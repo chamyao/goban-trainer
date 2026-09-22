@@ -28,22 +28,17 @@ function markResult(bookId, pid, ok) {
   Sync.scheduleSave();
 }
 
-/* ================= account sync (shared GitHub Gist, username only) ================= */
+/* ================= account sync (Google Sheet via Apps Script, username only) ================= */
 
 const Sync = {
-  // Remote sync needs credentials, which must never live in this file (this
-  // repo is public — a committed token gets scraped and revoked immediately).
-  // To enable sync on a device, run once in the console:
-  //   localStorage.setItem("gt-sync", JSON.stringify({ gistId: "...", token: "ghp_..." }))
-  CONFIG_KEY: "gt-sync",
+  // Public by design: this URL only lets a caller read/write one row keyed
+  // by a username they supply, in a Sheet with nothing else in it. It's a
+  // Google Apps Script Web App, not a credential — nothing here can be
+  // "revoked" the way a leaked API token would be.
+  API_URL: "https://script.google.com/macros/s/AKfycbwpMBFBjrgcHdX-xiAwIepUg4a06uLPrBlGWBAPuPkUOc30gzzsCHRy6odjI6qYLV8AKA/exec",
   USERNAME_KEY: "gt-username",
   username: null,
   saveTimer: null,
-
-  config() {
-    try { return JSON.parse(localStorage.getItem(this.CONFIG_KEY)) || null; }
-    catch { return null; }
-  },
 
   async init() {
     this.username = localStorage.getItem(this.USERNAME_KEY);
@@ -55,23 +50,18 @@ const Sync = {
     });
   },
 
-  async fetchAll() {
-    const cfg = this.config();
-    if (!cfg) return {};
-    const res = await fetch(`https://api.github.com/gists/${cfg.gistId}`, {
-      headers: { Authorization: `Bearer ${cfg.token}`, Accept: "application/vnd.github+json" },
-    });
+  async fetchRemote() {
+    if (!this.username) return {};
+    const res = await fetch(`${this.API_URL}?username=${encodeURIComponent(this.username)}`);
     if (!res.ok) { console.error("[sync] fetch failed", res.status); return {}; }
-    const data = await res.json();
-    try { return JSON.parse(data.files["progress.json"].content || "{}"); }
-    catch { return {}; }
+    const body = await res.json();
+    return body.data || {};
   },
 
-  // Pull this username's slice from the shared gist, merge into local
-  // (solved sticks), so a fresh browser/device picks up prior progress.
+  // Pull this username's row, merge into local (solved sticks), so a fresh
+  // browser/device picks up prior progress.
   async pullAndMerge() {
-    const all = await this.fetchAll();
-    const remote = all[this.username] || {};
+    const remote = await this.fetchRemote();
     const local = loadProgress();
     for (const bookId in remote) {
       const b = local[bookId] || (local[bookId] = {});
@@ -81,20 +71,18 @@ const Sync = {
   },
 
   scheduleSave() {
-    if (!this.username || !this.config()) return;
+    if (!this.username) return;
     clearTimeout(this.saveTimer);
     this.saveTimer = setTimeout(() => this.save(), 3000);
   },
 
   async save() {
-    const cfg = this.config();
-    if (!this.username || !cfg) return;
-    const all = await this.fetchAll(); // re-fetch first so we don't clobber other usernames
-    all[this.username] = loadProgress();
-    const res = await fetch(`https://api.github.com/gists/${cfg.gistId}`, {
-      method: "PATCH",
-      headers: { Authorization: `Bearer ${cfg.token}`, Accept: "application/vnd.github+json" },
-      body: JSON.stringify({ files: { "progress.json": { content: JSON.stringify(all) } } }),
+    if (!this.username) return;
+    // text/plain avoids a CORS preflight that Apps Script web apps don't handle.
+    const res = await fetch(this.API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ username: this.username, data: loadProgress() }),
     });
     if (!res.ok) console.error("[sync] save failed", res.status, await res.text());
   },
