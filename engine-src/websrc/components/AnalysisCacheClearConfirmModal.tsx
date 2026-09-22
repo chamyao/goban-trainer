@@ -1,0 +1,98 @@
+import React from 'react';
+import { FaTimes, FaTrash } from 'react-icons/fa';
+import { useT } from '../i18n';
+import { useInitialDialogFocus } from '../hooks/useInitialDialogFocus';
+
+interface AnalysisCacheClearConfirmModalProps {
+  count: number;
+  onCancel: () => void;
+  onConfirm: () => void;
+}
+
+const formatAnalysisCount = (count: number): string =>
+  count === 1 ? '{count} cached analysis' : '{count} cached analyses';
+
+export const AnalysisCacheClearConfirmModal: React.FC<AnalysisCacheClearConfirmModalProps> = ({
+  count,
+  onCancel,
+  onConfirm,
+}) => {
+  const t = useT();
+  React.useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      event.stopPropagation();
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        onCancel();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown, true);
+    return () => window.removeEventListener('keydown', handleKeyDown, true);
+  }, [onCancel]);
+
+  const cancelButtonRef = React.useRef<HTMLButtonElement>(null);
+  const dialogRef = useInitialDialogFocus<HTMLDivElement>(true, {
+    focusContainer: false,
+    initialFocusRef: cancelButtonRef,
+  });
+  const label = t(formatAnalysisCount(count), { count });
+
+  return (
+    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/65 p-3 mobile-safe-inset mobile-safe-area-bottom">
+      <div
+        className="ui-panel flex w-full max-w-md flex-col overflow-hidden rounded-lg border shadow-xl"
+        ref={dialogRef}
+        tabIndex={-1}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="analysis-cache-clear-title"
+        aria-describedby="analysis-cache-clear-description"
+        data-analysis-cache-clear-confirm="true"
+      >
+        <div className="ui-bar flex items-center justify-between border-b border-[var(--ui-border)] px-4 py-3">
+          <h2 id="analysis-cache-clear-title" className="text-lg font-semibold text-[var(--ui-text)]">
+            {t('Clear Analysis Cache')}
+          </h2>
+          <button
+            type="button"
+            onClick={onCancel}
+            className="ui-control grid place-items-center rounded-lg text-[var(--ui-text-muted)] hover:bg-[var(--ui-surface-2)] hover:text-[var(--ui-text)]"
+            aria-label={t('Cancel clear analysis cache')}
+          >
+            <FaTimes aria-hidden="true" />
+          </button>
+        </div>
+
+        <div className="space-y-3 p-4">
+          <p id="analysis-cache-clear-description" className="text-sm leading-6 text-[var(--ui-text-muted)]">
+            {t('This removes {label} from the current game. Moves and notes stay unchanged, but restored SGF analysis will not be exported again unless you run analysis for those positions.', { label })}
+          </p>
+          <div className="rounded border border-[var(--ui-warning)] bg-[var(--ui-warning-soft)] px-3 py-2 text-sm font-semibold text-[var(--ui-warning)]">
+            {t('You can analyze the game again later.')}
+          </div>
+        </div>
+
+        <div className="ui-bar grid gap-2 border-t border-[var(--ui-border)] px-4 py-3 sm:flex sm:flex-wrap sm:justify-end">
+          <button
+            ref={cancelButtonRef}
+            type="button"
+            onClick={onCancel}
+            className="min-h-11 w-full rounded-lg border border-[var(--ui-border)] bg-[var(--ui-surface)] px-4 py-2 text-sm font-semibold text-[var(--ui-text)] hover:bg-[var(--ui-surface-2)] sm:w-auto"
+            autoFocus
+          >
+            {t('Cancel')}
+          </button>
+          <button
+            type="button"
+            onClick={onConfirm}
+            className="min-h-11 w-full rounded-lg border border-[var(--ui-danger)] bg-[var(--ui-danger-soft)] px-4 py-2 text-sm font-semibold text-[var(--ui-danger)] hover:bg-[var(--ui-surface-2)] sm:w-auto"
+          >
+            <span className="inline-flex items-center gap-2"><FaTrash aria-hidden="true" /> {t('Clear {label}', { label })}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+AnalysisCacheClearConfirmModal.displayName = 'AnalysisCacheClearConfirmModal';

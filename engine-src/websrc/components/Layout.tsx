@@ -1,0 +1,4155 @@
+import React, { Suspense, lazy, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { shallow } from 'zustand/shallow';
+import { setNotificationHeld, useGameStore } from '../store/gameStore';
+import { GoBoard } from './GoBoard';
+import { AnalysisCommandBar } from './AnalysisCommandBar';
+import { CandidatePvTiles } from './CandidatePvTiles';
+import { EditToolbar } from './EditToolbar';
+import { ManualScorePanel } from './ManualScorePanel';
+import type { GameInfoValues, AiConfigValues, TimerConfigValues } from './NewGameModal';
+import { downloadSgfFromTree, formatSgfDate, generateSgfFromTree, getImportedSgfNameFromProperties, parseSgf, type KaTrainSgfExportOptions } from '../utils/sgf';
+import { copyBoardImage, downloadBoardImage } from '../utils/boardImageExport';
+import { buildShareUrl, decodeSgfFromFragment, MAX_SHARE_URL_LENGTH } from '../utils/shareLink';
+import { pickSharedImportText, readSharedFromQuery } from '../utils/pwaOpen';
+import { AUTO_SAVE_MAX_LABEL, clearAutoSavedGame, readAutoSavedGame, writeAutoSavedGame, type AutoSavedGame } from '../utils/autoSave';
+import type { AutoSaveStatus } from '../utils/saveStatusDisplay';
+import {
+  LIBRARY_CURRENT_FOLDER_STORAGE_KEY,
+  createLibraryItem,
+  getLibraryFolderOptions,
+  getLibrarySaveTargetFolderId,
+  getUniqueLibraryItemName,
+  loadLibrary,
+  saveLibrary,
+  suggestLibraryItemNameFromSgf,
+  updateLibraryFileSgf,
+  type LibraryFile,
+  type LibraryFolderOption,
+} from '../utils/library';
+import { loadSgfOrOgs } from '../utils/ogs';
+import type { CandidateMove, EditTool, GameNode, Player } from '../types';
+import { DEFAULT_BOARD_SIZE, KOMI } from '../types';
+import { parseGtpMove } from '../lib/gtp';
+import { computeJapaneseManualScoreFromOwnership, formatResultScoreLead, roundToHalf } from '../utils/manualScore';
+import { computeManualScoreEstimate, estimateDeadStonesByPlayout, estimateDeadStonesFromOwnership, NO_MANUAL_SCORE_ESTIMATE, toggleDeadStoneChain } from '../utils/scoring';
+import { isDrillHidingAnswer } from '../utils/mistakeDrill';
+import { summarizePointsLost } from '../utils/analysisSummary';
+import { getKaTrainEvalColors } from '../utils/katrainTheme';
+import { getEngineModelLabel } from '../utils/engineLabel';
+import { getEngineActivityPresentation, getEngineStatusSummary } from '../utils/engineStatusSummary';
+import { normalizeBoardSize, unsupportedSgfBoardSize } from '../utils/boardSize';
+import { LazyModalBoundary } from './LazyModalBoundary';
+import { isStaleBuildError } from '../utils/errorReporting';
+import {
+  PHOTO_BOARD_IMAGE_ACCEPT,
+  PHOTO_BOARD_UNSUPPORTED_IMAGE_MESSAGE,
+  getPhotoBoardClipboardImageFile,
+  isPhotoBoardImageFile,
+  isUnsupportedPhotoBoardImageFile,
+} from '../utils/photoBoard';
+import { shouldIgnoreGlobalPasteTarget, shouldIgnoreShortcutForKey } from '../utils/keyboardTarget';
+import { getMoveInsight } from '../utils/moveInsight';
+import {
+  createUploadedModelUrl,
+  isKataGoModelWeightsFile,
+  MODEL_UPLOAD_ACCEPT,
+  restorePersistedUploadedModelUrl,
+  savePersistedUploadedModel,
+  validateModelUploadFile,
+} from '../utils/modelUpload';
+import { cancelAnimationFrameSafe, getAnimationNow, requestAnimationFrameSafe, type AnimationFrameHandle } from '../utils/animationFrame';
+import { getAppLocaleHtmlLang } from '../utils/locales';
+import { useT } from '../i18n';
+
+// Layout components
+import { MenuDrawer } from './layout/MenuDrawer';
+import { TopControlBar } from './layout/TopControlBar';
+import { BottomControlBar } from './layout/BottomControlBar';
+import { RightPanel } from './layout/RightPanel';
+import { MobileMatchStrip } from './layout/MobileMatchStrip';
+import { MobileTabBar } from './layout/MobileTabBar';
+import { MOBILE_TAB_PANEL_IDS, mobileTabId, type MobileTab } from './layout/mobileTabs';
+import { NotificationToast } from './layout/NotificationToast';
+import { MobileHome } from './MobileHome';
+import { AutoSaveRecoveryModal } from './AutoSaveRecoveryModal';
+import { AboutDialog } from './AboutDialog';
+import type { CommandPaletteCommand } from './CommandPaletteModal';
+import { getDirectGameImportText, type PasteSgfSubmitResult } from '../utils/pasteSgfInput';
+import {
+  type UiMode,
+  type UiState,
+  type AnalysisControlsState,
+  GHOST_ALPHA,
+  loadUiState,
+  saveUiState,
+} from './layout/types';
+import { formatBoardAnnouncement, rgba } from './layout/ui-utils';
+import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
+import { useShortcutLabels } from '../hooks/useShortcutLabels';
+import { useGamepadNavigation } from '../hooks/useGamepadNavigation';
+import { useTournamentWatcher } from '../hooks/useTournamentWatcher';
+import { useTournamentStore } from '../store/tournamentStore';
+import { formatKyuRank, type LadderState } from '../utils/tournament';
+import { currentGauntletOpponentKyu, type GauntletState } from '../utils/gauntlet';
+import { UnsavedChangesModal, type UnsavedChangesChoice } from './UnsavedChangesModal';
+import { getActiveChild, getBranchInfo, getCurrentLineMoveCount, getCurrentLineMoveNumber, getCurrentLineNodes } from '../utils/branchNavigation';
+import { computeMoveTimes, hasMoveTimeData } from '../utils/moveTimes';
+import { getMistakeNavigationAvailability } from '../utils/mistakeNavigation';
+import { ResignConfirmModal } from './ResignConfirmModal';
+import { AnalysisCacheClearConfirmModal } from './AnalysisCacheClearConfirmModal';
+import { getResignResult } from '../utils/resign';
+import { DESKTOP_LAYOUT_MEDIA, isDesktopLayoutSize, isDesktopLayoutViewport, isMobileLayoutViewport, shouldShowMobileMatchStrip } from '../utils/responsiveLayout';
+import { readLocalStorage, writeLocalStorage } from '../utils/storage';
+import { getMediaQueryList, subscribeMediaQueryList } from '../utils/mediaQuery';
+import { PREFERS_DARK_MEDIA_QUERY, getResolvedUiTheme } from '../utils/uiThemes';
+import { copyTextToClipboard, readClipboardText } from '../utils/clipboard';
+import { FIRST_RUN_LIBRARY_MIN_WIDTH, getInitialLibraryOpen, LIBRARY_OPEN_STORAGE_KEY } from '../utils/layoutPreferences';
+import { saveSettingsActiveTab } from '../utils/settingsTabs';
+import { nextPolicyHeatmapMetric } from '../utils/topMoveMetric';
+import { EDIT_TOOL_SHORTCUT_DEFINITIONS, eventMatchesShortcut } from '../utils/shortcuts';
+import { dispatchMoveTreeCommand, type MoveTreeCommand } from '../utils/moveTreeCommands';
+import { ANALYSIS_VISIT_PRESETS, formatVisitCount, visitPresetDescription, visitPresetLabel } from '../utils/visitPresets';
+import { getDroppedSgfOrOgsText, getFirstDraggedFile, hasDraggedFiles, hasPotentialGameImportDrag } from '../utils/dragImport';
+import { BOARD_THEME_OPTIONS } from '../utils/boardThemes';
+import { appendRestoredAnalysisSummary } from '../utils/importSummary';
+import { getResizeObserverConstructor } from '../utils/resizeObserver';
+import { resetSoundFailureReport, setSoundInitErrorHandler } from '../utils/sound';
+import { getSgfImportSizeError } from '../utils/sgfImportLimits';
+import { getPvAnimationProgress } from '../utils/pvAnimation';
+
+const SettingsModal = lazy(() => import('./SettingsModal').then((module) => ({ default: module.SettingsModal })));
+const GameAnalysisModal = lazy(() => import('./GameAnalysisModal').then((module) => ({ default: module.GameAnalysisModal })));
+const TsumegoFrameModal = lazy(() => import('./TsumegoFrameModal').then((module) => ({ default: module.TsumegoFrameModal })));
+const GameReportModal = lazy(() => import('./GameReportModal').then((module) => ({ default: module.GameReportModal })));
+const CommandPaletteModal = lazy(() => import('./CommandPaletteModal').then((module) => ({ default: module.CommandPaletteModal })));
+const KeyboardHelpModal = lazy(() => import('./KeyboardHelpModal').then((module) => ({ default: module.KeyboardHelpModal })));
+const NewGameModal = lazy(() => import('./NewGameModal').then((module) => ({ default: module.NewGameModal })));
+const PhotoBoardModal = lazy(() => import('./PhotoBoardModal').then((module) => ({ default: module.PhotoBoardModal })));
+const PasteSgfModal = lazy(() => import('./PasteSgfModal').then((module) => ({ default: module.PasteSgfModal })));
+const SaveToLibraryDialog = lazy(() => import('./SaveToLibraryDialog').then((module) => ({ default: module.SaveToLibraryDialog })));
+const ScoreQuizModal = lazy(() => import('./ScoreQuizModal').then((module) => ({ default: module.ScoreQuizModal })));
+const TournamentModal = lazy(() => import('./TournamentModal').then((module) => ({ default: module.TournamentModal })));
+const ProGamesModal = lazy(() => import('./ProGamesModal').then((module) => ({ default: module.ProGamesModal })));
+const LessonsModal = lazy(() => import('./LessonsModal').then((module) => ({ default: module.LessonsModal })));
+const GuessMoveModal = lazy(() => import('./GuessMoveModal').then((module) => ({ default: module.GuessMoveModal })));
+const ProblemModal = lazy(() => import('./ProblemModal').then((module) => ({ default: module.ProblemModal })));
+const KifuPrintModal = lazy(() => import('./KifuPrintModal').then((module) => ({ default: module.KifuPrintModal })));
+const LibraryPanel = lazy(() => import('./LibraryPanel').then((module) => ({ default: module.LibraryPanel })));
+const DesktopDashboard = lazy(() => import('./dashboard/DesktopDashboard').then((module) => ({ default: module.DesktopDashboard })));
+
+const LibraryPanelLoading: React.FC<{ isMobile?: boolean }> = ({ isMobile = false }) => {
+  const t = useT();
+  return (
+    <div
+      {...(isMobile
+        ? { role: 'tabpanel', id: MOBILE_TAB_PANEL_IDS.library, 'aria-labelledby': mobileTabId('library') }
+        : { 'aria-label': t('Game library') })}
+      className={[
+        'library-panel ui-panel border-r flex flex-col overflow-hidden relative',
+        isMobile ? 'fixed inset-0 z-40 mobile-safe-bottom mobile-safe-inset' : 'h-full w-full',
+      ].join(' ')}
+    >
+      <div className="ui-bar ui-bar-height ui-bar-pad border-b border-[var(--ui-border)] flex items-center">
+        <div className="text-sm font-semibold text-[var(--ui-text)]">{t('Library')}</div>
+      </div>
+      <div className="flex flex-1 items-center justify-center p-6 text-sm text-[var(--ui-text-muted)]" role="status">
+        {t('Loading game library…')}
+      </div>
+    </div>
+  );
+};
+
+const MOBILE_HOME_DISMISSED_KEY = 'web-katrain:mobile_home_dismissed:v1';
+const mainFileInputAccept = ['.sgf', PHOTO_BOARD_IMAGE_ACCEPT, MODEL_UPLOAD_ACCEPT].join(',');
+const LAYOUT_SHORTCUT_IDS = [
+  'toggle-library',
+  'toggle-sidebar',
+  'toggle-scoring',
+  'toggle-edit-mode',
+  'toggle-top-bar',
+  'toggle-bottom-bar',
+  'toggle-focus-mode',
+] as const;
+type LoadedExternalFile = { name: string; kind: 'file' | 'ogs' | 'pasted' };
+type SaveToLibraryDialogState = {
+  sgf: string;
+  initialName: string;
+  initialFolderId: string | null;
+  folderOptions: LibraryFolderOption[];
+};
+
+
+function computePointsLost(args: { currentNode: GameNode }): number | null {
+  const node = args.currentNode;
+  const move = node.move;
+  const parent = node.parent;
+  if (!move || !parent) return null;
+
+  const parentScore = parent.analysis?.rootScoreLead;
+  const childScore = node.analysis?.rootScoreLead;
+  if (typeof parentScore === 'number' && typeof childScore === 'number') {
+    const sign = move.player === 'black' ? 1 : -1;
+    return sign * (parentScore - childScore);
+  }
+
+  const candidate = parent.analysis?.moves.find((m) => m.x === move.x && m.y === move.y);
+  return candidate?.pointsLost ?? null;
+}
+
+export const Layout: React.FC = () => {
+  const {
+    startNewGame,
+    passTurn,
+    resign,
+    playMove,
+    makeAiMove,
+    isAiPlaying,
+    aiColor,
+    navigateBack,
+    navigateForward,
+    navigateToMove,
+    pinnedVariations,
+    pinCurrentVariation,
+    recallVariation,
+    clearPinnedVariations,
+    navigateStart,
+    navigateEnd,
+    switchBranch,
+    switchToBranchIndex,
+    undoToBranchPoint,
+    undoToMainBranch,
+    makeCurrentNodeMainBranch,
+    findMistake,
+    mistakeDrill,
+    startMistakeDrill,
+    stopMistakeDrill,
+    loadGame,
+    applySetupStones,
+    analyzeExtra,
+    analyzeTenuki,
+    resetCurrentAnalysis,
+    clearAnalysisCache,
+    analysisCacheSize,
+    toggleAnalysisMode,
+    isAnalysisMode,
+    isContinuousAnalysis,
+    toggleContinuousAnalysis,
+    toggleTeachMode,
+    isTeachMode,
+    regionOfInterest,
+    isSelectingRegionOfInterest,
+    startSelectRegionOfInterest,
+    cancelSelectRegionOfInterest,
+    setRegionOfInterest,
+    isInsertMode,
+    isEditMode,
+    toggleInsertMode,
+    toggleEditMode,
+    setEditTool,
+    isSelfplayToEnd,
+    selfplayToEnd,
+    notification,
+    clearNotification,
+    analysisData,
+    board,
+    currentNode,
+    activeBranchChildIds,
+    treeVersion,
+    runAnalysis,
+    settings,
+    updateSettings,
+    setRootProperty,
+    rootNode,
+    currentPlayer,
+    capturedBlack,
+    capturedWhite,
+    komi,
+    engineStatus,
+    engineError,
+    engineBackend,
+    engineBackendNote,
+    engineModelName,
+    isAiThinking,
+    isGameAnalysisRunning,
+    gameAnalysisType,
+    gameAnalysisDone,
+    gameAnalysisTotal,
+    startQuickGameAnalysis,
+    frameAsTsumego,
+    generateSetupPosition,
+    startFastGameAnalysis,
+    stopGameAnalysis,
+    rotateBoard,
+  } = useGameStore(
+    (state) => ({
+      resetGame: state.resetGame,
+      startNewGame: state.startNewGame,
+      passTurn: state.passTurn,
+      resign: state.resign,
+      playMove: state.playMove,
+      makeAiMove: state.makeAiMove,
+      isAiPlaying: state.isAiPlaying,
+      aiColor: state.aiColor,
+      navigateBack: state.navigateBack,
+      navigateForward: state.navigateForward,
+      navigateToMove: state.navigateToMove,
+      pinnedVariations: state.pinnedVariations,
+      pinCurrentVariation: state.pinCurrentVariation,
+      recallVariation: state.recallVariation,
+      clearPinnedVariations: state.clearPinnedVariations,
+      navigateStart: state.navigateStart,
+      navigateEnd: state.navigateEnd,
+      switchBranch: state.switchBranch,
+      switchToBranchIndex: state.switchToBranchIndex,
+      undoToBranchPoint: state.undoToBranchPoint,
+      undoToMainBranch: state.undoToMainBranch,
+      makeCurrentNodeMainBranch: state.makeCurrentNodeMainBranch,
+      findMistake: state.findMistake,
+      mistakeDrill: state.mistakeDrill,
+      startMistakeDrill: state.startMistakeDrill,
+      stopMistakeDrill: state.stopMistakeDrill,
+      loadGame: state.loadGame,
+      applySetupStones: state.applySetupStones,
+      analyzeExtra: state.analyzeExtra,
+      analyzeTenuki: state.analyzeTenuki,
+      resetCurrentAnalysis: state.resetCurrentAnalysis,
+      clearAnalysisCache: state.clearAnalysisCache,
+      analysisCacheSize: state.analysisCacheSize,
+      toggleAnalysisMode: state.toggleAnalysisMode,
+      isAnalysisMode: state.isAnalysisMode,
+      isContinuousAnalysis: state.isContinuousAnalysis,
+      toggleContinuousAnalysis: state.toggleContinuousAnalysis,
+      toggleTeachMode: state.toggleTeachMode,
+      isTeachMode: state.isTeachMode,
+      regionOfInterest: state.regionOfInterest,
+      isSelectingRegionOfInterest: state.isSelectingRegionOfInterest,
+      startSelectRegionOfInterest: state.startSelectRegionOfInterest,
+      cancelSelectRegionOfInterest: state.cancelSelectRegionOfInterest,
+      setRegionOfInterest: state.setRegionOfInterest,
+      isInsertMode: state.isInsertMode,
+      isEditMode: state.isEditMode,
+      toggleInsertMode: state.toggleInsertMode,
+      toggleEditMode: state.toggleEditMode,
+      setEditTool: state.setEditTool,
+      isSelfplayToEnd: state.isSelfplayToEnd,
+      selfplayToEnd: state.selfplayToEnd,
+      notification: state.notification,
+      clearNotification: state.clearNotification,
+      analysisData: state.analysisData,
+      board: state.board,
+      currentNode: state.currentNode,
+      activeBranchChildIds: state.activeBranchChildIds,
+      treeVersion: state.treeVersion,
+      runAnalysis: state.runAnalysis,
+      settings: state.settings,
+      updateSettings: state.updateSettings,
+      setRootProperty: state.setRootProperty,
+      rootNode: state.rootNode,
+      currentPlayer: state.currentPlayer,
+      capturedBlack: state.capturedBlack,
+      capturedWhite: state.capturedWhite,
+      komi: state.komi,
+      engineStatus: state.engineStatus,
+      engineError: state.engineError,
+      engineBackend: state.engineBackend,
+      engineBackendNote: state.engineBackendNote,
+      engineModelName: state.engineModelName,
+      isAiThinking: state.isAiThinking,
+      isGameAnalysisRunning: state.isGameAnalysisRunning,
+      gameAnalysisType: state.gameAnalysisType,
+      gameAnalysisDone: state.gameAnalysisDone,
+      gameAnalysisTotal: state.gameAnalysisTotal,
+      startQuickGameAnalysis: state.startQuickGameAnalysis,
+      frameAsTsumego: state.frameAsTsumego,
+      generateSetupPosition: state.generateSetupPosition,
+      startFastGameAnalysis: state.startFastGameAnalysis,
+      stopGameAnalysis: state.stopGameAnalysis,
+      rotateBoard: state.rotateBoard,
+    }),
+    shallow
+  );
+
+  const t = useT();
+  const boardSize = normalizeBoardSize(board.length, DEFAULT_BOARD_SIZE);
+  // Surfaces that would name the engine's move have to withhold it while a
+  // drill is asking about the position they are describing.
+  const drillHidesAnswer = isDrillHidingAnswer(mistakeDrill, currentNode.id);
+  const handicap = useMemo(() => {
+    const raw = rootNode.properties?.HA?.[0];
+    const parsed = raw ? Number.parseInt(raw, 10) : NaN;
+    if (Number.isFinite(parsed)) return Math.max(0, parsed);
+    const abCount = rootNode.properties?.AB?.length ?? 0;
+    return abCount > 0 ? abCount : 0;
+  }, [rootNode.properties]);
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const boardShellRef = useRef<HTMLDivElement>(null);
+  const analysisCommandBarRef = useRef<HTMLDivElement>(null);
+  const modalReturnFocusRef = useRef<HTMLElement | null>(null);
+  const [hoveredMove, setHoveredMove] = useState<CandidateMove | null>(null);
+  const [reportHoverMove, setReportHoverMove] = useState<CandidateMove | null>(null);
+  const [pvAnim, setPvAnim] = useState<{ key: string; startMs: number; upToMove: number } | null>(null);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
+  const [isGameAnalysisOpen, setIsGameAnalysisOpen] = useState(false);
+  const [isTsumegoFrameOpen, setIsTsumegoFrameOpen] = useState(false);
+  const [isGameReportOpen, setIsGameReportOpen] = useState(false);
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
+  const [isKeyboardHelpOpen, setIsKeyboardHelpOpen] = useState(false);
+  const [isScoreQuizOpen, setIsScoreQuizOpen] = useState(false);
+  const [isTournamentOpen, setIsTournamentOpen] = useState(false);
+  const [isProGamesOpen, setIsProGamesOpen] = useState(false);
+  const [isLessonsOpen, setIsLessonsOpen] = useState(false);
+  const [isGuessMoveOpen, setIsGuessMoveOpen] = useState(false);
+  const [isProblemOpen, setIsProblemOpen] = useState(false);
+  const [isKifuPrintOpen, setIsKifuPrintOpen] = useState(false);
+  const [noteFocusRequest, setNoteFocusRequest] = useState(0);
+  const [isNewGameOpen, setIsNewGameOpen] = useState(false);
+  const [isPhotoBoardOpen, setIsPhotoBoardOpen] = useState(false);
+  const [photoBoardInitialFile, setPhotoBoardInitialFile] = useState<File | null>(null);
+  const [isPasteSgfOpen, setIsPasteSgfOpen] = useState(false);
+  const [saveToLibraryDialog, setSaveToLibraryDialog] = useState<SaveToLibraryDialogState | null>(null);
+  const [isUnsavedChangesOpen, setIsUnsavedChangesOpen] = useState(false);
+  const [pendingResignPlayer, setPendingResignPlayer] = useState<Player | null>(null);
+  const [isClearAnalysisCacheConfirmOpen, setIsClearAnalysisCacheConfirmOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuFocusInputMode, setMenuFocusInputMode] = useState<'pointer' | 'keyboard'>('keyboard');
+  const [rightPanelOpen, setRightPanelOpen] = useState(false);
+  const [viewMenuOpen, setViewMenuOpen] = useState(false);
+  const [focusMode, setFocusMode] = useState(false);
+  const openKeyboardHelp = useCallback((returnFocus?: HTMLElement | null) => {
+    modalReturnFocusRef.current = returnFocus ?? null;
+    setIsKeyboardHelpOpen(true);
+  }, []);
+  const openAbout = useCallback((returnFocus?: HTMLElement | null) => {
+    modalReturnFocusRef.current = returnFocus ?? null;
+    setIsAboutOpen(true);
+  }, []);
+  const [mobileTab, setMobileTab] = useState<MobileTab>('board');
+  const [lastRightTab, setLastRightTab] = useState<MobileTab>('tree');
+  const [uiState, setUiState] = useState<UiState>(() => loadUiState());
+  const [libraryOpen, setLibraryOpen] = useState(getInitialLibraryOpen);
+  const [showSidebar, setShowSidebar] = useState(() => {
+    return readLocalStorage('web-katrain:sidebar_open:v1') !== 'false';
+  });
+  const [topBarOpen, setTopBarOpen] = useState(() => {
+    return readLocalStorage('web-katrain:top_bar_open:v1') !== 'false';
+  });
+  const [bottomBarOpen, setBottomBarOpen] = useState(() => {
+    return readLocalStorage('web-katrain:bottom_bar_open:v1') !== 'false';
+  });
+  const layoutShortcutLabels = useShortcutLabels(LAYOUT_SHORTCUT_IDS);
+  const [mobileHomeOpen, setMobileHomeOpen] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return isMobileLayoutViewport() && readLocalStorage(MOBILE_HOME_DISMISSED_KEY) !== 'true';
+  });
+
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    document.documentElement.dataset.uiTheme = getResolvedUiTheme(settings.uiTheme);
+    document.documentElement.dataset.uiDensity = settings.uiDensity;
+    document.documentElement.dataset.locale = settings.appLocale;
+    document.documentElement.lang = getAppLocaleHtmlLang(settings.appLocale);
+    if (settings.uiTheme !== 'system') return;
+    const mediaQueryList = getMediaQueryList(PREFERS_DARK_MEDIA_QUERY);
+    if (!mediaQueryList) return;
+    return subscribeMediaQueryList(mediaQueryList, () => {
+      document.documentElement.dataset.uiTheme = getResolvedUiTheme('system');
+    });
+  }, [settings.appLocale, settings.uiDensity, settings.uiTheme]);
+  const [isDesktop, setIsDesktop] = useState(() => {
+    return isDesktopLayoutViewport();
+  });
+  const isMobile = !isDesktop;
+  const [leftPanelWidth, setLeftPanelWidth] = useState(() => {
+    const raw = readLocalStorage('web-katrain:left_panel_width:v1');
+    const parsed = raw ? Number.parseInt(raw, 10) : NaN;
+    return Number.isFinite(parsed) ? parsed : 300;
+  });
+  const [rightPanelWidth, setRightPanelWidth] = useState(() => {
+    const raw = readLocalStorage('web-katrain:right_panel_width:v1');
+    const parsed = raw ? Number.parseInt(raw, 10) : NaN;
+    return Number.isFinite(parsed) ? parsed : 360;
+  });
+  const [libraryVersion, setLibraryVersion] = useState(0);
+  const [recentLibraryItems, setRecentLibraryItems] = useState<LibraryFile[]>([]);
+  const [loadedLibraryFileId, setLoadedLibraryFileId] = useState<string | null>(null);
+  const [loadedLibraryFileName, setLoadedLibraryFileName] = useState<string | null>(null);
+  const [loadedExternalFile, setLoadedExternalFile] = useState<LoadedExternalFile | null>(null);
+  const [externalLibraryFileUpdate, setExternalLibraryFileUpdate] = useState<{
+    id: string;
+    sgf: string;
+    updatedAt: number;
+  } | null>(null);
+  const [externalLibraryItemCreate, setExternalLibraryItemCreate] = useState<{
+    item: LibraryFile;
+    updatedAt: number;
+  } | null>(null);
+  const [isFileDragActive, setIsFileDragActive] = useState(false);
+  const [scoringMode, setScoringMode] = useState(false);
+  const [manualDeadStones, setManualDeadStones] = useState<Set<string>>(() => new Set());
+  const [manualScoreMode, setManualScoreMode] = useState<'manual' | 'estimate'>('manual');
+  const fileDragCounter = useRef(0);
+  const fileDragResetTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const cleanGameSgfRef = useRef<string | null>(null);
+  const unsavedChangesResolveRef = useRef<((choice: UnsavedChangesChoice) => void) | null>(null);
+  const autoSaveRecoveryCheckedRef = useRef(false);
+  const autoSaveTooLargeToastShownRef = useRef(false);
+  const uploadedModelRestorePromiseRef = useRef<ReturnType<typeof restorePersistedUploadedModelUrl> | null>(null);
+  const uploadedModelRestoreHandledRef = useRef(false);
+  const [autoSaveRecovery, setAutoSaveRecovery] = useState<AutoSavedGame | null>(null);
+  const [autoSaveRecoveryChecked, setAutoSaveRecoveryChecked] = useState(false);
+  const [autoSaveStatus, setAutoSaveStatus] = useState<AutoSaveStatus | null>(null);
+  const [viewportWidth, setViewportWidth] = useState(() => {
+    if (typeof window === 'undefined') return 1200;
+    return window.innerWidth;
+  });
+  const [viewportHeight, setViewportHeight] = useState(() => {
+    if (typeof window === 'undefined') return 900;
+    return window.innerHeight;
+  });
+
+  const mode = uiState.mode;
+  const boardUiMode = reportHoverMove ? 'analyze' : mode;
+  const shapeCoachEnabled = settings.showShapeCoach;
+  const modeControls = uiState.analysisControls[mode];
+  const modePanels = uiState.panels[mode];
+  const lastAppliedModeControlsRef = useRef<UiMode | null>(null);
+  const lockAiDetails = mode === 'play' && settings.trainerLockAi;
+  void treeVersion;
+
+  const sgfExportOptions = useMemo<KaTrainSgfExportOptions>(() => {
+    const saveCommentsPlayer =
+      settings.trainerEvalShowAi
+        ? { black: true, white: true }
+        : {
+          black: !(isAiPlaying && aiColor === 'black'),
+          white: !(isAiPlaying && aiColor === 'white'),
+        };
+    return {
+      trainer: {
+        evalThresholds: settings.trainerEvalThresholds,
+        saveFeedback: settings.trainerSaveFeedback,
+        saveCommentsPlayer,
+        saveAnalysis: settings.trainerSaveAnalysis,
+        saveMarks: settings.trainerSaveMarks,
+      },
+    };
+  }, [
+    aiColor,
+    isAiPlaying,
+    settings.trainerEvalShowAi,
+    settings.trainerEvalThresholds,
+    settings.trainerSaveAnalysis,
+    settings.trainerSaveFeedback,
+    settings.trainerSaveMarks,
+  ]);
+
+  const endResult = (() => {
+    const nodeEnd = currentNode.endState;
+    if (nodeEnd && nodeEnd.includes('+')) return nodeEnd;
+    const rootEnd = rootNode.properties?.RE?.[0];
+    if (rootEnd && rootEnd.includes('+')) return rootEnd;
+    const pass = (n: GameNode | null | undefined) => !!n?.move && (n.move.x < 0 || n.move.y < 0);
+    if (pass(currentNode) && pass(currentNode.parent)) {
+      if (settings.gameRules === 'japanese') {
+        const currentOwnership =
+          currentNode.analysis && (currentNode.analysis.ownershipMode ?? 'root') !== 'none'
+            ? currentNode.analysis.territory
+            : null;
+        const previousOwnership =
+          currentNode.parent?.analysis && (currentNode.parent.analysis.ownershipMode ?? 'root') !== 'none'
+            ? currentNode.parent.analysis.territory
+            : null;
+        if (currentOwnership && previousOwnership) {
+          const manual = computeJapaneseManualScoreFromOwnership({
+            board,
+            komi,
+            capturedBlack,
+            capturedWhite,
+            currentOwnership,
+            previousOwnership,
+          });
+          if (manual) return manual;
+        }
+      }
+
+      const scoreLead = currentNode.analysis?.rootScoreLead;
+      if (Number.isFinite(scoreLead)) {
+        return `${formatResultScoreLead(roundToHalf(scoreLead as number))}?`;
+      }
+      return t('Game ended');
+    }
+    return null;
+  })();
+
+  useEffect(() => {
+    setManualDeadStones(new Set());
+    setManualScoreMode('manual');
+  }, [boardSize, currentNode.id]);
+
+  // Estimating the score floods every empty region of the board, and nothing
+  // reads the result while scoring is off: the panel renders only its launcher
+  // and the board ignores `scoreTerritory`. Computing it on every navigation
+  // anyway was the second-largest cost of stepping through a game.
+  const manualScoreEstimate = useMemo(
+    () =>
+      scoringMode
+        ? computeManualScoreEstimate({
+            board,
+            komi,
+            capturedBlack,
+            capturedWhite,
+            deadStones: manualDeadStones,
+          })
+        : NO_MANUAL_SCORE_ESTIMATE,
+    [board, capturedBlack, capturedWhite, komi, manualDeadStones, scoringMode]
+  );
+  const manualScoreOwnership = useMemo(() => {
+    if (!currentNode.analysis || (currentNode.analysis.ownershipMode ?? 'root') === 'none') return null;
+    const ownership = currentNode.analysis.territory;
+    if (ownership.length !== board.length) return null;
+    const width = board[0]?.length ?? 0;
+    if (!ownership.every((row) => row.length === width)) return null;
+    return ownership;
+  }, [board, currentNode.analysis]);
+  const canEstimateFromBoardShape = useMemo(
+    () => board.some((row) => row.some((stone) => stone !== null)),
+    [board]
+  );
+  const scoreEstimateSource = manualScoreOwnership
+    ? 'ownership'
+    : canEstimateFromBoardShape
+      ? 'playout'
+      : null;
+
+  const rootProps = rootNode.properties ?? {};
+  const getRootProp = (key: string) => rootProps[key]?.[0] ?? '';
+  const defaultGameInfo: GameInfoValues = {
+    blackName: getRootProp('PB'),
+    whiteName: getRootProp('PW'),
+    blackRank: getRootProp('BR'),
+    whiteRank: getRootProp('WR'),
+    event: getRootProp('EV'),
+    date: formatSgfDate(),
+    place: getRootProp('PC'),
+    gameName: getRootProp('GN'),
+  };
+
+  const defaultAiConfig: AiConfigValues = {
+    opponent: isAiPlaying && aiColor ? aiColor : 'none',
+    aiStrategy: settings.aiStrategy,
+    humanSlProfile: settings.humanSlProfile,
+    aiRankKyu: settings.aiRankKyu,
+    aiScoreLossStrength: settings.aiScoreLossStrength,
+    aiPolicyOpeningMoves: settings.aiPolicyOpeningMoves,
+    aiWeightedPickOverride: settings.aiWeightedPickOverride,
+    aiWeightedWeakenFac: settings.aiWeightedWeakenFac,
+    aiWeightedLowerBound: settings.aiWeightedLowerBound,
+    aiPickPickOverride: settings.aiPickPickOverride,
+    aiPickPickN: settings.aiPickPickN,
+    aiPickPickFrac: settings.aiPickPickFrac,
+    aiLocalPickOverride: settings.aiLocalPickOverride,
+    aiLocalStddev: settings.aiLocalStddev,
+    aiLocalPickN: settings.aiLocalPickN,
+    aiLocalPickFrac: settings.aiLocalPickFrac,
+    aiLocalEndgame: settings.aiLocalEndgame,
+    aiTenukiPickOverride: settings.aiTenukiPickOverride,
+    aiTenukiStddev: settings.aiTenukiStddev,
+    aiTenukiPickN: settings.aiTenukiPickN,
+    aiTenukiPickFrac: settings.aiTenukiPickFrac,
+    aiTenukiEndgame: settings.aiTenukiEndgame,
+    aiInfluencePickOverride: settings.aiInfluencePickOverride,
+    aiInfluencePickN: settings.aiInfluencePickN,
+    aiInfluencePickFrac: settings.aiInfluencePickFrac,
+    aiInfluenceThreshold: settings.aiInfluenceThreshold,
+    aiInfluenceLineWeight: settings.aiInfluenceLineWeight,
+    aiInfluenceEndgame: settings.aiInfluenceEndgame,
+    aiTerritoryPickOverride: settings.aiTerritoryPickOverride,
+    aiTerritoryPickN: settings.aiTerritoryPickN,
+    aiTerritoryPickFrac: settings.aiTerritoryPickFrac,
+    aiTerritoryThreshold: settings.aiTerritoryThreshold,
+    aiTerritoryLineWeight: settings.aiTerritoryLineWeight,
+    aiTerritoryEndgame: settings.aiTerritoryEndgame,
+    aiJigoTargetScore: settings.aiJigoTargetScore,
+    aiOwnershipMaxPointsLost: settings.aiOwnershipMaxPointsLost,
+    aiOwnershipSettledWeight: settings.aiOwnershipSettledWeight,
+    aiOwnershipOpponentFac: settings.aiOwnershipOpponentFac,
+    aiOwnershipMinVisits: settings.aiOwnershipMinVisits,
+    aiOwnershipAttachPenalty: settings.aiOwnershipAttachPenalty,
+    aiOwnershipTenukiPenalty: settings.aiOwnershipTenukiPenalty,
+  };
+  const defaultTimerConfig: TimerConfigValues = {
+    mode: settings.timerMainTimeMinutes > 0 || settings.timerByoPeriods > 0 ? 'byo-yomi' : 'none',
+    mainTimeMinutes: settings.timerMainTimeMinutes,
+    byoLengthSeconds: settings.timerByoLengthSeconds,
+    byoPeriods: settings.timerByoPeriods,
+  };
+
+  // Toast helper. Dismissal is the store's job — it holds errors until they are
+  // read and promotes anything queued behind them; the flat 2500ms timer that
+  // used to live here cut errors short while their "Copy details" button was
+  // still the reason they were shown.
+  const toast = useCallback((message: string, type: 'info' | 'error' | 'success' = 'info', copyText?: string) => {
+    useGameStore.setState({ notification: { message, type, ...(copyText ? { copyText } : {}) } });
+  }, []);
+
+  // Board edits fire from a single click and are easy to make by accident, so
+  // the toast reporting one offers to take it straight back. Undoing replaces
+  // the toast with the store's own "Undid edit." confirmation, which is why
+  // this does not also dismiss it.
+  const undoEditFromToast = useCallback(() => {
+    useGameStore.getState().undoEdit();
+  }, []);
+
+  useEffect(() => {
+    setSoundInitErrorHandler((error) => {
+      updateSettings({ soundEnabled: false });
+      const soundDetails = [
+        t('Sound error: {error}', { error: error.message }),
+        t('Backend: {backend}', { backend: error.backend }),
+        t('Platform: {platform}', { platform: error.platform }),
+      ].join('\n');
+
+      toast(t('Sound disabled because browser audio is unavailable.'), 'error', soundDetails);
+    });
+
+    return () => setSoundInitErrorHandler(null);
+  }, [toast, updateSettings]);
+
+  useEffect(() => {
+    if (settings.soundEnabled) resetSoundFailureReport();
+  }, [settings.soundEnabled]);
+
+  const toggleScoringMode = useCallback(() => {
+    if (!scoringMode && (isEditMode || isInsertMode || isSelectingRegionOfInterest)) {
+      toast(t('Finish editing before scoring.'), 'error');
+      return;
+    }
+    setScoringMode((prev) => !prev);
+  }, [isEditMode, isInsertMode, isSelectingRegionOfInterest, scoringMode, toast]);
+
+  // On-demand "AI move" / "Play best" buttons: play one engine move for the
+  // side to move, even when not in a game vs AI or when it's the human's turn.
+  const requestAiMove = useCallback(() => makeAiMove({ force: true }), [makeAiMove]);
+
+  const clearManualDeadStones = useCallback(() => {
+    setManualDeadStones(new Set());
+    setManualScoreMode('manual');
+  }, []);
+
+  const autoEstimateDeadStones = useCallback(() => {
+    if (!manualScoreOwnership && !canEstimateFromBoardShape) {
+      toast(t('Score a position with stones before auto-estimating dead stones.'), 'info');
+      return;
+    }
+
+    const nextDeadStones = manualScoreOwnership
+      ? estimateDeadStonesFromOwnership(board, manualScoreOwnership)
+      : estimateDeadStonesByPlayout(board, { currentPlayer });
+    setManualDeadStones(nextDeadStones);
+    setManualScoreMode('estimate');
+    const sourceLabel = manualScoreOwnership ? 'ownership' : 'local playouts';
+    const stoneUnit = t(nextDeadStones.size === 1 ? 'stone' : 'stones');
+    toast(
+      nextDeadStones.size > 0
+        ? t('Auto-marked {count} dead {unit} from {source}.', { count: nextDeadStones.size, unit: stoneUnit, source: sourceLabel })
+        : t('No dead stones found from {source}.', { source: sourceLabel }),
+      'info'
+    );
+  }, [board, canEstimateFromBoardShape, currentPlayer, manualScoreOwnership, toast]);
+
+  const toggleManualDeadStone = useCallback((x: number, y: number) => {
+    setManualScoreMode('manual');
+    setManualDeadStones((prev) => toggleDeadStoneChain(board, prev, x, y));
+  }, [board]);
+
+  useEffect(() => {
+    if (!scoringMode) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (shouldIgnoreShortcutForKey(event.key, event.target, document.activeElement)) return;
+      if (event.key === 'Escape') setScoringMode(false);
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [scoringMode]);
+
+  const toggleFocusMode = useCallback(() => setFocusMode((prev) => !prev), []);
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (shouldIgnoreShortcutForKey(event.key, event.target, document.activeElement)) return;
+      if (eventMatchesShortcut(event, 'toggle-focus-mode')) {
+        event.preventDefault();
+        toggleFocusMode();
+        return;
+      }
+      if (focusMode && event.key === 'Escape') {
+        event.preventDefault();
+        setFocusMode(false);
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [focusMode, toggleFocusMode]);
+
+  useEffect(() => {
+    if (scoringMode && (isEditMode || isInsertMode || isSelectingRegionOfInterest)) {
+      setScoringMode(false);
+    }
+  }, [isEditMode, isInsertMode, isSelectingRegionOfInterest, scoringMode]);
+
+  /**
+   * Serializing the tree is not cheap: with analysis saved, a 231-move game is
+   * a 700 KB SGF whose per-node ownership/policy blobs are gzipped on the way
+   * out, which measured at 45 ms a call. `hasUnsavedChanges` calls this on
+   * every Layout render and the auto-save effect calls it twice more per tree
+   * change, so stepping through an analysed game spent most of the main thread
+   * re-compressing analysis nobody had asked to save.
+   *
+   * `treeVersion` is the store's canonical "the tree changed" counter -- every
+   * mutation path bumps it -- so it is the right cache key, and reading it from
+   * the store rather than the closure keeps this callback's identity stable for
+   * the effects that depend on it.
+   */
+  const sgfCacheRef = useRef<{ treeVersion: number; options: KaTrainSgfExportOptions; sgf: string } | null>(null);
+  const generateCurrentSgf = useCallback(
+    () => {
+      const { rootNode: currentRoot, treeVersion: currentTreeVersion } = useGameStore.getState();
+      const cached = sgfCacheRef.current;
+      if (cached && cached.treeVersion === currentTreeVersion && cached.options === sgfExportOptions) {
+        return cached.sgf;
+      }
+      const sgf = generateSgfFromTree(currentRoot, sgfExportOptions);
+      sgfCacheRef.current = { treeVersion: currentTreeVersion, options: sgfExportOptions, sgf };
+      return sgf;
+    },
+    [sgfExportOptions]
+  );
+
+  const markCurrentGameClean = useCallback((sgf?: string) => {
+    cleanGameSgfRef.current = sgf ?? generateCurrentSgf();
+  }, [generateCurrentSgf]);
+
+  const markCurrentGameCleanAndClearAutoSave = useCallback((sgf?: string) => {
+    markCurrentGameClean(sgf);
+    clearAutoSavedGame();
+    setAutoSaveStatus(null);
+  }, [markCurrentGameClean]);
+
+  const setLoadedLibraryFile = useCallback((id: string | null, name?: string | null) => {
+    setLoadedLibraryFileId(id);
+    setLoadedLibraryFileName(id ? (name?.trim() || t('Library game')) : null);
+    setLoadedExternalFile(null);
+  }, [t]);
+
+  const saveLoadedLibraryFile = useCallback(async (sgf: string): Promise<boolean> => {
+    if (!loadedLibraryFileId) return false;
+    try {
+      const items = await loadLibrary();
+      const loadedItem = items.find((item) => item.id === loadedLibraryFileId);
+      if (!loadedItem || loadedItem.type !== 'file') {
+        setLoadedLibraryFile(null);
+        toast(t('Loaded library file was not found. Downloading SGF instead.'), 'info');
+        return false;
+      }
+      const updatedAt = Date.now();
+      await saveLibrary(updateLibraryFileSgf(items, loadedLibraryFileId, sgf, updatedAt));
+      setExternalLibraryFileUpdate({ id: loadedLibraryFileId, sgf, updatedAt });
+      setLibraryVersion((prev) => prev + 1);
+      markCurrentGameCleanAndClearAutoSave(sgf);
+      toast(t('Updated "{name}" in Library.', { name: loadedItem.name }), 'success');
+      return true;
+    } catch {
+      toast(t('Failed to update loaded library file. Downloading SGF instead.'), 'error');
+      return false;
+    }
+  }, [loadedLibraryFileId, markCurrentGameCleanAndClearAutoSave, setLoadedLibraryFile, t, toast]);
+
+
+  useLayoutEffect(() => {
+    if (cleanGameSgfRef.current === null) markCurrentGameClean();
+  }, [markCurrentGameClean]);
+
+  const hasUnsavedChanges = useCallback(() => {
+    if (cleanGameSgfRef.current === null) return false;
+    try {
+      return generateCurrentSgf() !== cleanGameSgfRef.current;
+    } catch {
+      return false;
+    }
+  }, [generateCurrentSgf]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const onBeforeUnload = (event: BeforeUnloadEvent) => {
+      if (!hasUnsavedChanges()) return;
+      event.preventDefault();
+      event.returnValue = '';
+    };
+    window.addEventListener('beforeunload', onBeforeUnload);
+    return () => window.removeEventListener('beforeunload', onBeforeUnload);
+  }, [hasUnsavedChanges]);
+
+  // Holds the latest text/file open handlers (defined later in the component) so
+  // the early startup effect can route shared content without a TDZ on those
+  // callbacks. Refreshed every render below.
+  const pwaOpenHandlersRef = useRef<{
+    openText: (text: string) => unknown;
+    openFile: (file: File) => unknown;
+  } | null>(null);
+
+  const sharedLinkCheckedRef = useRef(false);
+  useEffect(() => {
+    if (sharedLinkCheckedRef.current) return;
+    sharedLinkCheckedRef.current = true;
+    if (typeof window === 'undefined') return;
+
+    // The shared/opened content is the intended state, so skip the recovery
+    // prompt (auto-save itself stays active for subsequent edits).
+    const suppressRecoveryPrompt = () => {
+      autoSaveRecoveryCheckedRef.current = true;
+      setAutoSaveRecoveryChecked(true);
+    };
+
+    // 1) Share link — full SGF compressed into the URL fragment (#sgf=...).
+    const sharedSgf = decodeSgfFromFragment(window.location.hash);
+    if (sharedSgf) {
+      try {
+        const parsed = parseSgf(sharedSgf);
+        loadGame(parsed);
+        setLoadedLibraryFile(null);
+        navigateEnd();
+        suppressRecoveryPrompt();
+        toast(t('Loaded shared game from link.'), 'success');
+      } catch {
+        toast(t('Could not load the shared game from this link.'), 'error');
+      } finally {
+        try {
+          window.history.replaceState(null, '', window.location.pathname + window.location.search);
+        } catch {
+          // Ignore environments without the History API.
+        }
+      }
+    } else {
+      // 2) Web Share Target (GET) — shared text / URL appended as query params.
+      const shared = readSharedFromQuery(window.location.search);
+      const sharedText = shared ? pickSharedImportText(shared) : null;
+      if (sharedText) {
+        suppressRecoveryPrompt();
+        void pwaOpenHandlersRef.current?.openText(sharedText);
+        try {
+          window.history.replaceState(null, '', window.location.pathname + window.location.hash);
+        } catch {
+          // Ignore environments without the History API.
+        }
+      }
+    }
+
+    // 3) File handler — files opened via the OS ("Open with Web KaTrain").
+    const launchQueue = (window as Window & {
+      launchQueue?: { setConsumer: (consumer: (params: { files?: Array<{ getFile: () => Promise<File> }> }) => void) => void };
+    }).launchQueue;
+    if (launchQueue && typeof launchQueue.setConsumer === 'function') {
+      launchQueue.setConsumer((params) => {
+        const handles = params?.files ?? [];
+        if (handles.length === 0) return;
+        suppressRecoveryPrompt();
+        void (async () => {
+          for (const handle of handles) {
+            try {
+              const file = await handle.getFile();
+              await pwaOpenHandlersRef.current?.openFile(file);
+            } catch {
+              toast(t('Could not open the file.'), 'error');
+            }
+          }
+        })();
+      });
+    }
+  }, [loadGame, navigateEnd, setLoadedLibraryFile, toast]);
+
+  useEffect(() => {
+    if (autoSaveRecoveryCheckedRef.current) return;
+    autoSaveRecoveryCheckedRef.current = true;
+    const snapshot = readAutoSavedGame();
+    if (snapshot && snapshot.sgf !== generateCurrentSgf()) {
+      setAutoSaveRecovery(snapshot);
+    }
+    setAutoSaveRecoveryChecked(true);
+  }, [generateCurrentSgf]);
+
+  useEffect(() => {
+    if (!autoSaveRecoveryChecked || autoSaveRecovery) return;
+    if (!hasUnsavedChanges()) {
+      clearAutoSavedGame();
+      setAutoSaveStatus(null);
+      autoSaveTooLargeToastShownRef.current = false;
+      return;
+    }
+    setAutoSaveStatus((current) => (current?.state === 'pending' ? current : { state: 'pending' }));
+    const timeout = window.setTimeout(() => {
+      const savedAt = Date.now();
+      const result = writeAutoSavedGame(generateCurrentSgf(), undefined, savedAt);
+      if (result === 'saved') {
+        autoSaveTooLargeToastShownRef.current = false;
+        setAutoSaveStatus({ state: 'saved', savedAt });
+      } else if (result === 'too-large') {
+        setAutoSaveStatus({ state: 'too-large' });
+        if (!autoSaveTooLargeToastShownRef.current) {
+          autoSaveTooLargeToastShownRef.current = true;
+          toast(t('Game is too large for recovery auto-save ({limit}). Save to Library or download SGF to keep changes.', { limit: AUTO_SAVE_MAX_LABEL }), 'info');
+        }
+      } else {
+        setAutoSaveStatus({ state: 'failed' });
+      }
+    }, 500);
+    return () => window.clearTimeout(timeout);
+  }, [autoSaveRecovery, autoSaveRecoveryChecked, generateCurrentSgf, hasUnsavedChanges, toast, treeVersion]);
+
+  const discardAutoSaveRecovery = useCallback(() => {
+    clearAutoSavedGame();
+    setAutoSaveRecovery(null);
+  }, []);
+
+  const restoreAutoSavedGame = useCallback(() => {
+    const snapshot = autoSaveRecovery;
+    if (!snapshot) return;
+    try {
+      const parsed = parseSgf(snapshot.sgf);
+      loadGame(parsed);
+      setLoadedLibraryFile(null);
+      navigateEnd();
+      setAutoSaveRecovery(null);
+      toast(t('Restored auto-saved game.'), 'success');
+    } catch {
+      clearAutoSavedGame();
+      setAutoSaveRecovery(null);
+      toast(t('Failed to restore auto-saved game.'), 'error');
+    }
+  }, [autoSaveRecovery, loadGame, navigateEnd, setLoadedLibraryFile, t, toast]);
+
+  const handleSaveCurrentSgf = useCallback(async () => {
+    const sgf = generateCurrentSgf();
+    if (await saveLoadedLibraryFile(sgf)) return;
+    try {
+      const saved = downloadSgfFromTree(useGameStore.getState().rootNode, sgfExportOptions);
+      markCurrentGameCleanAndClearAutoSave(saved);
+      toast(t('Downloaded SGF.'), 'success');
+    } catch (error) {
+      toast(error instanceof Error ? error.message : t('Failed to download SGF.'), 'error');
+    }
+  }, [generateCurrentSgf, markCurrentGameCleanAndClearAutoSave, saveLoadedLibraryFile, sgfExportOptions, t, toast]);
+
+  const openSaveToLibraryDialog = useCallback(async (returnFocus?: HTMLElement | null) => {
+    modalReturnFocusRef.current = returnFocus ?? null;
+    const sgf = generateCurrentSgf();
+    try {
+      const items = await loadLibrary();
+      const initialFolderId = getLibrarySaveTargetFolderId({
+        items,
+        loadedLibraryFileId,
+        preferredFolderId: readLocalStorage(LIBRARY_CURRENT_FOLDER_STORAGE_KEY),
+      });
+      const fileCount = items.filter((item): item is LibraryFile => item.type === 'file').length;
+      const fallbackName = loadedLibraryFileName ?? loadedExternalFile?.name ?? t('Game {n}', { n: fileCount + 1 });
+      setSaveToLibraryDialog({
+        sgf,
+        initialName: suggestLibraryItemNameFromSgf(sgf, fallbackName),
+        initialFolderId,
+        folderOptions: getLibraryFolderOptions(items),
+      });
+    } catch {
+      toast(t('Failed to open Library save dialog.'), 'error');
+      if (returnFocus?.isConnected) returnFocus.focus({ preventScroll: true });
+    }
+  }, [generateCurrentSgf, loadedExternalFile?.name, loadedLibraryFileId, loadedLibraryFileName, t, toast]);
+
+  const handleOpenSaveToLibraryDialog = useCallback((returnFocus?: HTMLElement | null) => {
+    void openSaveToLibraryDialog(returnFocus);
+  }, [openSaveToLibraryDialog]);
+
+  const handleSaveCopyToLibrary = useCallback(async (name: string, folderId: string | null): Promise<boolean> => {
+    const sgf = saveToLibraryDialog?.sgf ?? generateCurrentSgf();
+    const itemName = name.trim().replace(/\.sgf$/i, '').trim() || t('Untitled');
+    try {
+      const items = await loadLibrary();
+      const targetFolderId =
+        folderId && items.some((item) => item.type === 'folder' && item.id === folderId) ? folderId : null;
+      const updatedAt = Date.now();
+      const uniqueName = getUniqueLibraryItemName(itemName, items, targetFolderId);
+      const newItem = createLibraryItem(uniqueName, sgf, targetFolderId, updatedAt);
+      await saveLibrary([newItem, ...items]);
+      setLoadedLibraryFile(newItem.id, newItem.name);
+      setExternalLibraryItemCreate({ item: newItem, updatedAt });
+      setLibraryVersion((prev) => prev + 1);
+      markCurrentGameCleanAndClearAutoSave(sgf);
+      toast(t('Saved "{name}" to Library.', { name: newItem.name }), 'success');
+      setSaveToLibraryDialog(null);
+      return true;
+    } catch {
+      toast(t('Failed to save game to Library.'), 'error');
+      return false;
+    }
+  }, [generateCurrentSgf, markCurrentGameCleanAndClearAutoSave, saveToLibraryDialog?.sgf, setLoadedLibraryFile, t, toast]);
+
+  const confirmReplaceCurrentGame = useCallback(async (): Promise<UnsavedChangesChoice> => {
+    if (!hasUnsavedChanges()) return 'discard';
+    setIsUnsavedChangesOpen(true);
+    return new Promise((resolve) => {
+      unsavedChangesResolveRef.current = resolve;
+    });
+  }, [hasUnsavedChanges]);
+
+  const prepareForGameReplacement = useCallback(async () => {
+    const choice = await confirmReplaceCurrentGame();
+    if (choice === 'cancel') return false;
+    if (choice === 'save') await handleSaveCurrentSgf();
+    return true;
+  }, [confirmReplaceCurrentGame, handleSaveCurrentSgf]);
+
+  const handleUnsavedChangesChoice = useCallback((choice: UnsavedChangesChoice) => {
+    setIsUnsavedChangesOpen(false);
+    unsavedChangesResolveRef.current?.(choice);
+    unsavedChangesResolveRef.current = null;
+  }, []);
+
+  // Persist UI state
+  useEffect(() => {
+    saveUiState(uiState);
+  }, [uiState]);
+
+  useEffect(() => {
+    if (!isDesktop || viewportWidth < FIRST_RUN_LIBRARY_MIN_WIDTH) return;
+    writeLocalStorage(LIBRARY_OPEN_STORAGE_KEY, String(libraryOpen));
+  }, [isDesktop, libraryOpen, viewportWidth]);
+
+  useEffect(() => {
+    writeLocalStorage('web-katrain:sidebar_open:v1', String(showSidebar));
+  }, [showSidebar]);
+
+  useEffect(() => {
+    writeLocalStorage('web-katrain:top_bar_open:v1', String(topBarOpen));
+  }, [topBarOpen]);
+
+  useEffect(() => {
+    writeLocalStorage('web-katrain:bottom_bar_open:v1', String(bottomBarOpen));
+  }, [bottomBarOpen]);
+
+  useEffect(() => {
+    writeLocalStorage('web-katrain:left_panel_width:v1', String(leftPanelWidth));
+  }, [leftPanelWidth]);
+
+  useEffect(() => {
+    writeLocalStorage('web-katrain:right_panel_width:v1', String(rightPanelWidth));
+  }, [rightPanelWidth]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const mq = getMediaQueryList(DESKTOP_LAYOUT_MEDIA);
+    const update = () => setIsDesktop(
+      mq?.matches ?? isDesktopLayoutSize(window.innerWidth, window.innerHeight)
+    );
+    update();
+    if (mq) return subscribeMediaQueryList(mq, update);
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const handleResize = () => {
+      setViewportWidth(window.innerWidth);
+      setViewportHeight(window.innerHeight);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // NOTE: desktop responsive panel behavior (library/sidebar open state per
+  // viewport width) is now owned by DesktopDashboard. The legacy auto-collapse
+  // effect was removed to avoid fighting that logic.
+
+  const getPanelLimits = useCallback(() => {
+    const minLeft = 220;
+    const minRight = 280;
+    const minMain = isDesktop ? Math.max(380, Math.min(560, Math.round(viewportWidth * 0.4))) : 0;
+    const maxLeftLimit = Math.max(minLeft, Math.min(560, Math.floor(viewportWidth * 0.32)));
+    const maxRightLimit = Math.max(minRight, Math.min(600, Math.floor(viewportWidth * 0.34)));
+    const maxLeft = Math.max(
+      minLeft,
+      Math.min(maxLeftLimit, viewportWidth - minMain - (showSidebar ? rightPanelWidth : 0))
+    );
+    const maxRight = Math.max(
+      minRight,
+      Math.min(maxRightLimit, viewportWidth - minMain - (libraryOpen ? leftPanelWidth : 0))
+    );
+    return { minLeft, minRight, maxLeft, maxRight };
+  }, [isDesktop, libraryOpen, leftPanelWidth, rightPanelWidth, showSidebar, viewportWidth]);
+
+  useEffect(() => {
+    if (!isDesktop) return;
+    const { minLeft, minRight, maxLeft, maxRight } = getPanelLimits();
+
+    if (libraryOpen) {
+      const nextLeft = Math.min(maxLeft, Math.max(minLeft, leftPanelWidth));
+      if (nextLeft !== leftPanelWidth) setLeftPanelWidth(nextLeft);
+    }
+    if (showSidebar) {
+      const nextRight = Math.min(maxRight, Math.max(minRight, rightPanelWidth));
+      if (nextRight !== rightPanelWidth) setRightPanelWidth(nextRight);
+    }
+  }, [getPanelLimits, isDesktop, libraryOpen, leftPanelWidth, rightPanelWidth, showSidebar]);
+
+  // Apply per-mode analysis controls to settings on mode changes
+  useEffect(() => {
+    if (lastAppliedModeControlsRef.current === mode) return;
+    lastAppliedModeControlsRef.current = mode;
+    updateSettings(modeControls);
+  }, [mode, modeControls, updateSettings]);
+
+  // Keep mode controls in sync if settings are changed elsewhere
+  useEffect(() => {
+    setUiState((prev) => ({
+      ...prev,
+      analysisControls: {
+        ...prev.analysisControls,
+        [prev.mode]: {
+          analysisShowChildren: settings.analysisShowChildren,
+          analysisShowEval: settings.analysisShowEval,
+          analysisShowHints: settings.analysisShowHints,
+          analysisShowPolicy: settings.analysisShowPolicy,
+          analysisShowOwnership: settings.analysisShowOwnership,
+        },
+      },
+    }));
+  }, [
+    settings.analysisShowChildren,
+    settings.analysisShowEval,
+    settings.analysisShowHints,
+    settings.analysisShowPolicy,
+    settings.analysisShowOwnership,
+  ]);
+
+  // Auto-run analysis when in analysis mode
+  useEffect(() => {
+    if (!isAnalysisMode) return;
+    void runAnalysis();
+  }, [currentNode.id, isAnalysisMode, runAnalysis]);
+
+  // PV animation
+  const activeHoverMove = reportHoverMove ?? hoveredMove;
+  // Candidate tiles follow the same ownership rule as the board canvases: a
+  // temporary board tool gets a quiet targeting surface without switching the
+  // user's analysis preference off.
+  const boardAnalysisOverlaysActive =
+    isAnalysisMode && !isEditMode && !scoringMode && !isSelectingRegionOfInterest;
+  const pvOverlayEnabled = boardAnalysisOverlaysActive || !!reportHoverMove;
+  const pvKey = useMemo(() => {
+    const pv = activeHoverMove?.pv;
+    if (!pvOverlayEnabled || !pv || pv.length === 0) return null;
+    return `${currentNode.id}|${pv.join(' ')}`;
+  }, [currentNode.id, activeHoverMove, pvOverlayEnabled]);
+
+  const evalColors = useMemo(() => getKaTrainEvalColors(settings.trainerTheme), [settings.trainerTheme]);
+  const pvAnimTimeS = useMemo(() => {
+    if (reportHoverMove) return 0;
+    const t = settings.animPvTimeSeconds;
+    return typeof t === 'number' && Number.isFinite(t) ? t : 0.5;
+  }, [reportHoverMove, settings.animPvTimeSeconds]);
+
+  useEffect(() => {
+    if (!pvKey || pvAnimTimeS <= 0) {
+      setPvAnim(null);
+      return;
+    }
+    const now = getAnimationNow();
+    setPvAnim((prev) => (prev?.key === pvKey ? prev : { key: pvKey, startMs: now, upToMove: 0 }));
+  }, [pvKey, pvAnimTimeS]);
+
+  const pvLen = activeHoverMove?.pv?.length ?? 0;
+  useEffect(() => {
+    if (!pvAnim) return;
+    if (!pvKey || pvKey !== pvAnim.key) return;
+    if (pvLen <= 0) return;
+
+    const delayMs = Math.max(pvAnimTimeS, 0.1) * 1000;
+    let timer: number | null = null;
+    const tick = () => {
+      const now = getAnimationNow();
+      const progress = getPvAnimationProgress(now - pvAnim.startMs, delayMs, pvLen);
+      setPvAnim((current) => {
+        if (!current || current.key !== pvAnim.key || current.upToMove === progress.upToMove) return current;
+        return { ...current, upToMove: progress.upToMove };
+      });
+      if (progress.nextDelayMs !== null) timer = window.setTimeout(tick, progress.nextDelayMs);
+    };
+    tick();
+    return () => {
+      if (timer !== null) window.clearTimeout(timer);
+    };
+  }, [pvAnim, pvAnimTimeS, pvKey, pvLen]);
+
+  const pvUpToMove = useMemo(() => {
+    const pv = activeHoverMove?.pv;
+    if (!pvOverlayEnabled || !pv || pv.length === 0) return null;
+    if (pvAnimTimeS <= 0) return pv.length;
+    if (!pvAnim || pvAnim.key !== pvKey) return 0;
+    return pvAnim.upToMove;
+  }, [activeHoverMove, pvOverlayEnabled, pvAnim, pvAnimTimeS, pvKey]);
+
+  const passPv = useMemo(() => {
+    const pv = activeHoverMove?.pv;
+    if (!pvOverlayEnabled || !pv || pv.length === 0) return null;
+    const upToMove = typeof pvUpToMove === 'number' ? pvUpToMove : pv.length;
+    const opp: Player = currentPlayer === 'black' ? 'white' : 'black';
+    let last: { idx: number; player: Player } | null = null;
+    for (let i = 0; i < pv.length; i++) {
+      if (i > upToMove) break;
+      const m = parseGtpMove(pv[i]!, boardSize);
+      if (m?.kind === 'pass') last = { idx: i + 1, player: i % 2 === 0 ? currentPlayer : opp };
+    }
+    return last;
+  }, [boardSize, currentPlayer, activeHoverMove, pvOverlayEnabled, pvUpToMove]);
+
+  const noteCount = useMemo(() => {
+    void treeVersion;
+    let count = 0;
+    const stack: GameNode[] = [rootNode];
+    while (stack.length > 0) {
+      const node = stack.pop()!;
+      if (node.note && node.note.trim()) count += 1;
+      for (let i = node.children.length - 1; i >= 0; i--) stack.push(node.children[i]!);
+    }
+    return count;
+  }, [rootNode, treeVersion]);
+
+  // Close popovers on outside clicks
+  useEffect(() => {
+    const onDown = (e: MouseEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (!target) return;
+      if (target.closest('[data-menu-popover]')) return;
+      setViewMenuOpen(false);
+    };
+    window.addEventListener('mousedown', onDown);
+    return () => window.removeEventListener('mousedown', onDown);
+  }, []);
+
+  // Computed values
+  const isRemoteEngine = settings.engineMode === 'remote' && !!settings.remoteEngineUrl.trim();
+  const engineModelLabel = useMemo(
+    () => getEngineModelLabel(engineModelName, settings.katagoModelUrl),
+    [engineModelName, settings.katagoModelUrl]
+  );
+  // Remote analysis runs the server's network: the bundled model's filename is
+  // not what is answering, so it is not what the UI should name.
+  const activeEngineModelLabel = isRemoteEngine ? engineModelName ?? t('Remote Server') : engineModelLabel;
+
+  const engineSummary = useMemo(() => getEngineStatusSummary({
+    status: engineStatus,
+    error: engineError,
+    requestedBackend: settings.katagoBackend,
+    activeBackend: engineBackend,
+    backendNote: engineBackendNote,
+    modelLabel: activeEngineModelLabel,
+    modelUrl: settings.katagoModelUrl,
+    engineMode: settings.engineMode,
+    remoteEngineUrl: settings.remoteEngineUrl,
+  }), [activeEngineModelLabel, engineBackend, engineBackendNote, engineError, engineStatus, settings.engineMode, settings.katagoBackend, settings.katagoModelUrl, settings.remoteEngineUrl]);
+  const engineDot = engineSummary.dotClass;
+  const engineMeta = engineSummary.compactLabel;
+  const engineMetaTitle = engineSummary.title;
+  const engineActivity = getEngineActivityPresentation({
+    status: engineStatus,
+    error: engineError,
+    isAiThinking,
+    isGameAnalysisRunning,
+    isContinuousAnalysis,
+    isAnalysisMode,
+  });
+
+  const statusText = engineError
+    ? t('Engine error: {error}', { error: engineError })
+    : isSelfplayToEnd
+      ? t('Selfplay to end… (Esc to stop)')
+      : isSelectingRegionOfInterest
+        ? t('Select region of interest (drag on board, Esc cancels)')
+        : scoringMode
+          ? t('Scoring mode')
+        : notification?.message
+          ? notification.message
+          : isInsertMode
+            ? t('Insert mode (I to finish)')
+            : isAiThinking
+              ? t('AI thinking…')
+              : isGameAnalysisRunning
+              ? t('Analyzing game ({type})… {done}/{total}', { type: gameAnalysisType ?? '…', done: gameAnalysisDone, total: gameAnalysisTotal })
+              : isContinuousAnalysis
+                ? t('Pondering… (Space)')
+                : isAnalysisMode
+                  ? t('Analysis mode on (Tab toggles)')
+                  // Nothing notable is happening: stay empty rather than echo the
+                  // engine badge's own "Ready" next to it. Consumers skip the row
+                  // when this is blank.
+                  : '';
+
+  const pointsLost = computePointsLost({ currentNode });
+  const winRate = analysisData?.rootWinRate ?? currentNode.analysis?.rootWinRate;
+  const scoreLead = analysisData?.rootScoreLead ?? currentNode.analysis?.rootScoreLead;
+  const canStopAnalysis =
+    isAnalysisMode || isContinuousAnalysis || isSelfplayToEnd || isGameAnalysisRunning || isAiThinking;
+  const canResetAnalysis = analysisData !== null || currentNode.analysis !== null;
+  const canClearAnalysisCache = analysisCacheSize > 0 && !isGameAnalysisRunning;
+  const showAnalysisCommandBar =
+    settings.showAnalysisBar &&
+    (mode === 'analyze' ||
+      isAnalysisMode ||
+      isGameAnalysisRunning ||
+      typeof winRate === 'number' ||
+      typeof scoreLead === 'number');
+  const mobileContextToolActive = isMobile && (isEditMode || scoringMode);
+  // Phone portrait centres a width-limited board inside a much taller shell.
+  // Fill the top of that spare band with the player facts the bottom bar has
+  // to drop at phone widths; the gate keeps it off viewports where it would
+  // shrink the board instead (tablet portrait, landscape).
+  const showMobileMatchStrip =
+    isMobile
+    && !mobileContextToolActive
+    && shouldShowMobileMatchStrip(viewportWidth, viewportHeight);
+  const showBoardAnalysisCommandBar = showAnalysisCommandBar && !mobileContextToolActive;
+  const [boardToolOffsetY, setBoardToolOffsetY] = useState(12);
+  const analysisCommandBarSlotClass = mobileContextToolActive
+    ? 'analysis-command-bar-slot'
+    : isGameAnalysisRunning
+    ? undefined
+    : [
+        'analysis-command-bar-slot',
+        settings.showAnalysisBar && (!isMobile || showAnalysisCommandBar)
+          ? 'analysis-command-bar-slot--reserve'
+          : '',
+      ].filter(Boolean).join(' ');
+
+  useLayoutEffect(() => {
+    if (!showBoardAnalysisCommandBar) {
+      setBoardToolOffsetY(12);
+      return;
+    }
+
+    const shell = boardShellRef.current;
+    const commandContainer = analysisCommandBarRef.current;
+    if (!shell || !commandContainer) return;
+
+    let frame: AnimationFrameHandle | null = null;
+    const updateOffset = () => {
+      cancelAnimationFrameSafe(frame);
+      frame = requestAnimationFrameSafe(() => {
+        frame = null;
+        const commandBar = commandContainer.querySelector<HTMLElement>('[data-analysis-command-bar="true"]');
+        if (!commandBar) {
+          setBoardToolOffsetY(12);
+          return;
+        }
+        const shellRect = shell.getBoundingClientRect();
+        const commandRect = commandBar.getBoundingClientRect();
+        const nextOffset = Math.max(12, Math.ceil(commandRect.bottom - shellRect.top + 8));
+        setBoardToolOffsetY((current) => (current === nextOffset ? current : nextOffset));
+      });
+    };
+
+    updateOffset();
+    const ResizeObserverConstructor = getResizeObserverConstructor();
+    const observer = ResizeObserverConstructor ? new ResizeObserverConstructor(updateOffset) : null;
+    observer?.observe(shell);
+    observer?.observe(commandContainer);
+    window.addEventListener('resize', updateOffset);
+
+    return () => {
+      cancelAnimationFrameSafe(frame);
+      observer?.disconnect();
+      window.removeEventListener('resize', updateOffset);
+    };
+  }, [showBoardAnalysisCommandBar]);
+  const totalMovesInCurrentLine = useMemo(() => {
+    void treeVersion;
+    return getCurrentLineMoveCount(currentNode, activeBranchChildIds);
+  }, [activeBranchChildIds, currentNode, treeVersion]);
+  const currentMoveNumber = useMemo(() => {
+    void treeVersion;
+    return getCurrentLineMoveNumber(currentNode);
+  }, [currentNode, treeVersion]);
+  const boardAnnouncement = useMemo(() => {
+    void treeVersion;
+    return formatBoardAnnouncement({
+      move: currentNode.move,
+      moveNumber: currentMoveNumber,
+      totalMoves: totalMovesInCurrentLine,
+      boardSize,
+      winRate,
+      scoreLead,
+    });
+  }, [boardSize, currentMoveNumber, currentNode, scoreLead, settings.appLocale, totalMovesInCurrentLine, treeVersion, winRate]);
+
+  const branchInfo = useMemo(() => {
+    void treeVersion;
+    return getBranchInfo(currentNode);
+  }, [currentNode, treeVersion]);
+  const historyNavigation = useMemo(() => {
+    void treeVersion;
+    return {
+      back: currentNode.parent !== null,
+      forward: getActiveChild(currentNode, activeBranchChildIds) !== null,
+    };
+  }, [activeBranchChildIds, currentNode, treeVersion]);
+  const mistakeNavigation = useMemo(() => {
+    void treeVersion;
+    return getMistakeNavigationAvailability({
+      currentNode,
+      activeBranchChildIds,
+      threshold: settings.mistakeThreshold,
+    });
+  }, [activeBranchChildIds, currentNode, settings.mistakeThreshold, treeVersion]);
+  const passPolicyColor = useMemo(() => {
+    if (!boardAnalysisOverlaysActive) return null;
+    if (!settings.analysisShowPolicy) return null;
+    const policy = (analysisData ?? currentNode.analysis)?.policy;
+    if (!policy) return null;
+    const passPolicy = policy[boardSize * boardSize];
+    if (!Number.isFinite(passPolicy)) return null;
+    const polOrder = 5 - Math.trunc(-Math.log10(Math.max(1e-9, passPolicy - 1e-9)));
+    if (polOrder < 0) return null;
+    const col = evalColors[Math.min(evalColors.length - 1, Math.max(0, polOrder))]!;
+    return rgba(col, GHOST_ALPHA);
+  }, [analysisData, boardAnalysisOverlaysActive, boardSize, currentNode.analysis, evalColors, settings.analysisShowPolicy]);
+
+  const winRateLabel = typeof winRate === 'number' ? `${(winRate * 100).toFixed(1)}%` : null;
+  const scoreLeadLabel = typeof scoreLead === 'number' ? formatResultScoreLead(scoreLead) : null;
+  const pointsLostLabel = typeof pointsLost === 'number' ? summarizePointsLost(pointsLost).label : null;
+
+  const setMode = (next: UiMode) => {
+    setUiState((prev) => ({ ...prev, mode: next }));
+  };
+
+  const updateControls = (partial: Partial<AnalysisControlsState>) => {
+    updateSettings(partial);
+    setUiState((prev) => ({
+      ...prev,
+      analysisControls: {
+        ...prev.analysisControls,
+        [prev.mode]: { ...prev.analysisControls[prev.mode], ...partial },
+      },
+    }));
+  };
+
+  const updatePanels = (
+    partial:
+      | Partial<UiState['panels'][UiMode]>
+      | ((current: UiState['panels'][UiMode]) => Partial<UiState['panels'][UiMode]>)
+  ) => {
+    setUiState((prev) => {
+      const current = prev.panels[prev.mode];
+      const nextPartial = typeof partial === 'function' ? partial(current) : partial;
+      return {
+        ...prev,
+        panels: { ...prev.panels, [prev.mode]: { ...current, ...nextPartial } },
+      };
+    });
+  };
+
+  const toggleShapeCoach = () => {
+    updateSettings({ showShapeCoach: !settings.showShapeCoach });
+  };
+
+  useEffect(() => {
+    if (!isDesktop) return;
+    setMobileHomeOpen(false);
+  }, [isDesktop]);
+
+  const closeMobileHome = () => {
+    writeLocalStorage(MOBILE_HOME_DISMISSED_KEY, 'true');
+    setMobileHomeOpen(false);
+  };
+
+  const openMobileHome = () => {
+    setViewMenuOpen(false);
+    setMobileHomeOpen(true);
+  };
+
+  const openRightPanelForTab = (tab: MobileTab) => {
+    setRightPanelOpen(true);
+    setLibraryOpen(false);
+    setMobileTab(tab);
+    if (tab === 'tree') updatePanels({ treeOpen: true });
+    if (tab === 'info') updatePanels({ infoOpen: true, notesOpen: true, analysisOpen: true, graphOpen: true, statsOpen: true });
+    if (tab === 'tree' || tab === 'info') {
+      setLastRightTab(tab);
+    }
+  };
+
+  const handleMobileTabChange = (tab: MobileTab) => {
+    setViewMenuOpen(false);
+    if (tab === 'board') {
+      setMobileTab('board');
+      setLibraryOpen(false);
+      setRightPanelOpen(false);
+      return;
+    }
+    if (tab === 'library') {
+      setMobileTab('library');
+      setLibraryOpen(true);
+      setRightPanelOpen(false);
+      return;
+    }
+    openRightPanelForTab(tab);
+  };
+
+  const handleToggleLibrary = () => {
+    if (isMobile) {
+      handleMobileTabChange(libraryOpen ? 'board' : 'library');
+      return;
+    }
+    setLibraryOpen((prev) => !prev);
+  };
+
+  const handleCloseLibrary = () => {
+    setLibraryOpen(false);
+    if (isMobile) setMobileTab('board');
+  };
+
+  const handleToggleSidebar = () => {
+    if (isMobile) {
+      handleMobileTabChange(rightPanelOpen ? 'board' : lastRightTab);
+      return;
+    }
+    setShowSidebar((prev) => !prev);
+  };
+
+  const handleToggleTopBar = () => {
+    setTopBarOpen((prev) => !prev);
+  };
+
+  const handleToggleBottomBar = () => {
+    setBottomBarOpen((prev) => !prev);
+  };
+
+  const openCurrentNoteEditor = () => {
+    setViewMenuOpen(false);
+    setMenuOpen(false);
+    if (isMobile) {
+      openRightPanelForTab('info');
+    } else {
+      setShowSidebar(true);
+      setRightPanelOpen(true);
+    }
+    updatePanels((current) => ({ notesOpen: true, notes: { ...current.notes, notes: true } }));
+    setNoteFocusRequest((request) => request + 1);
+  };
+
+  const selectEditTool = (tool: EditTool) => {
+    setViewMenuOpen(false);
+    setMenuOpen(false);
+    if (!isEditMode) toggleEditMode();
+    setEditTool(tool);
+  };
+
+  const runMoveTreeCommand = (command: MoveTreeCommand) => {
+    setViewMenuOpen(false);
+    setMenuOpen(false);
+    if (isMobile) {
+      openRightPanelForTab('tree');
+    } else {
+      setShowSidebar(true);
+      setRightPanelOpen(true);
+      updatePanels({ treeOpen: true });
+    }
+    window.setTimeout(() => dispatchMoveTreeCommand(command), 0);
+  };
+
+  const handleCloseRightPanel = () => {
+    if (isMobile) {
+      setRightPanelOpen(false);
+      setMobileTab('board');
+    } else {
+      setShowSidebar(false);
+    }
+  };
+
+  const openShortcutSettings = useCallback(() => {
+    setViewMenuOpen(false);
+    setMenuOpen(false);
+    setIsKeyboardHelpOpen(false);
+    saveSettingsActiveTab('shortcuts');
+    setIsSettingsOpen(true);
+  }, []);
+
+  const handleLoadClick = () => fileInputRef.current?.click();
+
+  useEffect(() => {
+    if (uploadedModelRestoreHandledRef.current) return;
+    let cancelled = false;
+    const restorePromise = uploadedModelRestorePromiseRef.current ?? restorePersistedUploadedModelUrl(settings.katagoModelUrl);
+    uploadedModelRestorePromiseRef.current = restorePromise;
+
+    void restorePromise.then((restored) => {
+      if (cancelled || uploadedModelRestoreHandledRef.current) return;
+      uploadedModelRestoreHandledRef.current = true;
+      if (!restored) return;
+      updateSettings({ katagoModelUrl: restored.url });
+      toast(t('Restored uploaded KataGo model weights "{name}".', { name: restored.name }), 'success');
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [settings.katagoModelUrl, t, toast, updateSettings]);
+
+  const handleModelWeightsFile = useCallback(async (file: File): Promise<boolean> => {
+    const error = validateModelUploadFile(file);
+    if (error) {
+      toast(error, 'error');
+      return false;
+    }
+    try {
+      updateSettings({ katagoModelUrl: createUploadedModelUrl(file, settings.katagoModelUrl) });
+    } catch (uploadError) {
+      toast(uploadError instanceof Error ? uploadError.message : t('Could not load this model file.'), 'error');
+      return false;
+    }
+    const persisted = await savePersistedUploadedModel(file);
+    toast(
+      persisted
+        ? t('Loaded and saved KataGo model weights "{name}".', { name: file.name })
+        : t('Loaded KataGo model weights "{name}" for this session.', { name: file.name }),
+      'success'
+    );
+    return true;
+  }, [settings.katagoModelUrl, t, toast, updateSettings]);
+
+  const openNewGameWithGuard = useCallback(async () => {
+    setMenuOpen(false);
+    if (!(await prepareForGameReplacement())) return;
+    setIsNewGameOpen(true);
+  }, [prepareForGameReplacement]);
+
+  const startQuickNewGame = useCallback(async () => {
+    setMenuOpen(false);
+    setMobileHomeOpen(false);
+    setIsNewGameOpen(false);
+    if (!(await prepareForGameReplacement())) return;
+    startNewGame({
+      komi: KOMI,
+      rules: settings.gameRules,
+      boardSize: settings.defaultBoardSize,
+      handicap: settings.defaultHandicap,
+    });
+    setLoadedLibraryFile(null);
+    setScoringMode(false);
+    setManualDeadStones(new Set());
+    markCurrentGameCleanAndClearAutoSave();
+    toast(t('Started {size}×{size} game.', { size: settings.defaultBoardSize }), 'success');
+  }, [
+    markCurrentGameCleanAndClearAutoSave,
+    prepareForGameReplacement,
+    settings.defaultBoardSize,
+    settings.defaultHandicap,
+    settings.gameRules,
+    startNewGame,
+    setLoadedLibraryFile,
+    t,
+    toast,
+  ]);
+
+  // Only 9, 13 and 19 are supported, so any other declared size quietly became
+  // a 19x19 board with the stones scattered across it. Call after loadGame:
+  // it reports what the file asked for and what it actually opened at.
+  const boardSizeCoercionNotice = (sgfText: string): string => {
+    const declared = unsupportedSgfBoardSize(sgfText);
+    if (!declared) return '';
+    const opened = normalizeBoardSize(
+      useGameStore.getState().currentNode.gameState.board.length,
+      DEFAULT_BOARD_SIZE
+    );
+    return t('Board size {declared} is not supported, so it opened as {opened}×{opened}.', { declared, opened });
+  };
+
+  const loadLocalSgfText = async (text: string, sourceName: string): Promise<boolean> => {
+    const parsed = parseSgf(text);
+    if (!(await prepareForGameReplacement())) return false;
+    loadGame(parsed);
+    const restoredAnalysisCount = useGameStore.getState().analysisCacheSize;
+    setLoadedLibraryFile(null);
+    setLoadedExternalFile({ kind: 'file', name: sourceName || getImportedSgfNameFromProperties(parsed.tree?.props, t('Loaded SGF')) });
+    markCurrentGameCleanAndClearAutoSave();
+    const sizeNotice = boardSizeCoercionNotice(text);
+    toast(
+      appendRestoredAnalysisSummary(t('Loaded "{name}".', { name: sourceName || t('SGF') }), restoredAnalysisCount)
+        + (sizeNotice ? ` ${sizeNotice}` : ''),
+      sizeNotice ? 'info' : 'success'
+    );
+    return true;
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      if (isKataGoModelWeightsFile(file)) {
+        await handleModelWeightsFile(file);
+        return;
+      }
+      if (isPhotoBoardImageFile(file)) {
+        openPhotoBoard(file);
+        toast(t('Opened photo board from image.'), 'info');
+        return;
+      }
+      if (isUnsupportedPhotoBoardImageFile(file)) {
+        toast(PHOTO_BOARD_UNSUPPORTED_IMAGE_MESSAGE, 'error');
+        return;
+      }
+      if (!file.name.toLowerCase().endsWith('.sgf')) {
+        toast(t('Choose an SGF file, board photo, or KataGo model weights.'), 'error');
+        return;
+      }
+      const sizeError = getSgfImportSizeError(file.size);
+      if (sizeError) {
+        toast(sizeError, 'error');
+        return;
+      }
+      const text = await file.text();
+      await loadLocalSgfText(text, file.name);
+    } catch {
+      toast(t('Failed to parse SGF file.'), 'error');
+    } finally {
+      e.target.value = '';
+    }
+  };
+
+  const handleLoadFromLibrary = async (sgfText: string): Promise<boolean> => {
+    try {
+      const parsed = parseSgf(sgfText);
+      if (!(await prepareForGameReplacement())) return false;
+      loadGame(parsed);
+      markCurrentGameCleanAndClearAutoSave();
+      const sizeNotice = boardSizeCoercionNotice(sgfText);
+      if (sizeNotice) toast(sizeNotice, 'info');
+      return true;
+    } catch {
+      toast(t('Failed to load SGF from library.'), 'error');
+      return false;
+    }
+  };
+
+  const handleCopySgf = async () => {
+    const sgf = generateSgfFromTree(rootNode, sgfExportOptions);
+    if (await copyTextToClipboard(sgf)) {
+      toast(t('Copied SGF to clipboard.'), 'success');
+      return;
+    }
+
+    toast(t('Copy failed (clipboard unavailable).'), 'error');
+  };
+
+  const handleExportBoardImage = async () => {
+    const moveNumber = useGameStore.getState().currentNode.gameState.moveHistory.length;
+    if (await downloadBoardImage(rootNode, moveNumber)) {
+      toast(t('Exported board image (PNG).'), 'success');
+      return;
+    }
+    toast(t('Could not export the board image.'), 'error');
+  };
+
+  const handleCopyBoardImage = async () => {
+    if (await copyBoardImage()) {
+      toast(t('Copied board image to clipboard.'), 'success');
+      return;
+    }
+    toast(t('Copy failed (image clipboard unavailable).'), 'error');
+  };
+
+  const handleCopyShareLink = async () => {
+    const sgf = generateSgfFromTree(rootNode, sgfExportOptions);
+    const url = buildShareUrl(sgf, window.location);
+    if (!(await copyTextToClipboard(url))) {
+      toast(t('Copy failed (clipboard unavailable).'), 'error');
+      return;
+    }
+    if (url.length > MAX_SHARE_URL_LENGTH) {
+      toast(t('Copied share link. It is long and may not open in every browser.'), 'info');
+    } else {
+      toast(t('Copied share link to clipboard.'), 'success');
+    }
+  };
+
+  const handlePasteSgf = (returnFocus?: HTMLElement | null) => {
+    modalReturnFocusRef.current = returnFocus ?? null;
+    setViewMenuOpen(false);
+    setMenuOpen(false);
+    setIsPasteSgfOpen(true);
+  };
+
+  const openPhotoBoard = useCallback((file: File | null = null, returnFocus?: HTMLElement | null) => {
+    modalReturnFocusRef.current = returnFocus ?? null;
+    setPhotoBoardInitialFile(file);
+    setIsPhotoBoardOpen(true);
+  }, []);
+
+  const closePhotoBoard = useCallback(() => {
+    setIsPhotoBoardOpen(false);
+    setPhotoBoardInitialFile(null);
+  }, []);
+
+  const handleLoadProGame = useCallback(async (sgf: string, name: string) => {
+    try {
+      const parsed = parseSgf(sgf);
+      if (!(await prepareForGameReplacement())) return;
+      loadGame(parsed);
+      const restoredAnalysisCount = useGameStore.getState().analysisCacheSize;
+      setLoadedLibraryFile(null);
+      setLoadedExternalFile({ kind: 'pasted', name: getImportedSgfNameFromProperties(parsed.tree?.props, name) });
+      markCurrentGameCleanAndClearAutoSave();
+      setIsProGamesOpen(false);
+      navigateEnd();
+      toast(appendRestoredAnalysisSummary(t('Loaded {name}.', { name }), restoredAnalysisCount), 'success');
+    } catch {
+      toast(t('Failed to load pro game.'), 'error');
+    }
+  }, [markCurrentGameCleanAndClearAutoSave, prepareForGameReplacement, loadGame, setLoadedLibraryFile, navigateEnd, t, toast]);
+
+  const handleOpenSgfFromText = useCallback(async (
+    text: string,
+    options: { notifyFailure?: boolean } = {}
+  ): Promise<PasteSgfSubmitResult> => {
+    try {
+      const result = await loadSgfOrOgs(text);
+      if (!result.sgf.trim()) return 'failed';
+      const parsed = parseSgf(result.sgf);
+      if (!(await prepareForGameReplacement())) return 'cancelled';
+      loadGame(parsed);
+      const restoredAnalysisCount = useGameStore.getState().analysisCacheSize;
+      setLoadedLibraryFile(null);
+      setLoadedExternalFile(
+        result.source === 'ogs'
+          ? { kind: 'ogs', name: `ogs-${result.gameId ?? 'game'}.sgf` }
+          : { kind: 'pasted', name: getImportedSgfNameFromProperties(parsed.tree?.props, t('Pasted SGF')) }
+      );
+      markCurrentGameCleanAndClearAutoSave();
+      const sizeNotice = boardSizeCoercionNotice(result.sgf);
+      toast(
+        appendRestoredAnalysisSummary(
+          result.source === 'ogs' ? t('Downloaded OGS game {id}.', { id: result.gameId ?? '' }) : t('Loaded SGF.'),
+          restoredAnalysisCount
+        ) + (sizeNotice ? ` ${sizeNotice}` : ''),
+        sizeNotice ? 'info' : 'success'
+      );
+      return 'loaded';
+    } catch {
+      if (options.notifyFailure !== false) toast(t('Failed to load SGF or OGS URL.'), 'error');
+      return 'failed';
+    }
+  }, [markCurrentGameCleanAndClearAutoSave, prepareForGameReplacement, loadGame, setLoadedLibraryFile, t, toast]);
+
+  // Plain function (not memoised): only consumed via the handler ref assigned
+  // below during render, so it never feeds an effect/callback dependency list.
+  const handleOpenLaunchFile = async (file: File) => {
+    if (isPhotoBoardImageFile(file)) {
+      openPhotoBoard(file);
+      toast(t('Opened photo board from shared image.'), 'info');
+      return;
+    }
+    if (file.name.toLowerCase().endsWith('.sgf') || file.type === 'application/x-go-sgf') {
+      try {
+        const sizeError = getSgfImportSizeError(file.size);
+        if (sizeError) {
+          toast(sizeError, 'error');
+          return;
+        }
+        const text = await file.text();
+        await loadLocalSgfText(text, file.name);
+      } catch {
+        toast(t('Failed to open the SGF file.'), 'error');
+      }
+      return;
+    }
+    toast(t('Unsupported file type. Open an SGF file or board image.'), 'error');
+  };
+
+  // Keep the startup-effect handler ref pointed at the current callbacks.
+  pwaOpenHandlersRef.current = { openText: handleOpenSgfFromText, openFile: handleOpenLaunchFile };
+
+  const handleOpenRecent = async (item: LibraryFile) => {
+    const loaded = await handleLoadFromLibrary(item.sgf);
+    if (!loaded) return;
+    const restoredAnalysisCount = useGameStore.getState().analysisCacheSize;
+    setLoadedLibraryFile(item.id, item.name);
+    toast(appendRestoredAnalysisSummary(t('Loaded "{name}".', { name: item.name }), restoredAnalysisCount), 'success');
+  };
+
+  useEffect(() => {
+    const handlePasteEvent = (event: ClipboardEvent) => {
+      if (shouldIgnoreGlobalPasteTarget(event.target)) return;
+
+      const importText = getDirectGameImportText(event.clipboardData?.getData('text/plain'));
+      if (importText) {
+        event.preventDefault();
+        void handleOpenSgfFromText(importText);
+        return;
+      }
+
+      const imageFile = getPhotoBoardClipboardImageFile(event.clipboardData);
+      if (!imageFile) return;
+      event.preventDefault();
+      openPhotoBoard(imageFile);
+      toast(t('Opened photo board from pasted image.'), 'info');
+    };
+
+    document.addEventListener('paste', handlePasteEvent);
+    return () => document.removeEventListener('paste', handlePasteEvent);
+  }, [handleOpenSgfFromText, openPhotoBoard, toast]);
+
+  const handlePasteSgfShortcut = useCallback(async () => {
+    setViewMenuOpen(false);
+    setMenuOpen(false);
+
+    const clipboardText = await readClipboardText();
+    const importText = getDirectGameImportText(clipboardText);
+    if (importText) {
+      await handleOpenSgfFromText(importText);
+      return;
+    }
+
+    setIsPasteSgfOpen(true);
+  }, [handleOpenSgfFromText]);
+
+  const handlePhotoBoardImport = async (sgfText: string) => {
+    try {
+      const parsed = parseSgf(sgfText);
+      if (!(await prepareForGameReplacement())) return;
+      loadGame(parsed);
+      setLoadedLibraryFile(null);
+      navigateStart();
+      markCurrentGameCleanAndClearAutoSave();
+      closePhotoBoard();
+      toast(t('Imported board position.'), 'success');
+    } catch {
+      toast(t('Failed to import board position.'), 'error');
+    }
+  };
+
+  const handlePhotoBoardAddSetup = async (
+    stones: Array<{ x: number; y: number; player: Player }>,
+    scannedBoardSize: number
+  ) => {
+    if (scannedBoardSize !== boardSize) {
+      toast(t('Photo board is {a}x{a}; current board is {b}x{b}.', { a: scannedBoardSize, b: boardSize }), 'error');
+      return;
+    }
+    const changed = applySetupStones(stones);
+    if (changed === 0) {
+      toast(t('No new photo board stones to add.'), 'info');
+      return;
+    }
+    closePhotoBoard();
+    const setupStoneUnit = changed === 1 ? t('setup stone') : t('setup stones');
+    toast(t('Added {count} setup {unit} from photo board.', { count: changed, unit: setupStoneUnit }), 'success');
+  };
+
+  const handlePhotoBoardPlayMove = async (x: number, y: number) => {
+    const beforeNodeId = useGameStore.getState().currentNode.id;
+    playMove(x, y);
+    const after = useGameStore.getState();
+    if (after.currentNode.id === beforeNodeId) {
+      toast(t('Could not play photo board move.'), 'error');
+      return;
+    }
+    closePhotoBoard();
+    toast(t('Played photo board move.'), 'success');
+  };
+
+  const handleLibraryUpdated = useCallback(() => {
+    setLibraryVersion((prev) => prev + 1);
+  }, []);
+
+  const isGameImportDragEvent = (event: React.DragEvent) =>
+    hasPotentialGameImportDrag(event.dataTransfer);
+
+  const isDragOverLibrary = (target: EventTarget | null) => {
+    if (!target || !(target instanceof HTMLElement)) return false;
+    return Boolean(target.closest('[data-dropzone="library"]'));
+  };
+
+  const resetFileDragState = useCallback(() => {
+    fileDragCounter.current = 0;
+    if (fileDragResetTimer.current) {
+      clearTimeout(fileDragResetTimer.current);
+      fileDragResetTimer.current = null;
+    }
+    setIsFileDragActive(false);
+  }, []);
+
+  const handleAppDragEnter = (event: React.DragEvent<HTMLDivElement>) => {
+    if (!isGameImportDragEvent(event)) return;
+    if (isDragOverLibrary(event.target)) {
+      resetFileDragState();
+      return;
+    }
+    event.preventDefault();
+    if (fileDragResetTimer.current) {
+      clearTimeout(fileDragResetTimer.current);
+      fileDragResetTimer.current = null;
+    }
+    fileDragCounter.current += 1;
+    setIsFileDragActive(true);
+  };
+
+  const handleAppDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
+    if (isDragOverLibrary(event.target)) {
+      resetFileDragState();
+      return;
+    }
+    fileDragCounter.current = Math.max(0, fileDragCounter.current - 1);
+    if (fileDragCounter.current === 0) {
+      resetFileDragState();
+    }
+  };
+
+  const handleAppDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    if (!isGameImportDragEvent(event)) return;
+    if (isDragOverLibrary(event.target)) {
+      resetFileDragState();
+      return;
+    }
+    event.preventDefault();
+    if (fileDragResetTimer.current) {
+      clearTimeout(fileDragResetTimer.current);
+    }
+    fileDragResetTimer.current = setTimeout(() => {
+      resetFileDragState();
+    }, 350);
+  };
+
+  const handleAppDrop = async (event: React.DragEvent<HTMLDivElement>) => {
+    if (event.defaultPrevented) {
+      resetFileDragState();
+      return;
+    }
+    if (!isGameImportDragEvent(event) || isDragOverLibrary(event.target)) {
+      resetFileDragState();
+      return;
+    }
+    event.preventDefault();
+    resetFileDragState();
+    const droppedText = getDroppedSgfOrOgsText(event.dataTransfer);
+    if (!hasDraggedFiles(event.dataTransfer)) {
+      if (droppedText) {
+        await handleOpenSgfFromText(droppedText);
+      } else {
+        toast(t('Drop SGF text or an Online-Go game URL here.'), 'error');
+      }
+      return;
+    }
+    const file = getFirstDraggedFile<File>(event.dataTransfer);
+    if (!file) {
+      if (droppedText) {
+        await handleOpenSgfFromText(droppedText);
+      } else {
+        toast(t('Drop SGF text or an Online-Go game URL here.'), 'error');
+      }
+      return;
+    }
+    if (isKataGoModelWeightsFile(file)) {
+      await handleModelWeightsFile(file);
+      return;
+    }
+    if (isPhotoBoardImageFile(file)) {
+      openPhotoBoard(file);
+      toast(t('Opened photo board from dropped image.'), 'info');
+      return;
+    }
+    if (isUnsupportedPhotoBoardImageFile(file)) {
+      toast(PHOTO_BOARD_UNSUPPORTED_IMAGE_MESSAGE, 'error');
+      return;
+    }
+    if (!file.name.toLowerCase().endsWith('.sgf')) {
+      toast(t('Drop an SGF file, OGS URL, board photo, or KataGo model weights here.'), 'error');
+      return;
+    }
+    try {
+      const sizeError = getSgfImportSizeError(file.size);
+      if (sizeError) {
+        toast(sizeError, 'error');
+        return;
+      }
+      const text = await file.text();
+      await loadLocalSgfText(text, file.name);
+    } catch {
+      toast(t('Failed to load the dropped SGF file.'), 'error');
+    }
+  };
+
+  useEffect(() => () => {
+    if (fileDragResetTimer.current) {
+      clearTimeout(fileDragResetTimer.current);
+    }
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    void loadLibrary()
+      .then((libraryItems) => {
+        if (cancelled) return;
+        setRecentLibraryItems(
+          libraryItems
+            .filter((item): item is LibraryFile => item.type === 'file')
+            .sort((a, b) => b.updatedAt - a.updatedAt)
+            .slice(0, 6)
+        );
+      })
+      .catch(() => {
+        if (!cancelled) setRecentLibraryItems([]);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [libraryOpen, libraryVersion]);
+
+  const saveControlLabel = loadedLibraryFileId ? t('Save to Library') : t('Save SGF');
+
+  // Keyboard shortcuts
+  useKeyboardShortcuts({
+    mode,
+    sgfExportOptions,
+    saveSgf: handleSaveCurrentSgf,
+    saveCopyToLibrary: handleOpenSaveToLibraryDialog,
+    openSgf: handleLoadClick,
+    setIsSettingsOpen,
+    setIsGameAnalysisOpen,
+    setIsTsumegoFrameOpen,
+    setIsGameReportOpen,
+    setViewMenuOpen,
+    setMenuOpen,
+    setIsCommandPaletteOpen,
+    setIsKeyboardHelpOpen,
+    openPasteSgf: handlePasteSgfShortcut,
+    openNewGame: () => void openNewGameWithGuard(),
+    toggleLibrary: handleToggleLibrary,
+    closeLibrary: handleCloseLibrary,
+    toggleSidebar: handleToggleSidebar,
+    toggleScoringMode,
+    editCurrentNote: openCurrentNoteEditor,
+    runMoveTreeCommand,
+    toggleTopBar: handleToggleTopBar,
+    toggleBottomBar: handleToggleBottomBar,
+    toast,
+  });
+
+  const commandPaletteCommands: CommandPaletteCommand[] = (() => {
+    const closeFloatingMenus = () => {
+      setViewMenuOpen(false);
+      setMenuOpen(false);
+    };
+    const openSimpleModal = (open: () => void) => {
+      closeFloatingMenus();
+      open();
+    };
+    const openSettingsTab = (tab: 'general' | 'analysis' | 'ai' | 'shortcuts') => {
+      saveSettingsActiveTab(tab);
+      openSimpleModal(() => setIsSettingsOpen(true));
+    };
+    const setLiveAnalysisDepth = (visits: number) => {
+      if (isGameAnalysisRunning) {
+        toast(t('Stop game review before changing live analysis depth.'), 'error');
+        return;
+      }
+      updateSettings({ katagoVisits: visits });
+      if (isAnalysisMode) {
+        window.setTimeout(() => {
+          void useGameStore.getState().runAnalysis({ force: true, visits });
+        }, 0);
+      }
+      toast(t('Live analysis depth: {visits} visits ({preset}).', { visits: formatVisitCount(visits), preset: visitPresetLabel(visits) }), 'info');
+    };
+    const toggleTopMoveHints = () => {
+      if (settings.analysisShowPolicy) {
+        toast(t('Move heatmap is showing; top move hints are hidden.'), 'info');
+        return;
+      }
+      updateControls({ analysisShowHints: !settings.analysisShowHints });
+    };
+    const guardNavigation = (action: () => void) => {
+      if (isInsertMode) {
+        toast(t('Finish inserting before navigating.'), 'error');
+        return;
+      }
+      action();
+    };
+    const openScoring = () => {
+      if (isEditMode || isInsertMode || isSelectingRegionOfInterest) {
+        toast(t('Finish editing before scoring.'), 'error');
+        return false;
+      }
+      setScoringMode(true);
+      return true;
+    };
+
+    return [
+      {
+        id: 'quick-new-game',
+        label: t('Quick new game'),
+        category: t('Game'),
+        run: () => { void startQuickNewGame(); },
+        keywords: ['restart', 'fresh board'],
+      },
+      {
+        id: 'new-game',
+        label: t('New game setup'),
+        category: t('Game'),
+        shortcutId: 'new-game',
+        run: () => { void openNewGameWithGuard(); },
+        keywords: ['board size', 'handicap', 'players'],
+      },
+      {
+        id: 'save-sgf',
+        label: saveControlLabel,
+        category: t('File'),
+        shortcutId: 'save-sgf',
+        run: () => { void handleSaveCurrentSgf(); },
+        keywords: ['download', 'export'],
+      },
+      {
+        id: 'save-library',
+        label: t('Save copy to library'),
+        category: t('File'),
+        shortcutId: 'save-library',
+        run: handleOpenSaveToLibraryDialog,
+        keywords: ['archive', 'collection'],
+      },
+      {
+        id: 'load-sgf',
+        label: t('Load SGF / photo / model'),
+        category: t('File'),
+        shortcutId: 'open-sgf',
+        run: handleLoadClick,
+        keywords: ['open', 'import', 'weights'],
+      },
+      {
+        id: 'photo-board',
+        label: t('Open photo board'),
+        category: t('File'),
+        run: () => openPhotoBoard(),
+        keywords: ['scan', 'camera', 'image'],
+      },
+      {
+        id: 'print-kifu',
+        label: t('Print kifu (PDF)'),
+        category: t('File'),
+        run: () => openSimpleModal(() => setIsKifuPrintOpen(true)),
+        keywords: ['print', 'pdf', 'diagram', 'kifu', 'export', 'moves per diagram'],
+      },
+      {
+        id: 'paste-sgf',
+        label: t('Paste SGF or OGS URL'),
+        category: t('File'),
+        shortcutId: 'paste-sgf',
+        run: () => { void handlePasteSgfShortcut(); },
+        keywords: ['clipboard', 'load', 'read clipboard'],
+      },
+      {
+        id: 'copy-sgf',
+        label: t('Copy SGF'),
+        category: t('File'),
+        shortcutId: 'copy-sgf',
+        run: () => { void handleCopySgf(); },
+        keywords: ['clipboard'],
+      },
+      {
+        id: 'export-board-image',
+        label: t('Export board image (PNG)'),
+        category: t('File'),
+        run: () => { void handleExportBoardImage(); },
+        keywords: ['png', 'screenshot', 'diagram', 'picture', 'save image', 'download image', 'share'],
+      },
+      {
+        id: 'copy-board-image',
+        label: t('Copy board image'),
+        category: t('File'),
+        run: () => { void handleCopyBoardImage(); },
+        keywords: ['png', 'screenshot', 'diagram', 'clipboard', 'picture', 'share'],
+      },
+      {
+        id: 'copy-share-link',
+        label: t('Copy share link'),
+        category: t('File'),
+        run: () => { void handleCopyShareLink(); },
+        keywords: ['url', 'link', 'share', 'sgf', 'send', 'position'],
+      },
+      {
+        id: 'nav-back',
+        label: t('Previous move'),
+        category: t('Navigation'),
+        shortcutId: 'nav-back',
+        disabledReason: historyNavigation.back ? undefined : t('No previous move'),
+        run: () => { if (mode === 'play') handleUndo(); else navigateBack(); },
+        keywords: ['back', 'undo move'],
+      },
+      {
+        id: 'nav-forward',
+        label: t('Next move'),
+        category: t('Navigation'),
+        shortcutId: 'nav-forward',
+        disabledReason: historyNavigation.forward ? undefined : t('No next move'),
+        run: () => guardNavigation(navigateForward),
+        keywords: ['forward', 'redo move'],
+      },
+      {
+        id: 'nav-back-10',
+        label: t('Back 10 moves'),
+        category: t('Navigation'),
+        shortcutId: 'nav-back-10',
+        disabledReason: historyNavigation.back ? undefined : t('Already at the first move'),
+        run: () => { for (let i = 0; i < 10; i++) navigateBack(); },
+        keywords: ['rewind'],
+      },
+      {
+        id: 'nav-forward-10',
+        label: t('Forward 10 moves'),
+        category: t('Navigation'),
+        shortcutId: 'nav-forward-10',
+        disabledReason: historyNavigation.forward ? undefined : t('Already at the last move'),
+        run: () => guardNavigation(() => { for (let i = 0; i < 10; i++) navigateForward(); }),
+        keywords: ['advance'],
+      },
+      {
+        id: 'nav-start',
+        label: t('Go to start'),
+        category: t('Navigation'),
+        shortcutId: 'nav-start',
+        disabledReason: historyNavigation.back ? undefined : t('Already at the first move'),
+        run: () => guardNavigation(navigateStart),
+        keywords: ['root', 'beginning'],
+      },
+      {
+        id: 'nav-end',
+        label: t('Go to end'),
+        category: t('Navigation'),
+        shortcutId: 'nav-end',
+        disabledReason: historyNavigation.forward ? undefined : t('Already at the last move'),
+        run: () => guardNavigation(navigateEnd),
+        keywords: ['last move'],
+      },
+      {
+        id: 'branch-prev',
+        label: t('Previous branch'),
+        category: t('Navigation'),
+        shortcutId: 'branch-prev',
+        disabledReason: branchInfo.hasBranches ? undefined : t('No alternate branch'),
+        run: () => guardNavigation(() => switchBranch(-1)),
+        keywords: ['variation'],
+      },
+      {
+        id: 'branch-next',
+        label: t('Next branch'),
+        category: t('Navigation'),
+        shortcutId: 'branch-next',
+        disabledReason: branchInfo.hasBranches ? undefined : t('No alternate branch'),
+        run: () => guardNavigation(() => switchBranch(1)),
+        keywords: ['variation'],
+      },
+      {
+        id: 'undo-branch-point',
+        label: t('Undo to branch point'),
+        category: t('Navigation'),
+        shortcutId: 'undo-branch-point',
+        disabledReason: branchInfo.hasBranches ? undefined : t('Not on a variation'),
+        run: () => guardNavigation(undoToBranchPoint),
+        keywords: ['variation', 'fork'],
+      },
+      {
+        id: 'undo-main-branch',
+        label: t('Undo to main branch'),
+        category: t('Navigation'),
+        shortcutId: 'undo-main-branch',
+        disabledReason: branchInfo.hasBranches && branchInfo.currentIndex > 1 ? undefined : t('Already on the main branch'),
+        run: () => guardNavigation(undoToMainBranch),
+        keywords: ['variation', 'main line'],
+      },
+      {
+        id: 'make-main-branch',
+        label: t('Make current branch main'),
+        category: t('Navigation'),
+        shortcutId: 'make-main-branch',
+        disabledReason: branchInfo.hasBranches && branchInfo.currentIndex > 1 ? undefined : t('Current line is already main'),
+        run: () => guardNavigation(makeCurrentNodeMainBranch),
+        keywords: ['variation', 'main line'],
+      },
+      {
+        id: 'prev-mistake',
+        label: t('Previous mistake'),
+        category: t('Navigation'),
+        shortcutId: 'prev-mistake',
+        disabledReason: mistakeNavigation.previous ? undefined : t('No earlier analyzed mistake'),
+        run: () => guardNavigation(() => findMistake('undo')),
+        keywords: ['review', 'blunder'],
+      },
+      {
+        id: 'next-mistake',
+        label: t('Next mistake'),
+        category: t('Navigation'),
+        shortcutId: 'next-mistake',
+        disabledReason: mistakeNavigation.next ? undefined : t('No later analyzed mistake'),
+        run: () => guardNavigation(() => findMistake('redo')),
+        keywords: ['review', 'blunder'],
+      },
+      {
+        id: 'drill-mistakes',
+        label: mistakeDrill ? t('End mistake drill') : t('Drill my mistakes'),
+        category: t('Analysis'),
+        run: () => (mistakeDrill ? stopMistakeDrill() : startMistakeDrill('both')),
+        keywords: ['review', 'blunder', 'practice', 'quiz', 'learn from mistakes', 'retry'],
+      },
+      {
+        id: 'drill-mistakes-black',
+        label: t('Drill Black\u2019s mistakes'),
+        category: t('Analysis'),
+        run: () => startMistakeDrill('black'),
+        keywords: ['review', 'blunder', 'practice', 'quiz'],
+      },
+      {
+        id: 'drill-mistakes-white',
+        label: t('Drill White\u2019s mistakes'),
+        category: t('Analysis'),
+        run: () => startMistakeDrill('white'),
+        keywords: ['review', 'blunder', 'practice', 'quiz'],
+      },
+      {
+        id: 'toggle-library',
+        label: libraryOpen ? t('Hide library') : t('Show library'),
+        category: t('View'),
+        shortcutId: 'toggle-library',
+        run: handleToggleLibrary,
+        keywords: ['games', 'collection'],
+      },
+      {
+        id: 'toggle-sidebar',
+        label: showSidebar ? t('Hide side panel') : t('Show side panel'),
+        category: t('View'),
+        shortcutId: 'toggle-sidebar',
+        run: handleToggleSidebar,
+        keywords: ['layout', 'panels'],
+      },
+      {
+        id: 'center-move-tree',
+        label: t('Center current move in tree'),
+        category: t('View'),
+        shortcutId: 'center-move-tree',
+        run: () => runMoveTreeCommand('center-current'),
+        keywords: ['game tree', 'locate', 'review'],
+      },
+      {
+        id: 'toggle-move-tree-layout',
+        label: t('Switch move tree layout'),
+        category: t('View'),
+        shortcutId: 'toggle-move-tree-layout',
+        run: () => runMoveTreeCommand('toggle-layout'),
+        keywords: ['game tree', 'horizontal', 'vertical'],
+      },
+      {
+        id: 'toggle-move-tree-map',
+        label: t('Toggle move tree map'),
+        category: t('View'),
+        shortcutId: 'toggle-move-tree-map',
+        run: () => runMoveTreeCommand('toggle-minimap'),
+        keywords: ['game tree', 'minimap', 'overview'],
+      },
+      {
+        id: 'toggle-focus-mode',
+        label: focusMode ? t('Exit focus mode') : t('Enter focus mode'),
+        category: t('View'),
+        shortcutId: 'toggle-focus-mode',
+        run: () => {
+          closeFloatingMenus();
+          toggleFocusMode();
+        },
+        keywords: ['board only', 'distraction free', 'zen', 'hide panels'],
+      },
+      {
+        id: 'pin-variation',
+        label: t('Pin current line'),
+        category: t('Navigation'),
+        run: () => {
+          closeFloatingMenus();
+          pinCurrentVariation();
+        },
+        keywords: ['bookmark', 'save variation', 'recall', 'pinned'],
+      },
+      ...pinnedVariations.map((pin) => ({
+        id: `recall-variation-${pin.id}`,
+        label: t('Recall pinned: {label}', { label: pin.label }),
+        category: t('Navigation'),
+        run: () => {
+          closeFloatingMenus();
+          recallVariation(pin.id);
+        },
+        keywords: ['pinned', 'variation', 'jump', 'bookmark'],
+      })),
+      ...(pinnedVariations.length > 0
+        ? [
+            {
+              id: 'clear-pinned-variations',
+              label: t('Clear pinned lines'),
+              category: t('Navigation'),
+              run: () => {
+                closeFloatingMenus();
+                clearPinnedVariations();
+              },
+              keywords: ['unpin', 'remove pinned'],
+            },
+          ]
+        : []),
+      {
+        id: 'toggle-top-bar',
+        label: topBarOpen ? t('Hide top bar') : t('Show top bar'),
+        category: t('View'),
+        shortcutId: 'toggle-top-bar',
+        run: handleToggleTopBar,
+        keywords: ['layout', 'header', 'chrome', 'focus'],
+      },
+      {
+        id: 'toggle-bottom-bar',
+        label: bottomBarOpen ? t('Hide bottom controls') : t('Show bottom controls'),
+        category: t('View'),
+        shortcutId: 'toggle-bottom-bar',
+        run: handleToggleBottomBar,
+        keywords: ['layout', 'navigation', 'chrome', 'focus'],
+      },
+      {
+        id: 'toggle-sound',
+        label: settings.soundEnabled ? t('Mute sound') : t('Enable sound'),
+        category: t('View'),
+        shortcutId: 'toggle-sound',
+        run: () => updateSettings({ soundEnabled: !settings.soundEnabled }),
+        keywords: ['audio', 'mute', 'volume'],
+      },
+      {
+        id: 'toggle-coordinates',
+        label: settings.showCoordinates ? t('Hide coordinates') : t('Show coordinates'),
+        category: t('View'),
+        shortcutId: 'toggle-coordinates',
+        run: () => updateSettings({ showCoordinates: !settings.showCoordinates }),
+        keywords: ['board labels', 'grid'],
+      },
+      {
+        id: 'toggle-move-numbers',
+        label: settings.showMoveNumbers ? t('Hide move numbers') : t('Show move numbers'),
+        category: t('View'),
+        shortcutId: 'toggle-move-numbers',
+        run: () => updateSettings({ showMoveNumbers: !settings.showMoveNumbers }),
+        keywords: ['stones', 'sequence'],
+      },
+      {
+        id: 'toggle-next-move-preview',
+        label: settings.showNextMovePreview ? t('Hide next move preview') : t('Show next move preview'),
+        category: t('View'),
+        shortcutId: 'toggle-next-move-preview',
+        run: () => updateSettings({ showNextMovePreview: !settings.showNextMovePreview }),
+        keywords: ['ghost stone', 'preview'],
+      },
+      {
+        id: 'toggle-analysis',
+        label: isAnalysisMode ? t('Turn analysis off') : t('Turn analysis on'),
+        category: t('Analysis'),
+        shortcutId: 'toggle-analysis',
+        run: toggleAnalysisMode,
+        keywords: ['engine', 'ai'],
+      },
+      {
+        id: 'analysis-without-top',
+        label: t('Analyze without the top move'),
+        category: t('Analysis'),
+        // KataGo's avoidMoves: the same search with the engine's own first choice
+        // taken off the table, which is how you find out what the rest of the board
+        // is worth when one move dominates the reading.
+        run: () => {
+          closeFloatingMenus();
+          analyzeExtra('without-top');
+        },
+        keywords: ['avoid', 'exclude', 'second best', 'alternative plan'],
+      },
+      {
+        id: 'toggle-children',
+        label: settings.analysisShowChildren ? t('Hide children overlay') : t('Show children overlay'),
+        category: t('Analysis'),
+        shortcutId: 'toggle-children',
+        run: () => updateControls({ analysisShowChildren: !settings.analysisShowChildren }),
+        keywords: ['legal moves', 'variations'],
+      },
+      {
+        id: 'toggle-eval',
+        label: settings.analysisShowEval ? t('Hide evaluation dots') : t('Show evaluation dots'),
+        category: t('Analysis'),
+        shortcutId: 'toggle-eval',
+        run: () => updateControls({ analysisShowEval: !settings.analysisShowEval }),
+        keywords: ['dots', 'mistakes'],
+      },
+      {
+        id: 'toggle-hints',
+        label: settings.analysisShowHints && !settings.analysisShowPolicy ? t('Hide top move hints') : t('Show top move hints'),
+        category: t('Analysis'),
+        shortcutId: 'toggle-hints',
+        run: toggleTopMoveHints,
+        keywords: ['best moves', 'suggestions'],
+      },
+      {
+        id: 'toggle-policy',
+        label: settings.analysisShowPolicy ? t('Hide move heatmap') : t('Show move heatmap'),
+        category: t('Analysis'),
+        shortcutId: 'toggle-policy',
+        run: () => updateControls({ analysisShowPolicy: !settings.analysisShowPolicy }),
+        keywords: ['heatmap', 'probability', 'network'],
+      },
+      {
+        id: 'cycle-policy-metric',
+        label: t('Cycle move heatmap metric'),
+        category: t('Analysis'),
+        shortcutId: 'cycle-policy-metric',
+        run: () => {
+          updateSettings({ analysisPolicyMetric: nextPolicyHeatmapMetric(settings.analysisPolicyMetric) });
+          if (!settings.analysisShowPolicy) updateControls({ analysisShowPolicy: true });
+        },
+        keywords: ['probability label', 'score change', 'win-rate change', 'heatmap label'],
+      },
+      {
+        id: 'analyze-tenuki',
+        label: t('What does playing elsewhere cost?'),
+        category: t('Analysis'),
+        run: () => analyzeTenuki(),
+        disabledReason: currentNode.analysis
+          ? undefined
+          : t('Analyze the position first, so there is something to compare a pass against.'),
+        keywords: ['tenuki', 'sente', 'gote', 'urgent', 'threat', 'how big', 'value of the point', 'pass'],
+      },
+      {
+        id: 'toggle-territory',
+        label: settings.analysisShowOwnership ? t('Hide territory ownership') : t('Show territory ownership'),
+        category: t('Analysis'),
+        shortcutId: 'toggle-territory',
+        run: () => updateControls({ analysisShowOwnership: !settings.analysisShowOwnership }),
+        keywords: ['ownership', 'area'],
+      },
+      {
+        id: 'toggle-shape-coach',
+        label: shapeCoachEnabled ? t('Hide Shape Coach') : t('Show Shape Coach'),
+        category: t('Analysis'),
+        run: () => {
+          toggleShapeCoach();
+          toast(shapeCoachEnabled ? t('Shape Coach hidden.') : t('Shape Coach shown.'), 'info');
+        },
+        keywords: ['pattern', 'move names', 'joseki', 'study', 'sensei', 'kaya'],
+      },
+      ...ANALYSIS_VISIT_PRESETS.map((visits) => {
+        const label = visitPresetLabel(visits);
+        return {
+          id: `set-live-mcts-depth-${visits}`,
+          label: t('Set live analysis depth: {label}', { label }),
+          category: t('Analysis'),
+          run: () => setLiveAnalysisDepth(visits),
+          keywords: [
+            'visits',
+            'mcts',
+            'depth',
+            'live analysis',
+            `${visits}`,
+            formatVisitCount(visits),
+            visitPresetDescription(visits),
+          ],
+        };
+      }),
+      {
+        id: 'game-review',
+        label: isGameAnalysisRunning ? t('Stop game review') : t('Fast game review'),
+        category: t('Analysis'),
+        run: isGameAnalysisRunning ? stopGameAnalysis : () => startFastGameAnalysis(),
+        keywords: ['analyze all', 'report'],
+      },
+      {
+        id: 'game-report',
+        label: t('Open game report'),
+        category: t('Analysis'),
+        shortcutId: 'game-report-modal',
+        run: () => openSimpleModal(() => setIsGameReportOpen(true)),
+        keywords: ['review', 'mistakes'],
+      },
+      {
+        id: 'score-quiz',
+        label: t('Score estimation quiz'),
+        category: t('Study'),
+        run: () => openSimpleModal(() => setIsScoreQuizOpen(true)),
+        keywords: ['estimate', 'quiz', 'count', 'territory', 'judgement', 'guess'],
+      },
+      {
+        id: 'rank-ladder',
+        label: t('Rank ladder (tournament)'),
+        category: t('Study'),
+        run: () => openSimpleModal(() => setIsTournamentOpen(true)),
+        keywords: ['tournament', 'ladder', 'climb', 'bot', 'rank', 'challenge'],
+      },
+      {
+        id: 'pro-games',
+        label: t('Browse pro game database'),
+        category: t('Study'),
+        run: () => openSimpleModal(() => setIsProGamesOpen(true)),
+        keywords: ['professional', 'database', 'famous', 'kifu', 'player', 'event', 'opening', 'joseki'],
+      },
+      {
+        id: 'lessons',
+        label: t('Interactive lessons'),
+        category: t('Study'),
+        run: () => openSimpleModal(() => setIsLessonsOpen(true)),
+        keywords: ['learn', 'tutorial', 'teach', 'beginner', 'fundamentals', 'capture', 'eyes'],
+      },
+      {
+        id: 'guess-move',
+        label: t('Guess the move'),
+        category: t('Study'),
+        run: () => openSimpleModal(() => setIsGuessMoveOpen(true)),
+        keywords: ['predict', 'next move', 'quiz', 'pro', 'practice', 'replay'],
+      },
+      {
+        id: 'problem-practice',
+        label: t('Problem practice (tsumego)'),
+        category: t('Study'),
+        run: () => openSimpleModal(() => setIsProblemOpen(true)),
+        keywords: ['tsumego', 'problem', 'life and death', 'puzzle', 'solve', 'tesuji'],
+      },
+      {
+        id: 'game-analysis',
+        label: t('Open game re-analysis'),
+        category: t('Analysis'),
+        shortcutId: 'game-analysis-modal',
+        run: () => openSimpleModal(() => setIsGameAnalysisOpen(true)),
+        keywords: ['depth', 'range'],
+      },
+      {
+        id: 'tsumego-frame',
+        label: t('Frame as tsumego'),
+        category: t('Analysis'),
+        shortcutId: 'tsumego-frame-modal',
+        run: () => openSimpleModal(() => setIsTsumegoFrameOpen(true)),
+        keywords: ['tsumego', 'frame', 'wall', 'life and death', 'problem', 'fill'],
+      },
+      {
+        id: 'pass',
+        label: t('Pass'),
+        category: t('Game'),
+        shortcutId: 'pass',
+        run: passTurn,
+        keywords: ['skip', 'tenuki', 'no move'],
+      },
+      {
+        id: 'ai-move',
+        label: t('AI move'),
+        category: t('Game'),
+        shortcutId: 'ai-move',
+        run: requestAiMove,
+        keywords: ['engine', 'play for me', 'computer'],
+      },
+      {
+        id: 'rotate-board',
+        label: t('Rotate board'),
+        category: t('Game'),
+        shortcutId: 'rotate-board',
+        run: rotateBoard,
+        keywords: ['orientation', 'flip', 'turn'],
+      },
+      {
+        id: 'resign',
+        label: t('Resign'),
+        category: t('Game'),
+        // handleResign is declared below this registry, so defer the reference
+        // to call time rather than reading it while the list is being built.
+        run: () => handleResign(),
+        keywords: ['give up', 'concede', 'forfeit', 'quit game'],
+      },
+      {
+        id: 'toggle-scoring',
+        label: scoringMode ? t('Exit scoring mode') : t('Score position'),
+        category: t('Game'),
+        shortcutId: 'toggle-scoring',
+        run: toggleScoringMode,
+        keywords: ['count', 'territory', 'dead stones', 'manual score'],
+      },
+      {
+        id: 'score-auto-estimate',
+        label: t('Auto-estimate dead stones'),
+        category: t('Game'),
+        run: () => {
+          if (!openScoring()) return;
+          autoEstimateDeadStones();
+        },
+        keywords: ['score', 'territory', 'dead stones', 'ownership'],
+      },
+      {
+        id: 'score-clear-dead-stones',
+        label: t('Clear scoring dead stones'),
+        category: t('Game'),
+        run: () => {
+          if (!openScoring()) return;
+          clearManualDeadStones();
+        },
+        keywords: ['score', 'territory', 'reset marks'],
+      },
+      {
+        id: 'score-use-final',
+        label: t('Use final manual score'),
+        category: t('Game'),
+        run: () => {
+          if (!openScoring()) return;
+          setManualScoreMode('manual');
+        },
+        keywords: ['score', 'manual', 'final'],
+      },
+      {
+        id: 'score-done',
+        label: t('Finish scoring'),
+        category: t('Game'),
+        disabledReason: scoringMode ? undefined : t('Scoring mode is not active'),
+        run: () => setScoringMode(false),
+        keywords: ['score', 'done', 'close'],
+      },
+      {
+        id: 'toggle-edit-mode',
+        label: isEditMode ? t('Close edit tools') : t('Open edit tools'),
+        category: t('Edit'),
+        shortcutId: 'toggle-edit-mode',
+        run: toggleEditMode,
+        keywords: ['sgf', 'setup stones', 'markers', 'labels'],
+      },
+      ...EDIT_TOOL_SHORTCUT_DEFINITIONS.map((shortcut) => ({
+        id: shortcut.id,
+        label: shortcut.label,
+        category: t('Edit'),
+        shortcutId: shortcut.id,
+        run: () => selectEditTool(shortcut.tool),
+        keywords: ['tool', 'edit mode', shortcut.tool.replaceAll('-', ' ')],
+      })),
+      {
+        id: 'edit-note',
+        label: t('Edit current note'),
+        category: t('Edit'),
+        shortcutId: 'edit-note',
+        run: openCurrentNoteEditor,
+        keywords: ['comment', 'annotation', 'sgf c'],
+      },
+      ...BOARD_THEME_OPTIONS.map((theme) => ({
+        id: `set-board-theme-${theme.value}`,
+        label: t('Set board theme: {label}', { label: theme.label }),
+        category: t('Appearance'),
+        run: () => {
+          updateSettings({ boardTheme: theme.value });
+          toast(t('Board theme: {label}.', { label: theme.label }), 'info');
+        },
+        keywords: ['board', 'theme', 'appearance', 'kaya', theme.value],
+      })),
+      {
+        id: 'settings',
+        label: t('Open settings'),
+        category: t('Help & Settings'),
+        shortcutId: 'settings-modal',
+        run: () => openSimpleModal(() => setIsSettingsOpen(true)),
+        keywords: ['preferences', 'configuration'],
+      },
+      {
+        id: 'settings-general',
+        label: t('Open general settings'),
+        category: t('Help & Settings'),
+        run: () => openSettingsTab('general'),
+        keywords: ['preferences', 'configuration', 'board', 'theme', 'sound', 'gamepad'],
+      },
+      {
+        id: 'settings-analysis',
+        label: t('Open analysis settings'),
+        category: t('Help & Settings'),
+        run: () => openSettingsTab('analysis'),
+        keywords: ['preferences', 'configuration', 'overlays', 'review', 'visits'],
+      },
+      {
+        id: 'settings-ai',
+        label: t('Open AI/Engine settings'),
+        category: t('Help & Settings'),
+        run: () => openSettingsTab('ai'),
+        keywords: ['preferences', 'configuration', 'model', 'backend', 'webgpu', 'upload'],
+      },
+      {
+        id: 'keyboard-help',
+        label: t('Open keyboard shortcuts'),
+        category: t('Help & Settings'),
+        shortcutId: 'keyboard-help',
+        run: () => openSimpleModal(() => setIsKeyboardHelpOpen(true)),
+        keywords: ['hotkeys', 'keys'],
+      },
+      {
+        id: 'shortcut-settings',
+        label: t('Customize keyboard shortcuts'),
+        category: t('Help & Settings'),
+        run: openShortcutSettings,
+        keywords: ['hotkeys', 'keys', 'bindings', 'rebind'],
+      },
+      {
+        id: 'about',
+        label: t('About Web KaTrain'),
+        category: t('Help & Settings'),
+        run: () => openSimpleModal(() => setIsAboutOpen(true)),
+        keywords: ['version', 'build'],
+      },
+    ];
+  })();
+
+  const jumpBack = (n: number) => {
+    for (let i = 0; i < n; i++) navigateBack();
+  };
+  const jumpForward = (n: number) => {
+    for (let i = 0; i < n; i++) navigateForward();
+  };
+
+  const blackName = getRootProp('PB') || t('Black');
+  const whiteName = getRootProp('PW') || t('White');
+  const blackRank = getRootProp('BR');
+  const whiteRank = getRootProp('WR');
+
+  const currentMoveInsight = getMoveInsight(currentNode.move, boardSize, currentNode.parent?.gameState.board ?? null);
+
+  const handleUndo = () => {
+    const st = useGameStore.getState();
+    const lastMover = st.currentNode.move?.player ?? null;
+    const shouldUndoTwice = !!st.isAiPlaying && !!st.aiColor && lastMover === st.aiColor && st.currentPlayer !== st.aiColor;
+    navigateBack();
+    if (shouldUndoTwice) navigateBack();
+  };
+
+  const handleResign = () => {
+    setPendingResignPlayer(currentPlayer);
+  };
+
+  const confirmResign = useCallback(() => {
+    const resigningPlayer = pendingResignPlayer ?? currentPlayer;
+    const result = getResignResult(resigningPlayer);
+    setPendingResignPlayer(null);
+    resign(resigningPlayer);
+    toast(t('Result: {result}', { result }), 'info');
+  }, [currentPlayer, pendingResignPlayer, resign, t, toast]);
+
+  const cancelResign = useCallback(() => {
+    setPendingResignPlayer(null);
+  }, []);
+
+  const requestClearAnalysisCache = useCallback(() => {
+    if (isGameAnalysisRunning) return;
+    if (analysisCacheSize <= 0) {
+      clearAnalysisCache();
+      return;
+    }
+    setIsClearAnalysisCacheConfirmOpen(true);
+  }, [analysisCacheSize, clearAnalysisCache, isGameAnalysisRunning]);
+
+  const confirmClearAnalysisCache = useCallback(() => {
+    setIsClearAnalysisCacheConfirmOpen(false);
+    clearAnalysisCache();
+  }, [clearAnalysisCache]);
+
+  const cancelClearAnalysisCache = useCallback(() => {
+    setIsClearAnalysisCacheConfirmOpen(false);
+  }, []);
+
+  useEffect(() => {
+    if (analysisCacheSize <= 0 || isGameAnalysisRunning) {
+      setIsClearAnalysisCacheConfirmOpen(false);
+    }
+  }, [analysisCacheSize, isGameAnalysisRunning]);
+
+  const handleDisableGamepadNavigation = useCallback(() => {
+    updateSettings({ gamepadNavigation: false });
+    toast(t('Gamepad navigation disabled.'), 'info');
+  }, [t, toast, updateSettings]);
+
+  useTournamentWatcher();
+
+  const handlePlayTournamentGame = useCallback((ladder: LadderState) => {
+    setIsTournamentOpen(false);
+    startNewGame({ komi: ladder.komi, rules: settings.gameRules, boardSize: ladder.boardSize, handicap: ladder.handicap });
+    updateSettings({ aiStrategy: 'rank', aiRankKyu: ladder.currentKyu });
+    const opponent = ladder.userColor === 'black' ? 'white' : 'black';
+    // Start a fresh game first, then hand the opponent color to the rank bot.
+    window.setTimeout(() => {
+      useGameStore.getState().toggleAi(opponent);
+      useTournamentStore.getState().beginGame();
+    }, 0);
+    toast(t('Ladder game vs {size}×{size} {color} bot started.', { size: ladder.boardSize, color: ladder.userColor === 'black' ? t('White') : t('Black') }), 'success');
+  }, [startNewGame, updateSettings, settings.gameRules, t, toast]);
+
+  const handlePlayGauntletGame = useCallback((gauntlet: GauntletState) => {
+    setIsTournamentOpen(false);
+    const opponentKyu = currentGauntletOpponentKyu(gauntlet);
+    startNewGame({ komi: gauntlet.komi, rules: settings.gameRules, boardSize: gauntlet.boardSize, handicap: gauntlet.handicap });
+    updateSettings({ aiStrategy: 'rank', aiRankKyu: opponentKyu });
+    const opponent = gauntlet.userColor === 'black' ? 'white' : 'black';
+    window.setTimeout(() => {
+      useGameStore.getState().toggleAi(opponent);
+      useTournamentStore.getState().beginGauntletGame();
+    }, 0);
+    toast(t('Gauntlet game {n}/4 vs {rank} started.', { n: gauntlet.index + 1, rank: formatKyuRank(opponentKyu) }), 'success');
+  }, [startNewGame, updateSettings, settings.gameRules, t, toast]);
+
+  const gamepadBlockedByOverlay = Boolean(
+    isSettingsOpen ||
+    isAboutOpen ||
+    autoSaveRecovery ||
+    isUnsavedChangesOpen ||
+    isGameAnalysisOpen ||
+    isTsumegoFrameOpen ||
+    isKifuPrintOpen ||
+    isGameReportOpen ||
+    isCommandPaletteOpen ||
+    isKeyboardHelpOpen ||
+    isNewGameOpen ||
+    isScoreQuizOpen ||
+    isTournamentOpen ||
+    isProGamesOpen ||
+    isLessonsOpen ||
+    isGuessMoveOpen ||
+    isProblemOpen ||
+    isPhotoBoardOpen ||
+    isPasteSgfOpen ||
+    saveToLibraryDialog ||
+    pendingResignPlayer ||
+    isClearAnalysisCacheConfirmOpen ||
+    menuOpen ||
+    viewMenuOpen ||
+    (isMobile && libraryOpen)
+  );
+  const gamepadStatus = useGamepadNavigation({
+    enabled:
+      settings.gamepadNavigation &&
+      !scoringMode &&
+      !isSelectingRegionOfInterest &&
+      !isInsertMode &&
+      !isEditMode &&
+      !gamepadBlockedByOverlay,
+    handlers: {
+      back: mode === 'play' ? handleUndo : navigateBack,
+      forward: navigateForward,
+      backFast: () => jumpBack(10),
+      forwardFast: () => jumpForward(10),
+      start: navigateStart,
+      end: navigateEnd,
+      branchPrev: () => switchBranch(-1),
+      branchNext: () => switchBranch(1),
+    },
+  });
+  const currentGameDirty = hasUnsavedChanges();
+  /**
+   * Whether the loaded SGF carries a usable clock. Games played locally have
+   * none, so the graph's Time toggle is only offered when it can actually draw
+   * something.
+   */
+  const hasMoveTimes = useMemo(() => {
+    void treeVersion;
+    return hasMoveTimeData(
+      computeMoveTimes(getCurrentLineNodes(currentNode, activeBranchChildIds), rootNode.properties)
+    );
+  }, [activeBranchChildIds, currentNode, rootNode.properties, treeVersion]);
+  const desktopBottomControlsHeight =
+    !isMobile && settings.showBoardControls && bottomBarOpen ? 'var(--ui-bar-height)' : '0px';
+  const mobileBottomControlsHeight =
+    isMobile && settings.showBoardControls && bottomBarOpen && mobileTab === 'board' ? 'var(--ui-bar-height)' : '0px';
+
+  useEffect(() => {
+    const root = document.documentElement;
+    root.style.setProperty('--desktop-bottom-controls-height', desktopBottomControlsHeight);
+    root.style.setProperty('--mobile-bottom-controls-height', mobileBottomControlsHeight);
+    return () => {
+      root.style.removeProperty('--desktop-bottom-controls-height');
+      root.style.removeProperty('--mobile-bottom-controls-height');
+    };
+  }, [desktopBottomControlsHeight, mobileBottomControlsHeight]);
+
+  return (
+    <div
+      className="relative flex flex-col h-screen h-[100dvh] overflow-hidden app-root ui-root font-sans mobile-safe-inset"
+      onDragEnter={handleAppDragEnter}
+      onDragLeave={handleAppDragLeave}
+      onDragOver={handleAppDragOver}
+      onDrop={handleAppDrop}
+    >
+      <div className="sr-only" aria-live="polite" aria-atomic="true" data-board-announcer="true">
+        {boardAnnouncement}
+      </div>
+      <LazyModalBoundary
+        onError={(error) => {
+          const message = error instanceof Error ? error.message : String(error);
+          // A deploy is news, not a fault; only a genuine load failure is an error.
+          const stale = isStaleBuildError(message);
+          toast(
+            stale
+              ? t('Web KaTrain has been updated. Reload to open this.')
+              : t('That panel could not be opened. Reload to try again.'),
+            stale ? 'info' : 'error'
+          );
+        }}
+      >
+      <Suspense fallback={null}>
+        {isSettingsOpen && <SettingsModal onClose={() => setIsSettingsOpen(false)} />}
+        {isAboutOpen && (
+          <AboutDialog
+            onClose={() => setIsAboutOpen(false)}
+            returnFocus={modalReturnFocusRef.current}
+          />
+        )}
+        {autoSaveRecovery && (
+          <AutoSaveRecoveryModal
+            snapshot={autoSaveRecovery}
+            onRestore={restoreAutoSavedGame}
+            onDiscard={discardAutoSaveRecovery}
+          />
+        )}
+        {isUnsavedChangesOpen && (
+          <UnsavedChangesModal
+            onChoice={handleUnsavedChangesChoice}
+            saveTarget={loadedLibraryFileId ? 'library' : 'download'}
+          />
+        )}
+        {isGameAnalysisOpen && <GameAnalysisModal onClose={() => setIsGameAnalysisOpen(false)} />}
+        {isTsumegoFrameOpen && (
+          <TsumegoFrameModal
+            defaultMargin={settings.tsumegoFrameMargin}
+            defaultKoAllowed={settings.tsumegoFrameKoAllowed}
+            onClose={() => setIsTsumegoFrameOpen(false)}
+            onApply={({ margin, koAllowed }) => {
+              updateSettings({ tsumegoFrameMargin: margin, tsumegoFrameKoAllowed: koAllowed });
+              frameAsTsumego({ margin, koAllowed });
+              setIsTsumegoFrameOpen(false);
+            }}
+          />
+        )}
+        {isKifuPrintOpen && <KifuPrintModal onClose={() => setIsKifuPrintOpen(false)} />}
+        {isGameReportOpen && (
+          <GameReportModal
+            onClose={() => {
+              setIsGameReportOpen(false);
+              setReportHoverMove(null);
+            }}
+            setReportHoverMove={setReportHoverMove}
+          />
+        )}
+        {isCommandPaletteOpen && (
+          <CommandPaletteModal
+            commands={commandPaletteCommands}
+            onClose={() => setIsCommandPaletteOpen(false)}
+          />
+        )}
+        {isKeyboardHelpOpen && (
+          <KeyboardHelpModal
+            onClose={() => setIsKeyboardHelpOpen(false)}
+            onOpenShortcutSettings={openShortcutSettings}
+            returnFocus={modalReturnFocusRef.current}
+          />
+        )}
+        {isScoreQuizOpen && (
+          <ScoreQuizModal onClose={() => setIsScoreQuizOpen(false)} />
+        )}
+        {isTournamentOpen && (
+          <TournamentModal
+            onClose={() => setIsTournamentOpen(false)}
+            onPlayGame={handlePlayTournamentGame}
+            onPlayGauntletGame={handlePlayGauntletGame}
+          />
+        )}
+        {isProGamesOpen && (
+          <ProGamesModal
+            onClose={() => setIsProGamesOpen(false)}
+            onLoadGame={handleLoadProGame}
+          />
+        )}
+        {isLessonsOpen && (
+          <LessonsModal onClose={() => setIsLessonsOpen(false)} />
+        )}
+        {isGuessMoveOpen && (
+          <GuessMoveModal
+            onClose={() => setIsGuessMoveOpen(false)}
+            onBrowseProGames={() => {
+              setIsGuessMoveOpen(false);
+              setIsProGamesOpen(true);
+            }}
+            onOpenSgf={() => {
+              setIsGuessMoveOpen(false);
+              handleLoadClick();
+            }}
+          />
+        )}
+        {isProblemOpen && (
+          <ProblemModal
+            onClose={() => setIsProblemOpen(false)}
+            onOpenSgf={handleLoadClick}
+          />
+        )}
+        {isPhotoBoardOpen && (
+          <PhotoBoardModal
+            onClose={closePhotoBoard}
+            onImportSgf={handlePhotoBoardImport}
+            onAddSetupStones={handlePhotoBoardAddSetup}
+            onPlayMove={handlePhotoBoardPlayMove}
+            defaultBoardSize={boardSize}
+            defaultKomi={komi}
+            currentBoard={board}
+            currentPlayer={currentPlayer}
+            initialPhotoFile={photoBoardInitialFile}
+            returnFocus={modalReturnFocusRef.current}
+          />
+        )}
+        {isPasteSgfOpen && (
+          <PasteSgfModal
+            onClose={() => setIsPasteSgfOpen(false)}
+            onSubmit={(text) => handleOpenSgfFromText(text, { notifyFailure: false })}
+            onOpenPhotoBoard={() => {
+              const returnFocus = modalReturnFocusRef.current;
+              setIsPasteSgfOpen(false);
+              openPhotoBoard(null, returnFocus);
+            }}
+            returnFocus={modalReturnFocusRef.current}
+          />
+        )}
+        {saveToLibraryDialog && (
+          <SaveToLibraryDialog
+            open
+            initialName={saveToLibraryDialog.initialName}
+            folderOptions={saveToLibraryDialog.folderOptions}
+            initialFolderId={saveToLibraryDialog.initialFolderId}
+            onClose={() => setSaveToLibraryDialog(null)}
+            onSave={handleSaveCopyToLibrary}
+            returnFocus={modalReturnFocusRef.current}
+          />
+        )}
+        {isNewGameOpen && (
+          <NewGameModal
+            onClose={() => setIsNewGameOpen(false)}
+            defaultSetupPosition={{
+              enabled: false,
+              untilMove: settings.setupPositionMove,
+              targetAdvantage: settings.setupPositionAdvantage,
+            }}
+            onStart={({ komi: nextKomi, rules, info, aiConfig, timerConfig, boardSize: nextBoardSize, handicap: nextHandicap, setupPosition }) => {
+            startNewGame({ komi: nextKomi, rules, boardSize: nextBoardSize, handicap: nextHandicap });
+            if (setupPosition.enabled) {
+              updateSettings({ setupPositionMove: setupPosition.untilMove, setupPositionAdvantage: setupPosition.targetAdvantage });
+              generateSetupPosition({ untilMove: setupPosition.untilMove, targetAdvantage: setupPosition.targetAdvantage });
+            }
+            setLoadedLibraryFile(null);
+            setRootProperty('PB', info.blackName);
+            setRootProperty('PW', info.whiteName);
+            setRootProperty('BR', info.blackRank);
+            setRootProperty('WR', info.whiteRank);
+            setRootProperty('EV', info.event);
+            setRootProperty('DT', info.date);
+            setRootProperty('PC', info.place);
+            setRootProperty('GN', info.gameName);
+            const timerEnabled = timerConfig.mode === 'byo-yomi';
+            const safeMainTimeMinutes = Number.isFinite(timerConfig.mainTimeMinutes)
+              ? Math.max(0, timerConfig.mainTimeMinutes)
+              : 0;
+            const safeByoLengthSeconds = Number.isFinite(timerConfig.byoLengthSeconds)
+              ? Math.max(1, Math.floor(timerConfig.byoLengthSeconds))
+              : 1;
+            const safeByoPeriods = Number.isFinite(timerConfig.byoPeriods)
+              ? Math.max(1, Math.floor(timerConfig.byoPeriods))
+              : 1;
+            const timerSettings = timerEnabled
+              ? {
+                timerMainTimeMinutes: safeMainTimeMinutes,
+                timerByoLengthSeconds: safeByoLengthSeconds,
+                timerByoPeriods: safeByoPeriods,
+              }
+              : {
+                timerMainTimeMinutes: 0,
+                timerByoLengthSeconds: 0,
+                timerByoPeriods: 0,
+                timerMinimalUseSeconds: 0,
+              };
+            updateSettings({
+              aiStrategy: aiConfig.aiStrategy,
+              aiRankKyu: aiConfig.aiRankKyu,
+              aiScoreLossStrength: aiConfig.aiScoreLossStrength,
+              aiPolicyOpeningMoves: aiConfig.aiPolicyOpeningMoves,
+              aiWeightedPickOverride: aiConfig.aiWeightedPickOverride,
+              aiWeightedWeakenFac: aiConfig.aiWeightedWeakenFac,
+              aiWeightedLowerBound: aiConfig.aiWeightedLowerBound,
+              aiPickPickOverride: aiConfig.aiPickPickOverride,
+              aiPickPickN: aiConfig.aiPickPickN,
+              aiPickPickFrac: aiConfig.aiPickPickFrac,
+              aiLocalPickOverride: aiConfig.aiLocalPickOverride,
+              aiLocalStddev: aiConfig.aiLocalStddev,
+              aiLocalPickN: aiConfig.aiLocalPickN,
+              aiLocalPickFrac: aiConfig.aiLocalPickFrac,
+              aiLocalEndgame: aiConfig.aiLocalEndgame,
+              aiTenukiPickOverride: aiConfig.aiTenukiPickOverride,
+              aiTenukiStddev: aiConfig.aiTenukiStddev,
+              aiTenukiPickN: aiConfig.aiTenukiPickN,
+              aiTenukiPickFrac: aiConfig.aiTenukiPickFrac,
+              aiTenukiEndgame: aiConfig.aiTenukiEndgame,
+              aiInfluencePickOverride: aiConfig.aiInfluencePickOverride,
+              aiInfluencePickN: aiConfig.aiInfluencePickN,
+              aiInfluencePickFrac: aiConfig.aiInfluencePickFrac,
+              aiInfluenceThreshold: aiConfig.aiInfluenceThreshold,
+              aiInfluenceLineWeight: aiConfig.aiInfluenceLineWeight,
+              aiInfluenceEndgame: aiConfig.aiInfluenceEndgame,
+              aiTerritoryPickOverride: aiConfig.aiTerritoryPickOverride,
+              aiTerritoryPickN: aiConfig.aiTerritoryPickN,
+              aiTerritoryPickFrac: aiConfig.aiTerritoryPickFrac,
+              aiTerritoryThreshold: aiConfig.aiTerritoryThreshold,
+              aiTerritoryLineWeight: aiConfig.aiTerritoryLineWeight,
+              aiTerritoryEndgame: aiConfig.aiTerritoryEndgame,
+              aiJigoTargetScore: aiConfig.aiJigoTargetScore,
+              aiOwnershipMaxPointsLost: aiConfig.aiOwnershipMaxPointsLost,
+              aiOwnershipSettledWeight: aiConfig.aiOwnershipSettledWeight,
+              aiOwnershipOpponentFac: aiConfig.aiOwnershipOpponentFac,
+              aiOwnershipMinVisits: aiConfig.aiOwnershipMinVisits,
+              aiOwnershipAttachPenalty: aiConfig.aiOwnershipAttachPenalty,
+              aiOwnershipTenukiPenalty: aiConfig.aiOwnershipTenukiPenalty,
+              ...timerSettings,
+            });
+            const opponent = aiConfig.opponent === 'none' ? null : aiConfig.opponent;
+            useGameStore.setState({ isAiPlaying: !!opponent, aiColor: opponent });
+            const after = useGameStore.getState();
+            if (after.isAiPlaying && after.aiColor === after.currentPlayer) {
+              window.setTimeout(() => after.makeAiMove(), 0);
+            }
+            markCurrentGameCleanAndClearAutoSave();
+            setIsNewGameOpen(false);
+          }}
+            defaultKomi={KOMI}
+            defaultRules="chinese"
+            defaultBoardSize={settings.defaultBoardSize}
+            defaultHandicap={settings.defaultHandicap}
+            defaultInfo={defaultGameInfo}
+            defaultAiConfig={defaultAiConfig}
+            defaultTimerConfig={defaultTimerConfig}
+          />
+        )}
+      </Suspense>
+      </LazyModalBoundary>
+
+      <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept={mainFileInputAccept} />
+
+      {isFileDragActive && (
+        <div className="absolute inset-0 z-[80] flex items-center justify-center bg-black/60 backdrop-blur-sm pointer-events-none">
+          <div className="rounded-xl border-2 border-dashed border-[var(--ui-accent)] px-6 py-4 text-center ui-panel">
+            <div className="text-sm font-semibold text-[var(--ui-accent)]">{t('Drop SGF, OGS URL, board photo, or model weights')}</div>
+            <div className="text-xs ui-text-faint">{t('Release to load a game, fetch Online-Go, trace a photo, or switch browser KataGo weights.')}</div>
+          </div>
+        </div>
+      )}
+
+      <MenuDrawer
+        open={menuOpen && isMobile}
+        onClose={() => setMenuOpen(false)}
+        initialFocusInputMode={menuFocusInputMode}
+        onHome={openMobileHome}
+        onQuickNewGame={() => void startQuickNewGame()}
+        onNewGame={() => void openNewGameWithGuard()}
+        onSave={handleSaveCurrentSgf}
+        saveLabel={saveControlLabel}
+        onSaveToLibrary={handleOpenSaveToLibraryDialog}
+        onLoad={handleLoadClick}
+        onScanBoard={() => openPhotoBoard()}
+        onScoreQuiz={() => setIsScoreQuizOpen(true)}
+        onRankLadder={() => setIsTournamentOpen(true)}
+        onProGames={() => setIsProGamesOpen(true)}
+        onLessons={() => setIsLessonsOpen(true)}
+        onGuessMove={() => setIsGuessMoveOpen(true)}
+        onDrillMistakes={() => startMistakeDrill('both')}
+        onProblem={() => setIsProblemOpen(true)}
+        onCopy={handleCopySgf}
+        onPaste={handlePasteSgf}
+        onSettings={() => setIsSettingsOpen(true)}
+        onCommandPalette={() => setIsCommandPaletteOpen(true)}
+        onKeyboardHelp={openKeyboardHelp}
+        onAbout={openAbout}
+        appLocale={settings.appLocale}
+        onLocaleChange={(appLocale) => updateSettings({ appLocale })}
+        quickNewGameBoardSize={settings.defaultBoardSize}
+        recentItems={recentLibraryItems}
+        onOpenRecent={handleOpenRecent}
+      />
+
+      {isMobile && (
+        <MobileHome
+          open={mobileHomeOpen}
+          blackName={blackName}
+          whiteName={whiteName}
+          boardSize={boardSize}
+          moveCount={currentMoveNumber}
+          totalMoveCount={totalMovesInCurrentLine}
+          engineMeta={engineMeta}
+          gamepadName={gamepadStatus.connected ? gamepadStatus.name : null}
+          gamepadCount={gamepadStatus.count}
+          recentItems={recentLibraryItems}
+          onClose={closeMobileHome}
+          onGamepadNavigationDisable={handleDisableGamepadNavigation}
+          quickNewGameBoardSize={settings.defaultBoardSize}
+          onQuickNewGame={() => void startQuickNewGame()}
+          onNewGame={() => {
+            closeMobileHome();
+            void openNewGameWithGuard();
+          }}
+          onOpenSgf={() => {
+            closeMobileHome();
+            handleLoadClick();
+          }}
+          onScanBoard={() => {
+            closeMobileHome();
+            openPhotoBoard();
+          }}
+          onSaveToLibrary={() => {
+            closeMobileHome();
+            handleOpenSaveToLibraryDialog();
+          }}
+          onCopySgf={() => {
+            closeMobileHome();
+            void handleCopySgf();
+          }}
+          onPasteSgf={() => {
+            closeMobileHome();
+            void handlePasteSgf();
+          }}
+          onOpenLibrary={() => {
+            closeMobileHome();
+            handleMobileTabChange('library');
+          }}
+          onOpenReport={() => {
+            closeMobileHome();
+            setIsGameReportOpen(true);
+          }}
+          onOpenSettings={() => {
+            closeMobileHome();
+            setIsSettingsOpen(true);
+          }}
+          onOpenRecent={(item) => {
+            closeMobileHome();
+            void handleOpenRecent(item);
+          }}
+        />
+      )}
+
+      {isDesktop && (
+        <Suspense fallback={<div className="flex h-dvh items-center justify-center ui-text-faint">{t('Loading workspace…')}</div>}>
+          <DesktopDashboard
+            board={
+              <div className="relative flex h-full min-h-0 w-full min-w-0">
+                <GoBoard
+                  hoveredMove={activeHoverMove}
+                  onHoverMove={setHoveredMove}
+                  pvUpToMove={pvUpToMove}
+                  uiMode={boardUiMode}
+                  forcePvOverlay={!!reportHoverMove}
+                  scoringMode={scoringMode}
+                  scoreTerritory={manualScoreEstimate.territory}
+                  deadStones={manualDeadStones}
+                  onToggleDeadStone={toggleManualDeadStone}
+                />
+              </div>
+            }
+            boardControls={
+              <>
+                {/* Edit and scoring are mutually exclusive; hide the idle launcher for
+                    whichever mode is inactive so the strip stays a single row. */}
+                {!scoringMode && <EditToolbar isMobile={false} analysisCommandBarVisible={false} docked />}
+                {!isEditMode && <ManualScorePanel
+                  active={scoringMode}
+                  disabled={isEditMode || isInsertMode || isSelectingRegionOfInterest}
+                  isCompact={false}
+                  commandBarOffset={false}
+                  docked
+                  score={manualScoreEstimate}
+                  blackName={blackName}
+                  whiteName={whiteName}
+                  capturedBlack={capturedBlack}
+                  capturedWhite={capturedWhite}
+                  komi={komi}
+                  deadStoneCount={manualDeadStones.size}
+                  shortcutLabel={layoutShortcutLabels['toggle-scoring']}
+                  scoreMode={manualScoreMode}
+                  onToggle={toggleScoringMode}
+                  onAutoEstimate={autoEstimateDeadStones}
+                  onUseManualScore={() => setManualScoreMode('manual')}
+                  canAutoEstimate={scoreEstimateSource !== null}
+                  estimateSource={scoreEstimateSource}
+                  onClear={clearManualDeadStones}
+                  onDone={() => setScoringMode(false)}
+                />}
+              </>
+            }
+            blackName={blackName}
+            whiteName={whiteName}
+            blackRank={blackRank}
+            whiteRank={whiteRank}
+            capturedBlack={capturedBlack}
+            capturedWhite={capturedWhite}
+            komi={komi}
+            boardSize={boardSize}
+            handicap={handicap}
+            rules={settings.gameRules}
+            result={endResult}
+            currentPlayer={currentPlayer}
+            moveCount={currentMoveNumber}
+            totalMoves={totalMovesInCurrentLine}
+            loadedFileName={loadedLibraryFileName ?? loadedExternalFile?.name ?? null}
+            dirty={currentGameDirty}
+            currentNode={currentNode}
+            drillHidesAnswer={drillHidesAnswer}
+            hoveredCandidateKey={reportHoverMove ? `${reportHoverMove.x},${reportHoverMove.y}` : null}
+            onHoverCandidate={setReportHoverMove}
+            branchInfo={branchInfo}
+            showAnalysis={isAnalysisMode || mode === 'analyze'}
+            winRate={winRate ?? null}
+            scoreLead={scoreLead ?? null}
+            pointsLost={pointsLost}
+            pointsLostLabel={pointsLostLabel}
+            engineState={engineActivity.state}
+            enginePillLabel={engineActivity.label}
+            engineMeta={engineMeta}
+            engineMetaTitle={engineMetaTitle}
+            engineBackend={engineBackend ?? ''}
+            engineModelLabel={activeEngineModelLabel ?? ''}
+            analysisCacheSize={analysisCacheSize}
+            mode={mode}
+            setMode={setMode}
+            isContinuousAnalysis={isContinuousAnalysis}
+            toggleContinuousAnalysis={toggleContinuousAnalysis}
+            settings={settings}
+            updateControls={updateControls}
+            updateSettings={updateSettings}
+            isInsertMode={isInsertMode}
+            toggleInsertMode={toggleInsertMode}
+            isSelectingRegionOfInterest={isSelectingRegionOfInterest}
+            startSelectRegionOfInterest={startSelectRegionOfInterest}
+            focusMode={focusMode}
+            libraryOpen={libraryOpen && !focusMode}
+            setLibraryOpen={setLibraryOpen}
+            libraryWidth={leftPanelWidth}
+            hasMoveTimes={hasMoveTimes}
+            libraryPanel={libraryOpen && !focusMode ? (
+              <Suspense fallback={<LibraryPanelLoading />}>
+                <LibraryPanel
+                  open
+                  onClose={handleCloseLibrary}
+                  docked
+                  getCurrentSgf={() => generateSgfFromTree(rootNode, sgfExportOptions)}
+                  onLoadSgf={handleLoadFromLibrary}
+                  onToast={toast}
+                  onOpenPhotoBoard={openPhotoBoard}
+                  onLibraryUpdated={handleLibraryUpdated}
+                  onCurrentSaved={markCurrentGameCleanAndClearAutoSave}
+                  loadedFileId={loadedLibraryFileId}
+                  loadedFileDirty={currentGameDirty}
+                  onLoadedFileChange={setLoadedLibraryFile}
+                  externalFileUpdate={externalLibraryFileUpdate}
+                  externalItemCreate={externalLibraryItemCreate}
+                  showCloseButtonOnDesktop
+                />
+              </Suspense>
+            ) : null}
+            sidebarOpen={showSidebar && !focusMode}
+            setSidebarOpen={setShowSidebar}
+            isGameAnalysisRunning={isGameAnalysisRunning}
+            gameAnalysisType={gameAnalysisType}
+            gameAnalysisDone={gameAnalysisDone}
+            gameAnalysisTotal={gameAnalysisTotal}
+            startQuickGameAnalysis={startQuickGameAnalysis}
+            startFastGameAnalysis={startFastGameAnalysis}
+            stopGameAnalysis={stopGameAnalysis}
+            onClearAnalysisCache={requestClearAnalysisCache}
+            onOpenGameReport={() => setIsGameReportOpen(true)}
+            navigateBack={navigateBack}
+            navigateForward={navigateForward}
+            canNavigateBack={historyNavigation.back}
+            canNavigateForward={historyNavigation.forward}
+            navigateStart={navigateStart}
+            navigateEnd={navigateEnd}
+            navigateToMove={navigateToMove}
+            jumpBack={() => jumpBack(10)}
+            jumpForward={() => jumpForward(10)}
+            findMistake={(dir) => findMistake(dir > 0 ? 'redo' : 'undo')}
+            canFindPreviousMistake={mistakeNavigation.previous}
+            canFindNextMistake={mistakeNavigation.next}
+            rotateBoard={rotateBoard}
+            switchBranch={switchBranch}
+            undoToBranchPoint={undoToBranchPoint}
+            makeCurrentNodeMainBranch={makeCurrentNodeMainBranch}
+            passTurn={passTurn}
+            onUndo={handleUndo}
+            onAiMove={requestAiMove}
+            onResign={handleResign}
+            onPlayBest={requestAiMove}
+            onNewGame={() => void openNewGameWithGuard()}
+            onSaveSgf={handleSaveCurrentSgf}
+            onCopySgf={handleCopySgf}
+            onSaveToLibrary={handleOpenSaveToLibraryDialog}
+            onLoadSgf={handleLoadClick}
+            onPasteSgf={handlePasteSgf}
+            onScanBoard={(returnFocus) => openPhotoBoard(null, returnFocus)}
+            onSettings={() => setIsSettingsOpen(true)}
+            onCommandPalette={() => setIsCommandPaletteOpen(true)}
+            onKeyboardHelp={openKeyboardHelp}
+            onAbout={openAbout}
+            toast={toast}
+            headerNotification={
+              notification && notification.type !== 'error' ? (
+                <NotificationToast
+                  notification={notification}
+                  onClose={clearNotification}
+                  onHoldChange={setNotificationHeld}
+                  onUndo={undoEditFromToast}
+                  commandBarVisible={false}
+                  placement="desktop-header"
+                />
+              ) : null
+            }
+          />
+          {/* Errors stay an overlay below the header: they never auto-dismiss,
+              carry a Copy action, and need more than one line. */}
+          {notification && notification.type === 'error' && (
+            <NotificationToast
+              notification={notification}
+              onClose={clearNotification}
+              onHoldChange={setNotificationHeld}
+              onUndo={undoEditFromToast}
+              commandBarVisible={false}
+              placement="desktop-dashboard"
+            />
+          )}
+        </Suspense>
+      )}
+
+      {!isDesktop && (
+      <div className="flex flex-1 min-h-0 min-w-0 w-full overflow-hidden">
+        {libraryOpen && !focusMode ? (
+          <Suspense fallback={<LibraryPanelLoading isMobile={isMobile} />}>
+            <LibraryPanel
+              open
+              onClose={handleCloseLibrary}
+              docked={isDesktop}
+              width={leftPanelWidth}
+              getCurrentSgf={() => generateSgfFromTree(rootNode, sgfExportOptions)}
+              onLoadSgf={handleLoadFromLibrary}
+              onToast={toast}
+              onOpenPhotoBoard={openPhotoBoard}
+              isMobile={isMobile}
+              onLibraryUpdated={handleLibraryUpdated}
+              onCurrentSaved={markCurrentGameCleanAndClearAutoSave}
+              loadedFileId={loadedLibraryFileId}
+              loadedFileDirty={currentGameDirty}
+              onLoadedFileChange={setLoadedLibraryFile}
+              externalFileUpdate={externalLibraryFileUpdate}
+              externalItemCreate={externalLibraryItemCreate}
+            />
+          </Suspense>
+        ) : null}
+
+        {/* Main board column — a <main> landmark so assistive tech can skip
+            straight here. This layout previously exposed no main/header at all,
+            leaving the tab bar as its only landmark. */}
+        <main
+          className={['flex flex-col flex-1 min-w-0 min-h-0 w-full max-w-full relative', isMobile ? 'mobile-safe-bottom' : ''].join(' ')}
+          /* Tree and Review cover this screen with a full-viewport panel, and
+             Library covers it with its own drawer and scrim. Neither took it out
+             of the tab order or the accessibility tree, so controls a user
+             cannot see stayed reachable behind them. No isMobile guard here:
+             <main> only renders in the mobile shell, and combining both flags is
+             what made so much of this layout unreachable in the first place. */
+          inert={rightPanelOpen || (libraryOpen && !focusMode)}
+          style={isMobile ? { paddingBottom: 'calc(var(--mobile-tabbar-height) + var(--mobile-bottom-controls-height, 0px) + var(--pwa-banner-height, 0px) + env(safe-area-inset-bottom))' } : undefined}
+        >
+          {/* The mobile shell has no visible app title to promote, so the page's
+              top-level heading is screen-reader only. */}
+          <h1 className="sr-only">Web KaTrain</h1>
+          {topBarOpen && !focusMode && (
+            <TopControlBar
+              settings={settings}
+              updateControls={updateControls}
+              updateSettings={updateSettings}
+              regionOfInterest={regionOfInterest}
+              setRegionOfInterest={setRegionOfInterest}
+              isInsertMode={isInsertMode}
+              isEditMode={isEditMode}
+              isAnalysisMode={isAnalysisMode}
+              toggleAnalysisMode={toggleAnalysisMode}
+              engineDot={engineDot}
+              viewMenuOpen={viewMenuOpen}
+              setViewMenuOpen={setViewMenuOpen}
+              analyzeExtra={analyzeExtra}
+              startSelectRegionOfInterest={startSelectRegionOfInterest}
+              cancelSelectRegionOfInterest={cancelSelectRegionOfInterest}
+              isSelectingRegionOfInterest={isSelectingRegionOfInterest}
+              resetCurrentAnalysis={resetCurrentAnalysis}
+              clearAnalysisCache={requestClearAnalysisCache}
+              canStopAnalysis={canStopAnalysis}
+              canResetAnalysis={canResetAnalysis}
+              canClearAnalysisCache={canClearAnalysisCache}
+              toggleInsertMode={toggleInsertMode}
+              selfplayToEnd={selfplayToEnd}
+              toggleContinuousAnalysis={toggleContinuousAnalysis}
+              makeAiMove={requestAiMove}
+              rotateBoard={rotateBoard}
+              toggleTeachMode={toggleTeachMode}
+              isTeachMode={isTeachMode}
+              isGameAnalysisRunning={isGameAnalysisRunning}
+              gameAnalysisType={gameAnalysisType}
+              startQuickGameAnalysis={startQuickGameAnalysis}
+              startFastGameAnalysis={startFastGameAnalysis}
+              stopGameAnalysis={stopGameAnalysis}
+              setIsGameAnalysisOpen={setIsGameAnalysisOpen}
+              setIsGameReportOpen={setIsGameReportOpen}
+              onOpenTsumegoFrame={() => setIsTsumegoFrameOpen(true)}
+              onOpenMenu={(inputMode) => {
+                setMenuFocusInputMode(inputMode);
+                setMenuOpen(true);
+              }}
+              onQuickNewGame={() => void startQuickNewGame()}
+              onNewGame={() => void openNewGameWithGuard()}
+              onSaveSgf={handleSaveCurrentSgf}
+              saveTitle={saveControlLabel}
+              onSaveToLibrary={handleOpenSaveToLibraryDialog}
+              onLoadSgf={handleLoadClick}
+              onCopySgf={handleCopySgf}
+              onPasteSgf={handlePasteSgf}
+              onScanBoard={() => openPhotoBoard()}
+              onSettings={() => setIsSettingsOpen(true)}
+              onCommandPalette={() => setIsCommandPaletteOpen(true)}
+              onKeyboardHelp={openKeyboardHelp}
+              onAbout={openAbout}
+              winRateLabel={winRateLabel}
+              scoreLeadLabel={scoreLeadLabel}
+              pointsLostLabel={pointsLostLabel}
+              engineMeta={engineMeta}
+              engineMetaTitle={engineMetaTitle}
+              engineError={engineError}
+              isMobile={isMobile}
+              analysisCommandBarVisible={showBoardAnalysisCommandBar}
+            />
+          )}
+
+          {/* Board */}
+          <div
+            ref={boardShellRef}
+            className={[
+              'flex-1 flex flex-col justify-center ui-bg overflow-hidden relative',
+              isMobile ? 'mobile-board-shell p-2 sm:p-3 pb-0' : 'p-4 xl:p-6',
+              isMobile && isEditMode ? 'mobile-board-shell--edit' : '',
+              isMobile && scoringMode ? 'mobile-board-shell--scoring' : '',
+            ].filter(Boolean).join(' ')}
+            style={{ '--board-tool-offset-y': `${boardToolOffsetY}px` } as React.CSSProperties}
+          >
+            {notification && (
+              <NotificationToast
+                notification={notification}
+                onClose={clearNotification}
+                onHoldChange={setNotificationHeld}
+                onUndo={undoEditFromToast}
+                commandBarVisible={showBoardAnalysisCommandBar}
+              />
+            )}
+            {/* Edit and scoring are mutually exclusive; on mobile the compact score bar
+                docks at the bottom, so hide the bottom Edit launcher while scoring. */}
+            {!(isMobile && scoringMode) && (
+              <EditToolbar isMobile={isMobile} analysisCommandBarVisible={showBoardAnalysisCommandBar} hideIdleLauncher={isMobile} />
+            )}
+            <ManualScorePanel
+              active={scoringMode}
+              disabled={isEditMode || isInsertMode || isSelectingRegionOfInterest}
+              isCompact={isMobile}
+              hideLauncher={isMobile}
+              commandBarOffset={showBoardAnalysisCommandBar}
+              score={manualScoreEstimate}
+              blackName={blackName}
+              whiteName={whiteName}
+              capturedBlack={capturedBlack}
+              capturedWhite={capturedWhite}
+              komi={komi}
+              deadStoneCount={manualDeadStones.size}
+              shortcutLabel={layoutShortcutLabels['toggle-scoring']}
+              scoreMode={manualScoreMode}
+              onToggle={toggleScoringMode}
+              onAutoEstimate={autoEstimateDeadStones}
+              onUseManualScore={() => setManualScoreMode('manual')}
+              canAutoEstimate={scoreEstimateSource !== null}
+              estimateSource={scoreEstimateSource}
+              onClear={clearManualDeadStones}
+              onDone={() => setScoringMode(false)}
+            />
+            <div
+              ref={analysisCommandBarRef}
+              className={analysisCommandBarSlotClass}
+            >
+              {!mobileContextToolActive && <AnalysisCommandBar
+                mode={mode}
+                isAnalysisMode={isAnalysisMode}
+                showLiveToggle={!topBarOpen}
+                statusText={statusText}
+                engineDot={engineDot}
+                engineStatus={engineStatus}
+                engineError={engineError}
+                engineBackend={engineBackend}
+                engineModelLabel={activeEngineModelLabel}
+                requestedBackend={settings.katagoBackend}
+                modelUrl={settings.katagoModelUrl}
+                engineMode={settings.engineMode}
+                remoteEngineUrl={settings.remoteEngineUrl}
+                winRate={winRate ?? null}
+                scoreLead={scoreLead ?? null}
+                pointsLost={pointsLost}
+                analysisControls={modeControls}
+                updateControls={updateControls}
+                toggleAnalysisMode={toggleAnalysisMode}
+                isGameAnalysisRunning={isGameAnalysisRunning}
+                gameAnalysisType={gameAnalysisType}
+                gameAnalysisDone={gameAnalysisDone}
+                gameAnalysisTotal={gameAnalysisTotal}
+                startFastGameAnalysis={startFastGameAnalysis}
+                stopGameAnalysis={stopGameAnalysis}
+                onOpenGameReport={() => setIsGameReportOpen(true)}
+              />}
+            </div>
+            {isMobile && showBoardAnalysisCommandBar && isAnalysisMode && !isEditMode && !scoringMode && (
+              <CandidatePvTiles
+                pinnedKey={reportHoverMove ? `${reportHoverMove.x},${reportHoverMove.y}` : null}
+                onPin={setReportHoverMove}
+              />
+            )}
+            {showMobileMatchStrip && (
+              <MobileMatchStrip
+                currentPlayer={currentPlayer}
+                blackName={blackName}
+                whiteName={whiteName}
+                blackRank={blackRank}
+                whiteRank={whiteRank}
+                capturedBlack={capturedBlack}
+                capturedWhite={capturedWhite}
+                boardSize={boardSize}
+                komi={komi}
+                handicap={handicap}
+              />
+            )}
+            <div
+              // Only a tab panel on mobile: on desktop there is no tab bar, so the role
+              // and the aria-labelledby would point at tabs that are not rendered.
+              {...(isMobile ? { role: 'tabpanel', id: MOBILE_TAB_PANEL_IDS.board, 'aria-labelledby': mobileTabId('board') } : {})}
+              className={[
+                'mobile-board-canvas flex-1 flex justify-center min-h-0 min-w-0',
+                // On mobile the Score (top-left) and Edit (bottom-left) launchers float
+                // over the board shell. Reserve vertical clearance so the board never
+                // grows under them and covers the corner coordinates / play area.
+                // When the Edit toolbar is expanded it becomes a taller bottom strip, and
+                // the active scoring bar docks at the bottom too — reserve extra bottom
+                // space in both cases so the whole board stays visible above them.
+                // Portrait only: in landscape the board is height-limited and centered with
+                // the launchers in the side margins, so vertical padding there would just
+                // squash/clip the board.
+                // The padding is what places the board, not alignment: the board shell
+                // takes the canvas's content box exactly, so align-items has no free
+                // space to distribute and portrait:items-start moved nothing in any of
+                // the three states. Shrinking the box with pb-44 / pb-52 is what lifts
+                // the board clear of the edit and scoring strips.
+                !isMobile
+                  ? 'items-center'
+                  : isEditMode
+                    ? 'mobile-board-canvas--edit items-center portrait:pt-2 portrait:pb-44'
+                    : scoringMode
+                      ? 'mobile-board-canvas--scoring items-center portrait:pt-2 portrait:pb-52'
+                      : 'items-center portrait:py-6',
+              ].join(' ')}
+            >
+              <GoBoard
+                hoveredMove={activeHoverMove}
+                onHoverMove={setHoveredMove}
+                pvUpToMove={pvUpToMove}
+                uiMode={boardUiMode}
+                forcePvOverlay={!!reportHoverMove}
+                scoringMode={scoringMode}
+                scoreTerritory={manualScoreEstimate.territory}
+                deadStones={manualDeadStones}
+                onToggleDeadStone={toggleManualDeadStone}
+              />
+            </div>
+          </div>
+
+
+        </main>
+
+        <RightPanel
+          hoveredCandidateKey={reportHoverMove ? `${reportHoverMove.x},${reportHoverMove.y}` : null}
+          onHoverCandidate={setReportHoverMove}
+          open={rightPanelOpen}
+          onClose={handleCloseRightPanel}
+          width={isDesktop ? rightPanelWidth : undefined}
+          showOnDesktop={showSidebar && !focusMode}
+          mode={mode}
+          setMode={setMode}
+          modePanels={modePanels}
+          analysisControls={modeControls}
+          updatePanels={updatePanels}
+          updateControls={updateControls}
+          rootNode={rootNode}
+          treeVersion={treeVersion}
+          isGameAnalysisRunning={isGameAnalysisRunning}
+          gameAnalysisType={gameAnalysisType}
+          gameAnalysisDone={gameAnalysisDone}
+          gameAnalysisTotal={gameAnalysisTotal}
+          startQuickGameAnalysis={startQuickGameAnalysis}
+          startFastGameAnalysis={startFastGameAnalysis}
+          stopGameAnalysis={stopGameAnalysis}
+          clearAnalysisCache={requestClearAnalysisCache}
+          analysisCacheSize={analysisCacheSize}
+          onOpenGameAnalysis={() => setIsGameAnalysisOpen(true)}
+          onOpenGameReport={() => setIsGameReportOpen(true)}
+          currentPlayer={currentPlayer}
+          navigateStart={navigateStart}
+          navigateEnd={navigateEnd}
+          switchBranch={switchBranch}
+          switchToBranchIndex={switchToBranchIndex}
+          undoToBranchPoint={undoToBranchPoint}
+          undoToMainBranch={undoToMainBranch}
+          makeCurrentNodeMainBranch={makeCurrentNodeMainBranch}
+          isInsertMode={isInsertMode}
+          toast={toast}
+          winRate={winRate ?? null}
+          scoreLead={scoreLead ?? null}
+          pointsLost={pointsLost}
+          engineDot={engineDot}
+          engineMeta={engineMeta}
+          engineMetaTitle={engineMetaTitle}
+          engineStatus={engineStatus}
+          engineError={engineError}
+          engineBackend={engineBackend}
+          engineModelLabel={activeEngineModelLabel}
+          requestedBackend={settings.katagoBackend}
+          modelUrl={settings.katagoModelUrl}
+          engineMode={settings.engineMode}
+          remoteEngineUrl={settings.remoteEngineUrl}
+          statusText={statusText}
+          lockAiDetails={lockAiDetails}
+          currentNode={currentNode}
+          currentMoveInsight={currentMoveInsight}
+          shapeCoachEnabled={shapeCoachEnabled}
+          onToggleShapeCoach={toggleShapeCoach}
+          noteFocusRequest={noteFocusRequest}
+          isMobile={isMobile}
+          activeMobileTab={mobileTab}
+          showAnalysisSection={!isDesktop}
+        />
+
+
+        {isMobile && !focusMode && (
+          <div className="fixed bottom-0 left-0 right-0 z-[44] flex flex-col pointer-events-none">
+            <div className="mobile-bottom-dock pointer-events-auto bg-[var(--ui-bar)] border-t border-[var(--ui-border)] divide-y divide-[var(--ui-border)]">
+              {settings.showBoardControls && bottomBarOpen && mobileTab === 'board' && (
+                <div className="[&>div]:border-t-0 [&>div]:bg-transparent">
+                  <BottomControlBar
+                    passTurn={passTurn}
+                    navigateBack={navigateBack}
+                    navigateForward={navigateForward}
+                    canNavigateBack={historyNavigation.back}
+                    canNavigateForward={historyNavigation.forward}
+                    navigateToMove={navigateToMove}
+                    navigateStart={navigateStart}
+                    navigateEnd={navigateEnd}
+                    branchInfo={branchInfo}
+                    switchBranch={switchBranch}
+                    switchToBranchIndex={switchToBranchIndex}
+                    findMistake={findMistake}
+                    canFindPreviousMistake={mistakeNavigation.previous}
+                    canFindNextMistake={mistakeNavigation.next}
+                    rotateBoard={rotateBoard}
+                    currentPlayer={currentPlayer}
+                    currentMoveNumber={currentMoveNumber}
+                    totalMovesInCurrentLine={totalMovesInCurrentLine}
+                    boardSize={boardSize}
+                    handicap={handicap}
+                    blackName={blackName}
+                    whiteName={whiteName}
+                    blackRank={blackRank}
+                    whiteRank={whiteRank}
+                    capturedBlack={capturedBlack}
+                    capturedWhite={capturedWhite}
+                    isInsertMode={isInsertMode}
+                    passPolicyColor={passPolicyColor}
+                    passPv={passPv}
+                    jumpBack={jumpBack}
+                    jumpForward={jumpForward}
+                    isMobile={true}
+                    onUndo={handleUndo}
+                    onAiMove={requestAiMove}
+                    onResign={handleResign}
+                    unsavedChanges={currentGameDirty}
+                    autoSaveStatus={autoSaveStatus}
+                    isEditMode={isEditMode}
+                    scoringMode={scoringMode}
+                    onToggleEdit={toggleEditMode}
+                    onToggleScore={toggleScoringMode}
+                    editDisabled={scoringMode}
+                    scoreDisabled={isEditMode || isInsertMode || isSelectingRegionOfInterest}
+                    editShortcut={layoutShortcutLabels['toggle-edit-mode']}
+                    scoreShortcut={layoutShortcutLabels['toggle-scoring']}
+                  />
+                </div>
+              )}
+              <MobileTabBar
+                activeTab={mobileTab}
+                onTabChange={handleMobileTabChange}
+                commentBadge={noteCount}
+                hasControlBarAbove={settings.showBoardControls && bottomBarOpen && mobileTab === 'board'}
+              />
+            </div>
+          </div>
+        )}
+      </div>
+      )}
+      {focusMode && (
+        <div
+          className="fixed bottom-4 left-1/2 z-[60] flex max-w-[calc(100vw-1rem)] -translate-x-1/2 items-center gap-1 rounded-full border border-[var(--ui-border)] bg-[var(--ui-bar)]/95 px-2 py-1 text-xs text-[var(--ui-text)] shadow-[0_8px_30px_rgba(0,0,0,0.35)] backdrop-blur-md mobile-safe-area-bottom"
+          role="toolbar"
+          aria-label={t('Focus mode controls')}
+        >
+          <button type="button" onClick={navigateStart} disabled={!historyNavigation.back} className="grid h-11 w-11 shrink-0 place-items-center rounded-full hover:bg-[var(--ui-surface-2)] disabled:cursor-not-allowed disabled:opacity-40 desktop-shell:h-8 desktop-shell:w-8" title={t('First move')} aria-label={t('First move')}>⏮</button>
+          <button type="button" onClick={navigateBack} disabled={!historyNavigation.back} className="grid h-11 w-11 shrink-0 place-items-center rounded-full hover:bg-[var(--ui-surface-2)] disabled:cursor-not-allowed disabled:opacity-40 desktop-shell:h-8 desktop-shell:w-8" title={t('Previous move')} aria-label={t('Previous move')}>◀</button>
+          <span className="min-w-12 px-1 text-center font-mono tabular-nums lg:min-w-[4.5rem]">
+            {currentMoveNumber}/{totalMovesInCurrentLine}
+          </span>
+          <button type="button" onClick={navigateForward} disabled={!historyNavigation.forward} className="grid h-11 w-11 shrink-0 place-items-center rounded-full hover:bg-[var(--ui-surface-2)] disabled:cursor-not-allowed disabled:opacity-40 desktop-shell:h-8 desktop-shell:w-8" title={t('Next move')} aria-label={t('Next move')}>▶</button>
+          <button type="button" onClick={navigateEnd} disabled={!historyNavigation.forward} className="grid h-11 w-11 shrink-0 place-items-center rounded-full hover:bg-[var(--ui-surface-2)] disabled:cursor-not-allowed disabled:opacity-40 desktop-shell:h-8 desktop-shell:w-8" title={t('Last move')} aria-label={t('Last move')}>⏭</button>
+          <button
+            type="button"
+            onClick={() => setFocusMode(false)}
+            className="ml-1 min-h-11 min-w-11 shrink-0 rounded-full border border-[var(--ui-border)] bg-[var(--ui-surface)] px-2 py-1.5 text-[0.6875rem] font-semibold hover:bg-[var(--ui-surface-2)] desktop-shell:min-h-0 desktop-shell:min-w-0 lg:px-3"
+            title={t('Exit focus mode (Esc)')}
+            aria-label={t('Exit focus mode')}
+          >
+            <span className="lg:hidden">{t('Exit')}</span>
+            <span className="hidden lg:inline">{t('Exit focus')}</span>
+          </button>
+        </div>
+      )}
+      {pendingResignPlayer && (
+        <ResignConfirmModal
+          player={pendingResignPlayer}
+          onCancel={cancelResign}
+          onConfirm={confirmResign}
+        />
+      )}
+      {isClearAnalysisCacheConfirmOpen && (
+        <AnalysisCacheClearConfirmModal
+          count={analysisCacheSize}
+          onCancel={cancelClearAnalysisCache}
+          onConfirm={confirmClearAnalysisCache}
+        />
+      )}
+    </div>
+  );
+};

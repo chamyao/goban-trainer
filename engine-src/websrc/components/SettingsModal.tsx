@@ -1,0 +1,2945 @@
+import React from 'react';
+import { shallow } from 'zustand/shallow';
+import { useT } from '../i18n';
+import { useGameStore } from '../store/gameStore';
+import { FaBolt, FaCheck, FaChevronDown, FaGlobe, FaMicrochip, FaTimes } from 'react-icons/fa';
+import type { GameSettings } from '../types';
+import { ENGINE_MAX_TIME_MS, ENGINE_MAX_VISITS } from '../engine/katago/limits';
+import {
+    KATAGO_HUMAN_MODEL_SIZE,
+    KATAGO_HUMAN_MODEL_URL,
+    KATAGO_RECOMMENDED_MODEL_NAME,
+    KATAGO_RECOMMENDED_MODEL_SIZE,
+    KATAGO_RECOMMENDED_MODEL_UPLOADED,
+    KATAGO_RECOMMENDED_MODEL_URL,
+    KATAGO_SMALL_MODEL_PATH,
+} from '../engine/katago/modelDefaults';
+import { KATAGO_HUMAN_PROFILES } from '../engine/katago/searchParams';
+import { describeHumanProfile } from '../utils/humanProfileLabel';
+import { publicUrl } from '../utils/publicUrl';
+import { preferredScrollBehavior } from '../utils/mediaQuery';
+import { BOARD_THEME_OPTIONS, getBoardTheme } from '../utils/boardThemes';
+import { getEngineModelLabel } from '../utils/engineLabel';
+import { UI_THEME_OPTIONS } from '../utils/uiThemes';
+import { RULES_OPTIONS, rulesOf } from '../utils/goRules';
+import { describeAiStrength, estimateAiRank } from '../utils/aiStrength';
+import {
+  HANDICAP_PDA_LIMIT,
+  automaticHandicapPda,
+  clampHandicapPda,
+  countRootHandicapStones,
+  describeHandicapPda,
+} from '../utils/handicapAi';
+import { APP_LOCALE_OPTIONS } from '../utils/locales';
+import { BOARD_SIZES, getMaxHandicap } from '../utils/boardSize';
+import { useShortcutLabels } from '../hooks/useShortcutLabels';
+import { SETTINGS_TAB_LABELS, searchAvailableSettings, type SettingsSearchEntry } from '../utils/settingsSearch';
+import { useEscapeToClose } from '../hooks/useEscapeToClose';
+import { useInitialDialogFocus } from '../hooks/useInitialDialogFocus';
+import { ShortcutSettingsPanel } from './ShortcutSettingsPanel';
+import { POLICY_HEATMAP_METRIC_SELECT_OPTIONS, TOP_MOVE_METRIC_SELECT_OPTIONS } from '../utils/topMoveMetric';
+import {
+    clearUploadedModelUrl,
+    createUploadedModelUrl,
+    formatUploadedModelSize,
+    getModelFileNameFromUrl,
+    getUploadedModelInfo,
+    isUploadedModelUrl,
+    MAX_BROWSER_MODEL_UPLOAD_LABEL,
+    MODEL_UPLOAD_ACCEPT,
+    revokeUploadedModelUrl,
+    savePersistedUploadedModel,
+    syncUploadedModelUrl,
+    type UploadedModelInfo,
+    validateModelUploadFile,
+} from '../utils/modelUpload';
+import { copyTextToClipboard } from '../utils/clipboard';
+import { fetchBlobWithProgress } from '../utils/downloadProgress';
+import {
+    getNextSettingsTabId,
+    readSettingsActiveTab,
+    saveSettingsActiveTab,
+    type SettingsTabId,
+} from '../utils/settingsTabs';
+import { formatEngineBackendLabel } from '../utils/engineStatusSummary';
+import { describeModelDownloadError } from '../utils/modelDownloadError';
+import {
+    detectWebGpuAvailability,
+    isKataGoBackendAvailable,
+    type BrowserBackendAvailability,
+} from '../utils/backendAvailability';
+
+const OFFICIAL_MODELS: Array<{
+    label: string;
+    name: string;
+    url: string;
+    badge?: string;
+    uploaded: string;
+    size: string;
+    downloadAndLoad?: boolean;
+    browserLoadable?: boolean;
+}> = [
+    {
+        label: 'Strong Browser (b18)',
+        name: KATAGO_RECOMMENDED_MODEL_NAME,
+        url: KATAGO_RECOMMENDED_MODEL_URL,
+        badge: 'Optional',
+        uploaded: KATAGO_RECOMMENDED_MODEL_UPLOADED,
+        size: KATAGO_RECOMMENDED_MODEL_SIZE,
+        downloadAndLoad: true,
+        browserLoadable: true,
+    },
+    {
+        label: 'Latest / Strongest (b40)',
+        name: 'kata1-zhizi-b40c768nbt-fdx6d',
+        url: 'https://media.katagotraining.org/uploaded/networks/models/kata1/kata1-zhizi-b40c768nbt-fdx6d.bin.gz',
+        badge: 'Strongest',
+        uploaded: '2026-05-02',
+        size: '~824 MB',
+        browserLoadable: false,
+    },
+    {
+        label: 'Strongest (b28)',
+        name: 'kata1-zhizi-b28c512nbt-muonfd2',
+        url: 'https://media.katagotraining.org/uploaded/networks/models/kata1/kata1-zhizi-b28c512nbt-muonfd2.bin.gz',
+        badge: 'b28',
+        uploaded: '2026-03-22',
+        size: '~259 MB',
+        browserLoadable: false,
+    },
+    {
+        label: 'Latest (b28)',
+        name: 'kata1-b28c512nbt-s12763923712-d5805955894',
+        url: 'https://media.katagotraining.org/uploaded/networks/models/kata1/kata1-b28c512nbt-s12763923712-d5805955894.bin.gz',
+        badge: 'Latest b28',
+        uploaded: '2026-03-28',
+        size: '~259 MB',
+        browserLoadable: false,
+    },
+    {
+        label: 'Adam (b28)',
+        name: 'kata1-b28c512nbt-adam-s11387M-d5458M',
+        url: 'https://media.katagotraining.org/uploaded/networks/models/kata1/kata1-b28c512nbt-adam-s11387M-d5458M.bin.gz',
+        badge: 'Adam',
+        uploaded: '2025-10-12',
+        size: '~280 MB',
+        browserLoadable: false,
+    },
+];
+
+const MIN_ANALYSIS_VISITS = 16;
+const FAST_REVIEW_VISIT_PRESETS = [100, 500, 5000, 50000] as const;
+const SETTINGS_TABS = [
+    { id: 'general', label: 'General', compactLabel: 'General' },
+    { id: 'analysis', label: 'Analysis', compactLabel: 'Analysis' },
+    { id: 'ai', label: 'AI/Engine', compactLabel: 'Engine' },
+    { id: 'shortcuts', label: 'Shortcuts', compactLabel: 'Keys' },
+] as const satisfies ReadonlyArray<{ id: SettingsTabId; label: string; compactLabel: string }>;
+
+function clampSettingsVisits(value: number): number {
+    if (!Number.isFinite(value)) return MIN_ANALYSIS_VISITS;
+    return Math.max(MIN_ANALYSIS_VISITS, Math.min(ENGINE_MAX_VISITS, Math.floor(value)));
+}
+
+interface SettingsModalProps {
+    onClose: () => void;
+}
+
+const ANALYSIS_OVERLAY_SHORTCUT_IDS = [
+    'toggle-children',
+    'toggle-eval',
+    'toggle-hints',
+    'toggle-policy',
+    'cycle-policy-metric',
+    'toggle-territory',
+] as const;
+
+const ADVANCED_ENGINE_SETTING_IDS = new Set([
+    'settings-katago-max-time',
+    'settings-katago-batch-size',
+    'settings-katago-max-children',
+    'settings-katago-top-moves',
+    'settings-katago-wide-root-noise',
+    'settings-katago-pv-len',
+    'settings-katago-ownership',
+    'settings-katago-reuse-tree',
+    'settings-katago-randomize-symmetry',
+    'settings-katago-conservative-pass',
+    'settings-katago-fill-dame-before-pass',
+]);
+
+export const SettingsModal: React.FC<SettingsModalProps> = ({ onClose }) => {
+    useEscapeToClose(onClose);
+    const t = useT();
+    const dialogRef = useInitialDialogFocus<HTMLDivElement>();
+    const { settings, updateSettings, engineBackend, engineModelName, komi, handicapStoneCount } = useGameStore(
+        (state) => ({
+            settings: state.settings,
+            updateSettings: state.updateSettings,
+            engineBackend: state.engineBackend,
+            engineModelName: state.engineModelName,
+            komi: state.komi,
+            handicapStoneCount: countRootHandicapStones(state.rootNode),
+        }),
+        shallow
+    );
+    const engineModelLabel = getEngineModelLabel(engineModelName, settings.katagoModelUrl);
+    // KaTrain shows what the current AI configuration is worth in rank terms.
+    const aiStrength = React.useMemo(() => estimateAiRank(settings.aiStrategy, settings), [settings]);
+    const modelUploadInputRef = React.useRef<HTMLInputElement>(null);
+    const humanModelUploadInputRef = React.useRef<HTMLInputElement>(null);
+    const humanBlobUrlRef = React.useRef<string | null>(null);
+    const [copiedUrl, setCopiedUrl] = React.useState<string | null>(null);
+    const [downloadingUrl, setDownloadingUrl] = React.useState<string | null>(null);
+    const [downloadProgress, setDownloadProgress] = React.useState<number | null>(null);
+    const [downloadError, setDownloadError] = React.useState<string | null>(null);
+    const [modelUploadError, setModelUploadError] = React.useState<string | null>(null);
+    const [humanModelError, setHumanModelError] = React.useState<string | null>(null);
+    const [humanModelFileName, setHumanModelFileName] = React.useState<string | null>(null);
+    const [uploadedModelInfo, setUploadedModelInfo] = React.useState<UploadedModelInfo | null>(() => getUploadedModelInfo());
+    const [webGpuAvailability, setWebGpuAvailability] = React.useState<BrowserBackendAvailability>(() => detectWebGpuAvailability());
+    const shortcutLabels = useShortcutLabels(ANALYSIS_OVERLAY_SHORTCUT_IDS);
+
+    const [activeTab, setActiveTab] = React.useState<SettingsTabId>(() => {
+        if (typeof window === 'undefined') {
+            return 'general';
+        }
+        return readSettingsActiveTab('general');
+    });
+    React.useEffect(() => {
+        if (typeof window === 'undefined') {
+            return;
+        }
+        saveSettingsActiveTab(activeTab);
+    }, [activeTab]);
+    const [settingsQuery, setSettingsQuery] = React.useState('');
+    const settingsResults = React.useMemo(
+        () => searchAvailableSettings(settingsQuery, settings.aiStrategy),
+        [settingsQuery, settings.aiStrategy]
+    );
+    const [activeSettingsResult, setActiveSettingsResult] = React.useState(-1);
+    const [officialModelsOpen, setOfficialModelsOpen] = React.useState(false);
+    const [advancedEngineOpen, setAdvancedEngineOpen] = React.useState(false);
+
+    // Set by a search result, cleared once the control has been revealed. The
+    // target panel only mounts when the tab changes, so the reveal has to wait
+    // for that render rather than guess at a frame or two.
+    const [pendingReveal, setPendingReveal] = React.useState<string | null>(null);
+    const revealTimerRef = React.useRef<number | null>(null);
+
+    const goToSetting = (entry: SettingsSearchEntry) => {
+        if (ADVANCED_ENGINE_SETTING_IDS.has(entry.id)) {
+            setAdvancedEngineOpen(true);
+        }
+        setActiveTab(entry.tab);
+        setSettingsQuery('');
+        setPendingReveal(entry.id);
+    };
+
+    React.useEffect(() => {
+        if (!pendingReveal) return;
+        const label = document.querySelector<HTMLElement>(`label[for="${pendingReveal}"]`);
+        const control = document.getElementById(pendingReveal);
+        if (!label && !control) return;
+        setPendingReveal(null);
+
+        (label ?? control)?.scrollIntoView({ block: 'center', behavior: preferredScrollBehavior() });
+        // Focused, not just scrolled to, so keyboard users land on the control
+        // and can change it straight away.
+        const focusTarget = control?.getAttribute('role') === 'radiogroup'
+            ? control.querySelector<HTMLElement>('[role="radio"][aria-checked="true"]')
+            : control;
+        focusTarget?.focus({ preventScroll: true });
+        const row = label?.closest<HTMLElement>('div') ?? control;
+        if (!row) return;
+        // A brief marker: in a panel this long, scrolling alone leaves it
+        // unclear which row was the answer.
+        row.dataset.settingsFound = 'true';
+        // The timer is held in a ref rather than cleaned up by this effect:
+        // clearing pendingReveal above re-runs it, and an effect cleanup would
+        // cancel the timer it had just set, leaving the marker on for good.
+        if (revealTimerRef.current !== null) window.clearTimeout(revealTimerRef.current);
+        revealTimerRef.current = window.setTimeout(() => {
+            delete row.dataset.settingsFound;
+            revealTimerRef.current = null;
+        }, 1600);
+    }, [pendingReveal, activeTab]);
+
+    React.useEffect(() => () => {
+        if (revealTimerRef.current !== null) window.clearTimeout(revealTimerRef.current);
+    }, []);
+
+    const focusSettingsTab = (tabId: SettingsTabId) => {
+        window.requestAnimationFrame(() => {
+            document.getElementById(`tab-${tabId}`)?.focus();
+        });
+    };
+    const DEFAULT_EVAL_THRESHOLDS = [12, 6, 3, 1.5, 0.5, 0];
+    const DEFAULT_SHOW_DOTS = [true, true, true, true, true, true];
+    const DEFAULT_SAVE_FEEDBACK = [true, true, true, true, false, false];
+    const DEFAULT_ANIM_PV_TIME = 0.5;
+    const DEFAULT_ANIM_PV_MOVES = 100;
+    const SMALL_MODEL_URL = publicUrl(KATAGO_SMALL_MODEL_PATH);
+    const isUploadedModel = isUploadedModelUrl(settings.katagoModelUrl);
+    const sectionClass = 'settings-section rounded-xl border ui-surface p-4 sm:p-5';
+    const sectionTitleClass = 'text-xs font-semibold ui-text-muted tracking-[0.12em] uppercase';
+    const rowClass = 'settings-row flex items-center justify-between gap-4 min-h-11';
+    const labelClass = 'text-[var(--ui-text)] text-sm sm:text-base';
+    const inputClass =
+        'w-full ui-input rounded-lg px-3 py-2 border focus:border-[var(--ui-accent)] outline-none text-sm font-mono';
+    const selectClass =
+        'w-full ui-input rounded-lg px-3 py-2 border focus:border-[var(--ui-accent)] outline-none text-sm';
+    const subtextClass = 'text-xs ui-text-faint leading-relaxed';
+    const pillButtonClass =
+        'px-3 py-2 rounded-lg ui-surface-2 text-xs font-mono text-[var(--ui-text)] border transition-colors hover:brightness-110';
+    const modelCardClass =
+        'w-full text-left rounded-lg border px-3 py-2 bg-[var(--ui-surface)] border-[var(--ui-border)] text-[var(--ui-text)]';
+    const modelBadgeClass =
+        'text-[0.625rem] uppercase tracking-wide px-1.5 py-0.5 rounded bg-[var(--ui-surface-2)] text-[var(--ui-text-muted)] border border-[var(--ui-border)]';
+    const modelActionClass =
+        'px-2 py-1 text-xs rounded bg-[var(--ui-surface-2)] border border-[var(--ui-border)] text-[var(--ui-text-muted)] hover:bg-[var(--ui-surface)] hover:text-[var(--ui-text)]';
+    const backendCardClass = (active: boolean, available: boolean) => [
+        'min-h-20 rounded-lg border px-3 py-3 text-left transition-colors',
+        'flex items-start gap-3',
+        !available
+            ? 'cursor-not-allowed border-[var(--ui-border)] bg-[var(--ui-surface)] text-[var(--ui-text-faint)] opacity-70'
+            : active
+            ? 'border-[var(--ui-accent)] bg-[var(--ui-accent-soft)] text-[var(--ui-text)]'
+            : 'border-[var(--ui-border)] bg-[var(--ui-surface)] text-[var(--ui-text-muted)] hover:bg-[var(--ui-surface-2)] hover:text-[var(--ui-text)]',
+    ].join(' ');
+
+    const UI_DENSITY_OPTIONS: Array<{ value: GameSettings['uiDensity']; label: string; description: string }> = [
+        { value: 'compact', label: 'Compact', description: 'Tighter bars and smaller controls.' },
+        { value: 'comfortable', label: 'Comfortable', description: 'Balanced sizing for most screens.' },
+        { value: 'large', label: 'Large', description: 'Roomier controls and text.' },
+    ];
+    const uiThemeMeta = UI_THEME_OPTIONS.find((theme) => theme.value === settings.uiTheme);
+    const uiDensityMeta = UI_DENSITY_OPTIONS.find((density) => density.value === settings.uiDensity);
+    const appLocaleMeta = APP_LOCALE_OPTIONS.find((locale) => locale.value === settings.appLocale);
+    const backendOptions: Array<{
+        value: GameSettings['katagoBackend'];
+        label: string;
+        badge?: string;
+        description: string;
+        unavailableDescription?: string;
+        icon: React.ReactNode;
+    }> = [
+        {
+            value: 'webgpu',
+            label: 'WebGPU',
+            badge: 'Recommended',
+            description: 'Fast GPU path',
+            unavailableDescription: 'Not available in this browser',
+            icon: <FaBolt aria-hidden="true" />,
+        },
+        { value: 'wasm', label: 'WASM', description: 'Reliable CPU path', icon: <FaGlobe aria-hidden="true" /> },
+        { value: 'cpu', label: 'CPU', description: 'Compatibility path', icon: <FaMicrochip aria-hidden="true" /> },
+    ];
+    // Remote analysis runs on the server, so the status line reports the server
+    // rather than a browser backend that is not the one answering.
+    const isRemoteEngine = settings.engineMode === 'remote' && !!settings.remoteEngineUrl.trim();
+    const activeBackendLabel = isRemoteEngine ? t('Remote') : formatEngineBackendLabel(engineBackend ?? settings.katagoBackend);
+    const requestedBackendLabel = formatEngineBackendLabel(settings.katagoBackend);
+    const isBackendFallback = !isRemoteEngine && !!engineBackend && engineBackend !== settings.katagoBackend;
+    const focusBackendOption = (value: GameSettings['katagoBackend']) => {
+        window.setTimeout(() => {
+            document.querySelector<HTMLElement>(`[data-katago-backend-option="${value}"]`)?.focus();
+        }, 0);
+    };
+    const handleBackendOptionKeyDown = (
+        event: React.KeyboardEvent<HTMLButtonElement>,
+        value: GameSettings['katagoBackend']
+    ) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            if (isKataGoBackendAvailable(value, webGpuAvailability)) {
+                updateSettings({ katagoBackend: value });
+            }
+            return;
+        }
+
+        const direction =
+            event.key === 'ArrowRight' || event.key === 'ArrowDown'
+                ? 1
+                : event.key === 'ArrowLeft' || event.key === 'ArrowUp'
+                    ? -1
+                    : 0;
+        if (!direction) return;
+
+        event.preventDefault();
+        const currentIndex = backendOptions.findIndex((option) => option.value === value);
+        let nextOption = backendOptions[(currentIndex + direction + backendOptions.length) % backendOptions.length];
+        for (let i = 0; nextOption && i < backendOptions.length; i++) {
+            if (isKataGoBackendAvailable(nextOption.value, webGpuAvailability)) break;
+            nextOption = backendOptions[(backendOptions.indexOf(nextOption) + direction + backendOptions.length) % backendOptions.length];
+        }
+        if (!nextOption) return;
+        updateSettings({ katagoBackend: nextOption.value });
+        focusBackendOption(nextOption.value);
+    };
+    const maxHandicap = getMaxHandicap(settings.defaultBoardSize);
+    const boardThemeChoices = React.useMemo(
+        () => BOARD_THEME_OPTIONS.map((theme) => ({ ...theme, config: getBoardTheme(theme.value) })),
+        []
+    );
+    const focusBoardThemeChoice = (value: GameSettings['boardTheme']) => {
+        window.requestAnimationFrame(() => {
+            document.querySelector<HTMLElement>(`[data-board-theme-choice="${value}"]`)?.focus();
+        });
+    };
+    const handleBoardThemeChoiceKeyDown = (
+        event: React.KeyboardEvent<HTMLButtonElement>,
+        value: GameSettings['boardTheme']
+    ) => {
+        const currentIndex = boardThemeChoices.findIndex((theme) => theme.value === value);
+        let nextIndex = currentIndex;
+        if (event.key === 'Home') nextIndex = 0;
+        else if (event.key === 'End') nextIndex = boardThemeChoices.length - 1;
+        else if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+            nextIndex = (currentIndex + 1) % boardThemeChoices.length;
+        } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+            nextIndex = (currentIndex - 1 + boardThemeChoices.length) % boardThemeChoices.length;
+        } else {
+            return;
+        }
+
+        event.preventDefault();
+        const nextTheme = boardThemeChoices[nextIndex];
+        if (!nextTheme) return;
+        updateSettings({ boardTheme: nextTheme.value });
+        focusBoardThemeChoice(nextTheme.value);
+    };
+
+    React.useEffect(() => {
+        syncUploadedModelUrl(settings.katagoModelUrl);
+    }, [settings.katagoModelUrl]);
+
+    React.useEffect(() => {
+        setWebGpuAvailability(detectWebGpuAvailability());
+    }, []);
+
+    React.useEffect(() => {
+        setUploadedModelInfo(isUploadedModel ? getUploadedModelInfo() : null);
+    }, [isUploadedModel, settings.katagoModelUrl]);
+
+    const uploadedModelSavedLabel = uploadedModelInfo?.updatedAt
+        ? new Date(uploadedModelInfo.updatedAt).toLocaleString([], {
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+        })
+        : null;
+
+    const handleModelUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+        setModelUploadError(null);
+        const error = validateModelUploadFile(file);
+        if (error) {
+            setModelUploadError(error);
+            event.target.value = '';
+            return;
+        }
+        try {
+            updateSettings({ katagoModelUrl: createUploadedModelUrl(file, settings.katagoModelUrl) });
+            const persisted = await savePersistedUploadedModel(file);
+            setUploadedModelInfo(getUploadedModelInfo());
+            if (!persisted) {
+                setModelUploadError(t('Loaded for this session, but browser storage could not save the upload for reload.'));
+            }
+        } catch (uploadError) {
+            setModelUploadError(uploadError instanceof Error ? uploadError.message : t('Could not load this model file.'));
+        }
+        event.target.value = '';
+    };
+
+    const handleHumanModelUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        event.target.value = '';
+        if (!file) return;
+        const problem = validateModelUploadFile(file);
+        if (problem) {
+            setHumanModelError(problem);
+            return;
+        }
+        setHumanModelError(null);
+        // Session-only: the blob URL dies with the page, and the stored setting is
+        // reset on load so a dead URL never comes back.
+        if (humanBlobUrlRef.current) URL.revokeObjectURL(humanBlobUrlRef.current);
+        const url = URL.createObjectURL(file);
+        humanBlobUrlRef.current = url;
+        setHumanModelFileName(file.name);
+        updateSettings({ humanSlModelUrl: url });
+    };
+
+    const handleCopyUrl = async (url: string) => {
+        const onCopied = () => {
+            setCopiedUrl(url);
+            window.setTimeout(() => {
+                setCopiedUrl((current) => (current === url ? null : current));
+            }, 2000);
+        };
+
+        if (await copyTextToClipboard(url)) {
+            onCopied();
+        }
+    };
+
+    const handleClearHumanUpload = () => {
+        if (humanBlobUrlRef.current) {
+            URL.revokeObjectURL(humanBlobUrlRef.current);
+            humanBlobUrlRef.current = null;
+        }
+        setHumanModelFileName(null);
+        setHumanModelError(null);
+        updateSettings({ humanSlModelUrl: KATAGO_HUMAN_MODEL_URL });
+    };
+
+    const handleClearUpload = () => {
+        if (!isUploadedModel) return;
+        setModelUploadError(null);
+        setUploadedModelInfo(null);
+        updateSettings({ katagoModelUrl: clearUploadedModelUrl(SMALL_MODEL_URL) });
+    };
+
+    const handleDownloadAndLoad = async (url: string) => {
+        if (downloadingUrl) return;
+        setDownloadError(null);
+        setDownloadProgress(null);
+        setDownloadingUrl(url);
+        try {
+            revokeUploadedModelUrl();
+            const blob = await fetchBlobWithProgress(url, ({ percent }) => setDownloadProgress(percent));
+            const downloadedFile = new File([blob], getModelFileNameFromUrl(url), { type: blob.type });
+            updateSettings({ katagoModelUrl: createUploadedModelUrl(downloadedFile, settings.katagoModelUrl) });
+            const persisted = await savePersistedUploadedModel(downloadedFile);
+            setUploadedModelInfo(getUploadedModelInfo());
+            if (!persisted) {
+                setDownloadError(t('Loaded for this session, but browser storage could not save the download for reload.'));
+            }
+        } catch (error) {
+            setDownloadError(describeModelDownloadError(error));
+        } finally {
+            setDownloadingUrl(null);
+            setDownloadProgress(null);
+        }
+    };
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-3 sm:p-6 mobile-safe-inset mobile-safe-area-bottom">
+            <div
+                ref={dialogRef}
+                tabIndex={-1}
+                className="settings-modal w-full max-w-[960px] h-[92dvh] sm:h-auto sm:max-h-[92dvh] ui-panel rounded-xl sm:rounded-2xl shadow-xl border overflow-hidden flex flex-col"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="settings-title"
+            >
+                <div className="settings-modal-header sticky top-0 z-10 flex items-center justify-between px-4 sm:px-6 py-4 border-b ui-bar backdrop-blur">
+                    <h2 id="settings-title" className="text-lg sm:text-xl font-semibold text-[var(--ui-text)]">{t('Settings')}</h2>
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        className="ui-control grid shrink-0 place-items-center rounded-lg text-[var(--ui-text-muted)] hover:bg-[var(--ui-surface-2)] hover:text-[var(--ui-text)]"
+                        aria-label={t('Close settings')}
+                    >
+                        <FaTimes />
+                    </button>
+                </div>
+                <div className="settings-modal-body min-h-0 px-4 sm:px-6 py-5 flex flex-col flex-1 overflow-hidden">
+                    {/* Search. Four tabs and 80-odd controls is more than anyone
+                        should have to hunt through by eye; typing a word jumps
+                        straight to the control, switching tabs on the way. */}
+                    <div className="settings-search relative mb-4">
+                        <input
+                            type="search"
+                            role="combobox"
+                            id="settings-search-input"
+                            className="settings-search-input w-full rounded-lg border px-3 py-2 text-sm"
+                            placeholder={t('Search settings')}
+                            aria-label={t('Search settings')}
+                            aria-autocomplete="list"
+                            aria-controls={settingsQuery.trim() ? 'settings-search-results' : undefined}
+                            aria-expanded={settingsQuery.trim() !== ''}
+                            aria-activedescendant={activeSettingsResult >= 0 ? `settings-search-result-${activeSettingsResult}` : undefined}
+                            autoComplete="off"
+                            value={settingsQuery}
+                            onChange={(e) => {
+                                setSettingsQuery(e.target.value);
+                                setActiveSettingsResult(-1);
+                            }}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Escape' && settingsQuery) {
+                                    // Clear the query first; a second Escape closes the modal.
+                                    e.stopPropagation();
+                                    setSettingsQuery('');
+                                    setActiveSettingsResult(-1);
+                                } else if (e.key === 'ArrowDown' && settingsResults.length > 0) {
+                                    e.preventDefault();
+                                    setActiveSettingsResult((current) => (current + 1) % settingsResults.length);
+                                } else if (e.key === 'ArrowUp' && settingsResults.length > 0) {
+                                    e.preventDefault();
+                                    setActiveSettingsResult((current) => current <= 0 ? settingsResults.length - 1 : current - 1);
+                                } else if (e.key === 'Enter' && settingsResults[activeSettingsResult >= 0 ? activeSettingsResult : 0]) {
+                                    e.preventDefault();
+                                    goToSetting(settingsResults[activeSettingsResult >= 0 ? activeSettingsResult : 0]);
+                                }
+                            }}
+                        />
+                        {settingsQuery.trim() !== '' && (
+                            <ul id="settings-search-results" className="settings-search-results" role="listbox" aria-label={t('Search results')}>
+                                {settingsResults.length === 0 ? (
+                                    <li className="settings-search-empty">{t('No setting matches “{query}”', { query: settingsQuery.trim() })}</li>
+                                ) : (
+                                    settingsResults.map((entry, index) => (
+                                        <li key={entry.id}>
+                                            <button
+                                                id={`settings-search-result-${index}`}
+                                                type="button"
+                                                role="option"
+                                                aria-selected={index === activeSettingsResult}
+                                                className="settings-search-result"
+                                                onPointerMove={(event) => {
+                                                    if (event.pointerType !== 'touch') setActiveSettingsResult(index);
+                                                }}
+                                                onClick={() => goToSetting(entry)}
+                                            >
+                                                <span className="settings-search-result-label">{t(entry.label)}</span>
+                                                <span className="settings-search-result-tab">{t(SETTINGS_TAB_LABELS[entry.tab])}</span>
+                                            </button>
+                                        </li>
+                                    ))
+                                )}
+                            </ul>
+                        )}
+                    </div>
+
+                    {/* Tab Navigation */}
+                    <div className="settings-tabs flex w-full min-w-0 border-b mb-5"
+                        role="tablist"
+                        aria-orientation="horizontal"
+                    >
+                        {SETTINGS_TABS.map((tab) => {
+                            const isActive = activeTab === tab.id;
+                            return (
+                                <button type="button"
+                                    key={tab.id}
+                                    id={`tab-${tab.id}`}
+                                    role="tab"
+                                    aria-label={t(tab.label)}
+                                    aria-selected={isActive}
+                                    // Only the selected tab's panel is rendered, so pointing at
+                                    // the others names an element that is not there.
+                                    aria-controls={isActive ? `panel-${tab.id}` : undefined}
+                                    tabIndex={isActive ? 0 : -1}
+                                    onClick={() => setActiveTab(tab.id)}
+                                    onKeyDown={(e) => {
+                                        const nextTabId = getNextSettingsTabId(tab.id, e.key);
+                                        if (!nextTabId) return;
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        setActiveTab(nextTabId);
+                                        focusSettingsTab(nextTabId);
+                                    }}
+                                    className={`settings-tab min-w-0 flex-1 whitespace-nowrap px-2 py-2 text-sm font-medium transition-colors sm:px-4 ${
+                                        isActive
+                                            ? 'settings-tab-active border-b-2'
+                                            : ''
+                                    }`}
+                                >
+                                    <span className="settings-tab-label-full" aria-hidden="true">{t(tab.label)}</span>
+                                    <span className="settings-tab-label-compact" aria-hidden="true">{t(tab.compactLabel)}</span>
+                                </button>
+                            );
+                        })}
+                    </div>  
+                
+                    {/* Tab Content */}  
+                    <div className="settings-modal-content min-h-0 flex-1 overflow-y-auto space-y-6">
+                        {activeTab === 'general' && (  
+                            <div
+                                id="panel-general"
+                                role="tabpanel"
+                                aria-labelledby="tab-general"
+                                tabIndex={0}
+                            >  
+                                {/* Appearance Section */}
+                                <div className={sectionClass}>
+                                    <h3 className={sectionTitleClass}>{t('Appearance')}</h3>
+                                    <div className="mt-4 space-y-4">
+                                        <div className={rowClass}>
+                                            <label htmlFor="settings-show-coordinates" className={labelClass}>{t('Show Coordinates')}</label>
+                                            <input
+                                                id="settings-show-coordinates"
+                                                type="checkbox"
+                                                checked={settings.showCoordinates}
+                                                onChange={(e) => updateSettings({ showCoordinates: e.target.checked })}
+                                                className="toggle"
+                                            />
+                                        </div>
+
+                                        <div className={rowClass}>
+                                            <label htmlFor="settings-next-move-preview" className={labelClass}>{t('Next Move Preview')}</label>
+                                            <input
+                                                id="settings-next-move-preview"
+                                                type="checkbox"
+                                                checked={settings.showNextMovePreview}
+                                                onChange={(e) => updateSettings({ showNextMovePreview: e.target.checked })}
+                                                className="toggle"
+                                            />
+                                        </div>
+
+                                        <div className={rowClass}>
+                                            <label htmlFor="settings-show-move-numbers" className={labelClass}>{t('Show Move Numbers')}</label>
+                                            <input
+                                                id="settings-show-move-numbers"
+                                                type="checkbox"
+                                                checked={settings.showMoveNumbers}
+                                                onChange={(e) => updateSettings({ showMoveNumbers: e.target.checked })}
+                                                className="toggle"
+                                            />
+                                        </div>
+
+                                        <div className={rowClass}>
+                                            <label htmlFor="settings-show-board-controls" className={labelClass}>{t('Show Board Controls')}</label>
+                                            <input
+                                                id="settings-show-board-controls"
+                                                type="checkbox"
+                                                checked={settings.showBoardControls}
+                                                onChange={(e) => updateSettings({ showBoardControls: e.target.checked })}
+                                                className="toggle"
+                                            />
+                                        </div>
+
+                                        <div className={rowClass}>
+                                            <div>
+                                                <label htmlFor="settings-fuzzy-stone-placement" className={labelClass}>{t('Fuzzy Stone Placement')}</label>
+                                                <p className={subtextClass}>{t('Sets stones slightly off-center, fixed once played.')}</p>
+                                            </div>
+                                            <input
+                                                id="settings-fuzzy-stone-placement"
+                                                type="checkbox"
+                                                checked={settings.fuzzyStonePlacement}
+                                                onChange={(e) => updateSettings({ fuzzyStonePlacement: e.target.checked })}
+                                                className="toggle"
+                                            />
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <div className="flex items-center justify-between gap-3">
+                                                <div id="settings-board-theme-label" className="ui-text-muted">{t('Board Theme')}</div>
+                                            </div>
+                                            <div
+                                                id="settings-board-theme"
+                                                className="grid grid-cols-2 gap-2 sm:grid-cols-3"
+                                                role="radiogroup"
+                                                aria-labelledby="settings-board-theme-label"
+                                                data-settings-search-id="settings-board-theme"
+                                                data-board-theme-picker="true"
+                                            >
+                                                {boardThemeChoices.map((theme) => {
+                                                    const selected = settings.boardTheme === theme.value;
+                                                    const lineColor = theme.config.board.foregroundColor ?? '#000000';
+                                                    const texture = theme.config.board.texture;
+                                                    const backgroundImage = [
+                                                        texture ? `url("${texture}")` : null,
+                                                        `linear-gradient(${lineColor} 1px, transparent 1px)`,
+                                                        `linear-gradient(90deg, ${lineColor} 1px, transparent 1px)`,
+                                                    ].filter(Boolean).join(', ');
+                                                    const backgroundSize = `${texture ? '100% 100%, ' : ''}20% 20%, 20% 20%`;
+                                                    const stoneStyle = (player: 'black' | 'white'): React.CSSProperties => {
+                                                        const stone = theme.config.stones[player];
+                                                        return {
+                                                            backgroundColor: stone.backgroundColor,
+                                                            backgroundImage: stone.image ? `url("${stone.image}")` : undefined,
+                                                            backgroundPosition: 'center',
+                                                            backgroundRepeat: 'no-repeat',
+                                                            backgroundSize: 'cover',
+                                                            border: stone.borderWidth && stone.borderColor ? `${stone.borderWidth} solid ${stone.borderColor}` : undefined,
+                                                            boxShadow: stone.shadowColor && stone.shadowColor !== 'transparent'
+                                                                ? `${stone.shadowOffsetX ?? '0'} ${stone.shadowOffsetY ?? '0'} ${stone.shadowBlur ?? '0'} ${stone.shadowColor}`
+                                                                : undefined,
+                                                        };
+                                                    };
+
+                                                    return (
+                                                        <button
+                                                            key={theme.value}
+                                                            type="button"
+                                                            role="radio"
+                                                            aria-checked={selected}
+                                                            tabIndex={selected ? 0 : -1}
+                                                            aria-label={t('Board theme {label}', { label: t(theme.label) })}
+                                                            data-board-theme-choice={theme.value}
+                                                            onClick={() => updateSettings({ boardTheme: theme.value })}
+                                                            onKeyDown={(event) => handleBoardThemeChoiceKeyDown(event, theme.value)}
+                                                            className={[
+                                                                'group rounded-lg border p-2 text-left transition-colors',
+                                                                selected
+                                                                    ? 'border-[var(--ui-accent)] bg-[var(--ui-accent-soft)] text-[var(--ui-text)]'
+                                                                    : 'border-[var(--ui-border)] bg-[var(--ui-surface)] text-[var(--ui-text-muted)] hover:bg-[var(--ui-surface-2)] hover:text-[var(--ui-text)]',
+                                                            ].join(' ')}
+                                                        >
+                                                            <span
+                                                                className="relative mb-2 block h-16 overflow-hidden rounded-md border"
+                                                                style={{
+                                                                    backgroundColor: theme.config.board.backgroundColor,
+                                                                    backgroundImage,
+                                                                    backgroundSize,
+                                                                    borderColor: theme.config.board.borderColor ?? lineColor,
+                                                                }}
+                                                                aria-hidden="true"
+                                                            >
+                                                                <span className="absolute left-[21%] top-[26%] h-4 w-4 rounded-full" style={stoneStyle('black')} />
+                                                                <span className="absolute left-[55%] top-[42%] h-4 w-4 rounded-full" style={stoneStyle('white')} />
+                                                                <span className="absolute left-[35%] top-[62%] h-4 w-4 rounded-full" style={stoneStyle('black')} />
+                                                            </span>
+                                                            <span className="flex min-w-0 items-center justify-between gap-2">
+                                                                <span className="truncate text-xs font-semibold">{t(theme.label)}</span>
+                                                                {/* One of a set, not a switch: "On" read as a toggle state and
+                                                                    set 10px mono capital O next to a lowercase n. The engine
+                                                                    cards below already mark their choice with this chip. */}
+                                                                {selected ? (
+                                                                    <span className="grid h-4 w-4 shrink-0 place-items-center rounded-full bg-[var(--ui-accent)] text-[0.5rem] text-[var(--ui-accent-contrast)]">
+                                                                        <FaCheck aria-hidden="true" />
+                                                                    </span>
+                                                                ) : null}
+                                                            </span>
+                                                            {theme.config.description ? (
+                                                                <span
+                                                                    // A single clipped line is the one thing this caption cannot
+                                                                    // be: at phone width the cards are 127px wide, so up to 109px
+                                                                    // of a description was cut, and the hover title carrying the
+                                                                    // rest is unreachable on touch. Let it wrap — the longest one
+                                                                    // we ship takes three lines there and one on desktop.
+                                                                    className="mt-1 block text-[0.625rem] leading-tight ui-text-faint"
+                                                                    title={t(theme.config.description)}
+                                                                >
+                                                                    {t(theme.config.description)}
+                                                                </span>
+                                                            ) : null}
+                                                        </button>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                            <div className="space-y-2">
+                                                <label htmlFor="settings-default-board-size" className="ui-text-muted block">{t('Default Board Size')}</label>
+                                                <select
+                                                    id="settings-default-board-size"
+                                                    value={settings.defaultBoardSize}
+                                                    onChange={(e) => {
+                                                        const nextSize = Number(e.target.value) as GameSettings['defaultBoardSize'];
+                                                        const nextMax = getMaxHandicap(nextSize);
+                                                        updateSettings({
+                                                            defaultBoardSize: nextSize,
+                                                            defaultHandicap: Math.min(settings.defaultHandicap, nextMax),
+                                                        });
+                                                    }}
+                                                    className={selectClass}
+                                                >
+                                                    {BOARD_SIZES.map((size) => (
+                                                        <option key={size} value={size}>{size}×{size}</option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label htmlFor="settings-default-handicap" className="ui-text-muted block">{t('Default Handicap')}</label>
+                                                <input
+                                                    id="settings-default-handicap"
+                                                    type="number"
+                                                    min={0}
+                                                    max={maxHandicap}
+                                                    step={1}
+                                                    value={settings.defaultHandicap}
+                                                    onChange={(e) => {
+                                                        const next = Number.parseInt(e.target.value || '0', 10);
+                                                        updateSettings({
+                                                            defaultHandicap: Math.max(0, Math.min(Number.isFinite(next) ? next : 0, maxHandicap)),
+                                                        });
+                                                    }}
+                                                    className={inputClass}
+                                                />
+                                            </div>
+                                        </div>
+                                        <p className={subtextClass}>{t('Defaults for the New Game dialog.')}</p>
+
+                                        <div className="space-y-2">
+                                            <label htmlFor="settings-app-locale" className="ui-text-muted block">{t('Document language metadata')}</label>
+                                            <select
+                                                id="settings-app-locale"
+                                                value={settings.appLocale}
+                                                onChange={(e) => updateSettings({ appLocale: e.target.value as GameSettings['appLocale'] })}
+                                                className={selectClass}
+                                                data-settings-locale="true"
+                                            >
+                                                {APP_LOCALE_OPTIONS.map((locale) => (
+                                                    <option key={locale.value} value={locale.value} lang={locale.htmlLang}>
+                                                        {/* Same guard as LanguageSwitcher: the native name only adds
+                                                            information when it differs, else this reads "English (English)". */}
+                                                        {locale.label}
+                                                        {locale.label === locale.nativeLabel ? '' : ` (${locale.nativeLabel})`}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                            {appLocaleMeta ? (
+                                                <p className={subtextClass}>{t('Sets browser language metadata for accessibility and future translations.')}</p>
+                                            ) : null}
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <label htmlFor="settings-ui-theme" className="ui-text-muted block">{t('UI Theme')}</label>
+                                            <select
+                                                id="settings-ui-theme"
+                                                value={settings.uiTheme}
+                                                onChange={(e) => updateSettings({ uiTheme: e.target.value as GameSettings['uiTheme'] })}
+                                                className={selectClass}
+                                            >
+                                                {UI_THEME_OPTIONS.map((theme) => (
+                                                    <option key={theme.value} value={theme.value}>
+                                                        {t(theme.label)}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                            {uiThemeMeta ? <p className={subtextClass}>{t(uiThemeMeta.description)}</p> : null}
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <label htmlFor="settings-ui-density" className="ui-text-muted block">{t('UI Density')}</label>
+                                            <select
+                                                id="settings-ui-density"
+                                                value={settings.uiDensity}
+                                                onChange={(e) => updateSettings({ uiDensity: e.target.value as GameSettings['uiDensity'] })}
+                                                className={selectClass}
+                                            >
+                                                {UI_DENSITY_OPTIONS.map((density) => (
+                                                    <option key={density.value} value={density.value}>
+                                                        {t(density.label)}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                            {uiDensityMeta ? <p className={subtextClass}>{t(uiDensityMeta.description)}</p> : null}
+                                        </div>
+                                    </div>  
+                                </div>
+
+                                {/* Timer Section */}  
+                                <div className={sectionClass}>  
+                                    <div className="flex items-center justify-between">  
+                                        <h3 className={sectionTitleClass}>{t('Timer')}</h3>  
+                                    </div>  
+                                    <div className="mt-4 space-y-4">
+                                        <div className={rowClass}>
+                                            <label htmlFor="settings-sound-enabled" className={labelClass}>{t('Sound Effects')}</label>
+                                            <input
+                                                id="settings-sound-enabled"
+                                                type="checkbox"
+                                                checked={settings.soundEnabled}
+                                                onChange={(e) => updateSettings({ soundEnabled: e.target.checked })}
+                                                className="toggle"
+                                            />
+                                        </div>
+
+                                        <div className={rowClass}>
+                                            <label htmlFor="settings-timer-sound" className={labelClass}>{t('Timer Sound')}</label>
+                                            <input
+                                                id="settings-timer-sound"
+                                                type="checkbox"
+                                                checked={settings.timerSound}
+                                                onChange={(e) => updateSettings({ timerSound: e.target.checked })}
+                                                className="toggle"
+                                            />
+                                        </div>
+
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                            <div className="space-y-1">
+                                                <label htmlFor="settings-main-time" className="text-[var(--ui-text-muted)] block text-sm">{t('Main Time (min)')}</label>
+                                                <input
+                                                    id="settings-main-time"
+                                                    type="number"
+                                                    min={0}
+                                                    step={1}
+                                                    value={settings.timerMainTimeMinutes}
+                                                    onChange={(e) => updateSettings({ timerMainTimeMinutes: Math.max(0, parseInt(e.target.value || '0', 10)) })}
+                                                    className={inputClass}
+                                                />
+                                            </div>
+
+                                            <div className="space-y-1">
+                                                <label htmlFor="settings-byo-length" className="text-[var(--ui-text-muted)] block text-sm">{t('Byo Length (sec)')}</label>
+                                                <input
+                                                    id="settings-byo-length"
+                                                    type="number"
+                                                    min={1}
+                                                    step={1}
+                                                    value={settings.timerByoLengthSeconds}
+                                                    onChange={(e) => updateSettings({ timerByoLengthSeconds: Math.max(1, parseInt(e.target.value || '1', 10)) })}
+                                                    className={inputClass}
+                                                />
+                                            </div>
+
+                                            <div className="space-y-1">
+                                                <label htmlFor="settings-byo-periods" className="text-[var(--ui-text-muted)] block text-sm">{t('Byo Periods')}</label>
+                                                <input
+                                                    id="settings-byo-periods"
+                                                    type="number"
+                                                    min={1}
+                                                    step={1}
+                                                    value={settings.timerByoPeriods}
+                                                    onChange={(e) => updateSettings({ timerByoPeriods: Math.max(1, parseInt(e.target.value || '1', 10)) })}
+                                                    className={inputClass}
+                                                />
+                                            </div>
+
+                                            <div className="space-y-1">
+                                                <label htmlFor="settings-minimal-use" className="text-[var(--ui-text-muted)] block text-sm">{t('Minimal Use (sec)')}</label>
+                                                <input
+                                                    id="settings-minimal-use"
+                                                    type="number"
+                                                    min={0}
+                                                    step={1}
+                                                    value={settings.timerMinimalUseSeconds}
+                                                    onChange={(e) => updateSettings({ timerMinimalUseSeconds: Math.max(0, parseInt(e.target.value || '0', 10)) })}
+                                                    className={inputClass}
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <p className={subtextClass}>
+                                            {t('KaTrain-style clock (main time, then byo-yomi periods). Timer runs only in Play mode and only for human turns.')}
+                                        </p>
+                                    </div>
+                                </div>  
+
+                                <div className={sectionClass}>
+                                    <h3 className={sectionTitleClass}>{t('Input')}</h3>
+                                    <div className="mt-4 space-y-4">
+                                        <div className={rowClass}>
+                                            <div>
+                                                <label htmlFor="settings-gamepad-navigation" className={labelClass}>{t('Gamepad Navigation')}</label>
+                                                <p className={subtextClass}>
+                                                    {t('Controller input for review navigation.')}
+                                                </p>
+                                            </div>
+                                            <input
+                                                id="settings-gamepad-navigation"
+                                                type="checkbox"
+                                                checked={settings.gamepadNavigation}
+                                                onChange={(e) => updateSettings({ gamepadNavigation: e.target.checked })}
+                                                className="toggle"
+                                            />
+                                        </div>
+                                        <div className={rowClass}>
+                                            <div>
+                                                <label htmlFor="settings-touch-haptics" className={labelClass}>{t('Touch Haptics')}</label>
+                                                <p className={subtextClass}>
+                                                    {t('Short vibration on confirmed touch moves and swipe navigation.')}
+                                                </p>
+                                            </div>
+                                            <input
+                                                id="settings-touch-haptics"
+                                                type="checkbox"
+                                                checked={settings.hapticFeedback}
+                                                onChange={(e) => updateSettings({ hapticFeedback: e.target.checked })}
+                                                className="toggle"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Rules Section */}  
+                                <div className={sectionClass}>  
+                                    <h3 className={sectionTitleClass}>{t('Rules')}</h3>  
+                                    <div className="mt-4 space-y-4">
+                                        <div className={rowClass}>
+                                            <label htmlFor="settings-load-sgf-rewind" className={labelClass}>{t('Load SGF Rewind')}</label>
+                                            <input
+                                                id="settings-load-sgf-rewind"
+                                                type="checkbox"
+                                                checked={settings.loadSgfRewind}
+                                                onChange={(e) => updateSettings({ loadSgfRewind: e.target.checked })}
+                                                className="toggle"
+                                            />
+                                        </div>
+
+                                        <div className={rowClass}>
+                                            <label htmlFor="settings-load-sgf-fast-analysis" className={labelClass}>{t('Load SGF Fast Analysis')}</label>
+                                            <input
+                                                id="settings-load-sgf-fast-analysis"
+                                                type="checkbox"
+                                                checked={settings.loadSgfFastAnalysis}
+                                                onChange={(e) => updateSettings({ loadSgfFastAnalysis: e.target.checked })}
+                                                className="toggle"
+                                            />
+                                        </div>
+                                        <p className={subtextClass}>
+                                            {t('KaTrain-style: runs a fast engine review on load (uses “Fast Visits”) so graphs/points lost fill in quickly.')}
+                                        </p>
+
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                            <div className="space-y-1">
+                                                <label htmlFor="settings-pv-animation-time" className="text-[var(--ui-text-muted)] block text-sm">{t('PV Animation Time (sec)')}</label>
+                                                <input
+                                                    id="settings-pv-animation-time"
+                                                    type="number"
+                                                    min={0}
+                                                    step={0.05}
+                                                    value={settings.animPvTimeSeconds ?? DEFAULT_ANIM_PV_TIME}
+                                                    onChange={(e) =>
+                                                        updateSettings({
+                                                            animPvTimeSeconds: Math.max(0, parseFloat(e.target.value || String(DEFAULT_ANIM_PV_TIME))),
+                                                        })
+                                                    }
+                                                    className={inputClass}
+                                                />
+                                                <p className={subtextClass}>{t('KaTrain-style PV animation speed (0 disables animation).')}</p>
+                                            </div>
+
+                                            <div className="space-y-1">
+                                                <label htmlFor="settings-pv-animation-moves" className="text-[var(--ui-text-muted)] block text-sm">{t('PV Animation Moves')}</label>
+                                                <input
+                                                    id="settings-pv-animation-moves"
+                                                    type="number"
+                                                    min={0}
+                                                    step={1}
+                                                    value={settings.animPvMoves ?? DEFAULT_ANIM_PV_MOVES}
+                                                    onChange={(e) =>
+                                                        updateSettings({
+                                                            animPvMoves: Math.max(0, Math.round(parseFloat(e.target.value || String(DEFAULT_ANIM_PV_MOVES)))),
+                                                        })
+                                                    }
+                                                    className={inputClass}
+                                                />
+                                                <p className={subtextClass}>{t('How many moves of a variation to lay on the board (0 shows the whole sequence at once).')}</p>
+                                            </div>
+
+                                            <div className="space-y-1">
+                                                <label htmlFor="settings-game-rules" className="text-[var(--ui-text-muted)] block text-sm">{t('Rules')}</label>
+                                                <select
+                                                    id="settings-game-rules"
+                                                    value={settings.gameRules}
+                                                    onChange={(e) => updateSettings({ gameRules: e.target.value as GameSettings['gameRules'] })}
+                                                    className={selectClass}
+                                                >
+                                                    {RULES_OPTIONS.map((option) => (
+                                                        <option key={option.id} value={option.id}>
+                                                            {option.id === 'chinese'
+                                                                ? t('{label} (Default)', { label: t(option.label) })
+                                                                : t(option.label)}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                                <p className={subtextClass}>{t(rulesOf(settings.gameRules).summary)}</p>
+                                            </div>
+                                        </div>
+                                    </div>  
+                                </div>
+                            </div>  
+                        )}  
+                
+                        {activeTab === 'analysis' && (  
+                            <div
+                                id="panel-analysis"
+                                role="tabpanel"
+                                aria-labelledby="tab-analysis"
+                                tabIndex={0}
+                            >  
+                                {/* Analysis detail: the Coach/Pro switch the panels carry, findable here too */}
+                                <div className={sectionClass} data-settings-analysis-experience="true">
+                                    <h3 className={sectionTitleClass}>{t('Analysis Detail')}</h3>
+                                    <div className="mt-4 space-y-2">
+                                        <div className={rowClass}>
+                                            <label htmlFor="settings-analysis-experience" className={labelClass}>{t('Detail level')}</label>
+                                            <select
+                                                id="settings-analysis-experience"
+                                                value={settings.analysisExperience}
+                                                onChange={(e) => updateSettings({ analysisExperience: e.target.value as GameSettings['analysisExperience'] })}
+                                                className="ui-input text-[var(--ui-text)] rounded px-2 py-1 text-sm border"
+                                            >
+                                                <option value="coach">{t('Coach')}</option>
+                                                <option value="pro">{t('Pro')}</option>
+                                            </select>
+                                        </div>
+                                        <p className={subtextClass}>
+                                            {t('Coach keeps the review to move quality and plain-language guidance. Pro adds win rate, score, visits, policy and the engine’s own detail everywhere. The same switch sits at the top of the Analysis panel.')}
+                                        </p>
+
+                                        <div className={rowClass}>
+                                            <label htmlFor="settings-analysis-show-shape-coach" className={labelClass}>{t('Shape Coach')}</label>
+                                            <input
+                                                id="settings-analysis-show-shape-coach"
+                                                type="checkbox"
+                                                checked={settings.showShapeCoach}
+                                                onChange={(e) => updateSettings({ showShapeCoach: e.target.checked })}
+                                                className="toggle"
+                                            />
+                                        </div>
+                                        <p className={subtextClass}>
+                                            {t('Explains the shape a move makes — named patterns and good or bad shape — in the comment panel. Off by default; the star button in the comment panel toggles the same setting.')}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Analysis Overlays Section */}  
+                                <div className={sectionClass}>  
+                                    <h3 className={sectionTitleClass}>{t('Analysis Overlays')}</h3>
+
+                                    <div className="mt-4 space-y-4">
+                                        <div className={rowClass}>
+                                            <label htmlFor="settings-analysis-show-children" className={labelClass}>{t('Show Children ({shortcut})', { shortcut: shortcutLabels['toggle-children'] })}</label>
+                                            <input
+                                                id="settings-analysis-show-children"
+                                                type="checkbox"
+                                                checked={settings.analysisShowChildren}
+                                                onChange={(e) => updateSettings({ analysisShowChildren: e.target.checked })}
+                                                className="toggle"
+                                            />
+                                        </div>
+
+                                        <div className={rowClass}>
+                                            <label htmlFor="settings-analysis-evaluation-dots" className={labelClass}>{t('Evaluation Dots ({shortcut})', { shortcut: shortcutLabels['toggle-eval'] })}</label>
+                                            <input
+                                                id="settings-analysis-evaluation-dots"
+                                                type="checkbox"
+                                                checked={settings.analysisShowEval}
+                                                onChange={(e) => updateSettings({ analysisShowEval: e.target.checked })}
+                                                className="toggle"
+                                            />
+                                        </div>
+
+                                        <div className={rowClass}>
+                                            <label htmlFor="settings-analysis-top-moves" className={labelClass}>{t('Top Moves (Hints) ({shortcut})', { shortcut: shortcutLabels['toggle-hints'] })}</label>
+                                            <input
+                                                id="settings-analysis-top-moves"
+                                                type="checkbox"
+                                                checked={settings.analysisShowHints}
+                                                onChange={(e) => updateSettings({ analysisShowHints: e.target.checked })}
+                                                className="toggle"
+                                            />
+                                        </div>
+
+                                        <div className={rowClass}>
+                                            <label htmlFor="settings-analysis-policy" className={labelClass}>{t('Move Heatmap ({shortcut})', { shortcut: shortcutLabels['toggle-policy'] })}</label>
+                                            <input
+                                                id="settings-analysis-policy"
+                                                type="checkbox"
+                                                checked={settings.analysisShowPolicy}
+                                                onChange={(e) => updateSettings({ analysisShowPolicy: e.target.checked })}
+                                                className="toggle"
+                                            />
+                                        </div>
+
+                                        <div className={rowClass}>
+                                            <label htmlFor="settings-analysis-ownership" className={labelClass}>{t('Ownership (Territory) ({shortcut})', { shortcut: shortcutLabels['toggle-territory'] })}</label>
+                                            <input
+                                                id="settings-analysis-ownership"
+                                                type="checkbox"
+                                                checked={settings.analysisShowOwnership}
+                                                onChange={(e) => updateSettings({ analysisShowOwnership: e.target.checked })}
+                                                className="toggle"
+                                            />
+                                        </div>
+
+                                        <div className="pt-2 border-t border-[var(--ui-border)] space-y-4">
+                                            <h4 className={sectionTitleClass}>{t('KaTrain Hint Labels')}</h4>
+
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                                <div className="space-y-1">
+                                                    <label htmlFor="settings-analysis-evaluation-theme" className="text-[var(--ui-text-muted)] block text-sm">{t('Evaluation Theme')}</label>
+                                                    <select
+                                                        id="settings-analysis-evaluation-theme"
+                                                        value={settings.trainerTheme ?? 'theme:normal'}
+                                                        onChange={(e) => updateSettings({ trainerTheme: e.target.value as GameSettings['trainerTheme'] })}
+                                                        className={selectClass}
+                                                    >
+                                                        <option value="theme:normal">{t('Normal')}</option>
+                                                        <option value="theme:red-green-colourblind">{t('Red/Green colourblind')}</option>
+                                                    </select>
+                                                </div>
+
+                                                <div className="space-y-1">
+                                                    <label htmlFor="settings-analysis-low-visits-threshold" className="text-[var(--ui-text-muted)] block text-sm">{t('Low Visits Threshold')}</label>
+                                                    <input
+                                                        id="settings-analysis-low-visits-threshold"
+                                                        type="number"
+                                                        min={1}
+                                                        step={1}
+                                                        value={settings.trainerLowVisits}
+                                                        onChange={(e) => updateSettings({ trainerLowVisits: Math.max(1, parseInt(e.target.value || '1', 10)) })}
+                                                        className={inputClass}
+                                                    />
+                                                    <p className={subtextClass}>{t('Candidates searched fewer times than this are drawn faded: the engine has barely looked at them, so their numbers are rough.')}</p>
+                                                </div>
+
+                                                <div className="space-y-1">
+                                                    <label htmlFor="settings-analysis-primary-label" className="text-[var(--ui-text-muted)] block text-sm">{t('Primary Label')}</label>
+                                                    <select
+                                                        id="settings-analysis-primary-label"
+                                                        value={settings.trainerTopMovesShow}
+                                                        onChange={(e) => updateSettings({ trainerTopMovesShow: e.target.value as GameSettings['trainerTopMovesShow'] })}
+                                                        className={selectClass}
+                                                    >
+                                                        {TOP_MOVE_METRIC_SELECT_OPTIONS.map((o) => (
+                                                            <option key={o.value} value={o.value}>
+                                                                {t(o.label)}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                    <p className={subtextClass}>{t('The figure written on each top-move hint on the board.')}</p>
+                                                </div>
+
+                                                <div className="space-y-1">
+                                                    <label htmlFor="settings-analysis-secondary-label" className="text-[var(--ui-text-muted)] block text-sm">{t('Secondary Label')}</label>
+                                                    <select
+                                                        id="settings-analysis-secondary-label"
+                                                        value={settings.trainerTopMovesShowSecondary}
+                                                        onChange={(e) =>
+                                                            updateSettings({ trainerTopMovesShowSecondary: e.target.value as GameSettings['trainerTopMovesShowSecondary'] })
+                                                        }
+                                                        className={selectClass}
+                                                    >
+                                                        {TOP_MOVE_METRIC_SELECT_OPTIONS.map((o) => (
+                                                            <option key={o.value} value={o.value}>
+                                                                {t(o.label)}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                    <p className={subtextClass}>{t('A second, smaller figure under the first on each hint.')}</p>
+                                                </div>
+
+                                                <div className="space-y-1">
+                                                    <label htmlFor="settings-analysis-policy-heatmap" className="text-[var(--ui-text-muted)] block text-sm">{t('Heatmap Metric ({shortcut})', { shortcut: shortcutLabels['cycle-policy-metric'] })}</label>
+                                                    <select
+                                                        id="settings-analysis-policy-heatmap"
+                                                        value={settings.analysisPolicyMetric ?? 'policy'}
+                                                        onChange={(e) => updateSettings({ analysisPolicyMetric: e.target.value as GameSettings['analysisPolicyMetric'] })}
+                                                        className={selectClass}
+                                                    >
+                                                        {POLICY_HEATMAP_METRIC_SELECT_OPTIONS.map((o) => (
+                                                            <option key={o.value} value={o.value}>
+                                                                {t(o.label)}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                                <div className={rowClass}>
+                                                    <label htmlFor="settings-analysis-extra-precision" className={labelClass}>{t('Extra Precision')}</label>
+                                                    <input
+                                                        id="settings-analysis-extra-precision"
+                                                        type="checkbox"
+                                                        checked={settings.trainerExtraPrecision}
+                                                        onChange={(e) => updateSettings({ trainerExtraPrecision: e.target.checked })}
+                                                        className="toggle"
+                                                    />
+                                                    <p className={subtextClass}>{t('Show points lost to two decimals instead of one.')}</p>
+                                                </div>
+
+                                                <div className={rowClass}>
+                                                    <label htmlFor="settings-analysis-show-ai-dots" className={labelClass}>{t('Show AI Dots')}</label>
+                                                    <input
+                                                        id="settings-analysis-show-ai-dots"
+                                                        type="checkbox"
+                                                        checked={settings.trainerEvalShowAi}
+                                                        onChange={(e) => updateSettings({ trainerEvalShowAi: e.target.checked })}
+                                                        className="toggle"
+                                                    />
+                                                    <p className={subtextClass}>{t('Draw the quality dot on moves the AI played, not only on yours.')}</p>
+                                                </div>
+
+                                                <div className={rowClass}>
+                                                    <label
+                                                        htmlFor="settings-analysis-save-analysis"
+                                                        className={labelClass}
+                                                        title={t('Embed KT and KA analysis data when exporting SGF so reviewed games reopen with cached analysis.')}
+                                                    >
+                                                        {t('Save analysis in SGF')}
+                                                    </label>
+                                                    <input
+                                                        id="settings-analysis-save-analysis"
+                                                        type="checkbox"
+                                                        checked={settings.trainerSaveAnalysis}
+                                                        onChange={(e) => updateSettings({ trainerSaveAnalysis: e.target.checked })}
+                                                        className="toggle"
+                                                    />
+                                                </div>
+
+                                                <div className={rowClass}>
+                                                    <label htmlFor="settings-analysis-save-sgf-marks" className={labelClass}>{t('Save SGF marks (X / square)')}</label>
+                                                    <input
+                                                        id="settings-analysis-save-sgf-marks"
+                                                        type="checkbox"
+                                                        checked={settings.trainerSaveMarks}
+                                                        onChange={(e) => updateSettings({ trainerSaveMarks: e.target.checked })}
+                                                        className="toggle"
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div className={rowClass}>
+                                                <label htmlFor="settings-analysis-lock-ai-details" className={labelClass}>{t('Lock AI details (Play mode)')}</label>
+                                                <input
+                                                    id="settings-analysis-lock-ai-details"
+                                                    type="checkbox"
+                                                    checked={settings.trainerLockAi}
+                                                    onChange={(e) => updateSettings({ trainerLockAi: e.target.checked })}
+                                                    className="toggle"
+                                                />
+                                                <p className={subtextClass}>{t('In Play mode, hide the engine’s move-by-move detail (PV, policy, top move) so a game against the AI is played without it.')}</p>
+                                            </div>
+                                        </div>
+                                    </div>  
+                                </div>
+                
+                                {/* Groups the two mistake-flagging controls; named for the
+                                    group rather than repeating its first field's label. */}
+                                <div className={sectionClass}>
+                                    <h3 className={sectionTitleClass}>{t('Mistake Highlighting')}</h3>
+                                    <div className="mt-4 space-y-4">
+                                        <div className="space-y-2">
+                                            <label htmlFor="settings-analysis-last-n-eval-dots" className="text-[var(--ui-text-muted)] block">{t('Show Last N Eval Dots')}</label>
+                                            <div className="flex items-center gap-2">
+                                                <input
+                                                    id="settings-analysis-last-n-eval-dots"
+                                                    type="range"
+                                                    min="0"
+                                                    max="10"
+                                                    value={settings.showLastNMistakes}
+                                                    onChange={(e) => updateSettings({ showLastNMistakes: parseInt(e.target.value, 10) })}
+                                                    className="h-11 flex-1 lg:h-6"
+                                                />
+                                                <span className="text-[var(--ui-text)] font-mono w-8 text-right">{settings.showLastNMistakes}</span>
+                                            </div>
+                                            <p className={subtextClass}>
+                                                {t('Shows KaTrain-style colored dots on the last {count} moves.', { count: settings.showLastNMistakes })}
+                                            </p>
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <label htmlFor="settings-analysis-mistake-threshold" className="text-[var(--ui-text-muted)] block">{t('Mistake Threshold (Points)')}</label>
+                                            <div className="flex items-center gap-2">
+                                                <input
+                                                    id="settings-analysis-mistake-threshold"
+                                                    type="range"
+                                                    min="0.5"
+                                                    max="10"
+                                                    step="0.5"
+                                                    value={settings.mistakeThreshold ?? 3.0}
+                                                    onChange={(e) => updateSettings({ mistakeThreshold: parseFloat(e.target.value) })}
+                                                    className="h-11 flex-1 lg:h-6"
+                                                />
+                                                <span className="text-[var(--ui-text)] font-mono w-10 text-right">{(settings.mistakeThreshold ?? 3.0).toFixed(1)}</span>
+                                            </div>
+                                            <p className={subtextClass}>
+                                                {t('Minimum points lost to consider a move a mistake for navigation.')}
+                                            </p>
+                                        </div>
+                                    </div>  
+                                </div>
+                
+                                {/* Teach Mode Section */}  
+                                <div className={sectionClass}>  
+                                    <h3 className={sectionTitleClass}>{t('Teach Mode')}</h3>
+                                    <p className={`${subtextClass} mt-2`}>
+                                        {t('KaTrain-style auto-undo after analysis based on points lost. Values < 1 are treated as a probability; values ≥ 1 are treated as a max variation count.')}
+                                    </p>
+
+                                    <div className="mt-4 space-y-3">
+                                        {DEFAULT_EVAL_THRESHOLDS.map((fallbackThr, i) => {
+                                            const thr = settings.trainerEvalThresholds?.[i] ?? fallbackThr;
+                                            const undo = settings.teachNumUndoPrompts?.[i] ?? 0;
+                                            const showDot = settings.trainerShowDots?.[i] ?? true;
+                                            const saveFeedback = settings.trainerSaveFeedback?.[i] ?? false;
+
+                                            return (
+                                                <div key={`teach-${i}`} className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 items-start">
+                                                    <div className="space-y-1">
+                                                        <label htmlFor={`settings-teach-threshold-${i}`} className="text-[var(--ui-text-muted)] block text-xs">
+                                                            {t('≥ Threshold')}
+                                                            <span className="sr-only"> {t('row {count}', { count: i + 1 })}</span>
+                                                        </label>
+                                                        <input
+                                                            id={`settings-teach-threshold-${i}`}
+                                                            type="number"
+                                                            step={0.1}
+                                                            value={thr}
+                                                            onChange={(e) => {
+                                                                const v = parseFloat(e.target.value || '0');
+                                                                const next = [...(settings.trainerEvalThresholds ?? DEFAULT_EVAL_THRESHOLDS)];
+                                                                next[i] = v;
+                                                                updateSettings({ trainerEvalThresholds: next });
+                                                            }}
+                                                            className={inputClass}
+                                                        />
+                                                    </div>
+                                                    <div className="space-y-1">
+                                                        <label htmlFor={`settings-teach-undo-${i}`} className="text-[var(--ui-text-muted)] block text-xs">
+                                                            {t('Undo')}
+                                                            <span className="sr-only"> {t('row {count}', { count: i + 1 })}</span>
+                                                        </label>
+                                                        <input
+                                                            id={`settings-teach-undo-${i}`}
+                                                            type="number"
+                                                            min={0}
+                                                            step={0.1}
+                                                            value={undo}
+                                                            onChange={(e) => {
+                                                                const v = Math.max(0, parseFloat(e.target.value || '0'));
+                                                                const next = [...(settings.teachNumUndoPrompts ?? [])];
+                                                                next[i] = v;
+                                                                updateSettings({ teachNumUndoPrompts: next });
+                                                            }}
+                                                            className={inputClass}
+                                                        />
+                                                    </div>
+                                                    <div className="flex items-center justify-between gap-3">
+                                                        <label htmlFor={`settings-teach-show-dots-${i}`} className="text-[var(--ui-text-muted)] text-xs">
+                                                            {t('Show dots')}
+                                                            <span className="sr-only"> {t('row {count}', { count: i + 1 })}</span>
+                                                        </label>
+                                                        <input
+                                                            id={`settings-teach-show-dots-${i}`}
+                                                            type="checkbox"
+                                                            checked={showDot}
+                                                            onChange={(e) => {
+                                                                const next = [
+                                                                    ...(settings.trainerShowDots?.length ? settings.trainerShowDots : DEFAULT_SHOW_DOTS),
+                                                                ];
+                                                                next[i] = e.target.checked;
+                                                                updateSettings({ trainerShowDots: next });
+                                                            }}
+                                                            className="toggle"
+                                                        />
+                                                    </div>
+                                                    <div className="flex items-center justify-between gap-3">
+                                                        <label htmlFor={`settings-teach-save-sgf-${i}`} className="text-[var(--ui-text-muted)] text-xs">
+                                                            {t('Save SGF')}
+                                                            <span className="sr-only"> {t('row {count}', { count: i + 1 })}</span>
+                                                        </label>
+                                                        <input
+                                                            id={`settings-teach-save-sgf-${i}`}
+                                                            type="checkbox"
+                                                            checked={saveFeedback}
+                                                            onChange={(e) => {
+                                                                const next = [
+                                                                    ...(settings.trainerSaveFeedback?.length ? settings.trainerSaveFeedback : DEFAULT_SAVE_FEEDBACK),
+                                                                ];
+                                                                next[i] = e.target.checked;
+                                                                updateSettings({ trainerSaveFeedback: next });
+                                                            }}
+                                                            className="toggle"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+
+                                        <p className={subtextClass}>
+                                            {t('Matches KaTrain’s teacher config: thresholds define dot color classes; “Save SGF” controls auto-feedback comments.')}
+                                        </p>
+                                    </div>  
+                                </div>
+                            </div>  
+                        )}  
+                
+                        {activeTab === 'ai' && (  
+                            <div
+                                id="panel-ai"
+                                role="tabpanel"
+                                aria-labelledby="tab-ai"
+                                tabIndex={0}
+                            > 
+                                {/* AI Section */}  
+                                <div className={sectionClass}>  
+                                    <h3 className={sectionTitleClass}>{t('AI')}</h3>
+
+                                    <div className="mt-4 space-y-2">
+                                        <label htmlFor="settings-ai-strategy" className="text-[var(--ui-text-muted)] block">{t('Strategy')}</label>
+                                        <select
+                                            id="settings-ai-strategy"
+                                            value={settings.aiStrategy}
+                                            onChange={(e) => updateSettings({ aiStrategy: e.target.value as GameSettings['aiStrategy'] })}
+                                            className={selectClass}
+                                        >
+                                            <option value="default">{t('Default (engine top move)')}</option>
+                                            <option value="human">{t('Human (KataGo human net)')}</option>
+                                            <option value="handicap">{t('KataHandicap (KaTrain)')}</option>
+                                            <option value="antimirror">{t('KataAntiMirror (KaTrain)')}</option>
+                                            <option value="rank">{t('Rank (KaTrain)')}</option>
+                                            <option value="simple">{t('Simple Ownership (KaTrain)')}</option>
+                                            <option value="settle">{t('Settle Stones (KaTrain)')}</option>
+                                            <option value="scoreloss">{t('ScoreLoss (weaker)')}</option>
+                                            <option value="policy">{t('Policy')}</option>
+                                            <option value="weighted">{t('Policy Weighted')}</option>
+                                            <option value="jigo">{t('Jigo (KaTrain)')}</option>
+                                            <option value="pick">{t('Pick (KaTrain)')}</option>
+                                            <option value="local">{t('Local (KaTrain)')}</option>
+                                            <option value="tenuki">{t('Tenuki (KaTrain)')}</option>
+                                            <option value="territory">{t('Territory (KaTrain)')}</option>
+                                            <option value="influence">{t('Influence (KaTrain)')}</option>
+                                        </select>
+                                    </div>
+
+                                    <div className="mt-2 flex items-center justify-between gap-3 rounded-lg border border-[var(--ui-border)] bg-[var(--ui-surface)] px-3 py-2">
+                                        <span className="text-sm text-[var(--ui-text-muted)]">{t('Estimated strength')}</span>
+                                        <span
+                                            className="text-sm font-semibold text-[var(--ui-text)]"
+                                            data-ai-strength={aiStrength.label ?? 'none'}
+                                            title={describeAiStrength(aiStrength)}
+                                        >
+                                            {aiStrength.label ?? '—'}
+                                        </span>
+                                    </div>
+                                    <p className={subtextClass}>{describeAiStrength(aiStrength)}</p>
+
+                                    {settings.aiStrategy === 'handicap' && (
+                                        <div className="mt-3 space-y-3">
+                                            <p className={subtextClass}>
+                                                {t('Full-strength KataGo reading the board as if one side had more search, so it keeps pressing in a handicap game instead of settling for a decided result.')}
+                                            </p>
+                                            <div className="flex items-center justify-between gap-3">
+                                                <label htmlFor="settings-ai-handicap-automatic" className={labelClass}>
+                                                    {t('Set automatically from handicap')}
+                                                </label>
+                                                <input
+                                                    id="settings-ai-handicap-automatic"
+                                                    type="checkbox"
+                                                    checked={settings.aiHandicapAutomatic !== false}
+                                                    onChange={(e) => updateSettings({ aiHandicapAutomatic: e.target.checked })}
+                                                    className="toggle"
+                                                />
+                                            </div>
+                                            {settings.aiHandicapAutomatic === false ? (
+                                                <div className="space-y-1">
+                                                    <label htmlFor="settings-ai-handicap-pda" className="text-[var(--ui-text-muted)] block text-sm">
+                                                        {t('Search advantage')}
+                                                    </label>
+                                                    <input
+                                                        id="settings-ai-handicap-pda"
+                                                        type="number"
+                                                        step={0.25}
+                                                        min={-HANDICAP_PDA_LIMIT}
+                                                        max={HANDICAP_PDA_LIMIT}
+                                                        value={settings.aiHandicapPda ?? 0}
+                                                        onChange={(e) => updateSettings({ aiHandicapPda: clampHandicapPda(parseFloat(e.target.value || '0')) })}
+                                                        className={inputClass}
+                                                    />
+                                                    <p className={subtextClass}>
+                                                        {describeHandicapPda(clampHandicapPda(settings.aiHandicapPda ?? 0))}
+                                                    </p>
+                                                </div>
+                                            ) : (
+                                                <p className={subtextClass}>
+                                                    {describeHandicapPda(
+                                                        automaticHandicapPda({ handicapStones: handicapStoneCount, komi })
+                                                    )}
+                                                </p>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {settings.aiStrategy === 'antimirror' && (
+                                        <p className={`${subtextClass} mt-3`}>
+                                            {t('Watches for mirror go and breaks the symmetry when it sees it — taking the centre point, or leaning on an opponent stone already sitting there. Plays its normal game otherwise.')}
+                                        </p>
+                                    )}
+
+                                    {settings.aiStrategy === 'rank' && (
+                                        <div className="mt-3 space-y-1">
+                                            <label htmlFor="settings-ai-rank-kyu" className="text-[var(--ui-text-muted)] block text-sm">{t('Kyu Rank')}</label>
+                                            <input
+                                                id="settings-ai-rank-kyu"
+                                                type="number"
+                                                step={0.5}
+                                                value={settings.aiRankKyu}
+                                                onChange={(e) => updateSettings({ aiRankKyu: parseFloat(e.target.value || '0') })}
+                                                className={inputClass}
+                                            />
+                                            <p className={subtextClass}>
+                                                {t('KaTrain’s calibrated rank-based policy picking (e.g. 4 = 4k, 0 = 1d, -3 = 4d).')}
+                                            </p>
+                                        </div>
+                                    )}
+
+                                    {settings.aiStrategy === 'scoreloss' && (
+                                        <div className="mt-3 space-y-1">
+                                            <label htmlFor="settings-ai-scoreloss-strength" className="text-[var(--ui-text-muted)] block text-sm">{t('Strength (c)')}</label>
+                                            <input
+                                                id="settings-ai-scoreloss-strength"
+                                                type="number"
+                                                min={0}
+                                                step={0.05}
+                                                value={settings.aiScoreLossStrength}
+                                                onChange={(e) => updateSettings({ aiScoreLossStrength: Math.max(0, parseFloat(e.target.value || '0')) })}
+                                                className={inputClass}
+                                            />
+                                            <p className={subtextClass}>
+                                                {t('Higher = plays closer to best move; lower = more random among worse moves.')}
+                                            </p>
+                                        </div>
+                                    )}
+
+                                    {settings.aiStrategy === 'jigo' && (
+                                        <div className="mt-3 space-y-1">
+                                            <label htmlFor="settings-ai-jigo-target-score" className="text-[var(--ui-text-muted)] block text-sm">{t('Target Score')}</label>
+                                            <input
+                                                id="settings-ai-jigo-target-score"
+                                                type="number"
+                                                step={0.1}
+                                                value={settings.aiJigoTargetScore}
+                                                onChange={(e) => updateSettings({ aiJigoTargetScore: parseFloat(e.target.value || '0') })}
+                                                className={inputClass}
+                                            />
+                                            <p className={subtextClass}>
+                                                {t('Chooses the move whose {scoreLead} is closest to this (for the side to play).', { scoreLead: 'scoreLead' })}
+                                            </p>
+                                        </div>
+                                    )}
+
+                                    {(settings.aiStrategy === 'simple' || settings.aiStrategy === 'settle') && (
+                                        <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                                            <div className="space-y-1">
+                                                <label htmlFor="settings-ai-ownership-max-points-lost" className="text-[var(--ui-text-muted)] block text-sm">{t('Max Pt Lost')}</label>
+                                                <input
+                                                    id="settings-ai-ownership-max-points-lost"
+                                                    type="number"
+                                                    min={0}
+                                                    step={0.25}
+                                                    value={settings.aiOwnershipMaxPointsLost}
+                                                    onChange={(e) => updateSettings({ aiOwnershipMaxPointsLost: Math.max(0, parseFloat(e.target.value || '0')) })}
+                                                    className={inputClass}
+                                                />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label htmlFor="settings-ai-ownership-settled-weight" className="text-[var(--ui-text-muted)] block text-sm">{t('Settled Wt')}</label>
+                                                <input
+                                                    id="settings-ai-ownership-settled-weight"
+                                                    type="number"
+                                                    min={0}
+                                                    step={0.25}
+                                                    value={settings.aiOwnershipSettledWeight}
+                                                    onChange={(e) => updateSettings({ aiOwnershipSettledWeight: Math.max(0, parseFloat(e.target.value || '0')) })}
+                                                    className={inputClass}
+                                                />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label htmlFor="settings-ai-ownership-opponent-factor" className="text-[var(--ui-text-muted)] block text-sm">{t('Opp Fac')}</label>
+                                                <input
+                                                    id="settings-ai-ownership-opponent-factor"
+                                                    type="number"
+                                                    min={0}
+                                                    step={0.1}
+                                                    value={settings.aiOwnershipOpponentFac}
+                                                    onChange={(e) => updateSettings({ aiOwnershipOpponentFac: Math.max(0, parseFloat(e.target.value || '0')) })}
+                                                    className={inputClass}
+                                                />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label htmlFor="settings-ai-ownership-min-visits" className="text-[var(--ui-text-muted)] block text-sm">{t('Min Visits')}</label>
+                                                <input
+                                                    id="settings-ai-ownership-min-visits"
+                                                    type="number"
+                                                    min={0}
+                                                    step={1}
+                                                    value={settings.aiOwnershipMinVisits}
+                                                    onChange={(e) => updateSettings({ aiOwnershipMinVisits: Math.max(0, parseInt(e.target.value || '0', 10)) })}
+                                                    className={inputClass}
+                                                />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label htmlFor="settings-ai-ownership-attach-penalty" className="text-[var(--ui-text-muted)] block text-sm">{t('Attach Pen')}</label>
+                                                <input
+                                                    id="settings-ai-ownership-attach-penalty"
+                                                    type="number"
+                                                    min={0}
+                                                    step={0.25}
+                                                    value={settings.aiOwnershipAttachPenalty}
+                                                    onChange={(e) => updateSettings({ aiOwnershipAttachPenalty: Math.max(0, parseFloat(e.target.value || '0')) })}
+                                                    className={inputClass}
+                                                />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label htmlFor="settings-ai-ownership-tenuki-penalty" className="text-[var(--ui-text-muted)] block text-sm">{t('Tenuki Pen')}</label>
+                                                <input
+                                                    id="settings-ai-ownership-tenuki-penalty"
+                                                    type="number"
+                                                    min={0}
+                                                    step={0.25}
+                                                    value={settings.aiOwnershipTenukiPenalty}
+                                                    onChange={(e) => updateSettings({ aiOwnershipTenukiPenalty: Math.max(0, parseFloat(e.target.value || '0')) })}
+                                                    className={inputClass}
+                                                />
+                                            </div>
+                                            <div className={`col-span-1 sm:col-span-2 lg:col-span-3 ${subtextClass}`}>
+                                                {t('KaTrain {strategy}: uses per-move ownership (slower) to favor “settled” outcomes.', { strategy: settings.aiStrategy })}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {settings.aiStrategy === 'policy' && (
+                                        <div className="mt-3 space-y-1">
+                                            <label htmlFor="settings-ai-policy-opening-moves" className="text-[var(--ui-text-muted)] block text-sm">{t('Opening Moves')}</label>
+                                            <input
+                                                id="settings-ai-policy-opening-moves"
+                                                type="number"
+                                                min={0}
+                                                step={1}
+                                                value={settings.aiPolicyOpeningMoves}
+                                                onChange={(e) => updateSettings({ aiPolicyOpeningMoves: Math.max(0, parseInt(e.target.value || '0', 10)) })}
+                                                className={inputClass}
+                                            />
+                                            <p className={subtextClass}>
+                                                {t('For the first N moves, uses weighted policy sampling (KaTrain-like).')}
+                                            </p>
+                                        </div>
+                                    )}
+
+                                    {settings.aiStrategy === 'weighted' && (
+                                        <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                                            <div className="space-y-1">
+                                                <label htmlFor="settings-ai-weighted-override" className="text-[var(--ui-text-muted)] block text-sm">{t('Override')}</label>
+                                                <input
+                                                    id="settings-ai-weighted-override"
+                                                    type="number"
+                                                    min={0}
+                                                    max={1}
+                                                    step={0.01}
+                                                    value={settings.aiWeightedPickOverride}
+                                                    onChange={(e) => updateSettings({ aiWeightedPickOverride: Math.max(0, Math.min(1, parseFloat(e.target.value || '0'))) })}
+                                                    className={inputClass}
+                                                />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label htmlFor="settings-ai-weighted-weaken" className="text-[var(--ui-text-muted)] block text-sm">{t('Weaken')}</label>
+                                                <input
+                                                    id="settings-ai-weighted-weaken"
+                                                    type="number"
+                                                    min={0.01}
+                                                    step={0.05}
+                                                    value={settings.aiWeightedWeakenFac}
+                                                    onChange={(e) => updateSettings({ aiWeightedWeakenFac: Math.max(0.01, parseFloat(e.target.value || '0')) })}
+                                                    className={inputClass}
+                                                />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label htmlFor="settings-ai-weighted-lower" className="text-[var(--ui-text-muted)] block text-sm">{t('Lower')}</label>
+                                                <input
+                                                    id="settings-ai-weighted-lower"
+                                                    type="number"
+                                                    min={0}
+                                                    step={0.001}
+                                                    value={settings.aiWeightedLowerBound}
+                                                    onChange={(e) => updateSettings({ aiWeightedLowerBound: Math.max(0, parseFloat(e.target.value || '0')) })}
+                                                    className={inputClass}
+                                                />
+                                            </div>
+                                            <div className={`col-span-1 sm:col-span-2 lg:col-span-3 ${subtextClass}`}>
+                                                {t('Samples moves with probability proportional to {formula} above {lower}, unless the top policy move exceeds {override}.', {
+                                                    formula: 'policy^(1/weaken)',
+                                                    lower: 'lower',
+                                                    override: 'override',
+                                                })}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {settings.aiStrategy === 'pick' && (
+                                        <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                                            <div className="space-y-1">
+                                                <label htmlFor="settings-ai-pick-override" className="text-[var(--ui-text-muted)] block text-sm">{t('Override')}</label>
+                                                <input
+                                                    id="settings-ai-pick-override"
+                                                    type="number"
+                                                    min={0}
+                                                    max={1}
+                                                    step={0.01}
+                                                    value={settings.aiPickPickOverride}
+                                                    onChange={(e) => updateSettings({ aiPickPickOverride: Math.max(0, Math.min(1, parseFloat(e.target.value || '0'))) })}
+                                                    className={inputClass}
+                                                />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label htmlFor="settings-ai-pick-n" className="text-[var(--ui-text-muted)] block text-sm">{t('Pick N')}</label>
+                                                <input
+                                                    id="settings-ai-pick-n"
+                                                    type="number"
+                                                    min={0}
+                                                    step={1}
+                                                    value={settings.aiPickPickN}
+                                                    onChange={(e) => updateSettings({ aiPickPickN: Math.max(0, parseInt(e.target.value || '0', 10)) })}
+                                                    className={inputClass}
+                                                />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label htmlFor="settings-ai-pick-frac" className="text-[var(--ui-text-muted)] block text-sm">{t('Pick Frac')}</label>
+                                                <input
+                                                    id="settings-ai-pick-frac"
+                                                    type="number"
+                                                    min={0}
+                                                    max={1}
+                                                    step={0.05}
+                                                    value={settings.aiPickPickFrac}
+                                                    onChange={(e) => updateSettings({ aiPickPickFrac: Math.max(0, Math.min(1, parseFloat(e.target.value || '0'))) })}
+                                                    className={inputClass}
+                                                />
+                                            </div>
+                                            <div className={`col-span-1 sm:col-span-2 lg:col-span-3 ${subtextClass}`}>
+                                                {t('KaTrain pick-based policy: sample {formula} moves uniformly, then play the best policy among them.', { formula: 'pick_frac*legal + pick_n' })}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {settings.aiStrategy === 'local' && (
+                                        <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                                            <div className="space-y-1">
+                                                <label htmlFor="settings-ai-local-override" className="text-[var(--ui-text-muted)] block text-sm">{t('Override')}</label>
+                                                <input
+                                                    id="settings-ai-local-override"
+                                                    type="number"
+                                                    min={0}
+                                                    max={1}
+                                                    step={0.01}
+                                                    value={settings.aiLocalPickOverride}
+                                                    onChange={(e) => updateSettings({ aiLocalPickOverride: Math.max(0, Math.min(1, parseFloat(e.target.value || '0'))) })}
+                                                    className={inputClass}
+                                                />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label htmlFor="settings-ai-local-stddev" className="text-[var(--ui-text-muted)] block text-sm">{t('Stddev')}</label>
+                                                <input
+                                                    id="settings-ai-local-stddev"
+                                                    type="number"
+                                                    min={0.1}
+                                                    step={0.5}
+                                                    value={settings.aiLocalStddev}
+                                                    onChange={(e) => updateSettings({ aiLocalStddev: Math.max(0.1, parseFloat(e.target.value || '0')) })}
+                                                    className={inputClass}
+                                                />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label htmlFor="settings-ai-local-endgame" className="text-[var(--ui-text-muted)] block text-sm">{t('Endgame')}</label>
+                                                <input
+                                                    id="settings-ai-local-endgame"
+                                                    type="number"
+                                                    min={0}
+                                                    max={1}
+                                                    step={0.05}
+                                                    value={settings.aiLocalEndgame}
+                                                    onChange={(e) => updateSettings({ aiLocalEndgame: Math.max(0, Math.min(1, parseFloat(e.target.value || '0'))) })}
+                                                    className={inputClass}
+                                                />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label htmlFor="settings-ai-local-pick-n" className="text-[var(--ui-text-muted)] block text-sm">{t('Pick N')}</label>
+                                                <input
+                                                    id="settings-ai-local-pick-n"
+                                                    type="number"
+                                                    min={0}
+                                                    step={1}
+                                                    value={settings.aiLocalPickN}
+                                                    onChange={(e) => updateSettings({ aiLocalPickN: Math.max(0, parseInt(e.target.value || '0', 10)) })}
+                                                    className={inputClass}
+                                                />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label htmlFor="settings-ai-local-pick-frac" className="text-[var(--ui-text-muted)] block text-sm">{t('Pick Frac')}</label>
+                                                <input
+                                                    id="settings-ai-local-pick-frac"
+                                                    type="number"
+                                                    min={0}
+                                                    max={1}
+                                                    step={0.05}
+                                                    value={settings.aiLocalPickFrac}
+                                                    onChange={(e) => updateSettings({ aiLocalPickFrac: Math.max(0, Math.min(1, parseFloat(e.target.value || '0'))) })}
+                                                    className={inputClass}
+                                                />
+                                            </div>
+                                            <div className={`col-span-1 sm:col-span-2 lg:col-span-3 ${subtextClass}`}>
+                                                {t('KaTrain local: weights sampling by a Gaussian around the previous move (then picks the best policy among sampled moves).')}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {settings.aiStrategy === 'tenuki' && (
+                                        <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                                            <div className="space-y-1">
+                                                <label htmlFor="settings-ai-tenuki-override" className="text-[var(--ui-text-muted)] block text-sm">{t('Override')}</label>
+                                                <input
+                                                    id="settings-ai-tenuki-override"
+                                                    type="number"
+                                                    min={0}
+                                                    max={1}
+                                                    step={0.01}
+                                                    value={settings.aiTenukiPickOverride}
+                                                    onChange={(e) => updateSettings({ aiTenukiPickOverride: Math.max(0, Math.min(1, parseFloat(e.target.value || '0'))) })}
+                                                    className={inputClass}
+                                                />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label htmlFor="settings-ai-tenuki-stddev" className="text-[var(--ui-text-muted)] block text-sm">{t('Stddev')}</label>
+                                                <input
+                                                    id="settings-ai-tenuki-stddev"
+                                                    type="number"
+                                                    min={0.1}
+                                                    step={0.5}
+                                                    value={settings.aiTenukiStddev}
+                                                    onChange={(e) => updateSettings({ aiTenukiStddev: Math.max(0.1, parseFloat(e.target.value || '0')) })}
+                                                    className={inputClass}
+                                                />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label htmlFor="settings-ai-tenuki-endgame" className="text-[var(--ui-text-muted)] block text-sm">{t('Endgame')}</label>
+                                                <input
+                                                    id="settings-ai-tenuki-endgame"
+                                                    type="number"
+                                                    min={0}
+                                                    max={1}
+                                                    step={0.05}
+                                                    value={settings.aiTenukiEndgame}
+                                                    onChange={(e) => updateSettings({ aiTenukiEndgame: Math.max(0, Math.min(1, parseFloat(e.target.value || '0'))) })}
+                                                    className={inputClass}
+                                                />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label htmlFor="settings-ai-tenuki-pick-n" className="text-[var(--ui-text-muted)] block text-sm">{t('Pick N')}</label>
+                                                <input
+                                                    id="settings-ai-tenuki-pick-n"
+                                                    type="number"
+                                                    min={0}
+                                                    step={1}
+                                                    value={settings.aiTenukiPickN}
+                                                    onChange={(e) => updateSettings({ aiTenukiPickN: Math.max(0, parseInt(e.target.value || '0', 10)) })}
+                                                    className={inputClass}
+                                                />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label htmlFor="settings-ai-tenuki-pick-frac" className="text-[var(--ui-text-muted)] block text-sm">{t('Pick Frac')}</label>
+                                                <input
+                                                    id="settings-ai-tenuki-pick-frac"
+                                                    type="number"
+                                                    min={0}
+                                                    max={1}
+                                                    step={0.05}
+                                                    value={settings.aiTenukiPickFrac}
+                                                    onChange={(e) => updateSettings({ aiTenukiPickFrac: Math.max(0, Math.min(1, parseFloat(e.target.value || '0'))) })}
+                                                    className={inputClass}
+                                                />
+                                            </div>
+                                            <div className={`col-span-1 sm:col-span-2 lg:col-span-3 ${subtextClass}`}>
+                                                {t('KaTrain tenuki: weights sampling by {formula} around the previous move (prefers far away).', { formula: '1 - Gaussian' })}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {(settings.aiStrategy === 'influence' || settings.aiStrategy === 'territory') && (
+                                        <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                                            <div className="space-y-1">
+                                                <label htmlFor="settings-ai-edge-override" className="text-[var(--ui-text-muted)] block text-sm">{t('Override')}</label>
+                                                <input
+                                                    id="settings-ai-edge-override"
+                                                    type="number"
+                                                    min={0}
+                                                    max={1}
+                                                    step={0.01}
+                                                    value={settings.aiStrategy === 'influence' ? settings.aiInfluencePickOverride : settings.aiTerritoryPickOverride}
+                                                    onChange={(e) => {
+                                                        const v = Math.max(0, Math.min(1, parseFloat(e.target.value || '0')));
+                                                        updateSettings(settings.aiStrategy === 'influence' ? { aiInfluencePickOverride: v } : { aiTerritoryPickOverride: v });
+                                                    }}
+                                                    className={inputClass}
+                                                />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label htmlFor="settings-ai-edge-threshold" className="text-[var(--ui-text-muted)] block text-sm">{t('Threshold')}</label>
+                                                <input
+                                                    id="settings-ai-edge-threshold"
+                                                    type="number"
+                                                    min={0}
+                                                    step={0.5}
+                                                    value={settings.aiStrategy === 'influence' ? settings.aiInfluenceThreshold : settings.aiTerritoryThreshold}
+                                                    onChange={(e) => {
+                                                        const v = Math.max(0, parseFloat(e.target.value || '0'));
+                                                        updateSettings(settings.aiStrategy === 'influence' ? { aiInfluenceThreshold: v } : { aiTerritoryThreshold: v });
+                                                    }}
+                                                    className={inputClass}
+                                                />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label htmlFor="settings-ai-edge-line-weight" className="text-[var(--ui-text-muted)] block text-sm">{t('Line Wt')}</label>
+                                                <input
+                                                    id="settings-ai-edge-line-weight"
+                                                    type="number"
+                                                    min={0}
+                                                    step={1}
+                                                    value={settings.aiStrategy === 'influence' ? settings.aiInfluenceLineWeight : settings.aiTerritoryLineWeight}
+                                                    onChange={(e) => {
+                                                        const v = Math.max(0, parseInt(e.target.value || '0', 10));
+                                                        updateSettings(settings.aiStrategy === 'influence' ? { aiInfluenceLineWeight: v } : { aiTerritoryLineWeight: v });
+                                                    }}
+                                                    className={inputClass}
+                                                />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label htmlFor="settings-ai-edge-pick-n" className="text-[var(--ui-text-muted)] block text-sm">{t('Pick N')}</label>
+                                                <input
+                                                    id="settings-ai-edge-pick-n"
+                                                    type="number"
+                                                    min={0}
+                                                    step={1}
+                                                    value={settings.aiStrategy === 'influence' ? settings.aiInfluencePickN : settings.aiTerritoryPickN}
+                                                    onChange={(e) => {
+                                                        const v = Math.max(0, parseInt(e.target.value || '0', 10));
+                                                        updateSettings(settings.aiStrategy === 'influence' ? { aiInfluencePickN: v } : { aiTerritoryPickN: v });
+                                                    }}
+                                                    className={inputClass}
+                                                />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label htmlFor="settings-ai-edge-pick-frac" className="text-[var(--ui-text-muted)] block text-sm">{t('Pick Frac')}</label>
+                                                <input
+                                                    id="settings-ai-edge-pick-frac"
+                                                    type="number"
+                                                    min={0}
+                                                    max={1}
+                                                    step={0.05}
+                                                    value={settings.aiStrategy === 'influence' ? settings.aiInfluencePickFrac : settings.aiTerritoryPickFrac}
+                                                    onChange={(e) => {
+                                                        const v = Math.max(0, Math.min(1, parseFloat(e.target.value || '0')));
+                                                        updateSettings(settings.aiStrategy === 'influence' ? { aiInfluencePickFrac: v } : { aiTerritoryPickFrac: v });
+                                                    }}
+                                                    className={inputClass}
+                                                />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label htmlFor="settings-ai-edge-endgame" className="text-[var(--ui-text-muted)] block text-sm">{t('Endgame')}</label>
+                                                <input
+                                                    id="settings-ai-edge-endgame"
+                                                    type="number"
+                                                    min={0}
+                                                    max={1}
+                                                    step={0.05}
+                                                    value={settings.aiStrategy === 'influence' ? settings.aiInfluenceEndgame : settings.aiTerritoryEndgame}
+                                                    onChange={(e) => {
+                                                        const v = Math.max(0, Math.min(1, parseFloat(e.target.value || '0')));
+                                                        updateSettings(settings.aiStrategy === 'influence' ? { aiInfluenceEndgame: v } : { aiTerritoryEndgame: v });
+                                                    }}
+                                                    className={inputClass}
+                                                />
+                                            </div>
+                                            <div className={`col-span-1 sm:col-span-2 lg:col-span-3 ${subtextClass}`}>
+                                                {t('KaTrain {strategy}: distance-from-edge weights with {threshold} and {lineWeight}.', {
+                                                    strategy: settings.aiStrategy,
+                                                    threshold: 'threshold',
+                                                    lineWeight: 'line_weight',
+                                                })}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                                {/* Human SL Section */}
+                                <div className={sectionClass}>
+                                    <h3 className={sectionTitleClass}>{t('Human-like moves')}</h3>
+                                    <div className="mt-4 space-y-4">
+                                        <div className={rowClass}>
+                                            <label htmlFor="settings-human-sl-enabled" className={labelClass}>
+                                                {t('Show what a human would play')}
+                                            </label>
+                                            <input
+                                                id="settings-human-sl-enabled"
+                                                type="checkbox"
+                                                checked={settings.humanSlEnabled}
+                                                onChange={(e) => updateSettings({ humanSlEnabled: e.target.checked })}
+                                                className="toggle"
+                                            />
+                                        </div>
+                                        <p className={subtextClass}>
+                                            {t('KataGo’s human network predicts the move a player of a given rank would make, rather than the best move. It is a second set of weights ({size}) downloaded on first use, and it never changes the analysis itself.', { size: KATAGO_HUMAN_MODEL_SIZE })}
+                                        </p>
+
+                                        {settings.humanSlEnabled || settings.aiStrategy === 'human' ? (
+                                            <>
+                                                <div className="space-y-2">
+                                                    <label htmlFor="settings-human-sl-profile" className="text-[var(--ui-text-muted)] block">
+                                                        {t('Player profile')}
+                                                    </label>
+                                                    <select
+                                                        id="settings-human-sl-profile"
+                                                        value={settings.humanSlProfile}
+                                                        onChange={(e) => updateSettings({ humanSlProfile: e.target.value })}
+                                                        className={selectClass}
+                                                    >
+                                                        {KATAGO_HUMAN_PROFILES.map((profile) => (
+                                                            <option key={profile} value={profile}>
+                                                                {describeHumanProfile(profile)}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                </div>
+
+                                                {settings.aiStrategy === 'human' ? (
+                                                    <div className="space-y-2">
+                                                        <label htmlFor="settings-human-sl-bot-style" className="text-[var(--ui-text-muted)] block">
+                                                            {t('Opponent plays')}
+                                                        </label>
+                                                        <select
+                                                            id="settings-human-sl-bot-style"
+                                                            value={settings.humanSlBotStyle}
+                                                            onChange={(e) =>
+                                                                updateSettings({
+                                                                    humanSlBotStyle: e.target.value === 'search' ? 'search' : 'imitate',
+                                                                })
+                                                            }
+                                                            className={selectClass}
+                                                        >
+                                                            <option value="imitate">{t('Like the rank, mistakes and all')}</option>
+                                                            <option value="search">{t('Human shapes, backed by the search')}</option>
+                                                        </select>
+                                                        <p className={subtextClass}>
+                                                            {t('KataGo ships both: the first imitates the profile faithfully, the second keeps the human’s choice of moves but lets the search steer away from the bad ones, which plays a good deal stronger than the rank.')}
+                                                        </p>
+                                                    </div>
+                                                ) : null}
+
+                                                <div className="space-y-2">
+                                                    <label htmlFor="settings-human-sl-source" className="text-[var(--ui-text-muted)] block">
+                                                        {t('Policy overlay shows')}
+                                                    </label>
+                                                    <select
+                                                        id="settings-human-sl-source"
+                                                        value={settings.analysisPolicySource}
+                                                        onChange={(e) =>
+                                                            updateSettings({
+                                                                analysisPolicySource: e.target.value === 'human' ? 'human' : 'engine',
+                                                            })
+                                                        }
+                                                        className={selectClass}
+                                                    >
+                                                        <option value="engine">{t('Engine policy')}</option>
+                                                        <option value="human">{t('Human policy')}</option>
+                                                    </select>
+                                                </div>
+
+                                                <div className="space-y-2">
+                                                    <label htmlFor="settings-human-sl-url" className="text-[var(--ui-text-muted)] block">
+                                                        {t('Human model URL')}
+                                                    </label>
+                                                    <input
+                                                        id="settings-human-sl-url"
+                                                        type="text"
+                                                        value={humanBlobUrlRef.current && settings.humanSlModelUrl === humanBlobUrlRef.current ? '' : settings.humanSlModelUrl}
+                                                        onChange={(e) => updateSettings({ humanSlModelUrl: e.target.value })}
+                                                        className={`${inputClass} text-xs`}
+                                                        placeholder={KATAGO_HUMAN_MODEL_URL}
+                                                    />
+                                                    <p className={subtextClass}>
+                                                        {t('The official download does not allow cross-origin fetches, so either host the file yourself, put it under {path}, or load it from disk below.', { path: publicUrl('models/') })}
+                                                    </p>
+                                                    <div className="flex flex-wrap items-center gap-2">
+                                                        <button
+                                                            type="button"
+                                                            className={pillButtonClass}
+                                                            onClick={() => humanModelUploadInputRef.current?.click()}
+                                                        >
+                                                            {t('Load Human Weights')}
+                                                        </button>
+                                                        {humanModelFileName ? (
+                                                            <button type="button" className={pillButtonClass} onClick={handleClearHumanUpload}>
+                                                                {t('Clear')}
+                                                            </button>
+                                                        ) : null}
+                                                        <input
+                                                            ref={humanModelUploadInputRef}
+                                                            type="file"
+                                                            accept={MODEL_UPLOAD_ACCEPT}
+                                                            onChange={handleHumanModelUpload}
+                                                            className="hidden"
+                                                        />
+                                                    </div>
+                                                    {humanModelFileName ? (
+                                                        <p className={subtextClass}>
+                                                            {t('Using {name} for this session only.', { name: humanModelFileName })}
+                                                        </p>
+                                                    ) : null}
+                                                    {humanModelError ? (
+                                                        <p className="text-xs text-[var(--ui-danger,#ef4444)]">{humanModelError}</p>
+                                                    ) : null}
+                                                </div>
+                                            </>
+                                        ) : null}
+                                    </div>
+                                </div>
+
+                                {/* Engine Mode */}  
+                                    <div className="mt-4 space-y-2">
+                                        <div id="settings-engine-mode-label" className="text-[var(--ui-text-muted)] block text-sm">{t('Engine Mode')}</div>
+                                        <div
+                                            id="settings-engine-mode"
+                                            className="grid grid-cols-1 gap-2 sm:grid-cols-2"
+                                            role="radiogroup"
+                                            aria-labelledby="settings-engine-mode-label"
+                                            data-settings-search-id="settings-engine-mode"
+                                        >
+                                            {[
+                                                { value: 'local' as const, label: 'Browser (Local)', icon: <FaMicrochip aria-hidden="true" />, description: 'Run KataGo in your browser (WebGPU/WASM).' },
+                                                { value: 'remote' as const, label: 'Remote Server', icon: <FaGlobe aria-hidden="true" />, description: 'Connect to a remote KataGo server via WebSocket.' },
+                                            ].map((option) => {
+                                                const active = settings.engineMode === option.value;
+                                                return (
+                                                    <button
+                                                        key={option.value}
+                                                        type="button"
+                                                        className={backendCardClass(active, true)}
+                                                        role="radio"
+                                                        aria-checked={active}
+                                                        tabIndex={active ? 0 : -1}
+                                                        onClick={() => updateSettings({ engineMode: option.value })}
+                                                    >
+                                                        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-md border border-[var(--ui-border)] bg-[var(--ui-surface-2)] text-[var(--ui-accent)]" aria-hidden="true">
+                                                            {option.icon}
+                                                        </span>
+                                                        <span className="min-w-0 flex-1">
+                                                            <span className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
+                                                                <span className="truncate text-sm font-semibold">{t(option.label)}</span>
+                                                            </span>
+                                                            <span className="mt-1 block text-xs ui-text-muted">
+                                                                {t(option.description)}
+                                                            </span>
+                                                        </span>
+                                                        {active ? (
+                                                            <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-[var(--ui-accent)] text-[0.625rem] text-[var(--ui-accent-contrast)]">
+                                                                <FaCheck aria-hidden="true" />
+                                                            </span>
+                                                        ) : null}
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+
+                                    {/* Remote URL (only when remote mode is selected) */}
+                                    {settings.engineMode === 'remote' ? (
+                                        <div className="mt-4 space-y-2">
+                                            <label htmlFor="settings-remote-engine-url" className="text-[var(--ui-text-muted)] block">{t('Remote Engine URL')}</label>
+                                            <input
+                                                id="settings-remote-engine-url"
+                                                type="text"
+                                                value={settings.remoteEngineUrl}
+                                                onChange={(e) => updateSettings({ remoteEngineUrl: e.target.value })}
+                                                className={`${inputClass} text-xs`}
+                                                placeholder={t('ws://hostname:port/katago or /katago-proxy')}
+                                            />
+                                            <p className={subtextClass}>
+                                                {t('WebSocket URL of a remote KataGo analysis engine. Use {ws} or {wss} for direct connections, or a path like {proxy} for same-origin proxy connections.', {
+                                                    ws: 'ws://',
+                                                    wss: 'wss://',
+                                                    proxy: '/katago-proxy',
+                                                })}
+                                            </p>
+                                        </div>
+                                    ) : null}
+
+                                {/* KataGo Section */}  
+                                <div className={sectionClass}>  
+                                    <h3 className={sectionTitleClass}>{t('KataGo')}</h3>
+
+                                    <div className="mt-4 space-y-2">
+                                        <label htmlFor="settings-katago-model-url" className="text-[var(--ui-text-muted)] block">{t('Model URL')}</label>
+                                        <div className="flex flex-wrap gap-2">
+                                            <button
+                                                type="button"
+                                                className={pillButtonClass}
+                                                onClick={() => updateSettings({ katagoModelUrl: SMALL_MODEL_URL })}
+                                                title={t('Small bundled KataGo model')}
+                                            >
+                                                {t('Small Model')}
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className={pillButtonClass}
+                                                onClick={() => updateSettings({ katagoModelUrl: KATAGO_RECOMMENDED_MODEL_URL })}
+                                                title={t('Stronger b18 browser weights')}
+                                            >
+                                                {t('Strong b18')}
+                                            </button>
+                                        </div>
+                                        <input
+                                            id="settings-katago-model-url"
+                                            type="text"
+                                            value={settings.katagoModelUrl}
+                                            onChange={(e) => updateSettings({ katagoModelUrl: e.target.value })}
+                                            className={`${inputClass} text-xs`}
+                                            placeholder={SMALL_MODEL_URL}
+                                        />
+                                        <p className={subtextClass}>
+                                            {t('Use a local path under {path} or a full URL (must allow CORS).', { path: publicUrl('models/') })}
+                                        </p>
+                                        <div className="space-y-1">
+                                            <div className="text-xs text-[var(--ui-text-faint)]">{t('Upload weights (.bin.gz)')}</div>
+                                            <div className="flex flex-wrap gap-2">
+                                                <button
+                                                    type="button"
+                                                    className={pillButtonClass}
+                                                    onClick={() => modelUploadInputRef.current?.click()}
+                                                >
+                                                    {t('Upload Weights')}
+                                                </button>
+                                                {isUploadedModel ? (
+                                                    <button
+                                                        type="button"
+                                                        className={pillButtonClass}
+                                                        onClick={handleClearUpload}
+                                                    >
+                                                        {t('Clear Upload')}
+                                                    </button>
+                                                ) : null}
+                                            </div>
+                                            <input
+                                                ref={modelUploadInputRef}
+                                                type="file"
+                                                accept={MODEL_UPLOAD_ACCEPT}
+                                                onChange={handleModelUpload}
+                                                className="hidden"
+                                            />
+                                            {isUploadedModel ? (
+                                                <div
+                                                    className="rounded-lg border border-[var(--ui-accent)] bg-[var(--ui-accent-soft)] px-3 py-2 text-xs text-[var(--ui-text)]"
+                                                    data-katago-uploaded-model-summary="true"
+                                                >
+                                                    <div className="font-semibold">{t('Active browser upload')}</div>
+                                                    <div className="mt-1 min-w-0 truncate font-mono">
+                                                        {uploadedModelInfo?.name ?? t('Uploaded weights')}
+                                                    </div>
+                                                    <div className="mt-1 text-[var(--ui-text-muted)]">
+                                                        {uploadedModelInfo
+                                                            ? `${formatUploadedModelSize(uploadedModelInfo.size)}${uploadedModelSavedLabel ? ` / ${t('saved')} ${uploadedModelSavedLabel}` : ''}`
+                                                            : t('Saved in this browser and restored after reload.')}
+                                                    </div>
+                                                </div>
+                                            ) : null}
+                                            {modelUploadError ? (
+                                                <p className="text-xs text-rose-400 leading-relaxed">
+                                                    {modelUploadError}
+                                                </p>
+                                            ) : null}
+                                            <p className={subtextClass}>
+                                                {t('Browser uploads are limited to compressed weights under {label}; b28/b40 weights can exhaust browser memory.', { label: MAX_BROWSER_MODEL_UPLOAD_LABEL })}
+                                            </p>
+                                        </div>
+                                        <div className="space-y-2">
+                                            <button
+                                                type="button"
+                                                className="flex min-h-11 w-full items-center gap-3 rounded-lg border border-[var(--ui-border)] bg-[var(--ui-surface)] px-3 py-2 text-left transition-colors hover:bg-[var(--ui-surface-2)]"
+                                                aria-expanded={officialModelsOpen}
+                                                aria-controls={officialModelsOpen ? 'settings-official-models' : undefined}
+                                                onClick={() => setOfficialModelsOpen((open) => !open)}
+                                            >
+                                                <span className="min-w-0 flex-1">
+                                                    <span className="block text-sm font-medium text-[var(--ui-text)]">{t('Official model downloads')}</span>
+                                                    <span className="block text-xs text-[var(--ui-text-faint)]">{t('{count} optional KataGo networks', { count: OFFICIAL_MODELS.length })}</span>
+                                                </span>
+                                                <FaChevronDown
+                                                    aria-hidden="true"
+                                                    className={`shrink-0 text-[var(--ui-text-muted)] transition-transform ${officialModelsOpen ? 'rotate-180' : ''}`}
+                                                />
+                                            </button>
+                                            {officialModelsOpen ? (
+                                            <div id="settings-official-models" className="space-y-2">
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                                {OFFICIAL_MODELS.map((model) => (
+                                                    <div
+                                                        key={model.url}
+                                                        className={modelCardClass}
+                                                    >
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="text-sm font-semibold">{t(model.label)}</span>
+                                                            {model.badge ? (
+                                                                <span className={modelBadgeClass}>
+                                                                    {t(model.badge)}
+                                                                </span>
+                                                            ) : null}
+                                                            <span className="ml-auto text-[0.625rem] text-[var(--ui-text-muted)]">{model.size}</span>
+                                                        </div>
+                                                        <div className="text-[0.6875rem] text-[var(--ui-text-muted)] font-mono truncate">
+                                                            {model.name}
+                                                        </div>
+                                                        <div className="text-[0.625rem] text-[var(--ui-text-faint)]">
+                                                            {t('Uploaded {date}', { date: model.uploaded })}
+                                                        </div>
+                                                        <div className="mt-2 flex flex-wrap items-center gap-2">
+                                                            <a
+                                                                href={model.url}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className={modelActionClass}
+                                                                title={`${t('Download')} ${model.name}`}
+                                                            >
+                                                                {t('Download')}
+                                                            </a>
+                                                            {model.downloadAndLoad ? (
+                                                                <div className="flex min-w-0 flex-wrap items-center gap-2">
+                                                                    {(() => {
+                                                                        const isDownloadingModel = downloadingUrl === model.url;
+                                                                        const downloadLabel = isDownloadingModel
+                                                                            ? downloadProgress === null
+                                                                                ? t('Downloading...')
+                                                                                : t('Downloading {percent}%', { percent: downloadProgress })
+                                                                            : t('Download & Load');
+                                                                        return (
+                                                                            <>
+                                                                                <button
+                                                                                    type="button"
+                                                                                    className="px-2 py-1 text-xs rounded ui-accent-soft border hover:brightness-110 disabled:opacity-60"
+                                                                                    onClick={() => handleDownloadAndLoad(model.url)}
+                                                                                    disabled={isDownloadingModel}
+                                                                                    aria-label={
+                                                                                        isDownloadingModel
+                                                                                            ? `${downloadLabel} ${model.name}`
+                                                                                            : t('Download and load {name}', { name: model.name })
+                                                                                    }
+                                                                                >
+                                                                                    {downloadLabel}
+                                                                                </button>
+                                                                                {isDownloadingModel ? (
+                                                                                    <span
+                                                                                        className="shrink-0 min-w-[5.5rem] overflow-hidden rounded-full border border-[var(--ui-accent)] bg-[var(--ui-surface)] text-[0.625rem] text-[var(--ui-accent)]"
+                                                                                        role="progressbar"
+                                                                                        aria-label={t('Downloading {name}', { name: model.name })}
+                                                                                        aria-valuemin={downloadProgress === null ? undefined : 0}
+                                                                                        aria-valuemax={downloadProgress === null ? undefined : 100}
+                                                                                        aria-valuenow={downloadProgress === null ? undefined : downloadProgress}
+                                                                                        data-katago-model-download-progress="true"
+                                                                                    >
+                                                                                        <span className="relative block h-5">
+                                                                                            <span
+                                                                                                className={[
+                                                                                                    'absolute inset-y-0 left-0 bg-[var(--ui-accent-soft)]',
+                                                                                                    downloadProgress === null ? 'w-full animate-pulse' : '',
+                                                                                                ].join(' ')}
+                                                                                                style={
+                                                                                                    downloadProgress === null
+                                                                                                        ? undefined
+                                                                                                        : { width: `${downloadProgress}%` }
+                                                                                                }
+                                                                                                aria-hidden="true"
+                                                                                            />
+                                                                                            <span className="relative z-10 flex h-full items-center justify-center px-2 font-mono">
+                                                                                                {downloadProgress === null ? '...' : `${downloadProgress}%`}
+                                                                                            </span>
+                                                                                        </span>
+                                                                                    </span>
+                                                                                ) : (
+                                                                                    <span className="text-[0.625rem] text-[var(--ui-accent)]">{t('Saved in browser')}</span>
+                                                                                )}
+                                                                            </>
+                                                                        );
+                                                                    })()}
+                                                                </div>
+                                                            ) : model.browserLoadable === false ? (
+                                                                <span className="text-[0.625rem] text-rose-400">
+                                                                    {t('Too large for browser upload')}
+                                                                </span>
+                                                            ) : null}
+                                                            <button
+                                                                type="button"
+                                                                className={modelActionClass}
+                                                                onClick={() => handleCopyUrl(model.url)}
+                                                                // One of these per model, all reading "Copy URL" — name them
+                                                                // like the download progress bar above already does.
+                                                                aria-label={
+                                                                    copiedUrl === model.url
+                                                                        ? t('Copied URL for {name}', { name: model.name })
+                                                                        : t('Copy URL for {name}', { name: model.name })
+                                                                }
+                                                            >
+                                                                {copiedUrl === model.url ? t('Copied') : t('Copy URL')}
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            {downloadError ? (
+                                                <p className="text-xs text-rose-400">{downloadError}</p>
+                                            ) : null}
+                                            <p className={subtextClass}>
+                                                {t('Download only browser-sized weights, then use "Upload Weights" above. Saved browser uploads use IndexedDB; large b28/b40 weights are for native KataGo, not this browser engine.')}
+                                            </p>
+                                            </div>
+                                            ) : null}
+                                        </div>
+                                        <div className="space-y-2">
+                                            <div id="settings-katago-backend-label" className="text-[var(--ui-text-muted)] block text-sm">{t('Backend')}</div>
+                                            <div
+                                                id="settings-katago-backend"
+                                                className="grid grid-cols-1 gap-2 sm:grid-cols-3"
+                                                role="radiogroup"
+                                                aria-labelledby="settings-katago-backend-label"
+                                                data-settings-search-id="settings-katago-backend"
+                                                data-katago-backend-selector="true"
+                                            >
+                                                {backendOptions.map((option) => {
+                                                    const active = settings.katagoBackend === option.value;
+                                                    const available = isKataGoBackendAvailable(option.value, webGpuAvailability);
+                                                    return (
+                                                        <button
+                                                            key={option.value}
+                                                            type="button"
+                                                            className={backendCardClass(active, available)}
+                                                            role="radio"
+                                                            aria-checked={active}
+                                                            aria-disabled={!available}
+                                                            tabIndex={active ? 0 : -1}
+                                                            data-katago-backend-option={option.value}
+                                                            data-katago-backend-available={available}
+                                                            onClick={() => {
+                                                                if (!available) return;
+                                                                updateSettings({ katagoBackend: option.value });
+                                                            }}
+                                                            onKeyDown={(event) => handleBackendOptionKeyDown(event, option.value)}
+                                                        >
+                                                            <span
+                                                                className={[
+                                                                    'grid h-9 w-9 shrink-0 place-items-center rounded-md border',
+                                                                    !available
+                                                                        ? 'border-[var(--ui-border)] bg-[var(--ui-surface-2)] text-[var(--ui-text-faint)]'
+                                                                        : active
+                                                                        ? 'border-[var(--ui-accent)] bg-[var(--ui-accent)] text-[var(--ui-accent-contrast)]'
+                                                                        : 'border-[var(--ui-border)] bg-[var(--ui-surface-2)] text-[var(--ui-accent)]',
+                                                                ].join(' ')}
+                                                                aria-hidden="true"
+                                                            >
+                                                                {option.icon}
+                                                            </span>
+                                                            <span className="min-w-0 flex-1">
+                                                                <span className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
+                                                                    <span className="truncate text-sm font-semibold">{t(option.label)}</span>
+                                                                    {option.badge ? (
+                                                                        <span className="rounded-full border border-[var(--ui-accent)] px-1.5 py-0.5 text-[0.625rem] font-semibold uppercase tracking-wide text-[var(--ui-accent)]">
+                                                                            {t(option.badge)}
+                                                                        </span>
+                                                                    ) : null}
+                                                                </span>
+                                                                <span className="mt-1 block text-xs ui-text-muted">
+                                                                    {available
+                                                                        ? t(option.description)
+                                                                        : t(option.unavailableDescription ?? 'Unavailable')}
+                                                                </span>
+                                                            </span>
+                                                            {active ? (
+                                                                <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-[var(--ui-accent)] text-[0.625rem] text-[var(--ui-accent-contrast)]">
+                                                                    <FaCheck aria-hidden="true" />
+                                                                </span>
+                                                            ) : null}
+                                                        </button>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                        <p className={subtextClass} data-katago-backend-status="true">
+                                            {t('Engine: {backend}', { backend: activeBackendLabel })}
+                                            {isBackendFallback ? (
+                                                <>
+                                                    {' '}
+                                                    {t('fallback from {backend}', { backend: requestedBackendLabel })}
+                                                </>
+                                            ) : null}
+                                            {engineModelLabel ? (
+                                                <>
+                                                    {' '}
+                                                    · <span className="font-mono" title={engineModelLabel}>{engineModelLabel}</span>
+                                                </>
+                                            ) : null}
+                                        </p>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+                                        <div className="space-y-1">
+                                            <label htmlFor="settings-katago-visits" className="text-[var(--ui-text-muted)] block text-sm">{t('Visits')}</label>
+                                            <input
+                                                id="settings-katago-visits"
+                                                type="number"
+                                                min={16}
+                                                max={ENGINE_MAX_VISITS}
+                                                value={settings.katagoVisits}
+                                                onChange={(e) => updateSettings({ katagoVisits: clampSettingsVisits(parseInt(e.target.value || '0', 10)) })}
+                                                className={inputClass}
+                                            />
+                                            <p className={subtextClass}>{t('How many positions the search reads per move while live analysis is on. More is stronger and slower; the presets in the Analysis panel set the same number.')}</p>
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label htmlFor="settings-katago-fast-review-depth" className="text-[var(--ui-text-muted)] block text-sm">{t('Fast review depth')}</label>
+                                            <input
+                                                id="settings-katago-fast-review-depth"
+                                                type="number"
+                                                min={MIN_ANALYSIS_VISITS}
+                                                max={ENGINE_MAX_VISITS}
+                                                value={settings.katagoFastVisits}
+                                                onChange={(e) => updateSettings({ katagoFastVisits: clampSettingsVisits(parseInt(e.target.value || '0', 10)) })}
+                                                className={inputClass}
+                                            />
+                                            <div className="flex flex-wrap gap-1.5" role="group" aria-label={t('Fast review depth presets')}>
+                                                {FAST_REVIEW_VISIT_PRESETS.map((preset) => {
+                                                    const active = settings.katagoFastVisits === preset;
+                                                    return (
+                                                        <button
+                                                            key={preset}
+                                                            type="button"
+                                                            className={[
+                                                                pillButtonClass,
+                                                                active ? 'border-[var(--ui-accent)] bg-[var(--ui-accent-soft)] text-[var(--ui-text)]' : '',
+                                                            ].join(' ')}
+                                                            aria-pressed={active}
+                                                            data-fast-review-visit-preset={preset}
+                                                            onClick={() => updateSettings({ katagoFastVisits: preset })}
+                                                        >
+                                                            {preset}
+                                                        </button>
+                                                    );
+                                                })}
+                                            </div>
+                                            <p className={subtextClass}>{t('Used by Fast review and load-time SGF analysis.')}</p>
+                                        </div>
+                                    </div>
+
+                                    <button
+                                        type="button"
+                                        className="mt-4 flex min-h-11 w-full items-center gap-3 rounded-lg border border-[var(--ui-border)] bg-[var(--ui-surface)] px-3 py-2 text-left transition-colors hover:bg-[var(--ui-surface-2)]"
+                                        aria-expanded={advancedEngineOpen}
+                                        aria-controls={advancedEngineOpen ? 'settings-advanced-engine' : undefined}
+                                        onClick={() => setAdvancedEngineOpen((open) => !open)}
+                                    >
+                                        <span className="min-w-0 flex-1">
+                                            <span className="block text-sm font-medium text-[var(--ui-text)]">{t('Advanced engine tuning')}</span>
+                                            <span className="block text-xs text-[var(--ui-text-faint)]">{t('Limits, search behavior, and analysis output')}</span>
+                                        </span>
+                                        <FaChevronDown
+                                            aria-hidden="true"
+                                            className={`shrink-0 text-[var(--ui-text-muted)] transition-transform ${advancedEngineOpen ? 'rotate-180' : ''}`}
+                                        />
+                                    </button>
+
+                                    {advancedEngineOpen ? (
+                                    <div id="settings-advanced-engine">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+                                        <div className="space-y-1">
+                                            <label htmlFor="settings-katago-max-time" className="text-[var(--ui-text-muted)] block text-sm">{t('Max Time (ms)')}</label>
+                                            <input
+                                                id="settings-katago-max-time"
+                                                type="number"
+                                                min={25}
+                                                max={ENGINE_MAX_TIME_MS}
+                                                value={settings.katagoMaxTimeMs}
+                                                onChange={(e) => updateSettings({ katagoMaxTimeMs: Math.max(25, parseInt(e.target.value || '0', 10)) })}
+                                                className={inputClass}
+                                            />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label htmlFor="settings-katago-batch-size" className="text-[var(--ui-text-muted)] block text-sm">{t('Batch Size')}</label>
+                                            <input
+                                                id="settings-katago-batch-size"
+                                                type="number"
+                                                min={1}
+                                                max={64}
+                                                value={settings.katagoBatchSize}
+                                                onChange={(e) => updateSettings({ katagoBatchSize: Math.max(1, parseInt(e.target.value || '0', 10)) })}
+                                                className={inputClass}
+                                            />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label htmlFor="settings-katago-max-children" className="text-[var(--ui-text-muted)] block text-sm">{t('Max Children')}</label>
+                                            <input
+                                                id="settings-katago-max-children"
+                                                type="number"
+                                                min={4}
+                                                max={361}
+                                                value={settings.katagoMaxChildren}
+                                                onChange={(e) => updateSettings({ katagoMaxChildren: Math.max(4, parseInt(e.target.value || '0', 10)) })}
+                                                className={inputClass}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="mt-3 space-y-1">
+                                        <label htmlFor="settings-katago-top-moves" className="text-[var(--ui-text-muted)] block text-sm">{t('Top Moves')}</label>
+                                        <input
+                                            id="settings-katago-top-moves"
+                                            type="number"
+                                            min={1}
+                                            max={50}
+                                            value={settings.katagoTopK}
+                                            onChange={(e) => updateSettings({ katagoTopK: Math.max(1, parseInt(e.target.value || '0', 10)) })}
+                                            className={inputClass}
+                                        />
+                                    </div>
+
+                                    <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        <div className="space-y-1">
+                                            <label htmlFor="settings-katago-wide-root-noise" className="text-[var(--ui-text-muted)] block text-sm">{t('Wide Root Noise')}</label>
+                                            <input
+                                                id="settings-katago-wide-root-noise"
+                                                type="number"
+                                                min={0}
+                                                step={0.01}
+                                                value={settings.katagoWideRootNoise}
+                                                onChange={(e) => updateSettings({ katagoWideRootNoise: Math.max(0, parseFloat(e.target.value || '0')) })}
+                                                className={inputClass}
+                                            />
+                                            <p className={subtextClass}>{t('KaTrain default is 0.04; set 0 for strongest/most stable.')}</p>
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label htmlFor="settings-katago-root-policy-temperature" className="text-[var(--ui-text-muted)] block text-sm">{t('Root Policy Temperature')}</label>
+                                            <input
+                                                id="settings-katago-root-policy-temperature"
+                                                type="number"
+                                                min={0.01}
+                                                max={100}
+                                                step={0.05}
+                                                value={settings.katagoRootPolicyTemperature}
+                                                onChange={(e) =>
+                                                    updateSettings({
+                                                        katagoRootPolicyTemperature: Math.min(
+                                                            100,
+                                                            Math.max(0.01, parseFloat(e.target.value || '1'))
+                                                        ),
+                                                    })
+                                                }
+                                                className={inputClass}
+                                            />
+                                            <p className={subtextClass}>
+                                                {t('KataGo’s rootPolicyTemperature. Above 1 flattens the policy at the root so the search looks at more moves; 1 leaves it alone. Unlike wide root noise it adds nothing random, and it never changes the policy that is reported.')}
+                                            </p>
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label htmlFor="settings-katago-pv-len" className="text-[var(--ui-text-muted)] block text-sm">{t('PV Len')}</label>
+                                            <input
+                                                id="settings-katago-pv-len"
+                                                type="number"
+                                                min={0}
+                                                max={60}
+                                                step={1}
+                                                value={settings.katagoAnalysisPvLen}
+                                                onChange={(e) => updateSettings({ katagoAnalysisPvLen: Math.max(0, parseInt(e.target.value || '0', 10)) })}
+                                                className={inputClass}
+                                            />
+                                            <p className={subtextClass}>{t('KataGo analysisPVLen (moves after the first).')}</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        <div className="space-y-1">
+                                            <label htmlFor="settings-katago-ownership" className="text-[var(--ui-text-muted)] block text-sm">{t('Ownership')}</label>
+                                            <select
+                                                id="settings-katago-ownership"
+                                                value={settings.katagoOwnershipMode}
+                                                onChange={(e) => updateSettings({ katagoOwnershipMode: e.target.value as 'root' | 'tree' })}
+                                                className={selectClass}
+                                            >
+                                                <option value="tree">{t('Tree-averaged (KaTrain)')}</option>
+                                                <option value="root">{t('Root-only (faster)')}</option>
+                                            </select>
+                                            <p className={subtextClass}>
+                                                {t('KaTrain uses tree-averaged ownership; root-only disables per-move ownership for speed.')}
+                                            </p>
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label htmlFor="settings-katago-reuse-tree" className="text-[var(--ui-text-muted)] block text-sm">{t('Reuse Search Tree')}</label>
+                                            <div className="flex items-center space-x-2 text-sm text-[var(--ui-text-muted)]">
+                                                <input
+                                                    id="settings-katago-reuse-tree"
+                                                    type="checkbox"
+                                                    checked={settings.katagoReuseTree}
+                                                    onChange={(e) => updateSettings({ katagoReuseTree: e.target.checked })}
+                                                    className="rounded"
+                                                />
+                                                <span>{t('Enable (faster)')}</span>
+                                            </div>
+                                            <p className={subtextClass}>
+                                                {t('Speeds up continuous analysis by continuing from previous visits.')}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="mt-3 space-y-1">
+                                        <label htmlFor="settings-katago-randomize-symmetry" className="text-[var(--ui-text-muted)] block text-sm">{t('Randomize Symmetry')}</label>
+                                        <div className="flex items-center space-x-2 text-sm text-[var(--ui-text-muted)]">
+                                            <input
+                                                id="settings-katago-randomize-symmetry"
+                                                type="checkbox"
+                                                checked={settings.katagoNnRandomize}
+                                                onChange={(e) => updateSettings({ katagoNnRandomize: e.target.checked })}
+                                                className="rounded"
+                                            />
+                                            <span>{t('Enable (nnRandomize)')}</span>
+                                        </div>
+                                        <p className={subtextClass}>
+                                            {t('Matches KataGo defaults; disable for deterministic/stable analysis.')}
+                                        </p>
+                                    </div>
+
+                                    <div className="mt-3 space-y-1">
+                                        <label htmlFor="settings-katago-conservative-pass" className="text-[var(--ui-text-muted)] block text-sm">{t('Conservative Pass')}</label>
+                                        <div className="flex items-center space-x-2 text-sm text-[var(--ui-text-muted)]">
+                                            <input
+                                                id="settings-katago-conservative-pass"
+                                                type="checkbox"
+                                                checked={settings.katagoConservativePass}
+                                                onChange={(e) => updateSettings({ katagoConservativePass: e.target.checked })}
+                                                className="rounded"
+                                            />
+                                            <span>{t('Enable (conservativePass)')}</span>
+                                        </div>
+                                        <p className={subtextClass}>
+                                            {t('KaTrain default: suppresses “pass ends game” features at the root.')}
+                                        </p>
+                                    </div>
+
+                                    <div className="mt-3 space-y-1">
+                                        <label htmlFor="settings-katago-fill-dame-before-pass" className="text-[var(--ui-text-muted)] block text-sm">{t('Fill Dame Before Pass')}</label>
+                                        <div className="flex items-center space-x-2 text-sm text-[var(--ui-text-muted)]">
+                                            <input
+                                                id="settings-katago-fill-dame-before-pass"
+                                                type="checkbox"
+                                                checked={settings.katagoFillDameBeforePass}
+                                                onChange={(e) => updateSettings({ katagoFillDameBeforePass: e.target.checked })}
+                                                className="rounded"
+                                            />
+                                            <span>{t('Enable (fillDameBeforePass)')}</span>
+                                        </div>
+                                        <p className={subtextClass}>
+                                            {t('Under territory scoring only: takes passing off the table while a move that costs nothing is still on the board, so dame get filled rather than left for the other player. KataGo’s own example configs leave this off.')}
+                                        </p>
+                                    </div>
+                                    </div>
+                                    ) : null}
+                                </div>  
+                            </div>  
+                        )}  
+
+                        {activeTab === 'shortcuts' && (
+                            <div
+                                id="panel-shortcuts"
+                                role="tabpanel"
+                                aria-labelledby="tab-shortcuts"
+                                tabIndex={0}
+                            >
+                                <ShortcutSettingsPanel />
+                            </div>
+                        )}
+                    </div>  
+                </div>
+                <div className="settings-modal-footer sticky bottom-0 z-10 flex justify-end px-4 sm:px-6 py-4 ui-panel border-t backdrop-blur">
+                    <button type="button"
+                        onClick={onClose}
+                        className="px-5 py-2.5 rounded-lg ui-accent-bg hover:brightness-110 font-semibold shadow-lg shadow-black/20 transition-colors"
+                    >
+                        {t('Done')}
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};

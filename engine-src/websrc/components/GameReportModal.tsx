@@ -1,0 +1,2311 @@
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { FaBookOpen, FaBullseye, FaChartLine, FaInfoCircle, FaTimes } from 'react-icons/fa';
+import { shallow } from 'zustand/shallow';
+import { useGameStore } from '../store/gameStore';
+import { useT } from '../i18n';
+import {
+  GAME_REPORT_PHASES,
+  MOVE_POLICY_CATEGORIES,
+  computeGameReport,
+  describeReportSwing,
+  getPhaseAnalysisMoveRange,
+  getPhaseLabel,
+  getPhaseMoveRange,
+  getReportStudyFocus,
+  formatPolicyRank,
+  getPointLossBucket,
+  getReportRecoveries,
+  getReportTurningPoints,
+  sortMoveReportEntries,
+  type GameReportMistakeSort,
+  type GameReportPhaseFilter,
+  type MoveReportEntry,
+  type MovePolicyCategory,
+  describeStudyFocusEntry,
+} from '../utils/gameReport';
+import type { CandidateMove, GameNode, Player } from '../types';
+import { DEFAULT_BOARD_SIZE } from '../types';
+import { ScoreWinrateGraph } from './ScoreWinrateGraph';
+import { PanelHeaderButton } from './layout/ui';
+import { captureBoardSnapshot } from '../utils/boardSnapshot';
+import { normalizeBoardSize } from '../utils/boardSize';
+import { captureReportBoardSnapshot } from '../utils/reportBoardSnapshot';
+import { formatGameInfoPlayer, readRootInfoValue } from '../utils/gameInfoDisplay';
+import { computeGameTags } from '../utils/gameTags';
+import { setTimedNotification } from '../utils/timedNotification';
+import { afterAnimationFrames } from '../utils/animationFrame';
+import { printWindow } from '../utils/print';
+import { useEscapeToClose } from '../hooks/useEscapeToClose';
+import { useInitialDialogFocus } from '../hooks/useInitialDialogFocus';
+import { describeHumanProfile } from '../utils/humanProfileLabel';
+import { computeMoveTimes, formatMoveTime, hasMoveTimeData } from '../utils/moveTimes';
+import { describeTimePressure, summarizePlayerTime, type PlayerTimeInsight } from '../utils/timeInsight';
+import { getCurrentLineNodes } from '../utils/branchNavigation';
+import { NO_VALUE } from '../utils/analysisSummary';
+
+interface GameReportModalProps {
+  onClose: () => void;
+  setReportHoverMove: (move: CandidateMove | null) => void;
+}
+
+const DEFAULT_EVAL_THRESHOLDS = [12, 6, 3, 1.5, 0.5, 0];
+const HISTOGRAM_COLORS = ['#fb7185', '#f97316', '#f59e0b', '#84cc16', '#38bdf8', '#94a3b8'];
+const CRITICAL_SWING_THRESHOLD = 5;
+const RECOVERY_THRESHOLD = 1.5;
+const POLICY_GUIDE: Array<{ category: MovePolicyCategory; detail: string }> = [
+  { category: 'aiMove', detail: 'Engine top choice, or effectively tied with the top policy move.' },
+  { category: 'good', detail: 'Rank 2-3, or at least 50% of the top move policy.' },
+  { category: 'inaccuracy', detail: 'Rank 4-10, or at least 10% of the top move policy.' },
+  { category: 'mistake', detail: 'Rank 11-20, or at least 2% of the top move policy.' },
+  { category: 'blunder', detail: 'Outside the top 20 and below 2% of the top move policy.' },
+];
+
+function fmtPct(x: number | undefined): string {
+  if (typeof x !== 'number' || !Number.isFinite(x)) return NO_VALUE;
+  return `${(x * 100).toFixed(1)}%`;
+}
+
+function fmtNum(x: number | undefined, digits = 2): string {
+  if (typeof x !== 'number' || !Number.isFinite(x)) return NO_VALUE;
+  return x.toFixed(digits);
+}
+
+function fmtSigned(x: number | undefined, digits = 1): string {
+  if (typeof x !== 'number' || !Number.isFinite(x)) return NO_VALUE;
+  return x > 0 ? `+${x.toFixed(digits)}` : x.toFixed(digits);
+}
+
+function fmtPolicyPct(value: number | undefined): string {
+  if (typeof value !== 'number' || !Number.isFinite(value)) return NO_VALUE;
+  return `${Math.round(value * 100)}%`;
+}
+
+function fmtWinRate(value: number | undefined): string {
+  if (typeof value !== 'number' || !Number.isFinite(value)) return NO_VALUE;
+  return `${(value * 100).toFixed(1)}%`;
+}
+
+/** A Black-perspective win rate, read from the side that played the move. */
+function moverWinRate(value: number | undefined, player: 'black' | 'white'): number | undefined {
+  if (typeof value !== 'number' || !Number.isFinite(value)) return value;
+  return player === 'black' ? value : 1 - value;
+}
+
+function fmtWinSwing(value: number | undefined): string {
+  if (typeof value !== 'number' || !Number.isFinite(value)) return NO_VALUE;
+  const points = value * 100;
+  return points > 0 ? `+${points.toFixed(1)}pp` : `${points.toFixed(1)}pp`;
+}
+
+function policyCategoryClass(category: MovePolicyCategory | undefined): string {
+  switch (category) {
+    case 'aiMove':
+      return 'text-sky-500 border-sky-500/40 bg-sky-500/10';
+    case 'good':
+      return 'text-emerald-500 border-emerald-500/40 bg-emerald-500/10';
+    case 'inaccuracy':
+      return 'text-amber-600 border-amber-500/40 bg-amber-500/10';
+    case 'mistake':
+      return 'text-orange-600 border-orange-500/40 bg-orange-500/10';
+    case 'blunder':
+      return 'text-rose-500 border-rose-500/40 bg-rose-500/10';
+    default:
+      return 'text-[var(--ui-text-muted)] border-[var(--ui-border)] bg-[var(--ui-surface)]';
+  }
+}
+
+function policyCategoryColor(category: MovePolicyCategory): string {
+  switch (category) {
+    case 'aiMove':
+      return '#38bdf8';
+    case 'good':
+      return '#34d399';
+    case 'inaccuracy':
+      return '#fbbf24';
+    case 'mistake':
+      return '#fb923c';
+    case 'blunder':
+      return '#fb7185';
+  }
+}
+
+function rootPropertiesForNode(node: GameNode): Record<string, string[]> {
+  let root = node;
+  while (root.parent) root = root.parent;
+  return root.properties ?? {};
+}
+
+export const GameReportModal: React.FC<GameReportModalProps> = ({ onClose, setReportHoverMove }) => {
+  const {
+    currentNode,
+    activeBranchChildIds,
+    trainerEvalThresholds,
+    treeVersion,
+    jumpToNode,
+    gameAnalysisDone,
+    gameAnalysisTotal,
+    gameAnalysisType,
+    isGameAnalysisRunning,
+    isInsertMode,
+    startFastGameAnalysis,
+    stopGameAnalysis,
+    humanSlProfile,
+    mistakeThreshold,
+    rootNode,
+    startMistakeDrill,
+  } = useGameStore(
+    (state) => ({
+      currentNode: state.currentNode,
+      rootNode: state.rootNode,
+      activeBranchChildIds: state.activeBranchChildIds,
+      trainerEvalThresholds: state.settings.trainerEvalThresholds,
+      treeVersion: state.treeVersion,
+      jumpToNode: state.jumpToNode,
+      gameAnalysisDone: state.gameAnalysisDone,
+      gameAnalysisTotal: state.gameAnalysisTotal,
+      gameAnalysisType: state.gameAnalysisType,
+      isGameAnalysisRunning: state.isGameAnalysisRunning,
+      isInsertMode: state.isInsertMode,
+      startFastGameAnalysis: state.startFastGameAnalysis,
+      stopGameAnalysis: state.stopGameAnalysis,
+      humanSlProfile: state.settings.humanSlProfile,
+      mistakeThreshold: state.settings.mistakeThreshold,
+      startMistakeDrill: state.startMistakeDrill,
+    }),
+    shallow
+  );
+  const t = useT();
+  const locale = useGameStore((s) => s.settings.appLocale);
+  const policyCategoryLabel = (category: MovePolicyCategory | undefined): string => {
+    switch (category) {
+      case 'aiMove':
+        return t('AI move');
+      case 'good':
+        return t('Good');
+      case 'inaccuracy':
+        return t('Inaccuracy');
+      case 'mistake':
+        return t('Mistake');
+      case 'blunder':
+        return t('Blunder');
+      default:
+        return t('Unranked');
+    }
+  };
+  const humanProfileLabel = describeHumanProfile(humanSlProfile);
+  const hasMoveTimes = useMemo(
+    () => hasMoveTimeData(computeMoveTimes(getCurrentLineNodes(currentNode, activeBranchChildIds), rootNode.properties)),
+    [activeBranchChildIds, currentNode, rootNode.properties]
+  );
+  const [phaseFilter, setPhaseFilter] = useState<GameReportPhaseFilter>('all');
+  const [reportGraph, setReportGraph] = useState({ score: true, winrate: true, time: false });
+  const [playerFilter, setPlayerFilter] = useState<'all' | Player>('all');
+  const [bucketFilter, setBucketFilter] = useState<number | null>(null);
+  const [policyFilter, setPolicyFilter] = useState<MovePolicyCategory | null>(null);
+  const [mistakeSort, setMistakeSort] = useState<GameReportMistakeSort>('loss');
+  const [showAllMistakes, setShowAllMistakes] = useState(false);
+  const [outcomeRevealed, setOutcomeRevealed] = useState(false);
+  const [reviewQueue, setReviewQueue] = useState<MoveReportEntry[]>([]);
+  const [reviewIndex, setReviewIndex] = useState(0);
+  const [snapshotUrl, setSnapshotUrl] = useState<string | null>(null);
+  const [snapshotError, setSnapshotError] = useState<string | null>(null);
+  const [isPreparingPdf, setIsPreparingPdf] = useState(false);
+  const [pdfSnapshots, setPdfSnapshots] = useState<Array<{ id: string; dataUrl: string | null; entry: MoveReportEntry }>>([]);
+  const [graphTick, setGraphTick] = useState(0);
+  const [showReportGuide, setShowReportGuide] = useState(false);
+  useEscapeToClose(onClose, !showReportGuide);
+  const dialogRef = useInitialDialogFocus<HTMLDivElement>();
+  const reportGuideButtonRef = useRef<HTMLButtonElement>(null);
+  const reportGuideCloseRef = useRef<HTMLButtonElement>(null);
+  const snapshotTimerRef = useRef<number | null>(null);
+  const boardSize = normalizeBoardSize(currentNode.gameState.board.length, DEFAULT_BOARD_SIZE);
+  const sectionClass =
+    'rounded-xl border ui-surface p-4 shadow-[0_10px_30px_rgba(0,0,0,0.35)] print-surface';
+  const sectionTitleClass = 'text-[0.6875rem] font-semibold uppercase tracking-[0.2em] ui-text-faint';
+  const labelClass = 'text-[var(--ui-text-muted)]';
+  const valueClass = 'text-[var(--ui-text)]';
+  const mutedClass = 'text-[var(--ui-text-muted)]';
+  const faintClass = 'text-[var(--ui-text-faint)]';
+  const secondaryPillClass =
+    'inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--ui-border)] bg-[var(--ui-surface)] text-[var(--ui-text-muted)] hover:bg-[var(--ui-surface-2)] hover:text-[var(--ui-text)]';
+  const secondaryButtonClass =
+    'inline-flex min-h-11 items-center justify-center rounded border border-[var(--ui-border)] bg-[var(--ui-surface)] text-[var(--ui-text)] hover:bg-[var(--ui-surface-2)]';
+  const insetSurfaceClass = 'rounded-lg border border-[var(--ui-border)] bg-[var(--ui-panel)]';
+  const generatedAt = useMemo(() => new Date(), []);
+  const playerNames = useMemo(() => {
+    void treeVersion;
+    const rootProps = rootPropertiesForNode(currentNode);
+    return {
+      black: formatGameInfoPlayer(
+        readRootInfoValue(rootProps, 'PB'),
+        readRootInfoValue(rootProps, 'BR'),
+        'Black'
+      ),
+      white: formatGameInfoPlayer(
+        readRootInfoValue(rootProps, 'PW'),
+        readRootInfoValue(rootProps, 'WR'),
+        'White'
+      ),
+    } satisfies Record<Player, string>;
+  }, [currentNode, treeVersion]);
+  const reportThresholds = useMemo(
+    () => (trainerEvalThresholds?.length ? trainerEvalThresholds : DEFAULT_EVAL_THRESHOLDS),
+    [trainerEvalThresholds]
+  );
+
+  useEffect(() => {
+    const style = document.createElement('style');
+    style.textContent = `
+      @media print {
+        @page {
+          size: A4 landscape;
+          margin: 12mm;
+        }
+        html,
+        body,
+        #root {
+          height: auto !important;
+          overflow: visible !important;
+        }
+        body > * {
+          visibility: hidden !important;
+        }
+        .report-print,
+        .report-print * {
+          visibility: visible !important;
+        }
+        .report-overlay {
+          position: static !important;
+          inset: auto !important;
+          height: auto !important;
+          min-height: auto !important;
+          overflow: visible !important;
+          background: transparent !important;
+        }
+        .app-root {
+          height: auto !important;
+          min-height: auto !important;
+          overflow: visible !important;
+        }
+        .report-print {
+          position: static !important;
+          left: auto !important;
+          top: auto !important;
+          width: auto !important;
+          max-height: none !important;
+          height: auto !important;
+          overflow: visible !important;
+          background: #ffffff !important;
+          font-family: 'Source Serif 4', 'Times New Roman', serif !important;
+        }
+        .report-print .report-scroll {
+          overflow: visible !important;
+          max-height: none !important;
+          height: auto !important;
+        }
+        .report-print * {
+          color: #0f172a !important;
+          border-color: #e2e8f0 !important;
+          box-shadow: none !important;
+        }
+        .report-print .print-surface {
+          background: #ffffff !important;
+        }
+        .report-print .print-muted {
+          color: #475569 !important;
+        }
+        .report-print .print-break-avoid {
+          break-inside: avoid !important;
+          page-break-inside: avoid !important;
+        }
+        .report-print .pdf-title {
+          font-family: 'Source Sans 3', 'Helvetica Neue', Arial, sans-serif !important;
+          font-weight: 600 !important;
+          letter-spacing: 0.08em !important;
+          text-transform: uppercase !important;
+        }
+        .report-print .pdf-meta {
+          font-family: 'Source Sans 3', 'Helvetica Neue', Arial, sans-serif !important;
+          text-transform: uppercase !important;
+          letter-spacing: 0.12em !important;
+          font-size: 10px !important;
+          color: #64748b !important;
+        }
+        .report-print .pdf-page {
+          break-after: page !important;
+          page-break-after: always !important;
+          padding: 8mm !important;
+          border: 1px solid #e2e8f0 !important;
+          border-radius: 6px !important;
+          background: #ffffff !important;
+          width: 100% !important;
+          max-width: none !important;
+          box-sizing: border-box !important;
+          min-height: calc(100vh - 24mm) !important;
+          display: flex !important;
+          flex-direction: column !important;
+        }
+        .report-print .pdf-page:last-child {
+          break-after: auto !important;
+          page-break-after: auto !important;
+        }
+        .report-print .pdf-board {
+          width: 100% !important;
+          max-height: 70vh !important;
+          height: auto !important;
+          object-fit: contain !important;
+        }
+        .report-print .pdf-board-wrap {
+          flex: 1 !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          border: 1px solid #e2e8f0 !important;
+          border-radius: 8px !important;
+          padding: 8px !important;
+          background: #f8fafc !important;
+        }
+        .report-print .pdf-cover-title {
+          font-size: 26px !important;
+          letter-spacing: 0.18em !important;
+        }
+        .report-print .pdf-cover-subtitle {
+          font-family: 'Source Sans 3', 'Helvetica Neue', Arial, sans-serif !important;
+          font-size: 14px !important;
+          letter-spacing: 0.12em !important;
+          text-transform: uppercase !important;
+          color: #64748b !important;
+        }
+        .report-print .pdf-section-title {
+          font-family: 'Source Sans 3', 'Helvetica Neue', Arial, sans-serif !important;
+          font-size: 11px !important;
+          letter-spacing: 0.2em !important;
+          text-transform: uppercase !important;
+          color: #64748b !important;
+        }
+        .report-print .pdf-tree-line {
+          border-left: 1px solid #cbd5e1 !important;
+          padding-left: 12px !important;
+          margin-left: 6px !important;
+        }
+        .report-print .pdf-tree-node {
+          position: relative !important;
+          padding-left: 6px !important;
+        }
+        .report-print .pdf-tree-node::before {
+          content: '' !important;
+          position: absolute !important;
+          left: -14px !important;
+          top: 6px !important;
+          width: 8px !important;
+          height: 8px !important;
+          border-radius: 999px !important;
+          background: #0f172a !important;
+          border: 1px solid #cbd5e1 !important;
+        }
+        .print-hide {
+          display: none !important;
+        }
+        .print-only {
+          display: block !important;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
+
+  const reportsByPhase = useMemo(() => {
+    void treeVersion;
+    void gameAnalysisDone;
+    void gameAnalysisTotal;
+    const next = {} as Record<GameReportPhaseFilter, ReturnType<typeof computeGameReport>>;
+    for (const phase of GAME_REPORT_PHASES) {
+      next[phase.key] = computeGameReport({
+        currentNode,
+        thresholds: reportThresholds,
+        activeBranchChildIds,
+        phaseFilter: phase.key,
+      });
+    }
+    return next;
+  }, [
+    activeBranchChildIds,
+    currentNode,
+    reportThresholds,
+    treeVersion,
+    gameAnalysisDone,
+    gameAnalysisTotal,
+  ]);
+
+  const report = reportsByPhase[phaseFilter] ?? reportsByPhase.all;
+  const gameTags = useMemo(() => {
+    void treeVersion;
+    const wholeGame = reportsByPhase.all;
+    return computeGameTags({
+      entries: wholeGame.moveEntries,
+      stats: wholeGame.stats,
+      boardSize,
+      moveCount: wholeGame.movesInFilter,
+      result: readRootInfoValue(rootPropertiesForNode(currentNode), 'RE'),
+    });
+  }, [boardSize, currentNode, reportsByPhase, treeVersion]);
+  const phaseCounts = useMemo(() => {
+    return GAME_REPORT_PHASES.reduce(
+      (acc, phase) => {
+        const phaseReport = reportsByPhase[phase.key];
+        const analyzed = (phaseReport?.stats.black.numMoves ?? 0) + (phaseReport?.stats.white.numMoves ?? 0);
+        const total = phaseReport?.movesInFilter ?? 0;
+        acc[phase.key] = {
+          analyzed,
+          total,
+        };
+        return acc;
+      },
+      {} as Record<GameReportPhaseFilter, { analyzed: number; total: number }>
+    );
+  }, [reportsByPhase]);
+
+  const phaseAccuracyRows = useMemo(() => {
+    return GAME_REPORT_PHASES.filter((phase) => phase.key !== 'all').map((phase) => {
+      const phaseReport = reportsByPhase[phase.key];
+      return {
+        key: phase.key,
+        label: phase.label,
+        players: (['black', 'white'] as const).reduce(
+          (acc, player) => {
+            const playerStats = phaseReport?.stats[player];
+            acc[player] = {
+              accuracy: playerStats && playerStats.numMoves > 0 ? playerStats.accuracy : undefined,
+              numMoves: playerStats?.numMoves ?? 0,
+            };
+            return acc;
+          },
+          {} as Record<Player, { accuracy: number | undefined; numMoves: number }>
+        ),
+      };
+    });
+  }, [reportsByPhase]);
+
+  /**
+   * What the clock cost each player. Only computed when the SGF carries one --
+   * most local games do not, and the section stays out of the report entirely
+   * rather than showing a row of dashes.
+   */
+  const timeInsights = useMemo(() => {
+    if (!hasMoveTimes) return null;
+    const times = computeMoveTimes(
+      getCurrentLineNodes(currentNode, activeBranchChildIds),
+      rootNode.properties
+    );
+    // Keyed by node, not move number: the two diverge once a line contains a
+    // setup node, and pairing them wrongly attaches a mistake to a neighbouring
+    // move's clock.
+    const pointsLostByNodeId = new Map<string, number>();
+    for (const entry of reportsByPhase.all?.moveEntries ?? []) {
+      pointsLostByNodeId.set(entry.node.id, entry.pointsLost);
+    }
+    const forPlayer = (player: Player) =>
+      summarizePlayerTime({ player, times, pointsLostByNodeId, mistakeThreshold });
+    return { black: forPlayer('black'), white: forPlayer('white') };
+  }, [activeBranchChildIds, currentNode, hasMoveTimes, mistakeThreshold, reportsByPhase, rootNode.properties]);
+
+  const gameResult = useMemo(() => readRootInfoValue(rootPropertiesForNode(currentNode), 'RE'), [currentNode]);
+  // Spoiler shield: hide the outcome-revealing sections until the user opts in,
+  // but only when there is actually a recorded result to spoil.
+  const canShieldOutcome = !!(gameResult && gameResult.trim());
+  const showOutcome = outcomeRevealed || !canShieldOutcome;
+
+  const analyzedMoves = report.stats.black.numMoves + report.stats.white.numMoves;
+  const totalMoves = report.movesInFilter;
+  const coverage = totalMoves > 0 ? analyzedMoves / totalMoves : 0;
+  const hasReviewTargets = totalMoves > 0;
+  const hasFullCoverage = hasReviewTargets && coverage >= 0.999;
+  const phaseLabel = getPhaseLabel(phaseFilter);
+  const reviewMoveRange = useMemo(() => getPhaseAnalysisMoveRange(boardSize, phaseFilter), [boardSize, phaseFilter]);
+  const reviewScopeLabel = phaseFilter === 'all' ? t('fast review') : `${phaseLabel}${t('review')}`;
+  // Keep naming the action even with nothing to review: the button is disabled in
+  // that state and the status banner already says "No moves to review" and why, so
+  // relabelling both button instances repeated that line three times on one screen.
+  const reviewButtonLabel = isGameAnalysisRunning
+    ? `${t('Stop {type}', { type: gameAnalysisType ?? t('analysis') })}${gameAnalysisTotal > 0 ? ` (${gameAnalysisDone}/${gameAnalysisTotal})` : ''}`
+    : hasFullCoverage
+      ? t('Re-run {scope}', { scope: reviewScopeLabel })
+      : t('Run {scope}', { scope: reviewScopeLabel });
+  const coveragePercent = totalMoves > 0 ? Math.round(coverage * 100) : 0;
+  const analysisStatusTitle = isGameAnalysisRunning
+    ? t('Review running')
+    : hasFullCoverage
+      ? t('Analysis complete')
+      : hasReviewTargets
+        ? t('Partial analysis')
+        : t('No moves to review');
+  const analysisStatusDetail = isGameAnalysisRunning
+    ? `${t('Fast review is updating the report')}${gameAnalysisTotal > 0 ? ` (${gameAnalysisDone}/${gameAnalysisTotal})` : ''}.`
+    : hasFullCoverage
+      ? t('Every move in this filter has consecutive analysis, so the report is complete.')
+      : hasReviewTargets
+        ? t('{count} moves have report-grade consecutive analysis. Run {scope} to fill the gaps.', {
+            count: `${analyzedMoves}/${totalMoves}`,
+            scope: reviewScopeLabel,
+          })
+        : t('Load or play a game with moves before running a report review.');
+  const playerFilterLabel = playerFilter === 'all' ? t('All players') : playerNames[playerFilter];
+  const statsPlayers: Array<Player> = playerFilter === 'all' ? ['black', 'white'] : [playerFilter];
+  const filteredReportEntries = useMemo(() => {
+    return report.moveEntries.filter((entry) => {
+      if (playerFilter !== 'all' && entry.player !== playerFilter) return false;
+      if (bucketFilter != null && getPointLossBucket(entry.pointsLost, report.thresholds) !== bucketFilter) return false;
+      if (policyFilter && entry.policy?.category !== policyFilter) return false;
+      return true;
+    });
+  }, [bucketFilter, playerFilter, policyFilter, report.moveEntries, report.thresholds]);
+  const allMistakes = useMemo(
+    () => sortMoveReportEntries(filteredReportEntries, mistakeSort),
+    [filteredReportEntries, mistakeSort]
+  );
+  const topMistakes = useMemo(
+    () => (showAllMistakes ? allMistakes : allMistakes.slice(0, 10)),
+    [allMistakes, showAllMistakes]
+  );
+  const studyFocus = useMemo(
+    () => getReportStudyFocus({ reportsByPhase, phaseFilter, playerFilter }),
+    [locale, phaseFilter, playerFilter, reportsByPhase]
+  );
+  // Keep the printable PDF bounded even when the on-screen list shows all mistakes.
+  const pdfMistakes = useMemo(() => allMistakes.slice(0, 10), [allMistakes]);
+  const turningPoints = useMemo(
+    () => getReportTurningPoints(filteredReportEntries, CRITICAL_SWING_THRESHOLD, 5),
+    [filteredReportEntries]
+  );
+  const recoveries = useMemo(
+    () => getReportRecoveries(filteredReportEntries, RECOVERY_THRESHOLD, 5),
+    [filteredReportEntries]
+  );
+  const maxHist = Math.max(
+    1,
+    ...report.histogram.map((row) => Math.max(row.black, row.white))
+  );
+  const maxHistByPlayer = useMemo(() => {
+    const maxBlack = Math.max(1, ...report.histogram.map((row) => row.black));
+    const maxWhite = Math.max(1, ...report.histogram.map((row) => row.white));
+    return { black: maxBlack, white: maxWhite };
+  }, [report.histogram]);
+  const playerDistributions = useMemo(() => {
+    return (['black', 'white'] as const).map((player) => {
+      const total = report.histogram.reduce((acc, row) => acc + row[player], 0);
+      return {
+        player,
+        total,
+        segments: report.labels.map((label, idx) => ({
+          label,
+          count: report.histogram[idx]?.[player] ?? 0,
+          color: HISTOGRAM_COLORS[idx % HISTOGRAM_COLORS.length]!,
+        })),
+      };
+    });
+  }, [report.histogram, report.labels]);
+  const bucketFilterLabel = bucketFilter == null ? null : report.labels[bucketFilter] ?? null;
+  const policyFilterLabel = policyFilter ? policyCategoryLabel(policyFilter) : null;
+  const mistakeSortLabel = mistakeSort === 'policy' ? t('Quality') : t('Loss');
+
+  const activeFilterLabels = useMemo(() => {
+    const labels = [phaseLabel, playerFilterLabel];
+    if (bucketFilterLabel) labels.push(t('Loss {bucket}', { bucket: bucketFilterLabel }));
+    if (policyFilterLabel) labels.push(t('Quality {quality}', { quality: policyFilterLabel }));
+    return labels;
+  }, [bucketFilterLabel, phaseLabel, playerFilterLabel, policyFilterLabel]);
+  const keyStatRows: Array<{ label: string; description: string; value: (p: Player) => string }> = [
+    {
+      label: t('Moves'),
+      description: t('Analyzed moves included by the current phase, player, loss, and policy filters.'),
+      value: (p) => String(report.stats[p].numMoves),
+    },
+    {
+      label: t('Accuracy'),
+      description: t('KaTrain-style score-loss accuracy; higher values mean less weighted point loss.'),
+      value: (p) => fmtNum(report.stats[p].accuracy, 1),
+    },
+    {
+      label: t('Policy accuracy'),
+      description: t('Move quality score from policy rank and relative policy probability.'),
+      value: (p) => fmtNum(report.stats[p].policyAccuracy, 1),
+    },
+    {
+      label: t('Complexity'),
+      description: t('Average policy-weighted difficulty of the positions analyzed.'),
+      value: (p) => fmtPct(report.stats[p].complexity),
+    },
+    {
+      label: t('Mean point loss'),
+      description: t('Average points lost per analyzed move.'),
+      value: (p) => fmtNum(report.stats[p].meanPtLoss, 2),
+    },
+    {
+      label: t('Avg point swing'),
+      description: t('Average points gained minus points lost per analyzed move; positive values mean the player recovered more than they gave up.'),
+      value: (p) => fmtSigned(report.stats[p].meanPtSwing, 2),
+    },
+    {
+      label: t('Weighted point loss'),
+      description: t('Point loss weighted by position difficulty, matching KaTrain report semantics.'),
+      value: (p) => fmtNum(report.stats[p].weightedPtLoss, 2),
+    },
+    {
+      label: t('Total point loss'),
+      description: t('Sum of point loss across analyzed moves in the active filters.'),
+      value: (p) => fmtNum(report.stats[p].totalPtLoss, 2),
+    },
+    {
+      label: t('Net point swing'),
+      description: t('Total points gained minus points lost across analyzed moves in the active filters.'),
+      value: (p) => fmtSigned(report.stats[p].totalPtSwing, 2),
+    },
+    {
+      label: t('Max point loss'),
+      description: t('Largest single-move point loss in the active filters.'),
+      value: (p) => fmtNum(report.stats[p].maxPtLoss, 2),
+    },
+    {
+      label: t('AI top move'),
+      description: t('Share of moves that exactly matched the engine top choice.'),
+      value: (p) => fmtPct(report.stats[p].aiTopMove),
+    },
+    {
+      label: t('AI top5 move'),
+      description: t('Share of moves that ranked inside the engine top five policy candidates.'),
+      value: (p) => fmtPct(report.stats[p].aiTop5Move),
+    },
+    {
+      label: t('AI approved'),
+      description: t('Share of moves accepted by KaTrain’s looser top-move or low-loss approval rule.'),
+      value: (p) => fmtPct(report.stats[p].aiApprovedMove),
+    },
+  ];
+  const lossBucketGuide = useMemo(
+    () =>
+      report.labels.map((label, idx) => ({
+        label,
+        color: HISTOGRAM_COLORS[idx] ?? HISTOGRAM_COLORS[HISTOGRAM_COLORS.length - 1]!,
+      })),
+    [report.labels]
+  );
+
+  const graphRange = useMemo(() => {
+    return getPhaseMoveRange(boardSize, phaseFilter);
+  }, [boardSize, phaseFilter]);
+
+  const preparePrint = async () => {
+    if (isPreparingPdf) return;
+    setIsPreparingPdf(true);
+    try {
+      const snapshots = pdfMistakes.map((entry) => ({
+        id: entry.node.id,
+        dataUrl: captureReportBoardSnapshot({
+          board: entry.node.gameState.board,
+          playedMove: entry.node.move,
+          bestMove: entry.topMove,
+        }),
+        entry,
+      }));
+      setPdfSnapshots(snapshots);
+      await afterAnimationFrames(2);
+      if (!printWindow()) {
+        setTimedNotification(t('Print dialog unavailable in this browser.'), 'error');
+      }
+    } finally {
+      setIsPreparingPdf(false);
+    }
+  };
+
+  const handlePrintReport = () => {
+    void preparePrint();
+  };
+
+  const handleReviewClick = () => {
+    if (isGameAnalysisRunning) stopGameAnalysis();
+    else startFastGameAnalysis({ moveRange: reviewMoveRange });
+  };
+
+  const startReviewQueue = (entries: MoveReportEntry[]) => {
+    if (entries.length === 0) return;
+    setReviewQueue(entries);
+    setReviewIndex(0);
+    jumpToNode(entries[0]!.node);
+  };
+
+  const activeReview = reviewQueue[reviewIndex] ?? null;
+  const reviewStep = (delta: number) => {
+    if (reviewQueue.length === 0) return;
+    const next = Math.max(0, Math.min(reviewQueue.length - 1, reviewIndex + delta));
+    setReviewIndex(next);
+    jumpToNode(reviewQueue[next]!.node);
+  };
+
+  const startPractice = (entry: MoveReportEntry) => {
+    if (isInsertMode) {
+      setTimedNotification(t('Finish insert mode before starting mistake practice.'), 'error');
+      return;
+    }
+
+    const target = entry.node.parent ?? entry.node;
+    jumpToNode(target);
+    window.setTimeout(() => {
+      const latest = useGameStore.getState();
+      if (!latest.isInsertMode && latest.currentNode.children.length > 0) {
+        latest.toggleInsertMode();
+      }
+      setTimedNotification(t('Practice move {move}: try a correction for {player}.', { move: entry.moveNumber, player: playerNames[entry.player] }), 'info');
+    }, 0);
+    setReportHoverMove(null);
+    onClose();
+  };
+
+  const formatPv = (pv?: string[], max = 12) => {
+    if (!pv || pv.length === 0) return NO_VALUE;
+    const sliced = pv.slice(0, max);
+    return `${sliced.join(' ')}${pv.length > max ? ' ...' : ''}`;
+  };
+
+  const renderMistakeRows = (entries: MoveReportEntry[], showJump: boolean) => {
+    return entries.map((entry) => {
+      const previewMove = entry.topCandidate ?? null;
+      const policy = entry.policy;
+      const policyRank = formatPolicyRank(policy?.rank);
+      const policyTitle = policy
+        ? t('Policy rank {rank}; played prior {played}; top prior {top}; {rel} of top move', {
+            rank: policyRank,
+            played: fmtPolicyPct(policy.playedPrior),
+            top: fmtPolicyPct(policy.topPrior),
+            rel: fmtPolicyPct(policy.relativePrior),
+          })
+        : t('Policy data unavailable');
+      return (
+        <div
+          key={`${entry.node.id}-${entry.moveNumber}`}
+          className="contents"
+          onMouseEnter={() => setReportHoverMove(previewMove)}
+          onMouseLeave={() => setReportHoverMove(null)}
+        >
+          <div className={`col-span-2 font-mono ${valueClass}`}>#{entry.moveNumber}</div>
+          <div className={`col-span-1 text-center font-semibold ${valueClass}`}>
+            {entry.player === 'black' ? 'B' : 'W'}
+          </div>
+          <div className={`col-span-2 font-mono ${valueClass}`}>{entry.move}</div>
+          <div className={`col-span-2 font-mono ${mutedClass}`}>
+            {entry.topMove ?? NO_VALUE}
+          </div>
+          <div className="col-span-2 text-right font-mono text-rose-300">
+            {fmtNum(entry.pointsLost, 2)}
+          </div>
+          <div className="col-span-3 text-right">
+            {showJump ? (
+              <div className="flex flex-wrap justify-end gap-1 print-hide">
+                <button
+                  type="button"
+                  className={`px-2 py-1 ${secondaryButtonClass}`}
+                  onClick={() => jumpToNode(entry.node)}
+                >
+                  {t('Jump')}
+                </button>
+                <button
+                  type="button"
+                  className="px-2 py-1 rounded bg-[var(--ui-accent-soft)] border border-[var(--ui-accent)] text-[var(--ui-accent)] hover:brightness-110"
+                  onClick={() => startPractice(entry)}
+                >
+                  <span className="inline-flex items-center gap-1"><FaBullseye /> {t('Practice')}</span>
+                </button>
+              </div>
+            ) : (
+              <span className={mutedClass}>-</span>
+            )}
+          </div>
+          <div className={`col-span-12 text-[0.625rem] font-mono print-muted ${faintClass}`}>
+            <div className="flex flex-wrap items-center gap-2">
+              <span title={policyTitle}>
+                {t('Policy')}: <span className={[
+                  'inline-flex items-center rounded-full border px-1.5 py-0.5 font-semibold',
+                  policyCategoryClass(policy?.category),
+                ].join(' ')}>
+                  {policyCategoryLabel(policy?.category)}
+                </span>{' '}
+                {policyRank} · {fmtPolicyPct(policy?.relativePrior)} {t('of top')}
+              </span>
+              {typeof entry.humanPrior === 'number' && (
+                <span
+                  title={t("How often a player of the configured rank plays this move, from KataGo's human network{rank}", {
+                    rank: entry.humanRank ? t(' (their #{rank} choice here)', { rank: entry.humanRank }) : '',
+                  })}
+                >
+                  {humanProfileLabel}: {fmtPolicyPct(entry.humanPrior)}
+                  {entry.humanRank ? ` · #${entry.humanRank}` : ''}
+                </span>
+              )}
+              {/* The root win rate is Black's; the swing is signed for the
+                  mover. Printing one beside the other read "Black's win rate
+                  went up (-5.0pp)" under a White mistake, so both are shown
+                  from the mover's side, and say whose. */}
+              <span>
+                {t(entry.player === 'black' ? 'Black win' : 'White win')}: {fmtWinRate(moverWinRate(entry.winRateBefore, entry.player))} {'->'} {fmtWinRate(moverWinRate(entry.winRateAfter, entry.player))} ({fmtWinSwing(entry.winRateSwing)})
+              </span>
+              <span>{t('PV: {pv}', { pv: formatPv(entry.pv) })}</span>
+            </div>
+          </div>
+        </div>
+      );
+    });
+  };
+
+  const renderPvTree = (entry: MoveReportEntry) => {
+    const pv = entry.pv ?? [];
+    const line =
+      entry.topMove && (pv.length === 0 || pv[0] !== entry.topMove)
+        ? [entry.topMove, ...pv]
+        : pv;
+    if (line.length === 0) {
+      return <div className={`text-xs ${faintClass}`}>{t('PV unavailable.')}</div>;
+    }
+    const max = 24;
+    const nodes = line.slice(0, max);
+    return (
+      <div className="space-y-1 pdf-tree-line">
+        {nodes.map((move, idx) => (
+          <div key={`${move}-${idx}`} className={`text-xs font-mono ${mutedClass} pdf-tree-node`}>
+            {idx + 1}. {move}
+          </div>
+        ))}
+        {line.length > max && <div className={`text-[0.625rem] ${faintClass}`}>... {t('{count} more', { count: line.length - max })}</div>}
+      </div>
+    );
+  };
+
+  const refreshSnapshot = async () => {
+    setSnapshotError(null);
+    try {
+      const dataUrl = await captureBoardSnapshot();
+      if (!dataUrl) {
+        setSnapshotError(t('Snapshot unavailable.'));
+        return;
+      }
+      setSnapshotUrl(dataUrl);
+    } catch {
+      setSnapshotError(t('Snapshot unavailable.'));
+    }
+  };
+
+  useEffect(() => {
+    if (!isGameAnalysisRunning) return;
+    const id = window.setInterval(() => {
+      setGraphTick((tick) => tick + 1);
+    }, 900);
+    return () => window.clearInterval(id);
+  }, [isGameAnalysisRunning]);
+
+  useEffect(() => {
+    if (snapshotTimerRef.current) {
+      window.clearTimeout(snapshotTimerRef.current);
+    }
+    snapshotTimerRef.current = window.setTimeout(() => {
+      void refreshSnapshot();
+    }, 120);
+    return () => {
+      if (snapshotTimerRef.current) {
+        window.clearTimeout(snapshotTimerRef.current);
+      }
+    };
+  }, [treeVersion, currentNode?.id]);
+
+  useEffect(() => {
+    setPdfSnapshots([]);
+    setShowAllMistakes(false);
+  }, [bucketFilter, mistakeSort, playerFilter, phaseFilter, policyFilter, treeVersion]);
+
+  useEffect(() => {
+    setBucketFilter(null);
+    setPolicyFilter(null);
+  }, [phaseFilter]);
+
+  // Re-hide the outcome when a different game is loaded (root node identity changes),
+  // not on every in-report navigation.
+  const rootNodeId = useMemo(() => {
+    let root = currentNode;
+    while (root.parent) root = root.parent;
+    return root.id;
+  }, [currentNode]);
+  useEffect(() => {
+    setOutcomeRevealed(false);
+  }, [rootNodeId]);
+
+  useEffect(() => {
+    if (phaseFilter !== 'all' && phaseCounts[phaseFilter]?.total === 0) {
+      setPhaseFilter('all');
+    }
+  }, [phaseCounts, phaseFilter]);
+
+  useEffect(() => {
+    setReviewQueue([]);
+    setReviewIndex(0);
+    setReportHoverMove(null);
+  }, [bucketFilter, mistakeSort, phaseFilter, playerFilter, policyFilter, setReportHoverMove, treeVersion]);
+
+  useEffect(() => () => setReportHoverMove(null), [setReportHoverMove]);
+
+  useEffect(() => {
+    if (!showReportGuide) return;
+    reportGuideCloseRef.current?.focus({ preventScroll: true });
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return;
+      event.preventDefault();
+      event.stopPropagation();
+      setShowReportGuide(false);
+      window.setTimeout(() => reportGuideButtonRef.current?.focus({ preventScroll: true }), 0);
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [showReportGuide]);
+
+  const closeReportGuide = () => {
+    setShowReportGuide(false);
+    window.setTimeout(() => reportGuideButtonRef.current?.focus({ preventScroll: true }), 0);
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 report-overlay p-3 sm:p-6 mobile-safe-inset mobile-safe-area-bottom">
+      <div
+        className="game-report-modal ui-panel rounded-2xl shadow-2xl w-[92vw] max-w-[56rem] max-h-[90dvh] overflow-hidden flex flex-col report-print border"
+        ref={dialogRef}
+        tabIndex={-1}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="game-report-title"
+      >
+        <div className="game-report-modal-header flex items-center justify-between px-5 py-4 border-b border-[var(--ui-border)] ui-bar">
+          <div>
+            <div className="text-xs uppercase tracking-[0.2em] ui-text-faint">{t('KaTrain Report')}</div>
+            <h2 id="game-report-title" className="text-lg font-semibold text-[var(--ui-text)]">
+              {t('Game Analysis Summary')}
+            </h2>
+            <div className="mt-1 text-sm ui-text-muted">
+              {playerNames.black} vs {playerNames.white}
+            </div>
+            {showOutcome && gameTags.length > 0 && (
+              <div className="mt-2 flex flex-wrap gap-1.5" aria-label={t('Game tags')}>
+                {gameTags.map((tag) => (
+                  <span
+                    key={tag.id}
+                    title={tag.description}
+                    data-game-tag={tag.id}
+                    className="inline-flex items-center rounded-full border border-[var(--ui-accent)] bg-[var(--ui-accent-soft)] px-2.5 py-0.5 text-xs font-semibold text-[var(--ui-accent)]"
+                  >
+                    {tag.label}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+          <div className="flex items-center gap-2 print-hide">
+            <button
+              type="button"
+              ref={reportGuideButtonRef}
+              onClick={() => setShowReportGuide(true)}
+              className="inline-flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-lg border border-[var(--ui-border)] bg-[var(--ui-surface)] px-3 py-2 text-sm font-semibold text-[var(--ui-text)] hover:bg-[var(--ui-surface-2)]"
+              title={t('Open report guide')}
+              aria-label={t('Open report guide')}
+            >
+              <FaInfoCircle aria-hidden="true" />
+              <span className="hidden sm:inline">{t('Guide')}</span>
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              className="ui-control grid shrink-0 place-items-center rounded-lg text-[var(--ui-text-muted)] hover:bg-[var(--ui-surface-2)] hover:text-[var(--ui-text)]"
+              title={t('Close')}
+              aria-label={t('Close game report')}
+            >
+              <FaTimes aria-hidden="true" />
+            </button>
+          </div>
+        </div>
+
+        <div className="game-report-modal-body px-5 py-4 space-y-4 overflow-y-auto overscroll-contain report-scroll">
+          {totalMoves === 0 ? (
+            <div
+              className="game-report-modal-empty print-hide flex min-h-[12rem] items-center justify-center px-5 py-8 text-center sm:min-h-[14rem]"
+              data-game-report-empty="true"
+            >
+              <div className="max-w-md">
+                <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl border border-[var(--ui-border)] bg-[var(--ui-surface-2)] text-xl text-[var(--ui-accent)] shadow-[0_10px_30px_rgba(0,0,0,0.18)]">
+                  <FaChartLine aria-hidden="true" />
+                </div>
+                <h3 className="mt-5 text-lg font-semibold text-[var(--ui-text)]">{t('No moves to review')}</h3>
+                <p className="mt-2 text-sm leading-6 text-[var(--ui-text-muted)]">
+                  {t('Play a game on the board or open an SGF with moves. Your analysis summary will appear here.')}
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div className="print-hide space-y-4">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              {GAME_REPORT_PHASES.map((b) => {
+                const active = phaseFilter === b.key;
+                const counts = phaseCounts[b.key] ?? { analyzed: 0, total: 0 };
+                const disabled = b.key !== 'all' && counts.total === 0;
+                const tabLabel = disabled
+                  ? t('{phase}, no moves', { phase: t(b.label) })
+                  : t('{phase}, {analyzed} of {count} analyzed', {
+                      phase: t(b.label),
+                      analyzed: counts.analyzed,
+                      count: counts.total,
+                    });
+                return (
+                  <button
+                    key={b.key}
+                    type="button"
+                    onClick={() => {
+                      if (!disabled) setPhaseFilter(b.key);
+                    }}
+                    disabled={disabled}
+                    aria-label={tabLabel}
+                    title={
+                      disabled
+                        ? t('No moves in {phase}', { phase: t(b.label) })
+                        : t('{count} analyzed moves in {phase}', {
+                            count: `${counts.analyzed}/${counts.total}`,
+                            phase: t(b.label),
+                          })
+                    }
+                    className={[
+                      'min-h-11 min-w-0 inline-flex items-center justify-center gap-1 px-2 py-2 rounded-lg border text-sm font-semibold transition-colors sm:gap-2 sm:px-3',
+                      active
+                        ? 'bg-[var(--ui-accent-soft)] border-[var(--ui-accent)] text-[var(--ui-accent)]'
+                        : disabled
+                          ? 'bg-[var(--ui-surface)] border-[var(--ui-border)] text-[var(--ui-text-muted)] opacity-55 cursor-not-allowed'
+                          : 'bg-[var(--ui-surface)] border-[var(--ui-border)] text-[var(--ui-text)] hover:bg-[var(--ui-surface-2)]',
+                    ].join(' ')}
+                  >
+                    <span className="min-w-0 sm:hidden">{t(b.compactLabel)}</span>
+                    <span className="hidden min-w-0 sm:inline">{t(b.label)}</span>
+                    <span className="shrink-0 rounded-full border border-current/20 px-1.5 py-0.5 font-mono text-[0.6875rem] leading-none opacity-80">
+                      {counts.analyzed}/{counts.total}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+
+          <div className="flex flex-wrap items-center gap-2 print-hide">
+            {[
+              { key: 'all', label: t('All players') },
+              { key: 'black', label: playerNames.black },
+              { key: 'white', label: playerNames.white },
+            ].map((opt) => (
+              <button
+                key={opt.key}
+                type="button"
+                onClick={() => setPlayerFilter(opt.key as 'all' | Player)}
+                className={[
+                  'inline-flex min-h-11 items-center justify-center px-3 py-1.5 rounded-full text-xs font-semibold border transition-colors',
+                  playerFilter === opt.key
+                    ? 'bg-[var(--ui-accent-soft)] text-[var(--ui-accent)] border-[var(--ui-accent)]'
+                    : 'bg-[var(--ui-surface)] border-[var(--ui-border)] text-[var(--ui-text-muted)] hover:bg-[var(--ui-surface-2)] hover:text-[var(--ui-text)]',
+                ].join(' ')}
+              >
+                {opt.label}
+              </button>
+            ))}
+            {bucketFilterLabel && (
+              <button
+                type="button"
+                onClick={() => setBucketFilter(null)}
+                className="inline-flex min-h-11 items-center justify-center px-3 py-1.5 rounded-full text-xs font-semibold border bg-[var(--ui-accent-soft)] border-[var(--ui-accent)] text-[var(--ui-accent)]"
+                title={t('Clear loss bucket filter')}
+              >
+                {t('Loss {bucket}', { bucket: bucketFilterLabel })} x
+              </button>
+            )}
+            {policyFilter && policyFilterLabel && (
+              <button
+                type="button"
+                onClick={() => setPolicyFilter(null)}
+                className={[
+                  'inline-flex min-h-11 items-center justify-center px-3 py-1.5 rounded-full text-xs font-semibold border',
+                  policyCategoryClass(policyFilter),
+                ].join(' ')}
+                title={t('Clear policy quality filter')}
+              >
+                {t('Quality {quality}', { quality: policyFilterLabel })} x
+              </button>
+            )}
+          </div>
+
+          <div className="rounded-xl border border-[var(--ui-border)] bg-[var(--ui-surface)] p-3 shadow-[0_10px_30px_rgba(0,0,0,0.22)]">
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div className="min-w-0">
+                <div className={sectionTitleClass}>{analysisStatusTitle}</div>
+                <div className="mt-1 text-sm text-[var(--ui-text-muted)]">{analysisStatusDetail}</div>
+              </div>
+              <button
+                type="button"
+                onClick={handleReviewClick}
+                disabled={isPreparingPdf || (!isGameAnalysisRunning && !hasReviewTargets)}
+                title={analysisStatusDetail}
+                className={[
+                  'min-h-11 shrink-0 rounded-lg px-3 py-2 text-sm font-semibold disabled:opacity-60',
+                  isGameAnalysisRunning
+                    ? 'bg-rose-600/80 text-white hover:bg-rose-500'
+                    : hasFullCoverage
+                      ? 'bg-[var(--ui-surface-2)] text-[var(--ui-text)] border border-[var(--ui-border)] hover:brightness-110'
+                      : 'ui-accent-bg hover:brightness-110',
+                ].join(' ')}
+              >
+                {reviewButtonLabel}
+              </button>
+            </div>
+            <div
+              className="mt-3 h-2 overflow-hidden rounded-full bg-[var(--ui-surface-2)]"
+              role="progressbar"
+              aria-label={t('Report analysis coverage')}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-valuenow={coveragePercent}
+            >
+              <div
+                className={['h-full', hasFullCoverage ? 'bg-emerald-400' : 'bg-[var(--ui-accent)]'].join(' ')}
+                style={{ width: `${coveragePercent}%` }}
+              />
+            </div>
+          </div>
+
+          {studyFocus && (
+            <div className={sectionClass} data-game-report-study-focus="true" aria-label={t('Study focus')}>
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2">
+                    <FaBookOpen className="text-[var(--ui-accent)]" aria-hidden="true" />
+                    <div className={sectionTitleClass}>{t('Study Focus')}</div>
+                  </div>
+                  <div className={`mt-2 text-lg font-semibold ${valueClass}`}>{studyFocus.issueLabel}</div>
+                  <div className={`mt-1 text-xs ${mutedClass}`}>
+                    {t('Suggested from the weakest phase/player slice in the current filters.')}
+                  </div>
+                </div>
+                <span className="shrink-0 rounded-full border border-[var(--ui-accent)] bg-[var(--ui-accent-soft)] px-3 py-1 text-xs font-semibold text-[var(--ui-accent)]">
+                  {getPhaseLabel(studyFocus.phase)} · {playerNames[studyFocus.player]}
+                </span>
+              </div>
+
+              <div className="mt-3 grid grid-cols-2 gap-2 text-xs sm:grid-cols-4">
+                <div>
+                  <div className={faintClass}>{t('Analyzed')}</div>
+                  <div className={`mt-1 font-mono text-sm ${valueClass}`}>{studyFocus.analyzedMoves}</div>
+                </div>
+                <div>
+                  <div className={faintClass}>{t('Weighted loss')}</div>
+                  <div className={`mt-1 font-mono text-sm ${valueClass}`}>{fmtNum(studyFocus.weightedPtLoss, 2)}</div>
+                </div>
+                <div>
+                  <div className={faintClass}>{t('Mean loss')}</div>
+                  <div className={`mt-1 font-mono text-sm ${valueClass}`}>{fmtNum(studyFocus.meanPtLoss, 2)}</div>
+                </div>
+                <div>
+                  <div className={faintClass}>{t('Policy')}</div>
+                  <div className={`mt-1 font-mono text-sm ${valueClass}`}>{fmtNum(studyFocus.policyAccuracy, 1)}</div>
+                </div>
+              </div>
+
+              {studyFocus.policyProblem && (
+                <div className="mt-3 flex flex-wrap items-center gap-2 text-xs">
+                  <span className={mutedClass}>{t('Policy pattern:')}</span>
+                  <span className={[
+                    'rounded-full border px-2 py-0.5 font-semibold',
+                    policyCategoryClass(studyFocus.policyProblem.category),
+                  ].join(' ')}>
+                    {policyCategoryLabel(studyFocus.policyProblem.category)}
+                  </span>
+                  <span className={`font-mono ${faintClass}`}>
+                    {t('{count} moves', { count: studyFocus.policyProblem.count })} · {fmtPct(studyFocus.policyProblem.ratio)}
+                  </span>
+                </div>
+              )}
+
+              <div className="mt-3 grid gap-3 text-sm sm:grid-cols-2">
+                <div>
+                  <div className="text-[0.6875rem] font-semibold uppercase tracking-wide text-[var(--ui-text-faint)]">{t('Beginner next step')}</div>
+                  <div className={`mt-1 ${mutedClass}`}>{studyFocus.beginnerTip}</div>
+                </div>
+                <div>
+                  <div className="text-[0.6875rem] font-semibold uppercase tracking-wide text-[var(--ui-text-faint)]">{t('Pro review')}</div>
+                  <div className={`mt-1 ${mutedClass}`}>{studyFocus.proTip}</div>
+                </div>
+              </div>
+
+              {studyFocus.topEntry && (
+                <div className={`mt-3 flex flex-wrap items-center gap-2 border-t border-[var(--ui-border)] pt-3 text-xs ${mutedClass}`}>
+                  <span className={`font-mono font-semibold ${valueClass}`}>#{studyFocus.topEntry.moveNumber}</span>
+                  <span>{studyFocus.topEntry.player === 'black' ? 'B' : 'W'} {studyFocus.topEntry.move}</span>
+                  {(() => {
+                    const described = describeStudyFocusEntry(studyFocus.topEntry!);
+                    return (
+                      <>
+                        <span className={described.lostPoints ? 'font-mono text-[var(--ui-danger)]' : `font-mono ${faintClass}`}>
+                          {described.lossLabel}
+                        </span>
+                        <span>{described.engineLabel}</span>
+                      </>
+                    );
+                  })()}
+                  <div className="ml-auto flex flex-wrap gap-2 print-hide">
+                    <button
+                      type="button"
+                      onClick={() => jumpToNode(studyFocus.topEntry!.node)}
+                      className={`px-2 py-1 ${secondaryButtonClass}`}
+                    >
+                      {t('Jump')}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => startPractice(studyFocus.topEntry!)}
+                      className="rounded border border-[var(--ui-accent)] bg-[var(--ui-accent-soft)] px-2 py-1 font-semibold text-[var(--ui-accent)] hover:brightness-110"
+                    >
+                      <span className="inline-flex items-center gap-1"><FaBullseye aria-hidden="true" /> {t('Practice')}</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          <div className={sectionClass}>
+            <div className={sectionTitleClass}>{t('Phase Accuracy')}</div>
+            <div className={['mt-3 grid gap-2 text-sm', statsPlayers.length === 2 ? 'grid-cols-3' : 'grid-cols-2'].join(' ')}>
+              <div className={`text-xs uppercase tracking-wide ${faintClass}`}>{t('Phase')}</div>
+              {statsPlayers.map((player) => (
+                <div key={`phase-acc-head-${player}`} className={`min-w-0 truncate text-center text-xs font-semibold ${faintClass}`} title={playerNames[player]}>
+                  {playerNames[player]}
+                </div>
+              ))}
+              {phaseAccuracyRows.map((row) => (
+                <React.Fragment key={`phase-acc-${row.key}`}>
+                  <div className={labelClass}>{t(row.label)}</div>
+                  {statsPlayers.map((player) => {
+                    const cell = row.players[player];
+                    const acc = cell?.accuracy;
+                    const toneClass =
+                      acc == null
+                        ? faintClass
+                        : acc >= 80
+                          ? 'text-emerald-500'
+                          : acc >= 60
+                            ? 'text-amber-500'
+                            : 'text-rose-400';
+                    return (
+                      <div key={`phase-acc-${row.key}-${player}`} className="text-center font-mono">
+                        <span className={toneClass}>{fmtNum(acc, 1)}</span>
+                        {cell && cell.numMoves > 0 && (
+                          <span className={`ml-1 text-[0.625rem] ${faintClass}`}>/{cell.numMoves}</span>
+                        )}
+                      </div>
+                    );
+                  })}
+                </React.Fragment>
+              ))}
+            </div>
+            <p className={`mt-3 text-xs ${faintClass}`}>
+              {t('KaTrain-style accuracy per game phase; the small number is analyzed moves in that phase.')}
+            </p>
+          </div>
+
+          {timeInsights && (
+            <div className={sectionClass}>
+              <div className={sectionTitleClass}>{t('Time')}</div>
+              <div className={['mt-3 grid gap-2 text-sm', statsPlayers.length === 2 ? 'grid-cols-3' : 'grid-cols-2'].join(' ')}>
+                <div className={`text-xs uppercase tracking-wide ${faintClass}`}>{t('Clock')}</div>
+                {statsPlayers.map((player) => (
+                  <div key={`time-head-${player}`} className={`min-w-0 truncate text-center text-xs font-semibold ${faintClass}`} title={playerNames[player]}>
+                    {playerNames[player]}
+                  </div>
+                ))}
+                {([
+                  [t('Typical move'), (i: PlayerTimeInsight) => (i.measuredMoves > 0 ? formatMoveTime(i.medianSeconds) : NO_VALUE)],
+                  [t('Total'), (i: PlayerTimeInsight) => (i.measuredMoves > 0 ? formatMoveTime(i.totalSeconds) : NO_VALUE)],
+                  [t('Longest think'), (i: PlayerTimeInsight) => (i.slowest ? `${formatMoveTime(i.slowest.seconds)} · #${i.slowest.moveNumber}` : NO_VALUE)],
+                  [t('On mistakes'), (i: PlayerTimeInsight) => (i.medianOnMistakes === null ? NO_VALUE : formatMoveTime(i.medianOnMistakes))],
+                ] as const).map(([label, read]) => (
+                  <React.Fragment key={`time-row-${label}`}>
+                    <div className={labelClass}>{label}</div>
+                    {statsPlayers.map((player) => (
+                      <div key={`time-${label}-${player}`} className="text-center font-mono">
+                        {read(timeInsights[player])}
+                      </div>
+                    ))}
+                  </React.Fragment>
+                ))}
+              </div>
+              {statsPlayers.map((player) => {
+                const sentence = describeTimePressure(timeInsights[player]);
+                if (!sentence) return null;
+                return (
+                  <div key={`time-note-${player}`} className={`mt-2 text-xs ${mutedClass}`}>
+                    <span className="font-semibold">{playerNames[player]}:</span> {sentence}
+                  </div>
+                );
+              })}
+              <div className={`mt-2 text-xs ${faintClass}`}>
+                {t('From the clock recorded in the SGF. Moves the file does not determine a time for — a renewed byo-yomi period, most often — are left out rather than counted as instant.')}
+              </div>
+            </div>
+          )}
+
+          <div className={sectionClass}>
+            <div className={sectionTitleClass}>{t('Key Stats')}</div>
+            <div className={['mt-3 grid gap-2 text-sm', statsPlayers.length === 2 ? 'grid-cols-3' : 'grid-cols-2'].join(' ')}>
+              <div className={`text-xs uppercase tracking-wide ${faintClass}`}>{t('Metric')}</div>
+              {statsPlayers.map((player) => (
+                <div key={player} className={`min-w-0 truncate text-center text-xs font-semibold ${faintClass}`} title={playerNames[player]}>
+                  {playerNames[player]}
+                </div>
+              ))}
+
+              {keyStatRows.map(({ label, description, value }) => (
+                <React.Fragment key={label}>
+                  <div className={labelClass} title={description} aria-label={`${label}. ${description}`}>
+                    {label}
+                  </div>
+                  {statsPlayers.map((player) => (
+                    <div key={`${label}-${player}`} className={`text-center font-mono ${valueClass}`}>
+                      {value(player)}
+                    </div>
+                  ))}
+                </React.Fragment>
+              ))}
+            </div>
+            <p className={`mt-3 text-xs ${faintClass}`}>
+              {t('Requires analysis on consecutive moves (both parent and child) to compute point loss.')}
+            </p>
+          </div>
+
+          <div className={sectionClass}>
+            <div className={sectionTitleClass}>{t('Policy Quality')}</div>
+            <div className={['mt-3 grid gap-4', statsPlayers.length === 2 ? 'sm:grid-cols-2' : 'grid-cols-1'].join(' ')}>
+              {statsPlayers.map((player) => {
+                const distribution = report.stats[player].policyDistribution;
+                const total = distribution?.total ?? 0;
+                return (
+                  <div key={player} className={`${insetSurfaceClass} p-3`}>
+                    <div className="flex items-center justify-between gap-3">
+                      <div className={`flex items-center gap-2 text-sm font-semibold ${valueClass}`}>
+                        <span
+                          className={[
+                            'h-2.5 w-2.5 rounded-full border',
+                            player === 'black' ? 'game-report-player-swatch--black' : 'game-report-player-swatch--white',
+                          ].join(' ')}
+                          aria-hidden="true"
+                        />
+                        <span className="min-w-0 truncate" title={playerNames[player]}>{playerNames[player]}</span>
+                      </div>
+                      <div className="text-right">
+                        <div className={`text-[0.625rem] uppercase tracking-wide ${faintClass}`}>{t('Policy accuracy')}</div>
+                        <div className={`font-mono text-sm ${valueClass}`}>{fmtNum(report.stats[player].policyAccuracy, 1)}</div>
+                      </div>
+                    </div>
+                    <div className="mt-3 h-4 rounded-full bg-[var(--ui-surface-2)] overflow-hidden flex border border-[var(--ui-border)]">
+                      {total === 0 ? (
+                        <div className="h-full w-full bg-[var(--ui-border)]" />
+                      ) : (
+                        MOVE_POLICY_CATEGORIES
+                          .filter((category) => (distribution?.[category] ?? 0) > 0)
+                          .map((category) => {
+                            const count = distribution?.[category] ?? 0;
+                            return (
+                              <div
+                                key={`${player}-${category}`}
+                                className="h-full"
+                                style={{
+                                  width: `${(count / total) * 100}%`,
+                                  backgroundColor: policyCategoryColor(category),
+                                }}
+                                title={`${policyCategoryLabel(category)}: ${count}`}
+                              />
+                            );
+                          })
+                      )}
+                    </div>
+                    <div className="mt-3 flex flex-wrap gap-1.5">
+                      {MOVE_POLICY_CATEGORIES.map((category) => {
+                        const count = distribution?.[category] ?? 0;
+                        const pct = total > 0 ? Math.round((count / total) * 100) : 0;
+                        const active = policyFilter === category && (playerFilter === 'all' || playerFilter === player);
+                        const playerLabel = playerNames[player];
+                        const categoryLabel = policyCategoryLabel(category);
+                        return (
+                          <button
+                            type="button"
+                            key={`${player}-${category}-legend`}
+                            onClick={() => {
+                              setPlayerFilter(player);
+                              setPolicyFilter((prev) => (prev === category && playerFilter === player ? null : category));
+                            }}
+                            disabled={count === 0}
+                            aria-pressed={active}
+                            aria-label={
+                              count === 0
+                                ? t('{player} {category}: no moves', { player: playerLabel, category: categoryLabel })
+                                : t('Filter {player} policy quality {category}: {count} moves, {pct}%', {
+                                    player: playerLabel,
+                                    category: categoryLabel,
+                                    count,
+                                    pct,
+                                  })
+                            }
+                            title={
+                              count === 0
+                                ? t('No {category} moves for {player}', { player: playerLabel, category: categoryLabel })
+                                : t('Filter {player} mistakes to {category}', { player: playerLabel, category: categoryLabel })
+                            }
+                            className={[
+                              'inline-flex min-h-11 items-center gap-1 rounded-full border px-2 py-1 text-[0.625rem] transition-colors desktop-shell:min-h-0',
+                              active
+                                ? 'border-[var(--ui-accent)] bg-[var(--ui-accent-soft)] text-[var(--ui-accent)] ring-1 ring-[var(--ui-accent)]'
+                                : 'border-[var(--ui-border)] bg-[var(--ui-surface)] text-[var(--ui-text-muted)] hover:bg-[var(--ui-surface-2)] hover:text-[var(--ui-text)]',
+                              count === 0 ? 'opacity-45 cursor-not-allowed hover:bg-[var(--ui-surface)]' : '',
+                            ].join(' ')}
+                          >
+                            <span
+                              className="h-2 w-2 rounded-full"
+                              style={{ backgroundColor: policyCategoryColor(category) }}
+                              aria-hidden="true"
+                            />
+                            <span>{categoryLabel}</span>
+                            <span className="font-mono text-[var(--ui-text-muted)]">{count}</span>
+                            <span className="font-mono text-[var(--ui-text-faint)]">{pct}%</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className={sectionClass}>
+            <div className="flex items-center justify-between">
+              <div className={sectionTitleClass}>{t('Board Snapshot')}</div>
+              <button
+                type="button"
+                onClick={refreshSnapshot}
+                className={`px-3 py-1 text-xs font-semibold print-hide ${secondaryPillClass}`}
+              >
+                {t('Refresh')}
+              </button>
+            </div>
+            <div className={`mt-3 p-3 flex items-center justify-center ${insetSurfaceClass}`}>
+              {snapshotUrl ? (
+                <img
+                  src={snapshotUrl}
+                  alt={t('Board snapshot')}
+                  className="max-h-[260px] w-auto rounded-md border border-[var(--ui-border)]"
+                />
+              ) : (
+                <div className={`text-sm ${mutedClass}`}>
+                  {snapshotError ?? t('Capturing board snapshot...')}
+                </div>
+              )}
+            </div>
+            <div className={`mt-2 text-xs print-muted ${mutedClass}`}>
+              {t('Snapshot reflects the current board position and auto-updates on move.')}
+            </div>
+          </div>
+
+          {!showOutcome && (
+            <div className={`${sectionClass} print-hide`}>
+              <div className="flex flex-col items-center gap-3 py-4 text-center">
+                <div className={sectionTitleClass}>{t('Result hidden')}</div>
+                <p className={`max-w-sm text-sm ${mutedClass}`}>
+                  {t('The win-rate graph, critical swings and highlights are hidden so you can review the moves without spoilers.')}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setOutcomeRevealed(true)}
+                  className="min-h-11 rounded-lg px-4 py-2 text-sm font-semibold ui-accent-bg hover:brightness-110"
+                >
+                  {t('Reveal result & analysis')}
+                </button>
+              </div>
+            </div>
+          )}
+          {showOutcome && (
+          <React.Fragment>
+          <div className={sectionClass}>
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <div className={sectionTitleClass}>{t('Analysis Graph')}</div>
+                <span className="text-[0.625rem] uppercase tracking-wide px-2 py-0.5 rounded-full ui-accent-soft border print-hide">
+                  {t('Live')}
+                </span>
+              </div>
+              <div className="flex items-center gap-1">
+                <PanelHeaderButton
+                  label={t('Score')}
+                  colorClass="bg-blue-600/30"
+                  active={reportGraph.score}
+                  onClick={() => setReportGraph((prev) => ({ ...prev, score: !prev.score }))}
+                />
+                <PanelHeaderButton
+                  label={t('Win%')}
+                  colorClass="bg-green-600/30"
+                  active={reportGraph.winrate}
+                  onClick={() => setReportGraph((prev) => ({ ...prev, winrate: !prev.winrate }))}
+                />
+                {/* Only offered when the SGF carries a clock. Most local games
+                    have none, and a toggle that can only ever draw nothing is
+                    worse than no toggle. */}
+                {hasMoveTimes && (
+                  <PanelHeaderButton
+                    label={t('Time')}
+                    colorClass="bg-amber-600/30"
+                    active={reportGraph.time}
+                    onClick={() => setReportGraph((prev) => ({ ...prev, time: !prev.time }))}
+                  />
+                )}
+              </div>
+            </div>
+            <div className={`mt-3 p-2 ${insetSurfaceClass}`}>
+              {reportGraph.score || reportGraph.winrate || (hasMoveTimes && reportGraph.time) ? (
+                <div style={{ height: 160 }}>
+                  <ScoreWinrateGraph
+                    key={`${graphRange?.start ?? 0}-${graphRange?.end ?? 'all'}-${treeVersion}-${gameAnalysisDone}-${graphTick}-${reportGraph.score ? 's' : ''}${reportGraph.winrate ? 'w' : ''}${reportGraph.time ? 't' : ''}`}
+                    showScore={reportGraph.score}
+                    showWinrate={reportGraph.winrate}
+                    showTime={hasMoveTimes && reportGraph.time}
+                    range={graphRange}
+                  />
+                </div>
+              ) : (
+                <div className={`h-20 flex items-center justify-center text-sm ${faintClass}`}>{t('Graph hidden')}</div>
+              )}
+            </div>
+            <div className={`mt-2 text-xs ${mutedClass}`}>
+              {t('Score lead and winrate are from the current analysis data.')}
+              {hasMoveTimes ? ` ${t('Time comes from the clock recorded in the SGF.')}` : ''}
+            </div>
+          </div>
+
+          <div className={sectionClass}>
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className={sectionTitleClass}>{t('Critical Swings')}</div>
+              <span className={`rounded-full border border-[var(--ui-border)] bg-[var(--ui-surface)] px-2 py-1 text-[0.625rem] font-semibold uppercase tracking-wide ${mutedClass}`}>
+                {t('{count} over {max} pts', { count: turningPoints.length, max: CRITICAL_SWING_THRESHOLD })}
+              </span>
+            </div>
+            {turningPoints.length === 0 ? (
+              <div className={`mt-2 text-sm ${faintClass}`}>{t('No major score swings match these filters.')}</div>
+            ) : (
+              <div className="mt-3 space-y-2">
+                {turningPoints.map((entry) => (
+                  <div
+                    key={`${entry.node.id}-swing-${entry.moveNumber}`}
+                    className={`flex flex-wrap items-center gap-2 px-3 py-2 text-xs ${insetSurfaceClass}`}
+                  >
+                    <span className={`font-mono font-semibold ${valueClass}`}>#{entry.moveNumber}</span>
+                    <span className={`rounded-full border border-[var(--ui-border)] px-2 py-0.5 font-semibold ${mutedClass}`}>
+                      {entry.player === 'black' ? 'B' : 'W'} {entry.move}
+                    </span>
+                    <span className={`font-mono ${mutedClass}`}>
+                      {fmtSigned(entry.scoreBefore)} {'->'} {fmtSigned(entry.scoreAfter)}
+                    </span>
+                    <span className={['font-mono font-semibold', entry.winRateSwing >= 0 ? 'text-emerald-300' : 'text-rose-300'].join(' ')}>
+                      {t('Win {value}', { value: fmtWinSwing(entry.winRateSwing) })}
+                    </span>
+                    <span className={['font-mono font-semibold', entry.scoreDelta >= 0 ? valueClass : mutedClass].join(' ')}>
+                      {describeReportSwing(entry)}
+                    </span>
+                    {entry.policy && (
+                      <span className={[
+                        'rounded-full border px-2 py-0.5 font-semibold',
+                        policyCategoryClass(entry.policy.category),
+                      ].join(' ')}>
+                        {policyCategoryLabel(entry.policy.category)} {formatPolicyRank(entry.policy.rank)}
+                      </span>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => jumpToNode(entry.node)}
+                      className={`ml-auto px-2 py-1 print-hide ${secondaryButtonClass}`}
+                    >
+                      {t('Jump')}
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className={sectionClass}>
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className={sectionTitleClass}>{t('Best Recoveries')}</div>
+              <span className={`rounded-full border border-[var(--ui-border)] bg-[var(--ui-surface)] px-2 py-1 text-[0.625rem] font-semibold uppercase tracking-wide ${mutedClass}`}>
+                {t('{count} over {max} pts', { count: recoveries.length, max: RECOVERY_THRESHOLD })}
+              </span>
+            </div>
+            {recoveries.length === 0 ? (
+              <div className={`mt-2 text-sm ${faintClass}`}>{t('No point-gaining recovery moves match these filters.')}</div>
+            ) : (
+              <div className="mt-3 space-y-2">
+                {recoveries.map((entry) => (
+                  <div
+                    key={`${entry.node.id}-recovery-${entry.moveNumber}`}
+                    className={`flex flex-wrap items-center gap-2 px-3 py-2 text-xs ${insetSurfaceClass}`}
+                  >
+                    <span className={`font-mono font-semibold ${valueClass}`}>#{entry.moveNumber}</span>
+                    <span className={`rounded-full border border-[var(--ui-border)] px-2 py-0.5 font-semibold ${mutedClass}`}>
+                      {entry.player === 'black' ? 'B' : 'W'} {entry.move}
+                    </span>
+                    <span className={`font-mono ${mutedClass}`}>
+                      {fmtSigned(entry.scoreBefore)} {'->'} {fmtSigned(entry.scoreAfter)}
+                    </span>
+                    <span className={['font-mono font-semibold', entry.winRateSwing >= 0 ? 'text-emerald-300' : 'text-rose-300'].join(' ')}>
+                      {t('Win {value}', { value: fmtWinSwing(entry.winRateSwing) })}
+                    </span>
+                    <span className="font-mono font-semibold text-emerald-300">
+                      {describeReportSwing(entry)}
+                    </span>
+                    {entry.policy && (
+                      <span className={[
+                        'rounded-full border px-2 py-0.5 font-semibold',
+                        policyCategoryClass(entry.policy.category),
+                      ].join(' ')}>
+                        {policyCategoryLabel(entry.policy.category)} #{entry.policy.rank || '?'}
+                      </span>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => jumpToNode(entry.node)}
+                      className={`ml-auto px-2 py-1 print-hide ${secondaryButtonClass}`}
+                    >
+                      {t('Jump')}
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          </React.Fragment>
+          )}
+
+          <div className={sectionClass}>
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className="flex flex-wrap items-center gap-2">
+                <div className={sectionTitleClass}>{t('Biggest Mistakes')}</div>
+                <div
+                  className="inline-flex rounded-full border border-[var(--ui-border)] bg-[var(--ui-surface)] p-0.5 print-hide"
+                  aria-label={t('Mistake sort order')}
+                >
+                  {[
+                    { key: 'loss', label: t('Loss'), title: t('Sort by point loss') },
+                    { key: 'policy', label: t('Quality'), title: t('Sort by policy severity') },
+                  ].map((option) => {
+                    const active = mistakeSort === option.key;
+                    return (
+                      <button
+                        key={option.key}
+                        type="button"
+                        onClick={() => setMistakeSort(option.key as GameReportMistakeSort)}
+                        aria-pressed={active}
+                        title={option.title}
+                        className={[
+                          'min-h-11 rounded-full px-2.5 py-1 text-[0.6875rem] font-semibold transition-colors desktop-shell:min-h-0',
+                          active
+                            ? 'bg-[var(--ui-accent-soft)] text-[var(--ui-accent)]'
+                            : 'text-[var(--ui-text-muted)] hover:text-[var(--ui-text)] hover:bg-[var(--ui-surface-2)]',
+                        ].join(' ')}
+                      >
+                        {option.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+              <div className="flex items-center gap-2 print-hide">
+                {allMistakes.length > 10 && (
+                  <button
+                    type="button"
+                    onClick={() => setShowAllMistakes((prev) => !prev)}
+                    aria-pressed={showAllMistakes}
+                    className={`px-3 py-1 text-xs font-semibold ${secondaryPillClass}`}
+                    title={showAllMistakes ? t('Show only the top 10 mistakes') : t('Show all {count} mistakes', { count: allMistakes.length })}
+                  >
+                    {showAllMistakes ? t('Show top 10') : t('Show all ({count})', { count: allMistakes.length })}
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => startReviewQueue(topMistakes)}
+                  disabled={topMistakes.length === 0}
+                  className={`px-3 py-1 text-xs font-semibold disabled:opacity-40 ${secondaryPillClass}`}
+                >
+                  {t('Review {count}', { count: topMistakes.length })}
+                </button>
+                {/* The review queue walks the mistakes and shows each answer;
+                    the drill hides it and asks for the move instead. Closing
+                    the report is part of starting one -- the drill happens on
+                    the board this modal is covering. */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    onClose();
+                    startMistakeDrill(playerFilter === 'all' ? 'both' : playerFilter);
+                  }}
+                  disabled={allMistakes.length === 0}
+                  title={t('Replay each mistake with the answer hidden and find a better move')}
+                  className={`px-3 py-1 text-xs font-semibold disabled:opacity-40 ${secondaryPillClass}`}
+                >
+                  {t('Drill')}
+                </button>
+              </div>
+            </div>
+            {activeReview && (
+              <div className={`mt-3 p-3 print-hide ${insetSurfaceClass}`}>
+                <div className="flex flex-wrap items-center gap-2 text-xs">
+                  <span className={sectionTitleClass}>{t('Review Queue')}</span>
+                  <span className={`font-mono ${mutedClass}`}>
+                    {reviewIndex + 1}/{reviewQueue.length}
+                  </span>
+                  <span className={mutedClass}>
+                    {t('Move {count}', { count: activeReview.moveNumber })} · {playerNames[activeReview.player]} · {activeReview.move}
+                  </span>
+                  <span className="font-mono text-rose-300">-{fmtNum(activeReview.pointsLost, 2)}</span>
+                  {activeReview.policy && (
+                    <span className={[
+                      'rounded-full border px-2 py-0.5 font-semibold',
+                      policyCategoryClass(activeReview.policy.category),
+                    ].join(' ')}>
+                      {policyCategoryLabel(activeReview.policy.category)} #{activeReview.policy.rank || '?'} · {fmtPolicyPct(activeReview.policy.relativePrior)}
+                    </span>
+                  )}
+                  <div className="ml-auto flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => startPractice(activeReview)}
+                      className="px-2 py-1 rounded border border-[var(--ui-accent)] text-[var(--ui-accent)] hover:brightness-110"
+                    >
+                      {t('Practice')}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => reviewStep(-1)}
+                      disabled={reviewIndex === 0}
+                      className={`px-2 py-1 disabled:opacity-40 ${secondaryButtonClass}`}
+                    >
+                      {t('Previous')}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => reviewStep(1)}
+                      disabled={reviewIndex >= reviewQueue.length - 1}
+                      className={`px-2 py-1 disabled:opacity-40 ${secondaryButtonClass}`}
+                    >
+                      {t('Next')}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setReviewQueue([])}
+                      className={`px-2 py-1 ${secondaryButtonClass}`}
+                    >
+                      {t('Close')}
+                    </button>
+                  </div>
+                </div>
+                <div className={`mt-2 text-xs ${mutedClass}`}>
+                  {t('Played {move}; engine preferred {best}.', { move: activeReview.move, best: activeReview.topMove ?? NO_VALUE })}
+                </div>
+              </div>
+            )}
+            {topMistakes.length === 0 ? (
+              <div className={`mt-2 text-sm ${faintClass}`}>{t('No moves match these filters.')}</div>
+            ) : (
+              <div className={`mt-3 grid grid-cols-12 gap-2 text-xs ${mutedClass}`}>
+                <div className="col-span-2 uppercase tracking-wide text-[0.625rem]">{t('Move')}</div>
+                <div className="col-span-1 text-center uppercase tracking-wide text-[0.625rem]">{t('P')}</div>
+                <div className="col-span-2 uppercase tracking-wide text-[0.625rem]">{t('Played')}</div>
+                <div className="col-span-2 uppercase tracking-wide text-[0.625rem]">{t('Top')}</div>
+                <div className="col-span-2 text-right uppercase tracking-wide text-[0.625rem]">{t('Loss')}</div>
+                <div className="col-span-3 text-right uppercase tracking-wide text-[0.625rem]">{t('Action')}</div>
+                {renderMistakeRows(topMistakes, true)}
+              </div>
+            )}
+          </div>
+
+          <div className={sectionClass}>
+            <div className="flex items-center justify-between">
+              <div className={sectionTitleClass}>{t('Point Loss Histogram')}</div>
+              <div className={`flex items-center gap-2 text-[0.625rem] ${mutedClass}`}>
+                <span className="inline-flex items-center gap-1"><span className="game-report-histogram-swatch game-report-histogram-bar--black" />{t('Black')}</span>
+                <span className="inline-flex items-center gap-1"><span className="game-report-histogram-swatch game-report-histogram-bar--white" />{t('White')}</span>
+              </div>
+            </div>
+            <div className="mt-3 space-y-2">
+              {playerDistributions.map(({ player, total, segments }) => (
+                <div key={player}>
+                  <div className={`mb-1 flex items-center justify-between text-[0.625rem] uppercase tracking-wide ${faintClass}`}>
+                    <span>{player === 'black' ? t('Black distribution') : t('White distribution')}</span>
+                    <span>{t('{count} moves', { count: total })}</span>
+                  </div>
+                  <div className="h-3 rounded-full bg-[var(--ui-surface-2)] overflow-hidden flex border border-[var(--ui-border)]">
+                    {total === 0 ? (
+                      <div className="h-full w-full bg-[var(--ui-border)]" />
+                    ) : (
+                      segments
+                        .filter((segment) => segment.count > 0)
+                        .map((segment) => (
+                          <button
+                            type="button"
+                            key={`${player}-${segment.label}`}
+                            className="h-full hover:brightness-125 focus-visible:z-10"
+                            onClick={() => {
+                              setPlayerFilter(player);
+                              setBucketFilter(report.labels.findIndex((label) => label === segment.label));
+                            }}
+                            title={`${segment.label}: ${segment.count}`}
+                            style={{
+                              width: `${(segment.count / total) * 100}%`,
+                              backgroundColor: segment.color,
+                            }}
+                            aria-label={`${player} ${segment.label}: ${segment.count}`}
+                          />
+                        ))
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-4 grid grid-cols-12 gap-2 text-xs">
+              <div className={`col-span-3 uppercase tracking-wide text-[0.625rem] ${faintClass}`}>{t('Threshold')}</div>
+              <div className={`col-span-5 uppercase tracking-wide text-[0.625rem] ${faintClass}`}>{t('Distribution')}</div>
+              {playerFilter === 'all' ? (
+                <>
+                  <div className={`col-span-2 text-center uppercase tracking-wide text-[0.625rem] ${faintClass}`}>{t('B')}</div>
+                  <div className={`col-span-2 text-center uppercase tracking-wide text-[0.625rem] ${faintClass}`}>{t('W')}</div>
+                </>
+              ) : (
+                <div className={`col-span-4 text-center uppercase tracking-wide text-[0.625rem] ${faintClass}`}>
+                  {playerNames[playerFilter]}
+                </div>
+              )}
+
+              {report.labels
+                .map((label, idx) => ({ label, idx }))
+                .map(({ label, idx }) => {
+                  const row = report.histogram[idx]!;
+                  const blackWidth = `${Math.round((row.black / maxHist) * 100)}%`;
+                  const whiteWidth = `${Math.round((row.white / maxHist) * 100)}%`;
+                  const singleWidth =
+                    playerFilter === 'black'
+                      ? `${Math.round((row.black / maxHistByPlayer.black) * 100)}%`
+                      : `${Math.round((row.white / maxHistByPlayer.white) * 100)}%`;
+                  return (
+                    <React.Fragment key={label}>
+                      <div className={`col-span-3 ${mutedClass}`}>{label}</div>
+                      <div className="col-span-5">
+                        {/* The 8px bar is the inner span, centred by the grid, so the
+                            wrapper is free to be a real target. lg:h-2 shrank it to
+                            the graphic's own height, leaving an 8px strip to hit;
+                            h-6 clears the 24px floor and changes nothing visible.
+                            The h-11 touch size below lg was already right. */}
+                        <button
+                          type="button"
+                          className="grid h-11 w-full place-items-center rounded-full hover:brightness-125 lg:h-6"
+                          onClick={() => setBucketFilter(bucketFilter === idx ? null : idx)}
+                          aria-label={t('Filter loss bucket {bucket}', { bucket: label })}
+                        >
+                          <span
+                            className={[
+                              'flex h-2 w-full overflow-hidden rounded-full bg-[var(--ui-surface-2)]',
+                              bucketFilter === idx ? 'ring-2 ring-[var(--ui-accent)]' : '',
+                            ].join(' ')}
+                            aria-hidden="true"
+                          >
+                            {playerFilter === 'all' ? (
+                              <>
+                                <span className="h-full game-report-histogram-bar--black" style={{ width: blackWidth }} />
+                                <span className="h-full game-report-histogram-bar--white" style={{ width: whiteWidth }} />
+                              </>
+                            ) : (
+                              <span
+                                className={[
+                                  'h-full',
+                                  playerFilter === 'black'
+                                    ? 'game-report-histogram-bar--black'
+                                    : 'game-report-histogram-bar--white',
+                                ].join(' ')}
+                                style={{ width: singleWidth }}
+                              />
+                            )}
+                          </span>
+                        </button>
+                      </div>
+                      {playerFilter === 'all' ? (
+                        <>
+                          <div className={`col-span-2 text-center font-mono ${valueClass}`}>{row.black}</div>
+                          <div className={`col-span-2 text-center font-mono ${valueClass}`}>{row.white}</div>
+                        </>
+                      ) : (
+                        <div className={`col-span-4 text-center font-mono ${valueClass}`}>
+                          {playerFilter === 'black' ? row.black : row.white}
+                        </div>
+                      )}
+                    </React.Fragment>
+                  );
+                })}
+            </div>
+          </div>
+            </div>
+          )}
+
+          <div className="hidden print-only space-y-6">
+            <div className="pdf-page">
+              <div className="flex items-start justify-between gap-6">
+                <div>
+                  <div className="pdf-cover-subtitle">{t('KaTrain Official Report')}</div>
+                  <div className="pdf-cover-title pdf-title">{t('Game Analysis Summary')}</div>
+                  <div className="mt-2 text-sm font-semibold text-slate-700">
+                    {playerNames.black} vs {playerNames.white}
+                  </div>
+                </div>
+                <div className="text-xs text-slate-600">
+                  {generatedAt.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                  {' • '}
+                  {generatedAt.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                </div>
+              </div>
+              <div className="mt-5 grid grid-cols-3 gap-4 text-sm">
+                <div>
+                  <div className="pdf-section-title">{t('Phase')}</div>
+                  <div className="text-base font-semibold text-slate-900">{phaseLabel}</div>
+                </div>
+                <div>
+                  <div className="pdf-section-title">{t('Coverage')}</div>
+                  <div className="text-base font-semibold text-slate-900">{fmtPct(coverage)}</div>
+                </div>
+                <div>
+                  <div className="pdf-section-title">{t('Analyzed Moves')}</div>
+                  <div className="text-base font-semibold text-slate-900">
+                    {analyzedMoves}/{totalMoves || 0}
+                  </div>
+                </div>
+              </div>
+              <div className="mt-6 text-sm text-slate-700">
+                {t('Filters: {filters} • Sort: {sort} • Showing top {count} mistakes', {
+                  filters: activeFilterLabels.join(' - '),
+                  sort: mistakeSortLabel,
+                  count: pdfMistakes.length,
+                })}
+              </div>
+              <div className="mt-6">
+                <div className="pdf-section-title">{t('Key Stats')}</div>
+                <div className={['mt-2 grid gap-x-4 gap-y-1 text-xs', statsPlayers.length === 2 ? 'grid-cols-3' : 'grid-cols-2'].join(' ')}>
+                  <div className="font-semibold uppercase tracking-wide text-slate-500">{t('Metric')}</div>
+                  {statsPlayers.map((player) => (
+                    <div key={`pdf-stats-${player}`} className="truncate text-center font-semibold text-slate-500">
+                      {playerNames[player]}
+                    </div>
+                  ))}
+                  {keyStatRows.map(({ label, value }) => (
+                    <React.Fragment key={`pdf-${label}`}>
+                      <div className="text-slate-600">{label}</div>
+                      {statsPlayers.map((player) => (
+                        <div key={`pdf-${label}-${player}`} className="text-center font-mono text-slate-900">
+                          {value(player)}
+                        </div>
+                      ))}
+                    </React.Fragment>
+                  ))}
+                </div>
+              </div>
+              <div className="mt-6">
+                <div className="pdf-section-title">{t('Policy Quality')}</div>
+                <div className={['mt-2 grid gap-3 text-xs', statsPlayers.length === 2 ? 'grid-cols-2' : 'grid-cols-1'].join(' ')}>
+                  {statsPlayers.map((player) => {
+                    const distribution = report.stats[player].policyDistribution;
+                    const total = distribution?.total ?? 0;
+                    return (
+                      <div key={`pdf-policy-${player}`} className="rounded border border-slate-300 p-2">
+                        <div className="flex items-center justify-between gap-3">
+                          <div className="truncate font-semibold text-slate-900">{playerNames[player]}</div>
+                          <div className="font-mono text-slate-700">{t('Policy acc. {value}', { value: fmtNum(report.stats[player].policyAccuracy, 1) })}</div>
+                        </div>
+                        <div className="mt-2 flex h-2 overflow-hidden rounded bg-slate-200">
+                          {total === 0 ? (
+                            <div className="h-full w-full bg-slate-300" />
+                          ) : (
+                            MOVE_POLICY_CATEGORIES
+                              .filter((category) => (distribution?.[category] ?? 0) > 0)
+                              .map((category) => {
+                                const count = distribution?.[category] ?? 0;
+                                return (
+                                  <div
+                                    key={`pdf-policy-${player}-${category}`}
+                                    className="h-full"
+                                    style={{
+                                      width: `${(count / total) * 100}%`,
+                                      backgroundColor: policyCategoryColor(category),
+                                    }}
+                                  />
+                                );
+                              })
+                          )}
+                        </div>
+                        <div className="mt-2 grid grid-cols-5 gap-1">
+                          {MOVE_POLICY_CATEGORIES.map((category) => {
+                            const count = distribution?.[category] ?? 0;
+                            const pct = total > 0 ? Math.round((count / total) * 100) : 0;
+                            return (
+                              <div key={`pdf-policy-label-${player}-${category}`} className="min-w-0">
+                                <div className="truncate text-slate-600">{policyCategoryLabel(category)}</div>
+                                <div className="font-mono text-slate-900">
+                                  {count} ({pct}%)
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+              <div className="mt-6">
+                <div className="pdf-section-title">{t('Critical Swings')}</div>
+                {turningPoints.length === 0 ? (
+                  <div className="mt-2 text-sm text-slate-600">{t('No major score swings match these filters.')}</div>
+                ) : (
+                  <div className="mt-2 space-y-2 text-sm">
+                    {turningPoints.map((entry) => (
+                      <div
+                        key={`${entry.node.id}-pdf-swing-${entry.moveNumber}`}
+                        className="flex items-center justify-between gap-4 rounded border border-slate-300 px-3 py-2"
+                      >
+                        <div>
+                          <span className="font-semibold text-slate-900">{t('Move {count}', { count: entry.moveNumber })}</span>
+                          <span className="text-slate-700">
+                            {' '}
+                            {playerNames[entry.player]} {entry.move}
+                          </span>
+                        </div>
+                        <div className="font-mono text-slate-700">
+                          {fmtSigned(entry.scoreBefore)} {'->'} {fmtSigned(entry.scoreAfter)}
+                        </div>
+                        <div className="font-mono text-slate-700">{t('Win {value}', { value: fmtWinSwing(entry.winRateSwing) })}</div>
+                        <div className="font-semibold text-slate-900">{describeReportSwing(entry)}</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div className="mt-6">
+                <div className="pdf-section-title">{t('Best Recoveries')}</div>
+                {recoveries.length === 0 ? (
+                  <div className="mt-2 text-sm text-slate-600">{t('No point-gaining recovery moves match these filters.')}</div>
+                ) : (
+                  <div className="mt-2 space-y-2 text-sm">
+                    {recoveries.map((entry) => (
+                      <div
+                        key={`${entry.node.id}-pdf-recovery-${entry.moveNumber}`}
+                        className="flex items-center justify-between gap-4 rounded border border-slate-300 px-3 py-2"
+                      >
+                        <div>
+                          <span className="font-semibold text-slate-900">{t('Move {count}', { count: entry.moveNumber })}</span>
+                          <span className="text-slate-700">
+                            {' '}
+                            {playerNames[entry.player]} {entry.move}
+                          </span>
+                        </div>
+                        <div className="font-mono text-slate-700">
+                          {fmtSigned(entry.scoreBefore)} {'->'} {fmtSigned(entry.scoreAfter)}
+                        </div>
+                        <div className="font-mono text-slate-700">{t('Win {value}', { value: fmtWinSwing(entry.winRateSwing) })}</div>
+                        <div className="font-semibold text-slate-900">
+                          {describeReportSwing(entry)}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {pdfMistakes.length === 0 ? (
+              <div className="pdf-page">
+                <div className="text-sm text-slate-600">{t('No analyzed moves in this range.')}</div>
+              </div>
+            ) : (
+              (pdfSnapshots.length > 0
+                ? pdfSnapshots
+                : pdfMistakes.map((entry) => ({ id: entry.node.id, dataUrl: null, entry }))
+              ).map(({ id, dataUrl, entry }, idx) => (
+                <div key={id} className="pdf-page">
+                  <div className="flex items-start justify-between gap-6">
+                    <div>
+                      <div className="pdf-section-title">
+                        {t('Mistake {i} of {n}', { i: idx + 1, n: pdfMistakes.length })}
+                      </div>
+                      <div className="text-lg font-semibold text-slate-900">
+                        {t('Move {count}', { count: entry.moveNumber })} - {playerNames[entry.player]}
+                      </div>
+                      <div className="text-sm text-slate-700">
+                        {t('Played {move} • Best {best} • Loss {loss} • Win {win}', {
+                          move: entry.move,
+                          best: entry.topMove ?? NO_VALUE,
+                          loss: fmtNum(entry.pointsLost, 2),
+                          win: fmtWinSwing(entry.winRateSwing),
+                        })}
+                      </div>
+                    </div>
+                    <div className="text-xs text-slate-600">
+                      {t('Phase: {phase}', { phase: phaseLabel })}
+                    </div>
+                  </div>
+                  <div className="mt-4 pdf-board-wrap">
+                    {dataUrl ? (
+                      <img src={dataUrl} alt={t('Move {count} snapshot', { count: entry.moveNumber })} className="pdf-board" />
+                    ) : (
+                      <div className="text-[0.625rem] text-slate-500">{t('Snapshot missing')}</div>
+                    )}
+                  </div>
+                  <div className="mt-4">
+                    <div className="pdf-section-title">{t('Correct Move Tree')}</div>
+                    <div className="mt-2">{renderPvTree(entry)}</div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+        <div className="game-report-modal-footer px-5 py-4 ui-bar border-t border-[var(--ui-border)] flex flex-wrap items-center justify-between gap-3 print-hide">
+          {/* The review button lives in the status card above, next to the text
+              explaining why you'd run it and the bar it advances — repeating it
+              here rendered the same button twice on one screen. */}
+          <div className="flex flex-wrap items-center gap-2">
+            {totalMoves > 0 && (
+              <button
+                type="button"
+                onClick={handlePrintReport}
+                className="min-h-11 px-4 py-2 bg-[var(--ui-surface-2)] hover:brightness-110 text-[var(--ui-text)] border border-[var(--ui-border)] rounded-lg font-semibold disabled:opacity-60"
+                disabled={isPreparingPdf}
+              >
+                {isPreparingPdf
+                  ? t('Preparing print...')
+                  : t('Print / Save PDF')}
+              </button>
+            )}
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="min-h-11 px-4 py-2 ui-accent-bg hover:brightness-110 rounded-lg font-semibold"
+          >
+            {t('Done')}
+          </button>
+        </div>
+      </div>
+      {showReportGuide && (
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 p-4 print-hide"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="report-guide-title"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) closeReportGuide();
+          }}
+        >
+          <div className="ui-panel flex max-h-[88dvh] w-full max-w-2xl flex-col overflow-hidden rounded-xl border shadow-2xl">
+            <div className="flex items-center justify-between gap-4 border-b border-[var(--ui-border)] px-5 py-4 ui-bar">
+              <div>
+                <div className={sectionTitleClass}>{t('Report Guide')}</div>
+                <h3 id="report-guide-title" className="text-lg font-semibold text-[var(--ui-text)]">
+                  {t('Reading this report')}
+                </h3>
+              </div>
+              <button
+                type="button"
+                ref={reportGuideCloseRef}
+                onClick={closeReportGuide}
+                className="ui-control grid shrink-0 place-items-center rounded-lg text-[var(--ui-text-muted)] hover:bg-[var(--ui-surface-2)] hover:text-[var(--ui-text)]"
+                aria-label={t('Close report guide')}
+                title={t('Close report guide')}
+              >
+                <FaTimes aria-hidden="true" />
+              </button>
+            </div>
+            <div className="space-y-5 overflow-y-auto px-5 py-4 text-sm">
+              <section>
+                <div className={sectionTitleClass}>{t('Policy Quality')}</div>
+                <div className="mt-3 divide-y divide-[var(--ui-border)] rounded-lg border border-[var(--ui-border)]">
+                  {POLICY_GUIDE.map(({ category, detail }) => (
+                    <div key={category} className="grid gap-2 px-3 py-2 sm:grid-cols-[8rem_1fr]">
+                      <div className="inline-flex items-center gap-2 font-semibold text-[var(--ui-text)]">
+                        <span
+                          className="h-2.5 w-2.5 rounded-full"
+                          style={{ backgroundColor: policyCategoryColor(category) }}
+                          aria-hidden="true"
+                        />
+                        {policyCategoryLabel(category)}
+                      </div>
+                      <div className="text-[var(--ui-text-muted)]">{t(detail)}</div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+
+              <section>
+                <div className={sectionTitleClass}>{t('Point Loss Buckets')}</div>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {lossBucketGuide.map(({ label, color }) => (
+                    <span
+                      key={label}
+                      className="inline-flex items-center gap-2 rounded-full border border-[var(--ui-border)] bg-[var(--ui-surface)] px-3 py-1 font-mono text-xs text-[var(--ui-text)]"
+                    >
+                      <span className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} aria-hidden="true" />
+                      {label}
+                    </span>
+                  ))}
+                </div>
+                <p className="mt-2 text-xs text-[var(--ui-text-muted)]">
+                  {t('Point loss uses consecutive analyzed positions, so gaps in analysis are excluded from the report.')}
+                </p>
+              </section>
+
+              <section>
+                <div className={sectionTitleClass}>{t('Core Metrics')}</div>
+                <dl className="mt-3 grid gap-3 sm:grid-cols-3">
+                  <div>
+                    <dt className="font-semibold text-[var(--ui-text)]">{t('Accuracy')}</dt>
+                    <dd className="mt-1 text-xs text-[var(--ui-text-muted)]">
+                      {t('Score-loss accuracy weighted by position difficulty.')}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="font-semibold text-[var(--ui-text)]">{t('Policy accuracy')}</dt>
+                    <dd className="mt-1 text-xs text-[var(--ui-text-muted)]">
+                      {t('Average quality score from the policy category distribution.')}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="font-semibold text-[var(--ui-text)]">{t('Complexity')}</dt>
+                    <dd className="mt-1 text-xs text-[var(--ui-text-muted)]">
+                      {t('How much policy mass sits on point-losing alternatives.')}
+                    </dd>
+                  </div>
+                </dl>
+              </section>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};

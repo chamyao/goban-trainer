@@ -1,0 +1,92 @@
+import React from 'react';
+import { FaDownload, FaSave, FaTimes, FaTrash } from 'react-icons/fa';
+import { useT } from '../i18n';
+import { useEscapeToClose } from '../hooks/useEscapeToClose';
+import { useInitialDialogFocus } from '../hooks/useInitialDialogFocus';
+
+export type UnsavedChangesChoice = 'save' | 'discard' | 'cancel';
+
+interface UnsavedChangesModalProps {
+  onChoice: (choice: UnsavedChangesChoice) => void;
+  saveTarget?: 'download' | 'library';
+}
+
+export const UnsavedChangesModal: React.FC<UnsavedChangesModalProps> = ({ onChoice, saveTarget = 'download' }) => {
+  const t = useT();
+  const savesToLibrary = saveTarget === 'library';
+  const SaveIcon = savesToLibrary ? FaSave : FaDownload;
+  useEscapeToClose(() => onChoice('cancel'));
+  const cancelButtonRef = React.useRef<HTMLButtonElement>(null);
+  const dialogRef = useInitialDialogFocus<HTMLDivElement>(true, {
+    focusContainer: false,
+    initialFocusRef: cancelButtonRef,
+  });
+
+  return (
+    <div
+      className="fixed inset-0 z-[70] flex items-center justify-center bg-black/65 p-3 mobile-safe-inset mobile-safe-area-bottom"
+      onClick={() => onChoice('cancel')}
+    >
+      <div
+        className="ui-panel flex w-full max-w-md flex-col overflow-hidden rounded-lg border shadow-xl"
+        ref={dialogRef}
+        tabIndex={-1}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="unsaved-changes-title"
+        aria-describedby="unsaved-changes-description"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div className="ui-bar flex items-center justify-between border-b border-[var(--ui-border)] px-4 py-3">
+          <h2 id="unsaved-changes-title" className="text-lg font-semibold text-[var(--ui-text)]">
+            {t('Unsaved changes')}
+          </h2>
+          <button
+            type="button"
+            onClick={() => onChoice('cancel')}
+            className="ui-control grid place-items-center rounded-lg text-[var(--ui-text-muted)] hover:bg-[var(--ui-surface-2)] hover:text-[var(--ui-text)]"
+            aria-label={t('Close unsaved changes dialog')}
+          >
+            <FaTimes aria-hidden="true" />
+          </button>
+        </div>
+
+        <div className="space-y-3 p-4">
+          <p id="unsaved-changes-description" className="text-sm leading-6 text-[var(--ui-text-muted)]">
+            {savesToLibrary
+              ? t('The loaded library game has unsaved changes. Save it to Library before replacing it?')
+              : t('The current game has changes that are not saved. Save an SGF before replacing it?')}
+          </p>
+        </div>
+
+        <div className="ui-bar grid grid-cols-2 gap-2 border-t border-[var(--ui-border)] px-4 py-3 sm:flex sm:flex-wrap sm:justify-end">
+          <button
+            ref={cancelButtonRef}
+            type="button"
+            onClick={() => onChoice('cancel')}
+            className="min-h-11 rounded-lg border border-[var(--ui-border)] bg-[var(--ui-surface)] px-4 py-2 text-sm font-semibold text-[var(--ui-text)] hover:bg-[var(--ui-surface-2)]"
+            autoFocus
+          >
+            {t('Cancel')}
+          </button>
+          <button
+            type="button"
+            onClick={() => onChoice('discard')}
+            className="min-h-11 rounded-lg border border-[var(--ui-danger)] bg-[var(--ui-danger-soft)] px-4 py-2 text-sm font-semibold text-[var(--ui-danger)] hover:bg-[var(--ui-surface-2)]"
+          >
+            <span className="inline-flex items-center gap-2"><FaTrash /> {t('Discard')}</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => onChoice('save')}
+            className="col-span-2 min-h-11 rounded-lg border border-[var(--ui-accent)] bg-[var(--ui-accent)] px-4 py-2 text-sm font-semibold text-[var(--ui-accent-contrast)] sm:col-span-1"
+          >
+            <span className="inline-flex items-center gap-2"><SaveIcon /> {savesToLibrary ? t('Save to Library') : t('Save SGF')}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+UnsavedChangesModal.displayName = 'UnsavedChangesModal';

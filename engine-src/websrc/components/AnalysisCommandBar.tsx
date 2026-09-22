@@ -1,0 +1,778 @@
+import React from 'react';
+import { useT } from '../i18n';
+import type { AnalysisExperience } from '../types';
+import {
+  FaChartBar,
+  FaFileAlt,
+  FaLayerGroup,
+  FaMap,
+  FaPlay,
+  FaRobot,
+  FaSearch,
+  FaSquare,
+  FaThLarge,
+  FaTimes,
+  FaCopy,
+} from 'react-icons/fa';
+import type { AnalysisControlsState, UiMode } from './layout/types';
+import { formatAnalysisScoreLead, formatAnalysisWinRate, summarizePointsLost } from '../utils/analysisSummary';
+import { useGameStore } from '../store/gameStore';
+import {
+  getPolicyHeatmapMetricLabel,
+  getTopMoveMetricLabel,
+  nextPolicyHeatmapMetric,
+  nextTopMoveMetric,
+} from '../utils/topMoveMetric';
+import { getCurrentNodeBestMoveSummary } from '../utils/bestMoveSummary';
+import { isDrillHidingAnswer } from '../utils/mistakeDrill';
+import { summarizeGameAnalysisProgress } from '../utils/gameAnalysisProgress';
+import { getEngineStatusSummary } from '../utils/engineStatusSummary';
+import {
+  ANALYSIS_MIN_VISITS,
+  ANALYSIS_VISIT_PRESETS,
+  ANALYSIS_VISIT_SLIDER_MAX,
+  ANALYSIS_VISIT_SLIDER_MIN,
+  clampAnalysisVisits,
+  formatVisitCount,
+  mergeVisitPresets,
+  sliderValueToVisitCount,
+  visitCountToSliderValue,
+  visitPresetDescription,
+  visitPresetLabel,
+  visitSliderFillPercent,
+} from '../utils/visitPresets';
+import { ENGINE_MAX_VISITS } from '../engine/katago/limits';
+import { getNextMoveQuality, getPlayedMoveQuality } from '../utils/playedMoveQuality';
+import { copyTextToClipboard } from '../utils/clipboard';
+import { formatEngineErrorReport } from '../utils/engineDiagnostics';
+import { setTimedNotification } from '../utils/timedNotification';
+import { getCurrentLineNodes } from '../utils/branchNavigation';
+import { summarizeAnalysisCoverage } from '../utils/analysisCoverage';
+import { getFastReviewButtonState } from '../utils/fastReviewButtonState';
+
+interface AnalysisCommandBarProps {
+  mode: UiMode;
+  isAnalysisMode: boolean;
+  /** The top bar carries its own Analyze toggle; only show ours when it is hidden. */
+  showLiveToggle?: boolean;
+  statusText: string;
+  engineDot: string;
+  engineStatus: 'idle' | 'loading' | 'ready' | 'error';
+  engineError: string | null;
+  engineBackend: string | null;
+  engineModelLabel: string | null;
+  requestedBackend: string;
+  modelUrl: string;
+  /** 'remote' means a WebSocket server answers, not the browser backend below. */
+  engineMode?: 'local' | 'remote';
+  remoteEngineUrl?: string | null;
+  winRate: number | null;
+  scoreLead: number | null;
+  pointsLost: number | null;
+  analysisControls: AnalysisControlsState;
+  updateControls: (partial: Partial<AnalysisControlsState>) => void;
+  toggleAnalysisMode: () => void;
+  isGameAnalysisRunning: boolean;
+  gameAnalysisType: string | null;
+  gameAnalysisDone: number;
+  gameAnalysisTotal: number;
+  startFastGameAnalysis: (opts?: { moveRange?: [number, number] | null }) => void;
+  stopGameAnalysis: () => void;
+  onOpenGameReport: () => void;
+  /** Test/embedding override; the application normally uses the persisted setting. */
+  analysisExperienceOverride?: AnalysisExperience;
+}
+
+type HorizontalScrollEdges = { overflow: boolean; atStart: boolean; atEnd: boolean };
+
+const INITIAL_SCROLL_EDGES: HorizontalScrollEdges = { overflow: false, atStart: true, atEnd: true };
+
+function horizontalOverflowLabel(edges: HorizontalScrollEdges): 'none' | 'left' | 'right' | 'both' {
+  if (!edges.overflow) return 'none';
+  if (edges.atStart) return 'right';
+  if (edges.atEnd) return 'left';
+  return 'both';
+}
+
+function useHorizontalScrollEdges(enabled: boolean) {
+  const scrollRef = React.useRef<HTMLDivElement>(null);
+  const [scrollEdges, setScrollEdges] = React.useState<HorizontalScrollEdges>(INITIAL_SCROLL_EDGES);
+  const updateScrollEdges = React.useCallback(() => {
+    const scroller = scrollRef.current;
+    if (!scroller) return;
+    const maxScrollLeft = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
+    const next = {
+      overflow: maxScrollLeft > 2,
+      atStart: scroller.scrollLeft <= 2,
+      atEnd: scroller.scrollLeft >= maxScrollLeft - 2,
+    };
+    setScrollEdges((current) =>
+      current.overflow === next.overflow && current.atStart === next.atStart && current.atEnd === next.atEnd
+        ? current
+        : next
+    );
+  }, []);
+
+  React.useEffect(() => {
+    if (!enabled) return;
+    const scroller = scrollRef.current;
+    if (!scroller) return;
+    updateScrollEdges();
+    scroller.addEventListener('scroll', updateScrollEdges, { passive: true });
+    const resizeObserver = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(updateScrollEdges);
+    resizeObserver?.observe(scroller);
+    for (const child of Array.from(scroller.children)) resizeObserver?.observe(child);
+    const mutationObserver =
+      typeof MutationObserver === 'undefined' ? null : new MutationObserver(updateScrollEdges);
+    mutationObserver?.observe(scroller, { childList: true, subtree: true, characterData: true });
+    window.addEventListener('resize', updateScrollEdges);
+    return () => {
+      scroller.removeEventListener('scroll', updateScrollEdges);
+      resizeObserver?.disconnect();
+      mutationObserver?.disconnect();
+      window.removeEventListener('resize', updateScrollEdges);
+    };
+  }, [enabled, updateScrollEdges]);
+
+  return { scrollRef, scrollEdges };
+}
+
+export const AnalysisCommandBar: React.FC<AnalysisCommandBarProps> = ({
+  mode,
+  isAnalysisMode,
+  showLiveToggle = true,
+  statusText,
+  engineDot,
+  engineStatus,
+  engineError,
+  engineBackend,
+  engineModelLabel,
+  requestedBackend,
+  modelUrl,
+  engineMode,
+  remoteEngineUrl,
+  winRate,
+  scoreLead,
+  pointsLost,
+  analysisControls,
+  updateControls,
+  toggleAnalysisMode,
+  isGameAnalysisRunning,
+  gameAnalysisType,
+  gameAnalysisDone,
+  gameAnalysisTotal,
+  startFastGameAnalysis,
+  stopGameAnalysis,
+  onOpenGameReport,
+  analysisExperienceOverride,
+}) => {
+  const t = useT();
+  const topMoveMetric = useGameStore((state) => state.settings.trainerTopMovesShow);
+  const policyHeatmapMetric = useGameStore((state) => state.settings.analysisPolicyMetric);
+  const katagoVisits = useGameStore((state) => state.settings.katagoVisits);
+  const analysisExperience = useGameStore((state) => state.settings.analysisExperience);
+  // Coach keeps this bar to what a move costs; the metric cyclers and the
+  // visit count are engine vocabulary and wait for Pro.
+  const isPro = (analysisExperienceOverride ?? analysisExperience) === 'pro';
+  const showAnalysisBar = useGameStore((state) => state.settings.showAnalysisBar);
+  const currentNode = useGameStore((state) => state.currentNode);
+  const drillHidesAnswer = useGameStore((state) => isDrillHidingAnswer(state.mistakeDrill, state.currentNode.id));
+  const treeVersion = useGameStore((state) => state.treeVersion);
+  const activeBranchChildIds = useGameStore((state) => state.activeBranchChildIds);
+  const updateSettings = useGameStore((state) => state.updateSettings);
+  const depthButtonRef = React.useRef<HTMLButtonElement>(null);
+  const depthPopoverRef = React.useRef<HTMLDivElement>(null);
+  const depthCloseButtonRef = React.useRef<HTMLButtonElement>(null);
+  const depthPopoverId = React.useId();
+  const depthPopoverTitleId = React.useId();
+  const [depthPopoverOpen, setDepthPopoverOpen] = React.useState(false);
+  const [depthDraft, setDepthDraft] = React.useState('');
+  const [depthHintVisits, setDepthHintVisits] = React.useState<number | null>(null);
+  const [reviewStartedAt, setReviewStartedAt] = React.useState<number | null>(null);
+  const [reviewNow, setReviewNow] = React.useState(0);
+  const [engineErrorCopied, setEngineErrorCopied] = React.useState(false);
+  const shouldShow =
+    showAnalysisBar &&
+    (mode === 'analyze' ||
+      isAnalysisMode ||
+      isGameAnalysisRunning ||
+      typeof winRate === 'number' ||
+      typeof scoreLead === 'number');
+  const { scrollRef: metricsRef, scrollEdges: metricScrollEdges } = useHorizontalScrollEdges(shouldShow);
+  const { scrollRef: actionsRef, scrollEdges: actionScrollEdges } = useHorizontalScrollEdges(shouldShow);
+
+  const pointsSummary = summarizePointsLost(pointsLost);
+  const gameProgress = isGameAnalysisRunning && gameAnalysisTotal > 0
+    ? summarizeGameAnalysisProgress({
+        done: gameAnalysisDone,
+        total: gameAnalysisTotal,
+        startedAtMs: reviewStartedAt,
+        nowMs: reviewNow,
+      })
+    : null;
+  const analysisCoverage = summarizeAnalysisCoverage(getCurrentLineNodes(currentNode, activeBranchChildIds));
+  const fastReviewButton = getFastReviewButtonState({
+    isGameAnalysisRunning,
+    gameProgress,
+    analysisCoverage,
+  });
+  const liveButtonLabel = t(isAnalysisMode ? 'Live on' : 'Analyze');
+  const engineSummary = React.useMemo(() => getEngineStatusSummary({
+    status: engineStatus,
+    error: engineError,
+    requestedBackend,
+    activeBackend: engineBackend,
+    modelLabel: engineModelLabel,
+    modelUrl,
+    engineMode,
+    remoteEngineUrl,
+  }), [engineBackend, engineError, engineMode, engineModelLabel, engineStatus, modelUrl, remoteEngineUrl, requestedBackend]);
+  const engineStatusTitle = [statusText, engineSummary.title].filter(Boolean).join('\n\n');
+  const phoneHeaderAlreadyShowsEngineState = engineSummary.stateLabel === 'Ready'
+    && !engineError
+    && !engineSummary.isFallback;
+  const engineStatusClass = [
+    'analysis-command-bar__status',
+    `analysis-command-bar__status--${engineStatus}`,
+    engineSummary.isFallback ? 'analysis-command-bar__status--fallback' : '',
+    phoneHeaderAlreadyShowsEngineState ? 'analysis-command-bar__status--header-duplicate' : '',
+  ].join(' ');
+  React.useEffect(() => {
+    setEngineErrorCopied(false);
+  }, [engineError]);
+  const copyEngineError = React.useCallback(async () => {
+    if (!engineError) return;
+    const ok = await copyTextToClipboard(formatEngineErrorReport({
+      status: engineStatus,
+      requestedBackend,
+      activeBackend: engineMode === 'remote' && remoteEngineUrl?.trim() ? 'remote' : engineBackend ?? requestedBackend,
+      modelLabel: engineModelLabel,
+      modelUrl,
+      error: engineError,
+    }));
+    setEngineErrorCopied(ok);
+    setTimedNotification(t(ok ? 'Copied engine error details.' : 'Could not copy engine error details.'), ok ? 'success' : 'error');
+  }, [engineBackend, engineError, engineMode, engineModelLabel, engineStatus, modelUrl, remoteEngineUrl, requestedBackend, t]);
+
+  const toggleOverlay = (key: keyof AnalysisControlsState) => {
+    updateControls({ [key]: !analysisControls[key] });
+  };
+  const cycleTopMoveMetric = () => {
+    const nextMetric = nextTopMoveMetric(topMoveMetric);
+    updateSettings({ trainerTopMovesShow: nextMetric });
+    if (!analysisControls.analysisShowHints || analysisControls.analysisShowPolicy) {
+      updateControls({ analysisShowHints: true, analysisShowPolicy: false });
+    }
+  };
+  const cyclePolicyHeatmapMetric = () => {
+    updateSettings({ analysisPolicyMetric: nextPolicyHeatmapMetric(policyHeatmapMetric) });
+    if (!analysisControls.analysisShowPolicy) {
+      updateControls({ analysisShowPolicy: true });
+    }
+  };
+  const topMoveMetricLabel = getTopMoveMetricLabel(topMoveMetric, 'short');
+  const policyHeatmapMetricLabel = getPolicyHeatmapMetricLabel(policyHeatmapMetric, 'short');
+  const topMovesHiddenByPolicy = analysisControls.analysisShowPolicy;
+  const liveAnalysisLabel = t(isAnalysisMode ? 'Turn live analysis off' : 'Start live analysis');
+  const topMovesToggleTitle = topMovesHiddenByPolicy ? t('Move heatmap is showing; top move hints are hidden') : t('Show or hide top move hints');
+  // The chips that cycle a value have no ARIA state to lean on the way a
+  // toggle has aria-pressed, so their accessible name keeps the action — but it
+  // opens with the text printed on the chip, which is what a voice-control user
+  // reads out and what the old "Cycle …" names left out entirely.
+  const topMoveMetricAriaLabel = t('Hint: {metric} — cycle top move hint label', { metric: topMoveMetricLabel });
+  const heatmapToggleLabel = analysisControls.analysisShowPolicy ? t('Hide move heatmap') : t('Show move heatmap');
+  const policyHeatmapMetricAriaLabel = t('Map: {metric} — cycle move heatmap metric', { metric: policyHeatmapMetricLabel });
+  const territoryToggleLabel = analysisControls.analysisShowOwnership ? t('Hide territory ownership') : t('Show territory ownership');
+  const gameReportLabel = t('Open the full game report');
+  const playedMoveQuality = React.useMemo(
+    () => getPlayedMoveQuality(currentNode, pointsLost),
+    [currentNode, pointsLost]
+  );
+  const nextMoveQuality = React.useMemo(
+    () => getNextMoveQuality(currentNode, activeBranchChildIds),
+    [activeBranchChildIds, currentNode]
+  );
+  const bestMoveSummary = React.useMemo(() => {
+    // Node analysis mutates in place; treeVersion bumps whenever it changes.
+    void treeVersion;
+    // A drill asking about this position is asking for this exact move.
+    if (drillHidesAnswer) return null;
+    return getCurrentNodeBestMoveSummary(currentNode);
+  }, [currentNode, drillHidesAnswer, treeVersion]);
+  const displayedMoveQuality = playedMoveQuality ?? nextMoveQuality;
+  const moveQualityKind = playedMoveQuality ? 'played' : nextMoveQuality ? 'next' : 'quality';
+  const moveQualityTone = displayedMoveQuality?.tone ?? pointsSummary.tone;
+  const moveQualityValue = displayedMoveQuality?.valueLabel ?? pointsSummary.label;
+  const moveQualityLabel = displayedMoveQuality
+    ? moveQualityKind === 'next'
+      ? `${t('Next')} ${displayedMoveQuality.detailLabel}`
+      : displayedMoveQuality.detailLabel
+    : t('Move quality');
+  const fastReviewCompactLabel = fastReviewButton.state === 'ready'
+    ? t('Review')
+    : fastReviewButton.label;
+  const moveQualityTitle = displayedMoveQuality
+    ? moveQualityKind === 'next'
+      ? t('Next move: {title}', { title: displayedMoveQuality.title })
+      : displayedMoveQuality.title
+    : t('Move quality');
+  const liveVisits = clampAnalysisVisits(katagoVisits);
+  const liveVisitLabel = visitPresetLabel(liveVisits);
+  const liveVisitCountLabel = formatVisitCount(liveVisits);
+  const depthHintValue = depthHintVisits ?? liveVisits;
+  const depthHintLabel = visitPresetLabel(depthHintValue);
+  const depthHintDescription = visitPresetDescription(depthHintValue);
+  const liveVisitPresets = mergeVisitPresets(ANALYSIS_VISIT_PRESETS, liveVisits);
+  const liveVisitDepthSegments = ANALYSIS_VISIT_PRESETS.map((preset) => ({ preset, active: liveVisits >= preset }));
+  const applyLiveVisits = (visits: number) => {
+    const nextVisits = clampAnalysisVisits(visits);
+    if (nextVisits === liveVisits) return;
+    updateSettings({ katagoVisits: nextVisits });
+    if (isAnalysisMode) {
+      window.setTimeout(() => {
+        void useGameStore.getState().runAnalysis({ force: true, visits: nextVisits });
+      }, 0);
+    }
+  };
+  const commitDepthDraft = (raw: string) => {
+    const parsed = Number.parseInt(raw, 10);
+    if (!Number.isFinite(parsed)) {
+      setDepthDraft(String(liveVisits));
+      return;
+    }
+    const nextVisits = clampAnalysisVisits(parsed);
+    setDepthDraft(String(nextVisits));
+    applyLiveVisits(nextVisits);
+  };
+
+  const closeDepthPopover = React.useCallback((restoreFocus = false) => {
+    setDepthPopoverOpen(false);
+    if (restoreFocus && typeof window !== 'undefined') {
+      window.setTimeout(() => depthButtonRef.current?.focus({ preventScroll: true }), 0);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    setDepthDraft(String(liveVisits));
+    if (depthPopoverOpen) setDepthHintVisits(liveVisits);
+  }, [depthPopoverOpen, liveVisits]);
+
+  React.useEffect(() => {
+    if (!depthPopoverOpen) setDepthHintVisits(null);
+  }, [depthPopoverOpen]);
+
+  React.useEffect(() => {
+    if (isGameAnalysisRunning) {
+      closeDepthPopover();
+      setDepthHintVisits(null);
+    }
+  }, [closeDepthPopover, isGameAnalysisRunning]);
+
+  React.useEffect(() => {
+    if (!isGameAnalysisRunning) {
+      setReviewStartedAt(null);
+      setReviewNow(0);
+      return;
+    }
+    const now = Date.now();
+    setReviewStartedAt((startedAt) => startedAt ?? now);
+    setReviewNow(now);
+  }, [isGameAnalysisRunning, gameAnalysisType, gameAnalysisDone, gameAnalysisTotal]);
+
+  React.useEffect(() => {
+    if (!depthPopoverOpen) return;
+    depthCloseButtonRef.current?.focus({ preventScroll: true });
+
+    const handlePointerDown = (event: PointerEvent) => {
+      const target = event.target as Node | null;
+      if (!target) return;
+      if (depthPopoverRef.current?.contains(target)) return;
+      if (depthButtonRef.current?.contains(target)) return;
+      closeDepthPopover();
+    };
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        event.stopPropagation();
+        closeDepthPopover(true);
+      }
+    };
+
+    document.addEventListener('pointerdown', handlePointerDown);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('pointerdown', handlePointerDown);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [closeDepthPopover, depthPopoverOpen]);
+
+  const depthPopover = depthPopoverOpen && !isGameAnalysisRunning ? (
+    <div
+      id={depthPopoverId}
+      ref={depthPopoverRef}
+      className="analysis-command-bar__depth-popover"
+      role="dialog"
+      aria-modal="false"
+      aria-labelledby={depthPopoverTitleId}
+      data-analysis-live-depth-popover="true"
+    >
+      <div className="analysis-command-bar__depth-header">
+        <div>
+          <div id={depthPopoverTitleId} className="analysis-command-bar__depth-title">{t('Live analysis depth')}</div>
+          <div className="analysis-command-bar__depth-subtitle">{t('{visits} visits - {label}', { visits: liveVisits, label: liveVisitLabel })}</div>
+        </div>
+        <button
+          ref={depthCloseButtonRef}
+          type="button"
+          className="analysis-command-bar__depth-close"
+          onClick={() => closeDepthPopover(true)}
+          aria-label={t('Close live depth selector')}
+          title={t('Close live depth selector')}
+        >
+          <FaTimes size={12} aria-hidden="true" />
+        </button>
+      </div>
+      <div className="analysis-command-bar__depth-options" role="radiogroup" aria-label={t('Depth presets')}>
+        {liveVisitPresets.map((preset) => {
+          const active = preset === liveVisits;
+          return (
+            <button
+              key={preset}
+              type="button"
+              role="radio"
+              aria-checked={active}
+              className={['analysis-command-bar__depth-option', active ? 'active' : ''].join(' ')}
+              aria-label={t('{count} visits, {label}. {description}', { count: formatVisitCount(preset), label: visitPresetLabel(preset), description: visitPresetDescription(preset) })}
+              title={visitPresetDescription(preset)}
+              onMouseEnter={() => setDepthHintVisits(preset)}
+              onFocus={() => setDepthHintVisits(preset)}
+              onClick={() => applyLiveVisits(preset)}
+              data-analysis-live-depth-option={preset}
+            >
+              <span className="analysis-command-bar__depth-option-value">{formatVisitCount(preset)}</span>
+              <span className="analysis-command-bar__depth-option-label">{visitPresetLabel(preset)}</span>
+            </button>
+          );
+        })}
+      </div>
+      <p className="analysis-command-bar__depth-help" aria-live="polite">
+        <span>{depthHintLabel}</span>
+        {depthHintDescription}
+      </p>
+      <div className="analysis-command-bar__depth-custom">
+        <input
+          type="range"
+          min={ANALYSIS_VISIT_SLIDER_MIN}
+          max={ANALYSIS_VISIT_SLIDER_MAX}
+          step={0.01}
+          value={visitCountToSliderValue(liveVisits)}
+          className="analysis-command-bar__depth-slider"
+          aria-label={t('Live analysis depth slider')}
+          aria-valuetext={t('{visits} visits', { visits: liveVisits })}
+          style={{ '--analysis-depth-fill': `${visitSliderFillPercent(liveVisits)}%` } as React.CSSProperties}
+          onChange={(event) => applyLiveVisits(sliderValueToVisitCount(Number.parseFloat(event.currentTarget.value)))}
+        />
+        <input
+          type="number"
+          min={ANALYSIS_MIN_VISITS}
+          max={ENGINE_MAX_VISITS}
+          step={1}
+          value={depthDraft}
+          className="analysis-command-bar__depth-input"
+          aria-label={t('Exact live analysis visits')}
+          onChange={(event) => setDepthDraft(event.currentTarget.value)}
+          onBlur={(event) => commitDepthDraft(event.currentTarget.value)}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') event.currentTarget.blur();
+            if (event.key === 'Escape') {
+              setDepthDraft(String(liveVisits));
+              closeDepthPopover(true);
+            }
+          }}
+        />
+      </div>
+      <div className="analysis-command-bar__depth-scale" aria-hidden="true">
+        <span>{ANALYSIS_MIN_VISITS}</span>
+        <span>{formatVisitCount(ENGINE_MAX_VISITS)}</span>
+      </div>
+    </div>
+  ) : null;
+
+  const toggleDepthPopover = () => {
+    setDepthPopoverOpen((open) => !open);
+  };
+
+  if (!shouldShow) return null;
+
+  return (
+    <div className="analysis-command-bar" data-analysis-command-bar="true">
+      <div
+        className={engineStatusClass}
+        title={engineStatusTitle}
+        role="status"
+        aria-label={t('Engine status: {label}', { label: engineSummary.compactLabel })}
+        data-analysis-engine-status={engineStatus}
+      >
+        <span className={['analysis-command-bar__dot', engineDot].join(' ')} aria-hidden="true" />
+        <span className="analysis-command-bar__status-text">
+          <span className="analysis-command-bar__status-state">{t(engineSummary.stateLabel)}</span>
+          <span className="analysis-command-bar__status-detail" aria-hidden="true">
+            {engineSummary.isFallback ? t(' fallback') : ''}{' · '}{engineSummary.activeBackendLabel}
+          </span>
+        </span>
+        {engineError && (
+          <button
+            type="button"
+            className={[
+              'analysis-command-bar__status-copy',
+              engineErrorCopied ? 'copied' : '',
+            ].join(' ')}
+            onClick={() => void copyEngineError()}
+            title={t(engineErrorCopied ? 'Copied engine error details' : 'Copy engine error details')}
+            aria-label={t(engineErrorCopied ? 'Engine error details copied' : 'Copy engine error details')}
+          >
+            <FaCopy aria-hidden="true" />
+          </button>
+        )}
+      </div>
+
+      <div
+        ref={metricsRef}
+        className={[
+          'analysis-command-bar__metrics',
+          metricScrollEdges.overflow ? 'is-scrollable' : '',
+          metricScrollEdges.overflow && !metricScrollEdges.atStart ? 'has-overflow-left' : '',
+          metricScrollEdges.overflow && !metricScrollEdges.atEnd ? 'has-overflow-right' : '',
+        ].join(' ')}
+        aria-label={t('Analysis summary')}
+        data-analysis-metrics-overflow={horizontalOverflowLabel(metricScrollEdges)}
+      >
+        <div className="analysis-command-bar__metric">
+          <span className="analysis-command-bar__value analysis-command-bar__value--win">
+            {formatAnalysisWinRate(winRate)}
+          </span>
+          <span className="analysis-command-bar__label">
+            <span className="analysis-command-bar__label-full">{t('Black win')}</span>
+            <span className="analysis-command-bar__label-compact">{t('B win')}</span>
+          </span>
+        </div>
+        <div className="analysis-command-bar__metric">
+          <span className="analysis-command-bar__value analysis-command-bar__value--score">
+            {formatAnalysisScoreLead(scoreLead)}
+          </span>
+          <span className="analysis-command-bar__label">
+            <span className="analysis-command-bar__label-full">{t('Score lead')}</span>
+            <span className="analysis-command-bar__label-compact">{t('Score')}</span>
+          </span>
+        </div>
+        <div
+          className="analysis-command-bar__metric"
+          title={moveQualityTitle}
+          data-analysis-move-quality={moveQualityKind}
+        >
+          <span className={['analysis-command-bar__value', `analysis-command-bar__value--${moveQualityTone}`].join(' ')}>
+            {moveQualityValue}
+          </span>
+          <span className="analysis-command-bar__label">
+            <span className="analysis-command-bar__label-full">{moveQualityLabel}</span>
+            <span className="analysis-command-bar__label-compact">{t('Quality')}</span>
+          </span>
+        </div>
+        {bestMoveSummary && (
+          <div className="analysis-command-bar__metric" title={bestMoveSummary.title} data-analysis-best-move="true">
+            <span className="analysis-command-bar__value analysis-command-bar__value--best">
+              {bestMoveSummary.moveLabel}
+            </span>
+            <span className="analysis-command-bar__label">{isPro ? bestMoveSummary.detailLabel || t('Best move') : t('Best move')}</span>
+          </div>
+        )}
+      </div>
+
+      <div
+        ref={actionsRef}
+        className={[
+          'analysis-command-bar__actions',
+          actionScrollEdges.overflow ? 'is-scrollable' : '',
+          actionScrollEdges.overflow && !actionScrollEdges.atStart ? 'has-overflow-left' : '',
+          actionScrollEdges.overflow && !actionScrollEdges.atEnd ? 'has-overflow-right' : '',
+        ].join(' ')}
+        aria-label={t('Analysis controls')}
+        data-analysis-actions-overflow={horizontalOverflowLabel(actionScrollEdges)}
+      >
+        {showLiveToggle && (
+          <button
+            type="button"
+            className={['analysis-command-bar__button', isAnalysisMode ? 'active' : ''].join(' ')}
+            onClick={toggleAnalysisMode}
+            aria-pressed={isAnalysisMode}
+            title={liveAnalysisLabel}
+            aria-label={liveAnalysisLabel}
+          >
+            <FaPlay size={12} aria-hidden="true" />
+            <span>{liveButtonLabel}</span>
+          </button>
+        )}
+        <button
+          type="button"
+          className={[
+            'analysis-command-bar__button',
+            fastReviewButton.state === 'running' ? 'danger active' : '',
+            fastReviewButton.state === 'complete' ? 'active' : '',
+          ].join(' ')}
+          onClick={() => {
+            if (isGameAnalysisRunning) stopGameAnalysis();
+            else startFastGameAnalysis();
+          }}
+          disabled={fastReviewButton.disabled}
+          title={fastReviewButton.title}
+          aria-label={fastReviewButton.ariaLabel}
+          data-analysis-fast-review-state={fastReviewButton.state}
+        >
+          {isGameAnalysisRunning ? <FaSquare size={12} aria-hidden="true" /> : <FaRobot size={12} aria-hidden="true" />}
+          <span className="analysis-command-bar__label-full">{fastReviewButton.label}</span>
+          <span className="analysis-command-bar__label-compact">{fastReviewCompactLabel}</span>
+        </button>
+        <button
+          ref={depthButtonRef}
+          type="button"
+          className={['analysis-command-bar__button', liveVisits > ANALYSIS_MIN_VISITS ? 'active' : ''].join(' ')}
+          onClick={toggleDepthPopover}
+          disabled={isGameAnalysisRunning}
+          data-analysis-live-depth="true"
+          aria-haspopup="dialog"
+          aria-expanded={depthPopoverOpen}
+          aria-controls={depthPopoverOpen && !isGameAnalysisRunning ? depthPopoverId : undefined}
+          title={
+            isGameAnalysisRunning
+              ? t('Stop game analysis before changing live depth')
+              : t('Live analysis depth: {visits} visits ({label}).', { visits: liveVisits, label: liveVisitLabel })
+          }
+          aria-label={t('Depth: {count} — {visits} visits', { count: liveVisitCountLabel, visits: liveVisits })}
+        >
+          <FaSearch size={12} aria-hidden="true" />
+          <span>{t('Depth: {value}', { value: isPro ? liveVisitCountLabel : liveVisitLabel })}</span>
+          {isPro && (
+          <span
+            className="analysis-command-bar__depth-meter"
+            aria-hidden="true"
+            data-analysis-live-depth-meter="true"
+          >
+            {liveVisitDepthSegments.map((segment) => (
+              <span
+                key={segment.preset}
+                className={[
+                  'analysis-command-bar__depth-meter-segment',
+                  segment.active ? 'active' : '',
+                ].join(' ')}
+                data-analysis-live-depth-segment={segment.preset}
+              />
+            ))}
+          </span>
+          )}
+        </button>
+        <button
+          type="button"
+          className={['analysis-command-bar__button', analysisControls.analysisShowHints && !topMovesHiddenByPolicy ? 'active' : ''].join(' ')}
+          onClick={() => toggleOverlay('analysisShowHints')}
+          aria-pressed={analysisControls.analysisShowHints}
+          disabled={topMovesHiddenByPolicy}
+          title={topMovesToggleTitle}
+        >
+          <FaLayerGroup size={12} aria-hidden="true" />
+          <span>{t('Top moves')}</span>
+        </button>
+        {isPro && (
+        <button
+          type="button"
+          className={['analysis-command-bar__button', analysisControls.analysisShowHints && !topMovesHiddenByPolicy ? 'active' : ''].join(' ')}
+          onClick={cycleTopMoveMetric}
+          data-analysis-hint-metric="true"
+          title={t('Cycle the primary top move hint label')}
+          aria-label={topMoveMetricAriaLabel}
+        >
+          <FaChartBar size={12} aria-hidden="true" />
+          <span>{t('Hint: {metric}', { metric: topMoveMetricLabel })}</span>
+        </button>
+        )}
+        <button
+          type="button"
+          className={['analysis-command-bar__button', analysisControls.analysisShowPolicy ? 'active' : ''].join(' ')}
+          onClick={() => toggleOverlay('analysisShowPolicy')}
+          aria-pressed={analysisControls.analysisShowPolicy}
+          title={heatmapToggleLabel}
+        >
+          <FaThLarge size={12} aria-hidden="true" />
+          <span>{t('Heatmap')}</span>
+        </button>
+        {isPro && (
+        <button
+          type="button"
+          className={[
+            'analysis-command-bar__button',
+            analysisControls.analysisShowPolicy && policyHeatmapMetric !== 'policy' ? 'active' : '',
+          ].join(' ')}
+          onClick={cyclePolicyHeatmapMetric}
+          data-analysis-policy-metric="true"
+          title={t('Cycle the move heatmap metric')}
+          aria-label={policyHeatmapMetricAriaLabel}
+        >
+          <FaChartBar size={12} aria-hidden="true" />
+          <span>{t('Map: {metric}', { metric: policyHeatmapMetricLabel })}</span>
+        </button>
+        )}
+        <button
+          type="button"
+          className={['analysis-command-bar__button', analysisControls.analysisShowOwnership ? 'active' : ''].join(' ')}
+          onClick={() => toggleOverlay('analysisShowOwnership')}
+          aria-pressed={analysisControls.analysisShowOwnership}
+          title={territoryToggleLabel}
+        >
+          <FaMap size={12} aria-hidden="true" />
+          <span>{t('Territory')}</span>
+        </button>
+        <button
+          type="button"
+          className="analysis-command-bar__button"
+          onClick={onOpenGameReport}
+          title={gameReportLabel}
+          aria-label={gameReportLabel}
+        >
+          <FaFileAlt size={12} aria-hidden="true" />
+          <span>{t('Report')}</span>
+        </button>
+        <button
+          type="button"
+          className="analysis-command-bar__button analysis-command-bar__button--dismiss"
+          onClick={() => updateSettings({ showAnalysisBar: false })}
+          title={t('Hide the analysis bar (re-enable it from the View menu)')}
+          aria-label={t('Hide the analysis bar')}
+        >
+          <FaTimes size={12} aria-hidden="true" />
+        </button>
+      </div>
+
+      {depthPopover}
+
+      {isGameAnalysisRunning && gameProgress && (
+        <div className="analysis-command-bar__progress-caption" title={gameProgress.title} aria-live="polite">
+          {gameProgress.captionLabel}
+        </div>
+      )}
+
+      {isGameAnalysisRunning && gameAnalysisTotal > 0 && (
+        <div className="analysis-command-bar__progress" aria-hidden="true">
+          <span
+            className="analysis-command-bar__progress-fill"
+            style={{ width: `${Math.min(100, Math.round((gameAnalysisDone / gameAnalysisTotal) * 100))}%` }}
+          />
+        </div>
+      )}
+
+      {gameAnalysisType === 'fast' && (
+        <div className="analysis-command-bar__sr" aria-live="polite">
+          {t('Fast review in progress {caption}', { caption: gameProgress?.captionLabel ?? '' })}
+        </div>
+      )}
+    </div>
+  );
+};

@@ -1,0 +1,1349 @@
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import './dashboard.css';
+import { Icon, type IconName } from './icons';
+import type { CandidateMove, GameNode, GameRules, GameSettings, Player } from '../../types';
+import type { BranchInfo } from '../../utils/branchNavigation';
+import type { AnalysisControlsState } from '../layout/types';
+import { formatMoveLabel } from '../layout/ui-utils';
+import { MoveTree } from '../MoveTree';
+import { ScoreWinrateGraph } from '../ScoreWinrateGraph';
+import { TenukiRow } from '../TenukiRow';
+import { CandidateMoveList } from '../CandidateMoveList';
+import { AnalysisExperienceToggle } from '../AnalysisExperienceToggle';
+import { NotesPanel } from '../NotesPanel';
+import { Timer } from '../Timer';
+import { GameInfoPanel } from '../GameInfoPanel';
+import { LanguageSwitcher } from '../layout/LanguageSwitcher';
+import { getDashboardLayoutMode, type DashboardLayoutMode } from '../../utils/dashboardLayout';
+import { LIBRARY_OPEN_STORAGE_KEY } from '../../utils/layoutPreferences';
+import { readLocalStorage, writeLocalStorage } from '../../utils/storage';
+import { APP_BUILD_LABEL, APP_COMMIT_URL, APP_ISSUE_REPORT_URL } from '../../utils/appInfo';
+import { formatEngineBackendLabel, getEngineModelSource } from '../../utils/engineStatusSummary';
+import { DEFAULT_EVAL_THRESHOLDS, getEvaluationClass } from '../../utils/nodeAnalysis';
+import { evalColorToCss, getKaTrainEvalColors } from '../../utils/katrainTheme';
+import { ANALYSIS_VISIT_PRESETS, clampAnalysisVisits, visitPresetLabel } from '../../utils/visitPresets';
+import { formatRulesLabel } from '../../utils/gameInfoDisplay';
+import { formatReadableScoreLead, formatWinRateFavorLabel, POINTS_LOST_EXPLANATION } from '../../utils/analysisSummary';
+import { useT } from '../../i18n';
+
+type EngineState = 'ready' | 'running' | 'loading' | 'error';
+
+export interface DesktopDashboardProps {
+  // ---- slots (heavy components, read from the store themselves) ----
+  board: React.ReactNode;
+  boardControls?: React.ReactNode;
+
+  // ---- game meta ----
+  blackName: string;
+  whiteName: string;
+  blackRank: string;
+  whiteRank: string;
+  capturedBlack: number;
+  capturedWhite: number;
+  komi: number;
+  boardSize: number;
+  handicap: number;
+  rules: GameRules;
+  result: string | null;
+  currentPlayer: Player;
+  moveCount: number;
+  totalMoves: number;
+  loadedFileName: string | null;
+  dirty: boolean;
+  currentNode: GameNode;
+  /** True while a mistake drill is asking about this position; see `mistakeDrill`. */
+  drillHidesAnswer: boolean;
+  /** `${x},${y}` of the candidate whose variation is on the board, or null. */
+  hoveredCandidateKey: string | null;
+  onHoverCandidate: (move: CandidateMove | null) => void;
+  branchInfo: BranchInfo;
+
+  // ---- analysis ----
+  showAnalysis: boolean;
+  winRate: number | null;
+  scoreLead: number | null;
+  pointsLost: number | null;
+  pointsLostLabel: string | null;
+
+  // ---- engine ----
+  engineState: EngineState;
+  enginePillLabel: string;
+  engineMeta: string;
+  engineMetaTitle: string;
+  engineBackend: string;
+  engineModelLabel: string;
+  analysisCacheSize: number;
+
+  // ---- modes / settings ----
+  mode: 'play' | 'analyze';
+  setMode: (m: 'play' | 'analyze') => void;
+  isContinuousAnalysis: boolean;
+  toggleContinuousAnalysis: () => void;
+  settings: GameSettings;
+  updateControls: (partial: Partial<AnalysisControlsState>) => void;
+  updateSettings: (partial: Partial<GameSettings>) => void;
+  isInsertMode: boolean;
+  toggleInsertMode: () => void;
+  isSelectingRegionOfInterest: boolean;
+  startSelectRegionOfInterest: () => void;
+
+  // ---- panel open state (owned by Layout for keyboard shortcuts) ----
+  /** True when the loaded SGF carries per-move clock data worth charting. */
+  hasMoveTimes?: boolean;
+  libraryOpen: boolean;
+  setLibraryOpen: (open: boolean) => void;
+  libraryPanel?: React.ReactNode;
+  libraryWidth?: number;
+  sidebarOpen: boolean;
+  setSidebarOpen: (open: boolean) => void;
+  focusMode?: boolean;
+
+  // ---- game analysis ----
+  isGameAnalysisRunning: boolean;
+  gameAnalysisType: string | null;
+  gameAnalysisDone: number;
+  gameAnalysisTotal: number;
+  startQuickGameAnalysis: () => void;
+  startFastGameAnalysis: () => void;
+  stopGameAnalysis: () => void;
+  onClearAnalysisCache: () => void;
+  onOpenGameReport: () => void;
+
+  // ---- navigation / play ----
+  navigateBack: () => void;
+  navigateForward: () => void;
+  canNavigateBack: boolean;
+  canNavigateForward: boolean;
+  navigateStart: () => void;
+  navigateEnd: () => void;
+  navigateToMove: (n: number) => void;
+  jumpBack: () => void;
+  jumpForward: () => void;
+  findMistake: (dir: 1 | -1) => void;
+  canFindPreviousMistake: boolean;
+  canFindNextMistake: boolean;
+  rotateBoard: () => void;
+  switchBranch: (dir: 1 | -1) => void;
+  undoToBranchPoint: () => void;
+  makeCurrentNodeMainBranch: () => void;
+  passTurn: () => void;
+  onUndo: () => void;
+  onAiMove: () => void;
+  onResign: () => void;
+  onPlayBest: () => void;
+
+  // ---- file / header actions ----
+  onNewGame: () => void;
+  onSaveSgf: () => void;
+  onCopySgf: () => void;
+  onSaveToLibrary: (returnFocus?: HTMLElement | null) => void;
+  onLoadSgf: () => void;
+  onPasteSgf: (returnFocus?: HTMLElement | null) => void;
+  onScanBoard: (returnFocus?: HTMLElement | null) => void;
+  onSettings: () => void;
+  onCommandPalette: () => void;
+  onKeyboardHelp: (returnFocus?: HTMLElement | null) => void;
+  onAbout: (returnFocus?: HTMLElement | null) => void;
+
+  toast: (message: string, type?: 'info' | 'error' | 'success') => void;
+
+  /** Routine status, rendered in the header's spare middle rather than over it. */
+  headerNotification?: React.ReactNode;
+}
+
+const EVAL_CLASS_LABELS = ['Blunder', 'Mistake', 'Inaccuracy', 'Slight loss', 'Good', 'Best'] as const;
+
+/**
+ * The quality colour for a loss, from the same thresholds and palette the
+ * candidate list, the eval dots and the analysis panel use. This shell used
+ * to carry its own 5/2/1/0.5 scale, so a 4-point loss was an orange
+ * "Mistake" in the command bar and a yellow "Inaccuracy" in the list beside it.
+ */
+function evalColorForPointsLost(pl: number, thresholds: readonly number[], theme: unknown): string {
+  const colors = getKaTrainEvalColors(theme);
+  const index = getEvaluationClass(pl, thresholds, colors.length);
+  return evalColorToCss(colors[index] ?? colors[colors.length - 1]!);
+}
+
+function evalLegendRows(
+  thresholds: readonly number[],
+  theme: unknown,
+  tr: (text: string, vars?: Record<string, string | number>) => string,
+): Array<[string, string, string]> {
+  const thresholdList = thresholds.length > 0 ? thresholds : DEFAULT_EVAL_THRESHOLDS;
+  const colors = getKaTrainEvalColors(theme);
+  const ranges = [`${thresholdList[0]}+`, `${thresholdList[1]}-${thresholdList[0]}`, `${thresholdList[2]}-${thresholdList[1]}`, `${thresholdList[3]}-${thresholdList[2]}`, `${thresholdList[4]}-${thresholdList[3]}`, `0-${thresholdList[4]}`];
+  return EVAL_CLASS_LABELS.map((label, index) => [
+    tr(label),
+    evalColorToCss(colors[index] ?? colors[colors.length - 1]!),
+    tr('{n} pt', { n: ranges[index] }),
+  ]);
+}
+
+function formatVisitCount(n: number): string {
+  if (n < 1000) return String(n);
+  if (n < 100_000) return `${(n / 1000).toFixed(1)}k`;
+  if (n < 1_000_000) return `${Math.round(n / 1000)}k`;
+  return `${Math.round(n / 1_000_000)}M`;
+}
+
+type PopoverId = 'engine' | 'view' | 'file' | 'help' | null;
+type PopoverInputMode = 'pointer' | 'keyboard';
+
+const HERO_DISMISSED_KEY = 'wk-getting-started-dismissed';
+type DashboardOverlayKey = keyof Pick<
+  GameSettings,
+  'analysisShowChildren' | 'analysisShowEval' | 'analysisShowHints' | 'analysisShowPolicy' | 'analysisShowOwnership'
+>;
+
+const DASHBOARD_OVERLAY_NAMES: Record<DashboardOverlayKey, string> = {
+  analysisShowChildren: 'child move markers',
+  analysisShowEval: 'move evaluation dots',
+  analysisShowHints: 'top move hints',
+  analysisShowPolicy: 'move heatmap',
+  analysisShowOwnership: 'territory ownership',
+};
+
+export const DesktopDashboard: React.FC<DesktopDashboardProps> = (props) => {
+  const {
+    board,
+    boardControls,
+    blackName, whiteName, blackRank, whiteRank,
+    capturedBlack, capturedWhite, komi, boardSize, handicap, rules, result,
+    currentPlayer, moveCount, totalMoves, loadedFileName, dirty, currentNode, drillHidesAnswer,
+    hoveredCandidateKey, onHoverCandidate, branchInfo,
+    showAnalysis, winRate, scoreLead, pointsLost, pointsLostLabel,
+    engineState, enginePillLabel, engineMetaTitle, engineBackend, engineModelLabel, analysisCacheSize,
+    mode, setMode, isContinuousAnalysis, toggleContinuousAnalysis,
+    settings, updateControls, updateSettings,
+    isInsertMode, toggleInsertMode, isSelectingRegionOfInterest, startSelectRegionOfInterest,
+    hasMoveTimes = false,
+    libraryOpen, setLibraryOpen, libraryPanel, libraryWidth, sidebarOpen, setSidebarOpen, focusMode = false,
+    isGameAnalysisRunning, gameAnalysisType, gameAnalysisDone, gameAnalysisTotal,
+    startQuickGameAnalysis, startFastGameAnalysis, stopGameAnalysis, onClearAnalysisCache, onOpenGameReport,
+    navigateBack, navigateForward, canNavigateBack, canNavigateForward, navigateStart, navigateEnd, navigateToMove,
+    jumpBack, jumpForward, findMistake, canFindPreviousMistake, canFindNextMistake, rotateBoard, switchBranch, undoToBranchPoint, makeCurrentNodeMainBranch,
+    passTurn, onUndo, onAiMove, onResign, onPlayBest,
+    onNewGame, onSaveSgf, onCopySgf, onSaveToLibrary, onLoadSgf, onPasteSgf, onScanBoard,
+    onSettings, onCommandPalette, onKeyboardHelp, onAbout,
+    toast, headerNotification,
+  } = props;
+  const t = useT();
+  const rulesLabel = formatRulesLabel(rules);
+
+  const [sections, setSections] = useState({ info: true, tree: true, analysis: true, candidates: true, notes: true });
+  // Top game-info strip and bottom metrics bar collapse like the side panels so
+  // the board can take the full column; reopen handles mirror the edge toggles.
+  const [gamestripOpen, setGamestripOpen] = useState(() => {
+    return readLocalStorage('web-katrain:dash_gamestrip_open:v1') !== 'false';
+  });
+  const [commandbarOpen, setCommandbarOpen] = useState(() => {
+    return readLocalStorage('web-katrain:dash_commandbar_open:v1') !== 'false';
+  });
+  useEffect(() => {
+    writeLocalStorage('web-katrain:dash_gamestrip_open:v1', String(gamestripOpen));
+  }, [gamestripOpen]);
+  useEffect(() => {
+    writeLocalStorage('web-katrain:dash_commandbar_open:v1', String(commandbarOpen));
+  }, [commandbarOpen]);
+  // The command bar only holds live analysis metrics, so it stays out of the way
+  // entirely while analysis is off — engine state, captures and the "analysis is
+  // off" prompt already live in the header pill, the gamestrip and the sidebar.
+  const hasAnalysisMetrics =
+    winRate != null ||
+    scoreLead != null ||
+    pointsLost != null ||
+    !!currentNode.analysis?.moves?.[0];
+  const commandbarHasContent = hasAnalysisMetrics || isContinuousAnalysis || isGameAnalysisRunning;
+  const commandbarVisible = commandbarOpen && showAnalysis && commandbarHasContent;
+  // Three states, not two, because the stage reads this to decide whether to
+  // hold the bar's footprint: "reserved" means the bar is hidden only because
+  // analysis is off, so the board keeps its size across a Tab. "closed" means
+  // the user collapsed the bar and wants that space for the board.
+  const commandbarState = commandbarVisible ? 'open' : commandbarOpen ? 'reserved' : 'closed';
+  const [legend, setLegend] = useState({ winrate: true, score: true, time: false });
+  const [legendOpen, setLegendOpen] = useState(false);
+  const [layoutMode, setLayoutMode] = useState<DashboardLayoutMode>(() => {
+    if (typeof window === 'undefined') return 'wide';
+    return getDashboardLayoutMode(window.innerWidth);
+  });
+  const [initialWideLibraryOpen] = useState(() => {
+    const stored = readLocalStorage(LIBRARY_OPEN_STORAGE_KEY);
+    if (stored === 'true') return true;
+    if (stored === 'false') return false;
+    return libraryOpen;
+  });
+  const layoutModeRef = useRef<DashboardLayoutMode>(layoutMode);
+  const libraryOpenRef = useRef(libraryOpen);
+  const wideLibraryOpenRef = useRef(initialWideLibraryOpen);
+  const [pop, setPop] = useState<{ id: PopoverId; rect: DOMRect; inputMode: PopoverInputMode } | null>(null);
+  const popTriggerRef = useRef<HTMLElement | null>(null);
+  const [moveInputDraft, setMoveInputDraft] = useState<string | null>(null);
+  const moveInputValue = moveInputDraft ?? String(moveCount);
+
+  // ---- first-run hero ----
+  const [heroDismissed, setHeroDismissed] = useState(() => {
+    if (typeof window === 'undefined') return true;
+    try {
+      return window.localStorage.getItem(HERO_DISMISSED_KEY) === 'true';
+    } catch {
+      return true;
+    }
+  });
+  const dismissHero = useCallback(() => {
+    setHeroDismissed(true);
+    try {
+      window.localStorage.setItem(HERO_DISMISSED_KEY, 'true');
+    } catch {
+      // ignore storage failures
+    }
+  }, []);
+  // Only on a fresh, untouched game: the board stays playable underneath, and
+  // the card hides itself as soon as a move exists or the game has edits.
+  const showHero = !heroDismissed && totalMoves === 0 && !dirty;
+
+  useEffect(() => {
+    libraryOpenRef.current = libraryOpen;
+    if (layoutMode === 'wide') {
+      wideLibraryOpenRef.current = libraryOpen;
+    }
+  }, [layoutMode, libraryOpen]);
+
+  // ---- responsive mode ----
+  useEffect(() => {
+    const apply = () => {
+      const nextMode = getDashboardLayoutMode(window.innerWidth);
+      const previousMode = layoutModeRef.current;
+      layoutModeRef.current = nextMode;
+      setLayoutMode(nextMode);
+      if (nextMode === previousMode) return;
+      if (previousMode === 'wide') {
+        wideLibraryOpenRef.current = libraryOpenRef.current;
+      }
+      setLibraryOpen(nextMode === 'wide' ? wideLibraryOpenRef.current : false);
+    };
+    window.addEventListener('resize', apply);
+    return () => window.removeEventListener('resize', apply);
+  }, [setLibraryOpen]);
+
+  const libDrawer = layoutMode !== 'wide';
+  const sideDrawer = layoutMode === 'narrow';
+  const drawerOpen = (libDrawer && libraryOpen) || (sideDrawer && sidebarOpen);
+
+  const gridTemplateColumns = useMemo(() => {
+    const libCol = (!libDrawer && libraryOpen) ? 'var(--library-w)' : '0px';
+    const sideCol = (!sideDrawer && sidebarOpen) ? 'var(--sidebar-w)' : '0px';
+    return `${libCol} minmax(0,1fr) ${sideCol}`;
+  }, [libDrawer, libraryOpen, sideDrawer, sidebarOpen]);
+  const dashboardStyle = libraryWidth
+    ? ({ '--library-w': `${libraryWidth}px` } as React.CSSProperties)
+    : undefined;
+
+  const toggleLibrary = () => {
+    const next = !libraryOpen;
+    setLibraryOpen(next);
+    if (next && layoutMode === 'narrow') setSidebarOpen(false);
+  };
+  const toggleSidebar = () => {
+    const next = !sidebarOpen;
+    setSidebarOpen(next);
+    if (next && layoutMode === 'narrow') setLibraryOpen(false);
+  };
+
+  // ---- popovers ----
+  const openPop = (id: Exclude<PopoverId, null>, e: React.MouseEvent) => {
+    if (pop?.id === id) {
+      setPop(null);
+      return;
+    }
+    popTriggerRef.current = e.currentTarget as HTMLElement;
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    setPop({ id, rect, inputMode: e.detail === 0 ? 'keyboard' : 'pointer' });
+  };
+  const closePop = useCallback(() => setPop(null), []);
+  const closePopWithFocus = useCallback(() => {
+    setPop(null);
+    window.setTimeout(() => popTriggerRef.current?.focus({ preventScroll: true }), 0);
+  }, []);
+  useEffect(() => {
+    if (!pop) return;
+    const focusPopover = pop.inputMode === 'keyboard'
+      ? window.requestAnimationFrame(() => {
+          const popover = document.querySelector<HTMLElement>('[data-dashboard-popover="true"]');
+          const firstControl = popover?.querySelector<HTMLElement>(
+            'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+          );
+          (firstControl ?? popover)?.focus({ preventScroll: true });
+        })
+      : 0;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return;
+      e.preventDefault();
+      e.stopPropagation();
+      closePopWithFocus();
+    };
+    document.addEventListener('keydown', onKey);
+    return () => {
+      if (focusPopover) window.cancelAnimationFrame(focusPopover);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [pop, closePopWithFocus]);
+
+  // ---- command bar metrics ----
+  // A drill asking about this position is asking for exactly this move, so the
+  // metric strip has to withhold it too -- hiding the board hints and then
+  // printing "BEST MOVE G4" under the board answers the question anyway.
+  const bestMove = drillHidesAnswer ? null : currentNode.analysis?.moves?.[0] ?? null;
+  const isProDetail = settings.analysisExperience === 'pro';
+  // Remote analysis answers from a WebSocket server, so the browser backend and
+  // bundled model are not what the pill and the engine popover should name.
+  const isRemoteEngine = settings.engineMode === 'remote' && !!settings.remoteEngineUrl.trim();
+  // "Fast review" matches the command bar's name for the same operation;
+  // avoid exposing MCTS jargon in one surface and not the other.
+  const dashboardFastMctsTitle = isGameAnalysisRunning
+    ? t('Stop {game} analysis', { game: t(gameAnalysisType ?? 'current') })
+    : t('Run a fast engine review of the current line');
+  const dashboardFastMctsLabel = isGameAnalysisRunning ? t('Stop game analysis') : t('Run fast review');
+
+  const sectionHead = (
+    key: keyof typeof sections,
+    title: string,
+    iconName: IconName,
+    actions?: React.ReactNode
+  ) => (
+    <div className="section-head">
+      <button
+        type="button"
+        className="section-head-toggle"
+        aria-expanded={sections[key]}
+        onClick={() => {
+        setSections((s) => ({ ...s, [key]: !s[key] }));
+      }}
+      >
+        <span className="chev"><Icon name="chevR" size={13} /></span>
+        <span style={{ color: 'var(--muted)', display: 'inline-flex' }}><Icon name={iconName} size={13} /></span>
+        <span className="stitle"><span className="seyebrow">{title}</span></span>
+      </button>
+      {actions ? <div className="saction">{actions}</div> : null}
+    </div>
+  );
+
+  // ---- overlay toggle helper ----
+  const overlayBtn = (
+    keyName: DashboardOverlayKey,
+    label: string,
+    iconName: IconName,
+    disabled?: boolean
+  ) => {
+    const on = !!settings[keyName];
+    const overlayName = t(DASHBOARD_OVERLAY_NAMES[keyName]);
+    const overlayActionLabel = on ? t('Hide {overlay}', { overlay: overlayName }) : t('Show {overlay}', { overlay: overlayName });
+    const topMovesHiddenByPolicy = keyName === 'analysisShowHints' && disabled;
+    const overlayTitle = topMovesHiddenByPolicy
+      ? t('Move heatmap is showing; top move hints are hidden')
+      : overlayActionLabel;
+    // No aria-label: the accessible name is the visible chip text, so voice
+    // control can act on the word the user reads, and aria-pressed carries the
+    // on/off state on its own. A "Hide …"/"Show …" name states it a second
+    // time, and reads as a contradiction next to the pressed state.
+    return (
+      <button
+        type="button"
+        className={`pbtn${on ? ' on' : ''}`}
+        disabled={disabled}
+        aria-pressed={on}
+        title={overlayTitle}
+        onClick={() => updateControls({ [keyName]: !on } as Partial<AnalysisControlsState>)}
+      >
+        <Icon name={iconName} size={12} />{label}
+      </button>
+    );
+  };
+
+  const showCompactStartStrip = showHero && layoutMode === 'compact' && gamestripOpen;
+  const renderStartActions = () => (
+    <>
+      <button type="button" className="tbtn primary" onClick={() => { dismissHero(); onNewGame(); }}>
+        <Icon name="plus" size={14} /> {t('New game')}
+      </button>
+      <button type="button" className="tbtn" onClick={() => { dismissHero(); onLoadSgf(); }}>
+        <Icon name="folder" size={14} /> {t('Open SGF')}
+      </button>
+      <button type="button" className="tbtn" onClick={() => { dismissHero(); onPasteSgf(); }}>
+        <Icon name="clipboard" size={14} /> {t('Paste SGF / OGS')}
+      </button>
+      <button type="button" className="tbtn" onClick={() => { dismissHero(); onScanBoard(); }}>
+        <Icon name="camera" size={14} /> {t('From photo')}
+      </button>
+    </>
+  );
+
+  return (
+    <div
+      className="wk-dashboard"
+      data-layout={layoutMode}
+      data-library={libraryOpen ? 'open' : 'closed'}
+      data-sidebar={sidebarOpen ? 'open' : 'closed'}
+      data-focus={focusMode ? 'on' : 'off'}
+      data-gamestrip={gamestripOpen ? 'open' : 'closed'}
+      data-commandbar={commandbarState}
+      style={dashboardStyle}
+    >
+      {/* ============ Header ============ */}
+      <header className="header">
+        <div className="brand">
+          <span className="brand-mark" aria-hidden="true" />
+          {/* The app name is the page's only top-level heading; as a span there was
+              no h1 at all, so heading-based navigation had nothing to land on.
+              .brand-name sets font-size/weight explicitly and Preflight zeroes
+              heading margins, so this renders identically. */}
+          <h1 className="brand-name">Web <b>KaTrain</b></h1>
+        </div>
+        <div className="header-divider" />
+        <div className="iconcluster" id="wk-file-actions">
+          <button type="button" className="iconbtn" title={t('New game')} aria-label={t('New game')} onClick={onNewGame}><Icon name="plus" /></button>
+          <button type="button" className="iconbtn" title={t('Open SGF / photo / weights')} aria-label={t('Load SGF, board photo, or model weights')} onClick={onLoadSgf}><Icon name="folder" /></button>
+          <button type="button" className="iconbtn" title={t('Save SGF')} aria-label={t('Save SGF')} onClick={onSaveSgf}><Icon name="save" /></button>
+          <button
+            type="button"
+            className={`iconbtn${pop?.id === 'file' ? ' active' : ''}`}
+            title={t('More file actions')}
+            aria-label={t('More file actions')}
+            aria-haspopup="dialog"
+            aria-expanded={pop?.id === 'file'}
+            onClick={(e) => openPop('file', e)}
+          >
+            <Icon name="dots" />
+          </button>
+        </div>
+        <div className="iconcluster" id="wk-util-actions">
+          <button type="button" className="iconbtn" title={t('Command palette')} aria-label={t('Command palette')} onClick={onCommandPalette}><Icon name="search" /></button>
+          <button type="button" className="iconbtn" title={t('Settings')} aria-label={t('Settings')} onClick={onSettings}><Icon name="settings" /></button>
+          <button
+            type="button"
+            className={`iconbtn${pop?.id === 'help' ? ' active' : ''}`}
+            title={t('Help')}
+            aria-label={t('Help')}
+            aria-haspopup="dialog"
+            aria-expanded={pop?.id === 'help'}
+            onClick={(e) => openPop('help', e)}
+          >
+            <Icon name="help" />
+          </button>
+        </div>
+
+        {/* The header's spare middle is a flex slot, not empty canvas: routine
+            status lands inside it so it is squeezed by the two control
+            clusters instead of drawn on top of them. */}
+        <div className="header-spacer">{headerNotification}</div>
+
+        <LanguageSwitcher
+          appLocale={settings.appLocale}
+          onLocaleChange={(appLocale) => updateSettings({ appLocale })}
+          className="dashboard-language-switcher"
+        />
+
+        <button
+          type="button"
+          className="engine-pill"
+          id="wk-engine-pill"
+          data-state={engineState}
+          aria-haspopup="dialog"
+          aria-expanded={pop?.id === 'engine'}
+          title={engineMetaTitle}
+          onClick={(e) => openPop('engine', e)}
+        >
+          <span className="dot" />
+          <span id="wk-engine-pill-label">{enginePillLabel}</span>
+          {/* Model name and hash are developer detail; the pill stays at
+              "status · backend" and the popover carries the full identity. */}
+          {isRemoteEngine || engineBackend ? (
+            <span className="meta" id="wk-engine-pill-meta">
+              {isRemoteEngine ? t('Remote') : formatEngineBackendLabel(engineBackend)}
+            </span>
+          ) : null}
+        </button>
+        <button
+          type="button"
+          className="analyze-toggle"
+          aria-pressed={isContinuousAnalysis}
+          onClick={() => {
+            if (!isContinuousAnalysis) setMode('analyze');
+            toggleContinuousAnalysis();
+          }}
+        >
+          <span className="dot" />
+          {t('Analyze')}
+        </button>
+        <button
+          type="button"
+          className="tbtn"
+          id="wk-view-menu-btn"
+          aria-haspopup="dialog"
+          aria-expanded={pop?.id === 'view'}
+          onClick={(e) => openPop('view', e)}
+        >
+          <Icon name="sliders" size={14} /> <span className="vlabel">{t('View')}</span>
+        </button>
+      </header>
+
+      {/* ============ Body ============ */}
+      <div className="body" style={{ gridTemplateColumns }}>
+        {/* Library */}
+        {/* Both sidebars are <aside>, so without distinct labels a screen reader
+            announces "complementary" twice with no way to tell them apart. */}
+        {/* The docked library is `libraryPanel`, supplied by Layout. There used
+            to be a fallback library rendered here for when that prop was
+            absent, but Layout gates the panel and `libraryOpen` on exactly the
+            same condition, so the fallback could never be on screen -- it just
+            rebuilt a search box and a row per saved game into the DOM on every
+            render, one of which displayed the literal text "green". */}
+        <aside
+          aria-label={t('Game library')}
+          aria-hidden={!libraryOpen}
+          inert={!libraryOpen}
+          className={`library${libraryPanel ? ' full-library' : ''}${libDrawer ? ' drawer' : ''}${libraryOpen ? ' open' : ''}`}
+        >
+          {libraryPanel}
+        </aside>
+
+        {/* Board column */}
+        <main className="board-col">
+          {gamestripOpen && (
+          <div className={`gamestrip${showCompactStartStrip ? ' start-strip' : ''}`}>
+            {showCompactStartStrip ? (
+              <div className="compact-start" role="region" aria-label={t('Get started')} data-dashboard-compact-start="true">
+                <span className="compact-start-title">{t('Start')}</span>
+                <div className="compact-start-actions">{renderStartActions()}</div>
+                <button
+                  type="button"
+                  className="iconbtn compact-start-close"
+                  title={t('Dismiss')}
+                  aria-label={t('Dismiss get started')}
+                  onClick={dismissHero}
+                >
+                  <Icon name="x" size={13} />
+                </button>
+              </div>
+            ) : (
+              <>
+                <div className="gs-players">
+                  <div className={`gs-player${currentPlayer === 'black' ? ' to-move' : ''}`}>
+                    <span className="stone-mini b" />
+                    <span className="nm" title={blackName || t('Black')}>{blackName || t('Black')}</span>
+                    {blackRank ? <span className="rk">{blackRank}</span> : null}
+                    {capturedWhite > 0 ? (
+                      <span className="cap" title={t('{n} captured', { n: capturedWhite })}>
+                        +{capturedWhite}<span className="sr-only"> {t('captured')}</span>
+                      </span>
+                    ) : null}
+                  </div>
+                  <div className={`gs-player${currentPlayer === 'white' ? ' to-move' : ''}`}>
+                    <span className="stone-mini w" />
+                    <span className="nm" title={whiteName || t('White')}>{whiteName || t('White')}</span>
+                    {whiteRank ? <span className="rk">{whiteRank}</span> : null}
+                    {capturedBlack > 0 ? (
+                      <span className="cap" title={t('{n} captured', { n: capturedBlack })}>
+                        +{capturedBlack}<span className="sr-only"> {t('captured')}</span>
+                      </span>
+                    ) : null}
+                  </div>
+                </div>
+                <span className="gs-sep" />
+                <span className="gs-fact gs-fact-primary">{boardSize}×{boardSize}</span>
+                <span className="gs-fact">{t('komi')} <b>{komi}</b></span>
+                {handicap > 0 ? <span className="gs-fact">H{handicap}</span> : null}
+                <span className="gs-fact">{t(rulesLabel)}</span>
+                {result ? <span className="gs-result">{result}</span> : null}
+                <span className="gs-sep gs-sep-file" />
+                <div className="gs-file">
+                  <Icon name="book" size={13} />
+                  <span className="fn" title={loadedFileName || t('Untitled')}>{loadedFileName || t('Untitled')}</span>
+                </div>
+                <span className={`gs-save ${dirty ? 'dirty' : 'saved'}`}>
+                  <Icon name={dirty ? 'alert' : 'check'} size={11} />{dirty ? t('Unsaved') : t('Saved')}
+                </span>
+                {/* The clock belongs with the game facts; it renders nothing
+                    when no time control is configured. */}
+                <Timer variant="status" />
+              </>
+            )}
+          </div>
+          )}
+
+          <div className="board-stage">
+            <button
+              type="button"
+              className={`edge-toggle left${libraryOpen ? ' open' : ''}`}
+              title={libraryOpen ? t('Hide library') : t('Show library')}
+              aria-label={libraryOpen ? t('Hide library') : t('Show library')}
+              aria-pressed={libraryOpen}
+              onClick={toggleLibrary}
+            >
+              <Icon name={libraryOpen ? 'chevL' : 'chevR'} size={13} />
+              {!libraryOpen && <span className="edge-toggle-label">{t('Library')}</span>}
+            </button>
+            <button
+              type="button"
+              className={`edge-toggle top${gamestripOpen ? ' open' : ''}`}
+              title={gamestripOpen ? t('Hide game info') : t('Show game info')}
+              aria-label={gamestripOpen ? t('Hide game info') : t('Show game info')}
+              aria-pressed={gamestripOpen}
+              onClick={() => setGamestripOpen((v) => !v)}
+            >
+              <Icon name={gamestripOpen ? 'chevU' : 'chevD'} size={13} />
+              {!gamestripOpen && <span className="edge-toggle-label">{t('Game info')}</span>}
+            </button>
+            <div className="board-wrap">
+              <div className="goban-frame">{board}</div>
+            </div>
+            {showHero && !showCompactStartStrip && (
+              <div className="hero-card" data-dashboard-hero="true" role="region" aria-label={t('Get started')}>
+                <button
+                  type="button"
+                  className="iconbtn hero-close"
+                  title={t('Dismiss')}
+                  aria-label={t('Dismiss get started')}
+                  onClick={dismissHero}
+                >
+                  <Icon name="x" size={13} />
+                </button>
+                <div className="hero-title">{t('Start here')}</div>
+                <div className="hero-actions">{renderStartActions()}</div>
+              </div>
+            )}
+            <button
+              type="button"
+              className={`edge-toggle right${sidebarOpen ? ' open' : ''}`}
+              title={sidebarOpen ? t('Hide analysis') : t('Show analysis')}
+              aria-label={sidebarOpen ? t('Hide analysis') : t('Show analysis')}
+              aria-pressed={sidebarOpen}
+              onClick={toggleSidebar}
+            >
+              <Icon name={sidebarOpen ? 'chevR' : 'chevL'} size={13} />
+              {!sidebarOpen && <span className="edge-toggle-label">{t('Analysis')}</span>}
+            </button>
+            {showAnalysis && commandbarHasContent && (
+              <button
+                type="button"
+                className={`edge-toggle bottom${commandbarOpen ? ' open' : ''}`}
+                title={commandbarOpen ? t('Hide metrics') : t('Show metrics')}
+                aria-label={commandbarOpen ? t('Hide metrics') : t('Show metrics')}
+                aria-pressed={commandbarOpen}
+                onClick={() => setCommandbarOpen((v) => !v)}
+              >
+                <Icon name={commandbarOpen ? 'chevD' : 'chevU'} size={13} />
+                {!commandbarOpen && <span className="edge-toggle-label">{t('Metrics')}</span>}
+              </button>
+            )}
+          </div>
+
+          {/* Command bar */}
+          {commandbarVisible && (
+          <div className="commandbar">
+            <div className="cb-metrics">
+              {showAnalysis ? (
+                <>
+                  <div className="cb-metric">
+                    <div className="k">{t('Black win')}</div>
+                    <div className="v win">{winRate != null ? `${(winRate * 100).toFixed(1)}%` : '—'}</div>
+                    <div className="sub">{formatWinRateFavorLabel(winRate)}</div>
+                  </div>
+                  <div className="cb-metric">
+                    <div className="k">{t('Score')}</div>
+                    <div className="v score">{formatReadableScoreLead(scoreLead)}</div>
+                  </div>
+                  <div className="cb-metric">
+                    <div className="k">{t('Best move')}</div>
+                    <div className="v best">{bestMove ? formatMoveLabel(bestMove.x, bestMove.y, boardSize) : '—'}</div>
+                    <div className="sub" title={bestMove && isProDetail ? t('{pct}% Black win rate · {visits} visits', { pct: (bestMove.winRate * 100).toFixed(1), visits: bestMove.visits }) : undefined}>
+                      {bestMove ? (isProDetail ? t('{pct}% Black win · {visits} visits', { pct: (bestMove.winRate * 100).toFixed(0), visits: formatVisitCount(bestMove.visits) }) : t("Engine's pick")) : ''}
+                    </div>
+                  </div>
+                  <div className="cb-metric">
+                    <div className="k">{t('Played')}</div>
+                    <div className="v">
+                      {pointsLost != null ? (
+                        <><span className="cb-quality-dot" style={{ background: evalColorForPointsLost(pointsLost, settings.trainerEvalThresholds, settings.trainerTheme) }} />{pointsLostLabel}</>
+                      ) : '—'}
+                    </div>
+                    <div className={`sub ${pointsLost != null && pointsLost > 1.5 ? 'delta-bad' : 'delta-good'}`}>
+                      {pointsLost != null ? (pointsLost > 0.05 ? `−${t('{n} pts', { n: pointsLost.toFixed(1) })}` : t('optimal')) : ''}
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="cb-metric"><div className="k">{t('Analysis')}</div><div className="v">{t('Off')}</div><div className="sub">{t('enable to evaluate')}</div></div>
+                  <div className="cb-metric"><div className="k">{t('Engine')}</div><div className="v">{engineState === 'ready' ? t('Idle') : enginePillLabel}</div><div className="sub">{enginePillLabel}</div></div>
+                  <div className="cb-metric"><div className="k">{t('Captures')}</div><div className="v">{capturedBlack}·{capturedWhite}</div><div className="sub">{t('B · W')}</div></div>
+                </>
+              )}
+            </div>
+          </div>
+          )}
+
+          {/* Nav bar */}
+          <div className="navbar">
+            <button type="button" className="pass-btn" title={t('Pass (P)')} onClick={passTurn}>{t('Pass')}</button>
+            <div className="navgroup">
+              <button type="button" className="navbtn navbtn-pair" title={canFindPreviousMistake ? t('Previous mistake') : t('No previous analyzed mistake')} aria-label={t('Previous mistake')} onClick={() => findMistake(-1)} disabled={!canFindPreviousMistake}><Icon name="chevL" size={11} /><span className="mistake-dot" /></button>
+            </div>
+            <span className="nav-divider" />
+            <div className="navgroup">
+              <button type="button" className="navbtn" title={t('To start')} aria-label={t('To start')} onClick={navigateStart} disabled={!canNavigateBack}><Icon name="skipBack" size={15} /></button>
+              <button type="button" className="navbtn navbtn-skip" title={t('Back 10')} aria-label={t('Back 10')} onClick={jumpBack} disabled={!canNavigateBack}><Icon name="fastBack" size={15} /></button>
+              <button type="button" className="navbtn" title={t('Back')} aria-label={t('Back')} onClick={navigateBack} disabled={!canNavigateBack}><Icon name="chevL" size={15} /></button>
+            </div>
+            <div className="move-counter">
+              <span className="mc-label">{t('Move')}</span>
+              <input
+                type="number"
+                value={moveInputValue}
+                aria-label={t('Move number')}
+                title={t('Enter a move number to jump')}
+                inputMode="numeric"
+                min={0}
+                max={totalMoves}
+                onChange={(e) => setMoveInputDraft(e.target.value)}
+                onKeyDown={(e) => {
+                  e.stopPropagation();
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const trimmedMove = moveInputValue.trim();
+                    const n = Number(trimmedMove);
+                    if (trimmedMove && Number.isInteger(n) && n >= 0) navigateToMove(n);
+                    setMoveInputDraft(null);
+                    e.currentTarget.blur();
+                  } else if (e.key === 'Escape') {
+                    e.preventDefault();
+                    setMoveInputDraft(null);
+                    e.currentTarget.blur();
+                  }
+                }}
+                onBlur={() => setMoveInputDraft(null)}
+                onFocus={(e) => {
+                  setMoveInputDraft(String(moveCount));
+                  e.currentTarget.select();
+                }}
+              />
+              <span>/ {totalMoves}</span>
+            </div>
+            <div className="navgroup">
+              <button type="button" className="navbtn" title={t('Forward')} aria-label={t('Forward')} onClick={navigateForward} disabled={!canNavigateForward}><Icon name="chevR" size={15} /></button>
+              <button type="button" className="navbtn navbtn-skip" title={t('Forward 10')} aria-label={t('Forward 10')} onClick={jumpForward} disabled={!canNavigateForward}><Icon name="fastFwd" size={15} /></button>
+              <button type="button" className="navbtn" title={t('To end')} aria-label={t('To end')} onClick={navigateEnd} disabled={!canNavigateForward}><Icon name="skipFwd" size={15} /></button>
+            </div>
+            <span className="nav-divider" />
+            <div className="navgroup">
+              <button type="button" className="navbtn navbtn-pair" title={canFindNextMistake ? t('Next mistake') : t('No next analyzed mistake')} aria-label={t('Next mistake')} onClick={() => findMistake(1)} disabled={!canFindNextMistake}><span className="mistake-dot" /><Icon name="chevR" size={11} /></button>
+              <button type="button" className="navbtn" title={t('Rotate board')} aria-label={t('Rotate board')} onClick={rotateBoard}><Icon name="rotate" size={15} /></button>
+            </div>
+            <span className="nav-divider" />
+            <div className="board-tools">
+              <button
+                type="button"
+                className={`board-chip${isSelectingRegionOfInterest ? ' on' : ''}`}
+                aria-pressed={isSelectingRegionOfInterest}
+                title={t('Select a board region to analyze')}
+                onClick={startSelectRegionOfInterest}
+              >
+                <Icon name="target" size={13} /><span className="bc-label">{t('Region')}</span>
+              </button>
+              <button
+                type="button"
+                className={`board-chip${isInsertMode ? ' on' : ''}`}
+                aria-pressed={isInsertMode}
+                title={t('Insert moves into the game record')}
+                onClick={toggleInsertMode}
+              >
+                <Icon name="layers" size={13} /><span className="bc-label">{t('Insert')}</span>
+              </button>
+              {boardControls ? <div className="board-extra-tools">{boardControls}</div> : null}
+            </div>
+            <span className="navbar-spacer" />
+            <div className="playactions">
+              {mode === 'play' ? (
+                <>
+                  <button type="button" className="tbtn" title={canNavigateBack ? t('Undo') : t('No move to undo')} onClick={onUndo} disabled={!canNavigateBack}><Icon name="undo" size={14} /><span className="tbtn-label">{t('Undo')}</span></button>
+                  <button type="button" className="tbtn" title={t('AI move')} onClick={onAiMove}><Icon name="bot" size={14} /><span className="tbtn-label">{t('AI move')}</span></button>
+                  <button type="button" className="tbtn" style={{ color: 'var(--red)', borderColor: '#f0c4c4' }} title={t('Resign')} onClick={onResign}><Icon name="flag" size={14} /><span className="tbtn-label">{t('Resign')}</span></button>
+                </>
+              ) : (
+                <>
+                  <button type="button" className="tbtn" title={t('AI move')} onClick={onAiMove}><Icon name="bot" size={14} /><span className="tbtn-label">{t('AI move')}</span></button>
+                  <button type="button" className="tbtn primary" title={t('Play best')} onClick={onPlayBest}><Icon name="play" size={14} /><span className="tbtn-label">{t('Play best')}</span></button>
+                </>
+              )}
+            </div>
+          </div>
+        </main>
+
+        {/* Analysis sidebar */}
+        <aside
+          aria-label={t('Analysis panel')}
+          className={`sidebar${sideDrawer ? ' drawer' : ''}${sidebarOpen ? ' open' : ''}`}
+        >
+          {/* aria-pressed, not just the active class: without it the pair reads
+              as two plain buttons, so which mode is on was visible only as an
+              underline. "Review" also distinguishes this workspace switch from
+              the Analyze engine toggle and the Analysis disclosure below. */}
+          <div className="mode-tabs">
+            <button type="button" className={`mode-tab${mode === 'play' ? ' active' : ''}`} aria-pressed={mode === 'play'} onClick={() => setMode('play')}>{t('Play')}</button>
+            <button type="button" className={`mode-tab${mode === 'analyze' ? ' active' : ''}`} aria-pressed={mode === 'analyze'} onClick={() => setMode('analyze')}>{t('Review')}</button>
+            <button type="button" className="iconbtn drawer-close" title={t('Close')} style={{ margin: '6px 6px 6px 0' }} onClick={() => setSidebarOpen(false)}><Icon name="x" size={14} /></button>
+          </div>
+          <div className="sidebar-scroll">
+            {/* Game tree */}
+            <div className={`section${sections.tree ? ' open' : ''}`}>
+              {sectionHead('tree', t('Game tree'), 'sitemap')}
+              <div className="section-body flush">
+                {branchInfo.hasBranches && (
+                  <div className="panel-toolbar">
+                    <button type="button" className="pbtn pico" title={t('Previous branch')} aria-label={t('Previous branch')} onClick={() => switchBranch(-1)}><Icon name="chevD" size={12} /></button>
+                    <button type="button" className="pbtn pico" title={t('Next branch')} aria-label={t('Next branch')} onClick={() => switchBranch(1)}><Icon name="chevR" size={12} /></button>
+                    <span className="pbtn" style={{ pointerEvents: 'none' }}>
+                      <span style={{ color: 'var(--faint)' }}>{t('Branch')}</span>{' '}
+                      <span className="mono" style={{ color: 'var(--ink)' }}>{branchInfo.currentIndex}/{branchInfo.totalBranches}</span>
+                    </span>
+                    <button type="button" className="pbtn pico" title={t('Back to branch point')} aria-label={t('Back to branch point')} onClick={undoToBranchPoint}><Icon name="levelUp" size={12} /></button>
+                    {branchInfo.currentIndex > 1 ? (
+                      <button type="button" className="pbtn pico" title={t('Make main branch')} aria-label={t('Make current move the main branch')} onClick={() => { makeCurrentNodeMainBranch(); toast(t('Set as main branch'), 'success'); }}><Icon name="star" size={12} /></button>
+                    ) : null}
+                  </div>
+                )}
+                <div className="tree-region">
+                  <MoveTree />
+                </div>
+              </div>
+            </div>
+
+            {/* Analysis */}
+            <div className={`section${sections.analysis ? ' open' : ''}`}>
+              {sectionHead('analysis', t('Analysis'), 'chart', (
+                <div className="flex items-center gap-1">
+                  <AnalysisExperienceToggle />
+                  <button
+                  type="button"
+                  className={`pbtn pico${legendOpen ? ' on' : ''}`}
+                  title={legendOpen ? t('Hide move-quality legend') : t('Show move-quality legend')}
+                  aria-label={legendOpen ? t('Hide move-quality legend') : t('Show move-quality legend')}
+                  aria-expanded={legendOpen}
+                  aria-controls={legendOpen ? 'dashboard-analysis-quality-legend' : undefined}
+                  onClick={() => setLegendOpen((v) => !v)}
+                  ><Icon name="info" size={12} /></button>
+                </div>
+              ))}
+              <div className="section-body flush">
+                {isGameAnalysisRunning && (
+                  <div className="progress-wrap" style={{ paddingTop: 12 }}>
+                    <div className="progress-track">
+                      <div className="progress-fill" style={{ width: `${gameAnalysisTotal ? Math.round((gameAnalysisDone / gameAnalysisTotal) * 100) : 0}%` }} />
+                    </div>
+                    <div className="progress-label">{t('{done}/{total} positions · {type}', { done: gameAnalysisDone, total: gameAnalysisTotal, type: t(gameAnalysisType ?? 'analysis') })}</div>
+                  </div>
+                )}
+                <div className="graph-wrap">
+                  <ScoreWinrateGraph
+                    showScore={legend.score}
+                    showWinrate={legend.winrate}
+                    showTime={hasMoveTimes && legend.time}
+                  />
+                </div>
+                <div className="graph-legend">
+                  <button
+                    type="button"
+                    className={`lg${legend.winrate ? ' on' : ''}`}
+                    aria-pressed={legend.winrate}
+                    aria-label={legend.winrate ? t('Hide win rate graph') : t('Show win rate graph')}
+                    title={legend.winrate ? t('Hide win rate graph') : t('Show win rate graph')}
+                    onClick={() => setLegend((l) => ({ ...l, winrate: !l.winrate }))}
+                  >
+                    <span className="lg-check" aria-hidden="true"><Icon name="check" size={10} /></span>
+                    <span className="sw" style={{ background: 'var(--green)' }} />{t('Win rate')}
+                  </button>
+                  <button
+                    type="button"
+                    className={`lg${legend.score ? ' on' : ''}`}
+                    aria-pressed={legend.score}
+                    aria-label={legend.score ? t('Hide score graph') : t('Show score graph')}
+                    title={legend.score ? t('Hide score graph') : t('Show score graph')}
+                    onClick={() => setLegend((l) => ({ ...l, score: !l.score }))}
+                  >
+                    <span className="lg-check" aria-hidden="true"><Icon name="check" size={10} /></span>
+                    <span className="sw" style={{ background: 'var(--amber)' }} />{t('Score')}
+                  </button>
+                  {hasMoveTimes && (
+                    <button
+                      type="button"
+                      className={`lg${legend.time ? ' on' : ''}`}
+                      aria-pressed={legend.time}
+                      aria-label={legend.time ? t('Hide time graph') : t('Show time graph')}
+                      title={legend.time ? t('Hide time graph') : t('Show time graph')}
+                      onClick={() => setLegend((l) => ({ ...l, time: !l.time }))}
+                    >
+                      <span className="lg-check" aria-hidden="true"><Icon name="check" size={10} /></span>
+                      <span className="sw" style={{ background: 'var(--amber)', opacity: 0.55 }} />{t('Time')}
+                    </button>
+                  )}
+                </div>
+                {/* Overlay toggles and review actions are analyst tooling; the
+                    Play tab stays focused on the game itself. */}
+                {mode === 'analyze' && (
+                <div className="overlay-row overlay-row--toggles">
+                  {overlayBtn('analysisShowChildren', t('Children'), 'sitemap')}
+                  {overlayBtn('analysisShowEval', t('Dots'), 'circle')}
+                  {overlayBtn('analysisShowHints', t('Top moves'), 'layers', settings.analysisShowPolicy)}
+                  {overlayBtn('analysisShowPolicy', t('Heatmap'), 'grid')}
+                  {overlayBtn('analysisShowOwnership', t('Territory'), 'map')}
+                </div>
+                )}
+                {legendOpen && (
+                  <div id="dashboard-analysis-quality-legend" className="qlegend">
+                    <div className="eyebrow">{t('Move quality · points lost')}</div>
+                    <p className="qlegend-note">{t(POINTS_LOST_EXPLANATION)}</p>
+                    <div className="qgrid">
+                      {evalLegendRows(settings.trainerEvalThresholds, settings.trainerTheme, t).map(([label, color, range]) => (
+                        <div className="qi" key={label}>
+                          <span className="qd" style={{ background: color }} />
+                          <span className="ql">{label}</span>
+                          <span className="qr">{range}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {mode === 'analyze' && (
+                <div className="overlay-row overlay-row--actions" style={{ paddingTop: 8 }}>
+                  <button
+                    type="button"
+                    className="pbtn"
+                    aria-label={t('Run quick graph analysis')}
+                    title={t('Run quick graph analysis')}
+                    onClick={startQuickGameAnalysis}
+                  >
+                    <Icon name="chart" size={12} />{t('Quick graph')}
+                  </button>
+                  <button
+                    type="button"
+                    className={`pbtn${isGameAnalysisRunning ? ' danger' : ''}`}
+                    aria-label={dashboardFastMctsLabel}
+                    title={dashboardFastMctsTitle}
+                    onClick={() => (isGameAnalysisRunning ? stopGameAnalysis() : startFastGameAnalysis())}
+                  >
+                    <Icon name="gauge" size={12} />{isGameAnalysisRunning ? t('Stop') : t('Fast review')}
+                  </button>
+                  <button
+                    type="button"
+                    className="pbtn"
+                    aria-label={t('Open game report')}
+                    title={t('Open game report')}
+                    onClick={onOpenGameReport}
+                  >
+                    <Icon name="file" size={12} />{t('Report')}
+                  </button>
+                </div>
+                )}
+                {mode === 'analyze' && <TenukiRow />}
+                {!showAnalysis && (
+                  <div className="coach-card">
+                    <div className="cc-head">
+                      <div className="cc-title">{t('Live analysis is off')}</div>
+                      <button
+                        type="button"
+                        className="pbtn"
+                        aria-label={t('Turn on live analysis')}
+                        onClick={() => {
+                          setMode('analyze');
+                          if (!isContinuousAnalysis) toggleContinuousAnalysis();
+                        }}
+                      >
+                        <Icon name="chart" size={12} />{t('Turn on')}
+                      </button>
+                    </div>
+                    {t('Moves are not evaluated as you play them, and the board shows no hints or ownership.')}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Candidates: the engine's moves as rows, for reading five of them
+                against each other rather than one hovered circle at a time. */}
+            <div className={`section${sections.candidates ? ' open' : ''}`}>
+              {sectionHead('candidates', t('Candidates'), 'list')}
+              <div className="section-body flush">
+                <CandidateMoveList hoveredKey={hoveredCandidateKey} onHover={onHoverCandidate} />
+              </div>
+            </div>
+
+            {/* Comment / notes */}
+            <div className={`section${sections.notes ? ' open' : ''}`}>
+              {sectionHead('notes', t('Comment'), 'comment')}
+              <div className="section-body flush">
+                {/* "Lock AI details (Play mode)" is a teacher's setting; the
+                    other shell honours it, this one used to show the PV and
+                    policy text regardless. */}
+                <NotesPanel
+                  showInfo
+                  detailed={!(mode === 'play' && settings.trainerLockAi)}
+                  showNotes
+                  showShapeCoach={settings.showShapeCoach}
+                />
+              </div>
+            </div>
+
+            {/* Game info */}
+            <div className={`section${sections.info ? ' open' : ''}`}>
+              {sectionHead('info', t('Game info'), 'info')}
+              <div className="section-body">
+                <GameInfoPanel />
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        {/* drawer scrim */}
+        {drawerOpen && (
+          <div className="drawer-scrim" onClick={() => { setLibraryOpen(false); setSidebarOpen(false); }} />
+        )}
+      </div>
+
+      {/* ============ Popovers ============ */}
+      {pop && <div className="scrim" onClick={closePop} />}
+      {pop?.id === 'engine' && (
+        <EnginePopover
+          rect={pop.rect}
+          engineState={engineState}
+          backend={engineBackend}
+          model={engineModelLabel}
+          modelSource={isRemoteEngine ? t('Remote') : getEngineModelSource(settings.katagoModelUrl)}
+          isRemote={isRemoteEngine}
+          cacheSize={analysisCacheSize}
+          visits={settings.katagoVisits}
+          visitsDisabled={isGameAnalysisRunning}
+          onVisitsChange={(katagoVisits) => updateSettings({ katagoVisits })}
+          onClearCache={() => { closePop(); onClearAnalysisCache(); }}
+        />
+      )}
+      {pop?.id === 'file' && (
+        <div
+          className="popover menu"
+          style={popoverStyle(pop.rect, 230)}
+          onClick={(e) => e.stopPropagation()}
+          role="dialog"
+          aria-modal="false"
+          aria-label={t('File actions')}
+          tabIndex={-1}
+          data-dashboard-popover="true"
+        >
+          <div className="menu-section-label">{t('Export')}</div>
+          <button type="button" className="menu-item" onClick={() => { closePop(); onCopySgf(); }}>
+            <Icon name="copy" size={14} /><span className="mi-label">{t('Copy SGF')}</span>
+          </button>
+          <button type="button" className="menu-item" onClick={() => { const trigger = popTriggerRef.current; closePop(); onSaveToLibrary(trigger); }}>
+            <Icon name="book" size={14} /><span className="mi-label">{t('Save to library')}</span>
+          </button>
+          <div className="menu-divider" />
+          <div className="menu-section-label">{t('Import')}</div>
+          <button type="button" className="menu-item" onClick={() => { const trigger = popTriggerRef.current; closePop(); onPasteSgf(trigger); }}>
+            <Icon name="clipboard" size={14} /><span className="mi-label">{t('Paste SGF / OGS')}</span>
+          </button>
+          <button type="button" className="menu-item" aria-label={t('Photo Board')} onClick={() => { const trigger = popTriggerRef.current; closePop(); onScanBoard(trigger); }}>
+            <Icon name="camera" size={14} /><span className="mi-label">{t('Board from photo')}</span>
+          </button>
+        </div>
+      )}
+      {pop?.id === 'help' && (
+        <div
+          className="popover menu"
+          style={popoverStyle(pop.rect, 230)}
+          onClick={(e) => e.stopPropagation()}
+          role="dialog"
+          aria-modal="false"
+          aria-label={t('Help')}
+          tabIndex={-1}
+          data-dashboard-popover="true"
+        >
+          <button type="button" className="menu-item" onClick={() => { const trigger = popTriggerRef.current; closePop(); onKeyboardHelp(trigger); }}>
+            <Icon name="keyboard" size={14} /><span className="mi-label">{t('Keyboard shortcuts')}</span>
+          </button>
+          <button type="button" className="menu-item" onClick={() => { const trigger = popTriggerRef.current; closePop(); onAbout(trigger); }}>
+            <Icon name="info" size={14} /><span className="mi-label">{t('About Web KaTrain')}</span>
+          </button>
+          <div className="menu-divider" />
+          <a
+            className="menu-item"
+            href={APP_ISSUE_REPORT_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            title={t('Report an issue on GitHub')}
+            aria-label={t('Report an issue on GitHub')}
+            data-dashboard-report-issue="true"
+            onClick={closePop}
+          >
+            <Icon name="bug" />
+            <span className="mi-label">{t('Report an issue')}</span>
+          </a>
+        </div>
+      )}
+      {pop?.id === 'view' && (
+        <ViewMenu
+          rect={pop.rect}
+          showCoords={settings.showCoordinates}
+          onToggleCoords={() => updateSettings({ showCoordinates: !settings.showCoordinates })}
+          libraryOpen={libraryOpen}
+          sidebarOpen={sidebarOpen}
+          onToggleLibrary={toggleLibrary}
+          onToggleSidebar={toggleSidebar}
+        />
+      )}
+    </div>
+  );
+};
+
+function popoverStyle(rect: DOMRect, width: number): React.CSSProperties {
+  const left = Math.max(8, Math.min(rect.right - width, window.innerWidth - width - 8));
+  let top = rect.bottom + 6;
+  // best-effort: keep on screen
+  if (top + 320 > window.innerHeight - 8) top = Math.max(8, rect.top - 326);
+  return { left, top };
+}
+
+const EnginePopover: React.FC<{
+  rect: DOMRect;
+  engineState: EngineState;
+  backend: string;
+  model: string;
+  modelSource: string;
+  /** Analysis runs on a remote WebSocket server, not the in-browser backend. */
+  isRemote: boolean;
+  cacheSize: number;
+  visits: number;
+  visitsDisabled: boolean;
+  onVisitsChange: (visits: number) => void;
+  onClearCache: () => void;
+}> = ({ rect, engineState, backend, model, modelSource, isRemote, cacheSize, visits, visitsDisabled, onVisitsChange, onClearCache }) => {
+  const t = useT();
+  const states: Record<EngineState, [string, string]> = {
+    ready: [t('Ready'), 'var(--green)'],
+    running: [t('Analyzing'), 'var(--live)'],
+    loading: [t('Loading'), 'var(--live)'],
+    error: [t('Error'), 'var(--red)'],
+  };
+  const [label, color] = states[engineState];
+  const left = Math.max(8, Math.min(rect.left, window.innerWidth - 300 - 8));
+  return (
+    <div
+      className="popover"
+      style={{ left, top: rect.bottom + 6 }}
+      onClick={(e) => e.stopPropagation()}
+      role="dialog"
+      aria-modal="false"
+      aria-label={t('Engine details')}
+      tabIndex={-1}
+      data-dashboard-popover="true"
+    >
+      <div className="pop-head"><div className="pop-eyebrow">{t('Engine')}</div><div className="pop-title">{t(isRemote ? 'KataGo · remote' : 'KataGo · in-browser')}</div></div>
+      <div className="engine-detail">
+        <dl className="ed-grid">
+          <div><dt>{t('State')}</dt><dd style={{ color }}>{label}</dd></div>
+          <div><dt>{t('Backend')}</dt><dd>{isRemote ? t('Remote') : formatEngineBackendLabel(backend)}</dd></div>
+          <div><dt>{t('Model')}</dt><dd>{model || '—'}</dd></div>
+          <div><dt>{t('Source')}</dt><dd>{modelSource}</dd></div>
+        </dl>
+        <div className="ed-row ed-row-depth" data-analysis-live-visit-presets="true">
+          <div className="ed-depth-heading">
+            <span>{t('Analysis depth')}</span>
+            <span>{clampAnalysisVisits(visits)} {t('visits')}</span>
+          </div>
+          <div className="depth-presets">
+            {ANALYSIS_VISIT_PRESETS.map((preset) => (
+              <button
+                key={preset}
+                type="button"
+                className={`depth-preset${clampAnalysisVisits(visits) === preset ? ' on' : ''}`}
+                onClick={() => onVisitsChange(preset)}
+                disabled={visitsDisabled}
+                aria-pressed={clampAnalysisVisits(visits) === preset}
+                data-analysis-live-depth-option={preset}
+                title={visitsDisabled ? t('Stop game analysis before changing live visits') : t('Set live analysis to {visits} visits', { visits: preset })}
+              >
+                <span className="dp-v">{preset}</span>
+                <span className="dp-l">{visitPresetLabel(preset)}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="ed-row">
+          <span style={{ color: 'var(--faint)', fontSize: 12 }}>{t('Cached positions')}</span>
+          <button type="button" className="pbtn" onClick={onClearCache}><Icon name="trash" size={12} /> {cacheSize}</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const ViewMenu: React.FC<{
+  rect: DOMRect;
+  showCoords: boolean;
+  onToggleCoords: () => void;
+  libraryOpen: boolean;
+  sidebarOpen: boolean;
+  onToggleLibrary: () => void;
+  onToggleSidebar: () => void;
+}> = ({ rect, showCoords, onToggleCoords, libraryOpen, sidebarOpen, onToggleLibrary, onToggleSidebar }) => {
+  const t = useT();
+  const item = (label: string, on: boolean | null, kbd: string, onClick: () => void, iconName?: IconName) => (
+    <button
+      type="button"
+      className={`menu-item${on ? ' on' : ''}`}
+      aria-pressed={typeof on === 'boolean' ? on : undefined}
+      onClick={onClick}
+    >
+      {iconName ? <Icon name={iconName} size={14} /> : null}
+      <span className="mi-label">{label}</span>
+      {typeof on === 'boolean' ? <span className="mi-state">{on ? t('on') : t('off')}</span> : null}
+      {kbd ? <span className="mi-kbd">{kbd}</span> : null}
+    </button>
+  );
+  return (
+    <div
+      className="popover menu"
+      style={popoverStyle(rect, 230)}
+      onClick={(e) => e.stopPropagation()}
+      role="dialog"
+      aria-modal="false"
+      aria-label={t('View options')}
+      tabIndex={-1}
+      data-dashboard-popover="true"
+    >
+      <div className="menu-section-label">{t('Display')}</div>
+      {item(t('Coordinates'), showCoords, 'C', onToggleCoords)}
+      <div className="menu-divider" />
+      <div className="menu-section-label">{t('Layout')}</div>
+      {item(t('Library panel'), libraryOpen, '[', onToggleLibrary, 'book')}
+      {item(t('Analysis panel'), sidebarOpen, ']', onToggleSidebar, 'chart')}
+      <div className="menu-divider" />
+      {/* The only place build metadata lives now that the header chip is gone. */}
+      {APP_COMMIT_URL ? (
+        <a
+          href={APP_COMMIT_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="menu-build"
+          title={t('Open build commit: {label}', { label: APP_BUILD_LABEL })}
+          aria-label={t('Open build commit {label}', { label: APP_BUILD_LABEL })}
+          data-dashboard-build-link="true"
+        >
+          <Icon name="info" size={12} />
+          <span className="menu-build-text">{APP_BUILD_LABEL}</span>
+        </a>
+      ) : (
+        <div className="menu-build" title={APP_BUILD_LABEL} data-dashboard-build-link="true">
+          <Icon name="info" size={12} />
+          <span className="menu-build-text">{APP_BUILD_LABEL}</span>
+        </div>
+      )}
+    </div>
+  );
+};
