@@ -25,7 +25,119 @@ function markResult(bookId, pid, ok) {
   if (ok) b[pid] = 1;                    // solved sticks
   else if (b[pid] !== 1) b[pid] = -1;    // failed only if never solved
   localStorage.setItem(PROGRESS_KEY, JSON.stringify(prog));
+  Sync.scheduleSave();
 }
+
+/* ================= account sync (shared GitHub Gist, username only) ================= */
+
+const Sync = {
+  GIST_ID: "7f7f5c3a7dd5d77284e36f75bd515a8b",
+  TOKEN: "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",
+  USERNAME_KEY: "gt-username",
+  username: null,
+  saveTimer: null,
+
+  async init() {
+    this.username = localStorage.getItem(this.USERNAME_KEY);
+    this.renderChip();
+    if (this.username) await this.pullAndMerge();
+    else this.promptUsername();
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "hidden" && this.saveTimer) { clearTimeout(this.saveTimer); this.save(); }
+    });
+  },
+
+  async fetchAll() {
+    const res = await fetch(`https://api.github.com/gists/${this.GIST_ID}`, {
+      headers: { Authorization: `Bearer ${this.TOKEN}`, Accept: "application/vnd.github+json" },
+    });
+    if (!res.ok) { console.error("[sync] fetch failed", res.status); return {}; }
+    const data = await res.json();
+    try { return JSON.parse(data.files["progress.json"].content || "{}"); }
+    catch { return {}; }
+  },
+
+  // Pull this username's slice from the shared gist, merge into local
+  // (solved sticks), so a fresh browser/device picks up prior progress.
+  async pullAndMerge() {
+    const all = await this.fetchAll();
+    const remote = all[this.username] || {};
+    const local = loadProgress();
+    for (const bookId in remote) {
+      const b = local[bookId] || (local[bookId] = {});
+      for (const pid in remote[bookId]) if (b[pid] !== 1) b[pid] = remote[bookId][pid];
+    }
+    localStorage.setItem(PROGRESS_KEY, JSON.stringify(local));
+  },
+
+  scheduleSave() {
+    if (!this.username) return;
+    clearTimeout(this.saveTimer);
+    this.saveTimer = setTimeout(() => this.save(), 3000);
+  },
+
+  async save() {
+    if (!this.username) return;
+    const all = await this.fetchAll(); // re-fetch first so we don't clobber other usernames
+    all[this.username] = loadProgress();
+    const res = await fetch(`https://api.github.com/gists/${this.GIST_ID}`, {
+      method: "PATCH",
+      headers: { Authorization: `Bearer ${this.TOKEN}`, Accept: "application/vnd.github+json" },
+      body: JSON.stringify({ files: { "progress.json": { content: JSON.stringify(all) } } }),
+    });
+    if (!res.ok) console.error("[sync] save failed", res.status, await res.text());
+  },
+
+  renderChip() {
+    const chip = document.getElementById("authChip");
+    if (!chip) return;
+    chip.innerHTML = "";
+    if (this.username) {
+      chip.append(
+        h("span", { class: "email" }, `Playing as ${this.username}`),
+        h("span", { class: "signout", onclick: e => { e.stopPropagation(); this.promptUsername(); } }, "Switch")
+      );
+    } else {
+      chip.textContent = "Choose a username to sync progress";
+    }
+    chip.onclick = () => this.promptUsername();
+  },
+
+  promptUsername() {
+    const backdrop = document.getElementById("authModalBackdrop");
+    const modal = document.getElementById("authModal");
+    const close = () => { backdrop.hidden = true; };
+    backdrop.onclick = e => { if (e.target === backdrop) close(); };
+
+    modal.innerHTML = "";
+    const name = h("input", { type: "text", placeholder: "Username", autocomplete: "off", value: this.username || "" });
+    const msg = h("div", { class: "msg" }, "No password — anyone who types this name loads its progress.");
+    const saveBtn = h("button", {
+      onclick: async () => {
+        const val = name.value.trim();
+        if (!val) { msg.textContent = "Enter a username."; msg.className = "msg err"; return; }
+        saveBtn.disabled = true;
+        localStorage.setItem(this.USERNAME_KEY, val);
+        this.username = val;
+        await this.pullAndMerge();
+        saveBtn.disabled = false;
+        this.renderChip();
+        close();
+        route();
+      },
+    }, "Save");
+    modal.append(
+      h("h3", {}, "Username"),
+      name, msg,
+      h("div", { class: "row" }, [
+        h("button", { class: "ghost", onclick: close }, "Cancel"),
+        saveBtn,
+      ])
+    );
+    backdrop.hidden = false;
+    name.focus();
+  },
+};
 
 /* ================= engine (KataGo via bundled web-katrain worker) ================= */
 
@@ -1437,4 +1549,5 @@ document.addEventListener("keydown", e => {
 window.addEventListener("hashchange", route);
 window.__engine = Engine;
 window.__review = Review;
+Sync.init();
 route();

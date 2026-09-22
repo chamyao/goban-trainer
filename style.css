@@ -42,6 +42,43 @@ header h1 a { text-decoration: none; }
 }
 .engine-chip .dot { width: 8px; height: 8px; border-radius: 50%; background: #c9c2b2; }
 
+.auth-chip {
+  font-size: 12.5px; color: var(--muted);
+  background: var(--chip); padding: 5px 12px; border-radius: 999px;
+  display: flex; align-items: center; gap: 8px; white-space: nowrap; cursor: pointer;
+}
+.auth-chip:hover { background: #e4dec9; }
+.auth-chip .email { color: var(--ink); font-weight: 600; max-width: 160px; overflow: hidden; text-overflow: ellipsis; }
+.auth-chip .signout { color: var(--muted); text-decoration: underline; }
+.auth-chip .signout:hover { color: var(--danger); }
+
+.modal-backdrop {
+  position: fixed; inset: 0; background: rgba(30, 26, 16, .35);
+  display: flex; align-items: center; justify-content: center; z-index: 100;
+}
+.modal {
+  background: var(--card); border-radius: 14px; padding: 26px 28px;
+  width: min(340px, 90vw); box-shadow: 0 12px 40px rgba(30, 26, 16, .25);
+  display: flex; flex-direction: column; gap: 12px;
+}
+.modal h3 { margin: 0 0 4px; font-size: 17px; }
+.modal input {
+  padding: 9px 11px; border-radius: 8px; border: 1px solid var(--border);
+  font-size: 14px; background: var(--bg); color: var(--ink);
+}
+.modal .msg { font-size: 13px; color: var(--muted); min-height: 16px; }
+.modal .msg.err { color: var(--danger); }
+.modal .msg.ok { color: var(--accent); }
+.modal .row { display: flex; gap: 8px; justify-content: flex-end; align-items: center; }
+.modal button {
+  padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer;
+  font-size: 14px; font-weight: 600; background: var(--accent); color: #fff;
+}
+.modal button:disabled { opacity: .6; cursor: default; }
+.modal button.ghost { background: none; color: var(--muted); font-weight: 500; }
+.modal .switch { font-size: 13px; color: var(--muted); }
+.modal .switch a { color: var(--accent); cursor: pointer; text-decoration: underline; }
+
 main { max-width: 1080px; margin: 0 auto; padding: 28px 24px 60px; }
 
 /* ---- library ---- */
