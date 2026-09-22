@@ -31,16 +31,24 @@ function markResult(bookId, pid, ok) {
 /* ================= account sync (shared GitHub Gist, username only) ================= */
 
 const Sync = {
-  GIST_ID: "7f7f5c3a7dd5d77284e36f75bd515a8b",
-  TOKEN: "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",
+  // Remote sync needs credentials, which must never live in this file (this
+  // repo is public — a committed token gets scraped and revoked immediately).
+  // To enable sync on a device, run once in the console:
+  //   localStorage.setItem("gt-sync", JSON.stringify({ gistId: "...", token: "ghp_..." }))
+  CONFIG_KEY: "gt-sync",
   USERNAME_KEY: "gt-username",
   username: null,
   saveTimer: null,
 
+  config() {
+    try { return JSON.parse(localStorage.getItem(this.CONFIG_KEY)) || null; }
+    catch { return null; }
+  },
+
   async init() {
     this.username = localStorage.getItem(this.USERNAME_KEY);
     this.renderChip();
-    if (this.username) await this.pullAndMerge();
+    if (this.username) this.pullAndMerge().then(route).catch(e => console.error("[sync]", e));
     else this.promptUsername();
     document.addEventListener("visibilitychange", () => {
       if (document.visibilityState === "hidden" && this.saveTimer) { clearTimeout(this.saveTimer); this.save(); }
@@ -48,8 +56,10 @@ const Sync = {
   },
 
   async fetchAll() {
-    const res = await fetch(`https://api.github.com/gists/${this.GIST_ID}`, {
-      headers: { Authorization: `Bearer ${this.TOKEN}`, Accept: "application/vnd.github+json" },
+    const cfg = this.config();
+    if (!cfg) return {};
+    const res = await fetch(`https://api.github.com/gists/${cfg.gistId}`, {
+      headers: { Authorization: `Bearer ${cfg.token}`, Accept: "application/vnd.github+json" },
     });
     if (!res.ok) { console.error("[sync] fetch failed", res.status); return {}; }
     const data = await res.json();
@@ -71,18 +81,19 @@ const Sync = {
   },
 
   scheduleSave() {
-    if (!this.username) return;
+    if (!this.username || !this.config()) return;
     clearTimeout(this.saveTimer);
     this.saveTimer = setTimeout(() => this.save(), 3000);
   },
 
   async save() {
-    if (!this.username) return;
+    const cfg = this.config();
+    if (!this.username || !cfg) return;
     const all = await this.fetchAll(); // re-fetch first so we don't clobber other usernames
     all[this.username] = loadProgress();
-    const res = await fetch(`https://api.github.com/gists/${this.GIST_ID}`, {
+    const res = await fetch(`https://api.github.com/gists/${cfg.gistId}`, {
       method: "PATCH",
-      headers: { Authorization: `Bearer ${this.TOKEN}`, Accept: "application/vnd.github+json" },
+      headers: { Authorization: `Bearer ${cfg.token}`, Accept: "application/vnd.github+json" },
       body: JSON.stringify({ files: { "progress.json": { content: JSON.stringify(all) } } }),
     });
     if (!res.ok) console.error("[sync] save failed", res.status, await res.text());
@@ -110,20 +121,20 @@ const Sync = {
     backdrop.onclick = e => { if (e.target === backdrop) close(); };
 
     modal.innerHTML = "";
-    const name = h("input", { type: "text", placeholder: "Username", autocomplete: "off", value: this.username || "" });
+    const name = h("input", { type: "text", autocomplete: "off",
+                              placeholder: this.username || "Username" });
     const msg = h("div", { class: "msg" }, "No password — anyone who types this name loads its progress.");
     const saveBtn = h("button", {
-      onclick: async () => {
+      onclick: () => {
         const val = name.value.trim();
         if (!val) { msg.textContent = "Enter a username."; msg.className = "msg err"; return; }
-        saveBtn.disabled = true;
         localStorage.setItem(this.USERNAME_KEY, val);
         this.username = val;
-        await this.pullAndMerge();
-        saveBtn.disabled = false;
+        name.value = "";
         this.renderChip();
         close();
         route();
+        this.pullAndMerge().then(route).catch(e => console.error("[sync]", e));
       },
     }, "Save");
     modal.append(
