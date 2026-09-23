@@ -112,6 +112,20 @@ const Sync = {
     if (!res.ok) console.error("[sync] save failed", kind, res.status, await res.text());
   },
 
+  // Anonymous is fine — feedback doesn't require a username.
+  async sendFeedback(message) {
+    const res = await fetch(this.API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({
+        username: this.username || "",
+        kind: "feedback",
+        data: { message, context: location.hash },
+      }),
+    });
+    if (!res.ok) throw new Error(`feedback failed (${res.status})`);
+  },
+
   renderChip() {
     const chip = document.getElementById("authChip");
     if (!chip) return;
@@ -1752,6 +1766,39 @@ function viewReview() {
   Review.fetchDetail();
 }
 
+/* ================= feedback ================= */
+
+function viewFeedback() {
+  crumbs.textContent = "";
+  root.innerHTML = "";
+  const ta = h("textarea", { placeholder: "Bugs, confusing bits, feature requests — anything." });
+  const msg = h("div", { class: "msg" });
+  const submitBtn = h("button", {
+    class: "primary",
+    onclick: async () => {
+      const text = ta.value.trim();
+      if (!text) { msg.textContent = "Write something first."; msg.className = "msg err"; return; }
+      submitBtn.disabled = true; msg.textContent = ""; msg.className = "msg";
+      try {
+        await Sync.sendFeedback(text);
+        ta.value = "";
+        msg.textContent = "Sent — thanks!";
+        msg.className = "msg ok";
+      } catch (e) {
+        console.error(e);
+        msg.textContent = "Couldn't send that, try again.";
+        msg.className = "msg err";
+      }
+      submitBtn.disabled = false;
+    },
+  }, "Send feedback");
+  root.append(h("div", { class: "sgf-loader" }, [
+    h("div", { class: "cat-title" }, "Feedback"),
+    ta,
+    h("div", { class: "row" }, [submitBtn, msg]),
+  ]));
+}
+
 /* ================= router & keys ================= */
 
 async function route() {
@@ -1759,10 +1806,11 @@ async function route() {
   trainer = null;
   Review.els = null;
   const parts = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
-  const tab = parts[0] === "review" ? "review" : "library";
+  const tab = parts[0] === "review" ? "review" : parts[0] === "feedback" ? "feedback" : "library";
   for (const a of document.querySelectorAll("#tabs a"))
     a.classList.toggle("active", a.dataset.tab === tab);
   if (parts[0] === "review") viewReview();
+  else if (parts[0] === "feedback") viewFeedback();
   else if (parts[0] === "book" && parts[1] && parts[2]) await viewPlayer(parts[1], parseInt(parts[2], 10) || 1);
   else if (parts[0] === "book" && parts[1]) await viewBook(parts[1]);
   else await viewLibrary();
