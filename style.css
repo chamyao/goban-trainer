@@ -289,3 +289,4 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
   font: inherit; font-size: 14px; padding: 7px 10px; border-radius: 8px;
   border: 1px solid #eee8da; background: #faf8f2; color: var(--ink);
 }
+.sgf-loader .row .rec-field { flex: 1; min-width: 0; }

@@ -1785,6 +1785,103 @@ function viewRecord() {
   refresh();
 }
 
+/* ---- import finished games from an OGS account (public API, CORS-open) ---- */
+
+const OGS = {
+  API: "https://online-go.com/api/v1",
+  KEY: "goban.ogsUser",
+  remembered() { try { return localStorage.getItem(this.KEY) || ""; } catch { return ""; } },
+  remember(name) { try { localStorage.setItem(this.KEY, name); } catch {} },
+
+  async json(url) {
+    const r = await fetch(url);
+    if (!r.ok) throw new Error(`OGS returned ${r.status}`);
+    return r.json();
+  },
+  async findPlayer(name) {
+    const d = await this.json(`${this.API}/players?username=${encodeURIComponent(name)}`);
+    const hit = (d.results || []).find(p => p.username.toLowerCase() === name.toLowerCase());
+    if (!hit) throw new Error(`No OGS player named "${name}"`);
+    return hit;
+  },
+  // Finished 19×19 games only (the reviewer is 19×19-only; in-progress SGFs need a login).
+  firstPageUrl(id) {
+    return `${this.API}/players/${id}/games/?ended__isnull=false&width=19&height=19&ordering=-ended&page_size=15`;
+  },
+  async sgf(gameId) {
+    const r = await fetch(`${this.API}/games/${gameId}/sgf`);
+    if (!r.ok) throw new Error(`Couldn't download game ${gameId} (${r.status})`);
+    return r.text();
+  },
+};
+
+function ogsPanel(loadSgf) {
+  const input = h("input", { class: "rec-field", placeholder: "OGS username", value: OGS.remembered() });
+  const status = h("div", { class: "meta-sub" });
+  const list = h("div", { class: "review-history", style: "margin:0" });
+  const more = h("button", { style: "display:none" }, "Load more");
+  let player = null, nextUrl = null, busy = false;
+
+  const imported = () => new Set(Review.loadHistory().map(g => (/online-go\.com\/game\/(\d+)/.exec(g.sgf || "") || [])[1]).filter(Boolean));
+
+  const addGames = games => {
+    const have = imported();
+    for (const g of games) {
+      const me = g.players.black.id === player.id ? "B" : "W";
+      const opp = (me === "B" ? g.players.white : g.players.black).username;
+      const winner = g.black_lost === g.white_lost ? "" : g.black_lost ? "W" : "B";
+      const res = winner ? `${winner} wins · ${g.outcome}` : g.outcome;
+      const row = h("div", { class: "history-item" }, [
+        h("div", { class: "hi-open" }, [
+          h("div", { class: "t" }, `${me === "B" ? "Black" : "White"} vs ${opp}${have.has(String(g.id)) ? "  ✓ imported" : ""}`),
+          h("div", { class: "n" }, `${new Date(g.ended).toLocaleDateString()} · ${res}${g.handicap ? ` · H${g.handicap}` : ""}`),
+        ]),
+      ]);
+      row.addEventListener("click", async () => {
+        if (busy) return;
+        busy = true; status.textContent = "Downloading game…";
+        try { await loadSgf(await OGS.sgf(g.id)); }
+        catch (e) { status.textContent = e.message; }
+        busy = false;
+      });
+      list.append(row);
+    }
+  };
+
+  const fetchPage = async url => {
+    const d = await OGS.json(url);
+    addGames(d.results || []);
+    nextUrl = d.next;
+    more.style.display = nextUrl ? "" : "none";
+    status.textContent = list.children.length ? "Tap a game to load it into Review." : "No finished 19×19 games found.";
+  };
+
+  const go = async () => {
+    const name = input.value.trim();
+    if (!name || busy) return;
+    busy = true; list.innerHTML = ""; more.style.display = "none"; status.textContent = "Looking up…";
+    try {
+      player = await OGS.findPlayer(name);
+      OGS.remember(player.username);
+      await fetchPage(OGS.firstPageUrl(player.id));
+    } catch (e) { status.textContent = e.message === "Failed to fetch" ? "Couldn't reach OGS." : e.message; }
+    busy = false;
+  };
+  input.addEventListener("keydown", e => { if (e.key === "Enter") go(); });
+  more.addEventListener("click", async () => {
+    if (busy || !nextUrl) return;
+    busy = true;
+    try { await fetchPage(nextUrl); } catch (e) { status.textContent = e.message; }
+    busy = false;
+  });
+
+  return h("div", { class: "sgf-loader", style: "margin-top:0" }, [
+    h("div", { class: "cat-title" }, "Import from OGS"),
+    h("div", { class: "row" }, [input, h("button", { class: "primary", onclick: go }, "Find games")]),
+    status, list, more,
+  ]);
+}
+
 function viewReview() {
   crumbs.innerHTML = "";
   root.innerHTML = "";
@@ -1850,6 +1947,7 @@ function viewReview() {
         err,
       ]),
     ]));
+    root.append(ogsPanel(async text => tryLoad(text)));
     if (histList) root.append(histList);
     return;
   }
