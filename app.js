@@ -58,14 +58,19 @@ const Sync = {
     if (this.username) this.pullAndMerge().then(route).catch(e => console.error("[sync]", e));
     else this.promptUsername();
     document.addEventListener("visibilitychange", () => {
-      if (document.visibilityState === "hidden" && this.saveTimer) { clearTimeout(this.saveTimer); this.save(); }
+      if (document.visibilityState !== "hidden") return;
+      if (this.saveTimer) { clearTimeout(this.saveTimer); this.save("progress", { progress: loadProgress(), favorites: [...loadFavorites()] }); }
+      if (Review.saveTimer) { clearTimeout(Review.saveTimer); Review.saveState(); }
     });
   },
 
-  async fetchRemote() {
+  // kind selects which Sheet the Apps Script reads/writes ("progress" or
+  // "review") — separate rows, so a large review blob can never break
+  // solved-problem sync, and vice versa.
+  async fetchRemote(kind = "progress") {
     if (!this.username) return {};
-    const res = await fetch(`${this.API_URL}?username=${encodeURIComponent(this.username)}`);
-    if (!res.ok) { console.error("[sync] fetch failed", res.status); return {}; }
+    const res = await fetch(`${this.API_URL}?username=${encodeURIComponent(this.username)}&kind=${kind}`);
+    if (!res.ok) { console.error("[sync] fetch failed", kind, res.status); return {}; }
     const body = await res.json();
     return body.data || {};
   },
@@ -73,7 +78,7 @@ const Sync = {
   // Pull this username's row, merge into local (solved sticks, favorites
   // union), so a fresh browser/device picks up prior progress + favorites.
   async pullAndMerge() {
-    const remote = await this.fetchRemote();
+    const remote = await this.fetchRemote("progress");
     const local = loadProgress();
     for (const bookId in remote.progress || {}) {
       const b = local[bookId] || (local[bookId] = {});
@@ -88,19 +93,22 @@ const Sync = {
   scheduleSave() {
     if (!this.username) return;
     clearTimeout(this.saveTimer);
-    this.saveTimer = setTimeout(() => this.save(), 3000);
+    this.saveTimer = setTimeout(() => this.save("progress", { progress: loadProgress(), favorites: [...loadFavorites()] }), 3000);
   },
 
-  async save() {
+  // Google Sheets caps a cell at 50,000 characters — stay well clear of it
+  // rather than send a doomed request.
+  async save(kind, data) {
     if (!this.username) return;
-    const data = { progress: loadProgress(), favorites: [...loadFavorites()] };
+    const payload = JSON.stringify({ username: this.username, kind, data });
+    if (payload.length > 45000) { console.error("[sync] save skipped, too large", kind, payload.length); return; }
     // text/plain avoids a CORS preflight that Apps Script web apps don't handle.
     const res = await fetch(this.API_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({ username: this.username, data }),
+      body: payload,
     });
-    if (!res.ok) console.error("[sync] save failed", res.status, await res.text());
+    if (!res.ok) console.error("[sync] save failed", kind, res.status, await res.text());
   },
 
   renderChip() {
@@ -896,7 +904,11 @@ const Review = {
   },
 
   saveState() {
-    if (!this.game) { localStorage.removeItem(this.STORAGE_KEY); return; }
+    if (!this.game) {
+      localStorage.removeItem(this.STORAGE_KEY);
+      if (Sync.username) Sync.save("review", {});
+      return;
+    }
     const state = {
       sgf: this.sgfText,
       tree: this.serializeTree(this.mainNodes[0]),
@@ -907,17 +919,18 @@ const Review = {
     };
     try { localStorage.setItem(this.STORAGE_KEY, JSON.stringify(state)); }
     catch (e) { console.error("[review] save failed", e); }
+    // Local storage is the fast/authoritative copy for this device; this is
+    // just so another device can pick up where you left off.
+    if (Sync.username) Sync.save("review", state);
   },
   scheduleSave() {
     clearTimeout(this.saveTimer);
     this.saveTimer = setTimeout(() => this.saveState(), 800);
   },
 
-  // Returns true if a saved session was restored into this.game/this.node.
-  restoreState() {
-    let raw;
-    try { raw = JSON.parse(localStorage.getItem(this.STORAGE_KEY)); }
-    catch { raw = null; }
+  // Rebuilds this.game/this.node/etc. from a saved state object (local or
+  // remote). Returns true on success.
+  applyState(raw) {
     if (!raw || !raw.sgf) return false;
     try {
       this.load(raw.sgf);
@@ -936,6 +949,22 @@ const Review = {
       this.game = null;
       return false;
     }
+  },
+
+  // Local-only, synchronous — the fast path for a returning visit on this device.
+  restoreState() {
+    let raw;
+    try { raw = JSON.parse(localStorage.getItem(this.STORAGE_KEY)); }
+    catch { raw = null; }
+    return this.applyState(raw);
+  },
+
+  // Async fallback for when this device has nothing saved locally: pull
+  // whatever this username last saved from another device.
+  async pullRemoteFallback() {
+    if (this.game || !Sync.username) return false;
+    const remote = await Sync.fetchRemote("review");
+    return this.applyState(remote);
   },
 
   get cur() { return this.mainAncestor().main; },
@@ -1513,6 +1542,7 @@ function viewReview() {
   if (!Review.game && !Review.restoredOnce) {
     Review.restoredOnce = true;
     Review.restoreState();
+    if (!Review.game) Review.pullRemoteFallback().then(ok => { if (ok) viewReview(); });
   }
 
   if (!Review.game) {
@@ -1606,6 +1636,7 @@ function viewReview() {
         h("button", { onclick: () => {
           Review.game = null; Review.runId++;
           localStorage.removeItem(Review.STORAGE_KEY);
+          if (Sync.username) Sync.save("review", {});
           viewReview();
         } }, "New game"),
       ]),
