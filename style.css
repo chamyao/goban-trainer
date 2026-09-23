@@ -283,3 +283,9 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
   font: inherit; font-size: 13.5px; padding: 8px 10px; border-radius: 10px;
   border: 1px solid #eee8da; background: #faf8f2; color: var(--ink);
 }
+
+.rec-label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--muted); margin-top: 8px; }
+.rec-field {
+  font: inherit; font-size: 14px; padding: 7px 10px; border-radius: 8px;
+  border: 1px solid #eee8da; background: #faf8f2; color: var(--ink);
+}

@@ -1649,6 +1649,142 @@ async function viewPlayer(id, num) {
   window.__engine = Engine;
 }
 
+/* ---- record an in-person game: tap moves onto a board, then send to Review ---- */
+
+const Recorder = {
+  KEY: "goban.recordDraft",
+  d: null, // { moves: [{color,c,r}|{color,pass}], next, black, white, komi, result }
+
+  load() {
+    try { this.d = JSON.parse(localStorage.getItem(this.KEY)); } catch { this.d = null; }
+    if (!this.d || !Array.isArray(this.d.moves)) this.d = { moves: [], next: BLACK, black: "", white: "", komi: "6.5", result: "" };
+  },
+  save() { try { localStorage.setItem(this.KEY, JSON.stringify(this.d)); } catch {} },
+  clear() { try { localStorage.removeItem(this.KEY); } catch {} this.d = null; },
+
+  // Replays the moves; returns { grid, last, keys } (keys = positions seen, for ko).
+  replay(upTo = this.d.moves.length) {
+    let g = Array.from({ length: N }, () => new Array(N).fill(EMPTY)), last = null;
+    const keys = new Set([g.flat().join("")]);
+    for (const m of this.d.moves.slice(0, upTo)) {
+      last = null;
+      if (!m.pass) {
+        g = applyMove(g, m.c, m.r, m.color) || g;
+        last = [m.c, m.r];
+      }
+      keys.add(g.flat().join(""));
+    }
+    return { grid: g, last, keys };
+  },
+
+  play(c, r) {
+    const { grid, keys } = this.replay();
+    if (grid[r][c] !== EMPTY) return false;
+    const g2 = applyMove(grid, c, r, this.d.next);
+    if (!g2 || keys.has(g2.flat().join(""))) return false; // suicide / ko
+    this.d.moves.push({ color: this.d.next, c, r });
+    this.d.next = 3 - this.d.next;
+    this.save();
+    return true;
+  },
+  pass() {
+    this.d.moves.push({ color: this.d.next, pass: true });
+    this.d.next = 3 - this.d.next;
+    this.save();
+  },
+  undo() {
+    const m = this.d.moves.pop();
+    if (m) this.d.next = m.color;
+    this.save();
+  },
+
+  toSgf() {
+    const esc = t => t.replace(/[\]\\]/g, "\\$&");
+    const pt = m => m.pass ? "" : String.fromCharCode(97 + m.c) + String.fromCharCode(97 + m.r);
+    const km = parseFloat(this.d.komi);
+    let head = `;GM[1]FF[4]SZ[19]KM[${Number.isFinite(km) ? km : 6.5}]DT[${new Date().toISOString().slice(0, 10)}]`;
+    if (this.d.black) head += `PB[${esc(this.d.black)}]`;
+    if (this.d.white) head += `PW[${esc(this.d.white)}]`;
+    if (this.d.result) head += `RE[${esc(this.d.result)}]`;
+    return `(${head}${this.d.moves.map(m => `;${m.color === BLACK ? "B" : "W"}[${pt(m)}]`).join("")})`;
+  },
+};
+
+function viewRecord() {
+  crumbs.innerHTML = "";
+  root.innerHTML = "";
+  if (!Recorder.d) Recorder.load();
+  const d = Recorder.d;
+
+  const svg = document.createElementNS(SVGNS, "svg");
+  const boardCard = h("div", { class: "board-card" });
+  boardCard.append(svg);
+  const goban = new Goban(svg, { c0: 0, c1: 18, r0: 0, r1: 18 }, (c, r) => { if (Recorder.play(c, r)) refresh(); });
+  const status = h("div", { class: "meta-sub" });
+  const err = h("div", { class: "err" });
+  const btnUndo = h("button", { onclick: () => { Recorder.undo(); refresh(); } }, "Undo");
+  const btnSend = h("button", { class: "primary" }, "Send to Review");
+
+  function refresh() {
+    const { grid, last } = Recorder.replay();
+    goban.hoverColor = d.next;
+    goban.render(grid, last, true);
+    status.textContent = `${d.moves.length} moves · ${d.next === BLACK ? "Black" : "White"} to play`;
+    btnUndo.disabled = !d.moves.length;
+    btnSend.disabled = !d.moves.length;
+    err.textContent = "";
+  }
+
+  const field = (label, key, placeholder) => {
+    const input = h("input", { class: "rec-field", value: d[key] || "", placeholder });
+    input.addEventListener("input", () => { d[key] = input.value; Recorder.save(); });
+    return h("label", { class: "rec-label" }, [label, input]);
+  };
+
+  btnSend.addEventListener("click", () => {
+    try {
+      Review.load(Recorder.toSgf());
+      Review.currentId = Review.newId();
+      Review.saveState();
+      Recorder.clear();
+      viewReview();
+    } catch (e) { err.textContent = e.message; }
+  });
+
+  const aside = h("aside", {}, [
+    h("div", { class: "panel" }, [
+      h("h2", {}, "Record a game"),
+      h("div", { class: "meta-sub" }, "Tap the board to place each move as it's played. Use Swap color for handicap stones or a missed turn."),
+      status,
+    ]),
+    h("div", { class: "panel" }, [
+      h("div", { class: "rv-actions" }, [
+        btnUndo,
+        h("button", { onclick: () => { Recorder.pass(); refresh(); } }, "Pass"),
+        h("button", { onclick: () => { d.next = 3 - d.next; Recorder.save(); refresh(); } }, "Swap color"),
+      ]),
+    ]),
+    h("div", { class: "panel" }, [
+      field("Black", "black", "Black player"),
+      field("White", "white", "White player"),
+      field("Komi", "komi", "6.5"),
+      field("Result", "result", "e.g. B+3.5 (optional)"),
+    ]),
+    h("div", { class: "panel" }, [
+      h("div", { class: "rv-actions" }, [
+        btnSend,
+        h("button", { onclick: () => {
+          if (d.moves.length && !confirm("Discard this recording?")) return;
+          Recorder.clear(); viewReview();
+        } }, "Discard"),
+      ]),
+      err,
+    ]),
+  ]);
+  root.append(h("div", { class: "review" }, [boardCard, aside]));
+  refresh();
+}
+
 function viewReview() {
   crumbs.innerHTML = "";
   root.innerHTML = "";
@@ -1708,6 +1844,7 @@ function viewReview() {
       ta,
       h("div", { class: "row" }, [
         h("button", { class: "primary", onclick: () => tryLoad(ta.value) }, "Load SGF"),
+        h("button", { onclick: () => viewRecord() }, "Record a game"),
         (() => { const l = h("label", { class: "file" }, "Choose file…");
                  l.append(file); l.addEventListener("click", () => file.click()); return l; })(),
         err,
