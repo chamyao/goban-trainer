@@ -824,6 +824,13 @@ const Review = {
   detailSeq: 0,
   _q: Promise.resolve(),
 
+  // persistence: loaded SGF + explored tree + per-position analysis, local
+  // to this browser (not synced with the username progress/favorites).
+  STORAGE_KEY: "gt-review",
+  sgfText: null,
+  saveTimer: null,
+  restoredOnce: false,
+
   // the worker cancels an in-flight analysis when a new one arrives, so all
   // review engine calls go through one queue
   enqueue(fn) {
@@ -834,6 +841,7 @@ const Review = {
 
   load(text) {
     this.game = gameFromSgf(text);
+    this.sgfText = text;
     this.analyses = new Array(this.game.n + 1);
     this.analyzing = false;
     this.runId++;
@@ -858,6 +866,78 @@ const Review = {
     this.node = root;
   },
 
+  /* ---- persistence (local to this browser) ---- */
+  serializeTree(node) {
+    return { move: node.move, main: node.main, children: node.children.map(c => this.serializeTree(c)) };
+  },
+  rebuildNode(obj, parent) {
+    const grid = !obj.move ? parent.grid
+      : obj.move.pass ? parent.grid
+      : (applyMove(parent.grid, obj.move.c, obj.move.r, obj.move.color) || parent.grid.map(row => row.slice()));
+    const node = { move: obj.move, parent, children: [], main: obj.main, grid, key: grid.flat().join("") };
+    node.children = (obj.children || []).map(c => this.rebuildNode(c, node));
+    return node;
+  },
+  collectMainLine(root) {
+    const acc = [];
+    let n = root;
+    for (let next; (next = n.children.find(c => c.main !== undefined));) { acc.push(next); n = next; }
+    return acc;
+  },
+  nodePath(node) {
+    const path = [];
+    for (let n = node; n.parent; n = n.parent) path.unshift(n.parent.children.indexOf(n));
+    return path;
+  },
+  nodeAtPath(path) {
+    let n = this.mainNodes[0];
+    for (const i of path) { if (!n.children[i]) break; n = n.children[i]; }
+    return n;
+  },
+
+  saveState() {
+    if (!this.game) { localStorage.removeItem(this.STORAGE_KEY); return; }
+    const state = {
+      sgf: this.sgfText,
+      tree: this.serializeTree(this.mainNodes[0]),
+      path: this.nodePath(this.node),
+      analyses: this.analyses,
+      showHints: this.showHints,
+      movesOpen: this.movesOpen,
+    };
+    try { localStorage.setItem(this.STORAGE_KEY, JSON.stringify(state)); }
+    catch (e) { console.error("[review] save failed", e); }
+  },
+  scheduleSave() {
+    clearTimeout(this.saveTimer);
+    this.saveTimer = setTimeout(() => this.saveState(), 800);
+  },
+
+  // Returns true if a saved session was restored into this.game/this.node.
+  restoreState() {
+    let raw;
+    try { raw = JSON.parse(localStorage.getItem(this.STORAGE_KEY)); }
+    catch { raw = null; }
+    if (!raw || !raw.sgf) return false;
+    try {
+      this.load(raw.sgf);
+      if (raw.tree) {
+        const root = this.mainNodes[0];
+        root.children = (raw.tree.children || []).map(c => this.rebuildNode(c, root));
+        this.mainNodes = [root, ...this.collectMainLine(root)];
+      }
+      if (Array.isArray(raw.analyses)) this.analyses = raw.analyses;
+      if (typeof raw.showHints === "boolean") this.showHints = raw.showHints;
+      if (typeof raw.movesOpen === "boolean") this.movesOpen = raw.movesOpen;
+      this.node = (raw.path && this.nodeAtPath(raw.path)) || this.mainNodes[0];
+      return true;
+    } catch (e) {
+      console.error("[review] restore failed", e);
+      this.game = null;
+      return false;
+    }
+  },
+
   get cur() { return this.mainAncestor().main; },
   mainAncestor() { let n = this.node; while (n.main === undefined) n = n.parent; return n; },
   varDepth() { let d = 0, n = this.node; while (n.main === undefined) { d++; n = n.parent; } return d; },
@@ -879,6 +959,7 @@ const Review = {
     this.renderBoard(); this.renderReadout(); this.renderChart();
     this.renderActions(); this.renderVariations();
     this.fetchDetail();
+    this.scheduleSave();
   },
 
   /* ---- tree editing ---- */
@@ -1011,6 +1092,7 @@ const Review = {
           }));
           if (this.runId !== run) break;
           this.analyses[k] = { w: a.rootWinRate, s: a.rootScoreLead };
+          this.scheduleSave();
         } catch (e) { console.error(e); continue; }
         this.renderChart(); this.renderMistakes(); this.renderProgress(); this.renderReadout();
       }
@@ -1031,8 +1113,10 @@ const Review = {
         visits: 48, ownershipMode: "root",
       }));
       this.ownership = a.ownership || null;
-      if (this.node.main !== undefined)
+      if (this.node.main !== undefined) {
         this.analyses[this.node.main] = { w: a.rootWinRate, s: a.rootScoreLead };
+        this.scheduleSave();
+      }
       this.renderBoard(); this.renderReadout(); this.renderChart();
     } catch (e) { console.error(e); }
   },
@@ -1426,11 +1510,16 @@ function viewReview() {
   crumbs.innerHTML = "";
   root.innerHTML = "";
 
+  if (!Review.game && !Review.restoredOnce) {
+    Review.restoredOnce = true;
+    Review.restoreState();
+  }
+
   if (!Review.game) {
     const err = h("div", { class: "err" });
     const ta = h("textarea", { placeholder: "Paste SGF here…" });
     const tryLoad = text => {
-      try { Review.load(text); viewReview(); }
+      try { Review.load(text); Review.saveState(); viewReview(); }
       catch (e) { err.textContent = e.message; }
     };
     const file = h("input", { type: "file", accept: ".sgf,.txt", style: "display:none" });
@@ -1466,6 +1555,7 @@ function viewReview() {
   movesToggle.addEventListener("click", () => {
     Review.movesOpen = !Review.movesOpen;
     Review.renderVariations();
+    Review.scheduleSave();
   });
   const btnAnalyze = h("button", { class: "primary", onclick: () => Review.analyzeAll() }, "Analyze game");
   const btnMain = h("button", { onclick: () => Review.setNode(Review.mainAncestor()) }, "Main line");
@@ -1474,6 +1564,7 @@ function viewReview() {
     Review.showHints = !Review.showHints;
     Review.renderBoard(); Review.renderActions();
     if (Review.showHints) Review.fetchDetail();
+    Review.scheduleSave();
   } }, "Hints");
 
   const title = [g.meta.black || "Black", "vs", g.meta.white || "White",
@@ -1512,7 +1603,11 @@ function viewReview() {
         btnHints,
         btnMain,
         btnDelete,
-        h("button", { onclick: () => { Review.game = null; Review.runId++; viewReview(); } }, "New game"),
+        h("button", { onclick: () => {
+          Review.game = null; Review.runId++;
+          localStorage.removeItem(Review.STORAGE_KEY);
+          viewReview();
+        } }, "New game"),
       ]),
       progress,
     ]),
