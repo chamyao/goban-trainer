@@ -223,7 +223,7 @@ const Engine = {
         type: "katago:analyze", id, modelUrl: this.modelUrl, backend: "auto",
         komi: 6.5, rules: "japanese", topK: 8, analysisPvLen: 4,
         reuseTree: true, ownershipMode: "root",
-        visits: 96, maxTimeMs: 12000,
+        visits: 400, maxTimeMs: 20000,
         ...fields,
       });
     });
@@ -1022,7 +1022,7 @@ const Review = {
       const a = await this.enqueue(() => this.details.get(key) || Engine.analyze({
         board, currentPlayer: player,
         moveHistory: [], komi: this.game.meta.komi,
-        visits: visits || 64, ownershipMode: "none",
+        visits: visits || 200, ownershipMode: "none",
       }));
       if (this.details.size > 300) this.details.clear();
       this.details.set(key, a);
@@ -1088,7 +1088,7 @@ const Review = {
             board: gridToBoardState(g.grids[k]),
             currentPlayer: this.toMoveAt(k) === BLACK ? "black" : "white",
             moveHistory: hist, komi: g.meta.komi,
-            visits: 32, ownershipMode: "none", topK: 1, analysisPvLen: 1,
+            visits: 100, ownershipMode: "none", topK: 1, analysisPvLen: 1,
           }));
           if (this.runId !== run) break;
           this.analyses[k] = { w: a.rootWinRate, s: a.rootScoreLead };
@@ -1110,7 +1110,7 @@ const Review = {
       const a = await this.enqueue(() => Engine.analyze({
         board, currentPlayer: player,
         moveHistory: [], komi: this.game.meta.komi,
-        visits: 48, ownershipMode: "root",
+        visits: 150, ownershipMode: "root",
       }));
       this.ownership = a.ownership || null;
       if (this.node.main !== undefined) {
