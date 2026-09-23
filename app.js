@@ -865,6 +865,7 @@ const Review = {
   showHints: true,
   movesOpen: true,
   details: new Map(), // serialized board+turn -> full analysis (with .moves)
+  quick: new Map(),   // same key -> raw network eval (no search), for the readout when hints are off
   detailSeq: 0,
   _q: Promise.resolve(),
 
@@ -889,10 +890,12 @@ const Review = {
     this.game = gameFromSgf(text);
     this.sgfText = text;
     this.analyses = new Array(this.game.n + 1);
+    this.losses = new Array(this.game.n);   // points lost by move k, from a search of the position before it
     this.analyzing = false;
     this.runId++;
     this.ownership = null;
     this.details.clear();
+    this.quick.clear();
     // move tree: the game is the main line, played branches persist as children
     const root = { move: null, parent: null, children: [], main: 0,
                    grid: this.game.grids[0], key: this.game.grids[0].flat().join("") };
@@ -968,6 +971,7 @@ const Review = {
       tree: this.serializeTree(this.mainNodes[0]),
       path: this.nodePath(this.node),
       analyses: this.analyses,
+      losses: this.losses,
       showHints: this.showHints,
       movesOpen: this.movesOpen,
     };
@@ -1022,6 +1026,7 @@ const Review = {
         this.mainNodes = [root, ...this.collectMainLine(root)];
       }
       if (Array.isArray(raw.analyses)) this.analyses = raw.analyses;
+      if (Array.isArray(raw.losses)) this.losses = raw.losses;
       if (typeof raw.showHints === "boolean") this.showHints = raw.showHints;
       if (typeof raw.movesOpen === "boolean") this.movesOpen = raw.movesOpen;
       this.node = (raw.path && this.nodeAtPath(raw.path)) || this.mainNodes[0];
@@ -1087,7 +1092,7 @@ const Review = {
     this.ownership = null;
     this.renderBoard(); this.renderReadout(); this.renderChart();
     this.renderActions(); this.renderVariations(); this.renderNote();
-    this.fetchDetail();
+    if (this.showHints) this.fetchDetail(); else this.quickEval();
     this.scheduleSave();
   },
 
@@ -1148,6 +1153,28 @@ const Review = {
     } catch (e) { console.error(e); }
   },
 
+  // Score for the readout without a search: only needed for nodes the
+  // whole-game analysis doesn't cover (branches), and only one forward pass.
+  async quickEval() {
+    if (!this.game || (Engine.status !== "ready" && Engine.status !== "busy")) return;
+    if (this.node.main !== undefined && this.analyses[this.node.main]) return;
+    const key = this.detailKey();
+    if (this.quick.has(key)) { this.renderReadout(); return; }
+    const par = this.node.parent, gp = par && par.parent;
+    try {
+      const e = await Engine.evaluate({
+        board: gridToBoardState(this.curGrid()),
+        previousBoard: par ? gridToBoardState(par.grid) : undefined,
+        previousPreviousBoard: gp ? gridToBoardState(gp.grid) : undefined,
+        currentPlayer: this.curTurn() === BLACK ? "black" : "white",
+        komi: this.game.meta.komi,
+      });
+      if (this.quick.size > 300) this.quick.clear();
+      this.quick.set(key, e);
+      if (this.els && key === this.detailKey()) this.renderReadout();
+    } catch (err) { console.error(err); }
+  },
+
   /* ---- best-move detail for the current position ---- */
   async fetchDetail(visits) {
     if (!this.game || Engine.status !== "ready") return null;
@@ -1199,14 +1226,43 @@ const Review = {
   mistakes() {
     const out = [];
     for (let k = 0; k < this.game.n; k++) {
-      const a = this.analyses[k], b = this.analyses[k + 1];
-      if (!a || !b) continue;
-      const mover = this.game.moves[k].color;
-      const loss = mover === BLACK ? a.s - b.s : b.s - a.s;
-      if (loss >= 1.5) out.push({ k, loss });
+      const loss = this.losses[k];
+      if (loss != null && loss >= 1.5) out.push({ k, loss });
     }
     out.sort((x, y) => y.loss - x.loss);
     return out.slice(0, 6).sort((x, y) => x.k - y.k);
+  },
+
+  // Points the mover gave up with move k: the best move's score minus the
+  // played move's, both taken from one search of the position *before* the
+  // move. Comparing two moves' after-positions this way cancels the
+  // side-to-move effect that makes comparing consecutive position scores
+  // reward whoever just moved (the network can't see a tactic until it's played).
+  async movePointsLost(k) {
+    const g = this.game, m = g.moves[k];
+    if (m.pass) return 0;
+    const player = m.color === BLACK ? "black" : "white";
+    const sign = m.color === BLACK ? 1 : -1;
+    const hist = [];
+    for (let j = Math.max(0, k - 6); j < k; j++) {
+      const q = g.moves[j];
+      if (!q.pass) hist.push({ x: q.c, y: q.r, player: q.color === BLACK ? "black" : "white" });
+    }
+    const a = await this.enqueue(() => Engine.analyze({
+      board: gridToBoardState(g.grids[k]), currentPlayer: player, moveHistory: hist,
+      komi: g.meta.komi, visits: 100, ownershipMode: "none", topK: 10, analysisPvLen: 1, reuseTree: false,
+    }));
+    const best = (a.moves || [])[0];
+    if (!best) return 0;
+    const played = a.moves.find(c => c.x === m.c && c.y === m.r);
+    if (played) return Math.max(0, played.relativePointsLost);
+    // Not among the searched candidates: search the position it leads to instead.
+    const child = await this.enqueue(() => Engine.analyze({
+      board: gridToBoardState(g.grids[k + 1]), currentPlayer: player === "black" ? "white" : "black",
+      moveHistory: [...hist, { x: m.c, y: m.r, player }].slice(-6),
+      komi: g.meta.komi, visits: 100, ownershipMode: "none", topK: 1, analysisPvLen: 1, reuseTree: false,
+    }));
+    return Math.max(0, sign * (best.scoreLead - child.rootScoreLead));
   },
 
   async analyzeAll() {
@@ -1232,6 +1288,17 @@ const Review = {
           this.scheduleSave();
         } catch (e) { console.error(e); continue; }
         this.renderChart(); this.renderMistakes(); this.renderProgress(); this.renderReadout();
+      }
+      for (let k = 0; k < g.n; k++) {
+        if (this.runId !== run || !location.hash.startsWith("#/review")) break;
+        if (this.losses[k] != null) continue;
+        try {
+          const loss = await this.movePointsLost(k);
+          if (this.runId !== run) break;
+          this.losses[k] = loss;
+          this.scheduleSave();
+        } catch (e) { console.error(e); continue; }
+        this.renderChart(); this.renderMistakes(); this.renderProgress();
       }
     } finally {
       if (this.runId === run) { this.analyzing = false; this.renderProgress(); }
@@ -1303,7 +1370,7 @@ const Review = {
   renderReadout() {
     if (!this.els) return;
     let evalTxt = "";
-    const detail = this.details.get(this.detailKey());
+    const detail = this.details.get(this.detailKey()) || this.quick.get(this.detailKey());
     const a = this.node.main !== undefined ? (this.analyses[this.node.main] || detail) : detail;
     if (a) {
       const s = a.rootScoreLead ?? a.s;
@@ -1414,8 +1481,9 @@ const Review = {
   renderProgress() {
     if (!this.els) return;
     const done = this.analyses.filter(Boolean).length;
+    const judged = this.losses.filter(x => x != null).length;
     this.els.progress.textContent = this.analyzing
-      ? `Analyzing… ${done}/${this.game.n + 1}`
+      ? (done < this.game.n + 1 ? `Analyzing… ${done}/${this.game.n + 1}` : `Judging moves… ${judged}/${this.game.n}`)
       : done ? `Analyzed ${done}/${this.game.n + 1} positions` : "";
     this.els.btnAnalyze.disabled = this.analyzing;
   },
@@ -2048,7 +2116,7 @@ function viewReview() {
   Review.goban = new Goban(svg, { c0: 0, c1: 18, r0: 0, r1: 18 }, (c, r) => Review.click(c, r));
   Review.renderBoard(); Review.renderReadout(); Review.renderChart();
   Review.renderMistakes(); Review.renderProgress(); Review.renderActions(); Review.renderVariations(); Review.renderNote();
-  Review.fetchDetail();
+  if (Review.showHints) Review.fetchDetail(); else Review.quickEval();
 }
 
 /* ================= feedback ================= */
