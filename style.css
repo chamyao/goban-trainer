@@ -277,3 +277,9 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
 .rv-actions button.active { background: #3566b0; border-color: #3566b0; color: #fff; }
 .rv-actions button:disabled { opacity: .45; cursor: default; }
 .rv-progress { color: var(--muted); font-size: 13px; margin-top: 8px; min-height: 18px; }
+
+.move-note {
+  display: block; width: 100%; box-sizing: border-box; margin-top: 8px; resize: vertical;
+  font: inherit; font-size: 13.5px; padding: 8px 10px; border-radius: 10px;
+  border: 1px solid #eee8da; background: #faf8f2; color: var(--ink);
+}

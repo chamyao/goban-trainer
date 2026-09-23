@@ -893,13 +893,14 @@ const Review = {
 
   /* ---- persistence (local to this browser) ---- */
   serializeTree(node) {
-    return { move: node.move, main: node.main, children: node.children.map(c => this.serializeTree(c)) };
+    return { move: node.move, main: node.main, note: node.note || undefined, children: node.children.map(c => this.serializeTree(c)) };
   },
   rebuildNode(obj, parent) {
     const grid = !obj.move ? parent.grid
       : obj.move.pass ? parent.grid
       : (applyMove(parent.grid, obj.move.c, obj.move.r, obj.move.color) || parent.grid.map(row => row.slice()));
     const node = { move: obj.move, parent, children: [], main: obj.main, grid, key: grid.flat().join("") };
+    if (obj.note) node.note = obj.note;
     node.children = (obj.children || []).map(c => this.rebuildNode(c, node));
     return node;
   },
@@ -995,6 +996,7 @@ const Review = {
       this.currentId = raw.id || this.newId();
       if (raw.tree) {
         const root = this.mainNodes[0];
+        if (raw.tree.note) root.note = raw.tree.note;
         root.children = (raw.tree.children || []).map(c => this.rebuildNode(c, root));
         this.mainNodes = [root, ...this.collectMainLine(root)];
       }
@@ -1063,8 +1065,20 @@ const Review = {
     this.node = node;
     this.ownership = null;
     this.renderBoard(); this.renderReadout(); this.renderChart();
-    this.renderActions(); this.renderVariations();
+    this.renderActions(); this.renderVariations(); this.renderNote();
     this.fetchDetail();
+    this.scheduleSave();
+  },
+
+  renderNote() {
+    if (!this.els || !this.els.note) return;
+    this.els.note.value = this.node.note || "";
+  },
+
+  onNoteInput(text) {
+    const had = !!this.node.note;
+    if (text) this.node.note = text; else delete this.node.note;
+    if (had !== !!text) this.renderVariations();
     this.scheduleSave();
   },
 
@@ -1333,7 +1347,7 @@ const Review = {
     if (!this.movesOpen) return;
 
     const { maxX, maxRow } = this.layoutTree();
-    const CELL = 24, PAD = 12, R = 6.5;
+    const CELL = 28, PAD = 14, R = 10;
     const W = maxX * CELL + PAD * 2, H = maxRow * CELL + PAD * 2;
     const svg = document.createElementNS(SVGNS, "svg");
     svg.setAttribute("width", W); svg.setAttribute("height", H);
@@ -1364,8 +1378,18 @@ const Review = {
         stroke: "#5c554a", "stroke-width": 1, cursor: "pointer",
       });
       if (cur) c.id = "mv-cur";
+      const ply = this.plyOf(node);
+      if (node.move && ply) {
+        const num = el("text", { x: px(node), y: py(node) + 3.2, "text-anchor": "middle",
+          "font-size": ply > 99 ? 8 : 10, "font-weight": 600, "pointer-events": "none",
+          fill: node.move.color === BLACK ? "#fff" : "#2b2a26" });
+        num.textContent = ply;
+      }
+      if (node.note)
+        el("circle", { cx: px(node) + R - 1, cy: py(node) - R + 1, r: 3.5,
+                       fill: "#d98a1f", stroke: "#fff", "stroke-width": 1, "pointer-events": "none" });
       const t = el("title", {}, c);
-      t.textContent = `${this.plyOf(node) || 0}. ${this.nodeLabel(node)}`;
+      t.textContent = `${ply || 0}. ${this.nodeLabel(node)}${node.note ? " — " + node.note : ""}`;
       c.addEventListener("click", () => this.setNode(node));
       for (const ch of node.children) drawNode(ch);
     };
@@ -1710,6 +1734,8 @@ function viewReview() {
     Review.renderVariations();
     Review.scheduleSave();
   });
+  const note = h("textarea", { class: "move-note", placeholder: "Note on this move…", rows: 3 });
+  note.addEventListener("input", () => Review.onNoteInput(note.value));
   const btnAnalyze = h("button", { class: "primary", onclick: () => Review.analyzeAll() }, "Analyze game");
   const btnMain = h("button", { onclick: () => Review.setNode(Review.mainAncestor()) }, "Main line");
   const btnDelete = h("button", { onclick: () => Review.deleteBranch() }, "Delete branch");
@@ -1739,6 +1765,7 @@ function viewReview() {
       ]),
       movesToggle,
       movesEl,
+      note,
     ]),
     h("div", { class: "panel" }, [
       h("h2", {}, "Score"),
@@ -1771,11 +1798,11 @@ function viewReview() {
   wrap.append(boardCard, aside);
   root.append(wrap);
 
-  Review.els = { chart, tip, pos, progress, mistakes, moves: movesEl, movesToggle,
+  Review.els = { chart, tip, pos, progress, mistakes, moves: movesEl, movesToggle, note,
                  btnAnalyze, btnMain, btnDelete, btnHints };
   Review.goban = new Goban(svg, { c0: 0, c1: 18, r0: 0, r1: 18 }, (c, r) => Review.click(c, r));
   Review.renderBoard(); Review.renderReadout(); Review.renderChart();
-  Review.renderMistakes(); Review.renderProgress(); Review.renderActions(); Review.renderVariations();
+  Review.renderMistakes(); Review.renderProgress(); Review.renderActions(); Review.renderVariations(); Review.renderNote();
   Review.fetchDetail();
 }
 
@@ -1784,7 +1811,7 @@ function viewReview() {
 function viewFeedback() {
   crumbs.textContent = "";
   root.innerHTML = "";
-  const ta = h("textarea", { placeholder: "Bugs, confusing bits, feature requests — anything." });
+  const ta = h("textarea", {});
   const msg = h("div", { class: "msg" });
   const submitBtn = h("button", {
     class: "primary",
