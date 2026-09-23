@@ -832,10 +832,15 @@ const Review = {
   detailSeq: 0,
   _q: Promise.resolve(),
 
-  // persistence: loaded SGF + explored tree + per-position analysis, local
-  // to this browser (not synced with the username progress/favorites).
-  STORAGE_KEY: "gt-review",
+  // persistence: a history of loaded games (SGF + explored tree + analysis),
+  // local to this browser and synced separately from progress/favorites.
+  HISTORY_KEY: "gt-review-history",
+  MAX_LOCAL: 20,   // history entries kept in this browser
+  MAX_SYNC: 5,     // most-recent entries included in the synced payload
+                    // (Sheets caps a cell at 50k chars — a handful of full
+                    // games with analysis can already get close)
   sgfText: null,
+  currentId: null,
   saveTimer: null,
   restoredOnce: false,
 
@@ -903,13 +908,25 @@ const Review = {
     return n;
   },
 
-  saveState() {
-    if (!this.game) {
-      localStorage.removeItem(this.STORAGE_KEY);
-      if (Sync.username) Sync.save("review", {});
-      return;
-    }
-    const state = {
+  newId() { return "g" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); },
+  titleFor() {
+    const m = this.game.meta;
+    const who = `${m.black || "Black"} vs ${m.white || "White"}`;
+    return m.result ? `${who} · ${m.result}` : `${who} · ${this.game.n} moves`;
+  },
+
+  loadHistory() {
+    try { return JSON.parse(localStorage.getItem(this.HISTORY_KEY)) || []; }
+    catch { return []; }
+  },
+  saveHistoryLocal(hist) {
+    try { localStorage.setItem(this.HISTORY_KEY, JSON.stringify(hist)); }
+    catch (e) { console.error("[review] save failed", e); }
+  },
+
+  buildEntry() {
+    return {
+      id: this.currentId, savedAt: Date.now(), title: this.titleFor(),
       sgf: this.sgfText,
       tree: this.serializeTree(this.mainNodes[0]),
       path: this.nodePath(this.node),
@@ -917,23 +934,41 @@ const Review = {
       showHints: this.showHints,
       movesOpen: this.movesOpen,
     };
-    try { localStorage.setItem(this.STORAGE_KEY, JSON.stringify(state)); }
-    catch (e) { console.error("[review] save failed", e); }
-    // Local storage is the fast/authoritative copy for this device; this is
-    // just so another device can pick up where you left off.
-    if (Sync.username) Sync.save("review", state);
+  },
+
+  // Upserts the current game into the local history (most-recent first),
+  // then pushes a size-capped slice to the synced copy.
+  saveState() {
+    if (!this.game) return;
+    if (!this.currentId) this.currentId = this.newId();
+    const entry = this.buildEntry();
+    const hist = [entry, ...this.loadHistory().filter(g => g.id !== entry.id)].slice(0, this.MAX_LOCAL);
+    this.saveHistoryLocal(hist);
+    if (Sync.username) Sync.save("review", { games: hist.slice(0, this.MAX_SYNC) });
   },
   scheduleSave() {
     clearTimeout(this.saveTimer);
     this.saveTimer = setTimeout(() => this.saveState(), 800);
   },
 
-  // Rebuilds this.game/this.node/etc. from a saved state object (local or
-  // remote). Returns true on success.
+  openFromHistory(id) {
+    const entry = this.loadHistory().find(g => g.id === id);
+    return entry ? this.applyState(entry) : false;
+  },
+  deleteFromHistory(id) {
+    const hist = this.loadHistory().filter(g => g.id !== id);
+    this.saveHistoryLocal(hist);
+    if (Sync.username) Sync.save("review", { games: hist.slice(0, this.MAX_SYNC) });
+    if (this.currentId === id) { this.game = null; this.currentId = null; }
+  },
+
+  // Rebuilds this.game/this.node/etc. from a saved entry (local or remote).
+  // Returns true on success.
   applyState(raw) {
     if (!raw || !raw.sgf) return false;
     try {
       this.load(raw.sgf);
+      this.currentId = raw.id || this.newId();
       if (raw.tree) {
         const root = this.mainNodes[0];
         root.children = (raw.tree.children || []).map(c => this.rebuildNode(c, root));
@@ -947,24 +982,44 @@ const Review = {
     } catch (e) {
       console.error("[review] restore failed", e);
       this.game = null;
+      this.currentId = null;
       return false;
     }
   },
 
-  // Local-only, synchronous — the fast path for a returning visit on this device.
+  // Local-only, synchronous — the fast path for a returning visit on this
+  // device: reopen whatever was saved most recently.
   restoreState() {
-    let raw;
-    try { raw = JSON.parse(localStorage.getItem(this.STORAGE_KEY)); }
-    catch { raw = null; }
-    return this.applyState(raw);
+    const hist = this.loadHistory();
+    return hist.length ? this.applyState(hist[0]) : false;
   },
 
-  // Async fallback for when this device has nothing saved locally: pull
-  // whatever this username last saved from another device.
+  // Async, runs once per session: merge this username's synced history into
+  // local (by id, newer savedAt wins), and if this device has nothing open
+  // yet, open the most recently saved entry. Returns true if a re-render is
+  // warranted (history list changed, or a game got opened).
   async pullRemoteFallback() {
-    if (this.game || !Sync.username) return false;
+    if (!Sync.username) return false;
     const remote = await Sync.fetchRemote("review");
-    return this.applyState(remote);
+    const remoteGames = Array.isArray(remote.games) ? remote.games
+      : remote.sgf ? [{ ...remote, id: remote.id || this.newId(), savedAt: remote.savedAt || 0 }] // legacy single-game shape
+      : [];
+    if (!remoteGames.length) return false;
+    const byId = new Map(this.loadHistory().map(g => [g.id, g]));
+    let changed = false;
+    for (const g of remoteGames) {
+      const existing = byId.get(g.id);
+      if (!existing || (g.savedAt || 0) > (existing.savedAt || 0)) { byId.set(g.id, g); changed = true; }
+    }
+    if (changed) {
+      const merged = [...byId.values()].sort((a, b) => (b.savedAt || 0) - (a.savedAt || 0)).slice(0, this.MAX_LOCAL);
+      this.saveHistoryLocal(merged);
+    }
+    if (!this.game) {
+      const hist = this.loadHistory();
+      if (hist.length) return this.applyState(hist[0]);
+    }
+    return changed;
   },
 
   get cur() { return this.mainAncestor().main; },
@@ -1539,24 +1594,39 @@ function viewReview() {
   crumbs.innerHTML = "";
   root.innerHTML = "";
 
-  if (!Review.game && !Review.restoredOnce) {
+  if (!Review.restoredOnce) {
     Review.restoredOnce = true;
     Review.restoreState();
-    if (!Review.game) Review.pullRemoteFallback().then(ok => { if (ok) viewReview(); });
+    Review.pullRemoteFallback().then(changed => { if (changed) viewReview(); });
   }
 
   if (!Review.game) {
     const err = h("div", { class: "err" });
     const ta = h("textarea", { placeholder: "Paste SGF here…" });
     const tryLoad = text => {
-      try { Review.load(text); Review.saveState(); viewReview(); }
-      catch (e) { err.textContent = e.message; }
+      try {
+        Review.load(text);
+        Review.currentId = Review.newId();
+        Review.saveState();
+        viewReview();
+      } catch (e) { err.textContent = e.message; }
     };
     const file = h("input", { type: "file", accept: ".sgf,.txt", style: "display:none" });
     file.addEventListener("change", () => {
       const f = file.files[0];
       if (f) f.text().then(tryLoad);
     });
+    const hist = Review.loadHistory();
+    const histList = hist.length ? h("div", { class: "review-history" }, [
+      h("div", { class: "cat-title" }, "Recent games"),
+      ...hist.map(g => h("div", { class: "history-item" }, [
+        h("div", { class: "hi-open", onclick: () => { Review.openFromHistory(g.id); viewReview(); } }, [
+          h("div", { class: "t" }, g.title),
+          h("div", { class: "n" }, new Date(g.savedAt).toLocaleString()),
+        ]),
+        h("span", { class: "hi-del", title: "Delete", onclick: e => { e.stopPropagation(); Review.deleteFromHistory(g.id); viewReview(); } }, "✕"),
+      ])),
+    ]) : null;
     root.append(h("div", { class: "sgf-loader" }, [
       h("div", { class: "cat-title" }, "Load a game"),
       ta,
@@ -1567,6 +1637,7 @@ function viewReview() {
         err,
       ]),
     ]));
+    if (histList) root.append(histList);
     return;
   }
 
@@ -1634,11 +1705,11 @@ function viewReview() {
         btnMain,
         btnDelete,
         h("button", { onclick: () => {
-          Review.game = null; Review.runId++;
-          localStorage.removeItem(Review.STORAGE_KEY);
-          if (Sync.username) Sync.save("review", {});
+          // Non-destructive: the game stays saved in history, this just
+          // returns to the loader/history list.
+          Review.game = null; Review.currentId = null; Review.runId++;
           viewReview();
-        } }, "New game"),
+        } }, "Close game"),
       ]),
       progress,
     ]),

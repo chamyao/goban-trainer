@@ -205,6 +205,18 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
 .sgf-loader button.primary { background: var(--ink); border-color: var(--ink); color: #fff; }
 .sgf-loader .err { color: var(--danger); font-size: 14px; }
 
+.review-history { max-width: 620px; margin: 8px auto 30px; display: flex; flex-direction: column; gap: 8px; }
+.history-item {
+  background: var(--card); border-radius: 10px; padding: 10px 14px;
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  box-shadow: 0 1px 2px rgba(60,50,30,.06);
+}
+.history-item .hi-open { flex: 1; cursor: pointer; display: flex; flex-direction: column; gap: 2px; }
+.history-item .t { font-weight: 600; font-size: 14px; }
+.history-item .n { color: var(--muted); font-size: 12.5px; }
+.history-item .hi-del { color: var(--muted); cursor: pointer; padding: 4px 6px; border-radius: 6px; font-size: 13px; }
+.history-item .hi-del:hover { color: var(--danger); background: #f3dddc; }
+
 .review { display: flex; gap: 26px; justify-content: center; align-items: flex-start; flex-wrap: wrap; }
 .review aside { width: 360px; }
 
