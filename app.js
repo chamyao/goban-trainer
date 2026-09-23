@@ -832,6 +832,12 @@ function gameFromSgf(text) {
   }
   if (!moves.length) throw new Error("no moves found");
 
+  // What KataGo's komi input actually is under territory scoring (Japanese, the
+  // rules we always evaluate with): komi plus (black minus white) stones on the
+  // *starting* board -- BoardHistory::whiteBonusScore. Without it a handicap game
+  // reads several points too good for Black.
+  meta.engineKomi = meta.komi + (setup.black.length - setup.white.length);
+
   // precompute the position after every move
   const grids = [];
   let g = Array.from({ length: N }, () => new Array(N).fill(EMPTY));
@@ -1167,7 +1173,7 @@ const Review = {
         previousBoard: par ? gridToBoardState(par.grid) : undefined,
         previousPreviousBoard: gp ? gridToBoardState(gp.grid) : undefined,
         currentPlayer: this.curTurn() === BLACK ? "black" : "white",
-        komi: this.game.meta.komi,
+        komi: this.game.meta.engineKomi,
       });
       if (this.quick.size > 300) this.quick.clear();
       this.quick.set(key, e);
@@ -1189,7 +1195,7 @@ const Review = {
     try {
       const a = await this.enqueue(() => this.details.get(key) || Engine.analyze({
         board, currentPlayer: player,
-        moveHistory: [], komi: this.game.meta.komi,
+        moveHistory: [], komi: this.game.meta.engineKomi,
         visits: visits || 200, ownershipMode: "none",
       }));
       if (this.details.size > 300) this.details.clear();
@@ -1250,7 +1256,7 @@ const Review = {
     }
     const a = await this.enqueue(() => Engine.analyze({
       board: gridToBoardState(g.grids[k]), currentPlayer: player, moveHistory: hist,
-      komi: g.meta.komi, visits: 100, ownershipMode: "none", topK: 10, analysisPvLen: 1, reuseTree: false,
+      komi: g.meta.engineKomi, visits: 100, ownershipMode: "none", topK: 10, analysisPvLen: 1, reuseTree: false,
     }));
     const best = (a.moves || [])[0];
     if (!best) return 0;
@@ -1260,7 +1266,7 @@ const Review = {
     const child = await this.enqueue(() => Engine.analyze({
       board: gridToBoardState(g.grids[k + 1]), currentPlayer: player === "black" ? "white" : "black",
       moveHistory: [...hist, { x: m.c, y: m.r, player }].slice(-6),
-      komi: g.meta.komi, visits: 100, ownershipMode: "none", topK: 1, analysisPvLen: 1, reuseTree: false,
+      komi: g.meta.engineKomi, visits: 100, ownershipMode: "none", topK: 1, analysisPvLen: 1, reuseTree: false,
     }));
     return Math.max(0, sign * (best.scoreLead - child.rootScoreLead));
   },
@@ -1281,7 +1287,7 @@ const Review = {
             previousBoard: k > 0 ? gridToBoardState(g.grids[k - 1]) : undefined,
             previousPreviousBoard: k > 1 ? gridToBoardState(g.grids[k - 2]) : undefined,
             currentPlayer: this.toMoveAt(k) === BLACK ? "black" : "white",
-            komi: g.meta.komi,
+            komi: g.meta.engineKomi,
           }));
           if (this.runId !== run) break;
           this.analyses[k] = { w: a.rootWinRate, s: a.rootScoreLead };
@@ -1313,14 +1319,14 @@ const Review = {
       const player = this.curTurn() === BLACK ? "black" : "white";
       const a = await this.enqueue(() => Engine.analyze({
         board, currentPlayer: player,
-        moveHistory: [], komi: this.game.meta.komi,
+        moveHistory: [], komi: this.game.meta.engineKomi,
         visits: 150, ownershipMode: "root",
       }));
       this.ownership = a.ownership || null;
       if (this.node.main !== undefined) {
         const k = this.node.main, g = this.game;
         const e = await Engine.evaluate({
-          board, currentPlayer: player, komi: g.meta.komi,
+          board, currentPlayer: player, komi: g.meta.engineKomi,
           previousBoard: k > 0 ? gridToBoardState(g.grids[k - 1]) : undefined,
           previousPreviousBoard: k > 1 ? gridToBoardState(g.grids[k - 2]) : undefined,
         });
