@@ -1175,15 +1175,6 @@ const Review = {
     if (j >= 0 && j < p.children.length) this.setNode(p.children[j]);
   },
 
-  // KataGo reports rootWinRate/rootScoreLead relative to whoever is on move,
-  // not fixed to Black. Convert once at storage time so analyses[] can be
-  // compared/subtracted across positions without re-deriving whose turn it was.
-  toBlackPerspective(a, mover) {
-    return mover === BLACK
-      ? { w: a.rootWinRate, s: a.rootScoreLead }
-      : { w: 1 - a.rootWinRate, s: -a.rootScoreLead };
-  },
-
   mistakes() {
     const out = [];
     for (let k = 0; k < this.game.n; k++) {
@@ -1220,7 +1211,7 @@ const Review = {
             visits: 100, ownershipMode: "none", topK: 1, analysisPvLen: 1,
           }));
           if (this.runId !== run) break;
-          this.analyses[k] = this.toBlackPerspective(a, this.toMoveAt(k));
+          this.analyses[k] = { w: a.rootWinRate, s: a.rootScoreLead };
           this.scheduleSave();
         } catch (e) { console.error(e); continue; }
         this.renderChart(); this.renderMistakes(); this.renderProgress(); this.renderReadout();
@@ -1243,7 +1234,7 @@ const Review = {
       }));
       this.ownership = a.ownership || null;
       if (this.node.main !== undefined) {
-        this.analyses[this.node.main] = this.toBlackPerspective(a, this.curTurn());
+        this.analyses[this.node.main] = { w: a.rootWinRate, s: a.rootScoreLead };
         this.scheduleSave();
       }
       this.renderBoard(); this.renderReadout(); this.renderChart();
@@ -1292,11 +1283,7 @@ const Review = {
     const detail = this.details.get(this.detailKey());
     const a = this.node.main !== undefined ? (this.analyses[this.node.main] || detail) : detail;
     if (a) {
-      // analyses[] entries are already Black-normalized; a raw `detail`
-      // (from fetchDetail's cache) is still mover-relative and needs converting.
-      const s = "rootScoreLead" in a
-        ? (this.curTurn() === BLACK ? a.rootScoreLead : -a.rootScoreLead)
-        : a.s;
+      const s = a.rootScoreLead ?? a.s;
       evalTxt = `  ·  ${s >= 0 ? "B" : "W"}+${Math.abs(s).toFixed(1)}`;
     }
     const onMain = this.node.main !== undefined;
