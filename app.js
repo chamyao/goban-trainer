@@ -231,9 +231,30 @@ const Engine = {
       if (this.pending.size === 0 && this.status === "busy") this.setStatus("ready");
       if (msg.ok) p.resolve(msg.analysis);
       else p.reject(new Error(msg.error || "analysis failed"));
+    } else if (msg.type === "katago:eval_result") {
+      const p = this.pending.get(msg.id);
+      if (!p) return;
+      this.pending.delete(msg.id);
+      if (msg.ok) p.resolve(msg.eval);
+      else p.reject(new Error(msg.error || "eval failed"));
     } else if (msg.type === "katago:notice") {
       console.info("[katago]", msg.message);
     }
+  },
+
+  // Single forward pass of the network, no search. Scores are Black-perspective.
+  // Unlike analyze(), the result isn't averaged over search children, so it
+  // doesn't drift toward the side that just moved.
+  async evaluate(fields) {
+    await this.ensure();
+    const id = ++this.seq;
+    return new Promise((resolve, reject) => {
+      this.pending.set(id, { resolve, reject });
+      this.worker.postMessage({
+        type: "katago:eval", id, modelUrl: this.modelUrl, backend: "auto",
+        rules: "japanese", moveHistory: [], ...fields,
+      });
+    });
   },
 
   async analyze(fields) {
@@ -1198,17 +1219,13 @@ const Review = {
       for (let k = 0; k <= g.n; k++) {
         if (this.runId !== run || !location.hash.startsWith("#/review")) break;
         if (this.analyses[k]) continue;
-        const hist = [];
-        for (let j = Math.max(0, k - 6); j < k; j++) {
-          const m = g.moves[j];
-          if (!m.pass) hist.push({ x: m.c, y: m.r, player: m.color === BLACK ? "black" : "white" });
-        }
         try {
-          const a = await this.enqueue(() => Engine.analyze({
+          const a = await this.enqueue(() => Engine.evaluate({
             board: gridToBoardState(g.grids[k]),
+            previousBoard: k > 0 ? gridToBoardState(g.grids[k - 1]) : undefined,
+            previousPreviousBoard: k > 1 ? gridToBoardState(g.grids[k - 2]) : undefined,
             currentPlayer: this.toMoveAt(k) === BLACK ? "black" : "white",
-            moveHistory: hist, komi: g.meta.komi,
-            visits: 100, ownershipMode: "none", topK: 1, analysisPvLen: 1,
+            komi: g.meta.komi,
           }));
           if (this.runId !== run) break;
           this.analyses[k] = { w: a.rootWinRate, s: a.rootScoreLead };
@@ -1234,7 +1251,13 @@ const Review = {
       }));
       this.ownership = a.ownership || null;
       if (this.node.main !== undefined) {
-        this.analyses[this.node.main] = { w: a.rootWinRate, s: a.rootScoreLead };
+        const k = this.node.main, g = this.game;
+        const e = await Engine.evaluate({
+          board, currentPlayer: player, komi: g.meta.komi,
+          previousBoard: k > 0 ? gridToBoardState(g.grids[k - 1]) : undefined,
+          previousPreviousBoard: k > 1 ? gridToBoardState(g.grids[k - 2]) : undefined,
+        });
+        this.analyses[k] = { w: e.rootWinRate, s: e.rootScoreLead };
         this.scheduleSave();
       }
       this.renderBoard(); this.renderReadout(); this.renderChart();
