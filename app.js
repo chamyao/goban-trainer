@@ -28,6 +28,18 @@ function markResult(bookId, pid, ok) {
   Sync.scheduleSave();
 }
 
+const FAVORITES_KEY = "gt-favorites";
+function loadFavorites() {
+  try { return new Set(JSON.parse(localStorage.getItem(FAVORITES_KEY)) || []); }
+  catch { return new Set(); }
+}
+function toggleFavorite(bookId) {
+  const favs = loadFavorites();
+  favs.has(bookId) ? favs.delete(bookId) : favs.add(bookId);
+  localStorage.setItem(FAVORITES_KEY, JSON.stringify([...favs]));
+  Sync.scheduleSave();
+}
+
 /* ================= account sync (Google Sheet via Apps Script, username only) ================= */
 
 const Sync = {
@@ -58,16 +70,19 @@ const Sync = {
     return body.data || {};
   },
 
-  // Pull this username's row, merge into local (solved sticks), so a fresh
-  // browser/device picks up prior progress.
+  // Pull this username's row, merge into local (solved sticks, favorites
+  // union), so a fresh browser/device picks up prior progress + favorites.
   async pullAndMerge() {
     const remote = await this.fetchRemote();
     const local = loadProgress();
-    for (const bookId in remote) {
+    for (const bookId in remote.progress || {}) {
       const b = local[bookId] || (local[bookId] = {});
-      for (const pid in remote[bookId]) if (b[pid] !== 1) b[pid] = remote[bookId][pid];
+      for (const pid in remote.progress[bookId]) if (b[pid] !== 1) b[pid] = remote.progress[bookId][pid];
     }
     localStorage.setItem(PROGRESS_KEY, JSON.stringify(local));
+    const favs = loadFavorites();
+    for (const bookId of remote.favorites || []) favs.add(bookId);
+    localStorage.setItem(FAVORITES_KEY, JSON.stringify([...favs]));
   },
 
   scheduleSave() {
@@ -78,11 +93,12 @@ const Sync = {
 
   async save() {
     if (!this.username) return;
+    const data = { progress: loadProgress(), favorites: [...loadFavorites()] };
     // text/plain avoids a CORS preflight that Apps Script web apps don't handle.
     const res = await fetch(this.API_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({ username: this.username, data: loadProgress() }),
+      body: JSON.stringify({ username: this.username, data }),
     });
     if (!res.ok) console.error("[sync] save failed", res.status, await res.text());
   },
@@ -1290,14 +1306,25 @@ async function viewLibrary() {
   root.innerHTML = `<div class="loading">Loading…</div>`;
   const index = await getIndex();
   const prog = loadProgress();
+  const favs = loadFavorites();
   root.innerHTML = "";
   const cats = { tsumego: "Tsumego", tesuji: "Tesuji", endgame: "Endgame" };
   for (const cat in cats) {
     root.append(h("div", { class: "cat-title" }, cats[cat]));
     const list = h("div", { class: "book-list" });
-    for (const b of index.filter(x => x.category === cat)) {
+    const books = index.filter(x => x.category === cat)
+      .map((b, i) => ({ b, i }))
+      .sort((x, y) => (favs.has(y.b.id) - favs.has(x.b.id)) || (x.i - y.i))
+      .map(x => x.b);
+    for (const b of books) {
       const solved = Object.values(prog[b.id] || {}).filter(v => v === 1).length;
+      const isFav = favs.has(b.id);
       list.append(h("div", { class: "book", onclick: () => location.hash = `#/book/${b.id}` }, [
+        h("span", {
+          class: "star" + (isFav ? " on" : ""),
+          title: isFav ? "Unfavorite" : "Favorite",
+          onclick: e => { e.stopPropagation(); toggleFavorite(b.id); viewLibrary(); },
+        }, isFav ? "★" : "☆"),
         h("div", { class: "t" }, b.title),
         h("div", { class: "n" }, b.native),
         h("div", { class: "row" }, [
