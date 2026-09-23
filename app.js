@@ -97,11 +97,12 @@ const Sync = {
   },
 
   // Google Sheets caps a cell at 50,000 characters — stay well clear of it
-  // rather than send a doomed request.
-  async save(kind, data) {
+  // rather than send a doomed request. extra merges in e.g. {id} for
+  // per-row "review" games, or {id, delete:true} to remove one.
+  async save(kind, data, extra) {
     if (!this.username) return;
-    const payload = JSON.stringify({ username: this.username, kind, data });
-    if (payload.length > 45000) { console.error("[sync] save skipped, too large", kind, payload.length); return; }
+    const payload = JSON.stringify({ username: this.username, kind, data, ...extra });
+    if (payload.length > 48000) { console.error("[sync] save skipped, too large", kind, payload.length); return; }
     // text/plain avoids a CORS preflight that Apps Script web apps don't handle.
     const res = await fetch(this.API_URL, {
       method: "POST",
@@ -835,10 +836,7 @@ const Review = {
   // persistence: a history of loaded games (SGF + explored tree + analysis),
   // local to this browser and synced separately from progress/favorites.
   HISTORY_KEY: "gt-review-history",
-  MAX_LOCAL: 20,   // history entries kept in this browser
-  MAX_SYNC: 5,     // most-recent entries included in the synced payload
-                    // (Sheets caps a cell at 50k chars — a handful of full
-                    // games with analysis can already get close)
+  MAX_LOCAL: 50,   // history entries kept in this browser
   sgfText: null,
   currentId: null,
   saveTimer: null,
@@ -925,8 +923,11 @@ const Review = {
   },
 
   buildEntry() {
+    const existing = this.loadHistory().find(g => g.id === this.currentId);
     return {
-      id: this.currentId, savedAt: Date.now(), title: this.titleFor(),
+      id: this.currentId, savedAt: Date.now(),
+      name: existing ? existing.name : null,   // user-given, overrides title in the list
+      title: this.titleFor(),                  // auto-derived fallback
       sgf: this.sgfText,
       tree: this.serializeTree(this.mainNodes[0]),
       path: this.nodePath(this.node),
@@ -936,15 +937,16 @@ const Review = {
     };
   },
 
-  // Upserts the current game into the local history (most-recent first),
-  // then pushes a size-capped slice to the synced copy.
+  // Upserts the current game into local history (most-recent first) and
+  // pushes just this one game to its own synced row — no shared-cell size
+  // limit to worry about, since each game is its own row.
   saveState() {
     if (!this.game) return;
     if (!this.currentId) this.currentId = this.newId();
     const entry = this.buildEntry();
     const hist = [entry, ...this.loadHistory().filter(g => g.id !== entry.id)].slice(0, this.MAX_LOCAL);
     this.saveHistoryLocal(hist);
-    if (Sync.username) Sync.save("review", { games: hist.slice(0, this.MAX_SYNC) });
+    if (Sync.username) Sync.save("review", entry, { id: entry.id });
   },
   scheduleSave() {
     clearTimeout(this.saveTimer);
@@ -955,10 +957,18 @@ const Review = {
     const entry = this.loadHistory().find(g => g.id === id);
     return entry ? this.applyState(entry) : false;
   },
+  renameHistory(id, name) {
+    const hist = this.loadHistory();
+    const entry = hist.find(g => g.id === id);
+    if (!entry) return;
+    entry.name = name && name.trim() ? name.trim() : null;
+    this.saveHistoryLocal(hist);
+    if (Sync.username) Sync.save("review", entry, { id });
+  },
   deleteFromHistory(id) {
     const hist = this.loadHistory().filter(g => g.id !== id);
     this.saveHistoryLocal(hist);
-    if (Sync.username) Sync.save("review", { games: hist.slice(0, this.MAX_SYNC) });
+    if (Sync.username) Sync.save("review", {}, { id, delete: true });
     if (this.currentId === id) { this.game = null; this.currentId = null; }
   },
 
@@ -1001,9 +1011,7 @@ const Review = {
   async pullRemoteFallback() {
     if (!Sync.username) return false;
     const remote = await Sync.fetchRemote("review");
-    const remoteGames = Array.isArray(remote.games) ? remote.games
-      : remote.sgf ? [{ ...remote, id: remote.id || this.newId(), savedAt: remote.savedAt || 0 }] // legacy single-game shape
-      : [];
+    const remoteGames = Array.isArray(remote.games) ? remote.games : [];
     if (!remoteGames.length) return false;
     const byId = new Map(this.loadHistory().map(g => [g.id, g]));
     let changed = false;
@@ -1617,15 +1625,32 @@ function viewReview() {
       if (f) f.text().then(tryLoad);
     });
     const hist = Review.loadHistory();
-    const histList = hist.length ? h("div", { class: "review-history" }, [
-      h("div", { class: "cat-title" }, "Recent games"),
-      ...hist.map(g => h("div", { class: "history-item" }, [
+    const histItem = g => {
+      const titleEl = h("div", { class: "t" }, g.name || g.title);
+      const startRename = e => {
+        e.stopPropagation();
+        const input = h("input", { class: "hi-rename", value: g.name || "", placeholder: g.title });
+        const commit = () => { Review.renameHistory(g.id, input.value); viewReview(); };
+        input.addEventListener("keydown", e2 => {
+          if (e2.key === "Enter") input.blur();
+          else if (e2.key === "Escape") { input.value = g.name || ""; viewReview(); }
+        });
+        input.addEventListener("blur", commit);
+        titleEl.replaceWith(input);
+        input.focus(); input.select();
+      };
+      return h("div", { class: "history-item" }, [
         h("div", { class: "hi-open", onclick: () => { Review.openFromHistory(g.id); viewReview(); } }, [
-          h("div", { class: "t" }, g.title),
+          titleEl,
           h("div", { class: "n" }, new Date(g.savedAt).toLocaleString()),
         ]),
+        h("span", { class: "hi-rename-btn", title: "Rename", onclick: startRename }, "✎"),
         h("span", { class: "hi-del", title: "Delete", onclick: e => { e.stopPropagation(); Review.deleteFromHistory(g.id); viewReview(); } }, "✕"),
-      ])),
+      ]);
+    };
+    const histList = hist.length ? h("div", { class: "review-history" }, [
+      h("div", { class: "cat-title" }, "Recent games"),
+      ...hist.map(histItem),
     ]) : null;
     root.append(h("div", { class: "sgf-loader" }, [
       h("div", { class: "cat-title" }, "Load a game"),
