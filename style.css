@@ -166,6 +166,7 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
 .controls button.primary { background: var(--ink); border-color: var(--ink); color: #fff; }
 .controls button.active { background: #b89a4e; border-color: #b89a4e; color: #fff; }
 .controls button:disabled { opacity: .4; cursor: default; }
+.controls button.wide { grid-column: 1 / -1; }
 
 .nav-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .nav-row button {

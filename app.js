@@ -540,9 +540,12 @@ class Trainer {
   }
   terminal() {
     const ls = this.consistentLines();
-    if (ls.some(L => L.length - 1 > this.played.length)) return null;
     const done = ls.filter(L => L.length - 1 === this.played.length);
+    // A correct line ending here wins even if a longer line continues: the
+    // 101weiqi keys sometimes list e.g. [1,"ob"] alongside [3,"ob","pa"], and
+    // following the hint must not end in "Wrong".
     if (done.some(L => L[0] <= 2)) return "ok";
+    if (ls.some(L => L.length - 1 > this.played.length)) return null;
     if (done.some(L => L[0] === 3)) return "bad";
     return null;
   }
@@ -658,6 +661,16 @@ class Trainer {
     }
   }
 
+  // For when the answer key is wrong or misses an alternate solution.
+  claimSolved() {
+    if (this.explore || this.done === "ok" || this.engineBusy) return;
+    clearTimeout(this.replyTimer);
+    this.done = "ok";
+    markResult(this.book.id, this.p.id, true);
+    this.setStatus("ok", "✓", "Claimed solved");
+    this.render();
+  }
+
   finish(kind) {
     this.done = kind;
     markResult(this.book.id, this.p.id, kind === "ok");
@@ -690,8 +703,10 @@ class Trainer {
 
   hint() {
     if (this.explore || this.done) return;
-    const best = this.p.lines.find(L => L[0] === 1 &&
-      this.played.every((m, i) => m === L[i + 1]) && L.length - 1 > this.played.length);
+    // Prefer main solutions (1), else correct variations (2): after some
+    // white replies only a variation line continues.
+    const open = L => this.played.every((m, i) => m === L[i + 1]) && L.length - 1 > this.played.length;
+    const best = this.p.lines.find(L => L[0] === 1 && open(L)) || this.p.lines.find(L => L[0] === 2 && open(L));
     if (!best) return;
     const [c, r] = cIdx(best[this.played.length + 1]);
     this.goban.pulse(c, r);
@@ -1712,6 +1727,8 @@ async function viewPlayer(id, num) {
         h("button", { onclick: () => trainer.hint() }, "Hint"),
         h("button", { onclick: () => trainer.reset() }, "Reset"),
         btnExplore,
+        h("button", { class: "wide", title: "Answer key wrong, or you found another solution? Count it as solved.",
+                      onclick: () => trainer.claimSolved() }, "Claim solved"),
       ]),
     ]),
     h("div", { class: "panel" }, [
