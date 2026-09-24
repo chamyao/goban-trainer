@@ -509,7 +509,7 @@ class Trainer {
     this.lastMove = null;
     this.done = null;         // null | "ok" | "bad"
     this.explore = null;      // null | snapshot taken when entering explore
-    this.posHistory = [this.serialize(this.grid)]; // for the ko/superko rule
+    this.posHistory = [this.serialize(this.grid)]; // for the ko rule
     this.ownership = null;    // ownership overlay from Judge
     this.engineBusy = false;
     this.render();
@@ -518,8 +518,13 @@ class Trainer {
 
   onTree() { return this.consistentLines().length > 0; }
 
-  /* positional superko: a move may not recreate any earlier position */
-  koViolation(g2) { return this.posHistory.includes(this.serialize(g2)); }
+  /* simple ko (Japanese rules, as tsumego assume): a move may not recreate the
+     position from before the opponent's last move. Superko would wrongly forbid
+     e.g. retaking one stone after two were captured ("send two, return one"). */
+  koViolation(g2) {
+    const h = this.posHistory;
+    return h.length >= 2 && h[h.length - 2] === this.serialize(g2);
+  }
 
   /* --- variation tree --- */
   consistentLines() {
@@ -1045,17 +1050,15 @@ const Review = {
     }
   },
 
-  // Local-only, synchronous — the fast path for a returning visit on this
-  // device: reopen whatever was saved most recently.
-  restoreState() {
-    const hist = this.loadHistory();
-    return hist.length ? this.applyState(hist[0]) : false;
+  // Returns to the loader/history list. Non-destructive: flushes any pending
+  // save, and the game stays in history.
+  close() {
+    if (this.game) { clearTimeout(this.saveTimer); this.saveState(); }
+    this.game = null; this.currentId = null; this.runId++;
   },
 
   // Async, runs once per session: merge this username's synced history into
-  // local (by id, newer savedAt wins), and if this device has nothing open
-  // yet, open the most recently saved entry. Returns true if a re-render is
-  // warranted (history list changed, or a game got opened).
+  // local (by id, newer savedAt wins). Returns true if the history list changed.
   async pullRemoteFallback() {
     if (!Sync.username) return false;
     const remote = await Sync.fetchRemote("review");
@@ -1070,10 +1073,6 @@ const Review = {
     if (changed) {
       const merged = [...byId.values()].sort((a, b) => (b.savedAt || 0) - (a.savedAt || 0)).slice(0, this.MAX_LOCAL);
       this.saveHistoryLocal(merged);
-    }
-    if (!this.game) {
-      const hist = this.loadHistory();
-      if (hist.length) return this.applyState(hist[0]);
     }
     return changed;
   },
@@ -1125,7 +1124,7 @@ const Review = {
     const g2 = applyMove(this.curGrid(), c, r, color);
     if (!g2) return;
     const key = g2.flat().join("");
-    for (let n = this.node; n; n = n.parent) if (n.key === key) return; // ko / superko
+    if (this.node.parent && this.node.parent.key === key) return; // ko (simple ko, as in Japanese rules)
     const node = { move: { c, r, color }, parent: this.node, children: [], grid: g2, key };
     this.node.children.push(node);
     this.setNode(node);
@@ -1746,17 +1745,17 @@ const Recorder = {
   save() { try { localStorage.setItem(this.KEY, JSON.stringify(this.d)); } catch {} },
   clear() { try { localStorage.removeItem(this.KEY); } catch {} this.d = null; },
 
-  // Replays the moves; returns { grid, last, keys } (keys = positions seen, for ko).
+  // Replays the moves; returns { grid, last, keys } (keys = positions in order, for ko).
   replay(upTo = this.d.moves.length) {
     let g = Array.from({ length: N }, () => new Array(N).fill(EMPTY)), last = null;
-    const keys = new Set([g.flat().join("")]);
+    const keys = [g.flat().join("")];
     for (const m of this.d.moves.slice(0, upTo)) {
       last = null;
       if (!m.pass) {
         g = applyMove(g, m.c, m.r, m.color) || g;
         last = [m.c, m.r];
       }
-      keys.add(g.flat().join(""));
+      keys.push(g.flat().join(""));
     }
     return { grid: g, last, keys };
   },
@@ -1765,7 +1764,7 @@ const Recorder = {
     const { grid, keys } = this.replay();
     if (grid[r][c] !== EMPTY) return false;
     const g2 = applyMove(grid, c, r, this.d.next);
-    if (!g2 || keys.has(g2.flat().join(""))) return false; // suicide / ko
+    if (!g2 || keys[keys.length - 2] === g2.flat().join("")) return false; // suicide / simple ko
     this.d.moves.push({ color: this.d.next, c, r });
     this.d.next = 3 - this.d.next;
     this.save();
@@ -1972,8 +1971,7 @@ function viewReview() {
 
   if (!Review.restoredOnce) {
     Review.restoredOnce = true;
-    Review.restoreState();
-    Review.pullRemoteFallback().then(changed => { if (changed) viewReview(); });
+    Review.pullRemoteFallback().then(changed => { if (changed && location.hash.startsWith("#/review")) viewReview(); });
   }
 
   if (!Review.game) {
@@ -2102,12 +2100,7 @@ function viewReview() {
         btnHints,
         btnMain,
         btnDelete,
-        h("button", { onclick: () => {
-          // Non-destructive: the game stays saved in history, this just
-          // returns to the loader/history list.
-          Review.game = null; Review.currentId = null; Review.runId++;
-          viewReview();
-        } }, "Close game"),
+        h("button", { onclick: () => { Review.close(); viewReview(); } }, "Close game"),
       ]),
       progress,
     ]),
@@ -2202,6 +2195,11 @@ document.addEventListener("keydown", e => {
 });
 
 window.addEventListener("hashchange", route);
+// The Review tab always lands on the game list, even with a game open.
+document.querySelector('#tabs a[data-tab="review"]').addEventListener("click", () => {
+  Review.close();
+  if (location.hash.startsWith("#/review")) viewReview();
+});
 window.__engine = Engine;
 window.__review = Review;
 Sync.init();
