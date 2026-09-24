@@ -182,11 +182,7 @@ const Sync = {
 const Engine = {
   worker: null, status: "off", backend: null, initPromise: null,
   pending: new Map(), seq: 0,
-  // Tried in order. The b18 net is ~98 MB but handles unusual komi and
-  // handicap games; the small net is the fallback when b18 can't load
-  // (e.g. not enough GPU memory on older phones).
-  MODELS: ["engine/katago-b18.bin.gz", "engine/katago-small.bin.gz"],
-  modelIndex: 0, modelUrl: null,
+  modelUrl: new URL("engine/katago-small.bin.gz", location.href).href,
 
   setStatus(status, detail) {
     this.status = status; this.detail = detail || "";
@@ -207,34 +203,14 @@ const Engine = {
 
   ensure() {
     if (!this.initPromise) {
+      this.setStatus("loading");
+      this.worker = new Worker("engine/katago-worker.js");
+      this.worker.onmessage = e => this.onMessage(e.data);
+      this.worker.onerror = e => { this.setStatus("error", "worker failed"); console.error(e); };
       this.initPromise = new Promise((resolve, reject) => { this.initSettle = { resolve, reject }; });
-      this.startWorker();
+      this.worker.postMessage({ type: "katago:init", modelUrl: this.modelUrl, backend: "auto" });
     }
     return this.initPromise;
-  },
-
-  startWorker() {
-    this.setStatus("loading");
-    this.modelUrl = new URL(this.MODELS[this.modelIndex], location.href).href;
-    this.worker = new Worker("engine/katago-worker.js");
-    this.worker.onmessage = e => this.onMessage(e.data);
-    this.worker.onerror = e => { console.error(e); this.initFailed("worker failed"); };
-    this.worker.postMessage({ type: "katago:init", modelUrl: this.modelUrl, backend: "auto" });
-  },
-
-  initFailed(error) {
-    if (this.status !== "loading") { this.setStatus("error", error); return; }
-    this.worker.terminate();
-    if (this.modelIndex + 1 < this.MODELS.length) {
-      console.warn(`[katago] ${this.MODELS[this.modelIndex]} failed (${error}); falling back`);
-      this.modelIndex++;
-      this.startWorker();
-      return;
-    }
-    this.modelIndex = 0;
-    this.setStatus("error", error);
-    this.initSettle.reject(new Error(error));
-    this.initPromise = null;
   },
 
   onMessage(msg) {
@@ -244,7 +220,9 @@ const Engine = {
         this.setStatus("ready");
         this.initSettle.resolve();
       } else {
-        this.initFailed(msg.error);
+        this.setStatus("error", msg.error);
+        this.initSettle.reject(new Error(msg.error));
+        this.initPromise = null;
       }
     } else if (msg.type === "katago:analyze_result") {
       const p = this.pending.get(msg.id);
