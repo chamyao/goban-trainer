@@ -540,12 +540,9 @@ class Trainer {
   }
   terminal() {
     const ls = this.consistentLines();
-    const done = ls.filter(L => L.length - 1 === this.played.length);
-    // A correct line ending here wins even if a longer line continues: the
-    // 101weiqi keys sometimes list e.g. [1,"ob"] alongside [3,"ob","pa"], and
-    // following the hint must not end in "Wrong".
-    if (done.some(L => L[0] <= 2)) return "ok";
     if (ls.some(L => L.length - 1 > this.played.length)) return null;
+    const done = ls.filter(L => L.length - 1 === this.played.length);
+    if (done.some(L => L[0] <= 2)) return "ok";
     if (done.some(L => L[0] === 3)) return "bad";
     return null;
   }
@@ -703,10 +700,8 @@ class Trainer {
 
   hint() {
     if (this.explore || this.done) return;
-    // Prefer main solutions (1), else correct variations (2): after some
-    // white replies only a variation line continues.
-    const open = L => this.played.every((m, i) => m === L[i + 1]) && L.length - 1 > this.played.length;
-    const best = this.p.lines.find(L => L[0] === 1 && open(L)) || this.p.lines.find(L => L[0] === 2 && open(L));
+    const best = this.p.lines.find(L => L[0] === 1 &&
+      this.played.every((m, i) => m === L[i + 1]) && L.length - 1 > this.played.length);
     if (!best) return;
     const [c, r] = cIdx(best[this.played.length + 1]);
     this.goban.pulse(c, r);
