@@ -1,5 +1,8 @@
 apply plugin: 'com.android.application'
 
+// CI passes its run number so each build installs as an update.
+def ciBuild = (System.getenv("GITHUB_RUN_NUMBER") ?: "1") as Integer
+
 android {
     namespace "io.github.chamyao.gobantrainer"
     compileSdk rootProject.ext.compileSdkVersion
@@ -7,9 +10,8 @@ android {
         applicationId "io.github.chamyao.gobantrainer"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        // CI passes its run number so each build installs as an update.
-        versionCode (System.getenv("GITHUB_RUN_NUMBER") ?: "1").toInteger()
-        versionName "1.0." + (System.getenv("GITHUB_RUN_NUMBER") ?: "0")
+        versionCode ciBuild
+        versionName "1.0.${ciBuild}"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
