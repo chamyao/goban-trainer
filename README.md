@@ -14,6 +14,31 @@ open http://localhost:8321
 
 Any static file server works — there is no backend.
 
+## Android app
+
+`android-app/` wraps the web app in a native Android shell with
+[Capacitor](https://capacitorjs.com). Everything (problems, KataGo, the net)
+is bundled into the APK, so the trainer works offline; sync, feedback and the
+OGS import still need a connection.
+
+Every push runs `.github/workflows/android.yml`, which builds the APK and
+attaches it to the **android-latest** release
+(`https://github.com/chamyao/goban-trainer/releases/tag/android-latest`).
+To install on a phone: open that page in Chrome, download
+`goban-trainer.apk`, open it, and allow Chrome to install unknown apps when
+asked. Later builds install over the old one (same signing key), keeping
+local progress.
+
+Build locally (needs the Android SDK):
+
+```sh
+cd android-app && npm ci && npm run sync
+cd android && ./gradlew assembleDebug   # app/build/outputs/apk/debug/app-debug.apk
+```
+
+`npm run sync` copies the web files into `android-app/www/` and adds
+`native.js` (hardware back button); the web app itself is unchanged.
+
 ## Rebuild the data
 
 ```sh

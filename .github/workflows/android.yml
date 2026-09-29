@@ -1,0 +1,51 @@
+name: Android APK
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: android-app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: android-app/package-lock.json
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+      - run: npm ci
+      - run: npm run sync
+      - run: ./gradlew --no-daemon assembleDebug
+        working-directory: android-app/android
+      - run: cp android/app/build/outputs/apk/debug/app-debug.apk goban-trainer.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: goban-trainer-apk
+          path: android-app/goban-trainer.apk
+      # A stable download link for the phone: the "android-latest" release
+      # always holds the newest build.
+      - name: Publish to the android-latest release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git tag -f android-latest && git push -f origin android-latest
+          gh release view android-latest >/dev/null 2>&1 || \
+            gh release create android-latest --prerelease --title "Android app (latest build)" \
+              --notes "Download goban-trainer.apk on your phone and open it to install."
+          gh release upload android-latest goban-trainer.apk --clobber

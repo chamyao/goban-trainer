@@ -1,0 +1,9 @@
+{
+  "appId": "io.github.chamyao.gobantrainer",
+  "appName": "Goban Trainer",
+  "webDir": "www",
+  "android": {
+    "backgroundColor": "#f4f1ea",
+    "adjustMarginsForEdgeToEdge": "auto"
+  }
+}

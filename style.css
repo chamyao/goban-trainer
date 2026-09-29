@@ -135,7 +135,9 @@ main { max-width: 1080px; margin: 0 auto; padding: 28px 24px 60px; }
   box-shadow: 0 1px 3px rgba(60,50,30,.08), 0 8px 24px rgba(60,50,30,.06);
 }
 .board-card.explore { outline: 2px dashed #b89a4e; outline-offset: -8px; }
+.board-card { max-width: 100%; }
 svg { display: block; touch-action: manipulation; }
+.board-card svg { max-width: 100%; height: auto; }
 
 aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
 .panel {
@@ -291,3 +293,24 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
   border: 1px solid #eee8da; background: #faf8f2; color: var(--ink);
 }
 .sgf-loader .row .rec-field { flex: 1; min-width: 0; }
+
+/* ---- phones ---- */
+@media (max-width: 700px) {
+  header { flex-wrap: wrap; gap: 8px 10px; padding: 10px 16px; }
+  header h1 { font-size: 16px; }
+  #tabs a { padding: 5px 10px; }
+  #crumbs { order: 10; flex-basis: 100%; }
+  .engine-chip, .auth-chip { padding: 4px 10px; }
+  .auth-chip .email { max-width: 90px; }
+  main { padding: 16px 16px 40px; }
+  .cat-title { margin-top: 20px; }
+  .book-list { grid-template-columns: 1fr; }
+  .prob-grid { grid-template-columns: repeat(auto-fill, minmax(46px, 1fr)); }
+  .player, .review { gap: 14px; }
+  .board-card { padding: 6px; border-radius: 12px; width: 100%; }
+  .board-card svg { width: 100%; }
+  aside, .review aside { width: 100%; }
+  .keys { display: none; }
+  .sgf-loader { margin: 16px auto; }
+  .sgf-loader .row { flex-wrap: wrap; }
+}
