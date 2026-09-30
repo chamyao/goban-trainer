@@ -34,6 +34,12 @@ jobs:
       - run: ./gradlew --no-daemon assembleDebug
         working-directory: android-app/android
       - run: cp android/app/build/outputs/apk/debug/app-debug.apk goban-trainer.apk
+      # Fail if the APK lacks the model file app.js fetches (Android's build
+      # renames some assets, e.g. it gunzips *.gz).
+      - name: Check the APK has the KataGo model app.js asks for
+        run: |
+          model=$(grep -o '"engine/katago-small[^"]*"' www/app.js | tr -d '"')
+          unzip -l goban-trainer.apk | grep -q " assets/public/$model\$" || { echo "missing $model in APK"; exit 1; }
       - uses: actions/upload-artifact@v4
         with:
           name: goban-trainer-apk

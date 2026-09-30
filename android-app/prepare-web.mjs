@@ -2,6 +2,7 @@
 // and adds a small Android-only script (hardware back button).
 import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
+import { gunzipSync } from "node:zlib";
 import { fileURLToPath } from "node:url";
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -10,9 +11,18 @@ const www = join(here, "www");
 
 rmSync(www, { recursive: true, force: true });
 mkdirSync(www);
-for (const f of ["app.js", "style.css", "engine/engine-utils.js", "engine/katago-worker.js",
-                 "engine/katago-small.bin.gz", "tfjs", "data"])
+for (const f of ["style.css", "engine/engine-utils.js", "engine/katago-worker.js", "tfjs", "data"])
   cpSync(join(repo, f), join(www, f), { recursive: true });
+
+// The Android build silently gunzips *.gz assets and drops the extension, so
+// engine/katago-small.bin.gz would ship as katago-small.bin and the app's
+// fetch of the .gz name would 404. Ship it unzipped under the .bin name and
+// point app.js there (the worker accepts gzipped or raw models).
+const MODEL = "engine/katago-small.bin";
+writeFileSync(join(www, MODEL), gunzipSync(readFileSync(join(repo, MODEL + ".gz"))));
+const app = readFileSync(join(repo, "app.js"), "utf8");
+if (!app.includes(`"${MODEL}.gz"`)) throw new Error(`app.js no longer references ${MODEL}.gz`);
+writeFileSync(join(www, "app.js"), app.replace(`"${MODEL}.gz"`, `"${MODEL}"`));
 
 cpSync(join(here, "native.js"), join(www, "native.js"));
 const html = readFileSync(join(repo, "index.html"), "utf8");
