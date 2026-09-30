@@ -55,3 +55,6 @@ jobs:
             gh release create android-latest --prerelease --title "Android app (latest build)" \
               --notes "Download goban-trainer.apk on your phone and open it to install."
           gh release upload android-latest goban-trainer.apk --clobber
+          # The app compares this build number with its own versionCode on
+          # launch; set it only after the APK is uploaded.
+          gh release edit android-latest --title "Android app (build ${{ github.run_number }})"

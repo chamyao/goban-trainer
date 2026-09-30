@@ -7,4 +7,47 @@
     if (canGoBack) history.back();
     else App.exitApp();
   });
+  checkForUpdate(App);
 })();
+
+// On launch, ask GitHub whether a newer APK has been published. CI titles the
+// android-latest release "Android app (build N)", where N is the APK's
+// versionCode. Offline, or on any error, this gives up silently and the app
+// keeps working from its bundled files.
+async function checkForUpdate(App) {
+  const RELEASE_API = "https://api.github.com/repos/chamyao/goban-trainer/releases/tags/android-latest";
+  const APK_URL = "https://github.com/chamyao/goban-trainer/releases/download/android-latest/goban-trainer.apk";
+  try {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 5000);
+    const [info, res] = await Promise.all([
+      App.getInfo(),
+      fetch(RELEASE_API, { signal: ctrl.signal, headers: { Accept: "application/vnd.github+json" } }),
+    ]);
+    clearTimeout(timer);
+    if (!res.ok) return;
+    const m = /build (\d+)/.exec((await res.json()).name || "");
+    const latest = m ? +m[1] : 0, installed = +info.build || 0;
+    if (latest > installed) showUpdateBar(APK_URL, latest);
+  } catch (e) {
+    console.info("[update] check skipped:", e && e.message);
+  }
+}
+
+function showUpdateBar(apkUrl, build) {
+  const bar = document.createElement("div");
+  bar.style.cssText = "position:fixed;left:12px;right:12px;bottom:12px;z-index:200;display:flex;" +
+    "align-items:center;gap:10px;padding:12px 14px;border-radius:12px;background:#2f6f4f;color:#fff;" +
+    "font:14px/1.4 -apple-system,'Segoe UI',Helvetica,Arial,sans-serif;box-shadow:0 6px 20px rgba(0,0,0,.25)";
+  const link = document.createElement("a");
+  link.href = apkUrl;  // external URL: Capacitor hands it to Chrome, which downloads the APK
+  link.textContent = `Update available (build ${build}) — tap to download`;
+  link.style.cssText = "flex:1;color:#fff;font-weight:600;text-decoration:none";
+  const close = document.createElement("button");
+  close.textContent = "✕";
+  close.setAttribute("aria-label", "Dismiss");
+  close.style.cssText = "background:none;border:none;color:#fff;font-size:18px;padding:0 4px;cursor:pointer";
+  close.onclick = () => bar.remove();
+  bar.append(link, close);
+  document.body.append(bar);
+}
