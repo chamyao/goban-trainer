@@ -2295,7 +2295,7 @@ class LiveGame {
 const OGSPlay = {
   SERVERS: { prod: "https://online-go.com", beta: "https://beta.online-go.com" },
   // Public OAuth client IDs from <server>/oauth2/applications/ (not secrets).
-  CLIENT_IDS: { prod: "", beta: "" },
+  CLIENT_IDS: { prod: "", beta: "AXZY8pTJw2qGjXCRsYc7912QVGvSqdfGgA7abEM9" },
   // The Android app can't receive an https redirect itself; this page on the
   // site hands the login back to the app.
   APP_REDIRECT: "https://chamyao.github.io/goban-trainer/oauth-app.html",
