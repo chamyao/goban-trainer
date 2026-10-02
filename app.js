@@ -2295,7 +2295,7 @@ class LiveGame {
 const OGSPlay = {
   SERVERS: { prod: "https://online-go.com", beta: "https://beta.online-go.com" },
   // Public OAuth client IDs from <server>/oauth2/applications/ (not secrets).
-  CLIENT_IDS: { prod: "", beta: "AXZY8pTJw2qGjXCRsYc7912QVGvSqdfGgA7abEM9" },
+  CLIENT_IDS: { prod: "IJg6la0wpumEIw4dQkqql7POhxgbkpDSG40bj1eK", beta: "AXZY8pTJw2qGjXCRsYc7912QVGvSqdfGgA7abEM9" },
   // The Android app can't receive an https redirect itself; this page on the
   // site hands the login back to the app.
   APP_REDIRECT: "https://chamyao.github.io/goban-trainer/oauth-app.html",
@@ -2492,8 +2492,13 @@ function viewPlay(gameId) {
 }
 
 function playBody(gameId) {
-  const P = OGSPlay, server = P.serverKey();
-  const serverNote = h("div", { class: "meta-sub" }, server === "beta" ? "Using OGS's test server (beta.online-go.com)." : "");
+  const P = OGSPlay, server = P.serverKey(), other = server === "beta" ? "prod" : "beta";
+  // Switching servers logs out: each server has its own account and login.
+  const serverNote = h("div", { class: "meta-sub" }, [
+    server === "beta" ? "Using OGS's test server (beta.online-go.com). " : "",
+    P.CLIENT_IDS[other] ? h("a", { href: "#/play", onclick: e => { e.preventDefault(); P.setServer(other); } },
+                            other === "beta" ? "Use the test server instead" : "Switch to online-go.com") : "",
+  ]);
 
   if (!P.clientId()) {
     return [h("div", { class: "sgf-loader" }, [
@@ -2523,10 +2528,10 @@ function playBody(gameId) {
     if (!P.game || P.game.id !== +gameId) P.openGame(gameId);
     return playGame(P.game);
   }
-  return playLobby();
+  return playLobby(serverNote);
 }
 
-function playLobby() {
+function playLobby(serverNote) {
   const P = OGSPlay;
   clearInterval(playTicker);
   const status = h("div", { class: "meta-sub" });
@@ -2561,7 +2566,7 @@ function playLobby() {
     h("div", {}, [`Logged in as `, h("b", {}, P.me.username), ` on ${P.base().replace("https://", "")}. `,
                   h("a", { href: "#/play", onclick: e => { e.preventDefault(); P.logout(); } }, "Log out")]),
     h("div", { class: "meta-sub" }, `Ranked ${P.TIME_LABEL}, Japanese rules, opponents within 3 ranks.`),
-    action, status, games,
+    action, status, games, serverNote,
   ])];
 }
 
