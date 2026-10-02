@@ -49,3 +49,25 @@ for (const base of SERVERS) {
     console.log(`  WebSocket: ${await socket(base, origin)}`);
   }
 }
+
+// Which server knows our OAuth client? A bogus code gets "invalid_grant"
+// from a server that has the client registered, "invalid_client" otherwise.
+const CLIENT_ID = process.env.OGS_CLIENT_ID;
+if (CLIENT_ID) {
+  console.log(`\n=== OAuth client ${CLIENT_ID.slice(0, 6)}… registration`);
+  for (const base of SERVERS) {
+    for (const redirect of ["https://chamyao.github.io/goban-trainer/", "https://chamyao.github.io/goban-trainer/oauth-app.html"]) {
+      const r = await fetch(`${base}/oauth2/token/`, {
+        method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded", Origin: "https://chamyao.github.io" },
+        body: new URLSearchParams({ grant_type: "authorization_code", code: "bogus", client_id: CLIENT_ID, redirect_uri: redirect, code_verifier: "x".repeat(43) }),
+      });
+      console.log(`  ${base} redirect=${redirect.split("/").pop() || "/"}: HTTP ${r.status} ${(await r.text()).slice(0, 160)}`);
+    }
+    // The authorize page validates client_id + redirect_uri before asking to log in.
+    const q = new URLSearchParams({ response_type: "code", client_id: CLIENT_ID, redirect_uri: "https://chamyao.github.io/goban-trainer/",
+                                    code_challenge: "x".repeat(43), code_challenge_method: "S256", scope: "read write", state: "s" });
+    const a = await fetch(`${base}/oauth2/authorize/?${q}`, { redirect: "manual" });
+    console.log(`  ${base} authorize: HTTP ${a.status} location=${(a.headers.get("location") || "-").slice(0, 120)}`);
+  }
+}
+
