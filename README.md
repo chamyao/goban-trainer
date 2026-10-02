@@ -100,6 +100,27 @@ candidates render as blue markers (opacity ∝ visits, ring on the best),
 fetched automatically once the engine is loaded. Keyboard: ←/→ step, Home/End,
 J judge, U undo, E explore/resume, M engine move.
 
+## Play on OGS
+
+The Play tab plays live games on online-go.com from the static site: OGS's
+standard 19×19 "rapid" automatch (5 min + 5×30 s byoyomi, Japanese rules,
+opponents within 3 ranks). Login is OAuth2 with PKCE (no client secret, no
+server of ours); play runs over OGS's realtime WebSocket. A finished game
+opens in Review with one tap, and KataGo can propose the dead stones at the
+end. On touch screens a move takes two taps (preview, then confirm).
+
+Setup: register a **Public**, **Authorization code** application at
+`https://online-go.com/oauth2/applications/` (and/or beta.online-go.com) with
+redirect URIs `https://chamyao.github.io/goban-trainer/` and
+`https://chamyao.github.io/goban-trainer/oauth-app.html` (the Android app's
+hand-off page), then put the client IDs in `OGSPlay.CLIENT_IDS` in `app.js`.
+Setting `localStorage["goban.ogsServer"] = "beta"` switches to the test
+server.
+
+`ogs-test.html` checks OGS access from a browser, and the **OGS probe**
+workflow (`tools/ogs-probe/`) checks OGS's CORS and WebSocket origin handling
+from CI.
+
 ## Not yet implemented
 
 - Engine-adjudicated verdicts for problems with missing/broken answer data

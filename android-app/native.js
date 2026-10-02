@@ -7,6 +7,17 @@
     if (canGoBack) history.back();
     else App.exitApp();
   });
+  // OGS login: oauth-app.html on the site sends the code back through the
+  // app's link scheme (a warm start fires appUrlOpen, a cold start has it as
+  // the launch URL).
+  const finishOgsLogin = url => {
+    if (!url || !url.startsWith("io.github.chamyao.gobantrainer://oauth")) return;
+    OGSPlay.finishLogin(new URLSearchParams(url.split("?")[1] || ""))
+      .catch(e => { OGSPlay.loginError = e.message; })
+      .finally(() => { if (location.hash === "#/play") route(); else location.hash = "#/play"; });
+  };
+  App.addListener("appUrlOpen", ({ url }) => finishOgsLogin(url));
+  App.getLaunchUrl().then(r => finishOgsLogin(r && r.url)).catch(() => {});
   checkForUpdate(App);
 })();
 

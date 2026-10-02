@@ -279,6 +279,7 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
 .rv-actions button.primary { background: var(--ink); border-color: var(--ink); color: #fff; }
 .rv-actions button.active { background: #3566b0; border-color: #3566b0; color: #fff; }
 .rv-actions button:disabled { opacity: .45; cursor: default; }
+.rv-actions button.wide { grid-column: 1 / -1; }
 .rv-progress { color: var(--muted); font-size: 13px; margin-top: 8px; min-height: 18px; }
 
 .move-note {
@@ -293,6 +294,16 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
   border: 1px solid #eee8da; background: #faf8f2; color: var(--ink);
 }
 .sgf-loader .row .rec-field { flex: 1; min-width: 0; }
+
+/* ---- play on OGS ---- */
+.pl-row { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 10px; margin: 4px 0; }
+.pl-row.to-move { background: #f4f0e5; }
+.pl-stone { width: 16px; height: 16px; border-radius: 50%; flex: none; border: 1px solid rgba(0,0,0,.35); }
+.pl-stone.b { background: #1a1a1a; }
+.pl-stone.w { background: #fff; }
+.pl-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+.pl-clock { font-variant-numeric: tabular-nums; font-weight: 650; white-space: nowrap; }
+.pl-clock.low { color: var(--danger); }
 
 /* ---- phones ---- */
 @media (max-width: 700px) {

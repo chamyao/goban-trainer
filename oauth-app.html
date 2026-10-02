@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Back to Goban Trainer</title>
+<style>
+  :root { --bg: #f4f1ea; --ink: #2b2a26; --muted: #8a8578; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.5 -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+  main { max-width: 420px; margin: 0 auto; padding: 48px 16px; text-align: center; }
+  a.btn { display: inline-block; margin-top: 16px; padding: 12px 20px; border-radius: 10px; background: var(--ink); color: #fff; font-weight: 600; text-decoration: none; }
+  p { color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <h1 style="font-size:20px">Logged in to OGS</h1>
+  <p>Returning you to the Goban Trainer app…</p>
+  <a class="btn" id="back">Open the app</a>
+</main>
+<script>
+// OGS redirects the Android app's login here (OAuth needs an https
+// redirect); this hands the code back to the app through its link scheme.
+const back = `intent://oauth${location.search}#Intent;scheme=io.github.chamyao.gobantrainer;package=io.github.chamyao.gobantrainer;end`;
+document.getElementById("back").href = back;
+location.href = back;
+</script>
+</body>
+</html>

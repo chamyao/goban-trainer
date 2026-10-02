@@ -1622,9 +1622,11 @@ function h(tag, attrs = {}, children = []) {
 }
 
 async function viewLibrary() {
+  const nav = routeSeq;
   crumbs.textContent = "";
   root.innerHTML = `<div class="loading">Loading…</div>`;
   const index = await getIndex();
+  if (nav !== routeSeq) return; // navigated elsewhere while loading
   const prog = loadProgress();
   const favs = loadFavorites();
   root.innerHTML = "";
@@ -1659,8 +1661,10 @@ async function viewLibrary() {
 }
 
 async function viewBook(id) {
+  const nav = routeSeq;
   root.innerHTML = `<div class="loading">Loading…</div>`;
   const book = await getBook(id);
+  if (nav !== routeSeq) return;
   const prog = loadProgress()[id] || {};
   crumbs.innerHTML = "";
   crumbs.append(book.title);
@@ -1679,8 +1683,10 @@ async function viewBook(id) {
 }
 
 async function viewPlayer(id, num) {
+  const nav = routeSeq;
   root.innerHTML = `<div class="loading">Loading…</div>`;
   const book = await getBook(id);
+  if (nav !== routeSeq) return;
   const idx = Math.min(Math.max(1, num), book.problems.length) - 1;
   const p = book.problems[idx];
   crumbs.innerHTML = "";
@@ -2130,6 +2136,554 @@ function viewReview() {
   if (Review.showHints) Review.fetchDetail(); else Review.quickEval();
 }
 
+/* ================= play on OGS (OAuth login + realtime games) ================= */
+
+// Live games on online-go.com straight from this static site: OAuth2 with
+// PKCE (a public client, no secret) for login, then OGS's realtime WebSocket
+// for matchmaking and play. Message formats follow OGS's own client and
+// WeiqiHub's (github.com/ale64bit/WeiqiHub, lib/game_client/ogs).
+
+const stonesOf = s => { const out = []; for (let i = 0; i + 1 < s.length; i += 2) out.push(cIdx(s.slice(i, i + 2))); return out; };
+const sgfPt = (c, r) => String.fromCharCode(97 + c) + String.fromCharCode(97 + r);
+
+class OGSSocket {
+  constructor(base, jwt, onMessage, onOpen) {
+    this.url = base.replace("https://", "wss://") + "/";
+    Object.assign(this, { jwt, onMessage, onOpen });
+    this.seq = 0; this.pending = new Map(); this.drift = 0; this.latency = 0; this.tries = 0; this.closed = false;
+    try {
+      this.deviceId = localStorage.getItem("goban.ogsDevice");
+      if (!this.deviceId) localStorage.setItem("goban.ogsDevice", this.deviceId = crypto.randomUUID());
+    } catch { this.deviceId = crypto.randomUUID(); }
+    this.open();
+  }
+  open() {
+    const ws = this.ws = new WebSocket(this.url);
+    ws.onopen = () => {
+      this.tries = 0;
+      this.send("authenticate", { jwt: this.jwt(), device_id: this.deviceId, user_agent: navigator.userAgent,
+                                  language: "en", language_version: "1.0", client_version: "goban-trainer" });
+      this.ping();
+      clearInterval(this.pinger);
+      this.pinger = setInterval(() => this.ping(), 10000);
+      this.onOpen();
+    };
+    ws.onmessage = e => {
+      let m; try { m = JSON.parse(e.data); } catch { return; }
+      if (typeof m[0] === "number") { // reply to a request: [id, result, error]
+        const p = this.pending.get(m[0]);
+        if (!p) return;
+        this.pending.delete(m[0]);
+        if (m[2]) p.reject(new Error(m[2].message || m[2].code || JSON.stringify(m[2])));
+        else p.resolve(m[1]);
+      } else if (m[0] === "net/pong") {
+        const now = Date.now();
+        this.latency = now - m[1].client;
+        this.drift = now - this.latency / 2 - m[1].server;
+      } else this.onMessage(m[0], m[1]);
+    };
+    ws.onclose = () => {
+      clearInterval(this.pinger);
+      for (const p of this.pending.values()) p.reject(new Error("Connection to OGS lost"));
+      this.pending.clear();
+      if (!this.closed) setTimeout(() => this.open(), Math.min(30000, 1000 * 2 ** this.tries++));
+    };
+  }
+  get ready() { return this.ws && this.ws.readyState === 1; }
+  ping() { this.send("net/ping", { client: Date.now(), drift: this.drift, latency: this.latency }); }
+  send(cmd, data) { if (this.ready) this.ws.send(JSON.stringify(data === undefined ? [cmd] : [cmd, data])); }
+  request(cmd, data) {
+    return new Promise((resolve, reject) => {
+      if (!this.ready) return reject(new Error("Not connected to OGS"));
+      const id = ++this.seq;
+      this.pending.set(id, { resolve, reject });
+      this.ws.send(JSON.stringify([cmd, data, id]));
+      setTimeout(() => { if (this.pending.delete(id)) reject(new Error("OGS didn't answer")); }, 10000);
+    });
+  }
+  close() { this.closed = true; clearInterval(this.pinger); if (this.ws) this.ws.close(); }
+}
+
+// One live game, fed by game/<id>/* socket events.
+class LiveGame {
+  constructor(id, myId) {
+    this.id = id; this.myId = myId;
+    this.data = null; this.moves = []; this.clock = null; this.clockAt = 0;
+    this.phase = "loading"; this.removedStr = ""; this.error = ""; this.resync = false;
+  }
+  handle(kind, d) {
+    if (kind === "gamedata") {
+      this.data = d; this.phase = d.phase;
+      this.moves = (d.moves || []).map(m => [m[0], m[1]]);
+      this.removedStr = typeof d.removed === "string" ? d.removed : "";
+      if (d.clock) this.setClock(d.clock);
+    } else if (kind === "move") {
+      this.pending = null;
+      if (d.move_number === this.moves.length + 1) this.moves.push([d.move[0], d.move[1]]);
+      else this.resync = true; // missed something; fetch the full state again
+    } else if (kind === "clock") this.setClock(d);
+    else if (kind === "phase") {
+      this.phase = d;
+      if (d === "finished") this.resync = true; // fetch the winner and outcome
+    }
+    else if (kind === "removed_stones") this.removedStr = d.all_removed || "";
+    else if (kind === "undo_accepted" || kind === "reset") this.resync = true;
+    else if (kind === "error") this.error = typeof d === "string" ? d : JSON.stringify(d);
+  }
+  setClock(c) { this.clock = c; this.clockAt = Date.now(); }
+
+  player(color) { return this.data && this.data.players && this.data.players[color === BLACK ? "black" : "white"] || {}; }
+  get myColor() { return this.player(BLACK).id === this.myId ? BLACK : this.player(WHITE).id === this.myId ? WHITE : 0; }
+  get removed() { return new Set(stonesOf(this.removedStr).map(([c, r]) => r * N + c)); }
+
+  // Who played move i (0-based), the way OGS assigns colors.
+  colorOf(i) {
+    const d = this.data || {}, hc = d.handicap || 0;
+    let first = d.initial_player === "white" ? WHITE : BLACK;
+    if (hc > 1 && d.free_handicap_placement) {
+      if (i < hc) return BLACK;
+      i -= hc; first = WHITE;
+    }
+    return i % 2 === 0 ? first : 3 - first;
+  }
+  toMove() {
+    if (this.clock && this.clock.current_player) return this.clock.current_player === this.player(BLACK).id ? BLACK : WHITE;
+    return this.colorOf(this.moves.length);
+  }
+  get myTurn() { return this.phase === "play" && this.myColor && this.toMove() === this.myColor; }
+
+  replay() {
+    let g = Array.from({ length: N }, () => new Array(N).fill(EMPTY)), last = null;
+    const init = (this.data && this.data.initial_state) || {};
+    for (const [c, r] of stonesOf(init.black || "")) g[r][c] = BLACK;
+    for (const [c, r] of stonesOf(init.white || "")) g[r][c] = WHITE;
+    this.moves.forEach(([c, r], i) => {
+      last = null;
+      if (c < 0) return; // pass
+      g = applyMove(g, c, r, this.colorOf(i)) || g;
+      last = [c, r];
+    });
+    return { grid: g, last };
+  }
+
+  // Time left for `color` right now: { main, periods, period, byo } in seconds.
+  timeLeft(color) {
+    const c = this.clock, t = c && (color === BLACK ? c.black_time : c.white_time);
+    if (!t || typeof t !== "object") return null;
+    let elapsed = 0;
+    if (this.phase === "play" && !c.paused_since && c.current_player === this.player(color).id) {
+      // c.now is the server's clock when it sent this; avoids trusting the phone's clock.
+      elapsed = (Date.now() - this.clockAt) / 1000 + (c.now && c.last_move ? (c.now - c.last_move) / 1000 : 0);
+    }
+    const main = (t.thinking_time || 0) - elapsed, period = t.period_time || 0;
+    if (main > 0) return { main, periods: t.periods || 0, period, byo: false };
+    const over = -main, used = period > 0 ? Math.floor(over / period) : Infinity;
+    const periods = Math.max(0, (t.periods || 0) - used);
+    return { main: 0, periods, period: periods ? period - (over - used * period) : 0, byo: true };
+  }
+
+  resultText() {
+    const d = this.data || {};
+    if (this.phase !== "finished") return "";
+    const won = d.winner === this.myId, lost = d.winner && !won && this.myColor;
+    const who = d.winner === this.player(BLACK).id ? "Black" : d.winner === this.player(WHITE).id ? "White" : "";
+    const how = d.outcome ? ` by ${d.outcome}` : "";
+    return won ? `You won${how}` : lost ? `You lost${how}` : who ? `${who} won${how}` : `Game over${how}`;
+  }
+}
+
+const OGSPlay = {
+  SERVERS: { prod: "https://online-go.com", beta: "https://beta.online-go.com" },
+  // Public OAuth client IDs from <server>/oauth2/applications/ (not secrets).
+  CLIENT_IDS: { prod: "", beta: "" },
+  // The Android app can't receive an https redirect itself; this page on the
+  // site hands the login back to the app.
+  APP_REDIRECT: "https://chamyao.github.io/goban-trainer/oauth-app.html",
+  AUTH_KEY: "goban.ogsAuth", FLOW_KEY: "goban.ogsFlow", SERVER_KEY: "goban.ogsServer",
+  TIME_LABEL: "19×19 · 5 min + 5×30 s byoyomi",
+
+  me: null, jwt: null, sock: null, game: null, search: null, loginError: "", listeners: new Set(),
+
+  serverKey() {
+    let k; try { k = localStorage.getItem(this.SERVER_KEY); } catch {}
+    if (k && this.SERVERS[k]) return k;
+    return this.CLIENT_IDS.prod || !this.CLIENT_IDS.beta ? "prod" : "beta";
+  },
+  setServer(k) { this.logout(); try { localStorage.setItem(this.SERVER_KEY, k); } catch {} this.emit(); },
+  base() { return this.SERVERS[this.serverKey()]; },
+  clientId() { return this.CLIENT_IDS[this.serverKey()]; },
+  isApp() { return !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform()); },
+  redirectUri() { return this.isApp() ? this.APP_REDIRECT : location.origin + location.pathname; },
+
+  loadAuth() {
+    try { const a = JSON.parse(localStorage.getItem(this.AUTH_KEY)); return a && a.server === this.serverKey() ? a : null; }
+    catch { return null; }
+  },
+  saveAuth(a) { try { if (a) localStorage.setItem(this.AUTH_KEY, JSON.stringify(a)); else localStorage.removeItem(this.AUTH_KEY); } catch {} },
+  loggedIn() { return !!this.loadAuth(); },
+
+  async login() {
+    const b64 = buf => btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+    const verifier = b64(crypto.getRandomValues(new Uint8Array(32)));
+    const challenge = b64(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(verifier)));
+    const state = b64(crypto.getRandomValues(new Uint8Array(12)));
+    localStorage.setItem(this.FLOW_KEY, JSON.stringify({ verifier, state, server: this.serverKey(), redirect: this.redirectUri() }));
+    const q = new URLSearchParams({
+      response_type: "code", client_id: this.clientId(), redirect_uri: this.redirectUri(),
+      code_challenge: challenge, code_challenge_method: "S256", state, scope: "read write",
+    });
+    location.href = `${this.base()}/oauth2/authorize/?${q}`; // the app hands this to Chrome
+  },
+
+  // OGS sends the browser back with ?code=&state= (the app gets them via oauth-app.html).
+  async finishLogin(params) {
+    let flow = null;
+    try { flow = JSON.parse(localStorage.getItem(this.FLOW_KEY)); localStorage.removeItem(this.FLOW_KEY); } catch {}
+    if (params.get("error")) throw new Error(`OGS login failed: ${params.get("error_description") || params.get("error")}`);
+    if (!flow || flow.state !== params.get("state")) throw new Error("That login link expired — log in again.");
+    const tok = await this.tokenRequest(this.SERVERS[flow.server], {
+      grant_type: "authorization_code", code: params.get("code"), redirect_uri: flow.redirect,
+      client_id: this.CLIENT_IDS[flow.server], code_verifier: flow.verifier,
+    });
+    try { localStorage.setItem(this.SERVER_KEY, flow.server); } catch {}
+    this.saveAuth({ server: flow.server, ...tok });
+  },
+  async tokenRequest(base, fields) {
+    const r = await fetch(`${base}/oauth2/token/`, {
+      method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: new URLSearchParams(fields),
+    });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok || !d.access_token) throw new Error(`OGS login failed (${d.error_description || d.error || r.status})`);
+    return { access: d.access_token, refresh: d.refresh_token, expires: Date.now() + (d.expires_in || 3600) * 1000 };
+  },
+  async token() {
+    const a = this.loadAuth();
+    if (!a) throw new Error("Not logged in to OGS");
+    if (Date.now() < a.expires - 60000) return a.access;
+    try {
+      if (!a.refresh) throw new Error("OGS login expired — log in again.");
+      const t = await this.tokenRequest(this.base(), { grant_type: "refresh_token", refresh_token: a.refresh, client_id: this.clientId() });
+      this.saveAuth({ server: a.server, ...t });
+      return t.access;
+    } catch (e) { this.logout(); throw e; }
+  },
+  async api(path) {
+    const r = await fetch(this.base() + path, { headers: { Authorization: `Bearer ${await this.token()}` } });
+    if (r.status === 401) { this.logout(); throw new Error("OGS login expired — log in again."); }
+    if (!r.ok) throw new Error(`OGS returned ${r.status}`);
+    return r.json();
+  },
+  logout() {
+    this.saveAuth(null);
+    if (this.sock) this.sock.close();
+    this.sock = this.me = this.jwt = this.game = this.search = null;
+    this.emit();
+  },
+
+  // Fetches the account and its realtime token, then opens the socket.
+  async connect() {
+    if (this.sock) return;
+    const cfg = await this.api("/api/v1/ui/config");
+    if (!cfg.user || cfg.user.anonymous) { this.logout(); throw new Error("OGS didn't accept the login — log in again."); }
+    if (!cfg.user_jwt) throw new Error("OGS didn't return a realtime token for this login.");
+    this.me = cfg.user; this.jwt = cfg.user_jwt;
+    this.sock = new OGSSocket(this.base(), () => this.jwt, (c, d) => this.onMessage(c, d), () => this.onOpen());
+    this.emit();
+  },
+  onOpen() {
+    this.sendSearch();
+    if (this.game) this.sock.send("game/connect", { game_id: this.game.id, chat: false });
+  },
+
+  findGame() {
+    this.search = { uuid: crypto.randomUUID(), since: Date.now() };
+    this.sendSearch();
+    this.emit();
+  },
+  sendSearch() {
+    if (!this.search) return;
+    // OGS's standard 19×19 "rapid" automatch: 5 min + 5×30 s byoyomi.
+    this.sock.send("automatch/find_match", {
+      uuid: this.search.uuid,
+      size_speed_options: [{ size: "19x19", speed: "rapid", system: "byoyomi" }],
+      lower_rank_diff: 3, upper_rank_diff: 3,
+      rules: { condition: "required", value: "japanese" },
+      handicap: { condition: "preferred", value: "enabled" },
+    });
+  },
+  cancelSearch() {
+    if (this.search && this.sock) this.sock.send("automatch/cancel", { uuid: this.search.uuid });
+    this.search = null;
+    this.emit();
+  },
+
+  openGame(id) {
+    id = +id;
+    if (this.game && this.game.id === id) return;
+    if (this.game) this.sock.send("game/disconnect", { game_id: this.game.id });
+    this.game = new LiveGame(id, this.me.id);
+    this.sock.send("game/connect", { game_id: id, chat: false });
+    this.emit();
+  },
+
+  onMessage(cmd, d) {
+    if (cmd === "user/jwt") { this.jwt = d; return; }
+    if (cmd === "automatch/start" && this.search && d && d.uuid === this.search.uuid) {
+      this.search = null;
+      this.openGame(d.game_id);
+      location.hash = `#/play/${d.game_id}`;
+      return;
+    }
+    if (cmd === "automatch/cancel" && this.search && d && d.uuid === this.search.uuid) { this.search = null; this.emit(); return; }
+    const m = /^game\/(\d+)\/(.+)$/.exec(cmd);
+    if (m && this.game && +m[1] === this.game.id) {
+      this.game.handle(m[2], d);
+      if (this.game.resync) { this.game.resync = false; this.sock.send("game/connect", { game_id: this.game.id, chat: false }); }
+      this.emit();
+    }
+  },
+
+  async move(c, r) {
+    const g = this.game;
+    try { await this.sock.request("game/move", { game_id: g.id, move: c < 0 ? ".." : sgfPt(c, r) }); }
+    catch (e) { g.error = e.message; this.emit(); }
+  },
+  resign() { this.sock.send("game/resign", { game_id: this.game.id }); },
+  // Stone removal: mark or unmark a set of stones as dead.
+  setRemoved(points, removed) {
+    this.sock.send("game/removed_stones/set", { game_id: this.game.id, removed, stones: points.map(([c, r]) => sgfPt(c, r)).join("") });
+  },
+  acceptScore() {
+    this.sock.send("game/removed_stones/accept", { game_id: this.game.id, stones: this.game.removedStr, strict_seki_mode: false });
+  },
+  resumePlay() { this.sock.send("game/removed_stones/reject", { game_id: this.game.id }); },
+
+  // Your unfinished live games, newest first.
+  async ongoing() {
+    const d = await this.api(`/api/v1/players/${this.me.id}/games/?ended__isnull=true&source=play&time_per_move__lt=3600&time_per_move__gt=0&page_size=5`);
+    return d.results || [];
+  },
+
+  emit() { for (const f of this.listeners) f(); },
+};
+
+let playTicker = null;
+
+function fmtClock(t) {
+  if (!t) return "–";
+  const mmss = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
+  if (!t.byo) return `${mmss(t.main)} + ${t.periods}×${t.period}s`;
+  return t.periods ? `${Math.ceil(t.period)}s · ${t.periods} left` : "0s";
+}
+
+function viewPlay(gameId) {
+  crumbs.textContent = "";
+  root.textContent = "";
+  OGSPlay.listeners.clear();
+  const wrap = h("div", { class: "play" });
+  root.append(wrap);
+  const rerender = () => {
+    if (!wrap.isConnected) { OGSPlay.listeners.delete(rerender); return; }
+    wrap.textContent = "";
+    wrap.append(...playBody(gameId));
+  };
+  OGSPlay.listeners.add(rerender);
+  rerender();
+}
+
+function playBody(gameId) {
+  const P = OGSPlay, server = P.serverKey();
+  const serverNote = h("div", { class: "meta-sub" }, server === "beta" ? "Using OGS's test server (beta.online-go.com)." : "");
+
+  if (!P.clientId()) {
+    return [h("div", { class: "sgf-loader" }, [
+      h("div", { class: "cat-title" }, "Play on OGS"),
+      h("div", {}, `OGS login isn't set up yet for ${P.SERVERS[server].replace("https://", "")}: the app needs to be registered with OGS first.`),
+    ])];
+  }
+
+  if (!P.loggedIn()) {
+    const err = h("div", { class: "err" }, P.loginError);
+    return [h("div", { class: "sgf-loader" }, [
+      h("div", { class: "cat-title" }, "Play on OGS"),
+      h("div", {}, `Play ${P.TIME_LABEL} games on online-go.com. You log in on OGS's own page — your password never reaches this app.`),
+      serverNote,
+      h("div", { class: "row" }, [h("button", { class: "primary", onclick: () => P.login().catch(e => { err.textContent = e.message; }) }, "Log in with OGS")]),
+      err,
+    ])];
+  }
+
+  if (!P.sock) {
+    const msg = h("div", { class: "meta-sub" }, "Connecting to OGS…");
+    P.connect().catch(e => { msg.textContent = e.message; msg.className = "err"; });
+    return [h("div", { class: "sgf-loader" }, [h("div", { class: "cat-title" }, "Play on OGS"), msg])];
+  }
+
+  if (gameId) {
+    if (!P.game || P.game.id !== +gameId) P.openGame(gameId);
+    return playGame(P.game);
+  }
+  return playLobby();
+}
+
+function playLobby() {
+  const P = OGSPlay;
+  clearInterval(playTicker);
+  const status = h("div", { class: "meta-sub" });
+  const games = h("div", { class: "review-history", style: "margin:0" });
+  let action;
+  if (P.search) {
+    const since = h("span", {});
+    const tick = () => { since.textContent = `${Math.floor((Date.now() - P.search.since) / 1000)}s`; };
+    tick();
+    playTicker = setInterval(() => { if (!P.search || !since.isConnected) return clearInterval(playTicker); tick(); }, 1000);
+    action = h("div", { class: "row" }, [
+      h("div", { class: "meta-sub" }, ["Looking for an opponent… ", since]),
+      h("button", { onclick: () => P.cancelSearch() }, "Cancel"),
+    ]);
+  } else {
+    action = h("div", { class: "row" }, [h("button", { class: "primary", onclick: () => P.findGame() }, "Find a game")]);
+  }
+  P.ongoing().then(list => {
+    for (const g of list) {
+      const opp = g.players.black.id === P.me.id ? g.players.white.username : g.players.black.username;
+      const row = h("div", { class: "history-item" }, [h("div", { class: "hi-open" }, [
+        h("div", { class: "t" }, `Resume game vs ${opp}`),
+        h("div", { class: "n" }, `${g.width}×${g.height} · game ${g.id}`),
+      ])]);
+      row.addEventListener("click", () => { location.hash = `#/play/${g.id}`; });
+      games.append(row);
+    }
+  }).catch(e => { status.textContent = e.message; });
+
+  return [h("div", { class: "sgf-loader" }, [
+    h("div", { class: "cat-title" }, "Play on OGS"),
+    h("div", {}, [`Logged in as `, h("b", {}, P.me.username), ` on ${P.base().replace("https://", "")}. `,
+                  h("a", { href: "#/play", onclick: e => { e.preventDefault(); P.logout(); } }, "Log out")]),
+    h("div", { class: "meta-sub" }, `Ranked ${P.TIME_LABEL}, Japanese rules, opponents within 3 ranks.`),
+    action, status, games,
+  ])];
+}
+
+function playGame(g) {
+  const P = OGSPlay;
+  const svg = document.createElementNS(SVGNS, "svg");
+  const boardCard = h("div", { class: "board-card" }, [svg]);
+  const { grid, last } = g.replay();
+  const removed = g.removed;
+  const scoring = g.phase === "stone removal";
+
+  const goban = new Goban(svg, { c0: 0, c1: 18, r0: 0, r1: 18 }, (c, r) => {
+    if (scoring) {
+      if (grid[r][c] === EMPTY) return;
+      const pts = [...groupAndLiberties(grid, c, r).stones].map(k => [(k - k % N) / N, k % N]);
+      P.setRemoved(pts, !removed.has(r * N + c));
+    } else if (g.myTurn && grid[r][c] === EMPTY && applyMove(grid, c, r, g.myColor)) {
+      // On touch screens the points are tiny: first tap previews, second tap plays.
+      const same = g.pending && g.pending[0] === c && g.pending[1] === r;
+      if (matchMedia("(pointer: coarse)").matches && !same) { g.pending = [c, r]; P.emit(); return; }
+      g.pending = null; g.error = "";
+      P.move(c, r);
+    }
+  });
+  goban.hoverColor = g.myColor || BLACK;
+  goban.render(grid, last, g.myTurn || scoring);
+  if (g.pending && g.myTurn)
+    goban.el("circle", { cx: goban.px(g.pending[0]), cy: goban.py(g.pending[1]), r: goban.cell * .47, opacity: .55,
+                         fill: g.myColor === BLACK ? "url(#bs)" : "url(#ws)", "pointer-events": "none" });
+  for (const k of removed) { // dead stones: fade and cross out
+    const c = k % N, r = (k - c) / N, x = goban.px(c), y = goban.py(r), s = goban.cell * .22;
+    goban.el("circle", { cx: x, cy: y, r: goban.cell * .47, fill: "#dcb35c", opacity: .55, "pointer-events": "none" });
+    goban.el("path", { d: `M${x - s} ${y - s}L${x + s} ${y + s}M${x + s} ${y - s}L${x - s} ${y + s}`,
+                       stroke: "var(--danger)", "stroke-width": 3, "pointer-events": "none" });
+  }
+
+  const clockEl = color => h("div", { class: "pl-clock" }, fmtClock(g.timeLeft(color)));
+  const playerRow = color => {
+    const p = g.player(color), toMove = g.phase === "play" && g.toMove() === color;
+    const el = h("div", { class: `pl-row${toMove ? " to-move" : ""}` }, [
+      h("span", { class: `pl-stone ${color === BLACK ? "b" : "w"}` }),
+      h("span", { class: "pl-name" }, `${p.username || "…"}${color === g.myColor ? " (you)" : ""}`),
+      clockEl(color),
+    ]);
+    el.color = color;
+    return el;
+  };
+  const rows = [playerRow(BLACK), playerRow(WHITE)];
+
+  clearInterval(playTicker);
+  playTicker = setInterval(() => {
+    if (!svg.isConnected) return clearInterval(playTicker);
+    for (const row of rows) {
+      const t = g.timeLeft(row.color), el = row.lastChild;
+      el.textContent = fmtClock(t);
+      el.classList.toggle("low", !!t && t.byo && t.period < 10);
+    }
+  }, 250);
+
+  const status = h("div", { class: "meta-sub" },
+    g.phase === "loading" ? "Loading game…"
+    : g.phase === "finished" ? g.resultText()
+    : scoring ? "Game over by passes — tap groups to mark them dead, then accept the score."
+    : g.myTurn ? (g.pending ? "Tap the stone again to play it." : "Your move.")
+    : g.myColor ? "Opponent's move." : "Watching.");
+  const err = h("div", { class: "err" }, g.error);
+
+  const buttons = [];
+  if (g.phase === "play" && g.myColor) {
+    const pass = h("button", { onclick: () => { if (confirm("Pass?")) P.move(-1, -1); } }, "Pass");
+    pass.disabled = !g.myTurn;
+    buttons.push(pass);
+    buttons.push(h("button", { onclick: () => { if (confirm("Resign this game?")) P.resign(); } }, "Resign"));
+  } else if (scoring && g.myColor) {
+    buttons.push(h("button", { class: "primary", onclick: () => P.acceptScore() }, "Accept score"));
+    buttons.push(h("button", { onclick: () => P.resumePlay() }, "Resume play"));
+    buttons.push(h("button", { class: "wide", onclick: () => markDeadWithKataGo(g, grid, err) }, "Mark dead stones with KataGo"));
+  } else if (g.phase === "finished") {
+    buttons.push(h("button", { class: "primary", onclick: () => reviewOgsGame(g.id, err) }, "Review this game"));
+    buttons.push(h("button", { onclick: () => { P.game = null; location.hash = "#/play"; } }, "Back to lobby"));
+  }
+
+  const aside = h("aside", {}, [
+    h("div", { class: "panel" }, [h("h2", {}, `OGS game ${g.id}`), ...rows, status, err]),
+    buttons.length ? h("div", { class: "panel" }, [h("div", { class: "rv-actions" }, buttons)]) : "",
+  ]);
+  return [h("div", { class: "review" }, [boardCard, aside])];
+}
+
+// Proposes dead stones from KataGo's ownership map (stones in the
+// opponent's territory with high confidence).
+async function markDeadWithKataGo(g, grid, err) {
+  try {
+    err.textContent = "KataGo is reading the position…";
+    const a = await Engine.analyze({
+      board: gridToBoardState(grid), currentPlayer: g.toMove() === WHITE ? "white" : "black",
+      moveHistory: [], komi: (g.data && g.data.komi) || 6.5, visits: 150, ownershipMode: "root",
+    });
+    const dead = [];
+    for (let r = 0; r < N; r++)
+      for (let c = 0; c < N; c++) {
+        const own = a.ownership[r * N + c]; // + = Black's
+        if ((grid[r][c] === BLACK && own < -0.6) || (grid[r][c] === WHITE && own > 0.6)) dead.push([c, r]);
+      }
+    const before = stonesOf(g.removedStr);
+    if (before.length) OGSPlay.setRemoved(before, false);
+    if (dead.length) OGSPlay.setRemoved(dead, true);
+    err.textContent = dead.length ? `Marked ${dead.length} dead stones — check them, then accept.` : "KataGo found no dead stones.";
+  } catch (e) { err.textContent = `KataGo couldn't score this: ${e.message}`; }
+}
+
+async function reviewOgsGame(id, err) {
+  try {
+    const r = await fetch(`${OGSPlay.base()}/api/v1/games/${id}/sgf`);
+    if (!r.ok) throw new Error(`Couldn't download the game (${r.status})`);
+    Review.load(await r.text());
+    Review.currentId = Review.newId();
+    Review.saveState();
+    location.hash = "#/review";
+  } catch (e) { err.textContent = e.message; }
+}
+
 /* ================= feedback ================= */
 
 function viewFeedback() {
@@ -2165,15 +2719,21 @@ function viewFeedback() {
 
 /* ================= router & keys ================= */
 
+// Bumped on every navigation so async views can tell they've gone stale.
+let routeSeq = 0;
+
 async function route() {
+  routeSeq++;
   if (trainer) trainer.alive = false;
   trainer = null;
   Review.els = null;
   const parts = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
-  const tab = parts[0] === "review" ? "review" : parts[0] === "feedback" ? "feedback" : "library";
+  clearInterval(playTicker);
+  const tab = ["review", "play", "feedback"].includes(parts[0]) ? parts[0] : "library";
   for (const a of document.querySelectorAll("#tabs a"))
     a.classList.toggle("active", a.dataset.tab === tab);
   if (parts[0] === "review") viewReview();
+  else if (parts[0] === "play") viewPlay(parts[1]);
   else if (parts[0] === "feedback") viewFeedback();
   else if (parts[0] === "book" && parts[1] && parts[2]) await viewPlayer(parts[1], parseInt(parts[2], 10) || 1);
   else if (parts[0] === "book" && parts[1]) await viewBook(parts[1]);
@@ -2215,4 +2775,11 @@ document.querySelector('#tabs a[data-tab="review"]').addEventListener("click", (
 window.__engine = Engine;
 window.__review = Review;
 Sync.init();
-route();
+// Back from OGS's login page with ?code=&state=: finish the login, then
+// drop the query string and land on the Play tab.
+const loginParams = new URLSearchParams(location.search);
+if (loginParams.get("state") && (loginParams.get("code") || loginParams.get("error"))) {
+  OGSPlay.finishLogin(loginParams)
+    .catch(e => { OGSPlay.loginError = e.message; })
+    .finally(() => { history.replaceState(null, "", location.pathname + "#/play"); route(); });
+} else route();
