@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OGS Connection Test</title>
+<style>
+  :root { --bg: #f4f1ea; --card: #fff; --ink: #2b2a26; --muted: #8a8578; --ok: #2f6f4f; --bad: #b0413e; --warn: #9a6b1f; --border: #e2ddd0; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+  main { max-width: 640px; margin: 0 auto; padding: 16px; }
+  h1 { font-size: 19px; margin: 4px 0 2px; }
+  .sub { color: var(--muted); font-size: 13px; margin-bottom: 14px; }
+  .card { background: var(--card); border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(60,50,30,.08); }
+  label { display: block; font-size: 13px; color: var(--muted); margin: 8px 0 4px; }
+  input, select { width: 100%; font: inherit; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border); background: #faf8f2; color: var(--ink); }
+  button { font: inherit; font-weight: 600; padding: 10px 14px; border-radius: 10px; border: none; background: var(--ink); color: #fff; margin: 10px 8px 0 0; }
+  button.ghost { background: #faf8f2; color: var(--ink); border: 1px solid #ddd6c6; }
+  .row { display: flex; gap: 8px; align-items: baseline; padding: 6px 0; border-top: 1px solid #f0ece2; font-size: 14px; }
+  .row:first-child { border-top: none; }
+  .tag { flex: none; font-weight: 700; min-width: 44px; }
+  .PASS { color: var(--ok); } .FAIL { color: var(--bad); } .INFO { color: var(--warn); }
+  .detail { overflow-wrap: anywhere; }
+  pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 11.5px; color: var(--muted); max-height: 260px; overflow: auto; margin: 0; }
+</style>
+</head>
+<body>
+<main>
+  <h1>OGS connection test</h1>
+  <div class="sub">Checks whether this site can log in to OGS and use its live connection, straight from your browser. Screenshot the results when done.</div>
+
+  <div class="card">
+    <label for="server">Server</label>
+    <select id="server">
+      <option value="https://beta.online-go.com">beta.online-go.com (test server)</option>
+      <option value="https://online-go.com">online-go.com</option>
+    </select>
+    <label for="clientId">OAuth Client ID (optional — needed for the login tests)</label>
+    <input id="clientId" placeholder="paste the Client ID from OGS" autocomplete="off">
+    <button id="runBasic">Run basic tests</button>
+    <button id="runLogin" class="ghost">Run login tests</button>
+  </div>
+
+  <div class="card"><div id="results"><div class="row"><span class="detail" style="color:var(--muted)">No results yet.</span></div></div></div>
+  <div class="card"><pre id="log"></pre></div>
+</main>
+<script>
+// Everything here runs in the visitor's browser against OGS directly; no
+// server of ours is involved. Tokens are kept in sessionStorage only for the
+// duration of the login round trip and shown truncated.
+const $ = id => document.getElementById(id);
+const results = $("results"), logEl = $("log");
+const STORE = "ogsTest";
+let cleared = false;
+
+function report(tag, name, detail = "") {
+  if (!cleared) { results.textContent = ""; cleared = true; }
+  const row = document.createElement("div");
+  row.className = "row";
+  const t = document.createElement("span"); t.className = `tag ${tag}`; t.textContent = tag;
+  const d = document.createElement("span"); d.className = "detail"; d.textContent = detail ? `${name} — ${detail}` : name;
+  row.append(t, d); results.append(row);
+}
+function log(...a) { logEl.textContent += a.map(x => typeof x === "string" ? x : JSON.stringify(x)).join(" ") + "\n"; }
+const short = s => (s && s.length > 16 ? s.slice(0, 8) + "…" + s.slice(-4) : s || "");
+const server = () => $("server").value;
+const redirectUri = () => location.origin + location.pathname;
+
+function saveForm() {
+  try { localStorage.setItem(STORE + ".form", JSON.stringify({ server: server(), clientId: $("clientId").value.trim() })); } catch {}
+}
+try {
+  const f = JSON.parse(localStorage.getItem(STORE + ".form") || "{}");
+  if (f.server) $("server").value = f.server;
+  if (f.clientId) $("clientId").value = f.clientId;
+} catch {}
+
+/* ---- basic: REST + websocket ---- */
+
+async function testRest(base) {
+  try {
+    const r = await fetch(`${base}/api/v1/ui/config`);
+    const body = await r.json();
+    report(r.ok ? "PASS" : "FAIL", "REST API readable from this site", `HTTP ${r.status}, anonymous=${!body.user || body.user.anonymous}`);
+  } catch (e) {
+    report("FAIL", "REST API readable from this site", `${e.message} (likely blocked by CORS)`);
+  }
+}
+
+// Opens the realtime socket, optionally authenticates, and pings. Resolves
+// with the socket and the events it saw.
+function openSocket(base, jwt) {
+  return new Promise(resolve => {
+    const url = base.replace("https://", "wss://") + "/";
+    const events = [];
+    let ws, done = false, id = 0;
+    const finish = (ok, why) => { if (done) return; done = true; resolve({ ok, why, ws, events }); };
+    try { ws = new WebSocket(url); } catch (e) { return finish(false, e.message); }
+    const timer = setTimeout(() => finish(false, "no pong within 8s"), 8000);
+    ws.onopen = () => {
+      log("ws open", url);
+      if (jwt) ws.send(JSON.stringify(["authenticate", {
+        jwt, device_id: crypto.randomUUID(), user_agent: navigator.userAgent,
+        language: "en", language_version: "1.0", client_version: "goban-trainer-test",
+      }, ++id]));
+      ws.send(JSON.stringify(["net/ping", { client: Date.now(), drift: 0, latency: 0 }]));
+    };
+    ws.onmessage = e => {
+      log("ws ←", e.data.slice(0, 300));
+      let msg; try { msg = JSON.parse(e.data); } catch { return; }
+      events.push(msg);
+      if (msg[0] === "net/pong") { clearTimeout(timer); setTimeout(() => finish(true, "pong received"), jwt ? 1500 : 0); }
+    };
+    ws.onerror = () => { clearTimeout(timer); finish(false, "socket error (connection refused or origin rejected)"); };
+    ws.onclose = e => { log("ws close", e.code, e.reason); clearTimeout(timer); finish(false, `closed with code ${e.code}`); };
+  });
+}
+
+async function runBasic() {
+  saveForm(); cleared = false; logEl.textContent = "";
+  const base = server();
+  report("INFO", "Testing", `${base} from ${location.origin}`);
+  await testRest(base);
+  const s = await openSocket(base);
+  report(s.ok ? "PASS" : "FAIL", "Live connection (WebSocket) from this site", s.why);
+  if (s.ws) s.ws.close();
+  try {
+    const r = await fetch(`${base}/termination-api/automatch-stats`);
+    report(r.ok ? "PASS" : "INFO", "Automatch stats readable", `HTTP ${r.status}`);
+  } catch (e) { report("INFO", "Automatch stats readable", e.message); }
+}
+
+/* ---- login: OAuth2 authorization code + PKCE ---- */
+
+function b64url(bytes) {
+  return btoa(String.fromCharCode(...new Uint8Array(bytes))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+
+async function startLogin() {
+  saveForm();
+  const clientId = $("clientId").value.trim();
+  if (!clientId) { cleared = false; report("FAIL", "Login tests", "paste the Client ID first"); return; }
+  const verifier = b64url(crypto.getRandomValues(new Uint8Array(32)));
+  const challenge = b64url(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(verifier)));
+  const state = b64url(crypto.getRandomValues(new Uint8Array(12)));
+  sessionStorage.setItem(STORE + ".flow", JSON.stringify({ verifier, state, base: server(), clientId }));
+  const q = new URLSearchParams({
+    response_type: "code", client_id: clientId, redirect_uri: redirectUri(),
+    code_challenge: challenge, code_challenge_method: "S256", state, scope: "read write",
+  });
+  location.href = `${server()}/oauth2/authorize/?${q}`;
+}
+
+async function finishLogin(params) {
+  const flow = JSON.parse(sessionStorage.getItem(STORE + ".flow") || "null");
+  sessionStorage.removeItem(STORE + ".flow");
+  history.replaceState(null, "", redirectUri());
+  if (params.get("error")) { report("FAIL", "OGS login page", `${params.get("error")}: ${params.get("error_description") || ""}`); return; }
+  if (!flow || flow.state !== params.get("state")) { report("FAIL", "OGS login page", "state mismatch — start the login test again"); return; }
+  const { base, clientId, verifier } = flow;
+  report("PASS", "OGS login page returned an authorization code", `${base}`);
+
+  // 1. Token exchange (needs CORS on /oauth2/token/).
+  let token;
+  try {
+    const r = await fetch(`${base}/oauth2/token/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ grant_type: "authorization_code", code: params.get("code"),
+                                  redirect_uri: redirectUri(), client_id: clientId, code_verifier: verifier }),
+    });
+    const body = await r.json().catch(() => ({}));
+    if (!r.ok || !body.access_token) { report("FAIL", "Token exchange", `HTTP ${r.status} ${JSON.stringify(body).slice(0, 200)}`); return; }
+    token = body.access_token;
+    report("PASS", "Token exchange", `access token ${short(token)}, scope "${body.scope}", expires in ${body.expires_in}s`);
+  } catch (e) {
+    report("FAIL", "Token exchange", `${e.message} (likely blocked by CORS)`); return;
+  }
+
+  // 2. ui/config with the bearer token: does it return the user and a JWT?
+  let jwt = "";
+  try {
+    const r = await fetch(`${base}/api/v1/ui/config`, { headers: { Authorization: `Bearer ${token}` } });
+    const body = await r.json();
+    const user = body.user || {};
+    jwt = body.user_jwt || "";
+    report(user.anonymous === false || user.id ? "PASS" : "FAIL", "API recognises the login", `user=${user.username || "?"} (id ${user.id || "?"})`);
+    report(jwt ? "PASS" : "FAIL", "Got a realtime token (user_jwt)", jwt ? short(jwt) : "user_jwt missing from ui/config");
+  } catch (e) {
+    report("FAIL", "API recognises the login", e.message); return;
+  }
+
+  // 3. Authenticate the realtime socket with that JWT.
+  if (jwt) {
+    const s = await openSocket(base, jwt);
+    const authEvents = s.events.filter(m => typeof m[0] !== "string" || /^(user|authenticate|active_game|automatch)/.test(m[0]));
+    report(s.ok ? "PASS" : "FAIL", "Live connection with login", `${s.why}; ${authEvents.length} account events received`);
+    if (s.ws) s.ws.close();
+  }
+
+  // 4. Revoke the test token so it doesn't linger.
+  try {
+    await fetch(`${base}/oauth2/revoke_token/`, {
+      method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ token, client_id: clientId }),
+    });
+  } catch {}
+}
+
+$("runBasic").onclick = runBasic;
+$("runLogin").onclick = startLogin;
+const params = new URLSearchParams(location.search);
+if (params.get("code") || params.get("error")) finishLogin(params);
+</script>
+</body>
+</html>
