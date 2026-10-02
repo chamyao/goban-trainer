@@ -24,4 +24,4 @@ jobs:
       - run: npm ci
       - run: node probe.mjs
         env:
-          OGS_CLIENT_ID: AXZY8pTJw2qGjXCRsYc7912QVGvSqdfGgA7abEM9
+          OGS_CLIENT_ID: IJg6la0wpumEIw4dQkqql7POhxgbkpDSG40bj1eK
