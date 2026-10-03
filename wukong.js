@@ -262,6 +262,11 @@ const WK = (() => {
   });
   function land(p, y) {
     m.y = y; m.on = p; m.vy = 0; m.grab = null;
+    if (m.tumble) {
+      m.tumble = false; m.vx = 0;
+      set("dead", "dead"); m.until = performance.now() + 1500;
+      return;
+    }
     if (m.dieOnLand) return die();
     m.vx = (m.left ? -1 : 1) * RUN;
     set("land", "landing"); m.until = performance.now() + 140;
@@ -485,6 +490,27 @@ const WK = (() => {
     }
   }
   function arrive(now) { m.vx = m.vy = 0; m.left = m.hint.dir < 0; set("point", "hintpoint"); }
+  // ---- shake the page (scroll back and forth fast) to knock him loose.
+  let lastScroll = scrollY, lastDir = 0, flips = [];
+  function shakeInput(dy) {
+    if (!cv || Math.abs(dy) < 3) return;
+    const now = performance.now(), dir = Math.sign(dy);
+    if (lastDir && dir !== lastDir) flips.push(now);
+    lastDir = dir;
+    flips = flips.filter(t => now - t < 1000);
+    if (flips.length >= 3) { flips = []; shakeOff(); }
+  }
+  addEventListener("scroll", () => { const y = scrollY; shakeInput(y - lastScroll); lastScroll = y; }, { passive: true });
+  addEventListener("wheel", e => shakeInput(e.deltaY), { passive: true });  // also at the top/bottom of the page
+  function shakeOff() {
+    if (m.tumble || m.state === "dead") return;
+    if (m.hint) { if (!m.hint.shown) m.hint.done(); m.hint = null; }
+    m.bd = m.on = m.plan = m.jumpTo = m.climbTo = m.grab = m.boardJump = null;
+    m.vx = (Math.random() < 0.5 ? -1 : 1) * (6 + Math.random() * 5);
+    m.vy = -(10 + Math.random() * 6);
+    m.left = m.vx < 0; m.tumble = true; m.spin = (m.vx < 0 ? -1 : 1) * (0.25 + Math.random() * 0.15); m.rot = 0;
+    set("fall", "air");
+  }
   window.Wukong = { active: () => !!cv, pointAt: (svg, x, y, done) => pointAt(svg, x, y, done) };
 
   function step(dt) {
@@ -543,6 +569,7 @@ const WK = (() => {
           }
         }
       }
+      if (m.tumble) m.rot += m.spin * k;
       if (m.vy > 0) set("fall");
       if (m.vy > 0 && m.boardJump) {
         const J = m.boardJump, p = toScreen(J.b.svg, J.b.xs[J.i], J.b.ys[J.j]);
@@ -669,6 +696,9 @@ const WK = (() => {
           g.fillRect(Math.round(sx) - S, Math.round(sy), 3 * S, S);
         }
       }
+    } else if (m.tumble) {
+      g.translate(0, -18 * S); g.rotate(m.rot); g.translate(0, 18 * S);
+      g.drawImage(buf, -22 * S, -43 * S, WK.SIZE * S, WK.SIZE * S);
     } else {
       g.drawImage(buf, -22 * S, -43 * S, WK.SIZE * S, WK.SIZE * S);
     }
@@ -693,7 +723,7 @@ const WK = (() => {
     // Always drop in fresh from the top-left: forget any board, jump or climb
     // he was in the middle of when he was hidden.
     Object.assign(m, { x: 60, y: 80, vx: RUN, vy: 0, state: "air", on: null, plan: null, climbTo: null,
-                       bd: null, boardJump: null, grab: null, jumpTo: null, dieOnLand: false, left: false, hint: null });
+                       bd: null, boardJump: null, grab: null, jumpTo: null, dieOnLand: false, left: false, hint: null, tumble: false });
     flying.length = 0; flashes.length = 0;
     set("fall");
     last = 0; raf = requestAnimationFrame(loop);
