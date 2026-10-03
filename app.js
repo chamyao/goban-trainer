@@ -467,6 +467,30 @@ class Goban {
   }
 }
 
+// Sabaki-style left-to-right layout for any {children: []} tree: sets each
+// node's tx (ply) and ty (row); first children continue the row.
+function layoutMoveTree(root) {
+  const rowEnd = []; // per row: last x occupied
+  let maxX = 0, maxRow = 0;
+  const place = (chainStart, x, minRow) => {
+    let row = minRow;
+    while ((rowEnd[row] ?? -Infinity) >= x - 1) row++;
+    const branches = [];
+    let n = chainStart, cx = x;
+    while (n) {
+      n.tx = cx; n.ty = row;
+      rowEnd[row] = cx;
+      maxX = Math.max(maxX, cx); maxRow = Math.max(maxRow, row);
+      for (const alt of n.children.slice(1)) branches.push([alt, cx + 1, row + 1]);
+      n = n.children[0];
+      cx++;
+    }
+    for (const [alt, ax, ar] of branches) place(alt, ax, ar);
+  };
+  place(root, 0, 0);
+  return { maxX, maxRow };
+}
+
 /* ================= trainer (player view logic) ================= */
 
 class Trainer {
@@ -513,6 +537,7 @@ class Trainer {
     this.ownership = null;    // ownership overlay from Judge
     this.engineBusy = false;
     this.covered = new Set(); // White replies already faced this attempt ("ab,cd,…" prefixes)
+    this.viewing = null;      // solution-tree node shown on the board after solving
     this.render();
     this.setStatus("", "", "");
   }
@@ -837,6 +862,92 @@ class Trainer {
     this.els.turnBadge.textContent = this.explore
       ? (this.exploreTurn === BLACK ? "Explore · Black" : "Explore · White")
       : this.done ? "—" : this.engineBusy ? "White thinking…" : "Black to play";
+    this.renderSolutionTree();
+  }
+
+  /* --- solution tree: every line of the problem, shown once it's solved --- */
+  solutionTree() {
+    if (this.tree) return this.tree;
+    const root = { move: null, children: [], parent: null, ok: true };
+    // Correct lines first, so the top row of the tree is a solution.
+    for (const L of [...this.p.lines].sort((a, b) => (a[0] <= 2 ? 0 : 1) - (b[0] <= 2 ? 0 : 1))) {
+      let n = root;
+      L.slice(1).forEach((m, i) => {
+        let ch = n.children.find(c => c.move === m);
+        if (!ch) {
+          ch = { move: m, color: i % 2 === 0 ? BLACK : WHITE, children: [], parent: n, ok: false, ply: i + 1 };
+          n.children.push(ch);
+        }
+        if (L[0] <= 2) ch.ok = true;
+        n = ch;
+      });
+    }
+    return (this.tree = root);
+  }
+
+  showNode(node) {
+    const path = [];
+    for (let n = node; n.parent; n = n.parent) path.unshift(n);
+    this.grid = this.freshGrid();
+    this.lastMove = null;
+    for (const n of path) {
+      const [c, r] = cIdx(n.move);
+      this.grid = applyMove(this.grid, c, r, n.color) || this.grid;
+      this.lastMove = [c, r];
+    }
+    this.viewing = node;
+    this.render();
+  }
+
+  renderSolutionTree() {
+    const { treePanel, treeBox } = this.els;
+    if (!treePanel) return;
+    const show = this.done === "ok" && !this.explore;
+    treePanel.style.display = show ? "" : "none";
+    if (!show) return;
+    const root = this.solutionTree();
+    const { maxX, maxRow } = layoutMoveTree(root);
+    const CELL = 28, PAD = 14, R = 10;
+    treeBox.innerHTML = "";
+    const svg = document.createElementNS(SVGNS, "svg");
+    svg.setAttribute("width", maxX * CELL + PAD * 2);
+    svg.setAttribute("height", maxRow * CELL + PAD * 2);
+    treeBox.append(svg);
+    const px = n => PAD + n.tx * CELL, py = n => PAD + n.ty * CELL;
+    const el = (name, attrs) => {
+      const e = document.createElementNS(SVGNS, name);
+      for (const k in attrs) e.setAttribute(k, attrs[k]);
+      svg.appendChild(e);
+      return e;
+    };
+    const edges = n => n.children.forEach(ch => {
+      el("line", { x1: px(n), y1: py(n), x2: px(ch), y2: py(ch),
+                   stroke: ch.ok ? "#9cc2ad" : "#e0b4b2", "stroke-width": 2 });
+      edges(ch);
+    });
+    edges(root);
+    const nodes = n => {
+      if (n === this.viewing)
+        el("circle", { cx: px(n), cy: py(n), r: R + 3.5, fill: "none", stroke: "#3566b0", "stroke-width": 2.5 });
+      const c = el("circle", {
+        cx: px(n), cy: py(n), r: n.move ? R : R - 2.5,
+        fill: !n.move ? "#8a8578" : n.color === BLACK ? "#2b2a26" : "#fff",
+        stroke: !n.move ? "#5c554a" : n.ok ? "var(--accent)" : "var(--danger)",
+        "stroke-width": n.move ? 2 : 1, cursor: "pointer",
+      });
+      if (n.move) {
+        const t = el("text", { x: px(n), y: py(n) + 3.2, "text-anchor": "middle", "font-size": 10,
+                               "font-weight": 600, "pointer-events": "none",
+                               fill: n.color === BLACK ? "#fff" : "#2b2a26" });
+        t.textContent = n.ply;
+      }
+      const tip = document.createElementNS(SVGNS, "title");
+      tip.textContent = n.move ? `${n.ply}. ${coordLabel(n.move)}${n.ok ? "" : " (fails)"}` : "Start";
+      c.appendChild(tip);
+      c.addEventListener("click", () => this.showNode(n));
+      n.children.forEach(nodes);
+    };
+    nodes(root);
   }
 }
 
@@ -1482,27 +1593,7 @@ const Review = {
   /* ---- move tree graph (Sabaki-style, left to right) ---- */
   plyOf(node) { let k = 0; while (node.parent) { k++; node = node.parent; } return k; },
 
-  layoutTree() {
-    const rowEnd = []; // per row: last x occupied
-    let maxX = 0, maxRow = 0;
-    const place = (chainStart, x, minRow) => {
-      let row = minRow;
-      while ((rowEnd[row] ?? -Infinity) >= x - 1) row++;
-      const branches = [];
-      let n = chainStart, cx = x;
-      while (n) {
-        n.tx = cx; n.ty = row;
-        rowEnd[row] = cx;
-        maxX = Math.max(maxX, cx); maxRow = Math.max(maxRow, row);
-        for (const alt of n.children.slice(1)) branches.push([alt, cx + 1, row + 1]);
-        n = n.children[0];
-        cx++;
-      }
-      for (const [alt, ax, ar] of branches) place(alt, ax, ar);
-    };
-    place(this.mainNodes[0], 0, 0);
-    return { maxX, maxRow };
-  },
+  layoutTree() { return layoutMoveTree(this.mainNodes[0]); },
 
   renderVariations() {
     if (!this.els || !this.els.moves) return;
@@ -1774,6 +1865,12 @@ async function viewPlayer(id, num) {
   const status = h("div", { id: "status" });
   const turnBadge = h("span", { class: "badge turn" }, "Black to play");
   const btnExplore = h("button", {}, "Explore");
+  const treeBox = h("div", { class: "movetree", style: "height:auto; max-height:320px" });
+  const treePanel = h("div", { class: "panel", style: "display:none" }, [
+    h("h2", {}, "Solution tree"),
+    h("div", { class: "meta-sub" }, "Tap a move to see the position. Green: correct lines · red: failures."),
+    treeBox,
+  ]);
 
   const go = d => location.hash = `#/book/${id}/${idx + 1 + d}`;
   const btnPrev = h("button", { onclick: () => go(-1) }, "← Prev");
@@ -1797,6 +1894,7 @@ async function viewPlayer(id, num) {
       ]),
     ]),
     h("div", { class: "panel" }, [h("h2", {}, "Status"), status]),
+    treePanel,
     h("div", { class: "panel" }, [
       h("h2", {}, "Controls"),
       h("div", { class: "controls" }, [
@@ -1820,7 +1918,7 @@ async function viewPlayer(id, num) {
   player.append(boardCard, aside);
   root.append(player);
 
-  trainer = new Trainer(book, idx, { svg, boardCard, status, turnBadge, btnExplore });
+  trainer = new Trainer(book, idx, { svg, boardCard, status, turnBadge, btnExplore, treePanel, treeBox });
   btnExplore.addEventListener("click", () => trainer.toggleExplore());
   window.__trainer = trainer;
   window.__engine = Engine;
