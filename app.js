@@ -799,12 +799,45 @@ class Trainer {
     this.render();
   }
 
+  /* How the trainer would end from `played` if Black plays well: "ok", "bad" or
+     null (off the key). White answers as engineReply does: every correct-line
+     reply (they all get faced eventually), else its fallback line. Used by the
+     hint only: some keys have a correct line that a failure line extends
+     (e.g. [1,"sc"] with [3,"sc","qd"]), and White does play that refutation. */
+  outcome(played, memo = new Map()) {
+    const key = played.join(",");
+    if (memo.has(key)) return memo.get(key);
+    memo.set(key, "bad"); // guards against cycles in odd keys
+    const ls = this.linesFrom(played), n = played.length;
+    const cont = ls.filter(L => L.length - 1 > n);
+    let v;
+    if (!cont.length) {
+      const done = ls.filter(L => L.length - 1 === n);
+      v = done.some(L => L[0] <= 2) ? "ok" : done.some(L => L[0] === 3) ? "bad" : null;
+    } else if (n % 2 === 0) { // Black to move: some tree move must work
+      const moves = [...new Set(cont.map(L => L[n + 1]))];
+      v = moves.some(m => this.outcome([...played, m], memo) === "ok") ? "ok" : "bad";
+    } else { // White to move
+      let replies = [...new Set(cont.filter(L => L[0] <= 2).map(L => L[n + 1]))];
+      if (!replies.length) replies = [[...cont].sort((a, b) => a[0] - b[0] || b.length - a.length)[0][n + 1]];
+      v = replies.every(m => this.outcome([...played, m], memo) === "ok") ? "ok" : "bad";
+    }
+    memo.set(key, v);
+    return v;
+  }
+
   hint() {
     if (this.explore || this.done) return;
-    const best = this.p.lines.find(L => L[0] === 1 &&
-      this.played.every((m, i) => m === L[i + 1]) && L.length - 1 > this.played.length);
-    if (!best) return;
-    const [c, r] = cIdx(best[this.played.length + 1]);
+    // Next moves of the main solutions (1), then of correct variations (2):
+    // after some White replies only a variation continues. Prefer a move the
+    // key can't refute; failing that, the first one as before.
+    const n = this.played.length, memo = new Map();
+    const open = L => L.length - 1 > n && this.played.every((m, i) => m === L[i + 1]);
+    const moves = [...new Set([...this.p.lines.filter(L => L[0] === 1 && open(L)),
+                               ...this.p.lines.filter(L => L[0] === 2 && open(L))].map(L => L[n + 1]))];
+    if (!moves.length) return;
+    const best = moves.find(m => this.outcome([...this.played, m], memo) === "ok") || moves[0];
+    const [c, r] = cIdx(best);
     this.goban.pulse(c, r);
   }
 
