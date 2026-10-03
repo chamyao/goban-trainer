@@ -347,7 +347,8 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
 
 /* Sun Wukong toggle */
 .wukong-toggle {
-  background: var(--chip); border: none; border-radius: 999px; padding: 3px 9px;
-  font-size: 15px; line-height: 1.4; cursor: pointer;
+  background: var(--chip); border: none; border-radius: 999px; padding: 3px 8px;
+  line-height: 0; cursor: pointer; display: inline-flex; align-items: center;
 }
+.wukong-toggle .wukong-icon { width: 22px; height: 18px; image-rendering: pixelated; }
 .wukong-toggle.off { opacity: .45; filter: grayscale(1); }

@@ -173,7 +173,8 @@ const WK = (() => {
       g.fillStyle = PAL.n; g.fillRect(Math.round(gx) - 1, Math.round(gy) - 1, 2, 2);  // hand
     }
   }
-  return { PAL, FRAMES, render, SIZE: 44 };
+  const drawHead = (g, x = 0, y = 0) => blit(g, HEAD, x, y);
+  return { PAL, FRAMES, render, drawHead, SIZE: 44 };
 })();
 
 (() => {
@@ -230,21 +231,135 @@ const WK = (() => {
   }
   addEventListener("tczw:result", e => {
     if (!cv || e.detail !== "bad") return;
+    if (m.bd) { m.bd.prog = Math.round(m.bd.prog); if (m.bd.prog) { m.bd.i = m.bd.ti; m.bd.j = m.bd.tj; } m.bd.prog = 0; m.bd.ti = m.bd.i; m.bd.tj = m.bd.j; return die(); }
     if (m.state === "air" || m.state === "climb") {
       m.dieOnLand = true;
       if (m.state === "climb") { m.climbTo = null; m.vy = 0; set("fall", "air"); }
     } else die();
   });
   function land(p, y) {
-    m.y = y; m.on = p; m.vy = 0;
+    m.y = y; m.on = p; m.vy = 0; m.grab = null;
     if (m.dieOnLand) return die();
     m.vx = (m.left ? -1 : 1) * RUN;
     set("land", "landing"); m.until = performance.now() + 140;
   }
 
+  // ---- the go board: an SVG with a wood background; he walks its grid.
+  function findBoard() {
+    for (const svg of document.querySelectorAll("svg")) {
+      if (!svg.querySelector('rect[fill="url(#wood)"]')) continue;
+      const r = svg.getBoundingClientRect();
+      if (r.width < 120 || r.bottom < 80 || r.top > innerHeight - 40) continue;
+      const xs = new Set(), ys = new Set();
+      for (const l of svg.querySelectorAll("line")) {
+        const x1 = +l.getAttribute("x1"), x2 = +l.getAttribute("x2"), y1 = +l.getAttribute("y1"), y2 = +l.getAttribute("y2");
+        if (y1 === y2) ys.add(y1); else if (x1 === x2) xs.add(x1);
+      }
+      if (xs.size < 3 || ys.size < 3) continue;
+      return { svg, xs: [...xs].sort((a, b) => a - b), ys: [...ys].sort((a, b) => a - b) };
+    }
+    return null;
+  }
+  function boardStones(b) {
+    const set = new Set();
+    for (const c of b.svg.querySelectorAll('circle[fill="url(#bs)"], circle[fill="url(#ws)"]'))
+      set.add(`${+c.getAttribute("cx")},${+c.getAttribute("cy")}`);
+    return set;
+  }
+  function toScreen(svg, x, y) {
+    const ctm = svg.getScreenCTM();
+    if (!ctm) return null;
+    return { x: ctm.a * x + ctm.c * y + ctm.e, y: ctm.b * x + ctm.d * y + ctm.f, cell: ctm.a };
+  }
+  // Where he stands on the board: between intersections (i,j) → (ti,tj).
+  function boardPos() {
+    const B = m.bd, f = B.prog;
+    const x = B.b.xs[B.i] + (B.b.xs[B.ti] - B.b.xs[B.i]) * f, y = B.b.ys[B.j] + (B.b.ys[B.tj] - B.b.ys[B.j]) * f;
+    const p = toScreen(B.b.svg, x, y);
+    if (!p) return null;
+    const cellPx = (B.b.xs[1] - B.b.xs[0]) * p.cell;
+    // Standing on a stone: up on top of it.
+    return { x: p.x, y: p.y + cellPx * 0.12 - (B.onStone ? cellPx * 0.42 : 0), cellPx };
+  }
+  function hasStone(B, i, j) { return B.stones.has(`${B.b.xs[i]},${B.b.ys[j]}`); }
+  function boardChoose(now) {
+    const B = m.bd;
+    B.i = B.ti; B.j = B.tj; B.prog = 0;
+    B.onStone = hasStone(B, B.i, B.j);
+    if (now > B.leaveAt) return boardLeave();
+    const r = Math.random();
+    if (B.onStone && r < 0.5) { set("idle", "boardidle"); m.until = now + 1500 + Math.random() * 2500; return; }
+    if (r < 0.15) { set("idle", "boardidle"); m.until = now + 800 + Math.random() * 1600; return; }
+    const dirs = [[1, 0], [-1, 0], [0, 1], [0, -1]].filter(([di, dj]) =>
+      B.i + di >= 0 && B.i + di < B.b.xs.length && B.j + dj >= 0 && B.j + dj < B.b.ys.length);
+    // Keep going mostly straight; stones get hopped onto.
+    const keep = dirs.find(([di, dj]) => di === B.di && dj === B.dj);
+    const [di, dj] = keep && Math.random() < 0.6 ? keep : dirs[Math.floor(Math.random() * dirs.length)];
+    B.di = di; B.dj = dj; B.ti = B.i + di; B.tj = B.j + dj;
+    if (di) m.left = di < 0;
+    B.hop = hasStone(B, B.ti, B.tj) !== B.onStone;  // up onto / down off a stone
+    set(B.hop ? "rise" : "run", "board");
+  }
+  function boardEnter(b, i, j) {
+    m.bd = { b, stones: boardStones(b), i, j, ti: i, tj: j, prog: 0, di: 0, dj: 1, onStone: false,
+             leaveAt: performance.now() + 9000 + Math.random() * 14000 };
+    m.on = null; m.vy = 0;
+    set("land", "boardland"); m.until = performance.now() + 160;
+  }
+  function boardLeave() {
+    const B = m.bd; m.bd = null;
+    // Jump off toward the nearer side.
+    const right = B.i > B.b.xs.length / 2;
+    m.vx = (right ? 1 : -1) * RUN * 1.4; m.vy = -9; m.left = !right;
+    set("rise", "air");
+  }
+  // A jump that ends on a board intersection near (x, y).
+  function jumpToBoard() {
+    const b = findBoard();
+    if (!b) return false;
+    // Any intersection within jumping reach (not under a stone).
+    const stones = boardStones(b), reach = [];
+    b.xs.forEach((x, i) => b.ys.forEach((y, j) => {
+      if (stones.has(`${x},${y}`)) return;
+      const q = toScreen(b.svg, x, y);
+      if (q && Math.abs(q.x - m.x) < 380 && m.y - q.y < 230 && q.y > 70 && q.y < innerHeight - 10) reach.push([i, j]);
+    }));
+    if (!reach.length) return false;
+    const [i, j] = reach[Math.floor(Math.random() * reach.length)];
+    const p = toScreen(b.svg, b.xs[i], b.ys[j]);
+    const above = m.y - p.y, rise = Math.max(above + 40, 50);
+    m.vy = -Math.sqrt(2 * GRAV * rise);
+    const tUp = -m.vy / GRAV, tDown = Math.sqrt(2 * Math.max(rise - above, 8) / GRAV);
+    m.vx = (p.x - m.x) / (tUp + tDown); m.left = m.vx < 0; m.on = null;
+    m.boardJump = { b, i, j };
+    set("rise", "air");
+    return true;
+  }
+
   function step(dt) {
     const now = performance.now(), k = dt / 16;
     m.t += dt; m.animT += dt;
+    if (m.bd) {
+      if (!m.bd.b.svg.isConnected) { m.bd = null; set("fall", "air"); return; }
+      const B = m.bd;
+      if (m.state === "board") {
+        const len = Math.hypot(B.b.xs[B.ti] - B.b.xs[B.i], B.b.ys[B.tj] - B.b.ys[B.j]) || 1;
+        B.prog = Math.min(1, B.prog + (RUN * 0.55 * k) / (len * (toScreen(B.b.svg, 0, 0)?.cell || 1)));
+        if (B.hop) set(B.prog < 0.5 ? "rise" : "fall");
+        if (B.prog >= 1) boardChoose(now);
+      } else if ((m.state === "boardidle" || m.state === "boardland") && now > m.until) {
+        boardChoose(now);
+      } else if (m.state === "boardidle") {
+        if (m.anim === "idle" && Math.random() < 0.004) set("twirl");
+        if (m.anim === "twirl" && m.animT > 16 * 55) set("idle");
+      }
+      if (!m.bd) return;
+      const p = boardPos();
+      if (!p || p.y < 50 || p.y > innerHeight + 20) { m.bd = null; set("fall", "air"); return; }
+      m.x = p.x; m.y = p.y;
+      if (m.state === "dead" && now > m.until) { set("land", "boardland"); m.until = now + 220; }
+      return;
+    }
     if (m.state === "climb") {
       const r = rectOf(m.climbTo);
       if (!r || r.top < 60) { m.climbTo = null; set("fall", "air"); return; }
@@ -258,8 +373,29 @@ const WK = (() => {
       m.vy = Math.min(m.vy + GRAV * k, 18);
       m.x += m.vx * k; m.y += m.vy * k;
       if (m.x < 12 || m.x > innerWidth - 12) { m.vx = -m.vx * 0.4; m.x = Math.max(12, Math.min(innerWidth - 12, m.x)); }
+      if (m.grab) {
+        const G = m.grab, r = rectOf(G.p);
+        if (!r) m.grab = null;
+        else if (G.right ? m.x >= r.left - 7 * scale() : m.x <= r.right + 7 * scale()) {
+          m.grab = null;
+          if (m.y > r.top + 10 && m.y < r.bottom + 40) {
+            m.vx = m.vy = 0; m.climbTo = G.p;
+            if (m.dieOnLand) { m.climbTo = null; set("fall", "air"); } else { set("climb", "climb"); return; }
+          }
+        }
+      }
       if (m.vy > 0) set("fall");
-      if (m.vy > 0) {
+      if (m.vy > 0 && m.boardJump) {
+        const J = m.boardJump, p = toScreen(J.b.svg, J.b.xs[J.i], J.b.ys[J.j]);
+        if (!p || !J.b.svg.isConnected) m.boardJump = null;
+        else if (m.y >= p.y) {
+          m.boardJump = null;
+          boardEnter(J.b, J.i, J.j);
+          if (m.dieOnLand) die();
+          return;
+        }
+      }
+      if (m.vy > 0 && !m.boardJump) {
         for (const p of platforms()) {
           const r = p.el.getBoundingClientRect();
           if (m.x >= r.left && m.x <= r.right && prevY <= r.top + 1 && m.y >= r.top) return land(p, r.top);
@@ -279,7 +415,10 @@ const WK = (() => {
     }
     if (m.state === "landing" || m.state === "crouch") {
       if (now < m.until) return;
-      if (m.state === "crouch") return launch(m.jumpTo);
+      if (m.state === "crouch") {
+        if (m.grab) { m.on = null; set("rise", "air"); return; }
+        return launch(m.jumpTo);
+      }
       set("run", "run");
     }
     if (m.state === "idle") {
@@ -295,16 +434,26 @@ const WK = (() => {
       m.x = Math.max(lo, Math.min(hi, m.x)); m.vx = -m.vx;
     }
     if (Math.random() < 0.0035) { set("idle", "idle"); m.until = now + 1500 + Math.random() * 2500; return; }
-    if (!m.plan && Math.random() < 0.01) m.plan = chooseTarget();
+    if (!m.plan && Math.random() < 0.008 && jumpToBoard()) return;
+    if (!m.plan && Math.random() < 0.014) m.plan = chooseTarget();
     if (!m.plan) return;
     const p = rectOf(m.plan);
     if (!p) { m.plan = null; return; }
     const right = (p.left + p.right) / 2 > m.x;
     m.vx = (right ? 1 : -1) * RUN; m.left = !right;
     const side = right ? p.left : p.right, dist = Math.abs(side - m.x), above = m.y - p.top;
-    if (above > 30 && dist < 26 && m.y >= p.bottom - 6 && Math.random() < 0.5) {
+    if (above > 30 && dist < 26 && m.y >= p.bottom - 6 && Math.random() < 0.85) {
       // A box rising from where he stands: up its side.
       m.climbTo = m.plan; m.plan = null; set("climb", "climb");
+    } else if (above > 60 && dist > 20 && dist < 170 && !(m.x > p.left && m.x < p.right) && Math.random() < 0.65) {
+      // Leap at the box's side, grab it partway up and climb the rest.
+      const gx = right ? p.left : p.right;
+      const gy = p.top + Math.min(Math.max(30, (Math.min(p.bottom, m.y) - p.top) * 0.45), 110);
+      const rise = Math.max(m.y - gy + 12, 30);
+      m.vy = -Math.sqrt(2 * GRAV * rise);
+      m.vx = (gx - m.x) / (-m.vy / GRAV) * 1.05; m.left = !right;
+      m.grab = { p: m.plan, gx, right }; m.plan = null; m.on = null;
+      set("crouch", "crouch"); m.until = now + 110; m.jumpTo = null;
     } else if (dist < 150 || (m.x > p.left && m.x < p.right)) {
       m.jumpTo = m.plan; m.plan = null; set("crouch", "crouch"); m.until = now + 130;
     }
@@ -312,7 +461,9 @@ const WK = (() => {
 
   const SPEED = { idle: 220, twirl: 55, run: 85, climb: 150, crouch: 999, rise: 999, fall: 999, land: 999, dead: 999 };
   function draw() {
-    const dpr = devicePixelRatio || 1, S = scale();
+    const dpr = devicePixelRatio || 1;
+    let S = scale();
+    if (m.bd) { const p = boardPos(); if (p) S = Math.max(1, Math.min(S, Math.round(p.cellPx * 2.2 / 30))); }
     if (cv.width !== Math.round(innerWidth * dpr) || cv.height !== Math.round(innerHeight * dpr)) {
       cv.width = Math.round(innerWidth * dpr); cv.height = Math.round(innerHeight * dpr);
     }
@@ -374,7 +525,12 @@ const WK = (() => {
   }
   const btn = document.createElement("button");
   btn.className = "wukong-toggle";
-  btn.textContent = "🐒";
+  // Icon: his head from the standing frame, pixel for pixel.
+  const ico = document.createElement("canvas");
+  ico.className = "wukong-icon";
+  ico.width = 22; ico.height = 18;
+  WK.drawHead(ico.getContext("2d"));
+  btn.append(ico);
   btn.setAttribute("aria-label", "Show or hide Sun Wukong");
   function setOn(on) {
     try { localStorage.setItem(KEY, on ? "1" : "0"); } catch {}
