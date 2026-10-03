@@ -559,7 +559,7 @@ class Trainer {
       this.played.every((m, i) => m === L[i + 1]));
   }
   /* A problem is solved once every White reply along the correct lines has
-     been answered: White picks replies not faced yet, and finishing a line
+     been answered: White picks replies not faced yet (in line order), and finishing a line
      rewinds to the nearest White choice with replies left. Black only has to
      cover White's answers to the moves Black actually chose. */
   linesFrom(played) {
@@ -573,8 +573,10 @@ class Trainer {
     return [...moves].filter(m => !this.covered.has(key + "," + m));
   }
   engineReply() {
+    // Lines are stored in the order the source presents them (Redmond's video
+    // order), so White takes the earliest reply not faced yet.
     const open = this.openReplies(this.played);
-    if (open.length) return open[Math.floor(Math.random() * open.length)];
+    if (open.length) return open[0];
     const ls = this.consistentLines().filter(L => L.length - 1 > this.played.length);
     if (!ls.length) return null;
     ls.sort((a, b) => a[0] - b[0] || b.length - a.length);
@@ -762,7 +764,7 @@ class Trainer {
           if (!this.alive || this.explore) return;
           this.done = null;
           this.setStatus("", "", "");
-          const mv = next.open[Math.floor(Math.random() * next.open.length)];
+          const mv = next.open[0];
           this.rewindTo(next.prefix, mv);
         }, 1400);
         return;
