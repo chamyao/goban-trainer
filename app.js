@@ -2270,7 +2270,7 @@ const Music = {
       const vol = h("input", { type: "range", min: "0", max: "1", step: "0.05", class: "mw-volume", "aria-label": "Volume" });
       vol.value = this.load("gt-spotify-volume") ?? 0.7;
       vol.addEventListener("input", () => { this.store("gt-spotify-volume", +vol.value); this.player && this.player.setVolume(+vol.value); });
-      dev.append(h("span", {}, "🔊 This browser"), vol);
+      dev.append(vol);
     } else if (this.webState !== "failed") {
       dev.append(h("span", {}, "Connecting this browser to Spotify…"));
     }
