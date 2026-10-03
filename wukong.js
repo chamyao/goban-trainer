@@ -310,6 +310,22 @@ const WK = (() => {
     const B = m.bd;
     B.i = B.ti; B.j = B.tj; B.prog = 0;
     B.onStone = hasStone(B, B.i, B.j);
+    const H = m.hint;
+    if (H && H.svg === B.b.svg) {
+      if (B.i === H.si && B.j === H.sj) {
+        // Beside the point: a small step into reach, then point.
+        m.bd = null; set("run", "hintrun");
+        return;
+      }
+      const di = Math.sign(H.si - B.i), dj = Math.sign(H.sj - B.j);
+      const horiz = di && (!dj || Math.random() < 0.5);
+      B.di = horiz ? di : 0; B.dj = horiz ? 0 : dj;
+      B.ti = B.i + B.di; B.tj = B.j + B.dj;
+      if (B.di) m.left = B.di < 0;
+      B.hop = hasStone(B, B.ti, B.tj) !== B.onStone;
+      set(B.hop ? "rise" : B.dj ? "climb" : "run", "board");
+      return;
+    }
     if (now > B.leaveAt) return boardLeave();
     // Every so often: whack a neighbouring stone off the board.
     if (!B.onStone && now - (m.lastWhack || 0) > 15000 && Math.random() < 0.45) {
@@ -408,7 +424,9 @@ const WK = (() => {
       if (q && Math.abs(q.x - m.x) < 380 && m.y - q.y < 230 && q.y > 70 && q.y < innerHeight - 10) reach.push([i, j]);
     }));
     if (!reach.length) return false;
-    const [i, j] = reach[Math.floor(Math.random() * reach.length)];
+    const H = m.hint && m.hint.svg === b.svg ? m.hint : null;
+    const [i, j] = H ? reach.reduce((best, c) => Math.abs(c[0] - H.si) + Math.abs(c[1] - H.sj) < Math.abs(best[0] - H.si) + Math.abs(best[1] - H.sj) ? c : best)
+                     : reach[Math.floor(Math.random() * reach.length)];
     const p = toScreen(b.svg, b.xs[i], b.ys[j]);
     const above = m.y - p.y, rise = Math.max(above + 40, 50);
     m.vy = -Math.sqrt(2 * GRAV * rise);
@@ -433,39 +451,28 @@ const WK = (() => {
   }
   function pointAt(svg, x, y, done) {
     if (!cv || m.state === "dead") return done();
-    // Stand on whichever side keeps him on the board.
-    const r = svg.getBoundingClientRect(), p = toScreen(svg, x, y);
-    const dir = p && p.x - r.left < 80 ? -1 : 1;
-    m.hint = { svg, x, y, dir, done, at: performance.now() };
-    m.bd = null; m.plan = m.jumpTo = m.climbTo = m.grab = m.boardJump = null; m.on = null;
-    const spot = hintSpot(m.hint);
-    if (!spot) return done();
-    // Close by: run there. Further: leap.
-    if (Math.hypot(spot.x - m.x, spot.y - m.y) < 140) set("run", "hintrun");
-    else {
-      const above = m.y - spot.y, rise = Math.max(above + 50, 60);
-      m.vy = -Math.sqrt(2 * GRAV * rise);
-      const tUp = -m.vy / GRAV, tDown = Math.sqrt(2 * Math.max(rise - above, 8) / GRAV);
-      m.vx = (spot.x - m.x) / (tUp + tDown);
-      set("rise", "hintjump");
-    }
+    const b = findBoard();
+    if (!b || b.svg !== svg) return done();
+    const near = (arr, v) => arr.reduce((bi, a, n) => Math.abs(a - v) < Math.abs(arr[bi] - v) ? n : bi, 0);
+    const gi = near(b.xs, x), gj = near(b.ys, y);
+    // Stand at the intersection beside it (left if there is one), facing it.
+    const dir = gi > 0 ? 1 : -1;
+    m.hint = { svg, x, y, dir, done, at: performance.now(), si: gi - dir, sj: gj };
+    if (m.bd && (m.state === "boardidle" || m.state === "boardland")) m.until = 0;  // stop dawdling
   }
   function stepHint(now, k) {
     const H = m.hint, spot = H.svg.isConnected ? hintSpot(H) : null;
-    if (!spot || now - H.at > 6000) { H.done(); m.hint = null; set("fall", "air"); return; }
+    if (!spot) { H.done(); m.hint = null; set("fall", "air"); return; }
     if (m.state === "hintrun") {
       const dx = spot.x - m.x, dy = spot.y - m.y, d = Math.hypot(dx, dy), v = RUN * 1.3 * k;
       m.left = dx < 0;
       if (Math.abs(dy) > Math.abs(dx)) set("climb"); else set("run");
       if (d <= v) { m.x = spot.x; m.y = spot.y; arrive(now); } else { m.x += dx / d * v; m.y += dy / d * v; }
-    } else if (m.state === "hintjump") {
-      m.vy = Math.min(m.vy + GRAV * k, 18); m.x += m.vx * k; m.y += m.vy * k;
-      if (m.vy > 0) set("fall");
-      if (m.vy > 0 && m.y >= spot.y) { m.x = spot.x; m.y = spot.y; arrive(now); }
     } else if (m.state === "hintpoint") {
       m.x = spot.x; m.y = spot.y;  // stay put if the page scrolls
       if (!H.shown && m.animT > 220) { H.shown = true; H.done(); }
       if (m.animT > 2200) {
+        if (!H.shown) H.done();
         m.hint = null;
         // Back to roaming the board from the nearest intersection.
         const b = findBoard();
@@ -484,13 +491,15 @@ const WK = (() => {
     const now = performance.now(), k = dt / 16;
     m.t += dt; m.animT += dt;
     stepFlying(k);
-    if (m.hint) return stepHint(now, k);
+    // A hint he hasn't reached in 10 s: show the marker anyway.
+    if (m.hint && !m.hint.shown && now - m.hint.at > 10000) { m.hint.shown = true; m.hint.done(); }
+    if (m.hint && (m.state === "hintrun" || m.state === "hintpoint")) return stepHint(now, k);
     if (m.bd) {
       if (!m.bd.b.svg.isConnected) { m.bd = null; set("fall", "air"); return; }
       const B = m.bd;
       if (m.state === "board") {
         const len = Math.hypot(B.b.xs[B.ti] - B.b.xs[B.i], B.b.ys[B.tj] - B.b.ys[B.j]) || 1;
-        const speed = B.dj && !B.hop ? CLIMB_SPEED * 0.6 : RUN * 0.55;
+        const speed = (B.dj && !B.hop ? CLIMB_SPEED * 0.6 : RUN * 0.55) * (m.hint ? 1.7 : 1);
         B.prog = Math.min(1, B.prog + (speed * k) / (len * (toScreen(B.b.svg, 0, 0)?.cell || 1)));
         if (B.hop) set(B.prog < 0.5 ? "rise" : "fall");
         if (B.prog >= 1) boardChoose(now);
@@ -572,6 +581,7 @@ const WK = (() => {
       set("run", "run");
     }
     if (m.state === "idle") {
+      if (m.hint) { set("run", "run"); return; }
       if (m.anim === "idle" && Math.random() < 0.003) set("twirl");
       if (m.anim === "twirl" && m.animT > 16 * 55) set("idle");
       if (now > m.until) set("run", "run");
@@ -583,7 +593,21 @@ const WK = (() => {
       if (r && Math.random() < 0.5) { m.vy = -3; m.on = null; set("rise", "air"); return; }  // hop off
       m.x = Math.max(lo, Math.min(hi, m.x)); m.vx = -m.vx;
     }
-    if (Math.random() < 0.0035) { set("idle", "idle"); m.until = now + 1500 + Math.random() * 2500; return; }
+    if (m.hint) {
+      if (!m.plan && jumpToBoard()) return;
+      if (!m.plan) {
+        // Board out of reach: make for the box nearest to it.
+        const b = findBoard(), br = b && b.svg.getBoundingClientRect();
+        if (br) {
+          const cands = platforms().filter(p => p.el !== (m.on && m.on.el)).map(p => ({ p, r: p.el.getBoundingClientRect() }))
+            .filter(({ r }) => Math.abs((r.left + r.right) / 2 - m.x) < 420 && m.y - r.top < 240);
+          const dist = r => Math.hypot((r.left + r.right) / 2 - (br.left + br.right) / 2, r.top - (br.top + br.bottom) / 2);
+          const here = m.on && m.on !== "floor" ? dist(m.on.el.getBoundingClientRect()) : Math.hypot(m.x - (br.left + br.right) / 2, m.y - br.bottom);
+          const best = cands.sort((a, c) => dist(a.r) - dist(c.r))[0];
+          if (best && dist(best.r) < here) m.plan = best.p;
+        }
+      }
+    } else if (Math.random() < 0.0035) { set("idle", "idle"); m.until = now + 1500 + Math.random() * 2500; return; }
     if (!m.plan && Math.random() < 0.008 && jumpToBoard()) return;
     if (!m.plan && Math.random() < 0.014) m.plan = chooseTarget();
     if (!m.plan) return;

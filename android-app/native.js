@@ -13,10 +13,10 @@
   const finishOgsLogin = url => {
     if (!url || !url.startsWith("io.github.chamyao.gobantrainer://oauth")) return;
     const params = new URLSearchParams(url.split("?")[1] || "");
-    if (Spotify.isReturn(params)) {  // Spotify's login comes back the same way
-      Spotify.finishLogin(params)
+    if (Music.isReturn(params)) {  // Spotify's login comes back the same way
+      Music.finishLogin(params)
         .then(back => { if (location.hash === back) route(); else location.hash = back; })
-        .catch(e => Spotify.say(e.message));
+        .catch(e => Music.say(e.message));
       return;
     }
     OGSPlay.finishLogin(params)

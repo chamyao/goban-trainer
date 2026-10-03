@@ -863,11 +863,11 @@ class Trainer {
     const best = moves.find(m => this.outcome([...this.played, m], memo) === "ok") || moves[0];
     const [c, r] = cIdx(best);
     // With Sun Wukong around, he walks over and points at it with his staff;
-    // the marker appears once he points (or after 4 s if he can't get there).
+    // the marker appears once he points (or after 10 s if he can't get there).
     if (window.Wukong && Wukong.active()) {
       let shown = false;
       const show = () => { if (!shown) { shown = true; this.goban.pulse(c, r); } };
-      setTimeout(show, 4000);
+      setTimeout(show, 11000);
       Wukong.pointAt(this.goban.svg, this.goban.px(c), this.goban.py(r), show);
     } else this.goban.pulse(c, r);
   }
@@ -2032,9 +2032,9 @@ async function viewPlayer(id, num) {
 // PKCE login (public client, no secret) and the Web API's playback control:
 // the music plays in the Spotify app on a phone or computer (Premium), and
 // the ♪ button opens a widget to search, pick and control what plays.
-const Spotify = {
+const Music = {
   CLIENT_ID: "45e01bcb404941c1ab00da020e741a46",
-  SCOPES: "user-read-playback-state user-modify-playback-state user-read-currently-playing playlist-read-private playlist-read-collaborative",
+  SCOPES: "user-read-playback-state user-modify-playback-state user-read-currently-playing playlist-read-private playlist-read-collaborative streaming user-read-email user-read-private",
   AUTH_KEY: "gt-spotify-auth", FLOW_KEY: "gt-spotify-flow",
   message: "", listeners: new Set(), now: null,
 
@@ -2074,19 +2074,21 @@ const Spotify = {
     return flow.back || "#/";
   },
   async tokenRequest(fields) {
+    const { scope, ...form } = fields;
     const r = await fetch("https://accounts.spotify.com/api/token", {
-      method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: new URLSearchParams(fields),
+      method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: new URLSearchParams(form),
     });
     const d = await r.json().catch(() => ({}));
     if (!r.ok || !d.access_token) throw new Error(`Spotify login failed (${d.error_description || d.error || r.status})`);
-    return { access: d.access_token, refresh: d.refresh_token || fields.refresh_token, expires: Date.now() + (d.expires_in || 3600) * 1000 };
+    return { access: d.access_token, refresh: d.refresh_token || fields.refresh_token, expires: Date.now() + (d.expires_in || 3600) * 1000,
+             scope: d.scope || fields.scope || "" };
   },
   async token() {
     const a = this.load(this.AUTH_KEY);
     if (!a) throw new Error("Spotify isn't connected");
     if (Date.now() < a.expires - 60000) return a.access;
     try {
-      const t = await this.tokenRequest({ grant_type: "refresh_token", refresh_token: a.refresh, client_id: this.CLIENT_ID });
+      const t = await this.tokenRequest({ grant_type: "refresh_token", refresh_token: a.refresh, client_id: this.CLIENT_ID, scope: a.scope });
       this.store(this.AUTH_KEY, t);
       return t.access;
     } catch (e) { this.logout(); throw e; }
@@ -2103,18 +2105,55 @@ const Spotify = {
     if (!r.ok) { const e = new Error((d && d.error && d.error.message) || `Spotify returned ${r.status}`); e.status = r.status; throw e; }
     return d;
   },
-  // A player command; with no active player, wake the first available device.
+  // In-browser playback (Spotify's Web Playback SDK): desktop browsers only,
+  // Premium, and a login that granted "streaming".
+  canStream() {
+    const a = this.load(this.AUTH_KEY);
+    return !/Android|iPhone|iPad|Mobile/i.test(navigator.userAgent) && !!(a && /\bstreaming\b/.test(a.scope || ""));
+  },
+  needsReconnect() {
+    const a = this.load(this.AUTH_KEY);
+    return !/Android|iPhone|iPad|Mobile/i.test(navigator.userAgent) && a && !/\bstreaming\b/.test(a.scope || "");
+  },
+  startWebPlayer() {
+    if (this.player || this.sdkLoading || !this.canStream()) return;
+    this.sdkLoading = true;
+    window.onSpotifyWebPlaybackSDKReady = () => {
+      const player = new window.Spotify.Player({
+        name: "TCZW (this browser)", volume: 0.7,
+        getOAuthToken: cb => this.token().then(cb).catch(() => {}),
+      });
+      player.addListener("ready", ({ device_id }) => { this.webDevice = device_id; this.emit(); });
+      player.addListener("not_ready", () => { this.webDevice = null; this.emit(); });
+      for (const ev of ["initialization_error", "authentication_error", "account_error"])
+        player.addListener(ev, ({ message }) => this.say(ev === "account_error" ? "Playing in the browser needs Spotify Premium." : message));
+      player.connect();
+      this.player = player;
+    };
+    const sc = document.createElement("script");
+    sc.src = "https://sdk.scdn.co/spotify-player.js";
+    document.head.append(sc);
+  },
+  // A player command. With no active player, use this browser if it can
+  // play, else the first available device.
   async command(method, path, body) {
+    if (this.player && this.player.activateElement) this.player.activateElement().catch?.(() => {});
     try { await this.api(method, path, body); }
     catch (e) {
       if (e.status !== 404) throw e;
       const { devices = [] } = await this.api("GET", "/me/player/devices") || {};
-      const dev = devices.find(d => !d.is_restricted);
-      if (!dev) throw new Error("Open Spotify on your phone or computer first.");
+      const dev = devices.find(d => d.id === this.webDevice) || devices.find(d => !d.is_restricted);
+      if (!dev) throw new Error(/Android|iPhone|Mobile/i.test(navigator.userAgent)
+        ? "Open the Spotify app on this phone (play anything once), then try again."
+        : "Open Spotify somewhere, or reload this page to play in the browser.");
       await this.api(method, path + (path.includes("?") ? "&" : "?") + `device_id=${encodeURIComponent(dev.id)}`, body);
     }
     this.message = "";
     setTimeout(() => this.refresh(), 600);
+  },
+  async moveTo(id) {
+    await this.api("PUT", "/me/player", { device_ids: [id], play: true });
+    setTimeout(() => this.refresh(), 700);
   },
   playItem(it) {
     return it.type === "track" ? this.command("PUT", "/me/player/play", { uris: [it.uri] })
@@ -2122,9 +2161,11 @@ const Spotify = {
   },
   async refresh() {
     try {
-      const p = await this.api("GET", "/me/player");
+      const [p, d] = await Promise.all([this.api("GET", "/me/player"), this.api("GET", "/me/player/devices")]);
       this.now = p && p.item ? { name: p.item.name, by: (p.item.artists || []).map(a => a.name).join(", "),
                                  art: ((p.item.album && p.item.album.images) || []).slice(-1)[0]?.url, playing: p.is_playing } : null;
+      this.devices = ((d && d.devices) || []).filter(x => !x.is_restricted);
+      this.activeDevice = (p && p.device && p.device.id) || (this.devices.find(x => x.is_active) || {}).id || null;
     } catch (e) { this.now = null; }
     this.emit();
   },
@@ -2167,7 +2208,7 @@ const Spotify = {
     clearInterval(this.poll);
     if (open) {
       this.draw(true);
-      if (this.loggedIn()) { this.refresh(); this.poll = setInterval(() => this.refresh(), 5000); }
+      if (this.loggedIn()) { this.startWebPlayer(); this.refresh(); this.poll = setInterval(() => this.refresh(), 5000); }
     }
   },
   draw(fresh) {
@@ -2223,10 +2264,25 @@ const Spotify = {
                        : ctl("▶", "Play", () => this.command("PUT", "/me/player/play")),
         ctl("⏭", "Next", () => this.command("POST", "/me/player/next")),
       ]));
+    let dev = this.box.querySelector(".mw-devices");
+    if (!dev) { dev = h("div", { class: "mw-devices" }); now.after(dev); }
+    dev.innerHTML = "";
+    const devs = this.devices || [];
+    if (devs.length) {
+      const sel = h("select", { class: "mw-select", "aria-label": "Playing on" },
+        [...(this.activeDevice ? [] : [h("option", { value: "" }, "— choose a device —")]),
+         ...devs.map(d => { const o = h("option", { value: d.id }, d.id === this.webDevice ? "This browser" : `${d.name} (${d.type.toLowerCase()})`); if (d.id === this.activeDevice) o.selected = true; return o; })]);
+      sel.addEventListener("change", () => sel.value && this.moveTo(sel.value).catch(e => this.say(e.message)));
+      dev.append(h("span", {}, "Playing on"), sel);
+    } else {
+      dev.append(h("span", { class: "mw-sub" }, /Android|iPhone|Mobile/i.test(navigator.userAgent)
+        ? "No Spotify device found: open the Spotify app on this phone." : "No Spotify device found yet: open Spotify, or wait a moment for this browser to connect."));
+    }
+    if (this.needsReconnect()) dev.append(h("button", { class: "mw-logout", onclick: () => this.login() }, "Reconnect to play in this browser"));
     this.box.querySelector(".mw-msg").textContent = this.message || "";
   },
 };
-Spotify.mount();
+Music.mount();
 
 /* ---- record an in-person game: tap moves onto a board, then send to Review ---- */
 
@@ -3300,10 +3356,10 @@ Sync.init();
 // Back from OGS's login page with ?code=&state=: finish the login, then
 // drop the query string and land on the Play tab.
 const loginParams = new URLSearchParams(location.search);
-if (loginParams.get("state") && (loginParams.get("code") || loginParams.get("error")) && Spotify.isReturn(loginParams)) {
-  Spotify.finishLogin(loginParams)
+if (loginParams.get("state") && (loginParams.get("code") || loginParams.get("error")) && Music.isReturn(loginParams)) {
+  Music.finishLogin(loginParams)
     .then(back => history.replaceState(null, "", location.pathname + back))
-    .catch(e => { Spotify.message = e.message; history.replaceState(null, "", location.pathname + "#/"); })
+    .catch(e => { Music.message = e.message; history.replaceState(null, "", location.pathname + "#/"); })
     .finally(route);
 } else if (loginParams.get("state") && (loginParams.get("code") || loginParams.get("error"))) {
   OGSPlay.finishLogin(loginParams)
