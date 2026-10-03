@@ -2006,7 +2006,6 @@ async function viewPlayer(id, num) {
     h("div", { class: "panel" }, [
       h("div", { class: "nav-row" }, [btnPrev, h("span", { class: "pos" }, `${idx + 1} / ${book.problems.length}`), btnNext]),
     ]),
-    Spotify.panel(book, p),
     h("div", { class: "panel keys" },
       [["←/→", "prev / next"], ["U", "undo"], ["R", "reset"], ["H", "hint"], ["E", "explore"]]
         .map(([k, v]) => h("div", {}, [h("b", {}, k), v]))),
@@ -2018,32 +2017,24 @@ async function viewPlayer(id, num) {
 
   trainer = new Trainer(book, idx, { svg, boardCard, status, turnBadge, btnExplore, treePanel, treeBox, note });
   btnExplore.addEventListener("click", () => trainer.toggleExplore());
-  Spotify.problemOpened(book.id, p.id);
   window.__trainer = trainer;
   window.__engine = Engine;
 }
 
-/* ---- Spotify: each problem plays its own song from a playlist ---- */
+/* ---- Spotify: a small player in the header ---- */
 // PKCE login (public client, no secret) and the Web API's playback control:
-// the music plays in the Spotify app on a phone or computer (Premium only),
-// TCZW just tells it which song. A problem's song is picked from the chosen
-// playlist by a hash of the problem, so it's the same song every time;
-// "Use current song" pins whatever is playing to the problem instead.
+// the music plays in the Spotify app on a phone or computer (Premium), and
+// the ♪ button opens a widget to search, pick and control what plays.
 const Spotify = {
   CLIENT_ID: "45e01bcb404941c1ab00da020e741a46",
   SCOPES: "user-read-playback-state user-modify-playback-state user-read-currently-playing playlist-read-private playlist-read-collaborative",
-  AUTH_KEY: "gt-spotify-auth", FLOW_KEY: "gt-spotify-flow", LIST_KEY: "gt-spotify-playlist",
-  PINS_KEY: "gt-spotify-pins", ON_KEY: "gt-spotify-on",
-  current: null, lastUri: null, playTimer: null, message: "", listeners: new Set(),
+  AUTH_KEY: "gt-spotify-auth", FLOW_KEY: "gt-spotify-flow",
+  message: "", listeners: new Set(), now: null,
 
-  configured() { return !!this.CLIENT_ID; },
-  redirectUri() { return OGSPlay.redirectUri(); },
   load(key) { try { return JSON.parse(localStorage.getItem(key)); } catch { return null; } },
   store(key, v) { try { v == null ? localStorage.removeItem(key) : localStorage.setItem(key, JSON.stringify(v)); } catch {} },
   loggedIn() { return !!this.load(this.AUTH_KEY); },
-  enabled() { return this.load(this.ON_KEY) !== false; },
-  setEnabled(on) { this.store(this.ON_KEY, on); if (!on) this.lastUri = null; this.emit(); },
-  playlist() { return this.load(this.LIST_KEY); },
+  redirectUri() { return OGSPlay.redirectUri(); },
   onChange(fn) { this.listeners.add(fn); return () => this.listeners.delete(fn); },
   emit() { for (const fn of this.listeners) fn(); },
   say(msg) { this.message = msg; this.emit(); },
@@ -2093,183 +2084,142 @@ const Spotify = {
       return t.access;
     } catch (e) { this.logout(); throw e; }
   },
-  logout() { this.store(this.AUTH_KEY, null); this.current = this.lastUri = null; this.emit(); },
-
+  logout() { this.store(this.AUTH_KEY, null); this.now = null; this.emit(); },
   async api(method, path, body) {
     const r = await fetch("https://api.spotify.com/v1" + path, {
       method, headers: { Authorization: `Bearer ${await this.token()}`, ...(body ? { "Content-Type": "application/json" } : {}) },
       body: body ? JSON.stringify(body) : undefined,
     });
     if (r.status === 401) { this.logout(); throw new Error("Spotify login expired — connect again."); }
-    if (r.status === 204) return null;
+    if (r.status === 204 || r.status === 202) return null;
     const d = await r.json().catch(() => null);
-    if (!r.ok) { const e = new Error((d && d.error && d.error.message) || `Spotify returned ${r.status}`); e.status = r.status; e.reason = d && d.error && d.error.reason; throw e; }
+    if (!r.ok) { const e = new Error((d && d.error && d.error.message) || `Spotify returned ${r.status}`); e.status = r.status; throw e; }
     return d;
   },
-
-  // Accepts a playlist link, spotify:playlist:… URI or bare id.
-  async setPlaylist(link) {
-    const m = /playlist[/:]([A-Za-z0-9]{10,})/.exec(link) || /^([A-Za-z0-9]{10,})$/.exec(link.trim());
-    if (!m) throw new Error("That doesn't look like a Spotify playlist link.");
-    const id = m[1];
-    const meta = await this.api("GET", `/playlists/${id}?fields=name`);
-    const tracks = [];
-    let next = `/playlists/${id}/tracks?limit=100&fields=next,items(track(uri,name,is_local,artists(name)))`;
-    while (next) {
-      const page = await this.api("GET", next);
-      for (const it of page.items || []) {
-        const t = it.track || it.item;
-        if (t && t.uri && !t.is_local && t.uri.startsWith("spotify:track:")) tracks.push([t.uri, t.name, (t.artists || []).map(a => a.name).join(", ")]);
-      }
-      next = page.next ? page.next.replace("https://api.spotify.com/v1", "") : null;
-    }
-    if (!tracks.length) throw new Error("That playlist has no playable songs.");
-    this.store(this.LIST_KEY, { id, name: meta.name, tracks });
-    this.lastUri = null;
-    this.emit();
-  },
-
-  pinKey(bookId, pid) { return `${bookId}/${pid}`; },
-  // The problem's song: its pin, else a stable pick from the playlist.
-  songFor(bookId, pid) {
-    const pin = (this.load(this.PINS_KEY) || {})[this.pinKey(bookId, pid)];
-    if (pin) return pin;
-    const pl = this.playlist();
-    if (!pl || !pl.tracks.length) return null;
-    let h = 2166136261;  // FNV-1a
-    for (const c of `${bookId}/${pid}`) h = Math.imul(h ^ c.charCodeAt(0), 16777619) >>> 0;
-    return pl.tracks[h % pl.tracks.length];
-  },
-  async pinCurrent(bookId, pid) {
-    const now = await this.api("GET", "/me/player/currently-playing");
-    const t = now && now.item;
-    if (!t || !t.uri || !t.uri.startsWith("spotify:track:")) throw new Error("Nothing is playing in Spotify right now.");
-    const pins = this.load(this.PINS_KEY) || {};
-    pins[this.pinKey(bookId, pid)] = [t.uri, t.name, (t.artists || []).map(a => a.name).join(", ")];
-    this.store(this.PINS_KEY, pins);
-    this.current = pins[this.pinKey(bookId, pid)];
-    this.lastUri = t.uri;
-    this.say("");
-  },
-  unpin(bookId, pid) {
-    const pins = this.load(this.PINS_KEY) || {};
-    delete pins[this.pinKey(bookId, pid)];
-    this.store(this.PINS_KEY, pins);
-    this.lastUri = null;
-    this.emit();
-  },
-  pinned(bookId, pid) { return !!(this.load(this.PINS_KEY) || {})[this.pinKey(bookId, pid)]; },
-
-  // Opening a problem switches to its song; a short delay so flicking
-  // through problems doesn't fire a request per step.
-  problemOpened(bookId, pid) {
-    clearTimeout(this.playTimer);
-    if (!this.configured() || !this.loggedIn() || !this.enabled()) return;
-    const song = this.songFor(bookId, pid);
-    if (!song) return;
-    this.current = song;
-    this.emit();
-    if (song[0] === this.lastUri) return;
-    this.playTimer = setTimeout(() => this.play(song).catch(e => this.say(e.message)), 700);
-  },
-  RADIO_KEY: "gt-spotify-radio", radioCache: new Map(), recsBlocked: false,
-  radioOn() { return this.load(this.RADIO_KEY) !== false; },
-  setRadio(on) { this.store(this.RADIO_KEY, on); this.lastUri = null; this.emit(); },
-  // Song radio: what plays after the problem's song. Spotify's
-  // recommendations seeded with it where the app may still use them (it was
-  // closed to apps made after late 2024); otherwise the artist's top tracks
-  // mixed with the rest of the playlist.
-  async radioFor(uri) {
-    if (this.radioCache.has(uri)) return this.radioCache.get(uri);
-    const id = uri.split(":").pop(), out = [];
-    if (!this.recsBlocked) {
-      try {
-        const r = await this.api("GET", `/recommendations?seed_tracks=${id}&limit=25`);
-        for (const t of (r && r.tracks) || []) if (t.uri && t.uri !== uri) out.push(t.uri);
-      } catch (e) { if (e.status === 403 || e.status === 404) this.recsBlocked = true; }
-    }
-    if (out.length < 5) {
-      try {
-        const t = await this.api("GET", `/tracks/${id}`);
-        const artist = t && t.artists && t.artists[0];
-        if (artist) {
-          const top = await this.api("GET", `/artists/${artist.id}/top-tracks?market=US`);
-          for (const x of (top && top.tracks) || []) if (x.uri !== uri && !out.includes(x.uri)) out.push(x.uri);
-        }
-      } catch {}
-      const pl = this.playlist();
-      if (pl) {
-        const rest = pl.tracks.map(t => t[0]).filter(u => u !== uri && !out.includes(u));
-        for (let i = rest.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [rest[i], rest[j]] = [rest[j], rest[i]]; }
-        // Interleave: artist songs and playlist songs take turns.
-        const mixed = [];
-        while (out.length || rest.length) { if (out.length) mixed.push(out.shift()); if (rest.length) mixed.push(rest.shift()); }
-        out.push(...mixed.slice(0, 30));
-      }
-    }
-    this.radioCache.set(uri, out);
-    return out;
-  },
-  async play(song) {
-    const uris = [song[0], ...(this.radioOn() ? await this.radioFor(song[0]).catch(() => []) : [])];
-    try {
-      await this.api("PUT", "/me/player/play", { uris });
-    } catch (e) {
+  // A player command; with no active player, wake the first available device.
+  async command(method, path, body) {
+    try { await this.api(method, path, body); }
+    catch (e) {
       if (e.status !== 404) throw e;
-      // No active player: wake the first available device.
       const { devices = [] } = await this.api("GET", "/me/player/devices") || {};
       const dev = devices.find(d => !d.is_restricted);
-      if (!dev) throw new Error("Open Spotify on your phone or computer, then tap Play.");
-      await this.api("PUT", `/me/player/play?device_id=${encodeURIComponent(dev.id)}`, { uris });
+      if (!dev) throw new Error("Open Spotify on your phone or computer first.");
+      await this.api(method, path + (path.includes("?") ? "&" : "?") + `device_id=${encodeURIComponent(dev.id)}`, body);
     }
-    this.lastUri = song[0];
-    this.say("");
+    this.message = "";
+    setTimeout(() => this.refresh(), 600);
   },
-  async pause() { await this.api("PUT", "/me/player/pause"); this.lastUri = null; },
+  playItem(it) {
+    return it.type === "track" ? this.command("PUT", "/me/player/play", { uris: [it.uri] })
+                               : this.command("PUT", "/me/player/play", { context_uri: it.uri });
+  },
+  async refresh() {
+    try {
+      const p = await this.api("GET", "/me/player");
+      this.now = p && p.item ? { name: p.item.name, by: (p.item.artists || []).map(a => a.name).join(", "),
+                                 art: ((p.item.album && p.item.album.images) || []).slice(-1)[0]?.url, playing: p.is_playing } : null;
+    } catch (e) { this.now = null; }
+    this.emit();
+  },
+  item(x, type) {
+    const imgs = x.images || (x.album && x.album.images) || [];
+    const sub = type === "track" ? (x.artists || []).map(a => a.name).join(", ")
+              : type === "album" ? (x.artists || []).map(a => a.name).join(", ")
+              : type === "playlist" ? `by ${x.owner && x.owner.display_name || "Spotify"}` : "Artist";
+    return { type, uri: x.uri, name: x.name, sub, art: (imgs.slice(-1)[0] || {}).url };
+  },
+  async search(q) {
+    const r = await this.api("GET", `/search?q=${encodeURIComponent(q)}&type=track,playlist,album,artist&limit=5`);
+    const pick = (key, type) => ((r && r[key] && r[key].items) || []).filter(Boolean).map(x => this.item(x, type));
+    return [["Songs", pick("tracks", "track")], ["Playlists", pick("playlists", "playlist")],
+            ["Albums", pick("albums", "album")], ["Artists", pick("artists", "artist")]];
+  },
+  async myPlaylists() {
+    const r = await this.api("GET", "/me/playlists?limit=30");
+    return [["Your playlists", ((r && r.items) || []).filter(Boolean).map(x => this.item(x, "playlist"))]];
+  },
 
-  // The Music panel on a problem page.
-  panel(book, p) {
-    const box = h("div", { class: "panel music" });
-    const draw = () => {
-      box.innerHTML = "";
-      box.append(h("h2", {}, "Music"));
-      if (!this.configured()) { box.style.display = "none"; return; }
-      if (!this.loggedIn()) {
-        box.append(h("div", { class: "meta-sub" }, "Each problem plays its own song from a playlist of yours (Spotify Premium)."),
-                   h("div", { class: "controls" }, [h("button", { class: "wide", onclick: () => this.login().catch(e => this.say(e.message)) }, "Connect Spotify")]));
-      } else if (!this.playlist()) {
-        const input = h("input", { type: "text", placeholder: "Paste a Spotify playlist link", class: "music-input" });
-        const save = h("button", { class: "wide", onclick: async () => {
-          save.disabled = true; this.say("Loading playlist…");
-          try { await this.setPlaylist(input.value); this.problemOpened(book.id, p.id); }
-          catch (e) { this.say(e.message); }
-          finally { save.disabled = false; }
-        } }, "Use this playlist");
-        box.append(h("div", { class: "meta-sub" }, "Pick the playlist the problems' songs come from."), input, h("div", { class: "controls" }, [save]));
-      } else {
-        const song = this.songFor(book.id, p.id), pl = this.playlist(), on = this.enabled();
-        box.append(h("div", { class: "music-now" }, song ? [h("b", {}, song[1]), ` — ${song[2]}`] : "No song"),
-                   h("div", { class: "meta-sub" }, this.pinned(book.id, p.id) ? "Pinned to this problem" : `From “${pl.name}”`));
-        const act = fn => async () => { try { await fn(); } catch (e) { this.say(e.message); } };
-        box.append(h("div", { class: "controls" }, [
-          h("button", { onclick: act(() => song && this.play(song)) }, "▶ Play"),
-          h("button", { onclick: act(() => this.pause()) }, "❚❚ Pause"),
-          this.pinned(book.id, p.id)
-            ? h("button", { onclick: () => this.unpin(book.id, p.id) }, "Unpin")
-            : h("button", { title: "Tie the song playing in Spotify now to this problem", onclick: act(() => this.pinCurrent(book.id, p.id)) }, "Use current song"),
-          h("button", { onclick: () => { this.setEnabled(!on); if (!on) this.problemOpened(book.id, p.id); } }, on ? "Auto-play: on" : "Auto-play: off"),
-          h("button", { title: "After the problem's song, keep playing similar songs",
-                        onclick: () => this.setRadio(!this.radioOn()) }, this.radioOn() ? "Song radio: on" : "Song radio: off"),
-          h("button", { onclick: () => { this.store(this.LIST_KEY, null); this.emit(); } }, "Change playlist"),
-        ]));
-      }
-      if (this.message) box.append(h("div", { class: "meta-sub music-msg" }, this.message));
-    };
-    draw();
-    const off = this.onChange(() => { if (!box.isConnected) return off(); draw(); });
-    return box;
+  // The widget: a ♪ button in the header and a panel under it.
+  mount() {
+    const header = document.querySelector("header");
+    if (!header || this.btn) return;
+    this.btn = h("button", { class: "music-toggle", title: "Music", "aria-label": "Music" }, "♪");
+    this.box = h("div", { class: "music-widget", hidden: "" });
+    this.btn.addEventListener("click", () => this.toggle());
+    document.addEventListener("keydown", e => { if (e.key === "Escape" && !this.box.hidden) this.toggle(false); });
+    document.addEventListener("click", e => {
+      if (!this.box.hidden && !this.box.contains(e.target) && e.target !== this.btn) this.toggle(false);
+    });
+    header.append(this.btn);
+    document.body.append(this.box);
+    this.onChange(() => this.draw());
+  },
+  toggle(open = this.box.hidden) {
+    this.box.hidden = !open;
+    if (open) this.box.style.top = Math.round(this.btn.getBoundingClientRect().bottom + 8) + "px";
+    clearInterval(this.poll);
+    if (open) {
+      this.draw(true);
+      if (this.loggedIn()) { this.refresh(); this.poll = setInterval(() => this.refresh(), 5000); }
+    }
+  },
+  draw(fresh) {
+    if (!this.box || this.box.hidden) return;
+    if (!this.loggedIn()) {
+      this.box.innerHTML = "";
+      this.box.append(h("div", { class: "mw-title" }, "Music"),
+        h("div", { class: "mw-sub" }, "Control Spotify from here (Premium). Music plays in the Spotify app on your phone or computer."),
+        h("button", { class: "mw-connect", onclick: () => this.login().catch(e => this.say(e.message)) }, "Connect Spotify"));
+      if (this.message) this.box.append(h("div", { class: "mw-msg" }, this.message));
+      return;
+    }
+    if (fresh || !this.box.querySelector(".mw-search")) {
+      this.box.innerHTML = "";
+      const now = h("div", { class: "mw-now" });
+      const input = h("input", { class: "mw-search", type: "search", placeholder: "Search songs, playlists, albums, artists" });
+      const results = h("div", { class: "mw-results" });
+      const msg = h("div", { class: "mw-msg" });
+      this.box.append(now, input, results, msg,
+        h("button", { class: "mw-logout", onclick: () => this.logout() }, "Disconnect Spotify"));
+      let timer = 0, seq = 0;
+      const show = async () => {
+        const q = input.value.trim(), my = ++seq;
+        try {
+          const groups = q ? await this.search(q) : await this.myPlaylists();
+          if (my !== seq) return;
+          results.innerHTML = "";
+          for (const [title, items] of groups) {
+            if (!items.length) continue;
+            results.append(h("div", { class: "mw-group" }, title));
+            for (const it of items) results.append(h("button", { class: "mw-item", onclick: () => this.playItem(it).catch(e => this.say(e.message)) }, [
+              it.art ? h("img", { src: it.art, alt: "" }) : h("span", { class: "mw-noart" }, "♪"),
+              h("span", { class: "mw-text" }, [h("b", {}, it.name), h("small", {}, it.sub)]),
+            ]));
+          }
+          if (!results.children.length) results.append(h("div", { class: "mw-sub" }, q ? "No results." : "No playlists yet — search above."));
+        } catch (e) { this.say(e.message); }
+      };
+      input.addEventListener("input", () => { clearTimeout(timer); timer = setTimeout(show, 300); });
+      show();
+      setTimeout(() => input.focus(), 0);
+    }
+    const now = this.box.querySelector(".mw-now");
+    now.innerHTML = "";
+    const n = this.now;
+    const ctl = (label, title, fn) => h("button", { class: "mw-ctl", title, onclick: () => fn().catch(e => this.say(e.message)) }, label);
+    now.append(
+      n && n.art ? h("img", { src: n.art, alt: "" }) : h("span", { class: "mw-noart" }, "♪"),
+      h("span", { class: "mw-text" }, n ? [h("b", {}, n.name), h("small", {}, n.by)] : [h("b", {}, "Nothing playing"), h("small", {}, "Pick something below")]),
+      h("span", { class: "mw-ctls" }, [
+        ctl("⏮", "Previous", () => this.command("POST", "/me/player/previous")),
+        n && n.playing ? ctl("⏸", "Pause", () => this.command("PUT", "/me/player/pause"))
+                       : ctl("▶", "Play", () => this.command("PUT", "/me/player/play")),
+        ctl("⏭", "Next", () => this.command("POST", "/me/player/next")),
+      ]));
+    this.box.querySelector(".mw-msg").textContent = this.message || "";
   },
 };
+Spotify.mount();
 
 /* ---- record an in-person game: tap moves onto a board, then send to Review ---- */
 
