@@ -107,15 +107,16 @@ standard 19×19 "rapid" automatch (5 min + 5×30 s byoyomi, Japanese rules,
 opponents within 3 ranks). Login is OAuth2 with PKCE (no client secret, no
 server of ours); play runs over OGS's realtime WebSocket. A finished game
 opens in Review with one tap, and KataGo can propose the dead stones at the
-end. On touch screens a move takes two taps (preview, then confirm).
+end. On touch screens a move takes two taps (preview, then confirm). The
+lobby also lists your unfinished games, correspondence ones included, and
+opens any of them.
 
 Setup: register a **Public**, **Authorization code** application at
-`https://online-go.com/oauth2/applications/` (and/or beta.online-go.com) with
+`https://online-go.com/oauth2/applications/` with
 redirect URIs `https://chamyao.github.io/goban-trainer/` and
 `https://chamyao.github.io/goban-trainer/oauth-app.html` (the Android app's
-hand-off page), then put the client IDs in `OGSPlay.CLIENT_IDS` in `app.js`.
-Setting `localStorage["goban.ogsServer"] = "beta"` switches to the test
-server.
+hand-off page), then put the client ID in `OGSPlay.CLIENT_IDS.prod` in `app.js`. Play always
+uses online-go.com (the test server is no longer selectable).
 
 `ogs-test.html` checks OGS access from a browser, and the **OGS probe**
 workflow (`tools/ogs-probe/`) checks OGS's CORS and WebSocket origin handling
