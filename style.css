@@ -26,6 +26,7 @@ header {
 header h1 { font-size: 17px; margin: 0; }
 header h1 a { text-decoration: none; }
 header h1 .name-short { display: none; }
+header h1 .name-zh { margin-right: 4px; }
 #tabs { display: flex; gap: 4px; }
 #tabs a {
   text-decoration: none; padding: 6px 14px; border-radius: 8px;

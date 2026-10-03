@@ -1,4 +1,6 @@
-# Tian Cai Zhi Wang (TCZW)
+# 天才之王 Tian Cai Zhi Wang (TCZW)
+
+*King of Geniuses*
 
 Static web app for interactive tsumego/tesuji/endgame practice, built on the
 problem data collected by [101books](https://github.com/101books/101books.github.io)
