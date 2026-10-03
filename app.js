@@ -28,6 +28,16 @@ function markResult(bookId, pid, ok) {
   Sync.scheduleSave();
 }
 
+// Back to unattempted. 0 rather than deleting, so the next sync sends the
+// change instead of the old result coming back from the Sheet.
+function clearResult(bookId, pid) {
+  const prog = loadProgress();
+  if (!prog[bookId] || !prog[bookId][pid]) return;
+  prog[bookId][pid] = 0;
+  localStorage.setItem(PROGRESS_KEY, JSON.stringify(prog));
+  Sync.scheduleSave();
+}
+
 const FAVORITES_KEY = "gt-favorites";
 function loadFavorites() {
   try { return new Set(JSON.parse(localStorage.getItem(FAVORITES_KEY)) || []); }
@@ -750,6 +760,12 @@ class Trainer {
     markResult(this.book.id, this.p.id, true);
     this.setStatus("ok", "✓", "Claimed solved");
     this.render();
+  }
+
+  markUnsolved() {
+    clearResult(this.book.id, this.p.id);
+    this.reset();
+    this.setStatus("", "↺", "Marked unsolved — try it again");
   }
 
   finish(kind) {
@@ -1966,6 +1982,8 @@ async function viewPlayer(id, num) {
         btnExplore,
         h("button", { class: "wide", title: "Answer key wrong, or you found another solution? Count it as solved.",
                       onclick: () => trainer.claimSolved() }, "Claim solved"),
+        h("button", { class: "wide", title: "Clear this problem's solved or failed mark.",
+                      onclick: () => trainer.markUnsolved() }, "Mark unsolved"),
       ]),
     ]),
     h("div", { class: "panel" }, [
