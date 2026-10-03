@@ -20,7 +20,11 @@ jobs:
   fetch:
     runs-on: ubuntu-latest
     steps:
-      - run: pip install -q yt-dlp && sudo apt-get install -y -qq ffmpeg >/dev/null
+      - run: pip install -q "yt-dlp[default]" && sudo apt-get install -y -qq ffmpeg >/dev/null
+      # yt-dlp needs a JS runtime to solve YouTube's player challenges.
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
       - name: List the playlist
         run: |
           mkdir -p out
@@ -31,12 +35,21 @@ jobs:
           for i, e in enumerate(d['entries'], 1): print(i, e['id'], e.get('duration'), e.get('title'))
           "
       - name: Download videos and captions
+        # GitHub's IPs often get YouTube's bot check; try the player clients
+        # that are sometimes allowed from data centers, one at a time.
         run: |
-          yt-dlp --playlist-items "${{ github.event.inputs.videos || '1' }}" \
-            -f "bv*[height<=720][ext=mp4]/bv*[height<=720]/b[height<=720]" \
-            --write-auto-subs --write-subs --sub-langs "en.*" --sub-format vtt \
-            --write-info-json -o "out/%(playlist_index)03d-%(id)s.%(ext)s" "$PLAYLIST"
-          ls -la out
+          for client in default tv web_safari mweb ios web_embedded; do
+            echo "::group::player_client=$client"
+            if yt-dlp --playlist-items "${{ github.event.inputs.videos || '1' }}" \
+                 --extractor-args "youtube:player_client=$client" \
+                 -f "bv*[height<=720][ext=mp4]/bv*[height<=720]/b[height<=720]" \
+                 --write-auto-subs --write-subs --sub-langs "en.*" --sub-format vtt \
+                 --write-info-json -o "out/%(playlist_index)03d-%(id)s.%(ext)s" "$PLAYLIST"; then
+              echo "::endgroup::"; echo "WORKED with player_client=$client"; ls -la out; exit 0
+            fi
+            echo "::endgroup::"; echo "FAILED with player_client=$client"
+          done
+          exit 1
       - uses: actions/upload-artifact@v4
         if: always()
         with:
