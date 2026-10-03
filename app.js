@@ -1823,13 +1823,13 @@ async function viewLibrary() {
   const favs = loadFavorites();
   root.innerHTML = "";
   const cats = { tsumego: "Tsumego", tesuji: "Tesuji", endgame: "Endgame" };
-  for (const cat in cats) {
-    root.append(h("div", { class: "cat-title" }, cats[cat]));
+  // Favorited books from every category come first; they stay in their category too.
+  const sections = [["Favorites", index.filter(b => favs.has(b.id))],
+                    ...Object.entries(cats).map(([cat, title]) => [title, index.filter(b => b.category === cat)])];
+  for (const [title, books] of sections) {
+    if (!books.length) continue;
+    root.append(h("div", { class: "cat-title" }, title));
     const list = h("div", { class: "book-list" });
-    const books = index.filter(x => x.category === cat)
-      .map((b, i) => ({ b, i }))
-      .sort((x, y) => (favs.has(y.b.id) - favs.has(x.b.id)) || (x.i - y.i))
-      .map(x => x.b);
     for (const b of books) {
       const solved = Object.values(prog[b.id] || {}).filter(v => v === 1).length;
       const isFav = favs.has(b.id);
