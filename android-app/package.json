@@ -2,7 +2,7 @@
   "name": "goban-trainer-android",
   "private": true,
   "version": "1.0.0",
-  "description": "Android wrapper for Goban Trainer (Capacitor)",
+  "description": "Android wrapper for Tian Cai Zhi Wang (Capacitor)",
   "scripts": {
     "prepare-web": "node prepare-web.mjs",
     "sync": "npm run prepare-web && cap sync android"

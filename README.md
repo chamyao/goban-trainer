@@ -1,4 +1,4 @@
-# Goban Trainer
+# Tian Cai Zhi Wang (TCZW)
 
 Static web app for interactive tsumego/tesuji/endgame practice, built on the
 problem data collected by [101books](https://github.com/101books/101books.github.io)

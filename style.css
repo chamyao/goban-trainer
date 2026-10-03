@@ -25,6 +25,7 @@ header {
 }
 header h1 { font-size: 17px; margin: 0; }
 header h1 a { text-decoration: none; }
+header h1 .name-short { display: none; }
 #tabs { display: flex; gap: 4px; }
 #tabs a {
   text-decoration: none; padding: 6px 14px; border-radius: 8px;
@@ -310,6 +311,8 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
 @media (max-width: 700px) {
   header { flex-wrap: wrap; gap: 8px 10px; padding: 10px 16px; }
   header h1 { font-size: 16px; }
+  header h1 .name-full { display: none; }
+  header h1 .name-short { display: inline; }
   #tabs a { padding: 5px 10px; }
   #crumbs { order: 10; flex-basis: 100%; }
   .engine-chip, .auth-chip { padding: 4px 10px; }
