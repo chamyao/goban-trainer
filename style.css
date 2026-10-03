@@ -344,3 +344,10 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
 }
 .music .controls { margin-top: 8px; }
 .music .music-msg { margin-top: 8px; }
+
+/* Sun Wukong toggle */
+.wukong-toggle {
+  background: var(--chip); border: none; border-radius: 999px; padding: 3px 9px;
+  font-size: 15px; line-height: 1.4; cursor: pointer;
+}
+.wukong-toggle.off { opacity: .45; filter: grayscale(1); }

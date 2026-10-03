@@ -11,7 +11,7 @@ const www = join(here, "www");
 
 rmSync(www, { recursive: true, force: true });
 mkdirSync(www);
-for (const f of ["style.css", "engine/engine-utils.js", "engine/katago-worker.js", "tfjs", "data"])
+for (const f of ["style.css", "wukong.js", "engine/engine-utils.js", "engine/katago-worker.js", "tfjs", "data"])
   cpSync(join(repo, f), join(www, f), { recursive: true });
 
 // The Android build silently gunzips *.gz assets and drops the extension, so

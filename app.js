@@ -797,6 +797,7 @@ class Trainer {
     markResult(this.book.id, this.p.id, kind === "ok");
     this.setStatus(kind, kind === "ok" ? "✓" : "✗", kind === "ok" ? "Correct" : "Wrong");
     this.render();
+    window.dispatchEvent(new CustomEvent("tczw:result", { detail: kind }));  // Sun Wukong reacts
   }
 
   push() {
