@@ -2172,16 +2172,55 @@ const Spotify = {
     if (song[0] === this.lastUri) return;
     this.playTimer = setTimeout(() => this.play(song).catch(e => this.say(e.message)), 700);
   },
+  RADIO_KEY: "gt-spotify-radio", radioCache: new Map(), recsBlocked: false,
+  radioOn() { return this.load(this.RADIO_KEY) !== false; },
+  setRadio(on) { this.store(this.RADIO_KEY, on); this.lastUri = null; this.emit(); },
+  // Song radio: what plays after the problem's song. Spotify's
+  // recommendations seeded with it where the app may still use them (it was
+  // closed to apps made after late 2024); otherwise the artist's top tracks
+  // mixed with the rest of the playlist.
+  async radioFor(uri) {
+    if (this.radioCache.has(uri)) return this.radioCache.get(uri);
+    const id = uri.split(":").pop(), out = [];
+    if (!this.recsBlocked) {
+      try {
+        const r = await this.api("GET", `/recommendations?seed_tracks=${id}&limit=25`);
+        for (const t of (r && r.tracks) || []) if (t.uri && t.uri !== uri) out.push(t.uri);
+      } catch (e) { if (e.status === 403 || e.status === 404) this.recsBlocked = true; }
+    }
+    if (out.length < 5) {
+      try {
+        const t = await this.api("GET", `/tracks/${id}`);
+        const artist = t && t.artists && t.artists[0];
+        if (artist) {
+          const top = await this.api("GET", `/artists/${artist.id}/top-tracks?market=US`);
+          for (const x of (top && top.tracks) || []) if (x.uri !== uri && !out.includes(x.uri)) out.push(x.uri);
+        }
+      } catch {}
+      const pl = this.playlist();
+      if (pl) {
+        const rest = pl.tracks.map(t => t[0]).filter(u => u !== uri && !out.includes(u));
+        for (let i = rest.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [rest[i], rest[j]] = [rest[j], rest[i]]; }
+        // Interleave: artist songs and playlist songs take turns.
+        const mixed = [];
+        while (out.length || rest.length) { if (out.length) mixed.push(out.shift()); if (rest.length) mixed.push(rest.shift()); }
+        out.push(...mixed.slice(0, 30));
+      }
+    }
+    this.radioCache.set(uri, out);
+    return out;
+  },
   async play(song) {
+    const uris = [song[0], ...(this.radioOn() ? await this.radioFor(song[0]).catch(() => []) : [])];
     try {
-      await this.api("PUT", "/me/player/play", { uris: [song[0]] });
+      await this.api("PUT", "/me/player/play", { uris });
     } catch (e) {
       if (e.status !== 404) throw e;
       // No active player: wake the first available device.
       const { devices = [] } = await this.api("GET", "/me/player/devices") || {};
       const dev = devices.find(d => !d.is_restricted);
       if (!dev) throw new Error("Open Spotify on your phone or computer, then tap Play.");
-      await this.api("PUT", `/me/player/play?device_id=${encodeURIComponent(dev.id)}`, { uris: [song[0]] });
+      await this.api("PUT", `/me/player/play?device_id=${encodeURIComponent(dev.id)}`, { uris });
     }
     this.lastUri = song[0];
     this.say("");
@@ -2219,7 +2258,9 @@ const Spotify = {
             ? h("button", { onclick: () => this.unpin(book.id, p.id) }, "Unpin")
             : h("button", { title: "Tie the song playing in Spotify now to this problem", onclick: act(() => this.pinCurrent(book.id, p.id)) }, "Use current song"),
           h("button", { onclick: () => { this.setEnabled(!on); if (!on) this.problemOpened(book.id, p.id); } }, on ? "Auto-play: on" : "Auto-play: off"),
-          h("button", { class: "wide", onclick: () => { this.store(this.LIST_KEY, null); this.emit(); } }, "Change playlist"),
+          h("button", { title: "After the problem's song, keep playing similar songs",
+                        onclick: () => this.setRadio(!this.radioOn()) }, this.radioOn() ? "Song radio: on" : "Song radio: off"),
+          h("button", { onclick: () => { this.store(this.LIST_KEY, null); this.emit(); } }, "Change playlist"),
         ]));
       }
       if (this.message) box.append(h("div", { class: "meta-sub music-msg" }, this.message));
