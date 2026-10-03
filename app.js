@@ -2029,7 +2029,7 @@ async function viewPlayer(id, num) {
 // playlist by a hash of the problem, so it's the same song every time;
 // "Use current song" pins whatever is playing to the problem instead.
 const Spotify = {
-  CLIENT_ID: "",
+  CLIENT_ID: "45e01bcb404941c1ab00da020e741a46",
   SCOPES: "user-read-playback-state user-modify-playback-state user-read-currently-playing playlist-read-private playlist-read-collaborative",
   AUTH_KEY: "gt-spotify-auth", FLOW_KEY: "gt-spotify-flow", LIST_KEY: "gt-spotify-playlist",
   PINS_KEY: "gt-spotify-pins", ON_KEY: "gt-spotify-on",
