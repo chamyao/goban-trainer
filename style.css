@@ -145,6 +145,8 @@ main { max-width: 1080px; margin: 0 auto; padding: 28px 24px 60px; }
 .board-card { max-width: 100%; }
 svg { display: block; touch-action: manipulation; }
 .board-card svg { max-width: 100%; height: auto; }
+.board-card { position: relative; }
+.zoom-btn { display: none; }
 
 aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
 .panel {
@@ -330,6 +332,13 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
   .player, .review { gap: 14px; }
   .board-card { padding: 6px; border-radius: 12px; width: 100%; }
   .board-card svg { width: 100%; }
+  .zoom-btn {
+    display: block; position: absolute; top: 8px; right: 8px; z-index: 2; width: 34px; height: 34px;
+    border-radius: 50%; border: none; background: rgba(255,255,255,.85); box-shadow: 0 1px 4px rgba(0,0,0,.2);
+    font-size: 15px; line-height: 34px; padding: 0; cursor: pointer;
+  }
+  .board-card.zoomed .zoom-wrap { overflow: auto; max-height: 78vh; -webkit-overflow-scrolling: touch; border-radius: 8px; }
+  .board-card.zoomed svg { width: 200%; max-width: none; display: block; }
   aside, .review aside { width: 100%; }
   .keys { display: none; }
   .sgf-loader { margin: 16px auto; }
