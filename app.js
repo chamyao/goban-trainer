@@ -1712,10 +1712,12 @@ async function viewPlayer(id, num) {
       h("h2", {}, "Problem"),
       h("div", { class: "meta-title" }, `${book.title} · ${idx + 1}`),
       (() => { const d = h("div", { class: "meta-sub" });
-               d.append(h("a", { href: `https://www.101weiqi.com/q/${p.id}/`, target: "_blank" }, `101weiqi #${p.id}`));
+               // Problems from other sources carry their own link and credit.
+               if (p.url) d.append(h("a", { href: p.url, target: "_blank" }, p.credit || "source"));
+               else d.append(h("a", { href: `https://www.101weiqi.com/q/${p.id}/`, target: "_blank" }, `101weiqi #${p.id}`));
                return d; })(),
       h("div", { class: "badges" }, [
-        h("span", { class: "badge" }, p.lv || book.level),
+        (p.lv || book.level) ? h("span", { class: "badge" }, p.lv || book.level) : "",
         ...(p.qt ? [h("span", { class: "badge" }, p.qt)] : []),
         turnBadge,
       ]),
