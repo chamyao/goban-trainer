@@ -512,6 +512,7 @@ class Trainer {
     this.posHistory = [this.serialize(this.grid)]; // for the ko rule
     this.ownership = null;    // ownership overlay from Judge
     this.engineBusy = false;
+    this.covered = new Set(); // White replies already faced this attempt ("ab,cd,…" prefixes)
     this.render();
     this.setStatus("", "", "");
   }
@@ -532,11 +533,72 @@ class Trainer {
       this.played.length <= L.length - 1 &&
       this.played.every((m, i) => m === L[i + 1]));
   }
+  /* A problem is solved once every White reply along the correct lines has
+     been answered: White picks replies not faced yet, and finishing a line
+     rewinds to the nearest White choice with replies left. Black only has to
+     cover White's answers to the moves Black actually chose. */
+  linesFrom(played) {
+    return this.p.lines.filter(L => played.length <= L.length - 1 && played.every((m, i) => m === L[i + 1]));
+  }
+  // White replies at `played` still to face: lead to a correct line, not covered yet.
+  openReplies(played) {
+    const key = played.join(",");
+    const moves = new Set(this.linesFrom(played)
+      .filter(L => L[0] <= 2 && L.length - 1 > played.length).map(L => L[played.length + 1]));
+    return [...moves].filter(m => !this.covered.has(key + "," + m));
+  }
   engineReply() {
+    const open = this.openReplies(this.played);
+    if (open.length) return open[Math.floor(Math.random() * open.length)];
     const ls = this.consistentLines().filter(L => L.length - 1 > this.played.length);
     if (!ls.length) return null;
     ls.sort((a, b) => a[0] - b[0] || b.length - a.length);
     return ls[0][this.played.length + 1];
+  }
+  // Nearest earlier White turn on this path that still has open replies.
+  nextBranch() {
+    for (let k = this.played.length - 1; k >= 1; k--) {
+      if (k % 2 === 0) continue; // index k is a White move when k is odd
+      const prefix = this.played.slice(0, k);
+      const open = this.openReplies(prefix);
+      if (open.length) return { prefix, open };
+    }
+    return null;
+  }
+  remainingBranches() {
+    let n = 0;
+    for (let k = 1; k < this.played.length; k += 2) n += this.openReplies(this.played.slice(0, k)).length;
+    return n;
+  }
+  playWhite(mv) {
+    const [rc, rr] = cIdx(mv);
+    this.covered.add([...this.played, mv].join(","));
+    this.grid = applyMove(this.grid, rc, rr, WHITE);
+    this.played = [...this.played, mv];
+    this.lastMove = [rc, rr];
+    this.posHistory.push(this.serialize(this.grid));
+    this.render();
+  }
+  // Rewind to `prefix` (White to move) and play the next open reply there.
+  rewindTo(prefix, mv) {
+    this.grid = this.freshGrid();
+    this.posHistory = [this.serialize(this.grid)];
+    this.played = [];
+    this.lastMove = null;
+    prefix.forEach((m, i) => {
+      const [c, r] = cIdx(m);
+      this.grid = applyMove(this.grid, c, r, i % 2 === 0 ? BLACK : WHITE);
+      this.played.push(m);
+      this.lastMove = [c, r];
+      this.posHistory.push(this.serialize(this.grid));
+    });
+    this.history = [];
+    this.render();
+    this.replyTimer = setTimeout(() => {
+      this.playWhite(mv);
+      const t = this.terminal();
+      if (t) this.finish(t);
+    }, 700);
   }
   terminal() {
     const ls = this.consistentLines();
@@ -601,12 +663,7 @@ class Trainer {
 
     const reply = this.engineReply();
     if (reply) this.replyTimer = setTimeout(() => {
-      const [rc, rr] = cIdx(reply);
-      this.grid = applyMove(this.grid, rc, rr, WHITE);
-      this.played = [...this.played, reply];
-      this.lastMove = [rc, rr];
-      this.posHistory.push(this.serialize(this.grid));
-      this.render();
+      this.playWhite(reply);
       const t2 = this.terminal();
       if (t2) this.finish(t2);
     }, 350);
@@ -669,6 +726,23 @@ class Trainer {
   }
 
   finish(kind) {
+    if (kind === "ok") {
+      const next = this.nextBranch();
+      if (next) {
+        const left = this.remainingBranches();
+        this.done = "next"; // locks the board until the rewind
+        this.setStatus("ok", "✓", `Correct — White has ${left} other ${left === 1 ? "answer" : "answers"} to try`);
+        this.render();
+        this.replyTimer = setTimeout(() => {
+          if (!this.alive || this.explore) return;
+          this.done = null;
+          this.setStatus("", "", "");
+          const mv = next.open[Math.floor(Math.random() * next.open.length)];
+          this.rewindTo(next.prefix, mv);
+        }, 1400);
+        return;
+      }
+    }
     this.done = kind;
     markResult(this.book.id, this.p.id, kind === "ok");
     this.setStatus(kind, kind === "ok" ? "✓" : "✗", kind === "ok" ? "Correct" : "Wrong");
