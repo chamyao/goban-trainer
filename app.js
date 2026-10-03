@@ -1902,7 +1902,7 @@ async function viewBook(id) {
   const grid = h("div", { class: "prob-grid" });
   book.problems.forEach((p, i) => {
     const st = prog[p.id] === 1 ? " ok" : prog[p.id] === -1 ? " bad" : "";
-    grid.append(h("div", { class: "cell" + st, onclick: () => location.hash = `#/book/${id}/${i + 1}` }, String(i + 1)));
+    grid.append(h("div", { class: "cell" + st, onclick: () => location.hash = `#/book/${id}/${i + 1}` }, String(book.numbered ? p.id : i + 1)));
   });
   root.append(grid);
 }
@@ -1915,7 +1915,8 @@ async function viewPlayer(id, num) {
   const idx = Math.min(Math.max(1, num), book.problems.length) - 1;
   const p = book.problems[idx];
   crumbs.innerHTML = "";
-  crumbs.append(h("a", { href: `#/book/${id}` }, book.title), ` / ${idx + 1}`);
+  const label = book.numbered ? p.id : idx + 1; // numbered books show their own problem numbers
+  crumbs.append(h("a", { href: `#/book/${id}` }, book.title), ` / ${label}`);
 
   root.innerHTML = "";
   const svg = document.createElementNS(SVGNS, "svg");
@@ -1942,7 +1943,7 @@ async function viewPlayer(id, num) {
   const aside = h("aside", {}, [
     h("div", { class: "panel" }, [
       h("h2", {}, "Problem"),
-      h("div", { class: "meta-title" }, `${book.title} · ${idx + 1}`),
+      h("div", { class: "meta-title" }, `${book.title} · ${label}`),
       (() => { const d = h("div", { class: "meta-sub" });
                // Problems from other sources carry their own link and credit.
                if (p.url) d.append(h("a", { href: p.url, target: "_blank" }, p.credit || "source"));
