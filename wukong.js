@@ -97,6 +97,15 @@ const WK = (() => {
     fall: [F({ legs: "stretch", ty: 0, hy: -1, hx: 1, staff: { a: 60, gx: 7, gy: -10 }, tail: 7 })],
     land: [F({ legs: "crouch", torso: "TORSO_SQUASH", hy: 3, hx: 1, staff: { a: 12, gx: 7, gy: -5 } })],
     dead: [F({ head: "HEAD_X", legs: "stretch", staff: null, tail: 0 })],
+    // Wind up over the shoulder, lunge, swing flat through, follow through.
+    whack: [
+      F({ legs: "stand", hx: -1, staff: { a: 110, gx: 3, gy: -11, behind: true }, tail: 2 }),
+      F({ legs: "pass", hx: -2, hy: 1, ty: 0, staff: { a: 150, gx: 1, gy: -13, behind: true }, tail: 3 }),
+      F({ legs: "contact", hx: 3, hy: 1, staff: { a: 8, gx: 9, gy: -6 }, tail: 5, swoosh: true }),
+      F({ legs: "contact", hx: 3, hy: 2, staff: { a: -18, gx: 9, gy: -4 }, tail: 6 }),
+      F({ legs: "down", hx: 2, hy: 1, staff: { a: -10, gx: 8, gy: -5 }, tail: 7 }),
+      F({ legs: "stand", hx: 1, staff: { a: 30, gx: 7, gy: -7 }, tail: 0 }),
+    ],
     climb: [
       F({ head: "HEAD_BACK", legs: "climbA", ty: 0, hy: 0, staff: null, arms: "AL" }),
       F({ head: "HEAD_BACK", legs: "climbA", ty: -1, hy: -1, staff: null, arms: "AL" }),
@@ -145,6 +154,7 @@ const WK = (() => {
       const nx = FX - 6 - i, ny = torsoY + 4 - Math.round(i * 0.9) + Math.round(Math.sin(ph + i * 0.6) * 1.5);
       line(g, tx, ty, nx, ny, PAL.n); tx = nx; ty = ny;
     }
+    if (frame.staff && frame.staff.behind) drawStaff(g, frame, FX, torsoY);
     if (frame.legs.startsWith("climb")) {
       limb(g, FX, hipY, legs[0], PAL.L); limb(g, FX, hipY, legs[1], PAL.L);
     } else {
@@ -163,7 +173,18 @@ const WK = (() => {
       g.fillRect(FX - 9, torsoY - (up < 0 ? 11 : 6), 2, 2);
       g.fillRect(FX + 8, torsoY - (up > 0 ? 11 : 6), 2, 2);
     }
-    if (frame.staff) {
+    if (frame.staff && !frame.staff.behind) drawStaff(g, frame, FX, torsoY);
+    if (frame.swoosh) {  // motion arc in front of the strike
+      g.fillStyle = "rgba(255,247,214,0.9)";
+      for (let i = 0; i < 9; i++) {
+        const ang = -1.2 + i * 0.3;
+        g.fillRect(Math.round(FX + 10 + Math.cos(ang) * 12), Math.round(torsoY + 3 + Math.sin(ang) * 12), 1, 1);
+        if (i % 2) g.fillRect(Math.round(FX + 10 + Math.cos(ang) * 10), Math.round(torsoY + 3 + Math.sin(ang) * 10), 1, 1);
+      }
+    }
+  }
+  function drawStaff(g, frame, FX, torsoY) {
+    {
       const s = frame.staff, gx = FX + s.gx, gy = torsoY + 2 + (s.gy + 7);
       const a = s.a * Math.PI / 180, L = 22;
       const back = s.mid ? L / 2 : 4;  // grip near the end, or the middle when twirling/overhead
@@ -287,6 +308,16 @@ const WK = (() => {
     B.i = B.ti; B.j = B.tj; B.prog = 0;
     B.onStone = hasStone(B, B.i, B.j);
     if (now > B.leaveAt) return boardLeave();
+    // Every so often: whack a neighbouring stone off the board.
+    if (!B.onStone && now - (m.lastWhack || 0) > 15000 && Math.random() < 0.45) {
+      const side = [[1, 0], [-1, 0]].filter(([di]) => B.i + di >= 0 && B.i + di < B.b.xs.length && hasStone(B, B.i + di, B.j));
+      if (side.length) {
+        const [di] = side[Math.floor(Math.random() * side.length)];
+        m.left = di < 0; B.whack = [B.i + di, B.j]; B.whacked = false; m.lastWhack = now;
+        set("whack", "boardwhack");
+        return;
+      }
+    }
     const r = Math.random();
     if (B.onStone && r < 0.5) { set("idle", "boardidle"); m.until = now + 1500 + Math.random() * 2500; return; }
     if (r < 0.15) { set("idle", "boardidle"); m.until = now + 800 + Math.random() * 1600; return; }
@@ -298,7 +329,8 @@ const WK = (() => {
     B.di = di; B.dj = dj; B.ti = B.i + di; B.tj = B.j + dj;
     if (di) m.left = di < 0;
     B.hop = hasStone(B, B.ti, B.tj) !== B.onStone;  // up onto / down off a stone
-    set(B.hop ? "rise" : "run", "board");
+    // Up and down the board he climbs along the line, side to side he runs.
+    set(B.hop ? "rise" : dj ? "climb" : "run", "board");
   }
   function boardEnter(b, i, j) {
     m.bd = { b, stones: boardStones(b), i, j, ti: i, tj: j, prog: 0, di: 0, dj: 1, onStone: false,
@@ -312,6 +344,54 @@ const WK = (() => {
     const right = B.i > B.b.xs.length / 2;
     m.vx = (right ? 1 : -1) * RUN * 1.4; m.vy = -9; m.left = !right;
     set("rise", "air");
+  }
+  // Send the stone at (i, j) flying. Only its picture: the circle is hidden
+  // for a moment and fades back, the game itself is untouched.
+  const flying = [], flashes = [];
+  function knock(B, i, j) {
+    const x = B.b.xs[i], y = B.b.ys[j];
+    let color = null;
+    for (const c of B.b.svg.querySelectorAll("circle")) {
+      if (+c.getAttribute("cx") !== x || +c.getAttribute("cy") !== y) continue;
+      const fill = c.getAttribute("fill");
+      if (fill === "transparent" || +c.getAttribute("r") < 6) continue;  // click target, star point
+      if (fill === "url(#bs)") color = "b"; else if (fill === "url(#ws)") color = "w";
+      c.style.transition = "none"; c.style.opacity = "0";
+      setTimeout(() => { c.style.transition = "opacity .6s"; c.style.opacity = ""; }, 2200);
+    }
+    if (!color) return;
+    const p = toScreen(B.b.svg, x, y), cellPx = (B.b.xs[1] - B.b.xs[0]) * p.cell;
+    const dir = i > B.i ? 1 : -1;
+    flying.push({ x: p.x, y: p.y, vx: dir * (7 + Math.random() * 4), vy: -(9 + Math.random() * 5),
+                  r: cellPx * 0.47, color, rot: 0, spin: dir * (0.25 + Math.random() * 0.2) });
+    flashes.push({ x: p.x, y: p.y, t: 0 });
+  }
+  function stepFlying(k) {
+    for (let n = flying.length - 1; n >= 0; n--) {
+      const f = flying[n];
+      f.vy += GRAV * 0.55 * k; f.x += f.vx * k; f.y += f.vy * k; f.rot += f.spin * k;
+      if (f.y > innerHeight + 60 || f.x < -60 || f.x > innerWidth + 60) flying.splice(n, 1);
+    }
+    for (let n = flashes.length - 1; n >= 0; n--) if ((flashes[n].t += 16 * k) > 220) flashes.splice(n, 1);
+  }
+  function drawFlying() {
+    for (const f of flying) {
+      g.save(); g.translate(f.x, f.y); g.rotate(f.rot);
+      const grad = g.createRadialGradient(-f.r * 0.3, -f.r * 0.35, f.r * 0.1, 0, 0, f.r);
+      if (f.color === "b") { grad.addColorStop(0, "#5a5a5a"); grad.addColorStop(1, "#111"); }
+      else { grad.addColorStop(0, "#ffffff"); grad.addColorStop(1, "#cfcfc7"); }
+      g.fillStyle = grad; g.strokeStyle = "rgba(0,0,0,.35)"; g.lineWidth = 0.8;
+      g.beginPath(); g.arc(0, 0, f.r, 0, Math.PI * 2); g.fill(); g.stroke();
+      g.restore();
+    }
+    for (const fl of flashes) {  // impact: a quick pixel burst
+      const k = fl.t / 220, R = 6 + k * 22;
+      g.fillStyle = `rgba(255,236,150,${1 - k})`;
+      for (let a = 0; a < 8; a++) {
+        const ang = a * Math.PI / 4;
+        g.fillRect(Math.round(fl.x + Math.cos(ang) * R) - 2, Math.round(fl.y + Math.sin(ang) * R) - 2, 4, 4);
+      }
+    }
   }
   // A jump that ends on a board intersection near (x, y).
   function jumpToBoard() {
@@ -339,14 +419,19 @@ const WK = (() => {
   function step(dt) {
     const now = performance.now(), k = dt / 16;
     m.t += dt; m.animT += dt;
+    stepFlying(k);
     if (m.bd) {
       if (!m.bd.b.svg.isConnected) { m.bd = null; set("fall", "air"); return; }
       const B = m.bd;
       if (m.state === "board") {
         const len = Math.hypot(B.b.xs[B.ti] - B.b.xs[B.i], B.b.ys[B.tj] - B.b.ys[B.j]) || 1;
-        B.prog = Math.min(1, B.prog + (RUN * 0.55 * k) / (len * (toScreen(B.b.svg, 0, 0)?.cell || 1)));
+        const speed = B.dj && !B.hop ? CLIMB_SPEED * 0.6 : RUN * 0.55;
+        B.prog = Math.min(1, B.prog + (speed * k) / (len * (toScreen(B.b.svg, 0, 0)?.cell || 1)));
         if (B.hop) set(B.prog < 0.5 ? "rise" : "fall");
         if (B.prog >= 1) boardChoose(now);
+      } else if (m.state === "boardwhack") {
+        if (!B.whacked && m.animT >= 2 * SPEED.whack) { B.whacked = true; knock(B, B.whack[0], B.whack[1]); }
+        if (m.animT >= WK.FRAMES.whack.length * SPEED.whack) { set("idle", "boardidle"); m.until = now + 700; }
       } else if ((m.state === "boardidle" || m.state === "boardland") && now > m.until) {
         boardChoose(now);
       } else if (m.state === "boardidle") {
@@ -459,7 +544,7 @@ const WK = (() => {
     }
   }
 
-  const SPEED = { idle: 220, twirl: 55, run: 85, climb: 150, crouch: 999, rise: 999, fall: 999, land: 999, dead: 999 };
+  const SPEED = { idle: 220, twirl: 55, run: 85, climb: 150, crouch: 999, rise: 999, fall: 999, land: 999, dead: 999, whack: 110 };
   function draw() {
     const dpr = devicePixelRatio || 1;
     let S = scale();
@@ -469,6 +554,7 @@ const WK = (() => {
     }
     g.setTransform(dpr, 0, 0, dpr, 0, 0);
     g.clearRect(0, 0, innerWidth, innerHeight);
+    drawFlying();
     const frames = WK.FRAMES[m.anim];
     const fr = frames[Math.floor(m.animT / SPEED[m.anim]) % frames.length];
     bg.clearRect(0, 0, WK.SIZE, WK.SIZE);
@@ -514,7 +600,11 @@ const WK = (() => {
     g = cv.getContext("2d");
     buf = document.createElement("canvas"); buf.width = buf.height = WK.SIZE;
     bg = buf.getContext("2d");
-    Object.assign(m, { x: 60, y: 80, vx: RUN, vy: 0, state: "air", on: null, plan: null, climbTo: null });
+    // Always drop in fresh from the top-left: forget any board, jump or climb
+    // he was in the middle of when he was hidden.
+    Object.assign(m, { x: 60, y: 80, vx: RUN, vy: 0, state: "air", on: null, plan: null, climbTo: null,
+                       bd: null, boardJump: null, grab: null, jumpTo: null, dieOnLand: false, left: false });
+    flying.length = 0; flashes.length = 0;
     set("fall");
     last = 0; raf = requestAnimationFrame(loop);
   }
