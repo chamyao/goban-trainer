@@ -118,6 +118,11 @@ main { max-width: 1080px; margin: 0 auto; padding: 28px 24px 60px; }
 .book-head { margin: 6px 0 18px; }
 .book-head h2 { margin: 0 0 2px; font-size: 20px; }
 .book-head .sub { color: var(--muted); font-size: 14px; }
+.book-head .reset-book {
+  margin-top: 10px; font: inherit; font-size: 13px; font-weight: 600; padding: 6px 12px; border-radius: 10px;
+  border: 1px solid #ddd6c6; background: #faf8f2; color: var(--ink); cursor: pointer;
+}
+.book-head .reset-book:hover { background: #f1ede1; }
 .prob-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(52px, 1fr)); gap: 8px; }
 .cell {
   aspect-ratio: 1; border-radius: 9px; background: var(--card);

@@ -38,6 +38,13 @@ function clearResult(bookId, pid) {
   Sync.scheduleSave();
 }
 
+function clearBook(bookId) {
+  const prog = loadProgress();
+  for (const pid in prog[bookId] || {}) prog[bookId][pid] = 0;
+  localStorage.setItem(PROGRESS_KEY, JSON.stringify(prog));
+  Sync.scheduleSave();
+}
+
 const FAVORITES_KEY = "gt-favorites";
 function loadFavorites() {
   try { return new Set(JSON.parse(localStorage.getItem(FAVORITES_KEY)) || []); }
@@ -1912,9 +1919,18 @@ async function viewBook(id) {
   root.innerHTML = "";
   root.append(h("div", { class: "book-head" }, [
     h("h2", {}, book.title),
-    h("div", { class: "sub" }, `${book.native}  ·  ${book.level}  ·  ${book.problems.length} problems  ·  `),
+    h("div", { class: "sub" }, [book.native, book.level, `${book.problems.length} problems`, ""].filter((x, i, a) => x || i === a.length - 1).join("  ·  ")),
   ]));
   root.querySelector(".sub").append(h("a", { href: book.source, target: "_blank" }, "source"));
+  const marked = Object.values(prog).filter(v => v === 1 || v === -1).length;
+  if (marked) root.querySelector(".book-head").append(h("button", {
+    class: "reset-book",
+    onclick: () => {
+      if (!confirm(`Reset progress for ${book.title}? This clears ${marked} solved/failed mark${marked === 1 ? "" : "s"}.`)) return;
+      clearBook(id);
+      viewBook(id);
+    },
+  }, "Reset progress"));
   const grid = h("div", { class: "prob-grid" });
   book.problems.forEach((p, i) => {
     const st = prog[p.id] === 1 ? " ok" : prog[p.id] === -1 ? " bad" : "";
