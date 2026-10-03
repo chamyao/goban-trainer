@@ -462,6 +462,17 @@ class Goban {
       }
   }
 
+  // KataGo's candidate moves: numbered rings, best first; clicks pass through.
+  marks(list) {
+    list.forEach(({ c, r, label }, i) => {
+      const g = this.el("g", { "pointer-events": "none" });
+      this.el("circle", { cx: this.px(c), cy: this.py(r), r: this.cell * .3,
+                          fill: i === 0 ? "rgba(47,143,90,.9)" : "rgba(47,143,90,.55)", stroke: "#fff", "stroke-width": 1.5 }, g);
+      this.el("text", { x: this.px(c), y: this.py(r) + 4.5, "text-anchor": "middle", "font-size": 13,
+                        "font-weight": 700, fill: "#fff" }, g).textContent = label;
+    });
+  }
+
   pulse(c, r) {
     const p = this.el("circle", { cx: this.px(c), cy: this.py(r), r: this.cell * .3, fill: "none",
                                   stroke: "var(--accent)", "stroke-width": 3 });
@@ -821,6 +832,7 @@ class Trainer {
     this.ownership = null;
     this.setStatus("", "", "");
     this.render();
+    if (this.explore) this.evaluateExplore();
   }
 
   /* How the trainer would end from `played` if Black plays well: "ok", "bad" or
@@ -889,8 +901,10 @@ class Trainer {
       this.exploreTurn = this.turnColor();
     }
     this.ownership = null;
+    this.exploreEval = null; this.evalSeq = (this.evalSeq || 0) + 1;
     this.setStatus("", "", "");
     this.render();
+    if (this.explore) this.evaluateExplore();
   }
 
   exploreClick(c, r) {
@@ -907,6 +921,36 @@ class Trainer {
     this.ownership = null;
     this.setStatus("", "", "");
     this.render();
+    this.evaluateExplore();
+  }
+
+  // Explore shows KataGo's view of the position: the score and its top
+  // three moves for the side to play (it loads the engine if needed).
+  async evaluateExplore() {
+    if (!this.explore) return;
+    const grid = this.grid, turn = this.exploreTurn, seq = (this.evalSeq = (this.evalSeq || 0) + 1);
+    this.exploreEval = null;
+    this.setStatus("", "◈", Engine.status === "ready" || Engine.status === "busy" ? "KataGo is reading…" : "Loading KataGo…");
+    try {
+      const frame = this.frame();
+      const a = await Engine.analyze({
+        board: gridToBoardState(grid, frame), currentPlayer: turn === BLACK ? "black" : "white",
+        moveHistory: [], regionOfInterest: frame && frame.region ? frame.region : null, visits: 300,
+      });
+      if (!this.alive || seq !== this.evalSeq || this.grid !== grid || !this.explore) return;
+      const moves = (a.moves || []).filter(m => m.x >= 0 && m.x < N && m.y >= 0 && m.y < N && grid[m.y][m.x] === EMPTY).slice(0, 3);
+      const lead = a.rootScoreLead ?? 0;
+      const score = `${lead >= 0 ? "B" : "W"}+${Math.abs(lead).toFixed(1)}`;
+      const name = m => `${COLS[m.x]}${N - m.y}`;
+      this.exploreEval = { grid, marks: moves.map((m, i) => ({ c: m.x, r: m.y, label: String(i + 1) })) };
+      this.setStatus("", "◈", moves.length
+        ? `KataGo: ${score} · best for ${turn === BLACK ? "Black" : "White"}: ${moves.map(name).join(", ")}`
+        : `KataGo: ${score} · pass`);
+      this.render();
+    } catch (err) {
+      if (this.alive && seq === this.evalSeq) this.setStatus("off", "◌", "KataGo couldn't evaluate this position");
+      console.error(err);
+    }
   }
 
   /* --- rendering --- */
@@ -922,6 +966,8 @@ class Trainer {
       : (!this.done && !this.engineBusy && this.turnColor() === BLACK);
     this.goban.render(this.grid, this.lastMove, interactive);
     if (this.ownership) this.goban.renderOwnership(this.ownership);
+    const ev = this.exploreEval;
+    if (this.explore && ev && ev.grid === this.grid) this.goban.marks(ev.marks);
     this.els.boardCard.classList.toggle("explore", !!this.explore);
     this.els.btnExplore.classList.toggle("active", !!this.explore);
     this.els.btnExplore.textContent = this.explore ? "Resume" : "Explore";
@@ -1877,6 +1923,36 @@ function h(tag, attrs = {}, children = []) {
   return e;
 }
 
+// Phones: a zoom button on full-size boards (13×13 and up). Zoomed, the
+// board is about twice as wide and pans with a finger; taps still play.
+function addZoom(boardCard) {
+  const svg0 = boardCard.querySelector("svg");
+  if (!svg0) return;
+  const wrap = h("div", { class: "zoom-wrap" });
+  svg0.replaceWith(wrap); wrap.append(svg0);  // the Goban keeps its svg; only its parent changes
+  const btn = h("button", { class: "zoom-btn", title: "Zoom the board", "aria-label": "Zoom the board" }, "🔍");
+  btn.addEventListener("click", e => {
+    e.stopPropagation();
+    const on = boardCard.classList.toggle("zoomed");
+    btn.textContent = on ? "✕" : "🔍";
+    if (on) requestAnimationFrame(() => {
+      // Start centred on the last move if there is one, else the middle.
+      const mark = svg0.querySelector('circle[fill="none"][stroke-width="2"]');
+      const r = svg0.getBoundingClientRect(), cr = wrap.getBoundingClientRect();
+      const m = mark ? mark.getBoundingClientRect() : { left: r.left + r.width / 2, top: r.top + r.height / 2, width: 0, height: 0 };
+      wrap.scrollLeft += m.left + m.width / 2 - (cr.left + cr.width / 2);
+      wrap.scrollTop += m.top + m.height / 2 - (cr.top + cr.height / 2);
+    });
+  });
+  boardCard.append(btn);
+  // Only for big boards: decided once the board has its size.
+  requestAnimationFrame(() => {
+    const vb = svg0.viewBox;
+    const w = vb && vb.baseVal ? vb.baseVal.width : 0;
+    if (w < 44 * 12 + 76) btn.remove();
+  });
+}
+
 async function viewLibrary() {
   const nav = routeSeq;
   crumbs.textContent = "";
@@ -1962,6 +2038,7 @@ async function viewPlayer(id, num) {
   const svg = document.createElementNS(SVGNS, "svg");
   const boardCard = h("div", { class: "board-card" });
   boardCard.append(svg);
+  addZoom(boardCard);
 
   const status = h("div", { id: "status" });
   const turnBadge = h("span", { class: "badge turn" }, "Black to play");
@@ -2349,6 +2426,7 @@ function viewRecord() {
   const svg = document.createElementNS(SVGNS, "svg");
   const boardCard = h("div", { class: "board-card" });
   boardCard.append(svg);
+  addZoom(boardCard);
   const goban = new Goban(svg, { c0: 0, c1: 18, r0: 0, r1: 18 }, (c, r) => { if (Recorder.play(c, r)) refresh(); });
   const status = h("div", { class: "meta-sub" });
   const err = h("div", { class: "err" });
@@ -2585,6 +2663,7 @@ function viewReview() {
   const svg = document.createElementNS(SVGNS, "svg");
   const boardCard = h("div", { class: "board-card" });
   boardCard.append(svg);
+  addZoom(boardCard);
 
   const chart = document.createElementNS(SVGNS, "svg");
   const tip = h("div", { class: "chart-tip" });
@@ -3142,6 +3221,7 @@ function playGame(g) {
   const P = OGSPlay;
   const svg = document.createElementNS(SVGNS, "svg");
   const boardCard = h("div", { class: "board-card" }, [svg]);
+  addZoom(boardCard);
   const { grid, last } = g.replay();
   const removed = g.removed;
   const scoring = g.phase === "stone removal";
