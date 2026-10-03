@@ -1,0 +1,45 @@
+name: Redmond fetch
+
+# Downloads videos from Michael Redmond's life-and-death playlist (with
+# auto-captions) for problem extraction. Media is uploaded as a short-lived
+# workflow artifact, never committed.
+on:
+  workflow_dispatch:
+    inputs:
+      videos:
+        description: "Playlist items to download (yt-dlp --playlist-items, e.g. 1 or 1-5)"
+        default: "1"
+  push:
+    paths:
+      - .github/workflows/redmond-fetch.yml
+
+env:
+  PLAYLIST: https://www.youtube.com/playlist?list=PLW5_cMTm0wvaAfrTyLtU_HDjeTlK4VFRj
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - run: pip install -q yt-dlp && sudo apt-get install -y -qq ffmpeg >/dev/null
+      - name: List the playlist
+        run: |
+          mkdir -p out
+          yt-dlp --flat-playlist -J "$PLAYLIST" > out/playlist.json
+          python3 -c "
+          import json; d = json.load(open('out/playlist.json'))
+          print(d.get('title'), '-', len(d['entries']), 'videos')
+          for i, e in enumerate(d['entries'], 1): print(i, e['id'], e.get('duration'), e.get('title'))
+          "
+      - name: Download videos and captions
+        run: |
+          yt-dlp --playlist-items "${{ github.event.inputs.videos || '1' }}" \
+            -f "bv*[height<=720][ext=mp4]/bv*[height<=720]/b[height<=720]" \
+            --write-auto-subs --write-subs --sub-langs "en.*" --sub-format vtt \
+            --write-info-json -o "out/%(playlist_index)03d-%(id)s.%(ext)s" "$PLAYLIST"
+          ls -la out
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: redmond-media
+          path: out/
+          retention-days: 3
