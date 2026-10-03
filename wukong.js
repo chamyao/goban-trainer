@@ -511,7 +511,11 @@ const WK = (() => {
     m.left = m.vx < 0; m.tumble = true; m.spin = (m.vx < 0 ? -1 : 1) * (0.25 + Math.random() * 0.15); m.rot = 0;
     set("fall", "air");
   }
-  window.Wukong = { active: () => !!cv, pointAt: (svg, x, y, done) => pointAt(svg, x, y, done) };
+  window.Wukong = {
+    active: () => !!cv, pointAt: (svg, x, y, done) => pointAt(svg, x, y, done),
+    // Pages with their own Wukong (the journey map) put this one away.
+    suspend(on) { if (on) stop(); else if (!cv && enabled()) start(); },
+  };
 
   function step(dt) {
     const now = performance.now(), k = dt / 16;
