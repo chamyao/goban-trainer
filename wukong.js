@@ -98,6 +98,7 @@ const WK = (() => {
     land: [F({ legs: "crouch", torso: "TORSO_SQUASH", hy: 3, hx: 1, staff: { a: 12, gx: 7, gy: -5 } })],
     dead: [F({ head: "HEAD_X", legs: "stretch", staff: null, tail: 0 })],
     // Wind up over the shoulder, lunge, swing flat through, follow through.
+    point: [F({ legs: "stand", hx: 1, staff: { a: -28, gx: 4, gy: -6 }, tail: 1 })],
     whack: [
       F({ legs: "stand", hx: -1, staff: { a: 110, gx: 3, gy: -11, behind: true }, tail: 2 }),
       F({ legs: "pass", hx: -2, hy: 1, ty: 0, staff: { a: 150, gx: 1, gy: -13, behind: true }, tail: 3 }),
@@ -252,6 +253,7 @@ const WK = (() => {
   }
   addEventListener("tczw:result", e => {
     if (!cv || e.detail !== "bad") return;
+    if (m.hint) { m.hint.done(); m.hint = null; m.vy = 0; set("fall", "air"); m.dieOnLand = true; return; }
     if (m.bd) { m.bd.prog = Math.round(m.bd.prog); if (m.bd.prog) { m.bd.i = m.bd.ti; m.bd.j = m.bd.tj; } m.bd.prog = 0; m.bd.ti = m.bd.i; m.bd.tj = m.bd.j; return die(); }
     if (m.state === "air" || m.state === "climb") {
       m.dieOnLand = true;
@@ -265,6 +267,7 @@ const WK = (() => {
     set("land", "landing"); m.until = performance.now() + 140;
   }
 
+  const boardScale = cellPx => Math.max(1, Math.min(scale(), Math.round(cellPx * 2.2 / 30)));
   // ---- the go board: an SVG with a wood background; he walks its grid.
   function findBoard() {
     for (const svg of document.querySelectorAll("svg")) {
@@ -416,10 +419,72 @@ const WK = (() => {
     return true;
   }
 
+  // ---- hints: go stand beside the point and touch it with the staff tip.
+  const TIP = 20;  // staff tip, in sprite px ahead of his feet in the point pose
+  function hintSpot(H) {
+    const p = toScreen(H.svg, H.x, H.y);
+    if (!p) return null;
+    const S = boardScale(p.cell * cellOf(H.svg));
+    return { x: p.x - H.dir * TIP * S, y: p.y, S };
+  }
+  function cellOf(svg) {
+    const b = findBoard();
+    return b && b.svg === svg ? b.xs[1] - b.xs[0] : 44;
+  }
+  function pointAt(svg, x, y, done) {
+    if (!cv || m.state === "dead") return done();
+    // Stand on whichever side keeps him on the board.
+    const r = svg.getBoundingClientRect(), p = toScreen(svg, x, y);
+    const dir = p && p.x - r.left < 80 ? -1 : 1;
+    m.hint = { svg, x, y, dir, done, at: performance.now() };
+    m.bd = null; m.plan = m.jumpTo = m.climbTo = m.grab = m.boardJump = null; m.on = null;
+    const spot = hintSpot(m.hint);
+    if (!spot) return done();
+    // Close by: run there. Further: leap.
+    if (Math.hypot(spot.x - m.x, spot.y - m.y) < 140) set("run", "hintrun");
+    else {
+      const above = m.y - spot.y, rise = Math.max(above + 50, 60);
+      m.vy = -Math.sqrt(2 * GRAV * rise);
+      const tUp = -m.vy / GRAV, tDown = Math.sqrt(2 * Math.max(rise - above, 8) / GRAV);
+      m.vx = (spot.x - m.x) / (tUp + tDown);
+      set("rise", "hintjump");
+    }
+  }
+  function stepHint(now, k) {
+    const H = m.hint, spot = H.svg.isConnected ? hintSpot(H) : null;
+    if (!spot || now - H.at > 6000) { H.done(); m.hint = null; set("fall", "air"); return; }
+    if (m.state === "hintrun") {
+      const dx = spot.x - m.x, dy = spot.y - m.y, d = Math.hypot(dx, dy), v = RUN * 1.3 * k;
+      m.left = dx < 0;
+      if (Math.abs(dy) > Math.abs(dx)) set("climb"); else set("run");
+      if (d <= v) { m.x = spot.x; m.y = spot.y; arrive(now); } else { m.x += dx / d * v; m.y += dy / d * v; }
+    } else if (m.state === "hintjump") {
+      m.vy = Math.min(m.vy + GRAV * k, 18); m.x += m.vx * k; m.y += m.vy * k;
+      if (m.vy > 0) set("fall");
+      if (m.vy > 0 && m.y >= spot.y) { m.x = spot.x; m.y = spot.y; arrive(now); }
+    } else if (m.state === "hintpoint") {
+      m.x = spot.x; m.y = spot.y;  // stay put if the page scrolls
+      if (!H.shown && m.animT > 220) { H.shown = true; H.done(); }
+      if (m.animT > 2200) {
+        m.hint = null;
+        // Back to roaming the board from the nearest intersection.
+        const b = findBoard();
+        if (b && b.svg === H.svg) {
+          const i = b.xs.reduce((bi, x, n) => Math.abs(x - H.x) < Math.abs(b.xs[bi] - H.x) ? n : bi, 0);
+          const j = b.ys.reduce((bj, y, n) => Math.abs(y - H.y) < Math.abs(b.ys[bj] - H.y) ? n : bj, 0);
+          boardEnter(b, Math.max(0, Math.min(b.xs.length - 1, i - H.dir)), j);
+        } else set("fall", "air");
+      }
+    }
+  }
+  function arrive(now) { m.vx = m.vy = 0; m.left = m.hint.dir < 0; set("point", "hintpoint"); }
+  window.Wukong = { active: () => !!cv, pointAt: (svg, x, y, done) => pointAt(svg, x, y, done) };
+
   function step(dt) {
     const now = performance.now(), k = dt / 16;
     m.t += dt; m.animT += dt;
     stepFlying(k);
+    if (m.hint) return stepHint(now, k);
     if (m.bd) {
       if (!m.bd.b.svg.isConnected) { m.bd = null; set("fall", "air"); return; }
       const B = m.bd;
@@ -544,11 +609,12 @@ const WK = (() => {
     }
   }
 
-  const SPEED = { idle: 220, twirl: 55, run: 85, climb: 150, crouch: 999, rise: 999, fall: 999, land: 999, dead: 999, whack: 110 };
+  const SPEED = { idle: 220, twirl: 55, run: 85, climb: 150, crouch: 999, rise: 999, fall: 999, land: 999, dead: 999, whack: 110, point: 999 };
   function draw() {
     const dpr = devicePixelRatio || 1;
     let S = scale();
-    if (m.bd) { const p = boardPos(); if (p) S = Math.max(1, Math.min(S, Math.round(p.cellPx * 2.2 / 30))); }
+    if (m.bd) { const p = boardPos(); if (p) S = boardScale(p.cellPx); }
+    else if (m.hint) { const sp = hintSpot(m.hint); if (sp) S = sp.S; }
     if (cv.width !== Math.round(innerWidth * dpr) || cv.height !== Math.round(innerHeight * dpr)) {
       cv.width = Math.round(innerWidth * dpr); cv.height = Math.round(innerHeight * dpr);
     }
@@ -603,12 +669,15 @@ const WK = (() => {
     // Always drop in fresh from the top-left: forget any board, jump or climb
     // he was in the middle of when he was hidden.
     Object.assign(m, { x: 60, y: 80, vx: RUN, vy: 0, state: "air", on: null, plan: null, climbTo: null,
-                       bd: null, boardJump: null, grab: null, jumpTo: null, dieOnLand: false, left: false });
+                       bd: null, boardJump: null, grab: null, jumpTo: null, dieOnLand: false, left: false, hint: null });
     flying.length = 0; flashes.length = 0;
     set("fall");
     last = 0; raf = requestAnimationFrame(loop);
   }
-  function stop() { cancelAnimationFrame(raf); if (cv) cv.remove(); cv = null; }
+  function stop() {
+    cancelAnimationFrame(raf); if (cv) cv.remove(); cv = null;
+    if (m.hint) { m.hint.done(); m.hint = null; }
+  }
   function enabled() {
     try { const v = localStorage.getItem(KEY); if (v != null) return v === "1"; } catch {}
     return !matchMedia("(prefers-reduced-motion: reduce)").matches;

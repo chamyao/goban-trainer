@@ -862,7 +862,14 @@ class Trainer {
     if (!moves.length) return;
     const best = moves.find(m => this.outcome([...this.played, m], memo) === "ok") || moves[0];
     const [c, r] = cIdx(best);
-    this.goban.pulse(c, r);
+    // With Sun Wukong around, he walks over and points at it with his staff;
+    // the marker appears once he points (or after 4 s if he can't get there).
+    if (window.Wukong && Wukong.active()) {
+      let shown = false;
+      const show = () => { if (!shown) { shown = true; this.goban.pulse(c, r); } };
+      setTimeout(show, 4000);
+      Wukong.pointAt(this.goban.svg, this.goban.px(c), this.goban.py(r), show);
+    } else this.goban.pulse(c, r);
   }
 
   /* --- explore mode: play both colors freely, then restore the attempt --- */
