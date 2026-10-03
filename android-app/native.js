@@ -12,7 +12,14 @@
   // the launch URL).
   const finishOgsLogin = url => {
     if (!url || !url.startsWith("io.github.chamyao.gobantrainer://oauth")) return;
-    OGSPlay.finishLogin(new URLSearchParams(url.split("?")[1] || ""))
+    const params = new URLSearchParams(url.split("?")[1] || "");
+    if (Spotify.isReturn(params)) {  // Spotify's login comes back the same way
+      Spotify.finishLogin(params)
+        .then(back => { if (location.hash === back) route(); else location.hash = back; })
+        .catch(e => Spotify.say(e.message));
+      return;
+    }
+    OGSPlay.finishLogin(params)
       .catch(e => { OGSPlay.loginError = e.message; })
       .finally(() => { if (location.hash === "#/play") route(); else location.hash = "#/play"; });
   };

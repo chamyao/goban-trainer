@@ -335,3 +335,12 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
   .sgf-loader { margin: 16px auto; }
   .sgf-loader .row { flex-wrap: wrap; }
 }
+
+/* Music panel (Spotify) */
+.music .music-now { font-size: 14px; margin: 2px 0; overflow-wrap: anywhere; }
+.music .music-input {
+  width: 100%; box-sizing: border-box; margin: 8px 0; padding: 9px 11px; border-radius: 8px;
+  border: 1px solid var(--border); font-size: 14px; background: var(--bg); color: var(--ink);
+}
+.music .controls { margin-top: 8px; }
+.music .music-msg { margin-top: 8px; }

@@ -2005,6 +2005,7 @@ async function viewPlayer(id, num) {
     h("div", { class: "panel" }, [
       h("div", { class: "nav-row" }, [btnPrev, h("span", { class: "pos" }, `${idx + 1} / ${book.problems.length}`), btnNext]),
     ]),
+    Spotify.panel(book, p),
     h("div", { class: "panel keys" },
       [["←/→", "prev / next"], ["U", "undo"], ["R", "reset"], ["H", "hint"], ["E", "explore"]]
         .map(([k, v]) => h("div", {}, [h("b", {}, k), v]))),
@@ -2016,9 +2017,217 @@ async function viewPlayer(id, num) {
 
   trainer = new Trainer(book, idx, { svg, boardCard, status, turnBadge, btnExplore, treePanel, treeBox, note });
   btnExplore.addEventListener("click", () => trainer.toggleExplore());
+  Spotify.problemOpened(book.id, p.id);
   window.__trainer = trainer;
   window.__engine = Engine;
 }
+
+/* ---- Spotify: each problem plays its own song from a playlist ---- */
+// PKCE login (public client, no secret) and the Web API's playback control:
+// the music plays in the Spotify app on a phone or computer (Premium only),
+// TCZW just tells it which song. A problem's song is picked from the chosen
+// playlist by a hash of the problem, so it's the same song every time;
+// "Use current song" pins whatever is playing to the problem instead.
+const Spotify = {
+  CLIENT_ID: "",
+  SCOPES: "user-read-playback-state user-modify-playback-state user-read-currently-playing playlist-read-private playlist-read-collaborative",
+  AUTH_KEY: "gt-spotify-auth", FLOW_KEY: "gt-spotify-flow", LIST_KEY: "gt-spotify-playlist",
+  PINS_KEY: "gt-spotify-pins", ON_KEY: "gt-spotify-on",
+  current: null, lastUri: null, playTimer: null, message: "", listeners: new Set(),
+
+  configured() { return !!this.CLIENT_ID; },
+  redirectUri() { return OGSPlay.redirectUri(); },
+  load(key) { try { return JSON.parse(localStorage.getItem(key)); } catch { return null; } },
+  store(key, v) { try { v == null ? localStorage.removeItem(key) : localStorage.setItem(key, JSON.stringify(v)); } catch {} },
+  loggedIn() { return !!this.load(this.AUTH_KEY); },
+  enabled() { return this.load(this.ON_KEY) !== false; },
+  setEnabled(on) { this.store(this.ON_KEY, on); if (!on) this.lastUri = null; this.emit(); },
+  playlist() { return this.load(this.LIST_KEY); },
+  onChange(fn) { this.listeners.add(fn); return () => this.listeners.delete(fn); },
+  emit() { for (const fn of this.listeners) fn(); },
+  say(msg) { this.message = msg; this.emit(); },
+
+  async login() {
+    const b64 = buf => btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+    const verifier = b64(crypto.getRandomValues(new Uint8Array(32)));
+    const challenge = b64(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(verifier)));
+    // "sp." tells the shared login return (site and app) this one is Spotify's.
+    const state = "sp." + b64(crypto.getRandomValues(new Uint8Array(12)));
+    this.store(this.FLOW_KEY, { verifier, state, redirect: this.redirectUri(), back: location.hash });
+    const q = new URLSearchParams({
+      response_type: "code", client_id: this.CLIENT_ID, redirect_uri: this.redirectUri(),
+      code_challenge: challenge, code_challenge_method: "S256", state, scope: this.SCOPES,
+    });
+    location.href = `https://accounts.spotify.com/authorize?${q}`;
+  },
+  isReturn(params) { return (params.get("state") || "").startsWith("sp."); },
+  // Back from Spotify with ?code=&state=; returns the hash to go back to.
+  async finishLogin(params) {
+    const flow = this.load(this.FLOW_KEY);
+    this.store(this.FLOW_KEY, null);
+    if (params.get("error")) throw new Error(`Spotify login failed: ${params.get("error")}`);
+    if (!flow || flow.state !== params.get("state")) throw new Error("That Spotify login link expired — connect again.");
+    const tok = await this.tokenRequest({
+      grant_type: "authorization_code", code: params.get("code"), redirect_uri: flow.redirect,
+      client_id: this.CLIENT_ID, code_verifier: flow.verifier,
+    });
+    this.store(this.AUTH_KEY, tok);
+    return flow.back || "#/";
+  },
+  async tokenRequest(fields) {
+    const r = await fetch("https://accounts.spotify.com/api/token", {
+      method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: new URLSearchParams(fields),
+    });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok || !d.access_token) throw new Error(`Spotify login failed (${d.error_description || d.error || r.status})`);
+    return { access: d.access_token, refresh: d.refresh_token || fields.refresh_token, expires: Date.now() + (d.expires_in || 3600) * 1000 };
+  },
+  async token() {
+    const a = this.load(this.AUTH_KEY);
+    if (!a) throw new Error("Spotify isn't connected");
+    if (Date.now() < a.expires - 60000) return a.access;
+    try {
+      const t = await this.tokenRequest({ grant_type: "refresh_token", refresh_token: a.refresh, client_id: this.CLIENT_ID });
+      this.store(this.AUTH_KEY, t);
+      return t.access;
+    } catch (e) { this.logout(); throw e; }
+  },
+  logout() { this.store(this.AUTH_KEY, null); this.current = this.lastUri = null; this.emit(); },
+
+  async api(method, path, body) {
+    const r = await fetch("https://api.spotify.com/v1" + path, {
+      method, headers: { Authorization: `Bearer ${await this.token()}`, ...(body ? { "Content-Type": "application/json" } : {}) },
+      body: body ? JSON.stringify(body) : undefined,
+    });
+    if (r.status === 401) { this.logout(); throw new Error("Spotify login expired — connect again."); }
+    if (r.status === 204) return null;
+    const d = await r.json().catch(() => null);
+    if (!r.ok) { const e = new Error((d && d.error && d.error.message) || `Spotify returned ${r.status}`); e.status = r.status; e.reason = d && d.error && d.error.reason; throw e; }
+    return d;
+  },
+
+  // Accepts a playlist link, spotify:playlist:… URI or bare id.
+  async setPlaylist(link) {
+    const m = /playlist[/:]([A-Za-z0-9]{10,})/.exec(link) || /^([A-Za-z0-9]{10,})$/.exec(link.trim());
+    if (!m) throw new Error("That doesn't look like a Spotify playlist link.");
+    const id = m[1];
+    const meta = await this.api("GET", `/playlists/${id}?fields=name`);
+    const tracks = [];
+    let next = `/playlists/${id}/tracks?limit=100&fields=next,items(track(uri,name,is_local,artists(name)))`;
+    while (next) {
+      const page = await this.api("GET", next);
+      for (const it of page.items || []) {
+        const t = it.track || it.item;
+        if (t && t.uri && !t.is_local && t.uri.startsWith("spotify:track:")) tracks.push([t.uri, t.name, (t.artists || []).map(a => a.name).join(", ")]);
+      }
+      next = page.next ? page.next.replace("https://api.spotify.com/v1", "") : null;
+    }
+    if (!tracks.length) throw new Error("That playlist has no playable songs.");
+    this.store(this.LIST_KEY, { id, name: meta.name, tracks });
+    this.lastUri = null;
+    this.emit();
+  },
+
+  pinKey(bookId, pid) { return `${bookId}/${pid}`; },
+  // The problem's song: its pin, else a stable pick from the playlist.
+  songFor(bookId, pid) {
+    const pin = (this.load(this.PINS_KEY) || {})[this.pinKey(bookId, pid)];
+    if (pin) return pin;
+    const pl = this.playlist();
+    if (!pl || !pl.tracks.length) return null;
+    let h = 2166136261;  // FNV-1a
+    for (const c of `${bookId}/${pid}`) h = Math.imul(h ^ c.charCodeAt(0), 16777619) >>> 0;
+    return pl.tracks[h % pl.tracks.length];
+  },
+  async pinCurrent(bookId, pid) {
+    const now = await this.api("GET", "/me/player/currently-playing");
+    const t = now && now.item;
+    if (!t || !t.uri || !t.uri.startsWith("spotify:track:")) throw new Error("Nothing is playing in Spotify right now.");
+    const pins = this.load(this.PINS_KEY) || {};
+    pins[this.pinKey(bookId, pid)] = [t.uri, t.name, (t.artists || []).map(a => a.name).join(", ")];
+    this.store(this.PINS_KEY, pins);
+    this.current = pins[this.pinKey(bookId, pid)];
+    this.lastUri = t.uri;
+    this.say("");
+  },
+  unpin(bookId, pid) {
+    const pins = this.load(this.PINS_KEY) || {};
+    delete pins[this.pinKey(bookId, pid)];
+    this.store(this.PINS_KEY, pins);
+    this.lastUri = null;
+    this.emit();
+  },
+  pinned(bookId, pid) { return !!(this.load(this.PINS_KEY) || {})[this.pinKey(bookId, pid)]; },
+
+  // Opening a problem switches to its song; a short delay so flicking
+  // through problems doesn't fire a request per step.
+  problemOpened(bookId, pid) {
+    clearTimeout(this.playTimer);
+    if (!this.configured() || !this.loggedIn() || !this.enabled()) return;
+    const song = this.songFor(bookId, pid);
+    if (!song) return;
+    this.current = song;
+    this.emit();
+    if (song[0] === this.lastUri) return;
+    this.playTimer = setTimeout(() => this.play(song).catch(e => this.say(e.message)), 700);
+  },
+  async play(song) {
+    try {
+      await this.api("PUT", "/me/player/play", { uris: [song[0]] });
+    } catch (e) {
+      if (e.status !== 404) throw e;
+      // No active player: wake the first available device.
+      const { devices = [] } = await this.api("GET", "/me/player/devices") || {};
+      const dev = devices.find(d => !d.is_restricted);
+      if (!dev) throw new Error("Open Spotify on your phone or computer, then tap Play.");
+      await this.api("PUT", `/me/player/play?device_id=${encodeURIComponent(dev.id)}`, { uris: [song[0]] });
+    }
+    this.lastUri = song[0];
+    this.say("");
+  },
+  async pause() { await this.api("PUT", "/me/player/pause"); this.lastUri = null; },
+
+  // The Music panel on a problem page.
+  panel(book, p) {
+    const box = h("div", { class: "panel music" });
+    const draw = () => {
+      box.innerHTML = "";
+      box.append(h("h2", {}, "Music"));
+      if (!this.configured()) { box.style.display = "none"; return; }
+      if (!this.loggedIn()) {
+        box.append(h("div", { class: "meta-sub" }, "Each problem plays its own song from a playlist of yours (Spotify Premium)."),
+                   h("div", { class: "controls" }, [h("button", { class: "wide", onclick: () => this.login().catch(e => this.say(e.message)) }, "Connect Spotify")]));
+      } else if (!this.playlist()) {
+        const input = h("input", { type: "text", placeholder: "Paste a Spotify playlist link", class: "music-input" });
+        const save = h("button", { class: "wide", onclick: async () => {
+          save.disabled = true; this.say("Loading playlist…");
+          try { await this.setPlaylist(input.value); this.problemOpened(book.id, p.id); }
+          catch (e) { this.say(e.message); }
+          finally { save.disabled = false; }
+        } }, "Use this playlist");
+        box.append(h("div", { class: "meta-sub" }, "Pick the playlist the problems' songs come from."), input, h("div", { class: "controls" }, [save]));
+      } else {
+        const song = this.songFor(book.id, p.id), pl = this.playlist(), on = this.enabled();
+        box.append(h("div", { class: "music-now" }, song ? [h("b", {}, song[1]), ` — ${song[2]}`] : "No song"),
+                   h("div", { class: "meta-sub" }, this.pinned(book.id, p.id) ? "Pinned to this problem" : `From “${pl.name}”`));
+        const act = fn => async () => { try { await fn(); } catch (e) { this.say(e.message); } };
+        box.append(h("div", { class: "controls" }, [
+          h("button", { onclick: act(() => song && this.play(song)) }, "▶ Play"),
+          h("button", { onclick: act(() => this.pause()) }, "❚❚ Pause"),
+          this.pinned(book.id, p.id)
+            ? h("button", { onclick: () => this.unpin(book.id, p.id) }, "Unpin")
+            : h("button", { title: "Tie the song playing in Spotify now to this problem", onclick: act(() => this.pinCurrent(book.id, p.id)) }, "Use current song"),
+          h("button", { onclick: () => { this.setEnabled(!on); if (!on) this.problemOpened(book.id, p.id); } }, on ? "Auto-play: on" : "Auto-play: off"),
+          h("button", { class: "wide", onclick: () => { this.store(this.LIST_KEY, null); this.emit(); } }, "Change playlist"),
+        ]));
+      }
+      if (this.message) box.append(h("div", { class: "meta-sub music-msg" }, this.message));
+    };
+    draw();
+    const off = this.onChange(() => { if (!box.isConnected) return off(); draw(); });
+    return box;
+  },
+};
 
 /* ---- record an in-person game: tap moves onto a board, then send to Review ---- */
 
@@ -3092,7 +3301,12 @@ Sync.init();
 // Back from OGS's login page with ?code=&state=: finish the login, then
 // drop the query string and land on the Play tab.
 const loginParams = new URLSearchParams(location.search);
-if (loginParams.get("state") && (loginParams.get("code") || loginParams.get("error"))) {
+if (loginParams.get("state") && (loginParams.get("code") || loginParams.get("error")) && Spotify.isReturn(loginParams)) {
+  Spotify.finishLogin(loginParams)
+    .then(back => history.replaceState(null, "", location.pathname + back))
+    .catch(e => { Spotify.message = e.message; history.replaceState(null, "", location.pathname + "#/"); })
+    .finally(route);
+} else if (loginParams.get("state") && (loginParams.get("code") || loginParams.get("error"))) {
   OGSPlay.finishLogin(loginParams)
     .catch(e => { OGSPlay.loginError = e.message; })
     .finally(() => { history.replaceState(null, "", location.pathname + "#/play"); route(); });

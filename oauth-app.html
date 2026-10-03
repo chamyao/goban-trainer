@@ -14,12 +14,12 @@
 </head>
 <body>
 <main>
-  <h1 style="font-size:20px">Logged in to OGS</h1>
+  <h1 style="font-size:20px">Logged in</h1>
   <p>Returning you to the Tian Cai Zhi Wang app…</p>
   <a class="btn" id="back">Open the app</a>
 </main>
 <script>
-// OGS redirects the Android app's login here (OAuth needs an https
+// OGS and Spotify redirect the Android app's logins here (OAuth needs an https
 // redirect); this hands the code back to the app through its link scheme.
 const back = `intent://oauth${location.search}#Intent;scheme=io.github.chamyao.gobantrainer;package=io.github.chamyao.gobantrainer;end`;
 document.getElementById("back").href = back;
