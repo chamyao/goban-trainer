@@ -799,12 +799,45 @@ class Trainer {
     this.render();
   }
 
+  /* How the trainer would end from `played` if Black plays well: "ok", "bad" or
+     null (off the key). White answers as engineReply does: every correct-line
+     reply (they all get faced eventually), else its fallback line. Used by the
+     hint only: some keys have a correct line that a failure line extends
+     (e.g. [1,"sc"] with [3,"sc","qd"]), and White does play that refutation. */
+  outcome(played, memo = new Map()) {
+    const key = played.join(",");
+    if (memo.has(key)) return memo.get(key);
+    memo.set(key, "bad"); // guards against cycles in odd keys
+    const ls = this.linesFrom(played), n = played.length;
+    const cont = ls.filter(L => L.length - 1 > n);
+    let v;
+    if (!cont.length) {
+      const done = ls.filter(L => L.length - 1 === n);
+      v = done.some(L => L[0] <= 2) ? "ok" : done.some(L => L[0] === 3) ? "bad" : null;
+    } else if (n % 2 === 0) { // Black to move: some tree move must work
+      const moves = [...new Set(cont.map(L => L[n + 1]))];
+      v = moves.some(m => this.outcome([...played, m], memo) === "ok") ? "ok" : "bad";
+    } else { // White to move
+      let replies = [...new Set(cont.filter(L => L[0] <= 2).map(L => L[n + 1]))];
+      if (!replies.length) replies = [[...cont].sort((a, b) => a[0] - b[0] || b.length - a.length)[0][n + 1]];
+      v = replies.every(m => this.outcome([...played, m], memo) === "ok") ? "ok" : "bad";
+    }
+    memo.set(key, v);
+    return v;
+  }
+
   hint() {
     if (this.explore || this.done) return;
-    const best = this.p.lines.find(L => L[0] === 1 &&
-      this.played.every((m, i) => m === L[i + 1]) && L.length - 1 > this.played.length);
-    if (!best) return;
-    const [c, r] = cIdx(best[this.played.length + 1]);
+    // Next moves of the main solutions (1), then of correct variations (2):
+    // after some White replies only a variation continues. Prefer a move the
+    // key can't refute; failing that, the first one as before.
+    const n = this.played.length, memo = new Map();
+    const open = L => L.length - 1 > n && this.played.every((m, i) => m === L[i + 1]);
+    const moves = [...new Set([...this.p.lines.filter(L => L[0] === 1 && open(L)),
+                               ...this.p.lines.filter(L => L[0] === 2 && open(L))].map(L => L[n + 1]))];
+    if (!moves.length) return;
+    const best = moves.find(m => this.outcome([...this.played, m], memo) === "ok") || moves[0];
+    const [c, r] = cIdx(best);
     this.goban.pulse(c, r);
   }
 
@@ -1823,13 +1856,13 @@ async function viewLibrary() {
   const favs = loadFavorites();
   root.innerHTML = "";
   const cats = { tsumego: "Tsumego", tesuji: "Tesuji", endgame: "Endgame" };
-  for (const cat in cats) {
-    root.append(h("div", { class: "cat-title" }, cats[cat]));
+  // Favorited books from every category come first; they stay in their category too.
+  const sections = [["Favorites", index.filter(b => favs.has(b.id))],
+                    ...Object.entries(cats).map(([cat, title]) => [title, index.filter(b => b.category === cat)])];
+  for (const [title, books] of sections) {
+    if (!books.length) continue;
+    root.append(h("div", { class: "cat-title" }, title));
     const list = h("div", { class: "book-list" });
-    const books = index.filter(x => x.category === cat)
-      .map((b, i) => ({ b, i }))
-      .sort((x, y) => (favs.has(y.b.id) - favs.has(x.b.id)) || (x.i - y.i))
-      .map(x => x.b);
     for (const b of books) {
       const solved = Object.values(prog[b.id] || {}).filter(v => v === 1).length;
       const isFav = favs.has(b.id);
@@ -2471,14 +2504,19 @@ class LiveGame {
   // Time left for `color` right now: { main, periods, period, byo } in seconds.
   timeLeft(color) {
     const c = this.clock, t = c && (color === BLACK ? c.black_time : c.white_time);
-    if (!t || typeof t !== "object") return null;
+    if (t == null || (typeof t !== "object" && typeof t !== "number")) return null;
     let elapsed = 0;
     if (this.phase === "play" && !c.paused_since && c.current_player === this.player(color).id) {
       // c.now is the server's clock when it sent this; avoids trusting the phone's clock.
       elapsed = (Date.now() - this.clockAt) / 1000 + (c.now && c.last_move ? (c.now - c.last_move) / 1000 : 0);
     }
+    if (typeof t === "number") return { main: Math.max(0, t - elapsed), periods: 0, period: 0, byo: false }; // simple
     const main = (t.thinking_time || 0) - elapsed, period = t.period_time || 0;
     if (main > 0) return { main, periods: t.periods || 0, period, byo: false };
+    if (!t.periods && t.block_time != null) { // canadian: block_time for moves_left moves
+      return { main: Math.max(0, t.block_time + main), periods: 0, period: 0, byo: false, moves: t.moves_left };
+    }
+    if (!t.periods) return { main: 0, periods: 0, period: 0, byo: false }; // fischer / absolute: out of time
     const over = -main, used = period > 0 ? Math.floor(over / period) : Infinity;
     const periods = Math.max(0, (t.periods || 0) - used);
     return { main: 0, periods, period: periods ? period - (over - used * period) : 0, byo: true };
@@ -2495,6 +2533,7 @@ class LiveGame {
 }
 
 const OGSPlay = {
+  // Play always uses online-go.com; the beta entries are kept only for reference.
   SERVERS: { prod: "https://online-go.com", beta: "https://beta.online-go.com" },
   // Public OAuth client IDs from <server>/oauth2/applications/ (not secrets).
   CLIENT_IDS: { prod: "IJg6la0wpumEIw4dQkqql7POhxgbkpDSG40bj1eK", beta: "AXZY8pTJw2qGjXCRsYc7912QVGvSqdfGgA7abEM9" },
@@ -2506,12 +2545,11 @@ const OGSPlay = {
 
   me: null, jwt: null, sock: null, game: null, search: null, loginError: "", listeners: new Set(),
 
+  // Always online-go.com: an old stored "beta" choice is ignored (and cleared).
   serverKey() {
-    let k; try { k = localStorage.getItem(this.SERVER_KEY); } catch {}
-    if (k && this.SERVERS[k]) return k;
-    return this.CLIENT_IDS.prod || !this.CLIENT_IDS.beta ? "prod" : "beta";
+    try { if (localStorage.getItem(this.SERVER_KEY)) localStorage.removeItem(this.SERVER_KEY); } catch {}
+    return "prod";
   },
-  setServer(k) { this.logout(); try { localStorage.setItem(this.SERVER_KEY, k); } catch {} this.emit(); },
   base() { return this.SERVERS[this.serverKey()]; },
   clientId() { return this.CLIENT_IDS[this.serverKey()]; },
   isApp() { return !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform()); },
@@ -2543,12 +2581,12 @@ const OGSPlay = {
     try { flow = JSON.parse(localStorage.getItem(this.FLOW_KEY)); localStorage.removeItem(this.FLOW_KEY); } catch {}
     if (params.get("error")) throw new Error(`OGS login failed: ${params.get("error_description") || params.get("error")}`);
     if (!flow || flow.state !== params.get("state")) throw new Error("That login link expired — log in again.");
-    const tok = await this.tokenRequest(this.SERVERS[flow.server], {
+    if (flow.server !== this.serverKey()) throw new Error("That login link expired — log in again.");
+    const tok = await this.tokenRequest(this.base(), {
       grant_type: "authorization_code", code: params.get("code"), redirect_uri: flow.redirect,
-      client_id: this.CLIENT_IDS[flow.server], code_verifier: flow.verifier,
+      client_id: this.clientId(), code_verifier: flow.verifier,
     });
-    try { localStorage.setItem(this.SERVER_KEY, flow.server); } catch {}
-    this.saveAuth({ server: flow.server, ...tok });
+    this.saveAuth({ server: this.serverKey(), ...tok });
   },
   async tokenRequest(base, fields) {
     const r = await fetch(`${base}/oauth2/token/`, {
@@ -2660,10 +2698,37 @@ const OGSPlay = {
   },
   resumePlay() { this.sock.send("game/removed_stones/reject", { game_id: this.game.id }); },
 
-  // Your unfinished live games, newest first.
+  // Your unfinished games (live and correspondence), as
+  // { id, width, height, opp, corr, myMove } — myMove is null when unknown.
+  // /ui/overview carries each game's clock (whose turn it is); the plain
+  // games list is the fallback.
   async ongoing() {
-    const d = await this.api(`/api/v1/players/${this.me.id}/games/?ended__isnull=true&source=play&time_per_move__lt=3600&time_per_move__gt=0&page_size=5`);
-    return d.results || [];
+    const me = this.me.id, out = [];
+    const isCorr = g => {
+      let tcp = g.time_control_parameters;
+      if (typeof tcp === "string") { try { tcp = JSON.parse(tcp); } catch { tcp = null; } }
+      if (tcp && tcp.speed) return tcp.speed === "correspondence";
+      return (g.time_per_move || 0) >= 3600;
+    };
+    const row = (g, black, white, toMove) => ({
+      id: g.id, width: g.width, height: g.height,
+      opp: ((black && black.id === me ? white : black) || {}).username || "?",
+      corr: isCorr(g), myMove: toMove == null ? null : toMove === me,
+    });
+    try {
+      const d = await this.api("/api/v1/ui/overview");
+      if (!Array.isArray(d.active_games)) throw new Error("no active_games");
+      for (const g of d.active_games) {
+        const j = g.json || {}, p = j.players || {};
+        const toMove = (j.clock && j.clock.current_player) ?? g.player_to_move ?? null;
+        out.push(row({ ...j, ...g, time_control_parameters: g.time_control_parameters || j.time_control },
+                     g.black || p.black, g.white || p.white, toMove));
+      }
+      return out;
+    } catch (e) { if (!this.loggedIn()) throw e; }
+    const d = await this.api(`/api/v1/players/${me}/games/?ended__isnull=true&source=play&ordering=-id&page_size=20`);
+    for (const g of d.results || []) out.push(row(g, g.players && g.players.black, g.players && g.players.white, g.player_to_move ?? null));
+    return out;
   },
 
   emit() { for (const f of this.listeners) f(); },
@@ -2671,10 +2736,22 @@ const OGSPlay = {
 
 let playTicker = null;
 
+// m:ss under an hour, then "3h 05m", then "2d 4h" (correspondence clocks).
+function fmtDuration(s) {
+  s = Math.max(0, s);
+  if (s >= 86400) return `${Math.floor(s / 86400)}d ${Math.floor(s % 86400 / 3600)}h`;
+  if (s >= 3600) return `${Math.floor(s / 3600)}h ${String(Math.floor(s % 3600 / 60)).padStart(2, "0")}m`;
+  return `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
+}
+
 function fmtClock(t) {
   if (!t) return "–";
-  const mmss = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
-  if (!t.byo) return `${mmss(t.main)} + ${t.periods}×${t.period}s`;
+  if (!t.byo) {
+    const extra = t.periods ? ` + ${t.periods}×${t.period >= 60 ? fmtDuration(t.period) : t.period + "s"}`
+                : t.moves ? ` / ${t.moves} moves` : "";
+    return fmtDuration(t.main) + extra;
+  }
+  if (t.period >= 3600) return t.periods ? `${fmtDuration(t.period)} · ${t.periods} left` : "0s";
   return t.periods ? `${Math.ceil(t.period)}s · ${t.periods} left` : "0s";
 }
 
@@ -2694,13 +2771,7 @@ function viewPlay(gameId) {
 }
 
 function playBody(gameId) {
-  const P = OGSPlay, server = P.serverKey(), other = server === "beta" ? "prod" : "beta";
-  // Switching servers logs out: each server has its own account and login.
-  const serverNote = h("div", { class: "meta-sub" }, [
-    server === "beta" ? "Using OGS's test server (beta.online-go.com). " : "",
-    P.CLIENT_IDS[other] ? h("a", { href: "#/play", onclick: e => { e.preventDefault(); P.setServer(other); } },
-                            other === "beta" ? "Use the test server instead" : "Switch to online-go.com") : "",
-  ]);
+  const P = OGSPlay, server = P.serverKey();
 
   if (!P.clientId()) {
     return [h("div", { class: "sgf-loader" }, [
@@ -2713,8 +2784,7 @@ function playBody(gameId) {
     const err = h("div", { class: "err" }, P.loginError);
     return [h("div", { class: "sgf-loader" }, [
       h("div", { class: "cat-title" }, "Play on OGS"),
-      h("div", {}, `Play ${P.TIME_LABEL} games on online-go.com. You log in on OGS's own page — your password never reaches this app.`),
-      serverNote,
+      h("div", {}, `Play ${P.TIME_LABEL} games on online-go.com, and continue your correspondence games. You log in on OGS's own page — your password never reaches this app.`),
       h("div", { class: "row" }, [h("button", { class: "primary", onclick: () => P.login().catch(e => { err.textContent = e.message; }) }, "Log in with OGS")]),
       err,
     ])];
@@ -2730,10 +2800,10 @@ function playBody(gameId) {
     if (!P.game || P.game.id !== +gameId) P.openGame(gameId);
     return playGame(P.game);
   }
-  return playLobby(serverNote);
+  return playLobby();
 }
 
-function playLobby(serverNote) {
+function playLobby() {
   const P = OGSPlay;
   clearInterval(playTicker);
   const status = h("div", { class: "meta-sub" });
@@ -2752,11 +2822,13 @@ function playLobby(serverNote) {
     action = h("div", { class: "row" }, [h("button", { class: "primary", onclick: () => P.findGame() }, "Find a game")]);
   }
   P.ongoing().then(list => {
+    // Games waiting for your move first.
+    list.sort((a, b) => (b.myMove === true) - (a.myMove === true));
     for (const g of list) {
-      const opp = g.players.black.id === P.me.id ? g.players.white.username : g.players.black.username;
+      const kind = (g.corr ? "Correspondence" : "Live") + (g.myMove === true ? " · your move" : g.myMove === false ? " · waiting" : "");
       const row = h("div", { class: "history-item" }, [h("div", { class: "hi-open" }, [
-        h("div", { class: "t" }, `Resume game vs ${opp}`),
-        h("div", { class: "n" }, `${g.width}×${g.height} · game ${g.id}`),
+        h("div", { class: "t" }, `${g.corr ? "Open" : "Resume"} game vs ${g.opp}`),
+        h("div", { class: "n" }, `${kind} · ${g.width}×${g.height} · game ${g.id}`),
       ])]);
       row.addEventListener("click", () => { location.hash = `#/play/${g.id}`; });
       games.append(row);
@@ -2768,7 +2840,7 @@ function playLobby(serverNote) {
     h("div", {}, [`Logged in as `, h("b", {}, P.me.username), ` on ${P.base().replace("https://", "")}. `,
                   h("a", { href: "#/play", onclick: e => { e.preventDefault(); P.logout(); } }, "Log out")]),
     h("div", { class: "meta-sub" }, `Ranked ${P.TIME_LABEL}, Japanese rules, opponents within 3 ranks.`),
-    action, status, games, serverNote,
+    action, status, games,
   ])];
 }
 
