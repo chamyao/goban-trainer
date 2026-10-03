@@ -864,7 +864,28 @@ class Trainer {
     this.els.turnBadge.textContent = this.explore
       ? (this.exploreTurn === BLACK ? "Explore · Black" : "Explore · White")
       : this.done ? "—" : this.engineBusy ? "White thinking…" : "Black to play";
+    this.renderNote();
     this.renderSolutionTree();
+  }
+
+  // The source's comment on the position on the board ("Dead", "see the
+  // snap-back?"), keyed by the moves from the start.
+  noteFor(moves) {
+    const n = this.p.notes && this.p.notes[moves.join(",")];
+    return n ? n.join(" · ") : "";
+  }
+  renderNote() {
+    const el = this.els.note;
+    if (!el) return;
+    const moves = this.viewing ? this.pathMoves(this.viewing) : this.explore ? [] : this.played;
+    const text = this.explore ? "" : this.noteFor(moves);
+    el.textContent = text ? `“${text}”` : "";
+    el.style.display = text ? "" : "none";
+  }
+  pathMoves(node) {
+    const out = [];
+    for (let n = node; n.parent; n = n.parent) out.unshift(n.move);
+    return out;
   }
 
   /* --- solution tree: every line of the problem, shown once it's solved --- */
@@ -937,6 +958,9 @@ class Trainer {
         stroke: !n.move ? "#5c554a" : n.ok ? "var(--accent)" : "var(--danger)",
         "stroke-width": n.move ? 2 : 1, cursor: "pointer",
       });
+      if (n.move && this.noteFor(this.pathMoves(n)))
+        el("circle", { cx: px(n) + R - 1, cy: py(n) - R + 1, r: 3.5, fill: "#d98a1f",
+                       stroke: "#fff", "stroke-width": 1, "pointer-events": "none" });
       if (n.move) {
         const t = el("text", { x: px(n), y: py(n) + 3.2, "text-anchor": "middle", "font-size": 10,
                                "font-weight": 600, "pointer-events": "none",
@@ -944,7 +968,8 @@ class Trainer {
         t.textContent = n.ply;
       }
       const tip = document.createElementNS(SVGNS, "title");
-      tip.textContent = n.move ? `${n.ply}. ${coordLabel(n.move)}${n.ok ? "" : " (fails)"}` : "Start";
+      const note = n.move ? this.noteFor(this.pathMoves(n)) : "";
+      tip.textContent = n.move ? `${n.ply}. ${coordLabel(n.move)}${n.ok ? "" : " (fails)"}${note ? " — " + note : ""}` : "Start";
       c.appendChild(tip);
       c.addEventListener("click", () => this.showNode(n));
       n.children.forEach(nodes);
@@ -1868,9 +1893,10 @@ async function viewPlayer(id, num) {
   const turnBadge = h("span", { class: "badge turn" }, "Black to play");
   const btnExplore = h("button", {}, "Explore");
   const treeBox = h("div", { class: "movetree", style: "height:auto; max-height:320px" });
+  const note = h("div", { class: "source-note", style: "display:none" });
   const treePanel = h("div", { class: "panel", style: "display:none" }, [
     h("h2", {}, "Solution tree"),
-    h("div", { class: "meta-sub" }, "Tap a move to see the position. Green: correct lines · red: failures."),
+    h("div", { class: "meta-sub" }, "Tap a move to see the position. Green: correct lines · red: failures · dot: his comment."),
     treeBox,
   ]);
 
@@ -1895,7 +1921,7 @@ async function viewPlayer(id, num) {
         turnBadge,
       ]),
     ]),
-    h("div", { class: "panel" }, [h("h2", {}, "Status"), status]),
+    h("div", { class: "panel" }, [h("h2", {}, "Status"), status, note]),
     treePanel,
     h("div", { class: "panel" }, [
       h("h2", {}, "Controls"),
@@ -1920,7 +1946,7 @@ async function viewPlayer(id, num) {
   player.append(boardCard, aside);
   root.append(player);
 
-  trainer = new Trainer(book, idx, { svg, boardCard, status, turnBadge, btnExplore, treePanel, treeBox });
+  trainer = new Trainer(book, idx, { svg, boardCard, status, turnBadge, btnExplore, treePanel, treeBox, note });
   btnExplore.addEventListener("click", () => trainer.toggleExplore());
   window.__trainer = trainer;
   window.__engine = Engine;

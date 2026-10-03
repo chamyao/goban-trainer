@@ -158,6 +158,7 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
 #status.bad { color: var(--danger); font-weight: 650; }
 #status.off { color: #9a6b1f; }
 #status .icon { font-size: 18px; }
+.source-note { margin-top: 6px; font-size: 14.5px; font-style: italic; color: #7a5a1c; }
 
 .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
 .controls button {
