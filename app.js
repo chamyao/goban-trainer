@@ -2071,6 +2071,7 @@ const Music = {
       client_id: this.CLIENT_ID, code_verifier: flow.verifier,
     });
     this.store(this.AUTH_KEY, tok);
+    setTimeout(() => this.startWebPlayer(), 0);
     return flow.back || "#/";
   },
   async tokenRequest(fields) {
@@ -2105,68 +2106,62 @@ const Music = {
     if (!r.ok) { const e = new Error((d && d.error && d.error.message) || `Spotify returned ${r.status}`); e.status = r.status; throw e; }
     return d;
   },
-  // In-browser playback (Spotify's Web Playback SDK): desktop browsers only,
-  // Premium, and a login that granted "streaming".
-  canStream() {
-    const a = this.load(this.AUTH_KEY);
-    return !/Android|iPhone|iPad|Mobile/i.test(navigator.userAgent) && !!(a && /\bstreaming\b/.test(a.scope || ""));
-  },
-  needsReconnect() {
-    const a = this.load(this.AUTH_KEY);
-    return !/Android|iPhone|iPad|Mobile/i.test(navigator.userAgent) && a && !/\bstreaming\b/.test(a.scope || "");
-  },
+  // Music plays only in this browser, through Spotify's Web Playback SDK
+  // (Premium, and a login that granted "streaming").
+  hasStreaming() { const a = this.load(this.AUTH_KEY); return !!(a && /\bstreaming\b/.test(a.scope || "")); },
   startWebPlayer() {
-    if (this.player || this.sdkLoading || !this.canStream()) return;
+    if (this.player || this.sdkLoading || !this.loggedIn() || !this.hasStreaming()) return;
     this.sdkLoading = true;
+    this.webState = "connecting";
     window.onSpotifyWebPlaybackSDKReady = () => {
       const player = new window.Spotify.Player({
-        name: "TCZW (this browser)", volume: 0.7,
+        name: "Tian Cai Zhi Wang", volume: this.load("gt-spotify-volume") ?? 0.7,
         getOAuthToken: cb => this.token().then(cb).catch(() => {}),
       });
-      player.addListener("ready", ({ device_id }) => { this.webDevice = device_id; this.emit(); });
-      player.addListener("not_ready", () => { this.webDevice = null; this.emit(); });
-      for (const ev of ["initialization_error", "authentication_error", "account_error"])
-        player.addListener(ev, ({ message }) => this.say(ev === "account_error" ? "Playing in the browser needs Spotify Premium." : message));
+      player.addListener("ready", ({ device_id }) => { this.webDevice = device_id; this.webState = "ready"; this.emit(); });
+      player.addListener("not_ready", () => { this.webDevice = null; this.webState = "connecting"; this.emit(); });
+      player.addListener("player_state_changed", st => {
+        if (!st) return;
+        const t = st.track_window && st.track_window.current_track;
+        this.now = t ? { name: t.name, by: (t.artists || []).map(a => a.name).join(", "),
+                         art: ((t.album && t.album.images) || []).slice(-1)[0]?.url, playing: !st.paused } : null;
+        this.emit();
+      });
+      const fail = msg => { this.webState = "failed"; this.say(msg); };
+      player.addListener("initialization_error", () => fail(/Android|iPhone|Mobile/i.test(navigator.userAgent)
+        ? "Spotify doesn't support playing inside phone browsers. Try it on a computer." : "This browser can't play Spotify (it needs DRM/Widevine enabled)."));
+      player.addListener("authentication_error", () => fail("Spotify needs you to reconnect."));
+      player.addListener("account_error", () => fail("Playing in the browser needs Spotify Premium."));
       player.connect();
       this.player = player;
+      setTimeout(() => { if (this.webState === "connecting") fail("Couldn't start the Spotify player in this browser."); }, 15000);
     };
     const sc = document.createElement("script");
     sc.src = "https://sdk.scdn.co/spotify-player.js";
     document.head.append(sc);
   },
-  // A player command. With no active player, use this browser if it can
-  // play, else the first available device.
+  // Every command goes to this browser's player.
   async command(method, path, body) {
-    if (this.player && this.player.activateElement) this.player.activateElement().catch?.(() => {});
-    try { await this.api(method, path, body); }
-    catch (e) {
-      if (e.status !== 404) throw e;
-      const { devices = [] } = await this.api("GET", "/me/player/devices") || {};
-      const dev = devices.find(d => d.id === this.webDevice) || devices.find(d => !d.is_restricted);
-      if (!dev) throw new Error(/Android|iPhone|Mobile/i.test(navigator.userAgent)
-        ? "Open the Spotify app on this phone (play anything once), then try again."
-        : "Open Spotify somewhere, or reload this page to play in the browser.");
-      await this.api(method, path + (path.includes("?") ? "&" : "?") + `device_id=${encodeURIComponent(dev.id)}`, body);
-    }
+    if (!this.hasStreaming()) throw new Error("Tap Reconnect below so music can play in this browser.");
+    if (!this.webDevice) throw new Error(this.webState === "failed" ? this.message || "This browser can't play Spotify." : "Still connecting this browser to Spotify — try again in a moment.");
+    if (this.player && this.player.activateElement) await this.player.activateElement().catch?.(() => {});
+    await this.api(method, path + (path.includes("?") ? "&" : "?") + `device_id=${encodeURIComponent(this.webDevice)}`, body);
     this.message = "";
     setTimeout(() => this.refresh(), 600);
-  },
-  async moveTo(id) {
-    await this.api("PUT", "/me/player", { device_ids: [id], play: true });
-    setTimeout(() => this.refresh(), 700);
   },
   playItem(it) {
     return it.type === "track" ? this.command("PUT", "/me/player/play", { uris: [it.uri] })
                                : this.command("PUT", "/me/player/play", { context_uri: it.uri });
   },
   async refresh() {
-    try {
-      const [p, d] = await Promise.all([this.api("GET", "/me/player"), this.api("GET", "/me/player/devices")]);
-      this.now = p && p.item ? { name: p.item.name, by: (p.item.artists || []).map(a => a.name).join(", "),
-                                 art: ((p.item.album && p.item.album.images) || []).slice(-1)[0]?.url, playing: p.is_playing } : null;
-      this.devices = ((d && d.devices) || []).filter(x => !x.is_restricted);
-      this.activeDevice = (p && p.device && p.device.id) || (this.devices.find(x => x.is_active) || {}).id || null;
-    } catch (e) { this.now = null; }
+    if (this.player) {
+      const st = await this.player.getCurrentState().catch(() => null);
+      if (st) {
+        const t = st.track_window && st.track_window.current_track;
+        this.now = t ? { name: t.name, by: (t.artists || []).map(a => a.name).join(", "),
+                         art: ((t.album && t.album.images) || []).slice(-1)[0]?.url, playing: !st.paused } : null;
+      }
+    }
     this.emit();
   },
   item(x, type) {
@@ -2201,6 +2196,7 @@ const Music = {
     header.append(this.btn);
     document.body.append(this.box);
     this.onChange(() => this.draw());
+    this.startWebPlayer();
   },
   toggle(open = this.box.hidden) {
     this.box.hidden = !open;
@@ -2208,7 +2204,7 @@ const Music = {
     clearInterval(this.poll);
     if (open) {
       this.draw(true);
-      if (this.loggedIn()) { this.startWebPlayer(); this.refresh(); this.poll = setInterval(() => this.refresh(), 5000); }
+      if (this.loggedIn()) { this.startWebPlayer(); this.refresh(); this.poll = setInterval(() => this.refresh(), 3000); }
     }
   },
   draw(fresh) {
@@ -2267,18 +2263,17 @@ const Music = {
     let dev = this.box.querySelector(".mw-devices");
     if (!dev) { dev = h("div", { class: "mw-devices" }); now.after(dev); }
     dev.innerHTML = "";
-    const devs = this.devices || [];
-    if (devs.length) {
-      const sel = h("select", { class: "mw-select", "aria-label": "Playing on" },
-        [...(this.activeDevice ? [] : [h("option", { value: "" }, "— choose a device —")]),
-         ...devs.map(d => { const o = h("option", { value: d.id }, d.id === this.webDevice ? "This browser" : `${d.name} (${d.type.toLowerCase()})`); if (d.id === this.activeDevice) o.selected = true; return o; })]);
-      sel.addEventListener("change", () => sel.value && this.moveTo(sel.value).catch(e => this.say(e.message)));
-      dev.append(h("span", {}, "Playing on"), sel);
-    } else {
-      dev.append(h("span", { class: "mw-sub" }, /Android|iPhone|Mobile/i.test(navigator.userAgent)
-        ? "No Spotify device found: open the Spotify app on this phone." : "No Spotify device found yet: open Spotify, or wait a moment for this browser to connect."));
+    if (!this.hasStreaming()) {
+      dev.append(h("span", {}, "Music plays right here in the browser."),
+                 h("button", { class: "mw-logout", onclick: () => this.login() }, "Reconnect Spotify to enable it"));
+    } else if (this.webState === "ready") {
+      const vol = h("input", { type: "range", min: "0", max: "1", step: "0.05", class: "mw-volume", "aria-label": "Volume" });
+      vol.value = this.load("gt-spotify-volume") ?? 0.7;
+      vol.addEventListener("input", () => { this.store("gt-spotify-volume", +vol.value); this.player && this.player.setVolume(+vol.value); });
+      dev.append(h("span", {}, "🔊 This browser"), vol);
+    } else if (this.webState !== "failed") {
+      dev.append(h("span", {}, "Connecting this browser to Spotify…"));
     }
-    if (this.needsReconnect()) dev.append(h("button", { class: "mw-logout", onclick: () => this.login() }, "Reconnect to play in this browser"));
     this.box.querySelector(".mw-msg").textContent = this.message || "";
   },
 };

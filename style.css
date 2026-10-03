@@ -369,6 +369,7 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
 }
 .mw-results { display: flex; flex-direction: column; gap: 2px; }
 .mw-devices { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
+.mw-volume { flex: 1; min-width: 80px; accent-color: var(--accent); }
 .mw-select { flex: 1; min-width: 0; padding: 6px 8px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--ink); font: inherit; font-size: 13px; }
 .mw-group { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin: 8px 0 2px; }
 .mw-item { display: flex; align-items: center; gap: 10px; padding: 6px; border: none; background: none; border-radius: 8px; cursor: pointer; font: inherit; color: var(--ink); }
