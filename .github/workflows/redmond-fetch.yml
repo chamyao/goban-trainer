@@ -34,13 +34,23 @@ jobs:
           print(d.get('title'), '-', len(d['entries']), 'videos')
           for i, e in enumerate(d['entries'], 1): print(i, e['id'], e.get('duration'), e.get('title'))
           "
+      # Signed-in cookies from a throwaway account (the owner's choice) for
+      # YouTube's bot check on GitHub's IPs. Stored only as the YT_COOKIES
+      # repo secret, never in the repo.
+      - name: Write YouTube cookies
+        env:
+          YT_COOKIES: ${{ secrets.YT_COOKIES }}
+        run: |
+          if [ -n "$YT_COOKIES" ]; then printf '%s\n' "$YT_COOKIES" > "$RUNNER_TEMP/cookies.txt"; echo "cookies: yes"
+          else echo "cookies: none (set the YT_COOKIES secret)"; fi
       - name: Download videos and captions
         # GitHub's IPs often get YouTube's bot check; try the player clients
         # that are sometimes allowed from data centers, one at a time.
         run: |
           for client in default tv web_safari mweb ios web_embedded; do
             echo "::group::player_client=$client"
-            if yt-dlp --playlist-items "${{ github.event.inputs.videos || '1' }}" \
+            COOKIES=(); [ -f "$RUNNER_TEMP/cookies.txt" ] && COOKIES=(--cookies "$RUNNER_TEMP/cookies.txt")
+            if yt-dlp "${COOKIES[@]}" --sleep-requests 1 --playlist-items "${{ github.event.inputs.videos || '1' }}" \
                  --extractor-args "youtube:player_client=$client" \
                  -f "bv*[height<=720][ext=mp4]/bv*[height<=720]/b[height<=720]" \
                  --write-auto-subs --write-subs --sub-langs "en.*" --sub-format vtt \
