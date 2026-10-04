@@ -321,7 +321,8 @@ CAST = {
     "dongzhuo": "zm_098", "zhangbao": "zm_041", "zhangjiao": "zm_068", "luzhi": "zm_081",
     "zhujun": "zm_033", "huangfusong": "zm_055", "chengyuanzhi": "zm_011", "inspector": "zm_096",
     "xushao": "zm_091", "uncle": "zm_014", "zuofeng": "zm_063", "merchant": "zm_025", "immortal": "zm_080",
-    "stargrey": "zm_082", "starred": "zm_089",  # the two old men at the weiqi board (the Star Lords)
+    "stargrey": "zm_082", "starred": "zm_089",
+    "liubei_child": "zf_002", "liuyuanqi": "zm_065",  # the mulberry-tree opening: Liu Bei as a boy, and his uncle  # the two old men at the weiqi board (the Star Lords)
 }
 # Townsfolk speak in a voice for their kind (tools/tk_places.py "kind").
 FOLK_VOICE = {

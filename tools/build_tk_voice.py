@@ -36,6 +36,7 @@ EN_VOICE = {
     "zm_033": "am_eric", "zm_055": "am_liam", "zm_011": "am_echo", "zm_096": "am_echo",           # Zhu Jun, Huangfu Song, Cheng Yuanzhi, the inspector
     "zm_091": "bm_lewis", "zm_014": "am_adam", "zm_063": "am_liam", "zm_025": "am_adam",          # Xu Shao, Cao's uncle, Zuo Feng, the merchant
     "zm_080": "am_onyx", "zm_082": "bm_daniel", "zm_089": "bm_lewis",                              # the Immortal, the Star Lords
+    "zm_065": "am_adam",                                                                           # Liu Yuanqi
     "zm_052": "am_adam", "zm_100": "bm_daniel", "zm_069": "am_liam", "zm_057": "bm_fable",        # townsfolk: villager, elder, monk, noble
     "zm_045": "am_eric", "zm_016": "am_fenrir", "zm_030": "am_liam", "zm_064": "bm_lewis",        # soldier, rebel, hunter, official
     "zf_022": "af_sarah", "zf_002": "af_sky", "zf_017": "bf_isabella", "zf_023": "af_bella",     # woman, child and girl, lady, maiden

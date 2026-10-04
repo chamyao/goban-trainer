@@ -19,6 +19,8 @@ const TK_CHARS = {
   luzhi: { name: "Lu Zhi", skin: "#eec7a0", hair: "#9a9a9a", hat: "guan", hatC: "#1e1e24", robe: "#3e5f8a", trim: "#d6d2c4", beard: "long", beardC: "#a8a8a8", eyes: "kind" },
   zhujun: { name: "Zhu Jun", skin: "#e8c09a", hair: "#2a2024", hat: "helmet", hatC: "#858a94", robe: "#8a3030", trim: "#c8c8c8", beard: "short", eyes: "normal", weapon: "sword" },
   huangfusong: { name: "Huangfu Song", skin: "#e8c09a", hair: "#2a2024", hat: "helmet", hatC: "#858a94", robe: "#2f4f7a", trim: "#c8c8c8", beard: "long", eyes: "normal", weapon: "sword" },
+  liubei_child: { name: "Young Liu Bei", skin: "#f5d2ae", hair: "#2b2226", hat: "topknot", hatC: "#2b2226", pin: "#e6c14a", robe: "#e9dcae", trim: "#3f7d4c", beard: "none", ears: true, eyes: "kind" },
+  liuyuanqi: { name: "Liu Yuanqi", skin: "#eec7a0", hair: "#7a7276", hat: "guan", hatC: "#1e1e24", robe: "#5a6a4a", trim: "#d6d2c4", beard: "short", beardC: "#9a9a9a", eyes: "kind" },
   yanzheng: { name: "Yan Zheng", skin: "#e2b089", hair: "#2a2024", hat: "yellowband", hatC: "#e8bc2a", robe: "#6a4a2a", trim: "#e8bc2a", beard: "short", eyes: "narrow", weapon: "sword" },
   chengyuanzhi: { name: "Cheng Yuanzhi", skin: "#e8b88c", hair: "#2a2024", hat: "yellowband", hatC: "#e8bc2a", robe: "#8f6a3a", trim: "#e8bc2a", beard: "short", eyes: "wild", weapon: "glaive" },
   militia: { name: "Village brave", skin: "#ecc29a", hair: "#2a2024", hat: "band", hatC: "#b8392c", robe: "#6a7a5a", trim: "#b8392c", beard: "none", eyes: "normal", weapon: "spear" },

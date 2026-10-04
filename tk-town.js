@@ -15,7 +15,7 @@ const TK_NAMES_ZH = {
   liubei: "刘备", guanyu: "关羽", zhangfei: "张飞", caocao: "曹操", dongzhuo: "董卓", zhangbao: "张宝", zhangjiao: "张角",
   luzhi: "卢植", zhujun: "朱儁", huangfusong: "皇甫嵩", chengyuanzhi: "程远志", rebel: "黄巾兵", inspector: "督邮",
   xushao: "许劭", uncle: "曹操的叔父", zuofeng: "左丰", merchant: "张世平", immortal: "南华老仙",
-  stargrey: "灰衣老人", starred: "红衣老人", yanzheng: "严政",
+  stargrey: "灰衣老人", starred: "红衣老人", yanzheng: "严政", liubei_child: "少年刘备", liuyuanqi: "刘元起",
   f_farmer: "农夫", f_farmer2: "农夫", f_porter: "脚夫", f_youth: "后生", f_woman: "妇人", f_woman2: "妇人", f_elder: "老者", f_elder2: "老汉",
   f_child: "孩童", f_daoist: "道士", f_noble: "士人", f_soldier: "兵士", f_hunter: "猎户", f_official: "书吏",
   f_geisha: "仕女", f_geisha2: "仕女", f_geisha3: "仕女", f_maiden: "少女", f_maiden2: "少女", f_girl: "小姑娘",
