@@ -12,6 +12,15 @@ const WorldTravel = {
   addButtons(bar, w) {
     if (!bar || !WorldData.has(w.n)) return;
     const btn = (label, title, onclick) => h("button", { class: "tk-chron-btn", type: "button", title, onclick }, label);
+    // on and off the horse, once the party has one (also the R key)
+    if (typeof WorldItems !== "undefined") {
+      const ride = btn("", "Get on or off your horse (R)", () => { const s = this.scene(); if (s && s.sys.isActive()) WorldItems.toggle(s); });
+      const show = () => { ride.hidden = !WorldItems.hasMount(w); ride.textContent = WorldItems.riding(w) ? "🐎 下马 Dismount" : "🐎 上马 Ride"; };
+      WorldItems.onChange = show;
+      show();
+      setInterval(() => { if (ride.isConnected) show(); }, 1500);   // a gift can arrive mid-scene
+      bar.append(ride);
+    }
     bar.append(
       btn("🗺 地图 Map", "Travel to a place you have cleared", () => this.open(w)),
       btn("↺ 重新开始 Start over", "Forget this world's progress and start again", () => this.reset(w)));
@@ -94,7 +103,7 @@ const WorldTravel = {
     for (const k of Object.keys(p.tk || {})) if (k.startsWith(pre)) delete p.tk[k];
     for (const k of Object.keys(p.tkSeen || {})) if (k.startsWith(`${w.n}:`)) delete p.tkSeen[k];
     TK.saveProg(p);
-    for (const key of ["tk-party", "tk-items", "tk-at"]) { const a = TK.ls(key); delete a[w.n]; TK.lsSet(key, a); }
+    for (const key of ["tk-party", "tk-items", "tk-at", "tk-ride"]) { const a = TK.ls(key); delete a[w.n]; TK.lsSet(key, a); }
     try { localStorage.removeItem(WorldState.key(w.n)); } catch {}
     WorldView.destroy();
     viewTK(w.n);
