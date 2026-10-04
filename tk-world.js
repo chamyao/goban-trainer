@@ -58,8 +58,13 @@ const WorldData = {
 // [who, text] still work for maps compiled before that.
 // Wukong the guide on or off, remembered (the menu has the switch).
 const WorldGuide = {
-  get on() { try { return localStorage.getItem("tk-guide") !== "off"; } catch { return true; } },
-  set on(v) { try { localStorage.setItem("tk-guide", v ? "on" : "off"); } catch {} },
+  // "stuck": he comes only when you haven't made headway for a while (the default);
+  // "always"; or "off". Remembered.
+  get mode() { let v; try { v = localStorage.getItem("tk-guide"); } catch {} return v === "off" || v === "always" ? v : "stuck"; },
+  set mode(v) { try { localStorage.setItem("tk-guide", v); } catch {} },
+  get on() { return this.mode !== "off"; },
+  STUCK: 40000,   // ms without progress before he comes
+  prog: null,     // { key, best, idle }: kept across maps
   W: 60, H: 60,   // his canvas, in sprite pixels: Wukong (44x44) above a nimbus cloud
   cloud: null,
   // A golden-white nimbus with a curl at the back, drawn once.
@@ -374,6 +379,7 @@ function worldScenes() {
       if (!q) return null;
       const quests = this.available(q) ? [q] : this.leadsTo(q);
       const here = quests.find(x => x.place === this.placeId);
+      this.goalHops = 0;
       if (here) { const s = Object.values(this.spots).find(s => s.node === here.node); return s ? { x: s.x, y: s.y - 4 } : null; }
       const goals = new Set(quests.map(x => x.place)), near = {};
       for (const p of this.region.places) for (const l of p.links || []) { (near[p.id] ||= new Set()).add(l); (near[l] ||= new Set()).add(p.id); }
@@ -382,6 +388,7 @@ function worldScenes() {
         const id = queue.shift();
         if (goals.has(id)) {
           let hop = id;
+          for (let n = id; n !== this.placeId; n = prev[n]) this.goalHops++;
           while (prev[hop] !== this.placeId) hop = prev[hop];
           const e = this.exits.find(e => e.to === hop);
           return e ? { x: e.rect.centerX, y: e.rect.centerY } : null;
@@ -397,11 +404,17 @@ function worldScenes() {
     goalGuide(time) {
       const el = this.guide, t = this.goalAt;
       if (!el) return;
-      const show = WorldGuide.on && !!t && !this.ui.busy() && !this.leaving && !this.cine;
-      el.hidden = !show; el.say.hidden = true;
-      if (!show) { if (!t) this.fairy = null; return; }
       const P = this.player, dt = Math.min(50, this.game.loop.delta || 16) / 1000;
-      const f = this.fairy || (this.fairy = { x: P.x, y: P.y - 24, vx: 0, vy: 0, wp: null, still: 0 });
+      const free = !!t && !this.ui.busy() && !this.leaving && !this.cine;
+      // progress: maps still to cross, then distance on this one; getting closer resets the clock
+      const q = this.nextMain(), key = q ? q.node : "", score = (this.goalHops || 0) * 1000 + (t ? Math.hypot(t.x - P.x, t.y - P.y) : 0);
+      const G = WorldGuide.prog || (WorldGuide.prog = { key, best: score, idle: 0 });
+      if (G.key !== key || score < G.best - 40) Object.assign(G, { key, best: Math.min(score, G.key === key ? G.best : score), idle: 0 });
+      else if (free) G.idle += dt * 1000;
+      const mode = WorldGuide.mode, show = free && (mode === "always" || (mode === "stuck" && G.idle > WorldGuide.STUCK));
+      el.hidden = !show; el.say.hidden = true;
+      if (!show) { this.fairy = null; return; }   // he leaves, and flies in fresh next time
+      const f = this.fairy || (this.fairy = { x: P.x - (t.x > P.x ? 60 : -60), y: P.y - 70, vx: 0, vy: 0, wp: null, still: 0 });
       const toX = t.x - P.x, toY = t.y - P.y, dist = Math.hypot(toX, toY) || 1;
       // where he waits: over the goal when you're close to it, else a stretch ahead on the way
       const ahead = () => {
