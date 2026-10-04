@@ -21,13 +21,15 @@ words and name people only; their look belongs in CAST.
 """
 import re
 
-STYLE = ("Style: in the style of The God of High School (the Korean action webtoon and its MAPPA anime): "
-         "bold, clean, confident line art, sharp "
-         "angular faces with intense eyes, athletic builds, high-contrast cel shading with hard shadows, saturated "
-         "colours, dynamic energy, crisp detailed backgrounds. Ancient China, 184 AD. "
+STYLE = ("Style: in the style of The God of High School key art: rough, energetic black ink line art with "
+         "scratchy brush strokes and loose hatching, flat bold colour fills with almost no gradients, a punchy "
+         "limited palette of saturated orange, hot pink and electric cyan, offset cyan and magenta shadow shapes, "
+         "pink halftone dot screens, ink splatter and paint flecks, motion streaks, dynamic foreshortened action "
+         "pose, graphic poster composition. Ancient China, 184 AD. "
          "No text, no lettering, no borders, no letterbox bars.")
-# (the user's choice of look: The God of High School, named and also described, since models follow
-# a description more reliably than a title alone)
+# (the user's choice of look: The God of High School, from a piece of its key art they shared; named,
+# and described from that image, since models follow a description more reliably than a title alone.
+# The image itself isn't in the repo: it's the show's art, not ours to redistribute)
 
 # key -> (name as the scenes write it, look)
 CAST = {
@@ -46,8 +48,8 @@ CAST = {
 def portrait(key):
     """The request for a person's reference portrait."""
     name, look = CAST[key]
-    return (f"Character reference portrait of {name}, {look}. Full body, standing, facing the viewer, "
-            f"neutral pose, on a plain white background with nothing behind him, even lighting. {STYLE}")
+    return (f"Character reference portrait of {name}, {look}. Full body, three-quarter view, a confident dynamic "
+            f"stance that shows his whole outfit, on a plain flat background. {STYLE}")
 
 
 STILLS = {
