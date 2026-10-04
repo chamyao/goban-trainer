@@ -293,7 +293,7 @@ ZH = {
     "Go into the village inn.": "走进村店。",
     "Report to Lu Zhi in his tent.": "到卢植帐中拜见。",
     "Read the notice in the town square.": "去城中广场看榜文。",
-    "Swear brotherhood under the great peach tree.": "在大桃树下结为兄弟。",
+    "Sit at the old men's weiqi board under the great peach tree.": "在大桃树下，坐到两位老人的棋盘前。",
     "Side story: find the old man in the hills.": "支线：去山中寻找那位老人。",
     "Side story: hear Zhang Jiao's sermon in Julu.": "支线：到巨鹿听张角传道。",
     "Side story: the betrayal in the Yellow Hills.": "支线：黄冈的背叛。",
@@ -312,7 +312,7 @@ ZH = {
     "Dong Zhuo's tent": "董卓的大帐", "Liu Bei's home": "刘备的家", "The Cao family house": "曹家宅院",
     "The Han camp": "汉军营地", "The Yellow Turban line": "黄巾军阵", "The besieged city": "被围的城",
     "The county office": "县衙", "The envoy's rest": "使者歇脚处", "The great mulberry tree": "大桑树", "Lu Zhi's tent": "卢植大帐",
-    "The great peach tree": "大桃树", "The horse dealers' camp": "马商的营地", "The north gate of Luoyang": "洛阳北门",
+    "The great peach tree": "大桃树", "The weiqi board": "围棋盘", "The horse dealers' camp": "马商的营地", "The north gate of Luoyang": "洛阳北门",
     "The notice board": "榜文", "The teahouse": "茶馆", "The village inn": "村店", "Where Zhang Jiao preaches": "张角传道之处",
     "Zhang Bao's sorcery": "张宝的妖术", "Zhang Bao's stronghold": "张宝的城寨", "Zhang Fei's farm": "张飞的庄园",
 
