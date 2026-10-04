@@ -1327,10 +1327,10 @@
    "node": "1-n2",
    "role": "main",
    "place": "the-peach-garden",
-   "spot": "altar",
+   "spot": "board",
    "scene": "oath",
    "title": "The Peach Garden Oath",
-   "objective": "Swear brotherhood under the great peach tree.",
+   "objective": "Sit at the old men's weiqi board under the great peach tree.",
    "after": [
     "1-i1"
    ],
@@ -1457,7 +1457,7 @@
      147179
     ]
    ],
-   "objective_zh": "在大桃树下结为兄弟。",
+   "objective_zh": "在大桃树下，坐到两位老人的棋盘前。",
    "title_zh": "桃园结义"
   },
   {

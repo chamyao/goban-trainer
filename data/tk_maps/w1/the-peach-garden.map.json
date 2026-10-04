@@ -59,7 +59,8 @@
    "y": 9,
    "w": 1,
    "h": 1,
-   "id": "board"
+   "id": "board",
+   "label": "The weiqi board"
   },
   {
    "kind": "building.moongate",
@@ -1430,11 +1431,11 @@
  ],
  "spots": [
   {
-   "id": "altar",
-   "x": 17,
+   "id": "board",
+   "x": 20.5,
    "y": 10.7,
    "node": "1-n2",
-   "label": "The great peach tree",
+   "label": "The weiqi board",
    "intro": [
     "Under the great peach tree two old men sit over a weiqi board, one in grey, one in red.",
     [
@@ -1448,7 +1449,8 @@
      "Good. The road ahead forks, and fortune favours the one who reads it."
     ],
     "When the brothers look up, the two old men are gone. Only the board remains, and a drift of petals."
-   ]
+   ],
+   "trigger": "talk"
   }
  ],
  "npcs": [
