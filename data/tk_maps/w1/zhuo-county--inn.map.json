@@ -6,6 +6,7 @@
  "name": "The village inn",
  "archetype": "interior",
  "building": "inn",
+ "style": "building.inn",
  "size": [
   20,
   12

@@ -6,6 +6,7 @@
  "name": "House, Qiao",
  "archetype": "interior",
  "building": "house-2",
+ "style": "building.house",
  "size": [
   20,
   12

@@ -31,7 +31,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=12`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=13`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
@@ -131,7 +131,6 @@ const WorldFX = {
     add("@leaf", 3, 2, g => { g.fillStyle = "#8aa83a"; g.fillRect(0, 0, 3, 2); g.fillStyle = "#c8b04a"; g.fillRect(2, 1, 1, 1); });
     add("@ember", 2, 2, g => { g.fillStyle = "#ffb03a"; g.fillRect(0, 0, 2, 2); g.fillStyle = "#fff0a0"; g.fillRect(0, 0, 1, 1); });
     add("@mote", 1, 1, g => { g.fillStyle = "#fff4d8"; g.fillRect(0, 0, 1, 1); });
-    add("@dust", 5, 3, g => { g.fillStyle = "rgba(214,190,150,.9)"; g.fillRect(1, 0, 3, 1); g.fillRect(0, 1, 5, 1); g.fillRect(1, 2, 3, 1); });
     add("@glint", 5, 5, g => { g.fillStyle = "#ffffff"; g.fillRect(2, 0, 1, 5); g.fillRect(0, 2, 5, 1); g.fillStyle = "#d8f0ff"; g.fillRect(1, 1, 3, 3); g.fillStyle = "#ffffff"; g.fillRect(2, 2, 1, 1); });
     // lamplight for rooms: warm in the middle, falling off to the corners
     add("@lamp", 320, 180, g => {
@@ -148,13 +147,6 @@ const WorldFX = {
       const sh = spr.__shadow || (spr.__shadow = scene.add.image(0, 0, "@shadow").setDepth(-999));
       sh.setPosition(Math.round(spr.x), Math.round(spr.y) - 1).setVisible(spr.visible && spr.alpha > .3).setScale(Math.max(1, spr.displayWidth / 14), 1);
     }
-  },
-  // Little puffs of dust behind your feet as you run (not on water or indoors).
-  dust(scene, time, moving) {
-    if (!moving || scene.place.archetype === "interior" || time < (scene.nextDust || 0)) return;
-    scene.nextDust = time + 140;
-    const P = scene.player, d = scene.add.image(P.x + (Math.random() - .5) * 6, P.y - 1, "@dust").setDepth(P.y - 1).setAlpha(.8);
-    scene.tweens.add({ targets: d, alpha: 0, scaleX: 1.8, scaleY: 1.4, y: d.y - 3, duration: 420, onComplete: () => d.destroy() });
   },
   // Glints on water in view, now and then.
   water(scene, time) {
@@ -204,16 +196,16 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=12`);
-      this.load.json("kit", `assets/tk/kits/${kit}.json?v=10`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=10`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=13`);
+      this.load.json("kit", `assets/tk/kits/${kit}.json?v=11`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=11`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
       for (const [s, path] of Object.entries(kit.sheets)) this.load.image(`kit-${s}`, path);
       const [fw, fh] = kit.folk.frame;
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=17`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=19`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -695,7 +687,6 @@ function worldScenes() {
         P.anims.play(`h-liubei-${P.facing}`, true);
         P.anims.msPerFrame = 85;
       } else { P.anims.stop(); P.setTexture(`h-liubei-${P.facing}-0`); }
-      WorldFX.dust(this, time, !!(vx || vy) && P.body.speed > 20);
       P.setDepth(P.y);
 
       // exits: walk off the edge to the next place, if the story has opened it
@@ -721,15 +712,6 @@ function worldScenes() {
 
       for (const n of this.npcs) {
         if (n.mark) n.mark.setPosition(n.spr.x, Math.round(n.spr.y - n.spr.height - 1 + Math.sin(time / 250) * 1.5));
-        if (!n.wander && !n.challenge && !n.until && !this.ui.busy() && (n.folk || /^f_/.test(n.who || ""))) {   // standing folk look about
-          n.look = (n.look ?? 2000 + Math.random() * 5000) - dt;
-          if (n.look <= 0) {
-            n.look = 2500 + Math.random() * 5000;
-            n.base = n.base || n.dir;
-            n.dir = n.dir !== n.base ? n.base : ["left", "right", "down"][Math.floor(Math.random() * 3)];
-            this.faceNpc(n);
-          }
-        }
         if (!n.wander || this.ui.busy()) { n.spr.setVelocity(0); continue; }
         n.t -= dt;
         if (n.t <= 0) {

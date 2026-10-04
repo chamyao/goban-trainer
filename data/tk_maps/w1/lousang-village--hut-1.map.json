@@ -6,6 +6,7 @@
  "name": "Hut, Lousang Village",
  "archetype": "interior",
  "building": "hut-1",
+ "style": "building.hut",
  "size": [
   20,
   12

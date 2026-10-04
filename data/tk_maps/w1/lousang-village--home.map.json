@@ -6,6 +6,7 @@
  "name": "Liu Bei's home",
  "archetype": "interior",
  "building": "home",
+ "style": "building.hut",
  "size": [
   20,
   12

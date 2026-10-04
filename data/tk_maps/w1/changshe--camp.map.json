@@ -6,11 +6,12 @@
  "name": "The Han camp",
  "archetype": "interior",
  "building": "camp",
+ "style": "building.tent",
  "size": [
   20,
   12
  ],
- "seed": 0.6216925843392455,
+ "seed": 0.24991442202920788,
  "terrain": {
   "legend": {
    "#": "wood",
@@ -42,13 +43,6 @@
    "y": 2,
    "w": 2,
    "h": 1
-  },
-  {
-   "kind": "furn.rug",
-   "x": 8,
-   "y": 4,
-   "w": 3,
-   "h": 2
   },
   {
    "kind": "furn.rack",

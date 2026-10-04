@@ -314,7 +314,10 @@
     "qingzhou--house-1",
     "qingzhou--house-2",
     "qingzhou--inn-1",
-    "qingzhou--shop-1"
+    "qingzhou--shop-1",
+    "qingzhou--house-3",
+    "qingzhou--shop-2",
+    "qingzhou--house-4"
    ]
   },
   {
@@ -367,6 +370,39 @@
    "zh": "青州·茶馆",
    "archetype": "interior",
    "map": "qingzhou--shop-1.map.json",
+   "links": [
+    "qingzhou"
+   ],
+   "parent": "qingzhou"
+  },
+  {
+   "id": "qingzhou--house-3",
+   "name": "House, Qingzhou",
+   "zh": "青州·民居",
+   "archetype": "interior",
+   "map": "qingzhou--house-3.map.json",
+   "links": [
+    "qingzhou"
+   ],
+   "parent": "qingzhou"
+  },
+  {
+   "id": "qingzhou--shop-2",
+   "name": "Teahouse, Qingzhou",
+   "zh": "青州·茶馆",
+   "archetype": "interior",
+   "map": "qingzhou--shop-2.map.json",
+   "links": [
+    "qingzhou"
+   ],
+   "parent": "qingzhou"
+  },
+  {
+   "id": "qingzhou--house-4",
+   "name": "House, Qingzhou",
+   "zh": "青州·民居",
+   "archetype": "interior",
+   "map": "qingzhou--house-4.map.json",
    "links": [
     "qingzhou"
    ],
@@ -468,7 +504,10 @@
     "luoyang-gates--house-1",
     "luoyang-gates--house-2",
     "luoyang-gates--inn-1",
-    "luoyang-gates--shop-1"
+    "luoyang-gates--shop-1",
+    "luoyang-gates--house-3",
+    "luoyang-gates--shop-2",
+    "luoyang-gates--house-4"
    ]
   },
   {
@@ -521,6 +560,39 @@
    "zh": "洛阳城门·茶馆",
    "archetype": "interior",
    "map": "luoyang-gates--shop-1.map.json",
+   "links": [
+    "luoyang-gates"
+   ],
+   "parent": "luoyang-gates"
+  },
+  {
+   "id": "luoyang-gates--house-3",
+   "name": "House, Luoyang Gates",
+   "zh": "洛阳城门·民居",
+   "archetype": "interior",
+   "map": "luoyang-gates--house-3.map.json",
+   "links": [
+    "luoyang-gates"
+   ],
+   "parent": "luoyang-gates"
+  },
+  {
+   "id": "luoyang-gates--shop-2",
+   "name": "Teahouse, Luoyang Gates",
+   "zh": "洛阳城门·茶馆",
+   "archetype": "interior",
+   "map": "luoyang-gates--shop-2.map.json",
+   "links": [
+    "luoyang-gates"
+   ],
+   "parent": "luoyang-gates"
+  },
+  {
+   "id": "luoyang-gates--house-4",
+   "name": "House, Luoyang Gates",
+   "zh": "洛阳城门·民居",
+   "archetype": "interior",
+   "map": "luoyang-gates--house-4.map.json",
    "links": [
     "luoyang-gates"
    ],
@@ -704,7 +776,10 @@
     "yangcheng--house-1",
     "yangcheng--house-2",
     "yangcheng--inn-1",
-    "yangcheng--shop-1"
+    "yangcheng--shop-1",
+    "yangcheng--house-3",
+    "yangcheng--shop-2",
+    "yangcheng--house-4"
    ]
   },
   {
@@ -768,6 +843,39 @@
    "zh": "阳城·茶馆",
    "archetype": "interior",
    "map": "yangcheng--shop-1.map.json",
+   "links": [
+    "yangcheng"
+   ],
+   "parent": "yangcheng"
+  },
+  {
+   "id": "yangcheng--house-3",
+   "name": "House, Yangcheng",
+   "zh": "阳城·民居",
+   "archetype": "interior",
+   "map": "yangcheng--house-3.map.json",
+   "links": [
+    "yangcheng"
+   ],
+   "parent": "yangcheng"
+  },
+  {
+   "id": "yangcheng--shop-2",
+   "name": "Teahouse, Yangcheng",
+   "zh": "阳城·茶馆",
+   "archetype": "interior",
+   "map": "yangcheng--shop-2.map.json",
+   "links": [
+    "yangcheng"
+   ],
+   "parent": "yangcheng"
+  },
+  {
+   "id": "yangcheng--house-4",
+   "name": "House, Yangcheng",
+   "zh": "阳城·民居",
+   "archetype": "interior",
+   "map": "yangcheng--house-4.map.json",
    "links": [
     "yangcheng"
    ],

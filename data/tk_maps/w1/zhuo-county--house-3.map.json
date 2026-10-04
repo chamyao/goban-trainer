@@ -6,6 +6,7 @@
  "name": "House, Zhuo County",
  "archetype": "interior",
  "building": "house-3",
+ "style": "building.house",
  "size": [
   20,
   12

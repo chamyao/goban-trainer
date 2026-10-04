@@ -6,6 +6,7 @@
  "name": "The teahouse",
  "archetype": "interior",
  "building": "teahouse",
+ "style": "building.shop",
  "size": [
   20,
   12

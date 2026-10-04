@@ -6,6 +6,7 @@
  "name": "A hermit's shelter",
  "archetype": "interior",
  "building": "cave",
+ "style": "building.hut",
  "size": [
   20,
   12
