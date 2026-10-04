@@ -514,7 +514,7 @@ class Trainer {
   constructor(book, idx, els) {
     this.book = book;
     this.idx = idx;
-    this.flawed = null;  // why a solve wasn't flawless (hint, undo, explore), for Wukong's Journey
+    this.flawed = null;  // why a solve wasn't flawless (hint, undo, explore)
     this.p = book.problems[idx];
     this.els = els; // { svg, boardCard, status, turnBadge, buttons... }
     this.goban = new Goban(els.svg, cropFor(this.p), (c, r) => this.click(c, r));
@@ -1892,13 +1892,6 @@ async function viewLibrary() {
   const favs = loadFavorites();
   root.innerHTML = "";
   const cats = { tsumego: "Tsumego", tesuji: "Tesuji", endgame: "Endgame" };
-  // Wukong's Journey, the map book, sits above everything.
-  const jrDone = Object.values(prog.journey || {}).filter(v => v === 1).length;
-  root.append(h("a", { class: "jr-card", href: "#/journey" }, [
-    h("span", { class: "jr-card-icon" }, "🗺"),
-    h("span", {}, [h("b", {}, "Wukong's Journey"), h("small", {}, jrDone ? `${jrDone} levels cleared · flawless only` : "A map of hand-picked problems, 15K to 7D · flawless only")]),
-    h("span", { class: "jr-card-go" }, "→"),
-  ]));
   // Favorited books from every category come first; they stay in their category too.
   const sections = [["Favorites", index.filter(b => favs.has(b.id))],
                     ...Object.entries(cats).map(([cat, title]) => [title, index.filter(b => b.category === cat)])];
@@ -2290,273 +2283,6 @@ const Music = {
   },
 };
 Music.mount();
-
-/* ---- Wukong's Journey: a map book of worlds ---- */
-// Levels get harder along each world's path; forks offer a long road at the
-// world's grade or a shortcut a few grades harder. A level counts only when
-// solved flawlessly (no wrong move, hint, undo or explore); a slip swaps in
-// another problem of the same grade. A world's boss (Redmond / Maeda) opens
-// the next world. Data: data/journey.json (tools/build_journey.py).
-const Journey = {
-  data: null, DRAW_KEY: "gt-journey-draw", AT_KEY: "gt-journey-at",
-  THEMES: {
-    meadow: ["#cfe9f3", "#e8f4e0", "#a8d389", "#93c573"], cave: ["#5a6b7d", "#8a9bab", "#7d8a96", "#64717d"],
-    sea: ["#9fd3e8", "#d6eef5", "#7cc0d8", "#5aa9c6"], peach: ["#fde4ec", "#fff4f7", "#f4bccb", "#ea9fb5"],
-    forest: ["#d3e3c6", "#eaf1e1", "#86ac70", "#668f52"], fire: ["#ffd2a8", "#ffeedb", "#f39a5b", "#dc6c33"],
-    desert: ["#f6e3b4", "#fcf3dc", "#e9c780", "#d7ab5f"], snow: ["#e2ebf3", "#f8fbff", "#d3dee8", "#b9c9d6"],
-    sky: ["#b8d3ff", "#f0f6ff", "#ffffff", "#dde9ff"], temple: ["#f3e1c0", "#fbf3e4", "#dcbb7f", "#c69d58"],
-  },
-  async load() {
-    if (!this.data) this.data = await (await fetch("data/journey.json?v=1")).json();
-    return this.data;
-  },
-  load_(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } },
-  save_(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
-  cleared(key) { return (loadProgress().journey || {})[key] === 1; },
-  world(n) { return this.data.worlds[n - 1]; },
-  worldOpen(n) { return n === 1 || this.cleared(`${n - 1}-boss`); },
-  node(w, key) { return w.nodes.find(x => x.key === key); },
-  preds(w, key) { return w.edges.filter(e => e[1] === key).map(e => e[0]); },
-  open(w, key) { return key === "start" || this.preds(w, key).some(k => k === "start" || this.cleared(k)); },
-  problemRef(node) {
-    const d = this.load_(this.DRAW_KEY);
-    return node.pool[(d[node.key] || 0) % node.pool.length];
-  },
-  slip(node) { const d = this.load_(this.DRAW_KEY); d[node.key] = (d[node.key] || 0) + 1; this.save_(this.DRAW_KEY, d); },
-  at(n) { return this.load_(this.AT_KEY)[n] || "start"; },
-  setAt(n, key) { const a = this.load_(this.AT_KEY); a[n] = key; this.save_(this.AT_KEY, a); },
-  label(node) {
-    const k = node.key.split("-")[1];
-    return node.kind === "boss" ? `Boss ${node.key.split("-")[0]}` : node.kind === "shortcut" ? `Shortcut ${node.key}` : `Level ${node.key}`;
-  },
-  // Undirected path between two nodes through open ground.
-  route(w, from, to) {
-    const ok = k => this.open(w, k) || this.cleared(k);
-    const prev = { [from]: null }, q = [from];
-    while (q.length) {
-      const k = q.shift();
-      if (k === to) break;
-      for (const [a, b] of w.edges) for (const [x, y] of [[a, b], [b, a]])
-        if (x === k && !(y in prev) && (ok(y) || y === to)) { prev[y] = k; q.push(y); }
-    }
-    if (!(to in prev)) return [from, to];
-    const path = [];
-    for (let k = to; k !== null; k = prev[k]) path.unshift(k);
-    return path;
-  },
-};
-
-function curvePt(A, B, t) {  // the quadratic path drawn between two nodes
-  const mx = (A.x + B.x) / 2, my = (A.y + B.y) / 2 - 18;
-  const u = 1 - t;
-  return { x: u * u * A.x + 2 * u * t * mx + t * t * B.x, y: u * u * A.y + 2 * u * t * my + t * t * B.y };
-}
-
-async function viewJourney(worldN) {
-  const nav = routeSeq;
-  root.innerHTML = `<div class="loading">Loading…</div>`;
-  const J = await Journey.load();
-  if (nav !== routeSeq) return;
-  let n = Math.max(1, Math.min(J.worlds.length, worldN || 1));
-  if (!Journey.worldOpen(n)) n = 1;
-  const w = Journey.world(n);
-  crumbs.innerHTML = "";
-  crumbs.append(h("a", { href: "#/journey" }, "Wukong's Journey"), ` / World ${n}`);
-  root.innerHTML = "";
-  const levels = w.nodes.filter(x => x.kind !== "start"), done = levels.filter(x => Journey.cleared(x.key)).length;
-  root.append(h("div", { class: "jr-head" }, [
-    h("h2", {}, "Wukong's Journey"),
-    h("span", { class: "sub" }, `World ${n} · ${w.name} · ${w.grades} · ${done} / ${levels.length} cleared`),
-  ]));
-  root.append(h("div", { class: "jr-worlds" }, J.worlds.map(x => {
-    const open = Journey.worldOpen(x.n), star = Journey.cleared(`${x.n}-boss`) ? " ★" : "";
-    return h(open ? "a" : "span", { class: "jr-world" + (x.n === n ? " on" : "") + (open ? "" : " lock"),
-      ...(open ? { href: `#/journey/${x.n}` } : { title: "Beat the previous boss to open" }) }, `${x.n} ${x.name}${star}`);
-  })));
-
-  const [sky1, sky2, hill1, hill2] = Journey.THEMES[w.theme] || Journey.THEMES.meadow;
-  const W = 960, H = 520, N = Object.fromEntries(w.nodes.map(x => [x.key, x]));
-  const svg = document.createElementNS(SVGNS, "svg");
-  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
-  const el = (name, attrs, parent = svg) => { const e = document.createElementNS(SVGNS, name); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.append(e); return e; };
-  const defs = el("defs", {});
-  defs.innerHTML = `<linearGradient id="jsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${sky1}"/><stop offset="1" stop-color="${sky2}"/></linearGradient>`;
-  el("rect", { width: W, height: H, fill: "url(#jsky)" });
-  el("path", { d: "M0 300 C 120 250 220 280 330 240 S 560 180 700 210 S 900 150 960 170 L960 520 L0 520Z", fill: hill1 });
-  el("path", { d: "M0 380 C 160 340 300 380 460 350 S 760 320 960 360 L960 520 L0 520Z", fill: hill2 });
-  const curve = (A, B) => `M${A.x} ${A.y} Q${(A.x + B.x) / 2} ${(A.y + B.y) / 2 - 18} ${B.x} ${B.y}`;
-  for (const [a, b] of w.edges) {
-    const lit = (a === "start" || Journey.cleared(a) || Journey.open(w, a)) && Journey.open(w, b);
-    const short = N[a].kind === "shortcut" || N[b].kind === "shortcut";
-    el("path", { d: curve(N[a], N[b]), fill: "none", stroke: lit ? (short ? "#e9a6a0" : "#e8c77a") : "#cfc8b4", "stroke-width": 16, "stroke-linecap": "round" });
-    el("path", { d: curve(N[a], N[b]), fill: "none", stroke: lit ? (short ? "#c7372b" : "#b88a3a") : "#a8a08c", "stroke-width": 3,
-                 "stroke-dasharray": "2 12", "stroke-linecap": "round" });
-  }
-  const info = h("div", { class: "jr-info" });
-  let selected = null;
-  const select = key => {
-    selected = key;
-    const x = N[key], open = Journey.open(w, key), clr = Journey.cleared(key);
-    info.innerHTML = "";
-    const what = x.kind === "boss" ? `Boss · ${x.grade === "Redmond" ? "Michael Redmond's Life and Death" : "Maeda Tsumego"}`
-               : x.kind === "shortcut" ? `${x.grade} · shortcut: one hard problem instead of the long road` : x.grade;
-    info.append(h("div", {}, [h("b", {}, Journey.label(x)), h("div", { class: "meta" }, what + (clr ? " · cleared ★" : open ? "" : " · locked"))]));
-    const play = h("button", { class: "jr-play", onclick: () => location.hash = `#/journey/${n}/${key}` }, clr ? "Play again ▶" : "Play ▶");
-    if (!open) play.disabled = true;
-    info.append(play);
-    for (const g of svg.querySelectorAll(".jr-node")) g.classList.toggle("sel", g.dataset.key === key);
-  };
-  for (const x of w.nodes) {
-    const g = el("g", { class: "jr-node", "data-key": x.key, transform: `translate(${x.x} ${x.y})` });
-    if (x.kind === "start") {
-      el("rect", { x: -20, y: -12, width: 40, height: 24, rx: 6, fill: "#c7372b" }, g);
-      el("text", { y: 5, "text-anchor": "middle", "font-size": 11, "font-weight": 800, fill: "#fff" }, g).textContent = "START";
-      continue;
-    }
-    const st = Journey.cleared(x.key) ? "done" : Journey.open(w, x.key) ? "open" : "lock";
-    if (x.kind === "boss") {
-      const op = st === "lock" ? .65 : 1;
-      el("g", { opacity: op }, g).innerHTML = `<rect x="-34" y="-30" width="68" height="56" fill="#9a8f7a" stroke="#5c5444" stroke-width="3"/>
-        <rect x="-40" y="-44" width="16" height="18" fill="#9a8f7a" stroke="#5c5444" stroke-width="3"/><rect x="24" y="-44" width="16" height="18" fill="#9a8f7a" stroke="#5c5444" stroke-width="3"/>
-        <rect x="-10" y="-2" width="20" height="28" rx="10" fill="#3b3428"/><path d="M0 -62 v22" stroke="#5c5444" stroke-width="3"/>
-        <path d="M0 -62 l18 6 l-18 6z" fill="${st === "done" ? "#f6c935" : "#c7372b"}"/>`;
-      el("text", { y: 46, "text-anchor": "middle", "font-size": 12, "font-weight": 800, fill: "#5c5444" }, g).textContent = `BOSS ${x.grade === "Redmond" ? "· Redmond" : "· Maeda"}`;
-    } else {
-      const short = x.kind === "shortcut";
-      const fill = { done: "#f6c935", open: "#ffffff", lock: "#d8d2c2" }[st];
-      const ring = { done: "#b5860c", open: short ? "#c7372b" : "#2f6f4f", lock: "#a9a291" }[st];
-      if (short) el("rect", { x: -19, y: -19, width: 38, height: 38, rx: 6, transform: "rotate(45)", fill, stroke: ring, "stroke-width": 4 }, g);
-      else el("circle", { r: 20, fill, stroke: ring, "stroke-width": 4 }, g);
-      if (st === "done") el("path", { d: "M-7 0 l5 6 l10 -12", fill: "none", stroke: "#6b4e05", "stroke-width": 3.5, "stroke-linecap": "round", "stroke-linejoin": "round" }, g);
-      else if (st === "lock") el("g", {}, g).innerHTML = `<rect x="-7" y="-2" width="14" height="11" rx="2" fill="#8a8370"/><path d="M-4 -2 v-4 a4 4 0 0 1 8 0 v4" fill="none" stroke="#8a8370" stroke-width="2.5"/>`;
-      else el("text", { y: 5, "text-anchor": "middle", "font-size": short ? 15 : 14, "font-weight": 800, fill: "#2b2a26" }, g).textContent = short ? "⚡" : x.key.split("-")[1];
-      el("text", { y: 38, "text-anchor": "middle", "font-size": 11, "font-weight": 700, fill: "#4d4a3c" }, g).textContent = x.grade;
-    }
-    g.addEventListener("click", () => walkTo(x.key));
-  }
-  const map = h("div", { class: "jr-map" });
-  map.append(svg);
-  // Wukong on the map: stands on his last level and walks the paths.
-  const cv = h("canvas", { class: "jr-wukong", width: "44", height: "44" });
-  const bg = cv.getContext("2d");
-  map.append(cv);
-  root.append(map, info);
-  let pos = { ...N[Journey.at(n)] }, anim = "idle", left = false, walking = null, t0 = performance.now(), raf = 0;
-  const place = () => {
-    const r = svg.getBoundingClientRect(), k = r.width / W, S = Math.max(2, Math.round(2.6 * k));
-    cv.style.width = cv.style.height = 44 * S + "px";
-    cv.style.left = (pos.x * k - 22 * S) + "px"; cv.style.top = ((pos.y - 14) * k - 43 * S) + "px";
-    cv.style.transform = left ? "scaleX(-1)" : "";
-  };
-  function walkTo(key) {
-    const path = Journey.route(w, Journey.at(n), key);
-    walking = { path, i: 0, t: 0, done: () => { Journey.setAt(n, key); select(key); } };
-  }
-  const tick = now => {
-    if (!map.isConnected) return;
-    if (walking) {
-      const { path } = walking;
-      if (walking.i >= path.length - 1) { walking.done(); walking = null; anim = "idle"; }
-      else {
-        const A = N[path[walking.i]], B = N[path[walking.i + 1]], len = Math.hypot(B.x - A.x, B.y - A.y) || 1;
-        walking.t += 3.2 / len * 1.6;
-        anim = "run"; left = B.x < A.x;
-        if (walking.t >= 1) { walking.i++; walking.t = 0; pos = { x: B.x, y: B.y }; Journey.setAt(n, path[walking.i]); }
-        else pos = curvePt(A, B, walking.t);
-      }
-    }
-    const frames = WK.FRAMES[anim], f = frames[Math.floor((now - t0) / (anim === "run" ? 85 : 220)) % frames.length];
-    bg.clearRect(0, 0, 44, 44); WK.render(bg, f, now - t0);
-    place();
-    raf = requestAnimationFrame(tick);
-  };
-  raf = requestAnimationFrame(tick);
-  // Select where he stands; if that level is cleared, he walks on to the
-  // next open one (the long road first; shortcuts are a choice).
-  const here = Journey.at(n), first = levels.find(x => Journey.open(w, x.key) && !Journey.cleared(x.key));
-  if (here === "start" || Journey.cleared(here)) {
-    const next = w.edges.filter(e => e[0] === here).map(e => N[e[1]]).filter(x => !Journey.cleared(x.key))
-      .sort((a, b) => (a.kind === "shortcut") - (b.kind === "shortcut"))[0];
-    select(here === "start" ? (first || levels[0]).key : here);
-    if (next) setTimeout(() => map.isConnected && walkTo(next.key), 500);
-  } else select(here);
-}
-
-async function viewJourneyLevel(worldN, key) {
-  const nav = routeSeq;
-  root.innerHTML = `<div class="loading">Loading…</div>`;
-  const J = await Journey.load();
-  const w = Journey.world(worldN), node = w && Journey.node(w, key);
-  if (!node || !Journey.open(w, key)) { location.hash = `#/journey/${worldN || 1}`; return; }
-  const [bookId, pid] = Journey.problemRef(node);
-  const src = await getBook(bookId);
-  if (nav !== routeSeq) return;
-  const p = src.problems.find(x => x.id === pid);
-  const book = Object.assign({}, src, { problems: [p] });
-  Journey.setAt(worldN, key);
-  crumbs.innerHTML = "";
-  crumbs.append(h("a", { href: "#/journey" }, "Wukong's Journey"), " / ", h("a", { href: `#/journey/${worldN}` }, `World ${worldN}`), ` / ${Journey.label(node)}`);
-  root.innerHTML = "";
-  const svg = document.createElementNS(SVGNS, "svg");
-  const boardCard = h("div", { class: "board-card" });
-  boardCard.append(svg);
-  const status = h("div", { id: "status" });
-  const turnBadge = h("span", { class: "badge turn" }, "Black to play");
-  const btnExplore = h("button", {}, "Explore");
-  const treeBox = h("div", { class: "movetree", style: "height:auto; max-height:320px" });
-  const note = h("div", { class: "source-note", style: "display:none" });
-  const treePanel = h("div", { class: "panel", style: "display:none" }, [h("h2", {}, "Solution tree"), treeBox]);
-  const verdict = h("div", { class: "jr-verdict" });
-  const aside = h("aside", {}, [
-    h("div", { class: "panel" }, [
-      h("h2", {}, `World ${worldN} · ${w.name}`),
-      h("div", { class: "meta-title" }, `${Journey.label(node)} · ${node.kind === "boss" ? node.grade : node.grade}`),
-      h("div", { class: "meta-sub" }, [`from ${src.title} · `, p.url ? h("a", { href: p.url, target: "_blank" }, "source")
-                                                                     : h("a", { href: `https://www.101weiqi.com/q/${p.id}/`, target: "_blank" }, "source")]),
-      h("div", { class: "badges" }, [h("span", { class: "badge" }, p.lv || src.level || node.grade), ...(p.qt ? [h("span", { class: "badge" }, p.qt)] : []), turnBadge]),
-      h("div", { class: "jr-rule" }, "Flawless only: a wrong move, hint, undo or explore and you get a new problem."),
-    ]),
-    h("div", { class: "panel" }, [h("h2", {}, "Status"), status, note, verdict]),
-    treePanel,
-    h("div", { class: "panel" }, [
-      h("h2", {}, "Controls"),
-      h("div", { class: "controls" }, [
-        h("button", { onclick: () => trainer.undo() }, "Undo"),
-        h("button", { onclick: () => trainer.hint() }, "Hint"),
-        h("button", { onclick: () => trainer.reset() }, "Reset"),
-        btnExplore,
-        h("button", { class: "wide", onclick: () => location.hash = `#/journey/${worldN}` }, "← Back to the map"),
-      ]),
-    ]),
-  ]);
-  const player = h("div", { class: "player" });
-  player.append(boardCard, aside);
-  root.append(player);
-  trainer = new Trainer(book, 0, { svg, boardCard, status, turnBadge, btnExplore, treePanel, treeBox, note });
-  btnExplore.addEventListener("click", () => trainer.toggleExplore());
-  window.__trainer = trainer;
-  const t = trainer;
-  const onResult = e => {
-    if (!verdict.isConnected) return removeEventListener("tczw:result", onResult);
-    if (trainer !== t) return;
-    verdict.innerHTML = "";
-    if (e.detail === "ok" && !t.flawed) {
-      const progress = loadProgress(), j = progress.journey || (progress.journey = {});
-      j[key] = 1; localStorage.setItem(PROGRESS_KEY, JSON.stringify(progress)); Sync.scheduleSave();
-      verdict.className = "jr-verdict win";
-      verdict.append(h("b", {}, node.kind === "boss" ? `★ Boss defeated! ${worldN < J.worlds.length ? `World ${worldN + 1} is open.` : "Journey complete!"}` : "★ Flawless — level cleared!"),
-        h("button", { onclick: () => location.hash = node.kind === "boss" && worldN < J.worlds.length ? `#/journey/${worldN + 1}` : `#/journey/${worldN}` },
-          node.kind === "boss" && worldN < J.worlds.length ? `On to World ${worldN + 1} →` : "Back to the map →"));
-    } else {
-      Journey.slip(node);
-      verdict.className = "jr-verdict slip";
-      verdict.append(h("b", {}, e.detail === "ok" ? `Solved, but not flawless (${t.flawed}).` : "A slip!"),
-        h("span", {}, " A new problem of the same level awaits."),
-        h("button", { onclick: () => viewJourneyLevel(worldN, key) }, "New problem →"));
-    }
-  };
-  addEventListener("tczw:result", onResult);
-}
 
 /* ---- record an in-person game: tap moves onto a board, then send to Review ---- */
 
@@ -3584,12 +3310,9 @@ async function route() {
   const tab = ["review", "play", "feedback"].includes(parts[0]) ? parts[0] : "library";
   for (const a of document.querySelectorAll("#tabs a"))
     a.classList.toggle("active", a.dataset.tab === tab);
-  if (window.Wukong && Wukong.suspend) Wukong.suspend(parts[0] === "journey" && !parts[2]);  // the map has its own Wukong
   if (parts[0] === "review") viewReview();
   else if (parts[0] === "play") viewPlay(parts[1]);
   else if (parts[0] === "feedback") viewFeedback();
-  else if (parts[0] === "journey" && parts[1] && parts[2]) await viewJourneyLevel(parseInt(parts[1], 10), parts[2]);
-  else if (parts[0] === "journey") await viewJourney(parseInt(parts[1], 10) || 0);
   else if (parts[0] === "book" && parts[1] && parts[2]) await viewPlayer(parts[1], parseInt(parts[2], 10) || 1);
   else if (parts[0] === "book" && parts[1]) await viewBook(parts[1]);
   else await viewLibrary();
