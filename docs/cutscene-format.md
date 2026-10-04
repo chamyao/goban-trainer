@@ -90,6 +90,11 @@ the 2D world uses the code-drawn heroes, and a 3D one would use models.
 ## Playing
 
 `tk-cutscene.js` plays a scene inside the world (letterbox, Skip button).
-The world calls it after a won problem when the place has a cutscene for
-that quest, and falls back to plain dialogue otherwise. Skipping ends the
-scene at once; who joins the party is still applied.
+A scene with a `{"do": "problem"}` beat (from a `["problem"]` story step)
+holds the quest's Go problem: the world plays the scene up to it, brings up
+the board, and plays the rest only once the problem is solved. Leaving or
+failing ends the scene; trying again fast-forwards to the problem. Skipping
+before the problem jumps to it; after it, skipping ends the scene. A scene
+without one plays after a won problem, as before. When the place has no
+cutscene the world plays the same steps as plain dialogue. Who joins the
+party is applied either way.

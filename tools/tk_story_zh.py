@@ -100,7 +100,8 @@ ZH = {
     "Then let him chase us up the hill.": "那就引他追上山来。",
     # ---- boss ----
     "The General of Earth Falls": "地公将军之死",
-    "Again Zhang Bao calls the wind; again Liu Bei flees, and the rebels chase him to the hill. A signal gun — and blood and filth rain down from the ridge.": "次日，张宝又作妖法，刘备拨马便走，张宝驱兵赶来。将过山头，号炮一响，秽物齐泼。",
+    "Again Zhang Bao calls the wind; again Liu Bei flees, and the rebels chase him to the hill.": "次日，张宝又作妖法，刘备拨马便走，张宝驱兵赶来。",
+    "A signal gun — and blood and filth rain down from the ridge.": "将过山头，号炮一响，秽物齐泼。",
     "Paper men and straw horses flutter to the ground. The wind dies. Liu Bei's arrow strikes Zhang Bao in the arm, and he flees into Yangcheng.": "但见空中纸人草马纷纷坠地，风雷顿息。刘备一箭射中张宝左臂，张宝逃入阳城。",
     "Besieged, with no way out, Zhang Bao is killed by his own officer, Yan Zheng, who opens the gates.": "阳城被围，贼将严政刺杀张宝，献首投降。",
     "Wind and thunder answer to me! Your little band will be swept away like dust.": "风雷听我号令！你们这点人马，一阵风便扫个干净！",

@@ -297,7 +297,7 @@ def stage_scene(scene, m, spot, party, chars):
     arrivals = []
     for s in steps:
         op = s[0]
-        if op in ("n", "say", "fx", "pose", "move", "run", "remove", "party", "wait", "scroll") and opening:
+        if op in ("n", "say", "fx", "pose", "move", "run", "remove", "party", "wait", "scroll", "problem") and opening:
             opening = False
             if arrivals:
                 st.beats.append({"do": "camera", "to": st.frame(list(st.pos)), "ms": 600})
@@ -332,6 +332,8 @@ def stage_scene(scene, m, spot, party, chars):
             st.beats.append({"do": "gain", "item": s[1]})
         elif op == "wait":
             st.beats.append({"do": "wait", "ms": s[1]})
+        elif op == "problem":  # the scene's Go problem: the player solves it before the rest plays
+            st.beats.append({"do": "problem"})
         elif op == "n":
             st.beats.append({"do": "line", "line": s, "camera": st.frame(st.live())})
         elif op == "say":
