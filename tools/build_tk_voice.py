@@ -19,6 +19,16 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build_tk  # noqa: E402
 
 SPEED = 0.95
+# Some voices are slow by nature; these read faster so townsfolk keep pace with
+# the narrator (about 3.2 characters a second). Measured from rendered clips.
+VOICE_SPEED = {
+    "zm_052": 1.14,  # folk.villager
+    "zm_100": 1.13,  # folk.elder
+    "zm_057": 1.10,  # folk.noble
+    "zm_069": 1.18,  # folk.monk
+    "zm_064": 1.03,  # folk.official
+    "zm_030": 1.04,  # folk.hunter
+}
 
 
 def main():
@@ -40,7 +50,7 @@ def main():
         return
     pipe = KPipeline(lang_code="z", repo_id="hexgrad/Kokoro-82M-v1.1-zh")
     for i, (k, (text, voice)) in enumerate(todo.items(), 1):
-        audio = np.concatenate([a.numpy() for _, _, a in pipe(build_tk.spoken(text), voice=voice, speed=SPEED)])
+        audio = np.concatenate([a.numpy() for _, _, a in pipe(build_tk.spoken(text), voice=voice, speed=VOICE_SPEED.get(voice, SPEED))])
         pcm = (np.clip(audio, -1, 1) * 32767).astype(np.int16)
         enc = lameenc.Encoder()
         enc.set_bit_rate(48); enc.set_in_sample_rate(24000); enc.set_channels(1); enc.set_quality(2)

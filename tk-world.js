@@ -207,6 +207,28 @@ function worldScenes() {
       this.npcs.push(n);
     }
 
+    // A portrait for the duel board: a hero's bust, or a townsperson's sprite, enlarged.
+    faceOf(n) {
+      const c = document.createElement("canvas"), g = c.getContext("2d");
+      c.width = c.height = 34;
+      g.imageSmoothingEnabled = false;
+      if (n.who) { g.drawImage(TKArt.get(n.who, "bust"), 0, 0); return c; }
+      const fr = n.folk && this.textures.getFrame(n.folk.sheet, n.folk.still("down"));
+      if (!fr) return c;
+      // Trim the frame to the figure, then show its top (head and shoulders) as large as fits.
+      const t = document.createElement("canvas"), tg = t.getContext("2d");
+      t.width = fr.cutWidth; t.height = fr.cutHeight;
+      tg.drawImage(fr.source.image, fr.cutX, fr.cutY, fr.cutWidth, fr.cutHeight, 0, 0, fr.cutWidth, fr.cutHeight);
+      const px = tg.getImageData(0, 0, t.width, t.height).data;
+      let x0 = t.width, x1 = -1, y0 = t.height, y1 = -1;
+      for (let y = 0; y < t.height; y++) for (let x = 0; x < t.width; x++)
+        if (px[(y * t.width + x) * 4 + 3]) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); }
+      if (x1 < 0) return c;
+      const w = x1 - x0 + 1, h = Math.ceil((y1 - y0 + 1) * .7), k = Math.max(1, Math.floor(Math.min(30 / w, 32 / h)));
+      g.drawImage(t, x0, y0, w, h, Math.round((34 - w * k) / 2), 34 - h * k, w * k, h * k);
+      return c;
+    }
+
     setParty(list) {
       for (const F of this.followers) F.spr.destroy();
       this.followers = list.filter(x => x !== "liubei").map(who => {
@@ -257,19 +279,19 @@ function worldScenes() {
     playQuest(q, spot) {
       const lead = spot.intro.length ? worldLines(spot.intro)
         : q.boss ? [["say", q.boss.who, q.boss.taunt, q.boss.taunt_zh, q.boss.taunt_vid]] : [["n", `${q.title}.`, q.title_zh ? `${q.title_zh}。` : ""]];
-      this.talk(lead, () => this.puzzle(q.node), "story");
+      this.talk(lead, () => this.puzzle(q.node, q.boss ? { who: q.boss.who, face: this.faceOf({ who: q.boss.who }) } : null), "story");
     }
 
     // Bring up the problem over the map (opts.onPuzzle resolves true on a
     // flawless solve); the world waits behind it, then plays what the win unlocked.
-    async puzzle(key) {
+    async puzzle(key, foe) {
       const P = this.player;
       this.st.pos = { place: this.placeId, x: Math.round(P.x), y: Math.round(P.y), f: P.facing };
       this.save();
       this.leaving = true;
       P.setVelocity(0); P.anims.stop();
       this.ui.hint(null);
-      const win = await this.opts.onPuzzle(key);
+      const win = await this.opts.onPuzzle(key, { host: this.opts.host, foe });
       if (!this.sys.isActive()) return;  // the page moved on meanwhile
       this.leaving = false;
       this.opts.host.focus();
@@ -328,7 +350,7 @@ function worldScenes() {
         const n = t.n;
         n.dir = { up: "down", down: "up", left: "right", right: "left" }[this.player.facing];
         this.faceNpc(n);
-        if (n.challenge) return this.done(n.challenge) ? this.talk(worldLines(n.done)) : this.talk(worldLines(n.intro), () => this.puzzle(n.challenge));
+        if (n.challenge) return this.done(n.challenge) ? this.talk(worldLines(n.done)) : this.talk(worldLines(n.intro), () => this.puzzle(n.challenge, { id: n.challenge.split("-c-")[1], who: n.who, face: this.faceOf(n) }));
         this.talk(n.say.length ? worldLines(n.say) : [["n", "…"]]);
         return;
       }
