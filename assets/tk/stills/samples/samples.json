@@ -1,0 +1,44 @@
+{
+ "feast_wide--flux-schnell.jpg": {
+  "still": "feast_wide",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-schnell",
+  "seconds": 64.6,
+  "made": "2026-10-04"
+ },
+ "feast_toast--flux-schnell.jpg": {
+  "still": "feast_toast",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-schnell",
+  "seconds": 64.4,
+  "made": "2026-10-04"
+ },
+ "feast_toast--flux-2-klein-4b.jpg": {
+  "still": "feast_toast",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "seconds": 64.5,
+  "made": "2026-10-04"
+ },
+ "feast_night--flux-schnell.jpg": {
+  "still": "feast_night",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-schnell",
+  "seconds": 64.6,
+  "made": "2026-10-04"
+ },
+ "feast_night--flux-2-klein-4b.jpg": {
+  "still": "feast_night",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "seconds": 1.8,
+  "made": "2026-10-04"
+ },
+ "feast_wide--flux-2-klein-4b.jpg": {
+  "still": "feast_wide",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "seconds": 2.0,
+  "made": "2026-10-04"
+ }
+}
