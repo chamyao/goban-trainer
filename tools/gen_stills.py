@@ -6,6 +6,10 @@
     python3 tools/gen_stills.py --provider openai     # pick a provider (default: the first with a key)
     python3 tools/gen_stills.py --import DIR          # bring in images made by hand (DIR/<id>.png|jpg|webp),
                                                       # e.g. from Midjourney/Niji, which has no API
+    python3 tools/gen_stills.py --portraits 4 --only liubei --only guanyu --only zhangfei
+                                                      # candidate character designs, to choose from in
+                                                      # assets/tk/stills/refs/candidates/index.html
+    python3 tools/gen_stills.py --pick guanyu 3       # make candidate 3 Guan Yu's reference image
     python3 tools/gen_stills.py --provider replicate --only feast_wide \
         --compare black-forest-labs/flux-schnell black-forest-labs/flux-2-klein-4b
                                                       # the same prompts on several models, side by side in
@@ -42,7 +46,7 @@ from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
-from tk_stills import STILLS, STYLE  # noqa: E402
+from tk_stills import CAST, STILLS, STYLE, portrait, prompt  # noqa: E402
 
 OUT = ROOT / "assets/tk/stills"
 SIZE = (1280, 720)
@@ -64,21 +68,21 @@ def fetch(url):
 
 
 # ---------- providers: prompt → image bytes ----------
-def openai(prompt, model):
+def openai(prompt, model, aspect="16:9"):
     model = model or "gpt-image-1"
     r = http("https://api.openai.com/v1/images/generations",
-             {"model": model, "prompt": prompt, "size": "1536x1024", "quality": "high", "n": 1},
+             {"model": model, "prompt": prompt, "size": "1536x1024" if aspect == "16:9" else "1024x1536", "quality": "high", "n": 1},
              {"Authorization": f"Bearer {os.environ['OPENAI_API_KEY']}"})
     d = r["data"][0]
     return (base64.b64decode(d["b64_json"]) if d.get("b64_json") else fetch(d["url"])), model
 
 
-def replicate(prompt, model):
+def replicate(prompt, model, aspect="16:9"):
     model = model or "black-forest-labs/flux-1.1-pro"
     h = {"Authorization": f"Bearer {os.environ['REPLICATE_API_TOKEN']}", "Prefer": "wait"}
     url = f"https://api.replicate.com/v1/models/{model}/predictions"
     try:
-        r = http(url, {"input": {"prompt": prompt, "aspect_ratio": "16:9", "output_format": "png"}}, h)
+        r = http(url, {"input": {"prompt": prompt, "aspect_ratio": aspect, "output_format": "png"}}, h)
     except urllib.error.HTTPError as e:
         if e.code != 422:                       # 422: this model names its inputs differently
             raise
@@ -93,32 +97,32 @@ def replicate(prompt, model):
     return fetch(out[0] if isinstance(out, list) else out), model
 
 
-def fal(prompt, model):
+def fal(prompt, model, aspect="16:9"):
     model = model or "fal-ai/flux/dev"
-    r = http(f"https://fal.run/{model}", {"prompt": prompt, "image_size": "landscape_16_9", "num_images": 1},
+    r = http(f"https://fal.run/{model}", {"prompt": prompt, "image_size": "landscape_16_9" if aspect == "16:9" else "portrait_4_3", "num_images": 1},
              {"Authorization": f"Key {os.environ['FAL_KEY']}"})
     return fetch(r["images"][0]["url"]), model
 
 
-def google(prompt, model):
+def google(prompt, model, aspect="16:9"):
     # Imagen 4 was retired on 17 Aug 2026; Gemini's image model takes its place
     model = model or "gemini-2.5-flash-image"
     r = http(f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
              {"contents": [{"parts": [{"text": prompt}]}],
-              "generationConfig": {"responseModalities": ["IMAGE"], "imageConfig": {"aspectRatio": "16:9"}}},
+              "generationConfig": {"responseModalities": ["IMAGE"], "imageConfig": {"aspectRatio": aspect}}},
              {"x-goog-api-key": os.environ["GEMINI_API_KEY"]})
     parts = r["candidates"][0]["content"]["parts"]
     return base64.b64decode(next(p["inlineData"]["data"] for p in parts if "inlineData" in p)), model
 
 
-def dummy(prompt, model):
+def dummy(prompt, model, aspect="16:9"):
     """No key: a labelled gradient, so the whole pipeline (and the game's step) can be tested."""
     im = Image.new("RGB", SIZE)
     d = ImageDraw.Draw(im)
     for y in range(SIZE[1]):
         t = y / SIZE[1]
         d.line([(0, y), (SIZE[0], y)], fill=(int(70 + 120 * t), int(60 + 70 * t), int(50 + 40 * t)))
-    d.text((40, 40), "placeholder still\n" + prompt[len(STYLE):][:300], fill=(240, 230, 210))
+    d.text((40, 40), "placeholder still\n" + prompt[:300], fill=(240, 230, 210))
     buf = io.BytesIO()
     im.save(buf, "PNG")
     return buf.getvalue(), "dummy"
@@ -149,6 +153,38 @@ def fit(raw):
     return im.resize(SIZE, Image.LANCZOS)
 
 
+def portraits(name, fn, keys, n, model):
+    """n candidate portraits of each person, into refs/candidates/<key>-<i>.jpg (3:4), with an
+    index.html to choose from. --pick KEY I then makes one the reference: refs/<key>.jpg."""
+    out = OUT / "refs/candidates"
+    out.mkdir(parents=True, exist_ok=True)
+    for key in keys:
+        start = len(list(out.glob(f"{key}-*.jpg")))      # more candidates add to the ones there
+        for i in range(start + 1, start + n + 1):
+            try:
+                raw, used = fn(portrait(key), model, "3:4")
+            except Exception as e:
+                print(f"  {key} #{i}: failed: {e}")
+                continue
+            im = Image.open(io.BytesIO(raw)).convert("RGB")
+            im.thumbnail((768, 1024))
+            im.save(out / f"{key}-{i}.jpg", "JPEG", quality=88)
+            print(f"  {key} #{i}: {name}/{used} → assets/tk/stills/refs/candidates/{key}-{i}.jpg")
+    rows = []
+    for key, (cname, look) in CAST.items():
+        files = sorted(out.glob(f"{key}-*.jpg"), key=lambda f: int(f.stem.split("-")[1]))
+        if files:
+            figs = "".join(f'<figure><img src="{f.name}"><figcaption>{key} {f.stem.split("-")[1]}</figcaption></figure>'
+                           for f in files)
+            rows.append(f"<h2>{cname}</h2><p>{look}</p><div>{figs}</div>")
+    (out / "index.html").write_text(
+        "<!doctype html><meta charset=utf-8><title>Character designs</title><style>"
+        "body{font:15px system-ui;background:#16130f;color:#eee;margin:16px}p{color:#aaa}"
+        "div{display:flex;flex-wrap:wrap;gap:12px}figure{margin:0;width:240px}img{width:100%}"
+        "figcaption{color:#ccc}</style>" + "".join(rows))
+    print("choose from: assets/tk/stills/refs/candidates/index.html, then --pick KEY N")
+
+
 def compare(name, fn, models, ids):
     """Each still on each model, saved as samples/<id>--<model>.jpg, with an index.html
     that shows them side by side and how long each took."""
@@ -161,7 +197,7 @@ def compare(name, fn, models, ids):
             short = m.split("/")[-1]
             t = time.time()
             try:
-                raw, used = fn(f"{STYLE} {STILLS[sid]['prompt']}", m)
+                raw, used = fn(prompt(sid), m)
             except Exception as e:
                 print(f"  {sid} on {short}: failed: {e}")
                 continue
@@ -192,6 +228,8 @@ def main():
     ap.add_argument("--force", action="store_true", help="remake stills that already exist")
     ap.add_argument("--list", action="store_true", help="show what exists and what's missing")
     ap.add_argument("--import", dest="imp", metavar="DIR", help="fit and record hand-made images named <id>.*")
+    ap.add_argument("--portraits", type=int, metavar="N", help="N candidate portraits per person (--only to pick who)")
+    ap.add_argument("--pick", nargs=2, metavar=("KEY", "N"), help="make candidate N of KEY that person's reference")
     ap.add_argument("--compare", nargs="+", metavar="MODEL", help="try each model on the stills, into stills/samples/")
     a = ap.parse_args()
     OUT.mkdir(parents=True, exist_ok=True)
@@ -210,12 +248,21 @@ def main():
                 print(f"  skipped {f.name} (not a still id in tools/tk_stills.py)" if f.is_file() else "", end="")
                 continue
             fit(f.read_bytes()).save(OUT / f"{sid}.jpg", "JPEG", quality=84, optimize=True, progressive=True)
-            man[sid] = {"file": f"{sid}.jpg", "scene": STILLS[sid]["scene"], "prompt": f"{STYLE} {STILLS[sid]['prompt']}",
+            man[sid] = {"file": f"{sid}.jpg", "scene": STILLS[sid]["scene"], "prompt": prompt(sid),
                         "provider": "manual", "model": f.name, "made": date.today().isoformat()}
             print(f"  {sid}: imported {f.name}")
         man_path.write_text(json.dumps(man, ensure_ascii=False, indent=1))
         return
+    if a.pick:
+        key, i = a.pick
+        src = OUT / f"refs/candidates/{key}-{i}.jpg"
+        (OUT / f"refs/{key}.jpg").write_bytes(src.read_bytes())
+        print(f"{CAST[key][0]}: reference is now {src.name}")
+        return
     name, fn = pick(a.provider)
+    if a.portraits:
+        return portraits(name, fn, [k for k in CAST if not a.only or k in a.only], a.portraits,
+                         os.environ.get("TK_IMAGE_MODEL"))
     if a.compare:
         return compare(name, fn, a.compare, [sid for sid in STILLS if not a.only or sid in a.only])
     model = os.environ.get("TK_IMAGE_MODEL")
@@ -225,14 +272,14 @@ def main():
             continue
         if sid in man and (OUT / man[sid]["file"]).exists() and not a.force and man[sid]["provider"] != "dummy":
             continue
-        prompt = f"{STYLE} {s['prompt']}"
+        text = prompt(sid)
         try:
-            raw, used = fn(prompt, model)
+            raw, used = fn(text, model)
         except Exception as e:   # one failure shouldn't stop the rest
             print(f"  {sid}: failed: {e}")
             continue
         fit(raw).save(OUT / f"{sid}.jpg", "JPEG", quality=84, optimize=True, progressive=True)
-        man[sid] = {"file": f"{sid}.jpg", "scene": s["scene"], "prompt": prompt, "provider": name, "model": used,
+        man[sid] = {"file": f"{sid}.jpg", "scene": s["scene"], "prompt": text, "provider": name, "model": used,
                     "made": date.today().isoformat()}
         print(f"  {sid}: {name}/{used} → assets/tk/stills/{sid}.jpg ({(OUT / f'{sid}.jpg').stat().st_size // 1024} KB)")
         man_path.write_text(json.dumps(man, ensure_ascii=False, indent=1))
