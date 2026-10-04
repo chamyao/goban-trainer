@@ -104,8 +104,8 @@ class Room:
             return [(mid, top), (mid - 1, top), (mid + 1, top)]
         if where == "dais":
             return [(mid, top + 2), (mid, top + 1)]
-        if where == "rug":
-            return [(mid, top + 3), (mid, top + 4), (mid, top + 2)]
+        if where == "rug":   # clear of the desk: a rug's sprite reaches a row above its footprint
+            return [(mid, top + 4), (mid, top + 5), (mid, top + 3)]
         if where == "flank":
             return [(mid - 2, top), (mid + KINDS["furn.screen"][0] + 1, top), (mid - 3, top), (mid + 4, top)]
         if where in ("left", "right"):
@@ -172,7 +172,7 @@ class Room:
         return {
             "format": "tk-map/1", "id": rid, "world": world_n, "parent": self.parent["id"],
             "name": b.get("label") or f"{NAMES[b['kind']]}, {self.parent['name']}", "archetype": "interior",
-            "building": b.get("id"), "size": [self.W, self.H], "seed": self.rng.random(),
+            "building": b.get("id"), "style": b["kind"], "size": [self.W, self.H], "seed": self.rng.random(),
             "terrain": {"legend": LEGEND, "rows": ["".join(r) for r in self.t]},
             "objects": self.objects, "spots": [], "npcs": self.npcs,
             "exits": [{"to": self.parent["id"], "side": "S", "x": self.door[0], "y": self.door[1], "w": 1, "h": 1}],

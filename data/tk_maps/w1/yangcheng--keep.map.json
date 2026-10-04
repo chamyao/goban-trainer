@@ -6,6 +6,7 @@
  "name": "Zhang Bao's stronghold",
  "archetype": "interior",
  "building": "keep",
+ "style": "building.hall",
  "size": [
   20,
   12
@@ -53,7 +54,7 @@
   {
    "kind": "furn.rug",
    "x": 8,
-   "y": 4,
+   "y": 5,
    "w": 3,
    "h": 2
   },
@@ -112,7 +113,7 @@
   {
    "id": "in-1",
    "kind": "folk.official",
-   "x": 11.5,
+   "x": 10.5,
    "y": 4.9,
    "say": [
     "“This is the county office. State your business.”"

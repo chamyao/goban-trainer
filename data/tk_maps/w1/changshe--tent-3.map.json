@@ -6,11 +6,12 @@
  "name": "Tent, Changshe",
  "archetype": "interior",
  "building": "tent-3",
+ "style": "building.tent",
  "size": [
   20,
   12
  ],
- "seed": 0.15096548200921012,
+ "seed": 0.49082901863634776,
  "terrain": {
   "legend": {
    "#": "wood",
@@ -42,13 +43,6 @@
    "y": 2,
    "w": 2,
    "h": 1
-  },
-  {
-   "kind": "furn.rug",
-   "x": 8,
-   "y": 4,
-   "w": 3,
-   "h": 2
   },
   {
    "kind": "furn.rack",

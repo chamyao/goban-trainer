@@ -6,6 +6,7 @@
  "name": "Teahouse, Zhuo County",
  "archetype": "interior",
  "building": "shop-1",
+ "style": "building.shop",
  "size": [
   20,
   12

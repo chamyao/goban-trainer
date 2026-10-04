@@ -6,6 +6,7 @@
  "name": "Zhang Fei's farm",
  "archetype": "interior",
  "building": "farm",
+ "style": "building.lodge",
  "size": [
   20,
   12

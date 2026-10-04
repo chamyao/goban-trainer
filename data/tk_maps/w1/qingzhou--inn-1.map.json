@@ -6,6 +6,7 @@
  "name": "Inn, Qingzhou",
  "archetype": "interior",
  "building": "inn-1",
+ "style": "building.inn",
  "size": [
   20,
   12

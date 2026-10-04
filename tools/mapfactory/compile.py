@@ -150,15 +150,21 @@ def compile_map(m, kit, out_dir):
         return 0
 
     layers = []
+    # a room may carry a "style" (its building's kind): the kit can dress it differently
+    # ("room_styles": {"building.hall": {"wall": {...}, "stone": {...}}})
+    style = kit.k.get("room_styles", {}).get(m.get("style"), {})
+
+    def material(mat):
+        return (mat, style[mat]) if mat in style else kit.material(mat)
     base_mat, base = kit.material("grass")
     OUTDOOR = ("grass", "sand", "dirt", "water")   # drawn over grass, edges by the blob layers below
 
     def ground(mat):
         if mat in OUTDOOR:
             return plain(base, "grass")
-        rm, d = kit.material(mat)
+        rm, d = material(mat)
         if d and "edge" in d:                       # a wall: what shows through its gaps
-            rm, d = kit.material(d.get("under", "void"))
+            rm, d = material(d.get("under", "void"))
         return plain(d, rm) if d else 0
     layers.append(("ground", [ground(grid[y][x]) for y in range(H) for x in range(W)]))
     # one layer per other material present, in a fixed order (water over roads)
@@ -201,7 +207,7 @@ def compile_map(m, kit, out_dir):
     # walls: a frame of edge and corner pieces, chosen by where the floor is
     walls = {(x, y) for y in range(H) for x in range(W) if grid[y][x] == "wall"}
     if walls:
-        _, d = kit.material("wall")
+        _, d = material("wall")
         data = [0] * (W * H)
         floor = lambda x, y: 0 <= x < W and 0 <= y < H and MATERIALS.get(grid[y][x]) and grid[y][x] != "void"
         for x, y in walls:

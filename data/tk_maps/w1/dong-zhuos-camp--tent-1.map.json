@@ -6,11 +6,12 @@
  "name": "Tent, Dong Zhuo's Camp",
  "archetype": "interior",
  "building": "tent-1",
+ "style": "building.tent",
  "size": [
   20,
   12
  ],
- "seed": 0.5706164037047085,
+ "seed": 0.0876316082196501,
  "terrain": {
   "legend": {
    "#": "wood",
@@ -42,13 +43,6 @@
    "y": 2,
    "w": 2,
    "h": 1
-  },
-  {
-   "kind": "furn.rug",
-   "x": 8,
-   "y": 4,
-   "w": 3,
-   "h": 2
   },
   {
    "kind": "furn.rack",
