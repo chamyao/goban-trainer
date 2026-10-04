@@ -164,6 +164,46 @@ ZH = {
     "“A mistake,” warned his secretary Chen Lin. “You hand the spear to others, point first.”": "主簿陈琳劝道：“不可！这是倒持干戈，授人以柄。”",
     "A man beside them clapped and laughed. “This is as easy as turning over a hand. Why so much talk?” It was Cao Cao.": "旁边一人鼓掌大笑：“此事易如反掌，何必多议！”此人正是曹操。",
     "What did Cao Cao propose? Hear the next chapter.": "不知曹操说出甚话来，且听下文分解。",
+    # ---- World 1 places: townsfolk, challengers and story spots (tools/tk_places.py) ----
+    "“Off to sell your sandals in town, Xuande? Mind the road.”": "“玄德，又进城卖草鞋？路上小心。”",
+    "“That mulberry looks like a carriage canopy! Mother says someone from this house will ride under one.”": "“那棵桑树长得像车盖！娘说，这家将来要出贵人。”",
+    "“The Yellow Turbans are burning villages in the south. Strange times.”": "“黄巾贼在南边烧村子，真是乱世啊。”",
+    "Your neighbour has scratched a weiqi board into the dirt under the mulberry. “Before you go to town, Xuande, one game.”": "邻居在桑树下的泥地上画了一张棋盘。“玄德，进城之前，先下一局。”",
+    "“Ha! Sharper than your sandals. Go on, then.”": "“哈！你的棋比你的草鞋还精。去吧。”",
+    "“Bring me back a story from town.”": "“从城里带个新鲜事回来给我听。”",
+    "The governor of You Province calls for volunteers against the Yellow Turbans. At the bottom, a weiqi problem: “Let any man who would lead volunteers show he can read a battle.”": "幽州太守招募义兵，讨伐黄巾。榜文末尾附着一道围棋题：“欲率义兵者，先请看清此局。”",
+    "An old storyteller taps his clapper-board. “Sit, sit! Tales of the Yellow Heaven…”": "一位说书老人敲了敲醒木。“坐，坐！且听黄天的故事……”",
+    "“They say the Yellow Turbans wear scarves the colour of the earth.”": "“听说黄巾贼头上裹的巾，是土黄色的。”",
+    "“Liu Bei? The sandal-seller? Kind man. Ears down to his shoulders, you know.”": "“刘备？那个卖草鞋的？是个好人。耳朵都垂到肩膀了。”",
+    "“Zhang Fei sells wine and pork. Loud as thunder, but his heart is good.”": "“张飞卖酒杀猪，嗓门像打雷，心肠却好。”",
+    "“The governor wants volunteers. Read the notice.”": "“太守在招义兵，你去看看榜文吧。”",
+    "An old man sits over a weiqi board in the square. “You have the look of a thinker. Sit, play me one.”": "广场上，一位老人守着一张棋盘。“看你像个有心思的人。坐，陪我下一局。”",
+    "“Ha! Quick eyes. The governor could use a man like you.”": "“哈！好眼力。太守正需要你这样的人。”",
+    "“Come back when you've grown sharper.”": "“等你棋艺再长进些，再来找我。”",
+    "“Wine's on the house if you can solve the one my regulars can't.”": "“我这儿的老主顾都解不出这道题。你要是解得出，酒钱全免。”",
+    "“Well I never. Drink up, then!”": "“真没想到！那就喝吧！”",
+    "“Still the only one who's cracked it.”": "“到现在还只有你一个人解出来。”",
+    "“Weiqi's like farming: you claim the land, then you have to hold it. Try this.”": "“下棋跟种地一样：先占地，还得守得住。试试这道。”",
+    "“Held it, and well.”": "“守住了，守得好。”",
+    "“Fine soil this year.”": "“今年的地真肥。”",
+    "A clerk from the county office looks up. “The magistrate set this one. Nobody here has solved it.”": "县衙的一位书吏抬起头。“这道题是县令出的，这里还没人解得出。”",
+    "“Remarkable. I'll tell the magistrate a sandal-seller did it.”": "“了不起。我要告诉县令，是个卖草鞋的解出来的。”",
+    "“The magistrate still doesn't believe me.”": "“县令到现在还不信我。”",
+    "Under the great peach tree two old men sit over a weiqi board, one in grey, one in red.": "大桃树下，两位老人对坐下棋，一位穿灰衣，一位穿红衣。",
+    "Three young men, come to swear before Heaven? Heaven is listening. But first, show us how you read the stones.": "三位年轻人，要来对天盟誓吗？上天在听着。不过，先让我们看看你们怎么看这盘棋。",
+    "Good. The road ahead forks, and fortune favours the one who reads it.": "好。前路分岔，福气只眷顾看得清路的人。",
+    "When the brothers look up, the two old men are gone. Only the board remains, and a drift of petals.": "兄弟三人抬起头时，两位老人已不见踪影，只剩下一盘棋和满地落花。",
+    "The old man in grey studies the board and says nothing.": "灰衣老人凝视着棋盘，一言不发。",
+    "“Patience. Heaven is in no hurry.”": "别急。上天从不着急。",
+    "“An old man lives up in the hills. Gathers herbs. Some say he's an immortal.”": "“山里住着一位采药的老人，有人说他是神仙。”",
+    "“The Way of Great Peace heals the sick. Drink the charm-water, brother.”": "“太平道能治百病。兄弟，喝一碗符水吧。”",
+    "“Half the county wears yellow now.”": "“现在半个县的人都裹上黄巾了。”",
+    "“Fine northern horses, but the roads are full of bandits.”": "“北方的好马是有，可路上全是强盗。”",
+    "“The rebels have us surrounded. If only someone could draw them off…”": "“贼兵把我们围住了。要是有人能把他们引开就好了……”",
+    "“The new commandant of the north gate beats curfew-breakers to death. Even the eunuchs' uncles.”": "“北门新来的都尉，犯夜禁的一律打死，连宦官的叔父也不放过。”",
+    "“The general is in his tent. He doesn't like visitors without rank.”": "“将军在帐里。他不喜欢没官职的人来见他。”",
+    "“Wind and thunder answer to me!”": "风雷听我号令！",
+
 }
 
 # Pronunciation fixes for the voice only (the text shown keeps the real
@@ -199,4 +239,11 @@ CAST = {
     "dongzhuo": "zm_098", "zhangbao": "zm_041", "zhangjiao": "zm_068", "luzhi": "zm_081",
     "zhujun": "zm_033", "huangfusong": "zm_055", "chengyuanzhi": "zm_011", "inspector": "zm_096",
     "xushao": "zm_091", "uncle": "zm_014", "zuofeng": "zm_063", "merchant": "zm_025", "immortal": "zm_080",
+    "stargrey": "zm_082", "starred": "zm_089",  # the two old men at the weiqi board (the Star Lords)
+}
+# Townsfolk speak in a voice for their kind (tools/tk_places.py "kind").
+FOLK_VOICE = {
+    "folk.villager": "zm_052", "folk.woman": "zf_022", "folk.elder": "zm_100", "folk.child": "zf_002",
+    "folk.monk": "zm_069", "folk.noble": "zm_057", "folk.soldier": "zm_045", "folk.rebel": "zm_016",
+    "folk.hunter": "zm_030", "folk.official": "zm_064",
 }

@@ -138,13 +138,13 @@ const TownUI = {
     root.className = "town-ui";
     root.innerHTML = `<div class="town-goal"></div><div class="town-keys"><b>WASD</b>/<b>↑↓←→</b> walk · <b>Shift</b> run · <b>Space</b> talk</div>
       <div class="town-place"></div><div class="town-hint" hidden>Space</div><div class="town-focus" hidden>Click the map to play</div>
-      <div class="town-dlg" hidden><canvas class="town-face" width="34" height="34"></canvas><div class="town-txt"><div class="town-who"></div><div class="town-en"></div><div class="town-zh" lang="zh-CN"></div></div><div class="town-more">▼</div></div>`;
+      <div class="town-dim" hidden></div><div class="town-dlg" hidden><div class="town-tab">Story · 主线</div><canvas class="town-face" width="34" height="34"></canvas><div class="town-txt"><div class="town-who"></div><div class="town-en"></div><div class="town-zh" lang="zh-CN"></div></div><div class="town-more">▼</div></div>`;
     host.append(root);
     const $ = s => root.querySelector(s);
     let queue = [], done = null, open = false;
     const show = () => {
       const st = queue.shift();
-      if (!st) { $(".town-dlg").hidden = true; open = false; TKVoice.stop(); const d = done; done = null; d && d(); return; }
+      if (!st) { $(".town-dlg").hidden = true; $(".town-dim").hidden = true; open = false; TKVoice.stop(); const d = done; done = null; d && d(); return; }
       const said = st[0] === "say", who = said ? st[1] : null;
       const [en, zh, vid] = said ? [st[2], st[3], st[4]] : [st[1], st[2], st[3]];
       $(".town-who").textContent = who ? TK_CHARS[who].name : "";
@@ -163,8 +163,13 @@ const TownUI = {
       busy: () => open,
       goal: t => { $(".town-goal").textContent = t; },
       place(name) { const el = $(".town-place"); el.textContent = name; el.classList.remove("show"); void el.offsetWidth; el.classList.add("show"); },
-      dialog(steps, cb) {
-        queue = steps.filter(s => s[0] === "n" || s[0] === "say").slice(); done = cb || null; open = true; $(".town-dlg").hidden = false; show();
+      // style "story": the plot, framed and with the map dimmed; "chat": townsfolk and asides, small and plain
+      dialog(steps, cb, style = "chat") {
+        queue = steps.filter(s => s[0] === "n" || s[0] === "say").slice(); done = cb || null; open = true;
+        const dlg = $(".town-dlg");
+        dlg.classList.toggle("story", style === "story"); dlg.classList.toggle("chat", style !== "story");
+        $(".town-dim").hidden = style !== "story";
+        dlg.hidden = false; show();
       },
       advance() { if (open) show(); },
       hint(target) {

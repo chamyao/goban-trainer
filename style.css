@@ -509,3 +509,14 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
 .town-place.show { animation: townPlace 2.6s ease-out; }
 @keyframes townPlace { 0% { opacity: 0; transform: translateY(6px); } 15%, 70% { opacity: 1; transform: none; } 100% { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .town-place.show { animation: none; opacity: 0; } }
+
+/* plot vs chatter: story moments are framed, tabbed and dim the map; chatter is small and plain */
+.town-dim { position: absolute; inset: 0; background: radial-gradient(ellipse at center 40%, rgba(10, 6, 4, .05), rgba(10, 6, 4, .45)); }
+.town-tab { display: none; position: absolute; left: 14px; top: -14px; padding: 1px 10px; background: #8a2a1a; color: #f8ead0; border: 2px solid #f4ead2; border-radius: 4px; font: bold 12px/1.5 system-ui, sans-serif; letter-spacing: .04em; box-shadow: 0 2px 0 rgba(0, 0, 0, .25); }
+.town-dlg.story .town-tab { display: block; }
+.town-dlg.story { border-color: #7a3a22; box-shadow: 0 0 0 2px #e6c14a inset, 0 5px 0 rgba(0, 0, 0, .35); }
+.town-dlg.chat { max-width: 580px; min-height: 0; padding: 8px 12px; background: #e9e6df; color: #34302a; border: 2px solid #8f887a; box-shadow: 0 3px 0 rgba(0, 0, 0, .25); font-size: .92em; }
+.town-dlg.chat .town-who { color: #4a4438; }
+.town-dlg.chat .town-zh { color: #6c665a; }
+.town-dlg.chat .town-face { width: clamp(40px, 6vw, 64px); border-width: 2px; border-color: #8f887a; background: #d8d4ca; }
+.town-dlg.chat .town-more { color: #6c665a; }

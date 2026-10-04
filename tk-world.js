@@ -52,8 +52,11 @@ const WorldData = {
   },
 };
 
-// Lines in the place briefs are strings (narration) or [who, text]; dialogue wants steps.
-const worldLines = list => (list || []).map(l => typeof l === "string" ? ["n", l] : ["say", l[0], l[1]]);
+// Lines from the place briefs arrive as voiced steps (["n", en, zh, vid] or
+// ["say", who, en, zh, vid], see build_tk.place_step); bare strings and
+// [who, text] still work for maps compiled before that.
+const worldLines = list => (list || []).map(l => typeof l === "string" ? ["n", l]
+  : l[0] === "n" || l[0] === "say" ? l : ["say", l[0], l[1]]);
 
 /* ---------- the scenes (made once Phaser has loaded) ---------- */
 function worldScenes() {
@@ -246,7 +249,7 @@ function worldScenes() {
     playQuest(q, spot) {
       const lead = spot.intro.length ? worldLines(spot.intro)
         : q.boss ? [["say", q.boss.who, q.boss.taunt, q.boss.taunt_zh, q.boss.taunt_vid]] : [["n", `${q.title}.`]];
-      this.talk(lead, () => this.puzzle(q.node));
+      this.talk(lead, () => this.puzzle(q.node), "story");
     }
 
     // Open the problem on the level page; remember where we stood.
@@ -273,7 +276,7 @@ function worldScenes() {
           this.save();
           this.setGoal();
           if (q.role === "boss" && this.opts.onBoss) await this.opts.onBoss();
-        });
+        }, "story");
       }
       const n = this.npcs.find(m => m.challenge === ret.key);
       if (n) { n.mark.setVisible(false); this.talk(worldLines(n.win)); }
@@ -306,8 +309,7 @@ function worldScenes() {
         n.dir = { up: "down", down: "up", left: "right", right: "left" }[this.player.facing];
         this.faceNpc(n);
         if (n.challenge) return this.done(n.challenge) ? this.talk(worldLines(n.done)) : this.talk(worldLines(n.intro), () => this.puzzle(n.challenge));
-        const who = n.who;
-        this.talk(n.say.length ? n.say.map(l => who ? ["say", who, l] : ["n", l]) : [["n", "…"]]);
+        this.talk(n.say.length ? worldLines(n.say) : [["n", "…"]]);
         return;
       }
       const spot = this.spots[t.k], q = this.region.quests.find(x => x.node === spot.node);
@@ -316,7 +318,8 @@ function worldScenes() {
       else this.talk([["n", `${spot.label || "Nothing here"}. It isn't time yet.`]]);
     }
 
-    talk(steps, done) { this.player.setVelocity(0); this.ui.dialog(steps, done); }
+    // style: "story" for the plot (quest lead-ins and scenes), "chat" for everything else
+    talk(steps, done, style = "chat") { this.player.setVelocity(0); this.ui.dialog(steps, done, style); }
 
     faceNpc(n) {
       if (n.who) n.spr.setTexture(`h-${n.who}-${n.dir}-0`);

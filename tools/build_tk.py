@@ -18,7 +18,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from tk_story import WORLDS  # noqa: E402
-from tk_story_zh import CAST, NARRATOR, ZH, spoken  # noqa: E402
+from tk_story_zh import CAST, FOLK_VOICE, NARRATOR, ZH, spoken  # noqa: E402
 
 BOOKS = ROOT / "data" / "books"
 GRADES = [f"{k}K{p}" for k in range(15, 0, -1) for p in ("", "+")] + [f"{d}D{p}" for d in range(1, 8) for p in ("", "+")]
@@ -63,6 +63,43 @@ def voiced(steps):
     return out
 
 
+def place_step(line, kind=None):
+    """A line from tools/tk_places.py as a voiced dialogue step, and its voice.
+    kind is the speaker's npc kind; None for a story spot's intro/outro.
+    [who, text] is a character speaking; a hero's quoted line is his own speech;
+    a townsperson's line is read in their voice; anything else is narration."""
+    if isinstance(line, (list, tuple)):
+        who, en = line
+        z = zh(en)
+        return ["say", who, en, z, voice_id(z, voice_of(who))], voice_of(who)
+    z = zh(line)
+    if kind and kind.startswith("hero.") and line.startswith("“"):
+        who = kind[5:]
+        z = z.strip("“”")
+        return ["say", who, line.strip("“”"), z, voice_id(z, voice_of(who))], voice_of(who)
+    if kind and kind.startswith("folk."):
+        v = FOLK_VOICE.get(kind, FOLK_VOICE["folk.villager"])
+        return ["n", line, z, voice_id(z, v)], v
+    return ["n", line, z, voice_id(z)], NARRATOR
+
+
+def place_lines():
+    """Every line the places in tools/tk_places.py speak: id -> (Chinese text, voice)."""
+    from tk_places import PLACES
+    lines = {}
+    for places in PLACES.values():
+        for b in places.values():
+            said = [(l, None) for lm in b.get("landmarks", []) for k in ("intro", "outro") for l in lm.get(k, [])]
+            for p in b.get("npcs", []):
+                for k in ("say", "intro", "win", "done"):
+                    v = p.get(k)
+                    said += [(l, p["kind"]) for l in ([v] if isinstance(v, str) else v or [])]
+            for l, kind in said:
+                step, voice = place_step(l, kind)
+                lines[step[-1]] = (step[-2], voice)
+    return lines
+
+
 def all_lines(worlds):
     """Every clip the campaign voices: id -> (Chinese text, voice)."""
     lines = {}
@@ -78,13 +115,16 @@ def all_lines(worlds):
         for n in w["nodes"]:
             if "boss" in n:
                 lines[n["boss"]["taunt_vid"]] = (n["boss"]["taunt_zh"], voice_of(n["boss"]["who"]))
+    lines.update(place_lines())
     return lines
-SKIP_TYPES = {"欣赏题", "棋理题", "布局题", "定式题"}  # study and opening problems, not life-and-death puzzles
+# Life and death only, for now: tesuji, capturing races, capture and endgame
+# problems are less reliably vetted, so the campaign doesn't use them.
+TSUMEGO = {"死活题", "Life & Death"}
 
 
 def usable(p):
     # A real answer key: at least one correct line with a move in it.
-    return p.get("qt") not in SKIP_TYPES and any(l[0] == 1 and len(l) > 1 for l in p.get("lines", []))
+    return p.get("qt") in TSUMEGO and any(l[0] == 1 and len(l) > 1 for l in p.get("lines", []))
 
 
 def main():
