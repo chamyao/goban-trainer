@@ -6,6 +6,11 @@
     python3 tools/gen_stills.py --provider openai     # pick a provider (default: the first with a key)
     python3 tools/gen_stills.py --import DIR          # bring in images made by hand (DIR/<id>.png|jpg|webp),
                                                       # e.g. from Midjourney/Niji, which has no API
+    python3 tools/gen_stills.py --provider replicate --only feast_wide \
+        --compare black-forest-labs/flux-schnell black-forest-labs/flux-2-klein-4b
+                                                      # the same prompts on several models, side by side in
+                                                      # assets/tk/stills/samples/index.html (the game's stills
+                                                      # and stills.json are left alone)
 
 Providers, chosen by which key is in the environment (set it in the cloud
 environment's settings, or export it locally):
@@ -28,6 +33,7 @@ import json
 import os
 import sys
 import time
+import urllib.error
 import urllib.request
 from datetime import date
 from pathlib import Path
@@ -69,8 +75,14 @@ def openai(prompt, model):
 def replicate(prompt, model):
     model = model or "black-forest-labs/flux-1.1-pro"
     h = {"Authorization": f"Bearer {os.environ['REPLICATE_API_TOKEN']}", "Prefer": "wait"}
-    r = http(f"https://api.replicate.com/v1/models/{model}/predictions",
-             {"input": {"prompt": prompt, "aspect_ratio": "16:9", "output_format": "png"}}, h)
+    url = f"https://api.replicate.com/v1/models/{model}/predictions"
+    try:
+        r = http(url, {"input": {"prompt": prompt, "aspect_ratio": "16:9", "output_format": "png"}}, h)
+    except urllib.error.HTTPError as e:
+        if e.code != 422:                       # 422: this model names its inputs differently
+            raise
+        print(f"    ({model} refused aspect_ratio/output_format: {e.read()[:200]!r}; retrying with the prompt alone)")
+        r = http(url, {"input": {"prompt": prompt}}, h)
     while r.get("status") not in ("succeeded", "failed", "canceled"):
         time.sleep(2)
         r = http(r["urls"]["get"], headers=h)
@@ -136,6 +148,42 @@ def fit(raw):
     return im.resize(SIZE, Image.LANCZOS)
 
 
+def compare(name, fn, models, ids):
+    """Each still on each model, saved as samples/<id>--<model>.jpg, with an index.html
+    that shows them side by side and how long each took."""
+    out = OUT / "samples"
+    out.mkdir(parents=True, exist_ok=True)
+    log_path = out / "samples.json"
+    log = json.loads(log_path.read_text()) if log_path.exists() else {}
+    for sid in ids:
+        for m in models:
+            short = m.split("/")[-1]
+            t = time.time()
+            try:
+                raw, used = fn(f"{STYLE} {STILLS[sid]['prompt']}", m)
+            except Exception as e:
+                print(f"  {sid} on {short}: failed: {e}")
+                continue
+            f = f"{sid}--{short}.jpg"
+            fit(raw).save(out / f, "JPEG", quality=88)
+            log[f] = {"still": sid, "provider": name, "model": used, "seconds": round(time.time() - t, 1),
+                      "made": date.today().isoformat()}
+            print(f"  {sid} on {short}: {log[f]['seconds']}s → assets/tk/stills/samples/{f}")
+            log_path.write_text(json.dumps(log, indent=1))
+    rows = []
+    for sid in STILLS:
+        cells = [f'<figure><img src="{f}"><figcaption>{v["model"]} · {v["seconds"]}s</figcaption></figure>'
+                 for f, v in log.items() if v["still"] == sid]
+        if cells:
+            rows.append(f'<h2>{sid}</h2><p>{STILLS[sid]["prompt"]}</p><div>{"".join(cells)}</div>')
+    (out / "index.html").write_text(
+        "<!doctype html><meta charset=utf-8><title>Still samples</title><style>"
+        "body{font:15px system-ui;background:#16130f;color:#eee;margin:16px}p{color:#aaa;max-width:70em}"
+        "div{display:flex;flex-wrap:wrap;gap:12px}figure{margin:0;flex:1 1 480px}img{width:100%}"
+        "figcaption{color:#ccc;font-size:13px}</style>" + "".join(rows))
+    print(f"side by side: assets/tk/stills/samples/index.html")
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--provider", choices=PROVIDERS)
@@ -143,6 +191,7 @@ def main():
     ap.add_argument("--force", action="store_true", help="remake stills that already exist")
     ap.add_argument("--list", action="store_true", help="show what exists and what's missing")
     ap.add_argument("--import", dest="imp", metavar="DIR", help="fit and record hand-made images named <id>.*")
+    ap.add_argument("--compare", nargs="+", metavar="MODEL", help="try each model on the stills, into stills/samples/")
     a = ap.parse_args()
     OUT.mkdir(parents=True, exist_ok=True)
     man_path = OUT / "stills.json"
@@ -166,6 +215,8 @@ def main():
         man_path.write_text(json.dumps(man, ensure_ascii=False, indent=1))
         return
     name, fn = pick(a.provider)
+    if a.compare:
+        return compare(name, fn, a.compare, [sid for sid in STILLS if not a.only or sid in a.only])
     model = os.environ.get("TK_IMAGE_MODEL")
     print(f"provider: {name}" + (" (no API key found: placeholders only)" if name == "dummy" else ""))
     for sid, s in STILLS.items():
