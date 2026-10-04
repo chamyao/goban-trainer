@@ -6,7 +6,7 @@ The emphasis is on staging, not speech: pauses, poses, effects and who stands wh
 
 Scenes use the step format from `tools/tk_story.py`, plus a `"setting"` field (`"outdoor"`, `"indoor"`, or a list when a scene moves). This is a draft: nothing here is wired into `tk_story.py`, `tk_story_zh.py` or the voice build yet. Lines marked **[new]** are invented for the game and are not in the novel. Everything else was checked against ch. 1–2 of the Chinese text (Luo Guanzhong, Project Gutenberg #23950); see "Source check" at the end for what that turned up.
 
-New cast needed: `oldman_n` (Northern Dipper, in dark robes) and `oldman_s` (Southern Dipper, in red). Both stay unnamed in World 1. They speak once per appearance.
+New cast needed: `oldman_n` (Northern Dipper, in dark robes) and `oldman_s` (Southern Dipper, in red). Both stay unnamed in World 1. They speak once per appearance. The mulberry-tree scene also needs `liubei_child` and `liuyuanqi`.
 
 ## Settings
 
@@ -14,6 +14,7 @@ New cast needed: `oldman_n` (Northern Dipper, in dark robes) and `oldman_s` (Sou
 
 | Scene | Setting |
 |---|---|
+| tree | outdoor (Louzang Village, under the mulberry tree) |
 | notice | outdoor (the wall) → **indoor** (village inn; porch if no interiors) |
 | oath | outdoor (peach garden) |
 | daxing | outdoor |
@@ -33,11 +34,28 @@ New cast needed: `oldman_n` (Northern Dipper, in dark robes) and `oldman_s` (Sou
 | "What office do you hold?" is a short quarrel | Slower, with pauses; the weight is in the staging |
 | Zhang Bao's death is a single narration line | Played on screen: Yan Zheng kills him at the gate |
 | The inspector scene is a quick flogging | Rebuilt around the weeping villagers; Liu Bei hanging his seal on the inspector is the quiet climax |
+| World 1 opens at the notice | Opens at the mulberry tree at Louzang, where the child Liu Bei says he will ride the carriage canopy; sets up Lu Zhi as his old teacher |
 | No Star Lords in World 1 | Three appearances (tree, teahouse, shrine), one plain line each |
 
 ## Main scenes
 
 ```python
+"tree": {"title": "The Mulberry Tree at Louzang", "kind": "main", "setting": "outdoor", "steps": [
+    # attach to the `start` node (Lousang Village); plot.py only makes quests of nodes that have a scene
+    ["n", "Louzang Village, Zhuo County. South-east of one house stands a mulberry tree more than fifty feet tall. From far off, it looks like the canopy of a carriage."],
+    ["n", "A passing fortune-teller looks at it and says: this family will produce a great man."],
+    ["spawn", "kid", "liubei_child", "start", 10, 4],
+    ["spawn", "unc", "liuyuanqi", "start", 30, 6],
+    ["n", "Liu Bei's father died early. As a boy he plays under the tree with the village children."],
+    ["say", "liubei_child", "I will be the Son of Heaven, and I will ride this carriage canopy."],
+    ["wait", 1200],
+    ["say", "liuyuanqi", "This is no ordinary child!"],
+    ["n", "The family is poor. His uncle Liu Yuanqi helps them from then on."],
+    ["remove", "kid"], ["remove", "unc"],
+    ["n", "At fifteen, his mother sends him to study under Zheng Xuan and Lu Zhi, and he befriends Gongsun Zan."],
+    ["n", "Now he is twenty-eight. He is a devoted son to his mother, and he supports her by selling sandals and weaving mats."],
+]},
+
 "notice": {"title": "The Notice at Zhuo", "kind": "main", "setting": ["outdoor", "indoor"], "steps": [
     ["n", "Zhuo County. A crowd gathers at a notice on the wall: the Han is raising troops against the Yellow Turbans."],
     ["n", "Liu Bei, twenty-eight, descends from Prince Jing of Zhongshan, yet he sells sandals and weaves mats. His ears reach his shoulders; his arms hang past his knees."],
@@ -237,7 +255,7 @@ Compared against ch. 1–2 of the Chinese text. Matches and corrections:
   - Cut Guan Yu's "Then let him chase us up the hill", which isn't in the novel (it was in the existing `tk_story.py`).
   - Cut "most of them farmers" from the five hundred.
 - **Added from the novel:** the Anxi interlude (three at one table, Guan Yu and Zhang Fei standing attendance), Liu Bei standing below the steps while the inspector sits, the inspector's whip-flick, Zhang Fei dragging him to the hitching post, and the willow switches.
-- **Still unadded:** Liu Bei's childhood mulberry tree at Louzang ("I will be emperor and ride this canopy"), and his devotion to his mother. A World 1 opening scene at the tree would suit the plan.
+- **Added:** the mulberry-tree opening (tree, fortune-teller, the child's "I will be the Son of Heaven", Uncle Liu Yuanqi's reply, the mother, and his study under Zheng Xuan and Lu Zhi). Every line in it is from ch. 1, so there is no `[new]` dialogue. Naming Lu Zhi here sets up the cage-cart scene as his old teacher.
 - **Existing `tk_story.py` details to check:** "half a million" for the Yellow Turbans; the novel says 400–500 thousand (四五十萬).
 
 ## To do before this goes in
