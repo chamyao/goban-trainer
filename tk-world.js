@@ -737,10 +737,14 @@ function worldScenes() {
       if (who) return { kind: "npc", n: who };
       const spot = Object.entries(this.spots).find(([, s]) => Math.hypot(s.x - x, s.y - y) < 18);
       if (spot) return { kind: "spot", k: spot[0], s: spot[1] };
-      const door = this.exits.filter(e => e.side === "N" && e.rect.width < 16 &&
-          Math.abs(x - e.rect.centerX) < 26 && y > e.rect.centerY - 56 && y < e.rect.centerY + 14)
+      // a way out: a building's door (tap the building or its doorway), or any other exit
+      // (a room's door out, a road off the edge of the map), tapped on or near
+      const doorway = e => e.side === "N" && e.rect.width < 16;
+      const door = this.exits.filter(e => doorway(e)
+          ? Math.abs(x - e.rect.centerX) < 26 && y > e.rect.centerY - 56 && y < e.rect.centerY + 14 && this.placeOpen(e.to)
+          : x > e.rect.x - 20 && x < e.rect.right + 20 && y > e.rect.y - 20 && y < e.rect.bottom + 20)
         .sort((a, b) => Math.hypot(a.rect.centerX - x, a.rect.centerY - y) - Math.hypot(b.rect.centerX - x, b.rect.centerY - y))[0];
-      if (door && this.placeOpen(door.to)) return { kind: "door", e: door };
+      if (door) return { kind: "door", e: door };
       return null;
     }
     canMove() { return !this.ui.busy() && !this.seated && !this.leaving && !this.cine; }
@@ -755,14 +759,18 @@ function worldScenes() {
         const side = (ok.length ? ok : sides).sort((a, b) => Math.hypot(a.x - P.x, a.y - P.y) - Math.hypot(b.x - P.x, b.y - P.y))[0];
         tx = side.x; ty = side.y; then = side.f; aim = t;
       } else if (t && t.kind === "spot") { tx = t.s.x; ty = t.s.y + 12; then = "up"; aim = { kind: "spot", k: t.k }; }
-      else if (t && t.kind === "door") { door = t.e; tx = door.rect.centerX; ty = door.rect.bottom + 10; }   // then on in
+      else if (t && t.kind === "door") {   // walk up to it from inside the map, then on through
+        door = t.e;
+        const r = door.rect, v = { N: [0, 1], S: [0, -1], E: [-1, 0], W: [1, 0] }[door.side] || [0, 0];
+        tx = r.centerX + v[0] * (r.width / 2 + 10); ty = r.centerY + v[1] * (r.height / 2 + 8) + 3;
+      }
       this.walkTo(tx, ty, { then, aim, door });
     }
     // Head for a point by the walk grid; ring marks where.
     walkTo(tx, ty, { then = null, aim = null, door = null, ring = true } = {}) {
       const P = this.player, path = this.findPath(P.x, P.y - 3, tx, ty - 3, aim && aim.kind === "npc" ? aim.n : null);
       if (!path) return false;
-      if (door) path.push({ x: door.rect.centerX, y: door.rect.centerY - 2 });
+      if (door) path.push({ x: door.rect.centerX, y: door.rect.centerY - (door.side === "N" ? 2 : 0) });
       this.walk = { path, then, aim, door: !!door, last: { x: P.x, y: P.y }, stuck: 0, retries: 0 };
       if (ring) {
         const r = this.add.circle(tx, ty, 5).setStrokeStyle(1, 0xfff3c4, .9).setDepth(-997);
