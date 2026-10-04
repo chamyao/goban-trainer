@@ -381,8 +381,20 @@
    "links": [
     "qingzhou",
     "qiao",
-    "envoys-road"
+    "envoys-road",
+    "guangzong-road--luzhi-tent"
    ]
+  },
+  {
+   "id": "guangzong-road--luzhi-tent",
+   "name": "Lu Zhi's tent",
+   "zh": "广宗道上·",
+   "archetype": "interior",
+   "map": "guangzong-road--luzhi-tent.map.json",
+   "links": [
+    "guangzong-road"
+   ],
+   "parent": "guangzong-road"
   },
   {
    "id": "qiao",

@@ -139,7 +139,8 @@ PLACES = {
         },
         "Guangzong Road": {
             "archetype": "road",
-            "landmarks": [{"kind": "camp.logs", "id": "cart", "node": "1-n5", "label": "A prisoner's cart"}],
+            "landmarks": [{"kind": "camp.logs", "id": "cart", "node": "1-n5", "label": "A prisoner's cart"},
+                          {"kind": "building.tent", "id": "luzhi-tent", "label": "Lu Zhi's tent"}],
             "objectives": {"1-n5": "Go to Guangzong, where Lu Zhi besieges Zhang Jiao."},
         },
         "Qiao": {
