@@ -51,7 +51,7 @@ const WorldTravel = {
     const [x0, x1, y0, y1] = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)];
     const W = 640, H = 360, pad = 46;
     const P = id => [pad + (at[id][0] - x0) / (x1 - x0 || 1) * (W - 2 * pad), pad + (at[id][1] - y0) / (y1 - y0 || 1) * (H - 2 * pad)];
-    const svg = ["<svg viewBox='0 0 " + W + " " + H + "' class='tkt-map' role='img' aria-label='World map'>"];
+    const svg = ["<svg viewBox='0 0 " + W + " " + H + "' class='tkt-map' role='img' aria-label='Map of the realm'>"];
     const drawn = new Set();
     for (const p of region.places) for (const to of p.links) {
       const k = [p.id, to].sort().join("|");
@@ -78,7 +78,7 @@ const WorldTravel = {
     }
     wrap.append(pins);
     const box = h("div", { class: "tkt-box" }, [
-      h("div", { class: "tkt-head" }, [h("b", {}, `${w.zh} ${w.name} · 地图 World map`),
+      h("div", { class: "tkt-head" }, [h("b", {}, `${w.zh} ${w.name} · 地图 Map`),
         h("button", { class: "tkt-x", type: "button", title: "Close", onclick: () => close() }, "×")]),
       wrap,
       h("p", { class: "tkt-note" }, "去过并完成的地方可以直接前往；其余的还锁着。Places you have cleared are open to travel; the rest stay locked until the story reaches them."),

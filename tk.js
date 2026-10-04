@@ -987,7 +987,7 @@ async function viewTK(worldN) {
   voiceBtn.onclick = () => { TKVoice.lang = { zh: "en", en: "off", off: "zh" }[TKVoice.lang]; voiceLabel(); };
   root.append(h("div", { class: "tk-head" }, [
     h("div", {}, [h("h2", {}, [h("span", { class: "zh" }, D.native), " ", D.title]),
-      h("div", { class: "sub" }, `World ${w.n} · ${w.name} ${w.zh} · chapters ${w.chapters.join("–")} · ${w.grades} · ${done}/${levels.length} cleared`)]),
+      h("div", { class: "sub" }, `第${w.n}卷 Book ${w.n} · ${w.name} ${w.zh} · chapters ${w.chapters.join("–")} · ${w.grades} · ${done}/${levels.length} cleared`)]),
     h("div", { class: "tk-head-btns" }, [voiceBtn, chron]),
   ]));
   root.append(h("div", { class: "tk-worlds" }, [
@@ -1136,7 +1136,7 @@ async function viewTK(worldN) {
   }
   function showDone() {
     info.innerHTML = "";
-    info.append(h("div", { class: "tk-info-text" }, [h("b", {}, `★ World ${w.n} complete`), h("div", { class: "meta" }, "World 2, Hulao Pass, is coming next.")]));
+    info.append(h("div", { class: "tk-info-text" }, [h("b", {}, `★ 第${w.n}卷完 Book ${w.n} complete`), h("div", { class: "meta" }, "第二卷《虎牢关》即将推出。Book 2, Hulao Pass, is coming next.")]));
   }
   if (!TK.seen(`${w.n}:opening`)) {
     await run(w.opening); TK.markSeen(`${w.n}:opening`);
@@ -1187,7 +1187,7 @@ function tkLevelBuild(host, worldN, key, { w, node, src, p, book }, { back, agai
   const aside = h("aside", {}, [
     ...(bossPanel ? [bossPanel] : []),
     h("div", { class: "panel" }, [
-      h("h2", {}, `第${worldN}卷 ${w.zh} · World ${worldN} · ${w.name}`),
+      h("h2", {}, `第${worldN}卷 ${w.zh} · Book ${worldN} · ${w.name}`),
       h("div", { class: "meta-title" }, [`${node.place_zh || node.place} · ${TK_ROLE_ZH[node.role] || ""}`,
         h("span", { class: "tk-en" }, ` ${node.place} · ${TK.roleLabel(node)}`)]),
       h("div", { class: "meta-sub" }, [node.role === "boss" ? "" : `出自 from ${src.title} · `, p.url ? h("a", { href: p.url, target: "_blank" }, "来源 source")
@@ -1248,7 +1248,7 @@ async function viewTKLevel(worldN, key) {
   if (!d) { location.hash = `#/tk/${worldN || 1}`; return; }
   if (!d.node.town) TK.setAt(worldN, key);
   crumbs.innerHTML = "";
-  crumbs.append(h("a", { href: "#/" }, "Library"), " / ", h("a", { href: `#/tk/${worldN}` }, `Three Kingdoms · World ${worldN}`), ` / ${d.node.place}`);
+  crumbs.append(h("a", { href: "#/" }, "Library"), " / ", h("a", { href: `#/tk/${worldN}` }, `Three Kingdoms · Book ${worldN}`), ` / ${d.node.place}`);
   root.innerHTML = "";
   tkLevelBuild(root, worldN, key, d, {
     back: () => { root.classList.add("tk-leave"); setTimeout(() => { root.classList.remove("tk-leave"); location.hash = `#/tk/${worldN}`; }, 320); },

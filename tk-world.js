@@ -442,7 +442,7 @@ function worldScenes() {
       this.goalAt = this.goalPoint();
       if (this.fairy) this.fairy.wp = null;
       const q = this.nextMain();
-      if (!q) return this.ui.goal("The world is complete. The road goes on…", "这一卷已经完成。路还在前方……");
+      if (!q) return this.ui.goal("This book is complete. The road goes on…", "这一卷已经完成。路还在前方……");
       if (this.available(q)) return q.place === this.placeId ? this.ui.goal(q.objective, q.objective_zh)
         : this.ui.goal(`${q.objective} (${this.placeName(q.place)})`, q.objective_zh ? `${q.objective_zh}（${this.placeZh(q.place)}）` : "");
       const lead = this.leadsTo(q);
