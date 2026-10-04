@@ -128,7 +128,7 @@ const WorldCutscene = {
     };
     const actor = (id, at, face) => {
       let a = actors[id];
-      const who = cs.cast[id].who;
+      const who = cs.cast[id].as || cs.cast[id].who;   // "as": a stand-in for someone with no look yet
       if (!a && cs.cast[id].prop) {
         a = actors[id] = { id, prop: cs.cast[id].prop, riders: [], spr: propSprite(cs.cast[id].prop) };
       }
@@ -202,21 +202,21 @@ const WorldCutscene = {
     };
 
     // ---- props, poses, emotes, gifts, mood ----
-    const KIT_PROPS = { table: ["furn.table", "camp.table"], winejars: ["furn.jar", "furn.barrel"], rack: ["furn.rack"],
-      fire: ["camp.firepit", "camp.cookfire"], tent: ["building.tent", "building.hut", "building.house"],
-      gate: ["building.gate", "building.moongate"], desk: ["furn.desk", "furn.table", "camp.table"],
-      hall: ["building.hall", "building.inn", "building.house"] };
+    // how each prop looks: the registry in assets/tk/props.json "kinds" (tools/build_props.py)
+    const PROP = WorldCutscene.kinds || {};
     const propSprite = kind => {
-      const box = scene.add.container(0, 0), P = scene.textures.get("tk-props");
+      const box = scene.add.container(0, 0), P = scene.textures.get("tk-props"), d = PROP[kind] || {};
       const put = (tex, frame, dx = 0, dy = 0) => box.add(scene.add.image(dx, dy, tex, frame).setOrigin(.5, 1));
-      if (P.has(kind)) put("tk-props", kind);
-      else {
-        const k = (KIT_PROPS[kind] || []).find(k => scene.kit && scene.kit.kinds[k]);
-        if (k) {
-          const tex = `kit-${scene.kit.kinds[k][0][0]}`, fr = `${k}#0`;
-          if (kind === "winejars") { put(tex, fr, -6, 0); put(tex, fr, 6, 0); if (P.has("gourd")) put("tk-props", "gourd", 0, 2); }
-          else put(tex, fr);
-        } else box.add(scene.add.rectangle(0, 0, 16, 10, 0x8a5a3a).setOrigin(.5, 1));
+      const k = (d.kit || []).find(k => scene.kit && scene.kit.kinds[k]);
+      if (d.atlas && P.has(d.atlas)) put("tk-props", d.atlas);
+      else if (d.horse && Items) box.add(Items.horse(scene, d.horse, 0, 0));
+      else if (k) {
+        const tex = `kit-${scene.kit.kinds[k][0][0]}`, fr = `${k}#0`;
+        if (d.pair) { put(tex, fr, -6, 0); put(tex, fr, 6, 0); } else put(tex, fr);
+        if (d.with && P.has(d.with)) put("tk-props", d.with, 0, 2);
+      } else {                                   // not drawn yet (docs/graphics-needs.md): a crate stands in
+        if (P.has("crate")) put("tk-props", "crate"); else box.add(scene.add.rectangle(0, 0, 14, 10, 0x8a5a3a).setOrigin(.5, 1));
+        if (!PROP[kind]) console.info(`cutscene: no art yet for prop "${kind}", a crate stands in`);
       }
       return box;
     };
@@ -322,7 +322,7 @@ const WorldCutscene = {
       fx.push(g); glows.push(g);
       return g;
     };
-    const FIRES = ["fire", "forge"];
+    const FIRES = Object.keys(PROP).filter(k => PROP[k].fire);
     const light = (tint, ms) => {
       const c = LIGHT[tint] || (/^#[0-9a-f]{6}$/i.test(tint || "") ? parseInt(tint.slice(1), 16) : null);
       const old = shade, oldGlows = glows;
@@ -570,11 +570,12 @@ const WorldCutscene = {
   load(scene) {
     if (scene.textures.exists("tk-props")) return Promise.resolve();
     return new Promise(res => {
-      scene.load.json("tk-props-json", "assets/tk/props.json?v=1");
-      scene.load.image("tk-props", "assets/tk/props.png?v=1");
+      scene.load.json("tk-props-json", "assets/tk/props.json?v=2");
+      scene.load.image("tk-props", "assets/tk/props.png?v=2");
       scene.load.once("complete", () => {
         const t = scene.textures.get("tk-props"), j = scene.cache.json.get("tk-props-json");
         if (t && j) for (const [n, [x, y, w, h]] of Object.entries(j.frames)) t.add(n, 0, x, y, w, h);
+        WorldCutscene.kinds = (j && j.kinds) || {};
         res();
       });
       scene.load.start();

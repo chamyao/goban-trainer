@@ -186,6 +186,13 @@ PLACES = {
             "landmarks": [{"kind": "rock.big", "id": "altar", "node": "1-n7", "trigger": "arrive", "label": "Zhang Bao's sorcery"}],
             "objectives": {"1-n7": "Break Zhang Bao's sorcery in the hills."},
         },
+        "Anxi": {   # Liu Bei's first post, where the inspector comes (the closing)
+            "archetype": "town",
+            "landmarks": [
+                {"kind": "building.inn", "id": "hostel", "label": "The posting station"},
+                {"kind": "building.hall", "id": "office", "label": "The Anxi county office"},
+            ],
+        },
         "Yangcheng": {
             "archetype": "city",
             "banners": "yellow",

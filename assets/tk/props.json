@@ -1,107 +1,408 @@
 {
  "image": "assets/tk/props.png",
  "frames": {
-  "cagecart": [
+  "cart": [
    0,
+   0,
+   27,
+   27
+  ],
+  "ox": [
+   28,
+   0,
+   24,
+   16
+  ],
+  "book": [
+   53,
+   0,
+   16,
+   16
+  ],
+  "letter": [
+   70,
+   0,
+   12,
+   9
+  ],
+  "seal": [
+   83,
+   0,
+   9,
+   9
+  ],
+  "steelbars": [
+   93,
+   0,
+   16,
+   15
+  ],
+  "staves": [
+   110,
+   0,
+   12,
+   16
+  ],
+  "switches": [
+   123,
+   0,
+   16,
+   16
+  ],
+  "waterbowl": [
+   140,
+   0,
+   14,
+   6
+  ],
+  "post": [
+   155,
+   0,
+   11,
+   14
+  ],
+  "crate": [
+   167,
+   0,
+   16,
+   15
+  ],
+  "cagecart": [
+   184,
    0,
    48,
    37
   ],
   "forge": [
-   49,
+   233,
    0,
    29,
    30
   ],
   "anvil": [
-   79,
+   263,
    0,
    16,
    16
   ],
   "hammer": [
-   96,
+   280,
    0,
    16,
    16
   ],
   "gourd": [
-   113,
+   297,
    0,
    14,
    14
   ],
   "emote.!": [
-   128,
+   312,
    0,
    14,
    13
   ],
   "emote.?": [
-   143,
+   327,
    0,
    14,
    13
   ],
   "emote....": [
-   158,
+   342,
    0,
    14,
    13
   ],
   "emote.music": [
-   173,
+   357,
    0,
    14,
    13
   ],
   "emote.anger": [
-   188,
+   372,
    0,
    14,
    13
   ],
   "emote.sweat": [
-   203,
+   387,
    0,
    14,
    13
   ],
   "emote.zzz": [
-   218,
+   402,
    0,
    14,
    13
   ],
   "emote.heart": [
-   233,
+   417,
    0,
    14,
    13
   ],
   "item.twin_swords": [
-   248,
+   432,
    0,
    13,
    17
   ],
   "item.green_dragon": [
-   262,
+   446,
    0,
    6,
    23
   ],
   "item.serpent_spear": [
-   269,
+   453,
    0,
    7,
    21
   ],
   "item.silver": [
-   277,
+   461,
    0,
    14,
    15
   ]
+ },
+ "kinds": {
+  "cagecart": {
+   "size": [
+    3,
+    1
+   ],
+   "atlas": "cagecart"
+  },
+  "cart": {
+   "size": [
+    2,
+    1
+   ],
+   "atlas": "cart"
+  },
+  "forge": {
+   "size": [
+    2,
+    1
+   ],
+   "atlas": "forge",
+   "fire": true
+  },
+  "anvil": {
+   "size": [
+    1,
+    1
+   ],
+   "atlas": "anvil"
+  },
+  "ox": {
+   "size": [
+    1,
+    1
+   ],
+   "atlas": "ox"
+  },
+  "whitehorse": {
+   "size": [
+    2,
+    1
+   ],
+   "horse": "white"
+  },
+  "book": {
+   "size": [
+    1,
+    1
+   ],
+   "atlas": "book"
+  },
+  "letter": {
+   "size": [
+    1,
+    1
+   ],
+   "atlas": "letter"
+  },
+  "seal": {
+   "size": [
+    1,
+    1
+   ],
+   "atlas": "seal"
+  },
+  "steelbars": {
+   "size": [
+    1,
+    1
+   ],
+   "atlas": "steelbars"
+  },
+  "staves": {
+   "size": [
+    1,
+    1
+   ],
+   "atlas": "staves"
+  },
+  "switches": {
+   "size": [
+    1,
+    1
+   ],
+   "atlas": "switches"
+  },
+  "waterbowl": {
+   "size": [
+    1,
+    1
+   ],
+   "atlas": "waterbowl"
+  },
+  "post": {
+   "size": [
+    1,
+    1
+   ],
+   "atlas": "post"
+  },
+  "bucket": {
+   "size": [
+    1,
+    1
+   ],
+   "kit": [
+    "furn.barrel",
+    "furn.jar"
+   ]
+  },
+  "chest": {
+   "size": [
+    1,
+    1
+   ],
+   "kit": [
+    "furn.chest",
+    "furn.drawers"
+   ]
+  },
+  "straw": {
+   "size": [
+    2,
+    1
+   ],
+   "kit": [
+    "camp.hay",
+    "furn.sacks"
+   ]
+  },
+  "redbanner": {
+   "size": [
+    1,
+    1
+   ],
+   "kit": [
+    "banner.red"
+   ]
+  },
+  "yellowbanner": {
+   "size": [
+    1,
+    1
+   ],
+   "kit": [
+    "banner.yellow",
+    "banner.red"
+   ]
+  },
+  "winejars": {
+   "size": [
+    2,
+    1
+   ],
+   "kit": [
+    "furn.jar",
+    "furn.barrel"
+   ],
+   "pair": true,
+   "with": "gourd"
+  },
+  "table": {
+   "size": [
+    2,
+    1
+   ],
+   "kit": [
+    "furn.table",
+    "camp.table"
+   ]
+  },
+  "rack": {
+   "size": [
+    2,
+    1
+   ],
+   "kit": [
+    "furn.rack"
+   ]
+  },
+  "fire": {
+   "size": [
+    2,
+    1
+   ],
+   "kit": [
+    "camp.firepit",
+    "camp.cookfire"
+   ],
+   "fire": true
+  },
+  "tent": {
+   "size": [
+    3,
+    2
+   ],
+   "kit": [
+    "building.tent",
+    "building.hut",
+    "building.house"
+   ]
+  },
+  "gate": {
+   "size": [
+    3,
+    1
+   ],
+   "kit": [
+    "building.gate",
+    "building.moongate"
+   ]
+  },
+  "desk": {
+   "size": [
+    2,
+    1
+   ],
+   "kit": [
+    "furn.desk",
+    "furn.table",
+    "camp.table"
+   ]
+  },
+  "hall": {
+   "size": [
+    4,
+    2
+   ],
+   "kit": [
+    "building.hall",
+    "building.inn",
+    "building.house"
+   ]
+  }
  }
 }
