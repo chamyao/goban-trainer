@@ -410,9 +410,9 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
 .tk-map.tk-zoom-out { animation: tkZoomOut .5s ease-out; }
 @keyframes tkZoomIn { to { transform: scale(5); opacity: 0; } }
 @keyframes tkZoomOut { from { transform: scale(4); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-#root.tk-enter .tk-level { animation: tkLevelIn .45s ease-out; }
-#root.tk-leave .tk-level { animation: tkLevelOut .32s ease-in forwards; }
-#root.tk-flip .tk-level .board-card { animation: tkFlip .26s ease-in; }
+.tk-enter .tk-level { animation: tkLevelIn .45s ease-out; }
+.tk-leave .tk-level { animation: tkLevelOut .32s ease-in forwards; }
+.tk-flip .tk-level .board-card { animation: tkFlip .26s ease-in; }
 @keyframes tkLevelIn { from { transform: scale(.25); opacity: 0; } to { transform: none; opacity: 1; } }
 @keyframes tkLevelOut { to { transform: scale(.2); opacity: 0; } }
 @keyframes tkFlip { to { transform: rotateY(90deg); } }
@@ -530,3 +530,11 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
 .tk-para .zh { font-size: 1.08em; }
 .tk-para .en { opacity: .78; font-size: .92em; }
 .meta-title .tk-en { color: var(--muted); font-weight: normal; font-size: .9em; }
+
+/* A campaign problem over the explorable world: the map stays visible, dimmed. */
+.tk-overlay { position: fixed; inset: 0; z-index: 140; display: grid; place-items: center; padding: 16px; background: rgba(24, 14, 8, .55); backdrop-filter: blur(1.5px); animation: tkOverlayIn .25s ease-out; }
+.tk-overlay.tk-leave { animation: tkOverlayOut .28s ease-in forwards; }
+.tk-overlay-box { width: min(1000px, 100%); max-height: calc(100vh - 32px); overflow: auto; padding: 20px; background: var(--bg); border: 4px solid #7a3a22; border-radius: 12px; box-shadow: 0 0 0 2px #e6c14a inset, 0 18px 50px rgba(0, 0, 0, .45); box-sizing: border-box; }
+@keyframes tkOverlayIn { from { opacity: 0; } }
+@keyframes tkOverlayOut { to { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .tk-overlay, .tk-overlay.tk-leave { animation: none; } }
