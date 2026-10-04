@@ -28,7 +28,9 @@ ARCHETYPES = {
                  border=["tree.grove", "tree.small", "tree.pine"],
                  decor={"plant.bush": 1.0, "plant.flower": 1.0, "plant.grass": 1.5, "tree.small": .4, "lamp.post": .15},
                  clusters=(3, ["tree.small", "tree.grove", "plant.bush"]), pond=False),
-    "city": dict(size=(40, 30), plaza=(8, 5), fill=["building.hall", "building.house", "building.house", "building.inn", "building.shop"],
+    "city": dict(size=(40, 30), plaza=(8, 5), paved=True,
+                 fill=["building.hall", "building.house", "building.house", "building.inn", "building.shop",
+                       "building.house", "building.shop", "building.house"],
                  border=["tree.grove", "tree.pine"],
                  decor={"plant.bush": .8, "plant.grass": 1.0, "lamp.post": .2, "tree.small": .3},
                  clusters=(3, ["tree.small", "tree.pine", "plant.bush"]), pond=False),
@@ -429,6 +431,8 @@ class Layout:
         missing = self.check()
         if missing:
             raise RuntimeError("unreachable: " + ", ".join(missing))
+        if self.A.get("paved"):   # a city's streets and square are paved
+            self.t = [[":" if ch == "=" else ch for ch in row] for row in self.t]
         return {
             "format": "tk-map/1",
             "id": self.place["id"],

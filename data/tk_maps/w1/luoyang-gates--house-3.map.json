@@ -1,0 +1,122 @@
+{
+ "format": "tk-map/1",
+ "id": "luoyang-gates--house-3",
+ "world": 1,
+ "parent": "luoyang-gates",
+ "name": "House, Luoyang Gates",
+ "archetype": "interior",
+ "building": "house-3",
+ "style": "building.house",
+ "size": [
+  20,
+  12
+ ],
+ "seed": 0.7739782746125857,
+ "terrain": {
+  "legend": {
+   "#": "wood",
+   "%": "stone",
+   "&": "mat",
+   "e": "earth",
+   "W": "wall",
+   " ": "void"
+  },
+  "rows": [
+   "                    ",
+   "     WWWWWWWWWW     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     WWWWW#WWWW     ",
+   "                    ",
+   "                    ",
+   "                    "
+  ]
+ },
+ "objects": [
+  {
+   "kind": "furn.bed",
+   "x": 10,
+   "y": 2,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.drawers",
+   "x": 13,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.shelf",
+   "x": 8,
+   "y": 2,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.table",
+   "x": 11,
+   "y": 5,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 10,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 13,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.jar",
+   "x": 6,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "spots": [],
+ "npcs": [
+  {
+   "id": "in-1",
+   "kind": "folk.woman",
+   "x": 12.5,
+   "y": 6.9,
+   "say": [
+    "“Mind the floor — I've only just swept it.”"
+   ]
+  }
+ ],
+ "exits": [
+  {
+   "to": "luoyang-gates",
+   "side": "S",
+   "x": 10,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "luoyang-gates": [
+   10,
+   7
+  ],
+  "": [
+   10,
+   7
+  ]
+ }
+}
