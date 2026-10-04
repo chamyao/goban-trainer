@@ -21,9 +21,12 @@ words and name people only; their look belongs in CAST.
 """
 import re
 
-STYLE = ("Style: anime fantasy game key art, clean cel shading, vivid saturated colours, soft glow and bloom, "
-         "luminous sky, richly detailed painterly background. Ancient China, 184 AD. "
+STYLE = ("Style: Korean action webtoon and modern martial-arts anime: bold, clean, confident line art, sharp "
+         "angular faces with intense eyes, athletic builds, high-contrast cel shading with hard shadows, saturated "
+         "colours, dynamic energy, crisp detailed backgrounds. Ancient China, 184 AD. "
          "No text, no lettering, no borders, no letterbox bars.")
+# (the look of The God of High School, described in plain words: models follow a description more
+# reliably than a title, and the set shouldn't lean on someone else's name)
 
 # key -> (name as the scenes write it, look)
 CAST = {
@@ -31,8 +34,8 @@ CAST = {
                           "kind eyes, hair in a topknot, in a white robe trimmed with gold"),
     "guanyu": ("Guan Yu", "a tall, broad man with a deep red face, a very long black beard down to his chest and "
                           "narrow eyes, hair in a topknot, in a green robe"),
-    "zhangfei": ("Zhang Fei", "a huge, burly man with a round fierce face, big round eyes and wild bristling black "
-                              "whiskers, hair in a topknot, in black and dark brown clothes"),
+    "zhangfei": ("Zhang Fei", "a towering, powerfully muscled man with a fierce square jaw, big glaring eyes and "
+                              "a wild bristling black beard, hair in a topknot, in black and dark brown clothes"),
     "luzhi": ("Lu Zhi", "a dignified old scholar-general with a long grey beard, in plain grey clothes"),
     "zhangbao": ("Zhang Bao", "a sorcerer general with long loose black hair and a yellow headscarf, "
                               "in a yellow robe"),
@@ -43,7 +46,7 @@ def portrait(key):
     """The request for a person's reference portrait."""
     name, look = CAST[key]
     return (f"Character reference portrait of {name}, {look}. Full body, standing, facing the viewer, "
-            f"neutral pose, plain light background, even lighting. {STYLE}")
+            f"neutral pose, on a plain white background with nothing behind him, even lighting. {STYLE}")
 
 
 STILLS = {
