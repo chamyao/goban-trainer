@@ -12,8 +12,11 @@ different angle. A scene is a list of steps the map plays:
   ["move", id, at, dx, dy]     walk an actor there
   ["remove", id]
   ["party", [who, ...]]        the party walking the map from now on
+  ["gain", item]               the party gets a thing from the world's "items" (a mount, a weapon, …)
+  ["army", id, who, count, at, dx, dy]  a body of soldiers in formation (id names the group)
+  ["run", id, at, dx, dy]      like move, at a run (ids may name a group)
   ["fx", name, at, dx, dy]     an effect: petals, incense, blackwind, flash, whip, dust, paper
-  ["pose", id, pose]           stand, kneel, strike, fall
+  ["pose", id, pose, n]        stand, kneel, strike, fall; for a group, n = how many fall (nearest the enemy)
   ["wait", ms]
   ["scroll", title, [paragraphs]]  a storyteller scroll
 
@@ -36,6 +39,16 @@ WORLDS = [
         "grades": ["12K", "12K+"],
         "boss": "redmond",
         "party": ["liubei"],
+        # Things the story gives the party (["gain", key] in a scene). A mount
+        # puts the party on horseback; coats are per rider.
+        "items": {
+            "horses": {"name": "Fifty northern horses", "zh": "良马五十匹", "kind": "mount",
+                       "coats": {"liubei": "white", "guanyu": "brown", "zhangfei": "black"}},
+            "silver": {"name": "Five hundred taels of silver", "zh": "金银五百两", "kind": "treasure"},
+            "twin_swords": {"name": "Twin swords", "zh": "双股剑", "kind": "weapon", "who": "liubei"},
+            "green_dragon": {"name": "Green Dragon Crescent Blade", "zh": "青龙偃月刀", "kind": "weapon", "who": "guanyu"},
+            "serpent_spear": {"name": "Eighteen-foot serpent spear", "zh": "丈八蛇矛", "kind": "weapon", "who": "zhangfei"},
+        },
         # Map, 480x270. "role": main (fixed, carries a main story point),
         # side (long road), short (shortcut), boss.
         "nodes": [
@@ -107,8 +120,12 @@ WORLDS = [
                 ["n", "Their road forks here. The long road passes through the rebels' heartland; the mountain trail is shorter, and steeper."],
             ]},
             "daxing": {"title": "First Blood at Daxing Mountain", "kind": "main", "steps": [
+                # the novel's gifts come before the first battle, whichever road you took
+                ["gain", "horses"], ["gain", "twin_swords"], ["gain", "green_dragon"], ["gain", "serpent_spear"],
+                ["army", "braves", "militia", 5, "n3", -24, 0],
+                ["army", "yt", "rebel", 24, "n3", 72, 0],
                 ["n", "The Yellow Turban general Cheng Yuanzhi marches on Zhuo with fifty thousand men. Liu Bei meets him with five hundred."],
-                ["spawn", "r1", "rebel", "n3", 34, -8], ["spawn", "r2", "rebel", "n3", 40, 6],
+                ["spawn", "r1", "rebel", "n3", 40, -8], ["spawn", "r2", "chengyuanzhi", "n3", 46, 6],
                 ["say", "liubei", "Traitors to the realm! Why not surrender now?"],
                 ["say", "chengyuanzhi", "Deng Mao — bring me his head!"],
                 ["move", "r1", "n3", 14, -4],
@@ -117,14 +134,23 @@ WORLDS = [
                 ["move", "r2", "n3", 14, 4],
                 ["pose", "guanyu", "strike"], ["fx", "flash", "n3", 14, 4], ["pose", "r2", "fall"],
                 ["n", "Cheng Yuanzhi charges — and Guan Yu's great blade cuts him in two. The rebels throw down their spears and run."],
+                ["run", "yt", "n3", 160, 0], ["remove", "yt"],
                 ["remove", "r1"], ["remove", "r2"],
             ]},
             "qingzhou": {"title": "The Ambush at Qingzhou", "kind": "main", "steps": [
+                ["army", "relief", "militia", 4, "n4", -24, 0],
+                ["army", "yt", "rebel", 15, "n4", 80, 0],
                 ["n", "Rebels besiege Qingzhou. The relief force is outnumbered and falls back thirty li."],
                 ["say", "liubei", "They are many and we are few. Only surprise will win this. Yunchang, hide your men left of the ridge. Yide, to the right. When the gongs sound, strike."],
+                ["move", "guanyu", "n4", 8, -40], ["move", "zhangfei", "n4", 8, 40],
                 ["n", "Next morning Liu Bei attacks — then turns and flees. The rebels chase him over the ridge."],
-                ["fx", "dust", "n4", -20, 0],
+                ["run", "liubei", "n4", 30, 0], ["run", "liubei", "n4", -30, 0],
+                ["run", "yt", "n4", 10, 0],
+                ["fx", "dust", "n4", 0, 0],
+                ["fx", "flash", "n4", -30, 0],
+                ["run", "guanyu", "n4", 2, -10], ["run", "zhangfei", "n4", 2, 10], ["run", "liubei", "n4", -8, 0],
                 ["n", "Gongs crash. Guan Yu and Zhang Fei burst from both flanks as Liu Bei wheels around. Caught from three sides, the rebels break, and the siege of Qingzhou is lifted."],
+                ["pose", "yt", "fall", 4], ["run", "yt", "n4", 160, 0], ["remove", "yt"],
             ]},
             "cart": {"title": "The Cage Cart", "kind": "main", "steps": [
                 ["n", "Liu Bei sets out to help his old teacher Lu Zhi, who has Zhang Jiao himself trapped at Guangzong. On the road they meet soldiers guarding a prison cart."],
@@ -152,16 +178,30 @@ WORLDS = [
                 ["n", "That night they leave to join the general Zhu Jun instead."],
             ]},
             "blackwind": {"title": "Black Wind, Paper Soldiers", "kind": "main", "steps": [
+                ["spawn", "zj", "zhujun", "n7", -14, -10],
+                ["army", "han", "militia", 6, "n7", -30, 0],
+                ["spawn", "zb", "zhangbao", "n7", 70, 0],
+                ["army", "yt", "rebel", 14, "n7", 86, 0],
                 ["n", "Zhu Jun's army faces Zhang Bao, the General of Earth. Zhang Fei spears his officer Gao Sheng from the saddle — and then Zhang Bao lets down his hair, raises his sword, and chants."],
-                ["fx", "blackwind", "n7", 14, -12],
+                ["pose", "zb", "strike"],
+                ["fx", "blackwind", "n7", 40, -4],
                 ["n", "Wind howls and thunder rolls. Out of a black cloud pours a numberless host of horsemen. Liu Bei's army breaks and flees."],
+                ["run", "yt", "n7", 16, 0], ["run", "han", "n7", -120, 0], ["remove", "han"],
                 ["say", "zhujun", "Sorcery. Tomorrow, hide men on the hilltop with the blood of pigs, sheep and dogs. When his spirits come, drench them. The spell will break."],
                 ["say", "guanyu", "Then let him chase us up the hill."],
+                ["remove", "yt"], ["remove", "zb"], ["remove", "zj"],
             ]},
             "bosswin": {"title": "The General of Earth Falls", "kind": "main", "steps": [
+                ["army", "han", "militia", 5, "boss", -26, 0],
+                ["spawn", "zb", "zhangbao", "boss", 60, 0],
+                ["army", "yt", "rebel", 12, "boss", 76, 0],
                 ["n", "Again Zhang Bao calls the wind; again Liu Bei flees, and the rebels chase him to the hill. A signal gun — and blood and filth rain down from the ridge."],
-                ["fx", "paper", "boss", 0, 10],
+                ["run", "yt", "boss", 20, 0],
+                ["fx", "flash", "boss", 12, -8],
+                ["fx", "paper", "boss", 20, 0],
+                ["pose", "yt", "fall"],
                 ["n", "Paper men and straw horses flutter to the ground. The wind dies. Liu Bei's arrow strikes Zhang Bao in the arm, and he flees into Yangcheng."],
+                ["run", "zb", "boss", 160, 0], ["remove", "zb"], ["remove", "yt"],
                 ["n", "Besieged, with no way out, Zhang Bao is killed by his own officer, Yan Zheng, who opens the gates."],
             ]},
             # ---- side stories: the long road ----
@@ -210,9 +250,15 @@ WORLDS = [
             ]},
             # ---- side stories: the shortcuts ----
             "horses": {"title": "Horses from the North", "kind": "side", "steps": [
+                ["spawn", "zsp", "merchant", "as", 26, -6],
+                ["army", "herd", "horse", 6, "as", 44, 0],
                 ["n", "The brothers had men, but no horses. Then two travelling merchants, Zhang Shiping and Su Shuang, came down the trail driving a herd."],
                 ["say", "merchant", "Bandits have closed the road north. If you mean to crush them, take fifty horses — and five hundred taels of silver, and a thousand jin of steel for your weapons."],
+                ["move", "herd", "as", 16, 0],
+                ["gain", "horses"], ["gain", "silver"],
                 ["n", "Liu Bei had twin swords forged. Guan Yu's blade was the Green Dragon Crescent, eighty-two jin, called Cold Beauty. Zhang Fei's was an eighteen-foot serpent spear of steel."],
+                ["fx", "sparkle", "as", 0, -6],
+                ["gain", "twin_swords"], ["gain", "green_dragon"], ["gain", "serpent_spear"],
             ]},
             "bribe": {"title": "A Bribe Refused", "kind": "side", "steps": [
                 ["n", "At Guangzong, Lu Zhi had Zhang Jiao penned in, though the rebel's sorcery kept him from the final blow. Then the court's envoy arrived."],

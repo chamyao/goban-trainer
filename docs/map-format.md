@@ -132,6 +132,11 @@ come in the novel's order.
   if nothing matches, the object is still solid but invisible, and the
   compiler lists it.
 
+## Cutscenes
+
+Story scenes are staged in these maps by the scene generator; see
+`docs/cutscene-format.md`.
+
 ## Building
 
 ```

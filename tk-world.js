@@ -67,15 +67,17 @@ function worldScenes() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
       this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=3`);
-      this.load.json("kit", `assets/tk/kits/${kit}.json?v=3`);
+      this.load.json("kit", `assets/tk/kits/${kit}.json?v=4`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=1`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
       for (const [s, path] of Object.entries(kit.sheets)) this.load.image(`kit-${s}`, path);
       const [fw, fh] = kit.folk.frame;
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=3`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=4`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
+      if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
       this.load.once("complete", () => {
         for (const [kind, list] of Object.entries(kit.kinds)) list.forEach(([s, x, y, wd, ht], i) => this.textures.get(`kit-${s}`).add(`${kind}#${i}`, 0, x, y, wd, ht));
@@ -152,6 +154,7 @@ function worldScenes() {
       if (!pos) this.ui.place(this.place.name, this.place.zh);
       this.blocked = 0;
       this.leaving = false;
+      if (typeof WorldItems !== "undefined") WorldItems.attach(this);   // mounts (tk-items.js)
       window.__w = this;  // for tests and the console
       if (this.resume && opts.ret) { const r = opts.ret; opts.ret = null; this.time.delayedCall(400, () => this.returned(r)); }
     }
@@ -183,7 +186,7 @@ function worldScenes() {
       if (p.until && TK.cleared(p.until)) return;  // their part of the story is over
       let spr, folk = null, who = null;
       const face = p.face || "down";
-      if (p.kind.startsWith("hero.")) {
+      if (p.kind.startsWith("hero.") || p.drawn) {   // story people, and townsfolk drawn like them (kit folk.drawn)
         who = p.sprite;
         this.hero(who);
         spr = this.physics.add.sprite(o.x, o.y, `h-${who}-${face}-0`);
@@ -303,13 +306,19 @@ function worldScenes() {
         const spot = Object.values(this.spots).find(s => s.node === q.node);
         const steps = [...worldLines(spot && spot.outro), ...((this.story[q.scene] || {}).steps || [])];
         for (const n of this.npcs) if (n.until === q.node) { n.spr.setVisible(false); n.spr.body.enable = false; }
-        return this.talk(steps, async () => {
+        const finish = async () => {
           for (const s of steps) if (s[0] === "party") { this.st.party = s[1]; TK.setParty(this.w, s[1]); this.setParty(s[1]); }
+          if (typeof WorldItems !== "undefined") WorldItems.gainFrom(this, steps);   // what the scene gave
           if (q.scene) TK.markSeen(`${this.w.n}:${q.scene}`);
           this.save();
           this.setGoal();
           if (q.role === "boss" && this.opts.onBoss) await this.opts.onBoss();
-        }, "story");
+        };
+        // a staged cutscene (tk-cutscene.js) when the scene generator made one for this place, else the lines alone
+        const cs = ((this.cache.json.get("cutscenes") || {}).scenes || {})[q.scene];
+        if (cs && cs.place === this.placeId && typeof WorldCutscene !== "undefined")
+          return this.talk(worldLines(spot && spot.outro), () => WorldCutscene.play(this, cs, finish), "story");
+        return this.talk(steps, finish, "story");
       }
       const n = this.npcs.find(m => m.challenge === ret.key);
       if (n) { n.mark.setVisible(false); this.talk(worldLines(n.win)); }
@@ -419,7 +428,7 @@ function worldScenes() {
           n.moving = Math.random() < .5 || away;
         }
         const v = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }[n.dir];
-        if (n.moving) { n.spr.setVelocity(v[0] * 28, v[1] * 28); n.spr.anims.play(`fk-${n.sprite}-${n.dir}`, true); }
+        if (n.moving) { n.spr.setVelocity(v[0] * 28, v[1] * 28); n.spr.anims.play(n.who ? `h-${n.who}-${n.dir}` : `fk-${n.sprite}-${n.dir}`, true); }
         else { n.spr.setVelocity(0); this.faceNpc(n); }
         n.spr.setDepth(n.spr.y);
       }

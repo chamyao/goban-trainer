@@ -511,6 +511,12 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
 @media (prefers-reduced-motion: reduce) { .town-place.show { animation: none; opacity: 0; } }
 
 /* plot vs chatter: story moments are framed, tabbed and dim the map; chatter is small and plain */
+.town-gains { position: absolute; top: 18%; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; gap: 6px; align-items: center; pointer-events: none; z-index: 4; }
+.town-gain { padding: 6px 16px; background: rgba(40, 24, 16, .88); border: 2px solid #e6c14a; border-radius: 6px; text-align: center; animation: townGain 3.6s ease-out forwards; }
+.town-gain b { display: block; color: #f4d77a; font-size: 1.15em; }
+.town-gain span { display: block; font-size: .9em; color: #e8dcc0; }
+@keyframes townGain { 0% { opacity: 0; transform: translateY(6px); } 10%, 80% { opacity: 1; transform: none; } 100% { opacity: 0; } }
+.town-skip { position: absolute; top: 10px; right: 12px; z-index: 5; pointer-events: auto; padding: 4px 10px; font: bold 12px/1.4 system-ui, sans-serif; color: #f4ead2; background: rgba(40, 24, 16, .8); border: 1px solid #c79a4a; border-radius: 5px; cursor: pointer; }
 .town-dim { position: absolute; inset: 0; background: radial-gradient(ellipse at center 40%, rgba(10, 6, 4, .05), rgba(10, 6, 4, .45)); }
 .town-tab { display: none; position: absolute; left: 14px; top: -14px; padding: 1px 10px; background: #8a2a1a; color: #f8ead0; border: 2px solid #f4ead2; border-radius: 4px; font: bold 12px/1.5 system-ui, sans-serif; letter-spacing: .04em; box-shadow: 0 2px 0 rgba(0, 0, 0, .25); }
 .town-dlg.story .town-tab { display: block; }
