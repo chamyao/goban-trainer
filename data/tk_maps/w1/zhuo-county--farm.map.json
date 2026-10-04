@@ -1,0 +1,135 @@
+{
+ "format": "tk-map/1",
+ "id": "zhuo-county--farm",
+ "world": 1,
+ "parent": "zhuo-county",
+ "name": "Zhang Fei's farm",
+ "archetype": "interior",
+ "building": "farm",
+ "size": [
+  20,
+  12
+ ],
+ "seed": 0.5869118254970145,
+ "terrain": {
+  "legend": {
+   "#": "wood",
+   "%": "stone",
+   "&": "mat",
+   "e": "earth",
+   "W": "wall",
+   " ": "void"
+  },
+  "rows": [
+   "                    ",
+   "    WWWWWWWWWWW     ",
+   "    WeeeeeeeeeW     ",
+   "    WeeeeeeeeeW     ",
+   "    WeeeeeeeeeW     ",
+   "    WeeeeeeeeeW     ",
+   "    WeeeeeeeeeW     ",
+   "    WeeeeeeeeeW     ",
+   "    WWWWWeWWWWW     ",
+   "                    ",
+   "                    ",
+   "                    "
+  ]
+ },
+ "objects": [
+  {
+   "kind": "furn.hearth",
+   "x": 8,
+   "y": 2,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.bed",
+   "x": 6,
+   "y": 2,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.sacks",
+   "x": 5,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.sacks",
+   "x": 5,
+   "y": 3,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.barrel",
+   "x": 13,
+   "y": 3,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.table",
+   "x": 8,
+   "y": 5,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 7,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 10,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.jar",
+   "x": 5,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "spots": [],
+ "npcs": [
+  {
+   "id": "in-1",
+   "kind": "folk.villager",
+   "x": 9.5,
+   "y": 3.9,
+   "say": [
+    "“The harvest is in, if the rebels don't take it.”"
+   ]
+  }
+ ],
+ "exits": [
+  {
+   "to": "zhuo-county",
+   "side": "S",
+   "x": 9,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "zhuo-county": [
+   9,
+   7
+  ],
+  "": [
+   9,
+   7
+  ]
+ }
+}

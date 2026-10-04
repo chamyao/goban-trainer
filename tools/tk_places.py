@@ -183,3 +183,31 @@ PLACES = {
         },
     },
 }
+
+# Who you meet inside each kind of building (tools/mapfactory/interiors.py
+# furnishes the rooms). Lines need Chinese in tools/tk_story_zh.py.
+ROOMS = {
+    "building.inn": {"people": [
+        {"kind": "folk.villager", "say": "“Wine, pork, a bed for the night — we have it all.”"},
+        {"kind": "folk.hunter", "say": "“They say the governor is raising volunteers. I've half a mind to join.”"},
+    ]},
+    "building.shop": {"people": [
+        {"kind": "folk.woman", "say": "“Sit, have some tea. The storyteller starts soon.”"},
+        {"kind": "folk.elder", "say": "“Another pot, and another tale of the old days.”"},
+    ]},
+    "building.hall": {"people": [
+        {"kind": "folk.official", "say": "“This is the county office. State your business.”"},
+    ]},
+    "building.house": {"people": [
+        {"kind": "folk.woman", "say": "“Mind the floor — I've only just swept it.”"},
+    ]},
+    "building.hut": {"people": [
+        {"kind": "folk.elder", "say": "“It isn't much, but the roof keeps the rain off.”"},
+    ]},
+    "building.lodge": {"people": [
+        {"kind": "folk.villager", "say": "“The harvest is in, if the rebels don't take it.”"},
+    ]},
+    "building.tent": {"people": [
+        {"kind": "folk.soldier", "say": "“Orders come at dawn. Keep your weapon close.”"},
+    ]},
+}

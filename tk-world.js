@@ -31,7 +31,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=3`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=4`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
@@ -66,8 +66,8 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=3`);
-      this.load.json("kit", `assets/tk/kits/${kit}.json?v=4`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=4`);
+      this.load.json("kit", `assets/tk/kits/${kit}.json?v=5`);
       this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=1`);
     }
     create() {
@@ -75,7 +75,7 @@ function worldScenes() {
       for (const [s, path] of Object.entries(kit.sheets)) this.load.image(`kit-${s}`, path);
       const [fw, fh] = kit.folk.frame;
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=4`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=5`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -244,6 +244,8 @@ function worldScenes() {
     isDone(key) { return this.done(key) || !this.region.quests.some(q => q.node === key); }
     available(q) { return !this.done(q.node) && (q.after.length === 0 || q.after.some(a => this.isDone(a))); }
     placeOpen(id) {
+      const room = this.region.places.find(p => p.id === id);
+      if (room && room.parent) return this.placeOpen(room.parent);   // a building is open when its place is
       return id === this.region.start || this.st.visited.includes(id) ||
         this.region.quests.some(q => q.place === id && (this.available(q) || this.done(q.node)));
     }

@@ -7,6 +7,18 @@ here, so editing the story can't silently drop its voice-over.
 """
 
 ZH = {
+    # ---- inside buildings (tk_places.ROOMS) ----
+    "“Wine, pork, a bed for the night — we have it all.”": "“酒、肉、过夜的床铺，小店样样都有。”",
+    "“They say the governor is raising volunteers. I've half a mind to join.”": "“听说太守在招募义兵，我倒有心去投军。”",
+    "“Sit, have some tea. The storyteller starts soon.”": "“坐，喝杯茶。说书的马上就开讲了。”",
+    "“Another pot, and another tale of the old days.”": "“再来一壶，再听一段古。”",
+    "“This is the county office. State your business.”": "“这里是县衙，有何贵干？”",
+    "“Mind the floor — I've only just swept it.”": "“当心脚下，我刚扫过地。”",
+    "“It isn't much, but the roof keeps the rain off.”": "“屋子虽简陋，好歹能遮风挡雨。”",
+    "“The harvest is in, if the rebels don't take it.”": "“庄稼收了，只盼别被贼人抢去。”",
+    "“Orders come at dawn. Keep your weapon close.”": "“军令天亮就到，兵器别离身。”",
+    # interior names
+    "Inn": "客栈", "Teahouse": "茶馆", "Hall": "厅堂", "House": "民居", "Hut": "茅屋", "Farmhouse": "农舍", "Tent": "营帐",
     # ---- World 1: opening ----
     "臨江仙 · The Immortal by the River": "临江仙",
     "On and on the Yangtze rolls east, its waves washing the heroes away.": "滚滚长江东逝水，浪花淘尽英雄。",

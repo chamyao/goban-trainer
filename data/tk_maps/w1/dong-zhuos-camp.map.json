@@ -62,28 +62,32 @@
    "x": 18,
    "y": 17,
    "w": 3,
-   "h": 2
+   "h": 2,
+   "id": "tent-1"
   },
   {
    "kind": "building.tent",
    "x": 22,
    "y": 10,
    "w": 3,
-   "h": 2
+   "h": 2,
+   "id": "tent-2"
   },
   {
    "kind": "building.tent",
    "x": 10,
    "y": 7,
    "w": 3,
-   "h": 2
+   "h": 2,
+   "id": "tent-3"
   },
   {
    "kind": "building.tent",
    "x": 6,
    "y": 10,
    "w": 3,
-   "h": 2
+   "h": 2,
+   "id": "tent-4"
   },
   {
    "kind": "camp.firepit",
@@ -1090,6 +1094,51 @@
    "y": 0,
    "w": 2,
    "h": 1
+  },
+  {
+   "to": "dong-zhuos-camp--command",
+   "side": "N",
+   "x": 15.1,
+   "y": 7.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "dong-zhuos-camp--tent-1",
+   "side": "N",
+   "x": 19.1,
+   "y": 18.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "dong-zhuos-camp--tent-2",
+   "side": "N",
+   "x": 23.1,
+   "y": 11.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "dong-zhuos-camp--tent-3",
+   "side": "N",
+   "x": 11.1,
+   "y": 8.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "dong-zhuos-camp--tent-4",
+   "side": "N",
+   "x": 7.1,
+   "y": 11.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
   }
  ],
  "entries": {
@@ -1108,6 +1157,26 @@
   "": [
    15,
    9
+  ],
+  "dong-zhuos-camp--command": [
+   15,
+   8
+  ],
+  "dong-zhuos-camp--tent-1": [
+   19,
+   19
+  ],
+  "dong-zhuos-camp--tent-2": [
+   23,
+   12
+  ],
+  "dong-zhuos-camp--tent-3": [
+   11,
+   9
+  ],
+  "dong-zhuos-camp--tent-4": [
+   7,
+   12
   ]
  }
 }

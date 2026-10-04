@@ -64,35 +64,40 @@
    "x": 18,
    "y": 11,
    "w": 4,
-   "h": 2
+   "h": 2,
+   "id": "hall-1"
   },
   {
    "kind": "building.house",
    "x": 28,
    "y": 13,
    "w": 4,
-   "h": 2
+   "h": 2,
+   "id": "house-1"
   },
   {
    "kind": "building.house",
    "x": 7,
    "y": 12,
    "w": 4,
-   "h": 2
+   "h": 2,
+   "id": "house-2"
   },
   {
    "kind": "building.inn",
    "x": 13,
    "y": 11,
    "w": 4,
-   "h": 2
+   "h": 2,
+   "id": "inn-1"
   },
   {
    "kind": "building.shop",
    "x": 23,
    "y": 13,
    "w": 3,
-   "h": 2
+   "h": 2,
+   "id": "shop-1"
   },
   {
    "kind": "tree.pine",
@@ -1343,6 +1348,51 @@
    "y": 17,
    "w": 1,
    "h": 2
+  },
+  {
+   "to": "luoyang-gates--hall-1",
+   "side": "N",
+   "x": 19.6,
+   "y": 12.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "luoyang-gates--house-1",
+   "side": "N",
+   "x": 29.6,
+   "y": 14.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "luoyang-gates--house-2",
+   "side": "N",
+   "x": 8.6,
+   "y": 13.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "luoyang-gates--inn-1",
+   "side": "N",
+   "x": 14.6,
+   "y": 12.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "luoyang-gates--shop-1",
+   "side": "N",
+   "x": 24.1,
+   "y": 14.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
   }
  ],
  "entries": {
@@ -1357,6 +1407,26 @@
   "": [
    19,
    22
+  ],
+  "luoyang-gates--hall-1": [
+   20,
+   13
+  ],
+  "luoyang-gates--house-1": [
+   30,
+   15
+  ],
+  "luoyang-gates--house-2": [
+   9,
+   14
+  ],
+  "luoyang-gates--inn-1": [
+   15,
+   13
+  ],
+  "luoyang-gates--shop-1": [
+   24,
+   15
   ]
  }
 }

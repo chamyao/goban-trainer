@@ -97,6 +97,12 @@ def place_lines():
             for l, kind in said:
                 step, voice = place_step(l, kind)
                 lines[step[-1]] = (step[-2], voice)
+    from tk_places import ROOMS   # people inside buildings
+    for room in ROOMS.values():
+        for p in room.get("people", []):
+            for l in ([p["say"]] if isinstance(p.get("say"), str) else p.get("say", [])):
+                step, voice = place_step(l, p["kind"])
+                lines[step[-1]] = (step[-2], voice)
     return lines
 
 

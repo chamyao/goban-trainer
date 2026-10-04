@@ -64,35 +64,40 @@
    "x": 11,
    "y": 12,
    "w": 4,
-   "h": 2
+   "h": 2,
+   "id": "hall-1"
   },
   {
    "kind": "building.house",
    "x": 2,
    "y": 12,
    "w": 4,
-   "h": 2
+   "h": 2,
+   "id": "house-1"
   },
   {
    "kind": "building.house",
    "x": 21,
    "y": 10,
    "w": 4,
-   "h": 2
+   "h": 2,
+   "id": "house-2"
   },
   {
    "kind": "building.inn",
    "x": 16,
    "y": 6,
    "w": 4,
-   "h": 2
+   "h": 2,
+   "id": "inn-1"
   },
   {
    "kind": "building.shop",
    "x": 7,
    "y": 12,
    "w": 3,
-   "h": 2
+   "h": 2,
+   "id": "shop-1"
   },
   {
    "kind": "banner.yellow",
@@ -1404,6 +1409,60 @@
    "y": 16,
    "w": 1,
    "h": 2
+  },
+  {
+   "to": "yangcheng--keep",
+   "side": "N",
+   "x": 17.6,
+   "y": 10.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "yangcheng--hall-1",
+   "side": "N",
+   "x": 12.6,
+   "y": 13.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "yangcheng--house-1",
+   "side": "N",
+   "x": 3.6,
+   "y": 13.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "yangcheng--house-2",
+   "side": "N",
+   "x": 22.6,
+   "y": 11.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "yangcheng--inn-1",
+   "side": "N",
+   "x": 17.6,
+   "y": 7.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "yangcheng--shop-1",
+   "side": "N",
+   "x": 8.1,
+   "y": 13.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
   }
  ],
  "entries": {
@@ -1414,6 +1473,30 @@
   "": [
    18,
    12
+  ],
+  "yangcheng--keep": [
+   18,
+   11
+  ],
+  "yangcheng--hall-1": [
+   13,
+   14
+  ],
+  "yangcheng--house-1": [
+   4,
+   14
+  ],
+  "yangcheng--house-2": [
+   23,
+   12
+  ],
+  "yangcheng--inn-1": [
+   18,
+   8
+  ],
+  "yangcheng--shop-1": [
+   8,
+   14
   ]
  }
 }

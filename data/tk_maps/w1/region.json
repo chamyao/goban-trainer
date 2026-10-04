@@ -15,8 +15,56 @@
    "archetype": "village",
    "map": "lousang-village.map.json",
    "links": [
-    "zhuo-county"
+    "zhuo-county",
+    "lousang-village--home",
+    "lousang-village--house-1",
+    "lousang-village--house-2",
+    "lousang-village--hut-1"
    ]
+  },
+  {
+   "id": "lousang-village--home",
+   "name": "Liu Bei's home",
+   "zh": "刘备的家",
+   "archetype": "interior",
+   "map": "lousang-village--home.map.json",
+   "links": [
+    "lousang-village"
+   ],
+   "parent": "lousang-village"
+  },
+  {
+   "id": "lousang-village--house-1",
+   "name": "House, Lousang Village",
+   "zh": "楼桑村·民居",
+   "archetype": "interior",
+   "map": "lousang-village--house-1.map.json",
+   "links": [
+    "lousang-village"
+   ],
+   "parent": "lousang-village"
+  },
+  {
+   "id": "lousang-village--house-2",
+   "name": "House, Lousang Village",
+   "zh": "楼桑村·民居",
+   "archetype": "interior",
+   "map": "lousang-village--house-2.map.json",
+   "links": [
+    "lousang-village"
+   ],
+   "parent": "lousang-village"
+  },
+  {
+   "id": "lousang-village--hut-1",
+   "name": "Hut, Lousang Village",
+   "zh": "楼桑村·茅屋",
+   "archetype": "interior",
+   "map": "lousang-village--hut-1.map.json",
+   "links": [
+    "lousang-village"
+   ],
+   "parent": "lousang-village"
   },
   {
    "id": "zhuo-county",
@@ -26,8 +74,104 @@
    "map": "zhuo-county.map.json",
    "links": [
     "lousang-village",
-    "the-peach-garden"
+    "the-peach-garden",
+    "zhuo-county--inn",
+    "zhuo-county--teahouse",
+    "zhuo-county--office",
+    "zhuo-county--farm",
+    "zhuo-county--house-1",
+    "zhuo-county--house-2",
+    "zhuo-county--house-3",
+    "zhuo-county--shop-1"
    ]
+  },
+  {
+   "id": "zhuo-county--inn",
+   "name": "The village inn",
+   "zh": "村店",
+   "archetype": "interior",
+   "map": "zhuo-county--inn.map.json",
+   "links": [
+    "zhuo-county"
+   ],
+   "parent": "zhuo-county"
+  },
+  {
+   "id": "zhuo-county--teahouse",
+   "name": "The teahouse",
+   "zh": "茶馆",
+   "archetype": "interior",
+   "map": "zhuo-county--teahouse.map.json",
+   "links": [
+    "zhuo-county"
+   ],
+   "parent": "zhuo-county"
+  },
+  {
+   "id": "zhuo-county--office",
+   "name": "The county office",
+   "zh": "县衙",
+   "archetype": "interior",
+   "map": "zhuo-county--office.map.json",
+   "links": [
+    "zhuo-county"
+   ],
+   "parent": "zhuo-county"
+  },
+  {
+   "id": "zhuo-county--farm",
+   "name": "Zhang Fei's farm",
+   "zh": "张飞的庄园",
+   "archetype": "interior",
+   "map": "zhuo-county--farm.map.json",
+   "links": [
+    "zhuo-county"
+   ],
+   "parent": "zhuo-county"
+  },
+  {
+   "id": "zhuo-county--house-1",
+   "name": "House, Zhuo County",
+   "zh": "涿县·民居",
+   "archetype": "interior",
+   "map": "zhuo-county--house-1.map.json",
+   "links": [
+    "zhuo-county"
+   ],
+   "parent": "zhuo-county"
+  },
+  {
+   "id": "zhuo-county--house-2",
+   "name": "House, Zhuo County",
+   "zh": "涿县·民居",
+   "archetype": "interior",
+   "map": "zhuo-county--house-2.map.json",
+   "links": [
+    "zhuo-county"
+   ],
+   "parent": "zhuo-county"
+  },
+  {
+   "id": "zhuo-county--house-3",
+   "name": "House, Zhuo County",
+   "zh": "涿县·民居",
+   "archetype": "interior",
+   "map": "zhuo-county--house-3.map.json",
+   "links": [
+    "zhuo-county"
+   ],
+   "parent": "zhuo-county"
+  },
+  {
+   "id": "zhuo-county--shop-1",
+   "name": "Teahouse, Zhuo County",
+   "zh": "涿县·茶馆",
+   "archetype": "interior",
+   "map": "zhuo-county--shop-1.map.json",
+   "links": [
+    "zhuo-county"
+   ],
+   "parent": "zhuo-county"
   },
   {
    "id": "the-peach-garden",
@@ -49,8 +193,20 @@
    "map": "road-to-julu.map.json",
    "links": [
     "the-peach-garden",
-    "julu"
+    "julu",
+    "road-to-julu--cave"
    ]
+  },
+  {
+   "id": "road-to-julu--cave",
+   "name": "A hermit's shelter",
+   "zh": "隐士的草庐",
+   "archetype": "interior",
+   "map": "road-to-julu--cave.map.json",
+   "links": [
+    "road-to-julu"
+   ],
+   "parent": "road-to-julu"
   },
   {
    "id": "julu",
@@ -60,8 +216,44 @@
    "map": "julu.map.json",
    "links": [
     "road-to-julu",
-    "yellow-hills"
+    "yellow-hills",
+    "julu--house-1",
+    "julu--house-2",
+    "julu--hut-1"
    ]
+  },
+  {
+   "id": "julu--house-1",
+   "name": "House, Julu",
+   "zh": "巨鹿·民居",
+   "archetype": "interior",
+   "map": "julu--house-1.map.json",
+   "links": [
+    "julu"
+   ],
+   "parent": "julu"
+  },
+  {
+   "id": "julu--house-2",
+   "name": "House, Julu",
+   "zh": "巨鹿·民居",
+   "archetype": "interior",
+   "map": "julu--house-2.map.json",
+   "links": [
+    "julu"
+   ],
+   "parent": "julu"
+  },
+  {
+   "id": "julu--hut-1",
+   "name": "Hut, Julu",
+   "zh": "巨鹿·茅屋",
+   "archetype": "interior",
+   "map": "julu--hut-1.map.json",
+   "links": [
+    "julu"
+   ],
+   "parent": "julu"
   },
   {
    "id": "yellow-hills",
@@ -71,8 +263,20 @@
    "map": "yellow-hills.map.json",
    "links": [
     "julu",
-    "daxing-mountain"
+    "daxing-mountain",
+    "yellow-hills--tent"
    ]
+  },
+  {
+   "id": "yellow-hills--tent",
+   "name": "A Yellow Turban tent",
+   "zh": "黄巾军的帐篷",
+   "archetype": "interior",
+   "map": "yellow-hills--tent.map.json",
+   "links": [
+    "yellow-hills"
+   ],
+   "parent": "yellow-hills"
   },
   {
    "id": "horse-trail",
@@ -105,8 +309,68 @@
    "map": "qingzhou.map.json",
    "links": [
     "daxing-mountain",
-    "guangzong-road"
+    "guangzong-road",
+    "qingzhou--hall-1",
+    "qingzhou--house-1",
+    "qingzhou--house-2",
+    "qingzhou--inn-1",
+    "qingzhou--shop-1"
    ]
+  },
+  {
+   "id": "qingzhou--hall-1",
+   "name": "Hall, Qingzhou",
+   "zh": "青州·厅堂",
+   "archetype": "interior",
+   "map": "qingzhou--hall-1.map.json",
+   "links": [
+    "qingzhou"
+   ],
+   "parent": "qingzhou"
+  },
+  {
+   "id": "qingzhou--house-1",
+   "name": "House, Qingzhou",
+   "zh": "青州·民居",
+   "archetype": "interior",
+   "map": "qingzhou--house-1.map.json",
+   "links": [
+    "qingzhou"
+   ],
+   "parent": "qingzhou"
+  },
+  {
+   "id": "qingzhou--house-2",
+   "name": "House, Qingzhou",
+   "zh": "青州·民居",
+   "archetype": "interior",
+   "map": "qingzhou--house-2.map.json",
+   "links": [
+    "qingzhou"
+   ],
+   "parent": "qingzhou"
+  },
+  {
+   "id": "qingzhou--inn-1",
+   "name": "Inn, Qingzhou",
+   "zh": "青州·客栈",
+   "archetype": "interior",
+   "map": "qingzhou--inn-1.map.json",
+   "links": [
+    "qingzhou"
+   ],
+   "parent": "qingzhou"
+  },
+  {
+   "id": "qingzhou--shop-1",
+   "name": "Teahouse, Qingzhou",
+   "zh": "青州·茶馆",
+   "archetype": "interior",
+   "map": "qingzhou--shop-1.map.json",
+   "links": [
+    "qingzhou"
+   ],
+   "parent": "qingzhou"
   },
   {
    "id": "guangzong-road",
@@ -128,8 +392,56 @@
    "map": "qiao.map.json",
    "links": [
     "guangzong-road",
-    "luoyang-gates"
+    "luoyang-gates",
+    "qiao--caohome",
+    "qiao--house-1",
+    "qiao--house-2",
+    "qiao--hut-1"
    ]
+  },
+  {
+   "id": "qiao--caohome",
+   "name": "The Cao family house",
+   "zh": "曹家宅院",
+   "archetype": "interior",
+   "map": "qiao--caohome.map.json",
+   "links": [
+    "qiao"
+   ],
+   "parent": "qiao"
+  },
+  {
+   "id": "qiao--house-1",
+   "name": "House, Qiao",
+   "zh": "谯郡·民居",
+   "archetype": "interior",
+   "map": "qiao--house-1.map.json",
+   "links": [
+    "qiao"
+   ],
+   "parent": "qiao"
+  },
+  {
+   "id": "qiao--house-2",
+   "name": "House, Qiao",
+   "zh": "谯郡·民居",
+   "archetype": "interior",
+   "map": "qiao--house-2.map.json",
+   "links": [
+    "qiao"
+   ],
+   "parent": "qiao"
+  },
+  {
+   "id": "qiao--hut-1",
+   "name": "Hut, Qiao",
+   "zh": "谯郡·茅屋",
+   "archetype": "interior",
+   "map": "qiao--hut-1.map.json",
+   "links": [
+    "qiao"
+   ],
+   "parent": "qiao"
   },
   {
    "id": "luoyang-gates",
@@ -139,8 +451,68 @@
    "map": "luoyang-gates.map.json",
    "links": [
     "qiao",
-    "changshe"
+    "changshe",
+    "luoyang-gates--hall-1",
+    "luoyang-gates--house-1",
+    "luoyang-gates--house-2",
+    "luoyang-gates--inn-1",
+    "luoyang-gates--shop-1"
    ]
+  },
+  {
+   "id": "luoyang-gates--hall-1",
+   "name": "Hall, Luoyang Gates",
+   "zh": "洛阳城门·厅堂",
+   "archetype": "interior",
+   "map": "luoyang-gates--hall-1.map.json",
+   "links": [
+    "luoyang-gates"
+   ],
+   "parent": "luoyang-gates"
+  },
+  {
+   "id": "luoyang-gates--house-1",
+   "name": "House, Luoyang Gates",
+   "zh": "洛阳城门·民居",
+   "archetype": "interior",
+   "map": "luoyang-gates--house-1.map.json",
+   "links": [
+    "luoyang-gates"
+   ],
+   "parent": "luoyang-gates"
+  },
+  {
+   "id": "luoyang-gates--house-2",
+   "name": "House, Luoyang Gates",
+   "zh": "洛阳城门·民居",
+   "archetype": "interior",
+   "map": "luoyang-gates--house-2.map.json",
+   "links": [
+    "luoyang-gates"
+   ],
+   "parent": "luoyang-gates"
+  },
+  {
+   "id": "luoyang-gates--inn-1",
+   "name": "Inn, Luoyang Gates",
+   "zh": "洛阳城门·客栈",
+   "archetype": "interior",
+   "map": "luoyang-gates--inn-1.map.json",
+   "links": [
+    "luoyang-gates"
+   ],
+   "parent": "luoyang-gates"
+  },
+  {
+   "id": "luoyang-gates--shop-1",
+   "name": "Teahouse, Luoyang Gates",
+   "zh": "洛阳城门·茶馆",
+   "archetype": "interior",
+   "map": "luoyang-gates--shop-1.map.json",
+   "links": [
+    "luoyang-gates"
+   ],
+   "parent": "luoyang-gates"
   },
   {
    "id": "changshe",
@@ -150,8 +522,68 @@
    "map": "changshe.map.json",
    "links": [
     "luoyang-gates",
-    "dong-zhuos-camp"
+    "dong-zhuos-camp",
+    "changshe--camp",
+    "changshe--tent-1",
+    "changshe--tent-2",
+    "changshe--tent-3",
+    "changshe--tent-4"
    ]
+  },
+  {
+   "id": "changshe--camp",
+   "name": "The Han camp",
+   "zh": "汉军营地",
+   "archetype": "interior",
+   "map": "changshe--camp.map.json",
+   "links": [
+    "changshe"
+   ],
+   "parent": "changshe"
+  },
+  {
+   "id": "changshe--tent-1",
+   "name": "Tent, Changshe",
+   "zh": "长社·营帐",
+   "archetype": "interior",
+   "map": "changshe--tent-1.map.json",
+   "links": [
+    "changshe"
+   ],
+   "parent": "changshe"
+  },
+  {
+   "id": "changshe--tent-2",
+   "name": "Tent, Changshe",
+   "zh": "长社·营帐",
+   "archetype": "interior",
+   "map": "changshe--tent-2.map.json",
+   "links": [
+    "changshe"
+   ],
+   "parent": "changshe"
+  },
+  {
+   "id": "changshe--tent-3",
+   "name": "Tent, Changshe",
+   "zh": "长社·营帐",
+   "archetype": "interior",
+   "map": "changshe--tent-3.map.json",
+   "links": [
+    "changshe"
+   ],
+   "parent": "changshe"
+  },
+  {
+   "id": "changshe--tent-4",
+   "name": "Tent, Changshe",
+   "zh": "长社·营帐",
+   "archetype": "interior",
+   "map": "changshe--tent-4.map.json",
+   "links": [
+    "changshe"
+   ],
+   "parent": "changshe"
   },
   {
    "id": "envoys-road",
@@ -173,8 +605,68 @@
    "links": [
     "changshe",
     "envoys-road",
-    "hills-of-black-wind"
+    "hills-of-black-wind",
+    "dong-zhuos-camp--command",
+    "dong-zhuos-camp--tent-1",
+    "dong-zhuos-camp--tent-2",
+    "dong-zhuos-camp--tent-3",
+    "dong-zhuos-camp--tent-4"
    ]
+  },
+  {
+   "id": "dong-zhuos-camp--command",
+   "name": "Dong Zhuo's tent",
+   "zh": "董卓的大帐",
+   "archetype": "interior",
+   "map": "dong-zhuos-camp--command.map.json",
+   "links": [
+    "dong-zhuos-camp"
+   ],
+   "parent": "dong-zhuos-camp"
+  },
+  {
+   "id": "dong-zhuos-camp--tent-1",
+   "name": "Tent, Dong Zhuo's Camp",
+   "zh": "董卓营·营帐",
+   "archetype": "interior",
+   "map": "dong-zhuos-camp--tent-1.map.json",
+   "links": [
+    "dong-zhuos-camp"
+   ],
+   "parent": "dong-zhuos-camp"
+  },
+  {
+   "id": "dong-zhuos-camp--tent-2",
+   "name": "Tent, Dong Zhuo's Camp",
+   "zh": "董卓营·营帐",
+   "archetype": "interior",
+   "map": "dong-zhuos-camp--tent-2.map.json",
+   "links": [
+    "dong-zhuos-camp"
+   ],
+   "parent": "dong-zhuos-camp"
+  },
+  {
+   "id": "dong-zhuos-camp--tent-3",
+   "name": "Tent, Dong Zhuo's Camp",
+   "zh": "董卓营·营帐",
+   "archetype": "interior",
+   "map": "dong-zhuos-camp--tent-3.map.json",
+   "links": [
+    "dong-zhuos-camp"
+   ],
+   "parent": "dong-zhuos-camp"
+  },
+  {
+   "id": "dong-zhuos-camp--tent-4",
+   "name": "Tent, Dong Zhuo's Camp",
+   "zh": "董卓营·营帐",
+   "archetype": "interior",
+   "map": "dong-zhuos-camp--tent-4.map.json",
+   "links": [
+    "dong-zhuos-camp"
+   ],
+   "parent": "dong-zhuos-camp"
   },
   {
    "id": "hills-of-black-wind",
@@ -194,8 +686,80 @@
    "archetype": "city",
    "map": "yangcheng.map.json",
    "links": [
-    "hills-of-black-wind"
+    "hills-of-black-wind",
+    "yangcheng--keep",
+    "yangcheng--hall-1",
+    "yangcheng--house-1",
+    "yangcheng--house-2",
+    "yangcheng--inn-1",
+    "yangcheng--shop-1"
    ]
+  },
+  {
+   "id": "yangcheng--keep",
+   "name": "Zhang Bao's stronghold",
+   "zh": "张宝的城寨",
+   "archetype": "interior",
+   "map": "yangcheng--keep.map.json",
+   "links": [
+    "yangcheng"
+   ],
+   "parent": "yangcheng"
+  },
+  {
+   "id": "yangcheng--hall-1",
+   "name": "Hall, Yangcheng",
+   "zh": "阳城·厅堂",
+   "archetype": "interior",
+   "map": "yangcheng--hall-1.map.json",
+   "links": [
+    "yangcheng"
+   ],
+   "parent": "yangcheng"
+  },
+  {
+   "id": "yangcheng--house-1",
+   "name": "House, Yangcheng",
+   "zh": "阳城·民居",
+   "archetype": "interior",
+   "map": "yangcheng--house-1.map.json",
+   "links": [
+    "yangcheng"
+   ],
+   "parent": "yangcheng"
+  },
+  {
+   "id": "yangcheng--house-2",
+   "name": "House, Yangcheng",
+   "zh": "阳城·民居",
+   "archetype": "interior",
+   "map": "yangcheng--house-2.map.json",
+   "links": [
+    "yangcheng"
+   ],
+   "parent": "yangcheng"
+  },
+  {
+   "id": "yangcheng--inn-1",
+   "name": "Inn, Yangcheng",
+   "zh": "阳城·客栈",
+   "archetype": "interior",
+   "map": "yangcheng--inn-1.map.json",
+   "links": [
+    "yangcheng"
+   ],
+   "parent": "yangcheng"
+  },
+  {
+   "id": "yangcheng--shop-1",
+   "name": "Teahouse, Yangcheng",
+   "zh": "阳城·茶馆",
+   "archetype": "interior",
+   "map": "yangcheng--shop-1.map.json",
+   "links": [
+    "yangcheng"
+   ],
+   "parent": "yangcheng"
   }
  ],
  "quests": [

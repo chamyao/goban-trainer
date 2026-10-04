@@ -8,7 +8,9 @@
   "buildings": "assets/tk/jade/buildings.png",
   "town": "assets/tk/jade/town.png",
   "nature": "assets/tk/jade/nature.png",
-  "drawn": "assets/tk/drawn.png"
+  "drawn": "assets/tk/drawn.png",
+  "n_element": "assets/tk/ninja/element.png",
+  "n_camp": "assets/tk/ninja/camp.png"
  },
  "materials": {
   "grass": {
@@ -62,6 +64,59 @@
      1
     ]
    ]
+  },
+  "wood": {
+   "tiles": [
+    [
+     "town",
+     10,
+     14,
+     1
+    ]
+   ]
+  },
+  "stone": {
+   "tiles": [
+    [
+     "town",
+     1,
+     1,
+     1
+    ]
+   ]
+  },
+  "mat": {
+   "tiles": [
+    [
+     "town",
+     0,
+     3,
+     1
+    ]
+   ]
+  },
+  "earth": {
+   "tiles": [
+    [
+     "tiles",
+     2,
+     0,
+     1
+    ]
+   ]
+  },
+  "wall": {
+   "tiles": [
+    [
+     "town",
+     0,
+     14,
+     1
+    ]
+   ]
+  },
+  "void": {
+   "color": "#120c0a"
   }
  },
  "kinds": {
@@ -361,6 +416,171 @@
     128,
     16,
     16
+   ]
+  ],
+  "furn.jar": [
+   [
+    "n_element",
+    17,
+    0,
+    14,
+    16
+   ],
+   [
+    "n_element",
+    51,
+    2,
+    10,
+    13
+   ]
+  ],
+  "furn.chest": [
+   [
+    "n_element",
+    97,
+    4,
+    14,
+    12
+   ]
+  ],
+  "furn.drawers": [
+   [
+    "n_element",
+    16,
+    121,
+    16,
+    23
+   ],
+   [
+    "n_element",
+    113,
+    0,
+    14,
+    16
+   ]
+  ],
+  "furn.shelf": [
+   [
+    "n_element",
+    48,
+    113,
+    32,
+    29
+   ],
+   [
+    "n_element",
+    128,
+    112,
+    32,
+    30
+   ]
+  ],
+  "furn.bed": [
+   [
+    "n_element",
+    224,
+    1,
+    24,
+    15
+   ]
+  ],
+  "furn.table": [
+   [
+    "n_camp",
+    18,
+    82,
+    28,
+    28
+   ]
+  ],
+  "furn.desk": [
+   [
+    "n_element",
+    33,
+    162,
+    45,
+    13
+   ]
+  ],
+  "furn.counter": [
+   [
+    "n_element",
+    33,
+    162,
+    45,
+    13
+   ]
+  ],
+  "furn.stool": [
+   [
+    "n_element",
+    130,
+    3,
+    13,
+    12
+   ]
+  ],
+  "furn.rack": [
+   [
+    "n_element",
+    224,
+    41,
+    32,
+    21
+   ]
+  ],
+  "furn.rug": [
+   [
+    "n_element",
+    208,
+    64,
+    47,
+    48
+   ]
+  ],
+  "furn.mat": [
+   [
+    "n_element",
+    208,
+    64,
+    32,
+    32
+   ]
+  ],
+  "furn.plant": [
+   [
+    "n_element",
+    0,
+    120,
+    15,
+    24
+   ]
+  ],
+  "furn.screen": [
+   [
+    "n_element",
+    160,
+    113,
+    32,
+    29
+   ]
+  ],
+  "furn.barrel": [
+   [
+    "n_camp",
+    64,
+    80,
+    16,
+    32
+   ]
+  ],
+  "furn.sacks": [
+   [
+    "n_camp",
+    2,
+    82,
+    12,
+    27
    ]
   ]
  },

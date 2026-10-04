@@ -1,0 +1,100 @@
+{
+ "format": "tk-map/1",
+ "id": "road-to-julu--cave",
+ "world": 1,
+ "parent": "road-to-julu",
+ "name": "A hermit's shelter",
+ "archetype": "interior",
+ "building": "cave",
+ "size": [
+  20,
+  12
+ ],
+ "seed": 0.5352178242634397,
+ "terrain": {
+  "legend": {
+   "#": "wood",
+   "%": "stone",
+   "&": "mat",
+   "e": "earth",
+   "W": "wall",
+   " ": "void"
+  },
+  "rows": [
+   "                    ",
+   "                    ",
+   "      WWWWWWWW      ",
+   "      W&&&&&&W      ",
+   "      W&&&&&&W      ",
+   "      W&&&&&&W      ",
+   "      W&&&&&&W      ",
+   "      W&&&&&&W      ",
+   "      WWWW&WWW      ",
+   "                    ",
+   "                    ",
+   "                    "
+  ]
+ },
+ "objects": [
+  {
+   "kind": "furn.mat",
+   "x": 7,
+   "y": 3,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.hearth",
+   "x": 10,
+   "y": 3,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.jar",
+   "x": 12,
+   "y": 3,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.sacks",
+   "x": 7,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "spots": [],
+ "npcs": [
+  {
+   "id": "in-1",
+   "kind": "folk.elder",
+   "x": 11.5,
+   "y": 4.9,
+   "say": [
+    "“It isn't much, but the roof keeps the rain off.”"
+   ]
+  }
+ ],
+ "exits": [
+  {
+   "to": "road-to-julu",
+   "side": "S",
+   "x": 10,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "road-to-julu": [
+   10,
+   7
+  ],
+  "": [
+   10,
+   7
+  ]
+ }
+}

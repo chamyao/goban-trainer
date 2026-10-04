@@ -8,7 +8,10 @@
   "water": "assets/tk/ninja/water.png",
   "nature": "assets/tk/ninja/nature.png",
   "house": "assets/tk/ninja/house.png",
-  "camp": "assets/tk/ninja/camp.png"
+  "camp": "assets/tk/ninja/camp.png",
+  "element": "assets/tk/ninja/element.png",
+  "floor_in": "assets/tk/ninja/floor_in.png",
+  "wall_in": "assets/tk/ninja/wall_in.png"
  },
  "materials": {
   "grass": {
@@ -96,6 +99,99 @@
     12
    ],
    "above": "dirt"
+  },
+  "wood": {
+   "tiles": [
+    [
+     "floor_in",
+     1,
+     1,
+     4
+    ],
+    [
+     "floor_in",
+     12,
+     1,
+     1
+    ]
+   ]
+  },
+  "stone": {
+   "tiles": [
+    [
+     "floor_in",
+     1,
+     13,
+     3
+    ],
+    [
+     "floor_in",
+     5,
+     13,
+     1
+    ]
+   ]
+  },
+  "mat": {
+   "tiles": [
+    [
+     "floor_in",
+     12,
+     6,
+     1
+    ]
+   ]
+  },
+  "earth": {
+   "tiles": [
+    [
+     "floor_in",
+     11,
+     5,
+     1
+    ]
+   ]
+  },
+  "wall": {
+   "edge": {
+    "sheet": "wall_in",
+    "tl": [
+     0,
+     0
+    ],
+    "t": [
+     1,
+     0
+    ],
+    "tr": [
+     4,
+     0
+    ],
+    "l": [
+     0,
+     1
+    ],
+    "r": [
+     4,
+     1
+    ],
+    "bl": [
+     0,
+     4
+    ],
+    "b": [
+     1,
+     4
+    ],
+    "br": [
+     4,
+     4
+    ]
+   },
+   "under": "void"
+  },
+  "void": {
+   "color": "#120c0a"
   }
  },
  "kinds": {
@@ -468,6 +564,171 @@
     82,
     32,
     29
+   ]
+  ],
+  "furn.jar": [
+   [
+    "element",
+    17,
+    0,
+    14,
+    16
+   ],
+   [
+    "element",
+    51,
+    2,
+    10,
+    13
+   ]
+  ],
+  "furn.chest": [
+   [
+    "element",
+    97,
+    4,
+    14,
+    12
+   ]
+  ],
+  "furn.drawers": [
+   [
+    "element",
+    16,
+    121,
+    16,
+    23
+   ],
+   [
+    "element",
+    113,
+    0,
+    14,
+    16
+   ]
+  ],
+  "furn.shelf": [
+   [
+    "element",
+    48,
+    113,
+    32,
+    29
+   ],
+   [
+    "element",
+    128,
+    112,
+    32,
+    30
+   ]
+  ],
+  "furn.bed": [
+   [
+    "element",
+    224,
+    1,
+    24,
+    15
+   ]
+  ],
+  "furn.table": [
+   [
+    "camp",
+    18,
+    82,
+    28,
+    28
+   ]
+  ],
+  "furn.desk": [
+   [
+    "element",
+    33,
+    162,
+    45,
+    13
+   ]
+  ],
+  "furn.counter": [
+   [
+    "element",
+    33,
+    162,
+    45,
+    13
+   ]
+  ],
+  "furn.stool": [
+   [
+    "element",
+    130,
+    3,
+    13,
+    12
+   ]
+  ],
+  "furn.rack": [
+   [
+    "element",
+    224,
+    41,
+    32,
+    21
+   ]
+  ],
+  "furn.rug": [
+   [
+    "element",
+    208,
+    64,
+    47,
+    48
+   ]
+  ],
+  "furn.mat": [
+   [
+    "element",
+    208,
+    64,
+    32,
+    32
+   ]
+  ],
+  "furn.plant": [
+   [
+    "element",
+    0,
+    120,
+    15,
+    24
+   ]
+  ],
+  "furn.screen": [
+   [
+    "element",
+    160,
+    113,
+    32,
+    29
+   ]
+  ],
+  "furn.barrel": [
+   [
+    "camp",
+    64,
+    80,
+    16,
+    32
+   ]
+  ],
+  "furn.sacks": [
+   [
+    "camp",
+    2,
+    82,
+    12,
+    27
    ]
   ]
  },
