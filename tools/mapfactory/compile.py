@@ -183,6 +183,21 @@ def compile_map(m, kit, out_dir):
                 data[y * W + x] = plain(d, rm)
         layers.append((rm, data))
 
+    # small ground detail (sprouts, petals) scattered over open grass, if the
+    # kit has it: "detail": {"tiles": [[sheet, tx, ty, weight], ...], "density": 0.08}
+    det = kit.k.get("detail")
+    if det:
+        covered = {(xx, yy) for o in m["objects"] for yy in range(o["y"], o["y"] + o["h"]) for xx in range(o["x"], o["x"] + o["w"])}
+        drnd = random.Random(f"{m['seed']}/detail")   # its own stream: the other layers don't change
+        data = [0] * (W * H)
+        for y in range(H):
+            for x in range(W):
+                if grid[y][x] == "grass" and (x, y) not in covered and drnd.random() < det["density"]:
+                    sheet, tx, ty, _ = drnd.choices(det["tiles"], weights=[t[3] for t in det["tiles"]])[0]
+                    data[y * W + x] = gid(sheet, tx, ty)
+        if any(data):
+            layers.append(("detail", data))
+
     # walls: a frame of edge and corner pieces, chosen by where the floor is
     walls = {(x, y) for y in range(H) for x in range(W) if grid[y][x] == "wall"}
     if walls:
