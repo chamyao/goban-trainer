@@ -149,7 +149,8 @@ A story beat can be played inside a building: give its node in
 `tools/tk_places.py` (e.g. `"room": "inn"` at Zhuo County). The quest's
 place becomes the room (`"zhuo-county--inn"`), its spot goes on open floor
 in the middle of the room, and its cutscene is staged there. The room's
-place still clears with its parent on the travel map.
+place still clears with its parent on the travel map. The node may also
+carry `"trigger"` (`near`, `arrive` or `talk`), as a landmark does.
 
 A kit draws walls either as one tile (`"tiles"`) or as a frame of edge and
 corner pieces: `"wall": {"edge": {"sheet": …, "tl": [c, r], "t": …, "tr": …,

@@ -776,16 +776,14 @@
  ],
  "quests": [
   {
-   "node": "1-n1",
+   "node": "1-start",
    "role": "main",
-   "place": "zhuo-county",
-   "spot": "notice",
-   "scene": "notice",
-   "title": "The Notice at Zhuo",
-   "objective": "Read the notice in the town square.",
-   "after": [
-    "1-start"
-   ],
+   "place": "lousang-village",
+   "spot": "mulberry",
+   "scene": "tree",
+   "title": "The Mulberry Tree at Louzang",
+   "objective": "Sit under the great mulberry tree by your home.",
+   "after": [],
    "grade": "12K",
    "pool": [
     [
@@ -909,19 +907,19 @@
      44080
     ]
    ],
-   "objective_zh": "去城中广场看榜文。",
-   "title_zh": "涿县榜文"
+   "objective_zh": "到屋旁的大桑树下坐坐。",
+   "title_zh": "楼桑村的桑树"
   },
   {
-   "node": "1-n2",
+   "node": "1-c1",
    "role": "main",
-   "place": "the-peach-garden",
-   "spot": "altar",
-   "scene": "oath",
-   "title": "The Peach Garden Oath",
-   "objective": "Swear brotherhood under the great peach tree.",
+   "place": "zhuo-county--office",
+   "spot": "spot-1-c1",
+   "scene": "council",
+   "title": "The Governor's Council",
+   "objective": "Go to Zhuo County.",
    "after": [
-    "1-n1"
+    "1-start"
    ],
    "grade": "12K",
    "pool": [
@@ -1046,19 +1044,20 @@
      145871
     ]
    ],
-   "objective_zh": "在大桃树下结为兄弟。",
-   "title_zh": "桃园结义"
+   "room": "office",
+   "objective_zh": "",
+   "title_zh": "太守议事"
   },
   {
-   "node": "1-a1",
-   "role": "side",
-   "place": "road-to-julu",
-   "spot": "cave",
-   "scene": "peace1",
-   "title": "The Way of Great Peace · I: The Old Man in the Cave",
-   "objective": "Side story: find the old man in the hills.",
+   "node": "1-n1",
+   "role": "main",
+   "place": "zhuo-county",
+   "spot": "notice",
+   "scene": "notice",
+   "title": "The Notice at Zhuo",
+   "objective": "Read the notice in the town square.",
    "after": [
-    "1-n2"
+    "1-c1"
    ],
    "grade": "12K",
    "pool": [
@@ -1183,19 +1182,19 @@
      63831
     ]
    ],
-   "objective_zh": "支线：去山中寻找那位老人。",
-   "title_zh": "太平道·一：洞中老人"
+   "objective_zh": "去城中广场看榜文。",
+   "title_zh": "涿县榜文"
   },
   {
-   "node": "1-a2",
-   "role": "side",
-   "place": "julu",
-   "spot": "sermon",
-   "scene": "peace2",
-   "title": "The Way of Great Peace · II: The Blue Heaven Is Dead",
-   "objective": "Side story: hear Zhang Jiao's sermon in Julu.",
+   "node": "1-n2",
+   "role": "main",
+   "place": "the-peach-garden",
+   "spot": "altar",
+   "scene": "oath",
+   "title": "The Peach Garden Oath",
+   "objective": "Swear brotherhood under the great peach tree.",
    "after": [
-    "1-a1"
+    "1-n1"
    ],
    "grade": "12K",
    "pool": [
@@ -1320,19 +1319,19 @@
      134917
     ]
    ],
-   "objective_zh": "支线：到巨鹿听张角传道。",
-   "title_zh": "太平道·二：苍天已死"
+   "objective_zh": "在大桃树下结为兄弟。",
+   "title_zh": "桃园结义"
   },
   {
-   "node": "1-a3",
+   "node": "1-a1",
    "role": "side",
-   "place": "yellow-hills",
-   "spot": "tent",
-   "scene": "peace3",
-   "title": "The Way of Great Peace · III: Betrayed",
-   "objective": "Side story: the betrayal in the Yellow Hills.",
+   "place": "road-to-julu--cave",
+   "spot": "spot-1-a1",
+   "scene": "peace1",
+   "title": "The Way of Great Peace · I: The Old Man in the Cave",
+   "objective": "Side story: find the old man in the hills.",
    "after": [
-    "1-a2"
+    "1-n2"
    ],
    "grade": "12K",
    "pool": [
@@ -1457,6 +1456,283 @@
      147179
     ]
    ],
+   "room": "cave",
+   "objective_zh": "支线：去山中寻找那位老人。",
+   "title_zh": "太平道·一：洞中老人"
+  },
+  {
+   "node": "1-a2",
+   "role": "side",
+   "place": "julu--house-1",
+   "spot": "spot-1-a2",
+   "scene": "peace2",
+   "title": "The Way of Great Peace · II: The Blue Heaven Is Dead",
+   "objective": "Side story: hear Zhang Jiao's sermon in Julu.",
+   "after": [
+    "1-a1"
+   ],
+   "grade": "12K",
+   "pool": [
+    [
+     "the-unexpected-tesuji",
+     110763
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     134919
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     49295
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     108342
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     108275
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     111276
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     108345
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     108350
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     395507
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147188
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63795
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     131662
+    ],
+    [
+     "specialized-training-in-tesuji-4",
+     81394
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3434
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147180
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     84594
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     196297
+    ],
+    [
+     "specialized-training-in-tesuji-2",
+     81883
+    ],
+    [
+     "common-life-and-death-problems",
+     26032
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     48643
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     13339
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160718
+    ],
+    [
+     "specialized-training-in-tesuji-4",
+     81176
+    ],
+    [
+     "specialized-training-in-tesuji-4",
+     81241
+    ],
+    [
+     "200-basic-go-problems",
+     174790
+    ],
+    [
+     "200-basic-go-problems",
+     174330
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     127163
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     21899
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3559
+    ],
+    [
+     "hitomi-tsumego",
+     135436
+    ]
+   ],
+   "room": "house-1",
+   "objective_zh": "支线：到巨鹿听张角传道。",
+   "title_zh": "太平道·二：苍天已死"
+  },
+  {
+   "node": "1-a3",
+   "role": "side",
+   "place": "yellow-hills--tent",
+   "spot": "spot-1-a3",
+   "scene": "peace3",
+   "title": "The Way of Great Peace · III: Betrayed",
+   "objective": "Side story: the betrayal in the Yellow Hills.",
+   "after": [
+    "1-a2"
+   ],
+   "grade": "12K",
+   "pool": [
+    [
+     "seedling-project",
+     27353
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     127185
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     148973
+    ],
+    [
+     "weiqi-rapid-drill-800-part-1",
+     3115
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     108261
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     149026
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     84596
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3585
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     10809
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     149030
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-1",
+     1150
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     84589
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     169240
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-2",
+     1411
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     12550
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63834
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     134920
+    ],
+    [
+     "specialized-training-in-capturing-races",
+     5294
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3720
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-1",
+     1143
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147107
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3588
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     50714
+    ],
+    [
+     "seedling-project",
+     27430
+    ],
+    [
+     "specialized-training-in-tesuji-3",
+     81168
+    ],
+    [
+     "specialized-training-in-tesuji-2",
+     81971
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     50701
+    ],
+    [
+     "weiqi-rapid-drill-800-part-2",
+     3250
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     111243
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     43980
+    ]
+   ],
+   "room": "tent",
    "objective_zh": "支线：黄冈的背叛。",
    "title_zh": "太平道·三：事泄"
   },
@@ -1612,280 +1888,6 @@
    "grade": "12K",
    "pool": [
     [
-     "the-unexpected-tesuji",
-     110763
-    ],
-    [
-     "specialized-training-in-tsumego-3",
-     134919
-    ],
-    [
-     "specialized-training-in-tsumego-4",
-     49295
-    ],
-    [
-     "specialized-training-in-tsumego-4",
-     108342
-    ],
-    [
-     "specialized-training-in-tsumego-3",
-     108275
-    ],
-    [
-     "go-puzzles-at-a-glance",
-     111276
-    ],
-    [
-     "specialized-training-in-tsumego-4",
-     108345
-    ],
-    [
-     "specialized-training-in-tsumego-4",
-     108350
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     395507
-    ],
-    [
-     "compact-go-puzzles-to-learn-the-basics",
-     147188
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     63795
-    ],
-    [
-     "specialized-training-in-tsumego-3",
-     131662
-    ],
-    [
-     "specialized-training-in-tesuji-4",
-     81394
-    ],
-    [
-     "weiqi-rapid-drill-800-part-3",
-     3434
-    ],
-    [
-     "compact-go-puzzles-to-learn-the-basics",
-     147180
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     84594
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     196297
-    ],
-    [
-     "specialized-training-in-tesuji-2",
-     81883
-    ],
-    [
-     "common-life-and-death-problems",
-     26032
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     48643
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     13339
-    ],
-    [
-     "go-puzzles-at-a-glance",
-     160718
-    ],
-    [
-     "specialized-training-in-tesuji-4",
-     81176
-    ],
-    [
-     "specialized-training-in-tesuji-4",
-     81241
-    ],
-    [
-     "200-basic-go-problems",
-     174790
-    ],
-    [
-     "200-basic-go-problems",
-     174330
-    ],
-    [
-     "specialized-training-in-tsumego-6",
-     127163
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     21899
-    ],
-    [
-     "weiqi-rapid-drill-800-part-3",
-     3559
-    ],
-    [
-     "hitomi-tsumego",
-     135436
-    ]
-   ],
-   "objective_zh": "在大兴山迎战黄巾军。",
-   "title_zh": "大兴山初战"
-  },
-  {
-   "node": "1-n4",
-   "role": "main",
-   "place": "qingzhou",
-   "spot": "citygate",
-   "scene": "qingzhou",
-   "title": "The Ambush at Qingzhou",
-   "objective": "Lift the siege of Qingzhou.",
-   "after": [
-    "1-n3"
-   ],
-   "grade": "12K",
-   "pool": [
-    [
-     "seedling-project",
-     27353
-    ],
-    [
-     "specialized-training-in-tsumego-6",
-     127185
-    ],
-    [
-     "specialized-training-in-tsumego-3",
-     148973
-    ],
-    [
-     "weiqi-rapid-drill-800-part-1",
-     3115
-    ],
-    [
-     "specialized-training-in-tsumego-3",
-     108261
-    ],
-    [
-     "specialized-training-in-tsumego-3",
-     149026
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     84596
-    ],
-    [
-     "weiqi-rapid-drill-800-part-3",
-     3585
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     10809
-    ],
-    [
-     "specialized-training-in-tsumego-3",
-     149030
-    ],
-    [
-     "weiqi-life-and-death-1000-problems-part-1",
-     1150
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     84589
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     169240
-    ],
-    [
-     "weiqi-life-and-death-1000-problems-part-2",
-     1411
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     12550
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     63834
-    ],
-    [
-     "specialized-training-in-tsumego-3",
-     134920
-    ],
-    [
-     "specialized-training-in-capturing-races",
-     5294
-    ],
-    [
-     "weiqi-rapid-drill-800-part-4",
-     3720
-    ],
-    [
-     "weiqi-life-and-death-1000-problems-part-1",
-     1143
-    ],
-    [
-     "compact-go-puzzles-to-learn-the-basics",
-     147107
-    ],
-    [
-     "weiqi-rapid-drill-800-part-3",
-     3588
-    ],
-    [
-     "specialized-training-in-tsumego-3",
-     50714
-    ],
-    [
-     "seedling-project",
-     27430
-    ],
-    [
-     "specialized-training-in-tesuji-3",
-     81168
-    ],
-    [
-     "specialized-training-in-tesuji-2",
-     81971
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     50701
-    ],
-    [
-     "weiqi-rapid-drill-800-part-2",
-     3250
-    ],
-    [
-     "go-puzzles-at-a-glance",
-     111243
-    ],
-    [
-     "specialized-training-in-tsumego-5",
-     43980
-    ]
-   ],
-   "objective_zh": "解青州之围。",
-   "title_zh": "青州伏兵"
-  },
-  {
-   "node": "1-n5",
-   "role": "main",
-   "place": "guangzong-road",
-   "spot": "cart",
-   "scene": "cart",
-   "title": "The Cage Cart",
-   "objective": "Go to Guangzong, where Lu Zhi besieges Zhang Jiao.",
-   "after": [
-    "1-n4"
-   ],
-   "grade": "12K+",
-   "pool": [
-    [
      "specialized-training-in-tsumego-1",
      63829
     ],
@@ -2006,21 +2008,21 @@
      149022
     ]
    ],
-   "objective_zh": "前往广宗，卢植正在那里围攻张角。",
-   "title_zh": "槛车"
+   "objective_zh": "在大兴山迎战黄巾军。",
+   "title_zh": "大兴山初战"
   },
   {
-   "node": "1-b1",
-   "role": "side",
-   "place": "qiao",
-   "spot": "caohome",
-   "scene": "caocao1",
-   "title": "The Hero of Chaos · I: The Feigned Stroke",
-   "objective": "Side story: the boyhood of Cao Cao.",
+   "node": "1-n4",
+   "role": "main",
+   "place": "qingzhou",
+   "spot": "citygate",
+   "scene": "qingzhou",
+   "title": "The Ambush at Qingzhou",
+   "objective": "Lift the siege of Qingzhou.",
    "after": [
-    "1-n5"
+    "1-n3"
    ],
-   "grade": "12K+",
+   "grade": "12K",
    "pool": [
     [
      "specialized-training-in-tsumego-1",
@@ -2143,21 +2145,21 @@
      84589
     ]
    ],
-   "objective_zh": "支线：曹操的少年时代。",
-   "title_zh": "奸雄·一：诈中风"
+   "objective_zh": "解青州之围。",
+   "title_zh": "青州伏兵"
   },
   {
-   "node": "1-b2",
-   "role": "side",
-   "place": "luoyang-gates",
-   "spot": "northgate",
-   "scene": "caocao2",
-   "title": "The Hero of Chaos · II: A Villain in Chaos",
-   "objective": "Side story: Cao Cao at the gates of Luoyang.",
+   "node": "1-t1",
+   "role": "main",
+   "place": "guangzong-road--luzhi-tent",
+   "spot": "spot-1-t1",
+   "scene": "tent",
+   "title": "Lu Zhi's Tent",
+   "objective": "Go to Guangzong Road.",
    "after": [
-    "1-b1"
+    "1-n4"
    ],
-   "grade": "12K+",
+   "grade": "12K",
    "pool": [
     [
      "specialized-training-in-tsumego-2",
@@ -2280,19 +2282,20 @@
      43981
     ]
    ],
-   "objective_zh": "支线：洛阳城门的曹操。",
-   "title_zh": "奸雄·二：乱世奸雄"
+   "room": "luzhi-tent",
+   "objective_zh": "",
+   "title_zh": "卢植帐中"
   },
   {
-   "node": "1-b3",
-   "role": "side",
-   "place": "changshe",
-   "spot": "camp",
-   "scene": "caocao3",
-   "title": "The Hero of Chaos · III: Red Banners at Changshe",
-   "objective": "Side story: red banners at Changshe.",
+   "node": "1-n5",
+   "role": "main",
+   "place": "guangzong-road",
+   "spot": "cart",
+   "scene": "cart",
+   "title": "The Cage Cart",
+   "objective": "Go to Guangzong, where Lu Zhi besieges Zhang Jiao.",
    "after": [
-    "1-b2"
+    "1-t1"
    ],
    "grade": "12K+",
    "pool": [
@@ -2415,6 +2418,557 @@
     [
      "compact-go-puzzles-to-learn-the-basics",
      147190
+    ]
+   ],
+   "objective_zh": "前往广宗，卢植正在那里围攻张角。",
+   "title_zh": "槛车"
+  },
+  {
+   "node": "1-b1",
+   "role": "side",
+   "place": "qiao--caohome",
+   "spot": "spot-1-b1",
+   "scene": "caocao1",
+   "title": "The Hero of Chaos · I: The Feigned Stroke",
+   "objective": "Side story: the boyhood of Cao Cao.",
+   "after": [
+    "1-n5"
+   ],
+   "grade": "12K+",
+   "pool": [
+    [
+     "specialized-training-in-tsumego-2",
+     50683
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     21969
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     48794
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     120152
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     84606
+    ],
+    [
+     "specialized-training-in-tesuji-3",
+     81324
+    ],
+    [
+     "specialized-training-in-tesuji-3",
+     81031
+    ],
+    [
+     "bedtime-tsumego-part-3",
+     135711
+    ],
+    [
+     "weiqi-rapid-drill-800-part-2",
+     3303
+    ],
+    [
+     "specialized-training-in-tesuji-4",
+     81232
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-1",
+     1137
+    ],
+    [
+     "specialized-training-in-tesuji-4",
+     81260
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160734
+    ],
+    [
+     "specialized-training-in-tesuji-3",
+     81108
+    ],
+    [
+     "200-basic-go-problems",
+     175789
+    ],
+    [
+     "weiqi-rapid-drill-800-part-1",
+     3077
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     50462
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3753
+    ],
+    [
+     "specialized-training-in-tesuji-4",
+     81316
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     108274
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     148927
+    ],
+    [
+     "common-life-and-death-problems",
+     26027
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     43983
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     167167
+    ],
+    [
+     "common-life-and-death-problems",
+     26033
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     108356
+    ],
+    [
+     "specialized-training-in-tesuji-4",
+     81223
+    ],
+    [
+     "specialized-training-in-tesuji-4",
+     81188
+    ],
+    [
+     "weiqi-rapid-drill-800-part-2",
+     3268
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     61341
+    ]
+   ],
+   "room": "caohome",
+   "objective_zh": "支线：曹操的少年时代。",
+   "title_zh": "奸雄·一：诈中风"
+  },
+  {
+   "node": "1-b2",
+   "role": "side",
+   "place": "luoyang-gates--hall-1",
+   "spot": "spot-1-b2",
+   "scene": "caocao2",
+   "title": "The Hero of Chaos · II: A Villain in Chaos",
+   "objective": "Side story: Cao Cao at the gates of Luoyang.",
+   "after": [
+    "1-b1"
+   ],
+   "grade": "12K+",
+   "pool": [
+    [
+     "specialized-training-in-tsumego-5",
+     44045
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     108272
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     50483
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     13058
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     107980
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62334
+    ],
+    [
+     "weiqi-life-and-death-drills-beginner-part-1",
+     48956
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     127192
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160750
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     393
+    ],
+    [
+     "weiqi-rapid-drill-800-part-1",
+     3116
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     44191
+    ],
+    [
+     "specialized-training-in-tesuji-2",
+     80958
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3484
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-1",
+     1151
+    ],
+    [
+     "common-life-and-death-problems",
+     13058
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     21973
+    ],
+    [
+     "bedtime-tsumego-part-1",
+     135038
+    ],
+    [
+     "200-basic-go-problems",
+     174196
+    ],
+    [
+     "200-basic-go-problems",
+     174146
+    ],
+    [
+     "specialized-training-in-tesuji-4",
+     81218
+    ],
+    [
+     "weiqi-rapid-drill-800-part-1",
+     3120
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     48644
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     107981
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     54099
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     48767
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     108358
+    ],
+    [
+     "200-basic-go-problems",
+     174335
+    ],
+    [
+     "200-basic-go-problems",
+     174232
+    ],
+    [
+     "specialized-training-in-tesuji-3",
+     81019
+    ]
+   ],
+   "room": "hall-1",
+   "objective_zh": "支线：洛阳城门的曹操。",
+   "title_zh": "奸雄·二：乱世奸雄"
+  },
+  {
+   "node": "1-f1",
+   "role": "side",
+   "place": "changshe--camp",
+   "spot": "spot-1-f1",
+   "scene": "fireplan",
+   "title": "The Fire Plan",
+   "objective": "Side story: The Fire Plan.",
+   "after": [
+    "1-b2"
+   ],
+   "grade": "12K+",
+   "pool": [
+    [
+     "specialized-training-in-tsumego-1",
+     50699
+    ],
+    [
+     "specialized-training-in-tesuji-4",
+     81179
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     50731
+    ],
+    [
+     "weiqi-rapid-drill-800-part-2",
+     3282
+    ],
+    [
+     "200-basic-go-problems",
+     174618
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147192
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     120329
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147186
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     57460
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     120151
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     54136
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     108285
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     50506
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     404
+    ],
+    [
+     "weiqi-rapid-drill-800-part-2",
+     3244
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-1",
+     1157
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     21915
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     145874
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     77661
+    ],
+    [
+     "weiqi-rapid-drill-800-part-2",
+     3275
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3433
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147106
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     20526
+    ],
+    [
+     "nie-weipings-tsumego-encyclopedia",
+     48956
+    ],
+    [
+     "specialized-training-in-tesuji-2",
+     81907
+    ],
+    [
+     "fujisawa-shuko-classroom",
+     264937
+    ],
+    [
+     "bedtime-tsumego-part-3",
+     135803
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     3615
+    ],
+    [
+     "weiqi-rapid-drill-800-part-2",
+     3267
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     42268
+    ]
+   ],
+   "room": "camp",
+   "objective_zh": "",
+   "title_zh": "火攻之计"
+  },
+  {
+   "node": "1-b3",
+   "role": "side",
+   "place": "changshe",
+   "spot": "camp",
+   "scene": "caocao3",
+   "title": "The Hero of Chaos · III: Red Banners at Changshe",
+   "objective": "Side story: red banners at Changshe.",
+   "after": [
+    "1-f1"
+   ],
+   "grade": "12K+",
+   "pool": [
+    [
+     "weiqi-rapid-drill-800-part-1",
+     3023
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     127165
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     108343
+    ],
+    [
+     "bedtime-tsumego-part-2",
+     137656
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3478
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147185
+    ],
+    [
+     "200-basic-go-problems",
+     174622
+    ],
+    [
+     "weiqi-life-and-death-drills-beginner-part-2",
+     63231
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3624
+    ],
+    [
+     "specialized-training-in-tesuji-3",
+     81335
+    ],
+    [
+     "weiqi-rapid-drill-800-part-2",
+     3369
+    ],
+    [
+     "weiqi-rapid-drill-800-part-1",
+     3129
+    ],
+    [
+     "bedtime-tsumego-part-1",
+     135463
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147831
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3572
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     84627
+    ],
+    [
+     "seedling-project",
+     27420
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     84392
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     108264
+    ],
+    [
+     "specialized-training-in-tesuji-3",
+     80985
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     48641
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     50690
+    ],
+    [
+     "bedtime-tsumego-part-3",
+     135708
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     71247
+    ],
+    [
+     "weiqi-life-and-death-drills-beginner-part-2",
+     63249
+    ],
+    [
+     "200-basic-go-problems",
+     11714
+    ],
+    [
+     "200-basic-go-problems",
+     174791
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147834
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     5411
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     108280
     ]
    ],
    "objective_zh": "支线：长社红旗。",
@@ -2572,124 +3126,124 @@
    "grade": "12K+",
    "pool": [
     [
-     "specialized-training-in-tsumego-2",
-     50683
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     21969
-    ],
-    [
      "specialized-training-in-tsumego-3",
-     48794
+     149031
     ],
     [
-     "specialized-training-in-tsumego-1",
-     120152
+     "lee-chang-hos-selected-tsumego-part-1",
+     506
     ],
     [
-     "specialized-training-in-tsumego-2",
-     84606
+     "weiqi-rapid-drill-800-part-3",
+     3445
     ],
     [
-     "specialized-training-in-tesuji-3",
-     81324
+     "lee-chang-hos-selected-tsumego-part-1",
+     392
     ],
     [
-     "specialized-training-in-tesuji-3",
-     81031
+     "compact-go-puzzles-to-learn-the-basics",
+     147481
     ],
     [
-     "bedtime-tsumego-part-3",
-     135711
-    ],
-    [
-     "weiqi-rapid-drill-800-part-2",
-     3303
-    ],
-    [
-     "specialized-training-in-tesuji-4",
-     81232
-    ],
-    [
-     "weiqi-life-and-death-1000-problems-part-1",
-     1137
-    ],
-    [
-     "specialized-training-in-tesuji-4",
-     81260
-    ],
-    [
-     "go-puzzles-at-a-glance",
-     160734
-    ],
-    [
-     "specialized-training-in-tesuji-3",
-     81108
-    ],
-    [
-     "200-basic-go-problems",
-     175789
-    ],
-    [
-     "weiqi-rapid-drill-800-part-1",
-     3077
-    ],
-    [
-     "specialized-training-in-tsumego-3",
-     50462
-    ],
-    [
-     "weiqi-rapid-drill-800-part-4",
-     3753
-    ],
-    [
-     "specialized-training-in-tesuji-4",
-     81316
-    ],
-    [
-     "specialized-training-in-tsumego-3",
-     108274
-    ],
-    [
-     "specialized-training-in-tsumego-4",
-     148927
+     "compact-go-puzzles-to-learn-the-basics",
+     147471
     ],
     [
      "common-life-and-death-problems",
-     26027
+     25870
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     149037
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     51367
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     375
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     44173
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     50651
     ],
     [
      "specialized-training-in-tsumego-5",
-     43983
+     55132
+    ],
+    [
+     "bedtime-tsumego-part-1",
+     135475
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     149027
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3655
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     566
     ],
     [
      "specialized-training-in-tsumego-1",
-     167167
-    ],
-    [
-     "common-life-and-death-problems",
-     26033
+     51475
     ],
     [
      "specialized-training-in-tsumego-4",
-     108356
-    ],
-    [
-     "specialized-training-in-tesuji-4",
-     81223
-    ],
-    [
-     "specialized-training-in-tesuji-4",
-     81188
-    ],
-    [
-     "weiqi-rapid-drill-800-part-2",
-     3268
+     43880
     ],
     [
      "go-puzzles-at-a-glance",
-     61341
+     160636
+    ],
+    [
+     "bedtime-tsumego-part-3",
+     135797
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3418
+    ],
+    [
+     "fujisawa-shuko-classroom",
+     266361
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     375
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     54029
+    ],
+    [
+     "weiqi-rapid-drill-800-part-1",
+     3112
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     247652
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     148897
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     51103
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160621
     ]
    ],
    "objective_zh": "救出董卓，再到他帐前复命。",
@@ -2709,124 +3263,124 @@
    "grade": "12K+",
    "pool": [
     [
-     "specialized-training-in-tsumego-5",
-     44045
-    ],
-    [
      "specialized-training-in-tsumego-3",
-     108272
+     126589
     ],
     [
-     "specialized-training-in-tsumego-1",
-     50483
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     13058
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     107980
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     62334
-    ],
-    [
-     "weiqi-life-and-death-drills-beginner-part-1",
-     48956
-    ],
-    [
-     "specialized-training-in-tsumego-6",
-     127192
-    ],
-    [
-     "go-puzzles-at-a-glance",
-     160750
-    ],
-    [
-     "lee-chang-hos-selected-tsumego-part-1",
-     393
-    ],
-    [
-     "weiqi-rapid-drill-800-part-1",
-     3116
-    ],
-    [
-     "specialized-training-in-tsumego-6",
-     44191
-    ],
-    [
-     "specialized-training-in-tesuji-2",
-     80958
+     "specialized-training-in-tsumego-5",
+     44273
     ],
     [
      "weiqi-rapid-drill-800-part-3",
-     3484
-    ],
-    [
-     "weiqi-life-and-death-1000-problems-part-1",
-     1151
-    ],
-    [
-     "common-life-and-death-problems",
-     13058
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     21973
-    ],
-    [
-     "bedtime-tsumego-part-1",
-     135038
-    ],
-    [
-     "200-basic-go-problems",
-     174196
-    ],
-    [
-     "200-basic-go-problems",
-     174146
-    ],
-    [
-     "specialized-training-in-tesuji-4",
-     81218
-    ],
-    [
-     "weiqi-rapid-drill-800-part-1",
-     3120
+     3413
     ],
     [
      "specialized-training-in-tsumego-3",
-     48644
+     107356
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147108
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     50719
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3423
+    ],
+    [
+     "200-basic-go-problems",
+     175736
     ],
     [
      "specialized-training-in-tsumego-2",
-     107981
+     103156
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160622
     ],
     [
      "specialized-training-in-tsumego-2",
-     54099
+     392
     ],
     [
-     "specialized-training-in-tsumego-1",
-     48767
+     "lee-chang-hos-selected-tsumego-part-1",
+     398
+    ],
+    [
+     "weiqi-rapid-drill-800-part-1",
+     398
     ],
     [
      "specialized-training-in-tsumego-4",
-     108358
+     50724
     ],
     [
-     "200-basic-go-problems",
-     174335
+     "specialized-training-in-tsumego-2",
+     51136
     ],
     [
-     "200-basic-go-problems",
-     174232
+     "specialized-training-in-tsumego-4",
+     50509
     ],
     [
-     "specialized-training-in-tesuji-3",
-     81019
+     "weiqi-rapid-drill-800-part-1",
+     3042
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     148987
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3615
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     50721
+    ],
+    [
+     "specialized-training-in-tesuji-4",
+     81195
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160713
+    ],
+    [
+     "weiqi-life-and-death-drills-beginner-part-3",
+     63280
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     108266
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     247649
+    ],
+    [
+     "fujisawa-shuko-classroom",
+     3441
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     394
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     108362
+    ],
+    [
+     "weiqi-rapid-drill-800-part-1",
+     3103
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     149095
     ]
    ],
    "objective_zh": "在山中破张宝的妖术。",

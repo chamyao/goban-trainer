@@ -265,7 +265,7 @@ class Layout:
         b = self.place["brief"]
         done_nodes = set()
         for lm in b.get("landmarks", []):
-            lines = {k: lm[k] for k in ("intro", "outro") if lm.get(k)}
+            lines = {k: lm[k] for k in ("intro", "outro", "trigger") if lm.get(k)}
             o = self.place_landmark(lm["kind"], lm.get("id"), lm.get("label"), lm.get("node"), near=lm.get("near"), lines=lines)
             if o is None:
                 raise RuntimeError(f"no room for {lm['kind']}")

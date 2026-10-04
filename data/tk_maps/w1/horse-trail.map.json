@@ -1549,7 +1549,8 @@
    "x": 23,
    "y": 9.7,
    "node": "1-as",
-   "label": "The horse dealers' camp"
+   "label": "The horse dealers' camp",
+   "trigger": "arrive"
   }
  ],
  "npcs": [

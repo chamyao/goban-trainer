@@ -86,7 +86,16 @@
    "h": 1
   }
  ],
- "spots": [],
+ "spots": [
+  {
+   "id": "spot-1-a2",
+   "x": 9.5,
+   "y": 5.7,
+   "node": "1-a2",
+   "label": "The Way of Great Peace · II: The Blue Heaven Is Dead",
+   "trigger": "arrive"
+  }
+ ],
  "npcs": [
   {
    "id": "in-1",

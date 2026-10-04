@@ -180,7 +180,7 @@ class Room:
         }
 
 
-def add_spot(r, node, label=""):
+def add_spot(r, node, label="", trigger=None):
     """A story spot inside a room: open floor in the middle, in front of the furniture."""
     walk = {ch for ch, mat in LEGEND.items() if mat in FLOOR}
     solid = {(xx, yy) for o in r["objects"] if KINDS[o["kind"]][2]
@@ -200,7 +200,8 @@ def add_spot(r, node, label=""):
     cy = (min(rows) + max(rows)) / 2
     x, y = min((c for c in seen if c not in taken and c != start),
                key=lambda c: (abs(c[0] - cx) + abs(c[1] - cy), c))
-    spot = {"id": f"spot-{node}", "x": x + .5, "y": y + .7, "node": node, **({"label": label} if label else {})}
+    spot = {"id": f"spot-{node}", "x": x + .5, "y": y + .7, "node": node, **({"label": label} if label else {}),
+            **({"trigger": trigger} if trigger else {})}
     r["spots"].append(spot)
     return spot["id"]
 
