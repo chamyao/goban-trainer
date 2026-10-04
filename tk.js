@@ -11,7 +11,7 @@
 const TK_CHARS = {
   liubei: { name: "Liu Bei", skin: "#f2c79c", hair: "#2b2226", hat: "topknot", hatC: "#2b2226", pin: "#e6c14a", robe: "#e9dcae", trim: "#3f7d4c", beard: "thin", ears: true, eyes: "kind", weapon: "swords" },
   guanyu: { name: "Guan Yu", skin: "#c0402f", hair: "#1d1517", hat: "scarf", hatC: "#2e7a42", robe: "#2e7a42", trim: "#d4ad42", beard: "long", eyes: "phoenix", weapon: "glaive" },
-  zhangfei: { name: "Zhang Fei", skin: "#a06a45", hair: "#1a1416", hat: "band", hatC: "#b8392c", robe: "#4a4a5c", trim: "#b8392c", beard: "bristle", eyes: "round", weapon: "spear" },
+  zhangfei: { name: "Zhang Fei", skin: "#e9b98e", hair: "#1a1416", hat: "band", hatC: "#b8392c", robe: "#4a4a5c", trim: "#b8392c", beard: "bristle", eyes: "round", weapon: "spear" },
   caocao: { name: "Cao Cao", skin: "#efc59d", hair: "#241c1e", hat: "guan", hatC: "#1e1e24", robe: "#7b2a2a", trim: "#d4ad42", beard: "goatee", eyes: "narrow", weapon: "sword" },
   dongzhuo: { name: "Dong Zhuo", skin: "#e2b089", hair: "#2a2024", hat: "guan", hatC: "#1e1e24", robe: "#5b3b6e", trim: "#d4ad42", beard: "short", eyes: "narrow", fat: true },
   zhangbao: { name: "Zhang Bao", skin: "#e7c39b", hair: "#2a2024", hat: "wild", hatC: "#e8bc2a", robe: "#d8ab2a", trim: "#7a5216", beard: "none", eyes: "wild", weapon: "sword" },
@@ -19,13 +19,13 @@ const TK_CHARS = {
   luzhi: { name: "Lu Zhi", skin: "#eec7a0", hair: "#9a9a9a", hat: "guan", hatC: "#1e1e24", robe: "#3e5f8a", trim: "#d6d2c4", beard: "long", beardC: "#a8a8a8", eyes: "kind" },
   zhujun: { name: "Zhu Jun", skin: "#e8c09a", hair: "#2a2024", hat: "helmet", hatC: "#858a94", robe: "#8a3030", trim: "#c8c8c8", beard: "short", eyes: "normal", weapon: "sword" },
   huangfusong: { name: "Huangfu Song", skin: "#e8c09a", hair: "#2a2024", hat: "helmet", hatC: "#858a94", robe: "#2f4f7a", trim: "#c8c8c8", beard: "long", eyes: "normal", weapon: "sword" },
-  chengyuanzhi: { name: "Cheng Yuanzhi", skin: "#d9a77c", hair: "#2a2024", hat: "yellowband", hatC: "#e8bc2a", robe: "#8f6a3a", trim: "#e8bc2a", beard: "short", eyes: "wild", weapon: "glaive" },
-  rebel: { name: "Yellow Turban", skin: "#d9a77c", hair: "#2a2024", hat: "yellowband", hatC: "#e8bc2a", robe: "#9a7a4a", trim: "#e8bc2a", beard: "none", eyes: "normal", weapon: "spear" },
+  chengyuanzhi: { name: "Cheng Yuanzhi", skin: "#e8b88c", hair: "#2a2024", hat: "yellowband", hatC: "#e8bc2a", robe: "#8f6a3a", trim: "#e8bc2a", beard: "short", eyes: "wild", weapon: "glaive" },
+  rebel: { name: "Yellow Turban", skin: "#e8b88c", hair: "#2a2024", hat: "yellowband", hatC: "#e8bc2a", robe: "#9a7a4a", trim: "#e8bc2a", beard: "none", eyes: "normal", weapon: "spear" },
   inspector: { name: "The Inspector", skin: "#f0cfac", hair: "#2a2024", hat: "guan", hatC: "#1e1e24", robe: "#6b6a35", trim: "#d4ad42", beard: "thin", eyes: "narrow" },
   xushao: { name: "Xu Shao", skin: "#eec7a0", hair: "#3a3236", hat: "scholar", hatC: "#2e3a5a", robe: "#ded6c0", trim: "#2e3a5a", beard: "thin", eyes: "kind" },
   uncle: { name: "Cao Cao's uncle", skin: "#eec7a0", hair: "#5a5256", hat: "topknot", hatC: "#5a5256", pin: "#8a8a8a", robe: "#7a6a5a", trim: "#3a3236", beard: "short", eyes: "normal" },
   zuofeng: { name: "Zuo Feng", skin: "#f5dcc4", hair: "#2a2024", hat: "guan", hatC: "#1e1e24", robe: "#3f6a5a", trim: "#d4ad42", beard: "none", eyes: "narrow" },
-  merchant: { name: "Zhang Shiping", skin: "#e2b48c", hair: "#2a2024", hat: "straw", hatC: "#d8b867", robe: "#8a6a4a", trim: "#5a3a22", beard: "short", eyes: "kind" },
+  merchant: { name: "Zhang Shiping", skin: "#ebbd92", hair: "#2a2024", hat: "straw", hatC: "#d8b867", robe: "#8a6a4a", trim: "#5a3a22", beard: "short", eyes: "kind" },
   immortal: { name: "Old Immortal of Southern Florescence", img: "assets/tk/p_immortal.png", skin: "#efe0c8", hair: "#e8e8e8", hat: "topknot", hatC: "#e8e8e8", pin: "#6a8a5a", robe: "#6a8a6a", trim: "#d8d2c0", beard: "long", beardC: "#eeeeee", eyes: "kind" },
 };
 
