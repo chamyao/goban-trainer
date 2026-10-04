@@ -23,21 +23,16 @@ words and name people only; their look belongs in CAST.
 """
 import re
 
-STYLE = ("Style: modern Korean webtoon anime, in the style of The God of High School and Tower of God: crisp "
-         "black line art of varied weight, flat cel shading with one hard shadow tone, sharp angular faces, large "
-         "expressive eyes with bright highlights, spiky expressive hair, bright clean saturated colours. "
-         "Ancient China, 184 AD. No text, no lettering, no borders, no letterbox bars.")
-# (the user's choice of look, from God of High School and Tower of God images they shared, which go
-# with every request as style references (refs/style/, on the samples branch only: the shows' art
-# isn't ours to put in the game); named and described here too, for models that take no images)
+STYLE = "Style: in the style of Studio Ghibli."
 
 # key -> (name as the scenes write it, look)
 CAST = {
     "liubei": ("Liu Bei", "a gentle young man of twenty-three with a short neat black beard, long earlobes and "
                           "kind eyes, hair in a topknot, in a white robe trimmed with gold"),
-    "guanyu": ("Guan Yu", "a tall, broad man with a deep red face, a very long black beard down to his chest and "
-                          "narrow eyes, hair in a topknot, in a green robe"),
-    "zhangfei": ("Zhang Fei", "a towering, powerfully muscled man with a fierce square jaw, big glaring eyes and "
+    "guanyu": ("Guan Yu", "a towering giant of a man, a head taller than anyone, with massive shoulders and a thick "
+                          "neck, a deep red face, a very long black beard down to his chest and narrow eyes under "
+                          "heavy brows, hair in a topknot, in a green robe"),
+    "zhangfei": ("Zhang Fei", "a stocky, barrel-chested, powerfully muscled man, broad rather than tall, with a fierce square jaw, big glaring eyes and "
                               "a wild bristling black beard, hair in a topknot, in black and dark brown clothes"),
     "luzhi": ("Lu Zhi", "a dignified old scholar-general with a long grey beard, in plain grey clothes"),
     "zhangbao": ("Zhang Bao", "a sorcerer general with long loose black hair and a yellow headscarf, "
@@ -54,11 +49,16 @@ def style_note(n):
             f"but not its characters, clothes, objects or background. ")
 
 
+# how a person's portrait is shot, when not at eye level (a low camera makes Guan Yu read as big)
+ANGLE = {"guanyu": "Seen from slightly below, looming, his shoulders filling the frame."}
+
+
 def portrait(key, n_style=0):
     """The request for a person's reference portrait: the face is what the stills need to keep."""
     name, look = CAST[key]
     return (f"Character face portrait of {name}, {look}. Head and shoulders close-up, the face filling most of "
             f"the frame, three-quarter view, a characteristic expression, plain flat background. "
+            f"{ANGLE[key] + ' ' if key in ANGLE else ''}"
             f"{style_note(n_style)}{STYLE}")
 
 

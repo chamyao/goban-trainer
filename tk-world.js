@@ -199,14 +199,14 @@ function worldScenes() {
       const { w, kit } = this.opts;
       this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=18`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=11`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=14`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=15`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
       for (const [s, path] of Object.entries(kit.sheets)) this.load.image(`kit-${s}`, path);
       const [fw, fh] = kit.folk.frame;
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=25`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=26`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -594,7 +594,7 @@ function worldScenes() {
         TK.markSeen(seen);
         if (spot.intro.length || q.boss) await say(intro);   // a bare title would only break the tension here
         const won = await this.duel(q.node, foe);
-        if (won) { await say(worldLines(spot.outro)); await this.vanish(q.node, true); }   // their parting word, then they go
+        if (won) await this.parting(q.node, spot.outro, say);   // their parting word, they go, then the empty board
         return won;
       };
       const finish = () => this.finishQuest(q, steps);
@@ -610,6 +610,18 @@ function worldScenes() {
     cutscene(q) {
       const cs = ((this.cache.json.get("cutscenes") || {}).scenes || {})[q.scene];
       return cs && cs.place === this.placeId && typeof WorldCutscene !== "undefined" ? cs : null;
+    }
+
+    // A won spot's farewell. Those here only until this node (the Star Lords) are already gone
+    // (they vanish when the board is won); any words of theirs left in the outro come first, then
+    // the rest (the narration that they are gone).
+    async parting(node, outro, say) {
+      const lines = worldLines(outro), going = this.npcs.filter(n => n.until === node && n.spr.visible);
+      const ids = new Set([...going, ...this.npcs.filter(n => n.until === node)].map(n => n.who).filter(Boolean));
+      const cut = lines.reduce((k, l, i) => l[0] === "say" && ids.has(l[1]) ? i + 1 : k, 0);
+      await say(lines.slice(0, cut));
+      this.vanish(node);
+      await say(lines.slice(cut));
     }
 
     // People who are only here until a beat is won (the Star Lords at the oath).
@@ -641,7 +653,8 @@ function worldScenes() {
       this.leaving = true;
       P.setVelocity(0); P.anims.stop();
       this.ui.hint(null);
-      const win = await this.opts.onPuzzle(key, { host: this.opts.host, foe });
+      // solved: whoever was here only until this beat (the Star Lords) is gone at once, behind the board
+      const win = await this.opts.onPuzzle(key, { host: this.opts.host, foe, onWin: () => this.vanish(key) });
       if (!this.sys.isActive()) return false;  // the page moved on meanwhile
       this.leaving = false;
       this.opts.host.focus();
@@ -661,12 +674,12 @@ function worldScenes() {
       if (q) {
         const spot = Object.values(this.spots).find(s => s.node === q.node);
         const steps = [...worldLines(spot && spot.outro), ...((this.story[q.scene] || {}).steps || [])];
-        this.vanish(q.node);
         const finish = () => this.finishQuest(q, steps);
         // a staged cutscene (tk-cutscene.js) when the scene generator made one for this place, else the lines alone
-        const cs = this.cutscene(q);
-        if (cs) return this.talk(worldLines(spot && spot.outro), () => WorldCutscene.play(this, cs, finish), "story");
-        return this.talk(steps, finish, "story");
+        const cs = this.cutscene(q), rest = ((this.story[q.scene] || {}).steps || []);
+        const say = lines => new Promise(r => lines.length ? this.talk(lines, r, "story") : r());
+        return this.parting(q.node, spot && spot.outro, say).then(() =>
+          cs ? WorldCutscene.play(this, cs, finish) : this.talk(rest, finish, "story"));
       }
       const n = this.npcs.find(m => m.challenge === ret.key);
       if (n) { n.mark.setVisible(false); this.talk(worldLines(n.win)); }

@@ -41,8 +41,10 @@ const WorldCutscene = {
     const tween = cfg => new Promise(r => { if (skip) return r(); scene.tweens.add({ ...cfg, onComplete: r }); });
 
     // hide the player, the followers and the townsfolk; the cast stands in for them
-    // (opts.keep: townsfolk the scene needs as they are, e.g. who sets its problem)
-    const keep = new Set(opts.keep || []);
+    // (opts.keep: townsfolk the scene needs as they are, e.g. who sets its problem; not when the
+    // scene brings on its own of them, as the oath now stages the Star Lords itself)
+    const cast = new Set(Object.values(cs.cast || {}).map(c => c.who).filter(Boolean));
+    const keep = new Set((opts.keep || []).filter(s => !cast.has((scene.npcs.find(n => n.spr === s) || {}).who)));
     const hidden = [scene.player, ...scene.followers.map(f => f.spr), ...scene.npcs.map(n => n.spr), ...scene.npcs.map(n => n.mark).filter(Boolean)]
       .filter(s => s && s.visible && !keep.has(s));
     hidden.forEach(s => s.setVisible(false));
@@ -444,6 +446,7 @@ const WorldCutscene = {
           await wait(200);
           break;
         case "fade": await fade(b.actors); break;
+        case "vanish": b.actors.filter(id => actors[id]).forEach(id => { actors[id].spr.setVisible(false); sync(actors[id]); }); break;
         case "pose": await Promise.all(b.actors.filter(id => actors[id]).map((id, i) => pose(actors[id], b.pose, i))); break;
         case "emote": b.actors.filter(id => actors[id]).forEach(id => emote(actors[id], b.icon)); await wait(700); break;
         case "give": await give(b); break;
@@ -522,7 +525,7 @@ const WorldCutscene = {
           break;
         case "zoom": cam.setZoom(zoom0 * b.z); if (dark) dark.setScale(1 / b.z); break;
         case "mood": mood(b.dark, 0); break;
-        case "fade": b.actors.filter(id => actors[id]).forEach(id => { actors[id].spr.setVisible(false); sync(actors[id]); }); break;
+        case "fade": case "vanish": b.actors.filter(id => actors[id]).forEach(id => { actors[id].spr.setVisible(false); sync(actors[id]); }); break;
         case "gain": if (Items) { Items.gain(scene, b.item); Object.values(actors).forEach(mount); } break;
       }
     };

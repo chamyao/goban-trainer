@@ -1553,13 +1553,13 @@
     [
      "starred",
      "Three young men, come to swear before Heaven? Heaven is listening. But first, show us how you read the stones."
+    ],
+    [
+     "stargrey",
+     "Fortune favours the one who reads the stones."
     ]
    ],
    "outro": [
-    [
-     "stargrey",
-     "Good. The road ahead forks, and fortune favours the one who reads it."
-    ],
     "When the brothers look up, the two old men are gone. Only the board remains, and a drift of petals."
    ],
    "trigger": "talk"

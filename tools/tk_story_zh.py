@@ -165,6 +165,7 @@ ZH = {
     "A man beside them clapped and laughed. “This is as easy as turning over a hand. Why so much talk?” It was Cao Cao.": "旁边一人鼓掌大笑：“此事易如反掌，何必多议！”此人正是曹操。",
     "What did Cao Cao propose? Hear the next chapter.": "不知曹操说出甚话来，且听下文分解。",
     "The Inspector's Visit": "督邮驾到", "The Hitching Post": "县前马桩",
+    "Fortune favours the one who reads the stones.": "福运眷顾能读懂棋局的人。",
     "Meet the inspector at the posting station.": "到驿馆拜见督邮。",
     "Go to the county office, where the old villagers are gathering.": "到县衙前，老人们正聚在那里。",
     # ---- World 1: staging pass, lines that changed or are new ----
