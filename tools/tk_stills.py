@@ -25,6 +25,30 @@ STILLS = {
                   "Liu Bei in a pale robe in the middle, Guan Yu with a long black beard and a red face in green on "
                   "the left, Zhang Fei with a bristling black beard and a fierce face on the right.",
     },
+    # the feast after the oath: "Three hundred village braves join them, and they drink in the garden
+    # until they can drink no more." Three framings to choose from.
+    "feast_wide": {
+        "scene": "oath",
+        "prompt": "A joyful feast in a peach orchard in full pink blossom at golden dusk: three sworn brothers at a "
+                  "low wooden table heaped with wine jars and bowls, surrounded by a crowd of cheering village "
+                  "volunteers in rough hemp clothes raising cups; paper lanterns in the branches, petals drifting. "
+                  "Liu Bei in a pale robe in the middle, Guan Yu with a long black beard and a red face in green "
+                  "robes, Zhang Fei with a bristling black beard and a fierce, laughing face.",
+    },
+    "feast_toast": {
+        "scene": "oath",
+        "prompt": "Close, warm portrait of three sworn brothers raising wine bowls together in a toast under "
+                  "blossoming peach trees: Liu Bei in a pale robe smiling gently in the middle, Guan Yu with a long "
+                  "black beard and a red face in green robes, calm and proud, Zhang Fei with a bristling black "
+                  "beard roaring with laughter, wine splashing; petals and soft evening light.",
+    },
+    "feast_night": {
+        "scene": "oath",
+        "prompt": "Night in a peach orchard after a feast: village volunteers dance and sing around a bonfire, "
+                  "sparks rising into the blossoms; Zhang Fei, black-bearded and huge, has fallen asleep against a "
+                  "giant wine jar, while Liu Bei in a pale robe and Guan Yu with his long black beard and red face "
+                  "watch from the table, smiling.",
+    },
     "yellow_turbans": {
         "scene": "daxing",
         "prompt": "A vast rebel host of fifty thousand men in yellow headscarves fills a valley below Daxing "
