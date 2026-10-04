@@ -28,7 +28,9 @@ ARCHETYPES = {
                  border=["tree.grove", "tree.small", "tree.pine"],
                  decor={"plant.bush": 1.0, "plant.flower": 1.0, "plant.grass": 1.5, "tree.small": .4, "lamp.post": .15},
                  clusters=(3, ["tree.small", "tree.grove", "plant.bush"]), pond=False),
-    "city": dict(size=(40, 30), plaza=(8, 5), fill=["building.hall", "building.house", "building.house", "building.inn", "building.shop"],
+    "city": dict(size=(40, 30), plaza=(8, 5), paved=True,
+                 fill=["building.hall", "building.house", "building.house", "building.inn", "building.shop",
+                       "building.house", "building.shop", "building.house"],
                  border=["tree.grove", "tree.pine"],
                  decor={"plant.bush": .8, "plant.grass": 1.0, "lamp.post": .2, "tree.small": .3},
                  clusters=(3, ["tree.small", "tree.pine", "plant.bush"]), pond=False),
@@ -218,7 +220,7 @@ class Layout:
                     q.append(n)
         return False
 
-    def place_landmark(self, kind, lid=None, label=None, node=None, near_hub=False, near=None, lines=None):
+    def place_landmark(self, kind, lid=None, label=None, node=None, near_hub=False, near=None, lines=None, use=None):
         fw, fh, _ = KINDS[kind]
         building = kind.startswith(BUILDING)
         best = None
@@ -256,9 +258,9 @@ class Layout:
             self.door_path(door)
         if lid:
             self.anchors[lid] = door
-        if node:
+        if node or use:   # a story spot, or one with a use of its own (e.g. "ogs": the go table for live games)
             self.spots.append({"id": lid or f"spot-{node}", "x": door[0] + (0 if fw % 2 == 0 else .5), "y": door[1] + .7,
-                               "node": node, "label": label or "", **(lines or {})})
+                               "node": node or "", "label": label or "", **({"use": use, "trigger": "talk"} if use else {}), **(lines or {})})
         return o
 
     def lay_landmarks(self):
@@ -266,7 +268,7 @@ class Layout:
         done_nodes = set()
         for lm in b.get("landmarks", []):
             lines = {k: lm[k] for k in ("intro", "outro", "trigger") if lm.get(k)}
-            o = self.place_landmark(lm["kind"], lm.get("id"), lm.get("label"), lm.get("node"), near=lm.get("near"), lines=lines)
+            o = self.place_landmark(lm["kind"], lm.get("id"), lm.get("label"), lm.get("node"), near=lm.get("near"), lines=lines, use=lm.get("use"))
             if o is None:
                 raise RuntimeError(f"no room for {lm['kind']}")
             if lm.get("node"):
@@ -289,7 +291,13 @@ class Layout:
             x, y = self.rng.randint(3, self.W - w - 3), self.rng.randint(3, self.H - h - 3)
             if self.free_rect(x, y, w, h, margin=2):
                 cells = [(xx, yy) for yy in range(y, y + h) for xx in range(x, x + w)]
-                self.paint(cells, "~")
+                # a rounded pond inside the rectangle: its corners stay grass
+                # (own random stream, so the rest of the layout is unchanged)
+                shape = random.Random(x * 1000 + y)
+                cx, cy, rx, ry = x + (w - 1) / 2, y + (h - 1) / 2, w / 2, h / 2
+                water = [(xx, yy) for xx, yy in cells
+                         if ((xx - cx) / rx) ** 2 + ((yy - cy) / ry) ** 2 <= 1.05 + shape.uniform(-.1, .15)]
+                self.paint(water, "~")
                 for c in cells:
                     self.used.add(c)
                 return
@@ -423,6 +431,8 @@ class Layout:
         missing = self.check()
         if missing:
             raise RuntimeError("unreachable: " + ", ".join(missing))
+        if self.A.get("paved"):   # a city's streets and square are paved
+            self.t = [[":" if ch == "=" else ch for ch in row] for row in self.t]
         return {
             "format": "tk-map/1",
             "id": self.place["id"],

@@ -498,7 +498,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) this.data = await (await fetch("data/tk.json?v=15")).json();
+    if (!this.data) this.data = await (await fetch("data/tk.json?v=17")).json();
     return this.data;
   },
   ls(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } },
@@ -520,7 +520,9 @@ const TK = {
   party(w) { return this.ls("tk-party")[w.n] || w.party; },
   setParty(w, list) { const a = this.ls("tk-party"); a[w.n] = list; this.lsSet("tk-party", a); },
   problemRef(node) { const d = this.ls("tk-draw"); return node.pool[(d[node.key] || 0) % node.pool.length]; },
-  slip(node) { const d = this.ls("tk-draw"); d[node.key] = (d[node.key] || 0) + 1; this.lsSet("tk-draw", d); },
+  // A wrong move keeps the problem but rests it: TK_REST ms before it can be tried again.
+  rest(key) { const d = this.ls("tk-rest"); d[key] = Date.now() + TK_REST; this.lsSet("tk-rest", d); },
+  restLeft(key) { return Math.max(0, (this.ls("tk-rest")[key] || 0) - Date.now()); },
   // Walkable path between two nodes over open or cleared ground.
   route(w, from, to) {
     const ok = k => this.open(w, k) || this.cleared(k);
@@ -985,7 +987,7 @@ async function viewTK(worldN) {
   voiceBtn.onclick = () => { TKVoice.lang = { zh: "en", en: "off", off: "zh" }[TKVoice.lang]; voiceLabel(); };
   root.append(h("div", { class: "tk-head" }, [
     h("div", {}, [h("h2", {}, [h("span", { class: "zh" }, D.native), " ", D.title]),
-      h("div", { class: "sub" }, `World ${w.n} · ${w.name} ${w.zh} · chapters ${w.chapters.join("–")} · ${w.grades} · ${done}/${levels.length} cleared`)]),
+      h("div", { class: "sub" }, `第${w.n}卷 Book ${w.n} · ${w.name} ${w.zh} · chapters ${w.chapters.join("–")} · ${w.grades} · ${done}/${levels.length} cleared`)]),
     h("div", { class: "tk-head-btns" }, [voiceBtn, chron]),
   ]));
   root.append(h("div", { class: "tk-worlds" }, [
@@ -1016,15 +1018,41 @@ async function viewTK(worldN) {
     root.querySelector(".tk-head-btns").append(guideBtn);
     // The buttons live in a menu inside the game window, with the controls.
     const panel = h("div", { class: "tk-menu-panel", hidden: "" }, [root.querySelector(".tk-head-btns"),
-      h("div", { class: "tk-menu-keys" }, "WASD / 方向键 移动 move · Enter 对话 talk")]);
+      h("div", { class: "tk-menu-keys" }, TK_TOUCH ? "点击地面移动 Tap to move · 点击人物对话 Tap to talk" : "WASD / 方向键 移动 move · Enter 对话 talk · 点击也可 or click")]);
     const toggle = h("button", { class: "tk-menu-btn", type: "button", "aria-expanded": "false" }, "菜单 Menu ▾");
     toggle.onclick = () => {
       const open = panel.hidden;
       panel.hidden = !open; toggle.setAttribute("aria-expanded", String(open)); toggle.textContent = open ? "菜单 Menu ▴" : "菜单 Menu ▾";
       host.focus();
     };
-    panel.addEventListener("click", e => { if (e.target.closest("button")) setTimeout(() => host.focus(), 0); });   // keep the keyboard on the game
-    host.append(h("div", { class: "tk-menu" }, [toggle, panel]));
+    panel.addEventListener("click", e => {
+      const b = e.target.closest("button");
+      if (!b) return;
+      // actions that take you somewhere close the menu; switches (voice, music, guide) leave it open to show their state
+      if (!b.hasAttribute("aria-pressed")) { panel.hidden = true; toggle.setAttribute("aria-expanded", "false"); toggle.textContent = "菜单 Menu ▾"; }
+      setTimeout(() => host.focus(), 0);   // keep the keyboard on the game
+    });
+    // Full window: the game takes the whole screen (and the real full screen where the
+    // browser allows it). On by default on a phone; remembered either way.
+    const full = h("button", { class: "tk-menu-btn", type: "button", "aria-pressed": "false" });
+    const setFull = (on, native) => {
+      host.classList.toggle("tk-fullwin", on);
+      document.documentElement.classList.toggle("tk-fullwin-on", on);
+      full.setAttribute("aria-pressed", String(on));
+      full.textContent = on ? "还原 Exit full" : "全屏 Full";
+      try { localStorage.setItem("tk-full", on ? "1" : "0"); } catch {}
+      const de = document.documentElement;
+      try {
+        if (on && native && !document.fullscreenElement && de.requestFullscreen) de.requestFullscreen({ navigationUI: "hide" }).catch(() => {});
+        if (!on && document.fullscreenElement) document.exitFullscreen().catch(() => {});
+      } catch {}
+      if (!on) host.scrollIntoView({ block: "nearest" });
+    };
+    full.onclick = () => { setFull(!host.classList.contains("tk-fullwin"), true); host.focus(); };
+    let pref = null;
+    try { pref = localStorage.getItem("tk-full"); } catch {}
+    setFull(pref ? pref === "1" : TK_TOUCH, false);
+    host.append(h("div", { class: "tk-menu" }, [h("div", { class: "tk-menu-row" }, [full, toggle]), panel]));
     // Scenes replayed outside the node map: words only, no walking or effects.
     const still = { w, actors: {}, leader: { x: 0, y: 0 }, party: [], pos: () => ({ x: 0, y: 0 }), actor: () => null, moveActor: async () => {}, addFx: () => 0 };
     const run = async steps => { TKStory.busy = true; try { await TKStory.play(still, steps); } finally { TKStory.busy = false; } };
@@ -1032,7 +1060,8 @@ async function viewTK(worldN) {
     if (!TK.seen(`${w.n}:opening`)) { await run(w.opening); TK.markSeen(`${w.n}:opening`); if (nav !== routeSeq) return; }
     const ret = TKView.takeReturn();
     info.append(h("div", { class: "tk-info-text" }, [h("b", {}, `${w.zh} ${w.name}`),
-      h("div", { class: "meta" }, "用方向键移动，按回车对话；头上有 ! 的人会给你出题。Move with WASD or the arrow keys, Enter to talk. People marked ! will set you a problem.")]));
+      h("div", { class: "meta" }, TK_TOUCH ? "点击地面移动，点击人物对话；头上有 ! 的人会给你出题。Tap where to go, tap someone to talk. People marked ! will set you a problem."
+        : "用方向键移动，按回车对话（也可点击）；头上有 ! 的人会给你出题。Move with WASD or the arrow keys, Enter to talk, or click. People marked ! will set you a problem.")]));
     try {
       await WorldView.mount({
         w, host, ret: ret && ret.world === w.n ? ret : null,
@@ -1128,7 +1157,7 @@ async function viewTK(worldN) {
   }
   function showDone() {
     info.innerHTML = "";
-    info.append(h("div", { class: "tk-info-text" }, [h("b", {}, `★ World ${w.n} complete`), h("div", { class: "meta" }, "World 2, Hulao Pass, is coming next.")]));
+    info.append(h("div", { class: "tk-info-text" }, [h("b", {}, `★ 第${w.n}卷完 Book ${w.n} complete`), h("div", { class: "meta" }, "第二卷《虎牢关》即将推出。Book 2, Hulao Pass, is coming next.")]));
   }
   if (!TK.seen(`${w.n}:opening`)) {
     await run(w.opening); TK.markSeen(`${w.n}:opening`);
@@ -1179,7 +1208,7 @@ function tkLevelBuild(host, worldN, key, { w, node, src, p, book }, { back, agai
   const aside = h("aside", {}, [
     ...(bossPanel ? [bossPanel] : []),
     h("div", { class: "panel" }, [
-      h("h2", {}, `第${worldN}卷 ${w.zh} · World ${worldN} · ${w.name}`),
+      h("h2", {}, `第${worldN}卷 ${w.zh} · Book ${worldN} · ${w.name}`),
       h("div", { class: "meta-title" }, [`${node.place_zh || node.place} · ${TK_ROLE_ZH[node.role] || ""}`,
         h("span", { class: "tk-en" }, ` ${node.place} · ${TK.roleLabel(node)}`)]),
       h("div", { class: "meta-sub" }, [node.role === "boss" ? "" : `出自 from ${src.title} · `, p.url ? h("a", { href: p.url, target: "_blank" }, "来源 source")
@@ -1203,6 +1232,7 @@ function tkLevelBuild(host, worldN, key, { w, node, src, p, book }, { back, agai
   host.append(player);
   host.classList.add("tk-enter");
   setTimeout(() => host.classList.remove("tk-enter"), 500);
+  if (TK.restLeft(key) > 0) tkRestLock(boardCard, key);
   trainer = new Trainer(book, 0, { svg, boardCard, status, turnBadge, btnExplore, treePanel, treeBox, note, noEngine: true });
   btnExplore.addEventListener("click", () => trainer.toggleExplore());
   window.__trainer = trainer;
@@ -1219,11 +1249,12 @@ function tkLevelBuild(host, worldN, key, { w, node, src, p, book }, { back, agai
       verdict.className = "tk-verdict win";
       verdict.append(h("b", {}, node.role === "boss" ? "★ 击败首领！Boss defeated!" : "★ 完美！Flawless!"), h("button", { onclick: back }, "继续 Continue ▸"));
     } else {
-      TK.slip(node);
+      TK.rest(key);
       verdict.className = "tk-verdict slip";
       verdict.append(h("b", {}, e.detail === "ok" ? `解出了，但不算完美。Solved, but not flawless (${t.flawed}).` : "敌人识破了！The enemy saw through it!"),
-        h("span", {}, " 换个思路。Try another way."),
-        h("button", { onclick: () => { host.classList.add("tk-flip"); setTimeout(() => { host.classList.remove("tk-flip"); again(); }, 260); } }, "换一题 New problem →"));
+        h("span", {}, " 换个思路。Try another way."));
+      // a moment to see what went wrong, then the same problem from the start, to study until the rest is over
+      setTimeout(() => { if (verdict.isConnected) again(); }, 1800);
     }
   };
   addEventListener("tczw:result", onResult);
@@ -1238,7 +1269,7 @@ async function viewTKLevel(worldN, key) {
   if (!d) { location.hash = `#/tk/${worldN || 1}`; return; }
   if (!d.node.town) TK.setAt(worldN, key);
   crumbs.innerHTML = "";
-  crumbs.append(h("a", { href: "#/" }, "Library"), " / ", h("a", { href: `#/tk/${worldN}` }, `Three Kingdoms · World ${worldN}`), ` / ${d.node.place}`);
+  crumbs.append(h("a", { href: "#/" }, "Library"), " / ", h("a", { href: `#/tk/${worldN}` }, `Three Kingdoms · Book ${worldN}`), ` / ${d.node.place}`);
   root.innerHTML = "";
   tkLevelBuild(root, worldN, key, d, {
     back: () => { root.classList.add("tk-leave"); setTimeout(() => { root.classList.remove("tk-leave"); location.hash = `#/tk/${worldN}`; }, 320); },
@@ -1253,6 +1284,27 @@ const TK_SETTER_LINES = {
   luzhi: { open: ["还记得为师教你的么？黑先。", "Do you remember what I taught you? Black to play."], win: ["好。你没有忘。", "Good. You haven't forgotten."], slip: ["不对。静下心来，再看。", "No. Calm yourself, and look again."] },
 };
 TK_SETTER_LINES.starred = TK_SETTER_LINES.stargrey;
+
+const TK_REST = 30000;
+// A touch screen (a phone or tablet): tap to move and tap to talk.
+const TK_TOUCH = typeof matchMedia !== "undefined" && matchMedia("(pointer: coarse)").matches;
+
+// Hold a board until its problem's rest is over. The position stays in full view
+// (time to read it); stones can't be played yet, and a small chip counts down.
+// Then onReady(). Leaving and coming back doesn't skip it (the end time is saved).
+function tkRestLock(board, key, onReady) {
+  const lock = h("div", { class: "tk-rest" }), chip = h("span", { class: "tk-rest-chip" });
+  lock.append(chip);
+  board.append(lock);
+  const tick = () => {
+    if (!lock.isConnected) return;
+    const s = Math.ceil(TK.restLeft(key) / 1000);
+    if (s <= 0) { lock.remove(); if (onReady) onReady(); return; }
+    chip.innerHTML = `<b lang="zh-CN">思考</b> Think · ${s}s`;
+    setTimeout(tick, 250);
+  };
+  tick();
+}
 
 // Townsfolk who set problems, by challenger id (tools/tk_places.py).
 const TK_FOES = {
@@ -1297,12 +1349,20 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
     h("a", { href: p.url || `https://www.101weiqi.com/q/${p.id}/`, target: "_blank", rel: "noopener" }, "来源 source"),
   ]);
   box.replaceChildren(boardCard, h("div", { class: "tk-duel-side" }, [dlg, keys, srcLine]));
+  // A boss duel: a lacquered red frame, a darker field, and his name over the board.
+  box.parentNode && box.parentNode.classList.toggle("tk-duel-boss", !!node.boss);
+  if (node.boss) boardCard.prepend(h("div", { class: "tk-duel-bossname" }, [
+    h("b", { lang: "zh-CN" }, TK_BOSS_ZH[node.boss.who] || tkName(node.boss.who)), h("span", {}, node.boss.title || "")]));
 
   const lord = foe && TK_SETTER_LINES[foe.who];
-  if (node.boss) say(node.boss.taunt_zh || "", node.boss.taunt);
-  else if (lord) say(...lord.open);
-  else if (foe) say("请。你执黑先下。", "Your move. You play Black.");
-  else say("黑先。", "Black to play.");
+  const opening = () => {
+    if (node.boss) say(node.boss.taunt_zh || "", node.boss.taunt);
+    else if (lord) say(...lord.open);
+    else if (foe) say("请。你执黑先下。", "Your move. You play Black.");
+    else say("黑先。", "Black to play.");
+  };
+  opening();
+  if (TK.restLeft(key) > 0) { say("先看清这局，片刻之后再落子。", "Study the position; you can play again in a moment."); tkRestLock(boardCard, key, opening); }
 
   trainer = new Trainer(Object.assign({}, src, { problems: [p] }), 0, { svg, boardCard, status, treePanel, ...hidden, noEngine: true });
   // Size the board to the window it sits in, keeping its shape (it's cropped to the corner in play).
@@ -1334,12 +1394,14 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
       else if (foe) say("好棋！我认输。", "Well played. I resign.", go("继续 Continue ▸", leave));
       else say("★ 完美！", "Flawless!", go("继续 Continue ▸", leave));
     } else {
-      TK.slip(node);
+      TK.rest(key);
       dlg.classList.add("slip");
       const how = e.detail === "ok" ? [`解出了，但不算完美（${t.flawed}）。`, `Solved, but not flawless (${t.flawed}).`]
         : lord ? lord.slip
         : foe ? ["哈！被我看穿了。换个思路吧。", "Ha! I saw through that. Try another way."] : ["敌人识破了！换个思路。", "The enemy saw through it! Try another way."];
-      say(how[0], how[1], go("换一题 New problem ▸", () => { box.classList.add("tk-flip"); setTimeout(() => { box.classList.remove("tk-flip"); again(); }, 260); }));
+      say(how[0], how[1]);
+      // a moment to see what went wrong, then the same problem from the start, to study until the rest is over
+      setTimeout(() => { if (box.isConnected) again(); }, 1800);
     }
   };
   addEventListener("tczw:result", onResult);

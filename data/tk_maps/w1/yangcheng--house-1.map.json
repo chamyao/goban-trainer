@@ -6,11 +6,12 @@
  "name": "House, Yangcheng",
  "archetype": "interior",
  "building": "house-1",
+ "style": "building.house",
  "size": [
   20,
   12
  ],
- "seed": 0.2603811512972275,
+ "seed": 0.212080064917045,
  "terrain": {
   "legend": {
    "#": "wood",
@@ -38,43 +39,43 @@
  "objects": [
   {
    "kind": "furn.bed",
-   "x": 9,
+   "x": 11,
    "y": 2,
    "w": 2,
    "h": 1
   },
   {
    "kind": "furn.drawers",
-   "x": 12,
+   "x": 10,
    "y": 2,
    "w": 1,
    "h": 1
   },
   {
    "kind": "furn.shelf",
-   "x": 7,
+   "x": 8,
    "y": 2,
    "w": 2,
    "h": 1
   },
   {
    "kind": "furn.table",
-   "x": 7,
-   "y": 5,
+   "x": 9,
+   "y": 4,
    "w": 2,
    "h": 1
   },
   {
    "kind": "furn.stool",
-   "x": 6,
-   "y": 5,
+   "x": 8,
+   "y": 4,
    "w": 1,
    "h": 1
   },
   {
    "kind": "furn.stool",
-   "x": 9,
-   "y": 5,
+   "x": 11,
+   "y": 4,
    "w": 1,
    "h": 1
   },
@@ -84,6 +85,34 @@
    "y": 2,
    "w": 1,
    "h": 1
+  },
+  {
+   "kind": "furn.plant",
+   "x": 13,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.chest",
+   "x": 6,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.barrel",
+   "x": 13,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.sacks",
+   "x": 6,
+   "y": 7,
+   "w": 1,
+   "h": 1
   }
  ],
  "spots": [],
@@ -91,8 +120,8 @@
   {
    "id": "in-1",
    "kind": "folk.woman",
-   "x": 8.5,
-   "y": 6.9,
+   "x": 10.5,
+   "y": 5.9,
    "say": [
     "“Mind the floor — I've only just swept it.”"
    ]

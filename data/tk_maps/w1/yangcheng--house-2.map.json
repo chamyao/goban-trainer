@@ -6,11 +6,12 @@
  "name": "House, Yangcheng",
  "archetype": "interior",
  "building": "house-2",
+ "style": "building.house",
  "size": [
   20,
   12
  ],
- "seed": 0.8714797118187928,
+ "seed": 0.8651152190674851,
  "terrain": {
   "legend": {
    "#": "wood",
@@ -45,14 +46,14 @@
   },
   {
    "kind": "furn.drawers",
-   "x": 11,
+   "x": 8,
    "y": 2,
    "w": 1,
    "h": 1
   },
   {
    "kind": "furn.shelf",
-   "x": 6,
+   "x": 11,
    "y": 2,
    "w": 2,
    "h": 1
@@ -80,8 +81,22 @@
   },
   {
    "kind": "furn.jar",
+   "x": 6,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.plant",
    "x": 13,
    "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.barrel",
+   "x": 13,
+   "y": 7,
    "w": 1,
    "h": 1
   }

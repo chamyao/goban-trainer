@@ -48,7 +48,9 @@ const WorldCutscene = {
     cam.stopFollow();
 
     // letterbox and a Skip button
-    const W = scene.scale.width, H = scene.scale.height, bar = 16;
+    // the screen's size: it changes when the window is resized or the phone turns (WorldView.size)
+    let W = scene.scale.width, H = scene.scale.height;
+    const bar = 16;
     const bars = [scene.add.rectangle(0, -bar, W, bar, 0x000000).setOrigin(0), scene.add.rectangle(0, H + bar, W, bar, 0x000000).setOrigin(0, 1)]
       .map(b => b.setScrollFactor(0).setDepth(1e6));
     scene.tweens.add({ targets: bars[0], y: 0, duration: 300 });
@@ -108,6 +110,21 @@ const WorldCutscene = {
         Items.place(a.horse, a.seat, a.head, a.spr.x, a.spr.y, dir);
       }
       a.spr.setDepth(a.spr.y);
+      // a soft shadow at the feet, the world's own (tk-world.js WorldFX "@shadow"), so
+      // nothing jumps when a scene starts; none for someone sitting inside a prop
+      const big = a.horse || a.beast;
+      if (!a.shadow) a.shadow = scene.textures.exists("@shadow") ? scene.add.image(0, 0, "@shadow") : scene.add.ellipse(0, 0, 14, 5, 0x140c06, .28);
+      a.shadow.setScale(big ? 24 / 14 : a.fallen ? 16 / 14 : Math.max(1, a.spr.displayWidth / 14), big ? 1.4 : 1)
+        .setPosition(Math.round(a.spr.x), Math.round(a.ground ?? a.spr.y) - 1).setDepth(-999)
+        .setVisible(a.spr.visible && !a.inside).setAlpha(a.spr.alpha);
+    };
+    // a puff of dust at someone's feet (running, falling)
+    const puff = (x, y, n = 4, c = 0xcdb98e) => {
+      for (let i = 0; i < n; i++) {
+        const d = scene.add.rectangle(x + (Math.random() - .5) * 6, y - 1, 2, 2, c, .85).setDepth(y + .5);
+        fx.push(d);
+        scene.tweens.add({ targets: d, x: d.x + (Math.random() - .5) * 10, y: d.y - 2 - Math.random() * 4, alpha: 0, duration: 320 + Math.random() * 160, onComplete: () => d.destroy() });
+      }
     };
     const actor = (id, at, face) => {
       let a = actors[id];
@@ -133,6 +150,7 @@ const WorldCutscene = {
       }
       const [x, y] = px(at);
       a.spr.setPosition(x, y).setVisible(true).setAlpha(1).setAngle(0).clearTint();
+      a.fallen = false; a.ground = undefined;
       mount(a);
       if (face) look(a, face);
       return a;
@@ -163,7 +181,12 @@ const WorldCutscene = {
         const dir = Math.abs(x1 - x0) > Math.abs(y1 - y0) ? (x1 > x0 ? "right" : "left") : (y1 > y0 ? "down" : "up");
         a.dir = dir;
         stride(a, dir, b.speed > 5);
-        await tween({ targets: a.spr, x: x1, y: y1, duration: d / speed * 1000 / (a.horse ? 1.3 : 1), onUpdate: () => sync(a) });
+        let dust = 0;
+        const dusty = (b.speed > 5 || a.horse || a.beast) && !a.prop;
+        await tween({ targets: a.spr, x: x1, y: y1, duration: d / speed * 1000 / (a.horse ? 1.3 : 1), onUpdate: () => {
+          sync(a);
+          if (dusty && scene.time.now - dust > 150) { dust = scene.time.now; puff(a.spr.x, a.spr.y, a.horse || a.beast ? 3 : 2); }
+        } });
       }
       const last = pts[pts.length - 1];
       a.spr.setPosition(last[0], last[1]);
@@ -268,14 +291,16 @@ const WorldCutscene = {
     let dark = null;
     const mood = (on, ms) => {
       if (on && !dark) {
-        if (!scene.textures.exists("tk-vignette")) {
-          const c = scene.textures.createCanvas("tk-vignette", 2 * W, 2 * H), g = c.context;
-          const grd = g.createRadialGradient(W, H, H * .2, W, H, W * .6);
+        if (!scene.textures.exists("tk-vignette2")) {   // one square gradient, stretched to whatever the screen is
+          const c = scene.textures.createCanvas("tk-vignette2", 512, 512), g = c.context;
+          const grd = g.createRadialGradient(256, 256, 51, 256, 256, 154);
           grd.addColorStop(0, "rgba(10,6,24,0.18)"); grd.addColorStop(.6, "rgba(10,6,24,0.6)"); grd.addColorStop(1, "rgba(10,6,24,0.92)");
-          g.fillStyle = grd; g.fillRect(0, 0, 2 * W, 2 * H); c.refresh();
+          g.fillStyle = grd; g.fillRect(0, 0, 512, 512); c.refresh();
         }
         // fixed to the screen; the camera's zoom would scale it, so it is scaled back
-        dark = scene.add.image(W / 2, H / 2, "tk-vignette").setScrollFactor(0).setDepth(9e5).setAlpha(0).setScale(zoom0 / cam.zoom);
+        const img = scene.add.image(0, 0, "tk-vignette2").setDisplaySize(2 * W, 2 * H);
+        dark = scene.add.container(W / 2, H / 2, [img]).setScrollFactor(0).setDepth(9e5).setAlpha(0).setScale(zoom0 / cam.zoom);
+        dark.img = img;
         fx.push(dark);
         if (ms) scene.tweens.add({ targets: dark, alpha: 1, duration: ms }); else dark.setAlpha(1);
       } else if (!on && dark) {
@@ -317,10 +342,20 @@ const WorldCutscene = {
       const all = [shade, ...glows];
       if (ms) all.forEach(o => { const a = o.alpha; o.setAlpha(0); scene.tweens.add({ targets: o, alpha: a, duration: ms }); });
     };
+    // the screen changed size mid-scene: the letterbox, the mood and the light follow it
+    const relayout = () => {
+      W = scene.scale.width; H = scene.scale.height;
+      bars[0].setSize(W, bar);
+      bars[1].setSize(W, bar).setPosition(0, H);
+      if (dark) { dark.setPosition(W / 2, H / 2); dark.img.setDisplaySize(2 * W, 2 * H); }
+      if (shade) shade.setPosition(W / 2, H / 2).setSize(W * 3, H * 3);
+    };
+    scene.scale.on("resize", relayout);
     const board = (b, ms) => {
       const r = actors[b.actor] || actor(b.actor, b.at), p = actors[b.prop];
       if (!p) return Promise.resolve();
       if (!p.riders.includes(b.actor)) p.riders.push(b.actor);
+      r.inside = true;
       look(r, "down");
       if (!ms) return sync(p), Promise.resolve();
       const [x, y] = [p.spr.x, p.spr.y - (p.prop === "cagecart" ? 8 : 4)];
@@ -330,6 +365,7 @@ const WorldCutscene = {
       const r = actors[b.actor];
       if (!r) return Promise.resolve();
       for (const p of Object.values(actors)) if (p.prop) p.riders = p.riders.filter(id => id !== b.actor);
+      r.inside = false;
       const [x, y] = px(b.to);
       if (!ms) { r.spr.setPosition(x, y); sync(r); return Promise.resolve(); }
       return tween({ targets: r.spr, x, y, duration: ms, onUpdate: () => sync(r) }).then(() => { r.spr.setDepth(r.spr.y); sync(r); });
@@ -372,15 +408,36 @@ const WorldCutscene = {
           if (!a) break;
           const dx = t ? Math.sign(t.spr.x - a.spr.x) || 1 : (a.dir === "left" ? -1 : 1);
           look(a, dx > 0 ? "right" : "left");
-          await tween({ targets: a.spr, x: a.spr.x + dx * 7, duration: 90, yoyo: true, ease: "Quad.easeOut", onUpdate: () => sync(a) });
+          const lunge = tween({ targets: a.spr, x: a.spr.x + dx * 7, duration: 90, yoyo: true, ease: "Quad.easeOut", onUpdate: () => sync(a) });
+          // the blade's arc in front of him
+          const g = scene.add.graphics().setDepth(1e5);
+          fx.push(g);
+          const ax = a.spr.x + dx * 10, ay = a.spr.y - 10, start = dx > 0 ? -1.1 : Math.PI - 1.1;
+          g.lineStyle(2, 0xffffff, .95).beginPath().arc(0, 0, 9, start, start + 2.2).strokePath();
+          g.lineStyle(1, 0xbfe6ff, .8).beginPath().arc(0, 0, 11, start + .3, start + 1.9).strokePath();
+          g.setPosition(ax, ay).setScale(.6).setAngle(dx > 0 ? -30 : 30);
+          scene.tweens.add({ targets: g, scale: 1.25, angle: dx > 0 ? 40 : -40, alpha: 0, duration: 200, ease: "Quad.easeOut", onComplete: () => g.destroy() });
+          await lunge;
+          if (t && !t.prop) {                                      // the blow lands: a white flash and a stagger
+            const s = t.horse ? t.seat : t.spr;
+            s.setTintFill(0xffffff);
+            scene.time.delayedCall(70, () => { if (s.active) s.clearTint(); });
+            for (let i = 0; i < 5; i++) {
+              const sp = scene.add.rectangle(t.spr.x - dx * 3, t.spr.y - 10, 2, 2, i % 2 ? 0xffe9a0 : 0xffffff).setDepth(1e5);
+              fx.push(sp);
+              scene.tweens.add({ targets: sp, x: sp.x + dx * (4 + Math.random() * 8), y: sp.y + (Math.random() - .5) * 12, alpha: 0, duration: 220, onComplete: () => sp.destroy() });
+            }
+            tween({ targets: t.spr, x: t.spr.x + dx * 3, duration: 70, yoyo: true, onUpdate: () => sync(t) });
+          }
           cam.shake(120, .006);
           break;
         }
         case "fall":
           await Promise.all(b.actors.filter(id => actors[id]).map((id, i) => {
             const s = actors[id].spr;
-            unpose(actors[id]); actors[id].fallen = true;
-            return wait(i * 60).then(() => { s.setTint(0xb0a090); return tween({ targets: s, angle: (i % 2 ? -1 : 1) * 90, y: s.y - 2, duration: 260, ease: "Quad.easeIn" }); });
+            unpose(actors[id]); actors[id].fallen = true; actors[id].ground = s.y;
+            return wait(i * 60).then(() => { s.setTint(0xb0a090); return tween({ targets: s, angle: (i % 2 ? -1 : 1) * 90, y: s.y - 2, duration: 260, ease: "Quad.easeIn", onUpdate: () => sync(actors[id]) }); })
+              .then(() => { puff(s.x + (i % 2 ? -6 : 6), actors[id].ground, 5); sync(actors[id]); });
           }));
           await wait(200);
           break;
@@ -451,7 +508,7 @@ const WorldCutscene = {
         case "together": b.beats.forEach(instant); break;
         case "walk": { const a = actors[b.actor]; if (a) { const [x, y] = px(b.path[b.path.length - 1]); a.spr.setPosition(x, y); sync(a); } break; }
         case "line": lastLine = b; for (const t of b.face || []) if (actors[t.actor]) look(actors[t.actor], t.dir); break;
-        case "fall": b.actors.filter(id => actors[id]).forEach((id, i) => { unpose(actors[id]); actors[id].fallen = true; actors[id].spr.setTint(0xb0a090).setAngle((i % 2 ? -1 : 1) * 90); }); break;
+        case "fall": b.actors.filter(id => actors[id]).forEach((id, i) => { unpose(actors[id]); actors[id].fallen = true; actors[id].ground = actors[id].spr.y; actors[id].spr.setTint(0xb0a090).setAngle((i % 2 ? -1 : 1) * 90); sync(actors[id]); }); break;
         case "pose": if (!["drink", "cheer", "raise"].includes(b.pose)) b.actors.filter(id => actors[id] && !actors[id].prop).forEach(id => lasting(actors[id], b.pose)); break;
         case "face": for (const t of b.turns) if (actors[t.actor]) look(actors[t.actor], t.dir); break;
         case "board": board(b, 0); break;
@@ -485,10 +542,11 @@ const WorldCutscene = {
       await run(b);
     }
 
+    scene.scale.off("resize", relayout);
     // back to the world: the leader stands where the scene left him
     for (const t of timers) t.remove(false);
     scene.tweens.killTweensOf(Object.values(actors).map(a => a.spr));
-    for (const a of Object.values(actors)) { if (a.poseTw) a.poseTw.stop(); a.spr.destroy(); if (a.horse) { a.horse.destroy(); a.seat.destroy(); a.head.destroy(); } }
+    for (const a of Object.values(actors)) { if (a.poseTw) a.poseTw.stop(); if (a.shadow) a.shadow.destroy(); a.spr.destroy(); if (a.horse) { a.horse.destroy(); a.seat.destroy(); a.head.destroy(); } }
     for (const o of fx) o.destroy();
     skipBtn.remove();
     bars.forEach(b => b.destroy());

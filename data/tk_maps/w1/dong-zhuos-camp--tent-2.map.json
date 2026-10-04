@@ -6,11 +6,12 @@
  "name": "Tent, Dong Zhuo's Camp",
  "archetype": "interior",
  "building": "tent-2",
+ "style": "building.tent",
  "size": [
   20,
   12
  ],
- "seed": 0.5000801940753186,
+ "seed": 0.6454707251115459,
  "terrain": {
   "legend": {
    "#": "wood",
@@ -44,16 +45,16 @@
    "h": 1
   },
   {
-   "kind": "furn.rug",
-   "x": 8,
-   "y": 4,
-   "w": 3,
-   "h": 2
-  },
-  {
    "kind": "furn.rack",
    "x": 6,
-   "y": 5,
+   "y": 7,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.mat",
+   "x": 12,
+   "y": 4,
    "w": 2,
    "h": 1
   },
@@ -67,7 +68,42 @@
   {
    "kind": "furn.barrel",
    "x": 13,
-   "y": 7,
+   "y": 3,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.sacks",
+   "x": 6,
+   "y": 3,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.jar",
+   "x": 13,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "banner.red",
+   "x": 11,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.mat",
+   "x": 6,
+   "y": 4,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.sacks",
+   "x": 13,
+   "y": 6,
    "w": 1,
    "h": 1
   }

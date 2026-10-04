@@ -6,11 +6,12 @@
  "name": "Hut, Lousang Village",
  "archetype": "interior",
  "building": "hut-1",
+ "style": "building.hut",
  "size": [
   20,
   12
  ],
- "seed": 0.27529942566580035,
+ "seed": 0.46155728168996635,
  "terrain": {
   "legend": {
    "#": "wood",
@@ -38,14 +39,14 @@
  "objects": [
   {
    "kind": "furn.mat",
-   "x": 10,
+   "x": 8,
    "y": 3,
    "w": 2,
    "h": 1
   },
   {
    "kind": "furn.hearth",
-   "x": 8,
+   "x": 10,
    "y": 3,
    "w": 2,
    "h": 1
@@ -60,7 +61,21 @@
   {
    "kind": "furn.sacks",
    "x": 7,
-   "y": 5,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.barrel",
+   "x": 12,
+   "y": 3,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.jar",
+   "x": 12,
+   "y": 7,
    "w": 1,
    "h": 1
   }
@@ -70,7 +85,7 @@
   {
    "id": "in-1",
    "kind": "folk.elder",
-   "x": 9.5,
+   "x": 11.5,
    "y": 4.9,
    "say": [
     "“It isn't much, but the roof keeps the rain off.”"

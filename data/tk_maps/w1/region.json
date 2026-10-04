@@ -181,7 +181,6 @@
    "map": "the-peach-garden.map.json",
    "links": [
     "zhuo-county",
-    "road-to-julu",
     "horse-trail"
    ]
   },
@@ -192,7 +191,7 @@
    "archetype": "road",
    "map": "road-to-julu.map.json",
    "links": [
-    "the-peach-garden",
+    "horse-trail",
     "julu",
     "road-to-julu--cave"
    ]
@@ -285,6 +284,7 @@
    "archetype": "road",
    "map": "horse-trail.map.json",
    "links": [
+    "road-to-julu",
     "the-peach-garden",
     "daxing-mountain"
    ]
@@ -314,7 +314,10 @@
     "qingzhou--house-1",
     "qingzhou--house-2",
     "qingzhou--inn-1",
-    "qingzhou--shop-1"
+    "qingzhou--shop-1",
+    "qingzhou--house-3",
+    "qingzhou--shop-2",
+    "qingzhou--house-4"
    ]
   },
   {
@@ -367,6 +370,39 @@
    "zh": "青州·茶馆",
    "archetype": "interior",
    "map": "qingzhou--shop-1.map.json",
+   "links": [
+    "qingzhou"
+   ],
+   "parent": "qingzhou"
+  },
+  {
+   "id": "qingzhou--house-3",
+   "name": "House, Qingzhou",
+   "zh": "青州·民居",
+   "archetype": "interior",
+   "map": "qingzhou--house-3.map.json",
+   "links": [
+    "qingzhou"
+   ],
+   "parent": "qingzhou"
+  },
+  {
+   "id": "qingzhou--shop-2",
+   "name": "Teahouse, Qingzhou",
+   "zh": "青州·茶馆",
+   "archetype": "interior",
+   "map": "qingzhou--shop-2.map.json",
+   "links": [
+    "qingzhou"
+   ],
+   "parent": "qingzhou"
+  },
+  {
+   "id": "qingzhou--house-4",
+   "name": "House, Qingzhou",
+   "zh": "青州·民居",
+   "archetype": "interior",
+   "map": "qingzhou--house-4.map.json",
    "links": [
     "qingzhou"
    ],
@@ -468,7 +504,10 @@
     "luoyang-gates--house-1",
     "luoyang-gates--house-2",
     "luoyang-gates--inn-1",
-    "luoyang-gates--shop-1"
+    "luoyang-gates--shop-1",
+    "luoyang-gates--house-3",
+    "luoyang-gates--shop-2",
+    "luoyang-gates--house-4"
    ]
   },
   {
@@ -521,6 +560,39 @@
    "zh": "洛阳城门·茶馆",
    "archetype": "interior",
    "map": "luoyang-gates--shop-1.map.json",
+   "links": [
+    "luoyang-gates"
+   ],
+   "parent": "luoyang-gates"
+  },
+  {
+   "id": "luoyang-gates--house-3",
+   "name": "House, Luoyang Gates",
+   "zh": "洛阳城门·民居",
+   "archetype": "interior",
+   "map": "luoyang-gates--house-3.map.json",
+   "links": [
+    "luoyang-gates"
+   ],
+   "parent": "luoyang-gates"
+  },
+  {
+   "id": "luoyang-gates--shop-2",
+   "name": "Teahouse, Luoyang Gates",
+   "zh": "洛阳城门·茶馆",
+   "archetype": "interior",
+   "map": "luoyang-gates--shop-2.map.json",
+   "links": [
+    "luoyang-gates"
+   ],
+   "parent": "luoyang-gates"
+  },
+  {
+   "id": "luoyang-gates--house-4",
+   "name": "House, Luoyang Gates",
+   "zh": "洛阳城门·民居",
+   "archetype": "interior",
+   "map": "luoyang-gates--house-4.map.json",
    "links": [
     "luoyang-gates"
    ],
@@ -704,7 +776,10 @@
     "yangcheng--house-1",
     "yangcheng--house-2",
     "yangcheng--inn-1",
-    "yangcheng--shop-1"
+    "yangcheng--shop-1",
+    "yangcheng--house-3",
+    "yangcheng--shop-2",
+    "yangcheng--house-4"
    ]
   },
   {
@@ -772,6 +847,47 @@
     "yangcheng"
    ],
    "parent": "yangcheng"
+  },
+  {
+   "id": "yangcheng--house-3",
+   "name": "House, Yangcheng",
+   "zh": "阳城·民居",
+   "archetype": "interior",
+   "map": "yangcheng--house-3.map.json",
+   "links": [
+    "yangcheng"
+   ],
+   "parent": "yangcheng"
+  },
+  {
+   "id": "yangcheng--shop-2",
+   "name": "Teahouse, Yangcheng",
+   "zh": "阳城·茶馆",
+   "archetype": "interior",
+   "map": "yangcheng--shop-2.map.json",
+   "links": [
+    "yangcheng"
+   ],
+   "parent": "yangcheng"
+  },
+  {
+   "id": "yangcheng--house-4",
+   "name": "House, Yangcheng",
+   "zh": "阳城·民居",
+   "archetype": "interior",
+   "map": "yangcheng--house-4.map.json",
+   "links": [
+    "yangcheng"
+   ],
+   "parent": "yangcheng"
+  },
+  {
+   "id": "overworld",
+   "name": "The Realm",
+   "zh": "天下",
+   "archetype": "overworld",
+   "map": "overworld.map.json",
+   "links": []
   }
  ],
  "quests": [
@@ -1327,10 +1443,10 @@
    "node": "1-n2",
    "role": "main",
    "place": "the-peach-garden",
-   "spot": "altar",
+   "spot": "board",
    "scene": "oath",
    "title": "The Peach Garden Oath",
-   "objective": "Swear brotherhood under the great peach tree.",
+   "objective": "Sit at the old men's weiqi board under the great peach tree.",
    "after": [
     "1-i1"
    ],
@@ -1457,7 +1573,7 @@
      147179
     ]
    ],
-   "objective_zh": "在大桃树下结为兄弟。",
+   "objective_zh": "在大桃树下，坐到两位老人的棋盘前。",
    "title_zh": "桃园结义"
   },
   {
@@ -1469,7 +1585,7 @@
    "title": "The Way of Great Peace · I: The Old Man in the Cave",
    "objective": "Side story: find the old man in the hills.",
    "after": [
-    "1-n2"
+    "1-as"
    ],
    "grade": "12K",
    "pool": [
@@ -1876,152 +1992,14 @@
   },
   {
    "node": "1-as",
-   "role": "short",
+   "role": "main",
    "place": "horse-trail",
    "spot": "dealers",
    "scene": "horses",
    "title": "Horses from the North",
-   "objective": "Shortcut: the horse dealers on the northern trail.",
+   "objective": "Meet the horse dealers on the northern trail.",
    "after": [
     "1-n2"
-   ],
-   "grade": "8K",
-   "pool": [
-    [
-     "weiqi-life-and-death-1000-problems-part-1",
-     1262
-    ],
-    [
-     "bedtime-tsumego-part-1",
-     445
-    ],
-    [
-     "segoe-tsumego-dictionary-part-2",
-     15960
-    ],
-    [
-     "200-selected-problems-for-repetitive-practice",
-     5276
-    ],
-    [
-     "specialized-training-in-tsumego-6",
-     44194
-    ],
-    [
-     "compact-go-puzzles-to-learn-the-basics",
-     145878
-    ],
-    [
-     "go-puzzles-at-a-glance",
-     160666
-    ],
-    [
-     "weiqi-rapid-drill-800-part-2",
-     3272
-    ],
-    [
-     "specialized-training-in-tsumego-5",
-     15662
-    ],
-    [
-     "specialized-training-in-tsumego-4",
-     1400
-    ],
-    [
-     "200-basic-go-problems",
-     175713
-    ],
-    [
-     "lee-chang-hos-selected-tsumego-part-2",
-     628
-    ],
-    [
-     "weiqi-rapid-drill-800-part-1",
-     3089
-    ],
-    [
-     "specialized-training-in-tsumego-3",
-     149016
-    ],
-    [
-     "ishida-yoshio-tsumego-challenge",
-     37667
-    ],
-    [
-     "weiqi-rapid-drill-800-part-4",
-     3651
-    ],
-    [
-     "ishida-yoshio-tesuji",
-     28909
-    ],
-    [
-     "ohashi-style-power-up-tsumego-part-2",
-     144218
-    ],
-    [
-     "specialized-training-in-tsumego-5",
-     54910
-    ],
-    [
-     "weiqi-rapid-drill-800-part-4",
-     3692
-    ],
-    [
-     "seedling-project",
-     27356
-    ],
-    [
-     "specialized-training-in-tsumego-3",
-     148986
-    ],
-    [
-     "specialized-training-in-tsumego-4",
-     3729
-    ],
-    [
-     "beautiful-dan-level-tsumego-100",
-     138923
-    ],
-    [
-     "specialized-training-in-tsumego-5",
-     44072
-    ],
-    [
-     "specialized-training-in-tsumego-4",
-     75161
-    ],
-    [
-     "specialized-training-in-tsumego-6",
-     127085
-    ],
-    [
-     "specialized-training-in-tsumego-3",
-     148988
-    ],
-    [
-     "hitomi-tsumego",
-     135434
-    ],
-    [
-     "the-unexpected-tesuji",
-     37667
-    ]
-   ],
-   "objective_zh": "捷径：北方马道上的马商。",
-   "title_zh": "北来骏马"
-  },
-  {
-   "node": "1-n3",
-   "role": "main",
-   "place": "daxing-mountain",
-   "spot": "pass",
-   "scene": "daxing",
-   "title": "First Blood at Daxing Mountain",
-   "objective": "Meet the Yellow Turbans at Daxing Mountain.",
-   "after": [
-    "1-a3",
-    "1-as"
    ],
    "grade": "12K",
    "pool": [
@@ -2146,19 +2124,20 @@
      84589
     ]
    ],
-   "objective_zh": "在大兴山迎战黄巾军。",
-   "title_zh": "大兴山初战"
+   "objective_zh": "到北方马道上见马商。",
+   "title_zh": "北来骏马"
   },
   {
-   "node": "1-n4",
+   "node": "1-n3",
    "role": "main",
-   "place": "qingzhou",
-   "spot": "citygate",
-   "scene": "qingzhou",
-   "title": "The Ambush at Qingzhou",
-   "objective": "Lift the siege of Qingzhou.",
+   "place": "daxing-mountain",
+   "spot": "pass",
+   "scene": "daxing",
+   "title": "First Blood at Daxing Mountain",
+   "objective": "Meet the Yellow Turbans at Daxing Mountain.",
    "after": [
-    "1-n3"
+    "1-a3",
+    "1-as"
    ],
    "grade": "12K",
    "pool": [
@@ -2283,19 +2262,19 @@
      43981
     ]
    ],
-   "objective_zh": "解青州之围。",
-   "title_zh": "青州伏兵"
+   "objective_zh": "在大兴山迎战黄巾军。",
+   "title_zh": "大兴山初战"
   },
   {
-   "node": "1-t1",
+   "node": "1-n4",
    "role": "main",
-   "place": "guangzong-road--luzhi-tent",
-   "spot": "spot-1-t1",
-   "scene": "tent",
-   "title": "Lu Zhi's Tent",
-   "objective": "Report to Lu Zhi in his tent.",
+   "place": "qingzhou",
+   "spot": "citygate",
+   "scene": "qingzhou",
+   "title": "The Ambush at Qingzhou",
+   "objective": "Lift the siege of Qingzhou.",
    "after": [
-    "1-n4"
+    "1-n3"
    ],
    "grade": "12K",
    "pool": [
@@ -2418,6 +2397,143 @@
     [
      "specialized-training-in-tsumego-1",
      63785
+    ]
+   ],
+   "objective_zh": "解青州之围。",
+   "title_zh": "青州伏兵"
+  },
+  {
+   "node": "1-t1",
+   "role": "main",
+   "place": "guangzong-road--luzhi-tent",
+   "spot": "spot-1-t1",
+   "scene": "tent",
+   "title": "Lu Zhi's Tent",
+   "objective": "Report to Lu Zhi in his tent.",
+   "after": [
+    "1-n4"
+   ],
+   "grade": "12K",
+   "pool": [
+    [
+     "specialized-training-in-tesuji-3",
+     81157
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63833
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3475
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     145876
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63826
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     169237
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     169222
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     103403
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     21876
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3442
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62329
+    ],
+    [
+     "ishida-yoshio-tesuji",
+     45735
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     108052
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     127065
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     108379
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3689
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160700
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     108053
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3752
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62339
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     169239
+    ],
+    [
+     "lee-chang-hos-selected-tesuji-part-2",
+     129
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     127242
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     51100
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147208
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     50706
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62313
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62349
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     120154
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     103151
     ]
    ],
    "room": "luzhi-tent",

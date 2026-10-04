@@ -6,11 +6,12 @@
  "name": "The teahouse",
  "archetype": "interior",
  "building": "teahouse",
+ "style": "building.shop",
  "size": [
   20,
   12
  ],
- "seed": 0.6954117797032432,
+ "seed": 0.11072854230284157,
  "terrain": {
   "legend": {
    "#": "wood",
@@ -38,14 +39,14 @@
  "objects": [
   {
    "kind": "furn.shelf",
-   "x": 11,
+   "x": 13,
    "y": 2,
    "w": 2,
    "h": 1
   },
   {
    "kind": "furn.jar",
-   "x": 13,
+   "x": 9,
    "y": 2,
    "w": 1,
    "h": 1
@@ -110,6 +111,13 @@
    "kind": "furn.plant",
    "x": 5,
    "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.barrel",
+   "x": 5,
+   "y": 7,
    "w": 1,
    "h": 1
   }

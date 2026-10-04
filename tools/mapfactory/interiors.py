@@ -41,7 +41,18 @@ TEMPLATES = {
         ("furn.hearth", "backmid"), ("furn.bed", "back"), ("furn.sacks", "left"), ("furn.sacks", "left"), ("furn.barrel", "right"),
         ("furn.table", "table"), ("furn.jar", "corner")]),
     "building.tent": dict(size=(8, 6), floor="earth", furniture=[
-        ("furn.desk", "backmid"), ("furn.rug", "rug"), ("furn.rack", "left"), ("furn.chest", "corner"), ("furn.barrel", "right")]),
+        ("furn.desk", "backmid"), ("furn.rug", "rug"), ("furn.rack", "left"), ("furn.mat", "right"), ("furn.chest", "corner"),
+        ("furn.barrel", "right")]),
+}
+# things a room of each kind may also have, each with an even chance, so no two rooms are alike
+EXTRAS = {
+    "building.inn": [("furn.plant", "corner"), ("furn.jar", "left"), ("furn.sacks", "right"), ("furn.barrel", "left")],
+    "building.shop": [("furn.barrel", "corner"), ("furn.sacks", "left"), ("furn.plant", "corner")],
+    "building.hall": [("furn.jar", "left"), ("furn.jar", "right"), ("furn.chest", "right")],
+    "building.house": [("furn.plant", "corner"), ("furn.chest", "left"), ("furn.barrel", "right"), ("furn.sacks", "left")],
+    "building.hut": [("furn.barrel", "corner"), ("furn.jar", "right")],
+    "building.lodge": [("furn.plant", "corner"), ("furn.chest", "left"), ("furn.jar", "right")],
+    "building.tent": [("furn.sacks", "left"), ("furn.jar", "corner"), ("banner.red", "back"), ("furn.mat", "left"), ("furn.sacks", "right")],
 }
 NAMES = {"building.inn": "Inn", "building.shop": "Teahouse", "building.hall": "Hall", "building.house": "House",
          "building.hut": "Hut", "building.lodge": "Farmhouse", "building.tent": "Tent"}
@@ -104,8 +115,8 @@ class Room:
             return [(mid, top), (mid - 1, top), (mid + 1, top)]
         if where == "dais":
             return [(mid, top + 2), (mid, top + 1)]
-        if where == "rug":
-            return [(mid, top + 3), (mid, top + 4), (mid, top + 2)]
+        if where == "rug":   # clear of the desk: a rug's sprite reaches a row above its footprint
+            return [(mid, top + 4), (mid, top + 5), (mid, top + 3)]
         if where == "flank":
             return [(mid - 2, top), (mid + KINDS["furn.screen"][0] + 1, top), (mid - 3, top), (mid + 4, top)]
         if where in ("left", "right"):
@@ -121,7 +132,8 @@ class Room:
         return []
 
     def furnish(self):
-        for kind, where in self.T["furniture"]:
+        extras = [e for e in EXTRAS.get(self.b["kind"], []) if self.rng.random() < .5]
+        for kind, where in self.T["furniture"] + extras:
             fw, fh, _ = KINDS[kind]
             for x, y in self.candidates(kind, where):
                 if where == "table":
@@ -172,7 +184,7 @@ class Room:
         return {
             "format": "tk-map/1", "id": rid, "world": world_n, "parent": self.parent["id"],
             "name": b.get("label") or f"{NAMES[b['kind']]}, {self.parent['name']}", "archetype": "interior",
-            "building": b.get("id"), "size": [self.W, self.H], "seed": self.rng.random(),
+            "building": b.get("id"), "style": b["kind"], "size": [self.W, self.H], "seed": self.rng.random(),
             "terrain": {"legend": LEGEND, "rows": ["".join(r) for r in self.t]},
             "objects": self.objects, "spots": [], "npcs": self.npcs,
             "exits": [{"to": self.parent["id"], "side": "S", "x": self.door[0], "y": self.door[1], "w": 1, "h": 1}],

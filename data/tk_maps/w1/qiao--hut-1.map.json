@@ -6,11 +6,12 @@
  "name": "Hut, Qiao",
  "archetype": "interior",
  "building": "hut-1",
+ "style": "building.hut",
  "size": [
   20,
   12
  ],
- "seed": 0.49431731425393655,
+ "seed": 0.9464949811858667,
  "terrain": {
   "legend": {
    "#": "wood",
@@ -38,21 +39,21 @@
  "objects": [
   {
    "kind": "furn.mat",
-   "x": 10,
+   "x": 11,
    "y": 3,
    "w": 2,
    "h": 1
   },
   {
    "kind": "furn.hearth",
-   "x": 7,
+   "x": 8,
    "y": 3,
    "w": 2,
    "h": 1
   },
   {
    "kind": "furn.jar",
-   "x": 12,
+   "x": 7,
    "y": 3,
    "w": 1,
    "h": 1
@@ -60,6 +61,20 @@
   {
    "kind": "furn.sacks",
    "x": 7,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.barrel",
+   "x": 7,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.jar",
+   "x": 12,
    "y": 7,
    "w": 1,
    "h": 1
@@ -70,7 +85,7 @@
   {
    "id": "in-1",
    "kind": "folk.elder",
-   "x": 8.5,
+   "x": 9.5,
    "y": 4.9,
    "say": [
     "“It isn't much, but the roof keeps the rain off.”"

@@ -32,7 +32,9 @@ PLACES = {
             "archetype": "village",
             "landmarks": [
                 {"kind": "building.hut", "id": "home", "label": "Liu Bei's home"},
-                {"kind": "tree.big", "id": "mulberry", "node": "1-start", "label": "The great mulberry tree"},
+                {"kind": "tree.big", "id": "mulberry", "node": "1-start", "trigger": "arrive", "label": "The great mulberry tree"},
+                # live games against real players (tk-table.js); last, so the story landmarks keep their places
+                {"kind": "furniture.gotable", "id": "gotable", "use": "ogs", "label": "The travellers' go table"},
             ],
             "objectives": {"1-start": "Sit under the great mulberry tree by your home."},
             "npcs": [
@@ -128,7 +130,7 @@ PLACES = {
             "archetype": "road",
             "landmarks": [{"kind": "camp.hay", "id": "dealers", "node": "1-as", "trigger": "arrive", "label": "The horse dealers' camp"}],
             "npcs": [{"kind": "folk.noble", "near": "dealers", "say": "“Fine northern horses, but the roads are full of bandits.”"}],
-            "objectives": {"1-as": "Shortcut: the horse dealers on the northern trail."},
+            "objectives": {"1-as": "Meet the horse dealers on the northern trail."},
         },
         "Daxing Mountain": {
             "archetype": "mountain",

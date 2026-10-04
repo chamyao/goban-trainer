@@ -6,11 +6,12 @@
  "name": "House, Qiao",
  "archetype": "interior",
  "building": "house-2",
+ "style": "building.house",
  "size": [
   20,
   12
  ],
- "seed": 0.2773826275005947,
+ "seed": 0.04980015568283103,
  "terrain": {
   "legend": {
    "#": "wood",
@@ -38,21 +39,21 @@
  "objects": [
   {
    "kind": "furn.bed",
-   "x": 8,
+   "x": 7,
    "y": 2,
    "w": 2,
    "h": 1
   },
   {
    "kind": "furn.drawers",
-   "x": 11,
+   "x": 12,
    "y": 2,
    "w": 1,
    "h": 1
   },
   {
    "kind": "furn.shelf",
-   "x": 6,
+   "x": 9,
    "y": 2,
    "w": 2,
    "h": 1
@@ -80,8 +81,22 @@
   },
   {
    "kind": "furn.jar",
+   "x": 6,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.plant",
    "x": 13,
    "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.barrel",
+   "x": 13,
+   "y": 6,
    "w": 1,
    "h": 1
   }

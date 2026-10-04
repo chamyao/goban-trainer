@@ -6,11 +6,12 @@
  "name": "A hermit's shelter",
  "archetype": "interior",
  "building": "cave",
+ "style": "building.hut",
  "size": [
   20,
   12
  ],
- "seed": 0.5352178242634397,
+ "seed": 0.9472963160618696,
  "terrain": {
   "legend": {
    "#": "wood",
@@ -38,7 +39,7 @@
  "objects": [
   {
    "kind": "furn.mat",
-   "x": 7,
+   "x": 8,
    "y": 3,
    "w": 2,
    "h": 1
@@ -52,7 +53,7 @@
   },
   {
    "kind": "furn.jar",
-   "x": 12,
+   "x": 7,
    "y": 3,
    "w": 1,
    "h": 1
@@ -68,7 +69,7 @@
  "spots": [
   {
    "id": "spot-1-a1",
-   "x": 9.5,
+   "x": 10.5,
    "y": 5.7,
    "node": "1-a1",
    "label": "The Way of Great Peace · I: The Old Man in the Cave",

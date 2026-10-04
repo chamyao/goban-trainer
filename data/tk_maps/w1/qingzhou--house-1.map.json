@@ -6,11 +6,12 @@
  "name": "House, Qingzhou",
  "archetype": "interior",
  "building": "house-1",
+ "style": "building.house",
  "size": [
   20,
   12
  ],
- "seed": 0.5536795367544961,
+ "seed": 0.5310656387342401,
  "terrain": {
   "legend": {
    "#": "wood",
@@ -45,14 +46,14 @@
   },
   {
    "kind": "furn.drawers",
-   "x": 6,
+   "x": 13,
    "y": 2,
    "w": 1,
    "h": 1
   },
   {
    "kind": "furn.shelf",
-   "x": 12,
+   "x": 6,
    "y": 2,
    "w": 2,
    "h": 1
@@ -60,21 +61,21 @@
   {
    "kind": "furn.table",
    "x": 8,
-   "y": 4,
+   "y": 5,
    "w": 2,
    "h": 1
   },
   {
    "kind": "furn.stool",
    "x": 7,
-   "y": 4,
+   "y": 5,
    "w": 1,
    "h": 1
   },
   {
    "kind": "furn.stool",
    "x": 10,
-   "y": 4,
+   "y": 5,
    "w": 1,
    "h": 1
   },
@@ -84,6 +85,13 @@
    "y": 7,
    "w": 1,
    "h": 1
+  },
+  {
+   "kind": "furn.barrel",
+   "x": 13,
+   "y": 5,
+   "w": 1,
+   "h": 1
   }
  ],
  "spots": [],
@@ -91,8 +99,8 @@
   {
    "id": "in-1",
    "kind": "folk.woman",
-   "x": 9.5,
-   "y": 5.9,
+   "x": 8.5,
+   "y": 6.9,
    "say": [
     "“Mind the floor — I've only just swept it.”"
    ]

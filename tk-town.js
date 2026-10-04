@@ -156,20 +156,31 @@ const TownUI = {
     host.querySelectorAll(":scope > .town-ui").forEach(el => el.remove());  // a new place replaces the old overlay
     const root = document.createElement("div");
     root.className = "town-ui";
+    const TOUCH = typeof TK_TOUCH !== "undefined" && TK_TOUCH;
     root.innerHTML = `<div class="town-goal"></div><div class="town-keys"><b>WASD</b>/<b>↑↓←→</b> 移动 move · <b>Enter</b> 对话 talk</div>
-      <div class="town-place"></div><div class="town-hint" hidden>Enter</div><div class="town-focus" hidden>Click the map to play</div>
+      <div class="town-place"></div><div class="town-hint" hidden>${TOUCH ? "点击 Tap" : "Enter"}</div><div class="town-focus" hidden>${TOUCH ? "Tap the map to play" : "Click the map to play"}</div>
       <div class="town-dim" hidden></div><div class="town-dlg" hidden><div class="town-tab">主线 · Story</div><canvas class="town-face" width="34" height="34"></canvas><div class="town-txt"><div class="town-who"></div><div class="town-zh" lang="zh-CN"></div><div class="town-en"></div></div><div class="town-more">▼</div></div>`;
     host.append(root);
     const $ = s => root.querySelector(s);
-    let queue = [], done = null, open = false;
+    let queue = [], done = null, open = false, typing = null, finishTyping = null;
     const show = () => {
       const st = queue.shift();
       if (!st) { $(".town-dlg").hidden = true; $(".town-dim").hidden = true; open = false; TKVoice.stop(); const d = done; done = null; d && d(); return; }
       const said = st[0] === "say", who = said ? st[1] : null;
       const [en, zh, vid] = said ? [st[2], st[3], st[4]] : [st[1], st[2], st[3]];
       $(".town-who").textContent = who ? tkName(who) : "";
-      $(".town-en").textContent = en;
-      $(".town-zh").textContent = typeof zh === "string" ? zh : "";
+      // the words type themselves out; Enter shows the rest at once
+      const Z = typeof zh === "string" ? zh : "", E = en || "", dur = Math.min(2600, Math.max(Z.length / 32, E.length / 75) * 1000), t0 = performance.now();
+      clearInterval(typing);
+      const type = () => {
+        const k = dur ? Math.min(1, (performance.now() - t0) / dur) : 1;
+        $(".town-zh").textContent = Z.slice(0, Math.ceil(Z.length * k));
+        $(".town-en").textContent = E.slice(0, Math.ceil(E.length * k));
+        $(".town-more").style.visibility = k < 1 ? "hidden" : "";
+        if (k >= 1) { clearInterval(typing); typing = null; }
+      };
+      typing = setInterval(type, 30); type();
+      finishTyping = () => { clearInterval(typing); typing = null; $(".town-zh").textContent = Z; $(".town-en").textContent = E; $(".town-more").style.visibility = ""; };
       const face = $(".town-face"), fc = face.getContext("2d");
       fc.clearRect(0, 0, 34, 34);
       face.hidden = !who;
@@ -199,15 +210,15 @@ const TownUI = {
         $(".town-dim").hidden = style !== "story";
         dlg.hidden = false; show();
       },
-      advance() { if (open) show(); },
+      advance() { if (!open) return; if (typing) finishTyping(); else show(); },
       hint(target) {
         const h = $(".town-hint");
         if (!target) { h.hidden = true; return; }
         const cam = scene.cameras.main, cv = scene.game.canvas, k = cv.clientWidth / scene.scale.width;
         const r = cv.getBoundingClientRect(), rr = root.getBoundingClientRect();
         h.hidden = false;
-        h.style.left = (r.left - rr.left + (target.x - cam.worldView.x) * k) + "px";
-        h.style.top = (r.top - rr.top + (target.y - 30 - cam.worldView.y) * k) + "px";
+        h.style.left = (r.left - rr.left + (target.x - cam.worldView.x) * cam.zoom * k) + "px";
+        h.style.top = (r.top - rr.top + (target.y - 30 - cam.worldView.y) * cam.zoom * k) + "px";
       },
     };
   },

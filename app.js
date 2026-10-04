@@ -2880,12 +2880,13 @@ const OGSPlay = {
   saveAuth(a) { try { if (a) localStorage.setItem(this.AUTH_KEY, JSON.stringify(a)); else localStorage.removeItem(this.AUTH_KEY); } catch {} },
   loggedIn() { return !!this.loadAuth(); },
 
-  async login() {
+  // back: where to land after OGS sends the browser home (default: the Play tab)
+  async login(back) {
     const b64 = buf => btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
     const verifier = b64(crypto.getRandomValues(new Uint8Array(32)));
     const challenge = b64(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(verifier)));
     const state = b64(crypto.getRandomValues(new Uint8Array(12)));
-    localStorage.setItem(this.FLOW_KEY, JSON.stringify({ verifier, state, server: this.serverKey(), redirect: this.redirectUri() }));
+    localStorage.setItem(this.FLOW_KEY, JSON.stringify({ verifier, state, server: this.serverKey(), redirect: this.redirectUri(), back: back || "" }));
     const q = new URLSearchParams({
       response_type: "code", client_id: this.clientId(), redirect_uri: this.redirectUri(),
       code_challenge: challenge, code_challenge_method: "S256", state, scope: "read write",
@@ -2905,6 +2906,7 @@ const OGSPlay = {
       client_id: this.clientId(), code_verifier: flow.verifier,
     });
     this.saveAuth({ server: this.serverKey(), ...tok });
+    return flow.back || "";
   },
   async tokenRequest(base, fields) {
     const r = await fetch(`${base}/oauth2/token/`, {
@@ -2953,13 +2955,24 @@ const OGSPlay = {
     if (this.game) this.sock.send("game/connect", { game_id: this.game.id, chat: false });
   },
 
-  findGame() {
-    this.search = { uuid: crypto.randomUUID(), since: Date.now() };
+  // opts: { size: 9 } for a 9×9 game; { inWorld: true } keeps a match from leaving the page it was found on
+  findGame(opts = {}) {
+    this.search = { uuid: crypto.randomUUID(), since: Date.now(), ...opts };
     this.sendSearch();
     this.emit();
   },
   sendSearch() {
     if (!this.search) return;
+    if (this.search.size === 9) {   // the go table in the campaign: OGS's 9×9 rapid automatch, ranked
+      this.sock.send("automatch/find_match", {
+        uuid: this.search.uuid,
+        size_speed_options: [{ size: "9x9", speed: "rapid", system: "byoyomi" }],
+        lower_rank_diff: 3, upper_rank_diff: 3,
+        rules: { condition: "preferred", value: "japanese" },
+        handicap: { condition: "preferred", value: "disabled" },
+      });
+      return;
+    }
     // OGS's standard 19×19 "rapid" automatch: 5 min + 5×30 s byoyomi.
     this.sock.send("automatch/find_match", {
       uuid: this.search.uuid,
@@ -2987,9 +3000,10 @@ const OGSPlay = {
   onMessage(cmd, d) {
     if (cmd === "user/jwt") { this.jwt = d; return; }
     if (cmd === "automatch/start" && this.search && d && d.uuid === this.search.uuid) {
+      const inWorld = this.search.inWorld;
       this.search = null;
       this.openGame(d.game_id);
-      location.hash = `#/play/${d.game_id}`;
+      if (!inWorld) location.hash = `#/play/${d.game_id}`;
       return;
     }
     if (cmd === "automatch/cancel" && this.search && d && d.uuid === this.search.uuid) { this.search = null; this.emit(); return; }
@@ -3399,7 +3413,9 @@ if (loginParams.get("state") && (loginParams.get("code") || loginParams.get("err
     .catch(e => { Music.message = e.message; history.replaceState(null, "", location.pathname + "#/"); })
     .finally(route);
 } else if (loginParams.get("state") && (loginParams.get("code") || loginParams.get("error"))) {
+  let back = "";
   OGSPlay.finishLogin(loginParams)
+    .then(b => { back = b; })
     .catch(e => { OGSPlay.loginError = e.message; })
-    .finally(() => { history.replaceState(null, "", location.pathname + "#/play"); route(); });
+    .finally(() => { history.replaceState(null, "", location.pathname + (back || "#/play")); route(); });
 } else route();

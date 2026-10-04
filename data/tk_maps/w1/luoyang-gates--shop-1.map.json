@@ -6,11 +6,12 @@
  "name": "Teahouse, Luoyang Gates",
  "archetype": "interior",
  "building": "shop-1",
+ "style": "building.shop",
  "size": [
   20,
   12
  ],
- "seed": 0.9060441167399698,
+ "seed": 0.0412903027589705,
  "terrain": {
   "legend": {
    "#": "wood",
@@ -38,16 +39,9 @@
  "objects": [
   {
    "kind": "furn.shelf",
-   "x": 9,
+   "x": 10,
    "y": 2,
    "w": 2,
-   "h": 1
-  },
-  {
-   "kind": "furn.jar",
-   "x": 5,
-   "y": 2,
-   "w": 1,
    "h": 1
   },
   {
@@ -58,9 +52,16 @@
    "h": 1
   },
   {
+   "kind": "furn.jar",
+   "x": 5,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
    "kind": "furn.counter",
    "x": 12,
-   "y": 4,
+   "y": 5,
    "w": 3,
    "h": 1
   },
@@ -91,6 +92,27 @@
    "y": 2,
    "w": 1,
    "h": 1
+  },
+  {
+   "kind": "furn.barrel",
+   "x": 5,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.sacks",
+   "x": 5,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.plant",
+   "x": 14,
+   "y": 7,
+   "w": 1,
+   "h": 1
   }
  ],
  "spots": [],
@@ -99,7 +121,7 @@
    "id": "in-1",
    "kind": "folk.woman",
    "x": 13.5,
-   "y": 5.9,
+   "y": 6.9,
    "say": [
     "“Sit, have some tea. The storyteller starts soon.”"
    ]
@@ -117,7 +139,7 @@
    "id": "in-3",
    "kind": "folk.lady",
    "x": 12.5,
-   "y": 5.9,
+   "y": 6.9,
    "say": [
     "“More tea? The storyteller's tale of the Yellow Turbans is the talk of the county.”"
    ]
