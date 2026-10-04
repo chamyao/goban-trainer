@@ -531,10 +531,46 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
 .tk-para .en { opacity: .78; font-size: .92em; }
 .meta-title .tk-en { color: var(--muted); font-weight: normal; font-size: .9em; }
 
-/* A campaign problem over the explorable world: the map stays visible, dimmed. */
-.tk-overlay { position: fixed; inset: 0; z-index: 140; display: grid; place-items: center; padding: 16px; background: rgba(24, 14, 8, .55); backdrop-filter: blur(1.5px); animation: tkOverlayIn .25s ease-out; }
-.tk-overlay.tk-leave { animation: tkOverlayOut .28s ease-in forwards; }
-.tk-overlay-box { width: min(1000px, 100%); max-height: calc(100vh - 32px); overflow: auto; padding: 20px; background: var(--bg); border: 4px solid #7a3a22; border-radius: 12px; box-shadow: 0 0 0 2px #e6c14a inset, 0 18px 50px rgba(0, 0, 0, .45); box-sizing: border-box; }
-@keyframes tkOverlayIn { from { opacity: 0; } }
-@keyframes tkOverlayOut { to { opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .tk-overlay, .tk-overlay.tk-leave { animation: none; } }
+/* A campaign problem as a duel inside the game window (tk.js TKOverlay): the
+   world stays behind, dimmed; the board sits on a wooden frame and the game's own
+   dialogue box carries the opponent's words and the result. */
+.tk-duel { position: absolute; inset: 0; z-index: 20; overflow: hidden; color: #2c1c12; font-size: clamp(11px, 1.5vw, 15px); line-height: 1.4;
+  background: radial-gradient(ellipse at 35% 50%, rgba(20, 12, 8, .45), rgba(12, 6, 4, .78)); animation: tkDuelIn .3s ease-out; }
+.tk-duel.tk-duel-full { position: fixed; z-index: 140; font-family: Georgia, "Songti SC", serif; background: #1b130d; }
+.tk-duel.tk-leave { animation: tkDuelOut .28s ease-in forwards; }
+.tk-duel-wipe { position: absolute; inset: 0; pointer-events: none; z-index: 2;
+  background: repeating-linear-gradient(180deg, #120a06 0 10%, #3a2416 10% 12.5%); animation: tkDuelWipe .62s steps(8) forwards; }
+.tk-duel-stage { position: relative; height: 100%; display: flex; gap: 2.5%; align-items: center; padding: 3% 3.5%; box-sizing: border-box; animation: tkDuelStage .62s ease-out; }
+.tk-duel-full .tk-duel-stage { flex-direction: column; justify-content: center; height: auto; min-height: 100%; padding: 16px; gap: 12px; }
+.tk-duel-board { flex: none; display: flex; padding: 4px; background: #e2b468; border: 4px solid #7a3a22; border-radius: 6px;
+  box-shadow: 0 0 0 2px #e6c14a inset, 0 6px 0 rgba(0, 0, 0, .4); box-sizing: border-box; }
+.tk-duel-board svg { display: block; }
+.tk-duel-full .tk-duel-board { height: auto; max-width: 100%; width: min(100%, 520px); }
+.tk-duel-full .tk-duel-board svg { width: 100%; height: auto; }
+.tk-duel-board.explore { outline: 2px dashed #7a3a22; outline-offset: -8px; }
+.tk-duel-side { flex: 1; min-width: 0; align-self: stretch; display: flex; flex-direction: column; justify-content: flex-end; gap: 8px; }
+.tk-duel-full .tk-duel-side { width: min(100%, 520px); flex: none; }
+.tk-duel .town-dlg.tk-duel-dlg { position: relative; left: auto; bottom: auto; transform: none; width: 100%; max-width: none; min-height: 0; margin-top: 16px; }
+.tk-duel-en { font-weight: normal; color: #6a5440; font-size: .85em; }
+.tk-duel-dlg.chat .tk-duel-en { color: #6c665a; }
+.tk-duel-status:empty { display: none; }
+.tk-duel-status { margin-top: 6px; font: bold .9em/1.4 system-ui, sans-serif; }
+.tk-duel-status .icon { margin-right: 4px; }
+.tk-duel-status.ok { color: #2e6b2a; } .tk-duel-status.bad { color: #9a2a1a; }
+.tk-duel-next:empty { display: none; }
+.tk-duel-next { margin-top: 8px; text-align: right; }
+.tk-duel-go { padding: 3px 12px; font: bold 1em/1.5 inherit; font-family: inherit; color: #f8ead0; background: #8a2a1a; border: 2px solid #3a2416; border-radius: 4px; box-shadow: 0 3px 0 #3a2416; cursor: pointer; }
+.tk-duel-go b { display: inline-block; font-weight: normal; opacity: .8; animation: townBob 1s infinite; }
+.tk-duel-dlg.win { box-shadow: 0 0 0 2px #e6c14a inset, 0 0 0 4px #e6c14a, 0 5px 0 rgba(0, 0, 0, .35); }
+.tk-duel-keys { display: flex; flex-wrap: wrap; gap: 6px; }
+.tk-duel-key { display: inline-flex; align-items: center; gap: 5px; padding: 2px 8px 2px 3px; font: .85em/1.5 system-ui, sans-serif; color: #f4ead2; background: rgba(40, 24, 16, .85); border: 2px solid #c79a4a; border-radius: 6px; cursor: pointer; }
+.tk-duel-key:hover, .tk-duel-key:focus-visible { background: #5a3420; outline: none; }
+.tk-duel-key b { min-width: 1.4em; padding: 0 3px; text-align: center; background: #f4ead2; color: #3a2416; border-radius: 3px; font-size: .9em; }
+.tk-duel-src { font: .75em/1.4 system-ui, sans-serif; color: #e8dcc0; opacity: .75; }
+.tk-duel-src a { color: inherit; }
+.tk-duel-stage.tk-flip .tk-duel-board { animation: tkFlip .26s ease-in; }
+@keyframes tkDuelIn { from { opacity: 0; } }
+@keyframes tkDuelOut { to { opacity: 0; } }
+@keyframes tkDuelWipe { 0% { clip-path: inset(0 100% 0 0); } 45% { clip-path: inset(0 0 0 0); } 100% { clip-path: inset(0 0 0 100%); } }
+@keyframes tkDuelStage { 0%, 50% { opacity: 0; transform: scale(.96); } }
+@media (prefers-reduced-motion: reduce) { .tk-duel, .tk-duel.tk-leave, .tk-duel-stage, .tk-duel-go b { animation: none; } .tk-duel-wipe { display: none; } }

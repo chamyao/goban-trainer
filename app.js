@@ -3366,8 +3366,9 @@ document.addEventListener("keydown", e => {
   }
   if (!trainer) return;
   const parts = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
-  if (e.key === "ArrowLeft" && parts[2] > 1) location.hash = `#/book/${parts[1]}/${+parts[2] - 1}`;
-  else if (e.key === "ArrowRight") location.hash = `#/book/${parts[1]}/${+parts[2] + 1}`;
+  const book = parts[0] === "book";  // campaign levels have no next or previous problem
+  if (e.key === "ArrowLeft" && book && parts[2] > 1) location.hash = `#/book/${parts[1]}/${+parts[2] - 1}`;
+  else if (e.key === "ArrowRight" && book) location.hash = `#/book/${parts[1]}/${+parts[2] + 1}`;
   else if (e.key === "u") trainer.undo();
   else if (e.key === "r") trainer.reset();
   else if (e.key === "h") trainer.hint();

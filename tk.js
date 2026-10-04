@@ -948,7 +948,7 @@ async function viewTK(worldN) {
     try {
       await WorldView.mount({
         w, host, ret: ret && ret.world === w.n ? ret : null,
-        onPuzzle: key => TKOverlay.open(w.n, key),  // the board comes up over the map
+        onPuzzle: (key, at) => TKOverlay.open(w.n, key, at),  // the board comes up inside the game window
         onBoss: async () => { if (!TK.seen(`${w.n}:closing`)) { await run(w.closing); TK.markSeen(`${w.n}:closing`); } },
       });
     } catch (e) { host.textContent = e.message; }
@@ -1159,34 +1159,128 @@ async function viewTKLevel(worldN, key) {
   });
 }
 
-// A level laid over the explorable world: the map stays behind, dimmed.
-// Resolves true after a flawless solve, false if the player backs out.
+// Townsfolk who set problems, by challenger id (tools/tk_places.py).
+const TK_FOES = {
+  neighbour: ["邻居", "Neighbour"], elder: ["老者", "Old man"], innkeeper: ["店家", "Innkeeper"],
+  farmer: ["农夫", "Farmer"], clerk: ["书吏", "Clerk"],
+};
+
+// A level as a duel inside the game window: the opponent's portrait, a board on a
+// wooden frame, and the game's own dialogue box for what's said and what happened.
+// foe: { id, who, face } from the world (null for a story beat with no opponent).
+function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, onWin }) {
+  const svg = document.createElementNS(SVGNS, "svg");
+  const boardCard = h("div", { class: "tk-duel-board" }, [svg]);
+  const status = h("div", { class: "tk-duel-status" });
+  const hidden = { turnBadge: h("span"), btnExplore: h("button"), treeBox: h("div"), note: h("div") };
+  const treePanel = h("div");
+  const [nameZh, name] = foe && foe.who ? [TK_BOSS_ZH[foe.who] || (typeof tkName === "function" ? tkName(foe.who) : foe.who), node.boss ? node.boss.title : ""]
+    : foe ? (TK_FOES[foe.id] || ["对手", "Opponent"]) : [node.place_zh || node.place, node.place];
+  const face = foe && foe.face ? foe.face : null;
+  if (face) face.className = "town-face";
+  const zh = h("div", { class: "town-zh", lang: "zh-CN" }), en = h("div", { class: "town-en" });
+  const btns = h("div", { class: "tk-duel-next" });
+  const say = (z, e, ...next) => { zh.textContent = z; en.textContent = e; btns.replaceChildren(...next); };
+  const story = !foe || node.role === "boss";
+  const dlg = h("div", { class: `town-dlg tk-duel-dlg ${story ? "story" : "chat"}` }, [
+    h("div", { class: "town-tab" }, node.role === "boss" ? "首领 · Boss" : "主线 · Story"),
+    ...(face ? [face] : []),
+    h("div", { class: "town-txt" }, [
+      h("div", { class: "town-who" }, [nameZh, name && name !== nameZh ? h("span", { class: "tk-duel-en" }, ` ${name}`) : ""]),
+      zh, en, status, btns,
+    ]),
+  ]);
+  const key_ = (k, label, fn) => h("button", { type: "button", class: "tk-duel-key", onclick: fn }, [h("b", {}, k), label]);
+  const keys = h("div", { class: "tk-duel-keys" }, [
+    key_("U", "悔棋 Undo", () => trainer && trainer.undo()),
+    key_("H", "提示 Hint", () => trainer && trainer.hint()),
+    key_("R", "重来 Reset", () => trainer && trainer.reset()),
+    key_("Esc", "离开 Leave", leave),
+  ]);
+  const srcLine = h("div", { class: "tk-duel-src" }, [
+    `${p.lv || node.grade || ""} · 死活 · `, node.role === "boss" ? "" : `出自 ${src.title} · `,
+    h("a", { href: p.url || `https://www.101weiqi.com/q/${p.id}/`, target: "_blank", rel: "noopener" }, "来源 source"),
+  ]);
+  box.replaceChildren(boardCard, h("div", { class: "tk-duel-side" }, [dlg, keys, srcLine]));
+
+  if (node.boss) say(node.boss.taunt_zh || "", node.boss.taunt);
+  else if (foe) say("请。你执黑先下。", "Your move. You play Black.");
+  else say("黑先。", "Black to play.");
+
+  trainer = new Trainer(Object.assign({}, src, { problems: [p] }), 0, { svg, boardCard, status, treePanel, ...hidden, noEngine: true });
+  // Size the board to the window it sits in, keeping its shape (it's cropped to the corner in play).
+  const fit = () => {
+    if (box.parentNode && box.parentNode.classList.contains("tk-duel-full")) return svg.removeAttribute("style");
+    const vb = svg.viewBox.baseVal, cs = getComputedStyle(box);
+    if (!vb || !vb.width) return;
+    const H = box.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) - 16, W = box.clientWidth * .6 - 16;
+    const k = Math.min(H / vb.height, W / vb.width);
+    svg.style.width = `${Math.floor(vb.width * k)}px`; svg.style.height = `${Math.floor(vb.height * k)}px`;
+  };
+  fit();
+  const ro = new ResizeObserver(() => box.isConnected ? fit() : ro.disconnect());
+  ro.observe(box);
+  window.__trainer = trainer;
+  const t = trainer;
+  let settled = false;  // the first result decides the level; a reset can't undo a slip
+  const onResult = e => {
+    if (!box.isConnected) return removeEventListener("tczw:result", onResult);
+    if (trainer !== t || settled) return;
+    settled = true;
+    const go = (label, fn) => h("button", { type: "button", class: "tk-duel-go", onclick: fn }, [label, h("b", {}, " ⏎")]);
+    if (e.detail === "ok" && !t.flawed) {
+      TK.markCleared(key);
+      onWin();
+      dlg.classList.add("win");
+      if (node.boss) say("……我竟败了！", "…Defeated? Me?", go("继续 Continue ▸", leave));
+      else if (foe) say("好棋！我认输。", "Well played. I resign.", go("继续 Continue ▸", leave));
+      else say("★ 完美！", "Flawless!", go("继续 Continue ▸", leave));
+    } else {
+      TK.slip(node);
+      dlg.classList.add("slip");
+      const how = e.detail === "ok" ? [`解出了，但不算完美（${t.flawed}）。`, `Solved, but not flawless (${t.flawed}).`]
+        : foe ? ["哈！被我看穿了。换个思路吧。", "Ha! I saw through that. Try another way."] : ["敌人识破了！换个思路。", "The enemy saw through it! Try another way."];
+      say(how[0], how[1], go("换一题 New problem ▸", () => { box.classList.add("tk-flip"); setTimeout(() => { box.classList.remove("tk-flip"); again(); }, 260); }));
+    }
+  };
+  addEventListener("tczw:result", onResult);
+}
+
+// A level laid over the explorable world, inside its window (or the whole screen
+// when that window is small). Resolves true after a flawless solve, false if the
+// player leaves. at: { host, foe } from the world.
 const TKOverlay = {
-  open(worldN, key) {
+  open(worldN, key, at = {}) {
     return new Promise(async resolve => {
-      document.querySelectorAll(".tk-overlay").forEach(el => el.remove());
-      const box = h("div", { class: "tk-overlay-box", role: "dialog", "aria-modal": "true", "aria-label": "Go problem" });
-      const wrap = h("div", { class: "tk-overlay" }, [box]);
-      document.body.append(wrap);
+      document.querySelectorAll(".tk-duel").forEach(el => el.remove());
+      const host = at.host && at.host.isConnected ? at.host : null;
+      const box = h("div", { class: "tk-duel-stage" });
+      const wrap = h("div", { class: "tk-duel" + (!host || host.clientWidth < 640 ? " tk-duel-full" : ""), role: "dialog", "aria-modal": "true", "aria-label": "Go problem 死活题" },
+        [h("div", { class: "tk-duel-wipe" }), box]);
+      (wrap.classList.contains("tk-duel-full") ? document.body : host).append(wrap);
       let won = false, closed = false;
       const close = () => {
         if (closed) return;
         closed = true;
         if (trainer) { trainer.alive = false; clearTimeout(trainer.replyTimer); trainer = null; }
-        removeEventListener("keydown", onKey); removeEventListener("hashchange", onNav);
+        removeEventListener("keydown", onKey, true); removeEventListener("hashchange", onNav);
         wrap.classList.add("tk-leave");
         setTimeout(() => { wrap.remove(); resolve(won); }, 280);
       };
-      const onKey = e => { if (e.key === "Escape") close(); };
+      // Escape leaves; Enter takes the offered next step. Keys stay out of the paused world.
+      const onKey = e => {
+        if (e.key === "Escape") { e.preventDefault(); close(); }
+        else if (e.key === "Enter" && !(e.target && e.target.tagName === "BUTTON")) { const b = box.querySelector(".tk-duel-go"); e.preventDefault(); if (b) b.click(); }
+        else return;
+        e.stopPropagation();
+      };
       const onNav = () => close();
-      addEventListener("keydown", onKey); addEventListener("hashchange", onNav);
+      addEventListener("keydown", onKey, true); addEventListener("hashchange", onNav);
       const show = async () => {
-        box.innerHTML = `<div class="loading">Loading…</div>`;
         const d = await tkLevelData(worldN, key);
         if (closed) return;
         if (!d) return close();
-        box.innerHTML = "";
-        tkLevelBuild(box, worldN, key, d, { back: close, again: show, onWin: () => { won = true; } });
+        tkDuelBuild(box, worldN, key, d, at.foe || null, { leave: close, again: show, onWin: () => { won = true; } });
       };
       await show();
     });
