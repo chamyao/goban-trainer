@@ -18,7 +18,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from tk_story import WORLDS  # noqa: E402
-from tk_story_zh import ZH, spoken  # noqa: E402
+from tk_story_zh import CAST, NARRATOR, ZH, spoken  # noqa: E402
 
 BOOKS = ROOT / "data" / "books"
 GRADES = [f"{k}K{p}" for k in range(15, 0, -1) for p in ("", "+")] + [f"{d}D{p}" for d in range(1, 8) for p in ("", "+")]
@@ -34,9 +34,16 @@ def zh(en):
     return ZH[en]
 
 
-def voice_id(text):
-    """Voice-over clip for a line of Chinese; the name follows what is spoken."""
-    return hashlib.sha1(spoken(text).encode()).hexdigest()[:12]
+def voice_of(who=None):
+    if who and who not in CAST:
+        sys.exit(f"tools/tk_story_zh.py CAST has no voice for {who!r}")
+    return CAST[who] if who else NARRATOR
+
+
+def voice_id(text, voice=NARRATOR):
+    """Voice-over clip for a line of Chinese; the name follows what is spoken, and by whom."""
+    key = spoken(text) if voice == NARRATOR else f"{voice}|{spoken(text)}"  # narrator clips keep their names
+    return hashlib.sha1(key.encode()).hexdigest()[:12]
 
 
 def voiced(steps):
@@ -48,7 +55,7 @@ def voiced(steps):
         if s[0] == "n":
             s += [zh(s[1]), voice_id(zh(s[1]))]
         elif s[0] == "say":
-            s += [zh(s[2]), voice_id(zh(s[2]))]
+            s += [zh(s[2]), voice_id(zh(s[2]), voice_of(s[1]))]
         elif s[0] == "scroll":
             zps = [zh(t) for t in s[2]]
             s += [zh(s[1]), zps, [voice_id(t) for t in zps]]
@@ -57,20 +64,20 @@ def voiced(steps):
 
 
 def all_lines(worlds):
-    """Every (clip id, Chinese text) the campaign voices."""
+    """Every clip the campaign voices: id -> (Chinese text, voice)."""
     lines = {}
     for w in worlds:
         for steps in [w["opening"], w["closing"], *(v["steps"] for v in w["scenes"].values())]:
             for s in steps:
                 if s[0] == "n":
-                    lines[s[3]] = s[2]
+                    lines[s[3]] = (s[2], NARRATOR)
                 elif s[0] == "say":
-                    lines[s[4]] = s[3]
+                    lines[s[4]] = (s[3], voice_of(s[1]))
                 elif s[0] == "scroll":
-                    lines.update(zip(s[5], s[4]))
+                    lines.update((k, (t, NARRATOR)) for k, t in zip(s[5], s[4]))
         for n in w["nodes"]:
             if "boss" in n:
-                lines[n["boss"]["taunt_vid"]] = n["boss"]["taunt_zh"]
+                lines[n["boss"]["taunt_vid"]] = (n["boss"]["taunt_zh"], voice_of(n["boss"]["who"]))
     return lines
 SKIP_TYPES = {"欣赏题", "棋理题", "布局题", "定式题"}  # study and opening problems, not life-and-death puzzles
 
@@ -153,7 +160,7 @@ def main():
         out["scenes"] = {k: dict(v, zh=zh(v["title"]), steps=voiced(fix(v["steps"]))) for k, v in w["scenes"].items()}
         for n in out["nodes"]:
             if "boss" in n:
-                n["boss"] = dict(n["boss"], taunt_zh=zh(n["boss"]["taunt"]), taunt_vid=voice_id(zh(n["boss"]["taunt"])))
+                n["boss"] = dict(n["boss"], taunt_zh=zh(n["boss"]["taunt"]), taunt_vid=voice_id(zh(n["boss"]["taunt"]), voice_of(n["boss"]["who"])))
         for n in out["nodes"]:
             if "scene" in n:
                 assert n["scene"] in out["scenes"], n["scene"]

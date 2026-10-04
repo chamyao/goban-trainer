@@ -187,3 +187,16 @@ def spoken(text):
     for a, b in PRON.items():
         text = text.replace(a, b)
     return text
+
+# Who reads what. The narrator (a woman, Kokoro zf_027) reads narration and
+# the storyteller's scrolls; every speaking character has his own voice,
+# matched by gender and by measured pitch and pace (deep and fast for Zhang
+# Fei, slow for Lu Zhi, light for the eunuch Zuo Feng). Recasting a
+# character regenerates only his lines.
+NARRATOR = "zf_027"
+CAST = {
+    "liubei": "zm_053", "guanyu": "zm_034", "zhangfei": "zm_029", "caocao": "zm_013",
+    "dongzhuo": "zm_098", "zhangbao": "zm_041", "zhangjiao": "zm_068", "luzhi": "zm_081",
+    "zhujun": "zm_033", "huangfusong": "zm_055", "chengyuanzhi": "zm_011", "inspector": "zm_096",
+    "xushao": "zm_091", "uncle": "zm_014", "zuofeng": "zm_063", "merchant": "zm_025", "immortal": "zm_080",
+}
