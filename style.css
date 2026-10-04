@@ -614,3 +614,5 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
 .tk-menu-panel .tk-chron-btn[hidden] { display: none; }
 .tk-menu-keys { margin-top: 7px; color: #e8dcc0; font-size: 11px; }
 .tk-map:has(.tk-menu) .town-keys { display: none; }
+.town-guide { position: absolute; image-rendering: pixelated; pointer-events: none; }
+.town-guide[hidden] { display: none; }

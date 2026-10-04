@@ -56,6 +56,32 @@ const WorldData = {
 // Lines from the place briefs arrive as voiced steps (["n", en, zh, vid] or
 // ["say", who, en, zh, vid], see build_tk.place_step); bare strings and
 // [who, text] still work for maps compiled before that.
+// Wukong the guide on or off, remembered (the menu has the switch).
+const WorldGuide = {
+  get on() { try { return localStorage.getItem("tk-guide") !== "off"; } catch { return true; } },
+  set on(v) { try { localStorage.setItem("tk-guide", v ? "on" : "off"); } catch {} },
+  poses: null,
+  // His point and crouch poses, from the site's Wukong (wukong.js).
+  mount(root) {
+    if (!root || typeof WK === "undefined") return null;
+    if (!this.poses) this.poses = Object.fromEntries(["point", "crouch"].map(p => {
+      const cv = document.createElement("canvas"); cv.width = cv.height = WK.SIZE;
+      WK.render(cv.getContext("2d"), WK.FRAMES[p][0], 0);
+      return [p, cv];
+    }));
+    const el = document.createElement("canvas");
+    el.className = "town-guide"; el.width = el.height = WK.SIZE; el.hidden = true;
+    root.append(el);
+    return el;
+  },
+  // Stand him with his feet at game pixel (gx, gy), facing left or right.
+  place(el, canvas, gameW, gx, gy, left, pose) {
+    const k = canvas.clientWidth / gameW, size = WK.SIZE * k * .5, root = el.parentNode.getBoundingClientRect(), r = canvas.getBoundingClientRect();
+    if (el.dataset.pose !== pose) { const c = el.getContext("2d"); c.clearRect(0, 0, el.width, el.height); c.drawImage(this.poses[pose], 0, 0); el.dataset.pose = pose; }
+    Object.assign(el.style, { width: `${size}px`, height: `${size}px`, left: `${r.left - root.left + gx * k - size / 2}px`,
+      top: `${r.top - root.top + gy * k - size * 42 / 44}px`, transform: left ? "scaleX(-1)" : "none" });
+  },
+};
 const WORLD_NEAR = 36;  // px: how close walking up to a story spot starts its scene
 const worldLines = list => (list || []).map(l => typeof l === "string" ? ["n", l]
   : l[0] === "n" || l[0] === "say" ? l : ["say", l[0], l[1]]);
@@ -83,7 +109,6 @@ function worldScenes() {
       this.load.once("complete", () => {
         for (const [kind, list] of Object.entries(kit.kinds)) list.forEach(([s, x, y, wd, ht], i) => this.textures.get(`kit-${s}`).add(`${kind}#${i}`, 0, x, y, wd, ht));
         if (!this.textures.exists("@bang")) this.textures.addCanvas("@bang", TownArt.bang());
-        if (!this.textures.exists("@arrow")) this.textures.addCanvas("@arrow", TownArt.arrow());
         const st = WorldState.load(w.n, region);
         this.scene.start("world", { place: st.place || region.start, from: null, resume: true });
       });
@@ -152,8 +177,10 @@ function worldScenes() {
       this.keys = this.input.keyboard.addKeys("W,A,S,D,UP,DOWN,LEFT,RIGHT,E,ENTER");
       for (const k of ["ENTER", "E"]) this.keys[k].on("down", () => this.act());
       this.ui = TownUI.mount(this, opts.host);
-      // the way to the next objective: over its spot when on screen, else at the edge pointing there
-      this.arrow = this.add.image(0, 0, "@arrow").setScrollFactor(0).setDepth(1e6 - 1).setVisible(false);
+      // Wukong shows the way to the next objective: beside its spot when it's on screen,
+      // else at the edge of the screen, pointing toward it (WorldGuide.on toggles him)
+      // He's drawn over the game at screen resolution, so his pixel art keeps its detail.
+      this.guide = WorldGuide.mount(opts.host.querySelector(".town-ui"));
       this.setGoal();
       if (!pos) this.ui.place(this.place.name, this.place.zh);
       this.blocked = 0;
@@ -333,20 +360,23 @@ function worldScenes() {
       return null;
     }
 
-    goalArrow(time) {
-      const a = this.arrow, t = this.goalAt;
+    goalGuide(time) {
+      const a = this.guide, t = this.goalAt;
       if (!a) return;
-      const show = !!t && !this.ui.busy() && !this.leaving && !this.cine;
-      a.setVisible(show);
+      const show = WorldGuide.on && !!t && !this.ui.busy() && !this.leaving && !this.cine;
+      a.hidden = !show;
       if (!show) return;
-      const cam = this.cameras.main, v = cam.worldView, W = this.scale.width, H = this.scale.height, m = 16;
-      const sx = (t.x - v.x) * cam.zoom, sy = (t.y - v.y) * cam.zoom, bob = Math.sin(time / 180) * 2;
-      if (sx > m && sx < W - m && sy > m + 18 && sy < H - m) a.setPosition(Math.round(sx), Math.round(sy - 26 + bob)).setAngle(90);   // over the spot
-      else {
-        const dx = sx - W / 2, dy = sy - H / 2, k = Math.min((W / 2 - m) / Math.abs(dx || 1e-6), (H / 2 - m) / Math.abs(dy || 1e-6));
-        a.setPosition(Math.round(W / 2 + dx * k + Math.cos(Math.atan2(dy, dx)) * bob), Math.round(H / 2 + dy * k + Math.sin(Math.atan2(dy, dx)) * bob))
-          .setAngle(Math.round(Math.atan2(dy, dx) * 4 / Math.PI) * 45);   // eight directions keep the pixels crisp
+      const cam = this.cameras.main, v = cam.worldView, W = this.scale.width, H = this.scale.height, P = this.player;
+      const sx = (t.x - v.x) * cam.zoom, sy = (t.y - v.y) * cam.zoom, px = (P.x - v.x) * cam.zoom;
+      const ph = time % 1600, hop = ph < 260 ? -Math.sin(ph / 260 * Math.PI) * 4 : 0;   // a little hop now and then
+      let gx, gy, left;
+      if (sx > 14 && sx < W - 14 && sy > 24 && sy < H - 4) {   // beside the spot, on the side you're coming from, staff toward it
+        left = px >= sx; gx = sx + (left ? 13 : -13); gy = sy + 2;
+      } else {                                                    // at the edge of the screen, facing the way
+        const dx = sx - W / 2, dy = sy - H / 2, k = Math.min((W / 2 - 14) / Math.abs(dx || 1e-6), (H / 2 - 24) / Math.abs(dy || 1e-6));
+        left = dx < 0; gx = W / 2 + dx * k; gy = H / 2 + dy * k + 10;
       }
+      WorldGuide.place(a, this.game.canvas, W, gx, gy + hop, left, ph < 40 || (ph > 220 && ph < 260) ? "crouch" : "point");
     }
 
     // Walk up to a story spot. A scene with a ["problem"] step builds up to
@@ -489,7 +519,7 @@ function worldScenes() {
     }
 
     update(time, dt) {
-      this.goalArrow(time);
+      this.goalGuide(time);
       this.nearSpots();
       const P = this.player, K = this.keys;
       let vx = 0, vy = 0;

@@ -126,14 +126,6 @@ const TownArt = {
     return cv;
   },
 
-  // The arrow toward the next objective, pointing right (rotated in the world).
-  arrow() {
-    const A = TKArt, g = A.grid(20, 17);
-    for (let x = 0; x < 10; x++) for (let y = 8 - Math.floor(x * 7 / 9); y <= 8 + Math.floor(x * 7 / 9); y++) A.set(g, 18 - x, y, y > 8 + x * 7 / 18 ? "#e6b422" : "#ffe066");
-    A.rect(g, 1, 6, 9, 5, "#ffe066"); A.rect(g, 1, 9, 9, 2, "#e6b422");
-    return A.canvas(A.outline(g, "#3a2416"));
-  },
-
   // The "!" over someone who will set you a problem.
   bang() {
     const A = TKArt, g = A.grid(7, 12);
