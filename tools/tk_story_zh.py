@@ -162,6 +162,18 @@ ZH = {
     "“A mistake,” warned his secretary Chen Lin. “You hand the spear to others, point first.”": "主簿陈琳劝道：“不可！这是倒持干戈，授人以柄。”",
     "A man beside them clapped and laughed. “This is as easy as turning over a hand. Why so much talk?” It was Cao Cao.": "旁边一人鼓掌大笑：“此事易如反掌，何必多议！”此人正是曹操。",
     "What did Cao Cao propose? Hear the next chapter.": "不知曹操说出甚话来，且听下文分解。",
+    # ---- World 1: indoor scenes (ch. 1) ----
+    "The Governor's Council": "太守议事",
+    "Lu Zhi's Tent": "卢植帐中", "Lu Zhi's tent": "卢植的营帐",
+    "The Fire Plan": "火攻之计",
+    "The Yellow Turbans have crossed into You Province. Governor Liu Yan summons his officer Zou Jing.": "黄巾前犯幽州界分。太守刘焉闻得贼兵将至，召校尉邹靖计议。",
+    "Zou Jing advises him: “The rebels are many and our soldiers are few. My lord, you should raise troops at once, and meet them.”": "邹靖曰：“贼兵众，我兵寡，明公宜作速招军应敌。”",
+    "Liu Yan agrees, and has a notice posted calling for volunteers. It goes up on the wall at Zhuo County, and it draws out a hero.": "刘焉然其说，随即出榜招募义兵。榜文行到涿县，乃引出涿县中一个英雄。",
+    "With Qingzhou relieved, Liu Bei hears that his old teacher Lu Zhi is fighting Zhang Jiao at Guangzong, and goes to help him. Lu Zhi is glad to see him, and keeps him in the tent.": "青州之围已解。玄德闻中郎将卢植与贼首张角战于广宗，备昔曾师事卢植，欲往助之。至卢植军中，入帐施礼，具道来意。卢植大喜，留在帐前听调。",
+    "I have Zhang Jiao penned in here. His brothers Zhang Liang and Zhang Bao are at Yingchuan, facing Huangfu Song and Zhu Jun.": "我今围贼在此。贼弟张梁、张宝在颍川，与皇甫嵩、朱儁对垒。",
+    "Take your own men, and I will give you a thousand more. Go to Yingchuan, learn how they stand, and we will fix a day to destroy them.": "汝可引本部人马，我更助汝一千官军，前去颍川打探消息，约期剿捕。",
+    "Liu Bei takes his orders, and marches through the night.": "玄德领命，引军星夜投颍川来。",
+    "Every man is told to carry a bundle of straw, and hide it.": "遂令军士，每人束草一把，暗地埋伏。",
     # ---- World 1: the mulberry tree (ch. 1) ----
     "The Mulberry Tree at Louzang": "楼桑村的桑树",
     "Louzang Village, Zhuo County. South-east of Liu Bei's house stands a mulberry tree more than fifty feet tall. From far off, it looks like the canopy of a carriage.": "涿县楼桑村。玄德家之东南，有一大桑树，高五丈余，遥望之，童童如车盖。",
