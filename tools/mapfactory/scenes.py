@@ -321,8 +321,6 @@ class Stage:
             if sx != ox:
                 turns.append({"actor": speaker, "dir": "right" if ox > sx else "left"})
                 turns.append({"actor": other, "dir": "left" if ox > sx else "right"})
-        if self.cast.get(speaker, {}).get("as"):   # no look yet: the stand-in speaks the line (portrait, voice)
-            step = [step[0], self.cast[speaker]["as"], *step[2:]]
         self.beats.append({"do": "line", "line": step, "speaker": speaker, "face": turns,
                            "camera": self.frame([speaker] + ([other] if other else []))})
 
