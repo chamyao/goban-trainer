@@ -52,7 +52,7 @@ def build(n):
                 r = next((r for r in rooms if r.get("building") == q["room"]), None)
                 if r is None:
                     sys.exit(f"node {q['node']}: {p['id']} has no building with id {q['room']!r}")
-                q["place"], q["spot"] = r["id"], add_spot(r, q["node"], q["title"])
+                q["place"], q["spot"] = r["id"], add_spot(r, q["node"], q["title"], q.pop("trigger", None))
         for r in rooms:
             (d / f"{r['id']}.map.json").write_text(json.dumps(r, ensure_ascii=False, indent=1))
             kind_zh = ZH.get(r["name"].split(",")[0], "")
