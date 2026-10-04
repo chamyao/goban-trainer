@@ -41,6 +41,10 @@ node on the old node map (x right, y down, in node-map pixels; 8 px ≈ 1 tile):
 | `["close", group, target, r]` | the same at a walk: tighten the ring |
 | `["camera", "zoom", z, ms]` | zoom to `z` (1–2); `["camera", "zoom", 1, ms]` goes back. `["camera", "shake"]` shakes |
 | `["mood", "dark"]` / `["mood", "clear"]` | darken the edges of the screen for a tense moment, and lift it |
+| `["light", L, ms]` | tint the scene for the time of day: `night` (fires, lamps and forges glow), `dusk`, `dawn`, `storm`, any `"#rrggbb"`, or `day` to clear it, fading over `ms` (default 1500). Before the first line, the scene opens in that light |
+| `["music", cue]` | change the score: `boss` (taiko drums), `battle`, `victory`, `calm` (the place's own piece) or `none`. Before the first line, the scene opens with it |
+| `["boss", who]` | the boss's entrance: a wider letterbox, the camera closes on him, a gong, and his name card (Chinese, English and title) |
+| `["victory"]` | the gong, a 大捷 Victory banner, the party cheering, triumphant music |
 | `["wait", ms]` | a pause |
 
 Positive `dx` is "toward the enemy". The party's members are addressed by
@@ -65,6 +69,12 @@ party's side; anyone placed on the far side is an enemy.
 - **Gifts:** the giver walks next to the receiver first, and they face.
 - **The end:** anyone left on stage who isn't in the party fades; the
   player stands where Liu Bei ended up.
+
+A **boss scene** (the quest's role is `boss`) becomes a set piece without
+any extra steps: it opens to the taiko drums, the boss makes his entrance
+just before the board (his name and title come from the quest's `boss`),
+the drums carry on under the board, and the scene ends in a victory. Place
+your own `music`, `boss` or `victory` steps to time any of these yourself.
 
 ## The file
 
@@ -101,7 +111,11 @@ Props are cast members `{"prop": "cagecart", "side": "prop"}` placed with
 `{"do": "unboard", "actor", "to"}`, `{"do": "pose", "actors", "pose"}`,
 `{"do": "emote", "actors", "icon"}`, `{"do": "give", "from", "to", "item",
 "face", "camera"}`, `{"do": "face", "turns": [{"actor", "dir"}]}`,
-`{"do": "zoom", "z", "ms"}`, `{"do": "shake"}`, `{"do": "mood", "dark"}`.
+`{"do": "zoom", "z", "ms"}`, `{"do": "shake"}`, `{"do": "mood", "dark"}`,
+`{"do": "light", "tint", "ms"}`, `{"do": "music", "cue"}`,
+`{"do": "bossintro", "actor", "name", "zh", "title", "title_zh", "camera"}`,
+`{"do": "victory", "party", "camera"}`; a scene that opens in a light or to
+a cue has `"light"` or `"music"` on its `cut` beat.
 The 2D player draws props from `assets/tk/props.png` (built from Ninja
 Adventure pieces by `tools/build_props.py`) or from the kit's own sprites
 (tables, jars, racks, fires, tents, gates).

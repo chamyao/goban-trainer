@@ -93,6 +93,7 @@ ZH = {
     "Sorcery. Tomorrow, hide men on the hilltop with the blood of pigs, sheep and dogs. When his spirits come, drench them. The spell will break.": "他用的是妖术。明日宰杀猪羊狗，取血伏于山头，等贼赶来，从高坡上泼下，其法可解。",
     # ---- boss ----
     "The General of Earth Falls": "地公将军之死",
+    "Zhang Bao": "张宝", "General of Earth": "地公将军",   # the boss's name card (scenes.py)
     "Again Zhang Bao calls the wind; again Liu Bei flees, and the rebels chase him to the hill.": "次日，张宝又作妖法，刘备拨马便走，张宝驱兵赶来。",
     "A signal gun — and blood and filth rain down from the ridge.": "将过山头，号炮一响，秽物齐泼。",
     "Paper men and straw horses flutter to the ground. The wind dies. Liu Bei's arrow strikes Zhang Bao in the arm, and he flees into Yangcheng.": "但见空中纸人草马纷纷坠地，风雷顿息。刘备一箭射中张宝左臂，张宝逃入阳城。",
@@ -287,6 +288,10 @@ ZH = {
     "Julu": "巨鹿", "Yellow Hills": "黄冈", "Horse Trail": "马道", "Daxing Mountain": "大兴山", "Qingzhou": "青州",
     "Guangzong Road": "广宗道上", "Qiao": "谯郡", "Luoyang Gates": "洛阳城门", "Changshe": "长社",
     "Envoy's Road": "使者路上", "Dong Zhuo's Camp": "董卓营", "Hills of Black Wind": "黑风岭", "Yangcheng": "阳城",
+    "Sit under the great mulberry tree by your home.": "到屋旁的大桑树下坐坐。",
+    "Go to the county office, where the governor has called his officers.": "去县衙，太守正在召集僚属。",
+    "Go into the village inn.": "走进村店。",
+    "Report to Lu Zhi in his tent.": "到卢植帐中拜见。",
     "Read the notice in the town square.": "去城中广场看榜文。",
     "Swear brotherhood under the great peach tree.": "在大桃树下结为兄弟。",
     "Side story: find the old man in the hills.": "支线：去山中寻找那位老人。",
@@ -306,7 +311,7 @@ ZH = {
     "A Yellow Turban tent": "黄巾军的帐篷", "A hermit's shelter": "隐士的草庐", "A prisoner's cart": "囚车",
     "Dong Zhuo's tent": "董卓的大帐", "Liu Bei's home": "刘备的家", "The Cao family house": "曹家宅院",
     "The Han camp": "汉军营地", "The Yellow Turban line": "黄巾军阵", "The besieged city": "被围的城",
-    "The county office": "县衙", "The envoy's rest": "使者歇脚处", "The great mulberry tree": "大桑树",
+    "The county office": "县衙", "The envoy's rest": "使者歇脚处", "The great mulberry tree": "大桑树", "Lu Zhi's tent": "卢植大帐",
     "The great peach tree": "大桃树", "The horse dealers' camp": "马商的营地", "The north gate of Luoyang": "洛阳北门",
     "The notice board": "榜文", "The teahouse": "茶馆", "The village inn": "村店", "Where Zhang Jiao preaches": "张角传道之处",
     "Zhang Bao's sorcery": "张宝的妖术", "Zhang Bao's stronghold": "张宝的城寨", "Zhang Fei's farm": "张飞的庄园",

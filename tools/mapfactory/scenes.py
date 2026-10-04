@@ -20,6 +20,13 @@ play them:
   move like actors and can carry someone ("board"); an army can ring a prop
   or a person ("surround", "close"); a gift is walked over and handed on
   ("give"); poses, emote bubbles, camera zoom and a dark mood set the tone
+- "light" tints the whole scene for the time of day (night, dusk, dawn, a
+  storm); set before the first line, the scene opens in that light
+- "music" cues the score (boss, battle, calm, victory, none). A boss scene
+  is made a set piece on its own: taiko drums from the start, the boss's
+  entrance (camera on him, his name card, a gong) just before the board,
+  and a victory (gong, banner, the party cheering, triumphant music) at the
+  end, unless the story places its own "music", "boss" or "victory" steps
 
 The format is in docs/cutscene-format.md.
 """
@@ -40,12 +47,20 @@ PROPS = {"cagecart": (3, 1), "forge": (2, 1), "anvil": (1, 1), "winejars": (2, 1
          "desk": (2, 1), "hall": (4, 2)}
 POSES = {"drink", "cheer", "bow", "kneel", "sit", "drunk", "raise", "sleep", "stand"}
 EMOTES = {"!", "?", "...", "music", "anger", "sweat", "zzz", "heart"}
+LIGHTS = {"day", "night", "dusk", "dawn", "storm"}   # or "#rrggbb"
+CUES = {"boss", "battle", "calm", "victory", "none"}
 
 
 def characters():
     src = (ROOT / "tk.js").read_text()
     block = src[src.index("const TK_CHARS = {"):src.index("};", src.index("const TK_CHARS = {"))]
     return set(re.findall(r"^  (\w+): \{", block, re.M))
+
+
+def char_names():
+    src = (ROOT / "tk.js").read_text()
+    block = src[src.index("const TK_CHARS = {"):src.index("};", src.index("const TK_CHARS = {"))]
+    return dict(re.findall(r'^  (\w+): \{ name: "([^"]+)"', block, re.M))
 
 
 class Stage:
@@ -407,16 +422,37 @@ class Stage:
         self.beats.append({"do": "together", "beats": walks})
         self.beats.append({"do": "face", "turns": turns})
 
+    # ---------- set pieces ----------
+    def boss_intro(self, who, boss):
+        """The boss steps forward: the camera closes on him and his name card comes up."""
+        from tk_story_zh import ZH
+        a = self.find(who)
+        name = char_names().get(who, who)
+        title = ""
+        if boss and boss.get("who") == who:
+            title = boss.get("title", "")
+            if title.startswith(name + ", "):
+                title = title[len(name) + 2:]
+        self.beats.append({"do": "bossintro", **({"actor": a, "camera": self.frame([a])} if a else {}),
+                           "name": name, "zh": ZH.get(name, ""), "title": title, "title_zh": ZH.get(title, "")})
 
-def stage_scene(scene, m, spot, party, chars):
+    def victory(self):
+        ids = [a for a in self.party if a in self.cast and a not in self.gone]
+        self.beats.append({"do": "victory", "party": ids, "camera": self.frame(ids)})
+
+
+def stage_scene(scene, m, spot, party, chars, boss=None):
     st = Stage(m, spot, party)
     steps = scene["steps"]
+    has = {op for op, *_ in steps}
+    if boss and "music" not in has:
+        st.beats[0]["music"] = "boss"
     opening = True
     arrivals = []
     for s in steps:
         op = s[0]
         if op in ("n", "say", "fx", "pose", "move", "run", "remove", "party", "wait", "scroll", "problem",
-                  "emote", "give", "surround", "close", "camera", "mood", "unboard") and opening:
+                  "emote", "give", "surround", "close", "camera", "mood", "unboard", "boss", "victory") and opening:
             opening = False
             if arrivals:
                 st.beats.append({"do": "camera", "to": st.frame(list(st.pos)), "ms": 600})
@@ -468,6 +504,12 @@ def stage_scene(scene, m, spot, party, chars):
                 st.beats.append({"do": "zoom", "z": max(1, min(2, s[2])), "ms": s[3] if len(s) > 3 else 600})
             elif s[1] == "shake":
                 st.beats.append({"do": "shake"})
+        elif op == "light":
+            tint = s[1] if s[1] in LIGHTS or re.fullmatch(r"#[0-9a-fA-F]{6}", str(s[1])) else "day"
+            if opening:   # the scene opens in this light
+                st.beats[0]["light"] = tint
+            else:
+                st.beats.append({"do": "light", "tint": tint, "ms": s[2] if len(s) > 2 else 1500})
         elif op == "mood":
             st.beats.append({"do": "mood", "dark": s[1] == "dark"})
         elif op == "party":
@@ -477,11 +519,25 @@ def stage_scene(scene, m, spot, party, chars):
         elif op == "wait":
             st.beats.append({"do": "wait", "ms": s[1]})
         elif op == "problem":  # the scene's Go problem: the player solves it before the rest plays
+            if boss and "boss" not in has:
+                st.boss_intro(boss["who"], boss)
             st.beats.append({"do": "problem"})
+        elif op == "music":
+            if s[1] in CUES:
+                if opening:
+                    st.beats[0]["music"] = s[1]
+                else:
+                    st.beats.append({"do": "music", "cue": s[1]})
+        elif op == "boss":
+            st.boss_intro(s[1], boss)
+        elif op == "victory":
+            st.victory()
         elif op == "n":
             st.beats.append({"do": "line", "line": s, "camera": st.frame(st.live())})
         elif op == "say":
             st.say(s, chars)
+    if boss and "victory" not in has:
+        st.victory()
     # whoever is still standing at the end, except the party, leaves
     rest = [a for a in st.live() if a not in st.party and st.cast[a].get("who") not in st.party]
     if rest:
@@ -505,7 +561,7 @@ def build_scenes(n):
         m = json.loads((d / f"{q['place']}.map.json").read_text())
         spot = next(s for s in m["spots"] if s["node"] == q["node"])
         # party at this point in the story: the main line's party changes carry forward
-        staged = stage_scene(scene, m, spot, party, chars)
+        staged = stage_scene(scene, m, spot, party, chars, q.get("boss") if q["role"] == "boss" else None)
         out[q["scene"]] = {"place": q["place"], "spot": spot["id"], "node": q["node"], "party": party, **staged}
         if q["role"] in ("main", "boss"):
             for s in scene["steps"]:

@@ -72,7 +72,16 @@
    "h": 1
   }
  ],
- "spots": [],
+ "spots": [
+  {
+   "id": "spot-1-a3",
+   "x": 10.5,
+   "y": 5.7,
+   "node": "1-a3",
+   "label": "The Way of Great Peace · III: Betrayed",
+   "trigger": "arrive"
+  }
+ ],
  "npcs": [
   {
    "id": "in-1",

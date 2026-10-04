@@ -1067,7 +1067,8 @@
    "x": 22.5,
    "y": 11.7,
    "node": "1-n3",
-   "label": "The Yellow Turban line"
+   "label": "The Yellow Turban line",
+   "trigger": "arrive"
   }
  ],
  "npcs": [],

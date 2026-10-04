@@ -231,6 +231,7 @@ def compile_map(m, kit, out_dir):
         obj("", "prop", (x0 + n / 2) * T, (y + 1) * T, kind="wall", fw=n * T, fh=T, solid=True)
     for s in m["spots"]:
         obj(s["id"], "spot", s["x"] * T, s["y"] * T, node=s["node"], label=s.get("label", ""), label_zh=ZH.get(s.get("label", ""), ""),
+            **({"trigger": s["trigger"]} if s.get("trigger") else {}),
             **{k: json.dumps([place_step(l)[0] for l in s[k]], ensure_ascii=False) for k in ("intro", "outro") if s.get(k)})
     for n in m["npcs"]:
         sprite, drawn = (n["kind"][5:], False) if n["kind"].startswith("hero.") else kit.folk(n["kind"], f"{m['id']}/{n['id']}")

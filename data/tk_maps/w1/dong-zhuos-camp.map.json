@@ -1055,7 +1055,8 @@
    "x": 15.5,
    "y": 8.7,
    "node": "1-n6",
-   "label": "Dong Zhuo's tent"
+   "label": "Dong Zhuo's tent",
+   "trigger": "arrive"
   }
  ],
  "npcs": [

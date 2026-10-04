@@ -20,7 +20,11 @@
    "prop": kind. They are drawn from the prop atlas (assets/tk/props.png,
    tools/build_props.py) or from the kit's own sprites, move like actors and
    carry whoever boards them. Poses, emote bubbles, gifts handed over, camera
-   zoom and a dark mood are drawn here too. */
+   zoom, a dark mood and the light (night, dusk, dawn, storm) are drawn here too.
+   Boss scenes get a set piece at each end: the boss's entrance (a wider
+   letterbox, the camera on him, a gong and his name card) before the board,
+   and the victory (gong, banner, cheering) after. Music cues set
+   scene.musicCue for tk-music.js while the scene plays. */
 
 const WorldCutscene = {
   async play(scene, cs, done, opts = {}) {
@@ -45,10 +49,22 @@ const WorldCutscene = {
 
     // letterbox and a Skip button
     const W = scene.scale.width, H = scene.scale.height, bar = 16;
-    const bars = [scene.add.rectangle(0, -bar, W, bar, 0x000000).setOrigin(0), scene.add.rectangle(0, H, W, bar, 0x000000).setOrigin(0)]
+    const bars = [scene.add.rectangle(0, -bar, W, bar, 0x000000).setOrigin(0), scene.add.rectangle(0, H + bar, W, bar, 0x000000).setOrigin(0, 1)]
       .map(b => b.setScrollFactor(0).setDepth(1e6));
     scene.tweens.add({ targets: bars[0], y: 0, duration: 300 });
-    scene.tweens.add({ targets: bars[1], y: H - bar, duration: 300 });
+    scene.tweens.add({ targets: bars[1], y: H, duration: 300 });
+    const widen = k => scene.tweens.add({ targets: bars, scaleY: k, duration: 500, ease: "Sine.easeInOut" });   // wider for a set piece
+    const cue = c => { scene.musicCue = c; };
+    const gong = () => { if (typeof TKMusic !== "undefined") TKMusic.sfx("gong"); };
+    const overlay = (cls, html, ms) => {                          // a card over the scene (DOM, so text stays crisp)
+      const el = document.createElement("div");
+      el.className = cls; el.innerHTML = html;
+      (host.querySelector(".town-ui") || host).append(el);
+      overlays.push(el);
+      setTimeout(() => el.remove(), ms);
+    };
+    const esc = t => String(t || "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+    const overlays = [];
     const host = scene.game.worldOpts && scene.game.worldOpts.host || document.body;
     const skipBtn = document.createElement("button");
     skipBtn.className = "town-skip"; skipBtn.type = "button"; skipBtn.textContent = "Skip ▸▸";
@@ -74,6 +90,7 @@ const WorldCutscene = {
     const sync = a => {
       if (a.prop) {
         a.spr.setDepth(a.spr.y);
+        if (a.glow && a.glow.active) a.glow.setPosition(a.spr.x, a.spr.y - 6).setVisible(a.spr.visible);
         for (const id of a.riders) {        // inside: just behind the front bars, sitting on the bed
           const r = actors[id];
           if (!r) continue;
@@ -101,6 +118,7 @@ const WorldCutscene = {
       if (a && a.prop) {
         const [x, y] = px(at);
         a.spr.setPosition(x, y).setVisible(true).setAlpha(1);
+        if (night && FIRES.includes(a.prop) && !(a.glow && a.glow.active)) a.glow = glow(a.spr);
         sync(a);
         return a;
       }
@@ -265,6 +283,40 @@ const WorldCutscene = {
         if (ms) scene.tweens.add({ targets: d, alpha: 0, duration: ms, onComplete: () => d.setVisible(false) }); else d.setVisible(false);
       }
     };
+    // light: the whole scene tinted for the time of day; at night fires and lamps glow
+    const LIGHT = { night: 0x46559c, dusk: 0xf0c0a0, dawn: 0xd8c8e8, storm: 0x80868e };
+    let shade = null, glows = [], night = false;
+    const glow = o => {                                          // warm light round a fire or a lamp
+      if (!scene.textures.exists("tk-glow")) {
+        const c = scene.textures.createCanvas("tk-glow", 64, 64), g = c.context, grd = g.createRadialGradient(32, 32, 2, 32, 32, 32);
+        grd.addColorStop(0, "rgba(255,190,90,0.9)"); grd.addColorStop(.4, "rgba(255,150,60,0.4)"); grd.addColorStop(1, "rgba(255,120,40,0)");
+        g.fillStyle = grd; g.fillRect(0, 0, 64, 64); c.refresh();
+      }
+      const g = scene.add.image(o.x, o.y - 6, "tk-glow").setDepth(9.1e4).setBlendMode(Phaser.BlendModes.ADD).setAlpha(.8);
+      scene.tweens.add({ targets: g, scale: 1.12, alpha: .65, duration: 700 + Math.random() * 300, yoyo: true, repeat: -1 });
+      fx.push(g); glows.push(g);
+      return g;
+    };
+    const FIRES = ["fire", "forge"];
+    const light = (tint, ms) => {
+      const c = LIGHT[tint] || (/^#[0-9a-f]{6}$/i.test(tint || "") ? parseInt(tint.slice(1), 16) : null);
+      const old = shade, oldGlows = glows;
+      shade = null; glows = [];
+      const out = o => ms ? scene.tweens.add({ targets: o, alpha: 0, duration: ms, onComplete: () => o.destroy() }) : o.destroy();
+      if (old) out(old);
+      oldGlows.forEach(out);
+      night = tint === "night";
+      if (c == null) return;
+      // fixed to the screen and big enough to cover it at any zoom; multiplied over the map and the cast, under bubbles
+      shade = scene.add.rectangle(W / 2, H / 2, W * 3, H * 3, c).setScrollFactor(0).setDepth(9e4).setBlendMode(Phaser.BlendModes.MULTIPLY);
+      fx.push(shade);
+      if (night) {
+        scene.children.list.filter(o => o.type === "Image" && o.frame && /^(camp\.firepit|camp\.cookfire|lamp\.post|furn\.hearth)#/.test(o.frame.name)).forEach(glow);
+        Object.values(actors).filter(a => a.prop && FIRES.includes(a.prop)).forEach(a => { a.glow = glow(a.spr); });
+      }
+      const all = [shade, ...glows];
+      if (ms) all.forEach(o => { const a = o.alpha; o.setAlpha(0); scene.tweens.add({ targets: o, alpha: a, duration: ms }); });
+    };
     const board = (b, ms) => {
       const r = actors[b.actor] || actor(b.actor, b.at), p = actors[b.prop];
       if (!p) return Promise.resolve();
@@ -289,6 +341,8 @@ const WorldCutscene = {
         case "cut": {
           cam.fadeOut(180); await wait(190);
           for (const p of b.place) actor(p.actor, p.at, p.face);
+          if (b.light) light(b.light, 0);
+          if (b.music) cue(b.music);
           const lead = b.place[0];
           if (lead) { const [x, y] = px(lead.at); cam.centerOn(x, y - 8); }
           cam.fadeIn(220); await wait(230);
@@ -344,6 +398,41 @@ const WorldCutscene = {
           break;
         case "shake": cam.shake(350, .01); await wait(350); break;
         case "mood": mood(b.dark, 600); await wait(300); break;
+        case "light": light(b.tint, b.ms); await wait(Math.min(b.ms, 600)); break;
+        case "music": cue(b.cue); break;
+        case "bossintro": {                                       // the boss steps forward
+          cue(scene.musicCue || "boss");
+          widen(1.7);
+          mood(true, 400);
+          const a = b.actor && actors[b.actor];
+          if (b.camera) { await pan(b.camera, 500); cam.zoomTo(zoom0 * 1.6, 700, "Sine.easeInOut"); if (dark) scene.tweens.add({ targets: dark, scale: 1 / 1.6, duration: 700 }); }
+          if (a) look(a, "down");
+          await wait(500);
+          gong(); cam.shake(450, .012); cam.flash(160, 160, 30, 20);
+          if (a) hop(a);
+          overlay("tk-bosscard", `<b lang="zh-CN">${esc(b.zh || b.name)}</b><span>${esc(b.name)}</span>` +
+            (b.title ? `<i>${b.title_zh ? `<span lang="zh-CN" style="display:inline;letter-spacing:.1em;text-transform:none">${esc(b.title_zh)}</span> · ` : ""}${esc(b.title)}</i>` : ""), 3000);
+          await wait(2700);
+          cam.zoomTo(zoom0 * 1.25, 500, "Sine.easeInOut");
+          if (dark) scene.tweens.add({ targets: dark, scale: 1 / 1.25, duration: 500 });
+          await wait(500);
+          break;
+        }
+        case "victory": {                                         // the gong, the banner, the party cheering
+          gong(); cam.flash(500, 255, 246, 210); cam.shake(300, .008);
+          cue("victory");
+          mood(false, 800);
+          cam.zoomTo(zoom0, 600, "Sine.easeInOut");
+          await pan(b.camera, 600);
+          overlay("tk-victory", `<b lang="zh-CN">大捷</b><span>Victory</span>`, 3400);
+          const party = (b.party || []).filter(id => actors[id]);
+          party.forEach(id => WorldFx.play(scene, "sparkle", [actors[id].spr.x, actors[id].spr.y], fx));
+          await Promise.all(party.map((id, i) => wait(i * 120).then(() => pose(actors[id], "cheer", 0))));
+          await Promise.all(party.map((id, i) => wait(i * 120).then(() => pose(actors[id], "cheer", 0))));
+          await wait(1400);
+          widen(1);
+          break;
+        }
         case "fx": await WorldFx.play(scene, b.name, px(b.at), fx); break;
         case "wait": await wait(b.ms); break;
         case "party": break;                       // applied by the world when the scene ends
@@ -356,7 +445,9 @@ const WorldCutscene = {
     // a beat's end state at once, for fast-forwarding to the problem
     const instant = b => {
       switch (b.do) {
-        case "cut": case "appear": for (const p of b.place) actor(p.actor, p.at, p.face); break;
+        case "cut": case "appear": for (const p of b.place) actor(p.actor, p.at, p.face); if (b.light) light(b.light, 0); if (b.music) cue(b.music); break;
+        case "light": light(b.tint, 0); break;
+        case "music": cue(b.cue); break;
         case "together": b.beats.forEach(instant); break;
         case "walk": { const a = actors[b.actor]; if (a) { const [x, y] = px(b.path[b.path.length - 1]); a.spr.setPosition(x, y); sync(a); } break; }
         case "line": lastLine = b; for (const t of b.face || []) if (actors[t.actor]) look(actors[t.actor], t.dir); break;
@@ -403,6 +494,8 @@ const WorldCutscene = {
     bars.forEach(b => b.destroy());
     cam.resetFX();
     cam.setZoom(zoom0);
+    overlays.forEach(el => el.remove());
+    scene.musicCue = null;
     if (!left && cs.end && cs.end.leader) { const [x, y] = px(cs.end.leader); scene.player.setPosition(x, y); }
     scene.player.facing = "down";
     hidden.forEach(s => s.setVisible(true));

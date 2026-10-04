@@ -498,7 +498,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) this.data = await (await fetch("data/tk.json?v=12")).json();
+    if (!this.data) this.data = await (await fetch("data/tk.json?v=15")).json();
     return this.data;
   },
   ls(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } },
@@ -1006,6 +1006,14 @@ async function viewTK(worldN) {
     root.querySelector(".tk-head-btns").prepend(h("button", { class: "tk-chron-btn", type: "button", title: `Switch to ${WORLD_KITS[next].en}`,
       onclick: () => { WorldView.setKit(next); viewTK(w.n); } }, `画风：${WORLD_KITS[kit].zh} ${WORLD_KITS[kit].en}`));
     if (typeof WorldTravel !== "undefined") WorldTravel.addButtons(root.querySelector(".tk-head-btns"), w);   // map and start over (tk-travel.js)
+    const guideBtn = h("button", { class: "tk-chron-btn", type: "button" });
+    const guideLabel = () => {
+      guideBtn.textContent = { stuck: "悟空指路：迷路时 Wukong guide: when stuck", always: "悟空指路：一直 Wukong guide: always", off: "悟空指路：关 Wukong guide: off" }[WorldGuide.mode];
+      guideBtn.setAttribute("aria-pressed", String(WorldGuide.on));
+    };
+    guideBtn.onclick = () => { WorldGuide.mode = { stuck: "always", always: "off", off: "stuck" }[WorldGuide.mode]; guideLabel(); };
+    guideLabel();
+    root.querySelector(".tk-head-btns").append(guideBtn);
     // The buttons live in a menu inside the game window, with the controls.
     const panel = h("div", { class: "tk-menu-panel", hidden: "" }, [root.querySelector(".tk-head-btns"),
       h("div", { class: "tk-menu-keys" }, "WASD / 方向键 移动 move · Enter 对话 talk")]);

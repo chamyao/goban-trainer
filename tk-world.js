@@ -31,7 +31,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=5`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=10`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
@@ -56,6 +56,68 @@ const WorldData = {
 // Lines from the place briefs arrive as voiced steps (["n", en, zh, vid] or
 // ["say", who, en, zh, vid], see build_tk.place_step); bare strings and
 // [who, text] still work for maps compiled before that.
+// Wukong the guide on or off, remembered (the menu has the switch).
+const WorldGuide = {
+  // "stuck": he comes only when you haven't made headway for a while (the default);
+  // "always"; or "off". Remembered.
+  get mode() { let v; try { v = localStorage.getItem("tk-guide"); } catch {} return v === "off" || v === "always" ? v : "stuck"; },
+  set mode(v) { try { localStorage.setItem("tk-guide", v); } catch {} },
+  get on() { return this.mode !== "off"; },
+  STUCK: 40000,   // ms without progress before he comes
+  prog: null,     // { key, best, idle }: kept across maps
+  W: 60, H: 60,   // his canvas, in sprite pixels: Wukong (44x44) above a nimbus cloud
+  cloud: null,
+  // A golden-white nimbus with a curl at the back, drawn once.
+  nimbus() {
+    if (this.cloud) return this.cloud;
+    const cv = document.createElement("canvas"); cv.width = 34; cv.height = 12;
+    const g = cv.getContext("2d");
+    const blob = (x, y, r, c) => { g.fillStyle = c; for (let j = -r; j <= r; j++) for (let i = -r; i <= r; i++) if (i * i + j * j <= r * r + r) g.fillRect(x + i, y + j, 1, 1); };
+    for (const [x, y, r] of [[7, 7, 4], [13, 5, 5], [20, 5, 5], [26, 7, 4], [16, 8, 4]]) blob(x, y, r + 1, "#c8902a");   // outline
+    for (const [x, y, r] of [[7, 7, 4], [13, 5, 5], [20, 5, 5], [26, 7, 4], [16, 8, 4]]) blob(x, y, r, "#fff3c4");
+    for (const [x, y, r] of [[13, 4, 3], [20, 4, 3]]) blob(x, y, r, "#ffffff");
+    g.fillStyle = "#e8b64a"; for (const [x, y] of [[4, 9], [5, 10], [7, 10], [26, 10], [28, 9], [29, 8]]) g.fillRect(x, y, 1, 1);
+    g.fillStyle = "#c8902a"; g.fillRect(0, 6, 3, 1); g.fillRect(1, 5, 1, 1); g.fillRect(31, 6, 3, 1); g.fillRect(32, 5, 1, 1);   // curls
+    return (this.cloud = cv);
+  },
+  mount(root) {
+    if (!root || typeof WK === "undefined") return null;
+    const el = document.createElement("canvas");
+    el.className = "town-guide"; el.width = this.W; el.height = this.H; el.hidden = true;
+    const say = document.createElement("div");
+    say.className = "town-guide-say"; say.hidden = true; say.innerHTML = '<span lang="zh-CN">这边！</span> This way!';
+    root.append(el, say);
+    el.say = say;
+    return el;
+  },
+  // His own riding pose (the site's frames are left as they are): knees tucked on the
+  // cloud, staff held out toward the goal at angle a (degrees above horizontal).
+  frame(a, t) {
+    const base = WK.FRAMES.point[0];
+    return Object.assign({}, base, { legs: "crouch", torso: "TORSO_SQUASH", hy: 1 + Math.round(Math.sin(t / 400)), hx: 1,
+      head: t % 3600 < 140 ? "HEAD_BLINK" : "HEAD", staff: { a: Math.max(-55, Math.min(70, a)), gx: 6, gy: -7 }, tail: 2 });
+  },
+  // Draw him with the cloud's centre at game pixel (gx, gy).
+  place(el, canvas, gameW, gx, gy, left, a, t) {
+    const k = canvas.clientWidth / gameW, s = .5 * k, root = el.parentNode.getBoundingClientRect(), r = canvas.getBoundingClientRect();
+    const c = el.getContext("2d");
+    c.clearRect(0, 0, this.W, this.H);
+    c.drawImage(this.nimbus(), 13, 45 + Math.round(Math.sin(t / 260)));   // the cloud first: he sits on it
+    c.save(); c.translate(8, 4); WK.render(c, this.frame(a, t), t); c.restore();
+    for (let i = 0; i < 3; i++) {   // fairy sparkles circling him, twinkling
+      const q = t / 700 + i * 2.1, tw = Math.sin(t / 160 + i * 1.7);
+      if (tw < -.2) continue;
+      const x = Math.round(30 + Math.cos(q) * 22), y = Math.round(30 + Math.sin(q) * 14);
+      c.fillStyle = tw > .6 ? "#ffffff" : "#ffe36a";
+      c.fillRect(x, y, 1, 1);
+      if (tw > .5) { c.fillRect(x - 1, y, 3, 1); c.fillRect(x, y - 1, 1, 3); }
+    }
+    const x = r.left - root.left + gx * k - this.W * s / 2, y = r.top - root.top + gy * k - 51 * s;
+    Object.assign(el.style, { width: `${this.W * s}px`, height: `${this.H * s}px`, left: `${x}px`, top: `${y}px`, transform: left ? "scaleX(-1)" : "none" });
+    Object.assign(el.say.style, { left: `${x + this.W * s / 2}px`, top: `${y}px` });
+  },
+};
+const WORLD_NEAR = 36;  // px: how close walking up to a story spot starts its scene
 const worldLines = list => (list || []).map(l => typeof l === "string" ? ["n", l]
   : l[0] === "n" || l[0] === "say" ? l : ["say", l[0], l[1]]);
 
@@ -66,23 +128,22 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=5`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=10`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=7`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=5`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=8`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
       for (const [s, path] of Object.entries(kit.sheets)) this.load.image(`kit-${s}`, path);
       const [fw, fh] = kit.folk.frame;
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=7`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=12`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
       this.load.once("complete", () => {
         for (const [kind, list] of Object.entries(kit.kinds)) list.forEach(([s, x, y, wd, ht], i) => this.textures.get(`kit-${s}`).add(`${kind}#${i}`, 0, x, y, wd, ht));
         if (!this.textures.exists("@bang")) this.textures.addCanvas("@bang", TownArt.bang());
-        if (!this.textures.exists("@arrow")) this.textures.addCanvas("@arrow", TownArt.arrow());
         const st = WorldState.load(w.n, region);
         this.scene.start("world", { place: st.place || region.start, from: null, resume: true });
       });
@@ -121,7 +182,7 @@ function worldScenes() {
       for (const o of map.getObjectLayer("objects").objects) {
         const p = P(o);
         if (o.type === "prop") this.addProp(o, p);
-        else if (o.type === "spot") this.spots[o.name] = { x: o.x, y: o.y, node: p.node, label: p.label, labelZh: p.label_zh || "", intro: J(p.intro), outro: J(p.outro) };
+        else if (o.type === "spot") this.spots[o.name] = { x: o.x, y: o.y, node: p.node, label: p.label, labelZh: p.label_zh || "", intro: J(p.intro), outro: J(p.outro), trigger: p.trigger || "near" };
         else if (o.type === "npc") this.addNpc(o, p, J);
         else if (o.type === "exit") this.exits.push({ to: p.to, side: p.side, rect: new Phaser.Geom.Rectangle(o.x, o.y, o.width, o.height) });
         else if (o.type === "entry") this.entries[p.from || ""] = { x: o.x, y: o.y };
@@ -151,8 +212,10 @@ function worldScenes() {
       this.keys = this.input.keyboard.addKeys("W,A,S,D,UP,DOWN,LEFT,RIGHT,E,ENTER");
       for (const k of ["ENTER", "E"]) this.keys[k].on("down", () => this.act());
       this.ui = TownUI.mount(this, opts.host);
-      // the way to the next objective: over its spot when on screen, else at the edge pointing there
-      this.arrow = this.add.image(0, 0, "@arrow").setScrollFactor(0).setDepth(1e6 - 1).setVisible(false);
+      // Wukong shows the way to the next objective: beside its spot when it's on screen,
+      // else at the edge of the screen, pointing toward it (WorldGuide.on toggles him)
+      // He's drawn over the game at screen resolution, so his pixel art keeps its detail.
+      this.guide = WorldGuide.mount(opts.host.querySelector(".town-ui"));
       this.setGoal();
       if (!pos) this.ui.place(this.place.name, this.place.zh);
       this.blocked = 0;
@@ -160,6 +223,31 @@ function worldScenes() {
       if (typeof WorldItems !== "undefined") WorldItems.attach(this);   // mounts (tk-items.js)
       window.__w = this;  // for tests and the console
       if (this.resume && opts.ret) { const r = opts.ret; opts.ret = null; this.time.delayedCall(400, () => this.returned(r)); }
+      // story scenes that start by themselves: on arriving here, or on walking into their area
+      for (const s of Object.values(this.spots)) s.armed = Math.hypot(this.player.x - s.x, this.player.y - s.y) > WORLD_NEAR;   // not under your feet when you come back
+      this.time.delayedCall(900, () => {
+        const s = Object.values(this.spots).find(s => s.trigger === "arrive" && this.openQuest(s));
+        if (s && !this.ui.busy() && !this.leaving && !this.cine) this.playQuest(this.openQuest(s), s);
+      });
+    }
+
+    // The story quest a spot holds, if it can be played now.
+    openQuest(s) { const q = this.region.quests.find(x => x.node === s.node); return q && this.available(q) ? q : null; }
+
+    // Walking into a story spot's area starts its scene; it re-arms once you walk away.
+    nearSpots() {
+      if (this.ui.busy() || this.leaving || this.cine) return;
+      const P = this.player;
+      for (const s of Object.values(this.spots)) {
+        if (s.trigger === "talk") continue;
+        const d = Math.hypot(P.x - s.x, P.y - s.y);
+        if (d > WORLD_NEAR + 16) s.armed = true;
+        else if (d < WORLD_NEAR && s.armed) {
+          s.armed = false;
+          const q = this.openQuest(s);
+          if (q) { P.setVelocity(0); return this.playQuest(q, s); }
+        }
+      }
     }
 
     /* ---------- building the place ---------- */
@@ -245,7 +333,14 @@ function worldScenes() {
 
     /* ---------- quests: progress is the campaign save ---------- */
     save() { WorldState.save(this.w.n, this.st); }
-    done(key) { return TK.cleared(key); }
+    // A beat counts as done once anything after it is: saves from before a beat was
+    // added (the mulberry tree, the indoor scenes) aren't sent back to it.
+    done(key, seen = new Set()) {
+      if (TK.cleared(key)) return true;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return this.region.quests.some(q => q.after.includes(key) && this.done(q.node, seen));
+    }
     isDone(key) { return this.done(key) || !this.region.quests.some(q => q.node === key); }
     available(q) { return !this.done(q.node) && (q.after.length === 0 || q.after.some(a => this.isDone(a))); }
     placeOpen(id) {
@@ -273,6 +368,7 @@ function worldScenes() {
 
     setGoal() {
       this.goalAt = this.goalPoint();
+      if (this.fairy) this.fairy.wp = null;
       const q = this.nextMain();
       if (!q) return this.ui.goal("The world is complete. The road goes on…", "这一卷已经完成。路还在前方……");
       if (this.available(q)) return q.place === this.placeId ? this.ui.goal(q.objective, q.objective_zh)
@@ -290,6 +386,7 @@ function worldScenes() {
       if (!q) return null;
       const quests = this.available(q) ? [q] : this.leadsTo(q);
       const here = quests.find(x => x.place === this.placeId);
+      this.goalHops = 0;
       if (here) { const s = Object.values(this.spots).find(s => s.node === here.node); return s ? { x: s.x, y: s.y - 4 } : null; }
       const goals = new Set(quests.map(x => x.place)), near = {};
       for (const p of this.region.places) for (const l of p.links || []) { (near[p.id] ||= new Set()).add(l); (near[l] ||= new Set()).add(p.id); }
@@ -298,6 +395,7 @@ function worldScenes() {
         const id = queue.shift();
         if (goals.has(id)) {
           let hop = id;
+          for (let n = id; n !== this.placeId; n = prev[n]) this.goalHops++;
           while (prev[hop] !== this.placeId) hop = prev[hop];
           const e = this.exits.find(e => e.to === hop);
           return e ? { x: e.rect.centerX, y: e.rect.centerY } : null;
@@ -307,20 +405,56 @@ function worldScenes() {
       return null;
     }
 
-    goalArrow(time) {
-      const a = this.arrow, t = this.goalAt;
-      if (!a) return;
-      const show = !!t && !this.ui.busy() && !this.leaving && !this.cine;
-      a.setVisible(show);
-      if (!show) return;
-      const cam = this.cameras.main, v = cam.worldView, W = this.scale.width, H = this.scale.height, m = 16;
-      const sx = (t.x - v.x) * cam.zoom, sy = (t.y - v.y) * cam.zoom, bob = Math.sin(time / 180) * 2;
-      if (sx > m && sx < W - m && sy > m + 18 && sy < H - m) a.setPosition(Math.round(sx), Math.round(sy - 26 + bob)).setAngle(90);   // over the spot
-      else {
-        const dx = sx - W / 2, dy = sy - H / 2, k = Math.min((W / 2 - m) / Math.abs(dx || 1e-6), (H / 2 - m) / Math.abs(dy || 1e-6));
-        a.setPosition(Math.round(W / 2 + dx * k + Math.cos(Math.atan2(dy, dx)) * bob), Math.round(H / 2 + dy * k + Math.sin(Math.atan2(dy, dx)) * bob))
-          .setAngle(Math.round(Math.atan2(dy, dx) * 4 / Math.PI) * 45);   // eight directions keep the pixels crisp
-      }
+    // Wukong leads the way like a guiding spirit: he flies on ahead toward the goal,
+    // waits there drifting in lazy loops, and darts on once you catch up. Near the
+    // goal he settles over it. He moves on his own, gliding, never pinned to you.
+    goalGuide(time) {
+      const el = this.guide, t = this.goalAt;
+      if (!el) return;
+      const P = this.player, dt = Math.min(50, this.game.loop.delta || 16) / 1000;
+      const free = !!t && !this.ui.busy() && !this.leaving && !this.cine;
+      // progress: maps still to cross, then distance on this one; getting closer resets the clock
+      const q = this.nextMain(), key = q ? q.node : "", score = (this.goalHops || 0) * 1000 + (t ? Math.hypot(t.x - P.x, t.y - P.y) : 0);
+      const G = WorldGuide.prog || (WorldGuide.prog = { key, best: score, idle: 0 });
+      if (G.key !== key || score < G.best - 40) Object.assign(G, { key, best: Math.min(score, G.key === key ? G.best : score), idle: 0 });
+      else if (free) G.idle += dt * 1000;
+      const mode = WorldGuide.mode, show = free && (mode === "always" || (mode === "stuck" && G.idle > WorldGuide.STUCK));
+      el.hidden = !show; el.say.hidden = true;
+      if (!show) { this.fairy = null; return; }   // he leaves, and flies in fresh next time
+      const f = this.fairy || (this.fairy = { x: P.x - (t.x > P.x ? 60 : -60), y: P.y - 70, vx: 0, vy: 0, wp: null, still: 0 });
+      const toX = t.x - P.x, toY = t.y - P.y, dist = Math.hypot(toX, toY) || 1;
+      // where he waits: over the goal when you're close to it, else a stretch ahead on the way
+      const ahead = () => {
+        if (dist < 120) return { x: t.x, y: t.y - 22 };
+        const side = (Math.random() - .5) * 40;
+        return { x: P.x + toX / dist * 95 - toY / dist * side, y: P.y - 18 + toY / dist * 95 + toX / dist * side * .6 };
+      };
+      if (!f.wp) f.wp = ahead();
+      const caught = Math.hypot(P.x - f.wp.x, P.y + 18 - f.wp.y) < 48;            // you've reached him
+      const strayed = Math.hypot(f.wp.x - t.x, f.wp.y - t.y) > dist + 70;         // you went another way
+      const settle = dist < 120 && Math.hypot(f.wp.x - t.x, f.wp.y - t.y + 22) > 4;
+      const lost = Math.hypot(P.x - f.wp.x, P.y - f.wp.y) > 200;                    // you're far behind: he comes back for you
+      if (caught || strayed || settle || lost) f.wp = ahead();
+      // a slow drift around the waiting point
+      const wx = f.wp.x + Math.sin(time / 900) * 9 + Math.sin(time / 1730) * 5, wy = f.wp.y + Math.cos(time / 1150) * 5;
+      // glide there: ease the velocity toward the way, with a top speed
+      let dvx = (wx - f.x) * 2.2, dvy = (wy - f.y) * 2.2;
+      const sp = Math.hypot(dvx, dvy), max = 120;
+      if (sp > max) { dvx *= max / sp; dvy *= max / sp; }
+      const k = 1 - Math.pow(.02, dt);
+      f.vx += (dvx - f.vx) * k; f.vy += (dvy - f.vy) * k;
+      f.x += f.vx * dt; f.y += f.vy * dt;
+      // standing still far from the goal: a nudge
+      f.still = P.body && P.body.speed > 1 ? 0 : f.still + dt * 1000;
+      const nudge = dist > 120 && f.still > 2500 && (f.still - 2500) % 6000 < 1800;
+      // onto the screen (he stays in view at the edge if he's flown on beyond it)
+      const cam = this.cameras.main, v = cam.worldView, W = this.scale.width, H = this.scale.height;
+      const gx = Math.max(14, Math.min(W - 14, (f.x - v.x) * cam.zoom)), gy = Math.max(26, Math.min(H - 6, (f.y - v.y) * cam.zoom)) + Math.sin(time / 330) * 1.5;
+      const sx = (t.x - v.x) * cam.zoom, sy = (t.y - v.y) * cam.zoom;
+      const left = Math.abs(f.vx) > 12 ? f.vx < 0 : sx < gx;   // face where he's flying, else toward the goal
+      const a = Math.atan2(-(sy - (gy - 12)), Math.abs(sx - gx)) * 180 / Math.PI;
+      WorldGuide.place(el, this.game.canvas, W, gx, gy, left, a, time);
+      el.say.hidden = !nudge;
     }
 
     // Walk up to a story spot. A scene with a ["problem"] step builds up to
@@ -464,7 +598,8 @@ function worldScenes() {
     }
 
     update(time, dt) {
-      this.goalArrow(time);
+      this.goalGuide(time);
+      this.nearSpots();
       const P = this.player, K = this.keys;
       let vx = 0, vy = 0;
       if (!this.ui.busy() && !this.leaving) {
