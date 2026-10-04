@@ -30,6 +30,22 @@ const WorldItems = {
     const d = this.defs(w), m = this.owned(w).map(k => d[k]).find(x => x && x.kind === "mount");
     return m ? (m.coats && m.coats[who]) || "brown" : null;
   },
+  // Riding is a choice (R, or the header button), remembered per world; indoors everyone walks.
+  riding(w) { return TK.ls("tk-ride")[w.n] !== false; },
+  setRiding(w, on) { const a = TK.ls("tk-ride"); a[w.n] = !!on; TK.lsSet("tk-ride", a); },
+  hasMount(w) { const d = this.defs(w); return this.owned(w).some(k => d[k] && d[k].kind === "mount"); },
+  indoors(scene) { const p = scene.region && scene.region.places.find(x => x.id === scene.placeId); return !!(p && p.parent); },
+  mountedHere(scene, who) { return this.riding(scene.w) && !this.indoors(scene) ? this.coat(scene.w, who) : null; },
+  toggle(scene) {
+    const w = scene.w;
+    if (!this.hasMount(w)) return;
+    if (this.indoors(scene)) return this.say(scene, "屋里不能骑马", "No riding indoors");
+    this.setRiding(w, !this.riding(w));
+    scene.mountSig = null;
+    this.say(scene, this.riding(w) ? "上马" : "下马", this.riding(w) ? "Mounted" : "On foot");
+    if (this.onChange) this.onChange();
+  },
+  say(scene, zh, en) { this.notice(scene, { zh, name: en }, true); },
   add(w, key) {
     const all = TK.ls(this.KEY), list = all[w.n] || [];
     if (list.includes(key) || !this.defs(w)[key]) return false;
@@ -120,11 +136,11 @@ const WorldItems = {
       const riders = [{ who: "liubei", spr: scene.player, moving: scene.player.body.velocity.lengthSq() > 1 },
         ...scene.followers.map(f => ({ who: f.who, spr: f.spr, moving: !!(f.spr.anims && f.spr.anims.isPlaying) }))];
       // rebuild when the party changes
-      const sig = riders.map(r => r.who + ":" + (this.coat(w, r.who) || "")).join(",");
+      const sig = riders.map(r => r.who + ":" + (this.mountedHere(scene, r.who) || "")).join(",");
       if (sig !== scene.mountSig) {
         for (const m of scene.mounts) { m.horse.destroy(); m.seat.destroy(); m.head.destroy(); m.spr.setAlpha(1); }
-        scene.mounts = riders.filter(r => this.coat(w, r.who)).map(r => {
-          const coat = this.coat(w, r.who), horse = this.horse(scene, coat, r.spr.x, r.spr.y);
+        scene.mounts = riders.filter(r => this.mountedHere(scene, r.who)).map(r => {
+          const coat = this.mountedHere(scene, r.who), horse = this.horse(scene, coat, r.spr.x, r.spr.y);
           return { who: r.who, spr: r.spr, coat, horse, head: this.head(scene, horse), seat: scene.add.image(r.spr.x, r.spr.y, this.riderTexture(scene, r.who, "down")) };
         });
         scene.mountSig = sig;
@@ -145,6 +161,11 @@ const WorldItems = {
       if (scene.mounts.length && !scene.leaving && !busyScene) scene.player.body.velocity.scale(this.SPEED);
     };
     scene.mountSig = null;
+    // R gets on or off the horse
+    const key = () => { if (!scene.ui.busy() && !scene.cine && !scene.leaving) this.toggle(scene); };
+    scene.input.keyboard.on("keydown-R", key);
+    const keys = (scene.game.worldOpts && scene.game.worldOpts.host || document).querySelector(".town-keys");
+    if (keys && this.hasMount(w) && !keys.querySelector(".town-ride")) keys.insertAdjacentHTML("beforeend", ' · <span class="town-ride"><b>R</b> 上马/下马 ride</span>');
     scene.events.on("postupdate", sync);
     scene.events.once("shutdown", () => scene.events.off("postupdate", sync));
   },
@@ -160,7 +181,7 @@ const WorldItems = {
     this.notice(scene, d);
     scene.mountSig = null;   // re-seat the party
   },
-  notice(scene, d) {
+  notice(scene, d, brief) {
     const host = (scene.game.worldOpts && scene.game.worldOpts.host) || document.body;
     const ui = host.querySelector(".town-ui") || host;
     let root = ui.querySelector(".town-gains");
@@ -168,8 +189,9 @@ const WorldItems = {
     const el = document.createElement("div");
     el.className = "town-gain";
     el.innerHTML = `<b lang="zh-CN"></b><span></span>`;
-    el.querySelector("b").textContent = `得到 · ${d.zh || ""}`;
-    el.querySelector("span").textContent = `Gained: ${d.name}`;
+    el.querySelector("b").textContent = brief ? d.zh : `得到 · ${d.zh || ""}`;
+    el.querySelector("span").textContent = brief ? d.name : `Gained: ${d.name}`;
+    if (brief) el.classList.add("brief");
     root.append(el);
     setTimeout(() => el.remove(), 3600);
   },

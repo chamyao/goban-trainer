@@ -623,6 +623,64 @@
    "folk2": "assets/tk/jade/folk2.png"
   },
   "kinds": {
+   "folk.woman": [
+    {
+     "sheet": "folk1",
+     "origin": [
+      0,
+      0
+     ]
+    },
+    {
+     "sheet": "folk1",
+     "origin": [
+      3,
+      0
+     ]
+    },
+    {
+     "sheet": "folk1",
+     "origin": [
+      6,
+      0
+     ]
+    },
+    {
+     "sheet": "folk1",
+     "origin": [
+      9,
+      0
+     ]
+    },
+    {
+     "sheet": "folk1",
+     "origin": [
+      0,
+      4
+     ]
+    },
+    {
+     "sheet": "folk1",
+     "origin": [
+      3,
+      4
+     ]
+    },
+    {
+     "sheet": "folk1",
+     "origin": [
+      6,
+      4
+     ]
+    },
+    {
+     "sheet": "folk1",
+     "origin": [
+      9,
+      4
+     ]
+    }
+   ],
    "folk.villager": [
     {
      "sheet": "folk1",
@@ -630,66 +688,40 @@
       0,
       0
      ]
-    },
-    {
-     "sheet": "folk1",
-     "origin": [
-      3,
-      0
-     ]
-    },
-    {
-     "sheet": "folk1",
-     "origin": [
-      6,
-      0
-     ]
     }
-   ],
-   "folk.woman": [
-    {
-     "sheet": "folk1",
-     "origin": [
-      9,
-      0
-     ]
-    }
+   ]
+  },
+  "drawn": {
+   "folk.villager": [
+    "f_farmer",
+    "f_farmer2",
+    "f_porter",
+    "f_youth"
    ],
    "folk.elder": [
-    {
-     "sheet": "folk1",
-     "origin": [
-      3,
-      4
-     ]
-    }
+    "f_elder",
+    "f_elder2"
    ],
    "folk.child": [
-    {
-     "sheet": "folk1",
-     "origin": [
-      6,
-      4
-     ]
-    }
+    "f_child"
    ],
    "folk.monk": [
-    {
-     "sheet": "folk1",
-     "origin": [
-      0,
-      4
-     ]
-    }
+    "f_daoist"
    ],
    "folk.noble": [
-    {
-     "sheet": "folk1",
-     "origin": [
-      9,
-      4
-     ]
-    }
+    "f_noble"
+   ],
+   "folk.soldier": [
+    "f_soldier"
+   ],
+   "folk.rebel": [
+    "rebel"
+   ],
+   "folk.hunter": [
+    "f_hunter"
+   ],
+   "folk.official": [
+    "f_official"
    ]
   }
  }
