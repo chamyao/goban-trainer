@@ -483,3 +483,26 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
 .credits b { display: block; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 4px; }
 .credits p { margin: 0 0 4px; }
 .credits a { color: inherit; }
+
+/* ---------- Three Kingdoms: explorable town (tk-town.js) ---------- */
+.tk-map.tk-town { aspect-ratio: 16 / 9; outline: none; line-height: 1.4; font-family: Georgia, "Songti SC", serif; }
+.tk-map.tk-town:focus-visible { box-shadow: 0 0 0 3px #e6c14a, 0 2px 12px rgba(0,0,0,.15); }
+.tk-town canvas { image-rendering: pixelated; }
+.town-ui [hidden] { display: none !important; }
+.town-ui { position: absolute; inset: 0; pointer-events: none; color: #f4ead2; font-size: clamp(11px, 1.6vw, 15px); }
+.town-goal { position: absolute; top: 10px; left: 10px; max-width: 46ch; padding: 4px 10px; background: rgba(40, 24, 16, .82); border: 2px solid #c79a4a; border-radius: 6px; }
+.town-goal::before { content: "◆ "; color: #e6c14a; }
+.town-keys { position: absolute; right: 10px; top: 10px; padding: 4px 8px; background: rgba(40, 24, 16, .7); border-radius: 6px; font: 11px/1.5 system-ui, sans-serif; color: #e8dcc0; }
+.town-keys b { display: inline-block; min-width: 1.4em; padding: 0 3px; text-align: center; background: #f4ead2; color: #3a2416; border-radius: 3px; }
+.town-hint { position: absolute; transform: translate(-50%, -100%); padding: 0 5px; background: #f4ead2; color: #3a2416; border: 2px solid #3a2416; border-radius: 4px; font: bold 10px/1.4 system-ui, sans-serif; }
+.town-focus { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 8px 14px; background: rgba(20, 12, 8, .8); border-radius: 8px; font: 14px/1.4 system-ui, sans-serif; }
+.town-dlg { position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%); width: calc(100% - 24px); max-width: 760px; min-height: 22%; display: flex; gap: 12px; align-items: flex-start; padding: 10px 14px; background: #f4ead2; color: #2c1c12; border: 4px solid #7a3a22; border-radius: 8px; box-shadow: 0 5px 0 rgba(0, 0, 0, .35); box-sizing: border-box; }
+.town-face { width: clamp(52px, 9vw, 96px); height: auto; aspect-ratio: 1; image-rendering: pixelated; background: #e2d2ac; border: 3px solid #7a3a22; border-radius: 4px; flex: none; }
+.town-txt { min-width: 0; }
+.town-who { font-weight: bold; color: #8a2a1a; }
+.town-en { font-size: 1.1em; }
+.town-zh { margin-top: 4px; color: #6a5440; }
+.town-more { position: absolute; right: 12px; bottom: 4px; color: #8a2a1a; animation: townBob 1s infinite; }
+@keyframes townBob { 50% { transform: translateY(3px); } }
+@media (prefers-reduced-motion: reduce) { .town-more { animation: none; } }
+@media (max-width: 640px) { .town-keys { display: none; } }

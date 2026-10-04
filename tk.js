@@ -474,7 +474,7 @@ const TK = {
     return path;
   },
   roleLabel(node) {
-    return { main: "Main story", side: "Side story · long road", short: "Side story · shortcut", boss: "Boss" }[node.role] || "";
+    return { main: "Main story", side: "Side story · long road", short: "Side story · shortcut", boss: "Boss", challenge: "Challenge" }[node.role] || "";
   },
 };
 
@@ -929,6 +929,35 @@ async function viewTK(worldN) {
   const info = h("div", { class: "tk-info" });
   root.append(info);
 
+  // World 1 can be explored on foot (tk-town.js); the node map stays as the overview.
+  const town = w.n === 1 && typeof TownView !== "undefined";
+  const mode = town ? (TK.ls("tk-view")[w.n] || "town") : "map";  // the town until you take the south road
+  const setMode = m => { const v = TK.ls("tk-view"); v[w.n] = m; TK.lsSet("tk-view", v); viewTK(w.n); };
+  if (town) root.querySelector(".tk-head-btns").prepend(h("button", { class: "tk-chron-btn", type: "button", onclick: () => setMode(mode === "town" ? "map" : "town") },
+    mode === "town" ? "🗺 Overview map" : "🏘 Zhuo County"));
+  if (mode === "town") {
+    // Scenes replayed outside the node map: words only, no walking or effects.
+    const still = { w, actors: {}, leader: { x: 0, y: 0 }, party: [], pos: () => ({ x: 0, y: 0 }), actor: () => null, moveActor: async () => {}, addFx: () => 0 };
+    chron.onclick = () => tkChronicle(w, still);
+    if (!TK.seen(`${w.n}:opening`)) {
+      TKStory.busy = true;
+      try { await TKStory.play(still, w.opening); } finally { TKStory.busy = false; }
+      TK.markSeen(`${w.n}:opening`);
+      if (nav !== routeSeq) return;
+    }
+    const ret = TKView.takeReturn();
+    info.append(h("div", { class: "tk-info-text" }, [h("b", {}, "Zhuo County"),
+      h("div", { class: "meta" }, "Walk with WASD or the arrow keys, Shift to run, Space to talk. People marked ! will set you a problem.")]));
+    try {
+      await TownView.mount({
+        w, host, ret: ret && ret.world === w.n ? ret : null,
+        onPuzzle: key => { location.hash = `#/tk/${w.n}/${key}`; },
+        onLeave: () => { TK.setAt(w.n, `${w.n}-n2`); setMode("map"); },
+      });
+    } catch (e) { host.textContent = e.message; }
+    return;
+  }
+  if (typeof TownView !== "undefined") TownView.destroy();
   const map = new TKMap(w, host);
   TKView.map = map;
   await map.init();
@@ -1029,14 +1058,14 @@ async function viewTKLevel(worldN, key) {
   const nav = routeSeq;
   root.innerHTML = `<div class="loading">Loading…</div>`;
   await TK.load();
-  const w = TK.world(worldN), node = w && TK.node(w, key);
-  if (!node || !(TK.open(w, key) || TK.cleared(key))) { location.hash = `#/tk/${worldN || 1}`; return; }
+  const w = TK.world(worldN), node = w && (TK.node(w, key) || (typeof TownStory !== "undefined" && TownStory.node(w, key)));
+  if (!node || !(node.town || TK.open(w, key) || TK.cleared(key))) { location.hash = `#/tk/${worldN || 1}`; return; }
   const [bookId, pid] = TK.problemRef(node);
   const src = await getBook(bookId);
   if (nav !== routeSeq) return;
   const p = src.problems.find(x => x.id === pid);
   const book = Object.assign({}, src, { problems: [p] });
-  TK.setAt(worldN, key);
+  if (!node.town) TK.setAt(worldN, key);
   crumbs.innerHTML = "";
   crumbs.append(h("a", { href: "#/" }, "Library"), " / ", h("a", { href: `#/tk/${worldN}` }, `Three Kingdoms · World ${worldN}`), ` / ${node.place}`);
   root.innerHTML = "";

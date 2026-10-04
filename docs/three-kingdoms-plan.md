@@ -8,9 +8,11 @@ same campaign can be shown first as a simple top-down 2D world (GBA
 Pokémon style) and later as something larger and more open (Genshin
 Impact style), without rewriting the story.
 
-World 1 exists in two forms: the original node map (live, `tk.js`) and an
-explorable Zhuo County prototype (`tk-town.js`, branch `claude/zhuo-town`).
-The explorable world is the direction from here on.
+World 1 opens in explorable Zhuo County (`tk-town.js`, mounted in the
+campaign page's map box), where the notice and the Peach Garden oath are
+played on foot; the original node map (`tk.js`) stays as the overview and
+carries the rest of the world until those places are built. The explorable
+world is the direction from here on.
 
 ## Scope
 

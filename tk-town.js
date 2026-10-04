@@ -3,8 +3,11 @@
    a Tiled map for the ground, an object layer for props and people, an
    arcade-physics player the camera follows, and depth sorted by feet so
    you can walk behind houses and trees. Story beats are spots and people
-   you walk up to; Space / E talks. Art: Jade pack (assets/tk/jade, CC-BY
-   Willibab) for the town; the heroes and portraits come from TKArt (tk.js). */
+   you walk up to; Space / E talks. Talking to a challenger opens the real
+   level page (viewTKLevel); winning returns you to where you stood and the
+   scene plays here. Progress lives in the campaign save (TK.cleared/seen).
+   Art: Jade pack (assets/tk/jade, CC-BY Willibab) for the town; the heroes
+   and portraits come from TKArt (tk.js). Phaser loads only when a town opens. */
 
 const TOWN_T = 16;
 
@@ -34,7 +37,15 @@ const TOWN_PROPS = {
   flowers: ["nature", 0, 208, 16, 16, null],
   tuft: ["nature", 96, 192, 16, 16, null],
   lotus: ["nature", 144, 0, 32, 32, null],
+  gotable: ["@gotable", 0, 0, 22, 14, [20, 8]],
 };
+
+// The two nameless old men who set Go problems: the Star Lords of the plan
+// (docs/three-kingdoms-plan.md), unnamed until World 11.
+Object.assign(TK_CHARS, {
+  stargrey: { name: "Old man in grey", skin: "#ecc9a4", hair: "#e4e4e4", hat: "topknot", hatC: "#e4e4e4", pin: "#7a7a7a", robe: "#7c8088", trim: "#d8d2c0", beard: "long", beardC: "#f0f0f0", eyes: "kind" },
+  starred: { name: "Old man in red", skin: "#ecc9a4", hair: "#e4e4e4", hat: "scholar", hatC: "#5a2a22", robe: "#a83a2c", trim: "#e6c14a", beard: "long", beardC: "#f0f0f0", eyes: "kind" },
+});
 
 /* ---------- the heroes in four directions, from TKArt's front sprites ---------- */
 const TownArt = {
@@ -143,6 +154,21 @@ const TownArt = {
     A.rect(g, 3, 32, 5, 1, woodD); A.rect(g, 32, 32, 5, 1, woodD);
     return A.canvas(A.outline(g));
   },
+  // The "!" over someone who will set you a problem.
+  bang() {
+    const A = TKArt, g = A.grid(7, 12);
+    A.rect(g, 2, 1, 3, 6, "#ffe066"); A.rect(g, 2, 8, 3, 2, "#ffe066"); A.rect(g, 4, 1, 1, 6, "#e6b422");
+    return A.canvas(A.outline(g, "#3a2416"));
+  },
+  // A low weiqi table with a game in progress.
+  goTable() {
+    const A = TKArt, g = A.grid(22, 14), wood = "#c8903c", woodD = "#8a5a22";
+    A.rect(g, 1, 1, 20, 9, "#e2b468"); A.rect(g, 1, 10, 20, 1, woodD);
+    for (let i = 0; i < 5; i++) { A.rect(g, 3 + i * 4, 2, 1, 7, "#7a5228"); A.rect(g, 2, 2 + i * 1.6 | 0, 18, 1, "#7a5228"); }
+    for (const [x, y, c] of [[3, 4, "#222"], [7, 3, "#fff"], [11, 5, "#222"], [15, 4, "#fff"], [7, 7, "#222"], [15, 7, "#fff"], [11, 3, "#fff"]]) A.rect(g, x, y, 2, 2, c);
+    A.rect(g, 2, 11, 2, 2, wood); A.rect(g, 18, 11, 2, 2, wood);
+    return A.canvas(A.outline(g));
+  },
   // Register textures hero-<who>-<dir>-<frame> and walk animations.
   hero(scene, who) {
     const front = TKArt.get(who, "sprite", 0), back = this.back(who, 0);
@@ -171,242 +197,325 @@ const TownArt = {
   },
 };
 
-/* ---------- lines that aren't from the story file ---------- */
+/* ---------- what people say, and who challenges you ---------- */
 const TOWN_LINES = {
   storyteller: [["n", "An old storyteller taps his clapper-board. “Sit, sit! Tales of the Yellow Heaven, and of a boy named Cao Cao…”"],
-    ["n", "(The storyteller's side stories will play here.)"]],
+    ["n", "(His side stories will be told here.)"]],
   "zhangfei-wait": [["say", "zhangfei", "Hm? Go read the notice, friend, then we'll talk."]],
-  "guanyu-wait": [["n", "A giant of a man sits by his cart, stroking a beard two feet long."]],
-  folk1: [["n", "“They say the Yellow Turbans wear scarves the colour of the earth.”"]],
   folk2: [["n", "“Liu Bei? The sandal-seller? Kind man. Ears down to his shoulders, you know.”"]],
-  folk3: [["n", "“Zhang Fei sells wine and pork. Loud as thunder, but his heart is good.”"]],
-  folk4: [["n", "“Fine soil this year. Pity half the young men will go off to war.”"]],
   folk5: [["n", "“The governor wants volunteers. My son says he'll go.”"]],
-  "exit-south": [["n", "The road south leads to Daxing Mountain. (The next area isn't built yet.)"]],
-  "exit-west": [["n", "Back to Lousang Village. (Not built yet.)"]],
+  "exit-west": [["n", "The road back to Lousang Village. (Not built yet.)"]],
 };
 
-/* ---------- the scene ---------- */
-class TownScene extends Phaser.Scene {
-  constructor() { super("town"); }
+// Optional challengers: each sets a problem of the world's grade, Pokémon-trainer style.
+const TOWN_CHALLENGES = {
+  elder: { intro: [["n", "An old man sits over a weiqi board in the square. “You have the look of a thinker. Sit, play me one.”"]],
+    win: [["n", "“Ha! Quick eyes. The governor could use a man like you.”"]], done: [["n", "“Come back when you've grown sharper, and we'll play again.”"]] },
+  innkeeper: { intro: [["n", "“Wine's on the house if you can solve the one my regulars can't.”"]],
+    win: [["n", "“Well I never. Drink up, then!”"]], done: [["n", "“Still the only one who's cracked it.”"]] },
+  farmer: { intro: [["n", "“Weiqi's like farming: you claim the land, then you have to hold it. Try this.”"]],
+    win: [["n", "“Held it, and well. Zhang Fei's lucky to know you.”"]], done: [["n", "“Fine soil this year.”"]] },
+  scholar: { intro: [["n", "A clerk from the county office looks up. “The magistrate set this one. Nobody here has solved it.”"]],
+    win: [["n", "“Remarkable. I'll tell the magistrate a sandal-seller did it.”"]], done: [["n", "“The magistrate still doesn't believe me.”"]] },
+};
 
-  preload() {
-    const A = "assets/tk/jade/";
-    for (const s of ["buildings", "town", "nature"]) this.load.image(s, A + s + ".png");
-    this.load.image("tiles", A + "tiles.png");
-    this.load.spritesheet("folk1", A + "folk1.png", { frameWidth: 16, frameHeight: 21 });
-    this.load.spritesheet("folk2", A + "folk2.png", { frameWidth: 16, frameHeight: 21 });
-    this.load.tilemapTiledJSON("zhuo", "data/tk_town_zhuo.json");
-    this.load.json("tk", "data/tk.json");
-  }
+const TownStory = {
+  // Which part of the opening the player has reached, from the campaign save.
+  stage(w) {
+    if (!TK.cleared(`${w.n}-n1`)) return 0;
+    if (!TK.seen(`${w.n}:inn`)) return 1;
+    if (!TK.cleared(`${w.n}-n2`)) return 2;
+    return 3;
+  },
+  goal: ["Read the notice in the town square.", "Find the wine at the village inn, north of the square.",
+    "Go to the Peach Garden behind Zhang Fei's farm (east).", "The brothers are sworn. Take the south road to war."],
+  // A town challenger as a campaign level: a pool drawn from the world's problems.
+  node(w, key) {
+    const m = key.match(/^(\d+)-zhuo-(\w+)$/);
+    if (!m || !TOWN_CHALLENGES[m[2]]) return null;
+    const all = [], seen = new Set();
+    for (const n of w.nodes) if (n.pool && n.role !== "boss") for (const p of n.pool) { const k = p.join(":"); if (!seen.has(k)) { seen.add(k); all.push(p); } }
+    const i = Object.keys(TOWN_CHALLENGES).indexOf(m[2]) * 11 % all.length;
+    return { key, town: true, place: "Zhuo County", role: "challenge", grade: w.grades.split("–")[0], pool: all.slice(i).concat(all.slice(0, i)) };
+  },
+};
 
-  create() {
-    this.story = this.cache.json.get("tk").worlds[0].scenes;
-    this.stage = 0;  // 0 read the notice, 1 go to the inn, 2 go to the peach garden, 3 done
-    const map = this.make.tilemap({ key: "zhuo" });
-    map.createLayer("ground", map.addTilesetImage("ground", "tiles"), 0, 0);
-    this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-    this.solids = this.physics.add.staticGroup();
+/* ---------- the scene (made once Phaser has loaded) ---------- */
+function townSceneClass() {
+  return class TownScene extends Phaser.Scene {
+    constructor() { super("town"); }
+    init(opts) { this.opts = opts; this.w = opts.w; }
 
-    this.textures.addCanvas("@noticeboard", TownArt.noticeBoard());
-    for (const [name, [sheet, x, y, w, h]] of Object.entries(TOWN_PROPS)) if (sheet[0] !== "@") this.textures.get(sheet).add(name, 0, x, y, w, h);
-    for (const who of ["liubei", "guanyu", "zhangfei"]) TownArt.hero(this, who);
-
-    const props = o => Object.fromEntries((o.properties || []).map(p => [p.name, p.value]));
-    this.spots = {}; this.npcs = [];
-    for (const o of map.getObjectLayer("objects").objects) {
-      if (o.type === "prop") this.addProp(o.name, o.x, o.y);
-      else if (o.type === "spot") this.spots[o.name] = { x: o.x, y: o.y };
-      else if (o.type === "spawn") this.spawn = { x: o.x, y: o.y };
-      else if (o.type === "npc") this.addNpc(o.name, o.x, o.y, props(o));
+    preload() {
+      const A = "assets/tk/jade/";
+      for (const s of ["buildings", "town", "nature"]) this.load.image(s, A + s + ".png");
+      this.load.image("tiles", A + "tiles.png");
+      this.load.spritesheet("folk1", A + "folk1.png", { frameWidth: 16, frameHeight: 21 });
+      this.load.spritesheet("folk2", A + "folk2.png", { frameWidth: 16, frameHeight: 21 });
+      this.load.tilemapTiledJSON("zhuo", "data/tk_town_zhuo.json?v=2");
     }
 
-    // the player: Liu Bei, with a small body at the feet
-    this.player = this.physics.add.sprite(this.spawn.x, this.spawn.y, "h-liubei-down-0").setOrigin(.5, 1);
-    this.player.body.setSize(10, 6).setOffset(4, 14);
-    this.player.setCollideWorldBounds(true);
-    this.player.facing = "right";
-    this.physics.add.collider(this.player, this.solids);
-    this.physics.add.collider(this.player, this.npcs.map(n => n.spr));
-    this.followers = [];
+    create() {
+      const w = this.w;
+      this.story = w.scenes;
+      const map = this.make.tilemap({ key: "zhuo" });
+      map.createLayer("ground", map.addTilesetImage("ground", "tiles"), 0, 0);
+      this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+      this.solids = this.physics.add.staticGroup();
 
-    const cam = this.cameras.main;
-    cam.startFollow(this.player, true, .15, .15);
-    cam.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-    cam.setRoundPixels(true);
+      this.textures.addCanvas("@noticeboard", TownArt.noticeBoard());
+      this.textures.addCanvas("@gotable", TownArt.goTable());
+      this.textures.addCanvas("@bang", TownArt.bang());
+      for (const [name, [sheet, x, y, wd, ht]] of Object.entries(TOWN_PROPS)) if (sheet[0] !== "@") this.textures.get(sheet).add(name, 0, x, y, wd, ht);
+      for (const who of ["liubei", "guanyu", "zhangfei", "stargrey", "starred"]) TownArt.hero(this, who);
 
-    this.keys = this.input.keyboard.addKeys("W,A,S,D,UP,DOWN,LEFT,RIGHT,SHIFT,SPACE,E,ENTER,Z");
-    for (const k of ["SPACE", "E", "ENTER", "Z"]) this.keys[k].on("down", () => this.act());
-    this.trail = [];
-    this.ui = TownUI.mount(this);
-    this.setGoal();
-    this.cameras.main.fadeIn(400);
-  }
+      const props = o => Object.fromEntries((o.properties || []).map(p => [p.name, p.value]));
+      this.spots = {}; this.npcs = [];
+      for (const o of map.getObjectLayer("objects").objects) {
+        if (o.type === "prop") this.addProp(o.name, o.x, o.y);
+        else if (o.type === "spot") this.spots[o.name] = { x: o.x, y: o.y };
+        else if (o.type === "spawn") this.spawn = { x: o.x, y: o.y };
+        else if (o.type === "npc") this.addNpc(o.name, o.x, o.y, props(o));
+      }
 
-  addProp(name, x, y) {
-    const def = TOWN_PROPS[name];
-    if (!def) return;
-    const s = (def[0][0] === "@" ? this.add.image(Math.round(x), Math.round(y), def[0]) : this.add.image(Math.round(x), Math.round(y), def[0], name)).setOrigin(.5, 1).setDepth(y);
-    if (["flowers", "tuft", "lotus"].includes(name)) s.setDepth(y - 40);  // ground clutter stays underfoot
-    const solid = def[5];
-    if (solid) {
-      const b = this.add.zone(Math.round(x), Math.round(y - solid[1] / 2), solid[0], solid[1]);
-      this.solids.add(b);
+      // Back from a problem: stand where you left off.
+      let at = this.spawn, face = "right";
+      try { const s = JSON.parse(sessionStorage.getItem("tk-town-pos")); if (s && s.world === w.n) { at = s; face = s.f; } } catch {}
+      this.player = this.physics.add.sprite(at.x, at.y, "h-liubei-down-0").setOrigin(.5, 1);
+      this.player.body.setSize(10, 6).setOffset(4, 14);
+      this.player.setCollideWorldBounds(true);
+      this.player.facing = face;
+      this.physics.add.collider(this.player, this.solids);
+      this.physics.add.collider(this.player, this.npcs.map(n => n.spr));
+      this.followers = [];
+      this.trail = [];
+
+      const cam = this.cameras.main;
+      cam.startFollow(this.player, true, .15, .15);
+      cam.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+      cam.setRoundPixels(true);
+
+      this.keys = this.input.keyboard.addKeys("W,A,S,D,UP,DOWN,LEFT,RIGHT,SHIFT,SPACE,E,ENTER,Z");
+      for (const k of ["SPACE", "E", "ENTER", "Z"]) this.keys[k].on("down", () => this.act());
+      this.ui = TownUI.mount(this, this.opts.host);
+      this.sync();
+      cam.fadeIn(300);
+      if (this.opts.ret) this.time.delayedCall(350, () => this.returned(this.opts.ret));
     }
-    return s;
-  }
 
-  addNpc(id, x, y, p) {
-    let spr, folk = null;
-    if (p.who) { spr = this.physics.add.sprite(x, y, `h-${p.who}-down-0`); }
-    else { folk = TownArt.folk(this, p.folk); spr = this.physics.add.sprite(x, y, folk.sheet, folk.still("down")); }
-    spr.setOrigin(.5, 1).setDepth(y).setImmovable(true);
-    spr.body.setSize(10, 6).setOffset(3, spr.height - 6);
-    const n = { id, spr, who: p.who, folk, folkN: p.folk, line: p.line, wander: !!p.wander, home: { x, y }, t: 0, dir: "down" };
-    this.npcs.push(n);
-    this.physics.add.collider(spr, this.solids);
-    if (id === "guanyu") spr.setVisible(false).body.enable = false;  // arrives with the inn scene
-    return n;
-  }
-
-  setGoal() {
-    const goals = ["Read the notice in the town square.", "Find Zhang Fei's wine at the village inn, north of the square.",
-      "Go to the Peach Garden behind Zhang Fei's farm (east).", "The brothers are sworn. The road south leads to war."];
-    this.ui.goal(goals[this.stage]);
-  }
-
-  // What is the player facing? A story spot or a person within reach.
-  target() {
-    const P = this.player, v = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }[P.facing];
-    const fx = P.x + v[0] * 12, fy = P.y - 3 + v[1] * 12;
-    let best = null, bd = 20;
-    for (const n of this.npcs) {
-      if (!n.spr.visible) continue;
-      const d = Math.hypot(n.spr.x - fx, n.spr.y - 3 - fy);
-      if (d < bd) { bd = d; best = { kind: "npc", n }; }
+    // Bring people and the party in line with the story so far.
+    sync() {
+      const st = TownStory.stage(this.w);
+      this.ui.goal(TownStory.goal[st]);
+      const show = (id, on) => { const n = this.npcs.find(m => m.id === id); if (n) { n.spr.setVisible(on); n.spr.body.enable = on; } };
+      show("guanyu", false);
+      show("zhangfei", st < 2);
+      show("stargrey", st < 3); show("starred", st < 3);
+      if (st >= 2 && !this.followers.length) this.joinParty(["guanyu", "zhangfei"]);
+      for (const n of this.npcs) if (n.mark) n.mark.setVisible(n.spr.visible && !TK.cleared(n.challenge));
     }
-    for (const [k, s] of Object.entries(this.spots)) {
-      const d = Math.hypot(s.x - fx, s.y - fy);
-      if (d < (k.startsWith("exit") ? 24 : 26) && d < bd) { bd = d; best = { kind: "spot", k }; }
-    }
-    return best;
-  }
 
-  act() {
-    if (this.ui.busy()) { this.ui.advance(); return; }
-    const t = this.target();
-    if (!t) return;
-    if (t.kind === "npc") {
-      const n = t.n;
+    addProp(name, x, y) {
+      const def = TOWN_PROPS[name];
+      if (!def) return;
+      const img = def[0][0] === "@" ? this.add.image(Math.round(x), Math.round(y), def[0]) : this.add.image(Math.round(x), Math.round(y), def[0], name);
+      img.setOrigin(.5, 1).setDepth(["flowers", "tuft", "lotus"].includes(name) ? y - 40 : y);
+      const solid = def[5];
+      if (solid) this.solids.add(this.add.zone(Math.round(x), Math.round(y - solid[1] / 2), solid[0], solid[1]));
+      return img;
+    }
+
+    addNpc(id, x, y, p) {
+      let spr, folk = null;
+      if (p.who) spr = this.physics.add.sprite(x, y, `h-${p.who}-${p.face || "down"}-0`);
+      else { folk = TownArt.folk(this, p.folk); spr = this.physics.add.sprite(x, y, folk.sheet, folk.still(p.face || "down")); }
+      spr.setOrigin(.5, 1).setDepth(y).setImmovable(true);
+      spr.body.setSize(10, 6).setOffset(3, spr.height - 6);
+      const n = { id, spr, who: p.who, folk, folkN: p.folk, line: p.line, wander: !!p.wander, home: { x, y }, t: 0, dir: p.face || "down" };
+      if (p.challenge) {
+        n.challenge = `${this.w.n}-zhuo-${p.challenge}`; n.cid = p.challenge;
+        n.mark = this.add.image(x, y - spr.height - 2, "@bang").setOrigin(.5, 1).setDepth(9999);
+      }
+      this.npcs.push(n);
+      this.physics.add.collider(spr, this.solids);
+      return n;
+    }
+
+    // What is the player facing? A person or a story spot within reach.
+    target() {
+      const P = this.player, v = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }[P.facing];
+      const fx = P.x + v[0] * 12, fy = P.y - 3 + v[1] * 12;
+      let best = null, bd = 20;
+      for (const n of this.npcs) {
+        if (!n.spr.visible) continue;
+        const d = Math.hypot(n.spr.x - fx, n.spr.y - 3 - fy);
+        if (d < bd) { bd = d; best = { kind: "npc", n }; }
+      }
+      for (const [k, s] of Object.entries(this.spots)) {
+        const d = Math.hypot(s.x - fx, s.y - fy);
+        if (d < 24 && d < bd) { bd = d; best = { kind: "spot", k }; }
+      }
+      return best;
+    }
+
+    act() {
+      if (this.ui.busy()) { this.ui.advance(); return; }
+      const t = this.target();
+      if (!t) return;
+      if (t.kind === "spot") return this.spot(t.k);
+      const n = t.n, st = TownStory.stage(this.w);
       n.dir = { up: "down", down: "up", left: "right", right: "left" }[this.player.facing];
       this.faceNpc(n);
-      if (n.id === "zhangfei" && this.stage === 1) return this.talk(this.story.notice.steps.slice(2, 5));
-      this.talk(TOWN_LINES[n.line] || [["n", "…"]]);
-    } else this.spot(t.k);
-  }
-
-  spot(k) {
-    const notice = this.story.notice.steps, inn = notice.findIndex(s => s[0] === "n" && s[1].startsWith("At the village inn"));
-    if (k === "notice" && this.stage === 0) {
-      this.ui.puzzle("The Notice at Zhuo", () => this.talk(notice.slice(0, inn), () => { this.stage = 1; this.setGoal(); }));
-    } else if (k === "notice") this.talk([["n", "The governor of You Province calls for volunteers against the Yellow Turbans."]]);
-    else if (k === "inn" && this.stage === 1) {
-      const g = this.npcs.find(n => n.id === "guanyu");
-      g.spr.setVisible(true); g.spr.body.enable = true;
-      this.talk(notice.slice(inn).filter(s => s[0] !== "party"), () => {
-        this.stage = 2; this.setGoal(); this.joinParty(["guanyu", "zhangfei"]);
-      });
-    } else if (k === "inn") this.talk([["n", "The inn smells of wine and roast pork."]]);
-    else if (k === "garden" && this.stage === 2) {
-      this.ui.puzzle("The Peach Garden Oath", () => this.talk(this.story.oath.steps.filter(s => s[0] === "n" || s[0] === "say"),
-        () => { this.stage = 3; this.setGoal(); }));
-    } else if (k === "garden") this.talk([["n", stageMsg(this.stage)]]);
-    else this.talk(TOWN_LINES[k] || [["n", "…"]]);
-    function stageMsg(s) { return s < 2 ? "A peach garden in full bloom, behind Zhang Fei's farm." : "Petals drift over the place where you swore."; }
-  }
-
-  // Party members leave their posts and follow in single file.
-  joinParty(ids) {
-    for (const id of ids) {
-      const n = this.npcs.find(m => m.id === id);
-      n.spr.body.enable = false;
-      this.npcs = this.npcs.filter(m => m !== n);
-      this.followers.push({ who: id, spr: n.spr });
-    }
-    this.trail = Array(60).fill({ x: this.player.x, y: this.player.y, f: this.player.facing });
-  }
-
-  talk(steps, done) { this.player.setVelocity(0); this.ui.dialog(steps, done); }
-
-  faceNpc(n) {
-    if (n.who) n.spr.setTexture(`h-${n.who}-${n.dir}-0`);
-    else { n.spr.anims.stop(); n.spr.setFrame(n.folk.still(n.dir)); }
-  }
-
-  update(time, dt) {
-    const P = this.player, K = this.keys;
-    let vx = 0, vy = 0;
-    if (!this.ui.busy()) {
-      if (K.LEFT.isDown || K.A.isDown) vx -= 1;
-      if (K.RIGHT.isDown || K.D.isDown) vx += 1;
-      if (K.UP.isDown || K.W.isDown) vy -= 1;
-      if (K.DOWN.isDown || K.S.isDown) vy += 1;
-    }
-    const speed = K.SHIFT.isDown ? 110 : 64, len = Math.hypot(vx, vy) || 1;
-    P.setVelocity(vx / len * speed, vy / len * speed);
-    if (vx || vy) {
-      P.facing = Math.abs(vx) > Math.abs(vy) ? (vx < 0 ? "left" : "right") : (vy < 0 ? "up" : "down");
-      P.anims.play(`h-liubei-${P.facing}`, true);
-      P.anims.msPerFrame = K.SHIFT.isDown ? 85 : 135;
-    } else { P.anims.stop(); P.setTexture(`h-liubei-${P.facing}-0`); }
-    P.setDepth(P.y);
-
-    // followers walk the player's trail
-    if (vx || vy) { this.trail.unshift({ x: P.x, y: P.y, f: P.facing }); this.trail.length = 60; }
-    this.followers.forEach((F, i) => {
-      const p = this.trail[Math.min(this.trail.length - 1, (i + 1) * 14)] || { x: P.x, y: P.y, f: P.facing };
-      const moving = Math.hypot(F.spr.x - p.x, F.spr.y - p.y) > .5;
-      F.spr.setPosition(p.x, p.y).setDepth(p.y);
-      if (moving) F.spr.anims.play(`h-${F.who}-${p.f}`, true); else { F.spr.anims.stop(); F.spr.setTexture(`h-${F.who}-${p.f}-0`); }
-    });
-
-    // townsfolk amble about near home
-    for (const n of this.npcs) {
-      if (!n.wander || this.ui.busy()) { n.spr.setVelocity(0); continue; }
-      n.t -= dt;
-      if (n.t <= 0) {
-        n.t = 900 + Math.random() * 2200;
-        const go = Math.random() < .5, away = Math.hypot(n.spr.x - n.home.x, n.spr.y - n.home.y) > 40;
-        n.dir = away ? (Math.abs(n.spr.x - n.home.x) > Math.abs(n.spr.y - n.home.y) ? (n.spr.x > n.home.x ? "left" : "right") : (n.spr.y > n.home.y ? "up" : "down"))
-          : ["up", "down", "left", "right"][Math.floor(Math.random() * 4)];
-        n.moving = go || away;
+      if (n.id === "starred" || n.id === "stargrey") return this.spot("garden");
+      if (n.id === "zhangfei" && st === 1) return this.talk(this.story.notice.steps.slice(2, 5).filter(s => s[0] === "say"));
+      if (n.challenge) {
+        const C = TOWN_CHALLENGES[n.cid];
+        return TK.cleared(n.challenge) ? this.talk(C.done) : this.talk(C.intro, () => this.puzzle(n.challenge));
       }
-      const v = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }[n.dir];
-      if (n.moving) { n.spr.setVelocity(v[0] * 28, v[1] * 28); n.spr.anims.play(`f-${n.folkN}-${n.dir}`, true); }
-      else { n.spr.setVelocity(0); this.faceNpc(n); }
-      n.spr.setDepth(n.spr.y);
+      this.talk(TOWN_LINES[n.line] || [["n", "…"]]);
     }
 
-    // a hint over whatever you could talk to
-    const t = !this.ui.busy() && this.target();
-    this.ui.hint(t ? (t.kind === "npc" ? t.n.spr : this.spots[t.k]) : null);
-  }
+    spot(k) {
+      const st = TownStory.stage(this.w), notice = this.story.notice.steps;
+      const inn = notice.findIndex(s => s[0] === "n" && s[1].startsWith("At the village inn"));
+      if (k === "notice") {
+        if (st === 0) return this.talk([["n", "The governor of You Province calls for volunteers against the Yellow Turbans. At the bottom, a weiqi problem: “Let any man who would lead volunteers show he can read a battle.”"]],
+          () => this.puzzle(`${this.w.n}-n1`));
+        return this.talk([["n", "The governor of You Province calls for volunteers against the Yellow Turbans."]]);
+      }
+      if (k === "inn") {
+        if (st !== 1) return this.talk([["n", "The inn smells of wine and roast pork."]]);
+        const g = this.npcs.find(n => n.id === "guanyu");
+        g.spr.setVisible(true);
+        return this.talk(notice.slice(inn), () => {
+          TK.markSeen(`${this.w.n}:inn`); TK.setParty(this.w, ["liubei", "guanyu", "zhangfei"]);
+          g.spr.setVisible(false); this.sync();
+        });
+      }
+      if (k === "garden") {
+        if (st < 2) return this.talk([["n", "Two old men sit over a weiqi board under the peach trees. They don't look up."]]);
+        if (st === 2) return this.talk([
+          ["n", "Under the peach trees two old men sit over a weiqi board, one in grey, one in red."],
+          ["say", "starred", "Three young men, come to swear before Heaven? Heaven is listening. But first, show us how you read the stones."],
+        ], () => this.puzzle(`${this.w.n}-n2`));
+        return this.talk([["n", "Petals drift over the place where you swore. The weiqi board is still there."]]);
+      }
+      if (k === "exit-south") {
+        if (st < 3) return this.talk([["n", "The road south leads to war. Finish your business in Zhuo County first."]]);
+        return this.opts.onLeave && this.opts.onLeave("south");
+      }
+      this.talk(TOWN_LINES[k] || [["n", "…"]]);
+    }
+
+    // Open the problem on the level page; remember where we stood.
+    puzzle(key) {
+      const P = this.player;
+      try { sessionStorage.setItem("tk-town-pos", JSON.stringify({ world: this.w.n, x: Math.round(P.x), y: Math.round(P.y), f: P.facing })); } catch {}
+      this.cameras.main.fadeOut(250);
+      this.time.delayedCall(260, () => this.opts.onPuzzle(key));
+    }
+
+    // Back from a won problem: play what it unlocked.
+    returned(ret) {
+      if (!ret.win) return;
+      const w = this.w, notice = this.story.notice.steps, inn = notice.findIndex(s => s[0] === "n" && s[1].startsWith("At the village inn"));
+      const after = () => this.sync();
+      if (ret.key === `${w.n}-n1`) {
+        this.talk(notice.slice(0, inn), () => { TK.markSeen(`${w.n}:notice`); after(); });
+        const zf = this.npcs.find(n => n.id === "zhangfei"); if (zf) { zf.spr.setPosition(this.player.x + 18, this.player.y); }
+      } else if (ret.key === `${w.n}-n2`) {
+        this.talk([["say", "stargrey", "Good. The road ahead forks, and fortune favours the one who reads it."],
+          ["n", "When the brothers look up, the two old men are gone. Only the board remains, and a drift of petals."],
+          ...this.story.oath.steps], () => { TK.markSeen(`${w.n}:oath`); after(); });
+      } else {
+        const id = (ret.key.match(/-zhuo-(\w+)$/) || [])[1];
+        if (id && TOWN_CHALLENGES[id]) this.talk(TOWN_CHALLENGES[id].win, after); else after();
+      }
+    }
+
+    joinParty(ids) {
+      for (const id of ids) {
+        const n = this.npcs.find(m => m.id === id);
+        if (!n) continue;
+        n.spr.setVisible(true); n.spr.body.enable = false;
+        this.npcs = this.npcs.filter(m => m !== n);
+        this.followers.push({ who: id, spr: n.spr });
+      }
+      this.trail = Array(60).fill({ x: this.player.x, y: this.player.y, f: this.player.facing });
+    }
+
+    talk(steps, done) { this.player.setVelocity(0); this.ui.dialog(steps, done); }
+
+    faceNpc(n) {
+      if (n.who) n.spr.setTexture(`h-${n.who}-${n.dir}-0`);
+      else { n.spr.anims.stop(); n.spr.setFrame(n.folk.still(n.dir)); }
+    }
+
+    update(time, dt) {
+      const P = this.player, K = this.keys;
+      let vx = 0, vy = 0;
+      if (!this.ui.busy()) {
+        if (K.LEFT.isDown || K.A.isDown) vx -= 1;
+        if (K.RIGHT.isDown || K.D.isDown) vx += 1;
+        if (K.UP.isDown || K.W.isDown) vy -= 1;
+        if (K.DOWN.isDown || K.S.isDown) vy += 1;
+      }
+      const speed = K.SHIFT.isDown ? 110 : 64, len = Math.hypot(vx, vy) || 1;
+      P.setVelocity(vx / len * speed, vy / len * speed);
+      if (vx || vy) {
+        P.facing = Math.abs(vx) > Math.abs(vy) ? (vx < 0 ? "left" : "right") : (vy < 0 ? "up" : "down");
+        P.anims.play(`h-liubei-${P.facing}`, true);
+        P.anims.msPerFrame = K.SHIFT.isDown ? 85 : 135;
+      } else { P.anims.stop(); P.setTexture(`h-liubei-${P.facing}-0`); }
+      P.setDepth(P.y);
+
+      if (vx || vy) { this.trail.unshift({ x: P.x, y: P.y, f: P.facing }); this.trail.length = 60; }
+      this.followers.forEach((F, i) => {
+        const p = this.trail[Math.min(this.trail.length - 1, (i + 1) * 14)] || { x: P.x, y: P.y, f: P.facing };
+        const moving = Math.hypot(F.spr.x - p.x, F.spr.y - p.y) > .5;
+        F.spr.setPosition(p.x, p.y).setDepth(p.y);
+        if (moving) F.spr.anims.play(`h-${F.who}-${p.f}`, true); else { F.spr.anims.stop(); F.spr.setTexture(`h-${F.who}-${p.f}-0`); }
+      });
+
+      for (const n of this.npcs) {
+        if (n.mark) n.mark.setPosition(n.spr.x, Math.round(n.spr.y - n.spr.height - 1 + Math.sin(time / 250) * 1.5));
+        if (!n.wander || this.ui.busy()) { n.spr.setVelocity(0); continue; }
+        n.t -= dt;
+        if (n.t <= 0) {
+          n.t = 900 + Math.random() * 2200;
+          const away = Math.hypot(n.spr.x - n.home.x, n.spr.y - n.home.y) > 40;
+          n.dir = away ? (Math.abs(n.spr.x - n.home.x) > Math.abs(n.spr.y - n.home.y) ? (n.spr.x > n.home.x ? "left" : "right") : (n.spr.y > n.home.y ? "up" : "down"))
+            : ["up", "down", "left", "right"][Math.floor(Math.random() * 4)];
+          n.moving = away || Math.random() < .5;
+        }
+        const v = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }[n.dir];
+        if (n.moving) { n.spr.setVelocity(v[0] * 28, v[1] * 28); n.spr.anims.play(`f-${n.folkN}-${n.dir}`, true); }
+        else { n.spr.setVelocity(0); this.faceNpc(n); }
+        n.spr.setDepth(n.spr.y);
+      }
+
+      const t = !this.ui.busy() && this.target();
+      this.ui.hint(t ? (t.kind === "npc" ? t.n.spr : this.spots[t.k]) : null);
+    }
+  };
 }
 
-/* ---------- DOM overlay: goal, dialogue with portraits, puzzle stand-in ---------- */
+/* ---------- DOM overlay: goal, dialogue with portraits and voice ---------- */
 const TownUI = {
-  mount(scene) {
-    const root = document.getElementById("town-ui");
-    root.innerHTML = `<div class="town-goal"></div><div class="town-hint" hidden>Space</div>
-      <div class="town-dlg" hidden><canvas class="town-face" width="34" height="34"></canvas><div class="town-txt"><div class="town-who"></div><div class="town-en"></div><div class="town-zh"></div></div><div class="town-more">▼</div></div>
-      <div class="town-puz" hidden><div class="town-puz-box"><div class="town-puz-t"></div><p>In the full game a go problem starts here, and solving it plays the story.</p><button>Solve (prototype)</button></div></div>`;
+  mount(scene, host) {
+    const root = document.createElement("div");
+    root.className = "town-ui";
+    root.innerHTML = `<div class="town-goal"></div><div class="town-keys"><b>WASD</b>/<b>↑↓←→</b> walk · <b>Shift</b> run · <b>Space</b> talk</div>
+      <div class="town-hint" hidden>Space</div><div class="town-focus" hidden>Click the map to play</div>
+      <div class="town-dlg" hidden><canvas class="town-face" width="34" height="34"></canvas><div class="town-txt"><div class="town-who"></div><div class="town-en"></div><div class="town-zh" lang="zh-CN"></div></div><div class="town-more">▼</div></div>`;
+    host.append(root);
     const $ = s => root.querySelector(s);
-    let queue = [], done = null, open = false, puz = false;
+    let queue = [], done = null, open = false;
     const show = () => {
       const st = queue.shift();
-      if (!st) { $(".town-dlg").hidden = true; open = false; const d = done; done = null; d && d(); return; }
-      const [kind, a, b, c] = st, said = kind === "say";
-      const who = said ? a : null, en = said ? b : a, zh = said ? c : b;
+      if (!st) { $(".town-dlg").hidden = true; open = false; TKVoice.stop(); const d = done; done = null; d && d(); return; }
+      const said = st[0] === "say", who = said ? st[1] : null;
+      const [en, zh, vid] = said ? [st[2], st[3], st[4]] : [st[1], st[2], st[3]];
       $(".town-who").textContent = who ? TK_CHARS[who].name : "";
       $(".town-en").textContent = en;
       $(".town-zh").textContent = typeof zh === "string" ? zh : "";
@@ -414,16 +523,18 @@ const TownUI = {
       fc.clearRect(0, 0, 34, 34);
       face.hidden = !who;
       if (who) fc.drawImage(TKArt.get(who, "bust"), 0, 0);
+      if (vid) TKVoice.play(vid); else TKVoice.stop();
     };
+    const focus = () => { $(".town-focus").hidden = document.activeElement === host; };
+    host.addEventListener("focus", focus); host.addEventListener("blur", focus);
+    setTimeout(focus, 0);
     return {
-      busy: () => open || puz,
+      busy: () => open,
       goal: t => { $(".town-goal").textContent = t; },
-      dialog(steps, cb) { queue = steps.filter(s => s[0] === "n" || s[0] === "say").slice(); done = cb || null; open = true; $(".town-dlg").hidden = false; show(); },
-      advance() { if (open) show(); },
-      puzzle(title, cb) {
-        puz = true; $(".town-puz").hidden = false; $(".town-puz-t").textContent = title;
-        $(".town-puz button").onclick = () => { $(".town-puz").hidden = true; setTimeout(() => { puz = false; cb(); }, 50); };
+      dialog(steps, cb) {
+        queue = steps.filter(s => s[0] === "n" || s[0] === "say").slice(); done = cb || null; open = true; $(".town-dlg").hidden = false; show();
       },
+      advance() { if (open) show(); },
       hint(target) {
         const h = $(".town-hint");
         if (!target) { h.hidden = true; return; }
@@ -437,11 +548,42 @@ const TownUI = {
   },
 };
 
-function startTown(parent) {
-  return new Phaser.Game({
-    type: Phaser.AUTO, parent, width: 320, height: 180, pixelArt: true, roundPixels: true, backgroundColor: "#2a3a2a",
-    physics: { default: "arcade", arcade: { debug: false } },
-    scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
-    scene: TownScene,
-  });
-}
+/* ---------- mounting a town in the campaign page ---------- */
+const TownView = {
+  game: null,
+  phaser: null,
+  load() {
+    if (window.Phaser) return Promise.resolve();
+    return this.phaser || (this.phaser = new Promise((res, rej) => {
+      const s = document.createElement("script");
+      s.src = "https://cdnjs.cloudflare.com/ajax/libs/phaser/3.90.0/phaser.min.js";
+      s.onload = res; s.onerror = () => { this.phaser = null; rej(new Error("Couldn't load the game engine.")); };
+      document.head.append(s);
+    }));
+  },
+  // opts: { w, host, ret, onPuzzle(key), onLeave(dir) }
+  async mount(opts) {
+    this.destroy();
+    await this.load();
+    const host = opts.host;
+    host.classList.add("tk-town");
+    host.tabIndex = 0;
+    host.addEventListener("mousedown", () => host.focus());
+    this.game = new Phaser.Game({
+      type: Phaser.AUTO, parent: host, width: 320, height: 180, pixelArt: true, roundPixels: true, backgroundColor: "#2a3a2a",
+      physics: { default: "arcade", arcade: { debug: false } },
+      input: { keyboard: { target: host } },
+      scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
+      scene: [],
+    });
+    this.game.scene.add("town", townSceneClass(), true, opts);
+    host.focus();
+    if (window.Wukong && Wukong.suspend) Wukong.suspend(true);  // he stays out of the way while exploring
+  },
+  destroy() {
+    TKVoice.stop();
+    if (this.game) { this.game.destroy(true); this.game = null; }
+  },
+};
+// Leaving the campaign page tears the game down (and frees the keyboard).
+addEventListener("hashchange", () => { if (TownView.game && !/^#\/tk\/?\d*$/.test(location.hash)) TownView.destroy(); });

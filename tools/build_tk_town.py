@@ -7,7 +7,7 @@ Writes:
 The map has one tile layer ("ground") and one object layer ("objects").
 Objects are anchored at their bottom-centre (x, y in map pixels):
   type "prop"   name = a sprite in tk-town.js PROPS
-  type "npc"    name = an id; properties: who, folk, line, wander
+  type "npc"    name = an id; properties: who | folk, line, wander, challenge, face
   type "spot"   name = an id the story uses (notice, inn, garden, exit-*)
   type "spawn"  where the player starts
 """
@@ -119,8 +119,10 @@ for y in range(11, 30):
         prop("fenceV", 34, y)
 for y in range(12, 30, 3):
     for x in range(36, 43, 3):
-        prop("peach", x, y, rnd.randrange(-3, 4), rnd.randrange(-2, 3))
-prop("lotus", 39, 21, 8)
+        if not (x == 39 and y in (18, 21)):        # a clearing in the middle for the Star Lords
+            prop("peach", x, y, rnd.randrange(-3, 4), rnd.randrange(-2, 3))
+prop("gotable", 39, 18, 8, -2)                    # the two old men's weiqi board
+prop("lotus", 42, 22, 8)
 
 # border woods
 for x in range(0, W, 2):
@@ -172,16 +174,20 @@ for name, n in [("bush", 22), ("rock", 8), ("flowers", 26), ("tuft", 30), ("oak"
 obj("spawn", "start", 2 * T, 17 * T + 4)
 obj("spot", "notice", 15 * T + 16, 14 * T + 6)
 obj("spot", "inn", 15 * T + 16, 9 * T + 10)
-obj("spot", "garden", 33 * T + 8, 14 * T + 8)
+obj("spot", "garden", 39 * T + 16, 19 * T + 12)  # in the clearing, in front of the board
 obj("spot", "exit-south", 15 * T + 16, (H - 1) * T)
 obj("spot", "exit-west", 0, 17 * T)
 obj("npc", "storyteller", 5 * T + 8, 12 * T + 14, folk=5, line="storyteller")
 obj("npc", "zhangfei", 18 * T + 4, 15 * T + 4, who="zhangfei", line="zhangfei-wait")
 obj("npc", "guanyu", 17 * T + 8, 10 * T + 6, who="guanyu", line="guanyu-wait")
-obj("npc", "folk1", 13 * T, 18 * T, folk=0, line="folk1", wander=1)
+obj("npc", "stargrey", 38 * T + 6, 18 * T + 12, who="stargrey", face="right")
+obj("npc", "starred", 41 * T, 18 * T + 12, who="starred", face="left")
+prop("gotable", 12, 18, 8, -2)                    # the old weiqi player in the square
+obj("npc", "elder", 12 * T + 2, 18 * T - 2, folk=0, challenge="elder", face="down")
+obj("npc", "innkeeper", 19 * T + 8, 9 * T + 6, folk=4, challenge="innkeeper")
+obj("npc", "farmer", 27 * T, 24 * T + 4, folk=3, challenge="farmer")
+obj("npc", "scholar", 27 * T + 8, 11 * T + 10, folk=7, challenge="scholar")
 obj("npc", "folk2", 7 * T, 21 * T, folk=1, line="folk2", wander=1)
-obj("npc", "folk3", 23 * T, 15 * T + 8, folk=2, line="folk3", wander=1)
-obj("npc", "folk4", 27 * T, 24 * T, folk=3, line="folk4", wander=1)
 obj("npc", "folk5", 20 * T, 26 * T, folk=6, line="folk5", wander=1)
 
 tmj = {
