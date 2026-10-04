@@ -457,11 +457,11 @@ WORLDS = [
             ]},
             # ---- the closing: the inspector at Anxi ----
             "hostel": {"title": "The Inspector's Visit", "kind": "main", "steps": [
-                ["prop", "tbl", "table", "ax1", 0, 8],
+                ["prop", "tbl", "table", "ax1", -20, 10],
                 ["n", "At Anxi, Liu Bei governs for a month and wrongs no one. The three eat at one table and sleep in one bed. When Liu Bei sits among crowds, Guan Yu and Zhang Fei stand at his side all day without tiring."],
                 ["pose", "party", "sit"], ["wait", 1000], ["pose", "party", "stand"],
                 ["n", "Less than four months after he took office, an edict orders officers with military merit to be culled. Liu Bei fears he is among them. An inspector arrives."],
-                ["prop", "dk", "desk", "ax1", 18, -4], ["spawn", "ins", "inspector", "ax1", 18, -4], ["pose", "ins", "sit"],
+                ["spawn", "ins", "inspector", "ax1", 0, -24], ["pose", "ins", "sit"],   # behind the hostel's own desk, high and facing south
                 ["n", "Liu Bei goes out of the city to greet him. The inspector stays on his horse and answers with a small flick of his whip. Guan Yu and Zhang Fei are furious."],
                 ["n", "At the hostel the inspector sits facing south; Liu Bei stands below the steps."],
                 ["say", "inspector", "What is your origin, Sheriff Liu?"],
