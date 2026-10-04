@@ -100,6 +100,7 @@ ZH = {
     "Then let him chase us up the hill.": "那就引他追上山来。",
     # ---- boss ----
     "The General of Earth Falls": "地公将军之死",
+    "Zhang Bao": "张宝", "General of Earth": "地公将军",   # the boss's name card (scenes.py)
     "Again Zhang Bao calls the wind; again Liu Bei flees, and the rebels chase him to the hill.": "次日，张宝又作妖法，刘备拨马便走，张宝驱兵赶来。",
     "A signal gun — and blood and filth rain down from the ridge.": "将过山头，号炮一响，秽物齐泼。",
     "Paper men and straw horses flutter to the ground. The wind dies. Liu Bei's arrow strikes Zhang Bao in the arm, and he flees into Yangcheng.": "但见空中纸人草马纷纷坠地，风雷顿息。刘备一箭射中张宝左臂，张宝逃入阳城。",
