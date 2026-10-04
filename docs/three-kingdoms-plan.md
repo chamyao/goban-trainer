@@ -1,8 +1,16 @@
 # 三国演义 · Romance of the Three Kingdoms — campaign plan
 
-A story campaign that plays through the whole novel on an overworld map,
-one Go problem per level. This is the agreed plan; World 1 is built and live
-(`tk.js`, `data/tk.json`, `tools/tk_story.py`).
+A story campaign that plays through the whole novel as an explorable world,
+where the objectives are cleared by solving Go problems. Think of how
+Pokémon went from simple 2D to open 3D with the same core logic: the story,
+quests and puzzle rules here are data, separate from the graphics, so the
+same campaign can be shown first as a simple top-down 2D world (GBA
+Pokémon style) and later as something larger and more open (Genshin
+Impact style), without rewriting the story.
+
+World 1 exists in two forms: the original node map (live, `tk.js`) and an
+explorable Zhuo County prototype (`tk-town.js`, branch `claude/zhuo-town`).
+The explorable world is the direction from here on.
 
 ## Scope
 
@@ -54,47 +62,69 @@ per world to 7D:
 
 Within a world, levels climb from the bottom of its range to the top.
 
-## The map
+## Why Go is in the game: the Star Lords
 
-- **The story runs in order, separate from the map.** Problems are never
-  tied one-to-one to story beats.
-- **Main story points sit on the fixed nodes**: the ones every route passes
-  through, i.e. the node before each fork and the node after each merge. So
-  no route can skip the main story.
-- **Forks are difficulty shortcuts.** At a fork, both roads lead to the same
-  next main story point:
-  - the **long road**: 2–3 levels at the world's grade;
-  - the **shortcut**: one level about 4 grades harder (two 12K levels or one 8K).
-  You can walk back and take the other road, or replay it later.
-- **Side roads carry side stories.** The long road tells one side story in
-  2–3 parts; the shortcut tells a different one in a single scene, usually
-  from another angle (the enemy's side, a minor character). Side stories
-  fall between their fork and merge in the timeline and nothing in the main
-  story depends on them.
-- **Map size follows the plot**: a world gets as many fixed nodes as it has
-  main story points (about one per chapter on average), so busy worlds like
-  Red Cliffs are bigger. Roughly 100 fixed nodes and 70 side-road nodes across
-  the campaign.
-- **The party** walks the map and changes with the story: Liu Bei alone,
-  then the three brothers, Zhao Yun joins, Zhuge Liang joins and leads from
-  World 6, heroes leave the line when they die (Guan Yu after World 12, Zhang
-  Fei and Liu Bei in World 13), Zhuge Liang walks alone through World 16, and
-  Jiang Wei walks the epilogue.
-- **Wukong stays the site mascot**: he's hidden on the overworld map and can
-  roam level boards, controlled by the usual header toggle.
+The one fantasy layer added to the novel, and it comes from the novel
+itself. In chapter 69 the diviner Guan Lu tells the doomed youth Zhao Yan to
+bring wine to two old men playing weiqi under a mulberry tree: the Star
+Lords of the Northern Dipper, who records deaths, and the Southern Dipper,
+who records lives. Pleased, they change his allotted years from 19 to 99.
+Gods of fate, deciding lives over a Go board.
 
-## Levels
+- **From World 1**, two nameless old men appear at shrines, under old trees,
+  in teahouse corners. They watch Liu Bei's fate and set him Go problems.
+- **Each solved problem earns their counsel**, and the counsel is the tactic
+  that wins the next story beat (the ambush at Qingzhou, the pig's blood
+  against Zhang Bao's sorcery), told in dialogue.
+- **The link is loose**: the problem is any problem of the right grade, not
+  one picked to mirror the tactic, so it scales across 120 chapters.
+- **Their names stay a mystery until World 11.** Guan Lu appears where the
+  novel puts him (chapter 69, around 219), tells the Zhao Yan story, and
+  the player learns who has been setting the puzzles all along.
+- **They counsel; they don't rewrite history.** Solving never changes what
+  happens in the novel: Guan Yu still falls at Maicheng.
+- Optional: the legend of Wang Zhi, the woodcutter who watched two immortals
+  play Go until his axe handle rotted (烂柯, a poetic name for Go), as a
+  hidden side area.
 
-- **One problem per level, flawless only.** A wrong move, hint, undo or
-  Explore is a slip; a level settles on its first result, and a reset can't
-  undo a slip.
-- **A slip draws a new problem** of the same grade from the level's pool
-  (about 30 problems), so the story never stalls.
-- **Bosses** are the world's antagonist, played on a Michael Redmond problem
-  in the early worlds and a Maeda problem later. The boss level shows the
-  boss's portrait and taunt; it doesn't name the problem's source.
-- **Entering a level zooms in** from the map node; finishing zooms back out,
-  and the story point for that node plays on the map.
+## The world
+
+- **A world is a region of connected locations** (World 1: Zhuo County, the
+  Peach Garden, the road to Daxing Mountain, Qingzhou, the camps, Yangcheng).
+  Locations come from where the chapter's events happen; roughly 3–6 small
+  maps per chapter range.
+- **Main quests follow the novel's order.** Each main story point is an
+  objective ("Find the man who sighed at the notice", "Lift the siege of
+  Qingzhou"); finishing it opens the next. No route can skip the main story.
+- **Each objective is cleared through Go problems** set by the Star Lords
+  or by challengers (rebels, rival officers, a general testing you), the way
+  Pokémon trainers challenge you. Chapter bosses are the gyms.
+- **Optional routes keep the old difficulty shortcuts**: an easier road with
+  more problems at the region's grade, or a single hard problem (about 4
+  grades harder) that opens a gate or a mountain pass.
+- **Side stories are side quests** from people you meet, often told from
+  another angle (Cao Cao's youth from a teahouse storyteller, Zhang Jiao's
+  rise from a Yellow Turban deserter). Nothing in the main story depends on
+  them.
+- **The party** follows you and changes with the story: Liu Bei alone, then
+  the three brothers, Zhao Yun joins, Zhuge Liang joins and leads from World
+  6, heroes leave when they die (Guan Yu after World 12, Zhang Fei and Liu
+  Bei in World 13), Zhuge Liang walks alone through World 16, and Jiang Wei
+  carries the epilogue.
+- **Wukong stays the site mascot**: hidden while exploring, free to roam Go
+  boards, under the usual header toggle.
+
+## Problems
+
+- **Flawless only.** A wrong move, hint, undo or Explore is a slip; a
+  problem settles on its first result, and a reset can't undo a slip.
+- **A slip draws a new problem** of the same grade from that encounter's
+  pool (about 30), so the story never stalls.
+- **Bosses** are the world's antagonist on a Michael Redmond problem (early
+  worlds) or a Maeda problem (later). The boss shows a portrait and taunt and
+  doesn't name the problem's source.
+- **Talking to a challenger opens the board**; finishing returns you to the
+  world, where the story continues.
 
 ## Story delivery
 
@@ -103,13 +133,17 @@ A mix, sized to importance:
 | Moment | Delivery |
 |---|---|
 | World opening and ending | Storyteller scroll: the novel's chapter titles, and its cliffhanger line ("hear the next chapter") |
-| Main story points | Short map cutscene (sprites move, effects) plus portrait dialogue |
-| Side stories | Dialogue only, short |
+| Main story points | Cutscene in the location (characters walk and act, effects) plus portrait dialogue |
+| Side quests | Dialogue with the people involved, short |
 | Boss | Portrait and taunt before the problem, a defeat scene after |
 
-Scenes are 20–40 seconds with a Skip button, play only on the map (never on
+Scenes are 20–40 seconds with a Skip button, play in the world (never on
 the problem page), and can be replayed from the **Chronicle**, which lists
 every main and side story in order and hides the ones not yet seen.
+
+Scenes are written as a list of steps (narrate, say, walk to a spot, play an
+effect, change the party), placed at named spots in a location, so the
+scenes written for the node map carry over.
 
 ## Voice-over
 
@@ -127,28 +161,35 @@ every main and side story in order and hides the ones not yet seen.
 
 ## Art
 
-- **Jade Tileset** (Willibab, CC-BY) for terrain, buildings and walls, and
-  **GameTorch Eastern Fantasy Mountains** (CC0) for key visuals and props;
-  anything missing is drawn in code. Credits live on the Feedback tab.
+- **Now: simple top-down 2D**, GBA Pokémon style. Later: a larger, more
+  open look, possibly low-poly 3D, reading the same story and quest data.
+- **Characters are drawn in code** from a short description (skin, hat,
+  beard, robe, weapon), so any hero, general or townsperson can be made in
+  one consistent style, for free.
+- **Terrain and buildings from free packs**: the **Jade Tileset** (Willibab,
+  CC-BY), **GameTorch Eastern Fantasy Mountains** (CC0) for key visuals and
+  props, and CC0 packs such as Kenney's for generic terrain. Anything missing
+  is drawn in code. Credits live on the Feedback tab.
+- No AI-trained art packs: free packs plus code-drawn art is cheaper and
+  more consistent.
 - Characters stay historically grounded: ordinary skin tones for everyone
   (Zhang Fei's black face is opera face paint, not skin colour); Guan Yu's red
   face is kept because the novel describes it.
-- Planned: a scrolling map at Jade's natural tile size that follows the
-  party, with a zoom-out to see the whole world.
 
 ## Adding a world
 
 1. Read the world's chapters in full.
-2. Write its map, main story points, side stories, scrolls and boss in
-   `tools/tk_story.py`, and the Chinese for every line in `tools/tk_story_zh.py`
-   (cast any new characters).
-3. Add its art in `tk.js` (`TK_ART`) and any new character sprites (`TK_CHARS`).
-4. Run `tools/build_tk_voice.py`, then `tools/build_tk.py`.
+2. List its locations, and for each main story point an objective, a place
+   and the encounters that clear it; turn side episodes into side quests.
+3. Write its scenes, scrolls and boss in `tools/tk_story.py`, and the Chinese
+   for every line in `tools/tk_story_zh.py` (cast any new characters).
+4. Lay out its locations (a builder script drafts them; fine-tune by hand)
+   and add any new character descriptions.
+5. Run `tools/build_tk_voice.py`, then the build scripts.
 
 ## Open questions
 
-- Side-road nodes beyond World 1: keep every side road a side story, or
-  allow plain problems on some.
-- Possible three-way forks for the biggest moments (Red Cliffs).
+- How many encounters each objective needs (one problem, or a short series).
+- Three-way choices for the biggest moments (Red Cliffs).
 - Rewards such as relics for beating bosses (the Imperial Seal, the feather fan).
 - The book's final name and Library card.
