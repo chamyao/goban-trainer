@@ -20,27 +20,38 @@ The whole novel, all 120 chapters: 16 campaign worlds covering chapters
 epilogue world for chapters 105–120, so the story is complete without the
 novel's slow final stretch dragging on.
 
+## Emotional design
+
+1. **One emotional spine per world.** A relationship, a loyalty, a loss or a choice. The battle serves it.
+2. **Quiet scenes are the main quests.** Each world has 2–3 character scenes (a farewell, a reunion, a funeral, a refusal). Battles shrink to one short set piece, or none.
+3. **Bosses become reckonings.** A boss is the person the world's tension is with, met across a board. A battle boss is the exception.
+4. **Go carries the weight.** For peak moments the board is the scene: the problem is solved while the moment plays, and the Star Lords are present or deliberately absent.
+5. **Callbacks.** Lines and images return across worlds (the oath, the peach blossom, Dilu, the chopsticks), so late deaths land on early scenes.
+6. **Cut-scene length rule.** Peak scenes can run longer than 40 seconds; battles stay short.
+
 ## Worlds
 
-| # | World | Ch. | Boss | Story hooks |
-|---|---|---|---|---|
-| 1 | The Peach Garden Oath | 1–2 | Zhang Bao, General of Earth | The oath; the first battles against the Yellow Turbans; Zhang Fei whips the inspector |
-| 2 | Hulao Pass | 3–9 | **Lü Bu** (escapes, returns later) | Cao Cao's gifted-sword plot; the three brothers against Lü Bu; Diaochan and the chain scheme |
-| 3 | White Gate Tower | 10–19 | **Lü Bu**, final fight at flooded Xiapi | Lü Bu's shot at the halberd; Xu Province handed over three times |
-| 4 | The Thousand-Li Ride | 20–28 | Cai Yang at the Old City | Guan Yu's five passes and six generals; the brothers reunited |
-| 5 | Guandu | 29–33 | Yuan Shao | The brothers are scattered; **played as Cao Cao**; burning the grain at Wuchao |
-| 6 | The Three Visits | 34–38 | **Zhuge Liang's test**: persuading him is the boss | Dilu leaps the Tan stream; three trips to the thatched cottage |
-| 7 | Changban | 39–42 | Cao Cao's cavalry | Fire at Bowang and Xinye; Zhao Yun saves the baby heir; Zhang Fei holds the bridge |
-| 8 | Red Cliffs | 43–50 | Cao Cao's chained fleet | Debating Wu's scholars; borrowing arrows; Huang Gai's ruse; the east wind |
-| 9 | Three Provocations of Zhou Yu | 51–57 | Zhou Yu | The marriage trap; Zhou Yu angered three times |
-| 10 | Into Shu | 58–65 | Ma Chao (then joins) | Cao Cao cuts his beard to escape; Pang Tong falls at Fallen Phoenix Slope |
-| 11 | Hanzhong | 66–73 | Xiahou Yuan at Dingjun Mountain | Guan Yu's feast with only his sword; old Huang Zhong's charge |
-| 12 | The Fall of Guan Yu | 74–77 | Lü Meng | Flooding the seven armies; the Go game during the bone-scraping; Maicheng |
-| 13 | Yiling | 78–86 | Lu Xun | 700 li of camps burned; the Stone Sentinel Maze; Liu Bei entrusts his son |
-| 14 | The Southern Campaign | 87–91 | Meng Huo | The seven captures; elephant beasts; rattan armour |
-| 15 | Jieting and the Empty Fort | 91–98 | **Sima Yi** (returns) | Ma Su loses Jieting; the Empty Fort; the tearful execution |
-| 16 | Wuzhang Plains | 99–104 | **Sima Yi**, the final boss | Wooden oxen; Shangfang Valley; Zhuge Liang's death and the wooden statue |
-| E | The Three Return to One | 105–120 | Deng Ai | Jiang Wei carries on; Deng Ai through Yinping; Jin unites the realm |
+Each world has one emotional spine. Battles are kept short and some worlds have none; chapter ranges are in the difficulty table's order (World 1: ch. 1–2, 2: 3–9, 3: 10–19, 4: 20–28, 5: 29–33, 6: 34–38, 7: 39–42, 8: 43–50, 9: 51–57, 10: 58–65, 11: 66–73, 12: 74–77, 13: 78–86, 14: 87–91, 15: 91–98, 16: 99–104, E: 105–120).
+
+| # | Spine | Emotional beats (main) | Battle (kept short) |
+|---|---|---|---|
+| 1 Peach Garden | Strangers become brothers | The sigh at the notice; the oath; Zhang Fei's rage at the inspector, his loyalty shown as anger | Daxing Mountain |
+| 2 Hulao Pass | Ambition has a price | Cao Cao at Lü Boshe's house, "rather I betray the world" (ch4); Guan Yu and the wine still warm (ch5); Diaochan's choice and Dong Zhuo's fall (ch8–9); Lü Bu kills Ding Yuan (ch3) | Three brothers vs Lü Bu |
+| 3 White Gate Tower | Loyalty and its limits | Tao Qian offers Xu Province three times; Chen Gong's loyalty to the end; Lü Bu begs, and Liu Bei's quiet remark about Ding Yuan and Dong Zhuo (ch19) | none (Xiapi flood as backdrop) |
+| 4 Thousand-Li Ride | Faith kept at a cost | Plum wine and the chopsticks dropped at the thunder (ch21); Cao Cao's gifts and Guan Yu's refusals; Zhang Fei doubts him at Gucheng; the reunion | Five passes, abbreviated |
+| 5 Guandu (as Cao Cao) | The lonely ruler | Xu You's defection; Cao Cao burns the letters of his own officers who wrote to Yuan Shao (ch30), choosing not to know; Wuchao is the quiet climax | Wuchao fire |
+| 6 Three Visits | Patience and parting | Liu Bei's lament over his thighs growing fat (ch34); Xu Shu leaves for his mother's forged letter (ch36–37); the snowy third visit | none |
+| 7 Changban | What a leader will not abandon | Liu Bei refuses to leave the refugees (ch41); Lady Mi gives Zhao Yun the baby and drowns herself in a well (ch42); Liu Bei throws the child down ("to console a baby I'd lose a general") | Zhang Fei at the bridge |
+| 8 Red Cliffs | Respect between enemies | Zhuge Liang and Zhou Yu's uneasy alliance; Lu Su's friendship; Huang Gai takes a beating for the plan; Cao Cao's poem before the battle; **Huarong Road: Guan Yu lets Cao Cao go** (ch50) | The fire |
+| 9 Zhou Yu | Rivalry that was also recognition | Sun Shangxiang's courage and her marriage; "Since Yu was born, why Liang?" and Zhuge Liang weeping at the funeral (ch57) | none |
+| 10 Into Shu | Taking what isn't yours | Liu Bei's reluctance toward his kinsman Liu Zhang; Ma Chao's revenge for his murdered family; Pang Tong's death at Fallen Phoenix Slope; Zhuge Liang's grief | Fallen Phoenix Slope, short |
+| 11 Hanzhong | Who sets the board | Yang Xiu killed over "chicken ribs" (ch72), Cao Cao's paranoia; **Guan Lu and Zhao Yan: the Star Lords are named** (ch69); old Huang Zhong | Dingjun Mountain |
+| 12 Fall of Guan Yu | Pride, and a hero alone | The bone-scraping Go game (ch75) as the centrepiece problem; Guan Yu's last stand at Maicheng; Cao Cao honours the head with a funeral and weeps; the Star Lords are silent | Flooding the seven armies, abbreviated |
+| 13 Yiling | The oath comes due | Zhang Fei killed by his own men (ch81); Liu Bei's revenge and ruin; the White Emperor City, the son entrusted, "if he is no good, take the throne yourself" (ch85); callbacks to the Peach Garden | Burning the camps, abbreviated |
+| 14 Southern Campaign | Mercy and its cost | Seven captures, one problem each; **Zhuge Liang burns the rattan-armoured soldiers and weeps: "I have shortened my life"** (ch90) | none |
+| 15 Jieting | Duty over love | Jiang Wei's defection; Ma Su's mistake; the Empty Fort; the tearful execution (ch96); Zhuge Liang demotes himself | Empty Fort is a standoff, not a fight |
+| 16 Wuzhang | Spending the last years | Letters and the wooden oxen; the star prayer as seven nights of problems (ch103), the lamp knocked out by Wei Yan; the Star Lords refuse; the wooden statue frightens Sima Yi | none |
+| E Epilogue | Long united, must divide | Jiang Wei carries on; Liu Shan, "I am happy here" (ch119); Jin unites the realm and the ch. 120 line answers the opening scroll; the Star Lords keep playing | Deng Ai through Yinping, brief |
 
 Each world's chapters are read in full before its story is written.
 
@@ -99,6 +110,8 @@ Gods of fate, deciding lives over a Go board.
     bursts in and knocks it out. "Life and death are fated; prayer cannot
     change them." The gods of the Go board refuse him, and this is the
     campaign's emotional peak.
+- **They are silent at the great deaths.** At Guan Yu's, Zhang Fei's and Liu Bei's deaths the board is on screen and the Star Lords say nothing. One line from them closes ch. 120.
+- **Why Zhuge Liang's prayer is refused:** he is the last pillar of the Han, so his life is part of the mandate, unlike Zhao Yan's small, personal change.
 - Optional: the legend of Wang Zhi, the woodcutter who watched two immortals
   play Go until his axe handle rotted (烂柯, a poetic name for Go), as a
   hidden side area.
@@ -136,7 +149,7 @@ Gods of fate, deciding lives over a Go board.
   problem settles on its first result, and a reset can't undo a slip.
 - **A slip draws a new problem** of the same grade from that encounter's
   pool (about 30), so the story never stalls.
-- **Bosses** are the world's antagonist on a Michael Redmond problem (early
+- **Bosses** are either a reckoning or a battle. Where the tension is a person (Zhuge Liang's test in World 6, Zhou Yu in World 9, Meng Huo in World 14) the boss is a conversation across the board; where the antagonist is real (Lü Bu, Sima Yi) it is a rival. Each is the world's antagonist on a Michael Redmond problem (early
   worlds) or a Maeda problem (later). The boss shows a portrait and taunt and
   doesn't name the problem's source.
 - **Talking to a challenger opens the board**; finishing returns you to the
@@ -150,6 +163,7 @@ A mix, sized to importance:
 |---|---|
 | World opening and ending | Storyteller scroll: the novel's chapter titles, and its cliffhanger line ("hear the next chapter") |
 | Main story points | Cutscene in the location (characters walk and act, effects) plus portrait dialogue |
+| Peak moments | Longer than 40 s, played with the board visible, not skippable on first viewing; the problem is solved while the moment plays |
 | Side quests | Dialogue with the people involved, short |
 | Boss | Portrait and taunt before the problem, a defeat scene after |
 
@@ -206,6 +220,6 @@ scenes written for the node map carry over.
 ## Open questions
 
 - How many encounters each objective needs (one problem, or a short series).
-- Three-way choices for the biggest moments (Red Cliffs).
+- Choices at the biggest moments: keep Red Cliffs linear; choices affect only dialogue or rewards, never the novel's events.
 - Rewards such as relics for beating bosses (the Imperial Seal, the feather fan).
 - The book's final name and Library card.
