@@ -32,7 +32,7 @@ CAST = {
     "guanyu": ("Guan Yu", "a towering giant of a man, a head taller than anyone, with massive shoulders and a thick "
                           "neck, a deep red face, a very long black beard down to his chest and narrow eyes under "
                           "heavy brows, hair in a topknot, in a green robe"),
-    "zhangfei": ("Zhang Fei", "a towering, powerfully muscled man with a fierce square jaw, big glaring eyes and "
+    "zhangfei": ("Zhang Fei", "a stocky, barrel-chested, powerfully muscled man, broad rather than tall, with a fierce square jaw, big glaring eyes and "
                               "a wild bristling black beard, hair in a topknot, in black and dark brown clothes"),
     "luzhi": ("Lu Zhi", "a dignified old scholar-general with a long grey beard, in plain grey clothes"),
     "zhangbao": ("Zhang Bao", "a sorcerer general with long loose black hair and a yellow headscarf, "
