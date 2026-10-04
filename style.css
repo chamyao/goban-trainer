@@ -648,13 +648,13 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
 
 /* A soft vignette over the explorable world (tk-world.js), under the dialogue and menus. */
 .tk-map.tk-town .town-ui { box-shadow: inset 0 0 70px rgba(24, 12, 4, .32); }
-/* A problem resting after a wrong move (tk.js tkRestLock): a countdown over the board. */
+/* A problem resting after a wrong move (tk.js tkRestLock): the position stays in view,
+   stones can't be played yet, and a small chip counts down. */
 .board-card, .tk-duel-board { position: relative; }
-.tk-rest { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
-  color: #fff6dc; background: rgba(30, 16, 8, .62); border-radius: inherit; text-align: center; cursor: not-allowed; font-family: Georgia, "Songti SC", serif; }
-.tk-rest b { font-size: 1.3em; letter-spacing: .1em; }
-.tk-rest span { font: bold 2.6em/1.1 system-ui, sans-serif; color: #ffe36a; }
-.tk-rest small { font: .85em/1.4 system-ui, sans-serif; opacity: .85; }
+.tk-rest { position: absolute; inset: 0; z-index: 2; cursor: not-allowed; }
+.tk-rest-chip { position: absolute; top: 6px; left: 6px; padding: 2px 9px; font: 600 12px/1.5 system-ui, sans-serif; color: #fff6dc;
+  background: rgba(40, 24, 16, .85); border: 2px solid #c79a4a; border-radius: 6px; box-shadow: 0 2px 0 rgba(0, 0, 0, .3); }
+.tk-rest-chip b { color: #ffe36a; margin-right: 2px; }
 .tk-duel-go:disabled { opacity: .45; cursor: not-allowed; }
 .tk-duel-go:disabled b { animation: none; }
 
