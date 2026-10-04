@@ -3297,6 +3297,13 @@ function viewFeedback() {
     ta,
     h("div", { class: "row" }, [submitBtn, msg]),
   ]));
+  const link = (href, text) => h("a", { href, target: "_blank" }, text);
+  root.append(h("div", { class: "credits" }, [
+    h("b", {}, "Credits"),
+    h("p", {}, ["Michael Redmond's Life and Death problems are transcribed from his ", link("https://www.youtube.com/playlist?list=PLW5_cMTm0wvaAfrTyLtU_HDjeTlK4VFRj", "YouTube videos"), "; each problem links to its video."]),
+    h("p", {}, ["Three Kingdoms art: trees and props from the ", link("https://willibab.itch.io/free-jade-tileset-pack", "Jade Tileset"), " by Willibab (CC-BY) and ",
+      link("https://gametorch.app/collections/21", "GameTorch"), " (CC0); everything else is drawn in code."]),
+  ]));
 }
 
 /* ================= router & keys ================= */

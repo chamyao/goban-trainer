@@ -894,8 +894,6 @@ async function viewTK(worldN) {
   root.append(host);
   const info = h("div", { class: "tk-info" });
   root.append(info);
-  root.append(h("div", { class: "tk-credit" }, ["Art: trees and props from the ", h("a", { href: "https://willibab.itch.io/free-jade-tileset-pack", target: "_blank" }, "Jade Tileset"), " by Willibab (CC-BY) and ",
-    h("a", { href: "https://gametorch.app/collections/21", target: "_blank" }, "GameTorch"), " (CC0); everything else drawn in code."]));
 
   const map = new TKMap(w, host);
   TKView.map = map;
