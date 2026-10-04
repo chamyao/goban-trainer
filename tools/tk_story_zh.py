@@ -1,0 +1,189 @@
+"""Chinese for every line of the Three Kingdoms story, keyed by the English.
+
+The voice-over reads these (tools/build_tk_voice.py). Lines that come
+straight from the novel keep its wording; the rest is plain modern
+Mandarin. build_tk.py refuses to build if an English line has no entry
+here, so editing the story can't silently drop its voice-over.
+"""
+
+ZH = {
+    # ---- World 1: opening ----
+    "臨江仙 · The Immortal by the River": "临江仙",
+    "On and on the Yangtze rolls east, its waves washing the heroes away.": "滚滚长江东逝水，浪花淘尽英雄。",
+    "Right and wrong, triumph and ruin — turn your head, and all is empty.": "是非成败转头空。",
+    "Yet the green hills remain, through how many crimson sunsets.": "青山依旧在，几度夕阳红。",
+    "— Yang Shen": "——杨慎",
+    "Chapter 1": "第一回",
+    "The empire, long divided, must unite; long united, must divide.": "话说天下大势，分久必合，合久必分。",
+    "The Han has ruled for four hundred years. Now Emperor Ling trusts only his eunuchs, the Ten Attendants, who sell offices and silence honest men. Omens fill the sky: a serpent coils on the throne, hens turn into cocks, black vapour drifts into the palace.":
+        "汉朝传国四百年，到了灵帝，只信宦官。十常侍卖官鬻爵，陷害忠良。天下异象频生：青蛇盘踞御座，母鸡化为公鸡，黑气飞入宫殿。",
+    "In Julu, a healer named Zhang Jiao preaches the Way of Great Peace. In the year 184 half a million rise behind him, yellow scarves on their heads, chanting: “The Blue Heaven is dead! The Yellow Heaven shall rise!”":
+        "巨鹿人张角，传太平道，施符治病。中平元年，四五十万百姓头裹黄巾，随他造反，齐声高呼：“苍天已死，黄天当立！”",
+    "The governor of You Province posts a call for volunteers. The notice reaches Zhuo County…": "幽州太守刘焉出榜招募义兵。榜文传到了涿县……",
+    # ---- the notice ----
+    "The Notice at Zhuo": "涿县榜文",
+    "Liu Bei, twenty-eight, descends from Prince Jing of Zhongshan — yet he sells sandals and weaves mats for a living. His ears reach his shoulders; his arms hang past his knees.":
+        "刘备，字玄德，中山靖王之后，年二十八，家贫，以贩屦织席为业。他两耳垂肩，双手过膝。",
+    "He reads the notice, and sighs.": "他看了榜文，长叹一声。",
+    "A real man should serve his country! What are you sighing for?": "大丈夫不与国家出力，何故长叹？",
+    "I am of the Han imperial house. I long to crush these rebels and bring peace — but I lack the strength.": "我本汉室宗亲，有志破贼安民，只恨力不能及，所以长叹。",
+    "I've got money and land. Let's raise men together! But first — wine.": "我颇有些钱财，正好招募乡勇，与你同举大事！走，先喝一杯！",
+    "At the village inn, a giant pushing a cart strides in: nine feet tall, a beard two feet long, a face like a ripe red date.": "村店里，一条大汉推着车子进来：身长九尺，髯长二尺，面如重枣。",
+    "Wine, quickly! I'm off to the city to join the army.": "快斟酒来！我要赶进城去投军。",
+    "Then sit with us, friend. We have the same purpose.": "壮士请同坐，我们志向相同。",
+    "Guan Yu, of Hedong. I killed a bully who preyed on my village, and I've been on the run five years.": "我姓关，名羽，河东解良人。因本处豪强欺压百姓，被我杀了，逃难江湖已有五六年。",
+    # ---- the oath ----
+    "The Peach Garden Oath": "桃园结义",
+    "Behind my farm is a peach garden in full bloom. Tomorrow, let's swear brotherhood there before Heaven and Earth!": "我庄后有一桃园，花开正盛。明日就在园中祭告天地，我们三人结为兄弟！",
+    "With a black ox and a white horse for sacrifice, the three burn incense and bow.": "次日，三人备下乌牛白马，在桃园中焚香再拜。",
+    "Though we were not born on the same day of the same month of the same year…": "不求同年同月同日生……",
+    "…we wish to die on the same day of the same month of the same year.": "……只愿同年同月同日死。",
+    "Heaven and Earth, witness it! If we betray this oath, may Heaven and men strike us down!": "皇天后土，实鉴此心！背义忘恩，天人共戮！",
+    "Liu Bei becomes eldest brother, Guan Yu second, Zhang Fei youngest. Three hundred village braves join them, and they drink in the garden until they can drink no more.":
+        "刘备为兄，关羽次之，张飞为弟。乡中勇士三百余人前来投奔，众人在桃园中痛饮一醉。",
+    "Their road forks here. The long road passes through the rebels' heartland; the mountain trail is shorter, and steeper.": "前路在此分岔：大路穿过黄巾腹地；山路更近，却也更险。",
+    # ---- Daxing Mountain ----
+    "First Blood at Daxing Mountain": "大兴山初战",
+    "The Yellow Turban general Cheng Yuanzhi marches on Zhuo with fifty thousand men. Liu Bei meets him with five hundred.": "黄巾贼将程远志率五万人进犯涿郡，刘备领兵五百迎战。",
+    "Traitors to the realm! Why not surrender now?": "反国逆贼，何不早降！",
+    "Deng Mao — bring me his head!": "邓茂，去取他首级！",
+    "Zhang Fei's spear takes Deng Mao through the heart.": "张飞挺丈八蛇矛，一枪刺中邓茂心窝。",
+    "Cheng Yuanzhi charges — and Guan Yu's great blade cuts him in two. The rebels throw down their spears and run.": "程远志拍马来战，被关羽一刀挥为两段。贼众纷纷倒戈而逃。",
+    # ---- Qingzhou ----
+    "The Ambush at Qingzhou": "青州伏兵",
+    "Rebels besiege Qingzhou. The relief force is outnumbered and falls back thirty li.": "黄巾围困青州。救兵寡不敌众，退兵三十里下寨。",
+    "They are many and we are few. Only surprise will win this. Yunchang, hide your men left of the ridge. Yide, to the right. When the gongs sound, strike.":
+        "贼众我寡，必出奇兵，方可取胜。云长引兵伏于山左，翼德伏于山右，鸣金为号，一齐杀出。",
+    "Next morning Liu Bei attacks — then turns and flees. The rebels chase him over the ridge.": "次日，刘备引军鼓噪而进，交战片刻便退。贼众乘势追赶，越过山岭。",
+    "Gongs crash. Guan Yu and Zhang Fei burst from both flanks as Liu Bei wheels around. Caught from three sides, the rebels break, and the siege of Qingzhou is lifted.":
+        "金声大作，关张两军左右齐出，刘备回军复杀。三路夹攻，贼众大溃，青州之围遂解。",
+    # ---- the cage cart ----
+    "The Cage Cart": "槛车",
+    "Liu Bei sets out to help his old teacher Lu Zhi, who has Zhang Jiao himself trapped at Guangzong. On the road they meet soldiers guarding a prison cart.":
+        "刘备前往广宗，助恩师卢植围攻张角。半路上，却见一队军马押着一辆槛车。",
+    "Xuande! I had Zhang Jiao surrounded. But the court's envoy demanded a bribe, and I refused him. Now I go to the capital in chains, and Dong Zhuo takes my army.":
+        "玄德！我围张角，眼看就要破贼。朝廷派来的使者向我索贿，我不肯给。如今我被押解进京，兵马交给了董卓。",
+    "I'll cut down these guards and set him free!": "我去杀了这些押送的军士，救出卢中郎！",
+    "The court will judge him fairly. Don't be rash, Yide!": "朝廷自有公论，翼德不可造次！",
+    "The cart rolls away toward Luoyang. Again the road divides.": "槛车往洛阳去了。前路又一次分岔。",
+    # ---- Dong Zhuo ----
+    "“What Office Do You Hold?”": "现居何职",
+    "Heading home, the brothers hear a roar behind the hills: Han troops in rout, and behind them banners reading GENERAL OF HEAVEN.": "三人北归途中，忽闻山后喊声大震：汉军大败，后面黄巾漫山遍野，旗上大书“天公将军”。",
+    "That is Zhang Jiao! Charge!": "这是张角！快杀过去！",
+    "The three ride into his flank and drive him back fifty li. They escort the defeated commander, Dong Zhuo, safely to his camp.": "三人飞马冲杀，张角大乱，败走五十余里。他们救下董卓，护送回寨。",
+    "And what office do you hold?": "你们现居何职？",
+    "None, my lord. We are commoners.": "白身。",
+    "Dong Zhuo turns his back without a word of thanks.": "董卓甚是轻视，连谢也不谢。",
+    "We bled to save that wretch and he treats us like dirt! I'll kill him!": "我们亲赴血战救了这厮，他却如此无礼！不杀他，难消我气！",
+    "He is an officer of the court! You cannot.": "他是朝廷命官，岂可擅杀！",
+    "Then I won't serve under him. Stay if you like — I'm leaving.": "若在他部下听令，我实在不甘！二位兄长要留便留，我自投别处去！",
+    "We three swore to live and die together. If you go, we all go.": "我三人义同生死，岂可相离？要走一起走。",
+    "That night they leave to join the general Zhu Jun instead.": "三人连夜引军，投奔朱儁去了。",
+    # ---- black wind ----
+    "Black Wind, Paper Soldiers": "黑风纸兵",
+    "Zhu Jun's army faces Zhang Bao, the General of Earth. Zhang Fei spears his officer Gao Sheng from the saddle — and then Zhang Bao lets down his hair, raises his sword, and chants.":
+        "朱儁进讨地公将军张宝。张飞出马，刺高升于马下。张宝随即披发仗剑，作起妖法。",
+    "Wind howls and thunder rolls. Out of a black cloud pours a numberless host of horsemen. Liu Bei's army breaks and flees.": "只见风雷大作，一股黑气从天而降，黑气中似有无数人马杀来。刘备军中大乱，败阵而归。",
+    "Sorcery. Tomorrow, hide men on the hilltop with the blood of pigs, sheep and dogs. When his spirits come, drench them. The spell will break.": "他用的是妖术。明日宰杀猪羊狗，取血伏于山头，等贼赶来，从高坡上泼下，其法可解。",
+    "Then let him chase us up the hill.": "那就引他追上山来。",
+    # ---- boss ----
+    "The General of Earth Falls": "地公将军之死",
+    "Again Zhang Bao calls the wind; again Liu Bei flees, and the rebels chase him to the hill. A signal gun — and blood and filth rain down from the ridge.": "次日，张宝又作妖法，刘备拨马便走，张宝驱兵赶来。将过山头，号炮一响，秽物齐泼。",
+    "Paper men and straw horses flutter to the ground. The wind dies. Liu Bei's arrow strikes Zhang Bao in the arm, and he flees into Yangcheng.": "但见空中纸人草马纷纷坠地，风雷顿息。刘备一箭射中张宝左臂，张宝逃入阳城。",
+    "Besieged, with no way out, Zhang Bao is killed by his own officer, Yan Zheng, who opens the gates.": "阳城被围，贼将严政刺杀张宝，献首投降。",
+    "Wind and thunder answer to me! Your little band will be swept away like dust.": "风雷听我号令！你们这点人马，一阵风便扫个干净！",
+    # ---- side: the Way of Great Peace ----
+    "The Way of Great Peace · I: The Old Man in the Cave": "太平道·一：洞中老人",
+    "Meanwhile — or rather, years before — a failed scholar named Zhang Jiao went into the hills to gather herbs.": "早在多年以前，有个不第秀才名叫张角，入山采药。",
+    "There he met an old man with green eyes and a child's face, leaning on a staff, who led him into a cave.": "他遇见一位老人，碧眼童颜，手执藜杖，唤他进了一个山洞。",
+    "These three books are the Essentials of Great Peace. Take them, spread Heaven's teaching, and save the world. But harbour one rebellious thought, and you will be punished.":
+        "此三卷天书，名为《太平要术》。你得了它，当代天宣化，普救世人。若萌异心，必获恶报。",
+    "Master, what is your name?": "敢问老仙尊姓大名？",
+    "I am the Old Immortal of Southern Florescence.": "吾乃南华老仙也。",
+    "And he vanished in a breath of wind.": "说完，化作一阵清风而去。",
+    "The Way of Great Peace · II: The Blue Heaven Is Dead": "太平道·二：苍天已死",
+    "Zhang Jiao studied the books day and night until he could summon wind and rain. When plague swept the land, he went about giving out charmed water, and the sick recovered.": "张角日夜苦学，能呼风唤雨。瘟疫流行之时，他散施符水，为人治病。",
+    "They called him the Great and Virtuous Teacher. His disciples numbered in the hundreds of thousands, organised in thirty-six divisions.": "人们称他为大贤良师。他的徒众日多，立三十六方。",
+    "The Blue Heaven is dead! The Yellow Heaven shall rise! In the year jiazi, great fortune for all under Heaven!": "苍天已死，黄天当立；岁在甲子，天下大吉！",
+    "Across eight provinces, families chalked the word jiazi on their doors.": "八州百姓，家家在大门上用白土写上“甲子”二字。",
+    "The Way of Great Peace · III: Betrayed": "太平道·三：事泄",
+    "The hardest thing in the world to win is the people's hearts — and now they are ours. To let this moment pass would be a crime.": "至难得者，民心也。今民心已顺，若不乘势取天下，诚为可惜。",
+    "He bribed a eunuch in the palace to open the gates from within. But his disciple Tang Zhou carried the plan straight to the court. In Luoyang, his agent Ma Yuanyi was beheaded.":
+        "他暗中结交宫中宦官作为内应。不料弟子唐周赴朝廷告变，党羽马元义在洛阳被斩。",
+    "Then we rise now. I am the General of Heaven. Zhang Bao, you are General of Earth. Zhang Liang, General of Man.": "那就即刻起兵！我为天公将军，张宝为地公将军，张梁为人公将军！",
+    "Half a million rose in yellow scarves, and the imperial armies scattered before them like leaves.": "四五十万百姓裹黄巾相从，官军望风而靡。",
+    # ---- side: Cao Cao ----
+    "The Hero of Chaos · I: The Feigned Stroke": "奸雄·一：诈中风",
+    "Far to the south, in Qiao, a boy named Cao Cao loved hunting, music and mischief — and his uncle kept telling his father so.": "沛国谯郡有个少年，名叫曹操，好游猎，喜歌舞。他的叔父屡次向他父亲告状。",
+    "So one day, seeing his uncle coming, Cao Cao dropped to the ground, twitching.": "一天，曹操见叔父走来，便诈倒在地，装作中风的样子。",
+    "Brother! Your son has had a stroke!": "兄长！你儿子中风了！",
+    "A stroke? I've never had one in my life. Uncle just dislikes me, so he tells tales about me.": "儿子自来没有这病。只因叔父不喜欢我，所以冤枉我罢了。",
+    "From then on, whatever the uncle reported, Cao Cao's father never believed a word.": "从此以后，叔父再说曹操的不是，父亲一概不听。",
+    "The Hero of Chaos · II: A Villain in Chaos": "奸雄·二：乱世奸雄",
+    "Xu Shao of Runan was famous for judging men. Cao Cao went to see him.": "汝南许劭以善于识人闻名，曹操前去拜见。",
+    "What kind of man am I?": "我是怎样的人？",
+    "Xu Shao would not answer. Cao Cao asked again.": "许劭不答。曹操又问。",
+    "In an age of order, an able minister. In an age of chaos — a cunning villain.": "子治世之能臣，乱世之奸雄也。",
+    "Cao Cao laughed with delight. Later, as a captain in Luoyang, he hung coloured staves at the city gates and flogged anyone caught breaking curfew — even the uncle of the eunuch Jian Shuo. After that, nobody dared.":
+        "曹操听了大喜。后来他任洛阳北都尉，在城门设五色棒，犯禁者不避豪强，连宦官蹇硕的叔父也照打不误。从此再无人敢犯。",
+    "The Hero of Chaos · III: Red Banners at Changshe": "奸雄·三：长社红旗",
+    "At Changshe, the Yellow Turbans pitched their camp in tall grass.": "长社一带，黄巾依草结营。",
+    "They camp in grass. Fire will take them. Every man, bring a bundle of straw.": "贼依草结营，当用火攻。每人束草一把，暗地埋伏！",
+    "That night a great wind rose. The camp went up in flames; the rebels fled without saddles or armour.": "当夜大风忽起，一齐纵火，火焰张天。贼众马不及鞍，人不及甲，四散奔逃。",
+    "At dawn, as Zhang Bao and Zhang Liang ran, a column under red banners barred the road.": "天明时分，张梁、张宝夺路而走，忽见一彪军马，尽打红旗，截住去路。",
+    "Cao Cao, Commandant of Cavalry. You go no further.": "骑都尉曹操在此，休想过去！",
+    "Ten thousand heads were taken. The two brothers barely escaped with their lives.": "曹操斩首万余级，张梁、张宝死战得脱。",
+    # ---- side: shortcuts ----
+    "Horses from the North": "北来骏马",
+    "The brothers had men, but no horses. Then two travelling merchants, Zhang Shiping and Su Shuang, came down the trail driving a herd.": "兄弟三人有了人马，却苦无马匹。正在发愁，中山大商张世平、苏双赶着一群马来到庄上。",
+    "Bandits have closed the road north. If you mean to crush them, take fifty horses — and five hundred taels of silver, and a thousand jin of steel for your weapons.":
+        "贼寇阻断了北去的路。诸位既要讨贼，我们愿送良马五十匹，金银五百两，镔铁一千斤，以资器用。",
+    "Liu Bei had twin swords forged. Guan Yu's blade was the Green Dragon Crescent, eighty-two jin, called Cold Beauty. Zhang Fei's was an eighteen-foot serpent spear of steel.":
+        "刘备打造双股剑；关羽造青龙偃月刀，又名冷艳锯，重八十二斤；张飞造丈八点钢矛。",
+    "A Bribe Refused": "拒贿",
+    "At Guangzong, Lu Zhi had Zhang Jiao penned in, though the rebel's sorcery kept him from the final blow. Then the court's envoy arrived.": "卢植在广宗围住张角，只因张角会妖术，一时未能取胜。这时，朝廷的使者到了。",
+    "Your victories are splendid, general. And where is the gift for the Emperor's envoy?": "将军连战连捷，可喜可贺。那么，孝敬天使的礼物在哪里？",
+    "My army lacks grain. Where would I find money to flatter an envoy?": "军粮尚缺，安有余钱奉承天使？",
+    "Zuo Feng rode back to Luoyang and reported that Lu Zhi skulked behind his walls and would not fight.": "左丰怀恨，回京奏报：卢植高垒不战，惰慢军心。",
+    # ---- closing ----
+    "The Yellow Turbans Fall": "黄巾覆灭",
+    "Zhang Jiao died of illness at Guangzong. Huangfu Song beat Zhang Liang in seven battles and broke open the Great Teacher's coffin. The rebellion was over.": "张角病死于广宗。皇甫嵩连胜七阵，斩张梁，发张角之棺。黄巾之乱就此平定。",
+    "At Wancheng, Liu Bei gave Zhu Jun some advice: “Surround them completely and every man fights to the death. Leave them one way out, and they will run.” It worked. There too, a young officer named Sun Jian was first over the wall — a name to remember.":
+        "在宛城，刘备向朱儁进言：“四面围如铁桶，贼必死战；不如网开一面，贼必弃城而走。”果然奏效。也是在宛城，一位名叫孙坚的年轻将领首先登城，这个名字，日后还要记住。",
+    "But the eunuchs gave rewards only to those who paid. For all his battles, Liu Bei was made a mere county sheriff, at Anxi.": "可是宦官只赏送礼之人。刘备大小三十余战，只得了个安喜县尉。",
+    "Four months later an inspector arrived at Anxi, sitting high on his horse and demanding a bribe.": "到任不到四个月，督邮来到安喜，高坐马上，索要贿赂。",
+    "You claim imperial blood and invent your merits! The court is purging frauds like you.": "你诈称皇亲，虚报功绩！朝廷正要沙汰你这等滥官！",
+    "Zhang Fei, a few cups in, rode past the inspector's lodge and found fifty old villagers weeping at the gate.": "张飞喝了几杯闷酒，骑马经过馆驿，见五六十个老人在门前痛哭。",
+    "Tormentor of the people! Do you know who I am?": "害民贼！认得我么？",
+    "Lord Xuande! Save my life!": "玄德公，救我性命！",
+    "Brother, a phoenix does not roost among thorns. Let us kill him and go.": "兄长，枳棘丛中，非栖鸾凤之所。不如杀了督邮，弃官归乡。",
+    "By your crimes you deserve to die. I spare you. Here is my seal of office — I am done with it.": "据你害民，本当杀却，今姑饶你性命。我缴还印绶，从此去矣！",
+    "Chapter 2": "第二回",
+    "Emperor Ling died. In the capital, his brother-in-law, General He Jin, resolved to destroy the eunuchs at last — and sent for the warlords of the provinces to march on Luoyang and force the Empress's hand.":
+        "灵帝驾崩。大将军何进决意诛杀宦官，发檄文召四方诸侯领兵进京。",
+    "“A mistake,” warned his secretary Chen Lin. “You hand the spear to others, point first.”": "主簿陈琳劝道：“不可！这是倒持干戈，授人以柄。”",
+    "A man beside them clapped and laughed. “This is as easy as turning over a hand. Why so much talk?” It was Cao Cao.": "旁边一人鼓掌大笑：“此事易如反掌，何必多议！”此人正是曹操。",
+    "What did Cao Cao propose? Hear the next chapter.": "不知曹操说出甚话来，且听下文分解。",
+}
+
+# Pronunciation fixes for the voice only (the text shown keeps the real
+# characters). The speech model guesses some characters with two readings
+# wrong; each fix swaps in a homophone with the right reading.
+PRON = {
+    "长社": "常社", "髯长": "髯常",          # 长 cháng, not zhǎng
+    "早降": "早祥",                          # 降 xiáng (surrender), not jiàng
+    "缴还": "缴环",                          # 还 huán, not hái
+    "刘备为兄": "刘备维兄", "张飞为弟": "张飞维弟", "织席为业": "织席维业", "结为兄弟": "结维兄弟",
+    "化为公鸡": "化维公鸡", "挥为两段": "挥维两段", "鸣金为号": "鸣金维号", "诚为可惜": "诚维可惜",
+    "称他为": "称他维", "我为天公": "我维天公", "张宝为地公": "张宝维地公", "张梁为人公": "张梁维人公",  # 为 wéi
+    "将军": "酱军", "贼将": "贼酱",          # 将 jiàng (general), not jiāng
+    "只得了": "只德了", "你得了": "你德了", "得脱": "德脱", "难得者": "难德者",  # 得 dé
+    "诈倒": "诈岛", "倒持": "到持",          # 倒 dǎo (fall), dào (upside down)
+    "在地": "在弟", "讨地公": "讨弟公",      # 地 dì, not the particle de
+}
+
+
+def spoken(text):
+    for a, b in PRON.items():
+        text = text.replace(a, b)
+    return text

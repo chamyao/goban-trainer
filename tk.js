@@ -435,7 +435,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) this.data = await (await fetch("data/tk.json?v=1")).json();
+    if (!this.data) this.data = await (await fetch("data/tk.json?v=2")).json();
     return this.data;
   },
   ls(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } },
@@ -778,16 +778,42 @@ class TKMap {
   dimFor(v, ms) { this.dim = v; clearTimeout(this.dimT); this.dimT = setTimeout(() => { this.dim = 0; }, ms); }
 }
 
+/* ---------- voice-over: one Mandarin clip per line (tools/build_tk_voice.py) ---------- */
+
+const TKVoice = {
+  audio: null, queue: [],
+  get on() { try { return localStorage.getItem("tk-voice") !== "off"; } catch { return true; } },
+  set on(v) { try { localStorage.setItem("tk-voice", v ? "on" : "off"); } catch {} if (!v) this.stop(); },
+  has(vid) { return !!vid && TK.data && TK.data.voices.includes(vid); },
+  // Plays clips one after another; resolves when the last ends or is stopped.
+  play(vids) {
+    this.stop();
+    if (!this.on) return Promise.resolve();
+    this.queue = (Array.isArray(vids) ? vids : [vids]).filter(v => this.has(v));
+    return new Promise(res => {
+      const next = () => {
+        const v = this.queue.shift();
+        if (!v) { this.audio = null; res(); return; }
+        const a = new Audio(`assets/tk/voice/${v}.mp3`);
+        this.audio = a; a.onended = next; a.onerror = next; a.onpause = () => { if (this.audio === a && !a.ended) res(); };
+        a.play().catch(next);
+      };
+      next();
+    });
+  },
+  stop() { this.queue = []; if (this.audio) { const a = this.audio; this.audio = null; a.pause(); } },
+};
+
 /* ---------- story: dialogue box, storyteller scrolls, scene runner ---------- */
 
 const TKStory = {
   skipping: false,
-  dialog(who, text) {
+  dialog(who, text, zh, vid) {
     return new Promise(res => {
       let box = document.querySelector(".tk-dlg");
       if (!box) {
         box = h("div", { class: "tk-dlg" }, [
-          h("div", { class: "tk-dlg-face" }), h("div", { class: "tk-dlg-body" }, [h("b", { class: "tk-dlg-name" }), h("p", { class: "tk-dlg-text" })]),
+          h("div", { class: "tk-dlg-face" }), h("div", { class: "tk-dlg-body" }, [h("b", { class: "tk-dlg-name" }), h("p", { class: "tk-dlg-text" }), h("p", { class: "tk-dlg-zh", lang: "zh-CN" })]),
           h("button", { class: "tk-skip", type: "button" }, "Skip ▸▸"), h("span", { class: "tk-dlg-more" }, "▼"),
         ]);
         document.body.append(box);
@@ -797,11 +823,13 @@ const TKStory = {
       if (ch) face.append(ch.img ? h("img", { src: ch.img, alt: "" }) : TKArt.get(who, "bust"));
       box.classList.toggle("narr", !ch);
       box.querySelector(".tk-dlg-name").textContent = ch ? ch.name : "";
+      box.querySelector(".tk-dlg-zh").textContent = zh || "";
+      TKVoice.play(vid);
       const p = box.querySelector(".tk-dlg-text");
       let i = 0, done = false;
       const tick = setInterval(() => { i += 2; p.textContent = text.slice(0, i); if (i >= text.length) { clearInterval(tick); done = true; box.classList.add("ready"); } }, 28);
       box.classList.remove("ready");
-      const finish = () => { clearInterval(tick); box.onclick = null; skip.onclick = null; res(); };
+      const finish = () => { clearInterval(tick); TKVoice.stop(); box.onclick = null; skip.onclick = null; res(); };
       box.onclick = e => {
         if (e.target === skip) return;
         if (!done) { clearInterval(tick); p.textContent = text; done = true; box.classList.add("ready"); return; }
@@ -811,18 +839,20 @@ const TKStory = {
       skip.onclick = e => { e.stopPropagation(); this.skipping = true; finish(); };
     });
   },
-  closeDialog() { const b = document.querySelector(".tk-dlg"); if (b) b.remove(); },
-  scroll(title, paras) {
+  closeDialog() { TKVoice.stop(); const b = document.querySelector(".tk-dlg"); if (b) b.remove(); },
+  scroll(title, paras, zhTitle, zhParas, vids) {
     return new Promise(res => {
       const wrap = h("div", { class: "tk-scroll-wrap" }, [
         h("div", { class: "tk-scroll" }, [
           h("h3", {}, title),
-          ...paras.map(t => h("p", { class: t.startsWith("—") ? "by" : "" }, t)),
+          ...paras.map((t, i) => h("div", { class: "tk-para" + (t.startsWith("—") ? " by" : "") }, [h("p", {}, t),
+            ...(zhParas && zhParas[i] ? [h("p", { class: "zh", lang: "zh-CN" }, zhParas[i])] : [])])),
           h("button", { class: "tk-scroll-go", type: "button" }, "Continue ▸"),
         ]),
       ]);
       document.body.append(wrap);
-      const go = () => { wrap.remove(); res(); };
+      TKVoice.play(vids || []);
+      const go = () => { TKVoice.stop(); wrap.remove(); res(); };
       wrap.querySelector(".tk-scroll-go").onclick = go;
     });
   },
@@ -843,9 +873,9 @@ const TKStory = {
       }
       if (op === "remove") { delete map.actors[s[1]]; continue; }
       if (this.skipping) { if (op === "spawn") continue; continue; }
-      if (op === "n") await this.dialog(null, s[1]);
-      else if (op === "say") await this.dialog(s[1], s[2]);
-      else if (op === "scroll") { this.closeDialog(); await this.scroll(s[1], s[2]); }
+      if (op === "n") await this.dialog(null, s[1], s[2], s[3]);
+      else if (op === "say") await this.dialog(s[1], s[2], s[3], s[4]);
+      else if (op === "scroll") { this.closeDialog(); await this.scroll(s[1], s[2], s[3], s[4], s[5]); }
       else if (op === "spawn") { const p = map.pos(s[3], s[4], s[5]); map.actors[s[1]] = { who: s[2], x: p.x, y: p.y, frame: 0, pose: "stand", left: p.x > map.leader.x }; }
       else if (op === "move") { const a = map.actor(s[1]); if (a) { const p = map.pos(s[2], s[3], s[4]); await map.moveActor(a, p.x, p.y); } }
       else if (op === "pose") {
@@ -881,10 +911,14 @@ async function viewTK(worldN) {
   root.innerHTML = "";
   const levels = w.nodes.filter(x => !TK.isStart(x.key)), done = levels.filter(x => TK.cleared(x.key)).length;
   const chron = h("button", { class: "tk-chron-btn", type: "button" }, "📜 Chronicle");
+  const voiceBtn = h("button", { class: "tk-chron-btn", type: "button", "aria-pressed": String(TKVoice.on) });
+  const voiceLabel = () => { voiceBtn.textContent = TKVoice.on ? "🔊 Voice on" : "🔇 Voice off"; voiceBtn.setAttribute("aria-pressed", String(TKVoice.on)); };
+  voiceLabel();
+  voiceBtn.onclick = () => { TKVoice.on = !TKVoice.on; voiceLabel(); };
   root.append(h("div", { class: "tk-head" }, [
     h("div", {}, [h("h2", {}, [h("span", { class: "zh" }, D.native), " ", D.title]),
       h("div", { class: "sub" }, `World ${w.n} · ${w.name} ${w.zh} · chapters ${w.chapters.join("–")} · ${w.grades} · ${done}/${levels.length} cleared`)]),
-    chron,
+    h("div", { class: "tk-head-btns" }, [voiceBtn, chron]),
   ]));
   root.append(h("div", { class: "tk-worlds" }, [
     ...D.worlds.map(x => h("a", { class: "tk-world" + (x.n === n ? " on" : ""), href: `#/tk/${x.n}` }, `${x.n} · ${x.name}`)),
@@ -1019,8 +1053,11 @@ async function viewTKLevel(worldN, key) {
   const verdict = h("div", { class: "tk-verdict" });
   const bossPanel = node.boss ? h("div", { class: "panel tk-boss" }, [
     TKArt.get(node.boss.who, "bust"),
-    h("div", {}, [h("b", {}, node.boss.title), h("p", {}, `“${node.boss.taunt}”`)]),
+    h("div", {}, [h("b", {}, node.boss.title), h("p", {}, `“${node.boss.taunt}”`),
+      h("p", { class: "zh", lang: "zh-CN" }, node.boss.taunt_zh || ""),
+      ...(TKVoice.has(node.boss.taunt_vid) ? [h("button", { class: "tk-say", type: "button", onclick: () => TKVoice.play(node.boss.taunt_vid) }, "🔊")] : [])]),
   ]) : null;
+  if (node.boss) TKVoice.play(node.boss.taunt_vid);
   const aside = h("aside", {}, [
     ...(bossPanel ? [bossPanel] : []),
     h("div", { class: "panel" }, [

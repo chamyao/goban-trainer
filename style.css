@@ -399,6 +399,7 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
 .tk-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin: 6px 0 4px; }
 .tk-head h2 { margin: 0; font-size: 20px; } .tk-head .zh { color: #a33a2a; }
 .tk-head .sub { color: var(--muted); font-size: 13.5px; margin-top: 2px; }
+.tk-head-btns { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
 .tk-chron-btn { font: inherit; font-weight: 600; padding: 7px 12px; border-radius: 10px; border: 1px solid #d8cdb4; background: #fbf5e6; cursor: pointer; white-space: nowrap; }
 .tk-worlds { display: flex; gap: 6px; margin: 10px 0 12px; flex-wrap: wrap; }
 .tk-world { padding: 5px 11px; border-radius: 999px; background: #e9e3d4; font-size: 13px; font-weight: 600; color: #6d6656; text-decoration: none; }
@@ -430,6 +431,8 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
 .tk-boss { display: flex; gap: 12px; align-items: center; background: linear-gradient(100deg, #3a1d18, #6a2d22); color: #fff3d6; }
 .tk-boss canvas { width: 72px; height: 72px; image-rendering: pixelated; flex: none; background: rgba(255,255,255,.08); border-radius: 8px; }
 .tk-boss b { font-size: 15px; } .tk-boss p { margin: 4px 0 0; font-style: italic; font-size: 13.5px; }
+.tk-boss p.zh { font-style: normal; opacity: .85; }
+.tk-say { margin-top: 6px; font: inherit; border: none; border-radius: 8px; padding: 3px 9px; background: rgba(255,255,255,.15); color: inherit; cursor: pointer; }
 /* dialogue box, pinned to the bottom like a game */
 .tk-dlg {
   position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%); width: min(720px, calc(100vw - 20px)); z-index: 90;
@@ -444,6 +447,8 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
 .tk-dlg-body { flex: 1; min-height: 60px; }
 .tk-dlg-name { display: block; color: #8a2f22; font-size: 14px; margin-bottom: 3px; }
 .tk-dlg-text { margin: 0; font-size: 15.5px; line-height: 1.45; }
+.tk-dlg-zh { margin: 4px 0 0; font-size: 14px; line-height: 1.5; color: #7a5a3a; font-family: "Songti SC", "Noto Serif SC", serif; }
+.tk-dlg-zh:empty { display: none; }
 .tk-dlg.narr .tk-dlg-text { font-style: italic; color: #4a3a2a; }
 .tk-skip { position: absolute; top: -30px; right: 0; font: inherit; font-size: 12.5px; font-weight: 600; padding: 4px 10px; border-radius: 8px; border: none; background: rgba(40,24,16,.75); color: #fff8e6; cursor: pointer; }
 .tk-dlg-more { position: absolute; right: 12px; bottom: 6px; font-size: 11px; color: #8a2f22; opacity: 0; }
@@ -463,8 +468,10 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
 }
 @keyframes tkUnroll { from { clip-path: inset(48% 0 48% 0); } to { clip-path: inset(0 0 0 0); } }
 .tk-scroll h3 { margin: 0 0 12px; text-align: center; color: #7a2a22; font-size: 19px; letter-spacing: .02em; }
-.tk-scroll p { margin: 0 0 10px; font-size: 15.5px; line-height: 1.55; }
-.tk-scroll p.by { text-align: right; font-style: italic; color: #6a5a4a; }
+.tk-para { margin: 0 0 12px; }
+.tk-scroll p { margin: 0; font-size: 15.5px; line-height: 1.55; }
+.tk-scroll p.zh { margin-top: 3px; font-size: 14.5px; color: #6a4a32; }
+.tk-para.by p { text-align: right; font-style: italic; color: #6a5a4a; }
 .tk-scroll-go { display: block; margin: 14px auto 0; font: inherit; font-family: system-ui, sans-serif; font-weight: 700; padding: 9px 20px; border-radius: 10px; border: none; background: #8a2f22; color: #fff8e6; cursor: pointer; }
 .tk-chron { display: flex; flex-direction: column; gap: 6px; font-family: system-ui, sans-serif; }
 .tk-chron button { font: inherit; text-align: left; padding: 8px 12px; border-radius: 8px; border: 1px solid #d4c29a; background: #fbf5e4; cursor: pointer; display: flex; justify-content: space-between; gap: 10px; }
