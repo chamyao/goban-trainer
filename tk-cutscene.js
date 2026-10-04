@@ -446,6 +446,7 @@ const WorldCutscene = {
           await wait(200);
           break;
         case "fade": await fade(b.actors); break;
+        case "vanish": b.actors.filter(id => actors[id]).forEach(id => { actors[id].spr.setVisible(false); sync(actors[id]); }); break;
         case "pose": await Promise.all(b.actors.filter(id => actors[id]).map((id, i) => pose(actors[id], b.pose, i))); break;
         case "emote": b.actors.filter(id => actors[id]).forEach(id => emote(actors[id], b.icon)); await wait(700); break;
         case "give": await give(b); break;
@@ -524,7 +525,7 @@ const WorldCutscene = {
           break;
         case "zoom": cam.setZoom(zoom0 * b.z); if (dark) dark.setScale(1 / b.z); break;
         case "mood": mood(b.dark, 0); break;
-        case "fade": b.actors.filter(id => actors[id]).forEach(id => { actors[id].spr.setVisible(false); sync(actors[id]); }); break;
+        case "fade": case "vanish": b.actors.filter(id => actors[id]).forEach(id => { actors[id].spr.setVisible(false); sync(actors[id]); }); break;
         case "gain": if (Items) { Items.gain(scene, b.item); Object.values(actors).forEach(mount); } break;
       }
     };

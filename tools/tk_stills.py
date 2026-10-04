@@ -23,13 +23,7 @@ words and name people only; their look belongs in CAST.
 """
 import re
 
-STYLE = ("Style: modern Korean webtoon anime, in the style of The God of High School and Tower of God: crisp "
-         "black line art of varied weight, flat cel shading with one hard shadow tone, sharp angular faces, large "
-         "expressive eyes with bright highlights, spiky expressive hair, bright clean saturated colours. "
-         "Ancient China, 184 AD. No text, no lettering, no borders, no letterbox bars.")
-# (the user's choice of look, from God of High School and Tower of God images they shared, which go
-# with every request as style references (refs/style/, on the samples branch only: the shows' art
-# isn't ours to put in the game); named and described here too, for models that take no images)
+STYLE = "Style: in the style of Studio Ghibli."
 
 # key -> (name as the scenes write it, look)
 CAST = {

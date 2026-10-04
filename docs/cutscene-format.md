@@ -31,6 +31,7 @@ node on the old node map (x right, y down, in node-map pixels; 8 px ≈ 1 tile):
 | `["pose", id, "fall", n]` | fall; for a group, the `n` nearest the enemy (all if omitted). The fallen never move again |
 | `["fx", name, at, dx, dy]` | flash, dust, petals, incense, paper, fire, whip, sparkle, blackwind |
 | `["remove", id]` | fade out |
+| `["vanish", id]` | gone in an instant, no fade (removes or vanishes in a row go together) |
 | `["party", [who, …]]` | who travels with Liu Bei from now on |
 | `["prop", id, kind, at, dx, dy]` | put a thing on stage: any kind in the prop registry (`PROPS` in `tools/build_props.py`: cagecart, cart, forge, anvil, ox, whitehorse, book, letter, seal, steelbars, staves, switches, waterbowl, post, bucket, chest, straw, redbanner, yellowbanner, winejars, table, rack, fire, tent, gate, desk, hall). A kind not there yet still plays, 1x1 and drawn as a crate. It moves with `move`/`run` and leaves with `remove`; walkers go round it |
 | `["board", who, prop]` / `["unboard", who]` | ride inside a prop (a prisoner in the cage cart); it carries them when it moves, and `remove` takes them with it. Boarded before the first line, they are inside from the start |

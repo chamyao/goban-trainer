@@ -342,15 +342,16 @@ class Stage:
         self.fallen.update(ids)
         self.beats.append({"do": "fall", "actors": ids})
 
-    def remove(self, aid):
+    def remove(self, aid, how="fade"):
+        """Take people off stage: "fade" out, or "vanish" (gone in an instant, no fade)."""
         ids = [a for a in self.members(aid) if a in self.cast and a not in self.gone]
         ids += [r for r, p in self.aboard.items() if p in ids and r not in self.gone]   # a prop takes its riders
         if ids:
             last = self.beats[-1] if self.beats else None
-            if last and last["do"] == "fade":   # removes in a row go together ("both old men are gone")
+            if last and last["do"] == how:   # removes in a row go together ("both old men are gone")
                 last["actors"] += ids
             else:
-                self.beats.append({"do": "fade", "actors": ids})
+                self.beats.append({"do": how, "actors": ids})
         self.gone.update(ids)
         for a in ids:
             self.aboard.pop(a, None)
@@ -462,7 +463,7 @@ def stage_scene(scene, m, spot, party, chars, boss=None):
     arrivals = []
     for s in steps:
         op = s[0]
-        if op in ("n", "say", "fx", "pose", "move", "run", "remove", "party", "wait", "scroll", "problem",
+        if op in ("n", "say", "fx", "pose", "move", "run", "remove", "vanish", "party", "wait", "scroll", "problem",
                   "emote", "give", "surround", "close", "camera", "mood", "unboard", "boss", "victory") and opening:
             opening = False
             if arrivals:
@@ -492,8 +493,8 @@ def stage_scene(scene, m, spot, party, chars, boss=None):
         elif op == "fx":
             c = st.offset(s[3], s[4])
             st.beats.append({"do": "fx", "name": s[1], "at": st.xy(c)})
-        elif op == "remove":
-            st.remove(s[1])
+        elif op in ("remove", "vanish"):
+            st.remove(s[1], "fade" if op == "remove" else "vanish")
         elif op == "prop":
             st.prop(s[1], s[2], st.offset(s[4], s[5]))
         elif op == "board":
