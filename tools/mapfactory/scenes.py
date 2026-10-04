@@ -165,12 +165,10 @@ class Stage:
         return min(cands, key=lambda b: (self.pos[b][0] - ax) ** 2 + (self.pos[b][1] - ay) ** 2)
 
     def formation(self, n):
-        """Ranks three deep, filling away from the party."""
-        out = []
-        for i in range(n):
-            col, row = i // 3, i % 3
-            out.append((col, row - 1))
-        return out
+        """Ranks filling away from the party: three deep with gaps for a band,
+        five deep and close for a host, so a big army still fits the screen."""
+        deep, gap = (3, 2) if n <= 9 else (5, 1)
+        return [(i // deep, (i % deep - deep // 2) * gap) for i in range(n)]
 
     def side_of(self, who, cell):
         if who in self.party or who in FRIENDLY:
@@ -211,7 +209,7 @@ class Stage:
         ids = []
         for i, (col, row) in enumerate(self.formation(n)):
             aid = f"{gid}.{i}"
-            c = self.snap((centre[0] + col * away * self.dir, centre[1] + row * 2))
+            c = self.snap((centre[0] + col * away * self.dir, centre[1] + row))
             self.add(aid, who, c, side, gid)
             ids.append(aid)
         self.groups[gid] = ids

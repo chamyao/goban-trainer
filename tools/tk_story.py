@@ -122,8 +122,8 @@ WORLDS = [
             "daxing": {"title": "First Blood at Daxing Mountain", "kind": "main", "steps": [
                 # the novel's gifts come before the first battle, whichever road you took
                 ["gain", "horses"], ["gain", "twin_swords"], ["gain", "green_dragon"], ["gain", "serpent_spear"],
-                ["army", "braves", "militia", 6, "n3", -24, 0],
-                ["army", "yt", "rebel", 9, "n3", 72, 0],
+                ["army", "braves", "militia", 5, "n3", -24, 0],
+                ["army", "yt", "rebel", 24, "n3", 72, 0],
                 ["n", "The Yellow Turban general Cheng Yuanzhi marches on Zhuo with fifty thousand men. Liu Bei meets him with five hundred."],
                 ["spawn", "r1", "rebel", "n3", 40, -8], ["spawn", "r2", "chengyuanzhi", "n3", 46, 6],
                 ["say", "liubei", "Traitors to the realm! Why not surrender now?"],
@@ -138,7 +138,8 @@ WORLDS = [
                 ["remove", "r1"], ["remove", "r2"],
             ]},
             "qingzhou": {"title": "The Ambush at Qingzhou", "kind": "main", "steps": [
-                ["army", "yt", "rebel", 10, "n4", 80, 0],
+                ["army", "relief", "militia", 4, "n4", -24, 0],
+                ["army", "yt", "rebel", 15, "n4", 80, 0],
                 ["n", "Rebels besiege Qingzhou. The relief force is outnumbered and falls back thirty li."],
                 ["say", "liubei", "They are many and we are few. Only surprise will win this. Yunchang, hide your men left of the ridge. Yide, to the right. When the gongs sound, strike."],
                 ["move", "guanyu", "n4", 8, -40], ["move", "zhangfei", "n4", 8, 40],
@@ -180,7 +181,7 @@ WORLDS = [
                 ["spawn", "zj", "zhujun", "n7", -14, -10],
                 ["army", "han", "militia", 6, "n7", -30, 0],
                 ["spawn", "zb", "zhangbao", "n7", 70, 0],
-                ["army", "yt", "rebel", 8, "n7", 86, 0],
+                ["army", "yt", "rebel", 14, "n7", 86, 0],
                 ["n", "Zhu Jun's army faces Zhang Bao, the General of Earth. Zhang Fei spears his officer Gao Sheng from the saddle — and then Zhang Bao lets down his hair, raises his sword, and chants."],
                 ["pose", "zb", "strike"],
                 ["fx", "blackwind", "n7", 40, -4],
@@ -191,8 +192,9 @@ WORLDS = [
                 ["remove", "yt"], ["remove", "zb"], ["remove", "zj"],
             ]},
             "bosswin": {"title": "The General of Earth Falls", "kind": "main", "steps": [
+                ["army", "han", "militia", 5, "boss", -26, 0],
                 ["spawn", "zb", "zhangbao", "boss", 60, 0],
-                ["army", "yt", "rebel", 8, "boss", 76, 0],
+                ["army", "yt", "rebel", 12, "boss", 76, 0],
                 ["n", "Again Zhang Bao calls the wind; again Liu Bei flees, and the rebels chase him to the hill. A signal gun — and blood and filth rain down from the ridge."],
                 ["run", "yt", "boss", 20, 0],
                 ["fx", "flash", "boss", 12, -8],
