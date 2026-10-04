@@ -83,7 +83,6 @@ const TownArt = {
     else if (d.eyes === "phoenix") { s(7, ey, dark); s(6, ey - 1, dark); R(6, ey - 2, 3, 1, dark); }
     else if (d.eyes === "narrow") { R(6, ey, 2, 1, dark); s(7, ey - 2, dark); }
     else if (d.eyes === "wild") { s(7, ey, dark); s(6, ey, "#fff"); R(6, ey - 2, 2, 1, dark); s(8, ey - 3, dark); }
-    else if (d.eyes === "big") { R(6, ey - 1, 2, 2, dark); s(7, ey - 1, "#fff"); s(8, ey - 1, dark); }
     else s(7, ey, dark);
     s(8, 7, d.makeup ? "#c8283c" : A.shade(d.skin, -.4));  // mouth
     if (d.makeup) s(6, 7, "#f4a0aa");

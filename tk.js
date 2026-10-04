@@ -30,13 +30,13 @@ const TK_CHARS = {
   f_woman2: { name: "Woman", skin: "#efc59d", hair: "#3a2a2a", hat: "bun", hatC: "#3a2a2a", pin: "#e6c14a", robe: "#4a8a8a", trim: "#2a5a5a", beard: "none", eyes: "narrow" },
   f_elder: { name: "Elder", skin: "#e8c4a0", hair: "#d8d2c8", hat: "scholar", hatC: "#3a3236", robe: "#d6cfb8", trim: "#6a5a4a", beard: "long", beardC: "#e0dcd4", eyes: "kind" },
   f_elder2: { name: "Old man", skin: "#e2b089", hair: "#9a9a9a", hat: "topknot", hatC: "#9a9a9a", pin: "#6a6a6a", robe: "#8a7a5a", trim: "#4a3a2a", beard: "short", beardC: "#b0b0b0", eyes: "narrow" },
-  // court ladies and girls: high buns, big eyes, painted faces
-  f_geisha: { name: "Lady", skin: "#fbefe8", hair: "#1a1418", hat: "lady", pin: "#c8283c", pin2: "#e6c14a", flower: "#f08ab0", robe: "#c8283c", trim: "#e6c14a", beard: "none", eyes: "big", makeup: true },
-  f_geisha2: { name: "Lady", skin: "#fbefe8", hair: "#1a1418", hat: "lady", pin: "#2a2a3a", pin2: "#e6c14a", flower: "#ffffff", robe: "#6a3a8a", trim: "#f0d0e0", beard: "none", eyes: "big", makeup: true, iris: "#3a2a4a" },
-  f_geisha3: { name: "Lady", skin: "#f8eae0", hair: "#241a1e", hat: "lady", pin: "#2e7a5a", pin2: "#d8d8e0", flower: "#f6c84a", robe: "#2e6a7a", trim: "#f4ead2", beard: "none", eyes: "big", makeup: true },
-  f_maiden: { name: "Maiden", skin: "#f8dcc4", hair: "#2a2024", hat: "twinloops", pin: "#e6c14a", robe: "#7ab0c8", trim: "#f4f0e8", beard: "none", eyes: "big", makeup: true },
-  f_maiden2: { name: "Maiden", skin: "#f4d2b4", hair: "#3a2a26", hat: "twinloops", pin: "#c8392c", robe: "#e8a0b0", trim: "#8a3a4a", beard: "none", eyes: "big", makeup: true, iris: "#6a4024" },
-  f_girl: { name: "Girl", skin: "#f8dcc4", hair: "#2a2024", hat: "sidebuns", pin: "#c8392c", robe: "#f0b04a", trim: "#c8392c", beard: "none", eyes: "big" },
+  // court ladies and girls: high buns, painted faces
+  f_geisha: { name: "Lady", skin: "#fbefe8", hair: "#1a1418", hat: "lady", pin: "#c8283c", pin2: "#e6c14a", flower: "#f08ab0", robe: "#c8283c", trim: "#e6c14a", beard: "none", eyes: "kind", makeup: true },
+  f_geisha2: { name: "Lady", skin: "#fbefe8", hair: "#1a1418", hat: "lady", pin: "#2a2a3a", pin2: "#e6c14a", flower: "#ffffff", robe: "#6a3a8a", trim: "#f0d0e0", beard: "none", eyes: "kind", makeup: true },
+  f_geisha3: { name: "Lady", skin: "#f8eae0", hair: "#241a1e", hat: "lady", pin: "#2e7a5a", pin2: "#d8d8e0", flower: "#f6c84a", robe: "#2e6a7a", trim: "#f4ead2", beard: "none", eyes: "kind", makeup: true },
+  f_maiden: { name: "Maiden", skin: "#f8dcc4", hair: "#2a2024", hat: "twinloops", pin: "#e6c14a", robe: "#7ab0c8", trim: "#f4f0e8", beard: "none", eyes: "kind", makeup: true },
+  f_maiden2: { name: "Maiden", skin: "#f4d2b4", hair: "#3a2a26", hat: "twinloops", pin: "#c8392c", robe: "#e8a0b0", trim: "#8a3a4a", beard: "none", eyes: "kind", makeup: true },
+  f_girl: { name: "Girl", skin: "#f8dcc4", hair: "#2a2024", hat: "sidebuns", pin: "#c8392c", robe: "#f0b04a", trim: "#c8392c", beard: "none", eyes: "kind" },
   f_child: { name: "Child", skin: "#f5d2ae", hair: "#2a2024", hat: "topknot", hatC: "#2a2024", pin: "#c8392c", robe: "#d8a84a", trim: "#8a5a22", beard: "none", eyes: "round" },
   f_daoist: { name: "Daoist", skin: "#e8c4a0", hair: "#5a5256", hat: "scholar", hatC: "#2e3a5a", robe: "#8a8a9a", trim: "#2e3a5a", beard: "thin", eyes: "narrow" },
   f_noble: { name: "Gentleman", skin: "#f0cfac", hair: "#2a2024", hat: "guan", hatC: "#1e1e24", robe: "#6a3a7a", trim: "#d4ad42", beard: "goatee", eyes: "narrow" },
@@ -117,7 +117,6 @@ const TKArt = {
     else if (d.eyes === "phoenix") { s(2, ey, dark); s(3, ey - 1, dark); s(6, ey - 1, dark); s(7, ey, dark); R(2, ey - 2, 2, 1, dark); R(6, ey - 2, 2, 1, dark); }
     else if (d.eyes === "kind") { s(3, ey, dark); s(6, ey, dark); }
     else if (d.eyes === "wild") { s(2, ey, dark); s(3, ey, dark); s(6, ey, dark); s(7, ey, dark); }
-    else if (d.eyes === "big") { R(2, ey - 1, 2, 2, dark); s(2, ey - 1, "#fff"); R(6, ey - 1, 2, 2, dark); s(6, ey - 1, "#fff"); s(1, ey - 1, dark); s(8, ey - 1, dark); }  // big, bright, lashed
     else { s(3, ey, dark); s(6, ey, dark); }
     if (d.makeup) { s(4, 7 + dy, "#c8283c"); s(5, 7 + dy, "#c8283c"); s(2, 6 + dy, "#f4a0aa"); s(7, 6 + dy, "#f4a0aa"); }  // red lips, blush
     // beard
@@ -184,14 +183,6 @@ const TKArt = {
     else if (d.eyes === "narrow") { R(11, ey, 3, 1, dark); R(18, ey, 3, 1, dark); Ln(10, ey - 3, 13, ey - 2, dark); Ln(19, ey - 2, 22, ey - 3, dark); }
     else if (d.eyes === "kind") { s(11, ey, dark); R(12, ey - 1, 2, 1, dark); s(14, ey, dark); s(18, ey, dark); R(19, ey - 1, 2, 1, dark); s(21, ey, dark); R(10, ey - 4, 4, 1, hr); R(18, ey - 4, 4, 1, hr); }
     else if (d.eyes === "wild") { E(12, ey, 1.6, 1.6, "#fff"); E(20, ey, 1.6, 1.6, "#fff"); s(12, ey, "#a02020"); s(20, ey, "#a02020"); Ln(9, ey - 2, 14, ey - 4, dark); Ln(18, ey - 4, 23, ey - 2, dark); }
-    else if (d.eyes === "big") {  // big bright eyes: dark iris, a highlight, lashes that flick out
-      const iris = d.iris || "#5a3424";
-      for (const cx of [12, 20]) {
-        E(cx, ey + .5, 2.6, 3.2, "#fff"); E(cx, ey + .8, 2, 2.8, iris); E(cx, ey + 1.2, 1, 1.4, dark); R(cx - 1, ey - 1, 1, 1, "#fff"); s(cx + 1, ey + 2, "#fff");
-        Ln(cx - 3, ey - 3, cx + 2, ey - 3, dark); s(cx < 16 ? cx - 4 : cx + 3, ey - 4, dark);
-        Ln(cx - 2, ey - 6, cx + 1, ey - 6, hr);
-      }
-    }
     else { R(11, ey, 2, 2, dark); R(19, ey, 2, 2, dark); R(10, ey - 3, 4, 1, hr); R(18, ey - 3, 4, 1, hr); }
     s(16, 17, skinS); s(15, 18, skinS);  // nose
     R(14, 20, 4, 1, this.shade(d.skin, -.4));  // mouth
