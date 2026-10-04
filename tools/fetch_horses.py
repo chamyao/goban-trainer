@@ -5,7 +5,7 @@
 Source: "[LPC] Horses" by bluecarrot16, https://opengameart.org/content/lpc-horses
 (CC-BY 3.0 / CC-BY-SA 3.0 / GPL / OGA-BY 3.0; used under OGA-BY 3.0, credit in
 assets/tk/CREDITS.txt). The sheets are drawn for 32px-tall people on 128px
-frames; our heroes are 20px tall, so the walk cycles are scaled by 0.4.
+frames; our heroes are 20px tall, so the walk cycles are scaled by 0.5.
 
 Writes assets/tk/horses/<coat>.png: four rows (down, left, right, up), four
 walk frames each, every frame FRAME x FRAME with the hooves on the same line,
@@ -25,7 +25,7 @@ COATS = ["brown", "black", "white", "gray", "golden"]
 SRC = 128                                           # source frame size
 WALK = {"up": 4, "left": 5, "down": 6, "right": 7}  # source rows of the walk cycle
 ORDER = ["down", "left", "right", "up"]
-SCALE = .4
+SCALE = .5
 
 
 def shrink(frame):

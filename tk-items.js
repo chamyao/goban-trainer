@@ -11,10 +11,15 @@
 const WorldItems = {
   KEY: "tk-items",
   COATS: ["brown", "black", "white", "gray", "golden"],
-  FRAME: [31, 30],
+  FRAME: [38, 38],
   ROWS: ["down", "left", "right", "up"],
-  RISE: 9,        // how far a rider sits above the ground
-  LEGS: 5,        // a seated rider's legs are hidden by the horse's flank
+  // Where a rider sits, per facing: the frame row of the hooves (the horse's
+  // anchor), the seat's x offset from the horse's middle (behind the withers),
+  // and the seat's height above the hooves.
+  SEAT: { right: { hoof: 31, dx: 0, up: 20 }, left: { hoof: 31, dx: -1, up: 20 },
+          down: { hoof: 33, dx: 0, up: 26 }, up: { hoof: 38, dx: 0, up: 25 } },
+  HEAD: 13,       // facing us, the top rows of the horse (head and neck) are in front of the rider
+  HIP: 13.5,      // the row of a seated rider's hips
   SPEED: 1.5,     // mounted, the party travels this much faster
 
   owned(w) { return (TK.ls(this.KEY)[w.n] || []).slice(); },
@@ -34,7 +39,7 @@ const WorldItems = {
 
   /* ---------- Phaser: horse sheets and walk cycles ---------- */
   preload(scene) {
-    for (const c of this.COATS) scene.load.spritesheet(`horse-${c}`, `assets/tk/horses/${c}.png?v=1`, { frameWidth: this.FRAME[0], frameHeight: this.FRAME[1] });
+    for (const c of this.COATS) scene.load.spritesheet(`horse-${c}`, `assets/tk/horses/${c}.png?v=2`, { frameWidth: this.FRAME[0], frameHeight: this.FRAME[1] });
   },
   anims(scene) {
     for (const c of this.COATS) this.ROWS.forEach((dir, r) => {
@@ -52,12 +57,57 @@ const WorldItems = {
     if (moving) h.anims.play(`horse-${coat}-${dir}`, true);
     else { h.anims.stop(); h.setFrame(this.ROWS.indexOf(dir) * 4); }
   },
-  // A hero frame as a seated rider: the standing pose, legs cropped away.
-  seat(img, key) {
-    if (img.texture.key !== key) img.setTexture(key);
-    img.setCrop(0, 0, img.width, img.height - this.LEGS);
-    return img;
+  // A hero seated on a horse, made from his own front, back or profile frame:
+  // the upper body as drawn, then a saddle cloth and legs astride (front and
+  // back) or bent down the flank (profile), outlined like the rest.
+  rider(who, dir) {
+    const A = TKArt, d = TK_CHARS[who];
+    const src = dir === "down" ? A.get(who, "sprite", 0) : dir === "up" ? TownArt.back(who, 0) : TownArt.side(who, 0);
+    const W = src.width, H = src.height + 3, cut = 14;
+    const px = src.getContext("2d").getImageData(0, 0, src.width, src.height).data;
+    const g = A.grid(W, H), hex = i => "#" + [0, 1, 2].map(k => px[i + k].toString(16).padStart(2, "0")).join("");
+    for (let y = 0; y < cut; y++) for (let x = 0; x < W; x++) { const i = (y * src.width + x) * 4; if (px[i + 3] > 0) g.c[y][x] = hex(i); }
+    // the old outline under the waist goes; the new parts get their own
+    for (let x = 0; x < W; x++) if (g.c[cut - 1][x] === "#1c1418" && !(g.c[cut - 2][x] && g.c[cut - 2][x] !== "#1c1418")) g.c[cut - 1][x] = null;
+    const pants = A.shade(d.robe, -.32), boot = "#2a2228", cloth = "#8a2a1a", trim = "#d4ad42";
+    const put = (x, y, c) => { if (!g.c[y][x] || g.c[y][x] === "#1c1418") g.c[y][x] = c; };
+    if (dir === "right") {
+      for (let x = 2; x <= 9; x++) { put(x, cut - 1, cloth); put(x, cut, cloth); put(x, cut + 1, trim); }   // saddle cloth
+      for (let x = 6; x <= 9; x++) { g.c[cut - 1][x] = pants; g.c[cut][x] = pants; }                      // thigh, forward
+      for (let y = cut + 1; y <= cut + 3; y++) { g.c[y][8] = pants; g.c[y][9] = pants; }                 // shin, down the flank
+      g.c[cut + 4][8] = boot; g.c[cut + 4][9] = boot; g.c[cut + 4][10] = boot;                           // boot, toe forward
+    } else {
+      for (let x = 3; x <= 12; x++) { put(x, cut - 1, cloth); put(x, cut, trim); }
+      for (const lx of [2, 12]) {                                                                         // legs astride
+        for (let y = cut - 1; y <= cut + 2; y++) { g.c[y][lx] = pants; g.c[y][lx + (lx < 8 ? 1 : -1)] = y < cut + 1 ? pants : g.c[y][lx + (lx < 8 ? 1 : -1)]; }
+        g.c[cut + 3][lx] = boot;
+      }
+    }
+    return A.canvas(A.outline(g));
   },
+  riderTexture(scene, who, dir) {
+    const key = `ride-${who}-${dir}`;
+    if (!scene.textures.exists(key)) {
+      const cv = dir === "left" ? TKArt.flip(this.rider(who, "right")) : this.rider(who, dir);
+      scene.textures.addCanvas(key, cv);
+    }
+    return key;
+  },
+  // Put a seated rider and his horse at a place on the ground, facing dir.
+  // head: a copy of the horse showing only its head and neck, drawn over the
+  // rider when the horse faces us.
+  place(horse, seat, head, x, y, dir) {
+    const S = this.SEAT[dir];
+    x = Math.round(x); y = Math.round(y);
+    horse.setOrigin(.5, S.hoof / this.FRAME[1]).setPosition(x, y).setDepth(y);
+    seat.setOrigin(.5, this.HIP / seat.height).setPosition(x + S.dx, y - S.up).setDepth(y + .5);
+    if (head) {
+      head.setVisible(horse.visible && dir === "down").setAlpha(horse.alpha);
+      if (dir === "down") head.setTexture(horse.texture.key, horse.frame.name).setCrop(0, 0, this.FRAME[0], this.HEAD)
+        .setOrigin(horse.originX, horse.originY).setPosition(x, y).setDepth(y + .7);
+    }
+  },
+  head(scene, horse) { return scene.add.image(horse.x, horse.y, horse.texture.key, horse.frame.name).setOrigin(.5, 1).setVisible(false); },
   dirOf(spr) { const m = /-(down|up|left|right)-\d+$/.exec(spr.texture.key); return m ? m[1] : "down"; },
 
   /* ---------- the explorable world ---------- */
@@ -72,10 +122,10 @@ const WorldItems = {
       // rebuild when the party changes
       const sig = riders.map(r => r.who + ":" + (this.coat(w, r.who) || "")).join(",");
       if (sig !== scene.mountSig) {
-        for (const m of scene.mounts) { m.horse.destroy(); m.seat.destroy(); m.spr.setAlpha(1); }
+        for (const m of scene.mounts) { m.horse.destroy(); m.seat.destroy(); m.head.destroy(); m.spr.setAlpha(1); }
         scene.mounts = riders.filter(r => this.coat(w, r.who)).map(r => {
-          const coat = this.coat(w, r.who);
-          return { who: r.who, spr: r.spr, coat, horse: this.horse(scene, coat, r.spr.x, r.spr.y), seat: scene.add.image(r.spr.x, r.spr.y, r.spr.texture.key).setOrigin(.5, 1) };
+          const coat = this.coat(w, r.who), horse = this.horse(scene, coat, r.spr.x, r.spr.y);
+          return { who: r.who, spr: r.spr, coat, horse, head: this.head(scene, horse), seat: scene.add.image(r.spr.x, r.spr.y, this.riderTexture(scene, r.who, "down")) };
         });
         scene.mountSig = sig;
       }
@@ -84,13 +134,12 @@ const WorldItems = {
         const r = riders.find(x => x.spr === m.spr);
         const show = m.spr.visible && !busyScene;
         m.horse.setVisible(show); m.seat.setVisible(show);
-        if (!show) continue;
+        if (!show) { m.head.setVisible(false); continue; }
         m.spr.setAlpha(0);
         const dir = this.dirOf(m.spr);
         this.pose(m.horse, m.coat, dir, r && r.moving);
-        m.horse.setPosition(Math.round(m.spr.x), Math.round(m.spr.y)).setDepth(m.spr.y);
-        this.seat(m.seat, m.spr.texture.key.replace(/-\d+$/, "-0"));   // sits still: the horse does the walking
-        m.seat.setPosition(Math.round(m.spr.x), Math.round(m.spr.y - this.RISE)).setDepth(m.spr.y + .5);
+        m.seat.setTexture(this.riderTexture(scene, m.who, dir));
+        this.place(m.horse, m.seat, m.head, m.spr.x, m.spr.y, dir);
       }
       // mounted, the party travels faster (the world sets the walking speed each frame)
       if (scene.mounts.length && !scene.leaving && !busyScene) scene.player.body.velocity.scale(this.SPEED);

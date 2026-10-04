@@ -101,10 +101,15 @@ class Kit:
         return None, None
 
     def folk(self, kind, key):
+        """The townsperson's sprite, and whether the game draws it like a hero (folk.drawn)."""
+        drawn = self.k["folk"].get("drawn")
+        if drawn:
+            v = drawn.get(kind) or drawn[FOLK_FALLBACK]
+            return v[zlib.crc32(key.encode()) % len(v)], True
         kinds = self.k["folk"]["kinds"]
         v = kinds.get(kind) or kinds.get(FOLK_FALLBACK)
         i = zlib.crc32(key.encode()) % len(v)
-        return f"{kind if kind in kinds else FOLK_FALLBACK}#{i}"
+        return f"{kind if kind in kinds else FOLK_FALLBACK}#{i}", False
 
 
 def compile_map(m, kit, out_dir):
@@ -189,8 +194,9 @@ def compile_map(m, kit, out_dir):
         obj(s["id"], "spot", s["x"] * T, s["y"] * T, node=s["node"], label=s.get("label", ""), label_zh=ZH.get(s.get("label", ""), ""),
             **{k: json.dumps([place_step(l)[0] for l in s[k]], ensure_ascii=False) for k in ("intro", "outro") if s.get(k)})
     for n in m["npcs"]:
-        sprite = n["kind"][5:] if n["kind"].startswith("hero.") else kit.folk(n["kind"], f"{m['id']}/{n['id']}")
+        sprite, drawn = (n["kind"][5:], False) if n["kind"].startswith("hero.") else kit.folk(n["kind"], f"{m['id']}/{n['id']}")
         obj(n["id"], "npc", n["x"] * T, n["y"] * T, kind=n["kind"], sprite=sprite, wander=bool(n.get("wander")),
+            **({"drawn": True} if drawn else {}),
             say=json.dumps([place_step(l, n["kind"])[0] for l in n.get("say", [])], ensure_ascii=False),
             **{k: n[k] for k in ("challenge", "until", "face") if n.get(k)},
             **{k: json.dumps([place_step(l, n["kind"])[0] for l in n[k]], ensure_ascii=False) for k in ("intro", "win", "done") if n.get(k)})
@@ -259,7 +265,7 @@ def render(tmj, kit, out_dir):
             else:
                 d.rectangle([o["x"] - p["fw"] / 2, o["y"] - p["fh"], o["x"] + p["fw"] / 2, o["y"]], outline=(255, 0, 255))
         elif o["type"] == "npc":
-            if p["kind"].startswith("hero."):
+            if p["kind"].startswith("hero.") or p.get("drawn"):   # drawn by the game, not the pack
                 d.ellipse([o["x"] - 5, o["y"] - 14, o["x"] + 5, o["y"] - 4], fill=(200, 40, 40), outline=(0, 0, 0))
             else:
                 kind, i = p["sprite"].split("#")

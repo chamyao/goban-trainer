@@ -91,6 +91,7 @@ const TownArt = {
     else if (d.beard === "thin") { s(8, 8, bc); }
     // hats, in profile
     if (d.hat === "topknot") { R(2, 1, 6, 2, hr); R(4, -1, 2, 2, hr); s(3, 0, d.pin || "#e6c14a"); s(6, 0, d.pin || "#e6c14a"); }
+    else if (d.hat === "bun") { R(2, 1, 6, 2, hr); R(1, -1, 4, 3, hr); s(5, -1, d.pin || "#c8392c"); R(2, 3, 2, 4, hr); }
     else if (d.hat === "scarf") { R(2, 0, 7, 3, H); R(3, -1, 4, 1, H); R(1, 1, 1, 6, H); s(0, 6, H); }
     else if (d.hat === "band") { R(2, 0, 6, 2, hr); s(3, -1, hr); s(6, -1, hr); R(2, 2, 7, 1, H); s(1, 3, H); s(0, 4, H); }
     else if (d.hat === "guan") { R(3, -1, 5, 2, H); R(2, 1, 7, 2, H); s(1, 2, H); }

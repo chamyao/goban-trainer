@@ -46,17 +46,24 @@ const WorldCutscene = {
     const party = new Set(cs.party || []);
     const coatFor = who => Items && party.has(who) ? Items.coat(scene.w, who) : null;
     const herdCoat = id => Items ? Items.COATS[[...id].reduce((h, c) => h + c.charCodeAt(0), 0) % 3] : null;
+    // A mounted actor: a.spr stays the invisible anchor that moves and fades;
+    // the horse, the seated rider and (facing us) the horse's head follow it.
     const mount = a => {
       const coat = a.who === "horse" ? null : coatFor(a.who);
       if (coat && !a.horse) {
-        a.coat = coat; a.horse = Items.horse(scene, coat, a.spr.x, a.spr.y);
-        a.spr.setOrigin(.5, 1 + Items.RISE / a.spr.height);
-        Items.seat(a.spr, `h-${a.who}-${a.dir || "down"}-0`);
+        a.coat = coat; a.horse = Items.horse(scene, coat, a.spr.x, a.spr.y); a.head = Items.head(scene, a.horse);
+        a.seat = scene.add.image(a.spr.x, a.spr.y, Items.riderTexture(scene, a.who, a.dir || "down"));
+        a.spr.setScale(0);
       }
       sync(a);
     };
     const sync = a => {
-      if (a.horse) a.horse.setPosition(a.spr.x, a.spr.y).setDepth(a.spr.y - .5).setVisible(a.spr.visible).setAlpha(a.spr.alpha);
+      if (a.horse) {
+        const dir = a.dir || "down";
+        a.seat.setTexture(Items.riderTexture(scene, a.who, dir));
+        for (const o of [a.horse, a.seat]) o.setVisible(a.spr.visible).setAlpha(a.spr.alpha);
+        Items.place(a.horse, a.seat, a.head, a.spr.x, a.spr.y, dir);
+      }
       a.spr.setDepth(a.spr.y);
     };
     const actor = (id, at, face) => {
@@ -81,11 +88,11 @@ const WorldCutscene = {
       a.dir = dir;
       if (a.beast) return Items.pose(a.spr, a.coat, dir, false);
       a.spr.anims.stop(); a.spr.setTexture(`h-${a.who}-${dir}-0`);
-      if (a.horse) { Items.seat(a.spr, `h-${a.who}-${dir}-0`); Items.pose(a.horse, a.coat, dir, false); }
+      if (a.horse) { Items.pose(a.horse, a.coat, dir, false); sync(a); }
     };
     const stride = (a, dir, fast) => {
       if (a.beast) return Items.pose(a.spr, a.coat, dir, true);
-      if (a.horse) { Items.seat(a.spr, `h-${a.who}-${dir}-0`); return Items.pose(a.horse, a.coat, dir, true); }   // the horse walks, the rider sits
+      if (a.horse) { Items.pose(a.horse, a.coat, dir, true); return sync(a); }   // the horse walks, the rider sits
       a.spr.anims.play(`h-${a.who}-${dir}`, true);
       a.spr.anims.msPerFrame = fast ? 85 : 135;
       if (a.horse) Items.pose(a.horse, a.coat, dir, true);
@@ -176,7 +183,7 @@ const WorldCutscene = {
     // back to the world: the leader stands where the scene left him
     for (const t of timers) t.remove(false);
     scene.tweens.killTweensOf(Object.values(actors).map(a => a.spr));
-    for (const a of Object.values(actors)) { a.spr.destroy(); if (a.horse) a.horse.destroy(); }
+    for (const a of Object.values(actors)) { a.spr.destroy(); if (a.horse) { a.horse.destroy(); a.seat.destroy(); a.head.destroy(); } }
     for (const o of fx) o.destroy();
     skipBtn.remove();
     bars.forEach(b => b.destroy());

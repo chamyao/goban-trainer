@@ -67,7 +67,7 @@ function worldScenes() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
       this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=3`);
-      this.load.json("kit", `assets/tk/kits/${kit}.json?v=3`);
+      this.load.json("kit", `assets/tk/kits/${kit}.json?v=4`);
       this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=1`);
     }
     create() {
@@ -75,7 +75,7 @@ function worldScenes() {
       for (const [s, path] of Object.entries(kit.sheets)) this.load.image(`kit-${s}`, path);
       const [fw, fh] = kit.folk.frame;
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=3`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=4`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -186,7 +186,7 @@ function worldScenes() {
       if (p.until && TK.cleared(p.until)) return;  // their part of the story is over
       let spr, folk = null, who = null;
       const face = p.face || "down";
-      if (p.kind.startsWith("hero.")) {
+      if (p.kind.startsWith("hero.") || p.drawn) {   // story people, and townsfolk drawn like them (kit folk.drawn)
         who = p.sprite;
         this.hero(who);
         spr = this.physics.add.sprite(o.x, o.y, `h-${who}-${face}-0`);
@@ -406,7 +406,7 @@ function worldScenes() {
           n.moving = Math.random() < .5 || away;
         }
         const v = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }[n.dir];
-        if (n.moving) { n.spr.setVelocity(v[0] * 28, v[1] * 28); n.spr.anims.play(`fk-${n.sprite}-${n.dir}`, true); }
+        if (n.moving) { n.spr.setVelocity(v[0] * 28, v[1] * 28); n.spr.anims.play(n.who ? `h-${n.who}-${n.dir}` : `fk-${n.sprite}-${n.dir}`, true); }
         else { n.spr.setVelocity(0); this.faceNpc(n); }
         n.spr.setDepth(n.spr.y);
       }

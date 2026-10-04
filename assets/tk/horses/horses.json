@@ -1,7 +1,7 @@
 {
  "frame": [
-  31,
-  30
+  38,
+  38
  ],
  "rows": [
   "down",
@@ -15,5 +15,27 @@
   2,
   3
  ],
+ "seat": {
+  "down": {
+   "hoof": 33,
+   "dx": 0,
+   "up": 19
+  },
+  "left": {
+   "hoof": 31,
+   "dx": 12,
+   "up": 12
+  },
+  "right": {
+   "hoof": 31,
+   "dx": -14,
+   "up": 17
+  },
+  "up": {
+   "hoof": 38,
+   "dx": 1,
+   "up": 24
+  }
+ },
  "credit": "[LPC] Horses by bluecarrot16, OGA-BY 3.0, https://opengameart.org/content/lpc-horses"
 }

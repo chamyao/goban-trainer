@@ -646,6 +646,43 @@
      ]
     }
    ]
+  },
+  "drawn": {
+   "folk.villager": [
+    "f_farmer",
+    "f_farmer2",
+    "f_porter",
+    "f_youth"
+   ],
+   "folk.woman": [
+    "f_woman",
+    "f_woman2"
+   ],
+   "folk.elder": [
+    "f_elder",
+    "f_elder2"
+   ],
+   "folk.child": [
+    "f_child"
+   ],
+   "folk.monk": [
+    "f_daoist"
+   ],
+   "folk.noble": [
+    "f_noble"
+   ],
+   "folk.soldier": [
+    "f_soldier"
+   ],
+   "folk.rebel": [
+    "rebel"
+   ],
+   "folk.hunter": [
+    "f_hunter"
+   ],
+   "folk.official": [
+    "f_official"
+   ]
   }
  }
 }
