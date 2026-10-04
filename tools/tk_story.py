@@ -154,8 +154,8 @@ WORLDS = [
                 ["n", "Rebels besiege Qingzhou. The relief force is outnumbered and falls back thirty li."],
                 ["spawn", "sg", "stargrey", "n4", -36, 20], ["spawn", "sr", "starred", "n4", -28, 24],
                 ["n", "That night, at the edge of the camp, the two old men are at their board again."],
-                ["say", "starred", "Another."],
-                ["problem", "starred"],  # the board comes up here; the rest plays once it is solved
+                ["say", "stargrey", "Another."],
+                ["problem", "stargrey"],  # the board comes up here; the rest plays once it is solved
                 ["say", "starred", "Don't hold the strong point. Give ground, and make them follow."],
                 ["remove", "sg"], ["remove", "sr"],
                 ["say", "liubei", "They are many and we are few. Only surprise will win this. Yunchang, hide your men left of the ridge. Yide, to the right. When the gongs sound, strike."],
