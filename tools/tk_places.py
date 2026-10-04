@@ -29,8 +29,9 @@ PLACES = {
             "archetype": "village",
             "landmarks": [
                 {"kind": "building.hut", "id": "home", "label": "Liu Bei's home"},
-                {"kind": "tree.big", "id": "mulberry", "label": "The great mulberry tree"},
+                {"kind": "tree.big", "id": "mulberry", "node": "1-start", "label": "The great mulberry tree"},
             ],
+            "objectives": {"1-start": "Sit under the great mulberry tree by your home."},
             "npcs": [
                 {"kind": "folk.woman", "say": "“Off to sell your sandals in town, Xuande? Mind the road.”"},
                 {"kind": "folk.child", "say": "“That mulberry looks like a carriage canopy! Mother says someone from this house will ride under one.”"},
@@ -139,7 +140,8 @@ PLACES = {
         },
         "Guangzong Road": {
             "archetype": "road",
-            "landmarks": [{"kind": "camp.logs", "id": "cart", "node": "1-n5", "label": "A prisoner's cart"}],
+            "landmarks": [{"kind": "camp.logs", "id": "cart", "node": "1-n5", "label": "A prisoner's cart"},
+                          {"kind": "building.tent", "id": "luzhi-tent", "label": "Lu Zhi's tent"}],
             "objectives": {"1-n5": "Go to Guangzong, where Lu Zhi besieges Zhang Jiao."},
         },
         "Qiao": {
