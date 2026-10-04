@@ -346,7 +346,11 @@ class Stage:
         ids = [a for a in self.members(aid) if a in self.cast and a not in self.gone]
         ids += [r for r, p in self.aboard.items() if p in ids and r not in self.gone]   # a prop takes its riders
         if ids:
-            self.beats.append({"do": "fade", "actors": ids})
+            last = self.beats[-1] if self.beats else None
+            if last and last["do"] == "fade":   # removes in a row go together ("both old men are gone")
+                last["actors"] += ids
+            else:
+                self.beats.append({"do": "fade", "actors": ids})
         self.gone.update(ids)
         for a in ids:
             self.aboard.pop(a, None)

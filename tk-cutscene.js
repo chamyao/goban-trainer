@@ -41,8 +41,10 @@ const WorldCutscene = {
     const tween = cfg => new Promise(r => { if (skip) return r(); scene.tweens.add({ ...cfg, onComplete: r }); });
 
     // hide the player, the followers and the townsfolk; the cast stands in for them
-    // (opts.keep: townsfolk the scene needs as they are, e.g. who sets its problem)
-    const keep = new Set(opts.keep || []);
+    // (opts.keep: townsfolk the scene needs as they are, e.g. who sets its problem; not when the
+    // scene brings on its own of them, as the oath now stages the Star Lords itself)
+    const cast = new Set(Object.values(cs.cast || {}).map(c => c.who).filter(Boolean));
+    const keep = new Set((opts.keep || []).filter(s => !cast.has((scene.npcs.find(n => n.spr === s) || {}).who)));
     const hidden = [scene.player, ...scene.followers.map(f => f.spr), ...scene.npcs.map(n => n.spr), ...scene.npcs.map(n => n.mark).filter(Boolean)]
       .filter(s => s && s.visible && !keep.has(s));
     hidden.forEach(s => s.setVisible(false));
