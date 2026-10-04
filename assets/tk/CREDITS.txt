@@ -8,3 +8,6 @@ Three Kingdoms campaign art
 - Town (assets/tk/jade): Jade Tileset Pack by Willibab, https://willibab.itch.io/free-jade-tileset-pack, CC-BY.
   folk1/folk2.png are the pack's character sheets scaled back to 1x; tiles.png is cut from it by tools/build_tk_town.py.
 - Town engine: Phaser 3 (MIT), loaded from cdnjs.
+- Generated world maps (assets/tk/ninja): Ninja Adventure Asset Pack by Pixel-boy and AAA,
+  https://pixel-boy.itch.io/ninja-adventure-asset-pack, CC0. Fetched by tools/fetch_ninja_pack.py.
+- Map kits (assets/tk/kits) say how each pack draws the abstract maps; see docs/map-format.md.

@@ -3303,7 +3303,8 @@ function viewFeedback() {
     h("b", {}, "Credits"),
     h("p", {}, ["Michael Redmond's Life and Death problems are transcribed from his ", link("https://www.youtube.com/playlist?list=PLW5_cMTm0wvaAfrTyLtU_HDjeTlK4VFRj", "YouTube videos"), "; each problem links to its video."]),
     h("p", {}, ["Three Kingdoms art: trees and props from the ", link("https://willibab.itch.io/free-jade-tileset-pack", "Jade Tileset"), " by Willibab (CC-BY) and ",
-      link("https://gametorch.app/collections/21", "GameTorch"), " (CC0); everything else is drawn in code."]),
+      link("https://gametorch.app/collections/21", "GameTorch"), " (CC0); the explorable world from the ",
+      link("https://pixel-boy.itch.io/ninja-adventure-asset-pack", "Ninja Adventure"), " pack by Pixel-boy and AAA (CC0); everything else is drawn in code."]),
   ]));
 }
 

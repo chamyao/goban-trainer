@@ -1,0 +1,320 @@
+{
+ "kit": "jade",
+ "name": "Jade",
+ "credit": "Jade Tileset Pack by Willibab, https://willibab.itch.io/free-jade-tileset-pack, CC-BY",
+ "tile": 16,
+ "sheets": {
+  "tiles": "assets/tk/jade/tiles.png",
+  "buildings": "assets/tk/jade/buildings.png",
+  "town": "assets/tk/jade/town.png",
+  "nature": "assets/tk/jade/nature.png"
+ },
+ "materials": {
+  "grass": {
+   "tiles": [
+    [
+     "tiles",
+     0,
+     0,
+     6
+    ],
+    [
+     "tiles",
+     1,
+     0,
+     1
+    ]
+   ]
+  },
+  "dirt": {
+   "tiles": [
+    [
+     "tiles",
+     2,
+     0,
+     1
+    ]
+   ]
+  },
+  "sand": {
+   "tiles": [
+    [
+     "tiles",
+     3,
+     0,
+     1
+    ]
+   ]
+  },
+  "water": {
+   "color": "#4f86b8"
+  }
+ },
+ "kinds": {
+  "building.inn": [
+   [
+    "buildings",
+    160,
+    3,
+    96,
+    71
+   ]
+  ],
+  "building.shop": [
+   [
+    "buildings",
+    0,
+    80,
+    96,
+    64
+   ]
+  ],
+  "building.house": [
+   [
+    "buildings",
+    16,
+    19,
+    48,
+    45
+   ]
+  ],
+  "building.lodge": [
+   [
+    "buildings",
+    0,
+    144,
+    83,
+    48
+   ]
+  ],
+  "building.hall": [
+   [
+    "buildings",
+    173,
+    89,
+    70,
+    87
+   ]
+  ],
+  "tree.peach": [
+   [
+    "nature",
+    172,
+    3,
+    36,
+    40
+   ],
+   [
+    "nature",
+    224,
+    3,
+    32,
+    40
+   ]
+  ],
+  "tree.small": [
+   [
+    "nature",
+    172,
+    51,
+    36,
+    41
+   ],
+   [
+    "nature",
+    224,
+    51,
+    32,
+    41
+   ]
+  ],
+  "tree.pine": [
+   [
+    "town",
+    193,
+    48,
+    14,
+    64
+   ],
+   [
+    "town",
+    209,
+    48,
+    14,
+    64
+   ]
+  ],
+  "tree.bamboo": [
+   [
+    "nature",
+    64,
+    0,
+    16,
+    32
+   ]
+  ],
+  "plant.bush": [
+   [
+    "nature",
+    0,
+    128,
+    16,
+    16
+   ]
+  ],
+  "plant.flower": [
+   [
+    "nature",
+    0,
+    208,
+    16,
+    16
+   ]
+  ],
+  "plant.grass": [
+   [
+    "nature",
+    96,
+    192,
+    16,
+    16
+   ]
+  ],
+  "rock.small": [
+   [
+    "nature",
+    144,
+    128,
+    16,
+    16
+   ]
+  ],
+  "lamp.post": [
+   [
+    "town",
+    80,
+    224,
+    16,
+    32
+   ]
+  ],
+  "camp.logs": [
+   [
+    "buildings",
+    192,
+    184,
+    48,
+    24
+   ]
+  ]
+ },
+ "folk": {
+  "frame": [
+   16,
+   21
+  ],
+  "dirs": {
+   "down": [
+    0,
+    0
+   ],
+   "left": [
+    0,
+    1
+   ],
+   "right": [
+    0,
+    2
+   ],
+   "up": [
+    0,
+    3
+   ]
+  },
+  "step": [
+   1,
+   0
+  ],
+  "walk": [
+   0,
+   1,
+   2,
+   1
+  ],
+  "still": 1,
+  "sheets": {
+   "folk1": "assets/tk/jade/folk1.png",
+   "folk2": "assets/tk/jade/folk2.png"
+  },
+  "kinds": {
+   "folk.villager": [
+    {
+     "sheet": "folk1",
+     "origin": [
+      0,
+      0
+     ]
+    },
+    {
+     "sheet": "folk1",
+     "origin": [
+      3,
+      0
+     ]
+    },
+    {
+     "sheet": "folk1",
+     "origin": [
+      6,
+      0
+     ]
+    }
+   ],
+   "folk.woman": [
+    {
+     "sheet": "folk1",
+     "origin": [
+      9,
+      0
+     ]
+    }
+   ],
+   "folk.elder": [
+    {
+     "sheet": "folk1",
+     "origin": [
+      3,
+      4
+     ]
+    }
+   ],
+   "folk.child": [
+    {
+     "sheet": "folk1",
+     "origin": [
+      6,
+      4
+     ]
+    }
+   ],
+   "folk.monk": [
+    {
+     "sheet": "folk1",
+     "origin": [
+      0,
+      4
+     ]
+    }
+   ],
+   "folk.noble": [
+    {
+     "sheet": "folk1",
+     "origin": [
+      9,
+      4
+     ]
+    }
+   ]
+  }
+ }
+}
