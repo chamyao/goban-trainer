@@ -14,6 +14,7 @@ const WorldItems = {
   FRAME: [31, 30],
   ROWS: ["down", "left", "right", "up"],
   RISE: 9,        // how far a rider sits above the ground
+  LEGS: 5,        // a seated rider's legs are hidden by the horse's flank
   SPEED: 1.5,     // mounted, the party travels this much faster
 
   owned(w) { return (TK.ls(this.KEY)[w.n] || []).slice(); },
@@ -51,6 +52,12 @@ const WorldItems = {
     if (moving) h.anims.play(`horse-${coat}-${dir}`, true);
     else { h.anims.stop(); h.setFrame(this.ROWS.indexOf(dir) * 4); }
   },
+  // A hero frame as a seated rider: the standing pose, legs cropped away.
+  seat(img, key) {
+    if (img.texture.key !== key) img.setTexture(key);
+    img.setCrop(0, 0, img.width, img.height - this.LEGS);
+    return img;
+  },
   dirOf(spr) { const m = /-(down|up|left|right)-\d+$/.exec(spr.texture.key); return m ? m[1] : "down"; },
 
   /* ---------- the explorable world ---------- */
@@ -82,7 +89,8 @@ const WorldItems = {
         const dir = this.dirOf(m.spr);
         this.pose(m.horse, m.coat, dir, r && r.moving);
         m.horse.setPosition(Math.round(m.spr.x), Math.round(m.spr.y)).setDepth(m.spr.y);
-        m.seat.setTexture(m.spr.texture.key).setPosition(Math.round(m.spr.x), Math.round(m.spr.y - this.RISE)).setDepth(m.spr.y + .5);
+        this.seat(m.seat, m.spr.texture.key.replace(/-\d+$/, "-0"));   // sits still: the horse does the walking
+        m.seat.setPosition(Math.round(m.spr.x), Math.round(m.spr.y - this.RISE)).setDepth(m.spr.y + .5);
       }
       // mounted, the party travels faster (the world sets the walking speed each frame)
       if (scene.mounts.length && !scene.leaving && !busyScene) scene.player.body.velocity.scale(this.SPEED);
