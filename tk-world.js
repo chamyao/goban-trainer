@@ -594,7 +594,14 @@ function worldScenes() {
         TK.markSeen(seen);
         if (spot.intro.length || q.boss) await say(intro);   // a bare title would only break the tension here
         const won = await this.duel(q.node, foe);
-        if (won) { await say(worldLines(spot.outro)); await this.vanish(q.node, true); }   // their parting word, then they go
+        if (won) {
+          // their parting words; then they are gone (the empty board a moment), and the narration says so
+          const out = worldLines(spot.outro), cut = out.findIndex(l => l[0] === "n");
+          const words = cut < 0 ? out : out.slice(0, cut), after = cut < 0 ? [] : out.slice(cut);
+          await say(words);
+          await this.vanish(q.node, true);
+          if (after.length) { await new Promise(r => this.time.delayedCall(600, r)); await say(after); }
+        }
         return won;
       };
       const finish = () => this.finishQuest(q, steps);
