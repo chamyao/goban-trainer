@@ -48,7 +48,9 @@ const WorldCutscene = {
     cam.stopFollow();
 
     // letterbox and a Skip button
-    const W = scene.scale.width, H = scene.scale.height, bar = 16;
+    // the screen's size: it changes when the window is resized or the phone turns (WorldView.size)
+    let W = scene.scale.width, H = scene.scale.height;
+    const bar = 16;
     const bars = [scene.add.rectangle(0, -bar, W, bar, 0x000000).setOrigin(0), scene.add.rectangle(0, H + bar, W, bar, 0x000000).setOrigin(0, 1)]
       .map(b => b.setScrollFactor(0).setDepth(1e6));
     scene.tweens.add({ targets: bars[0], y: 0, duration: 300 });
@@ -289,14 +291,16 @@ const WorldCutscene = {
     let dark = null;
     const mood = (on, ms) => {
       if (on && !dark) {
-        if (!scene.textures.exists("tk-vignette")) {
-          const c = scene.textures.createCanvas("tk-vignette", 2 * W, 2 * H), g = c.context;
-          const grd = g.createRadialGradient(W, H, H * .2, W, H, W * .6);
+        if (!scene.textures.exists("tk-vignette2")) {   // one square gradient, stretched to whatever the screen is
+          const c = scene.textures.createCanvas("tk-vignette2", 512, 512), g = c.context;
+          const grd = g.createRadialGradient(256, 256, 51, 256, 256, 154);
           grd.addColorStop(0, "rgba(10,6,24,0.18)"); grd.addColorStop(.6, "rgba(10,6,24,0.6)"); grd.addColorStop(1, "rgba(10,6,24,0.92)");
-          g.fillStyle = grd; g.fillRect(0, 0, 2 * W, 2 * H); c.refresh();
+          g.fillStyle = grd; g.fillRect(0, 0, 512, 512); c.refresh();
         }
         // fixed to the screen; the camera's zoom would scale it, so it is scaled back
-        dark = scene.add.image(W / 2, H / 2, "tk-vignette").setScrollFactor(0).setDepth(9e5).setAlpha(0).setScale(zoom0 / cam.zoom);
+        const img = scene.add.image(0, 0, "tk-vignette2").setDisplaySize(2 * W, 2 * H);
+        dark = scene.add.container(W / 2, H / 2, [img]).setScrollFactor(0).setDepth(9e5).setAlpha(0).setScale(zoom0 / cam.zoom);
+        dark.img = img;
         fx.push(dark);
         if (ms) scene.tweens.add({ targets: dark, alpha: 1, duration: ms }); else dark.setAlpha(1);
       } else if (!on && dark) {
@@ -338,6 +342,15 @@ const WorldCutscene = {
       const all = [shade, ...glows];
       if (ms) all.forEach(o => { const a = o.alpha; o.setAlpha(0); scene.tweens.add({ targets: o, alpha: a, duration: ms }); });
     };
+    // the screen changed size mid-scene: the letterbox, the mood and the light follow it
+    const relayout = () => {
+      W = scene.scale.width; H = scene.scale.height;
+      bars[0].setSize(W, bar);
+      bars[1].setSize(W, bar).setPosition(0, H);
+      if (dark) { dark.setPosition(W / 2, H / 2); dark.img.setDisplaySize(2 * W, 2 * H); }
+      if (shade) shade.setPosition(W / 2, H / 2).setSize(W * 3, H * 3);
+    };
+    scene.scale.on("resize", relayout);
     const board = (b, ms) => {
       const r = actors[b.actor] || actor(b.actor, b.at), p = actors[b.prop];
       if (!p) return Promise.resolve();
@@ -529,6 +542,7 @@ const WorldCutscene = {
       await run(b);
     }
 
+    scene.scale.off("resize", relayout);
     // back to the world: the leader stands where the scene left him
     for (const t of timers) t.remove(false);
     scene.tweens.killTweensOf(Object.values(actors).map(a => a.spr));
