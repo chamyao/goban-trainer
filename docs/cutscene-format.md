@@ -32,7 +32,7 @@ node on the old node map (x right, y down, in node-map pixels; 8 px ≈ 1 tile):
 | `["fx", name, at, dx, dy]` | flash, dust, petals, incense, paper, fire, whip, sparkle, blackwind |
 | `["remove", id]` | fade out |
 | `["party", [who, …]]` | who travels with Liu Bei from now on |
-| `["prop", id, kind, at, dx, dy]` | put a thing on stage: `cagecart`, `forge`, `anvil`, `winejars`, `table`, `rack` (weapons), `fire`, `tent`, `gate` (a city gate), `desk`, `hall` (a hostel or office hall). It moves with `move`/`run` and leaves with `remove`; walkers go round it |
+| `["prop", id, kind, at, dx, dy]` | put a thing on stage: any kind in the prop registry (`PROPS` in `tools/build_props.py`: cagecart, cart, forge, anvil, ox, whitehorse, book, letter, seal, steelbars, staves, switches, waterbowl, post, bucket, chest, straw, redbanner, yellowbanner, winejars, table, rack, fire, tent, gate, desk, hall). A kind not there yet still plays, 1x1 and drawn as a crate. It moves with `move`/`run` and leaves with `remove`; walkers go round it |
 | `["board", who, prop]` / `["unboard", who]` | ride inside a prop (a prisoner in the cage cart); it carries them when it moves, and `remove` takes them with it. Boarded before the first line, they are inside from the start |
 | `["pose", id, P]` | `drink`, `cheer`, `raise` (holds up what they were last given) play once; `bow`, `kneel`, `sit`, `sleep`, `drunk` (sways) last until `stand` or a walk (drunk men keep swaying). `id` may be a group or `party` |
 | `["emote", id, E]` | a bubble overhead: `!`, `?`, `...`, `music`, `anger`, `sweat`, `zzz`, `heart` |
@@ -75,6 +75,13 @@ any extra steps: it opens to the taiko drums, the boss makes his entrance
 just before the board (his name and title come from the quest's `boss`),
 the drums carry on under the board, and the scene ends in a victory. Place
 your own `music`, `boss` or `victory` steps to time any of these yourself.
+
+**Nothing blocks a scene on missing art.** A prop kind not in the registry
+is a 1x1 crate; a character with no look (not in TK_CHARS or tk-town.js) is
+played by a stand-in (`"as": "f_farmer"` in the cast, and the stand-in
+speaks their lines). To give either real art: add one line to `PROPS` in
+`tools/build_props.py` (footprint, and an atlas frame, kit kinds or a horse
+coat) and rerun it, or add the character to TK_CHARS.
 
 ## The file
 

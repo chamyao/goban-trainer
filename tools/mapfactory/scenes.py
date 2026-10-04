@@ -42,9 +42,10 @@ PX = 8          # node-map pixels per tile
 WALK, RUN = 4.0, 7.5   # tiles per second
 FRIENDLY = {"militia"}  # extras on the party's side
 # props: footprint (w, h) in tiles; drawn bottom-centre on the anchor tile
-PROPS = {"cagecart": (3, 1), "forge": (2, 1), "anvil": (1, 1), "winejars": (2, 1), "table": (2, 1),
-         "rack": (2, 1), "fire": (2, 1), "tent": (3, 2), "gate": (3, 1),
-         "desk": (2, 1), "hall": (4, 2)}
+# props: footprint (w, h) in tiles, from the one registry (tools/build_props.py →
+# assets/tk/props.json "kinds"); a kind not there yet is 1x1 (drawn as a crate)
+PROPS = {k: tuple(v["size"]) for k, v in json.loads((ROOT / "assets/tk/props.json").read_text()).get("kinds", {}).items()}
+STAND_IN = "f_farmer"   # who plays a character that has no look yet
 POSES = {"drink", "cheer", "bow", "kneel", "sit", "drunk", "raise", "sleep", "stand"}
 EMOTES = {"!", "?", "...", "music", "anger", "sweat", "zzz", "heart"}
 LIGHTS = {"day", "night", "dusk", "dawn", "storm"}   # or "#rrggbb"
@@ -52,9 +53,12 @@ CUES = {"boss", "battle", "calm", "victory", "none"}
 
 
 def characters():
+    """Everyone the game can draw: TK_CHARS in tk.js, the townsfolk and extras
+    tk-town.js adds to it, and the horse (drawn by tk-items.js)."""
     src = (ROOT / "tk.js").read_text()
     block = src[src.index("const TK_CHARS = {"):src.index("};", src.index("const TK_CHARS = {"))]
-    return set(re.findall(r"^  (\w+): \{", block, re.M))
+    town = (ROOT / "tk-town.js").read_text()
+    return set(re.findall(r"^  (\w+): \{", block, re.M)) | set(re.findall(r"^  (\w+): \{ name:", town, re.M)) | {"horse"}
 
 
 def char_names():
@@ -64,7 +68,8 @@ def char_names():
 
 
 class Stage:
-    def __init__(self, m, spot, party):
+    def __init__(self, m, spot, party, chars=None):
+        self.chars = chars
         self.m = m
         self.W, self.H = m["size"]
         legend = m["terrain"]["legend"]
@@ -128,7 +133,7 @@ class Stage:
 
     def foot(self, pid, at=None):
         """The tiles a prop stands on."""
-        w, h = PROPS[self.props[pid]]
+        w, h = PROPS.get(self.props[pid], (1, 1))
         x, y = at or self.pos[pid]
         return {(x - w // 2 + i, y - j) for i in range(w) for j in range(h)}
 
@@ -191,6 +196,8 @@ class Stage:
     # ---------- cast ----------
     def add(self, aid, who, cell, side, group=None):
         self.cast[aid] = {"who": who, "side": side, **({"group": group} if group else {})}
+        if self.chars and who not in self.chars:   # no look yet: someone stands in, and the scene still plays
+            self.cast[aid]["as"] = STAND_IN
         self.pos[aid] = cell
         self.gone.discard(aid)
 
@@ -299,7 +306,7 @@ class Stage:
     def say(self, step, chars):
         who = step[1]
         speaker = self.find(who)
-        if speaker is None and who in chars:
+        if speaker is None and (who in chars or re.fullmatch(r"[a-z][a-z0-9_]*", who)):   # unknown ids get a stand-in
             # someone speaks who isn't on stage: bring them on, facing the party
             far = self.offset(28, -6 if len([a for a in self.live() if self.cast[a]["side"] == "them"]) else 0)
             self.spawn(who, who, far, "them")
@@ -314,6 +321,8 @@ class Stage:
             if sx != ox:
                 turns.append({"actor": speaker, "dir": "right" if ox > sx else "left"})
                 turns.append({"actor": other, "dir": "left" if ox > sx else "right"})
+        if self.cast.get(speaker, {}).get("as"):   # no look yet: the stand-in speaks the line (portrait, voice)
+            step = [step[0], self.cast[speaker]["as"], *step[2:]]
         self.beats.append({"do": "line", "line": step, "speaker": speaker, "face": turns,
                            "camera": self.frame([speaker] + ([other] if other else []))})
 
@@ -403,7 +412,7 @@ class Stage:
             return
         tx, ty = self.pos[t]
         if t in self.props:   # round the middle of the prop
-            w, h = PROPS[self.props[t]]
+            w, h = PROPS.get(self.props[t], (1, 1))
             ty -= (h - 1) / 2
         R = max(1.5, r / PX)
         cx = sum(self.pos[a][0] for a in ids) / len(ids)
@@ -442,7 +451,7 @@ class Stage:
 
 
 def stage_scene(scene, m, spot, party, chars, boss=None):
-    st = Stage(m, spot, party)
+    st = Stage(m, spot, party, chars)
     steps = scene["steps"]
     has = {op for op, *_ in steps}
     if boss and "music" not in has:
