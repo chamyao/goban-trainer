@@ -41,8 +41,10 @@ const WorldCutscene = {
     const tween = cfg => new Promise(r => { if (skip) return r(); scene.tweens.add({ ...cfg, onComplete: r }); });
 
     // hide the player, the followers and the townsfolk; the cast stands in for them
+    // (opts.keep: townsfolk the scene needs as they are, e.g. who sets its problem)
+    const keep = new Set(opts.keep || []);
     const hidden = [scene.player, ...scene.followers.map(f => f.spr), ...scene.npcs.map(n => n.spr), ...scene.npcs.map(n => n.mark).filter(Boolean)]
-      .filter(s => s && s.visible);
+      .filter(s => s && s.visible && !keep.has(s));
     hidden.forEach(s => s.setVisible(false));
     scene.player.setVelocity(0);
     cam.stopFollow();

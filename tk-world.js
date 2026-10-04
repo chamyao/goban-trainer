@@ -596,13 +596,15 @@ function worldScenes() {
         TK.markSeen(seen);
         if (spot.intro.length || q.boss) await say(intro);   // a bare title would only break the tension here
         const won = await this.duel(q.node, foe);
-        if (won) { this.vanish(q.node); await say(worldLines(spot.outro)); }
+        if (won) { await say(worldLines(spot.outro)); await this.vanish(q.node, true); }   // their parting word, then they go
         return won;
       };
       const finish = () => this.finishQuest(q, steps);
       const cs = this.cutscene(q);
       if (cs && cs.beats.some(b => b.do === "problem"))
-        return WorldCutscene.play(this, cs, finish, { onProblem: solve, onLeave: () => {}, ffToProblem: again });
+        // whoever is here only until this beat (the Star Lords at the oath) stays on stage to set the problem
+        return WorldCutscene.play(this, cs, finish, { onProblem: solve, onLeave: () => {}, ffToProblem: again,
+          keep: this.npcs.filter(n => n.until === q.node && n.spr.visible).map(n => n.spr) });
       const lines = steps.slice(0, at).filter(s => s[0] === "n" || s[0] === "say");
       say(again ? lines.slice(-1) : lines).then(solve).then(won => won && this.talk(steps.slice(at + 1), finish, "story"));
     }
@@ -613,7 +615,14 @@ function worldScenes() {
     }
 
     // People who are only here until a beat is won (the Star Lords at the oath).
-    vanish(node) { for (const n of this.npcs) if (n.until === node) { n.spr.setVisible(false); n.spr.body.enable = false; } }
+    // fade: a moment's fade (they were seen to go), not a blink
+    vanish(node, fade = false) {
+      const gone = this.npcs.filter(n => n.until === node);
+      for (const n of gone) { n.spr.body.enable = false; if (n.mark) n.mark.setVisible(false); }
+      if (!fade || !gone.some(n => n.spr.visible)) { gone.forEach(n => n.spr.setVisible(false)); return Promise.resolve(); }
+      return new Promise(r => this.tweens.add({ targets: gone.map(n => n.spr), alpha: 0, duration: 700,
+        onComplete: () => { gone.forEach(n => n.spr.setVisible(false).setAlpha(1)); r(); } }));
+    }
 
     // What a won story beat leaves behind: who joined, what was given, the next goal.
     async finishQuest(q, steps) {
