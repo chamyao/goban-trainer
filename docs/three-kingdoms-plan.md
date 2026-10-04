@@ -81,8 +81,23 @@ Gods of fate, deciding lives over a Go board.
 - **Their names stay a mystery until World 11.** Guan Lu appears where the
   novel puts him (chapter 69, around 219), tells the Zhao Yan story, and
   the player learns who has been setting the puzzles all along.
-- **They counsel; they don't rewrite history.** Solving never changes what
-  happens in the novel: Guan Yu still falls at Maicheng.
+- **They change small fates, not the great ones.** They can rewrite a life,
+  as they did for Zhao Yan, but the great fates are Heaven's mandate (天命)
+  and they won't touch those. Solving never changes what happens in the
+  novel: Guan Yu still falls at Maicheng.
+- **This becomes an arc across the campaign:**
+  - **Early worlds:** they help with counsel and nudge small things, never
+    the big ones.
+  - **World 11:** Guan Lu tells the Zhao Yan story; the player learns who
+    they are, and that they *can* change a life.
+  - **Worlds 12–13:** the obvious question, why they don't save Guan Yu,
+    Zhang Fei and Liu Bei, gets their answer: those fates are Heaven's.
+  - **World 16:** in chapter 103 (五丈原诸葛禳星) the dying Zhuge Liang
+    prays to the Northern Dipper for twelve more years; if his main lamp
+    burns for seven nights the prayer works. On the sixth night Wei Yan
+    bursts in and knocks it out. "Life and death are fated; prayer cannot
+    change them." The gods of the Go board refuse him, and this is the
+    campaign's emotional peak.
 - Optional: the legend of Wang Zhi, the woodcutter who watched two immortals
   play Go until his axe handle rotted (烂柯, a poetic name for Go), as a
   hidden side area.
