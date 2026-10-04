@@ -669,7 +669,10 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
 
 /* Phones and tablets: touching the game moves the party, never the page. A phone held
    upright gets a taller window (tk-world.js gives it a taller view to match). */
-.tk-map.tk-town, .tk-map.tk-town canvas { touch-action: none; -webkit-user-select: none; user-select: none; }
+.tk-map.tk-town, .tk-map.tk-town canvas { touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; }
+/* quick taps on the board place stones, never zoom the page */
+.tk-duel, .tk-duel svg { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+.tk-duel svg { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 @media (max-width: 700px) and (orientation: portrait) { .tk-map.tk-town { aspect-ratio: 3 / 4; max-height: 78vh; } }
 @media (pointer: coarse) { .town-keys { display: none; } }
 /* Full window: the game fills the screen, the page behind stays put */
