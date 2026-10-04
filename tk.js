@@ -1230,10 +1230,10 @@ function tkLevelBuild(host, worldN, key, { w, node, src, p, book }, { back, agai
     } else {
       TK.rest(key);
       verdict.className = "tk-verdict slip";
-      const retry = h("button", { disabled: "", onclick: () => { host.classList.add("tk-flip"); setTimeout(() => { host.classList.remove("tk-flip"); again(); }, 260); } }, "再试一次 Try again →");
       verdict.append(h("b", {}, e.detail === "ok" ? `解出了，但不算完美。Solved, but not flawless (${t.flawed}).` : "敌人识破了！The enemy saw through it!"),
-        h("span", {}, " 换个思路。Try another way."), retry);
-      tkRestLock(boardCard, key, () => { retry.disabled = false; });
+        h("span", {}, " 换个思路。Try another way."));
+      // a moment to see what went wrong, then the same problem from the start, to study until the rest is over
+      setTimeout(() => { if (verdict.isConnected) again(); }, 1800);
     }
   };
   addEventListener("tczw:result", onResult);
@@ -1266,16 +1266,18 @@ TK_SETTER_LINES.starred = TK_SETTER_LINES.stargrey;
 
 const TK_REST = 30000;
 
-// Lock a board until its problem's rest is over: a countdown over the stones,
-// then onReady(). Leaving and coming back doesn't skip it (the end time is saved).
+// Hold a board until its problem's rest is over. The position stays in full view
+// (time to read it); stones can't be played yet, and a small chip counts down.
+// Then onReady(). Leaving and coming back doesn't skip it (the end time is saved).
 function tkRestLock(board, key, onReady) {
-  const lock = h("div", { class: "tk-rest" });
+  const lock = h("div", { class: "tk-rest" }), chip = h("span", { class: "tk-rest-chip" });
+  lock.append(chip);
   board.append(lock);
   const tick = () => {
     if (!lock.isConnected) return;
     const s = Math.ceil(TK.restLeft(key) / 1000);
     if (s <= 0) { lock.remove(); if (onReady) onReady(); return; }
-    lock.innerHTML = `<b lang="zh-CN">休整片刻</b><span>${s}</span><small>Rest a moment before trying again</small>`;
+    chip.innerHTML = `<b lang="zh-CN">思考</b> Think · ${s}s`;
     setTimeout(tick, 250);
   };
   tick();
@@ -1337,7 +1339,7 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
     else say("黑先。", "Black to play.");
   };
   opening();
-  if (TK.restLeft(key) > 0) { say("先歇一歇，再来。", "Rest a moment, then try again."); tkRestLock(boardCard, key, opening); }
+  if (TK.restLeft(key) > 0) { say("先看清这局，片刻之后再落子。", "Study the position; you can play again in a moment."); tkRestLock(boardCard, key, opening); }
 
   trainer = new Trainer(Object.assign({}, src, { problems: [p] }), 0, { svg, boardCard, status, treePanel, ...hidden, noEngine: true });
   // Size the board to the window it sits in, keeping its shape (it's cropped to the corner in play).
@@ -1374,11 +1376,9 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
       const how = e.detail === "ok" ? [`解出了，但不算完美（${t.flawed}）。`, `Solved, but not flawless (${t.flawed}).`]
         : lord ? lord.slip
         : foe ? ["哈！被我看穿了。换个思路吧。", "Ha! I saw through that. Try another way."] : ["敌人识破了！换个思路。", "The enemy saw through it! Try another way."];
-      // the same problem again, from the start, once the rest is over
-      const retry = go("再试一次 Try again ▸", () => { box.classList.add("tk-flip"); setTimeout(() => { box.classList.remove("tk-flip"); again(); }, 260); });
-      retry.disabled = true;
-      say(how[0], how[1], retry);
-      tkRestLock(boardCard, key, () => { retry.disabled = false; });
+      say(how[0], how[1]);
+      // a moment to see what went wrong, then the same problem from the start, to study until the rest is over
+      setTimeout(() => { if (box.isConnected) again(); }, 1800);
     }
   };
   addEventListener("tczw:result", onResult);
