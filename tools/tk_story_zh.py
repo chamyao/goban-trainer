@@ -322,6 +322,8 @@ ZH = {
     "Side story: the boyhood of Cao Cao.": "支线：曹操的少年时代。",
     "Side story: Cao Cao at the gates of Luoyang.": "支线：洛阳城门的曹操。",
     "Side story: red banners at Changshe.": "支线：长社红旗。",
+    "Side story: the five-coloured staves at the city gates.": "支线：城门上的五色棒。",
+    "Side story: the fire plan in the Han camp.": "支线：汉军营中的火攻之计。",
     "Shortcut: the envoy on the road.": "捷径：路上的使者。",
     "Rescue Dong Zhuo, then report at his tent.": "救出董卓，再到他帐前复命。",
     "Break Zhang Bao's sorcery in the hills.": "在山中破张宝的妖术。",

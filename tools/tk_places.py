@@ -160,13 +160,13 @@ PLACES = {
             "archetype": "city",
             "landmarks": [{"kind": "building.gate", "id": "northgate", "node": "1-b2", "label": "The north gate of Luoyang"}],
             "npcs": [{"kind": "folk.official", "say": "“The new commandant of the north gate beats curfew-breakers to death. Even the eunuchs' uncles.”"}],
-            "objectives": {"1-b2": "Side story: Cao Cao at the gates of Luoyang."},
+            "objectives": {"1-b2": "Side story: Cao Cao at the gates of Luoyang.", "1-b2g": "Side story: the five-coloured staves at the city gates."},
         },
         "Changshe": {
             "archetype": "camp",
             "banners": "red",
             "landmarks": [{"kind": "building.tent", "id": "camp", "node": "1-b3", "label": "The Han camp"}],
-            "objectives": {"1-b3": "Side story: red banners at Changshe."},
+            "objectives": {"1-f1": "Side story: the fire plan in the Han camp.", "1-b3": "Side story: red banners at Changshe."},
         },
         "Envoy's Road": {
             "archetype": "road",
