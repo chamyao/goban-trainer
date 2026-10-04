@@ -794,7 +794,7 @@ const TKVoice = {
       const next = () => {
         const v = this.queue.shift();
         if (!v) { this.audio = null; res(); return; }
-        const a = new Audio(`assets/tk/voice/${v}.mp3`);
+        const a = new Audio(`assets/tk/voice/${v}.mp3?v=2`);  // bump when clips are re-rendered
         this.audio = a; a.onended = next; a.onerror = next; a.onpause = () => { if (this.audio === a && !a.ended) res(); };
         a.play().catch(next);
       };
