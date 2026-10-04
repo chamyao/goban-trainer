@@ -10,6 +10,9 @@ the factory can lay them out:
               Nodes without a landmark get a spot at the place's centre.
   npcs        people. kind "hero.<id>" is a story character, "folk.*" townsfolk.
               "say" is what they say when you talk to them.
+              A story spot's "trigger" says how its scene starts: "near" (walking
+              into its area; the default), "arrive" (entering the map) or "talk"
+              (pressing Enter at it, for things you'd read or use).
               A challenger ("challenge": an id) sets an optional Go problem from
               the world's pools: "intro" before the board, "win" after a
               flawless solve, "done" when you talk to them again.
@@ -44,7 +47,7 @@ PLACES = {
         "Zhuo County": {
             "archetype": "town",
             "landmarks": [
-                {"kind": "landmark.notice", "id": "notice", "node": "1-n1", "label": "The notice board",
+                {"kind": "landmark.notice", "id": "notice", "node": "1-n1", "trigger": "talk", "label": "The notice board",
                  "intro": ["The governor of You Province calls for volunteers against the Yellow Turbans. At the bottom, a weiqi problem: “Let any man who would lead volunteers show he can read a battle.”"]},
                 {"kind": "furniture.gotable", "id": "board", "near": "notice"},
                 {"kind": "building.inn", "id": "inn", "label": "The village inn"},
@@ -120,26 +123,26 @@ PLACES = {
         },
         "Horse Trail": {
             "archetype": "road",
-            "landmarks": [{"kind": "camp.hay", "id": "dealers", "node": "1-as", "label": "The horse dealers' camp"}],
+            "landmarks": [{"kind": "camp.hay", "id": "dealers", "node": "1-as", "trigger": "arrive", "label": "The horse dealers' camp"}],
             "npcs": [{"kind": "folk.noble", "near": "dealers", "say": "“Fine northern horses, but the roads are full of bandits.”"}],
             "objectives": {"1-as": "Shortcut: the horse dealers on the northern trail."},
         },
         "Daxing Mountain": {
             "archetype": "mountain",
             "banners": "yellow",
-            "landmarks": [{"kind": "rock.crag", "id": "pass", "node": "1-n3", "label": "The Yellow Turban line"}],
+            "landmarks": [{"kind": "rock.crag", "id": "pass", "node": "1-n3", "trigger": "arrive", "label": "The Yellow Turban line"}],
             "objectives": {"1-n3": "Meet the Yellow Turbans at Daxing Mountain."},
         },
         "Qingzhou": {
             "archetype": "city",
             "banners": "red",
-            "landmarks": [{"kind": "building.gate", "id": "citygate", "node": "1-n4", "label": "The besieged city"}],
+            "landmarks": [{"kind": "building.gate", "id": "citygate", "node": "1-n4", "trigger": "arrive", "label": "The besieged city"}],
             "npcs": [{"kind": "folk.soldier", "say": "“The rebels have us surrounded. If only someone could draw them off…”"}],
             "objectives": {"1-n4": "Lift the siege of Qingzhou."},
         },
         "Guangzong Road": {
             "archetype": "road",
-            "landmarks": [{"kind": "camp.logs", "id": "cart", "node": "1-n5", "label": "A prisoner's cart"},
+            "landmarks": [{"kind": "camp.logs", "id": "cart", "node": "1-n5", "trigger": "arrive", "label": "A prisoner's cart"},
                           {"kind": "building.tent", "id": "luzhi-tent", "label": "Lu Zhi's tent"}],
             "objectives": {"1-n5": "Go to Guangzong, where Lu Zhi besieges Zhang Jiao."},
         },
@@ -168,20 +171,20 @@ PLACES = {
         "Dong Zhuo's Camp": {
             "archetype": "camp",
             "banners": "red",
-            "landmarks": [{"kind": "building.tent", "id": "command", "node": "1-n6", "label": "Dong Zhuo's tent"}],
+            "landmarks": [{"kind": "building.tent", "id": "command", "node": "1-n6", "trigger": "arrive", "label": "Dong Zhuo's tent"}],
             "npcs": [{"kind": "folk.soldier", "say": "“The general is in his tent. He doesn't like visitors without rank.”"}],
             "objectives": {"1-n6": "Rescue Dong Zhuo, then report at his tent."},
         },
         "Hills of Black Wind": {
             "archetype": "hills",
             "banners": "yellow",
-            "landmarks": [{"kind": "rock.big", "id": "altar", "node": "1-n7", "label": "Zhang Bao's sorcery"}],
+            "landmarks": [{"kind": "rock.big", "id": "altar", "node": "1-n7", "trigger": "arrive", "label": "Zhang Bao's sorcery"}],
             "objectives": {"1-n7": "Break Zhang Bao's sorcery in the hills."},
         },
         "Yangcheng": {
             "archetype": "city",
             "banners": "yellow",
-            "landmarks": [{"kind": "building.hall", "id": "keep", "node": "1-boss", "label": "Zhang Bao's stronghold"}],
+            "landmarks": [{"kind": "building.hall", "id": "keep", "node": "1-boss", "trigger": "arrive", "label": "Zhang Bao's stronghold"}],
             "npcs": [{"kind": "hero.zhangbao", "near": "keep", "say": "“Wind and thunder answer to me!”"}],
             "objectives": {"1-boss": "Defeat Zhang Bao at Yangcheng."},
         },

@@ -1415,7 +1415,8 @@
    "x": 18,
    "y": 21.7,
    "node": "1-n4",
-   "label": "The besieged city"
+   "label": "The besieged city",
+   "trigger": "arrive"
   }
  ],
  "npcs": [

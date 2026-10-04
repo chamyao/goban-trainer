@@ -1432,7 +1432,8 @@
    "x": 21,
    "y": 10.7,
    "node": "1-n5",
-   "label": "A prisoner's cart"
+   "label": "A prisoner's cart",
+   "trigger": "arrive"
   }
  ],
  "npcs": [],

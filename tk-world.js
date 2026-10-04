@@ -56,6 +56,7 @@ const WorldData = {
 // Lines from the place briefs arrive as voiced steps (["n", en, zh, vid] or
 // ["say", who, en, zh, vid], see build_tk.place_step); bare strings and
 // [who, text] still work for maps compiled before that.
+const WORLD_NEAR = 36;  // px: how close walking up to a story spot starts its scene
 const worldLines = list => (list || []).map(l => typeof l === "string" ? ["n", l]
   : l[0] === "n" || l[0] === "say" ? l : ["say", l[0], l[1]]);
 
@@ -121,7 +122,7 @@ function worldScenes() {
       for (const o of map.getObjectLayer("objects").objects) {
         const p = P(o);
         if (o.type === "prop") this.addProp(o, p);
-        else if (o.type === "spot") this.spots[o.name] = { x: o.x, y: o.y, node: p.node, label: p.label, labelZh: p.label_zh || "", intro: J(p.intro), outro: J(p.outro) };
+        else if (o.type === "spot") this.spots[o.name] = { x: o.x, y: o.y, node: p.node, label: p.label, labelZh: p.label_zh || "", intro: J(p.intro), outro: J(p.outro), trigger: p.trigger || "near" };
         else if (o.type === "npc") this.addNpc(o, p, J);
         else if (o.type === "exit") this.exits.push({ to: p.to, side: p.side, rect: new Phaser.Geom.Rectangle(o.x, o.y, o.width, o.height) });
         else if (o.type === "entry") this.entries[p.from || ""] = { x: o.x, y: o.y };
@@ -160,6 +161,31 @@ function worldScenes() {
       if (typeof WorldItems !== "undefined") WorldItems.attach(this);   // mounts (tk-items.js)
       window.__w = this;  // for tests and the console
       if (this.resume && opts.ret) { const r = opts.ret; opts.ret = null; this.time.delayedCall(400, () => this.returned(r)); }
+      // story scenes that start by themselves: on arriving here, or on walking into their area
+      for (const s of Object.values(this.spots)) s.armed = Math.hypot(this.player.x - s.x, this.player.y - s.y) > WORLD_NEAR;   // not under your feet when you come back
+      this.time.delayedCall(900, () => {
+        const s = Object.values(this.spots).find(s => s.trigger === "arrive" && this.openQuest(s));
+        if (s && !this.ui.busy() && !this.leaving && !this.cine) this.playQuest(this.openQuest(s), s);
+      });
+    }
+
+    // The story quest a spot holds, if it can be played now.
+    openQuest(s) { const q = this.region.quests.find(x => x.node === s.node); return q && this.available(q) ? q : null; }
+
+    // Walking into a story spot's area starts its scene; it re-arms once you walk away.
+    nearSpots() {
+      if (this.ui.busy() || this.leaving || this.cine) return;
+      const P = this.player;
+      for (const s of Object.values(this.spots)) {
+        if (s.trigger === "talk") continue;
+        const d = Math.hypot(P.x - s.x, P.y - s.y);
+        if (d > WORLD_NEAR + 16) s.armed = true;
+        else if (d < WORLD_NEAR && s.armed) {
+          s.armed = false;
+          const q = this.openQuest(s);
+          if (q) { P.setVelocity(0); return this.playQuest(q, s); }
+        }
+      }
     }
 
     /* ---------- building the place ---------- */
@@ -464,6 +490,7 @@ function worldScenes() {
 
     update(time, dt) {
       this.goalArrow(time);
+      this.nearSpots();
       const P = this.player, K = this.keys;
       let vx = 0, vy = 0;
       if (!this.ui.busy() && !this.leaving) {
