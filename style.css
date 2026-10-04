@@ -616,3 +616,5 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
 .tk-map:has(.tk-menu) .town-keys { display: none; }
 .town-guide { position: absolute; image-rendering: pixelated; pointer-events: none; }
 .town-guide[hidden] { display: none; }
+.town-guide-say { position: absolute; transform: translate(-50%, -100%); padding: 1px 7px; white-space: nowrap; font: bold 11px/1.5 system-ui, sans-serif; color: #3a2416; background: #fff6dc; border: 2px solid #c8902a; border-radius: 8px; pointer-events: none; }
+.town-guide-say[hidden] { display: none; }

@@ -60,26 +60,56 @@ const WorldData = {
 const WorldGuide = {
   get on() { try { return localStorage.getItem("tk-guide") !== "off"; } catch { return true; } },
   set on(v) { try { localStorage.setItem("tk-guide", v ? "on" : "off"); } catch {} },
-  poses: null,
-  // His point and crouch poses, from the site's Wukong (wukong.js).
+  W: 60, H: 60,   // his canvas, in sprite pixels: Wukong (44x44) above a nimbus cloud
+  cloud: null,
+  // A golden-white nimbus with a curl at the back, drawn once.
+  nimbus() {
+    if (this.cloud) return this.cloud;
+    const cv = document.createElement("canvas"); cv.width = 34; cv.height = 12;
+    const g = cv.getContext("2d");
+    const blob = (x, y, r, c) => { g.fillStyle = c; for (let j = -r; j <= r; j++) for (let i = -r; i <= r; i++) if (i * i + j * j <= r * r + r) g.fillRect(x + i, y + j, 1, 1); };
+    for (const [x, y, r] of [[7, 7, 4], [13, 5, 5], [20, 5, 5], [26, 7, 4], [16, 8, 4]]) blob(x, y, r + 1, "#c8902a");   // outline
+    for (const [x, y, r] of [[7, 7, 4], [13, 5, 5], [20, 5, 5], [26, 7, 4], [16, 8, 4]]) blob(x, y, r, "#fff3c4");
+    for (const [x, y, r] of [[13, 4, 3], [20, 4, 3]]) blob(x, y, r, "#ffffff");
+    g.fillStyle = "#e8b64a"; for (const [x, y] of [[4, 9], [5, 10], [7, 10], [26, 10], [28, 9], [29, 8]]) g.fillRect(x, y, 1, 1);
+    g.fillStyle = "#c8902a"; g.fillRect(0, 6, 3, 1); g.fillRect(1, 5, 1, 1); g.fillRect(31, 6, 3, 1); g.fillRect(32, 5, 1, 1);   // curls
+    return (this.cloud = cv);
+  },
   mount(root) {
     if (!root || typeof WK === "undefined") return null;
-    if (!this.poses) this.poses = Object.fromEntries(["point", "crouch"].map(p => {
-      const cv = document.createElement("canvas"); cv.width = cv.height = WK.SIZE;
-      WK.render(cv.getContext("2d"), WK.FRAMES[p][0], 0);
-      return [p, cv];
-    }));
     const el = document.createElement("canvas");
-    el.className = "town-guide"; el.width = el.height = WK.SIZE; el.hidden = true;
-    root.append(el);
+    el.className = "town-guide"; el.width = this.W; el.height = this.H; el.hidden = true;
+    const say = document.createElement("div");
+    say.className = "town-guide-say"; say.hidden = true; say.innerHTML = '<span lang="zh-CN">这边！</span> This way!';
+    root.append(el, say);
+    el.say = say;
     return el;
   },
-  // Stand him with his feet at game pixel (gx, gy), facing left or right.
-  place(el, canvas, gameW, gx, gy, left, pose) {
-    const k = canvas.clientWidth / gameW, size = WK.SIZE * k * .5, root = el.parentNode.getBoundingClientRect(), r = canvas.getBoundingClientRect();
-    if (el.dataset.pose !== pose) { const c = el.getContext("2d"); c.clearRect(0, 0, el.width, el.height); c.drawImage(this.poses[pose], 0, 0); el.dataset.pose = pose; }
-    Object.assign(el.style, { width: `${size}px`, height: `${size}px`, left: `${r.left - root.left + gx * k - size / 2}px`,
-      top: `${r.top - root.top + gy * k - size * 42 / 44}px`, transform: left ? "scaleX(-1)" : "none" });
+  // His own riding pose (the site's frames are left as they are): knees tucked on the
+  // cloud, staff held out toward the goal at angle a (degrees above horizontal).
+  frame(a, t) {
+    const base = WK.FRAMES.point[0];
+    return Object.assign({}, base, { legs: "crouch", torso: "TORSO_SQUASH", hy: 1 + Math.round(Math.sin(t / 400)), hx: 1,
+      head: t % 3600 < 140 ? "HEAD_BLINK" : "HEAD", staff: { a: Math.max(-55, Math.min(70, a)), gx: 6, gy: -7 }, tail: 2 });
+  },
+  // Draw him with the cloud's centre at game pixel (gx, gy).
+  place(el, canvas, gameW, gx, gy, left, a, t) {
+    const k = canvas.clientWidth / gameW, s = .5 * k, root = el.parentNode.getBoundingClientRect(), r = canvas.getBoundingClientRect();
+    const c = el.getContext("2d");
+    c.clearRect(0, 0, this.W, this.H);
+    c.drawImage(this.nimbus(), 13, 45 + Math.round(Math.sin(t / 260)));   // the cloud first: he sits on it
+    c.save(); c.translate(8, 4); WK.render(c, this.frame(a, t), t); c.restore();
+    for (let i = 0; i < 3; i++) {   // fairy sparkles circling him, twinkling
+      const q = t / 700 + i * 2.1, tw = Math.sin(t / 160 + i * 1.7);
+      if (tw < -.2) continue;
+      const x = Math.round(30 + Math.cos(q) * 22), y = Math.round(30 + Math.sin(q) * 14);
+      c.fillStyle = tw > .6 ? "#ffffff" : "#ffe36a";
+      c.fillRect(x, y, 1, 1);
+      if (tw > .5) { c.fillRect(x - 1, y, 3, 1); c.fillRect(x, y - 1, 1, 3); }
+    }
+    const x = r.left - root.left + gx * k - this.W * s / 2, y = r.top - root.top + gy * k - 51 * s;
+    Object.assign(el.style, { width: `${this.W * s}px`, height: `${this.H * s}px`, left: `${x}px`, top: `${y}px`, transform: left ? "scaleX(-1)" : "none" });
+    Object.assign(el.say.style, { left: `${x + this.W * s / 2}px`, top: `${y}px` });
   },
 };
 const WORLD_NEAR = 36;  // px: how close walking up to a story spot starts its scene
@@ -361,22 +391,29 @@ function worldScenes() {
     }
 
     goalGuide(time) {
-      const a = this.guide, t = this.goalAt;
-      if (!a) return;
+      const el = this.guide, t = this.goalAt;
+      if (!el) return;
       const show = WorldGuide.on && !!t && !this.ui.busy() && !this.leaving && !this.cine;
-      a.hidden = !show;
-      if (!show) return;
+      el.hidden = !show; el.say.hidden = true;
+      if (!show) { this.fairy = null; return; }
       const cam = this.cameras.main, v = cam.worldView, W = this.scale.width, H = this.scale.height, P = this.player;
-      const sx = (t.x - v.x) * cam.zoom, sy = (t.y - v.y) * cam.zoom, px = (P.x - v.x) * cam.zoom;
-      const ph = time % 1600, hop = ph < 260 ? -Math.sin(ph / 260 * Math.PI) * 4 : 0;   // a little hop now and then
-      let gx, gy, left;
-      if (sx > 14 && sx < W - 14 && sy > 24 && sy < H - 4) {   // beside the spot, on the side you're coming from, staff toward it
-        left = px >= sx; gx = sx + (left ? 13 : -13); gy = sy + 2;
-      } else {                                                    // at the edge of the screen, facing the way
-        const dx = sx - W / 2, dy = sy - H / 2, k = Math.min((W / 2 - 14) / Math.abs(dx || 1e-6), (H / 2 - 24) / Math.abs(dy || 1e-6));
-        left = dx < 0; gx = W / 2 + dx * k; gy = H / 2 + dy * k + 10;
-      }
-      WorldGuide.place(a, this.game.canvas, W, gx, gy + hop, left, ph < 40 || (ph > 220 && ph < 260) ? "crouch" : "point");
+      const toX = t.x - P.x, toY = t.y - P.y, dist = Math.hypot(toX, toY) || 1;
+      // where he wants to be: over the goal when it's in view, else a little ahead of you on the way there
+      const inView = t.x > v.x + 16 && t.x < v.right - 16 && t.y > v.y + 30 && t.y < v.bottom - 8;
+      let wx = inView ? t.x : P.x + toX / dist * 34, wy = inView ? t.y - 22 : P.y - 20 + toY / dist * 18;
+      // a loop now and then when you're dawdling far from it, with a word
+      const ph = time % 6000, far = !inView && dist > 80, loop = far && ph < 900;
+      if (loop) { const q = ph / 900 * Math.PI * 2; wx += Math.sin(q) * 10; wy += (1 - Math.cos(q)) * -6; }
+      const f = this.fairy || (this.fairy = { x: P.x, y: P.y - 24 });
+      const dt = Math.min(50, this.game.loop.delta || 16), ease = 1 - Math.pow(.004, dt / 1000);
+      f.x += (wx - f.x) * ease; f.y += (wy - f.y) * ease;
+      // keep him on screen
+      let gx = (f.x - v.x) * cam.zoom, gy = (f.y - v.y) * cam.zoom + Math.sin(time / 330) * 2;
+      gx = Math.max(14, Math.min(W - 14, gx)); gy = Math.max(26, Math.min(H - 6, gy));
+      const sx = (t.x - v.x) * cam.zoom, sy = (t.y - v.y) * cam.zoom, left = sx < gx;
+      const a = Math.atan2(-(sy - (gy - 12)), Math.abs(sx - gx)) * 180 / Math.PI;   // his staff toward the goal
+      WorldGuide.place(el, this.game.canvas, W, gx, gy, left, a, time);
+      el.say.hidden = !(far && ph < 1800);
     }
 
     // Walk up to a story spot. A scene with a ["problem"] step builds up to
