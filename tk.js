@@ -1287,6 +1287,10 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
     h("a", { href: p.url || `https://www.101weiqi.com/q/${p.id}/`, target: "_blank", rel: "noopener" }, "来源 source"),
   ]);
   box.replaceChildren(boardCard, h("div", { class: "tk-duel-side" }, [dlg, keys, srcLine]));
+  // A boss duel: a lacquered red frame, a darker field, and his name over the board.
+  box.parentNode && box.parentNode.classList.toggle("tk-duel-boss", !!node.boss);
+  if (node.boss) boardCard.prepend(h("div", { class: "tk-duel-bossname" }, [
+    h("b", { lang: "zh-CN" }, TK_BOSS_ZH[node.boss.who] || tkName(node.boss.who)), h("span", {}, node.boss.title || "")]));
 
   if (node.boss) say(node.boss.taunt_zh || "", node.boss.taunt);
   else if (foe) say("请。你执黑先下。", "Your move. You play Black.");

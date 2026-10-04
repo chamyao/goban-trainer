@@ -635,3 +635,13 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
 .tk-victory span { display: block; margin-top: 4px; font: bold clamp(14px, 2vw, 20px)/1.2 Georgia, serif; letter-spacing: .4em; text-transform: uppercase; color: #fff3cf; text-shadow: 0 2px 0 #3a2410, 0 0 6px #1a0c04; }
 @keyframes tkVictory { 0% { opacity: 0; transform: translateX(-50%) scale(1.8); } 12% { opacity: 1; transform: translateX(-50%) scale(1); } 85% { opacity: 1; } 100% { opacity: 0; transform: translateX(-50%) scale(1); } }
 @keyframes tkRays { from { transform: rotate(0); } to { transform: rotate(40deg); } }
+
+/* A boss duel (tk.js tkDuelBuild): the board in a red lacquer frame, his name above it. */
+.tk-duel.tk-duel-boss { background: radial-gradient(ellipse at 35% 50%, rgba(70, 8, 4, .55), rgba(20, 2, 0, .88)); }
+.tk-duel-boss .tk-duel-board { position: relative; background: #e2b468; border-color: #8a1a10; box-shadow: 0 0 0 2px #e6c14a inset, 0 0 0 3px #3a0804, 0 0 18px 4px rgba(200, 40, 20, .55), 0 6px 0 rgba(0, 0, 0, .5); animation: tkBossPulse 2.4s ease-in-out infinite; }
+.tk-duel-bossname { position: absolute; left: 50%; top: 0; transform: translate(-50%, -62%); z-index: 1; padding: 3px 16px; white-space: nowrap; text-align: center;
+  color: #ffe9a8; background: linear-gradient(#a8241a, #6a0e08); border: 2px solid #e6c14a; border-radius: 4px; box-shadow: 0 3px 0 rgba(0, 0, 0, .45); font-family: Georgia, "Songti SC", serif; }
+.tk-duel-bossname b { display: block; font-size: 1.25em; letter-spacing: .12em; }
+.tk-duel-bossname span { display: block; font-size: .75em; opacity: .85; letter-spacing: .04em; }
+@keyframes tkBossPulse { 50% { box-shadow: 0 0 0 2px #e6c14a inset, 0 0 0 3px #3a0804, 0 0 26px 8px rgba(220, 50, 20, .7), 0 6px 0 rgba(0, 0, 0, .5); } }
+@media (prefers-reduced-motion: reduce) { .tk-duel-boss .tk-duel-board { animation: none; } }
