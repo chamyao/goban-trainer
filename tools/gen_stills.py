@@ -51,7 +51,8 @@ SIZE = (1280, 720)
 def http(url, body=None, headers=None, method=None, timeout=300):
     data = json.dumps(body).encode() if body is not None else None
     req = urllib.request.Request(url, data=data, method=method or ("POST" if data else "GET"),
-                                 headers={"Content-Type": "application/json", **(headers or {})})
+                                 headers={"Content-Type": "application/json", "User-Agent": "goban-trainer/gen_stills",
+                                          **(headers or {})})
     with urllib.request.urlopen(req, timeout=timeout) as r:
         raw = r.read()
     return json.loads(raw) if raw[:1] in (b"{", b"[") else raw
