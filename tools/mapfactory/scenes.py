@@ -16,6 +16,10 @@ play them:
   walk in from off to the side; speakers face whoever they address and the
   camera frames them; anyone who speaks but isn't on stage is brought on
 - a strike lunges at the nearest enemy; a fallen or removed actor fades
+- props (a cage cart, a forge, wine jars, a city gate) stand on open ground,
+  move like actors and can carry someone ("board"); an army can ring a prop
+  or a person ("surround", "close"); a gift is walked over and handed on
+  ("give"); poses, emote bubbles, camera zoom and a dark mood set the tone
 
 The format is in docs/cutscene-format.md.
 """
@@ -30,6 +34,11 @@ ROOT = Path(__file__).resolve().parent.parent.parent
 PX = 8          # node-map pixels per tile
 WALK, RUN = 4.0, 7.5   # tiles per second
 FRIENDLY = {"militia"}  # extras on the party's side
+# props: footprint (w, h) in tiles; drawn bottom-centre on the anchor tile
+PROPS = {"cagecart": (3, 1), "forge": (2, 1), "anvil": (1, 1), "winejars": (2, 1), "table": (2, 1),
+         "rack": (2, 1), "fire": (2, 1), "tent": (3, 2), "gate": (3, 1)}
+POSES = {"drink", "cheer", "bow", "kneel", "drunk", "raise", "sleep", "stand"}
+EMOTES = {"!", "?", "...", "music", "anger", "sweat", "zzz", "heart"}
 
 
 def characters():
@@ -66,6 +75,8 @@ class Stage:
         self.groups = {}    # group id -> [member ids]
         self.gone = set()
         self.fallen = set()
+        self.props = {}     # prop id -> kind
+        self.aboard = {}    # rider id -> prop id
         self.party = list(party)
         # the party lines up on the spot, facing the far side
         marks = [(0, 0), (-1, -1), (-1, 1), (-2, 0), (-2, -2), (-2, 2)]
@@ -99,14 +110,31 @@ class Stage:
                 if good(p):
                     yield p
 
+    def foot(self, pid, at=None):
+        """The tiles a prop stands on."""
+        w, h = PROPS[self.props[pid]]
+        x, y = at or self.pos[pid]
+        return {(x - w // 2 + i, y - j) for i in range(w) for j in range(h)}
+
+    def taken(self, who=None):
+        out = set()
+        for a, p in self.pos.items():
+            if a == who or a in self.gone or a in self.aboard:
+                continue
+            out |= self.foot(a) if a in self.props else {p}
+        return out
+
     def snap(self, c, who=None):
-        taken = {p for a, p in self.pos.items() if a != who and a not in self.gone}
+        taken = self.taken(who)
         cx, cy = max(0, min(self.W - 1, c[0])), max(0, min(self.H - 1, c[1]))
+        if who in self.props:   # the whole footprint on open ground
+            return next(self.near((cx, cy), lambda p: all(q in self.reach and q not in taken for q in self.foot(who, p))))
         return next(self.near((cx, cy), lambda p: p in self.reach and p not in taken))
 
     def path(self, a, b):
         if a == b:
             return [a]
+        props = set().union(*(self.foot(p) for p in self.props if p not in self.gone and p in self.pos)) - {a, b}
         prev, q = {a: None}, deque([a])
         while q:
             c = q.popleft()
@@ -114,7 +142,7 @@ class Stage:
                 break
             x, y = c
             for n in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
-                if n not in prev and n in self.reach:
+                if n not in prev and n in self.reach and n not in props:
                     prev[n] = c
                     q.append(n)
         if b not in prev:
@@ -151,14 +179,22 @@ class Stage:
         self.gone.discard(aid)
 
     def members(self, aid):
+        if aid == "party":
+            return [a for a in self.party if a in self.cast and a not in self.gone]
         return self.groups.get(aid, [aid])
+
+    def find(self, who):
+        """An actor by id, or the one playing a character."""
+        if who in self.cast and who not in self.gone:
+            return who
+        return next((a for a in self.live() if self.cast[a].get("who") == who and "group" not in self.cast[a]), None)
 
     def live(self):
         return [a for a in self.cast if a not in self.gone]
 
     def enemy_of(self, aid, standing=True):
         side = self.cast[aid]["side"]
-        cands = [b for b in self.live() if self.cast[b]["side"] != side and (not standing or b not in self.fallen)]
+        cands = [b for b in self.live() if self.cast[b]["side"] not in (side, "prop") and (not standing or b not in self.fallen)]
         if not cands:
             return None
         ax, ay = self.pos[aid]
@@ -180,6 +216,9 @@ class Stage:
         start = self.pos[aid]
         end = self.snap(target, aid)
         self.pos[aid] = end
+        for r, p in self.aboard.items():
+            if p == aid:
+                self.pos[r] = end
         pts = self.path(start, end)
         return {"do": "walk", "actor": aid, "path": [self.xy(p) for p in pts], "speed": speed}
 
@@ -218,7 +257,7 @@ class Stage:
 
     def move(self, aid, target, speed):
         # the fallen stay where they fell
-        ids = [a for a in self.members(aid) if a in self.cast and a not in self.gone and a not in self.fallen]
+        ids = [a for a in self.members(aid) if a in self.cast and a not in self.gone and a not in self.fallen and a not in self.aboard]
         if not ids:
             return
         if len(ids) == 1:
@@ -243,8 +282,7 @@ class Stage:
 
     def say(self, step, chars):
         who = step[1]
-        speaker = who if who in self.cast and who not in self.gone else \
-            next((a for a in self.live() if self.cast[a]["who"] == who and "group" not in self.cast[a]), None)
+        speaker = self.find(who)
         if speaker is None and who in chars:
             # someone speaks who isn't on stage: bring them on, facing the party
             far = self.offset(28, -6 if len([a for a in self.live() if self.cast[a]["side"] == "them"]) else 0)
@@ -274,7 +312,7 @@ class Stage:
         ids = [a for a in self.members(aid) if a in self.cast and a not in self.gone and a not in self.fallen]
         if count is not None and ids:
             # those nearest the enemy fall first
-            foe = [self.pos[b] for b in self.live() if self.cast[b]["side"] != self.cast[ids[0]]["side"]]
+            foe = [self.pos[b] for b in self.live() if self.cast[b]["side"] not in (self.cast[ids[0]]["side"], "prop")]
             if foe:
                 ids.sort(key=lambda a: min((self.pos[a][0] - f[0]) ** 2 + (self.pos[a][1] - f[1]) ** 2 for f in foe))
             ids = ids[:count]
@@ -283,11 +321,90 @@ class Stage:
 
     def remove(self, aid):
         ids = [a for a in self.members(aid) if a in self.cast and a not in self.gone]
+        ids += [r for r, p in self.aboard.items() if p in ids and r not in self.gone]   # a prop takes its riders
         if ids:
             self.beats.append({"do": "fade", "actors": ids})
         self.gone.update(ids)
         for a in ids:
+            self.aboard.pop(a, None)
+        for a in ids:
             self.fallen.discard(a)
+
+    # ---------- props, gifts, rings ----------
+    def prop(self, pid, kind, cell):
+        self.props[pid] = kind
+        self.cast[pid] = {"prop": kind, "side": "prop"}
+        self.pos[pid] = cell
+        self.gone.discard(pid)
+        self.pos[pid] = self.snap(cell, pid)
+        self.beats.append({"do": "appear", "place": [{"actor": pid, "at": self.xy(self.pos[pid])}]})
+
+    def board(self, who, pid, opening):
+        a = self.find(who)
+        if a is None or pid not in self.props:
+            return
+        x, y = self.pos[pid]
+        if not opening and abs(self.pos[a][0] - x) + abs(self.pos[a][1] - y) > 3:   # walk up to it first
+            self.beats.append(self.walk_beats(a, (x, y + 1), WALK))
+        self.aboard[a] = pid
+        self.pos[a] = self.pos[pid]
+        self.beats.append({"do": "board", "actor": a, "prop": pid, "at": self.xy(self.pos[pid])})
+
+    def unboard(self, who):
+        a = self.find(who)
+        if a not in self.aboard:
+            return
+        pid = self.aboard.pop(a)
+        x, y = self.pos[pid]
+        self.pos[a] = self.snap((x, y + 1), a)
+        self.beats.append({"do": "unboard", "actor": a, "to": self.xy(self.pos[a])})
+
+    def turn_to(self, a, cell):
+        dx, dy = cell[0] - self.pos[a][0], cell[1] - self.pos[a][1]
+        if abs(dx) >= abs(dy):
+            return {"actor": a, "dir": "right" if dx > 0 else "left"} if dx else None
+        return {"actor": a, "dir": "down" if dy > 0 else "up"}
+
+    def give(self, src, dst, item):
+        g, r = self.find(src), self.find(dst)
+        if g is None or r is None:
+            self.beats.append({"do": "gain", "item": item})
+            return
+        rx, ry = self.pos[r]
+        side = 1 if self.pos[g][0] >= rx else -1
+        if abs(self.pos[g][0] - rx) + abs(self.pos[g][1] - ry) > 1:
+            self.beats.append(self.walk_beats(g, (rx + side, ry), WALK))
+        turns = [t for t in (self.turn_to(g, (rx, ry)), self.turn_to(r, self.pos[g])) if t]
+        self.beats.append({"do": "give", "from": g, "to": r, "item": item, "face": turns,
+                           "camera": self.frame([g, r])})
+
+    def ring(self, gid, target, r, speed):
+        """A group stands in a ring round a prop or a person."""
+        import math
+        t = self.find(target)
+        ids = [a for a in self.members(gid) if a in self.cast and a not in self.gone and a not in self.fallen and a not in self.aboard]
+        if t is None or not ids:
+            return
+        tx, ty = self.pos[t]
+        if t in self.props:   # round the middle of the prop
+            w, h = PROPS[self.props[t]]
+            ty -= (h - 1) / 2
+        R = max(1.5, r / PX)
+        cx = sum(self.pos[a][0] for a in ids) / len(ids)
+        cy = sum(self.pos[a][1] for a in ids) / len(ids)
+        a0 = math.atan2(cy - ty, cx - tx)
+        # each man takes the ring place nearest him, in angle order
+        order = sorted(ids, key=lambda a: (math.atan2(self.pos[a][1] - ty, self.pos[a][0] - tx) - a0) % (2 * math.pi))
+        walks, turns = [], []
+        for i, a in enumerate(order):
+            ang = a0 + 2 * math.pi * i / len(order)
+            walks.append(self.walk_beats(a, (round(tx + R * math.cos(ang)), round(ty + R * math.sin(ang))), speed))
+        for a in order:
+            tt = self.turn_to(a, (round(tx), round(ty)))
+            if tt:
+                turns.append(tt)
+        self.beats.append({"do": "together", "beats": walks})
+        self.beats.append({"do": "face", "turns": turns})
 
 
 def stage_scene(scene, m, spot, party, chars):
@@ -297,7 +414,8 @@ def stage_scene(scene, m, spot, party, chars):
     arrivals = []
     for s in steps:
         op = s[0]
-        if op in ("n", "say", "fx", "pose", "move", "run", "remove", "party", "wait", "scroll", "problem") and opening:
+        if op in ("n", "say", "fx", "pose", "move", "run", "remove", "party", "wait", "scroll", "problem",
+                  "emote", "give", "surround", "close", "camera", "mood", "unboard") and opening:
             opening = False
             if arrivals:
                 st.beats.append({"do": "camera", "to": st.frame(list(st.pos)), "ms": 600})
@@ -319,13 +437,38 @@ def stage_scene(scene, m, spot, party, chars):
                 st.strike(s[1])
             elif s[2] == "fall":
                 st.fall(s[1], s[3] if len(s) > 3 else None)
-            else:
-                st.beats.append({"do": "pose", "actors": st.members(s[1]), "pose": s[2]})
+            elif s[2] in POSES:
+                ids = [a for a in st.members(s[1]) if a in st.cast and a not in st.gone and a not in st.fallen]
+                if ids:
+                    st.beats.append({"do": "pose", "actors": ids, "pose": s[2]})
         elif op == "fx":
             c = st.offset(s[3], s[4])
             st.beats.append({"do": "fx", "name": s[1], "at": st.xy(c)})
         elif op == "remove":
             st.remove(s[1])
+        elif op == "prop":
+            st.prop(s[1], s[2], st.offset(s[4], s[5]))
+        elif op == "board":
+            if s[1] in arrivals:   # already inside when the scene opens
+                arrivals.remove(s[1])
+            st.board(s[1], s[2], opening)
+        elif op == "unboard":
+            st.unboard(s[1])
+        elif op == "emote":
+            ids = [a for a in st.members(s[1]) if a in st.cast and a not in st.gone]
+            if s[2] in EMOTES and ids:
+                st.beats.append({"do": "emote", "actors": ids, "icon": s[2]})
+        elif op == "give":
+            st.give(s[1], s[2], s[3])
+        elif op in ("surround", "close"):
+            st.ring(s[1], s[2], s[3], RUN if op == "surround" else WALK)
+        elif op == "camera":
+            if s[1] == "zoom":
+                st.beats.append({"do": "zoom", "z": max(1, min(2, s[2])), "ms": s[3] if len(s) > 3 else 600})
+            elif s[1] == "shake":
+                st.beats.append({"do": "shake"})
+        elif op == "mood":
+            st.beats.append({"do": "mood", "dark": s[1] == "dark"})
         elif op == "party":
             st.beats.append({"do": "party", "list": s[1]})
         elif op == "gain":
@@ -339,7 +482,7 @@ def stage_scene(scene, m, spot, party, chars):
         elif op == "say":
             st.say(s, chars)
     # whoever is still standing at the end, except the party, leaves
-    rest = [a for a in st.live() if a not in st.party and st.cast[a]["who"] not in st.party]
+    rest = [a for a in st.live() if a not in st.party and st.cast[a].get("who") not in st.party]
     if rest:
         st.beats.append({"do": "fade", "actors": rest})
     lead = st.party[0] if st.party else None

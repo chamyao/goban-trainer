@@ -32,6 +32,16 @@ node on the old node map (x right, y down, in node-map pixels; 8 px ≈ 1 tile):
 | `["fx", name, at, dx, dy]` | flash, dust, petals, incense, paper, fire, whip, sparkle, blackwind |
 | `["remove", id]` | fade out |
 | `["party", [who, …]]` | who travels with Liu Bei from now on |
+| `["prop", id, kind, at, dx, dy]` | put a thing on stage: `cagecart`, `forge`, `anvil`, `winejars`, `table`, `rack` (weapons), `fire`, `tent`, `gate` (a city gate). It moves with `move`/`run` and leaves with `remove`; walkers go round it |
+| `["board", who, prop]` / `["unboard", who]` | ride inside a prop (a prisoner in the cage cart); it carries them when it moves, and `remove` takes them with it. Boarded before the first line, they are inside from the start |
+| `["pose", id, P]` | `drink`, `cheer`, `raise` (holds up what they were last given) play once; `bow`, `kneel`, `sleep`, `drunk` (sways) last until `stand` or a walk (drunk men keep swaying). `id` may be a group or `party` |
+| `["emote", id, E]` | a bubble overhead: `!`, `?`, `...`, `music`, `anger`, `sweat`, `zzz`, `heart` |
+| `["give", from, to, item]` | `from` walks over and hands `item` (a key of the world's `items`) to `to`, who holds it up; it is gained as with `["gain", item]` |
+| `["surround", group, target, r]` | the group runs to a ring of radius `r` px round a prop or a person and faces in |
+| `["close", group, target, r]` | the same at a walk: tighten the ring |
+| `["camera", "zoom", z, ms]` | zoom to `z` (1–2); `["camera", "zoom", 1, ms]` goes back. `["camera", "shake"]` shakes |
+| `["mood", "dark"]` / `["mood", "clear"]` | darken the edges of the screen for a tense moment, and lift it |
+| `["wait", ms]` | a pause |
 
 Positive `dx` is "toward the enemy". The party's members are addressed by
 character id (`liubei`, `guanyu`, …). `militia` soldiers fight on the
@@ -49,6 +59,10 @@ party's side; anyone placed on the far side is an enemy.
   from further out while the camera takes in the field.
 - **Dialogue:** the speaker and the person they address turn to face each
   other, and the camera frames them both.
+- **Props** take their whole footprint of open ground; a boarded rider
+  sits inside and goes where the prop goes. A ring places each man on the
+  nearest free tile of the circle, then turns them all to face the middle.
+- **Gifts:** the giver walks next to the receiver first, and they face.
 - **The end:** anyone left on stage who isn't in the party fades; the
   player stands where Liu Bei ended up.
 
@@ -82,6 +96,16 @@ party's side; anyone placed on the far side is an enemy.
 }
 ```
 
+Props are cast members `{"prop": "cagecart", "side": "prop"}` placed with
+`appear`. The newer beats: `{"do": "board", "actor", "prop", "at"}`,
+`{"do": "unboard", "actor", "to"}`, `{"do": "pose", "actors", "pose"}`,
+`{"do": "emote", "actors", "icon"}`, `{"do": "give", "from", "to", "item",
+"face", "camera"}`, `{"do": "face", "turns": [{"actor", "dir"}]}`,
+`{"do": "zoom", "z", "ms"}`, `{"do": "shake"}`, `{"do": "mood", "dark"}`.
+The 2D player draws props from `assets/tk/props.png` (built from Ninja
+Adventure pieces by `tools/build_props.py`) or from the kit's own sprites
+(tables, jars, racks, fires, tents, gates).
+
 Positions are tiles (feet), speeds tiles per second. Beats run in order;
 `together` runs its beats at once. `line` carries the story step unchanged
 (English, Chinese, voice clip). A renderer may draw actors however it likes:
@@ -97,4 +121,6 @@ failing ends the scene; trying again fast-forwards to the problem. Skipping
 before the problem jumps to it; after it, skipping ends the scene. A scene
 without one plays after a won problem, as before. When the place has no
 cutscene the world plays the same steps as plain dialogue. Who joins the
-party is applied either way.
+party is applied either way. Fast-forwarding lands every beat in its end
+state (props placed, riders aboard, lasting poses, gifts, zoom and mood);
+emotes and shakes are skipped.
