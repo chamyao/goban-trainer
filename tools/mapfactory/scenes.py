@@ -219,7 +219,8 @@ class Stage:
             self.beats.append({"do": "appear", "place": [{"actor": a, "at": self.xy(self.pos[a]), "face": self.face_dir(-away)} for a in ids]})
 
     def move(self, aid, target, speed):
-        ids = [a for a in self.members(aid) if a in self.cast and a not in self.gone]
+        # the fallen stay where they fell
+        ids = [a for a in self.members(aid) if a in self.cast and a not in self.gone and a not in self.fallen]
         if not ids:
             return
         if len(ids) == 1:
@@ -271,8 +272,14 @@ class Stage:
             t = self.enemy_of(a)
             self.beats.append({"do": "strike", "actor": a, **({"target": t} if t else {})})
 
-    def fall(self, aid):
-        ids = [a for a in self.members(aid) if a in self.cast and a not in self.gone]
+    def fall(self, aid, count=None):
+        ids = [a for a in self.members(aid) if a in self.cast and a not in self.gone and a not in self.fallen]
+        if count is not None and ids:
+            # those nearest the enemy fall first
+            foe = [self.pos[b] for b in self.live() if self.cast[b]["side"] != self.cast[ids[0]]["side"]]
+            if foe:
+                ids.sort(key=lambda a: min((self.pos[a][0] - f[0]) ** 2 + (self.pos[a][1] - f[1]) ** 2 for f in foe))
+            ids = ids[:count]
         self.fallen.update(ids)
         self.beats.append({"do": "fall", "actors": ids})
 
@@ -313,7 +320,7 @@ def stage_scene(scene, m, spot, party, chars):
             if s[2] == "strike":
                 st.strike(s[1])
             elif s[2] == "fall":
-                st.fall(s[1])
+                st.fall(s[1], s[3] if len(s) > 3 else None)
             else:
                 st.beats.append({"do": "pose", "actors": st.members(s[1]), "pose": s[2]})
         elif op == "fx":
@@ -323,6 +330,8 @@ def stage_scene(scene, m, spot, party, chars):
             st.remove(s[1])
         elif op == "party":
             st.beats.append({"do": "party", "list": s[1]})
+        elif op == "gain":
+            st.beats.append({"do": "gain", "item": s[1]})
         elif op == "wait":
             st.beats.append({"do": "wait", "ms": s[1]})
         elif op == "n":

@@ -28,7 +28,7 @@ node on the old node map (x right, y down, in node-map pixels; 8 px ≈ 1 tile):
 | `["move", id, at, dx, dy]` | walk there (a group keeps its formation) |
 | `["run", id, at, dx, dy]` | the same, at a run |
 | `["pose", id, "strike"]` | lunge at the nearest standing enemy |
-| `["pose", id, "fall"]` | fall (a group falls one after another) |
+| `["pose", id, "fall", n]` | fall; for a group, the `n` nearest the enemy (all if omitted). The fallen never move again |
 | `["fx", name, at, dx, dy]` | flash, dust, petals, incense, paper, fire, whip, sparkle, blackwind |
 | `["remove", id]` | fade out |
 | `["party", [who, …]]` | who travels with Liu Bei from now on |

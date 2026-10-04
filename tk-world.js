@@ -77,6 +77,7 @@ function worldScenes() {
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=3`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
+      if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
       this.load.once("complete", () => {
         for (const [kind, list] of Object.entries(kit.kinds)) list.forEach(([s, x, y, wd, ht], i) => this.textures.get(`kit-${s}`).add(`${kind}#${i}`, 0, x, y, wd, ht));
@@ -153,6 +154,7 @@ function worldScenes() {
       if (!pos) this.ui.place(this.place.name, this.place.zh);
       this.blocked = 0;
       this.leaving = false;
+      if (typeof WorldItems !== "undefined") WorldItems.attach(this);   // mounts (tk-items.js)
       window.__w = this;  // for tests and the console
       if (this.resume && opts.ret) { const r = opts.ret; opts.ret = null; this.time.delayedCall(400, () => this.returned(r)); }
     }
@@ -278,6 +280,7 @@ function worldScenes() {
         for (const n of this.npcs) if (n.until === q.node) { n.spr.setVisible(false); n.spr.body.enable = false; }
         const finish = async () => {
           for (const s of steps) if (s[0] === "party") { this.st.party = s[1]; TK.setParty(this.w, s[1]); this.setParty(s[1]); }
+          if (typeof WorldItems !== "undefined") WorldItems.gainFrom(this, steps);   // what the scene gave
           if (q.scene) TK.markSeen(`${this.w.n}:${q.scene}`);
           this.save();
           this.setGoal();

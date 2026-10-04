@@ -41,19 +41,50 @@ const WorldCutscene = {
     skipBtn.onclick = e => { e.stopPropagation(); skip = true; while (realBusy()) ui.advance(); };
     (host.querySelector(".town-ui") || host).append(skipBtn);
 
+    // Horses: "horse" in the cast is a riderless horse; the party rides once it owns a mount (tk-items.js).
+    const Items = typeof WorldItems !== "undefined" ? WorldItems : null;
+    const party = new Set(cs.party || []);
+    const coatFor = who => Items && party.has(who) ? Items.coat(scene.w, who) : null;
+    const herdCoat = id => Items ? Items.COATS[[...id].reduce((h, c) => h + c.charCodeAt(0), 0) % 3] : null;
+    const mount = a => {
+      const coat = a.who === "horse" ? null : coatFor(a.who);
+      if (coat && !a.horse) { a.coat = coat; a.horse = Items.horse(scene, coat, a.spr.x, a.spr.y); a.spr.setOrigin(.5, 1 + Items.RISE / a.spr.height); }
+      sync(a);
+    };
+    const sync = a => {
+      if (a.horse) a.horse.setPosition(a.spr.x, a.spr.y).setDepth(a.spr.y - .5).setVisible(a.spr.visible).setAlpha(a.spr.alpha);
+      a.spr.setDepth(a.spr.y);
+    };
     const actor = (id, at, face) => {
       let a = actors[id];
       const who = cs.cast[id].who;
       if (!a) {
-        scene.hero(who);
-        a = actors[id] = { id, who, spr: scene.add.sprite(0, 0, `h-${who}-down-0`).setOrigin(.5, 1) };
+        if (who === "horse" && Items) {
+          const coat = herdCoat(id);
+          a = actors[id] = { id, who, coat, beast: true, spr: Items.horse(scene, coat, 0, 0) };
+        } else {
+          scene.hero(who);
+          a = actors[id] = { id, who, spr: scene.add.sprite(0, 0, `h-${who}-down-0`).setOrigin(.5, 1) };
+        }
       }
       const [x, y] = px(at);
-      a.spr.setPosition(x, y).setDepth(y).setVisible(true).setAlpha(1).setAngle(0).clearTint();
+      a.spr.setPosition(x, y).setVisible(true).setAlpha(1).setAngle(0).clearTint();
+      mount(a);
       if (face) look(a, face);
       return a;
     };
-    const look = (a, dir) => { a.dir = dir; a.spr.anims.stop(); a.spr.setTexture(`h-${a.who}-${dir}-0`); };
+    const look = (a, dir) => {
+      a.dir = dir;
+      if (a.beast) return Items.pose(a.spr, a.coat, dir, false);
+      a.spr.anims.stop(); a.spr.setTexture(`h-${a.who}-${dir}-0`);
+      if (a.horse) Items.pose(a.horse, a.coat, dir, false);
+    };
+    const stride = (a, dir, fast) => {
+      if (a.beast) return Items.pose(a.spr, a.coat, dir, true);
+      a.spr.anims.play(`h-${a.who}-${dir}`, true);
+      a.spr.anims.msPerFrame = fast ? 85 : 135;
+      if (a.horse) Items.pose(a.horse, a.coat, dir, true);
+    };
     const walk = async (b) => {
       const a = actors[b.actor];
       if (!a) return;
@@ -63,16 +94,16 @@ const WorldCutscene = {
         if (d < .5) continue;
         const dir = Math.abs(x1 - x0) > Math.abs(y1 - y0) ? (x1 > x0 ? "right" : "left") : (y1 > y0 ? "down" : "up");
         a.dir = dir;
-        a.spr.anims.play(`h-${a.who}-${dir}`, true);
-        a.spr.anims.msPerFrame = b.speed > 5 ? 85 : 135;
-        await tween({ targets: a.spr, x: x1, y: y1, duration: d / speed * 1000, onUpdate: () => a.spr.setDepth(a.spr.y) });
+        stride(a, dir, b.speed > 5);
+        await tween({ targets: a.spr, x: x1, y: y1, duration: d / speed * 1000 / (a.horse ? 1.3 : 1), onUpdate: () => sync(a) });
       }
       const last = pts[pts.length - 1];
-      a.spr.setPosition(last[0], last[1]).setDepth(last[1]);
+      a.spr.setPosition(last[0], last[1]);
+      sync(a);
       look(a, a.dir || "down");
     };
     const fade = ids => Promise.all(ids.filter(id => actors[id]).map(id =>
-      tween({ targets: actors[id].spr, alpha: 0, duration: 350 }).then(() => actors[id].spr.setVisible(false))));
+      tween({ targets: actors[id].spr, alpha: 0, duration: 350, onUpdate: () => sync(actors[id]) }).then(() => { actors[id].spr.setVisible(false); sync(actors[id]); })));
     const pan = (to, ms = 350) => {
       if (!to) return Promise.resolve();
       const [x, y] = px(to);
@@ -113,7 +144,7 @@ const WorldCutscene = {
           if (!a) break;
           const dx = t ? Math.sign(t.spr.x - a.spr.x) || 1 : (a.dir === "left" ? -1 : 1);
           look(a, dx > 0 ? "right" : "left");
-          await tween({ targets: a.spr, x: a.spr.x + dx * 7, duration: 90, yoyo: true, ease: "Quad.easeOut" });
+          await tween({ targets: a.spr, x: a.spr.x + dx * 7, duration: 90, yoyo: true, ease: "Quad.easeOut", onUpdate: () => sync(a) });
           cam.shake(120, .006);
           break;
         }
@@ -129,6 +160,9 @@ const WorldCutscene = {
         case "fx": await WorldFx.play(scene, b.name, px(b.at), fx); break;
         case "wait": await wait(b.ms); break;
         case "party": break;                       // applied by the world when the scene ends
+        case "gain":                                  // a gift: saved now, and a mount seats the party at once
+          if (Items) { Items.gain(scene, b.item); Object.values(actors).forEach(mount); }
+          break;
       }
     };
 
@@ -137,7 +171,7 @@ const WorldCutscene = {
     // back to the world: the leader stands where the scene left him
     for (const t of timers) t.remove(false);
     scene.tweens.killTweensOf(Object.values(actors).map(a => a.spr));
-    for (const a of Object.values(actors)) a.spr.destroy();
+    for (const a of Object.values(actors)) { a.spr.destroy(); if (a.horse) a.horse.destroy(); }
     for (const o of fx) o.destroy();
     skipBtn.remove();
     bars.forEach(b => b.destroy());

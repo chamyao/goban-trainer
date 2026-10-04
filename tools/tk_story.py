@@ -12,10 +12,11 @@ different angle. A scene is a list of steps the map plays:
   ["move", id, at, dx, dy]     walk an actor there
   ["remove", id]
   ["party", [who, ...]]        the party walking the map from now on
+  ["gain", item]               the party gets a thing from the world's "items" (a mount, a weapon, …)
   ["army", id, who, count, at, dx, dy]  a body of soldiers in formation (id names the group)
   ["run", id, at, dx, dy]      like move, at a run (ids may name a group)
   ["fx", name, at, dx, dy]     an effect: petals, incense, blackwind, flash, whip, dust, paper
-  ["pose", id, pose]           stand, kneel, strike, fall
+  ["pose", id, pose, n]        stand, kneel, strike, fall; for a group, n = how many fall (nearest the enemy)
   ["wait", ms]
   ["scroll", title, [paragraphs]]  a storyteller scroll
 
@@ -38,6 +39,16 @@ WORLDS = [
         "grades": ["12K", "12K+"],
         "boss": "redmond",
         "party": ["liubei"],
+        # Things the story gives the party (["gain", key] in a scene). A mount
+        # puts the party on horseback; coats are per rider.
+        "items": {
+            "horses": {"name": "Fifty northern horses", "zh": "良马五十匹", "kind": "mount",
+                       "coats": {"liubei": "white", "guanyu": "brown", "zhangfei": "black"}},
+            "silver": {"name": "Five hundred taels of silver", "zh": "金银五百两", "kind": "treasure"},
+            "twin_swords": {"name": "Twin swords", "zh": "双股剑", "kind": "weapon", "who": "liubei"},
+            "green_dragon": {"name": "Green Dragon Crescent Blade", "zh": "青龙偃月刀", "kind": "weapon", "who": "guanyu"},
+            "serpent_spear": {"name": "Eighteen-foot serpent spear", "zh": "丈八蛇矛", "kind": "weapon", "who": "zhangfei"},
+        },
         # Map, 480x270. "role": main (fixed, carries a main story point),
         # side (long road), short (shortcut), boss.
         "nodes": [
@@ -109,6 +120,8 @@ WORLDS = [
                 ["n", "Their road forks here. The long road passes through the rebels' heartland; the mountain trail is shorter, and steeper."],
             ]},
             "daxing": {"title": "First Blood at Daxing Mountain", "kind": "main", "steps": [
+                # the novel's gifts come before the first battle, whichever road you took
+                ["gain", "horses"], ["gain", "twin_swords"], ["gain", "green_dragon"], ["gain", "serpent_spear"],
                 ["army", "braves", "militia", 6, "n3", -24, 0],
                 ["army", "yt", "rebel", 9, "n3", 72, 0],
                 ["n", "The Yellow Turban general Cheng Yuanzhi marches on Zhuo with fifty thousand men. Liu Bei meets him with five hundred."],
@@ -136,7 +149,7 @@ WORLDS = [
                 ["fx", "flash", "n4", -30, 0],
                 ["run", "guanyu", "n4", 2, -10], ["run", "zhangfei", "n4", 2, 10], ["run", "liubei", "n4", -8, 0],
                 ["n", "Gongs crash. Guan Yu and Zhang Fei burst from both flanks as Liu Bei wheels around. Caught from three sides, the rebels break, and the siege of Qingzhou is lifted."],
-                ["pose", "yt", "fall"], ["run", "yt", "n4", 160, 0], ["remove", "yt"],
+                ["pose", "yt", "fall", 4], ["run", "yt", "n4", 160, 0], ["remove", "yt"],
             ]},
             "cart": {"title": "The Cage Cart", "kind": "main", "steps": [
                 ["n", "Liu Bei sets out to help his old teacher Lu Zhi, who has Zhang Jiao himself trapped at Guangzong. On the road they meet soldiers guarding a prison cart."],
@@ -235,9 +248,15 @@ WORLDS = [
             ]},
             # ---- side stories: the shortcuts ----
             "horses": {"title": "Horses from the North", "kind": "side", "steps": [
+                ["spawn", "zsp", "merchant", "as", 26, -6],
+                ["army", "herd", "horse", 6, "as", 44, 0],
                 ["n", "The brothers had men, but no horses. Then two travelling merchants, Zhang Shiping and Su Shuang, came down the trail driving a herd."],
                 ["say", "merchant", "Bandits have closed the road north. If you mean to crush them, take fifty horses — and five hundred taels of silver, and a thousand jin of steel for your weapons."],
+                ["move", "herd", "as", 16, 0],
+                ["gain", "horses"], ["gain", "silver"],
                 ["n", "Liu Bei had twin swords forged. Guan Yu's blade was the Green Dragon Crescent, eighty-two jin, called Cold Beauty. Zhang Fei's was an eighteen-foot serpent spear of steel."],
+                ["fx", "sparkle", "as", 0, -6],
+                ["gain", "twin_swords"], ["gain", "green_dragon"], ["gain", "serpent_spear"],
             ]},
             "bribe": {"title": "A Bribe Refused", "kind": "side", "steps": [
                 ["n", "At Guangzong, Lu Zhi had Zhang Jiao penned in, though the rebel's sorcery kept him from the final blow. Then the court's envoy arrived."],
