@@ -48,12 +48,12 @@ const TKTable = {
   },
   stand() {
     const scene = this.scene;
-    if (OGSPlay.search) OGSPlay.cancelSearch();
     this.reset();
     if (scene && scene.sys && scene.sys.isActive()) { scene.seated = false; scene.opts.host.focus(); }
   },
   // Clears the table (the world's scene is gone, or the game is over and everyone has left).
   reset() {
+    if (OGSPlay.search && OGSPlay.search.inWorld) OGSPlay.cancelSearch();   // nobody left at the table to play a match
     clearInterval(this.tick);
     OGSPlay.listeners.delete(this.onEmit);
     if (this.ui) this.ui.remove();

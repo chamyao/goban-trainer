@@ -230,7 +230,7 @@ function worldScenes() {
     create() {
       const region = this.region = this.cache.json.get("region"), kit = this.kit = this.cache.json.get("kit");
       const opts = this.opts = this.game.worldOpts, w = this.w = opts.w;
-      this.grid = this.walk = this.lampFx = this.ambientFx = null; this.seated = false;   // the scene object outlives a change of place: no old map's walk grid or tap-walk
+      this.grid = this.walk = this.lampFx = this.ambientFx = this.cine = this.auto = null; this.seated = false;   // the scene object outlives a change of place: no old map's walk grid or tap-walk
       this.story = w.scenes;
       this.st = WorldState.load(w.n, region);
       if (!this.st.visited.includes(this.placeId)) this.st.visited.push(this.placeId);
@@ -284,7 +284,9 @@ function worldScenes() {
       cam.fadeIn(350);
 
       this.keys = this.input.keyboard.addKeys("W,A,S,D,UP,DOWN,LEFT,RIGHT,E,ENTER");
-      this.input.on("pointerdown", p => this.tapAt(p.worldX, p.worldY));   // tap (or click) to walk, tap someone to talk
+      // tap (or click) to walk there, tap someone to talk, a building to go in; hold and drag to steer
+      this.input.on("pointerdown", p => this.tapAt(p.worldX, p.worldY));
+      this.input.on("pointermove", p => { this.steer(p); this.hover(p); });
       for (const k of ["ENTER", "E"]) this.keys[k].on("down", () => this.act());
       this.ui = TownUI.mount(this, opts.host);
       if (this.place.archetype === "overworld") this.overworldLabels(opts.host.querySelector(".town-ui"));
@@ -681,16 +683,27 @@ function worldScenes() {
       return (this.grid = { C, cols, rows, block, free: (x, y) => x >= 0 && y >= 0 && x < cols && y < rows && !block[y * cols + x] });
     }
     // A* over the grid (8 directions, no corner-cutting), then the path pulled straight.
-    findPath(fx, fy, tx, ty) {
-      const G = this.walkGrid(), C = G.C, key = (x, y) => y * G.cols + x;
-      let sx = Math.floor(fx / C), sy = Math.floor(fy / C), gx = Math.floor(tx / C), gy = Math.floor(ty / C);
-      if (!G.free(gx, gy)) {   // tapped on something solid: the nearest open cell to it
+    // People standing about count as in the way (all but `skip`, the one being walked up to).
+    findPath(fx, fy, tx, ty, skip = null) {
+      const G0 = this.walkGrid(), C = G0.C, key = (x, y) => y * G0.cols + x;
+      const people = new Set();
+      for (const n of this.npcs) {
+        if (n === skip || !n.spr.visible) continue;
+        for (let y = Math.floor((n.spr.y - 7) / C); y <= Math.floor((n.spr.y + 1) / C); y++)
+          for (let x = Math.floor((n.spr.x - 6) / C); x <= Math.floor((n.spr.x + 6) / C); x++) people.add(key(x, y));
+      }
+      const G = { ...G0, free: (x, y) => G0.free(x, y) && !people.has(key(x, y)) };
+      const near = (x, y) => {   // the nearest open cell to one that isn't
+        if (G.free(x, y)) return [x, y];
         let best = null;
         for (let r = 1; r < 6 && !best; r++) for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++)
-          if (G.free(gx + dx, gy + dy) && (!best || Math.hypot(dx, dy) < best[2])) best = [gx + dx, gy + dy, Math.hypot(dx, dy)];
-        if (!best) return null;
-        [gx, gy] = best;
-      }
+          if (G.free(x + dx, y + dy) && (!best || Math.hypot(dx, dy) < best[2])) best = [x + dx, y + dy, Math.hypot(dx, dy)];
+        return best && [best[0], best[1]];
+      };
+      // from where he stands (squeezed against a wall or someone, the nearest open cell), to the tap
+      const s0 = near(Math.floor(fx / C), Math.floor(fy / C)), g0 = near(Math.floor(tx / C), Math.floor(ty / C));
+      if (!s0 || !g0) return null;
+      let [sx, sy] = s0, [gx, gy] = g0;
       const open = [[0, sx, sy]], g = new Map([[key(sx, sy), 0]]), from = new Map(), h = (x, y) => Math.hypot(x - gx, y - gy);
       let n = 0;
       while (open.length && n++ < 20000) {
@@ -716,34 +729,59 @@ function worldScenes() {
       pts.push(cells[cells.length - 1]);
       return pts.slice(1).map(([x, y]) => ({ x: x * C + C / 2, y: y * C + C / 2 }));
     }
-    tapAt(x, y) {
-      if (this.ui.busy()) return this.act();   // tap on through dialogue
-      if (this.seated) return;                  // at the go table: its own panel has the buttons
-      if (this.leaving || this.cine) return;
-      // a person or a story spot near the tap: walk up to them, then talk / look
-      const P = this.player;
-      const who = this.npcs.filter(n => n.spr.visible && Math.abs(n.spr.x - x) < 12 && y > n.spr.y - n.spr.height - 4 && y < n.spr.y + 6)
+    // What's under a point of the world: someone (their figure, not the ground beside them),
+    // a story spot, or a building's door; null for open ground.
+    pick(x, y) {
+      const who = this.npcs.filter(n => n.spr.visible && Math.abs(n.spr.x - x) < 9 && y > n.spr.y - n.spr.height && y < n.spr.y + 3)
         .sort((a, b) => Math.hypot(a.spr.x - x, a.spr.y - 8 - y) - Math.hypot(b.spr.x - x, b.spr.y - 8 - y))[0];
-      const spot = !who && Object.entries(this.spots).find(([, s]) => Math.hypot(s.x - x, s.y - y) < 18);
-      let tx = x, ty = y + 4, then = null, aim = null;
-      if (who) {
-        const sides = [[0, 14, "up"], [0, -12, "down"], [-14, 2, "right"], [14, 2, "left"]].map(([dx, dy, f]) => ({ x: who.spr.x + dx, y: who.spr.y + dy, f }));
-        const G = this.walkGrid(), ok = sides.filter(s => G.free(Math.floor(s.x / G.C), Math.floor(s.y / G.C)));
-        const side = (ok.length ? ok : sides).sort((a, b) => Math.hypot(a.x - P.x, a.y - P.y) - Math.hypot(b.x - P.x, b.y - P.y))[0];
-        tx = side.x; ty = side.y; then = side.f; aim = { kind: "npc", n: who };
-      } else if (spot) { tx = spot[1].x; ty = spot[1].y + 12; then = "up"; aim = { kind: "spot", k: spot[0] }; }
-      // a building (or the ground at its door): walk to the door, then on in through it
-      const door = !who && !spot && this.exits.filter(e => e.side === "N" && e.rect.width < 16 &&
+      if (who) return { kind: "npc", n: who };
+      const spot = Object.entries(this.spots).find(([, s]) => Math.hypot(s.x - x, s.y - y) < 18);
+      if (spot) return { kind: "spot", k: spot[0], s: spot[1] };
+      const door = this.exits.filter(e => e.side === "N" && e.rect.width < 16 &&
           Math.abs(x - e.rect.centerX) < 26 && y > e.rect.centerY - 56 && y < e.rect.centerY + 14)
         .sort((a, b) => Math.hypot(a.rect.centerX - x, a.rect.centerY - y) - Math.hypot(b.rect.centerX - x, b.rect.centerY - y))[0];
-      if (door) { tx = door.rect.centerX; ty = door.rect.bottom + 10; }
-      const path = this.findPath(P.x, P.y - 3, tx, ty - 3);
-      if (!path) return;
+      if (door && this.placeOpen(door.to)) return { kind: "door", e: door };
+      return null;
+    }
+    canMove() { return !this.ui.busy() && !this.seated && !this.leaving && !this.cine; }
+    tapAt(x, y) {
+      if (this.ui.busy()) return this.act();   // tap on through dialogue
+      if (!this.canMove()) return;              // (at the go table, its own panel has the buttons)
+      const P = this.player, t = this.pick(x, y);
+      let tx = x, ty = y + 4, then = null, aim = null, door = null;
+      if (t && t.kind === "npc") {   // walk up to them, face them, talk
+        const who = t.n, sides = [[0, 14, "up"], [0, -12, "down"], [-14, 2, "right"], [14, 2, "left"]].map(([dx, dy, f]) => ({ x: who.spr.x + dx, y: who.spr.y + dy, f }));
+        const G = this.walkGrid(), ok = sides.filter(s => G.free(Math.floor(s.x / G.C), Math.floor(s.y / G.C)));
+        const side = (ok.length ? ok : sides).sort((a, b) => Math.hypot(a.x - P.x, a.y - P.y) - Math.hypot(b.x - P.x, b.y - P.y))[0];
+        tx = side.x; ty = side.y; then = side.f; aim = t;
+      } else if (t && t.kind === "spot") { tx = t.s.x; ty = t.s.y + 12; then = "up"; aim = { kind: "spot", k: t.k }; }
+      else if (t && t.kind === "door") { door = t.e; tx = door.rect.centerX; ty = door.rect.bottom + 10; }   // then on in
+      this.walkTo(tx, ty, { then, aim, door });
+    }
+    // Head for a point by the walk grid; ring marks where.
+    walkTo(tx, ty, { then = null, aim = null, door = null, ring = true } = {}) {
+      const P = this.player, path = this.findPath(P.x, P.y - 3, tx, ty - 3, aim && aim.kind === "npc" ? aim.n : null);
+      if (!path) return false;
       if (door) path.push({ x: door.rect.centerX, y: door.rect.centerY - 2 });
-      this.walk = { path, then, aim, last: { x: P.x, y: P.y }, stuck: 0 };
-      // a little ring where you're headed
-      const ring = this.add.circle(tx, ty, 5).setStrokeStyle(1, 0xfff3c4, .9).setDepth(-997);
-      this.tweens.add({ targets: ring, scale: 1.8, alpha: 0, duration: 450, onComplete: () => ring.destroy() });
+      this.walk = { path, then, aim, door: !!door, last: { x: P.x, y: P.y }, stuck: 0, retries: 0 };
+      if (ring) {
+        const r = this.add.circle(tx, ty, 5).setStrokeStyle(1, 0xfff3c4, .9).setDepth(-997);
+        this.tweens.add({ targets: r, scale: 1.8, alpha: 0, duration: 450, onComplete: () => r.destroy() });
+      }
+      return true;
+    }
+    // Pointer held down and dragged: keep steering toward the finger (open ground only).
+    steer(p) {
+      if (!p.isDown || !this.canMove() || p.getDuration() < 220) return;
+      const now = this.time.now;
+      if (now - (this.steerAt || 0) < 160) return;
+      this.steerAt = now;
+      this.walkTo(p.worldX, p.worldY + 4, { ring: false });
+    }
+    // Over something you can tap: the hand cursor (a mouse; touch has none).
+    hover(p) {
+      const c = this.game.canvas, t = this.canMove() && this.pick(p.worldX, p.worldY);
+      c.style.cursor = t || this.ui.busy() ? "pointer" : "";
     }
     // The direction to the next point on the walk; at the end, turn to face and talk if a tap asked for it.
     followWalk(dt) {
@@ -758,7 +796,14 @@ function worldScenes() {
       // blocked by someone walking by: give up after a moment rather than push forever
       W.stuck = Math.hypot(P.x - W.last.x, P.y - W.last.y) < .5 ? W.stuck + dt : 0;
       W.last = { x: P.x, y: P.y };
-      if (W.stuck > 450) { this.arrive(W); return [0, 0]; }
+      if (W.stuck > 350) {
+        // someone stepped into the way: go round them, twice at most, then stop where he is
+        const end = W.path[W.path.length - 1], again = W.retries < 2 && this.findPath(P.x, P.y - 3, end.x, end.y, W.aim && W.aim.kind === "npc" ? W.aim.n : null);
+        if (!again) { this.arrive(W); return [0, 0]; }
+        if (W.door) again.push(end);   // the step in through the door is off the grid
+        W.path = again; W.retries++; W.stuck = 0;
+        return this.followWalk(dt);
+      }
       return [dx / d, dy / d];
     }
     // End of a tap-walk: if it was headed for someone (or a spot) and got close enough

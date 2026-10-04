@@ -1018,7 +1018,8 @@ async function viewTK(worldN) {
     root.querySelector(".tk-head-btns").append(guideBtn);
     // The buttons live in a menu inside the game window, with the controls.
     const panel = h("div", { class: "tk-menu-panel", hidden: "" }, [root.querySelector(".tk-head-btns"),
-      h("div", { class: "tk-menu-keys" }, TK_TOUCH ? "点击地面移动 Tap to move · 点击人物对话 Tap to talk" : "WASD / 方向键 移动 move · Enter 对话 talk · 点击也可 or click")]);
+      h("div", { class: "tk-menu-keys" }, TK_TOUCH ? "点击地面移动 Tap to move · 点击人物对话 Tap to talk · 按住拖动 Hold and drag to steer"
+        : "点击地面移动 Click to move · 点击人物对话 Click someone to talk · 按住拖动 Hold and drag to steer · 键盘也可 WASD / Enter work too")]);
     const toggle = h("button", { class: "tk-menu-btn", type: "button", "aria-expanded": "false" }, "菜单 Menu ▾");
     toggle.onclick = () => {
       const open = panel.hidden;
@@ -1060,8 +1061,8 @@ async function viewTK(worldN) {
     if (!TK.seen(`${w.n}:opening`)) { await run(w.opening); TK.markSeen(`${w.n}:opening`); if (nav !== routeSeq) return; }
     const ret = TKView.takeReturn();
     info.append(h("div", { class: "tk-info-text" }, [h("b", {}, `${w.zh} ${w.name}`),
-      h("div", { class: "meta" }, TK_TOUCH ? "点击地面移动，点击人物对话；头上有 ! 的人会给你出题。Tap where to go, tap someone to talk. People marked ! will set you a problem."
-        : "用方向键移动，按回车对话（也可点击）；头上有 ! 的人会给你出题。Move with WASD or the arrow keys, Enter to talk, or click. People marked ! will set you a problem.")]));
+      h("div", { class: "meta" }, TK_TOUCH ? "点击地面走过去，点击人物对话，点击房屋进门；头上有 ! 的人会给你出题。Tap where to go, tap someone to talk, tap a house to go in. People marked ! will set you a problem."
+        : "点击地面走过去，点击人物对话，点击房屋进门；头上有 ! 的人会给你出题。Click (or tap) where to go, click someone to talk, click a house to go in. People marked ! will set you a problem.")]));
     try {
       await WorldView.mount({
         w, host, ret: ret && ret.world === w.n ? ret : null,
