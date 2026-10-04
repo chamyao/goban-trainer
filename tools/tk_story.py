@@ -95,11 +95,11 @@ WORLDS = [
             "notice": {"title": "The Notice at Zhuo", "kind": "main", "steps": [
                 ["n", "Zhuo County. A crowd gathers at a notice on the wall: the governor is raising volunteers against the Yellow Turbans."],
                 ["n", "Liu Bei, twenty-eight, descends from Prince Jing of Zhongshan — yet he sells sandals and weaves mats for a living. His ears reach his shoulders; his arms hang past his knees."],
-                ["problem"],  # the board comes up here; the rest plays once it is solved
                 ["n", "He reads the notice, and sighs."],
                 ["spawn", "zf", "zhangfei", "n1", 30, 4],
                 ["move", "zf", "n1", 12, 2],
                 ["say", "zhangfei", "A real man should serve his country! What are you sighing for?"],
+                ["problem"],  # the board comes up here; the rest plays once it is solved
                 ["say", "liubei", "I am of the Han imperial house. I long to crush these rebels and bring peace — but I lack the strength."],
                 ["say", "zhangfei", "I've got money and land. Let's raise men together! But first — wine."],
                 ["n", "At the village inn, a giant pushing a cart strides in: nine feet tall, a beard two feet long, a face like a ripe red date."],
@@ -174,8 +174,7 @@ WORLDS = [
                 ["spawn", "lz", "luzhi", "n5", 22, -6],
                 ["say", "luzhi", "Xuande! I had Zhang Jiao surrounded. But the court's envoy demanded a bribe, and I refused him. Now I go to the capital in chains, and Dong Zhuo takes my army."],
                 ["say", "zhangfei", "I'll cut down these guards and set him free!"],
-                ["say", "luzhi", "Enough. Xuande, read this one with me, as you used to."],
-                ["problem", "luzhi"],  # the board comes up here; the rest plays once it is solved
+                ["problem"],  # the board comes up here; the rest plays once it is solved
                 ["say", "liubei", "The court will judge him fairly. Don't be rash, Yide!"],
                 ["wait", 1200],
                 ["move", "lz", "n5", 70, -10], ["remove", "lz"],
@@ -342,8 +341,8 @@ WORLDS = [
             ["n", "Liu Bei, a gentle man at heart, orders Zhang Fei to stop."],
             ["say", "guanyu", "Brother, you won great merit and were given only a sheriff's post, and now an inspector insults you. A phoenix does not roost among thorns. Let us kill him, give up the office, and make greater plans elsewhere."],
             ["wait", 1200],
-            ["say", "liubei", "For what you have done to the people you deserve to die. I spare your life. I return my seal of office, and I am gone."],
             ["n", "He hangs the seal around the inspector's neck."],
+            ["say", "liubei", "For what you have done to the people you deserve to die. I spare your life. I return my seal of office, and I am gone."],
             ["remove", "ins"],
             ["scroll", "Chapter 2", [
                 "Emperor Ling died. In the capital, his brother-in-law, General He Jin, resolved to destroy the eunuchs at last — and sent for the warlords of the provinces to march on Luoyang and force the Empress's hand.",

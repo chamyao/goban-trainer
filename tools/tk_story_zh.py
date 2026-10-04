@@ -170,7 +170,6 @@ ZH = {
     "Zhuo County. A crowd gathers at a notice on the wall: the governor is raising volunteers against the Yellow Turbans.": "涿县城中，众人围看墙上榜文：幽州太守刘焉出榜招募义兵，共破黄巾。",
     "Under an old tree by the road, two white-haired men sit over a weiqi board, as if no army were coming.": "路旁老树下，两位白发老人对坐弈棋，仿佛大军压境与他们无关。",
     "Read this first.": "先看这一局。",
-    "Enough. Xuande, read this one with me, as you used to.": "且住。玄德，像从前一样，陪为师看完这一局。",
     "To catch the bandits, first catch their king.": "擒贼先擒王。",
     "That night, at the edge of the camp, the two old men are at their board again.": "当夜营边，两位老人又在对弈。",
     "Another.": "再看这一局。",
