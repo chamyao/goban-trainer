@@ -39,6 +39,8 @@ New cast needed: `oldman_n` (Northern Dipper, in dark robes) and `oldman_s` (Sou
 
 ## Main scenes
 
+**Mulberry-tree opening: approved by the user.** It still needs a quest at the start village (map-factory) and stand-ins for the child and the uncle: the folk kind `child` for the young Liu Bei, and the existing `uncle` for Liu Yuanqi, unless new sprites `liubei_child` and `liuyuanqi` are drawn.
+
 ```python
 "tree": {"title": "The Mulberry Tree at Louzang", "kind": "main", "setting": "outdoor", "steps": [
     # attach to the `start` node (Lousang Village); plot.py only makes quests of nodes that have a scene

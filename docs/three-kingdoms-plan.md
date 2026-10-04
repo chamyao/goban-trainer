@@ -211,6 +211,7 @@ scenes written for the node map carry over.
 1. Read the world's chapters in full.
 2. List its locations, and for each main story point an objective, a place
    and the encounters that clear it; turn side episodes into side quests.
+2b. **Check the seams.** Each scene must start where the last one ended: who the party is with, where they are, why they came. If the novel has a meeting, a summons or a journey between two scenes (World 1: Liu Yan adopting Liu Bei, the plea from Qingzhou, Lu Zhi's camp, arriving at Zhu Jun's camp), put it in as a line or two of narration at the start of the next scene. Check by reading each scene's first lines against the previous scene's last.
 3. Write its scenes, scrolls and boss in `tools/tk_story.py`, and the Chinese
    for every line in `tools/tk_story_zh.py` (cast any new characters).
 4. Lay out its locations (a builder script drafts them; fine-tune by hand)

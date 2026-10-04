@@ -56,7 +56,6 @@ ZH = {
     "Their road forks here. The long road passes through the rebels' heartland; the mountain trail is shorter, and steeper.": "前路在此分岔：大路穿过黄巾腹地；山路更近，却也更险。",
     # ---- Daxing Mountain ----
     "First Blood at Daxing Mountain": "大兴山初战",
-    "The Yellow Turban general Cheng Yuanzhi marches on Zhuo with fifty thousand men. Liu Bei meets him with five hundred.": "黄巾贼将程远志率五万人进犯涿郡，刘备领兵五百迎战。",
     "Traitors to the realm! Why not surrender now?": "反国逆贼，何不早降！",
     "Deng Mao — bring me his head!": "邓茂，去取他首级！",
     "Zhang Fei's spear takes Deng Mao through the heart.": "张飞挺丈八蛇矛，一枪刺中邓茂心窝。",
@@ -71,13 +70,10 @@ ZH = {
         "金声大作，关张两军左右齐出，刘备回军复杀。三路夹攻，贼众大溃，青州之围遂解。",
     # ---- the cage cart ----
     "The Cage Cart": "槛车",
-    "Liu Bei sets out to help his old teacher Lu Zhi, who has Zhang Jiao himself trapped at Guangzong. On the road they meet soldiers guarding a prison cart.":
-        "刘备前往广宗，助恩师卢植围攻张角。半路上，却见一队军马押着一辆槛车。",
     "Xuande! I had Zhang Jiao surrounded. But the court's envoy demanded a bribe, and I refused him. Now I go to the capital in chains, and Dong Zhuo takes my army.":
         "玄德！我围张角，眼看就要破贼。朝廷派来的使者向我索贿，我不肯给。如今我被押解进京，兵马交给了董卓。",
     "I'll cut down these guards and set him free!": "我去杀了这些押送的军士，救出卢中郎！",
     "The court will judge him fairly. Don't be rash, Yide!": "朝廷自有公论，翼德不可造次！",
-    "The cart rolls away toward Luoyang. Again the road divides.": "槛车往洛阳去了。前路又一次分岔。",
     # ---- Dong Zhuo ----
     "“What Office Do You Hold?”": "现居何职",
     "Heading home, the brothers hear a roar behind the hills: Han troops in rout, and behind them banners reading GENERAL OF HEAVEN.": "三人北归途中，忽闻山后喊声大震：汉军大败，后面黄巾漫山遍野，旗上大书“天公将军”。",
@@ -166,6 +162,19 @@ ZH = {
     "“A mistake,” warned his secretary Chen Lin. “You hand the spear to others, point first.”": "主簿陈琳劝道：“不可！这是倒持干戈，授人以柄。”",
     "A man beside them clapped and laughed. “This is as easy as turning over a hand. Why so much talk?” It was Cao Cao.": "旁边一人鼓掌大笑：“此事易如反掌，何必多议！”此人正是曹操。",
     "What did Cao Cao propose? Hear the next chapter.": "不知曹操说出甚话来，且听下文分解。",
+    # ---- World 1: transitions (ch. 1-2) ----
+    "Liu Bei and his five hundred report to the governor, Liu Yan. Learning that Liu Bei is of the same imperial house, Liu Yan is delighted and takes him as a nephew.": "刘备引兵五百来见太守刘焉。玄德说起宗派，刘焉大喜，遂认玄德为侄。",
+    "Not many days later, the Yellow Turban general Cheng Yuanzhi marches on Zhuo with fifty thousand men. Liu Bei meets him with five hundred.": "不数日，黄巾贼将程远志统兵五万来犯涿郡。刘焉令邹靖引玄德等三人，统兵五百，前去破敌。",
+    "A letter comes from Gong Jing, governor of Qingzhou: the Yellow Turbans have his city surrounded, and it is about to fall. He begs for help.": "接得青州太守龚景牒文，言黄巾贼围城将陷，乞赐救援。",
+    "I will go and rescue it.": "备愿往救之。",
+    "Qingzhou is relieved. Liu Bei hears that his old teacher Lu Zhi is fighting Zhang Jiao himself at Guangzong, and goes to help him.": "青州之围已解。玄德闻中郎将卢植与贼首张角战于广宗，备昔曾师事卢植，欲往助之。",
+    "Lu Zhi is glad to see him, and keeps him at his tent. Then he sends him with a thousand more men to Yingchuan, to learn how Huangfu Song and Zhu Jun are doing against Zhang Jiao's brothers.": "卢植大喜，留在帐前听调，又添一千官军，令玄德往颍川打探皇甫嵩、朱儁与张角二弟交战的消息。",
+    "By the time Liu Bei arrives, the rebels have been routed by fire. Huangfu Song tells him the brothers will run to Zhang Jiao at Guangzong, and he turns back through the night.": "玄德赶到颍川，贼已败散。皇甫嵩曰：“张梁、张宝势穷力乏，必投广宗去依张角。玄德可即星夜往助。”玄德领命，遂引兵复回。",
+    "Halfway there, they meet soldiers guarding a prison cart.": "到得半路，只见一簇军马，护送一辆槛车。",
+    "The cart rolls away toward Luoyang.": "槛车往洛阳去了。",
+    "Lu Zhi is under arrest, and another man will lead his army. We have no one left to turn to here. Let us go back to Zhuo.": "卢中郎已被逮，别人领兵，我等去无所依，不如且回涿郡。",
+    "Liu Bei agrees, and they march north. Again the road divides.": "玄德从其言，遂引军北行。前路又一次分岔。",
+    "Zhu Jun receives them warmly. The two armies join, and Zhu Jun makes Liu Bei his vanguard against Zhang Bao.": "朱儁待之甚厚，合兵一处，进讨张宝，令玄德为其先锋，与贼对敌。",
     # ---- World 1 plot pass (from docs/world1-script-draft.md) ----
     "Zhuo County. A crowd gathers at a notice on the wall: the governor is raising volunteers against the Yellow Turbans.": "涿县城中，众人围看墙上榜文：幽州太守刘焉出榜招募义兵，共破黄巾。",
     "Under an old tree by the road, two white-haired men sit over a weiqi board, as if no army were coming.": "路旁老树下，两位白发老人对坐弈棋，仿佛大军压境与他们无关。",
