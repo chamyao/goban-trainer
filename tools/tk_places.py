@@ -192,6 +192,8 @@ PLACES = {
                 {"kind": "building.hall", "id": "hostel", "label": "The posting station"},   # a hall: the inspector sits high, facing south
                 {"kind": "building.hall", "id": "office", "node": "1-ax2", "label": "The Anxi county office"},   # the hitching post before it
             ],
+            "objectives": {"1-ax1": "Meet the inspector at the posting station.",
+                           "1-ax2": "Go to the county office, where the old villagers are gathering."},
         },
         "Yangcheng": {
             "archetype": "city",
