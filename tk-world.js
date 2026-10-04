@@ -31,7 +31,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=4`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=5`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
@@ -66,22 +66,23 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=4`);
-      this.load.json("kit", `assets/tk/kits/${kit}.json?v=6`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=3`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=5`);
+      this.load.json("kit", `assets/tk/kits/${kit}.json?v=7`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=5`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
       for (const [s, path] of Object.entries(kit.sheets)) this.load.image(`kit-${s}`, path);
       const [fw, fh] = kit.folk.frame;
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=6`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=7`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
       this.load.once("complete", () => {
         for (const [kind, list] of Object.entries(kit.kinds)) list.forEach(([s, x, y, wd, ht], i) => this.textures.get(`kit-${s}`).add(`${kind}#${i}`, 0, x, y, wd, ht));
         if (!this.textures.exists("@bang")) this.textures.addCanvas("@bang", TownArt.bang());
+        if (!this.textures.exists("@arrow")) this.textures.addCanvas("@arrow", TownArt.arrow());
         const st = WorldState.load(w.n, region);
         this.scene.start("world", { place: st.place || region.start, from: null, resume: true });
       });
@@ -150,6 +151,8 @@ function worldScenes() {
       this.keys = this.input.keyboard.addKeys("W,A,S,D,UP,DOWN,LEFT,RIGHT,E,ENTER");
       for (const k of ["ENTER", "E"]) this.keys[k].on("down", () => this.act());
       this.ui = TownUI.mount(this, opts.host);
+      // the way to the next objective: over its spot when on screen, else at the edge pointing there
+      this.arrow = this.add.image(0, 0, "@arrow").setScrollFactor(0).setDepth(1e6 - 1).setVisible(false);
       this.setGoal();
       if (!pos) this.ui.place(this.place.name, this.place.zh);
       this.blocked = 0;
@@ -196,10 +199,12 @@ function worldScenes() {
       }
       spr.setOrigin(.5, 1).setDepth(o.y).setImmovable(true);
       spr.body.setSize(10, 6).setOffset((spr.width - 10) / 2, spr.height - 6);
-      const n = { id: o.name, spr, who, folk, sprite: p.sprite, say: J(p.say), wander: p.wander, home: { x: o.x, y: o.y }, t: 0, dir: face, until: p.until };
+      // townsfolk drawn like the heroes speak with their own portrait and name
+      const own = p.drawn ? L => L.map(l => l[0] === "n" ? ["say", who, ...l.slice(1)] : l) : L => L;
+      const n = { id: o.name, spr, who, folk, sprite: p.sprite, say: own(J(p.say)), wander: p.wander, home: { x: o.x, y: o.y }, t: 0, dir: face, until: p.until };
       if (p.challenge) {
         n.challenge = `${this.w.n}-${this.placeId}-c-${p.challenge}`;
-        n.intro = J(p.intro); n.win = J(p.win); n.done = J(p.done);
+        n.intro = own(J(p.intro)); n.win = own(J(p.win)); n.done = own(J(p.done));
         n.mark = this.add.image(o.x, o.y - spr.height - 2, "@bang").setOrigin(.5, 1).setDepth(9999).setVisible(!TK.cleared(n.challenge));
       }
       this.physics.add.collider(spr, this.solids);
@@ -267,6 +272,7 @@ function worldScenes() {
     placeZh(id) { return this.region.places.find(p => p.id === id).zh || this.placeName(id); }
 
     setGoal() {
+      this.goalAt = this.goalPoint();
       const q = this.nextMain();
       if (!q) return this.ui.goal("The world is complete. The road goes on…", "这一卷已经完成。路还在前方……");
       if (this.available(q)) return q.place === this.placeId ? this.ui.goal(q.objective, q.objective_zh)
@@ -275,6 +281,46 @@ function worldScenes() {
       const ways = [...new Set(lead.map(p => p.role === "short" ? `the shortcut at ${this.placeName(p.place)}` : this.placeName(p.place)))];
       const waysZh = [...new Set(lead.map(p => p.role === "short" ? `${this.placeZh(p.place)}的捷径` : this.placeZh(p.place)))];
       this.ui.goal(`On to ${this.placeName(q.place)}, by way of ${ways.join(" or ")}.`, `前往${this.placeZh(q.place)}，可经${waysZh.join("或")}。`);
+    }
+
+    // Where the next objective is from here: its story spot on this map, or
+    // the exit that starts the shortest way to its place (rooms included).
+    goalPoint() {
+      const q = this.nextMain();
+      if (!q) return null;
+      const quests = this.available(q) ? [q] : this.leadsTo(q);
+      const here = quests.find(x => x.place === this.placeId);
+      if (here) { const s = Object.values(this.spots).find(s => s.node === here.node); return s ? { x: s.x, y: s.y - 4 } : null; }
+      const goals = new Set(quests.map(x => x.place)), near = {};
+      for (const p of this.region.places) for (const l of p.links || []) { (near[p.id] ||= new Set()).add(l); (near[l] ||= new Set()).add(p.id); }
+      const prev = { [this.placeId]: null }, queue = [this.placeId];
+      while (queue.length) {
+        const id = queue.shift();
+        if (goals.has(id)) {
+          let hop = id;
+          while (prev[hop] !== this.placeId) hop = prev[hop];
+          const e = this.exits.find(e => e.to === hop);
+          return e ? { x: e.rect.centerX, y: e.rect.centerY } : null;
+        }
+        for (const n of near[id] || []) if (!(n in prev)) { prev[n] = id; queue.push(n); }
+      }
+      return null;
+    }
+
+    goalArrow(time) {
+      const a = this.arrow, t = this.goalAt;
+      if (!a) return;
+      const show = !!t && !this.ui.busy() && !this.leaving && !this.cine;
+      a.setVisible(show);
+      if (!show) return;
+      const cam = this.cameras.main, v = cam.worldView, W = this.scale.width, H = this.scale.height, m = 16;
+      const sx = (t.x - v.x) * cam.zoom, sy = (t.y - v.y) * cam.zoom, bob = Math.sin(time / 180) * 2;
+      if (sx > m && sx < W - m && sy > m + 18 && sy < H - m) a.setPosition(Math.round(sx), Math.round(sy - 26 + bob)).setAngle(90);   // over the spot
+      else {
+        const dx = sx - W / 2, dy = sy - H / 2, k = Math.min((W / 2 - m) / Math.abs(dx || 1e-6), (H / 2 - m) / Math.abs(dy || 1e-6));
+        a.setPosition(Math.round(W / 2 + dx * k + Math.cos(Math.atan2(dy, dx)) * bob), Math.round(H / 2 + dy * k + Math.sin(Math.atan2(dy, dx)) * bob))
+          .setAngle(Math.round(Math.atan2(dy, dx) * 4 / Math.PI) * 45);   // eight directions keep the pixels crisp
+      }
     }
 
     // Walk up to a story spot. A scene with a ["problem"] step builds up to
@@ -418,6 +464,7 @@ function worldScenes() {
     }
 
     update(time, dt) {
+      this.goalArrow(time);
       const P = this.player, K = this.keys;
       let vx = 0, vy = 0;
       if (!this.ui.busy() && !this.leaving) {

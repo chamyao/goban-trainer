@@ -133,5 +133,6 @@ FALLBACK = {
 # people: folk.* are townsfolk drawn by the kit; hero.<id> are story
 # characters drawn by the game itself (TKArt), so every kit shows them the same.
 FOLK = ["folk.villager", "folk.woman", "folk.elder", "folk.child", "folk.monk",
-        "folk.noble", "folk.soldier", "folk.rebel", "folk.hunter", "folk.official"]
+        "folk.noble", "folk.soldier", "folk.rebel", "folk.hunter", "folk.official",
+        "folk.lady", "folk.maiden", "folk.girl"]  # court ladies (high chignons), maidens (looped buns) and girls: drawn by the game in every kit
 FOLK_FALLBACK = "folk.villager"

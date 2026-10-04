@@ -84,7 +84,7 @@ def place_step(line, kind=None):
 
 
 def place_lines():
-    """Every line the places in tools/tk_places.py speak: id -> (Chinese text, voice)."""
+    """Every line the places in tools/tk_places.py speak: id -> (Chinese text, voice, English text)."""
     from tk_places import PLACES
     lines = {}
     for places in PLACES.values():
@@ -96,31 +96,32 @@ def place_lines():
                     said += [(l, p["kind"]) for l in ([v] if isinstance(v, str) else v or [])]
             for l, kind in said:
                 step, voice = place_step(l, kind)
-                lines[step[-1]] = (step[-2], voice)
+                lines[step[-1]] = (step[-2], voice, step[1] if step[0] == "n" else step[2])
     from tk_places import ROOMS   # people inside buildings
     for room in ROOMS.values():
         for p in room.get("people", []):
             for l in ([p["say"]] if isinstance(p.get("say"), str) else p.get("say", [])):
                 step, voice = place_step(l, p["kind"])
-                lines[step[-1]] = (step[-2], voice)
+                lines[step[-1]] = (step[-2], voice, step[1] if step[0] == "n" else step[2])
     return lines
 
 
 def all_lines(worlds):
-    """Every clip the campaign voices: id -> (Chinese text, voice)."""
+    """Every clip the campaign voices: id -> (Chinese text, voice, English text).
+    The English voice-over reuses the id (assets/tk/voice/en/<id>.mp3)."""
     lines = {}
     for w in worlds:
         for steps in [w["opening"], w["closing"], *(v["steps"] for v in w["scenes"].values())]:
             for s in steps:
                 if s[0] == "n":
-                    lines[s[3]] = (s[2], NARRATOR)
+                    lines[s[3]] = (s[2], NARRATOR, s[1])
                 elif s[0] == "say":
-                    lines[s[4]] = (s[3], voice_of(s[1]))
+                    lines[s[4]] = (s[3], voice_of(s[1]), s[2])
                 elif s[0] == "scroll":
-                    lines.update((k, (t, NARRATOR)) for k, t in zip(s[5], s[4]))
+                    lines.update((k, (t, NARRATOR, e)) for k, t, e in zip(s[5], s[4], s[2]))
         for n in w["nodes"]:
             if "boss" in n:
-                lines[n["boss"]["taunt_vid"]] = (n["boss"]["taunt_zh"], voice_of(n["boss"]["who"]))
+                lines[n["boss"]["taunt_vid"]] = (n["boss"]["taunt_zh"], voice_of(n["boss"]["who"]), n["boss"]["taunt"])
     lines.update(place_lines())
     return lines
 # Life and death only, for now: tesuji, capturing races, capture and endgame
@@ -232,14 +233,17 @@ def main():
                 assert n["scene"] in out["scenes"], n["scene"]
         worlds.append(out)
     have = {p.stem for p in VOICE_DIR.glob("*.mp3")} if VOICE_DIR.exists() else set()
+    have_en = {p.stem for p in (VOICE_DIR / "en").glob("*.mp3")} if (VOICE_DIR / "en").exists() else set()
     lines = all_lines(worlds)
     missing = [k for k in lines if k not in have]
     data = {"id": "tk", "title": "Romance of the Three Kingdoms", "native": "三国演义", "worlds": worlds,
-            "voices": sorted(k for k in lines if k in have)}
+            "voices": sorted(k for k in lines if k in have),
+            "voices_en": sorted(k for k in lines if k in have_en)}
     (ROOT / "data" / "tk.json").write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")))
     if VETTED:
         print(f"KataGo vetting: {len(unvetted)} pooled problems not vetted yet"
               + (" — run tools/vet_tsumego.mjs --pools, then this again" if unvetted else ", every pool is clean"))
+    print(f"English voice-over: {sum(k in have_en for k in lines)}/{len(lines)} lines")
     print(f"voice-over: {len(lines) - len(missing)}/{len(lines)} lines have audio"
           + (" — run tools/build_tk_voice.py, then this again" if missing else ""))
     for w in worlds:

@@ -212,6 +212,11 @@ ZH = {
     "Brother, you won great merit and were given only a sheriff's post, and now an inspector insults you. A phoenix does not roost among thorns. Let us kill him, give up the office, and make greater plans elsewhere.": "兄长建许多大功，仅得县尉，今反被督邮侮辱。吾思枳棘丛中，非栖鸾凤之所；不如杀督邮，弃官归乡，别图远大之计。",
     "For what you have done to the people you deserve to die. I spare your life. I return my seal of office, and I am gone.": "据汝害民，本当杀却；今姑饶汝命。吾缴还印绶，从此去矣。",
     "He hangs the seal around the inspector's neck.": "玄德取印绶，挂于督邮之颈。",
+    # ---- ladies and girls about town ----
+    "“Brother Xuande! When you're rich, will you buy me a hairpin with a flower on it?”": "“玄德哥哥！等你富贵了，给我买一支带花的簪子好不好？”",
+    "“They say the volunteers march next month. Half the girls in town will be weeping at the gate.”": "“听说义兵下月就要出征，城里一半的姑娘都要在城门口哭了。”",
+    "“A man nine feet tall, with a face as red as a ripe date, just walked into the inn. Who do you suppose he is?”": "“刚才有个身长九尺、面如重枣的大汉进了酒店，你说他是什么人？”",
+    "“More tea? The storyteller's tale of the Yellow Turbans is the talk of the county.”": "“再添些茶吧？说书先生讲的黄巾故事，全县都在传呢。”",
     # ---- World 1 places: townsfolk, challengers and story spots (tools/tk_places.py) ----
     "“Off to sell your sandals in town, Xuande? Mind the road.”": "“玄德，又进城卖草鞋？路上小心。”",
     "“That mulberry looks like a carriage canopy! Mother says someone from this house will ride under one.”": "“那棵桑树长得像车盖！娘说，这家将来要出贵人。”",
@@ -321,6 +326,7 @@ CAST = {
 # Townsfolk speak in a voice for their kind (tools/tk_places.py "kind").
 FOLK_VOICE = {
     "folk.villager": "zm_052", "folk.woman": "zf_022", "folk.elder": "zm_100", "folk.child": "zf_002",
+    "folk.lady": "zf_017", "folk.maiden": "zf_023", "folk.girl": "zf_002",
     "folk.monk": "zm_069", "folk.noble": "zm_057", "folk.soldier": "zm_045", "folk.rebel": "zm_016",
     "folk.hunter": "zm_030", "folk.official": "zm_064",
 }

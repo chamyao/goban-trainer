@@ -31,6 +31,13 @@ const TK_CHARS = {
   f_woman2: { name: "Woman", skin: "#efc59d", hair: "#3a2a2a", hat: "bun", hatC: "#3a2a2a", pin: "#e6c14a", robe: "#4a8a8a", trim: "#2a5a5a", beard: "none", eyes: "narrow" },
   f_elder: { name: "Elder", skin: "#e8c4a0", hair: "#d8d2c8", hat: "scholar", hatC: "#3a3236", robe: "#d6cfb8", trim: "#6a5a4a", beard: "long", beardC: "#e0dcd4", eyes: "kind" },
   f_elder2: { name: "Old man", skin: "#e2b089", hair: "#9a9a9a", hat: "topknot", hatC: "#9a9a9a", pin: "#6a6a6a", robe: "#8a7a5a", trim: "#4a3a2a", beard: "short", beardC: "#b0b0b0", eyes: "narrow" },
+  // court ladies and girls: high buns, painted faces
+  f_geisha: { name: "Lady", skin: "#fbefe8", hair: "#1a1418", hat: "lady", pin: "#c8283c", pin2: "#e6c14a", flower: "#f08ab0", robe: "#c8283c", trim: "#e6c14a", beard: "none", eyes: "kind", makeup: true },
+  f_geisha2: { name: "Lady", skin: "#fbefe8", hair: "#1a1418", hat: "lady", pin: "#2a2a3a", pin2: "#e6c14a", flower: "#ffffff", robe: "#6a3a8a", trim: "#f0d0e0", beard: "none", eyes: "kind", makeup: true },
+  f_geisha3: { name: "Lady", skin: "#f8eae0", hair: "#241a1e", hat: "lady", pin: "#2e7a5a", pin2: "#d8d8e0", flower: "#f6c84a", robe: "#2e6a7a", trim: "#f4ead2", beard: "none", eyes: "kind", makeup: true },
+  f_maiden: { name: "Maiden", skin: "#f8dcc4", hair: "#2a2024", hat: "twinloops", pin: "#e6c14a", robe: "#7ab0c8", trim: "#f4f0e8", beard: "none", eyes: "kind", makeup: true },
+  f_maiden2: { name: "Maiden", skin: "#f4d2b4", hair: "#3a2a26", hat: "twinloops", pin: "#c8392c", robe: "#e8a0b0", trim: "#8a3a4a", beard: "none", eyes: "kind", makeup: true },
+  f_girl: { name: "Girl", skin: "#f8dcc4", hair: "#2a2024", hat: "sidebuns", pin: "#c8392c", robe: "#f0b04a", trim: "#c8392c", beard: "none", eyes: "kind" },
   f_child: { name: "Child", skin: "#f5d2ae", hair: "#2a2024", hat: "topknot", hatC: "#2a2024", pin: "#c8392c", robe: "#d8a84a", trim: "#8a5a22", beard: "none", eyes: "round" },
   f_daoist: { name: "Daoist", skin: "#e8c4a0", hair: "#5a5256", hat: "scholar", hatC: "#2e3a5a", robe: "#8a8a9a", trim: "#2e3a5a", beard: "thin", eyes: "narrow" },
   f_noble: { name: "Gentleman", skin: "#f0cfac", hair: "#2a2024", hat: "guan", hatC: "#1e1e24", robe: "#6a3a7a", trim: "#d4ad42", beard: "goatee", eyes: "narrow" },
@@ -112,6 +119,7 @@ const TKArt = {
     else if (d.eyes === "kind") { s(3, ey, dark); s(6, ey, dark); }
     else if (d.eyes === "wild") { s(2, ey, dark); s(3, ey, dark); s(6, ey, dark); s(7, ey, dark); }
     else { s(3, ey, dark); s(6, ey, dark); }
+    if (d.makeup) { s(4, 7 + dy, "#c8283c"); s(5, 7 + dy, "#c8283c"); s(2, 6 + dy, "#f4a0aa"); s(7, 6 + dy, "#f4a0aa"); }  // red lips, blush
     // beard
     const bc = d.beardC || d.hair || dark;
     if (d.beard === "long") { R(3, 7 + dy, 4, 1, bc); R(3, 8 + dy, 4, 3, bc); R(4, 11 + dy, 2, 1, bc); }
@@ -123,6 +131,17 @@ const TKArt = {
     const H = d.hatC, hr = d.hair || dark;
     if (d.hat === "topknot") { R(1, 1 + dy, 8, 2, hr); R(4, -1 + dy, 2, 2, hr); R(3, 0 + dy, 4, 1, d.pin || "#e6c14a"); s(1, 3 + dy, hr); s(8, 3 + dy, hr); }
     if (d.hat === "bun") { R(1, 1 + dy, 8, 2, hr); R(3, -2 + dy, 4, 3, hr); s(7, -1 + dy, d.pin || "#c8392c"); s(8, -2 + dy, d.pin || "#c8392c"); R(1, 3 + dy, 1, 3, hr); R(8, 3 + dy, 1, 3, hr); }  // a woman's hair, pinned up
+    else if (d.hat === "lady") {  // a court lady's high chignon: puffed wings, a comb, hairpins and a flower
+      R(1, 1 + dy, 8, 2, hr); R(0, 2 + dy, 1, 4, hr); R(9, 2 + dy, 1, 4, hr); R(1, 0 + dy, 8, 1, hr); R(2, -1 + dy, 6, 1, hr);
+      R(3, 0 + dy, 4, 1, d.pin || "#c8283c"); s(0, -1 + dy, d.pin2 || "#e6c14a"); s(9, -1 + dy, d.pin2 || "#e6c14a"); s(9, 1 + dy, d.flower || "#f08ab0"); s(8, 0 + dy, d.flower || "#f08ab0");
+    }
+    else if (d.hat === "twinloops") {  // two looped buns, a ribbon between
+      R(1, 1 + dy, 8, 2, hr); R(1, -1 + dy, 3, 1, hr); s(1, 0 + dy, hr); s(3, 0 + dy, hr); R(6, -1 + dy, 3, 1, hr); s(6, 0 + dy, hr); s(8, 0 + dy, hr);
+      s(4, 0 + dy, d.pin || "#e6c14a"); s(5, 0 + dy, d.pin || "#e6c14a"); R(1, 3 + dy, 1, 3, hr); R(8, 3 + dy, 1, 3, hr);
+    }
+    else if (d.hat === "sidebuns") {  // a girl's round buns, tied with ribbons
+      R(1, 1 + dy, 8, 2, hr); R(-1, 1 + dy, 2, 2, hr); R(9, 1 + dy, 2, 2, hr); s(0, 3 + dy, d.pin || "#c8392c"); s(9, 3 + dy, d.pin || "#c8392c"); R(2, 3 + dy, 6, 1, hr);
+    }
     else if (d.hat === "scarf") { R(1, 0 + dy, 8, 3, H); R(3, -1 + dy, 4, 1, H); R(0, 2 + dy, 1, 4, H); s(1, 3 + dy, hr); s(8, 3 + dy, hr); }
     else if (d.hat === "band") { R(1, 0 + dy, 8, 2, hr); s(1, -1 + dy, hr); s(4, -1 + dy, hr); s(7, -1 + dy, hr); R(1, 2 + dy, 8, 1, H); s(0, 3 + dy, hr); s(9, 3 + dy, hr); }
     else if (d.hat === "guan") { R(1, 1 + dy, 8, 2, H); R(2, -1 + dy, 6, 2, H); s(0, 2 + dy, H); s(9, 2 + dy, H); }
@@ -144,9 +163,9 @@ const TKArt = {
 
   // Dialogue portrait, 32x32.
   bust(d) {
-    const g = this.grid(34, 34), O = 1;
-    const s = (x, y, c) => this.set(g, x + O, y + O, c), R = (x, y, w, h, c) => this.rect(g, x + O, y + O, w, h, c);
-    const E = (cx, cy, rx, ry, c) => this.ellipse(g, cx + O, cy + O, rx, ry, c), Ln = (a, b, c2, e, col) => this.line(g, a + O, b + O, c2 + O, e + O, col);
+    const g = this.grid(34, 34), O = 1, Oy = d.hat === "lady" || d.hat === "twinloops" ? 5 : O;  // tall hair: the figure sits lower in the frame
+    const s = (x, y, c) => this.set(g, x + O, y + Oy, c), R = (x, y, w, h, c) => this.rect(g, x + O, y + Oy, w, h, c);
+    const E = (cx, cy, rx, ry, c) => this.ellipse(g, cx + O, cy + Oy, rx, ry, c), Ln = (a, b, c2, e, col) => this.line(g, a + O, b + Oy, c2 + O, e + Oy, col);
     const skinS = this.shade(d.skin, -.16), robeS = this.shade(d.robe, -.2), robeL = this.shade(d.robe, .15), dark = "#2a2228", hr = d.hair || dark, H = d.hatC;
     // shoulders, cross collar
     E(16, 33, 15, 8, d.robe); R(3, 27, 26, 5, d.robe); R(3, 30, 26, 2, robeS);
@@ -168,6 +187,7 @@ const TKArt = {
     else { R(11, ey, 2, 2, dark); R(19, ey, 2, 2, dark); R(10, ey - 3, 4, 1, hr); R(18, ey - 3, 4, 1, hr); }
     s(16, 17, skinS); s(15, 18, skinS);  // nose
     R(14, 20, 4, 1, this.shade(d.skin, -.4));  // mouth
+    if (d.makeup) { E(9.5, 18, 2, 1, "#f4a0aa"); E(22.5, 18, 2, 1, "#f4a0aa"); R(14, 20, 4, 1, "#c8283c"); R(15, 21, 2, 1, "#a81c30"); }  // blush, red lips
     // beard
     const bc = d.beardC || hr, bl = this.shade(bc, .25);
     if (d.beard === "long") { Ln(12, 19, 14, 18, bc); Ln(20, 19, 18, 18, bc); E(16, 26, 5, 8, bc); R(13, 21, 7, 4, bc); Ln(15, 23, 15, 32, bl); Ln(17, 24, 17, 31, bl); R(14, 20, 4, 1, this.shade(d.skin, -.4)); }
@@ -181,6 +201,28 @@ const TKArt = {
     // hair and hats
     if (d.hat === "topknot") { E(16, 7, 8.5, 4, hr); R(8, 7, 2, 6, hr); R(23, 7, 2, 6, hr); E(16, 2, 3, 2.5, hr); R(12, 3, 8, 1, d.pin || "#e6c14a"); }
     if (d.hat === "bun") { E(16, 7, 8.5, 4, hr); R(8, 7, 2, 9, hr); R(23, 7, 2, 9, hr); E(16, 1.5, 5, 3, hr); R(20, 0, 5, 1, d.pin || "#c8392c"); }
+    else if (d.hat === "lady") {  // a court lady's high chignon
+      const p2 = d.pin2 || "#e6c14a", fl = d.flower || "#f08ab0", hl = this.shade(hr, .35);
+      E(7, 12, 3, 5.5, hr); E(25, 12, 3, 5.5, hr);            // puffed wings over the ears
+      E(16, 7, 9.5, 4.5, hr); E(16, 2, 8, 3.5, hr); E(16, -1, 5, 2.5, hr);  // the swept-up mass and its knot
+      Ln(10, 3, 22, 3, hl); Ln(12, 0, 20, 0, hl);             // sheen
+      R(11, 4, 10, 2, d.pin || "#c8283c"); s(13, 4, p2); s(16, 4, p2); s(19, 4, p2);  // the lacquered comb
+      Ln(3, -1, 10, 3, p2); Ln(29, -1, 22, 3, p2); s(3, 0, fl); s(29, 0, fl); s(4, 1, fl); s(28, 1, fl);  // hairpins with dangles
+      E(24, 2, 2.2, 2.2, fl); s(24, 2, "#fff"); E(21.5, 0, 1.5, 1.5, this.shade(fl, -.15));  // a flower
+      R(9, 7, 14, 2, hr); R(8, 8, 2, 5, hr); R(23, 8, 2, 5, hr);
+    }
+    else if (d.hat === "twinloops") {  // two looped buns and a ribbon
+      E(16, 7, 8.5, 4, hr); R(8, 7, 2, 9, hr); R(23, 7, 2, 9, hr);
+      for (const cx of [9, 23]) for (let y = -2; y <= 5; y++) for (let x = cx - 5; x <= cx + 5; x++) {
+        const q = ((x - cx) / 4.5) ** 2 + ((y - 1.5) / 3.6) ** 2;
+        if (q <= 1 && q >= .3) s(x, y, hr);
+      }
+      R(14, 2, 4, 3, d.pin || "#e6c14a"); s(13, 5, d.pin || "#e6c14a"); s(18, 5, d.pin || "#e6c14a");
+    }
+    else if (d.hat === "sidebuns") {  // a girl's round buns with ribbons
+      E(16, 7, 8.5, 4, hr); E(6, 6, 3.6, 3.6, hr); E(26, 6, 3.6, 3.6, hr); s(5, 5, this.shade(hr, .35)); s(25, 5, this.shade(hr, .35));
+      R(3, 9, 5, 2, d.pin || "#c8392c"); R(24, 9, 5, 2, d.pin || "#c8392c"); R(9, 8, 14, 2, hr); R(8, 8, 2, 5, hr); R(23, 8, 2, 5, hr);
+    }
     else if (d.hat === "scarf") { E(16, 6, 9.5, 5, H); R(7, 6, 18, 4, H); R(6, 9, 2, 9, H); R(25, 9, 2, 6, H); Ln(9, 9, 23, 9, this.shade(H, -.25)); E(16, 2, 4, 2, H); }
     else if (d.hat === "band") { E(16, 7, 9, 4.5, hr); for (let x = 7; x <= 25; x += 3) Ln(x, 6, x - 1, 1, hr); R(7, 8, 18, 2, H); R(6, 9, 2, 8, hr); R(24, 9, 2, 8, hr); }
     else if (d.hat === "guan") { E(16, 7, 8.5, 3.5, hr); R(10, 0, 12, 7, H); R(11, 0, 10, 1, this.shade(H, .2)); R(6, 7, 20, 2, H); R(8, 8, 2, 4, hr); R(22, 8, 2, 4, hr); }
@@ -454,7 +496,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) this.data = await (await fetch("data/tk.json?v=9")).json();
+    if (!this.data) this.data = await (await fetch("data/tk.json?v=12")).json();
     return this.data;
   },
   ls(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } },
@@ -801,9 +843,11 @@ class TKMap {
 
 const TKVoice = {
   audio: null, queue: [],
-  get on() { try { return localStorage.getItem("tk-voice") !== "off"; } catch { return true; } },
-  set on(v) { try { localStorage.setItem("tk-voice", v ? "on" : "off"); } catch {} if (!v) this.stop(); },
-  has(vid) { return !!vid && TK.data && TK.data.voices.includes(vid); },
+  // "zh" (Chinese voice-over), "en" (English) or "off"; an older "on" means Chinese.
+  get lang() { let v; try { v = localStorage.getItem("tk-voice"); } catch {} return v === "off" || v === "en" ? v : "zh"; },
+  set lang(v) { try { localStorage.setItem("tk-voice", v); } catch {} if (v === "off") this.stop(); },
+  get on() { return this.lang !== "off"; },
+  has(vid) { return !!vid && !!TK.data && (this.lang === "en" ? TK.data.voices_en || [] : TK.data.voices).includes(vid); },
   // Plays clips one after another; resolves when the last ends or is stopped.
   play(vids) {
     this.stop();
@@ -813,7 +857,7 @@ const TKVoice = {
       const next = () => {
         const v = this.queue.shift();
         if (!v) { this.audio = null; res(); return; }
-        const a = new Audio(`assets/tk/voice/${v}.mp3?v=2`);  // bump when clips are re-rendered
+        const a = new Audio(`assets/tk/voice/${this.lang === "en" ? "en/" : ""}${v}.mp3?v=2`);  // bump when clips are re-rendered
         this.audio = a; a.onended = next; a.onerror = next; a.onpause = () => { if (this.audio === a && !a.ended) res(); };
         a.play().catch(next);
       };
@@ -929,11 +973,14 @@ async function viewTK(worldN) {
   crumbs.append(h("a", { href: "#/" }, "Library"), " / ", D.title);
   root.innerHTML = "";
   const levels = w.nodes.filter(x => !TK.isStart(x.key)), done = levels.filter(x => TK.cleared(x.key)).length;
-  const chron = h("button", { class: "tk-chron-btn", type: "button" }, "📜 史册 Chronicle");
-  const voiceBtn = h("button", { class: "tk-chron-btn", type: "button", "aria-pressed": String(TKVoice.on) });
-  const voiceLabel = () => { voiceBtn.textContent = TKVoice.on ? "🔊 配音 Voice on" : "🔇 静音 Voice off"; voiceBtn.setAttribute("aria-pressed", String(TKVoice.on)); };
+  const chron = h("button", { class: "tk-chron-btn", type: "button" }, "史册 Chronicle");
+  const voiceBtn = h("button", { class: "tk-chron-btn", type: "button", "aria-pressed": String(TKVoice.on), title: "配音：中文 → English → 关 Voice: Chinese → English → off" });
+  const voiceLabel = () => {
+    voiceBtn.textContent = { zh: "配音：中文 Chinese voice", en: "配音：英文 English voice", off: "静音 Voice off" }[TKVoice.lang];
+    voiceBtn.setAttribute("aria-pressed", String(TKVoice.on));
+  };
   voiceLabel();
-  voiceBtn.onclick = () => { TKVoice.on = !TKVoice.on; voiceLabel(); };
+  voiceBtn.onclick = () => { TKVoice.lang = { zh: "en", en: "off", off: "zh" }[TKVoice.lang]; voiceLabel(); };
   root.append(h("div", { class: "tk-head" }, [
     h("div", {}, [h("h2", {}, [h("span", { class: "zh" }, D.native), " ", D.title]),
       h("div", { class: "sub" }, `World ${w.n} · ${w.name} ${w.zh} · chapters ${w.chapters.join("–")} · ${w.grades} · ${done}/${levels.length} cleared`)]),
@@ -955,8 +1002,19 @@ async function viewTK(worldN) {
     // Art style: the same maps drawn with either free pack (tk-world.js WORLD_KITS).
     const kit = WorldView.kit(), kits = Object.keys(WORLD_KITS), next = kits[(kits.indexOf(kit) + 1) % kits.length];
     root.querySelector(".tk-head-btns").prepend(h("button", { class: "tk-chron-btn", type: "button", title: `Switch to ${WORLD_KITS[next].en}`,
-      onclick: () => { WorldView.setKit(next); viewTK(w.n); } }, `🎨 画风：${WORLD_KITS[kit].zh} ${WORLD_KITS[kit].en}`));
+      onclick: () => { WorldView.setKit(next); viewTK(w.n); } }, `画风：${WORLD_KITS[kit].zh} ${WORLD_KITS[kit].en}`));
     if (typeof WorldTravel !== "undefined") WorldTravel.addButtons(root.querySelector(".tk-head-btns"), w);   // map and start over (tk-travel.js)
+    // The buttons live in a menu inside the game window, with the controls.
+    const panel = h("div", { class: "tk-menu-panel", hidden: "" }, [root.querySelector(".tk-head-btns"),
+      h("div", { class: "tk-menu-keys" }, "WASD / 方向键 移动 move · Enter 对话 talk")]);
+    const toggle = h("button", { class: "tk-menu-btn", type: "button", "aria-expanded": "false" }, "菜单 Menu ▾");
+    toggle.onclick = () => {
+      const open = panel.hidden;
+      panel.hidden = !open; toggle.setAttribute("aria-expanded", String(open)); toggle.textContent = open ? "菜单 Menu ▴" : "菜单 Menu ▾";
+      host.focus();
+    };
+    panel.addEventListener("click", e => { if (e.target.closest("button")) setTimeout(() => host.focus(), 0); });   // keep the keyboard on the game
+    host.append(h("div", { class: "tk-menu" }, [toggle, panel]));
     // Scenes replayed outside the node map: words only, no walking or effects.
     const still = { w, actors: {}, leader: { x: 0, y: 0 }, party: [], pos: () => ({ x: 0, y: 0 }), actor: () => null, moveActor: async () => {}, addFx: () => 0 };
     const run = async steps => { TKStory.busy = true; try { await TKStory.play(still, steps); } finally { TKStory.busy = false; } };
@@ -1105,7 +1163,7 @@ function tkLevelBuild(host, worldN, key, { w, node, src, p, book }, { back, agai
     TKArt.get(node.boss.who, "bust"),
     h("div", {}, [h("b", {}, [TK_BOSS_ZH[node.boss.who] ? `${TK_BOSS_ZH[node.boss.who]} · ` : "", node.boss.title]),
       h("p", { class: "zh", lang: "zh-CN" }, node.boss.taunt_zh ? `“${node.boss.taunt_zh}”` : ""), h("p", {}, `“${node.boss.taunt}”`),
-      ...(TKVoice.has(node.boss.taunt_vid) ? [h("button", { class: "tk-say", type: "button", onclick: () => TKVoice.play(node.boss.taunt_vid) }, "🔊")] : [])]),
+      ...(TKVoice.has(node.boss.taunt_vid) ? [h("button", { class: "tk-say", type: "button", onclick: () => TKVoice.play(node.boss.taunt_vid) }, "播放 Play")] : [])]),
   ]) : null;
   if (node.boss) TKVoice.play(node.boss.taunt_vid);
   const aside = h("aside", {}, [

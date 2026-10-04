@@ -10,7 +10,7 @@
   20,
   12
  ],
- "seed": 0.11204121240338538,
+ "seed": 0.5349240499808023,
  "terrain": {
   "legend": {
    "#": "wood",
@@ -132,6 +132,15 @@
    "y": 7.9,
    "say": [
     "“Another pot, and another tale of the old days.”"
+   ]
+  },
+  {
+   "id": "in-3",
+   "kind": "folk.lady",
+   "x": 9.5,
+   "y": 5.9,
+   "say": [
+    "“More tea? The storyteller's tale of the Yellow Turbans is the talk of the county.”"
    ]
   }
  ],
