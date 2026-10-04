@@ -498,7 +498,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) this.data = await (await fetch("data/tk.json?v=14")).json();
+    if (!this.data) this.data = await (await fetch("data/tk.json?v=15")).json();
     return this.data;
   },
   ls(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } },
@@ -1007,8 +1007,11 @@ async function viewTK(worldN) {
       onclick: () => { WorldView.setKit(next); viewTK(w.n); } }, `画风：${WORLD_KITS[kit].zh} ${WORLD_KITS[kit].en}`));
     if (typeof WorldTravel !== "undefined") WorldTravel.addButtons(root.querySelector(".tk-head-btns"), w);   // map and start over (tk-travel.js)
     const guideBtn = h("button", { class: "tk-chron-btn", type: "button" });
-    const guideLabel = () => { guideBtn.textContent = WorldGuide.on ? "悟空指路 Wukong guide: on" : "悟空指路 Wukong guide: off"; guideBtn.setAttribute("aria-pressed", String(WorldGuide.on)); };
-    guideBtn.onclick = () => { WorldGuide.on = !WorldGuide.on; guideLabel(); };
+    const guideLabel = () => {
+      guideBtn.textContent = { stuck: "悟空指路：迷路时 Wukong guide: when stuck", always: "悟空指路：一直 Wukong guide: always", off: "悟空指路：关 Wukong guide: off" }[WorldGuide.mode];
+      guideBtn.setAttribute("aria-pressed", String(WorldGuide.on));
+    };
+    guideBtn.onclick = () => { WorldGuide.mode = { stuck: "always", always: "off", off: "stuck" }[WorldGuide.mode]; guideLabel(); };
     guideLabel();
     root.querySelector(".tk-head-btns").append(guideBtn);
     // The buttons live in a menu inside the game window, with the controls.

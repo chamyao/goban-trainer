@@ -5,6 +5,12 @@
      roads, gardens                       All The Tea In China (erhu, guzheng, flute)
      hills, mountains, camps              Imperial China (guzheng, erhu, taiko, strings)
      a battle being acted out             Dragon Dance (drums, guzheng)
+     a boss fight                         Taiko drums (taiko, bells, shouts)
+     a victory                            Imperial China (strings, taiko)
+
+   A cutscene can also call for music itself (["music", cue] in the story,
+   and boss scenes do it on their own): it sets scene.musicCue, which wins
+   while the scene plays. Cues: boss, battle, calm, victory, none.
 
    Pieces crossfade, the music dips while a line is voiced, and it fades out
    when you leave the campaign page. On/off is the Music button in the campaign
@@ -18,7 +24,10 @@ const TKMusic = {
     tea: { src: "assets/tk/music/all-the-tea-in-china.mp3", vol: .3 },
     imperial: { src: "assets/tk/music/imperial-china.mp3", vol: .26 },
     dragon: { src: "assets/tk/music/dragon-dance.mp3", vol: .3 },
+    taiko: { src: "assets/tk/music/taiko-drums.mp3", vol: .5 },
   },
+  CUES: { boss: "taiko", battle: "dragon", victory: "imperial" },   // "calm": the place's own piece; "none": silence
+  SFX: { gong: { src: "assets/tk/music/gong.mp3", vol: .8 } },
   BY_PLACE: { village: "lotus", town: "lotus", city: "lotus", interior: "lotus",
     road: "tea", garden: "tea", hills: "imperial", mountain: "imperial", camp: "imperial" },
   DUCK: .35,          // music level while a line is being voiced
@@ -42,8 +51,13 @@ const TKMusic = {
   pick() {
     const s = typeof WorldView !== "undefined" && WorldView.game && WorldView.game.scene.getScene("world");
     if (!s || !s.sys || !s.sys.isActive() || !s.region) return null;
-    if (s.cine && s.cine.cast && Object.values(s.cine.cast).some(c => c.group)) return "dragon";   // armies on stage
     const p = s.region.places.find(x => x.id === s.placeId);
+    if (s.cine && s.musicCue) {                                    // the scene asked for it
+      if (s.musicCue === "none") return null;
+      if (this.CUES[s.musicCue]) return this.CUES[s.musicCue];
+      return (p && this.BY_PLACE[p.archetype]) || "lotus";
+    }
+    if (s.cine && s.cine.cast && Object.values(s.cine.cast).some(c => c.group)) return "dragon";   // armies on stage
     return (p && this.BY_PLACE[p.archetype]) || "lotus";
   },
 
@@ -60,6 +74,15 @@ const TKMusic = {
       const a = this.el(want);
       if (a.paused) a.play().catch(() => {});
     }
+  },
+
+  // A one-off sound (the gong), when music is on.
+  sfx(name) {
+    const t = this.SFX[name];
+    if (!t || !this.on || !this.unlocked) return;
+    const a = new Audio(t.src);
+    a.volume = t.vol;
+    a.play().catch(() => {});
   },
 
   start() {

@@ -31,7 +31,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=9`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=10`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
@@ -58,8 +58,13 @@ const WorldData = {
 // [who, text] still work for maps compiled before that.
 // Wukong the guide on or off, remembered (the menu has the switch).
 const WorldGuide = {
-  get on() { try { return localStorage.getItem("tk-guide") !== "off"; } catch { return true; } },
-  set on(v) { try { localStorage.setItem("tk-guide", v ? "on" : "off"); } catch {} },
+  // "stuck": he comes only when you haven't made headway for a while (the default);
+  // "always"; or "off". Remembered.
+  get mode() { let v; try { v = localStorage.getItem("tk-guide"); } catch {} return v === "off" || v === "always" ? v : "stuck"; },
+  set mode(v) { try { localStorage.setItem("tk-guide", v); } catch {} },
+  get on() { return this.mode !== "off"; },
+  STUCK: 40000,   // ms without progress before he comes
+  prog: null,     // { key, best, idle }: kept across maps
   W: 60, H: 60,   // his canvas, in sprite pixels: Wukong (44x44) above a nimbus cloud
   cloud: null,
   // A golden-white nimbus with a curl at the back, drawn once.
@@ -123,16 +128,16 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=9`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=10`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=7`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=7`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=8`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
       for (const [s, path] of Object.entries(kit.sheets)) this.load.image(`kit-${s}`, path);
       const [fw, fh] = kit.folk.frame;
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=11`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=12`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -363,6 +368,7 @@ function worldScenes() {
 
     setGoal() {
       this.goalAt = this.goalPoint();
+      if (this.fairy) this.fairy.wp = null;
       const q = this.nextMain();
       if (!q) return this.ui.goal("The world is complete. The road goes on…", "这一卷已经完成。路还在前方……");
       if (this.available(q)) return q.place === this.placeId ? this.ui.goal(q.objective, q.objective_zh)
@@ -380,6 +386,7 @@ function worldScenes() {
       if (!q) return null;
       const quests = this.available(q) ? [q] : this.leadsTo(q);
       const here = quests.find(x => x.place === this.placeId);
+      this.goalHops = 0;
       if (here) { const s = Object.values(this.spots).find(s => s.node === here.node); return s ? { x: s.x, y: s.y - 4 } : null; }
       const goals = new Set(quests.map(x => x.place)), near = {};
       for (const p of this.region.places) for (const l of p.links || []) { (near[p.id] ||= new Set()).add(l); (near[l] ||= new Set()).add(p.id); }
@@ -388,6 +395,7 @@ function worldScenes() {
         const id = queue.shift();
         if (goals.has(id)) {
           let hop = id;
+          for (let n = id; n !== this.placeId; n = prev[n]) this.goalHops++;
           while (prev[hop] !== this.placeId) hop = prev[hop];
           const e = this.exits.find(e => e.to === hop);
           return e ? { x: e.rect.centerX, y: e.rect.centerY } : null;
@@ -397,30 +405,56 @@ function worldScenes() {
       return null;
     }
 
+    // Wukong leads the way like a guiding spirit: he flies on ahead toward the goal,
+    // waits there drifting in lazy loops, and darts on once you catch up. Near the
+    // goal he settles over it. He moves on his own, gliding, never pinned to you.
     goalGuide(time) {
       const el = this.guide, t = this.goalAt;
       if (!el) return;
-      const show = WorldGuide.on && !!t && !this.ui.busy() && !this.leaving && !this.cine;
+      const P = this.player, dt = Math.min(50, this.game.loop.delta || 16) / 1000;
+      const free = !!t && !this.ui.busy() && !this.leaving && !this.cine;
+      // progress: maps still to cross, then distance on this one; getting closer resets the clock
+      const q = this.nextMain(), key = q ? q.node : "", score = (this.goalHops || 0) * 1000 + (t ? Math.hypot(t.x - P.x, t.y - P.y) : 0);
+      const G = WorldGuide.prog || (WorldGuide.prog = { key, best: score, idle: 0 });
+      if (G.key !== key || score < G.best - 40) Object.assign(G, { key, best: Math.min(score, G.key === key ? G.best : score), idle: 0 });
+      else if (free) G.idle += dt * 1000;
+      const mode = WorldGuide.mode, show = free && (mode === "always" || (mode === "stuck" && G.idle > WorldGuide.STUCK));
       el.hidden = !show; el.say.hidden = true;
-      if (!show) { this.fairy = null; return; }
-      const cam = this.cameras.main, v = cam.worldView, W = this.scale.width, H = this.scale.height, P = this.player;
+      if (!show) { this.fairy = null; return; }   // he leaves, and flies in fresh next time
+      const f = this.fairy || (this.fairy = { x: P.x - (t.x > P.x ? 60 : -60), y: P.y - 70, vx: 0, vy: 0, wp: null, still: 0 });
       const toX = t.x - P.x, toY = t.y - P.y, dist = Math.hypot(toX, toY) || 1;
-      // where he wants to be: over the goal when it's in view, else a little ahead of you on the way there
-      const inView = t.x > v.x + 16 && t.x < v.right - 16 && t.y > v.y + 30 && t.y < v.bottom - 8;
-      let wx = inView ? t.x : P.x + toX / dist * 34, wy = inView ? t.y - 22 : P.y - 20 + toY / dist * 18;
-      // a loop now and then when you're dawdling far from it, with a word
-      const ph = time % 6000, far = !inView && dist > 80, loop = far && ph < 900;
-      if (loop) { const q = ph / 900 * Math.PI * 2; wx += Math.sin(q) * 10; wy += (1 - Math.cos(q)) * -6; }
-      const f = this.fairy || (this.fairy = { x: P.x, y: P.y - 24 });
-      const dt = Math.min(50, this.game.loop.delta || 16), ease = 1 - Math.pow(.004, dt / 1000);
-      f.x += (wx - f.x) * ease; f.y += (wy - f.y) * ease;
-      // keep him on screen
-      let gx = (f.x - v.x) * cam.zoom, gy = (f.y - v.y) * cam.zoom + Math.sin(time / 330) * 2;
-      gx = Math.max(14, Math.min(W - 14, gx)); gy = Math.max(26, Math.min(H - 6, gy));
-      const sx = (t.x - v.x) * cam.zoom, sy = (t.y - v.y) * cam.zoom, left = sx < gx;
-      const a = Math.atan2(-(sy - (gy - 12)), Math.abs(sx - gx)) * 180 / Math.PI;   // his staff toward the goal
+      // where he waits: over the goal when you're close to it, else a stretch ahead on the way
+      const ahead = () => {
+        if (dist < 120) return { x: t.x, y: t.y - 22 };
+        const side = (Math.random() - .5) * 40;
+        return { x: P.x + toX / dist * 95 - toY / dist * side, y: P.y - 18 + toY / dist * 95 + toX / dist * side * .6 };
+      };
+      if (!f.wp) f.wp = ahead();
+      const caught = Math.hypot(P.x - f.wp.x, P.y + 18 - f.wp.y) < 48;            // you've reached him
+      const strayed = Math.hypot(f.wp.x - t.x, f.wp.y - t.y) > dist + 70;         // you went another way
+      const settle = dist < 120 && Math.hypot(f.wp.x - t.x, f.wp.y - t.y + 22) > 4;
+      const lost = Math.hypot(P.x - f.wp.x, P.y - f.wp.y) > 200;                    // you're far behind: he comes back for you
+      if (caught || strayed || settle || lost) f.wp = ahead();
+      // a slow drift around the waiting point
+      const wx = f.wp.x + Math.sin(time / 900) * 9 + Math.sin(time / 1730) * 5, wy = f.wp.y + Math.cos(time / 1150) * 5;
+      // glide there: ease the velocity toward the way, with a top speed
+      let dvx = (wx - f.x) * 2.2, dvy = (wy - f.y) * 2.2;
+      const sp = Math.hypot(dvx, dvy), max = 120;
+      if (sp > max) { dvx *= max / sp; dvy *= max / sp; }
+      const k = 1 - Math.pow(.02, dt);
+      f.vx += (dvx - f.vx) * k; f.vy += (dvy - f.vy) * k;
+      f.x += f.vx * dt; f.y += f.vy * dt;
+      // standing still far from the goal: a nudge
+      f.still = P.body && P.body.speed > 1 ? 0 : f.still + dt * 1000;
+      const nudge = dist > 120 && f.still > 2500 && (f.still - 2500) % 6000 < 1800;
+      // onto the screen (he stays in view at the edge if he's flown on beyond it)
+      const cam = this.cameras.main, v = cam.worldView, W = this.scale.width, H = this.scale.height;
+      const gx = Math.max(14, Math.min(W - 14, (f.x - v.x) * cam.zoom)), gy = Math.max(26, Math.min(H - 6, (f.y - v.y) * cam.zoom)) + Math.sin(time / 330) * 1.5;
+      const sx = (t.x - v.x) * cam.zoom, sy = (t.y - v.y) * cam.zoom;
+      const left = Math.abs(f.vx) > 12 ? f.vx < 0 : sx < gx;   // face where he's flying, else toward the goal
+      const a = Math.atan2(-(sy - (gy - 12)), Math.abs(sx - gx)) * 180 / Math.PI;
       WorldGuide.place(el, this.game.canvas, W, gx, gy, left, a, time);
-      el.say.hidden = !(far && ph < 1800);
+      el.say.hidden = !nudge;
     }
 
     // Walk up to a story spot. A scene with a ["problem"] step builds up to

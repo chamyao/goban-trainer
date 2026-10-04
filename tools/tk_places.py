@@ -78,7 +78,8 @@ PLACES = {
                  "win": ["“Remarkable. I'll tell the magistrate a sandal-seller did it.”"], "done": ["“The magistrate still doesn't believe me.”"]},
             ],
             "banners": "red",
-            "objectives": {"1-n1": "Read the notice in the town square."},
+            "objectives": {"1-n1": "Read the notice in the town square.", "1-c1": "Go to the county office, where the governor has called his officers.",
+                           "1-i1": "Go into the village inn."},
         },
         "The Peach Garden": {
             "archetype": "garden",
@@ -145,7 +146,7 @@ PLACES = {
             "archetype": "road",
             "landmarks": [{"kind": "camp.logs", "id": "cart", "node": "1-n5", "trigger": "arrive", "label": "A prisoner's cart"},
                           {"kind": "building.tent", "id": "luzhi-tent", "label": "Lu Zhi's tent"}],
-            "objectives": {"1-n5": "Go to Guangzong, where Lu Zhi besieges Zhang Jiao."},
+            "objectives": {"1-n5": "Go to Guangzong, where Lu Zhi besieges Zhang Jiao.", "1-t1": "Report to Lu Zhi in his tent."},
         },
         "Qiao": {
             "archetype": "village",
