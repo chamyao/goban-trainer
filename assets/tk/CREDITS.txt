@@ -20,3 +20,7 @@ Three Kingdoms campaign art
   "Lotus Pond" and "Dragon Dance" from "Chinese Game Music" by BiteMe Games,
     https://bitemegames.itch.io/chinese-game-music, CC0.
   "All The Tea In China" and "Imperial China Cinematic" by Shane Ivers, https://www.silvermansound.com, CC BY 4.0.
+  "Taiko drums (seamless loop)" by jobro, https://opengameart.org/content/taiko-drums-seamless-loop
+    (cut from https://freesound.org/people/jobro/sounds/112248/), CC BY 3.0: the boss-fight music.
+  gong.mp3: "gong_01" from "100 CC0 SFX" by rubberduck, https://opengameart.org/content/100-cc0-sfx, CC0,
+    with an added echo tail.
