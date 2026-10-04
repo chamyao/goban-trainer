@@ -1,0 +1,249 @@
+"""Story content for the Three Kingdoms campaign, read by build_tk.py.
+
+Each world is a map of nodes. Main story points sit on the fixed nodes
+(the ones every route passes through, i.e. before each fork and after
+each merge), in the novel's order. Side roads carry side stories: the
+long road tells one in a few parts, the shortcut tells another from a
+different angle. A scene is a list of steps the map plays:
+
+  ["n", text]                  narration
+  ["say", who, text]           a line of dialogue (who = a character id)
+  ["spawn", id, who, at, dx, dy]  put an actor on the map near node `at`
+  ["move", id, at, dx, dy]     walk an actor there
+  ["remove", id]
+  ["party", [who, ...]]        the party walking the map from now on
+  ["fx", name, at, dx, dy]     an effect: petals, incense, blackwind, flash, whip, dust, paper
+  ["pose", id, pose]           stand, kneel, strike, fall
+  ["wait", ms]
+  ["scroll", title, [paragraphs]]  a storyteller scroll
+
+Actors: spawned ids, or a party member by character id (e.g. "zhangfei").
+Positions: "at" is a node key in the same world; dx/dy are map pixels (the map is 480x270).
+"""
+
+WORLDS = [
+    {
+        "n": 1,
+        "name": "The Peach Garden Oath",
+        "zh": "桃园结义",
+        "chapters": [1, 2],
+        "couplets": [
+            ["宴桃园豪杰三结义　斩黄巾英雄首立功",
+             "Three heroes feast in the Peach Garden and swear brotherhood; slaying the Yellow Turbans, they win their first glory"],
+            ["张翼德怒鞭督邮　何国舅谋诛宦竖",
+             "Zhang Fei whips the inspector in a rage; Imperial Uncle He Jin plots to kill the eunuchs"],
+        ],
+        "grades": ["12K", "12K+"],
+        "boss": "redmond",
+        "party": ["liubei"],
+        # Map, 480x270. "role": main (fixed, carries a main story point),
+        # side (long road), short (shortcut), boss.
+        "nodes": [
+            {"key": "start", "x": 34, "y": 236, "place": "Lousang Village"},
+            {"key": "n1", "x": 70, "y": 214, "role": "main", "place": "Zhuo County", "step": 0.0, "scene": "notice"},
+            {"key": "n2", "x": 108, "y": 186, "role": "main", "place": "The Peach Garden", "step": 0.1, "scene": "oath"},
+            {"key": "a1", "x": 140, "y": 222, "role": "side", "place": "Road to Julu", "step": 0.15, "scene": "peace1"},
+            {"key": "a2", "x": 180, "y": 236, "role": "side", "place": "Julu", "step": 0.2, "scene": "peace2"},
+            {"key": "a3", "x": 214, "y": 212, "role": "side", "place": "Yellow Hills", "step": 0.25, "scene": "peace3"},
+            {"key": "as", "x": 160, "y": 150, "role": "short", "place": "Horse Trail", "step": 0.2, "scene": "horses"},
+            {"key": "n3", "x": 246, "y": 178, "role": "main", "place": "Daxing Mountain", "step": 0.35, "scene": "daxing"},
+            {"key": "n4", "x": 282, "y": 206, "role": "main", "place": "Qingzhou", "step": 0.45, "scene": "qingzhou"},
+            {"key": "n5", "x": 316, "y": 176, "role": "main", "place": "Guangzong Road", "step": 0.55, "scene": "cart"},
+            {"key": "b1", "x": 342, "y": 214, "role": "side", "place": "Qiao", "step": 0.6, "scene": "caocao1"},
+            {"key": "b2", "x": 378, "y": 230, "role": "side", "place": "Luoyang Gates", "step": 0.65, "scene": "caocao2"},
+            {"key": "b3", "x": 412, "y": 204, "role": "side", "place": "Changshe", "step": 0.7, "scene": "caocao3"},
+            {"key": "bs", "x": 360, "y": 146, "role": "short", "place": "Envoy's Road", "step": 0.65, "scene": "bribe"},
+            {"key": "n6", "x": 420, "y": 164, "role": "main", "place": "Dong Zhuo's Camp", "step": 0.8, "scene": "office"},
+            {"key": "n7", "x": 388, "y": 114, "role": "main", "place": "Hills of Black Wind", "step": 0.9, "scene": "blackwind"},
+            {"key": "boss", "x": 432, "y": 62, "role": "boss", "place": "Yangcheng", "scene": "bosswin",
+             "boss": {"who": "zhangbao", "title": "Zhang Bao, General of Earth",
+                      "taunt": "Wind and thunder answer to me! Your little band will be swept away like dust."}},
+        ],
+        "edges": [["start", "n1"], ["n1", "n2"], ["n2", "a1"], ["a1", "a2"], ["a2", "a3"], ["a3", "n3"],
+                  ["n2", "as"], ["as", "n3"], ["n3", "n4"], ["n4", "n5"], ["n5", "b1"], ["b1", "b2"], ["b2", "b3"],
+                  ["b3", "n6"], ["n5", "bs"], ["bs", "n6"], ["n6", "n7"], ["n7", "boss"]],
+        "opening": [
+            ["scroll", "臨江仙 · The Immortal by the River", [
+                "On and on the Yangtze rolls east, its waves washing the heroes away.",
+                "Right and wrong, triumph and ruin — turn your head, and all is empty.",
+                "Yet the green hills remain, through how many crimson sunsets.",
+                "— Yang Shen",
+            ]],
+            ["scroll", "Chapter 1", [
+                "The empire, long divided, must unite; long united, must divide.",
+                "The Han has ruled for four hundred years. Now Emperor Ling trusts only his eunuchs, the Ten Attendants, who sell offices and silence honest men. Omens fill the sky: a serpent coils on the throne, hens turn into cocks, black vapour drifts into the palace.",
+                "In Julu, a healer named Zhang Jiao preaches the Way of Great Peace. In the year 184 half a million rise behind him, yellow scarves on their heads, chanting: “The Blue Heaven is dead! The Yellow Heaven shall rise!”",
+                "The governor of You Province posts a call for volunteers. The notice reaches Zhuo County…",
+            ]],
+        ],
+        "scenes": {
+            # ---- main story ----
+            "notice": {"title": "The Notice at Zhuo", "kind": "main", "steps": [
+                ["n", "Liu Bei, twenty-eight, descends from Prince Jing of Zhongshan — yet he sells sandals and weaves mats for a living. His ears reach his shoulders; his arms hang past his knees."],
+                ["n", "He reads the notice, and sighs."],
+                ["spawn", "zf", "zhangfei", "n1", 30, 4],
+                ["move", "zf", "n1", 12, 2],
+                ["say", "zhangfei", "A real man should serve his country! What are you sighing for?"],
+                ["say", "liubei", "I am of the Han imperial house. I long to crush these rebels and bring peace — but I lack the strength."],
+                ["say", "zhangfei", "I've got money and land. Let's raise men together! But first — wine."],
+                ["n", "At the village inn, a giant pushing a cart strides in: nine feet tall, a beard two feet long, a face like a ripe red date."],
+                ["spawn", "gy", "guanyu", "n1", -40, -10],
+                ["move", "gy", "n1", -12, 0],
+                ["say", "guanyu", "Wine, quickly! I'm off to the city to join the army."],
+                ["say", "liubei", "Then sit with us, friend. We have the same purpose."],
+                ["say", "guanyu", "Guan Yu, of Hedong. I killed a bully who preyed on my village, and I've been on the run five years."],
+                ["remove", "zf"], ["remove", "gy"],
+                ["party", ["liubei", "guanyu", "zhangfei"]],
+            ]},
+            "oath": {"title": "The Peach Garden Oath", "kind": "main", "steps": [
+                ["say", "zhangfei", "Behind my farm is a peach garden in full bloom. Tomorrow, let's swear brotherhood there before Heaven and Earth!"],
+                ["fx", "petals", "n2", 0, -20],
+                ["n", "With a black ox and a white horse for sacrifice, the three burn incense and bow."],
+                ["fx", "incense", "n2", -14, -4],
+                ["say", "liubei", "Though we were not born on the same day of the same month of the same year…"],
+                ["say", "guanyu", "…we wish to die on the same day of the same month of the same year."],
+                ["say", "zhangfei", "Heaven and Earth, witness it! If we betray this oath, may Heaven and men strike us down!"],
+                ["n", "Liu Bei becomes eldest brother, Guan Yu second, Zhang Fei youngest. Three hundred village braves join them, and they drink in the garden until they can drink no more."],
+                ["n", "Their road forks here. The long road passes through the rebels' heartland; the mountain trail is shorter, and steeper."],
+            ]},
+            "daxing": {"title": "First Blood at Daxing Mountain", "kind": "main", "steps": [
+                ["n", "The Yellow Turban general Cheng Yuanzhi marches on Zhuo with fifty thousand men. Liu Bei meets him with five hundred."],
+                ["spawn", "r1", "rebel", "n3", 34, -8], ["spawn", "r2", "rebel", "n3", 40, 6],
+                ["say", "liubei", "Traitors to the realm! Why not surrender now?"],
+                ["say", "chengyuanzhi", "Deng Mao — bring me his head!"],
+                ["move", "r1", "n3", 14, -4],
+                ["pose", "zhangfei", "strike"], ["fx", "flash", "n3", 14, -4], ["pose", "r1", "fall"],
+                ["n", "Zhang Fei's spear takes Deng Mao through the heart."],
+                ["move", "r2", "n3", 14, 4],
+                ["pose", "guanyu", "strike"], ["fx", "flash", "n3", 14, 4], ["pose", "r2", "fall"],
+                ["n", "Cheng Yuanzhi charges — and Guan Yu's great blade cuts him in two. The rebels throw down their spears and run."],
+                ["remove", "r1"], ["remove", "r2"],
+            ]},
+            "qingzhou": {"title": "The Ambush at Qingzhou", "kind": "main", "steps": [
+                ["n", "Rebels besiege Qingzhou. The relief force is outnumbered and falls back thirty li."],
+                ["say", "liubei", "They are many and we are few. Only surprise will win this. Yunchang, hide your men left of the ridge. Yide, to the right. When the gongs sound, strike."],
+                ["n", "Next morning Liu Bei attacks — then turns and flees. The rebels chase him over the ridge."],
+                ["fx", "dust", "n4", -20, 0],
+                ["n", "Gongs crash. Guan Yu and Zhang Fei burst from both flanks as Liu Bei wheels around. Caught from three sides, the rebels break, and the siege of Qingzhou is lifted."],
+            ]},
+            "cart": {"title": "The Cage Cart", "kind": "main", "steps": [
+                ["n", "Liu Bei sets out to help his old teacher Lu Zhi, who has Zhang Jiao himself trapped at Guangzong. On the road they meet soldiers guarding a prison cart."],
+                ["spawn", "lz", "luzhi", "n5", 22, -6],
+                ["say", "luzhi", "Xuande! I had Zhang Jiao surrounded. But the court's envoy demanded a bribe, and I refused him. Now I go to the capital in chains, and Dong Zhuo takes my army."],
+                ["say", "zhangfei", "I'll cut down these guards and set him free!"],
+                ["say", "liubei", "The court will judge him fairly. Don't be rash, Yide!"],
+                ["move", "lz", "n5", 70, -10], ["remove", "lz"],
+                ["n", "The cart rolls away toward Luoyang. Again the road divides."],
+            ]},
+            "office": {"title": "“What Office Do You Hold?”", "kind": "main", "steps": [
+                ["n", "Heading home, the brothers hear a roar behind the hills: Han troops in rout, and behind them banners reading GENERAL OF HEAVEN."],
+                ["say", "liubei", "That is Zhang Jiao! Charge!"],
+                ["fx", "dust", "n6", 20, -10],
+                ["n", "The three ride into his flank and drive him back fifty li. They escort the defeated commander, Dong Zhuo, safely to his camp."],
+                ["spawn", "dz", "dongzhuo", "n6", 18, -6],
+                ["say", "dongzhuo", "And what office do you hold?"],
+                ["say", "liubei", "None, my lord. We are commoners."],
+                ["n", "Dong Zhuo turns his back without a word of thanks."],
+                ["remove", "dz"],
+                ["say", "zhangfei", "We bled to save that wretch and he treats us like dirt! I'll kill him!"],
+                ["say", "liubei", "He is an officer of the court! You cannot."],
+                ["say", "zhangfei", "Then I won't serve under him. Stay if you like — I'm leaving."],
+                ["say", "liubei", "We three swore to live and die together. If you go, we all go."],
+                ["n", "That night they leave to join the general Zhu Jun instead."],
+            ]},
+            "blackwind": {"title": "Black Wind, Paper Soldiers", "kind": "main", "steps": [
+                ["n", "Zhu Jun's army faces Zhang Bao, the General of Earth. Zhang Fei spears his officer Gao Sheng from the saddle — and then Zhang Bao lets down his hair, raises his sword, and chants."],
+                ["fx", "blackwind", "n7", 14, -12],
+                ["n", "Wind howls and thunder rolls. Out of a black cloud pours a numberless host of horsemen. Liu Bei's army breaks and flees."],
+                ["say", "zhujun", "Sorcery. Tomorrow, hide men on the hilltop with the blood of pigs, sheep and dogs. When his spirits come, drench them. The spell will break."],
+                ["say", "guanyu", "Then let him chase us up the hill."],
+            ]},
+            "bosswin": {"title": "The General of Earth Falls", "kind": "main", "steps": [
+                ["n", "Again Zhang Bao calls the wind; again Liu Bei flees, and the rebels chase him to the hill. A signal gun — and blood and filth rain down from the ridge."],
+                ["fx", "paper", "boss", 0, 10],
+                ["n", "Paper men and straw horses flutter to the ground. The wind dies. Liu Bei's arrow strikes Zhang Bao in the arm, and he flees into Yangcheng."],
+                ["n", "Besieged, with no way out, Zhang Bao is killed by his own officer, Yan Zheng, who opens the gates."],
+            ]},
+            # ---- side stories: the long road ----
+            "peace1": {"title": "The Way of Great Peace · I: The Old Man in the Cave", "kind": "side", "steps": [
+                ["n", "Meanwhile — or rather, years before — a failed scholar named Zhang Jiao went into the hills to gather herbs."],
+                ["n", "There he met an old man with green eyes and a child's face, leaning on a staff, who led him into a cave."],
+                ["say", "immortal", "These three books are the Essentials of Great Peace. Take them, spread Heaven's teaching, and save the world. But harbour one rebellious thought, and you will be punished."],
+                ["say", "zhangjiao", "Master, what is your name?"],
+                ["say", "immortal", "I am the Old Immortal of Southern Florescence."],
+                ["n", "And he vanished in a breath of wind."],
+            ]},
+            "peace2": {"title": "The Way of Great Peace · II: The Blue Heaven Is Dead", "kind": "side", "steps": [
+                ["n", "Zhang Jiao studied the books day and night until he could summon wind and rain. When plague swept the land, he went about giving out charmed water, and the sick recovered."],
+                ["n", "They called him the Great and Virtuous Teacher. His disciples numbered in the hundreds of thousands, organised in thirty-six divisions."],
+                ["say", "zhangjiao", "The Blue Heaven is dead! The Yellow Heaven shall rise! In the year jiazi, great fortune for all under Heaven!"],
+                ["n", "Across eight provinces, families chalked the word jiazi on their doors."],
+            ]},
+            "peace3": {"title": "The Way of Great Peace · III: Betrayed", "kind": "side", "steps": [
+                ["say", "zhangjiao", "The hardest thing in the world to win is the people's hearts — and now they are ours. To let this moment pass would be a crime."],
+                ["n", "He bribed a eunuch in the palace to open the gates from within. But his disciple Tang Zhou carried the plan straight to the court. In Luoyang, his agent Ma Yuanyi was beheaded."],
+                ["say", "zhangjiao", "Then we rise now. I am the General of Heaven. Zhang Bao, you are General of Earth. Zhang Liang, General of Man."],
+                ["n", "Half a million rose in yellow scarves, and the imperial armies scattered before them like leaves."],
+            ]},
+            "caocao1": {"title": "The Hero of Chaos · I: The Feigned Stroke", "kind": "side", "steps": [
+                ["n", "Far to the south, in Qiao, a boy named Cao Cao loved hunting, music and mischief — and his uncle kept telling his father so."],
+                ["n", "So one day, seeing his uncle coming, Cao Cao dropped to the ground, twitching."],
+                ["say", "uncle", "Brother! Your son has had a stroke!"],
+                ["say", "caocao", "A stroke? I've never had one in my life. Uncle just dislikes me, so he tells tales about me."],
+                ["n", "From then on, whatever the uncle reported, Cao Cao's father never believed a word."],
+            ]},
+            "caocao2": {"title": "The Hero of Chaos · II: A Villain in Chaos", "kind": "side", "steps": [
+                ["n", "Xu Shao of Runan was famous for judging men. Cao Cao went to see him."],
+                ["say", "caocao", "What kind of man am I?"],
+                ["n", "Xu Shao would not answer. Cao Cao asked again."],
+                ["say", "xushao", "In an age of order, an able minister. In an age of chaos — a cunning villain."],
+                ["n", "Cao Cao laughed with delight. Later, as a captain in Luoyang, he hung coloured staves at the city gates and flogged anyone caught breaking curfew — even the uncle of the eunuch Jian Shuo. After that, nobody dared."],
+            ]},
+            "caocao3": {"title": "The Hero of Chaos · III: Red Banners at Changshe", "kind": "side", "steps": [
+                ["n", "At Changshe, the Yellow Turbans pitched their camp in tall grass."],
+                ["say", "huangfusong", "They camp in grass. Fire will take them. Every man, bring a bundle of straw."],
+                ["fx", "fire", "b3", 0, -14],
+                ["n", "That night a great wind rose. The camp went up in flames; the rebels fled without saddles or armour."],
+                ["n", "At dawn, as Zhang Bao and Zhang Liang ran, a column under red banners barred the road."],
+                ["say", "caocao", "Cao Cao, Commandant of Cavalry. You go no further."],
+                ["n", "Ten thousand heads were taken. The two brothers barely escaped with their lives."],
+            ]},
+            # ---- side stories: the shortcuts ----
+            "horses": {"title": "Horses from the North", "kind": "side", "steps": [
+                ["n", "The brothers had men, but no horses. Then two travelling merchants, Zhang Shiping and Su Shuang, came down the trail driving a herd."],
+                ["say", "merchant", "Bandits have closed the road north. If you mean to crush them, take fifty horses — and five hundred taels of silver, and a thousand jin of steel for your weapons."],
+                ["n", "Liu Bei had twin swords forged. Guan Yu's blade was the Green Dragon Crescent, eighty-two jin, called Cold Beauty. Zhang Fei's was an eighteen-foot serpent spear of steel."],
+            ]},
+            "bribe": {"title": "A Bribe Refused", "kind": "side", "steps": [
+                ["n", "At Guangzong, Lu Zhi had Zhang Jiao penned in, though the rebel's sorcery kept him from the final blow. Then the court's envoy arrived."],
+                ["say", "zuofeng", "Your victories are splendid, general. And where is the gift for the Emperor's envoy?"],
+                ["say", "luzhi", "My army lacks grain. Where would I find money to flatter an envoy?"],
+                ["n", "Zuo Feng rode back to Luoyang and reported that Lu Zhi skulked behind his walls and would not fight."],
+            ]},
+        },
+        "closing": [
+            ["scroll", "The Yellow Turbans Fall", [
+                "Zhang Jiao died of illness at Guangzong. Huangfu Song beat Zhang Liang in seven battles and broke open the Great Teacher's coffin. The rebellion was over.",
+                "At Wancheng, Liu Bei gave Zhu Jun some advice: “Surround them completely and every man fights to the death. Leave them one way out, and they will run.” It worked. There too, a young officer named Sun Jian was first over the wall — a name to remember.",
+                "But the eunuchs gave rewards only to those who paid. For all his battles, Liu Bei was made a mere county sheriff, at Anxi.",
+            ]],
+            ["n", "Four months later an inspector arrived at Anxi, sitting high on his horse and demanding a bribe."],
+            ["spawn", "ins", "inspector", "boss", -30, 40],
+            ["say", "inspector", "You claim imperial blood and invent your merits! The court is purging frauds like you."],
+            ["n", "Zhang Fei, a few cups in, rode past the inspector's lodge and found fifty old villagers weeping at the gate."],
+            ["move", "zhangfei", "boss", -20, 40],
+            ["say", "zhangfei", "Tormentor of the people! Do you know who I am?"],
+            ["fx", "whip", "boss", -30, 34], ["fx", "whip", "boss", -30, 34], ["fx", "whip", "boss", -30, 34],
+            ["say", "inspector", "Lord Xuande! Save my life!"],
+            ["say", "guanyu", "Brother, a phoenix does not roost among thorns. Let us kill him and go."],
+            ["say", "liubei", "By your crimes you deserve to die. I spare you. Here is my seal of office — I am done with it."],
+            ["remove", "ins"],
+            ["scroll", "Chapter 2", [
+                "Emperor Ling died. In the capital, his brother-in-law, General He Jin, resolved to destroy the eunuchs at last — and sent for the warlords of the provinces to march on Luoyang and force the Empress's hand.",
+                "“A mistake,” warned his secretary Chen Lin. “You hand the spear to others, point first.”",
+                "A man beside them clapped and laughed. “This is as easy as turning over a hand. Why so much talk?” It was Cao Cao.",
+                "What did Cao Cao propose? Hear the next chapter.",
+            ]],
+        ],
+    },
+]

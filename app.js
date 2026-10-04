@@ -550,6 +550,7 @@ class Trainer {
     this.played = [];
     this.lastMove = null;
     this.done = null;         // null | "ok" | "bad"
+    this.variation = 1;       // which of White's defences is being played
     this.explore = null;      // null | snapshot taken when entering explore
     this.posHistory = [this.serialize(this.grid)]; // for the ko rule
     this.ownership = null;    // ownership overlay from Judge
@@ -609,11 +610,6 @@ class Trainer {
       if (open.length) return { prefix, open };
     }
     return null;
-  }
-  remainingBranches() {
-    let n = 0;
-    for (let k = 1; k < this.played.length; k += 2) n += this.openReplies(this.played.slice(0, k)).length;
-    return n;
   }
   playWhite(mv) {
     const [rc, rr] = cIdx(mv);
@@ -781,9 +777,9 @@ class Trainer {
     if (kind === "ok") {
       const next = this.nextBranch();
       if (next) {
-        const left = this.remainingBranches();
         this.done = "next"; // locks the board until the rewind
-        this.setStatus("ok", "✓", `Correct — White has ${left} other ${left === 1 ? "answer" : "answers"} to try`);
+        this.variation = (this.variation || 1) + 1;
+        this.setStatus("ok", "✓", `Variation ${this.variation}`);
         this.render();
         this.replyTimer = setTimeout(() => {
           if (!this.alive || this.explore) return;
@@ -1892,6 +1888,14 @@ async function viewLibrary() {
   const favs = loadFavorites();
   root.innerHTML = "";
   const cats = { tsumego: "Tsumego", tesuji: "Tesuji", endgame: "Endgame" };
+  // The Three Kingdoms campaign sits above everything.
+  const tkDone = Object.values(prog.tk || {}).filter(v => v === 1).length;
+  root.append(h("a", { class: "tk-card", href: "#/tk" }, [
+    h("img", { class: "tk-card-icon", src: "assets/tk/fan.png", alt: "" }),
+    h("span", {}, [h("b", {}, "三国演义 · Romance of the Three Kingdoms"),
+      h("small", {}, tkDone ? `${tkDone} levels cleared · flawless only` : "A story campaign through the novel, 12K to 7D · flawless only")]),
+    h("span", { class: "tk-card-go" }, "→"),
+  ]));
   // Favorited books from every category come first; they stay in their category too.
   const sections = [["Favorites", index.filter(b => favs.has(b.id))],
                     ...Object.entries(cats).map(([cat, title]) => [title, index.filter(b => b.category === cat)])];
@@ -3308,11 +3312,14 @@ async function route() {
   const parts = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
   clearInterval(playTicker);
   const tab = ["review", "play", "feedback"].includes(parts[0]) ? parts[0] : "library";
+  if (window.Wukong && Wukong.suspend) Wukong.suspend(parts[0] === "tk" && !parts[2]);  // the map has its own party
   for (const a of document.querySelectorAll("#tabs a"))
     a.classList.toggle("active", a.dataset.tab === tab);
   if (parts[0] === "review") viewReview();
   else if (parts[0] === "play") viewPlay(parts[1]);
   else if (parts[0] === "feedback") viewFeedback();
+  else if (parts[0] === "tk" && parts[1] && parts[2]) await viewTKLevel(parseInt(parts[1], 10), parts[2]);
+  else if (parts[0] === "tk") await viewTK(parseInt(parts[1], 10) || 0);
   else if (parts[0] === "book" && parts[1] && parts[2]) await viewPlayer(parts[1], parseInt(parts[2], 10) || 1);
   else if (parts[0] === "book" && parts[1]) await viewBook(parts[1]);
   else await viewLibrary();

@@ -1,0 +1,7 @@
+Three Kingdoms campaign art
+
+- Jade Tileset Pack by Willibab — https://willibab.itch.io/free-jade-tileset-pack — CC-BY
+  (j_*.png: trees, bamboo, rocks, flowers, banners)
+- Retro Pixelated: Eastern Fantasy Mountains by GameTorch — https://gametorch.app/collections/21 — CC0
+  (g_*.png, p_immortal.png, fan.png)
+- Terrain, characters, portraits and effects are drawn in code (tk.js).
