@@ -175,6 +175,9 @@ ZH = {
     "Lu Zhi is under arrest, and another man will lead his army. We have no one left to turn to here. Let us go back to Zhuo.": "卢中郎已被逮，别人领兵，我等去无所依，不如且回涿郡。",
     "Liu Bei agrees, and they march north. Again the road divides.": "玄德从其言，遂引军北行。前路又一次分岔。",
     "Zhu Jun receives them warmly. The two armies join, and Zhu Jun makes Liu Bei his vanguard against Zhang Bao.": "朱儁待之甚厚，合兵一处，进讨张宝，令玄德为其先锋，与贼对敌。",
+    "Liu Bei tells him his own aim, and Guan Yu is delighted. The three go together to Zhang Fei's farm to plan their great enterprise.": "玄德遂以己志告之，云长大喜。三人同到张飞庄上，共议大事。",
+    "Very good.": "如此甚好。",
+    "The next day, in the peach garden behind Zhang Fei's farm, the blossoms are in full bloom.": "次日，张飞庄后的桃园中，花开正盛。",
     # ---- World 1 plot pass (from docs/world1-script-draft.md) ----
     "Zhuo County. A crowd gathers at a notice on the wall: the governor is raising volunteers against the Yellow Turbans.": "涿县城中，众人围看墙上榜文：幽州太守刘焉出榜招募义兵，共破黄巾。",
     "Under an old tree by the road, two white-haired men sit over a weiqi board, as if no army were coming.": "路旁老树下，两位白发老人对坐弈棋，仿佛大军压境与他们无关。",
