@@ -184,16 +184,7 @@ WORLDS = [
             "oath": {"title": "The Peach Garden Oath", "kind": "main", "steps": [
                 ["n", "The next day, in the peach garden behind Zhang Fei's farm, the blossoms are in full bloom."],
                 ["fx", "petals", "n2", 0, -20],
-                ["spawn", "sg", "stargrey", "n2", -14, -6], ["spawn", "sr", "starred", "n2", 14, -6],
-                ["n", "Under the great peach tree two old men sit over a weiqi board, one in grey, one in red."],
-                ["say", "starred", "Three young men, come to swear before Heaven? Heaven is listening. But first, show us how you read the stones."],
-                ["problem", "starred"],  # the oath plays once it is solved
-                ["say", "stargrey", "Good. The road ahead forks, and fortune favours the one who reads it."],
-                # the moment he finishes, both are gone: the player sees the empty board before the narration says so
-                ["remove", "sg"], ["remove", "sr"],
-                ["fx", "petals", "n2", 0, -20],
-                ["wait", 1800],
-                ["n", "When the brothers look up, the two old men are gone. Only the board remains, and a drift of petals."],
+                ["problem", "starred"],  # the immortals at the board (their intro and outro are in tk_places.py); the oath plays once it is solved
                 ["prop", "ox", "ox", "n2", -26, 14], ["prop", "wh", "whitehorse", "n2", -14, 18],
                 ["n", "With a black ox and a white horse for sacrifice, the three burn incense and bow."],
                 ["fx", "incense", "n2", -14, -4],
