@@ -32,7 +32,7 @@ PLACES = {
             "archetype": "village",
             "landmarks": [
                 {"kind": "building.hut", "id": "home", "label": "Liu Bei's home"},
-                {"kind": "tree.big", "id": "mulberry", "node": "1-start", "label": "The great mulberry tree"},
+                {"kind": "tree.big", "id": "mulberry", "node": "1-start", "trigger": "arrive", "label": "The great mulberry tree"},
             ],
             "objectives": {"1-start": "Sit under the great mulberry tree by your home."},
             "npcs": [

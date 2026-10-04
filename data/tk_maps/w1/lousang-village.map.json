@@ -1698,7 +1698,8 @@
    "x": 19,
    "y": 9.7,
    "node": "1-start",
-   "label": "The great mulberry tree"
+   "label": "The great mulberry tree",
+   "trigger": "arrive"
   }
  ],
  "npcs": [
