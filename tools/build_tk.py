@@ -192,8 +192,10 @@ def main():
             for s in steps:
                 if s[0] in ("spawn",) and isinstance(s[3], str):
                     s[3] = key(s[3])
-                elif s[0] in ("move", "fx") and len(s) > 2 and isinstance(s[2], str):
+                elif s[0] in ("move", "run", "fx") and len(s) > 2 and isinstance(s[2], str):
                     s[2] = key(s[2])
+                elif s[0] == "army" and isinstance(s[4], str):
+                    s[4] = key(s[4])
             return steps
         out["opening"] = voiced(fix(w["opening"]))
         out["closing"] = voiced(fix(w["closing"]))

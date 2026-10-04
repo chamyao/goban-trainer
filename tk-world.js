@@ -67,6 +67,7 @@ function worldScenes() {
       const { w, kit } = this.opts;
       this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=2`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=2`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=1`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
@@ -270,13 +271,18 @@ function worldScenes() {
         const spot = Object.values(this.spots).find(s => s.node === q.node);
         const steps = [...worldLines(spot && spot.outro), ...((this.story[q.scene] || {}).steps || [])];
         for (const n of this.npcs) if (n.until === q.node) { n.spr.setVisible(false); n.spr.body.enable = false; }
-        return this.talk(steps, async () => {
+        const finish = async () => {
           for (const s of steps) if (s[0] === "party") { this.st.party = s[1]; TK.setParty(this.w, s[1]); this.setParty(s[1]); }
           if (q.scene) TK.markSeen(`${this.w.n}:${q.scene}`);
           this.save();
           this.setGoal();
           if (q.role === "boss" && this.opts.onBoss) await this.opts.onBoss();
-        }, "story");
+        };
+        // a staged cutscene (tk-cutscene.js) when the scene generator made one for this place, else the lines alone
+        const cs = ((this.cache.json.get("cutscenes") || {}).scenes || {})[q.scene];
+        if (cs && cs.place === this.placeId && typeof WorldCutscene !== "undefined")
+          return this.talk(worldLines(spot && spot.outro), () => WorldCutscene.play(this, cs, finish), "story");
+        return this.talk(steps, finish, "story");
       }
       const n = this.npcs.find(m => m.challenge === ret.key);
       if (n) { n.mark.setVisible(false); this.talk(worldLines(n.win)); }

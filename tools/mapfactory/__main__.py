@@ -2,6 +2,7 @@
 
     python3 tools/mapfactory build   --world 1               # plot → abstract maps + region.json
     python3 tools/mapfactory compile --world 1 --kit ninja   # abstract maps → Tiled maps for one art pack
+    python3 tools/mapfactory scenes  --world 1               # story scenes → staged cutscenes (cutscenes.json)
     python3 tools/mapfactory all     --world 1 --kit ninja --kit jade --preview
 
 Reads data/tk.json (built from tools/tk_story.py) and tools/tk_places.py.
@@ -51,7 +52,7 @@ def build(n):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("cmd", choices=["build", "compile", "all"])
+    ap.add_argument("cmd", choices=["build", "compile", "scenes", "all"])
     ap.add_argument("--world", type=int, default=1)
     ap.add_argument("--kit", action="append", help="art kit(s) to compile for (default: ninja)")
     ap.add_argument("--preview", action="store_true", help="also render PNG previews into docs/maps/")
@@ -62,6 +63,9 @@ def main():
         from compile import compile_world
         for kit in a.kit or ["ninja"]:
             compile_world(a.world, kit, preview=a.preview)
+    if a.cmd in ("scenes", "all"):
+        from scenes import build_scenes
+        build_scenes(a.world)
 
 
 main()

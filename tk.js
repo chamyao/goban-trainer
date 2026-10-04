@@ -20,6 +20,7 @@ const TK_CHARS = {
   zhujun: { name: "Zhu Jun", skin: "#e8c09a", hair: "#2a2024", hat: "helmet", hatC: "#858a94", robe: "#8a3030", trim: "#c8c8c8", beard: "short", eyes: "normal", weapon: "sword" },
   huangfusong: { name: "Huangfu Song", skin: "#e8c09a", hair: "#2a2024", hat: "helmet", hatC: "#858a94", robe: "#2f4f7a", trim: "#c8c8c8", beard: "long", eyes: "normal", weapon: "sword" },
   chengyuanzhi: { name: "Cheng Yuanzhi", skin: "#e8b88c", hair: "#2a2024", hat: "yellowband", hatC: "#e8bc2a", robe: "#8f6a3a", trim: "#e8bc2a", beard: "short", eyes: "wild", weapon: "glaive" },
+  militia: { name: "Village brave", skin: "#ecc29a", hair: "#2a2024", hat: "band", hatC: "#b8392c", robe: "#6a7a5a", trim: "#b8392c", beard: "none", eyes: "normal", weapon: "spear" },
   rebel: { name: "Yellow Turban", skin: "#e8b88c", hair: "#2a2024", hat: "yellowband", hatC: "#e8bc2a", robe: "#9a7a4a", trim: "#e8bc2a", beard: "none", eyes: "normal", weapon: "spear" },
   inspector: { name: "The Inspector", skin: "#f0cfac", hair: "#2a2024", hat: "guan", hatC: "#1e1e24", robe: "#6b6a35", trim: "#d4ad42", beard: "thin", eyes: "narrow" },
   xushao: { name: "Xu Shao", skin: "#eec7a0", hair: "#3a3236", hat: "scholar", hatC: "#2e3a5a", robe: "#ded6c0", trim: "#2e3a5a", beard: "thin", eyes: "kind" },
