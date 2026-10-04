@@ -53,18 +53,21 @@ WORLDS = [
         # Map, 480x270. "role": main (fixed, carries a main story point),
         # side (long road), short (shortcut), boss.
         "nodes": [
-            {"key": "start", "x": 34, "y": 236, "place": "Lousang Village"},
+            {"key": "start", "x": 34, "y": 236, "role": "main", "place": "Lousang Village", "step": 0.0, "scene": "tree", "trigger": "arrive"},
+            {"key": "c1", "x": 52, "y": 226, "role": "main", "place": "Zhuo County", "room": "office", "step": 0.0, "scene": "council", "trigger": "arrive"},
             {"key": "n1", "x": 70, "y": 214, "role": "main", "place": "Zhuo County", "step": 0.0, "scene": "notice"},
             {"key": "n2", "x": 108, "y": 186, "role": "main", "place": "The Peach Garden", "step": 0.1, "scene": "oath"},
-            {"key": "a1", "x": 140, "y": 222, "role": "side", "place": "Road to Julu", "step": 0.15, "scene": "peace1"},
-            {"key": "a2", "x": 180, "y": 236, "role": "side", "place": "Julu", "step": 0.2, "scene": "peace2"},
-            {"key": "a3", "x": 214, "y": 212, "role": "side", "place": "Yellow Hills", "step": 0.25, "scene": "peace3"},
+            {"key": "a1", "x": 140, "y": 222, "role": "side", "place": "Road to Julu", "room": "cave", "step": 0.15, "scene": "peace1", "trigger": "arrive"},
+            {"key": "a2", "x": 180, "y": 236, "role": "side", "place": "Julu", "room": "house-1", "step": 0.2, "scene": "peace2", "trigger": "arrive"},
+            {"key": "a3", "x": 214, "y": 212, "role": "side", "place": "Yellow Hills", "room": "tent", "step": 0.25, "scene": "peace3", "trigger": "arrive"},
             {"key": "as", "x": 160, "y": 150, "role": "short", "place": "Horse Trail", "step": 0.2, "scene": "horses"},
             {"key": "n3", "x": 246, "y": 178, "role": "main", "place": "Daxing Mountain", "step": 0.35, "scene": "daxing"},
             {"key": "n4", "x": 282, "y": 206, "role": "main", "place": "Qingzhou", "step": 0.45, "scene": "qingzhou"},
+            {"key": "t1", "x": 299, "y": 191, "role": "main", "place": "Guangzong Road", "room": "luzhi-tent", "step": 0.5, "scene": "tent", "trigger": "arrive"},
             {"key": "n5", "x": 316, "y": 176, "role": "main", "place": "Guangzong Road", "step": 0.55, "scene": "cart"},
-            {"key": "b1", "x": 342, "y": 214, "role": "side", "place": "Qiao", "step": 0.6, "scene": "caocao1"},
-            {"key": "b2", "x": 378, "y": 230, "role": "side", "place": "Luoyang Gates", "step": 0.65, "scene": "caocao2"},
+            {"key": "b1", "x": 342, "y": 214, "role": "side", "place": "Qiao", "room": "caohome", "step": 0.6, "scene": "caocao1", "trigger": "arrive"},
+            {"key": "b2", "x": 378, "y": 230, "role": "side", "place": "Luoyang Gates", "room": "hall-1", "step": 0.65, "scene": "caocao2", "trigger": "arrive"},
+            {"key": "f1", "x": 395, "y": 217, "role": "side", "place": "Changshe", "room": "camp", "step": 0.67, "scene": "fireplan", "trigger": "arrive"},
             {"key": "b3", "x": 412, "y": 204, "role": "side", "place": "Changshe", "step": 0.7, "scene": "caocao3"},
             {"key": "bs", "x": 360, "y": 146, "role": "short", "place": "Envoy's Road", "step": 0.65, "scene": "bribe"},
             {"key": "n6", "x": 420, "y": 164, "role": "main", "place": "Dong Zhuo's Camp", "step": 0.8, "scene": "office"},
@@ -73,8 +76,8 @@ WORLDS = [
              "boss": {"who": "zhangbao", "title": "Zhang Bao, General of Earth",
                       "taunt": "Wind and thunder answer to me! Your little band will be swept away like dust."}},
         ],
-        "edges": [["start", "n1"], ["n1", "n2"], ["n2", "a1"], ["a1", "a2"], ["a2", "a3"], ["a3", "n3"],
-                  ["n2", "as"], ["as", "n3"], ["n3", "n4"], ["n4", "n5"], ["n5", "b1"], ["b1", "b2"], ["b2", "b3"],
+        "edges": [["start", "c1"], ["c1", "n1"], ["n1", "n2"], ["n2", "a1"], ["a1", "a2"], ["a2", "a3"], ["a3", "n3"],
+                  ["n2", "as"], ["as", "n3"], ["n3", "n4"], ["n4", "t1"], ["t1", "n5"], ["n5", "b1"], ["b1", "b2"], ["b2", "f1"], ["f1", "b3"],
                   ["b3", "n6"], ["n5", "bs"], ["bs", "n6"], ["n6", "n7"], ["n7", "boss"]],
         "opening": [
             ["scroll", "臨江仙 · The Immortal by the River", [
@@ -87,13 +90,51 @@ WORLDS = [
                 "The empire, long divided, must unite; long united, must divide.",
                 "The Han has ruled for four hundred years. Now Emperor Ling trusts only his eunuchs, the Ten Attendants, who sell offices and silence honest men. Omens fill the sky: a serpent coils on the throne, hens turn into cocks, black vapour drifts into the palace.",
                 "In Julu, a healer named Zhang Jiao preaches the Way of Great Peace. In the year 184 half a million rise behind him, yellow scarves on their heads, chanting: “The Blue Heaven is dead! The Yellow Heaven shall rise!”",
-                "The governor of You Province posts a call for volunteers. The notice reaches Zhuo County…",
+                "The Yellow Turbans must be put down. The court sends its generals against them, and the governor of You Province posts a call for volunteers. The notice reaches Zhuo County…",
             ]],
         ],
         "scenes": {
             # ---- main story ----
+            "council": {"title": "The Governor's Council", "kind": "main", "steps": [
+                ["n", "The Yellow Turbans have crossed into You Province. Governor Liu Yan summons his officer Zou Jing."],
+                ["spawn", "ly", "f_noble", "c1", 10, -6], ["spawn", "zj", "f_official", "c1", 22, -6],
+                ["n", "Zou Jing advises him: “The rebels are many and our soldiers are few. My lord, you should raise troops at once, and meet them.”"],
+                ["problem"],  # the board comes up here; the rest plays once it is solved
+                ["n", "Liu Yan agrees, and has a notice posted calling for volunteers. It goes up on the wall at Zhuo County, and it draws out a hero."],
+                ["remove", "ly"], ["remove", "zj"],
+            ]},
+            "tent": {"title": "Lu Zhi's Tent", "kind": "main", "steps": [
+                ["n", "With Qingzhou relieved, Liu Bei hears that his old teacher Lu Zhi is fighting Zhang Jiao at Guangzong, and goes to help him. Lu Zhi is glad to see him, and keeps him in the tent."],
+                ["spawn", "lz", "luzhi", "t1", 12, -4],
+                ["say", "luzhi", "I have Zhang Jiao penned in here. His brothers Zhang Liang and Zhang Bao are at Yingchuan, facing Huangfu Song and Zhu Jun."],
+                ["problem"],  # the board comes up here; the rest plays once it is solved
+                ["say", "luzhi", "Take your own men, and I will give you a thousand more. Go to Yingchuan, learn how they stand, and we will fix a day to destroy them."],
+                ["n", "Liu Bei takes his orders, and marches through the night."],
+                ["remove", "lz"],
+            ]},
+            "fireplan": {"title": "The Fire Plan", "kind": "side", "steps": [
+                ["n", "At Changshe, the Yellow Turbans pitched their camp in tall grass."],
+                ["say", "huangfusong", "They camp in grass. Fire will take them. Every man, bring a bundle of straw."],
+                ["problem"],  # the board comes up here; the rest plays once it is solved
+                ["n", "Every man is told to carry a bundle of straw, and hide it."],
+            ]},
+            "tree": {"title": "The Mulberry Tree at Louzang", "kind": "main", "steps": [
+                ["n", "Louzang Village, Zhuo County. South-east of Liu Bei's house stands a mulberry tree more than fifty feet tall. From far off, it looks like the canopy of a carriage."],
+                ["n", "A passing fortune-teller says: this family will produce a great man."],
+                ["spawn", "kid", "liubei_child", "start", 10, 4],
+                ["n", "Liu Bei's father died early. As a boy he plays under the tree with the village children."],
+                ["problem"],  # the board comes up here; the rest plays once it is solved
+                ["say", "liubei_child", "I will be the Son of Heaven, and I will ride this carriage canopy."],
+                ["wait", 1200],
+                ["spawn", "unc", "liuyuanqi", "start", 30, 6], ["move", "unc", "start", 14, 4],
+                ["say", "liuyuanqi", "This is no ordinary child!"],
+                ["n", "The family is poor. His uncle Liu Yuanqi helps them from then on."],
+                ["remove", "kid"], ["remove", "unc"],
+                ["n", "At fifteen, his mother sends him to study under Zheng Xuan and Lu Zhi, and he befriends Gongsun Zan."],
+                ["n", "He serves his mother with the utmost devotion."],
+            ]},
             "notice": {"title": "The Notice at Zhuo", "kind": "main", "steps": [
-                ["n", "Zhuo County. A crowd gathers at a notice on the wall: the governor is raising volunteers against the Yellow Turbans."],
+                ["n", "Zhuo County. A crowd gathers at a notice on the wall: the governor is raising volunteers to put down the Yellow Turbans."],
                 ["n", "Liu Bei, twenty-eight, descends from Prince Jing of Zhongshan — yet he sells sandals and weaves mats for a living. His ears reach his shoulders; his arms hang past his knees."],
                 ["n", "He reads the notice, and sighs."],
                 ["spawn", "zf", "zhangfei", "n1", 30, 4],
@@ -186,8 +227,6 @@ WORLDS = [
                 ["pose", "yt", "fall", 4], ["run", "yt", "n4", 160, 0], ["remove", "yt"],
             ]},
             "cart": {"title": "The Cage Cart", "kind": "main", "steps": [
-                ["n", "Qingzhou is relieved. Liu Bei hears that his old teacher Lu Zhi is fighting Zhang Jiao himself at Guangzong, and goes to help him."],
-                ["n", "Lu Zhi is glad to see him, and keeps him at his tent. Then he sends him with a thousand more men to Yingchuan, to learn how Huangfu Song and Zhu Jun are doing against Zhang Jiao's brothers."],
                 ["n", "By the time Liu Bei arrives, the rebels have been routed by fire. Huangfu Song tells him the brothers will run to Zhang Jiao at Guangzong, and he turns back through the night."],
                 ["n", "Halfway there, they meet soldiers guarding a prison cart."],
                 ["prop", "cart", "cagecart", "n5", 30, -6],
@@ -318,15 +357,13 @@ WORLDS = [
                 ["n", "Cao Cao laughed with delight. Later, as a captain in Luoyang, he hung coloured staves at the city gates and flogged anyone caught breaking curfew — even the uncle of the eunuch Jian Shuo. After that, nobody dared."],
             ]},
             "caocao3": {"title": "The Hero of Chaos · III: Red Banners at Changshe", "kind": "side", "steps": [
-                ["n", "At Changshe, the Yellow Turbans pitched their camp in tall grass."],
-                ["say", "huangfusong", "They camp in grass. Fire will take them. Every man, bring a bundle of straw."],
-                ["problem"],  # the board comes up here; the rest plays once it is solved
                 ["light", "night", 1500],
                 ["fx", "fire", "b3", 0, -14],
                 ["n", "That night a great wind rose. The camp went up in flames; the rebels fled without saddles or armour."],
                 ["light", "dawn", 1500],
                 ["n", "At dawn, as Zhang Bao and Zhang Liang ran, a column under red banners barred the road."],
                 ["light", "day", 1500],
+                ["problem"],  # the board comes up here; the rest plays once it is solved
                 ["say", "caocao", "Cao Cao, Commandant of Cavalry. You go no further."],
                 ["n", "Ten thousand heads were taken. The two brothers barely escaped with their lives."],
             ]},

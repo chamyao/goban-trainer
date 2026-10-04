@@ -46,7 +46,7 @@ PLACES = {
             "archetype": "town",
             "landmarks": [
                 {"kind": "landmark.notice", "id": "notice", "node": "1-n1", "label": "The notice board",
-                 "intro": ["The governor of You Province calls for volunteers against the Yellow Turbans. At the bottom, a weiqi problem: “Let any man who would lead volunteers show he can read a battle.”"]},
+                 "intro": ["Liu Bei answers by reading the rest of the notice. Below the governor's call for volunteers is a weiqi problem: “Let any man who would lead volunteers show he can read a battle.”"]},
                 {"kind": "furniture.gotable", "id": "board", "near": "notice"},
                 {"kind": "building.inn", "id": "inn", "label": "The village inn"},
                 {"kind": "building.shop", "id": "teahouse", "label": "The teahouse"},

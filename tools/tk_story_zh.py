@@ -31,7 +31,7 @@ ZH = {
         "汉朝传国四百年，到了灵帝，只信宦官。十常侍卖官鬻爵，陷害忠良。天下异象频生：青蛇盘踞御座，母鸡化为公鸡，黑气飞入宫殿。",
     "In Julu, a healer named Zhang Jiao preaches the Way of Great Peace. In the year 184 half a million rise behind him, yellow scarves on their heads, chanting: “The Blue Heaven is dead! The Yellow Heaven shall rise!”":
         "巨鹿人张角，传太平道，施符治病。中平元年，四五十万百姓头裹黄巾，随他造反，齐声高呼：“苍天已死，黄天当立！”",
-    "The governor of You Province posts a call for volunteers. The notice reaches Zhuo County…": "幽州太守刘焉出榜招募义兵。榜文传到了涿县……",
+    "The Yellow Turbans must be put down. The court sends its generals against them, and the governor of You Province posts a call for volunteers. The notice reaches Zhuo County…": "黄巾必须剿灭。朝廷遣将分三路讨之，幽州太守刘焉也出榜招募义兵。榜文传到了涿县……",
     # ---- the notice ----
     "The Notice at Zhuo": "涿县榜文",
     "Liu Bei, twenty-eight, descends from Prince Jing of Zhongshan — yet he sells sandals and weaves mats for a living. His ears reach his shoulders; his arms hang past his knees.":
@@ -162,6 +162,28 @@ ZH = {
     "“A mistake,” warned his secretary Chen Lin. “You hand the spear to others, point first.”": "主簿陈琳劝道：“不可！这是倒持干戈，授人以柄。”",
     "A man beside them clapped and laughed. “This is as easy as turning over a hand. Why so much talk?” It was Cao Cao.": "旁边一人鼓掌大笑：“此事易如反掌，何必多议！”此人正是曹操。",
     "What did Cao Cao propose? Hear the next chapter.": "不知曹操说出甚话来，且听下文分解。",
+    # ---- World 1: indoor scenes (ch. 1) ----
+    "The Governor's Council": "太守议事",
+    "Lu Zhi's Tent": "卢植帐中", "Lu Zhi's tent": "卢植的营帐",
+    "The Fire Plan": "火攻之计",
+    "The Yellow Turbans have crossed into You Province. Governor Liu Yan summons his officer Zou Jing.": "黄巾前犯幽州界分。太守刘焉闻得贼兵将至，召校尉邹靖计议。",
+    "Zou Jing advises him: “The rebels are many and our soldiers are few. My lord, you should raise troops at once, and meet them.”": "邹靖曰：“贼兵众，我兵寡，明公宜作速招军应敌。”",
+    "Liu Yan agrees, and has a notice posted calling for volunteers. It goes up on the wall at Zhuo County, and it draws out a hero.": "刘焉然其说，随即出榜招募义兵。榜文行到涿县，乃引出涿县中一个英雄。",
+    "With Qingzhou relieved, Liu Bei hears that his old teacher Lu Zhi is fighting Zhang Jiao at Guangzong, and goes to help him. Lu Zhi is glad to see him, and keeps him in the tent.": "青州之围已解。玄德闻中郎将卢植与贼首张角战于广宗，备昔曾师事卢植，欲往助之。至卢植军中，入帐施礼，具道来意。卢植大喜，留在帐前听调。",
+    "I have Zhang Jiao penned in here. His brothers Zhang Liang and Zhang Bao are at Yingchuan, facing Huangfu Song and Zhu Jun.": "我今围贼在此。贼弟张梁、张宝在颍川，与皇甫嵩、朱儁对垒。",
+    "Take your own men, and I will give you a thousand more. Go to Yingchuan, learn how they stand, and we will fix a day to destroy them.": "汝可引本部人马，我更助汝一千官军，前去颍川打探消息，约期剿捕。",
+    "Liu Bei takes his orders, and marches through the night.": "玄德领命，引军星夜投颍川来。",
+    "Every man is told to carry a bundle of straw, and hide it.": "遂令军士，每人束草一把，暗地埋伏。",
+    # ---- World 1: the mulberry tree (ch. 1) ----
+    "The Mulberry Tree at Louzang": "楼桑村的桑树",
+    "Louzang Village, Zhuo County. South-east of Liu Bei's house stands a mulberry tree more than fifty feet tall. From far off, it looks like the canopy of a carriage.": "涿县楼桑村。玄德家之东南，有一大桑树，高五丈余，遥望之，童童如车盖。",
+    "A passing fortune-teller says: this family will produce a great man.": "相者云：“此家必出贵人。”",
+    "Liu Bei's father died early. As a boy he plays under the tree with the village children.": "玄德幼孤，与乡中小儿戏于树下。",
+    "I will be the Son of Heaven, and I will ride this carriage canopy.": "我为天子，当乘此车盖。",
+    "This is no ordinary child!": "此儿非常人也！",
+    "The family is poor. His uncle Liu Yuanqi helps them from then on.": "叔父刘元起见玄德家贫，常资给之。",
+    "At fifteen, his mother sends him to study under Zheng Xuan and Lu Zhi, and he befriends Gongsun Zan.": "年十五岁，母使游学，尝师事郑玄、卢植，与公孙瓒等为友。",
+    "He serves his mother with the utmost devotion.": "玄德事母至孝。",
     # ---- World 1: transitions (ch. 1-2) ----
     "Liu Bei and his five hundred report to the governor, Liu Yan. Learning that Liu Bei is of the same imperial house, Liu Yan is delighted and takes him as a nephew.": "刘备引兵五百来见太守刘焉。玄德说起宗派，刘焉大喜，遂认玄德为侄。",
     "Not many days later, the Yellow Turban general Cheng Yuanzhi marches on Zhuo with fifty thousand men. Liu Bei meets him with five hundred.": "不数日，黄巾贼将程远志统兵五万来犯涿郡。刘焉令邹靖引玄德等三人，统兵五百，前去破敌。",
@@ -179,7 +201,7 @@ ZH = {
     "Very good.": "如此甚好。",
     "The next day, in the peach garden behind Zhang Fei's farm, the blossoms are in full bloom.": "次日，张飞庄后的桃园中，花开正盛。",
     # ---- World 1 plot pass (from docs/world1-script-draft.md) ----
-    "Zhuo County. A crowd gathers at a notice on the wall: the governor is raising volunteers against the Yellow Turbans.": "涿县城中，众人围看墙上榜文：幽州太守刘焉出榜招募义兵，共破黄巾。",
+    "Zhuo County. A crowd gathers at a notice on the wall: the governor is raising volunteers to put down the Yellow Turbans.": "涿县城中，众人围看墙上榜文：幽州太守刘焉出榜招募义兵，讨平黄巾。",
     "Under an old tree by the road, two white-haired men sit over a weiqi board, as if no army were coming.": "路旁老树下，两位白发老人对坐弈棋，仿佛大军压境与他们无关。",
     "Read this first.": "先看这一局。",
     "To catch the bandits, first catch their king.": "擒贼先擒王。",
@@ -224,7 +246,7 @@ ZH = {
     "Your neighbour has scratched a weiqi board into the dirt under the mulberry. “Before you go to town, Xuande, one game.”": "邻居在桑树下的泥地上画了一张棋盘。“玄德，进城之前，先下一局。”",
     "“Ha! Sharper than your sandals. Go on, then.”": "“哈！你的棋比你的草鞋还精。去吧。”",
     "“Bring me back a story from town.”": "“从城里带个新鲜事回来给我听。”",
-    "The governor of You Province calls for volunteers against the Yellow Turbans. At the bottom, a weiqi problem: “Let any man who would lead volunteers show he can read a battle.”": "幽州太守招募义兵，讨伐黄巾。榜文末尾附着一道围棋题：“欲率义兵者，先请看清此局。”",
+    "Liu Bei answers by reading the rest of the notice. Below the governor's call for volunteers is a weiqi problem: “Let any man who would lead volunteers show he can read a battle.”": "玄德答话之前，先看完榜文。太守招募义兵的告示下面，附着一道围棋题：“欲率义兵者，先请看清此局。”",
     "An old storyteller taps his clapper-board. “Sit, sit! Tales of the Yellow Heaven…”": "一位说书老人敲了敲醒木。“坐，坐！且听黄天的故事……”",
     "“They say the Yellow Turbans wear scarves the colour of the earth.”": "“听说黄巾贼头上裹的巾，是土黄色的。”",
     "“Liu Bei? The sandal-seller? Kind man. Ears down to his shoulders, you know.”": "“刘备？那个卖草鞋的？是个好人。耳朵都垂到肩膀了。”",
