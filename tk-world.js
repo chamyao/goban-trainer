@@ -421,7 +421,11 @@ const WorldView = {
     host.addEventListener("mousedown", () => host.focus());
     this.game = new Phaser.Game({
       type: Phaser.AUTO, parent: host, width: 320, height: 180, pixelArt: true, roundPixels: true, backgroundColor: "#1b2418",
-      physics: { default: "arcade", arcade: { debug: false } },
+      // Move by real elapsed time, so walking keeps its speed when the browser drops
+      // frames (laptops on battery often do): no fixed 60 Hz physics step to fall
+      // behind, and no delta smoothing to under-move after a slow patch.
+      physics: { default: "arcade", arcade: { debug: false, fixedStep: false } },
+      fps: { smoothStep: false },
       input: { keyboard: { target: host } },
       scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
       scene: worldScenes(),
