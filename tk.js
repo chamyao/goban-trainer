@@ -435,7 +435,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) this.data = await (await fetch("data/tk.json?v=2")).json();
+    if (!this.data) this.data = await (await fetch("data/tk.json?v=3")).json();
     return this.data;
   },
   ls(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } },
@@ -943,7 +943,7 @@ async function viewTK(worldN) {
       : (clr && scene ? `Side story: ${scene.title}` : "Side story: ???");
     info.append(h("div", { class: "tk-info-text" }, [
       h("b", {}, node.place),
-      h("div", { class: "meta" }, `${TK.roleLabel(node)} · ${node.grade}${clr ? " · cleared ★" : open ? "" : " · locked"}`),
+      h("div", { class: "meta" }, [TK.roleLabel(node), node.grade, clr ? "cleared ★" : open ? "" : "locked"].filter(Boolean).join(" · ")),
       h("div", { class: "meta" }, story),
     ]));
     const play = h("button", { class: "tk-play", type: "button" }, clr ? "Play again ▶" : "Play ▶");
@@ -1063,9 +1063,9 @@ async function viewTKLevel(worldN, key) {
     h("div", { class: "panel" }, [
       h("h2", {}, `World ${worldN} · ${w.name}`),
       h("div", { class: "meta-title" }, `${node.place} · ${TK.roleLabel(node)}`),
-      h("div", { class: "meta-sub" }, [`from ${src.title} · `, p.url ? h("a", { href: p.url, target: "_blank" }, "source")
+      h("div", { class: "meta-sub" }, [node.role === "boss" ? "" : `from ${src.title} · `, p.url ? h("a", { href: p.url, target: "_blank" }, "source")
                                                                  : h("a", { href: `https://www.101weiqi.com/q/${p.id}/`, target: "_blank" }, "source")]),
-      h("div", { class: "badges" }, [h("span", { class: "badge" }, p.lv || node.grade), ...(p.qt ? [h("span", { class: "badge" }, p.qt)] : []), turnBadge]),
+      h("div", { class: "badges" }, [...(p.lv || node.grade ? [h("span", { class: "badge" }, p.lv || node.grade)] : []), ...(p.qt ? [h("span", { class: "badge" }, p.qt)] : []), turnBadge]),
     ]),
     h("div", { class: "panel" }, [h("h2", {}, "Status"), status, note, verdict]),
     treePanel,

@@ -124,10 +124,8 @@ def main():
             if role == "boss":
                 if w["boss"] == "redmond":
                     pool = redmond[:60]
-                    node["grade"] = "Redmond"
                 else:
                     pool = [r for g, r in maeda if hi < g <= hi + 3] or [r for g, r in sorted(maeda, key=lambda t: -t[0])]
-                    node["grade"] = "Maeda"
                 pool = pool[:]
                 random.Random(w["n"]).shuffle(pool)
                 node["pool"] = pool[:POOL]
@@ -169,7 +167,7 @@ def main():
     print(f"voice-over: {len(lines) - len(missing)}/{len(lines)} lines have audio"
           + (" — run tools/build_tk_voice.py, then this again" if missing else ""))
     for w in worlds:
-        print(f"World {w['n']} {w['name']}: " + ", ".join(f"{n['key'].split('-')[1]}={n.get('grade', '-')}({len(n.get('pool', []))})" for n in w["nodes"]))
+        print(f"World {w['n']} {w['name']}: " + ", ".join(f"{n['key'].split('-')[1]}={n.get('grade', 'boss' if n.get('role') == 'boss' else '-')}({len(n.get('pool', []))})" for n in w["nodes"]))
 
 
 if __name__ == "__main__":
