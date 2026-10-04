@@ -10,6 +10,15 @@ Object.assign(TK_CHARS, {  // drawn by TKArt like everyone else
   starred: { name: "Old man in red", skin: "#ecc9a4", hair: "#e4e4e4", hat: "scholar", hatC: "#5a2a22", robe: "#a83a2c", trim: "#e6c14a", beard: "long", beardC: "#f0f0f0", eyes: "kind" },
 });
 
+// Chinese names, shown first in the dialogue box.
+const TK_NAMES_ZH = {
+  liubei: "刘备", guanyu: "关羽", zhangfei: "张飞", caocao: "曹操", dongzhuo: "董卓", zhangbao: "张宝", zhangjiao: "张角",
+  luzhi: "卢植", zhujun: "朱儁", huangfusong: "皇甫嵩", chengyuanzhi: "程远志", rebel: "黄巾兵", inspector: "督邮",
+  xushao: "许劭", uncle: "曹操的叔父", zuofeng: "左丰", merchant: "张世平", immortal: "南华老仙",
+  stargrey: "灰衣老人", starred: "红衣老人",
+};
+const tkName = who => [TK_NAMES_ZH[who], TK_CHARS[who] && TK_CHARS[who].name].filter(Boolean).join(" ");
+
 /* ---------- the heroes in four directions, from TKArt's front sprites ---------- */
 const TownArt = {
   // Recolour a front sprite into a back view: face becomes hair, beard becomes robe.
@@ -136,9 +145,9 @@ const TownUI = {
     host.querySelectorAll(":scope > .town-ui").forEach(el => el.remove());  // a new place replaces the old overlay
     const root = document.createElement("div");
     root.className = "town-ui";
-    root.innerHTML = `<div class="town-goal"></div><div class="town-keys"><b>WASD</b>/<b>↑↓←→</b> walk · <b>Shift</b> run · <b>Space</b> talk</div>
-      <div class="town-place"></div><div class="town-hint" hidden>Space</div><div class="town-focus" hidden>Click the map to play</div>
-      <div class="town-dim" hidden></div><div class="town-dlg" hidden><div class="town-tab">Story · 主线</div><canvas class="town-face" width="34" height="34"></canvas><div class="town-txt"><div class="town-who"></div><div class="town-en"></div><div class="town-zh" lang="zh-CN"></div></div><div class="town-more">▼</div></div>`;
+    root.innerHTML = `<div class="town-goal"></div><div class="town-keys"><b>WASD</b>/<b>↑↓←→</b> 移动 move · <b>Enter</b> 对话 talk</div>
+      <div class="town-place"></div><div class="town-hint" hidden>Enter</div><div class="town-focus" hidden>Click the map to play</div>
+      <div class="town-dim" hidden></div><div class="town-dlg" hidden><div class="town-tab">主线 · Story</div><canvas class="town-face" width="34" height="34"></canvas><div class="town-txt"><div class="town-who"></div><div class="town-zh" lang="zh-CN"></div><div class="town-en"></div></div><div class="town-more">▼</div></div>`;
     host.append(root);
     const $ = s => root.querySelector(s);
     let queue = [], done = null, open = false;
@@ -147,7 +156,7 @@ const TownUI = {
       if (!st) { $(".town-dlg").hidden = true; $(".town-dim").hidden = true; open = false; TKVoice.stop(); const d = done; done = null; d && d(); return; }
       const said = st[0] === "say", who = said ? st[1] : null;
       const [en, zh, vid] = said ? [st[2], st[3], st[4]] : [st[1], st[2], st[3]];
-      $(".town-who").textContent = who ? TK_CHARS[who].name : "";
+      $(".town-who").textContent = who ? tkName(who) : "";
       $(".town-en").textContent = en;
       $(".town-zh").textContent = typeof zh === "string" ? zh : "";
       const face = $(".town-face"), fc = face.getContext("2d");
@@ -161,8 +170,16 @@ const TownUI = {
     setTimeout(focus, 0);
     return {
       busy: () => open,
-      goal: t => { $(".town-goal").textContent = t; },
-      place(name) { const el = $(".town-place"); el.textContent = name; el.classList.remove("show"); void el.offsetWidth; el.classList.add("show"); },
+      // Chinese leads, English follows.
+      goal(t, zh) {
+        const g = $(".town-goal"); g.textContent = zh || t;
+        if (zh) g.append(Object.assign(document.createElement("span"), { className: "town-goal-en", textContent: t }));
+      },
+      place(name, zh) {
+        const el = $(".town-place"); el.textContent = zh || name; el.lang = zh ? "zh-CN" : "en";
+        if (zh) el.append(Object.assign(document.createElement("span"), { className: "town-place-en", lang: "en", textContent: name }));
+        el.classList.remove("show"); void el.offsetWidth; el.classList.add("show");
+      },
       // style "story": the plot, framed and with the map dimmed; "chat": townsfolk and asides, small and plain
       dialog(steps, cb, style = "chat") {
         queue = steps.filter(s => s[0] === "n" || s[0] === "say").slice(); done = cb || null; open = true;

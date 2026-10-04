@@ -204,6 +204,35 @@ ZH = {
     "“The general is in his tent. He doesn't like visitors without rank.”": "“将军在帐里。他不喜欢没官职的人来见他。”",
     "“Wind and thunder answer to me!”": "风雷听我号令！",
 
+    # ---- World 1 places, objectives and story spots (map factory, tk-world.js) ----
+    "Lousang Village": "楼桑村", "Zhuo County": "涿县", "The Peach Garden": "桃园", "Road to Julu": "巨鹿道上",
+    "Julu": "巨鹿", "Yellow Hills": "黄冈", "Horse Trail": "马道", "Daxing Mountain": "大兴山", "Qingzhou": "青州",
+    "Guangzong Road": "广宗道上", "Qiao": "谯郡", "Luoyang Gates": "洛阳城门", "Changshe": "长社",
+    "Envoy's Road": "使者路上", "Dong Zhuo's Camp": "董卓营", "Hills of Black Wind": "黑风岭", "Yangcheng": "阳城",
+    "Read the notice in the town square.": "去城中广场看榜文。",
+    "Swear brotherhood under the great peach tree.": "在大桃树下结为兄弟。",
+    "Side story: find the old man in the hills.": "支线：去山中寻找那位老人。",
+    "Side story: hear Zhang Jiao's sermon in Julu.": "支线：到巨鹿听张角传道。",
+    "Side story: the betrayal in the Yellow Hills.": "支线：黄冈的背叛。",
+    "Shortcut: the horse dealers on the northern trail.": "捷径：北方马道上的马商。",
+    "Meet the Yellow Turbans at Daxing Mountain.": "在大兴山迎战黄巾军。",
+    "Lift the siege of Qingzhou.": "解青州之围。",
+    "Go to Guangzong, where Lu Zhi besieges Zhang Jiao.": "前往广宗，卢植正在那里围攻张角。",
+    "Side story: the boyhood of Cao Cao.": "支线：曹操的少年时代。",
+    "Side story: Cao Cao at the gates of Luoyang.": "支线：洛阳城门的曹操。",
+    "Side story: red banners at Changshe.": "支线：长社红旗。",
+    "Shortcut: the envoy on the road.": "捷径：路上的使者。",
+    "Rescue Dong Zhuo, then report at his tent.": "救出董卓，再到他帐前复命。",
+    "Break Zhang Bao's sorcery in the hills.": "在山中破张宝的妖术。",
+    "Defeat Zhang Bao at Yangcheng.": "在阳城击败张宝。",
+    "A Yellow Turban tent": "黄巾军的帐篷", "A hermit's shelter": "隐士的草庐", "A prisoner's cart": "囚车",
+    "Dong Zhuo's tent": "董卓的大帐", "Liu Bei's home": "刘备的家", "The Cao family house": "曹家宅院",
+    "The Han camp": "汉军营地", "The Yellow Turban line": "黄巾军阵", "The besieged city": "被围的城",
+    "The county office": "县衙", "The envoy's rest": "使者歇脚处", "The great mulberry tree": "大桑树",
+    "The great peach tree": "大桃树", "The horse dealers' camp": "马商的营地", "The north gate of Luoyang": "洛阳北门",
+    "The notice board": "榜文", "The teahouse": "茶馆", "The village inn": "村店", "Where Zhang Jiao preaches": "张角传道之处",
+    "Zhang Bao's sorcery": "张宝的妖术", "Zhang Bao's stronghold": "张宝的城寨", "Zhang Fei's farm": "张飞的庄园",
+
 }
 
 # Pronunciation fixes for the voice only (the text shown keeps the real

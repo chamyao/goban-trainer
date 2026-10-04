@@ -122,6 +122,17 @@ def all_lines(worlds):
 TSUMEGO = {"死活题", "Life & Death"}
 
 
+# KataGo vetting (tools/vet_tsumego.mjs): "book/id" -> {"ok": bool, "why": ...}.
+# Rejected problems are never drawn; vetted-clean ones are preferred.
+VETTED_FILE = ROOT / "data" / "tk_vetted.json"
+VETTED = json.loads(VETTED_FILE.read_text()) if VETTED_FILE.exists() else {}
+
+
+def vet(ref):
+    r = VETTED.get(f"{ref[0]}/{ref[1]}")
+    return None if r is None else r["ok"]
+
+
 def usable(p):
     # A real answer key: at least one correct line with a move in it.
     return p.get("qt") in TSUMEGO and any(l[0] == 1 and len(l) > 1 for l in p.get("lines", []))
@@ -150,13 +161,18 @@ def main():
 
     taken = set()  # no problem appears twice in the whole campaign
 
+    unvetted = []
+
     def draw(rank, n=POOL):
-        out, d = [], 0
-        while len(out) < n and d < len(GRADES):  # borrow neighbouring grades if thin
-            for r in sorted({rank - d, rank + d}):
-                if 0 <= r < len(GRADES):
-                    out += [x for x in by_grade.get(GRADES[r], []) if tuple(x) not in taken and x not in out][:n - len(out)]
-            d += 1
+        out = []
+        for want in (True, None):  # KataGo-clean problems first, then ones not vetted yet; never rejected ones
+            d = 0
+            while len(out) < n and d < len(GRADES):  # borrow neighbouring grades if thin
+                for r in sorted({rank - d, rank + d}):
+                    if 0 <= r < len(GRADES):
+                        out += [x for x in by_grade.get(GRADES[r], []) if vet(x) is want and tuple(x) not in taken and x not in out][:n - len(out)]
+                d += 1
+        unvetted.extend(x for x in out if vet(x) is None)
         taken.update(map(tuple, out))
         return out
 
@@ -167,6 +183,8 @@ def main():
         for src in w["nodes"]:
             node = {k: v for k, v in src.items() if k != "step"}
             node["key"] = f"{w['n']}-{src['key']}"
+            if "place" in node:
+                node["place_zh"] = zh(node["place"])
             role = src.get("role")
             if role == "boss":
                 if w["boss"] == "redmond":
@@ -211,6 +229,9 @@ def main():
     data = {"id": "tk", "title": "Romance of the Three Kingdoms", "native": "三国演义", "worlds": worlds,
             "voices": sorted(k for k in lines if k in have)}
     (ROOT / "data" / "tk.json").write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")))
+    if VETTED:
+        print(f"KataGo vetting: {len(unvetted)} pooled problems not vetted yet"
+              + (" — run tools/vet_tsumego.mjs --pools, then this again" if unvetted else ", every pool is clean"))
     print(f"voice-over: {len(lines) - len(missing)}/{len(lines)} lines have audio"
           + (" — run tools/build_tk_voice.py, then this again" if missing else ""))
     for w in worlds:

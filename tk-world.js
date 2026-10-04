@@ -12,7 +12,8 @@
    are. Hero sprites and the dialogue box come from tk-town.js. */
 
 const WORLD_CLUTTER = /^(plant\.|rock\.small)/;  // drawn underfoot
-const WORLD_KIT = "jade";                         // ?kit=ninja (or localStorage tk-kit) to try another
+const WORLD_KIT = "jade";  // the default look; the campaign page's art button switches (localStorage tk-kit)
+const WORLD_KITS = { jade: { zh: "玉", en: "Jade" }, ninja: { zh: "忍者", en: "Ninja Adventure" } };
 
 /* ---------- where you are in a world: place, position, party, places seen ---------- */
 const WorldState = {
@@ -48,7 +49,7 @@ const WorldData = {
     let h = 0;
     for (const ch of key) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
     const i = all.length ? h % all.length : 0;
-    return { key, town: true, place: place.name, role: "challenge", grade: w.grades.split("–")[0], pool: all.slice(i).concat(all.slice(0, i)) };
+    return { key, town: true, place: place.name, place_zh: place.zh, role: "challenge", grade: w.grades.split("–")[0], pool: all.slice(i).concat(all.slice(0, i)) };
   },
 };
 
@@ -117,7 +118,7 @@ function worldScenes() {
       for (const o of map.getObjectLayer("objects").objects) {
         const p = P(o);
         if (o.type === "prop") this.addProp(o, p);
-        else if (o.type === "spot") this.spots[o.name] = { x: o.x, y: o.y, node: p.node, label: p.label, intro: J(p.intro), outro: J(p.outro) };
+        else if (o.type === "spot") this.spots[o.name] = { x: o.x, y: o.y, node: p.node, label: p.label, labelZh: p.label_zh || "", intro: J(p.intro), outro: J(p.outro) };
         else if (o.type === "npc") this.addNpc(o, p, J);
         else if (o.type === "exit") this.exits.push({ to: p.to, side: p.side, rect: new Phaser.Geom.Rectangle(o.x, o.y, o.width, o.height) });
         else if (o.type === "entry") this.entries[p.from || ""] = { x: o.x, y: o.y };
@@ -144,11 +145,11 @@ function worldScenes() {
       cam.setRoundPixels(true);
       cam.fadeIn(350);
 
-      this.keys = this.input.keyboard.addKeys("W,A,S,D,UP,DOWN,LEFT,RIGHT,SHIFT,SPACE,E,ENTER,Z");
-      for (const k of ["SPACE", "E", "ENTER", "Z"]) this.keys[k].on("down", () => this.act());
+      this.keys = this.input.keyboard.addKeys("W,A,S,D,UP,DOWN,LEFT,RIGHT,E,ENTER");
+      for (const k of ["ENTER", "E"]) this.keys[k].on("down", () => this.act());
       this.ui = TownUI.mount(this, opts.host);
       this.setGoal();
-      if (!pos) this.ui.place(this.place.name);
+      if (!pos) this.ui.place(this.place.name, this.place.zh);
       this.blocked = 0;
       this.leaving = false;
       window.__w = this;  // for tests and the console
@@ -236,19 +237,23 @@ function worldScenes() {
       return out;
     }
     placeName(id) { return this.region.places.find(p => p.id === id).name; }
+    placeZh(id) { return this.region.places.find(p => p.id === id).zh || this.placeName(id); }
 
     setGoal() {
       const q = this.nextMain();
-      if (!q) return this.ui.goal("The world is complete. The road goes on…");
-      if (this.available(q)) return this.ui.goal(q.place === this.placeId ? q.objective : `${q.objective} (${this.placeName(q.place)})`);
-      const ways = this.leadsTo(q).map(p => p.role === "short" ? `the shortcut at ${this.placeName(p.place)}` : this.placeName(p.place));
-      this.ui.goal(`On to ${this.placeName(q.place)}, by way of ${[...new Set(ways)].join(" or ")}.`);
+      if (!q) return this.ui.goal("The world is complete. The road goes on…", "这一卷已经完成。路还在前方……");
+      if (this.available(q)) return q.place === this.placeId ? this.ui.goal(q.objective, q.objective_zh)
+        : this.ui.goal(`${q.objective} (${this.placeName(q.place)})`, `${q.objective_zh || ""}（${this.placeZh(q.place)}）`);
+      const lead = this.leadsTo(q);
+      const ways = [...new Set(lead.map(p => p.role === "short" ? `the shortcut at ${this.placeName(p.place)}` : this.placeName(p.place)))];
+      const waysZh = [...new Set(lead.map(p => p.role === "short" ? `${this.placeZh(p.place)}的捷径` : this.placeZh(p.place)))];
+      this.ui.goal(`On to ${this.placeName(q.place)}, by way of ${ways.join(" or ")}.`, `前往${this.placeZh(q.place)}，可经${waysZh.join("或")}。`);
     }
 
     // Walk up to a story spot: its lead-in, then the problem.
     playQuest(q, spot) {
       const lead = spot.intro.length ? worldLines(spot.intro)
-        : q.boss ? [["say", q.boss.who, q.boss.taunt, q.boss.taunt_zh, q.boss.taunt_vid]] : [["n", `${q.title}.`]];
+        : q.boss ? [["say", q.boss.who, q.boss.taunt, q.boss.taunt_zh, q.boss.taunt_vid]] : [["n", `${q.title}.`, q.title_zh ? `${q.title_zh}。` : ""]];
       this.talk(lead, () => this.puzzle(q.node), "story");
     }
 
@@ -314,8 +319,8 @@ function worldScenes() {
       }
       const spot = this.spots[t.k], q = this.region.quests.find(x => x.node === spot.node);
       if (q && this.available(q)) this.playQuest(q, spot);
-      else if (q && this.done(q.node)) this.talk([["n", `${spot.label || q.title}. (${q.title}: done.)`]]);
-      else this.talk([["n", `${spot.label || "Nothing here"}. It isn't time yet.`]]);
+      else if (q && this.done(q.node)) this.talk([["n", `${spot.label || q.title}. (${q.title}: done.)`, `${spot.labelZh || q.title_zh}。（${q.title_zh}：已完成）`]]);
+      else this.talk([["n", `${spot.label || "Nothing here"}. It isn't time yet.`, `${spot.labelZh || "这里"}。时候还没到。`]]);
     }
 
     // style: "story" for the plot (quest lead-ins and scenes), "chat" for everything else
@@ -343,12 +348,12 @@ function worldScenes() {
         if (K.UP.isDown || K.W.isDown || this.auto === "up") vy -= 1;
         if (K.DOWN.isDown || K.S.isDown || this.auto === "down") vy += 1;
       }
-      const speed = K.SHIFT.isDown ? 110 : 64, len = Math.hypot(vx, vy) || 1;
+      const speed = 110, len = Math.hypot(vx, vy) || 1;  // always at a run
       P.setVelocity(vx / len * speed, vy / len * speed);
       if (vx || vy) {
         P.facing = Math.abs(vx) > Math.abs(vy) ? (vx < 0 ? "left" : "right") : (vy < 0 ? "up" : "down");
         P.anims.play(`h-liubei-${P.facing}`, true);
-        P.anims.msPerFrame = K.SHIFT.isDown ? 85 : 135;
+        P.anims.msPerFrame = 85;
       } else { P.anims.stop(); P.setTexture(`h-liubei-${P.facing}-0`); }
       P.setDepth(P.y);
 
@@ -361,7 +366,7 @@ function worldScenes() {
           this.blocked = 1500;
           const back = { N: [0, 1], S: [0, -1], E: [-1, 0], W: [1, 0] }[e.side];
           P.setPosition(P.x + back[0] * 10, P.y + back[1] * 10);
-          this.talk([["n", `The way to ${this.placeName(e.to)} isn't open yet.`]]);
+          this.talk([["n", `The way to ${this.placeName(e.to)} isn't open yet.`, `通往${this.placeZh(e.to)}的路还没有开通。`]]);
         }
       }
 
@@ -403,8 +408,9 @@ const WorldView = {
   kit() {
     let k = new URLSearchParams(location.search).get("kit");
     try { k = k || localStorage.getItem("tk-kit"); } catch {}
-    return k || WORLD_KIT;
+    return k in WORLD_KITS ? k : WORLD_KIT;
   },
+  setKit(k) { try { localStorage.setItem("tk-kit", k); } catch {} },
   // opts: { w, host, ret, onPuzzle(key), onBoss() }
   async mount(opts) {
     this.destroy();

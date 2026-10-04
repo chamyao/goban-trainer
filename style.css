@@ -499,8 +499,8 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
 .town-face { width: clamp(52px, 9vw, 96px); height: auto; aspect-ratio: 1; image-rendering: pixelated; background: #e2d2ac; border: 3px solid #7a3a22; border-radius: 4px; flex: none; }
 .town-txt { min-width: 0; }
 .town-who { font-weight: bold; color: #8a2a1a; }
-.town-en { font-size: 1.1em; }
-.town-zh { margin-top: 4px; color: #6a5440; }
+.town-zh { font-size: 1.15em; }
+.town-en { margin-top: 4px; color: #6a5440; font-size: .92em; }
 .town-more { position: absolute; right: 12px; bottom: 4px; color: #8a2a1a; animation: townBob 1s infinite; }
 @keyframes townBob { 50% { transform: translateY(3px); } }
 @media (prefers-reduced-motion: reduce) { .town-more { animation: none; } }
@@ -517,6 +517,16 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
 .town-dlg.story { border-color: #7a3a22; box-shadow: 0 0 0 2px #e6c14a inset, 0 5px 0 rgba(0, 0, 0, .35); }
 .town-dlg.chat { max-width: 580px; min-height: 0; padding: 8px 12px; background: #e9e6df; color: #34302a; border: 2px solid #8f887a; box-shadow: 0 3px 0 rgba(0, 0, 0, .25); font-size: .92em; }
 .town-dlg.chat .town-who { color: #4a4438; }
-.town-dlg.chat .town-zh { color: #6c665a; }
+.town-dlg.chat .town-en { color: #6c665a; }
 .town-dlg.chat .town-face { width: clamp(40px, 6vw, 64px); border-width: 2px; border-color: #8f887a; background: #d8d4ca; }
 .town-dlg.chat .town-more { color: #6c665a; }
+.town-goal-en { display: block; margin-left: 1.3em; font-size: .85em; opacity: .8; }
+.town-place-en { display: block; font-size: .5em; letter-spacing: .08em; margin-top: 2px; }
+/* Chinese leads, English follows (campaign dialogue and storyteller scrolls) */
+.tk-dlg-zh { margin: 0 0 3px; font-size: 16px; color: inherit; }
+.tk-dlg-text { font-size: 13.5px; color: #7a5a3a; }
+.tk-dlg.narr .tk-dlg-text { color: #7a5a3a; }
+.tk-scroll h3 .tk-scroll-en { display: block; font-size: .72em; font-weight: normal; opacity: .75; margin-top: 2px; }
+.tk-para .zh { font-size: 1.08em; }
+.tk-para .en { opacity: .78; font-size: .92em; }
+.meta-title .tk-en { color: var(--muted); font-weight: normal; font-size: .9em; }

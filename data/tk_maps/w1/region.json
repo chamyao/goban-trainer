@@ -2,6 +2,7 @@
  "format": "tk-region/1",
  "world": 1,
  "name": "The Peach Garden Oath",
+ "zh": "桃园结义",
  "start": "lousang-village",
  "party": [
   "liubei"
@@ -10,6 +11,7 @@
   {
    "id": "lousang-village",
    "name": "Lousang Village",
+   "zh": "楼桑村",
    "archetype": "village",
    "map": "lousang-village.map.json",
    "links": [
@@ -19,6 +21,7 @@
   {
    "id": "zhuo-county",
    "name": "Zhuo County",
+   "zh": "涿县",
    "archetype": "town",
    "map": "zhuo-county.map.json",
    "links": [
@@ -29,6 +32,7 @@
   {
    "id": "the-peach-garden",
    "name": "The Peach Garden",
+   "zh": "桃园",
    "archetype": "garden",
    "map": "the-peach-garden.map.json",
    "links": [
@@ -40,6 +44,7 @@
   {
    "id": "road-to-julu",
    "name": "Road to Julu",
+   "zh": "巨鹿道上",
    "archetype": "road",
    "map": "road-to-julu.map.json",
    "links": [
@@ -50,6 +55,7 @@
   {
    "id": "julu",
    "name": "Julu",
+   "zh": "巨鹿",
    "archetype": "village",
    "map": "julu.map.json",
    "links": [
@@ -60,6 +66,7 @@
   {
    "id": "yellow-hills",
    "name": "Yellow Hills",
+   "zh": "黄冈",
    "archetype": "hills",
    "map": "yellow-hills.map.json",
    "links": [
@@ -70,6 +77,7 @@
   {
    "id": "horse-trail",
    "name": "Horse Trail",
+   "zh": "马道",
    "archetype": "road",
    "map": "horse-trail.map.json",
    "links": [
@@ -80,6 +88,7 @@
   {
    "id": "daxing-mountain",
    "name": "Daxing Mountain",
+   "zh": "大兴山",
    "archetype": "mountain",
    "map": "daxing-mountain.map.json",
    "links": [
@@ -91,6 +100,7 @@
   {
    "id": "qingzhou",
    "name": "Qingzhou",
+   "zh": "青州",
    "archetype": "city",
    "map": "qingzhou.map.json",
    "links": [
@@ -101,6 +111,7 @@
   {
    "id": "guangzong-road",
    "name": "Guangzong Road",
+   "zh": "广宗道上",
    "archetype": "road",
    "map": "guangzong-road.map.json",
    "links": [
@@ -112,6 +123,7 @@
   {
    "id": "qiao",
    "name": "Qiao",
+   "zh": "谯郡",
    "archetype": "village",
    "map": "qiao.map.json",
    "links": [
@@ -122,6 +134,7 @@
   {
    "id": "luoyang-gates",
    "name": "Luoyang Gates",
+   "zh": "洛阳城门",
    "archetype": "city",
    "map": "luoyang-gates.map.json",
    "links": [
@@ -132,6 +145,7 @@
   {
    "id": "changshe",
    "name": "Changshe",
+   "zh": "长社",
    "archetype": "camp",
    "map": "changshe.map.json",
    "links": [
@@ -142,6 +156,7 @@
   {
    "id": "envoys-road",
    "name": "Envoy's Road",
+   "zh": "使者路上",
    "archetype": "road",
    "map": "envoys-road.map.json",
    "links": [
@@ -152,6 +167,7 @@
   {
    "id": "dong-zhuos-camp",
    "name": "Dong Zhuo's Camp",
+   "zh": "董卓营",
    "archetype": "camp",
    "map": "dong-zhuos-camp.map.json",
    "links": [
@@ -163,6 +179,7 @@
   {
    "id": "hills-of-black-wind",
    "name": "Hills of Black Wind",
+   "zh": "黑风岭",
    "archetype": "hills",
    "map": "hills-of-black-wind.map.json",
    "links": [
@@ -173,6 +190,7 @@
   {
    "id": "yangcheng",
    "name": "Yangcheng",
+   "zh": "阳城",
    "archetype": "city",
    "map": "yangcheng.map.json",
    "links": [
@@ -203,16 +221,8 @@
      3179
     ],
     [
-     "specialized-training-in-tsumego-5",
-     43979
-    ],
-    [
      "specialized-training-in-tesuji-3",
      81326
-    ],
-    [
-     "compact-go-puzzles-to-learn-the-basics",
-     10403
     ],
     [
      "specialized-training-in-tsumego-5",
@@ -313,8 +323,18 @@
     [
      "specialized-training-in-tsumego-2",
      84613
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     44162
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-1",
+     1146
     ]
-   ]
+   ],
+   "objective_zh": "去城中广场看榜文。",
+   "title_zh": "涿县榜文"
   },
   {
    "node": "1-n2",
@@ -329,14 +349,6 @@
    ],
    "grade": "12K",
    "pool": [
-    [
-     "specialized-training-in-tsumego-6",
-     44162
-    ],
-    [
-     "weiqi-life-and-death-1000-problems-part-1",
-     1146
-    ],
     [
      "specialized-training-in-tsumego-5",
      127058
@@ -448,8 +460,18 @@
     [
      "specialized-training-in-tsumego-5",
      127060
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     214846
+    ],
+    [
+     "ishida-yoshio-tsumego-challenge",
+     37681
     ]
-   ]
+   ],
+   "objective_zh": "在大桃树下结为兄弟。",
+   "title_zh": "桃园结义"
   },
   {
    "node": "1-a1",
@@ -464,14 +486,6 @@
    ],
    "grade": "12K",
    "pool": [
-    [
-     "specialized-training-in-tsumego-2",
-     214846
-    ],
-    [
-     "ishida-yoshio-tsumego-challenge",
-     37681
-    ],
     [
      "specialized-training-in-tsumego-1",
      210821
@@ -583,8 +597,18 @@
     [
      "specialized-training-in-tsumego-3",
      149021
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63831
+    ],
+    [
+     "fujisawa-shuko-classroom",
+     264972
     ]
-   ]
+   ],
+   "objective_zh": "支线：去山中寻找那位老人。",
+   "title_zh": "太平道·一：洞中老人"
   },
   {
    "node": "1-a2",
@@ -599,14 +623,6 @@
    ],
    "grade": "12K",
    "pool": [
-    [
-     "specialized-training-in-tsumego-1",
-     63831
-    ],
-    [
-     "fujisawa-shuko-classroom",
-     264972
-    ],
     [
      "hitomi-tsumego",
      135452
@@ -718,8 +734,18 @@
     [
      "specialized-training-in-tsumego-1",
      63832
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     43937
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     49295
     ]
-   ]
+   ],
+   "objective_zh": "支线：到巨鹿听张角传道。",
+   "title_zh": "太平道·二：苍天已死"
   },
   {
    "node": "1-a3",
@@ -734,14 +760,6 @@
    ],
    "grade": "12K",
    "pool": [
-    [
-     "specialized-training-in-tsumego-5",
-     43937
-    ],
-    [
-     "specialized-training-in-tsumego-4",
-     49295
-    ],
     [
      "specialized-training-in-tsumego-2",
      103407
@@ -853,8 +871,18 @@
     [
      "bedtime-tsumego-part-2",
      137662
+    ],
+    [
+     "bedtime-tsumego-part-3",
+     59523
+    ],
+    [
+     "common-life-and-death-problems",
+     26032
     ]
-   ]
+   ],
+   "objective_zh": "支线：黄冈的背叛。",
+   "title_zh": "太平道·三：事泄"
   },
   {
    "node": "1-as",
@@ -989,7 +1017,9 @@
      "the-unexpected-tesuji",
      37667
     ]
-   ]
+   ],
+   "objective_zh": "捷径：北方马道上的马商。",
+   "title_zh": "北来骏马"
   },
   {
    "node": "1-n3",
@@ -1005,14 +1035,6 @@
    ],
    "grade": "12K",
    "pool": [
-    [
-     "bedtime-tsumego-part-3",
-     59523
-    ],
-    [
-     "common-life-and-death-problems",
-     26032
-    ],
     [
      "common-life-and-death-problems",
      10969
@@ -1124,8 +1146,18 @@
     [
      "weiqi-rapid-drill-800-part-3",
      3559
+    ],
+    [
+     "hitomi-tsumego",
+     135436
+    ],
+    [
+     "seedling-project",
+     27353
     ]
-   ]
+   ],
+   "objective_zh": "在大兴山迎战黄巾军。",
+   "title_zh": "大兴山初战"
   },
   {
    "node": "1-n4",
@@ -1140,14 +1172,6 @@
    ],
    "grade": "12K",
    "pool": [
-    [
-     "hitomi-tsumego",
-     135436
-    ],
-    [
-     "seedling-project",
-     27353
-    ],
     [
      "specialized-training-in-tsumego-6",
      127185
@@ -1259,8 +1283,18 @@
     [
      "go-puzzles-at-a-glance",
      111243
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     43980
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63829
     ]
-   ]
+   ],
+   "objective_zh": "解青州之围。",
+   "title_zh": "青州伏兵"
   },
   {
    "node": "1-n5",
@@ -1275,14 +1309,6 @@
    ],
    "grade": "12K+",
    "pool": [
-    [
-     "specialized-training-in-tsumego-5",
-     43980
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     63829
-    ],
     [
      "200-basic-go-problems",
      174332
@@ -1394,8 +1420,18 @@
     [
      "weiqi-rapid-drill-800-part-3",
      3604
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     149022
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63828
     ]
-   ]
+   ],
+   "objective_zh": "前往广宗，卢植正在那里围攻张角。",
+   "title_zh": "槛车"
   },
   {
    "node": "1-b1",
@@ -1410,14 +1446,6 @@
    ],
    "grade": "12K+",
    "pool": [
-    [
-     "specialized-training-in-tsumego-3",
-     149022
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     63828
-    ],
     [
      "specialized-training-in-tsumego-1",
      167173
@@ -1529,8 +1557,18 @@
     [
      "weiqi-rapid-drill-800-part-1",
      3140
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     84589
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     51112
     ]
-   ]
+   ],
+   "objective_zh": "支线：曹操的少年时代。",
+   "title_zh": "奸雄·一：诈中风"
   },
   {
    "node": "1-b2",
@@ -1545,14 +1583,6 @@
    ],
    "grade": "12K+",
    "pool": [
-    [
-     "specialized-training-in-tsumego-2",
-     84589
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     51112
-    ],
     [
      "specialized-training-in-tsumego-3",
      51361
@@ -1664,8 +1694,18 @@
     [
      "200-basic-go-problems",
      174203
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     43981
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147875
     ]
-   ]
+   ],
+   "objective_zh": "支线：洛阳城门的曹操。",
+   "title_zh": "奸雄·二：乱世奸雄"
   },
   {
    "node": "1-b3",
@@ -1680,14 +1720,6 @@
    ],
    "grade": "12K+",
    "pool": [
-    [
-     "specialized-training-in-tsumego-5",
-     43981
-    ],
-    [
-     "compact-go-puzzles-to-learn-the-basics",
-     147875
-    ],
     [
      "weiqi-life-and-death-1000-problems-part-1",
      1149
@@ -1799,8 +1831,18 @@
     [
      "specialized-training-in-tesuji-5",
      119392
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147190
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     50683
     ]
-   ]
+   ],
+   "objective_zh": "支线：长社红旗。",
+   "title_zh": "奸雄·三：长社红旗"
   },
   {
    "node": "1-bs",
@@ -1935,7 +1977,9 @@
      "weiqi-life-and-death-1000-problems-part-1",
      1156
     ]
-   ]
+   ],
+   "objective_zh": "捷径：路上的使者。",
+   "title_zh": "拒贿"
   },
   {
    "node": "1-n6",
@@ -1951,14 +1995,6 @@
    ],
    "grade": "12K+",
    "pool": [
-    [
-     "compact-go-puzzles-to-learn-the-basics",
-     147190
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     50683
-    ],
     [
      "specialized-training-in-tsumego-1",
      21969
@@ -2070,8 +2106,18 @@
     [
      "weiqi-rapid-drill-800-part-2",
      3268
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     61341
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     44045
     ]
-   ]
+   ],
+   "objective_zh": "救出董卓，再到他帐前复命。",
+   "title_zh": "现居何职"
   },
   {
    "node": "1-n7",
@@ -2086,14 +2132,6 @@
    ],
    "grade": "12K+",
    "pool": [
-    [
-     "go-puzzles-at-a-glance",
-     61341
-    ],
-    [
-     "specialized-training-in-tsumego-5",
-     44045
-    ],
     [
      "specialized-training-in-tsumego-3",
      108272
@@ -2205,8 +2243,18 @@
     [
      "200-basic-go-problems",
      174232
+    ],
+    [
+     "specialized-training-in-tesuji-3",
+     81019
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     50699
     ]
-   ]
+   ],
+   "objective_zh": "在山中破张宝的妖术。",
+   "title_zh": "黑风纸兵"
   },
   {
    "node": "1-boss",
@@ -2348,7 +2396,9 @@
     "taunt": "Wind and thunder answer to me! Your little band will be swept away like dust.",
     "taunt_zh": "风雷听我号令！你们这点人马，一阵风便扫个干净！",
     "taunt_vid": "afb4201642a1"
-   }
+   },
+   "objective_zh": "在阳城击败张宝。",
+   "title_zh": "地公将军之死"
   }
  ]
 }
