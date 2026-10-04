@@ -31,7 +31,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=16`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=17`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
@@ -199,7 +199,7 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=16`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=17`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=11`);
       this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=13`);
     }

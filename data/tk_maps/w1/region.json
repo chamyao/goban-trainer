@@ -4011,7 +4011,7 @@
    "spot": "spot-1-ax1",
    "scene": "hostel",
    "title": "The Inspector's Visit",
-   "objective": "Go to Anxi.",
+   "objective": "Meet the inspector at the posting station.",
    "after": [
     "1-boss"
    ],
@@ -4139,7 +4139,7 @@
     ]
    ],
    "room": "hostel",
-   "objective_zh": "",
+   "objective_zh": "到驿馆拜见督邮。",
    "title_zh": "督邮驾到"
   },
   {
@@ -4149,7 +4149,7 @@
    "spot": "office",
    "scene": "post",
    "title": "The Hitching Post",
-   "objective": "Go to Anxi.",
+   "objective": "Go to the county office, where the old villagers are gathering.",
    "after": [
     "1-ax1"
    ],
@@ -4276,7 +4276,7 @@
      22155
     ]
    ],
-   "objective_zh": "",
+   "objective_zh": "到县衙前，老人们正聚在那里。",
    "title_zh": "县前马桩"
   }
  ]
