@@ -23,15 +23,13 @@ words and name people only; their look belongs in CAST.
 """
 import re
 
-STYLE = ("Style: in the style of The God of High School key art: rough, energetic black ink line art with "
-         "scratchy brush strokes and loose hatching, flat bold colour fills with almost no gradients, a punchy "
-         "limited palette of saturated orange, hot pink and electric cyan, offset cyan and magenta shadow shapes, "
-         "pink halftone dot screens, ink splatter and paint flecks, motion streaks, dynamic foreshortened action "
-         "pose, graphic poster composition. Ancient China, 184 AD. "
-         "No text, no lettering, no borders, no letterbox bars.")
-# (the user's choice of look: The God of High School, from a piece of its key art they shared; named,
-# and described from that image, since models follow a description more reliably than a title alone.
-# The image itself isn't in the repo: it's the show's art, not ours to redistribute)
+STYLE = ("Style: modern Korean webtoon anime, in the style of The God of High School and Tower of God: crisp "
+         "black line art of varied weight, flat cel shading with one hard shadow tone, sharp angular faces, large "
+         "expressive eyes with bright highlights, spiky expressive hair, bright clean saturated colours. "
+         "Ancient China, 184 AD. No text, no lettering, no borders, no letterbox bars.")
+# (the user's choice of look, from God of High School and Tower of God images they shared, which go
+# with every request as style references (refs/style/, on the samples branch only: the shows' art
+# isn't ours to put in the game); named and described here too, for models that take no images)
 
 # key -> (name as the scenes write it, look)
 CAST = {
@@ -57,10 +55,11 @@ def style_note(n):
 
 
 def portrait(key, n_style=0):
-    """The request for a person's reference portrait (n_style: style images sent with it)."""
+    """The request for a person's reference portrait: the face is what the stills need to keep."""
     name, look = CAST[key]
-    return (f"Character reference portrait of {name}, {look}. Full body, three-quarter view, a confident dynamic "
-            f"stance that shows his whole outfit, on a plain flat background. {style_note(n_style)}{STYLE}")
+    return (f"Character face portrait of {name}, {look}. Head and shoulders close-up, the face filling most of "
+            f"the frame, three-quarter view, a characteristic expression, plain flat background. "
+            f"{style_note(n_style)}{STYLE}")
 
 
 STILLS = {

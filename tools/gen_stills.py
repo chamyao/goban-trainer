@@ -186,7 +186,7 @@ def fit(raw):
 
 
 def portraits(name, fn, keys, n, model):
-    """n candidate portraits of each person, into refs/candidates/<key>-<i>.jpg (3:4), with an
+    """n candidate face portraits of each person, into refs/candidates/<key>-<i>.jpg (1:1), with an
     index.html to choose from. --pick KEY I then makes one the reference: refs/<key>.jpg."""
     out = OUT / "refs/candidates"
     out.mkdir(parents=True, exist_ok=True)
@@ -195,12 +195,12 @@ def portraits(name, fn, keys, n, model):
         for i in range(start + 1, start + n + 1):
             try:
                 text, images = request(name, key=key)
-                raw, used = fn(text, model, "3:4", images)
+                raw, used = fn(text, model, "1:1", images)
             except Exception as e:
                 print(f"  {key} #{i}: failed: {e}")
                 continue
             im = Image.open(io.BytesIO(raw)).convert("RGB")
-            im.thumbnail((768, 1024))
+            im.thumbnail((768, 768))
             im.save(out / f"{key}-{i}.jpg", "JPEG", quality=88)
             print(f"  {key} #{i}: {name}/{used} → assets/tk/stills/refs/candidates/{key}-{i}.jpg")
     rows = []
@@ -213,7 +213,7 @@ def portraits(name, fn, keys, n, model):
     (out / "index.html").write_text(
         "<!doctype html><meta charset=utf-8><title>Character designs</title><style>"
         "body{font:15px system-ui;background:#16130f;color:#eee;margin:16px}p{color:#aaa}"
-        "div{display:flex;flex-wrap:wrap;gap:12px}figure{margin:0;width:240px}img{width:100%}"
+        "div{display:flex;flex-wrap:wrap;gap:12px}figure{margin:0;width:300px}img{width:100%}"
         "figcaption{color:#ccc}</style>" + "".join(rows))
     print("choose from: assets/tk/stills/refs/candidates/index.html, then --pick KEY N")
 
