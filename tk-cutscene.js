@@ -163,7 +163,8 @@ const WorldCutscene = {
     // ---- props, poses, emotes, gifts, mood ----
     const KIT_PROPS = { table: ["furn.table", "camp.table"], winejars: ["furn.jar", "furn.barrel"], rack: ["furn.rack"],
       fire: ["camp.firepit", "camp.cookfire"], tent: ["building.tent", "building.hut", "building.house"],
-      gate: ["building.gate", "building.moongate"] };
+      gate: ["building.gate", "building.moongate"], desk: ["furn.desk", "furn.table", "camp.table"],
+      hall: ["building.hall", "building.inn", "building.house"] };
     const propSprite = kind => {
       const box = scene.add.container(0, 0), P = scene.textures.get("tk-props");
       const put = (tex, frame, dx = 0, dy = 0) => box.add(scene.add.image(dx, dy, tex, frame).setOrigin(.5, 1));
@@ -199,6 +200,7 @@ const WorldCutscene = {
       a.posed = pose;
       if (pose === "bow") t.setAngle(a.dir === "down" || a.dir === "up" ? 0 : right ? 14 : -14).setScale(1, a.dir === "down" ? .9 : 1);
       else if (pose === "kneel") t.setScale(1, .8);
+      else if (pose === "sit") t.setScale(1, .86);
       else if (pose === "sleep") t.setAngle(right ? 90 : -90);
       else if (pose === "drunk") {
         t.setTint(0xffd0c4);

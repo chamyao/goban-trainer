@@ -32,9 +32,9 @@ node on the old node map (x right, y down, in node-map pixels; 8 px ≈ 1 tile):
 | `["fx", name, at, dx, dy]` | flash, dust, petals, incense, paper, fire, whip, sparkle, blackwind |
 | `["remove", id]` | fade out |
 | `["party", [who, …]]` | who travels with Liu Bei from now on |
-| `["prop", id, kind, at, dx, dy]` | put a thing on stage: `cagecart`, `forge`, `anvil`, `winejars`, `table`, `rack` (weapons), `fire`, `tent`, `gate` (a city gate). It moves with `move`/`run` and leaves with `remove`; walkers go round it |
+| `["prop", id, kind, at, dx, dy]` | put a thing on stage: `cagecart`, `forge`, `anvil`, `winejars`, `table`, `rack` (weapons), `fire`, `tent`, `gate` (a city gate), `desk`, `hall` (a hostel or office hall). It moves with `move`/`run` and leaves with `remove`; walkers go round it |
 | `["board", who, prop]` / `["unboard", who]` | ride inside a prop (a prisoner in the cage cart); it carries them when it moves, and `remove` takes them with it. Boarded before the first line, they are inside from the start |
-| `["pose", id, P]` | `drink`, `cheer`, `raise` (holds up what they were last given) play once; `bow`, `kneel`, `sleep`, `drunk` (sways) last until `stand` or a walk (drunk men keep swaying). `id` may be a group or `party` |
+| `["pose", id, P]` | `drink`, `cheer`, `raise` (holds up what they were last given) play once; `bow`, `kneel`, `sit`, `sleep`, `drunk` (sways) last until `stand` or a walk (drunk men keep swaying). `id` may be a group or `party` |
 | `["emote", id, E]` | a bubble overhead: `!`, `?`, `...`, `music`, `anger`, `sweat`, `zzz`, `heart` |
 | `["give", from, to, item]` | `from` walks over and hands `item` (a key of the world's `items`) to `to`, who holds it up; it is gained as with `["gain", item]` |
 | `["surround", group, target, r]` | the group runs to a ring of radius `r` px round a prop or a person and faces in |

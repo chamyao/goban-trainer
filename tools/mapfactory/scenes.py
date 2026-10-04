@@ -36,8 +36,9 @@ WALK, RUN = 4.0, 7.5   # tiles per second
 FRIENDLY = {"militia"}  # extras on the party's side
 # props: footprint (w, h) in tiles; drawn bottom-centre on the anchor tile
 PROPS = {"cagecart": (3, 1), "forge": (2, 1), "anvil": (1, 1), "winejars": (2, 1), "table": (2, 1),
-         "rack": (2, 1), "fire": (2, 1), "tent": (3, 2), "gate": (3, 1)}
-POSES = {"drink", "cheer", "bow", "kneel", "drunk", "raise", "sleep", "stand"}
+         "rack": (2, 1), "fire": (2, 1), "tent": (3, 2), "gate": (3, 1),
+         "desk": (2, 1), "hall": (4, 2)}
+POSES = {"drink", "cheer", "bow", "kneel", "sit", "drunk", "raise", "sleep", "stand"}
 EMOTES = {"!", "?", "...", "music", "anger", "sweat", "zzz", "heart"}
 
 
