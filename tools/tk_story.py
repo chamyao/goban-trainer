@@ -51,7 +51,8 @@ WORLDS = [
             "serpent_spear": {"name": "Eighteen-foot serpent spear", "zh": "丈八蛇矛", "kind": "weapon", "who": "zhangfei"},
         },
         # Map, 480x270. "role": main (fixed, carries a main story point),
-        # side (long road), short (shortcut), boss.
+        # side (long road), short (shortcut), boss. The horse dealers are a
+        # main point; the long road branches off after them and rejoins at Daxing.
         "nodes": [
             {"key": "start", "x": 34, "y": 236, "role": "main", "place": "Lousang Village", "step": 0.0, "scene": "tree", "trigger": "arrive"},
             {"key": "c1", "x": 52, "y": 226, "role": "main", "place": "Zhuo County", "room": "office", "step": 0.0, "scene": "council", "trigger": "arrive"},
@@ -61,7 +62,7 @@ WORLDS = [
             {"key": "a1", "x": 140, "y": 222, "role": "side", "place": "Road to Julu", "room": "cave", "step": 0.15, "scene": "peace1", "trigger": "arrive"},
             {"key": "a2", "x": 180, "y": 236, "role": "side", "place": "Julu", "room": "house-1", "step": 0.2, "scene": "peace2", "trigger": "arrive"},
             {"key": "a3", "x": 214, "y": 212, "role": "side", "place": "Yellow Hills", "room": "tent", "step": 0.25, "scene": "peace3", "trigger": "arrive"},
-            {"key": "as", "x": 160, "y": 150, "role": "short", "place": "Horse Trail", "step": 0.2, "scene": "horses"},
+            {"key": "as", "x": 160, "y": 150, "role": "main", "place": "Horse Trail", "step": 0.12, "scene": "horses"},
             {"key": "n3", "x": 246, "y": 178, "role": "main", "place": "Daxing Mountain", "step": 0.35, "scene": "daxing"},
             {"key": "n4", "x": 282, "y": 206, "role": "main", "place": "Qingzhou", "step": 0.45, "scene": "qingzhou"},
             {"key": "t1", "x": 299, "y": 191, "role": "main", "place": "Guangzong Road", "room": "luzhi-tent", "step": 0.5, "scene": "tent", "trigger": "arrive"},
@@ -77,7 +78,7 @@ WORLDS = [
              "boss": {"who": "zhangbao", "title": "Zhang Bao, General of Earth",
                       "taunt": "Wind and thunder answer to me! Your little band will be swept away like dust."}},
         ],
-        "edges": [["start", "c1"], ["c1", "n1"], ["n1", "i1"], ["i1", "n2"], ["n2", "a1"], ["a1", "a2"], ["a2", "a3"], ["a3", "n3"],
+        "edges": [["start", "c1"], ["c1", "n1"], ["n1", "i1"], ["i1", "n2"], ["as", "a1"], ["a1", "a2"], ["a2", "a3"], ["a3", "n3"],
                   ["n2", "as"], ["as", "n3"], ["n3", "n4"], ["n4", "t1"], ["t1", "n5"], ["n5", "b1"], ["b1", "b2"], ["b2", "f1"], ["f1", "b3"],
                   ["b3", "n6"], ["n5", "bs"], ["bs", "n6"], ["n6", "n7"], ["n7", "boss"]],
         "opening": [
@@ -178,11 +179,9 @@ WORLDS = [
                 ["army", "braves", "militia", 8, "n2", -70, 0], ["move", "braves", "n2", -28, 0],
                 ["n", "Liu Bei becomes eldest brother, Guan Yu second, Zhang Fei youngest. Three hundred village braves join them, and they drink in the garden until they can drink no more."],
                 ["pose", "braves", "bow"], ["pose", "zhangfei", "drunk"], ["emote", "zhangfei", "zzz"], ["wait", 900], ["pose", "braves", "stand"],
-                ["n", "Their road forks here. The long road passes through the rebels' heartland; the mountain trail is shorter, and steeper."],
+                ["n", "The next day they gather their weapons, but they have no horses to ride."],
             ]},
             "daxing": {"title": "First Blood at Daxing Mountain", "kind": "main", "steps": [
-                # the novel's gifts come before the first battle, whichever road you took
-                ["gain", "horses"], ["gain", "twin_swords"], ["gain", "green_dragon"], ["gain", "serpent_spear"],
                 ["army", "braves", "militia", 5, "n3", -24, 0],
                 ["army", "yt", "rebel", 24, "n3", 72, 0],
                 ["n", "Liu Bei and his five hundred report to the governor, Liu Yan. Learning that Liu Bei is of the same imperial house, Liu Yan is delighted and takes him as a nephew."],
@@ -375,10 +374,11 @@ WORLDS = [
                 ["n", "Ten thousand heads were taken. The two brothers barely escaped with their lives."],
             ]},
             # ---- side stories: the shortcuts ----
-            "horses": {"title": "Horses from the North", "kind": "side", "steps": [
+            "horses": {"title": "Horses from the North", "kind": "main", "steps": [
                 ["spawn", "zsp", "merchant", "as", 26, -6],
                 ["army", "herd", "horse", 6, "as", 44, 0],
-                ["n", "The brothers had men, but no horses. Then two travelling merchants, Zhang Shiping and Su Shuang, came down the trail driving a herd."],
+                ["n", "While they are still worrying, word comes that two travelling merchants, Zhang Shiping and Su Shuang, are coming to the farm, driving a herd of horses."],
+                ["say", "liubei", "This is Heaven's help!"],
                 ["problem"],  # the board comes up here; the rest plays once it is solved
                 ["say", "merchant", "Bandits have closed the road north. If you mean to crush them, take fifty horses — and five hundred taels of silver, and a thousand jin of steel for your weapons."],
                 ["move", "herd", "as", 16, 0],
