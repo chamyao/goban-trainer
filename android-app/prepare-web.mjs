@@ -11,8 +11,12 @@ const www = join(here, "www");
 
 rmSync(www, { recursive: true, force: true });
 mkdirSync(www);
-for (const f of ["style.css", "wukong.js", "engine/engine-utils.js", "engine/katago-worker.js", "tfjs", "data"])
+for (const f of ["style.css", "wukong.js", "engine/engine-utils.js", "engine/katago-worker.js", "tfjs", "data", "assets"])
   cpSync(join(repo, f), join(www, f), { recursive: true });
+// every other local script and stylesheet index.html loads (the campaign's tk-*.js, …), so a new
+// file can't be left out of the app; app.js is written below
+for (const [, f] of readFileSync(join(repo, "index.html"), "utf8").matchAll(/(?:src|href)="([^"#:?]+\.(?:js|css))(?:\?[^"]*)?"/g))
+  if (f !== "app.js") cpSync(join(repo, f), join(www, f), { recursive: true });
 
 // The Android build silently gunzips *.gz assets and drops the extension, so
 // engine/katago-small.bin.gz would ship as katago-small.bin and the app's
