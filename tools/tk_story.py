@@ -56,6 +56,7 @@ WORLDS = [
             {"key": "start", "x": 34, "y": 236, "role": "main", "place": "Lousang Village", "step": 0.0, "scene": "tree", "trigger": "arrive"},
             {"key": "c1", "x": 52, "y": 226, "role": "main", "place": "Zhuo County", "room": "office", "step": 0.0, "scene": "council", "trigger": "arrive"},
             {"key": "n1", "x": 70, "y": 214, "role": "main", "place": "Zhuo County", "step": 0.0, "scene": "notice"},
+            {"key": "i1", "x": 89, "y": 200, "role": "main", "place": "Zhuo County", "room": "inn", "step": 0.05, "scene": "inn", "trigger": "arrive"},
             {"key": "n2", "x": 108, "y": 186, "role": "main", "place": "The Peach Garden", "step": 0.1, "scene": "oath"},
             {"key": "a1", "x": 140, "y": 222, "role": "side", "place": "Road to Julu", "room": "cave", "step": 0.15, "scene": "peace1", "trigger": "arrive"},
             {"key": "a2", "x": 180, "y": 236, "role": "side", "place": "Julu", "room": "house-1", "step": 0.2, "scene": "peace2", "trigger": "arrive"},
@@ -76,7 +77,7 @@ WORLDS = [
              "boss": {"who": "zhangbao", "title": "Zhang Bao, General of Earth",
                       "taunt": "Wind and thunder answer to me! Your little band will be swept away like dust."}},
         ],
-        "edges": [["start", "c1"], ["c1", "n1"], ["n1", "n2"], ["n2", "a1"], ["a1", "a2"], ["a2", "a3"], ["a3", "n3"],
+        "edges": [["start", "c1"], ["c1", "n1"], ["n1", "i1"], ["i1", "n2"], ["n2", "a1"], ["a1", "a2"], ["a2", "a3"], ["a3", "n3"],
                   ["n2", "as"], ["as", "n3"], ["n3", "n4"], ["n4", "t1"], ["t1", "n5"], ["n5", "b1"], ["b1", "b2"], ["b2", "f1"], ["f1", "b3"],
                   ["b3", "n6"], ["n5", "bs"], ["bs", "n6"], ["n6", "n7"], ["n7", "boss"]],
         "opening": [
@@ -143,17 +144,23 @@ WORLDS = [
                 ["problem"],  # the board comes up here; the rest plays once it is solved
                 ["say", "liubei", "I am of the Han imperial house. I long to crush these rebels and bring peace — but I lack the strength."],
                 ["say", "zhangfei", "I've got money and land. Let's raise men together! But first — wine."],
+                ["n", "Liu Bei is delighted, and the two go into the village inn to drink."],
+                ["remove", "zf"],
+                ["party", ["liubei", "zhangfei"]],
+            ]},
+            "inn": {"title": "The Stranger at the Inn", "kind": "main", "steps": [
                 ["n", "At the village inn, a giant pushing a cart strides in: nine feet tall, a beard two feet long, a face like a ripe red date."],
-                ["spawn", "gy", "guanyu", "n1", -40, -10],
-                ["move", "gy", "n1", -12, 0],
+                ["spawn", "gy", "guanyu", "i1", -40, -10],
+                ["move", "gy", "i1", -12, 0],
                 ["say", "guanyu", "Wine, quickly! I'm off to the city to join the army."],
                 ["say", "liubei", "Then sit with us, friend. We have the same purpose."],
                 ["say", "guanyu", "Guan Yu, of Hedong. I killed a bully who preyed on my village, and I've been on the run five years."],
+                ["problem"],  # the board comes up here; the rest plays once it is solved
                 ["n", "Liu Bei tells him his own aim, and Guan Yu is delighted. The three go together to Zhang Fei's farm to plan their great enterprise."],
                 ["say", "zhangfei", "Behind my farm is a peach garden in full bloom. Tomorrow, let's swear brotherhood there before Heaven and Earth!"],
                 ["say", "liubei", "Very good."],
                 ["say", "guanyu", "Very good."],
-                ["remove", "zf"], ["remove", "gy"],
+                ["remove", "gy"],
                 ["party", ["liubei", "guanyu", "zhangfei"]],
             ]},
             "oath": {"title": "The Peach Garden Oath", "kind": "main", "steps": [
