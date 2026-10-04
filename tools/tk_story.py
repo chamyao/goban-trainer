@@ -53,7 +53,7 @@ WORLDS = [
         # Map, 480x270. "role": main (fixed, carries a main story point),
         # side (long road), short (shortcut), boss.
         "nodes": [
-            {"key": "start", "x": 34, "y": 236, "place": "Lousang Village"},
+            {"key": "start", "x": 34, "y": 236, "role": "main", "place": "Lousang Village", "step": 0.0, "scene": "tree"},
             {"key": "n1", "x": 70, "y": 214, "role": "main", "place": "Zhuo County", "step": 0.0, "scene": "notice"},
             {"key": "n2", "x": 108, "y": 186, "role": "main", "place": "The Peach Garden", "step": 0.1, "scene": "oath"},
             {"key": "a1", "x": 140, "y": 222, "role": "side", "place": "Road to Julu", "step": 0.15, "scene": "peace1"},
@@ -92,6 +92,21 @@ WORLDS = [
         ],
         "scenes": {
             # ---- main story ----
+            "tree": {"title": "The Mulberry Tree at Louzang", "kind": "main", "steps": [
+                ["n", "Louzang Village, Zhuo County. South-east of Liu Bei's house stands a mulberry tree more than fifty feet tall. From far off, it looks like the canopy of a carriage."],
+                ["n", "A passing fortune-teller says: this family will produce a great man."],
+                ["spawn", "kid", "liubei_child", "start", 10, 4],
+                ["n", "Liu Bei's father died early. As a boy he plays under the tree with the village children."],
+                ["problem"],  # the board comes up here; the rest plays once it is solved
+                ["say", "liubei_child", "I will be the Son of Heaven, and I will ride this carriage canopy."],
+                ["wait", 1200],
+                ["spawn", "unc", "liuyuanqi", "start", 30, 6], ["move", "unc", "start", 14, 4],
+                ["say", "liuyuanqi", "This is no ordinary child!"],
+                ["n", "The family is poor. His uncle Liu Yuanqi helps them from then on."],
+                ["remove", "kid"], ["remove", "unc"],
+                ["n", "At fifteen, his mother sends him to study under Zheng Xuan and Lu Zhi, and he befriends Gongsun Zan."],
+                ["n", "He serves his mother with the utmost devotion."],
+            ]},
             "notice": {"title": "The Notice at Zhuo", "kind": "main", "steps": [
                 ["n", "Zhuo County. A crowd gathers at a notice on the wall: the governor is raising volunteers against the Yellow Turbans."],
                 ["n", "Liu Bei, twenty-eight, descends from Prince Jing of Zhongshan — yet he sells sandals and weaves mats for a living. His ears reach his shoulders; his arms hang past his knees."],
