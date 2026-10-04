@@ -162,6 +162,9 @@ ZH = {
     "“A mistake,” warned his secretary Chen Lin. “You hand the spear to others, point first.”": "主簿陈琳劝道：“不可！这是倒持干戈，授人以柄。”",
     "A man beside them clapped and laughed. “This is as easy as turning over a hand. Why so much talk?” It was Cao Cao.": "旁边一人鼓掌大笑：“此事易如反掌，何必多议！”此人正是曹操。",
     "What did Cao Cao propose? Hear the next chapter.": "不知曹操说出甚话来，且听下文分解。",
+    # ---- World 1: the third brother joins at the inn (ch. 1) ----
+    "The Stranger at the Inn": "村店遇云长",
+    "Liu Bei is delighted, and the two go into the village inn to drink.": "玄德甚喜，遂与同入村店中饮酒。",
     # ---- World 1: indoor scenes (ch. 1) ----
     "The Governor's Council": "太守议事",
     "Lu Zhi's Tent": "卢植帐中", "Lu Zhi's tent": "卢植的营帐",
