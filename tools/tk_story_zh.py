@@ -206,6 +206,7 @@ ZH = {
     "The family is poor. His uncle Liu Yuanqi helps them from then on.": "叔父刘元起见玄德家贫，常资给之。",
     "At fifteen, his mother sends him to study under Zheng Xuan and Lu Zhi, and he befriends Gongsun Zan.": "年十五岁，母使游学，尝师事郑玄、卢植，与公孙瓒等为友。",
     "He serves his mother with the utmost devotion.": "玄德事母至孝。",
+    "Years pass. By the time the governor calls for volunteers, Liu Bei is twenty-eight.": "及刘焉发榜招军时，玄德年已二十八岁矣。",
     # ---- World 1: transitions (ch. 1-2) ----
     "Liu Bei and his five hundred report to the governor, Liu Yan. Learning that Liu Bei is of the same imperial house, Liu Yan is delighted and takes him as a nephew.": "刘备引兵五百来见太守刘焉。玄德说起宗派，刘焉大喜，遂认玄德为侄。",
     "Not many days later, the Yellow Turban general Cheng Yuanzhi marches on Zhuo with fifty thousand men. Liu Bei meets him with five hundred.": "不数日，黄巾贼将程远志统兵五万来犯涿郡。刘焉令邹靖引玄德等三人，统兵五百，前去破敌。",

@@ -145,6 +145,7 @@ WORLDS = [
                 ["n", "At fifteen, his mother sends him to study under Zheng Xuan and Lu Zhi, and he befriends Gongsun Zan."],
                 ["n", "He serves his mother with the utmost devotion."],
                 ["emote", "mom", "heart"],
+                ["n", "Years pass. By the time the governor calls for volunteers, Liu Bei is twenty-eight."],
             ]},
             "notice": {"title": "The Notice at Zhuo", "kind": "main", "steps": [
                 ["army", "crowd", "f_villager", 5, "n1", -16, 10],
