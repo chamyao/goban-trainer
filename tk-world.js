@@ -208,7 +208,7 @@ function worldScenes() {
       for (const [s, path] of Object.entries(kit.sheets)) this.load.image(`kit-${s}`, path);
       const [fw, fh] = kit.folk.frame;
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=23`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=24`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -230,7 +230,7 @@ function worldScenes() {
     create() {
       const region = this.region = this.cache.json.get("region"), kit = this.kit = this.cache.json.get("kit");
       const opts = this.opts = this.game.worldOpts, w = this.w = opts.w;
-      this.grid = this.walk = this.lampFx = this.ambientFx = null;   // the scene object outlives a change of place: no old map's walk grid or tap-walk
+      this.grid = this.walk = this.lampFx = this.ambientFx = null; this.seated = false;   // the scene object outlives a change of place: no old map's walk grid or tap-walk
       this.story = w.scenes;
       this.st = WorldState.load(w.n, region);
       if (!this.st.visited.includes(this.placeId)) this.st.visited.push(this.placeId);
@@ -255,7 +255,7 @@ function worldScenes() {
       for (const o of map.getObjectLayer("objects").objects) {
         const p = P(o);
         if (o.type === "prop") this.addProp(o, p);
-        else if (o.type === "spot") this.spots[o.name] = { x: o.x, y: o.y, node: p.node, label: p.label, labelZh: p.label_zh || "", intro: J(p.intro), outro: J(p.outro), trigger: p.trigger || "near" };
+        else if (o.type === "spot") this.spots[o.name] = { x: o.x, y: o.y, node: p.node, label: p.label, labelZh: p.label_zh || "", intro: J(p.intro), outro: J(p.outro), trigger: p.trigger || "near", use: p.use || "" };
         else if (o.type === "npc") this.addNpc(o, p, J);
         else if (o.type === "exit") this.exits.push({ to: p.to, side: p.side, rect: new Phaser.Geom.Rectangle(o.x, o.y, o.width, o.height) });
         else if (o.type === "entry") this.entries[p.from || ""] = { x: o.x, y: o.y };
@@ -309,6 +309,7 @@ function worldScenes() {
       this.time.delayedCall(900, () => {
         const s = Object.values(this.spots).find(s => s.trigger === "arrive" && this.openQuest(s));
         if (s && !this.ui.busy() && !this.leaving && !this.cine) this.playQuest(this.openQuest(s), s);
+        else if (typeof TKTable !== "undefined") TKTable.arrived(this);   // back from signing in at the go table
       });
     }
 
@@ -428,7 +429,13 @@ function worldScenes() {
       const room = this.region.places.find(p => p.id === id);
       if (room && room.parent) return this.placeOpen(room.parent);   // a building is open when its place is
       return id === this.region.start || this.st.visited.includes(id) ||
-        this.region.quests.some(q => q.place === id && (this.available(q) || this.done(q.node)));
+        this.region.quests.some(q => this.placeIn(q.place, id) && (this.available(q) || this.done(q.node)));
+    }
+    // a place, or a building in it (the county office is in Zhuo County)
+    placeIn(place, id) {
+      if (place === id) return true;
+      const room = this.region.places.find(p => p.id === place);
+      return !!(room && room.parent === id);
     }
     // the next main story point, and if it isn't open yet, the open quests on the roads that lead to it
     nextMain() { return this.region.quests.find(q => (q.role === "main" || q.role === "boss") && !this.done(q.node)); }
@@ -711,6 +718,7 @@ function worldScenes() {
     }
     tapAt(x, y) {
       if (this.ui.busy()) return this.act();   // tap on through dialogue
+      if (this.seated) return;                  // at the go table: its own panel has the buttons
       if (this.leaving || this.cine) return;
       // a person or a story spot near the tap: walk up to them, then talk / look
       const P = this.player;
@@ -724,8 +732,14 @@ function worldScenes() {
         const side = (ok.length ? ok : sides).sort((a, b) => Math.hypot(a.x - P.x, a.y - P.y) - Math.hypot(b.x - P.x, b.y - P.y))[0];
         tx = side.x; ty = side.y; then = side.f; aim = { kind: "npc", n: who };
       } else if (spot) { tx = spot[1].x; ty = spot[1].y + 12; then = "up"; aim = { kind: "spot", k: spot[0] }; }
+      // a building (or the ground at its door): walk to the door, then on in through it
+      const door = !who && !spot && this.exits.filter(e => e.side === "N" && e.rect.width < 16 &&
+          Math.abs(x - e.rect.centerX) < 26 && y > e.rect.centerY - 56 && y < e.rect.centerY + 14)
+        .sort((a, b) => Math.hypot(a.rect.centerX - x, a.rect.centerY - y) - Math.hypot(b.rect.centerX - x, b.rect.centerY - y))[0];
+      if (door) { tx = door.rect.centerX; ty = door.rect.bottom + 10; }
       const path = this.findPath(P.x, P.y - 3, tx, ty - 3);
       if (!path) return;
+      if (door) path.push({ x: door.rect.centerX, y: door.rect.centerY - 2 });
       this.walk = { path, then, aim, last: { x: P.x, y: P.y }, stuck: 0 };
       // a little ring where you're headed
       const ring = this.add.circle(tx, ty, 5).setStrokeStyle(1, 0xfff3c4, .9).setDepth(-997);
@@ -791,7 +805,9 @@ function worldScenes() {
         this.talk(n.say.length ? worldLines(n.say) : [["n", "…"]]);
         return;
       }
-      const spot = this.spots[t.k], q = this.region.quests.find(x => x.node === spot.node);
+      const spot = this.spots[t.k];
+      if (spot.use === "ogs") return TKTable.sit(this, t.k);   // the travellers' go table (tk-table.js)
+      const q = this.region.quests.find(x => x.node === spot.node);
       if (q && this.available(q)) this.playQuest(q, spot);
       else if (q && this.done(q.node)) this.talk([["n", `${spot.label || q.title}. (${q.title}: done.)`,
         q.title_zh ? `${spot.labelZh || q.title_zh}。（${q.title_zh}：已完成）` : ""]]);
@@ -822,7 +838,7 @@ function worldScenes() {
       this.nearSpots();
       const P = this.player, K = this.keys;
       let vx = 0, vy = 0;
-      if (!this.ui.busy() && !this.leaving) {
+      if (!this.ui.busy() && !this.leaving && !this.seated) {
         if (K.LEFT.isDown || K.A.isDown || this.auto === "left") vx -= 1;
         if (K.RIGHT.isDown || K.D.isDown || this.auto === "right") vx += 1;
         if (K.UP.isDown || K.W.isDown || this.auto === "up") vy -= 1;
@@ -877,7 +893,7 @@ function worldScenes() {
         n.spr.setDepth(n.spr.y);
       }
 
-      const t = !this.ui.busy() && !this.leaving && this.target();
+      const t = !this.ui.busy() && !this.leaving && !this.seated && this.target();
       this.ui.hint(t ? (t.kind === "npc" ? t.n.spr : this.spots[t.k]) : null);
     }
   }

@@ -220,7 +220,7 @@ class Layout:
                     q.append(n)
         return False
 
-    def place_landmark(self, kind, lid=None, label=None, node=None, near_hub=False, near=None, lines=None):
+    def place_landmark(self, kind, lid=None, label=None, node=None, near_hub=False, near=None, lines=None, use=None):
         fw, fh, _ = KINDS[kind]
         building = kind.startswith(BUILDING)
         best = None
@@ -258,9 +258,9 @@ class Layout:
             self.door_path(door)
         if lid:
             self.anchors[lid] = door
-        if node:
+        if node or use:   # a story spot, or one with a use of its own (e.g. "ogs": the go table for live games)
             self.spots.append({"id": lid or f"spot-{node}", "x": door[0] + (0 if fw % 2 == 0 else .5), "y": door[1] + .7,
-                               "node": node, "label": label or "", **(lines or {})})
+                               "node": node or "", "label": label or "", **({"use": use, "trigger": "talk"} if use else {}), **(lines or {})})
         return o
 
     def lay_landmarks(self):
@@ -268,7 +268,7 @@ class Layout:
         done_nodes = set()
         for lm in b.get("landmarks", []):
             lines = {k: lm[k] for k in ("intro", "outro", "trigger") if lm.get(k)}
-            o = self.place_landmark(lm["kind"], lm.get("id"), lm.get("label"), lm.get("node"), near=lm.get("near"), lines=lines)
+            o = self.place_landmark(lm["kind"], lm.get("id"), lm.get("label"), lm.get("node"), near=lm.get("near"), lines=lines, use=lm.get("use"))
             if o is None:
                 raise RuntimeError(f"no room for {lm['kind']}")
             if lm.get("node"):

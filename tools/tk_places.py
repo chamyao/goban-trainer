@@ -33,6 +33,8 @@ PLACES = {
             "landmarks": [
                 {"kind": "building.hut", "id": "home", "label": "Liu Bei's home"},
                 {"kind": "tree.big", "id": "mulberry", "node": "1-start", "trigger": "arrive", "label": "The great mulberry tree"},
+                # live games against real players (tk-table.js); last, so the story landmarks keep their places
+                {"kind": "furniture.gotable", "id": "gotable", "use": "ogs", "label": "The travellers' go table"},
             ],
             "objectives": {"1-start": "Sit under the great mulberry tree by your home."},
             "npcs": [
