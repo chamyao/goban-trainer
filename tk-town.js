@@ -161,15 +161,25 @@ const TownUI = {
       <div class="town-dim" hidden></div><div class="town-dlg" hidden><div class="town-tab">主线 · Story</div><canvas class="town-face" width="34" height="34"></canvas><div class="town-txt"><div class="town-who"></div><div class="town-zh" lang="zh-CN"></div><div class="town-en"></div></div><div class="town-more">▼</div></div>`;
     host.append(root);
     const $ = s => root.querySelector(s);
-    let queue = [], done = null, open = false;
+    let queue = [], done = null, open = false, typing = null, finishTyping = null;
     const show = () => {
       const st = queue.shift();
       if (!st) { $(".town-dlg").hidden = true; $(".town-dim").hidden = true; open = false; TKVoice.stop(); const d = done; done = null; d && d(); return; }
       const said = st[0] === "say", who = said ? st[1] : null;
       const [en, zh, vid] = said ? [st[2], st[3], st[4]] : [st[1], st[2], st[3]];
       $(".town-who").textContent = who ? tkName(who) : "";
-      $(".town-en").textContent = en;
-      $(".town-zh").textContent = typeof zh === "string" ? zh : "";
+      // the words type themselves out; Enter shows the rest at once
+      const Z = typeof zh === "string" ? zh : "", E = en || "", dur = Math.min(2600, Math.max(Z.length / 32, E.length / 75) * 1000), t0 = performance.now();
+      clearInterval(typing);
+      const type = () => {
+        const k = dur ? Math.min(1, (performance.now() - t0) / dur) : 1;
+        $(".town-zh").textContent = Z.slice(0, Math.ceil(Z.length * k));
+        $(".town-en").textContent = E.slice(0, Math.ceil(E.length * k));
+        $(".town-more").style.visibility = k < 1 ? "hidden" : "";
+        if (k >= 1) { clearInterval(typing); typing = null; }
+      };
+      typing = setInterval(type, 30); type();
+      finishTyping = () => { clearInterval(typing); typing = null; $(".town-zh").textContent = Z; $(".town-en").textContent = E; $(".town-more").style.visibility = ""; };
       const face = $(".town-face"), fc = face.getContext("2d");
       fc.clearRect(0, 0, 34, 34);
       face.hidden = !who;
@@ -199,7 +209,7 @@ const TownUI = {
         $(".town-dim").hidden = style !== "story";
         dlg.hidden = false; show();
       },
-      advance() { if (open) show(); },
+      advance() { if (!open) return; if (typing) finishTyping(); else show(); },
       hint(target) {
         const h = $(".town-hint");
         if (!target) { h.hidden = true; return; }

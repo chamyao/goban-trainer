@@ -163,12 +163,16 @@ ZH = {
     "“A mistake,” warned his secretary Chen Lin. “You hand the spear to others, point first.”": "主簿陈琳劝道：“不可！这是倒持干戈，授人以柄。”",
     "A man beside them clapped and laughed. “This is as easy as turning over a hand. Why so much talk?” It was Cao Cao.": "旁边一人鼓掌大笑：“此事易如反掌，何必多议！”此人正是曹操。",
     "What did Cao Cao propose? Hear the next chapter.": "不知曹操说出甚话来，且听下文分解。",
+    # ---- World 1: the horse dealers are a main story point (ch. 1) ----
+    "The next day they gather their weapons, but they have no horses to ride.": "来日收拾军器，但恨无马匹可乘。",
+    "While they are still worrying, word comes that two travelling merchants, Zhang Shiping and Su Shuang, are coming to the farm, driving a herd of horses.": "正思虑间，人报有两个客人，引一伙伴当，赶一群马，投庄上来。原来二客乃中山大商：一名张世平，一名苏双。",
+    "This is Heaven's help!": "此天佑我也！",
     # ---- World 1: the third brother joins at the inn (ch. 1) ----
     "The Stranger at the Inn": "村店遇云长",
     "Liu Bei is delighted, and the two go into the village inn to drink.": "玄德甚喜，遂与同入村店中饮酒。",
     # ---- World 1: indoor scenes (ch. 1) ----
     "The Governor's Council": "太守议事",
-    "Lu Zhi's Tent": "卢植帐中", "Lu Zhi's tent": "卢植的营帐",
+    "Lu Zhi's Tent": "卢植帐中",
     "The Fire Plan": "火攻之计",
     "The Yellow Turbans have crossed into You Province. Governor Liu Yan summons his officer Zou Jing.": "黄巾前犯幽州界分。太守刘焉闻得贼兵将至，召校尉邹靖计议。",
     "Zou Jing advises him: “The rebels are many and our soldiers are few. My lord, you should raise troops at once, and meet them.”": "邹靖曰：“贼兵众，我兵寡，明公宜作速招军应敌。”",
@@ -297,7 +301,7 @@ ZH = {
     "Side story: find the old man in the hills.": "支线：去山中寻找那位老人。",
     "Side story: hear Zhang Jiao's sermon in Julu.": "支线：到巨鹿听张角传道。",
     "Side story: the betrayal in the Yellow Hills.": "支线：黄冈的背叛。",
-    "Shortcut: the horse dealers on the northern trail.": "捷径：北方马道上的马商。",
+    "Meet the horse dealers on the northern trail.": "到北方马道上见马商。",
     "Meet the Yellow Turbans at Daxing Mountain.": "在大兴山迎战黄巾军。",
     "Lift the siege of Qingzhou.": "解青州之围。",
     "Go to Guangzong, where Lu Zhi besieges Zhang Jiao.": "前往广宗，卢植正在那里围攻张角。",

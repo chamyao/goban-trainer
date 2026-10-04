@@ -216,7 +216,8 @@ scenes written for the node map carry over.
    for every line in `tools/tk_story_zh.py` (cast any new characters).
 4. Lay out its locations (a builder script drafts them; fine-tune by hand)
    and add any new character descriptions.
-5. Run `tools/build_tk_voice.py`, then the build scripts.
+5. Run `python3 tools/check_story.py --seams --build` before pushing: it checks the story (one problem per scene, known steps, a voice for every speaker, Chinese for every line), prints each scene's start against the previous end so the seams can be read, and builds the maps and cutscenes in a scratch copy.
+6. Run `tools/build_tk_voice.py`, then the build scripts.
 
 ## Open questions
 
