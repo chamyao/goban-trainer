@@ -260,14 +260,20 @@ function worldScenes() {
       this.talk(lead, () => this.puzzle(q.node), "story");
     }
 
-    // Open the problem on the level page; remember where we stood.
-    puzzle(key) {
+    // Bring up the problem over the map (opts.onPuzzle resolves true on a
+    // flawless solve); the world waits behind it, then plays what the win unlocked.
+    async puzzle(key) {
       const P = this.player;
       this.st.pos = { place: this.placeId, x: Math.round(P.x), y: Math.round(P.y), f: P.facing };
       this.save();
       this.leaving = true;
-      this.cameras.main.fadeOut(250);
-      this.time.delayedCall(260, () => this.opts.onPuzzle(key));
+      P.setVelocity(0); P.anims.stop();
+      this.ui.hint(null);
+      const win = await this.opts.onPuzzle(key);
+      if (!this.sys.isActive()) return;  // the page moved on meanwhile
+      this.leaving = false;
+      this.opts.host.focus();
+      if (win) this.returned({ key, win: true });
     }
 
     // Back from a won problem: play what it unlocked.

@@ -807,7 +807,8 @@ class Trainer {
     this.done = kind;
     if (kind === "bad") this.flawed = this.flawed || "a wrong move";  // a reset doesn't wipe it
     markResult(this.book.id, this.p.id, kind === "ok");
-    this.setStatus(kind, kind === "ok" ? "✓" : "✗", kind === "ok" ? "Correct" : "Wrong");
+    const zh = this.els.noEngine;  // the Three Kingdoms campaign leads with Chinese
+    this.setStatus(kind, kind === "ok" ? "✓" : "✗", kind === "ok" ? (zh ? "正确 Correct" : "Correct") : (zh ? "错误 Wrong" : "Wrong"));
     this.render();
     window.dispatchEvent(new CustomEvent("tczw:result", { detail: kind }));  // Sun Wukong reacts
   }
@@ -942,7 +943,7 @@ class Trainer {
     this.els.btnExplore.textContent = this.explore ? "Resume" : "Explore";
     this.els.turnBadge.textContent = this.explore
       ? (this.exploreTurn === BLACK ? "Explore · Black" : "Explore · White")
-      : this.done ? "—" : this.engineBusy ? "White thinking…" : "Black to play";
+      : this.done ? "—" : this.engineBusy ? "White thinking…" : this.els.noEngine ? "黑先 Black to play" : "Black to play";
     this.renderNote();
     this.renderSolutionTree();
   }

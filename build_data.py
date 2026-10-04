@@ -136,8 +136,13 @@ def build_problem(book_dir: Path, chapter: int, pid: int):
         black = [sflip(m) for m in black]
         white = [sflip(m) for m in white]
 
+    # Only answers 101weiqi has reviewed and approved (st 2): they are its
+    # official answer tree. Pending user submissions (st 1) include wrong
+    # first moves marked correct and correct lines marked wrong.
     lines = []
     for a in d.get("answers", []):
+        if a.get("st") != 2:
+            continue
         moves = [p["p"] for p in a.get("pts", [])]
         if not moves or not all(valid_move(m) for m in moves):
             continue
@@ -190,6 +195,12 @@ def main():
             json.dumps(out, ensure_ascii=False, separators=(",", ":")))
         index.append({**{k: book[k] for k in ("id", "title", "native", "level", "category")},
                       "count": len(problems)})
+
+    # Keep books that come from elsewhere (e.g. Redmond's, from .github/workflows/redmond-fetch.yml).
+    built = {b["id"] for b in index}
+    old = json.loads((OUT / "index.json").read_text()) if (OUT / "index.json").exists() else []
+    index += [b for b in old if b["id"] not in built and (OUT / "books" / f"{b['id']}.json").exists()
+              and not (REPO / "problems" / b["id"]).exists()]
 
     index.sort(key=lambda b: (["tsumego", "tesuji", "endgame"].index(b["category"]),
                               level_sort_key(b["level"]), b["title"]))

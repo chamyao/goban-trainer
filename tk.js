@@ -436,7 +436,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) this.data = await (await fetch("data/tk.json?v=6")).json();
+    if (!this.data) this.data = await (await fetch("data/tk.json?v=7")).json();
     return this.data;
   },
   ls(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } },
@@ -949,7 +949,7 @@ async function viewTK(worldN) {
     try {
       await WorldView.mount({
         w, host, ret: ret && ret.world === w.n ? ret : null,
-        onPuzzle: key => { location.hash = `#/tk/${w.n}/${key}`; },
+        onPuzzle: key => TKOverlay.open(w.n, key),  // the board comes up over the map
         onBoss: async () => { if (!TK.seen(`${w.n}:closing`)) { await run(w.closing); TK.markSeen(`${w.n}:closing`); } },
       });
     } catch (e) { host.textContent = e.message; }
@@ -1055,33 +1055,32 @@ async function viewTK(worldN) {
 const TK_ROLE_ZH = { main: "主线", side: "支线 · 远路", short: "支线 · 捷径", boss: "首领", challenge: "挑战" };
 const TK_BOSS_ZH = { zhangbao: "地公将军张宝" };
 
-async function viewTKLevel(worldN, key) {
-  const nav = routeSeq;
-  root.innerHTML = `<div class="loading">Loading…</div>`;
+// A campaign level's problem: the node (story beat or town challenger) and its
+// current draw from the pool; null if it isn't open.
+async function tkLevelData(worldN, key) {
   await TK.load();
   const w = TK.world(worldN);
   if (w && !TK.node(w, key) && typeof WorldData !== "undefined") await WorldData.region(w.n);  // a challenger in the world
   const node = w && (TK.node(w, key) || (typeof WorldData !== "undefined" && WorldData.node(w, key)));
-  if (!node || !(node.town || TK.open(w, key) || TK.cleared(key))) { location.hash = `#/tk/${worldN || 1}`; return; }
+  if (!node || !(node.town || TK.open(w, key) || TK.cleared(key))) return null;
   const [bookId, pid] = TK.problemRef(node);
   const src = await getBook(bookId);
-  if (nav !== routeSeq) return;
   const p = src.problems.find(x => x.id === pid);
-  const book = Object.assign({}, src, { problems: [p] });
-  if (!node.town) TK.setAt(worldN, key);
-  crumbs.innerHTML = "";
-  crumbs.append(h("a", { href: "#/" }, "Library"), " / ", h("a", { href: `#/tk/${worldN}` }, `Three Kingdoms · World ${worldN}`), ` / ${node.place}`);
-  root.innerHTML = "";
-  const back = () => { root.classList.add("tk-leave"); setTimeout(() => { root.classList.remove("tk-leave"); location.hash = `#/tk/${worldN}`; }, 320); };
+  return { w, node, src, p, book: Object.assign({}, src, { problems: [p] }) };
+}
+
+// The board and its panels, built into host. opts: back() leaves, again() deals
+// a new problem after a slip, onWin() runs once a flawless solve is saved.
+function tkLevelBuild(host, worldN, key, { w, node, src, p, book }, { back, again, onWin }) {
   const svg = document.createElementNS(SVGNS, "svg");
   const boardCard = h("div", { class: "board-card" });
   boardCard.append(svg);
   const status = h("div", { id: "status" });
-  const turnBadge = h("span", { class: "badge turn" }, "Black to play");
+  const turnBadge = h("span", { class: "badge turn" }, "黑先 Black to play");
   const btnExplore = h("button", {}, "Explore");
   const treeBox = h("div", { class: "movetree", style: "height:auto; max-height:320px" });
   const note = h("div", { class: "source-note", style: "display:none" });
-  const treePanel = h("div", { class: "panel", style: "display:none" }, [h("h2", {}, "Solution tree"), treeBox]);
+  const treePanel = h("div", { class: "panel", style: "display:none" }, [h("h2", {}, "解答 Solution tree"), treeBox]);
   const verdict = h("div", { class: "tk-verdict" });
   const bossPanel = node.boss ? h("div", { class: "panel tk-boss" }, [
     TKArt.get(node.boss.who, "bust"),
@@ -1096,8 +1095,8 @@ async function viewTKLevel(worldN, key) {
       h("h2", {}, `第${worldN}卷 ${w.zh} · World ${worldN} · ${w.name}`),
       h("div", { class: "meta-title" }, [`${node.place_zh || node.place} · ${TK_ROLE_ZH[node.role] || ""}`,
         h("span", { class: "tk-en" }, ` ${node.place} · ${TK.roleLabel(node)}`)]),
-      h("div", { class: "meta-sub" }, [node.role === "boss" ? "" : `from ${src.title} · `, p.url ? h("a", { href: p.url, target: "_blank" }, "source")
-                                                                 : h("a", { href: `https://www.101weiqi.com/q/${p.id}/`, target: "_blank" }, "source")]),
+      h("div", { class: "meta-sub" }, [node.role === "boss" ? "" : `出自 from ${src.title} · `, p.url ? h("a", { href: p.url, target: "_blank" }, "来源 source")
+                                                                 : h("a", { href: `https://www.101weiqi.com/q/${p.id}/`, target: "_blank" }, "来源 source")]),
       h("div", { class: "badges" }, [...(p.lv || node.grade ? [h("span", { class: "badge" }, p.lv || node.grade)] : []), ...(p.qt ? [h("span", { class: "badge" }, p.qt)] : []), turnBadge]),
     ]),
     h("div", { class: "panel" }, [h("h2", {}, "状态 Status"), status, note, verdict]),
@@ -1114,9 +1113,9 @@ async function viewTKLevel(worldN, key) {
   ]);
   const player = h("div", { class: "player tk-level" });
   player.append(boardCard, aside);
-  root.append(player);
-  root.classList.add("tk-enter");
-  setTimeout(() => root.classList.remove("tk-enter"), 500);
+  host.append(player);
+  host.classList.add("tk-enter");
+  setTimeout(() => host.classList.remove("tk-enter"), 500);
   trainer = new Trainer(book, 0, { svg, boardCard, status, turnBadge, btnExplore, treePanel, treeBox, note, noEngine: true });
   btnExplore.addEventListener("click", () => trainer.toggleExplore());
   window.__trainer = trainer;
@@ -1129,7 +1128,7 @@ async function viewTKLevel(worldN, key) {
     verdict.innerHTML = "";
     if (e.detail === "ok" && !t.flawed) {
       TK.markCleared(key);
-      try { sessionStorage.setItem("tk-return", JSON.stringify({ world: worldN, key, win: true })); } catch {}
+      onWin();
       verdict.className = "tk-verdict win";
       verdict.append(h("b", {}, node.role === "boss" ? "★ 击败首领！Boss defeated!" : "★ 完美！Flawless!"), h("button", { onclick: back }, "继续 Continue ▸"));
     } else {
@@ -1137,11 +1136,63 @@ async function viewTKLevel(worldN, key) {
       verdict.className = "tk-verdict slip";
       verdict.append(h("b", {}, e.detail === "ok" ? `解出了，但不算完美。Solved, but not flawless (${t.flawed}).` : "敌人识破了！The enemy saw through it!"),
         h("span", {}, " 换个思路。Try another way."),
-        h("button", { onclick: () => { root.classList.add("tk-flip"); setTimeout(() => { root.classList.remove("tk-flip"); viewTKLevel(worldN, key); }, 260); } }, "换一题 New problem →"));
+        h("button", { onclick: () => { host.classList.add("tk-flip"); setTimeout(() => { host.classList.remove("tk-flip"); again(); }, 260); } }, "换一题 New problem →"));
     }
   };
   addEventListener("tczw:result", onResult);
 }
+
+// A level as its own page (direct links, and worlds still on the node map).
+async function viewTKLevel(worldN, key) {
+  const nav = routeSeq;
+  root.innerHTML = `<div class="loading">Loading…</div>`;
+  const d = await tkLevelData(worldN, key);
+  if (nav !== routeSeq) return;
+  if (!d) { location.hash = `#/tk/${worldN || 1}`; return; }
+  if (!d.node.town) TK.setAt(worldN, key);
+  crumbs.innerHTML = "";
+  crumbs.append(h("a", { href: "#/" }, "Library"), " / ", h("a", { href: `#/tk/${worldN}` }, `Three Kingdoms · World ${worldN}`), ` / ${d.node.place}`);
+  root.innerHTML = "";
+  tkLevelBuild(root, worldN, key, d, {
+    back: () => { root.classList.add("tk-leave"); setTimeout(() => { root.classList.remove("tk-leave"); location.hash = `#/tk/${worldN}`; }, 320); },
+    again: () => viewTKLevel(worldN, key),
+    onWin: () => { try { sessionStorage.setItem("tk-return", JSON.stringify({ world: worldN, key, win: true })); } catch {} },
+  });
+}
+
+// A level laid over the explorable world: the map stays behind, dimmed.
+// Resolves true after a flawless solve, false if the player backs out.
+const TKOverlay = {
+  open(worldN, key) {
+    return new Promise(async resolve => {
+      document.querySelectorAll(".tk-overlay").forEach(el => el.remove());
+      const box = h("div", { class: "tk-overlay-box", role: "dialog", "aria-modal": "true", "aria-label": "Go problem" });
+      const wrap = h("div", { class: "tk-overlay" }, [box]);
+      document.body.append(wrap);
+      let won = false, closed = false;
+      const close = () => {
+        if (closed) return;
+        closed = true;
+        if (trainer) { trainer.alive = false; clearTimeout(trainer.replyTimer); trainer = null; }
+        removeEventListener("keydown", onKey); removeEventListener("hashchange", onNav);
+        wrap.classList.add("tk-leave");
+        setTimeout(() => { wrap.remove(); resolve(won); }, 280);
+      };
+      const onKey = e => { if (e.key === "Escape") close(); };
+      const onNav = () => close();
+      addEventListener("keydown", onKey); addEventListener("hashchange", onNav);
+      const show = async () => {
+        box.innerHTML = `<div class="loading">Loading…</div>`;
+        const d = await tkLevelData(worldN, key);
+        if (closed) return;
+        if (!d) return close();
+        box.innerHTML = "";
+        tkLevelBuild(box, worldN, key, d, { back: close, again: show, onWin: () => { won = true; } });
+      };
+      await show();
+    });
+  },
+};
 
 // Every story scene in the novel's order; the ones not yet seen stay hidden.
 function tkChronicle(w, map) {
