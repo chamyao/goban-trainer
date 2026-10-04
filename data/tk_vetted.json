@@ -1,16 +1,1 @@
-{"bedtime-tsumego-part-1/135059":{"ok":false,"why":"the tree accepts qa at the start, but KataGo's sa is 18 points better","net":"b18","visits":400},
-"compact-go-puzzles-to-learn-the-basics/10403":{"ok":false,"why":"the tree marks sc wrong at the start, but it works","net":"b18","visits":400},
-"compact-go-puzzles-to-learn-the-basics/146285":{"ok":false,"why":"sd also works after rc rd sc sb but isn't in the tree","net":"b18","visits":400},
-"compact-go-puzzles-to-learn-the-basics/147215":{"ok":false,"why":"ra also works after rb rc sa sb but isn't in the tree","net":"b18","visits":400},
-"go-puzzles-at-a-glance/160615":{"ok":true,"net":"b18","visits":400},
-"specialized-training-in-tesuji-3/81092":{"ok":false,"why":"the tree accepts ka at the start, but KataGo's ma is 24 points better","net":"b18","visits":400},
-"specialized-training-in-tesuji-3/81326":{"ok":true,"net":"b18","visits":400},
-"specialized-training-in-tsumego-1/10679":{"ok":false,"why":"ob also works after oa na pa od but isn't in the tree","net":"b18","visits":400},
-"specialized-training-in-tsumego-1/386":{"ok":false,"why":"the tree marks rg wrong at the start, but it works","net":"b18","visits":400},
-"specialized-training-in-tsumego-1/48648":{"ok":false,"why":"the tree accepts oa at the start, but KataGo's pa is 20 points better","net":"b18","visits":400},
-"specialized-training-in-tsumego-1/63787":{"ok":false,"why":"rd also works at the start but isn't in the tree","net":"b18","visits":400},
-"specialized-training-in-tsumego-1/63794":{"ok":false,"why":"the tree accepts na at the start, but KataGo's nc is 14 points better","net":"b18","visits":400},
-"specialized-training-in-tsumego-1/84590":{"ok":true,"net":"b18","visits":400},
-"specialized-training-in-tsumego-5/43979":{"ok":false,"why":"na also works after sb sa rc sc sb rb ra rd but isn't in the tree","net":"b18","visits":400},
-"specialized-training-in-tsumego-5/44080":{"ok":true,"net":"b18","visits":400},
-"weiqi-rapid-drill-800-part-1/3179":{"ok":true,"net":"b18","visits":400}}
+{}
