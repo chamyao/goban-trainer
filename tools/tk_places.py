@@ -34,6 +34,7 @@ PLACES = {
             "npcs": [
                 {"kind": "folk.woman", "say": "“Off to sell your sandals in town, Xuande? Mind the road.”"},
                 {"kind": "folk.child", "say": "“That mulberry looks like a carriage canopy! Mother says someone from this house will ride under one.”"},
+                {"kind": "folk.girl", "near": "home", "say": "“Brother Xuande! When you're rich, will you buy me a hairpin with a flower on it?”"},
                 {"kind": "folk.elder", "say": "“The Yellow Turbans are burning villages in the south. Strange times.”"},
                 {"kind": "folk.villager", "near": "mulberry", "challenge": "neighbour",
                  "intro": ["Your neighbour has scratched a weiqi board into the dirt under the mulberry. “Before you go to town, Xuande, one game.”"],
@@ -55,6 +56,8 @@ PLACES = {
                 {"kind": "folk.elder", "near": "teahouse", "say": "An old storyteller taps his clapper-board. “Sit, sit! Tales of the Yellow Heaven…”"},
                 {"kind": "folk.villager", "say": "“They say the Yellow Turbans wear scarves the colour of the earth.”"},
                 {"kind": "folk.woman", "say": "“Liu Bei? The sandal-seller? Kind man. Ears down to his shoulders, you know.”"},
+                {"kind": "folk.lady", "near": "teahouse", "say": "“They say the volunteers march next month. Half the girls in town will be weeping at the gate.”"},
+                {"kind": "folk.maiden", "near": "inn", "say": "“A man nine feet tall, with a face as red as a ripe date, just walked into the inn. Who do you suppose he is?”"},
                 {"kind": "folk.villager", "near": "farm", "say": "“Zhang Fei sells wine and pork. Loud as thunder, but his heart is good.”"},
                 {"kind": "folk.official", "near": "office", "say": "“The governor wants volunteers. Read the notice.”"},
                 {"kind": "folk.elder", "near": "board", "challenge": "elder", "face": "down",
@@ -194,6 +197,7 @@ ROOMS = {
     "building.shop": {"people": [
         {"kind": "folk.woman", "say": "“Sit, have some tea. The storyteller starts soon.”"},
         {"kind": "folk.elder", "say": "“Another pot, and another tale of the old days.”"},
+        {"kind": "folk.lady", "say": "“More tea? The storyteller's tale of the Yellow Turbans is the talk of the county.”"},
     ]},
     "building.hall": {"people": [
         {"kind": "folk.official", "say": "“This is the county office. State your business.”"},

@@ -31,7 +31,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=4`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=5`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
@@ -66,16 +66,16 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=4`);
-      this.load.json("kit", `assets/tk/kits/${kit}.json?v=6`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=2`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=5`);
+      this.load.json("kit", `assets/tk/kits/${kit}.json?v=7`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=4`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
       for (const [s, path] of Object.entries(kit.sheets)) this.load.image(`kit-${s}`, path);
       const [fw, fh] = kit.folk.frame;
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=6`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=7`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -196,10 +196,12 @@ function worldScenes() {
       }
       spr.setOrigin(.5, 1).setDepth(o.y).setImmovable(true);
       spr.body.setSize(10, 6).setOffset((spr.width - 10) / 2, spr.height - 6);
-      const n = { id: o.name, spr, who, folk, sprite: p.sprite, say: J(p.say), wander: p.wander, home: { x: o.x, y: o.y }, t: 0, dir: face, until: p.until };
+      // townsfolk drawn like the heroes speak with their own portrait and name
+      const own = p.drawn ? L => L.map(l => l[0] === "n" ? ["say", who, ...l.slice(1)] : l) : L => L;
+      const n = { id: o.name, spr, who, folk, sprite: p.sprite, say: own(J(p.say)), wander: p.wander, home: { x: o.x, y: o.y }, t: 0, dir: face, until: p.until };
       if (p.challenge) {
         n.challenge = `${this.w.n}-${this.placeId}-c-${p.challenge}`;
-        n.intro = J(p.intro); n.win = J(p.win); n.done = J(p.done);
+        n.intro = own(J(p.intro)); n.win = own(J(p.win)); n.done = own(J(p.done));
         n.mark = this.add.image(o.x, o.y - spr.height - 2, "@bang").setOrigin(.5, 1).setDepth(9999).setVisible(!TK.cleared(n.challenge));
       }
       this.physics.add.collider(spr, this.solids);

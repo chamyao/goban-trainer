@@ -943,6 +943,18 @@
    ],
    "folk.official": [
     "f_official"
+   ],
+   "folk.lady": [
+    "f_geisha",
+    "f_geisha2",
+    "f_geisha3"
+   ],
+   "folk.girl": [
+    "f_girl"
+   ],
+   "folk.maiden": [
+    "f_maiden",
+    "f_maiden2"
    ]
   }
  }

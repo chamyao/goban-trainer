@@ -1846,27 +1846,45 @@
   },
   {
    "id": "npc-4",
+   "kind": "folk.lady",
+   "x": 12.5,
+   "y": 15.9,
+   "say": [
+    "“They say the volunteers march next month. Half the girls in town will be weeping at the gate.”"
+   ]
+  },
+  {
+   "id": "npc-5",
+   "kind": "folk.maiden",
+   "x": 20.5,
+   "y": 10.9,
+   "say": [
+    "“A man nine feet tall, with a face as red as a ripe date, just walked into the inn. Who do you suppose he is?”"
+   ]
+  },
+  {
+   "id": "npc-6",
    "kind": "folk.villager",
    "x": 25.5,
-   "y": 11.9,
+   "y": 10.9,
    "say": [
     "“Zhang Fei sells wine and pork. Loud as thunder, but his heart is good.”"
    ]
   },
   {
-   "id": "npc-5",
+   "id": "npc-7",
    "kind": "folk.official",
-   "x": 30.5,
-   "y": 12.9,
+   "x": 28.5,
+   "y": 14.9,
    "say": [
     "“The governor wants volunteers. Read the notice.”"
    ]
   },
   {
-   "id": "npc-6",
+   "id": "npc-8",
    "kind": "folk.elder",
-   "x": 21.5,
-   "y": 11.9,
+   "x": 20.5,
+   "y": 15.9,
    "say": [],
    "challenge": "elder",
    "intro": [
@@ -1881,10 +1899,10 @@
    "face": "down"
   },
   {
-   "id": "npc-7",
+   "id": "npc-9",
    "kind": "folk.villager",
    "x": 20.5,
-   "y": 11.9,
+   "y": 9.9,
    "say": [],
    "challenge": "innkeeper",
    "intro": [
@@ -1898,10 +1916,10 @@
    ]
   },
   {
-   "id": "npc-8",
+   "id": "npc-10",
    "kind": "folk.villager",
    "x": 25.5,
-   "y": 9.9,
+   "y": 13.9,
    "say": [],
    "challenge": "farmer",
    "intro": [
@@ -1915,10 +1933,10 @@
    ]
   },
   {
-   "id": "npc-9",
+   "id": "npc-11",
    "kind": "folk.noble",
    "x": 30.5,
-   "y": 11.9,
+   "y": 14.9,
    "say": [],
    "challenge": "clerk",
    "intro": [

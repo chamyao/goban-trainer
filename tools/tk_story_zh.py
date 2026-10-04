@@ -177,6 +177,11 @@ ZH = {
     "“A mistake,” warned his secretary Chen Lin. “You hand the spear to others, point first.”": "主簿陈琳劝道：“不可！这是倒持干戈，授人以柄。”",
     "A man beside them clapped and laughed. “This is as easy as turning over a hand. Why so much talk?” It was Cao Cao.": "旁边一人鼓掌大笑：“此事易如反掌，何必多议！”此人正是曹操。",
     "What did Cao Cao propose? Hear the next chapter.": "不知曹操说出甚话来，且听下文分解。",
+    # ---- ladies and girls about town ----
+    "“Brother Xuande! When you're rich, will you buy me a hairpin with a flower on it?”": "“玄德哥哥！等你富贵了，给我买一支带花的簪子好不好？”",
+    "“They say the volunteers march next month. Half the girls in town will be weeping at the gate.”": "“听说义兵下月就要出征，城里一半的姑娘都要在城门口哭了。”",
+    "“A man nine feet tall, with a face as red as a ripe date, just walked into the inn. Who do you suppose he is?”": "“刚才有个身长九尺、面如重枣的大汉进了酒店，你说他是什么人？”",
+    "“More tea? The storyteller's tale of the Yellow Turbans is the talk of the county.”": "“再添些茶吧？说书先生讲的黄巾故事，全县都在传呢。”",
     # ---- World 1 places: townsfolk, challengers and story spots (tools/tk_places.py) ----
     "“Off to sell your sandals in town, Xuande? Mind the road.”": "“玄德，又进城卖草鞋？路上小心。”",
     "“That mulberry looks like a carriage canopy! Mother says someone from this house will ride under one.”": "“那棵桑树长得像车盖！娘说，这家将来要出贵人。”",
@@ -286,6 +291,7 @@ CAST = {
 # Townsfolk speak in a voice for their kind (tools/tk_places.py "kind").
 FOLK_VOICE = {
     "folk.villager": "zm_052", "folk.woman": "zf_022", "folk.elder": "zm_100", "folk.child": "zf_002",
+    "folk.lady": "zf_017", "folk.maiden": "zf_023", "folk.girl": "zf_002",
     "folk.monk": "zm_069", "folk.noble": "zm_057", "folk.soldier": "zm_045", "folk.rebel": "zm_016",
     "folk.hunter": "zm_030", "folk.official": "zm_064",
 }
