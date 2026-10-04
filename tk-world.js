@@ -230,6 +230,7 @@ function worldScenes() {
     create() {
       const region = this.region = this.cache.json.get("region"), kit = this.kit = this.cache.json.get("kit");
       const opts = this.opts = this.game.worldOpts, w = this.w = opts.w;
+      this.grid = this.walk = this.lampFx = this.ambientFx = null;   // the scene object outlives a change of place: no old map's walk grid or tap-walk
       this.story = w.scenes;
       this.st = WorldState.load(w.n, region);
       if (!this.st.visited.includes(this.placeId)) this.st.visited.push(this.placeId);
@@ -798,7 +799,7 @@ function worldScenes() {
     }
 
     // style: "story" for the plot (quest lead-ins and scenes), "chat" for everything else
-    talk(steps, done, style = "chat") { this.player.setVelocity(0); this.ui.dialog(steps, done, style); }
+    talk(steps, done, style = "chat") { this.walk = null; this.player.setVelocity(0); this.ui.dialog(steps, done, style); }
 
     faceNpc(n) {
       if (n.who) n.spr.setTexture(`h-${n.who}-${n.dir}-0`);
