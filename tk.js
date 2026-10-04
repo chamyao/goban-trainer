@@ -54,6 +54,8 @@ const TK_CHARS = {
   merchant: { name: "Zhang Shiping", skin: "#ebbd92", hair: "#2a2024", hat: "straw", hatC: "#d8b867", robe: "#8a6a4a", trim: "#5a3a22", beard: "short", eyes: "kind" },
   immortal: { name: "Old Immortal of Southern Florescence", img: "assets/tk/p_immortal.png", skin: "#efe0c8", hair: "#e8e8e8", hat: "topknot", hatC: "#e8e8e8", pin: "#6a8a5a", robe: "#6a8a6a", trim: "#d8d2c0", beard: "long", beardC: "#eeeeee", eyes: "kind" },
 };
+// Someone the story names but nobody has drawn yet: the stand-in's look (their own name still shows).
+const tkLook = who => TK_CHARS[who] || TK_CHARS.f_farmer;
 
 const TKArt = {
   shade(hex, f) {  // f < 0 darkens, > 0 lightens
@@ -238,7 +240,7 @@ const TKArt = {
   cache: {},
   get(who, kind, frame = 0, pose = "stand") {
     const k = `${who}|${kind}|${frame}|${pose}`;
-    if (!this.cache[k]) this.cache[k] = kind === "bust" ? this.bust(TK_CHARS[who]) : this.sprite(TK_CHARS[who], frame, pose);
+    if (!this.cache[k]) this.cache[k] = kind === "bust" ? this.bust(tkLook(who)) : this.sprite(tkLook(who), frame, pose);
     return this.cache[k];
   },
   // Flipped copy for walking left.
@@ -498,7 +500,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) this.data = await (await fetch("data/tk.json?v=17")).json();
+    if (!this.data) this.data = await (await fetch("data/tk.json?v=18")).json();
     return this.data;
   },
   ls(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } },
@@ -885,7 +887,7 @@ const TKStory = {
         ]);
         document.body.append(box);
       }
-      const ch = who && TK_CHARS[who], face = box.querySelector(".tk-dlg-face");
+      const ch = who ? tkLook(who) : null, face = box.querySelector(".tk-dlg-face");   // someone not yet drawn: the stand-in's face, their name
       face.innerHTML = "";
       if (ch) face.append(ch.img ? h("img", { src: ch.img, alt: "" }) : TKArt.get(who, "bust"));
       box.classList.toggle("narr", !ch);
@@ -1452,10 +1454,11 @@ const TKOverlay = {
 // Every story scene in the novel's order; the ones not yet seen stay hidden.
 function tkChronicle(w, map) {
   const items = [["opening", "Prologue", null]];
-  const order = ["n1", "n2", "a1", "a2", "a3", "as", "n3", "n4", "n5", "b1", "b2", "b3", "bs", "n6", "n7", "boss"];
-  const nodes = w.nodes.filter(n => n.scene).sort((a, b) => order.indexOf(a.key.split("-")[1]) - order.indexOf(b.key.split("-")[1]));
-  for (const n of nodes) items.push([n.scene, w.scenes[n.scene].title, n]);
-  items.push(["closing", "Epilogue: the inspector, and what came next", null]);
+  // the nodes come in the story's order; the boss's closing scroll follows the boss, before Anxi
+  for (const n of w.nodes.filter(n => n.scene && w.scenes[n.scene])) {
+    items.push([n.scene, w.scenes[n.scene].title, n]);
+    if (n.role === "boss" && w.closing && w.closing.length) items.push(["closing", "The Yellow Turbans Fall", null]);
+  }
   const wrap = h("div", { class: "tk-scroll-wrap" });
   const list = h("div", { class: "tk-chron" });
   for (const [id, title, n] of items) {

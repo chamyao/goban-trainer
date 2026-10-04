@@ -20,13 +20,14 @@ const TK_NAMES_ZH = {
   f_child: "孩童", f_daoist: "道士", f_noble: "士人", f_soldier: "兵士", f_hunter: "猎户", f_official: "书吏",
   f_geisha: "仕女", f_geisha2: "仕女", f_geisha3: "仕女", f_maiden: "少女", f_maiden2: "少女", f_girl: "小姑娘",
 };
-const tkName = who => [TK_NAMES_ZH[who], TK_CHARS[who] && TK_CHARS[who].name].filter(Boolean).join(" ");
+const tkName = who => [TK_NAMES_ZH[who], TK_CHARS[who] ? TK_CHARS[who].name
+  : !TK_NAMES_ZH[who] && String(who || "").replace(/^f_/, "").split(/[_-]/).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ")].filter(Boolean).join(" ");
 
 /* ---------- the heroes in four directions, from TKArt's front sprites ---------- */
 const TownArt = {
   // Recolour a front sprite into a back view: face becomes hair, beard becomes robe.
   back(who, frame) {
-    const d = TK_CHARS[who], src = TKArt.get(who, "sprite", frame);
+    const d = tkLook(who), src = TKArt.get(who, "sprite", frame);
     const cv = document.createElement("canvas"); cv.width = src.width; cv.height = src.height;
     const c = cv.getContext("2d"); c.drawImage(src, 0, 0);
     const img = c.getImageData(0, 0, cv.width, cv.height), p = img.data;
@@ -50,7 +51,7 @@ const TownArt = {
   // TKArt's front sprite. step: 0 stand, 1 stride with the arm forward,
   // 2 stand, 3 stride with the arm back.
   side(who, step) {
-    const d = TK_CHARS[who], A = TKArt, g = A.grid(16, 20), O = 2;
+    const d = tkLook(who), A = TKArt, g = A.grid(16, 20), O = 2;
     const s = (x, y, c) => A.set(g, x + O, y + 1, c), R = (x, y, w, h, c) => A.rect(g, x + O, y + 1, w, h, c);
     const skinS = A.shade(d.skin, -.18), robeS = A.shade(d.robe, -.22), arm = A.shade(d.robe, -.1), dark = "#2a2228";
     const hr = d.hair || dark, H = d.hatC, stride = step % 2 === 1, pole = d.weapon === "spear" || d.weapon === "glaive";

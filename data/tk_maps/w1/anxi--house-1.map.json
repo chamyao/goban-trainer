@@ -1,0 +1,136 @@
+{
+ "format": "tk-map/1",
+ "id": "anxi--house-1",
+ "world": 1,
+ "parent": "anxi",
+ "name": "House, Anxi",
+ "archetype": "interior",
+ "building": "house-1",
+ "style": "building.house",
+ "size": [
+  20,
+  12
+ ],
+ "seed": 0.10592287650008492,
+ "terrain": {
+  "legend": {
+   "#": "wood",
+   "%": "stone",
+   "&": "mat",
+   "e": "earth",
+   "W": "wall",
+   " ": "void"
+  },
+  "rows": [
+   "                    ",
+   "     WWWWWWWWWW     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     WWWWW#WWWW     ",
+   "                    ",
+   "                    ",
+   "                    "
+  ]
+ },
+ "objects": [
+  {
+   "kind": "furn.bed",
+   "x": 6,
+   "y": 2,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.drawers",
+   "x": 10,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.shelf",
+   "x": 8,
+   "y": 2,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.table",
+   "x": 8,
+   "y": 5,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 7,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 10,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.jar",
+   "x": 13,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.plant",
+   "x": 6,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.sacks",
+   "x": 6,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "spots": [],
+ "npcs": [
+  {
+   "id": "in-1",
+   "kind": "folk.woman",
+   "x": 8.5,
+   "y": 6.9,
+   "say": [
+    "“Mind the floor — I've only just swept it.”"
+   ]
+  }
+ ],
+ "exits": [
+  {
+   "to": "anxi",
+   "side": "S",
+   "x": 10,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "anxi": [
+   10,
+   7
+  ],
+  "": [
+   10,
+   7
+  ]
+ }
+}
