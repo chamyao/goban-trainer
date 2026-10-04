@@ -200,8 +200,10 @@ scenes written for the node map carry over.
   CC-BY), **GameTorch Eastern Fantasy Mountains** (CC0) for key visuals and
   props, and CC0 packs such as Kenney's for generic terrain. Anything missing
   is drawn in code. Credits live on the Feedback tab.
-- No AI-trained art packs: free packs plus code-drawn art is cheaper and
-  more consistent.
+- Free packs are preferred over code-drawn art. AI-generated images are
+  allowed (the user is considering AI stills with a Ken Burns pan for
+  scenes); an earlier version of this plan said otherwise, which the user
+  never asked for.
 - Characters stay historically grounded: ordinary skin tones for everyone
   (Zhang Fei's black face is opera face paint, not skin colour); Guan Yu's red
   face is kept because the novel describes it.
