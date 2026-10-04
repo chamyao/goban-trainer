@@ -5,19 +5,26 @@
    men fall, effects play, and the camera frames whoever is speaking. Beats
    are in tiles, so any art kit plays them; see docs/cutscene-format.md.
 
-   WorldCutscene.play(scene, cutscene, done) runs inside the world's Phaser
-   scene (tk-world.js). Dialogue goes through the world's dialogue box
+   WorldCutscene.play(scene, cutscene, done, opts) runs inside the world's
+   Phaser scene (tk-world.js). Dialogue goes through the world's dialogue box
    (TownUI). Skip ends the scene at once; its lasting effects (who joins the
-   party) are applied by the world's own callback. */
+   party) are applied by the world's own callback.
+
+   A "problem" beat is the scene's Go problem: the scene waits on
+   opts.onProblem() (a promise of a win). Losing or leaving ends the scene
+   and calls opts.onLeave instead of done. Before the problem, Skip jumps to
+   it, placing everyone where they would be; opts.ffToProblem starts that
+   way (a retry), and replays the last line before the problem. */
 
 const WorldCutscene = {
-  async play(scene, cs, done) {
+  async play(scene, cs, done, opts = {}) {
     const T = 16, ui = scene.ui, cam = scene.cameras.main;
     const realBusy = ui.busy;
     ui.busy = () => true;                       // the world stops walking and wandering while the scene plays
     scene.cine = cs;
     const actors = {}, fx = [], timers = [];
-    let skip = false;
+    const hasProblem = cs.beats.some(b => b.do === "problem");
+    let skip = !!(opts.ffToProblem && hasProblem), solved = !hasProblem, left = false, lastLine = null;
     const px = ([x, y]) => [x * T, y * T];
     const wait = ms => new Promise(r => { if (skip) return r(); timers.push(scene.time.delayedCall(ms, r)); });
     const tween = cfg => new Promise(r => { if (skip) return r(); scene.tweens.add({ ...cfg, onComplete: r }); });
@@ -141,6 +148,7 @@ const WorldCutscene = {
         case "walk": await walk(b); break;
         case "camera": await pan(b.to, b.ms || 500); break;
         case "line": {
+          lastLine = b;
           for (const t of b.face || []) if (actors[t.actor]) look(actors[t.actor], t.dir);
           await pan(b.camera, 300);
           if (skip) break;
@@ -178,7 +186,35 @@ const WorldCutscene = {
       }
     };
 
-    for (const b of cs.beats) { if (skip) break; await run(b); }
+    // a beat's end state at once, for fast-forwarding to the problem
+    const instant = b => {
+      switch (b.do) {
+        case "cut": case "appear": for (const p of b.place) actor(p.actor, p.at, p.face); break;
+        case "together": b.beats.forEach(instant); break;
+        case "walk": { const a = actors[b.actor]; if (a) { const [x, y] = px(b.path[b.path.length - 1]); a.spr.setPosition(x, y); sync(a); } break; }
+        case "line": lastLine = b; for (const t of b.face || []) if (actors[t.actor]) look(actors[t.actor], t.dir); break;
+        case "fall": b.actors.filter(id => actors[id]).forEach((id, i) => { actors[id].spr.setTint(0xb0a090).setAngle((i % 2 ? -1 : 1) * 90); }); break;
+        case "fade": b.actors.filter(id => actors[id]).forEach(id => { actors[id].spr.setVisible(false); sync(actors[id]); }); break;
+        case "gain": if (Items) { Items.gain(scene, b.item); Object.values(actors).forEach(mount); } break;
+      }
+    };
+
+    for (const b of cs.beats) {
+      if (b.do === "problem") {
+        if (skip) {                               // fast-forwarded here: frame the scene, and say the last line again on a retry
+          const ff = opts.ffToProblem;
+          skip = false;
+          const to = lastLine && lastLine.camera;
+          if (to) { const [x, y] = px(to); cam.centerOn(x, y - 8); }
+          if (ff && lastLine) await run(lastLine);
+        }
+        if (opts.onProblem && !(await opts.onProblem())) { left = true; break; }
+        solved = true;
+        continue;
+      }
+      if (skip) { if (solved) break; instant(b); continue; }
+      await run(b);
+    }
 
     // back to the world: the leader stands where the scene left him
     for (const t of timers) t.remove(false);
@@ -188,7 +224,7 @@ const WorldCutscene = {
     skipBtn.remove();
     bars.forEach(b => b.destroy());
     cam.resetFX();
-    if (cs.end && cs.end.leader) { const [x, y] = px(cs.end.leader); scene.player.setPosition(x, y); }
+    if (!left && cs.end && cs.end.leader) { const [x, y] = px(cs.end.leader); scene.player.setPosition(x, y); }
     scene.player.facing = "down";
     hidden.forEach(s => s.setVisible(true));
     for (const n of scene.npcs) if (n.until && !n.spr.body.enable) n.spr.setVisible(false);
@@ -196,7 +232,8 @@ const WorldCutscene = {
     cam.startFollow(scene.player, true, .15, .15);
     ui.busy = realBusy;
     scene.cine = null;
-    done && done();
+    const next = left ? opts.onLeave : done;
+    next && next();
   },
 };
 
