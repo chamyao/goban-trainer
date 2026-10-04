@@ -664,6 +664,19 @@ class Trainer {
       this.played.every((m, i) => m === L[i + 1]) &&
       L[this.played.length + 1] === mv);
 
+    if (!treeMove && this.els.noEngine) {
+      // Strict problems (the Three Kingdoms campaign): a move off the answer
+      // tree is simply wrong; there is no engine play to fall back on.
+      const g2 = applyMove(this.grid, c, r, BLACK);
+      if (!g2) return;
+      this.push();
+      this.grid = g2;
+      this.played = [...this.played, mv];
+      this.lastMove = [c, r];
+      this.posHistory.push(this.serialize(this.grid));
+      this.flawed = this.flawed || "a move off the solution";
+      return this.finish("bad");
+    }
     if (!treeMove) {
       if (Engine.status !== "ready") {
         if (Engine.status === "off" || Engine.status === "error") {

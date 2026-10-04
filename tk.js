@@ -436,7 +436,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) this.data = await (await fetch("data/tk.json?v=4")).json();
+    if (!this.data) this.data = await (await fetch("data/tk.json?v=5")).json();
     return this.data;
   },
   ls(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } },
@@ -814,7 +814,7 @@ const TKStory = {
       let box = document.querySelector(".tk-dlg");
       if (!box) {
         box = h("div", { class: "tk-dlg" }, [
-          h("div", { class: "tk-dlg-face" }), h("div", { class: "tk-dlg-body" }, [h("b", { class: "tk-dlg-name" }), h("p", { class: "tk-dlg-text" }), h("p", { class: "tk-dlg-zh", lang: "zh-CN" })]),
+          h("div", { class: "tk-dlg-face" }), h("div", { class: "tk-dlg-body" }, [h("b", { class: "tk-dlg-name" }), h("p", { class: "tk-dlg-zh", lang: "zh-CN" }), h("p", { class: "tk-dlg-text" })]),
           h("button", { class: "tk-skip", type: "button" }, "Skip ▸▸"), h("span", { class: "tk-dlg-more" }, "▼"),
         ]);
         document.body.append(box);
@@ -823,7 +823,7 @@ const TKStory = {
       face.innerHTML = "";
       if (ch) face.append(ch.img ? h("img", { src: ch.img, alt: "" }) : TKArt.get(who, "bust"));
       box.classList.toggle("narr", !ch);
-      box.querySelector(".tk-dlg-name").textContent = ch ? ch.name : "";
+      box.querySelector(".tk-dlg-name").textContent = ch ? (typeof tkName === "function" ? tkName(who) : ch.name) : "";
       box.querySelector(".tk-dlg-zh").textContent = zh || "";
       TKVoice.play(vid);
       const p = box.querySelector(".tk-dlg-text");
@@ -845,9 +845,9 @@ const TKStory = {
     return new Promise(res => {
       const wrap = h("div", { class: "tk-scroll-wrap" }, [
         h("div", { class: "tk-scroll" }, [
-          h("h3", {}, title),
-          ...paras.map((t, i) => h("div", { class: "tk-para" + (t.startsWith("—") ? " by" : "") }, [h("p", {}, t),
-            ...(zhParas && zhParas[i] ? [h("p", { class: "zh", lang: "zh-CN" }, zhParas[i])] : [])])),
+          h("h3", {}, zhTitle ? [h("span", { lang: "zh-CN" }, zhTitle), h("span", { class: "tk-scroll-en" }, title)] : title),
+          ...paras.map((t, i) => h("div", { class: "tk-para" + (t.startsWith("—") ? " by" : "") }, [  // Chinese first, English after
+            ...(zhParas && zhParas[i] ? [h("p", { class: "zh", lang: "zh-CN" }, zhParas[i])] : []), h("p", { class: "en" }, t)])),
           h("button", { class: "tk-scroll-go", type: "button" }, "Continue ▸"),
         ]),
       ]);
@@ -911,9 +911,9 @@ async function viewTK(worldN) {
   crumbs.append(h("a", { href: "#/" }, "Library"), " / ", D.title);
   root.innerHTML = "";
   const levels = w.nodes.filter(x => !TK.isStart(x.key)), done = levels.filter(x => TK.cleared(x.key)).length;
-  const chron = h("button", { class: "tk-chron-btn", type: "button" }, "📜 Chronicle");
+  const chron = h("button", { class: "tk-chron-btn", type: "button" }, "📜 史册 Chronicle");
   const voiceBtn = h("button", { class: "tk-chron-btn", type: "button", "aria-pressed": String(TKVoice.on) });
-  const voiceLabel = () => { voiceBtn.textContent = TKVoice.on ? "🔊 Voice on" : "🔇 Voice off"; voiceBtn.setAttribute("aria-pressed", String(TKVoice.on)); };
+  const voiceLabel = () => { voiceBtn.textContent = TKVoice.on ? "🔊 配音 Voice on" : "🔇 静音 Voice off"; voiceBtn.setAttribute("aria-pressed", String(TKVoice.on)); };
   voiceLabel();
   voiceBtn.onclick = () => { TKVoice.on = !TKVoice.on; voiceLabel(); };
   root.append(h("div", { class: "tk-head" }, [
@@ -922,29 +922,30 @@ async function viewTK(worldN) {
     h("div", { class: "tk-head-btns" }, [voiceBtn, chron]),
   ]));
   root.append(h("div", { class: "tk-worlds" }, [
-    ...D.worlds.map(x => h("a", { class: "tk-world" + (x.n === n ? " on" : ""), href: `#/tk/${x.n}` }, `${x.n} · ${x.name}`)),
-    h("span", { class: "tk-world lock" }, "2 · Hulao Pass — coming soon"),
+    ...D.worlds.map(x => h("a", { class: "tk-world" + (x.n === n ? " on" : ""), href: `#/tk/${x.n}` }, `${x.n} · ${x.zh} ${x.name}`)),
+    h("span", { class: "tk-world lock" }, "2 · 虎牢关 Hulao Pass — 敬请期待 coming soon"),
   ]));
   const host = h("div", { class: "tk-map" });
   root.append(host);
   const info = h("div", { class: "tk-info" });
   root.append(info);
 
-  // Worlds whose places are built are explored on foot (tk-world.js); the node map stays as the overview.
+  // Worlds whose places are built are explored on foot (tk-world.js); the node map
+  // remains only for worlds that haven't been built yet.
   const world = typeof WorldData !== "undefined" && WorldData.has(w.n);
-  const mode = world ? (TK.ls("tk-view")[w.n] || "world") : "map";
-  const setMode = m => { const v = TK.ls("tk-view"); v[w.n] = m; TK.lsSet("tk-view", v); viewTK(w.n); };
-  if (world) root.querySelector(".tk-head-btns").prepend(h("button", { class: "tk-chron-btn", type: "button", onclick: () => setMode(mode === "world" ? "map" : "world") },
-    mode === "world" ? "🗺 Overview map" : "🚶 Explore"));
-  if (mode === "world") {
+  if (world) {
+    // Art style: the same maps drawn with either free pack (tk-world.js WORLD_KITS).
+    const kit = WorldView.kit(), kits = Object.keys(WORLD_KITS), next = kits[(kits.indexOf(kit) + 1) % kits.length];
+    root.querySelector(".tk-head-btns").prepend(h("button", { class: "tk-chron-btn", type: "button", title: `Switch to ${WORLD_KITS[next].en}`,
+      onclick: () => { WorldView.setKit(next); viewTK(w.n); } }, `🎨 画风：${WORLD_KITS[kit].zh} ${WORLD_KITS[kit].en}`));
     // Scenes replayed outside the node map: words only, no walking or effects.
     const still = { w, actors: {}, leader: { x: 0, y: 0 }, party: [], pos: () => ({ x: 0, y: 0 }), actor: () => null, moveActor: async () => {}, addFx: () => 0 };
     const run = async steps => { TKStory.busy = true; try { await TKStory.play(still, steps); } finally { TKStory.busy = false; } };
     chron.onclick = () => tkChronicle(w, still);
     if (!TK.seen(`${w.n}:opening`)) { await run(w.opening); TK.markSeen(`${w.n}:opening`); if (nav !== routeSeq) return; }
     const ret = TKView.takeReturn();
-    info.append(h("div", { class: "tk-info-text" }, [h("b", {}, w.name),
-      h("div", { class: "meta" }, "Walk with WASD or the arrow keys, Shift to run, Space to talk. People marked ! will set you a problem.")]));
+    info.append(h("div", { class: "tk-info-text" }, [h("b", {}, `${w.zh} ${w.name}`),
+      h("div", { class: "meta" }, "用方向键移动，按回车对话；头上有 ! 的人会给你出题。Move with WASD or the arrow keys, Enter to talk. People marked ! will set you a problem.")]));
     try {
       await WorldView.mount({
         w, host, ret: ret && ret.world === w.n ? ret : null,
@@ -1051,6 +1052,9 @@ async function viewTK(worldN) {
   else showInfo(here);
 }
 
+const TK_ROLE_ZH = { main: "主线", side: "支线 · 远路", short: "支线 · 捷径", boss: "首领", challenge: "挑战" };
+const TK_BOSS_ZH = { zhangbao: "地公将军张宝" };
+
 async function viewTKLevel(worldN, key) {
   const nav = routeSeq;
   root.innerHTML = `<div class="loading">Loading…</div>`;
@@ -1081,30 +1085,30 @@ async function viewTKLevel(worldN, key) {
   const verdict = h("div", { class: "tk-verdict" });
   const bossPanel = node.boss ? h("div", { class: "panel tk-boss" }, [
     TKArt.get(node.boss.who, "bust"),
-    h("div", {}, [h("b", {}, node.boss.title), h("p", {}, `“${node.boss.taunt}”`),
-      h("p", { class: "zh", lang: "zh-CN" }, node.boss.taunt_zh || ""),
+    h("div", {}, [h("b", {}, [TK_BOSS_ZH[node.boss.who] ? `${TK_BOSS_ZH[node.boss.who]} · ` : "", node.boss.title]),
+      h("p", { class: "zh", lang: "zh-CN" }, node.boss.taunt_zh ? `“${node.boss.taunt_zh}”` : ""), h("p", {}, `“${node.boss.taunt}”`),
       ...(TKVoice.has(node.boss.taunt_vid) ? [h("button", { class: "tk-say", type: "button", onclick: () => TKVoice.play(node.boss.taunt_vid) }, "🔊")] : [])]),
   ]) : null;
   if (node.boss) TKVoice.play(node.boss.taunt_vid);
   const aside = h("aside", {}, [
     ...(bossPanel ? [bossPanel] : []),
     h("div", { class: "panel" }, [
-      h("h2", {}, `World ${worldN} · ${w.name}`),
-      h("div", { class: "meta-title" }, `${node.place} · ${TK.roleLabel(node)}`),
+      h("h2", {}, `第${worldN}卷 ${w.zh} · World ${worldN} · ${w.name}`),
+      h("div", { class: "meta-title" }, [`${node.place_zh || node.place} · ${TK_ROLE_ZH[node.role] || ""}`,
+        h("span", { class: "tk-en" }, ` ${node.place} · ${TK.roleLabel(node)}`)]),
       h("div", { class: "meta-sub" }, [node.role === "boss" ? "" : `from ${src.title} · `, p.url ? h("a", { href: p.url, target: "_blank" }, "source")
                                                                  : h("a", { href: `https://www.101weiqi.com/q/${p.id}/`, target: "_blank" }, "source")]),
       h("div", { class: "badges" }, [...(p.lv || node.grade ? [h("span", { class: "badge" }, p.lv || node.grade)] : []), ...(p.qt ? [h("span", { class: "badge" }, p.qt)] : []), turnBadge]),
     ]),
-    h("div", { class: "panel" }, [h("h2", {}, "Status"), status, note, verdict]),
+    h("div", { class: "panel" }, [h("h2", {}, "状态 Status"), status, note, verdict]),
     treePanel,
     h("div", { class: "panel" }, [
-      h("h2", {}, "Controls"),
+      h("h2", {}, "操作 Controls"),
       h("div", { class: "controls" }, [
-        h("button", { onclick: () => trainer.undo() }, "Undo"),
-        h("button", { onclick: () => trainer.hint() }, "Hint"),
-        h("button", { onclick: () => trainer.reset() }, "Reset"),
-        btnExplore,
-        h("button", { class: "wide", onclick: back }, "← Back to the map"),
+        h("button", { onclick: () => trainer.undo() }, "悔棋 Undo"),
+        h("button", { onclick: () => trainer.hint() }, "提示 Hint"),
+        h("button", { onclick: () => trainer.reset() }, "重来 Reset"),
+        h("button", { class: "wide", onclick: back }, "← 返回 Back"),
       ]),
     ]),
   ]);
@@ -1113,7 +1117,7 @@ async function viewTKLevel(worldN, key) {
   root.append(player);
   root.classList.add("tk-enter");
   setTimeout(() => root.classList.remove("tk-enter"), 500);
-  trainer = new Trainer(book, 0, { svg, boardCard, status, turnBadge, btnExplore, treePanel, treeBox, note });
+  trainer = new Trainer(book, 0, { svg, boardCard, status, turnBadge, btnExplore, treePanel, treeBox, note, noEngine: true });
   btnExplore.addEventListener("click", () => trainer.toggleExplore());
   window.__trainer = trainer;
   const t = trainer;
@@ -1127,13 +1131,13 @@ async function viewTKLevel(worldN, key) {
       TK.markCleared(key);
       try { sessionStorage.setItem("tk-return", JSON.stringify({ world: worldN, key, win: true })); } catch {}
       verdict.className = "tk-verdict win";
-      verdict.append(h("b", {}, node.role === "boss" ? "★ Boss defeated!" : "★ Flawless!"), h("button", { onclick: back }, "Continue ▸"));
+      verdict.append(h("b", {}, node.role === "boss" ? "★ 击败首领！Boss defeated!" : "★ 完美！Flawless!"), h("button", { onclick: back }, "继续 Continue ▸"));
     } else {
       TK.slip(node);
       verdict.className = "tk-verdict slip";
-      verdict.append(h("b", {}, e.detail === "ok" ? `Solved, but not flawless (${t.flawed}).` : "The enemy saw through it!"),
-        h("span", {}, " Try another way."),
-        h("button", { onclick: () => { root.classList.add("tk-flip"); setTimeout(() => { root.classList.remove("tk-flip"); viewTKLevel(worldN, key); }, 260); } }, "New problem →"));
+      verdict.append(h("b", {}, e.detail === "ok" ? `解出了，但不算完美。Solved, but not flawless (${t.flawed}).` : "敌人识破了！The enemy saw through it!"),
+        h("span", {}, " 换个思路。Try another way."),
+        h("button", { onclick: () => { root.classList.add("tk-flip"); setTimeout(() => { root.classList.remove("tk-flip"); viewTKLevel(worldN, key); }, 260); } }, "换一题 New problem →"));
     }
   };
   addEventListener("tczw:result", onResult);

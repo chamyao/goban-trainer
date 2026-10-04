@@ -21,6 +21,7 @@ sys.path.insert(0, str(ROOT / "tools"))
 
 from layout import layout  # noqa: E402
 from plot import build_region  # noqa: E402
+from tk_story_zh import ZH  # noqa: E402
 
 
 def out_dir(n):
@@ -40,11 +41,14 @@ def build(n):
         for q in region["quests"]:
             if q["place"] == p["id"]:
                 q["spot"] = next(s["id"] for s in m["spots"] if s["node"] == q["node"])
-        places.append({"id": p["id"], "name": p["name"], "archetype": m["archetype"], "map": f"{p['id']}.map.json",
-                       "links": p["links"]})
+        places.append({"id": p["id"], "name": p["name"], "zh": ZH.get(p["name"], ""), "archetype": m["archetype"],
+                       "map": f"{p['id']}.map.json", "links": p["links"]})
         print(f"  {p['id']:22} {m['archetype']:9} {m['size'][0]}x{m['size'][1]}  "
               f"{len(m['objects'])} objects, {len(m['spots'])} spots, {len(m['npcs'])} people, {len(m['exits'])} exits")
-    out = {"format": "tk-region/1", "world": n, "name": world["name"], "start": region["start"],
+    for q in region["quests"]:  # Chinese beside every line the player reads
+        q["objective_zh"] = ZH.get(q["objective"], "")
+        q["title_zh"] = world["scenes"][q["scene"]].get("zh", "")
+    out = {"format": "tk-region/1", "world": n, "name": world["name"], "zh": world.get("zh", ""), "start": region["start"],
            "party": world.get("party", []), "places": places, "quests": region["quests"]}
     (d / "region.json").write_text(json.dumps(out, ensure_ascii=False, indent=1))
     print(f"wrote {len(places)} maps and region.json to {d.relative_to(ROOT)}")

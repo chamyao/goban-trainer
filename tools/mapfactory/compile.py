@@ -15,6 +15,7 @@ from PIL import Image, ImageDraw
 
 from vocab import FALLBACK, FOLK_FALLBACK, KINDS
 from build_tk import place_step  # lines get their Chinese and voice clip here
+from tk_story_zh import ZH
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 DIRS = {"N": (0, -1), "E": (1, 0), "S": (0, 1), "W": (-1, 0), "NE": (1, -1), "SE": (1, 1), "SW": (-1, 1), "NW": (-1, -1)}
@@ -185,7 +186,7 @@ def compile_map(m, kit, out_dir):
         obj(key or "", "prop", (o["x"] + o["w"] / 2) * T, (o["y"] + o["h"]) * T,
             kind=o["kind"], fw=o["w"] * T, fh=o["h"] * T, solid=solid, **({"ref": o["id"]} if o.get("id") else {}))
     for s in m["spots"]:
-        obj(s["id"], "spot", s["x"] * T, s["y"] * T, node=s["node"], label=s.get("label", ""),
+        obj(s["id"], "spot", s["x"] * T, s["y"] * T, node=s["node"], label=s.get("label", ""), label_zh=ZH.get(s.get("label", ""), ""),
             **{k: json.dumps([place_step(l)[0] for l in s[k]], ensure_ascii=False) for k in ("intro", "outro") if s.get(k)})
     for n in m["npcs"]:
         sprite = n["kind"][5:] if n["kind"].startswith("hero.") else kit.folk(n["kind"], f"{m['id']}/{n['id']}")
