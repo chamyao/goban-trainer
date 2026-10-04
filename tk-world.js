@@ -199,14 +199,14 @@ function worldScenes() {
       const { w, kit } = this.opts;
       this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=18`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=11`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=14`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=15`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
       for (const [s, path] of Object.entries(kit.sheets)) this.load.image(`kit-${s}`, path);
       const [fw, fh] = kit.folk.frame;
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=25`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=26`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -612,20 +612,15 @@ function worldScenes() {
       return cs && cs.place === this.placeId && typeof WorldCutscene !== "undefined" ? cs : null;
     }
 
-    // A won spot's farewell. Those here only until this node (the Star Lords) say their lines, then
-    // fade in a drift of petals; a silent beat on the empty spot; then whatever is said after they
-    // speak (the narration that they are gone), so the player sees it before being told.
+    // A won spot's farewell. Those here only until this node (the Star Lords) are already gone
+    // (they vanish when the board is won); any words of theirs left in the outro come first, then
+    // the rest (the narration that they are gone).
     async parting(node, outro, say) {
       const lines = worldLines(outro), going = this.npcs.filter(n => n.until === node && n.spr.visible);
-      const ids = new Set(going.map(n => n.who).filter(Boolean));
+      const ids = new Set([...going, ...this.npcs.filter(n => n.until === node)].map(n => n.who).filter(Boolean));
       const cut = lines.reduce((k, l, i) => l[0] === "say" && ids.has(l[1]) ? i + 1 : k, 0);
       await say(lines.slice(0, cut));
-      if (going.length) {
-        const [x, y] = [going.reduce((a, n) => a + n.spr.x, 0) / going.length, going.reduce((a, n) => a + n.spr.y, 0) / going.length];
-        if (typeof WorldFx !== "undefined") WorldFx.play(this, "petals", [x, y], []);
-        await this.vanish(node, true);
-        await new Promise(r => this.time.delayedCall(1100, r));   // the empty board, before anyone says so
-      } else this.vanish(node);
+      this.vanish(node);
       await say(lines.slice(cut));
     }
 
@@ -658,7 +653,8 @@ function worldScenes() {
       this.leaving = true;
       P.setVelocity(0); P.anims.stop();
       this.ui.hint(null);
-      const win = await this.opts.onPuzzle(key, { host: this.opts.host, foe });
+      // solved: whoever was here only until this beat (the Star Lords) is gone at once, behind the board
+      const win = await this.opts.onPuzzle(key, { host: this.opts.host, foe, onWin: () => this.vanish(key) });
       if (!this.sys.isActive()) return false;  // the page moved on meanwhile
       this.leaving = false;
       this.opts.host.focus();

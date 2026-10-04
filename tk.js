@@ -500,7 +500,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) this.data = await (await fetch("data/tk.json?v=19")).json();
+    if (!this.data) this.data = await (await fetch("data/tk.json?v=20")).json();
     return this.data;
   },
   ls(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } },
@@ -1436,7 +1436,7 @@ const TKOverlay = {
         const d = await tkLevelData(worldN, key);
         if (closed) return;
         if (!d) return close();
-        tkDuelBuild(box, worldN, key, d, at.foe || null, { leave: close, again: show, onWin: () => { won = true; } });
+        tkDuelBuild(box, worldN, key, d, at.foe || null, { leave: close, again: show, onWin: () => { won = true; if (at.onWin) at.onWin(); } });
       };
       await show();
     });
