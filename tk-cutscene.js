@@ -20,7 +20,7 @@
    "prop": kind. They are drawn from the prop atlas (assets/tk/props.png,
    tools/build_props.py) or from the kit's own sprites, move like actors and
    carry whoever boards them. Poses, emote bubbles, gifts handed over, camera
-   zoom and a dark mood are drawn here too. */
+   zoom, a dark mood and the light (night, dusk, dawn, storm) are drawn here too. */
 
 const WorldCutscene = {
   async play(scene, cs, done, opts = {}) {
@@ -74,6 +74,7 @@ const WorldCutscene = {
     const sync = a => {
       if (a.prop) {
         a.spr.setDepth(a.spr.y);
+        if (a.glow && a.glow.active) a.glow.setPosition(a.spr.x, a.spr.y - 6).setVisible(a.spr.visible);
         for (const id of a.riders) {        // inside: just behind the front bars, sitting on the bed
           const r = actors[id];
           if (!r) continue;
@@ -101,6 +102,7 @@ const WorldCutscene = {
       if (a && a.prop) {
         const [x, y] = px(at);
         a.spr.setPosition(x, y).setVisible(true).setAlpha(1);
+        if (night && FIRES.includes(a.prop) && !(a.glow && a.glow.active)) a.glow = glow(a.spr);
         sync(a);
         return a;
       }
@@ -265,6 +267,40 @@ const WorldCutscene = {
         if (ms) scene.tweens.add({ targets: d, alpha: 0, duration: ms, onComplete: () => d.setVisible(false) }); else d.setVisible(false);
       }
     };
+    // light: the whole scene tinted for the time of day; at night fires and lamps glow
+    const LIGHT = { night: 0x46559c, dusk: 0xf0c0a0, dawn: 0xd8c8e8, storm: 0x80868e };
+    let shade = null, glows = [], night = false;
+    const glow = o => {                                          // warm light round a fire or a lamp
+      if (!scene.textures.exists("tk-glow")) {
+        const c = scene.textures.createCanvas("tk-glow", 64, 64), g = c.context, grd = g.createRadialGradient(32, 32, 2, 32, 32, 32);
+        grd.addColorStop(0, "rgba(255,190,90,0.9)"); grd.addColorStop(.4, "rgba(255,150,60,0.4)"); grd.addColorStop(1, "rgba(255,120,40,0)");
+        g.fillStyle = grd; g.fillRect(0, 0, 64, 64); c.refresh();
+      }
+      const g = scene.add.image(o.x, o.y - 6, "tk-glow").setDepth(9.1e4).setBlendMode(Phaser.BlendModes.ADD).setAlpha(.8);
+      scene.tweens.add({ targets: g, scale: 1.12, alpha: .65, duration: 700 + Math.random() * 300, yoyo: true, repeat: -1 });
+      fx.push(g); glows.push(g);
+      return g;
+    };
+    const FIRES = ["fire", "forge"];
+    const light = (tint, ms) => {
+      const c = LIGHT[tint] || (/^#[0-9a-f]{6}$/i.test(tint || "") ? parseInt(tint.slice(1), 16) : null);
+      const old = shade, oldGlows = glows;
+      shade = null; glows = [];
+      const out = o => ms ? scene.tweens.add({ targets: o, alpha: 0, duration: ms, onComplete: () => o.destroy() }) : o.destroy();
+      if (old) out(old);
+      oldGlows.forEach(out);
+      night = tint === "night";
+      if (c == null) return;
+      // fixed to the screen and big enough to cover it at any zoom; multiplied over the map and the cast, under bubbles
+      shade = scene.add.rectangle(W / 2, H / 2, W * 3, H * 3, c).setScrollFactor(0).setDepth(9e4).setBlendMode(Phaser.BlendModes.MULTIPLY);
+      fx.push(shade);
+      if (night) {
+        scene.children.list.filter(o => o.type === "Image" && o.frame && /^(camp\.firepit|camp\.cookfire|lamp\.post|furn\.hearth)#/.test(o.frame.name)).forEach(glow);
+        Object.values(actors).filter(a => a.prop && FIRES.includes(a.prop)).forEach(a => { a.glow = glow(a.spr); });
+      }
+      const all = [shade, ...glows];
+      if (ms) all.forEach(o => { const a = o.alpha; o.setAlpha(0); scene.tweens.add({ targets: o, alpha: a, duration: ms }); });
+    };
     const board = (b, ms) => {
       const r = actors[b.actor] || actor(b.actor, b.at), p = actors[b.prop];
       if (!p) return Promise.resolve();
@@ -289,6 +325,7 @@ const WorldCutscene = {
         case "cut": {
           cam.fadeOut(180); await wait(190);
           for (const p of b.place) actor(p.actor, p.at, p.face);
+          if (b.light) light(b.light, 0);
           const lead = b.place[0];
           if (lead) { const [x, y] = px(lead.at); cam.centerOn(x, y - 8); }
           cam.fadeIn(220); await wait(230);
@@ -344,6 +381,7 @@ const WorldCutscene = {
           break;
         case "shake": cam.shake(350, .01); await wait(350); break;
         case "mood": mood(b.dark, 600); await wait(300); break;
+        case "light": light(b.tint, b.ms); await wait(Math.min(b.ms, 600)); break;
         case "fx": await WorldFx.play(scene, b.name, px(b.at), fx); break;
         case "wait": await wait(b.ms); break;
         case "party": break;                       // applied by the world when the scene ends
@@ -356,7 +394,8 @@ const WorldCutscene = {
     // a beat's end state at once, for fast-forwarding to the problem
     const instant = b => {
       switch (b.do) {
-        case "cut": case "appear": for (const p of b.place) actor(p.actor, p.at, p.face); break;
+        case "cut": case "appear": for (const p of b.place) actor(p.actor, p.at, p.face); if (b.light) light(b.light, 0); break;
+        case "light": light(b.tint, 0); break;
         case "together": b.beats.forEach(instant); break;
         case "walk": { const a = actors[b.actor]; if (a) { const [x, y] = px(b.path[b.path.length - 1]); a.spr.setPosition(x, y); sync(a); } break; }
         case "line": lastLine = b; for (const t of b.face || []) if (actors[t.actor]) look(actors[t.actor], t.dir); break;

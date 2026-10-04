@@ -66,6 +66,8 @@ def build_region(world, briefs):
              "after": after[n["key"]], "grade": n.get("grade"), "pool": n.get("pool", [])}
         if n.get("boss"):
             q["boss"] = n["boss"]
+        if n.get("room"):   # played inside one of the place's buildings (its landmark "id")
+            q["room"] = n["room"]
         quests.append(q)
     start = slug(nodes[0]["place"])
     return {"places": [places[k] for k in order], "quests": quests, "start": start}

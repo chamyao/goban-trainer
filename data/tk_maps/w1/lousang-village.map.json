@@ -1692,7 +1692,15 @@
    "h": 1
   }
  ],
- "spots": [],
+ "spots": [
+  {
+   "id": "mulberry",
+   "x": 19,
+   "y": 9.7,
+   "node": "1-start",
+   "label": "The great mulberry tree"
+  }
+ ],
  "npcs": [
   {
    "id": "npc-1",
