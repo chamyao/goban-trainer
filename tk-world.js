@@ -314,7 +314,8 @@ function worldScenes() {
     }
 
     // The story quest a spot holds, if it can be played now.
-    openQuest(s) { const q = this.region.quests.find(x => x.node === s.node); return q && this.available(q) ? q : null; }
+    // (a scene played inside a building starts only in there: on the street its door is just where to go)
+    openQuest(s) { const q = this.region.quests.find(x => x.node === s.node); return q && this.available(q) && !(q.room && q.place !== this.placeId) ? q : null; }
 
     // Walking into a story spot's area starts its scene; it re-arms once you walk away.
     nearSpots() {
