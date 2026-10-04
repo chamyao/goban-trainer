@@ -197,13 +197,15 @@ class Overworld:
                     if self.free(x - 1, y - 1, w + 2, h + 2) and all(self.t[yy][xx] == "." for yy in range(y, y + h) for xx in range(x, x + w)):
                         self.put(kind, x, y)
         # a border of forest, then the country between
-        for y in range(H):
-            for x in range(W):
-                if (x < 2 or y < 2 or x >= W - 2 or y >= H - 2) and (x, y) not in self.used:
-                    kind = self.rng.choice(["tree.grove", "tree.small", "tree.pine"])
-                    w, h, _ = KINDS[kind]
-                    if x + w <= W and y + h <= H and all((xx, yy) not in self.used for yy in range(y, y + h) for xx in range(x, x + w)):
-                        self.put(kind, x, y)
+        # (three tiles deep; a second pass of single trees fills what the groves left)
+        for kinds in (["tree.grove", "tree.small", "tree.pine"], ["tree.small", "tree.pine"]):
+            for y in range(H):
+                for x in range(W):
+                    if (x < 3 or y < 2 or x >= W - 3 or y >= H - 2) and (x, y) not in self.used and (x, y) not in self.keep:
+                        kind = self.rng.choice(kinds)
+                        w, h, _ = KINDS[kind]
+                        if x + w <= W and y + h <= H and all((xx, yy) not in self.used for yy in range(y, y + h) for xx in range(x, x + w)):
+                            self.put(kind, x, y)
         area = W * H / 100
         for kind, per in FILL.items():
             w, h, solid = KINDS[kind]
