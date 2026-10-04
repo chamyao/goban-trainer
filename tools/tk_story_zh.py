@@ -166,6 +166,8 @@ ZH = {
     "What did Cao Cao propose? Hear the next chapter.": "不知曹操说出甚话来，且听下文分解。",
     "The Inspector's Visit": "督邮驾到", "The Hitching Post": "县前马桩",
     "Fortune favours the one who reads the stones.": "福运眷顾能读懂棋局的人。",
+    "Liu Bei goes into the tent and bows to his old teacher. Lu Zhi is glad to see him, and keeps him at his side.": "入帐施礼，具道来意。卢植大喜，留在帐前听调。",
+    "I hear my old teacher Lu Zhi is fighting Zhang Jiao at Guangzong. I once studied under him, and I wish to go and help.": "近闻中郎将卢植与贼首张角战于广宗，备昔曾师事卢植，欲往助之。",
     "Meet the inspector at the posting station.": "到驿馆拜见督邮。",
     "Go to the county office, where the old villagers are gathering.": "到县衙前，老人们正聚在那里。",
     # ---- World 1: staging pass, lines that changed or are new ----

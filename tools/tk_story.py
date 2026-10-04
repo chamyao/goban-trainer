@@ -65,7 +65,7 @@ WORLDS = [
             {"key": "as", "x": 160, "y": 150, "role": "main", "place": "Horse Trail", "step": 0.12, "scene": "horses"},
             {"key": "n3", "x": 246, "y": 178, "role": "main", "place": "Daxing Mountain", "step": 0.35, "scene": "daxing"},
             {"key": "n4", "x": 282, "y": 206, "role": "main", "place": "Qingzhou", "step": 0.45, "scene": "qingzhou"},
-            {"key": "t1", "x": 299, "y": 191, "role": "main", "place": "Guangzong Road", "room": "luzhi-tent", "step": 0.5, "scene": "tent", "trigger": "arrive"},
+            {"key": "t1", "x": 299, "y": 191, "role": "main", "place": "Guangzong Road", "room": "luzhi-tent", "step": 0.5, "scene": "tent"},
             {"key": "n5", "x": 316, "y": 176, "role": "main", "place": "Guangzong Road", "step": 0.55, "scene": "cart"},
             {"key": "b1", "x": 342, "y": 214, "role": "side", "place": "Qiao", "room": "caohome", "step": 0.6, "scene": "caocao1", "trigger": "arrive"},
             {"key": "b2", "x": 378, "y": 230, "role": "side", "place": "Luoyang Gates", "room": "hall-1", "step": 0.65, "scene": "caocao2", "trigger": "arrive"},
@@ -109,7 +109,7 @@ WORLDS = [
                 ["remove", "ly"], ["remove", "zj"],
             ]},
             "tent": {"title": "Lu Zhi's Tent", "kind": "main", "steps": [
-                ["n", "With Qingzhou relieved, Liu Bei hears that his old teacher Lu Zhi is fighting Zhang Jiao at Guangzong, and goes to help him. Lu Zhi is glad to see him, and keeps him in the tent."],
+                ["n", "Liu Bei goes into the tent and bows to his old teacher. Lu Zhi is glad to see him, and keeps him at his side."],
                 ["spawn", "lz", "luzhi", "t1", 12, -4],
                 ["say", "luzhi", "I have Zhang Jiao penned in here. His brothers Zhang Liang and Zhang Bao are at Yingchuan, facing Huangfu Song and Zhu Jun."],
                 ["problem"],  # the board comes up here; the rest plays once it is solved
@@ -255,6 +255,7 @@ WORLDS = [
                 ["run", "guanyu", "n4", 2, -10], ["run", "zhangfei", "n4", 2, 10], ["run", "liubei", "n4", -8, 0],
                 ["n", "Gongs crash. Guan Yu and Zhang Fei burst from both flanks as Liu Bei wheels around. Caught from three sides, the rebels break, and the siege of Qingzhou is lifted."],
                 ["pose", "yt", "fall", 4], ["run", "yt", "n4", 160, 0], ["remove", "yt"],
+                ["say", "liubei", "I hear my old teacher Lu Zhi is fighting Zhang Jiao at Guangzong. I once studied under him, and I wish to go and help."],
             ]},
             "cart": {"title": "The Cage Cart", "kind": "main", "steps": [
                 ["n", "By the time Liu Bei arrives, the rebels have been routed by fire. Huangfu Song tells him the brothers will run to Zhang Jiao at Guangzong, and he turns back through the night."],
