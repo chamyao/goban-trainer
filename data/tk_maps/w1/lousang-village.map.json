@@ -69,21 +69,24 @@
    "x": 27,
    "y": 8,
    "w": 4,
-   "h": 2
+   "h": 2,
+   "id": "house-1"
   },
   {
    "kind": "building.house",
    "x": 23,
    "y": 14,
    "w": 4,
-   "h": 2
+   "h": 2,
+   "id": "house-2"
   },
   {
    "kind": "building.hut",
    "x": 18,
    "y": 13,
    "w": 3,
-   "h": 2
+   "h": 2,
+   "id": "hut-1"
   },
   {
    "kind": "plant.bush",
@@ -1747,6 +1750,42 @@
    "y": 15,
    "w": 1,
    "h": 2
+  },
+  {
+   "to": "lousang-village--home",
+   "side": "N",
+   "x": 23.1,
+   "y": 8.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "lousang-village--house-1",
+   "side": "N",
+   "x": 28.6,
+   "y": 9.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "lousang-village--house-2",
+   "side": "N",
+   "x": 24.6,
+   "y": 15.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "lousang-village--hut-1",
+   "side": "N",
+   "x": 19.1,
+   "y": 14.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
   }
  ],
  "entries": {
@@ -1757,6 +1796,22 @@
   "": [
    23,
    10
+  ],
+  "lousang-village--home": [
+   23,
+   9
+  ],
+  "lousang-village--house-1": [
+   29,
+   10
+  ],
+  "lousang-village--house-2": [
+   25,
+   16
+  ],
+  "lousang-village--hut-1": [
+   19,
+   15
   ]
  }
 }

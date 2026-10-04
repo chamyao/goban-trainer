@@ -1,0 +1,100 @@
+{
+ "format": "tk-map/1",
+ "id": "julu--hut-1",
+ "world": 1,
+ "parent": "julu",
+ "name": "Hut, Julu",
+ "archetype": "interior",
+ "building": "hut-1",
+ "size": [
+  20,
+  12
+ ],
+ "seed": 0.692517986398843,
+ "terrain": {
+  "legend": {
+   "#": "wood",
+   "%": "stone",
+   "&": "mat",
+   "e": "earth",
+   "W": "wall",
+   " ": "void"
+  },
+  "rows": [
+   "                    ",
+   "                    ",
+   "      WWWWWWWW      ",
+   "      W&&&&&&W      ",
+   "      W&&&&&&W      ",
+   "      W&&&&&&W      ",
+   "      W&&&&&&W      ",
+   "      W&&&&&&W      ",
+   "      WWWW&WWW      ",
+   "                    ",
+   "                    ",
+   "                    "
+  ]
+ },
+ "objects": [
+  {
+   "kind": "furn.mat",
+   "x": 9,
+   "y": 3,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.hearth",
+   "x": 11,
+   "y": 3,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.jar",
+   "x": 7,
+   "y": 3,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.sacks",
+   "x": 7,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "spots": [],
+ "npcs": [
+  {
+   "id": "in-1",
+   "kind": "folk.elder",
+   "x": 12.5,
+   "y": 4.9,
+   "say": [
+    "“It isn't much, but the roof keeps the rain off.”"
+   ]
+  }
+ ],
+ "exits": [
+  {
+   "to": "julu",
+   "side": "S",
+   "x": 10,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "julu": [
+   10,
+   7
+  ],
+  "": [
+   10,
+   7
+  ]
+ }
+}

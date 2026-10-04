@@ -3319,6 +3319,10 @@ function viewFeedback() {
     h("p", {}, ["Three Kingdoms art: trees and props from the ", link("https://willibab.itch.io/free-jade-tileset-pack", "Jade Tileset"), " by Willibab (CC-BY) and ",
       link("https://gametorch.app/collections/21", "GameTorch"), " (CC0); an alternative look for the explorable world from the ",
       link("https://pixel-boy.itch.io/ninja-adventure-asset-pack", "Ninja Adventure"), " pack by Pixel-boy and AAA (CC0); the world engine is ", link("https://phaser.io", "Phaser"), " (MIT); everything else is drawn in code."]),
+    h("p", {}, ["Three Kingdoms music: ", link("https://bitemegames.itch.io/chinese-game-music", "Lotus Pond and Dragon Dance"), " by BiteMe Games (CC0); ",
+      link("https://www.silvermansound.com/free-music/all-the-tea-in-china", "All The Tea In China"), " and ",
+      link("https://www.silvermansound.com/free-music/imperial-china-cinematic", "Imperial China Cinematic"), " by Shane Ivers, silvermansound.com (CC BY 4.0). Horses: ",
+      link("https://opengameart.org/content/lpc-horses", "[LPC] Horses"), " by bluecarrot16 (OGA-BY 3.0)."]),
   ]));
 }
 

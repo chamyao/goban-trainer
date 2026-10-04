@@ -13,7 +13,7 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw
 
-from vocab import FALLBACK, FOLK_FALLBACK, KINDS
+from vocab import FALLBACK, FOLK_FALLBACK, KINDS, MATERIALS
 from build_tk import place_step  # lines get their Chinese and voice clip here
 from tk_story_zh import ZH
 
@@ -101,10 +101,16 @@ class Kit:
         return None, None
 
     def folk(self, kind, key):
+        """The townsperson's sprite, and whether the game draws it like a hero (folk.drawn)."""
+        drawn = self.k["folk"].get("drawn") or {}
         kinds = self.k["folk"]["kinds"]
+        # drawn like a hero when the kit says so for this kind (or has no pack sprite for it)
+        if kind in drawn or (drawn and kind not in kinds):
+            v = drawn.get(kind) or drawn[FOLK_FALLBACK]
+            return v[zlib.crc32(key.encode()) % len(v)], True
         v = kinds.get(kind) or kinds.get(FOLK_FALLBACK)
         i = zlib.crc32(key.encode()) % len(v)
-        return f"{kind if kind in kinds else FOLK_FALLBACK}#{i}"
+        return f"{kind if kind in kinds else FOLK_FALLBACK}#{i}", False
 
 
 def compile_map(m, kit, out_dir):
@@ -145,7 +151,16 @@ def compile_map(m, kit, out_dir):
 
     layers = []
     base_mat, base = kit.material("grass")
-    layers.append(("ground", [plain(base, "grass") for y in range(H) for x in range(W)]))
+    OUTDOOR = ("grass", "sand", "dirt", "water")   # drawn over grass, edges by the blob layers below
+
+    def ground(mat):
+        if mat in OUTDOOR:
+            return plain(base, "grass")
+        rm, d = kit.material(mat)
+        if d and "edge" in d:                       # a wall: what shows through its gaps
+            rm, d = kit.material(d.get("under", "void"))
+        return plain(d, rm) if d else 0
+    layers.append(("ground", [ground(grid[y][x]) for y in range(H) for x in range(W)]))
     # one layer per other material present, in a fixed order (water over roads)
     resolved = {}
     for mat in ["sand", "dirt", "water"]:
@@ -168,6 +183,23 @@ def compile_map(m, kit, out_dir):
                 data[y * W + x] = plain(d, rm)
         layers.append((rm, data))
 
+    # walls: a frame of edge and corner pieces, chosen by where the floor is
+    walls = {(x, y) for y in range(H) for x in range(W) if grid[y][x] == "wall"}
+    if walls:
+        _, d = kit.material("wall")
+        data = [0] * (W * H)
+        floor = lambda x, y: 0 <= x < W and 0 <= y < H and MATERIALS.get(grid[y][x]) and grid[y][x] != "void"
+        for x, y in walls:
+            n, s_, e, w_ = floor(x, y - 1), floor(x, y + 1), floor(x + 1, y), floor(x - 1, y)
+            piece = ("t" if s_ else "b" if n else "l" if e else "r" if w_ else
+                     "tl" if floor(x + 1, y + 1) else "tr" if floor(x - 1, y + 1) else "bl" if floor(x + 1, y - 1) else "br")
+            if d and "edge" in d:
+                sh = d["edge"]["sheet"]
+                data[y * W + x] = gid(sh, *d["edge"][piece])
+            elif d:
+                data[y * W + x] = plain(d, "wall")
+        layers.append(("wall", data))
+
     objs = []
 
     def obj(name, type_, x, y, w=0, h=0, **props):
@@ -185,12 +217,25 @@ def compile_map(m, kit, out_dir):
         solid = KINDS[o["kind"]][2]
         obj(key or "", "prop", (o["x"] + o["w"] / 2) * T, (o["y"] + o["h"]) * T,
             kind=o["kind"], fw=o["w"] * T, fh=o["h"] * T, solid=solid, **({"ref": o["id"]} if o.get("id") else {}))
+    runs = []
+    for y in range(H):
+        x = 0
+        while x < W:
+            if grid[y][x] == "wall":
+                x0 = x
+                while x < W and grid[y][x] == "wall":
+                    x += 1
+                runs.append((x0, y, x - x0))
+            x += 1
+    for x0, y, n in runs:
+        obj("", "prop", (x0 + n / 2) * T, (y + 1) * T, kind="wall", fw=n * T, fh=T, solid=True)
     for s in m["spots"]:
         obj(s["id"], "spot", s["x"] * T, s["y"] * T, node=s["node"], label=s.get("label", ""), label_zh=ZH.get(s.get("label", ""), ""),
             **{k: json.dumps([place_step(l)[0] for l in s[k]], ensure_ascii=False) for k in ("intro", "outro") if s.get(k)})
     for n in m["npcs"]:
-        sprite = n["kind"][5:] if n["kind"].startswith("hero.") else kit.folk(n["kind"], f"{m['id']}/{n['id']}")
+        sprite, drawn = (n["kind"][5:], False) if n["kind"].startswith("hero.") else kit.folk(n["kind"], f"{m['id']}/{n['id']}")
         obj(n["id"], "npc", n["x"] * T, n["y"] * T, kind=n["kind"], sprite=sprite, wander=bool(n.get("wander")),
+            **({"drawn": True} if drawn else {}),
             say=json.dumps([place_step(l, n["kind"])[0] for l in n.get("say", [])], ensure_ascii=False),
             **{k: n[k] for k in ("challenge", "until", "face") if n.get(k)},
             **{k: json.dumps([place_step(l, n["kind"])[0] for l in n[k]], ensure_ascii=False) for k in ("intro", "win", "done") if n.get(k)})
@@ -250,6 +295,8 @@ def render(tmj, kit, out_dir):
     draw = []
     for o in objs:
         p = props(o)
+        if o["type"] == "prop" and p.get("kind") == "wall":
+            continue
         if o["type"] == "prop":
             if o["name"]:
                 kind, i = o["name"].split("#")
@@ -259,7 +306,7 @@ def render(tmj, kit, out_dir):
             else:
                 d.rectangle([o["x"] - p["fw"] / 2, o["y"] - p["fh"], o["x"] + p["fw"] / 2, o["y"]], outline=(255, 0, 255))
         elif o["type"] == "npc":
-            if p["kind"].startswith("hero."):
+            if p["kind"].startswith("hero.") or p.get("drawn"):   # drawn by the game, not the pack
                 d.ellipse([o["x"] - 5, o["y"] - 14, o["x"] + 5, o["y"] - 4], fill=(200, 40, 40), outline=(0, 0, 0))
             else:
                 kind, i = p["sprite"].split("#")

@@ -1,0 +1,107 @@
+{
+ "format": "tk-map/1",
+ "id": "changshe--tent-2",
+ "world": 1,
+ "parent": "changshe",
+ "name": "Tent, Changshe",
+ "archetype": "interior",
+ "building": "tent-2",
+ "size": [
+  20,
+  12
+ ],
+ "seed": 0.3279025060082179,
+ "terrain": {
+  "legend": {
+   "#": "wood",
+   "%": "stone",
+   "&": "mat",
+   "e": "earth",
+   "W": "wall",
+   " ": "void"
+  },
+  "rows": [
+   "                    ",
+   "     WWWWWWWWWW     ",
+   "     WeeeeeeeeW     ",
+   "     WeeeeeeeeW     ",
+   "     WeeeeeeeeW     ",
+   "     WeeeeeeeeW     ",
+   "     WeeeeeeeeW     ",
+   "     WeeeeeeeeW     ",
+   "     WWWWWeWWWW     ",
+   "                    ",
+   "                    ",
+   "                    "
+  ]
+ },
+ "objects": [
+  {
+   "kind": "furn.desk",
+   "x": 9,
+   "y": 2,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.rug",
+   "x": 8,
+   "y": 4,
+   "w": 3,
+   "h": 2
+  },
+  {
+   "kind": "furn.rack",
+   "x": 6,
+   "y": 6,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.chest",
+   "x": 6,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.barrel",
+   "x": 13,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "spots": [],
+ "npcs": [
+  {
+   "id": "in-1",
+   "kind": "folk.soldier",
+   "x": 10.5,
+   "y": 3.9,
+   "say": [
+    "“Orders come at dawn. Keep your weapon close.”"
+   ]
+  }
+ ],
+ "exits": [
+  {
+   "to": "changshe",
+   "side": "S",
+   "x": 10,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "changshe": [
+   10,
+   7
+  ],
+  "": [
+   10,
+   7
+  ]
+ }
+}

@@ -19,7 +19,24 @@ const TK_CHARS = {
   luzhi: { name: "Lu Zhi", skin: "#eec7a0", hair: "#9a9a9a", hat: "guan", hatC: "#1e1e24", robe: "#3e5f8a", trim: "#d6d2c4", beard: "long", beardC: "#a8a8a8", eyes: "kind" },
   zhujun: { name: "Zhu Jun", skin: "#e8c09a", hair: "#2a2024", hat: "helmet", hatC: "#858a94", robe: "#8a3030", trim: "#c8c8c8", beard: "short", eyes: "normal", weapon: "sword" },
   huangfusong: { name: "Huangfu Song", skin: "#e8c09a", hair: "#2a2024", hat: "helmet", hatC: "#858a94", robe: "#2f4f7a", trim: "#c8c8c8", beard: "long", eyes: "normal", weapon: "sword" },
+  yanzheng: { name: "Yan Zheng", skin: "#e2b089", hair: "#2a2024", hat: "yellowband", hatC: "#e8bc2a", robe: "#6a4a2a", trim: "#e8bc2a", beard: "short", eyes: "narrow", weapon: "sword" },
   chengyuanzhi: { name: "Cheng Yuanzhi", skin: "#e8b88c", hair: "#2a2024", hat: "yellowband", hatC: "#e8bc2a", robe: "#8f6a3a", trim: "#e8bc2a", beard: "short", eyes: "wild", weapon: "glaive" },
+  militia: { name: "Village brave", skin: "#ecc29a", hair: "#2a2024", hat: "band", hatC: "#b8392c", robe: "#6a7a5a", trim: "#b8392c", beard: "none", eyes: "normal", weapon: "spear" },
+  // townsfolk, drawn like the heroes (kits with folk "drawn" use these; see assets/tk/kits)
+  f_farmer: { name: "Farmer", skin: "#e8b88c", hair: "#2a2024", hat: "straw", hatC: "#d8b867", robe: "#8a6a4a", trim: "#5a3a22", beard: "none", eyes: "normal" },
+  f_farmer2: { name: "Farmer", skin: "#ecc29a", hair: "#2a2024", hat: "band", hatC: "#5a6a8a", robe: "#5a6a8a", trim: "#3a3a4a", beard: "short", eyes: "normal" },
+  f_porter: { name: "Porter", skin: "#e2b089", hair: "#2a2024", hat: "topknot", hatC: "#2a2024", pin: "#8a6a4a", robe: "#7a7a6a", trim: "#4a4a3a", beard: "none", eyes: "round" },
+  f_youth: { name: "Young man", skin: "#f0c8a0", hair: "#2a2024", hat: "topknot", hatC: "#2a2024", pin: "#3f7d4c", robe: "#5a8a5a", trim: "#2e5a3a", beard: "none", eyes: "kind" },
+  f_woman: { name: "Woman", skin: "#f2cfaa", hair: "#2a2024", hat: "bun", hatC: "#2a2024", pin: "#c8392c", robe: "#c87a8a", trim: "#7a3a4a", beard: "none", eyes: "kind" },
+  f_woman2: { name: "Woman", skin: "#efc59d", hair: "#3a2a2a", hat: "bun", hatC: "#3a2a2a", pin: "#e6c14a", robe: "#4a8a8a", trim: "#2a5a5a", beard: "none", eyes: "narrow" },
+  f_elder: { name: "Elder", skin: "#e8c4a0", hair: "#d8d2c8", hat: "scholar", hatC: "#3a3236", robe: "#d6cfb8", trim: "#6a5a4a", beard: "long", beardC: "#e0dcd4", eyes: "kind" },
+  f_elder2: { name: "Old man", skin: "#e2b089", hair: "#9a9a9a", hat: "topknot", hatC: "#9a9a9a", pin: "#6a6a6a", robe: "#8a7a5a", trim: "#4a3a2a", beard: "short", beardC: "#b0b0b0", eyes: "narrow" },
+  f_child: { name: "Child", skin: "#f5d2ae", hair: "#2a2024", hat: "topknot", hatC: "#2a2024", pin: "#c8392c", robe: "#d8a84a", trim: "#8a5a22", beard: "none", eyes: "round" },
+  f_daoist: { name: "Daoist", skin: "#e8c4a0", hair: "#5a5256", hat: "scholar", hatC: "#2e3a5a", robe: "#8a8a9a", trim: "#2e3a5a", beard: "thin", eyes: "narrow" },
+  f_noble: { name: "Gentleman", skin: "#f0cfac", hair: "#2a2024", hat: "guan", hatC: "#1e1e24", robe: "#6a3a7a", trim: "#d4ad42", beard: "goatee", eyes: "narrow" },
+  f_soldier: { name: "Soldier", skin: "#e8b88c", hair: "#2a2024", hat: "helmet", hatC: "#858a94", robe: "#8a3030", trim: "#c8c8c8", beard: "none", eyes: "normal", weapon: "spear" },
+  f_hunter: { name: "Hunter", skin: "#d8a47c", hair: "#2a2024", hat: "band", hatC: "#4a6a3a", robe: "#5a6a3a", trim: "#3a4a2a", beard: "bristle", eyes: "round" },
+  f_official: { name: "Clerk", skin: "#f0cfac", hair: "#2a2024", hat: "guan", hatC: "#1e1e24", robe: "#3e5f8a", trim: "#d6d2c4", beard: "thin", eyes: "narrow" },
   rebel: { name: "Yellow Turban", skin: "#e8b88c", hair: "#2a2024", hat: "yellowband", hatC: "#e8bc2a", robe: "#9a7a4a", trim: "#e8bc2a", beard: "none", eyes: "normal", weapon: "spear" },
   inspector: { name: "The Inspector", skin: "#f0cfac", hair: "#2a2024", hat: "guan", hatC: "#1e1e24", robe: "#6b6a35", trim: "#d4ad42", beard: "thin", eyes: "narrow" },
   xushao: { name: "Xu Shao", skin: "#eec7a0", hair: "#3a3236", hat: "scholar", hatC: "#2e3a5a", robe: "#ded6c0", trim: "#2e3a5a", beard: "thin", eyes: "kind" },
@@ -105,6 +122,7 @@ const TKArt = {
     // hair and hats
     const H = d.hatC, hr = d.hair || dark;
     if (d.hat === "topknot") { R(1, 1 + dy, 8, 2, hr); R(4, -1 + dy, 2, 2, hr); R(3, 0 + dy, 4, 1, d.pin || "#e6c14a"); s(1, 3 + dy, hr); s(8, 3 + dy, hr); }
+    if (d.hat === "bun") { R(1, 1 + dy, 8, 2, hr); R(3, -2 + dy, 4, 3, hr); s(7, -1 + dy, d.pin || "#c8392c"); s(8, -2 + dy, d.pin || "#c8392c"); R(1, 3 + dy, 1, 3, hr); R(8, 3 + dy, 1, 3, hr); }  // a woman's hair, pinned up
     else if (d.hat === "scarf") { R(1, 0 + dy, 8, 3, H); R(3, -1 + dy, 4, 1, H); R(0, 2 + dy, 1, 4, H); s(1, 3 + dy, hr); s(8, 3 + dy, hr); }
     else if (d.hat === "band") { R(1, 0 + dy, 8, 2, hr); s(1, -1 + dy, hr); s(4, -1 + dy, hr); s(7, -1 + dy, hr); R(1, 2 + dy, 8, 1, H); s(0, 3 + dy, hr); s(9, 3 + dy, hr); }
     else if (d.hat === "guan") { R(1, 1 + dy, 8, 2, H); R(2, -1 + dy, 6, 2, H); s(0, 2 + dy, H); s(9, 2 + dy, H); }
@@ -162,6 +180,7 @@ const TKArt = {
     else if (d.beard === "thin") { Ln(12, 19, 14, 18, bc); Ln(20, 19, 18, 18, bc); R(15, 22, 2, 2, bc); }
     // hair and hats
     if (d.hat === "topknot") { E(16, 7, 8.5, 4, hr); R(8, 7, 2, 6, hr); R(23, 7, 2, 6, hr); E(16, 2, 3, 2.5, hr); R(12, 3, 8, 1, d.pin || "#e6c14a"); }
+    if (d.hat === "bun") { E(16, 7, 8.5, 4, hr); R(8, 7, 2, 9, hr); R(23, 7, 2, 9, hr); E(16, 1.5, 5, 3, hr); R(20, 0, 5, 1, d.pin || "#c8392c"); }
     else if (d.hat === "scarf") { E(16, 6, 9.5, 5, H); R(7, 6, 18, 4, H); R(6, 9, 2, 9, H); R(25, 9, 2, 6, H); Ln(9, 9, 23, 9, this.shade(H, -.25)); E(16, 2, 4, 2, H); }
     else if (d.hat === "band") { E(16, 7, 9, 4.5, hr); for (let x = 7; x <= 25; x += 3) Ln(x, 6, x - 1, 1, hr); R(7, 8, 18, 2, H); R(6, 9, 2, 8, hr); R(24, 9, 2, 8, hr); }
     else if (d.hat === "guan") { E(16, 7, 8.5, 3.5, hr); R(10, 0, 12, 7, H); R(11, 0, 10, 1, this.shade(H, .2)); R(6, 7, 20, 2, H); R(8, 8, 2, 4, hr); R(22, 8, 2, 4, hr); }
@@ -435,7 +454,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) this.data = await (await fetch("data/tk.json?v=5")).json();
+    if (!this.data) this.data = await (await fetch("data/tk.json?v=9")).json();
     return this.data;
   },
   ls(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } },
@@ -937,6 +956,7 @@ async function viewTK(worldN) {
     const kit = WorldView.kit(), kits = Object.keys(WORLD_KITS), next = kits[(kits.indexOf(kit) + 1) % kits.length];
     root.querySelector(".tk-head-btns").prepend(h("button", { class: "tk-chron-btn", type: "button", title: `Switch to ${WORLD_KITS[next].en}`,
       onclick: () => { WorldView.setKit(next); viewTK(w.n); } }, `🎨 画风：${WORLD_KITS[kit].zh} ${WORLD_KITS[kit].en}`));
+    if (typeof WorldTravel !== "undefined") WorldTravel.addButtons(root.querySelector(".tk-head-btns"), w);   // map and start over (tk-travel.js)
     // Scenes replayed outside the node map: words only, no walking or effects.
     const still = { w, actors: {}, leader: { x: 0, y: 0 }, party: [], pos: () => ({ x: 0, y: 0 }), actor: () => null, moveActor: async () => {}, addFx: () => 0 };
     const run = async steps => { TKStory.busy = true; try { await TKStory.play(still, steps); } finally { TKStory.busy = false; } };
@@ -1159,6 +1179,13 @@ async function viewTKLevel(worldN, key) {
   });
 }
 
+// What a story figure (the Star Lords, Lu Zhi) says on the board they set: [zh, en] to open, on a win, on a slip.
+const TK_SETTER_LINES = {
+  stargrey: { open: ["且看此局。黑先。", "Look at this. Black to play."], win: ["善。", "Good."], slip: ["未也。再看。", "Not yet. Look again."] },
+  luzhi: { open: ["还记得为师教你的么？黑先。", "Do you remember what I taught you? Black to play."], win: ["好。你没有忘。", "Good. You haven't forgotten."], slip: ["不对。静下心来，再看。", "No. Calm yourself, and look again."] },
+};
+TK_SETTER_LINES.starred = TK_SETTER_LINES.stargrey;
+
 // Townsfolk who set problems, by challenger id (tools/tk_places.py).
 const TK_FOES = {
   neighbour: ["邻居", "Neighbour"], elder: ["老者", "Old man"], innkeeper: ["店家", "Innkeeper"],
@@ -1181,7 +1208,7 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
   const zh = h("div", { class: "town-zh", lang: "zh-CN" }), en = h("div", { class: "town-en" });
   const btns = h("div", { class: "tk-duel-next" });
   const say = (z, e, ...next) => { zh.textContent = z; en.textContent = e; btns.replaceChildren(...next); };
-  const story = !foe || node.role === "boss";
+  const story = !foe || node.role === "boss" || !!TK_SETTER_LINES[foe.who];
   const dlg = h("div", { class: `town-dlg tk-duel-dlg ${story ? "story" : "chat"}` }, [
     h("div", { class: "town-tab" }, node.role === "boss" ? "首领 · Boss" : "主线 · Story"),
     ...(face ? [face] : []),
@@ -1203,7 +1230,9 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
   ]);
   box.replaceChildren(boardCard, h("div", { class: "tk-duel-side" }, [dlg, keys, srcLine]));
 
+  const lord = foe && TK_SETTER_LINES[foe.who];
   if (node.boss) say(node.boss.taunt_zh || "", node.boss.taunt);
+  else if (lord) say(...lord.open);
   else if (foe) say("请。你执黑先下。", "Your move. You play Black.");
   else say("黑先。", "Black to play.");
 
@@ -1233,12 +1262,14 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
       onWin();
       dlg.classList.add("win");
       if (node.boss) say("……我竟败了！", "…Defeated? Me?", go("继续 Continue ▸", leave));
+      else if (lord) say(...lord.win, go("继续 Continue ▸", leave));
       else if (foe) say("好棋！我认输。", "Well played. I resign.", go("继续 Continue ▸", leave));
       else say("★ 完美！", "Flawless!", go("继续 Continue ▸", leave));
     } else {
       TK.slip(node);
       dlg.classList.add("slip");
       const how = e.detail === "ok" ? [`解出了，但不算完美（${t.flawed}）。`, `Solved, but not flawless (${t.flawed}).`]
+        : lord ? lord.slip
         : foe ? ["哈！被我看穿了。换个思路吧。", "Ha! I saw through that. Try another way."] : ["敌人识破了！换个思路。", "The enemy saw through it! Try another way."];
       say(how[0], how[1], go("换一题 New problem ▸", () => { box.classList.add("tk-flip"); setTimeout(() => { box.classList.remove("tk-flip"); again(); }, 260); }));
     }

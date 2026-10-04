@@ -62,28 +62,32 @@
    "x": 23,
    "y": 10,
    "w": 3,
-   "h": 2
+   "h": 2,
+   "id": "tent-1"
   },
   {
    "kind": "building.tent",
    "x": 22,
    "y": 5,
    "w": 3,
-   "h": 2
+   "h": 2,
+   "id": "tent-2"
   },
   {
    "kind": "building.tent",
    "x": 11,
    "y": 8,
    "w": 3,
-   "h": 2
+   "h": 2,
+   "id": "tent-3"
   },
   {
    "kind": "building.tent",
    "x": 15,
    "y": 6,
    "w": 3,
-   "h": 2
+   "h": 2,
+   "id": "tent-4"
   },
   {
    "kind": "camp.firepit",
@@ -1162,6 +1166,51 @@
    "y": 0,
    "w": 2,
    "h": 1
+  },
+  {
+   "to": "changshe--camp",
+   "side": "N",
+   "x": 24.1,
+   "y": 15.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changshe--tent-1",
+   "side": "N",
+   "x": 24.1,
+   "y": 11.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changshe--tent-2",
+   "side": "N",
+   "x": 23.1,
+   "y": 6.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changshe--tent-3",
+   "side": "N",
+   "x": 12.1,
+   "y": 9.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changshe--tent-4",
+   "side": "N",
+   "x": 16.1,
+   "y": 7.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
   }
  ],
  "entries": {
@@ -1176,6 +1225,26 @@
   "": [
    24,
    17
+  ],
+  "changshe--camp": [
+   24,
+   16
+  ],
+  "changshe--tent-1": [
+   24,
+   12
+  ],
+  "changshe--tent-2": [
+   23,
+   7
+  ],
+  "changshe--tent-3": [
+   12,
+   10
+  ],
+  "changshe--tent-4": [
+   16,
+   8
   ]
  }
 }

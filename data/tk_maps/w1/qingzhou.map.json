@@ -64,35 +64,40 @@
    "x": 15,
    "y": 10,
    "w": 4,
-   "h": 2
+   "h": 2,
+   "id": "hall-1"
   },
   {
    "kind": "building.house",
    "x": 22,
    "y": 13,
    "w": 4,
-   "h": 2
+   "h": 2,
+   "id": "house-1"
   },
   {
    "kind": "building.house",
    "x": 8,
    "y": 10,
    "w": 4,
-   "h": 2
+   "h": 2,
+   "id": "house-2"
   },
   {
    "kind": "building.inn",
    "x": 27,
    "y": 11,
    "w": 4,
-   "h": 2
+   "h": 2,
+   "id": "inn-1"
   },
   {
    "kind": "building.shop",
    "x": 11,
    "y": 16,
    "w": 3,
-   "h": 2
+   "h": 2,
+   "id": "shop-1"
   },
   {
    "kind": "banner.red",
@@ -1441,6 +1446,51 @@
    "y": 15,
    "w": 1,
    "h": 2
+  },
+  {
+   "to": "qingzhou--hall-1",
+   "side": "N",
+   "x": 16.6,
+   "y": 11.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "qingzhou--house-1",
+   "side": "N",
+   "x": 23.6,
+   "y": 14.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "qingzhou--house-2",
+   "side": "N",
+   "x": 9.6,
+   "y": 11.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "qingzhou--inn-1",
+   "side": "N",
+   "x": 28.6,
+   "y": 12.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "qingzhou--shop-1",
+   "side": "N",
+   "x": 12.1,
+   "y": 17.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
   }
  ],
  "entries": {
@@ -1455,6 +1505,26 @@
   "": [
    18,
    22
+  ],
+  "qingzhou--hall-1": [
+   17,
+   12
+  ],
+  "qingzhou--house-1": [
+   24,
+   15
+  ],
+  "qingzhou--house-2": [
+   10,
+   12
+  ],
+  "qingzhou--inn-1": [
+   29,
+   13
+  ],
+  "qingzhou--shop-1": [
+   12,
+   18
   ]
  }
 }

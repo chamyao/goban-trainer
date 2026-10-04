@@ -132,6 +132,27 @@ come in the novel's order.
   if nothing matches, the object is still solid but invisible, and the
   compiler lists it.
 
+## Interiors
+
+Every building with a door gets a room (`tools/mapfactory/interiors.py`): a
+walled room on a dark surround, furnished from a template for its kind (an
+inn's counter, shelves and tables; a hall's screen, desk, rug and banners; a
+hut's mat and hearth…), with the people from `ROOMS` in `tools/tk_places.py`.
+Rooms are maps in the same format, with materials `wood`, `stone`, `mat`,
+`earth`, `wall` and `void`, and `furn.*` kinds. They are places in
+`region.json` with a `"parent"`; a room is open whenever its place is. The
+outdoor map gets an exit at the building's door (`"door": true`: press
+against the door to go in) and an entry in front of it for coming back out.
+
+A kit draws walls either as one tile (`"tiles"`) or as a frame of edge and
+corner pieces: `"wall": {"edge": {"sheet": …, "tl": [c, r], "t": …, "tr": …,
+"l": …, "r": …, "bl": …, "b": …, "br": …}, "under": "void"}`.
+
+## Cutscenes
+
+Story scenes are staged in these maps by the scene generator; see
+`docs/cutscene-format.md`.
+
 ## Building
 
 ```

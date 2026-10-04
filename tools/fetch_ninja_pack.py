@@ -34,6 +34,9 @@ TILESETS = {
     "Backgrounds/Tilesets/TilesetNature.png": "nature.png",
     "Backgrounds/Tilesets/TilesetHouse.png": "house.png",
     "Backgrounds/Tilesets/tileset_camp.png": "camp.png",
+    "Backgrounds/Tilesets/TilesetElement.png": "element.png",                # furniture
+    "Backgrounds/Tilesets/Interior/TilesetInteriorFloor.png": "floor_in.png",  # floors inside
+    "Backgrounds/Tilesets/Interior/TilesetWallSimple.png": "wall_in.png",     # a room's walls
 }
 # townsfolk with full 4x4 walk sheets (Child and OldWoman only have two frames)
 FOLK = ["Villager", "Villager2", "Villager3", "Villager4", "Villager5", "Woman", "OldMan", "OldMan2",

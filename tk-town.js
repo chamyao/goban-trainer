@@ -15,7 +15,7 @@ const TK_NAMES_ZH = {
   liubei: "刘备", guanyu: "关羽", zhangfei: "张飞", caocao: "曹操", dongzhuo: "董卓", zhangbao: "张宝", zhangjiao: "张角",
   luzhi: "卢植", zhujun: "朱儁", huangfusong: "皇甫嵩", chengyuanzhi: "程远志", rebel: "黄巾兵", inspector: "督邮",
   xushao: "许劭", uncle: "曹操的叔父", zuofeng: "左丰", merchant: "张世平", immortal: "南华老仙",
-  stargrey: "灰衣老人", starred: "红衣老人",
+  stargrey: "灰衣老人", starred: "红衣老人", yanzheng: "严政",
 };
 const tkName = who => [TK_NAMES_ZH[who], TK_CHARS[who] && TK_CHARS[who].name].filter(Boolean).join(" ");
 
@@ -91,6 +91,7 @@ const TownArt = {
     else if (d.beard === "thin") { s(8, 8, bc); }
     // hats, in profile
     if (d.hat === "topknot") { R(2, 1, 6, 2, hr); R(4, -1, 2, 2, hr); s(3, 0, d.pin || "#e6c14a"); s(6, 0, d.pin || "#e6c14a"); }
+    else if (d.hat === "bun") { R(2, 1, 6, 2, hr); R(1, -1, 4, 3, hr); s(5, -1, d.pin || "#c8392c"); R(2, 3, 2, 4, hr); }
     else if (d.hat === "scarf") { R(2, 0, 7, 3, H); R(3, -1, 4, 1, H); R(1, 1, 1, 6, H); s(0, 6, H); }
     else if (d.hat === "band") { R(2, 0, 6, 2, hr); s(3, -1, hr); s(6, -1, hr); R(2, 2, 7, 1, H); s(1, 3, H); s(0, 4, H); }
     else if (d.hat === "guan") { R(3, -1, 5, 2, H); R(2, 1, 7, 2, H); s(1, 2, H); }

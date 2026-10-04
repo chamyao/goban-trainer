@@ -16,6 +16,13 @@ MATERIALS = {
     "dirt": True,    # roads, paths, plazas, camp ground
     "sand": True,    # dry ground, riverbanks
     "water": False,  # ponds, rivers
+    # inside buildings
+    "wood": True,    # board floors: houses, inns, teahouses
+    "stone": True,   # flagstones: halls, offices
+    "mat": True,     # straw mats: huts
+    "earth": True,   # packed earth: tents, farm kitchens
+    "wall": False,   # a room's walls
+    "void": False,   # outside the room: drawn black
 }
 
 # kind -> (footprint w, h in tiles, solid)
@@ -62,6 +69,27 @@ KINDS = {
     "lamp.post": (1, 1, True),
 }
 
+# furniture (inside buildings)
+KINDS.update({
+    "furn.table": (2, 1, True),
+    "furn.stool": (1, 1, False),
+    "furn.counter": (3, 1, True),
+    "furn.shelf": (2, 1, True),       # stands against the back wall
+    "furn.drawers": (1, 1, True),
+    "furn.bed": (2, 1, True),
+    "furn.mat": (2, 1, False),        # a straw sleeping mat
+    "furn.jar": (1, 1, True),
+    "furn.barrel": (1, 1, True),
+    "furn.chest": (1, 1, True),
+    "furn.desk": (2, 1, True),
+    "furn.screen": (3, 1, True),      # a folding screen behind a seat of honour
+    "furn.rug": (3, 2, False),
+    "furn.plant": (1, 1, True),
+    "furn.hearth": (2, 1, True),
+    "furn.sacks": (1, 1, True),
+    "furn.rack": (2, 1, True),        # a weapons rack
+})
+
 # what to draw when a kit has no sprite for a kind (tried in order)
 FALLBACK = {
     "building.hall": ["building.house"],
@@ -90,6 +118,16 @@ FALLBACK = {
     "plant.flower": ["plant.grass"],
     "landmark.notice": ["camp.table"],
     "furniture.gotable": ["camp.table"],
+    "furn.table": ["camp.table"],
+    "furn.desk": ["furn.table", "camp.table"],
+    "furn.counter": ["furn.table", "camp.table"],
+    "furn.hearth": ["camp.cookfire", "camp.firepit"],
+    "furn.barrel": ["furn.jar"],
+    "furn.sacks": ["camp.hay", "furn.jar"],
+    "furn.chest": ["furn.drawers"],
+    "furn.mat": ["furn.bed"],
+    "furn.rack": ["lamp.post"],
+    "furn.plant": ["plant.bush"],
 }
 
 # people: folk.* are townsfolk drawn by the kit; hero.<id> are story

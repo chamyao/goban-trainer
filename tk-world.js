@@ -31,7 +31,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=3`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=4`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
@@ -66,16 +66,18 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=3`);
-      this.load.json("kit", `assets/tk/kits/${kit}.json?v=3`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=4`);
+      this.load.json("kit", `assets/tk/kits/${kit}.json?v=6`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=3`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
       for (const [s, path] of Object.entries(kit.sheets)) this.load.image(`kit-${s}`, path);
       const [fw, fh] = kit.folk.frame;
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=3`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=6`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
+      if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
       this.load.once("complete", () => {
         for (const [kind, list] of Object.entries(kit.kinds)) list.forEach(([s, x, y, wd, ht], i) => this.textures.get(`kit-${s}`).add(`${kind}#${i}`, 0, x, y, wd, ht));
@@ -152,6 +154,7 @@ function worldScenes() {
       if (!pos) this.ui.place(this.place.name, this.place.zh);
       this.blocked = 0;
       this.leaving = false;
+      if (typeof WorldItems !== "undefined") WorldItems.attach(this);   // mounts (tk-items.js)
       window.__w = this;  // for tests and the console
       if (this.resume && opts.ret) { const r = opts.ret; opts.ret = null; this.time.delayedCall(400, () => this.returned(r)); }
     }
@@ -183,7 +186,7 @@ function worldScenes() {
       if (p.until && TK.cleared(p.until)) return;  // their part of the story is over
       let spr, folk = null, who = null;
       const face = p.face || "down";
-      if (p.kind.startsWith("hero.")) {
+      if (p.kind.startsWith("hero.") || p.drawn) {   // story people, and townsfolk drawn like them (kit folk.drawn)
         who = p.sprite;
         this.hero(who);
         spr = this.physics.add.sprite(o.x, o.y, `h-${who}-${face}-0`);
@@ -241,6 +244,8 @@ function worldScenes() {
     isDone(key) { return this.done(key) || !this.region.quests.some(q => q.node === key); }
     available(q) { return !this.done(q.node) && (q.after.length === 0 || q.after.some(a => this.isDone(a))); }
     placeOpen(id) {
+      const room = this.region.places.find(p => p.id === id);
+      if (room && room.parent) return this.placeOpen(room.parent);   // a building is open when its place is
       return id === this.region.start || this.st.visited.includes(id) ||
         this.region.quests.some(q => q.place === id && (this.available(q) || this.done(q.node)));
     }
@@ -272,16 +277,56 @@ function worldScenes() {
       this.ui.goal(`On to ${this.placeName(q.place)}, by way of ${ways.join(" or ")}.`, `前往${this.placeZh(q.place)}，可经${waysZh.join("或")}。`);
     }
 
-    // Walk up to a story spot: its lead-in, then the problem.
+    // Walk up to a story spot. A scene with a ["problem"] step builds up to
+    // the board and plays its payoff once the problem is solved; leave or slip
+    // and the next try picks up at the last line before it. A scene without
+    // one plays after the problem, as before.
     playQuest(q, spot) {
-      const lead = spot.intro.length ? worldLines(spot.intro)
+      const steps = (this.story[q.scene] || {}).steps || [], at = steps.findIndex(s => s[0] === "problem");
+      const setter = q.boss ? q.boss.who : at >= 0 && steps[at][1];   // ["problem", who]: who sets it
+      const foe = setter ? { who: setter, face: this.faceOf({ who: setter }) } : null;
+      const intro = spot.intro.length ? worldLines(spot.intro)
         : q.boss ? [["say", q.boss.who, q.boss.taunt, q.boss.taunt_zh, q.boss.taunt_vid]] : [["n", `${q.title}.`, q.title_zh ? `${q.title_zh}。` : ""]];
-      this.talk(lead, () => this.puzzle(q.node, q.boss ? { who: q.boss.who, face: this.faceOf({ who: q.boss.who }) } : null), "story");
+      if (at < 0) return this.talk(intro, () => this.puzzle(q.node, foe), "story");
+      const seen = `${this.w.n}:${q.scene}:lead`, again = TK.seen(seen);
+      const say = lines => new Promise(r => lines.some(l => l[0] === "n" || l[0] === "say") ? this.talk(lines, r, "story") : r());
+      // the problem's own framing, the board, and on a win the spot's farewell
+      const solve = async () => {
+        TK.markSeen(seen);
+        if (spot.intro.length || q.boss) await say(intro);   // a bare title would only break the tension here
+        const won = await this.duel(q.node, foe);
+        if (won) { this.vanish(q.node); await say(worldLines(spot.outro)); }
+        return won;
+      };
+      const finish = () => this.finishQuest(q, steps);
+      const cs = this.cutscene(q);
+      if (cs && cs.beats.some(b => b.do === "problem"))
+        return WorldCutscene.play(this, cs, finish, { onProblem: solve, onLeave: () => {}, ffToProblem: again });
+      const lines = steps.slice(0, at).filter(s => s[0] === "n" || s[0] === "say");
+      say(again ? lines.slice(-1) : lines).then(solve).then(won => won && this.talk(steps.slice(at + 1), finish, "story"));
     }
 
-    // Bring up the problem over the map (opts.onPuzzle resolves true on a
-    // flawless solve); the world waits behind it, then plays what the win unlocked.
-    async puzzle(key, foe) {
+    cutscene(q) {
+      const cs = ((this.cache.json.get("cutscenes") || {}).scenes || {})[q.scene];
+      return cs && cs.place === this.placeId && typeof WorldCutscene !== "undefined" ? cs : null;
+    }
+
+    // People who are only here until a beat is won (the Star Lords at the oath).
+    vanish(node) { for (const n of this.npcs) if (n.until === node) { n.spr.setVisible(false); n.spr.body.enable = false; } }
+
+    // What a won story beat leaves behind: who joined, what was given, the next goal.
+    async finishQuest(q, steps) {
+      for (const s of steps) if (s[0] === "party") { this.st.party = s[1]; TK.setParty(this.w, s[1]); this.setParty(s[1]); }
+      if (typeof WorldItems !== "undefined") WorldItems.gainFrom(this, steps);   // what the scene gave
+      if (q.scene) TK.markSeen(`${this.w.n}:${q.scene}`);
+      this.save();
+      this.setGoal();
+      if (q.role === "boss" && this.opts.onBoss) await this.opts.onBoss();
+    }
+
+    // Bring up the problem over the map; resolves true on a flawless solve.
+    // The world waits behind it.
+    async duel(key, foe) {
       const P = this.player;
       this.st.pos = { place: this.placeId, x: Math.round(P.x), y: Math.round(P.y), f: P.facing };
       this.save();
@@ -289,27 +334,31 @@ function worldScenes() {
       P.setVelocity(0); P.anims.stop();
       this.ui.hint(null);
       const win = await this.opts.onPuzzle(key, { host: this.opts.host, foe });
-      if (!this.sys.isActive()) return;  // the page moved on meanwhile
+      if (!this.sys.isActive()) return false;  // the page moved on meanwhile
       this.leaving = false;
       this.opts.host.focus();
-      if (win) this.returned({ key, win: true });
+      return win;
     }
 
-    // Back from a won problem: play what it unlocked.
+    // A problem with its scene after it (challengers, and scenes with no ["problem"] step).
+    async puzzle(key, foe) {
+      if (await this.duel(key, foe)) this.returned({ key, win: true });
+    }
+
+    // Back from a won problem: play what it unlocked (the whole scene; a
+    // direct-link win comes back here too, so a mid-scene problem is passed by).
     returned(ret) {
       if (!ret.win) return;
       const q = this.region.quests.find(x => x.node === ret.key);
       if (q) {
         const spot = Object.values(this.spots).find(s => s.node === q.node);
         const steps = [...worldLines(spot && spot.outro), ...((this.story[q.scene] || {}).steps || [])];
-        for (const n of this.npcs) if (n.until === q.node) { n.spr.setVisible(false); n.spr.body.enable = false; }
-        return this.talk(steps, async () => {
-          for (const s of steps) if (s[0] === "party") { this.st.party = s[1]; TK.setParty(this.w, s[1]); this.setParty(s[1]); }
-          if (q.scene) TK.markSeen(`${this.w.n}:${q.scene}`);
-          this.save();
-          this.setGoal();
-          if (q.role === "boss" && this.opts.onBoss) await this.opts.onBoss();
-        }, "story");
+        this.vanish(q.node);
+        const finish = () => this.finishQuest(q, steps);
+        // a staged cutscene (tk-cutscene.js) when the scene generator made one for this place, else the lines alone
+        const cs = this.cutscene(q);
+        if (cs) return this.talk(worldLines(spot && spot.outro), () => WorldCutscene.play(this, cs, finish), "story");
+        return this.talk(steps, finish, "story");
       }
       const n = this.npcs.find(m => m.challenge === ret.key);
       if (n) { n.mark.setVisible(false); this.talk(worldLines(n.win)); }
@@ -419,7 +468,7 @@ function worldScenes() {
           n.moving = Math.random() < .5 || away;
         }
         const v = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }[n.dir];
-        if (n.moving) { n.spr.setVelocity(v[0] * 28, v[1] * 28); n.spr.anims.play(`fk-${n.sprite}-${n.dir}`, true); }
+        if (n.moving) { n.spr.setVelocity(v[0] * 28, v[1] * 28); n.spr.anims.play(n.who ? `h-${n.who}-${n.dir}` : `fk-${n.sprite}-${n.dir}`, true); }
         else { n.spr.setVelocity(0); this.faceNpc(n); }
         n.spr.setDepth(n.spr.y);
       }
