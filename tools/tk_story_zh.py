@@ -301,7 +301,7 @@ ZH = {
     "Side story: find the old man in the hills.": "支线：去山中寻找那位老人。",
     "Side story: hear Zhang Jiao's sermon in Julu.": "支线：到巨鹿听张角传道。",
     "Side story: the betrayal in the Yellow Hills.": "支线：黄冈的背叛。",
-    "Shortcut: the horse dealers on the northern trail.": "捷径：北方马道上的马商。",
+    "Meet the horse dealers on the northern trail.": "到北方马道上见马商。",
     "Meet the Yellow Turbans at Daxing Mountain.": "在大兴山迎战黄巾军。",
     "Lift the siege of Qingzhou.": "解青州之围。",
     "Go to Guangzong, where Lu Zhi besieges Zhang Jiao.": "前往广宗，卢植正在那里围攻张角。",

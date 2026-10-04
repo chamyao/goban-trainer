@@ -128,7 +128,7 @@ PLACES = {
             "archetype": "road",
             "landmarks": [{"kind": "camp.hay", "id": "dealers", "node": "1-as", "trigger": "arrive", "label": "The horse dealers' camp"}],
             "npcs": [{"kind": "folk.noble", "near": "dealers", "say": "“Fine northern horses, but the roads are full of bandits.”"}],
-            "objectives": {"1-as": "Shortcut: the horse dealers on the northern trail."},
+            "objectives": {"1-as": "Meet the horse dealers on the northern trail."},
         },
         "Daxing Mountain": {
             "archetype": "mountain",
