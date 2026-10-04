@@ -2,6 +2,8 @@
 
 Checked `tools/tk_story.py` on `main` (3069d16) scene by scene: every person and object named in the narration and dialogue, against what the staging steps put on stage (party, `spawn`, `army`, `prop`, `give`, `fx`, speakers). A keyword pass found candidates; the table below is the curated result after reading each scene. The cutscenes were not watched, so a gap listed here may be partly covered by something the generator adds (a speaker is brought on stage automatically).
 
+**Status: every gap below is now staged in `tools/tk_story.py`** (props and characters the generator lacked were added by Graphics; `python3 tools/check_story.py --needs` is empty). The inspector sequence is two normal scenes at Anxi (`hostel`, `post`). This file is the record of the audit.
+
 Fix types: **S** = script only (existing actors and props are enough), **C** = needs a new character or sprite, **P** = needs a new prop kind from Graphics, **G** = needs generator support.
 
 ## Gaps, by scene

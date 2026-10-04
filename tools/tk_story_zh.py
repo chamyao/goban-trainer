@@ -164,6 +164,7 @@ ZH = {
     "“A mistake,” warned his secretary Chen Lin. “You hand the spear to others, point first.”": "主簿陈琳劝道：“不可！这是倒持干戈，授人以柄。”",
     "A man beside them clapped and laughed. “This is as easy as turning over a hand. Why so much talk?” It was Cao Cao.": "旁边一人鼓掌大笑：“此事易如反掌，何必多议！”此人正是曹操。",
     "What did Cao Cao propose? Hear the next chapter.": "不知曹操说出甚话来，且听下文分解。",
+    "The Inspector's Visit": "督邮驾到", "The Hitching Post": "县前马桩",
     # ---- World 1: staging pass, lines that changed or are new ----
     "Cao Cao laughed with delight.": "操闻言大喜。",
     "The Hero of Chaos · II-b: The Five-Coloured Staves": "乱世英雄·二之二：五色棒",

@@ -7,22 +7,4 @@ The story is never blocked on these: a missing prop is drawn as a placeholder (o
 fallback is in) and a missing character falls back to a folk stand-in. Draw the real thing, register
 it, and it drops off this list the next time the script runs.
 
-## Props
-
-| Kind | Used in | What the text says |
-|---|---|---|
-| `book` | scene 'peace1' | These three books are the Essentials of Great Peace. Take them, spread Heaven's teaching, and save the world. But harbour one rebellious thought, and you will be punished. |
-| `bucket` | scene 'blackwind' | Pigs, sheep, dogs. Blood. |
-| `cart` | scene 'inn' | At the village inn, a giant pushing a cart strides in: nine feet tall, a beard two feet long, a face like a ripe red date. |
-| `chest` | scene 'horses' | Bandits have closed the road north. If you mean to crush them, take fifty horses — and five hundred taels of silver, and a thousand jin of steel for your weapons. |
-| `jiazi` | scene 'peace2' | The Blue Heaven is dead! The Yellow Heaven shall rise! In the year jiazi, great fortune for all under Heaven! |
-| `letter` | scene 'qingzhou' | A letter comes from Gong Jing, governor of Qingzhou: the Yellow Turbans have his city surrounded, and it is about to fall. He begs for help. |
-| `ox` | scene 'oath' | With a black ox and a white horse for sacrifice, the three burn incense and bow. |
-| `redbanner` | scene 'caocao3' | At dawn, as Zhang Bao and Zhang Liang ran, a column under red banners barred the road. |
-| `staves` | scene 'staves' | Cao Cao is made captain of the north district of Luoyang. As soon as he takes office, he hangs more than ten coloured staves at the four gates of the city. |
-| `steelbars` | scene 'horses' | Bandits have closed the road north. If you mean to crush them, take fifty horses — and five hundred taels of silver, and a thousand jin of steel for your weapons. |
-| `straw` | scene 'fireplan' | They camp in grass. Fire will take them. Every man, bring a bundle of straw. |
-| `waterbowl` | scene 'peace2' | Zhang Jiao studied the books day and night until he could summon wind and rain. When plague swept the land, he went about giving out charmed water, and the sick recovered. |
-| `whitehorse` | scene 'oath' | With a black ox and a white horse for sacrifice, the three burn incense and bow. |
-| `yellowbanner` | scene 'office'; scene 'peace3' | Heading home, the brothers hear a roar behind the hills: Han troops in rout, and behind them banners reading GENERAL OF HEAVEN. The hardest thing in the world to win is the people's hearts — and now t |
-
+Nothing is missing.
