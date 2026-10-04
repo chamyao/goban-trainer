@@ -29,9 +29,10 @@ const WorldTravel = {
 
   scene() { return WorldView.game && WorldView.game.scene.getScene("world"); },
 
-  // A place is cleared once every story point there is done; one with none, once visited.
+  // A place is cleared once every story point there (and in its rooms) is done; one with none, once visited.
   cleared(region, st, id) {
-    const qs = region.quests.filter(q => q.place === id);
+    const parent = Object.fromEntries(region.places.map(p => [p.id, p.parent]));
+    const qs = region.quests.filter(q => q.place === id || parent[q.place] === id);
     return qs.length ? qs.every(q => TK.cleared(q.node)) : (st.visited || []).includes(id);
   },
 
