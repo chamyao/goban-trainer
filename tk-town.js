@@ -156,8 +156,9 @@ const TownUI = {
     host.querySelectorAll(":scope > .town-ui").forEach(el => el.remove());  // a new place replaces the old overlay
     const root = document.createElement("div");
     root.className = "town-ui";
+    const TOUCH = typeof TK_TOUCH !== "undefined" && TK_TOUCH;
     root.innerHTML = `<div class="town-goal"></div><div class="town-keys"><b>WASD</b>/<b>↑↓←→</b> 移动 move · <b>Enter</b> 对话 talk</div>
-      <div class="town-place"></div><div class="town-hint" hidden>Enter</div><div class="town-focus" hidden>Click the map to play</div>
+      <div class="town-place"></div><div class="town-hint" hidden>${TOUCH ? "点击 Tap" : "Enter"}</div><div class="town-focus" hidden>${TOUCH ? "Tap the map to play" : "Click the map to play"}</div>
       <div class="town-dim" hidden></div><div class="town-dlg" hidden><div class="town-tab">主线 · Story</div><canvas class="town-face" width="34" height="34"></canvas><div class="town-txt"><div class="town-who"></div><div class="town-zh" lang="zh-CN"></div><div class="town-en"></div></div><div class="town-more">▼</div></div>`;
     host.append(root);
     const $ = s => root.querySelector(s);

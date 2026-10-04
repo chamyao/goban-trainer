@@ -666,3 +666,17 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
 .town-label span { display: block; font: 10px/1.3 system-ui, sans-serif; color: #6a5440; }
 .town-label.locked { opacity: .6; filter: grayscale(.6); }
 .town-label.goal { border-color: #e6c14a; box-shadow: 0 0 0 2px #8a2a1a, 0 0 12px rgba(230, 193, 74, .8); }
+
+/* Phones and tablets: touching the game moves the party, never the page. A phone held
+   upright gets a taller window (tk-world.js gives it a taller view to match). */
+.tk-map.tk-town, .tk-map.tk-town canvas { touch-action: none; -webkit-user-select: none; user-select: none; }
+@media (max-width: 700px) and (orientation: portrait) { .tk-map.tk-town { aspect-ratio: 3 / 4; max-height: 78vh; } }
+@media (pointer: coarse) { .town-keys { display: none; } }
+/* Full window: the game fills the screen, the page behind stays put */
+.tk-menu-row { display: flex; gap: 6px; }
+.tk-menu-btn[aria-pressed="true"] { background: rgba(40, 24, 16, .85); }
+.tk-map.tk-town.tk-fullwin { position: fixed; inset: 0; z-index: 50; width: auto; height: auto; max-height: none; aspect-ratio: auto; border-radius: 0; margin: 0; }
+html.tk-fullwin-on, html.tk-fullwin-on body { overflow: hidden; overscroll-behavior: none; }
+.tk-map.tk-town.tk-fullwin .tk-menu { top: max(8px, env(safe-area-inset-top)); right: max(8px, env(safe-area-inset-right)); }
+/* a narrow game window: the objective goes under the buttons rather than behind them */
+@media (max-width: 560px) { .tk-map.tk-town .town-goal { top: 46px; right: 10px; max-width: none; } }
