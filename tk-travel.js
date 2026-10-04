@@ -21,6 +21,7 @@ const WorldTravel = {
       setInterval(() => { if (ride.isConnected) show(); }, 1500);   // a gift can arrive mid-scene
       bar.append(ride);
     }
+    if (typeof TKMusic !== "undefined") bar.append(TKMusic.button(btn("", "Music on or off", null)));   // tk-music.js
     bar.append(
       btn("🗺 地图 Map", "Travel to a place you have cleared", () => this.open(w)),
       btn("↺ 重新开始 Start over", "Forget this world's progress and start again", () => this.reset(w)));

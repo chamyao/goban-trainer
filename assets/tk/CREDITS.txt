@@ -14,3 +14,7 @@ Three Kingdoms campaign art
 - drawn.png (notice board, go table, moon gate, gateway, fire pit, water) is drawn for the game by tools/draw_tk_extras.py.
 - Horses (assets/tk/horses): "[LPC] Horses" by bluecarrot16, https://opengameart.org/content/lpc-horses,
   used under OGA-BY 3.0; scaled to the heroes' size by tools/fetch_horses.py.
+- Music (assets/tk/music, converted to MP3):
+  "Lotus Pond" and "Dragon Dance" from "Chinese Game Music" by BiteMe Games,
+    https://bitemegames.itch.io/chinese-game-music, CC0.
+  "All The Tea In China" and "Imperial China Cinematic" by Shane Ivers, https://www.silvermansound.com, CC BY 4.0.
