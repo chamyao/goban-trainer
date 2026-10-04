@@ -289,7 +289,13 @@ class Layout:
             x, y = self.rng.randint(3, self.W - w - 3), self.rng.randint(3, self.H - h - 3)
             if self.free_rect(x, y, w, h, margin=2):
                 cells = [(xx, yy) for yy in range(y, y + h) for xx in range(x, x + w)]
-                self.paint(cells, "~")
+                # a rounded pond inside the rectangle: its corners stay grass
+                # (own random stream, so the rest of the layout is unchanged)
+                shape = random.Random(x * 1000 + y)
+                cx, cy, rx, ry = x + (w - 1) / 2, y + (h - 1) / 2, w / 2, h / 2
+                water = [(xx, yy) for xx, yy in cells
+                         if ((xx - cx) / rx) ** 2 + ((yy - cy) / ry) ** 2 <= 1.05 + shape.uniform(-.1, .15)]
+                self.paint(water, "~")
                 for c in cells:
                     self.used.add(c)
                 return
