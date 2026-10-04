@@ -20,6 +20,8 @@ play them:
   move like actors and can carry someone ("board"); an army can ring a prop
   or a person ("surround", "close"); a gift is walked over and handed on
   ("give"); poses, emote bubbles, camera zoom and a dark mood set the tone
+- "light" tints the whole scene for the time of day (night, dusk, dawn, a
+  storm); set before the first line, the scene opens in that light
 
 The format is in docs/cutscene-format.md.
 """
@@ -40,6 +42,7 @@ PROPS = {"cagecart": (3, 1), "forge": (2, 1), "anvil": (1, 1), "winejars": (2, 1
          "desk": (2, 1), "hall": (4, 2)}
 POSES = {"drink", "cheer", "bow", "kneel", "sit", "drunk", "raise", "sleep", "stand"}
 EMOTES = {"!", "?", "...", "music", "anger", "sweat", "zzz", "heart"}
+LIGHTS = {"day", "night", "dusk", "dawn", "storm"}   # or "#rrggbb"
 
 
 def characters():
@@ -468,6 +471,12 @@ def stage_scene(scene, m, spot, party, chars):
                 st.beats.append({"do": "zoom", "z": max(1, min(2, s[2])), "ms": s[3] if len(s) > 3 else 600})
             elif s[1] == "shake":
                 st.beats.append({"do": "shake"})
+        elif op == "light":
+            tint = s[1] if s[1] in LIGHTS or re.fullmatch(r"#[0-9a-fA-F]{6}", str(s[1])) else "day"
+            if opening:   # the scene opens in this light
+                st.beats[0]["light"] = tint
+            else:
+                st.beats.append({"do": "light", "tint": tint, "ms": s[2] if len(s) > 2 else 1500})
         elif op == "mood":
             st.beats.append({"do": "mood", "dark": s[1] == "dark"})
         elif op == "party":

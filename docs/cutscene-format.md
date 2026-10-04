@@ -41,6 +41,7 @@ node on the old node map (x right, y down, in node-map pixels; 8 px ≈ 1 tile):
 | `["close", group, target, r]` | the same at a walk: tighten the ring |
 | `["camera", "zoom", z, ms]` | zoom to `z` (1–2); `["camera", "zoom", 1, ms]` goes back. `["camera", "shake"]` shakes |
 | `["mood", "dark"]` / `["mood", "clear"]` | darken the edges of the screen for a tense moment, and lift it |
+| `["light", L, ms]` | tint the scene for the time of day: `night` (fires, lamps and forges glow), `dusk`, `dawn`, `storm`, any `"#rrggbb"`, or `day` to clear it, fading over `ms` (default 1500). Before the first line, the scene opens in that light |
 | `["wait", ms]` | a pause |
 
 Positive `dx` is "toward the enemy". The party's members are addressed by
@@ -101,7 +102,9 @@ Props are cast members `{"prop": "cagecart", "side": "prop"}` placed with
 `{"do": "unboard", "actor", "to"}`, `{"do": "pose", "actors", "pose"}`,
 `{"do": "emote", "actors", "icon"}`, `{"do": "give", "from", "to", "item",
 "face", "camera"}`, `{"do": "face", "turns": [{"actor", "dir"}]}`,
-`{"do": "zoom", "z", "ms"}`, `{"do": "shake"}`, `{"do": "mood", "dark"}`.
+`{"do": "zoom", "z", "ms"}`, `{"do": "shake"}`, `{"do": "mood", "dark"}`,
+`{"do": "light", "tint", "ms"}`; a scene that opens in a light has `"light"`
+on its `cut` beat.
 The 2D player draws props from `assets/tk/props.png` (built from Ninja
 Adventure pieces by `tools/build_props.py`) or from the kit's own sprites
 (tables, jars, racks, fires, tents, gates).
