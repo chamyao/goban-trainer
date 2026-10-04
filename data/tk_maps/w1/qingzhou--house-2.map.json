@@ -11,7 +11,7 @@
   20,
   12
  ],
- "seed": 0.09265493460604535,
+ "seed": 0.5494904099092047,
  "terrain": {
   "legend": {
    "#": "wood",
@@ -39,42 +39,42 @@
  "objects": [
   {
    "kind": "furn.bed",
-   "x": 10,
+   "x": 9,
    "y": 2,
    "w": 2,
    "h": 1
   },
   {
    "kind": "furn.drawers",
-   "x": 7,
+   "x": 12,
    "y": 2,
    "w": 1,
    "h": 1
   },
   {
    "kind": "furn.shelf",
-   "x": 8,
+   "x": 7,
    "y": 2,
    "w": 2,
    "h": 1
   },
   {
    "kind": "furn.table",
-   "x": 7,
+   "x": 11,
    "y": 4,
    "w": 2,
    "h": 1
   },
   {
    "kind": "furn.stool",
-   "x": 6,
+   "x": 10,
    "y": 4,
    "w": 1,
    "h": 1
   },
   {
    "kind": "furn.stool",
-   "x": 9,
+   "x": 13,
    "y": 4,
    "w": 1,
    "h": 1
@@ -85,6 +85,13 @@
    "y": 2,
    "w": 1,
    "h": 1
+  },
+  {
+   "kind": "furn.chest",
+   "x": 6,
+   "y": 4,
+   "w": 1,
+   "h": 1
   }
  ],
  "spots": [],
@@ -92,7 +99,7 @@
   {
    "id": "in-1",
    "kind": "folk.woman",
-   "x": 8.5,
+   "x": 12.5,
    "y": 5.9,
    "say": [
     "“Mind the floor — I've only just swept it.”"

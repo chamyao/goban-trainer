@@ -11,7 +11,7 @@
   20,
   12
  ],
- "seed": 0.3882126129633572,
+ "seed": 0.06160388086054369,
  "terrain": {
   "legend": {
    "#": "wood",
@@ -39,7 +39,7 @@
  "objects": [
   {
    "kind": "furn.shelf",
-   "x": 7,
+   "x": 10,
    "y": 2,
    "w": 2,
    "h": 1
@@ -68,49 +68,7 @@
   {
    "kind": "furn.jar",
    "x": 15,
-   "y": 8,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "furn.table",
-   "x": 13,
-   "y": 6,
-   "w": 2,
-   "h": 1
-  },
-  {
-   "kind": "furn.stool",
-   "x": 12,
-   "y": 6,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "furn.stool",
-   "x": 15,
-   "y": 6,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "furn.table",
-   "x": 5,
-   "y": 7,
-   "w": 2,
-   "h": 1
-  },
-  {
-   "kind": "furn.stool",
-   "x": 4,
-   "y": 7,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "furn.stool",
-   "x": 7,
-   "y": 7,
+   "y": 4,
    "w": 1,
    "h": 1
   },
@@ -136,9 +94,65 @@
    "h": 1
   },
   {
+   "kind": "furn.table",
+   "x": 6,
+   "y": 6,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 5,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 8,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.table",
+   "x": 13,
+   "y": 6,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 12,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 15,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
    "kind": "furn.plant",
    "x": 4,
    "y": 8,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.plant",
+   "x": 15,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.jar",
+   "x": 4,
+   "y": 6,
    "w": 1,
    "h": 1
   }
@@ -157,8 +171,8 @@
   {
    "id": "in-2",
    "kind": "folk.hunter",
-   "x": 14.5,
-   "y": 7.9,
+   "x": 11.5,
+   "y": 5.9,
    "say": [
     "“They say the governor is raising volunteers. I've half a mind to join.”"
    ]

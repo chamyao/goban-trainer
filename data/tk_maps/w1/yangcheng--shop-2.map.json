@@ -11,7 +11,7 @@
   20,
   12
  ],
- "seed": 0.3998387983457764,
+ "seed": 0.8934481542790427,
  "terrain": {
   "legend": {
    "#": "wood",
@@ -39,21 +39,21 @@
  "objects": [
   {
    "kind": "furn.shelf",
-   "x": 13,
+   "x": 5,
    "y": 2,
    "w": 2,
    "h": 1
   },
   {
    "kind": "furn.jar",
-   "x": 9,
+   "x": 13,
    "y": 2,
    "w": 1,
    "h": 1
   },
   {
    "kind": "furn.jar",
-   "x": 5,
+   "x": 12,
    "y": 2,
    "w": 1,
    "h": 1
@@ -61,54 +61,61 @@
   {
    "kind": "furn.counter",
    "x": 12,
-   "y": 3,
+   "y": 5,
    "w": 3,
    "h": 1
   },
   {
    "kind": "furn.table",
    "x": 8,
-   "y": 5,
+   "y": 4,
    "w": 2,
    "h": 1
   },
   {
    "kind": "furn.stool",
    "x": 7,
-   "y": 5,
+   "y": 4,
    "w": 1,
    "h": 1
   },
   {
    "kind": "furn.stool",
    "x": 10,
-   "y": 5,
+   "y": 4,
    "w": 1,
    "h": 1
   },
   {
    "kind": "furn.table",
-   "x": 12,
-   "y": 5,
+   "x": 6,
+   "y": 6,
    "w": 2,
    "h": 1
   },
   {
    "kind": "furn.stool",
-   "x": 11,
-   "y": 5,
+   "x": 5,
+   "y": 6,
    "w": 1,
    "h": 1
   },
   {
    "kind": "furn.stool",
-   "x": 14,
-   "y": 5,
+   "x": 8,
+   "y": 6,
    "w": 1,
    "h": 1
   },
   {
    "kind": "furn.plant",
+   "x": 14,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.sacks",
    "x": 5,
    "y": 7,
    "w": 1,
@@ -121,7 +128,7 @@
    "id": "in-1",
    "kind": "folk.woman",
    "x": 13.5,
-   "y": 4.9,
+   "y": 6.9,
    "say": [
     "“Sit, have some tea. The storyteller starts soon.”"
    ]
@@ -129,8 +136,8 @@
   {
    "id": "in-2",
    "kind": "folk.elder",
-   "x": 8.5,
-   "y": 6.9,
+   "x": 9.5,
+   "y": 5.9,
    "say": [
     "“Another pot, and another tale of the old days.”"
    ]
@@ -138,8 +145,8 @@
   {
    "id": "in-3",
    "kind": "folk.lady",
-   "x": 13.5,
-   "y": 6.9,
+   "x": 7.5,
+   "y": 7.9,
    "say": [
     "“More tea? The storyteller's tale of the Yellow Turbans is the talk of the county.”"
    ]
