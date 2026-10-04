@@ -514,7 +514,7 @@ class Trainer {
   constructor(book, idx, els) {
     this.book = book;
     this.idx = idx;
-    this.flawed = null;  // why a solve wasn't flawless (hint, undo, explore)
+    this.flawed = null;  // why a solve wasn't flawless (wrong move, hint, undo, explore)
     this.p = book.problems[idx];
     this.els = els; // { svg, boardCard, status, turnBadge, buttons... }
     this.goban = new Goban(els.svg, cropFor(this.p), (c, r) => this.click(c, r));
@@ -792,6 +792,7 @@ class Trainer {
       }
     }
     this.done = kind;
+    if (kind === "bad") this.flawed = this.flawed || "a wrong move";  // a reset doesn't wipe it
     markResult(this.book.id, this.p.id, kind === "ok");
     this.setStatus(kind, kind === "ok" ? "✓" : "✗", kind === "ok" ? "Correct" : "Wrong");
     this.render();

@@ -1089,9 +1089,11 @@ async function viewTKLevel(worldN, key) {
   btnExplore.addEventListener("click", () => trainer.toggleExplore());
   window.__trainer = trainer;
   const t = trainer;
+  let settled = false;  // the first result decides the level; a reset can't undo a slip
   const onResult = e => {
     if (!verdict.isConnected) return removeEventListener("tczw:result", onResult);
-    if (trainer !== t) return;
+    if (trainer !== t || settled) return;
+    settled = true;
     verdict.innerHTML = "";
     if (e.detail === "ok" && !t.flawed) {
       TK.markCleared(key);
