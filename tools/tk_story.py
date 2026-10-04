@@ -166,9 +166,9 @@ WORLDS = [
             "oath": {"title": "The Peach Garden Oath", "kind": "main", "steps": [
                 ["n", "The next day, in the peach garden behind Zhang Fei's farm, the blossoms are in full bloom."],
                 ["fx", "petals", "n2", 0, -20],
+                ["problem", "starred"],  # the immortals at the board (their intro and outro are in tk_places.py); the oath plays once it is solved
                 ["n", "With a black ox and a white horse for sacrifice, the three burn incense and bow."],
                 ["fx", "incense", "n2", -14, -4],
-                ["problem"],  # the board comes up here; the rest plays once it is solved
                 ["say", "liubei", "Though we were not born on the same day of the same month of the same year…"],
                 ["say", "guanyu", "…we wish to die on the same day of the same month of the same year."],
                 ["say", "zhangfei", "Heaven and Earth, witness it! If we betray this oath, may Heaven and men strike us down!"],
