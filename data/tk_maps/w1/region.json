@@ -880,6 +880,14 @@
     "yangcheng"
    ],
    "parent": "yangcheng"
+  },
+  {
+   "id": "overworld",
+   "name": "The Realm",
+   "zh": "天下",
+   "archetype": "overworld",
+   "map": "overworld.map.json",
+   "links": []
   }
  ],
  "quests": [

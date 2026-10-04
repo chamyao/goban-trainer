@@ -1,10 +1,11 @@
 /* ---- Three Kingdoms: the world map (travel) and starting a world over ----
    Two buttons in the campaign header (tk.js viewTK):
 
-   - 地图 Map: the world's places on a map drawn from the old node map's
-     layout. Places you have cleared (every story point there done; a place
-     with none, once visited) can be travelled to at once; the rest are
-     locked. You are shown where you stand.
+   - 地图 Map: out onto the overworld, a walkable map of the whole world
+     (tools/mapfactory/overworld.py), standing at the gate of the place you
+     were in. Walk the roads to any place; step onto its entrance to go in.
+     Places the story hasn't opened stay shut. (A world without an overworld
+     falls back to the old picker below: cleared places, travelled to at once.)
    - 重新开始 Start over: forgets this world's progress (problems cleared,
      scenes seen, party, possessions, where you stood) after a confirm. */
 
@@ -23,7 +24,7 @@ const WorldTravel = {
     }
     if (typeof TKMusic !== "undefined") bar.append(TKMusic.button(btn("", "Music on or off", null)));   // tk-music.js
     bar.append(
-      btn("地图 Map", "Travel to a place you have cleared", () => this.open(w)),
+      btn("地图 Map", "Out onto the world map", () => this.overworld(w)),
       btn("重新开始 Start over", "Forget this world's progress and start again", () => this.reset(w)));
   },
 
@@ -87,6 +88,18 @@ const WorldTravel = {
     const esc = e => { if (e.key === "Escape") { e.stopPropagation(); close(); } };
     addEventListener("keydown", esc, true);
     document.body.append(veil);
+  },
+
+  // Out onto the overworld, at the entrance of the place you're in (or its building's place).
+  async overworld(w) {
+    const s = this.scene(), region = await WorldData.region(w.n);
+    if (!region || !region.places.some(p => p.id === "overworld")) return this.open(w);
+    if (!s || !s.sys.isActive() || s.cine || s.leaving || s.ui.busy() || s.placeId === "overworld") return;
+    const here = region.places.find(p => p.id === s.placeId), from = (here && here.parent) || s.placeId;
+    s.leaving = true;
+    s.st.pos = null; s.save();
+    s.cameras.main.fadeOut(250);
+    s.cameras.main.once("camerafadeoutcomplete", () => s.scene.restart({ place: "overworld", from }));
   },
 
   go(id) {

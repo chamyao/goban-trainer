@@ -132,6 +132,18 @@ come in the novel's order.
   if nothing matches, the object is still solid but invisible, and the
   compiler lists it.
 
+## The overworld
+
+`tools/mapfactory/overworld.py` builds one more map, `overworld.map.json`
+(place id `overworld`, archetype `overworld`): the whole world on one
+walkable map. Each outdoor place stands where it sat on the story's node
+map (spread out a little), drawn as a cluster that says what it is (huts,
+a hall and houses, tents, crags, peach trees); roads follow the places'
+links; forest, rocks and lakes fill the country. Each place has an
+entrance, an ordinary exit with `"to"` its id, so the story's locks hold,
+and an entry in front of it keyed by its id, where you stand when you come
+out of it. The Map button (tk-travel.js) takes you there.
+
 ## Interiors
 
 Every building with a door gets a room (`tools/mapfactory/interiors.py`): a

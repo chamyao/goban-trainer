@@ -20,6 +20,7 @@ sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(ROOT / "tools"))
 
 from interiors import add_spot, furnish_place  # noqa: E402
+from overworld import build_overworld  # noqa: E402
 from layout import layout  # noqa: E402
 from plot import build_region  # noqa: E402
 from tk_story_zh import ZH  # noqa: E402
@@ -60,6 +61,14 @@ def build(n):
                            "archetype": "interior", "map": f"{r['id']}.map.json", "links": [p["id"]], "parent": p["id"]})
         print(f"  {p['id']:22} {m['archetype']:9} {m['size'][0]}x{m['size'][1]}  "
               f"{len(m['objects'])} objects, {len(m['spots'])} spots, {len(m['npcs'])} people, {len(m['exits'])} exits")
+    # the overworld: every place on one walkable map (overworld.py)
+    outdoor = [p for p in places if not p.get("parent")]
+    links = {p["id"]: [l for l in p["links"] if not l.startswith(p["id"] + "--")] for p in outdoor}
+    ow = build_overworld(outdoor, world["nodes"], links, region["start"], n)
+    (d / "overworld.map.json").write_text(json.dumps(ow, ensure_ascii=False, indent=1))
+    places.append({"id": "overworld", "name": ow["name"], "zh": ZH.get(ow["name"], "天下"), "archetype": "overworld",
+                   "map": "overworld.map.json", "links": []})
+    print(f"  overworld              {ow['size'][0]}x{ow['size'][1]}  {len(ow['objects'])} objects, {len(ow['exits'])} entrances")
     for q in region["quests"]:  # Chinese beside every line the player reads
         q["objective_zh"] = ZH.get(q["objective"], "")
         q["title_zh"] = world["scenes"][q["scene"]].get("zh", "")

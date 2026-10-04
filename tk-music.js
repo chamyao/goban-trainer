@@ -29,7 +29,7 @@ const TKMusic = {
   CUES: { boss: "taiko", battle: "dragon", victory: "imperial" },   // "calm": the place's own piece; "none": silence
   SFX: { gong: { src: "assets/tk/music/gong.mp3", vol: .8 } },
   BY_PLACE: { village: "lotus", town: "lotus", city: "lotus", interior: "lotus",
-    road: "tea", garden: "tea", hills: "imperial", mountain: "imperial", camp: "imperial" },
+    road: "tea", garden: "tea", overworld: "tea", hills: "imperial", mountain: "imperial", camp: "imperial" },
   DUCK: .35,          // music level while a line is being voiced
   FADE: 1200,         // ms
 
