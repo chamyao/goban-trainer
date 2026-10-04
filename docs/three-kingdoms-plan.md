@@ -8,9 +8,10 @@ same campaign can be shown first as a simple top-down 2D world (GBA
 Pokémon style) and later as something larger and more open (Genshin
 Impact style), without rewriting the story.
 
-World 1 exists in two forms: the original node map (live, `tk.js`) and an
-explorable Zhuo County prototype (`tk-town.js`, branch `claude/zhuo-town`).
-The explorable world is the direction from here on.
+World 1 is explored on foot inside the campaign page: the map factory
+(`tools/mapfactory`, `docs/map-format.md`) builds its 17 places from the plot,
+`tk-world.js` plays them, and each quest or challenger opens the real problem.
+The original node map (`tk.js`) stays as the overview.
 
 ## Scope
 

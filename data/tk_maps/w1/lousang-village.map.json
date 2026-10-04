@@ -1720,6 +1720,23 @@
     "“The Yellow Turbans are burning villages in the south. Strange times.”"
    ],
    "wander": true
+  },
+  {
+   "id": "npc-4",
+   "kind": "folk.villager",
+   "x": 18.5,
+   "y": 11.9,
+   "say": [],
+   "challenge": "neighbour",
+   "intro": [
+    "Your neighbour has scratched a weiqi board into the dirt under the mulberry. “Before you go to town, Xuande, one game.”"
+   ],
+   "win": [
+    "“Ha! Sharper than your sandals. Go on, then.”"
+   ],
+   "done": [
+    "“Bring me back a story from town.”"
+   ]
   }
  ],
  "exits": [

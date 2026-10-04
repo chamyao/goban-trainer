@@ -10,6 +10,13 @@ the factory can lay them out:
               Nodes without a landmark get a spot at the place's centre.
   npcs        people. kind "hero.<id>" is a story character, "folk.*" townsfolk.
               "say" is what they say when you talk to them.
+              A challenger ("challenge": an id) sets an optional Go problem from
+              the world's pools: "intro" before the board, "win" after a
+              flawless solve, "done" when you talk to them again.
+              "until": a node; once it is cleared they are gone. "face": a direction.
+  Lines are strings (narration) or [who, text] (a character speaks).
+  A landmark with a node can have "intro" lines (before its problem opens)
+  and "outro" lines (after the win, before the story scene).
   banners     colour of the banners about the place (red: Han, yellow: Yellow Turbans)
   objectives  the quest line for each node here, shown at the top of the screen
 
@@ -28,12 +35,17 @@ PLACES = {
                 {"kind": "folk.woman", "say": "“Off to sell your sandals in town, Xuande? Mind the road.”"},
                 {"kind": "folk.child", "say": "“That mulberry looks like a carriage canopy! Mother says someone from this house will ride under one.”"},
                 {"kind": "folk.elder", "say": "“The Yellow Turbans are burning villages in the south. Strange times.”"},
+                {"kind": "folk.villager", "near": "mulberry", "challenge": "neighbour",
+                 "intro": ["Your neighbour has scratched a weiqi board into the dirt under the mulberry. “Before you go to town, Xuande, one game.”"],
+                 "win": ["“Ha! Sharper than your sandals. Go on, then.”"], "done": ["“Bring me back a story from town.”"]},
             ],
         },
         "Zhuo County": {
             "archetype": "town",
             "landmarks": [
-                {"kind": "landmark.notice", "id": "notice", "node": "1-n1", "label": "The notice board"},
+                {"kind": "landmark.notice", "id": "notice", "node": "1-n1", "label": "The notice board",
+                 "intro": ["The governor of You Province calls for volunteers against the Yellow Turbans. At the bottom, a weiqi problem: “Let any man who would lead volunteers show he can read a battle.”"]},
+                {"kind": "furniture.gotable", "id": "board", "near": "notice"},
                 {"kind": "building.inn", "id": "inn", "label": "The village inn"},
                 {"kind": "building.shop", "id": "teahouse", "label": "The teahouse"},
                 {"kind": "building.hall", "id": "office", "label": "The county office"},
@@ -45,6 +57,18 @@ PLACES = {
                 {"kind": "folk.woman", "say": "“Liu Bei? The sandal-seller? Kind man. Ears down to his shoulders, you know.”"},
                 {"kind": "folk.villager", "near": "farm", "say": "“Zhang Fei sells wine and pork. Loud as thunder, but his heart is good.”"},
                 {"kind": "folk.official", "near": "office", "say": "“The governor wants volunteers. Read the notice.”"},
+                {"kind": "folk.elder", "near": "board", "challenge": "elder", "face": "down",
+                 "intro": ["An old man sits over a weiqi board in the square. “You have the look of a thinker. Sit, play me one.”"],
+                 "win": ["“Ha! Quick eyes. The governor could use a man like you.”"], "done": ["“Come back when you've grown sharper.”"]},
+                {"kind": "folk.villager", "near": "inn", "challenge": "innkeeper",
+                 "intro": ["“Wine's on the house if you can solve the one my regulars can't.”"],
+                 "win": ["“Well I never. Drink up, then!”"], "done": ["“Still the only one who's cracked it.”"]},
+                {"kind": "folk.villager", "near": "farm", "challenge": "farmer",
+                 "intro": ["“Weiqi's like farming: you claim the land, then you have to hold it. Try this.”"],
+                 "win": ["“Held it, and well.”"], "done": ["“Fine soil this year.”"]},
+                {"kind": "folk.noble", "near": "office", "challenge": "clerk",
+                 "intro": ["A clerk from the county office looks up. “The magistrate set this one. Nobody here has solved it.”"],
+                 "win": ["“Remarkable. I'll tell the magistrate a sandal-seller did it.”"], "done": ["“The magistrate still doesn't believe me.”"]},
             ],
             "banners": "red",
             "objectives": {"1-n1": "Read the notice in the town square."},
@@ -52,8 +76,20 @@ PLACES = {
         "The Peach Garden": {
             "archetype": "garden",
             "landmarks": [
-                {"kind": "tree.peach_big", "id": "altar", "node": "1-n2", "label": "The great peach tree"},
+                {"kind": "tree.peach_big", "id": "altar", "node": "1-n2", "label": "The great peach tree",
+                 "intro": ["Under the great peach tree two old men sit over a weiqi board, one in grey, one in red.",
+                           ["starred", "Three young men, come to swear before Heaven? Heaven is listening. But first, show us how you read the stones."]],
+                 "outro": [["stargrey", "Good. The road ahead forks, and fortune favours the one who reads it."],
+                           "When the brothers look up, the two old men are gone. Only the board remains, and a drift of petals."]},
+                {"kind": "furniture.gotable", "id": "board", "near": "altar"},
                 {"kind": "building.moongate", "id": "gate"},
+            ],
+            # The Star Lords of the plan (docs/three-kingdoms-plan.md), unnamed until World 11.
+            "npcs": [
+                {"kind": "hero.stargrey", "near": "board", "until": "1-n2", "face": "right",
+                 "say": "The old man in grey studies the board and says nothing."},
+                {"kind": "hero.starred", "near": "board", "until": "1-n2", "face": "left",
+                 "say": "“Patience. Heaven is in no hurry.”"},
             ],
             "objectives": {"1-n2": "Swear brotherhood under the great peach tree."},
         },

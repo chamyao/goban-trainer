@@ -21,9 +21,9 @@
    "................................",
    "................................",
    "................................",
-   "......................~~~~......",
-   "......................~~~~......",
-   "......................~~~~......",
+   "................................",
+   "................................",
+   "................................",
    "................................",
    "................................",
    "........................========",
@@ -33,11 +33,11 @@
    "................==========......",
    "..................==............",
    "................====............",
-   "..................==============",
-   "..................==============",
-   "................................",
-   "................................",
-   "................................",
+   "......~~~~~.......==============",
+   "......~~~~~.......==============",
+   "......~~~~~.....................",
+   "......~~~~~.....................",
+   "......~~~~~.....................",
    "................................",
    "................................",
    "................................"
@@ -54,6 +54,14 @@
    "label": "The great peach tree"
   },
   {
+   "kind": "furniture.gotable",
+   "x": 20,
+   "y": 9,
+   "w": 1,
+   "h": 1,
+   "id": "board"
+  },
+  {
    "kind": "building.moongate",
    "x": 15,
    "y": 14,
@@ -63,48 +71,90 @@
   },
   {
    "kind": "tree.peach",
-   "x": 5,
+   "x": 18,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 21,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 24,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 23,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 19,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.flower",
+   "x": 20,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 15,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.flower",
+   "x": 10,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.flower",
+   "x": 12,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.flower",
+   "x": 12,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.flower",
+   "x": 10,
    "y": 10,
    "w": 1,
    "h": 1
   },
   {
    "kind": "plant.flower",
-   "x": 8,
-   "y": 10,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.flower",
-   "x": 3,
-   "y": 10,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.flower",
-   "x": 9,
+   "x": 14,
    "y": 9,
    "w": 1,
    "h": 1
   },
   {
-   "kind": "tree.peach",
-   "x": 5,
-   "y": 7,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 6,
-   "y": 7,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
+   "kind": "plant.flower",
    "x": 9,
    "y": 7,
    "w": 1,
@@ -112,218 +162,120 @@
   },
   {
    "kind": "plant.flower",
-   "x": 4,
-   "y": 7,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 7,
-   "y": 7,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 11,
-   "y": 16,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 13,
-   "y": 15,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 8,
-   "y": 16,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 13,
-   "y": 14,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 11,
-   "y": 18,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
    "x": 5,
-   "y": 16,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 6,
-   "y": 17,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 3,
-   "y": 19,
+   "y": 6,
    "w": 1,
    "h": 1
   },
   {
    "kind": "plant.flower",
-   "x": 1,
-   "y": 18,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 3,
-   "y": 17,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 7,
-   "y": 16,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 3,
-   "y": 18,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 1,
-   "y": 19,
+   "x": 2,
+   "y": 6,
    "w": 1,
    "h": 1
   },
   {
    "kind": "plant.flower",
-   "x": 5,
-   "y": 20,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 9,
-   "y": 1,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 30,
-   "y": 23,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 5,
-   "y": 23,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 1,
-   "y": 22,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 8,
-   "y": 23,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 26,
-   "y": 22,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 0,
-   "y": 21,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 0,
-   "y": 0,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 6,
-   "y": 0,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 1,
+   "x": 7,
    "y": 4,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 20,
-   "y": 0,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 26,
-   "y": 1,
-   "w": 3,
+   "w": 1,
    "h": 1
   },
   {
    "kind": "tree.peach",
-   "x": 10,
-   "y": 0,
+   "x": 6,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 5,
+   "y": 3,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 4,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.flower",
+   "x": 7,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 5,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.flower",
+   "x": 8,
+   "y": 6,
    "w": 1,
    "h": 1
   },
   {
    "kind": "tree.grove",
    "x": 29,
-   "y": 5,
+   "y": 23,
    "w": 3,
    "h": 1
   },
   {
    "kind": "tree.grove",
+   "x": 5,
+   "y": 1,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 29,
+   "y": 4,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 10,
+   "y": 1,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 21,
+   "y": 23,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 16,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 16,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
    "x": 13,
-   "y": 22,
+   "y": 0,
    "w": 3,
    "h": 1
   },
@@ -335,43 +287,211 @@
    "h": 1
   },
   {
+   "kind": "tree.peach",
+   "x": 24,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 3,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 25,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 6,
+   "y": 22,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 0,
+   "y": 21,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 4,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
    "kind": "tree.grove",
-   "x": 1,
-   "y": 7,
+   "x": 0,
+   "y": 4,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 0,
+   "y": 0,
    "w": 3,
    "h": 1
   },
   {
    "kind": "tree.peach",
-   "x": 23,
+   "x": 17,
    "y": 1,
    "w": 1,
    "h": 1
   },
   {
    "kind": "tree.peach",
-   "x": 21,
-   "y": 1,
+   "x": 0,
+   "y": 17,
    "w": 1,
    "h": 1
   },
   {
    "kind": "tree.peach",
-   "x": 31,
-   "y": 6,
+   "x": 8,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 3,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 29,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 30,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 15,
+   "y": 22,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 0,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 13,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 2,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 0,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 5,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 17,
+   "y": 22,
    "w": 1,
    "h": 1
   },
   {
    "kind": "tree.grove",
-   "x": 23,
+   "x": 24,
+   "y": 0,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 1,
+   "y": 3,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 3,
+   "y": 22,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 4,
+   "y": 0,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 25,
    "y": 22,
    "w": 3,
    "h": 1
   },
   {
    "kind": "tree.peach",
-   "x": 12,
+   "x": 4,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 26,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 17,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 13,
    "y": 22,
    "w": 1,
    "h": 1
@@ -385,14 +505,84 @@
   },
   {
    "kind": "tree.peach",
-   "x": 17,
+   "x": 28,
    "y": 22,
    "w": 1,
    "h": 1
   },
   {
    "kind": "tree.peach",
-   "x": 26,
+   "x": 29,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 1,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 0,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 21,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 18,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 11,
+   "y": 22,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 1,
+   "y": 22,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 24,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 1,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 14,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 19,
    "y": 0,
    "w": 1,
    "h": 1
@@ -400,41 +590,13 @@
   {
    "kind": "tree.grove",
    "x": 29,
-   "y": 22,
+   "y": 3,
    "w": 3,
    "h": 1
   },
   {
    "kind": "tree.peach",
-   "x": 24,
-   "y": 23,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 21,
-   "y": 23,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 0,
-   "y": 2,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 6,
-   "y": 22,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 6,
+   "x": 25,
    "y": 1,
    "w": 1,
    "h": 1
@@ -442,7 +604,7 @@
   {
    "kind": "tree.peach",
    "x": 31,
-   "y": 3,
+   "y": 2,
    "w": 1,
    "h": 1
   },
@@ -455,16 +617,9 @@
   },
   {
    "kind": "tree.peach",
-   "x": 4,
-   "y": 23,
+   "x": 31,
+   "y": 22,
    "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 1,
-   "y": 15,
-   "w": 3,
    "h": 1
   },
   {
@@ -475,37 +630,51 @@
    "h": 1
   },
   {
-   "kind": "tree.peach",
-   "x": 18,
-   "y": 22,
-   "w": 1,
+   "kind": "tree.grove",
+   "x": 20,
+   "y": 0,
+   "w": 3,
    "h": 1
   },
   {
    "kind": "tree.peach",
-   "x": 16,
-   "y": 23,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 17,
+   "x": 22,
    "y": 1,
    "w": 1,
    "h": 1
   },
   {
+   "kind": "tree.grove",
+   "x": 29,
+   "y": 5,
+   "w": 3,
+   "h": 1
+  },
+  {
    "kind": "tree.peach",
-   "x": 31,
+   "x": 0,
    "y": 2,
    "w": 1,
    "h": 1
   },
   {
    "kind": "tree.peach",
-   "x": 0,
-   "y": 18,
+   "x": 30,
+   "y": 22,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 19,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 18,
+   "y": 23,
    "w": 1,
    "h": 1
   },
@@ -518,421 +687,8 @@
   },
   {
    "kind": "tree.peach",
-   "x": 1,
-   "y": 1,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 9,
-   "y": 23,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
    "x": 0,
-   "y": 5,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 30,
-   "y": 4,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 3,
-   "y": 0,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 14,
-   "y": 0,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 29,
-   "y": 23,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 1,
    "y": 3,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 11,
-   "y": 22,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 3,
-   "y": 23,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 6,
-   "y": 23,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 4,
-   "y": 22,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 20,
-   "y": 22,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 1,
-   "y": 20,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 30,
-   "y": 2,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 0,
-   "y": 8,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 29,
-   "y": 0,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 8,
-   "y": 1,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 31,
-   "y": 20,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 27,
-   "y": 0,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 25,
-   "y": 23,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 2,
-   "y": 1,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 19,
-   "y": 22,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 0,
-   "y": 22,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 12,
-   "y": 23,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 0,
-   "y": 17,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 0,
-   "y": 1,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 24,
-   "y": 1,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 0,
-   "y": 6,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 0,
-   "y": 23,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 5,
-   "y": 1,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 1,
-   "y": 2,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 15,
-   "y": 0,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 20,
-   "y": 1,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 30,
-   "y": 20,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 18,
-   "y": 1,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 2,
-   "y": 0,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 17,
-   "y": 23,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 10,
-   "y": 22,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 31,
-   "y": 1,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 15,
-   "y": 23,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 29,
-   "y": 1,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 30,
-   "y": 21,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 20,
-   "y": 23,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 16,
-   "y": 1,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 0,
-   "y": 19,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 0,
-   "y": 4,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 1,
-   "y": 16,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 1,
-   "y": 17,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 0,
-   "y": 15,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 12,
-   "y": 0,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 7,
-   "y": 1,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 19,
-   "y": 0,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 17,
-   "y": 0,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 30,
-   "y": 6,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 23,
-   "y": 0,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 10,
-   "y": 1,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 11,
-   "y": 1,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 16,
-   "y": 0,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 1,
-   "y": 8,
    "w": 1,
    "h": 1
   },
@@ -945,6 +701,153 @@
   },
   {
    "kind": "tree.peach",
+   "x": 14,
+   "y": 22,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 0,
+   "y": 1,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 0,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 28,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 22,
+   "y": 22,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 27,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 20,
+   "y": 22,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 30,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 1,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 31,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 1,
+   "y": 16,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 8,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 28,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 10,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 31,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 20,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 12,
+   "y": 22,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 0,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 6,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 0,
+   "y": 18,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 1,
+   "y": 21,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
    "x": 9,
    "y": 0,
    "w": 1,
@@ -952,8 +855,155 @@
   },
   {
    "kind": "tree.peach",
-   "x": 12,
+   "x": 26,
    "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 1,
+   "y": 2,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 7,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 18,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 18,
+   "y": 22,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 8,
+   "y": 22,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 0,
+   "y": 22,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 1,
+   "y": 7,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 29,
+   "y": 22,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 19,
+   "y": 22,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 3,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 1,
+   "y": 20,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 7,
+   "y": 22,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 2,
+   "y": 22,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 1,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 0,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 30,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 1,
+   "y": 17,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 31,
+   "y": 13,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 8,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 19,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 9,
+   "y": 23,
    "w": 1,
    "h": 1
   },
@@ -966,22 +1016,141 @@
   },
   {
    "kind": "tree.peach",
-   "x": 1,
-   "y": 6,
+   "x": 15,
+   "y": 1,
    "w": 1,
    "h": 1
   },
   {
+   "kind": "tree.grove",
+   "x": 10,
+   "y": 0,
+   "w": 3,
+   "h": 1
+  },
+  {
    "kind": "tree.peach",
-   "x": 11,
+   "x": 28,
    "y": 0,
    "w": 1,
    "h": 1
   },
   {
    "kind": "tree.peach",
-   "x": 15,
+   "x": 27,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 27,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 18,
    "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 4,
+   "y": 10,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 22,
+   "y": 18,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 14,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 26,
+   "y": 14,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 25,
+   "y": 18,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 27,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 4,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 22,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 12,
+   "y": 16,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 6,
+   "y": 9,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 9,
+   "y": 3,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 24,
+   "y": 14,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 11,
+   "y": 14,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.peach",
+   "x": 22,
+   "y": 14,
    "w": 1,
    "h": 1
   },
@@ -993,191 +1162,58 @@
    "h": 1
   },
   {
-   "kind": "tree.peach",
-   "x": 7,
-   "y": 20,
+   "kind": "plant.flower",
+   "x": 29,
+   "y": 13,
    "w": 1,
    "h": 1
   },
   {
-   "kind": "tree.peach",
-   "x": 24,
-   "y": 19,
+   "kind": "plant.flower",
+   "x": 28,
+   "y": 18,
    "w": 1,
    "h": 1
   },
   {
-   "kind": "tree.peach",
-   "x": 16,
+   "kind": "plant.flower",
+   "x": 10,
+   "y": 21,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.flower",
+   "x": 6,
    "y": 4,
    "w": 1,
    "h": 1
   },
   {
-   "kind": "tree.peach",
-   "x": 18,
-   "y": 6,
+   "kind": "plant.flower",
+   "x": 5,
+   "y": 10,
    "w": 1,
    "h": 1
   },
   {
-   "kind": "tree.peach",
-   "x": 18,
-   "y": 19,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 22,
-   "y": 19,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 22,
+   "kind": "plant.flower",
+   "x": 27,
    "y": 11,
    "w": 1,
    "h": 1
   },
   {
-   "kind": "tree.peach",
-   "x": 14,
-   "y": 10,
+   "kind": "plant.flower",
+   "x": 3,
+   "y": 15,
    "w": 1,
    "h": 1
   },
   {
-   "kind": "tree.peach",
-   "x": 20,
-   "y": 4,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 23,
-   "y": 9,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 6,
-   "y": 3,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
+   "kind": "plant.flower",
    "x": 12,
-   "y": 10,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 12,
-   "y": 6,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.peach",
-   "x": 7,
    "y": 13,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.flower",
-   "x": 25,
-   "y": 18,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.flower",
-   "x": 20,
-   "y": 18,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.flower",
-   "x": 23,
-   "y": 21,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.flower",
-   "x": 20,
-   "y": 2,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.flower",
-   "x": 15,
-   "y": 8,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.flower",
-   "x": 13,
-   "y": 10,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.flower",
-   "x": 21,
-   "y": 14,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.flower",
-   "x": 12,
-   "y": 16,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.flower",
-   "x": 2,
-   "y": 14,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.flower",
-   "x": 5,
-   "y": 15,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.flower",
-   "x": 20,
-   "y": 15,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.flower",
-   "x": 9,
-   "y": 18,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.flower",
-   "x": 10,
-   "y": 14,
    "w": 1,
    "h": 1
   },
@@ -1190,169 +1226,204 @@
   },
   {
    "kind": "plant.flower",
-   "x": 14,
-   "y": 14,
+   "x": 11,
+   "y": 3,
    "w": 1,
    "h": 1
   },
   {
    "kind": "plant.flower",
-   "x": 8,
-   "y": 5,
+   "x": 15,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.flower",
+   "x": 16,
+   "y": 20,
    "w": 1,
    "h": 1
   },
   {
    "kind": "plant.flower",
    "x": 13,
-   "y": 17,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.flower",
-   "x": 14,
-   "y": 19,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.flower",
-   "x": 14,
-   "y": 8,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.flower",
-   "x": 29,
    "y": 6,
    "w": 1,
    "h": 1
   },
   {
    "kind": "plant.flower",
-   "x": 7,
-   "y": 19,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.flower",
-   "x": 27,
-   "y": 18,
+   "x": 29,
+   "y": 21,
    "w": 1,
    "h": 1
   },
   {
    "kind": "plant.flower",
    "x": 17,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.flower",
+   "x": 12,
+   "y": 3,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.flower",
+   "x": 28,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.flower",
+   "x": 21,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.flower",
+   "x": 19,
+   "y": 21,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.flower",
+   "x": 20,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.flower",
+   "x": 13,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.flower",
+   "x": 16,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.flower",
+   "x": 20,
    "y": 21,
    "w": 1,
    "h": 1
   },
   {
    "kind": "plant.grass",
-   "x": 11,
-   "y": 15,
+   "x": 12,
+   "y": 2,
    "w": 1,
    "h": 1
   },
   {
    "kind": "plant.grass",
-   "x": 6,
-   "y": 13,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.grass",
-   "x": 26,
+   "x": 25,
    "y": 4,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 3,
+   "y": 17,
    "w": 1,
    "h": 1
   },
   {
    "kind": "plant.grass",
    "x": 28,
-   "y": 6,
+   "y": 19,
    "w": 1,
    "h": 1
   },
   {
    "kind": "plant.grass",
-   "x": 15,
+   "x": 26,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 10,
    "y": 9,
    "w": 1,
    "h": 1
   },
   {
    "kind": "plant.grass",
-   "x": 15,
-   "y": 10,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.grass",
-   "x": 6,
-   "y": 8,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.grass",
-   "x": 8,
-   "y": 2,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.grass",
    "x": 23,
-   "y": 18,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.grass",
-   "x": 10,
-   "y": 5,
+   "y": 7,
    "w": 1,
    "h": 1
   },
   {
    "kind": "plant.grass",
    "x": 13,
+   "y": 16,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 14,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 9,
+   "y": 21,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 15,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 27,
    "y": 19,
    "w": 1,
    "h": 1
   },
   {
    "kind": "plant.bush",
-   "x": 10,
-   "y": 19,
+   "x": 18,
+   "y": 4,
    "w": 1,
    "h": 1
   },
   {
    "kind": "plant.bush",
-   "x": 26,
-   "y": 11,
+   "x": 20,
+   "y": 6,
    "w": 1,
    "h": 1
   },
   {
    "kind": "plant.bush",
-   "x": 12,
-   "y": 18,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.bush",
-   "x": 22,
-   "y": 10,
+   "x": 14,
+   "y": 5,
    "w": 1,
    "h": 1
   }
@@ -1363,10 +1434,47 @@
    "x": 17,
    "y": 10.7,
    "node": "1-n2",
-   "label": "The great peach tree"
+   "label": "The great peach tree",
+   "intro": [
+    "Under the great peach tree two old men sit over a weiqi board, one in grey, one in red.",
+    [
+     "starred",
+     "Three young men, come to swear before Heaven? Heaven is listening. But first, show us how you read the stones."
+    ]
+   ],
+   "outro": [
+    [
+     "stargrey",
+     "Good. The road ahead forks, and fortune favours the one who reads it."
+    ],
+    "When the brothers look up, the two old men are gone. Only the board remains, and a drift of petals."
+   ]
   }
  ],
- "npcs": [],
+ "npcs": [
+  {
+   "id": "npc-1",
+   "kind": "hero.stargrey",
+   "x": 21.5,
+   "y": 8.9,
+   "say": [
+    "The old man in grey studies the board and says nothing."
+   ],
+   "until": "1-n2",
+   "face": "right"
+  },
+  {
+   "id": "npc-2",
+   "kind": "hero.starred",
+   "x": 21.5,
+   "y": 12.9,
+   "say": [
+    "“Patience. Heaven is in no hurry.”"
+   ],
+   "until": "1-n2",
+   "face": "left"
+  }
+ ],
  "exits": [
   {
    "to": "zhuo-county",

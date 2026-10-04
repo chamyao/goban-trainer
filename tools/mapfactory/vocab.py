@@ -31,6 +31,7 @@ KINDS = {
     "building.gate": (2, 1, False),      # a gateway you walk through
     "building.moongate": (3, 1, False),
     "landmark.notice": (2, 1, True),     # a notice board
+    "furniture.gotable": (1, 1, True),   # a weiqi table, where the Star Lords sit
     # trees and plants
     "tree.small": (1, 1, True),
     "tree.big": (2, 1, True),
@@ -88,6 +89,7 @@ FALLBACK = {
     "banner.purple": ["banner.red"],
     "plant.flower": ["plant.grass"],
     "landmark.notice": ["camp.table"],
+    "furniture.gotable": ["camp.table"],
 }
 
 # people: folk.* are townsfolk drawn by the kit; hero.<id> are story

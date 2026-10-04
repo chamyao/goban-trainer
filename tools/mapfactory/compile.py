@@ -184,11 +184,14 @@ def compile_map(m, kit, out_dir):
         obj(key or "", "prop", (o["x"] + o["w"] / 2) * T, (o["y"] + o["h"]) * T,
             kind=o["kind"], fw=o["w"] * T, fh=o["h"] * T, solid=solid, **({"ref": o["id"]} if o.get("id") else {}))
     for s in m["spots"]:
-        obj(s["id"], "spot", s["x"] * T, s["y"] * T, node=s["node"], label=s.get("label", ""))
+        obj(s["id"], "spot", s["x"] * T, s["y"] * T, node=s["node"], label=s.get("label", ""),
+            **{k: json.dumps(s[k], ensure_ascii=False) for k in ("intro", "outro") if s.get(k)})
     for n in m["npcs"]:
         sprite = n["kind"][5:] if n["kind"].startswith("hero.") else kit.folk(n["kind"], f"{m['id']}/{n['id']}")
         obj(n["id"], "npc", n["x"] * T, n["y"] * T, kind=n["kind"], sprite=sprite, wander=bool(n.get("wander")),
-            say=json.dumps(n.get("say", []), ensure_ascii=False))
+            say=json.dumps(n.get("say", []), ensure_ascii=False),
+            **{k: n[k] for k in ("challenge", "until", "face") if n.get(k)},
+            **{k: json.dumps(n[k], ensure_ascii=False) for k in ("intro", "win", "done") if n.get(k)})
     for e in m["exits"]:
         obj(f"exit-{e['to']}", "exit", e["x"] * T, e["y"] * T, e["w"] * T, e["h"] * T, to=e["to"], side=e["side"])
     for k, (x, y) in m["entries"].items():

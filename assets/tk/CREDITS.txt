@@ -6,8 +6,9 @@ Three Kingdoms campaign art
   (g_*.png, p_immortal.png, fan.png)
 - Terrain, characters, portraits and effects are drawn in code (tk.js).
 - Town (assets/tk/jade): Jade Tileset Pack by Willibab, https://willibab.itch.io/free-jade-tileset-pack, CC-BY.
-  folk1/folk2.png are the pack's character sheets scaled back to 1x; tiles.png is cut from it by tools/build_tk_town.py.
+  folk1/folk2.png are the pack's character sheets scaled back to 1x; tiles.png is cut from it by tools/cut_jade_tiles.py.
 - Town engine: Phaser 3 (MIT), loaded from cdnjs.
 - Generated world maps (assets/tk/ninja): Ninja Adventure Asset Pack by Pixel-boy and AAA,
   https://pixel-boy.itch.io/ninja-adventure-asset-pack, CC0. Fetched by tools/fetch_ninja_pack.py.
 - Map kits (assets/tk/kits) say how each pack draws the abstract maps; see docs/map-format.md.
+- drawn.png (notice board, go table, moon gate, gateway, fire pit, water) is drawn for the game by tools/draw_tk_extras.py.

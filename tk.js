@@ -474,7 +474,7 @@ const TK = {
     return path;
   },
   roleLabel(node) {
-    return { main: "Main story", side: "Side story · long road", short: "Side story · shortcut", boss: "Boss" }[node.role] || "";
+    return { main: "Main story", side: "Side story · long road", short: "Side story · shortcut", boss: "Boss", challenge: "Challenge" }[node.role] || "";
   },
 };
 
@@ -929,6 +929,31 @@ async function viewTK(worldN) {
   const info = h("div", { class: "tk-info" });
   root.append(info);
 
+  // Worlds whose places are built are explored on foot (tk-world.js); the node map stays as the overview.
+  const world = typeof WorldData !== "undefined" && WorldData.has(w.n);
+  const mode = world ? (TK.ls("tk-view")[w.n] || "world") : "map";
+  const setMode = m => { const v = TK.ls("tk-view"); v[w.n] = m; TK.lsSet("tk-view", v); viewTK(w.n); };
+  if (world) root.querySelector(".tk-head-btns").prepend(h("button", { class: "tk-chron-btn", type: "button", onclick: () => setMode(mode === "world" ? "map" : "world") },
+    mode === "world" ? "🗺 Overview map" : "🚶 Explore"));
+  if (mode === "world") {
+    // Scenes replayed outside the node map: words only, no walking or effects.
+    const still = { w, actors: {}, leader: { x: 0, y: 0 }, party: [], pos: () => ({ x: 0, y: 0 }), actor: () => null, moveActor: async () => {}, addFx: () => 0 };
+    const run = async steps => { TKStory.busy = true; try { await TKStory.play(still, steps); } finally { TKStory.busy = false; } };
+    chron.onclick = () => tkChronicle(w, still);
+    if (!TK.seen(`${w.n}:opening`)) { await run(w.opening); TK.markSeen(`${w.n}:opening`); if (nav !== routeSeq) return; }
+    const ret = TKView.takeReturn();
+    info.append(h("div", { class: "tk-info-text" }, [h("b", {}, w.name),
+      h("div", { class: "meta" }, "Walk with WASD or the arrow keys, Shift to run, Space to talk. People marked ! will set you a problem.")]));
+    try {
+      await WorldView.mount({
+        w, host, ret: ret && ret.world === w.n ? ret : null,
+        onPuzzle: key => { location.hash = `#/tk/${w.n}/${key}`; },
+        onBoss: async () => { if (!TK.seen(`${w.n}:closing`)) { await run(w.closing); TK.markSeen(`${w.n}:closing`); } },
+      });
+    } catch (e) { host.textContent = e.message; }
+    return;
+  }
+  if (typeof WorldView !== "undefined") WorldView.destroy();
   const map = new TKMap(w, host);
   TKView.map = map;
   await map.init();
@@ -1029,14 +1054,16 @@ async function viewTKLevel(worldN, key) {
   const nav = routeSeq;
   root.innerHTML = `<div class="loading">Loading…</div>`;
   await TK.load();
-  const w = TK.world(worldN), node = w && TK.node(w, key);
-  if (!node || !(TK.open(w, key) || TK.cleared(key))) { location.hash = `#/tk/${worldN || 1}`; return; }
+  const w = TK.world(worldN);
+  if (w && !TK.node(w, key) && typeof WorldData !== "undefined") await WorldData.region(w.n);  // a challenger in the world
+  const node = w && (TK.node(w, key) || (typeof WorldData !== "undefined" && WorldData.node(w, key)));
+  if (!node || !(node.town || TK.open(w, key) || TK.cleared(key))) { location.hash = `#/tk/${worldN || 1}`; return; }
   const [bookId, pid] = TK.problemRef(node);
   const src = await getBook(bookId);
   if (nav !== routeSeq) return;
   const p = src.problems.find(x => x.id === pid);
   const book = Object.assign({}, src, { problems: [p] });
-  TK.setAt(worldN, key);
+  if (!node.town) TK.setAt(worldN, key);
   crumbs.innerHTML = "";
   crumbs.append(h("a", { href: "#/" }, "Library"), " / ", h("a", { href: `#/tk/${worldN}` }, `Three Kingdoms · World ${worldN}`), ` / ${node.place}`);
   root.innerHTML = "";

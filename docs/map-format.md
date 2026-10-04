@@ -48,11 +48,15 @@ All positions are in **tiles**. Fractions are allowed for objects.
     {"kind": "tree.peach", "x": 30, "y": 11, "w": 1, "h": 1}
   ],
   "spots": [                      // where story beats happen; the player walks up and presses Space
-    {"id": "notice", "x": 20.5, "y": 15, "node": "1-n1", "label": "The notice board"}
+    {"id": "notice", "x": 20.5, "y": 15, "node": "1-n1", "label": "The notice board",
+     "intro": ["Lines before the problem opens"], "outro": [["stargrey", "Lines after the win, before the scene"]]}
   ],
   "npcs": [                       // people; hero.<id> are story characters, folk.* townsfolk
     {"id": "folk-1", "kind": "folk.villager", "x": 18, "y": 16, "wander": true,
-     "say": ["“They say the Yellow Turbans wear scarves the colour of the earth.”"]}
+     "say": ["“They say the Yellow Turbans wear scarves the colour of the earth.”"]},
+    {"id": "npc-6", "kind": "folk.elder", "x": 21, "y": 16, "challenge": "elder", "face": "down",   // sets a Go problem
+     "intro": ["…"], "win": ["…"], "done": ["…"]},
+    {"id": "npc-1", "kind": "hero.stargrey", "x": 30, "y": 9, "until": "1-n2"}   // gone once 1-n2 is cleared
   ],
   "exits": [                      // walk off the map here to reach another place
     {"to": "peach-garden", "side": "E", "x": 39, "y": 14, "w": 1, "h": 2}
@@ -66,6 +70,10 @@ All positions are in **tiles**. Fractions are allowed for objects.
   bottom-centre, so roofs and treetops rise above it. Solid kinds block
   walking over their footprint, whatever the pack draws.
 - A building's door is the middle of the footprint's bottom edge.
+- Lines (`intro`, `outro`, `win`, `done`) are strings (narration) or
+  `[who, text]` (a character speaks, with their portrait).
+- A challenger's problem is the campaign level `<world>-<place>-c-<challenge>`,
+  drawn from the world's problem pools; clearing it is saved like any level.
 - Water blocks walking.
 
 ## Region: `region.json`
@@ -128,7 +136,7 @@ come in the novel's order.
 
 ```
 python3 tools/mapfactory build --world 1              # plot → abstract maps + region
-python3 tools/mapfactory compile --world 1 --kit ninja --preview
+python3 tools/mapfactory compile --world 1 --kit jade --preview    # the default look; --kit ninja for the other
 ```
 
 `--preview` writes PNGs of every map and an overview to `docs/maps/`.

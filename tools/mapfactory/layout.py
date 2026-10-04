@@ -218,7 +218,7 @@ class Layout:
                     q.append(n)
         return False
 
-    def place_landmark(self, kind, lid=None, label=None, node=None, near_hub=False):
+    def place_landmark(self, kind, lid=None, label=None, node=None, near_hub=False, near=None, lines=None):
         fw, fh, _ = KINDS[kind]
         building = kind.startswith(BUILDING)
         best = None
@@ -235,8 +235,12 @@ class Layout:
             if hasattr(self, "plaza"):
                 px, py, pw, ph = self.plaza
                 d = min(d, abs(door[0] - max(px, min(door[0], px + pw - 1))) + abs(door[1] - max(py, min(door[1], py + ph - 1))))
-            hubd = abs(door[0] - self.hub[0]) + abs(door[1] - self.hub[1])
-            score = abs(d - (2 if building else 1)) * 3 + (hubd * (.5 if (node or near_hub) else .05)) + self.rng.random() * 2
+            hub = self.anchors.get(near, self.hub)
+            hubd = abs(door[0] - hub[0]) + abs(door[1] - hub[1])
+            if near in self.anchors:  # beside another landmark: a few tiles off, never on top of it
+                score = abs(hubd - 3) * 4 + self.rng.random()
+            else:
+                score = abs(d - (2 if building else 1)) * 3 + (hubd * (.5 if (node or near_hub) else .05)) + self.rng.random() * 2
             if best is None or score < best[0]:
                 best = (score, x, y, door)
         if best is None:
@@ -254,14 +258,15 @@ class Layout:
             self.anchors[lid] = door
         if node:
             self.spots.append({"id": lid or f"spot-{node}", "x": door[0] + (0 if fw % 2 == 0 else .5), "y": door[1] + .7,
-                               "node": node, "label": label or ""})
+                               "node": node, "label": label or "", **(lines or {})})
         return o
 
     def lay_landmarks(self):
         b = self.place["brief"]
         done_nodes = set()
         for lm in b.get("landmarks", []):
-            o = self.place_landmark(lm["kind"], lm.get("id"), lm.get("label"), lm.get("node"))
+            lines = {k: lm[k] for k in ("intro", "outro") if lm.get(k)}
+            o = self.place_landmark(lm["kind"], lm.get("id"), lm.get("label"), lm.get("node"), near=lm.get("near"), lines=lines)
             if o is None:
                 raise RuntimeError(f"no room for {lm['kind']}")
             if lm.get("node"):
@@ -371,8 +376,11 @@ class Layout:
                 if ok:
                     x, y = ok[0]
                     npc = {"id": f"npc-{i + 1}", "kind": p["kind"], "x": x + .5, "y": y + .9, "say": [p["say"]] if isinstance(p.get("say"), str) else p.get("say", [])}
-                    if p["kind"].startswith("folk.") and not p.get("near"):
+                    if p["kind"].startswith("folk.") and not p.get("near") and not p.get("challenge"):
                         npc["wander"] = True
+                    for k in ("challenge", "intro", "win", "done", "until", "face"):  # challengers and story people
+                        if p.get(k):
+                            npc[k] = p[k]
                     self.npcs.append(npc)
                     self.used.add((x, y))
                     break

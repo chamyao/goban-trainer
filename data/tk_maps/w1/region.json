@@ -2219,7 +2219,7 @@
    "after": [
     "1-n7"
    ],
-   "grade": "Redmond",
+   "grade": null,
    "pool": [
     [
      "redmond-life-and-death",
@@ -2347,7 +2347,7 @@
     "title": "Zhang Bao, General of Earth",
     "taunt": "Wind and thunder answer to me! Your little band will be swept away like dust.",
     "taunt_zh": "风雷听我号令！你们这点人马，一阵风便扫个干净！",
-    "taunt_vid": "2168f17e4060"
+    "taunt_vid": "afb4201642a1"
    }
   }
  ]
