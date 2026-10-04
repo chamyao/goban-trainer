@@ -894,7 +894,6 @@ async function viewTK(worldN) {
   root.append(host);
   const info = h("div", { class: "tk-info" });
   root.append(info);
-  root.append(h("div", { class: "tk-rule" }, "Flawless only: a wrong move, hint, undo or Explore and you get a new problem of the same grade. Main story plays on the shared road; each side road tells its own side story."));
   root.append(h("div", { class: "tk-credit" }, ["Art: trees and props from the ", h("a", { href: "https://willibab.itch.io/free-jade-tileset-pack", target: "_blank" }, "Jade Tileset"), " by Willibab (CC-BY) and ",
     h("a", { href: "https://gametorch.app/collections/21", target: "_blank" }, "GameTorch"), " (CC0); everything else drawn in code."]));
 
@@ -1032,7 +1031,6 @@ async function viewTKLevel(worldN, key) {
       h("div", { class: "meta-sub" }, [`from ${src.title} · `, p.url ? h("a", { href: p.url, target: "_blank" }, "source")
                                                                  : h("a", { href: `https://www.101weiqi.com/q/${p.id}/`, target: "_blank" }, "source")]),
       h("div", { class: "badges" }, [h("span", { class: "badge" }, p.lv || node.grade), ...(p.qt ? [h("span", { class: "badge" }, p.qt)] : []), turnBadge]),
-      h("div", { class: "tk-rule" }, "Flawless only: a wrong move, hint, undo or Explore and you get a new problem."),
     ]),
     h("div", { class: "panel" }, [h("h2", {}, "Status"), status, note, verdict]),
     treePanel,

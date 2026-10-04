@@ -1893,7 +1893,7 @@ async function viewLibrary() {
   root.append(h("a", { class: "tk-card", href: "#/tk" }, [
     h("img", { class: "tk-card-icon", src: "assets/tk/fan.png", alt: "" }),
     h("span", {}, [h("b", {}, "三国演义 · Romance of the Three Kingdoms"),
-      h("small", {}, tkDone ? `${tkDone} levels cleared · flawless only` : "A story campaign through the novel, 12K to 7D · flawless only")]),
+      h("small", {}, tkDone ? `${tkDone} levels cleared` : "A story campaign through the novel, 12K to 7D")]),
     h("span", { class: "tk-card-go" }, "→"),
   ]));
   // Favorited books from every category come first; they stay in their category too.
