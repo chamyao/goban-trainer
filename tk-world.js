@@ -243,7 +243,7 @@ function worldScenes() {
       const q = this.nextMain();
       if (!q) return this.ui.goal("The world is complete. The road goes on…", "这一卷已经完成。路还在前方……");
       if (this.available(q)) return q.place === this.placeId ? this.ui.goal(q.objective, q.objective_zh)
-        : this.ui.goal(`${q.objective} (${this.placeName(q.place)})`, `${q.objective_zh || ""}（${this.placeZh(q.place)}）`);
+        : this.ui.goal(`${q.objective} (${this.placeName(q.place)})`, q.objective_zh ? `${q.objective_zh}（${this.placeZh(q.place)}）` : "");
       const lead = this.leadsTo(q);
       const ways = [...new Set(lead.map(p => p.role === "short" ? `the shortcut at ${this.placeName(p.place)}` : this.placeName(p.place)))];
       const waysZh = [...new Set(lead.map(p => p.role === "short" ? `${this.placeZh(p.place)}的捷径` : this.placeZh(p.place)))];
@@ -319,7 +319,8 @@ function worldScenes() {
       }
       const spot = this.spots[t.k], q = this.region.quests.find(x => x.node === spot.node);
       if (q && this.available(q)) this.playQuest(q, spot);
-      else if (q && this.done(q.node)) this.talk([["n", `${spot.label || q.title}. (${q.title}: done.)`, `${spot.labelZh || q.title_zh}。（${q.title_zh}：已完成）`]]);
+      else if (q && this.done(q.node)) this.talk([["n", `${spot.label || q.title}. (${q.title}: done.)`,
+        q.title_zh ? `${spot.labelZh || q.title_zh}。（${q.title_zh}：已完成）` : ""]]);
       else this.talk([["n", `${spot.label || "Nothing here"}. It isn't time yet.`, `${spot.labelZh || "这里"}。时候还没到。`]]);
     }
 
