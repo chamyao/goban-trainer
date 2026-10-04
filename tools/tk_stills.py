@@ -21,12 +21,13 @@ words and name people only; their look belongs in CAST.
 """
 import re
 
-STYLE = ("Style: Korean action webtoon and modern martial-arts anime: bold, clean, confident line art, sharp "
+STYLE = ("Style: in the style of The God of High School (the Korean action webtoon and its MAPPA anime): "
+         "bold, clean, confident line art, sharp "
          "angular faces with intense eyes, athletic builds, high-contrast cel shading with hard shadows, saturated "
          "colours, dynamic energy, crisp detailed backgrounds. Ancient China, 184 AD. "
          "No text, no lettering, no borders, no letterbox bars.")
-# (the look of The God of High School, described in plain words: models follow a description more
-# reliably than a title, and the set shouldn't lean on someone else's name)
+# (the user's choice of look: The God of High School, named and also described, since models follow
+# a description more reliably than a title alone)
 
 # key -> (name as the scenes write it, look)
 CAST = {
