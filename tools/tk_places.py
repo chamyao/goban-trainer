@@ -189,8 +189,8 @@ PLACES = {
         "Anxi": {   # Liu Bei's first post, where the inspector comes (the closing)
             "archetype": "town",
             "landmarks": [
-                {"kind": "building.inn", "id": "hostel", "label": "The posting station"},
-                {"kind": "building.hall", "id": "office", "label": "The Anxi county office"},
+                {"kind": "building.hall", "id": "hostel", "label": "The posting station"},   # a hall: the inspector sits high, facing south
+                {"kind": "building.hall", "id": "office", "node": "1-ax2", "label": "The Anxi county office"},   # the hitching post before it
             ],
         },
         "Yangcheng": {
