@@ -570,8 +570,8 @@ const WorldCutscene = {
   load(scene) {
     if (scene.textures.exists("tk-props")) return Promise.resolve();
     return new Promise(res => {
-      scene.load.json("tk-props-json", "assets/tk/props.json?v=2");
-      scene.load.image("tk-props", "assets/tk/props.png?v=2");
+      scene.load.json("tk-props-json", "assets/tk/props.json?v=3");
+      scene.load.image("tk-props", "assets/tk/props.png?v=3");
       scene.load.once("complete", () => {
         const t = scene.textures.get("tk-props"), j = scene.cache.json.get("tk-props-json");
         if (t && j) for (const [n, [x, y, w, h]] of Object.entries(j.frames)) t.add(n, 0, x, y, w, h);
