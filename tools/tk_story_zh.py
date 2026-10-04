@@ -172,7 +172,7 @@ ZH = {
     "Liu Bei is delighted, and the two go into the village inn to drink.": "玄德甚喜，遂与同入村店中饮酒。",
     # ---- World 1: indoor scenes (ch. 1) ----
     "The Governor's Council": "太守议事",
-    "Lu Zhi's Tent": "卢植帐中", "Lu Zhi's tent": "卢植的营帐",
+    "Lu Zhi's Tent": "卢植帐中",
     "The Fire Plan": "火攻之计",
     "The Yellow Turbans have crossed into You Province. Governor Liu Yan summons his officer Zou Jing.": "黄巾前犯幽州界分。太守刘焉闻得贼兵将至，召校尉邹靖计议。",
     "Zou Jing advises him: “The rebels are many and our soldiers are few. My lord, you should raise troops at once, and meet them.”": "邹靖曰：“贼兵众，我兵寡，明公宜作速招军应敌。”",
