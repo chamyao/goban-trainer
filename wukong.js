@@ -307,8 +307,12 @@ const WK = (() => {
     const p = toScreen(B.b.svg, x, y);
     if (!p) return null;
     const cellPx = (B.b.xs[1] - B.b.xs[0]) * p.cell;
-    // Standing on a stone: up on top of it.
-    return { x: p.x, y: p.y + cellPx * 0.12 - (B.onStone ? cellPx * 0.42 : 0), cellPx };
+    // Standing on a stone: up on top of it. A hop onto or off a stone arcs
+    // through the air, sized to the board's squares so big boards get big hops.
+    const top = cellPx * 0.42, from = B.onStone ? top : 0;
+    let lift = from;
+    if (B.hop) lift = from + ((hasStone(B, B.ti, B.tj) ? top : 0) - from) * f + Math.sin(Math.PI * f) * cellPx * 0.55;
+    return { x: p.x, y: p.y + cellPx * 0.12 - lift, cellPx };
   }
   function hasStone(B, i, j) { return B.stones.has(`${B.b.xs[i]},${B.b.ys[j]}`); }
   function boardChoose(now) {
@@ -364,9 +368,15 @@ const WK = (() => {
   }
   function boardLeave() {
     const B = m.bd; m.bd = null;
-    // Jump off toward the nearer side.
+    // Jump off toward the nearer side, far enough to clear the board's edge
+    // however big its squares are (a zoomed-in problem has few, large ones).
     const right = B.i > B.b.xs.length / 2;
-    m.vx = (right ? 1 : -1) * RUN * 1.4; m.vy = -9; m.left = !right;
+    const card = B.b.svg.closest(".board-card") || B.b.svg, r = card.getBoundingClientRect();
+    const tx = right ? r.right + 28 : r.left - 28;
+    m.vy = -9;
+    const air = 2 * -m.vy / GRAV;  // frames until he's back at this height, past the edge
+    m.vx = (right ? 1 : -1) * Math.max(RUN * 1.4, Math.abs(tx - m.x) / air);
+    m.left = !right;
     set("rise", "air");
   }
   // Send the stone at (i, j) flying. Only its picture: the circle is hidden
