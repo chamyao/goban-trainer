@@ -13,7 +13,7 @@ environment's settings, or export it locally):
     OPENAI_API_KEY        openai     gpt-image-1        (TK_IMAGE_MODEL to change)
     REPLICATE_API_TOKEN   replicate  black-forest-labs/flux-1.1-pro
     FAL_KEY               fal        fal-ai/flux/dev
-    GEMINI_API_KEY        google     imagen-4.0-generate-001
+    GEMINI_API_KEY        google     gemini-2.5-flash-image
     (none)                dummy      a plain placeholder, to test the pipeline
 
 Every image is cropped to 16:9 and saved as assets/tk/stills/<id>.jpg
@@ -88,11 +88,14 @@ def fal(prompt, model):
 
 
 def google(prompt, model):
-    model = model or "imagen-4.0-generate-001"
-    r = http(f"https://generativelanguage.googleapis.com/v1beta/models/{model}:predict",
-             {"instances": [{"prompt": prompt}], "parameters": {"sampleCount": 1, "aspectRatio": "16:9"}},
+    # Imagen 4 was retired on 17 Aug 2026; Gemini's image model takes its place
+    model = model or "gemini-2.5-flash-image"
+    r = http(f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
+             {"contents": [{"parts": [{"text": prompt}]}],
+              "generationConfig": {"responseModalities": ["IMAGE"], "imageConfig": {"aspectRatio": "16:9"}}},
              {"x-goog-api-key": os.environ["GEMINI_API_KEY"]})
-    return base64.b64decode(r["predictions"][0]["bytesBase64Encoded"]), model
+    parts = r["candidates"][0]["content"]["parts"]
+    return base64.b64decode(next(p["inlineData"]["data"] for p in parts if "inlineData" in p)), model
 
 
 def dummy(prompt, model):
