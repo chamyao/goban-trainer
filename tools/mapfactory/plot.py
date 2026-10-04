@@ -68,6 +68,8 @@ def build_region(world, briefs):
             q["boss"] = n["boss"]
         if n.get("room"):   # played inside one of the place's buildings (its landmark "id")
             q["room"] = n["room"]
+            if n.get("trigger"):   # near (default), arrive or talk, as for landmarks
+                q["trigger"] = n["trigger"]
         quests.append(q)
     start = slug(nodes[0]["place"])
     return {"places": [places[k] for k in order], "quests": quests, "start": start}
