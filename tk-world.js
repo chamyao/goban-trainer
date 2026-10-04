@@ -68,7 +68,7 @@ function worldScenes() {
       const { w, kit } = this.opts;
       this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=4`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=6`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=2`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=3`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
@@ -283,7 +283,8 @@ function worldScenes() {
     // one plays after the problem, as before.
     playQuest(q, spot) {
       const steps = (this.story[q.scene] || {}).steps || [], at = steps.findIndex(s => s[0] === "problem");
-      const foe = q.boss ? { who: q.boss.who, face: this.faceOf({ who: q.boss.who }) } : null;
+      const setter = q.boss ? q.boss.who : at >= 0 && steps[at][1];   // ["problem", who]: who sets it
+      const foe = setter ? { who: setter, face: this.faceOf({ who: setter }) } : null;
       const intro = spot.intro.length ? worldLines(spot.intro)
         : q.boss ? [["say", q.boss.who, q.boss.taunt, q.boss.taunt_zh, q.boss.taunt_vid]] : [["n", `${q.title}.`, q.title_zh ? `${q.title_zh}。` : ""]];
       if (at < 0) return this.talk(intro, () => this.puzzle(q.node, foe), "story");

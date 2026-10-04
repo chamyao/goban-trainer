@@ -19,6 +19,7 @@ const TK_CHARS = {
   luzhi: { name: "Lu Zhi", skin: "#eec7a0", hair: "#9a9a9a", hat: "guan", hatC: "#1e1e24", robe: "#3e5f8a", trim: "#d6d2c4", beard: "long", beardC: "#a8a8a8", eyes: "kind" },
   zhujun: { name: "Zhu Jun", skin: "#e8c09a", hair: "#2a2024", hat: "helmet", hatC: "#858a94", robe: "#8a3030", trim: "#c8c8c8", beard: "short", eyes: "normal", weapon: "sword" },
   huangfusong: { name: "Huangfu Song", skin: "#e8c09a", hair: "#2a2024", hat: "helmet", hatC: "#858a94", robe: "#2f4f7a", trim: "#c8c8c8", beard: "long", eyes: "normal", weapon: "sword" },
+  yanzheng: { name: "Yan Zheng", skin: "#e2b089", hair: "#2a2024", hat: "yellowband", hatC: "#e8bc2a", robe: "#6a4a2a", trim: "#e8bc2a", beard: "short", eyes: "narrow", weapon: "sword" },
   chengyuanzhi: { name: "Cheng Yuanzhi", skin: "#e8b88c", hair: "#2a2024", hat: "yellowband", hatC: "#e8bc2a", robe: "#8f6a3a", trim: "#e8bc2a", beard: "short", eyes: "wild", weapon: "glaive" },
   militia: { name: "Village brave", skin: "#ecc29a", hair: "#2a2024", hat: "band", hatC: "#b8392c", robe: "#6a7a5a", trim: "#b8392c", beard: "none", eyes: "normal", weapon: "spear" },
   // townsfolk, drawn like the heroes (kits with folk "drawn" use these; see assets/tk/kits)
@@ -453,7 +454,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) this.data = await (await fetch("data/tk.json?v=8")).json();
+    if (!this.data) this.data = await (await fetch("data/tk.json?v=9")).json();
     return this.data;
   },
   ls(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } },
@@ -1178,6 +1179,13 @@ async function viewTKLevel(worldN, key) {
   });
 }
 
+// What a story figure (the Star Lords, Lu Zhi) says on the board they set: [zh, en] to open, on a win, on a slip.
+const TK_SETTER_LINES = {
+  stargrey: { open: ["且看此局。黑先。", "Look at this. Black to play."], win: ["善。", "Good."], slip: ["未也。再看。", "Not yet. Look again."] },
+  luzhi: { open: ["还记得为师教你的么？黑先。", "Do you remember what I taught you? Black to play."], win: ["好。你没有忘。", "Good. You haven't forgotten."], slip: ["不对。静下心来，再看。", "No. Calm yourself, and look again."] },
+};
+TK_SETTER_LINES.starred = TK_SETTER_LINES.stargrey;
+
 // Townsfolk who set problems, by challenger id (tools/tk_places.py).
 const TK_FOES = {
   neighbour: ["邻居", "Neighbour"], elder: ["老者", "Old man"], innkeeper: ["店家", "Innkeeper"],
@@ -1200,7 +1208,7 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
   const zh = h("div", { class: "town-zh", lang: "zh-CN" }), en = h("div", { class: "town-en" });
   const btns = h("div", { class: "tk-duel-next" });
   const say = (z, e, ...next) => { zh.textContent = z; en.textContent = e; btns.replaceChildren(...next); };
-  const story = !foe || node.role === "boss";
+  const story = !foe || node.role === "boss" || !!TK_SETTER_LINES[foe.who];
   const dlg = h("div", { class: `town-dlg tk-duel-dlg ${story ? "story" : "chat"}` }, [
     h("div", { class: "town-tab" }, node.role === "boss" ? "首领 · Boss" : "主线 · Story"),
     ...(face ? [face] : []),
@@ -1222,7 +1230,9 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
   ]);
   box.replaceChildren(boardCard, h("div", { class: "tk-duel-side" }, [dlg, keys, srcLine]));
 
+  const lord = foe && TK_SETTER_LINES[foe.who];
   if (node.boss) say(node.boss.taunt_zh || "", node.boss.taunt);
+  else if (lord) say(...lord.open);
   else if (foe) say("请。你执黑先下。", "Your move. You play Black.");
   else say("黑先。", "Black to play.");
 
@@ -1252,12 +1262,14 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
       onWin();
       dlg.classList.add("win");
       if (node.boss) say("……我竟败了！", "…Defeated? Me?", go("继续 Continue ▸", leave));
+      else if (lord) say(...lord.win, go("继续 Continue ▸", leave));
       else if (foe) say("好棋！我认输。", "Well played. I resign.", go("继续 Continue ▸", leave));
       else say("★ 完美！", "Flawless!", go("继续 Continue ▸", leave));
     } else {
       TK.slip(node);
       dlg.classList.add("slip");
       const how = e.detail === "ok" ? [`解出了，但不算完美（${t.flawed}）。`, `Solved, but not flawless (${t.flawed}).`]
+        : lord ? lord.slip
         : foe ? ["哈！被我看穿了。换个思路吧。", "Ha! I saw through that. Try another way."] : ["敌人识破了！换个思路。", "The enemy saw through it! Try another way."];
       say(how[0], how[1], go("换一题 New problem ▸", () => { box.classList.add("tk-flip"); setTimeout(() => { box.classList.remove("tk-flip"); again(); }, 260); }));
     }

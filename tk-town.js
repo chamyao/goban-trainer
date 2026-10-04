@@ -15,7 +15,7 @@ const TK_NAMES_ZH = {
   liubei: "刘备", guanyu: "关羽", zhangfei: "张飞", caocao: "曹操", dongzhuo: "董卓", zhangbao: "张宝", zhangjiao: "张角",
   luzhi: "卢植", zhujun: "朱儁", huangfusong: "皇甫嵩", chengyuanzhi: "程远志", rebel: "黄巾兵", inspector: "督邮",
   xushao: "许劭", uncle: "曹操的叔父", zuofeng: "左丰", merchant: "张世平", immortal: "南华老仙",
-  stargrey: "灰衣老人", starred: "红衣老人",
+  stargrey: "灰衣老人", starred: "红衣老人", yanzheng: "严政",
 };
 const tkName = who => [TK_NAMES_ZH[who], TK_CHARS[who] && TK_CHARS[who].name].filter(Boolean).join(" ");
 
