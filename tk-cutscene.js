@@ -108,12 +108,13 @@ const WorldCutscene = {
         Items.place(a.horse, a.seat, a.head, a.spr.x, a.spr.y, dir);
       }
       a.spr.setDepth(a.spr.y);
-      // a soft shadow at the feet (none for someone sitting inside a prop)
+      // a soft shadow at the feet, the world's own (tk-world.js WorldFX "@shadow"), so
+      // nothing jumps when a scene starts; none for someone sitting inside a prop
       const big = a.horse || a.beast;
-      if (!a.shadow) a.shadow = scene.add.ellipse(0, 0, 1, 1, 0x000000, 1);
-      a.shadow.setSize(big ? 24 : a.fallen ? 16 : 11, big ? 7 : 4).setDisplaySize(big ? 24 : a.fallen ? 16 : 11, big ? 7 : 4)
-        .setPosition(a.spr.x, (a.ground ?? a.spr.y) - 1).setDepth(a.spr.y - .6)
-        .setVisible(a.spr.visible && !a.inside).setAlpha(.26 * a.spr.alpha);
+      if (!a.shadow) a.shadow = scene.textures.exists("@shadow") ? scene.add.image(0, 0, "@shadow") : scene.add.ellipse(0, 0, 14, 5, 0x140c06, .28);
+      a.shadow.setScale(big ? 24 / 14 : a.fallen ? 16 / 14 : Math.max(1, a.spr.displayWidth / 14), big ? 1.4 : 1)
+        .setPosition(Math.round(a.spr.x), Math.round(a.ground ?? a.spr.y) - 1).setDepth(-999)
+        .setVisible(a.spr.visible && !a.inside).setAlpha(a.spr.alpha);
     };
     // a puff of dust at someone's feet (running, falling)
     const puff = (x, y, n = 4, c = 0xcdb98e) => {
