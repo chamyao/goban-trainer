@@ -10,9 +10,11 @@ themselves:
 
     STYLE  one short style line, the end of every request (portraits too)
     CAST   each person's fixed look, added to every request that names them
-    refs   a portrait of each person in CAST (assets/tk/stills/refs/<key>.jpg),
-           made first and approved by eye, then sent with every still that
-           names them as a reference image, on models that take references
+    refs   images sent with the prompt, on models that take them (flux-2-klein,
+           up to 5): first any style images in assets/tk/stills/refs/style/
+           (art to match the look of; the user's, kept on the samples branch,
+           not in the game), then the approved portrait of each person the
+           still names (assets/tk/stills/refs/<key>.jpg, chosen with --pick)
 
 A request is built in this order, most important first (models weigh the
 start of a prompt most, and flux-schnell cuts off after ~256 tokens): the
@@ -45,11 +47,20 @@ CAST = {
 }
 
 
-def portrait(key):
-    """The request for a person's reference portrait."""
+def style_note(n):
+    """What to say about n style reference images sent first."""
+    if not n:
+        return ""
+    which = "Reference image 1 shows" if n == 1 else f"Reference images 1-{n} show"
+    return (f"{which} the art style only: match its line work, colours, shading and texture, "
+            f"but not its characters, clothes, objects or background. ")
+
+
+def portrait(key, n_style=0):
+    """The request for a person's reference portrait (n_style: style images sent with it)."""
     name, look = CAST[key]
     return (f"Character reference portrait of {name}, {look}. Full body, three-quarter view, a confident dynamic "
-            f"stance that shows his whole outfit, on a plain flat background. {STYLE}")
+            f"stance that shows his whole outfit, on a plain flat background. {style_note(n_style)}{STYLE}")
 
 
 STILLS = {
@@ -112,12 +123,13 @@ def cast_in(sid):
     return [key for _, key in sorted(found)]
 
 
-def prompt(sid, refs=()):
-    """The full request for a still: scene, then the cast it names (pointing at their reference
-    images when refs, the keys sent as images in that order, are given), then the style."""
+def prompt(sid, n_style=0, cast_refs=()):
+    """The full request for a still: scene, then the cast it names, then the style. With reference
+    images, n_style style images come first, then a portrait for each key in cast_refs, in order."""
     parts = [STILLS[sid]["prompt"]]
     for key in cast_in(sid):
         name, look = CAST[key]
-        ref = f" (reference image {list(refs).index(key) + 1}: keep his face, hair and clothes)" if key in refs else ""
+        ref = (f" (reference image {n_style + list(cast_refs).index(key) + 1}: keep his face, hair and clothes)"
+               if key in cast_refs else "")
         parts.append(f"{name} is {look}{ref}.")
-    return " ".join(parts + [STYLE])
+    return " ".join(parts) + " " + style_note(n_style) + STYLE

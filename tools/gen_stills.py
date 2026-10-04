@@ -46,7 +46,7 @@ from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
-from tk_stills import CAST, STILLS, STYLE, portrait, prompt  # noqa: E402
+from tk_stills import CAST, STILLS, STYLE, cast_in, portrait, prompt  # noqa: E402
 
 OUT = ROOT / "assets/tk/stills"
 SIZE = (1280, 720)
@@ -68,7 +68,7 @@ def fetch(url):
 
 
 # ---------- providers: prompt → image bytes ----------
-def openai(prompt, model, aspect="16:9"):
+def openai(prompt, model, aspect="16:9", images=()):
     model = model or "gpt-image-1"
     r = http("https://api.openai.com/v1/images/generations",
              {"model": model, "prompt": prompt, "size": "1536x1024" if aspect == "16:9" else "1024x1536", "quality": "high", "n": 1},
@@ -77,12 +77,15 @@ def openai(prompt, model, aspect="16:9"):
     return (base64.b64decode(d["b64_json"]) if d.get("b64_json") else fetch(d["url"])), model
 
 
-def replicate(prompt, model, aspect="16:9"):
+def replicate(prompt, model, aspect="16:9", images=()):
     model = model or "black-forest-labs/flux-1.1-pro"
     h = {"Authorization": f"Bearer {os.environ['REPLICATE_API_TOKEN']}", "Prefer": "wait"}
     url = f"https://api.replicate.com/v1/models/{model}/predictions"
     try:
-        r = http(url, {"input": {"prompt": prompt, "aspect_ratio": aspect, "output_format": "png"}}, h)
+        inp = {"prompt": prompt, "aspect_ratio": aspect, "output_format": "png"}
+        if images:
+            inp["images"] = list(images)        # flux-2 models: up to 5 reference images
+        r = http(url, {"input": inp}, h)
     except urllib.error.HTTPError as e:
         if e.code != 422:                       # 422: this model names its inputs differently
             raise
@@ -97,14 +100,14 @@ def replicate(prompt, model, aspect="16:9"):
     return fetch(out[0] if isinstance(out, list) else out), model
 
 
-def fal(prompt, model, aspect="16:9"):
+def fal(prompt, model, aspect="16:9", images=()):
     model = model or "fal-ai/flux/dev"
     r = http(f"https://fal.run/{model}", {"prompt": prompt, "image_size": "landscape_16_9" if aspect == "16:9" else "portrait_4_3", "num_images": 1},
              {"Authorization": f"Key {os.environ['FAL_KEY']}"})
     return fetch(r["images"][0]["url"]), model
 
 
-def google(prompt, model, aspect="16:9"):
+def google(prompt, model, aspect="16:9", images=()):
     # Imagen 4 was retired on 17 Aug 2026; Gemini's image model takes its place
     model = model or "gemini-2.5-flash-image"
     r = http(f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
@@ -115,7 +118,7 @@ def google(prompt, model, aspect="16:9"):
     return base64.b64decode(next(p["inlineData"]["data"] for p in parts if "inlineData" in p)), model
 
 
-def dummy(prompt, model, aspect="16:9"):
+def dummy(prompt, model, aspect="16:9", images=()):
     """No key: a labelled gradient, so the whole pipeline (and the game's step) can be tested."""
     im = Image.new("RGB", SIZE)
     d = ImageDraw.Draw(im)
@@ -144,6 +147,35 @@ def pick(name):
     return "dummy", dummy
 
 
+MAX_REFS = 5
+TAKES_REFS = ("replicate",)          # providers whose models here take reference images (flux-2)
+
+
+def data_uri(path):
+    """An image as a data: URI, shrunk to 1024 px so requests stay small."""
+    im = Image.open(path).convert("RGB")
+    im.thumbnail((1024, 1024))
+    buf = io.BytesIO()
+    im.save(buf, "JPEG", quality=90)
+    return "data:image/jpeg;base64," + base64.b64encode(buf.getvalue()).decode()
+
+
+def style_refs():
+    d = OUT / "refs/style"
+    return sorted(f for f in d.iterdir() if f.suffix.lower() in (".png", ".jpg", ".jpeg", ".webp")) if d.exists() else []
+
+
+def request(provider, sid=None, key=None):
+    """(prompt, images) for a still or a portrait: style images first, then cast portraits."""
+    style = style_refs()[:MAX_REFS] if provider in TAKES_REFS else []
+    if key:
+        return portrait(key, len(style)), [data_uri(f) for f in style]
+    cast = [k for k in cast_in(sid) if (OUT / f"refs/{k}.jpg").exists()] if provider in TAKES_REFS else []
+    cast = cast[:MAX_REFS - len(style)]
+    images = [data_uri(f) for f in style] + [data_uri(OUT / f"refs/{k}.jpg") for k in cast]
+    return prompt(sid, len(style), cast), images
+
+
 def fit(raw):
     """Crop to 16:9 around the centre and scale to 1280x720."""
     im = Image.open(io.BytesIO(raw)).convert("RGB")
@@ -162,7 +194,8 @@ def portraits(name, fn, keys, n, model):
         start = len(list(out.glob(f"{key}-*.jpg")))      # more candidates add to the ones there
         for i in range(start + 1, start + n + 1):
             try:
-                raw, used = fn(portrait(key), model, "3:4")
+                text, images = request(name, key=key)
+                raw, used = fn(text, model, "3:4", images)
             except Exception as e:
                 print(f"  {key} #{i}: failed: {e}")
                 continue
@@ -197,7 +230,8 @@ def compare(name, fn, models, ids):
             short = m.split("/")[-1]
             t = time.time()
             try:
-                raw, used = fn(prompt(sid), m)
+                text, images = request(name, sid)
+                raw, used = fn(text, m, "16:9", images)
             except Exception as e:
                 print(f"  {sid} on {short}: failed: {e}")
                 continue
@@ -272,9 +306,9 @@ def main():
             continue
         if sid in man and (OUT / man[sid]["file"]).exists() and not a.force and man[sid]["provider"] != "dummy":
             continue
-        text = prompt(sid)
+        text, images = request(name, sid)
         try:
-            raw, used = fn(text, model)
+            raw, used = fn(text, model, "16:9", images)
         except Exception as e:   # one failure shouldn't stop the rest
             print(f"  {sid}: failed: {e}")
             continue
