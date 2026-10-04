@@ -111,6 +111,28 @@ def ox():
     return trim(cow)
 
 
+def jiazi():
+    """甲子 chalked on a gate plank, as the Yellow Turbans marked doors for their year:
+    the camp sheet's plank, darkened, with the characters in GNU Unifont (pixel glyphs)."""
+    from PIL import ImageFont
+    plank = img("camp.png").crop((0, 112, 48, 128))
+    px = plank.load()
+    for y in range(plank.height):
+        for x in range(plank.width):
+            r, g, b, a = px[x, y]
+            px[x, y] = (int(r * .5), int(g * .42), int(b * .38), a)
+    plank = trim(plank)
+    board = Image.new("RGBA", (plank.width, plank.height * 2 - 2))   # two planks, one above the other
+    board.alpha_composite(plank, (0, plank.height - 2))
+    board.alpha_composite(plank, (0, 0))
+    plank = board
+    font = ImageFont.truetype("/usr/share/fonts/opentype/unifont/unifont_jp.otf", 16)
+    d = ImageDraw.Draw(plank)
+    w = d.textlength("甲子", font=font)
+    d.text(((plank.width - w) / 2, (plank.height - 16) / 2 - 1), "甲子", font=font, fill=(236, 230, 214, 255))
+    return plank
+
+
 def bundle(name, n, gap, tilt=0):
     """A few of one item side by side (iron bars, staves)."""
     one = trim(img(name))
@@ -136,6 +158,7 @@ PROPS = {
     "switches": {"size": [1, 1], "atlas": "switches"},
     "waterbowl": {"size": [1, 1], "atlas": "waterbowl"},
     "post": {"size": [1, 1], "atlas": "post"},
+    "jiazi": {"size": [3, 1], "atlas": "jiazi"},
     "bucket": {"size": [1, 1], "kit": ["furn.barrel", "furn.jar"]},
     "chest": {"size": [1, 1], "kit": ["furn.chest", "furn.drawers"]},
     "straw": {"size": [2, 1], "kit": ["camp.hay", "furn.sacks"]},
@@ -167,6 +190,7 @@ def main():
         "waterbowl": trim(el.crop((96, 160, 112, 176))),
         "post": trim(el.crop((48, 32, 64, 48))),
         "crate": trim(img("props/Object_CrateEmpty.png")),
+        "jiazi": jiazi(),
         "cagecart": cagecart(),
         "forge": forge(),
         "anvil": trim(img("props/Tool_Anvil.png")),
