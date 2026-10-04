@@ -56,12 +56,10 @@ const WorldData = {
 // Lines from the place briefs arrive as voiced steps (["n", en, zh, vid] or
 // ["say", who, en, zh, vid], see build_tk.place_step); bare strings and
 // [who, text] still work for maps compiled before that.
-// Wukong the guide on or off, remembered (the menu has the switch).
+// Wukong the guide: he appears when the player has been stuck a while.
 const WorldGuide = {
-  // "stuck": he comes only when you haven't made headway for a while (the default);
-  // "always"; or "off". Remembered.
-  get mode() { let v; try { v = localStorage.getItem("tk-guide"); } catch {} return v === "off" || v === "always" ? v : "stuck"; },
-  set mode(v) { try { localStorage.setItem("tk-guide", v); } catch {} },
+  // Always adaptive: he comes only when the player hasn't made headway for a while (no setting).
+  get mode() { return "stuck"; },
   get on() { return this.mode !== "off"; },
   STUCK: 40000,   // ms without progress before he comes
   prog: null,     // { key, best, idle }: kept across maps
@@ -201,7 +199,7 @@ function worldScenes() {
       const { w, kit } = this.opts;
       this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=18`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=11`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=13`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=14`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
@@ -291,7 +289,7 @@ function worldScenes() {
       this.ui = TownUI.mount(this, opts.host);
       if (this.place.archetype === "overworld") this.overworldLabels(opts.host.querySelector(".town-ui"));
       // Wukong shows the way to the next objective: beside its spot when it's on screen,
-      // else at the edge of the screen, pointing toward it (WorldGuide.on toggles him)
+      // else at the edge of the screen, pointing toward it (adaptive: only when the player is stuck)
       // He's drawn over the game at screen resolution, so his pixel art keeps its detail.
       this.guide = WorldGuide.mount(opts.host.querySelector(".town-ui"));
       this.setGoal();
