@@ -172,7 +172,10 @@ const WorldItems = {
 
   // After a scene: whatever it gave, with a notice for each new thing.
   gainFrom(scene, steps) {
-    for (const s of steps) if (s[0] === "gain") this.gain(scene, s[1]);
+    for (const s of steps) {
+      if (s[0] === "gain") this.gain(scene, s[1]);
+      else if (s[0] === "give") this.gain(scene, s[3]);   // ["give", from, to, item]
+    }
   },
   gain(scene, key) {
     const w = scene.w;

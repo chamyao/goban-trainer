@@ -7,7 +7,7 @@
      a battle being acted out             Dragon Dance (drums, guzheng)
 
    Pieces crossfade, the music dips while a line is voiced, and it fades out
-   when you leave the campaign page. On/off is the 🎵 Music button in the campaign
+   when you leave the campaign page. On/off is the Music button in the campaign
    header (remembered in localStorage tk-music). Browsers only let sound start
    after a click or key press, so it begins with your first one on the page.
    Sources and licences: assets/tk/CREDITS.txt. */
@@ -72,7 +72,7 @@ const TKMusic = {
 
   // The header button (added by tk-travel.js beside Map and Start over).
   button(btn) {
-    const show = () => { btn.textContent = this.on ? "🎵 音乐 Music on" : "🎵 音乐 Music off"; btn.setAttribute("aria-pressed", String(this.on)); };
+    const show = () => { btn.textContent = this.on ? "音乐 Music on" : "音乐 Music off"; btn.setAttribute("aria-pressed", String(this.on)); };
     btn.onclick = () => { this.on = !this.on; this.unlocked = true; show(); this.tick(); };
     show();
     return btn;

@@ -15,7 +15,10 @@ const TK_NAMES_ZH = {
   liubei: "刘备", guanyu: "关羽", zhangfei: "张飞", caocao: "曹操", dongzhuo: "董卓", zhangbao: "张宝", zhangjiao: "张角",
   luzhi: "卢植", zhujun: "朱儁", huangfusong: "皇甫嵩", chengyuanzhi: "程远志", rebel: "黄巾兵", inspector: "督邮",
   xushao: "许劭", uncle: "曹操的叔父", zuofeng: "左丰", merchant: "张世平", immortal: "南华老仙",
-  stargrey: "灰衣老人", starred: "红衣老人", yanzheng: "严政",
+  stargrey: "灰衣老人", starred: "红衣老人", yanzheng: "严政", liubei_child: "少年刘备", liuyuanqi: "刘元起",
+  f_farmer: "农夫", f_farmer2: "农夫", f_porter: "脚夫", f_youth: "后生", f_woman: "妇人", f_woman2: "妇人", f_elder: "老者", f_elder2: "老汉",
+  f_child: "孩童", f_daoist: "道士", f_noble: "士人", f_soldier: "兵士", f_hunter: "猎户", f_official: "书吏",
+  f_geisha: "仕女", f_geisha2: "仕女", f_geisha3: "仕女", f_maiden: "少女", f_maiden2: "少女", f_girl: "小姑娘",
 };
 const tkName = who => [TK_NAMES_ZH[who], TK_CHARS[who] && TK_CHARS[who].name].filter(Boolean).join(" ");
 
@@ -31,7 +34,7 @@ const TownArt = {
     const same = (i, col) => p[i] === col[0] && p[i + 1] === col[1] && p[i + 2] === col[2];
     const put = (i, col) => { p[i] = col[0]; p[i + 1] = col[1]; p[i + 2] = col[2]; };
     const hair = hex(d.hair || "#2a2228"), robe = hex(d.robe), beard = hex(d.beardC || d.hair || "#2a2228");
-    const face = [d.skin, TKArt.shade(d.skin, -.18), "#2a2228", "#ffffff"].map(hex).concat([beard]);
+    const face = [d.skin, TKArt.shade(d.skin, -.18), "#2a2228", "#ffffff", "#c8283c", "#f4a0aa"].map(hex).concat([beard]);  // makeup too
     for (let y = 3; y <= 9; y++) for (let x = 3; x <= 10; x++) {
       const i = (y * cv.width + x) * 4;
       if (p[i + 3] && face.some(f => same(i, f))) put(i, hair);
@@ -81,7 +84,8 @@ const TownArt = {
     else if (d.eyes === "narrow") { R(6, ey, 2, 1, dark); s(7, ey - 2, dark); }
     else if (d.eyes === "wild") { s(7, ey, dark); s(6, ey, "#fff"); R(6, ey - 2, 2, 1, dark); s(8, ey - 3, dark); }
     else s(7, ey, dark);
-    s(8, 7, A.shade(d.skin, -.4));  // mouth
+    s(8, 7, d.makeup ? "#c8283c" : A.shade(d.skin, -.4));  // mouth
+    if (d.makeup) s(6, 7, "#f4a0aa");
     // beard
     const bc = d.beardC || hr;
     if (d.beard === "long") { R(6, 7, 3, 1, bc); R(5, 8, 4, 3, bc); R(6, 11, 2, 1, bc); }
@@ -92,6 +96,12 @@ const TownArt = {
     // hats, in profile
     if (d.hat === "topknot") { R(2, 1, 6, 2, hr); R(4, -1, 2, 2, hr); s(3, 0, d.pin || "#e6c14a"); s(6, 0, d.pin || "#e6c14a"); }
     else if (d.hat === "bun") { R(2, 1, 6, 2, hr); R(1, -1, 4, 3, hr); s(5, -1, d.pin || "#c8392c"); R(2, 3, 2, 4, hr); }
+    else if (d.hat === "lady") {
+      R(2, 1, 6, 2, hr); R(1, -1, 6, 2, hr); R(0, 2, 2, 5, hr); R(2, 3, 2, 3, hr);
+      R(3, 0, 3, 1, d.pin || "#c8283c"); s(0, -1, d.pin2 || "#e6c14a"); s(7, -1, d.pin2 || "#e6c14a"); s(7, 1, d.flower || "#f08ab0"); s(8, 0, d.flower || "#f08ab0");
+    }
+    else if (d.hat === "twinloops") { R(2, 1, 6, 2, hr); R(2, -1, 3, 1, hr); s(2, 0, hr); s(4, 0, hr); R(5, -1, 2, 1, hr); s(6, 0, hr); s(5, 0, d.pin || "#e6c14a"); R(2, 3, 2, 4, hr); }
+    else if (d.hat === "sidebuns") { R(2, 1, 6, 2, hr); R(0, 1, 2, 2, hr); s(1, 3, d.pin || "#c8392c"); R(2, 3, 2, 3, hr); }
     else if (d.hat === "scarf") { R(2, 0, 7, 3, H); R(3, -1, 4, 1, H); R(1, 1, 1, 6, H); s(0, 6, H); }
     else if (d.hat === "band") { R(2, 0, 6, 2, hr); s(3, -1, hr); s(6, -1, hr); R(2, 2, 7, 1, H); s(1, 3, H); s(0, 4, H); }
     else if (d.hat === "guan") { R(3, -1, 5, 2, H); R(2, 1, 7, 2, H); s(1, 2, H); }
@@ -114,6 +124,14 @@ const TownArt = {
     }
     c.putImageData(img, 0, 0);
     return cv;
+  },
+
+  // The arrow toward the next objective, pointing right (rotated in the world).
+  arrow() {
+    const A = TKArt, g = A.grid(20, 17);
+    for (let x = 0; x < 10; x++) for (let y = 8 - Math.floor(x * 7 / 9); y <= 8 + Math.floor(x * 7 / 9); y++) A.set(g, 18 - x, y, y > 8 + x * 7 / 18 ? "#e6b422" : "#ffe066");
+    A.rect(g, 1, 6, 9, 5, "#ffe066"); A.rect(g, 1, 9, 9, 2, "#e6b422");
+    return A.canvas(A.outline(g, "#3a2416"));
   },
 
   // The "!" over someone who will set you a problem.

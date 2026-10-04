@@ -14,12 +14,19 @@
    opts.onProblem() (a promise of a win). Losing or leaving ends the scene
    and calls opts.onLeave instead of done. Before the problem, Skip jumps to
    it, placing everyone where they would be; opts.ffToProblem starts that
-   way (a retry), and replays the last line before the problem. */
+   way (a retry), and replays the last line before the problem.
+
+   Props (a cage cart, a forge, wine jars, a city gate) are cast members with
+   "prop": kind. They are drawn from the prop atlas (assets/tk/props.png,
+   tools/build_props.py) or from the kit's own sprites, move like actors and
+   carry whoever boards them. Poses, emote bubbles, gifts handed over, camera
+   zoom and a dark mood are drawn here too. */
 
 const WorldCutscene = {
   async play(scene, cs, done, opts = {}) {
     const T = 16, ui = scene.ui, cam = scene.cameras.main;
-    const realBusy = ui.busy;
+    await WorldCutscene.load(scene);
+    const realBusy = ui.busy, zoom0 = cam.zoom;
     ui.busy = () => true;                       // the world stops walking and wandering while the scene plays
     scene.cine = cs;
     const actors = {}, fx = [], timers = [];
@@ -65,6 +72,18 @@ const WorldCutscene = {
       sync(a);
     };
     const sync = a => {
+      if (a.prop) {
+        a.spr.setDepth(a.spr.y);
+        for (const id of a.riders) {        // inside: just behind the front bars, sitting on the bed
+          const r = actors[id];
+          if (!r) continue;
+          r.spr.setPosition(a.spr.x, a.spr.y - (a.prop === "cagecart" ? 8 : 4)).setAlpha(a.spr.alpha).setVisible(a.spr.visible);
+          sync(r);
+          r.spr.setDepth(a.spr.y - .5);
+          if (r.seat) r.seat.setDepth(a.spr.y - .5);
+        }
+        return;
+      }
       if (a.horse) {
         const dir = a.dir || "down";
         a.seat.setTexture(Items.riderTexture(scene, a.who, dir));
@@ -76,6 +95,15 @@ const WorldCutscene = {
     const actor = (id, at, face) => {
       let a = actors[id];
       const who = cs.cast[id].who;
+      if (!a && cs.cast[id].prop) {
+        a = actors[id] = { id, prop: cs.cast[id].prop, riders: [], spr: propSprite(cs.cast[id].prop) };
+      }
+      if (a && a.prop) {
+        const [x, y] = px(at);
+        a.spr.setPosition(x, y).setVisible(true).setAlpha(1);
+        sync(a);
+        return a;
+      }
       if (!a) {
         if (who === "horse" && Items) {
           const coat = herdCoat(id);
@@ -92,12 +120,14 @@ const WorldCutscene = {
       return a;
     };
     const look = (a, dir) => {
+      if (a.prop) return;
       a.dir = dir;
       if (a.beast) return Items.pose(a.spr, a.coat, dir, false);
       a.spr.anims.stop(); a.spr.setTexture(`h-${a.who}-${dir}-0`);
       if (a.horse) { Items.pose(a.horse, a.coat, dir, false); sync(a); }
     };
     const stride = (a, dir, fast) => {
+      if (a.prop) return;
       if (a.beast) return Items.pose(a.spr, a.coat, dir, true);
       if (a.horse) { Items.pose(a.horse, a.coat, dir, true); return sync(a); }   // the horse walks, the rider sits
       a.spr.anims.play(`h-${a.who}-${dir}`, true);
@@ -108,6 +138,7 @@ const WorldCutscene = {
       const a = actors[b.actor];
       if (!a) return;
       const pts = b.path.map(px), speed = b.speed * T;
+      if (a.posed && a.posed !== "drunk") unpose(a);   // up off the knees before walking
       for (let i = 1; i < pts.length && !skip; i++) {
         const [x0, y0] = [a.spr.x, a.spr.y], [x1, y1] = pts[i], d = Math.hypot(x1 - x0, y1 - y0);
         if (d < .5) continue;
@@ -127,6 +158,129 @@ const WorldCutscene = {
       if (!to) return Promise.resolve();
       const [x, y] = px(to);
       return new Promise(r => { if (skip) return r(); cam.pan(x, y - 8, ms, "Sine.easeInOut", true, (c, p) => { if (p === 1) r(); }); });
+    };
+
+    // ---- props, poses, emotes, gifts, mood ----
+    const KIT_PROPS = { table: ["furn.table", "camp.table"], winejars: ["furn.jar", "furn.barrel"], rack: ["furn.rack"],
+      fire: ["camp.firepit", "camp.cookfire"], tent: ["building.tent", "building.hut", "building.house"],
+      gate: ["building.gate", "building.moongate"], desk: ["furn.desk", "furn.table", "camp.table"],
+      hall: ["building.hall", "building.inn", "building.house"] };
+    const propSprite = kind => {
+      const box = scene.add.container(0, 0), P = scene.textures.get("tk-props");
+      const put = (tex, frame, dx = 0, dy = 0) => box.add(scene.add.image(dx, dy, tex, frame).setOrigin(.5, 1));
+      if (P.has(kind)) put("tk-props", kind);
+      else {
+        const k = (KIT_PROPS[kind] || []).find(k => scene.kit && scene.kit.kinds[k]);
+        if (k) {
+          const tex = `kit-${scene.kit.kinds[k][0][0]}`, fr = `${k}#0`;
+          if (kind === "winejars") { put(tex, fr, -6, 0); put(tex, fr, 6, 0); if (P.has("gourd")) put("tk-props", "gourd", 0, 2); }
+          else put(tex, fr);
+        } else box.add(scene.add.rectangle(0, 0, 16, 10, 0x8a5a3a).setOrigin(.5, 1));
+      }
+      return box;
+    };
+    const body = a => a.horse ? a.seat : a.spr;                  // what poses bend: the rider on a horse
+    const top = a => body(a).getBounds().top;
+    const unpose = a => {
+      if (a.poseTw) { a.poseTw.stop(); a.poseTw = null; }
+      const t = body(a);
+      if (!a.fallen) { t.setAngle(0); if (!a.horse) t.setScale(1); t.clearTint(); }
+      a.posed = null;
+    };
+    const hold = (a, frame, ms) => {                             // an icon held overhead, rising with a glint
+      if (!scene.textures.get("tk-props").has(frame)) return Promise.resolve();
+      const i = scene.add.image(body(a).x, top(a) - 1, "tk-props", frame).setOrigin(.5, 1).setDepth(1e5);
+      fx.push(i);
+      return tween({ targets: i, y: i.y - 4, duration: 220, ease: "Back.easeOut" }).then(() => wait(ms)).then(() => i.destroy());
+    };
+    const hop = a => tween({ targets: a.spr, y: a.spr.y - 5, duration: 130, yoyo: true, repeat: 1, ease: "Quad.easeOut", onUpdate: () => sync(a) });
+    const lasting = (a, pose) => {                               // the end state of a pose that lasts
+      const t = body(a), right = a.dir !== "left";
+      unpose(a);
+      a.posed = pose;
+      if (pose === "bow") t.setAngle(a.dir === "down" || a.dir === "up" ? 0 : right ? 14 : -14).setScale(1, a.dir === "down" ? .9 : 1);
+      else if (pose === "kneel") t.setScale(1, .8);
+      else if (pose === "sit") t.setScale(1, .86);
+      else if (pose === "sleep") t.setAngle(right ? 90 : -90);
+      else if (pose === "drunk") {
+        t.setTint(0xffd0c4);
+        a.poseTw = scene.tweens.add({ targets: t, angle: { from: -8, to: 8 }, duration: 650, yoyo: true, repeat: -1, ease: "Sine.easeInOut" });
+      } else a.posed = null;                                     // stand
+    };
+    const pose = async (a, p, i) => {
+      if (a.prop || a.beast) return;
+      await wait(i * 70);
+      if (p === "drink") {
+        const t = body(a), side = a.dir === "left" ? -1 : 1;
+        if (!scene.textures.get("tk-props").has("gourd")) return;
+        const g = scene.add.image(t.x + side * 5, t.y - 8, "tk-props", "gourd").setScale(.6).setDepth(1e5);
+        fx.push(g);
+        await tween({ targets: g, y: top(a) + 6, angle: -side * 60, duration: 260, yoyo: true, hold: 260, repeat: 1 });
+        g.destroy();
+      } else if (p === "cheer") await hop(a);
+      else if (p === "raise") await Promise.all([hop(a), hold(a, a.item ? `item.${a.item}` : "", 500)]);
+      else lasting(a, p);
+    };
+    const emote = (a, icon) => {
+      const f = `emote.${icon}`;
+      if (!scene.textures.get("tk-props").has(f)) return;
+      const e = scene.add.image(body(a).x + 4, top(a) - 1, "tk-props", f).setOrigin(.5, 1).setDepth(1e5).setScale(0);
+      fx.push(e);
+      if (icon === "zzz") scene.tweens.add({ targets: e, y: e.y - 3, duration: 600, yoyo: true, repeat: 1 });
+      scene.tweens.add({ targets: e, scale: 1, duration: 140, ease: "Back.easeOut" });
+      scene.tweens.add({ targets: e, alpha: 0, delay: 1700, duration: 250, onComplete: () => e.destroy() });
+    };
+    const give = async b => {
+      const g = actors[b.from], r = actors[b.to];
+      for (const t of b.face || []) if (actors[t.actor]) look(actors[t.actor], t.dir);
+      await pan(b.camera, 300);
+      if (r) r.item = b.item;
+      const f = `item.${b.item}`;
+      if (g && r && scene.textures.get("tk-props").has(f)) {
+        const i = scene.add.image(body(g).x, top(g), "tk-props", f).setOrigin(.5, 1).setDepth(1e5);
+        fx.push(i);
+        await tween({ targets: i, y: i.y - 5, duration: 200, ease: "Back.easeOut" });
+        await tween({ targets: i, x: body(r).x, y: top(r) - 3, duration: 380, ease: "Sine.easeInOut" });
+        i.destroy();
+        WorldFx.play(scene, "sparkle", [body(r).x, body(r).y], fx);
+        await Promise.all([hop(r), hold(r, f, 600)]);
+      }
+      if (Items) { Items.gain(scene, b.item); Object.values(actors).forEach(mount); }
+    };
+    let dark = null;
+    const mood = (on, ms) => {
+      if (on && !dark) {
+        if (!scene.textures.exists("tk-vignette")) {
+          const c = scene.textures.createCanvas("tk-vignette", 2 * W, 2 * H), g = c.context;
+          const grd = g.createRadialGradient(W, H, H * .2, W, H, W * .6);
+          grd.addColorStop(0, "rgba(10,6,24,0.18)"); grd.addColorStop(.6, "rgba(10,6,24,0.6)"); grd.addColorStop(1, "rgba(10,6,24,0.92)");
+          g.fillStyle = grd; g.fillRect(0, 0, 2 * W, 2 * H); c.refresh();
+        }
+        // fixed to the screen; the camera's zoom would scale it, so it is scaled back
+        dark = scene.add.image(W / 2, H / 2, "tk-vignette").setScrollFactor(0).setDepth(9e5).setAlpha(0).setScale(zoom0 / cam.zoom);
+        fx.push(dark);
+        if (ms) scene.tweens.add({ targets: dark, alpha: 1, duration: ms }); else dark.setAlpha(1);
+      } else if (!on && dark) {
+        const d = dark; dark = null;
+        if (ms) scene.tweens.add({ targets: d, alpha: 0, duration: ms, onComplete: () => d.setVisible(false) }); else d.setVisible(false);
+      }
+    };
+    const board = (b, ms) => {
+      const r = actors[b.actor] || actor(b.actor, b.at), p = actors[b.prop];
+      if (!p) return Promise.resolve();
+      if (!p.riders.includes(b.actor)) p.riders.push(b.actor);
+      look(r, "down");
+      if (!ms) return sync(p), Promise.resolve();
+      const [x, y] = [p.spr.x, p.spr.y - (p.prop === "cagecart" ? 8 : 4)];
+      return tween({ targets: r.spr, x, y, duration: ms, onUpdate: () => sync(r) }).then(() => sync(p));
+    };
+    const unboard = (b, ms) => {
+      const r = actors[b.actor];
+      if (!r) return Promise.resolve();
+      for (const p of Object.values(actors)) if (p.prop) p.riders = p.riders.filter(id => id !== b.actor);
+      const [x, y] = px(b.to);
+      if (!ms) { r.spr.setPosition(x, y); sync(r); return Promise.resolve(); }
+      return tween({ targets: r.spr, x, y, duration: ms, onUpdate: () => sync(r) }).then(() => { r.spr.setDepth(r.spr.y); sync(r); });
     };
 
     const run = async b => {
@@ -171,12 +325,25 @@ const WorldCutscene = {
         case "fall":
           await Promise.all(b.actors.filter(id => actors[id]).map((id, i) => {
             const s = actors[id].spr;
+            unpose(actors[id]); actors[id].fallen = true;
             return wait(i * 60).then(() => { s.setTint(0xb0a090); return tween({ targets: s, angle: (i % 2 ? -1 : 1) * 90, y: s.y - 2, duration: 260, ease: "Quad.easeIn" }); });
           }));
           await wait(200);
           break;
         case "fade": await fade(b.actors); break;
-        case "pose": break;
+        case "pose": await Promise.all(b.actors.filter(id => actors[id]).map((id, i) => pose(actors[id], b.pose, i))); break;
+        case "emote": b.actors.filter(id => actors[id]).forEach(id => emote(actors[id], b.icon)); await wait(700); break;
+        case "give": await give(b); break;
+        case "face": for (const t of b.turns) if (actors[t.actor]) look(actors[t.actor], t.dir); break;
+        case "board": await board(b, 260); break;
+        case "unboard": await unboard(b, 260); break;
+        case "zoom":
+          cam.zoomTo(zoom0 * b.z, b.ms, "Sine.easeInOut");
+          if (dark) scene.tweens.add({ targets: dark, scale: 1 / b.z, duration: b.ms, ease: "Sine.easeInOut" });
+          await wait(b.ms);
+          break;
+        case "shake": cam.shake(350, .01); await wait(350); break;
+        case "mood": mood(b.dark, 600); await wait(300); break;
         case "fx": await WorldFx.play(scene, b.name, px(b.at), fx); break;
         case "wait": await wait(b.ms); break;
         case "party": break;                       // applied by the world when the scene ends
@@ -193,7 +360,18 @@ const WorldCutscene = {
         case "together": b.beats.forEach(instant); break;
         case "walk": { const a = actors[b.actor]; if (a) { const [x, y] = px(b.path[b.path.length - 1]); a.spr.setPosition(x, y); sync(a); } break; }
         case "line": lastLine = b; for (const t of b.face || []) if (actors[t.actor]) look(actors[t.actor], t.dir); break;
-        case "fall": b.actors.filter(id => actors[id]).forEach((id, i) => { actors[id].spr.setTint(0xb0a090).setAngle((i % 2 ? -1 : 1) * 90); }); break;
+        case "fall": b.actors.filter(id => actors[id]).forEach((id, i) => { unpose(actors[id]); actors[id].fallen = true; actors[id].spr.setTint(0xb0a090).setAngle((i % 2 ? -1 : 1) * 90); }); break;
+        case "pose": if (!["drink", "cheer", "raise"].includes(b.pose)) b.actors.filter(id => actors[id] && !actors[id].prop).forEach(id => lasting(actors[id], b.pose)); break;
+        case "face": for (const t of b.turns) if (actors[t.actor]) look(actors[t.actor], t.dir); break;
+        case "board": board(b, 0); break;
+        case "unboard": unboard(b, 0); break;
+        case "give":
+          for (const t of b.face || []) if (actors[t.actor]) look(actors[t.actor], t.dir);
+          if (actors[b.to]) actors[b.to].item = b.item;
+          if (Items) { Items.gain(scene, b.item); Object.values(actors).forEach(mount); }
+          break;
+        case "zoom": cam.setZoom(zoom0 * b.z); if (dark) dark.setScale(1 / b.z); break;
+        case "mood": mood(b.dark, 0); break;
         case "fade": b.actors.filter(id => actors[id]).forEach(id => { actors[id].spr.setVisible(false); sync(actors[id]); }); break;
         case "gain": if (Items) { Items.gain(scene, b.item); Object.values(actors).forEach(mount); } break;
       }
@@ -219,11 +397,12 @@ const WorldCutscene = {
     // back to the world: the leader stands where the scene left him
     for (const t of timers) t.remove(false);
     scene.tweens.killTweensOf(Object.values(actors).map(a => a.spr));
-    for (const a of Object.values(actors)) { a.spr.destroy(); if (a.horse) { a.horse.destroy(); a.seat.destroy(); a.head.destroy(); } }
+    for (const a of Object.values(actors)) { if (a.poseTw) a.poseTw.stop(); a.spr.destroy(); if (a.horse) { a.horse.destroy(); a.seat.destroy(); a.head.destroy(); } }
     for (const o of fx) o.destroy();
     skipBtn.remove();
     bars.forEach(b => b.destroy());
     cam.resetFX();
+    cam.setZoom(zoom0);
     if (!left && cs.end && cs.end.leader) { const [x, y] = px(cs.end.leader); scene.player.setPosition(x, y); }
     scene.player.facing = "down";
     hidden.forEach(s => s.setVisible(true));
@@ -234,6 +413,21 @@ const WorldCutscene = {
     scene.cine = null;
     const next = left ? opts.onLeave : done;
     next && next();
+  },
+
+  // the prop atlas (props, emote bubbles, gift icons), loaded once per game
+  load(scene) {
+    if (scene.textures.exists("tk-props")) return Promise.resolve();
+    return new Promise(res => {
+      scene.load.json("tk-props-json", "assets/tk/props.json?v=1");
+      scene.load.image("tk-props", "assets/tk/props.png?v=1");
+      scene.load.once("complete", () => {
+        const t = scene.textures.get("tk-props"), j = scene.cache.json.get("tk-props-json");
+        if (t && j) for (const [n, [x, y, w, h]] of Object.entries(j.frames)) t.add(n, 0, x, y, w, h);
+        res();
+      });
+      scene.load.start();
+    });
   },
 };
 

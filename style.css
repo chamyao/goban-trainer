@@ -601,3 +601,16 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
 .tkt-pin.lock { opacity: .55; filter: grayscale(.6); }
 .tkt-note { margin: 8px 2px 0; font-size: 13px; color: #6a5440; }
 @media (max-width: 600px) { .tkt-pin { min-width: 0; padding: 2px 4px; font-size: 10px; } .tkt-pin b { font-size: 11px; } }
+
+/* The campaign's buttons, in a menu inside the game window (tk.js viewTK). */
+.tk-map .tk-menu { position: absolute; top: 8px; right: 8px; z-index: 15; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; font: 12px/1.4 system-ui, sans-serif; }
+.tk-menu-btn { padding: 3px 10px; font: 600 12px/1.5 system-ui, sans-serif; color: #f4ead2; background: rgba(40, 24, 16, .85); border: 2px solid #c79a4a; border-radius: 6px; cursor: pointer; }
+.tk-menu-btn:hover, .tk-menu-btn:focus-visible { background: #5a3420; outline: none; }
+.tk-menu-panel { max-width: 230px; padding: 8px; background: rgba(40, 24, 16, .93); border: 2px solid #c79a4a; border-radius: 8px; box-shadow: 0 4px 0 rgba(0, 0, 0, .3); }
+.tk-menu-panel[hidden] { display: none; }
+.tk-menu-panel .tk-head-btns { flex-direction: column; align-items: stretch; gap: 5px; }
+.tk-menu-panel .tk-chron-btn { padding: 4px 10px; font: 600 12px/1.4 system-ui, sans-serif; text-align: left; color: #3a2416; background: #f4ead2; border: 1px solid #7a3a22; border-radius: 4px; }
+.tk-menu-panel .tk-chron-btn:hover { background: #fff6dc; }
+.tk-menu-panel .tk-chron-btn[hidden] { display: none; }
+.tk-menu-keys { margin-top: 7px; color: #e8dcc0; font-size: 11px; }
+.tk-map:has(.tk-menu) .town-keys { display: none; }

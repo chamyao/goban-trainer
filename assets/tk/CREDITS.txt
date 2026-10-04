@@ -10,6 +10,8 @@ Three Kingdoms campaign art
 - Town engine: Phaser 3 (MIT), loaded from cdnjs.
 - Generated world maps (assets/tk/ninja): Ninja Adventure Asset Pack by Pixel-boy and AAA,
   https://pixel-boy.itch.io/ninja-adventure-asset-pack, CC0. Fetched by tools/fetch_ninja_pack.py.
+  Cutscene props, emote bubbles and gift icons (assets/tk/props.png) are composed from the same
+  pack by tools/build_props.py.
 - Map kits (assets/tk/kits) say how each pack draws the abstract maps; see docs/map-format.md.
 - drawn.png (notice board, go table, moon gate, gateway, fire pit, water) is drawn for the game by tools/draw_tk_extras.py.
 - Horses (assets/tk/horses): "[LPC] Horses" by bluecarrot16, https://opengameart.org/content/lpc-horses,

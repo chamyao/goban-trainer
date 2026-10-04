@@ -1716,18 +1716,27 @@
   },
   {
    "id": "npc-3",
+   "kind": "folk.girl",
+   "x": 22.5,
+   "y": 11.9,
+   "say": [
+    "“Brother Xuande! When you're rich, will you buy me a hairpin with a flower on it?”"
+   ]
+  },
+  {
+   "id": "npc-4",
    "kind": "folk.elder",
-   "x": 23.5,
-   "y": 13.9,
+   "x": 21.5,
+   "y": 9.9,
    "say": [
     "“The Yellow Turbans are burning villages in the south. Strange times.”"
    ],
    "wander": true
   },
   {
-   "id": "npc-4",
+   "id": "npc-5",
    "kind": "folk.villager",
-   "x": 18.5,
+   "x": 19.5,
    "y": 11.9,
    "say": [],
    "challenge": "neighbour",

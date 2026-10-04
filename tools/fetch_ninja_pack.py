@@ -44,6 +44,13 @@ FOLK = ["Villager", "Villager2", "Villager3", "Villager4", "Villager5", "Woman",
 FILES = dict(TILESETS)
 for f in FOLK:
     FILES[f"Actor/Character/{f}/SpriteSheet.png"] = f"folk/{f.lower()}.png"
+# pieces for cutscene props, emote bubbles and gift icons (tools/build_props.py)
+PROPS = ["Ui/Emote/emote4.png", "Ui/Emote/emote19.png", "Ui/Emote/emote20.png", "Ui/Emote/emote22.png",
+         "Ui/Emote/emote23.png", "Ui/Emote/emote27.png", "Ui/Emote/emote28.png",
+         "Items/Tool/Anvil.png", "Items/Tool/Hammer.png", "Items/Object/Gourd.png", "Items/Object/MoneyBag.png",
+         "Items/Weapons/Sword/Sprite.png", "Items/Weapons/Lance/Sprite.png", "Items/Weapons/Lance2/Sprite.png"]
+for f in PROPS:
+    FILES[f] = "props/" + f.split("/", 1)[1].replace("/Sprite.png", ".png").replace("/", "_")
 FILES["LICENSE.txt"] = "LICENSE.txt"
 
 
@@ -73,7 +80,7 @@ def main():
             out = OUT / dst
             out.parent.mkdir(parents=True, exist_ok=True)
             data = z.read(names[src])
-            if dst.endswith(".png") and "folk" not in dst:
+            if dst.endswith(".png") and "/" not in dst:
                 # trim sheets to whole tiles (TilesetFloor is 417px tall)
                 im = Image.open(io.BytesIO(data))
                 w, h = im.width // 16 * 16, im.height // 16 * 16
