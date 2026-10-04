@@ -495,7 +495,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) this.data = await (await fetch("data/tk.json?v=10")).json();
+    if (!this.data) this.data = await (await fetch("data/tk.json?v=11")).json();
     return this.data;
   },
   ls(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } },
@@ -842,9 +842,11 @@ class TKMap {
 
 const TKVoice = {
   audio: null, queue: [],
-  get on() { try { return localStorage.getItem("tk-voice") !== "off"; } catch { return true; } },
-  set on(v) { try { localStorage.setItem("tk-voice", v ? "on" : "off"); } catch {} if (!v) this.stop(); },
-  has(vid) { return !!vid && TK.data && TK.data.voices.includes(vid); },
+  // "zh" (Chinese voice-over), "en" (English) or "off"; an older "on" means Chinese.
+  get lang() { let v; try { v = localStorage.getItem("tk-voice"); } catch {} return v === "off" || v === "en" ? v : "zh"; },
+  set lang(v) { try { localStorage.setItem("tk-voice", v); } catch {} if (v === "off") this.stop(); },
+  get on() { return this.lang !== "off"; },
+  has(vid) { return !!vid && !!TK.data && (this.lang === "en" ? TK.data.voices_en || [] : TK.data.voices).includes(vid); },
   // Plays clips one after another; resolves when the last ends or is stopped.
   play(vids) {
     this.stop();
@@ -854,7 +856,7 @@ const TKVoice = {
       const next = () => {
         const v = this.queue.shift();
         if (!v) { this.audio = null; res(); return; }
-        const a = new Audio(`assets/tk/voice/${v}.mp3?v=2`);  // bump when clips are re-rendered
+        const a = new Audio(`assets/tk/voice/${this.lang === "en" ? "en/" : ""}${v}.mp3?v=2`);  // bump when clips are re-rendered
         this.audio = a; a.onended = next; a.onerror = next; a.onpause = () => { if (this.audio === a && !a.ended) res(); };
         a.play().catch(next);
       };
@@ -970,11 +972,14 @@ async function viewTK(worldN) {
   crumbs.append(h("a", { href: "#/" }, "Library"), " / ", D.title);
   root.innerHTML = "";
   const levels = w.nodes.filter(x => !TK.isStart(x.key)), done = levels.filter(x => TK.cleared(x.key)).length;
-  const chron = h("button", { class: "tk-chron-btn", type: "button" }, "📜 史册 Chronicle");
-  const voiceBtn = h("button", { class: "tk-chron-btn", type: "button", "aria-pressed": String(TKVoice.on) });
-  const voiceLabel = () => { voiceBtn.textContent = TKVoice.on ? "🔊 配音 Voice on" : "🔇 静音 Voice off"; voiceBtn.setAttribute("aria-pressed", String(TKVoice.on)); };
+  const chron = h("button", { class: "tk-chron-btn", type: "button" }, "史册 Chronicle");
+  const voiceBtn = h("button", { class: "tk-chron-btn", type: "button", "aria-pressed": String(TKVoice.on), title: "配音：中文 → English → 关 Voice: Chinese → English → off" });
+  const voiceLabel = () => {
+    voiceBtn.textContent = { zh: "配音：中文 Chinese voice", en: "配音：英文 English voice", off: "静音 Voice off" }[TKVoice.lang];
+    voiceBtn.setAttribute("aria-pressed", String(TKVoice.on));
+  };
   voiceLabel();
-  voiceBtn.onclick = () => { TKVoice.on = !TKVoice.on; voiceLabel(); };
+  voiceBtn.onclick = () => { TKVoice.lang = { zh: "en", en: "off", off: "zh" }[TKVoice.lang]; voiceLabel(); };
   root.append(h("div", { class: "tk-head" }, [
     h("div", {}, [h("h2", {}, [h("span", { class: "zh" }, D.native), " ", D.title]),
       h("div", { class: "sub" }, `World ${w.n} · ${w.name} ${w.zh} · chapters ${w.chapters.join("–")} · ${w.grades} · ${done}/${levels.length} cleared`)]),
@@ -996,8 +1001,19 @@ async function viewTK(worldN) {
     // Art style: the same maps drawn with either free pack (tk-world.js WORLD_KITS).
     const kit = WorldView.kit(), kits = Object.keys(WORLD_KITS), next = kits[(kits.indexOf(kit) + 1) % kits.length];
     root.querySelector(".tk-head-btns").prepend(h("button", { class: "tk-chron-btn", type: "button", title: `Switch to ${WORLD_KITS[next].en}`,
-      onclick: () => { WorldView.setKit(next); viewTK(w.n); } }, `🎨 画风：${WORLD_KITS[kit].zh} ${WORLD_KITS[kit].en}`));
+      onclick: () => { WorldView.setKit(next); viewTK(w.n); } }, `画风：${WORLD_KITS[kit].zh} ${WORLD_KITS[kit].en}`));
     if (typeof WorldTravel !== "undefined") WorldTravel.addButtons(root.querySelector(".tk-head-btns"), w);   // map and start over (tk-travel.js)
+    // The buttons live in a menu inside the game window, with the controls.
+    const panel = h("div", { class: "tk-menu-panel", hidden: "" }, [root.querySelector(".tk-head-btns"),
+      h("div", { class: "tk-menu-keys" }, "WASD / 方向键 移动 move · Enter 对话 talk")]);
+    const toggle = h("button", { class: "tk-menu-btn", type: "button", "aria-expanded": "false" }, "菜单 Menu ▾");
+    toggle.onclick = () => {
+      const open = panel.hidden;
+      panel.hidden = !open; toggle.setAttribute("aria-expanded", String(open)); toggle.textContent = open ? "菜单 Menu ▴" : "菜单 Menu ▾";
+      host.focus();
+    };
+    panel.addEventListener("click", e => { if (e.target.closest("button")) setTimeout(() => host.focus(), 0); });   // keep the keyboard on the game
+    host.append(h("div", { class: "tk-menu" }, [toggle, panel]));
     // Scenes replayed outside the node map: words only, no walking or effects.
     const still = { w, actors: {}, leader: { x: 0, y: 0 }, party: [], pos: () => ({ x: 0, y: 0 }), actor: () => null, moveActor: async () => {}, addFx: () => 0 };
     const run = async steps => { TKStory.busy = true; try { await TKStory.play(still, steps); } finally { TKStory.busy = false; } };
@@ -1146,7 +1162,7 @@ function tkLevelBuild(host, worldN, key, { w, node, src, p, book }, { back, agai
     TKArt.get(node.boss.who, "bust"),
     h("div", {}, [h("b", {}, [TK_BOSS_ZH[node.boss.who] ? `${TK_BOSS_ZH[node.boss.who]} · ` : "", node.boss.title]),
       h("p", { class: "zh", lang: "zh-CN" }, node.boss.taunt_zh ? `“${node.boss.taunt_zh}”` : ""), h("p", {}, `“${node.boss.taunt}”`),
-      ...(TKVoice.has(node.boss.taunt_vid) ? [h("button", { class: "tk-say", type: "button", onclick: () => TKVoice.play(node.boss.taunt_vid) }, "🔊")] : [])]),
+      ...(TKVoice.has(node.boss.taunt_vid) ? [h("button", { class: "tk-say", type: "button", onclick: () => TKVoice.play(node.boss.taunt_vid) }, "播放 Play")] : [])]),
   ]) : null;
   if (node.boss) TKVoice.play(node.boss.taunt_vid);
   const aside = h("aside", {}, [

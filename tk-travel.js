@@ -15,7 +15,7 @@ const WorldTravel = {
     // on and off the horse, once the party has one (also the R key)
     if (typeof WorldItems !== "undefined") {
       const ride = btn("", "Get on or off your horse (R)", () => { const s = this.scene(); if (s && s.sys.isActive()) WorldItems.toggle(s); });
-      const show = () => { ride.hidden = !WorldItems.hasMount(w); ride.textContent = WorldItems.riding(w) ? "🐎 下马 Dismount" : "🐎 上马 Ride"; };
+      const show = () => { ride.hidden = !WorldItems.hasMount(w); ride.textContent = WorldItems.riding(w) ? "下马 Dismount" : "上马 Ride"; };
       WorldItems.onChange = show;
       show();
       setInterval(() => { if (ride.isConnected) show(); }, 1500);   // a gift can arrive mid-scene
@@ -23,8 +23,8 @@ const WorldTravel = {
     }
     if (typeof TKMusic !== "undefined") bar.append(TKMusic.button(btn("", "Music on or off", null)));   // tk-music.js
     bar.append(
-      btn("🗺 地图 Map", "Travel to a place you have cleared", () => this.open(w)),
-      btn("↺ 重新开始 Start over", "Forget this world's progress and start again", () => this.reset(w)));
+      btn("地图 Map", "Travel to a place you have cleared", () => this.open(w)),
+      btn("重新开始 Start over", "Forget this world's progress and start again", () => this.reset(w)));
   },
 
   scene() { return WorldView.game && WorldView.game.scene.getScene("world"); },
