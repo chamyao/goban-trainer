@@ -645,3 +645,6 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
 .tk-duel-bossname span { display: block; font-size: .75em; opacity: .85; letter-spacing: .04em; }
 @keyframes tkBossPulse { 50% { box-shadow: 0 0 0 2px #e6c14a inset, 0 0 0 3px #3a0804, 0 0 26px 8px rgba(220, 50, 20, .7), 0 6px 0 rgba(0, 0, 0, .5); } }
 @media (prefers-reduced-motion: reduce) { .tk-duel-boss .tk-duel-board { animation: none; } }
+
+/* A soft vignette over the explorable world (tk-world.js), under the dialogue and menus. */
+.tk-map.tk-town .town-ui { box-shadow: inset 0 0 70px rgba(24, 12, 4, .32); }

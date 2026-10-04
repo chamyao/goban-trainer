@@ -117,6 +117,74 @@ const WorldGuide = {
     Object.assign(el.say.style, { left: `${x + this.W * s / 2}px`, top: `${y}px` });
   },
 };
+// Small touches that make the world feel lived in: a soft shadow under everyone,
+// and something in the air that suits the place.
+const WorldFX = {
+  textures(scene) {
+    const add = (key, w, h, draw) => {
+      if (scene.textures.exists(key)) return;
+      const cv = document.createElement("canvas"); cv.width = w; cv.height = h; draw(cv.getContext("2d"));
+      scene.textures.addCanvas(key, cv);
+    };
+    add("@shadow", 14, 5, g => { g.fillStyle = "rgba(20,12,6,.28)"; g.beginPath(); g.ellipse(7, 2.5, 7, 2.5, 0, 0, Math.PI * 2); g.fill(); });
+    add("@petal", 3, 2, g => { g.fillStyle = "#f6a8bc"; g.fillRect(0, 0, 3, 2); g.fillStyle = "#fbd6e0"; g.fillRect(0, 0, 1, 1); });
+    add("@leaf", 3, 2, g => { g.fillStyle = "#8aa83a"; g.fillRect(0, 0, 3, 2); g.fillStyle = "#c8b04a"; g.fillRect(2, 1, 1, 1); });
+    add("@ember", 2, 2, g => { g.fillStyle = "#ffb03a"; g.fillRect(0, 0, 2, 2); g.fillStyle = "#fff0a0"; g.fillRect(0, 0, 1, 1); });
+    add("@mote", 1, 1, g => { g.fillStyle = "#fff4d8"; g.fillRect(0, 0, 1, 1); });
+    add("@glint", 5, 5, g => { g.fillStyle = "#ffffff"; g.fillRect(2, 0, 1, 5); g.fillRect(0, 2, 5, 1); g.fillStyle = "#d8f0ff"; g.fillRect(1, 1, 3, 3); g.fillStyle = "#ffffff"; g.fillRect(2, 2, 1, 1); });
+    // lamplight for rooms: warm in the middle, falling off to the corners
+    add("@lamp", 320, 180, g => {
+      const r = g.createRadialGradient(160, 96, 10, 160, 96, 210);
+      r.addColorStop(0, "rgba(255,196,110,0.10)"); r.addColorStop(.55, "rgba(120,60,20,0.05)"); r.addColorStop(1, "rgba(16,6,0,0.55)");
+      g.fillStyle = r; g.fillRect(0, 0, 320, 180);
+    });
+  },
+  // Shadows follow whoever is standing in the world: you, your party, the townsfolk.
+  shadows(scene) {
+    const people = [scene.player, ...scene.followers.map(f => f.spr), ...scene.npcs.map(n => n.spr)];
+    for (const spr of people) {
+      if (!spr || !spr.scene) continue;
+      const sh = spr.__shadow || (spr.__shadow = scene.add.image(0, 0, "@shadow").setDepth(-999));
+      sh.setPosition(Math.round(spr.x), Math.round(spr.y) - 1).setVisible(spr.visible && spr.alpha > .3).setScale(Math.max(1, spr.displayWidth / 14), 1);
+    }
+  },
+  // Glints on water in view, now and then.
+  water(scene, time) {
+    const L = scene.water;
+    if (!L) return;
+    if (!scene.waterTiles) {
+      scene.waterTiles = [];
+      L.forEachTile(t => { if (t.index !== -1) scene.waterTiles.push([t.pixelX + t.width / 2, t.pixelY + t.height / 2]); });
+    }
+    if (!scene.waterTiles.length || time < (scene.nextGlint || 0)) return;
+    scene.nextGlint = time + 90 + Math.random() * 160;
+    const v = scene.cameras.main.worldView, seen = scene.waterTiles.filter(([x, y]) => v.contains(x, y));
+    if (!seen.length) return;
+    const [x, y] = seen[Math.floor(Math.random() * seen.length)];
+    const g = scene.add.image(x + (Math.random() - .5) * 12, y + (Math.random() - .5) * 12, "@glint").setDepth(-998).setAlpha(0).setScale(Math.random() < .5 ? .6 : 1);
+    scene.tweens.add({ targets: g, alpha: { from: 0, to: .9 }, duration: 260, yoyo: true, hold: 120, onComplete: () => g.destroy() });
+  },
+  ambient(scene, kind) {
+    const W = scene.scale.width, H = scene.scale.height;
+    if (kind === "interior") scene.add.image(0, 0, "@lamp").setOrigin(0).setScrollFactor(0).setDepth(9e4).setDisplaySize(W, H);
+    const C = {
+      garden: { tex: "@petal", frequency: 260, y: -6, speedY: { min: 10, max: 18 }, speedX: { min: -8, max: 6 }, lifespan: 12000 },
+      village: { tex: "@leaf", frequency: 1600, y: -6, speedY: { min: 9, max: 15 }, speedX: { min: -4, max: 8 }, lifespan: 12000 },
+      town: { tex: "@leaf", frequency: 2200, y: -6, speedY: { min: 9, max: 15 }, speedX: { min: -4, max: 8 }, lifespan: 12000 },
+      road: { tex: "@leaf", frequency: 900, x: -6, y: { min: 0, max: 180 }, speedX: { min: 14, max: 26 }, speedY: { min: -2, max: 6 }, lifespan: 14000 },
+      hills: { tex: "@leaf", frequency: 800, x: -6, y: { min: 0, max: 180 }, speedX: { min: 16, max: 30 }, speedY: { min: -3, max: 5 }, lifespan: 14000 },
+      mountain: { tex: "@leaf", frequency: 800, x: -6, y: { min: 0, max: 180 }, speedX: { min: 16, max: 30 }, speedY: { min: -3, max: 5 }, lifespan: 14000 },
+      camp: { tex: "@ember", frequency: 450, y: 186, speedY: { min: -18, max: -9 }, speedX: { min: -5, max: 5 }, lifespan: 9000, alpha: { start: 1, end: 0 } },
+      interior: { tex: "@mote", frequency: 500, y: { min: 0, max: 180 }, speedY: { min: -2, max: 2 }, speedX: { min: -2, max: 2 }, lifespan: 6000, alpha: { start: 0, end: .8, ease: "Sine.easeInOut", yoyo: true } },
+    }[kind];
+    if (!C || !scene.add.particles) return;
+    const { tex, ...cfg } = C;
+    scene.ambientFx = scene.add.particles(0, 0, tex, Object.assign({
+      x: { min: 0, max: W }, rotate: { min: 0, max: 360 }, quantity: 1, alpha: { start: .95, end: .7 },
+    }, cfg)).setScrollFactor(0).setDepth(1e5);
+    scene.ambientFx.fastForward && scene.ambientFx.fastForward(8000);   // the air is already full when you arrive
+  },
+};
 const WORLD_NEAR = 36;  // px: how close walking up to a story spot starts its scene
 const worldLines = list => (list || []).map(l => typeof l === "string" ? ["n", l]
   : l[0] === "n" || l[0] === "say" ? l : ["say", l[0], l[1]]);
@@ -144,6 +212,7 @@ function worldScenes() {
       this.load.once("complete", () => {
         for (const [kind, list] of Object.entries(kit.kinds)) list.forEach(([s, x, y, wd, ht], i) => this.textures.get(`kit-${s}`).add(`${kind}#${i}`, 0, x, y, wd, ht));
         if (!this.textures.exists("@bang")) this.textures.addCanvas("@bang", TownArt.bang());
+        WorldFX.textures(this);
         const st = WorldState.load(w.n, region);
         this.scene.start("world", { place: st.place || region.start, from: null, resume: true });
       });
@@ -221,6 +290,7 @@ function worldScenes() {
       this.blocked = 0;
       this.leaving = false;
       if (typeof WorldItems !== "undefined") WorldItems.attach(this);   // mounts (tk-items.js)
+      WorldFX.ambient(this, this.place.archetype);   // petals, leaves, embers, dust
       window.__w = this;  // for tests and the console
       if (this.resume && opts.ret) { const r = opts.ret; opts.ret = null; this.time.delayedCall(400, () => this.returned(r)); }
       // story scenes that start by themselves: on arriving here, or on walking into their area
@@ -598,6 +668,8 @@ function worldScenes() {
     }
 
     update(time, dt) {
+      WorldFX.shadows(this);
+      WorldFX.water(this, time);
       this.goalGuide(time);
       this.nearSpots();
       const P = this.player, K = this.keys;
