@@ -164,6 +164,17 @@ ZH = {
     "“A mistake,” warned his secretary Chen Lin. “You hand the spear to others, point first.”": "主簿陈琳劝道：“不可！这是倒持干戈，授人以柄。”",
     "A man beside them clapped and laughed. “This is as easy as turning over a hand. Why so much talk?” It was Cao Cao.": "旁边一人鼓掌大笑：“此事易如反掌，何必多议！”此人正是曹操。",
     "What did Cao Cao propose? Hear the next chapter.": "不知曹操说出甚话来，且听下文分解。",
+    "The Inspector's Visit": "督邮驾到", "The Hitching Post": "县前马桩",
+    # ---- World 1: staging pass, lines that changed or are new ----
+    "Cao Cao laughed with delight.": "操闻言大喜。",
+    "The Hero of Chaos · II-b: The Five-Coloured Staves": "乱世英雄·二之二：五色棒",
+    "Cao Cao is made captain of the north district of Luoyang. As soon as he takes office, he hangs more than ten coloured staves at the four gates of the city.": "操举孝廉，为郎，除洛阳北部尉。初到任，即设五色棒十余条于县之四门。",
+    "Anyone who breaks the curfew is beaten, rich or powerful alike.": "有犯禁者，不避豪贵，皆责之。",
+    "One night the uncle of the eunuch Jian Shuo walks the street with a sword in his hand. Cao Cao's patrol catches him.": "中常侍蹇硕之叔，提刀夜行，操巡夜拿住。",
+    "Cao Cao has him beaten with the staves.": "操就棒责之。",
+    "After that, no one inside the city or out dares to break the rule, and Cao Cao's name spreads.": "由是内外莫敢犯者，威名颇震。",
+    "He bribed a eunuch in the palace to open the gates from within. But his disciple Tang Zhou carried the plan straight to the court.": "遣其党马元义，暗赍金帛，结交中涓封谞，以为内应。弟子唐州乃径赴省中告变。",
+    "In Luoyang, his agent Ma Yuanyi was beheaded.": "帝召大将军何进调兵擒马元义，斩之。",
     # ---- World 1: the horse dealers are a main story point (ch. 1) ----
     "The next day they gather their weapons, but they have no horses to ride.": "来日收拾军器，但恨无马匹可乘。",
     "While they are still worrying, word comes that two travelling merchants, Zhang Shiping and Su Shuang, are coming to the farm, driving a herd of horses.": "正思虑间，人报有两个客人，引一伙伴当，赶一群马，投庄上来。原来二客乃中山大商：一名张世平，一名苏双。",
