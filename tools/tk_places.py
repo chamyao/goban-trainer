@@ -88,11 +88,7 @@ PLACES = {
             "landmarks": [
                 {"kind": "tree.peach_big", "id": "altar", "label": "The great peach tree"},
                 {"kind": "furniture.gotable", "id": "board", "near": "altar", "node": "1-n2", "label": "The weiqi board",
-                 "trigger": "talk",
-                 "intro": ["Under the great peach tree two old men sit over a weiqi board, one in grey, one in red.",
-                           ["starred", "Three young men, come to swear before Heaven? Heaven is listening. But first, show us how you read the stones."]],
-                 "outro": [["stargrey", "Good. The road ahead forks, and fortune favours the one who reads it."],
-                           "When the brothers look up, the two old men are gone. Only the board remains, and a drift of petals."]},
+                 "trigger": "talk"},   # the old men's lines and their vanishing are staged in the oath scene (tk_story.py)
                 {"kind": "building.moongate", "id": "gate"},
             ],
             # The Star Lords of the plan (docs/three-kingdoms-plan.md), unnamed until World 11.
