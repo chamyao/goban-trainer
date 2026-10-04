@@ -955,6 +955,7 @@ async function viewTK(worldN) {
     const kit = WorldView.kit(), kits = Object.keys(WORLD_KITS), next = kits[(kits.indexOf(kit) + 1) % kits.length];
     root.querySelector(".tk-head-btns").prepend(h("button", { class: "tk-chron-btn", type: "button", title: `Switch to ${WORLD_KITS[next].en}`,
       onclick: () => { WorldView.setKit(next); viewTK(w.n); } }, `🎨 画风：${WORLD_KITS[kit].zh} ${WORLD_KITS[kit].en}`));
+    if (typeof WorldTravel !== "undefined") WorldTravel.addButtons(root.querySelector(".tk-head-btns"), w);   // map and start over (tk-travel.js)
     // Scenes replayed outside the node map: words only, no walking or effects.
     const still = { w, actors: {}, leader: { x: 0, y: 0 }, party: [], pos: () => ({ x: 0, y: 0 }), actor: () => null, moveActor: async () => {}, addFx: () => 0 };
     const run = async steps => { TKStory.busy = true; try { await TKStory.play(still, steps); } finally { TKStory.busy = false; } };
