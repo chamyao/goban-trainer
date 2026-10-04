@@ -31,7 +31,7 @@ ZH = {
         "汉朝传国四百年，到了灵帝，只信宦官。十常侍卖官鬻爵，陷害忠良。天下异象频生：青蛇盘踞御座，母鸡化为公鸡，黑气飞入宫殿。",
     "In Julu, a healer named Zhang Jiao preaches the Way of Great Peace. In the year 184 half a million rise behind him, yellow scarves on their heads, chanting: “The Blue Heaven is dead! The Yellow Heaven shall rise!”":
         "巨鹿人张角，传太平道，施符治病。中平元年，四五十万百姓头裹黄巾，随他造反，齐声高呼：“苍天已死，黄天当立！”",
-    "The governor of You Province posts a call for volunteers. The notice reaches Zhuo County…": "幽州太守刘焉出榜招募义兵。榜文传到了涿县……",
+    "The Yellow Turbans must be put down. The court sends its generals against them, and the governor of You Province posts a call for volunteers. The notice reaches Zhuo County…": "黄巾必须剿灭。朝廷遣将分三路讨之，幽州太守刘焉也出榜招募义兵。榜文传到了涿县……",
     # ---- the notice ----
     "The Notice at Zhuo": "涿县榜文",
     "Liu Bei, twenty-eight, descends from Prince Jing of Zhongshan — yet he sells sandals and weaves mats for a living. His ears reach his shoulders; his arms hang past his knees.":
@@ -189,7 +189,7 @@ ZH = {
     "Very good.": "如此甚好。",
     "The next day, in the peach garden behind Zhang Fei's farm, the blossoms are in full bloom.": "次日，张飞庄后的桃园中，花开正盛。",
     # ---- World 1 plot pass (from docs/world1-script-draft.md) ----
-    "Zhuo County. A crowd gathers at a notice on the wall: the governor is raising volunteers against the Yellow Turbans.": "涿县城中，众人围看墙上榜文：幽州太守刘焉出榜招募义兵，共破黄巾。",
+    "Zhuo County. A crowd gathers at a notice on the wall: the governor is raising volunteers to put down the Yellow Turbans.": "涿县城中，众人围看墙上榜文：幽州太守刘焉出榜招募义兵，讨平黄巾。",
     "Under an old tree by the road, two white-haired men sit over a weiqi board, as if no army were coming.": "路旁老树下，两位白发老人对坐弈棋，仿佛大军压境与他们无关。",
     "Read this first.": "先看这一局。",
     "To catch the bandits, first catch their king.": "擒贼先擒王。",

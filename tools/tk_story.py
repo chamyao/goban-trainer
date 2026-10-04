@@ -87,7 +87,7 @@ WORLDS = [
                 "The empire, long divided, must unite; long united, must divide.",
                 "The Han has ruled for four hundred years. Now Emperor Ling trusts only his eunuchs, the Ten Attendants, who sell offices and silence honest men. Omens fill the sky: a serpent coils on the throne, hens turn into cocks, black vapour drifts into the palace.",
                 "In Julu, a healer named Zhang Jiao preaches the Way of Great Peace. In the year 184 half a million rise behind him, yellow scarves on their heads, chanting: “The Blue Heaven is dead! The Yellow Heaven shall rise!”",
-                "The governor of You Province posts a call for volunteers. The notice reaches Zhuo County…",
+                "The Yellow Turbans must be put down. The court sends its generals against them, and the governor of You Province posts a call for volunteers. The notice reaches Zhuo County…",
             ]],
         ],
         "scenes": {
@@ -108,7 +108,7 @@ WORLDS = [
                 ["n", "He serves his mother with the utmost devotion."],
             ]},
             "notice": {"title": "The Notice at Zhuo", "kind": "main", "steps": [
-                ["n", "Zhuo County. A crowd gathers at a notice on the wall: the governor is raising volunteers against the Yellow Turbans."],
+                ["n", "Zhuo County. A crowd gathers at a notice on the wall: the governor is raising volunteers to put down the Yellow Turbans."],
                 ["n", "Liu Bei, twenty-eight, descends from Prince Jing of Zhongshan — yet he sells sandals and weaves mats for a living. His ears reach his shoulders; his arms hang past his knees."],
                 ["n", "He reads the notice, and sighs."],
                 ["spawn", "zf", "zhangfei", "n1", 30, 4],
