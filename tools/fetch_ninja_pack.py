@@ -48,7 +48,10 @@ for f in FOLK:
 PROPS = ["Ui/Emote/emote4.png", "Ui/Emote/emote19.png", "Ui/Emote/emote20.png", "Ui/Emote/emote22.png",
          "Ui/Emote/emote23.png", "Ui/Emote/emote27.png", "Ui/Emote/emote28.png",
          "Items/Tool/Anvil.png", "Items/Tool/Hammer.png", "Items/Object/Gourd.png", "Items/Object/MoneyBag.png",
-         "Items/Weapons/Sword/Sprite.png", "Items/Weapons/Lance/Sprite.png", "Items/Weapons/Lance2/Sprite.png"]
+         "Items/Weapons/Sword/Sprite.png", "Items/Weapons/Lance/Sprite.png", "Items/Weapons/Lance2/Sprite.png",
+         "Items/Object/Book.png", "Items/Object/CrateEmpty.png", "Items/Other/Letter.png", "Items/Other/Stamp.png",
+         "Items/Resource/BarIron.png", "Items/Resource/Branch.png", "Items/Weapons/Stick/Sprite.png",
+         "Actor/Animal/Cow/SpriteSheetWhiteSide.png"]
 for f in PROPS:
     FILES[f] = "props/" + f.split("/", 1)[1].replace("/Sprite.png", ".png").replace("/", "_")
 FILES["LICENSE.txt"] = "LICENSE.txt"
