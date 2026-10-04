@@ -3043,7 +3043,7 @@
    "spot": "spot-1-b2g",
    "scene": "staves",
    "title": "The Hero of Chaos · II-b: The Five-Coloured Staves",
-   "objective": "Side story: The Hero of Chaos · II-b: The Five-Coloured Staves.",
+   "objective": "Side story: the five-coloured staves at the city gates.",
    "after": [
     "1-b2"
    ],
@@ -3170,7 +3170,7 @@
      3367
     ]
    ],
-   "objective_zh": "",
+   "objective_zh": "支线：城门上的五色棒。",
    "title_zh": "乱世英雄·二之二：五色棒"
   },
   {
@@ -3180,7 +3180,7 @@
    "spot": "spot-1-f1",
    "scene": "fireplan",
    "title": "The Fire Plan",
-   "objective": "Side story: The Fire Plan.",
+   "objective": "Side story: the fire plan in the Han camp.",
    "after": [
     "1-b2g"
    ],
@@ -3308,7 +3308,7 @@
     ]
    ],
    "room": "camp",
-   "objective_zh": "",
+   "objective_zh": "支线：汉军营中的火攻之计。",
    "title_zh": "火攻之计"
   },
   {
