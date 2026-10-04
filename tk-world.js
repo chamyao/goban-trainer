@@ -98,8 +98,8 @@ const WorldGuide = {
       head: t % 3600 < 140 ? "HEAD_BLINK" : "HEAD", staff: { a: Math.max(-55, Math.min(70, a)), gx: 6, gy: -7 }, tail: 2 });
   },
   // Draw him with the cloud's centre at game pixel (gx, gy).
-  place(el, canvas, gameW, gx, gy, left, a, t) {
-    const k = canvas.clientWidth / gameW, s = .5 * k, root = el.parentNode.getBoundingClientRect(), r = canvas.getBoundingClientRect();
+  place(el, canvas, gameW, gx, gy, left, a, t, zoom = 1) {
+    const k = canvas.clientWidth / gameW, s = .5 * k * zoom, root = el.parentNode.getBoundingClientRect(), r = canvas.getBoundingClientRect();
     const c = el.getContext("2d");
     c.clearRect(0, 0, this.W, this.H);
     c.drawImage(this.nimbus(), 13, 45 + Math.round(Math.sin(t / 260)));   // the cloud first: he sits on it
@@ -274,6 +274,7 @@ function worldScenes() {
 
       const cam = this.cameras.main;
       cam.startFollow(this.player, true, .15, .15);
+      if (this.place.archetype === "overworld") cam.setZoom(.5);   // the realm from on high: a wide stretch of country, the party small
       cam.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
       cam.setRoundPixels(true);
       cam.fadeIn(350);
@@ -281,6 +282,7 @@ function worldScenes() {
       this.keys = this.input.keyboard.addKeys("W,A,S,D,UP,DOWN,LEFT,RIGHT,E,ENTER");
       for (const k of ["ENTER", "E"]) this.keys[k].on("down", () => this.act());
       this.ui = TownUI.mount(this, opts.host);
+      if (this.place.archetype === "overworld") this.overworldLabels(opts.host.querySelector(".town-ui"));
       // Wukong shows the way to the next objective: beside its spot when it's on screen,
       // else at the edge of the screen, pointing toward it (WorldGuide.on toggles him)
       // He's drawn over the game at screen resolution, so his pixel art keeps its detail.
@@ -457,6 +459,11 @@ function worldScenes() {
       const quests = this.available(q) ? [q] : this.leadsTo(q);
       const here = quests.find(x => x.place === this.placeId);
       this.goalHops = 0;
+      if (this.place.archetype === "overworld") {   // the entrance of the place the goal is in (a room's own place)
+        const top = id => { const p = this.region.places.find(x => x.id === id); return p && p.parent ? p.parent : id; };
+        for (const q of quests) { const e = this.exits.find(e => e.to === top(q.place)); if (e) { this.goalHops = 1; return { x: e.rect.centerX, y: e.rect.centerY }; } }
+        return null;
+      }
       if (here) { const s = Object.values(this.spots).find(s => s.node === here.node); return s ? { x: s.x, y: s.y - 4 } : null; }
       const goals = new Set(quests.map(x => x.place)), near = {};
       for (const p of this.region.places) for (const l of p.links || []) { (near[p.id] ||= new Set()).add(l); (near[l] ||= new Set()).add(p.id); }
@@ -478,6 +485,32 @@ function worldScenes() {
     // Wukong leads the way like a guiding spirit: he flies on ahead toward the goal,
     // waits there drifting in lazy loops, and darts on once you catch up. Near the
     // goal he settles over it. He moves on his own, gliding, never pinned to you.
+    // Overworld: each place's name over its entrance; locked ones dimmed, the goal's marked.
+    overworldLabels(root) {
+      if (!root) return;
+      const goalPlace = (() => { const q = this.nextMain(); if (!q) return null; const qs = this.available(q) ? [q] : this.leadsTo(q);
+        const p = this.region.places.find(x => x.id === (qs[0] && qs[0].place)); return p ? (p.parent || p.id) : null; })();
+      this.labels = this.exits.filter(e => e.to && this.region.places.some(p => p.id === e.to)).map(e => {
+        const el = document.createElement("div"), open = this.placeOpen(e.to), goal = e.to === goalPlace;
+        el.className = "town-label" + (open ? "" : " locked") + (goal ? " goal" : "");
+        el.innerHTML = `<b lang="zh-CN">${goal ? "◆ " : ""}${this.placeZh(e.to)}</b><span>${this.placeName(e.to)}${open ? "" : " · 未开放 locked"}</span>`;
+        root.append(el);
+        return { el, x: e.rect.centerX, y: e.rect.y };
+      });
+    }
+    placeLabels() {
+      if (!this.labels) return;
+      const cam = this.cameras.main, v = cam.worldView, cv = this.game.canvas, k = cv.clientWidth / this.scale.width;
+      const r = cv.getBoundingClientRect(), rr = this.labels[0] && this.labels[0].el.parentNode.getBoundingClientRect();
+      const hide = this.ui.busy() || !!this.cine;
+      for (const L of this.labels) {
+        const sx = (L.x - v.x) * cam.zoom, sy = (L.y - v.y) * cam.zoom;
+        const on = !hide && sx > -40 && sx < this.scale.width + 40 && sy > -10 && sy < this.scale.height + 20;
+        L.el.hidden = !on;
+        if (on) { L.el.style.left = `${r.left - rr.left + sx * k}px`; L.el.style.top = `${r.top - rr.top + sy * k}px`; }
+      }
+    }
+
     goalGuide(time) {
       const el = this.guide, t = this.goalAt;
       if (!el) return;
@@ -523,7 +556,7 @@ function worldScenes() {
       const sx = (t.x - v.x) * cam.zoom, sy = (t.y - v.y) * cam.zoom;
       const left = Math.abs(f.vx) > 12 ? f.vx < 0 : sx < gx;   // face where he's flying, else toward the goal
       const a = Math.atan2(-(sy - (gy - 12)), Math.abs(sx - gx)) * 180 / Math.PI;
-      WorldGuide.place(el, this.game.canvas, W, gx, gy, left, a, time);
+      WorldGuide.place(el, this.game.canvas, W, gx, gy, left, a, time, cam.zoom);
       el.say.hidden = !nudge;
     }
 
@@ -671,6 +704,7 @@ function worldScenes() {
       WorldFX.shadows(this);
       WorldFX.water(this, time);
       this.goalGuide(time);
+      this.placeLabels();
       this.nearSpots();
       const P = this.player, K = this.keys;
       let vx = 0, vy = 0;

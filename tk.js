@@ -1025,7 +1025,13 @@ async function viewTK(worldN) {
       panel.hidden = !open; toggle.setAttribute("aria-expanded", String(open)); toggle.textContent = open ? "菜单 Menu ▴" : "菜单 Menu ▾";
       host.focus();
     };
-    panel.addEventListener("click", e => { if (e.target.closest("button")) setTimeout(() => host.focus(), 0); });   // keep the keyboard on the game
+    panel.addEventListener("click", e => {
+      const b = e.target.closest("button");
+      if (!b) return;
+      // actions that take you somewhere close the menu; switches (voice, music, guide) leave it open to show their state
+      if (!b.hasAttribute("aria-pressed")) { panel.hidden = true; toggle.setAttribute("aria-expanded", "false"); toggle.textContent = "菜单 Menu ▾"; }
+      setTimeout(() => host.focus(), 0);   // keep the keyboard on the game
+    });
     host.append(h("div", { class: "tk-menu" }, [toggle, panel]));
     // Scenes replayed outside the node map: words only, no walking or effects.
     const still = { w, actors: {}, leader: { x: 0, y: 0 }, party: [], pos: () => ({ x: 0, y: 0 }), actor: () => null, moveActor: async () => {}, addFx: () => 0 };

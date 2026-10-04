@@ -216,8 +216,8 @@ const TownUI = {
         const cam = scene.cameras.main, cv = scene.game.canvas, k = cv.clientWidth / scene.scale.width;
         const r = cv.getBoundingClientRect(), rr = root.getBoundingClientRect();
         h.hidden = false;
-        h.style.left = (r.left - rr.left + (target.x - cam.worldView.x) * k) + "px";
-        h.style.top = (r.top - rr.top + (target.y - 30 - cam.worldView.y) * k) + "px";
+        h.style.left = (r.left - rr.left + (target.x - cam.worldView.x) * cam.zoom * k) + "px";
+        h.style.top = (r.top - rr.top + (target.y - 30 - cam.worldView.y) * cam.zoom * k) + "px";
       },
     };
   },
