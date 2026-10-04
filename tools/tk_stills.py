@@ -10,9 +10,11 @@ themselves:
 
     STYLE  one short style line, the end of every request (portraits too)
     CAST   each person's fixed look, added to every request that names them
-    refs   a portrait of each person in CAST (assets/tk/stills/refs/<key>.jpg),
-           made first and approved by eye, then sent with every still that
-           names them as a reference image, on models that take references
+    refs   images sent with the prompt, on models that take them (flux-2-klein,
+           up to 5): first any style images in assets/tk/stills/refs/style/
+           (art to match the look of; the user's, kept on the samples branch,
+           not in the game), then the approved portrait of each person the
+           still names (assets/tk/stills/refs/<key>.jpg, chosen with --pick)
 
 A request is built in this order, most important first (models weigh the
 start of a prompt most, and flux-schnell cuts off after ~256 tokens): the
@@ -21,15 +23,13 @@ words and name people only; their look belongs in CAST.
 """
 import re
 
-STYLE = ("Style: in the style of The God of High School key art: rough, energetic black ink line art with "
-         "scratchy brush strokes and loose hatching, flat bold colour fills with almost no gradients, a punchy "
-         "limited palette of saturated orange, hot pink and electric cyan, offset cyan and magenta shadow shapes, "
-         "pink halftone dot screens, ink splatter and paint flecks, motion streaks, dynamic foreshortened action "
-         "pose, graphic poster composition. Ancient China, 184 AD. "
-         "No text, no lettering, no borders, no letterbox bars.")
-# (the user's choice of look: The God of High School, from a piece of its key art they shared; named,
-# and described from that image, since models follow a description more reliably than a title alone.
-# The image itself isn't in the repo: it's the show's art, not ours to redistribute)
+STYLE = ("Style: modern Korean webtoon anime, in the style of The God of High School and Tower of God: crisp "
+         "black line art of varied weight, flat cel shading with one hard shadow tone, sharp angular faces, large "
+         "expressive eyes with bright highlights, spiky expressive hair, bright clean saturated colours. "
+         "Ancient China, 184 AD. No text, no lettering, no borders, no letterbox bars.")
+# (the user's choice of look, from God of High School and Tower of God images they shared, which go
+# with every request as style references (refs/style/, on the samples branch only: the shows' art
+# isn't ours to put in the game); named and described here too, for models that take no images)
 
 # key -> (name as the scenes write it, look)
 CAST = {
@@ -45,11 +45,21 @@ CAST = {
 }
 
 
-def portrait(key):
-    """The request for a person's reference portrait."""
+def style_note(n):
+    """What to say about n style reference images sent first."""
+    if not n:
+        return ""
+    which = "Reference image 1 shows" if n == 1 else f"Reference images 1-{n} show"
+    return (f"{which} the art style only: match its line work, colours, shading and texture, "
+            f"but not its characters, clothes, objects or background. ")
+
+
+def portrait(key, n_style=0):
+    """The request for a person's reference portrait: the face is what the stills need to keep."""
     name, look = CAST[key]
-    return (f"Character reference portrait of {name}, {look}. Full body, three-quarter view, a confident dynamic "
-            f"stance that shows his whole outfit, on a plain flat background. {STYLE}")
+    return (f"Character face portrait of {name}, {look}. Head and shoulders close-up, the face filling most of "
+            f"the frame, three-quarter view, a characteristic expression, plain flat background. "
+            f"{style_note(n_style)}{STYLE}")
 
 
 STILLS = {
@@ -112,12 +122,13 @@ def cast_in(sid):
     return [key for _, key in sorted(found)]
 
 
-def prompt(sid, refs=()):
-    """The full request for a still: scene, then the cast it names (pointing at their reference
-    images when refs, the keys sent as images in that order, are given), then the style."""
+def prompt(sid, n_style=0, cast_refs=()):
+    """The full request for a still: scene, then the cast it names, then the style. With reference
+    images, n_style style images come first, then a portrait for each key in cast_refs, in order."""
     parts = [STILLS[sid]["prompt"]]
     for key in cast_in(sid):
         name, look = CAST[key]
-        ref = f" (reference image {list(refs).index(key) + 1}: keep his face, hair and clothes)" if key in refs else ""
+        ref = (f" (reference image {n_style + list(cast_refs).index(key) + 1}: keep his face, hair and clothes)"
+               if key in cast_refs else "")
         parts.append(f"{name} is {look}{ref}.")
-    return " ".join(parts + [STYLE])
+    return " ".join(parts) + " " + style_note(n_style) + STYLE
