@@ -180,6 +180,31 @@ class Room:
         }
 
 
+def add_spot(r, node, label=""):
+    """A story spot inside a room: open floor in the middle, in front of the furniture."""
+    walk = {ch for ch, mat in LEGEND.items() if mat in FLOOR}
+    solid = {(xx, yy) for o in r["objects"] if KINDS[o["kind"]][2]
+             for yy in range(o["y"], o["y"] + o["h"]) for xx in range(o["x"], o["x"] + o["w"])}
+    taken = {(int(p["x"]), int(p["y"])) for p in r["npcs"]}
+    start = tuple(r["entries"][""])
+    seen, q = {start}, deque([start])
+    while q:
+        x, y = q.popleft()
+        for n in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
+            if n not in seen and 0 <= n[1] < len(r["terrain"]["rows"]) and 0 <= n[0] < len(r["terrain"]["rows"][0]) \
+                    and r["terrain"]["rows"][n[1]][n[0]] in walk and n not in solid:
+                seen.add(n)
+                q.append(n)
+    rows = [y for _, y in seen]
+    cx = sum(x for x, _ in seen) / len(seen)
+    cy = (min(rows) + max(rows)) / 2
+    x, y = min((c for c in seen if c not in taken and c != start),
+               key=lambda c: (abs(c[0] - cx) + abs(c[1] - cy), c))
+    spot = {"id": f"spot-{node}", "x": x + .5, "y": y + .7, "node": node, **({"label": label} if label else {})}
+    r["spots"].append(spot)
+    return spot["id"]
+
+
 def furnish_place(m, place, rooms, world_n):
     """Give every building in an outdoor map a door and a room. Returns the interiors."""
     out, counts = [], {}

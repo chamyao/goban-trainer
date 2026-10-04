@@ -19,7 +19,7 @@ ROOT = HERE.parent.parent
 sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(ROOT / "tools"))
 
-from interiors import furnish_place  # noqa: E402
+from interiors import add_spot, furnish_place  # noqa: E402
 from layout import layout  # noqa: E402
 from plot import build_region  # noqa: E402
 from tk_story_zh import ZH  # noqa: E402
@@ -47,6 +47,12 @@ def build(n):
         (d / f"{p['id']}.map.json").write_text(json.dumps(m, ensure_ascii=False, indent=1))
         places.append({"id": p["id"], "name": p["name"], "zh": ZH.get(p["name"], ""), "archetype": m["archetype"],
                        "map": f"{p['id']}.map.json", "links": p["links"] + [r["id"] for r in rooms]})
+        for q in region["quests"]:   # a story beat played inside a building
+            if q["place"] == p["id"] and q.get("room"):
+                r = next((r for r in rooms if r.get("building") == q["room"]), None)
+                if r is None:
+                    sys.exit(f"node {q['node']}: {p['id']} has no building with id {q['room']!r}")
+                q["place"], q["spot"] = r["id"], add_spot(r, q["node"], q["title"])
         for r in rooms:
             (d / f"{r['id']}.map.json").write_text(json.dumps(r, ensure_ascii=False, indent=1))
             kind_zh = ZH.get(r["name"].split(",")[0], "")
