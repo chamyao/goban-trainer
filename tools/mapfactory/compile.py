@@ -102,11 +102,12 @@ class Kit:
 
     def folk(self, kind, key):
         """The townsperson's sprite, and whether the game draws it like a hero (folk.drawn)."""
-        drawn = self.k["folk"].get("drawn")
-        if drawn:
+        drawn = self.k["folk"].get("drawn") or {}
+        kinds = self.k["folk"]["kinds"]
+        # drawn like a hero when the kit says so for this kind (or has no pack sprite for it)
+        if kind in drawn or (drawn and kind not in kinds):
             v = drawn.get(kind) or drawn[FOLK_FALLBACK]
             return v[zlib.crc32(key.encode()) % len(v)], True
-        kinds = self.k["folk"]["kinds"]
         v = kinds.get(kind) or kinds.get(FOLK_FALLBACK)
         i = zlib.crc32(key.encode()) % len(v)
         return f"{kind if kind in kinds else FOLK_FALLBACK}#{i}", False
