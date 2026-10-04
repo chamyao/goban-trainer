@@ -4,7 +4,7 @@ Draft revision of World 1 (ch. 1–2) for the emotion-first plan. Spine: **stran
 
 The emphasis is on staging, not speech: pauses, poses, effects and who stands where. Dialogue stays plain and short, and deaths play on screen.
 
-Scenes use the step format from `tools/tk_story.py`, plus a `"setting"` field (`"outdoor"`, `"indoor"`, or a list when a scene moves). This is a draft: nothing here is wired into `tk_story.py`, `tk_story_zh.py` or the voice build yet. Lines marked **[new]** are invented for the game and are not in the novel. Everything else follows ch. 1–2 from memory, not a checked comparison.
+Scenes use the step format from `tools/tk_story.py`, plus a `"setting"` field (`"outdoor"`, `"indoor"`, or a list when a scene moves). This is a draft: nothing here is wired into `tk_story.py`, `tk_story_zh.py` or the voice build yet. Lines marked **[new]** are invented for the game and are not in the novel. Everything else was checked against ch. 1–2 of the Chinese text (Luo Guanzhong, Project Gutenberg #23950); see "Source check" at the end for what that turned up.
 
 New cast needed: `oldman_n` (Northern Dipper, in dark robes) and `oldman_s` (Southern Dipper, in red). Both stay unnamed in World 1. They speak once per appearance.
 
@@ -71,7 +71,7 @@ New cast needed: `oldman_n` (Northern Dipper, in dark robes) and `oldman_s` (Sou
 ]},
 
 "daxing": {"title": "Five Hundred Against Fifty Thousand", "kind": "main", "setting": "outdoor", "steps": [
-    ["n", "The Yellow Turban general Cheng Yuanzhi marches on Zhuo with fifty thousand men. Liu Bei has five hundred, most of them farmers."],
+    ["n", "The Yellow Turban general Cheng Yuanzhi marches on Zhuo with fifty thousand men. Liu Bei has five hundred."],
     ["spawn", "oldmanN", "oldman_n", "n3", -40, 6],
     ["spawn", "oldmanS", "oldman_s", "n3", -34, 10],
     ["n", "Under an old tree beside the road, two white-haired men sit over a Go board. They do not look up."],   # [new]
@@ -127,8 +127,10 @@ New cast needed: `oldman_n` (Northern Dipper, in dark robes) and `oldman_s` (Sou
     ["wait", 1000],
     ["say", "zhangfei", "We bled to save that wretch and he treats us like dirt! I'll kill him!"],
     ["say", "liubei", "He is an officer of the court! You cannot."],
-    ["say", "zhangfei", "Then I won't serve under him. Stay if you like. I'm leaving."],
-    ["say", "liubei", "We swore to live and die together. If you go, we all go."],
+    ["say", "guanyu", "A court officer. You cannot kill him on your own."],
+    ["say", "zhangfei", "If I don't kill him I'll have to take his orders, and I won't. Stay here if you like. I'm going elsewhere."],
+    ["say", "liubei", "We three are bound in life and death. How could we part? We will all go elsewhere."],
+    ["say", "zhangfei", "That eases my anger a little."],
     ["wait", 1000],
     ["n", "That night they leave to join the general Zhu Jun instead."],
 ]},
@@ -144,7 +146,7 @@ New cast needed: `oldman_n` (Northern Dipper, in dark robes) and `oldman_s` (Sou
     ["n", "(A Go problem opens.)"],
     ["remove", "oldmanN"], ["remove", "oldmanS"],
     ["say", "zhujun", "Sorcery. Tomorrow, hide men on the hilltop with the blood of pigs, sheep and dogs. When his spirits come, drench them. The spell will break."],
-    ["say", "guanyu", "Then let him chase us up the hill."],
+    ["n", "Guan Yu and Zhang Fei each take a thousand men up the ridge behind the hill, with buckets of blood and filth."],
 ]},
 
 "bosswin": {"title": "The General of Earth Falls", "kind": "main", "setting": "outdoor", "steps": [
@@ -153,11 +155,11 @@ New cast needed: `oldman_n` (Northern Dipper, in dark robes) and `oldman_s` (Sou
     ["n", "Paper men and straw horses flutter to the ground. The wind dies. Liu Bei's arrow strikes Zhang Bao in the arm, and he flees into Yangcheng."],
     ["spawn", "zb", "zhangbao", "boss", 0, 20],
     ["spawn", "yz", "yanzheng", "boss", 24, 20],
-    ["n", "Besieged, with no way out, Zhang Bao stands at the gate of Yangcheng. His own officer, Yan Zheng, is behind him."],
+    ["n", "Zhu Jun's army surrounds Yangcheng. Zhang Bao holds the walls and will not come out. His own officer, Yan Zheng, is behind him."],
     ["wait", 800],
     ["move", "yz", "boss", 6, 20],
     ["pose", "yz", "strike"], ["fx", "flash", "boss", 0, 20], ["pose", "zb", "fall"],
-    ["n", "Yan Zheng kills him, and opens the gates."],
+    ["n", "Yan Zheng stabs him and carries his head out to surrender."],
     ["remove", "zb"], ["remove", "yz"],
 ]},
 ```
@@ -167,24 +169,36 @@ New cast needed: `oldman_n` (Northern Dipper, in dark robes) and `oldman_s` (Sou
 ```python
 "closing": [
     ["scroll", "The Yellow Turbans Fall", [
-        "Zhang Jiao died of illness at Guangzong. Huangfu Song beat Zhang Liang in seven battles and broke open the Great Teacher's coffin. The rebellion was over.",
+        "By the time Huangfu Song took over, Zhang Jiao was already dead. Huangfu Song beat Zhang Liang in seven battles and broke open the Great Teacher's coffin. The rebellion was over.",
         "At Wancheng, Liu Bei gave Zhu Jun some advice: “Surround them completely and every man fights to the death. Leave them one way out, and they will run.” It worked. There too, a young officer named Sun Jian was first over the wall, a name to remember.",
         "But the eunuchs gave rewards only to those who paid. For all his battles, Liu Bei was made a mere county sheriff, at Anxi.",
     ]],
-    # setting: outdoor (lodge gate and courtyard)
-    ["n", "Four months later an inspector arrived at Anxi, sitting high on his horse and demanding a bribe."],
+    # setting: outdoor (county office, road) → indoor (hostel hall) → outdoor (lodge gate and hitching post)
+    ["n", "At Anxi, Liu Bei governs for a month and wrongs no one. The three eat at one table and sleep in one bed. When Liu Bei sits among crowds, Guan Yu and Zhang Fei stand at his side all day without tiring."],
+    ["wait", 1000],
+    ["n", "Less than four months after he took office, an edict orders officers with military merit to be culled. Liu Bei fears he is among them. An inspector arrives."],
     ["spawn", "ins", "inspector", "boss", -30, 40],
+    ["n", "Liu Bei goes out of the city to greet him. The inspector stays on his horse and answers with a small flick of his whip. Guan Yu and Zhang Fei are furious."],
+    ["n", "At the hostel the inspector sits facing south; Liu Bei stands below the steps."],   # indoor: the hostel hall
+    ["say", "inspector", "What is your origin, Sheriff Liu?"],
+    ["say", "liubei", "I descend from Prince Jing of Zhongshan. I fought the Yellow Turbans from Zhuo County in over thirty battles."],
     ["say", "inspector", "You claim imperial blood and invent your merits! The court is purging frauds like you."],
-    ["n", "Zhang Fei, a few cups in, rode past the inspector's lodge and found fifty old villagers weeping at the gate."],
+    ["wait", 1000],
+    ["n", "Liu Bei goes home and consults his clerks. They tell him the inspector only wants a bribe. \u201cI have wronged the people of this county in nothing. Where would I find money?\u201d The inspector arrests the county clerks, and Liu Bei is turned away at the gate each time he comes to plead."],
+    ["n", "Zhang Fei, a few cups of gloomy wine in, rides past the hostel and finds fifty or sixty old villagers weeping at the gate."],
     ["spawn", "v1", "villager", "boss", -40, 50], ["spawn", "v2", "villager", "boss", -34, 54], ["spawn", "v3", "villager", "boss", -28, 50],   # [new] crowd, no lines
     ["wait", 1200],
+    ["n", "They say the inspector is pressing the clerks to ruin Liu Bei, and the gatekeepers have beaten them back."],
     ["move", "zhangfei", "boss", -20, 40],
-    ["say", "zhangfei", "Tormentor of the people! Do you know who I am?"],
+    ["say", "zhangfei", "Plunderer of the people! Do you know who I am?"],
+    ["n", "He drags the inspector out by the hair, to the hitching post before the county office, and ties him."],
     ["fx", "whip", "boss", -30, 34], ["fx", "whip", "boss", -30, 34], ["fx", "whip", "boss", -30, 34],
+    ["n", "Zhang Fei breaks ten or more willow switches on his legs."],
     ["say", "inspector", "Lord Xuande! Save my life!"],
-    ["say", "guanyu", "Brother, a phoenix does not roost among thorns. Let us kill him and go."],
+    ["n", "Liu Bei, who is a gentle man at heart, orders Zhang Fei to stop."],
+    ["say", "guanyu", "Brother, you won great merit and have only a sheriff's post, and now an inspector insults you. A phoenix does not roost among thorns. Let us kill him, give up the office, and make our plans elsewhere."],
     ["wait", 1200],
-    ["say", "liubei", "By your crimes you deserve to die. I spare you. Here is my seal of office. I am done with it."],
+    ["say", "liubei", "For what you have done to the people you deserve to die. I spare your life. I return my seal of office, and I am gone."],
     ["n", "He hangs the seal around the inspector's neck."],
     ["remove", "ins"], ["remove", "v1"], ["remove", "v2"], ["remove", "v3"],
     ["scroll", "Chapter 2", [
@@ -210,6 +224,21 @@ Unchanged from `tools/tk_story.py` for now. Settings, from the text:
 | caocao3 | outdoor |
 | horses | outdoor |
 | bribe (Lu Zhi's tent) | indoor |
+
+## Source check
+
+Compared against ch. 1–2 of the Chinese text. Matches and corrections:
+
+- **Matches:** Liu Bei's age and description; Zhang Fei meeting him at the notice (Zhang sells wine and slaughters pigs); Guan Yu at the inn; the oath wording, the ox and horse, and the 300 braves; Zhang Shiping and Su Shuang's horses, silver and iron; Daxing, Cheng Yuanzhi's 50,000 against 500, the deaths of Deng Mao and Cheng Yuanzhi; the Qingzhou retreat of 30 li, Guan Yu left, Zhang Fei right, gongs as signal; Lu Zhi's cage cart and Zhang Fei's wish to cut down the guards; Dong Zhuo's "commoner" exchange; Zhu Jun's pig, sheep and dog blood; Liu Bei's arrow in Zhang Bao's arm; Yan Zheng.
+- **Corrected in this draft:**
+  - Yan Zheng stabs Zhang Bao and brings his head to surrender; he does not "open the gates".
+  - The Dong Zhuo quarrel: Guan Yu also restrains Zhang Fei, and Zhang Fei answers Liu Bei with "that eases my anger".
+  - Zhang Jiao was already dead when Huangfu Song took over, so the scroll no longer says he "died of illness at Guangzong".
+  - Cut Guan Yu's "Then let him chase us up the hill", which isn't in the novel (it was in the existing `tk_story.py`).
+  - Cut "most of them farmers" from the five hundred.
+- **Added from the novel:** the Anxi interlude (three at one table, Guan Yu and Zhang Fei standing attendance), Liu Bei standing below the steps while the inspector sits, the inspector's whip-flick, Zhang Fei dragging him to the hitching post, and the willow switches.
+- **Still unadded:** Liu Bei's childhood mulberry tree at Louzang ("I will be emperor and ride this canopy"), and his devotion to his mother. A World 1 opening scene at the tree would suit the plan.
+- **Existing `tk_story.py` details to check:** "half a million" for the Yellow Turbans; the novel says 400–500 thousand (四五十萬).
 
 ## To do before this goes in
 
