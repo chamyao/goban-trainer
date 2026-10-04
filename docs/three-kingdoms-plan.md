@@ -206,6 +206,18 @@ scenes written for the node map carry over.
   (Zhang Fei's black face is opera face paint, not skin colour); Guan Yu's red
   face is kept because the novel describes it.
 
+## Missing art never blocks the story
+
+The story is free to use any prop or character the novel needs, even one that has not been drawn yet. Writing
+a scene never waits on art:
+
+- A prop kind the generator does not know is drawn as a labelled placeholder, and a character kind with no
+  sprite falls back to a folk stand-in (the generator never crashes on either).
+- `python3 tools/check_story.py --needs` writes `docs/graphics-needs.md`: every missing prop and character,
+  the scenes that use it, and the line of text that describes it. That file is the graphics build's work list.
+- Graphics draws the real thing, registers it, and it drops off the list the next time the script runs. Nobody
+  edits the list by hand.
+
 ## Adding a world
 
 1. Read the world's chapters in full.
