@@ -517,7 +517,9 @@ const TK = {
   party(w) { return this.ls("tk-party")[w.n] || w.party; },
   setParty(w, list) { const a = this.ls("tk-party"); a[w.n] = list; this.lsSet("tk-party", a); },
   problemRef(node) { const d = this.ls("tk-draw"); return node.pool[(d[node.key] || 0) % node.pool.length]; },
-  slip(node) { const d = this.ls("tk-draw"); d[node.key] = (d[node.key] || 0) + 1; this.lsSet("tk-draw", d); },
+  // A wrong move keeps the problem but rests it: TK_REST ms before it can be tried again.
+  rest(key) { const d = this.ls("tk-rest"); d[key] = Date.now() + TK_REST; this.lsSet("tk-rest", d); },
+  restLeft(key) { return Math.max(0, (this.ls("tk-rest")[key] || 0) - Date.now()); },
   // Walkable path between two nodes over open or cleared ground.
   route(w, from, to) {
     const ok = k => this.open(w, k) || this.cleared(k);
@@ -1200,6 +1202,7 @@ function tkLevelBuild(host, worldN, key, { w, node, src, p, book }, { back, agai
   host.append(player);
   host.classList.add("tk-enter");
   setTimeout(() => host.classList.remove("tk-enter"), 500);
+  if (TK.restLeft(key) > 0) tkRestLock(boardCard, key);
   trainer = new Trainer(book, 0, { svg, boardCard, status, turnBadge, btnExplore, treePanel, treeBox, note, noEngine: true });
   btnExplore.addEventListener("click", () => trainer.toggleExplore());
   window.__trainer = trainer;
@@ -1216,11 +1219,12 @@ function tkLevelBuild(host, worldN, key, { w, node, src, p, book }, { back, agai
       verdict.className = "tk-verdict win";
       verdict.append(h("b", {}, node.role === "boss" ? "★ 击败首领！Boss defeated!" : "★ 完美！Flawless!"), h("button", { onclick: back }, "继续 Continue ▸"));
     } else {
-      TK.slip(node);
+      TK.rest(key);
       verdict.className = "tk-verdict slip";
+      const retry = h("button", { disabled: "", onclick: () => { host.classList.add("tk-flip"); setTimeout(() => { host.classList.remove("tk-flip"); again(); }, 260); } }, "再试一次 Try again →");
       verdict.append(h("b", {}, e.detail === "ok" ? `解出了，但不算完美。Solved, but not flawless (${t.flawed}).` : "敌人识破了！The enemy saw through it!"),
-        h("span", {}, " 换个思路。Try another way."),
-        h("button", { onclick: () => { host.classList.add("tk-flip"); setTimeout(() => { host.classList.remove("tk-flip"); again(); }, 260); } }, "换一题 New problem →"));
+        h("span", {}, " 换个思路。Try another way."), retry);
+      tkRestLock(boardCard, key, () => { retry.disabled = false; });
     }
   };
   addEventListener("tczw:result", onResult);
@@ -1242,6 +1246,23 @@ async function viewTKLevel(worldN, key) {
     again: () => viewTKLevel(worldN, key),
     onWin: () => { try { sessionStorage.setItem("tk-return", JSON.stringify({ world: worldN, key, win: true })); } catch {} },
   });
+}
+
+const TK_REST = 30000;
+
+// Lock a board until its problem's rest is over: a countdown over the stones,
+// then onReady(). Leaving and coming back doesn't skip it (the end time is saved).
+function tkRestLock(board, key, onReady) {
+  const lock = h("div", { class: "tk-rest" });
+  board.append(lock);
+  const tick = () => {
+    if (!lock.isConnected) return;
+    const s = Math.ceil(TK.restLeft(key) / 1000);
+    if (s <= 0) { lock.remove(); if (onReady) onReady(); return; }
+    lock.innerHTML = `<b lang="zh-CN">休整片刻</b><span>${s}</span><small>Rest a moment before trying again</small>`;
+    setTimeout(tick, 250);
+  };
+  tick();
 }
 
 // Townsfolk who set problems, by challenger id (tools/tk_places.py).
@@ -1292,9 +1313,13 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
   if (node.boss) boardCard.prepend(h("div", { class: "tk-duel-bossname" }, [
     h("b", { lang: "zh-CN" }, TK_BOSS_ZH[node.boss.who] || tkName(node.boss.who)), h("span", {}, node.boss.title || "")]));
 
-  if (node.boss) say(node.boss.taunt_zh || "", node.boss.taunt);
-  else if (foe) say("请。你执黑先下。", "Your move. You play Black.");
-  else say("黑先。", "Black to play.");
+  const opening = () => {
+    if (node.boss) say(node.boss.taunt_zh || "", node.boss.taunt);
+    else if (foe) say("请。你执黑先下。", "Your move. You play Black.");
+    else say("黑先。", "Black to play.");
+  };
+  opening();
+  if (TK.restLeft(key) > 0) { say("先歇一歇，再来。", "Rest a moment, then try again."); tkRestLock(boardCard, key, opening); }
 
   trainer = new Trainer(Object.assign({}, src, { problems: [p] }), 0, { svg, boardCard, status, treePanel, ...hidden, noEngine: true });
   // Size the board to the window it sits in, keeping its shape (it's cropped to the corner in play).
@@ -1325,11 +1350,15 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
       else if (foe) say("好棋！我认输。", "Well played. I resign.", go("继续 Continue ▸", leave));
       else say("★ 完美！", "Flawless!", go("继续 Continue ▸", leave));
     } else {
-      TK.slip(node);
+      TK.rest(key);
       dlg.classList.add("slip");
       const how = e.detail === "ok" ? [`解出了，但不算完美（${t.flawed}）。`, `Solved, but not flawless (${t.flawed}).`]
         : foe ? ["哈！被我看穿了。换个思路吧。", "Ha! I saw through that. Try another way."] : ["敌人识破了！换个思路。", "The enemy saw through it! Try another way."];
-      say(how[0], how[1], go("换一题 New problem ▸", () => { box.classList.add("tk-flip"); setTimeout(() => { box.classList.remove("tk-flip"); again(); }, 260); }));
+      // the same problem again, from the start, once the rest is over
+      const retry = go("再试一次 Try again ▸", () => { box.classList.add("tk-flip"); setTimeout(() => { box.classList.remove("tk-flip"); again(); }, 260); });
+      retry.disabled = true;
+      say(how[0], how[1], retry);
+      tkRestLock(boardCard, key, () => { retry.disabled = false; });
     }
   };
   addEventListener("tczw:result", onResult);
