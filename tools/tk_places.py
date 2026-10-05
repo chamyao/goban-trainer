@@ -138,7 +138,7 @@ PLACES = {
             "banners": "yellow",
             "shrine": True,   # one of the four that light in World 1
             "landmarks": [{"kind": "rock.crag", "id": "pass", "node": "1-n3", "label": "The Yellow Turban line"}],
-            "objectives": {"1-n3": "Report to the governor with your five hundred."},
+            "objectives": {"1-n3": "Go to Daxing Mountain. The Yellow Turbans are marching on Zhuo."},
         },
         "Qingzhou": {
             "archetype": "city",
