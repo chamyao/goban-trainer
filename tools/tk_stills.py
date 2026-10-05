@@ -87,7 +87,7 @@ STYLES = {
     "try_90s": "Style: 1990s cel anime screenshot: hand-painted cels, clean outlines, flat colours with one hard shadow "
                "tone, simple painted background.",
     # the user: "the style tag is what needs to get cut" (scene and cast text unchanged)
-    "min": "",   # no style line at all: the scene and its people carry the picture
+    "min": "Style: 2D donghua.",   # one short line; the scene and its people carry the picture
     "genshin": "Style: in the style of Genshin Impact key art: polished anime cel shading, bright vivid colours, "
                "ornate gold trim and jade accents, glowing particles, clean detailed fantasy illustration.",
     "watercolor": "Style: Chinese watercolour painting: loose wet washes of colour bleeding softly on rice paper, "
