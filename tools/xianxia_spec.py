@@ -165,4 +165,4 @@ PROPS_GEN = {
 }
 
 # generated props that came out unreadable at this size: the kit keeps the drawn atlas frame for these
-PROPS_SKIP = {"prop.cart", "prop.anvil", "prop.steelbars", "prop.staves", "prop.switches", "prop.book"}
+PROPS_SKIP = {"prop.forge", "prop.cart", "prop.anvil", "prop.steelbars", "prop.staves", "prop.switches", "prop.book"}
