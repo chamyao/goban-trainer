@@ -758,7 +758,13 @@ function worldScenes() {
           if (c < (g.get(key(nx, ny)) ?? Infinity)) { g.set(key(nx, ny), c); from.set(key(nx, ny), [x, y]); open.push([c + h(nx, ny), nx, ny]); }
         }
       }
-      if (!g.has(key(gx, gy))) return null;
+      // the tap snapped into a pocket he can't get into (behind a table, say): go as close as he can
+      if (!g.has(key(gx, gy))) {
+        let best = null;
+        for (const k of g.keys()) { const x = k % G0.cols, y = (k - x) / G0.cols, d = h(x, y); if (!best || d < best[2]) best = [x, y, d]; }
+        if (!best || best[2] > 6) return null;
+        [gx, gy] = best;
+      }
       const cells = [];
       for (let c = [gx, gy]; c; c = from.get(key(c[0], c[1]))) cells.unshift(c);
       // keep only the turning points that can't be seen past
