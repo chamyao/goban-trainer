@@ -2,7 +2,7 @@
 
     python3 tools/build_portraits.py DIR    # DIR holds face_<who>--<n>.png (gen_stills --review output)
 
-Writes assets/tk/portraits/<who>.png (the figure on transparency, 720 px tall at most) and
+Writes assets/tk/portraits/<who>.webp (the figure on transparency, 720 px tall at most) and
 assets/tk/portraits/portraits.json ({who: file}), which the dialogue box reads (tk-town.js). The
 background is whatever near-white region touches the image's edge, so white inside the figure
 (a robe, a beard) stays. PICK chooses a try other than the first.
@@ -55,8 +55,8 @@ def main():
         im = cut(Image.open(p))
         if im.height > 720:
             im = im.resize((round(im.width * 720 / im.height), 720), Image.LANCZOS)
-        im.save(OUT / f"{who}.png", optimize=True)
-        man[who] = f"{who}.png"
+        im.save(OUT / f"{who}.webp", "WEBP", quality=86, method=6)   # with alpha, a tenth of the png
+        man[who] = f"{who}.webp"
         print(f"  {who}: {im.width}x{im.height}")
     man_path.write_text(json.dumps(dict(sorted(man.items())), indent=1))
     print(f"{len(man)} portraits in {OUT.relative_to(ROOT)}")

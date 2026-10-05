@@ -772,3 +772,4 @@ html.tk-fullwin-on, html.tk-fullwin-on body { overflow: hidden; overscroll-behav
 .town-ui.genshin .town-dlg.chat .town-more { color: #f0c76a; }
 .town-ui.genshin .town-dim { background: linear-gradient(to top, rgba(0, 0, 0, .35), transparent 60%); }
 @media (max-width: 600px) { .town-ui.genshin .town-portrait { height: 55%; } .town-ui.genshin .town-dlg.has-portrait { padding-left: 34%; } }
+.town-ui.genshin .town-dlg.chat, .town-ui.genshin .town-dlg.story { max-width: none; width: 100%; left: 0; right: 0; transform: none; border-radius: 0; }
