@@ -293,7 +293,7 @@ function worldScenes() {
       }
       // a town's shrine with no story spot of its own: touching it still answers (dark, or its hint)
       if (this.shrine && !Object.values(this.spots).some(s => Math.hypot(s.x - this.shrine.x, s.y - this.shrine.y) < 30))
-        this.spots.shrine_ = { x: this.shrine.x, y: this.shrine.y + 12, node: "", label: "The shrine", labelZh: "神龛", intro: [], outro: [], trigger: "talk", use: "shrine" };
+        this.spots.shrine_ = { x: this.shrine.x, y: this.shrine.y + 12, node: "", label: "The rock under the pine", labelZh: "松下盘石", intro: [], outro: [], trigger: "talk", use: "shrine" };
       this.refreshStory();
       for (const s of Object.values(this.spots)) {   // a story waiting here: a slow glow on the ground, gold for the main story, cooler for side stories
         const q = s.node && this.region.quests.find(x => x.node === s.node);
@@ -1312,11 +1312,11 @@ function worldScenes() {
     // Touching a shrine: dark, "the board is quiet"; settled, the Star Lords' hint again and where to go now.
     shrineTalk() {
       const q = this.shrineQuest();
-      if (!q || this.shrineState() === "dark") return this.talk([["n", "The board is quiet.", "棋盘寂静。"]]);
+      if (!q || this.shrineState() === "dark") return this.talk([["n", "A board scratched into the rock. No one is playing.", "石上刻着一副棋盘，无人对弈。"]]);
       const lines = [];
       if (q.hint) lines.push(["n", q.hint, q.hint_zh || ""]);
       if (this.goalText) lines.push(["n", this.goalText[0], this.goalText[1]]);
-      this.talk(lines.length ? lines : [["n", "The board is quiet.", "棋盘寂静。"]]);
+      this.talk(lines.length ? lines : [["n", "A board scratched into the rock. No one is playing.", "石上刻着一副棋盘，无人对弈。"]]);
     }
 
     // style: "story" for the plot (quest lead-ins and scenes), "chat" for everything else
