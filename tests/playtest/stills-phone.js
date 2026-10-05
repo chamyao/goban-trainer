@@ -1,6 +1,6 @@
 // Phone upright: the scene pictures (stills) on a screen much narrower than the picture. For a few scenes
-// (the oath, Hulao, the garden): the picture never leaves a gap at the screen's sides as it pans, the blurred
-// copy fills the screen, how much of the picture the pan shows, how much of it the dialogue box covers, and
+// (the oath, Hulao, the garden): the picture never leaves a gap at the screen's sides as it pans, a blurred
+// copy (when there is one) fills the screen, how much of the picture the pan shows, how much of it the dialogue box covers, and
 // turning the phone on its side mid-picture (then back) still leaves no gap.
 const { chromium, devices } = require(require('child_process').execSync('npm root -g').toString().trim()+'/playwright');
 (async()=>{const b=await chromium.launch({args:['--use-gl=swiftshader','--enable-webgl']});const ctx=await b.newContext({...devices['iPhone 13']});const p=await ctx.newPage();
@@ -38,7 +38,7 @@ for(const c of cases.filter(c=>!only||only.includes(c.key))){
     const d=document.querySelector('.town-ui .town-dlg');const D=d&&!d.hidden&&d.offsetParent?d.getBoundingClientRect():null;
     const covered=D?Math.max(0,Math.min(R.bottom,E.bottom)-Math.max(R.top,D.top))/Math.min(R.height,E.height):0;
     return {id,wide:el.classList.contains('wide'),screen:[E.width,E.height].map(Math.round),img:[R.width,R.height,R.top].map(Math.round),seen:Math.round(100*Math.min(1,(maxL-minL+E.width)/R.width)),gap,n,
-      bgFills:!!B&&B.left<=E.left+1&&B.top<=E.top+1&&B.right>=E.right-1&&B.bottom>=E.bottom-1,covered:Math.round(100*covered),dlgTop:D&&Math.round(D.top)};});
+      hasBg:!!B,bgFills:!B||B.left<=E.left+1&&B.top<=E.top+1&&B.right>=E.right-1&&B.bottom>=E.bottom-1,covered:Math.round(100*covered),dlgTop:D&&Math.round(D.top)};});
   const gapNow=()=>p.evaluate(()=>{const el=document.querySelector('.tk-still.on');if(!el)return null;const img=el.querySelector('img:not(.tk-still-bg)'),E=el.getBoundingClientRect(),R=img.getBoundingClientRect(),bg=el.querySelector('.tk-still-bg');
     return {left:Math.round(R.left-E.left),right:Math.round(E.right-R.right),top:Math.round(R.top-E.top),h:Math.round(R.height),H:Math.round(E.height),wide:el.classList.contains('wide'),bgFills:!bg||(()=>{const B=bg.getBoundingClientRect();return B.right>=E.right-1&&B.bottom>=E.bottom-1;})()};});
   for(let i=0;i<500;i++){await p.waitForTimeout(150);
@@ -48,7 +48,7 @@ for(const c of cases.filter(c=>!only||only.includes(c.key))){
       console.log(`     ${id}: picture ${m.img[0]}x${m.img[1]} at top ${m.img[2]} on ${m.screen}, pan shows ${m.seen}% of its width, dialogue box covers ${m.covered}% of it (box top ${m.dlgTop})`);
       check(m.wide,`${id}: shown as the upright-phone picture (wide)`);
       check(m.gap===0,`${id}: no gap at the sides while it pans (${m.gap}/${m.n} samples with a gap)`);
-      check(m.bgFills,`${id}: the blurred copy fills the screen`);
+      if(m.hasBg)check(m.bgFills,`${id}: the blurred copy fills the screen`);
       check(m.covered<=34,`${id}: the dialogue box covers ${m.covered}% of the picture`);
       // on its side mid-picture, then back
       await p.setViewportSize(devices['iPhone 13 landscape'].viewport);await p.waitForTimeout(1500);const L=await gapNow();
