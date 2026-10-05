@@ -327,5 +327,33 @@
     "beat": "Wang Yun on the burning gate tower beside the Emperor, facing the rebel army.",
     "scene": "A city gate tower on fire at dusk: Wang Yun, an old man in court robes, stands at the parapet with a small boy in an emperor's robe at his side, both looking down at a rebel army pouring through the streets below, smoke drifting past them. Wide shot from below, flames at the corners of the tower.",
     "notes": ""
+  },
+  "zhangbao_a": {
+    "book": 1,
+    "category": "omen",
+    "beat": "Who Zhang Bao is: the General of Earth on his hill before the battle.",
+    "scene": "Wide panoramic composition at dusk. On the left, Zhu Jun's Han camp with cooking fires and a line of spearmen below a ridge. In the middle, a long grassy valley. On the right, on a rocky hilltop, Zhang Bao stands before a small altar with a sword and paper charms, his long hair loose, yellow banners behind him, a thin dark cloud gathering over his head.",
+    "notes": "transition beat"
+  },
+  "tree_c": {
+    "book": 1,
+    "category": "peace",
+    "beat": "Liu Bei's mother and his boyhood: studying, friends, devotion.",
+    "scene": "Inside a poor country house in the afternoon: Liu Bei's mother sits at a loom by the door, weaving straw mats; on the right Liu Bei as a young man sits at a low table reading a bamboo scroll, and Gongsun Zan, a young man of his own age, sits across from him sharing the book. Through the open door on the left, the mulberry tree stands in the yard. Calm, plain overcast light.",
+    "notes": "transition beat"
+  },
+  "yingchuan_a": {
+    "book": 1,
+    "category": "aftermath",
+    "beat": "Changshe after the fire: Huangfu Song's army among the burnt grass.",
+    "scene": "Wide panoramic composition on an overcast morning. On the left, trampled burnt grass with smoke still rising and Yellow Turban banners lying flat. In the middle, Huangfu Song and Zhu Jun on horseback, looking over the field, with Han spearmen around them. On the right, Liu Bei, Guan Yu and Zhang Fei arriving at the head of their column on the road.",
+    "notes": "transition beat"
+  },
+  "bloodplan_a": {
+    "book": 1,
+    "category": "plan",
+    "beat": "The brothers plan the blood and the ridges, with the village pens below.",
+    "scene": "A hillside at the roadside shrine in grey afternoon light: on the left Liu Bei points down the hill toward a village of pens and huts; in the middle Guan Yu and Zhang Fei stand listening, Guan Yu pointing at one ridge and Zhang Fei at the other; on the right, the two ridges rise above the road. Only these three men.",
+    "notes": "transition beat"
   }
 }
