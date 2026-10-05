@@ -500,7 +500,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) this.data = await (await fetch("data/tk.json?v=32")).json();
+    if (!this.data) this.data = await (await fetch("data/tk.json?v=33")).json();
     return this.data;
   },
   ls(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } },
@@ -1403,10 +1403,19 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
   if (node.boss) boardCard.prepend(h("div", { class: "tk-duel-bossname" }, [
     h("b", { lang: "zh-CN" }, TK_BOSS_ZH[node.boss.who] || tkName(node.boss.who)), h("span", {}, node.boss.title || "")]));
 
-  const lord = foe && TK_SETTER_LINES[foe.who];
+  // A decision board: the leader's dilemma named over the board while the problem is open.
+  const dil = node.dilemma;
+  if (dil) boardCard.prepend(h("div", { class: "tk-duel-dilemma" }, [h("b", { lang: "zh-CN" }, dil.q_zh || ""), h("span", {}, dil.q)]));
+  const dline = k => dil && dil[k] ? [dil[k + "_zh"] || "", dil[k]] : null;
+  // each of the leader's lines (open/win/slip) replaces the usual one when given
+  const base = foe && TK_SETTER_LINES[foe.who];
+  const lord = dil && (dil.open || dil.win || dil.slip) ? {
+    open: dline("open") || (base ? base.open : ["黑先。", "Black to play."]),
+    win: dline("win") || (base ? base.win : ["★ 完美！", "Flawless!"]),
+    slip: dline("slip") || (base ? base.slip : TK_SETTER_LINES.stargrey.slip) } : base;
   const opening = () => {
     if (node.boss) say(node.boss.taunt_zh || "", node.boss.taunt);
-    else if (lord) say(...lord.open);
+    else if (lord) { say(...lord.open); if (dil && dil.open_vid && TKVoice.has(dil.open_vid)) TKVoice.play(dil.open_vid); }
     else if (foe) say("请。你执黑先下。", "Your move. You play Black.");
     else say("黑先。", "Black to play.");
   };
@@ -1439,7 +1448,7 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
       onWin();
       dlg.classList.add("win");
       if (node.boss) say("……我竟败了！", "…Defeated? Me?", go("继续 Continue ▸", leave));
-      else if (lord) say(...lord.win, go("继续 Continue ▸", leave));
+      else if (lord) { say(...lord.win, go("继续 Continue ▸", leave)); if (dil && dil.win_vid && TKVoice.has(dil.win_vid)) TKVoice.play(dil.win_vid); }
       else if (foe) say("好棋！我认输。", "Well played. I resign.", go("继续 Continue ▸", leave));
       else say("★ 完美！", "Flawless!", go("继续 Continue ▸", leave));
     } else {
@@ -1449,6 +1458,7 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
         : lord ? lord.slip
         : foe ? ["哈！被我看穿了。换个思路吧。", "Ha! I saw through that. Try another way."] : ["敌人识破了！换个思路。", "The enemy saw through it! Try another way."];
       say(how[0], how[1]);
+      if (e.detail !== "ok" && dil && dil.slip_vid && TKVoice.has(dil.slip_vid)) TKVoice.play(dil.slip_vid);
       // a moment to see what went wrong, then the same problem from the start, to study until the rest is over
       setTimeout(() => { if (box.isConnected) again(); }, 1800);
     }

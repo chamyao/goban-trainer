@@ -74,7 +74,7 @@ WORLDS = [
                        "objective": "Lift the siege of Qingzhou.", "at": "Qingzhou", "count": False}]},
             {"key": "t1", "x": 299, "y": 191, "role": "main", "place": "Guangzong Road", "room": "luzhi-tent", "step": 0.5, "scene": "tent"},
             {"key": "e1", "x": 352, "y": 186, "role": "main", "place": "Changshe", "step": 0.52, "scene": "yingchuan"},
-            {"key": "n5", "x": 316, "y": 176, "role": "main", "place": "Guangzong Road", "step": 0.55, "scene": "cart"},
+            {"key": "n5", "x": 316, "y": 176, "role": "main", "place": "Guangzong Road", "step": 0.55, "scene": "cart", "dilemma": {"q": "Free Lu Zhi, or trust the court?", "who": "liubei", "win": "It is clear to me now.", "slip": "Not yet. Let me think it through once more."}},
             {"key": "b1", "x": 342, "y": 214, "role": "side", "place": "Qiao", "room": "caohome", "step": 0.6, "scene": "caocao1"},
             {"key": "b2", "x": 378, "y": 230, "role": "side", "place": "Luoyang Gates", "room": "hall-1", "step": 0.65, "scene": "caocao2"},
             {"key": "b2g", "x": 386, "y": 224, "role": "side", "place": "Luoyang Gates", "step": 0.66, "scene": "staves"},
@@ -96,7 +96,7 @@ WORLDS = [
                  {"needs": ["mark:ridge_left", "mark:ridge_right"], "else": "bossearly2",
                   "objective": "Defeat the Black Wind.", "count": False, "at": "Hills of Black Wind"}]},
             {"key": "ax1", "x": 448, "y": 44, "role": "main", "place": "Anxi", "room": "hostel", "step": 0.95, "scene": "hostel"},
-            {"key": "ax2", "x": 462, "y": 26, "role": "main", "place": "Anxi", "step": 0.97, "scene": "post"},
+            {"key": "ax2", "x": 462, "y": 26, "role": "main", "place": "Anxi", "step": 0.97, "scene": "post", "dilemma": {"q": "Kill the inspector, or spare him?", "who": "liubei", "win": "I know what I must do.", "slip": "Not yet. I cannot bring myself to say it."}},
         ],
         "edges": [["start", "c1"], ["c1", "n1"], ["n1", "i1"], ["i1", "n2"], ["as", "a1"], ["a1", "a2"], ["a2", "a3"], ["a3", "n3"],
                   ["n2", "as"], ["as", "n3"], ["n3", "n4"], ["n4", "n4b"], ["n4b", "t1"], ["t1", "e1"], ["e1", "n5"], ["n5", "b1"], ["b1", "b2"], ["b2", "b2g"], ["b2g", "f1"], ["f1", "b3"],
@@ -323,7 +323,8 @@ WORLDS = [
                 ["say", "luzhi", "Xuande! I had Zhang Jiao surrounded. But the court's envoy demanded a bribe, and I refused him. Now I go to the capital in chains, and Dong Zhuo takes my army."],
                 ["camera", "zoom", 1, 500], ["emote", "zhangfei", "anger"],
                 ["say", "zhangfei", "I'll cut down these guards and set him free!"],
-                ["problem"],  # the board comes up here; the rest plays once it is solved
+                ["n", "Liu Bei looks at the cart, at the four guards, at Zhang Fei's hand on his blade."],
+                ["problem"],  # the board is Liu Bei weighing it; solving it is the choice
                 ["say", "liubei", "The court will judge him fairly. Don't be rash, Yide!"],
                 ["wait", 1200],
                 ["emote", "lz", "..."],
@@ -579,7 +580,6 @@ WORLDS = [
                 ["n", "The inspector is forcing the clerks to accuse Liu Bei, they tell him, and the gatekeepers beat them away when they come to plead for him."],
                 ["spawn", "ins", "inspector", "ax2", 30, 0], ["prop", "post", "post", "ax2", 20, 0],
                 ["say", "zhangfei", "Tormentor of the people! Do you know who I am?"],
-                ["problem"],  # the board comes up here; the rest plays once it is solved
                 ["n", "He drags the inspector out by the hair, to the hitching post before the county office, and ties him there."],
                 ["move", "ins", "ax2", 20, 0],
                 ["fx", "whip", "ax2", 20, 0], ["fx", "whip", "ax2", 20, 0], ["fx", "whip", "ax2", 20, 0],
@@ -590,6 +590,7 @@ WORLDS = [
                 ["n", "Liu Bei, a gentle man at heart, orders Zhang Fei to stop."],
                 ["say", "guanyu", "Brother, you won great merit and were given only a sheriff's post, and now an inspector insults you. A phoenix does not roost among thorns. Let us kill him, give up the office, and make greater plans elsewhere."],
                 ["wait", 1200],
+                ["problem"],  # the board is Liu Bei weighing it; solving it is the choice
                 ["prop", "seal", "seal", "ax2", 12, -4],
                 ["n", "He hangs the seal around the inspector's neck."],
                 ["say", "liubei", "For what you have done to the people you deserve to die. I spare your life. I return my seal of office, and I am gone."],

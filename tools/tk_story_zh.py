@@ -73,6 +73,13 @@ ZH = {
     "Xuande! I had Zhang Jiao surrounded. But the court's envoy demanded a bribe, and I refused him. Now I go to the capital in chains, and Dong Zhuo takes my army.":
         "玄德！我围张角，眼看就要破贼。朝廷派来的使者向我索贿，我不肯给。如今我被押解进京，兵马交给了董卓。",
     "I'll cut down these guards and set him free!": "我去杀了这些押送的军士，救出卢中郎！",
+    "Liu Bei looks at the cart, at the four guards, at Zhang Fei's hand on his blade.": "玄德看看囚车，看看四名军士，又看看张飞按剑的手。",
+    "It is clear to me now.": "我明白了。",
+    "Not yet. Let me think it through once more.": "且慢，容我再想想。",
+    "I know what I must do.": "我知道该怎么做了。",
+    "Not yet. I cannot bring myself to say it.": "且慢，我实在说不出口。",
+    "Free Lu Zhi, or trust the court?": "劫囚车救卢植，还是信朝廷？",
+    "Kill the inspector, or spare him?": "杀督邮，还是饶他一命？",
     "The court will judge him fairly. Don't be rash, Yide!": "朝廷自有公论，翼德不可造次！",
     # ---- Dong Zhuo ----
     "“What Office Do You Hold?”": "现居何职",
