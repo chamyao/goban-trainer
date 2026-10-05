@@ -13,7 +13,8 @@
 
 const WORLD_CLUTTER = /^(plant\.|rock\.small)/;  // drawn underfoot
 const WORLD_KIT = "xianxia";  // the default look; the campaign page's art button switches (localStorage tk-kit)
-const WORLD_KITS = { jade: { zh: "玉", en: "Jade" }, ninja: { zh: "忍者", en: "Ninja Adventure" }, xianxia: { zh: "仙侠", en: "Xianxia (generated)" } };
+const WORLD_KITS = { jade: { zh: "玉", en: "Jade" }, ninja: { zh: "忍者", en: "Ninja Adventure" }, xianxia: { zh: "仙侠", en: "Xianxia (generated)" },
+  genshin: { zh: "原神", en: "Genshin (isometric)", iso: true } };   // iso: drawn for the isometric view (tk-iso.js)
 
 /* ---------- where you are in a world: place, position, party, places seen ---------- */
 const WorldState = {
@@ -31,7 +32,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=29`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=30`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
@@ -213,9 +214,9 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=29`);
-      this.load.json("kit", `assets/tk/kits/${kit}.json?v=16`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=28`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=30`);
+      this.load.json("kit", `assets/tk/kits/${kit}.json?v=26`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=30`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
@@ -224,7 +225,7 @@ function worldScenes() {
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
       for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=39`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=44`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -259,10 +260,14 @@ function worldScenes() {
       const map = this.make.tilemap({ key: `map-${this.placeId}` });
       const sets = map.tilesets.map(ts => map.addTilesetImage(ts.name, `kit-${ts.name}`));
       this.water = null;
+      const layers = [];
       for (const l of map.layers) {
         const layer = map.createLayer(l.name, sets, 0, 0).setDepth(-1000);
+        layers.push(layer);
         if (l.name === "water") { layer.setCollisionByExclusion([-1]); this.water = layer; }
       }
+      // an isometric kit: the same flat map, drawn as a diamond world (tk-iso.js)
+      this.iso = typeof WorldIso !== "undefined" && WorldIso.on(kit) ? WorldIso.mount(this, map, layers) : null;
       this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
       this.solids = this.physics.add.staticGroup(); this.buildings = [];
       for (const who of new Set(["liubei", ...this.st.party])) this.hero(who);
@@ -321,14 +326,14 @@ function worldScenes() {
       const cam = this.cameras.main;
       cam.startFollow(this.player, true, .15, .15);
       if (this.place.archetype === "overworld") cam.setZoom(.5);   // the realm from on high: a wide stretch of country, the party small
-      this.mapW = map.widthInPixels; this.mapH = map.heightInPixels;
+      this.mapW = this.iso ? this.iso.width : map.widthInPixels; this.mapH = this.iso ? this.iso.height : map.heightInPixels;
       this.fitCamera();
       cam.setRoundPixels(true);
       cam.fadeIn(350);
 
       this.keys = this.input.keyboard.addKeys("W,A,S,D,UP,DOWN,LEFT,RIGHT,E,ENTER");
       // tap (or click) to walk there, tap someone to talk, a building to go in; hold and drag to steer
-      this.input.on("pointerdown", p => this.tapAt(p.worldX, p.worldY));
+      this.input.on("pointerdown", p => { const q = this.flat(p.worldX, p.worldY); this.tapAt(q.x, q.y, p.worldX, p.worldY); });
       this.input.on("pointermove", p => { this.steer(p); this.hover(p); });
       // After a talk closes, a key starts another only after a pause in pressing (or once he's taken a
       // step): mashing Enter through a talk doesn't loop it. Taps still talk at once.
@@ -374,6 +379,10 @@ function worldScenes() {
         else if (typeof TKTable !== "undefined") TKTable.arrived(this);   // back from signing in at the go table
       });
     }
+
+    // Where a point of the flat map is drawn (the isometric view moves it), and back.
+    view(x, y) { return this.iso ? this.iso.P(x, y) : { x, y }; }
+    flat(x, y) { return this.iso ? this.iso.inv(x, y) : { x, y }; }
 
     // The camera's bounds: the map, or, where the map is smaller than the view (a room on a
     // phone held upright), a frame around it so it sits in the middle instead of the top corner.
@@ -442,14 +451,15 @@ function worldScenes() {
         const sheet = this.kit.kinds[o.name.split("#")[0]][+o.name.split("#")[1]][0];
         img = this.add.image(Math.round(o.x), Math.round(o.y), `kit-${sheet}`, o.name).setOrigin(.5, 1);
         img.setDepth(WORLD_CLUTTER.test(p.kind) ? o.y - 400 : o.y);
+        if (this.iso && !WORLD_CLUTTER.test(p.kind)) WorldIso.anchor(this, img, o.x, o.y - p.fh / 2, p.fw, p.fh);   // stands on its footprint
         if (p.kind === "landmark.shrine") {   // the Star Lords' shrine: its look follows the story (setShrine)
           this.shrine = { img, x: o.x, y: o.y, state: "dark", fx: [] };
           this.setShrine(TK.shrineState?.(this.w.n, this.placeId) || "dark");
         }
       }
       if (img && !/^(building\.|tree\.|ground\.|deco\.)/.test(p.kind || "") && img.width <= 64)
-        (this.propBoxes = this.propBoxes || []).push({ cx: o.x, x0: o.x - img.width / 2, x1: o.x + img.width / 2, y0: o.y - img.height, y1: o.y });
-      if (img && /^building\./.test(p.kind || "")) this.buildings.push({ x: o.x, bottom: o.y, w: img.width, h: img.height });
+        (this.propBoxes = this.propBoxes || []).push({ cx: o.x, x0: o.x - img.width / 2, x1: o.x + img.width / 2, y0: o.y - img.height, y1: o.y, img });
+      if (img && /^building\./.test(p.kind || "")) this.buildings.push({ x: o.x, bottom: o.y, w: img.width, h: img.height, img });
       // a building's wall follows its art, which is often wider or narrower than its footprint:
       // cl and cr either side of its centre (worked out with its neighbours by the map tools)
       const l = p.cl || p.fw / 2, r = p.cr || p.fw / 2;
@@ -717,7 +727,7 @@ function worldScenes() {
       const r = cv.getBoundingClientRect(), rr = this.labels[0] && this.labels[0].el.parentNode.getBoundingClientRect();
       const hide = this.ui.busy() || !!this.cine;
       for (const L of this.labels) {
-        const sx = (L.x - v.x) * cam.zoom, sy = (L.y - v.y) * cam.zoom;
+        const at = this.view(L.x, L.y), sx = (at.x - v.x) * cam.zoom, sy = (at.y - v.y) * cam.zoom;
         const on = !hide && sx > -40 && sx < this.scale.width + 40 && sy > -10 && sy < this.scale.height + 20;
         L.el.hidden = !on;
         if (on) { L.el.style.left = `${r.left - rr.left + sx * k}px`; L.el.style.top = `${r.top - rr.top + sy * k}px`; }
@@ -767,8 +777,9 @@ function worldScenes() {
       const nudge = dist > 120 && f.still > 2500 && (f.still - 2500) % 6000 < 1800;
       // onto the screen (he stays in view at the edge if he's flown on beyond it)
       const cam = this.cameras.main, v = cam.worldView, W = this.scale.width, H = this.scale.height;
-      const gx = Math.max(14, Math.min(W - 14, (f.x - v.x) * cam.zoom)), gy = Math.max(26, Math.min(H - 6, (f.y - v.y) * cam.zoom)) + Math.sin(time / 330) * 1.5;
-      const sx = (t.x - v.x) * cam.zoom, sy = (t.y - v.y) * cam.zoom;
+      const fv = this.view(f.x, f.y), tv = this.view(t.x, t.y);
+      const gx = Math.max(14, Math.min(W - 14, (fv.x - v.x) * cam.zoom)), gy = Math.max(26, Math.min(H - 6, (fv.y - v.y) * cam.zoom)) + Math.sin(time / 330) * 1.5;
+      const sx = (tv.x - v.x) * cam.zoom, sy = (tv.y - v.y) * cam.zoom;
       const left = Math.abs(f.vx) > 12 ? f.vx < 0 : sx < gx;   // face where he's flying, else toward the goal
       const a = Math.atan2(-(sy - (gy - 12)), Math.abs(sx - gx)) * 180 / Math.PI;
       WorldGuide.place(el, this.game.canvas, W, gx, gy, left, a, time, cam.zoom);
@@ -876,6 +887,12 @@ function worldScenes() {
       this.save();
       this.setGoal();
       if (q.role === "boss" && this.opts.onBoss) await this.opts.onBoss();
+      // that was the book's last main beat: a moment, a fade, and on into the next book
+      if (q.role !== "side" && q.role !== "short" && !this.nextMain() && this.opts.onBookDone && TK.world(this.w.n + 1)) {
+        this.goal(`Book ${this.w.n} is complete. On to Book ${this.w.n + 1}…`, `第${this.w.n}卷完。前往第${this.w.n + 1}卷……`);
+        this.leaving = true;
+        this.time.delayedCall(1800, () => { this.cameras.main.fadeOut(600); this.time.delayedCall(650, () => this.opts.onBookDone()); });
+      }
     }
 
     // Bring up the problem over the map; resolves true on a flawless solve.
@@ -991,16 +1008,21 @@ function worldScenes() {
     }
     // What's under a point of the world: someone (their figure, not the ground beside them),
     // a story spot, or a building's door; null for open ground.
-    pick(x, y) {
+    // sx, sy: the tap as drawn (the isometric view); each thing is then tested against the tap as it
+    // falls on that thing's own picture, which stands up from its feet, not lies on the ground
+    pick(x, y, sx, sy) {
+      const at = this.tapOn(x, y, sx, sy);
       // forgiving: a fingertip (about 44 screen px) anywhere near someone's figure, or on the thing a
       // story spot is (its notice board, its table), counts; the nearest wins
       const cv = this.game.canvas, k = cv.clientWidth ? cv.clientWidth / this.scale.width : 1, r = Math.max(9, 22 / (this.cameras.main.zoom * k));
       const toBox = (b, x, y) => Math.hypot(Math.max(b.x0 - x, 0, x - b.x1), Math.max(b.y0 - y, 0, y - b.y1));
-      const who = this.npcs.filter(n => n.spr.visible).map(n => ({ n, d: toBox({ x0: n.spr.x - n.spr.width / 2 + 2, x1: n.spr.x + n.spr.width / 2 - 2, y0: n.spr.y - n.spr.height, y1: n.spr.y + 3 }, x, y) }))
+      const who = this.npcs.filter(n => n.spr.visible).map(n => { const t = at(n.spr.x, n.spr.y);
+        return { n, d: toBox({ x0: n.spr.x - n.spr.width / 2 + 2, x1: n.spr.x + n.spr.width / 2 - 2, y0: n.spr.y - n.spr.height, y1: n.spr.y + 3 }, t.x, t.y) }; })
         .filter(o => o.d <= r).sort((a, b) => a.d - b.d)[0];
       const spot = Object.entries(this.spots).map(([key, s]) => {
-        let d = Math.hypot(s.x - x, s.y - y);
-        for (const b of this.propBoxes || []) if (Math.hypot(b.cx - s.x, b.y1 - s.y) < 28) d = Math.min(d, toBox(b, x, y));
+        const t = at(s.x, s.y);
+        let d = Math.hypot(s.x - t.x, s.y - t.y);
+        for (const b of this.propBoxes || []) if (Math.hypot(b.cx - s.x, b.y1 - s.y) < 28) { const u = at(b.cx, b.y1, b.img); d = Math.min(d, toBox(b, u.x, u.y)); }
         return { key, s, d };
       }).filter(o => o.d <= Math.max(18, r)).sort((a, b) => a.d - b.d)[0];
       if (who && (!spot || who.d <= spot.d)) return { kind: "npc", n: who.n };
@@ -1010,15 +1032,25 @@ function worldScenes() {
       const doorway = e => e.side === "N" && e.rect.width < 16;
       const door = this.exits.filter(e => doorway(e)
           // the building itself (its face, from the door up), not the road in front of it
-          ? this.onBuilding(e, x, y) && this.placeOpen(e.to)
+          ? this.onBuilding(e, x, y, at) && this.placeOpen(e.to)
           : x > e.rect.x - 20 && x < e.rect.right + 20 && y > e.rect.y - 20 && y < e.rect.bottom + 20)
         .sort((a, b) => Math.hypot(a.rect.centerX - x, a.rect.centerY - y) - Math.hypot(b.rect.centerX - x, b.rect.centerY - y))[0];
       if (door) return { kind: "door", e: door };
       return null;
     }
+    // The tap as it falls on a thing standing at (ox, oy): flat, the tap itself; isometric, the point the
+    // same distance from (ox, oy) as the tap is from where the thing is drawn (img.isoAt: a building's footprint).
+    tapOn(x, y, sx, sy) {
+      if (!this.iso || sx == null) return () => ({ x, y });
+      return (ox, oy, img) => {
+        const a = img && img.isoAt, q = a ? this.iso.P(a[0], a[1]) : this.iso.P(ox, oy);
+        return { x: ox + sx - q.x, y: oy + sy - q.y - (a ? a[2] : 0) };
+      };
+    }
     // A tap on the building a door belongs to (as drawn), or just above its door.
-    onBuilding(e, x, y) {
+    onBuilding(e, x, y, at = () => ({ x, y })) {
       const b = (this.buildings || []).find(b => Math.abs(b.x - e.rect.centerX) < b.w / 2 && Math.abs(b.bottom - e.rect.bottom) < 20);
+      if (b && this.iso) { const t = at(b.x, b.bottom, b.img); return Math.abs(t.x - b.x) < b.w / 2 && t.y > b.bottom - b.h && t.y < b.bottom; }
       if (b) return Math.abs(x - b.x) < b.w / 2 && y > b.bottom - b.h && y < e.rect.bottom;
       return Math.abs(x - e.rect.centerX) < 22 && y > e.rect.centerY - 48 && y < e.rect.bottom;
     }
@@ -1029,10 +1061,10 @@ function worldScenes() {
       spr._fw = spr.width; spr._fh = spr.height;
     }
     canMove() { return !this.ui.busy() && !this.seated && !this.leaving && !this.cine && !this.approaching; }
-    tapAt(x, y) {
+    tapAt(x, y, sx, sy) {
       if (this.ui.busy()) return this.act();   // tap on through dialogue
       if (!this.canMove()) return;              // (at the go table, its own panel has the buttons)
-      const P = this.player, t = this.pick(x, y);
+      const P = this.player, t = this.pick(x, y, sx, sy);
       let tx = x, ty = y + 4, then = null, aim = null, door = null;
       if (t && t.kind === "npc") {   // walk up to them, face them, talk
         const who = t.n, sides = [[0, 14, "up"], [0, -12, "down"], [-14, 2, "right"], [14, 2, "left"]].map(([dx, dy, f]) => ({ x: who.spr.x + dx, y: who.spr.y + dy, f }));
@@ -1065,11 +1097,12 @@ function worldScenes() {
       const now = this.time.now;
       if (now - (this.steerAt || 0) < 160) return;
       this.steerAt = now;
-      this.walkTo(p.worldX, p.worldY + 4, { ring: false });
+      const q = this.flat(p.worldX, p.worldY);
+      this.walkTo(q.x, q.y + 4, { ring: false });
     }
     // Over something you can tap: the hand cursor (a mouse; touch has none).
     hover(p) {
-      const c = this.game.canvas, t = this.canMove() && this.pick(p.worldX, p.worldY);
+      const q = this.flat(p.worldX, p.worldY), c = this.game.canvas, t = this.canMove() && this.pick(q.x, q.y, p.worldX, p.worldY);
       c.style.cursor = t || this.ui.busy() ? "pointer" : "";
     }
     // The direction to the next point on the walk; at the end, turn to face and talk if a tap asked for it.
@@ -1153,7 +1186,7 @@ function worldScenes() {
       if (spot.use === "shrine") return this.shrineTalk();
       const q = this.region.quests.find(x => x.node === spot.node);
       if (q && q.shrine && !this.available(q)) return this.shrineTalk();
-      if (q && this.available(q)) this.playQuest(q, spot);
+      if (q && this.available(q)) this.approach(q, spot);   // the same face-and-beat start as walking in
       else if (q && this.done(q.node)) this.talk([["n", `${spot.label || q.title}. (${q.title}: done.)`,
         q.title_zh ? `${spot.labelZh || q.title_zh}。（${q.title_zh}：已完成）` : ""]]);
       else this.talk([["n", `${spot.label || "Nothing here"}. It isn't time yet.`, `${spot.labelZh || "这里"}。时候还没到。`]]);
@@ -1328,6 +1361,7 @@ const WorldView = {
     host.addEventListener("mousedown", () => host.focus());
     const [gw, gh] = this.size(host);
     this.game = new Phaser.Game({
+      loader: { crossOrigin: "anonymous" },   // in the Android app the files come from the live site
       type: Phaser.AUTO, parent: host, width: gw, height: gh, pixelArt: true, roundPixels: true, backgroundColor: "#1b2418",
       // Move by real elapsed time, so walking keeps its speed when the browser drops
       // frames (laptops on battery often do): no fixed 60 Hz physics step to fall

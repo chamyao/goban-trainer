@@ -18,6 +18,8 @@
    "map": "pingyuan.map.json",
    "links": [
     "the-lords-camp",
+    "beimang-hill",
+    "luoyang",
     "pingyuan--house-1",
     "pingyuan--house-2",
     "pingyuan--house-3",
@@ -77,8 +79,8 @@
    "links": [
     "pingyuan",
     "sishui-gate",
-    "beimang-hill",
-    "luoyang",
+    "yongan-palace",
+    "l-boshes-farm",
     "the-lords-camp--council",
     "the-lords-camp--tent-1",
     "the-lords-camp--tent-2",
@@ -150,9 +152,6 @@
    "links": [
     "the-lords-camp",
     "hulao-pass",
-    "yongan-palace",
-    "xingyang",
-    "burned-luoyang",
     "sishui-gate--table"
    ]
   },
@@ -175,9 +174,7 @@
    "map": "hulao-pass.map.json",
    "links": [
     "sishui-gate",
-    "burned-luoyang",
-    "xianshan",
-    "wang-yuns-garden"
+    "burned-luoyang"
    ]
   },
   {
@@ -188,9 +185,9 @@
    "map": "burned-luoyang.map.json",
    "links": [
     "hulao-pass",
-    "sishui-gate",
+    "xingyang",
     "xianshan",
-    "changan",
+    "wang-yuns-garden",
     "burned-luoyang--court"
    ]
   },
@@ -212,7 +209,7 @@
    "archetype": "hills",
    "map": "beimang-hill.map.json",
    "links": [
-    "the-lords-camp",
+    "pingyuan",
     "wenming-garden"
    ]
   },
@@ -389,7 +386,7 @@
    "map": "yongan-palace.map.json",
    "links": [
     "ding-yuans-camp",
-    "sishui-gate",
+    "the-lords-camp",
     "yongan-palace--upper",
     "yongan-palace--house-1",
     "yongan-palace--house-2",
@@ -459,7 +456,7 @@
    "archetype": "city",
    "map": "luoyang.map.json",
    "links": [
-    "the-lords-camp",
+    "pingyuan",
     "zhongmou",
     "luoyang--hall",
     "luoyang--hall-1",
@@ -650,7 +647,7 @@
    "map": "l-boshes-farm.map.json",
    "links": [
     "zhongmou",
-    "xingyang",
+    "the-lords-camp",
     "l-boshes-farm--farm",
     "l-boshes-farm--house-1",
     "l-boshes-farm--house-2",
@@ -708,8 +705,7 @@
    "archetype": "mountain",
    "map": "xingyang.map.json",
    "links": [
-    "l-boshes-farm",
-    "sishui-gate"
+    "burned-luoyang"
    ]
   },
   {
@@ -719,8 +715,7 @@
    "archetype": "mountain",
    "map": "xianshan.map.json",
    "links": [
-    "burned-luoyang",
-    "hulao-pass"
+    "burned-luoyang"
    ]
   },
   {
@@ -730,7 +725,7 @@
    "archetype": "garden",
    "map": "wang-yuns-garden.map.json",
    "links": [
-    "hulao-pass",
+    "burned-luoyang",
     "fengyi-pavilion",
     "wang-yuns-garden--pavilion",
     "wang-yuns-garden--hall"
@@ -789,7 +784,6 @@
    "map": "changan.map.json",
    "links": [
     "fengyi-pavilion",
-    "burned-luoyang",
     "changan--market",
     "changan--hall-1",
     "changan--house-1",
@@ -1054,7 +1048,9 @@
    "title": "The Lowest Seat",
    "objective": "Go to Yuan Shao's tent, where the lords are gathering.",
    "after": [
-    "2-m1"
+    "2-m1",
+    "2-a5",
+    "2-b3"
    ],
    "grade": "11K",
    "pool": [
@@ -1189,11 +1185,10 @@
    "spot": "gate",
    "scene": "sishui",
    "title": "The Gate Nobody Can Take",
-   "objective": "Go to the gate, where Hua Xiong is waiting.",
+   "objective": "Go to Sishui Gate; there is news from the front.",
    "after": [
     "2-m2",
-    "2-a5",
-    "2-b4"
+    "2-c1"
    ],
    "grade": "11K",
    "pool": [
@@ -1318,7 +1313,7 @@
      3284
     ]
    ],
-   "objective_zh": "到关前，华雄正在叫阵。",
+   "objective_zh": "到汜水关去，前线有消息。",
    "title_zh": "无人能破之关"
   },
   {
@@ -1467,8 +1462,7 @@
    "title": "The Eight Lords at Hulao",
    "objective": "Go to Hulao Pass, where the lords are gathering.",
    "after": [
-    "2-m3b",
-    "2-c3"
+    "2-m3b"
    ],
    "grade": "11K",
    "pool": [
@@ -1917,8 +1911,7 @@
    "title": "The Burned Capital",
    "objective": "Ride into the ruins of Luoyang.",
    "after": [
-    "2-boss",
-    "2-d6"
+    "2-boss"
    ],
    "grade": "11K+",
    "pool": [
@@ -2055,7 +2048,7 @@
    "title": "The Fireflies",
    "objective": "Side story: the two boys in the reeds.",
    "after": [
-    "2-m2"
+    "2-m1"
    ],
    "grade": "11K",
    "pool": [
@@ -2751,7 +2744,7 @@
    "title": "Will Weeping Kill Dong Zhuo?",
    "objective": "Side story: Wang Yun's birthday dinner.",
    "after": [
-    "2-m2"
+    "2-m1"
    ],
    "grade": "11K",
    "pool": [
@@ -3162,7 +3155,7 @@
    "title": "The Horse at Xingyang",
    "objective": "Side story: the pass at Xingyang.",
    "after": [
-    "2-b3"
+    "2-m5"
    ],
    "grade": "11K",
    "pool": [
@@ -3299,7 +3292,7 @@
    "title": "The Red Cap",
    "objective": "Side story: Sun Jian's camp, at night.",
    "after": [
-    "2-m3b"
+    "2-m2"
    ],
    "grade": "11K",
    "pool": [
@@ -3436,7 +3429,7 @@
    "title": "The Well",
    "objective": "Side story: the well in the ruined palace.",
    "after": [
-    "2-c1"
+    "2-m5"
    ],
    "grade": "11K+",
    "pool": [
@@ -3710,7 +3703,7 @@
    "title": "The Peony Pavilion",
    "objective": "Side story: the peony pavilion, at night.",
    "after": [
-    "2-boss"
+    "2-m5"
    ],
    "grade": "11K+",
    "pool": [

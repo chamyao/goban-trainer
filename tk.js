@@ -265,7 +265,7 @@ const TKImg = {
   cache: {},
   get(name) {
     if (!this.cache[name]) {
-      const im = new Image();
+      const im = new Image(); im.crossOrigin = "anonymous";
       this.cache[name] = { im, ready: new Promise(r => { im.onload = r; im.onerror = r; }) };
       im.src = `assets/tk/${name}.png`;
     }
@@ -500,7 +500,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) this.data = await (await fetch("data/tk.json?v=29")).json();
+    if (!this.data) this.data = await (await fetch("data/tk.json?v=31")).json();
     return this.data;
   },
   ls(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } },
@@ -515,7 +515,8 @@ const TK = {
   preds(w, key) { return w.edges.filter(e => e[1] === key).map(e => e[0]); },
   succs(w, key) { return w.edges.filter(e => e[0] === key).map(e => e[1]); },
   isStart(key) { return key.endsWith("-start"); },
-  open(w, key) { return this.isStart(key) || this.preds(w, key).some(k => this.isStart(k) || this.cleared(k)); },
+  // open: a start, the first beat of a book (nothing before it: Book 2 has no start node), or one whose way in is cleared
+  open(w, key) { const p = this.preds(w, key); return this.isStart(key) || !p.length || p.some(k => this.isStart(k) || this.cleared(k)); },
   worldOpen(n) { return n === 1 || this.cleared(`${n - 1}-boss`) || (typeof TK_TEST !== "undefined" && TK_TEST); },   // test mode opens every book
   at(n) { return this.ls("tk-at")[n] || `${n}-start`; },
   setAt(n, key) { const a = this.ls("tk-at"); a[n] = key; this.lsSet("tk-at", a); },
@@ -976,7 +977,10 @@ async function viewTK(worldN) {
   root.innerHTML = `<div class="loading">Loading…</div>`;
   const D = await TK.load();
   if (nav !== routeSeq) return;
-  let n = worldN && TK.world(worldN) && TK.worldOpen(worldN) ? worldN : 1;
+  // no book named (the library card): the book last played; a named one becomes the last played
+  let last = 1; try { last = +localStorage.getItem("tk-book") || 1; } catch {}
+  let n = worldN && TK.world(worldN) && TK.worldOpen(worldN) ? worldN : TK.world(last) && TK.worldOpen(last) ? last : 1;
+  try { localStorage.setItem("tk-book", String(n)); } catch {}
   const w = TK.world(n);
   crumbs.innerHTML = "";
   crumbs.append(h("a", { href: "#/" }, "Library"), " / ", D.title);
@@ -1013,6 +1017,13 @@ async function viewTK(worldN) {
     const kit = WorldView.kit(), kits = Object.keys(WORLD_KITS), next = kits[(kits.indexOf(kit) + 1) % kits.length];
     root.querySelector(".tk-head-btns").prepend(h("button", { class: "tk-chron-btn", type: "button", title: `Switch to ${WORLD_KITS[next].en}`,
       onclick: () => { WorldView.setKit(next); viewTK(w.n); } }, `画风：${WORLD_KITS[kit].zh} ${WORLD_KITS[kit].en}`));
+    // View: isometric (diagonal, from a corner) or top-down, for any art style (tk-iso.js)
+    if (typeof WorldIso !== "undefined") {
+      const iso = WorldIso.on(WORLD_KITS[kit]);
+      root.querySelector(".tk-head-btns").prepend(h("button", { class: "tk-chron-btn", type: "button",
+        title: iso ? "Switch to the top-down view" : "Switch to the isometric view",
+        onclick: () => { WorldIso.setChoice(!iso); viewTK(w.n); } }, iso ? "视角：斜 Isometric" : "视角：俯 Top-down"));
+    }
     if (typeof WorldTravel !== "undefined") WorldTravel.addButtons(root.querySelector(".tk-head-btns"), w);   // map and start over (tk-travel.js)
     // on a phone: whether a tap on a small board shows a ghost stone first (Auto) or plays at once (Never)
     if (TK_TOUCH && typeof Goban !== "undefined") {
@@ -1029,7 +1040,10 @@ async function viewTK(worldN) {
       const ta = h("textarea", { class: "tk-fb-text", rows: "3", placeholder: "意见反馈 Feedback: what's wrong or what would be better here?" });
       const msg = h("span", { class: "tk-fb-msg" });
       const send = h("button", { class: "tk-chron-btn", type: "button", "data-keep": "1" }, "发送反馈 Send feedback");
-      ta.addEventListener("keydown", e => e.stopPropagation());   // typing doesn't walk him or talk
+      ta.addEventListener("keydown", e => {   // typing doesn't walk him or talk; Enter sends (Shift+Enter for a new line)
+        e.stopPropagation();
+        if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); send.click(); }
+      });
       ta.addEventListener("keyup", e => e.stopPropagation());
       send.onclick = async () => {
         const text = ta.value.trim();
@@ -1097,6 +1111,8 @@ async function viewTK(worldN) {
         w, host, ret: ret && ret.world === w.n ? ret : null,
         onPuzzle: (key, at) => TKOverlay.open(w.n, key, at),  // the board comes up inside the game window
         onBoss: async () => { if (!TK.seen(`${w.n}:closing`)) { await run(w.closing); TK.markSeen(`${w.n}:closing`); } },
+        // the book's last beat done: on into the next book, no menus (its opening scroll plays there)
+        onBookDone: () => { if (TK.world(w.n + 1)) { try { localStorage.setItem("tk-book", String(w.n + 1)); } catch {} location.hash = `#/tk/${w.n + 1}`; } },
       });
     } catch (e) { host.textContent = e.message; }
     return;

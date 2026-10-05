@@ -1436,7 +1436,7 @@
  ],
  "exits": [
   {
-   "to": "the-lords-camp",
+   "to": "pingyuan",
    "side": "N",
    "x": 22,
    "y": 0,
@@ -1534,7 +1534,7 @@
   }
  ],
  "entries": {
-  "the-lords-camp": [
+  "pingyuan": [
    23,
    2
   ],

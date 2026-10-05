@@ -997,7 +997,7 @@
    "h": 2
   },
   {
-   "to": "beimang-hill",
+   "to": "yongan-palace",
    "side": "N",
    "x": 21,
    "y": 0,
@@ -1005,7 +1005,7 @@
    "h": 1
   },
   {
-   "to": "luoyang",
+   "to": "l-boshes-farm",
    "side": "S",
    "x": 18,
    "y": 27,
@@ -1067,11 +1067,11 @@
    35,
    15
   ],
-  "beimang-hill": [
+  "yongan-palace": [
    22,
    2
   ],
-  "luoyang": [
+  "l-boshes-farm": [
    19,
    25
   ],

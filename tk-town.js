@@ -153,20 +153,31 @@ const TownArt = {
 
 /* ---------- DOM overlay: goal, dialogue with portraits and voice ---------- */
 const TownUI = {
+  // who -> portrait file (assets/tk/portraits/portraits.json, tools/build_portraits.py), fetched once
+  portraits: {}, PORTRAIT_V: 1,
+  loadPortraits() {
+    if (!this._pp) this._pp = fetch(`assets/tk/portraits/portraits.json?v=${this.PORTRAIT_V}`).then(r => r.ok ? r.json() : {})
+      .catch(() => ({})).then(m => { this.portraits = m; for (const f of Object.values(m)) new Image().src = `assets/tk/portraits/${f}?v=${this.PORTRAIT_V}`; });
+    return this._pp;
+  },
   mount(scene, host) {
+    if (scene.kit && scene.kit.dialogue === "genshin") this.loadPortraits();
     host.querySelectorAll(":scope > .town-ui").forEach(el => el.remove());  // a new place replaces the old overlay
     const root = document.createElement("div");
-    root.className = "town-ui";
+    // the dialogue look follows the art kit ("dialogue" in kits/<kit>.json): "genshin" is the big cut-out
+    // portrait in a dark gradient box (style.css); the other kits keep the original box and pixel bust
+    const look = (scene.kit && scene.kit.dialogue) || "", painted = look === "genshin";
+    root.className = "town-ui" + (look ? " " + look : "");
     const TOUCH = typeof TK_TOUCH !== "undefined" && TK_TOUCH;
     root.innerHTML = `<div class="town-goal"></div><div class="town-keys"><b>点击</b>移动 click to move · <b>点击人物</b>对话 click someone to talk</div>
       <div class="town-place"></div><div class="town-hint" hidden>${TOUCH ? "点击 Tap" : "点击 Click"}</div><div class="town-focus" hidden>${TOUCH ? "Tap the map to play" : "Click the map to play"}</div>
-      <div class="town-dim" hidden></div><div class="town-dlg" hidden><div class="town-tab">主线 · Story</div><canvas class="town-face" width="34" height="34"></canvas><div class="town-txt"><div class="town-who"></div><div class="town-zh" lang="zh-CN"></div><div class="town-en"></div></div><div class="town-more">▼</div></div>`;
+      <div class="town-dim" hidden></div><img class="town-portrait" alt="" hidden><div class="town-dlg" hidden><div class="town-tab">主线 · Story</div><canvas class="town-face" width="34" height="34"></canvas><div class="town-txt"><div class="town-who"></div><div class="town-zh" lang="zh-CN"></div><div class="town-en"></div></div><div class="town-more">▼</div></div>`;
     host.append(root);
     const $ = s => root.querySelector(s);
     let queue = [], done = null, open = false, typing = null, finishTyping = null;
     const show = () => {
       const st = queue.shift();
-      if (!st) { $(".town-dlg").hidden = true; $(".town-dim").hidden = true; open = false; TKVoice.stop(); const d = done; done = null; d && d(); return; }
+      if (!st) { $(".town-dlg").hidden = true; $(".town-dim").hidden = true; $(".town-portrait").hidden = true; open = false; TKVoice.stop(); const d = done; done = null; d && d(); return; }
       const said = st[0] === "say", who = said ? st[1] : null;
       const [en, zh, vid] = said ? [st[2], st[3], st[4]] : [st[1], st[2], st[3]];
       $(".town-who").textContent = who ? tkName(who) : "";
@@ -184,8 +195,16 @@ const TownUI = {
       finishTyping = () => { clearInterval(typing); typing = null; $(".town-zh").textContent = Z; $(".town-en").textContent = E; $(".town-more").style.visibility = ""; };
       const face = $(".town-face"), fc = face.getContext("2d");
       fc.clearRect(0, 0, 34, 34);
-      face.hidden = !who;
-      if (who) fc.drawImage(TKArt.get(who, "bust"), 0, 0);
+      // a painted portrait when there is one (assets/tk/portraits), else the pixel bust
+      const pic = $(".town-portrait"), file = painted && who && TownUI.portraits[who];
+      if (file) {
+        const src = `assets/tk/portraits/${file}?v=${TownUI.PORTRAIT_V}`;
+        if (pic.dataset.who !== who) { pic.dataset.who = who; pic.src = src; pic.classList.remove("in"); void pic.offsetWidth; pic.classList.add("in"); }
+        pic.hidden = false;
+      } else { pic.hidden = true; pic.dataset.who = ""; }
+      $(".town-dlg").classList.toggle("has-portrait", !!file);
+      face.hidden = !who || !!file;
+      if (who && !file) fc.drawImage(TKArt.get(who, "bust"), 0, 0);
       if (vid) TKVoice.play(vid); else TKVoice.stop();
     };
     const focus = () => { const f = host.querySelector(".town-focus"); if (f) f.hidden = TOUCH || document.activeElement === host; };   // on a phone a tap works either way

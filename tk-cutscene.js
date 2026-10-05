@@ -85,7 +85,7 @@ const WorldCutscene = {
       hideStill();
       const el = document.createElement("div");
       el.className = `tk-still kb-${b.move || "in"}`;
-      const img = new Image();
+      const img = new Image(); img.crossOrigin = "anonymous";
       img.alt = "";
       img.src = `assets/tk/stills/${m.file}`;
       el.append(img);
@@ -377,6 +377,7 @@ const WorldCutscene = {
     };
     // the screen changed size mid-scene: the letterbox, the mood and the light follow it
     const relayout = () => {
+      if (!bars[0].scene) return;   // the scene was left mid-cutscene: its objects are gone
       W = scene.scale.width; H = scene.scale.height;
       bars[0].setSize(W, bar);
       bars[1].setSize(W, bar).setPosition(0, H);
@@ -384,6 +385,7 @@ const WorldCutscene = {
       if (shade) shade.setPosition(W / 2, H / 2).setSize(W * 3, H * 3);
     };
     scene.scale.on("resize", relayout);
+    scene.events.once("shutdown", () => scene.scale.off("resize", relayout));   // the scale manager outlives the scene
     const board = (b, ms) => {
       const r = actors[b.actor] || actor(b.actor, b.at), p = actors[b.prop];
       if (!p) return Promise.resolve();
@@ -405,10 +407,11 @@ const WorldCutscene = {
     };
 
     const run = async b => {
-      if (skip) return;
+      if (skip && b.do !== "scroll") return;   // a chapter scroll is story, not staging: it shows even when skipping
       if (still && !["line", "wait", "music", "still", "together"].includes(b.do)) hideStill();
       switch (b.do) {
         case "still": await showStill(b); break;
+        case "scroll": if (still) hideStill(); if (typeof TKStory !== "undefined") { TKStory.closeDialog(); await TKStory.scroll(...b.args); } break;
         case "cut": {
           cam.fadeOut(180); await wait(190);
           for (const p of b.place) actor(p.actor, p.at, p.face);
@@ -574,7 +577,11 @@ const WorldCutscene = {
         solved = true;
         continue;
       }
-      if (skip) { if (solved) break; instant(b); continue; }
+      if (skip) {   // skipped: staging jumps to its end, but a chapter scroll still shows (not again on a retry's fast-forward)
+        if (b.do === "scroll" && !(opts.ffToProblem && !solved)) { await run(b); continue; }
+        if (!solved) instant(b);
+        continue;
+      }
       await run(b);
     }
 
@@ -608,7 +615,7 @@ const WorldCutscene = {
   // the prop atlas (props, emote bubbles, gift icons), loaded once per game
   // the stills that exist (tools/gen_stills.py writes assets/tk/stills/stills.json), fetched once
   stillIndex() {
-    if (!this._stills) this._stills = fetch("assets/tk/stills/stills.json?v=11").then(r => r.ok ? r.json() : {}).catch(() => ({}));
+    if (!this._stills) this._stills = fetch("assets/tk/stills/stills.json?v=13").then(r => r.ok ? r.json() : {}).catch(() => ({}));
     return this._stills;
   },
   load(scene) {

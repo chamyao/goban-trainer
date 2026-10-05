@@ -2,6 +2,8 @@
 
     python3 tools/build_xianxia_kit.py [GEN]   # GEN: the folder holding the generated batches
                                                # (default assets/tk/gen: xianxia, xianxia-redo, ...)
+    python3 tools/build_xianxia_kit.py [GEN] --genshin   # the isometric Genshin kit (kits/genshin.json):
+                                               # GEN/genshin's pieces, xianxia's where it has none yet
 
 The pieces come from tools/gen_pixel.py --set xianxia (Retro Diffusion, prompts in
 tools/xianxia_spec.py). Each object is trimmed and fitted to its footprint (the size the Jade
@@ -20,13 +22,15 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from build_jade_edges import block  # noqa: E402
-from xianxia_spec import PROPS_GEN, CHAR_PICK, DRAWN_GROUND, HERO_H, INTERIOR, OBJECTS, REDO  # noqa: E402
+from xianxia_spec import GENSHIN_BAD, GENSHIN_DROP, PROPS_GEN, PROPS_SKIP, CHAR_PICK, DRAWN_GROUND, HERO_H, INTERIOR, OBJECTS, REDO  # noqa: E402
 import random  # noqa: E402
 
 T = 16
-OUT = ROOT / "assets/tk/xianxia"
+GENSHIN = "--genshin" in sys.argv
+LOOK = "genshin" if GENSHIN else "xianxia"
+OUT = ROOT / f"assets/tk/{LOOK}"
 SLACK = 1.15
-DROP = {"plant.flower-2", "furn.rug-1"}   # variants not used at all: this one sits on a mound of earth, like a stone basin
+DROP = {"plant.flower-2", "furn.rug-1", "prop.post-1", "landmark.shrine-1", "prop.mirror-1", "prop.cagecart-2"}   # variants not used at all: this one sits on a mound of earth, like a stone basin
 DETAIL_SKIP = {"plant.flower-1", "plant.flower-2"}   # flowers read as pebbles at a distance   # a piece may be this much bigger than its footprint before it's shrunk
 
 
@@ -38,6 +42,12 @@ def quantize_like(small, big, alpha):
     a = small.getchannel("A").point(lambda v: 255 if v >= alpha else 0)
     rgb.putalpha(a)
     return rgb
+
+
+def iso_box(box):
+    """Where a flat w x h piece's footprint becomes a diamond: wider, a bit taller (as gen_pixel asks)."""
+    w, h = box
+    return round(w + h / 2), round(h + w / 4)
 
 
 def fit(im, box):
@@ -69,6 +79,13 @@ COL = {
     "sand": [(222, 206, 166), (210, 194, 154), (232, 218, 182), (196, 180, 142)],
     "water": [(86, 150, 156), (78, 140, 148), (104, 168, 172), (140, 196, 196)],
 }
+if GENSHIN:   # Liyue in the sun: bright lawn green, golden earth, warm sand, clear blue water
+    COL = {
+        "grass": [(110, 186, 84), (98, 172, 76), (128, 200, 96), (84, 152, 66), (156, 216, 112)],
+        "dirt": [(214, 176, 118), (198, 160, 104), (228, 192, 134), (178, 142, 94)],
+        "sand": [(246, 226, 176), (236, 214, 164), (252, 236, 192), (222, 200, 150)],
+        "water": [(70, 168, 206), (60, 154, 194), (98, 190, 222), (164, 222, 240)],
+    }
 
 
 def ground_tile(mat, seed):
@@ -98,11 +115,11 @@ def ground_tile(mat, seed):
     return im
 
 
-def variants(src, name):
+def variants(src, name, keep=lambda p: True):
     """A piece's tries, from the last source folder that has any (a later batch replaces an
     earlier one: the second tries in xianxia-redo over the first run's)."""
     for d in reversed(src if isinstance(src, list) else [src]):
-        found = sorted(d.glob(f"{name}-*.png"), key=lambda p: int(p.stem.rsplit("-", 1)[1]))
+        found = sorted((p for p in d.glob(f"{name}-*.png") if keep(p)), key=lambda p: int(p.stem.rsplit("-", 1)[1]))
         if found:
             return found
     return []
@@ -145,8 +162,10 @@ def hero_sheet(path):
 
 def main():
     # the generated pieces: the first run, then the later batches (any of them may be missing)
-    base = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "assets/tk/gen"
-    src = [base / d for d in ("xianxia", "xianxia-chars2", "xianxia-interior", "xianxia-redo", "xianxia-props") if (base / d).exists()]
+    args = [v for v in sys.argv[1:] if not v.startswith("--")]
+    base = Path(args[0]) if args else ROOT / "assets/tk/gen"
+    batches = ("xianxia", "xianxia-chars2", "xianxia-interior", "xianxia-redo", "xianxia-props") + (("genshin", "genshin-redo2") if GENSHIN else ())
+    src = [base / d for d in batches if (base / d).exists()]
     OUT.mkdir(parents=True, exist_ok=True)
     kit = json.loads((ROOT / "assets/tk/kits/jade.json").read_text())
 
@@ -184,21 +203,29 @@ def main():
 
     # objects
     items, made = [], {}
-    for kind, (_, box, _) in {**OBJECTS, **INTERIOR, **PROPS_GEN}.items():
+    for kind, (_, box, _) in {**OBJECTS, **INTERIOR, **{k: v for k, v in PROPS_GEN.items() if k not in PROPS_SKIP}}.items():
         # a piece that came out wrong is used only once its second try exists
-        where = [d for d in src if d.name == "xianxia-redo"] if kind in REDO else src
-        for k, p in enumerate(v for v in variants(where, kind) if v.stem not in DROP):
-            items.append((f"{kind}#{k}", fit(Image.open(p), box)))
+        where = [d for d in src if d.name in ("xianxia-redo", "genshin", "genshin-redo2")] if kind in REDO else src
+        if kind in GENSHIN_BAD:   # its isometric try came out wrong: xianxia's until the redo is good
+            where = [d for d in where if not d.name.startswith("genshin")]
+        ok = lambda v: (v.stem not in GENSHIN_DROP and f"{v.parent.name}/{v.stem}" not in GENSHIN_DROP
+                        if v.parent.name.startswith("genshin") else v.stem not in DROP)   # a dropped try: the folder before's
+        for k, p in enumerate(variants(where, kind, ok)):
+            items.append((f"{kind}#{k}", fit(Image.open(p), iso_box(box) if p.parent.name.startswith("genshin") else box)))
             made.setdefault(kind, []).append(f"{kind}#{k}")
     sheet, pos = pack(items)
     sheet.save(OUT / "objects.png")
 
     # the kit: Jade's, with the outdoors swapped for ours
-    kit.update(kit="xianxia", name="Xianxia",
+    kit.update(kit=LOOK, name=LOOK.capitalize(),
                credit="Outdoor ground and objects generated for the game with Retro Diffusion (tools/gen_pixel.py, "
                       "tools/xianxia_spec.py); interiors and townsfolk from the Jade kit: " + kit["credit"])
-    kit["sheets"].update(x_tiles="assets/tk/xianxia/tiles.png", x_edges="assets/tk/xianxia/edges.png",
-                         x_objects="assets/tk/xianxia/objects.png")
+    kit["sheets"].update(x_tiles=f"assets/tk/{LOOK}/tiles.png", x_edges=f"assets/tk/{LOOK}/edges.png",
+                         x_objects=f"assets/tk/{LOOK}/objects.png")
+    if GENSHIN:
+        kit["iso"] = True   # tk-iso.js: the world drawn isometrically
+        kit["dialogue"] = "genshin"   # tk-town.js: painted portraits, the Genshin dialogue box
+        kit["isoVoid"] = "#%02x%02x%02x" % COL["grass"][3]   # beyond the map's diamond: darker grass
     kit["materials"]["grass"] = {"tiles": [["x_tiles", i, row["grass"], 3 if i == 0 else 1]
                                            for i in range(len(ground["grass"]))]}
     for i, (m, _, _) in enumerate(edged):
@@ -232,10 +259,10 @@ def main():
         if p:
             sheet, frame = hero_sheet(p)
             sheet.save(OUT / f"chars/{who}.png")
-            kit["heroes"][who] = {"sheet": f"assets/tk/xianxia/chars/{who}.png", "frame": frame}
-    (ROOT / "assets/tk/kits/xianxia.json").write_text(json.dumps(kit, indent=1))
+            kit["heroes"][who] = {"sheet": f"assets/tk/{LOOK}/chars/{who}.png", "frame": frame}
+    (ROOT / f"assets/tk/kits/{LOOK}.json").write_text(json.dumps(kit, indent=1))
     missing = sorted(k for k in {**OBJECTS, **INTERIOR} if k not in made)
-    print(f"xianxia kit: {sum(len(v) for v in ground.values())} ground tiles, {len(edged)} edge sets, "
+    print(f"{LOOK} kit: {sum(len(v) for v in ground.values())} ground tiles, {len(edged)} edge sets, "
           f"{len(items)} object sprites for {len(made)} kinds" + (f"; still Jade's: {', '.join(missing)}" if missing else "") + f"; heroes: {', '.join(kit['heroes']) or 'none'}")
 
 
