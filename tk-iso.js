@@ -108,13 +108,16 @@ const WorldIso = {
       }
       return frames.get(k);
     };
+    // one batch: thousands of separate drawFrame calls each flush the GPU, which took many seconds on a phone
+    rt.beginDraw();
     for (let y = -n; y < rows + n; y++) for (let x = -n; x < cols + n; x++) {
       if (x >= 0 && y >= 0 && x < cols && y < rows) continue;
       if (Math.max(-x, -y, x - cols + 1, y - rows + 1) * T > near) continue;   // past the ring: the backdrop
       const t = layer.getTileAt(Math.min(cols - 1, Math.max(0, x)), Math.min(rows - 1, Math.max(0, y)));
       const f = t && t.index >= 0 && frameOf(t);
-      if (f) rt.drawFrame(f[0], f[1], (x + n) * T, (y + n) * T);
+      if (f) rt.batchDrawFrame(f[0], f[1], (x + n) * T, (y + n) * T);
     }
+    rt.endDraw();
   },
 
   // The apron's growth: the kit's trees and rocks, thicker the further from the map, never on the map.
