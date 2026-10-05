@@ -1461,14 +1461,21 @@ function tkChronicle(w, map) {
     ]);
     b.disabled = !seen;
     b.onclick = async () => {
-      wrap.remove();
+      close();
       const steps = id === "opening" ? w.opening : id === "closing" ? w.closing : w.scenes[id].steps;
       TKStory.busy = true;
       try { await TKStory.play(map, steps.filter(s => s[0] !== "party")); } finally { TKStory.busy = false; }
     };
     list.append(b);
   }
-  wrap.append(h("div", { class: "tk-scroll" }, [h("h3", {}, `Chronicle · ${w.name}`), list,
-    h("button", { class: "tk-scroll-go", type: "button", onclick: () => wrap.remove() }, "Close")]));
+  // closes from the top as well as the end, by a tap outside it, or Escape
+  const close = () => { wrap.remove(); removeEventListener("keydown", esc, true); };
+  const esc = e => { if (e.key === "Escape") { e.stopPropagation(); close(); } };
+  addEventListener("keydown", esc, true);
+  wrap.addEventListener("click", e => { if (e.target === wrap) close(); });
+  wrap.append(h("div", { class: "tk-scroll" }, [
+    h("button", { class: "tk-scroll-x", type: "button", "aria-label": "Close 关闭", onclick: close }, "关闭 Close"),
+    h("h3", {}, `Chronicle · ${w.name}`), list,
+    h("button", { class: "tk-scroll-go", type: "button", onclick: close }, "Close")]));
   document.body.append(wrap);
 }

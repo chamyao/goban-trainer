@@ -25,7 +25,8 @@ for(let round=0;round<2;round++) for(let i=0;i<n;i++){
   const np=await p.evaluate(i=>{const n=window.__w.npcs[i];if(!n)return null;const s=n.spr;return s.visible?[s.x,s.y-8]:null;},i); if(!np) continue;
   // bring the npc on screen: walk there by taps first if far
   await p.evaluate(([x,y])=>{const w=window.__w;if(Math.hypot(w.player.x-x,w.player.y-y)>120)w.player.setPosition(x+40,y+30);},np); await p.waitForTimeout(700);
-  const np2=await p.evaluate(i=>{const n=window.__w.npcs[i];return n?[n.spr.x,n.spr.y-8]:null;},i); if(!np2) continue;
+  // stand them still: a villager who wanders off between the look and the tap leaves the tap on a building
+  const np2=await p.evaluate(i=>{const n=window.__w.npcs[i];if(!n)return null;n.wander=false;n.spr.setVelocity&&n.spr.setVelocity(0);return [n.spr.x,n.spr.y-8];},i); if(!np2) continue;
   await tapW(np2[0],np2[1]);
   let talked=false;
   for(let k=0;k<30;k++){await p.waitForTimeout(250);const s=await st();if(s.busy){talked=true;const [a,b2]=await scr(np2[0],np2[1]-40);await p.touchscreen.tap(a,b2);} else if(talked) break;}
@@ -34,7 +35,7 @@ for(let round=0;round<2;round++) for(let i=0;i<n;i++){
   // now tap the ground in 4 directions around Liu Bei
   for(const [dx,dy] of [[50,0],[-50,0],[0,40],[0,-40]]){
     if(await p.evaluate(()=>window.__w.ui.busy())){await p.evaluate(()=>{while(window.__w.ui.busy())window.__w.ui.advance();});await p.waitForTimeout(200);}
-    const s0=await st(); const tx=s0.p[0]+dx, ty=s0.p[1]+dy;
+    const s0=await st(); if(s0.leaving){await p.waitForTimeout(1500);await ready();break;} const tx=s0.p[0]+dx, ty=s0.p[1]+dy;
     // only taps the game can route somewhere else: it aims at y+4 and snaps a blocked tap to the
     // nearest open cell, which next to a fence can be the one he stands on (no move is right then)
     const free=await p.evaluate(([x,y])=>{const w=window.__w,G=w.walkGrid();if(!G.free(Math.floor(x/8),Math.floor((y+1)/8)))return false;

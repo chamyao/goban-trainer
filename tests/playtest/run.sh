@@ -19,7 +19,7 @@ fi
 declare -A ARGS=( [tap-after-talk]="zhuo-county" [go-table-ogs]="phone" )
 declare -A LIMIT=( [playthrough]=1500 [tap-after-talk]=400 [spot-reach]=300 [ending]=600 [door-taps]=400 [side-stories]=500 )
 tests=("$@")
-[[ ${#tests[@]} -eq 0 ]] && tests=(tap-move-talk tap-duel challengers doors-and-exits scene-arming spot-tap-once door-taps framing star-lords go-table-ogs drag-and-hover full-window rest-after-slip duel-desktop wukong-guide play-tab spot-reach side-stories tap-after-talk ending playthrough)
+[[ ${#tests[@]} -eq 0 ]] && tests=(tap-move-talk tap-duel challengers doors-and-exits scene-arming spot-tap-once door-taps framing star-lords go-table-ogs drag-and-hover full-window rest-after-slip duel-desktop wukong-guide play-tab menu old-saves rotate-leave spot-reach side-stories tap-after-talk ending playthrough)
 fails=0
 for t in "${tests[@]}"; do
   start=$(date +%s)
