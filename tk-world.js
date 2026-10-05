@@ -1026,10 +1026,12 @@ function worldScenes() {
         .filter(o => o.d <= r).sort((a, b) => a.d - b.d)[0];
       const spot = Object.entries(this.spots).map(([key, s]) => {
         const t = at(s.x, s.y);
-        let d = Math.hypot(s.x - t.x, s.y - t.y);
+        const own = Math.hypot(s.x - t.x, s.y - t.y);
+        let d = own;
         for (const b of this.propBoxes || []) if (Math.hypot(b.cx - s.x, b.y1 - s.y) < 28) { const u = at(b.cx, b.y1, b.img); d = Math.min(d, toBox(b, u.x, u.y)); }
-        return { key, s, d };
-      }).filter(o => o.d <= Math.max(18, r)).sort((a, b) => a.d - b.d)[0];
+        return { key, s, d, mine: own <= 18 };
+      // a tap on a spot's own place beats a neighbour's picture reaching over it (the Black Wind altar over the shrine)
+      }).filter(o => o.d <= Math.max(18, r)).sort((a, b) => (b.mine - a.mine) || a.d - b.d)[0];
       if (who && (!spot || who.d <= spot.d)) return { kind: "npc", n: who.n };
       if (spot) return { kind: "spot", k: spot.key, s: spot.s };
       // a way out: a building's door (tap the building or its doorway), or any other exit
