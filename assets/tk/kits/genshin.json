@@ -20,7 +20,9 @@
   "x_edges": "assets/tk/genshin/edges.png",
   "x_objects": "assets/tk/genshin/objects.png",
   "bg_meadow": "assets/tk/genshin/bg_meadow.png",
-  "bg_forest": "assets/tk/genshin/bg_forest.png"
+  "bg_forest": "assets/tk/genshin/bg_forest.png",
+  "bg_mountain": "assets/tk/genshin/bg_mountain.png",
+  "bg_ruins": "assets/tk/genshin/bg_ruins.png"
  },
  "materials": {
   "grass": {
@@ -1561,7 +1563,9 @@
   "garden": "meadow",
   "road": "meadow",
   "camp": "meadow",
-  "hills": "forest"
+  "hills": "forest",
+  "mountain": "mountain",
+  "ruins": "ruins"
  },
  "isoForeground": {
   "meadow": [

@@ -206,7 +206,7 @@ GENSHIN_BACKDROPS = {
     "mountain": "flat rocky ground seen from directly above: grey stones, gravel, tufts of grass, small pine trees",
     "ruins": "flat ground seen from directly above: grey ash, charred wood, broken roof tiles, burnt grass",
 }
-GENSHIN_BACKDROP_PICK = {"meadow": 1, "forest": 1, "mountain": 3, "ruins": 3}   # the tries that tile cleanly
+GENSHIN_BACKDROP_PICK = {"meadow": 1, "forest": 1, "mountain": 4, "ruins": 3}   # the tries that tile cleanly
 GENSHIN_FOREGROUNDS = {
     "fg.canopy": ("a big cluster of leafy green tree crowns, seen from slightly above", (128, 96)),
     "fg.pine": ("a tall dark green pine tree", (64, 112)),
