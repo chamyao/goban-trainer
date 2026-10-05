@@ -695,7 +695,7 @@ function worldScenes() {
       return this.region.quests.filter(h => h.hint && h.node !== q.node && this.done(h.node) &&
         (q.after.includes(h.node) || named.includes(`node:${h.node}`))).pop() || null;
     }
-    // A wisp of incense over whoever can act now: someone ready to give, or a place waiting for what
+    // A ring at the feet of whoever can act now: someone ready to give, or a place waiting for what
     // you now hold. It clears once their part is done; nobody who can't act yet is marked.
     markActors() {
       if (!this.npcs) return;
@@ -708,11 +708,10 @@ function worldScenes() {
       for (const [k, m] of this.actMarks) if (!want.has(k)) { m.ev.remove(); this.actMarks.delete(k); }
       for (const [k, t] of want) {
         if (this.actMarks.has(k)) continue;
-        const ev = this.time.addEvent({ delay: 380, loop: true, callback: () => {
-          const v = this.view(t.x, t.y), at = { x: v.x, y: v.y - (t.displayHeight || 22) - 2 };   // over the head, where it's drawn
-          const p = this.add.circle(at.x + Phaser.Math.Between(-2, 2), at.y, 1.6, 0xf4e2b0, .8).setDepth(9998);
-          this.tweens.add({ targets: p, y: p.y - 14, x: p.x + Phaser.Math.Between(-4, 4), scale: 2.2, alpha: 0, duration: 1800, onComplete: () => p.destroy() });
-        } });
+        // a soft gold ring pulsing at their feet (where they're drawn)
+        const v = this.view(k.x, k.y), ring = this.add.ellipse(v.x, v.y, 18, 8).setStrokeStyle(1.5, 0xf2cf6a, .9).setDepth(v.y - 1);
+        const tw = this.tweens.add({ targets: ring, scale: 1.35, alpha: .25, duration: 900, yoyo: true, repeat: -1, ease: "Sine.InOut" });
+        const ev = { remove: () => { tw.remove(); ring.destroy(); } };
         this.actMarks.set(k, { ev, t, called: false });
       }
     }
