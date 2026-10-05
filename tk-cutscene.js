@@ -85,7 +85,7 @@ const WorldCutscene = {
       hideStill();
       const el = document.createElement("div");
       el.className = `tk-still kb-${b.move || "in"}`;
-      const img = new Image();
+      const img = new Image(); img.crossOrigin = "anonymous";
       img.alt = "";
       img.src = `assets/tk/stills/${m.file}`;
       el.append(img);

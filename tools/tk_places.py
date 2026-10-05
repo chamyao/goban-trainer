@@ -80,7 +80,7 @@ PLACES = {
                  "win": ["“Remarkable. I'll tell the magistrate a sandal-seller did it.”"], "done": ["“The magistrate still doesn't believe me.”"]},
             ],
             "banners": "red",
-            "objectives": {"1-n1": "Read the notice in the town square.", "1-c1": "Go to the county office, where the governor has called his officers.",
+            "objectives": {"1-n1": "Read the notice in the town square.", "1-c1": "Go into the county town. The governor is calling for men.",
                            "1-i1": "Go into the village inn."},
         },
         "The Peach Garden": {
@@ -138,7 +138,7 @@ PLACES = {
             "banners": "yellow",
             "shrine": True,   # one of the four that light in World 1
             "landmarks": [{"kind": "rock.crag", "id": "pass", "node": "1-n3", "label": "The Yellow Turban line"}],
-            "objectives": {"1-n3": "Meet the Yellow Turbans at Daxing Mountain."},
+            "objectives": {"1-n3": "Report to the governor with your five hundred."},
         },
         "Qingzhou": {
             "archetype": "city",
@@ -180,19 +180,19 @@ PLACES = {
             "landmarks": [{"kind": "building.tent", "id": "camp", "node": "1-b3", "label": "The Han camp"},
                           {"kind": "rock.big", "id": "fieldcamp", "node": "1-e1", "label": "Where the army was"}],
             "objectives": {"1-f1": "Side story: the fire plan in the Han camp.", "1-b3": "Side story: red banners at Changshe.",
-                           "1-e1": "Go to Yingchuan and learn how Huangfu Song and Zhu Jun stand."},
+                           "1-e1": "Go to Changshe, in Yingchuan, and learn how Huangfu Song and Zhu Jun stand."},
         },
         "Envoy's Road": {
             "archetype": "road",
             "landmarks": [{"kind": "camp.table", "id": "envoy", "node": "1-bs", "label": "The envoy's rest"}],
             "objectives": {"1-bs": "Shortcut: the envoy on the road."},
         },
-        "Dong Zhuo's Camp": {
+        "The Hills North of Guangzong": {
             "archetype": "camp",
             "banners": "red",
-            "landmarks": [{"kind": "building.tent", "id": "command", "node": "1-n6", "label": "Dong Zhuo's tent"}],
+            "landmarks": [{"kind": "building.tent", "id": "command", "node": "1-n6", "label": "The command tent"}],
             "npcs": [{"kind": "folk.soldier", "say": "“The general is in his tent. He doesn't like visitors without rank.”"}],
-            "objectives": {"1-n6": "Rescue Dong Zhuo, then report at his tent."},
+            "objectives": {"1-n6": "Head home to Zhuo."},
         },
         "Hills of Black Wind": {
             "archetype": "hills",

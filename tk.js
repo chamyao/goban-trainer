@@ -265,7 +265,7 @@ const TKImg = {
   cache: {},
   get(name) {
     if (!this.cache[name]) {
-      const im = new Image();
+      const im = new Image(); im.crossOrigin = "anonymous";
       this.cache[name] = { im, ready: new Promise(r => { im.onload = r; im.onerror = r; }) };
       im.src = `assets/tk/${name}.png`;
     }
