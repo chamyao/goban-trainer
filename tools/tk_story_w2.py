@@ -28,11 +28,11 @@ def T(en, zh):
 
 # Voices for the people World 2 adds (Kokoro Mandarin ids, as in tk_story_zh.CAST).
 CAST2 = {
-    "lvbu": "zm_039", "wangyun": "zm_072", "liru": "zm_077", "lisu": "zm_018", "huaxiong": "zm_043",
-    "dingyuan": "zm_075", "yuanshao": "zm_087", "yuanshu": "zm_083", "chengong": "zm_059",
-    "caohong": "zm_036", "sunjian": "zm_048", "zumao": "zm_022", "chengpu": "zm_070",
-    "handang": "zm_074", "caiyong": "zm_093", "gongsunzan": "zm_037", "lijue": "zm_058",
-    "guosi": "zm_061", "lvboshe": "zm_086", "diaochan": "zf_023", "hetaihou": "zf_022",
+    "lvbu": "zm_097", "wangyun": "zm_009", "liru": "zm_010", "lisu": "zm_012", "huaxiong": "zm_015",
+    "dingyuan": "zm_020", "yuanshao": "zm_031", "yuanshu": "zm_035", "chengong": "zm_050",
+    "caohong": "zm_054", "sunjian": "zm_056", "zumao": "zm_062", "chengpu": "zm_066",
+    "handang": "zm_095", "caiyong": "zm_091", "gongsunzan": "zm_037", "lijue": "zm_058",
+    "guosi": "zm_061", "lvboshe": "zm_014", "diaochan": "zf_023", "hetaihou": "zf_022",
     "tangfei": "zf_017", "shaodi": "zf_002", "xiandi": "zf_002", "dongmu": "zf_022",
 }
 

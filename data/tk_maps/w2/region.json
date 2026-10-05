@@ -1019,282 +1019,6 @@
    "pool": [
     [
      "go-puzzles-at-a-glance",
-     160627
-    ],
-    [
-     "specialized-training-in-tsumego-3",
-     50488
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     43752
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     84591
-    ],
-    [
-     "200-basic-go-problems",
-     174211
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     169243
-    ],
-    [
-     "bedtime-tsumego-part-2",
-     51905
-    ],
-    [
-     "specialized-training-in-tsumego-4",
-     50505
-    ],
-    [
-     "specialized-training-in-tsumego-3",
-     107621
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     105503
-    ],
-    [
-     "compact-go-puzzles-to-learn-the-basics",
-     147404
-    ],
-    [
-     "specialized-training-in-tsumego-3",
-     103155
-    ],
-    [
-     "specialized-training-in-tsumego-5",
-     43938
-    ],
-    [
-     "200-basic-go-problems",
-     174213
-    ],
-    [
-     "specialized-training-in-tsumego-4",
-     59361
-    ],
-    [
-     "specialized-training-in-tsumego-5",
-     43930
-    ],
-    [
-     "bedtime-tsumego-part-1",
-     21691
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     104314
-    ],
-    [
-     "lee-chang-hos-selected-tsumego-part-1",
-     406
-    ],
-    [
-     "ohashi-style-power-up-tsumego-part-2",
-     132680
-    ],
-    [
-     "specialized-training-in-tsumego-5",
-     448
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     204103
-    ],
-    [
-     "specialized-training-in-tsumego-5",
-     3040
-    ],
-    [
-     "hitomi-tsumego",
-     160826
-    ],
-    [
-     "specialized-training-in-tsumego-3",
-     148981
-    ],
-    [
-     "go-puzzles-at-a-glance",
-     160717
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     105507
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     21913
-    ],
-    [
-     "specialized-training-in-tsumego-3",
-     118072
-    ],
-    [
-     "200-basic-go-problems",
-     174206
-    ]
-   ],
-   "objective_zh": "在路上迎接公孙瓒，同往诸侯营。",
-   "title_zh": "诸侯之路"
-  },
-  {
-   "node": "2-m2",
-   "role": "main",
-   "place": "the-lords-camp",
-   "spot": "council",
-   "scene": "alliance",
-   "title": "The Lowest Seat",
-   "objective": "Go to Yuan Shao's tent, where the lords are gathering.",
-   "after": [
-    "2-m1"
-   ],
-   "grade": "11K",
-   "pool": [
-    [
-     "specialized-training-in-tsumego-4",
-     53135
-    ],
-    [
-     "compact-go-puzzles-to-learn-the-basics",
-     145872
-    ],
-    [
-     "hitomi-tsumego",
-     135429
-    ],
-    [
-     "bedtime-tsumego-part-1",
-     135073
-    ],
-    [
-     "specialized-training-in-tsumego-3",
-     107355
-    ],
-    [
-     "specialized-training-in-tsumego-5",
-     50372
-    ],
-    [
-     "go-puzzles-at-a-glance",
-     140947
-    ],
-    [
-     "specialized-training-in-tsumego-3",
-     108259
-    ],
-    [
-     "common-life-and-death-problems",
-     25490
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     48642
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     84601
-    ],
-    [
-     "go-puzzles-at-a-glance",
-     160673
-    ],
-    [
-     "go-puzzles-at-a-glance",
-     160658
-    ],
-    [
-     "common-life-and-death-problems",
-     26022
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     84603
-    ],
-    [
-     "ohashi-style-power-up-tsumego-part-1",
-     132024
-    ],
-    [
-     "specialized-training-in-tesuji-4",
-     81175
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     3320
-    ],
-    [
-     "compact-go-puzzles-to-learn-the-basics",
-     147448
-    ],
-    [
-     "nie-weipings-tsumego-encyclopedia",
-     1235
-    ],
-    [
-     "specialized-training-in-tsumego-3",
-     20152
-    ],
-    [
-     "lee-chang-hos-selected-tsumego-part-2",
-     22012
-    ],
-    [
-     "weiqi-rapid-drill-800-part-1",
-     3175
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     202091
-    ],
-    [
-     "weiqi-rapid-drill-800-part-2",
-     3365
-    ],
-    [
-     "specialized-training-in-tsumego-5",
-     43919
-    ],
-    [
-     "go-puzzles-at-a-glance",
-     160691
-    ],
-    [
-     "hitomi-tsumego",
-     54064
-    ],
-    [
-     "hitomi-tsumego",
-     135426
-    ],
-    [
-     "seedling-project",
-     27452
-    ]
-   ],
-   "objective_zh": "到袁绍大帐，诸侯正在聚集。",
-   "title_zh": "末座"
-  },
-  {
-   "node": "2-m3",
-   "role": "main",
-   "place": "sishui-gate",
-   "spot": "gate",
-   "scene": "sishui",
-   "title": "The Gate Nobody Can Take",
-   "objective": "Go to the gate, where Hua Xiong is waiting.",
-   "after": [
-    "2-m2",
-    "2-a5",
-    "2-b4"
-   ],
-   "grade": "11K",
-   "pool": [
-    [
-     "go-puzzles-at-a-glance",
      160647
     ],
     [
@@ -1414,19 +1138,19 @@
      135079
     ]
    ],
-   "objective_zh": "到关前，华雄正在叫阵。",
-   "title_zh": "无人能破之关"
+   "objective_zh": "在路上迎接公孙瓒，同往诸侯营。",
+   "title_zh": "诸侯之路"
   },
   {
-   "node": "2-m3b",
+   "node": "2-m2",
    "role": "main",
-   "place": "sishui-gate",
-   "spot": "table",
-   "scene": "wine",
-   "title": "The Warm Cup",
-   "objective": "Return to the council table.",
+   "place": "the-lords-camp",
+   "spot": "council",
+   "scene": "alliance",
+   "title": "The Lowest Seat",
+   "objective": "Go to Yuan Shao's tent, where the lords are gathering.",
    "after": [
-    "2-m3"
+    "2-m1"
    ],
    "grade": "11K",
    "pool": [
@@ -1551,20 +1275,21 @@
      3477
     ]
    ],
-   "objective_zh": "回到军议之席。",
-   "title_zh": "温酒斩华雄"
+   "objective_zh": "到袁绍大帐，诸侯正在聚集。",
+   "title_zh": "末座"
   },
   {
-   "node": "2-m4a",
+   "node": "2-m3",
    "role": "main",
-   "place": "hulao-pass",
+   "place": "sishui-gate",
    "spot": "gate",
-   "scene": "hulao1",
-   "title": "The Eight Lords at Hulao",
-   "objective": "Go to Hulao Pass, where the lords are gathering.",
+   "scene": "sishui",
+   "title": "The Gate Nobody Can Take",
+   "objective": "Go to the gate, where Hua Xiong is waiting.",
    "after": [
-    "2-m3b",
-    "2-c3"
+    "2-m2",
+    "2-a5",
+    "2-b4"
    ],
    "grade": "11K",
    "pool": [
@@ -1689,22 +1414,21 @@
      3284
     ]
    ],
-   "board": false,
-   "objective_zh": "到虎牢关，诸侯正在聚集。",
-   "title_zh": "八路诸侯战吕布"
+   "objective_zh": "到关前，华雄正在叫阵。",
+   "title_zh": "无人能破之关"
   },
   {
-   "node": "2-m4b",
+   "node": "2-m3b",
    "role": "main",
-   "place": "hulao-pass",
-   "spot": "shrine",
-   "scene": "shrine2",
-   "title": "The Shrine at the Camp",
-   "objective": "Go to the old shrine by the camp.",
+   "place": "sishui-gate",
+   "spot": "table",
+   "scene": "wine",
+   "title": "The Warm Cup",
+   "objective": "Return to the council table.",
    "after": [
-    "2-m4a"
+    "2-m3"
    ],
-   "grade": "11K+",
+   "grade": "11K",
    "pool": [
     [
      "specialized-training-in-tesuji-4",
@@ -1825,6 +1549,282 @@
     [
      "specialized-training-in-tsumego-2",
      104315
+    ]
+   ],
+   "objective_zh": "回到军议之席。",
+   "title_zh": "温酒斩华雄"
+  },
+  {
+   "node": "2-m4a",
+   "role": "main",
+   "place": "hulao-pass",
+   "spot": "gate",
+   "scene": "hulao1",
+   "title": "The Eight Lords at Hulao",
+   "objective": "Go to Hulao Pass, where the lords are gathering.",
+   "after": [
+    "2-m3b",
+    "2-c3"
+   ],
+   "grade": "11K",
+   "pool": [
+    [
+     "specialized-training-in-tsumego-6",
+     127203
+    ],
+    [
+     "seedling-project",
+     27453
+    ],
+    [
+     "200-basic-go-problems",
+     175732
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     22166
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     542
+    ],
+    [
+     "bedtime-tsumego-part-1",
+     135071
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147412
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     108327
+    ],
+    [
+     "hitomi-tsumego",
+     135424
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     50671
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     12447
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     507
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     127239
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147411
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     483
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     44228
+    ],
+    [
+     "200-basic-go-problems",
+     175784
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     50487
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3488
+    ],
+    [
+     "weiqi-rapid-drill-800-part-1",
+     3081
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     372
+    ],
+    [
+     "specialized-training-in-tesuji-5",
+     119582
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3769
+    ],
+    [
+     "hitomi-tsumego",
+     104315
+    ],
+    [
+     "seedling-project",
+     27447
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     127188
+    ],
+    [
+     "200-basic-go-problems",
+     174770
+    ],
+    [
+     "hitomi-tsumego",
+     4958
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     204102
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     50486
+    ]
+   ],
+   "board": false,
+   "objective_zh": "到虎牢关，诸侯正在聚集。",
+   "title_zh": "八路诸侯战吕布"
+  },
+  {
+   "node": "2-m4b",
+   "role": "main",
+   "place": "hulao-pass",
+   "spot": "shrine",
+   "scene": "shrine2",
+   "title": "The Shrine at the Camp",
+   "objective": "Go to the old shrine by the camp.",
+   "after": [
+    "2-m4a"
+   ],
+   "grade": "11K+",
+   "pool": [
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3742
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160616
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     478
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-1",
+     1145
+    ],
+    [
+     "bedtime-tsumego-part-3",
+     135794
+    ],
+    [
+     "nie-weipings-tsumego-encyclopedia",
+     26157
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     44204
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     463
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-1",
+     1140
+    ],
+    [
+     "hitomi-tsumego",
+     160807
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160618
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     43784
+    ],
+    [
+     "weiqi-rapid-drill-800-part-1",
+     3168
+    ],
+    [
+     "the-unexpected-tesuji",
+     107590
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160747
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     50512
+    ],
+    [
+     "specialized-training-in-tesuji-3",
+     81064
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     84619
+    ],
+    [
+     "200-selected-problems-for-repetitive-practice",
+     376
+    ],
+    [
+     "200-basic-go-problems",
+     174207
+    ],
+    [
+     "hitomi-tsumego",
+     160785
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     84598
+    ],
+    [
+     "weiqi-rapid-drill-800-part-2",
+     3232
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     4958
+    ],
+    [
+     "hitomi-tsumego",
+     125311
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3436
+    ],
+    [
+     "specialized-training-in-tesuji-4",
+     81266
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     426
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     7009
+    ],
+    [
+     "the-great-tesuji-encyclopedia-3",
+     46584
     ]
    ],
    "shrine": true,
@@ -1973,7 +1973,7 @@
     "title": "Lü Bu, the Flying General",
     "taunt": "Four men or forty. None of you will leave this field.",
     "taunt_zh": "四个也好，四十个也好，没有一个能离开这里。",
-    "taunt_vid": "60843d0a7b1f"
+    "taunt_vid": "02f67796517a"
    },
    "gate": [
     {
@@ -2017,280 +2017,6 @@
     "2-d6"
    ],
    "grade": "11K+",
-   "pool": [
-    [
-     "specialized-training-in-tsumego-6",
-     127203
-    ],
-    [
-     "seedling-project",
-     27453
-    ],
-    [
-     "200-basic-go-problems",
-     175732
-    ],
-    [
-     "specialized-training-in-tsumego-3",
-     22166
-    ],
-    [
-     "lee-chang-hos-selected-tsumego-part-1",
-     542
-    ],
-    [
-     "bedtime-tsumego-part-1",
-     135071
-    ],
-    [
-     "compact-go-puzzles-to-learn-the-basics",
-     147412
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     108327
-    ],
-    [
-     "hitomi-tsumego",
-     135424
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     50671
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     12447
-    ],
-    [
-     "specialized-training-in-tsumego-5",
-     507
-    ],
-    [
-     "specialized-training-in-tsumego-6",
-     127239
-    ],
-    [
-     "compact-go-puzzles-to-learn-the-basics",
-     147411
-    ],
-    [
-     "specialized-training-in-tsumego-3",
-     483
-    ],
-    [
-     "specialized-training-in-tsumego-5",
-     44228
-    ],
-    [
-     "200-basic-go-problems",
-     175784
-    ],
-    [
-     "specialized-training-in-tsumego-3",
-     50487
-    ],
-    [
-     "weiqi-rapid-drill-800-part-3",
-     3488
-    ],
-    [
-     "weiqi-rapid-drill-800-part-1",
-     3081
-    ],
-    [
-     "lee-chang-hos-selected-tsumego-part-1",
-     372
-    ],
-    [
-     "specialized-training-in-tesuji-5",
-     119582
-    ],
-    [
-     "weiqi-rapid-drill-800-part-4",
-     3769
-    ],
-    [
-     "hitomi-tsumego",
-     104315
-    ],
-    [
-     "seedling-project",
-     27447
-    ],
-    [
-     "specialized-training-in-tsumego-6",
-     127188
-    ],
-    [
-     "200-basic-go-problems",
-     174770
-    ],
-    [
-     "hitomi-tsumego",
-     4958
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     204102
-    ],
-    [
-     "specialized-training-in-tsumego-3",
-     50486
-    ]
-   ],
-   "objective_zh": "进入洛阳废墟。",
-   "title_zh": "焦土洛阳"
-  },
-  {
-   "node": "2-a1",
-   "role": "side",
-   "place": "beimang-hill",
-   "spot": "reeds",
-   "scene": "fireflies",
-   "title": "The Fireflies",
-   "objective": "Side story: the two boys in the reeds.",
-   "after": [
-    "2-m2"
-   ],
-   "grade": "11K",
-   "pool": [
-    [
-     "weiqi-rapid-drill-800-part-4",
-     3742
-    ],
-    [
-     "go-puzzles-at-a-glance",
-     160616
-    ],
-    [
-     "lee-chang-hos-selected-tsumego-part-1",
-     478
-    ],
-    [
-     "weiqi-life-and-death-1000-problems-part-1",
-     1145
-    ],
-    [
-     "bedtime-tsumego-part-3",
-     135794
-    ],
-    [
-     "nie-weipings-tsumego-encyclopedia",
-     26157
-    ],
-    [
-     "specialized-training-in-tsumego-6",
-     44204
-    ],
-    [
-     "specialized-training-in-tsumego-5",
-     463
-    ],
-    [
-     "weiqi-life-and-death-1000-problems-part-1",
-     1140
-    ],
-    [
-     "hitomi-tsumego",
-     160807
-    ],
-    [
-     "go-puzzles-at-a-glance",
-     160618
-    ],
-    [
-     "specialized-training-in-tsumego-4",
-     43784
-    ],
-    [
-     "weiqi-rapid-drill-800-part-1",
-     3168
-    ],
-    [
-     "the-unexpected-tesuji",
-     107590
-    ],
-    [
-     "go-puzzles-at-a-glance",
-     160747
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     50512
-    ],
-    [
-     "specialized-training-in-tesuji-3",
-     81064
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     84619
-    ],
-    [
-     "200-selected-problems-for-repetitive-practice",
-     376
-    ],
-    [
-     "200-basic-go-problems",
-     174207
-    ],
-    [
-     "hitomi-tsumego",
-     160785
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     84598
-    ],
-    [
-     "weiqi-rapid-drill-800-part-2",
-     3232
-    ],
-    [
-     "lee-chang-hos-selected-tsumego-part-1",
-     4958
-    ],
-    [
-     "hitomi-tsumego",
-     125311
-    ],
-    [
-     "weiqi-rapid-drill-800-part-3",
-     3436
-    ],
-    [
-     "specialized-training-in-tesuji-4",
-     81266
-    ],
-    [
-     "lee-chang-hos-selected-tsumego-part-1",
-     426
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     7009
-    ],
-    [
-     "the-great-tesuji-encyclopedia-3",
-     46584
-    ]
-   ],
-   "objective_zh": "支线：芦苇中的两个少年。",
-   "title_zh": "萤火"
-  },
-  {
-   "node": "2-a2",
-   "role": "side",
-   "place": "wenming-garden",
-   "spot": "hall",
-   "scene": "wenming",
-   "title": "The Feast at Wenming Garden",
-   "objective": "Side story: the feast at Wenming Garden.",
-   "after": [
-    "2-a1"
-   ],
-   "grade": "11K",
    "pool": [
     [
      "compact-go-puzzles-to-learn-the-basics",
@@ -2413,19 +2139,19 @@
      63417
     ]
    ],
-   "objective_zh": "支线：温明园之宴。",
-   "title_zh": "温明园之宴"
+   "objective_zh": "进入洛阳废墟。",
+   "title_zh": "焦土洛阳"
   },
   {
-   "node": "2-a3",
+   "node": "2-a1",
    "role": "side",
-   "place": "l-bus-camp",
-   "spot": "tent",
-   "scene": "redhare",
-   "title": "Red Hare",
-   "objective": "Side story: take Dong Zhuo's gifts to Lü Bu's camp.",
+   "place": "beimang-hill",
+   "spot": "reeds",
+   "scene": "fireflies",
+   "title": "The Fireflies",
+   "objective": "Side story: the two boys in the reeds.",
    "after": [
-    "2-a2"
+    "2-m2"
    ],
    "grade": "11K",
    "pool": [
@@ -2550,28 +2276,19 @@
      3801
     ]
    ],
-   "gate": [
-    {
-     "needs": [
-      "item:gifts"
-     ],
-     "else": "lisuwaits",
-     "count": false
-    }
-   ],
-   "objective_zh": "支线：把董卓的礼物送到吕布营中。",
-   "title_zh": "赤兔马"
+   "objective_zh": "支线：芦苇中的两个少年。",
+   "title_zh": "萤火"
   },
   {
-   "node": "2-a4",
+   "node": "2-a2",
    "role": "side",
-   "place": "ding-yuans-camp",
-   "spot": "tent",
-   "scene": "dingyuan",
-   "title": "The Night Tent",
-   "objective": "Side story: Ding Yuan's tent, at night.",
+   "place": "wenming-garden",
+   "spot": "hall",
+   "scene": "wenming",
+   "title": "The Feast at Wenming Garden",
+   "objective": "Side story: the feast at Wenming Garden.",
    "after": [
-    "2-a3"
+    "2-a1"
    ],
    "grade": "11K",
    "pool": [
@@ -2696,20 +2413,19 @@
      3747
     ]
    ],
-   "board": false,
-   "objective_zh": "支线：丁原帐中，夜里。",
-   "title_zh": "夜入丁原帐"
+   "objective_zh": "支线：温明园之宴。",
+   "title_zh": "温明园之宴"
   },
   {
-   "node": "2-a5",
+   "node": "2-a3",
    "role": "side",
-   "place": "yongan-palace",
-   "spot": "upper",
-   "scene": "poison",
-   "title": "The Cup of Long Life",
-   "objective": "Side story: the upper room in the Yong'an Palace.",
+   "place": "l-bus-camp",
+   "spot": "tent",
+   "scene": "redhare",
+   "title": "Red Hare",
+   "objective": "Side story: take Dong Zhuo's gifts to Lü Bu's camp.",
    "after": [
-    "2-a4"
+    "2-a2"
    ],
    "grade": "11K",
    "pool": [
@@ -2834,20 +2550,28 @@
      111275
     ]
    ],
-   "board": false,
-   "objective_zh": "支线：永安宫楼上。",
-   "title_zh": "寿酒"
+   "gate": [
+    {
+     "needs": [
+      "item:gifts"
+     ],
+     "else": "lisuwaits",
+     "count": false
+    }
+   ],
+   "objective_zh": "支线：把董卓的礼物送到吕布营中。",
+   "title_zh": "赤兔马"
   },
   {
-   "node": "2-b1",
+   "node": "2-a4",
    "role": "side",
-   "place": "luoyang",
-   "spot": "hall",
-   "scene": "dagger",
-   "title": "Will Weeping Kill Dong Zhuo?",
-   "objective": "Side story: Wang Yun's birthday dinner.",
+   "place": "ding-yuans-camp",
+   "spot": "tent",
+   "scene": "dingyuan",
+   "title": "The Night Tent",
+   "objective": "Side story: Ding Yuan's tent, at night.",
    "after": [
-    "2-m2"
+    "2-a3"
    ],
    "grade": "11K",
    "pool": [
@@ -2972,19 +2696,20 @@
      1230
     ]
    ],
-   "objective_zh": "支线：王允的寿宴。",
-   "title_zh": "哭得死董卓否？"
+   "board": false,
+   "objective_zh": "支线：丁原帐中，夜里。",
+   "title_zh": "夜入丁原帐"
   },
   {
-   "node": "2-b2",
+   "node": "2-a5",
    "role": "side",
-   "place": "zhongmou",
-   "spot": "office",
-   "scene": "zhongmou",
-   "title": "The Magistrate",
-   "objective": "Side story: the magistrate's back room.",
+   "place": "yongan-palace",
+   "spot": "upper",
+   "scene": "poison",
+   "title": "The Cup of Long Life",
+   "objective": "Side story: the upper room in the Yong'an Palace.",
    "after": [
-    "2-b1"
+    "2-a4"
    ],
    "grade": "11K",
    "pool": [
@@ -3109,19 +2834,20 @@
      414
     ]
    ],
-   "objective_zh": "支线：县令的后院。",
-   "title_zh": "中牟县令"
+   "board": false,
+   "objective_zh": "支线：永安宫楼上。",
+   "title_zh": "寿酒"
   },
   {
-   "node": "2-b3",
+   "node": "2-b1",
    "role": "side",
-   "place": "l-boshes-farm",
-   "spot": "farm",
-   "scene": "lvboshe",
-   "title": "Rather I Betray the World",
-   "objective": "Side story: the farm of Lü Boshe.",
+   "place": "luoyang",
+   "spot": "hall",
+   "scene": "dagger",
+   "title": "Will Weeping Kill Dong Zhuo?",
+   "objective": "Side story: Wang Yun's birthday dinner.",
    "after": [
-    "2-b2"
+    "2-m2"
    ],
    "grade": "11K",
    "pool": [
@@ -3246,19 +2972,19 @@
      3337
     ]
    ],
-   "objective_zh": "支线：吕伯奢庄。",
-   "title_zh": "宁教我负天下人"
+   "objective_zh": "支线：王允的寿宴。",
+   "title_zh": "哭得死董卓否？"
   },
   {
-   "node": "2-b4",
+   "node": "2-b2",
    "role": "side",
-   "place": "xingyang",
-   "spot": "pass",
-   "scene": "xingyang",
-   "title": "The Horse at Xingyang",
-   "objective": "Side story: the pass at Xingyang.",
+   "place": "zhongmou",
+   "spot": "office",
+   "scene": "zhongmou",
+   "title": "The Magistrate",
+   "objective": "Side story: the magistrate's back room.",
    "after": [
-    "2-b3"
+    "2-b1"
    ],
    "grade": "11K",
    "pool": [
@@ -3383,19 +3109,19 @@
      127217
     ]
    ],
-   "objective_zh": "支线：荥阳关口。",
-   "title_zh": "荥阳之马"
+   "objective_zh": "支线：县令的后院。",
+   "title_zh": "中牟县令"
   },
   {
-   "node": "2-c1",
+   "node": "2-b3",
    "role": "side",
-   "place": "sishui-gate",
-   "spot": "night",
-   "scene": "zumao",
-   "title": "The Red Cap",
-   "objective": "Side story: Sun Jian's camp, at night.",
+   "place": "l-boshes-farm",
+   "spot": "farm",
+   "scene": "lvboshe",
+   "title": "Rather I Betray the World",
+   "objective": "Side story: the farm of Lü Boshe.",
    "after": [
-    "2-m3b"
+    "2-b2"
    ],
    "grade": "11K",
    "pool": [
@@ -3520,21 +3246,21 @@
      135795
     ]
    ],
-   "objective_zh": "支线：孙坚的夜营。",
-   "title_zh": "赤帻"
+   "objective_zh": "支线：吕伯奢庄。",
+   "title_zh": "宁教我负天下人"
   },
   {
-   "node": "2-c2",
+   "node": "2-b4",
    "role": "side",
-   "place": "burned-luoyang",
-   "spot": "well",
-   "scene": "seal",
-   "title": "The Well",
-   "objective": "Side story: the well in the ruined palace.",
+   "place": "xingyang",
+   "spot": "pass",
+   "scene": "xingyang",
+   "title": "The Horse at Xingyang",
+   "objective": "Side story: the pass at Xingyang.",
    "after": [
-    "2-c1"
+    "2-b3"
    ],
-   "grade": "11K+",
+   "grade": "11K",
    "pool": [
     [
      "weiqi-rapid-drill-800-part-2",
@@ -3657,21 +3383,21 @@
      148979
     ]
    ],
-   "objective_zh": "支线：废宫中的井。",
-   "title_zh": "井中玉玺"
+   "objective_zh": "支线：荥阳关口。",
+   "title_zh": "荥阳之马"
   },
   {
-   "node": "2-c3",
+   "node": "2-c1",
    "role": "side",
-   "place": "xianshan",
-   "spot": "ridge",
-   "scene": "xianshan",
-   "title": "Arrows and Stones",
-   "objective": "Side story: Mount Xian.",
+   "place": "sishui-gate",
+   "spot": "night",
+   "scene": "zumao",
+   "title": "The Red Cap",
+   "objective": "Side story: Sun Jian's camp, at night.",
    "after": [
-    "2-c2"
+    "2-m3b"
    ],
-   "grade": "11K+",
+   "grade": "11K",
    "pool": [
     [
      "bedtime-tsumego-part-3",
@@ -3794,19 +3520,19 @@
      147442
     ]
    ],
-   "objective_zh": "支线：岘山。",
-   "title_zh": "岘山矢石"
+   "objective_zh": "支线：孙坚的夜营。",
+   "title_zh": "赤帻"
   },
   {
-   "node": "2-d1",
+   "node": "2-c2",
    "role": "side",
-   "place": "wang-yuns-garden",
-   "spot": "pavilion",
-   "scene": "garden",
-   "title": "The Peony Pavilion",
-   "objective": "Side story: the peony pavilion, at night.",
+   "place": "burned-luoyang",
+   "spot": "well",
+   "scene": "seal",
+   "title": "The Well",
+   "objective": "Side story: the well in the ruined palace.",
    "after": [
-    "2-boss"
+    "2-c1"
    ],
    "grade": "11K+",
    "pool": [
@@ -3931,19 +3657,19 @@
      160794
     ]
    ],
-   "objective_zh": "支线：夜里的牡丹亭。",
-   "title_zh": "牡丹亭"
+   "objective_zh": "支线：废宫中的井。",
+   "title_zh": "井中玉玺"
   },
   {
-   "node": "2-d2",
+   "node": "2-c3",
    "role": "side",
-   "place": "wang-yuns-garden",
-   "spot": "hall",
-   "scene": "feasts",
-   "title": "Two Feasts",
-   "objective": "Side story: the banquet hall.",
+   "place": "xianshan",
+   "spot": "ridge",
+   "scene": "xianshan",
+   "title": "Arrows and Stones",
+   "objective": "Side story: Mount Xian.",
    "after": [
-    "2-d1"
+    "2-c2"
    ],
    "grade": "11K+",
    "pool": [
@@ -4068,19 +3794,19 @@
      160817
     ]
    ],
-   "objective_zh": "支线：宴客堂。",
-   "title_zh": "两席之宴"
+   "objective_zh": "支线：岘山。",
+   "title_zh": "岘山矢石"
   },
   {
-   "node": "2-d3",
+   "node": "2-d1",
    "role": "side",
-   "place": "fengyi-pavilion",
+   "place": "wang-yuns-garden",
    "spot": "pavilion",
-   "scene": "pavilion",
-   "title": "The Fengyi Pavilion",
-   "objective": "Side story: the Fengyi Pavilion.",
+   "scene": "garden",
+   "title": "The Peony Pavilion",
+   "objective": "Side story: the peony pavilion, at night.",
    "after": [
-    "2-d2"
+    "2-boss"
    ],
    "grade": "11K+",
    "pool": [
@@ -4205,19 +3931,19 @@
      241959
     ]
    ],
-   "objective_zh": "支线：凤仪亭。",
-   "title_zh": "凤仪亭"
+   "objective_zh": "支线：夜里的牡丹亭。",
+   "title_zh": "牡丹亭"
   },
   {
-   "node": "2-d4",
+   "node": "2-d2",
    "role": "side",
-   "place": "changan",
-   "spot": "gate",
-   "scene": "fall",
-   "title": "The Carriage",
-   "objective": "Side story: the Beiye Gate.",
+   "place": "wang-yuns-garden",
+   "spot": "hall",
+   "scene": "feasts",
+   "title": "Two Feasts",
+   "objective": "Side story: the banquet hall.",
    "after": [
-    "2-d3"
+    "2-d1"
    ],
    "grade": "11K+",
    "pool": [
@@ -4342,19 +4068,19 @@
      3295
     ]
    ],
-   "objective_zh": "支线：北掖门。",
-   "title_zh": "北掖门"
+   "objective_zh": "支线：宴客堂。",
+   "title_zh": "两席之宴"
   },
   {
-   "node": "2-d5",
+   "node": "2-d3",
    "role": "side",
-   "place": "changan",
-   "spot": "market",
-   "scene": "mourner",
-   "title": "The One Who Wept",
-   "objective": "Side story: the market.",
+   "place": "fengyi-pavilion",
+   "spot": "pavilion",
+   "scene": "pavilion",
+   "title": "The Fengyi Pavilion",
+   "objective": "Side story: the Fengyi Pavilion.",
    "after": [
-    "2-d4"
+    "2-d2"
    ],
    "grade": "11K+",
    "pool": [
@@ -4479,19 +4205,19 @@
      135076
     ]
    ],
-   "objective_zh": "支线：市集。",
-   "title_zh": "伏尸而哭"
+   "objective_zh": "支线：凤仪亭。",
+   "title_zh": "凤仪亭"
   },
   {
-   "node": "2-d6",
+   "node": "2-d4",
    "role": "side",
    "place": "changan",
-   "spot": "tower",
-   "scene": "tower",
-   "title": "Wang Yun on the Gate",
-   "objective": "Side story: the gate tower.",
+   "spot": "gate",
+   "scene": "fall",
+   "title": "The Carriage",
+   "objective": "Side story: the Beiye Gate.",
    "after": [
-    "2-d5"
+    "2-d3"
    ],
    "grade": "11K+",
    "pool": [
@@ -4614,6 +4340,280 @@
     [
      "weiqi-rapid-drill-800-part-4",
      3671
+    ]
+   ],
+   "objective_zh": "支线：北掖门。",
+   "title_zh": "北掖门"
+  },
+  {
+   "node": "2-d5",
+   "role": "side",
+   "place": "changan",
+   "spot": "market",
+   "scene": "mourner",
+   "title": "The One Who Wept",
+   "objective": "Side story: the market.",
+   "after": [
+    "2-d4"
+   ],
+   "grade": "11K+",
+   "pool": [
+    [
+     "specialized-training-in-tsumego-2",
+     247655
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160745
+    ],
+    [
+     "common-life-and-death-problems",
+     4225
+    ],
+    [
+     "specialized-training-in-tesuji-1",
+     241969
+    ],
+    [
+     "200-basic-go-problems",
+     174729
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     12745
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     27614
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-2",
+     134360
+    ],
+    [
+     "common-life-and-death-problems",
+     25465
+    ],
+    [
+     "fujisawa-shuko-classroom",
+     264977
+    ],
+    [
+     "200-selected-problems-for-repetitive-practice",
+     3249
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     20647
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     465
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-1",
+     142306
+    ],
+    [
+     "200-basic-go-problems",
+     174731
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     126872
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     1208
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     108368
+    ],
+    [
+     "hitomi-tsumego",
+     160787
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-1",
+     132148
+    ],
+    [
+     "hitomi-tsumego",
+     135428
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     127080
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3652
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-2",
+     668
+    ],
+    [
+     "the-unexpected-tesuji",
+     107400
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-1",
+     1174
+    ],
+    [
+     "ishida-yoshio-tsumego-challenge",
+     37671
+    ],
+    [
+     "weiqi-rapid-drill-800-part-1",
+     3138
+    ],
+    [
+     "fujisawa-shuko-classroom",
+     265458
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     127186
+    ]
+   ],
+   "objective_zh": "支线：市集。",
+   "title_zh": "伏尸而哭"
+  },
+  {
+   "node": "2-d6",
+   "role": "side",
+   "place": "changan",
+   "spot": "tower",
+   "scene": "tower",
+   "title": "Wang Yun on the Gate",
+   "objective": "Side story: the gate tower.",
+   "after": [
+    "2-d5"
+   ],
+   "grade": "11K+",
+   "pool": [
+    [
+     "hitomi-tsumego",
+     160850
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     127037
+    ],
+    [
+     "specialized-training-in-tesuji-1",
+     118928
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     108372
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     50694
+    ],
+    [
+     "fujisawa-shuko-classroom",
+     265377
+    ],
+    [
+     "the-great-tesuji-encyclopedia-4",
+     46961
+    ],
+    [
+     "200-selected-problems-for-repetitive-practice",
+     11711
+    ],
+    [
+     "fujisawa-shuko-classroom",
+     266257
+    ],
+    [
+     "weiqi-life-and-death-drills-beginner-part-3",
+     63384
+    ],
+    [
+     "the-great-tesuji-encyclopedia-4",
+     46964
+    ],
+    [
+     "segoe-tsumego-dictionary-part-2",
+     15929
+    ],
+    [
+     "hitomi-tsumego",
+     160861
+    ],
+    [
+     "the-great-tesuji-encyclopedia-4",
+     6012
+    ],
+    [
+     "200-basic-go-problems",
+     174799
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     43986
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     62670
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147456
+    ],
+    [
+     "specialized-training-in-tesuji-3",
+     81103
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     497
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-1",
+     142241
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-1",
+     132095
+    ],
+    [
+     "hitomi-tsumego",
+     515
+    ],
+    [
+     "bedtime-tsumego-part-3",
+     136013
+    ],
+    [
+     "200-basic-go-problems",
+     174223
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     403
+    ],
+    [
+     "weiqi-life-and-death-drills-beginner-part-2",
+     63265
+    ],
+    [
+     "hitomi-tsumego",
+     160838
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     43960
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-1",
+     142249
     ]
    ],
    "objective_zh": "支线：宣平门楼。",
