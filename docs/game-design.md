@@ -8,7 +8,7 @@ Written by the Game Design session. It rests on reading `docs/three-kingdoms-pla
 - **The Star Lords are the one justification for problems.** They offer counsel in exchange for a solved problem.
 - **Counsel becomes a hint the player acts on in the world** (go to a place, find a person, collect a thing), instead of a cutscene in which the characters do it. The cutscene then shows the result of what the player did.
 - **Bosses stay hard problems.** Relics should do something, not just appear in a scene.
-- **A slip keeps the same problem and starts a cooldown** (as the game already does). Keep it.
+- **A slip keeps the same problem and starts a fixed 30 s cooldown** (as the game already does). The user considers this mechanic done: no variation by Book or boss.
 - **Gated battles show a defeat, not a problem.** If the player attempts a fail-then-prepare battle or boss before its conditions are met (for example the blood at Black Wind), the board never opens: a short defeat scene plays and a clue points to what is missing. No problem is spent and no slip is counted. Once the conditions are met, the problem opens as normal.
 - **"Fail until prepared" and deliveries are tools in a toolbox**, used where the novel supports them and varied from Book to Book.
 - **Open:** whether the game is Three Kingdoms with a light xianxia layer (the plan today) or a full xianxia game. This review assumes the plan as written.
@@ -27,7 +27,7 @@ Written by the Game Design session. It rests on reading `docs/three-kingdoms-pla
 2. **The player never acts on the story.** The Star Lords give a plan, then the characters carry it out in a cinematic (Qingzhou's ambush, Black Wind's blood). The player's only input is the problem.
 3. **Problems often have no stated reason.** About 20 of 24 World 1 scenes open a board with no in-world reason, and challengers have their own reasons. The Star Lords' role is clear only in four.
 4. **Rewards do not do anything.** Apart from the horses, items are decoration, so there is little to look forward to between bosses.
-5. **Retry feel is untested.** Same problem plus a 30 s cooldown is a good rule: it stops trial and error and gives time to think. Not yet checked by playtest: whether 30 s is right for every grade, and whether the wait is used (reading the position) or just endured.
+5. **Retry feel is untested.** Same problem plus a 30 s cooldown is a good rule: it stops trial and error and gives time to think. Settled by the user: a fixed 30 s everywhere.
 6. **Replay hooks are thin.** Optional harder routes and the Chronicle exist, but nothing invites a second run.
 
 ## Proposals (priority order)
@@ -68,7 +68,7 @@ Implementer key: **Plot** = Plot/Story, **Integ** = Primary Integration, **Gfx**
 ## Open questions for the user
 
 1. Three Kingdoms with a light xianxia layer, or a full xianxia game?
-2. Should the cooldown vary (shorter for early Books, longer for bosses)? The rule itself is settled: same problem, cooldown on a slip; a gated battle shows a defeat scene and no board.
+2. (Settled.) A slip keeps the same problem with a fixed 30 s cooldown, in every Book and for bosses. A gated battle shows a defeat scene and no board.
 3. How many Book-end choices, and should they carry into later Books?
 4. Do challenger NPCs stay as optional trainers or become the Star Lords' proxies?
 
