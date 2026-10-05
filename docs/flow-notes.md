@@ -36,3 +36,10 @@ These are design notes from a player's point of view: whether each objective and
 ## How to check a new Book
 
 Before a Book's data goes in, read its main line alone, with no side roads, and for each objective ask: does the player already know every name in it? Then walk each side road in the order the edges allow, and check that nothing shows a result before its cause, or a person after their death.
+
+## Recheck (Plot 6285003, on Plot's branch)
+
+All the notes above were taken, and the main-line reads and side-road order now hold up. Remaining:
+
+- **World 1, Qingzhou (minor):** Daxing now ends with "a messenger gallops in from Qingzhou", but the objective still says "Lift the siege of Qingzhou" before the letter is read. "Hear the messenger from Qingzhou." would close it; it's optional.
+- **For Book 3's opening:** Book 2's side roads after the ruins (Xingyang, the well and Mount Xian, and the Diaochan thread) don't rejoin the main line, so a player who skips them never sees Dong Zhuo die or Li Jue and Guo Si take Chang'an. Book 3's opening scroll or first scene needs to say so.
