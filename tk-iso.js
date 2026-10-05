@@ -24,20 +24,26 @@ const WorldIso = {
     const W = map.widthInPixels, H = map.heightInPixels;
     const P = (x, y) => ({ x: x - y + H, y: (x + y) / 2 });
     const inv = (sx, sy) => { const u = sx - H, v = 2 * sy; return { x: (u + v) / 2, y: (v - u) / 2 }; };
-    // the ground: every layer drawn flat into one texture, shown turned 45 degrees and squashed
+    // the ground: every layer drawn flat into one texture, shown turned 45 degrees and squashed. Outdoors
+    // the texture runs on past the map (the apron): the screen is a rectangle and the map a diamond, so near
+    // the map's edge the view reaches beyond it; out there the map's own edge ground carries on, and the
+    // kit's trees and rocks stand on it (apron()), out of reach of the player
+    const kit = scene.kit || {}, indoor = String(scene.placeId).includes("--");
+    const T = map.tileWidth, pad = indoor ? 0 : Math.min(48, Math.ceil(Math.max(W, H) / 2 / T) + 4) * T;
     const key = `iso-ground-${scene.placeId}`;
     if (scene.textures.exists(key)) scene.textures.remove(key);
-    const rt = scene.make.renderTexture({ x: 0, y: 0, width: W, height: H }, false);
-    for (const l of layers) rt.draw(l, 0, 0);
+    const rt = scene.make.renderTexture({ x: 0, y: 0, width: W + 2 * pad, height: H + 2 * pad }, false);
+    if (pad) WorldIso.extendGround(scene, map, layers[0], rt, pad);
+    for (const l of layers) rt.draw(l, pad, pad);
     rt.saveTexture(key);
     for (const l of layers) l.setVisible(false);
-    const floor = scene.add.container(H, 0).setScale(1, .5).setDepth(-2e5);
+    const floor = scene.add.container(H, -pad).setScale(1, .5).setDepth(-2e5);
     floor.add(scene.add.image(0, 0, key).setOrigin(0, 0).setRotation(Math.PI / 4).setScale(Math.SQRT2));
     floor.isoFixed = true;
-    const iso = scene.iso = { P, inv, W, H, floor, width: W + H, height: (W + H) / 2 };
+    const iso = scene.iso = { P, inv, W, H, pad, floor, width: W + H, height: (W + H) / 2 };
+    if (pad) WorldIso.apron(scene, map, iso, kit);
     // beyond the map's diamond: outdoors more country (the kit's "isoVoid" colour); indoors the void the
     // room is drawn on, so the unused part of the map doesn't show as a slab under the room
-    const kit = scene.kit || {}, indoor = String(scene.placeId).includes("--");
     const back = indoor ? kit.materials && kit.materials.void && kit.materials.void.color : kit.isoVoid;
     if (back) scene.cameras.main.setBackgroundColor(back);
     if (!indoor) WorldIso.surround(scene, iso, kit);
@@ -83,6 +89,46 @@ const WorldIso = {
     scene.events.on("render", restore);
     scene.events.once("shutdown", () => { scene.events.off("prerender", project); scene.events.off("render", restore); });
     return iso;
+  },
+
+  // The apron's ground: each cell outside the map gets the ground tile of the nearest map cell at the edge.
+  extendGround(scene, map, layer, rt, pad) {
+    if (!layer) return;
+    const T = map.tileWidth, cols = map.width, rows = map.height, n = pad / T, frames = new Map();
+    const frameOf = t => {   // a tile's picture as a frame of its tileset's texture
+      const ts = t.tileset, k = `${ts.name}:${t.index}`;
+      if (!frames.has(k)) {
+        const tex = scene.textures.get(ts.image.key), c = ts.getTileTextureCoordinates(t.index), f = `iso-${t.index}`;
+        if (c && !tex.has(f)) tex.add(f, 0, c.x, c.y, ts.tileWidth, ts.tileHeight);
+        frames.set(k, c ? [ts.image.key, f] : null);
+      }
+      return frames.get(k);
+    };
+    for (let y = -n; y < rows + n; y++) for (let x = -n; x < cols + n; x++) {
+      if (x >= 0 && y >= 0 && x < cols && y < rows) continue;
+      const t = layer.getTileAt(Math.min(cols - 1, Math.max(0, x)), Math.min(rows - 1, Math.max(0, y)));
+      const f = t && t.index >= 0 && frameOf(t);
+      if (f) rt.drawFrame(f[0], f[1], (x + n) * T, (y + n) * T);
+    }
+  },
+
+  // The apron's growth: the kit's trees and rocks, thicker the further from the map, never on the map.
+  apron(scene, map, iso, kit) {
+    const wanted = (kit.isoApron || ["tree.big", "tree.pine", "tree.small", "tree.grove", "rock.big", "plant.bush"])
+      .filter(k => kit.kinds[k]);
+    const frames = wanted.flatMap(k => kit.kinds[k].map((f, i) => [`kit-${f[0]}`, `${k}#${i}`]));
+    if (!frames.length) return;
+    let seed = [...String(scene.placeId)].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 11);
+    const rnd = () => (seed = (seed * 1103515245 + 12345) >>> 0) / 4294967296;
+    const { W, H, pad } = iso, step = map.tileWidth * 2;
+    for (let y = -pad + step / 2; y < H + pad; y += step) for (let x = -pad + step / 2; x < W + pad; x += step) {
+      const out = Math.max(-x, -y, x - W, y - H);   // how far outside the map
+      if (out < map.tileWidth) continue;
+      if (rnd() > Math.min(.75, .15 + out / pad)) continue;
+      const [tex, f] = frames[Math.floor(rnd() * frames.length)];
+      const img = scene.add.image(x + (rnd() - .5) * step, y + (rnd() - .5) * step, tex, f).setOrigin(.5, 1);
+      img.setDepth(img.y).setFlipX(rnd() < .5);
+    }
   },
 
   // Outdoors, the country around the map: a seamless backdrop under the diamond (kit "isoBackdrop": the place's
