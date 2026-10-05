@@ -7,9 +7,13 @@ GROUND: 16x16 seamless tiles, several variants each.
 OBJECTS: kind -> (prompt, (w, h) to fit, variants).
 """
 
-# the ground materials taken from GROUND; the rest stay the Jade kit's (the first generated
-# grass, dirt and stone came out as yellow sand and patterned rugs: regenerate before adding them)
-USE_GROUND = set()
+# Ground is drawn (tools/build_xianxia_kit.py, ground()) in colours matched to the objects: the
+# generated ground came out as yellow sand and patterned rugs. GROUND below is kept for a retry.
+DRAWN_GROUND = ("grass", "dirt", "sand", "water")
+
+# pieces that came out wrong (a box for a go table, shrines for small rocks...): they keep the
+# Jade kit's art until they are regenerated
+REDO = {"furniture.gotable", "camp.table", "camp.hay", "building.moongate", "rock.small"}
 
 GROUND = {
     "grass": ("soft light jade-green grass, a few tiny flowers, even and calm", 4),
