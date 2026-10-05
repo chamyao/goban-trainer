@@ -7,6 +7,7 @@ Writes assets/tk/drawn.png, a small sheet the kits use like any pack sheet
   moon gate      64,0   48x40      water      0,48 and 16,48 (16x16 tiles)
   fire pit       32,48  32x16      gateway    64,48  32x32
   shrine         0,80 dark, 32,80 lit, 64,80 settled (32x30 each)
+  ruins (Book 2's burned Luoyang): hall 0,112 64x44   columns 64,112 32x40   rubble 96,112 16x12
 """
 from pathlib import Path
 
@@ -177,8 +178,41 @@ def shrine(state):
     return img
 
 
+CHAR, CHARD, ASH, ASHD = "#3a2e2a", "#241c1a", "#8a8682", "#5e5a56"
+
+
+def ruin_hall():   # a burned hall: the walls stand, the roof is gone, charred beams across the gap
+    g = Grid(64, 44)
+    g.rect(2, 26, 60, 17, "#6e6660"); g.rect(2, 26, 60, 2, "#4e4844")            # the stone base
+    for x in (4, 18, 32, 46, 58):
+        top = 6 + (x * 7) % 11
+        g.rect(x, top, 4, 26 - top, CHAR); g.rect(x + 3, top, 1, 26 - top, CHARD)  # burnt pillars, broken at odd heights
+    g.rect(4, 12, 40, 3, CHARD); g.rect(30, 9, 18, 2, CHAR)                         # beams fallen across
+    g.rect(22, 30, 14, 13, "#1c1614")                                             # the empty doorway
+    for x, y in ((8, 38), (40, 36), (52, 40), (14, 34)):
+        g.rect(x, y, 3, 2, ASH)                                                   # ash and stones on the base
+    return g.outline().image()
+
+
+def ruin_columns():   # two charred columns, one snapped
+    g = Grid(32, 40)
+    g.rect(4, 4, 6, 33, CHAR); g.rect(8, 4, 2, 33, CHARD); g.rect(3, 2, 8, 3, "#4a3e38")
+    g.rect(20, 16, 6, 21, CHAR); g.rect(24, 16, 2, 21, CHARD); g.set(20, 15, CHAR); g.set(23, 14, CHAR); g.set(25, 15, CHAR)
+    g.rect(1, 36, 30, 3, "#6e6660")
+    for x in (12, 15, 27):
+        g.rect(x, 34, 3, 2, ASH)
+    return g.outline().image()
+
+
+def ruin_rubble():   # a heap of stones and burnt timber
+    g = Grid(16, 12)
+    g.ellipse(8, 9, 7, 3, ASHD); g.ellipse(6, 8, 3, 2, ASH); g.ellipse(11, 8, 3, 2, "#a09c96")
+    g.rect(2, 5, 9, 2, CHAR); g.set(12, 4, CHAR)
+    return g.outline().image()
+
+
 def main():
-    sheet = Image.new("RGBA", (112, 112))
+    sheet = Image.new("RGBA", (112, 160))
     sheet.alpha_composite(notice_board(), (0, 0))
     sheet.alpha_composite(go_table(), (40, 0))
     sheet.alpha_composite(moon_gate(), (64, 0))
@@ -188,6 +222,9 @@ def main():
     sheet.alpha_composite(gateway(), (64, 48))
     for i, state in enumerate(("dark", "lit", "settled")):
         sheet.alpha_composite(shrine(state), (32 * i, 80))
+    sheet.alpha_composite(ruin_hall(), (0, 112))
+    sheet.alpha_composite(ruin_columns(), (64, 112))
+    sheet.alpha_composite(ruin_rubble(), (96, 112))
     out = ROOT / "assets/tk/drawn.png"
     sheet.save(out)
     print(out.relative_to(ROOT))

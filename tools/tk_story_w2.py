@@ -724,7 +724,7 @@ PLACES2 = {
     ], [_talk("folk.soldier", "Lü Bu on Red Hare: they say he can go through a whole army.", "吕布骑着赤兔马，听说能单骑冲过一支大军。")],
         {"2-m4a": T("Go to Hulao Pass, where the lords are gathering.", "到虎牢关，诸侯正在聚集。"),
          "2-m4b": T("Go to the old shrine by the camp.", "到营中的旧神龛去。"), "2-boss": _OBJ_BOSS}, banners="red"),
-    "Burned Luoyang": _P("city", [{"kind": "building.hall", "id": "court", "node": "2-m5", "label": T("The burned palace", "焚毁的宫殿")},
+    "Burned Luoyang": _P("ruins", [{"kind": "building.hall", "id": "court", "node": "2-m5", "label": T("The burned palace", "焚毁的宫殿")},
                                   {"kind": "rock.big", "id": "well", "node": "2-c2", "label": T("The well in the ruins", "废墟中的井")}],
                          [_talk("folk.elder", "The palace burned for three days. I watched it from the hills.", "宫殿烧了三天三夜。我在山上看着的。")],
                          {"2-m5": T("Ride into the ruins of Luoyang.", "进入洛阳废墟。"), "2-c2": T("Side story: the well in the ruined palace.", "支线：废宫中的井。")}),

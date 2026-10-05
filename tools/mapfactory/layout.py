@@ -50,6 +50,12 @@ ARCHETYPES = {
                   border=["rock.crag", "tree.dead", "rock.big"],
                   decor={"tree.dead": .8, "rock.small": 1.0, "plant.grass": 1.4, "rock.crag": .25, "plant.bush": .5},
                   clusters=(4, ["tree.dead", "rock.crag", "rock.big"]), patches=6, pond=False),
+    # Book 2's burned Luoyang: ash and rubble where the city was, charred halls, dead trees, no people
+    "ruins": dict(size=(40, 30), plaza=(8, 5), paved=True,
+                  fill=["ruin.hall", "ruin.columns", "ruin.hall", "ruin.columns", "ruin.columns", "ruin.hall"],
+                  border=["tree.dead", "rock.big", "ruin.columns"],
+                  decor={"ruin.rubble": 2.0, "tree.dead": .6, "rock.small": 1.2, "plant.grass": .3},
+                  clusters=(4, ["ruin.rubble", "rock.big", "tree.dead"]), patches=8, pond=False, bare=True),
     "camp": dict(size=(38, 28), plaza=(10, 7), fill=["building.tent", "building.tent", "building.tent", "building.tent"],
                  border=["tree.grove", "tree.pine", "rock.big"],
                  decor={"plant.grass": 1.5, "rock.small": .4, "plant.bush": .6},
@@ -466,6 +472,8 @@ class Layout:
             raise RuntimeError("unreachable: " + ", ".join(missing))
         if self.A.get("paved"):   # a city's streets and square are paved
             self.t = [[":" if ch == "=" else ch for ch in row] for row in self.t]
+        if self.A.get("bare"):    # burned ground: no grass left, only earth and ash between the paving
+            self.t = [["=" if ch == "." else ch for ch in row] for row in self.t]
         return {
             "format": "tk-map/1",
             "id": self.place["id"],

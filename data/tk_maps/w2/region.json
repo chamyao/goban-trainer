@@ -184,22 +184,14 @@
    "id": "burned-luoyang",
    "name": "Burned Luoyang",
    "zh": "焦土洛阳",
-   "archetype": "city",
+   "archetype": "ruins",
    "map": "burned-luoyang.map.json",
    "links": [
     "hulao-pass",
     "sishui-gate",
     "xianshan",
     "changan",
-    "burned-luoyang--court",
-    "burned-luoyang--hall-1",
-    "burned-luoyang--house-1",
-    "burned-luoyang--house-2",
-    "burned-luoyang--inn-1",
-    "burned-luoyang--shop-1",
-    "burned-luoyang--house-3",
-    "burned-luoyang--shop-2",
-    "burned-luoyang--house-4"
+    "burned-luoyang--court"
    ]
   },
   {
@@ -208,94 +200,6 @@
    "zh": "焚毁的宫殿",
    "archetype": "interior",
    "map": "burned-luoyang--court.map.json",
-   "links": [
-    "burned-luoyang"
-   ],
-   "parent": "burned-luoyang"
-  },
-  {
-   "id": "burned-luoyang--hall-1",
-   "name": "Hall, Burned Luoyang",
-   "zh": "焦土洛阳·厅堂",
-   "archetype": "interior",
-   "map": "burned-luoyang--hall-1.map.json",
-   "links": [
-    "burned-luoyang"
-   ],
-   "parent": "burned-luoyang"
-  },
-  {
-   "id": "burned-luoyang--house-1",
-   "name": "House, Burned Luoyang",
-   "zh": "焦土洛阳·民居",
-   "archetype": "interior",
-   "map": "burned-luoyang--house-1.map.json",
-   "links": [
-    "burned-luoyang"
-   ],
-   "parent": "burned-luoyang"
-  },
-  {
-   "id": "burned-luoyang--house-2",
-   "name": "House, Burned Luoyang",
-   "zh": "焦土洛阳·民居",
-   "archetype": "interior",
-   "map": "burned-luoyang--house-2.map.json",
-   "links": [
-    "burned-luoyang"
-   ],
-   "parent": "burned-luoyang"
-  },
-  {
-   "id": "burned-luoyang--inn-1",
-   "name": "Inn, Burned Luoyang",
-   "zh": "焦土洛阳·客栈",
-   "archetype": "interior",
-   "map": "burned-luoyang--inn-1.map.json",
-   "links": [
-    "burned-luoyang"
-   ],
-   "parent": "burned-luoyang"
-  },
-  {
-   "id": "burned-luoyang--shop-1",
-   "name": "Teahouse, Burned Luoyang",
-   "zh": "焦土洛阳·茶馆",
-   "archetype": "interior",
-   "map": "burned-luoyang--shop-1.map.json",
-   "links": [
-    "burned-luoyang"
-   ],
-   "parent": "burned-luoyang"
-  },
-  {
-   "id": "burned-luoyang--house-3",
-   "name": "House, Burned Luoyang",
-   "zh": "焦土洛阳·民居",
-   "archetype": "interior",
-   "map": "burned-luoyang--house-3.map.json",
-   "links": [
-    "burned-luoyang"
-   ],
-   "parent": "burned-luoyang"
-  },
-  {
-   "id": "burned-luoyang--shop-2",
-   "name": "Teahouse, Burned Luoyang",
-   "zh": "焦土洛阳·茶馆",
-   "archetype": "interior",
-   "map": "burned-luoyang--shop-2.map.json",
-   "links": [
-    "burned-luoyang"
-   ],
-   "parent": "burned-luoyang"
-  },
-  {
-   "id": "burned-luoyang--house-4",
-   "name": "House, Burned Luoyang",
-   "zh": "焦土洛阳·民居",
-   "archetype": "interior",
-   "map": "burned-luoyang--house-4.map.json",
    "links": [
     "burned-luoyang"
    ],
