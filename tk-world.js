@@ -13,7 +13,7 @@
 
 const WORLD_CLUTTER = /^(plant\.|rock\.small)/;  // drawn underfoot
 const WORLD_KIT = "xianxia";  // the default look; the campaign page's art button switches (localStorage tk-kit)
-const WORLD_KITS = { jade: { zh: "玉", en: "Jade" }, ninja: { zh: "忍者", en: "Ninja Adventure" }, xianxia: { zh: "仙侠", en: "Xianxia (generated)" },
+const WORLD_KITS = { jade: { zh: "玉", en: "Jade" }, xianxia: { zh: "仙侠", en: "Xianxia (generated)" },
   genshin: { zh: "原神", en: "Genshin (isometric)", iso: true } };   // iso: drawn for the isometric view (tk-iso.js)
 
 /* ---------- where you are in a world: place, position, party, places seen ---------- */
