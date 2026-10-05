@@ -83,5 +83,90 @@
   ],
   "seconds": 62.9,
   "made": "2026-10-05"
+ },
+ "char.zhujun": {
+  "model": "retro-diffusion/rd-animation",
+  "input": {
+   "style": "four_angle_walking",
+   "width": 48,
+   "height": 48,
+   "return_spritesheet": true,
+   "prompt": "Chinese imperial general, short beard, grey iron helmet, dark red robe over armour, sword, Chinese fantasy RPG, xianxia, Eastern Han dynasty"
+  },
+  "n": 1,
+  "size": [
+   192,
+   192
+  ],
+  "seconds": 28.4,
+  "made": "2026-10-05"
+ },
+ "char.militia": {
+  "model": "retro-diffusion/rd-animation",
+  "input": {
+   "style": "four_angle_walking",
+   "width": 48,
+   "height": 48,
+   "return_spritesheet": true,
+   "prompt": "young Chinese village volunteer, red headband, olive-green tunic, holding a spear, Chinese fantasy RPG, xianxia, Eastern Han dynasty"
+  },
+  "n": 1,
+  "size": [
+   192,
+   192
+  ],
+  "seconds": 28.8,
+  "made": "2026-10-05"
+ },
+ "char.rebel": {
+  "model": "retro-diffusion/rd-animation",
+  "input": {
+   "style": "four_angle_walking",
+   "width": 48,
+   "height": 48,
+   "return_spritesheet": true,
+   "prompt": "Yellow Turban rebel, yellow headscarf, ragged brown tunic, holding a spear, Chinese fantasy RPG, xianxia, Eastern Han dynasty"
+  },
+  "n": 1,
+  "size": [
+   192,
+   192
+  ],
+  "seconds": 24.0,
+  "made": "2026-10-05"
+ },
+ "char.f_farmer": {
+  "model": "retro-diffusion/rd-animation",
+  "input": {
+   "style": "four_angle_walking",
+   "width": 48,
+   "height": 48,
+   "return_spritesheet": true,
+   "prompt": "Chinese peasant farmer, straw hat, plain brown clothes, Chinese fantasy RPG, xianxia, Eastern Han dynasty"
+  },
+  "n": 1,
+  "size": [
+   192,
+   192
+  ],
+  "seconds": 39.3,
+  "made": "2026-10-05"
+ },
+ "char.f_official": {
+  "model": "retro-diffusion/rd-animation",
+  "input": {
+   "style": "four_angle_walking",
+   "width": 48,
+   "height": 48,
+   "return_spritesheet": true,
+   "prompt": "Chinese clerk, black official's cap, blue robe, thin moustache, Chinese fantasy RPG, xianxia, Eastern Han dynasty"
+  },
+  "n": 1,
+  "size": [
+   192,
+   192
+  ],
+  "seconds": 27.2,
+  "made": "2026-10-05"
  }
 }
