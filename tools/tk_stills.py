@@ -132,7 +132,8 @@ STYLE = f"{STYLES['final']} Han dynasty China, about 184 AD."
 BATTLE_LINES = {
     "final_b1": "Dynamic action shot, speed lines.",
     "final_b2": "Low camera angle, motion blur, flying debris.",   # dropped: shot-specific, not reusable on every battle
-    "final_b5": "Kinetic action, bold motion lines.",
+    "final_b5": "Kinetic action, bold motion lines.",   # dropped: the same as b1
+    "final_b6": "Action webtoon.",
     "final_b3": "Explosive action, high contrast, impact frames.",
     "final_b4": "Fight scene like The God of High School.",
 }
