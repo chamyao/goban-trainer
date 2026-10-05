@@ -74,6 +74,8 @@ ZH = {
         "玄德！我围张角，眼看就要破贼。朝廷派来的使者向我索贿，我不肯给。如今我被押解进京，兵马交给了董卓。",
     "I'll cut down these guards and set him free!": "我去杀了这些押送的军士，救出卢中郎！",
     "Liu Bei looks at the cart, at the four guards, at Zhang Fei's hand on his blade.": "玄德看看囚车，看看四名军士，又看看张飞按剑的手。",
+    "If I free him, I am a rebel. If I stand by, an honest man goes to his ruin.": "劫了囚车，我便是反贼；袖手旁观，忠良便要受冤。",
+    "He deserves to die. But I am a sheriff, and he is the court's own man.": "此人死有余辜。可我是县尉，他是朝廷的人。",
     "It is clear to me now.": "我明白了。",
     "Not yet. Let me think it through once more.": "且慢，容我再想想。",
     "I know what I must do.": "我知道该怎么做了。",
