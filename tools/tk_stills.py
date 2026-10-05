@@ -25,7 +25,7 @@ import re
 
 # the user's pick from the candidates below (gongbi), with what it tended to add uninvited ruled out
 STYLE = ("Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat "
-         "mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no "
+         "mineral colours, gold leaf accents, stylised clouds and waves. No text, no speech or thought bubbles, no captions, no calligraphy, no seals, no "
          "signature, no watermark.")
 
 # candidates for STYLE, to choose by eye (gen_stills.py --styles): the user wants the stills to
