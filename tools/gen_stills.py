@@ -36,10 +36,12 @@ import base64
 import io
 import json
 import os
+import random
 import sys
 import time
 import urllib.error
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor
 from datetime import date
 from pathlib import Path
 
@@ -58,9 +60,16 @@ def http(url, body=None, headers=None, method=None, timeout=300):
     req = urllib.request.Request(url, data=data, method=method or ("POST" if data else "GET"),
                                  headers={"Content-Type": "application/json", "User-Agent": "goban-trainer/gen_stills",
                                           **(headers or {})})
-    with urllib.request.urlopen(req, timeout=timeout) as r:
-        raw = r.read()
-    return json.loads(raw) if raw[:1] in (b"{", b"[") else raw
+    for attempt in range(8):
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as r:
+                raw = r.read()
+            return json.loads(raw) if raw[:1] in (b"{", b"[") else raw
+        except urllib.error.HTTPError as e:
+            if e.code != 429 or attempt == 7:   # rate limited: wait as told (or back off) and go again
+                raise
+            wait = float(e.headers.get("Retry-After") or 0) or 2 ** attempt
+            time.sleep(wait + random.random())
 
 
 def fetch(url):
@@ -225,7 +234,7 @@ def portraits(name, fn, keys, n, model):
     print("choose from: assets/tk/stills/refs/candidates/index.html, then --pick KEY N")
 
 
-def review(name, fn, ids, model, tries, look=None):
+def review(name, fn, ids, model, tries, look=None, workers=8):
     """Candidates for the user to approve, into samples/review/<id>--<n>.jpg: nothing goes into
     stills.json until the user has seen and OK'd it."""
     out = OUT / "samples/review"
@@ -233,19 +242,21 @@ def review(name, fn, ids, model, tries, look=None):
     restyle = (lambda t: t.replace(STYLE, f"{STYLES[look]} {NEGATIVE}")) if look else (lambda t: t)
     tag = f"{look}-" if look else ""
     jobs = [(f"{sid}--{tag}{n}", restyle(request(name, sid)[0])) for sid in ids for n in range(1, tries + 1)]
-    for i, (stem, text) in enumerate(jobs):
-        if (out / f"{stem}.jpg").exists():
-            continue
-        if i:
-            time.sleep(15)   # back to back, Replicate turns away about half with 429s
+    jobs = [(stem, text) for stem, text in jobs if not (out / f"{stem}.jpg").exists()]
+
+    def one(job):   # all at once; http() waits out any 429 itself
+        stem, text = job
         try:
             raw, used = fn(text, model, "16:9", [])
         except Exception as e:
-            print(f"  {stem}: failed: {e}")
-            continue
+            return f"  {stem}: failed: {e}"
         fit(raw).save(out / f"{stem}.jpg", "JPEG", quality=86)
         (out / f"{stem}.txt").write_text(text)
-        print(f"  {stem}: {name}/{used}")
+        return f"  {stem}: {name}/{used}"
+
+    with ThreadPoolExecutor(max_workers=max(1, workers)) as pool:
+        for line in pool.map(one, jobs):
+            print(line, flush=True)
 
 
 def styles(name, fn, ids, keys, model):
@@ -335,6 +346,7 @@ def main():
     ap.add_argument("--review", nargs="+", metavar="ID", help="candidates for the user to approve, into "
                     "stills/samples/review/ (never stills.json)")
     ap.add_argument("--tries", type=int, default=2, help="with --review: candidates per still")
+    ap.add_argument("--jobs", type=int, default=8, help="with --review: requests in flight at once")
     ap.add_argument("--look", choices=sorted(STYLES), help="with --review: a candidate style (tk_stills.STYLES) "
                     "instead of STYLE, the negatives kept")
     ap.add_argument("--styles", nargs="*", metavar="KEY", help="every candidate style on --only stills, and every "
@@ -375,7 +387,7 @@ def main():
         return portraits(name, fn, [k for k in CAST if not a.only or k in a.only], a.portraits,
                          os.environ.get("TK_IMAGE_MODEL"))
     if a.review:
-        return review(name, fn, a.review, os.environ.get("TK_IMAGE_MODEL"), a.tries, a.look)
+        return review(name, fn, a.review, os.environ.get("TK_IMAGE_MODEL"), a.tries, a.look, a.jobs)
     if a.styles is not None:
         return styles(name, fn, [s for s in STILLS if a.only and s in a.only], a.styles, os.environ.get("TK_IMAGE_MODEL"))
     if a.compare:

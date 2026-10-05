@@ -66,6 +66,15 @@ def build_region(world, briefs):
              "after": after[n["key"]], "grade": n.get("grade"), "pool": n.get("pool", [])}
         if n.get("boss"):
             q["boss"] = n["boss"]
+        if n.get("board") is False:   # a scene with no board (a defeat): playing it is the beat
+            q["board"] = False
+        if n.get("shrine"):   # this node is its place's shrine (dark / lit / settled); "hint" is what it repeats
+            q["shrine"] = True
+            if n.get("hint"):
+                q["hint"] = n["hint"]
+        if n.get("gate"):   # a gated battle: each {"needs", "else" scene, "objective", "at" place}, in order
+            q["gate"] = [{**g, "needs": g["needs"] if isinstance(g["needs"], list) else [g["needs"]],
+                          **({"place": slug(g["at"])} if g.get("at") else {})} for g in n["gate"]]
         if n.get("room"):   # played inside one of the place's buildings (its landmark "id")
             q["room"] = n["room"]
             if n.get("trigger"):   # near (default), arrive or talk, as for landmarks
