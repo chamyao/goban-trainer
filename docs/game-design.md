@@ -100,3 +100,13 @@ Agreed with Plot/Story; the script draft is Plot's (`docs/world2-script-draft.md
 ## Who decides what
 
 Per the user (confirmed directly): **story-tied design** (Book mechanics tied to scenes, hints, objectives, which scenes use which block) goes to Plot/Story for approval. **Interface and engine decisions** (taps, thresholds, settings, how triggers feel) go to Primary Integration. Game Design contacts each directly.
+
+## Decision boards (user idea)
+
+When a leader (Liu Bei, later Cao Cao, Zhuge Liang) reaches a hard choice, the scene pauses on the dilemma and the Go problem is how he weighs it. Solving it is the moment he decides, and the scene goes on with the novel's choice. This gives the boards without Star Lords a reason in the story, and makes the player share the weight of the choice.
+
+- **Shape:** one or two lines set out the dilemma (say who wants what), then the board opens under a short caption naming it (for example "Free Lu Zhi, or trust the court?"). On a solve the leader states his choice. On a slip, a short line of doubt ("Not yet clear…"), and the usual 30 s cooldown.
+- **Outcome is the novel's.** The board is the thinking, not a vote; the choice never changes events.
+- **Only real dilemmas.** Use it where the novel shows a leader torn, not where he acts at once. Star Lord boards and battles stay as they are.
+- **World 1 fits:** the cage cart (free Lu Zhi or trust the court), Dong Zhuo's insult (Zhang Fei wants to kill him), the inn (take in a wanted man), the hitching post (kill the inspector or spare him). **Book 2:** letting an unknown archer face Hua Xiong (Cao Cao and Yuan Shao), chasing Dong Zhuo from the ruins (Cao Cao alone), Wang Yun and Diaochan.
+- **Who:** Plot picks the scenes and writes the dilemma lines; Integration adds the caption over the board.
