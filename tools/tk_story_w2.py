@@ -243,7 +243,7 @@ def _scenes_capital():
             # no board: the player has not brought Dong Zhuo's gifts
             ["spawn", "lb", "lvbu", "a3", 30, 0], ["spawn", "ls", "lisu", "a3", -16, 6],
             S("lisu", "I have nothing to show him. Bring what Dong Zhuo sent, from his man at the garden.",
-              "我没有礼物给他看。去园中向董相国的人取来。"),
+              "空着手，我拿什么去见他？去园中向董相国的人把礼物取来。"),
             ["remove", "lb"], ["remove", "ls"],
         ]},
         "dingyuan": {"title": T("The Night Tent", "夜入丁原帐"), "kind": "side", "steps": [
