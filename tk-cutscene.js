@@ -97,14 +97,19 @@ const WorldCutscene = {
       // a screen much narrower than the picture (a phone held upright): the picture is shown at up to
       // 1.5 times the screen's width (two thirds of it at a time), high on the screen with dark above and
       // below, and pans from its left edge to its right edge and back.
-      const r = el.getBoundingClientRect(), ar = img.naturalWidth / img.naturalHeight;
-      if (r.width && r.height * ar > r.width * 1.25) {
+      // (sized again when the screen turns or resizes; a wide screen goes back to the full-frame drift)
+      const fit = () => {
+        const r = el.getBoundingClientRect(), ar = img.naturalWidth / img.naturalHeight;
+        const wide = r.width && r.height * ar > r.width * 1.25;
+        el.classList.toggle("wide", !!wide);
+        if (!wide) { img.removeAttribute("style"); return; }
         const w = Math.min(r.height * ar, r.width * 1.5), h = w / ar, range = w - r.width;
-        el.classList.add("wide");
         Object.assign(img.style, { width: `${Math.ceil(w)}px`, height: `${Math.ceil(h)}px`, top: `${Math.round(Math.max(0, (r.height - h) * .3))}px` });
         el.style.setProperty("--from", "0px");
         el.style.setProperty("--to", `${-Math.floor(range)}px`);
-      }
+      };
+      fit();
+      if (typeof ResizeObserver !== "undefined") { const ro = new ResizeObserver(() => el.isConnected ? fit() : ro.disconnect()); ro.observe(el); }
       overlays.push(el);
       still = el;
       requestAnimationFrame(() => el.classList.add("on"));
