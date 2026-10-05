@@ -38,12 +38,12 @@ ZH = {
         "刘备，字玄德，中山靖王之后，年二十八，家贫，以贩屦织席为业。他两耳垂肩，双手过膝。",
     "He reads the notice, and sighs.": "他看了榜文，长叹一声。",
     "A real man should serve his country! What are you sighing for?": "大丈夫不与国家出力，何故长叹？",
-    "I am of the Han imperial house. I long to crush these rebels and bring peace — but I lack the strength.": "我本汉室宗亲，有志破贼安民，只恨力不能及，所以长叹。",
-    "I've got money and land. Let's raise men together! But first — wine.": "我颇有些钱财，正好招募乡勇，与你同举大事！走，先喝一杯！",
+    "I am of the Han imperial house, Liu Bei, called Xuande. I long to crush these rebels and bring peace, but I lack the strength.": "我本汉室宗亲，姓刘，名备，字玄德。有志破贼安民，只恨力不能及，所以长叹。",
+    "I'm Zhang Fei, called Yide. I've got money and land. Let's raise men together! But first, wine.": "我姓张，名飞，字翼德。我颇有些钱财，正好招募乡勇，与你同举大事！走，先喝一杯！",
     "At the village inn, a giant pushing a cart strides in: nine feet tall, a beard two feet long, a face like a ripe red date.": "村店里，一条大汉推着车子进来：身长九尺，髯长二尺，面如重枣。",
     "Wine, quickly! I'm off to the city to join the army.": "快斟酒来！我要赶进城去投军。",
     "Then sit with us, friend. We have the same purpose.": "壮士请同坐，我们志向相同。",
-    "Guan Yu, of Hedong. I killed a bully who preyed on my village, and I've been on the run five years.": "我姓关，名羽，河东解良人。因本处豪强欺压百姓，被我杀了，逃难江湖已有五六年。",
+    "Guan Yu, called Yunchang, of Hedong. I killed a bully who preyed on my village, and I've been on the run five years.": "我姓关，名羽，字云长，河东解良人。因本处豪强欺压百姓，被我杀了，逃难江湖已有五六年。",
     # ---- the oath ----
     "The Peach Garden Oath": "桃园结义",
     "Behind my farm is a peach garden in full bloom. Tomorrow, let's swear brotherhood there before Heaven and Earth!": "我庄后有一桃园，花开正盛。明日就在园中祭告天地，我们三人结为兄弟！",
@@ -51,8 +51,8 @@ ZH = {
     "Though we were not born on the same day of the same month of the same year…": "不求同年同月同日生……",
     "…we wish to die on the same day of the same month of the same year.": "……只愿同年同月同日死。",
     "Heaven and Earth, witness it! If we betray this oath, may Heaven and men strike us down!": "皇天后土，实鉴此心！背义忘恩，天人共戮！",
-    "Liu Bei becomes eldest brother, Guan Yu second, Zhang Fei youngest. Three hundred village braves join them, and they drink in the garden until they can drink no more.":
-        "刘备为兄，关羽次之，张飞为弟。乡中勇士三百余人前来投奔，众人在桃园中痛饮一醉。",
+    "Liu Bei becomes eldest brother, Guan Yu second, Zhang Fei youngest. Five hundred village braves join them, and they drink in the garden until they can drink no more.":
+        "刘备为兄，关羽次之，张飞为弟。乡中勇士五百余人前来投奔，众人在桃园中痛饮一醉。",
     "Their road forks here. The long road passes through the rebels' heartland; the mountain trail is shorter, and steeper.": "前路在此分岔：大路穿过黄巾腹地；山路更近，却也更险。",
     # ---- Daxing Mountain ----
     "First Blood at Daxing Mountain": "大兴山初战",
@@ -82,7 +82,7 @@ ZH = {
     "Not yet. I cannot bring myself to say it.": "且慢，我实在说不出口。",
     "Free Lu Zhi, or trust the court?": "劫囚车救卢植，还是信朝廷？",
     "Kill the inspector, or spare him?": "杀督邮，还是饶他一命？",
-    "After the notice, Liu Bei and Zhang Fei sit down to wine at a village inn, and talk of the Yellow Turbans.": "招贴之后，玄德与张飞来到村中酒店，对饮闲谈，说起黄巾之乱。",
+    "After the notice, Liu Bei and Zhang Fei sit down to wine at a village inn, and talk of the Yellow Turbans.": "看过榜文，玄德与张飞来到村中酒店，对饮闲谈，说起黄巾之乱。",
     "Then a giant pushing a cart strides in: nine feet tall, a beard two feet long, a face like a ripe red date.": "正饮间，只见一条大汉推着一辆车子，到店门首歇下：身长九尺，髯长二尺，面如重枣。",
     "Who is this red-faced giant? He walks in like he owns the road.": "这红脸大汉是谁？进门来好大的气派！",
     "A man who kills a bully is no stranger at this table.": "杀了恶霸的好汉，便是自家人！",
@@ -129,7 +129,7 @@ ZH = {
     "Wind and thunder answer to me! Your little band will be swept away like dust.": "风雷听我号令！你们这点人马，一阵风便扫个干净！",
     # ---- side: the Way of Great Peace ----
     "The Way of Great Peace · I: The Old Man in the Cave": "太平道·一：洞中老人",
-    "Meanwhile — or rather, years before — a failed scholar named Zhang Jiao went into the hills to gather herbs.": "早在多年以前，有个不第秀才名叫张角，入山采药。",
+    "Years before, the man who would lead the Yellow Turbans was only a failed scholar named Zhang Jiao. One day he went into the hills to gather herbs.": "多年以前，那位日后统领黄巾的人，还只是个不第秀才，名叫张角。一日，他入山采药。",
     "There he met an old man with green eyes and a child's face, leaning on a staff, who led him into a cave.": "他遇见一位老人，碧眼童颜，手执藜杖，唤他进了一个山洞。",
     "These three books are the Essentials of Great Peace. Take them, spread Heaven's teaching, and save the world. But harbour one rebellious thought, and you will be punished.":
         "此三卷天书，名为《太平要术》。你得了它，当代天宣化，普救世人。若萌异心，必获恶报。",
@@ -173,7 +173,7 @@ ZH = {
     "The brothers had men, but no horses. Then two travelling merchants, Zhang Shiping and Su Shuang, came down the trail driving a herd.": "兄弟三人有了人马，却苦无马匹。正在发愁，中山大商张世平、苏双赶着一群马来到庄上。",
     "Bandits have closed the road north. If you mean to crush them, take fifty horses — and five hundred taels of silver, and a thousand jin of steel for your weapons.":
         "贼寇阻断了北去的路。诸位既要讨贼，我们愿送良马五十匹，金银五百两，镔铁一千斤，以资器用。",
-    "Liu Bei had twin swords forged. Guan Yu's blade was the Green Dragon Crescent, eighty-two jin, called Cold Beauty. Zhang Fei's was an eighteen-foot serpent spear of steel.":
+    "Liu Bei has twin swords forged. Guan Yu's blade is the Green Dragon Crescent, eighty-two jin, called Cold Beauty. Zhang Fei's is an eighteen-foot serpent spear of steel.":
         "刘备打造双股剑；关羽造青龙偃月刀，又名冷艳锯，重八十二斤；张飞造丈八点钢矛。",
     "A Bribe Refused": "拒贿",
     "At Guangzong, Lu Zhi had Zhang Jiao penned in, though the rebel's sorcery kept him from the final blow. Then the court's envoy arrived.": "卢植在广宗围住张角，只因张角会妖术，一时未能取胜。这时，朝廷的使者到了。",
@@ -207,10 +207,10 @@ ZH = {
     "Cao Cao has him beaten with the staves.": "操就棒责之。",
     "After that, no one inside the city or out dares to break the rule, and Cao Cao's name spreads.": "由是内外莫敢犯者，威名颇震。",
     "He bribed a eunuch in the palace to open the gates from within. But his disciple Tang Zhou carried the plan straight to the court.": "遣其党马元义，暗赍金帛，结交中涓封谞，以为内应。弟子唐州乃径赴省中告变。",
-    "In Luoyang, his agent Ma Yuanyi was beheaded.": "帝召大将军何进调兵擒马元义，斩之。",
+    "His agent Ma Yuanyi, who had carried the bribe to Luoyang, was caught and beheaded.": "送贿入洛阳的马元义被擒，斩于市。",
     # ---- World 1: the horse dealers are a main story point (ch. 1) ----
     "The next day they gather their weapons, but they have no horses to ride.": "来日收拾军器，但恨无马匹可乘。",
-    "While they are still worrying, word comes that two travelling merchants, Zhang Shiping and Su Shuang, are coming to the farm, driving a herd of horses.": "正思虑间，人报有两个客人，引一伙伴当，赶一群马，投庄上来。原来二客乃中山大商：一名张世平，一名苏双。",
+    "While they are still worrying, word comes of two horse dealers, Zhang Shiping and Su Shuang, camped on the northern trail with a herd of horses.": "正思虑间，人报北边路上来了两个马商，一名张世平，一名苏双，赶着一群马，在路边歇下。",
     "This is Heaven's help!": "此天佑我也！",
     # ---- World 1: the third brother joins at the inn (ch. 1) ----
     "The Stranger at the Inn": "村店遇云长",
@@ -228,11 +228,11 @@ ZH = {
     "Liu Bei takes his orders, and marches through the night.": "玄德领命，引军星夜投颍川来。",
     "Every man is told to carry a bundle of straw, and hide it.": "遂令军士，每人束草一把，暗地埋伏。",
     # ---- World 1: the mulberry tree (ch. 1) ----
-    "The Mulberry Tree at Louzang": "楼桑村的桑树",
-    "Louzang Village, Zhuo County. South-east of Liu Bei's house stands a mulberry tree more than fifty feet tall. From far off, it looks like the canopy of a carriage.": "涿县楼桑村。玄德家之东南，有一大桑树，高五丈余，遥望之，童童如车盖。",
-    "A passing fortune-teller says: this family will produce a great man.": "相者云：“此家必出贵人。”",
+    "The Mulberry Tree at Lousang": "楼桑村的大桑树",
+    "South-east of his house stands a mulberry tree more than fifty feet tall. From far off, it looks like the canopy over an emperor's carriage.": "他家东南有一棵大桑树，高五丈余，遥望之，童童如车盖。",
+    "A passing fortune-teller looks at it and says: this house will produce a great man.": "相者见了，说：“此家必出贵人。”",
     "Liu Bei's father died early. As a boy he plays under the tree with the village children.": "玄德幼孤，与乡中小儿戏于树下。",
-    "I will be the Son of Heaven, and I will ride this carriage canopy.": "我为天子，当乘此车盖。",
+    "When I am the Son of Heaven, I will ride under a canopy like this!": "我为天子，当乘此车盖！",
     "This is no ordinary child!": "此儿非常人也！",
     "The family is poor. His uncle Liu Yuanqi helps them from then on.": "叔父刘元起见玄德家贫，常资给之。",
     "At fifteen, his mother sends him to study under Zheng Xuan and Lu Zhi, and he befriends Gongsun Zan.": "年十五岁，母使游学，尝师事郑玄、卢植，与公孙瓒等为友。",
@@ -435,6 +435,10 @@ ZH = {
     "The notice board": "榜文", "The teahouse": "茶馆", "The village inn": "村店", "Where Zhang Jiao preaches": "张角传道之处",
     "Zhang Bao's sorcery": "张宝的妖术", "The village below the hills": "山下的村子", "The roadside shrine": "路旁的神龛", "The left ridge": "左边的山岭", "The right ridge": "右边的山岭", "Zhang Bao's stronghold": "张宝的城寨", "Zhang Fei's farm": "张飞的庄园",
 
+    "The man that notice will draw out grew up here, in Lousang Village, Zhuo County. His name is Liu Bei.": "这榜文要引出的英雄，就在涿县楼桑村长大。他姓刘，名备。",
+    "His uncle, Liu Yuanqi, hears him.": "叔父刘元起听见了。",
+    "Behind him a voice booms. The man is eight feet tall, with a leopard's head, round eyes, and whiskers like a tiger's.": "身后一人厉声说话。那人身长八尺，豹头环眼，燕颔虎须，声若巨雷。",
+    "Armed and mounted at last, the brothers lead their five hundred to the governor.": "兵器鞍马齐备，兄弟三人引着五百乡勇，去见太守。",
 }
 
 # Pronunciation fixes for the voice only (the text shown keeps the real

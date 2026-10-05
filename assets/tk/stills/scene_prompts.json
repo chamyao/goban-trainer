@@ -355,5 +355,12 @@
     "beat": "The brothers plan the blood and the ridges, with the village pens below.",
     "scene": "A hillside at the roadside shrine in grey afternoon light: on the left Liu Bei points down the hill toward a village of pens and huts; in the middle Guan Yu and Zhang Fei stand listening, Guan Yu pointing at one ridge and Zhang Fei at the other; on the right, the two ridges rise above the road. Only these three men.",
     "notes": "transition beat"
+  },
+  "peace1_a": {
+    "book": 1,
+    "category": "omen",
+    "beat": "Zhang Jiao, a poor scholar gathering herbs, meets the green-eyed old man at a cave in the hills.",
+    "scene": "A wooded mountainside in thin morning mist. At the mouth of a cave stands an old man with a child's smooth face and bright green eyes, leaning on a tall staff and beckoning. Before him, a thin scholar in a worn grey robe with an herb basket on his back has stopped on the path, startled. Only these two.",
+    "notes": "transition beat"
   }
 }
