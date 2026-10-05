@@ -12,7 +12,16 @@
    are not slanted, only placed: their feet land on the diamond floor.
 */
 const WorldIso = {
-  on(kit) { return !!(kit && kit.iso) || /[?&]iso=1\b/.test(location.search); },
+  // On for a kit made for it ("iso": true), unless the player chose otherwise (the campaign page's view
+  // button, localStorage tk-iso "1" / "0"); ?iso=1 or ?iso=0 in the address wins over both.
+  on(kit) {
+    const q = location.search.match(/[?&]iso=([01])\b/);
+    if (q) return q[1] === "1";
+    const c = this.choice();
+    return c ? c === "1" : !!(kit && kit.iso);
+  },
+  choice() { try { return localStorage.getItem("tk-iso"); } catch { return null; } },
+  setChoice(on) { try { localStorage.setItem("tk-iso", on ? "1" : "0"); } catch {} },
 
   // Set up the view for a scene whose tile layers are made. layers: the tilemap layers.
   mount(scene, map, layers) {
