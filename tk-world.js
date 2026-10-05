@@ -218,8 +218,8 @@ function worldScenes() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
       this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=33`);
-      this.load.json("kit", `assets/tk/kits/${kit}.json?v=30`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=33`);
+      this.load.json("kit", `assets/tk/kits/${kit}.json?v=33`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=34`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
@@ -293,7 +293,7 @@ function worldScenes() {
       }
       // a town's shrine with no story spot of its own: touching it still answers (dark, or its hint)
       if (this.shrine && !Object.values(this.spots).some(s => Math.hypot(s.x - this.shrine.x, s.y - this.shrine.y) < 30))
-        this.spots.shrine_ = { x: this.shrine.x, y: this.shrine.y + 12, node: "", label: "The shrine", labelZh: "神龛", intro: [], outro: [], trigger: "talk", use: "shrine" };
+        this.spots.shrine_ = { x: this.shrine.x, y: this.shrine.y + 12, node: "", label: "The rock under the pine", labelZh: "松下盘石", intro: [], outro: [], trigger: "talk", use: "shrine" };
       this.refreshStory();
       for (const s of Object.values(this.spots)) {   // a story waiting here: a slow glow on the ground, gold for the main story, cooler for side stories
         const q = s.node && this.region.quests.find(x => x.node === s.node);
@@ -494,8 +494,8 @@ function worldScenes() {
       if (p.solid) this.solids.add(this.add.zone(o.x + (r - l) / 2, o.y - p.fh / 2, l + r - 2, p.fh - 2));
     }
 
-    // The shrine's three looks: "dark" (cold stone), "lit" (the stones glow, incense burns: a hint is
-    // waiting) and "settled" (soft glow, no smoke). Who decides which is the story's (TK.shrineState).
+    // The shrine's three looks (the rock under the pine): "dark" (an empty board), "lit" (a game in
+    // progress: a hint is waiting) and "settled" (the finished game). A soft glow, no smoke. Who decides which is the story's (TK.shrineState).
     setShrine(state) {
       const s = this.shrine;
       if (!s || !["dark", "lit", "settled"].includes(state)) return;
@@ -503,15 +503,10 @@ function worldScenes() {
       s.img.setFrame(state === "dark" ? "landmark.shrine#0" : `landmark.shrine.${state}#0`);
       s.fx.forEach(f => f.remove ? f.remove() : f.destroy()); s.fx = [];   // tweens and timers are removed, the glow destroyed
       if (state === "dark") return;
-      const glow = this.add.ellipse(s.x - 4, s.y - 11, 26, 14, state === "lit" ? 0x8ae8ff : 0xf4d27a, state === "lit" ? .35 : .18)
+      const glow = this.add.ellipse(s.x + 6, s.y - 6, 26, 14, state === "lit" ? 0x8ae8ff : 0xf4d27a, state === "lit" ? .35 : .18)
         .setBlendMode(Phaser.BlendModes.ADD).setDepth(s.y + 1);
+      glow.isoFollow = s.img;   // in the isometric view it stays on the shrine
       s.fx.push(glow, this.tweens.add({ targets: glow, alpha: state === "lit" ? .12 : .08, duration: state === "lit" ? 900 : 2200, yoyo: true, repeat: -1, ease: "Sine.InOut" }));
-      if (state !== "lit") return;
-      // incense smoke from the burner: small grey puffs that rise, drift and fade
-      s.fx.push(this.time.addEvent({ delay: 420, loop: true, callback: () => {
-        const puff = this.add.circle(s.x + 9 + Phaser.Math.Between(-1, 1), s.y - 19, 1.5, 0xd6dae0, .7).setDepth(s.y + 2);
-        this.tweens.add({ targets: puff, y: puff.y - 16, x: puff.x + Phaser.Math.Between(-4, 4), scale: 2.2, alpha: 0, duration: 2200, onComplete: () => puff.destroy() });
-      } }));
     }
 
     folkAnims(sprite) {
@@ -709,11 +704,16 @@ function worldScenes() {
       for (const [k, m] of this.actMarks) if (!want.has(k)) { m.ev.remove(); this.actMarks.delete(k); }
       for (const [k, t] of want) {
         if (this.actMarks.has(k)) continue;
-        // a soft gold ring pulsing at their feet (where they're drawn)
-        // made at the flat map's x, y like everyone else: the isometric view moves it to where they're drawn
-        const ring = this.add.ellipse(k.x, k.y, 18, 8).setStrokeStyle(1.5, 0xf2cf6a, .9).setDepth(k.y - 1);
-        const tw = this.tweens.add({ targets: ring, scale: 1.35, alpha: .25, duration: 900, yoyo: true, repeat: -1, ease: "Sine.InOut" });
-        const ev = { remove: () => { tw.remove(); ring.destroy(); } };
+        // read at a glance on a phone: a bright gold ring at their feet, and a gold diamond bobbing over
+        // their head (feet are often hidden behind other sprites). Made at the flat map's x, y like everyone
+        // else; the isometric view moves them to where they're drawn (the diamond held above, isoBase).
+        const ring = this.add.ellipse(k.x, k.y, 20, 9).setStrokeStyle(2.5, 0xffd34d, 1).setDepth(k.y - 1);
+        const top = k.y - (k.displayHeight || 24) - 7;
+        const gem = this.add.polygon(k.x, top, [0, -5, 4, 0, 0, 5, -4, 0], 0xffd34d).setStrokeStyle(1, 0x6a4a10).setDepth(9999);
+        gem.isoBase = [k.x, k.y];
+        const tw = this.tweens.add({ targets: ring, scale: 1.3, alpha: .6, duration: 800, yoyo: true, repeat: -1, ease: "Sine.InOut" });
+        const tw2 = this.tweens.add({ targets: gem, y: top - 4, duration: 600, yoyo: true, repeat: -1, ease: "Sine.InOut" });
+        const ev = { remove: () => { tw.remove(); tw2.remove(); ring.destroy(); gem.destroy(); } };
         this.actMarks.set(k, { ev, t, called: false });
       }
     }
@@ -731,6 +731,8 @@ function worldScenes() {
           fontFamily: "sans-serif", fontSize: "11px", color: "#3a2410", backgroundColor: "#f4e6c4", padding: { x: 5, y: 3 },
           wordWrap: { width: 160 } }).setOrigin(.5, 1).setDepth(10000).setResolution(2);
         this.tweens.add({ targets: txt, alpha: 0, delay: 3200, duration: 600, onComplete: () => txt.destroy() });
+        const vid = l[l.length - 1];
+        if (typeof TKVoice !== "undefined" && TKVoice.has(vid)) TKVoice.play(vid);   // voiced, like any line
       }
     }   // the goal line's height moves the HUD's edge
 
@@ -1283,7 +1285,11 @@ function worldScenes() {
       if (q && this.available(q)) this.approach(q, spot);   // the same face-and-beat start as walking in
       else if (q && this.done(q.node)) this.talk([["n", `${spot.label || q.title}. (${q.title}: done.)`,
         q.title_zh ? `${spot.labelZh || q.title_zh}。（${q.title_zh}：已完成）` : ""]]);
-      else this.talk([["n", `${spot.label || "Nothing here"}. It isn't time yet.`, `${spot.labelZh || "这里"}。时候还没到。`]]);
+      else {   // not yet: say where the story is now, so a locked place points the way
+        const lines = [["n", `${spot.label || "Nothing here"}. Nothing to do here yet.`, `${spot.labelZh || "这里"}。这里还没有要做的事。`]];
+        if (this.goalText) lines.push(["n", `For now: ${this.goalText[0]}`, this.goalText[1] ? `眼下：${this.goalText[1]}` : ""]);
+        this.talk(lines);
+      }
     }
 
     // Someone with something to give: a plain line until the story's condition holds, then the
@@ -1306,11 +1312,11 @@ function worldScenes() {
     // Touching a shrine: dark, "the board is quiet"; settled, the Star Lords' hint again and where to go now.
     shrineTalk() {
       const q = this.shrineQuest();
-      if (!q || this.shrineState() === "dark") return this.talk([["n", "The board is quiet.", "棋盘寂静。"]]);
+      if (!q || this.shrineState() === "dark") return this.talk([["n", "A board scratched into the rock. No one is playing.", "石上刻着一副棋盘，无人对弈。"]]);
       const lines = [];
       if (q.hint) lines.push(["n", q.hint, q.hint_zh || ""]);
       if (this.goalText) lines.push(["n", this.goalText[0], this.goalText[1]]);
-      this.talk(lines.length ? lines : [["n", "The board is quiet.", "棋盘寂静。"]]);
+      this.talk(lines.length ? lines : [["n", "A board scratched into the rock. No one is playing.", "石上刻着一副棋盘，无人对弈。"]]);
     }
 
     // style: "story" for the plot (quest lead-ins and scenes), "chat" for everything else

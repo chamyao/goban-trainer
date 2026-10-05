@@ -94,7 +94,7 @@
     "book": 1,
     "category": "intrigue",
     "beat": "Lu Zhi's hands on the bars as the cart rolls off along the empty road.",
-    "scene": "Close shot of the rough wooden bars of a cage cart, an old man's thin hands resting on them. Beyond the bars an empty, rutted dirt road runs away between bare fields toward distant hills under a flat grey sky, a few wisps of straw dropped in front. Only the hands and the road.",
+    "scene": "Close shot from just behind an old man sitting inside a cage cart: the back of his grey head and his thin shoulders in the near corner of the frame, his arms in grey sleeves reaching forward so his hands rest on the rough wooden bars. Beyond the bars an empty, rutted dirt road runs away between bare fields toward distant hills under a flat grey sky, a few wisps of straw dropped in front.",
     "notes": ""
   },
   "office_b": {
@@ -327,5 +327,89 @@
     "beat": "Wang Yun on the burning gate tower beside the Emperor, facing the rebel army.",
     "scene": "A city gate tower on fire at dusk: Wang Yun, an old man in court robes, stands at the parapet with a small boy in an emperor's robe at his side, both looking down at a rebel army pouring through the streets below, smoke drifting past them. Wide shot from below, flames at the corners of the tower.",
     "notes": ""
+  },
+  "zhangbao_a": {
+    "book": 1,
+    "category": "omen",
+    "beat": "Who Zhang Bao is: the General of Earth on his hill before the battle.",
+    "scene": "Wide panoramic composition at dusk. On the left, Zhu Jun's Han camp with cooking fires and a line of spearmen below a ridge. In the middle, a long grassy valley. On the right, on a rocky hilltop, Zhang Bao stands before a small altar with a sword and paper charms, his long hair loose, yellow banners behind him, a thin dark cloud gathering over his head.",
+    "notes": "transition beat"
+  },
+  "tree_c": {
+    "book": 1,
+    "category": "peace",
+    "beat": "Liu Bei's mother and his boyhood: studying, friends, devotion.",
+    "scene": "Inside a poor country house in the afternoon: Liu Bei's mother sits at a loom by the door, weaving straw mats; on the right Liu Bei as a young man sits at a low table reading a bamboo scroll, and Gongsun Zan, a young man of his own age, sits across from him sharing the book. Through the open door on the left, the mulberry tree stands in the yard. Calm, plain overcast light.",
+    "notes": "transition beat"
+  },
+  "yingchuan_a": {
+    "book": 1,
+    "category": "aftermath",
+    "beat": "Changshe after the fire: Huangfu Song's army among the burnt grass.",
+    "scene": "Wide panoramic composition on an overcast morning. On the left, trampled burnt grass with smoke still rising and Yellow Turban banners lying flat. In the middle, Huangfu Song and Zhu Jun on horseback, looking over the field, with Han spearmen around them. On the right, Liu Bei, Guan Yu and Zhang Fei arriving at the head of their column on the road.",
+    "notes": "transition beat"
+  },
+  "bloodplan_a": {
+    "book": 1,
+    "category": "plan",
+    "beat": "The brothers plan the blood and the ridges, with the village pens below.",
+    "scene": "A hillside at the roadside shrine in grey afternoon light: on the left Liu Bei points down the hill toward a village of pens and huts; in the middle Guan Yu and Zhang Fei stand listening, Guan Yu pointing at one ridge and Zhang Fei at the other; on the right, the two ridges rise above the road. Only these three men.",
+    "notes": "transition beat"
+  },
+  "peace1_a": {
+    "book": 1,
+    "category": "omen",
+    "beat": "Zhang Jiao, a poor scholar gathering herbs, meets the green-eyed old man at a cave in the hills.",
+    "scene": "A wooded mountainside in thin morning mist. At the mouth of a cave stands an old man with a child's smooth face and bright green eyes, leaning on a tall staff and beckoning. Before him, a thin scholar in a worn grey robe with an herb basket on his back has stopped on the path, startled. Only these two.",
+    "notes": "transition beat"
+  },
+  "daxing_a": {
+    "book": 1,
+    "category": "battle",
+    "beat": "Before the first battle: Cheng Yuanzhi's fifty thousand against Liu Bei's five hundred at Daxing Mountain.",
+    "scene": "Wide panoramic composition under a pale sky at the foot of a rocky mountain. On the right, a vast Yellow Turban host fills the slope, yellow scarves and yellow banners as far as the eye can see, with Cheng Yuanzhi, a heavy rebel general, riding out in front. On the left, a small band of village volunteers holds the road, and at their head Liu Bei, Guan Yu and Zhang Fei sit on their horses, weapons ready.",
+    "notes": "transition beat"
+  },
+  "qingzhou_a": {
+    "book": 1,
+    "category": "battle",
+    "beat": "Qingzhou under siege: the Yellow Turbans ring the city walls, and the relief force is too small.",
+    "scene": "Wide panoramic composition on a grey afternoon. In the middle, the walls and gate tower of Qingzhou, with Han soldiers and red banners along the battlements. Yellow Turban rebels surround the walls on every side with ladders and yellow banners. In the left foreground, on a low hill, Liu Bei, Guan Yu and Zhang Fei look down on the siege from horseback with a few hundred men behind them.",
+    "notes": "transition beat"
+  },
+  "office_a": {
+    "book": 1,
+    "category": "battle",
+    "beat": "Dong Zhuo's beaten army in rout, Zhang Jiao's banners behind it, as the three brothers come over the hill.",
+    "scene": "Wide panoramic composition among low hills under a dusty afternoon sky. On the right, a Yellow Turban host pours down a valley under great yellow banners, Zhang Jiao in a yellow robe riding among them. In the middle, Han soldiers in red run before them, dropping spears, their commander Dong Zhuo, heavy and bearded, fleeing on horseback. On the left, on the crest of a hill, Liu Bei, Guan Yu and Zhang Fei rein in and look down at the rout.",
+    "notes": "transition beat"
+  },
+  "anxi_a": {
+    "book": 1,
+    "category": "peace",
+    "beat": "Liu Bei as the sheriff of Anxi, a quiet month: the three brothers at one table.",
+    "scene": "Inside a plain county office in a small town, evening lamplight. Liu Bei in a simple official robe and cap sits at a low table with bowls of rice and greens, Guan Yu and Zhang Fei sharing the table with him, the three eating together and talking. Through the open door, townsfolk pass in a quiet street. Warm, calm light. Exactly three men at the table.",
+    "notes": "transition beat"
+  },
+  "pingyuan_a": {
+    "book": 2,
+    "category": "everyday",
+    "beat": "Book 2 begins: Gongsun Zan's army passes Pingyuan, and he meets Liu Bei at the gate.",
+    "scene": "Wide panoramic composition outside the gate of a small walled town on a clear autumn morning. On the right, a long column of cavalry under Gongsun Zan's banners rides along the road, with Gongsun Zan in silver armour on a white horse at its head, reining in. On the left, at the open town gate, Liu Bei in a magistrate's plain robe steps out to greet him, with Guan Yu and Zhang Fei standing behind him.",
+    "notes": "transition beat"
+  },
+  "sishui_a": {
+    "book": 2,
+    "category": "battle",
+    "beat": "Before Sishui Gate: Hua Xiong's men carry Sun Jian's red cap on a pole to the lords' camp, jeering.",
+    "scene": "Wide panoramic composition on a grey day before a mountain pass. On the right, the stone walls and gate of Sishui Pass. In the middle, a band of Dong Zhuo's horsemen rides forward, one holding up a long pole with a red head-cloth hung at its tip, the others shouting. On the left, the palisade and tents of the lords' camp, where soldiers and officers watch from the gate in silence.",
+    "notes": "transition beat"
+  },
+  "hulao1_a": {
+    "book": 2,
+    "category": "battle",
+    "beat": "Before Hulao Pass: Lü Bu on Red Hare before Dong Zhuo's gate, the lords' army facing him.",
+    "scene": "Wide panoramic composition under a heavy sky. On the right, the towering walls of Hulao Pass with Dong Zhuo's black banners. Before the gate, alone, Lü Bu sits on a huge red horse, a crested helmet on his head and a long halberd in his hand. On the left, the lords' armies are drawn up in long lines under many coloured banners, their champions in front, holding back.",
+    "notes": "transition beat"
   }
 }

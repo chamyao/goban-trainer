@@ -1597,8 +1597,8 @@
    "place": "hulao-pass",
    "spot": "shrine",
    "scene": "shrine2",
-   "title": "The Shrine at the Camp",
-   "objective": "Go to the old shrine by the camp.",
+   "title": "The Rock under the Pine",
+   "objective": "Go to the rock under the pine by the camp.",
    "after": [
     "2-m4a"
    ],
@@ -1727,8 +1727,8 @@
    ],
    "shrine": true,
    "hint": "One, then two, then three.",
-   "objective_zh": "到营中的旧神龛去。",
-   "title_zh": "营中神龛",
+   "objective_zh": "到营边大松树下的盘石那里去。",
+   "title_zh": "松下盘石",
    "hint_zh": "一个，两个，三个。"
   },
   {
@@ -1892,11 +1892,10 @@
       "mark:liubei_in"
      ],
      "else": "hulaoearly2",
-     "objective": "Defeat Lü Bu at Hulao Pass.",
+     "objective": "Go to the posts in order: Zhang Fei first, then Guan Yu, then the flank.",
      "at": "Hulao Pass",
-     "count": false,
      "place": "hulao-pass",
-     "objective_zh": "在虎牢关击败吕布。"
+     "objective_zh": "依次就位：先张飞，再关羽，最后侧翼。"
     }
    ],
    "objective_zh": "在虎牢关击败吕布。",
