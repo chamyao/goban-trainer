@@ -1,89 +1,35 @@
 {
   "base": "2D anime / manhua cel style: bold clean ink outlines, flat colour fills, hard-edged 2-tone shadows (one shadow step, no soft gradients or painterly rendering), limited palette, simple backgrounds. Same character designs across every category.",
-  "avoid": "Not biblical: no god rays, shafts of light, golden-hour glow, halos or rim light; no kneeling or raised-arm tableaux unless the plot needs it; young anime characters in Han-era jackets, armour and caps rather than flowing robes; casual off-centre framing. Negative prompt: religious painting, biblical illustration, renaissance, oil painting, halo, god rays, divine light, holy, sermon.",
   "categories": {
     "everyday": {
       "name": "Everyday / village",
       "recipe": "Paper-white or pale sky background, light airy palette, thin ink lines, almost no shadow. Calm, readable, slice-of-life manhua.",
-      "scenes": [
-        "tree_a",
-        "tree_b",
-        "notice_a",
-        "notice_b",
-        "inn_a",
-        "inn_b",
-        "horses_a",
-        "horses_b",
-        "cart_a",
-        "post_a",
-        "lvboshe_a",
-        "fireflies_a"
-      ]
+      "scenes": ["tree_a","tree_b","notice_a","notice_b","inn_a","inn_b","horses_a","horses_b","cart_a","post_a","lvboshe_a","fireflies_a"]
     },
     "bond": {
       "name": "Ceremony / bond",
       "recipe": "Warm palette (peach blossom pink, gold, lantern red), symmetrical composed framing, soft light but still flat 2-tone shading. Heroic and sincere.",
-      "scenes": [
-        "oath_a",
-        "oath_b",
-        "oath_c",
-        "tent_b",
-        "alliance_b",
-        "seal_b",
-        "garden_a",
-        "pavilion_a"
-      ]
+      "scenes": ["oath_a","oath_b","oath_c","tent_b","alliance_b","seal_b","garden_a","pavilion_a"]
     },
     "intrigue": {
       "name": "Intrigue / tension",
       "recipe": "Dim interiors, single light source, large blocky black shadow shapes, cool or sickly accents. Tight close-ups on faces and hands.",
-      "scenes": [
-        "office_b",
-        "office_c",
-        "caocao2_b",
-        "tent_c",
-        "dingyuan_a",
-        "lvboshe_b",
-        "wine_b",
-        "cart_b",
-        "cart_c",
-        "post_b"
-      ]
+      "scenes": ["office_b","office_c","caocao2_b","tent_c","dingyuan_a","lvboshe_b","wine_b","cart_b","cart_c","post_b"]
     },
     "battle": {
       "name": "Battle / action",
       "recipe": "God of High School energy: dynamic angles, speed lines, impact frames, high contrast, saturated accents. Still cel-shaded, never painterly.",
-      "scenes": [
-        "blackwind_c",
-        "bosswin_a",
-        "caocao3_b",
-        "hulao_a",
-        "hulao_b",
-        "xingyang_a",
-        "zumao_a",
-        "xianshan_a",
-        "wine_a"
-      ]
+      "scenes": ["blackwind_c","bosswin_a","caocao3_b","hulao_a","hulao_b","xingyang_a","zumao_a","xianshan_a","wine_a"]
     },
     "omen": {
       "name": "Supernatural / omen",
       "recipe": "Flat graphic glow effects (talisman light, dark wind, well light) as hard-edged shapes, limited eerie palette (yellow, violet, black). GoH-style effects without the motion blur.",
-      "scenes": [
-        "blackwind_a",
-        "peace2_b",
-        "seal_a"
-      ]
+      "scenes": ["blackwind_a","peace2_b","seal_a"]
     },
     "aftermath": {
       "name": "Aftermath / elegy",
       "recipe": "Muted desaturated palette, wide quiet shots, smoke and ash as flat shapes, night or dusk. Still clean lines; emotion from emptiness, not shading.",
-      "scenes": [
-        "bosswin_c",
-        "bosswin_d",
-        "ruins_a",
-        "fall_a",
-        "tower_a"
-      ]
+      "scenes": ["bosswin_c","bosswin_d","ruins_a","fall_a","tower_a"]
     }
   }
 }
