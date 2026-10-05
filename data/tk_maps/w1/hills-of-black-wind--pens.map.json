@@ -3,7 +3,7 @@
  "id": "hills-of-black-wind--pens",
  "world": 1,
  "parent": "hills-of-black-wind",
- "name": "The village below the hills",
+ "name": "The farm east of the shrine",
  "archetype": "interior",
  "building": "pens",
  "style": "building.hut",

@@ -195,6 +195,19 @@ def check_world(w, ZH, CAST, errors, warnings, needs=None, folk=None):
             n["lines"].extend((hit or lines)[:1])
 
     def scan(steps, where, own_node=None, need_problem=False):
+        # a still stays up only through lines, waits and music (tk-cutscene.js): one followed straight
+        # by a spawn or a move is hidden at once and never seen
+        for i, st in enumerate(steps):
+            if st[0] != "still":
+                continue
+            seen = 0
+            for nx in steps[i + 1:]:
+                if nx[0] in ("n", "say"):
+                    seen += 1
+                elif nx[0] not in ("wait", "music", "together"):
+                    break
+            if not seen:
+                warnings.append(f"{name}: {where}: still {st[1]!r} is hidden at once (no line before the next {nx[0] if i + 1 < len(steps) else 'end'!r})")
         problems = [s for s in steps if s[0] == "problem"]
         if need_problem and len(problems) != 1:
             errors.append(f"{name}: {where} has {len(problems)} problems (needs exactly 1)")

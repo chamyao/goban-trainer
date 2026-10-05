@@ -768,8 +768,8 @@
   },
   {
    "id": "hills-of-black-wind--pens",
-   "name": "The village below the hills",
-   "zh": "山下的村子",
+   "name": "The farm east of the shrine",
+   "zh": "神龛东边的农庄",
    "archetype": "interior",
    "map": "hills-of-black-wind--pens.map.json",
    "links": [
@@ -994,7 +994,7 @@
    "place": "lousang-village",
    "spot": "mulberry",
    "scene": "tree",
-   "title": "The Mulberry Tree at Louzang",
+   "title": "The Mulberry Tree at Lousang",
    "objective": "Sit under the great mulberry tree by your home.",
    "after": [],
    "grade": "12K",
@@ -1121,7 +1121,7 @@
     ]
    ],
    "objective_zh": "到屋旁的大桑树下坐坐。",
-   "title_zh": "楼桑村的桑树"
+   "title_zh": "楼桑村的大桑树"
   },
   {
    "node": "1-c1",
@@ -2643,11 +2643,10 @@
       "mark:flank_right"
      ],
      "else": "qingzhouwait",
-     "objective": "Lift the siege of Qingzhou.",
+     "objective": "Post Guan Yu on the left hill and Zhang Fei on the right.",
      "at": "Qingzhou",
-     "count": false,
      "place": "qingzhou",
-     "objective_zh": "解青州之围。"
+     "objective_zh": "让关羽伏于左山，张飞伏于右山。"
     }
    ],
    "objective_zh": "解青州之围。",
@@ -2926,7 +2925,7 @@
     ]
    ],
    "objective_zh": "去颍川长社，探明皇甫嵩、朱儁的军情。",
-   "title_zh": "来迟的颍川"
+   "title_zh": "颍川，来迟一步"
   },
   {
    "node": "1-n5",
@@ -4035,7 +4034,7 @@
    "spot": "altar",
    "scene": "blackwind",
    "title": "Black Wind, Paper Soldiers",
-   "objective": "Break Zhang Bao's sorcery in the hills.",
+   "objective": "Join Zhu Jun in the hills, against Zhang Bao.",
    "after": [
     "1-n6"
    ],
@@ -4163,7 +4162,7 @@
     ]
    ],
    "board": false,
-   "objective_zh": "在山中破张宝的妖术。",
+   "objective_zh": "到山中与朱儁会合，迎战张宝。",
    "title_zh": "黑风纸兵"
   },
   {
@@ -4461,23 +4460,21 @@
       "item:dogblood"
      ],
      "else": "bossearly2",
-     "objective": "Defeat the Black Wind.",
-     "count": false,
+     "objective": "Gather the blood of pigs, sheep and dogs at the farm east of the shrine.",
      "at": "Hills of Black Wind",
      "place": "hills-of-black-wind",
-     "objective_zh": "破黑风妖法。"
+     "objective_zh": "到神龛东边的农庄，讨来猪、羊、狗的血。"
     },
     {
      "needs": [
       "mark:ridge_left",
       "mark:ridge_right"
      ],
-     "else": "bossearly2",
-     "objective": "Defeat the Black Wind.",
-     "count": false,
+     "else": "bossearly3",
+     "objective": "Take the blood up to Guan Yu on the left ridge and Zhang Fei on the right.",
      "at": "Hills of Black Wind",
      "place": "hills-of-black-wind",
-     "objective_zh": "破黑风妖法。"
+     "objective_zh": "把血送上左山岭的关羽和右山岭的张飞。"
     }
    ],
    "objective_zh": "在阳城击败张宝。",
