@@ -44,5 +44,21 @@ if(s0.needs){
   check(!s3.ghost&&(s3.played>s0.played||s3.done),`a second tap on the ghost plays it (moves ${s0.played} -> ${s3.played})`);
 }else check(s1.played>s0.played||s1.done,`one tap plays (moves ${s0.played} -> ${s1.played})`);
 await p.locator('.tk-duel-key',{hasText:'Leave'}).tap(); await p.waitForTimeout(600); check(!(await p.locator('.tk-duel').count()),'Leave closes the problem');
+// the menu's "Confirm taps" switch: Never plays on one tap at any spacing
+await p.locator('.tk-menu-btn',{hasText:'Menu'}).tap();await p.waitForTimeout(300);
+const conf=p.locator('.tk-menu-panel button',{hasText:'Confirm taps'});
+if(await conf.count()){
+  if(!/Never/.test(await conf.textContent()))await conf.tap();await p.waitForTimeout(300);
+  check(/Never/.test(await conf.textContent())&&await p.evaluate(()=>localStorage.getItem('goban-confirm')==='never'),'the menu switch sets Confirm taps: Never');
+  await p.locator('.tk-menu-btn',{hasText:'Menu'}).tap();await p.waitForTimeout(300);
+  await p.evaluate(()=>{const d=TK.ls('tk-rest');for(const k in d)d[k]=Date.now()-1;TK.lsSet('tk-rest',d);const w=window.__w,n=w.npcs.find(n=>n.challenge);w.player.setPosition(n.spr.x,n.spr.y+14);w.player.facing='up';w.act();});
+  for(let i=0;i<60&&!(await p.locator('.tk-duel svg').count());i++){await p.evaluate(()=>window.__w.ui.busy()&&window.__w.ui.advance());await p.waitForTimeout(150);}await p.waitForTimeout(900);
+  const e2=await p.evaluate(()=>{const t=window.__trainer,g=t.goban;const q=[...g.svg.querySelectorAll('circle[fill="transparent"]')].map(e=>{const cx=+e.getAttribute('cx'),cy=+e.getAttribute('cy');let c=-1,r=-1;for(let k=0;k<19;k++){if(g.px(k)===cx)c=k;if(g.py(k)===cy)r=k;}const R=e.getBoundingClientRect();return {c,r,x:R.left+R.width/2,y:R.top+R.height/2};}).find(q=>q.c>=0&&q.r>=0&&!t.grid[q.r][q.c]);return {q,played:t.played.length,needs:g.needsConfirm()};});
+  await p.touchscreen.tap(e2.q.x,e2.q.y);await p.waitForTimeout(900);const after=await B();
+  check(!after.ghost&&(after.played>e2.played||after.done),`with Never, one tap plays (moves ${e2.played} -> ${after.played}; needs a confirm: ${e2.needs})`);
+  await p.locator('.tk-duel-key',{hasText:'Leave'}).tap();await p.waitForTimeout(600);
+  await p.locator('.tk-menu-btn',{hasText:'Menu'}).tap();await p.waitForTimeout(300);await conf.tap();await p.waitForTimeout(200);
+  check(/Auto/.test(await conf.textContent()),'and back to Auto');
+}else console.log((s0.needs?'FAIL ':'NOTE ')+'no Confirm taps switch in the menu');
 console.log(`tap-duel: ${fails} failed`);
 await b.close();})();
