@@ -98,7 +98,7 @@ def run(model, inp):
 def kit_set(a):
     """The xianxia kit (tools/xianxia_spec.py) into assets/tk/gen/xianxia/<name>-<i>.png."""
     from xianxia_spec import GROUND, OBJECTS
-    out = OUT / "xianxia"
+    out = OUT / ("xianxia" if a.set in ("xianxia", "xianxia-chars") else a.set)   # parallel sets: own folders
     out.mkdir(parents=True, exist_ok=True)
     log_path = out / "gen.json"
     log = json.loads(log_path.read_text()) if log_path.exists() else {}
@@ -110,6 +110,17 @@ def kit_set(a):
     jobs += [(k, "rd-plus", {"style": "topdown_asset", "width": max(16, w), "height": max(16, h), "remove_bg": True,
                               "prompt": f"{p}, {LOOK}, 3/4 top-down game sprite, small"}, n)
              for k, (p, (w, h), n) in OBJECTS.items()]
+    if a.set in ("xianxia-redo", "xianxia-interior"):
+        from xianxia_spec import INTERIOR, REDO_OBJECTS
+        objs = REDO_OBJECTS if a.set == "xianxia-redo" else INTERIOR
+        jobs = [(k, "rd-plus", {"style": "topdown_asset", "width": max(16, w), "height": max(16, h), "remove_bg": True,
+                                 "prompt": f"{p}, {LOOK}, 3/4 top-down game sprite, small"}, n)
+                for k, (p, (w, h), n) in objs.items()]
+    if a.set == "xianxia-chars2":
+        from xianxia_spec import CHARACTERS2
+        jobs = [(f"char.{k}", "rd-animation", {"style": "four_angle_walking", "width": 48, "height": 48,
+                                                "return_spritesheet": True, "prompt": f"{p}, {LOOK}"}, 1)
+                for k, p in CHARACTERS2.items()]
     if a.set == "xianxia-chars":
         from xianxia_spec import CHARACTERS
         from xianxia_spec import CHAR_TRIES
@@ -151,7 +162,7 @@ def main():
     ap.add_argument("--only", action="append")
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--list", action="store_true")
-    ap.add_argument("--set", choices=["xianxia", "xianxia-chars"], help="generate a whole kit's pieces (tools/xianxia_spec.py)")
+    ap.add_argument("--set", choices=["xianxia", "xianxia-chars", "xianxia-redo", "xianxia-interior", "xianxia-chars2"], help="generate a whole kit's pieces (tools/xianxia_spec.py)")
     ap.add_argument("--pause", type=float, default=12, help="seconds between requests (rate limits)")
     a = ap.parse_args()
     OUT.mkdir(parents=True, exist_ok=True)

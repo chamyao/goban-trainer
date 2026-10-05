@@ -104,10 +104,30 @@ const WorldItems = {
   riderTexture(scene, who, dir) {
     const key = `ride-${who}-${dir}`;
     if (!scene.textures.exists(key)) {
-      const cv = dir === "left" ? TKArt.flip(this.rider(who, "right")) : this.rider(who, dir);
+      const gen = scene.textures.exists(`hx-${who}`) && scene.textures.exists(`h-${who}-${dir}-0`);
+      const cv = gen ? this.genRider(scene.textures.get(`h-${who}-${dir}-0`).getSourceImage())
+        : dir === "left" ? TKArt.flip(this.rider(who, "right")) : this.rider(who, dir);
       scene.textures.addCanvas(key, cv);
     }
     return key;
+  },
+  // A generated (kit-drawn) hero in the saddle: his frame above the waist, set so the waist
+  // falls on the hip row the seat is placed by, over a band of saddle cloth.
+  genRider(frame) {
+    const w = frame.width, top = this.bodyTop(frame), waist = top + Math.round((frame.height - top) * .55);
+    const hip = Math.floor(this.HIP), cv = document.createElement("canvas");
+    cv.width = w; cv.height = hip + 4;
+    const g = cv.getContext("2d");
+    g.drawImage(frame, 0, 0, w, waist, 0, hip - waist, w, waist);
+    g.fillStyle = "#8a2a1a"; g.fillRect(Math.round(w * .2), hip, Math.round(w * .6), 2);
+    g.fillStyle = "#d4ad42"; g.fillRect(Math.round(w * .2), hip + 2, Math.round(w * .6), 1);
+    return cv;
+  },
+  bodyTop(frame) {   // the first row with paint on it
+    const d = frame.getContext ? frame.getContext("2d").getImageData(0, 0, frame.width, frame.height).data : null;
+    if (!d) return 0;
+    for (let y = 0; y < frame.height; y++) for (let x = 0; x < frame.width; x++) if (d[(y * frame.width + x) * 4 + 3] > 0) return y;
+    return 0;
   },
   // Put a seated rider and his horse at a place on the ground, facing dir.
   // head: a copy of the horse showing only its head and neck, drawn over the
