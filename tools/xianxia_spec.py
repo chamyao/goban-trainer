@@ -74,3 +74,58 @@ CHARACTERS = {
 
 # how many tries (different seeds) to make of each, to choose from: char.<who>-<n>.png
 CHAR_TRIES = {"liubei": 1, "guanyu": 3, "zhangfei": 3}
+# which try is used in the game (the user's pick), and how tall the heroes stand in pixels
+CHAR_PICK = {"liubei": 1, "guanyu": 1, "zhangfei": 1}
+HERO_H = 22
+
+
+# ---- parallel batches (each run by its own helper session, into assets/tk/gen/<set>/) ----
+
+# second tries at the pieces that came out wrong (REDO), with plainer prompts
+REDO_OBJECTS = {
+    "furniture.gotable": ("small square grey stone table with a weiqi board on top, black and white stones on it", (24, 16), 2),
+    "camp.table": ("low plain wooden table with a rolled-up map scroll on it", (28, 28), 2),
+    "camp.hay": ("pile of golden straw, loose hay heap", (32, 30), 2),
+    "building.moongate": ("short white plaster garden wall with a big round moon-shaped doorway through its middle, "
+                          "grey tiles along the top", (48, 40), 2),
+    "rock.small": ("a single small rough grey stone, nothing else", (16, 13), 2),
+}
+
+# indoor furniture for the rooms (Jade's are Ninja Adventure pieces)
+INTERIOR = {
+    "furn.stool": ("small round wooden stool", (14, 13), 2),
+    "furn.jar": ("Chinese ceramic wine jar with a cloth-tied lid", (14, 16), 2),
+    "furn.shelf": ("tall wooden shelf with scrolls, bowls and boxes", (32, 30), 2),
+    "furn.table": ("low square Chinese wooden table", (28, 28), 2),
+    "furn.plant": ("potted bonsai pine in a blue ceramic pot", (15, 24), 2),
+    "furn.barrel": ("wooden barrel with iron bands", (16, 30), 1),
+    "furn.chest": ("red lacquered wooden chest with brass fittings", (16, 13), 2),
+    "furn.sacks": ("stack of grain sacks", (14, 26), 1),
+    "furn.bed": ("simple Chinese wooden bed with a blue quilt", (24, 16), 1),
+    "furn.drawers": ("Chinese wooden cabinet with small drawers and brass pulls", (16, 23), 1),
+    "furn.mat": ("woven straw floor mat", (32, 32), 1),
+    "furn.desk": ("long low Chinese writing desk with brush, ink stone and scrolls", (46, 14), 2),
+    "furn.counter": ("long wooden shop counter", (46, 14), 1),
+    "furn.rack": ("wooden weapon rack with spears and halberds", (32, 22), 1),
+    "furn.screen": ("folding Chinese screen painted with mountains and cranes", (32, 30), 2),
+    "furn.rug": ("red patterned Chinese rug", (48, 48), 1),
+    "furn.hearth": ("brick cooking stove with a wok and a fire", (32, 24), 1),
+}
+
+# the rest of the cast as walking sheets (CHARACTERS covers the three brothers)
+CHARACTERS2 = {
+    "caocao": "sharp-eyed Chinese commander, short goatee, black official's cap, dark red robe with gold trim, sword at his side",
+    "dongzhuo": "fat, arrogant Chinese warlord, short beard, black official's cap, purple robe with gold trim",
+    "zhangjiao": "old Chinese sorcerer, long white hair and long white beard, yellow headscarf, flowing yellow robe, holding a staff",
+    "zhangbao": "wild-haired Chinese sorcerer general, yellow headscarf, yellow robe, holding a sword",
+    "luzhi": "dignified old Chinese scholar-general, long grey beard, black official's cap, blue robe with pale trim",
+    "zhujun": "Chinese imperial general, short beard, grey iron helmet, dark red robe over armour, sword",
+    "huangfusong": "Chinese imperial general, long black beard, grey iron helmet, blue robe over armour, sword",
+    "militia": "young Chinese village volunteer, red headband, olive-green tunic, holding a spear",
+    "rebel": "Yellow Turban rebel, yellow headscarf, ragged brown tunic, holding a spear",
+    "f_soldier": "Han dynasty soldier, grey iron helmet, red tunic, holding a spear",
+    "f_farmer": "Chinese peasant farmer, straw hat, plain brown clothes",
+    "f_official": "Chinese clerk, black official's cap, blue robe, thin moustache",
+    "f_woman": "Chinese village woman, hair in a bun with a red pin, pink dress",
+    "f_elder": "old Chinese village elder, long white beard, pale robe, walking stick",
+}
