@@ -659,7 +659,7 @@ FACE_LOOKS = {
     "caiyong": ("Cai Yong", "a sorrowful old scholar with a grey beard, in a plain scholar's robe and cap"),
     "chengpu": ("Cheng Pu", "a veteran general with a grizzled beard, in red armour, holding a long spear"),
     "handang": ("Han Dang", "a tough general with a square jaw and short beard, in red armour, holding a broadsword"),
-    # tries at a tougher or plainer Liu Bei (liubei_b/_c/_d): the user kept the original (CAST's look)
+    # a try at a tougher Liu Bei (liubei_b); the user kept the original (CAST's look)
     "liubei_b": ("Liu Bei", "a battle-hardened young hero of twenty-eight, the leader of a band of volunteers: lean and "
                             "tough, a short black beard, long earlobes, a faint scar on his cheekbone, a fierce confident "
                             "half-smile, hair tied up in a topknot, a dusty white robe with gold trim, sleeves bound for "
