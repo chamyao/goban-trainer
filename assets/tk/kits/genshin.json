@@ -22,7 +22,8 @@
   "bg_meadow": "assets/tk/genshin/bg_meadow.png",
   "bg_forest": "assets/tk/genshin/bg_forest.png",
   "bg_mountain": "assets/tk/genshin/bg_mountain.png",
-  "bg_ruins": "assets/tk/genshin/bg_ruins.png"
+  "bg_ruins": "assets/tk/genshin/bg_ruins.png",
+  "pinerock": "assets/tk/genshin/pinerock.png"
  },
  "materials": {
   "grass": {
@@ -798,36 +799,36 @@
   ],
   "landmark.shrine": [
    [
-    "x_objects",
-    166,
-    431,
-    44,
-    44
+    "pinerock",
+    0,
+    0,
+    51,
+    54
    ],
    [
-    "x_objects",
-    211,
-    431,
-    36,
-    44
+    "pinerock",
+    0,
+    0,
+    51,
+    54
    ]
   ],
   "landmark.shrine.lit": [
    [
-    "x_objects",
-    248,
-    431,
-    44,
-    44
+    "pinerock",
+    51,
+    0,
+    51,
+    54
    ]
   ],
   "landmark.shrine.settled": [
    [
-    "x_objects",
-    293,
-    431,
-    44,
-    44
+    "pinerock",
+    102,
+    0,
+    51,
+    54
    ]
   ],
   "ruin.hall": [

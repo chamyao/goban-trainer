@@ -218,8 +218,8 @@ function worldScenes() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
       this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=33`);
-      this.load.json("kit", `assets/tk/kits/${kit}.json?v=30`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=33`);
+      this.load.json("kit", `assets/tk/kits/${kit}.json?v=32`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=34`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
@@ -503,7 +503,7 @@ function worldScenes() {
       s.img.setFrame(state === "dark" ? "landmark.shrine#0" : `landmark.shrine.${state}#0`);
       s.fx.forEach(f => f.remove ? f.remove() : f.destroy()); s.fx = [];   // tweens and timers are removed, the glow destroyed
       if (state === "dark") return;
-      const glow = this.add.ellipse(s.x - 4, s.y - 11, 26, 14, state === "lit" ? 0x8ae8ff : 0xf4d27a, state === "lit" ? .35 : .18)
+      const glow = this.add.ellipse(s.x + 6, s.y - 6, 26, 14, state === "lit" ? 0x8ae8ff : 0xf4d27a, state === "lit" ? .35 : .18)
         .setBlendMode(Phaser.BlendModes.ADD).setDepth(s.y + 1);
       glow.isoFollow = s.img;   // in the isometric view it stays on the shrine
       s.fx.push(glow, this.tweens.add({ targets: glow, alpha: state === "lit" ? .12 : .08, duration: state === "lit" ? 900 : 2200, yoyo: true, repeat: -1, ease: "Sine.InOut" }));

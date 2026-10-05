@@ -18,7 +18,8 @@
   "n_nature": "assets/tk/ninja/nature.png",
   "x_tiles": "assets/tk/xianxia/tiles.png",
   "x_edges": "assets/tk/xianxia/edges.png",
-  "x_objects": "assets/tk/xianxia/objects.png"
+  "x_objects": "assets/tk/xianxia/objects.png",
+  "pinerock": "assets/tk/xianxia/pinerock.png"
  },
  "materials": {
   "grass": {
@@ -829,29 +830,29 @@
   ],
   "landmark.shrine": [
    [
-    "x_objects",
-    411,
-    188,
-    31,
-    34
+    "pinerock",
+    0,
+    0,
+    40,
+    45
    ]
   ],
   "landmark.shrine.lit": [
    [
-    "x_objects",
+    "pinerock",
+    40,
     0,
-    228,
-    31,
-    34
+    40,
+    45
    ]
   ],
   "landmark.shrine.settled": [
    [
-    "x_objects",
-    32,
-    228,
-    31,
-    34
+    "pinerock",
+    80,
+    0,
+    40,
+    45
    ]
   ],
   "ruin.hall": [

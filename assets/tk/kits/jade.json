@@ -15,7 +15,8 @@
   "n_floor_in": "assets/tk/ninja/floor_in.png",
   "n_wall_in": "assets/tk/ninja/wall_in.png",
   "extras": "assets/tk/jade/extras.png",
-  "n_nature": "assets/tk/ninja/nature.png"
+  "n_nature": "assets/tk/ninja/nature.png",
+  "pinerock": "assets/tk/jade/pinerock.png"
  },
  "materials": {
   "grass": {
@@ -710,29 +711,29 @@
   ],
   "landmark.shrine": [
    [
-    "drawn",
+    "pinerock",
     0,
-    80,
-    32,
-    30
+    0,
+    40,
+    38
    ]
   ],
   "landmark.shrine.lit": [
    [
-    "drawn",
-    32,
-    80,
-    32,
-    30
+    "pinerock",
+    40,
+    0,
+    40,
+    38
    ]
   ],
   "landmark.shrine.settled": [
    [
-    "drawn",
-    64,
+    "pinerock",
     80,
-    32,
-    30
+    0,
+    40,
+    38
    ]
   ],
   "ruin.hall": [
