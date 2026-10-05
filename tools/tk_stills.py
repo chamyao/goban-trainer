@@ -220,6 +220,8 @@ def cast_in(sid):
 def prompt(sid, n_style=0, cast_refs=()):
     """The full request for a still: scene, then the cast it names, then the style. With reference
     images, n_style style images come first, then a portrait for each key in cast_refs, in order."""
+    if STILLS[sid].get("raw"):   # a mock screen, sent as written
+        return STILLS[sid]["prompt"]
     parts = [STILLS[sid]["prompt"]]
     for key in cast_in(sid):
         name, look = CAST[key]
@@ -574,6 +576,36 @@ FINAL2 = {
     "tower_a": "A city gate tower on fire at dusk: Wang Yun stands at the parapet beside a small boy in an emperor's "
                "robe, both looking down at a rebel army massing below.",
 }
+
+# Mock screenshots to choose a new look for the sprites and dialogue (the user, Book 2): each style twice,
+# a map screen and a dialogue screen. Sent as written (no cast lines, no style line): "raw".
+_BROS = ("Liu Bei (a gentle man with a short black beard, white robe with gold trim), Guan Yu (a towering man with a "
+         "deep red face and a very long black beard, green robe, holding a crescent-bladed halberd) and Zhang Fei "
+         "(stocky, wild black beard, black clothes, a long spear)")
+_TALK = ("Guan Yu: Wine, quickly! I'm off to the city to join the army.", "关羽：快斟酒来吃，我待赶入城去投军！")
+_LOOKS = {
+    "hd2d": "an HD-2D game in the manner of Octopath Traveler but set in ancient China: detailed pixel-art characters "
+            "in a diorama-like world with real lighting, soft depth-of-field blur, glowing lanterns, bloom",
+    "paladin": "a classic 1990s Chinese RPG in the manner of Chinese Paladin (Sword and Fairy) and Xuan-Yuan Sword: "
+               "hand-painted isometric backgrounds with rich detail, small finely drawn characters, ornate Chinese "
+               "UI frames",
+    "ink": "an ink-wash painting game in the manner of Tale of Immortal and Eastern Exorcist: the whole world painted "
+           "like a Chinese ink scroll, rice-paper texture, soft washes of colour, characters with brush outlines",
+    "chibi": "a polished modern Chinese mobile wuxia RPG: cute chibi 3D-rendered characters with big heads, bright "
+             "detailed stylised world, clean glossy UI",
+}
+for _k, _look in _LOOKS.items():
+    STILLS[f"mock_{_k}_map"] = {"scene": "mock", "lens": "map", "raw": True, "prompt": (
+        f"A gameplay screenshot from {_look}. Top-down three-quarter view of a small ancient Chinese village with "
+        f"earth-walled houses, a huge mulberry tree and peach trees in blossom; the three heroes {_BROS} walk together "
+        f"along a dirt path, a few villagers nearby. A small quest marker in the top-left corner and a minimap in the "
+        f"top-right. Han dynasty China; nothing modern.")}
+    STILLS[f"mock_{_k}_talk"] = {"scene": "mock", "lens": "talk", "raw": True, "prompt": (
+        f"A dialogue screenshot from {_look}. The game world (an ancient Chinese village inn at evening) behind, "
+        f"dimmed; in front, a large character portrait of Guan Yu (a towering man with a deep red face, narrow eyes, "
+        f"a very long black beard, green robe and green headscarf) on the left, and a dialogue box along the bottom "
+        f"with his name and the line \"{_TALK[0]}\" with the Chinese \"{_TALK[1]}\" above it. Han dynasty China; "
+        f"nothing modern.")}
 
 # the stills the game uses (Plot/Story's choice: the emotional peaks, the partings, the one death)
 CHOSEN = ["tree_b", "notice_b", "inn_b", "oath_b", "oath_c", "tent_b", "cart_b", "cart_c", "office_b", "blackwind_a",
