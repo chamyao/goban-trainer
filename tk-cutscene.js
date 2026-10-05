@@ -523,7 +523,7 @@ const WorldCutscene = {
           if (actors[b.to]) actors[b.to].item = b.item;
           if (Items) { Items.gain(scene, b.item); Object.values(actors).forEach(mount); }
           break;
-        case "zoom": cam.setZoom(zoom0 * b.z); if (dark) dark.setScale(1 / b.z); break;
+        case "zoom": cam.setZoom(zoom0 * b.z); if (scene.fitCamera) scene.fitCamera(); if (dark) dark.setScale(1 / b.z); break;
         case "mood": mood(b.dark, 0); break;
         case "fade": case "vanish": b.actors.filter(id => actors[id]).forEach(id => { actors[id].spr.setVisible(false); sync(actors[id]); }); break;
         case "gain": if (Items) { Items.gain(scene, b.item); Object.values(actors).forEach(mount); } break;
@@ -557,6 +557,7 @@ const WorldCutscene = {
     bars.forEach(b => b.destroy());
     cam.resetFX();
     cam.setZoom(zoom0);
+    if (scene.fitCamera) scene.fitCamera();
     overlays.forEach(el => el.remove());
     scene.musicCue = null;
     if (!left && cs.end && cs.end.leader) { const [x, y] = px(cs.end.leader); scene.player.setPosition(x, y); }

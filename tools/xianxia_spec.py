@@ -7,6 +7,14 @@ GROUND: 16x16 seamless tiles, several variants each.
 OBJECTS: kind -> (prompt, (w, h) to fit, variants).
 """
 
+# Ground is drawn (tools/build_xianxia_kit.py, ground()) in colours matched to the objects: the
+# generated ground came out as yellow sand and patterned rugs. GROUND below is kept for a retry.
+DRAWN_GROUND = ("grass", "dirt", "sand", "water")
+
+# pieces that came out wrong (a box for a go table, shrines for small rocks...): they keep the
+# Jade kit's art until they are regenerated
+REDO = {"furniture.gotable", "camp.table", "camp.hay", "building.moongate", "rock.small"}
+
 GROUND = {
     "grass": ("soft light jade-green grass, a few tiny flowers, even and calm", 4),
     "dirt": ("packed light-brown earth path, a few small pebbles, even", 2),
@@ -50,4 +58,16 @@ OBJECTS = {
     "rock.small": ("small grey stone", (16, 13), 2),
     "rock.big": ("large mossy grey boulder", (60, 44), 2),
     "rock.crag": ("tall jagged grey rock spire", (48, 46), 2),
+}
+
+
+# Story characters as 4-direction walking sheets (rd-animation four_angle_walking, 48x48 frames:
+# 4 directions x 4 steps). Looks follow the stills' cast (tools/tk_stills.py CAST).
+CHARACTERS = {
+    "liubei": "young Chinese hero, white robe with gold trim and a green sash, black topknot, short neat black beard, "
+              "twin swords at his belt, calm",
+    "guanyu": "tall broad Chinese general, deep red face, very long black beard down to his chest, green robe and green "
+              "headscarf, carrying a long crescent-bladed glaive",
+    "zhangfei": "stocky barrel-chested Chinese warrior, wild bristling black beard, round fierce eyes, dark grey and "
+                "black armour with red trim, red headband, carrying a long spear",
 }

@@ -110,6 +110,11 @@ def kit_set(a):
     jobs += [(k, "rd-plus", {"style": "topdown_asset", "width": max(16, w), "height": max(16, h), "remove_bg": True,
                               "prompt": f"{p}, {LOOK}, 3/4 top-down game sprite, small"}, n)
              for k, (p, (w, h), n) in OBJECTS.items()]
+    if a.set == "xianxia-chars":
+        from xianxia_spec import CHARACTERS
+        jobs = [(f"char.{k}", "rd-animation", {"style": "four_angle_walking", "width": 48, "height": 48,
+                                                "return_spritesheet": True, "prompt": f"{p}, {LOOK}"}, 1)
+                for k, p in CHARACTERS.items()]
     first = True
     for name, model, inp, n in jobs:
         if (a.only and name not in a.only) or ((out / f"{name}-1.png").exists() and not a.force):
@@ -117,7 +122,7 @@ def kit_set(a):
         if not first:
             time.sleep(a.pause)
         first = False
-        inp = {**inp, "num_images": n, "input_palette": pal}
+        inp = {**inp, "num_images": n, "input_palette": pal} if model != "rd-animation" else inp
         t = time.time()
         try:
             imgs = run(model, inp)
@@ -138,7 +143,7 @@ def main():
     ap.add_argument("--only", action="append")
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--list", action="store_true")
-    ap.add_argument("--set", choices=["xianxia"], help="generate a whole kit's pieces (tools/xianxia_spec.py)")
+    ap.add_argument("--set", choices=["xianxia", "xianxia-chars"], help="generate a whole kit's pieces (tools/xianxia_spec.py)")
     ap.add_argument("--pause", type=float, default=12, help="seconds between requests (rate limits)")
     a = ap.parse_args()
     OUT.mkdir(parents=True, exist_ok=True)
