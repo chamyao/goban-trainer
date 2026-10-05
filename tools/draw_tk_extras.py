@@ -6,6 +6,7 @@ Writes assets/tk/drawn.png, a small sheet the kits use like any pack sheet
   notice board   0,0    40x34      go table   40,0   22x14
   moon gate      64,0   48x40      water      0,48 and 16,48 (16x16 tiles)
   fire pit       32,48  32x16      gateway    64,48  32x32
+  shrine         0,80 dark, 32,80 lit, 64,80 settled (32x30 each)
 """
 from pathlib import Path
 
@@ -139,8 +140,45 @@ def gateway():  # a simple wooden gateway (pailou) you walk through
     return g.outline().image()
 
 
+def shrine(state):
+    """The Star Lords' weiqi shrine in each town: a stone stele, a stone board and a bronze burner.
+    state: "dark" (cold stone), "lit" (the stones glow, incense burns), "settled" (soft glow, no smoke)."""
+    g = Grid(32, 30)
+    st, stD, stL = "#8a8e94", "#5e636b", "#b4b8bc"
+    lit, settled = state == "lit", state == "settled"
+    # the stele behind, with a little tiled cap
+    g.rect(5, 6, 10, 14, stD); g.rect(6, 7, 8, 12, st); g.rect(3, 3, 14, 2, "#3e4350"); g.rect(5, 1, 10, 2, "#3e4350")
+    g.rect(9, 9, 2, 8, "#d8b04a" if lit else "#c8a860" if settled else stD)   # the carved line (no characters)
+    # the plinth
+    g.rect(1, 23, 30, 5, stD); g.rect(2, 22, 28, 2, st); g.rect(2, 27, 28, 1, "#4a4e56")
+    # the stone board on it: three lines each way, a few stones on the points
+    g.rect(3, 14, 18, 9, "#e6dcb4" if lit else stL); g.rect(3, 22, 18, 1, stD)
+    line = "#d8a838" if lit else "#c9b98a" if settled else "#7a7e86"
+    for x in (6, 11, 16):
+        g.rect(x, 15, 1, 7, line)
+    for y in (16, 18, 20):
+        g.rect(4, y, 16, 1, line)
+    for x, y, c in [(5, 15, "#222222"), (10, 17, "#f8f8f8"), (15, 15, "#222222"), (15, 19, "#f8f8f8")]:
+        if lit:   # a halo round each stone
+            for dx, dy in ((-1, 0), (-1, 1), (2, 0), (2, 1), (0, -1), (1, -1), (0, 2), (1, 2)):
+                g.set(x + dx, y + dy, "#8ae8ff")
+        g.rect(x, y, 2, 2, "#1a1a1a" if c == "#222222" else c)
+    # the bronze burner (a round ding on three legs)
+    g.ellipse(25.5, 19, 4, 3, "#8a6a32"); g.rect(21, 16, 9, 1, "#b08a42"); g.rect(22, 15, 1, 1, "#b08a42"); g.rect(28, 15, 1, 1, "#b08a42")
+    g.rect(22, 21, 1, 2, "#5a4420"); g.rect(25, 22, 1, 1, "#5a4420"); g.rect(28, 21, 1, 2, "#5a4420")
+    for x in (24, 26):
+        g.rect(x, 12, 1, 4, "#6a5a48" if state == "dark" else "#c8a070")
+        if lit:
+            g.set(x, 11, "#ff7a2c")
+    img = g.outline().image()
+    if lit:   # smoke over the outline: thin grey wisps
+        for x, y in ((24, 9), (23, 7), (24, 5), (26, 9), (27, 7), (26, 5), (25, 3), (23, 2)):
+            img.putpixel((x, y), (214, 218, 224, 170))
+    return img
+
+
 def main():
-    sheet = Image.new("RGBA", (112, 80))
+    sheet = Image.new("RGBA", (112, 112))
     sheet.alpha_composite(notice_board(), (0, 0))
     sheet.alpha_composite(go_table(), (40, 0))
     sheet.alpha_composite(moon_gate(), (64, 0))
@@ -148,6 +186,8 @@ def main():
     sheet.alpha_composite(water(1), (16, 48))
     sheet.alpha_composite(fire_pit(), (32, 48))
     sheet.alpha_composite(gateway(), (64, 48))
+    for i, state in enumerate(("dark", "lit", "settled")):
+        sheet.alpha_composite(shrine(state), (32 * i, 80))
     out = ROOT / "assets/tk/drawn.png"
     sheet.save(out)
     print(out.relative_to(ROOT))
