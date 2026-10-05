@@ -453,7 +453,10 @@ function worldScenes() {
         const sheet = this.kit.kinds[o.name.split("#")[0]][+o.name.split("#")[1]][0];
         img = this.add.image(Math.round(o.x), Math.round(o.y), `kit-${sheet}`, o.name).setOrigin(.5, 1);
         img.setDepth(WORLD_CLUTTER.test(p.kind) ? o.y - 400 : o.y);
-        if (this.iso && !WORLD_CLUTTER.test(p.kind)) WorldIso.anchor(this, img, o.x, o.y - p.fh / 2, p.fw, p.fh);   // stands on its footprint
+        if (this.iso && (!WORLD_CLUTTER.test(p.kind) || /^furn\./.test(p.kind))) {
+          WorldIso.anchor(this, img, o.x, o.y - p.fh / 2, p.fw, p.fh);   // stands on its footprint
+          if (WORLD_CLUTTER.test(p.kind)) img.setDepth(img.depth - 400);   // a rug still lies underfoot
+        }
         if (p.kind === "landmark.shrine") {   // the Star Lords' shrine: its look follows the story (setShrine)
           this.shrine = { img, x: o.x, y: o.y, state: "dark", fx: [] };
           this.setShrine(TK.shrineState?.(this.w.n, this.placeId) || "dark");
