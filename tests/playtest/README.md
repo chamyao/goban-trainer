@@ -29,7 +29,7 @@ starts from a fresh save.
 | playthrough | fresh save, phone: all 15 main story beats by taps (scene, mid-scene problem, scene after), the book completes |
 | ending | the last stretch: boss, the "Yellow Turbans Fall" scroll, Anxi hostel (ax1), the post (ax2), book complete |
 | tap-move-talk | tap the ground → walks there; tap a person → walks up and talks; taps advance and end the dialogue |
-| tap-duel | phone: tap a challenger, the duel opens full-screen, a tap places a stone, Leave by tap |
+| tap-duel | phone: tap a challenger, the duel opens full-screen; tap to preview where points are under 28 px apart (first tap a ghost and no move, a tap elsewhere moves it, a second tap plays), else one tap plays; Leave by tap. PLAYTEST_DEVICE picks the device |
 | doors-and-exits | walk out of Lousang by taps; tap a building to go in; tap the doorway to leave; tap the road off the map edge |
 | tap-after-talk | (arg: place) talk to every villager, then tap the ground around Liu Bei in four directions: he must move every time |
 | scene-arming | a scene doesn't start as you arrive; it starts after walking in (room and outdoor map) |
