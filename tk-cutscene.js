@@ -593,6 +593,7 @@ const WorldCutscene = {
     if (!left && cs.end && cs.end.leader) { const [x, y] = px(cs.end.leader); scene.player.setPosition(x, y); }
     scene.player.facing = "down";
     hidden.forEach(s => s.setVisible(true));
+    if (scene.refreshStory) scene.refreshStory();   // who stands where may have changed in the scene
     for (const n of scene.npcs) if (n.until && !n.spr.body.enable) n.spr.setVisible(false);
     scene.trail = Array(60).fill({ x: scene.player.x, y: scene.player.y, f: "down" });
     cam.startFollow(scene.player, true, .15, .15);
