@@ -1281,7 +1281,11 @@ function worldScenes() {
       if (q && this.available(q)) this.approach(q, spot);   // the same face-and-beat start as walking in
       else if (q && this.done(q.node)) this.talk([["n", `${spot.label || q.title}. (${q.title}: done.)`,
         q.title_zh ? `${spot.labelZh || q.title_zh}。（${q.title_zh}：已完成）` : ""]]);
-      else this.talk([["n", `${spot.label || "Nothing here"}. It isn't time yet.`, `${spot.labelZh || "这里"}。时候还没到。`]]);
+      else {   // not yet: say where the story is now, so a locked place points the way
+        const lines = [["n", `${spot.label || "Nothing here"}. Nothing to do here yet.`, `${spot.labelZh || "这里"}。这里还没有要做的事。`]];
+        if (this.goalText) lines.push(["n", `For now: ${this.goalText[0]}`, this.goalText[1] ? `眼下：${this.goalText[1]}` : ""]);
+        this.talk(lines);
+      }
     }
 
     // Someone with something to give: a plain line until the story's condition holds, then the
