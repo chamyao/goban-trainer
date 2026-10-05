@@ -103,3 +103,14 @@ A condition is always one of: a story node cleared, an item held, or a place mar
 
 - **Qingzhou flanks:** Deliver with no item; the "items" are Guan Yu and Zhang Fei, placed by talking at the left and right ridge spots. Swapping them gets a correction line, not a failure.
 - **Lu Zhi's errand:** Deliver with no item: reach Changshe (a place marked done), then return to the tent. The twist (arriving late) is Plot's scene.
+
+## Keeping hints present (after a new tester's notes)
+
+A new tester lost the thread three times. Qingzhou: "the hint to lift the siege needs to be more present", "the sage's words [should] persist on screen until I drop off the brothers". Black Wind: "make it clear I should give the blood to the brothers". The Han camp: "it isn't time yet" right after the previous level. The common cause is that a hint said once in dialogue is gone when the dialogue closes. Rule, in four parts; the objective still names only the goal:
+
+1. **The hint stays on screen until its step is done.** Under the goal line, a second, quieter line quotes the hint in the speaker's own words (Black Wind: "Pigs, sheep, dogs. Blood." · Qingzhou: "Give ground, and make them follow."). It appears when the hint is given and goes when the gate it serves is cleared. It is the hint itself, not a checklist: no counts or item lists.
+2. **Targets glow while they can act.** A person who can give something now, or who is waiting for a delivery or a placement (the villagers, Guan Yu and Zhang Fei on their ridges or hills), carries a small marker in the shrine's style (a wisp of incense). It goes once their part is done. Nothing that can't act yet is marked.
+3. **The target calls out on approach.** When the player comes near someone the hint needs, holding what they need, that person speaks first (Zhang Fei: "Brother! Is that the blood? Up here!"). Plot writes these lines.
+4. **"Not yet" always says what comes first.** Any refusal names the next place ("Not yet. Lu Zhi is waiting for you at Guangzong."), and a place with nothing to do now doesn't look active.
+
+Parts 1 and 2 are interface (Integration); parts 3 and 4 are story lines (Plot).
