@@ -31,7 +31,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=25`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=26`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
@@ -208,9 +208,9 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=25`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=26`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=15`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=23`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=24`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
@@ -219,7 +219,7 @@ function worldScenes() {
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
       for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=35`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=36`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -259,7 +259,7 @@ function worldScenes() {
         if (l.name === "water") { layer.setCollisionByExclusion([-1]); this.water = layer; }
       }
       this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-      this.solids = this.physics.add.staticGroup();
+      this.solids = this.physics.add.staticGroup(); this.buildings = [];
       for (const who of new Set(["liubei", ...this.st.party])) this.hero(who);
 
       const P = o => Object.fromEntries((o.properties || []).map(p => [p.name, p.value]));
@@ -393,16 +393,21 @@ function worldScenes() {
     }
 
     addProp(o, p) {
+      let img = null;
       if (o.name) {
         const sheet = this.kit.kinds[o.name.split("#")[0]][+o.name.split("#")[1]][0];
-        const img = this.add.image(Math.round(o.x), Math.round(o.y), `kit-${sheet}`, o.name).setOrigin(.5, 1);
+        img = this.add.image(Math.round(o.x), Math.round(o.y), `kit-${sheet}`, o.name).setOrigin(.5, 1);
         img.setDepth(WORLD_CLUTTER.test(p.kind) ? o.y - 400 : o.y);
         if (p.kind === "landmark.shrine") {   // the Star Lords' shrine: its look follows the story (setShrine)
           this.shrine = { img, x: o.x, y: o.y, state: "dark", fx: [] };
           this.setShrine(TK.shrineState?.(this.w.n, this.placeId) || "dark");
         }
       }
-      if (p.solid) this.solids.add(this.add.zone(o.x, o.y - p.fh / 2, p.fw - 2, p.fh - 2));
+      if (img && /^building\./.test(p.kind || "")) this.buildings.push({ x: o.x, bottom: o.y, w: img.width, h: img.height });
+      // a building's wall follows its art, which is often wider or narrower than its footprint:
+      // cl and cr either side of its centre (worked out with its neighbours by the map tools)
+      const l = p.cl || p.fw / 2, r = p.cr || p.fw / 2;
+      if (p.solid) this.solids.add(this.add.zone(o.x + (r - l) / 2, o.y - p.fh / 2, l + r - 2, p.fh - 2));
     }
 
     // The shrine's three looks: "dark" (cold stone), "lit" (the stones glow, incense burns: a hint is
@@ -493,6 +498,7 @@ function worldScenes() {
         this.hero(who);
         return { who, spr: this.add.sprite(this.player.x, this.player.y, `h-${who}-down-0`).setOrigin(.5, 1) };
       });
+      if (this.npcs) this.refreshStory();
       this.trail = Array(60).fill({ x: this.player.x, y: this.player.y, f: this.player.facing });
     }
 
@@ -528,6 +534,10 @@ function worldScenes() {
     // Who is here and how the shrine looks follow the story; redone whenever it moves on.
     refreshStory() {
       for (const n of this.npcs) if (n.when) { const on = this.cond(n.when); n.spr.setVisible(on); n.spr.body.enable = on; }
+      // one of each person at a time: a brother standing here in his own right (Guan Yu on his
+      // ridge) isn't also following Liu Bei
+      const here = new Set(this.npcs.filter(n => n.who && n.spr.visible).map(n => n.who));
+      for (const F of this.followers || []) F.spr.setVisible(!here.has(F.who));
       if (this.shrine && this.setShrine) this.setShrine(this.shrineState());
     }
 
@@ -569,7 +579,7 @@ function worldScenes() {
       if (!q) return this.goal("This book is complete. The road goes on…", "这一卷已经完成。路还在前方……");
       const g = this.available(q) && this.gateFor(q);
       if (g && g.objective) {   // what the battle still needs, with a count
-        const need = [].concat(g.needs || []), k = need.filter(c => this.cond(c)).length, n = need.length > 1 ? ` (${k}/${need.length})` : "";
+        const need = [].concat(g.needs || []), k = need.filter(c => this.cond(c)).length, n = need.length > 1 && g.count !== false ? ` (${k}/${need.length})` : "";
         const away = g.place && g.place !== this.placeId && !this.placeIn(this.placeId, g.place);
         return this.goal(`${g.objective}${n}${away ? ` (${this.placeName(g.place)})` : ""}`,
           g.objective_zh ? `${g.objective_zh}${n ? `（${k}/${need.length}）` : ""}${away ? `（${this.placeZh(g.place)}）` : ""}` : "");
@@ -921,11 +931,17 @@ function worldScenes() {
       const doorway = e => e.side === "N" && e.rect.width < 16;
       const door = this.exits.filter(e => doorway(e)
           // the building itself (its face, from the door up), not the road in front of it
-          ? Math.abs(x - e.rect.centerX) < 22 && y > e.rect.centerY - 48 && y < e.rect.bottom && this.placeOpen(e.to)
+          ? this.onBuilding(e, x, y) && this.placeOpen(e.to)
           : x > e.rect.x - 20 && x < e.rect.right + 20 && y > e.rect.y - 20 && y < e.rect.bottom + 20)
         .sort((a, b) => Math.hypot(a.rect.centerX - x, a.rect.centerY - y) - Math.hypot(b.rect.centerX - x, b.rect.centerY - y))[0];
       if (door) return { kind: "door", e: door };
       return null;
+    }
+    // A tap on the building a door belongs to (as drawn), or just above its door.
+    onBuilding(e, x, y) {
+      const b = (this.buildings || []).find(b => Math.abs(b.x - e.rect.centerX) < b.w / 2 && Math.abs(b.bottom - e.rect.bottom) < 20);
+      if (b) return Math.abs(x - b.x) < b.w / 2 && y > b.bottom - b.h && y < e.rect.bottom;
+      return Math.abs(x - e.rect.centerX) < 22 && y > e.rect.centerY - 48 && y < e.rect.bottom;
     }
     // The feet-sized body, centred under the sprite whatever its size (drawn, generated or
     // mounted sprites differ); redone in update whenever the frame size changes.
@@ -1041,6 +1057,9 @@ function worldScenes() {
         n.dir = { up: "down", down: "up", left: "right", right: "left" }[this.player.facing];
         this.faceNpc(n);
         if (n.gives) return this.giveFrom(n);
+        // someone standing at a place to deliver to (Guan Yu at his ridge) takes the delivery
+        const at = Object.values(this.spots).find(s => s.needs && Math.hypot(s.x - n.spr.x, s.y - n.spr.y) < 64);
+        if (at) return this.deliverAt(at);
         if (n.challenge) return this.done(n.challenge) ? this.talk(worldLines(n.done)) : this.talk(worldLines(n.intro), () => this.puzzle(n.challenge, { id: n.challenge.split("-c-")[1], who: n.who, face: this.faceOf(n) }));
         this.talk(n.say.length ? worldLines(n.say) : [["n", "…"]]);
         return;

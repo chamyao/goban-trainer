@@ -87,9 +87,9 @@ WORLDS = [
              "gate": [
                  {"needs": ["node:n7b"], "else": "bossearly"},
                  {"needs": ["item:pigblood", "item:sheepblood", "item:dogblood"], "else": "bossearly2",
-                  "objective": "Gather blood from the village below the hills: pigs, sheep, dogs.", "at": "Hills of Black Wind"},
+                  "objective": "Defeat the Black Wind.", "count": False, "at": "Hills of Black Wind"},
                  {"needs": ["mark:ridge_left", "mark:ridge_right"], "else": "bossearly2",
-                  "objective": "Take the blood up to Guan Yu on the left ridge and Zhang Fei on the right.", "at": "Hills of Black Wind"}]},
+                  "objective": "Defeat the Black Wind.", "count": False, "at": "Hills of Black Wind"}]},
             {"key": "ax1", "x": 448, "y": 44, "role": "main", "place": "Anxi", "room": "hostel", "step": 0.95, "scene": "hostel"},
             {"key": "ax2", "x": 462, "y": 26, "role": "main", "place": "Anxi", "step": 0.97, "scene": "post"},
         ],
