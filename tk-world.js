@@ -498,6 +498,7 @@ function worldScenes() {
         this.hero(who);
         return { who, spr: this.add.sprite(this.player.x, this.player.y, `h-${who}-down-0`).setOrigin(.5, 1) };
       });
+      if (this.npcs) this.refreshStory();
       this.trail = Array(60).fill({ x: this.player.x, y: this.player.y, f: this.player.facing });
     }
 
@@ -533,6 +534,10 @@ function worldScenes() {
     // Who is here and how the shrine looks follow the story; redone whenever it moves on.
     refreshStory() {
       for (const n of this.npcs) if (n.when) { const on = this.cond(n.when); n.spr.setVisible(on); n.spr.body.enable = on; }
+      // one of each person at a time: a brother standing here in his own right (Guan Yu on his
+      // ridge) isn't also following Liu Bei
+      const here = new Set(this.npcs.filter(n => n.who && n.spr.visible).map(n => n.who));
+      for (const F of this.followers || []) F.spr.setVisible(!here.has(F.who));
       if (this.shrine && this.setShrine) this.setShrine(this.shrineState());
     }
 
@@ -1052,6 +1057,9 @@ function worldScenes() {
         n.dir = { up: "down", down: "up", left: "right", right: "left" }[this.player.facing];
         this.faceNpc(n);
         if (n.gives) return this.giveFrom(n);
+        // someone standing at a place to deliver to (Guan Yu at his ridge) takes the delivery
+        const at = Object.values(this.spots).find(s => s.needs && Math.hypot(s.x - n.spr.x, s.y - n.spr.y) < 64);
+        if (at) return this.deliverAt(at);
         if (n.challenge) return this.done(n.challenge) ? this.talk(worldLines(n.done)) : this.talk(worldLines(n.intro), () => this.puzzle(n.challenge, { id: n.challenge.split("-c-")[1], who: n.who, face: this.faceOf(n) }));
         this.talk(n.say.length ? worldLines(n.say) : [["n", "…"]]);
         return;
