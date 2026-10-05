@@ -8,6 +8,7 @@ window. They need Node with Playwright installed globally and a Chromium
     tests/playtest/run.sh                    # everything (the playthrough takes ~10 min)
     tests/playtest/run.sh playthrough        # one or more by name
     PLAYTEST_URL=http://localhost:8766 tests/playtest/run.sh tap-duel   # another local copy
+    PLAYTEST_KIT=jade tests/playtest/run.sh door-taps side-stories     # another art kit (jade, ninja, xianxia; default: the game's)
 
 `run.sh` serves the repo on :8765 if nothing is there, writes each test's output to
 `out/<name>.log` (screenshots to `out/*.png`), and prints `ok` or `FAIL` per test.
@@ -41,7 +42,9 @@ starts from a fresh save.
 | menu | phone: every menu button on screen; voice zh/en/off and music toggle and are remembered; the art switch cycles every kit keeping place and progress; Chronicle opens, closes, replays the Prologue; Map goes to the overworld; Start over asks (Cancel keeps, OK forgets); taps still move him after. NOTE lines are feel notes, not failures |
 | old-saves | phone: saves an older version could leave (beats added since, a place renamed, a position in a wall or off the map, an unknown kit or hero, corrupt JSON, a finished book) all load into a real place, on open ground, with a sensible goal, and he moves |
 | rotate-leave | phone: turn sideways and back mid-scene and mid-problem (dialogue, board and taps stay usable); Leave a story problem halfway: not cleared, goal still on it, the spot plays again. (Fails until the problem re-lays out on rotation: tk.js picks the stacked full-screen layout once, at open.) |
-| blackwind | phone, taps, no teleports inside the stretch: the 10 checks of docs/mechanics-spec.md §8 (on claude/game-design): first try at n7 with no board, shrine dark/lit/settled, givers once, ridges in either order, Yangcheng gated (bossearly, bossearly2, then the board; a slip holds it 30 s), supplies gone after the win, Start over, a dark shrine elsewhere; and the time for each leg |
+| blackwind | phone, taps, no teleports inside the stretch: the 10 checks of docs/mechanics-spec.md §8 (on claude/game-design): first try at n7 with no board, shrine dark/lit/settled, givers once, ridges in either order, delivering by talking to Zhang Fei and Guan Yu (one blood isn't enough), Yangcheng gated (bossearly, bossearly2, then the board; a slip holds it 30 s), supplies gone after the win, Start over, a dark shrine elsewhere; no hero shown twice (follower and NPC); and the time for each leg |
+| test-mode | ?test=1 (kept in localStorage tk-test) gives problems a Skip (test) key that wins them; none without it; ?test=0 turns it off |
+| room-cast | phone: through each room's story scene (Zhuo inn and office, Julu house, Lu Zhi's tent, Anxi hostel) every hero stays on screen and on the floor (not inside furniture or a wall), and the cutscene's Skip button can be tapped (nothing on top of it). arg: one room |
 | star-lords | peach garden: the two immortals stay through the problem, vanish the moment it is won, the narration follows |
 | go-table-ogs | the 9×9 go table with a stand-in OGS socket: sit, search sent, opponent walks in, live board, move, resign, leave |
 | drag-and-hover | desktop: hand cursor over people; hold-and-drag steers |

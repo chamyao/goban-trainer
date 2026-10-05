@@ -9,7 +9,7 @@ const busy=()=>p.evaluate(()=>!!(window.__w&&window.__w.ui.busy()));
 const drain=async()=>{for(let i=0;i<400;i++){if(!(await busy()))break;await p.evaluate(()=>window.__w.act());await p.waitForTimeout(100);}};
 const near=sel=>p.evaluate(sel=>{const w=window.__w;let t;if(sel.npc){const n=w.npcs.find(n=>n.challenge&&n.challenge.endsWith(sel.npc));t={x:n.spr.x,y:n.spr.y};}else{const s=Object.values(w.spots).find(s=>s.node===sel.node);t={x:s.x,y:s.y};}
   for(const [dx,dy,f] of [[0,14,'up'],[0,-12,'down'],[-14,2,'right'],[14,2,'left']]){w.player.setPosition(t.x+dx,t.y+dy);w.player.facing=f;const tg=w.target();if(tg&&(sel.npc?tg.kind==='npc':tg.kind==='spot'))return f;}return 'none';},sel);
-await p.goto((process.env.PLAYTEST_URL||'http://localhost:8765')+'/index.html#/tk/1');await p.waitForTimeout(1200);
+await p.goto((process.env.PLAYTEST_URL||'http://localhost:8765')+'/index.html'+(process.env.PLAYTEST_KIT?'?kit='+process.env.PLAYTEST_KIT:'')+'#/tk/1');await p.waitForTimeout(1200);
 const c=p.getByText('Cancel',{exact:true});if(await c.count())await c.first().click();
 for(let i=0;i<6;i++){const g=p.locator('.tk-scroll-go');if(await g.count()){await g.first().click();await p.waitForTimeout(300);}}
 await ready(); await p.evaluate(()=>{window.__w.leaving=false;window.__w.go('zhuo-county')}); await p.waitForTimeout(1200); await ready();
