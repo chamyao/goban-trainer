@@ -610,6 +610,42 @@ for _k, _look in _LOOKS.items():
         f"with his name and the line \"{_TALK[0]}\" with the Chinese \"{_TALK[1]}\" above it. Han dynasty China; "
         f"nothing modern.")}
 
+# Dialogue portraits in the Genshin look (the user's pick for the new style): one half-body cut-out per
+# speaker, on white for the background to be keyed out (tools/build_portraits.py). Looks beyond CAST here.
+FACE_LOOKS = {
+    "starred": ("the Red Star Lord", "a cheerful immortal old man with a long white beard, rosy cheeks, in a flowing "
+                                     "crimson robe embroidered with stars"),
+    "stargrey": ("the Grey Star Lord", "a stern immortal old man with a long white beard and long eyebrows, in a "
+                                       "flowing silver-grey robe embroidered with stars"),
+    "immortal": ("the hermit immortal", "an ancient Daoist hermit with a white beard to his waist, a wooden staff and a "
+                                        "gourd, in a plain pale robe, kind wise eyes"),
+    "liubei_child": ("young Liu Bei", "a bright-eyed boy of six with his hair in two tufts, in a plain hemp tunic"),
+    "liuyuanqi": ("Liu Yuanqi", "a strong dark-haired farmer of forty with a short black beard, in a hemp robe"),
+    "uncle": ("Liu Bei's uncle", "a strong dark-haired farmer of forty with a short black beard, in a hemp robe"),
+    "chengyuanzhi": ("Cheng Yuanzhi", "a hulking Yellow Turban rebel general with a yellow headscarf, leather armour "
+                                      "and a heavy broadsword"),
+    "merchant": ("the horse merchant", "a prosperous northern horse trader with a fur-trimmed cap and a neat moustache"),
+    "zuofeng": ("Zuo Feng", "a smug court eunuch envoy, beardless, in a dark official robe and gauze cap"),
+    "yuanshu": ("Yuan Shu", "an arrogant young nobleman with a thin moustache, in gold brocade and a tall cap"),
+    "xiandi": ("the Prince of Chenliu", "a calm, serious boy of nine in a yellow silk robe with a small crown"),
+    "shaodi": ("the boy Emperor", "a frightened boy of fourteen in an emperor's yellow robe and crown"),
+    "hetaihou": ("Empress Dowager He", "a proud imperial lady in her thirties in rich red and gold court robes, a tall "
+                                       "jewelled headdress"),
+    "tangfei": ("Consort Tang", "a gentle young court lady in a pale lavender robe, hair in an elegant bun"),
+    "liru": ("Li Ru", "Dong Zhuo's sly advisor, thin with narrow eyes and a wispy beard, in a dark robe and scholar's cap"),
+    "dongmu": ("Dong Zhuo's mother", "a frail old woman of ninety with white hair, in a dark brocade robe"),
+    "caiyong": ("Cai Yong", "a sorrowful old scholar with a grey beard, in a plain scholar's robe and cap"),
+    "chengpu": ("Cheng Pu", "a veteran general with a grizzled beard, in red armour, holding a long spear"),
+    "handang": ("Han Dang", "a tough general with a square jaw and short beard, in red armour, holding a broadsword"),
+}
+FACE_STYLE = ("In the style of Genshin Impact character art: polished anime cel shading, clean lineart, vibrant "
+              "colours, soft rim light. Plain flat pure white background, nothing else behind the figure. Han dynasty "
+              "China, about 184 AD: no text, no modern items.")
+for _who, (_name, _look) in {**{k: v for k, v in CAST.items()}, **FACE_LOOKS}.items():
+    STILLS[f"face_{_who}"] = {"scene": "face", "lens": _who, "raw": True, "aspect": "3:4", "prompt": (
+        f"Character portrait of {_name}, {_look}. Half-body from the waist up, turned three-quarters toward the "
+        f"viewer, a characteristic expression. {FACE_STYLE}")}
+
 # the stills the game uses (Plot/Story's choice: the emotional peaks, the partings, the one death)
 CHOSEN = ["tree_b", "notice_b", "inn_b", "oath_b", "oath_c", "tent_b", "cart_b", "cart_c", "office_b", "blackwind_a",
           "bosswin_c", "bosswin_d", "peace2_b", "caocao2_b", "caocao3_b", "post_b", "horses_b",

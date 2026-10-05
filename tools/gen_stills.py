@@ -253,10 +253,17 @@ def review(name, fn, ids, model, tries, look=None, workers=8):
 
     def one(job):   # all at once; http() waits out any 429 itself
         stem, text = job
+        aspect = STILLS[stem.split("--")[0]].get("aspect", "16:9")
         try:
-            raw, used = fn(text, model, "16:9", [])
+            raw, used = fn(text, model, aspect, [])
         except Exception as e:
             return f"  {stem}: failed: {e}"
+        if aspect != "16:9":   # a portrait: kept whole (no crop), as png for the background to be keyed out
+            im = Image.open(io.BytesIO(raw)).convert("RGB")
+            im.thumbnail((768, 1024))
+            im.save(out / f"{stem}.png")
+            (out / f"{stem}.txt").write_text(text)
+            return f"  {stem}: {name}/{used}"
         fit(raw).save(out / f"{stem}.jpg", "JPEG", quality=86)
         (out / f"{stem}.txt").write_text(text)
         return f"  {stem}: {name}/{used}"
