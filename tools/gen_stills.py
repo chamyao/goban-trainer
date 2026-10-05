@@ -195,12 +195,12 @@ def portraits(name, fn, keys, n, model):
         for i in range(start + 1, start + n + 1):
             try:
                 text, images = request(name, key=key)
-                raw, used = fn(text, model, "1:1", images)
+                raw, used = fn(text, model, "3:4", images)   # half-body cards
             except Exception as e:
                 print(f"  {key} #{i}: failed: {e}")
                 continue
             im = Image.open(io.BytesIO(raw)).convert("RGB")
-            im.thumbnail((768, 768))
+            im.thumbnail((768, 1024))
             im.save(out / f"{key}-{i}.jpg", "JPEG", quality=88)
             print(f"  {key} #{i}: {name}/{used} → assets/tk/stills/refs/candidates/{key}-{i}.jpg")
     rows = []

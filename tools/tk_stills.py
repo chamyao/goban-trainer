@@ -23,7 +23,10 @@ words and name people only; their look belongs in CAST.
 """
 import re
 
-STYLE = "Style: in the style of Studio Ghibli."
+# the user's pick from the candidates below (gongbi), with what it tended to add uninvited ruled out
+STYLE = ("Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat "
+         "mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no "
+         "signature, no watermark.")
 
 # candidates for STYLE, to choose by eye (gen_stills.py --styles): the user wants the stills to
 # look like modern Chinese xianxia game art, Sword and Fairy cover art especially
@@ -90,12 +93,11 @@ ANGLE = {"guanyu": "Seen from slightly below, looming, his shoulders filling the
 
 
 def portrait(key, n_style=0):
-    """The request for a person's reference portrait: the face is what the stills need to keep."""
+    """The request for a person's reference portrait (the "card" framing, the user's pick): what the
+    stills are given to keep a face and costume the same from one image to the next."""
     name, look = CAST[key]
-    return (f"Character face portrait of {name}, {look}. Head and shoulders close-up, the face filling most of "
-            f"the frame, three-quarter view, a characteristic expression, plain flat background. "
-            f"{ANGLE[key] + ' ' if key in ANGLE else ''}"
-            f"{style_note(n_style)}{STYLE}")
+    return (f"{PORTRAITS['card'].format(name=name, look=look)} "
+            f"{ANGLE[key] + ' ' if key in ANGLE else ''}{style_note(n_style)}{STYLE}")
 
 
 STILLS = {
