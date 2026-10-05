@@ -466,5 +466,23 @@
   ],
   "seconds": 41.5,
   "made": "2026-10-05"
+ },
+ "ruin.hall": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 88,
+   "height": 64,
+   "remove_bg": true,
+   "prompt": "a single burned-out ruin of a Chinese hall: roofless, charred black pillars of different heights on a grey stone base, a fallen burnt beam, ash by itself, centred, game item sprite, bright saturated anime colours like Genshin Impact, soft cel shading, clean outline, isometric 2:1 angle",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   88,
+   64
+  ],
+  "seconds": 47.4,
+  "made": "2026-10-05"
  }
 }
