@@ -4,6 +4,11 @@ Player-facing rules for the mechanics agreed in `docs/game-design.md`, written s
 
 **Pilot:** World 1, Black Wind. Built on `main` (1a3a72e), with the gate's `"count": False` for goal-only objectives. All four blocks are built and played through on a phone (Testing, main 80dc3ef): about 4 minutes from the first try to the boss board.
 
+## Rules for problems (all boards)
+
+- **Flawless only.** A wrong move, hint, undo or Explore is a slip. A slip keeps the same problem, resets it and holds the board for a fixed 30 s "Think" cooldown.
+- **Tap to preview on small boards (touch).** When the points are under about 28 px apart (phones: 18-25 px), the first tap puts a faint ghost stone on the point and a second tap on the same point plays it. Tapping a different point moves the ghost. A ghost is not a move, so it is never a slip. Where the points are 28 px or more apart, one tap plays as now. (Decided by Plot/Story after Testing's phone report.)
+
 ## Four building blocks
 
 Every mechanic in the toolbox is made of these four. Build them once; Plot combines them per Book.
