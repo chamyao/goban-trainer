@@ -522,10 +522,10 @@ def _scenes_chain():
     }
 
 
-def _dl(q, who, win, slip, zq, zwin, zslip):
-    """A decision board: caption, who weighs it, and the lines on a solve and a slip."""
-    ZH2[q], ZH2[win], ZH2[slip] = zq, zwin, zslip
-    return {"q": q, "who": who, "win": win, "slip": slip}
+def _dl(q, who, open_, win, slip, zq, zopen, zwin, zslip):
+    """A decision board: caption, who weighs it, and the lines on opening, a solve and a slip."""
+    ZH2[q], ZH2[open_], ZH2[win], ZH2[slip] = zq, zopen, zwin, zslip
+    return {"q": q, "who": who, "open": open_, "win": win, "slip": slip}
 
 
 def _node(key, x, y, role, place, step, scene, **extra):
@@ -574,12 +574,12 @@ def _nodes():
         _node("c2", 388, 170, "side", ("Burned Luoyang", "焦土洛阳"), 0.6, "seal"),
         _node("c3", 410, 196, "side", ("Xianshan", "岘山"), 0.65, "xianshan"),
         # The Chain (ch8-9)
-        _node("d1", 350, 140, "side", ("Wang Yun's Garden", "王允后园"), 0.7, "garden", dilemma=_dl("Will Diaochan give her life?", "diaochan", "I understand what I must do.", "Not yet. Let me think.", "貂蝉可愿以身许国？", "妾明白了。", "且慢，容妾想想。")),
+        _node("d1", 350, 140, "side", ("Wang Yun's Garden", "王允后园"), 0.7, "garden", dilemma=_dl("Will Diaochan give her life?", "diaochan", "Lord Wang has raised me as his own child. Now he asks for my life.", "I understand what I must do.", "Not yet. Let me think.", "貂蝉可愿以身许国？", "司徒待妾如亲生，今日却要妾的性命。", "妾明白了。", "且慢，容妾想想。")),
         _node("d2", 368, 118, "side", ("Wang Yun's Garden", "王允后园"), 0.74, "feasts"),
         _node("d3", 390, 100, "side", ("Fengyi Pavilion", "凤仪亭"), 0.78, "pavilion"),
         _node("d4", 412, 84, "side", ("Chang'an", "长安"), 0.82, "fall"),
         _node("d5", 434, 98, "side", ("Chang'an", "长安"), 0.86, "mourner"),
-        _node("d6", 448, 122, "side", ("Chang'an", "长安"), 0.9, "tower", dilemma=_dl("Flee with Lü Bu, or hold the gate?", "wangyun", "I know what I must do.", "Not yet. I cannot decide.", "随吕布出关，还是死守宫门？", "吾意已决。", "且慢，吾尚难决。")),
+        _node("d6", 448, 122, "side", ("Chang'an", "长安"), 0.9, "tower", dilemma=_dl("Flee with Lü Bu, or hold the gate?", "wangyun", "Lü Bu waits with a horse. The Emperor is in the palace behind me.", "I know what I must do.", "Not yet. I cannot decide.", "随吕布出关，还是死守宫门？", "吕布备马在侧，天子却在宫中。", "吾意已决。", "且慢，吾尚难决。")),
     ]
 
 
