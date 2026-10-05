@@ -44,6 +44,7 @@ for(const [name,dev] of SIZES){
   const dl=await inView('.town-ui .town-dlg');bad(dl.length===1&&dl[0].ok,'the dialogue box is off screen: '+JSON.stringify(dl));
   const dOver=await p.evaluate(()=>{const d=document.querySelector('.town-ui .town-dlg');return d&&!d.hidden&&(d.scrollHeight>d.clientHeight+2);});bad(!dOver,'the dialogue text overflows its box');
   for(let i=0;i<20&&await p.evaluate(()=>window.__w.ui.busy());i++){await p.evaluate(()=>window.__w.ui.advance());await p.waitForTimeout(100);}
+  if(touch){await p.waitForTimeout(300);bad(!(await p.evaluate(()=>{const f=document.querySelector('.town-focus');return !!f&&!f.hidden;})),'"Tap the map to play" shows on a touch screen');}
   // a problem
   await p.evaluate(()=>{const w=window.__w,n=w.npcs.find(n=>n.challenge);n.wander=false;w.player.setPosition(n.spr.x,n.spr.y+14);w.player.facing='up';w.act();});
   for(let i=0;i<60&&!(await p.locator('.tk-duel svg').count());i++){await p.evaluate(()=>window.__w.ui.busy()&&window.__w.ui.advance());await p.waitForTimeout(100);}await p.waitForTimeout(900);
