@@ -81,7 +81,7 @@ WORLDS = [
             {"key": "f1", "x": 395, "y": 217, "role": "side", "place": "Changshe", "room": "camp", "step": 0.67, "scene": "fireplan"},
             {"key": "b3", "x": 412, "y": 204, "role": "side", "place": "Changshe", "step": 0.7, "scene": "caocao3"},
             {"key": "bs", "x": 360, "y": 146, "role": "short", "place": "Envoy's Road", "step": 0.65, "scene": "bribe"},
-            {"key": "n6", "x": 420, "y": 164, "role": "main", "place": "Dong Zhuo's Camp", "step": 0.8, "scene": "office"},
+            {"key": "n6", "x": 420, "y": 164, "role": "main", "place": "The Hills North of Guangzong", "step": 0.8, "scene": "office"},
             {"key": "n7", "x": 388, "y": 114, "role": "main", "place": "Hills of Black Wind", "step": 0.9, "scene": "blackwind", "board": False},
             {"key": "n7b", "x": 408, "y": 90, "role": "main", "place": "Hills of Black Wind", "step": 0.92, "scene": "shrine", "shrine": True,
              "hint": "Pigs, sheep, dogs. Blood."},
@@ -137,6 +137,7 @@ WORLDS = [
                 ["remove", "lz"],
             ]},
             "fireplan": {"title": "The Fire Plan", "kind": "side", "steps": [
+                ["n", "Some days before Liu Bei reaches Yingchuan, in the Han camp at Changshe…"],
                 ["spawn", "hs", "huangfusong", "f1", 8, -4],
                 ["army", "troops", "militia", 3, "f1", -10, 6],
                 ["n", "At Changshe, the Yellow Turbans pitched their camp in tall grass."],
@@ -251,6 +252,7 @@ WORLDS = [
                 ["n", "Cheng Yuanzhi charges — and Guan Yu's great blade cuts him in two. The rebels throw down their spears and run."],
                 ["run", "yt", "n3", 160, 0], ["remove", "yt"],
                 ["remove", "r1"], ["remove", "r2"],
+                ["n", "The very next day, a messenger gallops in from Qingzhou."],
             ]},
             "qingzhou": {"title": "The Ambush at Qingzhou", "kind": "main", "steps": [
                 ["prop", "gate", "gate", "n4", 70, -16],
@@ -533,6 +535,7 @@ WORLDS = [
                 ["light", "day", 1500],
             ]},
             "caocao3": {"title": "The Hero of Chaos · III: Red Banners at Changshe", "kind": "side", "steps": [
+                ["n", "Days before Liu Bei reached Yingchuan, the rebels fled the flames at Changshe."],
                 ["army", "yt", "rebel", 10, "b3", 40, 0],
                 ["spawn", "zbao", "zhangbao", "b3", 54, -6], ["spawn", "zl", "rebel", "b3", 54, 6],
                 ["light", "night", 1500],
