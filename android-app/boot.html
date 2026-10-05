@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tian Cai Zhi Wang</title>
+<style>html,body{margin:0;height:100%;background:#f4f1ea}</style>
+<script>
+// Load the live site into the app (see prepare-web.mjs). Its files come from the site (a <base> tag),
+// but the page keeps the app's own address: same saves, same native bridge. The KataGo worker and model
+// stay local (a worker must be same-origin), via APP_LOCAL.
+(async () => {
+  const LIVE = "https://chamyao.github.io/goban-trainer/", LOCAL = location.origin + "/";
+  const bundled = () => location.replace("app.html" + location.hash);
+  try {
+    const ctrl = new AbortController(), timer = setTimeout(() => ctrl.abort(), 4000);
+    const res = await fetch(LIVE + "index.html?t=" + Date.now(), { cache: "no-store", signal: ctrl.signal });
+    clearTimeout(timer);
+    if (!res.ok) return bundled();
+    let html = await res.text();
+    if (!html.includes("<head>") || !html.includes("</body>")) return bundled();
+    // with a <base>, a link like href="#/tk/1" would point at the site itself and leave the app: keep
+    // in-page links in-page
+    const keep = `document.addEventListener("click", e => { const a = e.target.closest && e.target.closest('a[href^="#"]');
+      if (a) { e.preventDefault(); location.hash = a.getAttribute("href"); } }, true);`;
+    html = html.replace("<head>", `<head><base href="${LIVE}"><script>window.APP_LOCAL = ${JSON.stringify(LOCAL)};${keep}<\/script>`)
+               .replace("</body>", `<script src="${LOCAL}native.js"><\/script>\n</body>`);
+    document.open(); document.write(html); document.close();
+  } catch (e) { bundled(); }
+})();
+</script>
+</head><body></body></html>

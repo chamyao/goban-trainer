@@ -31,5 +31,10 @@ writeFileSync(join(www, "app.js"), app.replace(`"${MODEL}.gz"`, `"${MODEL}"`));
 cpSync(join(here, "native.js"), join(www, "native.js"));
 const html = readFileSync(join(repo, "index.html"), "utf8");
 if (!html.includes("</body>")) throw new Error("index.html has no </body>");
-writeFileSync(join(www, "index.html"), html.replace("</body>", '<script src="native.js"></script>\n</body>'));
+// The bundled copy of the site, used when the live one can't be reached (offline).
+writeFileSync(join(www, "app.html"), html.replace("</body>", '<script src="native.js"></script>\n</body>'));
+// The app starts here: it loads the live site's page, so updates arrive without a new APK, and runs it
+// at the app's own address (saves stay where they are, the native bridge keeps working). Offline, or if
+// the site is slow to answer, it opens the bundled copy instead.
+writeFileSync(join(www, "index.html"), readFileSync(join(here, "boot.html"), "utf8"));
 console.log("www/ ready");

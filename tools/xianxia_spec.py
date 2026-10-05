@@ -163,3 +163,6 @@ PROPS_GEN = {
     "prop.letter": ("folded letter on yellowed paper", (14, 10), 2),
     "prop.seal": ("square jade official seal with a carved animal on top", (12, 12), 2),
 }
+
+# generated props that came out unreadable at this size: the kit keeps the drawn atlas frame for these
+PROPS_SKIP = {"prop.cart", "prop.anvil", "prop.steelbars", "prop.staves", "prop.switches", "prop.book"}

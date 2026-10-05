@@ -1,7 +1,10 @@
 name: Android APK
 
+# The app loads the live site at launch (android-app/boot.html), so web changes reach it without a
+# new APK; a new APK (and the in-app "update available" bar) is only for changes to the app itself.
 on:
   push:
+    paths: ["android-app/**", ".github/workflows/android.yml"]
   workflow_dispatch:
 
 permissions:

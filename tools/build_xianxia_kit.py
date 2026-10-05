@@ -20,13 +20,13 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from build_jade_edges import block  # noqa: E402
-from xianxia_spec import PROPS_GEN, CHAR_PICK, DRAWN_GROUND, HERO_H, INTERIOR, OBJECTS, REDO  # noqa: E402
+from xianxia_spec import PROPS_GEN, PROPS_SKIP, CHAR_PICK, DRAWN_GROUND, HERO_H, INTERIOR, OBJECTS, REDO  # noqa: E402
 import random  # noqa: E402
 
 T = 16
 OUT = ROOT / "assets/tk/xianxia"
 SLACK = 1.15
-DROP = {"plant.flower-2", "furn.rug-1"}   # variants not used at all: this one sits on a mound of earth, like a stone basin
+DROP = {"plant.flower-2", "furn.rug-1", "prop.post-1"}   # variants not used at all: this one sits on a mound of earth, like a stone basin
 DETAIL_SKIP = {"plant.flower-1", "plant.flower-2"}   # flowers read as pebbles at a distance   # a piece may be this much bigger than its footprint before it's shrunk
 
 
@@ -184,7 +184,7 @@ def main():
 
     # objects
     items, made = [], {}
-    for kind, (_, box, _) in {**OBJECTS, **INTERIOR, **PROPS_GEN}.items():
+    for kind, (_, box, _) in {**OBJECTS, **INTERIOR, **{k: v for k, v in PROPS_GEN.items() if k not in PROPS_SKIP}}.items():
         # a piece that came out wrong is used only once its second try exists
         where = [d for d in src if d.name == "xianxia-redo"] if kind in REDO else src
         for k, p in enumerate(v for v in variants(where, kind) if v.stem not in DROP):

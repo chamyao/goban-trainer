@@ -43,8 +43,8 @@ def _scenes_main():
             ["army", "men", "militia", 4, "m1", -34, 0],
             ["spawn", "gz", "gongsunzan", "m1", 50, -8],
             ["army", "riders", "f_soldier", 6, "m1", 72, 6],
-            N("Liu Bei has been made magistrate of Pingyuan. Then the lords of the east rise against Dong Zhuo, and Gongsun Zan marches past his gate.",
-              "玄德已为平原令。忽然关东诸侯起兵讨伐董卓，公孙瓒的大军正好经过平原。"),
+            N("After Anxi, Liu Bei's old schoolmate Gongsun Zan spoke up for him, and he was made magistrate of Pingyuan. Then the lords of the east rise against Dong Zhuo, and Gongsun Zan marches past his gate.",
+              "安喜之后，玄德的同窗公孙瓒向朝廷举荐了他，他做了平原令。忽然关东诸侯起兵讨伐董卓，公孙瓒的大军正好经过平原。"),
             S("gongsunzan", "Are these the two who broke the Yellow Turbans with you?", "乃同破黄巾者乎？"),
             S("liubei", "It was all their doing.", "皆此二人之力。"),
             ["problem"],
@@ -105,8 +105,8 @@ def _scenes_main():
             # the first try, and it fails: no board and no Star Lords
             ["army", "lords", "militia", 8, "m4a", -52, 0],
             ["spawn", "lb", "lvbu", "m4a", 96, 0], ["army", "dz", "f_soldier", 8, "m4a", 112, 0],
-            N("Dong Zhuo has fortified Hulao Pass, and in front of it stands Lü Bu, whom no one has yet withstood.",
-              "董卓重兵屯虎牢关，关前立着吕布，无人能当。"),
+            N("Dong Zhuo has fortified Hulao Pass, and in front of it stands his adopted son Lü Bu, whom no one has yet withstood.",
+              "董卓重兵屯虎牢关，关前立着他的义子吕布，无人能当。"),
             ["run", "lb", "m4a", -30, 0], ["pose", "lb", "strike"], ["pose", "lords", "fall", 3],
             N("Eight lords send their champions against him one after another. Fang Yue falls to a single thrust of the halberd. Mu Shun falls. Wu Anguo's wrist is cut through.",
               "八路诸侯各遣大将出战。方悦被吕布一戟刺于马下，穆顺亦被刺死，武安国被砍断手腕，弃锤而走。"),
@@ -185,6 +185,7 @@ def _scenes_main():
 def _scenes_capital():
     return {
         "fireflies": {"title": T("The Fireflies", "萤火"), "kind": "side", "steps": [
+            N("Before the lords rose, in the capital, on a night of fire…", "诸侯起兵之前，都城里，一个起火的夜晚……"),
             ["light", "night", 800],
             ["spawn", "sd", "shaodi", "a1", 0, 4], ["spawn", "xd", "xiandi", "a1", 12, 6],
             N("The palace is burning. The eunuch Zhang Rang has thrown himself into the river, and the two boys, the Emperor and his brother, lie hidden in the reeds, afraid to make a sound.",
@@ -271,6 +272,7 @@ def _scenes_capital():
 def _scenes_knife():
     return {
         "dagger": {"title": T("Will Weeping Kill Dong Zhuo?", "哭得死董卓否？"), "kind": "side", "steps": [
+            N("Before the lords rose, a young captain tried to kill Dong Zhuo.", "诸侯起兵之前，有一位年轻校尉曾想刺杀董卓。"),
             ["prop", "tbl", "table", "b1", 10, 8], ["prop", "wine", "winejars", "b1", 22, 8],
             ["spawn", "wy", "wangyun", "b1", 32, 0], ["spawn", "cc", "caocao", "b1", -22, 10],
             ["army", "off", "f_official", 5, "b1", -8, -28],
@@ -349,6 +351,7 @@ def _scenes_knife():
 def _scenes_seal():
     return {
         "zumao": {"title": T("The Red Cap", "赤帻"), "kind": "side", "steps": [
+            N("The night before Hua Xiong's men carried the red cap to the lords' camp…", "华雄的人把赤帻挑到诸侯营前的前一夜……"),
             ["light", "night", 800],
             ["spawn", "sj", "sunjian", "c1", -6, 0], ["spawn", "zm", "zumao", "c1", -22, 8],
             ["spawn", "hx", "huaxiong", "c1", 92, 0], ["army", "hxs", "f_soldier", 6, "c1", 106, 0], ["prop", "post", "post", "c1", 62, -10],
@@ -533,13 +536,13 @@ _OBJ_BOSS = T("Defeat Lü Bu at Hulao Pass.", "在虎牢关击败吕布。")
 
 def _nodes():
     return [
-        _node("m1", 34, 70, "main", ("Pingyuan", "平原"), 0.0, "pingyuan", trigger="arrive"),
-        _node("m2", 80, 96, "main", ("The Lords' Camp", "诸侯大营"), 0.08, "alliance"),
-        _node("m3", 140, 120, "main", ("Sishui Gate", "汜水关"), 0.22, "sishui"),
-        _node("m3b", 156, 134, "main", ("Sishui Gate", "汜水关"), 0.28, "wine"),
-        _node("m4a", 214, 152, "main", _HULAO, 0.5, "hulao1", board=False),
-        _node("m4b", 232, 142, "main", _HULAO, 0.55, "shrine2", shrine=True, hint="One, then two, then three."),
-        {"key": "boss", "x": 254, "y": 160, "role": "boss", "place": T(*_HULAO), "scene": "hulao",
+        _node("m1", 30, 100, "main", ("Pingyuan", "平原"), 0.0, "pingyuan", trigger="arrive"),
+        _node("m2", 160, 100, "main", ("The Lords' Camp", "诸侯大营"), 0.08, "alliance"),
+        _node("m3", 205, 112, "main", ("Sishui Gate", "汜水关"), 0.22, "sishui"),
+        _node("m3b", 217, 124, "main", ("Sishui Gate", "汜水关"), 0.28, "wine"),
+        _node("m4a", 252, 140, "main", _HULAO, 0.5, "hulao1", board=False),
+        _node("m4b", 266, 132, "main", _HULAO, 0.55, "shrine2", shrine=True, hint="One, then two, then three."),
+        {"key": "boss", "x": 288, "y": 148, "role": "boss", "place": T(*_HULAO), "scene": "hulao",
          "boss": {"who": "lvbu", "title": T("Lü Bu, the Flying General", "吕布，飞将"),
                   "taunt": T("Four men or forty. None of you will leave this field.", "四个也好，四十个也好，没有一个能离开这里。")},
          # a gated battle: the brothers go in one by one, in the novel's order
@@ -547,38 +550,41 @@ def _nodes():
              {"needs": ["node:m4b"], "else": "hulaoearly", "objective": _OBJ_BOSS, "at": "Hulao Pass", "count": False},
              {"needs": ["mark:zhangfei_in", "mark:guanyu_in", "mark:liubei_in"], "else": "hulaoearly2",
               "objective": _OBJ_BOSS, "at": "Hulao Pass", "count": False}]},
-        _node("m5", 330, 190, "main", ("Burned Luoyang", "焦土洛阳"), 0.95, "ruins"),
+        _node("m5", 340, 170, "main", ("Burned Luoyang", "焦土洛阳"), 0.95, "ruins"),
         # The Capital (ch3-4)
-        _node("a1", 100, 44, "side", ("Beimang Hill", "北邙山"), 0.04, "fireflies"),
-        _node("a2", 128, 32, "side", ("Wenming Garden", "温明园"), 0.08, "wenming"),
-        _node("a3", 160, 28, "side", ("Lü Bu's Camp", "吕布营"), 0.12, "redhare",
+        _node("a1", 46, 64, "side", ("Beimang Hill", "北邙山"), 0.04, "fireflies"),
+        _node("a2", 68, 44, "side", ("Wenming Garden", "温明园"), 0.08, "wenming"),
+        _node("a3", 96, 34, "side", ("Lü Bu's Camp", "吕布营"), 0.12, "redhare",
               gate=[{"needs": ["item:gifts"], "else": "lisuwaits", "count": False}]),
-        _node("a4", 190, 36, "side", ("Ding Yuan's Camp", "丁原营"), 0.16, "dingyuan", board=False),
-        _node("a5", 220, 50, "side", ("Yong'an Palace", "永安宫"), 0.2, "poison", board=False),
+        _node("a4", 124, 42, "side", ("Ding Yuan's Camp", "丁原营"), 0.16, "dingyuan", board=False),
+        _node("a5", 146, 62, "side", ("Yong'an Palace", "永安宫"), 0.2, "poison", board=False),
         # Cao Cao's Knife (ch4-6)
-        _node("b1", 96, 150, "side", ("Luoyang", "洛阳"), 0.1, "dagger"),
-        _node("b2", 122, 176, "side", ("Zhongmou", "中牟"), 0.14, "zhongmou"),
-        _node("b3", 158, 198, "side", ("Lü Boshe's Farm", "吕伯奢庄"), 0.18, "lvboshe"),
-        _node("b4", 198, 218, "side", ("Xingyang", "荥阳"), 0.22, "xingyang"),
+        _node("b1", 46, 136, "side", ("Luoyang", "洛阳"), 0.1, "dagger"),
+        _node("b2", 68, 162, "side", ("Zhongmou", "中牟"), 0.14, "zhongmou"),
+        _node("b3", 98, 178, "side", ("Lü Boshe's Farm", "吕伯奢庄"), 0.18, "lvboshe"),
+        _node("b4", 360, 214, "side", ("Xingyang", "荥阳"), 0.22, "xingyang"),
         # The Seal (ch5-7)
-        _node("c1", 182, 108, "side", ("Sishui Gate", "汜水关"), 0.3, "zumao"),
-        _node("c2", 300, 214, "side", ("Burned Luoyang", "焦土洛阳"), 0.6, "seal"),
-        _node("c3", 346, 240, "side", ("Xianshan", "岘山"), 0.65, "xianshan"),
+        _node("c1", 186, 76, "side", ("Sishui Gate", "汜水关"), 0.3, "zumao"),
+        _node("c2", 388, 170, "side", ("Burned Luoyang", "焦土洛阳"), 0.6, "seal"),
+        _node("c3", 410, 196, "side", ("Xianshan", "岘山"), 0.65, "xianshan"),
         # The Chain (ch8-9)
-        _node("d1", 284, 100, "side", ("Wang Yun's Garden", "王允后园"), 0.7, "garden"),
-        _node("d2", 312, 84, "side", ("Wang Yun's Garden", "王允后园"), 0.74, "feasts"),
-        _node("d3", 342, 72, "side", ("Fengyi Pavilion", "凤仪亭"), 0.78, "pavilion"),
-        _node("d4", 374, 86, "side", ("Chang'an", "长安"), 0.82, "fall"),
-        _node("d5", 402, 100, "side", ("Chang'an", "长安"), 0.86, "mourner"),
-        _node("d6", 430, 124, "side", ("Chang'an", "长安"), 0.9, "tower"),
+        _node("d1", 350, 140, "side", ("Wang Yun's Garden", "王允后园"), 0.7, "garden"),
+        _node("d2", 368, 118, "side", ("Wang Yun's Garden", "王允后园"), 0.74, "feasts"),
+        _node("d3", 390, 100, "side", ("Fengyi Pavilion", "凤仪亭"), 0.78, "pavilion"),
+        _node("d4", 412, 84, "side", ("Chang'an", "长安"), 0.82, "fall"),
+        _node("d5", 434, 98, "side", ("Chang'an", "长安"), 0.86, "mourner"),
+        _node("d6", 448, 122, "side", ("Chang'an", "长安"), 0.9, "tower"),
     ]
 
 
 _EDGES = [["m1", "m2"], ["m2", "m3"], ["m3", "m3b"], ["m3b", "m4a"], ["m4a", "m4b"], ["m4a", "boss"], ["m4b", "boss"], ["boss", "m5"],
-          ["m2", "a1"], ["a1", "a2"], ["a2", "a3"], ["a3", "a4"], ["a4", "a5"], ["a5", "m3"],
-          ["m2", "b1"], ["b1", "b2"], ["b2", "b3"], ["b3", "b4"], ["b4", "m3"],
-          ["m3b", "c1"], ["c1", "c2"], ["c2", "c3"], ["c3", "m4a"],
-          ["boss", "d1"], ["d1", "d2"], ["d2", "d3"], ["d3", "d4"], ["d4", "d5"], ["d5", "d6"], ["d6", "m5"]]
+          # before the alliance: the capital (ch3-4) and Cao Cao's flight (ch4), told as looks back
+          ["m1", "a1"], ["a1", "a2"], ["a2", "a3"], ["a3", "a4"], ["a4", "a5"], ["a5", "m2"],
+          ["m1", "b1"], ["b1", "b2"], ["b2", "b3"], ["b3", "m2"],
+          # the night raid at Sishui, before the gate
+          ["m2", "c1"], ["c1", "m3"],
+          # after the ruins: Xingyang, the seal and Sun Jian's death, and the chain (ch6-9)
+          ["m5", "b4"], ["m5", "c2"], ["c2", "c3"], ["m5", "d1"], ["d1", "d2"], ["d2", "d3"], ["d3", "d4"], ["d4", "d5"], ["d5", "d6"]]
 
 
 def _scene_table():
@@ -600,8 +606,8 @@ def _opening():
     return [_scroll("Chapter 3", "第三回", [
         ("The Yellow Turbans were broken, and the court was not saved. The eunuchs fell to He Jin's soldiers in a night of fire, and the general who was meant to protect the throne, Dong Zhuo, rode into the capital at the head of twenty thousand men from the west.",
          "黄巾虽破，朝廷未安。十常侍亡于何进之兵，一夜火光。而那位本应护驾的将军董卓，却率西凉大军二十万，进入了洛阳。"),
-        ("Within the year he had put one boy on the throne in place of another, and the first was dead.",
-         "不出一年，他废了一位少年天子，立了另一位，而前一位已经死了。"),
+        ("Ding Yuan's adopted son, Lü Bu, strongest of all the western riders, killed his father for a red horse and went over to him. Within the year Dong Zhuo had put one boy on the throne in place of another, and the first was dead.",
+         "丁原的义子吕布，是西凉诸将中最勇猛的人，为了一匹赤兔马杀了义父，投了董卓。不出一年，董卓废了一位少年天子，立了另一位，而前一位已经死了。"),
         ("In the east, a young captain named Cao Cao drew a knife. Hear what happened.",
          "在东边，一个名叫曹操的年轻校尉，拔出了一把刀。且听下文。"),
     ])]
@@ -697,7 +703,7 @@ PLACES2 = {
                                    {"kind": "building.tent", "id": "table", "node": "2-m3b", "label": T("The council table", "军议之席")},
                                    {"kind": "rock.big", "id": "night", "node": "2-c1", "label": T("Sun Jian's night camp", "孙坚夜营")}],
                       [_talk("folk.soldier", "Hua Xiong cut down two champions before breakfast.", "华雄还没吃早饭，就斩了两员上将。")],
-                      {"2-m3": T("Go to the gate, where Hua Xiong is waiting.", "到关前，华雄正在叫阵。"),
+                      {"2-m3": T("Go to Sishui Gate; there is news from the front.", "到汜水关去，前线有消息。"),
                        "2-m3b": T("Return to the council table.", "回到军议之席。"),
                        "2-c1": T("Side story: Sun Jian's camp, at night.", "支线：孙坚的夜营。")}, banners="red"),
     "Hulao Pass": _P("mountain", [

@@ -199,7 +199,9 @@ const Sync = {
 const Engine = {
   worker: null, status: "off", backend: null, initPromise: null,
   pending: new Map(), seq: 0,
-  modelUrl: new URL("engine/katago-small.bin.gz", location.href).href,
+  // in the Android app the worker and model are the app's own files (APP_LOCAL), even when the page is the live site
+  // (the APK ships the model unzipped, under the .bin name: see android-app/prepare-web.mjs)
+  modelUrl: new URL(window.APP_LOCAL ? "engine/katago-small.bin" : "engine/katago-small.bin.gz", window.APP_LOCAL || location.href).href,
 
   setStatus(status, detail) {
     this.status = status; this.detail = detail || "";
@@ -221,7 +223,7 @@ const Engine = {
   ensure() {
     if (!this.initPromise) {
       this.setStatus("loading");
-      this.worker = new Worker("engine/katago-worker.js");
+      this.worker = new Worker((window.APP_LOCAL || "") + "engine/katago-worker.js");
       this.worker.onmessage = e => this.onMessage(e.data);
       this.worker.onerror = e => { this.setStatus("error", "worker failed"); console.error(e); };
       this.initPromise = new Promise((resolve, reject) => { this.initSettle = { resolve, reject }; });
