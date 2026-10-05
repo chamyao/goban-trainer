@@ -111,3 +111,14 @@ When a leader (Liu Bei, later Cao Cao, Zhuge Liang) reaches a hard choice, the s
 - **World 1 fits:** the cage cart (free Lu Zhi or trust the court), Dong Zhuo's insult (Zhang Fei wants to kill him), the inn (take in a wanted man), the hitching post (kill the inspector or spare him). **Book 2:** letting an unknown archer face Hua Xiong (Cao Cao and Yuan Shao), chasing Dong Zhuo from the ruins (Cao Cao alone), Wang Yun and Diaochan.
 - **Who:** Plot picks the scenes and writes the dilemma lines; Integration adds the caption over the board.
 - **Status:** the engine is live on main (6a72f7a) as an optional node field `"dilemma": {"q", "who", "open", "win", "slip"}`. `q` is a parchment caption over the board (Chinese above English), `who` picks the voice, and `open`/`win`/`slip` replace the generic lines. Plot moved the four scenes (World 1's cage cart and hitching post, Book 2's garden and gate tower) into the node field (67043b2, sent to Integration), with first-person slip lines for the voice (for example Liu Bei: "Not yet. Let me think it through once more."). Live on main (ea6decf): each board shows its caption, and the leader speaks voiced win and slip lines. Testing passed the logic on a phone. The caption layout was then fixed by Integration (ac43965): it never sits on the board. It goes in the side column just above the dialogue box (on its side, beside the board; upright, in the band between the board and the dialogue), at 17 px Chinese and 14 px English, with balanced wrapping that breaks Chinese only at punctuation. Opening lines added by Plot (1782b44, with Integration), voiced by each leader (for example Liu Bei at the cart: "If I free him, I am a rebel. If I stand by, an honest man goes to his ruin."). Book 2's 21 speakers lacked Chinese names in the speaker label ("Wangyun"); the list has gone to Integration.
+
+## The Star Lords' stone (replaces the incense shrine)
+
+Decided by History, after a tester's complaint traced to the incense (the user: "an artifact left over from copying the Black Myth concept"). The mechanic is unchanged (dark, lit, settled; a settled one repeats the hint); only the look and wording change, following ch. 69: the two old men play weiqi on a flat rock (盤石) under a great pine (大松樹), with wine and dried meat beside them (酒脯).
+
+- **Dark:** a flat rock under an old pine, a board scratched into it, empty.
+- **Lit:** a game in progress, two wine cups and a plate of dried meat beside it, as if the players just looked away.
+- **Settled:** the finished game left on the rock, the cups drained.
+- **No incense or smoke anywhere,** including the act marker (now a gold ring) and the lines.
+- **The tree is a pine,** not a mulberry (the mulberry is Liu Bei's boyhood tree).
+- **Who:** Plot rewrites the label and lines (History checks them); Integration and Graphics draw the three looks.
