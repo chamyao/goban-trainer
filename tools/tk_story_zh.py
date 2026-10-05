@@ -385,6 +385,7 @@ ZH = {
     "“General! The pigs' blood is ready for you!”": "“将军！猪血给您备好了！”",
     "“General, over here! Take a sheep, if it helps.”": "“将军，这边！要羊血尽管拿去。”",
     "“General! My hounds are yours, if it ends this.”": "“将军！只要能了结此事，我的猎犬任您取用。”",
+    "A man behind him, with a leopard's head, round eyes and a voice like thunder, cries out. This is Zhang Fei, who farms near Zhuo, sells wine and slaughters pigs.": "忽然背后一人厉声大叫：豹头环眼，声若巨雷。此人姓张名飞，字翼德，世居涿郡，卖酒屠猪。",
     "No one is on this hill yet.": "这座山岭上还没有人。",
     "A thousand men, hidden on the left. I wait for the gongs.": "一千人马伏于山左，只等鸣金。",
     "The right hill is mine. I will hear the gongs from a mile off.": "右边山岭归我。十里之外我也听得见锣响。",
@@ -437,7 +438,6 @@ ZH = {
 
     "The man that notice will draw out grew up here, in Lousang Village, Zhuo County. His name is Liu Bei.": "这榜文要引出的英雄，就在涿县楼桑村长大。他姓刘，名备。",
     "His uncle, Liu Yuanqi, hears him.": "叔父刘元起听见了。",
-    "Behind him a voice booms. The man is eight feet tall, with a leopard's head, round eyes, and whiskers like a tiger's.": "身后一人厉声说话。那人身长八尺，豹头环眼，燕颔虎须，声若巨雷。",
     "Armed and mounted at last, the brothers lead their five hundred to the governor.": "兵器鞍马齐备，兄弟三人引着五百乡勇，去见太守。",
     "His lieutenant, Deng Mao, rides out.": "副将邓茂挺枪出马。",
     "Liu Bei marches to relieve the city. But the rebels are too many, and his force is beaten back thirty li.": "玄德引兵前去解围。怎奈贼众势大，救兵寡不敌众，退兵三十里下寨。",
