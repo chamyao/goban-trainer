@@ -376,5 +376,19 @@
     "beat": "Qingzhou under siege: the Yellow Turbans ring the city walls, and the relief force is too small.",
     "scene": "Wide panoramic composition on a grey afternoon. In the middle, the walls and gate tower of Qingzhou, with Han soldiers and red banners along the battlements. Yellow Turban rebels surround the walls on every side with ladders and yellow banners. In the left foreground, on a low hill, Liu Bei, Guan Yu and Zhang Fei look down on the siege from horseback with a few hundred men behind them.",
     "notes": "transition beat"
+  },
+  "office_a": {
+    "book": 1,
+    "category": "battle",
+    "beat": "Dong Zhuo's beaten army in rout, Zhang Jiao's banners behind it, as the three brothers come over the hill.",
+    "scene": "Wide panoramic composition among low hills under a dusty afternoon sky. On the right, a Yellow Turban host pours down a valley under great yellow banners, Zhang Jiao in a yellow robe riding among them. In the middle, Han soldiers in red run before them, dropping spears, their commander Dong Zhuo, heavy and bearded, fleeing on horseback. On the left, on the crest of a hill, Liu Bei, Guan Yu and Zhang Fei rein in and look down at the rout.",
+    "notes": "transition beat"
+  },
+  "anxi_a": {
+    "book": 1,
+    "category": "peace",
+    "beat": "Liu Bei as the sheriff of Anxi, a quiet month: the three brothers at one table.",
+    "scene": "Inside a plain county office in a small town, evening lamplight. Liu Bei in a simple official robe and cap sits at a low table with bowls of rice and greens, Guan Yu and Zhang Fei sharing the table with him, the three eating together and talking. Through the open door, townsfolk pass in a quiet street. Warm, calm light. Exactly three men at the table.",
+    "notes": "transition beat"
   }
 }
