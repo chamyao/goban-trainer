@@ -1,0 +1,290 @@
+{
+ "landmark.shrine": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 32,
+   "height": 30,
+   "remove_bg": true,
+   "prompt": "small outdoor weiqi shrine: a carved grey stone stele with a little tiled cap, a square stone go board on a low plinth in front of it with a few black and white stones, a small bronze incense burner beside it, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 70.4,
+  "made": "2026-10-05"
+ },
+ "ruin.hall": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 64,
+   "height": 44,
+   "remove_bg": true,
+   "prompt": "burned-out ruin of a Chinese hall: roofless, charred black pillars of different heights on a grey stone base, a fallen burnt beam, ash, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 154.2,
+  "made": "2026-10-05"
+ },
+ "ruin.columns": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 32,
+   "height": 40,
+   "remove_bg": true,
+   "prompt": "two charred black wooden columns on a stone base, one snapped short, ash around them, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 33.4,
+  "made": "2026-10-05"
+ },
+ "ruin.rubble": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 16,
+   "height": 16,
+   "remove_bg": true,
+   "prompt": "small heap of grey stones and burnt black timber, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 31.6,
+  "made": "2026-10-05"
+ },
+ "prop.pig": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 20,
+   "height": 16,
+   "remove_bg": true,
+   "prompt": "a pink domestic pig tied with a rope round its middle, side view, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 33.3,
+  "made": "2026-10-05"
+ },
+ "prop.well": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 28,
+   "height": 30,
+   "remove_bg": true,
+   "prompt": "round grey stone well with a wooden frame, little tiled roof and a rope bucket, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 60.0,
+  "made": "2026-10-05"
+ },
+ "prop.mirror": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 16,
+   "height": 22,
+   "remove_bg": true,
+   "prompt": "round polished bronze mirror on a small carved wooden stand, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 58.4,
+  "made": "2026-10-05"
+ },
+ "prop.pond": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 36,
+   "height": 18,
+   "remove_bg": true,
+   "prompt": "small oval lotus pond with a grey stone rim, lily pads and pink lotus flowers, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 23.1,
+  "made": "2026-10-05"
+ },
+ "prop.cagecart": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 48,
+   "height": 40,
+   "remove_bg": true,
+   "prompt": "wooden prisoner cage on a two-wheeled cart, thick wooden bars, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 27.0,
+  "made": "2026-10-05"
+ },
+ "prop.cart": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 32,
+   "height": 28,
+   "remove_bg": true,
+   "prompt": "small wooden handcart with two wheels and long handles, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 80.3,
+  "made": "2026-10-05"
+ },
+ "prop.forge": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 32,
+   "height": 26,
+   "remove_bg": true,
+   "prompt": "blacksmith's stone forge with glowing orange coals, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 34.2,
+  "made": "2026-10-05"
+ },
+ "prop.anvil": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 16,
+   "height": 16,
+   "remove_bg": true,
+   "prompt": "iron blacksmith's anvil on a wooden stump, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 15.4,
+  "made": "2026-10-05"
+ },
+ "prop.ox": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 24,
+   "height": 18,
+   "remove_bg": true,
+   "prompt": "black ox standing, side view, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 53.7,
+  "made": "2026-10-05"
+ },
+ "prop.post": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 16,
+   "height": 20,
+   "remove_bg": true,
+   "prompt": "thick wooden hitching post with an iron ring, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 40.8,
+  "made": "2026-10-05"
+ },
+ "prop.steelbars": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 16,
+   "height": 16,
+   "remove_bg": true,
+   "prompt": "small stack of iron ingots, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 35.4,
+  "made": "2026-10-05"
+ },
+ "prop.staves": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 16,
+   "height": 18,
+   "remove_bg": true,
+   "prompt": "bundle of four wooden staves leaning together, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 37.4,
+  "made": "2026-10-05"
+ }
+}
