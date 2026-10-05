@@ -70,6 +70,33 @@ const WorldCutscene = {
       setTimeout(() => el.remove(), ms);
     };
     const esc = t => String(t || "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+    // a painted still over the map, under the dialogue, drifting slowly while lines play over it;
+    // it goes when the scene moves on (any beat but lines, waits and music), or at the end
+    let still = null;
+    const hideStill = () => {
+      if (!still) return;
+      const el = still; still = null;
+      el.classList.remove("on");
+      setTimeout(() => el.remove(), 800);
+    };
+    const showStill = async b => {
+      const m = (await WorldCutscene.stillIndex())[b.id];
+      if (!m) return;                                       // not painted yet: the map carries the moment
+      hideStill();
+      const el = document.createElement("div");
+      el.className = `tk-still kb-${b.move || "in"}`;
+      const img = new Image();
+      img.alt = "";
+      img.src = `assets/tk/stills/${m.file}`;
+      el.append(img);
+      await Promise.race([img.decode().catch(() => {}), new Promise(r => setTimeout(r, 1500))]);
+      if (!img.complete || !img.naturalWidth) return;
+      (host.querySelector(".town-ui") || host).prepend(el);
+      overlays.push(el);
+      still = el;
+      requestAnimationFrame(() => el.classList.add("on"));
+      await wait(700);
+    };
     const overlays = [];
     const host = scene.game.worldOpts && scene.game.worldOpts.host || document.body;
     const skipBtn = document.createElement("button");
@@ -377,7 +404,9 @@ const WorldCutscene = {
 
     const run = async b => {
       if (skip) return;
+      if (still && !["line", "wait", "music", "still", "together"].includes(b.do)) hideStill();
       switch (b.do) {
+        case "still": await showStill(b); break;
         case "cut": {
           cam.fadeOut(180); await wait(190);
           for (const p of b.place) actor(p.actor, p.at, p.face);
@@ -523,7 +552,7 @@ const WorldCutscene = {
           if (actors[b.to]) actors[b.to].item = b.item;
           if (Items) { Items.gain(scene, b.item); Object.values(actors).forEach(mount); }
           break;
-        case "zoom": cam.setZoom(zoom0 * b.z); if (dark) dark.setScale(1 / b.z); break;
+        case "zoom": cam.setZoom(zoom0 * b.z); if (scene.fitCamera) scene.fitCamera(); if (dark) dark.setScale(1 / b.z); break;
         case "mood": mood(b.dark, 0); break;
         case "fade": case "vanish": b.actors.filter(id => actors[id]).forEach(id => { actors[id].spr.setVisible(false); sync(actors[id]); }); break;
         case "gain": if (Items) { Items.gain(scene, b.item); Object.values(actors).forEach(mount); } break;
@@ -547,6 +576,7 @@ const WorldCutscene = {
       await run(b);
     }
 
+    hideStill();
     scene.scale.off("resize", relayout);
     // back to the world: the leader stands where the scene left him
     for (const t of timers) t.remove(false);
@@ -557,6 +587,7 @@ const WorldCutscene = {
     bars.forEach(b => b.destroy());
     cam.resetFX();
     cam.setZoom(zoom0);
+    if (scene.fitCamera) scene.fitCamera();
     overlays.forEach(el => el.remove());
     scene.musicCue = null;
     if (!left && cs.end && cs.end.leader) { const [x, y] = px(cs.end.leader); scene.player.setPosition(x, y); }
@@ -572,6 +603,11 @@ const WorldCutscene = {
   },
 
   // the prop atlas (props, emote bubbles, gift icons), loaded once per game
+  // the stills that exist (tools/gen_stills.py writes assets/tk/stills/stills.json), fetched once
+  stillIndex() {
+    if (!this._stills) this._stills = fetch("assets/tk/stills/stills.json?v=2").then(r => r.ok ? r.json() : {}).catch(() => ({}));
+    return this._stills;
+  },
   load(scene) {
     if (scene.textures.exists("tk-props")) return Promise.resolve();
     return new Promise(res => {

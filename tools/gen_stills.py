@@ -2,6 +2,7 @@
 
     python3 tools/gen_stills.py                # make every still that doesn't exist yet
     python3 tools/gen_stills.py --list         # what exists, what's missing, with the full prompts
+    python3 tools/gen_stills.py --chosen       # only the stills the game uses (Plot's choice, tk_stills.CHOSEN)
     python3 tools/gen_stills.py --only oath --force   # remake one
     python3 tools/gen_stills.py --provider openai     # pick a provider (default: the first with a key)
     python3 tools/gen_stills.py --import DIR          # bring in images made by hand (DIR/<id>.png|jpg|webp),
@@ -46,7 +47,7 @@ from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
-from tk_stills import CAST, STILLS, STYLE, cast_in, portrait, prompt  # noqa: E402
+from tk_stills import CAST, CHOSEN, PORTRAITS, STILLS, STYLE, STYLES, cast_in, portrait, prompt  # noqa: E402
 
 OUT = ROOT / "assets/tk/stills"
 SIZE = (1280, 720)
@@ -195,12 +196,12 @@ def portraits(name, fn, keys, n, model):
         for i in range(start + 1, start + n + 1):
             try:
                 text, images = request(name, key=key)
-                raw, used = fn(text, model, "1:1", images)
+                raw, used = fn(text, model, "3:4", images)   # half-body cards
             except Exception as e:
                 print(f"  {key} #{i}: failed: {e}")
                 continue
             im = Image.open(io.BytesIO(raw)).convert("RGB")
-            im.thumbnail((768, 768))
+            im.thumbnail((768, 1024))
             im.save(out / f"{key}-{i}.jpg", "JPEG", quality=88)
             print(f"  {key} #{i}: {name}/{used} → assets/tk/stills/refs/candidates/{key}-{i}.jpg")
     rows = []
@@ -216,6 +217,43 @@ def portraits(name, fn, keys, n, model):
         "div{display:flex;flex-wrap:wrap;gap:12px}figure{margin:0;width:300px}img{width:100%}"
         "figcaption{color:#ccc}</style>" + "".join(rows))
     print("choose from: assets/tk/stills/refs/candidates/index.html, then --pick KEY N")
+
+
+def styles(name, fn, ids, keys, model):
+    """Each candidate style (tk_stills.STYLES) on the given stills, and each portrait framing
+    (PORTRAITS) x style on the given people, into samples/styles/ with an index.html to choose from."""
+    out = OUT / "samples/styles"
+    out.mkdir(parents=True, exist_ok=True)
+    jobs = [(f"{sid}--{st}", prompt(sid).replace(STYLE, sty), "16:9") for sid in ids for st, sty in STYLES.items()]
+    for key in keys:
+        nm, look = CAST[key]
+        for fr, tpl in PORTRAITS.items():
+            for st, sty in STYLES.items():
+                jobs.append((f"portrait-{key}-{fr}--{st}", f"{tpl.format(name=nm, look=look, held='his weapon')} {sty}", "3:4" if fr != "bust" else "1:1"))
+    for i, (stem, text, aspect) in enumerate(jobs):
+        if (out / f"{stem}.jpg").exists():
+            continue
+        if i:
+            time.sleep(15)   # back to back, Replicate turns away about half with 429s
+        try:
+            raw, used = fn(text, model, aspect)
+        except Exception as e:
+            print(f"  {stem}: failed: {e}")
+            continue
+        im = Image.open(io.BytesIO(raw)).convert("RGB")
+        im.thumbnail((1280, 1280))
+        im.save(out / f"{stem}.jpg", "JPEG", quality=86)
+        print(f"  {stem}: {name}/{used}")
+    files = sorted(out.glob("*.jpg"))
+    rows = []
+    for group in sorted({f.stem.split("--")[0] for f in files}):
+        figs = "".join(f'<figure><img src="{f.name}"><figcaption>{f.stem.split("--")[1]}</figcaption></figure>'
+                       for f in files if f.stem.split("--")[0] == group)
+        rows.append(f"<h2>{group}</h2><div>{figs}</div>")
+    (out / "index.html").write_text(
+        "<!doctype html><meta charset=utf-8><title>Style candidates</title><style>body{font:15px system-ui;"
+        "background:#16130f;color:#eee;margin:16px}div{display:flex;flex-wrap:wrap;gap:10px}figure{margin:0;"
+        "width:300px}img{width:100%}</style>" + "".join(rows))
 
 
 def compare(name, fn, models, ids):
@@ -259,13 +297,18 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--provider", choices=PROVIDERS)
     ap.add_argument("--only", action="append", help="still id(s) to make")
+    ap.add_argument("--chosen", action="store_true", help="only the stills the game uses (tk_stills.CHOSEN)")
     ap.add_argument("--force", action="store_true", help="remake stills that already exist")
     ap.add_argument("--list", action="store_true", help="show what exists and what's missing")
     ap.add_argument("--import", dest="imp", metavar="DIR", help="fit and record hand-made images named <id>.*")
     ap.add_argument("--portraits", type=int, metavar="N", help="N candidate portraits per person (--only to pick who)")
     ap.add_argument("--pick", nargs=2, metavar=("KEY", "N"), help="make candidate N of KEY that person's reference")
+    ap.add_argument("--styles", nargs="*", metavar="KEY", help="every candidate style on --only stills, and every "
+                    "portrait framing x style on these people (e.g. guanyu), into stills/samples/styles/")
     ap.add_argument("--compare", nargs="+", metavar="MODEL", help="try each model on the stills, into stills/samples/")
     a = ap.parse_args()
+    if a.chosen:
+        a.only = (a.only or []) + CHOSEN
     OUT.mkdir(parents=True, exist_ok=True)
     man_path = OUT / "stills.json"
     man = json.loads(man_path.read_text()) if man_path.exists() else {}
@@ -297,15 +340,21 @@ def main():
     if a.portraits:
         return portraits(name, fn, [k for k in CAST if not a.only or k in a.only], a.portraits,
                          os.environ.get("TK_IMAGE_MODEL"))
+    if a.styles is not None:
+        return styles(name, fn, [s for s in STILLS if a.only and s in a.only], a.styles, os.environ.get("TK_IMAGE_MODEL"))
     if a.compare:
         return compare(name, fn, a.compare, [sid for sid in STILLS if not a.only or sid in a.only])
     model = os.environ.get("TK_IMAGE_MODEL")
     print(f"provider: {name}" + (" (no API key found: placeholders only)" if name == "dummy" else ""))
+    made_one = False
     for sid, s in STILLS.items():
         if a.only and sid not in a.only:
             continue
         if sid in man and (OUT / man[sid]["file"]).exists() and not a.force and man[sid]["provider"] != "dummy":
             continue
+        if made_one:
+            time.sleep(15)   # back to back, Replicate turns away about half with 429s
+        made_one = True
         text, images = request(name, sid)
         try:
             raw, used = fn(text, model, "16:9", images)

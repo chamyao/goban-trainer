@@ -69,11 +69,10 @@
  "spots": [
   {
    "id": "spot-1-a1",
-   "x": 10.5,
-   "y": 5.7,
+   "x": 9.5,
+   "y": 3.7,
    "node": "1-a1",
-   "label": "The Way of Great Peace · I: The Old Man in the Cave",
-   "trigger": "arrive"
+   "label": "The Way of Great Peace · I: The Old Man in the Cave"
   }
  ],
  "npcs": [

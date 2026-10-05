@@ -428,11 +428,12 @@ class Goban {
       if (c >= c0 && c <= c1 && r >= r0 && r <= r1)
         this.el("circle", { cx: this.px(c), cy: this.py(r), r: 4, fill: "var(--line)" });
 
-    const labelRow = r0 === 0 ? { y: this.py(r0) - 17, edge: true } : { y: this.py(r1) + 26, edge: false };
+    // in the margin, clear of a stone on the edge line (radius ~.47 cell)
+    const labelRow = r0 === 0 ? { y: this.py(r0) - 27, edge: true } : { y: this.py(r1) + 34, edge: false };
     for (let c = c0; c <= c1; c++)
       this.el("text", { x: this.px(c), y: labelRow.y, "text-anchor": "middle", "font-size": 12.5,
                         fill: "#7a6535", "font-weight": 600 }).textContent = COLS[c];
-    const labelCol = c1 === 18 ? this.px(c1) + 21 : this.px(c0) - 21;
+    const labelCol = c1 === 18 ? this.px(c1) + 29 : this.px(c0) - 29;
     for (let r = r0; r <= r1; r++)
       this.el("text", { x: labelCol, y: this.py(r) + 4.5, "text-anchor": "middle", "font-size": 12.5,
                         fill: "#7a6535", "font-weight": 600 }).textContent = N - r;

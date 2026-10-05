@@ -32,7 +32,7 @@ node on the old node map (x right, y down, in node-map pixels; 8 px ≈ 1 tile):
 | `["fx", name, at, dx, dy]` | flash, dust, petals, incense, paper, fire, whip, sparkle, blackwind |
 | `["remove", id]` | fade out |
 | `["vanish", id]` | gone in an instant, no fade (removes or vanishes in a row go together) |
-| `["still", id, move]` | a painted still fades in under the lines that follow, drifts (`move` in plain words: "slow zoom in", "slow pull back", "slow pan up"…), and goes at the next beat that is not a line, wait or music. Place it before the line it should be up for. Skipped if the painting is not made yet |
+| `["still", id, move]` | a painted still (tools/tk_stills.py, id as there) fades in over the map, under the dialogue, and drifts while the next lines play; move in plain words: "slow zoom in", "pull back", "pan up", "pan across", "drift down". It goes at the next beat that isn't a line, a wait or music, or at the end. A still not yet painted is skipped |
 | `["party", [who, …]]` | who travels with Liu Bei from now on |
 | `["prop", id, kind, at, dx, dy]` | put a thing on stage: any kind in the prop registry (`PROPS` in `tools/build_props.py`: cagecart, cart, forge, anvil, ox, whitehorse, book, letter, seal, steelbars, staves, switches, waterbowl, post, bucket, chest, straw, redbanner, yellowbanner, winejars, table, rack, fire, tent, gate, desk, hall). A kind not there yet still plays, 1x1 and drawn as a crate. It moves with `move`/`run` and leaves with `remove`; walkers go round it |
 | `["board", who, prop]` / `["unboard", who]` | ride inside a prop (a prisoner in the cage cart); it carries them when it moves, and `remove` takes them with it. Boarded before the first line, they are inside from the start |
