@@ -114,3 +114,10 @@ A new tester lost the thread three times. Qingzhou: "the hint to lift the siege 
 4. **"Not yet" always says what comes first.** Any refusal names the next place ("Not yet. Lu Zhi is waiting for you at Guangzong."), and a place with nothing to do now doesn't look active.
 
 Parts 1 and 2 are interface (Integration); parts 3 and 4 are story lines (Plot).
+
+**Status (Integration, main 359b869):** parts 1-3 are built.
+1. **Hint line:** any story node can carry `"hint"` (Chinese from ZH). It shows under the goal as a quieter italic quote, Chinese then English, while its node is cleared, the next main step follows it (by an edge, or `node:KEY` in a gate), and that step's gates aren't all cleared. Black Wind has it from `n7b`; Qingzhou needs Plot to add the hint to the node whose counsel it is.
+2. **Markers:** a warm incense wisp over any NPC who can give now (`gives_when` holds and the item isn't held yet), and over any delivery place whose `when` and `needs` hold and isn't delivered yet.
+3. **Call hook:** an NPC or delivery landmark can carry `"call"` (one or more lines). When the player comes within about 56 px of a marked target, it shows once per visit as a bubble over the target, Chinese above English, not a dialogue box.
+
+Part 4 (every "not yet" names where to go first) is Plot's lines.
