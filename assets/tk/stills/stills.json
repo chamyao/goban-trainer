@@ -190,5 +190,37 @@
   "provider": "replicate",
   "model": "black-forest-labs/flux-2-klein-4b",
   "made": "2026-10-05"
+ },
+ "post_b": {
+  "file": "post_b.jpg",
+  "scene": "post",
+  "prompt": "Zhang Fei in a towering rage, the bound inspector tied to a hitching post, a bundle of willow switches in Zhang Fei's fist, Liu Bei rushing up to stop him. Zhang Fei is a stocky, barrel-chested, powerfully muscled man, broad rather than tall, with a fierce square jaw, big glaring eyes and a wild bristling black beard, hair in a topknot, in black and dark brown clothes (reference image 1: keep his face, hair and clothes). Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold (reference image 2: keep his face, hair and clothes). Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
+ },
+ "horses_a": {
+  "file": "horses_a.jpg",
+  "scene": "horses",
+  "prompt": "Two merchants arriving with a long string of fine northern horses down a country road, dust glowing in the late sun, the brothers coming out to meet them. Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
+ },
+ "horses_b": {
+  "file": "horses_b.jpg",
+  "scene": "horses",
+  "prompt": "Liu Bei, Guan Yu and Zhang Fei each receiving his weapon from the smith: twin swords, a crescent-bladed glaive, a long serpent spear, sparks still in the air. Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold (reference image 1: keep his face, hair and clothes). Guan Yu is a towering giant of a man, a head taller than anyone, with massive shoulders and a thick neck, a deep red face, a very long black beard down to his chest and narrow eyes under heavy brows, hair in a topknot, in a green robe (reference image 2: keep his face, hair and clothes). Zhang Fei is a stocky, barrel-chested, powerfully muscled man, broad rather than tall, with a fierce square jaw, big glaring eyes and a wild bristling black beard, hair in a topknot, in black and dark brown clothes (reference image 3: keep his face, hair and clothes). Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
+ },
+ "bosswin_d": {
+  "file": "bosswin_d.jpg",
+  "scene": "bosswin",
+  "prompt": "Inside the walls of Yangcheng at night, Zhang Bao turns away from the gate as his own officer Yan Zheng steps up behind him and drives a blade into his back; torchlight, a few guards frozen at the edge of the frame. Dark and quiet, no gore, just the moment. Zhang Bao is a sorcerer general with long loose black hair and a yellow headscarf, in a yellow robe (reference image 1: keep his face, hair and clothes). Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
  }
 }
