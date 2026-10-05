@@ -88,7 +88,7 @@ Guan Yu steps out from behind Liu Bei and volunteers. Yuan Shu shouts him down (
 - Guan Yu: "Keep the wine. I will be back." / 「酒且斟下，某去便来。」
 - (The cup, the head, the steam.) The novel says only: 「其酒尚温」, the wine was still warm.
 - Staging: Cao Cao with the wine on a table; Guan Yu mounts and rides out (`run`, off the map); a long wait with the drums and shouts; he returns, throws the head (a `pose` and a prop); a close on the cup, with steam (`fx sparkle`). In the evening Cao Cao quietly sends meat and wine to the three brothers (novel: 「曹操暗使人赍牛酒，犒劳三人」), which we play as a closing beat: three cups at a small fire.
-- Problem: before the ride: Cao Cao's table (a board about reading the gate); a **shrine of the Star Lords is not here**: the quiet scene.
+- Problem: **framed as the wine cooling** (agreed with Game Design): the board opens with Cao Cao's cup steaming beside it, no timer and no pressure; on the solve Guan Yu returns and the wine is still warm. No Star Lords here: the quiet scene.
 - Novel: ch5. This is the Book's first emotional peak.
 
 ### 5. `hulao1` (main, outdoor): the eight lords at Hulao
@@ -108,13 +108,14 @@ The shrine at the camp, dark until now, glows after the lords' defeat. The Star 
 - Starred (before the board): "One cannot match him. Not one." **[new]** / 「一人不能敌他。一人不行。」
 - Stargrey: "Then who?" **[new]**: (the problem opens here)
 - After the board is solved, the shrine settles: the hint log says: "One, then two, then three." **[new]** / 「一个，两个，三个。」
-- Mechanic: the **formation**: the player places the three brothers around Lü Bu: Zhang Fei first (he fights fifty rounds), then Guan Yu from the side, then Liu Bei with his two swords. Three spots (marks), any order the player likes; the cutscene plays them in the novel's order regardless.
-- Novel: the placing is the game; the three-against-one is the novel's.
+- Mechanic: the **formation, as an order** (agreed with Game Design): the player sends each brother in by talking to him at the line. **Zhang Fei first** (he fights fifty rounds with Lü Bu), **Guan Yu when Zhang Fei tires**, then **Liu Bei** with his two swords, from the side. A wrong order is never a failure: the brother says a correction line instead (to Guan Yu: "Yide first. He has been begging for it." **[new]** / 「翼德先去。他早就等不及了。」), and the right brother steps up. Three marks (`mark:zhangfei_in`, `mark:guanyu_in`, `mark:liubei_in`) set in that order. This is not Qingzhou's left-and-right placement.
+- Novel: the order is the novel's: ch5.
 
-### 7. `hulao` (boss): three against one
+### 7. `hulao` (boss): three against one (after the formation, the board)
 
 Lü Bu challenges again. The three brothers fight him in a T: Zhang Fei in front, Guan Yu joining at the side, Liu Bei coming in from the flank. The lords stand and watch. Lü Bu cannot guard against all three, thrusts at Liu Bei and misses, and wheels his horse and rides for the gate.
 
+- The scene plays only once the three brothers are in the field (the order above); until then the boss spot plays a short defeat scene with no board. Then the boss board, then Lü Bu flees: it reads as a win.
 - Boss card: **Lü Bu, "the Flying General"** (the plan's Michael Redmond problem). He taunts first: "Four men or forty. None of you will leave this field." **[new]** / 「四个人也好，四十个也好，没有一个能离开这里。」 The Star Lords give no hint. The player solves the problem.
 - Staging: the T formation (`army` of three, `pose strike`), the lords' armies lined up on the hill (`army`), Red Hare's rearing, Lü Bu's wheeling away with the halberd trailing, then the brothers pursuing to the gate under rocks and arrows (`fx flash`, `camera shake`).
 - The novel: ch5: the best set-piece of the Book and the title of the chapter.
@@ -167,14 +168,14 @@ Dong Zhuo, in command of the city, calls the officials to a feast at Wenming Gar
 - Problem: here: the question is whether to speak. No Star Lords.
 - Novel: ch3.
 
-### A3. `redhare` (side, outdoor): the horse, the gold, the jade belt (optional delivery)
+### A3. `redhare` (side, outdoor): the horse, the gold, the jade belt
 
 After Lü Bu routs him in the field, Dong Zhuo admires Lü Bu. Li Su, Lü Bu's countryman, offers to win him. Dong Zhuo gives him Red Hare, a thousand taels of gold, dozens of pearls and a jade belt. Li Su rides to Lü Bu's camp.
 
 - Li Su: "A horse that goes a thousand li a day: Red Hare. I bring it to you, brother." / 「有良马一匹，日行千里，渡水登山，如履平地，名曰『赤兔』：特献与贤弟，以助虎威。」
 - Li Su: "A good bird chooses its tree, a good minister chooses his lord. If you see it too late, you will regret it." / 「良禽择木而栖，贤臣择主而佐。见机不早，悔之晚矣。」
 - Lü Bu: "I regret that I never met my master." / 「恨不逢其主耳。」
-- Mechanic: the **delivery** (optional): the player carries the horse and the gold from Dong Zhuo's camp to Lü Bu's, as Li Su's follower, and the twist is the carry is the harm. The outcome is fixed: it arrives and Lü Bu is bought.
+- No mechanic: a story scene. (The optional delivery is the Seven-Star Dagger, in B1.)
 - Staging: the horse (the red coat), a chest of gold and a jade belt as props (`chest`, `gift`), Li Su's walk across the camp to Lü Bu.
 - Novel: ch3.
 
@@ -206,13 +207,14 @@ After the deposition, Dong Zhuo's man Li Ru comes to the Emperor in the Yong'an 
 
 # Side thread B: Cao Cao's Knife (ch4-6)
 
-### B1. `dagger` (side, indoor): "Will weeping kill Dong Zhuo?"
+### B1. `dagger` (side, indoor): "Will weeping kill Dong Zhuo?" (the optional delivery)
 
 Wang Yun gives a birthday dinner for the officials and weeps in front of them for the Emperor. Cao Cao laughs. Next day, he goes to Dong Zhuo's hall with the seven-star knife under his robe. Dong Zhuo, tired, lies down with his face turned to the wall. Cao Cao draws the knife; Dong Zhuo's eye catches his reflection in the mirror; Cao Cao, quick, kneels and offers the knife as a gift. He takes a horse and runs.
 
 - Cao Cao, laughing, at Wang Yun's table: "A whole court of ministers crying from night to morning, from morning to night: can that kill Dong Zhuo?" / 「满朝公卿，夜哭到明，明哭到夜，还能哭死董卓否？」
 - Dong Zhuo, afterwards: "What are you doing?" Cao Cao (kneeling): "I have a precious knife, and I offer it to you, my lord." / 「操有宝刀一口，献上恩相。」
 - Staging: first the dinner (low table, lanterns, tearful officials, Cao Cao laughing). Then Dong Zhuo's inner chamber: a couch, Dong Zhuo's back, Lü Bu out of the room; the knife; the mirror (a prop `mirror`, bronze); the kneel; the gift; Cao Cao on a borrowed horse leaving through the east gate.
+- **Optional delivery** (chosen by Game Design: it leads straight into Lü Boshe's house, the Book's spine): the player carries the Seven-Star Dagger from Wang Yun's house, across Luoyang, to Dong Zhuo's hall for Cao Cao. The outcome is the novel's and fixed: the dagger is drawn, the mirror catches it, and it is offered as a gift. The failure is the twist. Objective: "Take Wang Yun's Seven-Star Dagger to Dong Zhuo's hall." Item: `dagger` (kind `relic`, "七星宝刀").
 - Problem: the moment before he draws the knife (a board: "Now?").
 - Novel: ch4.
 
@@ -298,7 +300,7 @@ Wang Yun, the Minister, walks in his garden at night, weeping. He hears a sigh f
 - Diaochan: "Command me, and I will not shrink from death." / 「但有使令，万死不辞。」
 - Wang Yun: "The people hang by their heels, the court is a pile of eggs. Only you can help." / 「百姓有倒悬之危，君臣有累卵之急，非汝不能救也。」
 - Staging: night, peonies (`petals`), a pavilion, the girl in a pale robe on her knees, Wang Yun's grey hair bowing to the ground (`pose bow`).
-- Problem: here: "Will she?" No Star Lords.
+- Problem: here: "Will she?" **A sign of the Star Lords, not the figures** (agreed): a weiqi board set out on the pavilion table with two stones, and no one at it.
 - Novel: ch8. **Emotional peak** of the thread.
 
 ### D2. `feasts` (side, indoor): two feasts
@@ -359,10 +361,11 @@ Li Jue, Guo Si, Zhang Ji and Fan Chou raise a hundred thousand men in the west a
 
 | | |
 |---|---|
-| Required mechanic | **Formation** at Hulao (the three brothers placed round Lü Bu), preceded by a failure: the eight lords' defeat lights the shrine. I would rather not repeat Black Wind's gathering. |
-| Optional | **Delivery**: the horse and the gold to Lü Bu (`redhare`), carried as Li Su's follower; the twist is that the carry is the harm. |
+| Required mechanic | **Formation as an order** at Hulao (Zhang Fei first, then Guan Yu, then Liu Bei; a wrong order gets a correction line, never a failure), preceded by the eight lords' defeat, which lights the shrine. Not Black Wind's gathering and not Qingzhou's left-and-right. |
+| Hua Xiong | no extra mechanic: the board is framed as the wine cooling |
+| Optional | **Delivery**: the Seven-Star Dagger from Wang Yun's house to Dong Zhuo's hall (B1); the failure is the twist |
 | Star Lords in person | One: the roadside shrine at Hulao (after the lords' defeat). |
-| A sign of them | none |
+| A sign of them | one: the empty board in Wang Yun's garden (D1), for Diaochan |
 | Silent (no board hint) | everything else, especially the deaths (A4, A5, C1, C3, D4, D5, D6) |
 | Boss | Lü Bu at Hulao, a hard problem with no hint, a taunt first |
 | Relics | The Imperial Seal as the Book's trophy for the player? **Open question for Game Design:** a "relic that does something". In the novel the seal causes Sun Jian's death. |
