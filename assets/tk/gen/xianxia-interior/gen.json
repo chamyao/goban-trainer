@@ -196,5 +196,113 @@
   ],
   "seconds": 91.2,
   "made": "2026-10-05"
+ },
+ "furn.screen": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 32,
+   "height": 30,
+   "remove_bg": true,
+   "prompt": "folding Chinese screen painted with mountains and cranes, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 117.6,
+  "made": "2026-10-05"
+ },
+ "furn.rug": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 48,
+   "height": 48,
+   "remove_bg": true,
+   "prompt": "red patterned Chinese rug, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 65.1,
+  "made": "2026-10-05"
+ },
+ "furn.plant": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 16,
+   "height": 24,
+   "remove_bg": true,
+   "prompt": "potted bonsai pine in a blue ceramic pot, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 78.4,
+  "made": "2026-10-05"
+ },
+ "furn.sacks": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 16,
+   "height": 26,
+   "remove_bg": true,
+   "prompt": "stack of grain sacks, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 17.7,
+  "made": "2026-10-05"
+ },
+ "furn.hearth": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 32,
+   "height": 24,
+   "remove_bg": true,
+   "prompt": "brick cooking stove with a wok and a fire, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 97.8,
+  "made": "2026-10-05"
+ },
+ "furn.table": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 28,
+   "height": 28,
+   "remove_bg": true,
+   "prompt": "low square Chinese wooden table, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 115.7,
+  "made": "2026-10-05"
  }
 }
