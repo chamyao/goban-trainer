@@ -196,6 +196,7 @@ const TownUI = {
       // Chinese leads, English follows.
       goal(t, zh) {
         const g = $(".town-goal"); g.textContent = zh || t;
+        g.onclick = e => { e.stopPropagation(); if (scene.walkToGoal) scene.walkToGoal(); };   // tap the goal: head for it
         if (zh) g.append(Object.assign(document.createElement("span"), { className: "town-goal-en", textContent: t }));
       },
       place(name, zh) {
@@ -212,9 +213,9 @@ const TownUI = {
         dlg.hidden = false; show();
       },
       advance() { if (!open) return; if (typing) finishTyping(); else show(); },
-      hint(target) {
+      hint(target) {   // (no floating "Tap" label any more: a ring on the ground marks what he'd act on)
         const h = $(".town-hint");
-        if (!target) { h.hidden = true; return; }
+        if (!target || h) { if (h) h.hidden = true; return; }
         const cam = scene.cameras.main, cv = scene.game.canvas, k = cv.clientWidth / scene.scale.width;
         const r = cv.getBoundingClientRect(), rr = root.getBoundingClientRect();
         h.hidden = false;

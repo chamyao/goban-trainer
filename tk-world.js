@@ -31,7 +31,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=28`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=29`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
@@ -213,9 +213,9 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=28`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=29`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=16`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=27`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=28`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
@@ -224,7 +224,7 @@ function worldScenes() {
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
       for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=38`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=39`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -269,7 +269,7 @@ function worldScenes() {
 
       const P = o => Object.fromEntries((o.properties || []).map(p => [p.name, p.value]));
       const J = v => { try { return JSON.parse(v || "[]"); } catch { return []; } };
-      this.spots = {}; this.npcs = []; this.exits = []; this.entries = {}; this.shrine = null;
+      this.spots = {}; this.npcs = []; this.exits = []; this.propBoxes = []; this.entries = {}; this.shrine = null;
       for (const o of map.getObjectLayer("objects").objects) {
         const p = P(o);
         if (o.type === "prop") this.addProp(o, p);
@@ -285,6 +285,14 @@ function worldScenes() {
       if (this.shrine && !Object.values(this.spots).some(s => Math.hypot(s.x - this.shrine.x, s.y - this.shrine.y) < 30))
         this.spots.shrine_ = { x: this.shrine.x, y: this.shrine.y + 12, node: "", label: "The shrine", labelZh: "神龛", intro: [], outro: [], trigger: "talk", use: "shrine" };
       this.refreshStory();
+      for (const s of Object.values(this.spots)) {   // a story waiting here: a slow glow on the ground, gold for the main story, cooler for side stories
+        const q = s.node && this.region.quests.find(x => x.node === s.node);
+        if (!q || q.shrine || s.use === "shrine") continue;   // shrines have their own looks
+        s.glow = this.add.ellipse(s.x, s.y + 2, 30, 11, q.role === "side" || q.role === "short" ? 0x9fd8ff : 0xffd27a, .5).setDepth(-995).setVisible(false);
+        this.tweens.add({ targets: s.glow, scaleX: 1.25, scaleY: 1.25, alpha: .2, duration: 1100, yoyo: true, repeat: -1, ease: "Sine.easeInOut" });
+      }
+      this.focusMark = this.add.ellipse(0, 0, 20, 8).setStrokeStyle(1.5, 0xfff3c4, .85).setDepth(-994).setVisible(false);
+      this.tweens.add({ targets: this.focusMark, alpha: .35, duration: 700, yoyo: true, repeat: -1, ease: "Sine.easeInOut" });
 
       // back from a problem (or a reload): stand where you were
       // (only where he can stand: an older map may have put a wall there, or ended short of it)
@@ -394,9 +402,18 @@ function worldScenes() {
     // (a scene played inside a building starts only in there: on the street its door is just where to go)
     openQuest(s) { const q = this.region.quests.find(x => x.node === s.node); return q && this.available(q) && !(q.room && q.place !== this.placeId) ? q : null; }
 
+    // Coming up to a story spot: he stops and turns to it, a short beat, then its scene (not a cut).
+    approach(q, s) {
+      const P = this.player;
+      P.setVelocity(0); this.walk = null; this.approaching = true;
+      const dx = s.x - P.x, dy = s.y - P.y;
+      P.facing = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? "right" : "left") : (dy > 0 ? "down" : "up");
+      P.anims.stop(); P.setTexture(`h-liubei-${P.facing}-0`);
+      this.time.delayedCall(320, () => { this.approaching = false; if (!this.ui.busy() && !this.leaving && !this.cine) this.playQuest(q, s); });
+    }
     // Walking into a story spot's area starts its scene; it re-arms once you walk away.
     nearSpots() {
-      if (this.ui.busy() || this.leaving || this.cine) return;
+      if (this.ui.busy() || this.leaving || this.cine || this.approaching) return;
       const P = this.player;
       for (const s of Object.values(this.spots)) {
         if (s.trigger === "talk") continue;
@@ -406,7 +423,7 @@ function worldScenes() {
         else if (d < WORLD_NEAR && s.armed) {
           s.armed = false;
           const q = this.openQuest(s);
-          if (q) { P.setVelocity(0); this.walk = null; return this.playQuest(q, s); }   // a tap on the spot ends its walk here
+          if (q) return this.approach(q, s);   // a tap on the spot ends its walk here
         }
       }
     }
@@ -430,6 +447,8 @@ function worldScenes() {
           this.setShrine(TK.shrineState?.(this.w.n, this.placeId) || "dark");
         }
       }
+      if (img && !/^(building\.|tree\.|ground\.|deco\.)/.test(p.kind || "") && img.width <= 64)
+        (this.propBoxes = this.propBoxes || []).push({ cx: o.x, x0: o.x - img.width / 2, x1: o.x + img.width / 2, y0: o.y - img.height, y1: o.y });
       if (img && /^building\./.test(p.kind || "")) this.buildings.push({ x: o.x, bottom: o.y, w: img.width, h: img.height });
       // a building's wall follows its art, which is often wider or narrower than its footprint:
       // cl and cr either side of its centre (worked out with its neighbours by the map tools)
@@ -622,6 +641,16 @@ function worldScenes() {
     }
     goal(en, zh) { this.goalText = [en, zh]; this.ui.goal(en, zh); if (this.mapW) this.fitCamera(); }   // the goal line's height moves the HUD's edge
 
+    // A tap on the goal line: walk toward it (its story spot here, or the way out toward it).
+    walkToGoal() {
+      if (!this.canMove()) return;
+      const g = this.goalPoint();
+      if (!g) return;
+      const e = this.exits.find(e => Math.abs(e.rect.centerX - g.x) < 1 && Math.abs(e.rect.centerY - g.y) < 1);
+      if (e) return this.tapAt(e.rect.centerX, e.rect.centerY);
+      const k = Object.keys(this.spots).find(k => Math.hypot(this.spots[k].x - g.x, this.spots[k].y - g.y) < 8);
+      this.walkTo(g.x, g.y + (k ? 12 : 8), k ? { then: "up", aim: { kind: "spot", k } } : {});
+    }
     // Where the next objective is from here: its story spot on this map, or
     // the exit that starts the shortest way to its place (rooms included).
     goalPoint() {
@@ -963,11 +992,19 @@ function worldScenes() {
     // What's under a point of the world: someone (their figure, not the ground beside them),
     // a story spot, or a building's door; null for open ground.
     pick(x, y) {
-      const who = this.npcs.filter(n => n.spr.visible && Math.abs(n.spr.x - x) < 9 && y > n.spr.y - n.spr.height && y < n.spr.y + 3)
-        .sort((a, b) => Math.hypot(a.spr.x - x, a.spr.y - 8 - y) - Math.hypot(b.spr.x - x, b.spr.y - 8 - y))[0];
-      if (who) return { kind: "npc", n: who };
-      const spot = Object.entries(this.spots).find(([, s]) => Math.hypot(s.x - x, s.y - y) < 18);
-      if (spot) return { kind: "spot", k: spot[0], s: spot[1] };
+      // forgiving: a fingertip (about 44 screen px) anywhere near someone's figure, or on the thing a
+      // story spot is (its notice board, its table), counts; the nearest wins
+      const cv = this.game.canvas, k = cv.clientWidth ? cv.clientWidth / this.scale.width : 1, r = Math.max(9, 22 / (this.cameras.main.zoom * k));
+      const toBox = (b, x, y) => Math.hypot(Math.max(b.x0 - x, 0, x - b.x1), Math.max(b.y0 - y, 0, y - b.y1));
+      const who = this.npcs.filter(n => n.spr.visible).map(n => ({ n, d: toBox({ x0: n.spr.x - n.spr.width / 2 + 2, x1: n.spr.x + n.spr.width / 2 - 2, y0: n.spr.y - n.spr.height, y1: n.spr.y + 3 }, x, y) }))
+        .filter(o => o.d <= r).sort((a, b) => a.d - b.d)[0];
+      const spot = Object.entries(this.spots).map(([key, s]) => {
+        let d = Math.hypot(s.x - x, s.y - y);
+        for (const b of this.propBoxes || []) if (Math.hypot(b.cx - s.x, b.y1 - s.y) < 28) d = Math.min(d, toBox(b, x, y));
+        return { key, s, d };
+      }).filter(o => o.d <= Math.max(18, r)).sort((a, b) => a.d - b.d)[0];
+      if (who && (!spot || who.d <= spot.d)) return { kind: "npc", n: who.n };
+      if (spot) return { kind: "spot", k: spot.key, s: spot.s };
       // a way out: a building's door (tap the building or its doorway), or any other exit
       // (a room's door out, a road off the edge of the map), tapped on or near
       const doorway = e => e.side === "N" && e.rect.width < 16;
@@ -991,7 +1028,7 @@ function worldScenes() {
       spr.body.setSize(10, 6).setOffset((spr.width - 10) / 2, spr.height - 6);
       spr._fw = spr.width; spr._fh = spr.height;
     }
-    canMove() { return !this.ui.busy() && !this.seated && !this.leaving && !this.cine; }
+    canMove() { return !this.ui.busy() && !this.seated && !this.leaving && !this.cine && !this.approaching; }
     tapAt(x, y) {
       if (this.ui.busy()) return this.act();   // tap on through dialogue
       if (!this.canMove()) return;              // (at the go table, its own panel has the buttons)
@@ -1243,8 +1280,11 @@ function worldScenes() {
       }
 
       if (this.ui.busy()) { this.talkOver = time; this.talkAt = { x: this.player.x, y: this.player.y }; }
-      const t = !this.ui.busy() && !this.leaving && !this.seated && this.target();
-      this.ui.hint(t ? (t.kind === "npc" ? t.n.spr : this.spots[t.k]) : null);
+      const t = !this.ui.busy() && !this.leaving && !this.seated && !this.cine && this.target();
+      const at = t ? (t.kind === "npc" ? t.n.spr : this.spots[t.k]) : null;
+      if (this.focusMark) this.focusMark.setVisible(!!at).setPosition(at ? at.x : 0, at ? at.y + 1 : 0);
+      const quiet = this.ui.busy() || this.cine;
+      for (const s of Object.values(this.spots)) if (s.glow) s.glow.setVisible(!quiet && !!(s.node && this.openQuest(s)));
     }
   }
   return [WorldBoot, WorldScene];

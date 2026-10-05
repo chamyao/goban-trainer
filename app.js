@@ -130,14 +130,14 @@ const Sync = {
   },
 
   // Anonymous is fine — feedback doesn't require a username.
-  async sendFeedback(message) {
+  async sendFeedback(message, context = location.hash) {
     const res = await fetch(this.API_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify({
         username: this.username || "",
         kind: "feedback",
-        data: { message, context: location.hash },
+        data: { message, context },
       }),
     });
     if (!res.ok) throw new Error(`feedback failed (${res.status})`);
