@@ -355,5 +355,40 @@
     "beat": "The brothers plan the blood and the ridges, with the village pens below.",
     "scene": "A hillside at the roadside shrine in grey afternoon light: on the left Liu Bei points down the hill toward a village of pens and huts; in the middle Guan Yu and Zhang Fei stand listening, Guan Yu pointing at one ridge and Zhang Fei at the other; on the right, the two ridges rise above the road. Only these three men.",
     "notes": "transition beat"
+  },
+  "peace1_a": {
+    "book": 1,
+    "category": "omen",
+    "beat": "Zhang Jiao, a poor scholar gathering herbs, meets the green-eyed old man at a cave in the hills.",
+    "scene": "A wooded mountainside in thin morning mist. At the mouth of a cave stands an old man with a child's smooth face and bright green eyes, leaning on a tall staff and beckoning. Before him, a thin scholar in a worn grey robe with an herb basket on his back has stopped on the path, startled. Only these two.",
+    "notes": "transition beat"
+  },
+  "daxing_a": {
+    "book": 1,
+    "category": "battle",
+    "beat": "Before the first battle: Cheng Yuanzhi's fifty thousand against Liu Bei's five hundred at Daxing Mountain.",
+    "scene": "Wide panoramic composition under a pale sky at the foot of a rocky mountain. On the right, a vast Yellow Turban host fills the slope, yellow scarves and yellow banners as far as the eye can see, with Cheng Yuanzhi, a heavy rebel general, riding out in front. On the left, a small band of village volunteers holds the road, and at their head Liu Bei, Guan Yu and Zhang Fei sit on their horses, weapons ready.",
+    "notes": "transition beat"
+  },
+  "qingzhou_a": {
+    "book": 1,
+    "category": "battle",
+    "beat": "Qingzhou under siege: the Yellow Turbans ring the city walls, and the relief force is too small.",
+    "scene": "Wide panoramic composition on a grey afternoon. In the middle, the walls and gate tower of Qingzhou, with Han soldiers and red banners along the battlements. Yellow Turban rebels surround the walls on every side with ladders and yellow banners. In the left foreground, on a low hill, Liu Bei, Guan Yu and Zhang Fei look down on the siege from horseback with a few hundred men behind them.",
+    "notes": "transition beat"
+  },
+  "office_a": {
+    "book": 1,
+    "category": "battle",
+    "beat": "Dong Zhuo's beaten army in rout, Zhang Jiao's banners behind it, as the three brothers come over the hill.",
+    "scene": "Wide panoramic composition among low hills under a dusty afternoon sky. On the right, a Yellow Turban host pours down a valley under great yellow banners, Zhang Jiao in a yellow robe riding among them. In the middle, Han soldiers in red run before them, dropping spears, their commander Dong Zhuo, heavy and bearded, fleeing on horseback. On the left, on the crest of a hill, Liu Bei, Guan Yu and Zhang Fei rein in and look down at the rout.",
+    "notes": "transition beat"
+  },
+  "anxi_a": {
+    "book": 1,
+    "category": "peace",
+    "beat": "Liu Bei as the sheriff of Anxi, a quiet month: the three brothers at one table.",
+    "scene": "Inside a plain county office in a small town, evening lamplight. Liu Bei in a simple official robe and cap sits at a low table with bowls of rice and greens, Guan Yu and Zhang Fei sharing the table with him, the three eating together and talking. Through the open door, townsfolk pass in a quiet street. Warm, calm light. Exactly three men at the table.",
+    "notes": "transition beat"
   }
 }

@@ -205,7 +205,7 @@ PLACES = {
                 {"kind": "landmark.shrine", "id": "shrine", "node": "1-n7b", "near": "altar", "label": "The roadside shrine",
                  "intro": ["The old shrine at the roadside, dark until now, begins to glow."],
                  "outro": ["The glow settles. Only the board remains, and a thread of incense."]},
-                {"kind": "building.hut", "id": "pens", "label": "The village below the hills"},   # where the blood comes from
+                {"kind": "building.hut", "id": "pens", "label": "The farm east of the shrine"},   # where the blood comes from
                 # a ridge on each flank, each with room before it for a thousand men (Guan Yu left, Zhang Fei right)
                 {"kind": "rock.crag", "id": "ridge_left", "label": "The left ridge", "use": "ridge", "side": "W", "clear": [8, 4],
                  "needs": ["item:pigblood", "item:sheepblood", "item:dogblood"], "delivers": "ridge_left", "when": "node:n7b",
@@ -246,7 +246,7 @@ PLACES = {
                 {"kind": "folk.soldier", "near": "ridge_right", "when": "node:n7b", "face": "down", "say": "“A bucket each, and every man ready.”"},
                 {"kind": "folk.soldier", "near": "ridge_right", "when": "node:n7b", "face": "down", "say": "“Let the paper horses come.”"},
             ],
-            "objectives": {"1-n7": "Break Zhang Bao's sorcery in the hills.",
+            "objectives": {"1-n7": "Join Zhu Jun in the hills, against Zhang Bao.",
                            "1-n7b": "Go to the roadside shrine where the glow has begun."},
         },
         "Anxi": {   # Liu Bei's first post, where the inspector comes (the closing)
