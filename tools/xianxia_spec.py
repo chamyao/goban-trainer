@@ -166,3 +166,15 @@ PROPS_GEN = {
 
 # generated props that came out unreadable at this size: the kit keeps the drawn atlas frame for these
 PROPS_SKIP = {"prop.forge", "prop.cart", "prop.anvil", "prop.steelbars", "prop.staves", "prop.switches", "prop.book"}
+
+
+# ---- the Genshin kit (the user's pick, after the mock screens): isometric, bright Liyue colours ----
+# Same pieces as xianxia (OBJECTS, INTERIOR, PROPS_GEN), drawn for the isometric view: a piece on a
+# footprint w x h tiles stands on a diamond (w + h) tiles wide (tk-iso.js), so its box is that wide.
+GENSHIN_LOOK = ("bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, "
+                "jade-green glazed roofs, vermilion pillars, gold trim, clean shapes, soft cel shading")
+GENSHIN_PALETTE = ["#2e2438", "#4b3d5c", "#8a4b2e", "#c47a3e", "#2f8a6e", "#45b48a", "#8be0a8", "#3aa0c8",
+                   "#8fd6f0", "#e04a36", "#f2804a", "#f5c242", "#fde59a", "#f7a8c4", "#fff6e2", "#d8cdb6",
+                   "#9a8e7c", "#5aa846", "#9bd86a"]
+GENSHIN_PILOT = ["building.house", "building.hall", "building.inn", "building.hut", "tree.big", "tree.peach",
+                 "tree.pine", "rock.big"]

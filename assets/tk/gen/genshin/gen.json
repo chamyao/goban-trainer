@@ -1,0 +1,146 @@
+{
+ "building.inn": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 136,
+   "height": 96,
+   "remove_bg": true,
+   "prompt": "two-storey Chinese inn, red lacquered pillars, grey curved tiled roof, red lanterns, wine flag, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, jade-green glazed roofs, vermilion pillars, gold trim, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   136,
+   96
+  ],
+  "seconds": 12.1,
+  "made": "2026-10-05"
+ },
+ "tree.big": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 72,
+   "height": 64,
+   "remove_bg": true,
+   "prompt": "large old camphor tree, wide dark green canopy, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, jade-green glazed roofs, vermilion pillars, gold trim, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   72,
+   64
+  ],
+  "seconds": 17.0,
+  "made": "2026-10-05"
+ },
+ "building.hall": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 120,
+   "height": 112,
+   "remove_bg": true,
+   "prompt": "Chinese government hall, red pillars, curved jade-green glazed tile roof, white stone steps, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, jade-green glazed roofs, vermilion pillars, gold trim, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   120,
+   112
+  ],
+  "seconds": 54.4,
+  "made": "2026-10-05"
+ },
+ "building.hut": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 72,
+   "height": 56,
+   "remove_bg": true,
+   "prompt": "humble Chinese farm hut, mud walls, thatched straw roof, wooden door, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, jade-green glazed roofs, vermilion pillars, gold trim, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   72,
+   64
+  ],
+  "seconds": 63.2,
+  "made": "2026-10-05"
+ },
+ "tree.pine": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 56,
+   "height": 48,
+   "remove_bg": true,
+   "prompt": "Chinese pine tree, flat layered clusters of dark green needles, twisting trunk, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, jade-green glazed roofs, vermilion pillars, gold trim, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 3
+  },
+  "n": 3,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 64.2,
+  "made": "2026-10-05"
+ },
+ "tree.peach": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 56,
+   "height": 56,
+   "remove_bg": true,
+   "prompt": "peach tree in full pink blossom, dark twisting trunk, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, jade-green glazed roofs, vermilion pillars, gold trim, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 81.0,
+  "made": "2026-10-05"
+ },
+ "rock.big": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 88,
+   "height": 64,
+   "remove_bg": true,
+   "prompt": "large mossy grey boulder, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, jade-green glazed roofs, vermilion pillars, gold trim, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   88,
+   64
+  ],
+  "seconds": 81.0,
+  "made": "2026-10-05"
+ },
+ "building.house": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 72,
+   "height": 64,
+   "remove_bg": true,
+   "prompt": "small Chinese village house, white plaster walls, dark grey curved tile roof, wooden door, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, jade-green glazed roofs, vermilion pillars, gold trim, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   72,
+   64
+  ],
+  "seconds": 81.9,
+  "made": "2026-10-05"
+ }
+}
