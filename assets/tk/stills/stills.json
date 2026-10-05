@@ -217,5 +217,13 @@
   "provider": "replicate",
   "model": "black-forest-labs/flux-2-klein-4b",
   "made": "2026-10-05"
+ },
+ "bosswin_c": {
+  "file": "bosswin_c.jpg",
+  "scene": "bosswin",
+  "prompt": "Torn paper cut-outs shaped like little horsemen and spearmen, flat red and white Chinese paper cuttings, drifting down like leaves onto empty grass in clear light after a storm, the sky breaking open. No real people in the picture. Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
  }
 }
