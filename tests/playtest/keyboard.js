@@ -16,8 +16,9 @@ const W=(f,a)=>p.evaluate(f,a);
 // (it can come up a moment after the page)
 for(let i=0;i<15;i++){const c=p.getByText('Cancel',{exact:true});if(await c.count()&&await c.first().isVisible()){await c.first().click();break;}if(i>4&&await p.locator('.tk-scroll-go').count())break;await p.waitForTimeout(300);}
 // opening scrolls: Enter
-let scrolls=0;for(let i=0;i<20;i++){if(!(await p.locator('.tk-scroll-go').count())){if(scrolls&&i>scrolls+3)break;await p.waitForTimeout(300);continue;}const t=await W(()=>document.querySelector('.tk-scroll h3').textContent);await p.keyboard.press('Enter');await p.waitForTimeout(500);
-  if(await p.locator('.tk-scroll-go').count()&&await W(()=>document.querySelector('.tk-scroll h3').textContent)===t){check(false,'Enter on the scroll "'+t+'" does nothing');break;}scrolls++;}
+const signIn=async()=>{const c=p.getByText('Cancel',{exact:true});if(await c.count()&&await c.first().isVisible()){await c.first().click();await p.waitForTimeout(300);}};
+let scrolls=0;await p.waitForTimeout(1500);for(let i=0;i<20;i++){await signIn();if(!(await p.locator('.tk-scroll-go').count())){if(scrolls&&i>scrolls+3)break;await p.waitForTimeout(300);continue;}const t=await W(()=>document.querySelector('.tk-scroll h3').textContent);await signIn();await p.keyboard.press('Enter');await p.waitForTimeout(500);
+  if(await p.locator('.tk-scroll-go').count()&&await W(()=>document.querySelector('.tk-scroll h3').textContent)===t){check(false,'Enter on the scroll "'+t+'" does nothing; focus on '+await W(()=>{const a=document.activeElement;return (a?a.tagName+'.'+a.className:'none')+' | visible modals: '+[...document.querySelectorAll('.modal, dialog, [role=dialog]')].filter(e=>e.offsetParent!==null).map(e=>e.className+' '+e.textContent.slice(0,40)).join(' ; ');}));break;}scrolls++;}
 check(scrolls>=1,`Enter turns the opening scrolls (${scrolls})`);
 for(let i=0;i<60&&!(await W(()=>!!(window.__w&&window.__w.player&&!window.__w.leaving)));i++)await p.waitForTimeout(200);await p.waitForTimeout(1200);
 // the first scene (the mulberry tree) may be talking: Enter moves it on
@@ -30,11 +31,11 @@ const P=()=>W(()=>[window.__w.player.x,window.__w.player.y]);
 const walksAgain=async()=>{for(const k of ['ArrowDown','ArrowUp','ArrowLeft','ArrowRight']){const a=await P();await p.keyboard.down(k);await p.waitForTimeout(350);await p.keyboard.up(k);await p.waitForTimeout(100);const c=await P();if(Math.hypot(c[0]-a[0],c[1]-a[1])>6)return k;}return null;};
 for(const [k,dx,dy] of [['d',1,0],['a',-1,0],['s',0,1],['w',0,-1],['ArrowRight',1,0],['ArrowLeft',-1,0],['ArrowDown',0,1],['ArrowUp',0,-1]]){
   // stand on open ground with room that way
-  await W(([dx,dy])=>{const w=window.__w,G=w.walkGrid();for(let y=2;y<G.rows-2;y++)for(let x=2;x<G.cols-2;x++){let ok=true;for(let s=-1;s<=6&&ok;s++)ok=G.free(x+dx*s,y+dy*s)&&G.free(x+dx*s+(dy?1:0),y+dy*s+(dx?1:0));if(ok){w.player.setPosition(x*G.C+G.C/2,y*G.C+G.C/2+3);return;}}},[dx,dy]);
+  await W(([dx,dy])=>{const w=window.__w,G=w.walkGrid(),sp=Object.values(w.spots);for(let y=2;y<G.rows-2;y++)for(let x=2;x<G.cols-2;x++){let ok=!sp.some(s=>w.openQuest(s)&&Math.hypot(s.x-x*G.C,s.y-y*G.C)<70);for(let s=-1;s<=6&&ok;s++)ok=G.free(x+dx*s,y+dy*s)&&G.free(x+dx*s+(dy?1:0),y+dy*s+(dx?1:0));if(ok){w.player.setPosition(x*G.C+G.C/2,y*G.C+G.C/2+3);return;}}},[dx,dy]);
   await p.waitForTimeout(200);const a=await P();await p.keyboard.down(k);await p.waitForTimeout(450);await p.keyboard.up(k);await p.waitForTimeout(100);const c=await P();
   const mv=[c[0]-a[0],c[1]-a[1]];check(mv[0]*dx+mv[1]*dy>8,`holding ${k} walks him that way (${mv.map(Math.round).join(',')})`);}
 // E talks to the person in front; Enter moves the talk on and ends it
-const npcAt=await W(()=>{const w=window.__w,n=w.npcs.find(n=>!n.challenge&&n.spr.visible&&!n.who);if(!n)return null;n.wander=false;w.player.setPosition(n.spr.x,n.spr.y+14);w.player.facing='up';w.player.setTexture('h-liubei-up-0');return n.sprite;});
+const npcAt=await W(()=>{const w=window.__w,n=w.npcs.find(n=>!n.challenge&&n.spr.visible&&!/^(liubei|guanyu|zhangfei)$/.test(n.who||"")&&!Object.values(w.spots).some(s=>w.openQuest(s)&&Math.hypot(s.x-n.spr.x,s.y-n.spr.y)<60));if(!n)return null;n.wander=false;w.player.setPosition(n.spr.x,n.spr.y+14);w.player.facing='up';w.player.setTexture('h-liubei-up-0');return n.sprite;});
 await p.waitForTimeout(300);await p.keyboard.press('e');await p.waitForTimeout(500);
 check(await busy(),'E talks to the villager in front ('+npcAt+')');
 const n1=await enterThrough();
@@ -43,9 +44,10 @@ if(await busy()){const diag=[];for(let i=0;i<4;i++){diag.push(await W(()=>{const
 check(!(await busy()),`Enter moves the talk on and ends it (${n1} presses)`);
 const k2=await walksAgain();check(!!k2&&!(await busy()),'after the talk the keys walk him again ('+k2+')');
 // mashing Enter at a villager: one talk, not a loop (Enter can't start a talk just after one closes)
-await W(()=>{const w=window.__w,n=w.npcs.find(n=>!n.challenge&&n.spr.visible&&!n.who);n.wander=false;w.player.setPosition(n.spr.x,n.spr.y+14);w.player.facing='up';w.player.setTexture('h-liubei-up-0');});
-await p.waitForTimeout(400);let opens=0,was=false;
+await W(()=>{const w=window.__w,n=w.npcs.find(n=>!n.challenge&&n.spr.visible&&!/^(liubei|guanyu|zhangfei)$/.test(n.who||"")&&!Object.values(w.spots).some(s=>w.openQuest(s)&&Math.hypot(s.x-n.spr.x,s.y-n.spr.y)<60));n.wander=false;w.player.setPosition(n.spr.x,n.spr.y+14);w.player.facing='up';w.player.setTexture('h-liubei-up-0');});
+await p.waitForTimeout(1200);let opens=0,was=false;const pm0=await P();
 for(let i=0;i<30;i++){await p.keyboard.press('Enter');await p.waitForTimeout(100);const b=await busy();if(b&&!was)opens++;was=b;}
+const pm1=await P();console.log(`     (he moved ${Math.round(Math.hypot(pm1[0]-pm0[0],pm1[1]-pm0[1]))} px while Enter was mashed)`);
 for(let i=0;i<20&&await busy();i++){await p.keyboard.press('Enter');await p.waitForTimeout(400);}
 check(opens<=2,`mashing Enter for 3 s at a villager opens the talk ${opens} time(s)`);
 // a challenger's problem by keys
