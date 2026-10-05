@@ -31,7 +31,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=18`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=20`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
@@ -197,16 +197,16 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=18`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=20`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=11`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=16`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=17`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
       for (const [s, path] of Object.entries(kit.sheets)) this.load.image(`kit-${s}`, path);
       const [fw, fh] = kit.folk.frame;
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=27`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=28`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -305,7 +305,14 @@ function worldScenes() {
       window.__w = this;  // for tests and the console
       if (this.resume && opts.ret) { const r = opts.ret; opts.ret = null; this.time.delayedCall(400, () => this.returned(r)); }
       // story scenes that start by themselves: on arriving here, or on walking into their area
-      for (const s of Object.values(this.spots)) s.armed = Math.hypot(this.player.x - s.x, this.player.y - s.y) > WORLD_NEAR;   // not under your feet when you come back
+      // A story spot doesn't go off under your feet as you come in: outside its reach it waits for you
+      // to walk up; arriving inside it (a map's default arrival point can be on it), it waits until
+      // you've walked a little way into the place. Back where you were (a problem left, a reload),
+      // you must step clear of it first.
+      for (const s of Object.values(this.spots)) {
+        s.armed = Math.hypot(this.player.x - s.x, this.player.y - s.y) > WORLD_NEAR;
+        s.armAt = !s.armed && !pos ? { x: this.player.x, y: this.player.y } : null;
+      }
       this.time.delayedCall(900, () => {
         const s = Object.values(this.spots).find(s => s.trigger === "arrive" && this.openQuest(s));
         if (s && !this.ui.busy() && !this.leaving && !this.cine) this.playQuest(this.openQuest(s), s);
@@ -325,6 +332,7 @@ function worldScenes() {
         if (s.trigger === "talk") continue;
         const d = Math.hypot(P.x - s.x, P.y - s.y);
         if (d > WORLD_NEAR + 16) s.armed = true;
+        else if (s.armAt && Math.hypot(P.x - s.armAt.x, P.y - s.armAt.y) > 28) { s.armed = true; s.armAt = null; }
         else if (d < WORLD_NEAR && s.armed) {
           s.armed = false;
           const q = this.openQuest(s);

@@ -51,6 +51,10 @@ PIECES = {
                  "cutout"),
     "liubei": ("rd-animation", "small_sprites", (32, 32), "young Chinese hero in a white robe with gold trim, black "
                "topknot, short black beard", "sheet"),
+    "liubei64": ("rd-plus", "topdown_asset", (64, 64), "full-body game character sprite of a young Chinese hero "
+                 "standing, white robe with gold trim, black topknot, short black beard, 3/4 top-down view", "cutout"),
+    "liubei64turn": ("rd-plus", "character_turnaround", (256, 64), "young Chinese hero in a white robe with gold "
+                     "trim, black topknot, short black beard; front, side, back and three-quarter views", "cutout"),
     "liubei48": ("rd-animation", "four_angle_walking", (48, 48), "young Chinese hero in a white robe with gold trim, "
                  "black topknot, short black beard", "sheet"),
 }
