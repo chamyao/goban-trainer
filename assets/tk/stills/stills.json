@@ -134,7 +134,8 @@
   "prompt": "An overturned bronze ding-shaped wine vessel with handles, clearly an ancient vessel, not a can, on a table, wine spilling, the shadow of a raised fist on the tent wall. Han dynasty China, about 184 AD: nothing modern, no glass, no paved roads. Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark.",
   "provider": "replicate",
   "model": "black-forest-labs/flux-2-klein-4b",
-  "made": "2026-10-05"
+  "made": "2026-10-05",
+  "note": "cropped to drop a hanging scroll with calligraphy"
  },
  "blackwind_a": {
   "file": "blackwind_a.jpg",
