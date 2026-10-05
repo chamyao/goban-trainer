@@ -361,7 +361,22 @@ function worldScenes() {
     fitCamera() {
       const cam = this.cameras.main, vw = cam.width / cam.zoom, vh = cam.height / cam.zoom, mw = this.mapW, mh = this.mapH;
       const bx = mw < vw ? -Math.round((vw - mw) / 2) : 0, by = mh < vh ? -Math.round((vh - mh) / 2) : 0;
-      cam.setBounds(bx, by, Math.max(mw, vw), Math.max(mh, vh));
+      // the buttons and goal line along the top cover the map's top edge (a road out there): let the
+      // view go that much higher, so whatever is at the edge can be brought out from under them
+      const top = Math.min(by, -this.hudTop());
+      cam.setBounds(bx, top, Math.max(mw, vw), Math.max(mh, vh) + (by - top));
+    }
+    // How far down the screen the HUD reaches, in world pixels.
+    hudTop() {
+      const cv = this.game.canvas, host = cv && cv.closest(".tk-map");
+      if (!host || !cv.clientWidth) return 0;
+      const r = cv.getBoundingClientRect(), k = cv.clientWidth / this.scale.width * this.cameras.main.zoom;
+      let low = r.top;
+      for (const el of host.querySelectorAll(".town-goal, .tk-menu-row")) {
+        const b = el.getBoundingClientRect();
+        if (b.height && b.top < r.top + r.height / 3) low = Math.max(low, b.bottom);
+      }
+      return Math.ceil((low - r.top + 4) / k);
     }
 
     // The story quest a spot holds, if it can be played now.
@@ -592,7 +607,7 @@ function worldScenes() {
       const waysZh = [...new Set(lead.map(p => p.role === "short" ? `${this.placeZh(p.place)}的捷径` : this.placeZh(p.place)))];
       this.goal(`On to ${this.placeName(q.place)}, by way of ${ways.join(" or ")}.`, `前往${this.placeZh(q.place)}，可经${waysZh.join("或")}。`);
     }
-    goal(en, zh) { this.goalText = [en, zh]; this.ui.goal(en, zh); }
+    goal(en, zh) { this.goalText = [en, zh]; this.ui.goal(en, zh); if (this.mapW) this.fitCamera(); }   // the goal line's height moves the HUD's edge
 
     // Where the next objective is from here: its story spot on this map, or
     // the exit that starts the shortest way to its place (rooms included).
