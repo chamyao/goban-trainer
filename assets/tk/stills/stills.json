@@ -209,5 +209,21 @@
   "provider": "replicate",
   "model": "black-forest-labs/flux-2-klein-4b",
   "made": "2026-10-05"
+ },
+ "inn_a": {
+  "file": "inn_a.jpg",
+  "scene": "inn",
+  "prompt": "A warm, crowded village inn at evening, lanterns glowing, as the door bangs open and Guan Yu strides in pushing a handcart, everyone turning to look; Liu Bei in white and Zhang Fei in black at a table by the wall, clay wine jars and bowls on it. Bare plank walls, no scrolls or hangings. Guan Yu is a towering giant of a man, a head taller than anyone, with massive shoulders and a thick neck, a deep red face, a very long black beard down to his chest and narrow eyes under heavy brows, hair in a topknot, in a green robe. Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold. Zhang Fei is a stocky, barrel-chested, powerfully muscled man, broad rather than tall, with a fierce square jaw, big glaring eyes and a wild bristling black beard, hair in a topknot, in black and dark brown clothes. Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
+ },
+ "inn_b": {
+  "file": "inn_b.jpg",
+  "scene": "inn",
+  "prompt": "Exactly three men leaning together over a small inn table: Liu Bei in white on the left, Guan Yu in green with a long black beard in the middle, Zhang Fei in black on the right, with shallow clay wine bowls, deep in talk, faces lit by a single small oil lamp, the rest of the room fading into shadow. Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold (reference image 1: keep his face, hair and clothes). Guan Yu is a towering giant of a man, a head taller than anyone, with massive shoulders and a thick neck, a deep red face, a very long black beard down to his chest and narrow eyes under heavy brows, hair in a topknot, in a green robe (reference image 2: keep his face, hair and clothes). Zhang Fei is a stocky, barrel-chested, powerfully muscled man, broad rather than tall, with a fierce square jaw, big glaring eyes and a wild bristling black beard, hair in a topknot, in black and dark brown clothes (reference image 3: keep his face, hair and clothes). Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
  }
 }
