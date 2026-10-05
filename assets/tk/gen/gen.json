@@ -130,5 +130,149 @@
   "how": "cutout",
   "seconds": 14.3,
   "made": "2026-10-05"
+ },
+ "t16_grass": {
+  "model": "retro-diffusion/rd-fast",
+  "style": "texture",
+  "prompt": "jade-green grass with clover and a few tiny white flowers, flat seamless game texture, 16 pixel tiles, Chinese fantasy RPG, xianxia, Eastern Han dynasty",
+  "size": [
+   64,
+   64
+  ],
+  "how": "tile",
+  "seconds": 25.7,
+  "made": "2026-10-05"
+ },
+ "t16_stone": {
+  "model": "retro-diffusion/rd-fast",
+  "style": "texture",
+  "prompt": "pale grey flagstone courtyard paving with moss in the cracks, flat seamless game texture, 16 pixel tiles, Chinese fantasy RPG, xianxia, Eastern Han dynasty",
+  "size": [
+   64,
+   64
+  ],
+  "how": "tile",
+  "seconds": 26.6,
+  "made": "2026-10-05"
+ },
+ "t16_water": {
+  "model": "retro-diffusion/rd-fast",
+  "style": "texture",
+  "prompt": "clear teal pond water with soft ripples, flat seamless game texture, 16 pixel tiles, Chinese fantasy RPG, xianxia, Eastern Han dynasty",
+  "size": [
+   64,
+   64
+  ],
+  "how": "tile",
+  "seconds": 28.2,
+  "made": "2026-10-05"
+ },
+ "t16_dirt": {
+  "model": "retro-diffusion/rd-fast",
+  "style": "texture",
+  "prompt": "packed light-brown dirt road with small pebbles, flat seamless game texture, 16 pixel tiles, Chinese fantasy RPG, xianxia, Eastern Han dynasty",
+  "size": [
+   64,
+   64
+  ],
+  "how": "tile",
+  "seconds": 30.3,
+  "made": "2026-10-05"
+ },
+ "t16_wall": {
+  "model": "retro-diffusion/rd-fast",
+  "style": "texture",
+  "prompt": "white plaster wall with faint cracks and a grey stone base, flat seamless game texture, 16 pixel tiles, Chinese fantasy RPG, xianxia, Eastern Han dynasty",
+  "size": [
+   64,
+   64
+  ],
+  "how": "tile",
+  "seconds": 16.9,
+  "made": "2026-10-05"
+ },
+ "t16_roof": {
+  "model": "retro-diffusion/rd-fast",
+  "style": "texture",
+  "prompt": "jade-green glazed Chinese roof tiles in curved overlapping rows, flat seamless game texture, 16 pixel tiles, Chinese fantasy RPG, xianxia, Eastern Han dynasty",
+  "size": [
+   64,
+   64
+  ],
+  "how": "tile",
+  "seconds": 8.8,
+  "made": "2026-10-05"
+ },
+ "t32_grass": {
+  "model": "retro-diffusion/rd-fast",
+  "style": "texture",
+  "prompt": "jade-green grass with clover and a few tiny white flowers, flat seamless game texture, 32 pixel tiles, Chinese fantasy RPG, xianxia, Eastern Han dynasty",
+  "size": [
+   128,
+   128
+  ],
+  "how": "tile",
+  "seconds": 10.1,
+  "made": "2026-10-05"
+ },
+ "t32_stone": {
+  "model": "retro-diffusion/rd-fast",
+  "style": "texture",
+  "prompt": "pale grey flagstone courtyard paving with moss in the cracks, flat seamless game texture, 32 pixel tiles, Chinese fantasy RPG, xianxia, Eastern Han dynasty",
+  "size": [
+   128,
+   128
+  ],
+  "how": "tile",
+  "seconds": 8.6,
+  "made": "2026-10-05"
+ },
+ "t32_water": {
+  "model": "retro-diffusion/rd-fast",
+  "style": "texture",
+  "prompt": "clear teal pond water with soft ripples, flat seamless game texture, 32 pixel tiles, Chinese fantasy RPG, xianxia, Eastern Han dynasty",
+  "size": [
+   128,
+   128
+  ],
+  "how": "tile",
+  "seconds": 17.7,
+  "made": "2026-10-05"
+ },
+ "t32_dirt": {
+  "model": "retro-diffusion/rd-fast",
+  "style": "texture",
+  "prompt": "packed light-brown dirt road with small pebbles, flat seamless game texture, 32 pixel tiles, Chinese fantasy RPG, xianxia, Eastern Han dynasty",
+  "size": [
+   128,
+   128
+  ],
+  "how": "tile",
+  "seconds": 28.9,
+  "made": "2026-10-05"
+ },
+ "t32_wall": {
+  "model": "retro-diffusion/rd-fast",
+  "style": "texture",
+  "prompt": "white plaster wall with faint cracks and a grey stone base, flat seamless game texture, 32 pixel tiles, Chinese fantasy RPG, xianxia, Eastern Han dynasty",
+  "size": [
+   128,
+   128
+  ],
+  "how": "tile",
+  "seconds": 46.4,
+  "made": "2026-10-05"
+ },
+ "t32_roof": {
+  "model": "retro-diffusion/rd-fast",
+  "style": "texture",
+  "prompt": "jade-green glazed Chinese roof tiles in curved overlapping rows, flat seamless game texture, 32 pixel tiles, Chinese fantasy RPG, xianxia, Eastern Han dynasty",
+  "size": [
+   128,
+   128
+  ],
+  "how": "tile",
+  "seconds": 17.2,
+  "made": "2026-10-05"
  }
 }
