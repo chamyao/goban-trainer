@@ -699,8 +699,12 @@ const WorldFx = {
     } else if (name === "fire") {
       for (let i = 0; i < 60; i++) fly(dot(R() < .5 ? 0xff7a2a : 0xffc84a, 3), { x: x + (R() - .5) * 50, y: y - 20 - R() * 30, alpha: 0, duration: 700 }, R() * 1200);
     } else if (name === "whip") {
-      const t = scene.add.text(x, y - 26, "THWACK!", { fontFamily: "Georgia, serif", fontSize: "10px", color: "#fff", stroke: "#3a2416", strokeThickness: 3 }).setOrigin(.5).setDepth(1e5);
-      keep.push(t); fly(t, { y: y - 36, alpha: 0, duration: 600 }); cam.shake(160, .006);
+      // a stroke of the staff: a pale streak across, a few specks of dust, a small jolt
+      const side = R() < .5 ? -1 : 1, g = scene.add.graphics({ x, y }).setDepth(1e5); keep.push(g);   // drawn about (x, y), so the iso view moves it as one
+      g.lineStyle(2, 0xf4ecd8, .85).beginPath(); g.moveTo(-9 * side, -22); g.lineTo(7 * side, -12); g.strokePath();
+      fly(g, { alpha: 0, duration: 220 });
+      for (let i = 0; i < 6; i++) fly(dot(R() < .5 ? 0xd8c39a : 0xb8a074), { x: x + (R() - .5) * 18, y: y - 10 - R() * 10, alpha: 0, duration: 380 });
+      cam.shake(90, .003);
     } else if (name === "blackwind") {
       const W = scene.scale.width, H = scene.scale.height;
       const dark = scene.add.rectangle(0, 0, W, H, 0x0a0812, 0).setOrigin(0).setScrollFactor(0).setDepth(9e4); keep.push(dark);
