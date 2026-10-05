@@ -83,8 +83,8 @@ CAST = {
     "dongzhuo": ("Dong Zhuo", "a huge, heavy, bearded bully of a warlord with a sneer, in a general's armour"),
     "zhujun": ("Zhu Jun", "an imperial general with a short beard, iron helmet, dark red robe over armour"),
     "huangfusong": ("Huangfu Song", "an imperial general with a long black beard, iron helmet, blue robe over armour"),
-    "inspector": ("the inspector", "a plump, sneering court official with a thin moustache, in a black gauze "
-                                   "official's hat and a blue silk robe"),
+    "inspector": ("the inspector", "a plump, sneering court official with a thin moustache, in a Han dynasty black "
+                                   "gauze official's cap (a small stiff cap with two flaps, not a top hat) and a blue silk robe"),
     "xushao": ("Xu Shao", "a calm scholar with a thin beard and knowing eyes, scholar's hat, pale robe"),
 }
 
@@ -392,22 +392,27 @@ EXTRA = {
 # face references. Nothing goes back into the game until the user has approved it (gen_stills --review).
 REVIEW = {
     # inn: "a giant pushing a cart strides in: nine feet tall, a beard two feet long, a face like a ripe red date"
-    "inn_v2": ("inn", "Guan Yu shoves open the door of a small village inn at evening, pushing a wooden handcart "
-                      "ahead of him and stooping under the lintel; the drinkers turn to stare, and Liu Bei and Zhang Fei "
-                      "look up from their table. Clay wine jars, paper lanterns, plank walls."),
+    "inn_v2": ("inn", "Guan Yu shoves open the plain wooden door of a small village inn at evening, pushing a wooden "
+                      "handcart ahead of him and stooping under the lintel; at one table inside, Liu Bei and Zhang Fei "
+                      "turn to stare up at him. Plank walls, paper-screened lattice windows, plain unmarked paper "
+                      "lanterns, clay wine jars and bowls. No signboards, no wall hangings, no other figures."),
     # oath: "With a black ox and a white horse for sacrifice, the three burn incense and bow."
-    "oath_v2": ("oath", "Liu Bei, Guan Yu and Zhang Fei kneel side by side before a low stone altar with burning "
-                        "incense in a peach orchard in full pink blossom, bowing; a black ox and a white horse stand "
-                        "tethered beside the altar. Only these three men in the picture."),
+    "oath_v2": ("oath", "Liu Bei, Guan Yu and Zhang Fei kneel in a row on the same side of a low stone altar, facing "
+                        "it with their backs half to us, heads bowed and hands clasped, thin sticks of incense smoking "
+                        "in a bronze burner on the altar; a black ox and a white horse stand tethered beside it; a "
+                        "peach orchard in full pink blossom. Nobody stands behind the altar. Only these three men."),
     # post: "Zhang Fei breaks ten or more willow switches across his legs." (the inspector's; docs/stills-must-show.md)
-    "post_v2": ("post", "In front of a county office gate, the inspector is tied with ropes to a wooden hitching post, "
-                        "howling; Zhang Fei stands beside him swinging a bundle of willow switches down across the "
-                        "inspector's legs, broken switches on the ground; Liu Bei hurries in from the side with a hand raised to "
-                        "stop him. Only these three men in the picture; Liu Bei is not tied or beaten."),
+    "post_v2": ("post", "In front of a county office gate, the inspector stands with his back against a thick wooden "
+                        "hitching post, his arms bound behind him around the post and ropes wound across his chest, "
+                        "howling in pain; Zhang Fei raises a bundle of thin green willow switches and lashes them "
+                        "down across the inspector's legs, broken switches scattered on the ground; Liu Bei hurries in "
+                        "from the side with a hand raised to stop him. Only these three men; Liu Bei is not tied or "
+                        "beaten. Plain gate, no signboard."),
     # blackwind: "Out of a black cloud pours a numberless host of horsemen. Liu Bei's army breaks and flees."
-    "blackwind_v2": ("blackwind", "On a hilltop Zhang Bao, hair loose, raises his sword and chants; a black whirlwind "
-                                  "of storm cloud, sand and stones pours down the slope onto a line of soldiers with "
-                                  "spears, who break and run; ghostly paper-like riders gallop inside the cloud."),
+    "blackwind_v2": ("blackwind", "Zhang Bao stands on a rocky hilltop, hair loose, sword raised high, mouth open "
+                                  "chanting; a black whirlwind of storm cloud, sand and stones pours down the slope "
+                                  "onto a line of Han spearmen in cloth headwraps and lamellar armour, who break and "
+                                  "run; ghostly paper-like riders gallop inside the cloud."),
 }
 
 # the stills the game uses (Plot/Story's choice: the emotional peaks, the partings, the one death)
