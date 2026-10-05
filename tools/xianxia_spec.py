@@ -190,3 +190,8 @@ GENSHIN_DROP = {"furn.stool-1", "prop.pond-1", "rock.small-2", "ruin.rubble-2", 
 # and so did "Liyue". This wording never mentions architecture at all.
 GENSHIN_ITEM = ("a single {p} by itself, centred, game item sprite, bright saturated anime colours "
                 "like Genshin Impact, soft cel shading, clean outline")
+# isometric art whose entrance is drawn on the lower-right face: the door is on the footprint's south edge,
+# which the isometric view puts lower-left, so the game mirrors these (kit "isoFlip")
+GENSHIN_FLIP = {"building.inn-1", "building.house-2"}
+# trees drawn standing on a raised square of ground: the square is cut away, the trunk kept
+GENSHIN_UNPLATE = ("tree.",)

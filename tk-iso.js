@@ -33,9 +33,11 @@ const WorldIso = {
     floor.add(scene.add.image(0, 0, key).setOrigin(0, 0).setRotation(Math.PI / 4).setScale(Math.SQRT2));
     floor.isoFixed = true;
     const iso = scene.iso = { P, inv, W, H, floor, width: W + H, height: (W + H) / 2 };
-    // outdoors, the corners beyond the diamond are more country (the kit's "isoVoid" colour); rooms stay dark
-    const kit = scene.kit || {};
-    if (kit.isoVoid && !String(scene.placeId).includes("--")) scene.cameras.main.setBackgroundColor(kit.isoVoid);
+    // beyond the map's diamond: outdoors more country (the kit's "isoVoid" colour); indoors the void the
+    // room is drawn on, so the unused part of the map doesn't show as a slab under the room
+    const kit = scene.kit || {}, indoor = String(scene.placeId).includes("--");
+    const back = indoor ? kit.materials && kit.materials.void && kit.materials.void.color : kit.isoVoid;
+    if (back) scene.cameras.main.setBackgroundColor(back);
 
     // the view's depth: how far down the screen an object's feet are. Objects drawn above everything
     // (marks, emotes, flashes: depth >= 9000) and behind everything (<= -9000) keep theirs; the rest
