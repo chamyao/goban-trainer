@@ -7,6 +7,10 @@ GROUND: 16x16 seamless tiles, several variants each.
 OBJECTS: kind -> (prompt, (w, h) to fit, variants).
 """
 
+# the ground materials taken from GROUND; the rest stay the Jade kit's (the first generated
+# grass, dirt and stone came out as yellow sand and patterned rugs: regenerate before adding them)
+USE_GROUND = set()
+
 GROUND = {
     "grass": ("soft light jade-green grass, a few tiny flowers, even and calm", 4),
     "dirt": ("packed light-brown earth path, a few small pebbles, even", 2),

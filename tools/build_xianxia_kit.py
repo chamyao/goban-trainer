@@ -19,7 +19,7 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from build_jade_edges import block  # noqa: E402
-from xianxia_spec import GROUND, OBJECTS  # noqa: E402
+from xianxia_spec import GROUND, OBJECTS, USE_GROUND  # noqa: E402
 
 T = 16
 OUT = ROOT / "assets/tk/xianxia"
@@ -28,8 +28,8 @@ SLACK = 1.15   # a piece may be this much bigger than its footprint before it's 
 
 def quantize_like(small, big, alpha):
     """Keep the shrunk piece to the colours the original used, with hard edges (pixel art)."""
-    pal = big.convert("RGB").quantize(colors=min(48, max(2, len(set(big.convert("RGB").getdata())))),
-                                      method=Image.Quantize.MEDIANCUT)
+    n = len(big.convert("RGB").getcolors(1 << 16) or []) or 48
+    pal = big.convert("RGB").quantize(colors=min(48, max(2, n)), method=Image.Quantize.MEDIANCUT)
     rgb = small.convert("RGB").quantize(palette=pal, dither=Image.Dither.NONE).convert("RGBA")
     a = small.getchannel("A").point(lambda v: 255 if v >= alpha else 0)
     rgb.putalpha(a)
@@ -128,14 +128,16 @@ def main():
                       "tools/xianxia_spec.py); interiors and townsfolk from the Jade kit: " + kit["credit"])
     kit["sheets"].update(x_tiles="assets/tk/xianxia/tiles.png", x_edges="assets/tk/xianxia/edges.png",
                          x_objects="assets/tk/xianxia/objects.png")
-    kit["materials"]["grass"] = {"tiles": [["x_tiles", i, row["grass"], 3 if i == 0 else 1]
-                                           for i in range(len(ground["grass"]))]}
-    for i, (m, _, _) in enumerate(edged):
-        kit["materials"][m] = {"blob": ["x_edges", i * 10, 0, 10, 10], "inside": [i * 10 + 2, 9],
-                               "outside": ["x_tiles", 0, row["grass"]]}
+    if "grass" in USE_GROUND:
+        kit["materials"]["grass"] = {"tiles": [["x_tiles", i, row["grass"], 3 if i == 0 else 1]
+                                               for i in range(len(ground["grass"]))]}
+        for i, (m, _, _) in enumerate(edged):
+            if m in USE_GROUND:
+                kit["materials"][m] = {"blob": ["x_edges", i * 10, 0, 10, 10], "inside": [i * 10 + 2, 9],
+                                       "outside": ["x_tiles", 0, row["grass"]]}
     for kind, names in made.items():
         kit["kinds"][kind] = [["x_objects", *pos[n]] for n in names]
-    if detail:   # the scatter on the grass: our tufts and flowers
+    if detail and "grass" in USE_GROUND:   # the scatter on the grass: our tufts and flowers
         kit["detail"] = {"tiles": [["x_tiles", i, len(ground), 1] for i in range(len(detail))],
                          "density": kit["detail"]["density"]}
     (ROOT / "assets/tk/kits/xianxia.json").write_text(json.dumps(kit, indent=1))
