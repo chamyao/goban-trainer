@@ -202,20 +202,20 @@ PLACES = {
             "landmarks": [
                 {"kind": "rock.big", "id": "altar", "node": "1-n7", "label": "Zhang Bao's sorcery"},
                 # the shrine that lights after the first try fails (scene "shrine")
-                {"kind": "landmark.shrine", "id": "shrine", "node": "1-n7b", "near": "altar", "label": "The rock under the pine",
-                 "intro": ["Under the great pine by the road, the stones on the flat rock begin to glow."],
+                {"kind": "landmark.shrine", "id": "shrine", "node": "1-n7b", "near": "altar", "label": "The shrine under the pine",
+                 "intro": ["Under the old pine by the road, a game has been laid out on the little shrine's offering table, with wine cups and dried meat beside it."],
                  "outro": ["The old men are gone. Only the game remains."]},
                 {"kind": "building.hut", "id": "pens", "label": "The farm east of the pine"},   # where the blood comes from
                 # a ridge on each flank, each with room before it for a thousand men (Guan Yu left, Zhang Fei right)
                 {"kind": "rock.crag", "id": "ridge_left", "label": "The left ridge", "use": "ridge", "side": "W", "clear": [8, 4],
                  "needs": ["item:pigblood", "item:sheepblood", "item:dogblood"], "delivers": "ridge_left", "when": "node:n7b",
-                 "empty": ["The ridge is empty. Go to the rock under the pine first."],
+                 "empty": ["The ridge is empty. Go to the shrine under the pine first."],
                  "waiting": [["guanyu", "We hold the ridge. The blood is still to come."]],
                  "call": [["guanyu", "Brother! Is that the blood? Up here, quickly!"]],
                  "deliver": [["guanyu", "Blood and filth for every paper horse. We wait for the gun."]]},
                 {"kind": "rock.crag", "id": "ridge_right", "label": "The right ridge", "use": "ridge", "side": "E", "clear": [8, 4],
                  "needs": ["item:pigblood", "item:sheepblood", "item:dogblood"], "delivers": "ridge_right", "when": "node:n7b",
-                 "empty": ["The ridge is empty. Go to the rock under the pine first."],
+                 "empty": ["The ridge is empty. Go to the shrine under the pine first."],
                  "waiting": [["zhangfei", "A thousand men, and nothing to throw. Hurry, brother."]],
                  "call": [["zhangfei", "Brother! Is that the blood? Bring it up here!"]],
                  "deliver": [["zhangfei", "Let his spirits come. I'll soak every one."]]},
@@ -247,7 +247,7 @@ PLACES = {
                 {"kind": "folk.soldier", "near": "ridge_right", "when": "node:n7b", "face": "down", "say": "“Let the paper horses come.”"},
             ],
             "objectives": {"1-n7": "Join Zhu Jun in the hills, against Zhang Bao.",
-                           "1-n7b": "Go to the rock under the great pine, where the stones have begun to glow."},
+                           "1-n7b": "Go to the shrine under the old pine, where a game has been laid out."},
         },
         "Anxi": {   # Liu Bei's first post, where the inspector comes (the closing)
             "archetype": "town",

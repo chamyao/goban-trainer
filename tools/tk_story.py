@@ -402,13 +402,13 @@ WORLDS = [
                 ["run", "yt", "n7", 16, 0], ["run", "han", "n7", -120, 0], ["remove", "han"],
                 ["say", "zhujun", "Sorcery. Paper and straw wearing the shape of men; no blade can kill what was never alive. Fall back to the road."],
                 ["light", "day", 1500],
-                ["n", "As they fall back, Liu Bei sees a faint glow under the great pine by the road."],
+                ["n", "As they fall back, Liu Bei sees a game laid out on the little shrine under the old pine by the road."],
                 ["remove", "yt"], ["remove", "zb"], ["remove", "zj"],
             ]},
-            "shrine": {"title": "The Rock under the Pine", "kind": "main", "steps": [
+            "shrine": {"title": "The Shrine under the Pine", "kind": "main", "steps": [
                 # the shrine lights after the failure; the Star Lords speak, then the board
                 ["spawn", "zj", "zhujun", "n7b", -14, -10],
-                ["n", "On a flat rock under the pine, where the stones glow, sit the two white-haired men from the peach garden, as if nothing had happened."],
+                ["n", "At the little stone shrine under the pine sit the two white-haired men from the peach garden, over the board cut into its offering table, wine cups beside them, as if nothing had happened."],
                 ["spawn", "sg", "stargrey", "n7b", -34, 20], ["spawn", "sr", "starred", "n7b", -26, 24],
                 ["say", "stargrey", "Read this, before you go back."],
                 ["still", "blackwind_c", "slow drift down"],

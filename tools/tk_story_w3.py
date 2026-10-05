@@ -360,12 +360,12 @@ def _scenes_main():
             N("That night two of Lü Bu's envoys slip past in the dark, riding for Yuan Shu.", "当夜，吕布遣许汜、王楷趁黑冲过玄德营寨，往淮南求救去了。"),
             ["remove", "env"], ["light", "day", 1500],
             S("liubei", "They are through. We are holding a road with holes in it.", "让他们过去了。这条路，我们守得处处是空隙。"),
-            N("By the camp, under a great pine, the stones on a flat rock begin to glow.", "营边一棵大松树下，盘石上的棋子忽然发出微光。"),
+            N("By the camp, under an old pine, a game has been laid out on a little stone shrine.", "营边一棵老松树下，一座小石祠的供桌上摆开了一局棋。"),
             ["remove", "men"],
         ]},
-        "rock3": {"title": T("The Rock under the Pine", "松下盘石"), "kind": "main", "steps": [
+        "rock3": {"title": T("The Shrine under the Pine", "松下星君祠"), "kind": "main", "steps": [
             # the rock lights after the envoys slip through; the hint is the posts
-            N("On the flat rock under the pine sit the two white-haired men from the peach garden, as if nothing had happened.", "大松树下的盘石上，桃园中那两位白发老人对坐，仿佛什么也没发生。"),
+            N("At the shrine under the pine sit the two white-haired men from the peach garden, wine cups beside the board, as if nothing had happened.", "松树下的星君祠前，桃园中那两位白发老人对坐，酒杯放在棋盘旁，仿佛什么也没发生。"),
             ["spawn", "sg", "stargrey", "m13b", -34, 20], ["spawn", "sr", "starred", "m13b", -26, 24],
             S("stargrey", "The tiger is in its cage.", "虎已入笼。"),
             S("starred", "A caged tiger paces, looking for the door. Shut every door, and wait.", "笼中之虎，来回踱步，只寻门户。把门都关上，然后等。"),
@@ -377,7 +377,7 @@ def _scenes_main():
         "roadearly": {"title": T("Holes in the Road", "处处空隙"), "kind": "main", "steps": [
             # no board: the posts are not yet given out, or the rock not yet read
             N("Liu Bei waits on the road, but in the dark he cannot see where the gaps are. Another rider slips past.", "玄德守在路上，黑暗之中，看不清哪里有空隙。又有一骑偷偷过去了。"),
-            S("liubei", "Not like this. The stones under the pine are glowing; I should go and see.", "这样不行。松下的棋子正发着光，我该去看看。"),
+            S("liubei", "Not like this. Someone has laid out a game at the shrine under the pine; I should go and see.", "这样不行。松树下的星君祠前有人摆开了棋局，我该去看看。"),
         ]},
         "roadearly2": {"title": T("Holes in the Road", "处处空隙"), "kind": "main", "steps": [
             # no board: one or both brothers are not yet at their posts
@@ -653,25 +653,25 @@ PLACES3 = {
          "3-m12": T("Go to the west gate. Lü Bu's generals are attacking.", "到西门去。吕布的部将正在攻城。")}),
     "Xiapi": _P("city", [
         {"kind": "building.tent", "id": "camp", "node": "3-m13", "label": T("Liu Bei's camp on the road", "玄德路口营寨")},
-        {"kind": "landmark.shrine", "id": "rock", "node": "3-m13b", "near": "camp", "label": T("The rock under the pine", "松下盘石"),
-         "intro": [T("Under the great pine by the camp, the stones on the flat rock begin to glow.", "营边大松树下，盘石上的棋子忽然发出微光。")],
+        {"kind": "landmark.shrine", "id": "rock", "node": "3-m13b", "near": "camp", "label": T("The shrine under the pine", "松下星君祠"),
+         "intro": [T("Under the old pine by the camp, a game has been laid out on the little shrine's offering table, with wine cups and dried meat beside it.", "营边老松树下，小祠的供桌上摆开了一局棋，旁边放着酒杯和肉脯。")],
          "outro": [T("The old men are gone. Only the game remains.", "两位老人已经不见了，只剩下那盘棋。")]},
         {"kind": "rock.big", "id": "road", "node": "3-m13c", "label": T("The Huainan road", "淮南要路")},
         {"kind": "building.gate", "id": "whitegate", "node": "3-boss", "label": T("The White Gate Tower", "白门楼")},
         # the brothers take a side of the road each (Guan Yu west, Zhang Fei east)
         {"kind": "rock.crag", "id": "road_west", "label": T("The west side of the road", "路西"),
          "needs": ["node:m13b"], "delivers": "road_west", "when": "node:m13b",
-         "empty": [T("No one is posted here yet. Go to the rock under the pine first.", "这里还没有人把守。先去大松树下的盘石。")],
+         "empty": [T("No one is posted here yet. Go to the shrine under the pine first.", "这里还没有人把守。先去松树下的星君祠。")],
          "call": [_w("guanyu", "Brother, give me the west side. Nothing will pass me.", "兄长，路西交给我。什么也过不去。")],
          "deliver": [_w("guanyu", "The west is shut. Let him look for another door.", "路西已关。让他另寻门户吧。")]},
         {"kind": "rock.crag", "id": "road_east", "label": T("The east side of the road", "路东"),
          "needs": ["node:m13b"], "delivers": "road_east", "when": "node:m13b",
-         "empty": [T("No one is posted here yet. Go to the rock under the pine first.", "这里还没有人把守。先去大松树下的盘石。")],
+         "empty": [T("No one is posted here yet. Go to the shrine under the pine first.", "这里还没有人把守。先去松树下的星君祠。")],
          "call": [_w("zhangfei", "Brother! Put me on the east side. I'll catch whatever comes.", "哥哥！让我守路东。来什么捉什么。")],
          "deliver": [_w("zhangfei", "The east is mine. Not even a rabbit gets through.", "路东归我。连只兔子也别想过去。")]},
     ], [_talk("folk.soldier", "Lord Cao says any camp that lets Lü Bu through answers for it by martial law.", "曹公有令：哪个营寨放走了吕布，军法从事。")],
         {"3-m13": T("Go to Xiapi, where Cao Cao has Lü Bu surrounded.", "前往下邳，曹操已把吕布围住。"),
-         "3-m13b": T("Go to the rock under the pine by the camp.", "到营边大松树下的盘石那里去。"),
+         "3-m13b": T("Go to the shrine under the pine by the camp.", "到营边松树下的星君祠去。"),
          "3-m13c": _OBJ_ROAD,
          "3-boss": T("Go up to the White Gate Tower.", "登上白门楼。")}),
 }
