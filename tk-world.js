@@ -199,7 +199,7 @@ function worldScenes() {
       const { w, kit } = this.opts;
       this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=20`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=14`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=18`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=19`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
@@ -265,7 +265,7 @@ function worldScenes() {
       const pos = this.resume && this.st.pos && this.st.pos.place === this.placeId ? this.st.pos : null;
       const at = pos || this.entries[this.from || ""] || this.entries[""];
       this.player = this.physics.add.sprite(at.x, at.y, "h-liubei-down-0").setOrigin(.5, 1);
-      this.player.body.setSize(10, 6).setOffset(4, 14);
+      this.footBody(this.player);
       this.player.setCollideWorldBounds(true);
       this.player.facing = pos ? pos.f : "down";
       this.physics.add.collider(this.player, this.solids);
@@ -795,6 +795,12 @@ function worldScenes() {
       if (door) return { kind: "door", e: door };
       return null;
     }
+    // The feet-sized body, centred under the sprite whatever its size (drawn, generated or
+    // mounted sprites differ); redone in update whenever the frame size changes.
+    footBody(spr) {
+      spr.body.setSize(10, 6).setOffset((spr.width - 10) / 2, spr.height - 6);
+      spr._fw = spr.width; spr._fh = spr.height;
+    }
     canMove() { return !this.ui.busy() && !this.seated && !this.leaving && !this.cine; }
     tapAt(x, y) {
       if (this.ui.busy()) return this.act();   // tap on through dialogue
@@ -938,6 +944,7 @@ function worldScenes() {
       this.placeLabels();
       this.nearSpots();
       const P = this.player, K = this.keys;
+      if (P.width !== P._fw || P.height !== P._fh) this.footBody(P);   // on or off a horse, another kit's sprite
       let vx = 0, vy = 0;
       if (!this.ui.busy() && !this.leaving && !this.seated) {
         if (K.LEFT.isDown || K.A.isDown || this.auto === "left") vx -= 1;
