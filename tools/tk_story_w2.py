@@ -187,6 +187,7 @@ def _scenes_main():
             N("Gongsun Zan makes Liu Bei chancellor of Pingyuan, and the three brothers go back to their small city.",
               "公孙瓒令玄德为平原相，三人各回本地。"),
             ["remove", "ys"], ["remove", "gz"], ["light", "day", 1500],
+            *_chapter9(),
         ]},
     }
 
@@ -633,13 +634,27 @@ def _opening():
 
 
 def _closing():
+    # plays straight after the boss (Hulao): it bridges to the burning of Luoyang. Chapter 9 closes the ruins scene.
+    return [_scroll("After Hulao", "虎牢关之后", [
+        ("Lü Bu fell back through the pass, and the lords' camp rang with the names of three brothers from Pingyuan.",
+         "吕布退入关中，诸侯营中，人人都在传说平原来的三兄弟。"),
+        ("In Luoyang, Dong Zhuo took fright. His adviser Li Ru told him to leave the old capital to the lords and take the court west, to Chang'an.",
+         "洛阳城里，董卓大惊。谋士李儒劝他弃了洛阳，挟天子西迁长安。"),
+        ("Dong Zhuo agreed, and gave the order: when they left, the city would burn.",
+         "董卓依言，下令：大军离城之日，放火烧城。"),
+    ])]
+
+
+def _chapter9():
     return [_scroll("Chapter 9", "第九回", [
+        ("In Chang'an, Dong Zhuo ruled as a tyrant, until the minister Wang Yun used a singing girl, Diaochan, to turn Lü Bu against him. Lü Bu killed his adopted father at the palace gate.",
+         "董卓在长安肆虐，直到司徒王允用歌伎貂蝉设下连环计，离间吕布。吕布在宫门前杀了他的义父。"),
         ("Dong Zhuo was dead and his tyranny was over, but the men who had killed him had no strength to rule. Li Jue, Guo Si, Zhang Ji and Fan Chou, his four captains, came back on Chang'an with a hundred thousand men from the west.",
          "董卓已死，暴政已终，可除掉他的人并没有治国的力量。他的四员部将李傕、郭汜、张济、樊稠，率西凉兵十余万，反扑长安。"),
         ("Lü Bu fled to Yuan Shu. Wang Yun, who had made it all, refused to flee, and jumped from the gate tower.",
          "吕布投奔袁术。一手策划这一切的王允，不肯逃走，从门楼上跳了下去。"),
-        ("The three brothers went home to Pingyuan. What would become of the Emperor? Hear the next chapter.",
-         "三兄弟回到平原。天子将何去何从？且听下回分解。"),
+        ("Far away in Pingyuan, the three brothers heard the news. What would become of the Emperor? Hear the next chapter.",
+         "远在平原的三兄弟听到了消息。天子将何去何从？且听下回分解。"),
     ])]
 
 
