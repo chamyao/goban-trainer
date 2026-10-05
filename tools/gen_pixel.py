@@ -4,6 +4,7 @@ and character sprites, all held to one palette.
     python3 tools/gen_pixel.py                 # make every piece in PIECES that doesn't exist yet
     python3 tools/gen_pixel.py --only hall --force
     python3 tools/gen_pixel.py --list
+    python3 tools/gen_pixel.py --set xianxia   # the whole Chinese-fantasy kit (tools/xianxia_spec.py)
 
 Needs REPLICATE_API_TOKEN. Writes assets/tk/gen/<id>.png and assets/tk/gen/gen.json (what made
 each). The look is a Chinese fantasy game: jade, teal, vermilion and gold, pale stone, ink
@@ -91,7 +92,45 @@ def run(model, inp):
     if r["status"] != "succeeded":
         raise RuntimeError(f"{model}: {r.get('status')} {r.get('error')}")
     out = r["output"]
-    return fetch(out[0] if isinstance(out, list) else out)
+    return [fetch(u) for u in (out if isinstance(out, list) else [out])]
+
+
+def kit_set(a):
+    """The xianxia kit (tools/xianxia_spec.py) into assets/tk/gen/xianxia/<name>-<i>.png."""
+    from xianxia_spec import GROUND, OBJECTS
+    out = OUT / "xianxia"
+    out.mkdir(parents=True, exist_ok=True)
+    log_path = out / "gen.json"
+    log = json.loads(log_path.read_text()) if log_path.exists() else {}
+    pal = data_uri(palette_png())
+    jobs = [(f"ground.{k}", "rd-fast", {"style": "texture", "width": 16, "height": 16, "tile_x": True, "tile_y": True,
+                                         "bypass_prompt_expansion": True,
+                                         "prompt": f"{p}, flat seamless 16x16 game ground tile, top-down"}, n)
+            for k, (p, n) in GROUND.items()]
+    jobs += [(k, "rd-plus", {"style": "topdown_asset", "width": max(16, w), "height": max(16, h), "remove_bg": True,
+                              "prompt": f"{p}, {LOOK}, 3/4 top-down game sprite, small"}, n)
+             for k, (p, (w, h), n) in OBJECTS.items()]
+    first = True
+    for name, model, inp, n in jobs:
+        if (a.only and name not in a.only) or ((out / f"{name}-1.png").exists() and not a.force):
+            continue
+        if not first:
+            time.sleep(a.pause)
+        first = False
+        inp = {**inp, "num_images": n, "input_palette": pal}
+        t = time.time()
+        try:
+            imgs = run(model, inp)
+        except Exception as e:
+            print(f"  {name}: failed: {e}")
+            continue
+        for i, raw in enumerate(imgs, 1):
+            (out / f"{name}-{i}.png").write_bytes(raw)
+        size = Image.open(out / f"{name}-1.png").size
+        log[name] = {"model": f"retro-diffusion/{model}", "input": {k: v for k, v in inp.items() if k != "input_palette"},
+                     "n": len(imgs), "size": list(size), "seconds": round(time.time() - t, 1), "made": date.today().isoformat()}
+        log_path.write_text(json.dumps(log, indent=1))
+        print(f"  {name}: {len(imgs)} x {size[0]}x{size[1]} in {log[name]['seconds']}s")
 
 
 def main():
@@ -99,11 +138,14 @@ def main():
     ap.add_argument("--only", action="append")
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--list", action="store_true")
+    ap.add_argument("--set", choices=["xianxia"], help="generate a whole kit's pieces (tools/xianxia_spec.py)")
     ap.add_argument("--pause", type=float, default=12, help="seconds between requests (rate limits)")
     a = ap.parse_args()
     OUT.mkdir(parents=True, exist_ok=True)
     log_path = OUT / "gen.json"
     log = json.loads(log_path.read_text()) if log_path.exists() else {}
+    if a.set:
+        return kit_set(a)
     if a.list:
         for k, (m, st, (w, h), p, how) in PIECES.items():
             print(f"{'✓' if (OUT / f'{k}.png').exists() else '·'} {k:10} {m}/{st} {w}x{h} {how}: {p}")
@@ -128,7 +170,7 @@ def main():
             inp["return_spritesheet"] = True
         t = time.time()
         try:
-            raw = run(model, inp)
+            raw = run(model, inp)[0]
         except Exception as e:
             print(f"  {k}: failed: {e}")
             continue
