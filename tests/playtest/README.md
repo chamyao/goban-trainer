@@ -38,6 +38,9 @@ starts from a fresh save.
 | framing | phone portrait and landscape: a room or map smaller than the screen sits centred, no empty band; the brothers stand beside Liu Bei on arrival, not on him |
 | challengers | phone: every challenger in book 1 by taps: talk, duel, solve on the board, Continue; then cleared, "!" gone, talking again gives their after-words |
 | side-stories | phone: each side story and the shortcut (a1-a3, b1, b2, b2g, f1, b3, bs): tap its spot, tap through, solve by tapping the board, cleared |
+| menu | phone: every menu button on screen; voice zh/en/off and music toggle and are remembered; the art switch cycles every kit keeping place and progress; Chronicle opens, closes, replays the Prologue; Map goes to the overworld; Start over asks (Cancel keeps, OK forgets); taps still move him after. NOTE lines are feel notes, not failures |
+| old-saves | phone: saves an older version could leave (beats added since, a place renamed, a position in a wall or off the map, an unknown kit or hero, corrupt JSON, a finished book) all load into a real place, on open ground, with a sensible goal, and he moves |
+| rotate-leave | phone: turn sideways and back mid-scene and mid-problem (dialogue, board and taps stay usable); Leave a story problem halfway: not cleared, goal still on it, the spot plays again. (Fails until the problem re-lays out on rotation: tk.js picks the stacked full-screen layout once, at open.) |
 | star-lords | peach garden: the two immortals stay through the problem, vanish the moment it is won, the narration follows |
 | go-table-ogs | the 9×9 go table with a stand-in OGS socket: sit, search sent, opponent walks in, live board, move, resign, leave |
 | drag-and-hover | desktop: hand cursor over people; hold-and-drag steers |
@@ -47,5 +50,4 @@ starts from a fresh save.
 | wukong-guide | the menu has no guide switch; Wukong appears only after standing still a while |
 | play-tab | the site's Play tab still loads |
 
-Known gaps: no test for a real OGS game, real audio, the Android app (APK), or
-saves from older versions.
+Known gaps: no test for a real OGS game, real audio, or the Android app (APK).
