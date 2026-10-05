@@ -173,7 +173,7 @@ PLACES = {
         "Luoyang Gates": {
             "archetype": "city",
             "landmarks": [{"kind": "building.gate", "id": "northgate", "node": "1-b2", "label": "The north gate of Luoyang"}],
-            "npcs": [{"kind": "folk.official", "say": "“The new commandant of the north gate beats curfew-breakers to death. Even the eunuchs' uncles.”"}],
+            "npcs": [{"kind": "folk.official", "say": "“The new commandant of the north gate beats curfew-breakers with his staves. Even the uncle of a palace eunuch.”"}],
             "objectives": {"1-b2": "Side story: Cao Cao at the gates of Luoyang.", "1-b2g": "Side story: the five-coloured staves at the city gates."},
         },
         "Changshe": {

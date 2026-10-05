@@ -256,7 +256,7 @@ def _scenes_main():
             N("Liu Bei throws his arms around him, takes the sword, and throws it to the ground.", "玄德向前抱住，夺剑掷地。"),
             S("liubei", "The ancients said: brothers are hands and feet; wives and children are clothing. Torn clothes can be mended. A hand cut off cannot be joined again.",
               "古人云：兄弟如手足，妻子如衣服。衣服破，尚可缝；手足断，安可续？"),
-            S("liubei", "We three swore in the Peach Garden: not born on the same day, but to die on the same day. The city was never truly mine, and Lü Bu will not harm my family.",
+            S("liubei", "We three swore in the Peach Garden: we did not ask to be born on the same day, only to die on the same day. The city was never truly mine, and Lü Bu will not harm my family.",
               "吾三人桃园结义，不求同生，但愿同死。况城池本非吾有；家眷虽被陷，吕布必不谋害，尚可设计救之。"),
             N("Guan Yu and Zhang Fei weep.", "关、张俱感泣。"),
             ["party", ["liubei", "guanyu", "zhangfei"]], ["remove", "men"],
