@@ -178,7 +178,7 @@
   "scene": "bosswin",
   "prompt": "Torn paper soldiers and paper horses drift down onto empty green grass in clear light after the storm, the dark clouds breaking up. No real people. Style: clean modern anime illustration like a quiet historical anime film: natural colours, soft daylight or warm lamplight, gentle cel shading, detailed painted backgrounds, calm story-telling composition at eye level, natural poses and expressions; no speed lines, no impact effects, no motion blur, no exaggerated action poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
   "provider": "replicate",
-  "model": "neutral-1",
+  "model": "neutral-2",
   "look": "neutral",
   "made": "2026-10-05"
  },
