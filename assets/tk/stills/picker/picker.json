@@ -5958,6 +5958,13 @@
      "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/hulao_b--2.jpg"
     },
     {
+     "blob": "9e92cdabd56b",
+     "img": "9e92cdabd56b.webp",
+     "cid": "hulao_b",
+     "label": "cel_action-1",
+     "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/hulao_b--cel_action-1.jpg"
+    },
+    {
      "blob": "6b32fee0b7ce",
      "img": "6b32fee0b7ce.webp",
      "cid": "hulao_b",
@@ -5995,6 +6002,13 @@
      "cid": "hulao_b",
      "label": "2",
      "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/hulao_b--2.jpg"
+    },
+    {
+     "blob": "9e92cdabd56b",
+     "img": "9e92cdabd56b.webp",
+     "cid": "hulao_b",
+     "label": "cel_action-1",
+     "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/hulao_b--cel_action-1.jpg"
     },
     {
      "blob": "71e2279b01d3",
@@ -6050,6 +6064,13 @@
      "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/ruins_a--2.jpg"
     },
     {
+     "blob": "6f380daa59b7",
+     "img": "6f380daa59b7.webp",
+     "cid": "ruins_a",
+     "label": "cel-1",
+     "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/ruins_a--cel-1.jpg"
+    },
+    {
      "blob": "5ba0dbac29a6",
      "img": "5ba0dbac29a6.webp",
      "cid": "ruins_a",
@@ -6079,14 +6100,14 @@
    "look": "neutral",
    "category": "everyday",
    "line": "At night in tall river reeds, two boys in torn silk robes, one about fourteen and one about nine, hold hands and look up as a line of fireflies rises before them, lighting the way",
-   "current": "c42123bd9f8b",
+   "current": "73ee36aa4b38",
    "candidates": [
     {
-     "blob": "c42123bd9f8b",
-     "img": "c42123bd9f8b.webp",
+     "blob": "73ee36aa4b38",
+     "img": "73ee36aa4b38.webp",
      "cid": "fireflies_a",
      "label": "in game now",
-     "src": "ae2a4093c93ae2966d0de465c048587a3f0d6b46:assets/tk/stills/fireflies_a.jpg"
+     "src": "50f4d7d5c17bbff58f61d3cc9671df59b8ccf847:assets/tk/stills/fireflies_a.jpg"
     },
     {
      "blob": "9fc39b443e62",
@@ -6103,6 +6124,13 @@
      "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/fireflies_a--2.jpg"
     },
     {
+     "blob": "0496f2b52a3d",
+     "img": "0496f2b52a3d.webp",
+     "cid": "fireflies_a",
+     "label": "cel-1",
+     "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/fireflies_a--cel-1.jpg"
+    },
+    {
      "blob": "ff9e395f1a05",
      "img": "ff9e395f1a05.webp",
      "cid": "fireflies_a",
@@ -6115,6 +6143,13 @@
      "cid": "fireflies_a",
      "label": "gohs_calm-2",
      "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/fireflies_a--gohs_calm-2.jpg"
+    },
+    {
+     "blob": "c42123bd9f8b",
+     "img": "c42123bd9f8b.webp",
+     "cid": "fireflies_a",
+     "label": "in game until 2026-10-05",
+     "src": "ae2a4093c93ae2966d0de465c048587a3f0d6b46:assets/tk/stills/fireflies_a.jpg"
     },
     {
      "blob": "f2524c854e89",
@@ -6143,17 +6178,17 @@
    "id": "dingyuan_a",
    "book": 2,
    "scene": "dingyuan",
-   "look": "neutral",
+   "look": "2",
    "category": "intrigue",
    "line": "Inside a lamplit tent at night, Ding Yuan sits at a desk reading by a candle and looks up; Lü Bu stands over him in armour with a drawn sword",
-   "current": "da0668dae4ba",
+   "current": "65e1669411a4",
    "candidates": [
     {
-     "blob": "da0668dae4ba",
-     "img": "da0668dae4ba.webp",
+     "blob": "65e1669411a4",
+     "img": "65e1669411a4.webp",
      "cid": "dingyuan_a",
      "label": "in game now",
-     "src": "ae2a4093c93ae2966d0de465c048587a3f0d6b46:assets/tk/stills/dingyuan_a.jpg"
+     "src": "50f4d7d5c17bbff58f61d3cc9671df59b8ccf847:assets/tk/stills/dingyuan_a.jpg"
     },
     {
      "blob": "9d54dfda852a",
@@ -6168,6 +6203,20 @@
      "cid": "dingyuan_a",
      "label": "2",
      "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/dingyuan_a--2.jpg"
+    },
+    {
+     "blob": "a4f7ef432cec",
+     "img": "a4f7ef432cec.webp",
+     "cid": "dingyuan_a",
+     "label": "cel-1",
+     "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/dingyuan_a--cel-1.jpg"
+    },
+    {
+     "blob": "da0668dae4ba",
+     "img": "da0668dae4ba.webp",
+     "cid": "dingyuan_a",
+     "label": "in game until 2026-10-05",
+     "src": "ae2a4093c93ae2966d0de465c048587a3f0d6b46:assets/tk/stills/dingyuan_a.jpg"
     },
     {
      "blob": "0a4dd436bfc5",
@@ -6223,6 +6272,13 @@
      "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/lvboshe_a--2.jpg"
     },
     {
+     "blob": "6660d23f577f",
+     "img": "6660d23f577f.webp",
+     "cid": "lvboshe_a",
+     "label": "cel-1",
+     "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/lvboshe_a--cel-1.jpg"
+    },
+    {
      "blob": "d21f8778af44",
      "img": "d21f8778af44.webp",
      "cid": "lvboshe_a",
@@ -6263,6 +6319,13 @@
      "cid": "lvboshe_b",
      "label": "2",
      "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/lvboshe_b--2.jpg"
+    },
+    {
+     "blob": "4773ecdcb97b",
+     "img": "4773ecdcb97b.webp",
+     "cid": "lvboshe_b",
+     "label": "cel-1",
+     "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/lvboshe_b--cel-1.jpg"
     },
     {
      "blob": "1a4416bb7fd3",
@@ -6325,6 +6388,13 @@
      "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/lvboshe_b--2.jpg"
     },
     {
+     "blob": "4773ecdcb97b",
+     "img": "4773ecdcb97b.webp",
+     "cid": "lvboshe_b",
+     "label": "cel-1",
+     "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/lvboshe_b--cel-1.jpg"
+    },
+    {
      "blob": "2024a950b4af",
      "img": "2024a950b4af.webp",
      "cid": "lvboshe_b",
@@ -6358,6 +6428,13 @@
      "cid": "lvboshe_a",
      "label": "2",
      "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/lvboshe_a--2.jpg"
+    },
+    {
+     "blob": "6660d23f577f",
+     "img": "6660d23f577f.webp",
+     "cid": "lvboshe_a",
+     "label": "cel-1",
+     "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/lvboshe_a--cel-1.jpg"
     },
     {
      "blob": "d21f8778af44",
@@ -6425,6 +6502,13 @@
      "cid": "xingyang_a",
      "label": "2",
      "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/xingyang_a--2.jpg"
+    },
+    {
+     "blob": "95be8c085300",
+     "img": "95be8c085300.webp",
+     "cid": "xingyang_a",
+     "label": "cel_action-1",
+     "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/xingyang_a--cel_action-1.jpg"
     }
    ]
   },
@@ -6457,6 +6541,13 @@
      "cid": "zumao_a",
      "label": "2",
      "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/zumao_a--2.jpg"
+    },
+    {
+     "blob": "662a851534d5",
+     "img": "662a851534d5.webp",
+     "cid": "zumao_a",
+     "label": "cel_action-1",
+     "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/zumao_a--cel_action-1.jpg"
     }
    ]
   },
@@ -6489,6 +6580,13 @@
      "cid": "seal_a",
      "label": "2",
      "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/seal_a--2.jpg"
+    },
+    {
+     "blob": "0a673f394c48",
+     "img": "0a673f394c48.webp",
+     "cid": "seal_a",
+     "label": "cel-1",
+     "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/seal_a--cel-1.jpg"
     },
     {
      "blob": "f99d55225112",
@@ -6524,6 +6622,13 @@
      "cid": "seal_b",
      "label": "2",
      "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/seal_b--2.jpg"
+    },
+    {
+     "blob": "68328b7e051c",
+     "img": "68328b7e051c.webp",
+     "cid": "seal_b",
+     "label": "cel-1",
+     "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/seal_b--cel-1.jpg"
     },
     {
      "blob": "9abd175bcc88",
@@ -6586,6 +6691,13 @@
      "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/seal_b--2.jpg"
     },
     {
+     "blob": "68328b7e051c",
+     "img": "68328b7e051c.webp",
+     "cid": "seal_b",
+     "label": "cel-1",
+     "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/seal_b--cel-1.jpg"
+    },
+    {
      "blob": "151278ef766b",
      "img": "151278ef766b.webp",
      "cid": "seal_b",
@@ -6619,6 +6731,13 @@
      "cid": "seal_a",
      "label": "2",
      "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/seal_a--2.jpg"
+    },
+    {
+     "blob": "0a673f394c48",
+     "img": "0a673f394c48.webp",
+     "cid": "seal_a",
+     "label": "cel-1",
+     "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/seal_a--cel-1.jpg"
     },
     {
      "blob": "c099dd7263ec",
@@ -6679,6 +6798,13 @@
      "cid": "xianshan_a",
      "label": "2",
      "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/xianshan_a--2.jpg"
+    },
+    {
+     "blob": "1a39760ca015",
+     "img": "1a39760ca015.webp",
+     "cid": "xianshan_a",
+     "label": "cel_action-1",
+     "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/xianshan_a--cel_action-1.jpg"
     }
    ]
   },
@@ -6686,17 +6812,17 @@
    "id": "garden_a",
    "book": 2,
    "scene": "garden",
-   "look": "neutral",
+   "look": "2",
    "category": "bond",
    "line": "A peony garden at night under the moon: Diaochan kneels with her forehead near the ground; before her Wang Yun bows low; behind them a small pavilion with a stone weiqi board on its table and two stones on it, no one at it",
-   "current": "6f3e1ce19d0b",
+   "current": "51bda08ec729",
    "candidates": [
     {
-     "blob": "6f3e1ce19d0b",
-     "img": "6f3e1ce19d0b.webp",
+     "blob": "51bda08ec729",
+     "img": "51bda08ec729.webp",
      "cid": "garden_a",
      "label": "in game now",
-     "src": "ae2a4093c93ae2966d0de465c048587a3f0d6b46:assets/tk/stills/garden_a.jpg"
+     "src": "50f4d7d5c17bbff58f61d3cc9671df59b8ccf847:assets/tk/stills/garden_a.jpg"
     },
     {
      "blob": "cf3c6b284f23",
@@ -6713,11 +6839,18 @@
      "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/garden_a--2.jpg"
     },
     {
-     "blob": "51bda08ec729",
-     "img": "51bda08ec729.webp",
+     "blob": "2709577c5614",
+     "img": "2709577c5614.webp",
+     "cid": "garden_a",
+     "label": "cel-1",
+     "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/garden_a--cel-1.jpg"
+    },
+    {
+     "blob": "6f3e1ce19d0b",
+     "img": "6f3e1ce19d0b.webp",
      "cid": "garden_a",
      "label": "in game until 2026-10-05",
-     "src": "107af4a3c1029302da519d623529ec70984e2f92:assets/tk/stills/garden_a.jpg"
+     "src": "ae2a4093c93ae2966d0de465c048587a3f0d6b46:assets/tk/stills/garden_a.jpg"
     },
     {
      "blob": "d134f3c80764",
@@ -6764,6 +6897,13 @@
      "cid": "pavilion_a",
      "label": "2",
      "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/pavilion_a--2.jpg"
+    },
+    {
+     "blob": "353761c949e2",
+     "img": "353761c949e2.webp",
+     "cid": "pavilion_a",
+     "label": "cel-1",
+     "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/pavilion_a--cel-1.jpg"
     },
     {
      "blob": "aba1f9765be4",
@@ -6833,6 +6973,13 @@
      "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/fall_a--2.jpg"
     },
     {
+     "blob": "2dccc0ccb8f5",
+     "img": "2dccc0ccb8f5.webp",
+     "cid": "fall_a",
+     "label": "cel-1",
+     "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/fall_a--cel-1.jpg"
+    },
+    {
      "blob": "501160c3fbbe",
      "img": "501160c3fbbe.webp",
      "cid": "fall_a",
@@ -6884,6 +7031,13 @@
      "cid": "tower_a",
      "label": "2",
      "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/tower_a--2.jpg"
+    },
+    {
+     "blob": "ef97939311a3",
+     "img": "ef97939311a3.webp",
+     "cid": "tower_a",
+     "label": "cel-1",
+     "src": "origin/claude/stills-samples:assets/tk/stills/samples/review/tower_a--cel-1.jpg"
     },
     {
      "blob": "e13364ad75d8",
