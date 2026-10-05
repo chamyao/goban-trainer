@@ -1,0 +1,200 @@
+{
+ "furn.stool": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 16,
+   "height": 16,
+   "remove_bg": true,
+   "prompt": "small round wooden stool, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 25.2,
+  "made": "2026-10-05"
+ },
+ "furn.jar": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 16,
+   "height": 16,
+   "remove_bg": true,
+   "prompt": "Chinese ceramic wine jar with a cloth-tied lid, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 41.2,
+  "made": "2026-10-05"
+ },
+ "furn.shelf": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 32,
+   "height": 30,
+   "remove_bg": true,
+   "prompt": "tall wooden shelf with scrolls, bowls and boxes, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 55.8,
+  "made": "2026-10-05"
+ },
+ "furn.barrel": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 16,
+   "height": 30,
+   "remove_bg": true,
+   "prompt": "wooden barrel with iron bands, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 14.8,
+  "made": "2026-10-05"
+ },
+ "furn.chest": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 16,
+   "height": 16,
+   "remove_bg": true,
+   "prompt": "red lacquered wooden chest with brass fittings, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 20.0,
+  "made": "2026-10-05"
+ },
+ "furn.bed": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 24,
+   "height": 16,
+   "remove_bg": true,
+   "prompt": "simple Chinese wooden bed with a blue quilt, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 11.0,
+  "made": "2026-10-05"
+ },
+ "furn.drawers": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 16,
+   "height": 23,
+   "remove_bg": true,
+   "prompt": "Chinese wooden cabinet with small drawers and brass pulls, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 19.8,
+  "made": "2026-10-05"
+ },
+ "furn.mat": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 32,
+   "height": 32,
+   "remove_bg": true,
+   "prompt": "woven straw floor mat, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 39.7,
+  "made": "2026-10-05"
+ },
+ "furn.desk": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 46,
+   "height": 16,
+   "remove_bg": true,
+   "prompt": "long low Chinese writing desk with brush, ink stone and scrolls, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 50.8,
+  "made": "2026-10-05"
+ },
+ "furn.counter": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 46,
+   "height": 16,
+   "remove_bg": true,
+   "prompt": "long wooden shop counter, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 59.3,
+  "made": "2026-10-05"
+ },
+ "furn.rack": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 32,
+   "height": 22,
+   "remove_bg": true,
+   "prompt": "wooden weapon rack with spears and halberds, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 91.2,
+  "made": "2026-10-05"
+ }
+}
