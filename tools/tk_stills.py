@@ -76,6 +76,8 @@ CAST = {
     "dongzhuo": ("Dong Zhuo", "a huge, heavy, bearded bully of a warlord with a sneer, in a general's armour"),
     "zhujun": ("Zhu Jun", "an imperial general with a short beard, iron helmet, dark red robe over armour"),
     "huangfusong": ("Huangfu Song", "an imperial general with a long black beard, iron helmet, blue robe over armour"),
+    "inspector": ("the inspector", "a plump, sneering court official with a thin moustache, in a black gauze "
+                                   "official's hat and a blue silk robe"),
     "xushao": ("Xu Shao", "a calm scholar with a thin beard and knowing eyes, scholar's hat, pale robe"),
 }
 
@@ -378,6 +380,28 @@ EXTRA = {
                              "at the edge of the frame. Dark and quiet, no gore, just the moment."),
 }
 
+# The second pass (the user turned down the first set): each still is drawn from the one line it sits
+# under in tools/tk_story.py, with every named person present, one clear action and few figures, and no
+# face references. Nothing goes back into the game until the user has approved it (gen_stills --review).
+REVIEW = {
+    # inn: "a giant pushing a cart strides in: nine feet tall, a beard two feet long, a face like a ripe red date"
+    "inn_v2": ("inn", "Guan Yu shoves open the door of a small village inn at evening, pushing a wooden handcart "
+                      "ahead of him and stooping under the lintel; two drinkers at a table turn to stare up at him. "
+                      "Clay wine jars, paper lanterns, plank walls."),
+    # oath: "With a black ox and a white horse for sacrifice, the three burn incense and bow."
+    "oath_v2": ("oath", "Liu Bei, Guan Yu and Zhang Fei kneel side by side before a low stone altar with burning "
+                        "incense in a peach orchard in full pink blossom, bowing; a black ox and a white horse stand "
+                        "tethered beside the altar. Only these three men in the picture."),
+    # post: "Zhang Fei breaks ten or more willow switches across his legs." (the inspector's)
+    "post_v2": ("post", "In front of a county office gate, the inspector is tied with ropes to a wooden hitching post, "
+                        "howling; Zhang Fei stands beside him swinging a bundle of willow switches down across the "
+                        "inspector's legs, broken switches on the ground. Only these two men in the picture."),
+    # blackwind: "Out of a black cloud pours a numberless host of horsemen. Liu Bei's army breaks and flees."
+    "blackwind_v2": ("blackwind", "On a hilltop Zhang Bao, hair loose, raises his sword and chants; a black whirlwind "
+                                  "of storm cloud, sand and stones pours down the slope onto a line of soldiers with "
+                                  "spears, who break and run."),
+}
+
 # the stills the game uses (Plot/Story's choice: the emotional peaks, the partings, the one death)
 CHOSEN = ["tree_b", "notice_b", "inn_b", "oath_b", "oath_c", "tent_b", "cart_b", "cart_c", "office_b", "blackwind_a",
           "bosswin_c", "bosswin_d", "peace2_b", "caocao2_b", "caocao3_b", "post_b", "horses_b",
@@ -391,4 +415,6 @@ for _scene, _shots in SCENES.items():
 
 for _id, (_scene, _text) in EXTRA.items():
     STILLS.setdefault(_id, {"scene": _scene, "lens": _id[-1], "prompt": _text})
+for _id, (_scene, _text) in REVIEW.items():
+    STILLS.setdefault(_id, {"scene": _scene, "lens": "v2", "prompt": _text})
 assert all(c in STILLS for c in CHOSEN)
