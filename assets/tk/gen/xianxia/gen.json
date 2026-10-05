@@ -566,5 +566,95 @@
   ],
   "seconds": 26.6,
   "made": "2026-10-05"
+ },
+ "plant.bush": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 16,
+   "height": 16,
+   "remove_bg": true,
+   "prompt": "small round green shrub, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 18.1,
+  "made": "2026-10-05"
+ },
+ "plant.flower": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 16,
+   "height": 16,
+   "remove_bg": true,
+   "prompt": "small patch of pink and white wildflowers, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 32.3,
+  "made": "2026-10-05"
+ },
+ "rock.small": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 16,
+   "height": 16,
+   "remove_bg": true,
+   "prompt": "small grey stone, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 16.3,
+  "made": "2026-10-05"
+ },
+ "rock.big": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 60,
+   "height": 44,
+   "remove_bg": true,
+   "prompt": "large mossy grey boulder, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 34.7,
+  "made": "2026-10-05"
+ },
+ "rock.crag": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 48,
+   "height": 46,
+   "remove_bg": true,
+   "prompt": "tall jagged grey rock spire, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 23.0,
+  "made": "2026-10-05"
  }
 }
