@@ -142,5 +142,53 @@
   "provider": "replicate",
   "model": "black-forest-labs/flux-2-klein-4b",
   "made": "2026-10-05"
+ },
+ "blackwind_c": {
+  "file": "blackwind_c.jpg",
+  "scene": "blackwind",
+  "prompt": "Ghostly paper cut-out soldiers and horses riding in a black wind, swirling like leaves, under a dark sky. Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
+ },
+ "bosswin_a": {
+  "file": "bosswin_a.jpg",
+  "scene": "bosswin",
+  "prompt": "A hillside ambush: soldiers hurl jars of filth at the summoned wind, and the sorcery breaks apart into fluttering paper scraps falling from the sky. Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
+ },
+ "bosswin_c": {
+  "file": "bosswin_c.jpg",
+  "scene": "bosswin",
+  "prompt": "Torn paper soldiers drifting down onto grass in clear light after a storm, the sky breaking open. Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
+ },
+ "peace2_b": {
+  "file": "peace2_b.jpg",
+  "scene": "peace2",
+  "prompt": "Zhang Jiao, white-haired, raising his arms before a vast crowd in yellow headscarves at sunset, preaching that the Blue Heaven is dead and the Yellow Heaven shall rise. Zhang Jiao is a gaunt old sorcerer with long white hair and a long white beard, a yellow headscarf and a flowing yellow robe, burning eyes (reference image 1: keep his face, hair and clothes). Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
+ },
+ "caocao2_b": {
+  "file": "caocao2_b.jpg",
+  "scene": "caocao2",
+  "prompt": "Cao Cao laughing with delight at Xu Shao's verdict, head thrown back, while Xu Shao watches him gravely. Cao Cao is a lean man of about thirty with a thin moustache and a quick, sharp look, black official's cap, dark red robe with gold trim (reference image 1: keep his face, hair and clothes). Xu Shao is a calm scholar with a thin beard and knowing eyes, scholar's hat, pale robe (reference image 2: keep his face, hair and clothes). Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
+ },
+ "post_a": {
+  "file": "post_a.jpg",
+  "scene": "post",
+  "prompt": "Outside the hostel in morning light, a crowd of old villagers kneeling and weeping at the gate as Zhang Fei rides up, frowning. Zhang Fei is a stocky, barrel-chested, powerfully muscled man, broad rather than tall, with a fierce square jaw, big glaring eyes and a wild bristling black beard, hair in a topknot, in black and dark brown clothes (reference image 1: keep his face, hair and clothes). Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
  }
 }
