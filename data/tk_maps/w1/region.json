@@ -2496,8 +2496,10 @@
      27356
     ]
    ],
+   "hint": "Give ground, and make them follow.",
    "objective_zh": "听青州来的信使怎么说。",
-   "title_zh": "青州伏兵"
+   "title_zh": "青州伏兵",
+   "hint_zh": "退一步，引他来追。"
   },
   {
    "node": "1-n4b",

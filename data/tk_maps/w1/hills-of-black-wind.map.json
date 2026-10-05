@@ -1048,7 +1048,7 @@
    "delivers": "ridge_left",
    "when": "node:n7b",
    "empty": [
-    "The ridge is empty. Nobody has been told to hold it yet."
+    "The ridge is empty. Read the roadside shrine first."
    ],
    "waiting": [
     [
@@ -1060,6 +1060,12 @@
     [
      "guanyu",
      "Blood and filth for every paper horse. We wait for the gun."
+    ]
+   ],
+   "call": [
+    [
+     "guanyu",
+     "Brother! Is that the blood? Up here, quickly!"
     ]
    ]
   },
@@ -1079,7 +1085,7 @@
    "delivers": "ridge_right",
    "when": "node:n7b",
    "empty": [
-    "The ridge is empty. Nobody has been told to hold it yet."
+    "The ridge is empty. Read the roadside shrine first."
    ],
    "waiting": [
     [
@@ -1091,6 +1097,12 @@
     [
      "zhangfei",
      "Let his spirits come. I'll soak every one."
+    ]
+   ],
+   "call": [
+    [
+     "zhangfei",
+     "Brother! Is that the blood? Bring it up here!"
     ]
    ]
   }
@@ -1111,6 +1123,9 @@
    ],
    "given": [
     "“You have my pigs' blood. Go, and stop this wind.”"
+   ],
+   "call": [
+    "“General! The pigs' blood is ready for you!”"
    ]
   },
   {
@@ -1128,6 +1143,9 @@
    ],
    "given": [
     "“You've had the best of my flock, general. Go on.”"
+   ],
+   "call": [
+    "“General, over here! Take a sheep, if it helps.”"
    ]
   },
   {
@@ -1145,6 +1163,9 @@
    ],
    "given": [
     "“You have the dog's blood. May it do what it must.”"
+   ],
+   "call": [
+    "“General! My hounds are yours, if it ends this.”"
    ]
   },
   {

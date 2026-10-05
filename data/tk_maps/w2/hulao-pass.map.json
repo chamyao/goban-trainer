@@ -1237,12 +1237,18 @@
    "delivers": "zhangfei_in",
    "when": "node:m4b",
    "empty": [
-    "No one is here yet."
+    "No one is here yet. Read the shrine by the camp first."
    ],
    "deliver": [
     [
      "zhangfei",
      "Leave Lü Bu to me!"
+    ]
+   ],
+   "call": [
+    [
+     "zhangfei",
+     "Elder Brother, over here! Let me at him first!"
     ]
    ]
   },
@@ -1258,7 +1264,7 @@
    "delivers": "guanyu_in",
    "when": "node:m4b",
    "empty": [
-    "No one is here yet."
+    "No one is here yet. Read the shrine by the camp first."
    ],
    "waiting": [
     [
@@ -1270,6 +1276,12 @@
     [
      "guanyu",
      "Then I go in, brother."
+    ]
+   ],
+   "call": [
+    [
+     "guanyu",
+     "Brother, Yide has him. Now it is my turn."
     ]
    ]
   },
@@ -1285,7 +1297,7 @@
    "delivers": "liubei_in",
    "when": "node:m4b",
    "empty": [
-    "No one is here yet."
+    "No one is here yet. Read the shrine by the camp first."
    ],
    "waiting": [
     [

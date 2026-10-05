@@ -731,6 +731,8 @@ function worldScenes() {
           fontFamily: "sans-serif", fontSize: "11px", color: "#3a2410", backgroundColor: "#f4e6c4", padding: { x: 5, y: 3 },
           wordWrap: { width: 160 } }).setOrigin(.5, 1).setDepth(10000).setResolution(2);
         this.tweens.add({ targets: txt, alpha: 0, delay: 3200, duration: 600, onComplete: () => txt.destroy() });
+        const vid = l[l.length - 1];
+        if (typeof TKVoice !== "undefined" && TKVoice.has(vid)) TKVoice.play(vid);   // voiced, like any line
       }
     }   // the goal line's height moves the HUD's edge
 
