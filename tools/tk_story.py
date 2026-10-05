@@ -180,6 +180,7 @@ WORLDS = [
                 ["n", "He reads the notice, and sighs."],
                 ["spawn", "zf", "zhangfei", "n1", 30, 4],
                 ["move", "zf", "n1", 12, 2],
+                ["n", "A man behind him, with a leopard's head, round eyes and a voice like thunder, cries out. This is Zhang Fei, who farms near Zhuo, sells wine and slaughters pigs."],
                 ["say", "zhangfei", "A real man should serve his country! What are you sighing for?"],
                 ["problem"],  # the board comes up here; the rest plays once it is solved
                 ["say", "liubei", "I am of the Han imperial house. I long to crush these rebels and bring peace — but I lack the strength."],
@@ -642,6 +643,7 @@ WORLDS = [
                 ["give", "smith", "guanyu", "green_dragon"],
                 ["give", "smith", "zhangfei", "serpent_spear"],
                 ["pose", "party", "raise"],
+                ["n", "Volunteers keep coming to the farm. By the time they march, five hundred follow Liu Bei."],
             ]},
             "bribe": {"title": "A Bribe Refused", "kind": "side", "steps": [
                 ["n", "At Guangzong, Lu Zhi had Zhang Jiao penned in, though the rebel's sorcery kept him from the final blow. Then the court's envoy arrived."],

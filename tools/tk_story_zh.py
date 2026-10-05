@@ -385,6 +385,8 @@ ZH = {
     "“General! The pigs' blood is ready for you!”": "“将军！猪血给您备好了！”",
     "“General, over here! Take a sheep, if it helps.”": "“将军，这边！要羊血尽管拿去。”",
     "“General! My hounds are yours, if it ends this.”": "“将军！只要能了结此事，我的猎犬任您取用。”",
+    "A man behind him, with a leopard's head, round eyes and a voice like thunder, cries out. This is Zhang Fei, who farms near Zhuo, sells wine and slaughters pigs.": "忽然背后一人厉声大叫：豹头环眼，声若巨雷。此人姓张名飞，字翼德，世居涿郡，卖酒屠猪。",
+    "Volunteers keep coming to the farm. By the time they march, five hundred follow Liu Bei.": "庄上投军的人络绎不绝。待到起兵之日，随玄德的已有五百人。",
     "No one is on this hill yet.": "这座山岭上还没有人。",
     "A thousand men, hidden on the left. I wait for the gongs.": "一千人马伏于山左，只等鸣金。",
     "The right hill is mine. I will hear the gongs from a mile off.": "右边山岭归我。十里之外我也听得见锣响。",
