@@ -887,6 +887,12 @@ function worldScenes() {
       this.save();
       this.setGoal();
       if (q.role === "boss" && this.opts.onBoss) await this.opts.onBoss();
+      // that was the book's last main beat: a moment, a fade, and on into the next book
+      if (q.role !== "side" && q.role !== "short" && !this.nextMain() && this.opts.onBookDone && TK.world(this.w.n + 1)) {
+        this.goal(`Book ${this.w.n} is complete. On to Book ${this.w.n + 1}…`, `第${this.w.n}卷完。前往第${this.w.n + 1}卷……`);
+        this.leaving = true;
+        this.time.delayedCall(1800, () => { this.cameras.main.fadeOut(600); this.time.delayedCall(650, () => this.opts.onBookDone()); });
+      }
     }
 
     // Bring up the problem over the map; resolves true on a flawless solve.

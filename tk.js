@@ -977,7 +977,10 @@ async function viewTK(worldN) {
   root.innerHTML = `<div class="loading">Loading…</div>`;
   const D = await TK.load();
   if (nav !== routeSeq) return;
-  let n = worldN && TK.world(worldN) && TK.worldOpen(worldN) ? worldN : 1;
+  // no book named (the library card): the book last played; a named one becomes the last played
+  let last = 1; try { last = +localStorage.getItem("tk-book") || 1; } catch {}
+  let n = worldN && TK.world(worldN) && TK.worldOpen(worldN) ? worldN : TK.world(last) && TK.worldOpen(last) ? last : 1;
+  try { localStorage.setItem("tk-book", String(n)); } catch {}
   const w = TK.world(n);
   crumbs.innerHTML = "";
   crumbs.append(h("a", { href: "#/" }, "Library"), " / ", D.title);
@@ -1108,6 +1111,8 @@ async function viewTK(worldN) {
         w, host, ret: ret && ret.world === w.n ? ret : null,
         onPuzzle: (key, at) => TKOverlay.open(w.n, key, at),  // the board comes up inside the game window
         onBoss: async () => { if (!TK.seen(`${w.n}:closing`)) { await run(w.closing); TK.markSeen(`${w.n}:closing`); } },
+        // the book's last beat done: on into the next book, no menus (its opening scroll plays there)
+        onBookDone: () => { if (TK.world(w.n + 1)) { try { localStorage.setItem("tk-book", String(w.n + 1)); } catch {} location.hash = `#/tk/${w.n + 1}`; } },
       });
     } catch (e) { host.textContent = e.message; }
     return;
