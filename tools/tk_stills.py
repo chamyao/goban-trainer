@@ -372,7 +372,10 @@ EXTRA = {
 
 # the stills the game uses (Plot/Story's choice: the emotional peaks, the partings, the one death)
 CHOSEN = ["tree_b", "notice_b", "inn_b", "oath_b", "oath_c", "tent_b", "cart_b", "cart_c", "office_b", "blackwind_a",
-          "bosswin_c", "bosswin_d", "peace2_b", "caocao2_b", "caocao3_b", "post_b", "horses_b"]
+          "bosswin_c", "bosswin_d", "peace2_b", "caocao2_b", "caocao3_b", "post_b", "horses_b",
+          # and eleven more (Plot, 8c8b3dd): a scene may carry several
+          "tree_a", "notice_a", "inn_a", "oath_a", "tent_c", "cart_a", "office_c", "blackwind_c", "bosswin_a",
+          "post_a", "horses_a"]
 
 for _scene, _shots in SCENES.items():
     for _lens, _text in zip(LENSES, _shots):
