@@ -19,7 +19,7 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
-from tk_stills import CHOSEN, FINAL2, STILLS  # noqa: E402
+from tk_stills import CATEGORY, CHOSEN, FINAL2, STILLS  # noqa: E402
 
 STILLS_DIR = ROOT / "assets/tk/stills"
 OUT = STILLS_DIR / "picker"
@@ -100,7 +100,7 @@ def main():
         mine = [dict(c, blob=b[:12]) for b, c in cands.items() if c["scene"] == man[sid]["scene"]]
         mine.sort(key=lambda c: (c["label"] != "in game now" or c["cid"] != sid, c["cid"] != sid, c["cid"], c["label"]))
         slots.append({"id": sid, "book": 1 if sid in book1 else 2, "scene": man[sid]["scene"],
-                      "look": man[sid].get("look", ""), "line": STILLS.get(sid, {}).get("prompt", "").split(". ")[0],
+                      "look": man[sid].get("look", ""), "category": CATEGORY.get(sid, ""), "line": STILLS.get(sid, {}).get("prompt", "").split(". ")[0],
                       "current": next((b[:12] for b, s in current.items() if s == sid), None),
                       "candidates": [{"blob": c["blob"], "img": c["img"], "cid": c["cid"], "label": c["label"],
                                       "src": c["src"]} for c in mine]})

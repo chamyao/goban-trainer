@@ -104,6 +104,15 @@ CALM = ["tree_a", "tree_b", "notice_a", "notice_b", "inn_a", "inn_b", "oath_a", 
 # Book 2's quiet ones (garden_a stays: the user picked that one)
 CALM2 = ["fireflies_a", "pavilion_a", "wine_a", "wine_b", "lvboshe_a", "seal_a", "seal_b", "ruins_a"]
 
+# the user's style categories (assets/tk/stills/categories.json): one look per category, the shared base
+# plus that category's recipe, as "cat_<category>" (gen_stills --look cat_bond ...); CATEGORY: still -> category
+import json as _json
+from pathlib import Path as _Path
+_CATS = _json.loads((_Path(__file__).resolve().parent.parent / "assets/tk/stills/categories.json").read_text())
+CATEGORY = {sid: k for k, c in _CATS["categories"].items() for sid in c["scenes"]}
+for _k, _c in _CATS["categories"].items():
+    STYLES[f"cat_{_k}"] = f"Style: {_CATS['base'].rstrip('.')}. {_c['recipe']}"
+
 # the user's pick for the stills: the God of High School look, on Seedream 5 Pro (gen_stills' default)
 STYLE = f"{STYLES['gohs']} {NEGATIVE}"
 
