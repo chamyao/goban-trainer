@@ -49,15 +49,21 @@ for(const c of cases.filter(c=>!only||only.includes(c.key))){
   const cap=async()=>p.evaluate(()=>{const e=document.querySelector('.tk-duel-dilemma');if(!e)return null;const r=e.getBoundingClientRect(),zh=e.querySelector('b'),en=e.querySelector('span');
     const stones=[...document.querySelectorAll('.tk-duel svg circle')].filter(c=>+c.getAttribute('r')>3).map(c=>c.getBoundingClientRect()).filter(s=>s.width>4);
     const hit=stones.filter(s=>s.left<r.right-1&&s.right>r.left+1&&s.top<r.bottom-1&&s.bottom>r.top+1).length;
+    const over=b=>b.left<r.right-1&&b.right>r.left+1&&b.top<r.bottom-1&&b.bottom>r.top+1;
+    const letters=[...document.querySelectorAll('.tk-duel svg text')].map(t=>t.getBoundingClientRect()).filter(b=>b.width>0&&over(b)).length;
+    // the Chinese line by line: how many characters on each (a lone one on a line reads badly)
+    const perLine=[];if(zh&&zh.firstChild){const tn=zh.firstChild,rg=document.createRange();let lastTop=null;for(let i=0;i<tn.length;i++){rg.setStart(tn,i);rg.setEnd(tn,i+1);const b=rg.getBoundingClientRect();if(!b.width)continue;if(lastTop===null||Math.abs(b.top-lastTop)>4){perLine.push(0);lastTop=b.top;}perLine[perLine.length-1]++;}}
     const fs=x=>x?parseFloat(getComputedStyle(x).fontSize):0;
     return {zh:zh&&zh.textContent,en:en&&en.textContent,zhAbove:zh&&en?zh.getBoundingClientRect().bottom<=en.getBoundingClientRect().top+2:false,fz:fs(zh),fe:fs(en),
-      on:r.top>=0&&r.left>=0&&r.right<=innerWidth+1&&r.bottom<=innerHeight+1&&r.width>0&&getComputedStyle(e).visibility!=='hidden',stones:stones.length,hit,r:[r.left,r.top,r.width,r.height].map(Math.round)};});
+      letters,perLine,on:r.top>=0&&r.left>=0&&r.right<=innerWidth+1&&r.bottom<=innerHeight+1&&r.width>0&&getComputedStyle(e).visibility!=='hidden',stones:stones.length,hit,r:[r.left,r.top,r.width,r.height].map(Math.round)};});
   const k=await cap();
   await p.screenshot({path:require('path').join(__dirname,'out',`decision-${c.key}-${c.dev.replace(/ /g,'_')}.png`)});
   check(!!k&&k.zh===c.dil.q_zh&&k.en===c.dil.q,`${tag}: the caption is there: ${k?`"${k.zh}" / "${k.en}"`:'none'}`);
   if(k){check(k.zhAbove,`${tag}: Chinese above English`);
     check(k.on&&k.fz>=12&&k.fe>=12,`${tag}: readable and on screen (zh ${k.fz}px, en ${k.fe}px, at ${k.r})`);
-    check(k.hit===0,`${tag}: covers no stone (${k.hit} of ${k.stones} under it)`);}
+    check(k.hit===0,`${tag}: covers no stone (${k.hit} of ${k.stones} under it)`);
+    check(k.letters===0,`${tag}: covers no board letter or number (${k.letters} under it)`);
+    check(k.perLine.length&&k.perLine.every(n=>n>2),`${tag}: no Chinese character left alone on a line (per line: ${k.perLine.join(', ')})`);}
   const open=await dlgText();console.log(`     opening line: "${open.slice(0,120)}"`);
   if(c.dil.open)check(open.includes(c.dil.open),`${tag}: the leader's opening line plays`);
   if(!c.dev.includes('landscape')){   // upright: a slip
