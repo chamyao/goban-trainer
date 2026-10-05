@@ -403,7 +403,19 @@ function worldScenes() {
       // inside the box (never so far the player could leave it) so less of the screen is beyond the map
       // (none at the top: the HUD already covers that edge)
       const ix = this.iso ? Math.max(0, Math.min(vw * .16, (mw - vw) / 2)) : 0, iy = this.iso ? Math.max(0, Math.min(vh * .1, (mh - vh) / 2)) : 0;
+      this.camBox = { x: bx, y: top, w: Math.max(mw, vw), h: Math.max(mh, vh) + (by - top), ix, iy };
       cam.setBounds(bx + ix, top, Math.max(mw, vw) - 2 * ix, Math.max(mh, vh) + (by - top) - iy);
+    }
+    // isometric: the inset gives way where the player is near it, so he is always drawn at least
+    // 24 px inside the view (the box's own edges still hold)
+    keepPlayerInView() {
+      const b = this.camBox, P = this.player;
+      if (!this.iso || !b || !P || !(b.ix || b.iy)) return;
+      const cam = this.cameras.main, m = 24 / cam.zoom, p = this.view(P.x, P.y);
+      const L = Math.max(b.x, Math.min(b.x + b.ix, p.x - m)), R = Math.min(b.x + b.w, Math.max(b.x + b.w - b.ix, p.x + m));
+      const B = Math.min(b.y + b.h, Math.max(b.y + b.h - b.iy, p.y + m));
+      const cur = cam.getBounds();
+      if (cur.x !== L || cur.right !== R || cur.bottom !== B) cam.setBounds(L, b.y, R - L, B - b.y);
     }
     // How far down the screen the HUD reaches, in world pixels.
     hudTop() {
@@ -1262,6 +1274,7 @@ function worldScenes() {
     }
 
     update(time, dt) {
+      this.keepPlayerInView();
       WorldFX.shadows(this);
       WorldFX.water(this, time);
       this.goalGuide(time);
