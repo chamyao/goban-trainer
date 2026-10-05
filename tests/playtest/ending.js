@@ -14,7 +14,7 @@ const line=()=>p.evaluate(()=>{const d=document.querySelector('.town-ui .town-dl
 const front=node=>p.evaluate(node=>{const w=window.__w;const s=Object.values(w.spots).find(s=>s.node===node);if(!s)return 'nospot';
   for(const [dx,dy,f] of [[0,14,'up'],[0,-12,'down'],[-14,2,'right'],[14,2,'left']]){w.player.setPosition(s.x+dx,s.y+dy);w.player.facing=f;const tg=w.target();if(tg&&tg.kind==='spot')return f;}return 'none';},node);
 const go=async place=>{await p.evaluate(pl=>{window.__w.leaving=false;window.__w.go(pl);},place);await p.waitForTimeout(1000);await ready();await p.waitForTimeout(400);};
-await p.goto((process.env.PLAYTEST_URL||'http://localhost:8765')+'/index.html#/tk/1');await p.waitForTimeout(1500);const c=p.getByText('Cancel',{exact:true});if(await c.count())await c.first().tap();
+await p.goto((process.env.PLAYTEST_URL||'http://localhost:8765')+'/index.html'+(process.env.PLAYTEST_KIT?'?kit='+process.env.PLAYTEST_KIT:'')+'#/tk/1');await p.waitForTimeout(1500);const c=p.getByText('Cancel',{exact:true});if(await c.count())await c.first().tap();
 for(let i=0;i<6;i++){const g=p.locator('.tk-scroll-go');if(await g.count()){await g.first().tap();await p.waitForTimeout(400);}}
 await ready();
 console.log('fresh goal:',await p.evaluate(()=>document.querySelector('.town-goal').textContent),'| next:',await p.evaluate(()=>window.__w.nextMain().node));

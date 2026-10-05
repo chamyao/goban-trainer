@@ -4,7 +4,7 @@ const SP=require('path').join(__dirname,'out');require('fs').mkdirSync(SP,{recur
 p.on('pageerror',e=>console.log('ERR',e.message));
 await p.route('**/phaser.min.js',r=>r.fulfill({path:require('path').join(__dirname,'vendor/phaser.min.js'),contentType:'application/javascript'}));
 await p.route('**/*.mp3',r=>r.fulfill({status:404,body:''}));
-await p.goto((process.env.PLAYTEST_URL||'http://localhost:8765')+'/index.html#/tk/1');await p.waitForTimeout(1200);
+await p.goto((process.env.PLAYTEST_URL||'http://localhost:8765')+'/index.html'+(process.env.PLAYTEST_KIT?'?kit='+process.env.PLAYTEST_KIT:'')+'#/tk/1');await p.waitForTimeout(1200);
 await p.evaluate(()=>{['1-start','1-c1','1-n1','1-i1'].forEach(k=>TK.markCleared(k));localStorage.setItem('tk-guide','off');});await p.reload();await p.waitForTimeout(1500);
 {const c=p.getByText('Cancel',{exact:true});if(await c.count())await c.first().tap();}
 for(let i=0;i<6;i++){const g=p.locator('.tk-scroll-go');if(await g.count()){await g.first().tap();await p.waitForTimeout(400);}}

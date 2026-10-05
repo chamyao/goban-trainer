@@ -8,7 +8,7 @@ let fails=0;const check=(ok,what)=>{if(!ok)fails++;console.log((ok?'ok   ':'FAIL
 p.on('pageerror',e=>console.log('ERR',e.message));
 await p.route('**/phaser.min.js',r=>r.fulfill({path:require('path').join(__dirname,'vendor/phaser.min.js'),contentType:'application/javascript'}));
 await p.route('**/*.mp3',r=>r.fulfill({status:404,body:''}));
-await p.goto((process.env.PLAYTEST_URL||'http://localhost:8765')+'/index.html#/tk/1');await p.waitForTimeout(1200);
+await p.goto((process.env.PLAYTEST_URL||'http://localhost:8765')+'/index.html'+(process.env.PLAYTEST_KIT?'?kit='+process.env.PLAYTEST_KIT:'')+'#/tk/1');await p.waitForTimeout(1200);
 await p.evaluate(()=>{['1-start','1-c1','1-n1','1-i1','1-n2','1-as','1-n3','1-n4','1-t1','1-n5','1-bs','1-n6'].forEach(k=>TK.markCleared(k));TK.setParty({n:1},['liubei','guanyu','zhangfei']);localStorage.setItem('tk-guide','off');});
 await p.reload();await p.waitForTimeout(1500);
 const scrolls=async()=>{for(let i=0;i<6;i++){const c=p.getByText('Cancel',{exact:true});if(await c.count()&&await c.first().isVisible())await c.first().tap();const g=p.locator('.tk-scroll-go');if(await g.count()){await g.first().tap();await p.waitForTimeout(400);}}};
@@ -19,12 +19,13 @@ const toS=(x,y)=>p.evaluate(([x,y])=>{const w=window.__w,cam=w.cameras.main,cv=w
 const line=()=>W(()=>{const d=document.querySelector('.town-ui .town-dlg');return d&&!d.hidden?((d.querySelector('.town-who').textContent||'')+': '+d.querySelector('.town-en').textContent):null;});
 let LINES=0;
 // tap through whatever is talking (dialogue, cutscene, scrolls); stops when the world is free or a board opens
-const through=async(max=600)=>{const seen=[];for(let i=0;i<max;i++){if(await p.locator('.tk-duel svg').count())return {lines:seen,duel:true};
+const through=async(max=600)=>{const seen=[];try{await dupCheck('scene start');}catch{}for(let i=0;i<max;i++){if(await p.locator('.tk-duel svg').count())return {lines:seen,duel:true};
   const g=p.locator('.tk-scroll-go');if(await g.count()){seen.push('[scroll]');await g.first().tap();await p.waitForTimeout(300);continue;}
   const s=await st();if(!s.busy&&!s.leaving){if(i>6)break;await p.waitForTimeout(150);continue;}
   const l=await line();if(l&&seen[seen.length-1]!==l){seen.push(l);LINES++;}
   const box=await W(()=>{const d=document.querySelector('.town-ui .town-dlg');if(d&&!d.hidden){const r=d.getBoundingClientRect();return [r.left+r.width/2,r.top+r.height/2];}const c=window.__w.game.canvas.getBoundingClientRect();return [c.left+c.width/2,c.top+c.height*.85];});
   await p.touchscreen.tap(...box);await p.waitForTimeout(250);}
+  try{await dupCheck('after a scene');}catch{}
   return {lines:seen.filter((x,i)=>!seen.slice(i+1).some(y=>y.startsWith(x.slice(0,x.length))&&y!==x)),duel:false};};
 // walk there by taps (the target itself if it's on screen, else toward it at the screen's edge)
 const walkTo=async(get,{near=18,tapTarget=true,max=60}={})=>{let last=null,stuck=0;
@@ -39,7 +40,7 @@ const walkTo=async(get,{near=18,tapTarget=true,max=60}={})=>{let last=null,stuck
 const npc=g=>`(()=>{const n=window.__w.npcs.find(n=>${g});return n&&n.spr.visible?[n.spr.x,n.spr.y-8]:null;})()`;
 const spot=k=>`(()=>{const s=window.__w.spots[${JSON.stringify(k)}]||Object.values(window.__w.spots).find(s=>s.node===${JSON.stringify(k)});return s?[s.x,s.y]:null;})()`;
 const exitTo=to=>`(()=>{const e=window.__w.exits.find(e=>e.to===${JSON.stringify(to)});return e?[e.rect.centerX,e.rect.centerY]:null;})()`;
-const travel=async to=>{const r=await walkTo(new Function('return '+exitTo(to)),{max:80});for(let i=0;i<30;i++){if((await st()).place===to)break;await p.waitForTimeout(200);}await ready();await scrolls();return (await st()).place===to;};
+const travel=async to=>{const r=await walkTo(new Function('return '+exitTo(to)),{max:80});for(let i=0;i<30;i++){if((await st()).place===to)break;await p.waitForTimeout(200);}await ready();await scrolls();await dupCheck('arriving');return (await st()).place===to;};
 const best=()=>W(()=>{const t=window.__trainer;if(!t||t.done||t.engineBusy||t.played.length%2)return null;
   const n=t.played.length,memo=new Map(),open=L=>L.length-1>n&&t.played.every((m,i)=>m===L[i+1]);
   const ms=[...new Set([...t.p.lines.filter(L=>L[0]===1&&open(L)),...t.p.lines.filter(L=>L[0]===2&&open(L))].map(L=>L[n+1]))];if(!ms.length)return null;
@@ -52,6 +53,8 @@ const items=()=>W(()=>WorldItems.owned(TK.world(1)).filter(k=>/blood/.test(k)).s
 const marks=()=>W(()=>WorldMarks.all(TK.world(1)).sort().join(',')||'none');
 const goal=()=>W(()=>document.querySelector('.town-goal').textContent);
 const shrine=()=>W(()=>window.__w.shrineState());
+const DUPS=[];const dupCheck=async tag=>{const d=await W(()=>{const w=window.__w;if(!w||!w.followers)return null;const npcs=new Set(w.npcs.filter(n=>n.spr.visible).map(n=>n.who||n.sprite));
+  const twice=w.followers.filter(F=>F.spr.visible&&npcs.has(F.who)).map(F=>F.who);return twice.length?w.placeId+': '+twice.join(','):null;});if(d&&!DUPS.includes(tag+' '+d))DUPS.push(tag+' '+d);};
 const T={},leg=(k,t0)=>{T[k]=(T[k]||0)+(Date.now()-t0)/1000;};
 await scrolls();await ready();
 // 9. a dark shrine in another town
@@ -62,7 +65,7 @@ check(z.lines.some(l=>/The board is quiet/.test(l)),'9. Zhuo County\'s shrine (n
 // arrive at Black Wind from Dong Zhuo's camp, as the story does
 await W(()=>{window.__w.leaving=false;window.__w.go('dong-zhuos-camp');});await p.waitForTimeout(1500);await ready();
 await W(()=>{window.__w.leaving=false;window.__w.go('hills-of-black-wind');});await p.waitForTimeout(1500);await ready();await scrolls();
-console.log('     arrived:',JSON.stringify(await st()),'goal:',(await goal()).slice(0,60));
+await dupCheck('arriving');console.log('     arrived:',JSON.stringify(await st()),'goal:',(await goal()).slice(0,60));
 const sh0=await shrine();
 // 1. the first try at n7: a scene, no board; the shrine lights
 let t0=Date.now();const START=Date.now();
@@ -99,7 +102,9 @@ td=Date.now();await walkTo(new Function('return '+spot('1-n7b')));r=await throug
 check(r.lines.some(l=>/Pigs, sheep, dogs/.test(l)),'4. touching the settled shrine repeats the hint: '+r.lines.map(l=>'"'+l.slice(0,40)+'"').join(' '));
 // 5. each giver gives once; the count reaches 3/3; the items stay when he leaves the map
 t0=Date.now();const counts=[];
-for(const g of ['pigblood','sheepblood','dogblood']){await walkTo(new Function('return '+npc(`n.gives==='${g}'`)));await through();counts.push((await goal()).match(/\d\/\d/)?.[0]||'?');}
+for(const g of ['pigblood','sheepblood','dogblood']){await walkTo(new Function('return '+npc(`n.gives==='${g}'`)));await through();counts.push((await goal()).match(/\d\/\d/)?.[0]||'?');
+  if(g==='pigblood'){const tw=Date.now();await walkTo(new Function('return '+npc(`(n.who||n.sprite)==='zhangfei'`)));const x=await through();leg('detour (checks 2-3)',tw);T['3 gather (3 givers)']=(T['3 gather (3 givers)']||0)-(Date.now()-tw)/1000;
+    check((await marks())==='none'&&x.lines.length>0,`7. Zhang Fei with only the pig's blood: no delivery, "${(x.lines[x.lines.length-1]||'').slice(0,60)}"`);}}
 leg('3 gather (3 givers)',t0);
 check((await items())==='dogblood,pigblood,sheepblood','5. all three given: '+await items()+'; goal counts '+counts.join(' '));
 td=Date.now();await walkTo(new Function('return '+npc(`n.gives==='pigblood'`)));r=await through();leg('detour (checks 2-3)',td);
@@ -110,9 +115,9 @@ check(!r.duel&&r.lines.length>0,`6. Yangcheng before the ridges: no board; "${(r
 check((await items())==='dogblood,pigblood,sheepblood','5. the blood is kept after leaving the map');
 await travel('hills-of-black-wind');leg('detour (checks 2-3)',td);
 // 7. the ridges, right first then left
-t0=Date.now();for(const k of ['ridge_right','ridge_left']){await walkTo(new Function('return '+spot(k)));const x=await through();console.log(`     ${k}: "${(x.lines[x.lines.length-1]||'').slice(0,70)}" — goal "${(await goal()).slice(0,50)}"`);}
+t0=Date.now();for(const [k,who] of [['ridge_right','zhangfei'],['ridge_left','guanyu']]){await walkTo(new Function('return '+npc(`(n.who||n.sprite)==='${who}'`)));const x=await through();console.log(`     ${k}: "${(x.lines[x.lines.length-1]||'').slice(0,70)}" — goal "${(await goal()).slice(0,50)}"`);}
 leg('4 ridges (right, then left)',t0);
-check((await marks())==='ridge_left,ridge_right','7. both ridges supplied (right first): '+await marks());
+check((await marks())==='ridge_left,ridge_right','7. both ridges supplied by talking to Zhang Fei, then Guan Yu: '+await marks());
 // Yangcheng opens the board; a slip keeps the problem and holds it 30 s
 t0=Date.now();await travel('yangcheng');await walkTo(new Function('return '+spot('1-boss')));r=await through();leg('5 Yangcheng (walk + scene to the board)',t0);
 const TOTAL=(Date.now()-START)/1000;
@@ -136,6 +141,7 @@ await p.locator('.tk-menu-btn',{hasText:'Menu'}).tap();await p.waitForTimeout(30
 await p.locator('.tk-menu-panel button',{hasText:'Start over'}).tap();await p.waitForTimeout(2000);
 const reset=await W(()=>({items:WorldItems.owned(TK.world(1)).length,marks:WorldMarks.all(TK.world(1)).length,n7:TK.cleared('1-n7'),n7b:TK.cleared('1-n7b')}));
 check(!reset.items&&!reset.marks&&!reset.n7&&!reset.n7b,'8. Start over clears items, marks and the shrine: '+JSON.stringify(reset));
+check(!DUPS.length,'no hero shown twice (a follower and the same hero standing in the place): '+(DUPS.join('; ')||'none seen'));
 // 10. timing
 console.log('\n10. timing, phone, taps (dialogue tapped through at about 4 taps a second; boards solved at once):');
 for(const [k,v] of Object.entries(T))console.log(`     ${k.padEnd(48)} ${v.toFixed(0)} s`);
