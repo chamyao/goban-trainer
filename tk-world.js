@@ -31,7 +31,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=22`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=23`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
@@ -197,9 +197,9 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=22`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=23`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=15`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=20`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=21`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
@@ -208,7 +208,7 @@ function worldScenes() {
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
       for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=32`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=33`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -265,7 +265,7 @@ function worldScenes() {
       const pos = this.resume && this.st.pos && this.st.pos.place === this.placeId ? this.st.pos : null;
       const at = pos || this.entries[this.from || ""] || this.entries[""];
       this.player = this.physics.add.sprite(at.x, at.y, "h-liubei-down-0").setOrigin(.5, 1);
-      this.player.body.setSize(10, 6).setOffset(4, 14);
+      this.footBody(this.player);
       this.player.setCollideWorldBounds(true);
       this.player.facing = pos ? pos.f : "down";
       this.physics.add.collider(this.player, this.solids);
@@ -789,7 +789,13 @@ function worldScenes() {
           if (c < (g.get(key(nx, ny)) ?? Infinity)) { g.set(key(nx, ny), c); from.set(key(nx, ny), [x, y]); open.push([c + h(nx, ny), nx, ny]); }
         }
       }
-      if (!g.has(key(gx, gy))) return null;
+      // the tap snapped into a pocket he can't get into (behind a table, say): go as close as he can
+      if (!g.has(key(gx, gy))) {
+        let best = null;
+        for (const k of g.keys()) { const x = k % G0.cols, y = (k - x) / G0.cols, d = h(x, y); if (!best || d < best[2]) best = [x, y, d]; }
+        if (!best || best[2] > 6) return null;
+        [gx, gy] = best;
+      }
       const cells = [];
       for (let c = [gx, gy]; c; c = from.get(key(c[0], c[1]))) cells.unshift(c);
       // keep only the turning points that can't be seen past
@@ -818,6 +824,12 @@ function worldScenes() {
         .sort((a, b) => Math.hypot(a.rect.centerX - x, a.rect.centerY - y) - Math.hypot(b.rect.centerX - x, b.rect.centerY - y))[0];
       if (door) return { kind: "door", e: door };
       return null;
+    }
+    // The feet-sized body, centred under the sprite whatever its size (drawn, generated or
+    // mounted sprites differ); redone in update whenever the frame size changes.
+    footBody(spr) {
+      spr.body.setSize(10, 6).setOffset((spr.width - 10) / 2, spr.height - 6);
+      spr._fw = spr.width; spr._fh = spr.height;
     }
     canMove() { return !this.ui.busy() && !this.seated && !this.leaving && !this.cine; }
     tapAt(x, y) {
@@ -962,6 +974,7 @@ function worldScenes() {
       this.placeLabels();
       this.nearSpots();
       const P = this.player, K = this.keys;
+      if (P.width !== P._fw || P.height !== P._fh) this.footBody(P);   // on or off a horse, another kit's sprite
       let vx = 0, vy = 0;
       if (!this.ui.busy() && !this.leaving && !this.seated) {
         if (K.LEFT.isDown || K.A.isDown || this.auto === "left") vx -= 1;

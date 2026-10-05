@@ -109,8 +109,10 @@ WORLDS = [
                 ["remove", "ly"], ["remove", "zj"],
             ]},
             "tent": {"title": "Lu Zhi's Tent", "kind": "main", "steps": [
+                ["still", "tent_b", "slow zoom in"],
                 ["n", "Liu Bei goes into the tent and bows to his old teacher. Lu Zhi is glad to see him, and keeps him at his side."],
                 ["spawn", "lz", "luzhi", "t1", 12, -4],
+                ["still", "tent_c", "slow zoom in"],
                 ["say", "luzhi", "I have Zhang Jiao penned in here. His brothers Zhang Liang and Zhang Bao are at Yingchuan, facing Huangfu Song and Zhu Jun."],
                 ["problem"],  # the board comes up here; the rest plays once it is solved
                 ["say", "luzhi", "Take your own men, and I will give you a thousand more. Go to Yingchuan, learn how they stand, and we will fix a day to destroy them."],
@@ -127,6 +129,7 @@ WORLDS = [
                 ["n", "Every man is told to carry a bundle of straw, and hide it."],
             ]},
             "tree": {"title": "The Mulberry Tree at Louzang", "kind": "main", "steps": [
+                ["still", "tree_a", "slow pan up"],
                 ["n", "Louzang Village, Zhuo County. South-east of Liu Bei's house stands a mulberry tree more than fifty feet tall. From far off, it looks like the canopy of a carriage."],
                 ["spawn", "ft", "f_elder", "start", -34, 12], ["move", "ft", "start", -8, 10],
                 ["n", "A passing fortune-teller says: this family will produce a great man."],
@@ -135,6 +138,7 @@ WORLDS = [
                 ["army", "kids", "f_child", 3, "start", 22, 6],
                 ["n", "Liu Bei's father died early. As a boy he plays under the tree with the village children."],
                 ["problem"],  # the board comes up here; the rest plays once it is solved
+                ["still", "tree_b", "slow zoom in"],
                 ["say", "liubei_child", "I will be the Son of Heaven, and I will ride this carriage canopy."],
                 ["wait", 1200],
                 ["spawn", "unc", "liuyuanqi", "start", 30, 6], ["move", "unc", "start", 14, 4],
@@ -149,8 +153,10 @@ WORLDS = [
             ]},
             "notice": {"title": "The Notice at Zhuo", "kind": "main", "steps": [
                 ["army", "crowd", "f_villager", 5, "n1", -16, 10],
+                ["still", "notice_a", "slow pull back"],
                 ["n", "Zhuo County. A crowd gathers at a notice on the wall: the governor is raising volunteers to put down the Yellow Turbans."],
                 ["n", "Liu Bei, twenty-eight, descends from Prince Jing of Zhongshan — yet he sells sandals and weaves mats for a living. His ears reach his shoulders; his arms hang past his knees."],
+                ["still", "notice_b", "slow pull back"],
                 ["n", "He reads the notice, and sighs."],
                 ["spawn", "zf", "zhangfei", "n1", 30, 4],
                 ["move", "zf", "n1", 12, 2],
@@ -163,6 +169,7 @@ WORLDS = [
                 ["party", ["liubei", "zhangfei"]],
             ]},
             "inn": {"title": "The Stranger at the Inn", "kind": "main", "steps": [
+                ["still", "inn_a", "slow pan across"],
                 ["n", "At the village inn, a giant pushing a cart strides in: nine feet tall, a beard two feet long, a face like a ripe red date."],
                 ["prop", "tbl", "table", "i1", 6, 8], ["prop", "wine", "winejars", "i1", 18, 8],
                 ["spawn", "keep", "f_villager", "i1", 24, -8],
@@ -174,6 +181,7 @@ WORLDS = [
                 ["say", "liubei", "Then sit with us, friend. We have the same purpose."],
                 ["say", "guanyu", "Guan Yu, of Hedong. I killed a bully who preyed on my village, and I've been on the run five years."],
                 ["problem"],  # the board comes up here; the rest plays once it is solved
+                ["still", "inn_b", "slow zoom in"],
                 ["n", "Liu Bei tells him his own aim, and Guan Yu is delighted. The three go together to Zhang Fei's farm to plan their great enterprise."],
                 ["say", "zhangfei", "Behind my farm is a peach garden in full bloom. Tomorrow, let's swear brotherhood there before Heaven and Earth!"],
                 ["say", "liubei", "Very good."],
@@ -182,12 +190,14 @@ WORLDS = [
                 ["party", ["liubei", "guanyu", "zhangfei"]],
             ]},
             "oath": {"title": "The Peach Garden Oath", "kind": "main", "steps": [
+                ["still", "oath_a", "slow pan across"],
                 ["n", "The next day, in the peach garden behind Zhang Fei's farm, the blossoms are in full bloom."],
                 ["fx", "petals", "n2", 0, -20],
                 ["problem", "starred"],  # the immortals at the board (their intro and outro are in tk_places.py); the oath plays once it is solved
                 ["prop", "ox", "ox", "n2", -26, 14], ["prop", "wh", "whitehorse", "n2", -14, 18],
                 ["n", "With a black ox and a white horse for sacrifice, the three burn incense and bow."],
                 ["fx", "incense", "n2", -14, -4],
+                ["still", "oath_b", "slow zoom in"],
                 ["say", "liubei", "Though we were not born on the same day of the same month of the same year…"],
                 ["say", "guanyu", "…we wish to die on the same day of the same month of the same year."],
                 ["say", "zhangfei", "Heaven and Earth, witness it! If we betray this oath, may Heaven and men strike us down!"],
@@ -195,6 +205,7 @@ WORLDS = [
                 ["prop", "tbl", "table", "n2", 0, 14], ["prop", "wine", "winejars", "n2", 22, 14],
                 ["pose", "party", "drink"], ["emote", "zhangfei", "music"], ["pose", "party", "cheer"],
                 ["army", "braves", "militia", 8, "n2", -70, 0], ["move", "braves", "n2", -28, 0],
+                ["still", "oath_c", "slow pan up"],
                 ["n", "Liu Bei becomes eldest brother, Guan Yu second, Zhang Fei youngest. Three hundred village braves join them, and they drink in the garden until they can drink no more."],
                 ["pose", "braves", "bow"], ["pose", "zhangfei", "drunk"], ["emote", "zhangfei", "zzz"], ["wait", 900], ["pose", "braves", "stand"],
                 ["n", "The next day they gather their weapons, but they have no horses to ride."],
@@ -258,12 +269,14 @@ WORLDS = [
                 ["say", "liubei", "I hear my old teacher Lu Zhi is fighting Zhang Jiao at Guangzong. I once studied under him, and I wish to go and help."],
             ]},
             "cart": {"title": "The Cage Cart", "kind": "main", "steps": [
+                ["still", "cart_a", "slow pan along the road"],
                 ["n", "By the time Liu Bei arrives, the rebels have been routed by fire. Huangfu Song tells him the brothers will run to Zhang Jiao at Guangzong, and he turns back through the night."],
                 ["n", "Halfway there, they meet soldiers guarding a prison cart."],
                 ["prop", "cart", "cagecart", "n5", 30, -6],
                 ["spawn", "lz", "luzhi", "n5", 30, -6], ["board", "lz", "cart"],
                 ["army", "guards", "f_soldier", 4, "n5", 44, 0],
                 ["mood", "dark"], ["camera", "zoom", 1.4, 800],
+                ["still", "cart_b", "slow zoom in"],
                 ["say", "luzhi", "Xuande! I had Zhang Jiao surrounded. But the court's envoy demanded a bribe, and I refused him. Now I go to the capital in chains, and Dong Zhuo takes my army."],
                 ["camera", "zoom", 1, 500], ["emote", "zhangfei", "anger"],
                 ["say", "zhangfei", "I'll cut down these guards and set him free!"],
@@ -273,6 +286,7 @@ WORLDS = [
                 ["emote", "lz", "..."],
                 ["move", "cart", "n5", 70, -10], ["move", "guards", "n5", 84, -10],
                 ["remove", "cart"], ["remove", "guards"], ["mood", "clear"],
+                ["still", "cart_c", "slow pan along the road"],
                 ["n", "The cart rolls away toward Luoyang."],
                 ["say", "guanyu", "Lu Zhi is under arrest, and another man will lead his army. We have no one left to turn to here. Let us go back to Zhuo."],
                 ["n", "Liu Bei agrees, and they march north. Again the road divides."],
@@ -289,11 +303,13 @@ WORLDS = [
                 ["run", "yt", "n6", 180, 0], ["remove", "yt"], ["remove", "yb"],
                 ["n", "The three ride into his flank and drive him back fifty li. They escort the defeated commander, Dong Zhuo, safely to his camp."],
                 ["spawn", "dz", "dongzhuo", "n6", 18, -6],
+                ["still", "office_b", "zoom in"],
                 ["say", "dongzhuo", "And what office do you hold?"],
                 ["say", "liubei", "None, my lord. We are commoners."],
                 ["n", "Dong Zhuo turns his back without a word of thanks."],
                 ["remove", "dz"],
                 ["wait", 1000],
+                ["still", "office_c", "slow zoom in"],
                 ["say", "zhangfei", "We bled to save that wretch and he treats us like dirt! I'll kill him!"],
                 ["say", "liubei", "He is an officer of the court! You cannot."],
                 ["say", "zhangfei", "If I don't kill him, I'll have to take his orders, and I won't. Stay here if you like, brothers. I'm going elsewhere."],
@@ -315,12 +331,14 @@ WORLDS = [
                 ["pose", "zb", "strike"],
                 ["light", "storm", 800],
                 ["fx", "blackwind", "n7", 40, -4],
+                ["still", "blackwind_a", "slow zoom out"],
                 ["n", "Wind howls and thunder rolls. Out of a black cloud pours a numberless host of horsemen. Liu Bei's army breaks and flees."],
                 ["run", "yt", "n7", 16, 0], ["run", "han", "n7", -120, 0], ["remove", "han"],
                 ["spawn", "sg", "stargrey", "n7", -34, 20], ["spawn", "sr", "starred", "n7", -26, 24],
                 ["n", "At a roadside shrine the two old men sit over their board, as if nothing were happening."],
                 ["say", "stargrey", "Read this, before you run."],
                 ["problem", "stargrey"],  # the board comes up here; the rest plays once it is solved
+                ["still", "blackwind_c", "slow drift down"],
                 ["say", "starred", "Pigs, sheep, dogs. Blood."],
                 ["remove", "sg"], ["remove", "sr"],
                 ["say", "zhujun", "Sorcery. Tomorrow, hide men on the hilltop with the blood of pigs, sheep and dogs. When his spirits come, drench them. The spell will break."],
@@ -340,6 +358,7 @@ WORLDS = [
                 ["n", "Again Zhang Bao calls the wind; again Liu Bei flees, and the rebels chase him to the hill."],
                 ["light", "storm", 800],
                 ["problem"],  # the board comes up here; the rest plays once it is solved
+                ["still", "bosswin_a", "slow pan across"],
                 ["n", "A signal gun — and blood and filth rain down from the ridge."],
                 ["fx", "flash", "boss", 14, -42], ["camera", "shake"],
                 ["run", "ridgeL", "boss", 34, -12], ["run", "ridgeR", "boss", 34, 12],
@@ -348,6 +367,7 @@ WORLDS = [
                 ["fx", "paper", "boss", 20, 0],
                 ["pose", "yt", "fall"],
                 ["light", "day", 1200],
+                ["still", "bosswin_c", "slow drift down"],
                 ["n", "Paper men and straw horses flutter to the ground. The wind dies. Liu Bei's arrow strikes Zhang Bao in the arm, and he flees into Yangcheng."],
                 ["pose", "liubei", "strike"], ["fx", "flash", "boss", 60, 0],
                 ["remove", "yt"], ["run", "zb", "boss", 70, 0],
@@ -357,6 +377,7 @@ WORLDS = [
                 ["wait", 800],
                 ["move", "yz", "boss", 76, 0],
                 ["pose", "yz", "strike"], ["fx", "flash", "boss", 70, 0], ["pose", "zb", "fall"], ["camera", "shake"],
+                ["still", "bosswin_d", "slow zoom in"],
                 ["n", "Yan Zheng stabs him, and carries his head out to surrender."],
                 ["remove", "zb"], ["remove", "yz"],
                 ["mood", "clear"], ["pose", "han", "cheer"],
@@ -384,6 +405,7 @@ WORLDS = [
                 ["army", "disc", "f_monk", 6, "a2", -18, 6],
                 ["n", "They called him the Great and Virtuous Teacher. His disciples numbered in the hundreds of thousands, organised in thirty-six divisions."],
                 ["problem"],  # the board comes up here; the rest plays once it is solved
+                ["still", "peace2_b", "slow pan up"],
                 ["say", "zhangjiao", "The Blue Heaven is dead! The Yellow Heaven shall rise! In the year jiazi, great fortune for all under Heaven!"],
                 ["prop", "jz", "jiazi", "a2", 18, -6],
                 ["n", "Across eight provinces, families chalked the word jiazi on their doors."],
@@ -422,6 +444,7 @@ WORLDS = [
                 ["n", "Xu Shao would not answer. Cao Cao asked again."],
                 ["problem"],  # the board comes up here; the rest plays once it is solved
                 ["say", "xushao", "In an age of order, an able minister. In an age of chaos — a cunning villain."],
+                ["still", "caocao2_b", "zoom in"],
                 ["n", "Cao Cao laughed with delight."],
             ]},
             "staves": {"title": "The Hero of Chaos · II-b: The Five-Coloured Staves", "kind": "side", "steps": [
@@ -452,6 +475,7 @@ WORLDS = [
                 ["light", "day", 1500],
                 ["problem"],  # the board comes up here; the rest plays once it is solved
                 ["spawn", "cc", "caocao", "b3", 124, 0],
+                ["still", "caocao3_b", "slow zoom in"],
                 ["say", "caocao", "Cao Cao, Commandant of Cavalry. You go no further."],
                 ["pose", "col", "strike"], ["pose", "yt", "fall", 8],
                 ["n", "Ten thousand heads were taken. The two brothers barely escaped with their lives."],
@@ -475,6 +499,7 @@ WORLDS = [
             ]},
             "post": {"title": "The Hitching Post", "kind": "main", "steps": [
                 ["army", "elders", "f_villager", 5, "ax2", -30, 6],
+                ["still", "post_a", "slow pull back"],
                 ["n", "Zhang Fei, a few cups of gloomy wine in, rides past the hostel and finds fifty or sixty old villagers weeping at the gate."],
                 ["wait", 1200],
                 ["n", "The inspector is forcing the clerks to accuse Liu Bei, they tell him, and the gatekeepers beat them away when they come to plead for him."],
@@ -485,6 +510,7 @@ WORLDS = [
                 ["move", "ins", "ax2", 20, 0],
                 ["fx", "whip", "ax2", 20, 0], ["fx", "whip", "ax2", 20, 0], ["fx", "whip", "ax2", 20, 0],
                 ["prop", "sw", "switches", "ax2", 14, 8],
+                ["still", "post_b", "slow zoom in"],
                 ["n", "Zhang Fei breaks ten or more willow switches across his legs."],
                 ["say", "inspector", "Lord Xuande! Save my life!"],
                 ["n", "Liu Bei, a gentle man at heart, orders Zhang Fei to stop."],
@@ -505,6 +531,7 @@ WORLDS = [
             "horses": {"title": "Horses from the North", "kind": "main", "steps": [
                 ["spawn", "zsp", "merchant", "as", 26, -6], ["spawn", "zsp2", "merchant", "as", 30, 2],
                 ["army", "herd", "horse", 6, "as", 44, 0],
+                ["still", "horses_a", "slow pan across"],
                 ["n", "While they are still worrying, word comes that two travelling merchants, Zhang Shiping and Su Shuang, are coming to the farm, driving a herd of horses."],
                 ["say", "liubei", "This is Heaven's help!"],
                 ["problem"],  # the board comes up here; the rest plays once it is solved
@@ -515,6 +542,7 @@ WORLDS = [
                 ["prop", "forge", "forge", "as", -24, -16], ["prop", "anvil", "anvil", "as", -12, -12],
                 ["spawn", "smith", "f_porter", "as", -14, -4],
                 ["fx", "sparkle", "as", -12, -12], ["wait", 300], ["fx", "sparkle", "as", -12, -12],
+                ["still", "horses_b", "slow pan across"],
                 ["n", "Liu Bei had twin swords forged. Guan Yu's blade was the Green Dragon Crescent, eighty-two jin, called Cold Beauty. Zhang Fei's was an eighteen-foot serpent spear of steel."],
                 ["give", "smith", "liubei", "twin_swords"],
                 ["give", "smith", "guanyu", "green_dragon"],

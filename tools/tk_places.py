@@ -68,7 +68,7 @@ PLACES = {
                 {"kind": "folk.official", "near": "office", "say": "“The governor wants volunteers. Read the notice.”"},
                 {"kind": "folk.elder", "near": "board", "challenge": "elder", "face": "down",
                  "intro": ["An old man sits over a weiqi board in the square. “You have the look of a thinker. Sit, play me one.”"],
-                 "win": ["“Ha! Quick eyes. The governor could use a man like you.”"], "done": ["“Come back when you've grown sharper.”"]},
+                 "win": ["“Ha! Quick eyes. The governor could use a man like you.”"], "done": ["“Go on. I'll sit here a while yet, still thinking about that board.”"]},
                 {"kind": "folk.villager", "near": "inn", "challenge": "innkeeper",
                  "intro": ["“Wine's on the house if you can solve the one my regulars can't.”"],
                  "win": ["“Well I never. Drink up, then!”"], "done": ["“Still the only one who's cracked it.”"]},
