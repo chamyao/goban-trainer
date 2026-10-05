@@ -695,6 +695,8 @@ body:has(.tk-scroll-wrap) .wukong-toggle, body:has(.tk-scroll-wrap) #wukong { vi
 html.tk-fullwin-on, html.tk-fullwin-on body { overflow: hidden; overscroll-behavior: none; }
 .tk-map.tk-town.tk-fullwin .tk-menu { top: max(8px, env(safe-area-inset-top)); right: max(8px, env(safe-area-inset-right)); }
 /* a narrow game window: the objective goes under the buttons rather than behind them */
+/* counsel still to act on, under the goal (tk-world.js activeHint) */
+.town-goal-hint { display: block; margin-top: 3px; padding-top: 3px; border-top: 1px solid rgba(199, 154, 74, .45); font-style: italic; opacity: .82; font-size: .9em; }
 @media (max-width: 560px) { .tk-map.tk-town .town-goal { top: 46px; right: 10px; max-width: none; } }
 /* the travellers' go table (tk-table.js) */
 .tk-table-panel { position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%); z-index: 16; width: min(92%, 460px); padding: 8px 12px;

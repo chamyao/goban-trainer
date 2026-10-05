@@ -219,7 +219,7 @@ function worldScenes() {
       const { w, kit } = this.opts;
       this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=33`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=30`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=32`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=33`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
@@ -279,13 +279,13 @@ function worldScenes() {
 
       const P = o => Object.fromEntries((o.properties || []).map(p => [p.name, p.value]));
       const J = v => { try { return JSON.parse(v || "[]"); } catch { return []; } };
-      this.spots = {}; this.npcs = []; this.exits = []; this.propBoxes = []; this.entries = {}; this.shrine = null;
+      this.spots = {}; this.npcs = []; this.actMarks = new Map(); this.exits = []; this.propBoxes = []; this.entries = {}; this.shrine = null;
       for (const o of map.getObjectLayer("objects").objects) {
         const p = P(o);
         if (o.type === "prop") this.addProp(o, p);
         else if (o.type === "spot") this.spots[o.name] = { x: o.x, y: o.y, node: p.node, label: p.label, labelZh: p.label_zh || "", intro: J(p.intro), outro: J(p.outro), trigger: p.trigger || "near", use: p.use || "",
           // a place to deliver to (a ridge): mark, condition, what it needs, and its lines
-          ...(p.needs ? { needs: J(p.needs), delivers: p.delivers || o.name, when: p.when || "", empty: J(p.empty), waiting: J(p.waiting),
+          ...(p.needs ? { needs: J(p.needs), delivers: p.delivers || o.name, when: p.when || "", empty: J(p.empty), waiting: J(p.waiting), call: J(p.call),
                           deliver: J(p.deliver), delivered: J(p.delivered) } : {}) };
         else if (o.type === "npc") this.addNpc(o, p, J);
         else if (o.type === "exit") this.exits.push({ to: p.to, side: p.side, rect: new Phaser.Geom.Rectangle(o.x, o.y, o.width, o.height) });
@@ -544,6 +544,7 @@ function worldScenes() {
       const n = { id: o.name, spr, who, folk, sprite: p.sprite, say: own(J(p.say)), wander: p.wander, home: { x: o.x, y: o.y }, t: 0, dir: face, until: p.until,
         when: p.when || "" };   // only here once the story's condition holds (Guan Yu on his ridge)
       if (p.gives) Object.assign(n, { gives: p.gives, givesWhen: p.gives_when || "", give: own(J(p.give)), given: own(J(p.given)) });
+      n.call = own(J(p.call));
       if (p.challenge) {
         n.challenge = `${this.w.n}-${this.placeId}-c-${p.challenge}`;
         n.intro = own(J(p.intro)); n.win = own(J(p.win)); n.done = own(J(p.done));
@@ -677,7 +678,59 @@ function worldScenes() {
       const waysZh = [...new Set(lead.map(p => p.role === "short" ? `${this.placeZh(p.place)}的捷径` : this.placeZh(p.place)))];
       this.goal(`On to ${this.placeName(q.place)}, by way of ${ways.join(" or ")}.`, `前往${this.placeZh(q.place)}，可经${waysZh.join("或")}。`);
     }
-    goal(en, zh) { this.goalText = [en, zh]; this.ui.goal(en, zh); if (this.mapW) this.fitCamera(); }   // the goal line's height moves the HUD's edge
+    goal(en, zh) {
+      this.goalText = [en, zh];
+      const h = this.activeHint();
+      this.ui.goal(en, zh, h && [h.hint, h.hint_zh || ""]);
+      if (this.mapW) this.fitCamera();   // the goal line's height moves the HUD's edge
+      this.markActors();
+    }
+    // Counsel that stays present (Game Design, "Keeping hints present"): a cleared step's "hint" is
+    // kept under the goal line while the next main step still needs it, i.e. that step follows it or
+    // its gate names it, and until that gate is cleared.
+    activeHint() {
+      const q = this.nextMain();
+      if (!q || (q.gate && !this.gateFor(q))) return null;
+      const named = [].concat(...(q.gate || []).map(g => [].concat(g.needs || [])));
+      return this.region.quests.filter(h => h.hint && h.node !== q.node && this.done(h.node) &&
+        (q.after.includes(h.node) || named.includes(`node:${h.node}`))).pop() || null;
+    }
+    // A ring at the feet of whoever can act now: someone ready to give, or a place waiting for what
+    // you now hold. It clears once their part is done; nobody who can't act yet is marked.
+    markActors() {
+      if (!this.npcs) return;
+      this.actMarks = this.actMarks || new Map();
+      const want = new Map();
+      for (const n of this.npcs)
+        if (n.gives && n.spr.visible && this.cond(n.givesWhen) && !WorldItems.has(this.w, n.gives)) want.set(n.spr, n.spr), n.spr.tkCall = n.call;
+      for (const s of Object.values(this.spots || {}))
+        if (s.needs && this.cond(s.when) && this.cond(s.needs) && !WorldMarks.has(this.w, s.delivers)) want.set(s, s), s.tkCall = s.call;
+      for (const [k, m] of this.actMarks) if (!want.has(k)) { m.ev.remove(); this.actMarks.delete(k); }
+      for (const [k, t] of want) {
+        if (this.actMarks.has(k)) continue;
+        // a soft gold ring pulsing at their feet (where they're drawn)
+        const v = this.view(k.x, k.y), ring = this.add.ellipse(v.x, v.y, 18, 8).setStrokeStyle(1.5, 0xf2cf6a, .9).setDepth(v.y - 1);
+        const tw = this.tweens.add({ targets: ring, scale: 1.35, alpha: .25, duration: 900, yoyo: true, repeat: -1, ease: "Sine.InOut" });
+        const ev = { remove: () => { tw.remove(); ring.destroy(); } };
+        this.actMarks.set(k, { ev, t, called: false });
+      }
+    }
+    // A marked target with a "call" line speaks it once when the player comes near (a bubble over them,
+    // not a dialogue): "You have the blood? Bring it here!"
+    callOut() {
+      if (!this.actMarks || !this.actMarks.size || !this.player || this.ui.busy()) return;
+      const P = this.player;
+      for (const m of this.actMarks.values()) {
+        const L = m.t.tkCall;
+        if (m.called || !L || !L.length || Math.hypot(m.t.x - P.x, m.t.y - P.y) > 56) continue;
+        m.called = true;
+        const l = worldLines(L)[0], v = this.view(m.t.x, m.t.y), y = v.y - (m.t.displayHeight || 22) - 10;
+        const txt = this.add.text(v.x, y, (l[0] === "say" ? [l[3], l[2]] : [l[2], l[1]]).filter(Boolean).join("\n"), {
+          fontFamily: "sans-serif", fontSize: "11px", color: "#3a2410", backgroundColor: "#f4e6c4", padding: { x: 5, y: 3 },
+          wordWrap: { width: 160 } }).setOrigin(.5, 1).setDepth(10000).setResolution(2);
+        this.tweens.add({ targets: txt, alpha: 0, delay: 3200, duration: 600, onComplete: () => txt.destroy() });
+      }
+    }   // the goal line's height moves the HUD's edge
 
     // A tap on the goal line: walk toward it (its story spot here, or the way out toward it).
     walkToGoal() {
@@ -1276,6 +1329,7 @@ function worldScenes() {
 
     update(time, dt) {
       this.keepPlayerInView();
+      this.callOut();
       WorldFX.shadows(this);
       WorldFX.water(this, time);
       this.goalGuide(time);
