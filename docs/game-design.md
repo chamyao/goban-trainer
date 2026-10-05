@@ -112,13 +112,15 @@ When a leader (Liu Bei, later Cao Cao, Zhuge Liang) reaches a hard choice, the s
 - **Who:** Plot picks the scenes and writes the dilemma lines; Integration adds the caption over the board.
 - **Status:** the engine is live on main (6a72f7a) as an optional node field `"dilemma": {"q", "who", "open", "win", "slip"}`. `q` is a parchment caption over the board (Chinese above English), `who` picks the voice, and `open`/`win`/`slip` replace the generic lines. Plot moved the four scenes (World 1's cage cart and hitching post, Book 2's garden and gate tower) into the node field (67043b2, sent to Integration), with first-person slip lines for the voice (for example Liu Bei: "Not yet. Let me think it through once more."). Live on main (ea6decf): each board shows its caption, and the leader speaks voiced win and slip lines. Testing passed the logic on a phone. The caption layout was then fixed by Integration (ac43965): it never sits on the board. It goes in the side column just above the dialogue box (on its side, beside the board; upright, in the band between the board and the dialogue), at 17 px Chinese and 14 px English, with balanced wrapping that breaks Chinese only at punctuation. Opening lines added by Plot (1782b44, with Integration), voiced by each leader (for example Liu Bei at the cart: "If I free him, I am a rebel. If I stand by, an honest man goes to his ruin."). Book 2's 21 speakers lacked Chinese names in the speaker label ("Wangyun"); the list has gone to Integration.
 
-## The Star Lords' stone (replaces the incense shrine)
+## The Star Lords' shrine, re-dressed (no incense)
 
-Decided by History, after a tester's complaint traced to the incense (the user: "an artifact left over from copying the Black Myth concept"). The mechanic is unchanged (dark, lit, settled; a settled one repeats the hint); only the look and wording change, following ch. 69: the two old men play weiqi on a flat rock (盤石) under a great pine (大松樹), with wine and dried meat beside them (酒脯).
+Decided by History, after a tester's complaint traced to the incense (the user: "an artifact left over from copying the Black Myth concept"). The user prefers to keep a shrine, so it stays a shrine, re-dressed after ch. 69, where the two old men play weiqi on a flat rock (盤石) under a great pine (大松樹), with wine and dried meat beside them (酒脯). The mechanic is unchanged (dark, lit, settled; a settled shrine repeats the hint).
 
-- **Dark:** a flat rock under an old pine, a board scratched into it, empty.
-- **Lit:** a game in progress, two wine cups and a plate of dried meat beside it, as if the players just looked away.
-- **Settled:** the finished game left on the rock, the cups drained.
-- **No incense or smoke anywhere,** including the act marker (now a gold ring) and the lines.
+- **The shrine:** a small stone shrine to the two Dippers, under an old pine on a flat rock, with the board cut into its offering table.
+- **Dark:** an empty offering table, the board bare.
+- **Lit:** a game in progress on the table, two wine cups and a plate of dried meat, as if the players just stepped away.
+- **Settled:** the finished game left on the table, the cups drained.
+- **No incense or smoke anywhere,** including the act marker (now a gold ring) and the lines; use cups, lamp or game wording. The Peach Garden oath keeps its incense (the novel's oath ritual, not the Star Lords).
 - **The tree is a pine,** not a mulberry (the mulberry is Liu Bei's boyhood tree).
+- **The star altar with lamps** is kept for the Wuzhang prayer scene in Book 16.
 - **Who:** Plot rewrites the label and lines (History checks them); Integration and Graphics draw the three looks.
