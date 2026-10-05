@@ -1023,6 +1023,24 @@ async function viewTK(worldN) {
       label();
       root.querySelector(".tk-head-btns").append(conf);
     }
+    // Feedback from inside the game, tagged with where the player is (book, place, position, next
+    // beat, what's on screen), so a note like "this didn't trigger" comes with its context
+    {
+      const ta = h("textarea", { class: "tk-fb-text", rows: "3", placeholder: "意见反馈 Feedback: what's wrong or what would be better here?" });
+      const msg = h("span", { class: "tk-fb-msg" });
+      const send = h("button", { class: "tk-chron-btn", type: "button", "data-keep": "1" }, "发送反馈 Send feedback");
+      ta.addEventListener("keydown", e => e.stopPropagation());   // typing doesn't walk him or talk
+      ta.addEventListener("keyup", e => e.stopPropagation());
+      send.onclick = async () => {
+        const text = ta.value.trim();
+        if (!text) { msg.textContent = "先写几句 Write something first."; return; }
+        send.disabled = true; msg.textContent = "…";
+        try { await Sync.sendFeedback(text, tkFeedbackContext(w)); ta.value = ""; msg.textContent = "已发送，谢谢！Sent, thanks!"; }
+        catch (e) { console.error(e); msg.textContent = "没发出去，再试一次 Couldn't send, try again."; }
+        send.disabled = false;
+      };
+      root.querySelector(".tk-head-btns").append(h("div", { class: "tk-fb" }, [ta, h("div", { class: "tk-fb-row" }, [send, msg])]));
+    }
     // the other books, once open (Book 2 after Book 1's boss)
     for (const x of D.worlds) if (x.n !== w.n && TK.worldOpen(x.n))
       root.querySelector(".tk-head-btns").append(h("button", { class: "tk-chron-btn", type: "button", onclick: () => { location.hash = `#/tk/${x.n}`; } },
@@ -1041,7 +1059,7 @@ async function viewTK(worldN) {
       const b = e.target.closest("button");
       if (!b) return;
       // actions that take you somewhere close the menu; switches (voice, music, guide) leave it open to show their state
-      if (!b.hasAttribute("aria-pressed")) { panel.hidden = true; toggle.setAttribute("aria-expanded", "false"); toggle.textContent = "菜单 Menu ▾"; }
+      if (!b.hasAttribute("aria-pressed") && !b.dataset.keep) { panel.hidden = true; toggle.setAttribute("aria-expanded", "false"); toggle.textContent = "菜单 Menu ▾"; }
       setTimeout(() => host.focus(), 0);   // keep the keyboard on the game
     });
     // Full window: the game takes the whole screen (and the real full screen where the
@@ -1478,6 +1496,31 @@ const TKOverlay = {
     });
   },
 };
+
+// Where the player is, for a feedback note: book, place, position, the next beat and its goal line,
+// what's open on screen, and the device and settings.
+function tkFeedbackContext(w) {
+  const sc = window.__w, parts = [location.hash, `Book ${w.n}`];
+  try {
+    if (sc && sc.place) {
+      const P = sc.player;
+      parts.push(`place ${sc.placeId}${P ? ` @ ${Math.round(P.x)},${Math.round(P.y)} facing ${P.facing}` : ""}`);
+      const q = sc.nextMain && sc.nextMain();
+      if (q) parts.push(`next ${q.node}`);
+      if (sc.goalText) parts.push(`goal "${sc.goalText[0]}"`);
+      const busy = [sc.cine && "cutscene", sc.ui && sc.ui.busy() && "dialogue", sc.seated && "go table"].filter(Boolean);
+      if (busy.length) parts.push(`on screen: ${busy.join(", ")}`);
+    }
+    if (document.querySelector(".tk-duel")) parts.push(`problem open${window.__trainer && window.__trainer.p ? ` (${window.__trainer.p.id || ""})` : ""}`);
+    parts.push(`cleared ${w.nodes.filter(x => TK.cleared(x.key)).length}/${w.nodes.length}`);
+    parts.push(`kit ${typeof WorldView !== "undefined" ? WorldView.kit() : "?"}`, `voice ${TKVoice.lang}`);
+    parts.push(`${TK_TOUCH ? "touch" : "mouse"} ${innerWidth}x${innerHeight}`);
+    if (TK_TEST) parts.push("test mode");
+    const v = [...document.scripts].map(x => (x.src.match(/(tk-world|tk)\.js\?v=\d+/) || [])[0]).filter(Boolean);
+    if (v.length) parts.push(v.join(" "));
+  } catch (e) { parts.push(`(context error: ${e.message})`); }
+  return parts.join(" · ");
+}
 
 // Every story scene in the novel's order; the ones not yet seen stay hidden.
 function tkChronicle(w, map) {
