@@ -99,4 +99,4 @@ Agreed with Plot/Story; the script draft is Plot's (`docs/world2-script-draft.md
 
 ## Who decides what
 
-Per the user: **story-tied design** (Book mechanics tied to scenes, hints, objectives, which scenes use which block) goes to Plot/Story for approval. **Interface and engine decisions** (taps, confirm thresholds, settings, how triggers feel) go to Primary Integration.
+Per the user: Game Design reports **only to Plot/Story**. Plot approves story-tied design (Book mechanics tied to scenes, hints, objectives, which scenes use which block). Anything outside Plot's scope, such as interface and engine decisions (taps, thresholds, settings, how triggers feel), Plot forwards to Primary Integration. Game Design does not go to Integration directly.
