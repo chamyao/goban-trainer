@@ -1,0 +1,110 @@
+{
+ "grass": {
+  "model": "retro-diffusion/rd-plus",
+  "style": "topdown_map",
+  "prompt": "lush jade-green grass with clover and tiny white flowers, flat top-down ground texture, no objects, Chinese fantasy RPG, xianxia, Eastern Han dynasty",
+  "size": [
+   64,
+   64
+  ],
+  "how": "tile",
+  "seconds": 12.7,
+  "made": "2026-10-05"
+ },
+ "stone": {
+  "model": "retro-diffusion/rd-plus",
+  "style": "topdown_map",
+  "prompt": "pale grey flagstone courtyard paving, irregular stones, moss in the cracks, flat top-down ground texture, Chinese fantasy RPG, xianxia, Eastern Han dynasty",
+  "size": [
+   64,
+   64
+  ],
+  "how": "tile",
+  "seconds": 12.7,
+  "made": "2026-10-05"
+ },
+ "water": {
+  "model": "retro-diffusion/rd-plus",
+  "style": "topdown_map",
+  "prompt": "clear teal pond water with soft ripples and a few lotus pads, flat top-down texture, Chinese fantasy RPG, xianxia, Eastern Han dynasty",
+  "size": [
+   64,
+   64
+  ],
+  "how": "tile",
+  "seconds": 12.5,
+  "made": "2026-10-05"
+ },
+ "hall": {
+  "model": "retro-diffusion/rd-plus",
+  "style": "topdown_asset",
+  "prompt": "Chinese palace hall, red lacquered pillars, curved upswept roof with jade-green glazed tiles and gold ridge ornaments, white stone steps, front door, Chinese fantasy RPG, xianxia, Eastern Han dynasty",
+  "size": [
+   96,
+   96
+  ],
+  "how": "cutout",
+  "seconds": 34.8,
+  "made": "2026-10-05"
+ },
+ "pine": {
+  "model": "retro-diffusion/rd-plus",
+  "style": "topdown_asset",
+  "prompt": "twisted Chinese pine tree with flat layered clusters of dark green needles, like an ink painting, Chinese fantasy RPG, xianxia, Eastern Han dynasty",
+  "size": [
+   64,
+   64
+  ],
+  "how": "cutout",
+  "seconds": 16.4,
+  "made": "2026-10-05"
+ },
+ "peach": {
+  "model": "retro-diffusion/rd-plus",
+  "style": "topdown_asset",
+  "prompt": "peach tree in full pink blossom, dark twisting trunk, Chinese fantasy RPG, xianxia, Eastern Han dynasty",
+  "size": [
+   64,
+   64
+  ],
+  "how": "cutout",
+  "seconds": 18.5,
+  "made": "2026-10-05"
+ },
+ "moongate": {
+  "model": "retro-diffusion/rd-plus",
+  "style": "topdown_asset",
+  "prompt": "round moon gate in a white plaster wall with grey tiled coping, Chinese fantasy RPG, xianxia, Eastern Han dynasty",
+  "size": [
+   64,
+   64
+  ],
+  "how": "cutout",
+  "seconds": 21.2,
+  "made": "2026-10-05"
+ },
+ "liubei": {
+  "model": "retro-diffusion/rd-animation",
+  "style": "small_sprites",
+  "prompt": "young Chinese hero in a white robe with gold trim, black topknot, short black beard, Chinese fantasy RPG, xianxia, Eastern Han dynasty",
+  "size": [
+   160,
+   128
+  ],
+  "how": "sheet",
+  "seconds": 31.2,
+  "made": "2026-10-05"
+ },
+ "liubei48": {
+  "model": "retro-diffusion/rd-animation",
+  "style": "four_angle_walking",
+  "prompt": "young Chinese hero in a white robe with gold trim, black topknot, short black beard, Chinese fantasy RPG, xianxia, Eastern Han dynasty",
+  "size": [
+   192,
+   192
+  ],
+  "how": "sheet",
+  "seconds": 57.6,
+  "made": "2026-10-05"
+ }
+}
