@@ -172,7 +172,9 @@ PROPS_SKIP = {"prop.forge", "prop.cart", "prop.anvil", "prop.steelbars", "prop.s
 # Same pieces as xianxia (OBJECTS, INTERIOR, PROPS_GEN), drawn for the isometric view: a piece on a
 # footprint w x h tiles stands on a diamond (w + h) tiles wide (tk-iso.js), so its box is that wide.
 GENSHIN_LOOK = ("bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, "
-                "jade-green glazed roofs, vermilion pillars, gold trim, clean shapes, soft cel shading")
+                "clean shapes, soft cel shading")
+GENSHIN_BUILT = "jade-green glazed roofs, vermilion pillars, gold trim"   # buildings and furniture only: on a rock it made a pavilion
+GENSHIN_NATURE = "growing straight from the ground, no pot, no planter, no base tile, no building"   # trees came out as bonsai
 GENSHIN_PALETTE = ["#2e2438", "#4b3d5c", "#8a4b2e", "#c47a3e", "#2f8a6e", "#45b48a", "#8be0a8", "#3aa0c8",
                    "#8fd6f0", "#e04a36", "#f2804a", "#f5c242", "#fde59a", "#f7a8c4", "#fff6e2", "#d8cdb6",
                    "#9a8e7c", "#5aa846", "#9bd86a"]

@@ -130,15 +130,18 @@ def kit_set(a):
                                  "prompt": f"{p}, {LOOK}, 3/4 top-down game sprite, small"}, n)
                 for k, (p, (w, h), n) in PROPS_GEN.items()]
     if a.set.startswith("genshin"):   # the isometric kit: every building, tree, rock and prop, bright
-        from xianxia_spec import GENSHIN_LOOK, GENSHIN_PILOT, INTERIOR, PROPS_GEN, PROPS_SKIP
+        from xianxia_spec import GENSHIN_BUILT, GENSHIN_LOOK, GENSHIN_NATURE, GENSHIN_PILOT, INTERIOR, PROPS_GEN, PROPS_SKIP
         objs = {**OBJECTS, **INTERIOR, **{k: v for k, v in PROPS_GEN.items() if k not in PROPS_SKIP}}
         if a.set == "genshin-pilot":
             objs = {k: objs[k] for k in GENSHIN_PILOT}
         r8 = lambda v: min(256, max(16, (round(v) + 7) // 8 * 8))
         # a flat w x h piece seen isometrically: its footprint becomes a wider diamond, it stands a bit taller
-        jobs = [(k, "rd-plus", {"style": "isometric_asset", "width": r8(w + h / 2), "height": r8(h + w / 4),
+        natural = lambda k: k.split(".")[0] in ("tree", "rock", "plant")
+        jobs = [(k, "rd-plus", {"style": "isometric_asset", "width": r8(w + h / 2),
+                                 "height": r8(h * 1.5 if natural(k) else h + w / 4),   # a canopy needs headroom
                                  "remove_bg": True,
-                                 "prompt": f"{p}, {GENSHIN_LOOK}, isometric game sprite, 2:1 isometric angle, small"}, n)
+                                 "prompt": f"{p}, {GENSHIN_NATURE if natural(k) else GENSHIN_BUILT}, {GENSHIN_LOOK}, "
+                                           "isometric game sprite, 2:1 isometric angle, small"}, n)
                 for k, (p, (w, h), n) in objs.items()]
     if a.set == "xianxia-chars2":
         from xianxia_spec import CHARACTERS2

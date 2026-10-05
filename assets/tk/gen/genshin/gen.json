@@ -22,17 +22,17 @@
   "input": {
    "style": "isometric_asset",
    "width": 72,
-   "height": 64,
+   "height": 72,
    "remove_bg": true,
-   "prompt": "large old camphor tree, wide dark green canopy, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, jade-green glazed roofs, vermilion pillars, gold trim, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "prompt": "large old camphor tree, wide dark green canopy, growing straight from the ground, no pot, no planter, no base tile, no building, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
    "num_images": 1
   },
   "n": 1,
   "size": [
    72,
-   64
+   72
   ],
-  "seconds": 17.0,
+  "seconds": 22.2,
   "made": "2026-10-05"
  },
  "building.hall": {
@@ -76,9 +76,9 @@
   "input": {
    "style": "isometric_asset",
    "width": 56,
-   "height": 48,
+   "height": 56,
    "remove_bg": true,
-   "prompt": "Chinese pine tree, flat layered clusters of dark green needles, twisting trunk, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, jade-green glazed roofs, vermilion pillars, gold trim, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "prompt": "Chinese pine tree, flat layered clusters of dark green needles, twisting trunk, growing straight from the ground, no pot, no planter, no base tile, no building, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
    "num_images": 3
   },
   "n": 3,
@@ -86,7 +86,7 @@
    64,
    64
   ],
-  "seconds": 64.2,
+  "seconds": 30.2,
   "made": "2026-10-05"
  },
  "tree.peach": {
@@ -94,9 +94,9 @@
   "input": {
    "style": "isometric_asset",
    "width": 56,
-   "height": 56,
+   "height": 64,
    "remove_bg": true,
-   "prompt": "peach tree in full pink blossom, dark twisting trunk, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, jade-green glazed roofs, vermilion pillars, gold trim, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "prompt": "peach tree in full pink blossom, dark twisting trunk, growing straight from the ground, no pot, no planter, no base tile, no building, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
    "num_images": 2
   },
   "n": 2,
@@ -104,7 +104,7 @@
    64,
    64
   ],
-  "seconds": 81.0,
+  "seconds": 23.7,
   "made": "2026-10-05"
  },
  "rock.big": {
@@ -112,17 +112,17 @@
   "input": {
    "style": "isometric_asset",
    "width": 88,
-   "height": 64,
+   "height": 72,
    "remove_bg": true,
-   "prompt": "large mossy grey boulder, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, jade-green glazed roofs, vermilion pillars, gold trim, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "prompt": "large mossy grey boulder, growing straight from the ground, no pot, no planter, no base tile, no building, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
    "num_images": 2
   },
   "n": 2,
   "size": [
    88,
-   64
+   72
   ],
-  "seconds": 81.0,
+  "seconds": 25.0,
   "made": "2026-10-05"
  },
  "building.house": {
