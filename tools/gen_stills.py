@@ -97,6 +97,8 @@ def replicate(prompt, model, aspect="16:9", images=()):
         inp = {"prompt": prompt, "aspect_ratio": aspect, "output_format": "png"}
         if "qwen" in model:
             inp["negative_prompt"] = NEGATIVE_LIST
+        if "seedream" in model:
+            inp["size"] = "1K"                  # seedream defaults to 2K (twice the price, slower)
         if images:
             inp["images"] = list(images)        # flux-2 models: up to 5 reference images
         r = http(url, {"input": inp}, h)
