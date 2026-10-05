@@ -75,3 +75,13 @@ None at present. Settled: a slip keeps the same problem with a fixed 30 s cooldo
 ## Suggested first pilot
 
 World 1, Black Wind: the first attempt is routed by the storm (already staged); the Star Lords' hint is "pigs, sheep, dogs, blood"; the player finds the butcher or pen, carries the blood to the two ridges, and the Yangcheng scene shows the ambush working. This tests the hint action, the missions bar, a relic or item that does something, and fail-then-prepare in one place, using a scene that already exists.
+
+## Book 2 (Hulao Pass, ch. 3-9): design decisions
+
+Agreed with Plot/Story; the script draft is Plot's (`docs/world2-script-draft.md`).
+
+- **Required mechanic: formation at Hulao**, as the novel's order. Zhang Fei goes in first, Guan Yu joins when he tires, then Liu Bei. The player sends each brother in by talking to him; a wrong order gets a correction line, never a failure. Then the Lü Bu boss board (hard, no hint, taunt first), and Lü Bu retreats. This is not fail-then-prepare, so the same kind is not used twice in a row (Book 1 ended on Black Wind), and it differs from Book 1's left-and-right flanks at Qingzhou.
+- **Optional delivery: the Seven-Star Dagger** (Wang Yun to Cao Cao, ch. 4), a Cao Cao side story. It fails by the novel, and it leads into Lü Boshe's house, the Book's spine.
+- **Hua Xiong:** no extra mechanic. His problem is framed as the wine cooling: Cao Cao's cup steams beside the board, and on the solve Guan Yu returns with the wine still warm. No timer.
+- **Star Lords:** in person at Hulao (danger); only a sign at the Diaochan plot; none at the quiet scenes (Lü Boshe's house, the wine, Dong Zhuo's fall).
+- **Perspective:** Liu Bei is absent in ch. 3-4, so Cao Cao's scenes are side stories, as in Book 1.
