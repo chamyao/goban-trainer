@@ -11,7 +11,7 @@
    campaign save (TK.cleared / TK.seen); this file only remembers where you
    are. Hero sprites and the dialogue box come from tk-town.js. */
 
-const WORLD_CLUTTER = /^(plant\.|rock\.small)/;  // drawn underfoot
+const WORLD_CLUTTER = /^(plant\.|rock\.small|furn\.rug|furn\.mat)/;  // drawn underfoot (a rug is a floor, not a sheet hung in front of people)
 const WORLD_KIT = "xianxia";  // the default look; the campaign page's art button switches (localStorage tk-kit)
 const WORLD_KITS = { jade: { zh: "玉", en: "Jade" }, xianxia: { zh: "仙侠", en: "Xianxia (generated)" },
   genshin: { zh: "原神", en: "Genshin (isometric)", iso: true } };   // iso: drawn for the isometric view (tk-iso.js)
