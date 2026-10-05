@@ -6,7 +6,7 @@ const { chromium, devices } = require(require('child_process').execSync('npm roo
 const SP=require('path').join(__dirname,'out');require('fs').mkdirSync(SP,{recursive:true});
 const BEATS=['1-a1','1-a2','1-a3','1-b1','1-b2','1-b2g','1-f1','1-b3','1-bs'];
 (async()=>{const b=await chromium.launch({args:['--use-gl=swiftshader','--enable-webgl']});const ctx=await b.newContext({...devices['iPhone 13']});const p=await ctx.newPage();
-p.on('pageerror',e=>console.log('ERR',e.message));
+p.on('pageerror',e=>console.log('ERR',e.message,'|',(e.stack||'').split('\n').slice(1,5).map(x=>x.trim()).join(' < ')));
 await p.route('**/phaser.min.js',r=>r.fulfill({path:require('path').join(__dirname,'vendor/phaser.min.js'),contentType:'application/javascript'}));
 await p.route('**/*.mp3',r=>r.fulfill({status:404,body:''}));
 await p.goto((process.env.PLAYTEST_URL||'http://localhost:8765')+'/index.html#/tk/1');await p.waitForTimeout(1200);
@@ -31,11 +31,12 @@ for(const node of BEATS){
   await p.evaluate(pl=>{window.__w.leaving=false;window.__w.go(pl);},q.place);await p.waitForTimeout(1500);await ready();await scrolls();await ready();
   const goal=await p.evaluate(()=>document.querySelector('.town-goal').textContent);
   // stand a few steps below the spot, then tap it
-  const s=await p.evaluate(node=>{const w=window.__w,s=Object.values(w.spots).find(s=>s.node===node);if(!s)return null;const G=w.walkGrid();
+  const s=await p.evaluate(node=>{const w=window.__w,s=Object.values(w.spots).find(s=>s.node===node);if(!s)return null;if(w.ui.busy()||w.cine)return [s.x,s.y];const G=w.walkGrid();
     for(const [dx,dy] of [[0,50],[0,40],[30,40],[-30,40],[40,0],[-40,0],[0,-40]]){if(G.free(Math.floor((s.x+dx)/G.C),Math.floor((s.y+dy-3)/G.C))){w.player.setPosition(s.x+dx,s.y+dy);break;}}return [s.x,s.y];},node);
   if(!s){fails++;console.log(`FAIL ${node} (${q.place}): no story spot on the map`);continue;}
-  await p.waitForTimeout(800);if(await p.evaluate(()=>window.__w.ui.busy())){for(let i=0;i<30&&await p.evaluate(()=>window.__w.ui.busy());i++){await tapBox();await p.waitForTimeout(150);}}
-  await tapW(s[0],s[1]);
+  // indoors the scene starts as you come in: then just tap through it; outdoors walk up and tap the spot
+  await p.waitForTimeout(1200);const started=await p.evaluate(()=>window.__w.ui.busy()||!!window.__w.cine);
+  if(!started)await tapW(s[0],s[1]);
   const before=[];let opened=false;
   for(let i=0;i<400;i++){if(await p.locator('.tk-duel svg').count()){opened=true;break;}const l=await line();if(l&&before[before.length-1]!==l)before.push(l);if(await p.evaluate(()=>window.__w.ui.busy()||!!window.__w.cine))await tapBox();await p.waitForTimeout(120);}
   if(!opened){fails++;await p.screenshot({path:SP+`/side-${node}.png`});console.log(`FAIL ${node} (${q.place}): no problem opened; lines: ${before.slice(-3).join(' | ')}`);continue;}

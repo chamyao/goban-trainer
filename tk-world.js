@@ -31,7 +31,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=23`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=25`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
@@ -56,6 +56,17 @@ const WorldData = {
 // Lines from the place briefs arrive as voiced steps (["n", en, zh, vid] or
 // ["say", who, en, zh, vid], see build_tk.place_step); bare strings and
 // [who, text] still work for maps compiled before that.
+// Places marked done by the story (a ridge supplied, a flank held…), per world, in localStorage
+// "tk-marks". Conditions ("node:…", "item:…", "mark:…") are read by WorldScene.cond.
+const WorldMarks = {
+  KEY: "tk-marks",
+  all(w) { return (TK.ls(this.KEY)[w.n] || []).slice(); },
+  has(w, m) { return this.all(w).includes(m); },
+  add(w, m) { const a = TK.ls(this.KEY), l = a[w.n] || []; if (!l.includes(m)) { l.push(m); a[w.n] = l; TK.lsSet(this.KEY, a); } },
+};
+// The shrine's look for a place (tk-world's shrine prop asks as it is drawn).
+TK.shrineState = (n, placeId) => { const w = window.__w; return w && w.region && w.shrineState ? w.shrineState(placeId) : "dark"; };
+
 // Wukong the guide: he appears when the player has been stuck a while.
 const WorldGuide = {
   // Always adaptive: he comes only when the player hasn't made headway for a while (no setting).
@@ -197,9 +208,9 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=23`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=25`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=15`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=21`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=23`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
@@ -208,7 +219,7 @@ function worldScenes() {
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
       for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=33`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=35`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -257,15 +268,29 @@ function worldScenes() {
       for (const o of map.getObjectLayer("objects").objects) {
         const p = P(o);
         if (o.type === "prop") this.addProp(o, p);
-        else if (o.type === "spot") this.spots[o.name] = { x: o.x, y: o.y, node: p.node, label: p.label, labelZh: p.label_zh || "", intro: J(p.intro), outro: J(p.outro), trigger: p.trigger || "near", use: p.use || "" };
+        else if (o.type === "spot") this.spots[o.name] = { x: o.x, y: o.y, node: p.node, label: p.label, labelZh: p.label_zh || "", intro: J(p.intro), outro: J(p.outro), trigger: p.trigger || "near", use: p.use || "",
+          // a place to deliver to (a ridge): mark, condition, what it needs, and its lines
+          ...(p.needs ? { needs: J(p.needs), delivers: p.delivers || o.name, when: p.when || "", empty: J(p.empty), waiting: J(p.waiting),
+                          deliver: J(p.deliver), delivered: J(p.delivered) } : {}) };
         else if (o.type === "npc") this.addNpc(o, p, J);
         else if (o.type === "exit") this.exits.push({ to: p.to, side: p.side, rect: new Phaser.Geom.Rectangle(o.x, o.y, o.width, o.height) });
         else if (o.type === "entry") this.entries[p.from || ""] = { x: o.x, y: o.y };
       }
+      // a town's shrine with no story spot of its own: touching it still answers (dark, or its hint)
+      if (this.shrine && !Object.values(this.spots).some(s => Math.hypot(s.x - this.shrine.x, s.y - this.shrine.y) < 30))
+        this.spots.shrine_ = { x: this.shrine.x, y: this.shrine.y + 12, node: "", label: "The shrine", labelZh: "神龛", intro: [], outro: [], trigger: "talk", use: "shrine" };
+      this.refreshStory();
 
       // back from a problem (or a reload): stand where you were
       // (only where he can stand: an older map may have put a wall there, or ended short of it)
-      const standable = q => { const G = this.walkGrid(), ok = q.x >= 0 && q.y >= 0 && G.free(Math.floor(q.x / G.C), Math.floor((q.y - 3) / G.C)); this.grid = null; return ok; };
+      // (open ground, or within two cells of it: a doorway's entry point is squeezed against the wall)
+      const standable = q => {
+        const G = this.walkGrid(), cx = Math.floor(q.x / G.C), cy = Math.floor((q.y - 3) / G.C);
+        let ok = false;
+        for (let dy = -2; dy <= 2 && !ok; dy++) for (let dx = -2; dx <= 2 && !ok; dx++) ok = G.free(cx + dx, cy + dy);
+        this.grid = null;
+        return ok && q.x >= 0 && q.y >= 0 && q.x <= this.physics.world.bounds.width && q.y <= this.physics.world.bounds.height;
+      };
       const pos = this.resume && this.st.pos && this.st.pos.place === this.placeId && standable(this.st.pos) ? this.st.pos : null;
       const at = pos || this.entries[this.from || ""] || this.entries[""];
       this.player = this.physics.add.sprite(at.x, at.y, "h-liubei-down-0").setOrigin(.5, 1);
@@ -427,7 +452,9 @@ function worldScenes() {
       spr.body.setSize(10, 6).setOffset((spr.width - 10) / 2, spr.height - 6);
       // townsfolk drawn like the heroes speak with their own portrait and name
       const own = p.drawn ? L => L.map(l => l[0] === "n" ? ["say", who, ...l.slice(1)] : l) : L => L;
-      const n = { id: o.name, spr, who, folk, sprite: p.sprite, say: own(J(p.say)), wander: p.wander, home: { x: o.x, y: o.y }, t: 0, dir: face, until: p.until };
+      const n = { id: o.name, spr, who, folk, sprite: p.sprite, say: own(J(p.say)), wander: p.wander, home: { x: o.x, y: o.y }, t: 0, dir: face, until: p.until,
+        when: p.when || "" };   // only here once the story's condition holds (Guan Yu on his ridge)
+      if (p.gives) Object.assign(n, { gives: p.gives, givesWhen: p.gives_when || "", give: own(J(p.give)), given: own(J(p.given)) });
       if (p.challenge) {
         n.challenge = `${this.w.n}-${this.placeId}-c-${p.challenge}`;
         n.intro = own(J(p.intro)); n.win = own(J(p.win)); n.done = own(J(p.done));
@@ -479,6 +506,31 @@ function worldScenes() {
       seen.add(key);
       return this.region.quests.some(q => q.after.includes(key) && this.done(q.node, seen));
     }
+    // A story condition: "node:<key>" cleared (a short key is this world's), "item:<key>" held,
+    // "mark:<id>" done; a list holds when all of it does.
+    cond(c) {
+      if (!c) return true;
+      if (Array.isArray(c)) return c.every(x => this.cond(x));
+      const i = String(c).indexOf(":"), kind = String(c).slice(0, i), v = String(c).slice(i + 1);
+      if (kind === "node") return this.done(/^\d+-/.test(v) ? v : `${this.w.n}-${v}`);
+      if (kind === "item") return WorldItems.has(this.w, v);
+      if (kind === "mark") return WorldMarks.has(this.w, v);
+      return false;
+    }
+    // A gated battle's first unmet condition: its defeat scene plays instead of the board.
+    gateFor(q) { return q && q.gate ? q.gate.find(g => !this.cond(g.needs)) || null : null; }
+    // The shrine of a place: dark (nothing yet), lit (its scene is open), settled (its board solved).
+    shrineQuest(placeId = this.placeId) { return this.region.quests.find(q => q.shrine && this.placeIn(q.place, placeId)) || null; }
+    shrineState(placeId = this.placeId) {
+      const q = this.shrineQuest(placeId);
+      return !q ? "dark" : this.done(q.node) ? "settled" : this.available(q) ? "lit" : "dark";
+    }
+    // Who is here and how the shrine looks follow the story; redone whenever it moves on.
+    refreshStory() {
+      for (const n of this.npcs) if (n.when) { const on = this.cond(n.when); n.spr.setVisible(on); n.spr.body.enable = on; }
+      if (this.shrine && this.setShrine) this.setShrine(this.shrineState());
+    }
+
     isDone(key) { return this.done(key) || !this.region.quests.some(q => q.node === key); }
     available(q) { return !this.done(q.node) && (q.after.length === 0 || q.after.some(a => this.isDone(a))); }
     placeOpen(id) {
@@ -514,21 +566,42 @@ function worldScenes() {
       this.goalAt = this.goalPoint();
       if (this.fairy) this.fairy.wp = null;
       const q = this.nextMain();
-      if (!q) return this.ui.goal("This book is complete. The road goes on…", "这一卷已经完成。路还在前方……");
-      if (this.available(q)) return q.place === this.placeId ? this.ui.goal(q.objective, q.objective_zh)
-        : this.ui.goal(`${q.objective} (${this.placeName(q.place)})`, q.objective_zh ? `${q.objective_zh}（${this.placeZh(q.place)}）` : "");
+      if (!q) return this.goal("This book is complete. The road goes on…", "这一卷已经完成。路还在前方……");
+      const g = this.available(q) && this.gateFor(q);
+      if (g && g.objective) {   // what the battle still needs, with a count
+        const need = [].concat(g.needs || []), k = need.filter(c => this.cond(c)).length, n = need.length > 1 ? ` (${k}/${need.length})` : "";
+        const away = g.place && g.place !== this.placeId && !this.placeIn(this.placeId, g.place);
+        return this.goal(`${g.objective}${n}${away ? ` (${this.placeName(g.place)})` : ""}`,
+          g.objective_zh ? `${g.objective_zh}${n ? `（${k}/${need.length}）` : ""}${away ? `（${this.placeZh(g.place)}）` : ""}` : "");
+      }
+      if (this.available(q)) return q.place === this.placeId ? this.goal(q.objective, q.objective_zh)
+        : this.goal(`${q.objective} (${this.placeName(q.place)})`, q.objective_zh ? `${q.objective_zh}（${this.placeZh(q.place)}）` : "");
       const lead = this.leadsTo(q);
       const ways = [...new Set(lead.map(p => p.role === "short" ? `the shortcut at ${this.placeName(p.place)}` : this.placeName(p.place)))];
       const waysZh = [...new Set(lead.map(p => p.role === "short" ? `${this.placeZh(p.place)}的捷径` : this.placeZh(p.place)))];
-      this.ui.goal(`On to ${this.placeName(q.place)}, by way of ${ways.join(" or ")}.`, `前往${this.placeZh(q.place)}，可经${waysZh.join("或")}。`);
+      this.goal(`On to ${this.placeName(q.place)}, by way of ${ways.join(" or ")}.`, `前往${this.placeZh(q.place)}，可经${waysZh.join("或")}。`);
     }
+    goal(en, zh) { this.goalText = [en, zh]; this.ui.goal(en, zh); }
 
     // Where the next objective is from here: its story spot on this map, or
     // the exit that starts the shortest way to its place (rooms included).
     goalPoint() {
       const q = this.nextMain();
       if (!q) return null;
-      const quests = this.available(q) ? [q] : this.leadsTo(q);
+      const g = this.available(q) && this.gateFor(q);
+      if (g && g.place && g.objective) {   // the nearest giver or delivery place still to visit
+        if (this.placeIn(this.placeId, g.place) && this.placeId === g.place) {
+          const P = this.player, need = [].concat(g.needs || []).filter(c => !this.cond(c)), d = t => Math.hypot(t.x - P.x, t.y - P.y);
+          const items = need.filter(c => c.startsWith("item:")).map(c => c.slice(5)), marks = need.filter(c => c.startsWith("mark:")).map(c => c.slice(5));
+          const ts = [...this.npcs.filter(n => n.gives && items.includes(n.gives) && n.spr.visible).map(n => ({ x: n.spr.x, y: n.spr.y - 8 })),
+                      ...Object.values(this.spots).filter(s => s.needs && marks.includes(s.delivers)).map(s => ({ x: s.x, y: s.y - 4 }))];
+          this.goalHops = 0;
+          if (ts.length) return ts.sort((a, b) => d(a) - d(b))[0];
+        } else return this.routeTo([{ place: g.place }]);
+      }
+      return this.routeTo(this.available(q) ? [q] : this.leadsTo(q));
+    }
+    routeTo(quests) {
       const here = quests.find(x => x.place === this.placeId);
       this.goalHops = 0;
       if (this.place.archetype === "overworld") {   // the entrance of the place the goal is in (a room's own place)
@@ -639,7 +712,15 @@ function worldScenes() {
     // and the next try picks up at the last line before it. A scene without
     // one plays after the problem, as before.
     playQuest(q, spot) {
+      // a gated battle before it's ready: its defeat scene, no board, no cooldown; he stays here
+      const gate = this.gateFor(q);
+      if (gate) return this.playScene(gate.else, () => this.setGoal());
       const steps = (this.story[q.scene] || {}).steps || [], at = steps.findIndex(s => s[0] === "problem");
+      if (q.board === false) {   // a scene with no board (a defeat): playing it is the beat
+        const fin = () => { TK.markCleared(q.node); this.finishQuest(q, steps); };
+        const play = () => this.playScene(q.scene, fin);
+        return spot.intro.length ? this.talk(worldLines(spot.intro), play, "story") : play();
+      }
       const setter = q.boss ? q.boss.who : at >= 0 && steps[at][1];   // ["problem", who]: who sets it
       const foe = setter ? { who: setter, face: this.faceOf({ who: setter }) } : null;
       const intro = spot.intro.length ? worldLines(spot.intro)
@@ -663,6 +744,14 @@ function worldScenes() {
           keep: this.npcs.filter(n => n.until === q.node && n.spr.visible).map(n => n.spr) });
       const lines = steps.slice(0, at).filter(s => s[0] === "n" || s[0] === "say");
       say(again ? lines.slice(-1) : lines).then(solve).then(won => won && this.talk(steps.slice(at + 1), finish, "story"));
+    }
+
+    // A scene by id, staged here if the generator made one, else its lines.
+    playScene(id, done) {
+      const all = (this.cache.json.get("cutscenes") || {}).scenes || {}, cs = all[id];
+      this.walk = null;
+      if (cs && cs.place === this.placeId && typeof WorldCutscene !== "undefined") return WorldCutscene.play(this, cs, done);
+      return this.talk((this.story[id] || {}).steps || [], done, "story");
     }
 
     cutscene(q) {
@@ -697,6 +786,12 @@ function worldScenes() {
       for (const s of steps) if (s[0] === "party") { this.st.party = s[1]; TK.setParty(this.w, s[1]); this.setParty(s[1]); }
       if (typeof WorldItems !== "undefined") WorldItems.gainFrom(this, steps);   // what the scene gave
       if (q.scene) TK.markSeen(`${this.w.n}:${q.scene}`);
+      // a gated battle won: the supplies it needed have done their job
+      for (const g of q.gate || []) for (const c of [].concat(g.needs || [])) {
+        const [k, v] = String(c).split(":");
+        if (k === "item" && (WorldItems.defs(this.w)[v] || {}).kind === "supply") WorldItems.remove(this.w, v);
+      }
+      this.refreshStory();
       this.save();
       this.setGoal();
       if (q.role === "boss" && this.opts.onBoss) await this.opts.onBoss();
@@ -945,17 +1040,48 @@ function worldScenes() {
         const n = t.n;
         n.dir = { up: "down", down: "up", left: "right", right: "left" }[this.player.facing];
         this.faceNpc(n);
+        if (n.gives) return this.giveFrom(n);
         if (n.challenge) return this.done(n.challenge) ? this.talk(worldLines(n.done)) : this.talk(worldLines(n.intro), () => this.puzzle(n.challenge, { id: n.challenge.split("-c-")[1], who: n.who, face: this.faceOf(n) }));
         this.talk(n.say.length ? worldLines(n.say) : [["n", "…"]]);
         return;
       }
       const spot = this.spots[t.k];
       if (spot.use === "ogs") return TKTable.sit(this, t.k);   // the travellers' go table (tk-table.js)
+      if (spot.needs) return this.deliverAt(spot);
+      if (spot.use === "shrine") return this.shrineTalk();
       const q = this.region.quests.find(x => x.node === spot.node);
+      if (q && q.shrine && !this.available(q)) return this.shrineTalk();
       if (q && this.available(q)) this.playQuest(q, spot);
       else if (q && this.done(q.node)) this.talk([["n", `${spot.label || q.title}. (${q.title}: done.)`,
         q.title_zh ? `${spot.labelZh || q.title_zh}。（${q.title_zh}：已完成）` : ""]]);
       else this.talk([["n", `${spot.label || "Nothing here"}. It isn't time yet.`, `${spot.labelZh || "这里"}。时候还没到。`]]);
+    }
+
+    // Someone with something to give: a plain line until the story's condition holds, then the
+    // gift (once), then an "already given" line.
+    giveFrom(n) {
+      const lines = L => worldLines(L && L.length ? L : n.say.length ? n.say : [["n", "…"]]);
+      if (!this.cond(n.givesWhen)) return this.talk(lines(n.say));
+      if (WorldItems.has(this.w, n.gives)) return this.talk(lines(n.given));
+      this.talk(lines(n.give), () => { WorldItems.gain(this, n.gives); this.refreshStory(); this.setGoal(); });
+    }
+    // A place to deliver to: empty until its condition, waiting until everything it needs is held,
+    // then the handover (marks it done), then its after-line.
+    deliverAt(s) {
+      const lines = (L, fb) => worldLines(L && L.length ? L : fb);
+      if (!this.cond(s.when)) return this.talk(lines(s.empty, [["n", `${s.label || "Here"}. There's no one here.`, `${s.labelZh || "这里"}。这里没有人。`]]));
+      if (WorldMarks.has(this.w, s.delivers)) return this.talk(lines(s.delivered, s.deliver));
+      if (!this.cond(s.needs)) return this.talk(lines(s.waiting, [["n", "Not yet.", "还不到时候。"]]));
+      this.talk(lines(s.deliver, [["n", "Delivered.", "已送到。"]]), () => { WorldMarks.add(this.w, s.delivers); this.refreshStory(); this.setGoal(); });
+    }
+    // Touching a shrine: dark, "the board is quiet"; settled, the Star Lords' hint again and where to go now.
+    shrineTalk() {
+      const q = this.shrineQuest();
+      if (!q || this.shrineState() === "dark") return this.talk([["n", "The board is quiet.", "棋盘寂静。"]]);
+      const lines = [];
+      if (q.hint) lines.push(["n", q.hint, q.hint_zh || ""]);
+      if (this.goalText) lines.push(["n", this.goalText[0], this.goalText[1]]);
+      this.talk(lines.length ? lines : [["n", "The board is quiet.", "棋盘寂静。"]]);
     }
 
     // style: "story" for the plot (quest lead-ins and scenes), "chat" for everything else
@@ -1033,6 +1159,13 @@ function worldScenes() {
           n.dir = away ? (Math.abs(n.spr.x - n.home.x) > Math.abs(n.spr.y - n.home.y) ? (n.spr.x > n.home.x ? "left" : "right") : (n.spr.y > n.home.y ? "up" : "down"))
             : ["up", "down", "left", "right"][Math.floor(Math.random() * 4)];
           n.moving = Math.random() < .5 || away;
+        }
+        // keep out of doorways and roads out: a villager standing there blocks the way in
+        const door = this.exits.find(e => n.spr.x > e.rect.x - 18 && n.spr.x < e.rect.right + 18 && n.spr.y > e.rect.y - 18 && n.spr.y < e.rect.bottom + 22);
+        if (door) {
+          const dx = n.spr.x - door.rect.centerX, dy = n.spr.y - door.rect.centerY;
+          n.dir = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? "right" : "left") : (dy > 0 ? "down" : "up");
+          n.moving = true; n.t = Math.max(n.t, 600);
         }
         const v = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }[n.dir];
         if (n.moving) { n.spr.setVelocity(v[0] * 28, v[1] * 28); n.spr.anims.play(n.who ? `h-${n.who}-${n.dir}` : `fk-${n.sprite}-${n.dir}`, true); }

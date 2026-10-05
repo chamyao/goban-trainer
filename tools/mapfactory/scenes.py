@@ -592,6 +592,12 @@ def build_scenes(n):
         # party at this point in the story: the main line's party changes carry forward
         staged = stage_scene(scene, m, spot, party, chars, q.get("boss") if q["role"] == "boss" else None)
         out[q["scene"]] = {"place": q["place"], "spot": spot["id"], "node": q["node"], "party": party, **staged}
+        # a gated battle's defeat scenes are staged at the same spot, with the same party
+        for g in q.get("gate", []):
+            other = world["scenes"].get(g.get("else", ""))
+            if other and g["else"] not in out:
+                out[g["else"]] = {"place": q["place"], "spot": spot["id"], "node": q["node"], "party": party,
+                                  **stage_scene(other, m, spot, party, chars)}
         if q["role"] in ("main", "boss"):
             for s in scene["steps"]:
                 if s[0] == "party":

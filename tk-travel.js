@@ -118,7 +118,7 @@ const WorldTravel = {
     for (const k of Object.keys(p.tk || {})) if (k.startsWith(pre)) delete p.tk[k];
     for (const k of Object.keys(p.tkSeen || {})) if (k.startsWith(`${w.n}:`)) delete p.tkSeen[k];
     TK.saveProg(p);
-    for (const key of ["tk-party", "tk-items", "tk-at", "tk-ride"]) { const a = TK.ls(key); delete a[w.n]; TK.lsSet(key, a); }
+    for (const key of ["tk-party", "tk-items", "tk-at", "tk-ride", "tk-marks"]) { const a = TK.ls(key); delete a[w.n]; TK.lsSet(key, a); }
     try { localStorage.removeItem(WorldState.key(w.n)); } catch {}
     WorldView.destroy();
     viewTK(w.n);

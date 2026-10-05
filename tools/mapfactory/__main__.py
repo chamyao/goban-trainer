@@ -72,6 +72,11 @@ def build(n):
     for q in region["quests"]:  # Chinese beside every line the player reads
         q["objective_zh"] = ZH.get(q["objective"], "")
         q["title_zh"] = world["scenes"][q["scene"]].get("zh", "")
+        if q.get("hint"):
+            q["hint_zh"] = ZH.get(q["hint"], "")
+        for g in q.get("gate", []):
+            if g.get("objective"):
+                g["objective_zh"] = ZH.get(g["objective"], "")
     out = {"format": "tk-region/1", "world": n, "name": world["name"], "zh": world.get("zh", ""), "start": region["start"],
            "party": world.get("party", []), "places": places, "quests": region["quests"]}
     (d / "region.json").write_text(json.dumps(out, ensure_ascii=False, indent=1))
