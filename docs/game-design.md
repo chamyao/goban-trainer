@@ -46,7 +46,7 @@ Implementer key: **Plot** = Plot/Story, **Integ** = Primary Integration, **Gfx**
 | 5 | **Relics that do something** | A relic opens a path or gate, speeds travel like the horses, makes a hint more precise, changes how the party looks, or unlocks a scene or Chronicle entry. Boss wins give the Book's trophy and a callback later | Integ (effects), Plot (which relic, where), Gfx (icons) |
 | 6 | **Boss framing** | Keep the hard problem. Mark it clearly as harder, and the Star Lords give no hint ("This one is yours"). Earlier hint actions pay off in the cutscene around it, not on the board. A slip keeps the same problem with the cooldown, as for every problem | Plot, Integ |
 | 7 | **Vary where the problem sits** | Not always mid-scene: some scenes open with the problem, some have none, a few have two. Matches the plan's "some battles, some none" | Plot |
-| 8 | **Book-end choice and replay hooks** | A small choice at each Book's end changes dialogue or a reward, never the novel's events. Plus hidden Star Lord encounters, the Wang Zhi legend area, and Chronicle completion | Plot, Gfx, Integ |
+| 8 | **Replay hooks** | Hidden Star Lord encounters, the Wang Zhi legend area, and Chronicle completion. (Book-end choices were considered and dropped by the user.) | Plot, Gfx, Integ |
 
 ## The toolbox (supporting mechanics)
 
@@ -56,7 +56,6 @@ Implementer key: **Plot** = Plot/Story, **Integ** = Primary Integration, **Gfx**
 | **Fail, then prepare** | Black Wind (B1), Hulao (B2), Guandu (B5), Red Cliffs (B8), Nanjun (B9), poisoned springs (B14), Chencang (B15) | Daxing (the novel prepares first), the five passes, Dingjun, any real defeat | A first attempt before the conditions are met shows a defeat scene and no problem; a clue sends the player to gather strength. Plot's rule: use it only where the novel has a setback then a win |
 | **Delivery** | Lu Zhi's errand to Yingchuan (B1), the ladies' escort (B4), the letter left for Zhuge Liang (B6), Kan Ze's letter (B8), the blotted letter (B10), Guan Yu's failed plea (B12), the sealed bag (B16) | Lady Mi and A Dou, the heads, wills, Xu Shu's forged letter (must deceive the player too) | Almost all outcomes are fixed by the novel, so the value is the journey and the twist. At most one required delivery per Book plus one optional. Twists: arrive too late, forged or altered letter, a trap, recipient gone, the carry is the harm |
 | **Formation or flank placement** | The short battles (Qingzhou, Wuchao) | Where the novel needs the characters to act | Small and forgiving |
-| **Choice beat** | Book endings | Anything that changes events | Dialogue or reward only |
 | **Collecting** | Relics, forge and pills, Star Lord counsel collection | | The xianxia flavour, if wanted |
 | **Discovery** | Hidden shrines, Star Lord encounters | | Replay value |
 
@@ -70,8 +69,9 @@ Implementer key: **Plot** = Plot/Story, **Integ** = Primary Integration, **Gfx**
 
 ## Open questions for the user
 
+None at present. (Dropped by the user: Book-end choices and keepsakes.)
+
 2. (Settled.) A slip keeps the same problem with a fixed 30 s cooldown, in every Book and for bosses. A gated battle shows a defeat scene and no board.
-3. How many Book-end choices, and should they carry into later Books?
 
 ## Suggested first pilot
 
