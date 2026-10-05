@@ -80,6 +80,14 @@ STYLES = {
                   "fills, hard-edged two-tone cel shadows, a limited palette, energetic dynamic composition and poses, "
                   "a few speed lines; no airbrushed gradients, no bloom, no glow, no volumetric light, no painterly "
                   "texture, no photorealism.",
+    # a prompt bake-off before the wide redo (the user: "get a good prompt before doing wide scale"): short on purpose
+    "try_min": "Style: flat 2D anime illustration, bold black outlines, flat colours, simple two-tone shading, plain background.",
+    "try_avatar": "Style: in the style of the animated series Avatar: The Last Airbender: flat 2D cel animation, clean "
+                  "outlines, flat colours, simple shading, East Asian character design.",
+    "try_90s": "Style: 1990s cel anime screenshot: hand-painted cels, clean outlines, flat colours with one hard shadow "
+               "tone, simple painted background.",
+    # the user: "the style tag is what needs to get cut" (scene and cast text unchanged)
+    "min": "Style: 2D donghua.",   # one short line; the scene and its people carry the picture
     "genshin": "Style: in the style of Genshin Impact key art: polished anime cel shading, bright vivid colours, "
                "ornate gold trim and jade accents, glowing particles, clean detailed fantasy illustration.",
     "watercolor": "Style: Chinese watercolour painting: loose wet washes of colour bleeding softly on rice paper, "
