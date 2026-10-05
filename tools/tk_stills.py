@@ -58,7 +58,7 @@ PORTRAITS = {
 
 # key -> (name as the scenes write it, look)
 CAST = {
-    "liubei": ("Liu Bei", "a gentle young man of twenty-three with a short neat black beard, long earlobes and "
+    "liubei": ("Liu Bei", "a gentle man of twenty-eight with a short neat black beard, long earlobes and "
                           "kind eyes, hair in a topknot, in a white robe trimmed with gold"),
     "guanyu": ("Guan Yu", "a towering giant of a man, a head taller than anyone, with massive shoulders and a thick "
                           "neck, a deep red face, a very long black beard down to his chest and narrow eyes under "
@@ -70,9 +70,9 @@ CAST = {
                               "in a yellow robe"),
     "zhangjiao": ("Zhang Jiao", "a gaunt old sorcerer with long white hair and a long white beard, a yellow headscarf "
                                 "and a flowing yellow robe, burning eyes"),
-    "caocao": ("Cao Cao", "a lean, sharp-eyed young man with a short goatee and a knowing half-smile, black official's "
+    "caocao": ("Cao Cao", "a lean man of about thirty with a thin moustache and a quick, sharp look, black official's "
                           "cap, dark red robe with gold trim"),
-    "dongzhuo": ("Dong Zhuo", "a fat, arrogant warlord with a short beard and a sneer, black official's cap, purple robe"),
+    "dongzhuo": ("Dong Zhuo", "a huge, heavy, bearded bully of a warlord with a sneer, in a general's armour"),
     "zhujun": ("Zhu Jun", "an imperial general with a short beard, iron helmet, dark red robe over armour"),
     "huangfusong": ("Huangfu Song", "an imperial general with a long black beard, iron helmet, blue robe over armour"),
     "xushao": ("Xu Shao", "a calm scholar with a thin beard and knowing eyes, scholar's hat, pale robe"),
@@ -189,7 +189,7 @@ SCENES = {
         "A humble village of earth-walled houses at golden morning, and above it a gigantic mulberry tree, "
         "its round crown spreading like the canopy of an imperial carriage; villagers pause in the lane to stare up.",
         "A small boy of six stands under a great mulberry tree, chin up, pointing at its canopy and declaring he will ride "
-        "in a carriage like that one day; his uncle beside him startled, hand raised to hush him.",
+        "in a carriage like that one day; his uncle, a middle-aged farmer, startled beside him, hand raised to hush him.",
         "Looking straight up through the leaves of a vast mulberry tree, sunlight breaking through in rays, the leaves "
         "forming a perfect round canopy against a deep blue sky.",
     ),
@@ -273,8 +273,8 @@ SCENES = {
     "office": (
         "Han troops fleeing in rout across hills under a stormy sky, pursued by Yellow Turbans, as three brothers "
         "charge in from the side and turn the battle.",
-        "Dong Zhuo seated in his tent, sneering down at Liu Bei standing before him, as Zhang Fei behind Liu Bei reaches "
-        "for his sword in rage and Guan Yu holds his arm.",
+        "Dong Zhuo seated in his army camp with banners behind him, sneering down at Liu Bei standing before him, as "
+        "Zhang Fei lunges for his sword in rage and Liu Bei and Guan Yu together hold him back.",
         "A general's cup tipped over on a table, wine spilling, the shadow of a raised fist on the tent wall.",
     ),
     "blackwind": (
@@ -363,6 +363,21 @@ SCENES = {
     ),
 }
 
+# a fourth view where Plot asked for a moment the three don't cover
+EXTRA = {
+    "bosswin_d": ("bosswin", "Inside the walls of Yangcheng at night, Zhang Bao turns away from the gate as his own officer "
+                             "Yan Zheng steps up behind him and drives a blade into his back; torchlight, a few guards frozen "
+                             "at the edge of the frame. Dark and quiet, no gore, just the moment."),
+}
+
+# the stills the game uses (Plot/Story's choice: the emotional peaks, the partings, the one death)
+CHOSEN = ["tree_b", "notice_b", "inn_b", "oath_b", "oath_c", "tent_b", "cart_b", "cart_c", "office_b", "blackwind_a",
+          "bosswin_c", "bosswin_d", "peace2_b", "caocao2_b", "caocao3_b", "post_b", "horses_b"]
+
 for _scene, _shots in SCENES.items():
     for _lens, _text in zip(LENSES, _shots):
         STILLS.setdefault(f"{_scene}_{_lens}", {"scene": _scene, "lens": _lens, "prompt": _text})
+
+for _id, (_scene, _text) in EXTRA.items():
+    STILLS.setdefault(_id, {"scene": _scene, "lens": _id[-1], "prompt": _text})
+assert all(c in STILLS for c in CHOSEN)
