@@ -23,7 +23,10 @@ words and name people only; their look belongs in CAST.
 """
 import re
 
-STYLE = "Style: in the style of Studio Ghibli."
+# the user's pick from the candidates below (gongbi), with what it tended to add uninvited ruled out
+STYLE = ("Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat "
+         "mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no "
+         "signature, no watermark.")
 
 # candidates for STYLE, to choose by eye (gen_stills.py --styles): the user wants the stills to
 # look like modern Chinese xianxia game art, Sword and Fairy cover art especially
@@ -47,7 +50,7 @@ STYLES = {
 PORTRAITS = {
     "bust": "Character face portrait of {name}, {look}. Head and shoulders close-up, the face filling most of the "
             "frame, three-quarter view, a characteristic expression, plain flat background.",
-    "card": "Character art of {name}, {look}. Half-body, three-quarter view, holding his signature weapon, a "
+    "card": "Character art of {name}, {look}. Half-body, three-quarter view, holding {held}, a "
             "characteristic expression, swirling mist and clouds behind him, like a game character card.",
     "select": "Full-body character art of {name}, {look}. Standing in a heroic pose, whole figure visible from head "
               "to feet, soft gradient background, like a game's character select screen.",
@@ -89,13 +92,19 @@ def style_note(n):
 ANGLE = {"guanyu": "Seen from slightly below, looming, his shoulders filling the frame."}
 
 
+# what each holds in his portrait card
+HELD = {"liubei": "a pair of twin swords", "guanyu": "a long crescent-bladed glaive, the Green Dragon blade",
+        "zhangfei": "a long spear with a wavy serpent blade", "caocao": "a sword", "zhangjiao": "a tall wooden staff",
+        "zhangbao": "a sword", "luzhi": "a rolled scroll", "zhujun": "a sword", "huangfusong": "a sword",
+        "dongzhuo": "a wine cup", "xushao": "a writing brush"}
+
+
 def portrait(key, n_style=0):
-    """The request for a person's reference portrait: the face is what the stills need to keep."""
+    """The request for a person's reference portrait (the "card" framing, the user's pick): what the
+    stills are given to keep a face and costume the same from one image to the next."""
     name, look = CAST[key]
-    return (f"Character face portrait of {name}, {look}. Head and shoulders close-up, the face filling most of "
-            f"the frame, three-quarter view, a characteristic expression, plain flat background. "
-            f"{ANGLE[key] + ' ' if key in ANGLE else ''}"
-            f"{style_note(n_style)}{STYLE}")
+    return (f"{PORTRAITS['card'].format(name=name, look=look, held=HELD.get(key, 'nothing, hands folded'))} "
+            f"{ANGLE[key] + ' ' if key in ANGLE else ''}{style_note(n_style)}{STYLE}")
 
 
 STILLS = {

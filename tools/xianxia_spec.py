@@ -75,7 +75,9 @@ CHARACTERS = {
 # how many tries (different seeds) to make of each, to choose from: char.<who>-<n>.png
 CHAR_TRIES = {"liubei": 1, "guanyu": 3, "zhangfei": 3}
 # which try is used in the game (the user's pick), and how tall the heroes stand in pixels
-CHAR_PICK = {"liubei": 1, "guanyu": 1, "zhangfei": 1}
+CHAR_PICK = {"liubei": 1, "guanyu": 1, "zhangfei": 2,   # the user's picks
+             **{k: 1 for k in ("caocao", "dongzhuo", "zhangjiao", "zhangbao", "luzhi", "zhujun", "huangfusong",
+                               "militia", "rebel", "f_soldier", "f_farmer", "f_official", "f_woman", "f_elder")}}
 HERO_H = 22
 
 
