@@ -122,8 +122,11 @@ CATEGORY = {sid: k for k, c in _CATS["categories"].items() for sid in c["scenes"
 for _k, _c in _CATS["categories"].items():
     STYLES[f"cat_{_k}"] = f"Style: {_CATS['base'].rstrip('.')}. {_c['recipe']}"
 
-# the user's pick for the stills: the God of High School look, on Seedream 5 Pro (gen_stills' default)
-STYLE = f"{STYLES['gohs']} {NEGATIVE}"
+# the stills are made on Seedream 5 Pro (gen_stills' default); the God of High School look was the first pick
+# the user's final style (after the garden tests): one short line, the era, nothing else; scenes and cast
+# descriptions carry the picture. Every still's default; --look gohs etc. still swap it out for comparisons.
+STYLES["final"] = "Style: 2D donghua, hard cel shading."
+STYLE = f"{STYLES['final']} Han dynasty China, about 184 AD."
 
 # candidates for the portrait framing (the reference faces), to choose by eye
 PORTRAITS = {
