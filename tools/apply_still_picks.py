@@ -4,7 +4,8 @@
 
 Each pick names a candidate in assets/tk/stills/picker/picker.json by its blob; the full-size original
 (on the samples branch, or an earlier version of the still) is fitted into assets/tk/stills/<id>.jpg and
-recorded in stills.json as the user's pick.
+recorded in stills.json as the user's pick. Entries may carry a "note" (or be only a note): notes are
+printed and kept in assets/tk/stills/picker/notes.json, for the redos they ask for.
 """
 import json
 import re
@@ -26,7 +27,15 @@ def main():
     slots = {s["id"]: s for s in json.loads((OUT / "picker/picker.json").read_text())["slots"]}
     man_path = OUT / "stills.json"
     man = json.loads(man_path.read_text())
+    notes_path = OUT / "picker/notes.json"   # the user's notes per still, kept for the redo they ask for
+    notes = json.loads(notes_path.read_text()) if notes_path.exists() else {}
     for p in picks:
+        if p.get("note"):
+            notes.setdefault(p["id"], []).append({"note": p["note"], "date": date.today().isoformat(),
+                                                  "picked": p.get("blob")})
+            print(f"  {p['id']}: note: {p['note']}")
+        if not p.get("blob"):   # a note only
+            continue
         slot = slots.get(p["id"])
         c = slot and next((c for c in slot["candidates"] if c["blob"] == p["blob"]), None)
         if not c:
@@ -46,6 +55,7 @@ def main():
                         "approved": f"user, {date.today().isoformat()} (still picker)", "made": date.today().isoformat()}
         print(f"  {p['id']}: {c['cid']} {c['label']}")
     man_path.write_text(json.dumps(man, ensure_ascii=False, indent=1))
+    notes_path.write_text(json.dumps(notes, ensure_ascii=False, indent=1))
 
 
 if __name__ == "__main__":
