@@ -1153,7 +1153,7 @@ function worldScenes() {
       if (spot.use === "shrine") return this.shrineTalk();
       const q = this.region.quests.find(x => x.node === spot.node);
       if (q && q.shrine && !this.available(q)) return this.shrineTalk();
-      if (q && this.available(q)) this.playQuest(q, spot);
+      if (q && this.available(q)) this.approach(q, spot);   // the same face-and-beat start as walking in
       else if (q && this.done(q.node)) this.talk([["n", `${spot.label || q.title}. (${q.title}: done.)`,
         q.title_zh ? `${spot.labelZh || q.title_zh}。（${q.title_zh}：已完成）` : ""]]);
       else this.talk([["n", `${spot.label || "Nothing here"}. It isn't time yet.`, `${spot.labelZh || "这里"}。时候还没到。`]]);

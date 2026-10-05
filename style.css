@@ -748,3 +748,6 @@ html.tk-fullwin-on, html.tk-fullwin-on body { overflow: hidden; overscroll-behav
 .tk-fb-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .tk-fb-msg { font: 11px/1.3 system-ui, sans-serif; color: #f4ead2; }
 @media (pointer: coarse) { .tk-fb-text { font-size: 16px; } }   /* no zoom-on-focus on iPhone */
+/* the menu never wider than the screen: long labels (Confirm taps…) wrap instead */
+.tk-menu-panel { max-width: min(230px, calc(100vw - 16px)); }
+.tk-menu-panel .tk-head-btns > * { max-width: 100%; box-sizing: border-box; white-space: normal; overflow-wrap: anywhere; }
