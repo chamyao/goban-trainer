@@ -59,7 +59,7 @@ const WorldIso = {
     const project = () => {
       saved.length = 0;
       for (const o of scene.children.list) {
-        if (o.isoFixed || o.scrollFactorX === 0 || !o.visible) continue;
+        if (o.isoFixed || o.isoFollow || o.scrollFactorX === 0 || !o.visible) continue;
         const a = o.isoAt;   // a building or prop: its footprint's centre, and the drop to its front corner
         const b = o.isoBase;  // a rider, an emote: the ground point it is held above (its offset stays upright)
         const lx = a ? a[0] : b ? b[0] : o.x, ly = a ? a[1] : b ? b[1] : o.y, q = P(lx, ly);
@@ -67,6 +67,18 @@ const WorldIso = {
         o.x = q.x + (b ? o.x - b[0] : 0); o.y = q.y + (a ? a[2] : b ? o.y - b[1] : 0);
         const d = o._depth;
         if (d > -9000 && d < 9000) o._depth = q.y + (a ? a[2] : 0) + (a ? 0 : d - ly);
+      }
+      // a glow or smoke drawn on a building or prop (isoFollow): it keeps its flat offset from that thing's
+      // anchor, so it stays where it was drawn on the art
+      for (const o of scene.children.list) {
+        const t = o.isoFollow;
+        if (!t || !o.visible) continue;
+        const i = saved.indexOf(t);
+        saved.push(o, o.x, o.y, o._depth);
+        if (i < 0) continue;   // the thing itself isn't drawn: leave it
+        o.x = t.x + (o.x - saved[i + 1]); o.y = t.y + (o.y - saved[i + 2]);
+        const d = o._depth;
+        if (d > -9000 && d < 9000) o._depth = t._depth + (d - saved[i + 3]);
       }
       // people in a scene (isoSpread) who stood side by side on the map's diagonal now stand one above the
       // other: nudge such pairs apart sideways, as drawn only; their shadows (isoWith) go with them

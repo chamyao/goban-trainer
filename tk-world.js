@@ -505,11 +505,13 @@ function worldScenes() {
       if (state === "dark") return;
       const glow = this.add.ellipse(s.x - 4, s.y - 11, 26, 14, state === "lit" ? 0x8ae8ff : 0xf4d27a, state === "lit" ? .35 : .18)
         .setBlendMode(Phaser.BlendModes.ADD).setDepth(s.y + 1);
+      glow.isoFollow = s.img;   // in the isometric view it stays on the shrine
       s.fx.push(glow, this.tweens.add({ targets: glow, alpha: state === "lit" ? .12 : .08, duration: state === "lit" ? 900 : 2200, yoyo: true, repeat: -1, ease: "Sine.InOut" }));
       if (state !== "lit") return;
       // incense smoke from the burner: small grey puffs that rise, drift and fade
       s.fx.push(this.time.addEvent({ delay: 420, loop: true, callback: () => {
         const puff = this.add.circle(s.x + 9 + Phaser.Math.Between(-1, 1), s.y - 19, 1.5, 0xd6dae0, .7).setDepth(s.y + 2);
+        puff.isoFollow = s.img;
         this.tweens.add({ targets: puff, y: puff.y - 16, x: puff.x + Phaser.Math.Between(-4, 4), scale: 2.2, alpha: 0, duration: 2200, onComplete: () => puff.destroy() });
       } }));
     }
