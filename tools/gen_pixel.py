@@ -130,17 +130,21 @@ def kit_set(a):
                                  "prompt": f"{p}, {LOOK}, 3/4 top-down game sprite, small"}, n)
                 for k, (p, (w, h), n) in PROPS_GEN.items()]
     if a.set.startswith("genshin"):   # the isometric kit: every building, tree, rock and prop, bright
-        from xianxia_spec import GENSHIN_BUILT, GENSHIN_LOOK, GENSHIN_NATURE, GENSHIN_PILOT, INTERIOR, PROPS_GEN, PROPS_SKIP
+        from xianxia_spec import (GENSHIN_BAD, GENSHIN_BUILT, GENSHIN_LOOK, GENSHIN_NATURE, GENSHIN_OBJECT,
+                                  GENSHIN_PILOT, INTERIOR, PROPS_GEN, PROPS_SKIP)
         objs = {**OBJECTS, **INTERIOR, **{k: v for k, v in PROPS_GEN.items() if k not in PROPS_SKIP}}
         if a.set == "genshin-pilot":
             objs = {k: objs[k] for k in GENSHIN_PILOT}
-        r8 = lambda v: min(256, max(16, (round(v) + 7) // 8 * 8))
+        if a.set == "genshin-redo":
+            objs = {k: objs[k] for k in sorted(GENSHIN_BAD)}
+        r8 = lambda v: min(256, max(32, (round(v) + 7) // 8 * 8))   # tiny canvases came back as scenes
         # a flat w x h piece seen isometrically: its footprint becomes a wider diamond, it stands a bit taller
         natural = lambda k: k.split(".")[0] in ("tree", "rock", "plant")
+        words = lambda k: GENSHIN_NATURE if natural(k) else GENSHIN_BUILT if k.startswith("building.") else GENSHIN_OBJECT
         jobs = [(k, "rd-plus", {"style": "isometric_asset", "width": r8(w + h / 2),
                                  "height": r8(h * 1.5 if natural(k) else h + w / 4),   # a canopy needs headroom
                                  "remove_bg": True,
-                                 "prompt": f"{p}, {GENSHIN_NATURE if natural(k) else GENSHIN_BUILT}, {GENSHIN_LOOK}, "
+                                 "prompt": f"{p}, {words(k)}, {GENSHIN_LOOK}, "
                                            "isometric game sprite, 2:1 isometric angle, small"}, n)
                 for k, (p, (w, h), n) in objs.items()]
     if a.set == "xianxia-chars2":
@@ -191,7 +195,7 @@ def main():
     ap.add_argument("--only", action="append")
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--list", action="store_true")
-    ap.add_argument("--set", choices=["xianxia", "xianxia-chars", "xianxia-redo", "xianxia-interior", "xianxia-chars2", "xianxia-props", "genshin-pilot", "genshin"], help="generate a whole kit's pieces (tools/xianxia_spec.py)")
+    ap.add_argument("--set", choices=["xianxia", "xianxia-chars", "xianxia-redo", "xianxia-interior", "xianxia-chars2", "xianxia-props", "genshin-pilot", "genshin", "genshin-redo"], help="generate a whole kit's pieces (tools/xianxia_spec.py)")
     ap.add_argument("--pause", type=float, default=12, help="seconds between requests (rate limits)")
     ap.add_argument("--jobs", type=int, default=8, help="requests at once")
     a = ap.parse_args()
