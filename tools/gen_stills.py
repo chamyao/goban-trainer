@@ -228,7 +228,7 @@ def styles(name, fn, ids, keys, model):
         nm, look = CAST[key]
         for fr, tpl in PORTRAITS.items():
             for st, sty in STYLES.items():
-                jobs.append((f"portrait-{key}-{fr}--{st}", f"{tpl.format(name=nm, look=look)} {sty}", "3:4" if fr != "bust" else "1:1"))
+                jobs.append((f"portrait-{key}-{fr}--{st}", f"{tpl.format(name=nm, look=look, held='his weapon')} {sty}", "3:4" if fr != "bust" else "1:1"))
     for i, (stem, text, aspect) in enumerate(jobs):
         if (out / f"{stem}.jpg").exists():
             continue
