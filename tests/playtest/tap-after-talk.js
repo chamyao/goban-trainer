@@ -41,7 +41,7 @@ for(let round=0;round<2;round++) for(let i=0;i<n;i++){
     const free=await p.evaluate(([x,y])=>{const w=window.__w,G=w.walkGrid();if(!G.free(Math.floor(x/8),Math.floor((y+1)/8)))return false;
       const path=w.findPath(w.player.x,w.player.y-3,x,y+1);return !!path&&path.length>0&&Math.hypot(path[path.length-1].x-w.player.x,path[path.length-1].y-w.player.y+3)>=8;},[tx,ty]);
     if(!free) continue;
-    if(await p.evaluate(([x,y])=>window.__w.npcs.some(n=>n.spr.visible&&Math.hypot(n.spr.x-x,n.spr.y-8-y)<22),[tx,ty])) continue;
+    if(await p.evaluate(([x,y])=>!!window.__w.pick(x,y),[tx,ty])) continue;   // a tap that would pick someone or something (forgiving taps) is not a ground tap
     await tapW(tx,ty); await p.waitForTimeout(900);
     if(await p.evaluate(pl=>!window.__w||window.__w.placeId!==pl,PLACE)){await p.waitForTimeout(800);await ready();await p.evaluate(pl=>{window.__w.leaving=false;window.__w.go(pl);},PLACE);await p.waitForTimeout(1500);await ready();break;}
     const s1=await st(); const moved=Math.hypot(s1.p[0]-s0.p[0],s1.p[1]-s0.p[1]);
