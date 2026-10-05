@@ -73,6 +73,9 @@ STYLES = {
                "cinematic and dark-fantasy.",
 }
 
+# the user's pick for the stills: the God of High School look, on Seedream 5 Pro (gen_stills' default)
+STYLE = f"{STYLES['gohs']} {NEGATIVE}"
+
 # candidates for the portrait framing (the reference faces), to choose by eye
 PORTRAITS = {
     "bust": "Character face portrait of {name}, {look}. Head and shoulders close-up, the face filling most of the "
@@ -434,6 +437,74 @@ REVIEW = {
                                   "run; ghostly paper-like riders gallop inside the cloud."),
 }
 
+# The final World 1 set: one prompt per still the story uses, written from docs/stills-must-show.md
+# (Plot): who must be in the frame, the one action, and what must not be there. Each man is placed in the
+# frame, objects belong to whoever holds them, and nothing names writing. Replaces the scene prompts above.
+FINAL = {
+    "tree_a": "A humble village of mud-walled houses with thatched roofs, and above it one enormous mulberry tree, over "
+              "fifty feet tall, its round crown spreading like the canopy of an imperial carriage; a few villagers in "
+              "the lane glance up at it. Morning light.",
+    "tree_b": "Under a huge mulberry tree, a small boy of six in a plain hemp tunic and straw sandals points up at the "
+              "round canopy, chin high, boasting; beside him his uncle, a strong dark-haired farmer of forty with a short "
+              "black beard in a hemp robe, startled, raises a hand to hush him. Only these two.",
+    "notice_a": "A crowd of villagers in plain hemp clothes packs a dusty town square, all reading a large paper notice "
+                "pasted on a whitewashed wall; no one stands out from the crowd.",
+    "notice_b": "At the back of a crowd before a paper notice on a wall, Liu Bei reads it and sighs, head lowered; right "
+                "behind him Zhang Fei leans in, glaring, about to speak to him.",
+    "inn_a": REVIEW["inn_v2"][1],
+    "inn_b": "Liu Bei, Guan Yu and Zhang Fei sit at one small inn table, leaning in close over clay wine bowls, lit by a "
+             "single small open-flame oil lamp; Guan Yu, in the middle, is talking, telling his story; the room behind "
+             "them falls into shadow. Exactly three men.",
+    "oath_a": "A peach orchard in full pink blossom at dawn; in the middle a low stone altar with incense smoke curling "
+              "up from a bronze burner; a black ox and a white horse stand tethered beside it. No people.",
+    "oath_b": "Liu Bei, Guan Yu and Zhang Fei kneel in a row on the same side of a low stone altar, facing it, backs "
+              "half to us, heads bowed and hands clasped: Liu Bei in the middle, Guan Yu on the left, Zhang Fei on the "
+              "right; incense smoke rises from a bronze burner on the altar; peach blossom all around. Nobody stands "
+              "behind the altar. Exactly three men.",
+    "oath_c": "Close-up of three hands raising three small bronze wine cups together in a toast under peach blossom, "
+              "pink petals falling into the wine: one hand in a white sleeve, one in a green sleeve, one in a black "
+              "sleeve. No faces.",
+    "tent_b": "Inside an army tent, Liu Bei bows low to his old teacher Lu Zhi, who stands and reaches out to greet him "
+              "warmly. Only these two.",
+    "tent_c": "A general's camp desk inside a tent: rolled bamboo scrolls, a brush, an inkstone, and a blank map drawn "
+              "only with hills and rivers, pinned with small coloured flags, lit by a small open-flame bronze oil lamp. "
+              "No people.",
+    "cart_a": "A dusty country road: a wooden cage cart holds an old prisoner in grey, imperial soldiers with spears walk "
+              "around it, and beside it three riders rein in their horses to stare.",
+    "cart_b": "Lu Zhi sits inside a wooden cage cart, speaking quietly through the bars to Liu Bei, who grips the bars "
+              "from outside; behind Liu Bei, Zhang Fei glares, furious, both hands on his spear.",
+    "cart_c": "Close-up of the rough wooden bars of a cage cart with an old man's hands resting on them, and beyond "
+              "the bars an empty rutted dirt road stretching away to the hills. No faces.",
+    "office_b": "In an open army camp under banners, Dong Zhuo sits on the right, sneering down at them; on the left "
+                "Zhang Fei lunges, hand on his sword, and Liu Bei and Guan Yu hold him back by both arms.",
+    "office_c": "A bronze wine cup lies tipped over on a wooden camp table, wine spilling across it; on the tent canvas "
+                "behind falls the shadow of a raised fist. No faces.",
+    "blackwind_a": REVIEW["blackwind_v2"][1],
+    "blackwind_c": "Riders and horses made of cut white paper whirl through a howling black wind under a dark sky, like "
+                   "leaves in a storm. No real people.",
+    "bosswin_a": "On a hillside ridge, soldiers hurl clay jars of filth down the slope; the jars burst, and the black "
+                 "whirlwind below tears apart into scraps of paper.",
+    "bosswin_c": "Torn paper soldiers and paper horses drift down onto empty green grass in clear light after the storm, "
+                 "the dark clouds breaking up. No real people.",
+    "bosswin_d": "Inside the walls of Yangcheng at night, Zhang Bao turns away toward the gate while his own officer, a "
+                 "lean man in dark armour, steps up behind him and drives a sword into his back; torchlight; a few guards "
+                 "frozen at the edges. No blood.",
+    "peace2_b": "Zhang Jiao raises both arms high before a vast crowd of followers in yellow headscarves at sunset, "
+                "the crowd roaring back.",
+    "caocao2_b": "In a scholar's quiet study, a lean young man of twenty with a thin moustache, in a black official's cap "
+                 "and a dark red robe, throws his head back laughing with delight; across from him Xu Shao sits, "
+                 "grave, watching him. Only these two.",
+    "caocao3_b": "Cao Cao rides out at dawn on a dark horse, sword drawn and raised, red banners and a column of cavalry "
+                 "behind him.",
+    "post_a": "Fifty or sixty old villagers kneel weeping at the gate of a hostel; from the side, Zhang Fei rides up on "
+              "a horse and reins in, frowning down at them.",
+    "post_b": REVIEW["post_v2"][1],
+    "horses_a": "Two travelling merchants on foot drive a string of fine northern horses down a country road toward "
+                "Liu Bei, Guan Yu and Zhang Fei, who wait at the roadside; dust glows in the low sun.",
+    "horses_b": "In a smithy full of sparks, a burly smith hands over new weapons: twin swords to Liu Bei, a "
+                "crescent-bladed long halberd to Guan Yu, and a long spear with a wavy serpent blade to Zhang Fei.",
+}
+
 # the stills the game uses (Plot/Story's choice: the emotional peaks, the partings, the one death)
 CHOSEN = ["tree_b", "notice_b", "inn_b", "oath_b", "oath_c", "tent_b", "cart_b", "cart_c", "office_b", "blackwind_a",
           "bosswin_c", "bosswin_d", "peace2_b", "caocao2_b", "caocao3_b", "post_b", "horses_b",
@@ -449,4 +520,6 @@ for _id, (_scene, _text) in EXTRA.items():
     STILLS.setdefault(_id, {"scene": _scene, "lens": _id[-1], "prompt": _text})
 for _id, (_scene, _text) in REVIEW.items():
     STILLS.setdefault(_id, {"scene": _scene, "lens": "v2", "prompt": _text})
+for _id, _text in FINAL.items():   # the final prompt replaces the first-pass scene text
+    STILLS.setdefault(_id, {"scene": _id.rsplit("_", 1)[0], "lens": _id.rsplit("_", 1)[1]})["prompt"] = _text
 assert all(c in STILLS for c in CHOSEN)
