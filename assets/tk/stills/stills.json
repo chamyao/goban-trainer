@@ -10,7 +10,7 @@
  "tree_b": {
   "file": "tree_b.jpg",
   "scene": "tree",
-  "prompt": "A small boy of six stands under a great mulberry tree, chin up, pointing at its canopy and declaring he will ride in a carriage like that one day; his uncle, a middle-aged farmer, startled beside him, hand raised to hush him. Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
+  "prompt": "A small boy of six stands under a great mulberry tree, chin up, pointing at its canopy and declaring he will ride in a carriage like that one day; his uncle, a middle-aged farmer, startled beside him, hand raised to hush him. Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no speech or thought bubbles, no captions, no calligraphy, no seals, no signature, no watermark.",
   "provider": "replicate",
   "model": "black-forest-labs/flux-2-klein-4b",
   "made": "2026-10-05"
@@ -66,7 +66,7 @@
  "oath_c": {
   "file": "oath_c.jpg",
   "scene": "oath",
-  "prompt": "Three wine cups raised and touching above a table under peach blossom, petals falling into the wine, golden evening light. Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
+  "prompt": "Three bronze jue wine cups raised and touching above a table under peach blossom, petals falling into the wine, golden evening light. Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no speech or thought bubbles, no captions, no calligraphy, no seals, no signature, no watermark.",
   "provider": "replicate",
   "model": "black-forest-labs/flux-2-klein-4b",
   "made": "2026-10-05"
@@ -74,7 +74,7 @@
  "tent_b": {
   "file": "tent_b.jpg",
   "scene": "tent",
-  "prompt": "Inside a lamplit army tent, Liu Bei bowing low to his old teacher Lu Zhi, who rises from his desk smiling to greet him. Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold (reference image 1: keep his face, hair and clothes). Lu Zhi is a dignified old scholar-general with a long grey beard, in plain grey clothes (reference image 2: keep his face, hair and clothes). Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
+  "prompt": "Inside a lamplit army tent, Liu Bei bowing low to his old teacher Lu Zhi, who rises from his desk smiling to greet him; a bronze oil lamp on the desk is the only light. Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold (reference image 1: keep his face, hair and clothes). Lu Zhi is a dignified old scholar-general with a long grey beard, in plain grey clothes (reference image 2: keep his face, hair and clothes). Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no speech or thought bubbles, no captions, no calligraphy, no seals, no signature, no watermark.",
   "provider": "replicate",
   "model": "black-forest-labs/flux-2-klein-4b",
   "made": "2026-10-05"
@@ -82,7 +82,7 @@
  "tent_c": {
   "file": "tent_c.jpg",
   "scene": "tent",
-  "prompt": "A general's desk in a tent: scrolls, a brush, an inkstone and a battle map pinned with small flags, lamplight and shadow. Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
+  "prompt": "A general's desk in a tent: scrolls, a brush, an inkstone and a battle map pinned with small flags, the warm light of a small bronze oil lamp and shadow. Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no speech or thought bubbles, no captions, no calligraphy, no seals, no signature, no watermark.",
   "provider": "replicate",
   "model": "black-forest-labs/flux-2-klein-4b",
   "made": "2026-10-05"
