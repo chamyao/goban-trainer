@@ -681,14 +681,14 @@
    "width": 48,
    "height": 48,
    "return_spritesheet": true,
-   "prompt": "tall broad Chinese general, deep red face, very long black beard down to his chest, green robe and green headscarf, carrying a long crescent-bladed glaive, Chinese fantasy RPG, xianxia, Eastern Han dynasty"
+   "prompt": "tall Chinese general, full head of black hair in a topknot under a green cloth headscarf, deep red face, very long flowing black beard reaching his chest, long green robe, holding a crescent-bladed glaive, Chinese fantasy RPG, xianxia, Eastern Han dynasty"
   },
-  "n": 1,
+  "n": 3,
   "size": [
    192,
    192
   ],
-  "seconds": 25.5,
+  "seconds": 108.0,
   "made": "2026-10-05"
  },
  "char.zhangfei": {
@@ -698,14 +698,14 @@
    "width": 48,
    "height": 48,
    "return_spritesheet": true,
-   "prompt": "stocky barrel-chested Chinese warrior, wild bristling black beard, round fierce eyes, dark grey and black armour with red trim, red headband, carrying a long spear, Chinese fantasy RPG, xianxia, Eastern Han dynasty"
+   "prompt": "burly Chinese warrior in a dark brown robe with a black sash, no armour, black hair in a topknot, big wild black beard covering his jaw, round fierce eyes, holding a long serpent spear, Chinese fantasy RPG, xianxia, Eastern Han dynasty"
   },
-  "n": 1,
+  "n": 3,
   "size": [
    192,
    192
   ],
-  "seconds": 18.7,
+  "seconds": 156.1,
   "made": "2026-10-05"
  }
 }
