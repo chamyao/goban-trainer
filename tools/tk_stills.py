@@ -591,6 +591,9 @@ _LOOKS = {
                "UI frames",
     "ink": "an ink-wash painting game in the manner of Tale of Immortal and Eastern Exorcist: the whole world painted "
            "like a Chinese ink scroll, rice-paper texture, soft washes of colour, characters with brush outlines",
+    "genshin": "Genshin Impact, in its Liyue region: an open-world anime action RPG with cel-shaded 3D characters, "
+               "a bright painterly world with golden light, jade and crimson Chinese architecture, glowing particles, "
+               "its clean modern HUD",
     "chibi": "a polished modern Chinese mobile wuxia RPG: cute chibi 3D-rendered characters with big heads, bright "
              "detailed stylised world, clean glossy UI",
 }
