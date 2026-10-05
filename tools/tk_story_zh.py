@@ -335,6 +335,7 @@ ZH = {
     "Head home to Zhuo.": "回涿郡去。",
     "Break Zhang Bao's sorcery in the hills.": "在山中破张宝的妖术。",
     "Yingchuan, Too Late": "来迟的颍川",
+    "Hear the messenger from Qingzhou.": "听青州来的信使怎么说。",
     "The very next day, a messenger gallops in from Qingzhou.": "次日，青州有快马飞报而来。",
     "Some days before Liu Bei reaches Yingchuan, in the Han camp at Changshe…": "在玄德赶到颍川的几天前，长社的汉军大营里……",
     "Days before Liu Bei reached Yingchuan, the rebels fled the flames at Changshe.": "玄德赶到颍川的几天前，贼兵在长社逃出火海。",
