@@ -34,6 +34,10 @@ starts from a fresh save.
 | scene-arming | a scene doesn't start as you arrive; it starts after walking in (room and outdoor map) |
 | spot-reach | every story spot can be reached on foot to within its trigger radius (36 px) |
 | spot-tap-once | tap a story spot: its scene plays once; after it he doesn't walk on and set the spot off again |
+| door-taps | phone: a tap on the road in front of or beside a building's door walks there; a tap on the building goes in (Lousang, Zhuo County) |
+| framing | phone portrait and landscape: a room or map smaller than the screen sits centred, no empty band; the brothers stand beside Liu Bei on arrival, not on him |
+| challengers | phone: every challenger in book 1 by taps: talk, duel, solve on the board, Continue; then cleared, "!" gone, talking again gives their after-words |
+| side-stories | phone: each side story and the shortcut (a1-a3, b1, b2, b2g, f1, b3, bs): tap its spot, tap through, solve by tapping the board, cleared |
 | star-lords | peach garden: the two immortals stay through the problem, vanish the moment it is won, the narration follows |
 | go-table-ogs | the 9×9 go table with a stand-in OGS socket: sit, search sent, opponent walks in, live board, move, resign, leave |
 | drag-and-hover | desktop: hand cursor over people; hold-and-drag steers |
