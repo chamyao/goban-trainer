@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Still Picker</title>
+<!-- Every generated try of every story still (tools/build_stills_picker.py); tap the best for each and send
+     the picks (they arrive as feedback; tools/apply_still_picks.py puts them in the game). -->
+<style>
+  :root {
+    --bg: #17130f; --panel: #221c16; --line: #3a3026; --ink: #efe6d6; --dim: #a89884;
+    --gold: #e0b14a; --gold-ink: #1d160c; --ok: #6fbf73;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  header { position: sticky; top: 0; z-index: 5; background: rgba(23, 19, 15, .96); border-bottom: 1px solid var(--line);
+           padding: 10px 16px; display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; }
+  h1 { font-size: 17px; margin: 0; letter-spacing: .02em; }
+  .count { color: var(--dim); font-size: 14px; }
+  .grow { flex: 1; }
+  button { font: inherit; border-radius: 8px; border: 1px solid var(--line); background: var(--panel); color: var(--ink);
+           padding: 7px 12px; cursor: pointer; }
+  button.primary { background: var(--gold); color: var(--gold-ink); border-color: var(--gold); font-weight: 600; }
+  button[aria-pressed="true"] { border-color: var(--gold); color: var(--gold); }
+  .tabs { display: flex; gap: 6px; }
+  main { max-width: 1200px; margin: 0 auto; padding: 12px 16px 80px; }
+  .help { color: var(--dim); font-size: 14px; margin: 4px 0 14px; }
+  .slot { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px; margin-bottom: 14px; }
+  .slot h2 { font-size: 15px; margin: 0 0 2px; display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+  .slot h2 .tag { font-size: 12px; color: var(--dim); font-weight: 400; }
+  .slot h2 .done { color: var(--ok); font-size: 13px; font-weight: 600; }
+  .line { color: var(--dim); font-size: 13.5px; margin: 0 0 10px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+  .nav { display: flex; align-items: center; gap: 10px; margin: 0 0 12px; }
+  .nav .where { flex: 1; text-align: center; color: var(--dim); font-size: 14px; }
+  .slot { animation: slotIn .25s ease-out; }
+  @keyframes slotIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  figure.flash { border-color: var(--gold); box-shadow: 0 0 0 4px var(--gold); }
+  figure { cursor: pointer; }
+  .done-all { text-align: center; padding: 40px 0; }
+  .notes-l { display: block; margin-top: 10px; color: var(--dim); font-size: 13px; }
+  .notes { display: block; width: 100%; margin-top: 4px; padding: 8px; border-radius: 8px; border: 1px solid var(--line);
+           background: #120f0c; color: var(--ink); font: 15px/1.4 system-ui, sans-serif; resize: vertical; }
+  @media (pointer: coarse) { .notes { font-size: 16px; } }
+  .more { margin-top: 8px; }
+  .more summary { cursor: pointer; color: var(--dim); font-size: 13.5px; padding: 4px 0; }
+  .more .grid { margin-top: 6px; }
+  figure { margin: 0; position: relative; border-radius: 8px; overflow: hidden; border: 2px solid transparent; background: #000;
+           cursor: zoom-in; }
+  figure img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+  figure figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 14px 6px 4px; font-size: 11px; color: #fff;
+                      background: linear-gradient(transparent, rgba(0, 0, 0, .78)); white-space: nowrap; overflow: hidden;
+                      text-overflow: ellipsis; }
+  figure.now { border-color: #6a5a46; }
+  figure.picked { border-color: var(--gold); box-shadow: 0 0 0 2px var(--gold); }
+  figure .pick { position: absolute; top: 5px; right: 5px; width: 30px; height: 30px; padding: 0; border-radius: 50%;
+                 background: rgba(0, 0, 0, .6); border-color: rgba(255, 255, 255, .5); color: #fff; font-size: 15px; line-height: 1; }
+  figure.picked .pick { background: var(--gold); color: var(--gold-ink); border-color: var(--gold); }
+  .badge { position: absolute; top: 5px; left: 5px; font-size: 10.5px; padding: 2px 6px; border-radius: 4px;
+           background: rgba(0, 0, 0, .65); color: var(--ink); }
+  /* the big view */
+  .lb { position: fixed; inset: 0; z-index: 10; background: rgba(0, 0, 0, .92); display: none; flex-direction: column;
+        align-items: center; justify-content: center; padding: 12px; gap: 10px; }
+  .lb.open { display: flex; }
+  .lb img { max-width: 100%; max-height: calc(100vh - 130px); border-radius: 6px; }
+  .lb .cap { color: var(--dim); font-size: 13px; text-align: center; }
+  .lb .row { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .toast { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); background: var(--gold); color: var(--gold-ink);
+           padding: 8px 14px; border-radius: 8px; font-weight: 600; display: none; z-index: 20; }
+  @media (max-width: 520px) { .grid { grid-template-columns: 1fr; } h1 { font-size: 16px; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>Still Picker</h1>
+  <span class="count" id="count"></span>
+  <span class="grow"></span>
+  <button type="button" id="copy">Copy picks</button>
+  <button type="button" class="primary" id="send">Send picks</button>
+</header>
+<main>
+  <p class="help">One scene at a time: tap the picture you like best and the next scene comes up. 🔍 shows one big first.
+    Picks are kept on this device, and sent when the last scene is picked (or with Send picks).</p>
+  <div class="nav"><button type="button" id="back">◀ Back</button><span class="where" id="where"></span><button type="button" id="skip">Skip ▶</button></div>
+  <div id="slots"></div>
+</main>
+<div class="lb" id="lb">
+  <img alt="">
+  <div class="cap"></div>
+  <div class="row">
+    <button type="button" data-go="-1">◀ Prev</button>
+    <button type="button" class="primary" id="lbPick">Pick this</button>
+    <button type="button" data-go="1">Next ▶</button>
+    <button type="button" id="lbClose">Close</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+// Same address as the site's feedback box (app.js Sync.API_URL): picks arrive as a feedback note.
+const API_URL = "https://script.google.com/macros/s/AKfycbwpMBFBjrgcHdX-xiAwIepUg4a06uLPrBlGWBAPuPkUOc30gzzsCHRy6odjI6qYLV8AKA/exec";
+const BASE = "assets/tk/stills/picker/";
+const KEY = "tk-still-picks";
+let data = { slots: [] }, book = 1, picks = {}, notes = {};
+try { picks = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch { picks = {}; }
+try { notes = JSON.parse(localStorage.getItem(KEY + "-notes") || "{}"); } catch { notes = {}; }
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(picks)); localStorage.setItem(KEY + "-notes", JSON.stringify(notes)); } catch {} };
+const $ = s => document.querySelector(s);
+const el = (tag, props = {}, ...kids) => { const e = Object.assign(document.createElement(tag), props); e.append(...kids); return e; };
+
+function toast(msg) {
+  const t = $("#toast"); t.textContent = msg; t.style.display = "block";
+  clearTimeout(toast.t); toast.t = setTimeout(() => { t.style.display = "none"; }, 2200);
+}
+function count() {
+  const n = data.slots.filter(s => picks[s.id]).length;
+  $("#count").textContent = `${n} of ${data.slots.length} picked`;
+}
+let cur = 0, flashing = false;
+const order = () => data.slots;   // Book 1's scenes, then Book 2's
+const firstOpen = from => { const L = order(); for (let k = 0; k < L.length; k++) { const i = (from + k) % L.length; if (!picks[L[i].id]) return i; } return -1; };
+function go(i) { cur = Math.max(0, Math.min(order().length - 1, i)); render(); window.scrollTo(0, 0); }
+// a tap picks it: a flash, then on to the next scene still to pick (or the end)
+function pick(slot, c, fig) {
+  if (flashing) return;
+  picks[slot.id] = c.blob; save(); count();
+  flashing = true; if (fig) fig.classList.add("flash");
+  setTimeout(() => {
+    flashing = false;
+    const next = firstOpen(cur + 1);
+    if (next < 0) { cur = order().length; render(); send(true); } else go(next);
+  }, 380);
+}
+function thumb(slot, c, list, i) {
+  const f = el("figure", { className: (c.blob === slot.current ? "now " : "") + (picks[slot.id] === c.blob ? "picked" : "") });
+  const img = el("img", { src: BASE + c.img, alt: `${c.cid} ${c.label}`, loading: "eager" });
+  const zoom = el("button", { type: "button", className: "pick", title: "See it big", textContent: "🔍" });
+  zoom.onclick = e => { e.stopPropagation(); open(slot, list, i); };
+  f.append(img, el("figcaption", { textContent: `${c.cid !== slot.id ? c.cid + " · " : ""}${c.label}` }), zoom);
+  if (c.blob === slot.current) f.append(el("span", { className: "badge", textContent: "in game" }));
+  f.onclick = () => pick(slot, c, f);
+  return f;
+}
+function render() {
+  const box = $("#slots"); box.innerHTML = "";
+  const L = order();
+  if (cur >= L.length) {
+    $("#where").textContent = "Done";
+    box.append(el("div", { className: "done-all" }, el("h2", { textContent: "All scenes picked" }),
+      el("p", { className: "line", textContent: "Your picks are being sent. Back goes over any scene again." })));
+    return;
+  }
+  const slot = L[cur];
+  $("#where").textContent = `Scene ${cur + 1} of ${L.length} · Book ${slot.book}`;
+  const own = slot.candidates.filter(c => c.cid === slot.id), other = slot.candidates.filter(c => c.cid !== slot.id);
+  const list = [...own, ...other];
+  const done = picks[slot.id] ? el("span", { className: "done", textContent: "✓ picked" }) : "";
+  const card = el("section", { className: "slot" },
+    el("h2", {}, slot.id, el("span", { className: "tag", textContent: `${slot.scene} · ${slot.look || ""} · ${own.length} tries` }), done),
+    el("p", { className: "line", textContent: slot.line }));
+  const grid = el("div", { className: "grid" });
+  own.forEach((c, i) => grid.append(thumb(slot, c, list, i)));
+  card.append(grid);
+  if (other.length) {
+    const g2 = el("div", { className: "grid" });
+    other.forEach((c, i) => g2.append(thumb(slot, c, list, own.length + i)));
+    card.append(el("details", { className: "more" }, el("summary", { textContent: `${other.length} more from the "${slot.scene}" scene` }), g2));
+  }
+  // a review of this scene's stills: what's wrong, what it should show (sent with the picks)
+  const ta = el("textarea", { className: "notes", rows: 3, value: notes[slot.id] || "",
+    placeholder: "Notes on this scene (optional): what's wrong, what it should show…" });
+  ta.oninput = () => { if (ta.value.trim()) notes[slot.id] = ta.value; else delete notes[slot.id]; save(); };
+  card.append(el("label", { className: "notes-l" }, "Notes", ta));
+  box.append(card);
+  // the next scene's pictures load while this one is looked at
+  const nx = L[cur + 1]; if (nx) nx.candidates.forEach(c => { const im = new Image(); im.src = BASE + c.img; });
+}
+$("#back").onclick = () => go(Math.min(cur, order().length) - 1);
+$("#skip").onclick = () => go(cur + 1);
+// the big view: one slot's candidates, prev/next, pick
+let lbState = null;
+function open(slot, list, i) { lbState = { slot, list, i }; show(); $("#lb").classList.add("open"); }
+function show() {
+  const { slot, list, i } = lbState, c = list[i];
+  $("#lb img").src = BASE + c.img;
+  $("#lb .cap").textContent = `${slot.id} — ${c.cid !== slot.id ? c.cid + " · " : ""}${c.label}${c.blob === slot.current ? " (in game now)" : ""} · ${i + 1}/${list.length}`;
+  $("#lbPick").textContent = picks[slot.id] === c.blob ? "✓ Picked (tap to undo)" : "Pick this";
+}
+document.querySelectorAll("[data-go]").forEach(b => b.onclick = () => {
+  const n = lbState.list.length; lbState.i = (lbState.i + +b.dataset.go + n) % n; show();
+});
+$("#lbPick").onclick = () => { $("#lb").classList.remove("open"); pick(lbState.slot, lbState.list[lbState.i]); };
+$("#lbClose").onclick = () => $("#lb").classList.remove("open");
+$("#lb").onclick = e => { if (e.target.id === "lb") $("#lb").classList.remove("open"); };
+document.addEventListener("keydown", e => {
+  if (!$("#lb").classList.contains("open")) return;
+  if (e.key === "Escape") $("#lb").classList.remove("open");
+  if (e.key === "ArrowLeft" || e.key === "ArrowRight") document.querySelector(`[data-go="${e.key === "ArrowLeft" ? -1 : 1}"]`).click();
+  if (e.key === "Enter") $("#lbPick").click();
+});
+// the picks as a note: still id -> the picked image (its blob, which apply_still_picks.py resolves)
+function note() {
+  const chosen = data.slots.filter(s => picks[s.id] || notes[s.id]).map(s => {
+    const c = s.candidates.find(c => c.blob === picks[s.id]);
+    return Object.assign(c ? { id: s.id, blob: c.blob, from: c.label, same: c.blob === s.current } : { id: s.id },
+      notes[s.id] ? { note: notes[s.id].trim() } : {});
+  });
+  return "STILL PICKS " + JSON.stringify(chosen);
+}
+$("#copy").onclick = async () => {
+  try { await navigator.clipboard.writeText(note()); toast("Copied"); } catch { prompt("Copy this:", note()); }
+};
+async function send(auto) {
+  if (!Object.keys(picks).length && !Object.keys(notes).length) return toast("Pick or note something first");
+  const b = $("#send"); b.disabled = true; b.textContent = "Sending…";
+  try {
+    const res = await fetch(API_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ username: localStorage.getItem("gt-username") || "", kind: "feedback",
+                             data: { message: note(), context: "#/stills-picker" } }) });
+    if (!res.ok) throw new Error(res.status);
+    toast(auto ? "All picked and sent — thanks!" : "Sent — thanks!");
+  } catch (e) { toast("Couldn't send — use Copy picks instead"); }
+  b.disabled = false; b.textContent = "Send picks";
+}
+$("#send").onclick = () => send(false);
+fetch(BASE + "picker.json?v=1").then(r => r.json()).then(d => {
+  data = d; data.slots.sort((a, b) => (a.book || 0) - (b.book || 0));   // Book 1 first
+  const f = firstOpen(0); cur = f < 0 ? 0 : f; render(); count();
+})
+  .catch(() => { $("#slots").textContent = "Couldn't load the picker data."; });
+</script>
+</body>
+</html>

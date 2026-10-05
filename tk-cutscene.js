@@ -89,7 +89,7 @@ const WorldCutscene = {
       el.className = `tk-still kb-${b.move || "in"}`;
       const img = new Image(); img.crossOrigin = "anonymous";
       img.alt = "";
-      img.src = `assets/tk/stills/${m.file}`;
+      img.src = `assets/tk/stills/${m.file}?v=${m.made || ""}${m.look || ""}`;   // a redone still is fetched anew
       el.append(img);
       await Promise.race([img.decode().catch(() => {}), new Promise(r => setTimeout(r, 1500))]);
       if (!img.complete || !img.naturalWidth) return;
@@ -148,6 +148,7 @@ const WorldCutscene = {
       // nothing jumps when a scene starts; none for someone sitting inside a prop
       const big = a.horse || a.beast;
       if (!a.shadow) a.shadow = scene.textures.exists("@shadow") ? scene.add.image(0, 0, "@shadow") : scene.add.ellipse(0, 0, 14, 5, 0x140c06, .28);
+      a.shadow.isoWith = a.spr;   // nudged with its owner in the isometric view (tk-iso.js)
       a.shadow.setScale(big ? 24 / 14 : a.fallen ? 16 / 14 : Math.max(1, a.spr.displayWidth / 14), big ? 1.4 : 1)
         .setPosition(Math.round(a.spr.x), Math.round(a.ground ?? a.spr.y) - 1).setDepth(-999)
         .setVisible(a.spr.visible && !a.inside).setAlpha(a.spr.alpha);
@@ -180,6 +181,7 @@ const WorldCutscene = {
         } else {
           scene.hero(who);
           a = actors[id] = { id, who, spr: scene.add.sprite(0, 0, `h-${who}-down-0`).setOrigin(.5, 1) };
+          a.spr.isoSpread = true;   // isometric: kept from standing on top of a neighbour (tk-iso.js)
         }
       }
       const [x, y] = px(at);
@@ -620,7 +622,7 @@ const WorldCutscene = {
   // the prop atlas (props, emote bubbles, gift icons), loaded once per game
   // the stills that exist (tools/gen_stills.py writes assets/tk/stills/stills.json), fetched once
   stillIndex() {
-    if (!this._stills) this._stills = fetch("assets/tk/stills/stills.json?v=13").then(r => r.ok ? r.json() : {}).catch(() => ({}));
+    if (!this._stills) this._stills = fetch("assets/tk/stills/stills.json?v=16").then(r => r.ok ? r.json() : {}).catch(() => ({}));
     return this._stills;
   },
   load(scene) {

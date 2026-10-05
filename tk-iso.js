@@ -12,6 +12,8 @@
    are not slanted, only placed: their feet land on the diamond floor.
 */
 try { localStorage.removeItem("tk-iso"); } catch {}
+const SPREAD = 13;   // how far apart (screen px) two people in a scene keep, side to side
+
 const WorldIso = {
   // Each art style keeps its own perspective: on only for a kit drawn for it ("iso": true, Genshin).
   // (There was a view switch; it's gone, and any choice it left behind is cleared.)
@@ -33,9 +35,11 @@ const WorldIso = {
     floor.add(scene.add.image(0, 0, key).setOrigin(0, 0).setRotation(Math.PI / 4).setScale(Math.SQRT2));
     floor.isoFixed = true;
     const iso = scene.iso = { P, inv, W, H, floor, width: W + H, height: (W + H) / 2 };
-    // outdoors, the corners beyond the diamond are more country (the kit's "isoVoid" colour); rooms stay dark
-    const kit = scene.kit || {};
-    if (kit.isoVoid && !String(scene.placeId).includes("--")) scene.cameras.main.setBackgroundColor(kit.isoVoid);
+    // beyond the map's diamond: outdoors more country (the kit's "isoVoid" colour); indoors the void the
+    // room is drawn on, so the unused part of the map doesn't show as a slab under the room
+    const kit = scene.kit || {}, indoor = String(scene.placeId).includes("--");
+    const back = indoor ? kit.materials && kit.materials.void && kit.materials.void.color : kit.isoVoid;
+    if (back) scene.cameras.main.setBackgroundColor(back);
 
     // the view's depth: how far down the screen an object's feet are. Objects drawn above everything
     // (marks, emotes, flashes: depth >= 9000) and behind everything (<= -9000) keep theirs; the rest
@@ -52,6 +56,19 @@ const WorldIso = {
         o.x = q.x + (b ? o.x - b[0] : 0); o.y = q.y + (a ? a[2] : b ? o.y - b[1] : 0);
         const d = o._depth;
         if (d > -9000 && d < 9000) o._depth = q.y + (a ? a[2] : 0) + (a ? 0 : d - ly);
+      }
+      // people in a scene (isoSpread) who stood side by side on the map's diagonal now stand one above the
+      // other: nudge such pairs apart sideways, as drawn only; their shadows (isoWith) go with them
+      const crowd = scene.children.list.filter(o => o.isoSpread && o.visible).sort((m, n) => m.y - n.y), off = new Map();
+      for (let i = 0; i < crowd.length; i++) for (let j = i + 1; j < crowd.length; j++) {
+        const m = crowd[i], n = crowd[j], dx = (n.x + (off.get(n) || 0)) - (m.x + (off.get(m) || 0));
+        if (Math.abs(dx) >= SPREAD || n.y - m.y >= 24) continue;
+        const push = (SPREAD - Math.abs(dx)) / 2, s = dx > 0 ? 1 : dx < 0 ? -1 : (j % 2 ? 1 : -1);
+        off.set(n, (off.get(n) || 0) + s * push); off.set(m, (off.get(m) || 0) - s * push);
+      }
+      if (off.size) for (const o of scene.children.list) {
+        const k = off.get(o) ?? (o.isoWith && off.get(o.isoWith));
+        if (k) o.x += k;
       }
       scene.children.sortChildrenFlag = true;
       scene.children.depthSort();

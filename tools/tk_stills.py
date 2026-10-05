@@ -59,6 +59,27 @@ STYLES = {
                   "dramatic framing.",
     "gohs": "Style: in the style of the anime The God of High School: bold dynamic action anime, thick energetic "
             "lineart, high contrast, vivid saturated colours, speed lines and impact effects, extreme fighting poses.",
+    # the same anime look for the quiet scenes (the user: "too crazy on scenes that are supposed to be calm ...
+    # why is even them sharing a drink so violent"): the battles keep "gohs"
+    "gohs_calm": "Style: anime illustration with the character designs and clean bold lineart of The God of High "
+                 "School, but a calm, quiet slice-of-life moment: relaxed natural poses, gentle expressions, soft warm "
+                 "natural light, a still, peaceful village mood, a steady eye-level camera; no action lines, no speed "
+                 "lines, no impact effects, no flying debris, no motion blur, no aggressive poses.",
+    # the default for every still that isn't a battle (the user: "only use GoH for battle scenes, something more
+    # neutral as default"): calm, story-telling, no action effects
+    "neutral": "Style: clean modern anime illustration like a quiet historical anime film: natural colours, soft "
+               "daylight or warm lamplight, gentle cel shading, detailed painted backgrounds, calm story-telling "
+               "composition at eye level, natural poses and expressions; no speed lines, no impact effects, no "
+               "motion blur, no exaggerated action poses.",
+    # what the user's picks pointed to ("too much shading ... more 2D, with more blocky shading, anime style"):
+    # flat 2D cel anime, for the quiet scenes, and the same with action staging for the battles
+    "cel": "Style: 2D anime / Chinese manhua illustration: bold clean black ink outlines, flat colour fills, hard-edged "
+           "two-tone cel shadows, a limited palette, light airy background; calm staging, natural poses; no airbrushed "
+           "gradients, no bloom, no glow, no volumetric light, no painterly texture, no photorealism.",
+    "cel_action": "Style: 2D anime / Chinese manhua action illustration: bold clean black ink outlines, flat colour "
+                  "fills, hard-edged two-tone cel shadows, a limited palette, energetic dynamic composition and poses, "
+                  "a few speed lines; no airbrushed gradients, no bloom, no glow, no volumetric light, no painterly "
+                  "texture, no photorealism.",
     "genshin": "Style: in the style of Genshin Impact key art: polished anime cel shading, bright vivid colours, "
                "ornate gold trim and jade accents, glowing particles, clean detailed fantasy illustration.",
     "watercolor": "Style: Chinese watercolour painting: loose wet washes of colour bleeding softly on rice paper, "
@@ -72,6 +93,25 @@ STYLES = {
                "glowing accents of spirit light and embers, a dynamic low or high camera angle, intense poses, "
                "cinematic and dark-fantasy.",
 }
+
+# the battles keep the God of High School look; every other still is "neutral"
+BATTLE = {"blackwind_a", "blackwind_c", "bosswin_a", "caocao3_b", "hulao_a", "hulao_b", "xianshan_a", "xingyang_a",
+          "zumao_a"}
+
+# the quiet stills, redone in "gohs_calm" (village, inn, oath, partings); the battles stay "gohs"
+CALM = ["tree_a", "tree_b", "notice_a", "notice_b", "inn_a", "inn_b", "oath_a", "oath_b", "oath_c", "tent_b",
+        "tent_c", "cart_b", "cart_c", "caocao2_b", "bosswin_c", "horses_a", "horses_b", "post_a"]
+# Book 2's quiet ones (garden_a stays: the user picked that one)
+CALM2 = ["fireflies_a", "pavilion_a", "wine_a", "wine_b", "lvboshe_a", "seal_a", "seal_b", "ruins_a"]
+
+# the user's style categories (assets/tk/stills/categories.json): one look per category, the shared base
+# plus that category's recipe, as "cat_<category>" (gen_stills --look cat_bond ...); CATEGORY: still -> category
+import json as _json
+from pathlib import Path as _Path
+_CATS = _json.loads((_Path(__file__).resolve().parent.parent / "assets/tk/stills/categories.json").read_text())
+CATEGORY = {sid: k for k, c in _CATS["categories"].items() for sid in c["scenes"]}
+for _k, _c in _CATS["categories"].items():
+    STYLES[f"cat_{_k}"] = f"Style: {_CATS['base'].rstrip('.')}. {_c['recipe']}"
 
 # the user's pick for the stills: the God of High School look, on Seedream 5 Pro (gen_stills' default)
 STYLE = f"{STYLES['gohs']} {NEGATIVE}"
@@ -637,12 +677,7 @@ FACE_LOOKS = {
     "caiyong": ("Cai Yong", "a sorrowful old scholar with a grey beard, in a plain scholar's robe and cap"),
     "chengpu": ("Cheng Pu", "a veteran general with a grizzled beard, in red armour, holding a long spear"),
     "handang": ("Han Dang", "a tough general with a square jaw and short beard, in red armour, holding a broadsword"),
-    # the hero, less pretty (the user: "too much of a pretty boy, make him look more like a protagonist");
-    # the stills keep CAST's look
-    "liubei": ("Liu Bei", "the hero of the story, a determined man of twenty-eight, broad-shouldered and rugged, a "
-                          "strong jaw and a sun-weathered face, short black beard and moustache, long earlobes, steady "
-                          "resolute eyes under heavy brows, hair in a topknot with a few loose strands, a white robe "
-                          "with gold trim over light leather armour, the hilts of twin swords at his hip"),
+    # a try at a tougher Liu Bei (liubei_b); the user kept the original (CAST's look)
     "liubei_b": ("Liu Bei", "a battle-hardened young hero of twenty-eight, the leader of a band of volunteers: lean and "
                             "tough, a short black beard, long earlobes, a faint scar on his cheekbone, a fierce confident "
                             "half-smile, hair tied up in a topknot, a dusty white robe with gold trim, sleeves bound for "

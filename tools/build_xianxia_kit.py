@@ -22,7 +22,7 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from build_jade_edges import block  # noqa: E402
-from xianxia_spec import GENSHIN_BAD, GENSHIN_DROP, PROPS_GEN, PROPS_SKIP, CHAR_PICK, DRAWN_GROUND, HERO_H, INTERIOR, OBJECTS, REDO  # noqa: E402
+from xianxia_spec import GENSHIN_BAD, GENSHIN_DROP, GENSHIN_FLIP, GENSHIN_UNPLATE, PROPS_GEN, PROPS_SKIP, CHAR_PICK, DRAWN_GROUND, HERO_H, INTERIOR, OBJECTS, REDO  # noqa: E402
 import random  # noqa: E402
 
 T = 16
@@ -60,6 +60,33 @@ def fit(im, box):
     if s < 1:
         small = im.resize((max(1, round(im.width * s)), max(1, round(im.height * s))), Image.Resampling.BOX)
         im = quantize_like(small, im, 110)
+    return im
+
+
+def unplate(im):
+    """A tree without the raised square of ground it was drawn on. From the bottom up, rows as wide as
+    the square are the square, until a row as narrow as the trunk: below that only the trunk's columns stay."""
+    im = im.convert("RGBA")
+    a = im.getchannel("A")
+    w, h = im.size
+    rows = []
+    for y in range(h):
+        xs = [x for x in range(w) if a.getpixel((x, y)) > 40]
+        rows.append((xs[0], xs[-1]) if xs else None)
+    bottom = max(y for y in range(h) if rows[y])
+    width = lambda y: rows[y][1] - rows[y][0] if rows[y] else 0
+    wide = max(range(int(h * .6), bottom + 1), key=width)   # the square's widest row (its side corners)
+    y = wide
+    while y > 0 and width(y) > w * .22:
+        y -= 1
+    if not rows[y] or wide - y < 2 or y < h * .4 or width(wide) < w * .4:   # no square found: as drawn
+        return im
+    x0, x1 = rows[y][0] - 1, rows[y][1] + 1          # the trunk where it meets the square
+    px = im.load()
+    for yy in range(y + 1, h):
+        for x in range(w):
+            if not (x0 <= x <= x1):
+                px[x, yy] = (0, 0, 0, 0)
     return im
 
 
@@ -202,7 +229,7 @@ def main():
     edges.save(OUT / "edges.png")
 
     # objects
-    items, made = [], {}
+    items, made, flip = [], {}, []
     for kind, (_, box, _) in {**OBJECTS, **INTERIOR, **{k: v for k, v in PROPS_GEN.items() if k not in PROPS_SKIP}}.items():
         # a piece that came out wrong is used only once its second try exists
         where = [d for d in src if d.name in ("xianxia-redo", "genshin", "genshin-redo2")] if kind in REDO else src
@@ -211,7 +238,12 @@ def main():
         ok = lambda v: (v.stem not in GENSHIN_DROP and f"{v.parent.name}/{v.stem}" not in GENSHIN_DROP
                         if v.parent.name.startswith("genshin") else v.stem not in DROP)   # a dropped try: the folder before's
         for k, p in enumerate(variants(where, kind, ok)):
-            items.append((f"{kind}#{k}", fit(Image.open(p), iso_box(box) if p.parent.name.startswith("genshin") else box)))
+            im = Image.open(p)
+            if p.parent.name.startswith("genshin") and kind.startswith(GENSHIN_UNPLATE):
+                im = unplate(im)
+            items.append((f"{kind}#{k}", fit(im, iso_box(box) if p.parent.name.startswith("genshin") else box)))
+            if p.parent.name.startswith("genshin") and p.stem in GENSHIN_FLIP:
+                flip.append(f"{kind}#{k}")
             made.setdefault(kind, []).append(f"{kind}#{k}")
     sheet, pos = pack(items)
     sheet.save(OUT / "objects.png")
@@ -226,6 +258,7 @@ def main():
         kit["iso"] = True   # tk-iso.js: the world drawn isometrically
         kit["dialogue"] = "genshin"   # tk-town.js: painted portraits, the Genshin dialogue box
         kit["isoVoid"] = "#%02x%02x%02x" % COL["grass"][3]   # beyond the map's diamond: darker grass
+        kit["isoFlip"] = flip   # mirrored in the game: their entrance on the door's face
     kit["materials"]["grass"] = {"tiles": [["x_tiles", i, row["grass"], 3 if i == 0 else 1]
                                            for i in range(len(ground["grass"]))]}
     for i, (m, _, _) in enumerate(edged):

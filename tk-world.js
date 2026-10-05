@@ -11,7 +11,7 @@
    campaign save (TK.cleared / TK.seen); this file only remembers where you
    are. Hero sprites and the dialogue box come from tk-town.js. */
 
-const WORLD_CLUTTER = /^(plant\.|rock\.small)/;  // drawn underfoot
+const WORLD_CLUTTER = /^(plant\.|rock\.small|furn\.rug|furn\.mat)/;  // drawn underfoot (a rug is a floor, not a sheet hung in front of people)
 const WORLD_KIT = "xianxia";  // the default look; the campaign page's art button switches (localStorage tk-kit)
 const WORLD_KITS = { jade: { zh: "玉", en: "Jade" }, xianxia: { zh: "仙侠", en: "Xianxia (generated)" },
   genshin: { zh: "原神", en: "Genshin (isometric)", iso: true } };   // iso: drawn for the isometric view (tk-iso.js)
@@ -35,7 +35,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=31`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=32`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
@@ -217,8 +217,8 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=31`);
-      this.load.json("kit", `assets/tk/kits/${kit}.json?v=27`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=33`);
+      this.load.json("kit", `assets/tk/kits/${kit}.json?v=28`);
       this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=31`);
     }
     create() {
@@ -331,6 +331,8 @@ function worldScenes() {
       const cam = this.cameras.main;
       cam.startFollow(this.player, true, .15, .15);
       if (this.place.archetype === "overworld") cam.setZoom(.5);   // the realm from on high: a wide stretch of country, the party small
+      // the isometric diamond is only half as tall as it is wide: on an upright phone come in closer so it fills the screen
+      else if (this.iso && this.scale.height > this.scale.width) cam.setZoom(1.3);
       this.mapW = this.iso ? this.iso.width : map.widthInPixels; this.mapH = this.iso ? this.iso.height : map.heightInPixels;
       this.fitCamera();
       cam.setRoundPixels(true);
@@ -456,7 +458,11 @@ function worldScenes() {
         const sheet = this.kit.kinds[o.name.split("#")[0]][+o.name.split("#")[1]][0];
         img = this.add.image(Math.round(o.x), Math.round(o.y), `kit-${sheet}`, o.name).setOrigin(.5, 1);
         img.setDepth(WORLD_CLUTTER.test(p.kind) ? o.y - 400 : o.y);
-        if (this.iso && !WORLD_CLUTTER.test(p.kind)) WorldIso.anchor(this, img, o.x, o.y - p.fh / 2, p.fw, p.fh);   // stands on its footprint
+        if (this.iso && (!WORLD_CLUTTER.test(p.kind) || /^furn\./.test(p.kind))) {
+          WorldIso.anchor(this, img, o.x, o.y - p.fh / 2, p.fw, p.fh);   // stands on its footprint
+          if (WORLD_CLUTTER.test(p.kind)) img.setDepth(img.depth - 400);   // a rug still lies underfoot
+        }
+        if (this.iso && (this.kit.isoFlip || []).includes(o.name)) img.setFlipX(true);   // its entrance on the door's face
         if (p.kind === "landmark.shrine") {   // the Star Lords' shrine: its look follows the story (setShrine)
           this.shrine = { img, x: o.x, y: o.y, state: "dark", fx: [] };
           this.setShrine(TK.shrineState?.(this.w.n, this.placeId) || "dark");
@@ -1039,7 +1045,7 @@ function worldScenes() {
       const doorway = e => e.side === "N" && e.rect.width < 16;
       const door = this.exits.filter(e => doorway(e)
           // the building itself (its face, from the door up), not the road in front of it
-          ? this.onBuilding(e, x, y, at) && this.placeOpen(e.to)
+          ? this.onBuilding(e, x, y, at, sx, sy) && this.placeOpen(e.to)
           : x > e.rect.x - 20 && x < e.rect.right + 20 && y > e.rect.y - 20 && y < e.rect.bottom + 20)
         .sort((a, b) => Math.hypot(a.rect.centerX - x, a.rect.centerY - y) - Math.hypot(b.rect.centerX - x, b.rect.centerY - y))[0];
       if (door) return { kind: "door", e: door };
@@ -1055,8 +1061,14 @@ function worldScenes() {
       };
     }
     // A tap on the building a door belongs to (as drawn), or just above its door.
-    onBuilding(e, x, y, at = () => ({ x, y })) {
+    onBuilding(e, x, y, at = () => ({ x, y }), sx, sy) {
       const b = (this.buildings || []).find(b => Math.abs(b.x - e.rect.centerX) < b.w / 2 && Math.abs(b.bottom - e.rect.bottom) < 20);
+      // isometric: the building as drawn, its painted pixels only (not the empty corners or the road before it)
+      if (b && this.iso && b.img && sx != null) {
+        const img = b.img, lx = (sx - (img.x - img.displayWidth * img.originX)) / img.scaleX, ly = (sy - (img.y - img.displayHeight * img.originY)) / img.scaleY;
+        if (lx < 0 || ly < 0 || lx >= img.width || ly >= img.height) return false;
+        return (this.textures.getPixelAlpha(Math.floor(lx), Math.floor(ly), img.texture.key, img.frame.name) || 0) > 40;
+      }
       if (b && this.iso) { const t = at(b.x, b.bottom, b.img); return Math.abs(t.x - b.x) < b.w / 2 && t.y > b.bottom - b.h && t.y < b.bottom; }
       if (b) return Math.abs(x - b.x) < b.w / 2 && y > b.bottom - b.h && y < e.rect.bottom;
       return Math.abs(x - e.rect.centerX) < 22 && y > e.rect.centerY - 48 && y < e.rect.bottom;

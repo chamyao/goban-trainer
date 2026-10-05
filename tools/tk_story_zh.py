@@ -323,7 +323,7 @@ ZH = {
     "Side story: hear Zhang Jiao's sermon in Julu.": "支线：到巨鹿听张角传道。",
     "Side story: the betrayal in the Yellow Hills.": "支线：黄冈的背叛。",
     "Meet the horse dealers on the northern trail.": "到北方马道上见马商。",
-    "Report to the governor with your five hundred.": "带着五百人去见太守。",
+    "Go to Daxing Mountain. The Yellow Turbans are marching on Zhuo.": "到大兴山去。黄巾军正向涿郡进发。",
     "Lift the siege of Qingzhou.": "解青州之围。",
     "Go to Guangzong, where Lu Zhi besieges Zhang Jiao.": "前往广宗，卢植正在那里围攻张角。",
     "Side story: the boyhood of Cao Cao.": "支线：曹操的少年时代。",
