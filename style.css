@@ -486,7 +486,7 @@ body:has(.tk-scroll-wrap) .wukong-toggle, body:has(.tk-scroll-wrap) #wukong { vi
 .credits p { margin: 0 0 4px; }
 .credits a { color: inherit; }
 /* ---------- Three Kingdoms: explorable world (tk-world.js, tk-town.js) ---------- */
-.tk-map.tk-town { aspect-ratio: 16 / 9; outline: none; line-height: 1.4; font-family: Georgia, "Songti SC", serif; }
+.tk-map.tk-town { aspect-ratio: 16 / 9; max-width: calc((100vh - 16px) * 16 / 9); max-width: calc((100dvh - 16px) * 16 / 9); margin-inline: auto; outline: none; line-height: 1.4; font-family: Georgia, "Songti SC", serif; }
 .tk-map.tk-town:focus-visible { box-shadow: 0 0 0 3px #e6c14a, 0 2px 12px rgba(0,0,0,.15); }
 .tk-town canvas { image-rendering: pixelated; }
 .town-ui [hidden] { display: none !important; }
@@ -612,7 +612,7 @@ body:has(.tk-scroll-wrap) .wukong-toggle, body:has(.tk-scroll-wrap) #wukong { vi
 .tk-map .tk-menu { position: absolute; top: 8px; right: 8px; z-index: 15; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; font: 12px/1.4 system-ui, sans-serif; }
 .tk-menu-btn { padding: 3px 10px; font: 600 12px/1.5 system-ui, sans-serif; color: #f4ead2; background: rgba(40, 24, 16, .85); border: 2px solid #c79a4a; border-radius: 6px; cursor: pointer; }
 .tk-menu-btn:hover, .tk-menu-btn:focus-visible { background: #5a3420; outline: none; }
-.tk-menu-panel { max-width: 230px; padding: 8px; background: rgba(40, 24, 16, .93); border: 2px solid #c79a4a; border-radius: 8px; box-shadow: 0 4px 0 rgba(0, 0, 0, .3); }
+.tk-menu-panel { max-width: 230px; max-height: calc(100vh - 64px); max-height: calc(100dvh - 64px); overflow-y: auto; box-sizing: border-box; padding: 8px; background: rgba(40, 24, 16, .93); border: 2px solid #c79a4a; border-radius: 8px; box-shadow: 0 4px 0 rgba(0, 0, 0, .3); }
 .tk-menu-panel[hidden] { display: none; }
 .tk-menu-panel .tk-head-btns { flex-direction: column; align-items: stretch; gap: 5px; }
 .tk-menu-panel .tk-chron-btn { padding: 4px 10px; font: 600 12px/1.4 system-ui, sans-serif; text-align: left; color: #3a2416; background: #f4ead2; border: 1px solid #7a3a22; border-radius: 4px; }
@@ -684,7 +684,7 @@ body:has(.tk-scroll-wrap) .wukong-toggle, body:has(.tk-scroll-wrap) #wukong { vi
 /* Full window: the game fills the screen, the page behind stays put */
 .tk-menu-row { display: flex; gap: 6px; }
 .tk-menu-btn[aria-pressed="true"] { background: rgba(40, 24, 16, .85); }
-.tk-map.tk-town.tk-fullwin { position: fixed; inset: 0; z-index: 50; width: auto; height: auto; max-height: none; aspect-ratio: auto; border-radius: 0; margin: 0; }
+.tk-map.tk-town.tk-fullwin { position: fixed; inset: 0; z-index: 50; width: auto; height: auto; max-height: none; max-width: none; aspect-ratio: auto; border-radius: 0; margin: 0; }
 html.tk-fullwin-on, html.tk-fullwin-on body { overflow: hidden; overscroll-behavior: none; }
 .tk-map.tk-town.tk-fullwin .tk-menu { top: max(8px, env(safe-area-inset-top)); right: max(8px, env(safe-area-inset-right)); }
 /* a narrow game window: the objective goes under the buttons rather than behind them */
