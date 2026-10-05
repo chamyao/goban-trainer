@@ -155,7 +155,7 @@ PLACES = {
                  "deliver": [["zhangfei", "The right hill is mine. I will hear the gongs from a mile off."]]},
             ],
             "npcs": [{"kind": "folk.soldier", "say": "“The rebels have us surrounded. If only someone could draw them off…”"}],
-            "objectives": {"1-n4": "Lift the siege of Qingzhou.", "1-n4b": "Lift the siege of Qingzhou."},
+            "objectives": {"1-n4": "Hear the messenger from Qingzhou.", "1-n4b": "Lift the siege of Qingzhou."},
         },
         "Guangzong Road": {
             "archetype": "road",
