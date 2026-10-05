@@ -46,7 +46,7 @@ from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
-from tk_stills import CAST, STILLS, STYLE, cast_in, portrait, prompt  # noqa: E402
+from tk_stills import CAST, PORTRAITS, STILLS, STYLE, STYLES, cast_in, portrait, prompt  # noqa: E402
 
 OUT = ROOT / "assets/tk/stills"
 SIZE = (1280, 720)
@@ -218,6 +218,43 @@ def portraits(name, fn, keys, n, model):
     print("choose from: assets/tk/stills/refs/candidates/index.html, then --pick KEY N")
 
 
+def styles(name, fn, ids, keys, model):
+    """Each candidate style (tk_stills.STYLES) on the given stills, and each portrait framing
+    (PORTRAITS) x style on the given people, into samples/styles/ with an index.html to choose from."""
+    out = OUT / "samples/styles"
+    out.mkdir(parents=True, exist_ok=True)
+    jobs = [(f"{sid}--{st}", prompt(sid).replace(STYLE, sty), "16:9") for sid in ids for st, sty in STYLES.items()]
+    for key in keys:
+        nm, look = CAST[key]
+        for fr, tpl in PORTRAITS.items():
+            for st, sty in STYLES.items():
+                jobs.append((f"portrait-{key}-{fr}--{st}", f"{tpl.format(name=nm, look=look)} {sty}", "3:4" if fr != "bust" else "1:1"))
+    for i, (stem, text, aspect) in enumerate(jobs):
+        if (out / f"{stem}.jpg").exists():
+            continue
+        if i:
+            time.sleep(4)
+        try:
+            raw, used = fn(text, model, aspect)
+        except Exception as e:
+            print(f"  {stem}: failed: {e}")
+            continue
+        im = Image.open(io.BytesIO(raw)).convert("RGB")
+        im.thumbnail((1280, 1280))
+        im.save(out / f"{stem}.jpg", "JPEG", quality=86)
+        print(f"  {stem}: {name}/{used}")
+    files = sorted(out.glob("*.jpg"))
+    rows = []
+    for group in sorted({f.stem.split("--")[0] for f in files}):
+        figs = "".join(f'<figure><img src="{f.name}"><figcaption>{f.stem.split("--")[1]}</figcaption></figure>'
+                       for f in files if f.stem.split("--")[0] == group)
+        rows.append(f"<h2>{group}</h2><div>{figs}</div>")
+    (out / "index.html").write_text(
+        "<!doctype html><meta charset=utf-8><title>Style candidates</title><style>body{font:15px system-ui;"
+        "background:#16130f;color:#eee;margin:16px}div{display:flex;flex-wrap:wrap;gap:10px}figure{margin:0;"
+        "width:300px}img{width:100%}</style>" + "".join(rows))
+
+
 def compare(name, fn, models, ids):
     """Each still on each model, saved as samples/<id>--<model>.jpg, with an index.html
     that shows them side by side and how long each took."""
@@ -264,6 +301,8 @@ def main():
     ap.add_argument("--import", dest="imp", metavar="DIR", help="fit and record hand-made images named <id>.*")
     ap.add_argument("--portraits", type=int, metavar="N", help="N candidate portraits per person (--only to pick who)")
     ap.add_argument("--pick", nargs=2, metavar=("KEY", "N"), help="make candidate N of KEY that person's reference")
+    ap.add_argument("--styles", nargs="*", metavar="KEY", help="every candidate style on --only stills, and every "
+                    "portrait framing x style on these people (e.g. guanyu), into stills/samples/styles/")
     ap.add_argument("--compare", nargs="+", metavar="MODEL", help="try each model on the stills, into stills/samples/")
     a = ap.parse_args()
     OUT.mkdir(parents=True, exist_ok=True)
@@ -297,6 +336,8 @@ def main():
     if a.portraits:
         return portraits(name, fn, [k for k in CAST if not a.only or k in a.only], a.portraits,
                          os.environ.get("TK_IMAGE_MODEL"))
+    if a.styles is not None:
+        return styles(name, fn, [s for s in STILLS if a.only and s in a.only], a.styles, os.environ.get("TK_IMAGE_MODEL"))
     if a.compare:
         return compare(name, fn, a.compare, [sid for sid in STILLS if not a.only or sid in a.only])
     model = os.environ.get("TK_IMAGE_MODEL")
