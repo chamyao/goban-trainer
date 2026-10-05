@@ -176,8 +176,9 @@ def check_world(w, ZH, CAST, errors, warnings, needs=None, folk=None):
     for sc, ks in used.items():
         if len(ks) > 1:
             errors.append(f"{name}: scene {sc!r} is on several nodes: {ks}")
+    gate_scenes = {g.get("else") for n in nodes.values() for g in n.get("gate", [])}   # played by a gate, not by a node
     for sc in scenes:
-        if sc not in used:
+        if sc not in used and sc not in gate_scenes:
             warnings.append(f"{name}: scene {sc!r} is not on any node")
 
     props = known_props()

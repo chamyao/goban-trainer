@@ -1,6 +1,6 @@
 # World 1: Black Wind as a gated battle (pilot), with the Star Lords' shrine
 
-The point of all of this is that solving the Star Lords' board **changes the world**. Before it, nobody can help and the battle is lost. After it, the shrine settles, the people offer what is needed, and the second try can win. This draft is the story side only: nothing here is in `tools/tk_story.py` yet, because the player can't carry an item, gate a node, or show a shrine's state. The asks are at the bottom. Lines marked **[new]** are not in the novel (ch. 2); the rest are.
+The point of all of this is that solving the Star Lords' board **changes the world**. Before it, nobody can help and the battle is lost. After it, the shrine settles, the people offer what is needed, and the second try can win. **Status: written into `tools/tk_story.py` and `tools/tk_places.py` in the format of `docs/story-mechanics-format.md`** (nodes n7, n7b and the boss gate; scenes `blackwind`, `shrine`, `bossearly`, `bossearly2`; the village people and ridges). The text below is the design record. Lines marked **[new]** are not in the novel (ch. 2); the rest are.
 
 ## The shrine
 
