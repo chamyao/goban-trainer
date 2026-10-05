@@ -205,9 +205,10 @@ SCENES = {
     ),
     "inn": (
         "A warm, crowded village inn at evening, lanterns glowing, as the door bangs open and Guan Yu strides in pushing "
-        "a handcart, everyone turning to look; Liu Bei and Zhang Fei at a table by the wall, clay wine jars and bowls on it.",
-        "Liu Bei, Guan Yu and Zhang Fei leaning together over a small inn table with shallow clay wine bowls, deep in "
-        "talk, faces lit by a single small oil lamp, the rest of the room fading into shadow.",
+        "a handcart, everyone turning to look; Liu Bei in white and Zhang Fei in black at a table by the wall, clay "
+        "wine jars and bowls on it. Bare plank walls, no scrolls or hangings.",
+        "Exactly three men leaning together over a small inn table: Liu Bei in white on the left, Guan Yu in green with a "
+        "long black beard in the middle, Zhang Fei in black on the right, with shallow clay wine bowls, deep in talk, faces lit by a single small oil lamp, the rest of the room fading into shadow.",
         "Rain streaking past the paper window of an inn at night, the warm silhouettes of three men inside, a handcart "
         "left out in the wet lane.",
     ),
