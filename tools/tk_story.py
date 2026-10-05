@@ -93,7 +93,7 @@ WORLDS = [
              "gate": [
                  {"needs": ["node:n7b"], "else": "bossearly"},
                  {"needs": ["item:pigblood", "item:sheepblood", "item:dogblood"], "else": "bossearly2",
-                  "objective": "Gather the blood of pigs, sheep and dogs at the farm east of the shrine.", "at": "Hills of Black Wind"},
+                  "objective": "Gather the blood of pigs, sheep and dogs at the farm east of the pine.", "at": "Hills of Black Wind"},
                  {"needs": ["mark:ridge_left", "mark:ridge_right"], "else": "bossearly3",
                   "objective": "Take the blood up to Guan Yu on the left ridge and Zhang Fei on the right.", "at": "Hills of Black Wind"}]},
             {"key": "ax1", "x": 448, "y": 44, "role": "main", "place": "Anxi", "room": "hostel", "step": 0.95, "scene": "hostel"},
@@ -249,7 +249,7 @@ WORLDS = [
                 ["say", "chengyuanzhi", "Deng Mao — bring me his head!"],
                 ["n", "His lieutenant, Deng Mao, rides out."],
                 ["spawn", "sg", "stargrey", "n3", -40, 18], ["spawn", "sr", "starred", "n3", -32, 22],
-                ["n", "Under an old tree by the road sit the two white-haired men from the peach garden, over their weiqi board, as if no army were coming."],
+                ["n", "Under an old pine by the road sit the two white-haired men from the peach garden, over a board on a flat rock, as if no army were coming."],
                 ["say", "stargrey", "Read this first."],
                 ["problem", "stargrey"],  # the board comes up here; the rest plays once it is solved
                 ["say", "starred", "To catch the bandits, first catch their king."],
@@ -402,13 +402,13 @@ WORLDS = [
                 ["run", "yt", "n7", 16, 0], ["run", "han", "n7", -120, 0], ["remove", "han"],
                 ["say", "zhujun", "Sorcery. Paper and straw wearing the shape of men; no blade can kill what was never alive. Fall back to the road."],
                 ["light", "day", 1500],
-                ["n", "As they fall back, Liu Bei sees a faint glow at the old shrine by the road."],
+                ["n", "As they fall back, Liu Bei sees a faint glow under the great pine by the road."],
                 ["remove", "yt"], ["remove", "zb"], ["remove", "zj"],
             ]},
-            "shrine": {"title": "The Shrine at the Roadside", "kind": "main", "steps": [
+            "shrine": {"title": "The Rock under the Pine", "kind": "main", "steps": [
                 # the shrine lights after the failure; the Star Lords speak, then the board
                 ["spawn", "zj", "zhujun", "n7b", -14, -10],
-                ["n", "At the glowing shrine sit the two white-haired men from the peach garden, over its board, as if nothing had happened."],
+                ["n", "On a flat rock under the pine, where the stones glow, sit the two white-haired men from the peach garden, as if nothing had happened."],
                 ["spawn", "sg", "stargrey", "n7b", -34, 20], ["spawn", "sr", "starred", "n7b", -26, 24],
                 ["say", "stargrey", "Read this, before you go back."],
                 ["still", "blackwind_c", "slow drift down"],
@@ -416,7 +416,7 @@ WORLDS = [
                 ["problem", "stargrey"],  # the board comes up here; the Star Lords are gone by the time it closes
                 ["remove", "sg"], ["remove", "sr"],
                 ["say", "zhujun", "Blood breaks sorcery. Tomorrow, hide men on the hilltops with the blood of pigs, sheep and dogs. When his spirits come, drench them, and the spell will break."],
-                ["n", "Zhu Jun's own men have no blood to spare. But at the farm just east of the shrine, the farmers keep pigs, sheep and hounds."],
+                ["n", "Zhu Jun's own men have no blood to spare. But at the farm just east of the pine, the farmers keep pigs, sheep and hounds."],
                 ["remove", "zj"],
                 ["still", "bloodplan_a", "slow zoom in"],
                 ["say", "liubei", "The blood of pigs, sheep and dogs. The farm east of here has all three. I will go and ask the farmers for it."],
@@ -447,7 +447,7 @@ WORLDS = [
                 ["n", "Again the black wind pours out of the cloud. The army breaks."],
                 ["run", "han", "boss", -120, 0], ["run", "liubei", "boss", -16, 0],
                 ["light", "day", 1500],
-                ["say", "guanyu", "The old men said blood. Pigs, sheep, dogs. We have none. Go to the farm east of the shrine and ask."],
+                ["say", "guanyu", "The old men said blood. Pigs, sheep, dogs. We have none. Go to the farm east of the pine and ask."],
                 ["remove", "han"], ["remove", "yt"], ["remove", "zb"],
             ]},
             "bossearly3": {"title": "The Wind Again", "kind": "main", "steps": [

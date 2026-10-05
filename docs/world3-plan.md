@@ -19,7 +19,7 @@ Every scene has one problem, placed at the decision. Dilemma boards are marked �
 
 | # | Key | Place | Scene | Chapter | What happens, and the problem beat |
 |---|---|---|---|---|---|
-| 1 | m1 | Pingyuan | `beihai1` A Rider from Beihai | 11 | Taishi Ci fights out of Beihai and reaches Pingyuan with Kong Rong's letter. "Kong of Beihai knows that Liu Bei exists in this world?" Problem: Liu Bei reading the letter. Star Lords under a tree at the gate, first time this Book: "A promise is a stone. Once thrown, it does not come back." |
+| 1 | m1 | Pingyuan | `beihai1` A Rider from Beihai | 11 | Taishi Ci fights out of Beihai and reaches Pingyuan with Kong Rong's letter. "Kong of Beihai knows that Liu Bei exists in this world?" Problem: Liu Bei reading the letter. Star Lords at their rock under a pine by the gate, first time this Book: "A promise is a stone. Once thrown, it does not come back." |
 | 2 | m2 | Beihai | `beihai2` The Siege of Beihai | 11 | Guan Yu kills the Yellow Turban Guan Hai. At the feast Mi Zhu tells the Xuzhou story; Kong Rong shames Liu Bei; "Without trust a man cannot stand. Troops or none, I will come." Problem before Guan Yu rides out. |
 | 3 | m3 | Gongsun Zan's camp | `zilong` The Borrowed General | 11 | Gongsun Zan lends 2,000 men and Zhao Yun (introduced here: the young officer from Changshan who once saved Gongsun Zan at the Pan River). Problem: Liu Bei asking for him. |
 | 4 | m4 | Xuzhou, outside the walls | `breakthrough` The Red Banner | 11 | Liu Bei and Zhang Fei cut through Cao Cao's lines under a red banner, "Liu Xuande of Pingyuan". Tao Qian offers the seal the first time. "If I had such a thought, may Heaven forsake me!" Problem: the charge. |
@@ -33,7 +33,7 @@ Every scene has one problem, placed at the decision. Dilemma boards are marked �
 | 12 | m12 | Xiaopei | `horses` The Stolen Horses | 16 | Zhang Fei steals 150 of Lü Bu's horses. "You took my brother's Xuzhou and say nothing!" Lü Bu besieges Xiaopei; the brothers break out by moonlight to Cao Cao. Problem: the breakout. |
 | 13 | m13 | Xu, the new capital | `xu` A Pit for the Tiger | 16-17 | Cao Cao receives Liu Bei ("Xuande is a brother to me"); Xun Yu says kill him, Guo Jia says no. Cao Cao sends him back to Xiaopei: "a pit dug to wait for the tiger". Problem: Cao Cao's question. |
 | 14 | m14 | Xiaopei | `scattered` Scattered | 18-19 | Lü Bu's generals take Xiaopei. Guan Yu shames Zhang Liao on the wall: "You carry yourself like no common man. Why serve a bandit?" Zhang Liao lowers his head. The brothers are scattered; then, on the road east, the reunion: "Lü Bu, don't run! Guan Yunchang is here!" Problem: Guan Yu and Zhang Liao. |
-| 15 | m15 | Xiapi, the Huainan road | `road` The Huainan Road | 19 | Shrine (Star Lords' counsel): "A tiger in a cage paces. Shut every door, and wait." Gate: post Guan Yu and Zhang Fei on the Huainan road (two marks). Too early: Lü Bu's envoys slip through. Once posted: Zhang Fei takes Hao Meng; Lü Bu tries to break out with his daughter tied to his back, and turns back. Cao Cao floods Xiapi. |
+| 15 | m15 | Xiapi, the Huainan road | `road` The Huainan Road | 19 | The rock under the pine (Star Lords' counsel): "A tiger in a cage paces. Shut every door, and wait." Gate: post Guan Yu and Zhang Fei on the Huainan road (two marks). Too early: Lü Bu's envoys slip through. Once posted: Zhang Fei takes Hao Meng; Lü Bu tries to break out with his daughter tied to his back, and turns back. Cao Cao floods Xiapi. |
 | B | boss | Xiapi, the White Gate Tower | `whitegate` The White Gate Tower | 19 | A reckoning, not a fight. Lü Bu, bound: "The ropes are too tight." Chen Gong will not beg, asks only about his mother, and walks down the stairs himself. Lü Bu to Liu Bei: "You are the guest on the dais and I the prisoner below the steps. Will you not say one word?" Problem: Cao Cao's "What do you say?" Then the answer, and "Big Ears! Have you forgotten the halberd at the gate?" Zhang Liao curses Cao Cao and is spared. |
 
 Boss card: Lü Bu, "Lü Bu, bound at the White Gate". Taunt: "You are the guest on the dais, and I the prisoner below the steps."
@@ -68,7 +68,7 @@ Lighter material left out or told in a line: Ma Teng and Ma Chao (ch10), Kong Ro
 
 ## The Star Lords
 
-Twice this Book: under the tree at Pingyuan's gate (scene 1, counsel about keeping one's word), and at the shrine before the Huainan road (scene 15, the counsel that wins it). They are at the White Gate as a board on the tower and say nothing.
+Twice this Book, always at their rock under a great pine (ch. 69's 盤石 under the 大松樹; no incense): at Pingyuan's gate (scene 1, counsel about keeping one's word), and before the Huainan road (scene 15, the counsel that wins it). They are at the White Gate as a board on the tower and say nothing.
 
 ## Stills (transitions and peaks, all new)
 
