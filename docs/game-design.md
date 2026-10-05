@@ -8,6 +8,7 @@ Written by the Game Design session. It rests on reading `docs/three-kingdoms-pla
 - **The Star Lords are the one justification for problems.** They offer counsel in exchange for a solved problem.
 - **Counsel becomes a hint the player acts on in the world** (go to a place, find a person, collect a thing), instead of a cutscene in which the characters do it. The cutscene then shows the result of what the player did.
 - **Bosses stay hard problems.** Relics should do something, not just appear in a scene.
+- **Gated battles show a defeat, not a problem.** If the player attempts a fail-then-prepare battle or boss before its conditions are met (for example the blood at Black Wind), the board never opens: a short defeat scene plays and a clue points to what is missing. No problem is spent and no slip is counted. Once the conditions are met, the problem opens as normal.
 - **"Fail until prepared" and deliveries are tools in a toolbox**, used where the novel supports them and varied from Book to Book.
 - **Open:** whether the game is Three Kingdoms with a light xianxia layer (the plan today) or a full xianxia game. This review assumes the plan as written.
 
@@ -48,7 +49,7 @@ Implementer key: **Plot** = Plot/Story, **Integ** = Primary Integration, **Gfx**
 | Tool | Fits well | Does not fit | Notes |
 |---|---|---|---|
 | **Hint action** (go, find, collect) | Everywhere the Star Lords sit at the board | The great deaths | The baseline; Proposal 1 |
-| **Fail, then prepare** | Black Wind (B1), Hulao (B2), Guandu (B5), Red Cliffs (B8), Nanjun (B9), poisoned springs (B14), Chencang (B15) | Daxing (the novel prepares first), the five passes, Dingjun, any real defeat | A first failed attempt costs nothing; a clue sends the player to gather strength. Plot's rule: use it only where the novel has a setback then a win |
+| **Fail, then prepare** | Black Wind (B1), Hulao (B2), Guandu (B5), Red Cliffs (B8), Nanjun (B9), poisoned springs (B14), Chencang (B15) | Daxing (the novel prepares first), the five passes, Dingjun, any real defeat | A first attempt before the conditions are met shows a defeat scene and no problem; a clue sends the player to gather strength. Plot's rule: use it only where the novel has a setback then a win |
 | **Delivery** | Lu Zhi's errand to Yingchuan (B1), the ladies' escort (B4), the letter left for Zhuge Liang (B6), Kan Ze's letter (B8), the blotted letter (B10), Guan Yu's failed plea (B12), the sealed bag (B16) | Lady Mi and A Dou, the heads, wills, Xu Shu's forged letter (must deceive the player too) | Almost all outcomes are fixed by the novel, so the value is the journey and the twist. At most one required delivery per Book plus one optional. Twists: arrive too late, forged or altered letter, a trap, recipient gone, the carry is the harm |
 | **Formation or flank placement** | The short battles (Qingzhou, Wuchao) | Where the novel needs the characters to act | Small and forgiving |
 | **Choice beat** | Book endings | Anything that changes events | Dialogue or reward only |
@@ -66,7 +67,7 @@ Implementer key: **Plot** = Plot/Story, **Integ** = Primary Integration, **Gfx**
 ## Open questions for the user
 
 1. Three Kingdoms with a light xianxia layer, or a full xianxia game?
-2. Should retries on the peak bosses keep the same problem?
+2. Once a boss's conditions are met and the board is open, should a slip draw a new problem (current rule) or keep the same one for a few peak bosses? (The gated-defeat case is settled: no board, just a defeat scene.)
 3. How many Book-end choices, and should they carry into later Books?
 4. Do challenger NPCs stay as optional trainers or become the Star Lords' proxies?
 
