@@ -177,8 +177,8 @@ PLACES = {
         "Changshe": {
             "archetype": "camp",
             "banners": "red",
-            "landmarks": [{"kind": "building.tent", "id": "camp", "node": "1-b3", "label": "The Han camp"},
-                          {"kind": "rock.big", "id": "fieldcamp", "node": "1-e1", "label": "Where the army was"}],
+            "landmarks": [{"kind": "building.tent", "id": "camp", "node": "1-e1", "label": "The Han camp"},
+                          {"kind": "rock.big", "id": "fieldcamp", "node": "1-b3", "label": "The burnt grass"}],
             "objectives": {"1-f1": "Side story: the fire plan in the Han camp.", "1-b3": "Side story: red banners at Changshe.",
                            "1-e1": "Go to Changshe, in Yingchuan, and learn how Huangfu Song and Zhu Jun stand."},
         },
