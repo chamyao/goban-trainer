@@ -921,7 +921,10 @@ const TKStory = {
       ]);
       document.body.append(wrap);
       TKVoice.play(vids || []);
-      const go = () => { TKVoice.stop(); wrap.remove(); res(); };
+      // Enter or Space turns it too (no focus on the button: that would scroll a long one to its end)
+      const key = e => { if ((e.key === "Enter" || e.key === " ") && !(e.target && e.target.tagName === "BUTTON")) { e.preventDefault(); e.stopPropagation(); go(); } };
+      const go = () => { removeEventListener("keydown", key, true); TKVoice.stop(); wrap.remove(); res(); };
+      addEventListener("keydown", key, true);
       wrap.querySelector(".tk-scroll-go").onclick = go;
     });
   },
