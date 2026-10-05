@@ -396,7 +396,7 @@ ZH = {
     "Zhang Liang and Zhang Bao have no strength left. They will run to Guangzong, to Zhang Jiao. Go back at once, and help.": "张梁、张宝势穷力乏，必投广宗去依张角。玄德可即星夜往助。",
     "Liu Bei takes his orders, and turns his army back through the night.": "玄德领命，遂引兵复回。",
     "Sorcery. A man cannot fight a wind. Fall back to the road.": "此乃妖术，人如何与风相战？退回大路。",
-    "On a flat rock under the pine, where the stones glow, sit the two white-haired men from the peach garden, as if nothing had happened.": "大松树下的盘石上，棋子微微发光。桃园中那两位白发老人对坐其旁，仿佛什么也没发生。",
+    "At the little stone shrine under the pine sit the two white-haired men from the peach garden, over the board cut into its offering table, wine cups beside them, as if nothing had happened.": "老松树下的石祠前，桃园中那两位白发老人对着供桌上刻出的棋盘坐着，酒杯放在一旁，仿佛什么也没发生。",
     "Read this, before you go back.": "回去之前，先看看这一局。",
     "Zhu Jun's own men have no blood to spare. In the village below the hills there are pens, flocks and hounds. Liu Bei goes down to ask.": "朱儁军中无血可用。山下村中有猪圈、羊群和猎犬，玄德下山去问。",
     "Zhu Jun's own men have no blood to spare. But at the farm just east of the pine, the farmers keep pigs, sheep and hounds.": "朱儁军中无血可用。大松树东边不远有座农庄，庄户人家养着猪、羊和猎犬。",
@@ -447,20 +447,20 @@ ZH = {
     "He loved hunting, music and mischief, and his uncle kept telling his father so.": "他好游猎，喜歌舞，叔父屡次向他父亲告状。",
     "Dong Zhuo looks down on them, and turns his back without a word of thanks. Zhang Fei starts forward, and his brothers hold him back.": "董卓甚是轻视，连谢也不谢，转身便走。张飞大怒，便要上前，被两位兄长拦住。",
     "The armies meet. Zhang Fei spears Zhang Bao's officer Gao Sheng from the saddle — and then Zhang Bao lets down his hair, raises his sword, and chants.": "两军相遇。张飞出马，刺张宝部将高升于马下。张宝随即披发仗剑，作起妖法。",
-    "As they fall back, Liu Bei sees a faint glow under the great pine by the road.": "退兵途中，玄德望见路旁大松树下隐隐发光。",
+    "As they fall back, Liu Bei sees a game laid out on the little shrine under the old pine by the road.": "退兵途中，玄德望见路旁老松树下的小祠供桌上，摆开了一局棋。",
     "Liu Bei marches on Yangcheng with the blood still on his own carts. Again Zhang Bao lets down his hair and chants.": "玄德带着血进兵阳城，血却还在自己车上。张宝又披发仗剑，作起妖法。",
     "The blood is no use down here. It must go up to my brothers on the ridges, left and right.": "血在山下无用，须送上左右山头，交给两位兄弟。",
     "Gather the blood of pigs, sheep and dogs at the farm east of the pine.": "到大松树东边的农庄，讨来猪、羊、狗的血。",
     "Take the blood up to Guan Yu on the left ridge and Zhang Fei on the right.": "把血送上左山岭的关羽和右山岭的张飞。",
     "The farm east of the shrine": "神龛东边的农庄",
     "Join Zhu Jun in the hills, against Zhang Bao.": "到山中与朱儁会合，迎战张宝。",
-    "The Rock under the Pine": "松下盘石",
-    "The rock under the pine": "松下盘石",
-    "Under the great pine by the road, the stones on the flat rock begin to glow.": "路旁大松树下，盘石上的棋子忽然发出微光。",
+    "The Shrine under the Pine": "松下星君祠",
+    "The shrine under the pine": "松下星君祠",
+    "Under the old pine by the road, a game has been laid out on the little shrine's offering table, with wine cups and dried meat beside it.": "路旁老松树下，小祠的供桌上摆开了一局棋，旁边放着酒杯和肉脯。",
     "The old men are gone. Only the game remains.": "两位老人已经不见了，只剩下那盘棋。",
     "The farm east of the pine": "大松树东边的农庄",
-    "The ridge is empty. Go to the rock under the pine first.": "山岭上空无一人。先去大松树下的盘石。",
-    "Go to the rock under the great pine, where the stones have begun to glow.": "到大松树下的盘石那里去，棋子已经发光了。",
+    "The ridge is empty. Go to the shrine under the pine first.": "山岭上空无一人。先去松树下的星君祠。",
+    "Go to the shrine under the old pine, where a game has been laid out.": "到老松树下的星君祠去，那里摆开了一局棋。",
 }
 
 # Pronunciation fixes for the voice only (the text shown keeps the real
@@ -515,3 +515,7 @@ from tk_story_w2 import ZH2 as _ZH2, CAST2 as _CAST2  # noqa: E402
 for _k, _v in _ZH2.items():
     ZH.setdefault(_k, _v)
 CAST.update(_CAST2)
+from tk_story_w3 import ZH3 as _ZH3, CAST3 as _CAST3  # noqa: E402
+for _k, _v in _ZH3.items():
+    ZH.setdefault(_k, _v)
+CAST.update(_CAST3)
