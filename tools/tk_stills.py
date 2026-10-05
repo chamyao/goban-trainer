@@ -122,8 +122,11 @@ CATEGORY = {sid: k for k, c in _CATS["categories"].items() for sid in c["scenes"
 for _k, _c in _CATS["categories"].items():
     STYLES[f"cat_{_k}"] = f"Style: {_CATS['base'].rstrip('.')}. {_c['recipe']}"
 
-# the user's pick for the stills: the God of High School look, on Seedream 5 Pro (gen_stills' default)
-STYLE = f"{STYLES['gohs']} {NEGATIVE}"
+# the stills are made on Seedream 5 Pro (gen_stills' default); the God of High School look was the first pick
+# the user's final style (after the garden tests): one short line, the era, nothing else; scenes and cast
+# descriptions carry the picture. Every still's default; --look gohs etc. still swap it out for comparisons.
+STYLES["final"] = "Style: 2D donghua, hard cel shading."
+STYLE = f"{STYLES['final']} Han dynasty China, about 184 AD."
 
 # candidates for the portrait framing (the reference faces), to choose by eye
 PORTRAITS = {
@@ -721,3 +724,12 @@ for _id, _text in FINAL.items():   # the final prompt replaces the first-pass sc
 for _id, _text in FINAL2.items():
     STILLS[_id] = {"scene": _id.rsplit("_", 1)[0], "lens": _id.rsplit("_", 1)[1], "prompt": _text}
 assert all(c in STILLS for c in CHOSEN)
+
+# the scene text of the stills the game shows, as Plot rewrites it (assets/tk/stills/scene_prompts.json):
+# {id: {"book", "category", "beat": what the still must show, "scene": the text, "notes"}}. Its "scene"
+# replaces the text above; the cast descriptions and the style line are still added by prompt().
+_SP = _Path(__file__).resolve().parent.parent / "assets/tk/stills/scene_prompts.json"
+if _SP.exists():
+    for _id, _e in _json.loads(_SP.read_text()).items():
+        if _id in STILLS and _e.get("scene"):
+            STILLS[_id]["prompt"] = _e["scene"]
