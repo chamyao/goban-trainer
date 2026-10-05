@@ -1,15 +1,16 @@
-"""The Star Lords' rock under the pine (ch. 69: they play go on a flat rock under a great pine), in each kit.
+"""The Star Lords' shrine, in each kit: a small stone shrine to the two Dippers under an old pine, on a flat
+rock whose offering table has a go board cut into it (ch. 69: the Star Lords play go under a great pine).
 
     python3 tools/pine_rock.py            # every kit: jade, xianxia, genshin
     python3 tools/pine_rock.py genshin    # one
 
-Each kit's look is made from its own art, so it matches: the kit's first pine (tree.pine), and in front of
-it a flat slab drawn in colours taken from the kit's big rock (rock.big), with a board scratched into its
-top. Three looks, side by side in assets/tk/<dir>/pinerock.png, replace the old shrine's:
-    landmark.shrine           dark: the empty board
+Each kit's look is made from its own art, so it matches: the kit's first pine (tree.pine), the little shrine
+and the slab of its offering table drawn in colours taken from the kit's big rock (rock.big). Three looks,
+side by side in assets/tk/<dir>/pinerock.png, replace the old shrine's:
+    landmark.shrine           dark: the offering table empty, the board bare
     landmark.shrine.lit       a game in progress, two wine cups and a plate of dried meat beside it
-    landmark.shrine.settled   the finished game left on the rock, the cups drained
-No incense or smoke in any of them. build_xianxia_kit.py runs this after it writes a kit.
+    landmark.shrine.settled   the finished game left on the table, the cups drained
+No incense, smoke or burner in any of them. build_xianxia_kit.py runs this after it writes a kit.
 """
 import json
 import sys
@@ -95,6 +96,38 @@ def slab(w, pal, state):
     return im
 
 
+def shrine(pal, state):
+    """The little stone shrine: a tiled cap, a body with a niche, and in the niche the two Dippers (two
+    marks, gold when the Star Lords are about)."""
+    w, h = 12, 15
+    im = Image.new("RGBA", (w, h))
+    p = im.load()
+    roof, roofL = (62, 67, 80, 255), (92, 98, 112, 255)
+    for x in range(1, w - 1):
+        p[x, 1] = roof
+    for x in range(w):
+        p[x, 2] = roofL if 0 < x < w - 1 else roof
+    for x in range(4, 8):
+        p[x, 0] = roof
+    for y in range(3, 13):
+        for x in range(2, w - 2):
+            p[x, y] = pal["body"] if x < w - 3 else pal["shadow"]
+    for y in range(5, 11):
+        for x in range(4, 8):
+            p[x, y] = (40, 38, 44, 255)                      # the niche
+    star = (240, 206, 96, 255) if state != "dark" else (110, 108, 112, 255)
+    p[4, 6], p[5, 7], p[6, 8], p[7, 9] = star, star, (40, 38, 44, 255), star   # the two Dippers, as a few points
+    p[6, 6] = star
+    for y in range(12, h):
+        for x in range(1, w - 1):
+            p[x, y] = pal["shadow"]
+    filled = {(x, y) for x in range(w) for y in range(h) if p[x, y][3]}
+    for x, y in filled:
+        if any((x + dx, y + dy) not in filled for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1))) and p[x, y] not in (roof, roofL):
+            p[x, y] = pal["line"]
+    return im
+
+
 def build(name):
     path = ROOT / "assets/tk/kits" / f"{name}.json"
     kit = json.loads(path.read_text())
@@ -109,7 +142,8 @@ def build(name):
     for state in STATES:
         im = Image.new("RGBA", (W, H))
         im.alpha_composite(pine, (0, 0))                       # the pine behind, to the left
-        im.alpha_composite(slab(sw, pal, state), (W - sw, H - 15))   # the rock in front of it, under its branches
+        im.alpha_composite(shrine(pal, state), (W - 13, H - 26))     # the shrine on the rock, behind its table
+        im.alpha_composite(slab(sw, pal, state), (W - sw, H - 15))   # the offering table in front, under the branches
         frames.append(im)
     out = ROOT / "assets/tk" / KITS[name] / "pinerock.png"
     sheet = Image.new("RGBA", (W * len(frames), H))
