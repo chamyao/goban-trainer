@@ -134,6 +134,13 @@ BATTLE_LINES = {
     "final_b2": "Low camera angle, motion blur, flying debris.",   # dropped: shot-specific, not reusable on every battle
     "final_b5": "Kinetic action, bold motion lines.",   # dropped: the same as b1
     "final_b6": "Action webtoon.",
+    # stronger ones (the user: "the style line is having minimal effect, we need to beef it up")
+    "final_bA": "Explosive anime battle key frame: extreme foreshortening, radial speed lines, impact flashes, dust and "
+                "debris bursting toward the camera, high contrast.",
+    "final_bB": "In the style of the anime The God of High School: bold dynamic action anime, thick energetic lineart, "
+                "high contrast, vivid saturated colours, speed lines and impact effects, extreme fighting poses.",
+    "final_bC": "Korean action webtoon fight panel: thick inked lineart, dramatic perspective, speed lines, impact "
+                "effects, intense expressions.",
     "final_b3": "Explosive action, high contrast, impact frames.",
     "final_b4": "Fight scene like The God of High School.",
 }

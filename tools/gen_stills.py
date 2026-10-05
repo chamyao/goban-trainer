@@ -247,7 +247,11 @@ def review(name, fn, ids, model, tries, look=None, workers=8):
     out.mkdir(parents=True, exist_ok=True)
     restyle = (lambda t: t.replace(STYLE, f"{STYLES[look]} {NEGATIVE}")) if look else (lambda t: t)
     if look and look.startswith(("min", "final")):   # no "no" parts; only the style line and the era
-        restyle = lambda t: t.replace(STYLE, f"{STYLES[look]} Han dynasty China, about 184 AD.")
+        base = look.removesuffix("_front")
+        if look.endswith("_front"):   # the style first: models weight the start of a prompt most
+            restyle = lambda t: f"{STYLES[base]} " + t.replace(STYLE, "Han dynasty China, about 184 AD.")
+        else:
+            restyle = lambda t: t.replace(STYLE, f"{STYLES[base]} Han dynasty China, about 184 AD.")
     # candidates from different models sit side by side: <id>--<model>-<look>-<n>
     tag = (f"{model.split('/')[-1]}-" if model else "") + (f"{look}-" if look else "")
     jobs = [(f"{sid}--{tag}{n}", restyle(request(name, sid)[0])) for sid in ids for n in range(1, tries + 1)]
@@ -363,7 +367,7 @@ def main():
                     "stills/samples/review/ (never stills.json)")
     ap.add_argument("--tries", type=int, default=2, help="with --review: candidates per still")
     ap.add_argument("--jobs", type=int, default=8, help="with --review: requests in flight at once")
-    ap.add_argument("--look", choices=sorted(STYLES), help="with --review: a candidate style (tk_stills.STYLES) "
+    ap.add_argument("--look", choices=sorted(STYLES) + [f"{k}_front" for k in STYLES if k.startswith("final")], help="with --review: a candidate style (tk_stills.STYLES) "
                     "instead of STYLE, the negatives kept")
     ap.add_argument("--styles", nargs="*", metavar="KEY", help="every candidate style on --only stills, and every "
                     "portrait framing x style on these people (e.g. guanyu), into stills/samples/styles/")
