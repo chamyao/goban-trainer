@@ -1,0 +1,226 @@
+{
+ "tree_a": {
+  "file": "tree_a.jpg",
+  "scene": "tree",
+  "prompt": "A humble village of earth-walled houses at golden morning, and above it a gigantic mulberry tree, its round crown spreading like the canopy of an imperial carriage; villagers pause in the lane to stare up. Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
+ },
+ "tree_b": {
+  "file": "tree_b.jpg",
+  "scene": "tree",
+  "prompt": "A small boy of six stands under a great mulberry tree, chin up, pointing at its canopy and declaring he will ride in a carriage like that one day; his uncle, a middle-aged farmer, startled beside him, hand raised to hush him. Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no speech or thought bubbles, no captions, no calligraphy, no seals, no signature, no watermark.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
+ },
+ "notice_a": {
+  "file": "notice_a.jpg",
+  "scene": "notice",
+  "prompt": "A dusty county town square at noon, a crowd of townsfolk pressing around a notice pasted on a whitewashed wall, red official seals on the paper, banners stirring in a hot wind. Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
+ },
+ "notice_b": {
+  "file": "notice_b.jpg",
+  "scene": "notice",
+  "prompt": "Liu Bei stands at the back of the crowd reading the notice, sighing deeply, while behind him Zhang Fei looms with arms folded, glaring, about to call out to him. Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold (reference image 1: keep his face, hair and clothes). Zhang Fei is a stocky, barrel-chested, powerfully muscled man, broad rather than tall, with a fierce square jaw, big glaring eyes and a wild bristling black beard, hair in a topknot, in black and dark brown clothes (reference image 2: keep his face, hair and clothes). Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
+ },
+ "inn_a": {
+  "file": "inn_a.jpg",
+  "scene": "inn",
+  "prompt": "A warm, crowded village inn at evening, lanterns glowing, as the door bangs open and Guan Yu strides in pushing a handcart, everyone turning to look; Liu Bei and Zhang Fei at a table by the wall. Guan Yu is a towering giant of a man, a head taller than anyone, with massive shoulders and a thick neck, a deep red face, a very long black beard down to his chest and narrow eyes under heavy brows, hair in a topknot, in a green robe (reference image 1: keep his face, hair and clothes). Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold (reference image 2: keep his face, hair and clothes). Zhang Fei is a stocky, barrel-chested, powerfully muscled man, broad rather than tall, with a fierce square jaw, big glaring eyes and a wild bristling black beard, hair in a topknot, in black and dark brown clothes (reference image 3: keep his face, hair and clothes). Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
+ },
+ "inn_b": {
+  "file": "inn_b.jpg",
+  "scene": "inn",
+  "prompt": "Liu Bei, Guan Yu and Zhang Fei leaning together over a small inn table with wine cups, deep in talk, faces lit by a single lamp, the rest of the room fading into shadow. Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold (reference image 1: keep his face, hair and clothes). Guan Yu is a towering giant of a man, a head taller than anyone, with massive shoulders and a thick neck, a deep red face, a very long black beard down to his chest and narrow eyes under heavy brows, hair in a topknot, in a green robe (reference image 2: keep his face, hair and clothes). Zhang Fei is a stocky, barrel-chested, powerfully muscled man, broad rather than tall, with a fierce square jaw, big glaring eyes and a wild bristling black beard, hair in a topknot, in black and dark brown clothes (reference image 3: keep his face, hair and clothes). Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
+ },
+ "oath_a": {
+  "file": "oath_a.jpg",
+  "scene": "oath",
+  "prompt": "A peach orchard in full pink blossom at dawn, an altar with incense smoke curling upward, a black ox and a white horse tethered for the sacrifice, three figures kneeling, petals drifting through shafts of light. Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
+ },
+ "oath_b": {
+  "file": "oath_b.jpg",
+  "scene": "oath",
+  "prompt": "Liu Bei, Guan Yu and Zhang Fei kneeling side by side before the altar, eyes closed, hands clasped, swearing brotherhood, incense smoke between them, petals in their hair. Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold (reference image 1: keep his face, hair and clothes). Guan Yu is a towering giant of a man, a head taller than anyone, with massive shoulders and a thick neck, a deep red face, a very long black beard down to his chest and narrow eyes under heavy brows, hair in a topknot, in a green robe (reference image 2: keep his face, hair and clothes). Zhang Fei is a stocky, barrel-chested, powerfully muscled man, broad rather than tall, with a fierce square jaw, big glaring eyes and a wild bristling black beard, hair in a topknot, in black and dark brown clothes (reference image 3: keep his face, hair and clothes). Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
+ },
+ "oath_c": {
+  "file": "oath_c.jpg",
+  "scene": "oath",
+  "prompt": "Three bronze jue wine cups raised and touching above a table under peach blossom, petals falling into the wine, golden evening light. Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no speech or thought bubbles, no captions, no calligraphy, no seals, no signature, no watermark.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
+ },
+ "tent_b": {
+  "file": "tent_b.jpg",
+  "scene": "tent",
+  "prompt": "Inside a lamplit army tent, Liu Bei bowing low to his old teacher Lu Zhi, who rises from his desk smiling to greet him; a bronze oil lamp on the desk is the only light. Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold (reference image 1: keep his face, hair and clothes). Lu Zhi is a dignified old scholar-general with a long grey beard, in plain grey clothes (reference image 2: keep his face, hair and clothes). Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no speech or thought bubbles, no captions, no calligraphy, no seals, no signature, no watermark.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
+ },
+ "tent_c": {
+  "file": "tent_c.jpg",
+  "scene": "tent",
+  "prompt": "A general's desk in a tent: scrolls, a brush, an inkstone and a battle map pinned with small flags, the warm light of a small bronze oil lamp and shadow. Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no speech or thought bubbles, no captions, no calligraphy, no seals, no signature, no watermark.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
+ },
+ "caocao3_b": {
+  "file": "caocao3_b.jpg",
+  "scene": "caocao3",
+  "prompt": "Cao Cao on horseback at the head of his red-bannered cavalry, half-smiling, sword drawn, as the sun rises behind him. Cao Cao is a lean man of about thirty with a thin moustache and a quick, sharp look, black official's cap, dark red robe with gold trim (reference image 1: keep his face, hair and clothes). Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
+ },
+ "cart_a": {
+  "file": "cart_a.jpg",
+  "scene": "cart",
+  "prompt": "A dusty road between fields, a wooden prisoner's cage cart escorted by soldiers with spears, and three riders who have reined in beside it. Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
+ },
+ "cart_b": {
+  "file": "cart_b.jpg",
+  "scene": "cart",
+  "prompt": "Lu Zhi in the cage cart, calm and dignified, speaking quietly to Liu Bei through the bars, while Zhang Fei behind him grips his spear in fury. Lu Zhi is a dignified old scholar-general with a long grey beard, in plain grey clothes (reference image 1: keep his face, hair and clothes). Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold (reference image 2: keep his face, hair and clothes). Zhang Fei is a stocky, barrel-chested, powerfully muscled man, broad rather than tall, with a fierce square jaw, big glaring eyes and a wild bristling black beard, hair in a topknot, in black and dark brown clothes (reference image 3: keep his face, hair and clothes). Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
+ },
+ "cart_c": {
+  "file": "cart_c.jpg",
+  "scene": "cart",
+  "prompt": "Close on the rough wooden bars of a cage cart and an old scholar's hands resting on them, a lonely road stretching away under clouds. Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
+ },
+ "office_b": {
+  "file": "office_b.jpg",
+  "scene": "office",
+  "prompt": "Dong Zhuo seated in his army camp with banners behind him, sneering down at Liu Bei standing before him, as Zhang Fei lunges for his sword in rage and Liu Bei and Guan Yu together hold him back. Dong Zhuo is a huge, heavy, bearded bully of a warlord with a sneer, in a general's armour (reference image 1: keep his face, hair and clothes). Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold (reference image 2: keep his face, hair and clothes). Zhang Fei is a stocky, barrel-chested, powerfully muscled man, broad rather than tall, with a fierce square jaw, big glaring eyes and a wild bristling black beard, hair in a topknot, in black and dark brown clothes (reference image 3: keep his face, hair and clothes). Guan Yu is a towering giant of a man, a head taller than anyone, with massive shoulders and a thick neck, a deep red face, a very long black beard down to his chest and narrow eyes under heavy brows, hair in a topknot, in a green robe (reference image 4: keep his face, hair and clothes). Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
+ },
+ "office_c": {
+  "file": "office_c.jpg",
+  "scene": "office",
+  "prompt": "A general's cup tipped over on a table, wine spilling, the shadow of a raised fist on the tent wall. Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
+ },
+ "blackwind_a": {
+  "file": "blackwind_a.jpg",
+  "scene": "blackwind",
+  "prompt": "Zhang Bao on a hilltop with his hair loose, sword raised, chanting, as a black whirlwind of storm cloud, sand and stones pours down onto a line of soldiers. Zhang Bao is a sorcerer general with long loose black hair and a yellow headscarf, in a yellow robe (reference image 1: keep his face, hair and clothes). Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
+ },
+ "blackwind_c": {
+  "file": "blackwind_c.jpg",
+  "scene": "blackwind",
+  "prompt": "Ghostly paper cut-out soldiers and horses riding in a black wind, swirling like leaves, under a dark sky. Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
+ },
+ "bosswin_a": {
+  "file": "bosswin_a.jpg",
+  "scene": "bosswin",
+  "prompt": "A hillside ambush: soldiers hurl jars of filth at the summoned wind, and the sorcery breaks apart into fluttering paper scraps falling from the sky. Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
+ },
+ "bosswin_c": {
+  "file": "bosswin_c.jpg",
+  "scene": "bosswin",
+  "prompt": "Torn paper soldiers drifting down onto grass in clear light after a storm, the sky breaking open. Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
+ },
+ "peace2_b": {
+  "file": "peace2_b.jpg",
+  "scene": "peace2",
+  "prompt": "Zhang Jiao, white-haired, raising his arms before a vast crowd in yellow headscarves at sunset, preaching that the Blue Heaven is dead and the Yellow Heaven shall rise. Zhang Jiao is a gaunt old sorcerer with long white hair and a long white beard, a yellow headscarf and a flowing yellow robe, burning eyes (reference image 1: keep his face, hair and clothes). Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
+ },
+ "caocao2_b": {
+  "file": "caocao2_b.jpg",
+  "scene": "caocao2",
+  "prompt": "Cao Cao laughing with delight at Xu Shao's verdict, head thrown back, while Xu Shao watches him gravely. Cao Cao is a lean man of about thirty with a thin moustache and a quick, sharp look, black official's cap, dark red robe with gold trim (reference image 1: keep his face, hair and clothes). Xu Shao is a calm scholar with a thin beard and knowing eyes, scholar's hat, pale robe (reference image 2: keep his face, hair and clothes). Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
+ },
+ "post_a": {
+  "file": "post_a.jpg",
+  "scene": "post",
+  "prompt": "Outside the hostel in morning light, a crowd of old villagers kneeling and weeping at the gate as Zhang Fei rides up, frowning. Zhang Fei is a stocky, barrel-chested, powerfully muscled man, broad rather than tall, with a fierce square jaw, big glaring eyes and a wild bristling black beard, hair in a topknot, in black and dark brown clothes (reference image 1: keep his face, hair and clothes). Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
+ },
+ "post_b": {
+  "file": "post_b.jpg",
+  "scene": "post",
+  "prompt": "Zhang Fei in a towering rage, the bound inspector tied to a hitching post, a bundle of willow switches in Zhang Fei's fist, Liu Bei rushing up to stop him. Zhang Fei is a stocky, barrel-chested, powerfully muscled man, broad rather than tall, with a fierce square jaw, big glaring eyes and a wild bristling black beard, hair in a topknot, in black and dark brown clothes (reference image 1: keep his face, hair and clothes). Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold (reference image 2: keep his face, hair and clothes). Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
+ },
+ "horses_a": {
+  "file": "horses_a.jpg",
+  "scene": "horses",
+  "prompt": "Two merchants arriving with a long string of fine northern horses down a country road, dust glowing in the late sun, the brothers coming out to meet them. Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
+ },
+ "horses_b": {
+  "file": "horses_b.jpg",
+  "scene": "horses",
+  "prompt": "Liu Bei, Guan Yu and Zhang Fei each receiving his weapon from the smith: twin swords, a crescent-bladed glaive, a long serpent spear, sparks still in the air. Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold (reference image 1: keep his face, hair and clothes). Guan Yu is a towering giant of a man, a head taller than anyone, with massive shoulders and a thick neck, a deep red face, a very long black beard down to his chest and narrow eyes under heavy brows, hair in a topknot, in a green robe (reference image 2: keep his face, hair and clothes). Zhang Fei is a stocky, barrel-chested, powerfully muscled man, broad rather than tall, with a fierce square jaw, big glaring eyes and a wild bristling black beard, hair in a topknot, in black and dark brown clothes (reference image 3: keep his face, hair and clothes). Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
+ },
+ "bosswin_d": {
+  "file": "bosswin_d.jpg",
+  "scene": "bosswin",
+  "prompt": "Inside the walls of Yangcheng at night, Zhang Bao turns away from the gate as his own officer Yan Zheng steps up behind him and drives a blade into his back; torchlight, a few guards frozen at the edge of the frame. Dark and quiet, no gore, just the moment. Zhang Bao is a sorcerer general with long loose black hair and a yellow headscarf, in a yellow robe (reference image 1: keep his face, hair and clothes). Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
+  "provider": "replicate",
+  "model": "black-forest-labs/flux-2-klein-4b",
+  "made": "2026-10-05"
+ }
+}
