@@ -390,5 +390,26 @@
     "beat": "Liu Bei as the sheriff of Anxi, a quiet month: the three brothers at one table.",
     "scene": "Inside a plain county office in a small town, evening lamplight. Liu Bei in a simple official robe and cap sits at a low table with bowls of rice and greens, Guan Yu and Zhang Fei sharing the table with him, the three eating together and talking. Through the open door, townsfolk pass in a quiet street. Warm, calm light. Exactly three men at the table.",
     "notes": "transition beat"
+  },
+  "pingyuan_a": {
+    "book": 2,
+    "category": "everyday",
+    "beat": "Book 2 begins: Gongsun Zan's army passes Pingyuan, and he meets Liu Bei at the gate.",
+    "scene": "Wide panoramic composition outside the gate of a small walled town on a clear autumn morning. On the right, a long column of cavalry under Gongsun Zan's banners rides along the road, with Gongsun Zan in silver armour on a white horse at its head, reining in. On the left, at the open town gate, Liu Bei in a magistrate's plain robe steps out to greet him, with Guan Yu and Zhang Fei standing behind him.",
+    "notes": "transition beat"
+  },
+  "sishui_a": {
+    "book": 2,
+    "category": "battle",
+    "beat": "Before Sishui Gate: Hua Xiong's men carry Sun Jian's red cap on a pole to the lords' camp, jeering.",
+    "scene": "Wide panoramic composition on a grey day before a mountain pass. On the right, the stone walls and gate of Sishui Pass. In the middle, a band of Dong Zhuo's horsemen rides forward, one holding up a long pole with a red head-cloth hung at its tip, the others shouting. On the left, the palisade and tents of the lords' camp, where soldiers and officers watch from the gate in silence.",
+    "notes": "transition beat"
+  },
+  "hulao1_a": {
+    "book": 2,
+    "category": "battle",
+    "beat": "Before Hulao Pass: Lü Bu on Red Hare before Dong Zhuo's gate, the lords' army facing him.",
+    "scene": "Wide panoramic composition under a heavy sky. On the right, the towering walls of Hulao Pass with Dong Zhuo's black banners. Before the gate, alone, Lü Bu sits on a huge red horse, a crested helmet on his head and a long halberd in his hand. On the left, the lords' armies are drawn up in long lines under many coloured banners, their champions in front, holding back.",
+    "notes": "transition beat"
   }
 }
