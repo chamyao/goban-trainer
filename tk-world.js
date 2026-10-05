@@ -215,7 +215,7 @@ function worldScenes() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
       this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=30`);
-      this.load.json("kit", `assets/tk/kits/${kit}.json?v=24`);
+      this.load.json("kit", `assets/tk/kits/${kit}.json?v=26`);
       this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=30`);
     }
     create() {
@@ -225,7 +225,7 @@ function worldScenes() {
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
       for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=43`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=44`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -333,7 +333,7 @@ function worldScenes() {
 
       this.keys = this.input.keyboard.addKeys("W,A,S,D,UP,DOWN,LEFT,RIGHT,E,ENTER");
       // tap (or click) to walk there, tap someone to talk, a building to go in; hold and drag to steer
-      this.input.on("pointerdown", p => { const q = this.flat(p.worldX, p.worldY); this.tapAt(q.x, q.y); });
+      this.input.on("pointerdown", p => { const q = this.flat(p.worldX, p.worldY); this.tapAt(q.x, q.y, p.worldX, p.worldY); });
       this.input.on("pointermove", p => { this.steer(p); this.hover(p); });
       // After a talk closes, a key starts another only after a pause in pressing (or once he's taken a
       // step): mashing Enter through a talk doesn't loop it. Taps still talk at once.
@@ -458,8 +458,8 @@ function worldScenes() {
         }
       }
       if (img && !/^(building\.|tree\.|ground\.|deco\.)/.test(p.kind || "") && img.width <= 64)
-        (this.propBoxes = this.propBoxes || []).push({ cx: o.x, x0: o.x - img.width / 2, x1: o.x + img.width / 2, y0: o.y - img.height, y1: o.y });
-      if (img && /^building\./.test(p.kind || "")) this.buildings.push({ x: o.x, bottom: o.y, w: img.width, h: img.height });
+        (this.propBoxes = this.propBoxes || []).push({ cx: o.x, x0: o.x - img.width / 2, x1: o.x + img.width / 2, y0: o.y - img.height, y1: o.y, img });
+      if (img && /^building\./.test(p.kind || "")) this.buildings.push({ x: o.x, bottom: o.y, w: img.width, h: img.height, img });
       // a building's wall follows its art, which is often wider or narrower than its footprint:
       // cl and cr either side of its centre (worked out with its neighbours by the map tools)
       const l = p.cl || p.fw / 2, r = p.cr || p.fw / 2;
@@ -1002,16 +1002,21 @@ function worldScenes() {
     }
     // What's under a point of the world: someone (their figure, not the ground beside them),
     // a story spot, or a building's door; null for open ground.
-    pick(x, y) {
+    // sx, sy: the tap as drawn (the isometric view); each thing is then tested against the tap as it
+    // falls on that thing's own picture, which stands up from its feet, not lies on the ground
+    pick(x, y, sx, sy) {
+      const at = this.tapOn(x, y, sx, sy);
       // forgiving: a fingertip (about 44 screen px) anywhere near someone's figure, or on the thing a
       // story spot is (its notice board, its table), counts; the nearest wins
       const cv = this.game.canvas, k = cv.clientWidth ? cv.clientWidth / this.scale.width : 1, r = Math.max(9, 22 / (this.cameras.main.zoom * k));
       const toBox = (b, x, y) => Math.hypot(Math.max(b.x0 - x, 0, x - b.x1), Math.max(b.y0 - y, 0, y - b.y1));
-      const who = this.npcs.filter(n => n.spr.visible).map(n => ({ n, d: toBox({ x0: n.spr.x - n.spr.width / 2 + 2, x1: n.spr.x + n.spr.width / 2 - 2, y0: n.spr.y - n.spr.height, y1: n.spr.y + 3 }, x, y) }))
+      const who = this.npcs.filter(n => n.spr.visible).map(n => { const t = at(n.spr.x, n.spr.y);
+        return { n, d: toBox({ x0: n.spr.x - n.spr.width / 2 + 2, x1: n.spr.x + n.spr.width / 2 - 2, y0: n.spr.y - n.spr.height, y1: n.spr.y + 3 }, t.x, t.y) }; })
         .filter(o => o.d <= r).sort((a, b) => a.d - b.d)[0];
       const spot = Object.entries(this.spots).map(([key, s]) => {
-        let d = Math.hypot(s.x - x, s.y - y);
-        for (const b of this.propBoxes || []) if (Math.hypot(b.cx - s.x, b.y1 - s.y) < 28) d = Math.min(d, toBox(b, x, y));
+        const t = at(s.x, s.y);
+        let d = Math.hypot(s.x - t.x, s.y - t.y);
+        for (const b of this.propBoxes || []) if (Math.hypot(b.cx - s.x, b.y1 - s.y) < 28) { const u = at(b.cx, b.y1, b.img); d = Math.min(d, toBox(b, u.x, u.y)); }
         return { key, s, d };
       }).filter(o => o.d <= Math.max(18, r)).sort((a, b) => a.d - b.d)[0];
       if (who && (!spot || who.d <= spot.d)) return { kind: "npc", n: who.n };
@@ -1021,15 +1026,25 @@ function worldScenes() {
       const doorway = e => e.side === "N" && e.rect.width < 16;
       const door = this.exits.filter(e => doorway(e)
           // the building itself (its face, from the door up), not the road in front of it
-          ? this.onBuilding(e, x, y) && this.placeOpen(e.to)
+          ? this.onBuilding(e, x, y, at) && this.placeOpen(e.to)
           : x > e.rect.x - 20 && x < e.rect.right + 20 && y > e.rect.y - 20 && y < e.rect.bottom + 20)
         .sort((a, b) => Math.hypot(a.rect.centerX - x, a.rect.centerY - y) - Math.hypot(b.rect.centerX - x, b.rect.centerY - y))[0];
       if (door) return { kind: "door", e: door };
       return null;
     }
+    // The tap as it falls on a thing standing at (ox, oy): flat, the tap itself; isometric, the point the
+    // same distance from (ox, oy) as the tap is from where the thing is drawn (img.isoAt: a building's footprint).
+    tapOn(x, y, sx, sy) {
+      if (!this.iso || sx == null) return () => ({ x, y });
+      return (ox, oy, img) => {
+        const a = img && img.isoAt, q = a ? this.iso.P(a[0], a[1]) : this.iso.P(ox, oy);
+        return { x: ox + sx - q.x, y: oy + sy - q.y - (a ? a[2] : 0) };
+      };
+    }
     // A tap on the building a door belongs to (as drawn), or just above its door.
-    onBuilding(e, x, y) {
+    onBuilding(e, x, y, at = () => ({ x, y })) {
       const b = (this.buildings || []).find(b => Math.abs(b.x - e.rect.centerX) < b.w / 2 && Math.abs(b.bottom - e.rect.bottom) < 20);
+      if (b && this.iso) { const t = at(b.x, b.bottom, b.img); return Math.abs(t.x - b.x) < b.w / 2 && t.y > b.bottom - b.h && t.y < b.bottom; }
       if (b) return Math.abs(x - b.x) < b.w / 2 && y > b.bottom - b.h && y < e.rect.bottom;
       return Math.abs(x - e.rect.centerX) < 22 && y > e.rect.centerY - 48 && y < e.rect.bottom;
     }
@@ -1040,10 +1055,10 @@ function worldScenes() {
       spr._fw = spr.width; spr._fh = spr.height;
     }
     canMove() { return !this.ui.busy() && !this.seated && !this.leaving && !this.cine && !this.approaching; }
-    tapAt(x, y) {
+    tapAt(x, y, sx, sy) {
       if (this.ui.busy()) return this.act();   // tap on through dialogue
       if (!this.canMove()) return;              // (at the go table, its own panel has the buttons)
-      const P = this.player, t = this.pick(x, y);
+      const P = this.player, t = this.pick(x, y, sx, sy);
       let tx = x, ty = y + 4, then = null, aim = null, door = null;
       if (t && t.kind === "npc") {   // walk up to them, face them, talk
         const who = t.n, sides = [[0, 14, "up"], [0, -12, "down"], [-14, 2, "right"], [14, 2, "left"]].map(([dx, dy, f]) => ({ x: who.spr.x + dx, y: who.spr.y + dy, f }));
@@ -1081,7 +1096,7 @@ function worldScenes() {
     }
     // Over something you can tap: the hand cursor (a mouse; touch has none).
     hover(p) {
-      const q = this.flat(p.worldX, p.worldY), c = this.game.canvas, t = this.canMove() && this.pick(q.x, q.y);
+      const q = this.flat(p.worldX, p.worldY), c = this.game.canvas, t = this.canMove() && this.pick(q.x, q.y, p.worldX, p.worldY);
       c.style.cursor = t || this.ui.busy() ? "pointer" : "";
     }
     // The direction to the next point on the walk; at the end, turn to face and talk if a tap asked for it.
