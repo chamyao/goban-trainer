@@ -1215,5 +1215,28 @@
     "under": "void"
    }
   }
+ },
+ "heroes": {
+  "liubei": {
+   "sheet": "assets/tk/xianxia/chars/liubei.png",
+   "frame": [
+    11,
+    22
+   ]
+  },
+  "guanyu": {
+   "sheet": "assets/tk/xianxia/chars/guanyu.png",
+   "frame": [
+    11,
+    22
+   ]
+  },
+  "zhangfei": {
+   "sheet": "assets/tk/xianxia/chars/zhangfei.png",
+   "frame": [
+    11,
+    22
+   ]
+  }
  }
 }
