@@ -346,11 +346,15 @@ def main():
         return compare(name, fn, a.compare, [sid for sid in STILLS if not a.only or sid in a.only])
     model = os.environ.get("TK_IMAGE_MODEL")
     print(f"provider: {name}" + (" (no API key found: placeholders only)" if name == "dummy" else ""))
+    made_one = False
     for sid, s in STILLS.items():
         if a.only and sid not in a.only:
             continue
         if sid in man and (OUT / man[sid]["file"]).exists() and not a.force and man[sid]["provider"] != "dummy":
             continue
+        if made_one:
+            time.sleep(15)   # back to back, Replicate turns away about half with 429s
+        made_one = True
         text, images = request(name, sid)
         try:
             raw, used = fn(text, model, "16:9", images)
