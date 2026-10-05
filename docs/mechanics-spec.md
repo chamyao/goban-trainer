@@ -2,7 +2,7 @@
 
 Player-facing rules for the mechanics agreed in `docs/game-design.md`, written so Integration can build them without guessing and Testing can check them. How they are built is Integration's call. The story content is Plot's (`docs/world1-blackwind-gated.md`); this file only says how it behaves.
 
-**Pilot:** World 1, Black Wind. **What already exists on `main` (c60889f):** the shrine landmark in every town, its three looks, Black Wind's roadside shrine and node `1-n7b`, and its objective text. **What is missing:** the logic that picks a shrine's look (`TK.shrineState` is called but not defined, so every shrine shows dark), items given by talking, delivery, and gating a node.
+**Pilot:** World 1, Black Wind. Built on `main` (1a3a72e), with the gate's `"count": False` for goal-only objectives. **What already exists on `main` (c60889f):** the shrine landmark in every town, its three looks, Black Wind's roadside shrine and node `1-n7b`, and its objective text. **What is missing:** the logic that picks a shrine's look (`TK.shrineState` is called but not defined, so every shrine shows dark), items given by talking, delivery, and gating a node.
 
 ## Four building blocks
 
@@ -32,7 +32,7 @@ A condition is always one of: a story node cleared, an item held, or a place mar
 ## 2. The hint
 
 - The hint is the Star Lords' last line before the board (Black Wind: "Pigs, sheep, dogs. Blood.").
-- After the board is solved, the objective line shows the next step in plain words (Plot's objective text), and the settled shrine repeats the hint itself.
+- **The objective states the goal; the hint says what to do.** (User decision.) After the board is solved, the objective line stays on the goal (Black Wind: "Defeat the Black Wind." 破黑风妖法。; Book 2: "Defeat Lü Bu at Hulao Pass."). It does not name the items or show a count. Working out the steps from the hint is the player's part; the settled shrine repeats the hint for anyone who forgets.
 - No separate missions bar for now. The single objective line at the top is enough while a Book has one open task at a time. Add the bar only when a Book has parallel tasks.
 
 ## 3. Give (gathering)
@@ -42,7 +42,7 @@ A condition is always one of: a story node cleared, an item held, or a place mar
 | Plain line, no item (Plot's "before" line) | Gift line, the item is gained, a short notice "Gained: Pig's blood (猪血)" | A short "already given" line |
 
 - Black Wind's condition: the roadside shrine is settled.
-- Any order. The objective line counts: "Gather blood from the village: 1/3".
+- Any order. The objective line does not change or count (see section 2).
 - Items are kept when the player leaves the map.
 
 ## 4. Deliver (the ridges)
@@ -54,7 +54,7 @@ A condition is always one of: a story node cleared, an item held, or a place mar
 | After, player holds all three | The handover line; the ridge is marked supplied |
 
 - Delivering does not use up the items, so one set supplies both ridges. Either ridge first.
-- The objective line counts: "Take the blood to the ridges: 1/2".
+- The objective line does not count (see section 2).
 - After Yangcheng is won, the three supply items are removed (they have done their job and shouldn't clutter the possessions).
 
 ## 5. Gate (Yangcheng)
@@ -66,12 +66,12 @@ A condition is always one of: a story node cleared, an item held, or a place mar
 | Both ridges supplied | `bosswin`, as now | Yes | Usual rule on a slip |
 
 - The defeat scene can play any number of times. It is skippable from the second time.
-- After a defeat the player stays near the boss spot (no teleport), and the objective line points to what is missing.
+- After a defeat the player stays near the boss spot (no teleport). The defeat scene's last line (Guan Yu naming what is missing) and the settled shrine are what point the way; the objective stays on the goal.
 - Nothing about the boss problem changes: same problem pool, same difficulty.
 
 ## 6. Pointer and objective
 
-- The objective line always names the next missing thing: the shrine, then the village, then the ridges, then Yangcheng.
+- The objective line names the goal, not the steps (section 2). Before the shrine is solved it sends the player to the shrine; after, it stays "Defeat the Black Wind."
 - Wukong's pointer (when the guide is on) points to the nearest unfinished target: the lit shrine, the nearest giver who hasn't given, the nearest ridge not supplied.
 
 ## 7. Save, restart, Chronicle
@@ -86,7 +86,7 @@ A condition is always one of: a story node cleared, an item held, or a place mar
 2. The village people give nothing before the shrine is solved; the ridges are empty.
 3. Going to Yangcheng early plays `bossearly`, no board, no cooldown chip.
 4. Shrine board solved: it settles; touching it again repeats the hint.
-5. Each giver gives once; the count reaches 3/3; leaving the map keeps the items.
+5. Each giver gives once; leaving the map keeps the items; the objective stays "Defeat the Black Wind." with no count.
 6. Yangcheng before both ridges plays `bossearly2`.
 7. Both ridges in either order, then Yangcheng opens the board; a slip keeps the problem with the 30 s cooldown.
 8. After the win, the supply items are gone; Start over resets everything.
