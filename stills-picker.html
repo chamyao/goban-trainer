@@ -38,6 +38,10 @@
   figure.flash { border-color: var(--gold); box-shadow: 0 0 0 4px var(--gold); }
   figure { cursor: pointer; }
   .done-all { text-align: center; padding: 40px 0; }
+  .notes-l { display: block; margin-top: 10px; color: var(--dim); font-size: 13px; }
+  .notes { display: block; width: 100%; margin-top: 4px; padding: 8px; border-radius: 8px; border: 1px solid var(--line);
+           background: #120f0c; color: var(--ink); font: 15px/1.4 system-ui, sans-serif; resize: vertical; }
+  @media (pointer: coarse) { .notes { font-size: 16px; } }
   .more { margin-top: 8px; }
   .more summary { cursor: pointer; color: var(--dim); font-size: 13.5px; padding: 4px 0; }
   .more .grid { margin-top: 6px; }
@@ -96,9 +100,10 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbwpMBFBjrgcHdX-xiAwIepUg4a06uLPrBlGWBAPuPkUOc30gzzsCHRy6odjI6qYLV8AKA/exec";
 const BASE = "assets/tk/stills/picker/";
 const KEY = "tk-still-picks";
-let data = { slots: [] }, book = 1, picks = {};
+let data = { slots: [] }, book = 1, picks = {}, notes = {};
 try { picks = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch { picks = {}; }
-const save = () => { try { localStorage.setItem(KEY, JSON.stringify(picks)); } catch {} };
+try { notes = JSON.parse(localStorage.getItem(KEY + "-notes") || "{}"); } catch { notes = {}; }
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(picks)); localStorage.setItem(KEY + "-notes", JSON.stringify(notes)); } catch {} };
 const $ = s => document.querySelector(s);
 const el = (tag, props = {}, ...kids) => { const e = Object.assign(document.createElement(tag), props); e.append(...kids); return e; };
 
@@ -160,6 +165,11 @@ function render() {
     other.forEach((c, i) => g2.append(thumb(slot, c, list, own.length + i)));
     card.append(el("details", { className: "more" }, el("summary", { textContent: `${other.length} more from the "${slot.scene}" scene` }), g2));
   }
+  // a review of this scene's stills: what's wrong, what it should show (sent with the picks)
+  const ta = el("textarea", { className: "notes", rows: 3, value: notes[slot.id] || "",
+    placeholder: "Notes on this scene (optional): what's wrong, what it should show…" });
+  ta.oninput = () => { if (ta.value.trim()) notes[slot.id] = ta.value; else delete notes[slot.id]; save(); };
+  card.append(el("label", { className: "notes-l" }, "Notes", ta));
   box.append(card);
   // the next scene's pictures load while this one is looked at
   const nx = L[cur + 1]; if (nx) nx.candidates.forEach(c => { const im = new Image(); im.src = BASE + c.img; });
@@ -189,9 +199,10 @@ document.addEventListener("keydown", e => {
 });
 // the picks as a note: still id -> the picked image (its blob, which apply_still_picks.py resolves)
 function note() {
-  const chosen = data.slots.filter(s => picks[s.id]).map(s => {
+  const chosen = data.slots.filter(s => picks[s.id] || notes[s.id]).map(s => {
     const c = s.candidates.find(c => c.blob === picks[s.id]);
-    return { id: s.id, blob: c.blob, from: c.label, same: c.blob === s.current };
+    return Object.assign(c ? { id: s.id, blob: c.blob, from: c.label, same: c.blob === s.current } : { id: s.id },
+      notes[s.id] ? { note: notes[s.id].trim() } : {});
   });
   return "STILL PICKS " + JSON.stringify(chosen);
 }
@@ -199,7 +210,7 @@ $("#copy").onclick = async () => {
   try { await navigator.clipboard.writeText(note()); toast("Copied"); } catch { prompt("Copy this:", note()); }
 };
 async function send(auto) {
-  if (!Object.keys(picks).length) return toast("Pick some first");
+  if (!Object.keys(picks).length && !Object.keys(notes).length) return toast("Pick or note something first");
   const b = $("#send"); b.disabled = true; b.textContent = "Sending…";
   try {
     const res = await fetch(API_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" },
