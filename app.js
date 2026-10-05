@@ -372,6 +372,7 @@ function cropFor(problem) {
 }
 
 class Goban {
+  static TOUCH = typeof matchMedia !== "undefined" && matchMedia("(pointer: coarse)").matches;
   constructor(svg, crop, onClick) {
     this.svg = svg; this.crop = crop; this.onClick = onClick;
     this.cell = 44; this.pad = 38;
@@ -393,7 +394,7 @@ class Goban {
 
   render(grid, lastMove, interactive) {
     const { c0, c1, r0, r1 } = this.crop;
-    this.svg.innerHTML = "";
+    this.svg.innerHTML = ""; this.ghost = null;
     const defs = this.el("defs", {});
     defs.innerHTML = `
       <radialGradient id="bs" cx="35%" cy="30%"><stop offset="0%" stop-color="#5a5a5a"/><stop offset="100%" stop-color="#111"/></radialGradient>
@@ -459,9 +460,28 @@ class Goban {
             t.setAttribute("fill", this.hoverColor === BLACK ? "rgba(20,20,20,.3)" : "rgba(255,255,255,.5)");
         });
         t.addEventListener("mouseleave", () => t.setAttribute("fill", "transparent"));
-        t.addEventListener("click", () => this.onClick(c, r));
+        t.addEventListener("click", () => this.tap(c, r, grid));
       }
   }
+
+  // On a touch screen where the points are closer than a fingertip (a wide crop on a small phone),
+  // the first tap only shows a ghost stone; a second tap on the same point plays it, a tap on
+  // another point moves the ghost. A slip costs a rest, so a fingertip miss mustn't count.
+  needsConfirm() {
+    if (!Goban.TOUCH) return false;
+    const w = this.svg.getBoundingClientRect().width;
+    return w > 0 && w / this.W * this.cell < 28;
+  }
+  tap(c, r, grid) {
+    if (grid[r][c] !== EMPTY || !this.needsConfirm()) { this.clearGhost(); return this.onClick(c, r); }
+    if (this.ghost && this.ghost.c === c && this.ghost.r === r) { this.clearGhost(); return this.onClick(c, r); }
+    this.clearGhost();
+    const g = this.el("circle", { cx: this.px(c), cy: this.py(r), r: this.cell * .47, "pointer-events": "none",
+                                  fill: this.hoverColor === BLACK ? "rgba(20,20,20,.45)" : "rgba(255,255,255,.65)",
+                                  stroke: "var(--accent)", "stroke-width": 2, "stroke-dasharray": "4 3" });
+    this.ghost = { c, r, el: g };
+  }
+  clearGhost() { if (this.ghost) { this.ghost.el.remove(); this.ghost = null; } }
 
   pulse(c, r) {
     const p = this.el("circle", { cx: this.px(c), cy: this.py(r), r: this.cell * .3, fill: "none",

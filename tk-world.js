@@ -31,7 +31,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=25`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=26`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
@@ -208,9 +208,9 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=25`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=26`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=15`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=23`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=25`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
@@ -219,7 +219,7 @@ function worldScenes() {
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
       for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=35`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=36`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -259,7 +259,7 @@ function worldScenes() {
         if (l.name === "water") { layer.setCollisionByExclusion([-1]); this.water = layer; }
       }
       this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-      this.solids = this.physics.add.staticGroup();
+      this.solids = this.physics.add.staticGroup(); this.buildings = [];
       for (const who of new Set(["liubei", ...this.st.party])) this.hero(who);
 
       const P = o => Object.fromEntries((o.properties || []).map(p => [p.name, p.value]));
@@ -317,7 +317,14 @@ function worldScenes() {
       // tap (or click) to walk there, tap someone to talk, a building to go in; hold and drag to steer
       this.input.on("pointerdown", p => this.tapAt(p.worldX, p.worldY));
       this.input.on("pointermove", p => { this.steer(p); this.hover(p); });
-      for (const k of ["ENTER", "E"]) this.keys[k].on("down", () => this.act());
+      // After a talk closes, a key starts another only after a pause in pressing (or once he's taken a
+      // step): mashing Enter through a talk doesn't loop it. Taps still talk at once.
+      for (const k of ["ENTER", "E"]) this.keys[k].on("down", () => {
+        const now = this.time.now, last = this.lastKey || 0, P = this.player, at = this.talkAt;
+        this.lastKey = now;
+        const moved = at && Math.hypot(P.x - at.x, P.y - at.y) > 8;
+        if (this.ui.busy() || moved || (now - (this.talkOver || 0) > 600 && now - last > 600)) this.act();
+      });
       this.ui = TownUI.mount(this, opts.host);
       if (this.place.archetype === "overworld") this.overworldLabels(opts.host.querySelector(".town-ui"));
       // Wukong shows the way to the next objective: beside its spot when it's on screen,
@@ -360,7 +367,22 @@ function worldScenes() {
     fitCamera() {
       const cam = this.cameras.main, vw = cam.width / cam.zoom, vh = cam.height / cam.zoom, mw = this.mapW, mh = this.mapH;
       const bx = mw < vw ? -Math.round((vw - mw) / 2) : 0, by = mh < vh ? -Math.round((vh - mh) / 2) : 0;
-      cam.setBounds(bx, by, Math.max(mw, vw), Math.max(mh, vh));
+      // the buttons and goal line along the top cover the map's top edge (a road out there): let the
+      // view go that much higher, so whatever is at the edge can be brought out from under them
+      const top = Math.min(by, -this.hudTop());
+      cam.setBounds(bx, top, Math.max(mw, vw), Math.max(mh, vh) + (by - top));
+    }
+    // How far down the screen the HUD reaches, in world pixels.
+    hudTop() {
+      const cv = this.game.canvas, host = cv && cv.closest(".tk-map");
+      if (!host || !cv.clientWidth) return 0;
+      const r = cv.getBoundingClientRect(), k = cv.clientWidth / this.scale.width * this.cameras.main.zoom;
+      let low = r.top;
+      for (const el of host.querySelectorAll(".town-goal, .tk-menu-row")) {
+        const b = el.getBoundingClientRect();
+        if (b.height && b.top < r.top + r.height / 3) low = Math.max(low, b.bottom);
+      }
+      return Math.ceil((low - r.top + 4) / k);
     }
 
     // The story quest a spot holds, if it can be played now.
@@ -393,16 +415,21 @@ function worldScenes() {
     }
 
     addProp(o, p) {
+      let img = null;
       if (o.name) {
         const sheet = this.kit.kinds[o.name.split("#")[0]][+o.name.split("#")[1]][0];
-        const img = this.add.image(Math.round(o.x), Math.round(o.y), `kit-${sheet}`, o.name).setOrigin(.5, 1);
+        img = this.add.image(Math.round(o.x), Math.round(o.y), `kit-${sheet}`, o.name).setOrigin(.5, 1);
         img.setDepth(WORLD_CLUTTER.test(p.kind) ? o.y - 400 : o.y);
         if (p.kind === "landmark.shrine") {   // the Star Lords' shrine: its look follows the story (setShrine)
           this.shrine = { img, x: o.x, y: o.y, state: "dark", fx: [] };
           this.setShrine(TK.shrineState?.(this.w.n, this.placeId) || "dark");
         }
       }
-      if (p.solid) this.solids.add(this.add.zone(o.x, o.y - p.fh / 2, p.fw - 2, p.fh - 2));
+      if (img && /^building\./.test(p.kind || "")) this.buildings.push({ x: o.x, bottom: o.y, w: img.width, h: img.height });
+      // a building's wall follows its art, which is often wider or narrower than its footprint:
+      // cl and cr either side of its centre (worked out with its neighbours by the map tools)
+      const l = p.cl || p.fw / 2, r = p.cr || p.fw / 2;
+      if (p.solid) this.solids.add(this.add.zone(o.x + (r - l) / 2, o.y - p.fh / 2, l + r - 2, p.fh - 2));
     }
 
     // The shrine's three looks: "dark" (cold stone), "lit" (the stones glow, incense burns: a hint is
@@ -493,6 +520,7 @@ function worldScenes() {
         this.hero(who);
         return { who, spr: this.add.sprite(this.player.x, this.player.y, `h-${who}-down-0`).setOrigin(.5, 1) };
       });
+      if (this.npcs) this.refreshStory();
       this.trail = Array(60).fill({ x: this.player.x, y: this.player.y, f: this.player.facing });
     }
 
@@ -528,6 +556,10 @@ function worldScenes() {
     // Who is here and how the shrine looks follow the story; redone whenever it moves on.
     refreshStory() {
       for (const n of this.npcs) if (n.when) { const on = this.cond(n.when); n.spr.setVisible(on); n.spr.body.enable = on; }
+      // one of each person at a time: a brother standing here in his own right (Guan Yu on his
+      // ridge) isn't also following Liu Bei
+      const here = new Set(this.npcs.filter(n => n.who && n.spr.visible).map(n => n.who));
+      for (const F of this.followers || []) F.spr.setVisible(!here.has(F.who));
       if (this.shrine && this.setShrine) this.setShrine(this.shrineState());
     }
 
@@ -569,7 +601,7 @@ function worldScenes() {
       if (!q) return this.goal("This book is complete. The road goes on…", "这一卷已经完成。路还在前方……");
       const g = this.available(q) && this.gateFor(q);
       if (g && g.objective) {   // what the battle still needs, with a count
-        const need = [].concat(g.needs || []), k = need.filter(c => this.cond(c)).length, n = need.length > 1 ? ` (${k}/${need.length})` : "";
+        const need = [].concat(g.needs || []), k = need.filter(c => this.cond(c)).length, n = need.length > 1 && g.count !== false ? ` (${k}/${need.length})` : "";
         const away = g.place && g.place !== this.placeId && !this.placeIn(this.placeId, g.place);
         return this.goal(`${g.objective}${n}${away ? ` (${this.placeName(g.place)})` : ""}`,
           g.objective_zh ? `${g.objective_zh}${n ? `（${k}/${need.length}）` : ""}${away ? `（${this.placeZh(g.place)}）` : ""}` : "");
@@ -581,7 +613,7 @@ function worldScenes() {
       const waysZh = [...new Set(lead.map(p => p.role === "short" ? `${this.placeZh(p.place)}的捷径` : this.placeZh(p.place)))];
       this.goal(`On to ${this.placeName(q.place)}, by way of ${ways.join(" or ")}.`, `前往${this.placeZh(q.place)}，可经${waysZh.join("或")}。`);
     }
-    goal(en, zh) { this.goalText = [en, zh]; this.ui.goal(en, zh); }
+    goal(en, zh) { this.goalText = [en, zh]; this.ui.goal(en, zh); if (this.mapW) this.fitCamera(); }   // the goal line's height moves the HUD's edge
 
     // Where the next objective is from here: its story spot on this map, or
     // the exit that starts the shortest way to its place (rooms included).
@@ -714,7 +746,20 @@ function worldScenes() {
     playQuest(q, spot) {
       // a gated battle before it's ready: its defeat scene, no board, no cooldown; he stays here
       const gate = this.gateFor(q);
-      if (gate) return this.playScene(gate.else, () => this.setGoal());
+      if (gate) return this.playScene(gate.else, () => {
+        // back by the spot (the scene may have marched him off), and it waits until he steps away
+        if (spot) {
+          const G = this.walkGrid(), C = G.C;
+          let best = null;
+          for (let r = 1; r < 8 && !best; r++) for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) {
+            const x = Math.floor(spot.x / C) + dx, y = Math.floor((spot.y + 28) / C) + dy;
+            if (G.free(x, y) && (!best || Math.hypot(dx, dy) < best.d)) best = { x: x * C + C / 2, y: y * C + C / 2 + 3, d: Math.hypot(dx, dy) };
+          }
+          if (best) { this.player.setPosition(best.x, best.y); this.trail = Array(60).fill({ x: best.x, y: best.y, f: "down" }); }
+          spot.armed = false; spot.armAt = { x: this.player.x, y: this.player.y };
+        }
+        this.setGoal();
+      });
       const steps = (this.story[q.scene] || {}).steps || [], at = steps.findIndex(s => s[0] === "problem");
       if (q.board === false) {   // a scene with no board (a defeat): playing it is the beat
         const fin = () => { TK.markCleared(q.node); this.finishQuest(q, steps); };
@@ -921,11 +966,17 @@ function worldScenes() {
       const doorway = e => e.side === "N" && e.rect.width < 16;
       const door = this.exits.filter(e => doorway(e)
           // the building itself (its face, from the door up), not the road in front of it
-          ? Math.abs(x - e.rect.centerX) < 22 && y > e.rect.centerY - 48 && y < e.rect.bottom && this.placeOpen(e.to)
+          ? this.onBuilding(e, x, y) && this.placeOpen(e.to)
           : x > e.rect.x - 20 && x < e.rect.right + 20 && y > e.rect.y - 20 && y < e.rect.bottom + 20)
         .sort((a, b) => Math.hypot(a.rect.centerX - x, a.rect.centerY - y) - Math.hypot(b.rect.centerX - x, b.rect.centerY - y))[0];
       if (door) return { kind: "door", e: door };
       return null;
+    }
+    // A tap on the building a door belongs to (as drawn), or just above its door.
+    onBuilding(e, x, y) {
+      const b = (this.buildings || []).find(b => Math.abs(b.x - e.rect.centerX) < b.w / 2 && Math.abs(b.bottom - e.rect.bottom) < 20);
+      if (b) return Math.abs(x - b.x) < b.w / 2 && y > b.bottom - b.h && y < e.rect.bottom;
+      return Math.abs(x - e.rect.centerX) < 22 && y > e.rect.centerY - 48 && y < e.rect.bottom;
     }
     // The feet-sized body, centred under the sprite whatever its size (drawn, generated or
     // mounted sprites differ); redone in update whenever the frame size changes.
@@ -991,9 +1042,13 @@ function worldScenes() {
       W.stuck = Math.hypot(P.x - W.last.x, P.y - W.last.y) < .5 ? W.stuck + dt : 0;
       W.last = { x: P.x, y: P.y };
       if (W.stuck > 350) {
-        // someone stepped into the way: go round them, twice at most, then stop where he is
-        const end = W.path[W.path.length - 1], again = W.retries < 2 && this.findPath(P.x, P.y - 3, end.x, end.y, W.aim && W.aim.kind === "npc" ? W.aim.n : null);
-        if (!again) { this.arrive(W); return [0, 0]; }
+        // someone stepped into the way: go round them; if there's no way round just now (a villager
+        // in the doorway), wait a moment for them to move on; stop only after a few tries
+        const end = W.path[W.path.length - 1], again = W.retries < 6 && this.findPath(P.x, P.y - 3, end.x, end.y, W.aim && W.aim.kind === "npc" ? W.aim.n : null);
+        if (!again) {
+          if (W.retries < 6) { W.retries++; W.stuck = 0; return [0, 0]; }
+          this.arrive(W); return [0, 0];
+        }
         if (W.door) again.push(end);   // the step in through the door is off the grid
         W.path = again; W.retries++; W.stuck = 0;
         return this.followWalk(dt);
@@ -1041,6 +1096,9 @@ function worldScenes() {
         n.dir = { up: "down", down: "up", left: "right", right: "left" }[this.player.facing];
         this.faceNpc(n);
         if (n.gives) return this.giveFrom(n);
+        // someone standing at a place to deliver to (Guan Yu at his ridge) takes the delivery
+        const at = Object.values(this.spots).find(s => s.needs && Math.hypot(s.x - n.spr.x, s.y - n.spr.y) < 64);
+        if (at) return this.deliverAt(at);
         if (n.challenge) return this.done(n.challenge) ? this.talk(worldLines(n.done)) : this.talk(worldLines(n.intro), () => this.puzzle(n.challenge, { id: n.challenge.split("-c-")[1], who: n.who, face: this.faceOf(n) }));
         this.talk(n.say.length ? worldLines(n.say) : [["n", "…"]]);
         return;
@@ -1160,11 +1218,15 @@ function worldScenes() {
             : ["up", "down", "left", "right"][Math.floor(Math.random() * 4)];
           n.moving = Math.random() < .5 || away;
         }
-        // keep out of doorways and roads out: a villager standing there blocks the way in
-        const door = this.exits.find(e => n.spr.x > e.rect.x - 18 && n.spr.x < e.rect.right + 18 && n.spr.y > e.rect.y - 18 && n.spr.y < e.rect.bottom + 22);
-        if (door) {
-          const dx = n.spr.x - door.rect.centerX, dy = n.spr.y - door.rect.centerY;
-          n.dir = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? "right" : "left") : (dy > 0 ? "down" : "up");
+        // keep out of doorways and roads out (a villager standing there blocks the way in), and step
+        // aside for Liu Bei when he's walking somewhere and comes close
+        const door = this.exits.find(e => n.spr.x > e.rect.x - 28 && n.spr.x < e.rect.right + 28 && n.spr.y > e.rect.y - 24 && n.spr.y < e.rect.bottom + 30);
+        const P = this.player, close = this.walk && Math.hypot(n.spr.x - P.x, n.spr.y - P.y) < 28;
+        const from = door ? { x: door.rect.centerX, y: door.rect.centerY } : close ? P : null;
+        if (from) {
+          const dx = n.spr.x - from.x, dy = n.spr.y - from.y;
+          // from Liu Bei, step to the side of his way rather than ahead of him
+          n.dir = (close && !door ? Math.abs(dx) < Math.abs(dy) : Math.abs(dx) > Math.abs(dy)) ? (dx > 0 ? "right" : "left") : (dy > 0 ? "down" : "up");
           n.moving = true; n.t = Math.max(n.t, 600);
         }
         const v = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }[n.dir];
@@ -1173,6 +1235,7 @@ function worldScenes() {
         n.spr.setDepth(n.spr.y);
       }
 
+      if (this.ui.busy()) { this.talkOver = time; this.talkAt = { x: this.player.x, y: this.player.y }; }
       const t = !this.ui.busy() && !this.leaving && !this.seated && this.target();
       this.ui.hint(t ? (t.kind === "npc" ? t.n.spr : this.spots[t.k]) : null);
     }

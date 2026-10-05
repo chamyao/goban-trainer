@@ -28,7 +28,7 @@ Everything that waits on the story uses one condition, or a list of them
 A gate entry: `{"needs": [conditions], "else": "scene id", "objective": "…", "at": "Place Name"}`.
 `objective` (optional) replaces the objective line while this entry is the
 first unmet one, with a count of the needs met, e.g. "Gather blood …
-(1/3)". `at` is where its targets are, so the guide points there. Supply
+(1/3)". `"count": False` leaves the count off (when the objective shouldn't give the way away). `at` is where its targets are, so the guide points there. Supply
 items (`"kind": "supply"`) named in a gate are removed when the battle is won.
 
 Scenes named by `else` are staged at the node's own spot, like the node's
@@ -42,9 +42,9 @@ Black Wind, for example:
 {"key": "boss", …, "gate": [
     {"needs": ["node:n7b"], "else": "bossearly"},
     {"needs": ["item:pigblood", "item:sheepblood", "item:dogblood"], "else": "bossearly2",
-     "objective": "Gather blood from the village below the hills: pigs, sheep, dogs.", "at": "Hills of Black Wind"},
+     "objective": "Defeat the Black Wind.", "count": False, "at": "Hills of Black Wind"},
     {"needs": ["mark:ridge_left", "mark:ridge_right"], "else": "bossearly2",
-     "objective": "Take the blood up to Guan Yu on the left ridge and Zhang Fei on the right.", "at": "Hills of Black Wind"}]},
+     "objective": "Defeat the Black Wind.", "count": False, "at": "Hills of Black Wind"}]},
 ```
 
 with edges `n7 → n7b` and `n7 → boss`, so the boss spot can be reached

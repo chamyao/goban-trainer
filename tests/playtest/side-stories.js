@@ -9,7 +9,7 @@ const BEATS=['1-a1','1-a2','1-a3','1-b1','1-b2','1-b2g','1-f1','1-b3','1-bs'];
 p.on('pageerror',e=>console.log('ERR',e.message,'|',(e.stack||'').split('\n').slice(1,5).map(x=>x.trim()).join(' < ')));
 await p.route('**/phaser.min.js',r=>r.fulfill({path:require('path').join(__dirname,'vendor/phaser.min.js'),contentType:'application/javascript'}));
 await p.route('**/*.mp3',r=>r.fulfill({status:404,body:''}));
-await p.goto((process.env.PLAYTEST_URL||'http://localhost:8765')+'/index.html#/tk/1');await p.waitForTimeout(1200);
+await p.goto((process.env.PLAYTEST_URL||'http://localhost:8765')+'/index.html'+(process.env.PLAYTEST_KIT?'?kit='+process.env.PLAYTEST_KIT:'')+'#/tk/1');await p.waitForTimeout(1200);
 await p.evaluate(()=>localStorage.setItem('tk-guide','off'));
 const ready=async()=>{for(let i=0;i<60;i++){if(await p.evaluate(()=>!!(window.__w&&window.__w.player&&!window.__w.leaving)))break;await p.waitForTimeout(200);}await p.waitForTimeout(500);};
 const scrolls=async()=>{for(let i=0;i<6;i++){const c=p.getByText('Cancel',{exact:true});if(await c.count()&&await c.first().isVisible())await c.first().tap();const g=p.locator('.tk-scroll-go');if(await g.count()){await g.first().tap();await p.waitForTimeout(400);}}};

@@ -4168,10 +4168,11 @@
       "item:dogblood"
      ],
      "else": "bossearly2",
-     "objective": "Gather blood from the village below the hills: pigs, sheep, dogs.",
+     "objective": "Defeat the Black Wind.",
+     "count": false,
      "at": "Hills of Black Wind",
      "place": "hills-of-black-wind",
-     "objective_zh": "到山下村中取猪、羊、狗血。"
+     "objective_zh": "破黑风妖法。"
     },
     {
      "needs": [
@@ -4179,10 +4180,11 @@
       "mark:ridge_right"
      ],
      "else": "bossearly2",
-     "objective": "Take the blood up to Guan Yu on the left ridge and Zhang Fei on the right.",
+     "objective": "Defeat the Black Wind.",
+     "count": false,
      "at": "Hills of Black Wind",
      "place": "hills-of-black-wind",
-     "objective_zh": "把血送上山去：关羽在左，张飞在右。"
+     "objective_zh": "破黑风妖法。"
     }
    ],
    "objective_zh": "在阳城击败张宝。",

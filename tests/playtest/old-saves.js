@@ -20,7 +20,7 @@ for(const [name,setup,expect] of CASES){
   p.on('pageerror',e=>{errs.push(e.message);console.log('ERR',e.message);});
   await p.route('**/phaser.min.js',r=>r.fulfill({path:require('path').join(__dirname,'vendor/phaser.min.js'),contentType:'application/javascript'}));
   await p.route('**/*.mp3',r=>r.fulfill({status:404,body:''}));
-  await p.goto((process.env.PLAYTEST_URL||'http://localhost:8765')+'/index.html#/tk/1');await p.waitForTimeout(1200);
+  await p.goto((process.env.PLAYTEST_URL||'http://localhost:8765')+'/index.html'+(process.env.PLAYTEST_KIT?'?kit='+process.env.PLAYTEST_KIT:'')+'#/tk/1');await p.waitForTimeout(1200);
   await p.evaluate(()=>{localStorage.clear();localStorage.setItem('tk-guide','off');});
   await p.evaluate(setup);await p.reload();await p.waitForTimeout(1800);
   for(let i=0;i<6;i++){const c=p.getByText('Cancel',{exact:true});if(await c.count()&&await c.first().isVisible())await c.first().tap();const g=p.locator('.tk-scroll-go');if(await g.count()){await g.first().tap();await p.waitForTimeout(400);}}

@@ -188,7 +188,7 @@ const TownUI = {
       if (who) fc.drawImage(TKArt.get(who, "bust"), 0, 0);
       if (vid) TKVoice.play(vid); else TKVoice.stop();
     };
-    const focus = () => { const f = host.querySelector(".town-focus"); if (f) f.hidden = document.activeElement === host; };
+    const focus = () => { const f = host.querySelector(".town-focus"); if (f) f.hidden = TOUCH || document.activeElement === host; };   // on a phone a tap works either way
     if (!host.dataset.townFocus) { host.dataset.townFocus = "1"; host.addEventListener("focus", focus); host.addEventListener("blur", focus); }
     setTimeout(focus, 0);
     return {

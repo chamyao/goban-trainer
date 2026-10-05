@@ -106,8 +106,8 @@ The existing `bosswin` stays as it is.
 |---|---|---|
 | 1-n7 | Break Zhang Bao's sorcery in the hills. (unchanged; the first try) | 破张宝的妖术。 |
 | 1-n7b | Go to the roadside shrine where the glow has begun. | 去路旁那座发光的神龛。 |
-| after the hint | Gather blood from the village below the hills: pigs, sheep, dogs. | 到山下村中取猪、羊、狗血。 |
-| after the three | Take the blood up to Guan Yu on the left ridge and Zhang Fei on the right. | 把血送上山去：关羽在左，张飞在右。 |
+| after the hint | Defeat the Black Wind. (the user's decision: the objective does not name the bloods; the shrine's hint does that) | 破黑风妖法。 |
+| after the three | Defeat the Black Wind. (same line, no count) | 破黑风妖法。 |
 | 1-boss | Defeat Zhang Bao at Yangcheng. (unchanged) | 在阳城击败张宝。 |
 
 ## Chinese for the new lines
@@ -175,7 +175,7 @@ Everywhere else the shrine stays dark. The cage cart, Dong Zhuo's camp, the hitc
 | Lit (hint waiting) | the Star Lords appear (the scene above) | |
 | Settled | the Star Lords' hint again, and the current objective | |
 
-At Black Wind a settled shrine says: "Pigs, sheep, dogs. Blood." and shows the objective "Gather blood from the village below the hills: pigs, sheep, dogs", or, once that is done, "Take the blood up to Guan Yu on the left ridge and Zhang Fei on the right." Hint text for the other three shrines is each Star Lord's own line from that scene: Daxing "To catch the bandits, first catch their king.", Qingzhou "Don't hold the strong point. Give ground, and make them follow."
+At Black Wind a settled shrine says: "Pigs, sheep, dogs. Blood." and shows the objective "Defeat the Black Wind." (the objective does not name the bloods: the hint does).
 
 Dark shrines are in the towns that will never light in World 1 only as a quiet stone; later Books can light one for an optional hidden board.
 
@@ -199,4 +199,4 @@ Each giver says one of these if the player talks to them again after taking the 
 "“You have the dog's blood. May it do what it must.”": "“狗血你们拿去了。但愿它能破了那法。”",   # [new]
 ```
 
-The objective line shows counts and names the next missing thing: "Gather blood from the village below the hills: pigs, sheep, dogs (1/3)", then "Take the blood up to Guan Yu on the left ridge and Zhang Fei on the right (1/2)". The two `bossearly` defeat scenes may repeat; they are skippable from the second time.
+The objective line is "Defeat the Black Wind." throughout, with no count (a gate field `"count": False`); it does not name the bloods, because that is what the shrine's hint is for. The two `bossearly` defeat scenes may repeat; they are skippable from the second time.

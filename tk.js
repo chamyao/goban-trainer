@@ -500,7 +500,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) this.data = await (await fetch("data/tk.json?v=26")).json();
+    if (!this.data) this.data = await (await fetch("data/tk.json?v=28")).json();
     return this.data;
   },
   ls(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } },
@@ -921,7 +921,10 @@ const TKStory = {
       ]);
       document.body.append(wrap);
       TKVoice.play(vids || []);
-      const go = () => { TKVoice.stop(); wrap.remove(); res(); };
+      // Enter or Space turns it too (no focus on the button: that would scroll a long one to its end)
+      const key = e => { if ((e.key === "Enter" || e.key === " ") && !(e.target && e.target.tagName === "BUTTON")) { e.preventDefault(); e.stopPropagation(); go(); } };
+      const go = () => { removeEventListener("keydown", key, true); TKVoice.stop(); wrap.remove(); res(); };
+      addEventListener("keydown", key, true);
       wrap.querySelector(".tk-scroll-go").onclick = go;
     });
   },
@@ -1282,6 +1285,15 @@ TK_SETTER_LINES.starred = TK_SETTER_LINES.stargrey;
 
 const TK_REST = 30000;
 // A touch screen (a phone or tablet): tap to move and tap to talk.
+// Test mode, for trying the story without solving: open the page with ?test=1 (?test=0 ends it).
+// Problems then get a Skip key that counts as a flawless solve.
+const TK_TEST = (() => {
+  try {
+    const q = new URLSearchParams(location.search).get("test");
+    if (q != null) localStorage.setItem("tk-test", q === "0" ? "0" : "1");
+    return localStorage.getItem("tk-test") === "1";
+  } catch { return false; }
+})();
 const TK_TOUCH = typeof matchMedia !== "undefined" && matchMedia("(pointer: coarse)").matches;
 
 // Hold a board until its problem's rest is over. The position stays in full view
@@ -1338,6 +1350,7 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
     key_("H", "提示 Hint", () => trainer && trainer.hint()),
     key_("R", "重来 Reset", () => trainer && trainer.reset()),
     key_("Esc", "离开 Leave", leave),
+    TK_TEST ? key_("S", "跳过 Skip (test)", () => trainer && (trainer.flawed = null, dispatchEvent(new CustomEvent("tczw:result", { detail: "ok" })))) : "",
   ]);
   const srcLine = h("div", { class: "tk-duel-src" }, [
     `${p.lv || node.grade || ""} · 死活 · `, node.role === "boss" ? "" : `出自 ${src.title} · `,

@@ -8,7 +8,7 @@ const ctx=await b.newContext({...dev});const p=await ctx.newPage();
 p.on('pageerror',e=>console.log('ERR',e.message));
 await p.route('**/phaser.min.js',r=>r.fulfill({path:require('path').join(__dirname,'vendor/phaser.min.js'),contentType:'application/javascript'}));
 await p.route('**/*.mp3',r=>r.fulfill({status:404,body:''}));
-await p.goto((process.env.PLAYTEST_URL||'http://localhost:8765')+'/index.html#/tk/1');await p.waitForTimeout(1200);
+await p.goto((process.env.PLAYTEST_URL||'http://localhost:8765')+'/index.html'+(process.env.PLAYTEST_KIT?'?kit='+process.env.PLAYTEST_KIT:'')+'#/tk/1');await p.waitForTimeout(1200);
 // the three brothers travel together after the peach garden
 await p.evaluate(()=>{['1-start','1-c1','1-n1','1-i1','1-n2'].forEach(k=>TK.markCleared(k));TK.setParty({n:1},['liubei','guanyu','zhangfei']);localStorage.setItem('tk-guide','off');});await p.reload();await p.waitForTimeout(1500);
 {const c=p.getByText('Cancel',{exact:true});if(await c.count())await c.first().tap();}

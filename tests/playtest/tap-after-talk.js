@@ -5,7 +5,7 @@ const PLACE=process.argv[2]||'lousang-village';
 p.on('pageerror',e=>console.log('ERR',e.message));
 await p.route('**/phaser.min.js',r=>r.fulfill({path:require('path').join(__dirname,'vendor/phaser.min.js'),contentType:'application/javascript'}));
 await p.route('**/*.mp3',r=>r.fulfill({status:404,body:''}));
-await p.goto((process.env.PLAYTEST_URL||'http://localhost:8765')+'/index.html#/tk/1');await p.waitForTimeout(1200);
+await p.goto((process.env.PLAYTEST_URL||'http://localhost:8765')+'/index.html'+(process.env.PLAYTEST_KIT?'?kit='+process.env.PLAYTEST_KIT:'')+'#/tk/1');await p.waitForTimeout(1200);
 await p.evaluate(()=>{['1-start','1-c1','1-n1'].forEach(k=>TK.markCleared(k));localStorage.setItem('tk-guide','off');});await p.reload();await p.waitForTimeout(1500);
 {const c=p.getByText('Cancel',{exact:true});if(await c.count())await c.first().tap();}
 for(let i=0;i<6;i++){const g=p.locator('.tk-scroll-go');if(await g.count()){await g.first().tap();await p.waitForTimeout(400);}}
@@ -24,7 +24,7 @@ for(let round=0;round<2;round++) for(let i=0;i<n;i++){
   if(await p.evaluate(pl=>window.__w.placeId!==pl,PLACE)){await p.evaluate(pl=>{window.__w.leaving=false;window.__w.go(pl);},PLACE);await p.waitForTimeout(1500);await ready();}
   const np=await p.evaluate(i=>{const n=window.__w.npcs[i];if(!n)return null;const s=n.spr;return s.visible?[s.x,s.y-8]:null;},i); if(!np) continue;
   // bring the npc on screen: walk there by taps first if far
-  await p.evaluate(([x,y])=>{const w=window.__w;if(Math.hypot(w.player.x-x,w.player.y-y)>120)w.player.setPosition(x+40,y+30);},np); await p.waitForTimeout(700);
+  await p.evaluate(([x,y])=>{const w=window.__w;if(Math.hypot(w.player.x-x,w.player.y-y)>120){const G=w.walkGrid();for(const [dx,dy] of [[40,30],[-40,30],[0,30],[30,0],[-30,0],[0,-30]])if(G.free(Math.floor((x+dx)/G.C),Math.floor((y+dy-3)/G.C))){w.player.setPosition(x+dx,y+dy);break;}}},np); await p.waitForTimeout(700);
   // stand them still: a villager who wanders off between the look and the tap leaves the tap on a building
   const np2=await p.evaluate(i=>{const n=window.__w.npcs[i];if(!n)return null;n.wander=false;n.spr.setVelocity&&n.spr.setVelocity(0);return [n.spr.x,n.spr.y-8];},i); if(!np2) continue;
   await tapW(np2[0],np2[1]);
