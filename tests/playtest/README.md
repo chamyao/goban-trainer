@@ -45,6 +45,7 @@ starts from a fresh save.
 | blackwind | phone, taps, no teleports inside the stretch: the 10 checks of docs/mechanics-spec.md §8 (on claude/game-design): first try at n7 with no board, shrine dark/lit/settled, givers once, ridges in either order, delivering by talking to Zhang Fei and Guan Yu (one blood isn't enough), Yangcheng gated (bossearly, bossearly2, then the board; a slip holds it 30 s), supplies gone after the win, Start over, a dark shrine elsewhere; no hero shown twice (follower and NPC); and the time for each leg |
 | test-mode | ?test=1 (kept in localStorage tk-test) gives problems a Skip (test) key that wins them; none without it; ?test=0 turns it off |
 | room-cast | phone: through each room's story scene (Zhuo inn and office, Julu house, Lu Zhi's tent, Anxi hostel) every hero stays on screen and on the floor (not inside furniture or a wall), and the cutscene's Skip button can be tapped (nothing on top of it). arg: one room |
+| keyboard | desktop by keys: Enter turns the opening scrolls and moves scenes and talks on; WASD and arrows walk; E talks; in a problem U undoes, R resets, H hints, Escape leaves, Enter continues after a win; a road the story hasn't opened stops him; walking off an open edge goes on |
 | star-lords | peach garden: the two immortals stay through the problem, vanish the moment it is won, the narration follows |
 | go-table-ogs | the 9×9 go table with a stand-in OGS socket: sit, search sent, opponent walks in, live board, move, resign, leave |
 | drag-and-hover | desktop: hand cursor over people; hold-and-drag steers |
