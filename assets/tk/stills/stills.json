@@ -112,12 +112,12 @@
  "cart_a": {
   "file": "cart_a.jpg",
   "scene": "cart",
-  "prompt": "A dusty country road between wheat fields on a grey afternoon. A wooden cage cart carries an old man in plain grey clothes; imperial soldiers with spears walk beside the wheels. Three riders have just reined in their horses on the other side of the cart and are staring at the prisoner. Wide shot, dust hanging low. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "prompt": "A dusty country road on a grey afternoon, seen close from beside the wheels. A wooden cage cart fills the middle of the frame, an old man in plain grey clothes inside it, gripping the bars; imperial soldiers with spears walk at its wheels. Three riders, Liu Bei, Guan Yu and Zhang Fei, have just reined in on the other side of the cart, close enough to see their faces, staring at the prisoner. Medium shot, dust hanging low. Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold. Guan Yu is a towering giant of a man, a head taller than anyone, with massive shoulders and a thick neck, a deep red face (only his face is red; his neck and hands are normal skin), a very long black beard down to his chest and narrow eyes under heavy brows, hair in a topknot, in a green robe. Zhang Fei is a stocky, barrel-chested, powerfully muscled man, broad rather than tall, with a fierce square jaw, big glaring eyes and a wild bristling black beard, hair in a topknot, in black and dark brown clothes. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
   "provider": "replicate",
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "picked": "Plot's rewrite, final-2"
  },
  "cart_b": {
   "file": "cart_b.jpg",
@@ -192,12 +192,12 @@
  "bosswin_c": {
   "file": "bosswin_c.jpg",
   "scene": "bosswin",
-  "prompt": "A grassy hillside after a storm: torn paper soldiers and paper horses drift slowly down onto the green grass in soft overcast light, the dark clouds thinning overhead. Wide, quiet shot from a little way down the slope, with the whole hillside in view. The hillside is empty; only paper. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "prompt": "Close shot, looking up into a grey sky after a storm: torn scraps of paper, pieces of paper soldiers and paper horses, a head, an arm, a half-horse, tumble and flutter down through the air like fallen leaves, caught mid-fall at different heights with the dark clouds thinning behind them. A strip of green hillside at the bottom of the frame. Nothing stands upright; only falling paper, and no living people. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
   "provider": "replicate",
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "picked": "Plot's rewrite, final-2"
  },
  "bosswin_d": {
   "file": "bosswin_d.jpg",
@@ -262,12 +262,12 @@
  "horses_a": {
   "file": "horses_a.jpg",
   "scene": "horses",
-  "prompt": "A country road in the late afternoon: two travelling merchants on foot drive a long string of fine northern horses toward three men waiting at the roadside, Liu Bei, Guan Yu and Zhang Fei; the horses toss their heads and dust rises around them. Wide shot, low sun behind the herd. Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold. Guan Yu is a towering giant of a man, a head taller than anyone, with massive shoulders and a thick neck, a deep red face (only his face is red; his neck and hands are normal skin), a very long black beard down to his chest and narrow eyes under heavy brows, hair in a topknot, in a green robe. Zhang Fei is a stocky, barrel-chested, powerfully muscled man, broad rather than tall, with a fierce square jaw, big glaring eyes and a wild bristling black beard, hair in a topknot, in black and dark brown clothes. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "prompt": "A country road on an overcast afternoon, flat soft light, no low sun: two travelling merchants on foot drive a long string of fine northern horses toward three men waiting at the roadside, Liu Bei, Guan Yu and Zhang Fei. The horses toss their heads and dust rises around them. Medium-wide shot, the horses filling the frame. Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold. Guan Yu is a towering giant of a man, a head taller than anyone, with massive shoulders and a thick neck, a deep red face (only his face is red; his neck and hands are normal skin), a very long black beard down to his chest and narrow eyes under heavy brows, hair in a topknot, in a green robe. Zhang Fei is a stocky, barrel-chested, powerfully muscled man, broad rather than tall, with a fierce square jaw, big glaring eyes and a wild bristling black beard, hair in a topknot, in black and dark brown clothes. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
   "provider": "replicate",
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "picked": "Plot's rewrite, final-2"
  },
  "horses_b": {
   "file": "horses_b.jpg",
@@ -372,12 +372,12 @@
  "lvboshe_b": {
   "file": "lvboshe_b.jpg",
   "scene": "lvboshe",
-  "prompt": "A dusk road: Cao Cao sits his horse with his sword lowered, jaw tight, staring straight ahead. Beside him Chen Gong looks at him in appalled silence, hand loose on the reins. Far behind them on the road lie a fallen donkey and a figure that does not move, two wine jars rolled in the dust. Cao Cao is a lean man of about thirty with a thin moustache and a quick, sharp look, black official's cap, dark red robe with gold trim. Chen Gong is a thin, upright county magistrate in his thirties with a sparse beard, in a plain dark robe and scholar's cap. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "prompt": "A road in grey dusk, flat cold light with no sunset glow and no warm colour in the sky: Cao Cao sits his horse with his sword lowered, jaw tight, staring straight ahead. Beside him Chen Gong looks at him in appalled silence, hand loose on the reins. Far behind them on the road lie a fallen donkey and a figure that does not move, two wine jars rolled in the dust. Heavy, still, grim. Cao Cao is a lean man of about thirty with a thin moustache and a quick, sharp look, black official's cap, dark red robe with gold trim. Chen Gong is a thin, upright county magistrate in his thirties with a sparse beard, in a plain dark robe and scholar's cap. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
   "provider": "replicate",
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "picked": "Plot's rewrite, final-2"
  },
  "xingyang_a": {
   "file": "xingyang_a.jpg",
