@@ -110,29 +110,8 @@ import json as _json
 from pathlib import Path as _Path
 _CATS = _json.loads((_Path(__file__).resolve().parent.parent / "assets/tk/stills/categories.json").read_text())
 CATEGORY = {sid: k for k, c in _CATS["categories"].items() for sid in c["scenes"]}
-# the user: the neutral ones looked "almost biblical". The categories keep the cast young and anime, in
-# Han-era jackets and armour, framed casually, in flat light; and say what to keep away from
-UNHOLY = ("The characters are young, anime-styled, in Han-era belted short jackets, armour and caps rather than long "
-          "flowing robes wherever the scene allows; casual off-centre anime framing (close-ups, over-the-shoulder, "
-          "people mid-gesture or mid-talk); plain flat daylight or flat lamplight. Not a religious painting, not a "
-          "biblical illustration, not renaissance, not an oil painting: no halo, no god rays, no divine light, no "
-          "sacred glow, no sermon poses.")
 for _k, _c in _CATS["categories"].items():
-    STYLES[f"cat_{_k}"] = f"Style: {_CATS['base'].rstrip('.')}. {_c['recipe']} " + (UNHOLY if _k != "battle" else
-        "The characters are young and anime-styled. Not a religious painting, no halo, no god rays.")
-
-# scene words that read as sacred light: taken out of the scene text for the category looks (gen_stills restyle)
-import re as _re
-_HOLY = [(r",? ?sunlight breaking through in rays", ""), (r" through shafts of light", ""),
-         (r"at golden (dusk|morning|dawn)", "in plain daylight"), (r"in clear light after (a|the) storm", "after the storm"),
-         (r",? ?the sky breaking open", ""), (r"golden light", "flat light"), (r"glowing particles,? ?", "")]
-
-
-def scrub(text):
-    """A scene's text without the sacred-light phrasing (for the category looks)."""
-    for pat, rep in _HOLY:
-        text = _re.sub(pat, rep, text)
-    return text
+    STYLES[f"cat_{_k}"] = f"Style: {_CATS['base'].rstrip('.')}. {_c['recipe']}"
 
 # the user's pick for the stills: the God of High School look, on Seedream 5 Pro (gen_stills' default)
 STYLE = f"{STYLES['gohs']} {NEGATIVE}"
