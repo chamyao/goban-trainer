@@ -123,11 +123,12 @@ const WorldCutscene = {
     const sync = a => {
       if (a.prop) {
         a.spr.setDepth(a.spr.y);
-        if (a.glow && a.glow.active) a.glow.setPosition(a.spr.x, a.spr.y - 6).setVisible(a.spr.visible);
+        if (a.glow && a.glow.active) { a.glow.setPosition(a.spr.x, a.spr.y - 6).setVisible(a.spr.visible); a.glow.isoBase = [a.spr.x, a.spr.y]; }
         for (const id of a.riders) {        // inside: just behind the front bars, sitting on the bed
           const r = actors[id];
           if (!r) continue;
           r.spr.setPosition(a.spr.x, a.spr.y - (a.prop === "cagecart" ? 8 : 4)).setAlpha(a.spr.alpha).setVisible(a.spr.visible);
+          r.spr.isoBase = [a.spr.x, a.spr.y];   // sitting on the bed, upright in the isometric view
           sync(r);
           r.spr.setDepth(a.spr.y - .5);
           if (r.seat) r.seat.setDepth(a.spr.y - .5);
@@ -299,6 +300,7 @@ const WorldCutscene = {
       const f = `emote.${icon}`;
       if (!scene.textures.get("tk-props").has(f)) return;
       const e = scene.add.image(body(a).x + 4, top(a) - 1, "tk-props", f).setOrigin(.5, 1).setDepth(1e5).setScale(0);
+      e.isoBase = [body(a).x, a.spr.y];   // above the head, not off to one side, in the isometric view
       fx.push(e);
       if (icon === "zzz") scene.tweens.add({ targets: e, y: e.y - 3, duration: 600, yoyo: true, repeat: 1 });
       scene.tweens.add({ targets: e, scale: 1, duration: 140, ease: "Back.easeOut" });
@@ -400,6 +402,7 @@ const WorldCutscene = {
       const r = actors[b.actor];
       if (!r) return Promise.resolve();
       for (const p of Object.values(actors)) if (p.prop) p.riders = p.riders.filter(id => id !== b.actor);
+      r.spr.isoBase = null;   // off the cart: back on its own feet
       r.inside = false;
       const [x, y] = px(b.to);
       if (!ms) { r.spr.setPosition(x, y); sync(r); return Promise.resolve(); }

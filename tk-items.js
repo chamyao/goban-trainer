@@ -144,6 +144,7 @@ const WorldItems = {
     x = Math.round(x); y = Math.round(y);
     horse.setOrigin(.5, S.hoof / this.FRAME[1]).setPosition(x, y).setDepth(y);
     seat.setOrigin(.5, this.HIP / seat.height).setPosition(x + S.dx, y - S.up).setDepth(y + .5);
+    seat.isoBase = [x, y];   // the isometric view keeps him upright on the saddle (tk-iso.js)
     if (head) {
       head.setVisible(horse.visible && dir === "down").setAlpha(horse.alpha);
       if (dir === "down") head.setTexture(horse.texture.key, horse.frame.name).setCrop(0, 0, this.FRAME[0], this.HEAD)
