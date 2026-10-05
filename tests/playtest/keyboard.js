@@ -73,8 +73,8 @@ await W(()=>{const d=TK.ls('tk-rest');for(const k in d)d[k]=Date.now()-1;TK.lsSe
 await W(k=>{const w=window.__w,n=w.npcs.find(n=>n.challenge===k);w.player.setPosition(n.spr.x,n.spr.y+14);w.player.facing='up';w.player.setTexture('h-liubei-up-0');},key);
 await p.waitForTimeout(300);await p.keyboard.press('e');await p.waitForTimeout(400);await enterThrough();await p.waitForTimeout(800);
 for(let i=0;i<30;i++){if(await p.locator('.tk-duel-go').count())break;const m=await W(()=>{const t=window.__trainer;if(!t||t.done||t.engineBusy||t.played.length%2)return null;const n=t.played.length,memo=new Map(),open=L=>L.length-1>n&&t.played.every((m,i)=>m===L[i+1]);
-  const ms=[...new Set(t.p.lines.filter(L=>L[0]<=2&&open(L)).map(L=>L[n+1]))];const mv=ms.find(m=>t.outcome([...t.played,m],memo)==='ok')||ms[0];if(!mv)return null;const c=mv.charCodeAt(0)-97,r=mv.charCodeAt(1)-97;
-  const el=[...t.goban.svg.querySelectorAll('circle[fill="transparent"]')].find(e=>+e.getAttribute('cx')===t.goban.px(c)&&+e.getAttribute('cy')===t.goban.py(r));const R=el.getBoundingClientRect();return [R.left+R.width/2,R.top+R.height/2];});
+  const ms=[...new Set(t.p.lines.filter(L=>L[0]<=2&&open(L)).map(L=>L[n+1]))];const ord=[...ms.filter(m=>t.outcome([...t.played,m],memo)==='ok'),...ms];const els=[...t.goban.svg.querySelectorAll('circle[fill="transparent"]')];for(const mv of ord){const c=mv.charCodeAt(0)-97,r=mv.charCodeAt(1)-97;const el=els.find(e=>+e.getAttribute('cx')===t.goban.px(c)&&+e.getAttribute('cy')===t.goban.py(r));if(el){const R=el.getBoundingClientRect();return [R.left+R.width/2,R.top+R.height/2];}}return ms.length?'off':null;});
+  if(m==='off'){check(false,'none of the key\'s moves is a point on the board as shown');break;}
   if(m){await p.mouse.click(m[0],m[1]);await p.waitForTimeout(900);}else await p.waitForTimeout(400);}
 check(await p.locator('.tk-duel-go').count()>0,'solved: the Continue button is up');
 await p.keyboard.press('Enter');await p.waitForTimeout(1200);await enterThrough();
