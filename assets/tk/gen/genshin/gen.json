@@ -1114,5 +1114,135 @@
   ],
   "seconds": 62.9,
   "made": "2026-10-05"
+ },
+ "fg.rocks": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 112,
+   "height": 72,
+   "remove_bg": true,
+   "prompt": "a pile of large mossy grey boulders, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   112,
+   72
+  ],
+  "seconds": 59.1,
+  "made": "2026-10-05"
+ },
+ "fg.pine": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 64,
+   "height": 112,
+   "remove_bg": true,
+   "prompt": "a tall dark green pine tree, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   112
+  ],
+  "seconds": 61.4,
+  "made": "2026-10-05"
+ },
+ "fg.reeds": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 80,
+   "height": 80,
+   "remove_bg": true,
+   "prompt": "a thick clump of tall green reeds and grasses, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   80,
+   80
+  ],
+  "seconds": 63.7,
+  "made": "2026-10-05"
+ },
+ "bg.meadow": {
+  "model": "retro-diffusion/rd-fast",
+  "input": {
+   "style": "texture",
+   "width": 192,
+   "height": 192,
+   "tile_x": true,
+   "tile_y": true,
+   "prompt": "lush green countryside seen from above: grass, clumps of bushes, small round trees, wild flowers, a few rocks, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, seamless game background texture",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   192,
+   192
+  ],
+  "seconds": 63.8,
+  "made": "2026-10-05"
+ },
+ "bg.mountain": {
+  "model": "retro-diffusion/rd-fast",
+  "input": {
+   "style": "texture",
+   "width": 192,
+   "height": 192,
+   "tile_x": true,
+   "tile_y": true,
+   "prompt": "rocky mountain slopes seen from above: grey boulders, scree, tufts of grass, small pine trees, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, seamless game background texture",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   192,
+   192
+  ],
+  "seconds": 67.9,
+  "made": "2026-10-05"
+ },
+ "bg.ruins": {
+  "model": "retro-diffusion/rd-fast",
+  "input": {
+   "style": "texture",
+   "width": 192,
+   "height": 192,
+   "tile_x": true,
+   "tile_y": true,
+   "prompt": "scorched ground seen from above: grey ash, charred beams, broken roof tiles, burnt grass, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, seamless game background texture",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   192,
+   192
+  ],
+  "seconds": 70.1,
+  "made": "2026-10-05"
+ },
+ "bg.forest": {
+  "model": "retro-diffusion/rd-fast",
+  "input": {
+   "style": "texture",
+   "width": 192,
+   "height": 192,
+   "tile_x": true,
+   "tile_y": true,
+   "prompt": "dense green woodland seen from above: tree crowns packed close, glimpses of grass between them, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, seamless game background texture",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   192,
+   192
+  ],
+  "seconds": 72.2,
+  "made": "2026-10-05"
  }
 }

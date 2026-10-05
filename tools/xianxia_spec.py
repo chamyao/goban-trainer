@@ -183,11 +183,31 @@ GENSHIN_PILOT = ["building.house", "building.hall", "building.inn", "building.hu
 GENSHIN_OBJECT = "one single isolated object only, no room, no walls, no floor, no roof, no building"   # small props came out as whole rooms
 # came out wrong in the full run (a room, a pavilion, a fragment): the kit keeps xianxia's piece until
 # `gen_pixel --set genshin-redo --force` makes a good one and the kind is taken off this list
-GENSHIN_BAD = {"banner.red", "banner.yellow", "camp.firepit", "camp.hay", "camp.logs", "furn.barrel", "furn.counter",
-               "furn.drawers", "furn.jar", "furn.mat", "furn.rack", "furn.rug", "furn.sacks", "furn.screen", "furn.stool",
-               "furn.table", "furniture.gotable", "prop.letter", "prop.post", "prop.pond", "prop.seal", "prop.waterbowl",
-               "rock.crag", "rock.small", "ruin.columns", "ruin.hall", "ruin.rubble"}
+GENSHIN_BAD = set()   # every kind has a good isometric piece now (genshin-redo2 fixed the counter, sacks and tables)
+GENSHIN_DROP = {"furn.stool-1", "prop.pond-1", "rock.small-2", "ruin.rubble-2",   # first redo: a room, a campfire
+                "genshin-redo2/rock.small-1", "genshin-redo2/rock.small-2", "genshin-redo2/ruin.rubble-1"}   # a plant, a bush, a campfire
 # second try at the props, run beside the first: naming roofs and buildings, even as "no roof", brought them in,
 # and so did "Liyue". This wording never mentions architecture at all.
 GENSHIN_ITEM = ("a single {p} by itself, centred, game item sprite, bright saturated anime colours "
                 "like Genshin Impact, soft cel shading, clean outline")
+# isometric art whose entrance is drawn on the lower-right face: the door is on the footprint's south edge,
+# which the isometric view puts lower-left, so the game mirrors these (kit "isoFlip")
+GENSHIN_FLIP = {"building.inn-1", "building.house-2"}
+# trees drawn standing on a raised square of ground: the square is cut away, the trunk kept
+GENSHIN_UNPLATE = ("tree.",)
+
+# ---- the Genshin isometric view's surroundings (the user: "the corners of the map look strangely empty") ----
+# BACKDROPS: seamless textures that fill the screen beyond a map's diamond, one per kind of country.
+# FOREGROUNDS: big cut-out pieces drawn over the edges of the view, nearer than the map, to frame it.
+GENSHIN_BACKDROPS = {
+    "meadow": "lush green countryside seen from above: grass, clumps of bushes, small round trees, wild flowers, a few rocks",
+    "forest": "dense green woodland seen from above: tree crowns packed close, glimpses of grass between them",
+    "mountain": "rocky mountain slopes seen from above: grey boulders, scree, tufts of grass, small pine trees",
+    "ruins": "scorched ground seen from above: grey ash, charred beams, broken roof tiles, burnt grass",
+}
+GENSHIN_FOREGROUNDS = {
+    "fg.canopy": ("a big cluster of leafy green tree crowns, seen from slightly above", (128, 96)),
+    "fg.pine": ("a tall dark green pine tree", (64, 112)),
+    "fg.rocks": ("a pile of large mossy grey boulders", (112, 72)),
+    "fg.reeds": ("a thick clump of tall green reeds and grasses", (80, 80)),
+}
