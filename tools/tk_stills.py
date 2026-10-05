@@ -65,6 +65,12 @@ STYLES = {
                  "School, but a calm, quiet slice-of-life moment: relaxed natural poses, gentle expressions, soft warm "
                  "natural light, a still, peaceful village mood, a steady eye-level camera; no action lines, no speed "
                  "lines, no impact effects, no flying debris, no motion blur, no aggressive poses.",
+    # the default for every still that isn't a battle (the user: "only use GoH for battle scenes, something more
+    # neutral as default"): calm, story-telling, no action effects
+    "neutral": "Style: clean modern anime illustration like a quiet historical anime film: natural colours, soft "
+               "daylight or warm lamplight, gentle cel shading, detailed painted backgrounds, calm story-telling "
+               "composition at eye level, natural poses and expressions; no speed lines, no impact effects, no "
+               "motion blur, no exaggerated action poses.",
     "genshin": "Style: in the style of Genshin Impact key art: polished anime cel shading, bright vivid colours, "
                "ornate gold trim and jade accents, glowing particles, clean detailed fantasy illustration.",
     "watercolor": "Style: Chinese watercolour painting: loose wet washes of colour bleeding softly on rice paper, "
@@ -78,6 +84,10 @@ STYLES = {
                "glowing accents of spirit light and embers, a dynamic low or high camera angle, intense poses, "
                "cinematic and dark-fantasy.",
 }
+
+# the battles keep the God of High School look; every other still is "neutral"
+BATTLE = {"blackwind_a", "blackwind_c", "bosswin_a", "caocao3_b", "hulao_a", "hulao_b", "xianshan_a", "xingyang_a",
+          "zumao_a"}
 
 # the quiet stills, redone in "gohs_calm" (village, inn, oath, partings); the battles stay "gohs"
 CALM = ["tree_a", "tree_b", "notice_a", "notice_b", "inn_a", "inn_b", "oath_a", "oath_b", "oath_c", "tent_b",
