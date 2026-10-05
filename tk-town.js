@@ -161,10 +161,13 @@ const TownUI = {
     return this._pp;
   },
   mount(scene, host) {
-    this.loadPortraits();
+    if (scene.kit && scene.kit.dialogue === "genshin") this.loadPortraits();
     host.querySelectorAll(":scope > .town-ui").forEach(el => el.remove());  // a new place replaces the old overlay
     const root = document.createElement("div");
-    root.className = "town-ui genshin";   // the dialogue look: big cut-out portrait, dark gradient box (style.css)
+    // the dialogue look follows the art kit ("dialogue" in kits/<kit>.json): "genshin" is the big cut-out
+    // portrait in a dark gradient box (style.css); the other kits keep the original box and pixel bust
+    const look = (scene.kit && scene.kit.dialogue) || "", painted = look === "genshin";
+    root.className = "town-ui" + (look ? " " + look : "");
     const TOUCH = typeof TK_TOUCH !== "undefined" && TK_TOUCH;
     root.innerHTML = `<div class="town-goal"></div><div class="town-keys"><b>点击</b>移动 click to move · <b>点击人物</b>对话 click someone to talk</div>
       <div class="town-place"></div><div class="town-hint" hidden>${TOUCH ? "点击 Tap" : "点击 Click"}</div><div class="town-focus" hidden>${TOUCH ? "Tap the map to play" : "Click the map to play"}</div>
@@ -193,7 +196,7 @@ const TownUI = {
       const face = $(".town-face"), fc = face.getContext("2d");
       fc.clearRect(0, 0, 34, 34);
       // a painted portrait when there is one (assets/tk/portraits), else the pixel bust
-      const pic = $(".town-portrait"), file = who && TownUI.portraits[who];
+      const pic = $(".town-portrait"), file = painted && who && TownUI.portraits[who];
       if (file) {
         const src = `assets/tk/portraits/${file}?v=${TownUI.PORTRAIT_V}`;
         if (pic.dataset.who !== who) { pic.dataset.who = who; pic.src = src; pic.classList.remove("in"); void pic.offsetWidth; pic.classList.add("in"); }

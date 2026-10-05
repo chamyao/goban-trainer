@@ -183,8 +183,9 @@ GENSHIN_PILOT = ["building.house", "building.hall", "building.inn", "building.hu
 GENSHIN_OBJECT = "one single isolated object only, no room, no walls, no floor, no roof, no building"   # small props came out as whole rooms
 # came out wrong in the full run (a room, a pavilion, a fragment): the kit keeps xianxia's piece until
 # `gen_pixel --set genshin-redo --force` makes a good one and the kind is taken off this list
-GENSHIN_BAD = {"furn.counter", "furn.sacks", "furn.table"}   # every try a room so far
-GENSHIN_DROP = {"furn.stool-1", "prop.pond-1", "rock.small-2", "ruin.rubble-2"}   # single tries that came out as a room or a campfire
+GENSHIN_BAD = set()   # every kind has a good isometric piece now (genshin-redo2 fixed the counter, sacks and tables)
+GENSHIN_DROP = {"furn.stool-1", "prop.pond-1", "rock.small-2", "ruin.rubble-2",   # first redo: a room, a campfire
+                "genshin-redo2/rock.small-1", "genshin-redo2/rock.small-2", "genshin-redo2/ruin.rubble-1"}   # a plant, a bush, a campfire
 # second try at the props, run beside the first: naming roofs and buildings, even as "no roof", brought them in,
 # and so did "Liyue". This wording never mentions architecture at all.
 GENSHIN_ITEM = ("a single {p} by itself, centred, game item sprite, bright saturated anime colours "

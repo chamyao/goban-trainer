@@ -115,11 +115,11 @@ def ground_tile(mat, seed):
     return im
 
 
-def variants(src, name):
+def variants(src, name, keep=lambda p: True):
     """A piece's tries, from the last source folder that has any (a later batch replaces an
     earlier one: the second tries in xianxia-redo over the first run's)."""
     for d in reversed(src if isinstance(src, list) else [src]):
-        found = sorted(d.glob(f"{name}-*.png"), key=lambda p: int(p.stem.rsplit("-", 1)[1]))
+        found = sorted((p for p in d.glob(f"{name}-*.png") if keep(p)), key=lambda p: int(p.stem.rsplit("-", 1)[1]))
         if found:
             return found
     return []
@@ -208,8 +208,9 @@ def main():
         where = [d for d in src if d.name in ("xianxia-redo", "genshin", "genshin-redo2")] if kind in REDO else src
         if kind in GENSHIN_BAD:   # its isometric try came out wrong: xianxia's until the redo is good
             where = [d for d in where if not d.name.startswith("genshin")]
-        for k, p in enumerate(v for v in variants(where, kind)
-                              if v.stem not in (GENSHIN_DROP if v.parent.name.startswith("genshin") else DROP)):
+        ok = lambda v: (v.stem not in GENSHIN_DROP and f"{v.parent.name}/{v.stem}" not in GENSHIN_DROP
+                        if v.parent.name.startswith("genshin") else v.stem not in DROP)   # a dropped try: the folder before's
+        for k, p in enumerate(variants(where, kind, ok)):
             items.append((f"{kind}#{k}", fit(Image.open(p), iso_box(box) if p.parent.name.startswith("genshin") else box)))
             made.setdefault(kind, []).append(f"{kind}#{k}")
     sheet, pos = pack(items)
@@ -223,6 +224,7 @@ def main():
                          x_objects=f"assets/tk/{LOOK}/objects.png")
     if GENSHIN:
         kit["iso"] = True   # tk-iso.js: the world drawn isometrically
+        kit["dialogue"] = "genshin"   # tk-town.js: painted portraits, the Genshin dialogue box
         kit["isoVoid"] = "#%02x%02x%02x" % COL["grass"][3]   # beyond the map's diamond: darker grass
     kit["materials"]["grass"] = {"tiles": [["x_tiles", i, row["grass"], 3 if i == 0 else 1]
                                            for i in range(len(ground["grass"]))]}

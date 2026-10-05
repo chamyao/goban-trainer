@@ -377,6 +377,7 @@ const WorldCutscene = {
     };
     // the screen changed size mid-scene: the letterbox, the mood and the light follow it
     const relayout = () => {
+      if (!bars[0].scene) return;   // the scene was left mid-cutscene: its objects are gone
       W = scene.scale.width; H = scene.scale.height;
       bars[0].setSize(W, bar);
       bars[1].setSize(W, bar).setPosition(0, H);
@@ -384,6 +385,7 @@ const WorldCutscene = {
       if (shade) shade.setPosition(W / 2, H / 2).setSize(W * 3, H * 3);
     };
     scene.scale.on("resize", relayout);
+    scene.events.once("shutdown", () => scene.scale.off("resize", relayout));   // the scale manager outlives the scene
     const board = (b, ms) => {
       const r = actors[b.actor] || actor(b.actor, b.at), p = actors[b.prop];
       if (!p) return Promise.resolve();
