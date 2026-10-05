@@ -265,7 +265,8 @@ function worldScenes() {
       const pos = this.resume && this.st.pos && this.st.pos.place === this.placeId ? this.st.pos : null;
       const at = pos || this.entries[this.from || ""] || this.entries[""];
       this.player = this.physics.add.sprite(at.x, at.y, "h-liubei-down-0").setOrigin(.5, 1);
-      this.player.body.setSize(10, 6).setOffset(4, 14);
+      // his feet, whatever the kit's sprite size (Jade's is 18x20; generated sheets are bigger)
+      this.player.body.setSize(10, 6).setOffset((this.player.width - 10) / 2, this.player.height - 6);
       this.player.setCollideWorldBounds(true);
       this.player.facing = pos ? pos.f : "down";
       this.physics.add.collider(this.player, this.solids);
