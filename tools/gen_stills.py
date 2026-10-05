@@ -88,7 +88,7 @@ def openai(prompt, model, aspect="16:9", images=()):
 
 
 def replicate(prompt, model, aspect="16:9", images=()):
-    model = model or "black-forest-labs/flux-1.1-pro"
+    model = model or "bytedance/seedream-5-pro"   # the user's pick, after the bake-off
     h = {"Authorization": f"Bearer {os.environ['REPLICATE_API_TOKEN']}", "Prefer": "wait"}
     url = f"https://api.replicate.com/v1/models/{model}/predictions"
     try:
