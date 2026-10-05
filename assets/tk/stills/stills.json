@@ -278,5 +278,195 @@
   "look": "gohs",
   "approved": "user, 2026-10-05",
   "made": "2026-10-05"
+ },
+ "alliance_b": {
+  "file": "alliance_b.jpg",
+  "scene": "alliance",
+  "prompt": "A long feast table of rich lords in a great tent: Yuan Shao sits at the head, richly dressed; Liu Bei sits at the very lowest place at the far end, hands on his knees; behind him Guan Yu and Zhang Fei stand with arms folded, faces cool. The lords ignore him. Yuan Shao is a proud, richly dressed nobleman in his forties with a neat beard, in a purple brocade robe and a tall official's cap. Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold. Guan Yu is a towering giant of a man, a head taller than anyone, with massive shoulders and a thick neck, a deep red face (only his face is red; his neck and hands are normal skin), a very long black beard down to his chest and narrow eyes under heavy brows, hair in a topknot, in a green robe. Zhang Fei is a stocky, barrel-chested, powerfully muscled man, broad rather than tall, with a fierce square jaw, big glaring eyes and a wild bristling black beard, hair in a topknot, in black and dark brown clothes. Style: in the style of the anime The God of High School: bold dynamic action anime, thick energetic lineart, high contrast, vivid saturated colours, speed lines and impact effects, extreme fighting poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "gohs",
+  "approved": "user, 2026-10-05",
+  "made": "2026-10-05"
+ },
+ "wine_a": {
+  "file": "wine_a.jpg",
+  "scene": "wine",
+  "prompt": "Outside a camp gate, Cao Cao holds out a bronze cup of steaming hot wine; Guan Yu, already in the saddle with his long crescent-bladed halberd, does not take it and looks toward the gate; a low table beside them, steam rising from the cup. Cao Cao is a lean man of about thirty with a thin moustache and a quick, sharp look, black official's cap, dark red robe with gold trim. Guan Yu is a towering giant of a man, a head taller than anyone, with massive shoulders and a thick neck, a deep red face (only his face is red; his neck and hands are normal skin), a very long black beard down to his chest and narrow eyes under heavy brows, hair in a topknot, in a green robe. Style: in the style of the anime The God of High School: bold dynamic action anime, thick energetic lineart, high contrast, vivid saturated colours, speed lines and impact effects, extreme fighting poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "gohs",
+  "approved": "user, 2026-10-05",
+  "made": "2026-10-05"
+ },
+ "wine_b": {
+  "file": "wine_b.jpg",
+  "scene": "wine",
+  "prompt": "Before the lords' table, Guan Yu stands calm with his crescent-bladed halberd grounded; at his feet lies the helmeted head of the enemy general, and beside it on the table the same bronze cup, still steaming; the lords stare, stunned. No blood. Guan Yu is a towering giant of a man, a head taller than anyone, with massive shoulders and a thick neck, a deep red face (only his face is red; his neck and hands are normal skin), a very long black beard down to his chest and narrow eyes under heavy brows, hair in a topknot, in a green robe. Style: in the style of the anime The God of High School: bold dynamic action anime, thick energetic lineart, high contrast, vivid saturated colours, speed lines and impact effects, extreme fighting poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "gohs",
+  "approved": "user, 2026-10-05",
+  "made": "2026-10-05"
+ },
+ "hulao_a": {
+  "file": "hulao_a.jpg",
+  "scene": "hulao",
+  "prompt": "On a wide field before a fortress pass, Lü Bu on a tall red horse chases a fleeing rider, Gongsun Zan on a white horse, his halberd raised to thrust; from the side Zhang Fei charges in on horseback, spear levelled. Only these three riders. Lü Bu is a tall, strikingly handsome young warrior, broad-shouldered, in ornate red and gold armour with a gold crown bearing two long pheasant-feather plumes, carrying a tall crescent-bladed halberd. Gongsun Zan is a lean general in white armour on a white horse. Zhang Fei is a stocky, barrel-chested, powerfully muscled man, broad rather than tall, with a fierce square jaw, big glaring eyes and a wild bristling black beard, hair in a topknot, in black and dark brown clothes. Style: in the style of the anime The God of High School: bold dynamic action anime, thick energetic lineart, high contrast, vivid saturated colours, speed lines and impact effects, extreme fighting poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "gohs",
+  "approved": "user, 2026-10-05",
+  "made": "2026-10-05"
+ },
+ "hulao_b": {
+  "file": "hulao_b.jpg",
+  "scene": "hulao",
+  "prompt": "Lü Bu on a tall red horse in the middle of a dusty field, halberd swinging, ringed by three riders: Zhang Fei in front with his serpent spear, Guan Yu at the side with his crescent halberd, Liu Bei at the flank with twin swords; far behind, the allied lords watch from a hill. Exactly four fighters. Lü Bu is a tall, strikingly handsome young warrior, broad-shouldered, in ornate red and gold armour with a gold crown bearing two long pheasant-feather plumes, carrying a tall crescent-bladed halberd. Zhang Fei is a stocky, barrel-chested, powerfully muscled man, broad rather than tall, with a fierce square jaw, big glaring eyes and a wild bristling black beard, hair in a topknot, in black and dark brown clothes. Guan Yu is a towering giant of a man, a head taller than anyone, with massive shoulders and a thick neck, a deep red face (only his face is red; his neck and hands are normal skin), a very long black beard down to his chest and narrow eyes under heavy brows, hair in a topknot, in a green robe. Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold. Style: in the style of the anime The God of High School: bold dynamic action anime, thick energetic lineart, high contrast, vivid saturated colours, speed lines and impact effects, extreme fighting poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "gohs",
+  "approved": "user, 2026-10-05",
+  "made": "2026-10-05"
+ },
+ "ruins_a": {
+  "file": "ruins_a.jpg",
+  "scene": "ruins",
+  "prompt": "The burned palace city of Luoyang under an ash-grey sky: charred black columns, collapsed roofs, thin smoke, an empty gate hall; in the foreground, small, Liu Bei, Guan Yu and Zhang Fei stand looking at it. No crowds, no flames. Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold. Guan Yu is a towering giant of a man, a head taller than anyone, with massive shoulders and a thick neck, a deep red face (only his face is red; his neck and hands are normal skin), a very long black beard down to his chest and narrow eyes under heavy brows, hair in a topknot, in a green robe. Zhang Fei is a stocky, barrel-chested, powerfully muscled man, broad rather than tall, with a fierce square jaw, big glaring eyes and a wild bristling black beard, hair in a topknot, in black and dark brown clothes. Style: in the style of the anime The God of High School: bold dynamic action anime, thick energetic lineart, high contrast, vivid saturated colours, speed lines and impact effects, extreme fighting poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "gohs",
+  "approved": "user, 2026-10-05",
+  "made": "2026-10-05"
+ },
+ "fireflies_a": {
+  "file": "fireflies_a.jpg",
+  "scene": "fireflies",
+  "prompt": "At night in tall river reeds, two boys in torn silk robes, one about fourteen and one about nine, hold hands and look up as a line of fireflies rises before them, lighting the way. Only the two boys. Style: in the style of the anime The God of High School: bold dynamic action anime, thick energetic lineart, high contrast, vivid saturated colours, speed lines and impact effects, extreme fighting poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "gohs",
+  "approved": "user, 2026-10-05",
+  "made": "2026-10-05"
+ },
+ "dingyuan_a": {
+  "file": "dingyuan_a.jpg",
+  "scene": "dingyuan",
+  "prompt": "Inside a lamplit tent at night, Ding Yuan sits at a desk reading by a candle and looks up; Lü Bu stands over him in armour with a drawn sword. Only these two. No blood. Ding Yuan is an old provincial governor with a grey beard, in a dark official robe. Lü Bu is a tall, strikingly handsome young warrior, broad-shouldered, in ornate red and gold armour with a gold crown bearing two long pheasant-feather plumes, carrying a tall crescent-bladed halberd. Style: in the style of the anime The God of High School: bold dynamic action anime, thick energetic lineart, high contrast, vivid saturated colours, speed lines and impact effects, extreme fighting poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "gohs",
+  "approved": "user, 2026-10-05",
+  "made": "2026-10-05"
+ },
+ "lvboshe_a": {
+  "file": "lvboshe_a.jpg",
+  "scene": "lvboshe",
+  "prompt": "A dirt road at dusk: Lü Boshe rides a donkey with two clay wine jars hanging from the saddle, raising a hand in greeting; ahead of him Cao Cao and Chen Gong sit on horseback, and Cao Cao has turned back, sword drawn. Lü Boshe is a kindly old farmer with a white beard, in a patched hemp robe and a straw hat. Cao Cao is a lean man of about thirty with a thin moustache and a quick, sharp look, black official's cap, dark red robe with gold trim. Chen Gong is a thin, upright county magistrate in his thirties with a sparse beard, in a plain dark robe and scholar's cap. Style: in the style of the anime The God of High School: bold dynamic action anime, thick energetic lineart, high contrast, vivid saturated colours, speed lines and impact effects, extreme fighting poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "gohs",
+  "approved": "user, 2026-10-05",
+  "made": "2026-10-05"
+ },
+ "lvboshe_b": {
+  "file": "lvboshe_b.jpg",
+  "scene": "lvboshe",
+  "prompt": "On a dusk road, Cao Cao sits on his horse, sword lowered, face hard; beside him Chen Gong stares at him in appalled silence; far behind them on the road lie a fallen donkey and a still figure. No blood. Cao Cao is a lean man of about thirty with a thin moustache and a quick, sharp look, black official's cap, dark red robe with gold trim. Chen Gong is a thin, upright county magistrate in his thirties with a sparse beard, in a plain dark robe and scholar's cap. Style: in the style of the anime The God of High School: bold dynamic action anime, thick energetic lineart, high contrast, vivid saturated colours, speed lines and impact effects, extreme fighting poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "gohs",
+  "approved": "user, 2026-10-05",
+  "made": "2026-10-05"
+ },
+ "xingyang_a": {
+  "file": "xingyang_a.jpg",
+  "scene": "xingyang",
+  "prompt": "Wading a river at dusk: Cao Cao rides a strong horse with an arrow in his shoulder, and Cao Hong, on foot in the water beside it, leads the horse by the bridle. Cao Cao is a lean man of about thirty with a thin moustache and a quick, sharp look, black official's cap, dark red robe with gold trim. Cao Hong is a sturdy young officer with a short beard, stripped to a plain tunic. Style: in the style of the anime The God of High School: bold dynamic action anime, thick energetic lineart, high contrast, vivid saturated colours, speed lines and impact effects, extreme fighting poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "gohs",
+  "approved": "user, 2026-10-05",
+  "made": "2026-10-05"
+ },
+ "zumao_a": {
+  "file": "zumao_a.jpg",
+  "scene": "zumao",
+  "prompt": "In a dark wood, a burnt tree stump stands with a red cap hanging on it; enemy cavalry with torches ring it warily; half hidden among the trees behind, Zu Mao crouches with two swords drawn. Zu Mao is a wiry officer in red armour with two swords. Style: in the style of the anime The God of High School: bold dynamic action anime, thick energetic lineart, high contrast, vivid saturated colours, speed lines and impact effects, extreme fighting poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "gohs",
+  "approved": "user, 2026-10-05",
+  "made": "2026-10-05"
+ },
+ "seal_a": {
+  "file": "seal_a.jpg",
+  "scene": "seal",
+  "prompt": "In palace ruins at night, a round stone well glows with five-coloured light rising out of it; Sun Jian and a few soldiers with torches lean over the rim, faces lit from below. Sun Jian is a broad, powerful general in his late thirties with a short beard, in red lacquered armour and a red cap. Style: in the style of the anime The God of High School: bold dynamic action anime, thick energetic lineart, high contrast, vivid saturated colours, speed lines and impact effects, extreme fighting poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "gohs",
+  "approved": "user, 2026-10-05",
+  "made": "2026-10-05"
+ },
+ "seal_b": {
+  "file": "seal_b.jpg",
+  "scene": "seal",
+  "prompt": "In a torchlit camp, Sun Jian in armour raises one hand in an oath; before him Yuan Shao sits at a table with his hand held out as if to receive something; the other lords watch. Empty hands. Sun Jian is a broad, powerful general in his late thirties with a short beard, in red lacquered armour and a red cap. Yuan Shao is a proud, richly dressed nobleman in his forties with a neat beard, in a purple brocade robe and a tall official's cap. Style: in the style of the anime The God of High School: bold dynamic action anime, thick energetic lineart, high contrast, vivid saturated colours, speed lines and impact effects, extreme fighting poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "gohs",
+  "approved": "user, 2026-10-05",
+  "made": "2026-10-05"
+ },
+ "xianshan_a": {
+  "file": "xianshan_a.jpg",
+  "scene": "xianshan",
+  "prompt": "A steep wooded ridge at night: Sun Jian on horseback among the trees looks up as a rain of stones and arrows pours down from the slope above; his riders scatter behind him. No blood. Sun Jian is a broad, powerful general in his late thirties with a short beard, in red lacquered armour and a red cap. Style: in the style of the anime The God of High School: bold dynamic action anime, thick energetic lineart, high contrast, vivid saturated colours, speed lines and impact effects, extreme fighting poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "gohs",
+  "approved": "user, 2026-10-05",
+  "made": "2026-10-05"
+ },
+ "garden_a": {
+  "file": "garden_a.jpg",
+  "scene": "garden",
+  "prompt": "A peony garden at night under the moon: Diaochan kneels with her forehead near the ground; before her Wang Yun bows low; behind them a small pavilion with a stone weiqi board on its table and two stones on it, no one at it. Only these two. Diaochan is a graceful young woman of sixteen in a pale silk robe, hair in an elegant bun with a jade pin. Wang Yun is an old minister with a long grey beard, in dark court robes and a tall official's cap. Style: in the style of the anime The God of High School: bold dynamic action anime, thick energetic lineart, high contrast, vivid saturated colours, speed lines and impact effects, extreme fighting poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "gohs",
+  "approved": "user, 2026-10-05",
+  "made": "2026-10-05"
+ },
+ "pavilion_a": {
+  "file": "pavilion_a.jpg",
+  "scene": "pavilion",
+  "prompt": "Beside a lotus pond at a garden pavilion, Diaochan rests in Lü Bu's arms, her face turned up to his, wet with tears; his tall halberd leans against the railing. Only these two. Diaochan is a graceful young woman of sixteen in a pale silk robe, hair in an elegant bun with a jade pin. Lü Bu is a tall, strikingly handsome young warrior, broad-shouldered, in ornate red and gold armour with a gold crown bearing two long pheasant-feather plumes, carrying a tall crescent-bladed halberd. Style: in the style of the anime The God of High School: bold dynamic action anime, thick energetic lineart, high contrast, vivid saturated colours, speed lines and impact effects, extreme fighting poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "gohs",
+  "approved": "user, 2026-10-05",
+  "made": "2026-10-05"
+ },
+ "fall_a": {
+  "file": "fall_a.jpg",
+  "scene": "fall",
+  "prompt": "At a palace gate, Dong Zhuo, huge and heavy in armour, lies on the ground beside a carriage with a broken wheel, looking up in terror; Lü Bu stands over him with the halberd point at his throat; Li Su beside him with a sword; guards in the background. No blood. Dong Zhuo is a huge, heavy, bearded bully of a warlord with a sneer, in a general's armour. Lü Bu is a tall, strikingly handsome young warrior, broad-shouldered, in ornate red and gold armour with a gold crown bearing two long pheasant-feather plumes, carrying a tall crescent-bladed halberd. Li Su is a lean officer in plain armour with a drawn sword. Style: in the style of the anime The God of High School: bold dynamic action anime, thick energetic lineart, high contrast, vivid saturated colours, speed lines and impact effects, extreme fighting poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "gohs",
+  "approved": "user, 2026-10-05",
+  "made": "2026-10-05"
+ },
+ "tower_a": {
+  "file": "tower_a.jpg",
+  "scene": "tower",
+  "prompt": "A city gate tower on fire at dusk: Wang Yun stands at the parapet beside a small boy in an emperor's robe, both looking down at a rebel army massing below. Wang Yun is an old minister with a long grey beard, in dark court robes and a tall official's cap. Style: in the style of the anime The God of High School: bold dynamic action anime, thick energetic lineart, high contrast, vivid saturated colours, speed lines and impact effects, extreme fighting poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "gohs",
+  "approved": "user, 2026-10-05",
+  "made": "2026-10-05"
  }
 }

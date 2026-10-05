@@ -1013,6 +1013,13 @@ async function viewTK(worldN) {
     const kit = WorldView.kit(), kits = Object.keys(WORLD_KITS), next = kits[(kits.indexOf(kit) + 1) % kits.length];
     root.querySelector(".tk-head-btns").prepend(h("button", { class: "tk-chron-btn", type: "button", title: `Switch to ${WORLD_KITS[next].en}`,
       onclick: () => { WorldView.setKit(next); viewTK(w.n); } }, `画风：${WORLD_KITS[kit].zh} ${WORLD_KITS[kit].en}`));
+    // View: isometric (diagonal, from a corner) or top-down, for any art style (tk-iso.js)
+    if (typeof WorldIso !== "undefined") {
+      const iso = WorldIso.on(WORLD_KITS[kit]);
+      root.querySelector(".tk-head-btns").prepend(h("button", { class: "tk-chron-btn", type: "button",
+        title: iso ? "Switch to the top-down view" : "Switch to the isometric view",
+        onclick: () => { WorldIso.setChoice(!iso); viewTK(w.n); } }, iso ? "视角：斜 Isometric" : "视角：俯 Top-down"));
+    }
     if (typeof WorldTravel !== "undefined") WorldTravel.addButtons(root.querySelector(".tk-head-btns"), w);   // map and start over (tk-travel.js)
     // on a phone: whether a tap on a small board shows a ghost stone first (Auto) or plays at once (Never)
     if (TK_TOUCH && typeof Goban !== "undefined") {

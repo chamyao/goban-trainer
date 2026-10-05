@@ -220,6 +220,8 @@ def cast_in(sid):
 def prompt(sid, n_style=0, cast_refs=()):
     """The full request for a still: scene, then the cast it names, then the style. With reference
     images, n_style style images come first, then a portrait for each key in cast_refs, in order."""
+    if STILLS[sid].get("raw"):   # a mock screen, sent as written
+        return STILLS[sid]["prompt"]
     parts = [STILLS[sid]["prompt"]]
     for key in cast_in(sid):
         name, look = CAST[key]
@@ -574,6 +576,75 @@ FINAL2 = {
     "tower_a": "A city gate tower on fire at dusk: Wang Yun stands at the parapet beside a small boy in an emperor's "
                "robe, both looking down at a rebel army massing below.",
 }
+
+# Mock screenshots to choose a new look for the sprites and dialogue (the user, Book 2): each style twice,
+# a map screen and a dialogue screen. Sent as written (no cast lines, no style line): "raw".
+_BROS = ("Liu Bei (a gentle man with a short black beard, white robe with gold trim), Guan Yu (a towering man with a "
+         "deep red face and a very long black beard, green robe, holding a crescent-bladed halberd) and Zhang Fei "
+         "(stocky, wild black beard, black clothes, a long spear)")
+_TALK = ("Guan Yu: Wine, quickly! I'm off to the city to join the army.", "关羽：快斟酒来吃，我待赶入城去投军！")
+_LOOKS = {
+    "hd2d": "an HD-2D game in the manner of Octopath Traveler but set in ancient China: detailed pixel-art characters "
+            "in a diorama-like world with real lighting, soft depth-of-field blur, glowing lanterns, bloom",
+    "paladin": "a classic 1990s Chinese RPG in the manner of Chinese Paladin (Sword and Fairy) and Xuan-Yuan Sword: "
+               "hand-painted isometric backgrounds with rich detail, small finely drawn characters, ornate Chinese "
+               "UI frames",
+    "ink": "an ink-wash painting game in the manner of Tale of Immortal and Eastern Exorcist: the whole world painted "
+           "like a Chinese ink scroll, rice-paper texture, soft washes of colour, characters with brush outlines",
+    "genshin": "Genshin Impact, in its Liyue region: an open-world anime action RPG with cel-shaded 3D characters, "
+               "a bright painterly world with golden light, jade and crimson Chinese architecture, glowing particles, "
+               "its clean modern HUD",
+    "chibi": "a polished modern Chinese mobile wuxia RPG: cute chibi 3D-rendered characters with big heads, bright "
+             "detailed stylised world, clean glossy UI",
+}
+for _k, _look in _LOOKS.items():
+    STILLS[f"mock_{_k}_map"] = {"scene": "mock", "lens": "map", "raw": True, "prompt": (
+        f"A gameplay screenshot from {_look}. Top-down three-quarter view of a small ancient Chinese village with "
+        f"earth-walled houses, a huge mulberry tree and peach trees in blossom; the three heroes {_BROS} walk together "
+        f"along a dirt path, a few villagers nearby. A small quest marker in the top-left corner and a minimap in the "
+        f"top-right. Han dynasty China; nothing modern.")}
+    STILLS[f"mock_{_k}_talk"] = {"scene": "mock", "lens": "talk", "raw": True, "prompt": (
+        f"A dialogue screenshot from {_look}. The game world (an ancient Chinese village inn at evening) behind, "
+        f"dimmed; in front, a large character portrait of Guan Yu (a towering man with a deep red face, narrow eyes, "
+        f"a very long black beard, green robe and green headscarf) on the left, and a dialogue box along the bottom "
+        f"with his name and the line \"{_TALK[0]}\" with the Chinese \"{_TALK[1]}\" above it. Han dynasty China; "
+        f"nothing modern.")}
+
+# Dialogue portraits in the Genshin look (the user's pick for the new style): one half-body cut-out per
+# speaker, on white for the background to be keyed out (tools/build_portraits.py). Looks beyond CAST here.
+FACE_LOOKS = {
+    "starred": ("the Red Star Lord", "a cheerful immortal old man with a long white beard, rosy cheeks, in a flowing "
+                                     "crimson robe embroidered with stars"),
+    "stargrey": ("the Grey Star Lord", "a stern immortal old man with a long white beard and long eyebrows, in a "
+                                       "flowing silver-grey robe embroidered with stars"),
+    "immortal": ("the hermit immortal", "an ancient Daoist hermit with a white beard to his waist, a wooden staff and a "
+                                        "gourd, in a plain pale robe, kind wise eyes"),
+    "liubei_child": ("young Liu Bei", "a bright-eyed boy of six with his hair in two tufts, in a plain hemp tunic"),
+    "liuyuanqi": ("Liu Yuanqi", "a strong dark-haired farmer of forty with a short black beard, in a hemp robe"),
+    "uncle": ("Liu Bei's uncle", "a strong dark-haired farmer of forty with a short black beard, in a hemp robe"),
+    "chengyuanzhi": ("Cheng Yuanzhi", "a hulking Yellow Turban rebel general with a yellow headscarf, leather armour "
+                                      "and a heavy broadsword"),
+    "merchant": ("the horse merchant", "a prosperous northern horse trader with a fur-trimmed cap and a neat moustache"),
+    "zuofeng": ("Zuo Feng", "a smug court eunuch envoy, beardless, in a dark official robe and gauze cap"),
+    "yuanshu": ("Yuan Shu", "an arrogant young nobleman with a thin moustache, in gold brocade and a tall cap"),
+    "xiandi": ("the Prince of Chenliu", "a calm, serious boy of nine in a yellow silk robe with a small crown"),
+    "shaodi": ("the boy Emperor", "a frightened boy of fourteen in an emperor's yellow robe and crown"),
+    "hetaihou": ("Empress Dowager He", "a proud imperial lady in her thirties in rich red and gold court robes, a tall "
+                                       "jewelled headdress"),
+    "tangfei": ("Consort Tang", "a gentle young court lady in a pale lavender robe, hair in an elegant bun"),
+    "liru": ("Li Ru", "Dong Zhuo's sly advisor, thin with narrow eyes and a wispy beard, in a dark robe and scholar's cap"),
+    "dongmu": ("Dong Zhuo's mother", "a frail old woman of ninety with white hair, in a dark brocade robe"),
+    "caiyong": ("Cai Yong", "a sorrowful old scholar with a grey beard, in a plain scholar's robe and cap"),
+    "chengpu": ("Cheng Pu", "a veteran general with a grizzled beard, in red armour, holding a long spear"),
+    "handang": ("Han Dang", "a tough general with a square jaw and short beard, in red armour, holding a broadsword"),
+}
+FACE_STYLE = ("In the style of Genshin Impact character art: polished anime cel shading, clean lineart, vibrant "
+              "colours, soft rim light. Plain flat pure white background, nothing else behind the figure. Han dynasty "
+              "China, about 184 AD: no text, no modern items.")
+for _who, (_name, _look) in {**{k: v for k, v in CAST.items()}, **FACE_LOOKS}.items():
+    STILLS[f"face_{_who}"] = {"scene": "face", "lens": _who, "raw": True, "aspect": "3:4", "prompt": (
+        f"Character portrait of {_name}, {_look}. Half-body from the waist up, turned three-quarters toward the "
+        f"viewer, a characteristic expression. {FACE_STYLE}")}
 
 # the stills the game uses (Plot/Story's choice: the emotional peaks, the partings, the one death)
 CHOSEN = ["tree_b", "notice_b", "inn_b", "oath_b", "oath_c", "tent_b", "cart_b", "cart_c", "office_b", "blackwind_a",
