@@ -89,7 +89,7 @@ const WorldCutscene = {
       el.className = `tk-still kb-${b.move || "in"}`;
       const img = new Image(); img.crossOrigin = "anonymous";
       img.alt = "";
-      img.src = `assets/tk/stills/${m.file}`;
+      img.src = `assets/tk/stills/${m.file}?v=${m.made || ""}${m.look || ""}`;   // a redone still is fetched anew
       el.append(img);
       await Promise.race([img.decode().catch(() => {}), new Promise(r => setTimeout(r, 1500))]);
       if (!img.complete || !img.naturalWidth) return;
@@ -622,7 +622,7 @@ const WorldCutscene = {
   // the prop atlas (props, emote bubbles, gift icons), loaded once per game
   // the stills that exist (tools/gen_stills.py writes assets/tk/stills/stills.json), fetched once
   stillIndex() {
-    if (!this._stills) this._stills = fetch("assets/tk/stills/stills.json?v=13").then(r => r.ok ? r.json() : {}).catch(() => ({}));
+    if (!this._stills) this._stills = fetch("assets/tk/stills/stills.json?v=14").then(r => r.ok ? r.json() : {}).catch(() => ({}));
     return this._stills;
   },
   load(scene) {
