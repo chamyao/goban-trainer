@@ -125,7 +125,8 @@ def all_lines(worlds):
             d = n.get("dilemma", {})
             for k in ("open", "win", "slip"):
                 if k in d:
-                    lines[d[k + "_vid"]] = (d[k + "_zh"], voice_of(d.get("who")), d[k])
+                    z = d.get(k + "_zh") or zh(d[k])
+                    lines[d.get(k + "_vid") or voice_id(z, voice_of(d.get("who")))] = (z, voice_of(d.get("who")), d[k])
     lines.update(place_lines())
     return lines
 # Life and death only, for now: tesuji, capturing races, capture and endgame
