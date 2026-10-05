@@ -35,6 +35,8 @@ const walkTo=async(get,{near=18,tapTarget=true,max=60}={})=>{let last=null,stuck
     let tx=sx,ty=sy;if(!on){const [px,py]=await toS(s.P[0],s.P[1]);const dx=sx-px,dy=sy-py;let f=1;
       for(const [lim,dd,c0] of [[L+m,dx,px],[L+Wd-m,dx,px],[T+110,dy,py],[T+H-m,dy,py]])if(dd){const ff=(lim-c0)/dd;if(ff>0)f=Math.min(f,ff);}tx=px+dx*f;ty=py+dy*f;}
     if(last&&Math.hypot(s.P[0]-last[0],s.P[1]-last[1])<3)stuck++;else stuck=0;if(stuck>2){tx+=(Math.random()-.5)*120;ty+=(Math.random()-.5)*120;}
+    // a step towards something off screen: not on someone or a story spot on the way (it would answer instead)
+    if(!on)for(let k=0;k<6&&await p.evaluate(([x,y])=>{const w=window.__w,cam=w.cameras.main,cv=w.game.canvas,r=cv.getBoundingClientRect(),kk=cv.clientWidth/w.scale.width;const wx=cam.worldView.x+(x-r.left)/(cam.zoom*kk),wy=cam.worldView.y+(y-r.top)/(cam.zoom*kk),f=w.flat(wx,wy),t=w.pick(f.x,f.y,wx,wy);return !!t&&(t.kind==="npc"||t.kind==="spot");},[tx,ty]);k++){tx+=(k%2?-1:1)*40*(k+1);}
     last=s.P;await p.touchscreen.tap(tx,ty);await p.waitForTimeout(on?1500:900);}
   return 'stuck';};
 const npc=g=>`(()=>{const n=window.__w.npcs.find(n=>${g});return n&&n.spr.visible?[n.spr.x,n.spr.y-8]:null;})()`;

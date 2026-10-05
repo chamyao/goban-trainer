@@ -17,12 +17,15 @@ const WORLD_KITS = { jade: { zh: "玉", en: "Jade" }, xianxia: { zh: "仙侠", e
   genshin: { zh: "原神", en: "Genshin (isometric)", iso: true } };   // iso: drawn for the isometric view (tk-iso.js)
 
 /* ---------- where you are in a world: place, position, party, places seen ---------- */
+// Places renamed since a save was made: the old id (and its rooms, "old--room") to the new one
+const WORLD_RENAMED = { "dong-zhuos-camp": "the-hills-north-of-guangzong" };
+const worldRenamed = id => { for (const [a, b] of Object.entries(WORLD_RENAMED)) if (id === a || String(id).startsWith(a + "--")) return b + id.slice(a.length); return id; };
 const WorldState = {
   key: n => `tk-world-${n}`,
   load(n, region) {
     let s = {};
     try { s = JSON.parse(localStorage.getItem(this.key(n)) || "{}"); } catch { s = {}; }
-    return { visited: s.visited || [region.start], party: s.party || TK.party(TK.world(n)) || region.party, place: s.place, pos: s.pos || null };
+    return { visited: (s.visited || [region.start]).map(worldRenamed), party: s.party || TK.party(TK.world(n)) || region.party, place: s.place, pos: s.pos || null };
   },
   save(n, st) { try { localStorage.setItem(this.key(n), JSON.stringify(st)); } catch { /* private mode */ } },
 };
@@ -249,7 +252,9 @@ function worldScenes() {
       const opts = this.opts = this.game.worldOpts, w = this.w = opts.w;
       this.grid = this.walk = this.lampFx = this.ambientFx = this.cine = this.auto = null; this.seated = false;   // the scene object outlives a change of place: no old map's walk grid or tap-walk
       this.story = w.scenes;
-      // a save from an older map (a place since renamed or removed): back to the start
+      // a save from an older map: a renamed place is found under its new name (arriving as if walking in);
+      // a removed one sends him back to the start
+      if (worldRenamed(this.placeId) !== this.placeId) { this.placeId = worldRenamed(this.placeId); this.resume = false; if (this.placeId.includes("--")) this.from = this.placeId.split("--")[0]; }
       if (!region.places.some(p => p.id === this.placeId)) { this.placeId = region.start; this.resume = false; }
       this.st = WorldState.load(w.n, region);
       if (!this.st.visited.includes(this.placeId)) this.st.visited.push(this.placeId);
@@ -1027,10 +1032,12 @@ function worldScenes() {
         .filter(o => o.d <= r).sort((a, b) => a.d - b.d)[0];
       const spot = Object.entries(this.spots).map(([key, s]) => {
         const t = at(s.x, s.y);
-        let d = Math.hypot(s.x - t.x, s.y - t.y);
+        const own = Math.hypot(s.x - t.x, s.y - t.y);
+        let d = own;
         for (const b of this.propBoxes || []) if (Math.hypot(b.cx - s.x, b.y1 - s.y) < 28) { const u = at(b.cx, b.y1, b.img); d = Math.min(d, toBox(b, u.x, u.y)); }
-        return { key, s, d };
-      }).filter(o => o.d <= Math.max(18, r)).sort((a, b) => a.d - b.d)[0];
+        return { key, s, d, mine: own <= 18 };
+      // a tap on a spot's own place beats a neighbour's picture reaching over it (the Black Wind altar over the shrine)
+      }).filter(o => o.d <= Math.max(18, r)).sort((a, b) => (b.mine - a.mine) || a.d - b.d)[0];
       if (who && (!spot || who.d <= spot.d)) return { kind: "npc", n: who.n };
       if (spot) return { kind: "spot", k: spot.key, s: spot.s };
       // a way out: a building's door (tap the building or its doorway), or any other exit
@@ -1058,8 +1065,11 @@ function worldScenes() {
       const b = (this.buildings || []).find(b => Math.abs(b.x - e.rect.centerX) < b.w / 2 && Math.abs(b.bottom - e.rect.bottom) < 20);
       // isometric: the building as drawn, its painted pixels only (not the empty corners or the road before it)
       if (b && this.iso && b.img && sx != null) {
-        const img = b.img, lx = (sx - (img.x - img.displayWidth * img.originX)) / img.scaleX, ly = (sy - (img.y - img.displayHeight * img.originY)) / img.scaleY;
+        // where the view draws it (between frames img.x, img.y are back on the flat map), and a mirrored building's pixels
+        const img = b.img, a = img.isoAt, q = a ? this.iso.P(a[0], a[1]) : this.iso.P(img.x, img.y), X = q.x, Y = q.y + (a ? a[2] : 0);
+        let lx = (sx - (X - img.displayWidth * img.originX)) / Math.abs(img.scaleX); const ly = (sy - (Y - img.displayHeight * img.originY)) / Math.abs(img.scaleY);
         if (lx < 0 || ly < 0 || lx >= img.width || ly >= img.height) return false;
+        if (img.flipX) lx = img.width - 1 - lx;
         return (this.textures.getPixelAlpha(Math.floor(lx), Math.floor(ly), img.texture.key, img.frame.name) || 0) > 40;
       }
       if (b && this.iso) { const t = at(b.x, b.bottom, b.img); return Math.abs(t.x - b.x) < b.w / 2 && t.y > b.bottom - b.h && t.y < b.bottom; }
