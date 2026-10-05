@@ -326,6 +326,8 @@ function worldScenes() {
       const cam = this.cameras.main;
       cam.startFollow(this.player, true, .15, .15);
       if (this.place.archetype === "overworld") cam.setZoom(.5);   // the realm from on high: a wide stretch of country, the party small
+      // the isometric diamond is only half as tall as it is wide: on an upright phone come in closer so it fills the screen
+      else if (this.iso && this.scale.height > this.scale.width) cam.setZoom(1.3);
       this.mapW = this.iso ? this.iso.width : map.widthInPixels; this.mapH = this.iso ? this.iso.height : map.heightInPixels;
       this.fitCamera();
       cam.setRoundPixels(true);
@@ -1032,7 +1034,7 @@ function worldScenes() {
       const doorway = e => e.side === "N" && e.rect.width < 16;
       const door = this.exits.filter(e => doorway(e)
           // the building itself (its face, from the door up), not the road in front of it
-          ? this.onBuilding(e, x, y, at) && this.placeOpen(e.to)
+          ? this.onBuilding(e, x, y, at, sx, sy) && this.placeOpen(e.to)
           : x > e.rect.x - 20 && x < e.rect.right + 20 && y > e.rect.y - 20 && y < e.rect.bottom + 20)
         .sort((a, b) => Math.hypot(a.rect.centerX - x, a.rect.centerY - y) - Math.hypot(b.rect.centerX - x, b.rect.centerY - y))[0];
       if (door) return { kind: "door", e: door };
@@ -1048,8 +1050,14 @@ function worldScenes() {
       };
     }
     // A tap on the building a door belongs to (as drawn), or just above its door.
-    onBuilding(e, x, y, at = () => ({ x, y })) {
+    onBuilding(e, x, y, at = () => ({ x, y }), sx, sy) {
       const b = (this.buildings || []).find(b => Math.abs(b.x - e.rect.centerX) < b.w / 2 && Math.abs(b.bottom - e.rect.bottom) < 20);
+      // isometric: the building as drawn, its painted pixels only (not the empty corners or the road before it)
+      if (b && this.iso && b.img && sx != null) {
+        const img = b.img, lx = (sx - (img.x - img.displayWidth * img.originX)) / img.scaleX, ly = (sy - (img.y - img.displayHeight * img.originY)) / img.scaleY;
+        if (lx < 0 || ly < 0 || lx >= img.width || ly >= img.height) return false;
+        return (this.textures.getPixelAlpha(Math.floor(lx), Math.floor(ly), img.texture.key, img.frame.name) || 0) > 40;
+      }
       if (b && this.iso) { const t = at(b.x, b.bottom, b.img); return Math.abs(t.x - b.x) < b.w / 2 && t.y > b.bottom - b.h && t.y < b.bottom; }
       if (b) return Math.abs(x - b.x) < b.w / 2 && y > b.bottom - b.h && y < e.rect.bottom;
       return Math.abs(x - e.rect.centerX) < 22 && y > e.rect.centerY - 48 && y < e.rect.bottom;
