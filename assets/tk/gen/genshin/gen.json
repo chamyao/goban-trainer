@@ -1244,5 +1244,23 @@
   ],
   "seconds": 72.2,
   "made": "2026-10-05"
+ },
+ "fg.canopy": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 128,
+   "height": 96,
+   "remove_bg": true,
+   "prompt": "a big cluster of leafy green tree crowns, seen from slightly above, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   128,
+   96
+  ],
+  "seconds": 25.8,
+  "made": "2026-10-05"
  }
 }
