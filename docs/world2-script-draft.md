@@ -1,6 +1,6 @@
 # World 2 (Book 2): Hulao Pass, chapters 3-9: draft
 
-**Spine: ambition has a price.** Chapters 3-9 of the novel, read in full (the Chinese text, Gutenberg #23950). This is the scene list and the lines, in the style of `docs/world1-script-draft.md`: sparse, quoted from the novel where it has the line, `[new]` where I invented one. It is a draft: nothing is in `tools/tk_story.py` yet. Staging steps (`prop`, `army`, `pose`, `fx`...) follow after approval, as they did in Book 1.
+**Spine: ambition has a price.** Chapters 3-9 of the novel, read in full (the Chinese text, Gutenberg #23950). This is the scene list and the lines, in the style of `docs/world1-script-draft.md`: sparse, quoted from the novel where it has the line, `[new]` where I invented one. **Status: approved by the user and written into the game data** in `tools/tk_story_w2.py` (nodes, 29 scenes, places, objectives, Chinese), appended to the worlds by `tk_story.py`, `tk_story_zh.py` and `tk_places.py`. The rest of this file is the design record; where the data differs, the data wins. As built: the formation is three landmarks with marks (`zhangfei_in`, `guanyu_in`, `liubei_in`); the delivery item is one item, `gifts`, given by a stand-in for Li Su at Wenming Garden and needed at Lü Bu's camp (otherwise the scene `lisuwaits` plays); Hua Xiong's board comes before Guan Yu rides out; Diaochan's sign is a weiqi board on the pavilion table.
 
 Chinese below is the novel's, simplified. Where I trimmed it, the English is the sense.
 
