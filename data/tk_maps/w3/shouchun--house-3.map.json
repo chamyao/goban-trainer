@@ -1,0 +1,129 @@
+{
+ "format": "tk-map/1",
+ "id": "shouchun--house-3",
+ "world": 3,
+ "parent": "shouchun",
+ "name": "House, Shouchun",
+ "archetype": "interior",
+ "building": "house-3",
+ "style": "building.house",
+ "size": [
+  20,
+  12
+ ],
+ "seed": 0.933629847885874,
+ "terrain": {
+  "legend": {
+   "#": "wood",
+   "%": "stone",
+   "&": "mat",
+   "e": "earth",
+   "W": "wall",
+   " ": "void"
+  },
+  "rows": [
+   "                    ",
+   "     WWWWWWWWWW     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     WWWWW#WWWW     ",
+   "                    ",
+   "                    ",
+   "                    "
+  ]
+ },
+ "objects": [
+  {
+   "kind": "furn.bed",
+   "x": 9,
+   "y": 2,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.drawers",
+   "x": 11,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.shelf",
+   "x": 6,
+   "y": 2,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.table",
+   "x": 11,
+   "y": 5,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 10,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 13,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.jar",
+   "x": 13,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.barrel",
+   "x": 13,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "spots": [],
+ "npcs": [
+  {
+   "id": "in-1",
+   "kind": "folk.woman",
+   "x": 12.5,
+   "y": 6.9,
+   "say": [
+    "“Mind the floor — I've only just swept it.”"
+   ]
+  }
+ ],
+ "exits": [
+  {
+   "to": "shouchun",
+   "side": "S",
+   "x": 10,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "shouchun": [
+   10,
+   7
+  ],
+  "": [
+   10,
+   7
+  ]
+ }
+}

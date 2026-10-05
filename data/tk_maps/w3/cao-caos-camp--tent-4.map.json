@@ -1,0 +1,122 @@
+{
+ "format": "tk-map/1",
+ "id": "cao-caos-camp--tent-4",
+ "world": 3,
+ "parent": "cao-caos-camp",
+ "name": "Tent, Cao Cao's Camp",
+ "archetype": "interior",
+ "building": "tent-4",
+ "style": "building.tent",
+ "size": [
+  20,
+  12
+ ],
+ "seed": 0.8612154443299185,
+ "terrain": {
+  "legend": {
+   "#": "wood",
+   "%": "stone",
+   "&": "mat",
+   "e": "earth",
+   "W": "wall",
+   " ": "void"
+  },
+  "rows": [
+   "                    ",
+   "     WWWWWWWWWW     ",
+   "     WeeeeeeeeW     ",
+   "     WeeeeeeeeW     ",
+   "     WeeeeeeeeW     ",
+   "     WeeeeeeeeW     ",
+   "     WeeeeeeeeW     ",
+   "     WeeeeeeeeW     ",
+   "     WWWWWeWWWW     ",
+   "                    ",
+   "                    ",
+   "                    "
+  ]
+ },
+ "objects": [
+  {
+   "kind": "furn.desk",
+   "x": 9,
+   "y": 2,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.rack",
+   "x": 6,
+   "y": 4,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.mat",
+   "x": 12,
+   "y": 5,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.chest",
+   "x": 6,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.barrel",
+   "x": 13,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.jar",
+   "x": 13,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "banner.red",
+   "x": 8,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "spots": [],
+ "npcs": [
+  {
+   "id": "in-1",
+   "kind": "folk.soldier",
+   "x": 10.5,
+   "y": 3.9,
+   "say": [
+    "“Orders come at dawn. Keep your weapon close.”"
+   ]
+  }
+ ],
+ "exits": [
+  {
+   "to": "cao-caos-camp",
+   "side": "S",
+   "x": 10,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "cao-caos-camp": [
+   10,
+   7
+  ],
+  "": [
+   10,
+   7
+  ]
+ }
+}
