@@ -180,3 +180,10 @@ GENSHIN_PALETTE = ["#2e2438", "#4b3d5c", "#8a4b2e", "#c47a3e", "#2f8a6e", "#45b4
                    "#9a8e7c", "#5aa846", "#9bd86a"]
 GENSHIN_PILOT = ["building.house", "building.hall", "building.inn", "building.hut", "tree.big", "tree.peach",
                  "tree.pine", "rock.big"]
+GENSHIN_OBJECT = "one single isolated object only, no room, no walls, no floor, no roof, no building"   # small props came out as whole rooms
+# came out wrong in the full run (a room, a pavilion, a fragment): the kit keeps xianxia's piece until
+# `gen_pixel --set genshin-redo --force` makes a good one and the kind is taken off this list
+GENSHIN_BAD = {"banner.red", "banner.yellow", "camp.firepit", "camp.hay", "camp.logs", "furn.barrel", "furn.counter",
+               "furn.drawers", "furn.jar", "furn.mat", "furn.rack", "furn.rug", "furn.sacks", "furn.screen", "furn.stool",
+               "furn.table", "furniture.gotable", "prop.letter", "prop.post", "prop.pond", "prop.seal", "prop.waterbowl",
+               "rock.crag", "rock.small", "ruin.columns", "ruin.hall", "ruin.rubble"}

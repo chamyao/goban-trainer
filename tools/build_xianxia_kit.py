@@ -22,7 +22,7 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from build_jade_edges import block  # noqa: E402
-from xianxia_spec import PROPS_GEN, PROPS_SKIP, CHAR_PICK, DRAWN_GROUND, HERO_H, INTERIOR, OBJECTS, REDO  # noqa: E402
+from xianxia_spec import GENSHIN_BAD, PROPS_GEN, PROPS_SKIP, CHAR_PICK, DRAWN_GROUND, HERO_H, INTERIOR, OBJECTS, REDO  # noqa: E402
 import random  # noqa: E402
 
 T = 16
@@ -206,6 +206,8 @@ def main():
     for kind, (_, box, _) in {**OBJECTS, **INTERIOR, **{k: v for k, v in PROPS_GEN.items() if k not in PROPS_SKIP}}.items():
         # a piece that came out wrong is used only once its second try exists
         where = [d for d in src if d.name in ("xianxia-redo", "genshin")] if kind in REDO else src
+        if kind in GENSHIN_BAD:   # its isometric try came out wrong: xianxia's until the redo is good
+            where = [d for d in where if d.name != "genshin"]
         for k, p in enumerate(v for v in variants(where, kind) if v.stem not in DROP):
             items.append((f"{kind}#{k}", fit(Image.open(p), iso_box(box) if p.parent.name == "genshin" else box)))
             made.setdefault(kind, []).append(f"{kind}#{k}")
