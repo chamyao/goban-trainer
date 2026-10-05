@@ -1,0 +1,552 @@
+{
+ "ground.grass": {
+  "model": "retro-diffusion/rd-fast",
+  "input": {
+   "style": "texture",
+   "width": 16,
+   "height": 16,
+   "tile_x": true,
+   "tile_y": true,
+   "bypass_prompt_expansion": true,
+   "prompt": "soft light jade-green grass, a few tiny flowers, even and calm, flat seamless 16x16 game ground tile, top-down",
+   "num_images": 4
+  },
+  "n": 4,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 33.2,
+  "made": "2026-10-05"
+ },
+ "ground.dirt": {
+  "model": "retro-diffusion/rd-fast",
+  "input": {
+   "style": "texture",
+   "width": 16,
+   "height": 16,
+   "tile_x": true,
+   "tile_y": true,
+   "bypass_prompt_expansion": true,
+   "prompt": "packed light-brown earth path, a few small pebbles, even, flat seamless 16x16 game ground tile, top-down",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 12.6,
+  "made": "2026-10-05"
+ },
+ "ground.sand": {
+  "model": "retro-diffusion/rd-fast",
+  "input": {
+   "style": "texture",
+   "width": 16,
+   "height": 16,
+   "tile_x": true,
+   "tile_y": true,
+   "bypass_prompt_expansion": true,
+   "prompt": "pale cream sand, smooth, a few grains, flat seamless 16x16 game ground tile, top-down",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 13.2,
+  "made": "2026-10-05"
+ },
+ "ground.water": {
+  "model": "retro-diffusion/rd-fast",
+  "input": {
+   "style": "texture",
+   "width": 16,
+   "height": 16,
+   "tile_x": true,
+   "tile_y": true,
+   "bypass_prompt_expansion": true,
+   "prompt": "clear teal pond water, gentle ripples, even, flat seamless 16x16 game ground tile, top-down",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 13.2,
+  "made": "2026-10-05"
+ },
+ "ground.stone": {
+  "model": "retro-diffusion/rd-fast",
+  "input": {
+   "style": "texture",
+   "width": 16,
+   "height": 16,
+   "tile_x": true,
+   "tile_y": true,
+   "bypass_prompt_expansion": true,
+   "prompt": "pale grey square flagstone paving, thin dark seams, flat seamless 16x16 game ground tile, top-down",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 32.4,
+  "made": "2026-10-05"
+ },
+ "building.house": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 48,
+   "height": 46,
+   "remove_bg": true,
+   "prompt": "small Chinese village house, white plaster walls, dark grey curved tile roof, wooden door, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 28.1,
+  "made": "2026-10-05"
+ },
+ "building.hut": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 48,
+   "height": 44,
+   "remove_bg": true,
+   "prompt": "humble Chinese farm hut, mud walls, thatched straw roof, wooden door, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 14.2,
+  "made": "2026-10-05"
+ },
+ "building.shop": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 96,
+   "height": 64,
+   "remove_bg": true,
+   "prompt": "Chinese market shop, open wooden front with goods, grey curved tiled roof, red cloth awning, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   96,
+   64
+  ],
+  "seconds": 19.3,
+  "made": "2026-10-05"
+ },
+ "building.inn": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 96,
+   "height": 72,
+   "remove_bg": true,
+   "prompt": "two-storey Chinese inn, red lacquered pillars, grey curved tiled roof, red lanterns, wine flag, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   96,
+   72
+  ],
+  "seconds": 14.8,
+  "made": "2026-10-05"
+ },
+ "building.lodge": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 84,
+   "height": 48,
+   "remove_bg": true,
+   "prompt": "long low Chinese farmhouse, grey tiled roof, wooden veranda, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   84,
+   64
+  ],
+  "seconds": 15.6,
+  "made": "2026-10-05"
+ },
+ "building.hall": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 72,
+   "height": 88,
+   "remove_bg": true,
+   "prompt": "Chinese government hall, red pillars, curved jade-green glazed tile roof, white stone steps, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   72,
+   88
+  ],
+  "seconds": 19.6,
+  "made": "2026-10-05"
+ },
+ "building.tent": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 48,
+   "height": 46,
+   "remove_bg": true,
+   "prompt": "ancient Chinese army tent, cream canvas with red trim, open flap, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 23.4,
+  "made": "2026-10-05"
+ },
+ "building.moongate": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 48,
+   "height": 40,
+   "remove_bg": true,
+   "prompt": "round moon gate in a short white plaster wall with grey tile coping, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 12.7,
+  "made": "2026-10-05"
+ },
+ "building.gate": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 40,
+   "height": 36,
+   "remove_bg": true,
+   "prompt": "Chinese wooden memorial archway, red pillars, small curved tiled roof, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 18.7,
+  "made": "2026-10-05"
+ },
+ "landmark.notice": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 40,
+   "height": 34,
+   "remove_bg": true,
+   "prompt": "wooden notice board with paper notices under a small tiled roof, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 19.4,
+  "made": "2026-10-05"
+ },
+ "furniture.gotable": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 24,
+   "height": 16,
+   "remove_bg": true,
+   "prompt": "small square stone table with a go board on it, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 48.2,
+  "made": "2026-10-05"
+ },
+ "lamp.post": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 16,
+   "height": 32,
+   "remove_bg": true,
+   "prompt": "Chinese stone garden lantern, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 16.6,
+  "made": "2026-10-05"
+ },
+ "banner.red": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 16,
+   "height": 30,
+   "remove_bg": true,
+   "prompt": "tall narrow red silk war banner on a wooden pole, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 18.7,
+  "made": "2026-10-05"
+ },
+ "banner.yellow": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 16,
+   "height": 30,
+   "remove_bg": true,
+   "prompt": "tall narrow yellow silk banner on a wooden pole, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 10.9,
+  "made": "2026-10-05"
+ },
+ "camp.table": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 28,
+   "height": 28,
+   "remove_bg": true,
+   "prompt": "low wooden camp table with a map scroll on it, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 23.0,
+  "made": "2026-10-05"
+ },
+ "camp.firepit": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 32,
+   "height": 18,
+   "remove_bg": true,
+   "prompt": "ring of stones with a small burning campfire, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 18.7,
+  "made": "2026-10-05"
+ },
+ "camp.logs": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 48,
+   "height": 24,
+   "remove_bg": true,
+   "prompt": "stack of cut firewood logs, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 16.0,
+  "made": "2026-10-05"
+ },
+ "camp.hay": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 32,
+   "height": 30,
+   "remove_bg": true,
+   "prompt": "round haystack, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 14.3,
+  "made": "2026-10-05"
+ },
+ "tree.pine": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 32,
+   "height": 34,
+   "remove_bg": true,
+   "prompt": "Chinese pine tree, flat layered clusters of dark green needles, twisting trunk, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 3
+  },
+  "n": 3,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 33.2,
+  "made": "2026-10-05"
+ },
+ "tree.small": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 36,
+   "height": 40,
+   "remove_bg": true,
+   "prompt": "round leafy green tree, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 3
+  },
+  "n": 3,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 19.9,
+  "made": "2026-10-05"
+ },
+ "tree.grove": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 70,
+   "height": 54,
+   "remove_bg": true,
+   "prompt": "cluster of three leafy green trees, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   70,
+   64
+  ],
+  "seconds": 17.4,
+  "made": "2026-10-05"
+ },
+ "tree.peach": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 36,
+   "height": 40,
+   "remove_bg": true,
+   "prompt": "peach tree in full pink blossom, dark twisting trunk, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 19.2,
+  "made": "2026-10-05"
+ },
+ "tree.peach_big": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 48,
+   "height": 48,
+   "remove_bg": true,
+   "prompt": "large old peach tree in full pink blossom, wide canopy, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 22.1,
+  "made": "2026-10-05"
+ },
+ "tree.big": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 48,
+   "height": 48,
+   "remove_bg": true,
+   "prompt": "large old camphor tree, wide dark green canopy, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 16.0,
+  "made": "2026-10-05"
+ },
+ "tree.dead": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 32,
+   "height": 32,
+   "remove_bg": true,
+   "prompt": "bare dead tree, gnarled grey branches, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 27.8,
+  "made": "2026-10-05"
+ }
+}
