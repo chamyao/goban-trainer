@@ -59,3 +59,15 @@ OBJECTS = {
     "rock.big": ("large mossy grey boulder", (60, 44), 2),
     "rock.crag": ("tall jagged grey rock spire", (48, 46), 2),
 }
+
+
+# Story characters as 4-direction walking sheets (rd-animation four_angle_walking, 48x48 frames:
+# 4 directions x 4 steps). Looks follow the stills' cast (tools/tk_stills.py CAST).
+CHARACTERS = {
+    "liubei": "young Chinese hero, white robe with gold trim and a green sash, black topknot, short neat black beard, "
+              "twin swords at his belt, calm",
+    "guanyu": "tall broad Chinese general, deep red face, very long black beard down to his chest, green robe and green "
+              "headscarf, carrying a long crescent-bladed glaive",
+    "zhangfei": "stocky barrel-chested Chinese warrior, wild bristling black beard, round fierce eyes, dark grey and "
+                "black armour with red trim, red headband, carrying a long spear",
+}
