@@ -35,7 +35,7 @@ import re
 from collections import deque
 from pathlib import Path
 
-from vocab import KINDS
+from vocab import KINDS, MATERIALS
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 PX = 8          # node-map pixels per tile
@@ -91,7 +91,7 @@ class Stage:
         self.block = set()
         for y, row in enumerate(m["terrain"]["rows"]):
             for x, ch in enumerate(row):
-                if legend[ch] == "water":
+                if not MATERIALS.get(legend[ch], True):   # water, a room's walls, outside the room
                     self.block.add((x, y))
         for o in m["objects"]:
             if KINDS[o["kind"]][2]:
@@ -100,6 +100,12 @@ class Stage:
                         self.block.add((xx, yy))
         self.spot = (int(spot["x"]), int(spot["y"]))
         self.reach = self.flood(self.spot)
+        # in a room the scene is the room: stage it in the middle of the floor, not against
+        # the back wall where the story spot may sit (on a phone that's off the top of the view)
+        if "wall" in legend.values():
+            mx = sum(c[0] for c in self.reach) / len(self.reach)
+            my = sum(c[1] for c in self.reach) / len(self.reach)
+            self.spot = min(self.reach, key=lambda c: (c[0] - mx) ** 2 + (c[1] - my) ** 2)
         # enemies go on the side with more open ground
         sx, sy = self.spot
         right = sum((x, y) in self.reach for x in range(sx + 2, sx + 11) for y in range(sy - 3, sy + 4))

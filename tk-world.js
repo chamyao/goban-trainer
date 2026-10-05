@@ -210,7 +210,7 @@ function worldScenes() {
       const { w, kit } = this.opts;
       this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=25`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=15`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=23`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=24`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
@@ -219,7 +219,7 @@ function worldScenes() {
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
       for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=35`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=36`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -259,7 +259,7 @@ function worldScenes() {
         if (l.name === "water") { layer.setCollisionByExclusion([-1]); this.water = layer; }
       }
       this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-      this.solids = this.physics.add.staticGroup();
+      this.solids = this.physics.add.staticGroup(); this.buildings = [];
       for (const who of new Set(["liubei", ...this.st.party])) this.hero(who);
 
       const P = o => Object.fromEntries((o.properties || []).map(p => [p.name, p.value]));
@@ -393,16 +393,21 @@ function worldScenes() {
     }
 
     addProp(o, p) {
+      let img = null;
       if (o.name) {
         const sheet = this.kit.kinds[o.name.split("#")[0]][+o.name.split("#")[1]][0];
-        const img = this.add.image(Math.round(o.x), Math.round(o.y), `kit-${sheet}`, o.name).setOrigin(.5, 1);
+        img = this.add.image(Math.round(o.x), Math.round(o.y), `kit-${sheet}`, o.name).setOrigin(.5, 1);
         img.setDepth(WORLD_CLUTTER.test(p.kind) ? o.y - 400 : o.y);
         if (p.kind === "landmark.shrine") {   // the Star Lords' shrine: its look follows the story (setShrine)
           this.shrine = { img, x: o.x, y: o.y, state: "dark", fx: [] };
           this.setShrine(TK.shrineState?.(this.w.n, this.placeId) || "dark");
         }
       }
-      if (p.solid) this.solids.add(this.add.zone(o.x, o.y - p.fh / 2, p.fw - 2, p.fh - 2));
+      if (img && /^building\./.test(p.kind || "")) this.buildings.push({ x: o.x, bottom: o.y, w: img.width, h: img.height });
+      // a building's wall follows its art, which is often wider or narrower than its footprint:
+      // cl and cr either side of its centre (worked out with its neighbours by the map tools)
+      const l = p.cl || p.fw / 2, r = p.cr || p.fw / 2;
+      if (p.solid) this.solids.add(this.add.zone(o.x + (r - l) / 2, o.y - p.fh / 2, l + r - 2, p.fh - 2));
     }
 
     // The shrine's three looks: "dark" (cold stone), "lit" (the stones glow, incense burns: a hint is
@@ -921,11 +926,17 @@ function worldScenes() {
       const doorway = e => e.side === "N" && e.rect.width < 16;
       const door = this.exits.filter(e => doorway(e)
           // the building itself (its face, from the door up), not the road in front of it
-          ? Math.abs(x - e.rect.centerX) < 22 && y > e.rect.centerY - 48 && y < e.rect.bottom && this.placeOpen(e.to)
+          ? this.onBuilding(e, x, y) && this.placeOpen(e.to)
           : x > e.rect.x - 20 && x < e.rect.right + 20 && y > e.rect.y - 20 && y < e.rect.bottom + 20)
         .sort((a, b) => Math.hypot(a.rect.centerX - x, a.rect.centerY - y) - Math.hypot(b.rect.centerX - x, b.rect.centerY - y))[0];
       if (door) return { kind: "door", e: door };
       return null;
+    }
+    // A tap on the building a door belongs to (as drawn), or just above its door.
+    onBuilding(e, x, y) {
+      const b = (this.buildings || []).find(b => Math.abs(b.x - e.rect.centerX) < b.w / 2 && Math.abs(b.bottom - e.rect.bottom) < 20);
+      if (b) return Math.abs(x - b.x) < b.w / 2 && y > b.bottom - b.h && y < e.rect.bottom;
+      return Math.abs(x - e.rect.centerX) < 22 && y > e.rect.centerY - 48 && y < e.rect.bottom;
     }
     // The feet-sized body, centred under the sprite whatever its size (drawn, generated or
     // mounted sprites differ); redone in update whenever the frame size changes.

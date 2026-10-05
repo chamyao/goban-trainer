@@ -32,6 +32,46 @@ def norm(sig):
     return frozenset(s)
 
 
+def building_walls(m, kit, T):
+    """A building's art is often wider than its footprint (an inn, a hall), or narrower (a small
+    house). Its wall follows what's drawn (cl, cr: pixels left and right of its centre), but stops short of anyone
+    standing there, a way in or a story spot, and leaves a walkway to the next building."""
+    out, blds = {}, []
+    for o in m["objects"]:
+        if not (o["kind"].startswith("building.") and KINDS[o["kind"]][2]):
+            continue
+        _, spr = kit.sprite(o["kind"], f"{m['id']}/{o['x']},{o['y']}")
+        if not spr:
+            continue
+        cx, fw = (o["x"] + o["w"] / 2) * T, o["w"] * T
+        half = max(T / 2, spr[3] / 2 - 4)   # what's drawn, wider or narrower than the footprint
+        blds.append({"o": o, "cx": cx, "fw": fw, "min": min(fw / 2, half), "y0": o["y"] * T, "y1": (o["y"] + o["h"]) * T, "l": half, "r": half})
+    pts = [((n["x"] + .5) * T, (n["y"] + .9) * T) for n in m["npcs"]] + \
+          [((x + .5) * T, (y + .9) * T) for x, y in m["entries"].values()] + \
+          [((s["x"] + .5) * T, (s["y"] + .5) * T) for s in m.get("spots", [])]
+    for b in blds:
+        for px, py in pts:
+            if b["y0"] - 8 < py < b["y1"] + 10:
+                if px < b["cx"]:
+                    b["l"] = min(b["l"], max(b["min"], b["cx"] - px - 10))
+                else:
+                    b["r"] = min(b["r"], max(b["min"], px - b["cx"] - 10))
+    for a in blds:   # a walkway (a tile) between neighbours
+        for b in blds:
+            if a is b or not (a["y0"] < b["y1"] and b["y0"] < a["y1"]) or a["cx"] > b["cx"]:
+                continue
+            over = (a["cx"] + a["r"]) + T - (b["cx"] - b["l"])
+            if over > 0:
+                ta, tb = a["r"] - a["min"], b["l"] - b["min"]   # what each can give back
+                ga = min(ta, over * ta / max(ta + tb, 1e-6))
+                a["r"] -= ga
+                b["l"] -= min(tb, over - ga)
+    for b in blds:
+        if b["l"] != b["fw"] / 2 or b["r"] != b["fw"] / 2:
+            out[id(b["o"])] = {"cl": round(b["l"], 1), "cr": round(b["r"], 1)}
+    return out
+
+
 class Kit:
     def __init__(self, name):
         self.path = ROOT / f"assets/tk/kits/{name}.json"
@@ -233,11 +273,13 @@ def compile_map(m, kit, out_dir):
                                 "float" if isinstance(v, float) else "string", "value": v} for k, v in props.items()]
         objs.append(o)
 
+    walls = building_walls(m, kit, T)
     for o in m["objects"]:
         key, spr = kit.sprite(o["kind"], f"{m['id']}/{o['x']},{o['y']}")
         solid = KINDS[o["kind"]][2]
         obj(key or "", "prop", (o["x"] + o["w"] / 2) * T, (o["y"] + o["h"]) * T,
-            kind=o["kind"], fw=o["w"] * T, fh=o["h"] * T, solid=solid, **({"ref": o["id"]} if o.get("id") else {}))
+            kind=o["kind"], fw=o["w"] * T, fh=o["h"] * T, solid=solid, **({"ref": o["id"]} if o.get("id") else {}),
+            **walls.get(id(o), {}))
     runs = []
     for y in range(H):
         x = 0
