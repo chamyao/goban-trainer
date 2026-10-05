@@ -317,7 +317,8 @@ function worldScenes() {
       // tap (or click) to walk there, tap someone to talk, a building to go in; hold and drag to steer
       this.input.on("pointerdown", p => this.tapAt(p.worldX, p.worldY));
       this.input.on("pointermove", p => { this.steer(p); this.hover(p); });
-      for (const k of ["ENTER", "E"]) this.keys[k].on("down", () => this.act());
+      // (a moment after a talk closes before a key can start another: mashing Enter doesn't loop a chat)
+      for (const k of ["ENTER", "E"]) this.keys[k].on("down", () => { if (this.ui.busy() || this.time.now - (this.talkOver || 0) > 250) this.act(); });
       this.ui = TownUI.mount(this, opts.host);
       if (this.place.archetype === "overworld") this.overworldLabels(opts.host.querySelector(".town-ui"));
       // Wukong shows the way to the next objective: beside its spot when it's on screen,
@@ -1213,6 +1214,7 @@ function worldScenes() {
         n.spr.setDepth(n.spr.y);
       }
 
+      if (this.ui.busy()) this.talkOver = time;
       const t = !this.ui.busy() && !this.leaving && !this.seated && this.target();
       this.ui.hint(t ? (t.kind === "npc" ? t.n.spr : this.spots[t.k]) : null);
     }
