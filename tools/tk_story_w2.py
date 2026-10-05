@@ -20,13 +20,6 @@ def S(who, en, zh):
     return ["say", who, en]
 
 
-def D(caption, slip, zh_caption, zh_slip):
-    """A decision board: the caption over it, and the doubt line on a slip."""
-    ZH2[caption] = zh_caption
-    ZH2[slip] = zh_slip
-    return ["dilemma", caption, slip]
-
-
 def T(en, zh):
     """A title, objective, place or other label, with its Chinese."""
     ZH2[en] = zh
@@ -433,7 +426,6 @@ def _scenes_chain():
             S("wangyun", "You must pity the people of the Han empire.", "汝可怜大汉天下生灵！"),
             S("diaochan", "Command me, and I will not shrink from death.", "但有使令，万死不辞。"),
             S("wangyun", "The people hang by their heels, and the court is a pile of eggs. Only you can help.", "百姓有倒悬之危，君臣有累卵之急，非汝不能救也。"),
-            D("Will Diaochan give her life?", "Not yet. Diaochan does not answer.", "貂蝉可愿以身许国？", "未决。貂蝉不答。"),
             ["problem"],
             N("Diaochan agrees.", "貂蝉应允。"),
             ["remove", "wy"], ["remove", "dc"], ["remove", "sign"], ["light", "day", 1500],
@@ -516,7 +508,6 @@ def _scenes_chain():
             ["spawn", "lj", "lijue", "d6", 82, 0], ["spawn", "gs", "guosi", "d6", 90, 10],
             N("Li Jue, Guo Si, Zhang Ji and Fan Chou raise a hundred thousand men in the west and take Chang'an. Lü Bu rides to the Qingsuo Gate and begs Wang Yun to ride out with him.",
               "李傕、郭汜、张济、樊稠起兵十余万，杀奔长安。吕布至青琐门外，呼王允曰：「势急矣！请司徒上马，同出关去，别图良策。」"),
-            D("Flee with Lü Bu, or hold the gate?", "Not yet clear. Wang Yun does not move.", "随吕布出关，还是死守宫门？", "未决。王允立而不动。"),
             ["problem"],
             S("wangyun", "If the gods of the realm let me save the state, that is my wish. If not, I give my body. I will not run in danger.",
               "若蒙社稷之灵，得安国家，吾之愿也；若不获已，则允奉身以死。临难苟免，吾不为也。"),
@@ -529,6 +520,12 @@ def _scenes_chain():
             ["remove", "west"], ["remove", "lj"], ["remove", "gs"], ["remove", "gate"], ["light", "day", 1500],
         ]},
     }
+
+
+def _dl(q, who, win, slip, zq, zwin, zslip):
+    """A decision board: caption, who weighs it, and the lines on a solve and a slip."""
+    ZH2[q], ZH2[win], ZH2[slip] = zq, zwin, zslip
+    return {"q": q, "who": who, "win": win, "slip": slip}
 
 
 def _node(key, x, y, role, place, step, scene, **extra):
@@ -577,12 +574,12 @@ def _nodes():
         _node("c2", 388, 170, "side", ("Burned Luoyang", "焦土洛阳"), 0.6, "seal"),
         _node("c3", 410, 196, "side", ("Xianshan", "岘山"), 0.65, "xianshan"),
         # The Chain (ch8-9)
-        _node("d1", 350, 140, "side", ("Wang Yun's Garden", "王允后园"), 0.7, "garden"),
+        _node("d1", 350, 140, "side", ("Wang Yun's Garden", "王允后园"), 0.7, "garden", dilemma=_dl("Will Diaochan give her life?", "diaochan", "I understand what I must do.", "Not yet. Let me think.", "貂蝉可愿以身许国？", "妾明白了。", "且慢，容妾想想。")),
         _node("d2", 368, 118, "side", ("Wang Yun's Garden", "王允后园"), 0.74, "feasts"),
         _node("d3", 390, 100, "side", ("Fengyi Pavilion", "凤仪亭"), 0.78, "pavilion"),
         _node("d4", 412, 84, "side", ("Chang'an", "长安"), 0.82, "fall"),
         _node("d5", 434, 98, "side", ("Chang'an", "长安"), 0.86, "mourner"),
-        _node("d6", 448, 122, "side", ("Chang'an", "长安"), 0.9, "tower"),
+        _node("d6", 448, 122, "side", ("Chang'an", "长安"), 0.9, "tower", dilemma=_dl("Flee with Lü Bu, or hold the gate?", "wangyun", "I know what I must do.", "Not yet. I cannot decide.", "随吕布出关，还是死守宫门？", "吾意已决。", "且慢，吾尚难决。")),
     ]
 
 
