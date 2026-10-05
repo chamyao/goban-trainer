@@ -733,10 +733,9 @@ html.tk-fullwin-on, html.tk-fullwin-on body { overflow: hidden; overscroll-behav
 @keyframes tkKbUp { from { transform: scale(1.12) translateY(4%); } to { transform: scale(1.12) translateY(-4%); } }
 @keyframes tkKbDown { from { transform: scale(1.12) translateY(-4%); } to { transform: scale(1.12) translateY(4%); } }
 @keyframes tkKbPan { from { transform: scale(1.12) translateX(4%); } to { transform: scale(1.12) translateX(-4%); } }
-/* a phone held upright (tk-cutscene.js): the picture at up to twice the screen's width, high on the screen over a
-   blurred copy of itself, panning gently around its focal point (--from/--to) */
-.tk-still.wide .tk-still-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: blur(14px) brightness(.55); transform: scale(1.1); animation: none; }
-.tk-still.wide img:not(.tk-still-bg) { position: absolute; left: 0; max-width: none; object-fit: fill; animation: tkKbWide 10s ease-in-out infinite alternate; }
+/* a phone held upright (tk-cutscene.js): the picture at up to 1.5 times the screen's width, high on the screen with
+   dark above and below, panning from edge to edge and back (--from/--to) */
+.tk-still.wide img:not(.tk-still-bg) { position: absolute; left: 0; max-width: none; object-fit: fill; animation: tkKbWide 12s ease-in-out infinite alternate; }
 @keyframes tkKbWide { from { transform: translateX(var(--from, 0px)); } to { transform: translateX(var(--to, 0px)); } }
 @media (prefers-reduced-motion: reduce) { .tk-still img { animation: none; } .tk-still.wide img:not(.tk-still-bg) { transform: translateX(var(--from, 0px)); } }
 /* a problem on a phone turned sideways (or opened that way): board left at full height, words and keys beside it */
