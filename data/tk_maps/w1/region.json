@@ -3869,8 +3869,149 @@
      108255
     ]
    ],
+   "board": false,
    "objective_zh": "在山中破张宝的妖术。",
    "title_zh": "黑风纸兵"
+  },
+  {
+   "node": "1-n7b",
+   "role": "main",
+   "place": "hills-of-black-wind",
+   "spot": "shrine",
+   "scene": "shrine",
+   "title": "The Shrine at the Roadside",
+   "objective": "Go to the roadside shrine where the glow has begun.",
+   "after": [
+    "1-n7"
+   ],
+   "grade": "12K+",
+   "pool": [
+    [
+     "specialized-training-in-tsumego-2",
+     247675
+    ],
+    [
+     "200-basic-go-problems",
+     174723
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160660
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     105501
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     259730
+    ],
+    [
+     "weiqi-small-leisure-collection",
+     19625
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     108346
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     112809
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-1",
+     1201
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     88764
+    ],
+    [
+     "200-basic-go-problems",
+     175733
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     486
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     51362
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     108331
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     105500
+    ],
+    [
+     "seedling-project",
+     27415
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147201
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147209
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     166754
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     105496
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     104309
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-1",
+     1165
+    ],
+    [
+     "weiqi-rapid-drill-800-part-1",
+     3174
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     51356
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3441
+    ],
+    [
+     "weiqi-life-and-death-drills-beginner-part-3",
+     63405
+    ],
+    [
+     "weiqi-small-leisure-collection",
+     25501
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     43935
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     84591
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     54226
+    ]
+   ],
+   "shrine": true,
+   "hint": "Pigs, sheep, dogs. Blood.",
+   "objective_zh": "去路旁那座发光的神龛。",
+   "title_zh": "路旁神龛",
+   "hint_zh": "猪、羊、狗。血。"
   },
   {
    "node": "1-boss",
@@ -4013,6 +4154,37 @@
     "taunt_zh": "风雷听我号令！你们这点人马，一阵风便扫个干净！",
     "taunt_vid": "afb4201642a1"
    },
+   "gate": [
+    {
+     "needs": [
+      "node:n7b"
+     ],
+     "else": "bossearly"
+    },
+    {
+     "needs": [
+      "item:pigblood",
+      "item:sheepblood",
+      "item:dogblood"
+     ],
+     "else": "bossearly2",
+     "objective": "Gather blood from the village below the hills: pigs, sheep, dogs.",
+     "at": "Hills of Black Wind",
+     "place": "hills-of-black-wind",
+     "objective_zh": "到山下村中取猪、羊、狗血。"
+    },
+    {
+     "needs": [
+      "mark:ridge_left",
+      "mark:ridge_right"
+     ],
+     "else": "bossearly2",
+     "objective": "Take the blood up to Guan Yu on the left ridge and Zhang Fei on the right.",
+     "at": "Hills of Black Wind",
+     "place": "hills-of-black-wind",
+     "objective_zh": "把血送上山去：关羽在左，张飞在右。"
+    }
+   ],
    "objective_zh": "在阳城击败张宝。",
    "title_zh": "地公将军之死"
   },
@@ -4026,144 +4198,6 @@
    "objective": "Meet the inspector at the posting station.",
    "after": [
     "1-boss"
-   ],
-   "grade": "12K+",
-   "pool": [
-    [
-     "specialized-training-in-tsumego-2",
-     247675
-    ],
-    [
-     "200-basic-go-problems",
-     174723
-    ],
-    [
-     "go-puzzles-at-a-glance",
-     160660
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     105501
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     259730
-    ],
-    [
-     "weiqi-small-leisure-collection",
-     19625
-    ],
-    [
-     "specialized-training-in-tsumego-4",
-     108346
-    ],
-    [
-     "specialized-training-in-tsumego-4",
-     112809
-    ],
-    [
-     "weiqi-life-and-death-1000-problems-part-1",
-     1201
-    ],
-    [
-     "specialized-training-in-tsumego-4",
-     88764
-    ],
-    [
-     "200-basic-go-problems",
-     175733
-    ],
-    [
-     "lee-chang-hos-selected-tsumego-part-1",
-     486
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     51362
-    ],
-    [
-     "specialized-training-in-tsumego-4",
-     108331
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     105500
-    ],
-    [
-     "seedling-project",
-     27415
-    ],
-    [
-     "compact-go-puzzles-to-learn-the-basics",
-     147201
-    ],
-    [
-     "compact-go-puzzles-to-learn-the-basics",
-     147209
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     166754
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     105496
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     104309
-    ],
-    [
-     "weiqi-life-and-death-1000-problems-part-1",
-     1165
-    ],
-    [
-     "weiqi-rapid-drill-800-part-1",
-     3174
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     51356
-    ],
-    [
-     "weiqi-rapid-drill-800-part-3",
-     3441
-    ],
-    [
-     "weiqi-life-and-death-drills-beginner-part-3",
-     63405
-    ],
-    [
-     "weiqi-small-leisure-collection",
-     25501
-    ],
-    [
-     "specialized-training-in-tsumego-5",
-     43935
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     84591
-    ],
-    [
-     "specialized-training-in-tsumego-4",
-     54226
-    ]
-   ],
-   "room": "hostel",
-   "objective_zh": "到驿馆拜见督邮。",
-   "title_zh": "督邮驾到"
-  },
-  {
-   "node": "1-ax2",
-   "role": "main",
-   "place": "anxi",
-   "spot": "office",
-   "scene": "post",
-   "title": "The Hitching Post",
-   "objective": "Go to the county office, where the old villagers are gathering.",
-   "after": [
-    "1-ax1"
    ],
    "grade": "12K+",
    "pool": [
@@ -4286,6 +4320,144 @@
     [
      "specialized-training-in-tsumego-3",
      22155
+    ]
+   ],
+   "room": "hostel",
+   "objective_zh": "到驿馆拜见督邮。",
+   "title_zh": "督邮驾到"
+  },
+  {
+   "node": "1-ax2",
+   "role": "main",
+   "place": "anxi",
+   "spot": "office",
+   "scene": "post",
+   "title": "The Hitching Post",
+   "objective": "Go to the county office, where the old villagers are gathering.",
+   "after": [
+    "1-ax1"
+   ],
+   "grade": "12K+",
+   "pool": [
+    [
+     "bedtime-tsumego-part-1",
+     135468
+    ],
+    [
+     "200-basic-go-problems",
+     174334
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-1",
+     1298
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     43933
+    ],
+    [
+     "nie-weipings-tsumego-encyclopedia",
+     19625
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     50718
+    ],
+    [
+     "fujisawa-shuko-classroom",
+     266255
+    ],
+    [
+     "specialized-training-in-tesuji-3",
+     81090
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     149079
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     43984
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-2",
+     745
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-1",
+     1235
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     108329
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     10370
+    ],
+    [
+     "weiqi-rapid-drill-800-part-2",
+     3269
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147213
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     105504
+    ],
+    [
+     "common-life-and-death-problems",
+     19625
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     84617
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     43929
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     397
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     108298
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     247677
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147212
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-1",
+     1133
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160639
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     108330
+    ],
+    [
+     "weiqi-small-leisure-collection",
+     25566
+    ],
+    [
+     "seedling-project",
+     27589
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     54137
     ]
    ],
    "objective_zh": "到县衙前，老人们正聚在那里。",
