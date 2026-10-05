@@ -162,14 +162,6 @@
   "model": "black-forest-labs/flux-2-klein-4b",
   "made": "2026-10-05"
  },
- "bosswin_c": {
-  "file": "bosswin_c.jpg",
-  "scene": "bosswin",
-  "prompt": "Torn paper soldiers drifting down onto grass in clear light after a storm, the sky breaking open. Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
-  "provider": "replicate",
-  "model": "black-forest-labs/flux-2-klein-4b",
-  "made": "2026-10-05"
- },
  "peace2_b": {
   "file": "peace2_b.jpg",
   "scene": "peace2",
