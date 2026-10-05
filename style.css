@@ -705,3 +705,19 @@ html.tk-fullwin-on, html.tk-fullwin-on body { overflow: hidden; overscroll-behav
 .tk-table svg { touch-action: manipulation; cursor: pointer; }
 .tk-table-panel .town-zh { color: #f4ead2; }
 .tk-table-panel .town-en { color: #e9dcc0; }
+
+/* painted stills in cutscenes (tk-cutscene.js showStill): under the dialogue, a slow Ken Burns drift */
+.tk-still { position: absolute; inset: 0; overflow: hidden; background: #0c0806; opacity: 0; transition: opacity .7s ease; }
+.tk-still.on { opacity: 1; }
+.tk-still img { width: 100%; height: 100%; object-fit: cover; transform-origin: 50% 50%; animation: 16s ease-out forwards; }
+.tk-still.kb-in img { animation-name: tkKbIn; }
+.tk-still.kb-out img { animation-name: tkKbOut; }
+.tk-still.kb-up img { animation-name: tkKbUp; }
+.tk-still.kb-down img { animation-name: tkKbDown; }
+.tk-still.kb-pan img { animation-name: tkKbPan; }
+@keyframes tkKbIn { from { transform: scale(1); } to { transform: scale(1.14); } }
+@keyframes tkKbOut { from { transform: scale(1.14); } to { transform: scale(1); } }
+@keyframes tkKbUp { from { transform: scale(1.12) translateY(4%); } to { transform: scale(1.12) translateY(-4%); } }
+@keyframes tkKbDown { from { transform: scale(1.12) translateY(-4%); } to { transform: scale(1.12) translateY(4%); } }
+@keyframes tkKbPan { from { transform: scale(1.12) translateX(4%); } to { transform: scale(1.12) translateX(-4%); } }
+@media (prefers-reduced-motion: reduce) { .tk-still img { animation: none; } }

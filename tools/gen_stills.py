@@ -2,6 +2,7 @@
 
     python3 tools/gen_stills.py                # make every still that doesn't exist yet
     python3 tools/gen_stills.py --list         # what exists, what's missing, with the full prompts
+    python3 tools/gen_stills.py --chosen       # only the stills the game uses (Plot's choice, tk_stills.CHOSEN)
     python3 tools/gen_stills.py --only oath --force   # remake one
     python3 tools/gen_stills.py --provider openai     # pick a provider (default: the first with a key)
     python3 tools/gen_stills.py --import DIR          # bring in images made by hand (DIR/<id>.png|jpg|webp),
@@ -46,7 +47,7 @@ from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
-from tk_stills import CAST, PORTRAITS, STILLS, STYLE, STYLES, cast_in, portrait, prompt  # noqa: E402
+from tk_stills import CAST, CHOSEN, PORTRAITS, STILLS, STYLE, STYLES, cast_in, portrait, prompt  # noqa: E402
 
 OUT = ROOT / "assets/tk/stills"
 SIZE = (1280, 720)
@@ -296,6 +297,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--provider", choices=PROVIDERS)
     ap.add_argument("--only", action="append", help="still id(s) to make")
+    ap.add_argument("--chosen", action="store_true", help="only the stills the game uses (tk_stills.CHOSEN)")
     ap.add_argument("--force", action="store_true", help="remake stills that already exist")
     ap.add_argument("--list", action="store_true", help="show what exists and what's missing")
     ap.add_argument("--import", dest="imp", metavar="DIR", help="fit and record hand-made images named <id>.*")
@@ -305,6 +307,8 @@ def main():
                     "portrait framing x style on these people (e.g. guanyu), into stills/samples/styles/")
     ap.add_argument("--compare", nargs="+", metavar="MODEL", help="try each model on the stills, into stills/samples/")
     a = ap.parse_args()
+    if a.chosen:
+        a.only = (a.only or []) + CHOSEN
     OUT.mkdir(parents=True, exist_ok=True)
     man_path = OUT / "stills.json"
     man = json.loads(man_path.read_text()) if man_path.exists() else {}
@@ -342,11 +346,15 @@ def main():
         return compare(name, fn, a.compare, [sid for sid in STILLS if not a.only or sid in a.only])
     model = os.environ.get("TK_IMAGE_MODEL")
     print(f"provider: {name}" + (" (no API key found: placeholders only)" if name == "dummy" else ""))
+    made_one = False
     for sid, s in STILLS.items():
         if a.only and sid not in a.only:
             continue
         if sid in man and (OUT / man[sid]["file"]).exists() and not a.force and man[sid]["provider"] != "dummy":
             continue
+        if made_one:
+            time.sleep(15)   # back to back, Replicate turns away about half with 429s
+        made_one = True
         text, images = request(name, sid)
         try:
             raw, used = fn(text, model, "16:9", images)
