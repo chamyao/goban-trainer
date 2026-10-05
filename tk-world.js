@@ -31,12 +31,12 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=26`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=27`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
   },
-  has(n) { return n === 1; },  // worlds whose places have been built
+  has(n) { return n === 1 || n === 2; },  // worlds whose places have been built
   // "1-zhuo-county-c-elder": a challenger in a place, drawing from the world's problems.
   node(w, key) {
     const region = this.regions[w.n];
@@ -208,9 +208,9 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=26`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=27`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=15`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=25`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=26`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
@@ -219,7 +219,7 @@ function worldScenes() {
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
       for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=36`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=37`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -598,7 +598,9 @@ function worldScenes() {
       this.goalAt = this.goalPoint();
       if (this.fairy) this.fairy.wp = null;
       const q = this.nextMain();
-      if (!q) return this.goal("This book is complete. The road goes on…", "这一卷已经完成。路还在前方……");
+      if (!q) return TK.world(this.w.n + 1)
+        ? this.goal(`This book is complete. Book ${this.w.n + 1} is open: Menu → Book ${this.w.n + 1}.`, `这一卷已经完成。第${this.w.n + 1}卷已开启：菜单 → 第${this.w.n + 1}卷。`)
+        : this.goal("This book is complete. The road goes on…", "这一卷已经完成。路还在前方……");
       const g = this.available(q) && this.gateFor(q);
       if (g && g.objective) {   // what the battle still needs, with a count
         const need = [].concat(g.needs || []), k = need.filter(c => this.cond(c)).length, n = need.length > 1 && g.count !== false ? ` (${k}/${need.length})` : "";

@@ -143,9 +143,19 @@ PLACES = {
         "Qingzhou": {
             "archetype": "city",
             "banners": "red",
-            "landmarks": [{"kind": "building.gate", "id": "citygate", "node": "1-n4", "label": "The besieged city"}],
+            "landmarks": [
+                {"kind": "building.gate", "id": "citygate", "node": "1-n4", "label": "The besieged city"},
+                {"kind": "rock.big", "id": "field", "node": "1-n4b", "label": "The field before the city"},
+                # the two brothers go to their hills before the ambush (Guan Yu left, Zhang Fei right)
+                {"kind": "rock.crag", "id": "flank_left", "label": "The left hill", "needs": ["node:n4"], "delivers": "flank_left", "when": "node:n4",
+                 "empty": ["No one is on this hill yet."],
+                 "deliver": [["guanyu", "A thousand men, hidden on the left. I wait for the gongs."]]},
+                {"kind": "rock.crag", "id": "flank_right", "label": "The right hill", "needs": ["node:n4"], "delivers": "flank_right", "when": "node:n4",
+                 "empty": ["No one is on this hill yet."],
+                 "deliver": [["zhangfei", "The right hill is mine. I will hear the gongs from a mile off."]]},
+            ],
             "npcs": [{"kind": "folk.soldier", "say": "“The rebels have us surrounded. If only someone could draw them off…”"}],
-            "objectives": {"1-n4": "Lift the siege of Qingzhou."},
+            "objectives": {"1-n4": "Lift the siege of Qingzhou.", "1-n4b": "Lift the siege of Qingzhou."},
         },
         "Guangzong Road": {
             "archetype": "road",
@@ -167,8 +177,10 @@ PLACES = {
         "Changshe": {
             "archetype": "camp",
             "banners": "red",
-            "landmarks": [{"kind": "building.tent", "id": "camp", "node": "1-b3", "label": "The Han camp"}],
-            "objectives": {"1-f1": "Side story: the fire plan in the Han camp.", "1-b3": "Side story: red banners at Changshe."},
+            "landmarks": [{"kind": "building.tent", "id": "camp", "node": "1-b3", "label": "The Han camp"},
+                          {"kind": "rock.big", "id": "fieldcamp", "node": "1-e1", "label": "Where the army was"}],
+            "objectives": {"1-f1": "Side story: the fire plan in the Han camp.", "1-b3": "Side story: red banners at Changshe.",
+                           "1-e1": "Go to Yingchuan and learn how Huangfu Song and Zhu Jun stand."},
         },
         "Envoy's Road": {
             "archetype": "road",
@@ -277,3 +289,10 @@ ROOMS = {
         {"kind": "folk.soldier", "say": "“Orders come at dawn. Keep your weapon close.”"},
     ]},
 }
+
+
+# ---- World 2 (tk_story_w2.py) ----
+import pathlib as _pl, sys as _sys  # noqa: E402
+_sys.path.insert(0, str(_pl.Path(__file__).resolve().parent))
+from tk_story_w2 import PLACES2 as _PLACES2  # noqa: E402
+PLACES[2] = _PLACES2

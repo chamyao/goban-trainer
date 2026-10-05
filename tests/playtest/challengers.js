@@ -41,7 +41,7 @@ for(const [pl,key] of keys){
   if(!t1.duel){fails++;console.log(`FAIL ${key}: no duel; lines ${t1.lines.slice(-2).join(' | ')}`);await p.screenshot({path:SP+`/challenger-${key}.png`});continue;}
   await p.waitForTimeout(800);
   const who=await p.evaluate(()=>{const d=document.querySelector('.tk-duel-dlg');return d.querySelector('.town-who').textContent+' | '+d.querySelector('.town-en').textContent;});
-  const moves=[];for(let i=0;i<40;i++){if(await p.locator('.tk-duel-go').count())break;const m=await best();if(m&&m.x){await p.touchscreen.tap(m.x,m.y);moves.push(m.m);await p.waitForTimeout(900);}else await p.waitForTimeout(400);}
+  const moves=[];for(let i=0;i<40;i++){if(await p.locator('.tk-duel-go').count())break;const m=await best();if(m&&m.x){await p.touchscreen.tap(m.x,m.y);/* tap-to-preview: a second tap plays the ghost */if(await p.evaluate(()=>!!(window.__trainer&&window.__trainer.goban.ghost)))await p.touchscreen.tap(m.x,m.y);moves.push(m.m);await p.waitForTimeout(900);}else await p.waitForTimeout(400);}
   const won=await p.evaluate(()=>{const d=document.querySelector('.tk-duel-dlg');return d?d.classList.contains('win'):false;});
   const winLine=await p.evaluate(()=>{const d=document.querySelector('.tk-duel-dlg .town-en');return d?d.textContent:'';});
   if(await p.locator('.tk-duel-go').count())await p.locator('.tk-duel-go').first().tap();

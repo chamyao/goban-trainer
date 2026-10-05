@@ -47,7 +47,7 @@ const best=()=>W(()=>{const t=window.__trainer;if(!t||t.done||t.engineBusy||t.pl
   const m=ms.find(m=>t.outcome([...t.played,m],memo)==='ok')||ms[0],c=m.charCodeAt(0)-97,r=m.charCodeAt(1)-97;
   const el=[...t.goban.svg.querySelectorAll('circle[fill="transparent"]')].find(e=>+e.getAttribute('cx')===t.goban.px(c)&&+e.getAttribute('cy')===t.goban.py(r));
   if(!el)return {m};const R=el.getBoundingClientRect();return {m,x:R.left+R.width/2,y:R.top+R.height/2};});
-const solve=async()=>{await p.waitForTimeout(800);const mv=[];for(let i=0;i<40;i++){if(await p.locator('.tk-duel-go').count())break;if(await p.locator('.tk-rest').count()){await p.waitForTimeout(500);continue;}const m=await best();if(m&&m.x){await p.touchscreen.tap(m.x,m.y);mv.push(m.m);await p.waitForTimeout(900);}else await p.waitForTimeout(400);}
+const solve=async()=>{await p.waitForTimeout(800);const mv=[];for(let i=0;i<40;i++){if(await p.locator('.tk-duel-go').count())break;if(await p.locator('.tk-rest').count()){await p.waitForTimeout(500);continue;}const m=await best();if(m&&m.x){await p.touchscreen.tap(m.x,m.y);/* tap-to-preview: a second tap plays the ghost */if(await p.evaluate(()=>!!(window.__trainer&&window.__trainer.goban.ghost)))await p.touchscreen.tap(m.x,m.y);mv.push(m.m);await p.waitForTimeout(900);}else await p.waitForTimeout(400);}
   const won=await W(()=>{const d=document.querySelector('.tk-duel-dlg');return !!d&&d.classList.contains('win');});if(await p.locator('.tk-duel-go').count())await p.locator('.tk-duel-go').first().tap();await p.waitForTimeout(600);return {won,mv};};
 const items=()=>W(()=>WorldItems.owned(TK.world(1)).filter(k=>/blood/.test(k)).sort().join(',')||'none');
 const marks=()=>W(()=>WorldMarks.all(TK.world(1)).sort().join(',')||'none');
@@ -127,7 +127,7 @@ const pid=await W(()=>window.__trainer.p.id);
 const wrong=await W(()=>{const t=window.__trainer,first=new Set(t.p.lines.map(L=>L[1]));const els=[...t.goban.svg.querySelectorAll('circle[fill="transparent"]')];
   for(const el of els){const cx=+el.getAttribute('cx'),cy=+el.getAttribute('cy');let c=-1,rr=-1;for(let i=0;i<19;i++){if(t.goban.px(i)===cx)c=i;if(t.goban.py(i)===cy)rr=i;}
     const m=String.fromCharCode(97+c)+String.fromCharCode(97+rr);if(c>=0&&rr>=0&&!first.has(m)&&!t.grid[rr][c]){const R=el.getBoundingClientRect();return [R.left+R.width/2,R.top+R.height/2,m];}}return null;});
-if(wrong){await p.touchscreen.tap(wrong[0],wrong[1]);await p.waitForTimeout(3000);}
+if(wrong){await p.touchscreen.tap(wrong[0],wrong[1]);/* tap-to-preview: a second tap plays the ghost */if(await p.evaluate(()=>!!(window.__trainer&&window.__trainer.goban.ghost)))await p.touchscreen.tap(wrong[0],wrong[1]);await p.waitForTimeout(3000);}
 const rest=await W(()=>({held:!!document.querySelector('.tk-rest'),chip:(document.querySelector('.tk-rest-chip')||{}).textContent||''}));
 const pid2=await W(()=>window.__trainer&&window.__trainer.p.id);
 check(!!wrong&&rest.held&&pid2===pid,`7. a slip (${wrong&&wrong[2]}): same problem ${pid2===pid}, held ${rest.held} "${rest.chip}"`);

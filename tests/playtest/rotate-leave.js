@@ -45,7 +45,7 @@ check(bp.inView,'turned back: the whole board is on screen '+JSON.stringify(bp.b
 // leave halfway: one right move, then Leave
 const mv=await p.evaluate(()=>{const t=window.__trainer;const L=t.p.lines.find(L=>L[0]===1);const m=L[1],c=m.charCodeAt(0)-97,r=m.charCodeAt(1)-97;
   const el=[...t.goban.svg.querySelectorAll('circle[fill="transparent"]')].find(e=>+e.getAttribute('cx')===t.goban.px(c)&&+e.getAttribute('cy')===t.goban.py(r));const R=el.getBoundingClientRect();return [R.left+R.width/2,R.top+R.height/2,L.length];});
-if(mv[2]>3){await p.touchscreen.tap(mv[0],mv[1]);await p.waitForTimeout(1000);}
+if(mv[2]>3){await p.touchscreen.tap(mv[0],mv[1]);/* tap-to-preview: a second tap plays the ghost */if(await p.evaluate(()=>!!(window.__trainer&&window.__trainer.goban.ghost)))await p.touchscreen.tap(mv[0],mv[1]);await p.waitForTimeout(1000);}
 await p.locator('.tk-duel-key',{hasText:'Leave'}).tap();await p.waitForTimeout(1200);
 for(let i=0;i<30&&await dlg();i++){await tapDlg();await p.waitForTimeout(200);}
 await ready();

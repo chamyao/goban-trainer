@@ -334,6 +334,21 @@ ZH = {
     "Shortcut: the envoy on the road.": "捷径：路上的使者。",
     "Rescue Dong Zhuo, then report at his tent.": "救出董卓，再到他帐前复命。",
     "Break Zhang Bao's sorcery in the hills.": "在山中破张宝的妖术。",
+    "Yingchuan, Too Late": "来迟的颍川",
+    "Not Yet": "尚早",
+    "The left hill": "左侧山岭",
+    "The right hill": "右侧山岭",
+    "The field before the city": "城前旷野",
+    "Where the army was": "官军曾驻之处",
+    "No one is on this hill yet.": "这座山岭上还没有人。",
+    "A thousand men, hidden on the left. I wait for the gongs.": "一千人马伏于山左，只等鸣金。",
+    "The right hill is mine. I will hear the gongs from a mile off.": "右边山岭归我。十里之外我也听得见锣响。",
+    "Go to Yingchuan and learn how Huangfu Song and Zhu Jun stand.": "去颍川，探明皇甫嵩、朱儁的军情。",
+    "Liu Bei sends the army out, but the hills on either side are empty, and the rebels press him back.": "玄德引军出战，两侧山岭上却空无一人，被贼兵逼退。",
+    "Not yet. Yunchang and Yide must be on their hills first.": "还不是时候。须先让云长、翼德各上山岭。",
+    "Liu Bei marches through the night to Yingchuan. When he arrives, the rebels have been routed by fire.": "玄德星夜赶到颍川，见贼已被火攻击溃。",
+    "Zhang Liang and Zhang Bao have no strength left. They will run to Guangzong, to Zhang Jiao. Go back at once, and help.": "张梁、张宝势穷力乏，必投广宗去依张角。玄德可即星夜往助。",
+    "Liu Bei takes his orders, and turns his army back through the night.": "玄德领命，遂引兵复回。",
     "Sorcery. A man cannot fight a wind. Fall back to the road.": "此乃妖术，人如何与风相战？退回大路。",
     "At the roadside, the old shrine that was dark begins to glow. Two white-haired men sit over its board, as if nothing had happened.": "路旁那座暗了的旧神龛忽然发出微光。两位白发老人坐在棋盘前，仿佛什么也没发生。",
     "Read this, before you go back.": "再去之前，先读这一局。",
@@ -419,3 +434,12 @@ FOLK_VOICE = {
     "folk.monk": "zm_069", "folk.noble": "zm_057", "folk.soldier": "zm_045", "folk.rebel": "zm_016",
     "folk.hunter": "zm_030", "folk.official": "zm_064",
 }
+
+
+# ---- World 2 (tk_story_w2.py) ----
+import pathlib as _pl, sys as _sys  # noqa: E402
+_sys.path.insert(0, str(_pl.Path(__file__).resolve().parent))
+from tk_story_w2 import ZH2 as _ZH2, CAST2 as _CAST2  # noqa: E402
+for _k, _v in _ZH2.items():
+    ZH.setdefault(_k, _v)
+CAST.update(_CAST2)
