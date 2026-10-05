@@ -8,6 +8,7 @@ Written by the Game Design session. It rests on reading `docs/three-kingdoms-pla
 - **The Star Lords are the one justification for problems.** They offer counsel in exchange for a solved problem.
 - **Counsel becomes a hint the player acts on in the world** (go to a place, find a person, collect a thing), instead of a cutscene in which the characters do it. The cutscene then shows the result of what the player did.
 - **Bosses stay hard problems.** Relics should do something, not just appear in a scene.
+- **A slip keeps the same problem and starts a cooldown** (as the game already does). Keep it.
 - **Gated battles show a defeat, not a problem.** If the player attempts a fail-then-prepare battle or boss before its conditions are met (for example the blood at Black Wind), the board never opens: a short defeat scene plays and a clue points to what is missing. No problem is spent and no slip is counted. Once the conditions are met, the problem opens as normal.
 - **"Fail until prepared" and deliveries are tools in a toolbox**, used where the novel supports them and varied from Book to Book.
 - **Open:** whether the game is Three Kingdoms with a light xianxia layer (the plan today) or a full xianxia game. This review assumes the plan as written.
@@ -16,7 +17,7 @@ Written by the Game Design session. It rests on reading `docs/three-kingdoms-pla
 
 - **Genre and feel:** a top-down explorable story world in the style of GBA Pokémon, where each objective is cleared by solving a Go problem. A storyteller scroll opens and closes each Book. Cutscenes are acted out on the maps with portrait dialogue, voice-over and a Chronicle to replay them.
 - **The loop, minute to minute:** walk to a marked story spot, a scene plays, the board opens, you solve it flawlessly, the rest of the scene plays, the next objective appears. A top-of-screen objective line and Wukong's pointer say where to go.
-- **Rules:** a wrong move, hint, undo or Explore is a slip, a slip draws a new problem of the same grade, and bosses are the hardest problems of the Book.
+- **Rules:** a wrong move, hint, undo or Explore is a slip, a slip keeps the same problem: it resets, stays in full view for study, and is held for a 30 s "Think" cooldown (saved, so leaving and coming back doesn't skip it); the Star Lords answer a slip with "Not yet. Look again." Bosses are the hardest problems of the Book. (The plan and the header comment in `tk.js` still say a slip draws a new problem; the code does not, and they should be updated.)
 - **Rewards:** only story items (horses, weapons, silver). The horses change travel and looks; the rest are shown in a scene.
 - **World 1:** 24 scenes (15 main, 9 side), each with exactly one problem placed mid-scene. The Star Lords sit at the board in 4 of them (oath, Daxing, Qingzhou, Black Wind). Villagers and officials also set challenger problems.
 
@@ -26,7 +27,7 @@ Written by the Game Design session. It rests on reading `docs/three-kingdoms-pla
 2. **The player never acts on the story.** The Star Lords give a plan, then the characters carry it out in a cinematic (Qingzhou's ambush, Black Wind's blood). The player's only input is the problem.
 3. **Problems often have no stated reason.** About 20 of 24 World 1 scenes open a board with no in-world reason, and challengers have their own reasons. The Star Lords' role is clear only in four.
 4. **Rewards do not do anything.** Apart from the horses, items are decoration, so there is little to look forward to between bosses.
-5. **Retry feel is untested.** Flawless-only with a new problem on every slip is clean, but there is no in-fiction response to failing.
+5. **Retry feel is untested.** Same problem plus a 30 s cooldown is a good rule: it stops trial and error and gives time to think. Not yet checked by playtest: whether 30 s is right for every grade, and whether the wait is used (reading the position) or just endured.
 6. **Replay hooks are thin.** Optional harder routes and the Chronicle exist, but nothing invites a second run.
 
 ## Proposals (priority order)
@@ -40,7 +41,7 @@ Implementer key: **Plot** = Plot/Story, **Integ** = Primary Integration, **Gfx**
 | 3 | **The Star Lords justify every problem** | They sit at the board, or leave a sign (a board in the dirt, a stone set out) where they cannot be present. Challengers become the Star Lords' proxies or are marked optional trainers. Silence at the great deaths then lands harder | Plot decides each scene; Gfx draws signs; Integ updates challenger text |
 | 4 | **A toolbox of supporting mechanics, one per Book** | See the toolbox below. Rule: at most one required extra action per problem, and Go is always the most frequent activity | Plot picks per Book; Integ builds each tool once |
 | 5 | **Relics that do something** | A relic opens a path or gate, speeds travel like the horses, makes a hint more precise, changes how the party looks, or unlocks a scene or Chronicle entry. Boss wins give the Book's trophy and a callback later | Integ (effects), Plot (which relic, where), Gfx (icons) |
-| 6 | **Boss framing** | Keep the hard problem. Mark it clearly as harder, and the Star Lords give no hint ("This one is yours"). Earlier hint actions pay off in the cutscene around it, not on the board. Open question: for a few peak bosses, keep the same problem on a retry | Plot, Integ |
+| 6 | **Boss framing** | Keep the hard problem. Mark it clearly as harder, and the Star Lords give no hint ("This one is yours"). Earlier hint actions pay off in the cutscene around it, not on the board. A slip keeps the same problem with the cooldown, as for every problem | Plot, Integ |
 | 7 | **Vary where the problem sits** | Not always mid-scene: some scenes open with the problem, some have none, a few have two. Matches the plan's "some battles, some none" | Plot |
 | 8 | **Book-end choice and replay hooks** | A small choice at each Book's end changes dialogue or a reward, never the novel's events. Plus hidden Star Lord encounters, the Wang Zhi legend area, and Chronicle completion | Plot, Gfx, Integ |
 
@@ -67,7 +68,7 @@ Implementer key: **Plot** = Plot/Story, **Integ** = Primary Integration, **Gfx**
 ## Open questions for the user
 
 1. Three Kingdoms with a light xianxia layer, or a full xianxia game?
-2. Once a boss's conditions are met and the board is open, should a slip draw a new problem (current rule) or keep the same one for a few peak bosses? (The gated-defeat case is settled: no board, just a defeat scene.)
+2. Should the cooldown vary (shorter for early Books, longer for bosses)? The rule itself is settled: same problem, cooldown on a slip; a gated battle shows a defeat scene and no board.
 3. How many Book-end choices, and should they carry into later Books?
 4. Do challenger NPCs stay as optional trainers or become the Star Lords' proxies?
 
