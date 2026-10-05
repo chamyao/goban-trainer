@@ -411,5 +411,68 @@
     "beat": "Before Hulao Pass: Lü Bu on Red Hare before Dong Zhuo's gate, the lords' army facing him.",
     "scene": "Wide panoramic composition under a heavy sky. On the right, the towering walls of Hulao Pass with Dong Zhuo's black banners. Before the gate, alone, Lü Bu sits on a huge red horse, a crested helmet on his head and a long halberd in his hand. On the left, the lords' armies are drawn up in long lines under many coloured banners, their champions in front, holding back.",
     "notes": "transition beat"
+  },
+  "beihai3_a": {
+    "book": 3,
+    "category": "battle",
+    "beat": "Taishi Ci fights his way out of besieged Beihai alone, shooting the riders who chase him.",
+    "scene": "Wide panoramic composition at dawn outside a walled city ringed with Yellow Turban camps. In the middle, a single rider, Taishi Ci, gallops away from the city gate at full stretch, turned in the saddle and drawing his bow back at the pursuers. Behind him, several Yellow Turban horsemen tumble from their saddles with arrows in them. On the walls behind, Han soldiers watch.",
+    "notes": "transition beat"
+  },
+  "xuzhou3_a": {
+    "book": 3,
+    "category": "battle",
+    "beat": "Before the charge: Cao Cao's army lies around Xuzhou in white mourning banners.",
+    "scene": "Wide panoramic composition on a cold grey day. In the middle, the walls of Xuzhou. Around them on every side, Cao Cao's army in white mourning cloth, with white banners that look like frost and snow on the plain. In the left foreground, on a rise, Liu Bei, Guan Yu, Zhang Fei and a young officer in white armour, Zhao Yun, look down on the siege with a small force behind them and one red banner.",
+    "notes": "transition beat"
+  },
+  "zilong3_a": {
+    "book": 3,
+    "category": "bond",
+    "beat": "Liu Bei holds Zhao Yun's hand as they part outside Xuzhou.",
+    "scene": "Medium shot on a road outside a city gate in soft morning light. Liu Bei holds both hands of a young officer in white armour, Zhao Yun, who is about to mount his white horse. Both have tears in their eyes. Guan Yu and Zhang Fei stand a few steps behind. Willow trees by the road. Calm, sincere.",
+    "notes": "transition beat"
+  },
+  "deathbed3_a": {
+    "book": 3,
+    "category": "intrigue",
+    "beat": "The dying Tao Qian holds out the seal of Xuzhou to Liu Bei.",
+    "scene": "Inside a dim bedchamber lit by one oil lamp. An old man, Tao Qian, lies propped on pillows in a plain bed, thin and grey, holding out a square seal on a cord with a shaking hand. Liu Bei kneels at the bedside, hands raised, half refusing. Two officers stand in the shadows behind. Quiet and heavy.",
+    "notes": "transition beat"
+  },
+  "handsfeet3_a": {
+    "book": 3,
+    "category": "bond",
+    "beat": "Liu Bei catches Zhang Fei's sword arm as he tries to kill himself.",
+    "scene": "Close shot inside an army tent by lamplight. Zhang Fei, face twisted with shame, has drawn his sword to his own throat. Liu Bei has thrown his arms around him from the front and grips his wrist, pulling the blade away. Guan Yu, a step behind, reaches toward them. Strong emotion, tears on Zhang Fei's face.",
+    "notes": "transition beat"
+  },
+  "halberd3_a": {
+    "book": 3,
+    "category": "battle",
+    "beat": "The halberd planted 150 paces off at the camp gate, and Lü Bu drawing his bow.",
+    "scene": "Wide shot from behind Lü Bu inside an open army tent. Lü Bu, in a crested helmet, draws a great bow to full stretch. Far off across the open ground, at the camp gate, a tall halberd stands planted upright, its small side blade catching the light. At the table on either side, Liu Bei holds his breath with eyes half closed, and Ji Ling watches with a sceptical frown.",
+    "notes": "transition beat"
+  },
+  "flood3_a": {
+    "book": 3,
+    "category": "aftermath",
+    "beat": "Cao Cao floods Xiapi: water all around the city, only the east gate dry.",
+    "scene": "Wide panoramic composition under a dull sky. A walled city, Xiapi, stands in a broad sheet of brown floodwater that reaches halfway up its walls, roofs and treetops showing above the water around it. Only the road to the east gate is still dry. On the hills in the foreground, Cao Cao's banners and soldiers watch.",
+    "notes": "transition beat"
+  },
+  "whitegate3_a": {
+    "book": 3,
+    "category": "intrigue",
+    "beat": "The White Gate Tower: Lü Bu bound before Cao Cao and Liu Bei.",
+    "scene": "Inside the top floor of a city gate tower, grey daylight. Cao Cao and Liu Bei sit side by side behind a low table. Guan Yu and Zhang Fei stand beside them. On the floor before them, Lü Bu kneels, tied with heavy ropes, still in his armour, his crested helmet gone, looking up at Liu Bei.",
+    "notes": "transition beat"
+  },
+  "whitegate3_b": {
+    "book": 3,
+    "category": "intrigue",
+    "beat": "Chen Gong walks down the tower stairs alone, and does not look back.",
+    "scene": "A steep wooden stair inside a gate tower. A thin scholar in a plain blue robe, Chen Gong, walks down it alone, back straight, hands bound before him. At the top of the stairs Cao Cao has half risen, one hand reaching after him, his face wet with tears. Guards stand aside and do not hold him.",
+    "notes": "transition beat"
   }
 }
