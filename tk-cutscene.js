@@ -94,13 +94,21 @@ const WorldCutscene = {
       await Promise.race([img.decode().catch(() => {}), new Promise(r => setTimeout(r, 1500))]);
       if (!img.complete || !img.naturalWidth) return;
       (host.querySelector(".town-ui") || host).prepend(el);
-      // a screen much narrower than the picture (a phone held upright): show it at full height and
-      // pan across its whole width, so the scene is seen instead of only its middle
-      const r = el.getBoundingClientRect(), iw = r.height * img.naturalWidth / img.naturalHeight;
-      if (r.width && iw > r.width * 1.25) {
+      // a screen much narrower than the picture (a phone held upright): a balance between seeing the
+      // whole scene and seeing it big. The picture is shown at up to twice the screen's width (about half
+      // of it at a time), high on the screen over a blurred copy of itself, and pans gently around its
+      // focal point (stills.json "fx", 0 left .. 1 right; the middle if unset).
+      const r = el.getBoundingClientRect(), ar = img.naturalWidth / img.naturalHeight;
+      if (r.width && r.height * ar > r.width * 1.25) {
+        const w = Math.min(r.height * ar, r.width * 2), h = w / ar, range = w - r.width;
+        const fx = typeof m.fx === "number" ? m.fx : .5, c = Math.max(0, Math.min(range, fx * w - r.width / 2));
+        const clamp = v => Math.max(0, Math.min(range, v)), span = range * .3;
+        const bg = img.cloneNode(); bg.className = "tk-still-bg";
+        el.prepend(bg);
         el.classList.add("wide");
-        img.style.width = `${Math.ceil(iw)}px`;
-        el.style.setProperty("--pan", `${Math.floor(r.width - iw)}px`);
+        Object.assign(img.style, { width: `${Math.ceil(w)}px`, height: `${Math.ceil(h)}px`, top: `${Math.round(Math.max(0, (r.height - h) * .3))}px` });
+        el.style.setProperty("--from", `${-Math.round(clamp(c - span))}px`);
+        el.style.setProperty("--to", `${-Math.round(clamp(c + span))}px`);
       }
       overlays.push(el);
       still = el;
