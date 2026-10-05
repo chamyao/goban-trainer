@@ -1397,15 +1397,17 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
     `${p.lv || node.grade || ""} · 死活 · `, node.role === "boss" ? "" : `出自 ${src.title} · `,
     h("a", { href: p.url || `https://www.101weiqi.com/q/${p.id}/`, target: "_blank", rel: "noopener" }, "来源 source"),
   ]);
-  box.replaceChildren(boardCard, h("div", { class: "tk-duel-side" }, [dlg, keys, srcLine]));
+  // a decision board: the leader's choice named in the side column, over what's said
+  const dil = node.dilemma;
+  const dilBox = dil ? h("div", { class: "tk-duel-dilemma" }, [h("b", { lang: "zh-CN" }, dil.q_zh || ""), h("span", {}, dil.q)]) : "";
+  box.replaceChildren(boardCard, h("div", { class: "tk-duel-side" }, [dilBox, dlg, keys, srcLine]));
   // A boss duel: a lacquered red frame, a darker field, and his name over the board.
   box.parentNode && box.parentNode.classList.toggle("tk-duel-boss", !!node.boss);
   if (node.boss) boardCard.prepend(h("div", { class: "tk-duel-bossname" }, [
     h("b", { lang: "zh-CN" }, TK_BOSS_ZH[node.boss.who] || tkName(node.boss.who)), h("span", {}, node.boss.title || "")]));
 
   // A decision board: the leader's dilemma named over the board while the problem is open.
-  const dil = node.dilemma;
-  if (dil) boardCard.prepend(h("div", { class: "tk-duel-dilemma" }, [h("b", { lang: "zh-CN" }, dil.q_zh || ""), h("span", {}, dil.q)]));
+
   const dline = k => dil && dil[k] ? [dil[k + "_zh"] || "", dil[k]] : null;
   // each of the leader's lines (open/win/slip) replaces the usual one when given
   const base = foe && TK_SETTER_LINES[foe.who];

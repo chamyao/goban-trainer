@@ -652,11 +652,10 @@ body:has(.tk-scroll-wrap) .wukong-toggle, body:has(.tk-scroll-wrap) #wukong { vi
 .tk-duel-bossname b { display: block; font-size: 1.25em; letter-spacing: .12em; }
 .tk-duel-bossname span { display: block; font-size: .75em; opacity: .85; letter-spacing: .04em; }
 /* A decision board (tk.js tkDuelBuild): the dilemma named over the board while the problem is open. */
-.tk-duel-board:has(.tk-duel-dilemma) { position: relative; }
-.tk-duel-dilemma { position: absolute; left: 50%; top: 0; transform: translate(-50%, -62%); z-index: 1; max-width: 92%; padding: 3px 14px; text-align: center;
+.tk-duel-dilemma { margin: 0 0 8px; padding: 6px 12px; text-align: center; text-wrap: balance;
   color: #3a2410; background: #f4e6c4; border: 2px solid #8a6a3a; border-radius: 4px; box-shadow: 0 3px 0 rgba(0, 0, 0, .35); font-family: Georgia, "Songti SC", serif; }
-.tk-duel-dilemma b { display: block; font-size: 1.05em; letter-spacing: .06em; }
-.tk-duel-dilemma span { display: block; font-size: .75em; opacity: .85; }
+.tk-duel-dilemma b { display: block; font-size: 17px; letter-spacing: .06em; word-break: keep-all; overflow-wrap: anywhere; }
+.tk-duel-dilemma span { display: block; font-size: 14px; opacity: .9; }
 @keyframes tkBossPulse { 50% { box-shadow: 0 0 0 2px #e6c14a inset, 0 0 0 3px #3a0804, 0 0 26px 8px rgba(220, 50, 20, .7), 0 6px 0 rgba(0, 0, 0, .5); } }
 @media (prefers-reduced-motion: reduce) { .tk-duel-boss .tk-duel-board { animation: none; } }
 
