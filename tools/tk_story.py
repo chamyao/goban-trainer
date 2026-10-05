@@ -72,7 +72,7 @@ WORLDS = [
             {"key": "n4b", "x": 292, "y": 198, "role": "main", "place": "Qingzhou", "step": 0.47, "scene": "qingzhou2", "board": False,
              # the ambush plays once both brothers are on their hills
              "gate": [{"needs": ["mark:flank_left", "mark:flank_right"], "else": "qingzhouwait",
-                       "objective": "Lift the siege of Qingzhou.", "at": "Qingzhou", "count": False}]},
+                       "objective": "Post Guan Yu on the left hill and Zhang Fei on the right.", "at": "Qingzhou"}]},
             {"key": "t1", "x": 299, "y": 191, "role": "main", "place": "Guangzong Road", "room": "luzhi-tent", "step": 0.5, "scene": "tent"},
             {"key": "e1", "x": 352, "y": 186, "role": "main", "place": "Changshe", "step": 0.52, "scene": "yingchuan"},
             {"key": "n5", "x": 316, "y": 176, "role": "main", "place": "Guangzong Road", "step": 0.55, "scene": "cart", "dilemma": {"q": "Free Lu Zhi, or trust the court?", "who": "liubei", "open": "If I free him, I am a rebel. If I stand by, an honest man goes to his ruin.", "win": "It is clear to me now.", "slip": "Not yet. Let me think it through once more."}},
@@ -131,7 +131,7 @@ WORLDS = [
                 ["n", "Liu Bei goes into the tent and bows to his old teacher. Lu Zhi is glad to see him, and keeps him at his side."],
                 ["spawn", "lz", "luzhi", "t1", 12, -4],
                 ["still", "tent_c", "slow zoom in"],
-                ["say", "luzhi", "I have Zhang Jiao penned in here. His brothers Zhang Liang and Zhang Bao are at Yingchuan, facing Huangfu Song and Zhu Jun."],
+                ["say", "luzhi", "I have Zhang Jiao penned in here. His brothers Zhang Liang and Zhang Bao are at Yingchuan, facing the court's generals, Huangfu Song and Zhu Jun."],
                 ["problem"],  # the board comes up here; the rest plays once it is solved
                 ["say", "luzhi", "Take your own men, and I will give you a thousand more. Go to Yingchuan, learn how they stand, and we will fix a day to destroy them."],
                 ["n", "Liu Bei takes his orders, and marches through the night."],
@@ -244,10 +244,12 @@ WORLDS = [
                 ["n", "Not many days later, the Yellow Turban general Cheng Yuanzhi marches on Zhuo with fifty thousand men. Liu Bei meets him with five hundred."],
                 ["army", "yt", "rebel", 24, "n3", 72, 0],
                 ["spawn", "r1", "rebel", "n3", 40, -8], ["spawn", "r2", "chengyuanzhi", "n3", 46, 6],
+                ["still", "daxing_a", "slow pan across"],
                 ["say", "liubei", "Traitors to the realm! Why not surrender now?"],
                 ["say", "chengyuanzhi", "Deng Mao — bring me his head!"],
+                ["n", "His lieutenant, Deng Mao, rides out."],
                 ["spawn", "sg", "stargrey", "n3", -40, 18], ["spawn", "sr", "starred", "n3", -32, 22],
-                ["n", "Under an old tree by the road, two white-haired men sit over a weiqi board, as if no army were coming."],
+                ["n", "Under an old tree by the road sit the two white-haired men from the peach garden, over their weiqi board, as if no army were coming."],
                 ["say", "stargrey", "Read this first."],
                 ["problem", "stargrey"],  # the board comes up here; the rest plays once it is solved
                 ["say", "starred", "To catch the bandits, first catch their king."],
@@ -272,9 +274,9 @@ WORLDS = [
                 ["army", "relief", "militia", 4, "n4", -24, 0],
                 ["army", "yt", "rebel", 15, "n4", 80, 0],
                 ["spawn", "gj", "f_noble", "n4", 64, -12],
-                ["n", "Gong Jing's city is besieged by the Yellow Turbans. Liu Bei marches to relieve it."],
                 ["emote", "gj", "!"],
-                ["n", "Rebels besiege Qingzhou. The relief force is outnumbered and falls back thirty li."],
+                ["still", "qingzhou_a", "slow pull back"],
+                ["n", "Liu Bei marches to relieve the city. But the rebels are too many, and his force is beaten back thirty li."],
                 ["surround", "yt", "gate", 32], ["emote", "liubei", "sweat"],
                 ["spawn", "sg", "stargrey", "n4", -36, 20], ["spawn", "sr", "starred", "n4", -28, 24],
                 ["light", "night", 1200],
@@ -283,7 +285,7 @@ WORLDS = [
                 ["problem", "stargrey"],  # the board comes up here; the rest plays once it is solved
                 ["say", "starred", "Don't hold the strong point. Give ground, and make them follow."],
                 ["remove", "sg"], ["remove", "sr"],
-                ["say", "liubei", "They are many and we are few. Only surprise will win this. Yunchang, hide your men left of the ridge. Yide, to the right. When the gongs sound, strike."],
+                ["say", "liubei", "They are many and we are few. Only surprise will win this. Yunchang, hide your men behind the left hill. Yide, behind the right. When the gongs sound, strike."],
             ]},
             "qingzhou2": {"title": "The Ambush at Qingzhou", "kind": "main", "steps": [
                 # the morning of the ambush: plays once Guan Yu and Zhang Fei are on their hills (a gate on n4b)
@@ -318,6 +320,7 @@ WORLDS = [
                 ["fx", "fire", "e1", 78, 0],
                 ["still", "yingchuan_a", "slow pan across"],
                 ["n", "Liu Bei marches through the night to Yingchuan. When he arrives, the rebels have been routed by fire."],
+                ["say", "liubei", "My teacher Lu Zhi sends me, with a thousand men. How do you stand?"],
                 ["say", "huangfusong", "Zhu Jun and I have burned their camp at Changshe, and their army is broken."],
                 ["say", "zhujun", "Their army lost thousands in the fire, and the rest ran."],
                 ["say", "huangfusong", "Zhang Liang and Zhang Bao have no strength left. They will run to Guangzong, to Zhang Jiao. Go back at once, and help."],
@@ -327,7 +330,7 @@ WORLDS = [
             ]},
             "cart": {"title": "The Cage Cart", "kind": "main", "steps": [
                 ["still", "cart_a", "slow pan along the road"],
-                ["n", "Halfway there, they meet soldiers guarding a prison cart."],
+                ["n", "Halfway back to Guangzong, they meet soldiers guarding a prison cart."],
                 ["prop", "cart", "cagecart", "n5", 30, -6],
                 ["spawn", "lz", "luzhi", "n5", 30, -6], ["board", "lz", "cart"],
                 ["army", "guards", "f_soldier", 4, "n5", 44, 0],
@@ -345,7 +348,7 @@ WORLDS = [
                 ["remove", "cart"], ["remove", "guards"], ["mood", "clear"],
                 ["still", "cart_c", "slow pan along the road"],
                 ["n", "The cart rolls away toward Luoyang."],
-                ["say", "guanyu", "Lu Zhi is under arrest, and another man will lead his army. We have no one left to turn to here. Let us go back to Zhuo."],
+                ["say", "guanyu", "Lu Zhi is under arrest, and Dong Zhuo has his army. We have no one left to turn to here. Let us go back to Zhuo."],
                 ["n", "Liu Bei agrees, and they march north. Again the road divides."],
             ]},
             "office": {"title": "“What Office Do You Hold?”", "kind": "main", "steps": [
@@ -525,7 +528,8 @@ WORLDS = [
             ]},
             "caocao1": {"title": "The Hero of Chaos · I: The Feigned Stroke", "kind": "side", "steps": [
                 ["spawn", "cc", "caocao", "b1", 4, 6], ["spawn", "cs", "f_elder", "b1", 20, -4],
-                ["n", "Far to the south, in Qiao, a boy named Cao Cao loved hunting, music and mischief — and his uncle kept telling his father so."],
+                ["n", "Liu Bei is not the only young man this war will raise. Years before, far to the south in Qiao, lived a boy named Cao Cao."],
+                ["n", "He loved hunting, music and mischief, and his uncle kept telling his father so."],
                 ["spawn", "unc", "uncle", "b1", -26, -4], ["move", "unc", "b1", -10, -4],
                 ["n", "So one day, seeing his uncle coming, Cao Cao dropped to the ground, twitching."],
                 ["pose", "cc", "drunk"],
@@ -536,7 +540,7 @@ WORLDS = [
                 ["n", "From then on, whatever the uncle reported, Cao Cao's father never believed a word."],
             ]},
             "caocao2": {"title": "The Hero of Chaos · II: A Villain in Chaos", "kind": "side", "steps": [
-                ["n", "Xu Shao of Runan was famous for judging men. Cao Cao went to see him."],
+                ["n", "When he was grown, Cao Cao went to see Xu Shao of Runan, who was famous for judging men."],
                 ["say", "caocao", "What kind of man am I?"],
                 ["n", "Xu Shao would not answer. Cao Cao asked again."],
                 ["problem"],  # the board comes up here; the rest plays once it is solved
@@ -649,7 +653,7 @@ WORLDS = [
                 ["n", "Armed and mounted at last, the brothers lead their five hundred to the governor."],
             ]},
             "bribe": {"title": "A Bribe Refused", "kind": "side", "steps": [
-                ["n", "At Guangzong, Lu Zhi had Zhang Jiao penned in, though the rebel's sorcery kept him from the final blow. Then the court's envoy arrived."],
+                ["n", "At Guangzong, Lu Zhi had Zhang Jiao penned in, though the rebel's sorcery kept him from the final blow. Then the court's envoy arrived: the eunuch Zuo Feng."],
                 ["say", "zuofeng", "Your victories are splendid, general. And where is the gift for the Emperor's envoy?"],
                 ["problem"],  # the board comes up here; the rest plays once it is solved
                 ["say", "luzhi", "My army lacks grain. Where would I find money to flatter an envoy?"],

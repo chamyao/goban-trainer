@@ -362,5 +362,19 @@
     "beat": "Zhang Jiao, a poor scholar gathering herbs, meets the green-eyed old man at a cave in the hills.",
     "scene": "A wooded mountainside in thin morning mist. At the mouth of a cave stands an old man with a child's smooth face and bright green eyes, leaning on a tall staff and beckoning. Before him, a thin scholar in a worn grey robe with an herb basket on his back has stopped on the path, startled. Only these two.",
     "notes": "transition beat"
+  },
+  "daxing_a": {
+    "book": 1,
+    "category": "battle",
+    "beat": "Before the first battle: Cheng Yuanzhi's fifty thousand against Liu Bei's five hundred at Daxing Mountain.",
+    "scene": "Wide panoramic composition under a pale sky at the foot of a rocky mountain. On the right, a vast Yellow Turban host fills the slope, yellow scarves and yellow banners as far as the eye can see, with Cheng Yuanzhi, a heavy rebel general, riding out in front. On the left, a small band of village volunteers holds the road, and at their head Liu Bei, Guan Yu and Zhang Fei sit on their horses, weapons ready.",
+    "notes": "transition beat"
+  },
+  "qingzhou_a": {
+    "book": 1,
+    "category": "battle",
+    "beat": "Qingzhou under siege: the Yellow Turbans ring the city walls, and the relief force is too small.",
+    "scene": "Wide panoramic composition on a grey afternoon. In the middle, the walls and gate tower of Qingzhou, with Han soldiers and red banners along the battlements. Yellow Turban rebels surround the walls on every side with ladders and yellow banners. In the left foreground, on a low hill, Liu Bei, Guan Yu and Zhang Fei look down on the siege from horseback with a few hundred men behind them.",
+    "notes": "transition beat"
   }
 }

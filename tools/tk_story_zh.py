@@ -63,7 +63,7 @@ ZH = {
     # ---- Qingzhou ----
     "The Ambush at Qingzhou": "青州伏兵",
     "Rebels besiege Qingzhou. The relief force is outnumbered and falls back thirty li.": "黄巾围困青州。救兵寡不敌众，退兵三十里下寨。",
-    "They are many and we are few. Only surprise will win this. Yunchang, hide your men left of the ridge. Yide, to the right. When the gongs sound, strike.":
+    "They are many and we are few. Only surprise will win this. Yunchang, hide your men behind the left hill. Yide, behind the right. When the gongs sound, strike.":
         "贼众我寡，必出奇兵，方可取胜。云长引兵伏于山左，翼德伏于山右，鸣金为号，一齐杀出。",
     "Next morning Liu Bei attacks — then turns and flees. The rebels chase him over the ridge.": "次日，刘备引军鼓噪而进，交战片刻便退。贼众乘势追赶，越过山岭。",
     "Gongs crash. Guan Yu and Zhang Fei burst from both flanks as Liu Bei wheels around. Caught from three sides, the rebels break, and the siege of Qingzhou is lifted.":
@@ -155,7 +155,7 @@ ZH = {
     "A stroke? I've never had one in my life. Uncle just dislikes me, so he tells tales about me.": "儿子自来没有这病。只因叔父不喜欢我，所以冤枉我罢了。",
     "From then on, whatever the uncle reported, Cao Cao's father never believed a word.": "从此以后，叔父再说曹操的不是，父亲一概不听。",
     "The Hero of Chaos · II: A Villain in Chaos": "奸雄·二：乱世奸雄",
-    "Xu Shao of Runan was famous for judging men. Cao Cao went to see him.": "汝南许劭以善于识人闻名，曹操前去拜见。",
+    "When he was grown, Cao Cao went to see Xu Shao of Runan, who was famous for judging men.": "曹操长大后，前去拜见以善于识人闻名的汝南许劭。",
     "What kind of man am I?": "我是怎样的人？",
     "Xu Shao would not answer. Cao Cao asked again.": "许劭不答。曹操又问。",
     "In an age of order, an able minister. In an age of chaos — a cunning villain.": "子治世之能臣，乱世之奸雄也。",
@@ -176,7 +176,7 @@ ZH = {
     "Liu Bei has twin swords forged. Guan Yu's blade is the Green Dragon Crescent, eighty-two jin, called Cold Beauty. Zhang Fei's is an eighteen-foot serpent spear of steel.":
         "刘备打造双股剑；关羽造青龙偃月刀，又名冷艳锯，重八十二斤；张飞造丈八点钢矛。",
     "A Bribe Refused": "拒贿",
-    "At Guangzong, Lu Zhi had Zhang Jiao penned in, though the rebel's sorcery kept him from the final blow. Then the court's envoy arrived.": "卢植在广宗围住张角，只因张角会妖术，一时未能取胜。这时，朝廷的使者到了。",
+    "At Guangzong, Lu Zhi had Zhang Jiao penned in, though the rebel's sorcery kept him from the final blow. Then the court's envoy arrived: the eunuch Zuo Feng.": "卢植在广宗围住张角，只因张角会妖术，一时未能取胜。这时，朝廷派来的使者到了，是宦官左丰。",
     "Your victories are splendid, general. And where is the gift for the Emperor's envoy?": "将军连战连捷，可喜可贺。那么，孝敬天使的礼物在哪里？",
     "My army lacks grain. Where would I find money to flatter an envoy?": "军粮尚缺，安有余钱奉承天使？",
     "Zuo Feng rode back to Luoyang and reported that Lu Zhi skulked behind his walls and would not fight.": "左丰怀恨，回京奏报：卢植高垒不战，惰慢军心。",
@@ -223,7 +223,7 @@ ZH = {
     "Zou Jing advises him: “The rebels are many and our soldiers are few. My lord, you should raise troops at once, and meet them.”": "邹靖曰：“贼兵众，我兵寡，明公宜作速招军应敌。”",
     "Liu Yan agrees, and has a notice posted calling for volunteers. It goes up on the wall at Zhuo County, and it draws out a hero.": "刘焉然其说，随即出榜招募义兵。榜文行到涿县，乃引出涿县中一个英雄。",
     "With Qingzhou relieved, Liu Bei hears that his old teacher Lu Zhi is fighting Zhang Jiao at Guangzong, and goes to help him. Lu Zhi is glad to see him, and keeps him in the tent.": "青州之围已解。玄德闻中郎将卢植与贼首张角战于广宗，备昔曾师事卢植，欲往助之。至卢植军中，入帐施礼，具道来意。卢植大喜，留在帐前听调。",
-    "I have Zhang Jiao penned in here. His brothers Zhang Liang and Zhang Bao are at Yingchuan, facing Huangfu Song and Zhu Jun.": "我今围贼在此。贼弟张梁、张宝在颍川，与皇甫嵩、朱儁对垒。",
+    "I have Zhang Jiao penned in here. His brothers Zhang Liang and Zhang Bao are at Yingchuan, facing the court's generals, Huangfu Song and Zhu Jun.": "我今围贼在此。贼弟张梁、张宝在颍川，与朝廷大将皇甫嵩、朱儁对垒。",
     "Take your own men, and I will give you a thousand more. Go to Yingchuan, learn how they stand, and we will fix a day to destroy them.": "汝可引本部人马，我更助汝一千官军，前去颍川打探消息，约期剿捕。",
     "Liu Bei takes his orders, and marches through the night.": "玄德领命，引军星夜投颍川来。",
     "Every man is told to carry a bundle of straw, and hide it.": "遂令军士，每人束草一把，暗地埋伏。",
@@ -247,9 +247,9 @@ ZH = {
     "Qingzhou is relieved. Liu Bei hears that his old teacher Lu Zhi is fighting Zhang Jiao himself at Guangzong, and goes to help him.": "青州之围已解。玄德闻中郎将卢植与贼首张角战于广宗，备昔曾师事卢植，欲往助之。",
     "Lu Zhi is glad to see him, and keeps him at his tent. Then he sends him with a thousand more men to Yingchuan, to learn how Huangfu Song and Zhu Jun are doing against Zhang Jiao's brothers.": "卢植大喜，留在帐前听调，又添一千官军，令玄德往颍川打探皇甫嵩、朱儁与张角二弟交战的消息。",
     "By the time Liu Bei arrives, the rebels have been routed by fire. Huangfu Song tells him the brothers will run to Zhang Jiao at Guangzong, and he turns back through the night.": "玄德赶到颍川，贼已败散。皇甫嵩曰：“张梁、张宝势穷力乏，必投广宗去依张角。玄德可即星夜往助。”玄德领命，遂引兵复回。",
-    "Halfway there, they meet soldiers guarding a prison cart.": "到得半路，只见一簇军马，护送一辆槛车。",
+    "Halfway back to Guangzong, they meet soldiers guarding a prison cart.": "回广宗的路上，行到半路，只见一簇军马，护送一辆槛车。",
     "The cart rolls away toward Luoyang.": "槛车往洛阳去了。",
-    "Lu Zhi is under arrest, and another man will lead his army. We have no one left to turn to here. Let us go back to Zhuo.": "卢中郎已被逮，别人领兵，我等去无所依，不如且回涿郡。",
+    "Lu Zhi is under arrest, and Dong Zhuo has his army. We have no one left to turn to here. Let us go back to Zhuo.": "卢中郎已被逮，兵马归了董卓，我等去无所依，不如且回涿郡。",
     "Liu Bei agrees, and they march north. Again the road divides.": "玄德从其言，遂引军北行。前路又一次分岔。",
     "Zhu Jun receives them warmly. The two armies join, and Zhu Jun makes Liu Bei his vanguard against Zhang Bao.": "朱儁待之甚厚，合兵一处，进讨张宝，令玄德为其先锋，与贼对敌。",
     "Liu Bei tells him his own aim, and Guan Yu is delighted. The three go together to Zhang Fei's farm to plan their great enterprise.": "玄德遂以己志告之，云长大喜。三人同到张飞庄上，共议大事。",
@@ -257,7 +257,7 @@ ZH = {
     "The next day, in the peach garden behind Zhang Fei's farm, the blossoms are in full bloom.": "次日，张飞庄后的桃园中，花开正盛。",
     # ---- World 1 plot pass (from docs/world1-script-draft.md) ----
     "Zhuo County. A crowd gathers at a notice on the wall: the governor is raising volunteers to put down the Yellow Turbans.": "涿县城中，众人围看墙上榜文：幽州太守刘焉出榜招募义兵，讨平黄巾。",
-    "Under an old tree by the road, two white-haired men sit over a weiqi board, as if no army were coming.": "路旁老树下，两位白发老人对坐弈棋，仿佛大军压境与他们无关。",
+    "Under an old tree by the road sit the two white-haired men from the peach garden, over their weiqi board, as if no army were coming.": "路旁老树下，桃园中那两位白发老人又对坐弈棋，仿佛大军压境与他们无关。",
     "Read this first.": "先看这一局。",
     "To catch the bandits, first catch their king.": "擒贼先擒王。",
     "That night, at the edge of the camp, the two old men are at their board again.": "当夜营边，两位老人又在对弈。",
@@ -439,6 +439,12 @@ ZH = {
     "His uncle, Liu Yuanqi, hears him.": "叔父刘元起听见了。",
     "Behind him a voice booms. The man is eight feet tall, with a leopard's head, round eyes, and whiskers like a tiger's.": "身后一人厉声说话。那人身长八尺，豹头环眼，燕颔虎须，声若巨雷。",
     "Armed and mounted at last, the brothers lead their five hundred to the governor.": "兵器鞍马齐备，兄弟三人引着五百乡勇，去见太守。",
+    "His lieutenant, Deng Mao, rides out.": "副将邓茂挺枪出马。",
+    "Liu Bei marches to relieve the city. But the rebels are too many, and his force is beaten back thirty li.": "玄德引兵前去解围。怎奈贼众势大，救兵寡不敌众，退兵三十里下寨。",
+    "Post Guan Yu on the left hill and Zhang Fei on the right.": "让关羽伏于左山，张飞伏于右山。",
+    "My teacher Lu Zhi sends me, with a thousand men. How do you stand?": "家师卢中郎遣备引兵一千到此，不知战况如何？",
+    "Liu Bei is not the only young man this war will raise. Years before, far to the south in Qiao, lived a boy named Cao Cao.": "这场乱世造就的英雄，不止玄德一人。多年以前，在南方的沛国谯郡，有个少年，名叫曹操。",
+    "He loved hunting, music and mischief, and his uncle kept telling his father so.": "他好游猎，喜歌舞，叔父屡次向他父亲告状。",
 }
 
 # Pronunciation fixes for the voice only (the text shown keeps the real
