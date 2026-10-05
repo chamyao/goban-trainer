@@ -59,6 +59,12 @@ STYLES = {
                   "dramatic framing.",
     "gohs": "Style: in the style of the anime The God of High School: bold dynamic action anime, thick energetic "
             "lineart, high contrast, vivid saturated colours, speed lines and impact effects, extreme fighting poses.",
+    # the same anime look for the quiet scenes (the user: "too crazy on scenes that are supposed to be calm ...
+    # why is even them sharing a drink so violent"): the battles keep "gohs"
+    "gohs_calm": "Style: anime illustration with the character designs and clean bold lineart of The God of High "
+                 "School, but a calm, quiet slice-of-life moment: relaxed natural poses, gentle expressions, soft warm "
+                 "natural light, a still, peaceful village mood, a steady eye-level camera; no action lines, no speed "
+                 "lines, no impact effects, no flying debris, no motion blur, no aggressive poses.",
     "genshin": "Style: in the style of Genshin Impact key art: polished anime cel shading, bright vivid colours, "
                "ornate gold trim and jade accents, glowing particles, clean detailed fantasy illustration.",
     "watercolor": "Style: Chinese watercolour painting: loose wet washes of colour bleeding softly on rice paper, "
@@ -72,6 +78,12 @@ STYLES = {
                "glowing accents of spirit light and embers, a dynamic low or high camera angle, intense poses, "
                "cinematic and dark-fantasy.",
 }
+
+# the quiet stills, redone in "gohs_calm" (village, inn, oath, partings); the battles stay "gohs"
+CALM = ["tree_a", "tree_b", "notice_a", "notice_b", "inn_a", "inn_b", "oath_a", "oath_b", "oath_c", "tent_b",
+        "tent_c", "cart_b", "cart_c", "caocao2_b", "bosswin_c", "horses_a", "horses_b", "post_a"]
+# Book 2's quiet ones (garden_a stays: the user picked that one)
+CALM2 = ["fireflies_a", "pavilion_a", "wine_a", "wine_b", "lvboshe_a", "seal_a", "seal_b", "ruins_a"]
 
 # the user's pick for the stills: the God of High School look, on Seedream 5 Pro (gen_stills' default)
 STYLE = f"{STYLES['gohs']} {NEGATIVE}"
