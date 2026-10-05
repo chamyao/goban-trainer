@@ -41,7 +41,7 @@ for(const node of BEATS){
   for(let i=0;i<400;i++){if(await p.locator('.tk-duel svg').count()){opened=true;break;}const l=await line();if(l&&before[before.length-1]!==l)before.push(l);if(await p.evaluate(()=>window.__w.ui.busy()||!!window.__w.cine))await tapBox();await p.waitForTimeout(120);}
   if(!opened){fails++;await p.screenshot({path:SP+`/side-${node}.png`});console.log(`FAIL ${node} (${q.place}): no problem opened; lines: ${before.slice(-3).join(' | ')}`);continue;}
   await p.waitForTimeout(800);
-  let moves=[];for(let i=0;i<40;i++){if(await p.locator('.tk-duel-go').count())break;const m=await best();if(m&&m.x){await p.touchscreen.tap(m.x,m.y);moves.push(m.m);await p.waitForTimeout(900);}else await p.waitForTimeout(400);}
+  let moves=[];for(let i=0;i<40;i++){if(await p.locator('.tk-duel-go').count())break;const m=await best();if(m&&m.x){await p.touchscreen.tap(m.x,m.y);/* tap-to-preview: a second tap plays the ghost */if(await p.evaluate(()=>!!(window.__trainer&&window.__trainer.goban.ghost)))await p.touchscreen.tap(m.x,m.y);moves.push(m.m);await p.waitForTimeout(900);}else await p.waitForTimeout(400);}
   await p.screenshot({path:SP+`/side-${node}-board.png`});
   const won=await p.evaluate(()=>{const d=document.querySelector('.tk-duel-dlg');return d?d.classList.contains('win'):false;});
   if(await p.locator('.tk-duel-go').count())await p.locator('.tk-duel-go').first().tap();
