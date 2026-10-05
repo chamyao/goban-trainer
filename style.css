@@ -519,6 +519,8 @@ body:has(.tk-scroll-wrap) .wukong-toggle, body:has(.tk-scroll-wrap) #wukong { vi
 .town-gain span { display: block; font-size: .9em; color: #e8dcc0; }
 .town-gain.brief { animation-duration: 1.6s; }
 @keyframes townGain { 0% { opacity: 0; transform: translateY(6px); } 10%, 80% { opacity: 1; transform: none; } 100% { opacity: 0; } }
+/* during a scene its Skip button takes the corner the menu sits in */
+.tk-map:has(.town-skip) .tk-menu { display: none; }
 .town-skip { position: absolute; top: 10px; right: 12px; z-index: 5; pointer-events: auto; padding: 4px 10px; font: bold 12px/1.4 system-ui, sans-serif; color: #f4ead2; background: rgba(40, 24, 16, .8); border: 1px solid #c79a4a; border-radius: 5px; cursor: pointer; }
 .town-dim { position: absolute; inset: 0; background: radial-gradient(ellipse at center 40%, rgba(10, 6, 4, .05), rgba(10, 6, 4, .45)); }
 .town-tab { display: none; position: absolute; left: 14px; top: -14px; padding: 1px 10px; background: #8a2a1a; color: #f8ead0; border: 2px solid #f4ead2; border-radius: 4px; font: bold 12px/1.5 system-ui, sans-serif; letter-spacing: .04em; box-shadow: 0 2px 0 rgba(0, 0, 0, .25); }
