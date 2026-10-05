@@ -7,7 +7,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.55
  },
  "tree_b": {
   "file": "tree_b.jpg",
@@ -17,7 +18,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.5
  },
  "notice_a": {
   "file": "notice_a.jpg",
@@ -27,7 +29,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.6
  },
  "notice_b": {
   "file": "notice_b.jpg",
@@ -37,7 +40,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.6
  },
  "inn_a": {
   "file": "inn_a.jpg",
@@ -47,7 +51,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.6
  },
  "inn_b": {
   "file": "inn_b.jpg",
@@ -57,7 +62,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.5
  },
  "oath_a": {
   "file": "oath_a.jpg",
@@ -67,7 +73,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.5
  },
  "oath_b": {
   "file": "oath_b.jpg",
@@ -77,7 +84,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.5
  },
  "oath_c": {
   "file": "oath_c.jpg",
@@ -87,7 +95,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.5
  },
  "tent_b": {
   "file": "tent_b.jpg",
@@ -97,7 +106,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.5
  },
  "tent_c": {
   "file": "tent_c.jpg",
@@ -107,7 +117,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.45
  },
  "cart_a": {
   "file": "cart_a.jpg",
@@ -117,7 +128,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "picked": "Plot's rewrite, final-2"
+  "picked": "Plot's rewrite, final-2",
+  "fx": 0.55
  },
  "cart_b": {
   "file": "cart_b.jpg",
@@ -127,7 +139,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.3
  },
  "cart_c": {
   "file": "cart_c.jpg",
@@ -137,7 +150,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.5
  },
  "office_b": {
   "file": "office_b.jpg",
@@ -147,7 +161,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.45
  },
  "office_c": {
   "file": "office_c.jpg",
@@ -157,7 +172,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.3
  },
  "blackwind_a": {
   "file": "blackwind_a.jpg",
@@ -167,7 +183,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.35
  },
  "blackwind_c": {
   "file": "blackwind_c.jpg",
@@ -177,7 +194,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.5
  },
  "bosswin_a": {
   "file": "bosswin_a.jpg",
@@ -187,7 +205,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.5
  },
  "bosswin_c": {
   "file": "bosswin_c.jpg",
@@ -197,7 +216,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "picked": "Plot's rewrite, final-2"
+  "picked": "Plot's rewrite, final-2",
+  "fx": 0.6
  },
  "bosswin_d": {
   "file": "bosswin_d.jpg",
@@ -207,7 +227,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.45
  },
  "peace2_b": {
   "file": "peace2_b.jpg",
@@ -217,7 +238,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.55
  },
  "caocao2_b": {
   "file": "caocao2_b.jpg",
@@ -227,7 +249,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.45
  },
  "caocao3_b": {
   "file": "caocao3_b.jpg",
@@ -237,7 +260,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.6
  },
  "post_a": {
   "file": "post_a.jpg",
@@ -247,7 +271,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.5
  },
  "post_b": {
   "file": "post_b.jpg",
@@ -257,7 +282,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.5
  },
  "horses_a": {
   "file": "horses_a.jpg",
@@ -267,7 +293,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "picked": "Plot's rewrite, final-2"
+  "picked": "Plot's rewrite, final-2",
+  "fx": 0.6
  },
  "horses_b": {
   "file": "horses_b.jpg",
@@ -277,7 +304,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.6
  },
  "alliance_b": {
   "file": "alliance_b.jpg",
@@ -287,7 +315,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.3
  },
  "wine_a": {
   "file": "wine_a.jpg",
@@ -297,7 +326,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.5
  },
  "wine_b": {
   "file": "wine_b.jpg",
@@ -307,7 +337,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.4
  },
  "hulao_a": {
   "file": "hulao_a.jpg",
@@ -317,7 +348,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.5
  },
  "hulao_b": {
   "file": "hulao_b.jpg",
@@ -327,7 +359,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.45
  },
  "ruins_a": {
   "file": "ruins_a.jpg",
@@ -337,7 +370,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.5
  },
  "fireflies_a": {
   "file": "fireflies_a.jpg",
@@ -347,7 +381,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.35
  },
  "dingyuan_a": {
   "file": "dingyuan_a.jpg",
@@ -357,7 +392,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.55
  },
  "lvboshe_a": {
   "file": "lvboshe_a.jpg",
@@ -367,7 +403,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.5
  },
  "lvboshe_b": {
   "file": "lvboshe_b.jpg",
@@ -377,7 +414,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "picked": "Plot's rewrite, final-2"
+  "picked": "Plot's rewrite, final-2",
+  "fx": 0.5
  },
  "xingyang_a": {
   "file": "xingyang_a.jpg",
@@ -387,7 +425,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.5
  },
  "zumao_a": {
   "file": "zumao_a.jpg",
@@ -397,7 +436,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.4
  },
  "seal_a": {
   "file": "seal_a.jpg",
@@ -407,7 +447,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.35
  },
  "seal_b": {
   "file": "seal_b.jpg",
@@ -417,7 +458,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.5
  },
  "xianshan_a": {
   "file": "xianshan_a.jpg",
@@ -427,7 +469,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.35
  },
  "garden_a": {
   "file": "garden_a.jpg",
@@ -437,7 +480,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.6
  },
  "pavilion_a": {
   "file": "pavilion_a.jpg",
@@ -447,7 +491,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.4
  },
  "fall_a": {
   "file": "fall_a.jpg",
@@ -457,7 +502,8 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.45
  },
  "tower_a": {
   "file": "tower_a.jpg",
@@ -467,6 +513,7 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)"
+  "approved": "user, 2026-10-05 (latest generation for all)",
+  "fx": 0.6
  }
 }
