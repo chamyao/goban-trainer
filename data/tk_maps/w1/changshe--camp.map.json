@@ -107,8 +107,7 @@
    "x": 10.5,
    "y": 5.7,
    "node": "1-f1",
-   "label": "The Fire Plan",
-   "trigger": "arrive"
+   "label": "The Fire Plan"
   }
  ],
  "npcs": [

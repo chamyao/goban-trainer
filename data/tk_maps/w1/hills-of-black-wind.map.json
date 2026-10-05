@@ -1030,8 +1030,7 @@
    "x": 19.5,
    "y": 12.7,
    "node": "1-n7",
-   "label": "Zhang Bao's sorcery",
-   "trigger": "arrive"
+   "label": "Zhang Bao's sorcery"
   }
  ],
  "npcs": [],

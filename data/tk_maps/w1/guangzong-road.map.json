@@ -1559,8 +1559,7 @@
    "x": 19,
    "y": 11.7,
    "node": "1-n5",
-   "label": "A prisoner's cart",
-   "trigger": "arrive"
+   "label": "A prisoner's cart"
   },
   {
    "id": "spot-1-t1",

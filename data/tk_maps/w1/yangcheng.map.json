@@ -1481,8 +1481,7 @@
    "x": 18,
    "y": 11.7,
    "node": "1-boss",
-   "label": "Zhang Bao's stronghold",
-   "trigger": "arrive"
+   "label": "Zhang Bao's stronghold"
   }
  ],
  "npcs": [

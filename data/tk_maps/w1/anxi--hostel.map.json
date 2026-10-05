@@ -128,8 +128,7 @@
    "x": 10.5,
    "y": 5.7,
    "node": "1-ax1",
-   "label": "The Inspector's Visit",
-   "trigger": "arrive"
+   "label": "The Inspector's Visit"
   }
  ],
  "npcs": [

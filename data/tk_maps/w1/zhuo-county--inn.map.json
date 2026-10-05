@@ -170,8 +170,7 @@
    "x": 10.5,
    "y": 5.7,
    "node": "1-i1",
-   "label": "The Stranger at the Inn",
-   "trigger": "arrive"
+   "label": "The Stranger at the Inn"
   }
  ],
  "npcs": [
