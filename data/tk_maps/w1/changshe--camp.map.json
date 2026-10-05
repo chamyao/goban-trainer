@@ -104,8 +104,8 @@
  "spots": [
   {
    "id": "spot-1-f1",
-   "x": 10.5,
-   "y": 5.7,
+   "x": 8.5,
+   "y": 3.7,
    "node": "1-f1",
    "label": "The Fire Plan"
   }

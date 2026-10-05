@@ -193,25 +193,27 @@ class Room:
 
 
 def add_spot(r, node, label="", trigger=None):
-    """A story spot inside a room: open floor in the middle, in front of the furniture."""
+    """A story spot inside a room: open floor toward the back, across the room from the door, so
+    you walk in before its scene starts."""
     walk = {ch for ch, mat in LEGEND.items() if mat in FLOOR}
     solid = {(xx, yy) for o in r["objects"] if KINDS[o["kind"]][2]
              for yy in range(o["y"], o["y"] + o["h"]) for xx in range(o["x"], o["x"] + o["w"])}
     taken = {(int(p["x"]), int(p["y"])) for p in r["npcs"]}
     start = tuple(r["entries"][""])
-    seen, q = {start}, deque([start])
+    dist, q = {start: 0}, deque([start])
     while q:
         x, y = q.popleft()
         for n in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
-            if n not in seen and 0 <= n[1] < len(r["terrain"]["rows"]) and 0 <= n[0] < len(r["terrain"]["rows"][0]) \
+            if n not in dist and 0 <= n[1] < len(r["terrain"]["rows"]) and 0 <= n[0] < len(r["terrain"]["rows"][0]) \
                     and r["terrain"]["rows"][n[1]][n[0]] in walk and n not in solid:
-                seen.add(n)
+                dist[n] = dist[x, y] + 1
                 q.append(n)
-    rows = [y for _, y in seen]
+    seen = set(dist)
     cx = sum(x for x, _ in seen) / len(seen)
-    cy = (min(rows) + max(rows)) / 2
-    x, y = min((c for c in seen if c not in taken and c != start),
-               key=lambda c: (abs(c[0] - cx) + abs(c[1] - cy), c))
+    far = max(dist.values())
+    deep = [c for c in seen if c not in taken and c != start and dist[c] >= max(4, far * .6)] or \
+        [c for c in seen if c not in taken and c != start]
+    x, y = min(deep, key=lambda c: (abs(c[0] - cx) + abs(dist[c] - far * .75), c))   # centred, near the back
     spot = {"id": f"spot-{node}", "x": x + .5, "y": y + .7, "node": node, **({"label": label} if label else {}),
             **({"trigger": trigger} if trigger else {})}
     r["spots"].append(spot)

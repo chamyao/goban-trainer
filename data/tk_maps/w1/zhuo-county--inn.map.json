@@ -167,8 +167,8 @@
  "spots": [
   {
    "id": "spot-1-i1",
-   "x": 10.5,
-   "y": 5.7,
+   "x": 8.5,
+   "y": 2.7,
    "node": "1-i1",
    "label": "The Stranger at the Inn"
   }

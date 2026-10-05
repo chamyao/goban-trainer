@@ -418,9 +418,16 @@ class Layout:
         self.lay_exits()
         self.lay_plaza()
         self.lay_landmarks()
-        # a first arrival (a new game) starts at the first landmark's door, or the hub
-        first = next(iter(self.anchors.values()), None)
-        self.entries[""] = (first[0], first[1] + 1) if first else self.hub
+        # arriving with no road to come in by (a new game, the world map, fast travel): at the edge
+        # of the map farthest from its story spots, so you walk in before a scene starts; with no
+        # edge to come in by, at the first landmark's door, or the hub
+        story = [(sp["x"], sp["y"]) for sp in self.spots if sp.get("node")]
+        edges = list(self.entries.values())
+        if edges and story:
+            self.entries[""] = tuple(max(edges, key=lambda e: (min(abs(e[0] - x) + abs(e[1] - y) for x, y in story), e)))
+        else:
+            first = next(iter(self.anchors.values()), None)
+            self.entries[""] = (first[0], first[1] + 1) if first else self.hub
         self.lay_pond()
         self.lay_banners()
         self.lay_patches()
