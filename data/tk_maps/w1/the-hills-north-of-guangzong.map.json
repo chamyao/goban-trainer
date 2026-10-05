@@ -1,0 +1,1147 @@
+{
+ "format": "tk-map/1",
+ "id": "the-hills-north-of-guangzong",
+ "world": 1,
+ "name": "The Hills North of Guangzong",
+ "archetype": "camp",
+ "size": [
+  38,
+  28
+ ],
+ "seed": 96064,
+ "terrain": {
+  "legend": {
+   ".": "grass",
+   "=": "dirt",
+   "~": "water",
+   ":": "sand"
+  },
+  "rows": [
+   "...................==.................",
+   "...................==.................",
+   "...................==.................",
+   "...................==.................",
+   "...................==.................",
+   "...................==.................",
+   "...................==.................",
+   "...................====...............",
+   ".................====.................",
+   ".........=.........==.....=...........",
+   ".........=.........==.....=...........",
+   "===========================...........",
+   "===========================...........",
+   ".................==========...........",
+   ".................==========...........",
+   ".................==========...........",
+   "=============================.........",
+   "===========================...........",
+   "......................................",
+   "......................................",
+   "......................................",
+   "......................................",
+   "......................................",
+   "......................................",
+   "......................................",
+   "......................................",
+   "......................................",
+   "......................................"
+  ]
+ },
+ "objects": [
+  {
+   "kind": "building.tent",
+   "x": 21,
+   "y": 5,
+   "w": 3,
+   "h": 2,
+   "id": "command",
+   "label": "The command tent"
+  },
+  {
+   "kind": "building.tent",
+   "x": 16,
+   "y": 6,
+   "w": 3,
+   "h": 2,
+   "id": "tent-1"
+  },
+  {
+   "kind": "building.tent",
+   "x": 25,
+   "y": 7,
+   "w": 3,
+   "h": 2,
+   "id": "tent-2"
+  },
+  {
+   "kind": "building.tent",
+   "x": 27,
+   "y": 14,
+   "w": 3,
+   "h": 2,
+   "id": "tent-3"
+  },
+  {
+   "kind": "building.tent",
+   "x": 8,
+   "y": 7,
+   "w": 3,
+   "h": 2,
+   "id": "tent-4"
+  },
+  {
+   "kind": "camp.firepit",
+   "x": 24,
+   "y": 17,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "camp.firepit",
+   "x": 15,
+   "y": 13,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "camp.logs",
+   "x": 24,
+   "y": 12,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "camp.hay",
+   "x": 12,
+   "y": 14,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "camp.cookfire",
+   "x": 21,
+   "y": 10,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "camp.table",
+   "x": 20,
+   "y": 18,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "banner.red",
+   "x": 25,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 29,
+   "y": 24,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 32,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.small",
+   "x": 32,
+   "y": 22,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 33,
+   "y": 24,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 29,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 33,
+   "y": 20,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.small",
+   "x": 30,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 31,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 29,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 34,
+   "y": 6,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 29,
+   "y": 8,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.small",
+   "x": 33,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 29,
+   "y": 9,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 11,
+   "y": 22,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 13,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.small",
+   "x": 10,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.small",
+   "x": 14,
+   "y": 22,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 9,
+   "y": 22,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 14,
+   "y": 21,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.small",
+   "x": 11,
+   "y": 21,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 8,
+   "y": 22,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 18,
+   "y": 27,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "rock.big",
+   "x": 32,
+   "y": 26,
+   "w": 3,
+   "h": 2
+  },
+  {
+   "kind": "rock.big",
+   "x": 5,
+   "y": 0,
+   "w": 3,
+   "h": 2
+  },
+  {
+   "kind": "tree.pine",
+   "x": 12,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "rock.big",
+   "x": 0,
+   "y": 26,
+   "w": 3,
+   "h": 2
+  },
+  {
+   "kind": "tree.pine",
+   "x": 36,
+   "y": 11,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "rock.big",
+   "x": 6,
+   "y": 26,
+   "w": 3,
+   "h": 2
+  },
+  {
+   "kind": "rock.big",
+   "x": 0,
+   "y": 7,
+   "w": 3,
+   "h": 2
+  },
+  {
+   "kind": "tree.grove",
+   "x": 24,
+   "y": 26,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 13,
+   "y": 1,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 21,
+   "y": 26,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 35,
+   "y": 7,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 35,
+   "y": 15,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "rock.big",
+   "x": 1,
+   "y": 1,
+   "w": 3,
+   "h": 2
+  },
+  {
+   "kind": "tree.grove",
+   "x": 28,
+   "y": 27,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 1,
+   "y": 3,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 9,
+   "y": 26,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 14,
+   "y": 27,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 35,
+   "y": 9,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "rock.big",
+   "x": 8,
+   "y": 1,
+   "w": 3,
+   "h": 2
+  },
+  {
+   "kind": "tree.grove",
+   "x": 35,
+   "y": 17,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 23,
+   "y": 1,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 36,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 35,
+   "y": 1,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "rock.big",
+   "x": 35,
+   "y": 2,
+   "w": 3,
+   "h": 2
+  },
+  {
+   "kind": "rock.big",
+   "x": 32,
+   "y": 1,
+   "w": 3,
+   "h": 2
+  },
+  {
+   "kind": "tree.grove",
+   "x": 35,
+   "y": 18,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 4,
+   "y": 26,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 14,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 11,
+   "y": 27,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 35,
+   "y": 5,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 4,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 12,
+   "y": 27,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 35,
+   "y": 27,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 35,
+   "y": 26,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "rock.big",
+   "x": 35,
+   "y": 13,
+   "w": 3,
+   "h": 2
+  },
+  {
+   "kind": "tree.grove",
+   "x": 1,
+   "y": 23,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 14,
+   "y": 26,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 12,
+   "y": 26,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 35,
+   "y": 4,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 0,
+   "y": 4,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 31,
+   "y": 0,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 34,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 36,
+   "y": 12,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 0,
+   "y": 21,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 36,
+   "y": 22,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 25,
+   "y": 0,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 8,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 15,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 9,
+   "y": 0,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 1,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 35,
+   "y": 23,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 19,
+   "y": 26,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 0,
+   "y": 24,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 35,
+   "y": 25,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 28,
+   "y": 26,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 0,
+   "y": 20,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "rock.big",
+   "x": 28,
+   "y": 1,
+   "w": 3,
+   "h": 2
+  },
+  {
+   "kind": "tree.pine",
+   "x": 37,
+   "y": 12,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 22,
+   "y": 27,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 3,
+   "y": 26,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 35,
+   "y": 10,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 37,
+   "y": 16,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 0,
+   "y": 25,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 27,
+   "y": 26,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 26,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 20,
+   "y": 26,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 25,
+   "y": 27,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 28,
+   "y": 0,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 19,
+   "y": 27,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 1,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 37,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 17,
+   "y": 27,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 24,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 37,
+   "y": 11,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 1,
+   "y": 0,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 13,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 32,
+   "y": 18,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 34,
+   "y": 13,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 13,
+   "y": 25,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 28,
+   "y": 3,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 11,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 12,
+   "y": 21,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 3,
+   "y": 14,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 8,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 6,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 27,
+   "y": 18,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 33,
+   "y": 17,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 8,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 14,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 34,
+   "y": 22,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "rock.small",
+   "x": 6,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "rock.small",
+   "x": 34,
+   "y": 16,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "rock.small",
+   "x": 28,
+   "y": 10,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "rock.small",
+   "x": 7,
+   "y": 9,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 34,
+   "y": 3,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 10,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 24,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 28,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 21,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 6,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "spots": [
+  {
+   "id": "command",
+   "x": 22.5,
+   "y": 7.7,
+   "node": "1-n6",
+   "label": "The command tent"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "npc-1",
+   "kind": "folk.soldier",
+   "x": 21.5,
+   "y": 16.9,
+   "say": [
+    "“The general is in his tent. He doesn't like visitors without rank.”"
+   ],
+   "wander": true
+  }
+ ],
+ "exits": [
+  {
+   "to": "changshe",
+   "side": "W",
+   "x": 0,
+   "y": 11,
+   "w": 1,
+   "h": 2
+  },
+  {
+   "to": "envoys-road",
+   "side": "W",
+   "x": 0,
+   "y": 16,
+   "w": 1,
+   "h": 2
+  },
+  {
+   "to": "hills-of-black-wind",
+   "side": "N",
+   "x": 19,
+   "y": 0,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "to": "the-hills-north-of-guangzong--command",
+   "side": "N",
+   "x": 22.1,
+   "y": 6.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "the-hills-north-of-guangzong--tent-1",
+   "side": "N",
+   "x": 17.1,
+   "y": 7.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "the-hills-north-of-guangzong--tent-2",
+   "side": "N",
+   "x": 26.1,
+   "y": 8.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "the-hills-north-of-guangzong--tent-3",
+   "side": "N",
+   "x": 28.1,
+   "y": 15.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "the-hills-north-of-guangzong--tent-4",
+   "side": "N",
+   "x": 9.1,
+   "y": 8.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  }
+ ],
+ "entries": {
+  "changshe": [
+   2,
+   12
+  ],
+  "envoys-road": [
+   2,
+   17
+  ],
+  "hills-of-black-wind": [
+   20,
+   2
+  ],
+  "": [
+   2,
+   17
+  ],
+  "the-hills-north-of-guangzong--command": [
+   22,
+   7
+  ],
+  "the-hills-north-of-guangzong--tent-1": [
+   17,
+   8
+  ],
+  "the-hills-north-of-guangzong--tent-2": [
+   26,
+   9
+  ],
+  "the-hills-north-of-guangzong--tent-3": [
+   28,
+   16
+  ],
+  "the-hills-north-of-guangzong--tent-4": [
+   9,
+   9
+  ]
+ }
+}

@@ -442,7 +442,7 @@
    "links": [
     "guangzong-road",
     "luoyang-gates",
-    "dong-zhuos-camp",
+    "the-hills-north-of-guangzong",
     "changshe--camp",
     "changshe--tent-1",
     "changshe--tent-2",
@@ -679,80 +679,80 @@
    "map": "envoys-road.map.json",
    "links": [
     "guangzong-road",
-    "dong-zhuos-camp"
+    "the-hills-north-of-guangzong"
    ]
   },
   {
-   "id": "dong-zhuos-camp",
-   "name": "Dong Zhuo's Camp",
-   "zh": "董卓营",
+   "id": "the-hills-north-of-guangzong",
+   "name": "The Hills North of Guangzong",
+   "zh": "广宗以北的山岭",
    "archetype": "camp",
-   "map": "dong-zhuos-camp.map.json",
+   "map": "the-hills-north-of-guangzong.map.json",
    "links": [
     "changshe",
     "envoys-road",
     "hills-of-black-wind",
-    "dong-zhuos-camp--command",
-    "dong-zhuos-camp--tent-1",
-    "dong-zhuos-camp--tent-2",
-    "dong-zhuos-camp--tent-3",
-    "dong-zhuos-camp--tent-4"
+    "the-hills-north-of-guangzong--command",
+    "the-hills-north-of-guangzong--tent-1",
+    "the-hills-north-of-guangzong--tent-2",
+    "the-hills-north-of-guangzong--tent-3",
+    "the-hills-north-of-guangzong--tent-4"
    ]
   },
   {
-   "id": "dong-zhuos-camp--command",
-   "name": "Dong Zhuo's tent",
-   "zh": "董卓的大帐",
+   "id": "the-hills-north-of-guangzong--command",
+   "name": "The command tent",
+   "zh": "主帅大帐",
    "archetype": "interior",
-   "map": "dong-zhuos-camp--command.map.json",
+   "map": "the-hills-north-of-guangzong--command.map.json",
    "links": [
-    "dong-zhuos-camp"
+    "the-hills-north-of-guangzong"
    ],
-   "parent": "dong-zhuos-camp"
+   "parent": "the-hills-north-of-guangzong"
   },
   {
-   "id": "dong-zhuos-camp--tent-1",
-   "name": "Tent, Dong Zhuo's Camp",
-   "zh": "董卓营·营帐",
+   "id": "the-hills-north-of-guangzong--tent-1",
+   "name": "Tent, The Hills North of Guangzong",
+   "zh": "广宗以北的山岭·营帐",
    "archetype": "interior",
-   "map": "dong-zhuos-camp--tent-1.map.json",
+   "map": "the-hills-north-of-guangzong--tent-1.map.json",
    "links": [
-    "dong-zhuos-camp"
+    "the-hills-north-of-guangzong"
    ],
-   "parent": "dong-zhuos-camp"
+   "parent": "the-hills-north-of-guangzong"
   },
   {
-   "id": "dong-zhuos-camp--tent-2",
-   "name": "Tent, Dong Zhuo's Camp",
-   "zh": "董卓营·营帐",
+   "id": "the-hills-north-of-guangzong--tent-2",
+   "name": "Tent, The Hills North of Guangzong",
+   "zh": "广宗以北的山岭·营帐",
    "archetype": "interior",
-   "map": "dong-zhuos-camp--tent-2.map.json",
+   "map": "the-hills-north-of-guangzong--tent-2.map.json",
    "links": [
-    "dong-zhuos-camp"
+    "the-hills-north-of-guangzong"
    ],
-   "parent": "dong-zhuos-camp"
+   "parent": "the-hills-north-of-guangzong"
   },
   {
-   "id": "dong-zhuos-camp--tent-3",
-   "name": "Tent, Dong Zhuo's Camp",
-   "zh": "董卓营·营帐",
+   "id": "the-hills-north-of-guangzong--tent-3",
+   "name": "Tent, The Hills North of Guangzong",
+   "zh": "广宗以北的山岭·营帐",
    "archetype": "interior",
-   "map": "dong-zhuos-camp--tent-3.map.json",
+   "map": "the-hills-north-of-guangzong--tent-3.map.json",
    "links": [
-    "dong-zhuos-camp"
+    "the-hills-north-of-guangzong"
    ],
-   "parent": "dong-zhuos-camp"
+   "parent": "the-hills-north-of-guangzong"
   },
   {
-   "id": "dong-zhuos-camp--tent-4",
-   "name": "Tent, Dong Zhuo's Camp",
-   "zh": "董卓营·营帐",
+   "id": "the-hills-north-of-guangzong--tent-4",
+   "name": "Tent, The Hills North of Guangzong",
+   "zh": "广宗以北的山岭·营帐",
    "archetype": "interior",
-   "map": "dong-zhuos-camp--tent-4.map.json",
+   "map": "the-hills-north-of-guangzong--tent-4.map.json",
    "links": [
-    "dong-zhuos-camp"
+    "the-hills-north-of-guangzong"
    ],
-   "parent": "dong-zhuos-camp"
+   "parent": "the-hills-north-of-guangzong"
   },
   {
    "id": "hills-of-black-wind",
@@ -761,7 +761,7 @@
    "archetype": "hills",
    "map": "hills-of-black-wind.map.json",
    "links": [
-    "dong-zhuos-camp",
+    "the-hills-north-of-guangzong",
     "yangcheng",
     "hills-of-black-wind--pens"
    ]
@@ -1130,7 +1130,7 @@
    "spot": "spot-1-c1",
    "scene": "council",
    "title": "The Governor's Council",
-   "objective": "Go to the county office, where the governor has called his officers.",
+   "objective": "Go into the county town. The governor is calling for men.",
    "after": [
     "1-start"
    ],
@@ -1258,7 +1258,7 @@
     ]
    ],
    "room": "office",
-   "objective_zh": "去县衙，太守正在召集僚属。",
+   "objective_zh": "进县城去。太守正在招募人马。",
    "title_zh": "太守议事"
   },
   {
@@ -2231,7 +2231,7 @@
    "spot": "pass",
    "scene": "daxing",
    "title": "First Blood at Daxing Mountain",
-   "objective": "Meet the Yellow Turbans at Daxing Mountain.",
+   "objective": "Report to the governor with your five hundred.",
    "after": [
     "1-a3",
     "1-as"
@@ -2359,7 +2359,7 @@
      3244
     ]
    ],
-   "objective_zh": "在大兴山迎战黄巾军。",
+   "objective_zh": "带着五百人去见太守。",
    "title_zh": "大兴山初战"
   },
   {
@@ -2369,7 +2369,7 @@
    "spot": "citygate",
    "scene": "qingzhou",
    "title": "The Ambush at Qingzhou",
-   "objective": "Lift the siege of Qingzhou.",
+   "objective": "Hear the messenger from Qingzhou.",
    "after": [
     "1-n3"
    ],
@@ -2496,7 +2496,7 @@
      27356
     ]
    ],
-   "objective_zh": "解青州之围。",
+   "objective_zh": "听青州来的信使怎么说。",
    "title_zh": "青州伏兵"
   },
   {
@@ -2796,7 +2796,7 @@
    "spot": "fieldcamp",
    "scene": "yingchuan",
    "title": "Yingchuan, Too Late",
-   "objective": "Go to Yingchuan and learn how Huangfu Song and Zhu Jun stand.",
+   "objective": "Go to Changshe, in Yingchuan, and learn how Huangfu Song and Zhu Jun stand.",
    "after": [
     "1-t1"
    ],
@@ -2923,7 +2923,7 @@
      160636
     ]
    ],
-   "objective_zh": "去颍川，探明皇甫嵩、朱儁的军情。",
+   "objective_zh": "去颍川长社，探明皇甫嵩、朱儁的军情。",
    "title_zh": "来迟的颍川"
   },
   {
@@ -3891,11 +3891,11 @@
   {
    "node": "1-n6",
    "role": "main",
-   "place": "dong-zhuos-camp",
+   "place": "the-hills-north-of-guangzong",
    "spot": "command",
    "scene": "office",
    "title": "“What Office Do You Hold?”",
-   "objective": "Rescue Dong Zhuo, then report at his tent.",
+   "objective": "Head home to Zhuo.",
    "after": [
     "1-b3",
     "1-bs"
@@ -4023,7 +4023,7 @@
      54226
     ]
    ],
-   "objective_zh": "救出董卓，再到他帐前复命。",
+   "objective_zh": "回涿郡去。",
    "title_zh": "现居何职"
   },
   {
