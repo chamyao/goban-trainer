@@ -220,17 +220,25 @@ class Layout:
                     q.append(n)
         return False
 
-    def place_landmark(self, kind, lid=None, label=None, node=None, near_hub=False, near=None, lines=None, use=None):
+    def place_landmark(self, kind, lid=None, label=None, node=None, near_hub=False, near=None, lines=None, use=None,
+                       side=None, clear=None):
+        """side: "W" or "E", the left or right part of the map (a ridge on each flank). clear: [w, h] tiles
+        kept open in front of it (room for a formation of a thousand men)."""
         fw, fh, _ = KINDS[kind]
         building = kind.startswith(BUILDING)
         best = None
-        for _ in range(500):
+        cw, ch = clear or (0, 0)
+        for _ in range(800 if side or clear else 500):
             x = self.rng.randint(2, self.W - fw - 2)
-            y = self.rng.randint(2, self.H - fh - 3)
+            y = self.rng.randint(2, self.H - fh - 3 - ch)
+            if side == "W" and x + fw > self.W * .33 or side == "E" and x < self.W * .67:
+                continue
             if not self.free_rect(x, y, fw, fh, margin=1, allow_dirt=not building):
                 continue
             door = (x + fw // 2, y + fh)
             if door in self.solid or not self.inb(*door, 1) or self.t[door[1]][door[0]] == "~":
+                continue
+            if clear and not self.free_rect(door[0] - cw // 2, door[1] + 1, cw, ch, margin=0, allow_dirt=True):
                 continue
             # distance from the door to the nearest road or plaza
             d = min((abs(door[0] - rx) + abs(door[1] - ry) for rx, ry in self.road), default=0)
@@ -254,11 +262,14 @@ class Layout:
         for dx in (-1, 0, 1):
             for dy in (0, 1):
                 self.keep.add((door[0] + dx, door[1] + dy))
+        for yy in range(door[1] + 1, door[1] + 1 + ch):   # the open ground in front
+            for xx in range(door[0] - cw // 2, door[0] - cw // 2 + cw):
+                self.keep.add((xx, yy))
         if building:
             self.door_path(door)
         if lid:
             self.anchors[lid] = door
-        if node or use:   # a story spot, or one with a use of its own (e.g. "ogs": the go table for live games)
+        if node or use or lines:   # a story spot, one with a use of its own (e.g. "ogs": the go table), or one with lines
             # at a door for a building; a tall rock or tree gets a tile of room, or whoever stands
             # there (a rider especially) is drawn into it
             room = 1 if kind.split(".")[0] in ("rock", "tree") else 0
@@ -271,7 +282,8 @@ class Layout:
         done_nodes = set()
         for lm in b.get("landmarks", []):
             lines = {k: lm[k] for k in ("intro", "outro", "trigger") if lm.get(k)}
-            o = self.place_landmark(lm["kind"], lm.get("id"), lm.get("label"), lm.get("node"), near=lm.get("near"), lines=lines, use=lm.get("use"))
+            o = self.place_landmark(lm["kind"], lm.get("id"), lm.get("label"), lm.get("node"), near=lm.get("near"), lines=lines,
+                                    use=lm.get("use"), side=lm.get("side"), clear=lm.get("clear"))
             if o is None:
                 raise RuntimeError(f"no room for {lm['kind']}")
             if lm.get("node"):
