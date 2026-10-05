@@ -80,8 +80,10 @@ World 1, Black Wind: the first attempt is routed by the storm (already staged); 
 
 Agreed with Plot/Story; the script draft is Plot's (`docs/world2-script-draft.md`).
 
-- **Required mechanic: formation at Hulao**, as the novel's order. Zhang Fei goes in first, Guan Yu joins when he tires, then Liu Bei. The player sends each brother in by talking to him; a wrong order gets a correction line, never a failure. Then the Lü Bu boss board (hard, no hint, taunt first), and Lü Bu retreats. This is not fail-then-prepare, so the same kind is not used twice in a row (Book 1 ended on Black Wind), and it differs from Book 1's left-and-right flanks at Qingzhou.
-- **Optional delivery: the Seven-Star Dagger** (Wang Yun to Cao Cao, ch. 4), a Cao Cao side story. It fails by the novel, and it leads into Lü Boshe's house, the Book's spine.
+- **Required mechanic: formation at Hulao**, as the novel's order. The eight lords' defeat is a no-board scene that lights the shrine; the Star Lords' hint is "One, then two, then three". Zhang Fei goes in first, Guan Yu joins when he tires, then Liu Bei. The player sends each brother in by talking to him; a wrong order gets a correction line, never a failure. Built from the existing blocks (marks, each conditional on the previous one). Then the Lü Bu boss board (hard, no hint, taunt first), and Lü Bu retreats. This is not fail-then-prepare, so the same kind is not used twice in a row (Book 1 ended on Black Wind), and it differs from Book 1's left-and-right flanks at Qingzhou.
+- **Optional delivery: Red Hare**, with gold and a jade belt, carried to Lü Bu (ch. 3). The carry is the harm: it leads to Ding Yuan's death. (Chosen over the Seven-Star Dagger.)
+- **The Imperial Seal is a story object, not a relic.** Liu Bei never holds it and it ruins whoever does. The Chronicle may note whose hands it is in, Book by Book. No Book 2 trophy unless one falls naturally from the novel.
+- **Scale:** 26 scenes; the Cai Yong scene is the first cut if needed.
 - **Hua Xiong:** no extra mechanic. His problem is framed as the wine cooling: Cao Cao's cup steams beside the board, and on the solve Guan Yu returns with the wine still warm. No timer.
 - **Star Lords:** in person at Hulao (danger); only a sign at the Diaochan plot; none at the quiet scenes (Lü Boshe's house, the wine, Dong Zhuo's fall).
 - **Perspective:** Liu Bei is absent in ch. 3-4, so Cao Cao's scenes are side stories, as in Book 1.
