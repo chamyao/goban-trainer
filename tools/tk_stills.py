@@ -28,6 +28,11 @@ import re
 NEGATIVE = ("No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, "
             "no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, "
             "rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.")
+# the same exclusions as a list, for models that take a separate negative prompt (gen_stills: qwen)
+NEGATIVE_LIST = ("text, letters, words, Chinese characters, calligraphy, inscriptions, writing on signboards, "
+                 "writing on lanterns, writing on banners, seal stamps, red seals, signature, watermark, speech "
+                 "bubbles, captions, guns, rifles, firearms, modern helmets, modern uniforms, modern shoes, sneakers, "
+                 "glass, glass windows, paved roads, extra people, duplicate person")
 STYLE = ("Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat "
          "mineral colours, gold leaf accents, stylised clouds and waves. " + NEGATIVE)
 
@@ -46,7 +51,18 @@ STYLES = {
              "glowing particles, ornate gold details, jade-green and crimson.",
     "gongbi": "Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat "
               "mineral colours, gold leaf accents, stylised clouds and waves.",
-    "ghibli": "Style: in the style of Studio Ghibli.",
+    "ghibli": "Style: in the style of Studio Ghibli: hand-painted anime, soft watercolour backgrounds, warm natural "
+              "light, gentle rounded character designs, lush detailed nature, calm storybook mood.",
+    # anime looks the user asked to compare (named, and described in words for models that don't know the name)
+    "towerofgod": "Style: in the style of the anime Tower of God: clean modern Korean webtoon anime, sharp angular "
+                  "lineart, flat cel shading with soft gradients, cool muted colours with glowing highlights, "
+                  "dramatic framing.",
+    "gohs": "Style: in the style of the anime The God of High School: bold dynamic action anime, thick energetic "
+            "lineart, high contrast, vivid saturated colours, speed lines and impact effects, extreme fighting poses.",
+    "genshin": "Style: in the style of Genshin Impact key art: polished anime cel shading, bright vivid colours, "
+               "ornate gold trim and jade accents, glowing particles, clean detailed fantasy illustration.",
+    "mahjongsoul": "Style: in the style of Mahjong Soul character art: glossy modern anime illustration, soft "
+                   "pastel-bright colours, clean thin lineart, smooth shading, cute stylised attractive characters.",
     # the user asked to see the look of the donghua Rakshasa Street, described in words (no show named)
     "donghua": "Style: modern Chinese donghua key frame: crisp clean lineart and cel shading, high contrast, "
                "dramatic rim light and back light, a dark moody palette of ink blacks, deep teal and crimson with "
@@ -69,7 +85,7 @@ CAST = {
     "liubei": ("Liu Bei", "a gentle man of twenty-eight with a short neat black beard, long earlobes and "
                           "kind eyes, hair in a topknot, in a white robe trimmed with gold"),
     "guanyu": ("Guan Yu", "a towering giant of a man, a head taller than anyone, with massive shoulders and a thick "
-                          "neck, a deep red face, a very long black beard down to his chest and narrow eyes under "
+                          "neck, a deep red face (only his face is red; his neck and hands are normal skin), a very long black beard down to his chest and narrow eyes under "
                           "heavy brows, hair in a topknot, in a green robe"),
     "zhangfei": ("Zhang Fei", "a stocky, barrel-chested, powerfully muscled man, broad rather than tall, with a fierce square jaw, big glaring eyes and "
                               "a wild bristling black beard, hair in a topknot, in black and dark brown clothes"),
