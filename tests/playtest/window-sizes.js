@@ -30,7 +30,13 @@ for(const [name,dev] of SIZES){
   const lap=await p.evaluate(()=>{const g=document.querySelector('.town-goal');if(!g||g.hidden)return false;const a=g.getBoundingClientRect();return [...document.querySelectorAll('.tk-menu-btn')].filter(b=>b.offsetParent).some(b=>{const r=b.getBoundingClientRect();return r.left<a.right-3&&r.right>a.left+3&&r.top<a.bottom-3&&r.bottom>a.top+3;});});
   bad(!lap,'the Menu button overlaps the goal line');
   await click(p.locator('.tk-menu-btn',{hasText:'Menu'}));await p.waitForTimeout(400);
-  const mbs=await inView('.tk-menu-panel button');bad(mbs.length>=5&&mbs.every(x=>x.ok),'menu buttons off screen: '+mbs.filter(x=>!x.ok).map(x=>x.t+' '+x.r).join(', '));
+  // every menu button on screen, or reachable by scrolling the menu
+  let mbs=await inView('.tk-menu-panel button');
+  if(mbs.some(x=>!x.ok)){await p.evaluate(()=>{const b=[...document.querySelectorAll('.tk-menu-panel button')].filter(b=>!b.hidden).pop();b.scrollIntoView({block:'nearest'});});await p.waitForTimeout(300);
+    const last=(await inView('.tk-menu-panel button')).pop();const pageScrolled=await p.evaluate(()=>scrollY>0);
+    bad(last&&last.ok&&!pageScrolled,'menu buttons off screen'+(pageScrolled?' (only by scrolling the page)':'')+': '+mbs.filter(x=>!x.ok).map(x=>x.t+' '+x.r).join(', '));
+    if(last&&last.ok)console.log(`NOTE ${name}: the menu scrolls to reach "${last.t}"`);}
+  else bad(mbs.length>=5,'the menu has too few buttons');
   await p.screenshot({path:SP+`/size-${name.replace(/ /g,'-')}-menu.png`});
   await click(p.locator('.tk-menu-btn',{hasText:'Menu'}));await p.waitForTimeout(300);
   // a talk

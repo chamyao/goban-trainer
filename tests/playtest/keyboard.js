@@ -42,6 +42,12 @@ if(await busy()){const diag=[];for(let i=0;i<4;i++){diag.push(await W(()=>{const
   console.log('     still talking after the Enters; then:',diag.join(' > '),'> now',await busy()?'busy':'free');}
 check(!(await busy()),`Enter moves the talk on and ends it (${n1} presses)`);
 const k2=await walksAgain();check(!!k2&&!(await busy()),'after the talk the keys walk him again ('+k2+')');
+// mashing Enter at a villager: one talk, not a loop (Enter can't start a talk just after one closes)
+await W(()=>{const w=window.__w,n=w.npcs.find(n=>!n.challenge&&n.spr.visible&&!n.who);n.wander=false;w.player.setPosition(n.spr.x,n.spr.y+14);w.player.facing='up';w.player.setTexture('h-liubei-up-0');});
+await p.waitForTimeout(400);let opens=0,was=false;
+for(let i=0;i<30;i++){await p.keyboard.press('Enter');await p.waitForTimeout(100);const b=await busy();if(b&&!was)opens++;was=b;}
+for(let i=0;i<20&&await busy();i++){await p.keyboard.press('Enter');await p.waitForTimeout(400);}
+check(opens<=2,`mashing Enter for 3 s at a villager opens the talk ${opens} time(s)`);
 // a challenger's problem by keys
 const key=await W(()=>{const w=window.__w,n=w.npcs.find(n=>n.challenge&&!TK.cleared(n.challenge));n.wander=false;w.player.setPosition(n.spr.x,n.spr.y+14);w.player.facing='up';w.player.setTexture('h-liubei-up-0');return n.challenge;});
 await p.waitForTimeout(300);await p.keyboard.press('e');await p.waitForTimeout(400);await enterThrough();
