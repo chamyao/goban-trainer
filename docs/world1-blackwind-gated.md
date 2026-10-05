@@ -182,3 +182,21 @@ Dark shrines are in the towns that will never light in World 1 only as a quiet s
 ## Length
 
 The Black Wind route is now: the first try, the shrine board, one visit to the village (the three people stand together at the pens, three short talks), two ridge talks, then the boss. About seven short actions. If the playtest says it drags, the first thing to cut is the two ridge talks (one visit that supplies both), not the village.
+
+## Second talks: "already given" lines (from Game Design's mechanics spec)
+
+Each giver says one of these if the player talks to them again after taking the blood. The items are not used up when delivered, so one set of three supplies both ridges, and they are removed after Yangcheng is won.
+
+| Who | Line | Chinese |
+|---|---|---|
+| Farmer | "You have my pigs' blood. Go, and stop this wind." **[new]** | “猪血你们已经拿走了。去吧，把这风止住。” |
+| Old shepherd | "You've had the best of my flock, general. Go on." **[new]** | “我羊群里最好的已经给你了，将军，去吧。” |
+| Hunter | "You have the dog's blood. May it do what it must." **[new]** | “狗血你们拿去了。但愿它能破了那法。” |
+
+```python
+"“You have my pigs' blood. Go, and stop this wind.”": "“猪血你们已经拿走了。去吧，把这风止住。”",   # [new]
+"“You've had the best of my flock, general. Go on.”": "“我羊群里最好的已经给你了，将军，去吧。”",   # [new]
+"“You have the dog's blood. May it do what it must.”": "“狗血你们拿去了。但愿它能破了那法。”",   # [new]
+```
+
+The objective line shows counts and names the next missing thing: "Gather blood from the village below the hills: pigs, sheep, dogs (1/3)", then "Take the blood up to Guan Yu on the left ridge and Zhang Fei on the right (1/2)". The two `bossearly` defeat scenes may repeat; they are skippable from the second time.
