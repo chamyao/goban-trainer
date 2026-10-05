@@ -26,7 +26,7 @@ import random  # noqa: E402
 T = 16
 OUT = ROOT / "assets/tk/xianxia"
 SLACK = 1.15
-DROP = {"plant.flower-2"}   # variants not used at all: this one sits on a mound of earth, like a stone basin
+DROP = {"plant.flower-2", "furn.rug-1"}   # variants not used at all: this one sits on a mound of earth, like a stone basin
 DETAIL_SKIP = {"plant.flower-1", "plant.flower-2"}   # flowers read as pebbles at a distance   # a piece may be this much bigger than its footprint before it's shrunk
 
 
