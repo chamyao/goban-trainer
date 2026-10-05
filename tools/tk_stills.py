@@ -25,7 +25,7 @@ import re
 
 # the user's pick from the candidates below (gongbi), with what it tended to add uninvited ruled out
 STYLE = ("Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat "
-         "mineral colours, gold leaf accents, stylised clouds and waves. No text, no speech or thought bubbles, no captions, no calligraphy, no seals, no "
+         "mineral colours, gold leaf accents, stylised clouds and waves. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no "
          "signature, no watermark.")
 
 # candidates for STYLE, to choose by eye (gen_stills.py --styles): the user wants the stills to
@@ -189,8 +189,8 @@ SCENES = {
         "A humble village of earth-walled houses at golden morning, and above it a gigantic mulberry tree, "
         "its round crown spreading like the canopy of an imperial carriage; villagers pause in the lane to stare up.",
         "A small boy of six in a plain hemp tunic and straw sandals, hair in two tufts, stands under a great mulberry tree, "
-        "chin up, pointing at its canopy and declaring he will ride in a carriage like that one day; his uncle, a man of "
-        "forty in a farmer's hemp robe, startled beside him, hand raised to hush him. Han dynasty China, about 184 AD: nothing modern, no glass, no paved roads.",
+        "chin up, pointing at its canopy and declaring he will ride in a carriage like that one day; his uncle, a strong "
+        "dark-haired man with a short black beard, in a farmer's hemp robe, startled beside him, hand raised to hush him. Han dynasty China, about 184 AD: nothing modern, no glass, no paved roads.",
         "Looking straight up through the leaves of a vast mulberry tree, sunlight breaking through in rays, the leaves "
         "forming a perfect round canopy against a deep blue sky.",
     ),
@@ -215,8 +215,8 @@ SCENES = {
         "horse tethered for the sacrifice, three figures kneeling, petals drifting through shafts of light.",
         "Liu Bei, Guan Yu and Zhang Fei kneeling side by side before the altar, eyes closed, hands clasped, swearing "
         "brotherhood, incense smoke between them, petals in their hair.",
-        "Three plain bronze wine bowls, wide and shallow, no stems, no goblets, no glass, raised and touching above a "
-        "table under peach blossom, petals falling into the wine, golden evening light. Han dynasty China, about 184 AD: nothing modern, no glass, no paved roads.",
+        "Three small bronze wine cups, raised and touching in a toast by three hands (a white sleeve, a green sleeve, a "
+        "black sleeve), above a table under blossoming peach trees, petals falling into the wine, golden evening light. Han dynasty China, about 184 AD: nothing modern, no glass, no paved roads.",
     ),
     "council": (
         "A grand hall of a provincial governor, red pillars and a raised dais, officers in rows, a messenger kneeling "
@@ -277,7 +277,7 @@ SCENES = {
         "charge in from the side and turn the battle.",
         "Dong Zhuo seated in his army camp with banners behind him, sneering down at Liu Bei standing before him, as "
         "Zhang Fei lunges for his sword in rage and Liu Bei and Guan Yu together hold him back.",
-        "An overturned bronze wine cup, no glass, on a table, wine spilling, the shadow of a raised fist on the tent wall. Han dynasty China, about 184 AD: nothing modern, no glass, no paved roads.",
+        "An overturned bronze ding-shaped wine vessel with handles, clearly an ancient vessel, not a can, on a table, wine spilling, the shadow of a raised fist on the tent wall. Han dynasty China, about 184 AD: nothing modern, no glass, no paved roads.",
     ),
     "blackwind": (
         "Zhang Bao on a hilltop with his hair loose, sword raised, chanting, as a black whirlwind of storm cloud, sand "
