@@ -637,6 +637,16 @@ FACE_LOOKS = {
     "caiyong": ("Cai Yong", "a sorrowful old scholar with a grey beard, in a plain scholar's robe and cap"),
     "chengpu": ("Cheng Pu", "a veteran general with a grizzled beard, in red armour, holding a long spear"),
     "handang": ("Han Dang", "a tough general with a square jaw and short beard, in red armour, holding a broadsword"),
+    # the hero, less pretty (the user: "too much of a pretty boy, make him look more like a protagonist");
+    # the stills keep CAST's look
+    "liubei": ("Liu Bei", "the hero of the story, a determined man of twenty-eight, broad-shouldered and rugged, a "
+                          "strong jaw and a sun-weathered face, short black beard and moustache, long earlobes, steady "
+                          "resolute eyes under heavy brows, hair in a topknot with a few loose strands, a white robe "
+                          "with gold trim over light leather armour, the hilts of twin swords at his hip"),
+    "liubei_b": ("Liu Bei", "a battle-hardened young hero of twenty-eight, the leader of a band of volunteers: lean and "
+                            "tough, a short black beard, long earlobes, a faint scar on his cheekbone, a fierce confident "
+                            "half-smile, hair tied up in a topknot, a dusty white robe with gold trim, sleeves bound for "
+                            "fighting, one hand resting on a sword hilt"),
 }
 FACE_STYLE = ("In the style of Genshin Impact character art: polished anime cel shading, clean lineart, vibrant "
               "colours, soft rim light. Plain flat pure white background, nothing else behind the figure. Han dynasty "
