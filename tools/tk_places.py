@@ -220,6 +220,12 @@ PLACES = {
                 # once the shrine is read, the brothers and their men take the ridges
                 {"kind": "hero.guanyu", "near": "ridge_left", "when": "node:n7b", "say": "“Bring the blood, brother. We hold the left.”"},
                 {"kind": "hero.zhangfei", "near": "ridge_right", "when": "node:n7b", "say": "“Bring the blood, brother. We hold the right.”"},
+                {"kind": "folk.soldier", "near": "ridge_left", "when": "node:n7b", "face": "down", "say": "“Waiting for the gun, sir.”"},
+                {"kind": "folk.soldier", "near": "ridge_left", "when": "node:n7b", "face": "down", "say": "“A bucket each, and every man ready.”"},
+                {"kind": "folk.soldier", "near": "ridge_left", "when": "node:n7b", "face": "down", "say": "“Let the paper horses come.”"},
+                {"kind": "folk.soldier", "near": "ridge_right", "when": "node:n7b", "face": "down", "say": "“Waiting for the gun, sir.”"},
+                {"kind": "folk.soldier", "near": "ridge_right", "when": "node:n7b", "face": "down", "say": "“A bucket each, and every man ready.”"},
+                {"kind": "folk.soldier", "near": "ridge_right", "when": "node:n7b", "face": "down", "say": "“Let the paper horses come.”"},
             ],
             "objectives": {"1-n7": "Break Zhang Bao's sorcery in the hills.",
                            "1-n7b": "Go to the roadside shrine where the glow has begun."},
