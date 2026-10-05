@@ -21,7 +21,7 @@ for(const pl of places){
       for(const back of [20,28,36,48,64]){const x=e.rect.centerX+V[0]*back,y=e.rect.centerY+V[1]*back+3;if(G.free(Math.floor(x/G.C),Math.floor((y-3)/G.C))){w.player.setPosition(x,y);return true;}}return false;},e.i);
     if(!r)continue;await p.waitForTimeout(500);
     const s=await p.evaluate(i=>{const w=window.__w,e=w.exits[i],cam=w.cameras.main,cv=w.game.canvas,R=cv.getBoundingClientRect(),k=cv.clientWidth/w.scale.width;
-      const toS=(x,y)=>[R.left+(x-cam.worldView.x)*cam.zoom*k,R.top+(y-cam.worldView.y)*cam.zoom*k];
+      const toS=(x,y)=>[R.left+((window.__w.view?window.__w.view(x,y).x:x)-cam.worldView.x)*cam.zoom*k,R.top+((window.__w.view?window.__w.view(x,y).y:y)-cam.worldView.y)*cam.zoom*k];
       const g=document.querySelector('.town-goal');const gb=g&&!g.hidden?g.getBoundingClientRect():null;let ok=0,n=0,under='';
       for(let a=0.1;a<1;a+=0.2)for(let c=0.1;c<1;c+=0.2){const [sx,sy]=toS(e.rect.x+e.rect.width*a,e.rect.y+e.rect.height*c);if(sx<0||sy<0||sx>innerWidth||sy>innerHeight)continue;n++;
         const el=document.elementFromPoint(sx,sy),inGoal=gb&&sx>gb.left&&sx<gb.right&&sy>gb.top&&sy<gb.bottom;

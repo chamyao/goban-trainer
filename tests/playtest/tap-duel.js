@@ -11,7 +11,7 @@ const c=p.getByText('Cancel',{exact:true});if(await c.count())await c.first().ta
 for(let i=0;i<6;i++){const g=p.locator('.tk-scroll-go');if(await g.count()){await g.first().tap();await p.waitForTimeout(400);}}
 for(let i=0;i<60;i++){if(await p.evaluate(()=>!!(window.__w&&window.__w.player)))break;await p.waitForTimeout(200);}
 await p.locator('.tk-map').scrollIntoViewIfNeeded(); await p.waitForTimeout(600);
-const toPage=(x,y)=>p.evaluate(([x,y])=>{const w=window.__w,cam=w.cameras.main,cv=w.game.canvas,r=cv.getBoundingClientRect(),k=cv.clientWidth/w.scale.width;return [r.left+(x-cam.worldView.x)*cam.zoom*k, r.top+(y-cam.worldView.y)*cam.zoom*k];},[x,y]);
+const toPage=(x,y)=>p.evaluate(([x,y])=>{const w=window.__w,cam=w.cameras.main,cv=w.game.canvas,r=cv.getBoundingClientRect(),k=cv.clientWidth/w.scale.width;return [r.left+((window.__w.view?window.__w.view(x,y).x:x)-cam.worldView.x)*cam.zoom*k, r.top+((window.__w.view?window.__w.view(x,y).y:y)-cam.worldView.y)*cam.zoom*k];},[x,y]);
 // bring the challenger on screen first (wherever the map put him)
 await p.evaluate(()=>{const n=window.__w.npcs.find(n=>n.challenge);window.__w.player.setPosition(n.spr.x+50,n.spr.y+30);});await p.waitForTimeout(1200);
 const n=await p.evaluate(()=>{const n=window.__w.npcs.find(n=>n.challenge);return [n.spr.x,n.spr.y-8];});

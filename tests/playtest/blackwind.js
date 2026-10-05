@@ -15,7 +15,7 @@ const scrolls=async()=>{for(let i=0;i<6;i++){const c=p.getByText('Cancel',{exact
 const ready=async()=>{for(let i=0;i<75;i++){if(await p.evaluate(()=>!!(window.__w&&window.__w.player&&!window.__w.leaving&&window.__w.sys.isActive())))break;await p.waitForTimeout(200);}await p.waitForTimeout(500);};
 const W=f=>p.evaluate(f);
 const st=()=>W(()=>{const w=window.__w;return {place:w.placeId,busy:w.ui.busy()||!!w.cine,P:[w.player.x,w.player.y],leaving:w.leaving};});
-const toS=(x,y)=>p.evaluate(([x,y])=>{const w=window.__w,cam=w.cameras.main,cv=w.game.canvas,r=cv.getBoundingClientRect(),k=cv.clientWidth/w.scale.width;return [r.left+(x-cam.worldView.x)*cam.zoom*k,r.top+(y-cam.worldView.y)*cam.zoom*k,r.left,r.top,r.width,r.height];},[x,y]);
+const toS=(x,y)=>p.evaluate(([x,y])=>{const w=window.__w,cam=w.cameras.main,cv=w.game.canvas,r=cv.getBoundingClientRect(),k=cv.clientWidth/w.scale.width;return [r.left+((window.__w.view?window.__w.view(x,y).x:x)-cam.worldView.x)*cam.zoom*k,r.top+((window.__w.view?window.__w.view(x,y).y:y)-cam.worldView.y)*cam.zoom*k,r.left,r.top,r.width,r.height];},[x,y]);
 const line=()=>W(()=>{const d=document.querySelector('.town-ui .town-dlg');return d&&!d.hidden?((d.querySelector('.town-who').textContent||'')+': '+d.querySelector('.town-en').textContent):null;});
 let LINES=0;
 // tap through whatever is talking (dialogue, cutscene, scrolls); stops when the world is free or a board opens

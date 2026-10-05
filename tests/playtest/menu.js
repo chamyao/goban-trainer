@@ -67,7 +67,7 @@ await ready();
 await menu(false);
 const p0=await p.evaluate(()=>[window.__w.player.x,window.__w.player.y]);
 const tgt=await p.evaluate(()=>{const w=window.__w,G=w.walkGrid();for(const [dx,dy] of [[40,0],[-40,0],[0,40],[0,-40]]){const x=w.player.x+dx,y=w.player.y+dy;if(G.free(Math.floor(x/G.C),Math.floor((y+1)/G.C))&&!w.pick(x,y))return [x,y];}return null;});
-if(tgt){const s=await p.evaluate(([x,y])=>{const w=window.__w,cam=w.cameras.main,cv=w.game.canvas,r=cv.getBoundingClientRect(),k=cv.clientWidth/w.scale.width;return [r.left+(x-cam.worldView.x)*cam.zoom*k,r.top+(y-cam.worldView.y)*cam.zoom*k];},tgt);await p.touchscreen.tap(...s);await p.waitForTimeout(1200);}
+if(tgt){const s=await p.evaluate(([x,y])=>{const w=window.__w,cam=w.cameras.main,cv=w.game.canvas,r=cv.getBoundingClientRect(),k=cv.clientWidth/w.scale.width;return [r.left+((window.__w.view?window.__w.view(x,y).x:x)-cam.worldView.x)*cam.zoom*k,r.top+((window.__w.view?window.__w.view(x,y).y:y)-cam.worldView.y)*cam.zoom*k];},tgt);await p.touchscreen.tap(...s);await p.waitForTimeout(1200);}
 const p1=await p.evaluate(()=>[window.__w.player.x,window.__w.player.y]);
 check(Math.hypot(p1[0]-p0[0],p1[1]-p0[1])>6,'after using the menu, a tap on the ground moves Liu Bei');
 // map: out onto the overworld
