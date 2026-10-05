@@ -11,7 +11,8 @@
   "camp": "assets/tk/ninja/camp.png",
   "element": "assets/tk/ninja/element.png",
   "floor_in": "assets/tk/ninja/floor_in.png",
-  "wall_in": "assets/tk/ninja/wall_in.png"
+  "wall_in": "assets/tk/ninja/wall_in.png",
+  "drawn": "assets/tk/drawn.png"
  },
  "materials": {
   "grass": {
@@ -717,6 +718,33 @@
     82,
     12,
     27
+   ]
+  ],
+  "landmark.shrine": [
+   [
+    "drawn",
+    0,
+    80,
+    32,
+    30
+   ]
+  ],
+  "landmark.shrine.lit": [
+   [
+    "drawn",
+    32,
+    80,
+    32,
+    30
+   ]
+  ],
+  "landmark.shrine.settled": [
+   [
+    "drawn",
+    64,
+    80,
+    32,
+    30
    ]
   ]
  },

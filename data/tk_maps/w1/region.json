@@ -760,8 +760,20 @@
    "map": "hills-of-black-wind.map.json",
    "links": [
     "dong-zhuos-camp",
-    "yangcheng"
+    "yangcheng",
+    "hills-of-black-wind--pens"
    ]
+  },
+  {
+   "id": "hills-of-black-wind--pens",
+   "name": "The village below the hills",
+   "zh": "山下的村子",
+   "archetype": "interior",
+   "map": "hills-of-black-wind--pens.map.json",
+   "links": [
+    "hills-of-black-wind"
+   ],
+   "parent": "hills-of-black-wind"
   },
   {
    "id": "yangcheng",
