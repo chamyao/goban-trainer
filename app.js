@@ -468,7 +468,7 @@ class Goban {
   // the first tap only shows a ghost stone; a second tap on the same point plays it, a tap on
   // another point moves the ghost. A slip costs a rest, so a fingertip miss mustn't count.
   needsConfirm() {
-    if (!Goban.TOUCH) return false;
+    if (!Goban.TOUCH || Goban.confirmMode() === "never") return false;
     const w = this.svg.getBoundingClientRect().width;
     return w > 0 && w / this.W * this.cell < 28;
   }
@@ -481,6 +481,9 @@ class Goban {
                                   stroke: "var(--accent)", "stroke-width": 2, "stroke-dasharray": "4 3" });
     this.ghost = { c, r, el: g };
   }
+  // "Confirm taps": auto (the default, as above) or never (one tap plays at any spacing)
+  static confirmMode() { try { return localStorage.getItem("goban-confirm") === "never" ? "never" : "auto"; } catch { return "auto"; } }
+  static setConfirmMode(m) { try { localStorage.setItem("goban-confirm", m); } catch {} }
   clearGhost() { if (this.ghost) { this.ghost.el.remove(); this.ghost = null; } }
 
   pulse(c, r) {

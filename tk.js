@@ -1014,6 +1014,15 @@ async function viewTK(worldN) {
     root.querySelector(".tk-head-btns").prepend(h("button", { class: "tk-chron-btn", type: "button", title: `Switch to ${WORLD_KITS[next].en}`,
       onclick: () => { WorldView.setKit(next); viewTK(w.n); } }, `画风：${WORLD_KITS[kit].zh} ${WORLD_KITS[kit].en}`));
     if (typeof WorldTravel !== "undefined") WorldTravel.addButtons(root.querySelector(".tk-head-btns"), w);   // map and start over (tk-travel.js)
+    // on a phone: whether a tap on a small board shows a ghost stone first (Auto) or plays at once (Never)
+    if (TK_TOUCH && typeof Goban !== "undefined") {
+      const conf = h("button", { class: "tk-chron-btn", type: "button" });
+      const label = () => { const auto = Goban.confirmMode() === "auto"; conf.setAttribute("aria-pressed", String(auto));
+        conf.textContent = auto ? "落子确认：自动 Confirm taps: Auto" : "落子确认：不用 Confirm taps: Never"; };
+      conf.onclick = () => { Goban.setConfirmMode(Goban.confirmMode() === "auto" ? "never" : "auto"); label(); };
+      label();
+      root.querySelector(".tk-head-btns").append(conf);
+    }
     // the other books, once open (Book 2 after Book 1's boss)
     for (const x of D.worlds) if (x.n !== w.n && TK.worldOpen(x.n))
       root.querySelector(".tk-head-btns").append(h("button", { class: "tk-chron-btn", type: "button", onclick: () => { location.hash = `#/tk/${x.n}`; } },
