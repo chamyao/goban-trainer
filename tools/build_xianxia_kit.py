@@ -265,10 +265,10 @@ def main():
         kit["isoFlip"] = flip   # mirrored in the game: their entrance on the door's face
         # the country around each outdoor map (tk-iso.js surround): a seamless backdrop per kind of place,
         # and which foreground pieces frame it
-        from xianxia_spec import GENSHIN_BACKDROPS
+        from xianxia_spec import GENSHIN_BACKDROP_PICK, GENSHIN_BACKDROPS
         gdir = next((d for d in reversed(src) if d.name == "genshin"), None)
         for k in GENSHIN_BACKDROPS:
-            f = gdir and gdir / f"bg.{k}-1.png"
+            f = gdir and gdir / f"bg.{k}-{GENSHIN_BACKDROP_PICK.get(k, 1)}.png"
             if f and f.exists():
                 Image.open(f).convert("RGB").save(OUT / f"bg_{k}.png")
                 kit["sheets"][f"bg_{k}"] = f"assets/tk/{LOOK}/bg_{k}.png"

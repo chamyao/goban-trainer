@@ -202,9 +202,11 @@ GENSHIN_UNPLATE = ("tree.",)
 GENSHIN_BACKDROPS = {
     "meadow": "lush green countryside seen from above: grass, clumps of bushes, small round trees, wild flowers, a few rocks",
     "forest": "dense green woodland seen from above: tree crowns packed close, glimpses of grass between them",
-    "mountain": "rocky mountain slopes seen from above: grey boulders, scree, tufts of grass, small pine trees",
-    "ruins": "scorched ground seen from above: grey ash, charred beams, broken roof tiles, burnt grass",
+    # the first tries of these two came out as scenic paintings, not ground seen from above: worded flatter
+    "mountain": "flat rocky ground seen from directly above: grey stones, gravel, tufts of grass, small pine trees",
+    "ruins": "flat ground seen from directly above: grey ash, charred wood, broken roof tiles, burnt grass",
 }
+GENSHIN_BACKDROP_PICK = {"meadow": 1, "forest": 1, "mountain": 3, "ruins": 3}   # the tries that tile cleanly
 GENSHIN_FOREGROUNDS = {
     "fg.canopy": ("a big cluster of leafy green tree crowns, seen from slightly above", (128, 96)),
     "fg.pine": ("a tall dark green pine tree", (64, 112)),

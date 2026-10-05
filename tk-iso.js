@@ -33,7 +33,11 @@ const WorldIso = {
     const key = `iso-ground-${scene.placeId}`;
     if (scene.textures.exists(key)) scene.textures.remove(key);
     const rt = scene.make.renderTexture({ x: 0, y: 0, width: W + 2 * pad, height: H + 2 * pad }, false);
-    if (pad) WorldIso.extendGround(scene, map, layers[0], rt, pad);
+    // with a backdrop for this kind of place (surround()), the map's own ground runs on only a few tiles and
+    // the backdrop shows beyond; without one, it runs to the apron's end
+    const backdrop = !indoor && (kit.isoBackdrop || {})[scene.place && scene.place.archetype];
+    const near = backdrop && scene.textures.exists(`kit-bg_${backdrop}`) ? Math.min(pad, 6 * T) : pad;
+    if (pad) WorldIso.extendGround(scene, map, layers[0], rt, pad, near);
     for (const l of layers) rt.draw(l, pad, pad);
     rt.saveTexture(key);
     for (const l of layers) l.setVisible(false);
@@ -92,7 +96,7 @@ const WorldIso = {
   },
 
   // The apron's ground: each cell outside the map gets the ground tile of the nearest map cell at the edge.
-  extendGround(scene, map, layer, rt, pad) {
+  extendGround(scene, map, layer, rt, pad, near = pad) {
     if (!layer) return;
     const T = map.tileWidth, cols = map.width, rows = map.height, n = pad / T, frames = new Map();
     const frameOf = t => {   // a tile's picture as a frame of its tileset's texture
@@ -106,6 +110,7 @@ const WorldIso = {
     };
     for (let y = -n; y < rows + n; y++) for (let x = -n; x < cols + n; x++) {
       if (x >= 0 && y >= 0 && x < cols && y < rows) continue;
+      if (Math.max(-x, -y, x - cols + 1, y - rows + 1) * T > near) continue;   // past the ring: the backdrop
       const t = layer.getTileAt(Math.min(cols - 1, Math.max(0, x)), Math.min(rows - 1, Math.max(0, y)));
       const f = t && t.index >= 0 && frameOf(t);
       if (f) rt.drawFrame(f[0], f[1], (x + n) * T, (y + n) * T);
