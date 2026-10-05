@@ -27,10 +27,10 @@ def T(en, zh):
 
 
 # Voices for the people World 3 adds (Kokoro Mandarin ids, as in tk_story_zh.CAST).
-CAST3 = {
-    "taishici": "zm_038", "kongrong": "zm_070", "guanhai": "zm_016", "taoqian": "zm_083", "mizhu": "zm_039",
-    "chendeng": "zm_040", "zhaoyun": "zm_042", "jiling": "zm_043", "zhangliao": "zm_044", "gaoshun": "zm_046",
-    "haomeng": "zm_047", "xunyu": "zm_048", "guojia": "zm_049", "sunqian": "zm_071",
+CAST3 = {   # valid Kokoro voices only (Integration); Book 3 reuses Book 1 and 2 voices of people who no longer appear
+    "taishici": "zm_045", "kongrong": "zm_091", "guanhai": "zm_016", "taoqian": "zm_068", "mizhu": "zm_063",
+    "chendeng": "zm_041", "zhaoyun": "zm_033", "jiling": "zm_011", "zhangliao": "zm_055", "gaoshun": "zm_015",
+    "haomeng": "zm_096", "xunyu": "zm_081", "guojia": "zm_065", "sunqian": "zm_014",
 }
 
 
@@ -507,7 +507,7 @@ def _nodes():
                     {"needs": ["mark:road_west", "mark:road_east"], "else": "roadearly2",
                      "objective": T("Post Guan Yu on the west side of the road and Zhang Fei on the east.", "让关羽守路西，张飞守路东。"), "at": "Xiapi"}]),
         {"key": "boss", "x": 430, "y": 90, "role": "boss", "place": T(*_XIAPI), "scene": "whitegate",
-         "boss": {"who": "lvbu", "title": "Lü Bu, bound at the White Gate",
+         "boss": {"who": "lvbu", "title": "Lü Bu, bound at the White Gate", "victory": False,   # a reckoning: no victory banner
                   "taunt": T("You are the guest on the dais, and I the prisoner below the steps.", "公为坐上客，布为阶下囚。")}},
     ]
 

@@ -1,0 +1,2831 @@
+{
+ "format": "tk-region/1",
+ "world": 3,
+ "name": "White Gate Tower",
+ "zh": "白门楼",
+ "start": "pingyuan",
+ "party": [
+  "liubei",
+  "guanyu",
+  "zhangfei"
+ ],
+ "places": [
+  {
+   "id": "pingyuan",
+   "name": "Pingyuan",
+   "zh": "平原",
+   "archetype": "town",
+   "map": "pingyuan.map.json",
+   "links": [
+    "beihai",
+    "pingyuan--house-1",
+    "pingyuan--house-2",
+    "pingyuan--house-3",
+    "pingyuan--shop-1"
+   ]
+  },
+  {
+   "id": "pingyuan--house-1",
+   "name": "House, Pingyuan",
+   "zh": "平原·民居",
+   "archetype": "interior",
+   "map": "pingyuan--house-1.map.json",
+   "links": [
+    "pingyuan"
+   ],
+   "parent": "pingyuan"
+  },
+  {
+   "id": "pingyuan--house-2",
+   "name": "House, Pingyuan",
+   "zh": "平原·民居",
+   "archetype": "interior",
+   "map": "pingyuan--house-2.map.json",
+   "links": [
+    "pingyuan"
+   ],
+   "parent": "pingyuan"
+  },
+  {
+   "id": "pingyuan--house-3",
+   "name": "House, Pingyuan",
+   "zh": "平原·民居",
+   "archetype": "interior",
+   "map": "pingyuan--house-3.map.json",
+   "links": [
+    "pingyuan"
+   ],
+   "parent": "pingyuan"
+  },
+  {
+   "id": "pingyuan--shop-1",
+   "name": "Teahouse, Pingyuan",
+   "zh": "平原·茶馆",
+   "archetype": "interior",
+   "map": "pingyuan--shop-1.map.json",
+   "links": [
+    "pingyuan"
+   ],
+   "parent": "pingyuan"
+  },
+  {
+   "id": "beihai",
+   "name": "Beihai",
+   "zh": "北海",
+   "archetype": "city",
+   "map": "beihai.map.json",
+   "links": [
+    "pingyuan",
+    "xuzhou",
+    "beihai--hall-1",
+    "beihai--house-1",
+    "beihai--house-2",
+    "beihai--inn-1",
+    "beihai--shop-1",
+    "beihai--house-3",
+    "beihai--shop-2",
+    "beihai--house-4"
+   ]
+  },
+  {
+   "id": "beihai--hall-1",
+   "name": "Hall, Beihai",
+   "zh": "北海·厅堂",
+   "archetype": "interior",
+   "map": "beihai--hall-1.map.json",
+   "links": [
+    "beihai"
+   ],
+   "parent": "beihai"
+  },
+  {
+   "id": "beihai--house-1",
+   "name": "House, Beihai",
+   "zh": "北海·民居",
+   "archetype": "interior",
+   "map": "beihai--house-1.map.json",
+   "links": [
+    "beihai"
+   ],
+   "parent": "beihai"
+  },
+  {
+   "id": "beihai--house-2",
+   "name": "House, Beihai",
+   "zh": "北海·民居",
+   "archetype": "interior",
+   "map": "beihai--house-2.map.json",
+   "links": [
+    "beihai"
+   ],
+   "parent": "beihai"
+  },
+  {
+   "id": "beihai--inn-1",
+   "name": "Inn, Beihai",
+   "zh": "北海·客栈",
+   "archetype": "interior",
+   "map": "beihai--inn-1.map.json",
+   "links": [
+    "beihai"
+   ],
+   "parent": "beihai"
+  },
+  {
+   "id": "beihai--shop-1",
+   "name": "Teahouse, Beihai",
+   "zh": "北海·茶馆",
+   "archetype": "interior",
+   "map": "beihai--shop-1.map.json",
+   "links": [
+    "beihai"
+   ],
+   "parent": "beihai"
+  },
+  {
+   "id": "beihai--house-3",
+   "name": "House, Beihai",
+   "zh": "北海·民居",
+   "archetype": "interior",
+   "map": "beihai--house-3.map.json",
+   "links": [
+    "beihai"
+   ],
+   "parent": "beihai"
+  },
+  {
+   "id": "beihai--shop-2",
+   "name": "Teahouse, Beihai",
+   "zh": "北海·茶馆",
+   "archetype": "interior",
+   "map": "beihai--shop-2.map.json",
+   "links": [
+    "beihai"
+   ],
+   "parent": "beihai"
+  },
+  {
+   "id": "beihai--house-4",
+   "name": "House, Beihai",
+   "zh": "北海·民居",
+   "archetype": "interior",
+   "map": "beihai--house-4.map.json",
+   "links": [
+    "beihai"
+   ],
+   "parent": "beihai"
+  },
+  {
+   "id": "xuzhou",
+   "name": "Xuzhou",
+   "zh": "徐州",
+   "archetype": "city",
+   "map": "xuzhou.map.json",
+   "links": [
+    "beihai",
+    "xuyi",
+    "xuzhou--hall",
+    "xuzhou--sickroom",
+    "xuzhou--guesthall",
+    "xuzhou--muster",
+    "xuzhou--hall-1",
+    "xuzhou--house-1",
+    "xuzhou--house-2",
+    "xuzhou--inn-1",
+    "xuzhou--shop-1",
+    "xuzhou--house-3",
+    "xuzhou--shop-2",
+    "xuzhou--house-4"
+   ]
+  },
+  {
+   "id": "xuzhou--hall",
+   "name": "The governor's hall",
+   "zh": "州衙",
+   "archetype": "interior",
+   "map": "xuzhou--hall.map.json",
+   "links": [
+    "xuzhou"
+   ],
+   "parent": "xuzhou"
+  },
+  {
+   "id": "xuzhou--sickroom",
+   "name": "Tao Qian's room",
+   "zh": "陶谦的卧房",
+   "archetype": "interior",
+   "map": "xuzhou--sickroom.map.json",
+   "links": [
+    "xuzhou"
+   ],
+   "parent": "xuzhou"
+  },
+  {
+   "id": "xuzhou--guesthall",
+   "name": "The guest hall",
+   "zh": "客厅",
+   "archetype": "interior",
+   "map": "xuzhou--guesthall.map.json",
+   "links": [
+    "xuzhou"
+   ],
+   "parent": "xuzhou"
+  },
+  {
+   "id": "xuzhou--muster",
+   "name": "The muster ground",
+   "zh": "校场",
+   "archetype": "interior",
+   "map": "xuzhou--muster.map.json",
+   "links": [
+    "xuzhou"
+   ],
+   "parent": "xuzhou"
+  },
+  {
+   "id": "xuzhou--hall-1",
+   "name": "Hall, Xuzhou",
+   "zh": "徐州·厅堂",
+   "archetype": "interior",
+   "map": "xuzhou--hall-1.map.json",
+   "links": [
+    "xuzhou"
+   ],
+   "parent": "xuzhou"
+  },
+  {
+   "id": "xuzhou--house-1",
+   "name": "House, Xuzhou",
+   "zh": "徐州·民居",
+   "archetype": "interior",
+   "map": "xuzhou--house-1.map.json",
+   "links": [
+    "xuzhou"
+   ],
+   "parent": "xuzhou"
+  },
+  {
+   "id": "xuzhou--house-2",
+   "name": "House, Xuzhou",
+   "zh": "徐州·民居",
+   "archetype": "interior",
+   "map": "xuzhou--house-2.map.json",
+   "links": [
+    "xuzhou"
+   ],
+   "parent": "xuzhou"
+  },
+  {
+   "id": "xuzhou--inn-1",
+   "name": "Inn, Xuzhou",
+   "zh": "徐州·客栈",
+   "archetype": "interior",
+   "map": "xuzhou--inn-1.map.json",
+   "links": [
+    "xuzhou"
+   ],
+   "parent": "xuzhou"
+  },
+  {
+   "id": "xuzhou--shop-1",
+   "name": "Teahouse, Xuzhou",
+   "zh": "徐州·茶馆",
+   "archetype": "interior",
+   "map": "xuzhou--shop-1.map.json",
+   "links": [
+    "xuzhou"
+   ],
+   "parent": "xuzhou"
+  },
+  {
+   "id": "xuzhou--house-3",
+   "name": "House, Xuzhou",
+   "zh": "徐州·民居",
+   "archetype": "interior",
+   "map": "xuzhou--house-3.map.json",
+   "links": [
+    "xuzhou"
+   ],
+   "parent": "xuzhou"
+  },
+  {
+   "id": "xuzhou--shop-2",
+   "name": "Teahouse, Xuzhou",
+   "zh": "徐州·茶馆",
+   "archetype": "interior",
+   "map": "xuzhou--shop-2.map.json",
+   "links": [
+    "xuzhou"
+   ],
+   "parent": "xuzhou"
+  },
+  {
+   "id": "xuzhou--house-4",
+   "name": "House, Xuzhou",
+   "zh": "徐州·民居",
+   "archetype": "interior",
+   "map": "xuzhou--house-4.map.json",
+   "links": [
+    "xuzhou"
+   ],
+   "parent": "xuzhou"
+  },
+  {
+   "id": "xuyi",
+   "name": "Xuyi",
+   "zh": "盱眙",
+   "archetype": "camp",
+   "map": "xuyi.map.json",
+   "links": [
+    "xuzhou",
+    "xiaopei",
+    "xuyi--camp",
+    "xuyi--tent-1",
+    "xuyi--tent-2",
+    "xuyi--tent-3",
+    "xuyi--tent-4"
+   ]
+  },
+  {
+   "id": "xuyi--camp",
+   "name": "The camp at Xuyi",
+   "zh": "盱眙营寨",
+   "archetype": "interior",
+   "map": "xuyi--camp.map.json",
+   "links": [
+    "xuyi"
+   ],
+   "parent": "xuyi"
+  },
+  {
+   "id": "xuyi--tent-1",
+   "name": "Tent, Xuyi",
+   "zh": "盱眙·营帐",
+   "archetype": "interior",
+   "map": "xuyi--tent-1.map.json",
+   "links": [
+    "xuyi"
+   ],
+   "parent": "xuyi"
+  },
+  {
+   "id": "xuyi--tent-2",
+   "name": "Tent, Xuyi",
+   "zh": "盱眙·营帐",
+   "archetype": "interior",
+   "map": "xuyi--tent-2.map.json",
+   "links": [
+    "xuyi"
+   ],
+   "parent": "xuyi"
+  },
+  {
+   "id": "xuyi--tent-3",
+   "name": "Tent, Xuyi",
+   "zh": "盱眙·营帐",
+   "archetype": "interior",
+   "map": "xuyi--tent-3.map.json",
+   "links": [
+    "xuyi"
+   ],
+   "parent": "xuyi"
+  },
+  {
+   "id": "xuyi--tent-4",
+   "name": "Tent, Xuyi",
+   "zh": "盱眙·营帐",
+   "archetype": "interior",
+   "map": "xuyi--tent-4.map.json",
+   "links": [
+    "xuyi"
+   ],
+   "parent": "xuyi"
+  },
+  {
+   "id": "xiaopei",
+   "name": "Xiaopei",
+   "zh": "小沛",
+   "archetype": "town",
+   "map": "xiaopei.map.json",
+   "links": [
+    "xuyi",
+    "xiapi",
+    "xiaopei--lvbucamp",
+    "xiaopei--house-1",
+    "xiaopei--house-2",
+    "xiaopei--house-3",
+    "xiaopei--shop-1"
+   ]
+  },
+  {
+   "id": "xiaopei--lvbucamp",
+   "name": "Lü Bu's camp",
+   "zh": "吕布营寨",
+   "archetype": "interior",
+   "map": "xiaopei--lvbucamp.map.json",
+   "links": [
+    "xiaopei"
+   ],
+   "parent": "xiaopei"
+  },
+  {
+   "id": "xiaopei--house-1",
+   "name": "House, Xiaopei",
+   "zh": "小沛·民居",
+   "archetype": "interior",
+   "map": "xiaopei--house-1.map.json",
+   "links": [
+    "xiaopei"
+   ],
+   "parent": "xiaopei"
+  },
+  {
+   "id": "xiaopei--house-2",
+   "name": "House, Xiaopei",
+   "zh": "小沛·民居",
+   "archetype": "interior",
+   "map": "xiaopei--house-2.map.json",
+   "links": [
+    "xiaopei"
+   ],
+   "parent": "xiaopei"
+  },
+  {
+   "id": "xiaopei--house-3",
+   "name": "House, Xiaopei",
+   "zh": "小沛·民居",
+   "archetype": "interior",
+   "map": "xiaopei--house-3.map.json",
+   "links": [
+    "xiaopei"
+   ],
+   "parent": "xiaopei"
+  },
+  {
+   "id": "xiaopei--shop-1",
+   "name": "Teahouse, Xiaopei",
+   "zh": "小沛·茶馆",
+   "archetype": "interior",
+   "map": "xiaopei--shop-1.map.json",
+   "links": [
+    "xiaopei"
+   ],
+   "parent": "xiaopei"
+  },
+  {
+   "id": "xiapi",
+   "name": "Xiapi",
+   "zh": "下邳",
+   "archetype": "city",
+   "map": "xiapi.map.json",
+   "links": [
+    "xiaopei",
+    "xiapi--camp",
+    "xiapi--hall-1",
+    "xiapi--house-1",
+    "xiapi--house-2",
+    "xiapi--inn-1",
+    "xiapi--shop-1",
+    "xiapi--house-3",
+    "xiapi--shop-2",
+    "xiapi--house-4"
+   ]
+  },
+  {
+   "id": "xiapi--camp",
+   "name": "Liu Bei's camp on the road",
+   "zh": "玄德路口营寨",
+   "archetype": "interior",
+   "map": "xiapi--camp.map.json",
+   "links": [
+    "xiapi"
+   ],
+   "parent": "xiapi"
+  },
+  {
+   "id": "xiapi--hall-1",
+   "name": "Hall, Xiapi",
+   "zh": "下邳·厅堂",
+   "archetype": "interior",
+   "map": "xiapi--hall-1.map.json",
+   "links": [
+    "xiapi"
+   ],
+   "parent": "xiapi"
+  },
+  {
+   "id": "xiapi--house-1",
+   "name": "House, Xiapi",
+   "zh": "下邳·民居",
+   "archetype": "interior",
+   "map": "xiapi--house-1.map.json",
+   "links": [
+    "xiapi"
+   ],
+   "parent": "xiapi"
+  },
+  {
+   "id": "xiapi--house-2",
+   "name": "House, Xiapi",
+   "zh": "下邳·民居",
+   "archetype": "interior",
+   "map": "xiapi--house-2.map.json",
+   "links": [
+    "xiapi"
+   ],
+   "parent": "xiapi"
+  },
+  {
+   "id": "xiapi--inn-1",
+   "name": "Inn, Xiapi",
+   "zh": "下邳·客栈",
+   "archetype": "interior",
+   "map": "xiapi--inn-1.map.json",
+   "links": [
+    "xiapi"
+   ],
+   "parent": "xiapi"
+  },
+  {
+   "id": "xiapi--shop-1",
+   "name": "Teahouse, Xiapi",
+   "zh": "下邳·茶馆",
+   "archetype": "interior",
+   "map": "xiapi--shop-1.map.json",
+   "links": [
+    "xiapi"
+   ],
+   "parent": "xiapi"
+  },
+  {
+   "id": "xiapi--house-3",
+   "name": "House, Xiapi",
+   "zh": "下邳·民居",
+   "archetype": "interior",
+   "map": "xiapi--house-3.map.json",
+   "links": [
+    "xiapi"
+   ],
+   "parent": "xiapi"
+  },
+  {
+   "id": "xiapi--shop-2",
+   "name": "Teahouse, Xiapi",
+   "zh": "下邳·茶馆",
+   "archetype": "interior",
+   "map": "xiapi--shop-2.map.json",
+   "links": [
+    "xiapi"
+   ],
+   "parent": "xiapi"
+  },
+  {
+   "id": "xiapi--house-4",
+   "name": "House, Xiapi",
+   "zh": "下邳·民居",
+   "archetype": "interior",
+   "map": "xiapi--house-4.map.json",
+   "links": [
+    "xiapi"
+   ],
+   "parent": "xiapi"
+  },
+  {
+   "id": "overworld",
+   "name": "The Realm",
+   "zh": "天下",
+   "archetype": "overworld",
+   "map": "overworld.map.json",
+   "links": []
+  }
+ ],
+ "quests": [
+  {
+   "node": "3-m1",
+   "role": "main",
+   "place": "pingyuan",
+   "spot": "gate",
+   "scene": "beihai1",
+   "title": "A Rider from Beihai",
+   "objective": "Meet the rider at Pingyuan's gate.",
+   "after": [],
+   "grade": "10K",
+   "pool": [
+    [
+     "specialized-training-in-tsumego-5",
+     43987
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     75172
+    ],
+    [
+     "weiqi-life-and-death-drills-beginner-part-1",
+     5398
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     44184
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     108283
+    ],
+    [
+     "specialized-training-in-tesuji-1",
+     241968
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     230594
+    ],
+    [
+     "weiqi-rapid-drill-800-part-2",
+     3371
+    ],
+    [
+     "fujisawa-shuko-classroom",
+     3690
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-1",
+     65416
+    ],
+    [
+     "weiqi-small-leisure-collection",
+     25479
+    ],
+    [
+     "200-basic-go-problems",
+     176528
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-2",
+     134366
+    ],
+    [
+     "specialized-training-in-tesuji-1",
+     241958
+    ],
+    [
+     "weiqi-rapid-drill-800-part-2",
+     3240
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160741
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147871
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160667
+    ],
+    [
+     "200-basic-go-problems",
+     174818
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     44164
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-1",
+     132099
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     22025
+    ],
+    [
+     "seedling-project",
+     27433
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     43839
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     127223
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     59984
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-1",
+     1152
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     166757
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     247654
+    ],
+    [
+     "bedtime-tsumego-part-2",
+     137715
+    ]
+   ],
+   "objective_zh": "到平原城门，见那位来使。",
+   "title_zh": "北海来使"
+  },
+  {
+   "node": "3-m2",
+   "role": "main",
+   "place": "beihai",
+   "spot": "gate",
+   "scene": "beihai2",
+   "title": "The Siege of Beihai",
+   "objective": "Go to Beihai and lift the siege.",
+   "after": [
+    "3-m1"
+   ],
+   "grade": "10K",
+   "pool": [
+    [
+     "specialized-training-in-tsumego-5",
+     444
+    ],
+    [
+     "specialized-training-in-tesuji-1",
+     387469
+    ],
+    [
+     "specialized-training-in-tesuji-1",
+     241956
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     438
+    ],
+    [
+     "segoe-tsumego-dictionary-part-2",
+     15957
+    ],
+    [
+     "common-life-and-death-problems",
+     42562
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3534
+    ],
+    [
+     "fujisawa-shuko-classroom",
+     266097
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     515
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     400
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     178030
+    ],
+    [
+     "weiqi-rapid-drill-800-part-2",
+     3296
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147959
+    ],
+    [
+     "200-basic-go-problems",
+     174804
+    ],
+    [
+     "200-basic-go-problems",
+     174773
+    ],
+    [
+     "specialized-training-in-tesuji-4",
+     81461
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     26659
+    ],
+    [
+     "nie-weipings-tsumego-encyclopedia",
+     4225
+    ],
+    [
+     "specialized-training-in-tesuji-1",
+     241965
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3637
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     108369
+    ],
+    [
+     "ishida-yoshio-tesuji",
+     45736
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     1208
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3539
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     44962
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     149049
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     428
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     50466
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147828
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147501
+    ]
+   ],
+   "objective_zh": "前往北海解围。",
+   "title_zh": "北海解围"
+  },
+  {
+   "node": "3-m3",
+   "role": "main",
+   "place": "xuzhou",
+   "spot": "lines",
+   "scene": "breakthrough",
+   "title": "The Red Banner",
+   "objective": "Go to Xuzhou, where Cao Cao's army surrounds the city.",
+   "after": [
+    "3-m2"
+   ],
+   "grade": "10K",
+   "pool": [
+    [
+     "weiqi-rapid-drill-800-part-2",
+     3274
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     6568
+    ],
+    [
+     "the-unexpected-tesuji",
+     74849
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     50646
+    ],
+    [
+     "hitomi-tsumego",
+     135420
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160680
+    ],
+    [
+     "bedtime-tsumego-part-1",
+     135462
+    ],
+    [
+     "common-life-and-death-problems",
+     25998
+    ],
+    [
+     "ishida-yoshio-tsumego-challenge",
+     37679
+    ],
+    [
+     "weiqi-small-leisure-collection",
+     25627
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     43873
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-1",
+     142197
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     512
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3536
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     43947
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-2",
+     144152
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     108278
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     7294
+    ],
+    [
+     "the-great-tesuji-encyclopedia-4",
+     47189
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     149014
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160655
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147459
+    ],
+    [
+     "200-selected-problems-for-repetitive-practice",
+     15662
+    ],
+    [
+     "weiqi-rapid-drill-800-part-2",
+     3249
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     149009
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147911
+    ],
+    [
+     "specialized-training-in-capturing-races",
+     5348
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     484
+    ],
+    [
+     "specialized-training-in-tesuji-5",
+     119427
+    ],
+    [
+     "200-basic-go-problems",
+     176542
+    ]
+   ],
+   "objective_zh": "前往徐州，曹军正围着城。",
+   "title_zh": "红旗白字"
+  },
+  {
+   "node": "3-m4",
+   "role": "main",
+   "place": "xuzhou",
+   "spot": "hall",
+   "scene": "second",
+   "title": "The Second Offer",
+   "objective": "Go to the governor's hall for the victory feast.",
+   "after": [
+    "3-m3"
+   ],
+   "grade": "10K",
+   "pool": [
+    [
+     "specialized-training-in-tsumego-5",
+     44070
+    ],
+    [
+     "seedling-project",
+     27338
+    ],
+    [
+     "weiqi-life-and-death-drills-beginner-part-2",
+     63168
+    ],
+    [
+     "hitomi-tsumego",
+     160832
+    ],
+    [
+     "seedling-project",
+     27445
+    ],
+    [
+     "beautiful-dan-level-tsumego-100",
+     138887
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     405
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160748
+    ],
+    [
+     "200-selected-problems-for-repetitive-practice",
+     11924
+    ],
+    [
+     "weiqi-rapid-drill-800-part-2",
+     3391
+    ],
+    [
+     "200-selected-problems-for-repetitive-practice",
+     391
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     149013
+    ],
+    [
+     "common-life-and-death-problems",
+     3317
+    ],
+    [
+     "200-basic-go-problems",
+     174788
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     140949
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     44197
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     20608
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     50591
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3690
+    ],
+    [
+     "segoe-tsumego-dictionary-part-2",
+     15900
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3469
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     445
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-1",
+     143441
+    ],
+    [
+     "common-life-and-death-problems",
+     25520
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     148989
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     50698
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     149216
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     148879
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     13719
+    ],
+    [
+     "bedtime-tsumego-part-1",
+     135466
+    ]
+   ],
+   "objective_zh": "到州衙赴庆功宴。",
+   "title_zh": "再让徐州"
+  },
+  {
+   "node": "3-m5",
+   "role": "main",
+   "place": "xuzhou",
+   "spot": "sickroom",
+   "scene": "deathbed",
+   "title": "The Third Offer",
+   "objective": "Go to Tao Qian. He is dying, and has asked for you.",
+   "after": [
+    "3-m4"
+   ],
+   "grade": "10K",
+   "pool": [
+    [
+     "weiqi-rapid-drill-800-part-4",
+     5012
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     84629
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3538
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3790
+    ],
+    [
+     "weiqi-rapid-drill-800-part-2",
+     3247
+    ],
+    [
+     "hitomi-tsumego",
+     135435
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     466
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160694
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     112038
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-2",
+     144375
+    ],
+    [
+     "specialized-training-in-tesuji-5",
+     119601
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-2",
+     134365
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     148991
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-1",
+     1106
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-1",
+     1125
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-1",
+     1238
+    ],
+    [
+     "specialized-training-in-tesuji-3",
+     81354
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     3571
+    ],
+    [
+     "segoe-tesuji-dictionary-part-1",
+     17397
+    ],
+    [
+     "lee-chang-hos-selected-tesuji-part-1",
+     11139
+    ],
+    [
+     "common-life-and-death-problems",
+     26041
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160663
+    ],
+    [
+     "weiqi-rapid-drill-800-part-2",
+     3293
+    ],
+    [
+     "hitomi-tsumego",
+     135430
+    ],
+    [
+     "weiqi-small-leisure-collection",
+     15714
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-2",
+     1358
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     43896
+    ],
+    [
+     "the-unexpected-tesuji",
+     22269
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     149140
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     21980
+    ]
+   ],
+   "objective_zh": "去见陶谦。他病重，请你去。",
+   "title_zh": "三让徐州"
+  },
+  {
+   "node": "3-m6",
+   "role": "main",
+   "place": "xuzhou",
+   "spot": "gate",
+   "scene": "guest",
+   "title": "A Tiger at the Gate",
+   "objective": "Go out to the road gate. Lü Bu is coming, asking for shelter.",
+   "after": [
+    "3-m5"
+   ],
+   "grade": "10K+",
+   "pool": [
+    [
+     "200-selected-problems-for-repetitive-practice",
+     1238
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     382
+    ],
+    [
+     "weiqi-rapid-drill-800-part-1",
+     3159
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     127100
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-1",
+     143885
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     50738
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     445
+    ],
+    [
+     "200-basic-go-problems",
+     174820
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3496
+    ],
+    [
+     "nie-weipings-tsumego-encyclopedia",
+     53008
+    ],
+    [
+     "common-life-and-death-problems",
+     26021
+    ],
+    [
+     "segoe-tsumego-dictionary-part-2",
+     752
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-2",
+     1439
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     405
+    ],
+    [
+     "nie-weipings-tsumego-encyclopedia",
+     445
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160730
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160668
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     149001
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     149264
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-1",
+     143326
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     149046
+    ],
+    [
+     "hitomi-tsumego",
+     160844
+    ],
+    [
+     "200-selected-problems-for-repetitive-practice",
+     74052
+    ],
+    [
+     "hitomi-tsumego",
+     160812
+    ],
+    [
+     "the-great-tesuji-encyclopedia-3",
+     15659
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-2",
+     1504
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     149012
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     104316
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     440
+    ],
+    [
+     "hitomi-tsumego",
+     135442
+    ]
+   ],
+   "objective_zh": "到城门外去。吕布前来投奔。",
+   "title_zh": "虎狼入门"
+  },
+  {
+   "node": "3-m7",
+   "role": "main",
+   "place": "xuzhou",
+   "spot": "guesthall",
+   "scene": "tigers",
+   "title": "Two Tigers",
+   "objective": "Go to the guest hall. An envoy has come from Xu.",
+   "after": [
+    "3-m6"
+   ],
+   "grade": "10K+",
+   "pool": [
+    [
+     "specialized-training-in-capturing-races",
+     5209
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     43864
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160656
+    ],
+    [
+     "weiqi-life-and-death-drills-beginner-part-2",
+     63150
+    ],
+    [
+     "ishida-yoshio-tesuji",
+     45754
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     149010
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     21980
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     149041
+    ],
+    [
+     "weiqi-rapid-drill-800-part-1",
+     3128
+    ],
+    [
+     "weiqi-rapid-drill-800-part-2",
+     3236
+    ],
+    [
+     "200-selected-problems-for-repetitive-practice",
+     1504
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-2",
+     1401
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     108378
+    ],
+    [
+     "common-life-and-death-problems",
+     25909
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     75201
+    ],
+    [
+     "fujisawa-shuko-classroom",
+     54910
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     247653
+    ],
+    [
+     "fujisawa-shuko-classroom",
+     265464
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     89123
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-1",
+     143353
+    ],
+    [
+     "weiqi-small-leisure-collection",
+     25520
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     454
+    ],
+    [
+     "hitomi-tsumego",
+     160842
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     523
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-2",
+     1400
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     50375
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     391
+    ],
+    [
+     "fujisawa-shuko-classroom",
+     181289
+    ],
+    [
+     "200-selected-problems-for-repetitive-practice",
+     22065
+    ],
+    [
+     "the-great-tesuji-encyclopedia-5",
+     4853
+    ]
+   ],
+   "objective_zh": "到客厅去。许都来了使者。",
+   "title_zh": "二虎竞食"
+  },
+  {
+   "node": "3-m8",
+   "role": "main",
+   "place": "xuzhou",
+   "spot": "muster",
+   "scene": "vow",
+   "title": "Zhang Fei's Vow",
+   "objective": "Go to the muster ground. An order has come to march.",
+   "after": [
+    "3-m7"
+   ],
+   "grade": "10K+",
+   "pool": [
+    [
+     "ishida-yoshio-tesuji",
+     45737
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     149015
+    ],
+    [
+     "200-selected-problems-for-repetitive-practice",
+     162739
+    ],
+    [
+     "weiqi-rapid-drill-800-part-2",
+     3400
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     89683
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     108361
+    ],
+    [
+     "seedling-project",
+     27448
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     149018
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     127224
+    ],
+    [
+     "bedtime-tsumego-part-1",
+     135484
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-2",
+     752
+    ],
+    [
+     "hitomi-tsumego",
+     67850
+    ],
+    [
+     "hitomi-tsumego",
+     109785
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     44056
+    ],
+    [
+     "hitomi-tsumego",
+     160810
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     149017
+    ],
+    [
+     "200-basic-go-problems",
+     174195
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160648
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     22218
+    ],
+    [
+     "200-selected-problems-for-repetitive-practice",
+     3571
+    ],
+    [
+     "segoe-tsumego-dictionary-part-1",
+     15659
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     474
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     44078
+    ],
+    [
+     "hitomi-tsumego",
+     160789
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147407
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3722
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     43897
+    ],
+    [
+     "fujisawa-shuko-classroom",
+     265005
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-2",
+     145539
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160625
+    ]
+   ],
+   "objective_zh": "到校场去。出兵的诏令到了。",
+   "title_zh": "张飞立誓"
+  },
+  {
+   "node": "3-m9",
+   "role": "main",
+   "place": "xuyi",
+   "spot": "camp",
+   "scene": "handsfeet",
+   "title": "Hands and Feet",
+   "objective": "March to Xuyi, against Yuan Shu's general Ji Ling.",
+   "after": [
+    "3-m8"
+   ],
+   "grade": "10K+",
+   "pool": [
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147503
+    ],
+    [
+     "specialized-training-in-tesuji-3",
+     81012
+    ],
+    [
+     "segoe-tsumego-dictionary-part-1",
+     15662
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160707
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     43920
+    ],
+    [
+     "hitomi-tsumego",
+     160780
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     444
+    ],
+    [
+     "200-basic-go-problems",
+     174147
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     1401
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3738
+    ],
+    [
+     "hitomi-tsumego",
+     160788
+    ],
+    [
+     "weiqi-rapid-drill-800-part-1",
+     1208
+    ],
+    [
+     "weiqi-rapid-drill-800-part-1",
+     3176
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     127161
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     148996
+    ],
+    [
+     "200-selected-problems-for-repetitive-practice",
+     1197
+    ],
+    [
+     "specialized-training-in-capturing-races",
+     11139
+    ],
+    [
+     "segoe-tsumego-dictionary-part-1",
+     15714
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     50477
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     84620
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     127184
+    ],
+    [
+     "the-unexpected-tesuji",
+     3317
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-1",
+     1166
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     50489
+    ],
+    [
+     "common-life-and-death-problems",
+     26042
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     149047
+    ],
+    [
+     "200-selected-problems-for-repetitive-practice",
+     162746
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     127189
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     149002
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147109
+    ]
+   ],
+   "objective_zh": "进兵盱眙，迎战袁术大将纪灵。",
+   "title_zh": "兄弟如手足"
+  },
+  {
+   "node": "3-m10",
+   "role": "main",
+   "place": "xiaopei",
+   "spot": "lvbucamp",
+   "scene": "halberd",
+   "title": "The Halberd at the Gate",
+   "objective": "Go to Lü Bu's camp. He has called both sides to a feast.",
+   "after": [
+    "3-m9"
+   ],
+   "grade": "10K+",
+   "pool": [
+    [
+     "go-puzzles-at-a-glance",
+     65391
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     459
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-1",
+     1281
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     149008
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     465
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-1",
+     65423
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     127213
+    ],
+    [
+     "200-basic-go-problems",
+     174727
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-1",
+     1292
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     146337
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-1",
+     1167
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     3392
+    ],
+    [
+     "segoe-tsumego-dictionary-part-1",
+     15663
+    ],
+    [
+     "common-life-and-death-problems",
+     445
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     477
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-2",
+     1428
+    ],
+    [
+     "200-selected-problems-for-repetitive-practice",
+     13558
+    ],
+    [
+     "hitomi-tsumego",
+     160786
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     50698
+    ],
+    [
+     "common-life-and-death-problems",
+     4616
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-2",
+     144416
+    ],
+    [
+     "ishida-yoshio-tesuji",
+     45755
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     11614
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     148892
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     75162
+    ],
+    [
+     "weiqi-rapid-drill-800-part-1",
+     3095
+    ],
+    [
+     "weiqi-rapid-drill-800-part-2",
+     3253
+    ],
+    [
+     "specialized-training-in-tesuji-4",
+     81470
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160686
+    ],
+    [
+     "200-basic-go-problems",
+     174776
+    ]
+   ],
+   "objective_zh": "到吕布营中。他请两家赴宴。",
+   "title_zh": "辕门射戟"
+  },
+  {
+   "node": "3-m11",
+   "role": "main",
+   "place": "xiaopei",
+   "spot": "northgate",
+   "scene": "horses",
+   "title": "The Stolen Horses",
+   "objective": "Go to the north gate. Lü Bu has come in a rage.",
+   "after": [
+    "3-m10"
+   ],
+   "grade": "10K+",
+   "pool": [
+    [
+     "200-selected-problems-for-repetitive-practice",
+     1112
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147454
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     42811
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     43899
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-1",
+     132032
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     43895
+    ],
+    [
+     "lee-chang-hos-selected-tesuji-part-3",
+     14883
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     84621
+    ],
+    [
+     "weiqi-rapid-drill-800-part-1",
+     3051
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     44069
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     44187
+    ],
+    [
+     "common-life-and-death-problems",
+     25924
+    ],
+    [
+     "weiqi-life-and-death-drills-beginner-part-2",
+     63210
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3751
+    ],
+    [
+     "common-life-and-death-problems",
+     25120
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     149190
+    ],
+    [
+     "200-basic-go-problems",
+     174785
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-2",
+     144164
+    ],
+    [
+     "weiqi-rapid-drill-800-part-2",
+     3361
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3622
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     43878
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3745
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3717
+    ],
+    [
+     "segoe-tesuji-dictionary-part-4",
+     18041
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     44159
+    ],
+    [
+     "hitomi-tsumego",
+     135439
+    ],
+    [
+     "specialized-training-in-tesuji-5",
+     81434
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     148889
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     100902
+    ],
+    [
+     "bedtime-tsumego-part-1",
+     37549
+    ]
+   ],
+   "objective_zh": "到北门去。吕布怒气冲冲地来了。",
+   "title_zh": "张飞夺马"
+  },
+  {
+   "node": "3-m12",
+   "role": "main",
+   "place": "xiaopei",
+   "spot": "westgate",
+   "scene": "scattered",
+   "title": "Scattered",
+   "objective": "Go to the west gate. Lü Bu's generals are attacking.",
+   "after": [
+    "3-m11"
+   ],
+   "grade": "9K",
+   "pool": [
+    [
+     "specialized-training-in-tsumego-3",
+     149152
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     472
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160675
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-1",
+     84444
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-4",
+     2119
+    ],
+    [
+     "hitomi-tsumego",
+     52773
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-2",
+     638
+    ],
+    [
+     "hitomi-tsumego",
+     135432
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     148881
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     84630
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     149141
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3706
+    ],
+    [
+     "go-seigen-endgame-part-2",
+     2362
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     457
+    ],
+    [
+     "segoe-tesuji-dictionary-part-4",
+     14498
+    ],
+    [
+     "200-basic-go-problems",
+     174778
+    ],
+    [
+     "ishida-yoshio-tsumego-challenge",
+     37668
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     556
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     149150
+    ],
+    [
+     "weiqi-rapid-drill-800-part-2",
+     3338
+    ],
+    [
+     "nie-weipings-tsumego-encyclopedia",
+     52773
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-1",
+     132102
+    ],
+    [
+     "weiqi-rapid-drill-800-part-1",
+     485
+    ],
+    [
+     "200-basic-go-problems",
+     175845
+    ],
+    [
+     "weiqi-rapid-drill-800-part-1",
+     3086
+    ],
+    [
+     "hitomi-tsumego",
+     160868
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     149065
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     149051
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     149050
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3740
+    ]
+   ],
+   "objective_zh": "到西门去。吕布的部将正在攻城。",
+   "title_zh": "兄弟失散"
+  },
+  {
+   "node": "3-m13",
+   "role": "main",
+   "place": "xiapi",
+   "spot": "camp",
+   "scene": "xiapi",
+   "title": "The Huainan Road",
+   "objective": "Go to Xiapi, where Cao Cao has Lü Bu surrounded.",
+   "after": [
+    "3-m12"
+   ],
+   "grade": "9K",
+   "pool": [
+    [
+     "weiqi-life-and-death-1000-problems-part-4",
+     2055
+    ],
+    [
+     "weiqi-rapid-drill-800-part-1",
+     3119
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160724
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147947
+    ],
+    [
+     "weiqi-rapid-drill-800-part-2",
+     3396
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-1",
+     1177
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-2",
+     144224
+    ],
+    [
+     "segoe-tsumego-dictionary-part-2",
+     15908
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147449
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3691
+    ],
+    [
+     "common-life-and-death-problems",
+     25919
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-1",
+     1293
+    ],
+    [
+     "segoe-tsumego-dictionary-part-2",
+     23045
+    ],
+    [
+     "200-basic-go-problems",
+     176518
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     43843
+    ],
+    [
+     "the-unexpected-tesuji",
+     1897
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-2",
+     144403
+    ],
+    [
+     "hashimoto-masterpiece-collection",
+     30556
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     410
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     43992
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     440
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160714
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3729
+    ],
+    [
+     "common-life-and-death-problems",
+     4229
+    ],
+    [
+     "weiqi-life-and-death-drills-beginner-part-3",
+     63377
+    ],
+    [
+     "the-unexpected-tesuji",
+     105225
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     127035
+    ],
+    [
+     "weiqi-rapid-drill-800-part-1",
+     3034
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-1",
+     142424
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     148999
+    ]
+   ],
+   "board": false,
+   "objective_zh": "前往下邳，曹操已把吕布围住。",
+   "title_zh": "淮南要路"
+  },
+  {
+   "node": "3-m13b",
+   "role": "main",
+   "place": "xiapi",
+   "spot": "rock",
+   "scene": "rock3",
+   "title": "The Shrine under the Pine",
+   "objective": "Go to the shrine under the pine by the camp.",
+   "after": [
+    "3-m13"
+   ],
+   "grade": "9K",
+   "pool": [
+    [
+     "specialized-training-in-tsumego-3",
+     149156
+    ],
+    [
+     "hitomi-tsumego",
+     160865
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     26568
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     529
+    ],
+    [
+     "bedtime-tsumego-part-3",
+     137001
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-1",
+     143592
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     127074
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     467
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     127016
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     13534
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     455
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     84610
+    ],
+    [
+     "bedtime-tsumego-part-3",
+     135804
+    ],
+    [
+     "200-basic-go-problems",
+     176536
+    ],
+    [
+     "segoe-tsumego-dictionary-part-1",
+     15711
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     50672
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160662
+    ],
+    [
+     "weiqi-rapid-drill-800-part-2",
+     3280
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     464
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3471
+    ],
+    [
+     "common-life-and-death-problems",
+     26043
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     498
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     149225
+    ],
+    [
+     "weiqi-rapid-drill-800-part-2",
+     3222
+    ],
+    [
+     "the-unexpected-tesuji",
+     74847
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     108364
+    ],
+    [
+     "segoe-tsumego-dictionary-part-1",
+     15676
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     529
+    ],
+    [
+     "200-selected-problems-for-repetitive-practice",
+     12409
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160709
+    ]
+   ],
+   "shrine": true,
+   "hint": "Shut every door, and wait.",
+   "objective_zh": "到营边松树下的星君祠去。",
+   "title_zh": "松下星君祠",
+   "hint_zh": "把门都关上，然后等。"
+  },
+  {
+   "node": "3-m13c",
+   "role": "main",
+   "place": "xiapi",
+   "spot": "road",
+   "scene": "breakout",
+   "title": "The Daughter on His Back",
+   "objective": "Hold the Huainan road.",
+   "after": [
+    "3-m13",
+    "3-m13b"
+   ],
+   "grade": "9K",
+   "pool": [
+    [
+     "specialized-training-in-tsumego-5",
+     127019
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     149231
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     543
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-2",
+     133256
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     149135
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     149153
+    ],
+    [
+     "seedling-project",
+     27432
+    ],
+    [
+     "weiqi-rapid-drill-800-part-2",
+     3323
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3791
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     127225
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     25924
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     43881
+    ],
+    [
+     "weiqi-rapid-drill-800-part-2",
+     3342
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     148882
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3544
+    ],
+    [
+     "segoe-tsumego-dictionary-part-3",
+     799
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-1",
+     1112
+    ],
+    [
+     "hitomi-tsumego",
+     135418
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-2",
+     670
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-1",
+     144067
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     44057
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     149230
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3668
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     149227
+    ],
+    [
+     "200-basic-go-problems",
+     174802
+    ],
+    [
+     "the-unexpected-tesuji",
+     63449
+    ],
+    [
+     "segoe-tsumego-dictionary-part-3",
+     16290
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-3",
+     1622
+    ],
+    [
+     "200-basic-go-problems",
+     175853
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160665
+    ]
+   ],
+   "gate": [
+    {
+     "needs": [
+      "node:m13b"
+     ],
+     "else": "roadearly",
+     "objective": "Hold the Huainan road.",
+     "at": "Xiapi",
+     "count": false,
+     "place": "xiapi",
+     "objective_zh": "守住淮南要路。"
+    },
+    {
+     "needs": [
+      "mark:road_west",
+      "mark:road_east"
+     ],
+     "else": "roadearly2",
+     "objective": "Post Guan Yu on the west side of the road and Zhang Fei on the east.",
+     "at": "Xiapi",
+     "place": "xiapi",
+     "objective_zh": "让关羽守路西，张飞守路东。"
+    }
+   ],
+   "objective_zh": "守住淮南要路。",
+   "title_zh": "负女突围"
+  },
+  {
+   "node": "3-boss",
+   "role": "boss",
+   "place": "xiapi",
+   "spot": "whitegate",
+   "scene": "whitegate",
+   "title": "The White Gate Tower",
+   "objective": "Go up to the White Gate Tower.",
+   "after": [
+    "3-m13c"
+   ],
+   "grade": null,
+   "pool": [
+    [
+     "redmond-life-and-death",
+     22
+    ],
+    [
+     "redmond-life-and-death",
+     18
+    ],
+    [
+     "redmond-life-and-death",
+     41
+    ],
+    [
+     "redmond-life-and-death",
+     29
+    ],
+    [
+     "redmond-life-and-death",
+     60
+    ],
+    [
+     "redmond-life-and-death",
+     23
+    ],
+    [
+     "redmond-life-and-death",
+     11
+    ],
+    [
+     "redmond-life-and-death",
+     27
+    ],
+    [
+     "redmond-life-and-death",
+     7
+    ],
+    [
+     "redmond-life-and-death",
+     51
+    ],
+    [
+     "redmond-life-and-death",
+     4
+    ],
+    [
+     "redmond-life-and-death",
+     8
+    ],
+    [
+     "redmond-life-and-death",
+     3
+    ],
+    [
+     "redmond-life-and-death",
+     54
+    ],
+    [
+     "redmond-life-and-death",
+     28
+    ],
+    [
+     "redmond-life-and-death",
+     12
+    ],
+    [
+     "redmond-life-and-death",
+     32
+    ],
+    [
+     "redmond-life-and-death",
+     38
+    ],
+    [
+     "redmond-life-and-death",
+     21
+    ],
+    [
+     "redmond-life-and-death",
+     14
+    ],
+    [
+     "redmond-life-and-death",
+     45
+    ],
+    [
+     "redmond-life-and-death",
+     20
+    ],
+    [
+     "redmond-life-and-death",
+     65
+    ],
+    [
+     "redmond-life-and-death",
+     61
+    ],
+    [
+     "redmond-life-and-death",
+     33
+    ],
+    [
+     "redmond-life-and-death",
+     30
+    ],
+    [
+     "redmond-life-and-death",
+     57
+    ],
+    [
+     "redmond-life-and-death",
+     2
+    ],
+    [
+     "redmond-life-and-death",
+     19
+    ],
+    [
+     "redmond-life-and-death",
+     43
+    ]
+   ],
+   "boss": {
+    "who": "lvbu",
+    "title": "Lü Bu, bound at the White Gate",
+    "victory": false,
+    "taunt": "You are the guest on the dais, and I the prisoner below the steps.",
+    "taunt_zh": "公为坐上客，布为阶下囚。",
+    "taunt_vid": "a83ea2b6554a"
+   },
+   "objective_zh": "登上白门楼。",
+   "title_zh": "白门楼"
+  }
+ ]
+}
