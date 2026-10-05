@@ -47,7 +47,7 @@ from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
-from tk_stills import CAST, CHOSEN, PORTRAITS, STILLS, STYLE, STYLES, cast_in, portrait, prompt  # noqa: E402
+from tk_stills import CAST, CHOSEN, PORTRAITS, NEGATIVE, STILLS, STYLE, STYLES, cast_in, portrait, prompt  # noqa: E402
 
 OUT = ROOT / "assets/tk/stills"
 SIZE = (1280, 720)
@@ -166,12 +166,18 @@ def style_refs():
     return sorted(f for f in d.iterdir() if f.suffix.lower() in (".png", ".jpg", ".jpeg", ".webp")) if d.exists() else []
 
 
+REF_LENSES = set()   # the lenses (tk_stills.LENSES) that get face references: none (the user: references throw off the vibe)
+
+
 def request(provider, sid=None, key=None):
     """(prompt, images) for a still or a portrait: style images first, then cast portraits."""
     style = style_refs()[:MAX_REFS] if provider in TAKES_REFS else []
     if key:
         return portrait(key, len(style)), [data_uri(f) for f in style]
-    cast = [k for k in cast_in(sid) if (OUT / f"refs/{k}.jpg").exists()] if provider in TAKES_REFS else []
+    # the user's policy: face references only for close shots (lens b). On wide, action and mood shots a
+    # reference drags in the portrait's pose and framing, and the picture goes stiff; words carry the look there.
+    close = sid.rsplit("_", 1)[-1] in REF_LENSES
+    cast = [k for k in cast_in(sid) if (OUT / f"refs/{k}.jpg").exists()] if provider in TAKES_REFS and close else []
     cast = cast[:MAX_REFS - len(style)]
     images = [data_uri(f) for f in style] + [data_uri(OUT / f"refs/{k}.jpg") for k in cast]
     return prompt(sid, len(style), cast), images
@@ -217,6 +223,29 @@ def portraits(name, fn, keys, n, model):
         "div{display:flex;flex-wrap:wrap;gap:12px}figure{margin:0;width:300px}img{width:100%}"
         "figcaption{color:#ccc}</style>" + "".join(rows))
     print("choose from: assets/tk/stills/refs/candidates/index.html, then --pick KEY N")
+
+
+def review(name, fn, ids, model, tries, look=None):
+    """Candidates for the user to approve, into samples/review/<id>--<n>.jpg: nothing goes into
+    stills.json until the user has seen and OK'd it."""
+    out = OUT / "samples/review"
+    out.mkdir(parents=True, exist_ok=True)
+    restyle = (lambda t: t.replace(STYLE, f"{STYLES[look]} {NEGATIVE}")) if look else (lambda t: t)
+    tag = f"{look}-" if look else ""
+    jobs = [(f"{sid}--{tag}{n}", restyle(request(name, sid)[0])) for sid in ids for n in range(1, tries + 1)]
+    for i, (stem, text) in enumerate(jobs):
+        if (out / f"{stem}.jpg").exists():
+            continue
+        if i:
+            time.sleep(15)   # back to back, Replicate turns away about half with 429s
+        try:
+            raw, used = fn(text, model, "16:9", [])
+        except Exception as e:
+            print(f"  {stem}: failed: {e}")
+            continue
+        fit(raw).save(out / f"{stem}.jpg", "JPEG", quality=86)
+        (out / f"{stem}.txt").write_text(text)
+        print(f"  {stem}: {name}/{used}")
 
 
 def styles(name, fn, ids, keys, model):
@@ -303,6 +332,11 @@ def main():
     ap.add_argument("--import", dest="imp", metavar="DIR", help="fit and record hand-made images named <id>.*")
     ap.add_argument("--portraits", type=int, metavar="N", help="N candidate portraits per person (--only to pick who)")
     ap.add_argument("--pick", nargs=2, metavar=("KEY", "N"), help="make candidate N of KEY that person's reference")
+    ap.add_argument("--review", nargs="+", metavar="ID", help="candidates for the user to approve, into "
+                    "stills/samples/review/ (never stills.json)")
+    ap.add_argument("--tries", type=int, default=2, help="with --review: candidates per still")
+    ap.add_argument("--look", choices=sorted(STYLES), help="with --review: a candidate style (tk_stills.STYLES) "
+                    "instead of STYLE, the negatives kept")
     ap.add_argument("--styles", nargs="*", metavar="KEY", help="every candidate style on --only stills, and every "
                     "portrait framing x style on these people (e.g. guanyu), into stills/samples/styles/")
     ap.add_argument("--compare", nargs="+", metavar="MODEL", help="try each model on the stills, into stills/samples/")
@@ -340,6 +374,8 @@ def main():
     if a.portraits:
         return portraits(name, fn, [k for k in CAST if not a.only or k in a.only], a.portraits,
                          os.environ.get("TK_IMAGE_MODEL"))
+    if a.review:
+        return review(name, fn, a.review, os.environ.get("TK_IMAGE_MODEL"), a.tries, a.look)
     if a.styles is not None:
         return styles(name, fn, [s for s in STILLS if a.only and s in a.only], a.styles, os.environ.get("TK_IMAGE_MODEL"))
     if a.compare:

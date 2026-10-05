@@ -31,7 +31,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=21`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=23`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
@@ -197,9 +197,9 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=21`);
-      this.load.json("kit", `assets/tk/kits/${kit}.json?v=14`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=19`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=23`);
+      this.load.json("kit", `assets/tk/kits/${kit}.json?v=15`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=21`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
@@ -208,7 +208,7 @@ function worldScenes() {
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
       for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=31`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=33`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -253,7 +253,7 @@ function worldScenes() {
 
       const P = o => Object.fromEntries((o.properties || []).map(p => [p.name, p.value]));
       const J = v => { try { return JSON.parse(v || "[]"); } catch { return []; } };
-      this.spots = {}; this.npcs = []; this.exits = []; this.entries = {};
+      this.spots = {}; this.npcs = []; this.exits = []; this.entries = {}; this.shrine = null;
       for (const o of map.getObjectLayer("objects").objects) {
         const p = P(o);
         if (o.type === "prop") this.addProp(o, p);
@@ -269,8 +269,7 @@ function worldScenes() {
       const pos = this.resume && this.st.pos && this.st.pos.place === this.placeId && standable(this.st.pos) ? this.st.pos : null;
       const at = pos || this.entries[this.from || ""] || this.entries[""];
       this.player = this.physics.add.sprite(at.x, at.y, "h-liubei-down-0").setOrigin(.5, 1);
-      // his feet, whatever the kit's sprite size (Jade's is 18x20; generated sheets are bigger)
-      this.player.body.setSize(10, 6).setOffset((this.player.width - 10) / 2, this.player.height - 6);
+      this.footBody(this.player);
       this.player.setCollideWorldBounds(true);
       this.player.facing = pos ? pos.f : "down";
       this.physics.add.collider(this.player, this.solids);
@@ -322,7 +321,10 @@ function worldScenes() {
         s.armAt = !s.armed && !pos ? { x: this.player.x, y: this.player.y } : null;
       }
       this.time.delayedCall(900, () => {
-        const s = Object.values(this.spots).find(s => s.trigger === "arrive" && this.openQuest(s));
+        // indoors a story starts as you come in (the room is the scene); outdoors only spots marked
+        // "arrive" do, the rest wait for you to walk up. Not when you're put back where you were.
+        const indoor = !!(this.place.parent || this.place.archetype === "interior");
+        const s = Object.values(this.spots).find(s => (s.trigger === "arrive" || (indoor && !pos && s.trigger !== "talk")) && this.openQuest(s));
         if (s && !this.ui.busy() && !this.leaving && !this.cine) this.playQuest(this.openQuest(s), s);
         else if (typeof TKTable !== "undefined") TKTable.arrived(this);   // back from signing in at the go table
       });
@@ -370,8 +372,32 @@ function worldScenes() {
         const sheet = this.kit.kinds[o.name.split("#")[0]][+o.name.split("#")[1]][0];
         const img = this.add.image(Math.round(o.x), Math.round(o.y), `kit-${sheet}`, o.name).setOrigin(.5, 1);
         img.setDepth(WORLD_CLUTTER.test(p.kind) ? o.y - 400 : o.y);
+        if (p.kind === "landmark.shrine") {   // the Star Lords' shrine: its look follows the story (setShrine)
+          this.shrine = { img, x: o.x, y: o.y, state: "dark", fx: [] };
+          this.setShrine(TK.shrineState?.(this.w.n, this.placeId) || "dark");
+        }
       }
       if (p.solid) this.solids.add(this.add.zone(o.x, o.y - p.fh / 2, p.fw - 2, p.fh - 2));
+    }
+
+    // The shrine's three looks: "dark" (cold stone), "lit" (the stones glow, incense burns: a hint is
+    // waiting) and "settled" (soft glow, no smoke). Who decides which is the story's (TK.shrineState).
+    setShrine(state) {
+      const s = this.shrine;
+      if (!s || !["dark", "lit", "settled"].includes(state)) return;
+      s.state = state;
+      s.img.setFrame(state === "dark" ? "landmark.shrine#0" : `landmark.shrine.${state}#0`);
+      s.fx.forEach(f => f.remove ? f.remove() : f.destroy()); s.fx = [];   // tweens and timers are removed, the glow destroyed
+      if (state === "dark") return;
+      const glow = this.add.ellipse(s.x - 4, s.y - 11, 26, 14, state === "lit" ? 0x8ae8ff : 0xf4d27a, state === "lit" ? .35 : .18)
+        .setBlendMode(Phaser.BlendModes.ADD).setDepth(s.y + 1);
+      s.fx.push(glow, this.tweens.add({ targets: glow, alpha: state === "lit" ? .12 : .08, duration: state === "lit" ? 900 : 2200, yoyo: true, repeat: -1, ease: "Sine.InOut" }));
+      if (state !== "lit") return;
+      // incense smoke from the burner: small grey puffs that rise, drift and fade
+      s.fx.push(this.time.addEvent({ delay: 420, loop: true, callback: () => {
+        const puff = this.add.circle(s.x + 9 + Phaser.Math.Between(-1, 1), s.y - 19, 1.5, 0xd6dae0, .7).setDepth(s.y + 2);
+        this.tweens.add({ targets: puff, y: puff.y - 16, x: puff.x + Phaser.Math.Between(-4, 4), scale: 2.2, alpha: 0, duration: 2200, onComplete: () => puff.destroy() });
+      } }));
     }
 
     folkAnims(sprite) {
@@ -806,6 +832,12 @@ function worldScenes() {
       if (door) return { kind: "door", e: door };
       return null;
     }
+    // The feet-sized body, centred under the sprite whatever its size (drawn, generated or
+    // mounted sprites differ); redone in update whenever the frame size changes.
+    footBody(spr) {
+      spr.body.setSize(10, 6).setOffset((spr.width - 10) / 2, spr.height - 6);
+      spr._fw = spr.width; spr._fh = spr.height;
+    }
     canMove() { return !this.ui.busy() && !this.seated && !this.leaving && !this.cine; }
     tapAt(x, y) {
       if (this.ui.busy()) return this.act();   // tap on through dialogue
@@ -949,6 +981,7 @@ function worldScenes() {
       this.placeLabels();
       this.nearSpots();
       const P = this.player, K = this.keys;
+      if (P.width !== P._fw || P.height !== P._fh) this.footBody(P);   // on or off a horse, another kit's sprite
       let vx = 0, vy = 0;
       if (!this.ui.busy() && !this.leaving && !this.seated) {
         if (K.LEFT.isDown || K.A.isDown || this.auto === "left") vx -= 1;

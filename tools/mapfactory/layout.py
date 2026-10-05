@@ -71,6 +71,9 @@ def guess_archetype(name):
     return "village"
 
 
+SHRINE_ARCHETYPES = {"village", "town", "city"}   # the places that have a shrine unless the brief says otherwise
+
+
 class Layout:
     def __init__(self, place, world_n, seed):
         self.place, self.seed = place, seed
@@ -288,6 +291,12 @@ class Layout:
                 raise RuntimeError(f"no room for {lm['kind']}")
             if lm.get("node"):
                 done_nodes.add(lm["node"])
+        # the Star Lords' weiqi shrine, by the centre of every town (a brief can say "shrine": True or False,
+        # or place its own as a landmark, as Black Wind does for its scene)
+        if b.get("shrine", self.arch_name in SHRINE_ARCHETYPES) and not any(
+                lm["kind"] == "landmark.shrine" for lm in b.get("landmarks", [])):
+            if self.place_landmark("landmark.shrine", "shrine", near_hub=True) is None:
+                raise RuntimeError("no room for the shrine")
         # nodes without a landmark: a spot at the hub
         for n in self.place["nodes"]:
             if n.get("scene") and n["key"] not in done_nodes:

@@ -24,9 +24,12 @@ words and name people only; their look belongs in CAST.
 import re
 
 # the user's pick from the candidates below (gongbi), with what it tended to add uninvited ruled out
+# what every still rules out, whatever its look
+NEGATIVE = ("No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, "
+            "no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, "
+            "rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.")
 STYLE = ("Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat "
-         "mineral colours, gold leaf accents, stylised clouds and waves. No text, no speech or thought bubbles, no captions, no calligraphy, no seals, no "
-         "signature, no watermark.")
+         "mineral colours, gold leaf accents, stylised clouds and waves. " + NEGATIVE)
 
 # candidates for STYLE, to choose by eye (gen_stills.py --styles): the user wants the stills to
 # look like modern Chinese xianxia game art, Sword and Fairy cover art especially
@@ -44,6 +47,11 @@ STYLES = {
     "gongbi": "Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat "
               "mineral colours, gold leaf accents, stylised clouds and waves.",
     "ghibli": "Style: in the style of Studio Ghibli.",
+    # the user asked to see the look of the donghua Rakshasa Street, described in words (no show named)
+    "donghua": "Style: modern Chinese donghua key frame: crisp clean lineart and cel shading, high contrast, "
+               "dramatic rim light and back light, a dark moody palette of ink blacks, deep teal and crimson with "
+               "glowing accents of spirit light and embers, a dynamic low or high camera angle, intense poses, "
+               "cinematic and dark-fantasy.",
 }
 
 # candidates for the portrait framing (the reference faces), to choose by eye
@@ -75,6 +83,8 @@ CAST = {
     "dongzhuo": ("Dong Zhuo", "a huge, heavy, bearded bully of a warlord with a sneer, in a general's armour"),
     "zhujun": ("Zhu Jun", "an imperial general with a short beard, iron helmet, dark red robe over armour"),
     "huangfusong": ("Huangfu Song", "an imperial general with a long black beard, iron helmet, blue robe over armour"),
+    "inspector": ("the inspector", "a plump, sneering court official with a thin moustache, in a Han dynasty black "
+                                   "gauze official's cap (a small stiff cap with two flaps, not a top hat) and a blue silk robe"),
     "xushao": ("Xu Shao", "a calm scholar with a thin beard and knowing eyes, scholar's hat, pale robe"),
 }
 
@@ -188,8 +198,9 @@ SCENES = {
     "tree": (
         "A humble village of earth-walled houses at golden morning, and above it a gigantic mulberry tree, "
         "its round crown spreading like the canopy of an imperial carriage; villagers pause in the lane to stare up.",
-        "A small boy of six stands under a great mulberry tree, chin up, pointing at its canopy and declaring he will ride "
-        "in a carriage like that one day; his uncle, a middle-aged farmer, startled beside him, hand raised to hush him.",
+        "A small boy of six in a plain hemp tunic and straw sandals, hair in two tufts, stands under a great mulberry tree, "
+        "chin up, pointing at its canopy and declaring he will ride in a carriage like that one day; his uncle, a strong "
+        "dark-haired man with a short black beard, in a farmer's hemp robe, startled beside him, hand raised to hush him. Han dynasty China, about 184 AD: nothing modern, no glass, no paved roads.",
         "Looking straight up through the leaves of a vast mulberry tree, sunlight breaking through in rays, the leaves "
         "forming a perfect round canopy against a deep blue sky.",
     ),
@@ -203,9 +214,10 @@ SCENES = {
     ),
     "inn": (
         "A warm, crowded village inn at evening, lanterns glowing, as the door bangs open and Guan Yu strides in pushing "
-        "a handcart, everyone turning to look; Liu Bei and Zhang Fei at a table by the wall.",
-        "Liu Bei, Guan Yu and Zhang Fei leaning together over a small inn table with wine cups, deep in talk, faces lit "
-        "by a single lamp, the rest of the room fading into shadow.",
+        "a handcart, everyone turning to look; Liu Bei in white and Zhang Fei in black at a table by the wall, clay "
+        "wine jars and bowls on it. Bare plank walls, no scrolls or hangings.",
+        "Exactly three men leaning together over a small inn table: Liu Bei in white on the left, Guan Yu in green with a "
+        "long black beard in the middle, Zhang Fei in black on the right, with shallow clay wine bowls, deep in talk, faces lit by a single small oil lamp, the rest of the room fading into shadow.",
         "Rain streaking past the paper window of an inn at night, the warm silhouettes of three men inside, a handcart "
         "left out in the wet lane.",
     ),
@@ -214,8 +226,10 @@ SCENES = {
         "horse tethered for the sacrifice, three figures kneeling, petals drifting through shafts of light.",
         "Liu Bei, Guan Yu and Zhang Fei kneeling side by side before the altar, eyes closed, hands clasped, swearing "
         "brotherhood, incense smoke between them, petals in their hair.",
-        "Three wine cups raised and touching above a table under peach blossom, petals falling into the wine, "
-        "golden evening light.",
+        "Exactly three hands, each holding one small bronze wine cup, the three cups touching in the middle in a toast: "
+        "one hand in a white sleeve from the left, one in a green sleeve from the top, one in a black sleeve from the "
+        "right. A carved table below, blossoming peach branches around. Han dynasty China, about 184 AD: nothing "
+        "modern, no glass, no paved roads.",
     ),
     "council": (
         "A grand hall of a provincial governor, red pillars and a raised dais, officers in rows, a messenger kneeling "
@@ -244,9 +258,9 @@ SCENES = {
         "An imperial army camp outside Guangzong at evening, rows of tents and banners, campfires lit, and the command "
         "tent glowing in the middle.",
         "Inside a lamplit army tent, Liu Bei bowing low to his old teacher Lu Zhi, who rises from his desk smiling to "
-        "greet him.",
+        "greet him; a bronze oil lamp on the desk is the only light.",
         "A general's desk in a tent: scrolls, a brush, an inkstone and a battle map pinned with small flags, "
-        "lamplight and shadow.",
+        "lit by a small open-flame bronze oil lamp, a shallow dish with a wick, no glass, no arm; light and shadow. Han dynasty China, about 184 AD: nothing modern, no glass, no paved roads.",
     ),
     "fireplan": (
         "Night at Changshe: a rebel camp of tents in tall dry grass, a strong wind bending the grass, imperial soldiers "
@@ -267,15 +281,16 @@ SCENES = {
         "who have reined in beside it.",
         "Lu Zhi in the cage cart, calm and dignified, speaking quietly to Liu Bei through the bars, while Zhang Fei "
         "behind him grips his spear in fury.",
-        "Close on the rough wooden bars of a cage cart and an old scholar's hands resting on them, a lonely road "
-        "stretching away under clouds.",
+        "Close on the rough wooden bars of a cage cart and an old scholar's hands resting on them, a lonely rutted "
+        "dirt road with wheel tracks, no paving, no markings, stretching away under clouds. Han dynasty China, about "
+        "184 AD: nothing modern, no glass, no paved roads.",
     ),
     "office": (
         "Han troops fleeing in rout across hills under a stormy sky, pursued by Yellow Turbans, as three brothers "
         "charge in from the side and turn the battle.",
         "Dong Zhuo seated in his army camp with banners behind him, sneering down at Liu Bei standing before him, as "
         "Zhang Fei lunges for his sword in rage and Liu Bei and Guan Yu together hold him back.",
-        "A general's cup tipped over on a table, wine spilling, the shadow of a raised fist on the tent wall.",
+        "An overturned bronze ding-shaped wine vessel with handles, clearly an ancient vessel, not a can, on a table, wine spilling, the shadow of a raised fist on the tent wall. Han dynasty China, about 184 AD: nothing modern, no glass, no paved roads.",
     ),
     "blackwind": (
         "Zhang Bao on a hilltop with his hair loose, sword raised, chanting, as a black whirlwind of storm cloud, sand "
@@ -288,7 +303,9 @@ SCENES = {
         "A hillside ambush: soldiers hurl jars of filth at the summoned wind, and the sorcery breaks apart into "
         "fluttering paper scraps falling from the sky.",
         "Zhang Bao on his horse, his face turning to dismay as his spell fails and paper figures crumble around him.",
-        "Torn paper soldiers drifting down onto grass in clear light after a storm, the sky breaking open.",
+        "Torn paper cut-outs shaped like little horsemen and spearmen, flat red and white Chinese paper cuttings, "
+        "drifting down like leaves onto empty grass in clear light after a storm, the sky breaking open. No real "
+        "people in the picture.",
     ),
     "peace1": (
         "A failed scholar gathering herbs in misty mountains, a hidden cave mouth among pines, an old man with a "
@@ -370,6 +387,34 @@ EXTRA = {
                              "at the edge of the frame. Dark and quiet, no gore, just the moment."),
 }
 
+# The second pass (the user turned down the first set): each still is drawn from the one line it sits
+# under in tools/tk_story.py, with every named person present, one clear action and few figures, and no
+# face references. Nothing goes back into the game until the user has approved it (gen_stills --review).
+REVIEW = {
+    # inn: "a giant pushing a cart strides in: nine feet tall, a beard two feet long, a face like a ripe red date"
+    "inn_v2": ("inn", "Guan Yu shoves open the plain wooden door of a small village inn at evening, pushing a wooden "
+                      "handcart ahead of him and stooping under the lintel; at one table inside, Liu Bei and Zhang Fei "
+                      "turn to stare up at him. Plank walls, paper-screened lattice windows, plain unmarked paper "
+                      "lanterns, clay wine jars and bowls. No signboards, no wall hangings, no other figures."),
+    # oath: "With a black ox and a white horse for sacrifice, the three burn incense and bow."
+    "oath_v2": ("oath", "Liu Bei, Guan Yu and Zhang Fei kneel in a row on the same side of a low stone altar, facing "
+                        "it with their backs half to us, heads bowed and hands clasped, thin sticks of incense smoking "
+                        "in a bronze burner on the altar; a black ox and a white horse stand tethered beside it; a "
+                        "peach orchard in full pink blossom. Nobody stands behind the altar. Only these three men."),
+    # post: "Zhang Fei breaks ten or more willow switches across his legs." (the inspector's; docs/stills-must-show.md)
+    "post_v2": ("post", "In front of a county office gate, the inspector stands with his back against a thick wooden "
+                        "hitching post, his arms bound behind him around the post and ropes wound across his chest, "
+                        "howling in pain; Zhang Fei raises a bundle of thin green willow switches and lashes them "
+                        "down across the inspector's legs, broken switches scattered on the ground; Liu Bei hurries in "
+                        "from the side with a hand raised to stop him. Only these three men; Liu Bei is not tied or "
+                        "beaten. Plain gate, no signboard."),
+    # blackwind: "Out of a black cloud pours a numberless host of horsemen. Liu Bei's army breaks and flees."
+    "blackwind_v2": ("blackwind", "Zhang Bao stands on a rocky hilltop, hair loose, sword raised high, mouth open "
+                                  "chanting; a black whirlwind of storm cloud, sand and stones pours down the slope "
+                                  "onto a line of Han spearmen in cloth headwraps and lamellar armour, who break and "
+                                  "run; ghostly paper-like riders gallop inside the cloud."),
+}
+
 # the stills the game uses (Plot/Story's choice: the emotional peaks, the partings, the one death)
 CHOSEN = ["tree_b", "notice_b", "inn_b", "oath_b", "oath_c", "tent_b", "cart_b", "cart_c", "office_b", "blackwind_a",
           "bosswin_c", "bosswin_d", "peace2_b", "caocao2_b", "caocao3_b", "post_b", "horses_b",
@@ -383,4 +428,6 @@ for _scene, _shots in SCENES.items():
 
 for _id, (_scene, _text) in EXTRA.items():
     STILLS.setdefault(_id, {"scene": _scene, "lens": _id[-1], "prompt": _text})
+for _id, (_scene, _text) in REVIEW.items():
+    STILLS.setdefault(_id, {"scene": _scene, "lens": "v2", "prompt": _text})
 assert all(c in STILLS for c in CHOSEN)

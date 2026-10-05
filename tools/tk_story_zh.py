@@ -280,7 +280,7 @@ ZH = {
     "“The governor wants volunteers. Read the notice.”": "“太守在招义兵，你去看看榜文吧。”",
     "An old man sits over a weiqi board in the square. “You have the look of a thinker. Sit, play me one.”": "广场上，一位老人守着一张棋盘。“看你像个有心思的人。坐，陪我下一局。”",
     "“Ha! Quick eyes. The governor could use a man like you.”": "“哈！好眼力。太守正需要你这样的人。”",
-    "“Come back when you've grown sharper.”": "“等你棋艺再长进些，再来找我。”",
+    "“Go on. I'll sit here a while yet, still thinking about that board.”": "“去吧。我还要在这儿坐一会儿，琢磨琢磨那盘棋。”",
     "“Wine's on the house if you can solve the one my regulars can't.”": "“我这儿的老主顾都解不出这道题。你要是解得出，酒钱全免。”",
     "“Well I never. Drink up, then!”": "“真没想到！那就喝吧！”",
     "“Still the only one who's cracked it.”": "“到现在还只有你一个人解出来。”",
@@ -334,6 +334,9 @@ ZH = {
     "Shortcut: the envoy on the road.": "捷径：路上的使者。",
     "Rescue Dong Zhuo, then report at his tent.": "救出董卓，再到他帐前复命。",
     "Break Zhang Bao's sorcery in the hills.": "在山中破张宝的妖术。",
+    "Go to the roadside shrine where the glow has begun.": "去路旁那座发光的神龛。",
+    "The old shrine at the roadside, dark until now, begins to glow.": "路旁这座暗了的旧神龛，忽然发出微光。",
+    "The glow settles. Only the board remains, and a thread of incense.": "微光渐息，只剩棋盘，和一缕香烟。",
     "Defeat Zhang Bao at Yangcheng.": "在阳城击败张宝。",
     "A Yellow Turban tent": "黄巾军的帐篷", "A hermit's shelter": "隐士的草庐", "A prisoner's cart": "囚车",
     "Dong Zhuo's tent": "董卓的大帐", "Liu Bei's home": "刘备的家", "The Cao family house": "曹家宅院",
@@ -341,7 +344,7 @@ ZH = {
     "The county office": "县衙", "The envoy's rest": "使者歇脚处", "The great mulberry tree": "大桑树", "The travellers' go table": "过客棋桌", "Lu Zhi's tent": "卢植大帐",
     "The great peach tree": "大桃树", "The weiqi board": "围棋盘", "The horse dealers' camp": "马商的营地", "The north gate of Luoyang": "洛阳北门",
     "The notice board": "榜文", "The teahouse": "茶馆", "The village inn": "村店", "Where Zhang Jiao preaches": "张角传道之处",
-    "Zhang Bao's sorcery": "张宝的妖术", "The village below the hills": "山下的村子", "The left ridge": "左边的山岭", "The right ridge": "右边的山岭", "Zhang Bao's stronghold": "张宝的城寨", "Zhang Fei's farm": "张飞的庄园",
+    "Zhang Bao's sorcery": "张宝的妖术", "The village below the hills": "山下的村子", "The roadside shrine": "路旁的神龛", "The left ridge": "左边的山岭", "The right ridge": "右边的山岭", "Zhang Bao's stronghold": "张宝的城寨", "Zhang Fei's farm": "张飞的庄园",
 
 }
 

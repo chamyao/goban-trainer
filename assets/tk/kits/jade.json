@@ -707,6 +707,33 @@
     28,
     28
    ]
+  ],
+  "landmark.shrine": [
+   [
+    "drawn",
+    0,
+    80,
+    32,
+    30
+   ]
+  ],
+  "landmark.shrine.lit": [
+   [
+    "drawn",
+    32,
+    80,
+    32,
+    30
+   ]
+  ],
+  "landmark.shrine.settled": [
+   [
+    "drawn",
+    64,
+    80,
+    32,
+    30
+   ]
   ]
  },
  "folk": {
