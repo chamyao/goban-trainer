@@ -22,7 +22,7 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from build_jade_edges import block  # noqa: E402
-from xianxia_spec import GENSHIN_BAD, PROPS_GEN, PROPS_SKIP, CHAR_PICK, DRAWN_GROUND, HERO_H, INTERIOR, OBJECTS, REDO  # noqa: E402
+from xianxia_spec import GENSHIN_BAD, GENSHIN_DROP, PROPS_GEN, PROPS_SKIP, CHAR_PICK, DRAWN_GROUND, HERO_H, INTERIOR, OBJECTS, REDO  # noqa: E402
 import random  # noqa: E402
 
 T = 16
@@ -208,7 +208,8 @@ def main():
         where = [d for d in src if d.name in ("xianxia-redo", "genshin", "genshin-redo2")] if kind in REDO else src
         if kind in GENSHIN_BAD:   # its isometric try came out wrong: xianxia's until the redo is good
             where = [d for d in where if not d.name.startswith("genshin")]
-        for k, p in enumerate(v for v in variants(where, kind) if v.stem not in DROP):
+        for k, p in enumerate(v for v in variants(where, kind)
+                              if v.stem not in (GENSHIN_DROP if v.parent.name.startswith("genshin") else DROP)):
             items.append((f"{kind}#{k}", fit(Image.open(p), iso_box(box) if p.parent.name.startswith("genshin") else box)))
             made.setdefault(kind, []).append(f"{kind}#{k}")
     sheet, pos = pack(items)
