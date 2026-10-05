@@ -24,10 +24,12 @@ words and name people only; their look belongs in CAST.
 import re
 
 # the user's pick from the candidates below (gongbi), with what it tended to add uninvited ruled out
+# what every still rules out, whatever its look
+NEGATIVE = ("No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, "
+            "no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, "
+            "rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.")
 STYLE = ("Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat "
-         "mineral colours, gold leaf accents, stylised clouds and waves. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no "
-         "signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or "
-         "modern uniforms, no glass, no paved roads.")
+         "mineral colours, gold leaf accents, stylised clouds and waves. " + NEGATIVE)
 
 # candidates for STYLE, to choose by eye (gen_stills.py --styles): the user wants the stills to
 # look like modern Chinese xianxia game art, Sword and Fairy cover art especially
@@ -45,6 +47,11 @@ STYLES = {
     "gongbi": "Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat "
               "mineral colours, gold leaf accents, stylised clouds and waves.",
     "ghibli": "Style: in the style of Studio Ghibli.",
+    # the user asked to see the look of the donghua Rakshasa Street, described in words (no show named)
+    "donghua": "Style: modern Chinese donghua key frame: crisp clean lineart and cel shading, high contrast, "
+               "dramatic rim light and back light, a dark moody palette of ink blacks, deep teal and crimson with "
+               "glowing accents of spirit light and embers, a dynamic low or high camera angle, intense poses, "
+               "cinematic and dark-fantasy.",
 }
 
 # candidates for the portrait framing (the reference faces), to choose by eye

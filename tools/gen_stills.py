@@ -47,7 +47,7 @@ from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
-from tk_stills import CAST, CHOSEN, PORTRAITS, STILLS, STYLE, STYLES, cast_in, portrait, prompt  # noqa: E402
+from tk_stills import CAST, CHOSEN, PORTRAITS, NEGATIVE, STILLS, STYLE, STYLES, cast_in, portrait, prompt  # noqa: E402
 
 OUT = ROOT / "assets/tk/stills"
 SIZE = (1280, 720)
@@ -225,12 +225,14 @@ def portraits(name, fn, keys, n, model):
     print("choose from: assets/tk/stills/refs/candidates/index.html, then --pick KEY N")
 
 
-def review(name, fn, ids, model, tries):
+def review(name, fn, ids, model, tries, look=None):
     """Candidates for the user to approve, into samples/review/<id>--<n>.jpg: nothing goes into
     stills.json until the user has seen and OK'd it."""
     out = OUT / "samples/review"
     out.mkdir(parents=True, exist_ok=True)
-    jobs = [(f"{sid}--{n}", request(name, sid)[0]) for sid in ids for n in range(1, tries + 1)]
+    restyle = (lambda t: t.replace(STYLE, f"{STYLES[look]} {NEGATIVE}")) if look else (lambda t: t)
+    tag = f"{look}-" if look else ""
+    jobs = [(f"{sid}--{tag}{n}", restyle(request(name, sid)[0])) for sid in ids for n in range(1, tries + 1)]
     for i, (stem, text) in enumerate(jobs):
         if (out / f"{stem}.jpg").exists():
             continue
@@ -333,6 +335,8 @@ def main():
     ap.add_argument("--review", nargs="+", metavar="ID", help="candidates for the user to approve, into "
                     "stills/samples/review/ (never stills.json)")
     ap.add_argument("--tries", type=int, default=2, help="with --review: candidates per still")
+    ap.add_argument("--look", choices=sorted(STYLES), help="with --review: a candidate style (tk_stills.STYLES) "
+                    "instead of STYLE, the negatives kept")
     ap.add_argument("--styles", nargs="*", metavar="KEY", help="every candidate style on --only stills, and every "
                     "portrait framing x style on these people (e.g. guanyu), into stills/samples/styles/")
     ap.add_argument("--compare", nargs="+", metavar="MODEL", help="try each model on the stills, into stills/samples/")
@@ -371,7 +375,7 @@ def main():
         return portraits(name, fn, [k for k in CAST if not a.only or k in a.only], a.portraits,
                          os.environ.get("TK_IMAGE_MODEL"))
     if a.review:
-        return review(name, fn, a.review, os.environ.get("TK_IMAGE_MODEL"), a.tries)
+        return review(name, fn, a.review, os.environ.get("TK_IMAGE_MODEL"), a.tries, a.look)
     if a.styles is not None:
         return styles(name, fn, [s for s in STILLS if a.only and s in a.only], a.styles, os.environ.get("TK_IMAGE_MODEL"))
     if a.compare:
