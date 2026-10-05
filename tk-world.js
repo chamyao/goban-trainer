@@ -265,7 +265,14 @@ function worldScenes() {
 
       // back from a problem (or a reload): stand where you were
       // (only where he can stand: an older map may have put a wall there, or ended short of it)
-      const standable = q => { const G = this.walkGrid(), ok = q.x >= 0 && q.y >= 0 && G.free(Math.floor(q.x / G.C), Math.floor((q.y - 3) / G.C)); this.grid = null; return ok; };
+      // (open ground, or within two cells of it: a doorway's entry point is squeezed against the wall)
+      const standable = q => {
+        const G = this.walkGrid(), cx = Math.floor(q.x / G.C), cy = Math.floor((q.y - 3) / G.C);
+        let ok = false;
+        for (let dy = -2; dy <= 2 && !ok; dy++) for (let dx = -2; dx <= 2 && !ok; dx++) ok = G.free(cx + dx, cy + dy);
+        this.grid = null;
+        return ok && q.x >= 0 && q.y >= 0 && q.x <= this.physics.world.bounds.width && q.y <= this.physics.world.bounds.height;
+      };
       const pos = this.resume && this.st.pos && this.st.pos.place === this.placeId && standable(this.st.pos) ? this.st.pos : null;
       const at = pos || this.entries[this.from || ""] || this.entries[""];
       this.player = this.physics.add.sprite(at.x, at.y, "h-liubei-down-0").setOrigin(.5, 1);
