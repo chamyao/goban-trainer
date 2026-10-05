@@ -25,10 +25,12 @@ for(const place of places){
     for(let i=0;i<q.length;i++){const [x,y]=q[i];if(seen.has(key(x,y)))continue;seen.add(key(x,y));for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+dx,ny=y+dy;if(!seen.has(key(nx,ny))&&G.free(nx,ny))q.push([nx,ny]);}}
     const near=(x,y)=>{const cx=Math.floor(x/C),cy=Math.floor(y/C);for(let r=0;r<40;r++)for(let dy=-r;dy<=r;dy++)for(let dx=-r;dx<=r;dx++)if(seen.has(key(cx+dx,cy+dy)))return [(cx+dx)*C+C/2,(cy+dy)*C+C/2];return null;};
     for(const [n,fx,fy] of [['NW corner',0,0],['NE corner',1,0],['SW corner',0,1],['SE corner',1,1],['N edge',.5,0],['S edge',.5,1],['W edge',0,.5],['E edge',1,.5]]){const q=near(fx*W,fy*H);if(q)out.push({n,at:q});}
-    for(const e of w.exits){const r=e.rect,inX=Math.min(Math.max(r.centerX,C),W-C),inY=Math.min(Math.max(r.centerY+(e.side==='N'?12:0),C),H-C);const q=near(inX,inY);if(q)out.push({n:'exit to '+e.to,at:q,exit:[Math.min(Math.max(q[0],r.x),r.right),Math.min(Math.max(q[1],r.y),r.bottom)]});   /* the exit's point nearest him (a road off the edge is a long strip) */}
+    for(const e of w.exits){const r=e.rect,inw={W:[1,0],E:[-1,0],N:[0,1],S:[0,-1]}[e.side]||[0,1],inX=Math.min(Math.max(r.centerX+inw[0]*(r.width/2+2*C),C),W-C),inY=Math.min(Math.max(r.centerY+inw[1]*(r.height/2+2*C),C),H-C);   /* two cells in from it: on it he would leave */
+      const q=near(inX,inY);if(q)out.push({n:'exit to '+e.to,at:q,exit:[Math.min(Math.max(q[0],r.x),r.right),Math.min(Math.max(q[1],r.y),r.bottom)]});   /* the exit's point nearest him (a road off the edge is a long strip) */}
     return out;});
   let bad=0;
   for(const s of spots){
+    if(await p.evaluate(pl=>window.__w.placeId!==pl,place)){await p.evaluate(pl=>{const w=window.__w;w.leaving=false;w.go(pl);},place);await p.waitForTimeout(1200);await ready();}
     await p.evaluate(([x,y])=>{const w=window.__w;w.walk=null;w.player.body.reset(x,y);(w.followers||[]).forEach(F=>F.spr.setPosition(x,y));},s.at);await p.waitForTimeout(150);await settle();
     const r=await p.evaluate(([at,ex])=>{const w=window.__w,cam=w.cameras.main,cv=w.game.canvas,cr=cv.getBoundingClientRect(),k=cv.clientWidth/w.scale.width;
       const toS=(x,y)=>{const v=w.view(x,y);return [cr.left+(v.x-cam.worldView.x)*cam.zoom*k,cr.top+(v.y-cam.worldView.y)*cam.zoom*k];};
