@@ -515,7 +515,8 @@ const TK = {
   preds(w, key) { return w.edges.filter(e => e[1] === key).map(e => e[0]); },
   succs(w, key) { return w.edges.filter(e => e[0] === key).map(e => e[1]); },
   isStart(key) { return key.endsWith("-start"); },
-  open(w, key) { return this.isStart(key) || this.preds(w, key).some(k => this.isStart(k) || this.cleared(k)); },
+  // open: a start, the first beat of a book (nothing before it: Book 2 has no start node), or one whose way in is cleared
+  open(w, key) { const p = this.preds(w, key); return this.isStart(key) || !p.length || p.some(k => this.isStart(k) || this.cleared(k)); },
   worldOpen(n) { return n === 1 || this.cleared(`${n - 1}-boss`) || (typeof TK_TEST !== "undefined" && TK_TEST); },   // test mode opens every book
   at(n) { return this.ls("tk-at")[n] || `${n}-start`; },
   setAt(n, key) { const a = this.ls("tk-at"); a[n] = key; this.lsSet("tk-at", a); },
@@ -1036,7 +1037,10 @@ async function viewTK(worldN) {
       const ta = h("textarea", { class: "tk-fb-text", rows: "3", placeholder: "意见反馈 Feedback: what's wrong or what would be better here?" });
       const msg = h("span", { class: "tk-fb-msg" });
       const send = h("button", { class: "tk-chron-btn", type: "button", "data-keep": "1" }, "发送反馈 Send feedback");
-      ta.addEventListener("keydown", e => e.stopPropagation());   // typing doesn't walk him or talk
+      ta.addEventListener("keydown", e => {   // typing doesn't walk him or talk; Enter sends (Shift+Enter for a new line)
+        e.stopPropagation();
+        if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); send.click(); }
+      });
       ta.addEventListener("keyup", e => e.stopPropagation());
       send.onclick = async () => {
         const text = ta.value.trim();
