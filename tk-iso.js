@@ -46,9 +46,10 @@ const WorldIso = {
       for (const o of scene.children.list) {
         if (o.isoFixed || o.scrollFactorX === 0 || !o.visible) continue;
         const a = o.isoAt;   // a building or prop: its footprint's centre, and the drop to its front corner
-        const lx = a ? a[0] : o.x, ly = a ? a[1] : o.y, q = P(lx, ly);
+        const b = o.isoBase;  // a rider, an emote: the ground point it is held above (its offset stays upright)
+        const lx = a ? a[0] : b ? b[0] : o.x, ly = a ? a[1] : b ? b[1] : o.y, q = P(lx, ly);
         saved.push(o, o.x, o.y, o._depth);
-        o.x = q.x; o.y = q.y + (a ? a[2] : 0);
+        o.x = q.x + (b ? o.x - b[0] : 0); o.y = q.y + (a ? a[2] : b ? o.y - b[1] : 0);
         const d = o._depth;
         if (d > -9000 && d < 9000) o._depth = q.y + (a ? a[2] : 0) + (a ? 0 : d - ly);
       }
