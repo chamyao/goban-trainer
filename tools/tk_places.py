@@ -136,6 +136,7 @@ PLACES = {
         "Daxing Mountain": {
             "archetype": "mountain",
             "banners": "yellow",
+            "shrine": True,   # one of the four that light in World 1
             "landmarks": [{"kind": "rock.crag", "id": "pass", "node": "1-n3", "label": "The Yellow Turban line"}],
             "objectives": {"1-n3": "Meet the Yellow Turbans at Daxing Mountain."},
         },
@@ -186,6 +187,10 @@ PLACES = {
             "banners": "yellow",
             "landmarks": [
                 {"kind": "rock.big", "id": "altar", "node": "1-n7", "label": "Zhang Bao's sorcery"},
+                # the shrine that lights after the first try fails (scene "shrine")
+                {"kind": "landmark.shrine", "id": "shrine", "node": "1-n7b", "near": "altar", "label": "The roadside shrine",
+                 "intro": ["The old shrine at the roadside, dark until now, begins to glow."],
+                 "outro": ["The glow settles. Only the board remains, and a thread of incense."]},
                 {"kind": "building.hut", "id": "pens", "label": "The village below the hills"},   # where the blood comes from
                 # a ridge on each flank, each with room before it for a thousand men (Guan Yu left, Zhang Fei right)
                 {"kind": "rock.crag", "id": "ridge_left", "label": "The left ridge", "use": "ridge", "side": "W", "clear": [8, 4]},
@@ -196,7 +201,8 @@ PLACES = {
                 {"kind": "folk.elder", "near": "pens", "say": "“My flock hasn't grazed since the storm. Take a sheep, general. Take what you need.”"},
                 {"kind": "folk.hunter", "near": "pens", "say": "“My hounds won't go near that hill. If their blood breaks the spell, take it.”"},
             ],
-            "objectives": {"1-n7": "Break Zhang Bao's sorcery in the hills."},
+            "objectives": {"1-n7": "Break Zhang Bao's sorcery in the hills.",
+                           "1-n7b": "Go to the roadside shrine where the glow has begun."},
         },
         "Anxi": {   # Liu Bei's first post, where the inspector comes (the closing)
             "archetype": "town",

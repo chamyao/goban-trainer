@@ -334,6 +334,9 @@ ZH = {
     "Shortcut: the envoy on the road.": "捷径：路上的使者。",
     "Rescue Dong Zhuo, then report at his tent.": "救出董卓，再到他帐前复命。",
     "Break Zhang Bao's sorcery in the hills.": "在山中破张宝的妖术。",
+    "Go to the roadside shrine where the glow has begun.": "去路旁那座发光的神龛。",
+    "The old shrine at the roadside, dark until now, begins to glow.": "路旁这座暗了的旧神龛，忽然发出微光。",
+    "The glow settles. Only the board remains, and a thread of incense.": "微光渐息，只剩棋盘，和一缕香烟。",
     "Defeat Zhang Bao at Yangcheng.": "在阳城击败张宝。",
     "A Yellow Turban tent": "黄巾军的帐篷", "A hermit's shelter": "隐士的草庐", "A prisoner's cart": "囚车",
     "Dong Zhuo's tent": "董卓的大帐", "Liu Bei's home": "刘备的家", "The Cao family house": "曹家宅院",
@@ -341,7 +344,7 @@ ZH = {
     "The county office": "县衙", "The envoy's rest": "使者歇脚处", "The great mulberry tree": "大桑树", "The travellers' go table": "过客棋桌", "Lu Zhi's tent": "卢植大帐",
     "The great peach tree": "大桃树", "The weiqi board": "围棋盘", "The horse dealers' camp": "马商的营地", "The north gate of Luoyang": "洛阳北门",
     "The notice board": "榜文", "The teahouse": "茶馆", "The village inn": "村店", "Where Zhang Jiao preaches": "张角传道之处",
-    "Zhang Bao's sorcery": "张宝的妖术", "The village below the hills": "山下的村子", "The left ridge": "左边的山岭", "The right ridge": "右边的山岭", "Zhang Bao's stronghold": "张宝的城寨", "Zhang Fei's farm": "张飞的庄园",
+    "Zhang Bao's sorcery": "张宝的妖术", "The village below the hills": "山下的村子", "The roadside shrine": "路旁的神龛", "The left ridge": "左边的山岭", "The right ridge": "右边的山岭", "Zhang Bao's stronghold": "张宝的城寨", "Zhang Fei's farm": "张飞的庄园",
 
 }
 
