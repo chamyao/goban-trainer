@@ -1055,8 +1055,7 @@
    "x": 15.5,
    "y": 8.7,
    "node": "1-n6",
-   "label": "Dong Zhuo's tent",
-   "trigger": "arrive"
+   "label": "Dong Zhuo's tent"
   }
  ],
  "npcs": [
@@ -1156,8 +1155,8 @@
    2
   ],
   "": [
-   15,
-   9
+   22,
+   25
   ],
   "dong-zhuos-camp--command": [
    15,
