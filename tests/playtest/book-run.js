@@ -25,7 +25,7 @@ const st=()=>p.evaluate(()=>{const w=window.__w;const q=s=>document.querySelecto
   const d=q('.town-ui .town-dlg');if(d&&!d.hidden)r.line=(q('.town-ui .town-who').textContent||'')+': '+q('.town-ui .town-en').textContent;
   const g=q('.town-goal');r.goal=g&&g.textContent;
   const cam=w.cameras.main,cv=w.game.canvas,cr=cv.getBoundingClientRect(),k=cv.clientWidth/w.scale.width;
-  const toS=(x,y)=>[cr.left+(x-cam.worldView.x)*cam.zoom*k,cr.top+(y-cam.worldView.y)*cam.zoom*k];
+  const toS=(x,y)=>[cr.left+((window.__w.view?window.__w.view(x,y).x:x)-cam.worldView.x)*cam.zoom*k,cr.top+((window.__w.view?window.__w.view(x,y).y:y)-cam.worldView.y)*cam.zoom*k];
   r.pS=toS(w.player.x,w.player.y);r.pW=[Math.round(w.player.x),Math.round(w.player.y)];r.cv=[cr.left,cr.top,cr.width,cr.height];
   const hud=[...document.querySelectorAll('.town-goal,.tk-menu-btn')].filter(e=>e.offsetParent!==null&&!e.hidden).map(e=>e.getBoundingClientRect().bottom);r.top=Math.max(cr.top+40,...hud)+16;
   if(w.goalAt){r.gW=[w.goalAt.x,w.goalAt.y];r.gS=toS(w.goalAt.x,w.goalAt.y);}

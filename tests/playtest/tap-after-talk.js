@@ -12,8 +12,8 @@ for(let i=0;i<6;i++){const g=p.locator('.tk-scroll-go');if(await g.count()){awai
 const ready=async()=>{for(let i=0;i<60;i++){if(await p.evaluate(()=>!!(window.__w&&window.__w.player&&!window.__w.leaving)))break;await p.waitForTimeout(200);}await p.waitForTimeout(500);};
 await ready();
 if(await p.evaluate(()=>window.__w.placeId)!==PLACE){await p.evaluate(pl=>{window.__w.leaving=false;window.__w.go(pl);},PLACE);await p.waitForTimeout(1500);await ready();}
-const scr=(x,y)=>p.evaluate(([x,y])=>{const w=window.__w,cam=w.cameras.main,cv=w.game.canvas,r=cv.getBoundingClientRect(),k=cv.clientWidth/w.scale.width;return [r.left+(x-cam.worldView.x)*cam.zoom*k, r.top+(y-cam.worldView.y)*cam.zoom*k];},[x,y]);
-const tapW=async(x,y)=>{const [a,b2]=await scr(x,y);await p.touchscreen.tap(a,b2);};
+const scr=(x,y)=>p.evaluate(([x,y])=>{const w=window.__w,cam=w.cameras.main,cv=w.game.canvas,r=cv.getBoundingClientRect(),k=cv.clientWidth/w.scale.width;return [r.left+((window.__w.view?window.__w.view(x,y).x:x)-cam.worldView.x)*cam.zoom*k, r.top+((window.__w.view?window.__w.view(x,y).y:y)-cam.worldView.y)*cam.zoom*k];},[x,y]);
+const tapW=async(x,y)=>{await p.evaluate(()=>new Promise(r=>{const w=window.__w;if(!w||!w.cameras){r();return;}const cam=w.cameras.main;let last='',same=0,n=0;const t=setInterval(()=>{const v=Math.round(cam.worldView.x)+','+Math.round(cam.worldView.y);same=v===last?same+1:0;last=v;if(same>=3||++n>40){clearInterval(t);r();}},40);}));/* the camera eases after him: tap once it has settled */const [a,b2]=await scr(x,y);await p.touchscreen.tap(a,b2);};
 const st=()=>p.evaluate(()=>{const w=window.__w,G=w.walkGrid();return {startFree:G.free(Math.floor(w.player.x/8),Math.floor((w.player.y-3)/8)),p:[Math.round(w.player.x),Math.round(w.player.y)],busy:w.ui.busy(),leaving:w.leaving,cine:!!w.cine,seated:w.seated,walk:w.walk&&{n:w.walk.path.length,stuck:Math.round(w.walk.stuck)}};});
 p.on('console',m=>{if(m.text().startsWith('T|'))console.log(m.text().slice(0,400));});
 await p.evaluate(()=>{const w=window.__w;const t=w.talk.bind(w);w.talk=(st,d,sty)=>{console.log('T|talk '+JSON.stringify(st&&st[0]).slice(0,60)+' '+new Error().stack.split('\n').slice(2,7).map(x=>x.trim().split(' ')[1]).join('<'));return t(st,d,sty);};
@@ -41,7 +41,7 @@ for(let round=0;round<2;round++) for(let i=0;i<n;i++){
     const free=await p.evaluate(([x,y])=>{const w=window.__w,G=w.walkGrid();if(!G.free(Math.floor(x/8),Math.floor((y+1)/8)))return false;
       const path=w.findPath(w.player.x,w.player.y-3,x,y+1);return !!path&&path.length>0&&Math.hypot(path[path.length-1].x-w.player.x,path[path.length-1].y-w.player.y+3)>=8;},[tx,ty]);
     if(!free) continue;
-    if(await p.evaluate(([x,y])=>window.__w.npcs.some(n=>n.spr.visible&&Math.hypot(n.spr.x-x,n.spr.y-8-y)<22),[tx,ty])) continue;
+    if(await p.evaluate(([x,y])=>!!window.__w.pick(x,y),[tx,ty])) continue;   // a tap that would pick someone or something (forgiving taps) is not a ground tap
     await tapW(tx,ty); await p.waitForTimeout(900);
     if(await p.evaluate(pl=>!window.__w||window.__w.placeId!==pl,PLACE)){await p.waitForTimeout(800);await ready();await p.evaluate(pl=>{window.__w.leaving=false;window.__w.go(pl);},PLACE);await p.waitForTimeout(1500);await ready();break;}
     const s1=await st(); const moved=Math.hypot(s1.p[0]-s0.p[0],s1.p[1]-s0.p[1]);

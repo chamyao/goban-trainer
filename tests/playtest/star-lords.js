@@ -15,7 +15,7 @@ const stars=()=>p.evaluate(()=>window.__w.npcs.filter(n=>n.until==='1-n2').map(n
 const s=await p.evaluate(()=>{const s=Object.values(window.__w.spots).find(s=>s.node==='1-n2');window.__w.player.setPosition(s.x,s.y+40);return [s.x,s.y];});
 await p.waitForTimeout(1000);
 console.log('before:',await stars());
-const scr=(x,y)=>p.evaluate(([x,y])=>{const w=window.__w,cam=w.cameras.main,cv=w.game.canvas,r=cv.getBoundingClientRect(),k=cv.clientWidth/w.scale.width;return [r.left+(x-cam.worldView.x)*cam.zoom*k, r.top+(y-cam.worldView.y)*cam.zoom*k];},[x,y]);
+const scr=(x,y)=>p.evaluate(([x,y])=>{const w=window.__w,cam=w.cameras.main,cv=w.game.canvas,r=cv.getBoundingClientRect(),k=cv.clientWidth/w.scale.width;return [r.left+((window.__w.view?window.__w.view(x,y).x:x)-cam.worldView.x)*cam.zoom*k, r.top+((window.__w.view?window.__w.view(x,y).y:y)-cam.worldView.y)*cam.zoom*k];},[x,y]);
 let [a,c]=await scr(s[0],s[1]); await p.touchscreen.tap(a,c);
 const center=async()=>{const r=await p.evaluate(()=>{const c=window.__w.game.canvas.getBoundingClientRect();return [c.left+c.width/2,c.top+c.height*.6]});await p.touchscreen.tap(r[0],r[1]);};
 let shotStar=false;

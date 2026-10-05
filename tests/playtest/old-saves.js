@@ -33,7 +33,7 @@ for(const [name,setup,expect] of CASES){
     onGround:G.free(Math.floor(w.player.x/G.C),Math.floor((w.player.y-3)/G.C)),inMap:w.player.x>=0&&w.player.y>=0&&w.player.x<=w.physics.world.bounds.width&&w.player.y<=w.physics.world.bounds.height+4,P:[Math.round(w.player.x),Math.round(w.player.y)]};}):null;
   let moved=false;
   if(s){const tgt=await p.evaluate(()=>{const w=window.__w,G=w.walkGrid();for(const r of [40,60,24])for(const [dx,dy] of [[r,0],[-r,0],[0,r],[0,-r]]){const x=w.player.x+dx,y=w.player.y+dy;if(G.free(Math.floor(x/G.C),Math.floor((y+1)/G.C))&&!w.pick(x,y)){const pa=w.findPath(w.player.x,w.player.y-3,x,y+1);if(pa&&pa.length)return [x,y];}}return null;});
-    if(tgt){const p0=s.P;const sc=await p.evaluate(([x,y])=>{const w=window.__w,cam=w.cameras.main,cv=w.game.canvas,r=cv.getBoundingClientRect(),k=cv.clientWidth/w.scale.width;return [r.left+(x-cam.worldView.x)*cam.zoom*k,r.top+(y-cam.worldView.y)*cam.zoom*k];},tgt);
+    if(tgt){const p0=s.P;const sc=await p.evaluate(([x,y])=>{const w=window.__w,cam=w.cameras.main,cv=w.game.canvas,r=cv.getBoundingClientRect(),k=cv.clientWidth/w.scale.width;return [r.left+((window.__w.view?window.__w.view(x,y).x:x)-cam.worldView.x)*cam.zoom*k,r.top+((window.__w.view?window.__w.view(x,y).y:y)-cam.worldView.y)*cam.zoom*k];},tgt);
       await p.touchscreen.tap(...sc);await p.waitForTimeout(1300);const p1=await p.evaluate(()=>[window.__w.player.x,window.__w.player.y]);moved=Math.hypot(p1[0]-p0[0],p1[1]-p0[1])>6;}}
   const ok=!!s&&!errs.length&&s.known&&s.onGround&&s.inMap&&moved&&(expect===null?s.next===null:s.next===expect);
   if(!ok){fails++;await p.screenshot({path:SP+'/old-save-'+name.replace(/[^a-z]+/gi,'-').slice(0,40)+'.png'});}

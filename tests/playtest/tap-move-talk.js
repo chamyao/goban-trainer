@@ -13,7 +13,7 @@ for(let i=0;i<60;i++){if(await p.evaluate(()=>!!(window.__w&&window.__w.player))
 await p.locator('.tk-map').scrollIntoViewIfNeeded(); await p.waitForTimeout(800);
 console.log('game size', await p.evaluate(()=>[window.__w.scale.width,window.__w.scale.height]), '| map box', JSON.stringify(await p.locator('.tk-map').boundingBox()), '| hint:', await p.locator('.tk-menu-keys').textContent());
 // world point -> page point
-const toPage=(x,y)=>p.evaluate(([x,y])=>{const w=window.__w,cam=w.cameras.main,cv=w.game.canvas,r=cv.getBoundingClientRect(),k=cv.clientWidth/w.scale.width;return [r.left+(x-cam.worldView.x)*cam.zoom*k, r.top+(y-cam.worldView.y)*cam.zoom*k];},[x,y]);
+const toPage=(x,y)=>p.evaluate(([x,y])=>{const w=window.__w,cam=w.cameras.main,cv=w.game.canvas,r=cv.getBoundingClientRect(),k=cv.clientWidth/w.scale.width;return [r.left+((window.__w.view?window.__w.view(x,y).x:x)-cam.worldView.x)*cam.zoom*k, r.top+((window.__w.view?window.__w.view(x,y).y:y)-cam.worldView.y)*cam.zoom*k];},[x,y]);
 const pos=()=>p.evaluate(()=>[Math.round(window.__w.player.x),Math.round(window.__w.player.y)]);
 // tap the ground some way off
 const start=await pos(); const tgt=await p.evaluate(()=>{const w=window.__w,P=w.player,G=w.walkGrid();for(const [dx,dy] of [[60,30],[-60,30],[60,-30],[-60,-30],[0,50]]){const x=P.x+dx,y=P.y+dy;if(G.free(Math.floor(x/8),Math.floor((y-3)/8)))return [x,y];}return [P.x,P.y+40];});

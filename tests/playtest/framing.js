@@ -18,8 +18,8 @@ await ready();
 for(const place of ['zhuo-county--inn','lousang-village--house-2','zhuo-county--office','horse-trail','the-peach-garden','zhuo-county']){
   await p.evaluate(pl=>{window.__w.leaving=false;window.__w.go(pl);},place);await p.waitForTimeout(1500);await ready();
   const r=await p.evaluate(()=>{const w=window.__w,cam=w.cameras.main,cv=w.game.canvas,cr=cv.getBoundingClientRect(),k=cv.clientWidth/w.scale.width;
-    const toS=(x,y)=>[cr.left+(x-cam.worldView.x)*cam.zoom*k,cr.top+(y-cam.worldView.y)*cam.zoom*k];
-    const wb=w.physics.world.bounds,[x0,y0]=toS(0,0),[x1,y1]=toS(wb.width,wb.height),P=w.player;
+    const toS=(x,y)=>[cr.left+((window.__w.view?window.__w.view(x,y).x:x)-cam.worldView.x)*cam.zoom*k,cr.top+((window.__w.view?window.__w.view(x,y).y:y)-cam.worldView.y)*cam.zoom*k];
+    const wb=w.physics.world.bounds,C=[toS(0,0),toS(wb.width,0),toS(0,wb.height),toS(wb.width,wb.height)],x0=Math.min(...C.map(c=>c[0])),y0=Math.min(...C.map(c=>c[1])),x1=Math.max(...C.map(c=>c[0])),y1=Math.max(...C.map(c=>c[1])),P=w.player;/* the four corners: the isometric view draws the map as a diamond */
     const fol=w.followers.map(F=>({who:F.who,d:Math.round(Math.hypot(F.spr.x-P.x,F.spr.y-P.y)),over:F.spr.depth>P.depth}));
     return {map:[x0,y0,x1,y1].map(Math.round),cv:[cr.left,cr.top,cr.right,cr.bottom].map(Math.round),fol};});
   const [x0,y0,x1,y1]=r.map,[L,T,R,B]=r.cv,out=[];

@@ -48,6 +48,8 @@ starts from a fresh save.
 | keyboard | desktop by keys: Enter turns the opening scrolls and moves scenes and talks on; WASD and arrows walk; E talks; in a problem U undoes, R resets, H hints, Escape leaves, Enter continues after a win; a road the story hasn't opened stops him; walking off an open edge goes on |
 | window-sizes | iPhone SE both ways, a folded phone (280x653), a tablet both ways, a short (1280x500) and a wide (1920x600) desktop: the game fills a phone and fits a desktop window; goal line, Menu and every menu button on screen; a talk's box and a problem's board and keys on screen. NOTEs: letterboxing, board points closer than 28 px |
 | hud-exits | phone upright: with Liu Bei walked up to each way off the edge of every map, part of it is on screen with a finger's room from the screen edge, the goal line and every button |
+| scene-scrolls | every story scroll inside a scene (Books 1 and 2) is shown when the scene plays (fails while Book 1's Chapter 2, after the inspector is spared, is dropped) |
+| tap-reach | iPhone 13 and SE: taps up to about 18 px off a person or 20-30 px off a story spot's object pick it; no Tap label; open story spots glow (gold main, blue side, never shrines); a tap on the goal line walks him there; a beat before a scene starts |
 | star-lords | peach garden: the two immortals stay through the problem, vanish the moment it is won, the narration follows |
 | go-table-ogs | the 9×9 go table with a stand-in OGS socket: sit, search sent, opponent walks in, live board, move, resign, leave |
 | drag-and-hover | desktop: hand cursor over people; hold-and-drag steers |

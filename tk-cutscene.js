@@ -37,6 +37,8 @@ const WorldCutscene = {
     const hasProblem = cs.beats.some(b => b.do === "problem");
     let skip = !!(opts.ffToProblem && hasProblem), solved = !hasProblem, left = false, lastLine = null;
     const px = ([x, y]) => [x * T, y * T];
+    // where the camera looks for a tile: the same, or where the isometric view draws it (tk-iso.js)
+    const seen = at => { const [x, y] = px(at); if (!scene.view) return [x, y]; const v = scene.view(x, y); return [v.x, v.y]; };
     const wait = ms => new Promise(r => { if (skip) return r(); timers.push(scene.time.delayedCall(ms, r)); });
     const tween = cfg => new Promise(r => { if (skip) return r(); scene.tweens.add({ ...cfg, onComplete: r }); });
 
@@ -229,7 +231,7 @@ const WorldCutscene = {
       tween({ targets: actors[id].spr, alpha: 0, duration: 350, onUpdate: () => sync(actors[id]) }).then(() => { actors[id].spr.setVisible(false); sync(actors[id]); })));
     const pan = (to, ms = 350) => {
       if (!to) return Promise.resolve();
-      const [x, y] = px(to);
+      const [x, y] = seen(to);
       return new Promise(r => { if (skip) return r(); cam.pan(x, y - 8, ms, "Sine.easeInOut", true, (c, p) => { if (p === 1) r(); }); });
     };
 
@@ -421,7 +423,7 @@ const WorldCutscene = {
           if (b.light) light(b.light, 0);
           if (b.music) cue(b.music);
           const lead = b.place[0];
-          if (lead) { const [x, y] = px(lead.at); cam.centerOn(x, y - 8); }
+          if (lead) { const [x, y] = seen(lead.at); cam.centerOn(x, y - 8); }
           cam.fadeIn(220); await wait(230);
           break;
         }
@@ -573,7 +575,7 @@ const WorldCutscene = {
           const ff = opts.ffToProblem;
           skip = false;
           const to = lastLine && lastLine.camera;
-          if (to) { const [x, y] = px(to); cam.centerOn(x, y - 8); }
+          if (to) { const [x, y] = seen(to); cam.centerOn(x, y - 8); }
           if (ff && lastLine) await run(lastLine);
         }
         if (opts.onProblem && !(await opts.onProblem())) { left = true; break; }

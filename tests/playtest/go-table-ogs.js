@@ -20,7 +20,7 @@ await p.evaluate(()=>{window.__sent=[];
     OGSPlay.sendSearch(); };
 });
 const sent=()=>p.evaluate(()=>window.__sent.map(([c,d])=>c+(d&&d.size_speed_options?' '+JSON.stringify(d.size_speed_options):'')+(d&&d.move?' '+d.move:'')));
-const tapW=async(x,y)=>{const [a,b2]=await p.evaluate(([x,y])=>{const w=window.__w,cam=w.cameras.main,cv=w.game.canvas,r=cv.getBoundingClientRect(),k=cv.clientWidth/w.scale.width;return [r.left+(x-cam.worldView.x)*cam.zoom*k, r.top+(y-cam.worldView.y)*cam.zoom*k];},[x,y]);if(MODE==='phone')await p.touchscreen.tap(a,b2);else await p.mouse.click(a,b2);};
+const tapW=async(x,y)=>{await p.evaluate(()=>new Promise(r=>{const w=window.__w;if(!w||!w.cameras){r();return;}const cam=w.cameras.main;let last='',same=0,n=0;const t=setInterval(()=>{const v=Math.round(cam.worldView.x)+','+Math.round(cam.worldView.y);same=v===last?same+1:0;last=v;if(same>=3||++n>40){clearInterval(t);r();}},40);}));/* the camera eases after him: tap once it has settled */const [a,b2]=await p.evaluate(([x,y])=>{const w=window.__w,cam=w.cameras.main,cv=w.game.canvas,r=cv.getBoundingClientRect(),k=cv.clientWidth/w.scale.width;return [r.left+((window.__w.view?window.__w.view(x,y).x:x)-cam.worldView.x)*cam.zoom*k, r.top+((window.__w.view?window.__w.view(x,y).y:y)-cam.worldView.y)*cam.zoom*k];},[x,y]);if(MODE==='phone')await p.touchscreen.tap(a,b2);else await p.mouse.click(a,b2);};
 const spot=await p.evaluate(()=>{const s=Object.values(window.__w.spots).find(s=>s.use==='ogs');window.__w.player.setPosition(s.x+30,s.y+30);return [s.x,s.y];});
 await p.waitForTimeout(900);
 await tapW(spot[0],spot[1]); await p.waitForTimeout(2500);
