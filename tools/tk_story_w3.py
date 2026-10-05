@@ -31,6 +31,8 @@ CAST3 = {
     "taishici": "zm_038", "kongrong": "zm_070", "guanhai": "zm_016", "taoqian": "zm_083", "mizhu": "zm_039",
     "chendeng": "zm_040", "zhaoyun": "zm_042", "jiling": "zm_043", "zhangliao": "zm_044", "gaoshun": "zm_046",
     "haomeng": "zm_047", "xunyu": "zm_048", "guojia": "zm_049", "sunqian": "zm_071",
+    "zhangkai": "zm_072", "yanshi": "zf_019", "houcheng": "zm_073", "sunce": "zm_074", "wanghou": "zm_075",
+    "xiahoudun": "zm_076",
 }
 
 
@@ -455,6 +457,235 @@ def _scenes_main():
     }
 
 
+def _scenes_chengong():
+    return {
+        "temple": {"title": T("The Temple in the Rain", "古寺夜雨"), "kind": "side", "steps": [
+            ["light", "storm", 800],
+            ["spawn", "cs", "caosong", "a1", 10, -4], ["army", "zkm", "f_soldier", 5, "a1", -30, 6], ["spawn", "zk", "zhangkai", "a1", -16, 0],
+            ["prop", "cart", "cart", "a1", 30, 6],
+            N("Before Cao Cao marched on Xuzhou: an old temple between Hua and Fei, on a night of rain.", "曹操兵临徐州之前：华、费之间一座古寺，大雨之夜。"),
+            N("Cao Song, Cao Cao's father, has stopped here with his family and a hundred carts. Tao Qian's officer Zhang Kai and five hundred men keep watch outside in the rain.",
+              "曹操之父曹嵩带着家小和百余辆车，在此避雨。陶谦部下都尉张闿领五百兵，在雨中守在寺外。"),
+            S("zhangkai", "We were Yellow Turbans once, and Tao Qian has given us nothing. These carts are full. Riches are easy tonight.",
+              "我们本是黄巾余党，勉强降顺陶谦，未有好处；如今曹嵩辎重车辆无数，你们欲得富贵不难。"),
+            ["problem"],  # the board comes up here; the rest plays once it is solved
+            ["fx", "fire", "a1", 10, -8], ["pose", "cs", "fall"],
+            N("That night they kill the whole family, take the carts, burn the temple, and run for Huainan.", "当夜杀了曹嵩全家，取了财物，放火烧寺，投淮南去了。"),
+            N("The storyteller says: Cao Cao once killed Lü Boshe's whole house. Now his own house is killed. Heaven's justice comes round.",
+              "后人有诗曰：曹操奸雄世所夸，曾将吕氏杀全家。如今阖户逢人杀，天理循环报不差。"),
+            ["remove", "cs"], ["remove", "zk"], ["remove", "zkm"], ["remove", "cart"], ["light", "day", 1500],
+        ]},
+        "plea": {"title": T("Chen Gong Pleads", "陈宫进谏"), "kind": "side", "steps": [
+            ["army", "cao", "f_soldier", 8, "a2", 40, 0], ["spawn", "cc", "caocao", "a2", 18, -4],
+            N("Cao Cao's whole army goes into white mourning, and every city it takes is put to the sword.", "曹操全军挂孝，凡得城池，将城中百姓尽行屠戮。"),
+            S("caocao", "Tao Qian let his men kill my father. We cannot live under the same sky! I will wash Xuzhou clean.", "陶谦纵兵杀吾父，此雠不共戴天！吾今悉起大军，洗荡徐州，方雪吾恨！"),
+            ["spawn", "cg", "chengong", "a2", -30, 6], ["move", "cg", "a2", 0, 4],
+            N("Chen Gong, who left Cao Cao after Lü Boshe's farm, is an officer at Dongjun now, and a friend of Tao Qian. He comes to plead for Xuzhou.",
+              "陈宫自吕伯奢庄上离了曹操，此时在东郡为从事，与陶谦交厚，闻讯特来求见。"),
+            S("chengong", "Tao Qian is a good man. Your father's death was Zhang Kai's crime, not his. And what feud have the common people with you?",
+              "陶谦乃仁人君子，非好利忘义之辈；尊父遇害，乃张闿之恶，非谦罪也。且州县之民，与明公何雠？杀之不祥。"),
+            ["problem"],  # the board comes up here; the rest plays once it is solved
+            S("caocao", "You left me once. Now you come back to speak for him? Tao Qian killed my family. I will tear out his heart!",
+              "公昔弃我而去，今有何面目复来相见？陶谦杀吾一家，誓当摘胆剜心，以雪吾恨！"),
+            N("Chen Gong goes out, and sighs.", "陈宫辞出，叹曰："),
+            S("chengong", "Now I cannot face Tao Qian either!", "吾亦无面目见陶谦也！"),
+            N("He rides to Zhang Miao at Chenliu. Soon he will bring Lü Bu to take Cao Cao's home province behind his back.", "遂驰马投陈留太守张邈去了。不久，他便要引吕布去袭曹操的兖州。"),
+            ["remove", "cg"], ["remove", "cc"], ["remove", "cao"],
+        ]},
+        "puyang": {"title": T("The Fire at Puyang", "濮阳火"), "kind": "side", "steps": [
+            ["light", "night", 800], ["prop", "gate", "gate", "a3", 40, -14],
+            ["spawn", "cc", "caocao", "a3", -10, 0], ["army", "cao", "f_soldier", 5, "a3", -34, 6],
+            N("Lü Bu holds Puyang. Chen Gong has the rich Tian family write to Cao Cao: they will open the gate, and a white banner marked RIGHTEOUSNESS will be the sign.",
+              "吕布据了濮阳。陈宫令城中富户田氏密书曹操，愿为内应，城上插白旗，大书“义”字为号。"),
+            S("caocao", "Heaven gives me Puyang!", "天使吾得濮阳也！"),
+            N("Cao Cao rides in himself. The streets are empty. Then fire breaks out at all four gates.", "曹操亲自入城，街上不见一人。忽然四门烈火齐起。"),
+            ["fx", "fire", "a3", 40, -10], ["fx", "fire", "a3", 0, 14], ["mood", "dark"],
+            ["problem"],  # the board comes up here; the rest plays once it is solved
+            ["spawn", "lb", "lvbu", "a3", 50, 0], ["move", "lb", "a3", 6, 0],
+            N("In the smoke Lü Bu rides up, taps Cao Cao's helmet with his halberd, and does not know him.", "火光里吕布挺戟而来，用戟在曹操盔上一击，却不认得他。"),
+            S("lvbu", "Where is Cao Cao?", "曹操何在？"),
+            S("caocao", "Ahead, on the yellow horse!", "前面骑黄马者是他。"),
+            ["run", "lb", "a3", 140, -10], ["remove", "lb"],
+            N("Lü Bu gallops off after the yellow horse. A burning beam falls on Cao Cao, and his men drag him out singed but alive. Among Lü Bu's officers that night is Zhang Liao.",
+              "吕布便纵马向前追去。一条火梁倒下，打着曹操，众将救出，须发尽被烧坏。是夜吕布军中，便有张辽。"),
+            S("caocao", "I fell for that oaf's trick. I will pay him back!", "误中匹夫之计，吾必当报之！"),
+            ["mood", "clear"], ["remove", "cc"], ["remove", "cao"], ["remove", "gate"], ["light", "day", 1500],
+        ]},
+        "threeplans": {"title": T("Three Plans", "陈宫三计"), "kind": "side", "steps": [
+            ["prop", "tbl", "table", "a4", 10, 10],
+            ["spawn", "lb", "lvbu", "a4", 14, -4], ["spawn", "cg", "chengong", "a4", -14, 4],
+            N("In Xiapi, before the flood. Chen Gong comes to Lü Bu with a plan.", "下邳城中，水淹之前。陈宫来见吕布献计。"),
+            S("chengong", "Cao Cao has only just come. Strike before his camps are set, rested men against tired ones, and we cannot lose.", "今操兵方来，可乘其寨栅未定，以逸击劳，无不胜者。"),
+            S("lvbu", "I have lost too often to go out rashly. Let them come, and I will drive them all into the Si.", "吾方屡败，不可轻出。待其来攻而后击之，皆落泗水矣。"),
+            N("Then a second plan: Lü Bu camps outside the walls and Chen Gong holds the city, and each relieves the other. Lü Bu agrees, until his wife, Lady Yan, weeps.",
+              "陈宫又献掎角之计：吕布引兵屯于城外，陈宫守城，互为救应。吕布然之。其妻严氏却哭道："),
+            ["spawn", "ys", "yanshi", "a4", 26, 8],
+            S("yanshi", "You would leave the city and your wife, and go out alone. If anything goes wrong, will I still be your wife?", "君委全城，捐妻子，孤军远出，倘一旦有变，妾岂得为将军之妻乎？"),
+            ["problem"],  # the board comes up here; the rest plays once it is solved
+            N("A third plan, to cut Cao Cao's grain. Lady Yan weeps again, and Diaochan begs him too.", "陈宫又劝断曹操粮道。严氏又泣，貂蝉也来劝。"),
+            ["spawn", "dc", "diaochan", "a4", 34, -2],
+            S("diaochan", "Be my protector, general. Do not ride out alone.", "将军与妾作主，勿轻骑自出。"),
+            S("lvbu", "Don't worry. With my halberd and Red Hare, who dares come near me?", "汝无忧虑。吾有画戟、赤兔马，谁敢近我？"),
+            N("Lü Bu stays in, and drinks with Lady Yan and Diaochan day after day.", "吕布遂不出，终日与严氏、貂蝉饮酒解闷。"),
+            S("chengong", "We will die with no ground to be buried in!", "吾等死无葬身之地矣！"),
+            ["remove", "lb"], ["remove", "cg"], ["remove", "ys"], ["remove", "dc"], ["remove", "tbl"],
+        ]},
+        "winejars": {"title": T("The Wine Jars", "侯成盗马"), "kind": "side", "steps": [
+            ["spawn", "lb", "lvbu", "a5", 14, -4],
+            N("With the water around the walls, Lü Bu sees in a mirror how wine has wasted him, and forbids wine in the city.", "水围城下，吕布照镜，见形容憔悴，乃下令城中禁酒。"),
+            S("lvbu", "Wine and women have wrecked me. From today, no more.", "吾被酒色伤矣！自今日始，当戒之。"),
+            ["spawn", "hc", "houcheng", "a5", -26, 6], ["prop", "jars", "winejars", "a5", -14, 10], ["move", "hc", "a5", 0, 4],
+            N("His officer Hou Cheng gets back fifteen stolen horses, and his friends want to celebrate. Afraid of the ban, he first brings five jars of the new wine to Lü Bu.",
+              "部将侯成追回被盗的十五匹马，众将要来作贺。侯成怕违禁，先送五瓶酒给吕布。"),
+            S("lvbu", "I have just forbidden wine, and you brew it for a party? Are you all plotting against me?", "吾方禁酒，汝却酿酒会饮，莫非同谋伐我乎？"),
+            ["problem"],  # the board comes up here; the rest plays once it is solved
+            N("He orders Hou Cheng beheaded. The officers beg, and he has him beaten fifty strokes instead.", "喝令推出斩之。众将告免，打了五十背花。"),
+            ["remove", "lb"], ["remove", "jars"],
+            N("That night Song Xian and Wei Xu come to see him.", "当夜，宋宪、魏续来看侯成。"),
+            S("houcheng", "What Lü Bu trusts is Red Hare. You two open the gate and seize him, and I will steal the horse first and take it to Lord Cao.",
+              "布所倚恃者，赤兔马也。汝二人果能献门擒布，吾当先盗马去见曹公。"),
+            N("Before dawn, Hou Cheng leads Red Hare out of the east gate.", "天未明，侯成盗了赤兔马，出东门而去。"),
+            ["run", "hc", "a5", 140, 0], ["remove", "hc"],
+        ]},
+    }
+
+
+def _scenes_emperor():
+    return {
+        "dogs": {"title": T("Two Dogs and a Bone", "二犬争骨"), "kind": "side", "steps": [
+            ["spawn", "xd", "xiandi", "b1", 0, -4], ["spawn", "lj", "lijue", "b1", 26, 4], ["spawn", "gs", "guosi", "b1", 60, 0],
+            N("Meanwhile, in Chang'an, Li Jue and Guo Si fall out. Guo Si's jealous wife has made him believe Li Jue means to poison him.", "此时长安城中，李傕、郭汜反目。郭汜之妻多疑，硬说李傕要毒死丈夫。"),
+            N("Li Jue carries the Emperor off to his camp. Guo Si seizes the ministers who come to make peace. They fight in the streets for fifty days.",
+              "李傕劫天子入营，郭汜扣下前来讲和的公卿。两人在城中厮杀五十余日。"),
+            S("guosi", "Li Jue can kidnap the Son of Heaven, and I can't kidnap ministers?", "李傕劫天子，偏我劫不得公卿！"),
+            ["problem"],  # the board comes up here; the rest plays once it is solved
+            N("The Emperor asks for rice and meat for his attendants. Li Jue sends rotten meat.", "天子令人求米五斛、牛骨五具，以赐左右。李傕却送去腐肉朽粮。"),
+            S("lijue", "You get your meals. What more do you want?", "朝夕上饭，何又他求？"),
+            S("xiandi", "Traitor, to insult me so!", "逆贼直如此相欺！"),
+            N("At last the two make peace, and let the Emperor go east, to the old capital.", "后来两人讲和，放天子东归旧都。"),
+            ["remove", "xd"], ["remove", "lj"], ["remove", "gs"],
+        ]},
+        "river": {"title": T("The River at Night", "夜渡黄河"), "kind": "side", "steps": [
+            ["light", "night", 800],
+            ["spawn", "xd", "xiandi", "b2", 0, -4], ["army", "court", "f_official", 5, "b2", -20, 8],
+            N("On the road east, Li Jue and Guo Si change their minds and come after him. At the Yellow River the bank is high, and there is one small boat.",
+              "东归路上，李傕、郭汜又反悔追来。到了黄河边，岸高水急，只有一条小船。"),
+            S("xiandi", "I cannot leave my officials behind.", "朕不可舍百官而去。"),
+            ["problem"],  # the board comes up here; the rest plays once it is solved
+            N("They let the Emperor and the Empress down the bank wrapped in silk. Men crowd the boat and cling to its sides, and are cut away.",
+              "众人以绢包了天子与皇后，从岸上放下，扶上小船。争上船的人扒住船舷不放，都被砍落水中。"),
+            ["move", "xd", "b2", 60, 0], ["remove", "court"],
+            N("On the far bank the Emperor has a dozen people left, and eats coarse millet in a thatched hut.", "到得对岸，天子身边只剩十余人，在茅屋中吃粗粮。"),
+            ["remove", "xd"], ["light", "day", 1500],
+        ]},
+        "thorns": {"title": T("Among the Thorns", "荆棘中的朝廷"), "kind": "side", "steps": [
+            ["spawn", "xd", "xiandi", "b3", 0, -4], ["army", "court", "f_official", 5, "b3", -24, 8],
+            N("The Emperor reaches Luoyang. The palaces are ash, and weeds grow through the walls. The court stands among thorns, and officials go out to gather firewood, and some starve.",
+              "天子到了洛阳，宫室烧尽，街市荒芜，满目蒿草。百官立于荆棘之中朝见，尚书郎以下自出城外采樵，多有饿死于颓墙坏壁之间者。"),
+            ["army", "cao", "f_soldier", 6, "b3", 70, 0], ["spawn", "cc", "caocao", "b3", 50, 0], ["move", "cc", "b3", 18, 0],
+            N("Then Cao Cao comes, with an army and with grain.", "此时曹操引大军到来。"),
+            S("xiandi", "General Cao is truly a pillar of the state!", "曹将军真社稷臣也！"),
+            ["problem"],  # the board comes up here; the rest plays once it is solved
+            N("Cao Cao moves the Emperor to his own city, Xu. From then on all power is Cao Cao's: the court's business goes to him first, and to the Emperor after.",
+              "曹操移驾许都。自此大权皆归于曹操，朝廷大务，先禀曹操，然后方奏天子。"),
+            ["remove", "xd"], ["remove", "court"], ["remove", "cc"], ["remove", "cao"],
+        ]},
+    }
+
+
+def _scenes_sunce():
+    return {
+        "pawn": {"title": T("The Seal in Pawn", "典玺借兵"), "kind": "side", "steps": [
+            ["spawn", "ys", "yuanshu", "c1", 20, -4], ["spawn", "sc", "sunce", "c1", -6, 4],
+            N("At Shouchun, Sun Jian's son Sun Ce serves Yuan Shu, and is given no army of his own. One night he weeps for his father.", "寿春城中，孙坚之子孙策寄身袁术帐下，不得兵权。一夜，他想起父亲，放声大哭。"),
+            N("He brings Yuan Shu the Imperial Seal his father found in the well, and asks for men in exchange.", "孙策取出父亲当年从井中得来的传国玉玺，向袁术借兵。"),
+            ["prop", "seal", "seal", "c1", 8, 2],
+            S("sunce", "Take the seal as my pledge, and lend me three thousand men.", "策愿以玉玺为质，借兵三千。"),
+            ["problem"],  # the board comes up here; the rest plays once it is solved
+            S("yuanshu", "It is not that I want your seal. I will just keep it here for now.", "吾非要你玉玺，今且权留在此。"),
+            N("Sun Ce gets three thousand men and five hundred horses, and crosses the river to the south.", "孙策得兵三千、马五百匹，渡江南下。"),
+            ["remove", "ys"], ["remove", "sc"], ["remove", "seal"],
+        ]},
+        "shenting": {"title": T("Shenting Ridge", "神亭酣斗"), "kind": "side", "steps": [
+            ["spawn", "sc", "sunce", "c2", -10, 0], ["army", "riders", "f_soldier", 4, "c2", -34, 6],
+            N("In the south, Sun Ce rides up Shenting Ridge with thirteen riders. Taishi Ci, who left Beihai to serve Liu Yao, charges out alone.",
+              "江东神亭岭上，孙策只带十三骑上山。当年离了北海、投了刘繇的太史慈，独自挺枪而出。"),
+            ["spawn", "tsc", "taishici", "c2", 60, 0], ["run", "tsc", "c2", 14, 0],
+            S("taishici", "I am Taishi Ci of Donglai, come to capture Sun Ce!", "我便是东莱太史慈也，特来捉孙策！"),
+            S("sunce", "Come at me two at a time, I'm not afraid. If I feared you, I would not be Sun Bofu!", "你两个一齐来并我一个，我不惧你！我若怕你，非孙伯符也！"),
+            ["problem"],  # the board comes up here; the rest plays once it is solved
+            ["pose", "sc", "strike"], ["pose", "tsc", "strike"], ["fx", "dust", "c2", 4, 0],
+            N("They fight a hundred bouts, until both are dragged from their horses. Sun Ce comes away with Taishi Ci's short halberd, and Taishi Ci with Sun Ce's helmet.",
+              "两人斗了一百余合，都滚下马来。孙策夺了太史慈背上短戟，太史慈掣了孙策头上的兜鍪。"),
+            N("Next day each holds up his prize before the other's army.", "次日，两边阵前各自挑出所得之物示众。"),
+            ["remove", "sc"], ["remove", "tsc"], ["remove", "riders"],
+        ]},
+        "noon": {"title": T("By Noon Tomorrow", "如约而归"), "kind": "side", "steps": [
+            ["spawn", "sc", "sunce", "c3", 10, -4], ["spawn", "tsc", "taishici", "c3", -10, 4], ["pose", "tsc", "kneel"],
+            N("Liu Yao is beaten, and Taishi Ci is caught in tripping ropes. Sun Ce unties him himself, and puts his own robe on him.", "刘繇兵败，太史慈被绊马索擒住。孙策亲自为他解缚，脱下自己的锦袍给他穿上。"),
+            ["pose", "tsc", "stand"],
+            S("sunce", "At Shenting, if you had caught me, would you have killed me?", "神亭相战之时，若公获我，还相害否？"),
+            S("taishici", "Hard to say.", "未可知也。"),
+            N("Taishi Ci asks leave to gather Liu Yao's scattered men, and promises to be back by noon tomorrow. Sun Ce's officers say he will never come back.",
+              "太史慈请求去招抚刘繇的散兵，约定明日中午回来。众将都说：此去必不回矣。"),
+            ["run", "tsc", "c3", -120, 0], ["remove", "tsc"],
+            S("sunce", "Ziyi is a man of his word. He will not betray me.", "子义乃信义之士，必不背我。"),
+            ["problem"],  # the board comes up here; the rest plays once it is solved
+            ["army", "men", "militia", 6, "c3", -80, 0], ["spawn", "tsc", "taishici", "c3", -60, 0],
+            ["move", "men", "c3", -30, 0], ["move", "tsc", "c3", -8, 0],
+            N("At noon the next day, Taishi Ci rides in with more than a thousand men.", "次日日中，太史慈果然引一千余人回寨。"),
+            ["remove", "sc"], ["remove", "tsc"], ["remove", "men"],
+        ]},
+    }
+
+
+def _scenes_caoman():
+    return {
+        "wancheng": {"title": T("The Gate at Wancheng", "典韦死守"), "kind": "side", "steps": [
+            ["light", "night", 800], ["prop", "gate", "gate", "d1", 30, -14],
+            ["spawn", "dw", "dianwei", "d1", 24, 0],
+            N("At Wancheng, Zhang Xiu surrenders to Cao Cao, and then Cao Cao takes Zhang Xiu's widowed aunt into his tent. Zhang Xiu decides to strike that night.",
+              "宛城张绣降了曹操，曹操却把张绣的婶娘邹氏纳入帐中。张绣大怒，决意夜袭。"),
+            N("First his man gets Cao Cao's bodyguard, Dian Wei, drunk, and steals his twin iron halberds.", "张绣部下胡车儿先把曹操的护卫典韦灌醉，偷走了他的双铁戟。"),
+            ["fx", "fire", "d1", 50, -8], ["army", "zx", "f_soldier", 10, "d1", 80, 0],
+            N("Fire. Dian Wei wakes without his halberds, takes a soldier's sword, and holds the camp gate alone.", "火起，典韦惊醒，不见双戟，夺了一口步卒的腰刀，独守寨门。"),
+            ["problem"],  # the board comes up here; the rest plays once it is solved
+            ["run", "zx", "d1", 36, 0], ["pose", "dw", "strike"], ["pose", "zx", "fall", 3],
+            N("When the sword is notched, he fights with two dead men for clubs. He dies on his feet at the gate, covered in wounds, and for a long time no one dares go past him.",
+              "刀砍缺了，他便提两个军人迎敌。身上数十处伤，大叫数声，血流满地而死。死了半晌，还无一人敢从前门而入。"),
+            ["pose", "dw", "fall"], ["remove", "zx"], ["light", "dawn", 1500],
+            ["spawn", "cc", "caocao", "d1", -20, 4],
+            S("caocao", "I lost my eldest son and my nephew, and I do not grieve so. I weep only for Dian Wei.", "吾折长子、爱侄，俱无深痛；独号泣典韦也。"),
+            ["remove", "dw"], ["remove", "cc"], ["remove", "gate"], ["light", "day", 1500],
+        ]},
+        "granary": {"title": T("The Granary Officer", "借头"), "kind": "side", "steps": [
+            ["spawn", "cc", "caocao", "d2", 14, -4], ["spawn", "wh", "wanghou", "d2", -10, 6],
+            N("Cao Cao besieges Yuan Shu's city of Shouchun, and his grain runs low. He tells the granary officer, Wang Hou, to hand it out in a smaller measure. The soldiers grumble that they are being cheated.",
+              "曹操围攻袁术的寿春，军粮将尽。他令管粮官王垕用小斛散粮。军中嗟怨，都说曹公欺众。"),
+            S("caocao", "I want to borrow something of yours, to calm the army: your head.", "吾欲问汝借一物，以压众心：欲借汝头以示众耳。"),
+            S("wanghou", "But I have done nothing wrong!", "某实无罪！"),
+            ["problem"],  # the board comes up here; the rest plays once it is solved
+            S("caocao", "I know you have done nothing wrong. But if I do not kill you, the army will turn.", "吾亦知汝无罪；但不杀汝，军心变矣。"),
+            ["remove", "wh"],
+            N("Wang Hou's head goes up on a pole: he cheated the army with a small measure. The grumbling stops. Cao Cao carries earth to the moat himself, and Shouchun falls.",
+              "王垕之头悬于竿上，榜曰：王垕故行小斛，盗窃官粮。众怨始解。曹操亲自负土填堑，寿春遂破。"),
+            ["remove", "cc"],
+        ]},
+        "eye": {"title": T("Father's Essence", "拔矢啖睛"), "kind": "side", "steps": [
+            ["spawn", "xhd", "xiahoudun", "d3", -6, 0], ["army", "cao", "f_soldier", 6, "d3", -34, 6], ["army", "lbm", "f_soldier", 6, "d3", 70, 0],
+            N("Cao Cao sends Xiahou Dun to help Liu Bei at Xiaopei. On the road, Lü Bu's officer Cao Xing shoots him in the left eye.", "曹操遣夏侯惇往救小沛。路上，吕布部将曹性一箭射中夏侯惇左目。"),
+            ["fx", "flash", "d3", -6, -4],
+            N("Xiahou Dun pulls out the arrow, and the eye comes with it.", "夏侯惇急用手拔箭，不想连眼珠拔出。"),
+            S("xiahoudun", "Father's essence, mother's blood. I will not throw it away!", "父精母血，不可弃也！"),
+            ["problem"],  # the board comes up here; the rest plays once it is solved
+            ["run", "xhd", "d3", 50, 0], ["pose", "xhd", "strike"], ["pose", "lbm", "fall", 1],
+            N("He swallows the eye, spurs at Cao Xing, and puts his spear through his face.", "遂纳于口内啖之，挺枪纵马，直取曹性，一枪搠透面门。"),
+            N("But Cao Cao's army is still beaten back, and Xiaopei is left to stand alone.", "但曹军终被杀败，小沛孤立无援。"),
+            ["remove", "xhd"], ["remove", "cao"], ["remove", "lbm"],
+        ]},
+    }
+
+
 def _dl(q, who, open_, win, slip, zq, zopen, zwin, zslip):
     """A decision board: caption, who weighs it, and the lines on opening, a solve and a slip."""
     ZH3[q], ZH3[open_], ZH3[win], ZH3[slip] = zq, zopen, zwin, zslip
@@ -509,17 +740,39 @@ def _nodes():
         {"key": "boss", "x": 430, "y": 90, "role": "boss", "place": T(*_XIAPI), "scene": "whitegate",
          "boss": {"who": "lvbu", "title": "Lü Bu, bound at the White Gate",
                   "taunt": T("You are the guest on the dais, and I the prisoner below the steps.", "公为坐上客，布为阶下囚。")}},
+        # A. Chen Gong's Counsel: Cao Song's murder, the plea, Puyang (off m3); Xiapi before the fall (off m13c)
+        _node("a1", 96, 214, "side", ("An Old Temple", "古寺"), 0.14, "temple"),
+        _node("a2", 112, 226, "side", ("Cao Cao's Camp", "曹营"), 0.16, "plea"),
+        _node("a3", 126, 210, "side", ("Puyang", "濮阳"), 0.18, "puyang"),
+        _node("a4", 404, 140, "side", _XIAPI, 0.92, "threeplans"),
+        _node("a5", 420, 124, "side", _XIAPI, 0.94, "winejars"),
+        # B. The Emperor's Road (off m6)
+        _node("b1", 150, 100, "side", ("Chang'an", "长安"), 0.34, "dogs"),
+        _node("b2", 164, 86, "side", ("The Yellow River", "黄河渡口"), 0.36, "river"),
+        _node("b3", 180, 96, "side", ("Burned Luoyang", "焦土洛阳"), 0.38, "thorns"),
+        # C. The Little Conqueror (off m9)
+        _node("c1", 222, 184, "side", ("Shouchun", "寿春"), 0.54, "pawn"),
+        _node("c2", 238, 198, "side", ("Shenting Ridge", "神亭岭"), 0.56, "shenting"),
+        _node("c3", 252, 180, "side", ("Jingxian", "泾县"), 0.58, "noon"),
+        # D. Cao Cao's Men (off m11)
+        _node("d1", 286, 160, "side", ("Wancheng", "宛城"), 0.7, "wancheng"),
+        _node("d2", 300, 176, "side", ("Shouchun", "寿春"), 0.72, "granary"),
+        _node("d3", 316, 164, "side", ("The Road to Xiaopei", "小沛道上"), 0.74, "eye"),
     ]
 
 
 _EDGES = [["m1", "m2"], ["m2", "m3"], ["m3", "m4"], ["m4", "m5"], ["m5", "m6"], ["m6", "m7"], ["m7", "m8"], ["m8", "m9"],
           ["m9", "m10"], ["m10", "m11"], ["m11", "m12"], ["m12", "m13"], ["m13", "m13b"], ["m13", "m13c"], ["m13b", "m13c"],
-          ["m13c", "boss"]]
+          ["m13c", "boss"],
+          ["m3", "a1"], ["a1", "a2"], ["a2", "a3"], ["a3", "m4"], ["m13c", "a4"], ["a4", "a5"], ["a5", "boss"],
+          ["m6", "b1"], ["b1", "b2"], ["b2", "b3"], ["b3", "m7"],
+          ["m9", "c1"], ["c1", "c2"], ["c2", "c3"], ["c3", "m10"],
+          ["m11", "d1"], ["d1", "d2"], ["d2", "d3"], ["d3", "m12"]]
 
 
 def _scene_table():
     scenes = {}
-    for part in (_scenes_main(),):
+    for part in (_scenes_main(), _scenes_chengong(), _scenes_emperor(), _scenes_sunce(), _scenes_caoman()):
         scenes.update(part)
     return scenes
 
@@ -658,6 +911,8 @@ PLACES3 = {
          "outro": [T("The old men are gone. Only the game remains.", "两位老人已经不见了，只剩下那盘棋。")]},
         {"kind": "rock.big", "id": "road", "node": "3-m13c", "label": T("The Huainan road", "淮南要路")},
         {"kind": "building.gate", "id": "whitegate", "node": "3-boss", "label": T("The White Gate Tower", "白门楼")},
+        {"kind": "building.hall", "id": "lvbuhall", "node": "3-a4", "label": T("Lü Bu's hall", "吕布府中")},
+        {"kind": "building.house", "id": "houcheng", "node": "3-a5", "label": T("Hou Cheng's quarters", "侯成住处")},
         # the brothers take a side of the road each (Guan Yu west, Zhang Fei east)
         {"kind": "rock.crag", "id": "road_west", "label": T("The west side of the road", "路西"),
          "needs": ["node:m13b"], "delivers": "road_west", "when": "node:m13b",
@@ -673,5 +928,43 @@ PLACES3 = {
         {"3-m13": T("Go to Xiapi, where Cao Cao has Lü Bu surrounded.", "前往下邳，曹操已把吕布围住。"),
          "3-m13b": T("Go to the shrine under the pine by the camp.", "到营边松树下的星君祠去。"),
          "3-m13c": _OBJ_ROAD,
-         "3-boss": T("Go up to the White Gate Tower.", "登上白门楼。")}),
+         "3-boss": T("Go up to the White Gate Tower.", "登上白门楼。"),
+         "3-a4": T("Side story: Chen Gong's plans in Lü Bu's hall.", "支线：吕布府中，陈宫献计。"),
+         "3-a5": T("Side story: Hou Cheng's wine jars.", "支线：侯成的酒。")}),
+    # ---- side threads ----
+    "An Old Temple": _P("hills", [{"kind": "building.hall", "id": "temple", "node": "3-a1", "label": T("The old temple", "古寺")}],
+                        [_talk("folk.monk", "Travellers shelter here when it rains. We ask no names.", "下雨天，过路人都来这里避雨。我们从不问姓名。")],
+                        {"3-a1": T("Side story: the old temple, on a night of rain.", "支线：雨夜古寺。")}),
+    "Cao Cao's Camp": _P("camp", [{"kind": "building.tent", "id": "tent", "node": "3-a2", "label": T("Cao Cao's tent", "曹操大帐")}],
+                         [_talk("folk.soldier", "White cloth on every man. The general is in mourning, and so are we.", "人人挂孝。主公在服丧，我们也一样。")],
+                         {"3-a2": T("Side story: Cao Cao's tent, before Xuzhou.", "支线：徐州城外，曹操大帐。")}, banners="red"),
+    "Puyang": _P("city", [{"kind": "building.gate", "id": "gate", "node": "3-a3", "label": T("The gate of Puyang", "濮阳城门")}],
+                 [_talk("folk.villager", "The Tian family say they will open the gate for Cao Cao. The Tians say a lot of things.", "田家说要给曹操开城门。田家的话，多着呢。")],
+                 {"3-a3": T("Side story: the gate of Puyang, at night.", "支线：夜里的濮阳城门。")}),
+    "Chang'an": _P("city", [{"kind": "building.hall", "id": "camp", "node": "3-b1", "label": T("Li Jue's camp", "李傕营中")}],
+                   [_talk("folk.woman", "Two of them fighting over the Emperor, like dogs over a bone.", "两个人争天子，像两条狗抢一根骨头。")],
+                   {"3-b1": T("Side story: the Emperor in Li Jue's camp.", "支线：李傕营中的天子。")}),
+    "The Yellow River": _P("road", [{"kind": "rock.big", "id": "bank", "node": "3-b2", "label": T("The high bank", "高岸")}],
+                           [_talk("folk.hunter", "One boat on this whole stretch of river, and it leaks.", "这一段河上只有一条船，还漏水。")],
+                           {"3-b2": T("Side story: the river crossing, at night.", "支线：夜渡黄河。")}),
+    "Burned Luoyang": _P("ruins", [{"kind": "building.hall", "id": "court", "node": "3-b3", "label": T("The court among the thorns", "荆棘中的朝堂")}],
+                         [_talk("folk.official", "We hold court standing up. There is nothing left to sit on.", "我们站着上朝。连坐的地方都没有了。")],
+                         {"3-b3": T("Side story: the court in burned Luoyang.", "支线：焦土洛阳的朝廷。")}),
+    "Shouchun": _P("city", [{"kind": "building.hall", "id": "hall", "node": "3-c1", "label": T("Yuan Shu's hall", "袁术府中")},
+                            {"kind": "building.tent", "id": "granary", "node": "3-d2", "label": T("The granary tent", "粮帐")}],
+                   [_talk("folk.villager", "Yuan Shu eats well. The rest of us eat what's left.", "袁术吃得好。我们吃剩下的。")],
+                   {"3-c1": T("Side story: Sun Ce in Yuan Shu's hall.", "支线：袁术府中的孙策。"),
+                    "3-d2": T("Side story: the granary officer at the siege of Shouchun.", "支线：寿春城下的管粮官。")}),
+    "Shenting Ridge": _P("mountain", [{"kind": "rock.crag", "id": "ridge", "node": "3-c2", "label": T("Shenting Ridge", "神亭岭")}],
+                         [_talk("folk.monk", "There is a shrine to the Emperor Guangwu up there. Soldiers come to pray before a fight.", "岭上有光武帝庙。打仗前常有军人来拜。")],
+                         {"3-c2": T("Side story: Shenting Ridge.", "支线：神亭岭。")}),
+    "Jingxian": _P("camp", [{"kind": "building.tent", "id": "tent", "node": "3-c3", "label": T("Sun Ce's camp", "孙策营寨")}],
+                   [_talk("folk.soldier", "He let the prisoner go to fetch his men. We'll never see him again.", "他把俘虏放走去招兵。这人再也不会回来了。")],
+                   {"3-c3": T("Side story: Sun Ce's camp at Jingxian.", "支线：泾县孙策营。")}),
+    "Wancheng": _P("camp", [{"kind": "building.gate", "id": "gate", "node": "3-d1", "label": T("The camp gate", "寨门")}],
+                   [_talk("folk.soldier", "Dian Wei stands at the gate every night. Nobody gets past Dian Wei.", "典韦每夜都守在寨门。谁也过不了典韦。")],
+                   {"3-d1": T("Side story: Cao Cao's camp gate at Wancheng.", "支线：宛城曹营寨门。")}, banners="red"),
+    "The Road to Xiaopei": _P("road", [{"kind": "rock.big", "id": "road", "node": "3-d3", "label": T("The road to Xiaopei", "小沛道上")}],
+                              [_talk("folk.villager", "Lord Cao's relief army came through this morning. Xiahou Dun leads it.", "曹公的援兵今早从这里过去了，是夏侯惇领兵。")],
+                              {"3-d3": T("Side story: Xiahou Dun on the road to Xiaopei.", "支线：小沛道上的夏侯惇。")}),
 }
