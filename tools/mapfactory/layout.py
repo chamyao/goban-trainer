@@ -291,7 +291,7 @@ class Layout:
         done_nodes = set()
         for lm in b.get("landmarks", []):
             lines = {k: lm[k] for k in ("intro", "outro", "trigger",   # and a place to deliver to (a ridge):
-                                        "needs", "delivers", "when", "empty", "waiting", "deliver", "delivered") if lm.get(k)}
+                                        "needs", "delivers", "when", "empty", "waiting", "deliver", "delivered", "call") if lm.get(k)}
             o = self.place_landmark(lm["kind"], lm.get("id"), lm.get("label"), lm.get("node"), near=lm.get("near"), lines=lines,
                                     use=lm.get("use"), side=lm.get("side"), clear=lm.get("clear"))
             if o is None:
@@ -418,7 +418,7 @@ class Layout:
                     if p["kind"].startswith("folk.") and not p.get("near") and not p.get("challenge"):
                         npc["wander"] = True
                     for k in ("challenge", "intro", "win", "done", "until", "face",   # challengers and story people
-                              "when", "gives", "gives_when", "give", "given"):     # present once…; gives an item once…
+                              "when", "gives", "gives_when", "give", "given", "call"):     # present once…; gives an item once…; calls out when you come near able to act
                         if p.get(k):
                             npc[k] = p[k]
                     self.npcs.append(npc)

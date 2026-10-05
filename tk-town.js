@@ -224,10 +224,17 @@ const TownUI = {
     return {
       busy: () => open,
       // Chinese leads, English follows.
-      goal(t, zh) {
+      // hint: [en, zh] of counsel still to act on, kept quieter under the goal
+      goal(t, zh, hint) {
         const g = $(".town-goal"); g.textContent = zh || t;
         g.onclick = e => { e.stopPropagation(); if (scene.walkToGoal) scene.walkToGoal(); };   // tap the goal: head for it
         if (zh) g.append(Object.assign(document.createElement("span"), { className: "town-goal-en", textContent: t }));
+        if (hint && hint[0]) {
+          const h = Object.assign(document.createElement("span"), { className: "town-goal-hint" });
+          h.append(Object.assign(document.createElement("span"), { lang: "zh-CN", textContent: `“${hint[1] || hint[0]}”` }));
+          if (hint[1]) h.append(Object.assign(document.createElement("span"), { className: "town-goal-en", textContent: `“${hint[0]}”` }));
+          g.append(h);
+        }
       },
       place(name, zh) {
         const el = $(".town-place"); el.textContent = zh || name; el.lang = zh ? "zh-CN" : "en";
