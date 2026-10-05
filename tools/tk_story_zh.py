@@ -280,7 +280,7 @@ ZH = {
     "“The governor wants volunteers. Read the notice.”": "“太守在招义兵，你去看看榜文吧。”",
     "An old man sits over a weiqi board in the square. “You have the look of a thinker. Sit, play me one.”": "广场上，一位老人守着一张棋盘。“看你像个有心思的人。坐，陪我下一局。”",
     "“Ha! Quick eyes. The governor could use a man like you.”": "“哈！好眼力。太守正需要你这样的人。”",
-    "“Come back when you've grown sharper.”": "“等你棋艺再长进些，再来找我。”",
+    "“Go on. I'll sit here a while yet, still thinking about that board.”": "“去吧。我还要在这儿坐一会儿，琢磨琢磨那盘棋。”",
     "“Wine's on the house if you can solve the one my regulars can't.”": "“我这儿的老主顾都解不出这道题。你要是解得出，酒钱全免。”",
     "“Well I never. Drink up, then!”": "“真没想到！那就喝吧！”",
     "“Still the only one who's cracked it.”": "“到现在还只有你一个人解出来。”",

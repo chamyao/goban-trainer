@@ -112,6 +112,7 @@ WORLDS = [
                 ["still", "tent_b", "slow zoom in"],
                 ["n", "Liu Bei goes into the tent and bows to his old teacher. Lu Zhi is glad to see him, and keeps him at his side."],
                 ["spawn", "lz", "luzhi", "t1", 12, -4],
+                ["still", "tent_c", "slow zoom in"],
                 ["say", "luzhi", "I have Zhang Jiao penned in here. His brothers Zhang Liang and Zhang Bao are at Yingchuan, facing Huangfu Song and Zhu Jun."],
                 ["problem"],  # the board comes up here; the rest plays once it is solved
                 ["say", "luzhi", "Take your own men, and I will give you a thousand more. Go to Yingchuan, learn how they stand, and we will fix a day to destroy them."],
@@ -128,6 +129,7 @@ WORLDS = [
                 ["n", "Every man is told to carry a bundle of straw, and hide it."],
             ]},
             "tree": {"title": "The Mulberry Tree at Louzang", "kind": "main", "steps": [
+                ["still", "tree_a", "slow pan up"],
                 ["n", "Louzang Village, Zhuo County. South-east of Liu Bei's house stands a mulberry tree more than fifty feet tall. From far off, it looks like the canopy of a carriage."],
                 ["spawn", "ft", "f_elder", "start", -34, 12], ["move", "ft", "start", -8, 10],
                 ["n", "A passing fortune-teller says: this family will produce a great man."],
@@ -151,6 +153,7 @@ WORLDS = [
             ]},
             "notice": {"title": "The Notice at Zhuo", "kind": "main", "steps": [
                 ["army", "crowd", "f_villager", 5, "n1", -16, 10],
+                ["still", "notice_a", "slow pull back"],
                 ["n", "Zhuo County. A crowd gathers at a notice on the wall: the governor is raising volunteers to put down the Yellow Turbans."],
                 ["n", "Liu Bei, twenty-eight, descends from Prince Jing of Zhongshan — yet he sells sandals and weaves mats for a living. His ears reach his shoulders; his arms hang past his knees."],
                 ["still", "notice_b", "slow pull back"],
@@ -166,6 +169,7 @@ WORLDS = [
                 ["party", ["liubei", "zhangfei"]],
             ]},
             "inn": {"title": "The Stranger at the Inn", "kind": "main", "steps": [
+                ["still", "inn_a", "slow pan across"],
                 ["n", "At the village inn, a giant pushing a cart strides in: nine feet tall, a beard two feet long, a face like a ripe red date."],
                 ["prop", "tbl", "table", "i1", 6, 8], ["prop", "wine", "winejars", "i1", 18, 8],
                 ["spawn", "keep", "f_villager", "i1", 24, -8],
@@ -186,6 +190,7 @@ WORLDS = [
                 ["party", ["liubei", "guanyu", "zhangfei"]],
             ]},
             "oath": {"title": "The Peach Garden Oath", "kind": "main", "steps": [
+                ["still", "oath_a", "slow pan across"],
                 ["n", "The next day, in the peach garden behind Zhang Fei's farm, the blossoms are in full bloom."],
                 ["fx", "petals", "n2", 0, -20],
                 ["problem", "starred"],  # the immortals at the board (their intro and outro are in tk_places.py); the oath plays once it is solved
@@ -264,6 +269,7 @@ WORLDS = [
                 ["say", "liubei", "I hear my old teacher Lu Zhi is fighting Zhang Jiao at Guangzong. I once studied under him, and I wish to go and help."],
             ]},
             "cart": {"title": "The Cage Cart", "kind": "main", "steps": [
+                ["still", "cart_a", "slow pan along the road"],
                 ["n", "By the time Liu Bei arrives, the rebels have been routed by fire. Huangfu Song tells him the brothers will run to Zhang Jiao at Guangzong, and he turns back through the night."],
                 ["n", "Halfway there, they meet soldiers guarding a prison cart."],
                 ["prop", "cart", "cagecart", "n5", 30, -6],
@@ -303,6 +309,7 @@ WORLDS = [
                 ["n", "Dong Zhuo turns his back without a word of thanks."],
                 ["remove", "dz"],
                 ["wait", 1000],
+                ["still", "office_c", "slow zoom in"],
                 ["say", "zhangfei", "We bled to save that wretch and he treats us like dirt! I'll kill him!"],
                 ["say", "liubei", "He is an officer of the court! You cannot."],
                 ["say", "zhangfei", "If I don't kill him, I'll have to take his orders, and I won't. Stay here if you like, brothers. I'm going elsewhere."],
@@ -331,6 +338,7 @@ WORLDS = [
                 ["n", "At a roadside shrine the two old men sit over their board, as if nothing were happening."],
                 ["say", "stargrey", "Read this, before you run."],
                 ["problem", "stargrey"],  # the board comes up here; the rest plays once it is solved
+                ["still", "blackwind_c", "slow drift down"],
                 ["say", "starred", "Pigs, sheep, dogs. Blood."],
                 ["remove", "sg"], ["remove", "sr"],
                 ["say", "zhujun", "Sorcery. Tomorrow, hide men on the hilltop with the blood of pigs, sheep and dogs. When his spirits come, drench them. The spell will break."],
@@ -350,6 +358,7 @@ WORLDS = [
                 ["n", "Again Zhang Bao calls the wind; again Liu Bei flees, and the rebels chase him to the hill."],
                 ["light", "storm", 800],
                 ["problem"],  # the board comes up here; the rest plays once it is solved
+                ["still", "bosswin_a", "slow pan across"],
                 ["n", "A signal gun — and blood and filth rain down from the ridge."],
                 ["fx", "flash", "boss", 14, -42], ["camera", "shake"],
                 ["run", "ridgeL", "boss", 34, -12], ["run", "ridgeR", "boss", 34, 12],
@@ -490,6 +499,7 @@ WORLDS = [
             ]},
             "post": {"title": "The Hitching Post", "kind": "main", "steps": [
                 ["army", "elders", "f_villager", 5, "ax2", -30, 6],
+                ["still", "post_a", "slow pull back"],
                 ["n", "Zhang Fei, a few cups of gloomy wine in, rides past the hostel and finds fifty or sixty old villagers weeping at the gate."],
                 ["wait", 1200],
                 ["n", "The inspector is forcing the clerks to accuse Liu Bei, they tell him, and the gatekeepers beat them away when they come to plead for him."],
@@ -521,6 +531,7 @@ WORLDS = [
             "horses": {"title": "Horses from the North", "kind": "main", "steps": [
                 ["spawn", "zsp", "merchant", "as", 26, -6], ["spawn", "zsp2", "merchant", "as", 30, 2],
                 ["army", "herd", "horse", 6, "as", 44, 0],
+                ["still", "horses_a", "slow pan across"],
                 ["n", "While they are still worrying, word comes that two travelling merchants, Zhang Shiping and Su Shuang, are coming to the farm, driving a herd of horses."],
                 ["say", "liubei", "This is Heaven's help!"],
                 ["problem"],  # the board comes up here; the rest plays once it is solved
