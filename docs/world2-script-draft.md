@@ -108,7 +108,7 @@ The shrine at the camp, dark until now, glows after the lords' defeat. The Star 
 - Starred (before the board): "One cannot match him. Not one." **[new]** / 「一人不能敌他。一人不行。」
 - Stargrey: "Then who?" **[new]**: (the problem opens here)
 - After the board is solved, the shrine settles: the hint log says: "One, then two, then three." **[new]** / 「一个，两个，三个。」
-- Mechanic: the **formation, as an order** (agreed with Game Design): the player sends each brother in by talking to him at the line. **Zhang Fei first** (he fights fifty rounds with Lü Bu), **Guan Yu when Zhang Fei tires**, then **Liu Bei** with his two swords, from the side. A wrong order is never a failure: the brother says a correction line instead (to Guan Yu: "Yide first. He has been begging for it." **[new]** / 「翼德先去。他早就等不及了。」), and the right brother steps up. Three marks (`mark:zhangfei_in`, `mark:guanyu_in`, `mark:liubei_in`) set in that order. This is not Qingzhou's left-and-right placement.
+- Mechanic: the **formation, as an order** (agreed with Game Design): the player sends each brother in by talking to him at the line. **Zhang Fei first** (he fights fifty rounds with Lü Bu), **Guan Yu when Zhang Fei tires**, then **Liu Bei** with his two swords, from the side. A wrong order is never a failure: the brother says a correction line instead (to Guan Yu: "Yide first. He has been begging for it." **[new]** / 「翼德先去。他早就等不及了。」), and the right brother steps up. Three marks (`mark:zhangfei_in`, `mark:guanyu_in`, `mark:liubei_in`) set in that order. The blocks can do the order: Guan Yu's landmark has `"needs": ["mark:zhangfei_in"]`... in the format of `docs/story-mechanics-format.md` (`when`/`needs` on the previous mark). **To confirm with Integration:** that a person or landmark with a `when` can show a line before the condition holds (the correction line). If not, the brothers are simply not available out of order, and the hint carries it. This is not Qingzhou's left-and-right placement.
 - Novel: the order is the novel's: ch5.
 
 ### 7. `hulao` (boss): three against one (after the formation, the board)
@@ -168,14 +168,14 @@ Dong Zhuo, in command of the city, calls the officials to a feast at Wenming Gar
 - Problem: here: the question is whether to speak. No Star Lords.
 - Novel: ch3.
 
-### A3. `redhare` (side, outdoor): the horse, the gold, the jade belt
+### A3. `redhare` (side, outdoor): the horse, the gold, the jade belt (the optional delivery)
 
 After Lü Bu routs him in the field, Dong Zhuo admires Lü Bu. Li Su, Lü Bu's countryman, offers to win him. Dong Zhuo gives him Red Hare, a thousand taels of gold, dozens of pearls and a jade belt. Li Su rides to Lü Bu's camp.
 
 - Li Su: "A horse that goes a thousand li a day: Red Hare. I bring it to you, brother." / 「有良马一匹，日行千里，渡水登山，如履平地，名曰『赤兔』：特献与贤弟，以助虎威。」
 - Li Su: "A good bird chooses its tree, a good minister chooses his lord. If you see it too late, you will regret it." / 「良禽择木而栖，贤臣择主而佐。见机不早，悔之晚矣。」
 - Lü Bu: "I regret that I never met my master." / 「恨不逢其主耳。」
-- No mechanic: a story scene. (The optional delivery is the Seven-Star Dagger, in B1.)
+- **Optional delivery** (final, Game Design agreed to my choice over the dagger: "the carry is the harm" is the stronger twist): the player carries Red Hare, the gold and the jade belt from Dong Zhuo's camp to Lü Bu's, as Li Su's follower. The outcome is the novel's and fixed: it arrives and Lü Bu is bought, and the next night Ding Yuan dies. Objective: "Take Dong Zhuo's gifts to Lü Bu's camp." Items: `redhare`, `gold`, `jadebelt`.
 - Staging: the horse (the red coat), a chest of gold and a jade belt as props (`chest`, `gift`), Li Su's walk across the camp to Lü Bu.
 - Novel: ch3.
 
@@ -207,14 +207,13 @@ After the deposition, Dong Zhuo's man Li Ru comes to the Emperor in the Yong'an 
 
 # Side thread B: Cao Cao's Knife (ch4-6)
 
-### B1. `dagger` (side, indoor): "Will weeping kill Dong Zhuo?" (the optional delivery)
+### B1. `dagger` (side, indoor): "Will weeping kill Dong Zhuo?"
 
 Wang Yun gives a birthday dinner for the officials and weeps in front of them for the Emperor. Cao Cao laughs. Next day, he goes to Dong Zhuo's hall with the seven-star knife under his robe. Dong Zhuo, tired, lies down with his face turned to the wall. Cao Cao draws the knife; Dong Zhuo's eye catches his reflection in the mirror; Cao Cao, quick, kneels and offers the knife as a gift. He takes a horse and runs.
 
 - Cao Cao, laughing, at Wang Yun's table: "A whole court of ministers crying from night to morning, from morning to night: can that kill Dong Zhuo?" / 「满朝公卿，夜哭到明，明哭到夜，还能哭死董卓否？」
 - Dong Zhuo, afterwards: "What are you doing?" Cao Cao (kneeling): "I have a precious knife, and I offer it to you, my lord." / 「操有宝刀一口，献上恩相。」
 - Staging: first the dinner (low table, lanterns, tearful officials, Cao Cao laughing). Then Dong Zhuo's inner chamber: a couch, Dong Zhuo's back, Lü Bu out of the room; the knife; the mirror (a prop `mirror`, bronze); the kneel; the gift; Cao Cao on a borrowed horse leaving through the east gate.
-- **Optional delivery** (chosen by Game Design: it leads straight into Lü Boshe's house, the Book's spine): the player carries the Seven-Star Dagger from Wang Yun's house, across Luoyang, to Dong Zhuo's hall for Cao Cao. The outcome is the novel's and fixed: the dagger is drawn, the mirror catches it, and it is offered as a gift. The failure is the twist. Objective: "Take Wang Yun's Seven-Star Dagger to Dong Zhuo's hall." Item: `dagger` (kind `relic`, "七星宝刀").
 - Problem: the moment before he draws the knife (a board: "Now?").
 - Novel: ch4.
 
@@ -363,12 +362,12 @@ Li Jue, Guo Si, Zhang Ji and Fan Chou raise a hundred thousand men in the west a
 |---|---|
 | Required mechanic | **Formation as an order** at Hulao (Zhang Fei first, then Guan Yu, then Liu Bei; a wrong order gets a correction line, never a failure), preceded by the eight lords' defeat, which lights the shrine. Not Black Wind's gathering and not Qingzhou's left-and-right. |
 | Hua Xiong | no extra mechanic: the board is framed as the wine cooling |
-| Optional | **Delivery**: the Seven-Star Dagger from Wang Yun's house to Dong Zhuo's hall (B1); the failure is the twist |
+| Optional | **Delivery**: Red Hare, the gold and the jade belt to Lü Bu (A3); the carry is the harm |
 | Star Lords in person | One: the roadside shrine at Hulao (after the lords' defeat). |
 | A sign of them | one: the empty board in Wang Yun's garden (D1), for Diaochan |
 | Silent (no board hint) | everything else, especially the deaths (A4, A5, C1, C3, D4, D5, D6) |
 | Boss | Lü Bu at Hulao, a hard problem with no hint, a taunt first |
-| Relics | The Imperial Seal as the Book's trophy for the player? **Open question for Game Design:** a "relic that does something". In the novel the seal causes Sun Jian's death. |
+| Relics | None. The Imperial Seal is a **story object, not a trophy** (agreed with Game Design): Liu Bei never holds it, and it ruins whoever does. At most the Chronicle notes whose hands it is in, Book by Book, as a callback with no mechanic. |
 
 ## What is left out
 
@@ -377,7 +376,7 @@ Dong Zhuo's own atrocities (the massacre at Yangcheng, the boiling of prisoners,
 ## Open questions for the user
 
 1. **The deaths of children and the old** (A5, the Emperor and the Consort; D6, Wang Yun): on screen, or just short of the deed? My recommendation: A5 stops just short; the rest are on screen.
-2. **The Seal** as a relic the player holds, even though in the novel it ruins Sun Jian. Is it kept as the Book's trophy, or left in the story only?
+2. ~~The Seal as a relic~~ Settled with Game Design: a story object only.
 3. **Six scenes** (A1, A2, B1-B3, D1-D3) carry the Book's best material in the side threads. Are they right as side stories, or should some of them be on the main road?
 4. **Scale.** 26 scenes, a little more than Book 1. Cut any of the four threads? I would cut D5 (the mourner) first.
 
