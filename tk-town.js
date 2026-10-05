@@ -19,8 +19,19 @@ const TK_NAMES_ZH = {
   f_farmer: "农夫", f_farmer2: "农夫", f_porter: "脚夫", f_youth: "后生", f_woman: "妇人", f_woman2: "妇人", f_elder: "老者", f_elder2: "老汉",
   f_child: "孩童", f_daoist: "道士", f_noble: "士人", f_soldier: "兵士", f_hunter: "猎户", f_official: "书吏",
   f_geisha: "仕女", f_geisha2: "仕女", f_geisha3: "仕女", f_maiden: "少女", f_maiden2: "少女", f_girl: "小姑娘",
+  // Book 2
+  caiyong: "蔡邕", caohong: "曹洪", chengong: "陈宫", chengpu: "程普", diaochan: "貂蝉", dingyuan: "丁原", dongmu: "董卓之母",
+  gongsunzan: "公孙瓒", handang: "韩当", hetaihou: "何太后", liru: "李儒", lisu: "李肃", lvbu: "吕布", shaodi: "少帝",
+  sunjian: "孙坚", tangfei: "唐妃", wangyun: "王允", xiandi: "献帝", yuanshao: "袁绍", yuanshu: "袁术", zumao: "祖茂",
 };
-const tkName = who => [TK_NAMES_ZH[who], TK_CHARS[who] ? TK_CHARS[who].name
+// English names where an id doesn't spell them (TK_CHARS names the heroes and villains it draws)
+const TK_NAMES_EN = {
+  caiyong: "Cai Yong", caohong: "Cao Hong", chengong: "Chen Gong", chengpu: "Cheng Pu", diaochan: "Diaochan", dingyuan: "Ding Yuan",
+  dongmu: "Dong Zhuo's mother", gongsunzan: "Gongsun Zan", handang: "Han Dang", hetaihou: "Empress He", liru: "Li Ru", lisu: "Li Su",
+  lvbu: "Lü Bu", shaodi: "Emperor Shao", sunjian: "Sun Jian", tangfei: "Consort Tang", wangyun: "Wang Yun", xiandi: "Emperor Xian",
+  yuanshao: "Yuan Shao", yuanshu: "Yuan Shu", zumao: "Zu Mao",
+};
+const tkName = who => [TK_NAMES_ZH[who], TK_CHARS[who] ? TK_CHARS[who].name : TK_NAMES_EN[who] ? TK_NAMES_EN[who]
   : !TK_NAMES_ZH[who] && String(who || "").replace(/^f_/, "").split(/[_-]/).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ")].filter(Boolean).join(" ");
 
 /* ---------- the heroes in four directions, from TKArt's front sprites ---------- */
