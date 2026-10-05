@@ -724,7 +724,20 @@ function worldScenes() {
     playQuest(q, spot) {
       // a gated battle before it's ready: its defeat scene, no board, no cooldown; he stays here
       const gate = this.gateFor(q);
-      if (gate) return this.playScene(gate.else, () => this.setGoal());
+      if (gate) return this.playScene(gate.else, () => {
+        // back by the spot (the scene may have marched him off), and it waits until he steps away
+        if (spot) {
+          const G = this.walkGrid(), C = G.C;
+          let best = null;
+          for (let r = 1; r < 8 && !best; r++) for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) {
+            const x = Math.floor(spot.x / C) + dx, y = Math.floor((spot.y + 28) / C) + dy;
+            if (G.free(x, y) && (!best || Math.hypot(dx, dy) < best.d)) best = { x: x * C + C / 2, y: y * C + C / 2 + 3, d: Math.hypot(dx, dy) };
+          }
+          if (best) { this.player.setPosition(best.x, best.y); this.trail = Array(60).fill({ x: best.x, y: best.y, f: "down" }); }
+          spot.armed = false; spot.armAt = { x: this.player.x, y: this.player.y };
+        }
+        this.setGoal();
+      });
       const steps = (this.story[q.scene] || {}).steps || [], at = steps.findIndex(s => s[0] === "problem");
       if (q.board === false) {   // a scene with no board (a defeat): playing it is the beat
         const fin = () => { TK.markCleared(q.node); this.finishQuest(q, steps); };
@@ -1007,9 +1020,13 @@ function worldScenes() {
       W.stuck = Math.hypot(P.x - W.last.x, P.y - W.last.y) < .5 ? W.stuck + dt : 0;
       W.last = { x: P.x, y: P.y };
       if (W.stuck > 350) {
-        // someone stepped into the way: go round them, twice at most, then stop where he is
-        const end = W.path[W.path.length - 1], again = W.retries < 2 && this.findPath(P.x, P.y - 3, end.x, end.y, W.aim && W.aim.kind === "npc" ? W.aim.n : null);
-        if (!again) { this.arrive(W); return [0, 0]; }
+        // someone stepped into the way: go round them; if there's no way round just now (a villager
+        // in the doorway), wait a moment for them to move on; stop only after a few tries
+        const end = W.path[W.path.length - 1], again = W.retries < 6 && this.findPath(P.x, P.y - 3, end.x, end.y, W.aim && W.aim.kind === "npc" ? W.aim.n : null);
+        if (!again) {
+          if (W.retries < 6) { W.retries++; W.stuck = 0; return [0, 0]; }
+          this.arrive(W); return [0, 0];
+        }
         if (W.door) again.push(end);   // the step in through the door is off the grid
         W.path = again; W.retries++; W.stuck = 0;
         return this.followWalk(dt);
@@ -1179,11 +1196,15 @@ function worldScenes() {
             : ["up", "down", "left", "right"][Math.floor(Math.random() * 4)];
           n.moving = Math.random() < .5 || away;
         }
-        // keep out of doorways and roads out: a villager standing there blocks the way in
-        const door = this.exits.find(e => n.spr.x > e.rect.x - 18 && n.spr.x < e.rect.right + 18 && n.spr.y > e.rect.y - 18 && n.spr.y < e.rect.bottom + 22);
-        if (door) {
-          const dx = n.spr.x - door.rect.centerX, dy = n.spr.y - door.rect.centerY;
-          n.dir = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? "right" : "left") : (dy > 0 ? "down" : "up");
+        // keep out of doorways and roads out (a villager standing there blocks the way in), and step
+        // aside for Liu Bei when he's walking somewhere and comes close
+        const door = this.exits.find(e => n.spr.x > e.rect.x - 28 && n.spr.x < e.rect.right + 28 && n.spr.y > e.rect.y - 24 && n.spr.y < e.rect.bottom + 30);
+        const P = this.player, close = this.walk && Math.hypot(n.spr.x - P.x, n.spr.y - P.y) < 28;
+        const from = door ? { x: door.rect.centerX, y: door.rect.centerY } : close ? P : null;
+        if (from) {
+          const dx = n.spr.x - from.x, dy = n.spr.y - from.y;
+          // from Liu Bei, step to the side of his way rather than ahead of him
+          n.dir = (close && !door ? Math.abs(dx) < Math.abs(dy) : Math.abs(dx) > Math.abs(dy)) ? (dx > 0 ? "right" : "left") : (dy > 0 ? "down" : "up");
           n.moving = true; n.t = Math.max(n.t, 600);
         }
         const v = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }[n.dir];
