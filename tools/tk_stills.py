@@ -724,3 +724,12 @@ for _id, _text in FINAL.items():   # the final prompt replaces the first-pass sc
 for _id, _text in FINAL2.items():
     STILLS[_id] = {"scene": _id.rsplit("_", 1)[0], "lens": _id.rsplit("_", 1)[1], "prompt": _text}
 assert all(c in STILLS for c in CHOSEN)
+
+# the scene text of the stills the game shows, as Plot rewrites it (assets/tk/stills/scene_prompts.json):
+# {id: {"book", "category", "beat": what the still must show, "scene": the text, "notes"}}. Its "scene"
+# replaces the text above; the cast descriptions and the style line are still added by prompt().
+_SP = _Path(__file__).resolve().parent.parent / "assets/tk/stills/scene_prompts.json"
+if _SP.exists():
+    for _id, _e in _json.loads(_SP.read_text()).items():
+        if _id in STILLS and _e.get("scene"):
+            STILLS[_id]["prompt"] = _e["scene"]
