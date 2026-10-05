@@ -24,10 +24,12 @@ words and name people only; their look belongs in CAST.
 import re
 
 # the user's pick from the candidates below (gongbi), with what it tended to add uninvited ruled out
+# what every still rules out, whatever its look
+NEGATIVE = ("No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, "
+            "no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, "
+            "rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.")
 STYLE = ("Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat "
-         "mineral colours, gold leaf accents, stylised clouds and waves. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no "
-         "signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or "
-         "modern uniforms, no glass, no paved roads.")
+         "mineral colours, gold leaf accents, stylised clouds and waves. " + NEGATIVE)
 
 # candidates for STYLE, to choose by eye (gen_stills.py --styles): the user wants the stills to
 # look like modern Chinese xianxia game art, Sword and Fairy cover art especially
@@ -45,6 +47,11 @@ STYLES = {
     "gongbi": "Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat "
               "mineral colours, gold leaf accents, stylised clouds and waves.",
     "ghibli": "Style: in the style of Studio Ghibli.",
+    # the user asked to see the look of the donghua Rakshasa Street, described in words (no show named)
+    "donghua": "Style: modern Chinese donghua key frame: crisp clean lineart and cel shading, high contrast, "
+               "dramatic rim light and back light, a dark moody palette of ink blacks, deep teal and crimson with "
+               "glowing accents of spirit light and embers, a dynamic low or high camera angle, intense poses, "
+               "cinematic and dark-fantasy.",
 }
 
 # candidates for the portrait framing (the reference faces), to choose by eye
@@ -386,20 +393,21 @@ EXTRA = {
 REVIEW = {
     # inn: "a giant pushing a cart strides in: nine feet tall, a beard two feet long, a face like a ripe red date"
     "inn_v2": ("inn", "Guan Yu shoves open the door of a small village inn at evening, pushing a wooden handcart "
-                      "ahead of him and stooping under the lintel; two drinkers at a table turn to stare up at him. "
-                      "Clay wine jars, paper lanterns, plank walls."),
+                      "ahead of him and stooping under the lintel; the drinkers turn to stare, and Liu Bei and Zhang Fei "
+                      "look up from their table. Clay wine jars, paper lanterns, plank walls."),
     # oath: "With a black ox and a white horse for sacrifice, the three burn incense and bow."
     "oath_v2": ("oath", "Liu Bei, Guan Yu and Zhang Fei kneel side by side before a low stone altar with burning "
                         "incense in a peach orchard in full pink blossom, bowing; a black ox and a white horse stand "
                         "tethered beside the altar. Only these three men in the picture."),
-    # post: "Zhang Fei breaks ten or more willow switches across his legs." (the inspector's)
+    # post: "Zhang Fei breaks ten or more willow switches across his legs." (the inspector's; docs/stills-must-show.md)
     "post_v2": ("post", "In front of a county office gate, the inspector is tied with ropes to a wooden hitching post, "
                         "howling; Zhang Fei stands beside him swinging a bundle of willow switches down across the "
-                        "inspector's legs, broken switches on the ground. Only these two men in the picture."),
+                        "inspector's legs, broken switches on the ground; Liu Bei hurries in from the side with a hand raised to "
+                        "stop him. Only these three men in the picture; Liu Bei is not tied or beaten."),
     # blackwind: "Out of a black cloud pours a numberless host of horsemen. Liu Bei's army breaks and flees."
     "blackwind_v2": ("blackwind", "On a hilltop Zhang Bao, hair loose, raises his sword and chants; a black whirlwind "
                                   "of storm cloud, sand and stones pours down the slope onto a line of soldiers with "
-                                  "spears, who break and run."),
+                                  "spears, who break and run; ghostly paper-like riders gallop inside the cloud."),
 }
 
 # the stills the game uses (Plot/Story's choice: the emotional peaks, the partings, the one death)
