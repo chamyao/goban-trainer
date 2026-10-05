@@ -232,6 +232,8 @@ function worldScenes() {
       const opts = this.opts = this.game.worldOpts, w = this.w = opts.w;
       this.grid = this.walk = this.lampFx = this.ambientFx = this.cine = this.auto = null; this.seated = false;   // the scene object outlives a change of place: no old map's walk grid or tap-walk
       this.story = w.scenes;
+      // a save from an older map (a place since renamed or removed): back to the start
+      if (!region.places.some(p => p.id === this.placeId)) { this.placeId = region.start; this.resume = false; }
       this.st = WorldState.load(w.n, region);
       if (!this.st.visited.includes(this.placeId)) this.st.visited.push(this.placeId);
       this.st.place = this.placeId;
@@ -262,7 +264,9 @@ function worldScenes() {
       }
 
       // back from a problem (or a reload): stand where you were
-      const pos = this.resume && this.st.pos && this.st.pos.place === this.placeId ? this.st.pos : null;
+      // (only where he can stand: an older map may have put a wall there, or ended short of it)
+      const standable = q => { const G = this.walkGrid(), ok = q.x >= 0 && q.y >= 0 && G.free(Math.floor(q.x / G.C), Math.floor((q.y - 3) / G.C)); this.grid = null; return ok; };
+      const pos = this.resume && this.st.pos && this.st.pos.place === this.placeId && standable(this.st.pos) ? this.st.pos : null;
       const at = pos || this.entries[this.from || ""] || this.entries[""];
       this.player = this.physics.add.sprite(at.x, at.y, "h-liubei-down-0").setOrigin(.5, 1);
       // his feet, whatever the kit's sprite size (Jade's is 18x20; generated sheets are bigger)
