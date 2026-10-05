@@ -317,7 +317,10 @@ function worldScenes() {
         s.armAt = !s.armed && !pos ? { x: this.player.x, y: this.player.y } : null;
       }
       this.time.delayedCall(900, () => {
-        const s = Object.values(this.spots).find(s => s.trigger === "arrive" && this.openQuest(s));
+        // indoors a story starts as you come in (the room is the scene); outdoors only spots marked
+        // "arrive" do, the rest wait for you to walk up. Not when you're put back where you were.
+        const indoor = !!(this.place.parent || this.place.archetype === "interior");
+        const s = Object.values(this.spots).find(s => (s.trigger === "arrive" || (indoor && !pos && s.trigger !== "talk")) && this.openQuest(s));
         if (s && !this.ui.busy() && !this.leaving && !this.cine) this.playQuest(this.openQuest(s), s);
         else if (typeof TKTable !== "undefined") TKTable.arrived(this);   // back from signing in at the go table
       });
