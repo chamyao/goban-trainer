@@ -19,17 +19,20 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from build_jade_edges import block  # noqa: E402
-from xianxia_spec import GROUND, OBJECTS  # noqa: E402
+from xianxia_spec import DRAWN_GROUND, OBJECTS, REDO  # noqa: E402
+import random  # noqa: E402
 
 T = 16
 OUT = ROOT / "assets/tk/xianxia"
-SLACK = 1.15   # a piece may be this much bigger than its footprint before it's shrunk
+SLACK = 1.15
+DROP = {"plant.flower-2"}   # variants not used at all: this one sits on a mound of earth, like a stone basin
+DETAIL_SKIP = {"plant.flower-1", "plant.flower-2"}   # flowers read as pebbles at a distance   # a piece may be this much bigger than its footprint before it's shrunk
 
 
 def quantize_like(small, big, alpha):
     """Keep the shrunk piece to the colours the original used, with hard edges (pixel art)."""
-    pal = big.convert("RGB").quantize(colors=min(48, max(2, len(set(big.convert("RGB").getdata())))),
-                                      method=Image.Quantize.MEDIANCUT)
+    n = len(big.convert("RGB").getcolors(1 << 16) or []) or 48
+    pal = big.convert("RGB").quantize(colors=min(48, max(2, n)), method=Image.Quantize.MEDIANCUT)
     rgb = small.convert("RGB").quantize(palette=pal, dither=Image.Dither.NONE).convert("RGBA")
     a = small.getchannel("A").point(lambda v: 255 if v >= alpha else 0)
     rgb.putalpha(a)
@@ -54,6 +57,43 @@ def tile16(im):
     im = im.convert("RGBA")
     if im.size != (T, T):
         im = quantize_like(im.resize((T, T), Image.Resampling.BOX), im, 0)
+    return im
+
+
+# drawn ground, in colours taken from the generated trees and buildings: muted jade grass,
+# warm earth, pale sand, teal water
+COL = {
+    "grass": [(104, 140, 86), (94, 128, 78), (116, 152, 94), (84, 116, 72), (130, 164, 102)],
+    "dirt": [(176, 146, 104), (162, 132, 94), (190, 160, 118), (146, 118, 84)],
+    "sand": [(222, 206, 166), (210, 194, 154), (232, 218, 182), (196, 180, 142)],
+    "water": [(86, 150, 156), (78, 140, 148), (104, 168, 172), (140, 196, 196)],
+}
+
+
+def ground_tile(mat, seed):
+    """A seamless 16x16 tile: the base colour, speckled with its darker and lighter shades, and on
+    grass a few short blades; water gets short ripple lines instead."""
+    rnd = random.Random(f"{mat}/{seed}")
+    c = COL[mat]
+    im = Image.new("RGBA", (T, T), c[0] + (255,))
+    px = im.load()
+    for _ in range(40 if mat != "water" else 10):
+        x, y = rnd.randrange(T), rnd.randrange(T)
+        px[x, y] = rnd.choice(c[1:3]) + (255,)
+    if mat == "grass":
+        for _ in range(rnd.choice((2, 3, 4))):   # a blade: dark root, light tip
+            x, y = rnd.randrange(T), rnd.randrange(1, T)
+            px[x, y] = c[3] + (255,)
+            px[x, (y - 1) % T] = c[4] + (255,)
+    if mat == "dirt":
+        for _ in range(2):                       # a pebble
+            x, y = rnd.randrange(T), rnd.randrange(T)
+            px[x, y], px[(x + 1) % T, y] = c[2] + (255,), c[3] + (255,)
+    if mat == "water":
+        for _ in range(2):                       # a ripple
+            x, y = rnd.randrange(T), rnd.randrange(T)
+            for k in range(rnd.choice((3, 4, 5))):
+                px[(x + k) % T, y] = c[3] + (255,)
     return im
 
 
@@ -83,12 +123,13 @@ def main():
     kit = json.loads((ROOT / "assets/tk/kits/jade.json").read_text())
 
     # ground: a row of 16x16 tiles per material
-    ground = {m: [tile16(Image.open(p)) for p in variants(src, f"ground.{m}")] for m in GROUND}
-    ground = {m: v for m, v in ground.items() if v}
+    ground = {m: [ground_tile(m, i) for i in range(4 if m == "grass" else 2)] for m in DRAWN_GROUND}
     # and a last row of grass detail (tufts, flowers), each centred on a clear tile
     detail = []
     for kind in ("plant.grass", "plant.flower"):
         for p in variants(src, kind):
+            if p.stem in DETAIL_SKIP:   # drawn on its own patch of earth: reads as a stone from afar
+                continue
             im = fit(Image.open(p), (12, 12))
             cell = Image.new("RGBA", (T, T))
             cell.alpha_composite(im, ((T - im.width) // 2, T - im.height))
@@ -116,7 +157,9 @@ def main():
     # objects
     items, made = [], {}
     for kind, (_, box, _) in OBJECTS.items():
-        for k, p in enumerate(variants(src, kind)):
+        if kind in REDO:
+            continue
+        for k, p in enumerate(v for v in variants(src, kind) if v.stem not in DROP):
             items.append((f"{kind}#{k}", fit(Image.open(p), box)))
             made.setdefault(kind, []).append(f"{kind}#{k}")
     sheet, pos = pack(items)
@@ -139,7 +182,7 @@ def main():
         kit["detail"] = {"tiles": [["x_tiles", i, len(ground), 1] for i in range(len(detail))],
                          "density": kit["detail"]["density"]}
     (ROOT / "assets/tk/kits/xianxia.json").write_text(json.dumps(kit, indent=1))
-    missing = [k for k in OBJECTS if k not in made]
+    missing = sorted(k for k in OBJECTS if k not in made)
     print(f"xianxia kit: {sum(len(v) for v in ground.values())} ground tiles, {len(edged)} edge sets, "
           f"{len(items)} object sprites for {len(made)} kinds" + (f"; still Jade's: {', '.join(missing)}" if missing else ""))
 

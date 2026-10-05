@@ -13,7 +13,7 @@
 
 const WORLD_CLUTTER = /^(plant\.|rock\.small)/;  // drawn underfoot
 const WORLD_KIT = "jade";  // the default look; the campaign page's art button switches (localStorage tk-kit)
-const WORLD_KITS = { jade: { zh: "玉", en: "Jade" }, ninja: { zh: "忍者", en: "Ninja Adventure" } };
+const WORLD_KITS = { jade: { zh: "玉", en: "Jade" }, ninja: { zh: "忍者", en: "Ninja Adventure" }, xianxia: { zh: "仙侠", en: "Xianxia (generated)" } };
 
 /* ---------- where you are in a world: place, position, party, places seen ---------- */
 const WorldState = {
