@@ -808,13 +808,14 @@ def _opening():
 
 
 def _closing():
-    # plays straight after the boss: Chapter 20's hook, into Book 4 (the hunt at Xu)
+    # plays straight after the boss: the road back to Xu, into Book 4 (the audience and the hunt are Book 4's)
     return [_scroll("After the White Gate", "白门楼之后", [
-        ("Liu Bei went back to Xu with Cao Cao. The Emperor had the family records read, found that Liu Bei was his uncle, and from then on men called him the Imperial Uncle.",
-         "玄德随曹操回到许都。天子命人查宗族世谱，原来玄德是自己的皇叔，从此人皆称玄德为“刘皇叔”。"),
-        ("Cao Cao's advisers whispered that a man the Emperor called uncle was a danger. Cao Cao only smiled, and asked the Emperor to come hunting.",
-         "曹操的谋士暗暗进言：天子认了皇叔，恐为后患。曹操只是一笑，请天子出城打围。"),
-        ("What happened at the hunt? Hear the next chapter.", "许田打围，又出了什么事？且听下回分解。"),
+        ("Liu Bei went back with Cao Cao to the capital at Xu. On the way, the people of Xuzhou blocked the road with incense and asked for Lord Liu as their governor.",
+         "玄德随曹操班师回许都。路过徐州，百姓焚香遮道，请留刘使君为牧。"),
+        ("Cao Cao said Lord Liu must first see the Emperor, and left his own man, Che Zhou, to hold Xuzhou.",
+         "曹操说：刘使君功大，且待面君封爵，回来未迟。遂令车骑将军车胄权领徐州。"),
+        ("What would the Emperor make of a sandal-seller who said he was of the Han house? Hear the next chapter.",
+         "一个卖草鞋出身、自称汉室宗亲的人，天子会怎样看他？且听下回分解。"),
     ])]
 
 
