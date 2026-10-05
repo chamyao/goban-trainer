@@ -80,6 +80,14 @@ STYLES = {
                   "fills, hard-edged two-tone cel shadows, a limited palette, energetic dynamic composition and poses, "
                   "a few speed lines; no airbrushed gradients, no bloom, no glow, no volumetric light, no painterly "
                   "texture, no photorealism.",
+    # a prompt bake-off before the wide redo (the user: "get a good prompt before doing wide scale"): short on purpose
+    "try_min": "Style: flat 2D anime illustration, bold black outlines, flat colours, simple two-tone shading, plain background.",
+    "try_avatar": "Style: in the style of the animated series Avatar: The Last Airbender: flat 2D cel animation, clean "
+                  "outlines, flat colours, simple shading, East Asian character design.",
+    "try_90s": "Style: 1990s cel anime screenshot: hand-painted cels, clean outlines, flat colours with one hard shadow "
+               "tone, simple painted background.",
+    # the user: "the style tag is what needs to get cut" (scene and cast text unchanged)
+    "min": "Style: 2D donghua.",   # one short line; the scene and its people carry the picture
     "genshin": "Style: in the style of Genshin Impact key art: polished anime cel shading, bright vivid colours, "
                "ornate gold trim and jade accents, glowing particles, clean detailed fantasy illustration.",
     "watercolor": "Style: Chinese watercolour painting: loose wet washes of colour bleeding softly on rice paper, "
@@ -103,6 +111,15 @@ CALM = ["tree_a", "tree_b", "notice_a", "notice_b", "inn_a", "inn_b", "oath_a", 
         "tent_c", "cart_b", "cart_c", "caocao2_b", "bosswin_c", "horses_a", "horses_b", "post_a"]
 # Book 2's quiet ones (garden_a stays: the user picked that one)
 CALM2 = ["fireflies_a", "pavilion_a", "wine_a", "wine_b", "lvboshe_a", "seal_a", "seal_b", "ruins_a"]
+
+# the user's style categories (assets/tk/stills/categories.json): one look per category, the shared base
+# plus that category's recipe, as "cat_<category>" (gen_stills --look cat_bond ...); CATEGORY: still -> category
+import json as _json
+from pathlib import Path as _Path
+_CATS = _json.loads((_Path(__file__).resolve().parent.parent / "assets/tk/stills/categories.json").read_text())
+CATEGORY = {sid: k for k, c in _CATS["categories"].items() for sid in c["scenes"]}
+for _k, _c in _CATS["categories"].items():
+    STYLES[f"cat_{_k}"] = f"Style: {_CATS['base'].rstrip('.')}. {_c['recipe']}"
 
 # the user's pick for the stills: the God of High School look, on Seedream 5 Pro (gen_stills' default)
 STYLE = f"{STYLES['gohs']} {NEGATIVE}"
