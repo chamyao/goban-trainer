@@ -32,6 +32,10 @@ for(const place of places){
   for(const s of spots){
     if(await p.evaluate(pl=>window.__w.placeId!==pl,place)){await p.evaluate(pl=>{const w=window.__w;w.leaving=false;w.go(pl);},place);await p.waitForTimeout(1200);await ready();}
     await p.evaluate(([x,y])=>{const w=window.__w;w.walk=null;w.player.body.reset(x,y);(w.followers||[]).forEach(F=>F.spr.setPosition(x,y));},s.at);await p.waitForTimeout(150);await settle();
+    // a spot next to a way out can take him through it: back, and once more; if he leaves again, it isn't a spot to stand on
+    if(await p.evaluate(pl=>window.__w.placeId!==pl,place)){await p.evaluate(pl=>{const w=window.__w;w.leaving=false;w.go(pl);},place);await p.waitForTimeout(1200);await ready();
+      await p.evaluate(([x,y])=>{const w=window.__w;w.walk=null;w.player.body.reset(x,y);(w.followers||[]).forEach(F=>F.spr.setPosition(x,y));},s.at);await p.waitForTimeout(150);await settle();
+      if(await p.evaluate(pl=>window.__w.placeId!==pl,place)){console.log(`     ${place} ${s.n}: standing there takes him out of the map (a way out): skipped`);continue;}}
     const r=await p.evaluate(([at,ex])=>{const w=window.__w,cam=w.cameras.main,cv=w.game.canvas,cr=cv.getBoundingClientRect(),k=cv.clientWidth/w.scale.width;
       const toS=(x,y)=>{const v=w.view(x,y);return [cr.left+(v.x-cam.worldView.x)*cam.zoom*k,cr.top+(v.y-cam.worldView.y)*cam.zoom*k];};
       const hud=Math.max(0,...[...document.querySelectorAll('.town-goal,.tk-menu-btn,.tk-head-btns')].filter(e=>e.offsetParent).map(e=>e.getBoundingClientRect().bottom));

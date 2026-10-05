@@ -693,7 +693,8 @@ function worldScenes() {
     activeHint() {
       const q = this.nextMain();
       if (!q || (q.gate && !this.gateFor(q))) return null;
-      const named = [].concat(...(q.gate || []).map(g => [].concat(g.needs || [])));
+      // a gate may name a step short ("node:n7b"): the same as "node:1-n7b"
+      const named = [].concat(...(q.gate || []).map(g => [].concat(g.needs || []))).map(c => String(c).replace(/^node:(?!\d+-)/, `node:${this.w.n}-`));
       return this.region.quests.filter(h => h.hint && h.node !== q.node && this.done(h.node) &&
         (q.after.includes(h.node) || named.includes(`node:${h.node}`))).pop() || null;
     }
@@ -710,10 +711,16 @@ function worldScenes() {
       for (const [k, m] of this.actMarks) if (!want.has(k)) { m.ev.remove(); this.actMarks.delete(k); }
       for (const [k, t] of want) {
         if (this.actMarks.has(k)) continue;
-        // a soft gold ring pulsing at their feet (where they're drawn)
-        const v = this.view(k.x, k.y), ring = this.add.ellipse(v.x, v.y, 18, 8).setStrokeStyle(1.5, 0xf2cf6a, .9).setDepth(v.y - 1);
-        const tw = this.tweens.add({ targets: ring, scale: 1.35, alpha: .25, duration: 900, yoyo: true, repeat: -1, ease: "Sine.InOut" });
-        const ev = { remove: () => { tw.remove(); ring.destroy(); } };
+        // read at a glance on a phone: a bright gold ring at their feet, and a gold diamond bobbing over
+        // their head (feet are often hidden behind other sprites). Made at the flat map's x, y like everyone
+        // else; the isometric view moves them to where they're drawn (the diamond held above, isoBase).
+        const ring = this.add.ellipse(k.x, k.y, 20, 9).setStrokeStyle(2.5, 0xffd34d, 1).setDepth(k.y - 1);
+        const top = k.y - (k.displayHeight || 24) - 7;
+        const gem = this.add.polygon(k.x, top, [0, -5, 4, 0, 0, 5, -4, 0], 0xffd34d).setStrokeStyle(1, 0x6a4a10).setDepth(9999);
+        gem.isoBase = [k.x, k.y];
+        const tw = this.tweens.add({ targets: ring, scale: 1.3, alpha: .6, duration: 800, yoyo: true, repeat: -1, ease: "Sine.InOut" });
+        const tw2 = this.tweens.add({ targets: gem, y: top - 4, duration: 600, yoyo: true, repeat: -1, ease: "Sine.InOut" });
+        const ev = { remove: () => { tw.remove(); tw2.remove(); ring.destroy(); gem.destroy(); } };
         this.actMarks.set(k, { ev, t, called: false });
       }
     }
