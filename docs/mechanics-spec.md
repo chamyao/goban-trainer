@@ -7,7 +7,7 @@ Player-facing rules for the mechanics agreed in `docs/game-design.md`, written s
 ## Rules for problems (all boards)
 
 - **Flawless only.** A wrong move, hint, undo or Explore is a slip. A slip keeps the same problem, resets it and holds the board for a fixed 30 s "Think" cooldown.
-- **Tap to preview on small boards (touch).** When the points are under about 28 px apart (phones: 18-25 px), the first tap puts a faint ghost stone on the point and a second tap on the same point plays it. Tapping a different point moves the ghost. A ghost is not a move, so it is never a slip. Where the points are 28 px or more apart, one tap plays as now. (Recommended by Plot/Story after Testing's phone report; interface decisions such as this are Primary Integration's to make.)
+- **Tap to preview on small boards (touch).** When the points are under about 28 px apart (phones: 18-25 px), the first tap puts a faint ghost stone on the point and a second tap on the same point plays it. Tapping a different point moves the ghost. A ghost is not a move, so it is never a slip. Where the points are 28 px or more apart, one tap plays as now. Taps on occupied points go straight through. A per-device setting in the game menu, "Confirm taps: Auto (default) / Never", lets a player turn it off (Never plays on a single tap at any spacing). On Books 1 and 2, 7% of problems fall under 28 px on an iPhone 13 and 50% on an iPhone SE. (Decided and built by Primary Integration.)
 
 ## Four building blocks
 

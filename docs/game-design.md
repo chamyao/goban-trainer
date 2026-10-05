@@ -95,7 +95,7 @@ Agreed with Plot/Story; the script draft is Plot's (`docs/world2-script-draft.md
 - **Qingzhou's flanks (World 1, formation):** written (Plot 8ef656f). The brothers go to their hills (marks `flank_left`, `flank_right`) before the ambush. Awaiting Testing.
 - **Lu Zhi's errand (World 1, delivery):** written (Plot 8ef656f). The errand to Yingchuan arrives too late. Awaiting Testing.
 - **Book 2 (Hulao Pass):** in the game data (Plot's branch). The ordered formation uses the existing blocks; a wrong brother gives a correction line (`empty`/`waiting`). Awaiting Testing.
-- **Tap to preview** (rules for problems): recommended by Plot, with a ghost stone never a slip; the decision is Primary Integration's (interface).
+- **Tap to preview** (rules for problems): decided and live (Primary Integration). A ghost stone is never a slip, and there is a "Confirm taps: Auto / Never" setting.
 
 ## Who decides what
 
