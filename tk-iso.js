@@ -40,6 +40,7 @@ const WorldIso = {
     const kit = scene.kit || {}, indoor = String(scene.placeId).includes("--");
     const back = indoor ? kit.materials && kit.materials.void && kit.materials.void.color : kit.isoVoid;
     if (back) scene.cameras.main.setBackgroundColor(back);
+    if (!indoor) WorldIso.surround(scene, iso, kit);
 
     // the view's depth: how far down the screen an object's feet are. Objects drawn above everything
     // (marks, emotes, flashes: depth >= 9000) and behind everything (<= -9000) keep theirs; the rest
@@ -82,6 +83,34 @@ const WorldIso = {
     scene.events.on("render", restore);
     scene.events.once("shutdown", () => { scene.events.off("prerender", project); scene.events.off("render", restore); });
     return iso;
+  },
+
+  // Outdoors, the country around the map: a seamless backdrop under the diamond (kit "isoBackdrop": the place's
+  // archetype -> a backdrop sheet bg_<kind>), and cut-out pieces (kit kinds fg.*) along the diamond's edges, drawn
+  // over its rim so the map sits in its surroundings instead of on an empty field.
+  surround(scene, iso, kit) {
+    const kind = (kit.isoBackdrop || {})[scene.place && scene.place.archetype];
+    if (!kind) return;
+    const key = `kit-bg_${kind}`, M = 900;
+    if (scene.textures.exists(key))
+      Object.assign(scene.add.tileSprite(-M, -M, iso.width + 2 * M, iso.height + 2 * M, key).setOrigin(0, 0).setDepth(-3e5), { isoFixed: true });
+    const pieces = (kit.isoForeground || {})[kind] || [];
+    const frames = pieces.flatMap(k => (kit.kinds[k] || []).map((_, i) => `${k}#${i}`));
+    if (!frames.length) return;
+    let seed = [...String(scene.placeId)].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7);
+    const rnd = () => (seed = (seed * 1103515245 + 12345) >>> 0) / 4294967296;
+    // the diamond's corners, screen space: top (H, 0), right (W+H, W/2), bottom (W, (W+H)/2), left (0, H/2)
+    const { W, H } = iso, C = [[H, 0], [W + H, W / 2], [W, (W + H) / 2], [0, H / 2]];
+    for (let e = 0; e < 4; e++) {
+      const [x0, y0] = C[e], [x1, y1] = C[(e + 1) % 4], len = Math.hypot(x1 - x0, y1 - y0);
+      const nx = (y1 - y0) / len, ny = -(x1 - x0) / len;   // outward
+      for (let t = 40 + rnd() * 60; t < len - 30; t += 70 + rnd() * 90) {
+        const out = 10 + rnd() * 40, x = x0 + (x1 - x0) * t / len + nx * out, y = y0 + (y1 - y0) * t / len + ny * out;
+        const f = frames[Math.floor(rnd() * frames.length)], [s] = f.split("#");
+        const img = scene.add.image(x, y, `kit-${(kit.kinds[s][0] || [])[0]}`, f).setOrigin(.5, 1).setDepth(y < (W + H) / 4 ? -1e5 : 8500);
+        img.setFlipX(rnd() < .5); img.isoFixed = true;
+      }
+    }
   },
 
   // A static building or prop: anchored by its footprint (tiles x, y, w, h) instead of its feet.
