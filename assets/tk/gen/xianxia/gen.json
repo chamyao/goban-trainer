@@ -656,5 +656,56 @@
   ],
   "seconds": 23.0,
   "made": "2026-10-05"
+ },
+ "char.liubei": {
+  "model": "retro-diffusion/rd-animation",
+  "input": {
+   "style": "four_angle_walking",
+   "width": 48,
+   "height": 48,
+   "return_spritesheet": true,
+   "prompt": "young Chinese hero, white robe with gold trim and a green sash, black topknot, short neat black beard, twin swords at his belt, calm, Chinese fantasy RPG, xianxia, Eastern Han dynasty"
+  },
+  "n": 1,
+  "size": [
+   192,
+   192
+  ],
+  "seconds": 33.0,
+  "made": "2026-10-05"
+ },
+ "char.guanyu": {
+  "model": "retro-diffusion/rd-animation",
+  "input": {
+   "style": "four_angle_walking",
+   "width": 48,
+   "height": 48,
+   "return_spritesheet": true,
+   "prompt": "tall broad Chinese general, deep red face, very long black beard down to his chest, green robe and green headscarf, carrying a long crescent-bladed glaive, Chinese fantasy RPG, xianxia, Eastern Han dynasty"
+  },
+  "n": 1,
+  "size": [
+   192,
+   192
+  ],
+  "seconds": 25.5,
+  "made": "2026-10-05"
+ },
+ "char.zhangfei": {
+  "model": "retro-diffusion/rd-animation",
+  "input": {
+   "style": "four_angle_walking",
+   "width": 48,
+   "height": 48,
+   "return_spritesheet": true,
+   "prompt": "stocky barrel-chested Chinese warrior, wild bristling black beard, round fierce eyes, dark grey and black armour with red trim, red headband, carrying a long spear, Chinese fantasy RPG, xianxia, Eastern Han dynasty"
+  },
+  "n": 1,
+  "size": [
+   192,
+   192
+  ],
+  "seconds": 18.7,
+  "made": "2026-10-05"
  }
 }
