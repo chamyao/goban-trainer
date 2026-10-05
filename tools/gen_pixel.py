@@ -42,6 +42,18 @@ PIECES = {
               "cracks, flat top-down ground texture", "tile"),
     "water": ("rd-plus", "topdown_map", (64, 64), "clear teal pond water with soft ripples and a few lotus pads, flat "
               "top-down texture", "tile"),
+    "t16_grass": ("rd-fast", "texture", (64, 64), "jade-green grass with clover and a few tiny white flowers, flat seamless game texture, 16 pixel tiles", "tile"),
+    "t16_stone": ("rd-fast", "texture", (64, 64), "pale grey flagstone courtyard paving with moss in the cracks, flat seamless game texture, 16 pixel tiles", "tile"),
+    "t16_water": ("rd-fast", "texture", (64, 64), "clear teal pond water with soft ripples, flat seamless game texture, 16 pixel tiles", "tile"),
+    "t16_dirt": ("rd-fast", "texture", (64, 64), "packed light-brown dirt road with small pebbles, flat seamless game texture, 16 pixel tiles", "tile"),
+    "t16_wall": ("rd-fast", "texture", (64, 64), "white plaster wall with faint cracks and a grey stone base, flat seamless game texture, 16 pixel tiles", "tile"),
+    "t16_roof": ("rd-fast", "texture", (64, 64), "jade-green glazed Chinese roof tiles in curved overlapping rows, flat seamless game texture, 16 pixel tiles", "tile"),
+    "t32_grass": ("rd-fast", "texture", (128, 128), "jade-green grass with clover and a few tiny white flowers, flat seamless game texture, 32 pixel tiles", "tile"),
+    "t32_stone": ("rd-fast", "texture", (128, 128), "pale grey flagstone courtyard paving with moss in the cracks, flat seamless game texture, 32 pixel tiles", "tile"),
+    "t32_water": ("rd-fast", "texture", (128, 128), "clear teal pond water with soft ripples, flat seamless game texture, 32 pixel tiles", "tile"),
+    "t32_dirt": ("rd-fast", "texture", (128, 128), "packed light-brown dirt road with small pebbles, flat seamless game texture, 32 pixel tiles", "tile"),
+    "t32_wall": ("rd-fast", "texture", (128, 128), "white plaster wall with faint cracks and a grey stone base, flat seamless game texture, 32 pixel tiles", "tile"),
+    "t32_roof": ("rd-fast", "texture", (128, 128), "jade-green glazed Chinese roof tiles in curved overlapping rows, flat seamless game texture, 32 pixel tiles", "tile"),
     "hall": ("rd-plus", "topdown_asset", (96, 96), "Chinese palace hall, red lacquered pillars, curved upswept roof with "
              "jade-green glazed tiles and gold ridge ornaments, white stone steps, front door", "cutout"),
     "pine": ("rd-plus", "topdown_asset", (48, 64), "twisted Chinese pine tree with flat layered clusters of dark green "
@@ -109,6 +121,7 @@ def main():
             inp["input_palette"] = pal
             if how == "tile":
                 inp["tile_x"] = inp["tile_y"] = True
+                inp["bypass_prompt_expansion"] = True   # it adds scenery to a plain texture otherwise
             if how == "cutout":
                 inp["remove_bg"] = True
         else:
