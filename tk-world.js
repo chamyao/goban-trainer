@@ -31,7 +31,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=25`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=26`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
@@ -208,7 +208,7 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=25`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=26`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=15`);
       this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=24`);
     }
@@ -574,7 +574,7 @@ function worldScenes() {
       if (!q) return this.goal("This book is complete. The road goes on…", "这一卷已经完成。路还在前方……");
       const g = this.available(q) && this.gateFor(q);
       if (g && g.objective) {   // what the battle still needs, with a count
-        const need = [].concat(g.needs || []), k = need.filter(c => this.cond(c)).length, n = need.length > 1 ? ` (${k}/${need.length})` : "";
+        const need = [].concat(g.needs || []), k = need.filter(c => this.cond(c)).length, n = need.length > 1 && g.count !== false ? ` (${k}/${need.length})` : "";
         const away = g.place && g.place !== this.placeId && !this.placeIn(this.placeId, g.place);
         return this.goal(`${g.objective}${n}${away ? ` (${this.placeName(g.place)})` : ""}`,
           g.objective_zh ? `${g.objective_zh}${n ? `（${k}/${need.length}）` : ""}${away ? `（${this.placeZh(g.place)}）` : ""}` : "");
