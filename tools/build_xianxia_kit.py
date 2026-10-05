@@ -314,6 +314,8 @@ def main():
             sheet.save(OUT / f"chars/{who}.png")
             kit["heroes"][who] = {"sheet": f"assets/tk/{LOOK}/chars/{who}.png", "frame": frame}
     (ROOT / f"assets/tk/kits/{LOOK}.json").write_text(json.dumps(kit, indent=1))
+    import pine_rock   # the Star Lords' rock under the pine replaces the shrine's three looks
+    pine_rock.build(LOOK)
     missing = sorted(k for k in {**OBJECTS, **INTERIOR} if k not in made)
     print(f"{LOOK} kit: {sum(len(v) for v in ground.values())} ground tiles, {len(edged)} edge sets, "
           f"{len(items)} object sprites for {len(made)} kinds" + (f"; still Jade's: {', '.join(missing)}" if missing else "") + f"; heroes: {', '.join(kit['heroes']) or 'none'}")

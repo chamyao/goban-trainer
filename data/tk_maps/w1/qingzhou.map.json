@@ -1495,12 +1495,18 @@
    "delivers": "flank_left",
    "when": "node:n4",
    "empty": [
-    "No one is on this hill yet."
+    "No one is on this hill yet. Hear the messenger first."
    ],
    "deliver": [
     [
      "guanyu",
      "A thousand men, hidden on the left. I wait for the gongs."
+    ]
+   ],
+   "call": [
+    [
+     "guanyu",
+     "Brother, send me! The left hill is mine."
     ]
    ]
   },
@@ -1516,12 +1522,18 @@
    "delivers": "flank_right",
    "when": "node:n4",
    "empty": [
-    "No one is on this hill yet."
+    "No one is on this hill yet. Hear the messenger first."
    ],
    "deliver": [
     [
      "zhangfei",
      "The right hill is mine. I will hear the gongs from a mile off."
+    ]
+   ],
+   "call": [
+    [
+     "zhangfei",
+     "Brother, send me! Put me on the right hill."
     ]
    ]
   }

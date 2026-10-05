@@ -1578,7 +1578,7 @@ function tkChronicle(w, map) {
   // the nodes come in the story's order; the boss's closing scroll follows the boss, before Anxi
   for (const n of w.nodes.filter(n => n.scene && w.scenes[n.scene])) {
     items.push([n.scene, w.scenes[n.scene].title, n]);
-    if (n.role === "boss" && w.closing && w.closing.length) items.push(["closing", "The Yellow Turbans Fall", null]);
+    if (n.role === "boss" && w.closing && w.closing.length) items.push(["closing", (w.closing.find(s => s[0] === "scroll") || [])[1] || "Epilogue", null]);   // the closing scroll's own title
   }
   const wrap = h("div", { class: "tk-scroll-wrap" });
   const list = h("div", { class: "tk-chron" });

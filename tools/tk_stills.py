@@ -183,7 +183,7 @@ CAST = {
                      "a gold crown bearing two long pheasant-feather plumes, carrying a tall crescent-bladed halberd"),
     "yuanshao": ("Yuan Shao", "a proud, richly dressed nobleman in his forties with a neat beard, in a purple brocade "
                               "robe and a tall official's cap"),
-    "gongsunzan": ("Gongsun Zan", "a lean general in white armour on a white horse"),
+    "gongsunzan": ("Gongsun Zan", "a lean, proud man dressed in white"),
     "sunjian": ("Sun Jian", "a broad, powerful general in his late thirties with a short beard, in red lacquered armour "
                             "and a red cap"),
     "dingyuan": ("Ding Yuan", "an old provincial governor with a grey beard, in a dark official robe"),
@@ -750,5 +750,5 @@ assert all(c in STILLS for c in CHOSEN)
 _SP = _Path(__file__).resolve().parent.parent / "assets/tk/stills/scene_prompts.json"
 if _SP.exists():
     for _id, _e in _json.loads(_SP.read_text()).items():
-        if _id in STILLS and _e.get("scene"):
-            STILLS[_id]["prompt"] = _e["scene"]
+        if _e.get("scene"):   # a new still (a transition beat) is added; scene "zhangbao" from "zhangbao_a"
+            STILLS.setdefault(_id, {"scene": _id.rsplit("_", 1)[0], "lens": _id.rsplit("_", 1)[1]})["prompt"] = _e["scene"]
