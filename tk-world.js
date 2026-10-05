@@ -1328,6 +1328,7 @@ const WorldView = {
     host.addEventListener("mousedown", () => host.focus());
     const [gw, gh] = this.size(host);
     this.game = new Phaser.Game({
+      loader: { crossOrigin: "anonymous" },   // in the Android app the files come from the live site
       type: Phaser.AUTO, parent: host, width: gw, height: gh, pixelArt: true, roundPixels: true, backgroundColor: "#1b2418",
       // Move by real elapsed time, so walking keeps its speed when the browser drops
       // frames (laptops on battery often do): no fixed 60 Hz physics step to fall
