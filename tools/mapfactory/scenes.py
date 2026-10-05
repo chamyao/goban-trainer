@@ -52,6 +52,21 @@ LIGHTS = {"day", "night", "dusk", "dawn", "storm"}   # or "#rrggbb"
 CUES = {"boss", "battle", "calm", "victory", "none"}
 
 
+
+def still_move(words):
+    """A still's drift from plain words ("slow zoom in", "pull back", "pan up", "pan across the road",
+    "drift down") to one of in, out, up, down, pan."""
+    w = (words or "").lower()
+    if "out" in w or "back" in w:
+        return "out"
+    if "up" in w:
+        return "up"
+    if "down" in w:
+        return "down"
+    if "pan" in w or "across" in w or "along" in w:
+        return "pan"
+    return "in"
+
 def characters():
     """Everyone the game can draw: TK_CHARS in tk.js, the townsfolk and extras
     tk-town.js adds to it, and the horse (drawn by tk-items.js)."""
@@ -463,7 +478,7 @@ def stage_scene(scene, m, spot, party, chars, boss=None):
     arrivals = []
     for s in steps:
         op = s[0]
-        if op in ("n", "say", "fx", "pose", "move", "run", "remove", "vanish", "party", "wait", "scroll", "problem",
+        if op in ("n", "say", "fx", "pose", "move", "run", "remove", "vanish", "party", "wait", "still", "scroll", "problem",
                   "emote", "give", "surround", "close", "camera", "mood", "unboard", "boss", "victory") and opening:
             opening = False
             if arrivals:
@@ -530,6 +545,8 @@ def stage_scene(scene, m, spot, party, chars, boss=None):
             st.beats.append({"do": "gain", "item": s[1]})
         elif op == "wait":
             st.beats.append({"do": "wait", "ms": s[1]})
+        elif op == "still":   # ["still", id, move]: a painted still over the map while the next lines play
+            st.beats.append({"do": "still", "id": s[1], "move": still_move(s[2] if len(s) > 2 else "")})
         elif op == "problem":  # the scene's Go problem: the player solves it before the rest plays
             if boss and "boss" not in has:
                 st.boss_intro(boss["who"], boss)

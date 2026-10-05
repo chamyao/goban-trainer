@@ -184,7 +184,18 @@ PLACES = {
         "Hills of Black Wind": {
             "archetype": "hills",
             "banners": "yellow",
-            "landmarks": [{"kind": "rock.big", "id": "altar", "node": "1-n7", "label": "Zhang Bao's sorcery"}],
+            "landmarks": [
+                {"kind": "rock.big", "id": "altar", "node": "1-n7", "label": "Zhang Bao's sorcery"},
+                {"kind": "building.hut", "id": "pens", "label": "The village below the hills"},   # where the blood comes from
+                # a ridge on each flank, each with room before it for a thousand men (Guan Yu left, Zhang Fei right)
+                {"kind": "rock.crag", "id": "ridge_left", "label": "The left ridge", "use": "ridge", "side": "W", "clear": [8, 4]},
+                {"kind": "rock.crag", "id": "ridge_right", "label": "The right ridge", "use": "ridge", "side": "E", "clear": [8, 4]},
+            ],
+            "npcs": [
+                {"kind": "folk.villager", "near": "pens", "say": "“The black wind took my roof. Take the pigs' blood, if it ends this.”"},
+                {"kind": "folk.elder", "near": "pens", "say": "“My flock hasn't grazed since the storm. Take a sheep, general. Take what you need.”"},
+                {"kind": "folk.hunter", "near": "pens", "say": "“My hounds won't go near that hill. If their blood breaks the spell, take it.”"},
+            ],
             "objectives": {"1-n7": "Break Zhang Bao's sorcery in the hills."},
         },
         "Anxi": {   # Liu Bei's first post, where the inspector comes (the closing)

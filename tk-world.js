@@ -12,7 +12,7 @@
    are. Hero sprites and the dialogue box come from tk-town.js. */
 
 const WORLD_CLUTTER = /^(plant\.|rock\.small)/;  // drawn underfoot
-const WORLD_KIT = "jade";  // the default look; the campaign page's art button switches (localStorage tk-kit)
+const WORLD_KIT = "xianxia";  // the default look; the campaign page's art button switches (localStorage tk-kit)
 const WORLD_KITS = { jade: { zh: "玉", en: "Jade" }, ninja: { zh: "忍者", en: "Ninja Adventure" }, xianxia: { zh: "仙侠", en: "Xianxia (generated)" } };
 
 /* ---------- where you are in a world: place, position, party, places seen ---------- */
@@ -31,7 +31,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=20`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=21`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
@@ -197,16 +197,18 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=20`);
-      this.load.json("kit", `assets/tk/kits/${kit}.json?v=11`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=17`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=21`);
+      this.load.json("kit", `assets/tk/kits/${kit}.json?v=14`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=19`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
       for (const [s, path] of Object.entries(kit.sheets)) this.load.image(`kit-${s}`, path);
       const [fw, fh] = kit.folk.frame;
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=28`);
+      // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
+      for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=31`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -351,7 +353,12 @@ function worldScenes() {
     }
 
     /* ---------- building the place ---------- */
-    hero(who) { if (!this.textures.exists(`h-${who}-down-0`)) TownArt.hero(this, who); }  // textures outlive the scene
+    hero(who) {   // textures outlive the scene
+      if (this.textures.exists(`h-${who}-down-0`)) return;
+      const h = (this.kit.heroes || {})[who];
+      if (h && this.textures.exists(`hx-${who}`)) WorldHeroes.fromSheet(this, who, h);
+      else TownArt.hero(this, who);
+    }
 
     addProp(o, p) {
       if (o.name) {
@@ -1001,6 +1008,25 @@ function worldScenes() {
   }
   return [WorldBoot, WorldScene];
 }
+
+/* ---------- story people from a kit's generated sheet ---------- */
+const WorldHeroes = {
+  DIRS: ["down", "up", "left", "right"],
+  // the same textures and walk animations TownArt.hero makes, cut from the kit's sheet
+  fromSheet(scene, who, h) {
+    const [fw, fh] = h.frame, src = scene.textures.get(`hx-${who}`).getSourceImage();
+    this.DIRS.forEach((dir, r) => {
+      for (let k = 0; k < 4; k++) {
+        const cv = document.createElement("canvas");
+        cv.width = fw; cv.height = fh;
+        cv.getContext("2d").drawImage(src, k * fw, r * fh, fw, fh, 0, 0, fw, fh);
+        scene.textures.addCanvas(`h-${who}-${dir}-${k}`, cv);
+      }
+      if (!scene.anims.exists(`h-${who}-${dir}`))
+        scene.anims.create({ key: `h-${who}-${dir}`, frames: [0, 1, 2, 3].map(k => ({ key: `h-${who}-${dir}-${k}` })), frameRate: 8, repeat: -1 });
+    });
+  },
+};
 
 /* ---------- mounting a world in the campaign page ---------- */
 const WorldView = {
