@@ -141,7 +141,8 @@
   "prompt": "Zhang Bao on a hilltop with his hair loose, sword raised, chanting, as a black whirlwind of storm cloud, sand and stones pours down onto a line of soldiers. Zhang Bao is a sorcerer general with long loose black hair and a yellow headscarf, in a yellow robe (reference image 1: keep his face, hair and clothes). Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no calligraphy, no seals, no signature, no watermark.",
   "provider": "replicate",
   "model": "black-forest-labs/flux-2-klein-4b",
-  "made": "2026-10-05"
+  "made": "2026-10-05",
+  "note": "the gongbi style sample (user's pick over the batch render), calligraphy and seal painted out"
  },
  "blackwind_c": {
   "file": "blackwind_c.jpg",
