@@ -142,5 +142,977 @@
   ],
   "seconds": 81.9,
   "made": "2026-10-05"
+ },
+ "building.lodge": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 112,
+   "height": 72,
+   "remove_bg": true,
+   "prompt": "long low Chinese farmhouse, grey tiled roof, wooden veranda, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   112,
+   72
+  ],
+  "seconds": 16.9,
+  "made": "2026-10-05"
+ },
+ "building.gate": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 64,
+   "height": 48,
+   "remove_bg": true,
+   "prompt": "Chinese wooden memorial archway, red pillars, small curved tiled roof, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 21.1,
+  "made": "2026-10-05"
+ },
+ "landmark.notice": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 64,
+   "height": 48,
+   "remove_bg": true,
+   "prompt": "wooden notice board with paper notices under a small tiled roof, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 22.4,
+  "made": "2026-10-05"
+ },
+ "furniture.gotable": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 32,
+   "height": 24,
+   "remove_bg": true,
+   "prompt": "small square stone table with a go board on it, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 23.5,
+  "made": "2026-10-05"
+ },
+ "building.shop": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 128,
+   "height": 88,
+   "remove_bg": true,
+   "prompt": "Chinese market shop, open wooden front with goods, grey curved tiled roof, red cloth awning, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   128,
+   88
+  ],
+  "seconds": 24.3,
+  "made": "2026-10-05"
+ },
+ "lamp.post": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 32,
+   "height": 40,
+   "remove_bg": true,
+   "prompt": "Chinese stone garden lantern, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 25.2,
+  "made": "2026-10-05"
+ },
+ "building.moongate": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 72,
+   "height": 56,
+   "remove_bg": true,
+   "prompt": "round moon gate in a short white plaster wall with grey tile coping, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   72,
+   64
+  ],
+  "seconds": 26.5,
+  "made": "2026-10-05"
+ },
+ "building.tent": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 72,
+   "height": 64,
+   "remove_bg": true,
+   "prompt": "ancient Chinese army tent, cream canvas with red trim, open flap, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   72,
+   64
+  ],
+  "seconds": 28.4,
+  "made": "2026-10-05"
+ },
+ "banner.red": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 32,
+   "height": 40,
+   "remove_bg": true,
+   "prompt": "tall narrow red silk war banner on a wooden pole, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 12.3,
+  "made": "2026-10-05"
+ },
+ "camp.firepit": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 48,
+   "height": 32,
+   "remove_bg": true,
+   "prompt": "ring of stones with a small burning campfire, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 9.0,
+  "made": "2026-10-05"
+ },
+ "camp.table": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 48,
+   "height": 40,
+   "remove_bg": true,
+   "prompt": "low wooden camp table with a map scroll on it, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 11.1,
+  "made": "2026-10-05"
+ },
+ "camp.logs": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 64,
+   "height": 40,
+   "remove_bg": true,
+   "prompt": "stack of cut firewood logs, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 9.5,
+  "made": "2026-10-05"
+ },
+ "camp.hay": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 48,
+   "height": 40,
+   "remove_bg": true,
+   "prompt": "round haystack, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 9.7,
+  "made": "2026-10-05"
+ },
+ "banner.yellow": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 32,
+   "height": 40,
+   "remove_bg": true,
+   "prompt": "tall narrow yellow silk banner on a wooden pole, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 15.4,
+  "made": "2026-10-05"
+ },
+ "tree.peach_big": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 72,
+   "height": 72,
+   "remove_bg": true,
+   "prompt": "large old peach tree in full pink blossom, wide canopy, growing straight from the ground, no pot, no planter, no base tile, no building, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   72,
+   72
+  ],
+  "seconds": 9.9,
+  "made": "2026-10-05"
+ },
+ "tree.grove": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 104,
+   "height": 88,
+   "remove_bg": true,
+   "prompt": "cluster of three leafy green trees, growing straight from the ground, no pot, no planter, no base tile, no building, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   104,
+   88
+  ],
+  "seconds": 13.3,
+  "made": "2026-10-05"
+ },
+ "tree.small": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 56,
+   "height": 64,
+   "remove_bg": true,
+   "prompt": "round leafy green tree, growing straight from the ground, no pot, no planter, no base tile, no building, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 3
+  },
+  "n": 3,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 15.5,
+  "made": "2026-10-05"
+ },
+ "tree.dead": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 48,
+   "height": 48,
+   "remove_bg": true,
+   "prompt": "bare dead tree, gnarled grey branches, growing straight from the ground, no pot, no planter, no base tile, no building, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 12.7,
+  "made": "2026-10-05"
+ },
+ "plant.flower": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 24,
+   "height": 24,
+   "remove_bg": true,
+   "prompt": "small patch of pink and white wildflowers, growing straight from the ground, no pot, no planter, no base tile, no building, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 12.1,
+  "made": "2026-10-05"
+ },
+ "rock.small": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 24,
+   "height": 24,
+   "remove_bg": true,
+   "prompt": "small grey stone, growing straight from the ground, no pot, no planter, no base tile, no building, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 14.6,
+  "made": "2026-10-05"
+ },
+ "plant.grass": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 24,
+   "height": 24,
+   "remove_bg": true,
+   "prompt": "small tuft of tall green grass, growing straight from the ground, no pot, no planter, no base tile, no building, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 17.8,
+  "made": "2026-10-05"
+ },
+ "plant.bush": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 24,
+   "height": 24,
+   "remove_bg": true,
+   "prompt": "small round green shrub, growing straight from the ground, no pot, no planter, no base tile, no building, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 21.5,
+  "made": "2026-10-05"
+ },
+ "rock.crag": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 72,
+   "height": 72,
+   "remove_bg": true,
+   "prompt": "tall jagged grey rock spire, growing straight from the ground, no pot, no planter, no base tile, no building, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   72,
+   72
+  ],
+  "seconds": 18.8,
+  "made": "2026-10-05"
+ },
+ "furn.shelf": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 48,
+   "height": 40,
+   "remove_bg": true,
+   "prompt": "tall wooden shelf with scrolls, bowls and boxes, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 14.6,
+  "made": "2026-10-05"
+ },
+ "furn.jar": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 24,
+   "height": 24,
+   "remove_bg": true,
+   "prompt": "Chinese ceramic wine jar with a cloth-tied lid, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 19.2,
+  "made": "2026-10-05"
+ },
+ "furn.barrel": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 32,
+   "height": 40,
+   "remove_bg": true,
+   "prompt": "wooden barrel with iron bands, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 10.4,
+  "made": "2026-10-05"
+ },
+ "furn.stool": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 24,
+   "height": 16,
+   "remove_bg": true,
+   "prompt": "small round wooden stool, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 21.2,
+  "made": "2026-10-05"
+ },
+ "furn.plant": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 32,
+   "height": 32,
+   "remove_bg": true,
+   "prompt": "potted bonsai pine in a blue ceramic pot, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 13.3,
+  "made": "2026-10-05"
+ },
+ "furn.table": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 48,
+   "height": 40,
+   "remove_bg": true,
+   "prompt": "low square Chinese wooden table, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 18.6,
+  "made": "2026-10-05"
+ },
+ "furn.sacks": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 32,
+   "height": 32,
+   "remove_bg": true,
+   "prompt": "stack of grain sacks, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 9.6,
+  "made": "2026-10-05"
+ },
+ "furn.chest": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 24,
+   "height": 24,
+   "remove_bg": true,
+   "prompt": "red lacquered wooden chest with brass fittings, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 13.9,
+  "made": "2026-10-05"
+ },
+ "furn.drawers": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 32,
+   "height": 32,
+   "remove_bg": true,
+   "prompt": "Chinese wooden cabinet with small drawers and brass pulls, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 8.6,
+  "made": "2026-10-05"
+ },
+ "furn.bed": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 32,
+   "height": 24,
+   "remove_bg": true,
+   "prompt": "simple Chinese wooden bed with a blue quilt, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 10.9,
+  "made": "2026-10-05"
+ },
+ "furn.mat": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 48,
+   "height": 40,
+   "remove_bg": true,
+   "prompt": "woven straw floor mat, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 10.9,
+  "made": "2026-10-05"
+ },
+ "furn.counter": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 56,
+   "height": 32,
+   "remove_bg": true,
+   "prompt": "long wooden shop counter, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 8.8,
+  "made": "2026-10-05"
+ },
+ "furn.rack": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 48,
+   "height": 32,
+   "remove_bg": true,
+   "prompt": "wooden weapon rack with spears and halberds, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 9.5,
+  "made": "2026-10-05"
+ },
+ "furn.desk": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 56,
+   "height": 32,
+   "remove_bg": true,
+   "prompt": "long low Chinese writing desk with brush, ink stone and scrolls, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 14.6,
+  "made": "2026-10-05"
+ },
+ "furn.rug": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 72,
+   "height": 64,
+   "remove_bg": true,
+   "prompt": "red patterned Chinese rug, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   72,
+   64
+  ],
+  "seconds": 10.0,
+  "made": "2026-10-05"
+ },
+ "furn.screen": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 48,
+   "height": 40,
+   "remove_bg": true,
+   "prompt": "folding Chinese screen painted with mountains and cranes, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 12.1,
+  "made": "2026-10-05"
+ },
+ "furn.hearth": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 48,
+   "height": 32,
+   "remove_bg": true,
+   "prompt": "brick cooking stove with a wok and a fire, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 10.8,
+  "made": "2026-10-05"
+ },
+ "landmark.shrine": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 48,
+   "height": 40,
+   "remove_bg": true,
+   "prompt": "small outdoor weiqi shrine: a carved grey stone stele with a little tiled cap, a square stone go board on a low plinth in front of it with a few black and white stones, a small bronze incense burner beside it, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 13.3,
+  "made": "2026-10-05"
+ },
+ "ruin.columns": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 56,
+   "height": 48,
+   "remove_bg": true,
+   "prompt": "two charred black wooden columns on a stone base, one snapped short, ash around them, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 12.7,
+  "made": "2026-10-05"
+ },
+ "ruin.hall": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 88,
+   "height": 64,
+   "remove_bg": true,
+   "prompt": "burned-out ruin of a Chinese hall: roofless, charred black pillars of different heights on a grey stone base, a fallen burnt beam, ash, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   88,
+   64
+  ],
+  "seconds": 14.9,
+  "made": "2026-10-05"
+ },
+ "ruin.rubble": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 24,
+   "height": 16,
+   "remove_bg": true,
+   "prompt": "small heap of grey stones and burnt black timber, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 13.5,
+  "made": "2026-10-05"
+ },
+ "prop.pig": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 32,
+   "height": 24,
+   "remove_bg": true,
+   "prompt": "a pink domestic pig tied with a rope round its middle, side view, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 13.2,
+  "made": "2026-10-05"
+ },
+ "prop.well": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 48,
+   "height": 40,
+   "remove_bg": true,
+   "prompt": "round grey stone well with a wooden frame, little tiled roof and a rope bucket, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 12.1,
+  "made": "2026-10-05"
+ },
+ "prop.pond": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 48,
+   "height": 32,
+   "remove_bg": true,
+   "prompt": "small oval lotus pond with a grey stone rim, lily pads and pink lotus flowers, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 12.2,
+  "made": "2026-10-05"
+ },
+ "prop.cagecart": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 72,
+   "height": 56,
+   "remove_bg": true,
+   "prompt": "wooden prisoner cage on a two-wheeled cart, thick wooden bars, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   72,
+   64
+  ],
+  "seconds": 11.4,
+  "made": "2026-10-05"
+ },
+ "prop.mirror": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 32,
+   "height": 32,
+   "remove_bg": true,
+   "prompt": "round polished bronze mirror on a small carved wooden stand, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 18.8,
+  "made": "2026-10-05"
+ },
+ "prop.ox": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 40,
+   "height": 24,
+   "remove_bg": true,
+   "prompt": "black ox standing, side view, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 12.8,
+  "made": "2026-10-05"
+ },
+ "prop.post": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 24,
+   "height": 24,
+   "remove_bg": true,
+   "prompt": "thick wooden hitching post with an iron ring, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 12.3,
+  "made": "2026-10-05"
+ },
+ "prop.letter": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 24,
+   "height": 16,
+   "remove_bg": true,
+   "prompt": "folded letter on yellowed paper, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 12.1,
+  "made": "2026-10-05"
+ },
+ "prop.seal": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 24,
+   "height": 16,
+   "remove_bg": true,
+   "prompt": "square jade official seal with a carved animal on top, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 11.9,
+  "made": "2026-10-05"
+ },
+ "prop.waterbowl": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 24,
+   "height": 16,
+   "remove_bg": true,
+   "prompt": "plain clay bowl of water, jade-green glazed roofs, vermilion pillars, gold trim, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 14.7,
+  "made": "2026-10-05"
  }
 }
