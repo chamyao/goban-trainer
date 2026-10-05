@@ -67,7 +67,8 @@ WORLDS = [
             {"key": "a3", "x": 214, "y": 212, "role": "side", "place": "Yellow Hills", "room": "tent", "step": 0.25, "scene": "peace3"},
             {"key": "as", "x": 160, "y": 150, "role": "main", "place": "Horse Trail", "step": 0.12, "scene": "horses"},
             {"key": "n3", "x": 246, "y": 178, "role": "main", "place": "Daxing Mountain", "step": 0.35, "scene": "daxing"},
-            {"key": "n4", "x": 282, "y": 206, "role": "main", "place": "Qingzhou", "step": 0.45, "scene": "qingzhou"},
+            {"key": "n4", "x": 282, "y": 206, "role": "main", "place": "Qingzhou", "step": 0.45, "scene": "qingzhou",
+             "hint": "Give ground, and make them follow."},
             {"key": "n4b", "x": 292, "y": 198, "role": "main", "place": "Qingzhou", "step": 0.47, "scene": "qingzhou2", "board": False,
              # the ambush plays once both brothers are on their hills
              "gate": [{"needs": ["mark:flank_left", "mark:flank_right"], "else": "qingzhouwait",

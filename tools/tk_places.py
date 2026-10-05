@@ -223,14 +223,17 @@ PLACES = {
             "npcs": [
                 {"kind": "folk.villager", "near": "pens", "say": "“The black wind has been bad this month.”",
                  "gives": "pigblood", "gives_when": "node:n7b",
+                 "call": ["“General! The pigs' blood is ready for you!”"],
                  "give": ["“The black wind took my roof. Take the pigs' blood, if it ends this.”"],
                  "given": ["“You have my pigs' blood. Go, and stop this wind.”"]},
                 {"kind": "folk.elder", "near": "pens", "say": "“Keep off the hills, general.”",
                  "gives": "sheepblood", "gives_when": "node:n7b",
+                 "call": ["“General, over here! Take a sheep, if it helps.”"],
                  "give": ["“My flock hasn't grazed since the storm. Take a sheep, general. Take what you need.”"],
                  "given": ["“You've had the best of my flock, general. Go on.”"]},
                 {"kind": "folk.hunter", "near": "pens", "say": "“My hounds won't go near that hill.”",
                  "gives": "dogblood", "gives_when": "node:n7b",
+                 "call": ["“General! My hounds are yours, if it ends this.”"],
                  "give": ["“My hounds won't go near that hill. If their blood breaks the spell, take it.”"],
                  "given": ["“You have the dog's blood. May it do what it must.”"]},
                 # once the shrine is read, the brothers and their men take the ridges
