@@ -26,7 +26,8 @@ import re
 # the user's pick from the candidates below (gongbi), with what it tended to add uninvited ruled out
 STYLE = ("Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat "
          "mineral colours, gold leaf accents, stylised clouds and waves. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no "
-         "signature, no watermark.")
+         "signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or "
+         "modern uniforms, no glass, no paved roads.")
 
 # candidates for STYLE, to choose by eye (gen_stills.py --styles): the user wants the stills to
 # look like modern Chinese xianxia game art, Sword and Fairy cover art especially
@@ -204,9 +205,9 @@ SCENES = {
     ),
     "inn": (
         "A warm, crowded village inn at evening, lanterns glowing, as the door bangs open and Guan Yu strides in pushing "
-        "a handcart, everyone turning to look; Liu Bei and Zhang Fei at a table by the wall.",
-        "Liu Bei, Guan Yu and Zhang Fei leaning together over a small inn table with wine cups, deep in talk, faces lit "
-        "by a single lamp, the rest of the room fading into shadow.",
+        "a handcart, everyone turning to look; Liu Bei and Zhang Fei at a table by the wall, clay wine jars and bowls on it.",
+        "Liu Bei, Guan Yu and Zhang Fei leaning together over a small inn table with shallow clay wine bowls, deep in "
+        "talk, faces lit by a single small oil lamp, the rest of the room fading into shadow.",
         "Rain streaking past the paper window of an inn at night, the warm silhouettes of three men inside, a handcart "
         "left out in the wet lane.",
     ),
@@ -292,7 +293,9 @@ SCENES = {
         "A hillside ambush: soldiers hurl jars of filth at the summoned wind, and the sorcery breaks apart into "
         "fluttering paper scraps falling from the sky.",
         "Zhang Bao on his horse, his face turning to dismay as his spell fails and paper figures crumble around him.",
-        "Torn paper soldiers drifting down onto grass in clear light after a storm, the sky breaking open.",
+        "Torn paper cut-outs shaped like little horsemen and spearmen, flat red and white Chinese paper cuttings, "
+        "drifting down like leaves onto empty grass in clear light after a storm, the sky breaking open. No real "
+        "people in the picture.",
     ),
     "peace1": (
         "A failed scholar gathering herbs in misty mountains, a hidden cave mouth among pines, an old man with a "
