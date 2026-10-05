@@ -1,0 +1,87 @@
+{
+ "char.caocao": {
+  "model": "retro-diffusion/rd-animation",
+  "input": {
+   "style": "four_angle_walking",
+   "width": 48,
+   "height": 48,
+   "return_spritesheet": true,
+   "prompt": "sharp-eyed Chinese commander, short goatee, black official's cap, dark red robe with gold trim, sword at his side, Chinese fantasy RPG, xianxia, Eastern Han dynasty"
+  },
+  "n": 1,
+  "size": [
+   192,
+   192
+  ],
+  "seconds": 28.9,
+  "made": "2026-10-05"
+ },
+ "char.dongzhuo": {
+  "model": "retro-diffusion/rd-animation",
+  "input": {
+   "style": "four_angle_walking",
+   "width": 48,
+   "height": 48,
+   "return_spritesheet": true,
+   "prompt": "fat, arrogant Chinese warlord, short beard, black official's cap, purple robe with gold trim, Chinese fantasy RPG, xianxia, Eastern Han dynasty"
+  },
+  "n": 1,
+  "size": [
+   192,
+   192
+  ],
+  "seconds": 80.3,
+  "made": "2026-10-05"
+ },
+ "char.zhangjiao": {
+  "model": "retro-diffusion/rd-animation",
+  "input": {
+   "style": "four_angle_walking",
+   "width": 48,
+   "height": 48,
+   "return_spritesheet": true,
+   "prompt": "old Chinese sorcerer, long white hair and long white beard, yellow headscarf, flowing yellow robe, holding a staff, Chinese fantasy RPG, xianxia, Eastern Han dynasty"
+  },
+  "n": 1,
+  "size": [
+   192,
+   192
+  ],
+  "seconds": 19.1,
+  "made": "2026-10-05"
+ },
+ "char.zhangbao": {
+  "model": "retro-diffusion/rd-animation",
+  "input": {
+   "style": "four_angle_walking",
+   "width": 48,
+   "height": 48,
+   "return_spritesheet": true,
+   "prompt": "wild-haired Chinese sorcerer general, yellow headscarf, yellow robe, holding a sword, Chinese fantasy RPG, xianxia, Eastern Han dynasty"
+  },
+  "n": 1,
+  "size": [
+   192,
+   192
+  ],
+  "seconds": 39.3,
+  "made": "2026-10-05"
+ },
+ "char.luzhi": {
+  "model": "retro-diffusion/rd-animation",
+  "input": {
+   "style": "four_angle_walking",
+   "width": 48,
+   "height": 48,
+   "return_spritesheet": true,
+   "prompt": "dignified old Chinese scholar-general, long grey beard, black official's cap, blue robe with pale trim, Chinese fantasy RPG, xianxia, Eastern Han dynasty"
+  },
+  "n": 1,
+  "size": [
+   192,
+   192
+  ],
+  "seconds": 62.9,
+  "made": "2026-10-05"
+ }
+}
