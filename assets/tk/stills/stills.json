@@ -6,7 +6,9 @@
   "provider": "replicate",
   "model": "neutral-1",
   "look": "neutral",
-  "made": "2026-10-05"
+  "made": "2026-10-05",
+  "picked": "in game until 2026-10-05",
+  "approved": "user, 2026-10-05 (still picker)"
  },
  "tree_b": {
   "file": "tree_b.jpg",
@@ -15,7 +17,9 @@
   "provider": "replicate",
   "model": "neutral-1",
   "look": "neutral",
-  "made": "2026-10-05"
+  "made": "2026-10-05",
+  "picked": "in game until 2026-10-05",
+  "approved": "user, 2026-10-05 (still picker)"
  },
  "notice_a": {
   "file": "notice_a.jpg",
@@ -24,7 +28,9 @@
   "provider": "replicate",
   "model": "neutral-1",
   "look": "neutral",
-  "made": "2026-10-05"
+  "made": "2026-10-05",
+  "picked": "in game until 2026-10-05",
+  "approved": "user, 2026-10-05 (still picker)"
  },
  "notice_b": {
   "file": "notice_b.jpg",
@@ -33,7 +39,9 @@
   "provider": "replicate",
   "model": "neutral-1",
   "look": "neutral",
-  "made": "2026-10-05"
+  "made": "2026-10-05",
+  "picked": "neutral-2",
+  "approved": "user, 2026-10-05 (still picker)"
  },
  "inn_a": {
   "file": "inn_a.jpg",
@@ -51,7 +59,9 @@
   "provider": "replicate",
   "model": "neutral-1",
   "look": "neutral",
-  "made": "2026-10-05"
+  "made": "2026-10-05",
+  "picked": "neutral-1",
+  "approved": "user, 2026-10-05 (still picker)"
  },
  "oath_a": {
   "file": "oath_a.jpg",
@@ -60,7 +70,9 @@
   "provider": "replicate",
   "model": "neutral-1",
   "look": "neutral",
-  "made": "2026-10-05"
+  "made": "2026-10-05",
+  "picked": "neutral-1",
+  "approved": "user, 2026-10-05 (still picker)"
  },
  "oath_b": {
   "file": "oath_b.jpg",
@@ -69,25 +81,31 @@
   "provider": "replicate",
   "model": "neutral-1",
   "look": "neutral",
-  "made": "2026-10-05"
+  "made": "2026-10-05",
+  "picked": "neutral-2",
+  "approved": "user, 2026-10-05 (still picker)"
  },
  "oath_c": {
   "file": "oath_c.jpg",
   "scene": "oath",
-  "prompt": "Close-up of three hands raising three small bronze wine cups together in a toast under peach blossom, pink petals falling into the wine: one hand in a white sleeve, one in a green sleeve, one in a black sleeve. No faces. Style: clean modern anime illustration like a quiet historical anime film: natural colours, soft daylight or warm lamplight, gentle cel shading, detailed painted backgrounds, calm story-telling composition at eye level, natural poses and expressions; no speed lines, no impact effects, no motion blur, no exaggerated action poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
+  "prompt": "Close-up of three hands raising three small bronze wine cups together in a toast under peach blossom, pink petals falling into the wine: one hand in a white sleeve, one in a green sleeve, one in a black sleeve. No faces. Style: anime illustration with the character designs and clean bold lineart of The God of High School, but a calm, quiet slice-of-life moment: relaxed natural poses, gentle expressions, soft warm natural light, a still, peaceful village mood, a steady eye-level camera; no action lines, no speed lines, no impact effects, no flying debris, no motion blur, no aggressive poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
   "provider": "replicate",
   "model": "neutral-1",
-  "look": "neutral",
-  "made": "2026-10-05"
+  "look": "gohs_calm",
+  "made": "2026-10-05",
+  "picked": "gohs_calm-1",
+  "approved": "user, 2026-10-05 (still picker)"
  },
  "tent_b": {
   "file": "tent_b.jpg",
   "scene": "tent",
-  "prompt": "Inside an army tent, Liu Bei bows low to his old teacher Lu Zhi, who stands and reaches out to greet him warmly. Only these two. Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold. Lu Zhi is a dignified old scholar-general with a long grey beard, in plain grey clothes. Style: clean modern anime illustration like a quiet historical anime film: natural colours, soft daylight or warm lamplight, gentle cel shading, detailed painted backgrounds, calm story-telling composition at eye level, natural poses and expressions; no speed lines, no impact effects, no motion blur, no exaggerated action poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
+  "prompt": "Inside an army tent, Liu Bei bows low to his old teacher Lu Zhi, who stands and reaches out to greet him warmly. Only these two. Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold. Lu Zhi is a dignified old scholar-general with a long grey beard, in plain grey clothes. Style: anime illustration with the character designs and clean bold lineart of The God of High School, but a calm, quiet slice-of-life moment: relaxed natural poses, gentle expressions, soft warm natural light, a still, peaceful village mood, a steady eye-level camera; no action lines, no speed lines, no impact effects, no flying debris, no motion blur, no aggressive poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
   "provider": "replicate",
   "model": "neutral-1",
-  "look": "neutral",
-  "made": "2026-10-05"
+  "look": "gohs_calm",
+  "made": "2026-10-05",
+  "picked": "gohs_calm-1",
+  "approved": "user, 2026-10-05 (still picker)"
  },
  "tent_c": {
   "file": "tent_c.jpg",
@@ -96,7 +114,9 @@
   "provider": "replicate",
   "model": "neutral-1",
   "look": "neutral",
-  "made": "2026-10-05"
+  "made": "2026-10-05",
+  "picked": "in game until 2026-10-05",
+  "approved": "user, 2026-10-05 (still picker)"
  },
  "cart_a": {
   "file": "cart_a.jpg",
@@ -105,16 +125,20 @@
   "provider": "replicate",
   "model": "neutral-1",
   "look": "neutral",
-  "made": "2026-10-05"
+  "made": "2026-10-05",
+  "picked": "in game until 2026-10-05",
+  "approved": "user, 2026-10-05 (still picker)"
  },
  "cart_b": {
   "file": "cart_b.jpg",
   "scene": "cart",
-  "prompt": "Lu Zhi sits inside a wooden cage cart, speaking quietly through the bars to Liu Bei, who grips the bars from outside; behind Liu Bei, Zhang Fei glares, furious, both hands on his spear. Lu Zhi is a dignified old scholar-general with a long grey beard, in plain grey clothes. Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold. Zhang Fei is a stocky, barrel-chested, powerfully muscled man, broad rather than tall, with a fierce square jaw, big glaring eyes and a wild bristling black beard, hair in a topknot, in black and dark brown clothes. Style: clean modern anime illustration like a quiet historical anime film: natural colours, soft daylight or warm lamplight, gentle cel shading, detailed painted backgrounds, calm story-telling composition at eye level, natural poses and expressions; no speed lines, no impact effects, no motion blur, no exaggerated action poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
+  "prompt": "Lu Zhi sits inside a wooden cage cart, speaking quietly through the bars to Liu Bei, who grips the bars from outside; behind Liu Bei, Zhang Fei glares, furious, both hands on his spear. Lu Zhi is a dignified old scholar-general with a long grey beard, in plain grey clothes. Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold. Zhang Fei is a stocky, barrel-chested, powerfully muscled man, broad rather than tall, with a fierce square jaw, big glaring eyes and a wild bristling black beard, hair in a topknot, in black and dark brown clothes. Style: in the style of the anime The God of High School: bold dynamic action anime, thick energetic lineart, high contrast, vivid saturated colours, speed lines and impact effects, extreme fighting poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
   "provider": "replicate",
   "model": "neutral-1",
-  "look": "neutral",
-  "made": "2026-10-05"
+  "look": "1",
+  "made": "2026-10-05",
+  "picked": "1",
+  "approved": "user, 2026-10-05 (still picker)"
  },
  "cart_c": {
   "file": "cart_c.jpg",
@@ -123,25 +147,31 @@
   "provider": "replicate",
   "model": "neutral-1",
   "look": "neutral",
-  "made": "2026-10-05"
+  "made": "2026-10-05",
+  "picked": "in game until 2026-10-05",
+  "approved": "user, 2026-10-05 (still picker)"
  },
  "office_b": {
   "file": "office_b.jpg",
   "scene": "office",
-  "prompt": "In an open army camp under banners, Dong Zhuo sits on the right, sneering down at them; on the left Zhang Fei lunges, hand on his sword, and Liu Bei and Guan Yu hold him back by both arms. Dong Zhuo is a huge, heavy, bearded bully of a warlord with a sneer, in a general's armour. Zhang Fei is a stocky, barrel-chested, powerfully muscled man, broad rather than tall, with a fierce square jaw, big glaring eyes and a wild bristling black beard, hair in a topknot, in black and dark brown clothes. Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold. Guan Yu is a towering giant of a man, a head taller than anyone, with massive shoulders and a thick neck, a deep red face (only his face is red; his neck and hands are normal skin), a very long black beard down to his chest and narrow eyes under heavy brows, hair in a topknot, in a green robe. Style: clean modern anime illustration like a quiet historical anime film: natural colours, soft daylight or warm lamplight, gentle cel shading, detailed painted backgrounds, calm story-telling composition at eye level, natural poses and expressions; no speed lines, no impact effects, no motion blur, no exaggerated action poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
+  "prompt": "In an open army camp under banners, Dong Zhuo sits on the right, sneering down at them; on the left Zhang Fei lunges, hand on his sword, and Liu Bei and Guan Yu hold him back by both arms. Dong Zhuo is a huge, heavy, bearded bully of a warlord with a sneer, in a general's armour. Zhang Fei is a stocky, barrel-chested, powerfully muscled man, broad rather than tall, with a fierce square jaw, big glaring eyes and a wild bristling black beard, hair in a topknot, in black and dark brown clothes. Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold. Guan Yu is a towering giant of a man, a head taller than anyone, with massive shoulders and a thick neck, a deep red face (only his face is red; his neck and hands are normal skin), a very long black beard down to his chest and narrow eyes under heavy brows, hair in a topknot, in a green robe. Style: in the style of the anime The God of High School: bold dynamic action anime, thick energetic lineart, high contrast, vivid saturated colours, speed lines and impact effects, extreme fighting poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
   "provider": "replicate",
   "model": "neutral-1",
-  "look": "neutral",
-  "made": "2026-10-05"
+  "look": "2",
+  "made": "2026-10-05",
+  "picked": "2",
+  "approved": "user, 2026-10-05 (still picker)"
  },
  "office_c": {
   "file": "office_c.jpg",
   "scene": "office",
-  "prompt": "A bronze wine cup lies tipped over on a wooden camp table, wine spilling across it; on the tent canvas behind falls the shadow of a raised fist. No faces. Style: clean modern anime illustration like a quiet historical anime film: natural colours, soft daylight or warm lamplight, gentle cel shading, detailed painted backgrounds, calm story-telling composition at eye level, natural poses and expressions; no speed lines, no impact effects, no motion blur, no exaggerated action poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
+  "prompt": "A bronze wine cup lies tipped over on a wooden camp table, wine spilling across it; on the tent canvas behind falls the shadow of a raised fist. No faces. Style: in the style of the anime The God of High School: bold dynamic action anime, thick energetic lineart, high contrast, vivid saturated colours, speed lines and impact effects, extreme fighting poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
   "provider": "replicate",
   "model": "neutral-1",
-  "look": "neutral",
-  "made": "2026-10-05"
+  "look": "1",
+  "made": "2026-10-05",
+  "picked": "1",
+  "approved": "user, 2026-10-05 (still picker)"
  },
  "blackwind_a": {
   "file": "blackwind_a.jpg",
@@ -150,8 +180,9 @@
   "provider": "replicate",
   "model": "bytedance/seedream-5-pro",
   "look": "gohs",
-  "approved": "user, 2026-10-05",
-  "made": "2026-10-05"
+  "approved": "user, 2026-10-05 (still picker)",
+  "made": "2026-10-05",
+  "picked": "in game until 2026-10-05"
  },
  "blackwind_c": {
   "file": "blackwind_c.jpg",
@@ -159,9 +190,10 @@
   "prompt": "Riders and horses made of cut white paper whirl through a howling black wind under a dark sky, like leaves in a storm. No real people. Style: in the style of the anime The God of High School: bold dynamic action anime, thick energetic lineart, high contrast, vivid saturated colours, speed lines and impact effects, extreme fighting poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
   "provider": "replicate",
   "model": "bytedance/seedream-5-pro",
-  "look": "gohs",
-  "approved": "user, 2026-10-05",
-  "made": "2026-10-05"
+  "look": "2",
+  "approved": "user, 2026-10-05 (still picker)",
+  "made": "2026-10-05",
+  "picked": "2"
  },
  "bosswin_a": {
   "file": "bosswin_a.jpg",
@@ -169,9 +201,10 @@
   "prompt": "On a hillside ridge, soldiers hurl clay jars of filth down the slope; the jars burst, and the black whirlwind below tears apart into scraps of paper. Style: in the style of the anime The God of High School: bold dynamic action anime, thick energetic lineart, high contrast, vivid saturated colours, speed lines and impact effects, extreme fighting poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
   "provider": "replicate",
   "model": "bytedance/seedream-5-pro",
-  "look": "gohs",
-  "approved": "user, 2026-10-05",
-  "made": "2026-10-05"
+  "look": "2",
+  "approved": "user, 2026-10-05 (still picker)",
+  "made": "2026-10-05",
+  "picked": "2"
  },
  "bosswin_c": {
   "file": "bosswin_c.jpg",
@@ -198,7 +231,9 @@
   "provider": "replicate",
   "model": "neutral-1",
   "look": "neutral",
-  "made": "2026-10-05"
+  "made": "2026-10-05",
+  "picked": "in game until 2026-10-05",
+  "approved": "user, 2026-10-05 (still picker)"
  },
  "caocao2_b": {
   "file": "caocao2_b.jpg",
@@ -207,7 +242,9 @@
   "provider": "replicate",
   "model": "neutral-1",
   "look": "neutral",
-  "made": "2026-10-05"
+  "made": "2026-10-05",
+  "picked": "in game until 2026-10-05",
+  "approved": "user, 2026-10-05 (still picker)"
  },
  "caocao3_b": {
   "file": "caocao3_b.jpg",
@@ -226,7 +263,9 @@
   "provider": "replicate",
   "model": "neutral-1",
   "look": "neutral",
-  "made": "2026-10-05"
+  "made": "2026-10-05",
+  "picked": "neutral-2",
+  "approved": "user, 2026-10-05 (still picker)"
  },
  "post_b": {
   "file": "post_b.jpg",
@@ -235,7 +274,9 @@
   "provider": "replicate",
   "model": "neutral-1",
   "look": "neutral",
-  "made": "2026-10-05"
+  "made": "2026-10-05",
+  "picked": "in game until 2026-10-05",
+  "approved": "user, 2026-10-05 (still picker)"
  },
  "horses_a": {
   "file": "horses_a.jpg",
@@ -253,7 +294,9 @@
   "provider": "replicate",
   "model": "neutral-1",
   "look": "neutral",
-  "made": "2026-10-05"
+  "made": "2026-10-05",
+  "picked": "neutral-1",
+  "approved": "user, 2026-10-05 (still picker)"
  },
  "alliance_b": {
   "file": "alliance_b.jpg",
@@ -267,20 +310,24 @@
  "wine_a": {
   "file": "wine_a.jpg",
   "scene": "wine",
-  "prompt": "Outside a camp gate, Cao Cao holds out a bronze cup of steaming hot wine; Guan Yu, already in the saddle with his long crescent-bladed halberd, does not take it and looks toward the gate; a low table beside them, steam rising from the cup. Cao Cao is a lean man of about thirty with a thin moustache and a quick, sharp look, black official's cap, dark red robe with gold trim. Guan Yu is a towering giant of a man, a head taller than anyone, with massive shoulders and a thick neck, a deep red face (only his face is red; his neck and hands are normal skin), a very long black beard down to his chest and narrow eyes under heavy brows, hair in a topknot, in a green robe. Style: clean modern anime illustration like a quiet historical anime film: natural colours, soft daylight or warm lamplight, gentle cel shading, detailed painted backgrounds, calm story-telling composition at eye level, natural poses and expressions; no speed lines, no impact effects, no motion blur, no exaggerated action poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
+  "prompt": "Outside a camp gate, Cao Cao holds out a bronze cup of steaming hot wine; Guan Yu, already in the saddle with his long crescent-bladed halberd, does not take it and looks toward the gate; a low table beside them, steam rising from the cup. Cao Cao is a lean man of about thirty with a thin moustache and a quick, sharp look, black official's cap, dark red robe with gold trim. Guan Yu is a towering giant of a man, a head taller than anyone, with massive shoulders and a thick neck, a deep red face (only his face is red; his neck and hands are normal skin), a very long black beard down to his chest and narrow eyes under heavy brows, hair in a topknot, in a green robe. Style: in the style of the anime The God of High School: bold dynamic action anime, thick energetic lineart, high contrast, vivid saturated colours, speed lines and impact effects, extreme fighting poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
   "provider": "replicate",
   "model": "neutral-1",
-  "look": "neutral",
-  "made": "2026-10-05"
+  "look": "1",
+  "made": "2026-10-05",
+  "picked": "1",
+  "approved": "user, 2026-10-05 (still picker)"
  },
  "wine_b": {
   "file": "wine_b.jpg",
   "scene": "wine",
-  "prompt": "Before the lords' table, Guan Yu stands calm with his crescent-bladed halberd grounded; at his feet lies the helmeted head of the enemy general, and beside it on the table the same bronze cup, still steaming; the lords stare, stunned. No blood. Guan Yu is a towering giant of a man, a head taller than anyone, with massive shoulders and a thick neck, a deep red face (only his face is red; his neck and hands are normal skin), a very long black beard down to his chest and narrow eyes under heavy brows, hair in a topknot, in a green robe. Style: clean modern anime illustration like a quiet historical anime film: natural colours, soft daylight or warm lamplight, gentle cel shading, detailed painted backgrounds, calm story-telling composition at eye level, natural poses and expressions; no speed lines, no impact effects, no motion blur, no exaggerated action poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
+  "prompt": "Before the lords' table, Guan Yu stands calm with his crescent-bladed halberd grounded; at his feet lies the helmeted head of the enemy general, and beside it on the table the same bronze cup, still steaming; the lords stare, stunned. No blood. Guan Yu is a towering giant of a man, a head taller than anyone, with massive shoulders and a thick neck, a deep red face (only his face is red; his neck and hands are normal skin), a very long black beard down to his chest and narrow eyes under heavy brows, hair in a topknot, in a green robe. Style: in the style of the anime The God of High School: bold dynamic action anime, thick energetic lineart, high contrast, vivid saturated colours, speed lines and impact effects, extreme fighting poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
   "provider": "replicate",
   "model": "neutral-1",
-  "look": "neutral",
-  "made": "2026-10-05"
+  "look": "1",
+  "made": "2026-10-05",
+  "picked": "1",
+  "approved": "user, 2026-10-05 (still picker)"
  },
  "hulao_a": {
   "file": "hulao_a.jpg",
