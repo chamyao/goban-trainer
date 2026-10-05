@@ -18,8 +18,15 @@ await p.goto((process.env.PLAYTEST_URL||'http://localhost:8765')+'/index.html'+(
 for(let i=0;i<6;i++){const g=p.locator('.tk-scroll-go');if(await g.count()){await g.first().tap();await p.waitForTimeout(400);}}
 await ready();
 console.log('fresh goal:',await p.evaluate(()=>document.querySelector('.town-goal').textContent),'| next:',await p.evaluate(()=>window.__w.nextMain().node));
-const beats=[['lousang-village','1-start'],['zhuo-county--office','1-c1'],['zhuo-county','1-n1'],['zhuo-county--inn','1-i1'],['the-peach-garden','1-n2'],['horse-trail','1-as'],['daxing-mountain','1-n3'],['qingzhou','1-n4'],['guangzong-road--luzhi-tent','1-t1'],['guangzong-road','1-n5'],['dong-zhuos-camp','1-n6'],['hills-of-black-wind','1-n7'],['hills-of-black-wind','1-n7b'],['yangcheng','1-boss'],['anxi--hostel','1-ax1'],['anxi','1-ax2']];
-for(const [place,node] of beats){
+// the beats in the order the game gives them (nextMain); a gated beat gets what it needs first (the
+// flanks, the blood, the ridges have their own tests: blackwind, side-stories)
+let guard=0;
+for(;;){
+  const nx=await p.evaluate(()=>{const w=window.__w,q=w&&w.nextMain();if(!q||!/^1-/.test(q.node))return null;
+    for(const g of q.gate||[])for(const n of [].concat(g.needs||[])){const [k,v]=String(n).split(':');if(k==='item')WorldItems.add(w.w,v);if(k==='mark')WorldMarks.add(w.w,v);if(k==='node')TK.markCleared(/^\d+-/.test(v)?v:w.w.n+'-'+v);}
+    return [q.place,q.node];});
+  if(!nx||++guard>40)break;const [place,node]=nx;
+
   
   if(node==='1-n6')await p.evaluate(()=>TK.markCleared('1-bs'));
   // Black Wind's gathering and the ridges have their own test (blackwind): supply them here
