@@ -17,12 +17,15 @@ const WORLD_KITS = { jade: { zh: "玉", en: "Jade" }, xianxia: { zh: "仙侠", e
   genshin: { zh: "原神", en: "Genshin (isometric)", iso: true } };   // iso: drawn for the isometric view (tk-iso.js)
 
 /* ---------- where you are in a world: place, position, party, places seen ---------- */
+// Places renamed since a save was made: the old id (and its rooms, "old--room") to the new one
+const WORLD_RENAMED = { "dong-zhuos-camp": "the-hills-north-of-guangzong" };
+const worldRenamed = id => { for (const [a, b] of Object.entries(WORLD_RENAMED)) if (id === a || String(id).startsWith(a + "--")) return b + id.slice(a.length); return id; };
 const WorldState = {
   key: n => `tk-world-${n}`,
   load(n, region) {
     let s = {};
     try { s = JSON.parse(localStorage.getItem(this.key(n)) || "{}"); } catch { s = {}; }
-    return { visited: s.visited || [region.start], party: s.party || TK.party(TK.world(n)) || region.party, place: s.place, pos: s.pos || null };
+    return { visited: (s.visited || [region.start]).map(worldRenamed), party: s.party || TK.party(TK.world(n)) || region.party, place: s.place, pos: s.pos || null };
   },
   save(n, st) { try { localStorage.setItem(this.key(n), JSON.stringify(st)); } catch { /* private mode */ } },
 };
@@ -249,7 +252,9 @@ function worldScenes() {
       const opts = this.opts = this.game.worldOpts, w = this.w = opts.w;
       this.grid = this.walk = this.lampFx = this.ambientFx = this.cine = this.auto = null; this.seated = false;   // the scene object outlives a change of place: no old map's walk grid or tap-walk
       this.story = w.scenes;
-      // a save from an older map (a place since renamed or removed): back to the start
+      // a save from an older map: a renamed place is found under its new name (arriving as if walking in);
+      // a removed one sends him back to the start
+      if (worldRenamed(this.placeId) !== this.placeId) { this.placeId = worldRenamed(this.placeId); this.resume = false; if (this.placeId.includes("--")) this.from = this.placeId.split("--")[0]; }
       if (!region.places.some(p => p.id === this.placeId)) { this.placeId = region.start; this.resume = false; }
       this.st = WorldState.load(w.n, region);
       if (!this.st.visited.includes(this.placeId)) this.st.visited.push(this.placeId);
