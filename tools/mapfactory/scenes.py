@@ -93,11 +93,23 @@ class Stage:
             for x, ch in enumerate(row):
                 if not MATERIALS.get(legend[ch], True):   # water, a room's walls, outside the room
                     self.block.add((x, y))
+        walls = {(x, y) for y, row in enumerate(m["terrain"]["rows"]) for x, ch in enumerate(row) if legend[ch] == "wall"}
         for o in m["objects"]:
-            if KINDS[o["kind"]][2]:
+            # in a room nobody stands on the furniture either (a stool, a jar), only round it
+            if KINDS[o["kind"]][2] or (walls and o["kind"].startswith("furn.") and o["kind"] not in ("furn.rug", "furn.mat")):
                 for yy in range(o["y"], o["y"] + o["h"]):
                     for xx in range(o["x"], o["x"] + o["w"]):
                         self.block.add((xx, yy))
+        # and in a room big enough to spare it, not hard against the walls (a figure there is drawn into them)
+        if walls:
+            floor = [(x, y) for y in range(self.H) for x in range(self.W) if (x, y) not in self.block and (x, y) not in walls
+                     and MATERIALS.get(legend[m["terrain"]["rows"][y][x]], True)]
+            xs, ys = {x for x, _ in floor}, {y for _, y in floor}
+            if len(xs) >= 8 and len(ys) >= 5:
+                doors = {(x, y - 1) for y, row in enumerate(m["terrain"]["rows"]) for x, ch in enumerate(row) if legend[ch] != "wall" and (x, y - 1) in walls}
+                for x, y in floor:
+                    if any((x + dx, y + dy) in walls for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1))) and (x, y) not in doors:
+                        self.block.add((x, y))
         self.spot = (int(spot["x"]), int(spot["y"]))
         self.reach = self.flood(self.spot)
         # in a room the scene is the room: stage it in the middle of the floor, not against
