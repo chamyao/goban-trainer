@@ -1237,6 +1237,104 @@
     11,
     22
    ]
+  },
+  "caocao": {
+   "sheet": "assets/tk/xianxia/chars/caocao.png",
+   "frame": [
+    11,
+    22
+   ]
+  },
+  "dongzhuo": {
+   "sheet": "assets/tk/xianxia/chars/dongzhuo.png",
+   "frame": [
+    17,
+    22
+   ]
+  },
+  "zhangjiao": {
+   "sheet": "assets/tk/xianxia/chars/zhangjiao.png",
+   "frame": [
+    12,
+    22
+   ]
+  },
+  "zhangbao": {
+   "sheet": "assets/tk/xianxia/chars/zhangbao.png",
+   "frame": [
+    12,
+    22
+   ]
+  },
+  "luzhi": {
+   "sheet": "assets/tk/xianxia/chars/luzhi.png",
+   "frame": [
+    12,
+    22
+   ]
+  },
+  "zhujun": {
+   "sheet": "assets/tk/xianxia/chars/zhujun.png",
+   "frame": [
+    11,
+    22
+   ]
+  },
+  "huangfusong": {
+   "sheet": "assets/tk/xianxia/chars/huangfusong.png",
+   "frame": [
+    17,
+    22
+   ]
+  },
+  "militia": {
+   "sheet": "assets/tk/xianxia/chars/militia.png",
+   "frame": [
+    11,
+    22
+   ]
+  },
+  "rebel": {
+   "sheet": "assets/tk/xianxia/chars/rebel.png",
+   "frame": [
+    18,
+    22
+   ]
+  },
+  "f_soldier": {
+   "sheet": "assets/tk/xianxia/chars/f_soldier.png",
+   "frame": [
+    17,
+    22
+   ]
+  },
+  "f_farmer": {
+   "sheet": "assets/tk/xianxia/chars/f_farmer.png",
+   "frame": [
+    14,
+    22
+   ]
+  },
+  "f_official": {
+   "sheet": "assets/tk/xianxia/chars/f_official.png",
+   "frame": [
+    13,
+    22
+   ]
+  },
+  "f_woman": {
+   "sheet": "assets/tk/xianxia/chars/f_woman.png",
+   "frame": [
+    10,
+    22
+   ]
+  },
+  "f_elder": {
+   "sheet": "assets/tk/xianxia/chars/f_elder.png",
+   "frame": [
+    12,
+    22
+   ]
   }
  }
 }
