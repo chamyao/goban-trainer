@@ -153,3 +153,32 @@ Items for the world's `items` list:
 6. **Integration: the ridges.** Empty until the shrine is solved; delivering all three items to a ridge plays its exchange and marks it supplied.
 7. **Integration: the boss gate.** The boss node plays `bossearly` if the shrine is unsolved, `bossearly2` if the hint was taken but the ridges are not both supplied, and the normal boss scene once they are. No cooldown, no problem spent.
 8. **Edges.** n7 to n7b to boss.
+
+## When the Star Lords appear: a moment of need
+
+Not only after a failure. A shrine lights, and the Star Lords appear, at **a moment of need**: a failure (Black Wind, Qingzhou after its retreat) or a threshold or danger that cannot be passed alone. In World 1:
+
+| Place | The moment of need |
+|---|---|
+| Peach Garden | a threshold: three strangers about to swear, and the vow needs a witness (no failure) |
+| Daxing | danger: five hundred men against fifty thousand (no failure) |
+| Qingzhou | a failure: the relief force falls back thirty li |
+| Black Wind | a failure: the storm routs the army |
+
+Everywhere else the shrine stays dark. The cage cart, Dong Zhuo's camp, the hitching post and the notice have no moment of need that a hint would answer; the person is on their own.
+
+## What a shrine says when touched
+
+| State | Line | Chinese |
+|---|---|---|
+| Dark | "The board is quiet." | “棋盘寂静。” |
+| Lit (hint waiting) | the Star Lords appear (the scene above) | |
+| Settled | the Star Lords' hint again, and the current objective | |
+
+At Black Wind a settled shrine says: "Pigs, sheep, dogs. Blood." and shows the objective "Gather blood from the village below the hills: pigs, sheep, dogs", or, once that is done, "Take the blood up to Guan Yu on the left ridge and Zhang Fei on the right." Hint text for the other three shrines is each Star Lord's own line from that scene: Daxing "To catch the bandits, first catch their king.", Qingzhou "Don't hold the strong point. Give ground, and make them follow."
+
+Dark shrines are in the towns that will never light in World 1 only as a quiet stone; later Books can light one for an optional hidden board.
+
+## Length
+
+The Black Wind route is now: the first try, the shrine board, one visit to the village (the three people stand together at the pens, three short talks), two ridge talks, then the boss. About seven short actions. If the playtest says it drags, the first thing to cut is the two ridge talks (one visit that supplies both), not the village.
