@@ -71,6 +71,15 @@ STYLES = {
                "daylight or warm lamplight, gentle cel shading, detailed painted backgrounds, calm story-telling "
                "composition at eye level, natural poses and expressions; no speed lines, no impact effects, no "
                "motion blur, no exaggerated action poses.",
+    # what the user's picks pointed to ("too much shading ... more 2D, with more blocky shading, anime style"):
+    # flat 2D cel anime, for the quiet scenes, and the same with action staging for the battles
+    "cel": "Style: 2D anime / Chinese manhua illustration: bold clean black ink outlines, flat colour fills, hard-edged "
+           "two-tone cel shadows, a limited palette, light airy background; calm staging, natural poses; no airbrushed "
+           "gradients, no bloom, no glow, no volumetric light, no painterly texture, no photorealism.",
+    "cel_action": "Style: 2D anime / Chinese manhua action illustration: bold clean black ink outlines, flat colour "
+                  "fills, hard-edged two-tone cel shadows, a limited palette, energetic dynamic composition and poses, "
+                  "a few speed lines; no airbrushed gradients, no bloom, no glow, no volumetric light, no painterly "
+                  "texture, no photorealism.",
     "genshin": "Style: in the style of Genshin Impact key art: polished anime cel shading, bright vivid colours, "
                "ornate gold trim and jade accents, glowing particles, clean detailed fantasy illustration.",
     "watercolor": "Style: Chinese watercolour painting: loose wet washes of colour bleeding softly on rice paper, "
