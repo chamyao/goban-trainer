@@ -259,10 +259,14 @@ function worldScenes() {
       const map = this.make.tilemap({ key: `map-${this.placeId}` });
       const sets = map.tilesets.map(ts => map.addTilesetImage(ts.name, `kit-${ts.name}`));
       this.water = null;
+      const layers = [];
       for (const l of map.layers) {
         const layer = map.createLayer(l.name, sets, 0, 0).setDepth(-1000);
+        layers.push(layer);
         if (l.name === "water") { layer.setCollisionByExclusion([-1]); this.water = layer; }
       }
+      // an isometric kit: the same flat map, drawn as a diamond world (tk-iso.js)
+      this.iso = typeof WorldIso !== "undefined" && WorldIso.on(kit) ? WorldIso.mount(this, map, layers) : null;
       this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
       this.solids = this.physics.add.staticGroup(); this.buildings = [];
       for (const who of new Set(["liubei", ...this.st.party])) this.hero(who);
@@ -321,14 +325,14 @@ function worldScenes() {
       const cam = this.cameras.main;
       cam.startFollow(this.player, true, .15, .15);
       if (this.place.archetype === "overworld") cam.setZoom(.5);   // the realm from on high: a wide stretch of country, the party small
-      this.mapW = map.widthInPixels; this.mapH = map.heightInPixels;
+      this.mapW = this.iso ? this.iso.width : map.widthInPixels; this.mapH = this.iso ? this.iso.height : map.heightInPixels;
       this.fitCamera();
       cam.setRoundPixels(true);
       cam.fadeIn(350);
 
       this.keys = this.input.keyboard.addKeys("W,A,S,D,UP,DOWN,LEFT,RIGHT,E,ENTER");
       // tap (or click) to walk there, tap someone to talk, a building to go in; hold and drag to steer
-      this.input.on("pointerdown", p => this.tapAt(p.worldX, p.worldY));
+      this.input.on("pointerdown", p => { const q = this.flat(p.worldX, p.worldY); this.tapAt(q.x, q.y); });
       this.input.on("pointermove", p => { this.steer(p); this.hover(p); });
       // After a talk closes, a key starts another only after a pause in pressing (or once he's taken a
       // step): mashing Enter through a talk doesn't loop it. Taps still talk at once.
@@ -374,6 +378,10 @@ function worldScenes() {
         else if (typeof TKTable !== "undefined") TKTable.arrived(this);   // back from signing in at the go table
       });
     }
+
+    // Where a point of the flat map is drawn (the isometric view moves it), and back.
+    view(x, y) { return this.iso ? this.iso.P(x, y) : { x, y }; }
+    flat(x, y) { return this.iso ? this.iso.inv(x, y) : { x, y }; }
 
     // The camera's bounds: the map, or, where the map is smaller than the view (a room on a
     // phone held upright), a frame around it so it sits in the middle instead of the top corner.
@@ -442,6 +450,7 @@ function worldScenes() {
         const sheet = this.kit.kinds[o.name.split("#")[0]][+o.name.split("#")[1]][0];
         img = this.add.image(Math.round(o.x), Math.round(o.y), `kit-${sheet}`, o.name).setOrigin(.5, 1);
         img.setDepth(WORLD_CLUTTER.test(p.kind) ? o.y - 400 : o.y);
+        if (this.iso && !WORLD_CLUTTER.test(p.kind)) WorldIso.anchor(this, img, o.x, o.y - p.fh / 2, p.fw, p.fh);   // stands on its footprint
         if (p.kind === "landmark.shrine") {   // the Star Lords' shrine: its look follows the story (setShrine)
           this.shrine = { img, x: o.x, y: o.y, state: "dark", fx: [] };
           this.setShrine(TK.shrineState?.(this.w.n, this.placeId) || "dark");
@@ -717,7 +726,7 @@ function worldScenes() {
       const r = cv.getBoundingClientRect(), rr = this.labels[0] && this.labels[0].el.parentNode.getBoundingClientRect();
       const hide = this.ui.busy() || !!this.cine;
       for (const L of this.labels) {
-        const sx = (L.x - v.x) * cam.zoom, sy = (L.y - v.y) * cam.zoom;
+        const at = this.view(L.x, L.y), sx = (at.x - v.x) * cam.zoom, sy = (at.y - v.y) * cam.zoom;
         const on = !hide && sx > -40 && sx < this.scale.width + 40 && sy > -10 && sy < this.scale.height + 20;
         L.el.hidden = !on;
         if (on) { L.el.style.left = `${r.left - rr.left + sx * k}px`; L.el.style.top = `${r.top - rr.top + sy * k}px`; }
@@ -767,8 +776,9 @@ function worldScenes() {
       const nudge = dist > 120 && f.still > 2500 && (f.still - 2500) % 6000 < 1800;
       // onto the screen (he stays in view at the edge if he's flown on beyond it)
       const cam = this.cameras.main, v = cam.worldView, W = this.scale.width, H = this.scale.height;
-      const gx = Math.max(14, Math.min(W - 14, (f.x - v.x) * cam.zoom)), gy = Math.max(26, Math.min(H - 6, (f.y - v.y) * cam.zoom)) + Math.sin(time / 330) * 1.5;
-      const sx = (t.x - v.x) * cam.zoom, sy = (t.y - v.y) * cam.zoom;
+      const fv = this.view(f.x, f.y), tv = this.view(t.x, t.y);
+      const gx = Math.max(14, Math.min(W - 14, (fv.x - v.x) * cam.zoom)), gy = Math.max(26, Math.min(H - 6, (fv.y - v.y) * cam.zoom)) + Math.sin(time / 330) * 1.5;
+      const sx = (tv.x - v.x) * cam.zoom, sy = (tv.y - v.y) * cam.zoom;
       const left = Math.abs(f.vx) > 12 ? f.vx < 0 : sx < gx;   // face where he's flying, else toward the goal
       const a = Math.atan2(-(sy - (gy - 12)), Math.abs(sx - gx)) * 180 / Math.PI;
       WorldGuide.place(el, this.game.canvas, W, gx, gy, left, a, time, cam.zoom);
@@ -1065,11 +1075,12 @@ function worldScenes() {
       const now = this.time.now;
       if (now - (this.steerAt || 0) < 160) return;
       this.steerAt = now;
-      this.walkTo(p.worldX, p.worldY + 4, { ring: false });
+      const q = this.flat(p.worldX, p.worldY);
+      this.walkTo(q.x, q.y + 4, { ring: false });
     }
     // Over something you can tap: the hand cursor (a mouse; touch has none).
     hover(p) {
-      const c = this.game.canvas, t = this.canMove() && this.pick(p.worldX, p.worldY);
+      const q = this.flat(p.worldX, p.worldY), c = this.game.canvas, t = this.canMove() && this.pick(q.x, q.y);
       c.style.cursor = t || this.ui.busy() ? "pointer" : "";
     }
     // The direction to the next point on the walk; at the end, turn to face and talk if a tap asked for it.
