@@ -1,6 +1,7 @@
 """Pack the generated Chinese-fantasy pieces into an art kit: assets/tk/kits/xianxia.json.
 
-    python3 tools/build_xianxia_kit.py [SRC]   # SRC: the generated pieces (default assets/tk/gen/xianxia)
+    python3 tools/build_xianxia_kit.py [GEN]   # GEN: the folder holding the generated batches
+                                               # (default assets/tk/gen: xianxia, xianxia-redo, ...)
 
 The pieces come from tools/gen_pixel.py --set xianxia (Retro Diffusion, prompts in
 tools/xianxia_spec.py). Each object is trimmed and fitted to its footprint (the size the Jade
@@ -19,7 +20,7 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from build_jade_edges import block  # noqa: E402
-from xianxia_spec import DRAWN_GROUND, OBJECTS, REDO  # noqa: E402
+from xianxia_spec import CHAR_PICK, DRAWN_GROUND, HERO_H, INTERIOR, OBJECTS, REDO  # noqa: E402
 import random  # noqa: E402
 
 T = 16
@@ -98,7 +99,13 @@ def ground_tile(mat, seed):
 
 
 def variants(src, name):
-    return sorted(src.glob(f"{name}-*.png"), key=lambda p: int(p.stem.rsplit("-", 1)[1]))
+    """A piece's tries, from the last source folder that has any (a later batch replaces an
+    earlier one: the second tries in xianxia-redo over the first run's)."""
+    for d in reversed(src if isinstance(src, list) else [src]):
+        found = sorted(d.glob(f"{name}-*.png"), key=lambda p: int(p.stem.rsplit("-", 1)[1]))
+        if found:
+            return found
+    return []
 
 
 def pack(items, width=512):
@@ -117,8 +124,29 @@ def pack(items, width=512):
     return sheet, pos
 
 
+def hero_sheet(path):
+    """A generated walking sheet (rows up, right, down, left; 4 steps of 48x48) cut to the box all
+    its frames share, shrunk so the figure stands HERO_H tall, and laid out as the game reads it:
+    rows down, up, left, right."""
+    im = Image.open(path).convert("RGBA")
+    cells = [[im.crop((k * 48, r * 48, k * 48 + 48, r * 48 + 48)) for k in range(4)] for r in range(4)]
+    boxes = [c.getchannel("A").point(lambda v: 255 if v > 40 else 0).getbbox() for row in cells for c in row]
+    boxes = [b for b in boxes if b]
+    box = (min(b[0] for b in boxes), min(b[1] for b in boxes), max(b[2] for b in boxes), max(b[3] for b in boxes))
+    s = HERO_H / (box[3] - box[1])
+    fw, fh = max(1, round((box[2] - box[0]) * s)), HERO_H
+    out = Image.new("RGBA", (fw * 4, fh * 4))
+    for r_out, r_in in enumerate((2, 0, 3, 1)):   # down, up, left, right
+        for k in range(4):
+            c = cells[r_in][k].crop(box)
+            out.alpha_composite(quantize_like(c.resize((fw, fh), Image.Resampling.BOX), c, 110), (k * fw, r_out * fh))
+    return out, [fw, fh]
+
+
 def main():
-    src = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "assets/tk/gen/xianxia"
+    # the generated pieces: the first run, then the later batches (any of them may be missing)
+    base = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "assets/tk/gen"
+    src = [base / d for d in ("xianxia", "xianxia-chars2", "xianxia-interior", "xianxia-redo") if (base / d).exists()]
     OUT.mkdir(parents=True, exist_ok=True)
     kit = json.loads((ROOT / "assets/tk/kits/jade.json").read_text())
 
@@ -156,10 +184,10 @@ def main():
 
     # objects
     items, made = [], {}
-    for kind, (_, box, _) in OBJECTS.items():
-        if kind in REDO:
-            continue
-        for k, p in enumerate(v for v in variants(src, kind) if v.stem not in DROP):
+    for kind, (_, box, _) in {**OBJECTS, **INTERIOR}.items():
+        # a piece that came out wrong is used only once its second try exists
+        where = [d for d in src if d.name == "xianxia-redo"] if kind in REDO else src
+        for k, p in enumerate(v for v in variants(where, kind) if v.stem not in DROP):
             items.append((f"{kind}#{k}", fit(Image.open(p), box)))
             made.setdefault(kind, []).append(f"{kind}#{k}")
     sheet, pos = pack(items)
@@ -181,10 +209,19 @@ def main():
     if detail:   # the scatter on the grass: our tufts and flowers
         kit["detail"] = {"tiles": [["x_tiles", i, len(ground), 1] for i in range(len(detail))],
                          "density": kit["detail"]["density"]}
+    # story people drawn from generated walking sheets
+    (OUT / "chars").mkdir(exist_ok=True)
+    kit["heroes"] = {}
+    for who, n in CHAR_PICK.items():
+        p = next((d / f"char.{who}-{n}.png" for d in reversed(src) if (d / f"char.{who}-{n}.png").exists()), None)
+        if p:
+            sheet, frame = hero_sheet(p)
+            sheet.save(OUT / f"chars/{who}.png")
+            kit["heroes"][who] = {"sheet": f"assets/tk/xianxia/chars/{who}.png", "frame": frame}
     (ROOT / "assets/tk/kits/xianxia.json").write_text(json.dumps(kit, indent=1))
-    missing = sorted(k for k in OBJECTS if k not in made)
+    missing = sorted(k for k in {**OBJECTS, **INTERIOR} if k not in made)
     print(f"xianxia kit: {sum(len(v) for v in ground.values())} ground tiles, {len(edged)} edge sets, "
-          f"{len(items)} object sprites for {len(made)} kinds" + (f"; still Jade's: {', '.join(missing)}" if missing else ""))
+          f"{len(items)} object sprites for {len(made)} kinds" + (f"; still Jade's: {', '.join(missing)}" if missing else "") + f"; heroes: {', '.join(kit['heroes']) or 'none'}")
 
 
 if __name__ == "__main__":
