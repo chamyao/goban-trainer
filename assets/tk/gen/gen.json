@@ -106,5 +106,29 @@
   "how": "sheet",
   "seconds": 57.6,
   "made": "2026-10-05"
+ },
+ "liubei64": {
+  "model": "retro-diffusion/rd-plus",
+  "style": "topdown_asset",
+  "prompt": "full-body game character sprite of a young Chinese hero standing, white robe with gold trim, black topknot, short black beard, 3/4 top-down view, Chinese fantasy RPG, xianxia, Eastern Han dynasty",
+  "size": [
+   64,
+   64
+  ],
+  "how": "cutout",
+  "seconds": 11.5,
+  "made": "2026-10-05"
+ },
+ "liubei64turn": {
+  "model": "retro-diffusion/rd-plus",
+  "style": "character_turnaround",
+  "prompt": "young Chinese hero in a white robe with gold trim, black topknot, short black beard; front, side, back and three-quarter views, Chinese fantasy RPG, xianxia, Eastern Han dynasty",
+  "size": [
+   256,
+   64
+  ],
+  "how": "cutout",
+  "seconds": 14.3,
+  "made": "2026-10-05"
  }
 }
