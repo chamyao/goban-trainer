@@ -246,6 +246,9 @@ def review(name, fn, ids, model, tries, look=None, workers=8):
     out = OUT / "samples/review"
     out.mkdir(parents=True, exist_ok=True)
     restyle = (lambda t: t.replace(STYLE, f"{STYLES[look]} {NEGATIVE}")) if look else (lambda t: t)
+    if look and look.startswith("cat_"):   # the category looks: no sacred light in the scene text either
+        from tk_stills import scrub
+        restyle = (lambda r: lambda t: scrub(r(t)))(restyle)
     # candidates from different models sit side by side: <id>--<model>-<look>-<n>
     tag = (f"{model.split('/')[-1]}-" if model else "") + (f"{look}-" if look else "")
     jobs = [(f"{sid}--{tag}{n}", restyle(request(name, sid)[0])) for sid in ids for n in range(1, tries + 1)]
