@@ -1,0 +1,470 @@
+{
+ "banner.yellow": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 32,
+   "height": 40,
+   "remove_bg": true,
+   "prompt": "a single tall narrow yellow silk banner on a wooden pole by itself, centred, game item sprite, bright saturated anime colours like Genshin Impact, soft cel shading, clean outline, isometric 2:1 angle",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 12.7,
+  "made": "2026-10-05"
+ },
+ "furn.drawers": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 32,
+   "height": 32,
+   "remove_bg": true,
+   "prompt": "a single Chinese wooden cabinet with small drawers and brass pulls by itself, centred, game item sprite, bright saturated anime colours like Genshin Impact, soft cel shading, clean outline, isometric 2:1 angle",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 14.1,
+  "made": "2026-10-05"
+ },
+ "camp.logs": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 64,
+   "height": 40,
+   "remove_bg": true,
+   "prompt": "a single stack of cut firewood logs by itself, centred, game item sprite, bright saturated anime colours like Genshin Impact, soft cel shading, clean outline, isometric 2:1 angle",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 17.8,
+  "made": "2026-10-05"
+ },
+ "furn.barrel": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 32,
+   "height": 40,
+   "remove_bg": true,
+   "prompt": "a single wooden barrel with iron bands by itself, centred, game item sprite, bright saturated anime colours like Genshin Impact, soft cel shading, clean outline, isometric 2:1 angle",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 19.3,
+  "made": "2026-10-05"
+ },
+ "camp.firepit": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 48,
+   "height": 32,
+   "remove_bg": true,
+   "prompt": "a single ring of stones with a small burning campfire by itself, centred, game item sprite, bright saturated anime colours like Genshin Impact, soft cel shading, clean outline, isometric 2:1 angle",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 23.1,
+  "made": "2026-10-05"
+ },
+ "camp.hay": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 48,
+   "height": 40,
+   "remove_bg": true,
+   "prompt": "a single round haystack by itself, centred, game item sprite, bright saturated anime colours like Genshin Impact, soft cel shading, clean outline, isometric 2:1 angle",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 24.2,
+  "made": "2026-10-05"
+ },
+ "furn.mat": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 48,
+   "height": 40,
+   "remove_bg": true,
+   "prompt": "a single woven straw floor mat by itself, centred, game item sprite, bright saturated anime colours like Genshin Impact, soft cel shading, clean outline, isometric 2:1 angle",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 11.2,
+  "made": "2026-10-05"
+ },
+ "banner.red": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 32,
+   "height": 40,
+   "remove_bg": true,
+   "prompt": "a single tall narrow red silk war banner on a wooden pole by itself, centred, game item sprite, bright saturated anime colours like Genshin Impact, soft cel shading, clean outline, isometric 2:1 angle",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 25.9,
+  "made": "2026-10-05"
+ },
+ "furn.counter": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 56,
+   "height": 32,
+   "remove_bg": true,
+   "prompt": "a single long wooden shop counter by itself, centred, game item sprite, bright saturated anime colours like Genshin Impact, soft cel shading, clean outline, isometric 2:1 angle",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 28.2,
+  "made": "2026-10-05"
+ },
+ "furn.rack": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 48,
+   "height": 32,
+   "remove_bg": true,
+   "prompt": "a single wooden weapon rack with spears and halberds by itself, centred, game item sprite, bright saturated anime colours like Genshin Impact, soft cel shading, clean outline, isometric 2:1 angle",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 12.3,
+  "made": "2026-10-05"
+ },
+ "furn.rug": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 72,
+   "height": 64,
+   "remove_bg": true,
+   "prompt": "a single red patterned Chinese rug by itself, centred, game item sprite, bright saturated anime colours like Genshin Impact, soft cel shading, clean outline, isometric 2:1 angle",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   72,
+   64
+  ],
+  "seconds": 13.5,
+  "made": "2026-10-05"
+ },
+ "furn.sacks": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 32,
+   "height": 32,
+   "remove_bg": true,
+   "prompt": "a single stack of grain sacks by itself, centred, game item sprite, bright saturated anime colours like Genshin Impact, soft cel shading, clean outline, isometric 2:1 angle",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 14.3,
+  "made": "2026-10-05"
+ },
+ "furn.jar": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 32,
+   "height": 32,
+   "remove_bg": true,
+   "prompt": "a single Chinese ceramic wine jar with a cloth-tied lid by itself, centred, game item sprite, bright saturated anime colours like Genshin Impact, soft cel shading, clean outline, isometric 2:1 angle",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 31.2,
+  "made": "2026-10-05"
+ },
+ "furniture.gotable": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 32,
+   "height": 32,
+   "remove_bg": true,
+   "prompt": "a single small square stone table with a go board on it by itself, centred, game item sprite, bright saturated anime colours like Genshin Impact, soft cel shading, clean outline, isometric 2:1 angle",
+   "num_images": 1
+  },
+  "n": 1,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 17.6,
+  "made": "2026-10-05"
+ },
+ "furn.screen": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 48,
+   "height": 40,
+   "remove_bg": true,
+   "prompt": "a single folding Chinese screen painted with mountains and cranes by itself, centred, game item sprite, bright saturated anime colours like Genshin Impact, soft cel shading, clean outline, isometric 2:1 angle",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 29.5,
+  "made": "2026-10-05"
+ },
+ "furn.stool": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 32,
+   "height": 32,
+   "remove_bg": true,
+   "prompt": "a single small round wooden stool by itself, centred, game item sprite, bright saturated anime colours like Genshin Impact, soft cel shading, clean outline, isometric 2:1 angle",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 28.6,
+  "made": "2026-10-05"
+ },
+ "furn.table": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 48,
+   "height": 40,
+   "remove_bg": true,
+   "prompt": "a single low square Chinese wooden table by itself, centred, game item sprite, bright saturated anime colours like Genshin Impact, soft cel shading, clean outline, isometric 2:1 angle",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 32.2,
+  "made": "2026-10-05"
+ },
+ "prop.letter": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 32,
+   "height": 32,
+   "remove_bg": true,
+   "prompt": "a single folded letter on yellowed paper by itself, centred, game item sprite, bright saturated anime colours like Genshin Impact, soft cel shading, clean outline, isometric 2:1 angle",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 29.7,
+  "made": "2026-10-05"
+ },
+ "prop.post": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 32,
+   "height": 32,
+   "remove_bg": true,
+   "prompt": "a single thick wooden hitching post with an iron ring by itself, centred, game item sprite, bright saturated anime colours like Genshin Impact, soft cel shading, clean outline, isometric 2:1 angle",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 23.1,
+  "made": "2026-10-05"
+ },
+ "prop.pond": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 48,
+   "height": 32,
+   "remove_bg": true,
+   "prompt": "a single small oval lotus pond with a grey stone rim, lily pads and pink lotus flowers by itself, centred, game item sprite, bright saturated anime colours like Genshin Impact, soft cel shading, clean outline, isometric 2:1 angle",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 29.8,
+  "made": "2026-10-05"
+ },
+ "prop.seal": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 32,
+   "height": 32,
+   "remove_bg": true,
+   "prompt": "a single square jade official seal with a carved animal on top by itself, centred, game item sprite, bright saturated anime colours like Genshin Impact, soft cel shading, clean outline, isometric 2:1 angle",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 20.4,
+  "made": "2026-10-05"
+ },
+ "prop.waterbowl": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 32,
+   "height": 32,
+   "remove_bg": true,
+   "prompt": "a single plain clay bowl of water by itself, centred, game item sprite, bright saturated anime colours like Genshin Impact, soft cel shading, clean outline, isometric 2:1 angle",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 20.3,
+  "made": "2026-10-05"
+ },
+ "rock.crag": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 72,
+   "height": 72,
+   "remove_bg": true,
+   "prompt": "tall jagged grey rock spire, growing straight from the ground, no pot, no planter, no base tile, no building, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   72,
+   72
+  ],
+  "seconds": 38.5,
+  "made": "2026-10-05"
+ },
+ "ruin.rubble": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 32,
+   "height": 32,
+   "remove_bg": true,
+   "prompt": "a single small heap of grey stones and burnt black timber by itself, centred, game item sprite, bright saturated anime colours like Genshin Impact, soft cel shading, clean outline, isometric 2:1 angle",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 31.9,
+  "made": "2026-10-05"
+ },
+ "ruin.columns": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 56,
+   "height": 48,
+   "remove_bg": true,
+   "prompt": "a single two charred black wooden columns on a stone base, one snapped short, ash around them by itself, centred, game item sprite, bright saturated anime colours like Genshin Impact, soft cel shading, clean outline, isometric 2:1 angle",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 36.5,
+  "made": "2026-10-05"
+ },
+ "rock.small": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "isometric_asset",
+   "width": 32,
+   "height": 32,
+   "remove_bg": true,
+   "prompt": "small grey stone, growing straight from the ground, no pot, no planter, no base tile, no building, bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, clean shapes, soft cel shading, isometric game sprite, 2:1 isometric angle, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 41.5,
+  "made": "2026-10-05"
+ }
+}

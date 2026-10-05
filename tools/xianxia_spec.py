@@ -187,3 +187,7 @@ GENSHIN_BAD = {"banner.red", "banner.yellow", "camp.firepit", "camp.hay", "camp.
                "furn.drawers", "furn.jar", "furn.mat", "furn.rack", "furn.rug", "furn.sacks", "furn.screen", "furn.stool",
                "furn.table", "furniture.gotable", "prop.letter", "prop.post", "prop.pond", "prop.seal", "prop.waterbowl",
                "rock.crag", "rock.small", "ruin.columns", "ruin.hall", "ruin.rubble"}
+# second try at the props, run beside the first: naming roofs and buildings, even as "no roof", brought them in,
+# and so did "Liyue". This wording never mentions architecture at all.
+GENSHIN_ITEM = ("a single {p} by itself, centred, game item sprite, bright saturated anime colours "
+                "like Genshin Impact, soft cel shading, clean outline")
