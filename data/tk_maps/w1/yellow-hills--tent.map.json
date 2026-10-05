@@ -97,11 +97,10 @@
  "spots": [
   {
    "id": "spot-1-a3",
-   "x": 10.5,
-   "y": 5.7,
+   "x": 8.5,
+   "y": 3.7,
    "node": "1-a3",
-   "label": "The Way of Great Peace · III: Betrayed",
-   "trigger": "arrive"
+   "label": "The Way of Great Peace · III: Betrayed"
   }
  ],
  "npcs": [

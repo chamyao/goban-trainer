@@ -118,11 +118,10 @@
  "spots": [
   {
    "id": "spot-1-c1",
-   "x": 10.5,
-   "y": 5.7,
+   "x": 9.5,
+   "y": 2.7,
    "node": "1-c1",
-   "label": "The Governor's Council",
-   "trigger": "arrive"
+   "label": "The Governor's Council"
   }
  ],
  "npcs": [

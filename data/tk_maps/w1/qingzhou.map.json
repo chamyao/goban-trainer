@@ -1432,8 +1432,7 @@
    "x": 18,
    "y": 21.7,
    "node": "1-n4",
-   "label": "The besieged city",
-   "trigger": "arrive"
+   "label": "The besieged city"
   }
  ],
  "npcs": [
@@ -1548,8 +1547,8 @@
    16
   ],
   "": [
-   18,
-   22
+   37,
+   16
   ],
   "qingzhou--hall-1": [
    17,

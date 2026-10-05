@@ -199,14 +199,14 @@ function worldScenes() {
       const { w, kit } = this.opts;
       this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=18`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=11`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=15`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=16`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
       for (const [s, path] of Object.entries(kit.sheets)) this.load.image(`kit-${s}`, path);
       const [fw, fh] = kit.folk.frame;
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=26`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=27`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -314,7 +314,8 @@ function worldScenes() {
     }
 
     // The story quest a spot holds, if it can be played now.
-    openQuest(s) { const q = this.region.quests.find(x => x.node === s.node); return q && this.available(q) ? q : null; }
+    // (a scene played inside a building starts only in there: on the street its door is just where to go)
+    openQuest(s) { const q = this.region.quests.find(x => x.node === s.node); return q && this.available(q) && !(q.room && q.place !== this.placeId) ? q : null; }
 
     // Walking into a story spot's area starts its scene; it re-arms once you walk away.
     nearSpots() {
