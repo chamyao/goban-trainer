@@ -60,7 +60,7 @@
   {
    "kind": "banner.yellow",
    "x": 16,
-   "y": 11,
+   "y": 12,
    "w": 1,
    "h": 1
   },
@@ -1028,7 +1028,7 @@
   {
    "id": "altar",
    "x": 19.5,
-   "y": 12.7,
+   "y": 13.7,
    "node": "1-n7",
    "label": "Zhang Bao's sorcery"
   }
