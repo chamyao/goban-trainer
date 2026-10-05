@@ -233,7 +233,7 @@ def styles(name, fn, ids, keys, model):
         if (out / f"{stem}.jpg").exists():
             continue
         if i:
-            time.sleep(4)
+            time.sleep(15)   # back to back, Replicate turns away about half with 429s
         try:
             raw, used = fn(text, model, aspect)
         except Exception as e:
