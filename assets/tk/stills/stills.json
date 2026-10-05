@@ -66,7 +66,7 @@
  "oath_c": {
   "file": "oath_c.jpg",
   "scene": "oath",
-  "prompt": "Three bronze jue wine cups raised and touching above a table under peach blossom, petals falling into the wine, golden evening light. Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no speech or thought bubbles, no captions, no calligraphy, no seals, no signature, no watermark.",
+  "prompt": "Exactly three hands, each holding one small bronze wine cup, the three cups touching in the middle in a toast: one hand in a white sleeve from the left, one in a green sleeve from the top, one in a black sleeve from the right. A carved table below, blossoming peach branches around. Han dynasty China, about 184 AD: nothing modern, no glass, no paved roads. Style: Chinese gongbi painting brought to a modern game illustration: fine ink outlines, rich flat mineral colours, gold leaf accents, stylised clouds and waves. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark.",
   "provider": "replicate",
   "model": "black-forest-labs/flux-2-klein-4b",
   "made": "2026-10-05"

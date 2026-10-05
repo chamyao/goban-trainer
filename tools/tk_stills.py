@@ -215,8 +215,10 @@ SCENES = {
         "horse tethered for the sacrifice, three figures kneeling, petals drifting through shafts of light.",
         "Liu Bei, Guan Yu and Zhang Fei kneeling side by side before the altar, eyes closed, hands clasped, swearing "
         "brotherhood, incense smoke between them, petals in their hair.",
-        "Three small bronze wine cups, raised and touching in a toast by three hands (a white sleeve, a green sleeve, a "
-        "black sleeve), above a table under blossoming peach trees, petals falling into the wine, golden evening light. Han dynasty China, about 184 AD: nothing modern, no glass, no paved roads.",
+        "Exactly three hands, each holding one small bronze wine cup, the three cups touching in the middle in a toast: "
+        "one hand in a white sleeve from the left, one in a green sleeve from the top, one in a black sleeve from the "
+        "right. A carved table below, blossoming peach branches around. Han dynasty China, about 184 AD: nothing "
+        "modern, no glass, no paved roads.",
     ),
     "council": (
         "A grand hall of a provincial governor, red pillars and a raised dais, officers in rows, a messenger kneeling "
