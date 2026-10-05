@@ -122,6 +122,10 @@ def all_lines(worlds):
         for n in w["nodes"]:
             if "boss" in n:
                 lines[n["boss"]["taunt_vid"]] = (n["boss"]["taunt_zh"], voice_of(n["boss"]["who"]), n["boss"]["taunt"])
+            d = n.get("dilemma", {})
+            for k in ("open", "win", "slip"):
+                if k in d:
+                    lines[d[k + "_vid"]] = (d[k + "_zh"], voice_of(d.get("who")), d[k])
     lines.update(place_lines())
     return lines
 # Life and death only, for now: tesuji, capturing races, capture and endgame
@@ -228,6 +232,15 @@ def main():
         for n in out["nodes"]:
             if "boss" in n:
                 n["boss"] = dict(n["boss"], taunt_zh=zh(n["boss"]["taunt"]), taunt_vid=voice_id(zh(n["boss"]["taunt"]), voice_of(n["boss"]["who"])))
+            # a decision board (Game Design): a caption naming the leader's dilemma, and optionally his
+            # own lines on the board: {"q": en, "who": cast id, "open"/"win"/"slip": en}
+            if "dilemma" in n:
+                d = dict(n["dilemma"], q_zh=zh(n["dilemma"]["q"]))
+                for k in ("open", "win", "slip"):
+                    if k in d:
+                        d[k + "_zh"] = zh(d[k])
+                        d[k + "_vid"] = voice_id(d[k + "_zh"], voice_of(d.get("who")))
+                n["dilemma"] = d
         for n in out["nodes"]:
             if "scene" in n:
                 assert n["scene"] in out["scenes"], n["scene"]

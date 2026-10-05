@@ -1403,10 +1403,15 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
   if (node.boss) boardCard.prepend(h("div", { class: "tk-duel-bossname" }, [
     h("b", { lang: "zh-CN" }, TK_BOSS_ZH[node.boss.who] || tkName(node.boss.who)), h("span", {}, node.boss.title || "")]));
 
-  const lord = foe && TK_SETTER_LINES[foe.who];
+  // A decision board: the leader's dilemma named over the board while the problem is open.
+  const dil = node.dilemma;
+  if (dil) boardCard.prepend(h("div", { class: "tk-duel-dilemma" }, [h("b", { lang: "zh-CN" }, dil.q_zh || ""), h("span", {}, dil.q)]));
+  const dline = k => dil && dil[k] ? [dil[k + "_zh"] || "", dil[k]] : null;
+  const lord = dline("open") ? { open: dline("open"), win: dline("win") || TK_SETTER_LINES.stargrey.win, slip: dline("slip") || TK_SETTER_LINES.stargrey.slip }
+    : foe && TK_SETTER_LINES[foe.who];
   const opening = () => {
     if (node.boss) say(node.boss.taunt_zh || "", node.boss.taunt);
-    else if (lord) say(...lord.open);
+    else if (lord) { say(...lord.open); if (dil && dil.open_vid && TKVoice.has(dil.open_vid)) TKVoice.play(dil.open_vid); }
     else if (foe) say("请。你执黑先下。", "Your move. You play Black.");
     else say("黑先。", "Black to play.");
   };
