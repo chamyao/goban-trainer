@@ -73,7 +73,7 @@
     "book": 1,
     "category": "intrigue",
     "beat": "Lu Zhi's desk: the map and the briefing for the Yingchuan errand.",
-    "scene": "Wide panoramic composition inside a general's tent at night, the action spread from left to right. On the left, a rack of rolled bamboo scrolls and an armour stand. In the middle, a camp desk with a brush on an inkstone and a plain map of hills and rivers pinned with small coloured flags. On the right, a chair pushed back from the desk and, behind it, a sword hung on a tent pole beside a second lamp. Lit by bronze oil lamps; no people.",
+    "scene": "A general's camp desk inside a tent at night: rolled bamboo scrolls, a brush resting on an inkstone, and a plain map of hills and rivers pinned with small coloured flags, lit by one bronze oil lamp that throws a warm pool of light and long shadows across the tent wall. Close shot of the desk, an empty chair pushed back.",
     "notes": ""
   },
   "cart_a": {
@@ -108,7 +108,7 @@
     "book": 1,
     "category": "intrigue",
     "beat": "The tipped cup and the fist's shadow: Zhang Fei's rage, seen only as objects.",
-    "scene": "Wide panoramic composition inside a lamplit tent, the story spread from left to right. On the left, a lamp on a stand and the tent canvas with the large dark shadow of a clenched raised fist. In the middle, a plain wooden camp table with a bronze wine cup tipped over, the last wine spilling across the boards. On the right, a second bronze cup rolled off onto the ground and an overturned stool, wine soaking into the dirt. No people, only objects and the shadow.",
+    "scene": "Close shot of a bronze wine cup tipped over on a plain wooden camp table, the last of the wine spilling across the boards and dripping off the edge. On the tent canvas behind it the dark shadow of a clenched fist is raised high, cast by a lamp outside. Only the cup, the table and the shadow.",
     "notes": ""
   },
   "blackwind_a": {
@@ -276,7 +276,7 @@
     "book": 2,
     "category": "battle",
     "beat": "The red cap hung on a stump as a decoy; Zu Mao waits in the trees.",
-    "scene": "Wide panoramic composition, a dark wood at night, the action spread from left to right. On the left, Zu Mao crouches half hidden among the trees with a sword in each hand, ready to charge. In the middle, a burnt tree stump in a clearing with a red cap hung on top of it. On the right, enemy cavalry with torches ring the clearing and edge forward warily, smoke drifting between the trunks. Torchlight and smoke.",
+    "scene": "A dark wood at night. A burnt tree stump stands in a clearing with a red cap hung on top of it; enemy cavalry with torches ring it, edging forward warily. Half hidden among the trees behind them, Zu Mao crouches low with a sword in each hand, ready to charge. Smoke and torchlight.",
     "notes": ""
   },
   "seal_a": {
@@ -311,7 +311,7 @@
     "book": 2,
     "category": "bond",
     "beat": "Diaochan weeps in Lü Bu's arms at the Fengyi Pavilion.",
-    "scene": "Wide panoramic composition, evening at a garden pavilion beside a lotus pond, the story spread from left to right. On the left, a pavilion railing with Lü Bu's tall halberd leaning against it. In the middle, Diaochan rests against Lü Bu's chest, her face turned up to his, wet with tears; he holds her with both arms. On the right, the lotus pond with a stone bridge and unlit lanterns, and in the far distance an upper window of the main house where a lamp shows. Grey light on the water. Only these two people.",
+    "scene": "Evening beside a lotus pond at a garden pavilion: Diaochan rests against Lü Bu's chest, her face turned up to his, wet with tears; he holds her with both arms. His tall halberd leans against the pavilion railing beside them. Grey light on the water, lanterns not yet lit. Only these two.",
     "notes": ""
   },
   "fall_a": {
@@ -325,7 +325,7 @@
     "book": 2,
     "category": "aftermath",
     "beat": "Wang Yun on the burning gate tower beside the Emperor, facing the rebel army.",
-    "scene": "Wide panoramic composition of a city gate tower on fire at dusk, the story spread from left to right. On the left, flames at the corner of the tower and rebel soldiers with torches climbing a stair. In the middle, Wang Yun, an old man in court robes, stands at the parapet with a small boy in an emperor's robe at his side, looking down. On the right, a rebel army pouring through the streets below the wall, banners and spears, smoke drifting across the whole frame. Seen from slightly below.",
+    "scene": "A city gate tower on fire at dusk: Wang Yun, an old man in court robes, stands at the parapet with a small boy in an emperor's robe at his side, both looking down at a rebel army pouring through the streets below, smoke drifting past them. Wide shot from below, flames at the corners of the tower.",
     "notes": ""
   }
 }
