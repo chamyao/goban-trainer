@@ -164,7 +164,7 @@ def main():
     # the generated pieces: the first run, then the later batches (any of them may be missing)
     args = [v for v in sys.argv[1:] if not v.startswith("--")]
     base = Path(args[0]) if args else ROOT / "assets/tk/gen"
-    batches = ("xianxia", "xianxia-chars2", "xianxia-interior", "xianxia-redo", "xianxia-props") + (("genshin",) if GENSHIN else ())
+    batches = ("xianxia", "xianxia-chars2", "xianxia-interior", "xianxia-redo", "xianxia-props") + (("genshin", "genshin-redo2") if GENSHIN else ())
     src = [base / d for d in batches if (base / d).exists()]
     OUT.mkdir(parents=True, exist_ok=True)
     kit = json.loads((ROOT / "assets/tk/kits/jade.json").read_text())
@@ -205,11 +205,11 @@ def main():
     items, made = [], {}
     for kind, (_, box, _) in {**OBJECTS, **INTERIOR, **{k: v for k, v in PROPS_GEN.items() if k not in PROPS_SKIP}}.items():
         # a piece that came out wrong is used only once its second try exists
-        where = [d for d in src if d.name in ("xianxia-redo", "genshin")] if kind in REDO else src
+        where = [d for d in src if d.name in ("xianxia-redo", "genshin", "genshin-redo2")] if kind in REDO else src
         if kind in GENSHIN_BAD:   # its isometric try came out wrong: xianxia's until the redo is good
-            where = [d for d in where if d.name != "genshin"]
+            where = [d for d in where if not d.name.startswith("genshin")]
         for k, p in enumerate(v for v in variants(where, kind) if v.stem not in DROP):
-            items.append((f"{kind}#{k}", fit(Image.open(p), iso_box(box) if p.parent.name == "genshin" else box)))
+            items.append((f"{kind}#{k}", fit(Image.open(p), iso_box(box) if p.parent.name.startswith("genshin") else box)))
             made.setdefault(kind, []).append(f"{kind}#{k}")
     sheet, pos = pack(items)
     sheet.save(OUT / "objects.png")
