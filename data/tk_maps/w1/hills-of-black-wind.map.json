@@ -64,7 +64,7 @@
    "w": 2,
    "h": 1,
    "id": "shrine",
-   "label": "The roadside shrine"
+   "label": "The rock under the pine"
   },
   {
    "kind": "building.hut",
@@ -73,7 +73,7 @@
    "w": 3,
    "h": 2,
    "id": "pens",
-   "label": "The farm east of the shrine"
+   "label": "The farm east of the pine"
   },
   {
    "kind": "rock.crag",
@@ -1024,12 +1024,12 @@
    "x": 19,
    "y": 9.7,
    "node": "1-n7b",
-   "label": "The roadside shrine",
+   "label": "The rock under the pine",
    "intro": [
-    "The old shrine at the roadside, dark until now, begins to glow."
+    "Under the great pine by the road, the stones on the flat rock begin to glow."
    ],
    "outro": [
-    "The glow settles. Only the board remains, and a thread of incense."
+    "The old men are gone. Only the game remains."
    ]
   },
   {
@@ -1048,7 +1048,7 @@
    "delivers": "ridge_left",
    "when": "node:n7b",
    "empty": [
-    "The ridge is empty. Read the roadside shrine first."
+    "The ridge is empty. Go to the rock under the pine first."
    ],
    "waiting": [
     [
@@ -1085,7 +1085,7 @@
    "delivers": "ridge_right",
    "when": "node:n7b",
    "empty": [
-    "The ridge is empty. Read the roadside shrine first."
+    "The ridge is empty. Go to the rock under the pine first."
    ],
    "waiting": [
     [

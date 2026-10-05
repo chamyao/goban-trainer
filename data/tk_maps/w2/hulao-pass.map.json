@@ -66,7 +66,7 @@
    "w": 2,
    "h": 1,
    "id": "shrine",
-   "label": "The shrine at the camp"
+   "label": "The rock under the pine"
   },
   {
    "kind": "building.gate",
@@ -1210,12 +1210,12 @@
    "x": 17,
    "y": 16.7,
    "node": "2-m4b",
-   "label": "The shrine at the camp",
+   "label": "The rock under the pine",
    "intro": [
-    "The old shrine at the camp, dark until now, begins to glow."
+    "Under the great pine by the camp, the stones on the flat rock begin to glow."
    ],
    "outro": [
-    "The glow settles. Only the board remains, and a thread of incense."
+    "The old men are gone. Only the game remains."
    ]
   },
   {
@@ -1237,7 +1237,7 @@
    "delivers": "zhangfei_in",
    "when": "node:m4b",
    "empty": [
-    "No one is here yet. Read the shrine by the camp first."
+    "No one is here yet. Go to the rock under the pine first."
    ],
    "deliver": [
     [
@@ -1264,7 +1264,7 @@
    "delivers": "guanyu_in",
    "when": "node:m4b",
    "empty": [
-    "No one is here yet. Read the shrine by the camp first."
+    "No one is here yet. Go to the rock under the pine first."
    ],
    "waiting": [
     [
@@ -1297,7 +1297,7 @@
    "delivers": "liubei_in",
    "when": "node:m4b",
    "empty": [
-    "No one is here yet. Read the shrine by the camp first."
+    "No one is here yet. Go to the rock under the pine first."
    ],
    "waiting": [
     [

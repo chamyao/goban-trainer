@@ -768,8 +768,8 @@
   },
   {
    "id": "hills-of-black-wind--pens",
-   "name": "The farm east of the shrine",
-   "zh": "神龛东边的农庄",
+   "name": "The farm east of the pine",
+   "zh": "大松树东边的农庄",
    "archetype": "interior",
    "map": "hills-of-black-wind--pens.map.json",
    "links": [
@@ -4171,8 +4171,8 @@
    "place": "hills-of-black-wind",
    "spot": "shrine",
    "scene": "shrine",
-   "title": "The Shrine at the Roadside",
-   "objective": "Go to the roadside shrine where the glow has begun.",
+   "title": "The Rock under the Pine",
+   "objective": "Go to the rock under the great pine, where the stones have begun to glow.",
    "after": [
     "1-n7"
    ],
@@ -4301,8 +4301,8 @@
    ],
    "shrine": true,
    "hint": "Pigs, sheep, dogs. Blood.",
-   "objective_zh": "去路旁那座发光的神龛。",
-   "title_zh": "路旁神龛",
+   "objective_zh": "到大松树下的盘石那里去，棋子已经发光了。",
+   "title_zh": "松下盘石",
    "hint_zh": "猪、羊、狗。血。"
   },
   {
@@ -4460,10 +4460,10 @@
       "item:dogblood"
      ],
      "else": "bossearly2",
-     "objective": "Gather the blood of pigs, sheep and dogs at the farm east of the shrine.",
+     "objective": "Gather the blood of pigs, sheep and dogs at the farm east of the pine.",
      "at": "Hills of Black Wind",
      "place": "hills-of-black-wind",
-     "objective_zh": "到神龛东边的农庄，讨来猪、羊、狗的血。"
+     "objective_zh": "到大松树东边的农庄，讨来猪、羊、狗的血。"
     },
     {
      "needs": [
