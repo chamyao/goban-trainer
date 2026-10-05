@@ -20,7 +20,8 @@ for(const place of ['lousang-village','zhuo-county']){
   // (the step just below the doorway and the road beside it used to count as the door)
   for(const d of doors){
     // the road just in front of the door: stand to one side, tap it
-    for(const [what,tx,ty,expectIn] of [['road in front',d.x,d.bottom+3,false],['road beside',d.x+24,d.bottom+3,false],['road beside',d.x-24,d.bottom+3,false],['building face',d.x,d.cy-30,true]]){
+    const iso=await p.evaluate(()=>!!window.__w.iso);   // isometric: the doorstep is drawn on the building's base, so "in front" is a little further out
+    for(const [what,tx,ty,expectIn] of [['road in front',d.x,d.bottom+(iso?12:3),false],['road beside',d.x+24,d.bottom+3,false],['road beside',d.x-24,d.bottom+3,false],['building face',d.x,d.cy-30,true]]){
       if(await p.evaluate(pl=>window.__w.placeId!==pl,place))await go(place);
       const ok=await p.evaluate(([x,y])=>{const w=window.__w,G=w.walkGrid(),C=G.C;for(const dx of [40,-40,0])for(const dy of [30,50]){const px=x+dx,py=y+dy;if(G.free(Math.floor(px/C),Math.floor((py-3)/C))){w.player.setPosition(px,py);return true;}}return false;},[d.x,d.bottom+14]);
       if(!ok){console.log(`skip ${place} -> ${d.to}: no open ground near the door`);continue;}

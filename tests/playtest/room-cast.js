@@ -22,7 +22,7 @@ for(const [room,node] of ROOMS){
   for(let i=0;i<260;i++){await p.waitForTimeout(150);if(await p.locator('.tk-duel svg').count())break;
     const r=await p.evaluate(()=>{const w=window.__w;if(!w||!w.cine||!w.cameras)return null;const cam=w.cameras.main,v=cam.worldView,G=w.walkGrid();
       const out=[];for(const o of w.children.list){if(!o.visible||!o.texture||!/^h-/.test(o.texture.key))continue;
-        const who=o.texture.key.split('-')[1],x=o.x,y=o.y,on=x>=v.x-2&&x<=v.right+2&&y-o.height*.5>=v.y-2&&y<=v.bottom+2;
+        const who=o.texture.key.split('-')[1],x=o.x,y=o.y,d=w.view?w.view(x,y):{x,y},on=d.x>=v.x-2&&d.x<=v.right+2&&d.y-o.height*.5>=v.y-2&&d.y<=v.bottom+2;   /* on screen where it is drawn (the isometric view moves it) */
         // feet inside a solid (furniture, wall): the drawn bodies, not the walk grid's padding
         const inside=w.solids.getChildren().find(z=>{const bd=z.body;return x>bd.x+1&&x<bd.right-1&&y-2>bd.y&&y-2<bd.bottom;});let near=false;const cx=Math.floor(x/G.C),cy=Math.floor((y-3)/G.C);for(let dy=-2;dy<=2&&!near;dy++)for(let dx=-2;dx<=2&&!near;dx++)near=G.free(cx+dx,cy+dy);
         const floor=!inside&&near;
