@@ -1039,7 +1039,29 @@
    "node": "",
    "label": "The left ridge",
    "use": "ridge",
-   "trigger": "talk"
+   "trigger": "talk",
+   "needs": [
+    "item:pigblood",
+    "item:sheepblood",
+    "item:dogblood"
+   ],
+   "delivers": "ridge_left",
+   "when": "node:n7b",
+   "empty": [
+    "The ridge is empty. Nobody has been told to hold it yet."
+   ],
+   "waiting": [
+    [
+     "guanyu",
+     "We hold the ridge. The blood is still to come."
+    ]
+   ],
+   "deliver": [
+    [
+     "guanyu",
+     "Blood and filth for every paper horse. We wait for the gun."
+    ]
+   ]
   },
   {
    "id": "ridge_right",
@@ -1048,7 +1070,29 @@
    "node": "",
    "label": "The right ridge",
    "use": "ridge",
-   "trigger": "talk"
+   "trigger": "talk",
+   "needs": [
+    "item:pigblood",
+    "item:sheepblood",
+    "item:dogblood"
+   ],
+   "delivers": "ridge_right",
+   "when": "node:n7b",
+   "empty": [
+    "The ridge is empty. Nobody has been told to hold it yet."
+   ],
+   "waiting": [
+    [
+     "zhangfei",
+     "A thousand men, and nothing to throw. Hurry, brother."
+    ]
+   ],
+   "deliver": [
+    [
+     "zhangfei",
+     "Let his spirits come. I'll soak every one."
+    ]
+   ]
   }
  ],
  "npcs": [
@@ -1058,7 +1102,15 @@
    "x": 26.5,
    "y": 16.9,
    "say": [
+    "“The black wind has been bad this month.”"
+   ],
+   "gives": "pigblood",
+   "gives_when": "node:n7b",
+   "give": [
     "“The black wind took my roof. Take the pigs' blood, if it ends this.”"
+   ],
+   "given": [
+    "“You have my pigs' blood. Go, and stop this wind.”"
    ]
   },
   {
@@ -1067,7 +1119,15 @@
    "x": 30.5,
    "y": 15.9,
    "say": [
+    "“Keep off the hills, general.”"
+   ],
+   "gives": "sheepblood",
+   "gives_when": "node:n7b",
+   "give": [
     "“My flock hasn't grazed since the storm. Take a sheep, general. Take what you need.”"
+   ],
+   "given": [
+    "“You've had the best of my flock, general. Go on.”"
    ]
   },
   {
@@ -1076,8 +1136,36 @@
    "x": 26.5,
    "y": 15.9,
    "say": [
+    "“My hounds won't go near that hill.”"
+   ],
+   "gives": "dogblood",
+   "gives_when": "node:n7b",
+   "give": [
     "“My hounds won't go near that hill. If their blood breaks the spell, take it.”"
+   ],
+   "given": [
+    "“You have the dog's blood. May it do what it must.”"
    ]
+  },
+  {
+   "id": "npc-4",
+   "kind": "hero.guanyu",
+   "x": 13.5,
+   "y": 20.9,
+   "say": [
+    "“Bring the blood, brother. We hold the left.”"
+   ],
+   "when": "node:n7b"
+  },
+  {
+   "id": "npc-5",
+   "kind": "hero.zhangfei",
+   "x": 36.5,
+   "y": 20.9,
+   "say": [
+    "“Bring the blood, brother. We hold the right.”"
+   ],
+   "when": "node:n7b"
   }
  ],
  "exits": [
