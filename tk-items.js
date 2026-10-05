@@ -53,6 +53,13 @@ const WorldItems = {
     return true;
   },
 
+  remove(w, key) {
+    const all = TK.ls(this.KEY), list = all[w.n] || [], i = list.indexOf(key);
+    if (i < 0) return false;
+    list.splice(i, 1); all[w.n] = list; TK.lsSet(this.KEY, all);
+    return true;
+  },
+
   /* ---------- Phaser: horse sheets and walk cycles ---------- */
   preload(scene) {
     for (const c of this.COATS) scene.load.spritesheet(`horse-${c}`, `assets/tk/horses/${c}.png?v=2`, { frameWidth: this.FRAME[0], frameHeight: this.FRAME[1] });

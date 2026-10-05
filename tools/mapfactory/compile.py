@@ -253,14 +253,18 @@ def compile_map(m, kit, out_dir):
     for s in m["spots"]:
         obj(s["id"], "spot", s["x"] * T, s["y"] * T, node=s["node"], label=s.get("label", ""), label_zh=ZH.get(s.get("label", ""), ""),
             **({"trigger": s["trigger"]} if s.get("trigger") else {}), **({"use": s["use"]} if s.get("use") else {}),
+            **({"needs": json.dumps(s["needs"] if isinstance(s["needs"], list) else [s["needs"]])} if s.get("needs") else {}),
+            **{k: s[k] for k in ("delivers", "when") if s.get(k)},
+            **{k: json.dumps([place_step(l)[0] for l in s[k]], ensure_ascii=False) for k in ("empty", "waiting", "deliver", "delivered") if s.get(k)},
             **{k: json.dumps([place_step(l)[0] for l in s[k]], ensure_ascii=False) for k in ("intro", "outro") if s.get(k)})
     for n in m["npcs"]:
         sprite, drawn = (n["kind"][5:], False) if n["kind"].startswith("hero.") else kit.folk(n["kind"], f"{m['id']}/{n['id']}")
         obj(n["id"], "npc", n["x"] * T, n["y"] * T, kind=n["kind"], sprite=sprite, wander=bool(n.get("wander")),
             **({"drawn": True} if drawn else {}),
             say=json.dumps([place_step(l, n["kind"])[0] for l in n.get("say", [])], ensure_ascii=False),
-            **{k: n[k] for k in ("challenge", "until", "face") if n.get(k)},
-            **{k: json.dumps([place_step(l, n["kind"])[0] for l in n[k]], ensure_ascii=False) for k in ("intro", "win", "done") if n.get(k)})
+            **{k: n[k] for k in ("challenge", "until", "face", "when", "gives", "gives_when") if n.get(k)},
+            **{k: json.dumps([place_step(l, n["kind"])[0] for l in ([n[k]] if isinstance(n[k], str) else n[k])], ensure_ascii=False)
+               for k in ("intro", "win", "done", "give", "given") if n.get(k)})
     for e in m["exits"]:
         obj(f"exit-{e['to']}", "exit", e["x"] * T, e["y"] * T, e["w"] * T, e["h"] * T, to=e["to"], side=e["side"])
     for k, (x, y) in m["entries"].items():
