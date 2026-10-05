@@ -27,7 +27,7 @@ const state=()=>p.evaluate(()=>{const w=window.__w;const h=document.querySelecto
 // the ring is moved like everything else, so its own x, y must be the flat map's)
 const drawn=()=>p.evaluate(()=>{const w=window.__w,out={};
   for(const [k,m] of w.actMarks){const id=(w.npcs.find(n=>n.spr===k)||{}).gives||(Object.entries(w.spots).find(([,s])=>s===k)||[])[0];const feet=w.view(k.x,k.y);
-    const rings=w.children.list.filter(o=>o.type==='Ellipse'&&o.visible);let best=1e9;for(const o of rings){const at=o.isoFixed?{x:o.x,y:o.y}:w.view(o.x,o.y);best=Math.min(best,Math.hypot(at.x-feet.x,at.y-feet.y));}
+    const rings=w.children.list.filter(o=>(o.type==='Ellipse')&&o.visible);   /* the ring at the feet (a diamond over the head may come with it) */let best=1e9;for(const o of rings){const at=o.isoFixed?{x:o.x,y:o.y}:w.view(o.x,o.y);best=Math.min(best,Math.hypot(at.x-feet.x,at.y-feet.y));}
     out[id]=Math.round(best);}return out;});
 let s=await state();
 check(!s.hint&&s.marked.length===0,`before the shrine: no hint line ("${s.hint}"), nothing marked (${s.marked.join(', ')||'none'})`);
@@ -53,6 +53,6 @@ for(const r of ridges){await p.evaluate(r=>{const w=window.__w;w.deliverAt(w.spo
 s=await state();
 check(!s.hint,`both ridges supplied: the hint line is gone ("${s.hint}"); goal "${s.goal.slice(0,60)}"`);
 check(s.marked.length===0,`nothing marked any more (${s.marked.join(', ')||'none'})`);
-const rings=await p.evaluate(()=>window.__w.children.list.filter(o=>o.type==='Ellipse'&&o.visible&&o.strokeColor===0xf2cf6a).length);
+const rings=await p.evaluate(()=>{const w=window.__w,mk=new Set([...w.actMarks.values()]);return w.children.list.filter(o=>o.visible&&(o.type==='Ellipse'||o.type==='Polygon'||o.type==='Triangle')&&o.depth<9000&&o.strokeColor===0xf2cf6a).length;});
 check(rings===0,`no marker rings left over (${rings})`);
 console.log(fails?`hints: ${fails} failed`:'hints: all ok');await b.close();process.exit(fails?1:0);})();

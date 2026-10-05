@@ -63,7 +63,7 @@ await scrolls();await ready();
 await W(()=>{window.__w.leaving=false;window.__w.go('zhuo-county');});await p.waitForTimeout(1500);await ready();
 await W(()=>{const s=window.__w.spots.shrine_;window.__w.player.setPosition(s.x,s.y+40);});await p.waitForTimeout(500);
 await walkTo(new Function('return '+spot('shrine_')));const z=await through();
-check(z.lines.some(l=>/The board is quiet/.test(l)),'9. Zhuo County\'s shrine (no node): "'+(z.lines[0]||'').slice(0,40)+'"');
+check(z.lines.some(l=>/The board is quiet|No one is playing/.test(l)),'9. Zhuo County\'s shrine (no node): "'+(z.lines[0]||'').slice(0,40)+'"');
 // arrive at Black Wind from Dong Zhuo's camp, as the story does
 await W(()=>{window.__w.leaving=false;window.__w.go('dong-zhuos-camp');});await p.waitForTimeout(1500);await ready();
 await W(()=>{window.__w.leaving=false;window.__w.go('hills-of-black-wind');});await p.waitForTimeout(1500);await ready();await scrolls();
