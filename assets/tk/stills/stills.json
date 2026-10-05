@@ -365,16 +365,20 @@
   "provider": "replicate",
   "model": "neutral-1",
   "look": "neutral",
-  "made": "2026-10-05"
+  "made": "2026-10-05",
+  "picked": "in game until 2026-10-05",
+  "approved": "user, 2026-10-05 (still picker)"
  },
  "dingyuan_a": {
   "file": "dingyuan_a.jpg",
   "scene": "dingyuan",
-  "prompt": "Inside a lamplit tent at night, Ding Yuan sits at a desk reading by a candle and looks up; Lü Bu stands over him in armour with a drawn sword. Only these two. No blood. Ding Yuan is an old provincial governor with a grey beard, in a dark official robe. Lü Bu is a tall, strikingly handsome young warrior, broad-shouldered, in ornate red and gold armour with a gold crown bearing two long pheasant-feather plumes, carrying a tall crescent-bladed halberd. Style: clean modern anime illustration like a quiet historical anime film: natural colours, soft daylight or warm lamplight, gentle cel shading, detailed painted backgrounds, calm story-telling composition at eye level, natural poses and expressions; no speed lines, no impact effects, no motion blur, no exaggerated action poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
+  "prompt": "Inside a lamplit tent at night, Ding Yuan sits at a desk reading by a candle and looks up; Lü Bu stands over him in armour with a drawn sword. Only these two. No blood. Ding Yuan is an old provincial governor with a grey beard, in a dark official robe. Lü Bu is a tall, strikingly handsome young warrior, broad-shouldered, in ornate red and gold armour with a gold crown bearing two long pheasant-feather plumes, carrying a tall crescent-bladed halberd. Style: in the style of the anime The God of High School: bold dynamic action anime, thick energetic lineart, high contrast, vivid saturated colours, speed lines and impact effects, extreme fighting poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
   "provider": "replicate",
   "model": "neutral-1",
-  "look": "neutral",
-  "made": "2026-10-05"
+  "look": "2",
+  "made": "2026-10-05",
+  "picked": "2",
+  "approved": "user, 2026-10-05 (still picker)"
  },
  "lvboshe_a": {
   "file": "lvboshe_a.jpg",
@@ -445,11 +449,13 @@
  "garden_a": {
   "file": "garden_a.jpg",
   "scene": "garden",
-  "prompt": "A peony garden at night under the moon: Diaochan kneels with her forehead near the ground; before her Wang Yun bows low; behind them a small pavilion with a stone weiqi board on its table and two stones on it, no one at it. Only these two. Diaochan is a graceful young woman of sixteen in a pale silk robe, hair in an elegant bun with a jade pin. Wang Yun is an old minister with a long grey beard, in dark court robes and a tall official's cap. Style: clean modern anime illustration like a quiet historical anime film: natural colours, soft daylight or warm lamplight, gentle cel shading, detailed painted backgrounds, calm story-telling composition at eye level, natural poses and expressions; no speed lines, no impact effects, no motion blur, no exaggerated action poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
+  "prompt": "A peony garden at night under the moon: Diaochan kneels with her forehead near the ground; before her Wang Yun bows low; behind them a small pavilion with a stone weiqi board on its table and two stones on it, no one at it. Only these two. Diaochan is a graceful young woman of sixteen in a pale silk robe, hair in an elegant bun with a jade pin. Wang Yun is an old minister with a long grey beard, in dark court robes and a tall official's cap. Style: in the style of the anime The God of High School: bold dynamic action anime, thick energetic lineart, high contrast, vivid saturated colours, speed lines and impact effects, extreme fighting poses. No text, no speech or thought bubbles, no captions, no calligraphy, no inscriptions, no characters, no red seal stamps, no seals, no signature, no watermark. Han dynasty China, about 184 AD: no guns, rifles, firearms, modern helmets or modern uniforms, no glass, no paved roads.",
   "provider": "replicate",
   "model": "neutral-1",
-  "look": "neutral",
-  "made": "2026-10-05"
+  "look": "2",
+  "made": "2026-10-05",
+  "picked": "2",
+  "approved": "user, 2026-10-05 (still picker)"
  },
  "pavilion_a": {
   "file": "pavilion_a.jpg",
