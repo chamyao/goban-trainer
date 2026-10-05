@@ -69,9 +69,7 @@ Implementer key: **Plot** = Plot/Story, **Integ** = Primary Integration, **Gfx**
 
 ## Open questions for the user
 
-None at present. (Dropped by the user: Book-end choices and keepsakes.)
-
-2. (Settled.) A slip keeps the same problem with a fixed 30 s cooldown, in every Book and for bosses. A gated battle shows a defeat scene and no board.
+None at present. Settled: a slip keeps the same problem with a fixed 30 s cooldown in every Book and for bosses; a gated battle shows a defeat scene and no board. Dropped by the user: Book-end choices and keepsakes.
 
 ## Suggested first pilot
 
