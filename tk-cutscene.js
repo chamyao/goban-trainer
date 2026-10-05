@@ -148,6 +148,7 @@ const WorldCutscene = {
       // nothing jumps when a scene starts; none for someone sitting inside a prop
       const big = a.horse || a.beast;
       if (!a.shadow) a.shadow = scene.textures.exists("@shadow") ? scene.add.image(0, 0, "@shadow") : scene.add.ellipse(0, 0, 14, 5, 0x140c06, .28);
+      a.shadow.isoWith = a.spr;   // nudged with its owner in the isometric view (tk-iso.js)
       a.shadow.setScale(big ? 24 / 14 : a.fallen ? 16 / 14 : Math.max(1, a.spr.displayWidth / 14), big ? 1.4 : 1)
         .setPosition(Math.round(a.spr.x), Math.round(a.ground ?? a.spr.y) - 1).setDepth(-999)
         .setVisible(a.spr.visible && !a.inside).setAlpha(a.spr.alpha);
@@ -180,6 +181,7 @@ const WorldCutscene = {
         } else {
           scene.hero(who);
           a = actors[id] = { id, who, spr: scene.add.sprite(0, 0, `h-${who}-down-0`).setOrigin(.5, 1) };
+          a.spr.isoSpread = true;   // isometric: kept from standing on top of a neighbour (tk-iso.js)
         }
       }
       const [x, y] = px(at);
