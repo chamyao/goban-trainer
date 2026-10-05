@@ -33,6 +33,7 @@ starts from a fresh save.
 | tap-after-talk | (arg: place) talk to every villager, then tap the ground around Liu Bei in four directions: he must move every time |
 | scene-arming | a scene doesn't start as you arrive; it starts after walking in (room and outdoor map) |
 | spot-reach | every story spot can be reached on foot to within its trigger radius (36 px) |
+| spot-tap-once | tap a story spot: its scene plays once; after it he doesn't walk on and set the spot off again |
 | star-lords | peach garden: the two immortals stay through the problem, vanish the moment it is won, the narration follows |
 | go-table-ogs | the 9×9 go table with a stand-in OGS socket: sit, search sent, opponent walks in, live board, move, resign, leave |
 | drag-and-hover | desktop: hand cursor over people; hold-and-drag steers |

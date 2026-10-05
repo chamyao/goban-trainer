@@ -336,7 +336,7 @@ function worldScenes() {
         else if (d < WORLD_NEAR && s.armed) {
           s.armed = false;
           const q = this.openQuest(s);
-          if (q) { P.setVelocity(0); return this.playQuest(q, s); }
+          if (q) { P.setVelocity(0); this.walk = null; return this.playQuest(q, s); }   // a tap on the spot ends its walk here
         }
       }
     }

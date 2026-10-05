@@ -35,7 +35,10 @@ for(let round=0;round<2;round++) for(let i=0;i<n;i++){
   for(const [dx,dy] of [[50,0],[-50,0],[0,40],[0,-40]]){
     if(await p.evaluate(()=>window.__w.ui.busy())){await p.evaluate(()=>{while(window.__w.ui.busy())window.__w.ui.advance();});await p.waitForTimeout(200);}
     const s0=await st(); const tx=s0.p[0]+dx, ty=s0.p[1]+dy;
-    const free=await p.evaluate(([x,y])=>{const G=window.__w.walkGrid();return G.free(Math.floor(x/8),Math.floor((y-3)/8));},[tx,ty]);
+    // only taps the game can route somewhere else: it aims at y+4 and snaps a blocked tap to the
+    // nearest open cell, which next to a fence can be the one he stands on (no move is right then)
+    const free=await p.evaluate(([x,y])=>{const w=window.__w,G=w.walkGrid();if(!G.free(Math.floor(x/8),Math.floor((y+1)/8)))return false;
+      const path=w.findPath(w.player.x,w.player.y-3,x,y+1);return !!path&&path.length>0&&Math.hypot(path[path.length-1].x-w.player.x,path[path.length-1].y-w.player.y+3)>=8;},[tx,ty]);
     if(!free) continue;
     if(await p.evaluate(([x,y])=>window.__w.npcs.some(n=>n.spr.visible&&Math.hypot(n.spr.x-x,n.spr.y-8-y)<22),[tx,ty])) continue;
     await tapW(tx,ty); await p.waitForTimeout(900);
