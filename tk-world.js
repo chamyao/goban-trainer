@@ -31,7 +31,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=27`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=28`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
@@ -178,6 +178,10 @@ const WorldFX = {
     if (scene.lampFx) scene.lampFx.destroy();
     if (scene.ambientFx) scene.ambientFx.destroy();
     scene.lampFx = scene.ambientFx = null;
+    // the ruins are drained of colour: ash-grey light over everything (WebGL only)
+    const fx = scene.cameras.main.postFX;
+    if (scene.ashFx) { fx && fx.remove(scene.ashFx); scene.ashFx = null; }
+    if (kind === "ruins" && fx) { scene.ashFx = fx.addColorMatrix(); scene.ashFx.saturate(-.65); scene.ashFx.brightness(.92, true); }
     if (kind === "interior") scene.lampFx = scene.add.image(0, 0, "@lamp").setOrigin(0).setScrollFactor(0).setDepth(9e4).setDisplaySize(W, H);
     const C = {
       garden: { tex: "@petal", frequency: 260, y: -6, speedY: { min: 10, max: 18 }, speedX: { min: -8, max: 6 }, lifespan: 12000 },
@@ -187,6 +191,7 @@ const WorldFX = {
       hills: { tex: "@leaf", frequency: 800, x: -6, y: { min: 0, max: 180 }, speedX: { min: 16, max: 30 }, speedY: { min: -3, max: 5 }, lifespan: 14000 },
       mountain: { tex: "@leaf", frequency: 800, x: -6, y: { min: 0, max: 180 }, speedX: { min: 16, max: 30 }, speedY: { min: -3, max: 5 }, lifespan: 14000 },
       camp: { tex: "@ember", frequency: 450, y: 186, speedY: { min: -18, max: -9 }, speedX: { min: -5, max: 5 }, lifespan: 9000, alpha: { start: 1, end: 0 } },
+      ruins: { tex: "@mote", frequency: 120, y: -6, speedY: { min: 6, max: 14 }, speedX: { min: -6, max: 4 }, lifespan: 16000, tint: 0x9a948e, scale: { min: 1, max: 2 } },   // falling ash
       interior: { tex: "@mote", frequency: 500, y: { min: 0, max: 180 }, speedY: { min: -2, max: 2 }, speedX: { min: -2, max: 2 }, lifespan: 6000, alpha: { start: 0, end: .8, ease: "Sine.easeInOut", yoyo: true } },
     }[kind];
     if (!C || !scene.add.particles) return;
@@ -208,9 +213,9 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=27`);
-      this.load.json("kit", `assets/tk/kits/${kit}.json?v=15`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=26`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=28`);
+      this.load.json("kit", `assets/tk/kits/${kit}.json?v=16`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=27`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
@@ -219,7 +224,7 @@ function worldScenes() {
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
       for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=37`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=38`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });

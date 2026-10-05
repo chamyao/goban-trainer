@@ -142,6 +142,56 @@ def bundle(name, n, gap, tilt=0):
     return trim(out)
 
 
+# ---- drawn by hand (tools/draw_tk_extras.Grid): what the pack lacks, for Book 2 ----
+def _grid(w, h):
+    import sys
+    sys.path.insert(0, str(ROOT / "tools"))
+    from draw_tk_extras import Grid
+    return Grid(w, h)
+
+
+def pig():   # a tied pig, side view
+    g = _grid(20, 14)
+    pink, pinkD = "#e8a0a0", "#c07878"
+    g.ellipse(10, 7, 8, 5, pink); g.ellipse(10, 9, 7, 3, pinkD)
+    g.ellipse(17, 6, 3, 3, pink); g.rect(19, 6, 1, 2, "#a85a5a")        # snout
+    g.set(16, 4, "#222222"); g.rect(14, 2, 2, 2, pinkD)                  # eye, ear
+    for x in (5, 8, 12, 15):
+        g.rect(x, 11, 2, 2, pinkD)                                       # legs
+    g.set(2, 5, pinkD); g.set(1, 4, pinkD)                               # tail
+    g.rect(6, 6, 1, 6, "#8a6a3a")                                        # the rope round its middle
+    return g.outline().image()
+
+
+def well():   # a round stone well with a wooden frame and a rope bucket
+    g = _grid(28, 30)
+    st, stD, stL = "#9a9ea6", "#6a6e76", "#c0c4c8"
+    g.rect(3, 16, 22, 11, stD); g.ellipse(14, 16, 11, 4, st); g.ellipse(14, 16, 8, 2.5, "#2a2e36")
+    for x in range(4, 24, 5):
+        g.rect(x, 19, 1, 8, stL)                                         # stone joints
+    wood = "#8a5a2a"
+    g.rect(3, 2, 2, 16, wood); g.rect(23, 2, 2, 16, wood); g.rect(2, 2, 24, 2, wood); g.rect(1, 0, 26, 2, "#3e4350")
+    g.rect(13, 4, 1, 8, "#c8a070"); g.rect(11, 12, 5, 4, "#7a5228")      # rope and bucket
+    return g.outline().image()
+
+
+def mirror():   # a round bronze mirror on a wooden stand
+    g = _grid(16, 22)
+    g.ellipse(8, 7, 6.5, 6.5, "#b08a42"); g.ellipse(8, 7, 5, 5, "#e2c886"); g.ellipse(6.5, 5.5, 1.5, 1.5, "#fff4d0")
+    g.rect(7, 13, 2, 6, "#7a4a22"); g.rect(3, 19, 10, 2, "#7a4a22")
+    return g.outline().image()
+
+
+def pond():   # a small lotus pond with a stone rim
+    g = _grid(36, 18)
+    g.ellipse(18, 9, 17, 8, "#8a8e94"); g.ellipse(18, 9, 15, 6.5, "#4a8aa8"); g.ellipse(18, 10, 13, 5, "#3a7a98")
+    for x, y in ((9, 8), (22, 6), (26, 11), (14, 12)):
+        g.ellipse(x, y, 2.5, 1.5, "#5aa05a")                             # lily pads
+    g.rect(21, 4, 2, 2, "#f0a8c0"); g.set(22, 3, "#f8d0e0")              # a lotus flower
+    g.rect(13, 10, 2, 2, "#f0a8c0")
+    return g.outline().image()
+
+
 # the registry of props: kind -> footprint (w, h tiles) and how to draw it
 PROPS = {
     "cagecart": {"size": [3, 1], "atlas": "cagecart"},
@@ -172,6 +222,11 @@ PROPS = {
     "gate": {"size": [3, 1], "kit": ["building.gate", "building.moongate"]},
     "desk": {"size": [2, 1], "kit": ["furn.desk", "furn.table", "camp.table"]},
     "hall": {"size": [4, 2], "kit": ["building.hall", "building.inn", "building.house"]},
+    # Book 2
+    "pig": {"size": [1, 1], "atlas": "pig"},
+    "well": {"size": [2, 1], "atlas": "well"},
+    "mirror": {"size": [1, 1], "atlas": "mirror"},
+    "water": {"size": [2, 1], "atlas": "pond"},
 }
 PROPS["forge"]["fire"] = True
 
@@ -208,6 +263,10 @@ def main():
         "item.green_dragon": trim(img("props/Weapons_Lance.png")),
         "item.serpent_spear": trim(img("props/Weapons_Lance2.png")),
         "item.silver": trim(img("props/Object_MoneyBag.png")),
+        "pig": pig(),
+        "well": well(),
+        "mirror": mirror(),
+        "pond": pond(),
     }
     # one row, 1px apart
     W = sum(f.width + 1 for f in frames.values())
