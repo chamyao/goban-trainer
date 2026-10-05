@@ -66,8 +66,11 @@ OBJECTS = {
 CHARACTERS = {
     "liubei": "young Chinese hero, white robe with gold trim and a green sash, black topknot, short neat black beard, "
               "twin swords at his belt, calm",
-    "guanyu": "tall broad Chinese general, deep red face, very long black beard down to his chest, green robe and green "
-              "headscarf, carrying a long crescent-bladed glaive",
-    "zhangfei": "stocky barrel-chested Chinese warrior, wild bristling black beard, round fierce eyes, dark grey and "
-                "black armour with red trim, red headband, carrying a long spear",
+    "guanyu": "tall Chinese general, full head of black hair in a topknot under a green cloth headscarf, deep red "
+              "face, very long flowing black beard reaching his chest, long green robe, holding a crescent-bladed glaive",
+    "zhangfei": "burly Chinese warrior in a dark brown robe with a black sash, no armour, black hair in a topknot, big "
+                "wild black beard covering his jaw, round fierce eyes, holding a long serpent spear",
 }
+
+# how many tries (different seeds) to make of each, to choose from: char.<who>-<n>.png
+CHAR_TRIES = {"liubei": 1, "guanyu": 3, "zhangfei": 3}

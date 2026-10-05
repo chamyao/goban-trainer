@@ -112,8 +112,9 @@ def kit_set(a):
              for k, (p, (w, h), n) in OBJECTS.items()]
     if a.set == "xianxia-chars":
         from xianxia_spec import CHARACTERS
+        from xianxia_spec import CHAR_TRIES
         jobs = [(f"char.{k}", "rd-animation", {"style": "four_angle_walking", "width": 48, "height": 48,
-                                                "return_spritesheet": True, "prompt": f"{p}, {LOOK}"}, 1)
+                                                "return_spritesheet": True, "prompt": f"{p}, {LOOK}"}, CHAR_TRIES.get(k, 1))
                 for k, p in CHARACTERS.items()]
     first = True
     for name, model, inp, n in jobs:
@@ -125,7 +126,14 @@ def kit_set(a):
         inp = {**inp, "num_images": n, "input_palette": pal} if model != "rd-animation" else inp
         t = time.time()
         try:
-            imgs = run(model, inp)
+            if model == "rd-animation":   # one image a request: n requests, n seeds
+                imgs = []
+                for i in range(n):
+                    if i:
+                        time.sleep(a.pause)
+                    imgs += run(model, {**inp, "seed": 1000 + i})
+            else:
+                imgs = run(model, inp)
         except Exception as e:
             print(f"  {name}: failed: {e}")
             continue

@@ -259,7 +259,10 @@ class Layout:
         if lid:
             self.anchors[lid] = door
         if node or use:   # a story spot, or one with a use of its own (e.g. "ogs": the go table for live games)
-            self.spots.append({"id": lid or f"spot-{node}", "x": door[0] + (0 if fw % 2 == 0 else .5), "y": door[1] + .7,
+            # at a door for a building; a tall rock or tree gets a tile of room, or whoever stands
+            # there (a rider especially) is drawn into it
+            room = 1 if kind.split(".")[0] in ("rock", "tree") else 0
+            self.spots.append({"id": lid or f"spot-{node}", "x": door[0] + (0 if fw % 2 == 0 else .5), "y": door[1] + .7 + room,
                                "node": node or "", "label": label or "", **({"use": use, "trigger": "talk"} if use else {}), **(lines or {})})
         return o
 
