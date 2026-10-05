@@ -16,7 +16,7 @@ Written by the Game Design session. It rests on reading `docs/three-kingdoms-pla
 - **Star Lords per scene follow Plot's proposal:** in person at four World 1 problems (oath, Daxing, Qingzhou, Black Wind), a sign of them at about three more (e.g. the mulberry-tree fortune-teller, a board left on a table at the inn), and none at the quiet scenes (cage cart, Dong Zhuo, the inspector, the notice), where the board's silence is the point and the problem is framed as a decision the character must get right. Other characters (Zhu Jun, Lu Zhi, later Xu Shu) may give hints.
 - **Star Lords' shrines (revised by the user via Plot):** every town has a small weiqi shrine in three looks (dark, lit while a hint is waiting, settled once solved), in the manner of the Keeper's Shrines in Black Myth: Wukong. It replaces the "sign" scenes. Solving the shrine's board visibly changes the world (people and places have different lines before and after). Design recommendation: a settled shrine is also a **hint log** (touching it repeats the Star Lords' hint and the current objective); it is **not** a rest point, because the 30 s cooldown is settled and there is nothing to heal. Open for Plot: the rule "the Star Lords appear only after a failure" fits gated battles but not the peach-garden oath or Daxing, so define the trigger as "a moment of need".
 - **Objectives state the goal; the Star Lords' hint says what to do** (user decision). No item names or counts in the objective line (Black Wind: "Defeat the Black Wind."; Book 2: "Defeat Lü Bu at Hulao Pass.").
-- **First pilot: Black Wind**, then Qingzhou's flanks, then Lu Zhi's errand.
+- **Pilots: Black Wind**, then Qingzhou's flanks, then Lu Zhi's errand (status in "Build status" below).
 
 ## What the game is today
 
@@ -88,3 +88,11 @@ Agreed with Plot/Story; the script draft is Plot's (`docs/world2-script-draft.md
 - **Hua Xiong:** no extra mechanic. His problem is framed as the wine cooling: Cao Cao's cup steams beside the board, and on the solve Guan Yu returns with the wine still warm. No timer.
 - **Star Lords:** in person at Hulao (danger); only a sign at the Diaochan plot; none at the quiet scenes (Lü Boshe's house, the wine, Dong Zhuo's fall).
 - **Perspective:** Liu Bei is absent in ch. 3-4, so Cao Cao's scenes are side stories, as in Book 1.
+
+## Build status
+
+- **Black Wind (World 1, fail-then-prepare):** built and passed. Testing ran 9 of 10 spec checks on a phone, all passing, and the tenth's one defect (Liu Bei's fall-back spot) is with Integration and Plot. The stretch takes about 4 minutes and didn't feel like chores.
+- **Qingzhou's flanks (World 1, formation):** written (Plot 8ef656f). The brothers go to their hills (marks `flank_left`, `flank_right`) before the ambush. Awaiting Testing.
+- **Lu Zhi's errand (World 1, delivery):** written (Plot 8ef656f). The errand to Yingchuan arrives too late. Awaiting Testing.
+- **Book 2 (Hulao Pass):** in the game data (Plot's branch). The ordered formation uses the existing blocks; a wrong brother gives a correction line (`empty`/`waiting`). Awaiting Testing.
+- **Tap to preview** (rules for problems): decided by Plot; a ghost stone is never a slip.
