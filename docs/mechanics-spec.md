@@ -2,7 +2,7 @@
 
 Player-facing rules for the mechanics agreed in `docs/game-design.md`, written so Integration can build them without guessing and Testing can check them. How they are built is Integration's call. The story content is Plot's (`docs/world1-blackwind-gated.md`); this file only says how it behaves.
 
-**Pilot:** World 1, Black Wind. Built on `main` (1a3a72e), with the gate's `"count": False` for goal-only objectives. **What already exists on `main` (c60889f):** the shrine landmark in every town, its three looks, Black Wind's roadside shrine and node `1-n7b`, and its objective text. **What is missing:** the logic that picks a shrine's look (`TK.shrineState` is called but not defined, so every shrine shows dark), items given by talking, delivery, and gating a node.
+**Pilot:** World 1, Black Wind. Built on `main` (1a3a72e), with the gate's `"count": False` for goal-only objectives. All four blocks are built and played through on a phone (Testing, main 80dc3ef): about 4 minutes from the first try to the boss board.
 
 ## Four building blocks
 
@@ -54,6 +54,7 @@ A condition is always one of: a story node cleared, an item held, or a place mar
 | After, player holds all three | The handover line; the ridge is marked supplied |
 
 - Delivering does not use up the items, so one set supplies both ridges. Either ridge first.
+- The player delivers by **talking to Guan Yu or Zhang Fei** on the ridge, not to the empty spot (changed after a user report).
 - The objective line does not count (see section 2).
 - After Yangcheng is won, the three supply items are removed (they have done their job and shouldn't clutter the possessions).
 
