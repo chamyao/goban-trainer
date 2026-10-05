@@ -231,8 +231,6 @@ def main():
     for i, (m, _, _) in enumerate(edged):
         kit["materials"][m] = {"blob": ["x_edges", i * 10, 0, 10, 10], "inside": [i * 10 + 2, 9],
                                "outside": ["x_tiles", 0, row["grass"]]}
-    for kind, names in made.items():
-        kit["kinds"][kind] = [["x_objects", *pos[n]] for n in names]
     # the shrine's lit and settled looks: the generated stone, warmed (the player adds the glow and the smoke)
     if "landmark.shrine" in made:
         base = dict(items)[made["landmark.shrine"][0]]
@@ -248,6 +246,9 @@ def main():
             made[f"landmark.shrine.{state}"] = [f"landmark.shrine.{state}#0"]
         sheet, pos = pack(items)
         sheet.save(OUT / "objects.png")
+    # every piece's place on the sheet, after the last packing (the shrine's looks repack it)
+    for kind, names in made.items():
+        kit["kinds"][kind] = [["x_objects", *pos[n]] for n in names]
     if detail:   # the scatter on the grass: our tufts and flowers
         kit["detail"] = {"tiles": [["x_tiles", i, len(ground), 1] for i in range(len(detail))],
                          "density": kit["detail"]["density"]}
