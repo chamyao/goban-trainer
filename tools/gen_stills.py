@@ -248,11 +248,7 @@ def review(name, fn, ids, model, tries, look=None, workers=8):
     restyle = (lambda t: t.replace(STYLE, f"{STYLES[look]} {NEGATIVE}")) if look else (lambda t: t)
     # candidates from different models sit side by side: <id>--<model>-<look>-<n>
     tag = (f"{model.split('/')[-1]}-" if model else "") + (f"{look}-" if look else "")
-    if look == "min":   # the minimal prompt: scene, people in a few words, one short style line
-        from tk_stills import prompt_min
-        jobs = [(f"{sid}--{tag}{n}", prompt_min(sid)) for sid in ids for n in range(1, tries + 1)]
-    else:
-        jobs = [(f"{sid}--{tag}{n}", restyle(request(name, sid)[0])) for sid in ids for n in range(1, tries + 1)]
+    jobs = [(f"{sid}--{tag}{n}", restyle(request(name, sid)[0])) for sid in ids for n in range(1, tries + 1)]
     jobs = [(stem, text) for stem, text in jobs if not (out / f"{stem}.jpg").exists()]
 
     def one(job):   # all at once; http() waits out any 429 itself
@@ -365,7 +361,7 @@ def main():
                     "stills/samples/review/ (never stills.json)")
     ap.add_argument("--tries", type=int, default=2, help="with --review: candidates per still")
     ap.add_argument("--jobs", type=int, default=8, help="with --review: requests in flight at once")
-    ap.add_argument("--look", choices=sorted(STYLES) + ["min"], help="with --review: a candidate style (tk_stills.STYLES) "
+    ap.add_argument("--look", choices=sorted(STYLES), help="with --review: a candidate style (tk_stills.STYLES) "
                     "instead of STYLE, the negatives kept")
     ap.add_argument("--styles", nargs="*", metavar="KEY", help="every candidate style on --only stills, and every "
                     "portrait framing x style on these people (e.g. guanyu), into stills/samples/styles/")

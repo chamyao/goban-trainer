@@ -277,43 +277,6 @@ def prompt(sid, n_style=0, cast_refs=()):
     return " ".join(parts) + " " + style_note(n_style) + STYLE
 
 
-# ---- the minimal prompt (the user: "keep the styling minimal and let the scene carry") ----------
-# the scene as written, each person in a few words, one short style line; no list of "no"s
-STYLE_MIN = "2D anime illustration, Han dynasty China."
-CAST_MIN = {
-    "liubei": "young man, kind face, short black beard, long earlobes, topknot, white robe",
-    "guanyu": "tall man, red face, long black beard, green robe",
-    "zhangfei": "stocky man, wild black beard, dark clothes",
-    "caocao": "lean man, thin moustache, black official's cap, dark red robe",
-    "lvbu": "handsome young warrior, red and gold armour, pheasant-feather crown",
-    "sunjian": "general, short beard, red armour, red cap",
-    "diaochan": "young woman, pale silk robe, hair in a bun",
-    "zhangbao": "sorcerer, long loose hair, yellow headscarf, yellow robe",
-    "zhangjiao": "old sorcerer, white beard, yellow headscarf, yellow robe",
-    "dongzhuo": "huge heavy warlord, beard, sneer, armour",
-    "luzhi": "old scholar-general, grey beard, grey clothes",
-    "yuanshao": "proud nobleman, neat beard, purple robe, tall cap",
-    "chengong": "thin magistrate, sparse beard, dark robe, scholar's cap",
-    "wangyun": "old minister, grey beard, dark court robe, tall cap",
-    "xushao": "scholar, thin beard, scholar's hat, pale robe",
-    "inspector": "plump sneering official, thin moustache, black gauze cap",
-    "gongsunzan": "general in white armour",
-    "dingyuan": "old governor, grey beard, dark robe",
-    "lvboshe": "old farmer, white beard, straw hat",
-    "caohong": "young officer, short beard, plain tunic",
-    "zumao": "wiry officer, red armour, two swords",
-    "lisu": "lean officer, plain armour",
-}
-
-
-def prompt_min(sid):
-    """A still's request, minimal: its scene, a few words for each person in it, STYLE_MIN."""
-    if STILLS[sid].get("raw"):
-        return STILLS[sid]["prompt"]
-    who = [f"{CAST[k][0]}: {CAST_MIN.get(k) or CAST[k][1]}." for k in cast_in(sid)]
-    return " ".join([STILLS[sid]["prompt"], *who, STYLE_MIN])
-
-
 # ---- the World 1 set: every scene seen three ways, for variety --------------------------------
 # A: wide, the place and the event. B: close, a face and a feeling. C: a telling detail, a mood,
 # a dramatic angle. Times of day and weather are spread across the set on purpose.
