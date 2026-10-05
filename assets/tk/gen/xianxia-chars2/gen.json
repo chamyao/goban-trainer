@@ -168,5 +168,73 @@
   ],
   "seconds": 27.2,
   "made": "2026-10-05"
+ },
+ "char.f_woman": {
+  "model": "retro-diffusion/rd-animation",
+  "input": {
+   "style": "four_angle_walking",
+   "width": 48,
+   "height": 48,
+   "return_spritesheet": true,
+   "prompt": "Chinese village woman, hair in a bun with a red pin, pink dress, Chinese fantasy RPG, xianxia, Eastern Han dynasty"
+  },
+  "n": 1,
+  "size": [
+   192,
+   192
+  ],
+  "seconds": 30.2,
+  "made": "2026-10-05"
+ },
+ "char.f_elder": {
+  "model": "retro-diffusion/rd-animation",
+  "input": {
+   "style": "four_angle_walking",
+   "width": 48,
+   "height": 48,
+   "return_spritesheet": true,
+   "prompt": "old Chinese village elder, long white beard, pale robe, walking stick, Chinese fantasy RPG, xianxia, Eastern Han dynasty"
+  },
+  "n": 1,
+  "size": [
+   192,
+   192
+  ],
+  "seconds": 24.9,
+  "made": "2026-10-05"
+ },
+ "char.huangfusong": {
+  "model": "retro-diffusion/rd-animation",
+  "input": {
+   "style": "four_angle_walking",
+   "width": 48,
+   "height": 48,
+   "return_spritesheet": true,
+   "prompt": "Chinese imperial general, long black beard, grey iron helmet, blue robe over armour, sword, Chinese fantasy RPG, xianxia, Eastern Han dynasty"
+  },
+  "n": 1,
+  "size": [
+   192,
+   192
+  ],
+  "seconds": 30.8,
+  "made": "2026-10-05"
+ },
+ "char.f_soldier": {
+  "model": "retro-diffusion/rd-animation",
+  "input": {
+   "style": "four_angle_walking",
+   "width": 48,
+   "height": 48,
+   "return_spritesheet": true,
+   "prompt": "Han dynasty soldier, grey iron helmet, red tunic, holding a spear, Chinese fantasy RPG, xianxia, Eastern Han dynasty"
+  },
+  "n": 1,
+  "size": [
+   192,
+   192
+  ],
+  "seconds": 89.1,
+  "made": "2026-10-05"
  }
 }
