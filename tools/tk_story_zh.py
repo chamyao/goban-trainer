@@ -419,3 +419,12 @@ FOLK_VOICE = {
     "folk.monk": "zm_069", "folk.noble": "zm_057", "folk.soldier": "zm_045", "folk.rebel": "zm_016",
     "folk.hunter": "zm_030", "folk.official": "zm_064",
 }
+
+
+# ---- World 2 (tk_story_w2.py) ----
+import pathlib as _pl, sys as _sys  # noqa: E402
+_sys.path.insert(0, str(_pl.Path(__file__).resolve().parent))
+from tk_story_w2 import ZH2 as _ZH2, CAST2 as _CAST2  # noqa: E402
+for _k, _v in _ZH2.items():
+    ZH.setdefault(_k, _v)
+CAST.update(_CAST2)

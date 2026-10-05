@@ -277,3 +277,10 @@ ROOMS = {
         {"kind": "folk.soldier", "say": "“Orders come at dawn. Keep your weapon close.”"},
     ]},
 }
+
+
+# ---- World 2 (tk_story_w2.py) ----
+import pathlib as _pl, sys as _sys  # noqa: E402
+_sys.path.insert(0, str(_pl.Path(__file__).resolve().parent))
+from tk_story_w2 import PLACES2 as _PLACES2  # noqa: E402
+PLACES[2] = _PLACES2
