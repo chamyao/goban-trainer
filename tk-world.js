@@ -401,7 +401,7 @@ function worldScenes() {
       const top = Math.min(by, -this.hudTop());
       // isometric: the map is a diamond, so its box's corners are empty; keep the view a little
       // inside the box (never so far the player could leave it) so less of the screen is beyond the map
-      const ix = this.iso ? Math.max(0, Math.min(vw * .25, (mw - vw) / 2)) : 0, iy = this.iso ? Math.max(0, Math.min(vh * .25, (mh - vh) / 2)) : 0;
+      const ix = this.iso ? Math.max(0, Math.min(vw * .25, (mw - vw) / 2)) : 0, iy = this.iso ? Math.max(0, Math.min(vh * .1, (mh - vh) / 2)) : 0;
       cam.setBounds(bx + ix, top + iy, Math.max(mw, vw) - 2 * ix, Math.max(mh, vh) + (by - top) - 2 * iy);
     }
     // How far down the screen the HUD reaches, in world pixels.
