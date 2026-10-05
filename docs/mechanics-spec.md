@@ -109,7 +109,7 @@ A condition is always one of: a story node cleared, an item held, or a place mar
 A new tester lost the thread three times. Qingzhou: "the hint to lift the siege needs to be more present", "the sage's words [should] persist on screen until I drop off the brothers". Black Wind: "make it clear I should give the blood to the brothers". The Han camp: "it isn't time yet" right after the previous level. The common cause is that a hint said once in dialogue is gone when the dialogue closes. Rule, in four parts; the objective still names only the goal:
 
 1. **The hint stays on screen until its step is done.** Under the goal line, a second, quieter line quotes the hint in the speaker's own words (Black Wind: "Pigs, sheep, dogs. Blood." · Qingzhou: "Give ground, and make them follow."). It appears when the hint is given and goes when the gate it serves is cleared. It is the hint itself, not a checklist: no counts or item lists.
-2. **Targets glow while they can act.** A person who can give something now, or who is waiting for a delivery or a placement (the villagers, Guan Yu and Zhang Fei on their ridges or hills), carries a small marker in the shrine's style (a wisp of incense). It goes once their part is done. Nothing that can't act yet is marked.
+2. **Targets glow while they can act.** A person who can give something now, or who is waiting for a delivery or a placement (the villagers, Guan Yu and Zhang Fei on their ridges or hills), carries a small marker (built as a soft gold ring at their feet). It goes once their part is done. Nothing that can't act yet is marked.
 3. **The target calls out on approach.** When the player comes near someone the hint needs, holding what they need, that person speaks first (Zhang Fei: "Brother! Is that the blood? Up here!"). Plot writes these lines.
 4. **"Not yet" always says what comes first.** Any refusal names the next place ("Not yet. Lu Zhi is waiting for you at Guangzong."), and a place with nothing to do now doesn't look active.
 
@@ -117,7 +117,7 @@ Parts 1 and 2 are interface (Integration); parts 3 and 4 are story lines (Plot).
 
 **Status (Integration, main 359b869):** parts 1-3 are built.
 1. **Hint line:** any story node can carry `"hint"` (Chinese from ZH). It shows under the goal as a quieter italic quote, Chinese then English, while its node is cleared, the next main step follows it (by an edge, or `node:KEY` in a gate), and that step's gates aren't all cleared. Black Wind has it from `n7b`; Qingzhou needs Plot to add the hint to the node whose counsel it is.
-2. **Markers:** a warm incense wisp over any NPC who can give now (`gives_when` holds and the item isn't held yet), and over any delivery place whose `when` and `needs` hold and isn't delivered yet.
+2. **Markers:** a soft gold ring pulsing at the target's feet (changed from an incense wisp in 35e4030, at the user's note that incense was a left-over of the Black Myth look) over any NPC who can give now (`gives_when` holds and the item isn't held yet), and over any delivery place whose `when` and `needs` hold and isn't delivered yet.
 3. **Call hook:** an NPC or delivery landmark can carry `"call"` (one or more lines). When the player comes within about 56 px of a marked target, it shows once per visit as a bubble over the target, Chinese above English, not a dialogue box.
 
 Part 4 (every "not yet" names where to go first) is Plot's lines.
