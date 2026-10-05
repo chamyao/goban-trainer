@@ -166,12 +166,18 @@ def style_refs():
     return sorted(f for f in d.iterdir() if f.suffix.lower() in (".png", ".jpg", ".jpeg", ".webp")) if d.exists() else []
 
 
+REF_LENSES = {"b"}   # the lenses (tk_stills.LENSES) that get face references
+
+
 def request(provider, sid=None, key=None):
     """(prompt, images) for a still or a portrait: style images first, then cast portraits."""
     style = style_refs()[:MAX_REFS] if provider in TAKES_REFS else []
     if key:
         return portrait(key, len(style)), [data_uri(f) for f in style]
-    cast = [k for k in cast_in(sid) if (OUT / f"refs/{k}.jpg").exists()] if provider in TAKES_REFS else []
+    # the user's policy: face references only for close shots (lens b). On wide, action and mood shots a
+    # reference drags in the portrait's pose and framing, and the picture goes stiff; words carry the look there.
+    close = sid.rsplit("_", 1)[-1] in REF_LENSES
+    cast = [k for k in cast_in(sid) if (OUT / f"refs/{k}.jpg").exists()] if provider in TAKES_REFS and close else []
     cast = cast[:MAX_REFS - len(style)]
     images = [data_uri(f) for f in style] + [data_uri(OUT / f"refs/{k}.jpg") for k in cast]
     return prompt(sid, len(style), cast), images
