@@ -131,3 +131,35 @@ CHARACTERS2 = {
     "f_woman": "Chinese village woman, hair in a bun with a red pin, pink dress",
     "f_elder": "old Chinese village elder, long white beard, pale robe, walking stick",
 }
+
+
+# Props for the xianxia kit only (the Jade kit keeps the hand-drawn ones in drawn.png and props.png).
+# Map kinds by their vocab name; cutscene props as "prop.<atlas frame>" (tools/build_props.py), which the
+# cutscene player uses in place of the atlas frame when the kit has one.
+PROPS_GEN = {
+    "landmark.shrine": ("small outdoor weiqi shrine: a carved grey stone stele with a little tiled cap, a square stone "
+                        "go board on a low plinth in front of it with a few black and white stones, a small bronze "
+                        "incense burner beside it", (32, 30), 2),
+    "ruin.hall": ("burned-out ruin of a Chinese hall: roofless, charred black pillars of different heights on a grey "
+                  "stone base, a fallen burnt beam, ash", (64, 44), 2),
+    "ruin.columns": ("two charred black wooden columns on a stone base, one snapped short, ash around them",
+                     (32, 40), 2),
+    "ruin.rubble": ("small heap of grey stones and burnt black timber", (16, 12), 2),
+    "prop.pig": ("a pink domestic pig tied with a rope round its middle, side view", (20, 14), 2),
+    "prop.well": ("round grey stone well with a wooden frame, little tiled roof and a rope bucket", (28, 30), 2),
+    "prop.mirror": ("round polished bronze mirror on a small carved wooden stand", (16, 22), 2),
+    "prop.pond": ("small oval lotus pond with a grey stone rim, lily pads and pink lotus flowers", (36, 18), 2),
+    "prop.cagecart": ("wooden prisoner cage on a two-wheeled cart, thick wooden bars", (48, 40), 2),
+    "prop.cart": ("small wooden handcart with two wheels and long handles", (32, 28), 2),
+    "prop.forge": ("blacksmith's stone forge with glowing orange coals", (32, 26), 2),
+    "prop.anvil": ("iron blacksmith's anvil on a wooden stump", (16, 14), 2),
+    "prop.ox": ("black ox standing, side view", (24, 18), 2),
+    "prop.post": ("thick wooden hitching post with an iron ring", (12, 20), 2),
+    "prop.steelbars": ("small stack of iron ingots", (16, 10), 2),
+    "prop.staves": ("bundle of four wooden staves leaning together", (16, 18), 2),
+    "prop.switches": ("bundle of thin green willow switches tied with string", (16, 12), 2),
+    "prop.waterbowl": ("plain clay bowl of water", (14, 10), 2),
+    "prop.book": ("rolled bamboo-slip book tied with cord", (14, 10), 2),
+    "prop.letter": ("folded letter on yellowed paper", (14, 10), 2),
+    "prop.seal": ("square jade official seal with a carved animal on top", (12, 12), 2),
+}
