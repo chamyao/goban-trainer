@@ -61,6 +61,9 @@ STYLES = {
             "lineart, high contrast, vivid saturated colours, speed lines and impact effects, extreme fighting poses.",
     "genshin": "Style: in the style of Genshin Impact key art: polished anime cel shading, bright vivid colours, "
                "ornate gold trim and jade accents, glowing particles, clean detailed fantasy illustration.",
+    "watercolor": "Style: Chinese watercolour painting: loose wet washes of colour bleeding softly on rice paper, "
+                  "light expressive ink brush outlines, muted earthy tones with touches of vermilion and jade, misty "
+                  "atmosphere, generous white space, figures painted with a few confident strokes.",
     "mahjongsoul": "Style: in the style of Mahjong Soul character art: glossy modern anime illustration, soft "
                    "pastel-bright colours, clean thin lineart, smooth shading, cute stylised attractive characters.",
     # the user asked to see the look of the donghua Rakshasa Street, described in words (no show named)
