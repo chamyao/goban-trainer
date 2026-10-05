@@ -515,3 +515,7 @@ from tk_story_w2 import ZH2 as _ZH2, CAST2 as _CAST2  # noqa: E402
 for _k, _v in _ZH2.items():
     ZH.setdefault(_k, _v)
 CAST.update(_CAST2)
+from tk_story_w3 import ZH3 as _ZH3, CAST3 as _CAST3  # noqa: E402
+for _k, _v in _ZH3.items():
+    ZH.setdefault(_k, _v)
+CAST.update(_CAST3)

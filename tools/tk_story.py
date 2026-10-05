@@ -691,3 +691,5 @@ import pathlib as _pl, sys as _sys  # noqa: E402
 _sys.path.insert(0, str(_pl.Path(__file__).resolve().parent))
 from tk_story_w2 import WORLD2 as _WORLD2  # noqa: E402
 WORLDS.append(_WORLD2)
+from tk_story_w3 import WORLD3 as _WORLD3  # noqa: E402
+WORLDS.append(_WORLD3)
