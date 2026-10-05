@@ -21,7 +21,7 @@ const tapDlg=async()=>{const d=await dlg();if(d)await p.touchscreen.tap(d.box[0]
 // start the notice scene (1-n1) by tapping its spot
 const spot=await p.evaluate(()=>{const w=window.__w,s=Object.values(w.spots).find(s=>s.node==='1-n1');w.player.setPosition(s.x,s.y+50);return [s.x,s.y];});
 await p.waitForTimeout(600);await tapW(...spot);
-let d=null;for(let i=0;i<40&&!(d=await dlg());i++)await p.waitForTimeout(150);
+let d=null;for(let i=0;i<100&&!(d=await dlg());i++)await p.waitForTimeout(150);
 for(let i=0;i<4&&d;i++){await tapDlg();await p.waitForTimeout(250);d=await dlg();}   // a couple of lines in
 const lineBefore=d&&d.text;
 await p.setViewportSize(LAND);await p.waitForTimeout(900);d=await dlg();await p.screenshot({path:SP+'/rotate-scene-landscape.png'});
