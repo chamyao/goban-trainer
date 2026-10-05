@@ -1065,8 +1065,11 @@ function worldScenes() {
       const b = (this.buildings || []).find(b => Math.abs(b.x - e.rect.centerX) < b.w / 2 && Math.abs(b.bottom - e.rect.bottom) < 20);
       // isometric: the building as drawn, its painted pixels only (not the empty corners or the road before it)
       if (b && this.iso && b.img && sx != null) {
-        const img = b.img, lx = (sx - (img.x - img.displayWidth * img.originX)) / img.scaleX, ly = (sy - (img.y - img.displayHeight * img.originY)) / img.scaleY;
+        // where the view draws it (between frames img.x, img.y are back on the flat map), and a mirrored building's pixels
+        const img = b.img, a = img.isoAt, q = a ? this.iso.P(a[0], a[1]) : this.iso.P(img.x, img.y), X = q.x, Y = q.y + (a ? a[2] : 0);
+        let lx = (sx - (X - img.displayWidth * img.originX)) / Math.abs(img.scaleX); const ly = (sy - (Y - img.displayHeight * img.originY)) / Math.abs(img.scaleY);
         if (lx < 0 || ly < 0 || lx >= img.width || ly >= img.height) return false;
+        if (img.flipX) lx = img.width - 1 - lx;
         return (this.textures.getPixelAlpha(Math.floor(lx), Math.floor(ly), img.texture.key, img.frame.name) || 0) > 40;
       }
       if (b && this.iso) { const t = at(b.x, b.bottom, b.img); return Math.abs(t.x - b.x) < b.w / 2 && t.y > b.bottom - b.h && t.y < b.bottom; }
