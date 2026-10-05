@@ -131,7 +131,7 @@ ZH = {
     # ---- side: Cao Cao ----
     "The Hero of Chaos · I: The Feigned Stroke": "奸雄·一：诈中风",
     "Far to the south, in Qiao, a boy named Cao Cao loved hunting, music and mischief — and his uncle kept telling his father so.": "沛国谯郡有个少年，名叫曹操，好游猎，喜歌舞。他的叔父屡次向他父亲告状。",
-    "So one day, seeing his uncle coming, Cao Cao dropped to the ground, twitching.": "一天，曹操见叔父走来，便诈倒在地，装作中风的样子。",
+    "So one day, seeing his uncle coming, Cao Cao dropped to the ground, twitching.": "有一日，曹操见叔父走来，便诈倒在地，装作中风的样子。",
     "Brother! Your son has had a stroke!": "兄长！你儿子中风了！",
     "A stroke? I've never had one in my life. Uncle just dislikes me, so he tells tales about me.": "儿子自来没有这病。只因叔父不喜欢我，所以冤枉我罢了。",
     "From then on, whatever the uncle reported, Cao Cao's father never believed a word.": "从此以后，叔父再说曹操的不是，父亲一概不听。",
