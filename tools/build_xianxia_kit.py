@@ -20,7 +20,7 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from build_jade_edges import block  # noqa: E402
-from xianxia_spec import CHAR_PICK, DRAWN_GROUND, HERO_H, INTERIOR, OBJECTS, REDO  # noqa: E402
+from xianxia_spec import PROPS_GEN, CHAR_PICK, DRAWN_GROUND, HERO_H, INTERIOR, OBJECTS, REDO  # noqa: E402
 import random  # noqa: E402
 
 T = 16
@@ -146,7 +146,7 @@ def hero_sheet(path):
 def main():
     # the generated pieces: the first run, then the later batches (any of them may be missing)
     base = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "assets/tk/gen"
-    src = [base / d for d in ("xianxia", "xianxia-chars2", "xianxia-interior", "xianxia-redo") if (base / d).exists()]
+    src = [base / d for d in ("xianxia", "xianxia-chars2", "xianxia-interior", "xianxia-redo", "xianxia-props") if (base / d).exists()]
     OUT.mkdir(parents=True, exist_ok=True)
     kit = json.loads((ROOT / "assets/tk/kits/jade.json").read_text())
 
@@ -184,7 +184,7 @@ def main():
 
     # objects
     items, made = [], {}
-    for kind, (_, box, _) in {**OBJECTS, **INTERIOR}.items():
+    for kind, (_, box, _) in {**OBJECTS, **INTERIOR, **PROPS_GEN}.items():
         # a piece that came out wrong is used only once its second try exists
         where = [d for d in src if d.name == "xianxia-redo"] if kind in REDO else src
         for k, p in enumerate(v for v in variants(where, kind) if v.stem not in DROP):
@@ -206,6 +206,21 @@ def main():
                                "outside": ["x_tiles", 0, row["grass"]]}
     for kind, names in made.items():
         kit["kinds"][kind] = [["x_objects", *pos[n]] for n in names]
+    # the shrine's lit and settled looks: the generated stone, warmed (the player adds the glow and the smoke)
+    if "landmark.shrine" in made:
+        base = dict(items)[made["landmark.shrine"][0]]
+        for state, tint in (("lit", (255, 236, 170)), ("settled", (240, 230, 205))):
+            im = base.copy()
+            px = im.load()
+            for y in range(im.height):
+                for x in range(im.width):
+                    r, g, b, a_ = px[x, y]
+                    if a_:
+                        px[x, y] = (min(255, (r * tint[0]) // 230), min(255, (g * tint[1]) // 230), min(255, (b * tint[2]) // 230), a_)
+            items.append((f"landmark.shrine.{state}#0", im))
+            made[f"landmark.shrine.{state}"] = [f"landmark.shrine.{state}#0"]
+        sheet, pos = pack(items)
+        sheet.save(OUT / "objects.png")
     if detail:   # the scatter on the grass: our tufts and flowers
         kit["detail"] = {"tiles": [["x_tiles", i, len(ground), 1] for i in range(len(detail))],
                          "density": kit["detail"]["density"]}

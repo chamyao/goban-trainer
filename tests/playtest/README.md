@@ -29,7 +29,7 @@ starts from a fresh save.
 | playthrough | fresh save, phone: all 15 main story beats by taps (scene, mid-scene problem, scene after), the book completes |
 | ending | the last stretch: boss, the "Yellow Turbans Fall" scroll, Anxi hostel (ax1), the post (ax2), book complete |
 | tap-move-talk | tap the ground → walks there; tap a person → walks up and talks; taps advance and end the dialogue |
-| tap-duel | phone: tap a challenger, the duel opens full-screen; tap to preview where points are under 28 px apart (first tap a ghost and no move, a tap elsewhere moves it, a second tap plays), else one tap plays; Leave by tap. PLAYTEST_DEVICE picks the device |
+| tap-duel | phone: tap a challenger, the duel opens full-screen; tap to preview where points are under 28 px apart (first tap a ghost and no move, a tap elsewhere moves it, a second tap plays), else one tap plays; ghosts on wrong points are never a slip; the menu's Confirm taps: Never plays on one tap; Leave by tap. PLAYTEST_DEVICE picks the device |
 | doors-and-exits | walk out of Lousang by taps; tap a building to go in; tap the doorway to leave; tap the road off the map edge |
 | tap-after-talk | (arg: place) talk to every villager, then tap the ground around Liu Bei in four directions: he must move every time |
 | scene-arming | a scene doesn't start as you arrive; it starts after walking in (room and outdoor map) |
@@ -56,5 +56,7 @@ starts from a fresh save.
 | duel-desktop | desktop duel overlay; Escape leaves; you can move again |
 | wukong-guide | the menu has no guide switch; Wukong appears only after standing still a while; nothing of his is drawn over a story scroll |
 | play-tab | the site's Play tab still loads |
+
+Tools, not in the default run: `node tests/playtest/spacing.js "iPhone SE"` measures board point spacing for every pool problem of Books 1 and 2 as the problem overlay shows it (share under 28 px and 24 px); `node tests/playtest/book-run.js 2` plays a whole book on the phone by taps and times each beat.
 
 Known gaps: no test for a real OGS game, real audio, or the Android app (APK).

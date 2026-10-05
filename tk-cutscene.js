@@ -239,7 +239,9 @@ const WorldCutscene = {
       const box = scene.add.container(0, 0), P = scene.textures.get("tk-props"), d = PROP[kind] || {};
       const put = (tex, frame, dx = 0, dy = 0) => box.add(scene.add.image(dx, dy, tex, frame).setOrigin(.5, 1));
       const k = (d.kit || []).find(k => scene.kit && scene.kit.kinds[k]);
-      if (d.atlas && P.has(d.atlas)) put("tk-props", d.atlas);
+      const own = d.atlas && scene.kit && scene.kit.kinds[`prop.${d.atlas}`];   // the kit's own look (xianxia: generated)
+      if (own) put(`kit-${own[0][0]}`, `prop.${d.atlas}#0`);
+      else if (d.atlas && P.has(d.atlas)) put("tk-props", d.atlas);
       else if (d.horse && Items) box.add(Items.horse(scene, d.horse, 0, 0));
       else if (k) {
         const tex = `kit-${scene.kit.kinds[k][0][0]}`, fr = `${k}#0`;
@@ -612,8 +614,8 @@ const WorldCutscene = {
   load(scene) {
     if (scene.textures.exists("tk-props")) return Promise.resolve();
     return new Promise(res => {
-      scene.load.json("tk-props-json", "assets/tk/props.json?v=3");
-      scene.load.image("tk-props", "assets/tk/props.png?v=3");
+      scene.load.json("tk-props-json", "assets/tk/props.json?v=4");
+      scene.load.image("tk-props", "assets/tk/props.png?v=4");
       scene.load.once("complete", () => {
         const t = scene.textures.get("tk-props"), j = scene.cache.json.get("tk-props-json");
         if (t && j) for (const [n, [x, y, w, h]] of Object.entries(j.frames)) t.add(n, 0, x, y, w, h);

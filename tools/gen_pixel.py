@@ -116,6 +116,11 @@ def kit_set(a):
         jobs = [(k, "rd-plus", {"style": "topdown_asset", "width": max(16, w), "height": max(16, h), "remove_bg": True,
                                  "prompt": f"{p}, {LOOK}, 3/4 top-down game sprite, small"}, n)
                 for k, (p, (w, h), n) in objs.items()]
+    if a.set == "xianxia-props":   # props for the xianxia kit only (Jade keeps the drawn ones)
+        from xianxia_spec import PROPS_GEN
+        jobs = [(k, "rd-plus", {"style": "topdown_asset", "width": max(16, w), "height": max(16, h), "remove_bg": True,
+                                 "prompt": f"{p}, {LOOK}, 3/4 top-down game sprite, small"}, n)
+                for k, (p, (w, h), n) in PROPS_GEN.items()]
     if a.set == "xianxia-chars2":
         from xianxia_spec import CHARACTERS2
         jobs = [(f"char.{k}", "rd-animation", {"style": "four_angle_walking", "width": 48, "height": 48,
@@ -162,7 +167,7 @@ def main():
     ap.add_argument("--only", action="append")
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--list", action="store_true")
-    ap.add_argument("--set", choices=["xianxia", "xianxia-chars", "xianxia-redo", "xianxia-interior", "xianxia-chars2"], help="generate a whole kit's pieces (tools/xianxia_spec.py)")
+    ap.add_argument("--set", choices=["xianxia", "xianxia-chars", "xianxia-redo", "xianxia-interior", "xianxia-chars2", "xianxia-props"], help="generate a whole kit's pieces (tools/xianxia_spec.py)")
     ap.add_argument("--pause", type=float, default=12, help="seconds between requests (rate limits)")
     a = ap.parse_args()
     OUT.mkdir(parents=True, exist_ok=True)
