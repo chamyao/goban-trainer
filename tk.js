@@ -516,7 +516,7 @@ const TK = {
   succs(w, key) { return w.edges.filter(e => e[0] === key).map(e => e[1]); },
   isStart(key) { return key.endsWith("-start"); },
   open(w, key) { return this.isStart(key) || this.preds(w, key).some(k => this.isStart(k) || this.cleared(k)); },
-  worldOpen(n) { return n === 1 || this.cleared(`${n - 1}-boss`); },
+  worldOpen(n) { return n === 1 || this.cleared(`${n - 1}-boss`) || (typeof TK_TEST !== "undefined" && TK_TEST); },   // test mode opens every book
   at(n) { return this.ls("tk-at")[n] || `${n}-start`; },
   setAt(n, key) { const a = this.ls("tk-at"); a[n] = key; this.lsSet("tk-at", a); },
   party(w) { return this.ls("tk-party")[w.n] || w.party; },
@@ -996,8 +996,9 @@ async function viewTK(worldN) {
     h("div", { class: "tk-head-btns" }, [voiceBtn, chron]),
   ]));
   root.append(h("div", { class: "tk-worlds" }, [
-    ...D.worlds.map(x => h("a", { class: "tk-world" + (x.n === n ? " on" : ""), href: `#/tk/${x.n}` }, `${x.n} · ${x.zh} ${x.name}`)),
-    h("span", { class: "tk-world lock" }, "2 · 虎牢关 Hulao Pass — 敬请期待 coming soon"),
+    ...D.worlds.map(x => TK.worldOpen(x.n)
+      ? h("a", { class: "tk-world" + (x.n === n ? " on" : ""), href: `#/tk/${x.n}` }, `${x.n} · ${x.zh} ${x.name}`)
+      : h("span", { class: "tk-world lock" }, `${x.n} · ${x.zh} ${x.name} — 先完成第${x.n - 1}卷 after Book ${x.n - 1}`)),
   ]));
   const host = h("div", { class: "tk-map" });
   root.append(host);
@@ -1013,6 +1014,10 @@ async function viewTK(worldN) {
     root.querySelector(".tk-head-btns").prepend(h("button", { class: "tk-chron-btn", type: "button", title: `Switch to ${WORLD_KITS[next].en}`,
       onclick: () => { WorldView.setKit(next); viewTK(w.n); } }, `画风：${WORLD_KITS[kit].zh} ${WORLD_KITS[kit].en}`));
     if (typeof WorldTravel !== "undefined") WorldTravel.addButtons(root.querySelector(".tk-head-btns"), w);   // map and start over (tk-travel.js)
+    // the other books, once open (Book 2 after Book 1's boss)
+    for (const x of D.worlds) if (x.n !== w.n && TK.worldOpen(x.n))
+      root.querySelector(".tk-head-btns").append(h("button", { class: "tk-chron-btn", type: "button", onclick: () => { location.hash = `#/tk/${x.n}`; } },
+        `第${x.n}卷 Book ${x.n} · ${x.zh} ${x.name} ▸`));
     // The buttons live in a menu inside the game window, with the controls.
     const panel = h("div", { class: "tk-menu-panel", hidden: "" }, [root.querySelector(".tk-head-btns"),
       h("div", { class: "tk-menu-keys" }, TK_TOUCH ? "点击地面移动 Tap to move · 点击人物对话 Tap to talk · 按住拖动 Hold and drag to steer"

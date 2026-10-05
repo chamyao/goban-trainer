@@ -36,7 +36,7 @@ const WorldData = {
     }
     return this.regions[n];
   },
-  has(n) { return n === 1; },  // worlds whose places have been built
+  has(n) { return n === 1 || n === 2; },  // worlds whose places have been built
   // "1-zhuo-county-c-elder": a challenger in a place, drawing from the world's problems.
   node(w, key) {
     const region = this.regions[w.n];
@@ -598,7 +598,9 @@ function worldScenes() {
       this.goalAt = this.goalPoint();
       if (this.fairy) this.fairy.wp = null;
       const q = this.nextMain();
-      if (!q) return this.goal("This book is complete. The road goes on…", "这一卷已经完成。路还在前方……");
+      if (!q) return TK.world(this.w.n + 1)
+        ? this.goal(`This book is complete. Book ${this.w.n + 1} is open: Menu → Book ${this.w.n + 1}.`, `这一卷已经完成。第${this.w.n + 1}卷已开启：菜单 → 第${this.w.n + 1}卷。`)
+        : this.goal("This book is complete. The road goes on…", "这一卷已经完成。路还在前方……");
       const g = this.available(q) && this.gateFor(q);
       if (g && g.objective) {   // what the battle still needs, with a count
         const need = [].concat(g.needs || []), k = need.filter(c => this.cond(c)).length, n = need.length > 1 && g.count !== false ? ` (${k}/${need.length})` : "";

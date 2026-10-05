@@ -1,0 +1,143 @@
+{
+ "format": "tk-map/1",
+ "id": "luoyang--house-4",
+ "world": 2,
+ "parent": "luoyang",
+ "name": "House, Luoyang",
+ "archetype": "interior",
+ "building": "house-4",
+ "style": "building.house",
+ "size": [
+  20,
+  12
+ ],
+ "seed": 0.03835739793505788,
+ "terrain": {
+  "legend": {
+   "#": "wood",
+   "%": "stone",
+   "&": "mat",
+   "e": "earth",
+   "W": "wall",
+   " ": "void"
+  },
+  "rows": [
+   "                    ",
+   "     WWWWWWWWWW     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     WWWWW#WWWW     ",
+   "                    ",
+   "                    ",
+   "                    "
+  ]
+ },
+ "objects": [
+  {
+   "kind": "furn.bed",
+   "x": 9,
+   "y": 2,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.drawers",
+   "x": 13,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.shelf",
+   "x": 11,
+   "y": 2,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.table",
+   "x": 7,
+   "y": 4,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 6,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 9,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.jar",
+   "x": 6,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.plant",
+   "x": 6,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.barrel",
+   "x": 13,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.sacks",
+   "x": 6,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "spots": [],
+ "npcs": [
+  {
+   "id": "in-1",
+   "kind": "folk.woman",
+   "x": 8.5,
+   "y": 5.9,
+   "say": [
+    "“Mind the floor — I've only just swept it.”"
+   ]
+  }
+ ],
+ "exits": [
+  {
+   "to": "luoyang",
+   "side": "S",
+   "x": 10,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "luoyang": [
+   10,
+   7
+  ],
+  "": [
+   10,
+   7
+  ]
+ }
+}

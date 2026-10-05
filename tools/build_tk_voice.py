@@ -40,6 +40,12 @@ EN_VOICE = {
     "zm_052": "am_adam", "zm_100": "bm_daniel", "zm_069": "am_liam", "zm_057": "bm_fable",        # townsfolk: villager, elder, monk, noble
     "zm_045": "am_eric", "zm_016": "am_fenrir", "zm_030": "am_liam", "zm_064": "bm_lewis",        # soldier, rebel, hunter, official
     "zf_022": "af_sarah", "zf_002": "af_sky", "zf_017": "bf_isabella", "zf_023": "af_bella",     # woman, child and girl, lady, maiden
+    # Book 2
+    "zm_039": "am_onyx", "zm_072": "bm_lewis", "zm_077": "am_puck", "zm_018": "am_eric",          # Lü Bu, Wang Yun, Li Ru, Li Su
+    "zm_043": "am_fenrir", "zm_075": "bm_george", "zm_087": "bm_fable", "zm_083": "am_echo",      # Hua Xiong, Ding Yuan, Yuan Shao, Yuan Shu
+    "zm_059": "bm_daniel", "zm_036": "am_liam", "zm_048": "am_michael", "zm_022": "am_adam",      # Chen Gong, Cao Hong, Sun Jian, Zu Mao
+    "zm_070": "bm_george", "zm_074": "am_eric", "zm_093": "bm_lewis", "zm_037": "am_adam",        # Cheng Pu, Han Dang, Cai Yong, Gongsun Zan
+    "zm_058": "am_fenrir", "zm_061": "am_puck", "zm_086": "bm_daniel",                             # Li Jue, Guo Si, Lü Boshe
 }
 EN_SPEED = 1.0
 # Some voices are slow by nature; these read faster so townsfolk keep pace with
