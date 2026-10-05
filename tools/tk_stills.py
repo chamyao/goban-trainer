@@ -107,6 +107,24 @@ CAST = {
     "huangfusong": ("Huangfu Song", "an imperial general with a long black beard, iron helmet, blue robe over armour"),
     "inspector": ("the inspector", "a plump, sneering court official with a thin moustache, in a Han dynasty black "
                                    "gauze official's cap (a small stiff cap with two flaps, not a top hat) and a blue silk robe"),
+    # Book 2 (World 2)
+    "lvbu": ("Lü Bu", "a tall, strikingly handsome young warrior, broad-shouldered, in ornate red and gold armour with "
+                     "a gold crown bearing two long pheasant-feather plumes, carrying a tall crescent-bladed halberd"),
+    "yuanshao": ("Yuan Shao", "a proud, richly dressed nobleman in his forties with a neat beard, in a purple brocade "
+                              "robe and a tall official's cap"),
+    "gongsunzan": ("Gongsun Zan", "a lean general in white armour on a white horse"),
+    "sunjian": ("Sun Jian", "a broad, powerful general in his late thirties with a short beard, in red lacquered armour "
+                            "and a red cap"),
+    "dingyuan": ("Ding Yuan", "an old provincial governor with a grey beard, in a dark official robe"),
+    "chengong": ("Chen Gong", "a thin, upright county magistrate in his thirties with a sparse beard, in a plain dark "
+                              "robe and scholar's cap"),
+    "caohong": ("Cao Hong", "a sturdy young officer with a short beard, stripped to a plain tunic"),
+    "lvboshe": ("Lü Boshe", "a kindly old farmer with a white beard, in a patched hemp robe and a straw hat"),
+    "wangyun": ("Wang Yun", "an old minister with a long grey beard, in dark court robes and a tall official's cap"),
+    "diaochan": ("Diaochan", "a graceful young woman of sixteen in a pale silk robe, hair in an elegant bun with a "
+                             "jade pin"),
+    "lisu": ("Li Su", "a lean officer in plain armour with a drawn sword"),
+    "zumao": ("Zu Mao", "a wiry officer in red armour with two swords"),
     "xushao": ("Xu Shao", "a calm scholar with a thin beard and knowing eyes, scholar's hat, pale robe"),
 }
 
@@ -505,6 +523,58 @@ FINAL = {
                 "crescent-bladed long halberd to Guan Yu, and a long spear with a wavy serpent blade to Zhang Fei.",
 }
 
+# Book 2 (World 2): one prompt per still step in tools/tk_story_w2.py, from docs/stills-must-show-w2.md.
+FINAL2 = {
+    "alliance_b": "A long feast table of rich lords in a great tent: Yuan Shao sits at the head, richly dressed; Liu "
+                  "Bei sits at the very lowest place at the far end, hands on his knees; behind him Guan Yu and Zhang "
+                  "Fei stand with arms folded, faces cool. The lords ignore him.",
+    "wine_a": "Outside a camp gate, Cao Cao holds out a bronze cup of steaming hot wine; Guan Yu, already in the saddle "
+              "with his long crescent-bladed halberd, does not take it and looks toward the gate; a low table beside "
+              "them, steam rising from the cup.",
+    "wine_b": "Before the lords' table, Guan Yu stands calm with his crescent-bladed halberd grounded; at his feet lies "
+              "the helmeted head of the enemy general, and beside it on the table the same bronze cup, still steaming; "
+              "the lords stare, stunned. No blood.",
+    "hulao_a": "On a wide field before a fortress pass, Lü Bu on a tall red horse chases a fleeing rider, Gongsun Zan "
+               "on a white horse, his halberd raised to thrust; from the side Zhang Fei charges in on horseback, spear "
+               "levelled. Only these three riders.",
+    "hulao_b": "Lü Bu on a tall red horse in the middle of a dusty field, halberd swinging, ringed by three riders: "
+               "Zhang Fei in front with his serpent spear, Guan Yu at the side with his crescent halberd, Liu Bei at the "
+               "flank with twin swords; far behind, the allied lords watch from a hill. Exactly four fighters.",
+    "ruins_a": "The burned palace city of Luoyang under an ash-grey sky: charred black columns, collapsed roofs, thin "
+               "smoke, an empty gate hall; in the foreground, small, Liu Bei, Guan Yu and Zhang Fei stand looking at it. "
+               "No crowds, no flames.",
+    "fireflies_a": "At night in tall river reeds, two boys in torn silk robes, one about fourteen and one about nine, "
+                   "hold hands and look up as a line of fireflies rises before them, lighting the way. Only the two "
+                   "boys.",
+    "dingyuan_a": "Inside a lamplit tent at night, Ding Yuan sits at a desk reading by a candle and looks up; Lü Bu "
+                  "stands over him in armour with a drawn sword. Only these two. No blood.",
+    "lvboshe_a": "A dirt road at dusk: Lü Boshe rides a donkey with two clay wine jars hanging from the saddle, raising "
+                 "a hand in greeting; ahead of him Cao Cao and Chen Gong sit on horseback, and Cao Cao has turned back, "
+                 "sword drawn.",
+    "lvboshe_b": "On a dusk road, Cao Cao sits on his horse, sword lowered, face hard; beside him Chen Gong stares at "
+                 "him in appalled silence; far behind them on the road lie a fallen donkey and a still figure. No blood.",
+    "xingyang_a": "Wading a river at dusk: Cao Cao rides a strong horse with an arrow in his shoulder, and Cao Hong, on "
+                  "foot in the water beside it, leads the horse by the bridle.",
+    "zumao_a": "In a dark wood, a burnt tree stump stands with a red cap hanging on it; enemy cavalry with torches "
+               "ring it warily; half hidden among the trees behind, Zu Mao crouches with two swords drawn.",
+    "seal_a": "In palace ruins at night, a round stone well glows with five-coloured light rising out of it; Sun Jian "
+              "and a few soldiers with torches lean over the rim, faces lit from below.",
+    "seal_b": "In a torchlit camp, Sun Jian in armour raises one hand in an oath; before him Yuan Shao sits at a table "
+              "with his hand held out as if to receive something; the other lords watch. Empty hands.",
+    "xianshan_a": "A steep wooded ridge at night: Sun Jian on horseback among the trees looks up as a rain of stones "
+                  "and arrows pours down from the slope above; his riders scatter behind him. No blood.",
+    "garden_a": "A peony garden at night under the moon: Diaochan kneels with her forehead near the ground; before her "
+                "Wang Yun bows low; behind them a small pavilion with a stone weiqi board on its table and two stones on "
+                "it, no one at it. Only these two.",
+    "pavilion_a": "Beside a lotus pond at a garden pavilion, Diaochan rests in Lü Bu's arms, her face turned up to his, "
+                  "wet with tears; his tall halberd leans against the railing. Only these two.",
+    "fall_a": "At a palace gate, Dong Zhuo, huge and heavy in armour, lies on the ground beside a carriage with a "
+              "broken wheel, looking up in terror; Lü Bu stands over him with the halberd point at his throat; Li Su "
+              "beside him with a sword; guards in the background. No blood.",
+    "tower_a": "A city gate tower on fire at dusk: Wang Yun stands at the parapet beside a small boy in an emperor's "
+               "robe, both looking down at a rebel army massing below.",
+}
+
 # the stills the game uses (Plot/Story's choice: the emotional peaks, the partings, the one death)
 CHOSEN = ["tree_b", "notice_b", "inn_b", "oath_b", "oath_c", "tent_b", "cart_b", "cart_c", "office_b", "blackwind_a",
           "bosswin_c", "bosswin_d", "peace2_b", "caocao2_b", "caocao3_b", "post_b", "horses_b",
@@ -522,4 +592,6 @@ for _id, (_scene, _text) in REVIEW.items():
     STILLS.setdefault(_id, {"scene": _scene, "lens": "v2", "prompt": _text})
 for _id, _text in FINAL.items():   # the final prompt replaces the first-pass scene text
     STILLS.setdefault(_id, {"scene": _id.rsplit("_", 1)[0], "lens": _id.rsplit("_", 1)[1]})["prompt"] = _text
+for _id, _text in FINAL2.items():
+    STILLS[_id] = {"scene": _id.rsplit("_", 1)[0], "lens": _id.rsplit("_", 1)[1], "prompt": _text}
 assert all(c in STILLS for c in CHOSEN)
