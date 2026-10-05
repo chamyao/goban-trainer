@@ -13,7 +13,8 @@
 
 const WORLD_CLUTTER = /^(plant\.|rock\.small)/;  // drawn underfoot
 const WORLD_KIT = "xianxia";  // the default look; the campaign page's art button switches (localStorage tk-kit)
-const WORLD_KITS = { jade: { zh: "玉", en: "Jade" }, ninja: { zh: "忍者", en: "Ninja Adventure" }, xianxia: { zh: "仙侠", en: "Xianxia (generated)" } };
+const WORLD_KITS = { jade: { zh: "玉", en: "Jade" }, ninja: { zh: "忍者", en: "Ninja Adventure" }, xianxia: { zh: "仙侠", en: "Xianxia (generated)" },
+  genshin: { zh: "原神", en: "Genshin (isometric)" } };
 
 /* ---------- where you are in a world: place, position, party, places seen ---------- */
 const WorldState = {
@@ -214,7 +215,7 @@ function worldScenes() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
       this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=29`);
-      this.load.json("kit", `assets/tk/kits/${kit}.json?v=18`);
+      this.load.json("kit", `assets/tk/kits/${kit}.json?v=19`);
       this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=29`);
     }
     create() {

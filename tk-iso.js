@@ -30,6 +30,9 @@ const WorldIso = {
     floor.add(scene.add.image(0, 0, key).setOrigin(0, 0).setRotation(Math.PI / 4).setScale(Math.SQRT2));
     floor.isoFixed = true;
     const iso = scene.iso = { P, inv, W, H, floor, width: W + H, height: (W + H) / 2 };
+    // outdoors, the corners beyond the diamond are more country (the kit's "isoVoid" colour); rooms stay dark
+    const kit = scene.kit || {};
+    if (kit.isoVoid && !String(scene.placeId).includes("--")) scene.cameras.main.setBackgroundColor(kit.isoVoid);
 
     // the view's depth: how far down the screen an object's feet are. Objects drawn above everything
     // (marks, emotes, flashes: depth >= 9000) and behind everything (<= -9000) keep theirs; the rest

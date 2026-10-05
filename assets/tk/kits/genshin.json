@@ -1,0 +1,1628 @@
+{
+ "kit": "genshin",
+ "name": "Genshin",
+ "credit": "Outdoor ground and objects generated for the game with Retro Diffusion (tools/gen_pixel.py, tools/xianxia_spec.py); interiors and townsfolk from the Jade kit: Jade Tileset Pack by Willibab, https://willibab.itch.io/free-jade-tileset-pack, CC-BY Notice board, go table, moon gate, gateway, fire pit and water drawn for the game (tools/draw_tk_extras.py).",
+ "tile": 16,
+ "sheets": {
+  "tiles": "assets/tk/jade/tiles.png",
+  "buildings": "assets/tk/jade/buildings.png",
+  "town": "assets/tk/jade/town.png",
+  "nature": "assets/tk/jade/nature.png",
+  "drawn": "assets/tk/drawn.png",
+  "n_element": "assets/tk/ninja/element.png",
+  "n_camp": "assets/tk/ninja/camp.png",
+  "edges": "assets/tk/jade/edges.png",
+  "n_floor_in": "assets/tk/ninja/floor_in.png",
+  "n_wall_in": "assets/tk/ninja/wall_in.png",
+  "extras": "assets/tk/jade/extras.png",
+  "n_nature": "assets/tk/ninja/nature.png",
+  "x_tiles": "assets/tk/genshin/tiles.png",
+  "x_edges": "assets/tk/genshin/edges.png",
+  "x_objects": "assets/tk/genshin/objects.png"
+ },
+ "materials": {
+  "grass": {
+   "tiles": [
+    [
+     "x_tiles",
+     0,
+     0,
+     3
+    ],
+    [
+     "x_tiles",
+     1,
+     0,
+     1
+    ],
+    [
+     "x_tiles",
+     2,
+     0,
+     1
+    ],
+    [
+     "x_tiles",
+     3,
+     0,
+     1
+    ]
+   ]
+  },
+  "dirt": {
+   "blob": [
+    "x_edges",
+    0,
+    0,
+    10,
+    10
+   ],
+   "inside": [
+    2,
+    9
+   ],
+   "outside": [
+    "x_tiles",
+    0,
+    0
+   ]
+  },
+  "sand": {
+   "blob": [
+    "x_edges",
+    10,
+    0,
+    10,
+    10
+   ],
+   "inside": [
+    12,
+    9
+   ],
+   "outside": [
+    "x_tiles",
+    0,
+    0
+   ]
+  },
+  "water": {
+   "blob": [
+    "x_edges",
+    20,
+    0,
+    10,
+    10
+   ],
+   "inside": [
+    22,
+    9
+   ],
+   "outside": [
+    "x_tiles",
+    0,
+    0
+   ]
+  },
+  "wood": {
+   "tiles": [
+    [
+     "n_floor_in",
+     1,
+     1,
+     1
+    ]
+   ]
+  },
+  "stone": {
+   "tiles": [
+    [
+     "n_floor_in",
+     3,
+     13,
+     1
+    ]
+   ]
+  },
+  "mat": {
+   "tiles": [
+    [
+     "n_floor_in",
+     12,
+     6,
+     1
+    ]
+   ]
+  },
+  "earth": {
+   "tiles": [
+    [
+     "n_floor_in",
+     11,
+     5,
+     1
+    ]
+   ]
+  },
+  "wall": {
+   "edge": {
+    "sheet": "n_wall_in",
+    "tl": [
+     0,
+     0
+    ],
+    "t": [
+     1,
+     0
+    ],
+    "tr": [
+     4,
+     0
+    ],
+    "l": [
+     0,
+     1
+    ],
+    "r": [
+     4,
+     1
+    ],
+    "bl": [
+     0,
+     4
+    ],
+    "b": [
+     1,
+     4
+    ],
+    "br": [
+     4,
+     4
+    ]
+   },
+   "under": "void"
+  },
+  "void": {
+   "color": "#120c0a"
+  }
+ },
+ "kinds": {
+  "building.inn": [
+   [
+    "x_objects",
+    73,
+    0,
+    71,
+    67
+   ]
+  ],
+  "building.shop": [
+   [
+    "x_objects",
+    160,
+    82,
+    43,
+    52
+   ]
+  ],
+  "building.house": [
+   [
+    "x_objects",
+    359,
+    0,
+    54,
+    53
+   ],
+   [
+    "x_objects",
+    414,
+    0,
+    55,
+    53
+   ]
+  ],
+  "building.lodge": [
+   [
+    "x_objects",
+    204,
+    82,
+    84,
+    52
+   ]
+  ],
+  "building.hall": [
+   [
+    "x_objects",
+    0,
+    0,
+    72,
+    81
+   ]
+  ],
+  "tree.peach": [
+   [
+    "x_objects",
+    317,
+    136,
+    41,
+    46
+   ],
+   [
+    "x_objects",
+    359,
+    136,
+    41,
+    46
+   ]
+  ],
+  "tree.small": [
+   [
+    "x_objects",
+    205,
+    136,
+    31,
+    46
+   ],
+   [
+    "x_objects",
+    237,
+    136,
+    39,
+    46
+   ],
+   [
+    "x_objects",
+    277,
+    136,
+    39,
+    46
+   ]
+  ],
+  "tree.pine": [
+   [
+    "x_objects",
+    39,
+    188,
+    32,
+    39
+   ],
+   [
+    "x_objects",
+    72,
+    188,
+    33,
+    39
+   ],
+   [
+    "x_objects",
+    106,
+    188,
+    27,
+    39
+   ]
+  ],
+  "tree.bamboo": [
+   [
+    "nature",
+    64,
+    0,
+    16,
+    32
+   ]
+  ],
+  "plant.bush": [
+   [
+    "x_objects",
+    124,
+    262,
+    16,
+    18
+   ],
+   [
+    "x_objects",
+    141,
+    262,
+    12,
+    18
+   ]
+  ],
+  "plant.flower": [
+   [
+    "x_objects",
+    154,
+    262,
+    15,
+    18
+   ]
+  ],
+  "plant.grass": [
+   [
+    "x_objects",
+    89,
+    262,
+    18,
+    18
+   ],
+   [
+    "x_objects",
+    108,
+    262,
+    15,
+    18
+   ]
+  ],
+  "rock.small": [
+   [
+    "x_objects",
+    350,
+    262,
+    17,
+    15
+   ],
+   [
+    "x_objects",
+    368,
+    262,
+    15,
+    15
+   ]
+  ],
+  "lamp.post": [
+   [
+    "x_objects",
+    211,
+    228,
+    18,
+    28
+   ]
+  ],
+  "camp.logs": [
+   [
+    "x_objects",
+    230,
+    228,
+    35,
+    28
+   ]
+  ],
+  "landmark.notice": [
+   [
+    "x_objects",
+    0,
+    188,
+    38,
+    39
+   ]
+  ],
+  "furniture.gotable": [
+   [
+    "x_objects",
+    47,
+    262,
+    17,
+    18
+   ],
+   [
+    "x_objects",
+    65,
+    262,
+    23,
+    18
+   ]
+  ],
+  "building.moongate": [
+   [
+    "x_objects",
+    102,
+    136,
+    48,
+    46
+   ],
+   [
+    "x_objects",
+    151,
+    136,
+    53,
+    46
+   ]
+  ],
+  "building.gate": [
+   [
+    "x_objects",
+    262,
+    188,
+    46,
+    34
+   ]
+  ],
+  "camp.firepit": [
+   [
+    "x_objects",
+    432,
+    228,
+    25,
+    21
+   ]
+  ],
+  "camp.cookfire": [
+   [
+    "drawn",
+    32,
+    48,
+    32,
+    16
+   ]
+  ],
+  "banner.red": [
+   [
+    "x_objects",
+    57,
+    228,
+    18,
+    32
+   ]
+  ],
+  "banner.yellow": [
+   [
+    "x_objects",
+    0,
+    228,
+    18,
+    33
+   ]
+  ],
+  "banner.blue": [
+   [
+    "town",
+    192,
+    176,
+    16,
+    28
+   ]
+  ],
+  "banner.purple": [
+   [
+    "town",
+    224,
+    176,
+    16,
+    28
+   ]
+  ],
+  "banner.green": [
+   [
+    "town",
+    240,
+    176,
+    16,
+    28
+   ]
+  ],
+  "tree.peach_big": [
+   [
+    "x_objects",
+    258,
+    0,
+    50,
+    55
+   ]
+  ],
+  "tree.big": [
+   [
+    "x_objects",
+    309,
+    0,
+    49,
+    55
+   ]
+  ],
+  "rock.crag": [
+   [
+    "x_objects",
+    55,
+    82,
+    54,
+    53
+   ],
+   [
+    "x_objects",
+    110,
+    82,
+    49,
+    53
+   ]
+  ],
+  "rock.big": [
+   [
+    "x_objects",
+    342,
+    82,
+    50,
+    51
+   ],
+   [
+    "x_objects",
+    393,
+    82,
+    60,
+    51
+   ]
+  ],
+  "furn.jar": [
+   [
+    "x_objects",
+    219,
+    262,
+    16,
+    17
+   ],
+   [
+    "x_objects",
+    170,
+    262,
+    15,
+    18
+   ]
+  ],
+  "furn.chest": [
+   [
+    "x_objects",
+    406,
+    262,
+    15,
+    15
+   ],
+   [
+    "x_objects",
+    422,
+    262,
+    17,
+    15
+   ]
+  ],
+  "furn.drawers": [
+   [
+    "x_objects",
+    200,
+    262,
+    18,
+    18
+   ]
+  ],
+  "furn.shelf": [
+   [
+    "x_objects",
+    309,
+    188,
+    20,
+    34
+   ],
+   [
+    "x_objects",
+    330,
+    188,
+    16,
+    34
+   ]
+  ],
+  "furn.bed": [
+   [
+    "x_objects",
+    186,
+    262,
+    13,
+    18
+   ]
+  ],
+  "furn.table": [
+   [
+    "x_objects",
+    76,
+    228,
+    30,
+    32
+   ],
+   [
+    "x_objects",
+    107,
+    228,
+    32,
+    30
+   ]
+  ],
+  "furn.desk": [
+   [
+    "x_objects",
+    253,
+    262,
+    15,
+    16
+   ],
+   [
+    "x_objects",
+    269,
+    262,
+    25,
+    16
+   ]
+  ],
+  "furn.counter": [
+   [
+    "x_objects",
+    295,
+    262,
+    23,
+    16
+   ]
+  ],
+  "furn.stool": [
+   [
+    "x_objects",
+    384,
+    262,
+    6,
+    15
+   ],
+   [
+    "x_objects",
+    391,
+    262,
+    14,
+    15
+   ]
+  ],
+  "furn.rack": [
+   [
+    "x_objects",
+    311,
+    228,
+    20,
+    25
+   ]
+  ],
+  "furn.rug": [
+   [
+    "n_element",
+    208,
+    64,
+    47,
+    48
+   ]
+  ],
+  "furn.mat": [
+   [
+    "x_objects",
+    226,
+    188,
+    35,
+    37
+   ]
+  ],
+  "furn.plant": [
+   [
+    "x_objects",
+    383,
+    228,
+    17,
+    24
+   ],
+   [
+    "x_objects",
+    401,
+    228,
+    17,
+    24
+   ]
+  ],
+  "furn.screen": [
+   [
+    "x_objects",
+    347,
+    188,
+    34,
+    34
+   ],
+   [
+    "x_objects",
+    382,
+    188,
+    28,
+    34
+   ]
+  ],
+  "furn.barrel": [
+   [
+    "x_objects",
+    292,
+    228,
+    18,
+    26
+   ]
+  ],
+  "furn.sacks": [
+   [
+    "x_objects",
+    236,
+    262,
+    16,
+    16
+   ]
+  ],
+  "tree.grove": [
+   [
+    "x_objects",
+    145,
+    0,
+    57,
+    61
+   ],
+   [
+    "x_objects",
+    203,
+    0,
+    54,
+    60
+   ]
+  ],
+  "tree.dead": [
+   [
+    "x_objects",
+    172,
+    188,
+    28,
+    37
+   ],
+   [
+    "x_objects",
+    201,
+    188,
+    24,
+    37
+   ]
+  ],
+  "building.tent": [
+   [
+    "x_objects",
+    51,
+    136,
+    50,
+    50
+   ],
+   [
+    "x_objects",
+    0,
+    82,
+    54,
+    53
+   ]
+  ],
+  "camp.hay": [
+   [
+    "x_objects",
+    173,
+    228,
+    37,
+    29
+   ],
+   [
+    "x_objects",
+    19,
+    228,
+    37,
+    33
+   ]
+  ],
+  "camp.table": [
+   [
+    "x_objects",
+    140,
+    228,
+    32,
+    29
+   ],
+   [
+    "x_objects",
+    350,
+    228,
+    32,
+    24
+   ]
+  ],
+  "landmark.shrine": [
+   [
+    "x_objects",
+    411,
+    188,
+    31,
+    34
+   ]
+  ],
+  "landmark.shrine.lit": [
+   [
+    "drawn",
+    32,
+    80,
+    32,
+    30
+   ]
+  ],
+  "landmark.shrine.settled": [
+   [
+    "drawn",
+    64,
+    80,
+    32,
+    30
+   ]
+  ],
+  "ruin.hall": [
+   [
+    "x_objects",
+    454,
+    82,
+    45,
+    51
+   ],
+   [
+    "x_objects",
+    0,
+    136,
+    50,
+    51
+   ]
+  ],
+  "ruin.columns": [
+   [
+    "x_objects",
+    134,
+    188,
+    37,
+    39
+   ],
+   [
+    "x_objects",
+    401,
+    136,
+    34,
+    46
+   ]
+  ],
+  "ruin.rubble": [
+   [
+    "x_objects",
+    440,
+    262,
+    15,
+    14
+   ],
+   [
+    "x_objects",
+    456,
+    262,
+    18,
+    14
+   ]
+  ],
+  "building.hut": [
+   [
+    "x_objects",
+    289,
+    82,
+    52,
+    51
+   ]
+  ],
+  "furn.hearth": [
+   [
+    "x_objects",
+    266,
+    228,
+    25,
+    28
+   ]
+  ],
+  "prop.pig": [
+   [
+    "x_objects",
+    319,
+    262,
+    14,
+    16
+   ],
+   [
+    "x_objects",
+    334,
+    262,
+    15,
+    16
+   ]
+  ],
+  "prop.well": [
+   [
+    "x_objects",
+    443,
+    188,
+    28,
+    34
+   ],
+   [
+    "x_objects",
+    472,
+    188,
+    30,
+    34
+   ]
+  ],
+  "prop.mirror": [
+   [
+    "x_objects",
+    332,
+    228,
+    17,
+    25
+   ]
+  ],
+  "prop.pond": [
+   [
+    "x_objects",
+    458,
+    228,
+    24,
+    21
+   ],
+   [
+    "x_objects",
+    483,
+    228,
+    26,
+    21
+   ]
+  ],
+  "prop.cagecart": [
+   [
+    "x_objects",
+    436,
+    136,
+    41,
+    46
+   ]
+  ],
+  "prop.ox": [
+   [
+    "x_objects",
+    0,
+    262,
+    18,
+    21
+   ],
+   [
+    "x_objects",
+    19,
+    262,
+    27,
+    21
+   ]
+  ],
+  "prop.post": [
+   [
+    "x_objects",
+    419,
+    228,
+    12,
+    23
+   ]
+  ],
+  "prop.waterbowl": [
+   [
+    "x_objects",
+    493,
+    262,
+    15,
+    12
+   ],
+   [
+    "x_objects",
+    0,
+    284,
+    15,
+    12
+   ]
+  ],
+  "prop.letter": [
+   [
+    "x_objects",
+    16,
+    284,
+    12,
+    12
+   ],
+   [
+    "x_objects",
+    29,
+    284,
+    8,
+    12
+   ]
+  ],
+  "prop.seal": [
+   [
+    "x_objects",
+    475,
+    262,
+    8,
+    14
+   ],
+   [
+    "x_objects",
+    484,
+    262,
+    8,
+    14
+   ]
+  ]
+ },
+ "folk": {
+  "frame": [
+   16,
+   21
+  ],
+  "dirs": {
+   "down": [
+    0,
+    0
+   ],
+   "left": [
+    0,
+    1
+   ],
+   "right": [
+    0,
+    2
+   ],
+   "up": [
+    0,
+    3
+   ]
+  },
+  "step": [
+   1,
+   0
+  ],
+  "walk": [
+   0,
+   1,
+   2,
+   1
+  ],
+  "still": 1,
+  "sheets": {
+   "folk1": "assets/tk/jade/folk1.png",
+   "folk2": "assets/tk/jade/folk2.png"
+  },
+  "kinds": {
+   "folk.woman": [
+    {
+     "sheet": "folk1",
+     "origin": [
+      0,
+      0
+     ]
+    },
+    {
+     "sheet": "folk1",
+     "origin": [
+      3,
+      0
+     ]
+    },
+    {
+     "sheet": "folk1",
+     "origin": [
+      6,
+      0
+     ]
+    },
+    {
+     "sheet": "folk1",
+     "origin": [
+      9,
+      0
+     ]
+    },
+    {
+     "sheet": "folk1",
+     "origin": [
+      0,
+      4
+     ]
+    },
+    {
+     "sheet": "folk1",
+     "origin": [
+      3,
+      4
+     ]
+    },
+    {
+     "sheet": "folk1",
+     "origin": [
+      6,
+      4
+     ]
+    },
+    {
+     "sheet": "folk1",
+     "origin": [
+      9,
+      4
+     ]
+    }
+   ],
+   "folk.villager": [
+    {
+     "sheet": "folk1",
+     "origin": [
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  "drawn": {
+   "folk.villager": [
+    "f_farmer",
+    "f_farmer2",
+    "f_porter",
+    "f_youth"
+   ],
+   "folk.elder": [
+    "f_elder",
+    "f_elder2"
+   ],
+   "folk.child": [
+    "f_child"
+   ],
+   "folk.monk": [
+    "f_daoist"
+   ],
+   "folk.noble": [
+    "f_noble"
+   ],
+   "folk.soldier": [
+    "f_soldier"
+   ],
+   "folk.rebel": [
+    "rebel"
+   ],
+   "folk.hunter": [
+    "f_hunter"
+   ],
+   "folk.official": [
+    "f_official"
+   ],
+   "folk.lady": [
+    "f_geisha",
+    "f_geisha2",
+    "f_geisha3"
+   ],
+   "folk.girl": [
+    "f_girl"
+   ],
+   "folk.maiden": [
+    "f_maiden",
+    "f_maiden2"
+   ]
+  }
+ },
+ "detail": {
+  "tiles": [
+   [
+    "x_tiles",
+    0,
+    4,
+    1
+   ],
+   [
+    "x_tiles",
+    1,
+    4,
+    1
+   ]
+  ],
+  "density": 0.12
+ },
+ "room_styles": {
+  "building.inn": {
+   "wood": {
+    "tiles": [
+     [
+      "n_floor_in",
+      1,
+      7,
+      1
+     ]
+    ]
+   },
+   "wall": {
+    "edge": {
+     "sheet": "n_wall_in",
+     "tl": [
+      0,
+      0
+     ],
+     "t": [
+      1,
+      0
+     ],
+     "tr": [
+      4,
+      0
+     ],
+     "l": [
+      0,
+      1
+     ],
+     "r": [
+      4,
+      1
+     ],
+     "bl": [
+      0,
+      4
+     ],
+     "b": [
+      1,
+      4
+     ],
+     "br": [
+      4,
+      4
+     ]
+    },
+    "under": "void"
+   }
+  },
+  "building.shop": {
+   "wood": {
+    "tiles": [
+     [
+      "n_floor_in",
+      12,
+      1,
+      1
+     ]
+    ]
+   },
+   "wall": {
+    "edge": {
+     "sheet": "n_wall_in",
+     "tl": [
+      5,
+      0
+     ],
+     "t": [
+      6,
+      0
+     ],
+     "tr": [
+      9,
+      0
+     ],
+     "l": [
+      5,
+      1
+     ],
+     "r": [
+      9,
+      1
+     ],
+     "bl": [
+      5,
+      4
+     ],
+     "b": [
+      6,
+      4
+     ],
+     "br": [
+      9,
+      4
+     ]
+    },
+    "under": "void"
+   }
+  },
+  "building.hall": {
+   "stone": {
+    "tiles": [
+     [
+      "n_floor_in",
+      14,
+      13,
+      1
+     ]
+    ]
+   },
+   "wall": {
+    "edge": {
+     "sheet": "n_wall_in",
+     "tl": [
+      5,
+      0
+     ],
+     "t": [
+      6,
+      0
+     ],
+     "tr": [
+      9,
+      0
+     ],
+     "l": [
+      5,
+      1
+     ],
+     "r": [
+      9,
+      1
+     ],
+     "bl": [
+      5,
+      4
+     ],
+     "b": [
+      6,
+      4
+     ],
+     "br": [
+      9,
+      4
+     ]
+    },
+    "under": "void"
+   }
+  },
+  "building.hut": {
+   "wall": {
+    "edge": {
+     "sheet": "n_wall_in",
+     "tl": [
+      0,
+      6
+     ],
+     "t": [
+      1,
+      6
+     ],
+     "tr": [
+      4,
+      6
+     ],
+     "l": [
+      0,
+      7
+     ],
+     "r": [
+      4,
+      7
+     ],
+     "bl": [
+      0,
+      10
+     ],
+     "b": [
+      1,
+      10
+     ],
+     "br": [
+      4,
+      10
+     ]
+    },
+    "under": "void"
+   }
+  },
+  "building.lodge": {
+   "wall": {
+    "edge": {
+     "sheet": "n_wall_in",
+     "tl": [
+      0,
+      6
+     ],
+     "t": [
+      1,
+      6
+     ],
+     "tr": [
+      4,
+      6
+     ],
+     "l": [
+      0,
+      7
+     ],
+     "r": [
+      4,
+      7
+     ],
+     "bl": [
+      0,
+      10
+     ],
+     "b": [
+      1,
+      10
+     ],
+     "br": [
+      4,
+      10
+     ]
+    },
+    "under": "void"
+   }
+  },
+  "building.tent": {
+   "wall": {
+    "edge": {
+     "sheet": "n_wall_in",
+     "tl": [
+      5,
+      6
+     ],
+     "t": [
+      6,
+      6
+     ],
+     "tr": [
+      9,
+      6
+     ],
+     "l": [
+      5,
+      7
+     ],
+     "r": [
+      9,
+      7
+     ],
+     "bl": [
+      5,
+      10
+     ],
+     "b": [
+      6,
+      10
+     ],
+     "br": [
+      9,
+      10
+     ]
+    },
+    "under": "void"
+   }
+  }
+ },
+ "iso": true,
+ "isoVoid": "#549842",
+ "heroes": {
+  "liubei": {
+   "sheet": "assets/tk/genshin/chars/liubei.png",
+   "frame": [
+    11,
+    22
+   ]
+  },
+  "guanyu": {
+   "sheet": "assets/tk/genshin/chars/guanyu.png",
+   "frame": [
+    11,
+    22
+   ]
+  },
+  "zhangfei": {
+   "sheet": "assets/tk/genshin/chars/zhangfei.png",
+   "frame": [
+    11,
+    22
+   ]
+  },
+  "caocao": {
+   "sheet": "assets/tk/genshin/chars/caocao.png",
+   "frame": [
+    11,
+    22
+   ]
+  },
+  "dongzhuo": {
+   "sheet": "assets/tk/genshin/chars/dongzhuo.png",
+   "frame": [
+    17,
+    22
+   ]
+  },
+  "zhangjiao": {
+   "sheet": "assets/tk/genshin/chars/zhangjiao.png",
+   "frame": [
+    12,
+    22
+   ]
+  },
+  "zhangbao": {
+   "sheet": "assets/tk/genshin/chars/zhangbao.png",
+   "frame": [
+    12,
+    22
+   ]
+  },
+  "luzhi": {
+   "sheet": "assets/tk/genshin/chars/luzhi.png",
+   "frame": [
+    12,
+    22
+   ]
+  },
+  "zhujun": {
+   "sheet": "assets/tk/genshin/chars/zhujun.png",
+   "frame": [
+    11,
+    22
+   ]
+  },
+  "huangfusong": {
+   "sheet": "assets/tk/genshin/chars/huangfusong.png",
+   "frame": [
+    17,
+    22
+   ]
+  },
+  "militia": {
+   "sheet": "assets/tk/genshin/chars/militia.png",
+   "frame": [
+    11,
+    22
+   ]
+  },
+  "rebel": {
+   "sheet": "assets/tk/genshin/chars/rebel.png",
+   "frame": [
+    18,
+    22
+   ]
+  },
+  "f_soldier": {
+   "sheet": "assets/tk/genshin/chars/f_soldier.png",
+   "frame": [
+    17,
+    22
+   ]
+  },
+  "f_farmer": {
+   "sheet": "assets/tk/genshin/chars/f_farmer.png",
+   "frame": [
+    14,
+    22
+   ]
+  },
+  "f_official": {
+   "sheet": "assets/tk/genshin/chars/f_official.png",
+   "frame": [
+    13,
+    22
+   ]
+  },
+  "f_woman": {
+   "sheet": "assets/tk/genshin/chars/f_woman.png",
+   "frame": [
+    10,
+    22
+   ]
+  },
+  "f_elder": {
+   "sheet": "assets/tk/genshin/chars/f_elder.png",
+   "frame": [
+    12,
+    22
+   ]
+  }
+ }
+}
