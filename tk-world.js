@@ -494,8 +494,8 @@ function worldScenes() {
       if (p.solid) this.solids.add(this.add.zone(o.x + (r - l) / 2, o.y - p.fh / 2, l + r - 2, p.fh - 2));
     }
 
-    // The shrine's three looks: "dark" (cold stone), "lit" (the stones glow, incense burns: a hint is
-    // waiting) and "settled" (soft glow, no smoke). Who decides which is the story's (TK.shrineState).
+    // The shrine's three looks (the rock under the pine): "dark" (an empty board), "lit" (a game in
+    // progress: a hint is waiting) and "settled" (the finished game). A soft glow, no smoke. Who decides which is the story's (TK.shrineState).
     setShrine(state) {
       const s = this.shrine;
       if (!s || !["dark", "lit", "settled"].includes(state)) return;
@@ -507,13 +507,6 @@ function worldScenes() {
         .setBlendMode(Phaser.BlendModes.ADD).setDepth(s.y + 1);
       glow.isoFollow = s.img;   // in the isometric view it stays on the shrine
       s.fx.push(glow, this.tweens.add({ targets: glow, alpha: state === "lit" ? .12 : .08, duration: state === "lit" ? 900 : 2200, yoyo: true, repeat: -1, ease: "Sine.InOut" }));
-      if (state !== "lit") return;
-      // incense smoke from the burner: small grey puffs that rise, drift and fade
-      s.fx.push(this.time.addEvent({ delay: 420, loop: true, callback: () => {
-        const puff = this.add.circle(s.x + 9 + Phaser.Math.Between(-1, 1), s.y - 19, 1.5, 0xd6dae0, .7).setDepth(s.y + 2);
-        puff.isoFollow = s.img;
-        this.tweens.add({ targets: puff, y: puff.y - 16, x: puff.x + Phaser.Math.Between(-4, 4), scale: 2.2, alpha: 0, duration: 2200, onComplete: () => puff.destroy() });
-      } }));
     }
 
     folkAnims(sprite) {
