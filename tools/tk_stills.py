@@ -659,26 +659,7 @@ FACE_LOOKS = {
     "caiyong": ("Cai Yong", "a sorrowful old scholar with a grey beard, in a plain scholar's robe and cap"),
     "chengpu": ("Cheng Pu", "a veteran general with a grizzled beard, in red armour, holding a long spear"),
     "handang": ("Han Dang", "a tough general with a square jaw and short beard, in red armour, holding a broadsword"),
-    # the hero, less pretty (the user: "too much of a pretty boy, make him look more like a protagonist");
-    # the stills keep CAST's look
-    "liubei": ("Liu Bei", "the hero of the story, a determined man of twenty-eight, broad-shouldered and rugged, a "
-                          "strong jaw and a sun-weathered face, short black beard and moustache, long earlobes, steady "
-                          "resolute eyes under heavy brows, hair in a topknot with a few loose strands, a white robe "
-                          "with gold trim over light leather armour, the hilts of twin swords at his hip"),
-    # third try (the user: "still look general, just not so excessively fake handsome"): a commander with an
-    # ordinary, lived-in face
-    "liubei_c": ("Liu Bei", "a dignified commander of twenty-eight with a plain, ordinary, lived-in face, not handsome: "
-                            "a broad nose, slightly uneven features, tired kind eyes with crow's feet, weathered skin, a "
-                            "short untrimmed black beard, very long earlobes, hair in a simple topknot; a white robe with "
-                            "gold trim over a general's lamellar armour, a red cloak, one hand on the hilt of twin swords; "
-                            "calm, steady and trustworthy rather than glamorous"),
-    # the user meant "gentle", not "general": kind and humble, still not a pretty boy
-    "liubei_d": ("Liu Bei", "a gentle, kind-hearted man of twenty-eight with a plain, ordinary face, not handsome: a "
-                            "round, open face, a broad nose, soft tired eyes with smile lines, a slightly weathered "
-                            "complexion, a short untidy black beard, very long earlobes, hair in a simple topknot tied "
-                            "with cloth; a modest, slightly worn white robe with a little gold trim, a straw-woven mat "
-                            "maker's calloused hands held together politely; a warm, humble, sincere half-smile, "
-                            "someone people trust at once"),
+    # tries at a tougher or plainer Liu Bei (liubei_b/_c/_d): the user kept the original (CAST's look)
     "liubei_b": ("Liu Bei", "a battle-hardened young hero of twenty-eight, the leader of a band of volunteers: lean and "
                             "tough, a short black beard, long earlobes, a faint scar on his cheekbone, a fierce confident "
                             "half-smile, hair tied up in a topknot, a dusty white robe with gold trim, sleeves bound for "
