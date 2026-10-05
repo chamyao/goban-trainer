@@ -407,13 +407,14 @@ function worldScenes() {
       cam.setBounds(bx + ix, top, Math.max(mw, vw) - 2 * ix, Math.max(mh, vh) + (by - top) - iy);
     }
     // isometric: the inset gives way where the player is near it, so he is always drawn at least
-    // 24 px inside the view (the box's own edges still hold)
+    // 24 px inside the view
     keepPlayerInView() {
       const b = this.camBox, P = this.player;
       if (!this.iso || !b || !P || !(b.ix || b.iy)) return;
       const cam = this.cameras.main, m = 24 / cam.zoom, p = this.view(P.x, P.y);
-      const L = Math.max(b.x, Math.min(b.x + b.ix, p.x - m)), R = Math.min(b.x + b.w, Math.max(b.x + b.w - b.ix, p.x + m));
-      const B = Math.min(b.y + b.h, Math.max(b.y + b.h - b.iy, p.y + m));
+      const e = 40 / cam.zoom;   // the box's own edge may give way a little too (the apron is drawn there)
+      const L = Math.max(b.x - e, Math.min(b.x + b.ix, p.x - m)), R = Math.min(b.x + b.w + e, Math.max(b.x + b.w - b.ix, p.x + m));
+      const B = Math.min(b.y + b.h + e, Math.max(b.y + b.h - b.iy, p.y + m));
       const cur = cam.getBounds();
       if (cur.x !== L || cur.right !== R || cur.bottom !== B) cam.setBounds(L, b.y, R - L, B - b.y);
     }
