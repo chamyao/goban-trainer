@@ -4,6 +4,7 @@ and character sprites, all held to one palette.
     python3 tools/gen_pixel.py                 # make every piece in PIECES that doesn't exist yet
     python3 tools/gen_pixel.py --only hall --force
     python3 tools/gen_pixel.py --list
+    python3 tools/gen_pixel.py --set xianxia   # the whole Chinese-fantasy kit (tools/xianxia_spec.py)
 
 Needs REPLICATE_API_TOKEN. Writes assets/tk/gen/<id>.png and assets/tk/gen/gen.json (what made
 each). The look is a Chinese fantasy game: jade, teal, vermilion and gold, pale stone, ink
@@ -42,6 +43,18 @@ PIECES = {
               "cracks, flat top-down ground texture", "tile"),
     "water": ("rd-plus", "topdown_map", (64, 64), "clear teal pond water with soft ripples and a few lotus pads, flat "
               "top-down texture", "tile"),
+    "t16_grass": ("rd-fast", "texture", (64, 64), "jade-green grass with clover and a few tiny white flowers, flat seamless game texture, 16 pixel tiles", "tile"),
+    "t16_stone": ("rd-fast", "texture", (64, 64), "pale grey flagstone courtyard paving with moss in the cracks, flat seamless game texture, 16 pixel tiles", "tile"),
+    "t16_water": ("rd-fast", "texture", (64, 64), "clear teal pond water with soft ripples, flat seamless game texture, 16 pixel tiles", "tile"),
+    "t16_dirt": ("rd-fast", "texture", (64, 64), "packed light-brown dirt road with small pebbles, flat seamless game texture, 16 pixel tiles", "tile"),
+    "t16_wall": ("rd-fast", "texture", (64, 64), "white plaster wall with faint cracks and a grey stone base, flat seamless game texture, 16 pixel tiles", "tile"),
+    "t16_roof": ("rd-fast", "texture", (64, 64), "jade-green glazed Chinese roof tiles in curved overlapping rows, flat seamless game texture, 16 pixel tiles", "tile"),
+    "t32_grass": ("rd-fast", "texture", (128, 128), "jade-green grass with clover and a few tiny white flowers, flat seamless game texture, 32 pixel tiles", "tile"),
+    "t32_stone": ("rd-fast", "texture", (128, 128), "pale grey flagstone courtyard paving with moss in the cracks, flat seamless game texture, 32 pixel tiles", "tile"),
+    "t32_water": ("rd-fast", "texture", (128, 128), "clear teal pond water with soft ripples, flat seamless game texture, 32 pixel tiles", "tile"),
+    "t32_dirt": ("rd-fast", "texture", (128, 128), "packed light-brown dirt road with small pebbles, flat seamless game texture, 32 pixel tiles", "tile"),
+    "t32_wall": ("rd-fast", "texture", (128, 128), "white plaster wall with faint cracks and a grey stone base, flat seamless game texture, 32 pixel tiles", "tile"),
+    "t32_roof": ("rd-fast", "texture", (128, 128), "jade-green glazed Chinese roof tiles in curved overlapping rows, flat seamless game texture, 32 pixel tiles", "tile"),
     "hall": ("rd-plus", "topdown_asset", (96, 96), "Chinese palace hall, red lacquered pillars, curved upswept roof with "
              "jade-green glazed tiles and gold ridge ornaments, white stone steps, front door", "cutout"),
     "pine": ("rd-plus", "topdown_asset", (48, 64), "twisted Chinese pine tree with flat layered clusters of dark green "
@@ -51,6 +64,10 @@ PIECES = {
                  "cutout"),
     "liubei": ("rd-animation", "small_sprites", (32, 32), "young Chinese hero in a white robe with gold trim, black "
                "topknot, short black beard", "sheet"),
+    "liubei64": ("rd-plus", "topdown_asset", (64, 64), "full-body game character sprite of a young Chinese hero "
+                 "standing, white robe with gold trim, black topknot, short black beard, 3/4 top-down view", "cutout"),
+    "liubei64turn": ("rd-plus", "character_turnaround", (256, 64), "young Chinese hero in a white robe with gold "
+                     "trim, black topknot, short black beard; front, side, back and three-quarter views", "cutout"),
     "liubei48": ("rd-animation", "four_angle_walking", (48, 48), "young Chinese hero in a white robe with gold trim, "
                  "black topknot, short black beard", "sheet"),
 }
@@ -75,7 +92,45 @@ def run(model, inp):
     if r["status"] != "succeeded":
         raise RuntimeError(f"{model}: {r.get('status')} {r.get('error')}")
     out = r["output"]
-    return fetch(out[0] if isinstance(out, list) else out)
+    return [fetch(u) for u in (out if isinstance(out, list) else [out])]
+
+
+def kit_set(a):
+    """The xianxia kit (tools/xianxia_spec.py) into assets/tk/gen/xianxia/<name>-<i>.png."""
+    from xianxia_spec import GROUND, OBJECTS
+    out = OUT / "xianxia"
+    out.mkdir(parents=True, exist_ok=True)
+    log_path = out / "gen.json"
+    log = json.loads(log_path.read_text()) if log_path.exists() else {}
+    pal = data_uri(palette_png())
+    jobs = [(f"ground.{k}", "rd-fast", {"style": "texture", "width": 16, "height": 16, "tile_x": True, "tile_y": True,
+                                         "bypass_prompt_expansion": True,
+                                         "prompt": f"{p}, flat seamless 16x16 game ground tile, top-down"}, n)
+            for k, (p, n) in GROUND.items()]
+    jobs += [(k, "rd-plus", {"style": "topdown_asset", "width": max(16, w), "height": max(16, h), "remove_bg": True,
+                              "prompt": f"{p}, {LOOK}, 3/4 top-down game sprite, small"}, n)
+             for k, (p, (w, h), n) in OBJECTS.items()]
+    first = True
+    for name, model, inp, n in jobs:
+        if (a.only and name not in a.only) or ((out / f"{name}-1.png").exists() and not a.force):
+            continue
+        if not first:
+            time.sleep(a.pause)
+        first = False
+        inp = {**inp, "num_images": n, "input_palette": pal}
+        t = time.time()
+        try:
+            imgs = run(model, inp)
+        except Exception as e:
+            print(f"  {name}: failed: {e}")
+            continue
+        for i, raw in enumerate(imgs, 1):
+            (out / f"{name}-{i}.png").write_bytes(raw)
+        size = Image.open(out / f"{name}-1.png").size
+        log[name] = {"model": f"retro-diffusion/{model}", "input": {k: v for k, v in inp.items() if k != "input_palette"},
+                     "n": len(imgs), "size": list(size), "seconds": round(time.time() - t, 1), "made": date.today().isoformat()}
+        log_path.write_text(json.dumps(log, indent=1))
+        print(f"  {name}: {len(imgs)} x {size[0]}x{size[1]} in {log[name]['seconds']}s")
 
 
 def main():
@@ -83,11 +138,14 @@ def main():
     ap.add_argument("--only", action="append")
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--list", action="store_true")
+    ap.add_argument("--set", choices=["xianxia"], help="generate a whole kit's pieces (tools/xianxia_spec.py)")
     ap.add_argument("--pause", type=float, default=12, help="seconds between requests (rate limits)")
     a = ap.parse_args()
     OUT.mkdir(parents=True, exist_ok=True)
     log_path = OUT / "gen.json"
     log = json.loads(log_path.read_text()) if log_path.exists() else {}
+    if a.set:
+        return kit_set(a)
     if a.list:
         for k, (m, st, (w, h), p, how) in PIECES.items():
             print(f"{'✓' if (OUT / f'{k}.png').exists() else '·'} {k:10} {m}/{st} {w}x{h} {how}: {p}")
@@ -105,13 +163,14 @@ def main():
             inp["input_palette"] = pal
             if how == "tile":
                 inp["tile_x"] = inp["tile_y"] = True
+                inp["bypass_prompt_expansion"] = True   # it adds scenery to a plain texture otherwise
             if how == "cutout":
                 inp["remove_bg"] = True
         else:
             inp["return_spritesheet"] = True
         t = time.time()
         try:
-            raw = run(model, inp)
+            raw = run(model, inp)[0]
         except Exception as e:
             print(f"  {k}: failed: {e}")
             continue
