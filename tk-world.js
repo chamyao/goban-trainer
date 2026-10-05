@@ -277,7 +277,8 @@ function worldScenes() {
       const cam = this.cameras.main;
       cam.startFollow(this.player, true, .15, .15);
       if (this.place.archetype === "overworld") cam.setZoom(.5);   // the realm from on high: a wide stretch of country, the party small
-      cam.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+      this.mapW = map.widthInPixels; this.mapH = map.heightInPixels;
+      this.fitCamera();
       cam.setRoundPixels(true);
       cam.fadeIn(350);
 
@@ -299,7 +300,7 @@ function worldScenes() {
       if (typeof WorldItems !== "undefined") WorldItems.attach(this);   // mounts (tk-items.js)
       WorldFX.ambient(this, this.place.archetype);   // petals, leaves, embers, dust
       // the window changed shape (full window, a phone turned): the screen-sized effects follow
-      const onResize = () => WorldFX.ambient(this, this.place.archetype);
+      const onResize = () => { WorldFX.ambient(this, this.place.archetype); this.fitCamera(); };
       this.scale.on("resize", onResize);
       this.events.once("shutdown", () => this.scale.off("resize", onResize));
       window.__w = this;  // for tests and the console
@@ -318,6 +319,14 @@ function worldScenes() {
         if (s && !this.ui.busy() && !this.leaving && !this.cine) this.playQuest(this.openQuest(s), s);
         else if (typeof TKTable !== "undefined") TKTable.arrived(this);   // back from signing in at the go table
       });
+    }
+
+    // The camera's bounds: the map, or, where the map is smaller than the view (a room on a
+    // phone held upright), a frame around it so it sits in the middle instead of the top corner.
+    fitCamera() {
+      const cam = this.cameras.main, vw = cam.width / cam.zoom, vh = cam.height / cam.zoom, mw = this.mapW, mh = this.mapH;
+      const bx = mw < vw ? -Math.round((vw - mw) / 2) : 0, by = mh < vh ? -Math.round((vh - mh) / 2) : 0;
+      cam.setBounds(bx, by, Math.max(mw, vw), Math.max(mh, vh));
     }
 
     // The story quest a spot holds, if it can be played now.
@@ -540,7 +549,9 @@ function worldScenes() {
       const el = this.guide, t = this.goalAt;
       if (!el) return;
       const P = this.player, dt = Math.min(50, this.game.loop.delta || 16) / 1000;
-      const free = !!t && !this.ui.busy() && !this.leaving && !this.cine;
+      // (not while a story scroll is up or a story is playing: reading isn't being stuck)
+      const free = !!t && !this.ui.busy() && !this.leaving && !this.cine && !this.seated &&
+        !(typeof TKStory !== "undefined" && TKStory.busy) && !document.querySelector(".tk-scroll-wrap");
       // progress: maps still to cross, then distance on this one; getting closer resets the clock
       const q = this.nextMain(), key = q ? q.node : "", score = (this.goalHops || 0) * 1000 + (t ? Math.hypot(t.x - P.x, t.y - P.y) : 0);
       const G = WorldGuide.prog || (WorldGuide.prog = { key, best: score, idle: 0 });
@@ -770,7 +781,8 @@ function worldScenes() {
       // (a room's door out, a road off the edge of the map), tapped on or near
       const doorway = e => e.side === "N" && e.rect.width < 16;
       const door = this.exits.filter(e => doorway(e)
-          ? Math.abs(x - e.rect.centerX) < 26 && y > e.rect.centerY - 56 && y < e.rect.centerY + 14 && this.placeOpen(e.to)
+          // the building itself (its face, from the door up), not the road in front of it
+          ? Math.abs(x - e.rect.centerX) < 22 && y > e.rect.centerY - 48 && y < e.rect.bottom && this.placeOpen(e.to)
           : x > e.rect.x - 20 && x < e.rect.right + 20 && y > e.rect.y - 20 && y < e.rect.bottom + 20)
         .sort((a, b) => Math.hypot(a.rect.centerX - x, a.rect.centerY - y) - Math.hypot(b.rect.centerX - x, b.rect.centerY - y))[0];
       if (door) return { kind: "door", e: door };
@@ -952,9 +964,11 @@ function worldScenes() {
 
       if (vx || vy) { this.trail.unshift({ x: P.x, y: P.y, f: P.facing }); this.trail.length = 60; }
       this.followers.forEach((F, i) => {
-        const p = this.trail[Math.min(this.trail.length - 1, (i + 1) * 14)] || { x: P.x, y: P.y, f: P.facing };
+        let p = this.trail[Math.min(this.trail.length - 1, (i + 1) * 14)] || { x: P.x, y: P.y, f: P.facing };
+        // no trail yet (just arrived, or a scene put him here): beside him, not on top of him
+        if (Math.hypot(p.x - P.x, p.y - P.y) < 6) p = { x: P.x + (i % 2 ? 11 : -11) * (1 + (i >> 1)), y: P.y - 2, f: p.f };
         const moving = Math.hypot(F.spr.x - p.x, F.spr.y - p.y) > .5;
-        F.spr.setPosition(p.x, p.y).setDepth(p.y);
+        F.spr.setPosition(p.x, p.y).setDepth(p.y - .5);   // Liu Bei in front where they meet
         if (moving) F.spr.anims.play(`h-${F.who}-${p.f}`, true); else { F.spr.anims.stop(); F.spr.setTexture(`h-${F.who}-${p.f}-0`); }
       });
 
