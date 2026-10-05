@@ -405,10 +405,11 @@ const WorldCutscene = {
     };
 
     const run = async b => {
-      if (skip) return;
+      if (skip && b.do !== "scroll") return;   // a chapter scroll is story, not staging: it shows even when skipping
       if (still && !["line", "wait", "music", "still", "together"].includes(b.do)) hideStill();
       switch (b.do) {
         case "still": await showStill(b); break;
+        case "scroll": if (still) hideStill(); if (typeof TKStory !== "undefined") { TKStory.closeDialog(); await TKStory.scroll(...b.args); } break;
         case "cut": {
           cam.fadeOut(180); await wait(190);
           for (const p of b.place) actor(p.actor, p.at, p.face);
@@ -574,7 +575,11 @@ const WorldCutscene = {
         solved = true;
         continue;
       }
-      if (skip) { if (solved) break; instant(b); continue; }
+      if (skip) {   // skipped: staging jumps to its end, but a chapter scroll still shows (not again on a retry's fast-forward)
+        if (b.do === "scroll" && !(opts.ffToProblem && !solved)) { await run(b); continue; }
+        if (!solved) instant(b);
+        continue;
+      }
       await run(b);
     }
 

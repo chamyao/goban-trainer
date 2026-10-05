@@ -553,6 +553,8 @@ def stage_scene(scene, m, spot, party, chars, boss=None):
             st.beats.append({"do": "wait", "ms": s[1]})
         elif op == "still":   # ["still", id, move]: a painted still over the map while the next lines play
             st.beats.append({"do": "still", "id": s[1], "move": still_move(s[2] if len(s) > 2 else "")})
+        elif op == "scroll":   # a chapter scroll over the scene (it plays even when the scene is skipped)
+            st.beats.append({"do": "scroll", "args": s[1:6]})
         elif op == "problem":  # the scene's Go problem: the player solves it before the rest plays
             if boss and "boss" not in has:
                 st.boss_intro(boss["who"], boss)
