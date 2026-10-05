@@ -386,6 +386,8 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
 }
 .wukong-toggle .wukong-icon { width: 22px; height: 18px; image-rendering: pixelated; }
 .wukong-toggle.off { opacity: .45; filter: grayscale(1); }
+/* not over a story scroll (Chapter 1 on a fresh save) */
+body:has(.tk-scroll-wrap) .wukong-toggle { visibility: hidden; }
 
 
 /* Romance of the Three Kingdoms campaign */

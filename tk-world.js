@@ -1153,6 +1153,13 @@ function worldScenes() {
             : ["up", "down", "left", "right"][Math.floor(Math.random() * 4)];
           n.moving = Math.random() < .5 || away;
         }
+        // keep out of doorways and roads out: a villager standing there blocks the way in
+        const door = this.exits.find(e => n.spr.x > e.rect.x - 18 && n.spr.x < e.rect.right + 18 && n.spr.y > e.rect.y - 18 && n.spr.y < e.rect.bottom + 22);
+        if (door) {
+          const dx = n.spr.x - door.rect.centerX, dy = n.spr.y - door.rect.centerY;
+          n.dir = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? "right" : "left") : (dy > 0 ? "down" : "up");
+          n.moving = true; n.t = Math.max(n.t, 600);
+        }
         const v = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }[n.dir];
         if (n.moving) { n.spr.setVelocity(v[0] * 28, v[1] * 28); n.spr.anims.play(n.who ? `h-${n.who}-${n.dir}` : `fk-${n.sprite}-${n.dir}`, true); }
         else { n.spr.setVelocity(0); this.faceNpc(n); }
