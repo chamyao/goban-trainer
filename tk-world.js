@@ -691,7 +691,8 @@ function worldScenes() {
     activeHint() {
       const q = this.nextMain();
       if (!q || (q.gate && !this.gateFor(q))) return null;
-      const named = [].concat(...(q.gate || []).map(g => [].concat(g.needs || [])));
+      // a gate may name a step short ("node:n7b"): the same as "node:1-n7b"
+      const named = [].concat(...(q.gate || []).map(g => [].concat(g.needs || []))).map(c => String(c).replace(/^node:(?!\d+-)/, `node:${this.w.n}-`));
       return this.region.quests.filter(h => h.hint && h.node !== q.node && this.done(h.node) &&
         (q.after.includes(h.node) || named.includes(`node:${h.node}`))).pop() || null;
     }
@@ -709,7 +710,8 @@ function worldScenes() {
       for (const [k, t] of want) {
         if (this.actMarks.has(k)) continue;
         // a soft gold ring pulsing at their feet (where they're drawn)
-        const v = this.view(k.x, k.y), ring = this.add.ellipse(v.x, v.y, 18, 8).setStrokeStyle(1.5, 0xf2cf6a, .9).setDepth(v.y - 1);
+        // made at the flat map's x, y like everyone else: the isometric view moves it to where they're drawn
+        const ring = this.add.ellipse(k.x, k.y, 18, 8).setStrokeStyle(1.5, 0xf2cf6a, .9).setDepth(k.y - 1);
         const tw = this.tweens.add({ targets: ring, scale: 1.35, alpha: .25, duration: 900, yoyo: true, repeat: -1, ease: "Sine.InOut" });
         const ev = { remove: () => { tw.remove(); ring.destroy(); } };
         this.actMarks.set(k, { ev, t, called: false });
