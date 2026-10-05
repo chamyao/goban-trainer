@@ -1,0 +1,92 @@
+{
+ "camp.table": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 28,
+   "height": 28,
+   "remove_bg": true,
+   "prompt": "low plain wooden table with a rolled-up map scroll on it, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 21.3,
+  "made": "2026-10-05"
+ },
+ "building.moongate": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 48,
+   "height": 40,
+   "remove_bg": true,
+   "prompt": "short white plaster garden wall with a big round moon-shaped doorway through its middle, grey tiles along the top, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 80.3,
+  "made": "2026-10-05"
+ },
+ "rock.small": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 16,
+   "height": 16,
+   "remove_bg": true,
+   "prompt": "a single small rough grey stone, nothing else, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 71.9,
+  "made": "2026-10-05"
+ },
+ "furniture.gotable": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 24,
+   "height": 16,
+   "remove_bg": true,
+   "prompt": "small square grey stone table with a weiqi board on top, black and white stones on it, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 31.9,
+  "made": "2026-10-05"
+ },
+ "camp.hay": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 32,
+   "height": 30,
+   "remove_bg": true,
+   "prompt": "pile of golden straw, loose hay heap, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 20.9,
+  "made": "2026-10-05"
+ }
+}
