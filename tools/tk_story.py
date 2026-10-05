@@ -323,7 +323,9 @@ WORLDS = [
                 ["say", "luzhi", "Xuande! I had Zhang Jiao surrounded. But the court's envoy demanded a bribe, and I refused him. Now I go to the capital in chains, and Dong Zhuo takes my army."],
                 ["camera", "zoom", 1, 500], ["emote", "zhangfei", "anger"],
                 ["say", "zhangfei", "I'll cut down these guards and set him free!"],
-                ["problem"],  # the board comes up here; the rest plays once it is solved
+                ["n", "Liu Bei looks at the cart, at the four guards, at Zhang Fei's hand on his blade."],
+                ["dilemma", "Free Lu Zhi, or trust the court?", "Not yet clear. Liu Bei turns it over once more."],
+                ["problem"],  # the board is Liu Bei weighing it; solving it is the choice
                 ["say", "liubei", "The court will judge him fairly. Don't be rash, Yide!"],
                 ["wait", 1200],
                 ["emote", "lz", "..."],
@@ -579,7 +581,6 @@ WORLDS = [
                 ["n", "The inspector is forcing the clerks to accuse Liu Bei, they tell him, and the gatekeepers beat them away when they come to plead for him."],
                 ["spawn", "ins", "inspector", "ax2", 30, 0], ["prop", "post", "post", "ax2", 20, 0],
                 ["say", "zhangfei", "Tormentor of the people! Do you know who I am?"],
-                ["problem"],  # the board comes up here; the rest plays once it is solved
                 ["n", "He drags the inspector out by the hair, to the hitching post before the county office, and ties him there."],
                 ["move", "ins", "ax2", 20, 0],
                 ["fx", "whip", "ax2", 20, 0], ["fx", "whip", "ax2", 20, 0], ["fx", "whip", "ax2", 20, 0],
@@ -590,6 +591,8 @@ WORLDS = [
                 ["n", "Liu Bei, a gentle man at heart, orders Zhang Fei to stop."],
                 ["say", "guanyu", "Brother, you won great merit and were given only a sheriff's post, and now an inspector insults you. A phoenix does not roost among thorns. Let us kill him, give up the office, and make greater plans elsewhere."],
                 ["wait", 1200],
+                ["dilemma", "Kill the inspector, or spare him?", "Not yet clear. Liu Bei cannot bring himself to say it."],
+                ["problem"],  # the board is Liu Bei weighing it; solving it is the choice
                 ["prop", "seal", "seal", "ax2", 12, -4],
                 ["n", "He hangs the seal around the inspector's neck."],
                 ["say", "liubei", "For what you have done to the people you deserve to die. I spare your life. I return my seal of office, and I am gone."],

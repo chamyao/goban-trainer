@@ -20,6 +20,13 @@ def S(who, en, zh):
     return ["say", who, en]
 
 
+def D(caption, slip, zh_caption, zh_slip):
+    """A decision board: the caption over it, and the doubt line on a slip."""
+    ZH2[caption] = zh_caption
+    ZH2[slip] = zh_slip
+    return ["dilemma", caption, slip]
+
+
 def T(en, zh):
     """A title, objective, place or other label, with its Chinese."""
     ZH2[en] = zh
@@ -426,6 +433,7 @@ def _scenes_chain():
             S("wangyun", "You must pity the people of the Han empire.", "汝可怜大汉天下生灵！"),
             S("diaochan", "Command me, and I will not shrink from death.", "但有使令，万死不辞。"),
             S("wangyun", "The people hang by their heels, and the court is a pile of eggs. Only you can help.", "百姓有倒悬之危，君臣有累卵之急，非汝不能救也。"),
+            D("Will Diaochan give her life?", "Not yet. Diaochan does not answer.", "貂蝉可愿以身许国？", "未决。貂蝉不答。"),
             ["problem"],
             N("Diaochan agrees.", "貂蝉应允。"),
             ["remove", "wy"], ["remove", "dc"], ["remove", "sign"], ["light", "day", 1500],
@@ -508,9 +516,10 @@ def _scenes_chain():
             ["spawn", "lj", "lijue", "d6", 82, 0], ["spawn", "gs", "guosi", "d6", 90, 10],
             N("Li Jue, Guo Si, Zhang Ji and Fan Chou raise a hundred thousand men in the west and take Chang'an. Lü Bu rides to the Qingsuo Gate and begs Wang Yun to ride out with him.",
               "李傕、郭汜、张济、樊稠起兵十余万，杀奔长安。吕布至青琐门外，呼王允曰：「势急矣！请司徒上马，同出关去，别图良策。」"),
+            D("Flee with Lü Bu, or hold the gate?", "Not yet clear. Wang Yun does not move.", "随吕布出关，还是死守宫门？", "未决。王允立而不动。"),
+            ["problem"],
             S("wangyun", "If the gods of the realm let me save the state, that is my wish. If not, I give my body. I will not run in danger.",
               "若蒙社稷之灵，得安国家，吾之愿也；若不获已，则允奉身以死。临难苟免，吾不为也。"),
-            ["problem"],
             ["run", "lb", "d6", -140, 0], ["run", "rid", "d6", -150, 10], ["remove", "lb"], ["remove", "rid"],
             N("Lü Bu rides out with a hundred horsemen, leaving his family behind. The rebels take the palace. Wang Yun goes up on the gate tower beside the Emperor, and jumps down.",
               "吕布弃家小，引百余骑飞奔出关。贼兵围绕内庭至急。王允立于宣平门楼上，自楼上跳下。"),
