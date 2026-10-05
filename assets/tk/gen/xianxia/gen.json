@@ -548,5 +548,23 @@
   ],
   "seconds": 27.8,
   "made": "2026-10-05"
+ },
+ "plant.grass": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 16,
+   "height": 16,
+   "remove_bg": true,
+   "prompt": "small tuft of tall green grass, Chinese fantasy RPG, xianxia, Eastern Han dynasty, 3/4 top-down game sprite, small",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 26.6,
+  "made": "2026-10-05"
  }
 }
