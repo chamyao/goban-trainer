@@ -87,7 +87,8 @@ STYLES = {
     "try_90s": "Style: 1990s cel anime screenshot: hand-painted cels, clean outlines, flat colours with one hard shadow "
                "tone, simple painted background.",
     # the user: "the style tag is what needs to get cut" (scene and cast text unchanged)
-    "min": "Style: 2D donghua.",   # one short line; the scene and its people carry the picture
+    "min": "Style: 2D donghua.",
+    "min_cel": "Style: 2D donghua, flat colours, hard cel shading.",   # one short line; the scene and its people carry the picture
     "genshin": "Style: in the style of Genshin Impact key art: polished anime cel shading, bright vivid colours, "
                "ornate gold trim and jade accents, glowing particles, clean detailed fantasy illustration.",
     "watercolor": "Style: Chinese watercolour painting: loose wet washes of colour bleeding softly on rice paper, "
@@ -169,7 +170,8 @@ CAST = {
     "caohong": ("Cao Hong", "a sturdy young officer with a short beard, stripped to a plain tunic"),
     "lvboshe": ("Lü Boshe", "a kindly old farmer with a white beard, in a patched hemp robe and a straw hat"),
     "wangyun": ("Wang Yun", "an old minister with a long grey beard, in dark court robes and a tall official's cap"),
-    "diaochan": ("Diaochan", "a graceful young woman of sixteen in a pale silk robe, hair in an elegant bun with a "
+    "diaochan": ("Diaochan", "a graceful young woman of sixteen in a flowing, sheer pale silk robe with long translucent "
+                              "gauze sleeves and a light silk shawl drifting around her, hair in an elegant bun with a "
                              "jade pin"),
     "lisu": ("Li Su", "a lean officer in plain armour with a drawn sword"),
     "zumao": ("Zu Mao", "a wiry officer in red armour with two swords"),
