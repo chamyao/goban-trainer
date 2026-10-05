@@ -1414,13 +1414,22 @@ const TKOverlay = {
       const wrap = h("div", { class: "tk-duel" + (!host || host.clientWidth < 640 ? " tk-duel-full" : ""), role: "dialog", "aria-modal": "true", "aria-label": "Go problem 死活题" },
         [h("div", { class: "tk-duel-wipe" }), box]);
       (wrap.classList.contains("tk-duel-full") ? document.body : host).append(wrap);
+      // a phone turned sideways or back: the whole screen or inside the game's window, decided again
+      const relayout = () => {
+        const full = !host || !host.isConnected || host.clientWidth < 640;
+        if (full === wrap.classList.contains("tk-duel-full")) return;
+        wrap.classList.toggle("tk-duel-full", full);
+        wrap.classList.add("tk-relaid");   // moved, not opened: no wipe again
+        (full ? document.body : host).append(wrap);
+      };
+      addEventListener("resize", relayout);
       let won = false, closed = false;
       const close = () => {
         if (closed) return;
         closed = true;
         if (trainer) { trainer.alive = false; clearTimeout(trainer.replyTimer); trainer = null; }
-        removeEventListener("keydown", onKey, true); removeEventListener("hashchange", onNav);
-        wrap.classList.add("tk-leave");
+        removeEventListener("keydown", onKey, true); removeEventListener("hashchange", onNav); removeEventListener("resize", relayout);
+        wrap.classList.remove("tk-relaid"); wrap.classList.add("tk-leave");
         setTimeout(() => { wrap.remove(); resolve(won); }, 280);
       };
       // Escape leaves; Enter takes the offered next step. Keys stay out of the paused world.

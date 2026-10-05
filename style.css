@@ -546,6 +546,8 @@ body:has(.tk-scroll-wrap) .wukong-toggle { visibility: hidden; }
 .tk-duel { position: absolute; inset: 0; z-index: 20; overflow: hidden; color: #2c1c12; font-size: clamp(11px, 1.5vw, 15px); line-height: 1.4;
   background: radial-gradient(ellipse at 35% 50%, rgba(20, 12, 8, .45), rgba(12, 6, 4, .78)); animation: tkDuelIn .3s ease-out; }
 .tk-duel.tk-duel-full { position: fixed; z-index: 140; font-family: Georgia, "Songti SC", serif; background: #1b130d; }
+.tk-duel.tk-relaid, .tk-relaid .tk-duel-stage { animation: none; }
+.tk-relaid .tk-duel-wipe { display: none; }
 .tk-duel.tk-leave { animation: tkDuelOut .28s ease-in forwards; }
 .tk-duel-wipe { position: absolute; inset: 0; pointer-events: none; z-index: 2;
   background: repeating-linear-gradient(180deg, #120a06 0 10%, #3a2416 10% 12.5%); animation: tkDuelWipe .62s steps(8) forwards; }
