@@ -49,7 +49,7 @@ from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
-from tk_stills import CAST, CHOSEN, PORTRAITS, NEGATIVE, STILLS, STYLE, STYLES, cast_in, portrait, prompt  # noqa: E402
+from tk_stills import CAST, CHOSEN, PORTRAITS, NEGATIVE, NEGATIVE_LIST, STILLS, STYLE, STYLES, cast_in, portrait, prompt  # noqa: E402
 
 OUT = ROOT / "assets/tk/stills"
 SIZE = (1280, 720)
@@ -92,7 +92,11 @@ def replicate(prompt, model, aspect="16:9", images=()):
     h = {"Authorization": f"Bearer {os.environ['REPLICATE_API_TOKEN']}", "Prefer": "wait"}
     url = f"https://api.replicate.com/v1/models/{model}/predictions"
     try:
+        if "qwen" in model and NEGATIVE in prompt:   # qwen takes a real negative prompt: the exclusions go there,
+            prompt = prompt.replace(NEGATIVE, "").strip()   # and the prompt itself never names calligraphy or seals
         inp = {"prompt": prompt, "aspect_ratio": aspect, "output_format": "png"}
+        if "qwen" in model:
+            inp["negative_prompt"] = NEGATIVE_LIST
         if images:
             inp["images"] = list(images)        # flux-2 models: up to 5 reference images
         r = http(url, {"input": inp}, h)

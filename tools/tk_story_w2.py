@@ -775,3 +775,43 @@ PLACES2 = {
                    {"2-d4": T("Side story: the Beiye Gate.", "支线：北掖门。"), "2-d5": T("Side story: the market.", "支线：市集。"),
                     "2-d6": T("Side story: the gate tower.", "支线：宣平门楼。")}),
 }
+
+
+# ---- stills: (scene, a word from the line it comes before, still id, move) ----
+# The must-show line for each id is in docs/stills-must-show-w2.md. A still comes up under the lines
+# that follow and goes at the next staging step; unpainted stills are skipped.
+STILLS_W2 = [
+    ("alliance", "Liu Bei is given the lowest seat", "alliance_b", "slow pull back"),
+    ("wine", "Keep the wine", "wine_a", "slow zoom in"),
+    ("wine", "Guan Yu rides back in", "wine_b", "slow zoom in"),
+    ("hulao", "Three-surnamed slave", "hulao_a", "slow pan across"),
+    ("hulao", "The three ring him", "hulao_b", "slow zoom in"),
+    ("ruins", "Dong Zhuo has fled to Chang'an", "ruins_a", "slow pull back"),
+    ("fireflies", "Heaven is helping us", "fireflies_a", "slow zoom in"),
+    ("dingyuan", "I am a grown man", "dingyuan_a", "slow zoom in"),
+    ("lvboshe", "On the road they meet", "lvboshe_a", "slow pan across"),
+    ("lvboshe", "I would rather betray the world", "lvboshe_b", "slow zoom in"),
+    ("xingyang", "My lord, get up", "xingyang_a", "slow zoom in"),
+    ("zumao", "Zumao hangs the cap", "zumao_a", "slow pan across"),
+    ("seal", "They bring up the body", "seal_a", "slow zoom in"),
+    ("seal", "If I have this seal", "seal_b", "slow zoom in"),
+    ("xianshan", "In the woods the stones", "xianshan_a", "slow zoom in"),
+    ("garden", "Command me", "garden_a", "slow zoom in"),
+    ("pavilion", "I heard your name", "pavilion_a", "slow zoom in"),
+    ("fall", "I bring an edict", "fall_a", "slow zoom in"),
+    ("tower", "Wang Yun is here", "tower_a", "slow pull back"),
+]
+
+
+def _place_stills():
+    for scene, anchor, sid, move in STILLS_W2:
+        steps = WORLD2["scenes"][scene]["steps"]
+        for i, st in enumerate(steps):
+            if st[0] in ("n", "say") and anchor in st[-1]:
+                steps.insert(i, ["still", sid, move])
+                break
+        else:
+            raise ValueError(f"still {sid}: no line with {anchor!r} in scene {scene}")
+
+
+_place_stills()
