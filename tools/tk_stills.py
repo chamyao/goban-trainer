@@ -214,7 +214,7 @@ SCENES = {
         "horse tethered for the sacrifice, three figures kneeling, petals drifting through shafts of light.",
         "Liu Bei, Guan Yu and Zhang Fei kneeling side by side before the altar, eyes closed, hands clasped, swearing "
         "brotherhood, incense smoke between them, petals in their hair.",
-        "Three wine cups raised and touching above a table under peach blossom, petals falling into the wine, "
+        "Three bronze jue wine cups raised and touching above a table under peach blossom, petals falling into the wine, "
         "golden evening light.",
     ),
     "council": (
@@ -244,9 +244,9 @@ SCENES = {
         "An imperial army camp outside Guangzong at evening, rows of tents and banners, campfires lit, and the command "
         "tent glowing in the middle.",
         "Inside a lamplit army tent, Liu Bei bowing low to his old teacher Lu Zhi, who rises from his desk smiling to "
-        "greet him.",
+        "greet him; a bronze oil lamp on the desk is the only light.",
         "A general's desk in a tent: scrolls, a brush, an inkstone and a battle map pinned with small flags, "
-        "lamplight and shadow.",
+        "the warm light of a small bronze oil lamp and shadow.",
     ),
     "fireplan": (
         "Night at Changshe: a rebel camp of tents in tall dry grass, a strong wind bending the grass, imperial soldiers "
