@@ -80,6 +80,15 @@ STYLES = {
                   "fills, hard-edged two-tone cel shadows, a limited palette, energetic dynamic composition and poses, "
                   "a few speed lines; no airbrushed gradients, no bloom, no glow, no volumetric light, no painterly "
                   "texture, no photorealism.",
+    # a prompt bake-off before the wide redo (the user: "get a good prompt before doing wide scale"): short on purpose
+    "try_min": "Style: flat 2D anime illustration, bold black outlines, flat colours, simple two-tone shading, plain background.",
+    "try_avatar": "Style: in the style of the animated series Avatar: The Last Airbender: flat 2D cel animation, clean "
+                  "outlines, flat colours, simple shading, East Asian character design.",
+    "try_90s": "Style: 1990s cel anime screenshot: hand-painted cels, clean outlines, flat colours with one hard shadow "
+               "tone, simple painted background.",
+    # the user: "the style tag is what needs to get cut" (scene and cast text unchanged)
+    "min": "Style: 2D donghua.",
+    "min_cel": "Style: 2D donghua, flat colours, hard cel shading.",   # one short line; the scene and its people carry the picture
     "genshin": "Style: in the style of Genshin Impact key art: polished anime cel shading, bright vivid colours, "
                "ornate gold trim and jade accents, glowing particles, clean detailed fantasy illustration.",
     "watercolor": "Style: Chinese watercolour painting: loose wet washes of colour bleeding softly on rice paper, "
@@ -113,8 +122,11 @@ CATEGORY = {sid: k for k, c in _CATS["categories"].items() for sid in c["scenes"
 for _k, _c in _CATS["categories"].items():
     STYLES[f"cat_{_k}"] = f"Style: {_CATS['base'].rstrip('.')}. {_c['recipe']}"
 
-# the user's pick for the stills: the God of High School look, on Seedream 5 Pro (gen_stills' default)
-STYLE = f"{STYLES['gohs']} {NEGATIVE}"
+# the stills are made on Seedream 5 Pro (gen_stills' default); the God of High School look was the first pick
+# the user's final style (after the garden tests): one short line, the era, nothing else; scenes and cast
+# descriptions carry the picture. Every still's default; --look gohs etc. still swap it out for comparisons.
+STYLES["final"] = "Style: 2D donghua, hard cel shading."
+STYLE = f"{STYLES['final']} Han dynasty China, about 184 AD."
 
 # candidates for the portrait framing (the reference faces), to choose by eye
 PORTRAITS = {
@@ -161,7 +173,8 @@ CAST = {
     "caohong": ("Cao Hong", "a sturdy young officer with a short beard, stripped to a plain tunic"),
     "lvboshe": ("Lü Boshe", "a kindly old farmer with a white beard, in a patched hemp robe and a straw hat"),
     "wangyun": ("Wang Yun", "an old minister with a long grey beard, in dark court robes and a tall official's cap"),
-    "diaochan": ("Diaochan", "a graceful young woman of sixteen in a pale silk robe, hair in an elegant bun with a "
+    "diaochan": ("Diaochan", "a graceful young woman of sixteen in a flowing, sheer pale silk robe with long translucent "
+                              "gauze sleeves and a light silk shawl drifting around her, hair in an elegant bun with a "
                              "jade pin"),
     "lisu": ("Li Su", "a lean officer in plain armour with a drawn sword"),
     "zumao": ("Zu Mao", "a wiry officer in red armour with two swords"),
@@ -711,3 +724,12 @@ for _id, _text in FINAL.items():   # the final prompt replaces the first-pass sc
 for _id, _text in FINAL2.items():
     STILLS[_id] = {"scene": _id.rsplit("_", 1)[0], "lens": _id.rsplit("_", 1)[1], "prompt": _text}
 assert all(c in STILLS for c in CHOSEN)
+
+# the scene text of the stills the game shows, as Plot rewrites it (assets/tk/stills/scene_prompts.json):
+# {id: {"book", "category", "beat": what the still must show, "scene": the text, "notes"}}. Its "scene"
+# replaces the text above; the cast descriptions and the style line are still added by prompt().
+_SP = _Path(__file__).resolve().parent.parent / "assets/tk/stills/scene_prompts.json"
+if _SP.exists():
+    for _id, _e in _json.loads(_SP.read_text()).items():
+        if _id in STILLS and _e.get("scene"):
+            STILLS[_id]["prompt"] = _e["scene"]
