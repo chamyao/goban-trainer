@@ -733,7 +733,10 @@ html.tk-fullwin-on, html.tk-fullwin-on body { overflow: hidden; overscroll-behav
 @keyframes tkKbUp { from { transform: scale(1.12) translateY(4%); } to { transform: scale(1.12) translateY(-4%); } }
 @keyframes tkKbDown { from { transform: scale(1.12) translateY(-4%); } to { transform: scale(1.12) translateY(4%); } }
 @keyframes tkKbPan { from { transform: scale(1.12) translateX(4%); } to { transform: scale(1.12) translateX(-4%); } }
-@media (prefers-reduced-motion: reduce) { .tk-still img { animation: none; } }
+/* a phone held upright: the picture at full height, panned edge to edge and back (tk-cutscene.js sets --pan) */
+.tk-still.wide img { height: 100%; max-width: none; object-fit: fill; animation: tkKbWide 12s ease-in-out infinite alternate; }
+@keyframes tkKbWide { from { transform: translateX(0); } to { transform: translateX(var(--pan, 0px)); } }
+@media (prefers-reduced-motion: reduce) { .tk-still img { animation: none; } .tk-still.wide img { transform: translateX(calc(var(--pan, 0px) / 2)); } }
 /* a problem on a phone turned sideways (or opened that way): board left at full height, words and keys beside it */
 @media (orientation: landscape) and (max-height: 560px) {
   .tk-duel-full .tk-duel-stage { flex-direction: row; align-items: center; justify-content: center; height: 100%; min-height: 0; padding: 10px 14px; }

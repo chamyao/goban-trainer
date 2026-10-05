@@ -94,6 +94,14 @@ const WorldCutscene = {
       await Promise.race([img.decode().catch(() => {}), new Promise(r => setTimeout(r, 1500))]);
       if (!img.complete || !img.naturalWidth) return;
       (host.querySelector(".town-ui") || host).prepend(el);
+      // a screen much narrower than the picture (a phone held upright): show it at full height and
+      // pan across its whole width, so the scene is seen instead of only its middle
+      const r = el.getBoundingClientRect(), iw = r.height * img.naturalWidth / img.naturalHeight;
+      if (r.width && iw > r.width * 1.25) {
+        el.classList.add("wide");
+        img.style.width = `${Math.ceil(iw)}px`;
+        el.style.setProperty("--pan", `${Math.floor(r.width - iw)}px`);
+      }
       overlays.push(el);
       still = el;
       requestAnimationFrame(() => el.classList.add("on"));
