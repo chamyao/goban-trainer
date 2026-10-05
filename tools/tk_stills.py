@@ -127,6 +127,15 @@ for _k, _c in _CATS["categories"].items():
 # descriptions carry the picture. Every still's default; --look gohs etc. still swap it out for comparisons.
 STYLES["final"] = "Style: 2D donghua, hard cel shading."
 STYLE = f"{STYLES['final']} Han dynasty China, about 184 AD."
+# short lines to add for battle scenes (the user: "battle scenes with some more oomph"), tested on Black Wind
+BATTLE_LINES = {
+    "final_b1": "Dynamic action shot, speed lines.",
+    "final_b2": "Low camera angle, motion blur, flying debris.",
+    "final_b3": "Explosive action, high contrast, impact frames.",
+    "final_b4": "Fight scene like The God of High School.",
+}
+for _k, _v in BATTLE_LINES.items():
+    STYLES[_k] = f"{STYLES['final']} {_v}"
 
 # candidates for the portrait framing (the reference faces), to choose by eye
 PORTRAITS = {
