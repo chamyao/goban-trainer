@@ -95,13 +95,11 @@ const WorldCutscene = {
       if (!img.complete || !img.naturalWidth) return;
       (host.querySelector(".town-ui") || host).prepend(el);
       // a screen much narrower than the picture (a phone held upright): the picture is shown at up to
-      // twice the screen's width (about half of it at a time), high on the screen over a blurred copy of
-      // itself, and pans from its left edge to its right edge and back.
+      // 1.5 times the screen's width (two thirds of it at a time), high on the screen with dark above and
+      // below, and pans from its left edge to its right edge and back.
       const r = el.getBoundingClientRect(), ar = img.naturalWidth / img.naturalHeight;
       if (r.width && r.height * ar > r.width * 1.25) {
-        const w = Math.min(r.height * ar, r.width * 2), h = w / ar, range = w - r.width;
-        const bg = img.cloneNode(); bg.className = "tk-still-bg";
-        el.prepend(bg);
+        const w = Math.min(r.height * ar, r.width * 1.5), h = w / ar, range = w - r.width;
         el.classList.add("wide");
         Object.assign(img.style, { width: `${Math.ceil(w)}px`, height: `${Math.ceil(h)}px`, top: `${Math.round(Math.max(0, (r.height - h) * .3))}px` });
         el.style.setProperty("--from", "0px");
