@@ -1166,6 +1166,72 @@
     "“Bring the blood, brother. We hold the right.”"
    ],
    "when": "node:n7b"
+  },
+  {
+   "id": "npc-6",
+   "kind": "folk.soldier",
+   "x": 9.5,
+   "y": 20.9,
+   "say": [
+    "“Waiting for the gun, sir.”"
+   ],
+   "face": "down",
+   "when": "node:n7b"
+  },
+  {
+   "id": "npc-7",
+   "kind": "folk.soldier",
+   "x": 13.5,
+   "y": 19.9,
+   "say": [
+    "“A bucket each, and every man ready.”"
+   ],
+   "face": "down",
+   "when": "node:n7b"
+  },
+  {
+   "id": "npc-8",
+   "kind": "folk.soldier",
+   "x": 9.5,
+   "y": 19.9,
+   "say": [
+    "“Let the paper horses come.”"
+   ],
+   "face": "down",
+   "when": "node:n7b"
+  },
+  {
+   "id": "npc-9",
+   "kind": "folk.soldier",
+   "x": 32.5,
+   "y": 20.9,
+   "say": [
+    "“Waiting for the gun, sir.”"
+   ],
+   "face": "down",
+   "when": "node:n7b"
+  },
+  {
+   "id": "npc-10",
+   "kind": "folk.soldier",
+   "x": 32.5,
+   "y": 18.9,
+   "say": [
+    "“A bucket each, and every man ready.”"
+   ],
+   "face": "down",
+   "when": "node:n7b"
+  },
+  {
+   "id": "npc-11",
+   "kind": "folk.soldier",
+   "x": 36.5,
+   "y": 19.9,
+   "say": [
+    "“Let the paper horses come.”"
+   ],
+   "face": "down",
+   "when": "node:n7b"
   }
  ],
  "exits": [

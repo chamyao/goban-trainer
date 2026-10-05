@@ -500,7 +500,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) this.data = await (await fetch("data/tk.json?v=25")).json();
+    if (!this.data) this.data = await (await fetch("data/tk.json?v=27")).json();
     return this.data;
   },
   ls(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } },
@@ -1282,6 +1282,15 @@ TK_SETTER_LINES.starred = TK_SETTER_LINES.stargrey;
 
 const TK_REST = 30000;
 // A touch screen (a phone or tablet): tap to move and tap to talk.
+// Test mode, for trying the story without solving: open the page with ?test=1 (?test=0 ends it).
+// Problems then get a Skip key that counts as a flawless solve.
+const TK_TEST = (() => {
+  try {
+    const q = new URLSearchParams(location.search).get("test");
+    if (q != null) localStorage.setItem("tk-test", q === "0" ? "0" : "1");
+    return localStorage.getItem("tk-test") === "1";
+  } catch { return false; }
+})();
 const TK_TOUCH = typeof matchMedia !== "undefined" && matchMedia("(pointer: coarse)").matches;
 
 // Hold a board until its problem's rest is over. The position stays in full view
@@ -1338,6 +1347,7 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
     key_("H", "提示 Hint", () => trainer && trainer.hint()),
     key_("R", "重来 Reset", () => trainer && trainer.reset()),
     key_("Esc", "离开 Leave", leave),
+    TK_TEST ? key_("S", "跳过 Skip (test)", () => trainer && (trainer.flawed = null, dispatchEvent(new CustomEvent("tczw:result", { detail: "ok" })))) : "",
   ]);
   const srcLine = h("div", { class: "tk-duel-src" }, [
     `${p.lv || node.grade || ""} · 死活 · `, node.role === "boss" ? "" : `出自 ${src.title} · `,
@@ -1414,13 +1424,22 @@ const TKOverlay = {
       const wrap = h("div", { class: "tk-duel" + (!host || host.clientWidth < 640 ? " tk-duel-full" : ""), role: "dialog", "aria-modal": "true", "aria-label": "Go problem 死活题" },
         [h("div", { class: "tk-duel-wipe" }), box]);
       (wrap.classList.contains("tk-duel-full") ? document.body : host).append(wrap);
+      // a phone turned sideways or back: the whole screen or inside the game's window, decided again
+      const relayout = () => {
+        const full = !host || !host.isConnected || host.clientWidth < 640;
+        if (full === wrap.classList.contains("tk-duel-full")) return;
+        wrap.classList.toggle("tk-duel-full", full);
+        wrap.classList.add("tk-relaid");   // moved, not opened: no wipe again
+        (full ? document.body : host).append(wrap);
+      };
+      addEventListener("resize", relayout);
       let won = false, closed = false;
       const close = () => {
         if (closed) return;
         closed = true;
         if (trainer) { trainer.alive = false; clearTimeout(trainer.replyTimer); trainer = null; }
-        removeEventListener("keydown", onKey, true); removeEventListener("hashchange", onNav);
-        wrap.classList.add("tk-leave");
+        removeEventListener("keydown", onKey, true); removeEventListener("hashchange", onNav); removeEventListener("resize", relayout);
+        wrap.classList.remove("tk-relaid"); wrap.classList.add("tk-leave");
         setTimeout(() => { wrap.remove(); resolve(won); }, 280);
       };
       // Escape leaves; Enter takes the offered next step. Keys stay out of the paused world.
