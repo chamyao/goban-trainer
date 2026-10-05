@@ -7,6 +7,14 @@ GROUND: 16x16 seamless tiles, several variants each.
 OBJECTS: kind -> (prompt, (w, h) to fit, variants).
 """
 
+# Ground is drawn (tools/build_xianxia_kit.py, ground()) in colours matched to the objects: the
+# generated ground came out as yellow sand and patterned rugs. GROUND below is kept for a retry.
+DRAWN_GROUND = ("grass", "dirt", "sand", "water")
+
+# pieces that came out wrong (a box for a go table, shrines for small rocks...): they keep the
+# Jade kit's art until they are regenerated
+REDO = {"furniture.gotable", "camp.table", "camp.hay", "building.moongate", "rock.small"}
+
 GROUND = {
     "grass": ("soft light jade-green grass, a few tiny flowers, even and calm", 4),
     "dirt": ("packed light-brown earth path, a few small pebbles, even", 2),
@@ -50,4 +58,158 @@ OBJECTS = {
     "rock.small": ("small grey stone", (16, 13), 2),
     "rock.big": ("large mossy grey boulder", (60, 44), 2),
     "rock.crag": ("tall jagged grey rock spire", (48, 46), 2),
+}
+
+
+# Story characters as 4-direction walking sheets (rd-animation four_angle_walking, 48x48 frames:
+# 4 directions x 4 steps). Looks follow the stills' cast (tools/tk_stills.py CAST).
+CHARACTERS = {
+    "liubei": "young Chinese hero, white robe with gold trim and a green sash, black topknot, short neat black beard, "
+              "twin swords at his belt, calm",
+    "guanyu": "tall Chinese general, full head of black hair in a topknot under a green cloth headscarf, deep red "
+              "face, very long flowing black beard reaching his chest, long green robe, holding a crescent-bladed glaive",
+    "zhangfei": "burly Chinese warrior in a dark brown robe with a black sash, no armour, black hair in a topknot, big "
+                "wild black beard covering his jaw, round fierce eyes, holding a long serpent spear",
+}
+
+# how many tries (different seeds) to make of each, to choose from: char.<who>-<n>.png
+CHAR_TRIES = {"liubei": 1, "guanyu": 3, "zhangfei": 3}
+# which try is used in the game (the user's pick), and how tall the heroes stand in pixels
+CHAR_PICK = {"liubei": 1, "guanyu": 1, "zhangfei": 2,   # the user's picks
+             **{k: 1 for k in ("caocao", "dongzhuo", "zhangjiao", "zhangbao", "luzhi", "zhujun", "huangfusong",
+                               "militia", "rebel", "f_soldier", "f_farmer", "f_official", "f_woman", "f_elder")}}
+HERO_H = 22
+
+
+# ---- parallel batches (each run by its own helper session, into assets/tk/gen/<set>/) ----
+
+# second tries at the pieces that came out wrong (REDO), with plainer prompts
+REDO_OBJECTS = {
+    "furniture.gotable": ("small square grey stone table with a weiqi board on top, black and white stones on it", (24, 16), 2),
+    "camp.table": ("low plain wooden table with a rolled-up map scroll on it", (28, 28), 2),
+    "camp.hay": ("pile of golden straw, loose hay heap", (32, 30), 2),
+    "building.moongate": ("short white plaster garden wall with a big round moon-shaped doorway through its middle, "
+                          "grey tiles along the top", (48, 40), 2),
+    "rock.small": ("a single small rough grey stone, nothing else", (16, 13), 2),
+}
+
+# indoor furniture for the rooms (Jade's are Ninja Adventure pieces)
+INTERIOR = {
+    "furn.stool": ("small round wooden stool", (14, 13), 2),
+    "furn.jar": ("Chinese ceramic wine jar with a cloth-tied lid", (14, 16), 2),
+    "furn.shelf": ("tall wooden shelf with scrolls, bowls and boxes", (32, 30), 2),
+    "furn.table": ("low square Chinese wooden table", (28, 28), 2),
+    "furn.plant": ("potted bonsai pine in a blue ceramic pot", (15, 24), 2),
+    "furn.barrel": ("wooden barrel with iron bands", (16, 30), 1),
+    "furn.chest": ("red lacquered wooden chest with brass fittings", (16, 13), 2),
+    "furn.sacks": ("stack of grain sacks", (14, 26), 1),
+    "furn.bed": ("simple Chinese wooden bed with a blue quilt", (24, 16), 1),
+    "furn.drawers": ("Chinese wooden cabinet with small drawers and brass pulls", (16, 23), 1),
+    "furn.mat": ("woven straw floor mat", (32, 32), 1),
+    "furn.desk": ("long low Chinese writing desk with brush, ink stone and scrolls", (46, 14), 2),
+    "furn.counter": ("long wooden shop counter", (46, 14), 1),
+    "furn.rack": ("wooden weapon rack with spears and halberds", (32, 22), 1),
+    "furn.screen": ("folding Chinese screen painted with mountains and cranes", (32, 30), 2),
+    "furn.rug": ("red patterned Chinese rug", (48, 48), 1),
+    "furn.hearth": ("brick cooking stove with a wok and a fire", (32, 24), 1),
+}
+
+# the rest of the cast as walking sheets (CHARACTERS covers the three brothers)
+CHARACTERS2 = {
+    "caocao": "sharp-eyed Chinese commander, short goatee, black official's cap, dark red robe with gold trim, sword at his side",
+    "dongzhuo": "fat, arrogant Chinese warlord, short beard, black official's cap, purple robe with gold trim",
+    "zhangjiao": "old Chinese sorcerer, long white hair and long white beard, yellow headscarf, flowing yellow robe, holding a staff",
+    "zhangbao": "wild-haired Chinese sorcerer general, yellow headscarf, yellow robe, holding a sword",
+    "luzhi": "dignified old Chinese scholar-general, long grey beard, black official's cap, blue robe with pale trim",
+    "zhujun": "Chinese imperial general, short beard, grey iron helmet, dark red robe over armour, sword",
+    "huangfusong": "Chinese imperial general, long black beard, grey iron helmet, blue robe over armour, sword",
+    "militia": "young Chinese village volunteer, red headband, olive-green tunic, holding a spear",
+    "rebel": "Yellow Turban rebel, yellow headscarf, ragged brown tunic, holding a spear",
+    "f_soldier": "Han dynasty soldier, grey iron helmet, red tunic, holding a spear",
+    "f_farmer": "Chinese peasant farmer, straw hat, plain brown clothes",
+    "f_official": "Chinese clerk, black official's cap, blue robe, thin moustache",
+    "f_woman": "Chinese village woman, hair in a bun with a red pin, pink dress",
+    "f_elder": "old Chinese village elder, long white beard, pale robe, walking stick",
+}
+
+
+# Props for the xianxia kit only (the Jade kit keeps the hand-drawn ones in drawn.png and props.png).
+# Map kinds by their vocab name; cutscene props as "prop.<atlas frame>" (tools/build_props.py), which the
+# cutscene player uses in place of the atlas frame when the kit has one.
+PROPS_GEN = {
+    "landmark.shrine": ("small outdoor weiqi shrine: a carved grey stone stele with a little tiled cap, a square stone "
+                        "go board on a low plinth in front of it with a few black and white stones, a small bronze "
+                        "incense burner beside it", (32, 30), 2),
+    "ruin.hall": ("burned-out ruin of a Chinese hall: roofless, charred black pillars of different heights on a grey "
+                  "stone base, a fallen burnt beam, ash", (64, 44), 2),
+    "ruin.columns": ("two charred black wooden columns on a stone base, one snapped short, ash around them",
+                     (32, 40), 2),
+    "ruin.rubble": ("small heap of grey stones and burnt black timber", (16, 12), 2),
+    "prop.pig": ("a pink domestic pig tied with a rope round its middle, side view", (20, 14), 2),
+    "prop.well": ("round grey stone well with a wooden frame, little tiled roof and a rope bucket", (28, 30), 2),
+    "prop.mirror": ("round polished bronze mirror on a small carved wooden stand", (16, 22), 2),
+    "prop.pond": ("small oval lotus pond with a grey stone rim, lily pads and pink lotus flowers", (36, 18), 2),
+    "prop.cagecart": ("wooden prisoner cage on a two-wheeled cart, thick wooden bars", (48, 40), 2),
+    "prop.cart": ("small wooden handcart with two wheels and long handles", (32, 28), 2),
+    "prop.forge": ("blacksmith's stone forge with glowing orange coals", (32, 26), 2),
+    "prop.anvil": ("iron blacksmith's anvil on a wooden stump", (16, 14), 2),
+    "prop.ox": ("black ox standing, side view", (24, 18), 2),
+    "prop.post": ("thick wooden hitching post with an iron ring", (12, 20), 2),
+    "prop.steelbars": ("small stack of iron ingots", (16, 10), 2),
+    "prop.staves": ("bundle of four wooden staves leaning together", (16, 18), 2),
+    "prop.switches": ("bundle of thin green willow switches tied with string", (16, 12), 2),
+    "prop.waterbowl": ("plain clay bowl of water", (14, 10), 2),
+    "prop.book": ("rolled bamboo-slip book tied with cord", (14, 10), 2),
+    "prop.letter": ("folded letter on yellowed paper", (14, 10), 2),
+    "prop.seal": ("square jade official seal with a carved animal on top", (12, 12), 2),
+}
+
+# generated props that came out unreadable at this size: the kit keeps the drawn atlas frame for these
+PROPS_SKIP = {"prop.forge", "prop.cart", "prop.anvil", "prop.steelbars", "prop.staves", "prop.switches", "prop.book"}
+
+
+# ---- the Genshin kit (the user's pick, after the mock screens): isometric, bright Liyue colours ----
+# Same pieces as xianxia (OBJECTS, INTERIOR, PROPS_GEN), drawn for the isometric view: a piece on a
+# footprint w x h tiles stands on a diamond (w + h) tiles wide (tk-iso.js), so its box is that wide.
+GENSHIN_LOOK = ("bright sunlit anime fantasy RPG in the style of Genshin Impact's Liyue: vivid saturated colours, "
+                "clean shapes, soft cel shading")
+GENSHIN_BUILT = "jade-green glazed roofs, vermilion pillars, gold trim"   # buildings and furniture only: on a rock it made a pavilion
+GENSHIN_NATURE = "growing straight from the ground, no pot, no planter, no base tile, no building"   # trees came out as bonsai
+GENSHIN_PALETTE = ["#2e2438", "#4b3d5c", "#8a4b2e", "#c47a3e", "#2f8a6e", "#45b48a", "#8be0a8", "#3aa0c8",
+                   "#8fd6f0", "#e04a36", "#f2804a", "#f5c242", "#fde59a", "#f7a8c4", "#fff6e2", "#d8cdb6",
+                   "#9a8e7c", "#5aa846", "#9bd86a"]
+GENSHIN_PILOT = ["building.house", "building.hall", "building.inn", "building.hut", "tree.big", "tree.peach",
+                 "tree.pine", "rock.big"]
+GENSHIN_OBJECT = "one single isolated object only, no room, no walls, no floor, no roof, no building"   # small props came out as whole rooms
+# came out wrong in the full run (a room, a pavilion, a fragment): the kit keeps xianxia's piece until
+# `gen_pixel --set genshin-redo --force` makes a good one and the kind is taken off this list
+GENSHIN_BAD = set()   # every kind has a good isometric piece now (genshin-redo2 fixed the counter, sacks and tables)
+GENSHIN_DROP = {"furn.stool-1", "prop.pond-1", "rock.small-2", "ruin.rubble-2",   # first redo: a room, a campfire
+                "genshin-redo2/rock.small-1", "genshin-redo2/rock.small-2", "genshin-redo2/ruin.rubble-1"}   # a plant, a bush, a campfire
+# second try at the props, run beside the first: naming roofs and buildings, even as "no roof", brought them in,
+# and so did "Liyue". This wording never mentions architecture at all.
+GENSHIN_ITEM = ("a single {p} by itself, centred, game item sprite, bright saturated anime colours "
+                "like Genshin Impact, soft cel shading, clean outline")
+# isometric art whose entrance is drawn on the lower-right face: the door is on the footprint's south edge,
+# which the isometric view puts lower-left, so the game mirrors these (kit "isoFlip")
+GENSHIN_FLIP = {"building.inn-1", "building.house-2"}
+# trees drawn standing on a raised square of ground: the square is cut away, the trunk kept
+GENSHIN_UNPLATE = ("tree.",)
+
+# ---- the Genshin isometric view's surroundings (the user: "the corners of the map look strangely empty") ----
+# BACKDROPS: seamless textures that fill the screen beyond a map's diamond, one per kind of country.
+# FOREGROUNDS: big cut-out pieces drawn over the edges of the view, nearer than the map, to frame it.
+GENSHIN_BACKDROPS = {
+    "meadow": "lush green countryside seen from above: grass, clumps of bushes, small round trees, wild flowers, a few rocks",
+    "forest": "dense green woodland seen from above: tree crowns packed close, glimpses of grass between them",
+    # the first tries of these two came out as scenic paintings, not ground seen from above: worded flatter
+    "mountain": "flat rocky ground seen from directly above: grey stones, gravel, tufts of grass, small pine trees",
+    "ruins": "flat ground seen from directly above: grey ash, charred wood, broken roof tiles, burnt grass",
+}
+GENSHIN_BACKDROP_PICK = {"meadow": 1, "forest": 1, "mountain": 4, "ruins": 3}   # the tries that tile cleanly
+GENSHIN_FOREGROUNDS = {
+    "fg.canopy": ("a big cluster of leafy green tree crowns, seen from slightly above", (128, 96)),
+    "fg.pine": ("a tall dark green pine tree", (64, 112)),
+    "fg.rocks": ("a pile of large mossy grey boulders", (112, 72)),
+    "fg.reeds": ("a thick clump of tall green reeds and grasses", (80, 80)),
 }

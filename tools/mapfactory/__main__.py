@@ -1,9 +1,9 @@
 """Map factory: turn the plot into game maps.
 
     python3 tools/mapfactory build   --world 1               # plot → abstract maps + region.json
-    python3 tools/mapfactory compile --world 1 --kit ninja   # abstract maps → Tiled maps for one art pack
+    python3 tools/mapfactory compile --world 1 --kit xianxia   # abstract maps → Tiled maps for one art pack
     python3 tools/mapfactory scenes  --world 1               # story scenes → staged cutscenes (cutscenes.json)
-    python3 tools/mapfactory all     --world 1 --kit ninja --kit jade --preview
+    python3 tools/mapfactory all     --world 1 --kit xianxia --kit jade --kit genshin --preview
 
 Reads data/tk.json (built from tools/tk_story.py) and tools/tk_places.py.
 Writes data/tk_maps/w<N>/. The format is described in docs/map-format.md.
@@ -72,6 +72,11 @@ def build(n):
     for q in region["quests"]:  # Chinese beside every line the player reads
         q["objective_zh"] = ZH.get(q["objective"], "")
         q["title_zh"] = world["scenes"][q["scene"]].get("zh", "")
+        if q.get("hint"):
+            q["hint_zh"] = ZH.get(q["hint"], "")
+        for g in q.get("gate", []):
+            if g.get("objective"):
+                g["objective_zh"] = ZH.get(g["objective"], "")
     out = {"format": "tk-region/1", "world": n, "name": world["name"], "zh": world.get("zh", ""), "start": region["start"],
            "party": world.get("party", []), "places": places, "quests": region["quests"]}
     (d / "region.json").write_text(json.dumps(out, ensure_ascii=False, indent=1))
@@ -82,14 +87,14 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("cmd", choices=["build", "compile", "scenes", "all"])
     ap.add_argument("--world", type=int, default=1)
-    ap.add_argument("--kit", action="append", help="art kit(s) to compile for (default: ninja)")
+    ap.add_argument("--kit", action="append", help="art kit(s) to compile for (default: xianxia, jade, genshin)")
     ap.add_argument("--preview", action="store_true", help="also render PNG previews into docs/maps/")
     a = ap.parse_args()
     if a.cmd in ("build", "all"):
         build(a.world)
     if a.cmd in ("compile", "all"):
         from compile import compile_world
-        for kit in a.kit or ["ninja"]:
+        for kit in a.kit or ["xianxia", "jade", "genshin"]:
             compile_world(a.world, kit, preview=a.preview)
     if a.cmd in ("scenes", "all"):
         from scenes import build_scenes

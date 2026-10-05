@@ -46,7 +46,7 @@ TOOLS = ROOT / "tools"
 STEPS = {
     "n", "say", "spawn", "army", "move", "run", "pose", "fx", "remove", "party", "gain", "wait", "scroll",
     "problem", "prop", "board", "unboard", "emote", "give", "surround", "close", "camera", "mood", "light",
-    "music", "boss", "victory",
+    "music", "boss", "victory", "vanish", "still",
 }
 # steps whose 4th/5th fields name a node: [op, id, who?, at, dx, dy]
 AT_POS = {"spawn": 3, "army": 4, "move": 2, "run": 2, "fx": 2, "prop": 3, "surround": None, "close": None}
@@ -167,11 +167,18 @@ def check_world(w, ZH, CAST, errors, warnings, needs=None, folk=None):
             errors.append(f"{name}: node {k!r} has trigger {n['trigger']!r}")
         if n.get("room") and not n.get("place"):
             errors.append(f"{name}: node {k!r} has a room but no place")
+        for g in n.get("gate", []):   # a gated battle: defeat scenes (no board) until its needs hold
+            if g.get("else") not in scenes:
+                errors.append(f"{name}: node {k!r} gate names scene {g.get('else')!r}, which does not exist")
+            for c in (g.get("needs") if isinstance(g.get("needs"), list) else [g.get("needs")]):
+                if not isinstance(c, str) or c.split(":")[0] not in ("node", "item", "mark"):
+                    errors.append(f"{name}: node {k!r} gate condition {c!r} is not node:/item:/mark:")
     for sc, ks in used.items():
         if len(ks) > 1:
             errors.append(f"{name}: scene {sc!r} is on several nodes: {ks}")
+    gate_scenes = {g.get("else") for n in nodes.values() for g in n.get("gate", [])}   # played by a gate, not by a node
     for sc in scenes:
-        if sc not in used:
+        if sc not in used and sc not in gate_scenes:
             warnings.append(f"{name}: scene {sc!r} is not on any node")
 
     props = known_props()
@@ -217,9 +224,12 @@ def check_world(w, ZH, CAST, errors, warnings, needs=None, folk=None):
             if t not in ZH:
                 errors.append(f"{name}: {where}: no Chinese for {kind}: {t[:70]!r}")
 
+    # scenes with no board: a node's with "board": False, and every gate's defeat scene
+    boardless = {n["scene"] for n in nodes.values() if n.get("board") is False and n.get("scene")}
+    boardless |= {g.get("else") for n in nodes.values() for g in n.get("gate", [])}
     for sc, body in scenes.items():
         own = used.get(sc, [None])[0]
-        attached = sc in used
+        attached = sc in used and sc not in boardless
         scan(body["steps"], f"scene {sc!r}", own, need_problem=attached)
         if body["title"] not in ZH:
             errors.append(f"{name}: scene {sc!r}: no Chinese for title {body['title']!r}")

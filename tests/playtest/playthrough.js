@@ -7,27 +7,38 @@ await p.route('**/*.mp3',r=>r.fulfill({status:404,body:''}));
 const shot=n=>p.screenshot({path:SP+'/mfr_'+n+'.png'});
 const ready=async()=>{for(let i=0;i<60;i++){if(await p.evaluate(()=>!!(window.__w&&window.__w.player&&window.__w.ui)))return;await p.waitForTimeout(200);}};
 const busy=()=>p.evaluate(()=>!!(window.__w&&window.__w.ui.busy()));
-const tapW=async(x,y)=>{const [a,b2]=await p.evaluate(([x,y])=>{const w=window.__w,cam=w.cameras.main,cv=w.game.canvas,r=cv.getBoundingClientRect(),k=cv.clientWidth/w.scale.width;return [r.left+(x-cam.worldView.x)*cam.zoom*k, r.top+(y-cam.worldView.y)*cam.zoom*k];},[x,y]);await p.touchscreen.tap(a,b2);};
+const tapW=async(x,y)=>{await p.evaluate(()=>new Promise(r=>{const w=window.__w;if(!w||!w.cameras){r();return;}const cam=w.cameras.main;let last='',same=0,n=0;const t=setInterval(()=>{const v=Math.round(cam.worldView.x)+','+Math.round(cam.worldView.y);same=v===last?same+1:0;last=v;if(same>=3||++n>40){clearInterval(t);r();}},40);}));/* the camera eases after him: tap once it has settled */const [a,b2]=await p.evaluate(([x,y])=>{const w=window.__w,cam=w.cameras.main,cv=w.game.canvas,r=cv.getBoundingClientRect(),k=cv.clientWidth/w.scale.width;return [r.left+((window.__w.view?window.__w.view(x,y).x:x)-cam.worldView.x)*cam.zoom*k, r.top+((window.__w.view?window.__w.view(x,y).y:y)-cam.worldView.y)*cam.zoom*k];},[x,y]);await p.touchscreen.tap(a,b2);};
 const act=async()=>{if(!(await p.evaluate(()=>!!window.__w&&(window.__w.ui.busy()||!!window.__w.cine))))return;const box=await p.evaluate(()=>{const r=window.__w.game.canvas.getBoundingClientRect();return [r.left+r.width/2,r.top+r.height*0.6];});await p.touchscreen.tap(box[0],box[1]);};
 const tapSpot=async node=>{const s=await p.evaluate(node=>{const s=Object.values(window.__w.spots).find(s=>s.node===node);return s&&[s.x,s.y];},node);if(s)await tapW(s[0],s[1]);};
 const line=()=>p.evaluate(()=>{const d=document.querySelector('.town-ui .town-dlg');return d&&!d.hidden?(d.querySelector('.town-who').textContent?d.querySelector('.town-who').textContent+': ':'')+d.querySelector('.town-en').textContent:null});
 const front=node=>p.evaluate(node=>{const w=window.__w;const s=Object.values(w.spots).find(s=>s.node===node);if(!s)return 'nospot';
   for(const [dx,dy,f] of [[0,14,'up'],[0,-12,'down'],[-14,2,'right'],[14,2,'left']]){w.player.setPosition(s.x+dx,s.y+dy);w.player.facing=f;const tg=w.target();if(tg&&tg.kind==='spot')return f;}return 'none';},node);
 const go=async place=>{await p.evaluate(pl=>{window.__w.leaving=false;window.__w.go(pl);},place);await p.waitForTimeout(1000);await ready();await p.waitForTimeout(400);};
-await p.goto((process.env.PLAYTEST_URL||'http://localhost:8765')+'/index.html#/tk/1');await p.waitForTimeout(1500);const c=p.getByText('Cancel',{exact:true});if(await c.count())await c.first().tap();
+await p.goto((process.env.PLAYTEST_URL||'http://localhost:8765')+'/index.html'+(process.env.PLAYTEST_KIT?'?kit='+process.env.PLAYTEST_KIT:'')+'#/tk/1');await p.waitForTimeout(1500);const c=p.getByText('Cancel',{exact:true});if(await c.count())await c.first().tap();
 for(let i=0;i<6;i++){const g=p.locator('.tk-scroll-go');if(await g.count()){await g.first().tap();await p.waitForTimeout(400);}}
 await ready();
 console.log('fresh goal:',await p.evaluate(()=>document.querySelector('.town-goal').textContent),'| next:',await p.evaluate(()=>window.__w.nextMain().node));
-const beats=[['lousang-village','1-start'],['zhuo-county--office','1-c1'],['zhuo-county','1-n1'],['zhuo-county--inn','1-i1'],['the-peach-garden','1-n2'],['horse-trail','1-as'],['daxing-mountain','1-n3'],['qingzhou','1-n4'],['guangzong-road--luzhi-tent','1-t1'],['guangzong-road','1-n5'],['dong-zhuos-camp','1-n6'],['hills-of-black-wind','1-n7'],['yangcheng','1-boss'],['anxi--hostel','1-ax1'],['anxi','1-ax2']];
-for(const [place,node] of beats){
+// the beats in the order the game gives them (nextMain); a gated beat gets what it needs first (the
+// flanks, the blood, the ridges have their own tests: blackwind, side-stories)
+let guard=0;
+for(;;){
+  const nx=await p.evaluate(()=>{const w=window.__w,q=w&&w.nextMain();if(!q||!/^1-/.test(q.node))return null;
+    for(const g of q.gate||[])for(const n of [].concat(g.needs||[])){const [k,v]=String(n).split(':');if(k==='item')WorldItems.add(w.w,v);if(k==='mark')WorldMarks.add(w.w,v);if(k==='node')TK.markCleared(/^\d+-/.test(v)?v:w.w.n+'-'+v);}
+    return [q.place,q.node];});
+  if(!nx||++guard>40)break;const [place,node]=nx;
+
   
   if(node==='1-n6')await p.evaluate(()=>TK.markCleared('1-bs'));
+  // Black Wind's gathering and the ridges have their own test (blackwind): supply them here
+  if(node==='1-boss')await p.evaluate(()=>{['pigblood','sheepblood','dogblood'].forEach(k=>WorldItems.add(TK.world(1),k));['ridge_left','ridge_right'].forEach(m=>WorldMarks.add(TK.world(1),m));});
   await go(place);
   console.log(`\n=== ${node} @ ${place}  face ${await front(node)}`);
   await p.evaluate(()=>{const w=window.__w;w.player.y+=10;}); await p.waitForTimeout(1200); await tapSpot(node); await p.waitForTimeout(1500); await p.waitForTimeout(200);
   const before=[];let t0=Date.now();
-  for(let i=0;i<500;i++){ if(await p.locator('.tk-duel svg').count())break; const l=await line(); if(l&&before[before.length-1]!==l)before.push(l); await act(); await p.waitForTimeout(80);}
+  const noBoard=await p.evaluate(n=>TK.world(1).nodes.find(x=>x.key===n).board===false,node);
+  for(let i=0;i<500;i++){ if(await p.locator('.tk-duel svg').count())break; if(noBoard&&i>20&&!(await busy())&&!(await p.evaluate(()=>!!window.__w.cine)))break; const l=await line(); if(l&&before[before.length-1]!==l)before.push(l); await act(); await p.waitForTimeout(80);}
   console.log(' BEFORE ('+((Date.now()-t0)/1000).toFixed(0)+'s): '+before.map(x=>x.slice(0,90)).join('\n   '));
+  if(noBoard){const ok=await p.evaluate(n=>TK.cleared(n),node);console.log(' (no board) cleared',ok);if(!ok)console.log('FAIL '+node+' not cleared by its scene');continue;}
   await p.waitForTimeout(900);
   const who=await p.evaluate(()=>{const d=document.querySelector('.tk-duel-dlg');return d?d.querySelector('.town-who').textContent+' | '+d.querySelector('.town-en').textContent:'?'});
   console.log(' BOARD: '+who); await shot(node);

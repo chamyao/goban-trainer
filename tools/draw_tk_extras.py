@@ -6,6 +6,8 @@ Writes assets/tk/drawn.png, a small sheet the kits use like any pack sheet
   notice board   0,0    40x34      go table   40,0   22x14
   moon gate      64,0   48x40      water      0,48 and 16,48 (16x16 tiles)
   fire pit       32,48  32x16      gateway    64,48  32x32
+  shrine         0,80 dark, 32,80 lit, 64,80 settled (32x30 each)
+  ruins (Book 2's burned Luoyang): hall 0,112 64x44   columns 64,112 32x40   rubble 96,112 16x12
 """
 from pathlib import Path
 
@@ -139,8 +141,78 @@ def gateway():  # a simple wooden gateway (pailou) you walk through
     return g.outline().image()
 
 
+def shrine(state):
+    """The Star Lords' weiqi shrine in each town: a stone stele, a stone board and a bronze burner.
+    state: "dark" (cold stone), "lit" (the stones glow, incense burns), "settled" (soft glow, no smoke)."""
+    g = Grid(32, 30)
+    st, stD, stL = "#8a8e94", "#5e636b", "#b4b8bc"
+    lit, settled = state == "lit", state == "settled"
+    # the stele behind, with a little tiled cap
+    g.rect(5, 6, 10, 14, stD); g.rect(6, 7, 8, 12, st); g.rect(3, 3, 14, 2, "#3e4350"); g.rect(5, 1, 10, 2, "#3e4350")
+    g.rect(9, 9, 2, 8, "#d8b04a" if lit else "#c8a860" if settled else stD)   # the carved line (no characters)
+    # the plinth
+    g.rect(1, 23, 30, 5, stD); g.rect(2, 22, 28, 2, st); g.rect(2, 27, 28, 1, "#4a4e56")
+    # the stone board on it: three lines each way, a few stones on the points
+    g.rect(3, 14, 18, 9, "#e6dcb4" if lit else stL); g.rect(3, 22, 18, 1, stD)
+    line = "#d8a838" if lit else "#c9b98a" if settled else "#7a7e86"
+    for x in (6, 11, 16):
+        g.rect(x, 15, 1, 7, line)
+    for y in (16, 18, 20):
+        g.rect(4, y, 16, 1, line)
+    for x, y, c in [(5, 15, "#222222"), (10, 17, "#f8f8f8"), (15, 15, "#222222"), (15, 19, "#f8f8f8")]:
+        if lit:   # a halo round each stone
+            for dx, dy in ((-1, 0), (-1, 1), (2, 0), (2, 1), (0, -1), (1, -1), (0, 2), (1, 2)):
+                g.set(x + dx, y + dy, "#8ae8ff")
+        g.rect(x, y, 2, 2, "#1a1a1a" if c == "#222222" else c)
+    # the bronze burner (a round ding on three legs)
+    g.ellipse(25.5, 19, 4, 3, "#8a6a32"); g.rect(21, 16, 9, 1, "#b08a42"); g.rect(22, 15, 1, 1, "#b08a42"); g.rect(28, 15, 1, 1, "#b08a42")
+    g.rect(22, 21, 1, 2, "#5a4420"); g.rect(25, 22, 1, 1, "#5a4420"); g.rect(28, 21, 1, 2, "#5a4420")
+    for x in (24, 26):
+        g.rect(x, 12, 1, 4, "#6a5a48" if state == "dark" else "#c8a070")
+        if lit:
+            g.set(x, 11, "#ff7a2c")
+    img = g.outline().image()
+    if lit:   # smoke over the outline: thin grey wisps
+        for x, y in ((24, 9), (23, 7), (24, 5), (26, 9), (27, 7), (26, 5), (25, 3), (23, 2)):
+            img.putpixel((x, y), (214, 218, 224, 170))
+    return img
+
+
+CHAR, CHARD, ASH, ASHD = "#3a2e2a", "#241c1a", "#8a8682", "#5e5a56"
+
+
+def ruin_hall():   # a burned hall: the walls stand, the roof is gone, charred beams across the gap
+    g = Grid(64, 44)
+    g.rect(2, 26, 60, 17, "#6e6660"); g.rect(2, 26, 60, 2, "#4e4844")            # the stone base
+    for x in (4, 18, 32, 46, 58):
+        top = 6 + (x * 7) % 11
+        g.rect(x, top, 4, 26 - top, CHAR); g.rect(x + 3, top, 1, 26 - top, CHARD)  # burnt pillars, broken at odd heights
+    g.rect(4, 12, 40, 3, CHARD); g.rect(30, 9, 18, 2, CHAR)                         # beams fallen across
+    g.rect(22, 30, 14, 13, "#1c1614")                                             # the empty doorway
+    for x, y in ((8, 38), (40, 36), (52, 40), (14, 34)):
+        g.rect(x, y, 3, 2, ASH)                                                   # ash and stones on the base
+    return g.outline().image()
+
+
+def ruin_columns():   # two charred columns, one snapped
+    g = Grid(32, 40)
+    g.rect(4, 4, 6, 33, CHAR); g.rect(8, 4, 2, 33, CHARD); g.rect(3, 2, 8, 3, "#4a3e38")
+    g.rect(20, 16, 6, 21, CHAR); g.rect(24, 16, 2, 21, CHARD); g.set(20, 15, CHAR); g.set(23, 14, CHAR); g.set(25, 15, CHAR)
+    g.rect(1, 36, 30, 3, "#6e6660")
+    for x in (12, 15, 27):
+        g.rect(x, 34, 3, 2, ASH)
+    return g.outline().image()
+
+
+def ruin_rubble():   # a heap of stones and burnt timber
+    g = Grid(16, 12)
+    g.ellipse(8, 9, 7, 3, ASHD); g.ellipse(6, 8, 3, 2, ASH); g.ellipse(11, 8, 3, 2, "#a09c96")
+    g.rect(2, 5, 9, 2, CHAR); g.set(12, 4, CHAR)
+    return g.outline().image()
+
+
 def main():
-    sheet = Image.new("RGBA", (112, 80))
+    sheet = Image.new("RGBA", (112, 160))
     sheet.alpha_composite(notice_board(), (0, 0))
     sheet.alpha_composite(go_table(), (40, 0))
     sheet.alpha_composite(moon_gate(), (64, 0))
@@ -148,6 +220,11 @@ def main():
     sheet.alpha_composite(water(1), (16, 48))
     sheet.alpha_composite(fire_pit(), (32, 48))
     sheet.alpha_composite(gateway(), (64, 48))
+    for i, state in enumerate(("dark", "lit", "settled")):
+        sheet.alpha_composite(shrine(state), (32 * i, 80))
+    sheet.alpha_composite(ruin_hall(), (0, 112))
+    sheet.alpha_composite(ruin_columns(), (64, 112))
+    sheet.alpha_composite(ruin_rubble(), (96, 112))
     out = ROOT / "assets/tk/drawn.png"
     sheet.save(out)
     print(out.relative_to(ROOT))

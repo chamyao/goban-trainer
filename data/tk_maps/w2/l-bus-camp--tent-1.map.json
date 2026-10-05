@@ -1,0 +1,115 @@
+{
+ "format": "tk-map/1",
+ "id": "l-bus-camp--tent-1",
+ "world": 2,
+ "parent": "l-bus-camp",
+ "name": "Tent, Lü Bu's Camp",
+ "archetype": "interior",
+ "building": "tent-1",
+ "style": "building.tent",
+ "size": [
+  20,
+  12
+ ],
+ "seed": 0.09438360466400231,
+ "terrain": {
+  "legend": {
+   "#": "wood",
+   "%": "stone",
+   "&": "mat",
+   "e": "earth",
+   "W": "wall",
+   " ": "void"
+  },
+  "rows": [
+   "                    ",
+   "     WWWWWWWWWW     ",
+   "     WeeeeeeeeW     ",
+   "     WeeeeeeeeW     ",
+   "     WeeeeeeeeW     ",
+   "     WeeeeeeeeW     ",
+   "     WeeeeeeeeW     ",
+   "     WeeeeeeeeW     ",
+   "     WWWWWeWWWW     ",
+   "                    ",
+   "                    ",
+   "                    "
+  ]
+ },
+ "objects": [
+  {
+   "kind": "furn.desk",
+   "x": 9,
+   "y": 2,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.rack",
+   "x": 6,
+   "y": 7,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.mat",
+   "x": 12,
+   "y": 4,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.chest",
+   "x": 6,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.barrel",
+   "x": 13,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "banner.red",
+   "x": 13,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "spots": [],
+ "npcs": [
+  {
+   "id": "in-1",
+   "kind": "folk.soldier",
+   "x": 10.5,
+   "y": 3.9,
+   "say": [
+    "“Orders come at dawn. Keep your weapon close.”"
+   ]
+  }
+ ],
+ "exits": [
+  {
+   "to": "l-bus-camp",
+   "side": "S",
+   "x": 10,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "l-bus-camp": [
+   10,
+   7
+  ],
+  "": [
+   10,
+   7
+  ]
+ }
+}

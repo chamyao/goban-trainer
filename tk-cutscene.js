@@ -35,8 +35,11 @@ const WorldCutscene = {
     scene.cine = cs;
     const actors = {}, fx = [], timers = [];
     const hasProblem = cs.beats.some(b => b.do === "problem");
+    WorldCutscene.preloadStills(cs);   // fetch the scene's stills now, so each is ready when its beat comes
     let skip = !!(opts.ffToProblem && hasProblem), solved = !hasProblem, left = false, lastLine = null;
     const px = ([x, y]) => [x * T, y * T];
+    // where the camera looks for a tile: the same, or where the isometric view draws it (tk-iso.js)
+    const seen = at => { const [x, y] = px(at); if (!scene.view) return [x, y]; const v = scene.view(x, y); return [v.x, v.y]; };
     const wait = ms => new Promise(r => { if (skip) return r(); timers.push(scene.time.delayedCall(ms, r)); });
     const tween = cfg => new Promise(r => { if (skip) return r(); scene.tweens.add({ ...cfg, onComplete: r }); });
 
@@ -70,6 +73,50 @@ const WorldCutscene = {
       setTimeout(() => el.remove(), ms);
     };
     const esc = t => String(t || "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+    // a painted still over the map, under the dialogue, drifting slowly while lines play over it;
+    // it goes when the scene moves on (any beat but lines, waits and music), or at the end
+    let still = null;
+    const hideStill = () => {
+      if (!still) return;
+      const el = still; still = null;
+      el.classList.remove("on");
+      setTimeout(() => el.remove(), 800);
+    };
+    const showStill = async b => {
+      const m = (await WorldCutscene.stillIndex())[b.id];
+      if (!m) return;                                       // not painted yet: the map carries the moment
+      hideStill();
+      const el = document.createElement("div");
+      el.className = `tk-still kb-${b.move || "in"}`;
+      const img = new Image(); img.crossOrigin = "anonymous";
+      img.alt = "";
+      img.src = WorldCutscene.stillSrc(m);
+      el.append(img);
+      // preloaded when the scene began; on a slow phone connection give it a while before going on without it
+      await Promise.race([img.decode().catch(() => {}), new Promise(r => setTimeout(r, 6000))]);
+      if (!img.complete || !img.naturalWidth) return;
+      (host.querySelector(".town-ui") || host).prepend(el);
+      // a screen much narrower than the picture (a phone held upright): the picture is shown at up to
+      // 1.5 times the screen's width (two thirds of it at a time), high on the screen with dark above and
+      // below, and pans from its left edge to its right edge and back.
+      // (sized again when the screen turns or resizes; a wide screen goes back to the full-frame drift)
+      const fit = () => {
+        const r = el.getBoundingClientRect(), ar = img.naturalWidth / img.naturalHeight;
+        const wide = r.width && r.height * ar > r.width * 1.25;
+        el.classList.toggle("wide", !!wide);
+        if (!wide) { img.removeAttribute("style"); return; }
+        const w = Math.min(r.height * ar, r.width * 1.5), h = w / ar, range = w - r.width;
+        Object.assign(img.style, { width: `${Math.ceil(w)}px`, height: `${Math.ceil(h)}px`, top: `${Math.round(Math.max(0, (r.height - h) * .3))}px` });
+        el.style.setProperty("--from", "0px");
+        el.style.setProperty("--to", `${-Math.floor(range)}px`);
+      };
+      fit();
+      if (typeof ResizeObserver !== "undefined") { const ro = new ResizeObserver(() => el.isConnected ? fit() : ro.disconnect()); ro.observe(el); }
+      overlays.push(el);
+      still = el;
+      requestAnimationFrame(() => el.classList.add("on"));
+      await wait(700);
+    };
     const overlays = [];
     const host = scene.game.worldOpts && scene.game.worldOpts.host || document.body;
     const skipBtn = document.createElement("button");
@@ -96,11 +143,12 @@ const WorldCutscene = {
     const sync = a => {
       if (a.prop) {
         a.spr.setDepth(a.spr.y);
-        if (a.glow && a.glow.active) a.glow.setPosition(a.spr.x, a.spr.y - 6).setVisible(a.spr.visible);
+        if (a.glow && a.glow.active) { a.glow.setPosition(a.spr.x, a.spr.y - 6).setVisible(a.spr.visible); a.glow.isoBase = [a.spr.x, a.spr.y]; }
         for (const id of a.riders) {        // inside: just behind the front bars, sitting on the bed
           const r = actors[id];
           if (!r) continue;
           r.spr.setPosition(a.spr.x, a.spr.y - (a.prop === "cagecart" ? 8 : 4)).setAlpha(a.spr.alpha).setVisible(a.spr.visible);
+          r.spr.isoBase = [a.spr.x, a.spr.y];   // sitting on the bed, upright in the isometric view
           sync(r);
           r.spr.setDepth(a.spr.y - .5);
           if (r.seat) r.seat.setDepth(a.spr.y - .5);
@@ -118,6 +166,7 @@ const WorldCutscene = {
       // nothing jumps when a scene starts; none for someone sitting inside a prop
       const big = a.horse || a.beast;
       if (!a.shadow) a.shadow = scene.textures.exists("@shadow") ? scene.add.image(0, 0, "@shadow") : scene.add.ellipse(0, 0, 14, 5, 0x140c06, .28);
+      a.shadow.isoWith = a.spr;   // nudged with its owner in the isometric view (tk-iso.js)
       a.shadow.setScale(big ? 24 / 14 : a.fallen ? 16 / 14 : Math.max(1, a.spr.displayWidth / 14), big ? 1.4 : 1)
         .setPosition(Math.round(a.spr.x), Math.round(a.ground ?? a.spr.y) - 1).setDepth(-999)
         .setVisible(a.spr.visible && !a.inside).setAlpha(a.spr.alpha);
@@ -150,6 +199,7 @@ const WorldCutscene = {
         } else {
           scene.hero(who);
           a = actors[id] = { id, who, spr: scene.add.sprite(0, 0, `h-${who}-down-0`).setOrigin(.5, 1) };
+          a.spr.isoSpread = true;   // isometric: kept from standing on top of a neighbour (tk-iso.js)
         }
       }
       const [x, y] = px(at);
@@ -201,7 +251,7 @@ const WorldCutscene = {
       tween({ targets: actors[id].spr, alpha: 0, duration: 350, onUpdate: () => sync(actors[id]) }).then(() => { actors[id].spr.setVisible(false); sync(actors[id]); })));
     const pan = (to, ms = 350) => {
       if (!to) return Promise.resolve();
-      const [x, y] = px(to);
+      const [x, y] = seen(to);
       return new Promise(r => { if (skip) return r(); cam.pan(x, y - 8, ms, "Sine.easeInOut", true, (c, p) => { if (p === 1) r(); }); });
     };
 
@@ -212,7 +262,9 @@ const WorldCutscene = {
       const box = scene.add.container(0, 0), P = scene.textures.get("tk-props"), d = PROP[kind] || {};
       const put = (tex, frame, dx = 0, dy = 0) => box.add(scene.add.image(dx, dy, tex, frame).setOrigin(.5, 1));
       const k = (d.kit || []).find(k => scene.kit && scene.kit.kinds[k]);
-      if (d.atlas && P.has(d.atlas)) put("tk-props", d.atlas);
+      const own = d.atlas && scene.kit && scene.kit.kinds[`prop.${d.atlas}`];   // the kit's own look (xianxia: generated)
+      if (own) put(`kit-${own[0][0]}`, `prop.${d.atlas}#0`);
+      else if (d.atlas && P.has(d.atlas)) put("tk-props", d.atlas);
       else if (d.horse && Items) box.add(Items.horse(scene, d.horse, 0, 0));
       else if (k) {
         const tex = `kit-${scene.kit.kinds[k][0][0]}`, fr = `${k}#0`;
@@ -270,6 +322,7 @@ const WorldCutscene = {
       const f = `emote.${icon}`;
       if (!scene.textures.get("tk-props").has(f)) return;
       const e = scene.add.image(body(a).x + 4, top(a) - 1, "tk-props", f).setOrigin(.5, 1).setDepth(1e5).setScale(0);
+      e.isoBase = [body(a).x, a.spr.y];   // above the head, not off to one side, in the isometric view
       fx.push(e);
       if (icon === "zzz") scene.tweens.add({ targets: e, y: e.y - 3, duration: 600, yoyo: true, repeat: 1 });
       scene.tweens.add({ targets: e, scale: 1, duration: 140, ease: "Back.easeOut" });
@@ -348,6 +401,7 @@ const WorldCutscene = {
     };
     // the screen changed size mid-scene: the letterbox, the mood and the light follow it
     const relayout = () => {
+      if (!bars[0].scene) return;   // the scene was left mid-cutscene: its objects are gone
       W = scene.scale.width; H = scene.scale.height;
       bars[0].setSize(W, bar);
       bars[1].setSize(W, bar).setPosition(0, H);
@@ -355,6 +409,7 @@ const WorldCutscene = {
       if (shade) shade.setPosition(W / 2, H / 2).setSize(W * 3, H * 3);
     };
     scene.scale.on("resize", relayout);
+    scene.events.once("shutdown", () => scene.scale.off("resize", relayout));   // the scale manager outlives the scene
     const board = (b, ms) => {
       const r = actors[b.actor] || actor(b.actor, b.at), p = actors[b.prop];
       if (!p) return Promise.resolve();
@@ -369,6 +424,7 @@ const WorldCutscene = {
       const r = actors[b.actor];
       if (!r) return Promise.resolve();
       for (const p of Object.values(actors)) if (p.prop) p.riders = p.riders.filter(id => id !== b.actor);
+      r.spr.isoBase = null;   // off the cart: back on its own feet
       r.inside = false;
       const [x, y] = px(b.to);
       if (!ms) { r.spr.setPosition(x, y); sync(r); return Promise.resolve(); }
@@ -376,15 +432,18 @@ const WorldCutscene = {
     };
 
     const run = async b => {
-      if (skip) return;
+      if (skip && b.do !== "scroll") return;   // a chapter scroll is story, not staging: it shows even when skipping
+      if (still && !["line", "wait", "music", "still", "together"].includes(b.do)) hideStill();
       switch (b.do) {
+        case "still": await showStill(b); break;
+        case "scroll": if (still) hideStill(); if (typeof TKStory !== "undefined") { TKStory.closeDialog(); await TKStory.scroll(...b.args); } break;
         case "cut": {
           cam.fadeOut(180); await wait(190);
           for (const p of b.place) actor(p.actor, p.at, p.face);
           if (b.light) light(b.light, 0);
           if (b.music) cue(b.music);
           const lead = b.place[0];
-          if (lead) { const [x, y] = px(lead.at); cam.centerOn(x, y - 8); }
+          if (lead) { const [x, y] = seen(lead.at); cam.centerOn(x, y - 8); }
           cam.fadeIn(220); await wait(230);
           break;
         }
@@ -523,7 +582,7 @@ const WorldCutscene = {
           if (actors[b.to]) actors[b.to].item = b.item;
           if (Items) { Items.gain(scene, b.item); Object.values(actors).forEach(mount); }
           break;
-        case "zoom": cam.setZoom(zoom0 * b.z); if (dark) dark.setScale(1 / b.z); break;
+        case "zoom": cam.setZoom(zoom0 * b.z); if (scene.fitCamera) scene.fitCamera(); if (dark) dark.setScale(1 / b.z); break;
         case "mood": mood(b.dark, 0); break;
         case "fade": case "vanish": b.actors.filter(id => actors[id]).forEach(id => { actors[id].spr.setVisible(false); sync(actors[id]); }); break;
         case "gain": if (Items) { Items.gain(scene, b.item); Object.values(actors).forEach(mount); } break;
@@ -536,17 +595,22 @@ const WorldCutscene = {
           const ff = opts.ffToProblem;
           skip = false;
           const to = lastLine && lastLine.camera;
-          if (to) { const [x, y] = px(to); cam.centerOn(x, y - 8); }
+          if (to) { const [x, y] = seen(to); cam.centerOn(x, y - 8); }
           if (ff && lastLine) await run(lastLine);
         }
         if (opts.onProblem && !(await opts.onProblem())) { left = true; break; }
         solved = true;
         continue;
       }
-      if (skip) { if (solved) break; instant(b); continue; }
+      if (skip) {   // skipped: staging jumps to its end, but a chapter scroll still shows (not again on a retry's fast-forward)
+        if (b.do === "scroll" && !(opts.ffToProblem && !solved)) { await run(b); continue; }
+        if (!solved) instant(b);
+        continue;
+      }
       await run(b);
     }
 
+    hideStill();
     scene.scale.off("resize", relayout);
     // back to the world: the leader stands where the scene left him
     for (const t of timers) t.remove(false);
@@ -557,11 +621,13 @@ const WorldCutscene = {
     bars.forEach(b => b.destroy());
     cam.resetFX();
     cam.setZoom(zoom0);
+    if (scene.fitCamera) scene.fitCamera();
     overlays.forEach(el => el.remove());
     scene.musicCue = null;
     if (!left && cs.end && cs.end.leader) { const [x, y] = px(cs.end.leader); scene.player.setPosition(x, y); }
     scene.player.facing = "down";
     hidden.forEach(s => s.setVisible(true));
+    if (scene.refreshStory) scene.refreshStory();   // who stands where may have changed in the scene
     for (const n of scene.npcs) if (n.until && !n.spr.body.enable) n.spr.setVisible(false);
     scene.trail = Array(60).fill({ x: scene.player.x, y: scene.player.y, f: "down" });
     cam.startFollow(scene.player, true, .15, .15);
@@ -572,11 +638,29 @@ const WorldCutscene = {
   },
 
   // the prop atlas (props, emote bubbles, gift icons), loaded once per game
+  // the stills that exist (tools/gen_stills.py writes assets/tk/stills/stills.json), fetched once
+  stillIndex() {
+    if (!this._stills) this._stills = fetch("assets/tk/stills/stills.json?v=19").then(r => r.ok ? r.json() : {}).catch(() => ({}));
+    return this._stills;
+  },
+  stillSrc(m) { return `assets/tk/stills/${m.file}?v=${m.made || ""}${m.look || ""}`; },   // a redone still is fetched anew
+  async preloadStills(cs) {
+    const ids = cs.beats.filter(b => b.do === "still").map(b => b.id);
+    if (!ids.length) return;
+    const idx = await this.stillIndex();
+    this._pre = this._pre || {};
+    for (const id of ids) {
+      const m = idx[id];
+      if (!m || this._pre[id]) continue;
+      const img = new Image(); img.crossOrigin = "anonymous"; img.src = this.stillSrc(m);
+      this._pre[id] = img;   // kept, so the browser keeps it decoded and cached
+    }
+  },
   load(scene) {
     if (scene.textures.exists("tk-props")) return Promise.resolve();
     return new Promise(res => {
-      scene.load.json("tk-props-json", "assets/tk/props.json?v=3");
-      scene.load.image("tk-props", "assets/tk/props.png?v=3");
+      scene.load.json("tk-props-json", "assets/tk/props.json?v=4");
+      scene.load.image("tk-props", "assets/tk/props.png?v=4");
       scene.load.once("complete", () => {
         const t = scene.textures.get("tk-props"), j = scene.cache.json.get("tk-props-json");
         if (t && j) for (const [n, [x, y, w, h]] of Object.entries(j.frames)) t.add(n, 0, x, y, w, h);

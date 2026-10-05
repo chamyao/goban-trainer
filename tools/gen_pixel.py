@@ -15,8 +15,10 @@ import argparse
 import json
 import os
 import sys
+import threading
 import time
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor
 from datetime import date
 from pathlib import Path
 
@@ -73,13 +75,18 @@ PIECES = {
 }
 
 
-def palette_png():
-    p = OUT / "palette.png"
+def palette_png(which=None):
+    """palette.png (the xianxia colours) or palette-<which>.png (xianxia_spec.<WHICH>_PALETTE)."""
+    cols = PALETTE
+    if which:
+        import xianxia_spec
+        cols = getattr(xianxia_spec, f"{which.upper()}_PALETTE")
+    p = OUT / (f"palette-{which}.png" if which else "palette.png")
     if not p.exists():
-        im = Image.new("RGB", (len(PALETTE), 1))
-        for i, c in enumerate(PALETTE):
+        im = Image.new("RGB", (len(cols), 1))
+        for i, c in enumerate(cols):
             im.putpixel((i, 0), tuple(int(c[k:k + 2], 16) for k in (1, 3, 5)))
-        im.resize((len(PALETTE) * 8, 8), Image.NEAREST).save(p)
+        im.resize((len(cols) * 8, 8), Image.NEAREST).save(p)
     return p
 
 
@@ -98,11 +105,12 @@ def run(model, inp):
 def kit_set(a):
     """The xianxia kit (tools/xianxia_spec.py) into assets/tk/gen/xianxia/<name>-<i>.png."""
     from xianxia_spec import GROUND, OBJECTS
-    out = OUT / "xianxia"
+    out = OUT / ("xianxia" if a.set in ("xianxia", "xianxia-chars") else
+                 "genshin" if a.set.startswith("genshin") and a.set != "genshin-redo2" else a.set)   # parallel sets: own folders
     out.mkdir(parents=True, exist_ok=True)
     log_path = out / "gen.json"
     log = json.loads(log_path.read_text()) if log_path.exists() else {}
-    pal = data_uri(palette_png())
+    pal = data_uri(palette_png("genshin" if a.set.startswith("genshin") else None))
     jobs = [(f"ground.{k}", "rd-fast", {"style": "texture", "width": 16, "height": 16, "tile_x": True, "tile_y": True,
                                          "bypass_prompt_expansion": True,
                                          "prompt": f"{p}, flat seamless 16x16 game ground tile, top-down"}, n)
@@ -110,27 +118,89 @@ def kit_set(a):
     jobs += [(k, "rd-plus", {"style": "topdown_asset", "width": max(16, w), "height": max(16, h), "remove_bg": True,
                               "prompt": f"{p}, {LOOK}, 3/4 top-down game sprite, small"}, n)
              for k, (p, (w, h), n) in OBJECTS.items()]
-    first = True
-    for name, model, inp, n in jobs:
-        if (a.only and name not in a.only) or ((out / f"{name}-1.png").exists() and not a.force):
-            continue
-        if not first:
-            time.sleep(a.pause)
-        first = False
-        inp = {**inp, "num_images": n, "input_palette": pal}
+    if a.set in ("xianxia-redo", "xianxia-interior"):
+        from xianxia_spec import INTERIOR, REDO_OBJECTS
+        objs = REDO_OBJECTS if a.set == "xianxia-redo" else INTERIOR
+        jobs = [(k, "rd-plus", {"style": "topdown_asset", "width": max(16, w), "height": max(16, h), "remove_bg": True,
+                                 "prompt": f"{p}, {LOOK}, 3/4 top-down game sprite, small"}, n)
+                for k, (p, (w, h), n) in objs.items()]
+    if a.set == "xianxia-props":   # props for the xianxia kit only (Jade keeps the drawn ones)
+        from xianxia_spec import PROPS_GEN
+        jobs = [(k, "rd-plus", {"style": "topdown_asset", "width": max(16, w), "height": max(16, h), "remove_bg": True,
+                                 "prompt": f"{p}, {LOOK}, 3/4 top-down game sprite, small"}, n)
+                for k, (p, (w, h), n) in PROPS_GEN.items()]
+    if a.set.startswith("genshin"):   # the isometric kit: every building, tree, rock and prop, bright
+        from xianxia_spec import (GENSHIN_BAD, GENSHIN_BUILT, GENSHIN_LOOK, GENSHIN_NATURE, GENSHIN_OBJECT,
+                                  GENSHIN_PILOT, INTERIOR, PROPS_GEN, PROPS_SKIP)
+        objs = {**OBJECTS, **INTERIOR, **{k: v for k, v in PROPS_GEN.items() if k not in PROPS_SKIP}}
+        if a.set == "genshin-pilot":
+            objs = {k: objs[k] for k in GENSHIN_PILOT}
+        if a.set in ("genshin-redo", "genshin-redo2"):
+            objs = {k: objs[k] for k in sorted(GENSHIN_BAD)}
+        r8 = lambda v: min(256, max(32, (round(v) + 7) // 8 * 8))   # tiny canvases came back as scenes
+        # a flat w x h piece seen isometrically: its footprint becomes a wider diamond, it stands a bit taller
+        natural = lambda k: k.split(".")[0] in ("tree", "rock", "plant")
+        words = lambda k: GENSHIN_NATURE if natural(k) else GENSHIN_BUILT if k.startswith("building.") else GENSHIN_OBJECT
+        jobs = [(k, "rd-plus", {"style": "isometric_asset", "width": r8(w + h / 2),
+                                 "height": r8(h * 1.5 if natural(k) else h + w / 4),   # a canopy needs headroom
+                                 "remove_bg": True,
+                                 "prompt": f"{p}, {words(k)}, {GENSHIN_LOOK}, "
+                                           "isometric game sprite, 2:1 isometric angle, small"}, n)
+                for k, (p, (w, h), n) in objs.items()]
+        if a.set == "genshin-redo2":   # props, worded with no architecture in it (xianxia_spec.GENSHIN_ITEM)
+            from xianxia_spec import GENSHIN_ITEM
+            for j in jobs:
+                if not natural(j[0]):
+                    j[2]["prompt"] = GENSHIN_ITEM.format(p=objs[j[0]][0]) + ", isometric 2:1 angle"
+    if a.set == "genshin-bg":   # the Genshin view's backdrops (seamless) and foreground framing pieces
+        from xianxia_spec import GENSHIN_BACKDROPS, GENSHIN_FOREGROUNDS, GENSHIN_LOOK
+        jobs = [(f"bg.{k}", "rd-fast", {"style": "texture", "width": 192, "height": 192, "tile_x": True, "tile_y": True,
+                                        "prompt": f"{p}, {GENSHIN_LOOK}, seamless game background texture"}, 2)
+                for k, p in GENSHIN_BACKDROPS.items()]
+        jobs += [(k, "rd-plus", {"style": "isometric_asset", "width": w, "height": h, "remove_bg": True,
+                                 "prompt": f"{p}, {GENSHIN_LOOK}, isometric game sprite"}, 2)
+                 for k, (p, (w, h)) in GENSHIN_FOREGROUNDS.items()]
+    if a.set == "xianxia-chars2":
+        from xianxia_spec import CHARACTERS2
+        jobs = [(f"char.{k}", "rd-animation", {"style": "four_angle_walking", "width": 48, "height": 48,
+                                                "return_spritesheet": True, "prompt": f"{p}, {LOOK}"}, 1)
+                for k, p in CHARACTERS2.items()]
+    if a.set == "xianxia-chars":
+        from xianxia_spec import CHARACTERS
+        from xianxia_spec import CHAR_TRIES
+        jobs = [(f"char.{k}", "rd-animation", {"style": "four_angle_walking", "width": 48, "height": 48,
+                                                "return_spritesheet": True, "prompt": f"{p}, {LOOK}"}, CHAR_TRIES.get(k, 1))
+                for k, p in CHARACTERS.items()]
+    todo = [j for j in jobs if not ((a.only and j[0] not in a.only) or ((out / f"{j[0]}-1.png").exists() and not a.force))]
+    lock = threading.Lock()
+
+    def one(job):
+        name, model, inp, n = job
+        inp = {**inp, "num_images": n, "input_palette": pal} if model != "rd-animation" else inp
         t = time.time()
         try:
-            imgs = run(model, inp)
+            if model == "rd-animation":   # one image a request: n requests, n seeds
+                imgs = []
+                for i in range(n):
+                    if i:
+                        time.sleep(a.pause)
+                    imgs += run(model, {**inp, "seed": 1000 + i})
+            else:
+                imgs = run(model, inp)
         except Exception as e:
             print(f"  {name}: failed: {e}")
-            continue
+            return
         for i, raw in enumerate(imgs, 1):
             (out / f"{name}-{i}.png").write_bytes(raw)
         size = Image.open(out / f"{name}-1.png").size
-        log[name] = {"model": f"retro-diffusion/{model}", "input": {k: v for k, v in inp.items() if k != "input_palette"},
-                     "n": len(imgs), "size": list(size), "seconds": round(time.time() - t, 1), "made": date.today().isoformat()}
-        log_path.write_text(json.dumps(log, indent=1))
-        print(f"  {name}: {len(imgs)} x {size[0]}x{size[1]} in {log[name]['seconds']}s")
+        with lock:
+            log[name] = {"model": f"retro-diffusion/{model}", "input": {k: v for k, v in inp.items() if k != "input_palette"},
+                         "n": len(imgs), "size": list(size), "seconds": round(time.time() - t, 1), "made": date.today().isoformat()}
+            log_path.write_text(json.dumps(log, indent=1))
+            print(f"  {name}: {len(imgs)} x {size[0]}x{size[1]} in {log[name]['seconds']}s", flush=True)
+
+    with ThreadPoolExecutor(max(1, a.jobs)) as ex:   # all at once (http() waits out a 429)
+        list(ex.map(one, todo))
 
 
 def main():
@@ -138,8 +208,9 @@ def main():
     ap.add_argument("--only", action="append")
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--list", action="store_true")
-    ap.add_argument("--set", choices=["xianxia"], help="generate a whole kit's pieces (tools/xianxia_spec.py)")
+    ap.add_argument("--set", choices=["xianxia", "xianxia-chars", "xianxia-redo", "xianxia-interior", "xianxia-chars2", "xianxia-props", "genshin-pilot", "genshin", "genshin-redo", "genshin-redo2", "genshin-bg"], help="generate a whole kit's pieces (tools/xianxia_spec.py)")
     ap.add_argument("--pause", type=float, default=12, help="seconds between requests (rate limits)")
+    ap.add_argument("--jobs", type=int, default=8, help="requests at once")
     a = ap.parse_args()
     OUT.mkdir(parents=True, exist_ok=True)
     log_path = OUT / "gen.json"

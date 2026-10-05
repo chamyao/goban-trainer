@@ -68,7 +68,7 @@ PLACES = {
                 {"kind": "folk.official", "near": "office", "say": "“The governor wants volunteers. Read the notice.”"},
                 {"kind": "folk.elder", "near": "board", "challenge": "elder", "face": "down",
                  "intro": ["An old man sits over a weiqi board in the square. “You have the look of a thinker. Sit, play me one.”"],
-                 "win": ["“Ha! Quick eyes. The governor could use a man like you.”"], "done": ["“Come back when you've grown sharper.”"]},
+                 "win": ["“Ha! Quick eyes. The governor could use a man like you.”"], "done": ["“Go on. I'll sit here a while yet, still thinking about that board.”"]},
                 {"kind": "folk.villager", "near": "inn", "challenge": "innkeeper",
                  "intro": ["“Wine's on the house if you can solve the one my regulars can't.”"],
                  "win": ["“Well I never. Drink up, then!”"], "done": ["“Still the only one who's cracked it.”"]},
@@ -80,7 +80,7 @@ PLACES = {
                  "win": ["“Remarkable. I'll tell the magistrate a sandal-seller did it.”"], "done": ["“The magistrate still doesn't believe me.”"]},
             ],
             "banners": "red",
-            "objectives": {"1-n1": "Read the notice in the town square.", "1-c1": "Go to the county office, where the governor has called his officers.",
+            "objectives": {"1-n1": "Read the notice in the town square.", "1-c1": "Go into the county town. The governor is calling for men.",
                            "1-i1": "Go into the village inn."},
         },
         "The Peach Garden": {
@@ -136,15 +136,26 @@ PLACES = {
         "Daxing Mountain": {
             "archetype": "mountain",
             "banners": "yellow",
+            "shrine": True,   # one of the four that light in World 1
             "landmarks": [{"kind": "rock.crag", "id": "pass", "node": "1-n3", "label": "The Yellow Turban line"}],
-            "objectives": {"1-n3": "Meet the Yellow Turbans at Daxing Mountain."},
+            "objectives": {"1-n3": "Go to Daxing Mountain. The Yellow Turbans are marching on Zhuo."},
         },
         "Qingzhou": {
             "archetype": "city",
             "banners": "red",
-            "landmarks": [{"kind": "building.gate", "id": "citygate", "node": "1-n4", "label": "The besieged city"}],
+            "landmarks": [
+                {"kind": "building.gate", "id": "citygate", "node": "1-n4", "label": "The besieged city"},
+                {"kind": "rock.big", "id": "field", "node": "1-n4b", "label": "The field before the city"},
+                # the two brothers go to their hills before the ambush (Guan Yu left, Zhang Fei right)
+                {"kind": "rock.crag", "id": "flank_left", "label": "The left hill", "needs": ["node:n4"], "delivers": "flank_left", "when": "node:n4",
+                 "empty": ["No one is on this hill yet."],
+                 "deliver": [["guanyu", "A thousand men, hidden on the left. I wait for the gongs."]]},
+                {"kind": "rock.crag", "id": "flank_right", "label": "The right hill", "needs": ["node:n4"], "delivers": "flank_right", "when": "node:n4",
+                 "empty": ["No one is on this hill yet."],
+                 "deliver": [["zhangfei", "The right hill is mine. I will hear the gongs from a mile off."]]},
+            ],
             "npcs": [{"kind": "folk.soldier", "say": "“The rebels have us surrounded. If only someone could draw them off…”"}],
-            "objectives": {"1-n4": "Lift the siege of Qingzhou."},
+            "objectives": {"1-n4": "Hear the messenger from Qingzhou.", "1-n4b": "Lift the siege of Qingzhou."},
         },
         "Guangzong Road": {
             "archetype": "road",
@@ -166,26 +177,70 @@ PLACES = {
         "Changshe": {
             "archetype": "camp",
             "banners": "red",
-            "landmarks": [{"kind": "building.tent", "id": "camp", "node": "1-b3", "label": "The Han camp"}],
-            "objectives": {"1-f1": "Side story: the fire plan in the Han camp.", "1-b3": "Side story: red banners at Changshe."},
+            "landmarks": [{"kind": "building.tent", "id": "camp", "node": "1-b3", "label": "The Han camp"},
+                          {"kind": "rock.big", "id": "fieldcamp", "node": "1-e1", "label": "Where the army was"}],
+            "objectives": {"1-f1": "Side story: the fire plan in the Han camp.", "1-b3": "Side story: red banners at Changshe.",
+                           "1-e1": "Go to Changshe, in Yingchuan, and learn how Huangfu Song and Zhu Jun stand."},
         },
         "Envoy's Road": {
             "archetype": "road",
             "landmarks": [{"kind": "camp.table", "id": "envoy", "node": "1-bs", "label": "The envoy's rest"}],
             "objectives": {"1-bs": "Shortcut: the envoy on the road."},
         },
-        "Dong Zhuo's Camp": {
+        "The Hills North of Guangzong": {
             "archetype": "camp",
             "banners": "red",
-            "landmarks": [{"kind": "building.tent", "id": "command", "node": "1-n6", "label": "Dong Zhuo's tent"}],
+            "landmarks": [{"kind": "building.tent", "id": "command", "node": "1-n6", "label": "The command tent"}],
             "npcs": [{"kind": "folk.soldier", "say": "“The general is in his tent. He doesn't like visitors without rank.”"}],
-            "objectives": {"1-n6": "Rescue Dong Zhuo, then report at his tent."},
+            "objectives": {"1-n6": "Head home to Zhuo."},
         },
         "Hills of Black Wind": {
             "archetype": "hills",
             "banners": "yellow",
-            "landmarks": [{"kind": "rock.big", "id": "altar", "node": "1-n7", "label": "Zhang Bao's sorcery"}],
-            "objectives": {"1-n7": "Break Zhang Bao's sorcery in the hills."},
+            "landmarks": [
+                {"kind": "rock.big", "id": "altar", "node": "1-n7", "label": "Zhang Bao's sorcery"},
+                # the shrine that lights after the first try fails (scene "shrine")
+                {"kind": "landmark.shrine", "id": "shrine", "node": "1-n7b", "near": "altar", "label": "The roadside shrine",
+                 "intro": ["The old shrine at the roadside, dark until now, begins to glow."],
+                 "outro": ["The glow settles. Only the board remains, and a thread of incense."]},
+                {"kind": "building.hut", "id": "pens", "label": "The village below the hills"},   # where the blood comes from
+                # a ridge on each flank, each with room before it for a thousand men (Guan Yu left, Zhang Fei right)
+                {"kind": "rock.crag", "id": "ridge_left", "label": "The left ridge", "use": "ridge", "side": "W", "clear": [8, 4],
+                 "needs": ["item:pigblood", "item:sheepblood", "item:dogblood"], "delivers": "ridge_left", "when": "node:n7b",
+                 "empty": ["The ridge is empty. Nobody has been told to hold it yet."],
+                 "waiting": [["guanyu", "We hold the ridge. The blood is still to come."]],
+                 "deliver": [["guanyu", "Blood and filth for every paper horse. We wait for the gun."]]},
+                {"kind": "rock.crag", "id": "ridge_right", "label": "The right ridge", "use": "ridge", "side": "E", "clear": [8, 4],
+                 "needs": ["item:pigblood", "item:sheepblood", "item:dogblood"], "delivers": "ridge_right", "when": "node:n7b",
+                 "empty": ["The ridge is empty. Nobody has been told to hold it yet."],
+                 "waiting": [["zhangfei", "A thousand men, and nothing to throw. Hurry, brother."]],
+                 "deliver": [["zhangfei", "Let his spirits come. I'll soak every one."]]},
+            ],
+            "npcs": [
+                {"kind": "folk.villager", "near": "pens", "say": "“The black wind has been bad this month.”",
+                 "gives": "pigblood", "gives_when": "node:n7b",
+                 "give": ["“The black wind took my roof. Take the pigs' blood, if it ends this.”"],
+                 "given": ["“You have my pigs' blood. Go, and stop this wind.”"]},
+                {"kind": "folk.elder", "near": "pens", "say": "“Keep off the hills, general.”",
+                 "gives": "sheepblood", "gives_when": "node:n7b",
+                 "give": ["“My flock hasn't grazed since the storm. Take a sheep, general. Take what you need.”"],
+                 "given": ["“You've had the best of my flock, general. Go on.”"]},
+                {"kind": "folk.hunter", "near": "pens", "say": "“My hounds won't go near that hill.”",
+                 "gives": "dogblood", "gives_when": "node:n7b",
+                 "give": ["“My hounds won't go near that hill. If their blood breaks the spell, take it.”"],
+                 "given": ["“You have the dog's blood. May it do what it must.”"]},
+                # once the shrine is read, the brothers and their men take the ridges
+                {"kind": "hero.guanyu", "near": "ridge_left", "when": "node:n7b", "say": "“Bring the blood, brother. We hold the left.”"},
+                {"kind": "hero.zhangfei", "near": "ridge_right", "when": "node:n7b", "say": "“Bring the blood, brother. We hold the right.”"},
+                {"kind": "folk.soldier", "near": "ridge_left", "when": "node:n7b", "face": "down", "say": "“Waiting for the gun, sir.”"},
+                {"kind": "folk.soldier", "near": "ridge_left", "when": "node:n7b", "face": "down", "say": "“A bucket each, and every man ready.”"},
+                {"kind": "folk.soldier", "near": "ridge_left", "when": "node:n7b", "face": "down", "say": "“Let the paper horses come.”"},
+                {"kind": "folk.soldier", "near": "ridge_right", "when": "node:n7b", "face": "down", "say": "“Waiting for the gun, sir.”"},
+                {"kind": "folk.soldier", "near": "ridge_right", "when": "node:n7b", "face": "down", "say": "“A bucket each, and every man ready.”"},
+                {"kind": "folk.soldier", "near": "ridge_right", "when": "node:n7b", "face": "down", "say": "“Let the paper horses come.”"},
+            ],
+            "objectives": {"1-n7": "Break Zhang Bao's sorcery in the hills.",
+                           "1-n7b": "Go to the roadside shrine where the glow has begun."},
         },
         "Anxi": {   # Liu Bei's first post, where the inspector comes (the closing)
             "archetype": "town",
@@ -234,3 +289,10 @@ ROOMS = {
         {"kind": "folk.soldier", "say": "“Orders come at dawn. Keep your weapon close.”"},
     ]},
 }
+
+
+# ---- World 2 (tk_story_w2.py) ----
+import pathlib as _pl, sys as _sys  # noqa: E402
+_sys.path.insert(0, str(_pl.Path(__file__).resolve().parent))
+from tk_story_w2 import PLACES2 as _PLACES2  # noqa: E402
+PLACES[2] = _PLACES2

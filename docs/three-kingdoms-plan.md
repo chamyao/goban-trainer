@@ -147,8 +147,12 @@ Gods of fate, deciding lives over a Go board.
 
 - **Flawless only.** A wrong move, hint, undo or Explore is a slip; a
   problem settles on its first result, and a reset can't undo a slip.
-- **A slip draws a new problem** of the same grade from that encounter's
-  pool (about 30), so the story never stalls.
+- **A slip keeps the same problem.** It resets and stays in view, and a
+  fixed 30-second "Think" cooldown follows, in every Book and for bosses.
+- **Gated battles never open the board early.** If a fail-then-prepare battle
+  or boss is attempted before its conditions are met (the blood at Black
+  Wind), a short defeat scene plays, in the novel's own terms, and a clue
+  points to what is missing. No problem is spent and no cooldown applies.
 - **Bosses** are either a reckoning or a battle. Where the tension is a person (Zhuge Liang's test in World 6, Zhou Yu in World 9, Meng Huo in World 14) the boss is a conversation across the board; where the antagonist is real (Lü Bu, Sima Yi) it is a rival. Each is the world's antagonist on a Michael Redmond problem (early
   worlds) or a Maeda problem (later). The boss shows a portrait and taunt and
   doesn't name the problem's source.

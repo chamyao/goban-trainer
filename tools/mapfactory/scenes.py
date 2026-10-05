@@ -35,7 +35,7 @@ import re
 from collections import deque
 from pathlib import Path
 
-from vocab import KINDS
+from vocab import KINDS, MATERIALS
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 PX = 8          # node-map pixels per tile
@@ -51,6 +51,21 @@ EMOTES = {"!", "?", "...", "music", "anger", "sweat", "zzz", "heart"}
 LIGHTS = {"day", "night", "dusk", "dawn", "storm"}   # or "#rrggbb"
 CUES = {"boss", "battle", "calm", "victory", "none"}
 
+
+
+def still_move(words):
+    """A still's drift from plain words ("slow zoom in", "pull back", "pan up", "pan across the road",
+    "drift down") to one of in, out, up, down, pan."""
+    w = (words or "").lower()
+    if "out" in w or "back" in w:
+        return "out"
+    if "up" in w:
+        return "up"
+    if "down" in w:
+        return "down"
+    if "pan" in w or "across" in w or "along" in w:
+        return "pan"
+    return "in"
 
 def characters():
     """Everyone the game can draw: TK_CHARS in tk.js, the townsfolk and extras
@@ -76,15 +91,33 @@ class Stage:
         self.block = set()
         for y, row in enumerate(m["terrain"]["rows"]):
             for x, ch in enumerate(row):
-                if legend[ch] == "water":
+                if not MATERIALS.get(legend[ch], True):   # water, a room's walls, outside the room
                     self.block.add((x, y))
+        walls = {(x, y) for y, row in enumerate(m["terrain"]["rows"]) for x, ch in enumerate(row) if legend[ch] == "wall"}
         for o in m["objects"]:
-            if KINDS[o["kind"]][2]:
+            # in a room nobody stands on the furniture either (a stool, a jar), only round it
+            if KINDS[o["kind"]][2] or (walls and o["kind"].startswith("furn.") and o["kind"] not in ("furn.rug", "furn.mat")):
                 for yy in range(o["y"], o["y"] + o["h"]):
                     for xx in range(o["x"], o["x"] + o["w"]):
                         self.block.add((xx, yy))
+        # and in a room big enough to spare it, not hard against the walls (a figure there is drawn into them)
+        if walls:
+            floor = [(x, y) for y in range(self.H) for x in range(self.W) if (x, y) not in self.block and (x, y) not in walls
+                     and MATERIALS.get(legend[m["terrain"]["rows"][y][x]], True)]
+            xs, ys = {x for x, _ in floor}, {y for _, y in floor}
+            if len(xs) >= 8 and len(ys) >= 5:
+                doors = {(x, y - 1) for y, row in enumerate(m["terrain"]["rows"]) for x, ch in enumerate(row) if legend[ch] != "wall" and (x, y - 1) in walls}
+                for x, y in floor:
+                    if any((x + dx, y + dy) in walls for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1))) and (x, y) not in doors:
+                        self.block.add((x, y))
         self.spot = (int(spot["x"]), int(spot["y"]))
         self.reach = self.flood(self.spot)
+        # in a room the scene is the room: stage it in the middle of the floor, not against
+        # the back wall where the story spot may sit (on a phone that's off the top of the view)
+        if "wall" in legend.values():
+            mx = sum(c[0] for c in self.reach) / len(self.reach)
+            my = sum(c[1] for c in self.reach) / len(self.reach)
+            self.spot = min(self.reach, key=lambda c: (c[0] - mx) ** 2 + (c[1] - my) ** 2)
         # enemies go on the side with more open ground
         sx, sy = self.spot
         right = sum((x, y) in self.reach for x in range(sx + 2, sx + 11) for y in range(sy - 3, sy + 4))
@@ -463,7 +496,7 @@ def stage_scene(scene, m, spot, party, chars, boss=None):
     arrivals = []
     for s in steps:
         op = s[0]
-        if op in ("n", "say", "fx", "pose", "move", "run", "remove", "vanish", "party", "wait", "scroll", "problem",
+        if op in ("n", "say", "fx", "pose", "move", "run", "remove", "vanish", "party", "wait", "still", "scroll", "problem",
                   "emote", "give", "surround", "close", "camera", "mood", "unboard", "boss", "victory") and opening:
             opening = False
             if arrivals:
@@ -530,6 +563,10 @@ def stage_scene(scene, m, spot, party, chars, boss=None):
             st.beats.append({"do": "gain", "item": s[1]})
         elif op == "wait":
             st.beats.append({"do": "wait", "ms": s[1]})
+        elif op == "still":   # ["still", id, move]: a painted still over the map while the next lines play
+            st.beats.append({"do": "still", "id": s[1], "move": still_move(s[2] if len(s) > 2 else "")})
+        elif op == "scroll":   # a chapter scroll over the scene (it plays even when the scene is skipped)
+            st.beats.append({"do": "scroll", "args": s[1:6]})
         elif op == "problem":  # the scene's Go problem: the player solves it before the rest plays
             if boss and "boss" not in has:
                 st.boss_intro(boss["who"], boss)
@@ -575,6 +612,12 @@ def build_scenes(n):
         # party at this point in the story: the main line's party changes carry forward
         staged = stage_scene(scene, m, spot, party, chars, q.get("boss") if q["role"] == "boss" else None)
         out[q["scene"]] = {"place": q["place"], "spot": spot["id"], "node": q["node"], "party": party, **staged}
+        # a gated battle's defeat scenes are staged at the same spot, with the same party
+        for g in q.get("gate", []):
+            other = world["scenes"].get(g.get("else", ""))
+            if other and g["else"] not in out:
+                out[g["else"]] = {"place": q["place"], "spot": spot["id"], "node": q["node"], "party": party,
+                                  **stage_scene(other, m, spot, party, chars)}
         if q["role"] in ("main", "boss"):
             for s in scene["steps"]:
                 if s[0] == "party":

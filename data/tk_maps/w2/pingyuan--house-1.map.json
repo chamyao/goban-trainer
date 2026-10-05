@@ -1,0 +1,143 @@
+{
+ "format": "tk-map/1",
+ "id": "pingyuan--house-1",
+ "world": 2,
+ "parent": "pingyuan",
+ "name": "House, Pingyuan",
+ "archetype": "interior",
+ "building": "house-1",
+ "style": "building.house",
+ "size": [
+  20,
+  12
+ ],
+ "seed": 0.15521353450860242,
+ "terrain": {
+  "legend": {
+   "#": "wood",
+   "%": "stone",
+   "&": "mat",
+   "e": "earth",
+   "W": "wall",
+   " ": "void"
+  },
+  "rows": [
+   "                    ",
+   "     WWWWWWWWWW     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     WWWWW#WWWW     ",
+   "                    ",
+   "                    ",
+   "                    "
+  ]
+ },
+ "objects": [
+  {
+   "kind": "furn.bed",
+   "x": 12,
+   "y": 2,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.drawers",
+   "x": 6,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.shelf",
+   "x": 7,
+   "y": 2,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.table",
+   "x": 10,
+   "y": 4,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 9,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 12,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.jar",
+   "x": 6,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.chest",
+   "x": 6,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.barrel",
+   "x": 13,
+   "y": 3,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.sacks",
+   "x": 6,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "spots": [],
+ "npcs": [
+  {
+   "id": "in-1",
+   "kind": "folk.woman",
+   "x": 11.5,
+   "y": 5.9,
+   "say": [
+    "“Mind the floor — I've only just swept it.”"
+   ]
+  }
+ ],
+ "exits": [
+  {
+   "to": "pingyuan",
+   "side": "S",
+   "x": 10,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "pingyuan": [
+   10,
+   7
+  ],
+  "": [
+   10,
+   7
+  ]
+ }
+}

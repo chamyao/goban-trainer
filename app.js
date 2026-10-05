@@ -130,14 +130,14 @@ const Sync = {
   },
 
   // Anonymous is fine — feedback doesn't require a username.
-  async sendFeedback(message) {
+  async sendFeedback(message, context = location.hash) {
     const res = await fetch(this.API_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify({
         username: this.username || "",
         kind: "feedback",
-        data: { message, context: location.hash },
+        data: { message, context },
       }),
     });
     if (!res.ok) throw new Error(`feedback failed (${res.status})`);
@@ -199,7 +199,9 @@ const Sync = {
 const Engine = {
   worker: null, status: "off", backend: null, initPromise: null,
   pending: new Map(), seq: 0,
-  modelUrl: new URL("engine/katago-small.bin.gz", location.href).href,
+  // in the Android app the worker and model are the app's own files (APP_LOCAL), even when the page is the live site
+  // (the APK ships the model unzipped, under the .bin name: see android-app/prepare-web.mjs)
+  modelUrl: new URL(window.APP_LOCAL ? "engine/katago-small.bin" : "engine/katago-small.bin.gz", window.APP_LOCAL || location.href).href,
 
   setStatus(status, detail) {
     this.status = status; this.detail = detail || "";
@@ -221,7 +223,7 @@ const Engine = {
   ensure() {
     if (!this.initPromise) {
       this.setStatus("loading");
-      this.worker = new Worker("engine/katago-worker.js");
+      this.worker = new Worker((window.APP_LOCAL || "") + "engine/katago-worker.js");
       this.worker.onmessage = e => this.onMessage(e.data);
       this.worker.onerror = e => { this.setStatus("error", "worker failed"); console.error(e); };
       this.initPromise = new Promise((resolve, reject) => { this.initSettle = { resolve, reject }; });
@@ -372,6 +374,7 @@ function cropFor(problem) {
 }
 
 class Goban {
+  static TOUCH = typeof matchMedia !== "undefined" && matchMedia("(pointer: coarse)").matches;
   constructor(svg, crop, onClick) {
     this.svg = svg; this.crop = crop; this.onClick = onClick;
     this.cell = 44; this.pad = 38;
@@ -393,7 +396,7 @@ class Goban {
 
   render(grid, lastMove, interactive) {
     const { c0, c1, r0, r1 } = this.crop;
-    this.svg.innerHTML = "";
+    this.svg.innerHTML = ""; this.ghost = null;
     const defs = this.el("defs", {});
     defs.innerHTML = `
       <radialGradient id="bs" cx="35%" cy="30%"><stop offset="0%" stop-color="#5a5a5a"/><stop offset="100%" stop-color="#111"/></radialGradient>
@@ -428,11 +431,12 @@ class Goban {
       if (c >= c0 && c <= c1 && r >= r0 && r <= r1)
         this.el("circle", { cx: this.px(c), cy: this.py(r), r: 4, fill: "var(--line)" });
 
-    const labelRow = r0 === 0 ? { y: this.py(r0) - 17, edge: true } : { y: this.py(r1) + 26, edge: false };
+    // in the margin, clear of a stone on the edge line (radius ~.47 cell)
+    const labelRow = r0 === 0 ? { y: this.py(r0) - 27, edge: true } : { y: this.py(r1) + 34, edge: false };
     for (let c = c0; c <= c1; c++)
       this.el("text", { x: this.px(c), y: labelRow.y, "text-anchor": "middle", "font-size": 12.5,
                         fill: "#7a6535", "font-weight": 600 }).textContent = COLS[c];
-    const labelCol = c1 === 18 ? this.px(c1) + 21 : this.px(c0) - 21;
+    const labelCol = c1 === 18 ? this.px(c1) + 29 : this.px(c0) - 29;
     for (let r = r0; r <= r1; r++)
       this.el("text", { x: labelCol, y: this.py(r) + 4.5, "text-anchor": "middle", "font-size": 12.5,
                         fill: "#7a6535", "font-weight": 600 }).textContent = N - r;
@@ -458,9 +462,31 @@ class Goban {
             t.setAttribute("fill", this.hoverColor === BLACK ? "rgba(20,20,20,.3)" : "rgba(255,255,255,.5)");
         });
         t.addEventListener("mouseleave", () => t.setAttribute("fill", "transparent"));
-        t.addEventListener("click", () => this.onClick(c, r));
+        t.addEventListener("click", () => this.tap(c, r, grid));
       }
   }
+
+  // On a touch screen where the points are closer than a fingertip (a wide crop on a small phone),
+  // the first tap only shows a ghost stone; a second tap on the same point plays it, a tap on
+  // another point moves the ghost. A slip costs a rest, so a fingertip miss mustn't count.
+  needsConfirm() {
+    if (!Goban.TOUCH || Goban.confirmMode() === "never") return false;
+    const w = this.svg.getBoundingClientRect().width;
+    return w > 0 && w / this.W * this.cell < 28;
+  }
+  tap(c, r, grid) {
+    if (grid[r][c] !== EMPTY || !this.needsConfirm()) { this.clearGhost(); return this.onClick(c, r); }
+    if (this.ghost && this.ghost.c === c && this.ghost.r === r) { this.clearGhost(); return this.onClick(c, r); }
+    this.clearGhost();
+    const g = this.el("circle", { cx: this.px(c), cy: this.py(r), r: this.cell * .47, "pointer-events": "none",
+                                  fill: this.hoverColor === BLACK ? "rgba(20,20,20,.45)" : "rgba(255,255,255,.65)",
+                                  stroke: "var(--accent)", "stroke-width": 2, "stroke-dasharray": "4 3" });
+    this.ghost = { c, r, el: g };
+  }
+  // "Confirm taps": auto (the default, as above) or never (one tap plays at any spacing)
+  static confirmMode() { try { return localStorage.getItem("goban-confirm") === "never" ? "never" : "auto"; } catch { return "auto"; } }
+  static setConfirmMode(m) { try { localStorage.setItem("goban-confirm", m); } catch {} }
+  clearGhost() { if (this.ghost) { this.ghost.el.remove(); this.ghost = null; } }
 
   pulse(c, r) {
     const p = this.el("circle", { cx: this.px(c), cy: this.py(r), r: this.cell * .3, fill: "none",

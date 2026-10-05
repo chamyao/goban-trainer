@@ -32,6 +32,46 @@ def norm(sig):
     return frozenset(s)
 
 
+def building_walls(m, kit, T):
+    """A building's art is often wider than its footprint (an inn, a hall), or narrower (a small
+    house). Its wall follows what's drawn (cl, cr: pixels left and right of its centre), but stops short of anyone
+    standing there, a way in or a story spot, and leaves a walkway to the next building."""
+    out, blds = {}, []
+    for o in m["objects"]:
+        if not (o["kind"].startswith("building.") and KINDS[o["kind"]][2]):
+            continue
+        _, spr = kit.sprite(o["kind"], f"{m['id']}/{o['x']},{o['y']}")
+        if not spr:
+            continue
+        cx, fw = (o["x"] + o["w"] / 2) * T, o["w"] * T
+        half = max(T / 2, spr[3] / 2 - 4)   # what's drawn, wider or narrower than the footprint
+        blds.append({"o": o, "cx": cx, "fw": fw, "min": min(fw / 2, half), "y0": o["y"] * T, "y1": (o["y"] + o["h"]) * T, "l": half, "r": half})
+    pts = [((n["x"] + .5) * T, (n["y"] + .9) * T) for n in m["npcs"]] + \
+          [((x + .5) * T, (y + .9) * T) for x, y in m["entries"].values()] + \
+          [((s["x"] + .5) * T, (s["y"] + .5) * T) for s in m.get("spots", [])]
+    for b in blds:
+        for px, py in pts:
+            if b["y0"] - 8 < py < b["y1"] + 10:
+                if px < b["cx"]:
+                    b["l"] = min(b["l"], max(b["min"], b["cx"] - px - 10))
+                else:
+                    b["r"] = min(b["r"], max(b["min"], px - b["cx"] - 10))
+    for a in blds:   # a walkway (a tile) between neighbours
+        for b in blds:
+            if a is b or not (a["y0"] < b["y1"] and b["y0"] < a["y1"]) or a["cx"] > b["cx"]:
+                continue
+            over = (a["cx"] + a["r"]) + T - (b["cx"] - b["l"])
+            if over > 0:
+                ta, tb = a["r"] - a["min"], b["l"] - b["min"]   # what each can give back
+                ga = min(ta, over * ta / max(ta + tb, 1e-6))
+                a["r"] -= ga
+                b["l"] -= min(tb, over - ga)
+    for b in blds:
+        if b["l"] != b["fw"] / 2 or b["r"] != b["fw"] / 2:
+            out[id(b["o"])] = {"cl": round(b["l"], 1), "cr": round(b["r"], 1)}
+    return out
+
+
 class Kit:
     def __init__(self, name):
         self.path = ROOT / f"assets/tk/kits/{name}.json"
@@ -233,11 +273,13 @@ def compile_map(m, kit, out_dir):
                                 "float" if isinstance(v, float) else "string", "value": v} for k, v in props.items()]
         objs.append(o)
 
+    walls = building_walls(m, kit, T)
     for o in m["objects"]:
         key, spr = kit.sprite(o["kind"], f"{m['id']}/{o['x']},{o['y']}")
         solid = KINDS[o["kind"]][2]
         obj(key or "", "prop", (o["x"] + o["w"] / 2) * T, (o["y"] + o["h"]) * T,
-            kind=o["kind"], fw=o["w"] * T, fh=o["h"] * T, solid=solid, **({"ref": o["id"]} if o.get("id") else {}))
+            kind=o["kind"], fw=o["w"] * T, fh=o["h"] * T, solid=solid, **({"ref": o["id"]} if o.get("id") else {}),
+            **walls.get(id(o), {}))
     runs = []
     for y in range(H):
         x = 0
@@ -253,14 +295,18 @@ def compile_map(m, kit, out_dir):
     for s in m["spots"]:
         obj(s["id"], "spot", s["x"] * T, s["y"] * T, node=s["node"], label=s.get("label", ""), label_zh=ZH.get(s.get("label", ""), ""),
             **({"trigger": s["trigger"]} if s.get("trigger") else {}), **({"use": s["use"]} if s.get("use") else {}),
+            **({"needs": json.dumps(s["needs"] if isinstance(s["needs"], list) else [s["needs"]])} if s.get("needs") else {}),
+            **{k: s[k] for k in ("delivers", "when") if s.get(k)},
+            **{k: json.dumps([place_step(l)[0] for l in s[k]], ensure_ascii=False) for k in ("empty", "waiting", "deliver", "delivered") if s.get(k)},
             **{k: json.dumps([place_step(l)[0] for l in s[k]], ensure_ascii=False) for k in ("intro", "outro") if s.get(k)})
     for n in m["npcs"]:
         sprite, drawn = (n["kind"][5:], False) if n["kind"].startswith("hero.") else kit.folk(n["kind"], f"{m['id']}/{n['id']}")
         obj(n["id"], "npc", n["x"] * T, n["y"] * T, kind=n["kind"], sprite=sprite, wander=bool(n.get("wander")),
             **({"drawn": True} if drawn else {}),
             say=json.dumps([place_step(l, n["kind"])[0] for l in n.get("say", [])], ensure_ascii=False),
-            **{k: n[k] for k in ("challenge", "until", "face") if n.get(k)},
-            **{k: json.dumps([place_step(l, n["kind"])[0] for l in n[k]], ensure_ascii=False) for k in ("intro", "win", "done") if n.get(k)})
+            **{k: n[k] for k in ("challenge", "until", "face", "when", "gives", "gives_when") if n.get(k)},
+            **{k: json.dumps([place_step(l, n["kind"])[0] for l in ([n[k]] if isinstance(n[k], str) else n[k])], ensure_ascii=False)
+               for k in ("intro", "win", "done", "give", "given") if n.get(k)})
     for e in m["exits"]:
         obj(f"exit-{e['to']}", "exit", e["x"] * T, e["y"] * T, e["w"] * T, e["h"] * T, to=e["to"], side=e["side"])
     for k, (x, y) in m["entries"].items():

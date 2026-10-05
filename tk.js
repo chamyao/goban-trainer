@@ -53,6 +53,35 @@ const TK_CHARS = {
   zuofeng: { name: "Zuo Feng", skin: "#f5dcc4", hair: "#2a2024", hat: "guan", hatC: "#1e1e24", robe: "#3f6a5a", trim: "#d4ad42", beard: "none", eyes: "narrow" },
   merchant: { name: "Zhang Shiping", skin: "#ebbd92", hair: "#2a2024", hat: "straw", hatC: "#d8b867", robe: "#8a6a4a", trim: "#5a3a22", beard: "short", eyes: "kind" },
   immortal: { name: "Old Immortal of Southern Florescence", img: "assets/tk/p_immortal.png", skin: "#efe0c8", hair: "#e8e8e8", hat: "topknot", hatC: "#e8e8e8", pin: "#6a8a5a", robe: "#6a8a6a", trim: "#d8d2c0", beard: "long", beardC: "#eeeeee", eyes: "kind" },
+  // Book 2: the coalition, Luoyang's court and Wang Yun's house
+  stargrey: { name: "Elder Grey Star", skin: "#efe0c8", hair: "#e8e8e8", hat: "scholar", hatC: "#5a5a6a", robe: "#8a8a9a", trim: "#d8d2c0", beard: "long", beardC: "#eeeeee", eyes: "kind" },
+  starred: { name: "Elder Red Star", skin: "#f0d8bc", hair: "#e8e8e8", hat: "scholar", hatC: "#7a2a2a", robe: "#a83a32", trim: "#e6c14a", beard: "long", beardC: "#eeeeee", eyes: "narrow" },
+  gongsunzan: { name: "Gongsun Zan", skin: "#eec7a0", hair: "#2a2024", hat: "helmet", hatC: "#d6d2c4", robe: "#e9e4d4", trim: "#3e5f8a", beard: "short", eyes: "round", weapon: "spear" },
+  yuanshao: { name: "Yuan Shao", skin: "#f0cfac", hair: "#2a2024", hat: "guan", hatC: "#1e1e24", robe: "#8a6a2a", trim: "#e6c14a", beard: "goatee", eyes: "narrow", weapon: "sword" },
+  yuanshu: { name: "Yuan Shu", skin: "#f2d0ae", hair: "#2a2024", hat: "guan", hatC: "#1e1e24", robe: "#c89a2a", trim: "#7a3a4a", beard: "thin", eyes: "narrow" },
+  xiandi: { name: "Emperor Xian", skin: "#f8dcc4", hair: "#2a2024", hat: "guan", hatC: "#1e1e24", robe: "#d8b02a", trim: "#7a2a2a", beard: "none", eyes: "kind" },
+  shaodi: { name: "Emperor Shao", skin: "#f8dcc4", hair: "#2a2024", hat: "guan", hatC: "#1e1e24", robe: "#c8a02a", trim: "#2a2a3a", beard: "none", eyes: "round" },
+  hetaihou: { name: "Empress Dowager He", skin: "#fbefe8", hair: "#1a1418", hat: "lady", pin: "#e6c14a", pin2: "#c8283c", flower: "#e6c14a", robe: "#6a2a4a", trim: "#e6c14a", beard: "none", eyes: "narrow", makeup: true },
+  tangfei: { name: "Consort Tang", skin: "#fbefe8", hair: "#1a1418", hat: "lady", pin: "#d8d8e0", pin2: "#e6c14a", flower: "#ffffff", robe: "#d8c8d8", trim: "#6a4a6a", beard: "none", eyes: "kind", makeup: true },
+  dingyuan: { name: "Ding Yuan", skin: "#e2b089", hair: "#5a5256", hat: "helmet", hatC: "#858a94", robe: "#3e5f8a", trim: "#c8c8c8", beard: "long", eyes: "round", weapon: "sword" },
+  lisu: { name: "Li Su", skin: "#efc59d", hair: "#2a2024", hat: "guan", hatC: "#1e1e24", robe: "#5a6a4a", trim: "#d4ad42", beard: "thin", eyes: "narrow" },
+  lvbu: { name: "Lü Bu", skin: "#efc59d", hair: "#1a1416", hat: "helmet", hatC: "#c8a03a", robe: "#a82a2a", trim: "#e6c14a", beard: "none", eyes: "wild", weapon: "glaive" },
+  liru: { name: "Li Ru", skin: "#e8c09a", hair: "#2a2024", hat: "scholar", hatC: "#1e1e24", robe: "#3a2a3a", trim: "#8a7a5a", beard: "goatee", eyes: "narrow" },
+  chengong: { name: "Chen Gong", skin: "#eec7a0", hair: "#2a2024", hat: "scholar", hatC: "#2e3a5a", robe: "#4a6a7a", trim: "#d6d2c4", beard: "thin", eyes: "kind" },
+  caohong: { name: "Cao Hong", skin: "#e2b089", hair: "#2a2024", hat: "helmet", hatC: "#858a94", robe: "#7b2a2a", trim: "#c8c8c8", beard: "bristle", eyes: "round", weapon: "sword" },
+  zumao: { name: "Zu Mao", skin: "#e8b88c", hair: "#2a2024", hat: "band", hatC: "#b8392c", robe: "#2a5a3a", trim: "#b8392c", beard: "short", eyes: "round", weapon: "sword" },
+  sunjian: { name: "Sun Jian", skin: "#e8b88c", hair: "#2a2024", hat: "helmet", hatC: "#c8a03a", robe: "#b8392c", trim: "#e6c14a", beard: "short", eyes: "phoenix", weapon: "sword" },
+  chengpu: { name: "Cheng Pu", skin: "#e2b089", hair: "#5a5256", hat: "helmet", hatC: "#858a94", robe: "#8a3030", trim: "#c8c8c8", beard: "long", eyes: "round", weapon: "spear" },
+  handang: { name: "Han Dang", skin: "#d8a47c", hair: "#2a2024", hat: "helmet", hatC: "#858a94", robe: "#6a3a2a", trim: "#c8c8c8", beard: "bristle", eyes: "round", weapon: "glaive" },
+  huaxiong: { name: "Hua Xiong", skin: "#d8a47c", hair: "#1a1416", hat: "helmet", hatC: "#4a4a5c", robe: "#3a3a4a", trim: "#8a3030", beard: "bristle", eyes: "wild", weapon: "glaive" },
+  lijue: { name: "Li Jue", skin: "#e2b089", hair: "#2a2024", hat: "helmet", hatC: "#4a4a5c", robe: "#5b3b6e", trim: "#c8c8c8", beard: "bristle", eyes: "narrow", weapon: "sword" },
+  guosi: { name: "Guo Si", skin: "#d8a47c", hair: "#2a2024", hat: "helmet", hatC: "#4a4a5c", robe: "#4a3a5a", trim: "#c8c8c8", beard: "short", eyes: "wild", weapon: "spear" },
+  wangyun: { name: "Wang Yun", skin: "#eec7a0", hair: "#9a9a9a", hat: "guan", hatC: "#1e1e24", robe: "#2e4a6a", trim: "#d6d2c4", beard: "long", beardC: "#c8c8c8", eyes: "kind" },
+  diaochan: { name: "Diaochan", skin: "#fbefe8", hair: "#1a1418", hat: "lady", pin: "#e6c14a", pin2: "#d8d8e0", flower: "#f08ab0", robe: "#f2d6e0", trim: "#c86a8a", beard: "none", eyes: "kind", makeup: true },
+  dongmu: { name: "Dong Zhuo's mother", skin: "#efd8c0", hair: "#d8d2c8", hat: "bun", hatC: "#d8d2c8", pin: "#e6c14a", robe: "#5b3b6e", trim: "#d4ad42", beard: "none", eyes: "kind" },
+  caiyong: { name: "Cai Yong", skin: "#eec7a0", hair: "#9a9a9a", hat: "scholar", hatC: "#3a3236", robe: "#d6cfb8", trim: "#6a5a4a", beard: "long", beardC: "#c8c8c8", eyes: "kind" },
+  lvboshe: { name: "Lü Boshe", skin: "#e8c4a0", hair: "#9a9a9a", hat: "topknot", hatC: "#9a9a9a", pin: "#6a6a6a", robe: "#8a7a5a", trim: "#4a3a2a", beard: "long", beardC: "#c8c8c8", eyes: "kind" },
+  f_villager: { name: "Villager", skin: "#e8b88c", hair: "#2a2024", hat: "band", hatC: "#8a7a5a", robe: "#8a7a5a", trim: "#5a3a22", beard: "none", eyes: "round" },
 };
 // Someone the story names but nobody has drawn yet: the stand-in's look (their own name still shows).
 const tkLook = who => TK_CHARS[who] || TK_CHARS.f_farmer;
@@ -265,7 +294,7 @@ const TKImg = {
   cache: {},
   get(name) {
     if (!this.cache[name]) {
-      const im = new Image();
+      const im = new Image(); im.crossOrigin = "anonymous";
       this.cache[name] = { im, ready: new Promise(r => { im.onload = r; im.onerror = r; }) };
       im.src = `assets/tk/${name}.png`;
     }
@@ -500,7 +529,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) this.data = await (await fetch("data/tk.json?v=22")).json();
+    if (!this.data) this.data = await (await fetch("data/tk.json?v=34")).json();
     return this.data;
   },
   ls(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } },
@@ -515,8 +544,9 @@ const TK = {
   preds(w, key) { return w.edges.filter(e => e[1] === key).map(e => e[0]); },
   succs(w, key) { return w.edges.filter(e => e[0] === key).map(e => e[1]); },
   isStart(key) { return key.endsWith("-start"); },
-  open(w, key) { return this.isStart(key) || this.preds(w, key).some(k => this.isStart(k) || this.cleared(k)); },
-  worldOpen(n) { return n === 1 || this.cleared(`${n - 1}-boss`); },
+  // open: a start, the first beat of a book (nothing before it: Book 2 has no start node), or one whose way in is cleared
+  open(w, key) { const p = this.preds(w, key); return this.isStart(key) || !p.length || p.some(k => this.isStart(k) || this.cleared(k)); },
+  worldOpen(n) { return n === 1 || this.cleared(`${n - 1}-boss`) || (typeof TK_TEST !== "undefined" && TK_TEST); },   // test mode opens every book
   at(n) { return this.ls("tk-at")[n] || `${n}-start`; },
   setAt(n, key) { const a = this.ls("tk-at"); a[n] = key; this.lsSet("tk-at", a); },
   party(w) { return this.ls("tk-party")[w.n] || w.party; },
@@ -921,7 +951,10 @@ const TKStory = {
       ]);
       document.body.append(wrap);
       TKVoice.play(vids || []);
-      const go = () => { TKVoice.stop(); wrap.remove(); res(); };
+      // Enter or Space turns it too (no focus on the button: that would scroll a long one to its end)
+      const key = e => { if ((e.key === "Enter" || e.key === " ") && !(e.target && e.target.tagName === "BUTTON")) { e.preventDefault(); e.stopPropagation(); go(); } };
+      const go = () => { removeEventListener("keydown", key, true); TKVoice.stop(); wrap.remove(); res(); };
+      addEventListener("keydown", key, true);
       wrap.querySelector(".tk-scroll-go").onclick = go;
     });
   },
@@ -973,7 +1006,10 @@ async function viewTK(worldN) {
   root.innerHTML = `<div class="loading">Loading…</div>`;
   const D = await TK.load();
   if (nav !== routeSeq) return;
-  let n = worldN && TK.world(worldN) && TK.worldOpen(worldN) ? worldN : 1;
+  // no book named (the library card): the book last played; a named one becomes the last played
+  let last = 1; try { last = +localStorage.getItem("tk-book") || 1; } catch {}
+  let n = worldN && TK.world(worldN) && TK.worldOpen(worldN) ? worldN : TK.world(last) && TK.worldOpen(last) ? last : 1;
+  try { localStorage.setItem("tk-book", String(n)); } catch {}
   const w = TK.world(n);
   crumbs.innerHTML = "";
   crumbs.append(h("a", { href: "#/" }, "Library"), " / ", D.title);
@@ -993,8 +1029,9 @@ async function viewTK(worldN) {
     h("div", { class: "tk-head-btns" }, [voiceBtn, chron]),
   ]));
   root.append(h("div", { class: "tk-worlds" }, [
-    ...D.worlds.map(x => h("a", { class: "tk-world" + (x.n === n ? " on" : ""), href: `#/tk/${x.n}` }, `${x.n} · ${x.zh} ${x.name}`)),
-    h("span", { class: "tk-world lock" }, "2 · 虎牢关 Hulao Pass — 敬请期待 coming soon"),
+    ...D.worlds.map(x => TK.worldOpen(x.n)
+      ? h("a", { class: "tk-world" + (x.n === n ? " on" : ""), href: `#/tk/${x.n}` }, `${x.n} · ${x.zh} ${x.name}`)
+      : h("span", { class: "tk-world lock" }, `${x.n} · ${x.zh} ${x.name} — 先完成第${x.n - 1}卷 after Book ${x.n - 1}`)),
   ]));
   const host = h("div", { class: "tk-map" });
   root.append(host);
@@ -1010,6 +1047,40 @@ async function viewTK(worldN) {
     root.querySelector(".tk-head-btns").prepend(h("button", { class: "tk-chron-btn", type: "button", title: `Switch to ${WORLD_KITS[next].en}`,
       onclick: () => { WorldView.setKit(next); viewTK(w.n); } }, `画风：${WORLD_KITS[kit].zh} ${WORLD_KITS[kit].en}`));
     if (typeof WorldTravel !== "undefined") WorldTravel.addButtons(root.querySelector(".tk-head-btns"), w);   // map and start over (tk-travel.js)
+    // on a phone: whether a tap on a small board shows a ghost stone first (Auto) or plays at once (Never)
+    if (TK_TOUCH && typeof Goban !== "undefined") {
+      const conf = h("button", { class: "tk-chron-btn", type: "button" });
+      const label = () => { const auto = Goban.confirmMode() === "auto"; conf.setAttribute("aria-pressed", String(auto));
+        conf.textContent = auto ? "落子确认：自动 Confirm taps: Auto" : "落子确认：不用 Confirm taps: Never"; };
+      conf.onclick = () => { Goban.setConfirmMode(Goban.confirmMode() === "auto" ? "never" : "auto"); label(); };
+      label();
+      root.querySelector(".tk-head-btns").append(conf);
+    }
+    // Feedback from inside the game, tagged with where the player is (book, place, position, next
+    // beat, what's on screen), so a note like "this didn't trigger" comes with its context
+    {
+      const ta = h("textarea", { class: "tk-fb-text", rows: "3", placeholder: "意见反馈 Feedback: what's wrong or what would be better here?" });
+      const msg = h("span", { class: "tk-fb-msg" });
+      const send = h("button", { class: "tk-chron-btn", type: "button", "data-keep": "1" }, "发送反馈 Send feedback");
+      ta.addEventListener("keydown", e => {   // typing doesn't walk him or talk; Enter sends (Shift+Enter for a new line)
+        e.stopPropagation();
+        if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); send.click(); }
+      });
+      ta.addEventListener("keyup", e => e.stopPropagation());
+      send.onclick = async () => {
+        const text = ta.value.trim();
+        if (!text) { msg.textContent = "先写几句 Write something first."; return; }
+        send.disabled = true; msg.textContent = "…";
+        try { await Sync.sendFeedback(text, tkFeedbackContext(w)); ta.value = ""; msg.textContent = "已发送，谢谢！Sent, thanks!"; }
+        catch (e) { console.error(e); msg.textContent = "没发出去，再试一次 Couldn't send, try again."; }
+        send.disabled = false;
+      };
+      root.querySelector(".tk-head-btns").append(h("div", { class: "tk-fb" }, [ta, h("div", { class: "tk-fb-row" }, [send, msg])]));
+    }
+    // the other books, once open (Book 2 after Book 1's boss)
+    for (const x of D.worlds) if (x.n !== w.n && TK.worldOpen(x.n))
+      root.querySelector(".tk-head-btns").append(h("button", { class: "tk-chron-btn", type: "button", onclick: () => { location.hash = `#/tk/${x.n}`; } },
+        `第${x.n}卷 Book ${x.n} · ${x.zh} ${x.name} ▸`));
     // The buttons live in a menu inside the game window, with the controls.
     const panel = h("div", { class: "tk-menu-panel", hidden: "" }, [root.querySelector(".tk-head-btns"),
       h("div", { class: "tk-menu-keys" }, TK_TOUCH ? "点击地面移动 Tap to move · 点击人物对话 Tap to talk · 按住拖动 Hold and drag to steer"
@@ -1024,7 +1095,7 @@ async function viewTK(worldN) {
       const b = e.target.closest("button");
       if (!b) return;
       // actions that take you somewhere close the menu; switches (voice, music, guide) leave it open to show their state
-      if (!b.hasAttribute("aria-pressed")) { panel.hidden = true; toggle.setAttribute("aria-expanded", "false"); toggle.textContent = "菜单 Menu ▾"; }
+      if (!b.hasAttribute("aria-pressed") && !b.dataset.keep) { panel.hidden = true; toggle.setAttribute("aria-expanded", "false"); toggle.textContent = "菜单 Menu ▾"; }
       setTimeout(() => host.focus(), 0);   // keep the keyboard on the game
     });
     // Full window: the game takes the whole screen (and the real full screen where the
@@ -1062,6 +1133,8 @@ async function viewTK(worldN) {
         w, host, ret: ret && ret.world === w.n ? ret : null,
         onPuzzle: (key, at) => TKOverlay.open(w.n, key, at),  // the board comes up inside the game window
         onBoss: async () => { if (!TK.seen(`${w.n}:closing`)) { await run(w.closing); TK.markSeen(`${w.n}:closing`); } },
+        // the book's last beat done: on into the next book, no menus (its opening scroll plays there)
+        onBookDone: () => { if (TK.world(w.n + 1)) { try { localStorage.setItem("tk-book", String(w.n + 1)); } catch {} location.hash = `#/tk/${w.n + 1}`; } },
       });
     } catch (e) { host.textContent = e.message; }
     return;
@@ -1282,6 +1355,15 @@ TK_SETTER_LINES.starred = TK_SETTER_LINES.stargrey;
 
 const TK_REST = 30000;
 // A touch screen (a phone or tablet): tap to move and tap to talk.
+// Test mode, for trying the story without solving: open the page with ?test=1 (?test=0 ends it).
+// Problems then get a Skip key that counts as a flawless solve.
+const TK_TEST = (() => {
+  try {
+    const q = new URLSearchParams(location.search).get("test");
+    if (q != null) localStorage.setItem("tk-test", q === "0" ? "0" : "1");
+    return localStorage.getItem("tk-test") === "1";
+  } catch { return false; }
+})();
 const TK_TOUCH = typeof matchMedia !== "undefined" && matchMedia("(pointer: coarse)").matches;
 
 // Hold a board until its problem's rest is over. The position stays in full view
@@ -1338,21 +1420,33 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
     key_("H", "提示 Hint", () => trainer && trainer.hint()),
     key_("R", "重来 Reset", () => trainer && trainer.reset()),
     key_("Esc", "离开 Leave", leave),
+    TK_TEST ? key_("S", "跳过 Skip (test)", () => trainer && (trainer.flawed = null, dispatchEvent(new CustomEvent("tczw:result", { detail: "ok" })))) : "",
   ]);
   const srcLine = h("div", { class: "tk-duel-src" }, [
     `${p.lv || node.grade || ""} · 死活 · `, node.role === "boss" ? "" : `出自 ${src.title} · `,
     h("a", { href: p.url || `https://www.101weiqi.com/q/${p.id}/`, target: "_blank", rel: "noopener" }, "来源 source"),
   ]);
-  box.replaceChildren(boardCard, h("div", { class: "tk-duel-side" }, [dlg, keys, srcLine]));
+  // a decision board: the leader's choice named in the side column, over what's said
+  const dil = node.dilemma;
+  const dilBox = dil ? h("div", { class: "tk-duel-dilemma" }, [h("b", { lang: "zh-CN" }, dil.q_zh || ""), h("span", {}, dil.q)]) : "";
+  box.replaceChildren(boardCard, h("div", { class: "tk-duel-side" }, [dilBox, dlg, keys, srcLine]));
   // A boss duel: a lacquered red frame, a darker field, and his name over the board.
   box.parentNode && box.parentNode.classList.toggle("tk-duel-boss", !!node.boss);
   if (node.boss) boardCard.prepend(h("div", { class: "tk-duel-bossname" }, [
     h("b", { lang: "zh-CN" }, TK_BOSS_ZH[node.boss.who] || tkName(node.boss.who)), h("span", {}, node.boss.title || "")]));
 
-  const lord = foe && TK_SETTER_LINES[foe.who];
+  // A decision board: the leader's dilemma named over the board while the problem is open.
+
+  const dline = k => dil && dil[k] ? [dil[k + "_zh"] || "", dil[k]] : null;
+  // each of the leader's lines (open/win/slip) replaces the usual one when given
+  const base = foe && TK_SETTER_LINES[foe.who];
+  const lord = dil && (dil.open || dil.win || dil.slip) ? {
+    open: dline("open") || (base ? base.open : ["黑先。", "Black to play."]),
+    win: dline("win") || (base ? base.win : ["★ 完美！", "Flawless!"]),
+    slip: dline("slip") || (base ? base.slip : TK_SETTER_LINES.stargrey.slip) } : base;
   const opening = () => {
     if (node.boss) say(node.boss.taunt_zh || "", node.boss.taunt);
-    else if (lord) say(...lord.open);
+    else if (lord) { say(...lord.open); if (dil && dil.open_vid && TKVoice.has(dil.open_vid)) TKVoice.play(dil.open_vid); }
     else if (foe) say("请。你执黑先下。", "Your move. You play Black.");
     else say("黑先。", "Black to play.");
   };
@@ -1385,7 +1479,7 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
       onWin();
       dlg.classList.add("win");
       if (node.boss) say("……我竟败了！", "…Defeated? Me?", go("继续 Continue ▸", leave));
-      else if (lord) say(...lord.win, go("继续 Continue ▸", leave));
+      else if (lord) { say(...lord.win, go("继续 Continue ▸", leave)); if (dil && dil.win_vid && TKVoice.has(dil.win_vid)) TKVoice.play(dil.win_vid); }
       else if (foe) say("好棋！我认输。", "Well played. I resign.", go("继续 Continue ▸", leave));
       else say("★ 完美！", "Flawless!", go("继续 Continue ▸", leave));
     } else {
@@ -1395,6 +1489,7 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
         : lord ? lord.slip
         : foe ? ["哈！被我看穿了。换个思路吧。", "Ha! I saw through that. Try another way."] : ["敌人识破了！换个思路。", "The enemy saw through it! Try another way."];
       say(how[0], how[1]);
+      if (e.detail !== "ok" && dil && dil.slip_vid && TKVoice.has(dil.slip_vid)) TKVoice.play(dil.slip_vid);
       // a moment to see what went wrong, then the same problem from the start, to study until the rest is over
       setTimeout(() => { if (box.isConnected) again(); }, 1800);
     }
@@ -1414,13 +1509,22 @@ const TKOverlay = {
       const wrap = h("div", { class: "tk-duel" + (!host || host.clientWidth < 640 ? " tk-duel-full" : ""), role: "dialog", "aria-modal": "true", "aria-label": "Go problem 死活题" },
         [h("div", { class: "tk-duel-wipe" }), box]);
       (wrap.classList.contains("tk-duel-full") ? document.body : host).append(wrap);
+      // a phone turned sideways or back: the whole screen or inside the game's window, decided again
+      const relayout = () => {
+        const full = !host || !host.isConnected || host.clientWidth < 640;
+        if (full === wrap.classList.contains("tk-duel-full")) return;
+        wrap.classList.toggle("tk-duel-full", full);
+        wrap.classList.add("tk-relaid");   // moved, not opened: no wipe again
+        (full ? document.body : host).append(wrap);
+      };
+      addEventListener("resize", relayout);
       let won = false, closed = false;
       const close = () => {
         if (closed) return;
         closed = true;
         if (trainer) { trainer.alive = false; clearTimeout(trainer.replyTimer); trainer = null; }
-        removeEventListener("keydown", onKey, true); removeEventListener("hashchange", onNav);
-        wrap.classList.add("tk-leave");
+        removeEventListener("keydown", onKey, true); removeEventListener("hashchange", onNav); removeEventListener("resize", relayout);
+        wrap.classList.remove("tk-relaid"); wrap.classList.add("tk-leave");
         setTimeout(() => { wrap.remove(); resolve(won); }, 280);
       };
       // Escape leaves; Enter takes the offered next step. Keys stay out of the paused world.
@@ -1443,6 +1547,31 @@ const TKOverlay = {
   },
 };
 
+// Where the player is, for a feedback note: book, place, position, the next beat and its goal line,
+// what's open on screen, and the device and settings.
+function tkFeedbackContext(w) {
+  const sc = window.__w, parts = [location.hash, `Book ${w.n}`];
+  try {
+    if (sc && sc.place) {
+      const P = sc.player;
+      parts.push(`place ${sc.placeId}${P ? ` @ ${Math.round(P.x)},${Math.round(P.y)} facing ${P.facing}` : ""}`);
+      const q = sc.nextMain && sc.nextMain();
+      if (q) parts.push(`next ${q.node}`);
+      if (sc.goalText) parts.push(`goal "${sc.goalText[0]}"`);
+      const busy = [sc.cine && "cutscene", sc.ui && sc.ui.busy() && "dialogue", sc.seated && "go table"].filter(Boolean);
+      if (busy.length) parts.push(`on screen: ${busy.join(", ")}`);
+    }
+    if (document.querySelector(".tk-duel")) parts.push(`problem open${window.__trainer && window.__trainer.p ? ` (${window.__trainer.p.id || ""})` : ""}`);
+    parts.push(`cleared ${w.nodes.filter(x => TK.cleared(x.key)).length}/${w.nodes.length}`);
+    parts.push(`kit ${typeof WorldView !== "undefined" ? WorldView.kit() : "?"}`, `voice ${TKVoice.lang}`);
+    parts.push(`${TK_TOUCH ? "touch" : "mouse"} ${innerWidth}x${innerHeight}`);
+    if (TK_TEST) parts.push("test mode");
+    const v = [...document.scripts].map(x => (x.src.match(/(tk-world|tk)\.js\?v=\d+/) || [])[0]).filter(Boolean);
+    if (v.length) parts.push(v.join(" "));
+  } catch (e) { parts.push(`(context error: ${e.message})`); }
+  return parts.join(" · ");
+}
+
 // Every story scene in the novel's order; the ones not yet seen stay hidden.
 function tkChronicle(w, map) {
   const items = [["opening", "Prologue", null]];
@@ -1461,14 +1590,21 @@ function tkChronicle(w, map) {
     ]);
     b.disabled = !seen;
     b.onclick = async () => {
-      wrap.remove();
+      close();
       const steps = id === "opening" ? w.opening : id === "closing" ? w.closing : w.scenes[id].steps;
       TKStory.busy = true;
       try { await TKStory.play(map, steps.filter(s => s[0] !== "party")); } finally { TKStory.busy = false; }
     };
     list.append(b);
   }
-  wrap.append(h("div", { class: "tk-scroll" }, [h("h3", {}, `Chronicle · ${w.name}`), list,
-    h("button", { class: "tk-scroll-go", type: "button", onclick: () => wrap.remove() }, "Close")]));
+  // closes from the top as well as the end, by a tap outside it, or Escape
+  const close = () => { wrap.remove(); removeEventListener("keydown", esc, true); };
+  const esc = e => { if (e.key === "Escape") { e.stopPropagation(); close(); } };
+  addEventListener("keydown", esc, true);
+  wrap.addEventListener("click", e => { if (e.target === wrap) close(); });
+  wrap.append(h("div", { class: "tk-scroll" }, [
+    h("button", { class: "tk-scroll-x", type: "button", "aria-label": "Close 关闭", onclick: close }, "关闭 Close"),
+    h("h3", {}, `Chronicle · ${w.name}`), list,
+    h("button", { class: "tk-scroll-go", type: "button", onclick: close }, "Close")]));
   document.body.append(wrap);
 }

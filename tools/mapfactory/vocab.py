@@ -39,6 +39,10 @@ KINDS = {
     "building.moongate": (3, 1, False),
     "landmark.notice": (2, 1, True),     # a notice board
     "furniture.gotable": (1, 1, True),   # a weiqi table, where the Star Lords sit
+    "ruin.hall": (4, 2, True),           # Book 2's burned Luoyang: a roofless hall, charred pillars
+    "ruin.columns": (2, 1, True),
+    "ruin.rubble": (1, 1, False),        # stones and burnt timber you walk over
+    "landmark.shrine": (2, 1, True),     # the Star Lords' weiqi shrine: one per town (looks: dark, lit, settled)
     # trees and plants
     "tree.small": (1, 1, True),
     "tree.big": (2, 1, True),

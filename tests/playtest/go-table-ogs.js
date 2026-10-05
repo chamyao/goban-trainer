@@ -6,7 +6,7 @@ const ctx=await b.newContext(MODE==='phone'?{...devices['iPhone 13']}:{viewport:
 p.on('pageerror',e=>console.log('ERR',e.message));
 await p.route('**/phaser.min.js',r=>r.fulfill({path:require('path').join(__dirname,'vendor/phaser.min.js'),contentType:'application/javascript'}));
 await p.route('**/*.mp3',r=>r.fulfill({status:404,body:''}));
-await p.goto((process.env.PLAYTEST_URL||'http://localhost:8765')+'/index.html#/tk/1');await p.waitForTimeout(1200);
+await p.goto((process.env.PLAYTEST_URL||'http://localhost:8765')+'/index.html'+(process.env.PLAYTEST_KIT?'?kit='+process.env.PLAYTEST_KIT:'')+'#/tk/1');await p.waitForTimeout(1200);
 await p.evaluate(()=>{TK.markCleared('1-start');localStorage.setItem('tk-guide','off');});await p.reload();await p.waitForTimeout(1500);
 {const c=p.getByText('Cancel',{exact:true});if(await c.count())await c.first().click();}
 for(let i=0;i<6;i++){const g=p.locator('.tk-scroll-go');if(await g.count()){await g.first().click();await p.waitForTimeout(400);}}
@@ -20,7 +20,7 @@ await p.evaluate(()=>{window.__sent=[];
     OGSPlay.sendSearch(); };
 });
 const sent=()=>p.evaluate(()=>window.__sent.map(([c,d])=>c+(d&&d.size_speed_options?' '+JSON.stringify(d.size_speed_options):'')+(d&&d.move?' '+d.move:'')));
-const tapW=async(x,y)=>{const [a,b2]=await p.evaluate(([x,y])=>{const w=window.__w,cam=w.cameras.main,cv=w.game.canvas,r=cv.getBoundingClientRect(),k=cv.clientWidth/w.scale.width;return [r.left+(x-cam.worldView.x)*cam.zoom*k, r.top+(y-cam.worldView.y)*cam.zoom*k];},[x,y]);if(MODE==='phone')await p.touchscreen.tap(a,b2);else await p.mouse.click(a,b2);};
+const tapW=async(x,y)=>{await p.evaluate(()=>new Promise(r=>{const w=window.__w;if(!w||!w.cameras){r();return;}const cam=w.cameras.main;let last='',same=0,n=0;const t=setInterval(()=>{const v=Math.round(cam.worldView.x)+','+Math.round(cam.worldView.y);same=v===last?same+1:0;last=v;if(same>=3||++n>40){clearInterval(t);r();}},40);}));/* the camera eases after him: tap once it has settled */const [a,b2]=await p.evaluate(([x,y])=>{const w=window.__w,cam=w.cameras.main,cv=w.game.canvas,r=cv.getBoundingClientRect(),k=cv.clientWidth/w.scale.width;return [r.left+((window.__w.view?window.__w.view(x,y).x:x)-cam.worldView.x)*cam.zoom*k, r.top+((window.__w.view?window.__w.view(x,y).y:y)-cam.worldView.y)*cam.zoom*k];},[x,y]);if(MODE==='phone')await p.touchscreen.tap(a,b2);else await p.mouse.click(a,b2);};
 const spot=await p.evaluate(()=>{const s=Object.values(window.__w.spots).find(s=>s.use==='ogs');window.__w.player.setPosition(s.x+30,s.y+30);return [s.x,s.y];});
 await p.waitForTimeout(900);
 await tapW(spot[0],spot[1]); await p.waitForTimeout(2500);

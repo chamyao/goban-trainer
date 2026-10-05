@@ -19,8 +19,19 @@ const TK_NAMES_ZH = {
   f_farmer: "农夫", f_farmer2: "农夫", f_porter: "脚夫", f_youth: "后生", f_woman: "妇人", f_woman2: "妇人", f_elder: "老者", f_elder2: "老汉",
   f_child: "孩童", f_daoist: "道士", f_noble: "士人", f_soldier: "兵士", f_hunter: "猎户", f_official: "书吏",
   f_geisha: "仕女", f_geisha2: "仕女", f_geisha3: "仕女", f_maiden: "少女", f_maiden2: "少女", f_girl: "小姑娘",
+  // Book 2
+  caiyong: "蔡邕", caohong: "曹洪", chengong: "陈宫", chengpu: "程普", diaochan: "貂蝉", dingyuan: "丁原", dongmu: "董卓之母",
+  gongsunzan: "公孙瓒", handang: "韩当", hetaihou: "何太后", liru: "李儒", lisu: "李肃", lvbu: "吕布", shaodi: "少帝",
+  sunjian: "孙坚", tangfei: "唐妃", wangyun: "王允", xiandi: "献帝", yuanshao: "袁绍", yuanshu: "袁术", zumao: "祖茂",
 };
-const tkName = who => [TK_NAMES_ZH[who], TK_CHARS[who] ? TK_CHARS[who].name
+// English names where an id doesn't spell them (TK_CHARS names the heroes and villains it draws)
+const TK_NAMES_EN = {
+  caiyong: "Cai Yong", caohong: "Cao Hong", chengong: "Chen Gong", chengpu: "Cheng Pu", diaochan: "Diaochan", dingyuan: "Ding Yuan",
+  dongmu: "Dong Zhuo's mother", gongsunzan: "Gongsun Zan", handang: "Han Dang", hetaihou: "Empress He", liru: "Li Ru", lisu: "Li Su",
+  lvbu: "Lü Bu", shaodi: "Emperor Shao", sunjian: "Sun Jian", tangfei: "Consort Tang", wangyun: "Wang Yun", xiandi: "Emperor Xian",
+  yuanshao: "Yuan Shao", yuanshu: "Yuan Shu", zumao: "Zu Mao",
+};
+const tkName = who => [TK_NAMES_ZH[who], TK_CHARS[who] ? TK_CHARS[who].name : TK_NAMES_EN[who] ? TK_NAMES_EN[who]
   : !TK_NAMES_ZH[who] && String(who || "").replace(/^f_/, "").split(/[_-]/).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ")].filter(Boolean).join(" ");
 
 /* ---------- the heroes in four directions, from TKArt's front sprites ---------- */
@@ -153,20 +164,31 @@ const TownArt = {
 
 /* ---------- DOM overlay: goal, dialogue with portraits and voice ---------- */
 const TownUI = {
+  // who -> portrait file (assets/tk/portraits/portraits.json, tools/build_portraits.py), fetched once
+  portraits: {}, PORTRAIT_V: 1,
+  loadPortraits() {
+    if (!this._pp) this._pp = fetch(`assets/tk/portraits/portraits.json?v=${this.PORTRAIT_V}`).then(r => r.ok ? r.json() : {})
+      .catch(() => ({})).then(m => { this.portraits = m; for (const f of Object.values(m)) new Image().src = `assets/tk/portraits/${f}?v=${this.PORTRAIT_V}`; });
+    return this._pp;
+  },
   mount(scene, host) {
+    if (scene.kit && scene.kit.dialogue === "genshin") this.loadPortraits();
     host.querySelectorAll(":scope > .town-ui").forEach(el => el.remove());  // a new place replaces the old overlay
     const root = document.createElement("div");
-    root.className = "town-ui";
+    // the dialogue look follows the art kit ("dialogue" in kits/<kit>.json): "genshin" is the big cut-out
+    // portrait in a dark gradient box (style.css); the other kits keep the original box and pixel bust
+    const look = (scene.kit && scene.kit.dialogue) || "", painted = look === "genshin";
+    root.className = "town-ui" + (look ? " " + look : "");
     const TOUCH = typeof TK_TOUCH !== "undefined" && TK_TOUCH;
     root.innerHTML = `<div class="town-goal"></div><div class="town-keys"><b>点击</b>移动 click to move · <b>点击人物</b>对话 click someone to talk</div>
       <div class="town-place"></div><div class="town-hint" hidden>${TOUCH ? "点击 Tap" : "点击 Click"}</div><div class="town-focus" hidden>${TOUCH ? "Tap the map to play" : "Click the map to play"}</div>
-      <div class="town-dim" hidden></div><div class="town-dlg" hidden><div class="town-tab">主线 · Story</div><canvas class="town-face" width="34" height="34"></canvas><div class="town-txt"><div class="town-who"></div><div class="town-zh" lang="zh-CN"></div><div class="town-en"></div></div><div class="town-more">▼</div></div>`;
+      <div class="town-dim" hidden></div><img class="town-portrait" alt="" hidden><div class="town-dlg" hidden><div class="town-tab">主线 · Story</div><canvas class="town-face" width="34" height="34"></canvas><div class="town-txt"><div class="town-who"></div><div class="town-zh" lang="zh-CN"></div><div class="town-en"></div></div><div class="town-more">▼</div></div>`;
     host.append(root);
     const $ = s => root.querySelector(s);
     let queue = [], done = null, open = false, typing = null, finishTyping = null;
     const show = () => {
       const st = queue.shift();
-      if (!st) { $(".town-dlg").hidden = true; $(".town-dim").hidden = true; open = false; TKVoice.stop(); const d = done; done = null; d && d(); return; }
+      if (!st) { $(".town-dlg").hidden = true; $(".town-dim").hidden = true; $(".town-portrait").hidden = true; open = false; TKVoice.stop(); const d = done; done = null; d && d(); return; }
       const said = st[0] === "say", who = said ? st[1] : null;
       const [en, zh, vid] = said ? [st[2], st[3], st[4]] : [st[1], st[2], st[3]];
       $(".town-who").textContent = who ? tkName(who) : "";
@@ -184,11 +206,19 @@ const TownUI = {
       finishTyping = () => { clearInterval(typing); typing = null; $(".town-zh").textContent = Z; $(".town-en").textContent = E; $(".town-more").style.visibility = ""; };
       const face = $(".town-face"), fc = face.getContext("2d");
       fc.clearRect(0, 0, 34, 34);
-      face.hidden = !who;
-      if (who) fc.drawImage(TKArt.get(who, "bust"), 0, 0);
+      // a painted portrait when there is one (assets/tk/portraits), else the pixel bust
+      const pic = $(".town-portrait"), file = painted && who && TownUI.portraits[who];
+      if (file) {
+        const src = `assets/tk/portraits/${file}?v=${TownUI.PORTRAIT_V}`;
+        if (pic.dataset.who !== who) { pic.dataset.who = who; pic.src = src; pic.classList.remove("in"); void pic.offsetWidth; pic.classList.add("in"); }
+        pic.hidden = false;
+      } else { pic.hidden = true; pic.dataset.who = ""; }
+      $(".town-dlg").classList.toggle("has-portrait", !!file);
+      face.hidden = !who || !!file;
+      if (who && !file) fc.drawImage(TKArt.get(who, "bust"), 0, 0);
       if (vid) TKVoice.play(vid); else TKVoice.stop();
     };
-    const focus = () => { const f = host.querySelector(".town-focus"); if (f) f.hidden = document.activeElement === host; };
+    const focus = () => { const f = host.querySelector(".town-focus"); if (f) f.hidden = TOUCH || document.activeElement === host; };   // on a phone a tap works either way
     if (!host.dataset.townFocus) { host.dataset.townFocus = "1"; host.addEventListener("focus", focus); host.addEventListener("blur", focus); }
     setTimeout(focus, 0);
     return {
@@ -196,6 +226,7 @@ const TownUI = {
       // Chinese leads, English follows.
       goal(t, zh) {
         const g = $(".town-goal"); g.textContent = zh || t;
+        g.onclick = e => { e.stopPropagation(); if (scene.walkToGoal) scene.walkToGoal(); };   // tap the goal: head for it
         if (zh) g.append(Object.assign(document.createElement("span"), { className: "town-goal-en", textContent: t }));
       },
       place(name, zh) {
@@ -212,9 +243,9 @@ const TownUI = {
         dlg.hidden = false; show();
       },
       advance() { if (!open) return; if (typing) finishTyping(); else show(); },
-      hint(target) {
+      hint(target) {   // (no floating "Tap" label any more: a ring on the ground marks what he'd act on)
         const h = $(".town-hint");
-        if (!target) { h.hidden = true; return; }
+        if (!target || h) { if (h) h.hidden = true; return; }
         const cam = scene.cameras.main, cv = scene.game.canvas, k = cv.clientWidth / scene.scale.width;
         const r = cv.getBoundingClientRect(), rr = root.getBoundingClientRect();
         h.hidden = false;
