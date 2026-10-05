@@ -230,7 +230,11 @@ def main():
 
     # objects
     items, made, flip = [], {}, []
-    for kind, (_, box, _) in {**OBJECTS, **INTERIOR, **{k: v for k, v in PROPS_GEN.items() if k not in PROPS_SKIP}}.items():
+    pieces = {**OBJECTS, **INTERIOR, **{k: v for k, v in PROPS_GEN.items() if k not in PROPS_SKIP}}
+    if GENSHIN:   # the view's foreground framing pieces (tk-iso.js surround), at the size they were made
+        from xianxia_spec import GENSHIN_FOREGROUNDS
+        pieces.update({k: (p, (round(w / 1.4), round(h / 1.4)), 2) for k, (p, (w, h)) in GENSHIN_FOREGROUNDS.items()})
+    for kind, (_, box, _) in pieces.items():
         # a piece that came out wrong is used only once its second try exists
         where = [d for d in src if d.name in ("xianxia-redo", "genshin", "genshin-redo2")] if kind in REDO else src
         if kind in GENSHIN_BAD:   # its isometric try came out wrong: xianxia's until the redo is good
@@ -259,6 +263,21 @@ def main():
         kit["dialogue"] = "genshin"   # tk-town.js: painted portraits, the Genshin dialogue box
         kit["isoVoid"] = "#%02x%02x%02x" % COL["grass"][3]   # beyond the map's diamond: darker grass
         kit["isoFlip"] = flip   # mirrored in the game: their entrance on the door's face
+        # the country around each outdoor map (tk-iso.js surround): a seamless backdrop per kind of place,
+        # and which foreground pieces frame it
+        from xianxia_spec import GENSHIN_BACKDROP_PICK, GENSHIN_BACKDROPS
+        gdir = next((d for d in reversed(src) if d.name == "genshin"), None)
+        for k in GENSHIN_BACKDROPS:
+            f = gdir and gdir / f"bg.{k}-{GENSHIN_BACKDROP_PICK.get(k, 1)}.png"
+            if f and f.exists():
+                Image.open(f).convert("RGB").save(OUT / f"bg_{k}.png")
+                kit["sheets"][f"bg_{k}"] = f"assets/tk/{LOOK}/bg_{k}.png"
+        kit["isoBackdrop"] = {a: b for a, b in {"village": "meadow", "town": "meadow", "city": "meadow", "garden": "meadow",
+                                                  "road": "meadow", "camp": "meadow", "hills": "forest",
+                                                  "mountain": "mountain", "ruins": "ruins"}.items()
+                              if f"bg_{b}" in kit["sheets"]}
+        kit["isoForeground"] = {"meadow": ["fg.canopy", "fg.reeds"], "forest": ["fg.canopy", "fg.pine"],
+                                "mountain": ["fg.pine", "fg.rocks"], "ruins": ["fg.rocks"]}
     kit["materials"]["grass"] = {"tiles": [["x_tiles", i, row["grass"], 3 if i == 0 else 1]
                                            for i in range(len(ground["grass"]))]}
     for i, (m, _, _) in enumerate(edged):

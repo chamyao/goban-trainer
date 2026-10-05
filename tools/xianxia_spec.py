@@ -195,3 +195,21 @@ GENSHIN_ITEM = ("a single {p} by itself, centred, game item sprite, bright satur
 GENSHIN_FLIP = {"building.inn-1", "building.house-2"}
 # trees drawn standing on a raised square of ground: the square is cut away, the trunk kept
 GENSHIN_UNPLATE = ("tree.",)
+
+# ---- the Genshin isometric view's surroundings (the user: "the corners of the map look strangely empty") ----
+# BACKDROPS: seamless textures that fill the screen beyond a map's diamond, one per kind of country.
+# FOREGROUNDS: big cut-out pieces drawn over the edges of the view, nearer than the map, to frame it.
+GENSHIN_BACKDROPS = {
+    "meadow": "lush green countryside seen from above: grass, clumps of bushes, small round trees, wild flowers, a few rocks",
+    "forest": "dense green woodland seen from above: tree crowns packed close, glimpses of grass between them",
+    # the first tries of these two came out as scenic paintings, not ground seen from above: worded flatter
+    "mountain": "flat rocky ground seen from directly above: grey stones, gravel, tufts of grass, small pine trees",
+    "ruins": "flat ground seen from directly above: grey ash, charred wood, broken roof tiles, burnt grass",
+}
+GENSHIN_BACKDROP_PICK = {"meadow": 1, "forest": 1, "mountain": 4, "ruins": 3}   # the tries that tile cleanly
+GENSHIN_FOREGROUNDS = {
+    "fg.canopy": ("a big cluster of leafy green tree crowns, seen from slightly above", (128, 96)),
+    "fg.pine": ("a tall dark green pine tree", (64, 112)),
+    "fg.rocks": ("a pile of large mossy grey boulders", (112, 72)),
+    "fg.reeds": ("a thick clump of tall green reeds and grasses", (80, 80)),
+}

@@ -152,6 +152,14 @@ def kit_set(a):
             for j in jobs:
                 if not natural(j[0]):
                     j[2]["prompt"] = GENSHIN_ITEM.format(p=objs[j[0]][0]) + ", isometric 2:1 angle"
+    if a.set == "genshin-bg":   # the Genshin view's backdrops (seamless) and foreground framing pieces
+        from xianxia_spec import GENSHIN_BACKDROPS, GENSHIN_FOREGROUNDS, GENSHIN_LOOK
+        jobs = [(f"bg.{k}", "rd-fast", {"style": "texture", "width": 192, "height": 192, "tile_x": True, "tile_y": True,
+                                        "prompt": f"{p}, {GENSHIN_LOOK}, seamless game background texture"}, 2)
+                for k, p in GENSHIN_BACKDROPS.items()]
+        jobs += [(k, "rd-plus", {"style": "isometric_asset", "width": w, "height": h, "remove_bg": True,
+                                 "prompt": f"{p}, {GENSHIN_LOOK}, isometric game sprite"}, 2)
+                 for k, (p, (w, h)) in GENSHIN_FOREGROUNDS.items()]
     if a.set == "xianxia-chars2":
         from xianxia_spec import CHARACTERS2
         jobs = [(f"char.{k}", "rd-animation", {"style": "four_angle_walking", "width": 48, "height": 48,
@@ -200,7 +208,7 @@ def main():
     ap.add_argument("--only", action="append")
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--list", action="store_true")
-    ap.add_argument("--set", choices=["xianxia", "xianxia-chars", "xianxia-redo", "xianxia-interior", "xianxia-chars2", "xianxia-props", "genshin-pilot", "genshin", "genshin-redo", "genshin-redo2"], help="generate a whole kit's pieces (tools/xianxia_spec.py)")
+    ap.add_argument("--set", choices=["xianxia", "xianxia-chars", "xianxia-redo", "xianxia-interior", "xianxia-chars2", "xianxia-props", "genshin-pilot", "genshin", "genshin-redo", "genshin-redo2", "genshin-bg"], help="generate a whole kit's pieces (tools/xianxia_spec.py)")
     ap.add_argument("--pause", type=float, default=12, help="seconds between requests (rate limits)")
     ap.add_argument("--jobs", type=int, default=8, help="requests at once")
     a = ap.parse_args()

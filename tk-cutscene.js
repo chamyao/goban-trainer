@@ -35,6 +35,7 @@ const WorldCutscene = {
     scene.cine = cs;
     const actors = {}, fx = [], timers = [];
     const hasProblem = cs.beats.some(b => b.do === "problem");
+    WorldCutscene.preloadStills(cs);   // fetch the scene's stills now, so each is ready when its beat comes
     let skip = !!(opts.ffToProblem && hasProblem), solved = !hasProblem, left = false, lastLine = null;
     const px = ([x, y]) => [x * T, y * T];
     // where the camera looks for a tile: the same, or where the isometric view draws it (tk-iso.js)
@@ -89,11 +90,28 @@ const WorldCutscene = {
       el.className = `tk-still kb-${b.move || "in"}`;
       const img = new Image(); img.crossOrigin = "anonymous";
       img.alt = "";
-      img.src = `assets/tk/stills/${m.file}?v=${m.made || ""}${m.look || ""}`;   // a redone still is fetched anew
+      img.src = WorldCutscene.stillSrc(m);
       el.append(img);
-      await Promise.race([img.decode().catch(() => {}), new Promise(r => setTimeout(r, 1500))]);
+      // preloaded when the scene began; on a slow phone connection give it a while before going on without it
+      await Promise.race([img.decode().catch(() => {}), new Promise(r => setTimeout(r, 6000))]);
       if (!img.complete || !img.naturalWidth) return;
       (host.querySelector(".town-ui") || host).prepend(el);
+      // a screen much narrower than the picture (a phone held upright): the picture is shown at up to
+      // 1.5 times the screen's width (two thirds of it at a time), high on the screen with dark above and
+      // below, and pans from its left edge to its right edge and back.
+      // (sized again when the screen turns or resizes; a wide screen goes back to the full-frame drift)
+      const fit = () => {
+        const r = el.getBoundingClientRect(), ar = img.naturalWidth / img.naturalHeight;
+        const wide = r.width && r.height * ar > r.width * 1.25;
+        el.classList.toggle("wide", !!wide);
+        if (!wide) { img.removeAttribute("style"); return; }
+        const w = Math.min(r.height * ar, r.width * 1.5), h = w / ar, range = w - r.width;
+        Object.assign(img.style, { width: `${Math.ceil(w)}px`, height: `${Math.ceil(h)}px`, top: `${Math.round(Math.max(0, (r.height - h) * .3))}px` });
+        el.style.setProperty("--from", "0px");
+        el.style.setProperty("--to", `${-Math.floor(range)}px`);
+      };
+      fit();
+      if (typeof ResizeObserver !== "undefined") { const ro = new ResizeObserver(() => el.isConnected ? fit() : ro.disconnect()); ro.observe(el); }
       overlays.push(el);
       still = el;
       requestAnimationFrame(() => el.classList.add("on"));
@@ -622,8 +640,21 @@ const WorldCutscene = {
   // the prop atlas (props, emote bubbles, gift icons), loaded once per game
   // the stills that exist (tools/gen_stills.py writes assets/tk/stills/stills.json), fetched once
   stillIndex() {
-    if (!this._stills) this._stills = fetch("assets/tk/stills/stills.json?v=16").then(r => r.ok ? r.json() : {}).catch(() => ({}));
+    if (!this._stills) this._stills = fetch("assets/tk/stills/stills.json?v=19").then(r => r.ok ? r.json() : {}).catch(() => ({}));
     return this._stills;
+  },
+  stillSrc(m) { return `assets/tk/stills/${m.file}?v=${m.made || ""}${m.look || ""}`; },   // a redone still is fetched anew
+  async preloadStills(cs) {
+    const ids = cs.beats.filter(b => b.do === "still").map(b => b.id);
+    if (!ids.length) return;
+    const idx = await this.stillIndex();
+    this._pre = this._pre || {};
+    for (const id of ids) {
+      const m = idx[id];
+      if (!m || this._pre[id]) continue;
+      const img = new Image(); img.crossOrigin = "anonymous"; img.src = this.stillSrc(m);
+      this._pre[id] = img;   // kept, so the browser keeps it decoded and cached
+    }
   },
   load(scene) {
     if (scene.textures.exists("tk-props")) return Promise.resolve();
