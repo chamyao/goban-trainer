@@ -32,6 +32,14 @@ if(s0.needs){
   check(s1.ghost&&s1.ghost[0]===A.c&&s1.ghost[1]===A.r&&s1.played===s0.played,`first tap: a ghost at ${A.c},${A.r} and no move (moves ${s0.played} -> ${s1.played})`);
   await p.touchscreen.tap(Z.x,Z.y);await p.waitForTimeout(500);const s2=await B();
   check(s2.ghost&&s2.ghost[0]===Z.c&&s2.ghost[1]===Z.r&&s2.played===s0.played,`a tap on another point moves the ghost there (${Z.c},${Z.r}), still no move`);
+  // ghosts on points that aren't the answer cost nothing: no slip, no rest, the solve still flawless
+  const firstMoves=await p.evaluate(()=>[...new Set(window.__trainer.p.lines.map(L=>L[1]))]);
+  const W2=empties.filter(q=>!firstMoves.includes(String.fromCharCode(97+q.c)+String.fromCharCode(97+q.r))).slice(0,4);
+  for(const q of W2){await p.touchscreen.tap(q.x,q.y);await p.waitForTimeout(250);}
+  await p.waitForTimeout(1500);
+  const sl=await p.evaluate(()=>({rest:!!document.querySelector('.tk-rest'),flawed:window.__trainer.flawed||null,done:window.__trainer.done||null,slip:!!document.querySelector('.tk-duel-dlg.slip')}));
+  check(!sl.rest&&!sl.flawed&&!sl.done&&!sl.slip,`ghosts on ${W2.length} wrong points: no slip, no rest, still flawless (${JSON.stringify(sl)})`);
+  await p.touchscreen.tap(Z.x,Z.y);await p.waitForTimeout(400);
   await p.touchscreen.tap(Z.x,Z.y);await p.waitForTimeout(900);const s3=await B();
   check(!s3.ghost&&(s3.played>s0.played||s3.done),`a second tap on the ghost plays it (moves ${s0.played} -> ${s3.played})`);
 }else check(s1.played>s0.played||s1.done,`one tap plays (moves ${s0.played} -> ${s1.played})`);
