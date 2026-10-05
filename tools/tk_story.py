@@ -304,7 +304,7 @@ WORLDS = [
                 ["army", "relief", "militia", 4, "n4b", -24, 0],
                 ["army", "yt", "rebel", 15, "n4b", 80, 0],
                 ["n", "Liu Bei sends the army out, but the hills on either side are empty, and the rebels press him back."],
-                ["say", "liubei", "Not yet. Yunchang and Yide must be on their hills first."],
+                ["say", "liubei", "Not yet. Yunchang must be on the left hill and Yide on the right, before I strike."],
                 ["remove", "relief"], ["remove", "yt"],
             ]},
             "yingchuan": {"title": "Yingchuan, Too Late", "kind": "main", "steps": [
@@ -438,7 +438,7 @@ WORLDS = [
                 ["n", "Again the black wind pours out of the cloud. The army breaks."],
                 ["run", "han", "boss", -120, 0], ["run", "liubei", "boss", -16, 0],
                 ["light", "day", 1500],
-                ["say", "guanyu", "The old men said blood. Pigs, sheep, dogs. We have none."],
+                ["say", "guanyu", "The old men said blood. Pigs, sheep, dogs. We have none. Go down to the village and ask."],
                 ["remove", "han"], ["remove", "yt"], ["remove", "zb"],
             ]},
             "bosswin": {"title": "The General of Earth Falls", "kind": "main", "steps": [
