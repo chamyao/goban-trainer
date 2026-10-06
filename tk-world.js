@@ -25,7 +25,7 @@ const WorldState = {
   load(n, region) {
     let s = {};
     try { s = JSON.parse(localStorage.getItem(this.key(n)) || "{}"); } catch { s = {}; }
-    return { visited: (s.visited || [region.start]).map(worldRenamed), party: s.party || TK.party(TK.world(n)) || region.party, place: s.place, pos: s.pos || null, light: s.light || null };   // light: a scene's last light, kept onto the next map
+    return { visited: (s.visited || [region.start]).map(worldRenamed), party: s.party || TK.party(TK.world(n)) || region.party, place: s.place, pos: s.pos || null, light: s.light || null, crowd: s.crowd || 0 };   // light: a scene's last light, kept onto the next map
   },
   save(n, st) { try { localStorage.setItem(this.key(n), JSON.stringify(st)); } catch { /* private mode */ } },
 };
@@ -599,8 +599,16 @@ function worldScenes() {
         this.hero(who);
         return { who, spr: this.add.sprite(this.player.x, this.player.y, `h-${who}-down-0`).setOrigin(.5, 1) };
       });
+      // a crowd that has fallen in behind (["crowd", n]: Jia Xu's Liangzhou men, more with each village)
+      const folk = ["f_farmer", "f_youth", "f_soldier", "f_farmer2", "f_elder", "f_hunter", "f_porter"];
+      for (let k = 0; k < (this.st.crowd || 0); k++) {
+        const who = folk[k % folk.length];
+        this.hero(who);
+        this.followers.push({ who, crowd: true, spr: this.add.sprite(this.player.x, this.player.y, `h-${who}-down-0`).setOrigin(.5, 1) });
+      }
       if (this.npcs) this.refreshStory();
-      this.trail = Array(60).fill({ x: this.player.x, y: this.player.y, f: this.player.facing });
+      this.trailLen = Math.max(60, (this.followers.length + 1) * 14 + 1);
+      this.trail = Array(this.trailLen).fill({ x: this.player.x, y: this.player.y, f: this.player.facing });
     }
 
     /* ---------- quests: progress is the campaign save ---------- */
@@ -1031,7 +1039,9 @@ function worldScenes() {
 
     // What a won story beat leaves behind: who joined, what was given, the next goal.
     async finishQuest(q, steps) {
-      for (const s of steps) if (s[0] === "party") { this.st.party = s[1]; TK.setParty(this.w, s[1]); this.setParty(s[1]); }
+      for (const s of steps) if (s[0] === "crowd") this.st.crowd = Math.max(0, typeof s[1] === "string" ? (this.st.crowd || 0) + +s[1] : +s[1] || 0);
+      for (const s of steps) if (s[0] === "party") { this.st.party = s[1]; TK.setParty(this.w, s[1]); }
+      if (steps.some(s => s[0] === "party" || s[0] === "crowd")) this.setParty(this.st.party);
       if (typeof WorldItems !== "undefined") WorldItems.gainFrom(this, steps);   // what the scene gave
       if (q.scene) TK.markSeen(`${this.w.n}:${q.scene}`);
       // a gated battle won: the supplies it needed have done their job
@@ -1535,9 +1545,12 @@ function worldScenes() {
         }
       }
 
-      if (vx || vy) { this.trail.unshift({ x: P.x, y: P.y, f: P.facing }); this.trail.length = 60; }
+      if (vx || vy) { this.trail.unshift({ x: P.x, y: P.y, f: P.facing }); this.trail.length = this.trailLen || 60; }
       this.followers.forEach((F, i) => {
-        let p = this.trail[Math.min(this.trail.length - 1, (i + 1) * 14)] || { x: P.x, y: P.y, f: P.facing };
+        // the party in single file; a crowd behind them closer together, two abreast
+        const nParty = this.followers.filter(f => !f.crowd).length, k = i - nParty;
+        let p = this.trail[Math.min(this.trail.length - 1, F.crowd ? (nParty + 1) * 14 + (k >> 1) * 9 : (i + 1) * 14)] || { x: P.x, y: P.y, f: P.facing };
+        if (F.crowd) p = { ...p, x: p.x + (p.f === "up" || p.f === "down" ? (k % 2 ? 6 : -6) : 0), y: p.y + (p.f === "left" || p.f === "right" ? (k % 2 ? 4 : -4) : 0) };
         // no trail yet (just arrived, or a scene put him here): beside him, not on top of him
         if (Math.hypot(p.x - P.x, p.y - P.y) < 6) p = { x: P.x + (i % 2 ? 11 : -11) * (1 + (i >> 1)), y: P.y - 2, f: p.f };
         const moving = Math.hypot(F.spr.x - p.x, F.spr.y - p.y) > .5;
