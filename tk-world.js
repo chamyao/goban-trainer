@@ -275,7 +275,7 @@ function worldScenes() {
       this.iso = typeof WorldIso !== "undefined" && WorldIso.on(kit) ? WorldIso.mount(this, map, layers) : null;
       this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
       this.solids = this.physics.add.staticGroup(); this.buildings = [];
-      for (const who of new Set(["liubei", ...this.st.party])) this.hero(who);
+      for (const who of new Set([this.lead, ...this.st.party])) this.hero(who);
 
       const P = o => Object.fromEntries((o.properties || []).map(p => [p.name, p.value]));
       const J = v => { try { return JSON.parse(v || "[]"); } catch { return []; } };
@@ -316,7 +316,7 @@ function worldScenes() {
       };
       const pos = this.resume && this.st.pos && this.st.pos.place === this.placeId && standable(this.st.pos) ? this.st.pos : null;
       const at = pos || this.entries[this.from || ""] || this.entries[""];
-      this.player = this.physics.add.sprite(at.x, at.y, "h-liubei-down-0").setOrigin(.5, 1);
+      this.player = this.physics.add.sprite(at.x, at.y, `h-${this.lead}-down-0`).setOrigin(.5, 1);
       this.footBody(this.player);
       this.player.setCollideWorldBounds(true);
       this.player.facing = pos ? pos.f : "down";
@@ -442,7 +442,7 @@ function worldScenes() {
       P.setVelocity(0); this.walk = null; this.approaching = true;
       const dx = s.x - P.x, dy = s.y - P.y;
       P.facing = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? "right" : "left") : (dy > 0 ? "down" : "up");
-      P.anims.stop(); P.setTexture(`h-liubei-${P.facing}-0`);
+      P.anims.stop(); P.setTexture(`h-${this.lead}-${P.facing}-0`);
       this.time.delayedCall(320, () => { this.approaching = false; if (!this.ui.busy() && !this.leaving && !this.cine) this.playQuest(q, s); });
     }
     // Walking into a story spot's area starts its scene; it re-arms once you walk away.
@@ -573,9 +573,16 @@ function worldScenes() {
       return c;
     }
 
+    // The one the player walks as: the party's first (Liu Bei, unless the story hands the lead to someone
+    // else, e.g. ["party", ["diaochan"]] in Book 2). The rest follow.
+    get lead() { const p = this.st && this.st.party; return (p && p[0]) || "liubei"; }
+
     setParty(list) {
       for (const F of this.followers) F.spr.destroy();
-      this.followers = list.filter(x => x !== "liubei").map(who => {
+      const lead = (list && list[0]) || "liubei";
+      this.hero(lead);
+      if (this.player) { this.player.anims.stop(); this.player.setTexture(`h-${lead}-${this.player.facing || "down"}-0`); }
+      this.followers = (list || []).filter(x => x !== lead).map(who => {
         this.hero(who);
         return { who, spr: this.add.sprite(this.player.x, this.player.y, `h-${who}-down-0`).setOrigin(.5, 1) };
       });
@@ -917,21 +924,37 @@ function worldScenes() {
       const seen = `${this.w.n}:${q.scene}:lead`, again = TK.seen(seen);
       const say = lines => new Promise(r => lines.some(l => l[0] === "n" || l[0] === "say") ? this.talk(lines, r, "story") : r());
       // the problem's own framing, the board, and on a win the spot's farewell
-      const solve = async () => {
+      // A scene can pose several problems, with lines between them ("NODE~1", "NODE~2", … each kept and
+      // rested on its own); coming back resumes at the first one not yet solved.
+      const nProb = steps.filter(s => s[0] === "problem").length;
+      const keyOf = i => nProb > 1 ? `${q.node}~${i + 1}` : q.node;
+      const problemDone = i => nProb > 1 && TK.cleared(keyOf(i));
+      const solve = async (i = 0) => {
         TK.markSeen(seen);
-        if (spot.intro.length || q.boss) await say(intro);   // a bare title would only break the tension here
-        const won = await this.duel(q.node, foe);
-        if (won) await this.parting(q.node, spot.outro, say);   // their parting word, they go, then the empty board
+        if (!i && (spot.intro.length || q.boss)) await say(intro);   // a bare title would only break the tension here
+        const won = await this.duel(keyOf(i), foe);
+        if (won && i === nProb - 1) await this.parting(q.node, spot.outro, say);   // their parting word, they go, then the empty board
         return won;
       };
-      const finish = () => this.finishQuest(q, steps);
+      const finish = () => { if (nProb > 1) TK.markCleared(q.node); this.finishQuest(q, steps); };
       const cs = this.cutscene(q);
       if (cs && cs.beats.some(b => b.do === "problem"))
         // whoever is here only until this beat (the Star Lords at the oath) stays on stage to set the problem
-        return WorldCutscene.play(this, cs, finish, { onProblem: solve, onLeave: () => {}, ffToProblem: again,
+        return WorldCutscene.play(this, cs, finish, { onProblem: solve, problemDone, onLeave: () => {}, ffToProblem: again,
           keep: this.npcs.filter(n => n.until === q.node && n.spr.visible).map(n => n.spr) });
-      const lines = steps.slice(0, at).filter(s => s[0] === "n" || s[0] === "say");
-      say(again ? lines.slice(-1) : lines).then(solve).then(won => won && this.talk(steps.slice(at + 1), finish, "story"));
+      // no staged scene: the lines, each problem in turn (solved ones passed by), then the rest
+      const segs = [[]];
+      for (const s of steps) s[0] === "problem" ? segs.push([]) : segs[segs.length - 1].push(s);
+      const spoken = L => L.filter(s => s[0] === "n" || s[0] === "say");
+      (async () => {
+        for (let i = 0; i < nProb; i++) {
+          if (problemDone(i)) continue;
+          const L = spoken(segs[i]);
+          await say(again && i === 0 ? L.slice(-1) : L);
+          if (!(await solve(i))) return;
+        }
+        this.talk(segs[nProb], finish, "story");
+      })();
     }
 
     // A scene by id, staged here if the generator made one, else its lines.
@@ -1010,7 +1033,7 @@ function worldScenes() {
       P.setVelocity(0); P.anims.stop();
       this.ui.hint(null);
       // solved: whoever was here only until this beat (the Star Lords) is gone at once, behind the board
-      const win = await this.opts.onPuzzle(key, { host: this.opts.host, foe, onWin: () => this.vanish(key) });
+      const win = await this.opts.onPuzzle(key, { host: this.opts.host, foe, onWin: () => this.vanish(key.split("~")[0]) });
       if (!this.sys.isActive()) return false;  // the page moved on meanwhile
       this.leaving = false;
       this.opts.host.focus();
@@ -1026,7 +1049,7 @@ function worldScenes() {
     // direct-link win comes back here too, so a mid-scene problem is passed by).
     returned(ret) {
       if (!ret.win) return;
-      const q = this.region.quests.find(x => x.node === ret.key);
+      const q = this.region.quests.find(x => x.node === String(ret.key).split("~")[0]);
       if (q) {
         const spot = Object.values(this.spots).find(s => s.node === q.node);
         const steps = [...worldLines(spot && spot.outro), ...((this.story[q.scene] || {}).steps || [])];
@@ -1258,7 +1281,7 @@ function worldScenes() {
       const dx = at.x - P.x, dy = at.y - (P.y - 3);
       if (Math.hypot(dx, dy) > 30) return;
       P.facing = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? "right" : "left") : (dy > 0 ? "down" : "up");
-      P.setTexture(`h-liubei-${P.facing}-0`);
+      P.setTexture(`h-${this.lead}-${P.facing}-0`);
       this.act(a);
     }
 
@@ -1378,9 +1401,9 @@ function worldScenes() {
       P.setVelocity(vx / len * speed, vy / len * speed);
       if (vx || vy) {
         P.facing = Math.abs(vx) > Math.abs(vy) ? (vx < 0 ? "left" : "right") : (vy < 0 ? "up" : "down");
-        P.anims.play(`h-liubei-${P.facing}`, true);
+        P.anims.play(`h-${this.lead}-${P.facing}`, true);
         P.anims.msPerFrame = 85;
-      } else { P.anims.stop(); P.setTexture(`h-liubei-${P.facing}-0`); }
+      } else { P.anims.stop(); P.setTexture(`h-${this.lead}-${P.facing}-0`); }
       P.setDepth(P.y);
 
       // exits: walk off the edge to the next place, if the story has opened it
