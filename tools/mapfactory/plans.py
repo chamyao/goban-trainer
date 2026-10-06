@@ -33,6 +33,10 @@ sys.path.insert(0, str(ROOT / "tools"))
 from vocab import KINDS  # noqa: E402
 
 SIDES = {"N": (0, -1), "S": (0, 1), "W": (-1, 0), "E": (1, 0)}
+DIRS = {"N": "up", "S": "down", "W": "left", "E": "right"}
+# the plan's light (day, dusk, night, lantern) and weather → the engine's one light
+LIGHT = {("lantern", None): "night", ("day", "clear"): "morning", ("dusk", "storm"): "storm", ("dusk", "smoke"): "smoke",
+         ("day", "storm"): "storm", ("day", "smoke"): "smoke"}
 # what a tile is made of, and whether you can walk on it (zones and lines become materials)
 WALK = {"grass": True, "dirt": True, "sand": True, "water": False, "void": False, "wall": False,
         "wood": True, "stone": True, "mat": True, "earth": True}
@@ -379,7 +383,7 @@ class MapBuilder:
             else:
                 t = self.near_cell(c, want_visible=False)
             spot = {"id": s["id"], "x": t[0] + .5, "y": t[1] + .7, "node": s.get("node", ""), "label": s.get("label", "")}
-            for k in ("trigger", "note", "on"):
+            for k in ("trigger", "note", "on", "sight"):
                 if s.get(k):
                     spot[k] = s[k]
             self.spots.append(spot)
@@ -392,6 +396,8 @@ class MapBuilder:
         for k in NPC_KEYS:
             if p.get(k) is not None:
                 n[k] = p[k]
+        if p.get("watch"):   # a townsperson who also watches (the Chancellor's gate guard on the crown errand)
+            n["watch"] = self.watch({"id": n["id"], **p["watch"], "beat": p["watch"].get("beat") or [p.get("at") or [0, 0]]})
         if p.get("id"):
             n["id"] = p["id"]
         u = n.get("until")
@@ -423,17 +429,33 @@ class MapBuilder:
             n = self.person(i, c, t, prefix="ch")
             n["challenge"] = c["id"]
             if c.get("face"):
-                n["face"] = {"N": "up", "S": "down", "E": "right", "W": "left"}[c["face"]]
-            if c.get("blocks") is not None:   # who he guards, and how far he sees, in tiles
-                n["blocks"], n["view"] = c["blocks"], c["view"] * self.C
+                n["face"] = DIRS[c["face"]]
+            n["view"] = c.get("view", 1) * self.C   # how far he sees you, in tiles
+            if c.get("blocks") is not None:         # what he guards
+                n["blocks"] = c["blocks"]
             self.npcs.append(n)
         for i, w in enumerate(watchers):
-            pts = w.get("beat") or [w["at"]]
-            tiles = [self.near_cell(tuple(b), want_visible=False) for b in pts]
-            n = {"id": w["id"], "kind": w["kind"], "x": tiles[0][0] + .5, "y": tiles[0][1] + .9, "say": [],
-                 "watch": {"beat": [[t[0] + .5, t[1] + .9] for t in tiles], "cone": w["cone"] * self.C,
-                           **{k: w[k] for k in ("shape", "pause", "face", "turns", "in_beats", "seen", "back_to") if w.get(k) is not None}}}
+            n = {"id": w["id"], "kind": w["kind"], "say": [], "watch": self.watch(w)}
+            n["x"], n["y"] = n["watch"]["beat"][0]
             self.npcs.append(n)
+
+    def watch(self, w):
+        """A stealth watcher in the engine's terms (docs/map-format.md, Book 2 additions): tiles, not cells."""
+        pts = w.get("beat") or [w["at"]]
+        tiles = [self.near_cell(tuple(b), want_visible=False) for b in pts]
+        out = {"id": w.get("id", ""), "cone": w["cone"] * self.C, "beat": [[t[0] + .5, t[1] + .9] for t in tiles]}
+        if w.get("face"):
+            out["face"] = DIRS.get(w["face"], w["face"])
+        if w.get("turns"):
+            out["turns"] = [DIRS.get(f, f) for f in w["turns"]]
+        if w.get("pause"):
+            px, py, secs = w["pause"]
+            t = self.near_cell((px, py), want_visible=False)
+            out["pause"] = [t[0] + .5, t[1] + .9, secs]
+        for k in ("in_beats", "seen", "back_to", "shape"):
+            if w.get(k) is not None:
+                out[k] = w[k]
+        return out
 
     # ---------- 5. build ----------
     def build(self, place_brief, npcs, challengers, watchers):
@@ -463,6 +485,30 @@ class MapBuilder:
 
 
 # ---------- the world: every place, compound and room, linked ----------
+def state(st, mb, plans):
+    """A plan's state → the engine's: light from light+weather, distances and points in tiles of this map."""
+    out = {k: v for k, v in st.items() if k not in ("light", "weather", "visibility", "procession", "exits_open", "exits_closed")}
+    light = LIGHT.get((st.get("light"), st.get("weather"))) or LIGHT.get((st.get("light"), None)) or st.get("light", "day")
+    out["light"] = light if light in ("day", "morning", "dusk", "night", "storm", "smoke") else "day"
+    if st.get("weather"):
+        out["weather"] = st["weather"]
+    if st.get("visibility"):
+        out["visibility"] = st["visibility"] * mb.C
+    if st.get("procession"):
+        pr = dict(st["procession"])
+        for k in ("from", "to"):
+            t = mb.near_cell(tuple(pr[k]), want_visible=False)
+            pr[k] = [t[0] + .5, t[1] + .5]
+        pr["leash"] = pr.get("leash", 4) * mb.C
+        out["procession"] = pr
+    places = {slug(p) for p in plans}
+    for k in ("exits_open", "exits_closed"):
+        ids = [slug(x) for x in st.get(k, []) if slug(x) in places]
+        if ids:
+            out[k] = ids
+    return out
+
+
 def build_world(n, world, plans, tables, zh=None, prefix=None):
     """Build every map of a world from its plans. Returns (maps, places, quests) as `mapfactory build`
     writes them. `prefix` renames the plans' node keys (Book 2's "2-a…" → the test book's "12-a…")."""
@@ -492,13 +538,15 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
         pid = slug(pname)
         P = b["plan"]
         seed = sum(map(ord, f"{n}/{pid}"))
-        rename = lambda p: {**p, **({"node": node(p["node"])} if p.get("node") else {})}   # noqa: E731
+        rename = lambda p: {**p, **({"node": node(p["node"])} if p.get("node") else {}),   # noqa: E731
+                            **({"in_beats": [node(k) for k in p["in_beats"]]} if p.get("in_beats") else {}),
+                            **({"watch": {**p["watch"], "in_beats": [node(k) for k in p["watch"].get("in_beats", [])]}} if p.get("watch") else {})}
         Pn = {**P, "spots": [rename(s) for s in P.get("spots", [])], "things": [rename(t) for t in P.get("things", [])]}
         mb = MapBuilder(n, pid, pid, Pn, tables, seed, pname, b.get("archetype", "city"))
         outdoor_people = [p for p in b.get("npcs", []) if not p.get("place")]
         chs = [c for c in b.get("challengers", []) if not c.get("map")]
-        m = mb.build(b, outdoor_people, chs, P.get("watchers", []))
-        m["states"] = b.get("states", [])
+        m = mb.build(b, [rename(p) for p in outdoor_people], chs, [rename(w) for w in P.get("watchers", [])])
+        m["states"] = [state(st, mb, plans) for st in b.get("states", [])]
         for k in ("followers", "seen_lines", "banners"):
             if b.get(k):
                 m[k] = b[k]
@@ -510,8 +558,8 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
             label = next((t.get("label") for src_plan in [P] + list((b.get("maps") or {}).values())
                           for t in src_plan.get("things", []) if t.get("map") == mid and t.get("label")), None) or mid
             smb = MapBuilder(n, pid, sid, subn, tables, seed + sum(map(ord, mid)), label, arch)
-            sm = smb.build(b, [p for p in b.get("npcs", []) if p.get("place") == mid],
-                           [c for c in b.get("challengers", []) if c.get("map") == mid], sub.get("watchers", []))
+            sm = smb.build(b, [rename(p) for p in b.get("npcs", []) if p.get("place") == mid],
+                           [c for c in b.get("challengers", []) if c.get("map") == mid], [rename(w) for w in sub.get("watchers", [])])
             sm["parent"] = pid
             sm["building"] = mid
             maps[sid] = (sm, smb)
