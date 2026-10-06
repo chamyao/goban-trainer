@@ -581,7 +581,7 @@ function worldScenes() {
     addNpc(o, p, J) {
       if (p.until && TK.cleared(p.until)) return;  // their part of the story is over
       let spr, folk = null, who = null;
-      const face = p.face || "down";
+      const face = { N: "up", S: "down", E: "right", W: "left" }[p.face] || p.face || "down";   // the plan maps write a compass point
       if (p.kind.startsWith("hero.") || p.drawn) {   // story people, and townsfolk drawn like them (kit folk.drawn)
         who = p.sprite;
         this.hero(who);
