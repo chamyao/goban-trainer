@@ -1607,7 +1607,13 @@
    "y": 34.85,
    "w": 0.8,
    "h": 0.45,
-   "door": true
+   "door": true,
+   "open_to": [
+    "diaochan"
+   ],
+   "refuse": [
+    "The gatekeeper bars the way. “The Grand Preceptor receives no one today.”"
+   ]
   },
   {
    "to": "changan--lubu",
@@ -1643,7 +1649,13 @@
    "y": 23.6,
    "w": 0.45,
    "h": 0.8,
-   "door": true
+   "door": true,
+   "open_to": [
+    "node:a17"
+   ],
+   "refuse": [
+    "The guards at the stair cross their halberds. “No one goes up to the Son of Heaven's tower.”"
+   ]
   },
   {
    "to": "meiwu-road",

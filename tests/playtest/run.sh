@@ -18,9 +18,9 @@ if [[ "$PLAYTEST_URL" == http://localhost:8765 ]] && ! curl -s -o /dev/null loca
   (cd "$root" && python3 -m http.server 8765 >/dev/null 2>&1 &) ; sleep 1
 fi
 declare -A ARGS=( [tap-after-talk]="zhuo-county" [go-table-ogs]="phone" )
-declare -A LIMIT=( [playthrough]=2400 [playthrough-3]=2400 [book-handoff-2]=400 [huainan-gate]=400 [tap-after-talk]=400 [spot-reach]=300 [ending]=600 [door-taps]=400 [side-stories]=500 [blackwind]=600 [boards-open]=1500 [book-handoff]=400 [feedback]=120 [decision-boards]=900 [iso-edges]=900 [iso-apron]=400 [stills-phone]=900 [app-boot]=600 [hints]=200 )
+declare -A LIMIT=( [playthrough]=2400 [playthrough-3]=2400 [book-handoff-2]=400 [huainan-gate]=400 [tap-after-talk]=400 [spot-reach]=300 [ending]=600 [door-taps]=400 [side-stories]=500 [blackwind]=600 [boards-open]=1500 [book-handoff]=400 [feedback]=120 [decision-boards]=900 [iso-edges]=900 [iso-apron]=400 [stills-phone]=900 [app-boot]=600 [hints]=200 [doors-12]=400 [challengers-12]=900 [back-doors]=900 )
 tests=("$@")
-[[ ${#tests[@]} -eq 0 ]] && tests=(room-spots problem-counts map-entries kit-default tap-move-talk tap-reach tap-duel challengers doors-and-exits hud-exits scene-arming spot-tap-once door-taps framing star-lords go-table-ogs drag-and-hover full-window window-sizes rest-after-slip duel-desktop keyboard wukong-guide play-tab menu feedback test-mode scene-scrolls stills-phone app-boot boards-open decision-boards book-handoff book-handoff-2 huainan-gate old-saves rotate-leave iso-edges iso-apron room-cast spot-reach side-stories blackwind hints tap-after-talk ending playthrough playthrough-3)
+[[ ${#tests[@]} -eq 0 ]] && tests=(room-spots problem-counts map-entries doors-12 challengers-12 back-doors kit-default tap-move-talk tap-reach tap-duel challengers doors-and-exits hud-exits scene-arming spot-tap-once door-taps framing star-lords go-table-ogs drag-and-hover full-window window-sizes rest-after-slip duel-desktop keyboard wukong-guide play-tab menu feedback test-mode scene-scrolls stills-phone app-boot boards-open decision-boards book-handoff book-handoff-2 huainan-gate old-saves rotate-leave iso-edges iso-apron room-cast spot-reach side-stories blackwind hints tap-after-talk ending playthrough playthrough-3)
 fails=0
 for t in "${tests[@]}"; do
   start=$(date +%s)
