@@ -699,22 +699,22 @@
       "item:pearls"
      ],
      "else": "a3_wait",
-     "objective": "Fetch the family pearls from the old steward.",
+     "objective": "Fetch the family pearls from the old steward, in your rear hall.",
      "count": false,
      "at": "Chang'an",
      "place": "changan",
-     "objective_zh": ""
+     "objective_zh": "到自家后堂，向老管家取出家藏明珠。"
     },
     {
      "needs": [
       "item:crown"
      ],
      "else": "a3_wait",
-     "objective": "Take the pearls to the jeweller, to be set into a gold crown.",
+     "objective": "Take the pearls to the jeweller's, at the west end of the market street, to be set into a gold crown.",
      "count": false,
      "at": "Chang'an",
      "place": "changan",
-     "objective_zh": ""
+     "objective_zh": "将明珠送到市街西头的珠宝铺，嵌造金冠。"
     }
    ],
    "objective_zh": "将金冠送到坊街东头吕布府的侧门，须经过相府门前。",
@@ -3880,7 +3880,7 @@
     ]
    ],
    "board": false,
-   "objective_zh": "",
+   "objective_zh": "前往郿坞。",
    "title_zh": "郿坞"
   },
   {
