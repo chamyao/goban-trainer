@@ -1229,6 +1229,7 @@ def _world():
         "grades": ["11K", "11K+"],
         "boss": "redmond",
         "party": ["wangyun"],
+        "lead_portrait": True,   # the go board shows whoever leads the party (tk.js tkDuelBuild)
         "items": _ITEMS,
         "nodes": _nodes_chain(),
         "edges": _EDGES_CHAIN,
