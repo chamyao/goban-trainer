@@ -547,7 +547,7 @@ function worldScenes() {
       if (p.challenge) {
         n.challenge = `${this.w.n}-${this.placeId}-c-${p.challenge}`;
         n.intro = own(J(p.intro)); n.win = own(J(p.win)); n.done = own(J(p.done));
-        n.mark = this.add.image(o.x, o.y - spr.height - 2, "@bang").setOrigin(.5, 1).setDepth(9999).setVisible(!TK.cleared(n.challenge));
+        n.mark = this.add.image(o.x, o.y - spr.height - 2, "@bang").setOrigin(.5, 1).setDepth(9999).setVisible(!TK.cleared(n.challenge) && (!n.when || this.cond(n.when)));
       }
       this.physics.add.collider(spr, this.solids);
       if (this.water) this.physics.add.collider(spr, this.water);
@@ -634,7 +634,8 @@ function worldScenes() {
     }
     // Who is here and how the shrine looks follow the story; redone whenever it moves on.
     refreshStory() {
-      for (const n of this.npcs) if (n.when) { const on = this.cond(n.when); n.spr.setVisible(on); n.spr.body.enable = on; }
+      for (const n of this.npcs) if (n.when) { const on = this.cond(n.when); n.spr.setVisible(on); n.spr.body.enable = on;
+        if (n.mark) n.mark.setVisible(on && !TK.cleared(n.challenge)); }   // a challenger not here yet has no "!" either
       // one of each person at a time: a brother standing here in his own right (Guan Yu on his
       // ridge) isn't also following Liu Bei
       const here = new Set(this.npcs.filter(n => n.who && n.spr.visible).map(n => n.who));
