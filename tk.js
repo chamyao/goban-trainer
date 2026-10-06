@@ -1474,7 +1474,9 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
   // portrait (assets/tk/portraits) on the left: a column of its own left of the board on a wide screen,
   // a small one left of the dialogue box on a phone (style.css shows one of the two). Who leads changes
   // as the story hands the party on; someone with no portrait yet shows nothing.
-  const wd = TK.world(worldN), lead = wd && wd.lead_portrait && TK.party(wd)[0];
+  // whose board it is: the decider its dilemma names, else whoever is walking (the two can differ mid-scene: Diaochan
+  // called in to Wang Yun's banquet decides its board while he is still the one walking)
+  const wd = TK.world(worldN), lead = wd && wd.lead_portrait && ((dil && dil.who) || TK.party(wd)[0]);
   if (lead && typeof TownUI !== "undefined") TownUI.loadPortraits().then(() => {
     const f = TownUI.portraits[lead];
     if (!f || !side.isConnected) return;
