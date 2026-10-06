@@ -1,0 +1,662 @@
+[
+ {
+  "kind": "bridge",
+  "status": {
+   "genshin": "stand-in: wood",
+   "jade": "stand-in: wood",
+   "xianxia": "stand-in: wood"
+  },
+  "size": null,
+  "ground": true,
+  "maps": [
+   "changan--xiangfu"
+  ],
+  "count": 0,
+  "brief": "a stone or timber bridge; the Phoenix Pavilion's is a zig-zag timber bridge"
+ },
+ {
+  "kind": "building.compound",
+  "status": {
+   "genshin": "stand-in: building.hall",
+   "jade": "stand-in: building.hall",
+   "xianxia": "stand-in: building.hall"
+  },
+  "size": [
+   10,
+   10
+  ],
+  "ground": false,
+  "maps": [
+   "changan"
+  ],
+  "count": 3,
+  "brief": "a walled Han residence seen from above: rammed-earth wall with grey tile coping, a gatehouse in the front wall, roofs of halls showing inside"
+ },
+ {
+  "kind": "building.gatehouse",
+  "status": {
+   "genshin": "stand-in: building.gate",
+   "jade": "stand-in: building.gate",
+   "xianxia": "stand-in: building.gate"
+  },
+  "size": [
+   2,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "changan--lubu",
+   "changan--palace",
+   "changan--wangyun",
+   "changan--xiangfu",
+   "liangzhou",
+   "meiwu"
+  ],
+  "count": 8,
+  "brief": "a compound's gatehouse: a roofed gateway in the compound wall, double doors"
+ },
+ {
+  "kind": "building.gatetower",
+  "status": {
+   "genshin": "stand-in: building.gate",
+   "jade": "stand-in: building.gate",
+   "xianxia": "stand-in: building.gate"
+  },
+  "size": [
+   3,
+   6
+  ],
+  "ground": false,
+  "maps": [
+   "changan"
+  ],
+  "count": 1,
+  "brief": "a city-gate tower (Xuanping Gate): a tall timber tower on the city wall over the gate passage, stairs up its inner side"
+ },
+ {
+  "kind": "building.granary",
+  "status": {
+   "genshin": "stand-in: building.lodge",
+   "jade": "stand-in: building.lodge",
+   "xianxia": "stand-in: building.lodge"
+  },
+  "size": [
+   6,
+   2
+  ],
+  "ground": false,
+  "maps": [
+   "meiwu"
+  ],
+  "count": 4,
+  "brief": "a Han granary: long rammed-earth storehouse, thatched or tiled gable roof, raised floor, small high vents"
+ },
+ {
+  "kind": "building.hall_grand",
+  "status": {
+   "genshin": "stand-in: building.hall",
+   "jade": "stand-in: building.hall",
+   "xianxia": "stand-in: building.hall"
+  },
+  "size": [
+   10,
+   5
+  ],
+  "ground": false,
+  "maps": [
+   "changan--lubu",
+   "changan--palace",
+   "changan--wangyun",
+   "changan--xiangfu",
+   "meiwu"
+  ],
+  "count": 6,
+  "brief": "a great hall of an official's residence: wide hip-and-gable roof of grey tiles, red lacquered pillars, latticed doors across the front, stone base"
+ },
+ {
+  "kind": "building.hut",
+  "status": {
+   "genshin": "drawn",
+   "jade": "stand-in: building.house",
+   "xianxia": "drawn"
+  },
+  "size": [
+   3,
+   2
+  ],
+  "ground": false,
+  "maps": [
+   "liangzhou",
+   "meiwu-road"
+  ],
+  "count": 4,
+  "brief": ""
+ },
+ {
+  "kind": "building.palace",
+  "status": {
+   "genshin": "stand-in: building.hall",
+   "jade": "stand-in: building.hall",
+   "xianxia": "stand-in: building.hall"
+  },
+  "size": [
+   26,
+   14
+  ],
+  "ground": false,
+  "maps": [
+   "changan"
+  ],
+  "count": 2,
+  "brief": "Weiyang Palace on its raised terrace: a vast hall with a double-eaved hip roof of dark grey tiles, red pillars, white stone balustrade and steps"
+ },
+ {
+  "kind": "building.pavilion",
+  "status": {
+   "genshin": "stand-in: building.moongate",
+   "jade": "stand-in: building.moongate",
+   "xianxia": "stand-in: building.moongate"
+  },
+  "size": [
+   3,
+   3
+  ],
+  "ground": false,
+  "maps": [
+   "changan--wangyun",
+   "changan--xiangfu"
+  ],
+  "count": 2,
+  "brief": "an open-sided garden pavilion: four or six red pillars, upturned eaves, no walls; may stand on piles in a lotus pond"
+ },
+ {
+  "kind": "building.pavilion_painted",
+  "status": {
+   "genshin": "stand-in: building.shop",
+   "jade": "stand-in: building.shop",
+   "xianxia": "stand-in: building.shop"
+  },
+  "size": [
+   3,
+   3
+  ],
+  "ground": false,
+  "maps": [
+   "changan--wangyun"
+  ],
+  "count": 1,
+  "brief": "the painted pavilion: a two-storey garden pavilion with carved, painted beams and a balcony"
+ },
+ {
+  "kind": "building.posthouse",
+  "status": {
+   "genshin": "stand-in: building.house",
+   "jade": "stand-in: building.house",
+   "xianxia": "stand-in: building.house"
+  },
+  "size": [
+   5,
+   3
+  ],
+  "ground": false,
+  "maps": [
+   "liangzhou",
+   "meiwu-road"
+  ],
+  "count": 4,
+  "brief": "a Han post-pavilion (亭): a small walled station with a gate and a lookout, a signboard by the road"
+ },
+ {
+  "kind": "building.storehouse",
+  "status": {
+   "genshin": "stand-in: building.lodge",
+   "jade": "stand-in: building.lodge",
+   "xianxia": "stand-in: building.lodge"
+  },
+  "size": [
+   6,
+   2
+  ],
+  "ground": false,
+  "maps": [
+   "meiwu"
+  ],
+  "count": 2,
+  "brief": "a treasury storehouse: stout walls, heavy double doors with bronze fittings, tiled roof"
+ },
+ {
+  "kind": "building.tent_small",
+  "status": {
+   "genshin": "stand-in: building.tent",
+   "jade": "stand-in: building.tent",
+   "xianxia": "stand-in: building.tent"
+  },
+  "size": [
+   2,
+   2
+  ],
+  "ground": false,
+  "maps": [
+   "liangzhou"
+  ],
+  "count": 1,
+  "brief": "a small square officer's tent"
+ },
+ {
+  "kind": "building.wing",
+  "status": {
+   "genshin": "stand-in: building.lodge",
+   "jade": "stand-in: building.lodge",
+   "xianxia": "stand-in: building.lodge"
+  },
+  "size": [
+   4,
+   6
+  ],
+  "ground": false,
+  "maps": [
+   "changan--lubu",
+   "changan--palace",
+   "changan--wangyun",
+   "changan--xiangfu",
+   "meiwu"
+  ],
+  "count": 10,
+  "brief": "a side wing of a courtyard house: long low gable roof, lattice windows, door facing the courtyard (drawn facing E, W or S as `faces` says)"
+ },
+ {
+  "kind": "camp",
+  "status": {
+   "genshin": "stand-in: dirt",
+   "jade": "stand-in: dirt",
+   "xianxia": "stand-in: dirt"
+  },
+  "size": null,
+  "ground": true,
+  "maps": [
+   "liangzhou",
+   "meiwu-road"
+  ],
+  "count": 0,
+  "brief": "trampled camp ground"
+ },
+ {
+  "kind": "camp.banquet",
+  "status": {
+   "genshin": "stand-in: camp.table",
+   "jade": "stand-in: camp.table",
+   "xianxia": "stand-in: camp.table"
+  },
+  "size": [
+   10,
+   2
+  ],
+  "ground": false,
+  "maps": [
+   "changan"
+  ],
+  "count": 1,
+  "brief": "a long banquet table under awnings, low tables and cushions in a row, wine jars"
+ },
+ {
+  "kind": "cliff",
+  "status": {
+   "genshin": "stand-in: sand",
+   "jade": "stand-in: sand",
+   "xianxia": "stand-in: sand"
+  },
+  "size": null,
+  "ground": true,
+  "maps": [
+   "liangzhou"
+  ],
+  "count": 0,
+  "brief": "a loess cliff face"
+ },
+ {
+  "kind": "court",
+  "status": {
+   "genshin": "stand-in: stone",
+   "jade": "stand-in: stone",
+   "xianxia": "stand-in: stone"
+  },
+  "size": null,
+  "ground": true,
+  "maps": [
+   "changan",
+   "changan--lubu",
+   "changan--palace",
+   "changan--wangyun",
+   "changan--xiangfu",
+   "liangzhou",
+   "meiwu"
+  ],
+  "count": 0,
+  "brief": "a stone-flagged courtyard"
+ },
+ {
+  "kind": "curtain",
+  "status": {
+   "genshin": "stand-in: wood",
+   "jade": "stand-in: wood",
+   "xianxia": "stand-in: wood"
+  },
+  "size": null,
+  "ground": true,
+  "maps": [
+   "changan--wy-hall",
+   "changan--xf-hall"
+  ],
+  "count": 0,
+  "brief": "a hanging curtain line across a room"
+ },
+ {
+  "kind": "field",
+  "status": {
+   "genshin": "stand-in: grass",
+   "jade": "stand-in: grass",
+   "xianxia": "stand-in: grass"
+  },
+  "size": null,
+  "ground": true,
+  "maps": [
+   "changan"
+  ],
+  "count": 0,
+  "brief": "open meadow outside the walls, longer grass"
+ },
+ {
+  "kind": "field.wheat",
+  "status": {
+   "genshin": "stand-in: sand",
+   "jade": "stand-in: sand",
+   "xianxia": "stand-in: sand"
+  },
+  "size": null,
+  "ground": true,
+  "maps": [
+   "changan",
+   "meiwu",
+   "meiwu-road"
+  ],
+  "count": 0,
+  "brief": "a wheat field in rows"
+ },
+ {
+  "kind": "gallery",
+  "status": {
+   "genshin": "stand-in: wood",
+   "jade": "stand-in: wood",
+   "xianxia": "stand-in: wood"
+  },
+  "size": null,
+  "ground": true,
+  "maps": [
+   "changan--xiangfu"
+  ],
+  "count": 0,
+  "brief": "a covered gallery: a roofed walkway with red pillars and lattice railings on both sides"
+ },
+ {
+  "kind": "garden",
+  "status": {
+   "genshin": "stand-in: grass",
+   "jade": "stand-in: grass",
+   "xianxia": "stand-in: grass"
+  },
+  "size": null,
+  "ground": true,
+  "maps": [
+   "changan--wangyun",
+   "changan--xiangfu"
+  ],
+  "count": 0,
+  "brief": "garden ground: grass, moss, scattered stones"
+ },
+ {
+  "kind": "garden.rockery",
+  "status": {
+   "genshin": "stand-in: rock.crag",
+   "jade": "stand-in: rock.crag",
+   "xianxia": "stand-in: rock.crag"
+  },
+  "size": [
+   2,
+   2
+  ],
+  "ground": false,
+  "maps": [
+   "changan--wangyun",
+   "changan--xiangfu"
+  ],
+  "count": 2,
+  "brief": "a garden rockery of pierced Taihu stones"
+ },
+ {
+  "kind": "hills",
+  "status": {
+   "genshin": "stand-in: grass",
+   "jade": "stand-in: grass",
+   "xianxia": "stand-in: grass"
+  },
+  "size": null,
+  "ground": true,
+  "maps": [
+   "liangzhou",
+   "meiwu-road"
+  ],
+  "count": 0,
+  "brief": "rough hill ground, scrub"
+ },
+ {
+  "kind": "landmark.heights",
+  "status": {
+   "genshin": "stand-in: rock.crag",
+   "jade": "stand-in: rock.crag",
+   "xianxia": "stand-in: rock.crag"
+  },
+  "size": [
+   10,
+   6
+  ],
+  "ground": false,
+  "maps": [
+   "liangzhou"
+  ],
+  "count": 2,
+  "brief": "a rocky height over a valley mouth, a signal post on top (gongs on one, drums on the other)"
+ },
+ {
+  "kind": "landmark.ridge",
+  "status": {
+   "genshin": "stand-in: rock.small",
+   "jade": "stand-in: rock.small",
+   "xianxia": "stand-in: rock.small"
+  },
+  "size": [
+   6,
+   2
+  ],
+  "ground": false,
+  "maps": [
+   "changan"
+  ],
+  "count": 1,
+  "brief": "an earthen ridge: raised bare earth with a gentle slope, grass on its flanks"
+ },
+ {
+  "kind": "loess",
+  "status": {
+   "genshin": "stand-in: sand",
+   "jade": "stand-in: sand",
+   "xianxia": "stand-in: sand"
+  },
+  "size": null,
+  "ground": true,
+  "maps": [
+   "liangzhou"
+  ],
+  "count": 0,
+  "brief": "dry yellow loess ground"
+ },
+ {
+  "kind": "market",
+  "status": {
+   "genshin": "stand-in: dirt",
+   "jade": "stand-in: dirt",
+   "xianxia": "stand-in: dirt"
+  },
+  "size": null,
+  "ground": true,
+  "maps": [
+   "changan"
+  ],
+  "count": 0,
+  "brief": "packed earth with straw and litter, a busy market"
+ },
+ {
+  "kind": "market.stalls",
+  "status": {
+   "genshin": "stand-in: building.shop",
+   "jade": "stand-in: building.shop",
+   "xianxia": "stand-in: building.shop"
+  },
+  "size": [
+   6,
+   2
+  ],
+  "ground": false,
+  "maps": [
+   "changan"
+  ],
+  "count": 1,
+  "brief": "a row of market stalls with cloth awnings, baskets and goods"
+ },
+ {
+  "kind": "passage",
+  "status": {
+   "genshin": "stand-in: stone",
+   "jade": "stand-in: stone",
+   "xianxia": "stand-in: stone"
+  },
+  "size": null,
+  "ground": true,
+  "maps": [
+   "changan--wangyun",
+   "changan--xiangfu"
+  ],
+  "count": 0,
+  "brief": "a narrow flagged passage between buildings"
+ },
+ {
+  "kind": "path",
+  "status": {
+   "genshin": "stand-in: sand",
+   "jade": "stand-in: sand",
+   "xianxia": "stand-in: sand"
+  },
+  "size": null,
+  "ground": true,
+  "maps": [
+   "changan--wangyun",
+   "changan--xiangfu"
+  ],
+  "count": 0,
+  "brief": "a narrow garden path of pebbles or stepping stones"
+ },
+ {
+  "kind": "plain",
+  "status": {
+   "genshin": "stand-in: grass",
+   "jade": "stand-in: grass",
+   "xianxia": "stand-in: grass"
+  },
+  "size": null,
+  "ground": true,
+  "maps": [
+   "meiwu-road"
+  ],
+  "count": 0,
+  "brief": "open treeless grassland"
+ },
+ {
+  "kind": "plateau",
+  "status": {
+   "genshin": "stand-in: stone",
+   "jade": "stand-in: stone",
+   "xianxia": "stand-in: stone"
+  },
+  "size": null,
+  "ground": true,
+  "maps": [
+   "changan"
+  ],
+  "count": 0,
+  "brief": "the raised Longshou terrace: an edge of dressed stone, steps where roads climb it"
+ },
+ {
+  "kind": "road",
+  "status": {
+   "genshin": "stand-in: dirt",
+   "jade": "stand-in: dirt",
+   "xianxia": "stand-in: dirt"
+  },
+  "size": null,
+  "ground": true,
+  "maps": [
+   "changan",
+   "liangzhou",
+   "meiwu",
+   "meiwu-road"
+  ],
+  "count": 0,
+  "brief": "a beaten-earth road; the avenue is paved, three lanes, the middle lane edged"
+ },
+ {
+  "kind": "stage",
+  "status": {
+   "genshin": "stand-in: wood",
+   "jade": "stand-in: wood",
+   "xianxia": "stand-in: wood"
+  },
+  "size": null,
+  "ground": true,
+  "maps": [
+   "changan--wy-hall",
+   "changan--xf-hall"
+  ],
+  "count": 0,
+  "brief": "a raised wooden stage floor behind a curtain"
+ },
+ {
+  "kind": "wall.city",
+  "status": {
+   "genshin": "stand-in: wall",
+   "jade": "stand-in: wall",
+   "xianxia": "stand-in: wall"
+  },
+  "size": null,
+  "ground": true,
+  "maps": [
+   "changan",
+   "meiwu"
+  ],
+  "count": 0,
+  "brief": "Chang'an's rammed-earth city wall, crenellated, wide enough to walk on"
+ },
+ {
+  "kind": "ward",
+  "status": {
+   "genshin": "stand-in: stone",
+   "jade": "stand-in: stone",
+   "xianxia": "stand-in: stone"
+  },
+  "size": null,
+  "ground": true,
+  "maps": [
+   "changan"
+  ],
+  "count": 0,
+  "brief": "the paved ground of an officials' ward"
+ }
+]

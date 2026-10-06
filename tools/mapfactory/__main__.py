@@ -30,9 +30,30 @@ def out_dir(n):
     return ROOT / f"data/tk_maps/w{n}"
 
 
-def build(n):
+def build_from_plans(n, pw, world):
+    """A book whose places are written as plan grids (plans.py): every map, room and quest from its plans."""
+    from plans import build_world, load, verify
+    plans, tables, zh = load(pw)
+    maps, places, quests = build_world(n, world, plans, tables, {**ZH, **zh}, prefix=str(pw) if pw != n else None)
+    problems = verify(maps)
+    if problems:
+        sys.exit("plans: " + "; ".join(problems))
+    d = out_dir(n)
+    d.mkdir(parents=True, exist_ok=True)
+    for mid, m in maps.items():
+        (d / f"{mid}.map.json").write_text(json.dumps(m, ensure_ascii=False, indent=1))
+        print(f"  {mid:28} {m['archetype']:9} {m['size'][0]}x{m['size'][1]}  {len(m['objects'])} objects, "
+              f"{len(m['spots'])} spots, {len(m['npcs'])} people, {len(m['exits'])} exits")
+    return places, quests, plans
+
+
+def build(n, plans_of=None):
     from tk_places import PLACES, ROOMS
     world = next(w for w in json.loads((ROOT / "data/tk.json").read_text())["worlds"] if w["n"] == n)
+    if plans_of:
+        places, quests, _ = build_from_plans(n, plans_of, world)
+        from plans import slug
+        return finish(n, world, places, {"quests": quests, "start": slug(world["nodes"][0]["place"])})
     region = build_region(world, PLACES.get(n, {}))
     d = out_dir(n)
     d.mkdir(parents=True, exist_ok=True)
@@ -62,6 +83,11 @@ def build(n):
                            **({"gives": g} if (g := [n["gives"] for n in r["npcs"] if n.get("gives")]) else {})})   # the guide finds givers indoors
         print(f"  {p['id']:22} {m['archetype']:9} {m['size'][0]}x{m['size'][1]}  "
               f"{len(m['objects'])} objects, {len(m['spots'])} spots, {len(m['npcs'])} people, {len(m['exits'])} exits")
+    finish(n, world, places, region)
+
+
+def finish(n, world, places, region):
+    d = out_dir(n)
     # the overworld: every place on one walkable map (overworld.py)
     outdoor = [p for p in places if not p.get("parent")]
     links = {p["id"]: [l for l in p["links"] if not l.startswith(p["id"] + "--")] for p in outdoor}
@@ -90,9 +116,10 @@ def main():
     ap.add_argument("--world", type=int, default=1)
     ap.add_argument("--kit", action="append", help="art kit(s) to compile for (default: xianxia, jade, genshin)")
     ap.add_argument("--preview", action="store_true", help="also render PNG previews into docs/maps/")
+    ap.add_argument("--plans", type=int, default=None, help="build the places from this book's plan grids (plans.py), e.g. --world 12 --plans 2")
     a = ap.parse_args()
     if a.cmd in ("build", "all"):
-        build(a.world)
+        build(a.world, a.plans)
     if a.cmd in ("compile", "all"):
         from compile import compile_world
         for kit in a.kit or ["xianxia", "jade", "genshin"]:
