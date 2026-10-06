@@ -270,3 +270,9 @@ B2_BUILDINGS2 = {
     "building.tent_small": ("a small square army tent made of pale canvas cloth on wooden poles with guy ropes, "
                             "the door flap tied open, cloth only, no walls or roof tiles", (32, 40), 2),
 }
+# the third (gen_pixel.py --set jade-b2c): Places' legibility pass
+B2_BUILDINGS3 = {
+    "building.markettower": ("a Han market tower: a slender two-storey timber tower with a tiled hip roof, a big drum "
+                             "in the open upper storey, and a long red flag on a tall pole beside it, front view",
+                             (96, 128), 2),
+}
