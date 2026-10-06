@@ -9,7 +9,7 @@ await p.route('**/phaser.min.js',r=>r.fulfill({path:require('path').join(__dirna
 await p.route('**/*.mp3',r=>r.fulfill({status:404,body:''}));
 const BASE=(process.env.PLAYTEST_URL||'http://localhost:8765')+'/index.html?test=1'+(process.env.PLAYTEST_KIT?'&kit='+process.env.PLAYTEST_KIT:'');
 await p.goto(BASE+'#/tk/1');await p.waitForTimeout(1500);
-const cases=await p.evaluate(()=>{const out=[];for(const n of [1,2]){const w=TK.world(n);if(!w)continue;for(const node of w.nodes){const sc=w.scenes[node.scene];if(!sc)continue;const sv=sc.steps.filter(s=>s[0]==='scroll').map(s=>s[1]);if(sv.length)out.push({w:n,key:node.key,scene:node.scene,scrolls:sv});}}return out;});
+const cases=await p.evaluate(()=>{const out=[];for(const n of [1,2,3,4,5,6,7,8,9]){const w=TK.world(n);if(!w)continue;for(const node of w.nodes){const sc=w.scenes[node.scene];if(!sc)continue;const sv=sc.steps.filter(s=>s[0]==='scroll').map(s=>s[1]);if(sv.length)out.push({w:n,key:node.key,scene:node.scene,scrolls:sv});}}return out;});
 console.log('scenes with scrolls:',cases.map(c=>c.key+'('+c.scrolls.join(', ')+')').join('; '));
 for(const c of cases){
   await p.goto(BASE+'#/tk/'+c.w);await p.waitForTimeout(800);

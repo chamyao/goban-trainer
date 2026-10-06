@@ -11,7 +11,7 @@ await p.route('**/phaser.min.js',r=>r.fulfill({path:require('path').join(__dirna
 await p.route('**/*.mp3',r=>r.fulfill({status:404,body:''}));
 const BASE=(process.env.PLAYTEST_URL||'http://localhost:8765')+'/index.html?test=1'+(process.env.PLAYTEST_KIT?'&kit='+process.env.PLAYTEST_KIT:'');
 await p.goto(BASE+'#/tk/1');await p.waitForTimeout(1500);
-const cases0=await p.evaluate(()=>{const out=[];for(const n of [1,2]){const w=TK.world(n);if(!w)continue;for(const node of w.nodes)if(node.dilemma)out.push({w:n,key:node.key,scene:node.scene,dil:node.dilemma});}return out;});
+const cases0=await p.evaluate(()=>{const out=[];for(const n of [1,2,3,4,5,6,7,8,9]){const w=TK.world(n);if(!w)continue;for(const node of w.nodes)if(node.dilemma)out.push({w:n,key:node.key,scene:node.scene,dil:node.dilemma});}return out;});
 const cases=[];for(const c of cases0)for(const dev of ['iPhone 13','iPhone 13 landscape'])cases.push({...c,dev});
 const only=process.env.ONLY?process.env.ONLY.split(','):null;
 console.log(`decision boards: ${cases0.map(c=>c.key+' ('+c.scene+')').join(', ')}`);

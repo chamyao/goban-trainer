@@ -10,7 +10,7 @@ await p.route('**/phaser.min.js',r=>r.fulfill({path:require('path').join(__dirna
 await p.route('**/*.mp3',r=>r.fulfill({status:404,body:''}));
 const BASE=(process.env.PLAYTEST_URL||'http://localhost:8765')+'/index.html?test=1'+(process.env.PLAYTEST_KIT?'&kit='+process.env.PLAYTEST_KIT:'');
 await p.goto(BASE+'#/tk/1');await p.waitForTimeout(1500);
-const cases=await p.evaluate(()=>{const out=[];for(const n of [1,2]){const w=TK.world(n);if(!w)continue;for(const node of w.nodes){const sc=w.scenes[node.scene];const first=!w.edges.some(e=>e[1]===node.key);const prob=!!(sc&&sc.steps.some(s=>s[0]==='problem'));if(prob||first)out.push({w:n,key:node.key,scene:node.scene,first,prob});}}return out;});
+const cases=await p.evaluate(()=>{const out=[];for(const n of [1,2,3,4,5,6,7,8,9]){const w=TK.world(n);if(!w)continue;for(const node of w.nodes){const sc=w.scenes[node.scene];const first=!w.edges.some(e=>e[1]===node.key);const prob=!!(sc&&sc.steps.some(s=>s[0]==='problem'));if(prob||first)out.push({w:n,key:node.key,scene:node.scene,first,prob});}}return out;});
 const only=process.env.ONLY?process.env.ONLY.split(','):null;
 console.log(`${cases.length} beats: ${cases.filter(c=>c.prob).length} scenes with a problem, first beats ${cases.filter(c=>c.first).map(c=>c.key).join(' ')}`);
 for(const c of cases.filter(c=>!only||only.includes(c.key))){

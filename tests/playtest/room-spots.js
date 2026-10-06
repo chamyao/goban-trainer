@@ -5,7 +5,7 @@
 // where it stands, not in the room.
 const fs=require('fs'),path=require('path');const ROOT=path.join(__dirname,'..','..');
 let fails=0;
-for(const n of [1,2]){const dir=path.join(ROOT,'data/tk_maps/w'+n);if(!fs.existsSync(dir))continue;
+for(const n of [1,2,3,4,5,6,7,8,9]){const dir=path.join(ROOT,'data/tk_maps/w'+n);if(!fs.existsSync(dir))continue;
   const region=JSON.parse(fs.readFileSync(path.join(dir,'region.json'),'utf8'));
   const inRoom=Object.fromEntries(region.quests.filter(q=>q.place.includes('--')).map(q=>[q.node,q.place]));
   const kits=fs.readdirSync(dir).filter(k=>fs.statSync(path.join(dir,k)).isDirectory());
