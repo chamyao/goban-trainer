@@ -52,7 +52,8 @@ PLACES2 = {
             {"kind": "building.house", "id": "shisun", "node": "2-a12a", "label": "Shisun Rui's house"},
             {"kind": "building.house", "id": "huangwan", "node": "2-a12b", "label": "Huang Wan's house"},
             # the palace quarter
-            {"kind": "building.hall", "id": "palace", "node": "2-a12c", "label": "Weiyang Palace"},
+            {"kind": "building.hall", "id": "palace", "label": "Weiyang Palace"},
+            {"kind": "building.house", "id": "side-hall", "near": "palace", "label": "The emperor's side hall"},
             {"kind": "building.gate", "id": "north-gate", "node": "2-a14", "near": "palace", "label": "The North Side Gate"},
             {"kind": "building.hall", "id": "dutang", "near": "palace", "label": "The great hall of state"},
             {"kind": "building.house", "id": "caiyong", "near": "palace", "label": "Cai Yong's house"},
@@ -199,6 +200,7 @@ PLACES2 = {
             {"kind": "building.hall", "id": "hall", "label": "Dong Zhuo's hall"},
             {"kind": "building.house", "id": "mother", "near": "hall", "label": "His mother's rooms"},
             {"kind": "building.lodge", "id": "treasury", "label": "The treasury"},
+            {"kind": "building.house", "id": "diaochan", "near": "hall", "label": "Diaochan's rooms"},
             {"kind": "camp.hay", "id": "granary", "label": "The granaries: twenty years of grain"},
             {"kind": "camp.hay", "id": "granary-2", "near": "granary"},
         ],
