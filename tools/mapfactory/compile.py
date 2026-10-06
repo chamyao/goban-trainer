@@ -153,6 +153,17 @@ class Kit:
         return f"{kind if kind in kinds else FOLK_FALLBACK}#{i}", False
 
 
+def voiced_states(states):
+    """A procession's leash line as a spoken step (Chinese and voice clip)."""
+    out = []
+    for st in states:
+        pr = st.get("procession")
+        if pr and isinstance(pr.get("leash_line"), str):
+            st = {**st, "procession": {**pr, "leash_line": place_step(pr["leash_line"])[0]}}
+        out.append(st)
+    return out
+
+
 def compile_map(m, kit, out_dir):
     T = kit.T
     W, H = m["size"]
@@ -279,6 +290,7 @@ def compile_map(m, kit, out_dir):
         solid = KINDS[o["kind"]][2]
         obj(key or "", "prop", (o["x"] + o["w"] / 2) * T, (o["y"] + o["h"]) * T,
             kind=o["kind"], fw=o["w"] * T, fh=o["h"] * T, solid=solid, **({"ref": o["id"]} if o.get("id") else {}),
+            **({"in": json.dumps([o["in"]] if isinstance(o["in"], str) else o["in"])} if o.get("in") else {}),
             **walls.get(id(o), {}))
     runs = []
     for y in range(H):
@@ -296,6 +308,7 @@ def compile_map(m, kit, out_dir):
         obj(s["id"], "spot", s["x"] * T, s["y"] * T, node=s["node"], label=s.get("label", ""), label_zh=ZH.get(s.get("label", ""), ""),
             **({"trigger": s["trigger"]} if s.get("trigger") else {}), **({"use": s["use"]} if s.get("use") else {}),
             **({"needs": json.dumps(s["needs"] if isinstance(s["needs"], list) else [s["needs"]])} if s.get("needs") else {}),
+            **({"sight": json.dumps(s["sight"])} if s.get("sight") else {}),
             **{k: s[k] for k in ("delivers", "when") if s.get(k)},
             **{k: json.dumps([place_step(l)[0] for l in s[k]], ensure_ascii=False) for k in ("empty", "waiting", "deliver", "delivered", "call") if s.get(k)},
             **{k: json.dumps([place_step(l)[0] for l in s[k]], ensure_ascii=False) for k in ("intro", "outro") if s.get(k)})
@@ -305,10 +318,19 @@ def compile_map(m, kit, out_dir):
             **({"drawn": True} if drawn else {}),
             say=json.dumps([place_step(l, n["kind"])[0] for l in n.get("say", [])], ensure_ascii=False),
             **{k: n[k] for k in ("challenge", "until", "face", "when", "gives", "gives_when") if n.get(k)},
+            **({"view": json.dumps(n["view"])} if n.get("view") else {}),
+            **({"watch": json.dumps({**n["watch"], "seen": [place_step(l, n["kind"])[0] for l in
+                                                            ([n["watch"]["seen"]] if isinstance(n["watch"].get("seen"), str) else n["watch"].get("seen") or [])]},
+                                    ensure_ascii=False)} if n.get("watch") else {}),
+            **({"in": json.dumps([n["in"]] if isinstance(n["in"], str) else n["in"])} if n.get("in") else {}),
+            **({"guard_x": n["guard"][0] * T, "guard_y": n["guard"][1] * T} if n.get("guard") else {}),
             **{k: json.dumps([place_step(l, n["kind"])[0] for l in ([n[k]] if isinstance(n[k], str) else n[k])], ensure_ascii=False)
                for k in ("intro", "win", "done", "give", "given", "call") if n.get(k)})
     for e in m["exits"]:
-        obj(f"exit-{e['to']}", "exit", e["x"] * T, e["y"] * T, e["w"] * T, e["h"] * T, to=e["to"], side=e["side"])
+        obj(f"exit-{e['to']}", "exit", e["x"] * T, e["y"] * T, e["w"] * T, e["h"] * T, to=e["to"], side=e["side"],
+            **({"open_to": json.dumps(e["open_to"])} if e.get("open_to") else {}),
+            **({"refuse": json.dumps([place_step(l)[0] for l in ([e["refuse"]] if isinstance(e["refuse"], str) else e["refuse"])], ensure_ascii=False)}
+               if e.get("refuse") else {}))
     for k, (x, y) in m["entries"].items():
         obj(f"entry-{k}" if k else "entry", "entry", (x + .5) * T, (y + .9) * T, **({"from": k} if k else {}))
 
@@ -326,7 +348,8 @@ def compile_map(m, kit, out_dir):
            "renderorder": "right-down", "width": W, "height": H, "tilewidth": T, "tileheight": T, "infinite": False,
            "nextlayerid": len(layers) + 2, "nextobjectid": len(objs) + 1,
            "properties": [{"name": "kit", "type": "string", "value": kit.k["kit"]},
-                          {"name": "source", "type": "string", "value": f"{m['id']}.map.json"}],
+                          {"name": "source", "type": "string", "value": f"{m['id']}.map.json"}]
+                         + ([{"name": "states", "type": "string", "value": json.dumps(voiced_states(m["states"]), ensure_ascii=False)}] if m.get("states") else []),
            "tilesets": tilesets,
            "layers": [{"id": i + 1, "name": n, "type": "tilelayer", "width": W, "height": H, "x": 0, "y": 0,
                        "opacity": 1, "visible": True, "data": data} for i, (n, data) in enumerate(layers)] +
