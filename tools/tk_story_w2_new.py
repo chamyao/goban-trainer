@@ -170,6 +170,8 @@ def _scenes_chain():
               "连环第一环，便是吕布。不可径直相请：张温之事在前，司徒召见太师之将，必遭疑忌。唯有送一件他必亲来致谢的厚礼，方能教他自己登门。"),
             S("wangyun", "The family pearls. Set in gold, as a crown for a hero. He'll come to thank me himself, and then he will see her.",
               "家藏明珠，嵌成金冠，赠与英雄。他必亲来致谢，那时便教他见着她。"),
+            ["light", "dawn", 2500],
+            N("At first light, Wang Yun sends for his old steward.", "天色微明，王允唤来老管家。"),
         ]},
 
         # A3 · The gold crown. Legwork: the board comes first (slipping it past Dong Zhuo's men), then the scene.
@@ -1212,6 +1214,56 @@ def _nodes_chain():
     ]
 
 
+# One caption per board in the three-board scenes (a node's "dilemma" may be a list, in board order).
+def _multi_dilemmas():
+    return {
+        "a9": [
+            D("diaochan", "Make him believe me.", "教他信我。",
+              "He came. Now every word has to ring true.", "他来了。如今句句都要像真的。",
+              "He holds me.", "他抱住了我。", "He doubts it. Again.", "他起疑了。再来。"),
+            D("diaochan", "Keep him from leaving.", "留住他。",
+              "He fears the old man. Make him fear losing me more.", "他怕那老贼。要教他更怕失去我。",
+              "He stays.", "他留下了。", "He's going. Stop him.", "他要走了。拦住他。"),
+            D("diaochan", "Shame him into staying.", "激他留下。",
+              "The greatest hero alive, taking orders. Let him hear how that sounds.", "当世英雄，竟受人制。让他听听这话。",
+              "He will not let me go.", "他不肯放手了。", "Too sharp. He'll turn on me.", "太狠了，他会翻脸。"),
+        ],
+        "a10": [
+            D("diaochan", "Lie about the pavilion.", "谎说凤仪亭之事。",
+              "Lü Bu chased me, and I nearly drowned. Make him see it.", "是吕布追我，我险些投池。要他看得真切。",
+              "He believes me.", "他信了。", "He's suspicious. Again.", "他起疑了。再来。"),
+            D("diaochan", "Put the sword to my throat.", "引剑自刎。",
+              "A real blade. He has to believe I'd rather die.", "真刀真剑。要他信我宁死不从。",
+              "He snatches it away.", "他夺下了剑。", "Not convincing. Again.", "不够真。再来。"),
+            D("diaochan", "Turn it on Li Ru.", "把罪推给李儒。",
+              "Give him someone to blame who isn't me.", "给他一个可怪的人，不是我。",
+              "He will never give me up.", "他再也舍不得我了。", "Careful. Not yet.", "小心，还不是时候。"),
+        ],
+        "a11": [
+            D("wangyun", "Provoke him.", "激怒他。",
+              "He is angry. Make the shame his own.", "他已动怒。要让这耻辱成了他自己的。",
+              "He is roaring.", "他拍案大叫。", "Too fast. He'll balk.", "太急了，他会退缩。"),
+            D("wangyun", "Answer 'but he is my father'.", "答“父子之情”。",
+              "One sentence has to cut the tie.", "一句话，便要斩断这父子之情。",
+              "He sees it.", "他想通了。", "He still calls him father.", "他还当他是父亲。"),
+            D("wangyun", "Loyal minister, or traitor?", "忠臣，还是反臣？",
+              "Give him a name in the histories to choose.", "让他自己选，青史留下什么名字。",
+              "He has sworn in blood.", "他已刺臂为誓。", "He wavers. Again.", "他在犹豫。再来。"),
+        ],
+        "a14": [
+            D("wangyun", "Get the carriage through the gate.", "让车驾入门。",
+              "His guards are shut outside. Only the carriage men come in.", "卫兵都挡在门外，只有车驾进来。",
+              "The gate closes behind him.", "门已在他身后关上。", "Not yet. He's looking.", "还不行，他在看。"),
+            D("wangyun", "Spring the ambush.", "伏兵齐出。",
+              "He has seen the swords. Now, before he turns back.", "他已看见了剑。就是现在，趁他还没回头。",
+              "The blades are on him.", "刀枪齐至。", "Too soon. Hold.", "太早了，稳住。"),
+            D("wangyun", "Finish it.", "了结此贼。",
+              "The blades won't go in. Only one man can do this.", "刀枪不入。只有一人能了结他。",
+              "There is an edict to kill a traitor!", "有诏讨贼！", "He's calling for his son. Hold.", "他在喊他的儿子。稳住。"),
+        ],
+    }
+
+
 _EDGES_CHAIN = [["a1", "a2"], ["a2", "a3"], ["a3", "a4"], ["a4", "a5"], ["a5", "a6"], ["a6", "a7"], ["a7", "a7c"], ["a7c", "a8"], ["a8", "a9"],
                 ["a9", "a10"], ["a10", "a11"], ["a11", "a12a"], ["a12a", "a12b"], ["a12b", "a12y"], ["a12y", "a12p"], ["a12p", "a12c"], ["a12c", "a12"],
                 ["a12", "a13"], ["a13", "a13a"], ["a13a", "a13b"], ["a13b", "a13c"], ["a13c", "a13d"], ["a13d", "a14"], ["a14", "a15"],
@@ -1244,7 +1296,7 @@ def _world():
         "party": ["wangyun"],
         "lead_portrait": True,   # the go board shows whoever leads the party (tk.js tkDuelBuild)
         "items": _ITEMS,
-        "nodes": _nodes_chain(),
+        "nodes": [dict(n, dilemma=_multi_dilemmas()[n["key"]]) if n["key"] in _multi_dilemmas() else n for n in _nodes_chain()],
         "edges": _EDGES_CHAIN,
         "scenes": scenes,
         "opening": [],
