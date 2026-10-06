@@ -714,13 +714,11 @@
   {
    "id": "raided",
    "when": "node:a14",
-   "gate": "open",
    "light": "day"
   },
   {
    "id": "empty",
    "when": "node:a16",
-   "gate": "open",
    "light": "day",
    "weather": "dust"
   }
