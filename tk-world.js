@@ -251,9 +251,9 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=50`);
-      this.load.json("kit", `assets/tk/kits/${kit}.json?v=34`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=50`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=55`);
+      this.load.json("kit", `assets/tk/kits/${kit}.json?v=38`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=54`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
@@ -262,7 +262,7 @@ function worldScenes() {
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
       for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=57`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=62`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -531,6 +531,7 @@ function worldScenes() {
           if (WORLD_CLUTTER.test(p.kind)) img.setDepth(img.depth - 400);   // a rug still lies underfoot
         }
         if (this.iso && (this.kit.isoFlip || []).includes(o.name)) img.setFlipX(true);   // its entrance on the door's face
+        if (p.flip) img.setFlipX(!img.flipX);   // a side view facing W (the map compiler mirrors an E-facing sprite)
         if (p.kind === "landmark.shrine") {   // the Star Lords' shrine: its look follows the story (setShrine)
           this.shrine = { img, x: o.x, y: o.y, state: "dark", fx: [] };
           this.setShrine(TK.shrineState?.(this.w.n, this.placeId) || "dark");
@@ -680,7 +681,7 @@ function worldScenes() {
       if (this.worldShade) { this.worldShade.destroy(); this.worldShade = null; }
       for (const g of this.glows || []) g.destroy();
       this.glows = [];
-      const c = { night: 0x46559c, dusk: 0xf0c0a0, dawn: 0xd8c8e8, storm: 0x80868e, smoke: 0xb39c8a }[this.st.light];
+      const c = { night: 0x46559c, dusk: 0xf0c0a0, dawn: 0xd8c8e8, storm: 0x80868e, smoke: 0xb39c8a, dust: 0xe9d6ac }[this.st.light];
       if (!c) return;
       const W = this.scale.width, H = this.scale.height;
       this.worldShade = this.add.rectangle(W / 2, H / 2, W * 3, H * 3, c).setScrollFactor(0).setDepth(9e4).setBlendMode(Phaser.BlendModes.MULTIPLY);
@@ -745,7 +746,7 @@ function worldScenes() {
         if (o.zone && o.zone.body) o.zone.body.enable = on;
       }
       if (st && "light" in st) {   // the state's light (day clears a scene's night)
-        const L = { day: null, morning: "dawn", dawn: "dawn", dusk: "dusk", night: "night", storm: "storm", smoke: "smoke" }[st.light];
+        const L = { day: st.weather === "dust" ? "dust" : null, morning: "dawn", dawn: "dawn", dusk: "dusk", night: "night", lantern: "night", storm: "storm", smoke: "smoke" }[st.light];
         if ((this.st.light || null) !== (L || null)) { this.st.light = L || null; if (this.player) this.applyWorldLight(); }   // (on arrival the scene applies it once built)
       }
       // one of each person at a time: a brother standing here in his own right (Guan Yu on his
@@ -1680,7 +1681,7 @@ function worldScenes() {
         n.sees = false;
         if (!this.watching(n)) continue;
         // his beat: walk it, stopping where it says to; or turn between the ways he faces
-        if (!calm && w.pts.length) {
+        if (!calm && w.pts.length > 1) {   // one point is a post: he stands there, facing his way or turning
           if (w.wait > 0) w.wait -= dt;
           else {
             const tg = w.pts[w.leg], dx = tg.x - n.spr.x, dy = tg.y - n.spr.y, d = Math.hypot(dx, dy), v = 30 * dt / 1000;
@@ -1708,7 +1709,9 @@ function worldScenes() {
         const pts = [{ x: ex, y: ey }];
         for (let k = 0; k <= 14; k++) { const a = a0 - Math.PI * 55 / 180 + k * (Math.PI * 110 / 180) / 14, r = this.ray(ex, ey, a, R); pts.push({ x: ex + Math.cos(a) * r, y: ey + Math.sin(a) * r }); }
         this.coneG.fillStyle(n.sees ? 0xff5a4a : 0xffe08a, n.sees ? .3 : .18).fillPoints(pts, true);
-        if (n.sees && !calm && !this.caught && (w.seen || w.back_to)) this.caughtBy(n);
+        // he catches you if he has something to say or somewhere to send you; not the one a sight puzzle wants you seen by
+        const wanted = Object.values(this.spots).some(s => s.sight && s.sight.seen_by === (w.id || n.id));
+        if (n.sees && !calm && !this.caught && !wanted && ((w.seen && w.seen.length) || w.back_to)) this.caughtBy(n);
       }
     }
     // Seen: he says so, and you're walked back to where he sends you (no game over)
@@ -1817,7 +1820,8 @@ function worldScenes() {
             this.blocked = 1500;
             const back = { N: [0, 1], S: [0, -1], E: [-1, 0], W: [1, 0] }[e.side];
             P.setPosition(P.x + back[0] * 10, P.y + back[1] * 10);
-            this.talk(e.refuse.length ? worldLines(e.refuse) : [["n", "The door is barred to you.", "此门不为你开。"]]);
+            const said = shut && ms.exits_closed_say && ms.exits_closed_say[e.to];
+            this.talk(said ? said : e.refuse.length ? worldLines(e.refuse) : [["n", "The door is barred to you.", "此门不为你开。"]]);
           }
         } else if (opened || this.placeOpen(e.to)) this.go(e.to);
         else if (!this.blocked) {

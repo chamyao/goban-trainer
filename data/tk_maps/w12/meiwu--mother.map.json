@@ -2,152 +2,103 @@
  "format": "tk-map/1",
  "id": "meiwu--mother",
  "world": 12,
- "parent": "meiwu",
  "name": "His mother's rooms",
  "archetype": "interior",
- "building": "mother",
- "style": "building.house",
  "size": [
-  20,
+  16,
   12
  ],
- "seed": 0.1787831885921486,
+ "seed": 1352,
+ "plan": true,
  "terrain": {
   "legend": {
-   "#": "wood",
-   "%": "stone",
-   "&": "mat",
-   "e": "earth",
+   " ": "void",
    "W": "wall",
-   " ": "void"
+   "#": "wood"
   },
   "rows": [
-   "                    ",
-   "     WWWWW#WWWW     ",
-   "     W########W     ",
-   "     W########W     ",
-   "     W########W     ",
-   "     W########W     ",
-   "     W########W     ",
-   "     W########W     ",
-   "     WWWWW#WWWW     ",
-   "                    ",
-   "                    ",
-   "                    "
-  ]
+   "                ",
+   " WWWWWWWWWWWWWW ",
+   " W############W ",
+   " W############W ",
+   " W############W ",
+   " W############W ",
+   " W############# ",
+   " W############# ",
+   " W############W ",
+   " W############W ",
+   " WWWWWWWWWWWWWW ",
+   "                "
+  ],
+  "walk": {
+   "void": false,
+   "wall": false,
+   "wood": true
+  }
  },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    8,
+    6
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     7,
+     3
+    ]
+   },
+   "tiles": 44
+  }
+ ],
  "objects": [
   {
    "kind": "furn.bed",
-   "x": 7,
+   "x": 5,
    "y": 2,
    "w": 2,
-   "h": 1
+   "h": 1,
+   "id": "bed"
   },
   {
-   "kind": "furn.drawers",
-   "x": 12,
+   "kind": "furn.lamp",
+   "x": 10,
    "y": 2,
    "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "furn.table",
-   "x": 9,
-   "y": 5,
-   "w": 2,
-   "h": 1
-  },
-  {
-   "kind": "furn.stool",
-   "x": 8,
-   "y": 5,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "furn.stool",
-   "x": 11,
-   "y": 5,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "furn.jar",
-   "x": 6,
-   "y": 2,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "furn.plant",
-   "x": 13,
-   "y": 2,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "furn.chest",
-   "x": 6,
-   "y": 7,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "furn.barrel",
-   "x": 13,
-   "y": 3,
-   "w": 1,
-   "h": 1
+   "h": 1,
+   "id": "incense"
   }
  ],
  "spots": [],
- "npcs": [
-  {
-   "id": "in-1",
-   "kind": "folk.woman",
-   "x": 12.5,
-   "y": 6.9,
-   "say": [
-    "“The old lady is ninety. She says her flesh trembles. She hasn't slept in days.”"
-   ],
-   "until": "12-a14"
-  }
- ],
+ "npcs": [],
  "exits": [
   {
-   "to": "meiwu--hall",
-   "side": "S",
-   "x": 10,
-   "y": 8,
+   "to": "meiwu",
+   "side": "E",
+   "x": 14,
+   "y": 6,
    "w": 1,
-   "h": 1
-  },
-  {
-   "to": "meiwu--diaochan",
-   "side": "N",
-   "x": 10,
-   "y": 1,
-   "w": 1,
-   "h": 1
+   "h": 2
   }
  ],
  "entries": {
-  "meiwu--hall": [
-   10,
-   7
+  "meiwu": [
+   13,
+   6
   ],
   "": [
-   10,
-   7
-  ],
-  "meiwu--diaochan": [
-   10,
-   2
+   13,
+   6
   ]
  },
+ "parent": "meiwu",
+ "building": "mother",
  "links": [
-  "meiwu--hall",
-  "meiwu--diaochan"
+  "meiwu"
  ]
 }

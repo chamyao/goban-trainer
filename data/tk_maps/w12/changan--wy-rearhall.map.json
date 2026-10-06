@@ -2,124 +2,122 @@
  "format": "tk-map/1",
  "id": "changan--wy-rearhall",
  "world": 12,
- "parent": "changan",
  "name": "The rear hall",
  "archetype": "interior",
- "building": "wy-rearhall",
- "style": "building.hall",
  "size": [
-  20,
-  12
+  24,
+  14
  ],
- "seed": 0.7753554890839383,
+ "seed": 1994,
+ "plan": true,
  "terrain": {
   "legend": {
-   "#": "wood",
    "%": "stone",
-   "&": "mat",
-   "e": "earth",
-   "W": "wall",
-   " ": "void"
+   " ": "void",
+   "W": "wall"
   },
   "rows": [
-   "   WWWWWWW%WWWWWW   ",
-   "   W%%%%%%%%%%%%W   ",
-   "   W%%%%%%%%%%%%W   ",
-   "   W%%%%%%%%%%%%W   ",
-   "   W%%%%%%%%%%%%W   ",
-   "   W%%%%%%%%%%%%W   ",
-   "   W%%%%%%%%%%%%W   ",
-   "   W%%%%%%%%%%%%W   ",
-   "   W%%%%%%%%%%%%W   ",
-   "   WWWWWWW%WWWWWW   ",
-   "                    ",
-   "                    "
-  ]
+   "                        ",
+   " WWWWWWWWWWWWWWWWWWWWWW ",
+   " %%%%%%%%%%%%%%%%%%%%%W ",
+   " %%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " WWWWWWWWWWW%%WWWWWWWWW ",
+   "                        "
+  ],
+  "walk": {
+   "stone": true,
+   "void": false,
+   "wall": false
+  }
  },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    12,
+    7
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     6,
+     6
+    ],
+    "to-wy-secret": [
+     0,
+     1
+    ]
+   },
+   "tiles": 64
+  }
+ ],
  "objects": [
   {
-   "kind": "furn.desk",
-   "x": 9,
-   "y": 3,
-   "w": 2,
-   "h": 1
-  },
-  {
-   "kind": "furn.rug",
-   "x": 8,
-   "y": 5,
-   "w": 3,
-   "h": 2
-  },
-  {
-   "kind": "banner.red",
-   "x": 7,
-   "y": 1,
+   "kind": "furn.screen",
+   "x": 2,
+   "y": 4,
    "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "banner.red",
-   "x": 13,
-   "y": 1,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "furn.shelf",
-   "x": 4,
-   "y": 1,
-   "w": 2,
-   "h": 1
-  },
-  {
-   "kind": "furn.shelf",
-   "x": 14,
-   "y": 1,
-   "w": 2,
-   "h": 1
-  },
-  {
-   "kind": "furn.plant",
-   "x": 4,
-   "y": 8,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "furn.plant",
-   "x": 15,
-   "y": 8,
-   "w": 1,
-   "h": 1
+   "h": 3,
+   "id": "screen",
+   "label": "A painted screen hiding a door",
+   "blocks_sight": true
   },
   {
    "kind": "furn.chest",
-   "x": 4,
-   "y": 7,
+   "x": 20,
+   "y": 2,
    "w": 1,
-   "h": 1
+   "h": 1,
+   "id": "chest",
+   "label": "The family chest"
+  },
+  {
+   "kind": "furn.table",
+   "x": 9,
+   "y": 4,
+   "w": 2,
+   "h": 1,
+   "id": "table-1"
+  },
+  {
+   "kind": "furn.table",
+   "x": 15,
+   "y": 4,
+   "w": 2,
+   "h": 1,
+   "id": "table-2"
   }
  ],
  "spots": [
   {
-   "id": "spot-12-a4",
-   "x": 10.5,
-   "y": 1.7,
+   "id": "a4",
+   "x": 12.5,
+   "y": 8.7,
    "node": "12-a4",
-   "label": "The First Banquet"
+   "label": "The first banquet"
   }
  ],
  "npcs": [
   {
-   "id": "in-1",
+   "id": "npc-1",
    "kind": "folk.elder",
-   "x": 10.5,
+   "x": 18.5,
    "y": 4.9,
    "say": [
     "“The master hasn't slept. He walks the garden and sighs.”"
    ],
-   "face": "down",
+   "face": "up",
    "gives": "pearls",
    "gives_when": "node:a2",
    "give": [
@@ -132,38 +130,40 @@
  ],
  "exits": [
   {
-   "to": "changan--wy-hall",
-   "side": "S",
-   "x": 10,
-   "y": 9,
+   "to": "changan--wy-secret",
+   "side": "W",
+   "x": 1,
+   "y": 2,
    "w": 1,
-   "h": 1
+   "h": 2
   },
   {
-   "to": "changan--wy-secret",
-   "side": "N",
-   "x": 10,
-   "y": 0,
-   "w": 1,
+   "to": "changan--wangyun",
+   "side": "S",
+   "x": 12,
+   "y": 12,
+   "w": 2,
    "h": 1
   }
  ],
  "entries": {
-  "changan--wy-hall": [
-   10,
-   8
+  "changan--wy-secret": [
+   2,
+   2
+  ],
+  "changan--wangyun": [
+   12,
+   11
   ],
   "": [
-   10,
-   8
-  ],
-  "changan--wy-secret": [
-   10,
-   1
+   12,
+   11
   ]
  },
+ "parent": "changan",
+ "building": "wy-rearhall",
  "links": [
-  "changan--wy-hall",
+  "changan--wangyun",
   "changan--wy-secret"
  ]
 }

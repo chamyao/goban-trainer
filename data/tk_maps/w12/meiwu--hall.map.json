@@ -2,126 +2,90 @@
  "format": "tk-map/1",
  "id": "meiwu--hall",
  "world": 12,
- "parent": "meiwu",
  "name": "Dong Zhuo's hall",
  "archetype": "interior",
- "building": "hall",
- "style": "building.hall",
  "size": [
-  20,
-  12
+  28,
+  16
  ],
- "seed": 0.5769648135552509,
+ "seed": 1114,
+ "plan": true,
  "terrain": {
   "legend": {
-   "#": "wood",
    "%": "stone",
-   "&": "mat",
-   "e": "earth",
-   "W": "wall",
-   " ": "void"
+   " ": "void",
+   "W": "wall"
   },
   "rows": [
-   "   WWWWWWW%WWWWWW   ",
-   "   W%%%%%%%%%%%%W   ",
-   "   W%%%%%%%%%%%%W   ",
-   "   W%%%%%%%%%%%%W   ",
-   "   W%%%%%%%%%%%%W   ",
-   "   W%%%%%%%%%%%%W   ",
-   "   W%%%%%%%%%%%%W   ",
-   "   W%%%%%%%%%%%%W   ",
-   "   W%%%%%%%%%%%%W   ",
-   "   WWWWWWW%WWWWWW   ",
-   "                    ",
-   "                    "
-  ]
+   "                            ",
+   " WWWWWWWWWWWWWWWWWWWWWWWWWW ",
+   " W%%%%%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%%%%%W ",
+   " WWWWWWWWWWWWW%%WWWWWWWWWWW ",
+   "                            "
+  ],
+  "walk": {
+   "stone": true,
+   "void": false,
+   "wall": false
+  }
  },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    14,
+    8
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     7,
+     7
+    ]
+   },
+   "tiles": 76
+  }
+ ],
  "objects": [
   {
-   "kind": "furn.desk",
-   "x": 9,
-   "y": 3,
-   "w": 2,
-   "h": 1
-  },
-  {
-   "kind": "furn.rug",
-   "x": 8,
-   "y": 5,
+   "kind": "furn.screen",
+   "x": 12,
+   "y": 2,
    "w": 3,
-   "h": 2
+   "h": 1,
+   "id": "screen",
+   "blocks_sight": true
   },
   {
-   "kind": "banner.red",
-   "x": 7,
-   "y": 1,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "banner.red",
-   "x": 13,
-   "y": 1,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "furn.shelf",
-   "x": 14,
-   "y": 1,
-   "w": 2,
-   "h": 1
-  },
-  {
-   "kind": "furn.shelf",
-   "x": 4,
-   "y": 1,
-   "w": 2,
-   "h": 1
-  },
-  {
-   "kind": "furn.plant",
-   "x": 4,
-   "y": 8,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "furn.plant",
-   "x": 15,
-   "y": 8,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "furn.chest",
-   "x": 4,
-   "y": 6,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "furn.jar",
-   "x": 4,
-   "y": 5,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "furn.jar",
-   "x": 15,
-   "y": 7,
-   "w": 1,
-   "h": 1
+   "kind": "furn.dais",
+   "x": 12,
+   "y": 4,
+   "w": 3,
+   "h": 2,
+   "id": "dais"
   }
  ],
  "spots": [
   {
-   "id": "spot-12-a13",
-   "x": 10.5,
-   "y": 1.7,
+   "id": "a13",
+   "x": 14.5,
+   "y": 8.7,
    "node": "12-a13",
-   "label": "A Dragon in a Dream"
+   "label": "Dong Zhuo's hall"
   }
  ],
  "npcs": [],
@@ -129,36 +93,25 @@
   {
    "to": "meiwu",
    "side": "S",
-   "x": 10,
-   "y": 9,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "to": "meiwu--mother",
-   "side": "N",
-   "x": 10,
-   "y": 0,
-   "w": 1,
+   "x": 14,
+   "y": 14,
+   "w": 2,
    "h": 1
   }
  ],
  "entries": {
   "meiwu": [
-   10,
-   8
+   14,
+   13
   ],
   "": [
-   10,
-   8
-  ],
-  "meiwu--mother": [
-   10,
-   1
+   14,
+   13
   ]
  },
+ "parent": "meiwu",
+ "building": "hall",
  "links": [
-  "meiwu",
-  "meiwu--mother"
+  "meiwu"
  ]
 }

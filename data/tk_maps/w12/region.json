@@ -15,30 +15,68 @@
    "archetype": "city",
    "map": "changan.map.json",
    "links": [
-    "meiwu",
-    "meiwu-road",
-    "liangzhou",
-    "changan--wy-hall",
-    "changan--wy-rearhall",
-    "changan--wy-secret",
-    "changan--xf-hall",
-    "changan--xf-bedroom",
-    "changan--lubu",
-    "changan--jeweller",
-    "changan--shisun",
-    "changan--huangwan",
-    "changan--dutang",
-    "changan--side-hall",
     "changan--caiyong",
-    "changan--hall-1",
-    "changan--house-1",
-    "changan--house-2",
-    "changan--inn-1",
-    "changan--shop-1",
-    "changan--house-3",
-    "changan--shop-2",
-    "changan--house-4"
+    "changan--jeweller",
+    "changan--lubu",
+    "changan--palace",
+    "changan--wangyun",
+    "changan--xiangfu",
+    "changan--xuanping-top",
+    "liangzhou",
+    "meiwu",
+    "meiwu-road"
    ]
+  },
+  {
+   "id": "changan--wangyun",
+   "name": "Wang Yun's residence",
+   "zh": "王允府",
+   "archetype": "compound",
+   "map": "changan--wangyun.map.json",
+   "links": [
+    "changan",
+    "changan--wy-hall",
+    "changan--wy-rearhall"
+   ],
+   "parent": "changan"
+  },
+  {
+   "id": "changan--xiangfu",
+   "name": "The Chancellor's residence",
+   "zh": "相府",
+   "archetype": "compound",
+   "map": "changan--xiangfu.map.json",
+   "links": [
+    "changan",
+    "changan--xf-bedroom",
+    "changan--xf-hall"
+   ],
+   "parent": "changan"
+  },
+  {
+   "id": "changan--lubu",
+   "name": "Lü Bu's quarters",
+   "zh": "吕布府",
+   "archetype": "compound",
+   "map": "changan--lubu.map.json",
+   "links": [
+    "changan",
+    "changan--lubu-hall"
+   ],
+   "parent": "changan"
+  },
+  {
+   "id": "changan--palace",
+   "name": "Weiyang Palace",
+   "zh": "未央宫",
+   "archetype": "compound",
+   "map": "changan--palace.map.json",
+   "links": [
+    "changan",
+    "changan--dutang",
+    "changan--side-hall"
+   ],
+   "parent": "changan"
   },
   {
    "id": "changan--wy-hall",
@@ -47,8 +85,7 @@
    "archetype": "interior",
    "map": "changan--wy-hall.map.json",
    "links": [
-    "changan",
-    "changan--wy-rearhall"
+    "changan--wangyun"
    ],
    "parent": "changan"
   },
@@ -59,7 +96,7 @@
    "archetype": "interior",
    "map": "changan--wy-rearhall.map.json",
    "links": [
-    "changan--wy-hall",
+    "changan--wangyun",
     "changan--wy-secret"
    ],
    "parent": "changan",
@@ -69,8 +106,8 @@
   },
   {
    "id": "changan--wy-secret",
-   "name": "The secret room",
-   "zh": "密室",
+   "name": "wy-secret",
+   "zh": "",
    "archetype": "interior",
    "map": "changan--wy-secret.map.json",
    "links": [
@@ -85,30 +122,29 @@
    "archetype": "interior",
    "map": "changan--xf-hall.map.json",
    "links": [
-    "changan",
-    "changan--xf-bedroom"
+    "changan--xiangfu"
    ],
    "parent": "changan"
   },
   {
    "id": "changan--xf-bedroom",
-   "name": "The bedchamber",
-   "zh": "长安·",
+   "name": "Dong Zhuo's bedchamber",
+   "zh": "董卓卧房",
    "archetype": "interior",
    "map": "changan--xf-bedroom.map.json",
    "links": [
-    "changan--xf-hall"
+    "changan--xiangfu"
    ],
    "parent": "changan"
   },
   {
-   "id": "changan--lubu",
-   "name": "Lü Bu's quarters",
-   "zh": "吕布府",
+   "id": "changan--lubu-hall",
+   "name": "Lü Bu's hall",
+   "zh": "吕布厅堂",
    "archetype": "interior",
-   "map": "changan--lubu.map.json",
+   "map": "changan--lubu-hall.map.json",
    "links": [
-    "changan"
+    "changan--lubu"
    ],
    "parent": "changan"
   },
@@ -127,47 +163,13 @@
    ]
   },
   {
-   "id": "changan--shisun",
-   "name": "Shisun Rui's house",
-   "zh": "士孙瑞宅",
-   "archetype": "interior",
-   "map": "changan--shisun.map.json",
-   "links": [
-    "changan"
-   ],
-   "parent": "changan"
-  },
-  {
-   "id": "changan--huangwan",
-   "name": "Huang Wan's house",
-   "zh": "黄琬宅",
-   "archetype": "interior",
-   "map": "changan--huangwan.map.json",
-   "links": [
-    "changan"
-   ],
-   "parent": "changan"
-  },
-  {
    "id": "changan--dutang",
    "name": "The great hall of state",
    "zh": "都堂",
    "archetype": "interior",
    "map": "changan--dutang.map.json",
    "links": [
-    "changan",
-    "changan--side-hall"
-   ],
-   "parent": "changan"
-  },
-  {
-   "id": "changan--side-hall",
-   "name": "The emperor's side hall",
-   "zh": "天子偏殿",
-   "archetype": "interior",
-   "map": "changan--side-hall.map.json",
-   "links": [
-    "changan--dutang"
+    "changan--palace"
    ],
    "parent": "changan"
   },
@@ -183,110 +185,51 @@
    "parent": "changan"
   },
   {
-   "id": "changan--hall-1",
-   "name": "Hall, Chang'an",
-   "zh": "长安·厅堂",
+   "id": "changan--xuanping-top",
+   "name": "The Xuanping Gate tower",
+   "zh": "宣平门楼",
    "archetype": "interior",
-   "map": "changan--hall-1.map.json",
+   "map": "changan--xuanping-top.map.json",
    "links": [
     "changan"
    ],
    "parent": "changan"
   },
   {
-   "id": "changan--house-1",
-   "name": "House, Chang'an",
-   "zh": "长安·民居",
+   "id": "changan--side-hall",
+   "name": "The emperor's side hall",
+   "zh": "天子偏殿",
    "archetype": "interior",
-   "map": "changan--house-1.map.json",
+   "map": "changan--side-hall.map.json",
    "links": [
-    "changan"
+    "changan--palace"
    ],
    "parent": "changan"
   },
   {
-   "id": "changan--house-2",
-   "name": "House, Chang'an",
-   "zh": "长安·民居",
-   "archetype": "interior",
-   "map": "changan--house-2.map.json",
+   "id": "meiwu-road",
+   "name": "Meiwu Road",
+   "zh": "郿坞道",
+   "archetype": "road",
+   "map": "meiwu-road.map.json",
    "links": [
-    "changan"
-   ],
-   "parent": "changan"
-  },
-  {
-   "id": "changan--inn-1",
-   "name": "Inn, Chang'an",
-   "zh": "长安·客栈",
-   "archetype": "interior",
-   "map": "changan--inn-1.map.json",
-   "links": [
-    "changan"
-   ],
-   "parent": "changan"
-  },
-  {
-   "id": "changan--shop-1",
-   "name": "Teahouse, Chang'an",
-   "zh": "长安·茶馆",
-   "archetype": "interior",
-   "map": "changan--shop-1.map.json",
-   "links": [
-    "changan"
-   ],
-   "parent": "changan"
-  },
-  {
-   "id": "changan--house-3",
-   "name": "House, Chang'an",
-   "zh": "长安·民居",
-   "archetype": "interior",
-   "map": "changan--house-3.map.json",
-   "links": [
-    "changan"
-   ],
-   "parent": "changan"
-  },
-  {
-   "id": "changan--shop-2",
-   "name": "Teahouse, Chang'an",
-   "zh": "长安·茶馆",
-   "archetype": "interior",
-   "map": "changan--shop-2.map.json",
-   "links": [
-    "changan"
-   ],
-   "parent": "changan"
-  },
-  {
-   "id": "changan--house-4",
-   "name": "House, Chang'an",
-   "zh": "长安·民居",
-   "archetype": "interior",
-   "map": "changan--house-4.map.json",
-   "links": [
-    "changan"
-   ],
-   "parent": "changan"
+    "changan",
+    "meiwu"
+   ]
   },
   {
    "id": "meiwu",
    "name": "Meiwu",
    "zh": "郿坞",
-   "archetype": "town",
+   "archetype": "fortress",
    "map": "meiwu.map.json",
    "links": [
     "changan",
-    "meiwu-road",
+    "liangzhou",
+    "meiwu--diaochan",
     "meiwu--hall",
     "meiwu--mother",
-    "meiwu--diaochan",
-    "meiwu--treasury",
-    "meiwu--house-1",
-    "meiwu--house-2",
-    "meiwu--house-3",
-    "meiwu--shop-1"
+    "meiwu-road"
    ]
   },
   {
@@ -296,8 +239,7 @@
    "archetype": "interior",
    "map": "meiwu--hall.map.json",
    "links": [
-    "meiwu",
-    "meiwu--mother"
+    "meiwu"
    ],
    "parent": "meiwu"
   },
@@ -308,8 +250,7 @@
    "archetype": "interior",
    "map": "meiwu--mother.map.json",
    "links": [
-    "meiwu--hall",
-    "meiwu--diaochan"
+    "meiwu"
    ],
    "parent": "meiwu"
   },
@@ -320,157 +261,20 @@
    "archetype": "interior",
    "map": "meiwu--diaochan.map.json",
    "links": [
-    "meiwu--mother"
-   ],
-   "parent": "meiwu"
-  },
-  {
-   "id": "meiwu--treasury",
-   "name": "The treasury",
-   "zh": "库房",
-   "archetype": "interior",
-   "map": "meiwu--treasury.map.json",
-   "links": [
     "meiwu"
    ],
    "parent": "meiwu"
-  },
-  {
-   "id": "meiwu--house-1",
-   "name": "House, Meiwu",
-   "zh": "郿坞·民居",
-   "archetype": "interior",
-   "map": "meiwu--house-1.map.json",
-   "links": [
-    "meiwu"
-   ],
-   "parent": "meiwu"
-  },
-  {
-   "id": "meiwu--house-2",
-   "name": "House, Meiwu",
-   "zh": "郿坞·民居",
-   "archetype": "interior",
-   "map": "meiwu--house-2.map.json",
-   "links": [
-    "meiwu"
-   ],
-   "parent": "meiwu"
-  },
-  {
-   "id": "meiwu--house-3",
-   "name": "House, Meiwu",
-   "zh": "郿坞·民居",
-   "archetype": "interior",
-   "map": "meiwu--house-3.map.json",
-   "links": [
-    "meiwu"
-   ],
-   "parent": "meiwu"
-  },
-  {
-   "id": "meiwu--shop-1",
-   "name": "Teahouse, Meiwu",
-   "zh": "郿坞·茶馆",
-   "archetype": "interior",
-   "map": "meiwu--shop-1.map.json",
-   "links": [
-    "meiwu"
-   ],
-   "parent": "meiwu"
-  },
-  {
-   "id": "meiwu-road",
-   "name": "Meiwu Road",
-   "zh": "郿坞道",
-   "archetype": "road",
-   "map": "meiwu-road.map.json",
-   "links": [
-    "meiwu",
-    "changan",
-    "meiwu-road--post"
-   ]
-  },
-  {
-   "id": "meiwu-road--post",
-   "name": "The thirty-li post",
-   "zh": "三十里亭",
-   "archetype": "interior",
-   "map": "meiwu-road--post.map.json",
-   "links": [
-    "meiwu-road"
-   ],
-   "parent": "meiwu-road"
   },
   {
    "id": "liangzhou",
    "name": "Liangzhou",
    "zh": "凉州",
-   "archetype": "road",
+   "archetype": "loess",
    "map": "liangzhou.map.json",
    "links": [
     "changan",
-    "liangzhou--camp",
-    "liangzhou--tent-2",
-    "liangzhou--v1",
-    "liangzhou--v2",
-    "liangzhou--v3"
+    "meiwu"
    ]
-  },
-  {
-   "id": "liangzhou--camp",
-   "name": "Li Jue's camp",
-   "zh": "李傕营",
-   "archetype": "interior",
-   "map": "liangzhou--camp.map.json",
-   "links": [
-    "liangzhou"
-   ],
-   "parent": "liangzhou"
-  },
-  {
-   "id": "liangzhou--tent-2",
-   "name": "Guo Si's tent",
-   "zh": "郭汜帐",
-   "archetype": "interior",
-   "map": "liangzhou--tent-2.map.json",
-   "links": [
-    "liangzhou"
-   ],
-   "parent": "liangzhou"
-  },
-  {
-   "id": "liangzhou--v1",
-   "name": "The herders' village",
-   "zh": "牧人村",
-   "archetype": "interior",
-   "map": "liangzhou--v1.map.json",
-   "links": [
-    "liangzhou"
-   ],
-   "parent": "liangzhou"
-  },
-  {
-   "id": "liangzhou--v2",
-   "name": "The walled farm",
-   "zh": "庄堡",
-   "archetype": "interior",
-   "map": "liangzhou--v2.map.json",
-   "links": [
-    "liangzhou"
-   ],
-   "parent": "liangzhou"
-  },
-  {
-   "id": "liangzhou--v3",
-   "name": "The post town: the pavilion",
-   "zh": "驿镇：亭",
-   "archetype": "interior",
-   "map": "liangzhou--v3.map.json",
-   "links": [
-    "liangzhou"
-   ],
-   "parent": "liangzhou"
   },
   {
    "id": "overworld",
@@ -486,7 +290,7 @@
    "node": "12-a1",
    "role": "main",
    "place": "changan",
-   "spot": "hengmen",
+   "spot": "a1",
    "scene": "a1",
    "title": "The Roadside Banquet",
    "objective": "See the Grand Preceptor off at the Heng Gate.",
@@ -621,8 +425,8 @@
   {
    "node": "12-a2",
    "role": "main",
-   "place": "changan",
-   "spot": "wy-garden",
+   "place": "changan--wangyun",
+   "spot": "a2",
    "scene": "a2",
    "title": "The Peony Pavilion",
    "objective": "Walk out into the rear garden.",
@@ -759,10 +563,10 @@
    "node": "12-a3",
    "role": "main",
    "place": "changan",
-   "spot": "lubu",
+   "spot": "a3",
    "scene": "a3",
    "title": "The Gold Crown",
-   "objective": "Have the family pearls set into a gold crown, and get it to Lü Bu unseen.",
+   "objective": "Have the family pearls set into a gold crown, and send it to Lü Bu in secret.",
    "after": [
     "12-a2"
    ],
@@ -913,14 +717,14 @@
      "objective_zh": "将明珠送到珠宝铺，嵌造金冠。"
     }
    ],
-   "objective_zh": "将家藏明珠嵌成金冠，避开耳目送到吕布手中。",
+   "objective_zh": "将家藏明珠嵌成金冠，密送吕布。",
    "title_zh": "金冠"
   },
   {
    "node": "12-a4",
    "role": "main",
    "place": "changan--wy-rearhall",
-   "spot": "spot-12-a4",
+   "spot": "a4",
    "scene": "a4",
    "title": "The First Banquet",
    "objective": "Receive Lü Bu in the rear hall.",
@@ -1050,7 +854,6 @@
      3448
     ]
    ],
-   "room": "wy-rearhall",
    "objective_zh": "在后堂款待吕布。",
    "title_zh": "初宴吕布"
   },
@@ -1058,7 +861,7 @@
    "node": "12-a5",
    "role": "main",
    "place": "changan--wy-hall",
-   "spot": "spot-12-a5",
+   "spot": "a5",
    "scene": "a5",
    "title": "The Dance Behind the Curtain",
    "objective": "Dance for the Grand Preceptor in the front hall.",
@@ -1188,7 +991,6 @@
      3160
     ]
    ],
-   "room": "wy-hall",
    "objective_zh": "在前厅为太师献舞。",
    "title_zh": "帘外之舞"
   },
@@ -1196,10 +998,10 @@
    "node": "12-a6",
    "role": "main",
    "place": "changan",
-   "spot": "lanterns",
+   "spot": "a6",
    "scene": "a6",
    "title": "Red Lanterns",
-   "objective": "Ride home past the red lanterns.",
+   "objective": "Ride home down the avenue.",
    "after": [
     "12-a5"
    ],
@@ -1326,14 +1128,14 @@
      3608
     ]
    ],
-   "objective_zh": "骑马经过红灯回府。",
+   "objective_zh": "沿大街骑马回府。",
    "title_zh": "红灯照道"
   },
   {
    "node": "12-a7",
    "role": "main",
    "place": "changan--xf-bedroom",
-   "spot": "spot-12-a7",
+   "spot": "a7",
    "scene": "a7",
    "title": "The Face in the Pond",
    "objective": "Go to the window.",
@@ -1463,18 +1265,17 @@
      3071
     ]
    ],
-   "room": "xf-bedroom",
    "objective_zh": "到窗前去。",
    "title_zh": "池中人影"
   },
   {
-   "node": "12-a8",
+   "node": "12-a7c",
    "role": "main",
-   "place": "changan--xf-bedroom",
-   "spot": "spot-12-a8",
-   "scene": "a8",
-   "title": "Behind the Sickbed",
-   "objective": "Nurse the Grand Preceptor.",
+   "place": "changan--xf-hall",
+   "spot": "curtain",
+   "scene": "a7c",
+   "title": "Half a Face",
+   "objective": "Show yourself to Lü Bu behind the curtain, where the Grand Preceptor can't see.",
    "after": [
     "12-a7"
    ],
@@ -1601,20 +1402,20 @@
      3732
     ]
    ],
-   "room": "xf-bedroom",
-   "objective_zh": "服侍太师养病。",
-   "title_zh": "床后指心"
+   "board": false,
+   "objective_zh": "在帘后让吕布看见你，别让太师看见。",
+   "title_zh": "微露半面"
   },
   {
-   "node": "12-a9",
+   "node": "12-a8",
    "role": "main",
-   "place": "changan",
-   "spot": "xf-garden",
-   "scene": "a9",
-   "title": "The Phoenix Pavilion",
-   "objective": "Meet Lü Bu at the Phoenix Pavilion.",
+   "place": "changan--xf-bedroom",
+   "spot": "a8",
+   "scene": "a8",
+   "title": "Behind the Sickbed",
+   "objective": "Nurse the Grand Preceptor.",
    "after": [
-    "12-a8"
+    "12-a7c"
    ],
    "grade": "11K",
    "pool": [
@@ -1739,19 +1540,19 @@
      751
     ]
    ],
-   "objective_zh": "到凤仪亭与吕布相会。",
-   "title_zh": "凤仪亭"
+   "objective_zh": "服侍太师养病。",
+   "title_zh": "床后指心"
   },
   {
-   "node": "12-a10",
+   "node": "12-a9",
    "role": "main",
-   "place": "changan--xf-hall",
-   "spot": "spot-12-a10",
-   "scene": "a10",
-   "title": "The Sword on the Wall",
-   "objective": "Answer the Grand Preceptor in the middle hall.",
+   "place": "changan--xiangfu",
+   "spot": "a9",
+   "scene": "a9",
+   "title": "The Phoenix Pavilion",
+   "objective": "Meet Lü Bu at the Phoenix Pavilion, unseen.",
    "after": [
-    "12-a9"
+    "12-a8"
    ],
    "grade": "11K",
    "pool": [
@@ -1876,20 +1677,19 @@
      143451
     ]
    ],
-   "room": "xf-hall",
-   "objective_zh": "到中堂回太师的话。",
-   "title_zh": "壁间宝剑"
+   "objective_zh": "避开耳目，到凤仪亭与吕布相会。",
+   "title_zh": "凤仪亭"
   },
   {
-   "node": "12-a11",
+   "node": "12-a10",
    "role": "main",
-   "place": "changan",
-   "spot": "ridge",
-   "scene": "a11",
-   "title": "You Are a Lü, He Is a Dong",
-   "objective": "Find Lü Bu outside the Heng Gate.",
+   "place": "changan--xf-hall",
+   "spot": "a10",
+   "scene": "a10",
+   "title": "The Sword on the Wall",
+   "objective": "Answer the Grand Preceptor in the middle hall.",
    "after": [
-    "12-a10"
+    "12-a9"
    ],
    "grade": "11K",
    "pool": [
@@ -2014,19 +1814,19 @@
      27449
     ]
    ],
-   "objective_zh": "到横门外去寻吕布。",
-   "title_zh": "将军自姓吕"
+   "objective_zh": "到中堂回太师的话。",
+   "title_zh": "壁间宝剑"
   },
   {
-   "node": "12-a12a",
+   "node": "12-a11",
    "role": "main",
    "place": "changan",
-   "spot": "shisun",
-   "scene": "a12a",
-   "title": "Shisun Rui",
-   "objective": "Sound out Shisun Rui.",
+   "spot": "a11",
+   "scene": "a11",
+   "title": "You Are a Lü, He Is a Dong",
+   "objective": "Find Lü Bu outside the Heng Gate.",
    "after": [
-    "12-a11"
+    "12-a10"
    ],
    "grade": "11K",
    "pool": [
@@ -2151,19 +1951,19 @@
      160670
     ]
    ],
-   "objective_zh": "密访士孙瑞。",
-   "title_zh": "士孙瑞"
+   "objective_zh": "到横门外去寻吕布。",
+   "title_zh": "将军自姓吕"
   },
   {
-   "node": "12-a12b",
+   "node": "12-a12a",
    "role": "main",
    "place": "changan",
-   "spot": "huangwan",
-   "scene": "a12b",
-   "title": "Huang Wan",
-   "objective": "Sound out Huang Wan.",
+   "spot": "shisun",
+   "scene": "a12a",
+   "title": "Shisun Rui",
+   "objective": "Sound out Shisun Rui.",
    "after": [
-    "12-a12a"
+    "12-a11"
    ],
    "grade": "11K",
    "pool": [
@@ -2288,19 +2088,19 @@
      42374
     ]
    ],
-   "objective_zh": "密访黄琬。",
-   "title_zh": "黄琬"
+   "objective_zh": "密访士孙瑞。",
+   "title_zh": "士孙瑞"
   },
   {
-   "node": "12-a12y",
+   "node": "12-a12b",
    "role": "main",
-   "place": "changan--caiyong",
-   "spot": "spot-12-a12y",
-   "scene": "a12y",
-   "title": "Stones, Not Men",
-   "objective": "Call on Cai Yong.",
+   "place": "changan",
+   "spot": "huangwan",
+   "scene": "a12b",
+   "title": "Huang Wan",
+   "objective": "Sound out Huang Wan.",
    "after": [
-    "12-a12b"
+    "12-a12a"
    ],
    "grade": "11K",
    "pool": [
@@ -2425,20 +2225,19 @@
      266259
     ]
    ],
-   "room": "caiyong",
-   "objective_zh": "去拜访蔡邕。",
-   "title_zh": "只谈棋子"
+   "objective_zh": "密访黄琬。",
+   "title_zh": "黄琬"
   },
   {
-   "node": "12-a12p",
+   "node": "12-a12y",
    "role": "main",
-   "place": "changan--wy-secret",
-   "spot": "spot-12-a12p",
-   "scene": "a12p",
-   "title": "The Plan",
-   "objective": "Meet in the secret room.",
+   "place": "changan--caiyong",
+   "spot": "a12y",
+   "scene": "a12y",
+   "title": "Stones, Not Men",
+   "objective": "Go to Chang'an.",
    "after": [
-    "12-a12y"
+    "12-a12b"
    ],
    "grade": "11K",
    "pool": [
@@ -2563,21 +2362,19 @@
      25509
     ]
    ],
-   "board": false,
-   "room": "wy-secret",
-   "objective_zh": "到密室会合。",
-   "title_zh": "定计"
+   "objective_zh": "",
+   "title_zh": "只谈棋子"
   },
   {
-   "node": "12-a12c",
+   "node": "12-a12p",
    "role": "main",
-   "place": "changan--side-hall",
-   "spot": "spot-12-a12c",
-   "scene": "a12c",
-   "title": "The Secret Edict",
-   "objective": "Reach the Son of Heaven unseen.",
+   "place": "changan--wy-secret",
+   "spot": "secret",
+   "scene": "a12p",
+   "title": "The Plan",
+   "objective": "Meet in the secret room.",
    "after": [
-    "12-a12p"
+    "12-a12y"
    ],
    "grade": "11K",
    "pool": [
@@ -2702,20 +2499,20 @@
      43909
     ]
    ],
-   "room": "side-hall",
-   "objective_zh": "避开耳目，面见天子。",
-   "title_zh": "天子密诏"
+   "board": false,
+   "objective_zh": "到密室会合。",
+   "title_zh": "定计"
   },
   {
-   "node": "12-a12",
+   "node": "12-a12c",
    "role": "main",
-   "place": "changan--wy-secret",
-   "spot": "spot-12-a12",
-   "scene": "a12",
-   "title": "The Broken Arrow",
-   "objective": "Bring Li Su into the plan.",
+   "place": "changan--side-hall",
+   "spot": "a12c",
+   "scene": "a12c",
+   "title": "The Secret Edict",
+   "objective": "Reach the Son of Heaven unseen.",
    "after": [
-    "12-a12c"
+    "12-a12p"
    ],
    "grade": "11K",
    "pool": [
@@ -2840,20 +2637,19 @@
      295416
     ]
    ],
-   "room": "wy-secret",
-   "objective_zh": "说李肃入伙。",
-   "title_zh": "折箭为誓"
+   "objective_zh": "避开耳目，面见天子。",
+   "title_zh": "天子密诏"
   },
   {
-   "node": "12-a13",
+   "node": "12-a12",
    "role": "main",
-   "place": "meiwu--hall",
-   "spot": "spot-12-a13",
-   "scene": "a13",
-   "title": "A Dragon in a Dream",
-   "objective": "Bring the edict to Dong Zhuo in his hall.",
+   "place": "changan--wy-secret",
+   "spot": "a12",
+   "scene": "a12",
+   "title": "The Broken Arrow",
+   "objective": "Bring Li Su into the plan.",
    "after": [
-    "12-a12"
+    "12-a12c"
    ],
    "grade": "11K",
    "pool": [
@@ -2978,20 +2774,19 @@
      1354
     ]
    ],
-   "room": "hall",
-   "objective_zh": "持诏往董卓堂上。",
-   "title_zh": "夜梦龙罩"
+   "objective_zh": "说李肃入伙。",
+   "title_zh": "折箭为誓"
   },
   {
-   "node": "12-a13a",
+   "node": "12-a13",
    "role": "main",
-   "place": "meiwu-road",
-   "spot": "wheel",
-   "scene": "a13a",
-   "title": "A Broken Wheel",
-   "objective": "Ride beside the Grand Preceptor's carriage.",
+   "place": "meiwu--hall",
+   "spot": "a13",
+   "scene": "a13",
+   "title": "A Dragon in a Dream",
+   "objective": "Bring the edict to Dong Zhuo in his hall.",
    "after": [
-    "12-a13"
+    "12-a12"
    ],
    "grade": "11K",
    "pool": [
@@ -3116,19 +2911,19 @@
      144127
     ]
    ],
-   "objective_zh": "骑马随在太师车旁。",
-   "title_zh": "车折马嘶"
+   "objective_zh": "持诏往董卓堂上。",
+   "title_zh": "夜梦龙罩"
   },
   {
-   "node": "12-a13b",
+   "node": "12-a13a",
    "role": "main",
    "place": "meiwu-road",
-   "spot": "fog",
-   "scene": "a13b",
-   "title": "Wind and Fog",
-   "objective": "Find the Grand Preceptor in the fog.",
+   "spot": "wheel",
+   "scene": "a13a",
+   "title": "A Broken Wheel",
+   "objective": "Ride beside the Grand Preceptor's carriage.",
    "after": [
-    "12-a13a"
+    "12-a13"
    ],
    "grade": "11K",
    "pool": [
@@ -3253,19 +3048,19 @@
      21182
     ]
    ],
-   "objective_zh": "在雾中找到太师。",
-   "title_zh": "狂风昏雾"
+   "objective_zh": "骑马随在太师车旁。",
+   "title_zh": "车折马嘶"
   },
   {
-   "node": "12-a13c",
+   "node": "12-a13b",
    "role": "main",
    "place": "meiwu-road",
-   "spot": "fields",
-   "scene": "a13c",
-   "title": "Grass of a Thousand Li",
-   "objective": "Follow the singing into the fields.",
+   "spot": "fog",
+   "scene": "a13b",
+   "title": "Wind and Fog",
+   "objective": "Find the Grand Preceptor in the fog.",
    "after": [
-    "12-a13b"
+    "12-a13a"
    ],
    "grade": "11K",
    "pool": [
@@ -3390,19 +3185,19 @@
      619
     ]
    ],
-   "objective_zh": "循着歌声走进田野。",
-   "title_zh": "千里草"
+   "objective_zh": "在雾中找到太师。",
+   "title_zh": "狂风昏雾"
   },
   {
-   "node": "12-a13d",
+   "node": "12-a13c",
    "role": "main",
-   "place": "changan",
-   "spot": "spot-12-a13d",
-   "scene": "a13d",
-   "title": "The Taoist's Cloth",
-   "objective": "Go to Chang'an.",
+   "place": "meiwu-road",
+   "spot": "fields",
+   "scene": "a13c",
+   "title": "Grass of a Thousand Li",
+   "objective": "Follow the singing into the fields.",
    "after": [
-    "12-a13c"
+    "12-a13b"
    ],
    "grade": "11K",
    "pool": [
@@ -3527,8 +3322,145 @@
      1506
     ]
    ],
+   "objective_zh": "循着歌声走进田野。",
+   "title_zh": "千里草"
+  },
+  {
+   "node": "12-a13d",
+   "role": "main",
+   "place": "changan",
+   "spot": "a13d",
+   "scene": "a13d",
+   "title": "The Taoist's Cloth",
+   "objective": "Escort the Grand Preceptor to the palace.",
+   "after": [
+    "12-a13c"
+   ],
+   "grade": "11K",
+   "pool": [
+    [
+     "bedtime-tsumego-part-1",
+     135684
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     553
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     371855
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     149199
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     294019
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-2",
+     144214
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     148959
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     127031
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     371862
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     399121
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     294018
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     292907
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     149229
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     145879
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3552
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     156162
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     149069
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     399124
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3629
+    ],
+    [
+     "hitomi-tsumego",
+     60366
+    ],
+    [
+     "weiqi-life-and-death-drills-beginner-part-3",
+     63419
+    ],
+    [
+     "200-basic-go-problems",
+     176544
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     640
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     148925
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     148910
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-1",
+     132097
+    ],
+    [
+     "common-life-and-death-problems",
+     26038
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     149215
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     148950
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160698
+    ]
+   ],
    "board": false,
-   "objective_zh": "",
+   "objective_zh": "护送太师入宫。",
    "title_zh": "道人布竿"
   },
   {
@@ -3689,144 +3621,6 @@
    "grade": "11K",
    "pool": [
     [
-     "bedtime-tsumego-part-1",
-     135684
-    ],
-    [
-     "lee-chang-hos-selected-tsumego-part-1",
-     553
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     371855
-    ],
-    [
-     "specialized-training-in-tsumego-4",
-     149199
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     294019
-    ],
-    [
-     "ohashi-style-power-up-tsumego-part-2",
-     144214
-    ],
-    [
-     "specialized-training-in-tsumego-4",
-     148959
-    ],
-    [
-     "specialized-training-in-tsumego-5",
-     127031
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     371862
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     399121
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     294018
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     292907
-    ],
-    [
-     "specialized-training-in-tsumego-4",
-     149229
-    ],
-    [
-     "compact-go-puzzles-to-learn-the-basics",
-     145879
-    ],
-    [
-     "weiqi-rapid-drill-800-part-3",
-     3552
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     156162
-    ],
-    [
-     "specialized-training-in-tsumego-3",
-     149069
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     399124
-    ],
-    [
-     "weiqi-rapid-drill-800-part-4",
-     3629
-    ],
-    [
-     "hitomi-tsumego",
-     60366
-    ],
-    [
-     "weiqi-life-and-death-drills-beginner-part-3",
-     63419
-    ],
-    [
-     "200-basic-go-problems",
-     176544
-    ],
-    [
-     "specialized-training-in-tsumego-5",
-     640
-    ],
-    [
-     "specialized-training-in-tsumego-4",
-     148925
-    ],
-    [
-     "specialized-training-in-tsumego-4",
-     148910
-    ],
-    [
-     "ohashi-style-power-up-tsumego-part-1",
-     132097
-    ],
-    [
-     "common-life-and-death-problems",
-     26038
-    ],
-    [
-     "specialized-training-in-tsumego-4",
-     149215
-    ],
-    [
-     "specialized-training-in-tsumego-4",
-     148950
-    ],
-    [
-     "go-puzzles-at-a-glance",
-     160698
-    ]
-   ],
-   "board": false,
-   "objective_zh": "在城中走走。",
-   "title_zh": "脐中为灯"
-  },
-  {
-   "node": "12-a15m",
-   "role": "main",
-   "place": "meiwu--diaochan",
-   "spot": "spot-12-a15m",
-   "scene": "a15m",
-   "title": "Meiwu",
-   "objective": "Find Diaochan.",
-   "after": [
-    "12-a15"
-   ],
-   "grade": "11K",
-   "pool": [
-    [
      "specialized-training-in-tsumego-4",
      148924
     ],
@@ -3948,20 +3742,19 @@
     ]
    ],
    "board": false,
-   "room": "diaochan",
-   "objective_zh": "找到貂蝉。",
-   "title_zh": "郿坞"
+   "objective_zh": "在城中走走。",
+   "title_zh": "脐中为灯"
   },
   {
-   "node": "12-a15c",
+   "node": "12-a15m",
    "role": "main",
-   "place": "changan--dutang",
-   "spot": "spot-12-a15c",
-   "scene": "a15c",
-   "title": "Cai Yong Weeps",
-   "objective": "Go to the victory feast in the great hall of state.",
+   "place": "meiwu--diaochan",
+   "spot": "a15m",
+   "scene": "a15m",
+   "title": "Meiwu",
+   "objective": "Go to Meiwu.",
    "after": [
-    "12-a15m"
+    "12-a15"
    ],
    "grade": "11K",
    "pool": [
@@ -4087,20 +3880,19 @@
     ]
    ],
    "board": false,
-   "room": "dutang",
-   "objective_zh": "到都堂赴庆功宴。",
-   "title_zh": "蔡邕哭尸"
+   "objective_zh": "",
+   "title_zh": "郿坞"
   },
   {
-   "node": "12-a16",
+   "node": "12-a15c",
    "role": "main",
-   "place": "liangzhou",
-   "spot": "camp",
-   "scene": "a16",
-   "title": "No Pardon",
-   "objective": "Hear the envoy at Li Jue's camp.",
+   "place": "changan--dutang",
+   "spot": "a15c",
+   "scene": "a15c",
+   "title": "Cai Yong Weeps",
+   "objective": "Go to the victory feast in the great hall of state.",
    "after": [
-    "12-a15c"
+    "12-a15m"
    ],
    "grade": "11K",
    "pool": [
@@ -4225,19 +4017,20 @@
      149191
     ]
    ],
-   "objective_zh": "到李傕营中听使者回报。",
-   "title_zh": "求赦不得"
+   "board": false,
+   "objective_zh": "到都堂赴庆功宴。",
+   "title_zh": "蔡邕哭尸"
   },
   {
-   "node": "12-a16a",
+   "node": "12-a16",
    "role": "main",
    "place": "liangzhou",
-   "spot": "v1",
-   "scene": "a16a",
-   "title": "A Rumour in Liangzhou",
-   "objective": "Spread the word in the herders' village.",
+   "spot": "camp",
+   "scene": "a16",
+   "title": "No Pardon",
+   "objective": "Hear the envoy at Li Jue's camp.",
    "after": [
-    "12-a16"
+    "12-a15c"
    ],
    "grade": "11K",
    "pool": [
@@ -4362,19 +4155,19 @@
      148921
     ]
    ],
-   "objective_zh": "在牧人村散布消息。",
-   "title_zh": "流言西凉"
+   "objective_zh": "到李傕营中听使者回报。",
+   "title_zh": "求赦不得"
   },
   {
-   "node": "12-a16b",
+   "node": "12-a16a",
    "role": "main",
    "place": "liangzhou",
-   "spot": "v2",
-   "scene": "a16b",
-   "title": "Fear",
-   "objective": "Spread the word at the walled farm.",
+   "spot": "v1",
+   "scene": "a16a",
+   "title": "A Rumour in Liangzhou",
+   "objective": "Spread the word in the herders' village.",
    "after": [
-    "12-a16a"
+    "12-a16"
    ],
    "grade": "11K",
    "pool": [
@@ -4499,19 +4292,19 @@
      43961
     ]
    ],
-   "objective_zh": "在庄堡散布消息。",
-   "title_zh": "众皆惊惶"
+   "objective_zh": "在牧人村散布消息。",
+   "title_zh": "流言西凉"
   },
   {
-   "node": "12-a16c",
+   "node": "12-a16b",
    "role": "main",
    "place": "liangzhou",
-   "spot": "v3",
-   "scene": "a16c",
-   "title": "Will You Follow Me?",
-   "objective": "Win over the post town.",
+   "spot": "v2",
+   "scene": "a16b",
+   "title": "Fear",
+   "objective": "Spread the word at the walled farm.",
    "after": [
-    "12-a16b"
+    "12-a16a"
    ],
    "grade": "11K",
    "pool": [
@@ -4636,19 +4429,19 @@
      3636
     ]
    ],
-   "objective_zh": "说服驿镇。",
-   "title_zh": "能从我反乎"
+   "objective_zh": "在庄堡散布消息。",
+   "title_zh": "众皆惊惶"
   },
   {
-   "node": "12-a16m",
+   "node": "12-a16c",
    "role": "main",
    "place": "liangzhou",
-   "spot": "road-out",
-   "scene": "a16m",
-   "title": "The March on Chang'an",
-   "objective": "March east.",
+   "spot": "v3",
+   "scene": "a16c",
+   "title": "Will You Follow Me?",
+   "objective": "Win over the constable at the post town.",
    "after": [
-    "12-a16c"
+    "12-a16b"
    ],
    "grade": "11K",
    "pool": [
@@ -4773,34 +4566,19 @@
      132145
     ]
    ],
-   "board": false,
-   "gate": [
-    {
-     "needs": [
-      "node:a16a",
-      "node:a16b",
-      "node:a16c"
-     ],
-     "else": "a16m_wait",
-     "objective": "Spread the rumour through the villages of Liangzhou.",
-     "at": "Liangzhou",
-     "place": "liangzhou",
-     "objective_zh": "在西凉各乡散布流言。"
-    }
-   ],
-   "objective_zh": "向东进发。",
-   "title_zh": "杀奔长安"
+   "objective_zh": "说服驿镇的亭长。",
+   "title_zh": "能从我反乎"
   },
   {
-   "node": "12-a17",
+   "node": "12-a16m",
    "role": "main",
    "place": "liangzhou",
-   "spot": "rengu",
-   "scene": "a17",
-   "title": "Gong to Advance, Drum to Withdraw",
-   "objective": "Hold the mouth of Ren Valley.",
+   "spot": "march",
+   "scene": "a16m",
+   "title": "The March on Chang'an",
+   "objective": "March east.",
    "after": [
-    "12-a16m"
+    "12-a16c"
    ],
    "grade": "11K",
    "pool": [
@@ -4925,19 +4703,34 @@
      156152
     ]
    ],
-   "objective_zh": "守住任谷口。",
-   "title_zh": "鸣金进兵"
+   "board": false,
+   "gate": [
+    {
+     "needs": [
+      "node:a16a",
+      "node:a16b",
+      "node:a16c"
+     ],
+     "else": "a16m_wait",
+     "objective": "Spread the rumour through the villages of Liangzhou.",
+     "at": "Liangzhou",
+     "place": "liangzhou",
+     "objective_zh": "在西凉各乡散布流言。"
+    }
+   ],
+   "objective_zh": "向东进发。",
+   "title_zh": "杀奔长安"
   },
   {
-   "node": "12-a18",
+   "node": "12-a17",
    "role": "main",
-   "place": "changan",
-   "spot": "xuanping",
-   "scene": "a18",
-   "title": "Wang Yun Is Here",
-   "objective": "Go to the Son of Heaven at the Xuanping Gate.",
+   "place": "liangzhou",
+   "spot": "rengu",
+   "scene": "a17",
+   "title": "Gong to Advance, Drum to Withdraw",
+   "objective": "Hold the mouth of Ren Valley.",
    "after": [
-    "12-a17"
+    "12-a16m"
    ],
    "grade": "11K",
    "pool": [
@@ -5060,6 +4853,281 @@
     [
      "ohashi-style-power-up-tsumego-part-2",
      144404
+    ]
+   ],
+   "objective_zh": "守住任谷口。",
+   "title_zh": "鸣金进兵"
+  },
+  {
+   "node": "12-a18p",
+   "role": "main",
+   "place": "changan",
+   "spot": "qingsuo",
+   "scene": "a18p",
+   "title": "To Save Myself by Running",
+   "objective": "Go to the palace steps.",
+   "after": [
+    "12-a17"
+   ],
+   "grade": "11K",
+   "pool": [
+    [
+     "go-puzzles-at-a-glance",
+     160720
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-1",
+     20557
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     370640
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     44203
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     292901
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     399113
+    ],
+    [
+     "ishida-yoshio-tesuji",
+     45758
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     292905
+    ],
+    [
+     "segoe-tsumego-dictionary-part-1",
+     15685
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     149238
+    ],
+    [
+     "specialized-training-in-tesuji-1",
+     282319
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     149206
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     148869
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     223305
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     294020
+    ],
+    [
+     "segoe-tsumego-dictionary-part-2",
+     15963
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     3186
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     293913
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-2",
+     132701
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     458
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     127070
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     294026
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     6565
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     134877
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-1",
+     1193
+    ],
+    [
+     "beautiful-dan-level-tsumego-100",
+     138891
+    ],
+    [
+     "the-great-tesuji-encyclopedia-3",
+     46571
+    ],
+    [
+     "go-seigen-tsumego-collection-part-1",
+     30932
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3474
+    ],
+    [
+     "200-basic-go-problems",
+     175714
+    ]
+   ],
+   "board": false,
+   "objective_zh": "到宫阶去。",
+   "title_zh": "临难苟免"
+  },
+  {
+   "node": "12-a18",
+   "role": "main",
+   "place": "changan--xuanping-top",
+   "spot": "a18",
+   "scene": "a18",
+   "title": "Wang Yun Is Here",
+   "objective": "Go to the Son of Heaven at the Xuanping Gate.",
+   "after": [
+    "12-a18p"
+   ],
+   "grade": "11K",
+   "pool": [
+    [
+     "200-basic-go-problems",
+     176625
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     148929
+    ],
+    [
+     "weiqi-rapid-drill-800-part-1",
+     555
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     149059
+    ],
+    [
+     "common-life-and-death-problems",
+     25910
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     149077
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     149205
+    ],
+    [
+     "specialized-training-in-tesuji-5",
+     131116
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3520
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     294030
+    ],
+    [
+     "weiqi-rapid-drill-800-part-1",
+     3144
+    ],
+    [
+     "bedtime-tsumego-part-2",
+     138208
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-2",
+     626
+    ],
+    [
+     "fujisawa-shuko-classroom",
+     265233
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-2",
+     624
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     554
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     85053
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-1",
+     142250
+    ],
+    [
+     "common-life-and-death-problems",
+     42459
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-2",
+     144230
+    ],
+    [
+     "beautiful-dan-level-tsumego-100",
+     134649
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     294031
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147924
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     149218
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     567
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-2",
+     132714
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160692
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     149063
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     43969
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-2",
+     1498
     ]
    ],
    "board": false,

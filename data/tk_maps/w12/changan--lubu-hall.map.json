@@ -1,0 +1,115 @@
+{
+ "format": "tk-map/1",
+ "id": "changan--lubu-hall",
+ "world": 12,
+ "name": "Lü Bu's hall",
+ "archetype": "interior",
+ "size": [
+  24,
+  14
+ ],
+ "seed": 1768,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   " ": "void",
+   "W": "wall",
+   "#": "wood"
+  },
+  "rows": [
+   "                        ",
+   " WWWWWWWWWWWWWWWWWWWWWW ",
+   " W####################W ",
+   " W####################W ",
+   " W####################W ",
+   " W####################W ",
+   " W####################W ",
+   " W####################W ",
+   " W####################W ",
+   " W####################W ",
+   " W####################W ",
+   " W####################W ",
+   " WWWWWWWWWWW##WWWWWWWWW ",
+   "                        "
+  ],
+  "walk": {
+   "void": false,
+   "wall": false,
+   "wood": true
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    12,
+    7
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     6,
+     6
+    ]
+   },
+   "tiles": 64
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.rack",
+   "x": 3,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "rack"
+  },
+  {
+   "kind": "furn.table",
+   "x": 11,
+   "y": 4,
+   "w": 2,
+   "h": 1,
+   "id": "table"
+  }
+ ],
+ "spots": [
+  {
+   "id": "a6-house",
+   "x": 12.5,
+   "y": 8.7,
+   "node": "",
+   "label": "Lü Bu's house",
+   "note": "A6 plays on in here after the lanterns"
+  }
+ ],
+ "npcs": [],
+ "exits": [
+  {
+   "to": "changan--lubu",
+   "side": "S",
+   "x": 12,
+   "y": 12,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "changan--lubu": [
+   12,
+   11
+  ],
+  "": [
+   12,
+   11
+  ]
+ },
+ "parent": "changan",
+ "building": "lubu-hall",
+ "links": [
+  "changan--lubu"
+ ]
+}

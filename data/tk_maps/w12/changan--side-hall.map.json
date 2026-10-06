@@ -2,129 +2,104 @@
  "format": "tk-map/1",
  "id": "changan--side-hall",
  "world": 12,
- "parent": "changan",
  "name": "The emperor's side hall",
  "archetype": "interior",
- "building": "side-hall",
- "style": "building.house",
  "size": [
   20,
   12
  ],
- "seed": 0.23460159181452822,
+ "seed": 1749,
+ "plan": true,
  "terrain": {
   "legend": {
-   "#": "wood",
    "%": "stone",
-   "&": "mat",
-   "e": "earth",
-   "W": "wall",
-   " ": "void"
+   " ": "void",
+   "W": "wall"
   },
   "rows": [
    "                    ",
-   "     WWWWWWWWWW     ",
-   "     W########W     ",
-   "     W########W     ",
-   "     W########W     ",
-   "     W########W     ",
-   "     W########W     ",
-   "     W########W     ",
-   "     WWWWW#WWWW     ",
-   "                    ",
-   "                    ",
+   " WWWWWWWWW%%WWWWWWW ",
+   " W%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%W ",
+   " WWWWWWWWWWWWWWWWWW ",
    "                    "
-  ]
+  ],
+  "walk": {
+   "stone": true,
+   "void": false,
+   "wall": false
+  }
  },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    10,
+    6
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     5,
+     0
+    ]
+   },
+   "tiles": 52
+  }
+ ],
  "objects": [
   {
-   "kind": "furn.bed",
-   "x": 6,
-   "y": 2,
-   "w": 2,
-   "h": 1
-  },
-  {
-   "kind": "furn.drawers",
+   "kind": "furn.dais",
    "x": 8,
-   "y": 2,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "furn.shelf",
-   "x": 12,
-   "y": 2,
-   "w": 2,
-   "h": 1
-  },
-  {
-   "kind": "furn.table",
-   "x": 11,
-   "y": 5,
-   "w": 2,
-   "h": 1
-  },
-  {
-   "kind": "furn.stool",
-   "x": 10,
-   "y": 5,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "furn.stool",
-   "x": 13,
-   "y": 5,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "furn.jar",
-   "x": 6,
-   "y": 7,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "furn.chest",
-   "x": 6,
-   "y": 4,
-   "w": 1,
-   "h": 1
+   "y": 6,
+   "w": 3,
+   "h": 2,
+   "id": "seat",
+   "label": "The boy emperor"
   }
  ],
  "spots": [
   {
-   "id": "spot-12-a12c",
-   "x": 9.5,
-   "y": 2.7,
+   "id": "a12c",
+   "x": 10.5,
+   "y": 4.7,
    "node": "12-a12c",
-   "label": "The Secret Edict"
+   "label": "The secret edict"
   }
  ],
  "npcs": [],
  "exits": [
   {
-   "to": "changan--dutang",
-   "side": "S",
+   "to": "changan--palace",
+   "side": "N",
    "x": 10,
-   "y": 8,
-   "w": 1,
+   "y": 1,
+   "w": 2,
    "h": 1
   }
  ],
  "entries": {
-  "changan--dutang": [
+  "changan--palace": [
    10,
-   7
+   2
   ],
   "": [
    10,
-   7
+   2
   ]
  },
+ "parent": "changan",
+ "building": "side-hall",
  "links": [
-  "changan--dutang"
+  "changan--palace"
  ]
 }

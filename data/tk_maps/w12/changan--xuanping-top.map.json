@@ -1,0 +1,120 @@
+{
+ "format": "tk-map/1",
+ "id": "changan--xuanping-top",
+ "world": 12,
+ "name": "The Xuanping Gate tower",
+ "archetype": "interior",
+ "size": [
+  24,
+  12
+ ],
+ "seed": 2124,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "%": "stone",
+   " ": "void",
+   "W": "wall"
+  },
+  "rows": [
+   "                        ",
+   " WWWWWWWWWWWWWWWWWWWWWW ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " WWWWWWWWWWW%%WWWWWWWWW ",
+   "                        "
+  ],
+  "walk": {
+   "stone": true,
+   "void": false,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    12,
+    6
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     6,
+     5
+    ]
+   },
+   "tiles": 60
+  }
+ ],
+ "objects": [
+  {
+   "kind": "banner.red",
+   "x": 4,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "banner-1"
+  },
+  {
+   "kind": "banner.red",
+   "x": 18,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "banner-2"
+  },
+  {
+   "kind": "furn.lamp",
+   "x": 12,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "brazier"
+  }
+ ],
+ "spots": [
+  {
+   "id": "a18",
+   "x": 12.5,
+   "y": 4.7,
+   "node": "12-a18",
+   "label": "The Xuanping Gate tower"
+  }
+ ],
+ "npcs": [],
+ "exits": [
+  {
+   "to": "changan",
+   "side": "S",
+   "x": 12,
+   "y": 10,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "changan": [
+   12,
+   9
+  ],
+  "": [
+   12,
+   9
+  ]
+ },
+ "parent": "changan",
+ "building": "xuanping-top",
+ "links": [
+  "changan"
+ ]
+}

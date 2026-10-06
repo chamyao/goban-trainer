@@ -191,7 +191,7 @@ A brief's `"states"`: `[{"id", "when", "until", "light", "visibility", "sound", 
 Every state whose `when` holds and whose `until` doesn't is active; they merge in order, so a later one's light, fog or sound wins.
 - `light`: `day` (none), `morning`, `dusk`, `night`, `storm`, `smoke`.
 - People and landmarks with `"in": [state ids]` are there only while one of those states is active.
-- `exits_open` / `exits_closed`: place ids whose exits are opened or barred while the state lasts.
+- `exits_open` / `exits_closed`: place ids whose exits are opened or barred while the state lasts. `exits_closed_say`: `{place id: [lines]}`, what you're told at a road the state has shut (voiced).
 - `visibility`: N tiles. A fog closes round the player.
 - `sound`: `{"bells" | "children" | "drum": source}`. A synthesised pattern grows louder as you near the source: `"carriage"` (the procession's), a spot id, a landmark id or a person's id. If none is given, the source is the next beat's spot. It plays only while the music is on.
 - `procession`: `{"column": [...], "from": [x, y], "to": [x, y], "leash": tiles, "leash_line": "…", "stops": [spot ids]}`.

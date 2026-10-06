@@ -16,7 +16,10 @@
   "n_wall_in": "assets/tk/ninja/wall_in.png",
   "extras": "assets/tk/jade/extras.png",
   "n_nature": "assets/tk/ninja/nature.png",
-  "pinerock": "assets/tk/jade/pinerock.png"
+  "pinerock": "assets/tk/jade/pinerock.png",
+  "drawn_b2": "assets/tk/drawn_b2.png",
+  "drawn_b2_tiles": "assets/tk/drawn_b2_tiles.png",
+  "b2_buildings": "assets/tk/jade/b2_buildings.png"
  },
  "materials": {
   "grass": {
@@ -163,6 +166,186 @@
   },
   "void": {
    "color": "#120c0a"
+  },
+  "field.wheat": {
+   "tiles": [
+    [
+     "drawn_b2_tiles",
+     0,
+     0,
+     1
+    ],
+    [
+     "drawn_b2_tiles",
+     1,
+     0,
+     1
+    ]
+   ]
+  },
+  "cliff": {
+   "tiles": [
+    [
+     "drawn_b2_tiles",
+     0,
+     1,
+     1
+    ],
+    [
+     "drawn_b2_tiles",
+     1,
+     1,
+     1
+    ]
+   ]
+  },
+  "plateau": {
+   "tiles": [
+    [
+     "drawn_b2_tiles",
+     0,
+     2,
+     1
+    ],
+    [
+     "drawn_b2_tiles",
+     1,
+     2,
+     1
+    ]
+   ]
+  },
+  "wall.city": {
+   "tiles": [
+    [
+     "drawn_b2_tiles",
+     0,
+     3,
+     1
+    ],
+    [
+     "drawn_b2_tiles",
+     1,
+     3,
+     1
+    ]
+   ]
+  },
+  "gallery": {
+   "tiles": [
+    [
+     "drawn_b2_tiles",
+     0,
+     4,
+     1
+    ],
+    [
+     "drawn_b2_tiles",
+     1,
+     4,
+     1
+    ]
+   ]
+  },
+  "bridge": {
+   "tiles": [
+    [
+     "drawn_b2_tiles",
+     0,
+     5,
+     1
+    ],
+    [
+     "drawn_b2_tiles",
+     1,
+     5,
+     1
+    ]
+   ]
+  },
+  "hills": {
+   "tiles": [
+    [
+     "drawn_b2_tiles",
+     0,
+     6,
+     1
+    ],
+    [
+     "drawn_b2_tiles",
+     1,
+     6,
+     1
+    ]
+   ]
+  },
+  "loess": {
+   "tiles": [
+    [
+     "drawn_b2_tiles",
+     0,
+     7,
+     1
+    ],
+    [
+     "drawn_b2_tiles",
+     1,
+     7,
+     1
+    ]
+   ]
+  },
+  "market": {
+   "tiles": [
+    [
+     "drawn_b2_tiles",
+     0,
+     8,
+     1
+    ],
+    [
+     "drawn_b2_tiles",
+     1,
+     8,
+     1
+    ]
+   ]
+  },
+  "court": {
+   "same": "stone"
+  },
+  "ward": {
+   "same": "stone"
+  },
+  "passage": {
+   "same": "stone"
+  },
+  "road": {
+   "same": "dirt"
+  },
+  "path": {
+   "same": "sand"
+  },
+  "camp": {
+   "same": "dirt"
+  },
+  "city": {
+   "same": "dirt"
+  },
+  "field": {
+   "same": "grass"
+  },
+  "plain": {
+   "same": "grass"
+  },
+  "garden": {
+   "same": "grass"
+  },
+  "stage": {
+   "same": "wood"
+  },
+  "curtain": {
+   "same": "wood"
   }
  },
  "kinds": {
@@ -761,6 +944,381 @@
     112,
     16,
     12
+   ]
+  ],
+  "corral": [
+   [
+    "drawn_b2",
+    0,
+    0,
+    128,
+    96
+   ]
+  ],
+  "tree.poplar": [
+   [
+    "drawn_b2",
+    129,
+    0,
+    14,
+    42
+   ]
+  ],
+  "tree.willow": [
+   [
+    "drawn_b2",
+    177,
+    0,
+    34,
+    38
+   ]
+  ],
+  "furn.dais": [
+   [
+    "drawn_b2",
+    0,
+    97,
+    48,
+    34
+   ]
+  ],
+  "prop.lanterns": [
+   [
+    "drawn_b2",
+    146,
+    97,
+    14,
+    30
+   ]
+  ],
+  "garden.trellis": [
+   [
+    "drawn_b2",
+    161,
+    97,
+    64,
+    30
+   ]
+  ],
+  "garden.screenwall": [
+   [
+    "drawn_b2",
+    0,
+    132,
+    64,
+    30
+   ]
+  ],
+  "banner.black": [
+   [
+    "drawn_b2",
+    65,
+    132,
+    16,
+    28
+   ]
+  ],
+  "furn.lamp": [
+   [
+    "drawn_b2",
+    82,
+    132,
+    12,
+    26
+   ]
+  ],
+  "furn.swordwall": [
+   [
+    "drawn_b2",
+    95,
+    132,
+    16,
+    24
+   ]
+  ],
+  "landmark.hitchingpost": [
+   [
+    "drawn_b2",
+    112,
+    132,
+    12,
+    24
+   ]
+  ],
+  "furn.window": [
+   [
+    "drawn_b2",
+    125,
+    132,
+    16,
+    18
+   ]
+  ],
+  "milestone": [
+   [
+    "drawn_b2",
+    142,
+    132,
+    12,
+    16
+   ]
+  ],
+  "water.lotus": [
+   [
+    "drawn_b2",
+    155,
+    132,
+    16,
+    16
+   ]
+  ],
+  "plant.peony": [
+   [
+    "drawn_b2",
+    172,
+    132,
+    16,
+    14
+   ]
+  ],
+  "prop.body_lamp": [
+   [
+    "drawn_b2",
+    189,
+    132,
+    22,
+    14
+   ]
+  ],
+  "furn.qin": [
+   [
+    "drawn_b2",
+    212,
+    132,
+    34,
+    12
+   ]
+  ],
+  "furn.seat": [
+   [
+    "drawn_b2",
+    0,
+    163,
+    16,
+    12
+   ]
+  ],
+  "building.palace": [
+   [
+    "b2_buildings",
+    0,
+    0,
+    188,
+    155
+   ]
+  ],
+  "building.hall_grand": [
+   [
+    "b2_buildings",
+    0,
+    156,
+    118,
+    117
+   ],
+   [
+    "b2_buildings",
+    205,
+    156,
+    124,
+    106
+   ]
+  ],
+  "building.gatetower": [
+   [
+    "b2_buildings",
+    330,
+    156,
+    45,
+    96
+   ]
+  ],
+  "building.pavilion_painted": [
+   [
+    "b2_buildings",
+    84,
+    274,
+    58,
+    79
+   ]
+  ],
+  "building.posthouse": [
+   [
+    "b2_buildings",
+    143,
+    274,
+    67,
+    74
+   ]
+  ],
+  "building.wing": [
+   [
+    "b2_buildings",
+    211,
+    274,
+    96,
+    63
+   ],
+   [
+    "b2_buildings",
+    88,
+    426,
+    94,
+    45
+   ]
+  ],
+  "building.gatehouse": [
+   [
+    "b2_buildings",
+    408,
+    274,
+    64,
+    59
+   ]
+  ],
+  "building.pavilion": [
+   [
+    "b2_buildings",
+    50,
+    366,
+    64,
+    57
+   ]
+  ],
+  "building.storehouse": [
+   [
+    "b2_buildings",
+    115,
+    366,
+    47,
+    57
+   ]
+  ],
+  "camp.banquet": [
+   [
+    "b2_buildings",
+    208,
+    366,
+    160,
+    53
+   ]
+  ],
+  "market.stalls": [
+   [
+    "b2_buildings",
+    369,
+    366,
+    96,
+    51
+   ]
+  ],
+  "building.granary": [
+   [
+    "b2_buildings",
+    0,
+    426,
+    87,
+    49
+   ]
+  ],
+  "garden.rockery": [
+   [
+    "drawn_b2",
+    144,
+    0,
+    32,
+    40
+   ]
+  ],
+  "landmark.ridge": [
+   [
+    "drawn_b2",
+    49,
+    97,
+    96,
+    34
+   ]
+  ],
+  "building.compound": [
+   [
+    "b2_buildings",
+    189,
+    0,
+    157,
+    138
+   ],
+   [
+    "b2_buildings",
+    347,
+    0,
+    142,
+    136
+   ]
+  ],
+  "landmark.heights": [
+   [
+    "b2_buildings",
+    119,
+    156,
+    85,
+    107
+   ],
+   [
+    "b2_buildings",
+    0,
+    274,
+    83,
+    91
+   ]
+  ],
+  "building.wing_side": [
+   [
+    "b2_buildings",
+    376,
+    156,
+    59,
+    94
+   ]
+  ],
+  "building.hut": [
+   [
+    "b2_buildings",
+    308,
+    274,
+    50,
+    61
+   ],
+   [
+    "b2_buildings",
+    163,
+    366,
+    44,
+    57
+   ]
+  ],
+  "building.tent_small": [
+   [
+    "b2_buildings",
+    359,
+    274,
+    48,
+    60
+   ],
+   [
+    "b2_buildings",
+    0,
+    366,
+    49,
+    59
    ]
   ]
  },

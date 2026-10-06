@@ -108,6 +108,28 @@ def place_lines():
             for l in ([p["say"]] if isinstance(p.get("say"), str) else p.get("say", [])):
                 step, voice = place_step(l, p["kind"])
                 lines[step[-1]] = (step[-2], voice, step[1] if step[0] == "n" else step[2])
+    # and whatever the built maps say that isn't in a brief (a book built from plan grids, tools/mapfactory/plans.py)
+    import json as _json
+    for f in sorted((ROOT / "data" / "tk_maps").glob("w*/*.map.json")):
+        m = _json.loads(f.read_text())
+        said = [(l, None) for ls in (m.get("seen_lines") or {}).values() for l in ls]
+        said += [(l, None) for e in m.get("exits", []) for l in e.get("refuse") or []]
+        said += [(st["procession"]["leash_line"], None) for st in m.get("states") or [] if (st.get("procession") or {}).get("leash_line")]
+        said += [(l, None) for st in m.get("states") or [] for v in (st.get("exits_closed_say") or {}).values()
+                 for l in ([v] if isinstance(v, str) else v)]
+        for sp in m.get("spots", []):
+            said += [(l, None) for k in ("intro", "outro", "empty", "waiting", "deliver", "delivered", "call") for l in sp.get(k) or []]
+        for n in m.get("npcs", []):
+            for k in ("say", "intro", "win", "done", "give", "given", "call"):
+                v = n.get(k)
+                said += [(l, n["kind"]) for l in ([v] if isinstance(v, str) else v or [])]
+            seen = (n.get("watch") or {}).get("seen")
+            said += [(l, n["kind"]) for l in (seen if isinstance(seen, list) else [])]
+        for l, kind in said:
+            if not isinstance(l, str):
+                continue
+            step, voice = place_step(l, kind)
+            lines.setdefault(step[-1], (step[-2], voice, step[1] if step[0] == "n" else step[2]))
     return lines
 
 
@@ -127,11 +149,12 @@ def all_lines(worlds):
         for n in w["nodes"]:
             if "boss" in n:
                 lines[n["boss"]["taunt_vid"]] = (n["boss"]["taunt_zh"], voice_of(n["boss"]["who"]), n["boss"]["taunt"])
-            d = n.get("dilemma", {})
-            for k in ("open", "win", "slip"):
-                if k in d:
-                    z = d.get(k + "_zh") or zh(d[k])
-                    lines[d.get(k + "_vid") or voice_id(z, voice_of(d.get("who")))] = (z, voice_of(d.get("who")), d[k])
+            dl = n.get("dilemma") or {}
+            for d in (dl if isinstance(dl, list) else [dl]):   # one per board, in a scene with several
+                for k in ("open", "win", "slip"):
+                    if k in d:
+                        z = d.get(k + "_zh") or zh(d[k])
+                        lines[d.get(k + "_vid") or voice_id(z, voice_of(d.get("who")))] = (z, voice_of(d.get("who")), d[k])
     lines.update(place_lines())
     return lines
 # Life and death only, for now: tesuji, capturing races, capture and endgame
@@ -240,13 +263,16 @@ def main():
                 n["boss"] = dict(n["boss"], taunt_zh=zh(n["boss"]["taunt"]), taunt_vid=voice_id(zh(n["boss"]["taunt"]), voice_of(n["boss"]["who"])))
             # a decision board (Game Design): a caption naming the leader's dilemma, and optionally his
             # own lines on the board: {"q": en, "who": cast id, "open"/"win"/"slip": en}
+            # (a list: one for each board of a scene that poses several)
             if "dilemma" in n:
-                d = dict(n["dilemma"], q_zh=zh(n["dilemma"]["q"]))
-                for k in ("open", "win", "slip"):
-                    if k in d:
-                        d[k + "_zh"] = zh(d[k])
-                        d[k + "_vid"] = voice_id(d[k + "_zh"], voice_of(d.get("who")))
-                n["dilemma"] = d
+                def one(d0):
+                    d = dict(d0, q_zh=zh(d0["q"]))
+                    for k in ("open", "win", "slip"):
+                        if k in d:
+                            d[k + "_zh"] = zh(d[k])
+                            d[k + "_vid"] = voice_id(d[k + "_zh"], voice_of(d.get("who")))
+                    return d
+                n["dilemma"] = [one(d) for d in n["dilemma"]] if isinstance(n["dilemma"], list) else one(n["dilemma"])
         for n in out["nodes"]:
             if "scene" in n:
                 assert n["scene"] in out["scenes"], n["scene"]

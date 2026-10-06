@@ -1,0 +1,626 @@
+{
+ "format": "tk-map/1",
+ "id": "changan--wangyun",
+ "world": 12,
+ "name": "Wang Yun's residence",
+ "archetype": "compound",
+ "size": [
+  28,
+  44
+ ],
+ "seed": 1643,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "court",
+   "b": "garden",
+   ".": "grass",
+   "c": "passage",
+   "d": "path",
+   ":": "sand",
+   "W": "wall",
+   "~": "water"
+  },
+  "rows": [
+   "............................",
+   ".WWWWWWWWWWWWWWWWWWWWWWWWWW.",
+   ".WbbbbbbbbbbbbbbbbbbbbbbbbW.",
+   ".WbbbbbbbbbbbbbbbbbbbbbbbbW.",
+   ".Wbbbbbbbbbb~~~~bbbbbbbbbbW.",
+   ".Wbbbbbbbbbb~~~~bbbbbbbbbbW.",
+   ".Wbbbbbbbb~~~~~~~~bbbbbbbbW.",
+   ".Wbbbbbbbb:~~~~~~~bbbbbbbbW.",
+   ".Wbbbbddbbbb~~~~bbddddddbbW.",
+   ".Wbbbbddbbbb:~~~bbddddddbbW.",
+   ".WbbbbddddddddddddddbbbbbbW.",
+   ".WbbbbddddddddddddddbbbbbbW.",
+   ".WbbbbddbbbbbbbbbbbbbbbbbbW.",
+   ".WbbbbddbbbbbbbbbbbbbbbbbbW.",
+   ".WbbbbddbbbbbbbbbbbbbbbbbbW.",
+   ".WbbbbddbbbbbbbbbbbbbbbbbbW.",
+   ".WWWWWaaWWWWWWWWWWWWWWWWWWW.",
+   ".WWWWWaaWWWWWWWWWWWWWWWWWWW.",
+   ".W....cc............cc....W.",
+   ".W....cc............cc....W.",
+   ".W....cc............cc....W.",
+   ".W....cc............cc....W.",
+   ".W....cc............cc....W.",
+   ".W....cc............cc....W.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".Wcccccc............ccccccW.",
+   ".Wcccccc............ccccccW.",
+   ".Wcccccc............ccccccW.",
+   ".Wcccccc............ccccccW.",
+   ".Wcccccc............ccccccW.",
+   ".Wcccccc............ccccccW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WWWWWWWWWWWaaWWWWWWWWWWWWW.",
+   "............................"
+  ],
+  "walk": {
+   "court": true,
+   "garden": true,
+   "grass": true,
+   "passage": true,
+   "path": true,
+   "sand": true,
+   "wall": false,
+   "water": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    14,
+    22
+   ],
+   "width": 1,
+   "gates": {
+    "gate": [
+     6,
+     21
+    ]
+   },
+   "tiles": 132
+  },
+  {
+   "id": "garden-wall",
+   "kind": "wall",
+   "path": [
+    [
+     1,
+     8
+    ],
+    [
+     12,
+     8
+    ]
+   ],
+   "width": 1,
+   "gates": {
+    "moongate": [
+     3,
+     8
+    ]
+   },
+   "tiles": 48
+  },
+  {
+   "id": "path-1",
+   "kind": "path",
+   "path": [
+    [
+     3,
+     7
+    ],
+    [
+     3,
+     4
+    ]
+   ],
+   "width": 1,
+   "tiles": 16
+  },
+  {
+   "id": "path-2",
+   "kind": "path",
+   "path": [
+    [
+     3,
+     5
+    ],
+    [
+     9,
+     5
+    ],
+    [
+     9,
+     4
+    ],
+    [
+     11,
+     4
+    ]
+   ],
+   "width": 1,
+   "tiles": 40
+  }
+ ],
+ "objects": [
+  {
+   "kind": "building.gatehouse",
+   "x": 12,
+   "y": 42,
+   "w": 2,
+   "h": 1,
+   "id": "gate",
+   "width": 2,
+   "wall": "walls",
+   "door": "S"
+  },
+  {
+   "kind": "building.gatehouse",
+   "x": 6,
+   "y": 16,
+   "w": 2,
+   "h": 2,
+   "id": "moongate",
+   "width": 2,
+   "wall": "garden-wall",
+   "door": "S"
+  },
+  {
+   "kind": "garden.screenwall",
+   "x": 12,
+   "y": 38,
+   "w": 4,
+   "h": 1,
+   "id": "screenwall",
+   "label": "The spirit screen",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.hall_grand",
+   "x": 9,
+   "y": 29,
+   "w": 10,
+   "h": 5,
+   "id": "wy-hall",
+   "door": "S",
+   "faces": "S",
+   "label": "The front hall",
+   "map": "wy-hall",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.wing",
+   "x": 2,
+   "y": 18,
+   "w": 4,
+   "h": 6,
+   "id": "wing-w",
+   "door": "S",
+   "faces": "S",
+   "label": "The maids' rooms",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.hall_grand",
+   "x": 9,
+   "y": 19,
+   "w": 10,
+   "h": 5,
+   "id": "wy-rearhall",
+   "door": "S",
+   "faces": "S",
+   "label": "The rear hall",
+   "map": "wy-rearhall",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.wing",
+   "x": 22,
+   "y": 18,
+   "w": 4,
+   "h": 6,
+   "id": "wing-e",
+   "door": "S",
+   "faces": "S",
+   "label": "The stores",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.pavilion",
+   "x": 4,
+   "y": 5,
+   "w": 3,
+   "h": 3,
+   "id": "peony",
+   "door": "S",
+   "faces": "S",
+   "label": "The peony pavilion",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.pavilion_painted",
+   "x": 20,
+   "y": 5,
+   "w": 3,
+   "h": 3,
+   "id": "wy-pavilion",
+   "door": "S",
+   "faces": "S",
+   "label": "The painted pavilion",
+   "blocks_sight": true
+  },
+  {
+   "kind": "garden.trellis",
+   "x": 8,
+   "y": 12,
+   "w": 4,
+   "h": 1,
+   "id": "trellis",
+   "label": "The 荼蘼 trellis"
+  },
+  {
+   "kind": "garden.rockery",
+   "x": 20,
+   "y": 12,
+   "w": 2,
+   "h": 2,
+   "id": "rockery",
+   "blocks_sight": true
+  },
+  {
+   "kind": "plant.peony",
+   "x": 7,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.peony",
+   "x": 5,
+   "y": 10,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.peony",
+   "x": 8,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.peony",
+   "x": 3,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.peony",
+   "x": 5,
+   "y": 11,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.peony",
+   "x": 3,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.peony",
+   "x": 7,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.peony",
+   "x": 4,
+   "y": 10,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.peony",
+   "x": 2,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.peony",
+   "x": 3,
+   "y": 9,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.peony",
+   "x": 8,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.peony",
+   "x": 9,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.peony",
+   "x": 8,
+   "y": 9,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.peony",
+   "x": 6,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.peony",
+   "x": 2,
+   "y": 9,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.peony",
+   "x": 5,
+   "y": 12,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.peony",
+   "x": 8,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.peony",
+   "x": 9,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.peony",
+   "x": 5,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.peony",
+   "x": 3,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.peony",
+   "x": 10,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.peony",
+   "x": 4,
+   "y": 11,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.peony",
+   "x": 7,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.peony",
+   "x": 2,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.peony",
+   "x": 3,
+   "y": 10,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.peony",
+   "x": 9,
+   "y": 9,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.peony",
+   "x": 5,
+   "y": 13,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.peony",
+   "x": 10,
+   "y": 9,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 25,
+   "y": 11,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 11,
+   "y": 9,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 12,
+   "y": 9,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.flower",
+   "x": 23,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.flower",
+   "x": 9,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.flower",
+   "x": 19,
+   "y": 14,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.flower",
+   "x": 19,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.flower",
+   "x": 4,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.flower",
+   "x": 22,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.flower",
+   "x": 4,
+   "y": 14,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.flower",
+   "x": 13,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "spots": [
+  {
+   "id": "a2",
+   "x": 6.5,
+   "y": 8.7,
+   "node": "12-a2",
+   "label": "The peony pavilion",
+   "trigger": "near"
+  }
+ ],
+ "npcs": [],
+ "exits": [
+  {
+   "to": "changan--wy-hall",
+   "side": "S",
+   "x": 13.6,
+   "y": 33.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changan--wy-rearhall",
+   "side": "S",
+   "x": 13.6,
+   "y": 23.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changan",
+   "side": "S",
+   "x": 12,
+   "y": 42,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "changan--wy-hall": [
+   14,
+   34
+  ],
+  "changan--wy-rearhall": [
+   14,
+   24
+  ],
+  "changan": [
+   12,
+   41
+  ],
+  "": [
+   14,
+   34
+  ]
+ },
+ "parent": "changan",
+ "building": "wangyun",
+ "links": [
+  "changan",
+  "changan--wy-hall",
+  "changan--wy-rearhall"
+ ]
+}
