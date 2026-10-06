@@ -1614,15 +1614,7 @@
    "h": 1
   }
  ],
- "spots": [
-  {
-   "id": "caohome",
-   "x": 19,
-   "y": 8.7,
-   "node": "1-b1",
-   "label": "The Cao family house"
-  }
- ],
+ "spots": [],
  "npcs": [],
  "exits": [
   {
@@ -1688,8 +1680,8 @@
    12
   ],
   "": [
-   2,
-   14
+   19,
+   9
   ],
   "qiao--caohome": [
    19,
