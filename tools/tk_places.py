@@ -63,7 +63,7 @@ PLACES = {
                 {"kind": "folk.villager", "say": "“They say the Yellow Turbans wear scarves the colour of the earth.”"},
                 {"kind": "folk.woman", "say": "“Liu Bei? The sandal-seller? Kind man. Ears down to his shoulders, you know.”"},
                 {"kind": "folk.lady", "near": "teahouse", "say": "“They say the volunteers march next month. Half the girls in town will be weeping at the gate.”"},
-                {"kind": "folk.maiden", "near": "inn", "say": "“A man nine feet tall, with a face as red as a ripe date, just walked into the inn. Who do you suppose he is?”"},
+                {"kind": "folk.maiden", "near": "inn", "say": "“Men are coming in from every village to join the volunteers. One of them is pushing a cart this way, the biggest man I ever saw.”"},
                 {"kind": "folk.villager", "near": "farm", "say": "“Zhang Fei sells wine and pork. Loud as thunder, but his heart is good.”"},
                 {"kind": "folk.official", "near": "office", "say": "“The governor wants volunteers. Read the notice.”"},
                 {"kind": "folk.elder", "near": "board", "challenge": "elder", "face": "down",
@@ -186,7 +186,7 @@ PLACES = {
         "Envoy's Road": {
             "archetype": "road",
             "landmarks": [{"kind": "camp.table", "id": "envoy", "node": "1-bs", "label": "The envoy's rest"}],
-            "objectives": {"1-bs": "Shortcut: the envoy on the road."},
+            "objectives": {"1-bs": "Shortcut: how Lu Zhi came to be in the cage cart."},
         },
         "The Hills North of Guangzong": {
             "archetype": "camp",

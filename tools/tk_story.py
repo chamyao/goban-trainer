@@ -660,15 +660,16 @@ WORLDS = [
                 ["prop", "forge", "forge", "as", -24, -16], ["prop", "anvil", "anvil", "as", -12, -12],
                 ["spawn", "smith", "f_porter", "as", -14, -4],
                 ["fx", "sparkle", "as", -12, -12], ["wait", 300], ["fx", "sparkle", "as", -12, -12],
-                ["still", "horses_b", "slow pan across"],
                 ["n", "Liu Bei has twin swords forged. Guan Yu's blade is the Green Dragon Crescent, eighty-two jin, called Cold Beauty. Zhang Fei's is an eighteen-foot serpent spear of steel."],
                 ["give", "smith", "liubei", "twin_swords"],
                 ["give", "smith", "guanyu", "green_dragon"],
                 ["give", "smith", "zhangfei", "serpent_spear"],
                 ["pose", "party", "raise"],
+                ["still", "horses_b", "slow pan across"],   # after the gives, so nothing moves under it
                 ["n", "Armed and mounted at last, the brothers lead their five hundred to the governor."],
             ]},
             "bribe": {"title": "A Bribe Refused", "kind": "side", "steps": [
+                ["n", "How did Lu Zhi come to be in that cart? Go back a few weeks, to his camp."],
                 ["n", "At Guangzong, Lu Zhi had Zhang Jiao penned in, though the rebel's sorcery kept him from the final blow. Then the court's envoy arrived: the eunuch Zuo Feng."],
                 ["say", "zuofeng", "Your victories are splendid, general. And where is the gift for the Emperor's envoy?"],
                 ["problem"],  # the board comes up here; the rest plays once it is solved
