@@ -20,7 +20,8 @@
   "x_edges": "assets/tk/xianxia/edges.png",
   "x_objects": "assets/tk/xianxia/objects.png",
   "pinerock": "assets/tk/xianxia/pinerock.png",
-  "drawn_b2": "assets/tk/drawn_b2.png"
+  "drawn_b2": "assets/tk/drawn_b2.png",
+  "drawn_b2_tiles": "assets/tk/drawn_b2_tiles.png"
  },
  "materials": {
   "grass": {
@@ -185,6 +186,150 @@
   },
   "void": {
    "color": "#120c0a"
+  },
+  "field.wheat": {
+   "tiles": [
+    [
+     "drawn_b2_tiles",
+     0,
+     0,
+     1
+    ],
+    [
+     "drawn_b2_tiles",
+     1,
+     0,
+     1
+    ]
+   ]
+  },
+  "cliff": {
+   "tiles": [
+    [
+     "drawn_b2_tiles",
+     0,
+     1,
+     1
+    ],
+    [
+     "drawn_b2_tiles",
+     1,
+     1,
+     1
+    ]
+   ]
+  },
+  "plateau": {
+   "tiles": [
+    [
+     "drawn_b2_tiles",
+     0,
+     2,
+     1
+    ],
+    [
+     "drawn_b2_tiles",
+     1,
+     2,
+     1
+    ]
+   ]
+  },
+  "wall.city": {
+   "tiles": [
+    [
+     "drawn_b2_tiles",
+     0,
+     3,
+     1
+    ],
+    [
+     "drawn_b2_tiles",
+     1,
+     3,
+     1
+    ]
+   ]
+  },
+  "gallery": {
+   "tiles": [
+    [
+     "drawn_b2_tiles",
+     0,
+     4,
+     1
+    ],
+    [
+     "drawn_b2_tiles",
+     1,
+     4,
+     1
+    ]
+   ]
+  },
+  "bridge": {
+   "tiles": [
+    [
+     "drawn_b2_tiles",
+     0,
+     5,
+     1
+    ],
+    [
+     "drawn_b2_tiles",
+     1,
+     5,
+     1
+    ]
+   ]
+  },
+  "hills": {
+   "tiles": [
+    [
+     "drawn_b2_tiles",
+     0,
+     6,
+     1
+    ],
+    [
+     "drawn_b2_tiles",
+     1,
+     6,
+     1
+    ]
+   ]
+  },
+  "loess": {
+   "tiles": [
+    [
+     "drawn_b2_tiles",
+     0,
+     7,
+     1
+    ],
+    [
+     "drawn_b2_tiles",
+     1,
+     7,
+     1
+    ]
+   ]
+  },
+  "market": {
+   "tiles": [
+    [
+     "drawn_b2_tiles",
+     0,
+     8,
+     1
+    ],
+    [
+     "drawn_b2_tiles",
+     1,
+     8,
+     1
+    ]
+   ]
   }
  },
  "kinds": {

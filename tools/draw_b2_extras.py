@@ -198,6 +198,94 @@ def hitchingpost():   # a wooden hitching post with an iron ring
     return g.outline().image()
 
 
+# ---- ground tiles (16 x 16, two variants each) for the plan grids' grounds ----
+def _tile(base, specks, seed, rows=None):
+    import random
+    r = random.Random(seed)
+    g = Grid(16, 16)
+    g.rect(0, 0, 16, 16, base)
+    for col, n in specks:
+        for _ in range(n):
+            g.set(r.randrange(16), r.randrange(16), col)
+    if rows:
+        for y, col in rows:
+            g.rect(0, y, 16, 1, col)
+    return g.image()
+
+
+def wheat(v):   # wheat in rows: gold stalks, darker furrows
+    g = Grid(16, 16)
+    g.rect(0, 0, 16, 16, "#d8b048")
+    for y in (3, 7, 11, 15):
+        g.rect(0, y, 16, 1, "#9a7428")
+    for x in range(v, 16, 3):
+        for y in (1, 5, 9, 13):
+            g.set(x, y, "#f2d27a"); g.set(x, y + 1, "#c89a38")
+    return g.image()
+
+
+def cliff(v):   # a loess cliff face: layered ochre bands, cracks
+    g = Grid(16, 16)
+    for y, c in ((0, "#c89a58"), (4, "#b08448"), (8, "#c89a58"), (12, "#a07038")):
+        g.rect(0, y, 16, 4, c)
+    for y in (3, 7, 11, 15):
+        g.rect(0, y, 16, 1, "#7a5228")
+    for x, y in ((3 + v, 1), (11 - v, 5), (6, 9), (13, 13)):
+        g.rect(x, y, 1, 2, "#6a4420")
+    return g.image()
+
+
+def plateau(v):   # the raised terrace: dressed pale stone in courses
+    g = Grid(16, 16)
+    g.rect(0, 0, 16, 16, "#d8d2c4")
+    for y in (0, 8):
+        g.rect(0, y, 16, 1, "#a8a294")
+    for x in ((0, 8) if v else (4, 12)):
+        g.rect(x, 1, 1, 7, "#a8a294")
+    for x in ((4, 12) if v else (0, 8)):
+        g.rect(x, 9, 1, 7, "#a8a294")
+    return g.image()
+
+
+def citywall(v):   # the top of a rammed-earth city wall: packed earth in layers, a walkway edge
+    g = Grid(16, 16)
+    g.rect(0, 0, 16, 16, "#b8946a")
+    for y in (2, 6, 10, 14):
+        g.rect(0, y, 16, 1, "#9a7650")
+    g.rect(0, 0, 16, 1, "#7a5a38")
+    for x in range(v * 4, 16, 8):
+        g.rect(x, 1, 4, 1, "#d8b88a")
+    return g.image()
+
+
+def planks(v, pillar=False):   # gallery or bridge boards; a gallery has red pillars at its edges
+    g = Grid(16, 16)
+    g.rect(0, 0, 16, 16, "#a8743a")
+    for y in (3, 7, 11, 15):
+        g.rect(0, y, 16, 1, "#7a4e22")
+    for y, x in ((1, 5 + v), (5, 11 - v), (9, 3 + v), (13, 9)):
+        g.set(x, y, "#c8945a")
+    if pillar:
+        g.rect(0, 6, 2, 4, "#b8302a"); g.rect(14, 6, 2, 4, "#b8302a")
+    return g.image()
+
+
+TILES = {
+    "field.wheat": [wheat(0), wheat(1)],
+    "cliff": [cliff(0), cliff(1)],
+    "plateau": [plateau(0), plateau(1)],
+    "wall.city": [citywall(0), citywall(1)],
+    "gallery": [planks(0, True), planks(1, True)],
+    "bridge": [planks(0), planks(1)],
+    "hills": [_tile("#4a8a3a", (("#3a7030", 18), ("#6a9a3a", 10), ("#8a7a4a", 5)), 1),
+              _tile("#4a8a3a", (("#3a7030", 18), ("#6a9a3a", 10), ("#8a7a4a", 5)), 2)],
+    "loess": [_tile("#d8b878", (("#c8a060", 20), ("#e8cc90", 12)), 3),
+              _tile("#d8b878", (("#c8a060", 20), ("#e8cc90", 12)), 4)],
+    "market": [_tile("#c8a878", (("#b08a58", 18), ("#e0c890", 8), ("#d8c050", 4)), 5),
+               _tile("#c8a878", (("#b08a58", 18), ("#e0c890", 8), ("#d8c050", 4)), 6)],
+}
+
+
 PIECES = {
     "banner.black": banner_black, "milestone": milestone, "plant.peony": peony, "water.lotus": lotus,
     "prop.lanterns": lantern_stand, "prop.body_lamp": body_lamp, "tree.poplar": poplar, "tree.willow": willow,
@@ -224,10 +312,23 @@ def main():
         sheet.alpha_composite(ims[k], (px, py))
     out = ROOT / "assets/tk/drawn_b2.png"
     sheet.save(out)
+    # the ground tiles: a 16 px grid of their own
+    tiles_out = ROOT / "assets/tk/drawn_b2_tiles.png"
+    tsheet = Image.new("RGBA", (16 * 2, 16 * len(TILES)))
+    tpos = {}
+    for row, (mat, ims_) in enumerate(TILES.items()):
+        for col, im in enumerate(ims_):
+            tsheet.alpha_composite(im, (col * 16, row * 16))
+        tpos[mat] = [["drawn_b2_tiles", col, row, 1] for col in range(len(ims_))]
+    tsheet.save(tiles_out)
     for name in KITS:
         path = ROOT / "assets/tk/kits" / f"{name}.json"
         kit = json.loads(path.read_text())
         kit["sheets"]["drawn_b2"] = str(out.relative_to(ROOT))
+        kit["sheets"]["drawn_b2_tiles"] = str(tiles_out.relative_to(ROOT))
+        for mat, tiles in tpos.items():
+            if mat not in kit["materials"] or "drawn_b2_tiles" in str(kit["materials"][mat]):
+                kit["materials"][mat] = {"tiles": tiles}
         for k, r in pos.items():
             mine = [v for v in kit["kinds"].get(k, []) if v[0] != "drawn_b2"]
             if not mine:   # the kit's own art wins
