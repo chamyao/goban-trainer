@@ -57,7 +57,7 @@ WORLDS = [
         # side (long road), short (shortcut), boss. The horse dealers are a
         # main point; the long road branches off after them and rejoins at Daxing.
         "nodes": [
-            {"key": "start", "x": 34, "y": 236, "role": "main", "place": "Lousang Village", "step": 0.0, "scene": "tree", "trigger": "arrive"},
+            {"key": "start", "x": 34, "y": 236, "role": "main", "place": "Lousang Village", "step": 0.0, "scene": "tree"},
             {"key": "c1", "x": 52, "y": 226, "role": "main", "place": "Zhuo County", "room": "office", "step": 0.0, "scene": "council"},
             {"key": "n1", "x": 70, "y": 214, "role": "main", "place": "Zhuo County", "step": 0.0, "scene": "notice"},
             {"key": "i1", "x": 89, "y": 200, "role": "main", "place": "Zhuo County", "room": "inn", "step": 0.05, "scene": "inn"},
@@ -138,7 +138,7 @@ WORLDS = [
                 ["remove", "lz"],
             ]},
             "fireplan": {"title": "The Fire Plan", "kind": "side", "steps": [
-                ["n", "Some days before Liu Bei reaches Yingchuan, in the Han camp at Changshe…"],
+                ["n", "On the night Liu Bei nears Yingchuan, outside the rebels' camp at Changshe…"],
                 ["spawn", "hs", "huangfusong", "f1", 8, -4],
                 ["army", "troops", "militia", 3, "f1", -10, 6],
                 ["n", "At Changshe, the Yellow Turbans pitched their camp in tall grass."],
@@ -219,13 +219,12 @@ WORLDS = [
                 ["still", "oath_a", "slow pan across"],
                 ["n", "The next day, in the peach garden behind Zhang Fei's farm, the blossoms are in full bloom."],
                 ["fx", "petals", "n2", 0, -20],
-                ["problem", "starred"],  # the immortals at the board (their intro and outro are in tk_places.py); the oath plays once it is solved
                 ["prop", "ox", "ox", "n2", -26, 14], ["prop", "wh", "whitehorse", "n2", -14, 18],
                 ["n", "With a black ox and a white horse for sacrifice, the three burn incense and bow."],
                 ["fx", "incense", "n2", -14, -4],
                 ["still", "oath_b", "slow zoom in"],
-                ["say", "liubei", "Though we were not born on the same day of the same month of the same year…"],
-                ["say", "guanyu", "…we wish to die on the same day of the same month of the same year."],
+                ["say", "liubei", "We do not ask to be born on the same day of the same month of the same year…"],
+                ["say", "guanyu", "…only to die on the same day of the same month of the same year."],
                 ["say", "zhangfei", "Heaven and Earth, witness it! If we betray this oath, may Heaven and men strike us down!"],
                 ["wait", 1500],
                 ["prop", "tbl", "table", "n2", 0, 14], ["prop", "wine", "winejars", "n2", 22, 14],
@@ -234,6 +233,7 @@ WORLDS = [
                 ["still", "oath_c", "slow pan up"],
                 ["n", "Liu Bei becomes eldest brother, Guan Yu second, Zhang Fei youngest. Five hundred village braves join them, and they drink in the garden until they can drink no more."],
                 ["pose", "braves", "bow"], ["pose", "zhangfei", "drunk"], ["emote", "zhangfei", "zzz"], ["wait", 900], ["pose", "braves", "stand"],
+                ["problem", "starred"],  # after the oath: the old men at their board (intro and outro in tk_places.py)
                 ["n", "The next day they gather their weapons, but they have no horses to ride."],
             ]},
             "daxing": {"title": "First Blood at Daxing Mountain", "kind": "main", "steps": [
@@ -319,7 +319,7 @@ WORLDS = [
                 ["spawn", "hs", "huangfusong", "e1", 44, -6], ["spawn", "zj", "zhujun", "e1", 56, 8],
                 ["fx", "fire", "e1", 78, 0],
                 ["still", "yingchuan_a", "slow pan across"],
-                ["n", "Liu Bei marches through the night to Yingchuan. When he arrives, the rebels have been routed by fire."],
+                ["n", "Liu Bei marches through the night to Yingchuan. He hears shouting, and sees the sky lit with fire. By the time he arrives, the rebels are routed."],
                 ["say", "liubei", "My teacher Lu Zhi sends me, with a thousand men. How do you stand?"],
                 ["say", "huangfusong", "Zhu Jun and I have burned their camp at Changshe, and their army is broken."],
                 ["say", "zhujun", "Their army lost thousands in the fire, and the rest ran."],
@@ -386,10 +386,14 @@ WORLDS = [
                 ["army", "han", "militia", 6, "n7", -30, 0],
                 ["spawn", "zb", "zhangbao", "n7", 70, 0],
                 ["army", "yt", "rebel", 14, "n7", 86, 0],
+                ["light", "night", 0],   # they left Dong Zhuo's camp at night (office); the night carries into the march
+                ["n", "They ride all night, and reach Zhu Jun's camp in the hills as the sky grows pale."],
+                ["light", "dawn", 1500],
                 ["n", "Zhu Jun receives them warmly. The two armies join, and Zhu Jun makes Liu Bei his vanguard against Zhang Bao."],
+                ["light", "day", 1500],
                 ["still", "zhangbao_a", "slow pan across"],
-                ["n", "Zhang Bao is Zhang Jiao's brother, the Yellow Turbans' General of Earth, and he is said to command sorcery: he calls up wind and thunder, and armies out of thin air. Zhu Jun's men have been broken against him once already."],
-                ["n", "If he is not stopped, the Han line at Yangcheng will fall."],
+                ["n", "Zhang Bao is Zhang Jiao's brother, the Yellow Turbans' General of Earth, and he is said to command sorcery: he calls up wind and thunder, and armies out of thin air. He has eighty or ninety thousand men camped behind the hills."],
+                ["n", "If he is not stopped, Zhu Jun's army cannot advance."],
                 ["spawn", "gs", "rebel", "n7", 62, 4],
                 ["n", "The armies meet. Zhang Fei spears Zhang Bao's officer Gao Sheng from the saddle — and then Zhang Bao lets down his hair, raises his sword, and chants."],
                 ["pose", "zhangfei", "strike"], ["fx", "flash", "n7", 56, 4], ["pose", "gs", "fall"],
@@ -402,13 +406,13 @@ WORLDS = [
                 ["run", "yt", "n7", 16, 0], ["run", "han", "n7", -120, 0], ["remove", "han"],
                 ["say", "zhujun", "Sorcery. Paper and straw wearing the shape of men; no blade can kill what was never alive. Fall back to the road."],
                 ["light", "day", 1500],
-                ["n", "As they fall back, Liu Bei sees a faint glow under the great pine by the road."],
+                ["n", "As they fall back, Liu Bei sees a game laid out on the little shrine under the old pine by the road."],
                 ["remove", "yt"], ["remove", "zb"], ["remove", "zj"],
             ]},
-            "shrine": {"title": "The Rock under the Pine", "kind": "main", "steps": [
+            "shrine": {"title": "The Shrine under the Pine", "kind": "main", "steps": [
                 # the shrine lights after the failure; the Star Lords speak, then the board
                 ["spawn", "zj", "zhujun", "n7b", -14, -10],
-                ["n", "On a flat rock under the pine, where the stones glow, sit the two white-haired men from the peach garden, as if nothing had happened."],
+                ["n", "At the little stone shrine under the pine sit the two white-haired men from the peach garden, over the board cut into its offering table, wine cups beside them, as if nothing had happened."],
                 ["spawn", "sg", "stargrey", "n7b", -34, 20], ["spawn", "sr", "starred", "n7b", -26, 24],
                 ["say", "stargrey", "Read this, before you go back."],
                 ["still", "blackwind_c", "slow drift down"],
@@ -518,7 +522,7 @@ WORLDS = [
                 ["n", "Zhang Jiao studied the books day and night until he could summon wind and rain. When plague swept the land, he went about giving out charmed water, and the sick recovered."],
                 ["pose", "sick", "stand"], ["emote", "sick", "heart"],
                 ["army", "disc", "f_monk", 6, "a2", -18, 6],
-                ["n", "They called him the Great and Virtuous Teacher. His disciples numbered in the hundreds of thousands, organised in thirty-six divisions."],
+                ["n", "He styled himself the Great and Virtuous Teacher. His disciples numbered in the hundreds of thousands, organised in thirty-six divisions."],
                 ["problem"],  # the board comes up here; the rest plays once it is solved
                 ["still", "peace2_b", "slow pan up"],
                 ["say", "zhangjiao", "The Blue Heaven is dead! The Yellow Heaven shall rise! In the year jiazi, great fortune for all under Heaven!"],
@@ -529,10 +533,10 @@ WORLDS = [
                 ["spawn", "zj", "zhangjiao", "a3", 0, 0],
                 ["say", "zhangjiao", "The hardest thing in the world to win is the people's hearts — and now they are ours. To let this moment pass would be a crime."],
                 ["spawn", "eun", "f_official", "a3", -18, -4],
-                ["n", "He bribed a eunuch in the palace to open the gates from within. But his disciple Tang Zhou carried the plan straight to the court."],
+                ["n", "His agent Ma Yuanyi took gold to the palace eunuch Feng Xu, to have him open the gates from within. But his disciple Tang Zhou carried the plan straight to the court."],
                 ["spawn", "tz", "f_official", "a3", -10, 8], ["run", "tz", "a3", -60, 8],
                 ["spawn", "my", "f_official", "a3", 22, 0], ["spawn", "ex", "f_soldier", "a3", 28, -4], ["pose", "my", "kneel"],
-                ["n", "His agent Ma Yuanyi, who had carried the bribe to Luoyang, was caught and beheaded."],
+                ["n", "Ma Yuanyi was caught in Luoyang and beheaded."],
                 ["pose", "ex", "strike"], ["fx", "flash", "a3", 22, 0], ["pose", "my", "fall"],
                 ["remove", "tz"], ["remove", "eun"],
                 ["problem"],  # the board comes up here; the rest plays once it is solved
@@ -578,7 +582,7 @@ WORLDS = [
                 ["light", "day", 1500],
             ]},
             "caocao3": {"title": "The Hero of Chaos · III: Red Banners at Changshe", "kind": "side", "steps": [
-                ["n", "Days before Liu Bei reached Yingchuan, the rebels fled the flames at Changshe."],
+                ["n", "That same night, as Liu Bei hurried toward Yingchuan, the rebels fled the flames at Changshe."],
                 ["army", "yt", "rebel", 10, "b3", 40, 0],
                 ["spawn", "zbao", "zhangbao", "b3", 54, -6], ["spawn", "zl", "rebel", "b3", 54, 6],
                 ["light", "night", 1500],
@@ -660,15 +664,16 @@ WORLDS = [
                 ["prop", "forge", "forge", "as", -24, -16], ["prop", "anvil", "anvil", "as", -12, -12],
                 ["spawn", "smith", "f_porter", "as", -14, -4],
                 ["fx", "sparkle", "as", -12, -12], ["wait", 300], ["fx", "sparkle", "as", -12, -12],
-                ["still", "horses_b", "slow pan across"],
                 ["n", "Liu Bei has twin swords forged. Guan Yu's blade is the Green Dragon Crescent, eighty-two jin, called Cold Beauty. Zhang Fei's is an eighteen-foot serpent spear of steel."],
                 ["give", "smith", "liubei", "twin_swords"],
                 ["give", "smith", "guanyu", "green_dragon"],
                 ["give", "smith", "zhangfei", "serpent_spear"],
                 ["pose", "party", "raise"],
+                ["still", "horses_b", "slow pan across"],   # after the gives, so nothing moves under it
                 ["n", "Armed and mounted at last, the brothers lead their five hundred to the governor."],
             ]},
             "bribe": {"title": "A Bribe Refused", "kind": "side", "steps": [
+                ["n", "How did Lu Zhi come to be in that cart? Go back a few weeks, to his camp."],
                 ["n", "At Guangzong, Lu Zhi had Zhang Jiao penned in, though the rebel's sorcery kept him from the final blow. Then the court's envoy arrived: the eunuch Zuo Feng."],
                 ["say", "zuofeng", "Your victories are splendid, general. And where is the gift for the Emperor's envoy?"],
                 ["problem"],  # the board comes up here; the rest plays once it is solved
@@ -691,3 +696,5 @@ import pathlib as _pl, sys as _sys  # noqa: E402
 _sys.path.insert(0, str(_pl.Path(__file__).resolve().parent))
 from tk_story_w2 import WORLD2 as _WORLD2  # noqa: E402
 WORLDS.append(_WORLD2)
+from tk_story_w3 import WORLD3 as _WORLD3  # noqa: E402
+WORLDS.append(_WORLD3)

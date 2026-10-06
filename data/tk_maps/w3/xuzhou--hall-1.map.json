@@ -1,0 +1,150 @@
+{
+ "format": "tk-map/1",
+ "id": "xuzhou--hall-1",
+ "world": 3,
+ "parent": "xuzhou",
+ "name": "Hall, Xuzhou",
+ "archetype": "interior",
+ "building": "hall-1",
+ "style": "building.hall",
+ "size": [
+  20,
+  12
+ ],
+ "seed": 0.6818139331174471,
+ "terrain": {
+  "legend": {
+   "#": "wood",
+   "%": "stone",
+   "&": "mat",
+   "e": "earth",
+   "W": "wall",
+   " ": "void"
+  },
+  "rows": [
+   "   WWWWWWWWWWWWWW   ",
+   "   W%%%%%%%%%%%%W   ",
+   "   W%%%%%%%%%%%%W   ",
+   "   W%%%%%%%%%%%%W   ",
+   "   W%%%%%%%%%%%%W   ",
+   "   W%%%%%%%%%%%%W   ",
+   "   W%%%%%%%%%%%%W   ",
+   "   W%%%%%%%%%%%%W   ",
+   "   W%%%%%%%%%%%%W   ",
+   "   WWWWWWW%WWWWWW   ",
+   "                    ",
+   "                    "
+  ]
+ },
+ "objects": [
+  {
+   "kind": "furn.screen",
+   "x": 8,
+   "y": 1,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "furn.desk",
+   "x": 9,
+   "y": 3,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.rug",
+   "x": 8,
+   "y": 5,
+   "w": 3,
+   "h": 2
+  },
+  {
+   "kind": "banner.red",
+   "x": 7,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "banner.red",
+   "x": 13,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.shelf",
+   "x": 5,
+   "y": 1,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.shelf",
+   "x": 11,
+   "y": 1,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.plant",
+   "x": 4,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.plant",
+   "x": 15,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.chest",
+   "x": 4,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.jar",
+   "x": 4,
+   "y": 3,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "spots": [],
+ "npcs": [
+  {
+   "id": "in-1",
+   "kind": "folk.official",
+   "x": 10.5,
+   "y": 4.9,
+   "say": [
+    "“This is the county office. State your business.”"
+   ]
+  }
+ ],
+ "exits": [
+  {
+   "to": "xuzhou",
+   "side": "S",
+   "x": 10,
+   "y": 9,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "xuzhou": [
+   10,
+   8
+  ],
+  "": [
+   10,
+   8
+  ]
+ }
+}

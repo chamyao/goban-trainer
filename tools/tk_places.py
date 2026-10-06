@@ -32,7 +32,7 @@ PLACES = {
             "archetype": "village",
             "landmarks": [
                 {"kind": "building.hut", "id": "home", "label": "Liu Bei's home"},
-                {"kind": "tree.big", "id": "mulberry", "node": "1-start", "trigger": "arrive", "label": "The great mulberry tree"},
+                {"kind": "tree.big", "id": "mulberry", "node": "1-start", "label": "The great mulberry tree"},
                 # live games against real players (tk-table.js); last, so the story landmarks keep their places
                 {"kind": "furniture.gotable", "id": "gotable", "use": "ogs", "label": "The travellers' go table"},
             ],
@@ -63,7 +63,7 @@ PLACES = {
                 {"kind": "folk.villager", "say": "“They say the Yellow Turbans wear scarves the colour of the earth.”"},
                 {"kind": "folk.woman", "say": "“Liu Bei? The sandal-seller? Kind man. Ears down to his shoulders, you know.”"},
                 {"kind": "folk.lady", "near": "teahouse", "say": "“They say the volunteers march next month. Half the girls in town will be weeping at the gate.”"},
-                {"kind": "folk.maiden", "near": "inn", "say": "“A man nine feet tall, with a face as red as a ripe date, just walked into the inn. Who do you suppose he is?”"},
+                {"kind": "folk.maiden", "near": "inn", "say": "“Men are coming in from every village to join the volunteers. One of them is pushing a cart this way, the biggest man I ever saw.”"},
                 {"kind": "folk.villager", "near": "farm", "say": "“Zhang Fei sells wine and pork. Loud as thunder, but his heart is good.”"},
                 {"kind": "folk.official", "near": "office", "say": "“The governor wants volunteers. Read the notice.”"},
                 {"kind": "folk.elder", "near": "board", "challenge": "elder", "face": "down",
@@ -86,14 +86,13 @@ PLACES = {
         "The Peach Garden": {
             "archetype": "garden",
             "landmarks": [
-                {"kind": "tree.peach_big", "id": "altar", "label": "The great peach tree"},
-                {"kind": "furniture.gotable", "id": "board", "near": "altar", "node": "1-n2", "label": "The weiqi board",
-                 "trigger": "talk",
-                 # everything the old men say comes before the board opens; when it closes they are simply gone
-                 "intro": ["Under the great peach tree two old men sit over a weiqi board, one in grey, one in red.",
-                           ["starred", "Three young men, come to swear before Heaven? Heaven is listening. But first, show us how you read the stones."],
+                # the oath plays at the tree first; the old men's board comes after it (the user: the board before the oath felt like an interruption)
+                {"kind": "tree.peach_big", "id": "altar", "node": "1-n2", "trigger": "talk", "label": "The great peach tree",
+                 "intro": ["When the cups are empty, the brothers see two old men under the great peach tree, one in grey, one in red, sitting over a weiqi board. No one saw them come.",
+                           ["starred", "Three brothers, sworn before Heaven. Heaven heard you. Now show us how you read the stones."],
                            ["stargrey", "Fortune favours the one who reads the stones."]],
                  "outro": ["When the brothers look up, the two old men are gone. Only the board remains, and a drift of petals."]},
+                {"kind": "furniture.gotable", "id": "board", "near": "altar", "label": "The weiqi board"},
                 {"kind": "building.moongate", "id": "gate"},
             ],
             # The Star Lords of the plan (docs/three-kingdoms-plan.md), unnamed until World 11.
@@ -103,7 +102,7 @@ PLACES = {
                 {"kind": "hero.starred", "near": "board", "until": "1-n2", "face": "left",
                  "say": "“Patience. Heaven is in no hurry.”"},
             ],
-            "objectives": {"1-n2": "Sit at the old men's weiqi board under the great peach tree."},
+            "objectives": {"1-n2": "Swear brotherhood under the great peach tree."},
         },
         "Road to Julu": {
             "archetype": "road",
@@ -173,7 +172,7 @@ PLACES = {
         "Luoyang Gates": {
             "archetype": "city",
             "landmarks": [{"kind": "building.gate", "id": "northgate", "node": "1-b2", "label": "The north gate of Luoyang"}],
-            "npcs": [{"kind": "folk.official", "say": "“The new commandant of the north gate beats curfew-breakers to death. Even the eunuchs' uncles.”"}],
+            "npcs": [{"kind": "folk.official", "say": "“The new commandant of the north gate beats curfew-breakers with his staves. Even the uncle of a palace eunuch.”"}],
             "objectives": {"1-b2": "Side story: Cao Cao at the gates of Luoyang.", "1-b2g": "Side story: the five-coloured staves at the city gates."},
         },
         "Changshe": {
@@ -187,7 +186,7 @@ PLACES = {
         "Envoy's Road": {
             "archetype": "road",
             "landmarks": [{"kind": "camp.table", "id": "envoy", "node": "1-bs", "label": "The envoy's rest"}],
-            "objectives": {"1-bs": "Shortcut: the envoy on the road."},
+            "objectives": {"1-bs": "Shortcut: how Lu Zhi came to be in the cage cart."},
         },
         "The Hills North of Guangzong": {
             "archetype": "camp",
@@ -202,20 +201,20 @@ PLACES = {
             "landmarks": [
                 {"kind": "rock.big", "id": "altar", "node": "1-n7", "label": "Zhang Bao's sorcery"},
                 # the shrine that lights after the first try fails (scene "shrine")
-                {"kind": "landmark.shrine", "id": "shrine", "node": "1-n7b", "near": "altar", "label": "The rock under the pine",
-                 "intro": ["Under the great pine by the road, the stones on the flat rock begin to glow."],
+                {"kind": "landmark.shrine", "id": "shrine", "node": "1-n7b", "near": "altar", "label": "The shrine under the pine",
+                 "intro": ["Under the old pine by the road, a game has been laid out on the little shrine's offering table, with wine cups and dried meat beside it."],
                  "outro": ["The old men are gone. Only the game remains."]},
                 {"kind": "building.hut", "id": "pens", "label": "The farm east of the pine"},   # where the blood comes from
                 # a ridge on each flank, each with room before it for a thousand men (Guan Yu left, Zhang Fei right)
                 {"kind": "rock.crag", "id": "ridge_left", "label": "The left ridge", "use": "ridge", "side": "W", "clear": [8, 4],
                  "needs": ["item:pigblood", "item:sheepblood", "item:dogblood"], "delivers": "ridge_left", "when": "node:n7b",
-                 "empty": ["The ridge is empty. Go to the rock under the pine first."],
+                 "empty": ["The ridge is empty. Go to the shrine under the pine first."],
                  "waiting": [["guanyu", "We hold the ridge. The blood is still to come."]],
                  "call": [["guanyu", "Brother! Is that the blood? Up here, quickly!"]],
                  "deliver": [["guanyu", "Blood and filth for every paper horse. We wait for the gun."]]},
                 {"kind": "rock.crag", "id": "ridge_right", "label": "The right ridge", "use": "ridge", "side": "E", "clear": [8, 4],
                  "needs": ["item:pigblood", "item:sheepblood", "item:dogblood"], "delivers": "ridge_right", "when": "node:n7b",
-                 "empty": ["The ridge is empty. Go to the rock under the pine first."],
+                 "empty": ["The ridge is empty. Go to the shrine under the pine first."],
                  "waiting": [["zhangfei", "A thousand men, and nothing to throw. Hurry, brother."]],
                  "call": [["zhangfei", "Brother! Is that the blood? Bring it up here!"]],
                  "deliver": [["zhangfei", "Let his spirits come. I'll soak every one."]]},
@@ -247,7 +246,7 @@ PLACES = {
                 {"kind": "folk.soldier", "near": "ridge_right", "when": "node:n7b", "face": "down", "say": "“Let the paper horses come.”"},
             ],
             "objectives": {"1-n7": "Join Zhu Jun in the hills, against Zhang Bao.",
-                           "1-n7b": "Go to the rock under the great pine, where the stones have begun to glow."},
+                           "1-n7b": "Go to the shrine under the old pine, where a game has been laid out."},
         },
         "Anxi": {   # Liu Bei's first post, where the inspector comes (the closing)
             "archetype": "town",
@@ -303,3 +302,5 @@ import pathlib as _pl, sys as _sys  # noqa: E402
 _sys.path.insert(0, str(_pl.Path(__file__).resolve().parent))
 from tk_story_w2 import PLACES2 as _PLACES2  # noqa: E402
 PLACES[2] = _PLACES2
+from tk_story_w3 import PLACES3 as _PLACES3  # noqa: E402
+PLACES[3] = _PLACES3

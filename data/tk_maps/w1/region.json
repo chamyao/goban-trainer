@@ -1540,10 +1540,10 @@
    "node": "1-n2",
    "role": "main",
    "place": "the-peach-garden",
-   "spot": "board",
+   "spot": "altar",
    "scene": "oath",
    "title": "The Peach Garden Oath",
-   "objective": "Sit at the old men's weiqi board under the great peach tree.",
+   "objective": "Swear brotherhood under the great peach tree.",
    "after": [
     "1-i1"
    ],
@@ -1670,7 +1670,7 @@
      81168
     ]
    ],
-   "objective_zh": "在大桃树下，坐到两位老人的棋盘前。",
+   "objective_zh": "在大桃树下结为兄弟。",
    "title_zh": "桃园结义"
   },
   {
@@ -3759,7 +3759,7 @@
    "spot": "envoy",
    "scene": "bribe",
    "title": "A Bribe Refused",
-   "objective": "Shortcut: the envoy on the road.",
+   "objective": "Shortcut: how Lu Zhi came to be in the cage cart.",
    "after": [
     "1-n5"
    ],
@@ -3886,7 +3886,7 @@
      135091
     ]
    ],
-   "objective_zh": "捷径：路上的使者。",
+   "objective_zh": "捷径：卢植是怎样被关进槛车的。",
    "title_zh": "拒贿"
   },
   {
@@ -4171,8 +4171,8 @@
    "place": "hills-of-black-wind",
    "spot": "shrine",
    "scene": "shrine",
-   "title": "The Rock under the Pine",
-   "objective": "Go to the rock under the great pine, where the stones have begun to glow.",
+   "title": "The Shrine under the Pine",
+   "objective": "Go to the shrine under the old pine, where a game has been laid out.",
    "after": [
     "1-n7"
    ],
@@ -4301,8 +4301,8 @@
    ],
    "shrine": true,
    "hint": "Pigs, sheep, dogs. Blood.",
-   "objective_zh": "到大松树下的盘石那里去，棋子已经发光了。",
-   "title_zh": "松下盘石",
+   "objective_zh": "到老松树下的星君祠去，那里摆开了一局棋。",
+   "title_zh": "松下星君祠",
    "hint_zh": "猪、羊、狗。血。"
   },
   {

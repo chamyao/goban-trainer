@@ -1701,8 +1701,7 @@
    "x": 19,
    "y": 10.7,
    "node": "1-start",
-   "label": "The great mulberry tree",
-   "trigger": "arrive"
+   "label": "The great mulberry tree"
   },
   {
    "id": "gotable",

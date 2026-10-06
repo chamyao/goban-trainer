@@ -64,7 +64,7 @@
    "w": 2,
    "h": 1,
    "id": "shrine",
-   "label": "The rock under the pine"
+   "label": "The shrine under the pine"
   },
   {
    "kind": "building.hut",
@@ -1024,9 +1024,9 @@
    "x": 19,
    "y": 9.7,
    "node": "1-n7b",
-   "label": "The rock under the pine",
+   "label": "The shrine under the pine",
    "intro": [
-    "Under the great pine by the road, the stones on the flat rock begin to glow."
+    "Under the old pine by the road, a game has been laid out on the little shrine's offering table, with wine cups and dried meat beside it."
    ],
    "outro": [
     "The old men are gone. Only the game remains."
@@ -1048,7 +1048,7 @@
    "delivers": "ridge_left",
    "when": "node:n7b",
    "empty": [
-    "The ridge is empty. Go to the rock under the pine first."
+    "The ridge is empty. Go to the shrine under the pine first."
    ],
    "waiting": [
     [
@@ -1085,7 +1085,7 @@
    "delivers": "ridge_right",
    "when": "node:n7b",
    "empty": [
-    "The ridge is empty. Go to the rock under the pine first."
+    "The ridge is empty. Go to the shrine under the pine first."
    ],
    "waiting": [
     [

@@ -1,0 +1,194 @@
+{
+ "format": "tk-map/1",
+ "id": "puyang--inn-1",
+ "world": 3,
+ "parent": "puyang",
+ "name": "Inn, Puyang",
+ "archetype": "interior",
+ "building": "inn-1",
+ "style": "building.inn",
+ "size": [
+  20,
+  12
+ ],
+ "seed": 0.02775308428169243,
+ "terrain": {
+  "legend": {
+   "#": "wood",
+   "%": "stone",
+   "&": "mat",
+   "e": "earth",
+   "W": "wall",
+   " ": "void"
+  },
+  "rows": [
+   "                    ",
+   "   WWWWWWWWWWWWWW   ",
+   "   W############W   ",
+   "   W############W   ",
+   "   W############W   ",
+   "   W############W   ",
+   "   W############W   ",
+   "   W############W   ",
+   "   W############W   ",
+   "   WWWWWWW#WWWWWW   ",
+   "                    ",
+   "                    "
+  ]
+ },
+ "objects": [
+  {
+   "kind": "furn.shelf",
+   "x": 14,
+   "y": 2,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.counter",
+   "x": 5,
+   "y": 4,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "furn.barrel",
+   "x": 4,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.barrel",
+   "x": 4,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.jar",
+   "x": 15,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.table",
+   "x": 8,
+   "y": 6,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 7,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 10,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.table",
+   "x": 11,
+   "y": 4,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 10,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 13,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.table",
+   "x": 12,
+   "y": 6,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 11,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 14,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.plant",
+   "x": 15,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.sacks",
+   "x": 15,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "spots": [],
+ "npcs": [
+  {
+   "id": "in-1",
+   "kind": "folk.villager",
+   "x": 6.5,
+   "y": 5.9,
+   "say": [
+    "“Wine, pork, a bed for the night — we have it all.”"
+   ]
+  },
+  {
+   "id": "in-2",
+   "kind": "folk.hunter",
+   "x": 8.5,
+   "y": 7.9,
+   "say": [
+    "“They say the governor is raising volunteers. I've half a mind to join.”"
+   ]
+  }
+ ],
+ "exits": [
+  {
+   "to": "puyang",
+   "side": "S",
+   "x": 10,
+   "y": 9,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "puyang": [
+   10,
+   8
+  ],
+  "": [
+   10,
+   8
+  ]
+ }
+}

@@ -192,6 +192,20 @@ def pond():   # a small lotus pond with a stone rim
     return g.outline().image()
 
 
+def halberd():   # a halberd planted at a camp gate (Book 3, ch. 16): a crescent blade, a red tassel, a stone at its foot
+    g = _grid(16, 36)
+    pole, poleD, steel, steelD = "#7a5a3a", "#5a3e26", "#d0d4d8", "#9aa0a8"
+    g.rect(7, 4, 2, 28, pole); g.rect(8, 4, 1, 28, poleD)                         # the shaft
+    g.rect(7, 0, 2, 5, steel); g.set(7, 0, steelD)                                  # the spike
+    for y, (x0, x1) in enumerate(((10, 11), (10, 12), (10, 13), (10, 13), (10, 12), (10, 11)), start=3):
+        g.rect(x0, y, x1 - x0 + 1, 1, steel)                                          # the crescent blade
+    g.set(13, 5, steelD); g.set(13, 6, steelD); g.rect(9, 4, 1, 4, steelD)
+    g.rect(4, 6, 3, 1, steel); g.set(3, 7, steel)                                   # the small back hook
+    g.rect(6, 9, 4, 1, "#c8392c"); g.rect(5, 10, 2, 4, "#c8392c"); g.rect(9, 10, 2, 3, "#a82a22")   # the tassel
+    g.rect(4, 31, 8, 4, "#7a7e86"); g.rect(5, 30, 6, 1, "#9a9ea4"); g.rect(4, 34, 8, 1, "#5e636b")  # the stone it stands in
+    return g.outline().image()
+
+
 # the registry of props: kind -> footprint (w, h tiles) and how to draw it
 PROPS = {
     "cagecart": {"size": [3, 1], "atlas": "cagecart"},
@@ -227,6 +241,8 @@ PROPS = {
     "well": {"size": [2, 1], "atlas": "well"},
     "mirror": {"size": [1, 1], "atlas": "mirror"},
     "water": {"size": [2, 1], "atlas": "pond"},
+    # Book 3
+    "halberd": {"size": [1, 1], "atlas": "halberd"},
 }
 PROPS["forge"]["fire"] = True
 
@@ -267,6 +283,7 @@ def main():
         "well": well(),
         "mirror": mirror(),
         "pond": pond(),
+        "halberd": halberd(),
     }
     # one row, 1px apart
     W = sum(f.width + 1 for f in frames.values())

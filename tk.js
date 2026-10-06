@@ -82,6 +82,29 @@ const TK_CHARS = {
   caiyong: { name: "Cai Yong", skin: "#eec7a0", hair: "#9a9a9a", hat: "scholar", hatC: "#3a3236", robe: "#d6cfb8", trim: "#6a5a4a", beard: "long", beardC: "#c8c8c8", eyes: "kind" },
   lvboshe: { name: "Lü Boshe", skin: "#e8c4a0", hair: "#9a9a9a", hat: "topknot", hatC: "#9a9a9a", pin: "#6a6a6a", robe: "#8a7a5a", trim: "#4a3a2a", beard: "long", beardC: "#c8c8c8", eyes: "kind" },
   f_villager: { name: "Villager", skin: "#e8b88c", hair: "#2a2024", hat: "band", hatC: "#8a7a5a", robe: "#8a7a5a", trim: "#5a3a22", beard: "none", eyes: "round" },
+  // Book 3: Beihai, Xuzhou and White Gate Tower
+  taishici: { name: "Taishi Ci", skin: "#e8b88c", hair: "#2a2024", hat: "band", hatC: "#3e5f8a", robe: "#4a6a8a", trim: "#d6d2c4", beard: "short", eyes: "phoenix", weapon: "spear" },
+  kongrong: { name: "Kong Rong", skin: "#f0cfac", hair: "#5a5256", hat: "scholar", hatC: "#1e1e24", robe: "#7a2a3a", trim: "#d4ad42", beard: "long", beardC: "#7a7276", eyes: "kind" },
+  guanhai: { name: "Guan Hai", skin: "#d8a47c", hair: "#2a2024", hat: "yellowband", hatC: "#e8bc2a", robe: "#8a6a2a", trim: "#e8bc2a", beard: "bristle", eyes: "wild", weapon: "glaive" },
+  taoqian: { name: "Tao Qian", skin: "#eec7a0", hair: "#d8d2c8", hat: "guan", hatC: "#1e1e24", robe: "#3e5f8a", trim: "#d4ad42", beard: "long", beardC: "#e0dcd4", eyes: "kind" },
+  mizhu: { name: "Mi Zhu", skin: "#f0cfac", hair: "#2a2024", hat: "scholar", hatC: "#2e3a5a", robe: "#c8a04a", trim: "#7a5216", beard: "thin", eyes: "kind" },
+  chendeng: { name: "Chen Deng", skin: "#efc59d", hair: "#2a2024", hat: "guan", hatC: "#1e1e24", robe: "#3a5a4a", trim: "#d6d2c4", beard: "goatee", eyes: "narrow" },
+  zhaoyun: { name: "Zhao Yun", skin: "#f2c79c", hair: "#1d1517", hat: "helmet", hatC: "#d6d2c4", robe: "#ecebe4", trim: "#3e5f8a", beard: "none", eyes: "phoenix", weapon: "spear" },
+  jiling: { name: "Ji Ling", skin: "#e2b089", hair: "#2a2024", hat: "helmet", hatC: "#858a94", robe: "#c89a2a", trim: "#7a3a4a", beard: "short", eyes: "round", weapon: "glaive" },
+  zhangliao: { name: "Zhang Liao", skin: "#e8b88c", hair: "#2a2024", hat: "helmet", hatC: "#4a4a5c", robe: "#5a3a6a", trim: "#c8c8c8", beard: "short", eyes: "phoenix", weapon: "glaive" },
+  haomeng: { name: "Hao Meng", skin: "#d8a47c", hair: "#2a2024", hat: "helmet", hatC: "#4a4a5c", robe: "#6a3a3a", trim: "#c8c8c8", beard: "bristle", eyes: "narrow", weapon: "sword" },
+  gaoshun: { name: "Gao Shun", skin: "#e2b089", hair: "#2a2024", hat: "helmet", hatC: "#3a3a44", robe: "#3a3a4a", trim: "#a83a32", beard: "short", eyes: "round", weapon: "spear" },
+  xunyu: { name: "Xun Yu", skin: "#f2d0ae", hair: "#2a2024", hat: "guan", hatC: "#1e1e24", robe: "#2e4a6a", trim: "#d6d2c4", beard: "thin", eyes: "kind" },
+  guojia: { name: "Guo Jia", skin: "#f5dcc4", hair: "#2a2024", hat: "scholar", hatC: "#2e3a5a", robe: "#5a7a8a", trim: "#d6d2c4", beard: "none", eyes: "narrow" },
+  sunqian: { name: "Sun Qian", skin: "#eec7a0", hair: "#2a2024", hat: "scholar", hatC: "#3a3236", robe: "#8a7a5a", trim: "#d6d2c4", beard: "thin", eyes: "kind" },
+  sunce: { name: "Sun Ce", skin: "#efc59d", hair: "#2a2024", hat: "helmet", hatC: "#c8a03a", robe: "#c8392c", trim: "#e6c14a", beard: "none", eyes: "phoenix", weapon: "spear" },
+  dianwei: { name: "Dian Wei", skin: "#c88a5c", hair: "#1a1416", hat: "band", hatC: "#2a2024", robe: "#5a3a2a", trim: "#8a3030", beard: "bristle", eyes: "wild", weapon: "swords", fat: true },
+  xiahoudun: { name: "Xiahou Dun", skin: "#e2b089", hair: "#1a1416", hat: "helmet", hatC: "#4a4a5c", robe: "#7b2a2a", trim: "#c8c8c8", beard: "short", eyes: "round", weapon: "spear", patch: true },
+  wanghou: { name: "Wang Hou", skin: "#efc59d", hair: "#2a2024", hat: "guan", hatC: "#1e1e24", robe: "#6a6a4a", trim: "#d4ad42", beard: "thin", eyes: "narrow" },
+  houcheng: { name: "Hou Cheng", skin: "#e8b88c", hair: "#2a2024", hat: "helmet", hatC: "#858a94", robe: "#5a3a6a", trim: "#c8c8c8", beard: "short", eyes: "round", weapon: "sword" },
+  yanshi: { name: "Lady Yan", skin: "#fbefe8", hair: "#1a1418", hat: "lady", pin: "#e6c14a", pin2: "#c8283c", flower: "#c8283c", robe: "#7a2a3a", trim: "#e6c14a", beard: "none", eyes: "narrow", makeup: true },
+  zhangkai: { name: "Zhang Kai", skin: "#d8a47c", hair: "#2a2024", hat: "yellowband", hatC: "#e8bc2a", robe: "#6a5a3a", trim: "#e8bc2a", beard: "bristle", eyes: "narrow", weapon: "sword" },
+  caosong: { name: "Cao Song", skin: "#efd8c0", hair: "#d8d2c8", hat: "guan", hatC: "#1e1e24", robe: "#7b4a2a", trim: "#d4ad42", beard: "long", beardC: "#e0dcd4", eyes: "kind" },
 };
 // Someone the story names but nobody has drawn yet: the stand-in's look (their own name still shows).
 const tkLook = who => TK_CHARS[who] || TK_CHARS.f_farmer;
@@ -152,6 +175,7 @@ const TKArt = {
     else if (d.eyes === "kind") { s(3, ey, dark); s(6, ey, dark); }
     else if (d.eyes === "wild") { s(2, ey, dark); s(3, ey, dark); s(6, ey, dark); s(7, ey, dark); }
     else { s(3, ey, dark); s(6, ey, dark); }
+    if (d.patch) { R(1, ey - 1, 8, 1, "#141014"); R(2, ey, 2, 1, "#141014"); }   // an eyepatch (Xiahou Dun)
     if (d.makeup) { s(4, 7 + dy, "#c8283c"); s(5, 7 + dy, "#c8283c"); s(2, 6 + dy, "#f4a0aa"); s(7, 6 + dy, "#f4a0aa"); }  // red lips, blush
     // beard
     const bc = d.beardC || d.hair || dark;
@@ -218,6 +242,7 @@ const TKArt = {
     else if (d.eyes === "kind") { s(11, ey, dark); R(12, ey - 1, 2, 1, dark); s(14, ey, dark); s(18, ey, dark); R(19, ey - 1, 2, 1, dark); s(21, ey, dark); R(10, ey - 4, 4, 1, hr); R(18, ey - 4, 4, 1, hr); }
     else if (d.eyes === "wild") { E(12, ey, 1.6, 1.6, "#fff"); E(20, ey, 1.6, 1.6, "#fff"); s(12, ey, "#a02020"); s(20, ey, "#a02020"); Ln(9, ey - 2, 14, ey - 4, dark); Ln(18, ey - 4, 23, ey - 2, dark); }
     else { R(11, ey, 2, 2, dark); R(19, ey, 2, 2, dark); R(10, ey - 3, 4, 1, hr); R(18, ey - 3, 4, 1, hr); }
+    if (d.patch) { Ln(7, ey - 3, 25, ey - 6, "#141014"); E(12, ey, 2.8, 2.4, "#141014"); }   // an eyepatch (Xiahou Dun)
     s(16, 17, skinS); s(15, 18, skinS);  // nose
     R(14, 20, 4, 1, this.shade(d.skin, -.4));  // mouth
     if (d.makeup) { E(9.5, 18, 2, 1, "#f4a0aa"); E(22.5, 18, 2, 1, "#f4a0aa"); R(14, 20, 4, 1, "#c8283c"); R(15, 21, 2, 1, "#a81c30"); }  // blush, red lips
@@ -529,7 +554,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) this.data = await (await fetch("data/tk.json?v=34")).json();
+    if (!this.data) this.data = await (await fetch("data/tk.json?v=37")).json();
     return this.data;
   },
   ls(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } },
