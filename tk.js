@@ -81,6 +81,15 @@ const TK_CHARS = {
   dongmu: { name: "Dong Zhuo's mother", skin: "#efd8c0", hair: "#d8d2c8", hat: "bun", hatC: "#d8d2c8", pin: "#e6c14a", robe: "#5b3b6e", trim: "#d4ad42", beard: "none", eyes: "kind" },
   caiyong: { name: "Cai Yong", skin: "#eec7a0", hair: "#9a9a9a", hat: "scholar", hatC: "#3a3236", robe: "#d6cfb8", trim: "#6a5a4a", beard: "long", beardC: "#c8c8c8", eyes: "kind" },
   lvboshe: { name: "Lü Boshe", skin: "#e8c4a0", hair: "#9a9a9a", hat: "topknot", hatC: "#9a9a9a", pin: "#6a6a6a", robe: "#8a7a5a", trim: "#4a3a2a", beard: "long", beardC: "#c8c8c8", eyes: "kind" },
+  // the new Book 2 (ch. 8-9): Wang Yun's plot and Dong Zhuo's fall
+  zhangwen: { name: "Zhang Wen", skin: "#eec7a0", hair: "#7a7276", hat: "guan", hatC: "#1e1e24", robe: "#5a3a6a", trim: "#d4ad42", beard: "long", beardC: "#9a9a9a", eyes: "kind" },
+  shisunrui: { name: "Shisun Rui", skin: "#efc59d", hair: "#2a2024", hat: "guan", hatC: "#1e1e24", robe: "#3e5f8a", trim: "#d6d2c4", beard: "goatee", eyes: "narrow" },
+  huangwan: { name: "Huang Wan", skin: "#e8c4a0", hair: "#9a9a9a", hat: "guan", hatC: "#1e1e24", robe: "#6a5a3a", trim: "#d4ad42", beard: "long", beardC: "#c8c8c8", eyes: "kind" },
+  mamidi: { name: "Ma Midi", skin: "#eec7a0", hair: "#d8d2c8", hat: "scholar", hatC: "#2e3a5a", robe: "#4a6a5a", trim: "#d6d2c4", beard: "long", beardC: "#e0dcd4", eyes: "kind" },
+  jiaxu: { name: "Jia Xu", skin: "#e8c09a", hair: "#2a2024", hat: "scholar", hatC: "#1e1e24", robe: "#2a2a34", trim: "#8a7a5a", beard: "thin", eyes: "narrow" },
+  niufu: { name: "Niu Fu", skin: "#d8a47c", hair: "#2a2024", hat: "helmet", hatC: "#4a4a5c", robe: "#5b3b6e", trim: "#c8c8c8", beard: "bristle", eyes: "round", weapon: "sword" },
+  huchier: { name: "Hu Chi'er", skin: "#c88a5c", hair: "#1a1416", hat: "band", hatC: "#4a3a2a", robe: "#6a4a2a", trim: "#3a2a1a", beard: "short", eyes: "wild", weapon: "sword" },
+  daoren: { name: "Taoist", skin: "#efe0c8", hair: "#d8d2c8", hat: "topknot", hatC: "#d8d2c8", pin: "#6a8a5a", robe: "#d8d2c0", trim: "#5a6a4a", beard: "long", beardC: "#eeeeee", eyes: "kind" },
   f_villager: { name: "Villager", skin: "#e8b88c", hair: "#2a2024", hat: "band", hatC: "#8a7a5a", robe: "#8a7a5a", trim: "#5a3a22", beard: "none", eyes: "round" },
   // Book 3: Beihai, Xuzhou and White Gate Tower
   taishici: { name: "Taishi Ci", skin: "#e8b88c", hair: "#2a2024", hat: "band", hatC: "#3e5f8a", robe: "#4a6a8a", trim: "#d6d2c4", beard: "short", eyes: "phoenix", weapon: "spear" },
