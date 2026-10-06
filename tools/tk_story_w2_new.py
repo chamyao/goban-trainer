@@ -352,8 +352,11 @@ def _scenes_chain():
             N("She knits her brows on purpose and puts on a look of sorrow, and dabs her eyes again and again with a perfumed handkerchief.",
               "貂蝉故蹙双眉，做忧愁不乐之态，复以香罗频拭眼泪。"),
             N("Lü Bu watches a long while, and goes. A little later he comes back in.", "吕布窥视良久，乃出；少顷，又入。"),
-            ["spawn", "dz", "dongzhuo", "a7", 24, 0],
-            ["move", "lb", "a7", 20, 4],
+        ]},
+        # A7c · The curtain. No board: the map's sight puzzle is the play (stand where Lü Bu sees you and Dong Zhuo doesn't, 露半面).
+        "a7c": {"title": T("Half a Face", "微露半面"), "kind": "main", "steps": [
+            ["spawn", "dz", "dongzhuo", "a7c", 24, 0],
+            ["move", "lb", "a7c", 20, 4],
             S("dongzhuo", "All quiet outside?", "外面无事乎？"),
             S("lvbu", "All quiet.", "无事。"),
             N("He stands at Dong Zhuo's side while he eats, stealing glances. Behind the embroidered curtain a woman comes and goes, "
@@ -935,12 +938,14 @@ def _scenes_chain():
             ["army", "villagers", "f_villager", 6, "a16a", 14, 0],
             N("In the first village, the word goes round: Wang Yun means to wipe out every man of Liangzhou.", "遂流言于西凉州曰：“王允将欲洗荡此方之人矣。”"),
             ["emote", "villagers", "!"],
+            ["crowd", 2],
         ]},
         "a16b": {"title": T("Fear", "众皆惊惶"), "kind": "main", "steps": [
             ["problem"],
             ["army", "villagers", "f_villager", 6, "a16b", 14, 0],
             N("By the second village it has run ahead of them. The people are terrified.", "众皆惊惶。"),
             ["emote", "villagers", "sweat"],
+            ["crowd", "+3"],
         ]},
         "a16c": {"title": T("Will You Follow Me?", "能从我反乎"), "kind": "main", "steps": [
             ["problem"],
@@ -948,6 +953,7 @@ def _scenes_chain():
             N("In the third, they put the question plainly: Why die for nothing? Will you rise with us? And every man will.",
               "乃复扬言曰：“徒死无益，能从我反乎？”众皆愿从。"),
             ["pose", "villagers", "cheer"],
+            ["crowd", "+5"],
         ]},
         "a16m": {"title": T("The March on Chang'an", "杀奔长安"), "kind": "main", "steps": [
             ["army", "host", "rebel", 9, "a16m", 20, 0],
@@ -993,15 +999,16 @@ def _scenes_chain():
             N("Then a rider brings word: Zhang Ji and Fan Chou are at Chang'an. Lü Bu hurries back, and loses many men on the way.",
               "忽然飞马报来，说张济、樊稠两路军马，竟犯长安，京城危急。布急领军回，折了好些人马。"),
             ["run", "lb", "a17", 80, 0], ["remove", "lb"], ["remove", "theirs"],
-            ["party", ["wangyun"], {"to": "a18"}],
+            ["crowd", 0],
+            ["party", ["wangyun"], {"to": "a18p"}],
         ]},
 
         # A18 · Xuanping Gate. No board: Wang Yun's choice, which the novel has already made.
-        "a18": {"title": T("Wang Yun Is Here", "王允在此"), "kind": "main", "steps": [
+        "a18p": {"title": T("To Save Myself by Running", "临难苟免"), "kind": "main", "steps": [
             ["light", "dusk"],
             N("A few days later, Li Meng and Wang Fang, Dong Zhuo's men still inside the city, secretly open the gates, and the rebel armies pour in from all four sides.",
               "数日之后，董卓余党李蒙、王方在城中为贼内应，偷开城门，四路贼军一齐拥入。"),
-            ["spawn", "lb", "lvbu", "a18", 20, 0], ["run", "lb", "a18", 8, 0],
+            ["spawn", "lb", "lvbu", "a18p", 20, 0], ["run", "lb", "a18p", 8, 0],
             S("lvbu", "It's hopeless! Mount up, Minister, and come out through the pass with me. We'll find another way.", "势急矣！请司徒上马，同出关去，别图良策。"),
             S("wangyun", "If the spirits of the dynasty help me bring the realm to peace, that is all I wish. If not, I give my life. "
               "To save myself by running in a crisis: that I will not do. Thank the lords east of the pass for me, and tell them to keep the realm in their hearts!",
@@ -1009,8 +1016,12 @@ def _scenes_chain():
             N("Lü Bu begs him again and again, but Wang Yun will not go. Soon flames rise from every gate to the sky. "
               "Lü Bu has to leave his own family behind, and flees through the pass with a hundred riders, to join Yuan Shu.",
               "吕布再三相劝，王允只是不肯去。不一时，各门火焰竟天，吕布只得弃却家小，引百余骑飞奔出关，投袁术去了。"),
-            ["run", "lb", "a18", -50, 0], ["remove", "lb"],
-            ["fx", "fire", "a18", 30, -10], ["fx", "fire", "a18", -20, -8],
+            ["run", "lb", "a18p", -50, 0], ["remove", "lb"],
+            ["fx", "fire", "a18p", 30, -10], ["fx", "fire", "a18p", -20, -8],
+        ]},
+        # A18 · The Xuanping Gate tower. No board: Wang Yun's choice, which the novel has already made.
+        "a18": {"title": T("Wang Yun Is Here", "王允在此"), "kind": "main", "steps": [
+            ["light", "dusk"],
             N("Li Jue and Guo Si let their men loot the city. Minister after minister dies for the dynasty. The rebels close round the inner palace, "
               "and the Emperor's attendants beg him to go up on the Xuanping Gate tower to stop the slaughter.",
               "李傕、郭汜纵兵大掠，众臣多死于国难。贼兵围绕内庭至急，侍臣请天子上宣平门止乱。"),
@@ -1090,6 +1101,7 @@ def _nodes_chain():
             "He is watching from the pond. Let him see a woman in pain.", "他在池边窥看。便让他看一个受苦的女子。",
             "He has seen enough.", "他看够了。",
             "Too much. He'll see it's an act.", "太过了，他会看出是假。")),
+        node("a7c", 170, 135, "a7c", room="xf-hall", board=False),
         node("a8", 180, 130, "a8", room="xf-bedroom", dilemma=D(
             "diaochan", "Tell him, without waking the man between us.", "隔着他，告诉吕布。",
             "One sign, and not a sound.", "只一个手势，不出一声。",
@@ -1195,15 +1207,16 @@ def _nodes_chain():
             "He is brave, and nothing else. Never let him fight the battle he wants.", "他只有勇而已。决不教他打想打的仗。",
             "He can neither fight nor stop.", "他欲战不得，欲止不得。",
             "He's breaking through. Again.", "他要冲破了。再来。")),
-        node("a18", 430, 6, "a18", board=False),
+        node("a18p", 426, 6, "a18p", board=False),
+        node("a18", 430, 6, "a18", room="xuanping-top", board=False),
     ]
 
 
-_EDGES_CHAIN = [["a1", "a2"], ["a2", "a3"], ["a3", "a4"], ["a4", "a5"], ["a5", "a6"], ["a6", "a7"], ["a7", "a8"], ["a8", "a9"],
+_EDGES_CHAIN = [["a1", "a2"], ["a2", "a3"], ["a3", "a4"], ["a4", "a5"], ["a5", "a6"], ["a6", "a7"], ["a7", "a7c"], ["a7c", "a8"], ["a8", "a9"],
                 ["a9", "a10"], ["a10", "a11"], ["a11", "a12a"], ["a12a", "a12b"], ["a12b", "a12y"], ["a12y", "a12p"], ["a12p", "a12c"], ["a12c", "a12"],
                 ["a12", "a13"], ["a13", "a13a"], ["a13a", "a13b"], ["a13b", "a13c"], ["a13c", "a13d"], ["a13d", "a14"], ["a14", "a15"],
                 ["a15", "a15m"], ["a15m", "a15c"], ["a15c", "a16"], ["a16", "a16a"], ["a16a", "a16b"], ["a16b", "a16c"], ["a16c", "a16m"], ["a16m", "a17"],
-                ["a17", "a18"]]
+                ["a17", "a18p"], ["a18p", "a18"]]
 
 _ITEMS = {
     "pearls": {"name": "Family pearls", "zh": "家藏明珠", "kind": "treasure"},

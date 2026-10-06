@@ -30,7 +30,7 @@ themselves, the voices, the art and the engine are other sessions' work.
 | A16 No pardon | before Jia Xu's advice | Jia Xu | 1 |
 | A16a / A16b / A16c | before each village scene (legwork: the rumour) | Jia Xu | 1 each |
 | A17 Ren Valley | as Lü Bu charges the valley mouth | Li Jue | 1 |
-| A1, A12p, A13d, A15, A15c, A16m, A18 | no board | | |
+| A1, A7c (sight puzzle), A12p, A13d, A15, A15m, A15c, A16m, A18p, A18 | no board | | |
 
 Difficulty within a three-problem scene should rise, the third hardest.
 
