@@ -279,6 +279,7 @@ def compile_map(m, kit, out_dir):
         solid = KINDS[o["kind"]][2]
         obj(key or "", "prop", (o["x"] + o["w"] / 2) * T, (o["y"] + o["h"]) * T,
             kind=o["kind"], fw=o["w"] * T, fh=o["h"] * T, solid=solid, **({"ref": o["id"]} if o.get("id") else {}),
+            **({"in": json.dumps([o["in"]] if isinstance(o["in"], str) else o["in"])} if o.get("in") else {}),
             **walls.get(id(o), {}))
     runs = []
     for y in range(H):
@@ -306,6 +307,7 @@ def compile_map(m, kit, out_dir):
             say=json.dumps([place_step(l, n["kind"])[0] for l in n.get("say", [])], ensure_ascii=False),
             **{k: n[k] for k in ("challenge", "until", "face", "when", "gives", "gives_when") if n.get(k)},
             **({"view": json.dumps(n["view"])} if n.get("view") else {}),
+            **({"in": json.dumps([n["in"]] if isinstance(n["in"], str) else n["in"])} if n.get("in") else {}),
             **({"guard_x": n["guard"][0] * T, "guard_y": n["guard"][1] * T} if n.get("guard") else {}),
             **{k: json.dumps([place_step(l, n["kind"])[0] for l in ([n[k]] if isinstance(n[k], str) else n[k])], ensure_ascii=False)
                for k in ("intro", "win", "done", "give", "given", "call") if n.get(k)})
@@ -331,7 +333,8 @@ def compile_map(m, kit, out_dir):
            "renderorder": "right-down", "width": W, "height": H, "tilewidth": T, "tileheight": T, "infinite": False,
            "nextlayerid": len(layers) + 2, "nextobjectid": len(objs) + 1,
            "properties": [{"name": "kit", "type": "string", "value": kit.k["kit"]},
-                          {"name": "source", "type": "string", "value": f"{m['id']}.map.json"}],
+                          {"name": "source", "type": "string", "value": f"{m['id']}.map.json"}]
+                         + ([{"name": "states", "type": "string", "value": json.dumps(m["states"], ensure_ascii=False)}] if m.get("states") else []),
            "tilesets": tilesets,
            "layers": [{"id": i + 1, "name": n, "type": "tilelayer", "width": W, "height": H, "x": 0, "y": 0,
                        "opacity": 1, "visible": True, "data": data} for i, (n, data) in enumerate(layers)] +

@@ -35,7 +35,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=48`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=49`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
@@ -217,7 +217,7 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=48`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=49`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=34`);
       this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=48`);
     }
@@ -228,7 +228,7 @@ function worldScenes() {
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
       for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=55`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=56`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -250,7 +250,7 @@ function worldScenes() {
     create() {
       const region = this.region = this.cache.json.get("region"), kit = this.kit = this.cache.json.get("kit");
       const opts = this.opts = this.game.worldOpts, w = this.w = opts.w;
-      this.grid = this.walk = this.lampFx = this.ambientFx = this.cine = this.auto = null; this.seated = false;   // the scene object outlives a change of place: no old map's walk grid or tap-walk
+      this.grid = this.walk = this.lampFx = this.ambientFx = this.cine = this.auto = this.player = null; this.seated = false;   // the scene object outlives a change of place: no old map's walk grid or tap-walk
       this.story = w.scenes;
       // a save from an older map: a renamed place is found under its new name (arriving as if walking in);
       // a removed one sends him back to the start
@@ -264,6 +264,9 @@ function worldScenes() {
       // ground and terrain layers, then objects
       const map = this.make.tilemap({ key: `map-${this.placeId}` });
       this.tw = map.tileWidth || 16;
+      // one map, several looks (Places' "states"): the last whose "when" holds and "until" doesn't
+      try { this.states = JSON.parse((map.properties || []).find(x => x.name === "states")?.value || "null"); } catch { this.states = null; }
+      this.stated = [];
       const sets = map.tilesets.map(ts => map.addTilesetImage(ts.name, `kit-${ts.name}`));
       this.water = null;
       const layers = [];
@@ -497,7 +500,9 @@ function worldScenes() {
       // a building's wall follows its art, which is often wider or narrower than its footprint:
       // cl and cr either side of its centre (worked out with its neighbours by the map tools)
       const l = p.cl || p.fw / 2, r = p.cr || p.fw / 2;
-      if (p.solid) this.solids.add(this.add.zone(o.x + (r - l) / 2, o.y - p.fh / 2, l + r - 2, p.fh - 2));
+      const zone = p.solid ? this.add.zone(o.x + (r - l) / 2, o.y - p.fh / 2, l + r - 2, p.fh - 2) : null;
+      if (zone) this.solids.add(zone);
+      if (p.in) this.stated.push({ img, zone, in: JSON.parse(p.in) });   // shown only in some of the map's states
     }
 
     // The shrine's three looks (the rock under the pine): "dark" (an empty board), "lit" (a game in
@@ -543,7 +548,7 @@ function worldScenes() {
       // townsfolk drawn like the heroes speak with their own portrait and name
       const own = p.drawn ? L => L.map(l => l[0] === "n" ? ["say", who, ...l.slice(1)] : l) : L => L;
       const n = { id: o.name, spr, who, folk, sprite: p.sprite, say: own(J(p.say)), wander: p.wander, home: { x: o.x, y: o.y }, t: 0, dir: face, until: p.until,
-        when: p.when || "" };   // only here once the story's condition holds (Guan Yu on his ridge)
+        when: p.when || "", in: p.in ? JSON.parse(p.in) : null };   // only here once the story's condition holds (Guan Yu on his ridge)
       if (p.gives) Object.assign(n, { gives: p.gives, givesWhen: p.gives_when || "", give: own(J(p.give)), given: own(J(p.given)) });
       n.call = own(J(p.call));
       if (p.challenge) {
@@ -602,10 +607,16 @@ function worldScenes() {
     save() { WorldState.save(this.w.n, this.st); }
     // The light a scene left the world in (tk-cutscene.js): kept on the map, and on the next map, until
     // a scene sets another. Day is none.
+    mapState() {
+      if (!this.states) return null;
+      let cur = null;
+      for (const st of this.states) if (this.cond(st.when) && !(st.until && this.cond(st.until))) cur = st;
+      return cur;
+    }
     setWorldLight(tint) { this.st.light = tint || null; this.save(); this.applyWorldLight(); }
     applyWorldLight() {
       if (this.worldShade) { this.worldShade.destroy(); this.worldShade = null; }
-      const c = { night: 0x46559c, dusk: 0xf0c0a0, dawn: 0xd8c8e8, storm: 0x80868e }[this.st.light];
+      const c = { night: 0x46559c, dusk: 0xf0c0a0, dawn: 0xd8c8e8, storm: 0x80868e, smoke: 0xb39c8a }[this.st.light];
       if (!c) return;
       const W = this.scale.width, H = this.scale.height;
       this.worldShade = this.add.rectangle(W / 2, H / 2, W * 3, H * 3, c).setScrollFactor(0).setDepth(9e4).setBlendMode(Phaser.BlendModes.MULTIPLY);
@@ -639,8 +650,21 @@ function worldScenes() {
     }
     // Who is here and how the shrine looks follow the story; redone whenever it moves on.
     refreshStory() {
-      for (const n of this.npcs) if (n.when) { const on = this.cond(n.when); n.spr.setVisible(on); n.spr.body.enable = on;
-        if (n.mark) n.mark.setVisible(on && !TK.cleared(n.challenge)); }   // a challenger not here yet has no "!" either
+      const st = this.mapState();
+      for (const n of this.npcs) if (n.when || n.in) {
+        const on = this.cond(n.when) && (!n.in || !!(st && n.in.includes(st.id)));
+        n.spr.setVisible(on); n.spr.body.enable = on;
+        if (n.mark) n.mark.setVisible(on && !TK.cleared(n.challenge));   // a challenger not here yet has no "!" either
+      }
+      for (const o of this.stated || []) {
+        const on = !!(st && o.in.includes(st.id));
+        if (o.img) o.img.setVisible(on);
+        if (o.zone && o.zone.body) o.zone.body.enable = on;
+      }
+      if (st && "light" in st) {   // the state's light (day clears a scene's night)
+        const L = { day: null, morning: "dawn", dawn: "dawn", dusk: "dusk", night: "night", storm: "storm", smoke: "smoke" }[st.light];
+        if ((this.st.light || null) !== (L || null)) { this.st.light = L || null; if (this.player) this.applyWorldLight(); }   // (on arrival the scene applies it once built)
+      }
       // one of each person at a time: a brother standing here in his own right (Guan Yu on his
       // ridge) isn't also following Liu Bei
       const here = new Set(this.npcs.filter(n => n.who && n.spr.visible).map(n => n.who));
@@ -1493,7 +1517,8 @@ function worldScenes() {
       for (const e of this.exits) {
         if (!Phaser.Geom.Rectangle.Contains(e.rect, P.x, P.y - 3)) continue;
         // a door only some may pass: the protagonist named, or a condition ("item:edict") that holds
-        const barred = e.openTo && !e.openTo.some(w => w.includes(":") ? this.cond(w) : w === this.lead);
+        const ms = this.mapState(), shut = ms && (ms.exits_closed || []).includes(e.to), opened = ms && (ms.exits_open || []).includes(e.to);
+        const barred = shut || e.openTo && !e.openTo.some(w => w.includes(":") ? this.cond(w) : w === this.lead);
         if (barred) {
           if (!this.blocked) {
             this.blocked = 1500;
@@ -1501,7 +1526,7 @@ function worldScenes() {
             P.setPosition(P.x + back[0] * 10, P.y + back[1] * 10);
             this.talk(e.refuse.length ? worldLines(e.refuse) : [["n", "The door is barred to you.", "此门不为你开。"]]);
           }
-        } else if (this.placeOpen(e.to)) this.go(e.to);
+        } else if (opened || this.placeOpen(e.to)) this.go(e.to);
         else if (!this.blocked) {
           this.blocked = 1500;
           const back = { N: [0, 1], S: [0, -1], E: [-1, 0], W: [1, 0] }[e.side];

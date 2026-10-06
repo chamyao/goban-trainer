@@ -300,7 +300,7 @@ class Layout:
                                     use=lm.get("use"), side=lm.get("side"), clear=lm.get("clear"))
             if o is None:
                 raise RuntimeError(f"no room for {lm['kind']}")
-            for k in ("open_to", "refuse"):   # a door that opens only for some (a protagonist, or a condition)
+            for k in ("open_to", "refuse", "in"):   # a door only for some; "in": shown only in those map states
                 if lm.get(k):
                     o[k] = lm[k]
             if lm.get("rooms"):   # one building outside, several rooms in a row inside (interiors.build_chain)
@@ -438,7 +438,7 @@ class Layout:
                     if p["kind"].startswith("folk.") and not p.get("near") and not p.get("challenge"):
                         npc["wander"] = True
                     for k in ("challenge", "intro", "win", "done", "until", "face",   # challengers and story people
-                              "when", "gives", "gives_when", "give", "given", "call", "view", "blocks"):     # present once…; gives an item once…; calls out when you come near able to act
+                              "when", "gives", "gives_when", "give", "given", "call", "view", "blocks", "in"):     # present once…; gives an item once…; calls out when you come near able to act
                         if p.get(k):
                             npc[k] = p[k]
                     self.npcs.append(npc)
@@ -529,6 +529,7 @@ class Layout:
             "npcs": self.npcs,
             "exits": self.exits,
             "entries": {k: list(v) for k, v in self.entries.items()},
+            **({"states": b["states"]} if (b := self.place["brief"]).get("states") else {}),   # one map, several looks
         }
 
 

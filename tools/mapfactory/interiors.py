@@ -230,7 +230,7 @@ def add_spot(r, node, label="", trigger=None):
     return spot["id"]
 
 
-STORY_KEYS = ("challenge", "intro", "win", "done", "until", "face", "when", "gives", "gives_when", "give", "given", "call", "view", "blocks")
+STORY_KEYS = ("challenge", "intro", "win", "done", "until", "face", "when", "gives", "gives_when", "give", "given", "call", "view", "blocks", "in")
 
 
 def furnish_place(m, place, rooms, world_n):
