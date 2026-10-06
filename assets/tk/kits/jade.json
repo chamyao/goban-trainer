@@ -18,7 +18,8 @@
   "n_nature": "assets/tk/ninja/nature.png",
   "pinerock": "assets/tk/jade/pinerock.png",
   "drawn_b2": "assets/tk/drawn_b2.png",
-  "drawn_b2_tiles": "assets/tk/drawn_b2_tiles.png"
+  "drawn_b2_tiles": "assets/tk/drawn_b2_tiles.png",
+  "b2_buildings": "assets/tk/jade/b2_buildings.png"
  },
  "materials": {
   "grass": {
@@ -1105,6 +1106,128 @@
     128,
     16,
     12
+   ]
+  ],
+  "building.palace": [
+   [
+    "b2_buildings",
+    0,
+    0,
+    188,
+    155
+   ]
+  ],
+  "building.hall_grand": [
+   [
+    "b2_buildings",
+    189,
+    0,
+    118,
+    117
+   ],
+   [
+    "b2_buildings",
+    308,
+    0,
+    124,
+    106
+   ]
+  ],
+  "building.gatetower": [
+   [
+    "b2_buildings",
+    433,
+    0,
+    45,
+    96
+   ]
+  ],
+  "building.pavilion_painted": [
+   [
+    "b2_buildings",
+    0,
+    156,
+    58,
+    79
+   ]
+  ],
+  "building.posthouse": [
+   [
+    "b2_buildings",
+    59,
+    156,
+    67,
+    74
+   ]
+  ],
+  "building.wing": [
+   [
+    "b2_buildings",
+    127,
+    156,
+    96,
+    63
+   ],
+   [
+    "b2_buildings",
+    346,
+    236,
+    94,
+    45
+   ]
+  ],
+  "building.gatehouse": [
+   [
+    "b2_buildings",
+    224,
+    156,
+    64,
+    59
+   ]
+  ],
+  "building.pavilion": [
+   [
+    "b2_buildings",
+    289,
+    156,
+    64,
+    57
+   ]
+  ],
+  "building.storehouse": [
+   [
+    "b2_buildings",
+    354,
+    156,
+    47,
+    57
+   ]
+  ],
+  "camp.banquet": [
+   [
+    "b2_buildings",
+    0,
+    236,
+    160,
+    53
+   ]
+  ],
+  "market.stalls": [
+   [
+    "b2_buildings",
+    161,
+    236,
+    96,
+    51
+   ]
+  ],
+  "building.granary": [
+   [
+    "b2_buildings",
+    258,
+    236,
+    87,
+    49
    ]
   ]
  },
