@@ -1,8 +1,8 @@
 {
  "format": "tk-region/1",
  "world": 12,
- "name": "Hulao Pass (draft)",
- "zh": "虎牢关",
+ "name": "Diaochan (draft)",
+ "zh": "貂蝉（草稿）",
  "start": "changan",
  "party": [
   "wangyun"
@@ -30,6 +30,7 @@
     "changan--palace",
     "changan--dutang",
     "changan--caiyong",
+    "changan--side-hall",
     "changan--hall-1",
     "changan--house-1",
     "changan--house-2",
@@ -173,6 +174,17 @@
    "parent": "changan"
   },
   {
+   "id": "changan--side-hall",
+   "name": "side-hall",
+   "zh": "长安·",
+   "archetype": "interior",
+   "map": "changan--side-hall.map.json",
+   "links": [
+    "changan"
+   ],
+   "parent": "changan"
+  },
+  {
    "id": "changan--hall-1",
    "name": "Hall, Chang'an",
    "zh": "长安·厅堂",
@@ -272,6 +284,7 @@
     "meiwu--hall",
     "meiwu--mother",
     "meiwu--treasury",
+    "meiwu--diaochan",
     "meiwu--house-1",
     "meiwu--house-2",
     "meiwu--house-3",
@@ -306,6 +319,17 @@
    "zh": "库房",
    "archetype": "interior",
    "map": "meiwu--treasury.map.json",
+   "links": [
+    "meiwu"
+   ],
+   "parent": "meiwu"
+  },
+  {
+   "id": "meiwu--diaochan",
+   "name": "diaochan",
+   "zh": "郿坞·",
+   "archetype": "interior",
+   "map": "meiwu--diaochan.map.json",
    "links": [
     "meiwu"
    ],
@@ -2536,8 +2560,8 @@
   {
    "node": "12-a12c",
    "role": "main",
-   "place": "changan",
-   "spot": "palace",
+   "place": "changan--side-hall",
+   "spot": "spot-12-a12c",
    "scene": "a12c",
    "title": "The Secret Edict",
    "objective": "Reach the Son of Heaven unseen.",
@@ -2667,6 +2691,7 @@
      43909
     ]
    ],
+   "room": "side-hall",
    "objective_zh": "避开耳目，面见天子。",
    "title_zh": "天子密诏"
   },
@@ -3780,7 +3805,7 @@
   {
    "node": "12-a15m",
    "role": "main",
-   "place": "meiwu--treasury",
+   "place": "meiwu--diaochan",
    "spot": "spot-12-a15m",
    "scene": "a15m",
    "title": "Meiwu",
@@ -3912,7 +3937,7 @@
     ]
    ],
    "board": false,
-   "room": "treasury",
+   "room": "diaochan",
    "objective_zh": "找到貂蝉。",
    "title_zh": "郿坞"
   },

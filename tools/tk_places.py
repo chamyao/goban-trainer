@@ -308,3 +308,9 @@ PLACES[3] = _PLACES3
 import json as _json  # noqa: E402
 from tk_places_w2 import PLACES2 as _P2  # noqa: E402
 PLACES[12] = _json.loads(_json.dumps(_P2).replace('"2-a', '"12-a'))
+# a story room the stopgap map hasn't drawn yet (the plan grids have it) gets a plain hall, so the test book still builds
+from tk_story_w2_new import WORLD2 as _W2  # noqa: E402
+for _n in _W2["nodes"]:
+    _pl = PLACES[12].get(_n.get("place"))
+    if _n.get("room") and _pl is not None and not any(lm.get("id") == _n["room"] for lm in _pl.get("landmarks", [])):
+        _pl.setdefault("landmarks", []).append({"kind": "building.hall", "id": _n["room"], "label": _n["room"]})
