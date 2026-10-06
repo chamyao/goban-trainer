@@ -72,3 +72,11 @@ What the design in `places-design.md` needs that the map format and the engine d
 16. **Followers:** a crowd that falls in behind the player and grows with each village. *Used by:* Liangzhou (A16).
 17. **Heights:** a raised plateau (the palace), a gate tower you climb (Xuanping), a ridge you stand on. These should read as raised: shadow, steps.
 18. **Seats that fill:** chairs in a room that fill as legwork is done. *Used by:* the secret room in A12. Today's `when` on people may already cover it.
+
+## New kinds the plans use
+Listed with their footprints in `NEW_KINDS` at the top of `tools/tk_places_w2.py`; line and zone kinds are in `LINE_KINDS` and `ZONE_KINDS` there. They include:
+- Buildings: compound, palace, grand hall, wing, pavilion (and painted pavilion), gate tower, granary, storehouse, post-house, gatehouse, small tent.
+- Landmarks and features: ridge, heights, hitching post, stalls, rockery, trellis, spirit screen, willow, corral.
+- Furniture: dais, curtain, sword on the wall, window, lamp, seat.
+- Lines: gallery (with lattice sides), bridge, stream, curtain.
+- Zones: court, passage, garden, stage, plain, loess, cliff, wheat.

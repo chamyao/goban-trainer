@@ -1,5 +1,7 @@
 # Book 2 places: the Diaochan arc
 
+**The plans themselves are data:** `tools/tk_places_w2.py`, checked by `tools/check_places_w2.py`, with drawings in `docs/book2/plans/`. Where this document and the data differ, the data wins.
+
 This is the Places session's design for the four places of the Diaochan arc: **Chang'an, Meiwu, the Meiwu Road and Liangzhou**. It follows `diaochan-arc.md` and uses its Shared keys. The research behind it is in `map-research.md`.
 
 It is written for the best game, not for what the map generator can say today. Every map stays generated: the layout sketches below are the relations a generated map must satisfy (what is south of what, what faces what, what sits in the pond), not drawings to copy. The stealth spaces come with play checks the generator must pass (a covered route exists, the curtain puzzle has a valid spot). See request 6 in `places-notes.md`. Wherever the design needs something new, the request is listed in `places-notes.md`. Once those are settled, the design will be turned into `PLACES[2]` data.
@@ -205,10 +207,14 @@ These come from the research. They apply to every map below.
 | `a10` | `xf-hall`: the sword on the wall | Diaochan | Dong Zhuo calls her in. The carriage then leaves from the gate, and Lü Bu stands in the crowd outside. |
 | `a11` | `ridge`, then `wy-secret` | Wang Yun | Walk out the Heng Gate. Lü Bu stands on the ridge watching the dust; come up behind him. |
 | `a12a`, `a12b` | `shisun`, `huangwan` | Wang Yun | Legwork, in either order. Each minister comes back to the secret room once won (his chair fills). |
-| `a12c` | `palace`: the North Side Gate court | Wang Yun | Legwork. A eunuch brings the secret edict to the gate. Gained: the secret edict. Deliver it to Lü Bu in the secret room. |
+| `a12p` | `wy-secret` | Wang Yun | The plan, with the two ministers (no board). |
+| `a12c` | `palace`: the emperor's side hall, behind the North Side Gate | Wang Yun | Legwork, and a stealth step: cross the gate court past two of Dong Zhuo's eunuchs to the side hall. Gained: the secret edict. |
 | `a12` | `wy-secret` | Wang Yun | Li Su is brought in. The broken arrow is the handoff to Li Su, who rides out of the Heng Gate. |
+| `a13d` | The avenue before the palace | Li Su | The Taoist with the cloth, as the procession comes down the avenue (no board). |
 | `a14` | `north-gate` | Wang Yun | Stand with the officials. The procession comes down the avenue. Boss. |
-| `a15` | `market` (the body, Cai Yong), then Meiwu | Wang Yun | Walk the celebrating city. Li Ru is brought in bound at the North Side Gate court. The victory feast and the report of Cai Yong happen at `wy-hall`. |
+| `a15` | `market` | Wang Yun | Walk the celebrating city to the body under its lamp. Li Ru is brought in bound at the gate court. |
+| `a15m` *(proposed)* | Meiwu, Diaochan's rooms | Lü Bu | A short walk with no board through the opened fortress, past Huangfu Song freeing the women, to Diaochan's rooms. |
+| `a15c` | `dutang`, the great hall of state in the palace | Wang Yun | The victory feast; Cai Yong is reported weeping over the body (no board). |
 | `a18` | `xuanping` tower | Wang Yun | The sack. Through the burning streets to the east gate. **Outside the Qingsuo Gate** Lü Bu begs him to flee: that's a palace gate, so this moment plays at the palace steps on the way. Then climb the tower. |
 
 ### Being seen in Chang'an (the stealth steps)
@@ -309,23 +315,18 @@ The people who matter stand still where you pass them. The rest wander. Lines ar
 
 ### Stops, west to east in the novel's order (all on the way back to Chang'an)
 
-1. **`wheel`, at about the 30-li post,** just after a small stone bridge, where the road is rutted.
-   - The column jolts and stops. A wheel has broken on the great carriage.
-   - Dong Zhuo calls Li Su to the carriage: go problem (A13a), 「弃旧换新」 ("discard the old for the new").
-   - A spare carriage is brought up.
-2. **`bridle`, about 10 li further,** a willow-lined stretch.
-   - The horse snaps its bridle: go problem (A13b).
-3. **`fog`, the next day,** on open plain.
+1. **`wheel`, just past the thirty-li post,** after the stone bridge over a stream, where the road bends and is rutted. *(A13a)*
+   - The column jolts and stops: a wheel has broken on the great carriage. A little further on, the horse snaps its bridle.
+   - Dong Zhuo calls Li Su to the carriage, and the go problem comes: 「弃旧换新」 ("discard the old for the new").
+2. **`fog`, the next day,** on open, treeless plain. *(A13b)*
    - Wind rises, and the light goes to storm. **The fog closes the view to a small circle around the player**, and the column ahead disappears.
-   - Follow the sound of the carriage bells to Dong Zhuo: go problem (A13c), 「红光紫雾，以壮天威」 ("red light and purple mist, to add to Heaven's majesty").
-   - **This is the twist:** for the first time the landmark (the procession's dust) is gone.
-4. **`fields`, at night outside the walls.**
-   - The camp: tents, fires, the two carriages. The Heng Gate's lanterns are visible far off.
-   - Children's singing comes from the moonlit fields and gets louder as you walk toward it: 「千里草，何青青！十日上，不得生！」 ("Grass of a thousand li, so green! Ten days up, it will not live!")
-   - When you find the children, they run. Walk back to the carriage: Dong Zhuo asks what it means. Last omen problem (A13d).
-5. **Morning, at the Heng Bridge** (the road's east end, the Chang'an side).
-   - The Taoist by the road with the cloth marked 口 at each end (scene, still `omen_taoist`). Li Su has him driven off.
-   - The column enters Chang'an by the Heng Gate.
+   - Follow the sound of the carriage bells to Dong Zhuo for the go problem: 「红光紫雾，以壮天威」 ("red light and purple mist, to add to Heaven's majesty").
+   - **This is the twist:** for the first time the landmark, the procession's dust, is gone.
+3. **`fields`, at night outside the walls.** *(A13c)*
+   - The camp: tents and fires, with Lü Bu asleep outside Dong Zhuo's tent.
+   - Children's singing comes from the moonlit wheat and gets louder as you walk toward it: 「千里草，何青青！十日上，不得生！」 ("Grass of a thousand li, so green! Ten days up, it will not live!")
+   - Dong Zhuo asks what it means, and the last omen problem comes.
+4. **In Chang'an,** the next morning, on the avenue before the palace: the Taoist with the cloth marked 口 at each end (A13d, no board; still `omen_taoist`).
 
 ### Townsfolk on the road
 - *Post-pavilion keeper (ride out):* "Thirty li to the next post, sir. Mind the ruts after the bridge."

@@ -72,20 +72,30 @@ Most zones are rectangles. For the rest (a curved pond, an L-shaped ward, a vall
 
 The generator rounds the edges, so it reads as a pond, not a block.
 
-## 6. Rooms inside a compound
+## 6. Compounds and rooms: maps of their own
 
-A compound has its own plan grid at a finer cell, by default **2×2 tiles**: its courts, halls and garden are laid out the same way. The compound's outer claim in the place's plan must be big enough for its inner grid. The checker compares the two and reports a mismatch.
+A compound (Wang Yun's residence, the Chancellor's residence, the palace) is a walled block in the place's plan, and **walking through its gate opens a map of its own**. That map has its own plan grid at a finer cell, by default **2×2 tiles**, with margin 0. Its courts, halls and garden are laid out by the same rules. A hall inside it opens onto a **room**, a small map again (`room()` in `tools/tk_places_w2.py`: walls round the edge, a door, furniture). So the levels are city → compound → room, like Pokémon's town → house.
 
-Stealth rooms keep the same rules, and the play checks (`places-notes.md`, request 6) then test the generated details: the covered route, the curtain's sight puzzle, and the safe spots.
+Stealth spaces carry **watchers** (a position or a beat, a facing, a cone length) and **play checks**:
+- **covered route:** a path from A to B that no watcher sees at every point of its beat, so there is always a moment to move.
+- **safe spot:** a cell in a zone that no cone ever reaches.
+- **sight puzzle:** for each way one watcher faces, there's a cell that a second watcher sees and the first doesn't (the A7 curtain).
+
+## Small rules learned from the first plans
+- **A footprint may be turned:** a wing 6×4 tiles fits a claim of 4×6.
+- **Gates and gate towers stand in a wall** and take no margin.
+- **Doors open onto a road or an open court:** in a town, never onto bare grass. Inside a compound, onto any walkable ground.
 
 ## 7. What the checker reports
 
-The checker runs **before** generation, on the plan alone. Errors stop the build:
+The checker is `tools/check_places_w2.py` (`--png` draws every plan into `docs/book2/plans/`). It runs **before** generation, on the plan alone. Errors stop the build:
 - **Overlap:** two things claim the same cell, or a thing sits on a line. Named, with the cells.
 - **Too small:** a claim smaller than the kind's footprint plus margin. Shows the size needed.
 - **Off the grid:** a rect or path outside `[cols, rows]`.
 - **Unconnected:** a door that touches no road, or a road that leads nowhere.
-- **Room mismatch:** a compound's inner grid doesn't fit its outer claim.
+- **Unwalkable or unreachable:** a spot, door, exit or watcher that can't be walked to from the entry.
+- **Keys and kinds:** a node that isn't a Shared key, or a kind that's neither in `vocab.py` nor in `NEW_KINDS`.
+- **Play checks:** covered route, safe spot, sight puzzle.
 
 Then the generator runs, and its play checks (walkable, visible, covered route, sight puzzle, safe spot) re-roll the details, never the plan.
 
