@@ -19,7 +19,7 @@ Shapes used below:
             "label", "node", "map": an inner map (a compound or a room), "on": "water"}
   spot     {"id", "at": [x, y], "node", "label", "trigger"}: a marker, claims no cell
   exit     {"to": place, "at": [x, y], "side"}
-  state    {"id", "when": condition, "until": condition, "light"}: one map, several looks
+  state    {"id", "when": condition, "until": condition, "light": day|dusk|night|lantern, "weather"}: one map, several looks
   npcs     as in Book 1 (say/challenge/gives/when/until/face), plus "in": [state ids] and
            "near": a thing id or "at": [x, y]; "watch": a stealth watcher (cone, beat)
 """
@@ -59,6 +59,70 @@ NEW_KINDS = {
     "furn.seat": (1, 1, False),
     "furn.qin": (2, 1, True),                       # a qin on its stand (Cai Yong's, the scorched tail)                     # a chair that fills as legwork is done
 }
+# What each new piece of art should look like: the brief for generating it (plans.py --assets lists
+# every kind the built maps use that a kit can't draw yet, with these words). Late Han, Chang'an, c. 192.
+ART = {
+    "building.compound": "a walled Han residence seen from above: rammed-earth wall with grey tile coping, a gatehouse in the front wall, roofs of halls showing inside",
+    "building.palace": "Weiyang Palace on its raised terrace: a vast hall with a double-eaved hip roof of dark grey tiles, red pillars, white stone balustrade and steps",
+    "building.hall_grand": "a great hall of an official's residence: wide hip-and-gable roof of grey tiles, red lacquered pillars, latticed doors across the front, stone base",
+    "building.wing": "a side wing of a courtyard house: long low gable roof, lattice windows, door facing the courtyard (drawn facing E, W or S as `faces` says)",
+    "building.pavilion": "an open-sided garden pavilion: four or six red pillars, upturned eaves, no walls; may stand on piles in a lotus pond",
+    "building.pavilion_painted": "the painted pavilion: a two-storey garden pavilion with carved, painted beams and a balcony",
+    "building.gatetower": "a city-gate tower (Xuanping Gate): a tall timber tower on the city wall over the gate passage, stairs up its inner side",
+    "building.granary": "a Han granary: long rammed-earth storehouse, thatched or tiled gable roof, raised floor, small high vents",
+    "building.storehouse": "a treasury storehouse: stout walls, heavy double doors with bronze fittings, tiled roof",
+    "building.posthouse": "a Han post-pavilion (亭): a small walled station with a gate and a lookout, a signboard by the road",
+    "building.gatehouse": "a compound's gatehouse: a roofed gateway in the compound wall, double doors",
+    "building.tent_small": "a small square officer's tent",
+    "camp.banquet": "a long banquet table under awnings, low tables and cushions in a row, wine jars",
+    "landmark.ridge": "an earthen ridge: raised bare earth with a gentle slope, grass on its flanks",
+    "landmark.heights": "a rocky height over a valley mouth, a signal post on top (gongs on one, drums on the other)",
+    "landmark.hitchingpost": "a wooden hitching post; with a tethered horse when Lü Bu is inside",
+    "market.stalls": "a row of market stalls with cloth awnings, baskets and goods",
+    "garden.rockery": "a garden rockery of pierced Taihu stones",
+    "garden.trellis": "a 荼蘼 (rose) trellis arching over a garden path, white flowers",
+    "garden.screenwall": "a spirit screen (影壁): a free-standing wall inside a gate, tiled coping",
+    "tree.willow": "a weeping willow, long drooping green strands",
+    "tree.poplar": "a tall slender poplar, for roadside rows",
+    "plant.peony": "a bed of peonies, large pink and red blooms",
+    "water.lotus": "lotus leaves and flowers floating on a pond tile",
+    "corral": "a wooden-railed corral with two or three horses",
+    "milestone": "a small stone road marker",
+    "banner.black": "a black banner on a pole (the Chancellor's)",
+    "prop.lanterns": "a red paper lantern on a stand, for rows along the avenue at night",
+    "prop.body_lamp": "a dark covered mound in the street with a small lamp flame on it (non-graphic)",
+    "furn.dais": "a raised dais with a low seat and armrest, a screen behind",
+    "furn.curtain": "a hanging bead curtain across part of a room",
+    "furn.swordwall": "a sword in its scabbard hanging on a wall rack",
+    "furn.window": "a latticed window in a wall",
+    "furn.lamp": "a bronze standing lamp, lit",
+    "furn.seat": "a floor cushion with a low armrest",
+    "furn.qin": "a guqin on its stand (Cai Yong's, its tail scorched)",
+    # lines and zones (drawn as ground)
+    "road": "a beaten-earth road; the avenue is paved, three lanes, the middle lane edged",
+    "path": "a narrow garden path of pebbles or stepping stones",
+    "bridge": "a stone or timber bridge; the Phoenix Pavilion's is a zig-zag timber bridge",
+    "gallery": "a covered gallery: a roofed walkway with red pillars and lattice railings on both sides",
+    "wall.city": "Chang'an's rammed-earth city wall, crenellated, wide enough to walk on",
+    "wall": "a compound or room wall",
+    "wall.lattice": "a lattice wall: wooden lattice panels you can see through but not walk through",
+    "curtain": "a hanging curtain line across a room",
+    "court": "a stone-flagged courtyard",
+    "passage": "a narrow flagged passage between buildings",
+    "garden": "garden ground: grass, moss, scattered stones",
+    "market": "packed earth with straw and litter, a busy market",
+    "plateau": "the raised Longshou terrace: an edge of dressed stone, steps where roads climb it",
+    "field.wheat": "a wheat field in rows",
+    "loess": "dry yellow loess ground",
+    "cliff": "a loess cliff face",
+    "hills": "rough hill ground, scrub",
+    "plain": "open treeless grassland",
+    "camp": "trampled camp ground",
+    "stage": "a raised wooden stage floor behind a curtain",
+    "ward": "the paved ground of an officials' ward",
+    "city": "the paved ground of the city",
+}
+
 # line kinds: walkable or not, and whether they block sight
 LINE_KINDS = {"road": (True, False), "path": (True, False), "bridge": (True, False), "gallery": (True, False),
               "river": (False, False), "stream": (False, False), "wall": (False, True), "wall.city": (False, True),
@@ -170,11 +234,11 @@ PLANS2 = {
         "states": [
             {"id": "capital", "light": "day"},
             {"id": "night-a2", "when": "node:a1", "until": "node:a2", "light": "night"},
-            {"id": "night-a6", "when": "node:a5", "until": "node:a6", "light": "night"},
+            {"id": "night-a6", "when": "node:a5", "until": "node:a6", "light": "lantern"},
             {"id": "away", "when": "node:a10", "until": "node:a13", "light": "day"},
-            {"id": "gate-day", "when": "node:a13c", "until": "node:a14", "light": "morning"},
+            {"id": "gate-day", "when": "node:a13c", "until": "node:a14", "light": "day", "weather": "clear"},
             {"id": "after", "when": "node:a14", "until": "node:a16", "light": "day", "banners": "red"},
-            {"id": "sack", "when": "node:a17", "light": "smoke", "exits_open": ["xuanping"]},
+            {"id": "sack", "when": "node:a17", "light": "dusk", "weather": "smoke", "exits_open": ["xuanping"]},
         ],
         "maps": {
             # ---- Wang Yun's residence: a three-court compound, gate south, garden north --------------
@@ -219,29 +283,30 @@ PLANS2 = {
             },
             # ---- the Chancellor's residence: Diaochan's stealth space ----------------------------------
             "xiangfu": {
-                "grid": [18, 20], "cell": 2, "margin": 0,
+                "grid": [18, 22], "cell": 2, "margin": 0,
                 "ground": [
-                    {"id": "front-court", "kind": "court", "rect": [1, 15, 16, 4]},
-                    {"id": "passage-w", "kind": "passage", "rect": [4, 11, 1, 4]},
-                    {"id": "passage-e", "kind": "passage", "rect": [11, 11, 1, 4]},
-                    {"id": "pond-court", "kind": "court", "rect": [15, 11, 2, 3]},
+                    {"id": "front-court", "kind": "court", "rect": [1, 17, 16, 4]},
+                    {"id": "inner-court", "kind": "court", "rect": [1, 11, 16, 2]},   # keeps the gallery clear of the halls' roofs
+                    {"id": "passage-w", "kind": "passage", "rect": [4, 13, 1, 4]},
+                    {"id": "passage-e", "kind": "passage", "rect": [11, 13, 1, 4]},
+                    {"id": "pond-court", "kind": "court", "rect": [15, 13, 2, 3]},
                     {"id": "xf-garden", "kind": "garden", "rect": [1, 1, 16, 9]},
                     {"id": "lotus", "kind": "water", "at": [8, 2], "mask": [".######.", "########", "########", "#######.", ".#####.."]},
-                    {"id": "window-pond", "kind": "water", "rect": [16, 12, 1, 1]},
+                    {"id": "window-pond", "kind": "water", "rect": [16, 14, 1, 1]},
                 ],
                 "lines": [
-                    {"id": "walls", "kind": "wall", "outline": [0, 0, 18, 20], "width": 1,
-                     "gates": {"gate": [8, 19], "garden-gate": [17, 5]}},
+                    {"id": "walls", "kind": "wall", "outline": [0, 0, 18, 22], "width": 1,
+                     "gates": {"gate": [8, 21], "garden-gate": [17, 5]}},
                     {"id": "gallery", "kind": "gallery", "path": [[1, 10], [16, 10]], "width": 2,
                      "sides": "wall.lattice", "label": "The covered gallery"},
                     {"id": "flower-path", "kind": "path", "path": [[2, 9], [2, 7], [6, 7], [6, 8], [10, 8], [10, 7], [12, 7]], "width": 1},
                     {"id": "bridge", "kind": "bridge", "path": [[12, 7], [12, 5]], "width": 1, "zigzag": True},
                 ],
                 "things": [
-                    {"id": "xf-hall", "kind": "building.hall_grand", "rect": [5, 11, 6, 4], "doors": ["S", "N"],
+                    {"id": "xf-hall", "kind": "building.hall_grand", "rect": [5, 13, 6, 4], "doors": ["S", "N"],
                      "label": "The middle hall", "map": "xf-hall"},
-                    {"id": "wing-w", "kind": "building.wing", "rect": [1, 11, 3, 3], "door": "N", "label": "The maids' rooms"},
-                    {"id": "xf-bedroom", "kind": "building.wing", "rect": [12, 11, 3, 3], "door": "N", "label": "Dong Zhuo's bedchamber",
+                    {"id": "wing-w", "kind": "building.wing", "rect": [1, 13, 3, 3], "door": "N", "label": "The maids' rooms"},
+                    {"id": "xf-bedroom", "kind": "building.wing", "rect": [12, 13, 3, 3], "door": "N", "label": "Dong Zhuo's bedchamber",
                      "map": "xf-bedroom", "window": "E"},
                     {"id": "phoenix", "kind": "building.pavilion", "rect": [11, 3, 2, 2], "on": "water", "door": "S",
                      "label": "The Phoenix Pavilion"},
@@ -250,15 +315,15 @@ PLANS2 = {
                     {"id": "willow-2", "kind": "tree.willow", "rect": [5, 6, 1, 1]},
                     {"id": "willow-3", "kind": "tree.willow", "rect": [8, 9, 1, 1]},
                     {"id": "willow-4", "kind": "tree.willow", "rect": [11, 8, 1, 1]},
-                    {"id": "halberds", "kind": "furn.rack", "rect": [14, 16, 1, 1], "label": "A halberd rack"},
-                    {"id": "plant-e", "kind": "furn.plant", "rect": [11, 14, 1, 1], "label": "A potted plum", "note": "the niche behind it is always safe"},
+                    {"id": "halberds", "kind": "furn.rack", "rect": [14, 18, 1, 1], "label": "A halberd rack"},
+                    {"id": "plant-e", "kind": "furn.plant", "rect": [11, 16, 1, 1], "label": "A potted plum", "note": "the niche behind it is always safe"},
                 ],
                 "spots": [
                     {"id": "a9", "at": [12, 5], "node": "2-a9", "label": "The Phoenix Pavilion", "trigger": "near"},
                     {"id": "collision", "at": [16, 5], "label": "The garden gate", "note": "Dong Zhuo runs into Li Ru here, at the end of A9"},
                 ],
                 "dress": [{"kind": "plant.flower", "along": "flower-path", "every": 1}, {"kind": "water.lotus", "in": "lotus"}],
-                "exits": [{"to": "Chang'an", "at": [8, 19], "side": "S"}],
+                "exits": [{"to": "Chang'an", "at": [8, 21], "side": "S"}],
                 # stealth: who watches where, in Diaochan's states. A beat is a path of cells; "pause" in seconds.
                 "watchers": [
                     {"id": "maid-1", "kind": "folk.maiden", "beat": [[2, 10], [7, 10], [7, 10], [2, 10]], "shape": "U", "pause": [7, 10, 3],
@@ -267,8 +332,8 @@ PLANS2 = {
                      "cone": 4, "in_beats": ["2-a9"], "seen": "maid", "back_to": "xf-bedroom"},
                     {"id": "steward", "kind": "folk.official", "beat": [[7, 6], [7, 4], [5, 4], [7, 4]], "shape": "L",
                      "cone": 5, "in_beats": ["2-a9"], "seen": "steward", "back_to": "xf-bedroom"},
-                    {"id": "guard-1", "kind": "folk.soldier", "at": [6, 17], "face": "N", "cone": 6, "in_beats": ["2-a7", "2-a8", "2-a9", "2-a10"]},
-                    {"id": "guard-2", "kind": "folk.soldier", "at": [11, 17], "face": "N", "cone": 6, "in_beats": ["2-a7", "2-a8", "2-a9", "2-a10"]},
+                    {"id": "guard-1", "kind": "folk.soldier", "at": [6, 19], "face": "N", "cone": 6, "in_beats": ["2-a7", "2-a8", "2-a9", "2-a10"]},
+                    {"id": "guard-2", "kind": "folk.soldier", "at": [11, 19], "face": "N", "cone": 6, "in_beats": ["2-a7", "2-a8", "2-a9", "2-a10"]},
                 ],
                 "checks": [   # play checks the generated details must pass (places-notes.md, request 6)
                     {"check": "covered_route", "from": [13, 10], "to": [12, 5], "beats": ["2-a9"]},
@@ -416,10 +481,10 @@ PLANS2 = {
             {"kind": "folk.woman", "at": [12, 5], "in": ["sack"], "say": "“East! Get to the Xuanping Gate, the Son of Heaven is there!”"},
             {"kind": "folk.villager", "at": [5, 6], "in": ["sack"], "say": "“I built his walls. Now his men burn mine.”"},
             # inside the Chancellor's residence (Diaochan)
-            {"kind": "folk.maiden", "place": "xiangfu", "at": [4, 12], "in_beats": ["2-a7"],
+            {"kind": "folk.maiden", "place": "xiangfu", "at": [4, 14], "in_beats": ["2-a7"],
              "say": "“The Grand Preceptor spent the night with the new girl and hasn't got up.”"},
-            {"kind": "folk.woman", "place": "xiangfu", "at": [2, 14], "say": "“Walk softly near the middle hall. He throws things when he's woken.”"},
-            {"kind": "folk.soldier", "place": "xiangfu", "at": [8, 18], "say": "“The young mistress doesn't go out. The Grand Preceptor's orders.”"},
+            {"kind": "folk.woman", "place": "xiangfu", "at": [2, 16], "say": "“Walk softly near the middle hall. He throws things when he's woken.”"},
+            {"kind": "folk.soldier", "place": "xiangfu", "at": [8, 20], "say": "“The young mistress doesn't go out. The Grand Preceptor's orders.”"},
         ],
         "seen_lines": {
             "maid": ["“Mistress? You've lost your way. The Grand Preceptor likes to know where you are.”"],
@@ -493,10 +558,10 @@ PLANS2 = {
              "procession": {"column": ["outriders", "carriage:dongzhuo", "carriage_covered:diaochan", "player", "rearguard"],
                             "path": "road", "from": [0, 4], "to": [35, 3], "leash": 6,
                             "leash_line": "Li Su must keep near the Grand Preceptor.", "stops": ["wheel", "fog", "fields"]}},
-            {"id": "fog", "when": "node:a13a", "until": "node:a13b", "light": "storm", "visibility": 3, "sound": {"bells": "carriage"}},
+            {"id": "fog", "when": "node:a13a", "until": "node:a13b", "light": "dusk", "weather": "storm", "visibility": 3, "sound": {"bells": "carriage"}},
             {"id": "night", "when": "node:a13b", "until": "node:a13c", "light": "night", "sound": {"children": "fields"}},
             {"id": "raid", "when": "node:a15", "until": "node:a16", "light": "day"},
-            {"id": "march", "when": "node:a16m", "light": "dust"},
+            {"id": "march", "when": "node:a16m", "light": "day", "weather": "dust"},
         ],
         "npcs": [
             {"kind": "folk.villager", "at": [14, 5], "in": ["ride-out"], "say": "“We built it, and they sent us home with nothing but a sore back.”"},
@@ -555,7 +620,7 @@ PLANS2 = {
         "states": [
             {"id": "fortress", "light": "day"},
             {"id": "raided", "when": "node:a14", "light": "day", "gate": "open"},
-            {"id": "empty", "when": "node:a16", "light": "dust", "gate": "open"},
+            {"id": "empty", "when": "node:a16", "light": "day", "weather": "dust", "gate": "open"},
         ],
         "maps": {
             "hall": room([14, 8], [7, 7], things=[{"id": "screen", "kind": "furn.screen", "rect": [6, 1, 2, 1]},
@@ -625,7 +690,7 @@ PLANS2 = {
             "exits": [{"to": "Meiwu", "at": [35, 5], "side": "E", "open_when": "node:a17"}],
             "entries": {"": [2, 5], "Meiwu": [34, 5]},
         },
-        "states": [{"id": "rumour", "light": "harsh"}, {"id": "army", "when": "node:a16m", "light": "dust"}],
+        "states": [{"id": "rumour", "light": "day", "weather": "harsh"}, {"id": "army", "when": "node:a16m", "light": "day", "weather": "dust"}],
         "followers": {"grow_with": ["node:a16a", "node:a16b", "node:a16c"], "kind": "folk.soldier", "per_step": 4},
         "npcs": [
             {"kind": "folk.soldier", "near": "camp", "in": ["rumour"], "say": "“No pardon. The envoy came back with nothing. I'm going home to my mother.”"},
