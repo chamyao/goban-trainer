@@ -33,12 +33,13 @@ for(const c of list){
     await setUpTo(stop,inc);await p.evaluate(B=>TK.markSeen(B+':opening'),BOOK);await p.reload();await p.waitForTimeout(1200);await ready();
     await p.evaluate(pl=>{const w=window.__w;w.leaving=false;w.cine=null;w.go(pl);},c.place);await p.waitForTimeout(1200);await ready();return stateOf(c);};
   if(whenNode){const s=await at(whenNode,false);check(s&&!s.shown&&!s.mark,`${c.ch} (${c.place}) before ${whenNode}: not there, no "!" (${JSON.stringify(s)})`);}
-  const s2=await at(whenNode||null,true);
+  // no "when": there from the book's start (not after every beat, which is past his "until")
+  const s2=whenNode?await at(whenNode,true):await at(await p.evaluate(()=>TK.world(window.__w.w.n).nodes[0].key),false);
   if(!check(s2&&s2.shown&&s2.mark,`${c.ch} (${c.place}) after ${whenNode||'the start'}: there, with his "!" (${JSON.stringify(s2)})`))continue;
   // he spots you: out of his sight nothing happens; step into it and he calls out ("!"), comes over, intro, his board
   const sight=await p.evaluate(c=>{const w=window.__w,n=w.npcs.find(n=>n.challenge===c.ch),T=w.tw||16;return {view:n.view||0,cone:n.cone,face:n.face0,guard:n.guard,T,x:n.spr.x,y:n.spr.y};},c);
   const place=(x,y)=>p.evaluate(([x,y])=>{const w=window.__w;w.walk=null;w.player.body.reset(x,y);},[x,y]);
-  const engaged=()=>p.evaluate(()=>!!window.__w.engaged||!!document.querySelector('.tk-duel svg'));
+  const engaged=()=>p.evaluate(ch=>!!(window.__w.engaged&&window.__w.engaged.challenge===ch)||!!document.querySelector('.tk-duel svg'),c.ch);   // this one (walked back, you may be in another's sight)
   const [fx,fy]={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]}[sight.face]||[0,1];
   const free=(x,y)=>p.evaluate(([x,y])=>{const w=window.__w,G=w.walkGrid();return G.free(Math.floor(x/G.C),Math.floor(y/G.C));},[x,y]);
   const spotAt=async k=>{for(const t of [0,.3,-.3,.6,-.6]){const x=sight.x+fx*k*sight.T-fy*t*sight.T*2,y=sight.y+fy*k*sight.T+fx*t*sight.T*2;if(await free(x,y))return [x,y];}return null;};
@@ -60,8 +61,9 @@ for(const c of list){
     await p.evaluate(()=>{dispatchEvent(new CustomEvent('tczw:result',{detail:'fail'}));});await p.waitForTimeout(2600);
     const lv=p.locator('.tk-duel-keys button',{hasText:/Leave|离开/});if(await lv.count())await lv.first().tap().catch(()=>{});await p.waitForTimeout(1500);
     for(let i=0;i<20&&await p.evaluate(()=>window.__w.ui.busy());i++){await p.evaluate(()=>window.__w.ui.advance());await p.waitForTimeout(120);}
-    const af=await p.evaluate(c=>{const w=window.__w,n=w.npcs.find(n=>n.challenge===c.ch);return {P:[w.player.x,w.player.y],home:Math.round(Math.hypot(n.spr.x-n.home.x,n.spr.y-n.home.y)),cool:!!n.cool,engaged:!!w.engaged,beaten:TK.cleared(n.challenge)};},c);
-    check(!af.beaten&&af.home<=2&&af.cool,`${c.ch}: lost, he goes back to his post (${af.home} px from it) and waits (cool ${af.cool})`);
+    for(let i=0;i<30&&await p.evaluate(c=>{const n=window.__w.npcs.find(n=>n.challenge===c.ch);return Math.hypot(n.spr.x-n.home.x,n.spr.y-n.home.y)>2;},c);i++)await p.waitForTimeout(200);   // his walk home (a long sight is a long walk)
+    const af=await p.evaluate(c=>{const w=window.__w,n=w.npcs.find(n=>n.challenge===c.ch);return {P:[w.player.x,w.player.y],home:Math.round(Math.hypot(n.spr.x-n.home.x,n.spr.y-n.home.y)),you:+(Math.hypot(w.player.x-n.home.x,w.player.y-n.home.y)/(w.tw||16)).toFixed(1),view:n.view,cool:!!n.cool,engaged:!!w.engaged,beaten:TK.cleared(n.challenge)};},c);
+    check(!af.beaten&&af.home<=2&&(af.cool||af.you>af.view+2),`${c.ch}: lost, he goes back to his post (${af.home} px from it) and waits (cool ${af.cool}; you ${af.you} tiles from his post, his sight ${af.view})`);
     await p.waitForTimeout(1500);check(!(await engaged()),`${c.ch}: standing there, he doesn't come again`);
     // leave and come back: he can see you again
     await p.evaluate(pl=>{const w=window.__w;w.leaving=false;w.go(pl);},c.place);await p.waitForTimeout(1200);await ready();

@@ -1709,7 +1709,9 @@ function worldScenes() {
         const pts = [{ x: ex, y: ey }];
         for (let k = 0; k <= 14; k++) { const a = a0 - Math.PI * 55 / 180 + k * (Math.PI * 110 / 180) / 14, r = this.ray(ex, ey, a, R); pts.push({ x: ex + Math.cos(a) * r, y: ey + Math.sin(a) * r }); }
         this.coneG.fillStyle(n.sees ? 0xff5a4a : 0xffe08a, n.sees ? .3 : .18).fillPoints(pts, true);
-        if (n.sees && !calm && !this.caught && (w.seen || w.back_to)) this.caughtBy(n);
+        // he catches you if he has something to say or somewhere to send you; not the one a sight puzzle wants you seen by
+        const wanted = Object.values(this.spots).some(s => s.sight && s.sight.seen_by === (w.id || n.id));
+        if (n.sees && !calm && !this.caught && !wanted && ((w.seen && w.seen.length) || w.back_to)) this.caughtBy(n);
       }
     }
     // Seen: he says so, and you're walked back to where he sends you (no game over)
