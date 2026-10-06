@@ -509,6 +509,10 @@ def state(st, mb, plans):
     return out
 
 
+def rect_tiles(r):
+    return {(x, y) for x in range(r["x"], r["x"] + r["w"]) for y in range(r["y"], r["y"] + r["h"])}
+
+
 def build_world(n, world, plans, tables, zh=None, prefix=None):
     """Build every map of a world from its plans. Returns (maps, places, quests) as `mapfactory build`
     writes them. `prefix` renames the plans' node keys (Book 2's "2-a…" → the test book's "12-a…")."""
@@ -612,7 +616,8 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
                         "y": 0 if side == "N" else mb.H - 1 if side == "S" else y0,
                         "w": 1 if side in "EW" else mb.C, "h": 1 if side in "NS" else mb.C}
             m["exits"].append({"to": target, "side": e.get("side", "S"), **rect})
-            inside = mb.near_tile((rect["x"] + rect["w"] // 2, rect["y"] + rect["h"] // 2), want_visible=False)
+            # arriving through it: the nearest tile off the exit itself (on it, you'd walk straight back out)
+            inside = mb.near_tile((rect["x"] + rect["w"] // 2, rect["y"] + rect["h"] // 2), want_visible=False, taken=rect_tiles(rect))
             m["entries"].setdefault(target, list(inside))
         # a room's own door leads back to whatever opens into it
         if m.get("parent") and owner.get(mid_) and not any(x["to"] == owner[mid_] for x in m["exits"]):
@@ -621,11 +626,12 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
                 xs, ys = [t[0] for t in gap], [t[1] for t in gap]
                 rect = {"x": min(xs), "y": min(ys), "w": max(xs) - min(xs) + 1, "h": max(ys) - min(ys) + 1}
                 m["exits"].append({"to": owner[mid_], "side": "S", **rect})
-                m["entries"].setdefault(owner[mid_], list(mb.near_tile((rect["x"], rect["y"]), want_visible=False)))
+                m["entries"].setdefault(owner[mid_], list(mb.near_tile((rect["x"], rect["y"]), want_visible=False, taken=rect_tiles(rect))))
+        on_exit = set().union(*[rect_tiles(x) for x in m["exits"] if not x.get("door")])
         for k, v in P.get("entries", {}).items():
             key = map_of(pid, k) if k else ""
             if key is not None:
-                t = mb.near_cell(tuple(v), want_visible=False)
+                t = mb.near_cell(tuple(v), want_visible=False, taken=on_exit)
                 m["entries"][key] = list(t)
         if "" not in m["entries"]:
             first = next(iter(m["entries"].values()), None)
