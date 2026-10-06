@@ -42,7 +42,7 @@ def D(who, q, q_zh, open_, open_zh, win, win_zh, slip, slip_zh):
 # Voices for the people Book 2 adds (Kokoro Mandarin ids). Book 1's cast
 # (caocao, dongzhuo, luzhi, huangfusong, ...) keeps its voices from tk_story_zh.CAST.
 CAST2 = {
-    "wangyun": "zm_010", "diaochan": "zf_023", "lvbu": "zm_097", "liru": "zm_012", "lisu": "zm_015",
+    "wangyun": "zm_010", "diaochan": "zf_044", "lvbu": "zm_097", "liru": "zm_012", "lisu": "zm_015",
     "zhangwen": "zm_020", "shisunrui": "zm_031", "huangwan": "zm_035", "dongmu": "zf_022",
     "caiyong": "zm_091", "mamidi": "zm_037", "lijue": "zm_058", "guosi": "zm_061", "jiaxu": "zm_050",
     "xiandi": "zf_002", "niufu": "zm_054", "huchier": "zm_056", "daoren": "zm_080",
