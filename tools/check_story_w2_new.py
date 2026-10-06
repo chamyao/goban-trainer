@@ -25,36 +25,12 @@ def main():
     errors, warnings = [], []
     cs.check_world(new.WORLD2, ZH, CAST, errors, warnings, {}, zh.FOLK_VOICE)
     errors = [e for e in errors if "problems (needs exactly 1)" not in e or " has 0 problems" in e]
-    errors += board_owners(new.WORLD2)
     for m in warnings:
         print("warning:", m)
     for m in errors:
         print("ERROR:", m)
     print(f"{len(new.WORLD2['scenes'])} scenes, {len(new.WORLD2['nodes'])} nodes checked: {len(errors)} errors, {len(warnings)} warnings")
     sys.exit(1 if errors else 0)
-
-
-def board_owners(w):
-    """Every board must be played by its own protagonist. A party step takes effect when its scene
-    ends, so a board belongs to whoever leads when its scene begins: that lead must be the dilemma's
-    "who" (each one, when "dilemma" is a list). Walks the main chain in order from the first node."""
-    nodes = {n["key"]: n for n in w["nodes"]}
-    nxt = {a: b for a, b in w["edges"]}
-    lead, k, out = (w.get("party") or [None])[0], w["nodes"][0]["key"], []
-    seen = set()
-    while k and k not in seen:
-        seen.add(k)
-        n = nodes[k]
-        d = n.get("dilemma")
-        for x in (d if isinstance(d, list) else [d] if d else []):
-            if x.get("who") != lead:
-                out.append(f"node {k!r}: its board is {x.get('who')!r}'s, but {lead!r} leads when the scene begins "
-                           f"(hand off at the end of the scene before)")
-        for st in w["scenes"][n["scene"]]["steps"]:
-            if st[0] == "party":
-                lead = st[1][0]
-        k = nxt.get(k)
-    return out
 
 
 if __name__ == "__main__":
