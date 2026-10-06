@@ -251,9 +251,9 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=53`);
-      this.load.json("kit", `assets/tk/kits/${kit}.json?v=37`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=53`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=54`);
+      this.load.json("kit", `assets/tk/kits/${kit}.json?v=38`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=54`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
@@ -531,6 +531,7 @@ function worldScenes() {
           if (WORLD_CLUTTER.test(p.kind)) img.setDepth(img.depth - 400);   // a rug still lies underfoot
         }
         if (this.iso && (this.kit.isoFlip || []).includes(o.name)) img.setFlipX(true);   // its entrance on the door's face
+        if (p.flip) img.setFlipX(!img.flipX);   // a side view facing W (the map compiler mirrors an E-facing sprite)
         if (p.kind === "landmark.shrine") {   // the Star Lords' shrine: its look follows the story (setShrine)
           this.shrine = { img, x: o.x, y: o.y, state: "dark", fx: [] };
           this.setShrine(TK.shrineState?.(this.w.n, this.placeId) || "dark");

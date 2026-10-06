@@ -117,6 +117,7 @@ KINDS.update({
     "building.palace": (12, 8, True),
     "building.hall_grand": (10, 5, True),   # Wang Yun's halls, the Chancellor's middle hall, Meiwu's hall
     "building.wing": (6, 4, True),          # a side wing of a siheyuan; its door may face E or W
+    "building.wing_side": (4, 6, True),     # the same seen from its gable end (drawn for an E/W wing)
     "building.pavilion": (3, 3, True),      # open-sided; may stand on water
     "building.pavilion_painted": (3, 3, True),
     "building.gatetower": (3, 6, True),     # a gate tower in a city wall, climbable
@@ -202,6 +203,7 @@ FALLBACK = {
     "building.palace": ["building.hall", "building.house"],
     "building.hall_grand": ["building.hall", "building.house"],
     "building.wing": ["building.lodge", "building.house"],
+    "building.wing_side": ["building.wing", "building.lodge", "building.house"],
     "building.pavilion": ["building.moongate", "building.shop", "building.house"],
     "building.pavilion_painted": ["building.pavilion", "building.shop", "building.house"],
     "building.gatetower": ["building.gate"],

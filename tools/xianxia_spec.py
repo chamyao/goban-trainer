@@ -252,3 +252,21 @@ B2_BUILDINGS = {
     "building.tent_small": ("a small square army officer's tent of pale canvas, door flap tied open, front view",
                             (32, 40), 2),
 }
+# the second batch (gen_pixel.py --set jade-b2b): what the first left on stand-ins
+B2_BUILDINGS2 = {
+    "building.compound": ("a walled Han residence seen from above at a 3/4 angle: a square rammed-earth wall with grey "
+                          "tiled coping, a gatehouse in the front wall, tiled roofs of halls and wings inside around a "
+                          "courtyard", (160, 160), 2),
+    "building.wing_side": ("a long low side wing of a Chinese courtyard house seen from its gable end: the triangular "
+                           "gable wall with a tiled roof edge, the long side running back, a door and lattice windows "
+                           "along the long side facing right", (64, 96), 2),
+    "garden.rockery": ("a garden rockery of tall pierced grey Taihu stones with holes, a little moss at the foot",
+                       (32, 40), 2),
+    "landmark.heights": ("a rocky height above a valley mouth: steep grey and ochre rock, scrub on top, a wooden "
+                         "signal post with a gong at the summit", (160, 112), 2),
+    "landmark.ridge": ("a low earthen ridge: a long mound of bare yellow earth with a gentle slope and grass along "
+                       "its crest", (96, 40), 2),
+    "building.hut": ("a poor peasant hut: mud walls, a thatched roof, a low wooden door", (48, 40), 2),
+    "building.tent_small": ("a small square army tent made of pale canvas cloth on wooden poles with guy ropes, "
+                            "the door flap tied open, cloth only, no walls or roof tiles", (32, 40), 2),
+}
