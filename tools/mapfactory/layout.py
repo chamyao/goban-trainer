@@ -294,12 +294,15 @@ class Layout:
         in_room = {n["key"] for n in self.place["nodes"] if n.get("room")}
         for lm in b.get("landmarks", []):
             lines = {k: lm[k] for k in ("intro", "outro", "trigger",   # and a place to deliver to (a ridge):
-                                        "needs", "delivers", "when", "empty", "waiting", "deliver", "delivered", "call") if lm.get(k)}
+                                        "needs", "delivers", "when", "empty", "waiting", "deliver", "delivered", "call", "sight") if lm.get(k)}
             node = lm.get("node") if lm.get("node") not in in_room else None
             o = self.place_landmark(lm["kind"], lm.get("id"), lm.get("label"), node, near=lm.get("near"), lines=lines,
                                     use=lm.get("use"), side=lm.get("side"), clear=lm.get("clear"))
             if o is None:
                 raise RuntimeError(f"no room for {lm['kind']}")
+            for k in ("open_to", "refuse", "in"):   # a door only for some; "in": shown only in those map states
+                if lm.get(k):
+                    o[k] = lm[k]
             if lm.get("rooms"):   # one building outside, several rooms in a row inside (interiors.build_chain)
                 o["rooms"] = lm["rooms"]
                 for c in lm["rooms"]:
@@ -435,12 +438,34 @@ class Layout:
                     if p["kind"].startswith("folk.") and not p.get("near") and not p.get("challenge"):
                         npc["wander"] = True
                     for k in ("challenge", "intro", "win", "done", "until", "face",   # challengers and story people
-                              "when", "gives", "gives_when", "give", "given", "call"):     # present once…; gives an item once…; calls out when you come near able to act
+                              "when", "gives", "gives_when", "give", "given", "call", "view", "blocks", "in", "watch"):     # present once…; gives an item once…; calls out when you come near able to act
                         if p.get(k):
                             npc[k] = p[k]
+                    if isinstance((npc.get("watch") or {}).get("seen"), str):   # a key into the brief's seen_lines
+                        npc["watch"] = {**npc["watch"], "seen": self.place["brief"].get("seen_lines", {}).get(npc["watch"]["seen"], [])}
                     self.npcs.append(npc)
                     self.used.add((x, y))
                     break
+
+    def resolve_guards(self):
+        """A blocking challenger's "blocks" (a beat, a landmark or room by id, or {"exit": place}) becomes the
+        point he guards: come near it before he's beaten and he stops you."""
+        slug = lambda name: "".join(ch for ch in name.lower().replace(" ", "-") if ch.isalnum() or ch == "-")
+        for n in self.npcs:
+            b = n.get("blocks")
+            if not b:
+                continue
+            at = None
+            if isinstance(b, dict) and b.get("exit"):
+                e = self.entries.get(slug(b["exit"])) or self.entries.get(b["exit"])
+                at = (e[0], e[1]) if e else None
+            elif b in self.anchors:
+                at = self.anchors[b]
+            else:
+                sp = next((sp for sp in self.spots if sp.get("node", "").endswith("-" + b) or sp["id"] == b), None)
+                at = (sp["x"], sp["y"]) if sp else None
+            if at:
+                n["guard"] = [round(at[0] + .5, 2), round(at[1] + .5, 2)]
 
     # ---------- 6. check ----------
     def walkable(self, c):
@@ -484,6 +509,7 @@ class Layout:
         self.lay_border()
         self.lay_decor()
         self.lay_npcs()
+        self.resolve_guards()
         missing = self.check()
         if missing:
             raise RuntimeError("unreachable: " + ", ".join(missing))
@@ -505,6 +531,7 @@ class Layout:
             "npcs": self.npcs,
             "exits": self.exits,
             "entries": {k: list(v) for k, v in self.entries.items()},
+            **({"states": b["states"]} if (b := self.place["brief"]).get("states") else {}),   # one map, several looks
         }
 
 

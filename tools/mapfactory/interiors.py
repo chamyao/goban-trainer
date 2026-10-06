@@ -78,6 +78,7 @@ class Room:
         # an aisle from the door up into the room stays clear
         self.keep = {(self.door[0] + dx, y) for dx in (-1, 0, 1) for y in range(self.ry + h - 2, self.ry + h + 1)}
         self.people = people
+        self.seen_lines = (parent.get("brief") or {}).get("seen_lines", {})
 
     def floor(self, x, y):
         return self.rx <= x < self.rx + self.w and self.ry <= y < self.ry + self.h
@@ -174,6 +175,8 @@ class Room:
             for k in STORY_KEYS:   # a story person seated inside ("inside": True in the place's npcs)
                 if p.get(k):
                     npc[k] = p[k]
+            if isinstance((npc.get("watch") or {}).get("seen"), str):
+                npc["watch"] = {**npc["watch"], "seen": self.seen_lines.get(npc["watch"]["seen"], [])}
             self.npcs.append(npc)
 
     def build(self, rid, world_n):
@@ -230,7 +233,7 @@ def add_spot(r, node, label="", trigger=None):
     return spot["id"]
 
 
-STORY_KEYS = ("challenge", "intro", "win", "done", "until", "face", "when", "gives", "gives_when", "give", "given", "call")
+STORY_KEYS = ("challenge", "intro", "win", "done", "until", "face", "when", "gives", "gives_when", "give", "given", "call", "view", "blocks", "in", "watch")
 
 
 def furnish_place(m, place, rooms, world_n):
@@ -247,7 +250,8 @@ def furnish_place(m, place, rooms, world_n):
             built = build_chain(m, place, o, chain, rooms, world_n)
             if built:
                 dx = o["x"] + o["w"] / 2
-                m["exits"].append({"to": built[0]["id"], "side": "N", "x": round(dx - .4, 2), "y": o["y"] + o["h"] - .15, "w": .8, "h": .45, "door": True})
+                m["exits"].append({"to": built[0]["id"], "side": "N", "x": round(dx - .4, 2), "y": o["y"] + o["h"] - .15, "w": .8, "h": .45, "door": True,
+                              **{k: o[k] for k in ("open_to", "refuse") if o.get(k)}})
                 m["entries"][built[0]["id"]] = [int(dx - .5) if o["w"] % 2 else int(dx), o["y"] + o["h"]]
                 out += built
             continue
@@ -260,7 +264,7 @@ def furnish_place(m, place, rooms, world_n):
         room = None
         for k in range(20):
             try:
-                room = Room({"id": m["id"], "name": m["name"]}, o, seed + k * 101, people).build(rid, world_n)
+                room = Room({"id": m["id"], "name": m["name"], "brief": place.get("brief")}, o, seed + k * 101, people).build(rid, world_n)
                 break
             except RuntimeError:
                 continue
@@ -268,7 +272,8 @@ def furnish_place(m, place, rooms, world_n):
             continue
         # the door: press against the middle of the building's front wall
         dx = o["x"] + o["w"] / 2
-        m["exits"].append({"to": rid, "side": "N", "x": round(dx - .4, 2), "y": o["y"] + o["h"] - .15, "w": .8, "h": .45, "door": True})
+        m["exits"].append({"to": rid, "side": "N", "x": round(dx - .4, 2), "y": o["y"] + o["h"] - .15, "w": .8, "h": .45, "door": True,
+                              **{k: o[k] for k in ("open_to", "refuse") if o.get(k)}})
         m["entries"][rid] = [int(dx - .5) if o["w"] % 2 else int(dx), o["y"] + o["h"]]
         out.append(room)
     return out
@@ -288,7 +293,7 @@ def build_chain(m, place, o, chain, rooms, world_n):
         people = mine + folk * (k == 0)
         seed, room = sum(map(ord, ids[k])), None
         for t in range(20):
-            r = Room({"id": m["id"], "name": m["name"]}, b, seed + t * 101, people)
+            r = Room({"id": m["id"], "name": m["name"], "brief": place.get("brief")}, b, seed + t * 101, people)
             r.back = ids[k - 1] if k else None
             r.next = ids[k + 1] if k + 1 < len(ids) else None
             if r.next:   # the back-wall gap, and an aisle to it kept clear
