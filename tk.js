@@ -563,7 +563,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) this.data = await (await fetch("data/tk.json?v=52")).json();
+    if (!this.data) this.data = await (await fetch("data/tk.json?v=53")).json();
     return this.data;
   },
   ls(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } },
@@ -1464,7 +1464,8 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
     h("a", { href: p.url || `https://www.101weiqi.com/q/${p.id}/`, target: "_blank", rel: "noopener" }, "来源 source"),
   ]);
   // a decision board: the leader's choice named in the side column, over what's said
-  const dil = node.dilemma;
+  const nth = Math.max(0, (+String(key).split("~")[1] || 1) - 1);   // which board of the scene
+  const dil = Array.isArray(node.dilemma) ? node.dilemma[Math.min(nth, node.dilemma.length - 1)] : node.dilemma;
   const dilBox = dil ? h("div", { class: "tk-duel-dilemma" }, [h("b", { lang: "zh-CN" }, dil.q_zh || ""), h("span", {}, dil.q)]) : "";
   const side = h("div", { class: "tk-duel-side" }, [dilBox, dlg, keys, srcLine]);
   box.replaceChildren(boardCard, side);

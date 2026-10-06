@@ -78,3 +78,6 @@ Lines are as elsewhere: a string (narration) or `[who, text]`.
 
 Items and marks are kept per world (`tk-items`, `tk-marks`) and cleared by
 Start over. Shrine looks are worked out from progress, never stored.
+
+### Dilemma per board
+A node's `"dilemma"` may be a list, one `{q, who, open, win, slip}` for each `["problem"]` in its scene, in order (A9, A10, A11 and A14 have three boards each). A single dilemma covers every board.
