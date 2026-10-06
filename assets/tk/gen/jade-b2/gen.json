@@ -168,7 +168,7 @@
    "width": 32,
    "height": 40,
    "remove_bg": true,
-   "prompt": "a small square army officer's tent of pale canvas, door flap tied open, front view, 16-bit JRPG town tileset style, bold black outlines, warm wood and red-brown tiled roofs, cream plaster walls, Han dynasty China, 3/4 top-down game sprite",
+   "prompt": "a small square army tent made of pale canvas cloth on wooden poles with guy ropes, the door flap tied open, cloth only, no walls or roof tiles, 16-bit JRPG town tileset style, bold black outlines, warm wood and red-brown tiled roofs, cream plaster walls, Han dynasty China, 3/4 top-down game sprite",
    "num_images": 2
   },
   "n": 2,
@@ -176,7 +176,7 @@
    64,
    64
   ],
-  "seconds": 17.0,
+  "seconds": 24.0,
   "made": "2026-10-06"
  },
  "market.stalls": {
@@ -231,6 +231,114 @@
    64
   ],
   "seconds": 31.0,
+  "made": "2026-10-06"
+ },
+ "building.hut": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 48,
+   "height": 40,
+   "remove_bg": true,
+   "prompt": "a poor peasant hut: mud walls, a thatched roof, a low wooden door, 16-bit JRPG town tileset style, bold black outlines, warm wood and red-brown tiled roofs, cream plaster walls, Han dynasty China, 3/4 top-down game sprite",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 20.0,
+  "made": "2026-10-06"
+ },
+ "landmark.ridge": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 96,
+   "height": 40,
+   "remove_bg": true,
+   "prompt": "a low earthen ridge: a long mound of bare yellow earth with a gentle slope and grass along its crest, 16-bit JRPG town tileset style, bold black outlines, warm wood and red-brown tiled roofs, cream plaster walls, Han dynasty China, 3/4 top-down game sprite",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   96,
+   64
+  ],
+  "seconds": 23.6,
+  "made": "2026-10-06"
+ },
+ "building.wing_side": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 64,
+   "height": 96,
+   "remove_bg": true,
+   "prompt": "a long low side wing of a Chinese courtyard house seen from its gable end: the triangular gable wall with a tiled roof edge, the long side running back, a door and lattice windows along the long side facing right, 16-bit JRPG town tileset style, bold black outlines, warm wood and red-brown tiled roofs, cream plaster walls, Han dynasty China, 3/4 top-down game sprite",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   96
+  ],
+  "seconds": 23.8,
+  "made": "2026-10-06"
+ },
+ "garden.rockery": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 32,
+   "height": 40,
+   "remove_bg": true,
+   "prompt": "a garden rockery of tall pierced grey Taihu stones with holes, a little moss at the foot, 16-bit JRPG town tileset style, bold black outlines, warm wood and red-brown tiled roofs, cream plaster walls, Han dynasty China, 3/4 top-down game sprite",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   64,
+   64
+  ],
+  "seconds": 24.7,
+  "made": "2026-10-06"
+ },
+ "building.compound": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 160,
+   "height": 160,
+   "remove_bg": true,
+   "prompt": "a walled Han residence seen from above at a 3/4 angle: a square rammed-earth wall with grey tiled coping, a gatehouse in the front wall, tiled roofs of halls and wings inside around a courtyard, 16-bit JRPG town tileset style, bold black outlines, warm wood and red-brown tiled roofs, cream plaster walls, Han dynasty China, 3/4 top-down game sprite",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   160,
+   160
+  ],
+  "seconds": 28.7,
+  "made": "2026-10-06"
+ },
+ "landmark.heights": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 160,
+   "height": 112,
+   "remove_bg": true,
+   "prompt": "a rocky height above a valley mouth: steep grey and ochre rock, scrub on top, a wooden signal post with a gong at the summit, 16-bit JRPG town tileset style, bold black outlines, warm wood and red-brown tiled roofs, cream plaster walls, Han dynasty China, 3/4 top-down game sprite",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   160,
+   112
+  ],
+  "seconds": 28.9,
   "made": "2026-10-06"
  }
 }
