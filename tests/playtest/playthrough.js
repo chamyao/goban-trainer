@@ -9,7 +9,7 @@ const shot=n=>p.screenshot({path:SP+'/mfr_'+n+'.png'});
 const ready=async()=>{for(let i=0;i<60;i++){if(await p.evaluate(()=>!!(window.__w&&window.__w.player&&window.__w.ui)))return;await p.waitForTimeout(200);}};
 const busy=()=>p.evaluate(()=>!!(window.__w&&window.__w.ui.busy()));
 const tapW=async(x,y)=>{await p.evaluate(()=>new Promise(r=>{const w=window.__w;if(!w||!w.cameras){r();return;}const cam=w.cameras.main;let last='',same=0,n=0;const t=setInterval(()=>{const v=Math.round(cam.worldView.x)+','+Math.round(cam.worldView.y);same=v===last?same+1:0;last=v;if(same>=3||++n>40){clearInterval(t);r();}},40);}));/* the camera eases after him: tap once it has settled */const [a,b2]=await p.evaluate(([x,y])=>{const w=window.__w,cam=w.cameras.main,cv=w.game.canvas,r=cv.getBoundingClientRect(),k=cv.clientWidth/w.scale.width;return [r.left+((window.__w.view?window.__w.view(x,y).x:x)-cam.worldView.x)*cam.zoom*k, r.top+((window.__w.view?window.__w.view(x,y).y:y)-cam.worldView.y)*cam.zoom*k];},[x,y]);await p.touchscreen.tap(a,b2);};
-const act=async()=>{if(!(await p.evaluate(()=>!!window.__w&&(window.__w.ui.busy()||!!window.__w.cine))))return;const box=await p.evaluate(()=>{const r=window.__w.game.canvas.getBoundingClientRect();return [r.left+r.width/2,r.top+r.height*0.6];});await p.touchscreen.tap(box[0],box[1]);};
+const act=async()=>{if(!(await p.evaluate(()=>!!window.__w&&(window.__w.ui.busy()||!!window.__w.cine)&&!document.querySelector('.tk-duel'))))return;   /* never a tap on an open board (it would be a move) */const box=await p.evaluate(()=>{const r=window.__w.game.canvas.getBoundingClientRect();return [r.left+r.width/2,r.top+r.height*0.6];});await p.touchscreen.tap(box[0],box[1]);};
 const tapSpot=async node=>{const s=await p.evaluate(node=>{const s=Object.values(window.__w.spots).find(s=>s.node===node);return s&&[s.x,s.y];},node);if(s)await tapW(s[0],s[1]);};
 const line=()=>p.evaluate(()=>{const d=document.querySelector('.town-ui .town-dlg');return d&&!d.hidden?(d.querySelector('.town-who').textContent?d.querySelector('.town-who').textContent+': ':'')+d.querySelector('.town-en').textContent:null});
 const front=node=>p.evaluate(node=>{const w=window.__w;const s=Object.values(w.spots).find(s=>s.node===node);if(!s)return 'nospot';
@@ -48,14 +48,21 @@ for(;;){
   const noBoard=await p.evaluate(n=>TK.world(window.__w.w.n).nodes.find(x=>x.key===n).board===false,node);
   for(let i=0;i<500;i++){ if(await p.locator('.tk-duel svg').count())break; if(noBoard&&i>20&&!(await busy())&&!(await p.evaluate(()=>!!window.__w.cine)))break; const l=await line(); if(l&&before[before.length-1]!==l)before.push(l); await act(); await p.waitForTimeout(80);}
   console.log(' BEFORE ('+((Date.now()-t0)/1000).toFixed(0)+'s): '+before.map(x=>x.slice(0,90)).join('\n   '));
-  if(noBoard){const ok=await p.evaluate(n=>TK.cleared(n),node);lastLight=await p.evaluate(()=>(window.__w.st&&window.__w.st.light)||'day');console.log(' (no board) cleared',ok,'light after:',lastLight);if(!ok)console.log('FAIL '+node+' not cleared by its scene');continue;}
+  if(noBoard){const ok=await p.evaluate(n=>TK.cleared(n),node);lastLight=await p.evaluate(()=>(window.__w.st&&window.__w.st.light)||'day');await p.waitForTimeout(1500);console.log('  after it: '+await p.evaluate(()=>{const w=window.__w;return `${w.lead} in ${w.placeId} at ${Math.round(w.player.x)},${Math.round(w.player.y)}`;}));console.log(' (no board) cleared',ok,'light after:',lastLight);if(!ok)console.log('FAIL '+node+' not cleared by its scene');continue;}
   await p.waitForTimeout(900);
   const who=await p.evaluate(()=>{const d=document.querySelector('.tk-duel-dlg');return d?d.querySelector('.town-who').textContent+' | '+d.querySelector('.town-en').textContent:'?'});
   console.log(' BOARD: '+who); await shot(node);
-  await p.evaluate(()=>window.dispatchEvent(new CustomEvent('tczw:result',{detail:'ok'})));await p.waitForTimeout(300);
+  await p.evaluate(()=>{window.__trainer&&(window.__trainer.flawed=null);window.dispatchEvent(new CustomEvent('tczw:result',{detail:'ok'}));});await p.waitForTimeout(300);
+  for(let k=0;k<25&&!(await p.locator('.tk-duel-go').count());k++)await p.waitForTimeout(200);
+  if(!(await p.locator('.tk-duel-go').count())){console.log('FAIL '+node+': no Continue after the board was solved; the board says: '+await p.evaluate(()=>{const d=document.querySelector('.tk-duel');return d?d.textContent.replace(/\s+/g,' ').slice(0,200):'(no board)';})+' | rest '+await p.evaluate(n=>TK.restLeft(n),node));break;}
   await p.locator('.tk-duel-go').tap(); await p.waitForTimeout(500);
   const after=[];t0=Date.now();
-  for(let i=0;i<600;i++){ if(!(await busy())&&!(await p.evaluate(()=>!!window.__w.cine)))break; const l=await line(); if(l&&after[after.length-1]!==l)after.push(l); if(await p.locator('.tk-scroll-go').count()){after.push('[scroll] '+await p.evaluate(()=>document.querySelector('.tk-scroll h3')&&document.querySelector('.tk-scroll h3').textContent));await p.locator('.tk-scroll-go').first().tap();} await act(); await p.waitForTimeout(80);}
+  let boards=1;
+  for(let i=0;i<600;i++){
+    // a scene with several boards (NODE~1, NODE~2…): the next comes up after more lines; solve it the same way
+    if(await p.locator('.tk-duel svg').count()&&!(await p.locator('.tk-duel-go').count())){await p.waitForTimeout(700);boards++;const w2=await p.evaluate(()=>{const d=document.querySelector('.tk-duel-dlg');return d?d.querySelector('.town-en').textContent:'?';});after.push(`[board ${boards}] ${w2}`);
+      await p.evaluate(()=>{window.__trainer&&(window.__trainer.flawed=null);window.dispatchEvent(new CustomEvent('tczw:result',{detail:'ok'}));});await p.waitForTimeout(300);await p.locator('.tk-duel-go').first().tap().catch(()=>{});await p.waitForTimeout(500);continue;}
+    if(!(await busy())&&!(await p.evaluate(()=>!!window.__w.cine)))break; const l=await line(); if(l&&after[after.length-1]!==l)after.push(l); if(await p.locator('.tk-scroll-go').count()){after.push('[scroll] '+await p.evaluate(()=>document.querySelector('.tk-scroll h3')&&document.querySelector('.tk-scroll h3').textContent));await p.locator('.tk-scroll-go').first().tap();} await act(); await p.waitForTimeout(80);}
   console.log(' AFTER ('+((Date.now()-t0)/1000).toFixed(0)+'s): '+after.map(x=>x.slice(0,90)).join('\n   '));
   for(let k=0;k<20;k++){await p.waitForTimeout(300);const g=p.locator('.tk-scroll-go');if(await g.count()){after.push('[scroll] '+await p.evaluate(()=>document.querySelector('.tk-scroll h3')&&document.querySelector('.tk-scroll h3').textContent));await g.first().tap();k=0;}}
   console.log(' AFTER2: '+after.filter(x=>x.startsWith('[scroll]')).join(' | '));
@@ -63,6 +70,7 @@ for(;;){
   if(vic)console.log(`  victory banner shown (${vic})`);
   if(node==='3-boss'&&vic)console.log('FAIL the White Gate shows a victory banner');
   lastLight=await p.evaluate(()=>(window.__w.st&&window.__w.st.light)||'day');
+  await p.waitForTimeout(1500);console.log('  after it: '+await p.evaluate(()=>{const w=window.__w;return `${w.lead} in ${w.placeId} at ${Math.round(w.player.x)},${Math.round(w.player.y)}`;}));
   console.log(' cleared',await p.evaluate(n=>TK.cleared(n),node),'light after:',lastLight,'goal:',await p.evaluate(()=>document.querySelector('.town-goal')&&document.querySelector('.town-goal').textContent.slice(0,60)));
 }
 await b.close();})();
