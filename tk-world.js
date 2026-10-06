@@ -284,7 +284,7 @@ function worldScenes() {
     create() {
       const region = this.region = this.cache.json.get("region"), kit = this.kit = this.cache.json.get("kit");
       const opts = this.opts = this.game.worldOpts, w = this.w = opts.w;
-      this.grid = this.walk = this.lampFx = this.ambientFx = this.cine = this.auto = this.player = this.engaged = null; this.seated = this.caught = false;   // the scene object outlives a change of place: no old map's walk grid or tap-walk
+      this.grid = this.walk = this.lampFx = this.ambientFx = this.cine = this.auto = this.player = this.engaged = this.carried = null; this.glows = []; this.seated = this.caught = false;   // the scene object outlives a change of place: no old map's walk grid or tap-walk
       this.story = w.scenes;
       // a save from an older map: a renamed place is found under its new name (arriving as if walking in);
       // a removed one sends him back to the start
@@ -300,7 +300,7 @@ function worldScenes() {
       this.tw = map.tileWidth || 16;
       // one map, several looks (Places' "states"): the last whose "when" holds and "until" doesn't
       try { this.states = JSON.parse((map.properties || []).find(x => x.name === "states")?.value || "null"); } catch { this.states = null; }
-      this.stated = []; this.refs = {}; this.sightZones = []; this.sgrid = null; if (this.coneG) { this.coneG.destroy(); this.coneG = null; } if (this.fog) { this.fog.destroy(); this.fog = null; } this.procession = null;
+      this.stated = []; this.refs = {}; this.lights = []; this.sightZones = []; this.sgrid = null; if (this.coneG) { this.coneG.destroy(); this.coneG = null; } if (this.fog) { this.fog.destroy(); this.fog = null; } this.procession = null;
       const sets = map.tilesets.map(ts => map.addTilesetImage(ts.name, `kit-${ts.name}`));
       this.water = null;
       const layers = [];
@@ -546,7 +546,8 @@ function worldScenes() {
       if (zone) this.solids.add(zone);
       if (zone && p.kind !== "wall.lattice") (this.sightZones = this.sightZones || []).push(zone);   // what blocks a watcher's sight (a lattice doesn't)
       if (p.in) this.stated.push({ img, zone, in: JSON.parse(p.in) });
-      if (p.ref) (this.refs = this.refs || {})[p.ref] = { x: o.x, y: o.y - (p.fh || 0) / 2 };   // shown only in some of the map's states
+      if (p.ref) (this.refs = this.refs || {})[p.ref] = { x: o.x, y: o.y - (p.fh || 0) / 2 };
+      if (/^(lamp\.|prop\.lantern|camp\.(firepit|cookfire)|furn\.(lamp|hearth))/.test(p.kind || "")) (this.lights = this.lights || []).push({ x: o.x, y: o.y - (p.fh || 16) / 2, kind: p.kind, img });   // shown only in some of the map's states
     }
 
     // The shrine's three looks (the rock under the pine): "dark" (an empty board), "lit" (a game in
@@ -677,10 +678,31 @@ function worldScenes() {
     setWorldLight(tint) { this.st.light = tint || null; this.save(); this.applyWorldLight(); }
     applyWorldLight() {
       if (this.worldShade) { this.worldShade.destroy(); this.worldShade = null; }
+      for (const g of this.glows || []) g.destroy();
+      this.glows = [];
       const c = { night: 0x46559c, dusk: 0xf0c0a0, dawn: 0xd8c8e8, storm: 0x80868e, smoke: 0xb39c8a }[this.st.light];
       if (!c) return;
       const W = this.scale.width, H = this.scale.height;
       this.worldShade = this.add.rectangle(W / 2, H / 2, W * 3, H * 3, c).setScrollFactor(0).setDepth(9e4).setBlendMode(Phaser.BlendModes.MULTIPLY);
+      // at night the lamps, lanterns and fires light the ground round them (and you carry a little light yourself)
+      if (this.st.light === "night" || this.st.light === "dusk") {
+        if (!this.textures.exists("@glow")) {
+          const S = 128, cv = document.createElement("canvas"); cv.width = cv.height = S;
+          const g = cv.getContext("2d"), r = g.createRadialGradient(S / 2, S / 2, 0, S / 2, S / 2, S / 2);
+          r.addColorStop(0, "rgba(255,214,140,0.9)"); r.addColorStop(.45, "rgba(255,190,110,0.35)"); r.addColorStop(1, "rgba(255,170,90,0)");
+          g.fillStyle = r; g.fillRect(0, 0, S, S);
+          this.textures.addCanvas("@glow", cv);
+        }
+        const night = this.st.light === "night";
+        for (const L of this.lights || []) {
+          if (L.img && !L.img.visible) continue;
+          const big = /firepit|cookfire|hearth/.test(L.kind) ? 1.1 : /lantern/.test(L.kind) ? .9 : .75;
+          const g = this.add.image(L.x, L.y, "@glow").setBlendMode(Phaser.BlendModes.ADD).setDepth(9e4 + 1).setScale(big).setAlpha(night ? .75 : .4);
+          this.tweens.add({ targets: g, alpha: g.alpha * .8, duration: 700 + Math.random() * 500, yoyo: true, repeat: -1, ease: "Sine.easeInOut" });
+          this.glows.push(g);
+        }
+        if (night && this.player) { this.carried = this.add.image(this.player.x, this.player.y - 8, "@glow").setBlendMode(Phaser.BlendModes.ADD).setDepth(9e4 + 1).setScale(.55).setAlpha(.35); this.glows.push(this.carried); }
+      }
     }
     // A beat counts as done once anything after it is: saves from before a beat was
     // added (the mulberry tree, the indoor scenes) aren't sent back to it.
@@ -1750,6 +1772,7 @@ function worldScenes() {
     }
 
     update(time, dt) {
+      if (this.carried && this.carried.active) this.carried.setPosition(this.player.x, this.player.y - 8);
       this.watchStep(dt);
       this.procession_();
       this.processionStep(dt);
