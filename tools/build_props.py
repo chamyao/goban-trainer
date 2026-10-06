@@ -268,6 +268,16 @@ def edict():   # the Emperor's secret edict: a yellow silk scroll, rolled, tied 
     return g.outline().image()
 
 
+def bench():   # a stone garden bench: a long seat slab on two carved legs
+    g = _grid(32, 16)
+    st, stD, stL = "#9a9ea6", "#6a6e76", "#c0c4c8"
+    g.rect(1, 3, 30, 4, st); g.rect(1, 3, 30, 1, stL); g.rect(1, 7, 30, 1, stD)   # the seat slab
+    for x in (4, 23):
+        g.rect(x, 8, 5, 6, stD); g.rect(x + 1, 8, 3, 5, st); g.rect(x, 14, 5, 1, "#4e525a")   # the legs
+    g.ellipse(6.5, 10.5, 1.2, 1.2, "#4e525a"); g.ellipse(25.5, 10.5, 1.2, 1.2, "#4e525a")    # a carved roundel on each
+    return g.outline().image()
+
+
 # the registry of props: kind -> footprint (w, h tiles) and how to draw it
 PROPS = {
     "cagecart": {"size": [3, 1], "atlas": "cagecart"},
@@ -308,6 +318,7 @@ PROPS = {
     # the new Book 2 (ch. 8-9)
     "carriage": {"size": [2, 1], "atlas": "carriage"},
     "curtain": {"size": [2, 1], "atlas": "curtain"},
+    "bench": {"size": [2, 1], "atlas": "bench"},
 }
 PROPS["forge"]["fire"] = True
 
@@ -354,6 +365,7 @@ def main():
         "item.pearls": pearls(),
         "item.crown": crown(),
         "item.edict": edict(),
+        "bench": bench(),
     }
     # one row, 1px apart
     W = sum(f.width + 1 for f in frames.values())
