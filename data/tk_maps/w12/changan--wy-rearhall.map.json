@@ -11,7 +11,7 @@
   20,
   12
  ],
- "seed": 0.41636280796466363,
+ "seed": 0.16374051319414396,
  "terrain": {
   "legend": {
    "#": "wood",
@@ -120,8 +120,26 @@
  "npcs": [
   {
    "id": "in-1",
-   "kind": "folk.official",
+   "kind": "folk.elder",
    "x": 10.5,
+   "y": 4.9,
+   "say": [
+    "“The master hasn't slept. He walks the garden and sighs.”"
+   ],
+   "face": "down",
+   "gives": "pearls",
+   "gives_when": "node:a2",
+   "give": [
+    "The old steward unlocks the family chest. “The pearls your father kept, master. Whatever you need them for, I never saw.”"
+   ],
+   "given": [
+    "“The chest is locked again, master. No one will know.”"
+   ]
+  },
+  {
+   "id": "in-2",
+   "kind": "folk.official",
+   "x": 11.5,
    "y": 4.9,
    "say": [
     "“This is the county office. State your business.”"

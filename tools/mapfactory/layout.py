@@ -409,6 +409,8 @@ class Layout:
     # ---------- 5. people ----------
     def lay_npcs(self):
         for i, p in enumerate(self.place["brief"].get("npcs", [])):
+            if p.get("inside") and p.get("near") in self.anchors:   # seated in that building's room instead (interiors.py)
+                continue
             cx, cy = self.anchors.get(p.get("near"), self.hub)
             for r in range(2, 9):
                 cands = [(cx + dx, cy + dy) for dx in range(-r, r + 1) for dy in range(-r, r + 1)

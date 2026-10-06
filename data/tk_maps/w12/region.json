@@ -61,7 +61,10 @@
    "links": [
     "changan"
    ],
-   "parent": "changan"
+   "parent": "changan",
+   "gives": [
+    "pearls"
+   ]
   },
   {
    "id": "changan--wy-secret",
@@ -116,7 +119,10 @@
    "links": [
     "changan"
    ],
-   "parent": "changan"
+   "parent": "changan",
+   "gives": [
+    "crown"
+   ]
   },
   {
    "id": "changan--shisun",

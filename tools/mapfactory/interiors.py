@@ -171,6 +171,9 @@ class Room:
             npc = {"id": f"in-{i + 1}", "kind": p["kind"], "x": x + .5, "y": y + .9, "say": [p["say"]] if isinstance(p.get("say"), str) else p.get("say", [])}
             if p.get("wander"):
                 npc["wander"] = True
+            for k in STORY_KEYS:   # a story person seated inside ("inside": True in the place's npcs)
+                if p.get(k):
+                    npc[k] = p[k]
             self.npcs.append(npc)
 
     def build(self, rid, world_n):
@@ -220,6 +223,9 @@ def add_spot(r, node, label="", trigger=None):
     return spot["id"]
 
 
+STORY_KEYS = ("challenge", "intro", "win", "done", "until", "face", "when", "gives", "gives_when", "give", "given", "call")
+
+
 def furnish_place(m, place, rooms, world_n):
     """Give every building in an outdoor map a door and a room. Returns the interiors."""
     out, counts = [], {}
@@ -231,7 +237,9 @@ def furnish_place(m, place, rooms, world_n):
             o["id"] = f"{o['kind'].split('.')[1]}-{counts[o['kind']]}"
         rid = f"{m['id']}--{o['id']}"
         brief = rooms.get(o["kind"], {})
-        people = brief.get("people", [])
+        # the place's own people marked "inside" by this building come first, then the room's usual folk
+        mine = [p for p in (place.get("brief") or {}).get("npcs", []) if p.get("inside") and p.get("near") == o["id"]]
+        people = mine + brief.get("people", [])
         seed = sum(map(ord, rid))
         room = None
         for k in range(20):

@@ -35,7 +35,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=42`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=43`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
@@ -217,9 +217,9 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=42`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=43`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=34`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=43`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=44`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
@@ -228,7 +228,7 @@ function worldScenes() {
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
       for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=49`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=50`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -771,13 +771,17 @@ function worldScenes() {
       if (!q) return null;
       const g = this.available(q) && this.gateFor(q);
       if (g && g.place && g.objective) {   // the nearest giver or delivery place still to visit
-        if (this.placeIn(this.placeId, g.place) && this.placeId === g.place) {
+        if (this.placeIn(this.placeId, g.place)) {   // in the place, or in one of its rooms
           const P = this.player, need = [].concat(g.needs || []).filter(c => !this.cond(c)), d = t => Math.hypot(t.x - P.x, t.y - P.y);
           const items = need.filter(c => c.startsWith("item:")).map(c => c.slice(5)), marks = need.filter(c => c.startsWith("mark:")).map(c => c.slice(5));
           const ts = [...this.npcs.filter(n => n.gives && items.includes(n.gives) && n.spr.visible).map(n => ({ x: n.spr.x, y: n.spr.y - 8 })),
                       ...Object.values(this.spots).filter(s => s.needs && marks.includes(s.delivers)).map(s => ({ x: s.x, y: s.y - 4 }))];
           this.goalHops = 0;
           if (ts.length) return ts.sort((a, b) => d(a) - d(b))[0];
+          // a giver seated indoors: the door of their room, or out of this room first
+          const room = this.region.places.find(p => p.parent === g.place && (p.gives || []).some(x => items.includes(x)));
+          if (room && room.id !== this.placeId) return this.routeTo([{ place: room.id }]);
+          if (this.placeId !== g.place) return this.routeTo([{ place: g.place }]);
         } else return this.routeTo([{ place: g.place }]);
       }
       return this.routeTo(this.available(q) ? [q] : this.leadsTo(q));
