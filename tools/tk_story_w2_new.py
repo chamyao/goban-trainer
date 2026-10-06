@@ -935,12 +935,14 @@ def _scenes_chain():
             ["army", "villagers", "f_villager", 6, "a16a", 14, 0],
             N("In the first village, the word goes round: Wang Yun means to wipe out every man of Liangzhou.", "遂流言于西凉州曰：“王允将欲洗荡此方之人矣。”"),
             ["emote", "villagers", "!"],
+            ["crowd", 2],
         ]},
         "a16b": {"title": T("Fear", "众皆惊惶"), "kind": "main", "steps": [
             ["problem"],
             ["army", "villagers", "f_villager", 6, "a16b", 14, 0],
             N("By the second village it has run ahead of them. The people are terrified.", "众皆惊惶。"),
             ["emote", "villagers", "sweat"],
+            ["crowd", "+3"],
         ]},
         "a16c": {"title": T("Will You Follow Me?", "能从我反乎"), "kind": "main", "steps": [
             ["problem"],
@@ -948,6 +950,7 @@ def _scenes_chain():
             N("In the third, they put the question plainly: Why die for nothing? Will you rise with us? And every man will.",
               "乃复扬言曰：“徒死无益，能从我反乎？”众皆愿从。"),
             ["pose", "villagers", "cheer"],
+            ["crowd", "+5"],
         ]},
         "a16m": {"title": T("The March on Chang'an", "杀奔长安"), "kind": "main", "steps": [
             ["army", "host", "rebel", 9, "a16m", 20, 0],
@@ -993,6 +996,7 @@ def _scenes_chain():
             N("Then a rider brings word: Zhang Ji and Fan Chou are at Chang'an. Lü Bu hurries back, and loses many men on the way.",
               "忽然飞马报来，说张济、樊稠两路军马，竟犯长安，京城危急。布急领军回，折了好些人马。"),
             ["run", "lb", "a17", 80, 0], ["remove", "lb"], ["remove", "theirs"],
+            ["crowd", 0],
             ["party", ["wangyun"], {"to": "a18"}],
         ]},
 
