@@ -892,14 +892,25 @@
    "gate": [
     {
      "needs": [
-      "item:crown"
+      "item:pearls"
      ],
      "else": "a3_wait",
-     "objective": "Have the family pearls set into a gold crown.",
+     "objective": "Fetch the family pearls from the old steward.",
      "count": false,
      "at": "Chang'an",
      "place": "changan",
-     "objective_zh": "取家藏明珠，令良匠嵌造金冠。"
+     "objective_zh": "向老管家取出家藏明珠。"
+    },
+    {
+     "needs": [
+      "item:crown"
+     ],
+     "else": "a3_wait",
+     "objective": "Take the pearls to the jeweller, to be set into a gold crown.",
+     "count": false,
+     "at": "Chang'an",
+     "place": "changan",
+     "objective_zh": "将明珠送到珠宝铺，嵌造金冠。"
     }
    ],
    "objective_zh": "将家藏明珠嵌成金冠，避开耳目送到吕布手中。",
