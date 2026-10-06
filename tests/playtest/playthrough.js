@@ -20,7 +20,7 @@ await ready();
 console.log('fresh goal:',await p.evaluate(()=>document.querySelector('.town-goal').textContent),'| next:',await p.evaluate(()=>window.__w.nextMain().node));
 // the beats in the order the game gives them (nextMain); a gated beat gets what it needs first (the
 // flanks, the blood, the ridges have their own tests: blackwind, side-stories)
-let guard=0;
+let guard=0,lastLight;
 for(;;){
   const nx=await p.evaluate(()=>{const w=window.__w,q=w&&w.nextMain();if(!q||!/^1-/.test(q.node))return null;
     for(const g of q.gate||[])for(const n of [].concat(g.needs||[])){const [k,v]=String(n).split(':');if(k==='item')WorldItems.add(w.w,v);if(k==='mark')WorldMarks.add(w.w,v);if(k==='node')TK.markCleared(/^\d+-/.test(v)?v:w.w.n+'-'+v);}
@@ -32,7 +32,10 @@ for(;;){
   // Black Wind's gathering and the ridges have their own test (blackwind): supply them here
   if(node==='1-boss')await p.evaluate(()=>{['pigblood','sheepblood','dogblood'].forEach(k=>WorldItems.add(TK.world(1),k));['ridge_left','ridge_right'].forEach(m=>WorldMarks.add(TK.world(1),m));});
   await go(place);
-  console.log(`\n=== ${node} @ ${place}  face ${await front(node)}`);
+  const lightIn=await p.evaluate(()=>(window.__w.st&&window.__w.st.light)||'day');
+  // the light the last beat left (night after a night scene) is still the light here: it carries onto the next map
+  if(typeof lastLight!=='undefined'&&lastLight!==lightIn)console.log(`FAIL the light didn't carry over: the last beat left ${lastLight}, ${node} at ${place} opens in ${lightIn}`);
+  console.log(`\n=== ${node} @ ${place}  face ${await front(node)}  light on arrival: ${lightIn}`);
   await p.evaluate(()=>{const w=window.__w;w.player.y+=10;}); await p.waitForTimeout(1200); await tapSpot(node); await p.waitForTimeout(1500); await p.waitForTimeout(200);
   const before=[];let t0=Date.now();
   const noBoard=await p.evaluate(n=>TK.world(1).nodes.find(x=>x.key===n).board===false,node);
@@ -49,6 +52,7 @@ for(;;){
   console.log(' AFTER ('+((Date.now()-t0)/1000).toFixed(0)+'s): '+after.map(x=>x.slice(0,90)).join('\n   '));
   for(let k=0;k<20;k++){await p.waitForTimeout(300);const g=p.locator('.tk-scroll-go');if(await g.count()){after.push('[scroll] '+await p.evaluate(()=>document.querySelector('.tk-scroll h3')&&document.querySelector('.tk-scroll h3').textContent));await g.first().tap();k=0;}}
   console.log(' AFTER2: '+after.filter(x=>x.startsWith('[scroll]')).join(' | '));
-  console.log(' cleared',await p.evaluate(n=>TK.cleared(n),node),'goal:',await p.evaluate(()=>document.querySelector('.town-goal')&&document.querySelector('.town-goal').textContent.slice(0,60)));
+  lastLight=await p.evaluate(()=>(window.__w.st&&window.__w.st.light)||'day');
+  console.log(' cleared',await p.evaluate(n=>TK.cleared(n),node),'light after:',lastLight,'goal:',await p.evaluate(()=>document.querySelector('.town-goal')&&document.querySelector('.town-goal').textContent.slice(0,60)));
 }
 await b.close();})();
