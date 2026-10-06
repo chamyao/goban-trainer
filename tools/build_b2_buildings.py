@@ -12,12 +12,16 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "assets/tk/gen/jade-b2"
-# the tent_small tries came back as houses, banquet-1 nearly empty: not picked
+# banquet-1 came back nearly empty: not picked
 PICKS = {
     "building.hall_grand": [1, 2], "building.palace": [2], "building.wing": [1, 2],
     "building.pavilion": [2], "building.pavilion_painted": [2], "building.gatetower": [1],
     "building.granary": [1], "building.storehouse": [1], "building.posthouse": [1],
     "building.gatehouse": [1], "camp.banquet": [2], "market.stalls": [2],
+    # the second batch (--set jade-b2b): the rockeries and ridges came back as scenes and buildings (drawn by
+    # code instead, tools/draw_b2_extras.py); wing_side-1 is a front view
+    "building.compound": [1, 2], "building.wing_side": [2], "landmark.heights": [1, 2],
+    "building.hut": [1, 2], "building.tent_small": [1, 2],
 }
 
 

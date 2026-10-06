@@ -289,12 +289,31 @@ TILES = {
 }
 
 
+def rockery():   # a garden rockery: tall pierced grey Taihu stones, moss at the foot
+    g = Grid(32, 40)
+    g.ellipse(16, 22, 9, 17, "#8a8e94"); g.ellipse(9, 30, 6, 9, "#9a9ea6"); g.ellipse(23, 31, 6, 8, "#7a7e86")
+    g.ellipse(13, 18, 4, 9, "#aab0b6")
+    for cx, cy, r in ((15, 12, 2.2), (19, 22, 2.6), (10, 28, 1.8), (23, 31, 1.6), (14, 32, 1.4)):
+        g.clear_ellipse(cx, cy, r, r * 1.2)   # the holes
+    g.rect(4, 37, 24, 2, "#4a7a3a"); g.rect(8, 36, 4, 1, "#5a9a4a"); g.rect(20, 36, 5, 1, "#5a9a4a")
+    return g.outline().image()
+
+
+def ridge():   # an earthen ridge: a long low mound of bare yellow earth, grass along its crest
+    g = Grid(96, 34)
+    g.ellipse(48, 22, 46, 11, "#c8a060"); g.ellipse(48, 25, 44, 8, "#b08448"); g.ellipse(44, 18, 34, 5, "#d8b878")
+    for x in range(10, 86, 3):
+        y = 12 + abs(x - 48) // 7
+        g.set(x, y, "#5a9a40"); g.set(x + 1, y - 1, "#4a8a36")
+    return g.outline().image()
+
+
 PIECES = {
     "banner.black": banner_black, "milestone": milestone, "plant.peony": peony, "water.lotus": lotus,
     "prop.lanterns": lantern_stand, "prop.body_lamp": body_lamp, "tree.poplar": poplar, "tree.willow": willow,
     "garden.trellis": trellis, "garden.screenwall": screenwall, "furn.qin": qin, "furn.window": window,
     "furn.swordwall": swordwall, "furn.seat": seat, "furn.lamp": lamp, "furn.dais": dais, "corral": corral,
-    "landmark.hitchingpost": hitchingpost,
+    "landmark.hitchingpost": hitchingpost, "garden.rockery": rockery, "landmark.ridge": ridge,
 }
 
 
