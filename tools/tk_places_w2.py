@@ -27,6 +27,7 @@ PLACES2 = {
     # =========================================================================================
     "Chang'an": {
         "archetype": "city",
+        "size": [52, 38],   # room for two walled gardens; a request (today the city is always 40x30)
         "room_folk": False,
         "shrine": False,
         "banners": "red",
@@ -38,12 +39,28 @@ PLACES2 = {
             {"kind": "building.hall", "id": "wangyun", "label": "Wang Yun's residence",
              "rooms": [{"id": "wy-hall", "label": "The front hall"}, {"id": "wy-rearhall", "label": "The rear hall"},
                        {"id": "wy-secret", "label": "The secret room", "kind": "building.house"}]},
-            {"kind": "building.moongate", "id": "wy-garden", "node": "2-a2", "near": "wangyun", "label": "Wang Yun's rear garden"},
+            # the gardens have ground of their own: a walled plot behind the residence, entered by the moon gate
+            # in its front wall; the beat's spot is at the pavilion inside, so you walk the garden to reach it.
+            # "garden" is a request to the factory (docs/book2/places-notes.md); the plan grid is tk_plans_w2.py.
+            {"kind": "building.moongate", "id": "wy-garden", "node": "2-a2", "near": "wangyun", "label": "Wang Yun's rear garden",
+             "garden": {"size": [14, 9], "behind": "wangyun", "wall": "low", "gate": "S",
+                        "pond": {"size": [5, 3], "where": "middle"},
+                        "pavilions": [{"label": "The peony pavilion", "where": "west", "spot": True},
+                                      {"label": "The painted pavilion", "where": "east"}],
+                        "path": "winding",
+                        "plants": {"tree.peach": 4, "tree.bamboo": 5, "plant.flower": 16, "plant.bush": 4, "rock.big": 1},
+                        "note": "the peony beds by the west pavilion; the 荼蘼 trellis over the path; a rockery by the pond"}},
             # the Chancellor's residence
             {"kind": "building.hall", "id": "xiangfu", "label": "The Chancellor's residence",
              "rooms": [{"id": "xf-hall", "label": "The middle hall"}, {"id": "xf-bedroom", "label": "The bedchamber", "kind": "building.house"}]},
             {"kind": "building.moongate", "id": "xf-garden", "node": "2-a9", "near": "xiangfu",
-             "label": "The Chancellor's rear garden: the Phoenix Pavilion"},
+             "label": "The Chancellor's rear garden: the Phoenix Pavilion",
+             "garden": {"size": [16, 10], "behind": "xiangfu", "wall": "low", "gate": "S",
+                        "pond": {"size": [7, 4], "where": "north", "lotus": True},
+                        "pavilions": [{"label": "The Phoenix Pavilion", "where": "pond", "bridge": "zigzag", "spot": True}],
+                        "path": "winding",
+                        "plants": {"tree.peach": 3, "tree.peach_big": 1, "tree.bamboo": 4, "plant.flower": 18, "plant.bush": 6, "rock.big": 2},
+                        "note": "willows by the path (分花拂柳); rockeries and bushes as cover; the garden gate on the side wall"}},
             {"kind": "lamp.post", "id": "lanterns", "node": "2-a6", "near": "xiangfu", "label": "The red lanterns on the avenue"},
             # Lü Bu's quarters, next door
             {"kind": "building.house", "id": "lubu", "node": "2-a3", "near": "xiangfu", "label": "Lü Bu's quarters"},

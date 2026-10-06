@@ -80,3 +80,8 @@ Listed with their footprints in `NEW_KINDS` at the top of `tools/tk_plans_w2.py`
 - Furniture: dais, curtain, sword on the wall, window, lamp, seat.
 - Lines: gallery (with lattice sides), bridge, stream, curtain.
 - Zones: court, passage, garden, stage, plain, loess, cliff, wheat.
+
+## Playtest (stopgap) requests
+
+19. **Gardens with ground of their own.** A landmark can carry `"garden": {...}`: a walled plot of `size` tiles behind the building named in `behind`, entered by its moon gate. Inside: a `pond` (size, where, lotus), `pavilions` (label, where: west/east/pond; one has the beat's `spot`; a pond pavilion gets a zig-zag `bridge`), a winding `path` from the gate to the spot pavilion, and `plants` (counts by kind) scattered off the path. Today the garden is only a moon gate squeezed behind the house. *Used by:* Wang Yun's rear garden (A2) and the Chancellor's rear garden (A9), in `tools/tk_places_w2.py`. The full design is the gardens in the compound maps of `tools/tk_plans_w2.py`.
+20. **A place's size from its brief** (`"size": [w, h]`), so Chang'an can hold its residences and two gardens without crowding. Today a city is always 40×30.
