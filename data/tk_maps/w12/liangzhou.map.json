@@ -1694,7 +1694,8 @@
     "“I've told them. They're coming.”"
    ],
    "until": "12-a16b",
-   "when": "node:a16a"
+   "when": "node:a16a",
+   "view": 3
   },
   {
    "id": "npc-2",
@@ -1714,7 +1715,13 @@
    ],
    "until": "12-a16c",
    "face": "left",
-   "when": "node:a16b"
+   "when": "node:a16b",
+   "view": 5,
+   "blocks": "v3",
+   "guard": [
+    22.5,
+    17.5
+   ]
   },
   {
    "id": "npc-3",
@@ -1733,7 +1740,8 @@
     "The scout watches the east road."
    ],
    "until": "12-a17",
-   "when": "node:a16m"
+   "when": "node:a16m",
+   "view": 3
   },
   {
    "id": "npc-4",

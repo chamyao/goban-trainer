@@ -109,6 +109,12 @@
    "h": 2,
    "id": "xiangfu",
    "label": "The Chancellor's residence",
+   "open_to": [
+    "diaochan"
+   ],
+   "refuse": [
+    "The gatekeeper bars the way. “The Grand Preceptor receives no one today.”"
+   ],
    "rooms": [
     {
      "id": "xf-hall",
@@ -1566,7 +1572,13 @@
    ],
    "until": "12-a3",
    "face": "left",
-   "when": "node:a2"
+   "when": "node:a2",
+   "view": 6,
+   "blocks": "a3",
+   "guard": [
+    31.5,
+    5.2
+   ]
   },
   {
    "id": "npc-4",
@@ -1585,7 +1597,8 @@
     "“Not again, old man. My purse can't take it.”"
    ],
    "until": "12-a3",
-   "when": "node:a2"
+   "when": "node:a2",
+   "view": 3
   },
   {
    "id": "npc-5",
@@ -1605,7 +1618,13 @@
    ],
    "until": "12-a12b",
    "face": "down",
-   "when": "node:a11"
+   "when": "node:a11",
+   "view": 5,
+   "blocks": "huangwan",
+   "guard": [
+    18.5,
+    9.5
+   ]
   },
   {
    "id": "npc-6",
@@ -1624,7 +1643,8 @@
     "The man in the plain coat has gone."
    ],
    "until": "12-a12a",
-   "when": "node:a11"
+   "when": "node:a11",
+   "view": 3
   },
   {
    "id": "npc-7",
@@ -1642,7 +1662,8 @@
    "done": [
     "“Another day, Minister. The stones keep.”"
    ],
-   "until": "12-a17"
+   "until": "12-a17",
+   "view": 3
   },
   {
    "id": "npc-8",
@@ -1661,7 +1682,8 @@
     "“Still out, Minister?”"
    ],
    "until": "12-a6",
-   "when": "node:a5"
+   "when": "node:a5",
+   "view": 3
   },
   {
    "id": "npc-9",
@@ -1896,7 +1918,13 @@
    "y": 8.85,
    "w": 0.8,
    "h": 0.45,
-   "door": true
+   "door": true,
+   "open_to": [
+    "diaochan"
+   ],
+   "refuse": [
+    "The gatekeeper bars the way. “The Grand Preceptor receives no one today.”"
+   ]
   },
   {
    "to": "changan--lubu",

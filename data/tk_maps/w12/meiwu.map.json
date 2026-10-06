@@ -1710,7 +1710,13 @@
    ],
    "until": "12-a13",
    "face": "down",
-   "when": "node:a12"
+   "when": "node:a12",
+   "view": 5,
+   "blocks": "gate",
+   "guard": [
+    29.5,
+    16.5
+   ]
   },
   {
    "id": "npc-2",
@@ -1730,7 +1736,13 @@
    ],
    "until": "12-a15m",
    "face": "down",
-   "when": "node:a15"
+   "when": "node:a15",
+   "view": 5,
+   "blocks": "diaochan",
+   "guard": [
+    15.5,
+    17.5
+   ]
   },
   {
    "id": "npc-3",
@@ -1749,7 +1761,8 @@
     "The officer sits against the wall and does not look up."
    ],
    "until": "12-a15m",
-   "when": "node:a15"
+   "when": "node:a15",
+   "view": 3
   },
   {
    "id": "npc-4",

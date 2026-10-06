@@ -1579,7 +1579,15 @@
    ],
    "until": "12-a13",
    "face": "left",
-   "when": "node:a12"
+   "when": "node:a12",
+   "view": 7,
+   "blocks": {
+    "exit": "Meiwu"
+   },
+   "guard": [
+    43.5,
+    10.5
+   ]
   },
   {
    "id": "npc-2",
@@ -1600,7 +1608,8 @@
     "“Safe road, sir.”"
    ],
    "until": "12-a13",
-   "when": "node:a12"
+   "when": "node:a12",
+   "view": 3
   },
   {
    "id": "npc-3",
