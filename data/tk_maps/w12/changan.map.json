@@ -1263,7 +1263,7 @@
     "cone": 12,
     "beat": [
      [
-      37.5,
+      33.5,
       37.9
      ],
      [
@@ -1271,9 +1271,14 @@
       37.9
      ],
      [
-      49.5,
+      33.5,
       37.9
      ]
+    ],
+    "pause": [
+     49.5,
+     37.9,
+     2
     ],
     "in_beats": [
      "12-a3"
@@ -1282,7 +1287,7 @@
      "“Minister Wang? Out with a parcel? The Grand Preceptor likes to know what his ministers carry.”"
     ],
     "back_to": "market",
-    "shape": "L"
+    "shape": "U"
    }
   },
   {
@@ -1460,8 +1465,8 @@
   {
    "id": "runner",
    "kind": "folk.official",
-   "x": 45.5,
-   "y": 37.9,
+   "x": 57.5,
+   "y": 33.9,
    "say": [],
    "intro": [
     "A runner in the Chancellor's colours steps into your path. “Minister Wang, out on foot? The Grand Preceptor likes to know who walks where.”"
@@ -1473,10 +1478,9 @@
     "The runner watches you pass, and says nothing."
    ],
    "until": "12-a3",
-   "face": "right",
    "when": "node:a2",
    "blocks": "a3",
-   "view": 12,
+   "view": 4,
    "challenge": "runner"
   },
   {
