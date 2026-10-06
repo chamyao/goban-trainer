@@ -105,12 +105,20 @@ def run(model, inp):
 def kit_set(a):
     """The xianxia kit (tools/xianxia_spec.py) into assets/tk/gen/xianxia/<name>-<i>.png."""
     from xianxia_spec import GROUND, OBJECTS
-    out = OUT / ("xianxia" if a.set in ("xianxia", "xianxia-chars") else
+    if a.set == "jade-b2":   # the new Book 2's big buildings for the Jade kit, in Jade's colours
+        from xianxia_spec import B2_BUILDINGS, JADE_LOOK
+        out = OUT / "jade-b2"
+        out.mkdir(parents=True, exist_ok=True)
+        a.pal_which = "jade"
+        a.jobs_override = [(k, "rd-plus", {"style": "topdown_asset", "width": w, "height": h, "remove_bg": True,
+                                           "prompt": f"{p}, {JADE_LOOK}, 3/4 top-down game sprite"}, n)
+                           for k, (p, (w, h), n) in B2_BUILDINGS.items()]
+    out = OUT / ("xianxia" if a.set in ("xianxia", "xianxia-chars") else "jade-b2" if a.set == "jade-b2" else
                  "genshin" if a.set.startswith("genshin") and a.set != "genshin-redo2" else a.set)   # parallel sets: own folders
     out.mkdir(parents=True, exist_ok=True)
     log_path = out / "gen.json"
     log = json.loads(log_path.read_text()) if log_path.exists() else {}
-    pal = data_uri(palette_png("genshin" if a.set.startswith("genshin") else None))
+    pal = data_uri(palette_png("genshin" if a.set.startswith("genshin") else getattr(a, "pal_which", None)))
     jobs = [(f"ground.{k}", "rd-fast", {"style": "texture", "width": 16, "height": 16, "tile_x": True, "tile_y": True,
                                          "bypass_prompt_expansion": True,
                                          "prompt": f"{p}, flat seamless 16x16 game ground tile, top-down"}, n)
@@ -171,6 +179,8 @@ def kit_set(a):
         jobs = [(f"char.{k}", "rd-animation", {"style": "four_angle_walking", "width": 48, "height": 48,
                                                 "return_spritesheet": True, "prompt": f"{p}, {LOOK}"}, CHAR_TRIES.get(k, 1))
                 for k, p in CHARACTERS.items()]
+    if getattr(a, "jobs_override", None):
+        jobs = a.jobs_override
     todo = [j for j in jobs if not ((a.only and j[0] not in a.only) or ((out / f"{j[0]}-1.png").exists() and not a.force))]
     lock = threading.Lock()
 
@@ -208,7 +218,7 @@ def main():
     ap.add_argument("--only", action="append")
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--list", action="store_true")
-    ap.add_argument("--set", choices=["xianxia", "xianxia-chars", "xianxia-redo", "xianxia-interior", "xianxia-chars2", "xianxia-props", "genshin-pilot", "genshin", "genshin-redo", "genshin-redo2", "genshin-bg"], help="generate a whole kit's pieces (tools/xianxia_spec.py)")
+    ap.add_argument("--set", choices=["xianxia", "xianxia-chars", "xianxia-redo", "xianxia-interior", "xianxia-chars2", "xianxia-props", "genshin-pilot", "genshin", "genshin-redo", "genshin-redo2", "genshin-bg", "jade-b2"], help="generate a whole kit's pieces (tools/xianxia_spec.py)")
     ap.add_argument("--pause", type=float, default=12, help="seconds between requests (rate limits)")
     ap.add_argument("--jobs", type=int, default=8, help="requests at once")
     a = ap.parse_args()

@@ -206,10 +206,49 @@ GENSHIN_BACKDROPS = {
     "mountain": "flat rocky ground seen from directly above: grey stones, gravel, tufts of grass, small pine trees",
     "ruins": "flat ground seen from directly above: grey ash, charred wood, broken roof tiles, burnt grass",
 }
-GENSHIN_BACKDROP_PICK = {"meadow": 1, "forest": 1, "mountain": 3, "ruins": 3}   # the tries that tile cleanly
+GENSHIN_BACKDROP_PICK = {"meadow": 1, "forest": 1, "mountain": 4, "ruins": 3}   # the tries that tile cleanly
 GENSHIN_FOREGROUNDS = {
     "fg.canopy": ("a big cluster of leafy green tree crowns, seen from slightly above", (128, 96)),
     "fg.pine": ("a tall dark green pine tree", (64, 112)),
     "fg.rocks": ("a pile of large mossy grey boulders", (112, 72)),
     "fg.reeds": ("a thick clump of tall green reeds and grasses", (80, 80)),
+}
+
+
+# ---- the new Book 2's big buildings, for the Jade kit (gen_pixel.py --set jade-b2) ----
+# Jade's own 16 colours (assets/tk/jade/buildings.png), and two greys for stone and tiles
+JADE_PALETTE = ["#000000", "#c37100", "#ffdba2", "#794100", "#49a269", "#db4161", "#b21030", "#306141",
+                "#e35100", "#4192c3", "#71e392", "#a23000", "#305182", "#200000", "#ff61b2", "#386d00",
+                "#8a8e94", "#c8c8c0"]
+JADE_LOOK = ("16-bit JRPG town tileset style, bold black outlines, warm wood and red-brown tiled roofs, "
+             "cream plaster walls, Han dynasty China")
+# kind: (prompt, (w, h) in pixels, tries). Sizes follow the plan footprints (16 px tiles) plus the roof.
+B2_BUILDINGS = {
+    "building.hall_grand": ("a great hall of an official's residence: wide hip-and-gable roof of grey-red tiles "
+                            "with upturned eaves, red lacquered pillars, a broad stone terrace with steps at the front, "
+                            "front view", (160, 128), 2),
+    "building.palace": ("an imperial palace hall on a high stone terrace: a vast double-eaved hip roof of dark tiles, "
+                        "a row of red pillars, wide stairs up the middle of the terrace, front view", (256, 192), 2),
+    "building.wing": ("a long low side wing of a Chinese courtyard house: a gable roof of grey tiles, lattice "
+                      "windows, a door in the middle, front view", (96, 80), 2),
+    "building.pavilion": ("an open-sided Chinese garden pavilion: four red pillars, a square hip roof with upturned "
+                          "eaves, a low railing, front view", (48, 64), 2),
+    "building.pavilion_painted": ("a two-storey painted garden pavilion: red pillars with painted beams, a balcony with "
+                                  "a railing on the upper storey, double upturned roofs, front view", (48, 80), 2),
+    "building.gatetower": ("a Chinese city-gate tower: a tall timber tower with a tiled hip roof standing on a "
+                           "rammed-earth wall, an arched gateway below, front view", (64, 112), 2),
+    "building.granary": ("a long Han granary: rammed-earth walls, a thatched gable roof, small vents high in the wall, "
+                         "a wooden door, front view", (96, 64), 2),
+    "building.storehouse": ("a treasury storehouse: stout plastered walls, heavy double doors with bronze studs, "
+                            "a grey tiled roof, front view", (96, 64), 2),
+    "building.posthouse": ("a Han post-station: a small walled yard with a gate and a wooden lookout tower inside, "
+                           "front view", (80, 80), 2),
+    "building.gatehouse": ("the roofed gateway of a walled Chinese residence: double red doors under a small tiled "
+                           "roof set in a plastered wall, front view", (64, 56), 2),
+    "camp.banquet": ("a long outdoor banquet: low lacquered tables in a row with dishes and wine jars, cushions, "
+                     "under a cloth awning on poles, front view", (160, 48), 2),
+    "market.stalls": ("a row of market stalls with striped cloth awnings, baskets and goods on tables, front view",
+                      (96, 48), 2),
+    "building.tent_small": ("a small square army officer's tent of pale canvas, door flap tied open, front view",
+                            (32, 40), 2),
 }
