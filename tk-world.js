@@ -1681,7 +1681,7 @@ function worldScenes() {
         n.sees = false;
         if (!this.watching(n)) continue;
         // his beat: walk it, stopping where it says to; or turn between the ways he faces
-        if (!calm && w.pts.length) {
+        if (!calm && w.pts.length > 1) {   // one point is a post: he stands there, facing his way or turning
           if (w.wait > 0) w.wait -= dt;
           else {
             const tg = w.pts[w.leg], dx = tg.x - n.spr.x, dy = tg.y - n.spr.y, d = Math.hypot(dx, dy), v = 30 * dt / 1000;

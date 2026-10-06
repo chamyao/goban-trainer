@@ -44,6 +44,15 @@ for(;;){
   if(typeof lastLight!=='undefined'&&lastLight!==lightIn)console.log(`FAIL the light didn't carry over: the last beat left ${lastLight}, ${node} at ${place} opens in ${lightIn}`);
   console.log(`\n=== ${node} @ ${place}  face ${await front(node)}  light on arrival: ${lightIn}`);
   await p.evaluate(()=>{const w=window.__w;w.player.y+=10;}); await p.waitForTimeout(1200); await tapSpot(node); await p.waitForTimeout(1500); await p.waitForTimeout(200);
+  // a sight puzzle (seen by one watcher, not by the other): stand where one sees her and the other, whichever way he turns, doesn't
+  const sight=await p.evaluate(node=>{const w=window.__w,s=Object.values(w.spots).find(s=>s.node===node);if(!s||!s.sight)return null;const T=w.tw||16;
+    const by=id=>w.npcs.find(n=>n.watch&&(n.watch.id===id||n.id===id)),A=by(s.sight.seen_by),B=by(s.sight.unseen_by);if(!A)return 'no watcher '+s.sight.seen_by;
+    const dirs=B?(B.watch.turns.length?B.watch.turns:[B.watch.dir]):[];let best=null;
+    for(let y=0;y<80;y++)for(let x=0;x<80;x++){const P={x:(x+.5)*T,y:(y+.9)*T};if(w.ray(P.x,P.y-6,0,1)<1||!w.sees(A,P))continue;
+      if(dirs.some(d=>{const o=B.watch.dir;B.watch.dir=d;const r=w.sees(B,P);B.watch.dir=o;return r;}))continue;
+      const d=Math.hypot(P.x-s.x,P.y-s.y);if(!best||d<best.d)best={...P,d};}
+    if(!best)return 'none';w.walk=null;w.auto=null;w.player.setVelocity(0);w.player.setPosition(best.x,best.y);return Math.round(best.x)+','+Math.round(best.y);},node);
+  if(sight){console.log('  sight puzzle: standing at '+sight);if(!/^\d/.test(sight))console.log(`FAIL ${node}: no place where ${'one watcher sees you and the other does not'} (${sight})`);await p.waitForTimeout(1500);}
   const before=[];let t0=Date.now();
   const noBoard=await p.evaluate(n=>TK.world(window.__w.w.n).nodes.find(x=>x.key===n).board===false,node);
   for(let i=0;i<500;i++){ if(await p.locator('.tk-duel svg').count())break; if(noBoard&&i>20&&!(await busy())&&!(await p.evaluate(()=>!!window.__w.cine)))break; const l=await line(); if(l&&before[before.length-1]!==l)before.push(l); await act(); await p.waitForTimeout(80);}
