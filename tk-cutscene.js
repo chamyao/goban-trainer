@@ -368,6 +368,7 @@ const WorldCutscene = {
     // light: the whole scene tinted for the time of day; at night fires and lamps glow
     const LIGHT = { night: 0x46559c, dusk: 0xf0c0a0, dawn: 0xd8c8e8, storm: 0x80868e };
     let shade = null, glows = [], night = false;
+    let tintNow = (scene.st && scene.st.light) || null;   // the map's light going in (a scene that ended at night left it)
     const glow = o => {                                          // warm light round a fire or a lamp
       if (!scene.textures.exists("tk-glow")) {
         const c = scene.textures.createCanvas("tk-glow", 64, 64), g = c.context, grd = g.createRadialGradient(32, 32, 2, 32, 32, 32);
@@ -388,6 +389,7 @@ const WorldCutscene = {
       if (old) out(old);
       oldGlows.forEach(out);
       night = tint === "night";
+      tintNow = c == null ? null : tint;
       if (c == null) return;
       // fixed to the screen and big enough to cover it at any zoom; multiplied over the map and the cast, under bubbles
       shade = scene.add.rectangle(W / 2, H / 2, W * 3, H * 3, c).setScrollFactor(0).setDepth(9e4).setBlendMode(Phaser.BlendModes.MULTIPLY);
@@ -589,6 +591,9 @@ const WorldCutscene = {
       }
     };
 
+    // the scene starts in the light the map is in, until it sets its own
+    if (scene.worldShade) scene.worldShade.setVisible(false);
+    if (tintNow) light(tintNow, 0);
     for (const b of cs.beats) {
       if (b.do === "problem") {
         if (skip) {                               // fast-forwarded here: frame the scene, and say the last line again on a retry
@@ -612,6 +617,7 @@ const WorldCutscene = {
 
     hideStill();
     scene.scale.off("resize", relayout);
+    if (scene.setWorldLight) scene.setWorldLight(tintNow);   // the map keeps the scene's last light (night stays night)
     // back to the world: the leader stands where the scene left him
     for (const t of timers) t.remove(false);
     scene.tweens.killTweensOf(Object.values(actors).map(a => a.spr));

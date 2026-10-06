@@ -1540,10 +1540,10 @@
    "node": "1-n2",
    "role": "main",
    "place": "the-peach-garden",
-   "spot": "board",
+   "spot": "altar",
    "scene": "oath",
    "title": "The Peach Garden Oath",
-   "objective": "Sit at the old men's weiqi board under the great peach tree.",
+   "objective": "Swear brotherhood under the great peach tree.",
    "after": [
     "1-i1"
    ],
@@ -1670,7 +1670,7 @@
      81168
     ]
    ],
-   "objective_zh": "在大桃树下，坐到两位老人的棋盘前。",
+   "objective_zh": "在大桃树下结为兄弟。",
    "title_zh": "桃园结义"
   },
   {
@@ -3759,7 +3759,7 @@
    "spot": "envoy",
    "scene": "bribe",
    "title": "A Bribe Refused",
-   "objective": "Shortcut: the envoy on the road.",
+   "objective": "Shortcut: how Lu Zhi came to be in the cage cart.",
    "after": [
     "1-n5"
    ],
@@ -3886,7 +3886,7 @@
      135091
     ]
    ],
-   "objective_zh": "捷径：路上的使者。",
+   "objective_zh": "捷径：卢植是怎样被关进槛车的。",
    "title_zh": "拒贿"
   },
   {

@@ -1543,16 +1543,16 @@
  ],
  "spots": [
   {
-   "id": "board",
-   "x": 20.5,
-   "y": 10.7,
+   "id": "altar",
+   "x": 17,
+   "y": 11.7,
    "node": "1-n2",
-   "label": "The weiqi board",
+   "label": "The great peach tree",
    "intro": [
-    "Under the great peach tree two old men sit over a weiqi board, one in grey, one in red.",
+    "When the cups are empty, the brothers see two old men under the great peach tree, one in grey, one in red, sitting over a weiqi board. No one saw them come.",
     [
      "starred",
-     "Three young men, come to swear before Heaven? Heaven is listening. But first, show us how you read the stones."
+     "Three brothers, sworn before Heaven. Heaven heard you. Now show us how you read the stones."
     ],
     [
      "stargrey",

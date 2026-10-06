@@ -35,7 +35,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=35`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=36`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
@@ -217,9 +217,9 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=35`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=36`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=33`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=36`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=37`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
@@ -362,6 +362,7 @@ function worldScenes() {
       this.leaving = false;
       if (typeof WorldItems !== "undefined") WorldItems.attach(this);   // mounts (tk-items.js)
       WorldFX.ambient(this, this.place.archetype);   // petals, leaves, embers, dust
+      this.worldShade = null; this.applyWorldLight();   // night, dusk or dawn left by the last scene
       // the window changed shape (full window, a phone turned): the screen-sized effects follow
       const onResize = () => { WorldFX.ambient(this, this.place.archetype); this.fitCamera(); };
       this.scale.on("resize", onResize);
@@ -584,6 +585,16 @@ function worldScenes() {
 
     /* ---------- quests: progress is the campaign save ---------- */
     save() { WorldState.save(this.w.n, this.st); }
+    // The light a scene left the world in (tk-cutscene.js): kept on the map, and on the next map, until
+    // a scene sets another. Day is none.
+    setWorldLight(tint) { this.st.light = tint || null; this.save(); this.applyWorldLight(); }
+    applyWorldLight() {
+      if (this.worldShade) { this.worldShade.destroy(); this.worldShade = null; }
+      const c = { night: 0x46559c, dusk: 0xf0c0a0, dawn: 0xd8c8e8, storm: 0x80868e }[this.st.light];
+      if (!c) return;
+      const W = this.scale.width, H = this.scale.height;
+      this.worldShade = this.add.rectangle(W / 2, H / 2, W * 3, H * 3, c).setScrollFactor(0).setDepth(9e4).setBlendMode(Phaser.BlendModes.MULTIPLY);
+    }
     // A beat counts as done once anything after it is: saves from before a beat was
     // added (the mulberry tree, the indoor scenes) aren't sent back to it.
     done(key, seen = new Set()) {
