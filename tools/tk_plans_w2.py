@@ -339,7 +339,7 @@ PLANS2 = {
                     {"id": "guard-2", "kind": "folk.soldier", "at": [11, 19], "face": "N", "cone": 6, "in_beats": ["2-a7", "2-a7c", "2-a8", "2-a9", "2-a10"]},
                 ],
                 "checks": [   # play checks the generated details must pass (places-notes.md, request 6)
-                    {"check": "covered_route", "from": [13, 16], "to": [12, 5], "beats": ["2-a9"]},
+                    {"check": "covered_route", "from": [13, 16], "to": [12, 5], "beats": ["2-a9"], "must_wait": True},
                     {"check": "safe_spot", "in": ["passage-e", "xf-garden"]},
                 ],
             },
@@ -373,12 +373,12 @@ PLANS2 = {
                 ],
                 "exits": [{"to": "Chang'an", "at": [7, 0], "side": "N"}],
                 "watchers": [   # A12c: reaching the emperor unseen past Dong Zhuo's eunuchs, down a side passage
-                    {"id": "eunuch-1", "kind": "folk.official", "beat": [[1, 2], [1, 11], [5, 11]], "shape": "L", "cone": 4,
+                    {"id": "eunuch-1", "kind": "folk.official", "beat": [[2, 11], [13, 11], [2, 11]], "shape": "U", "pause": [13, 11, 2], "cone": 4,
                      "in_beats": ["2-a12c"], "seen": "eunuch", "back_to": "north-gate"},
-                    {"id": "eunuch-2", "kind": "folk.official", "beat": [[14, 3], [14, 11], [10, 11]], "shape": "L", "cone": 4,
+                    {"id": "eunuch-2", "kind": "folk.official", "beat": [[10, 2], [10, 9], [10, 2]], "shape": "U", "pause": [10, 2, 2], "cone": 4,
                      "in_beats": ["2-a12c"], "seen": "eunuch", "back_to": "north-gate"},
                 ],
-                "checks": [{"check": "covered_route", "from": [7, 1], "to": [12, 9], "beats": ["2-a12c"]},
+                "checks": [{"check": "covered_route", "from": [7, 1], "to": [12, 9], "beats": ["2-a12c"], "must_wait": True},
                            {"check": "safe_spot", "in": ["passages"]}],
             },
             # ---- rooms: each a small map of its own ----------------------------------------------------
@@ -473,7 +473,7 @@ PLANS2 = {
              "given": ["“That crown was the best work of my life. I hope it went to someone worth it.”"]},
             {"kind": "folk.soldier", "near": "xiangfu", "face": "S", "in": ["capital", "night-a2", "night-a6"],
              "say": "“The Grand Preceptor receives no one today.”",
-             "watch": {"beat": [[9, 9], [12, 9], [12, 9]], "shape": "L", "cone": 3, "in_beats": ["2-a3"],
+             "watch": {"beat": [[8, 9], [12, 9], [8, 9]], "shape": "U", "pause": [12, 9, 2], "cone": 3, "in_beats": ["2-a3"],
                        "seen": ["“Minister Wang? Out with a parcel? The Grand Preceptor likes to know what his ministers carry.”"],
                        "back_to": "market"}},
             {"kind": "folk.soldier", "near": "lubu", "in": ["capital"],
@@ -752,10 +752,10 @@ def _ch(cid, kind, at, when, until, intro, win, done, blocks=None, view=1, face=
 
 PLANS2["Chang'an"]["challengers"] = [
     # the crown errand (before A3): a runner watches Lü Bu's gate from across the ward street
-    _ch("runner", "folk.official", [11, 9], "node:a2", "node:a3",
+    _ch("runner", "folk.official", [14, 8], "node:a2", "node:a3",
         "A runner in the Chancellor's colours steps into your path. “Minister Wang, out on foot? The Grand Preceptor likes to know who walks where.”",
         "“Nothing worth reporting, then. Good day, Minister.”", "The runner watches you pass, and says nothing.",
-        blocks="a3", face="E", view=3),
+        blocks="a3", view=1),
     _ch("flyingbear", "folk.soldier", [5, 5], "node:a2", "node:a3",
         "A Flying Bear soldier lounges against the wall, dice in his fist. “Bored, old man? Play me. Lose, and you buy the wine.”",
         "“Hah! The old man bites. Go on.”", "“Not again, old man. My purse can't take it.”"),

@@ -343,6 +343,8 @@ class Plan:
                         q.append(n)
             if b not in seen:
                 self.err(f"covered route {a}→{b}: every way passes a cell some watcher never stops seeing")
+            if chk.get("must_wait") and b in self.bfs(a, frozenset(ever)):   # too easy: a way no watcher ever sees
+                self.err(f"covered route {a}→{b}: there's a way no watcher ever sees, so the player never has to wait")
             self.covered = (a, b, len([c for c in seen if c not in ever]))
         elif chk["check"] == "sight_puzzle":   # for each way the one watcher faces, some cell the other sees and he doesn't
             byid = {w["id"]: w for w in self.p.get("watchers", [])}
