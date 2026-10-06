@@ -57,13 +57,16 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 *Then he hears someone sighing by the peony pavilion. He steps softly closer to look. It is Diaochan, the singing girl of his household.*  
 忽闻有人在牡丹亭畔，长吁短叹。允潜步窥之，乃府中歌伎貂蝉也。
 
-[still: `dc_garden`]
-
 *She was chosen as a small girl and brought up in his house, and taught to sing and dance. She is sixteen, as gifted as she is beautiful, and Wang Yun treats her as his own daughter.*  
 其女自幼选入府中，教以歌舞，年方二八，色伎俱佳，允以亲女待之。
 
 **Wang Yun:** Shameless girl! Are you meeting a lover?  
 贱人将有私情耶？
+
+[still: `dc_garden`]
+
+*Startled, she drops to her knees to answer.*  
+貂蝉惊跪答曰：
 
 **Diaochan:** How would your servant dare have a lover!  
 贱妾安敢有私！
@@ -141,8 +144,6 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 *Lü Bu is delighted, and comes in person to Wang Yun's house to thank him.*  
 布大喜，亲到王允宅致谢。
 
-*(the player is now: Diaochan)*
-
 
 ## A4 · The First Banquet (初宴吕布)
 *Chang'an / wy-rearhall* · boards: **Diaochan** — “Win him.”
@@ -213,6 +214,8 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 *Lü Bu bows his thanks again and again, and goes.*  
 布再三拜谢而去。
+
+*(the player is now: Diaochan)*
 
 
 ## A5 · The Dance Behind the Curtain (帘外之舞)
@@ -804,20 +807,18 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 *(gained: The Emperor's secret edict)*
 
-*That night, Li Su, Commander of Cavalry, is sent for in secret.*  
-是夜，骑都尉李肃被密召而至。
-
-*(the player is now: Li Su)*
-
 
 ## A12 · The Broken Arrow (折箭为誓)
 *Chang'an / wy-secret* · boards: **Li Su** — “Turn on the Grand Preceptor?”
 
-*Wang Yun has called Lü Bu in to plan with them, and gives him the Emperor's secret edict.*  
+*Wang Yun calls Lü Bu in to plan with them, and gives him the Emperor's secret edict.*  
 允请吕布共议，以天子密诏付之。
 
 **Lü Bu:** Li Su? He's the one who talked me into killing Ding Jianyang. If he won't go now, I'll cut him down first.  
 昔日劝吾杀丁建阳，亦此人也。今若不去，吾先斩之。
+
+*They send for Li Su in secret.*  
+使人密请肃至。
 
 **Lü Bu:** Once you talked me into killing Ding Jianyang and going over to Dong Zhuo. Now Dong Zhuo cheats the Son of Heaven above and tortures the people below. His crimes are full to the brim, and men and gods hate him alike. Take the Emperor's summons to Meiwu, call Dong Zhuo to court, and we'll ambush and kill him. Help us restore the house of Han, and be loyal ministers together. What do you say?  
 昔日公说布，使杀丁建阳而投董卓；今卓上欺天子，下虐生灵，罪恶贯盈，人神共愤。公可传天子诏往郿坞，宣卓入朝，伏兵诛之，力扶汉室，共作忠臣。尊意若何？
@@ -834,6 +835,8 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 **Wang Yun:** If you can carry this off, how could you fail to rise high?  
 公若能干此事，何患不得显官？
+
+*(the player is now: Li Su)*
 
 
 ## A13 · A Dragon in a Dream (夜梦龙罩)
