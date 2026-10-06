@@ -632,8 +632,8 @@ PLANS2 = {
         "states": [
             {"id": "fortress", "light": "day"},
             {"id": "road-west-shut", "until": "node:a16m", "exits_closed": ["Liangzhou"]},
-            {"id": "raided", "when": "node:a14", "light": "day", "gate": "open"},
-            {"id": "empty", "when": "node:a16", "light": "day", "weather": "dust", "gate": "open"},
+            {"id": "raided", "when": "node:a14", "light": "day"},
+            {"id": "empty", "when": "node:a16", "light": "day", "weather": "dust"},
         ],
         "maps": {
             "hall": room([14, 8], [7, 7], things=[{"id": "screen", "kind": "furn.screen", "rect": [6, 1, 2, 1]},
