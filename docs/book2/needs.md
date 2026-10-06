@@ -63,7 +63,7 @@ Cai Yong is not a road challenger: on the user's call he is a main beat (A12y).
 | Kind | Exists today? | Used in |
 |---|---|---|
 | `table`, `winejars`, `cart` | yes | A1, A4, A5, A10 |
-| `curtain` (a bead curtain across a room) | **no** | A5 |
+| `curtain` (a bead curtain across a room) | **no** (the only new prop; `halberd` and `mirror` already exist) | A5 |
 | covered carriage (the `cart` with a canopy and curtains, someone boarded) | `cart` only | A5, A10 |
 
 ## Poses (new)
@@ -74,11 +74,13 @@ Cai Yong is not a road challenger: on the user's call he is a main beat (A12y).
 | `throat` (a sword held to one's own neck) | A10 |
 | `cutarm` (cutting one's own arm for a blood oath) | A11 |
 
-## New cast (all need a look; voices in `CAST2`)
-王允 Wang Yun, 貂蝉 Diaochan, 吕布 Lü Bu, 李儒 Li Ru, 李肃 Li Su, 张温 Zhang Wen, 士孙瑞 Shisun Rui,
-黄琬 Huang Wan, 汉献帝 Emperor Xian (a boy), and later 董卓之母 Dong Zhuo's mother, 蔡邕 Cai Yong,
-马日磾 Ma Midi, 李傕 Li Jue, 郭汜 Guo Si, 贾诩 Jia Xu, 牛辅 Niu Fu, 胡赤儿 Hu Chi'er, the Taoist.
-Dong Zhuo is Book 1's.
+## Cast
+Already drawn (TK_CHARS): 王允 wangyun, 貂蝉 diaochan, 吕布 lvbu, 李儒 liru, 李肃 lisu, 董卓之母 dongmu, 蔡邕 caiyong,
+李傕 lijue, 郭汜 guosi, 汉献帝 xiandi, and Book 1's 董卓 dongzhuo and 皇甫嵩 huangfusong.
+
+**New looks needed (8):** 贾诩 jiaxu (priority: leads the villains' turn); 士孙瑞 shisunrui, 黄琬 huangwan, 马日磾 mamidi,
+the Taoist daoren (on screen, with lines); 张温 zhangwen (no lines), 牛辅 niufu and 胡赤儿 huchier (narrated only), for whom a folk stand-in is fine.
+Voices for all are in `CAST2`.
 
 ## Stills written so far (briefs in `assets/tk/stills/scene_prompts.json`)
 `dz_roadside`, `dz_redtray`, `dc_garden`, `dc_wangkneels`, `dc_wine`, `dc_dance`, `dc_lanterns`, `dc_window`,
