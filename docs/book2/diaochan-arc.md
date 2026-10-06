@@ -298,6 +298,7 @@ Written from the Chinese original (第八回、第九回). Everything in a beat 
 | `a5` | Second banquet | Chang'an / `wy-hall` |
 | `a6` | Red lanterns | Chang'an / street near `xiangfu` |
 | `a7` | The window | Chang'an / `xf-bedroom` |
+| `a7c` | The curtain: half a face (no board; the map's sight puzzle is the play) | Chang'an / `xf-hall` |
 | `a8` | The sickbed | Chang'an / `xf-bedroom` |
 | `a9` | Phoenix Pavilion | Chang'an / `xf-garden` |
 | `a10` | The sword on the wall | Chang'an / `xf-hall` |
@@ -320,6 +321,7 @@ Written from the Chinese original (第八回、第九回). Everything in a beat 
 | `a16a`–`a16c` | Rumour villages (legwork) | Liangzhou / `v1`–`v3` |
 | `a16m` | The march (no board; gated on the three villages) | Liangzhou / road out |
 | `a17` | Ren Valley | Liangzhou / `rengu` |
-| `a18` | Xuanping Gate (no board) | Chang'an / `xuanping` |
+| `a18p` | Lü Bu's plea at the palace steps (no board) | Chang'an / the palace steps |
+| `a18` | The Xuanping Gate tower (no board) | Chang'an / `xuanping-top` |
 
 These match `tools/tk_story_w2_new.py`. The keys may be renamed when the story is written, but Plot will say so.
