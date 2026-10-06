@@ -18,9 +18,10 @@ front door opens into the first, each back wall into the next; main 54ff914).
 "inside": True on a person: they stand in the room of their "near" building (the steward
 by the family chest, the jeweller at his bench). The factory honours it (main 4c88e49).
 
-Road challengers (14; 6 blocking): today a challenger can't block a path or spot
-you, so the blocking ones stand by the landmark you must reach next, and only
-for that walk (when/until). Marked "blocking" in a comment.
+Road challengers (14; 6 blocking), each only for its walk (when/until). "blocks" names
+what a blocking one guards (a node, landmark or room id, or {"exit": place}); come
+near it unbeaten and he stops you. "view" is how far he sees you, in tiles: the
+optional ones have a short view, so they spot you only close up (main f222944).
 """
 
 PLACES2 = {
@@ -52,6 +53,7 @@ PLACES2 = {
                         "note": "the peony beds by the west pavilion; the 荼蘼 trellis over the path; a rockery by the pond"}},
             # the Chancellor's residence
             {"kind": "building.hall", "id": "xiangfu", "label": "The Chancellor's residence",
+             "open_to": ["diaochan"], "refuse": ["The gatekeeper bars the way. “The Grand Preceptor receives no one today.”"],
              "rooms": [{"id": "xf-hall", "label": "The middle hall"}, {"id": "xf-bedroom", "label": "The bedchamber", "kind": "building.house"}]},
             {"kind": "building.moongate", "id": "xf-garden", "node": "2-a9", "near": "xiangfu",
              "label": "The Chancellor's rear garden: the Phoenix Pavilion",
@@ -93,24 +95,24 @@ PLACES2 = {
              "give": ["“Pearls from your own house, Minister? Then the crown will be the best thing I ever made.”"],
              "given": ["“That crown was the best work of my life. I hope it went to someone worth it.”"]},
             # --- road challengers: the crown errand (before A3) --------------------------------------
-            {"kind": "folk.official", "near": "lubu", "face": "left", "challenge": "runner", "when": "node:a2", "until": "2-a3",   # blocking
+            {"kind": "folk.official", "near": "lubu", "face": "left", "challenge": "runner", "blocks": "a3", "view": 6, "when": "node:a2", "until": "2-a3",   # blocking
              "intro": ["A runner in the Chancellor's colours steps into your path. “Minister Wang, out on foot? The Grand Preceptor likes to know who walks where.”"],
              "win": ["“Nothing worth reporting, then. Good day, Minister.”"], "done": ["The runner watches you pass, and says nothing."]},
-            {"kind": "folk.soldier", "near": "jeweller", "challenge": "flyingbear", "when": "node:a2", "until": "2-a3",
+            {"kind": "folk.soldier", "near": "jeweller", "challenge": "flyingbear", "view": 3, "when": "node:a2", "until": "2-a3",
              "intro": ["A Flying Bear soldier lounges against the wall, dice in his fist. “Bored, old man? Play me. Lose, and you buy the wine.”"],
              "win": ["“Hah! The old man bites. Go on.”"], "done": ["“Not again, old man. My purse can't take it.”"]},
             # --- road challengers: the conspirators' errands (before A12a/A12b) ------------------------
-            {"kind": "folk.soldier", "near": "huangwan", "face": "down", "challenge": "patrol", "when": "node:a11", "until": "2-a12b",   # blocking
+            {"kind": "folk.soldier", "near": "huangwan", "face": "down", "challenge": "patrol", "blocks": "huangwan", "view": 5, "when": "node:a11", "until": "2-a12b",   # blocking
              "intro": ["A Flying Bear patrol fills the lane to Huang Wan's gate. “Visiting late, Minister? Every lane in Chang'an answers to the Grand Preceptor.”"],
              "win": ["“On your way, then. Quickly.”"], "done": ["The patrol has moved on to the next lane."]},
-            {"kind": "folk.villager", "near": "shisun", "challenge": "informer", "when": "node:a11", "until": "2-a12a",
+            {"kind": "folk.villager", "near": "shisun", "challenge": "informer", "view": 3, "when": "node:a11", "until": "2-a12a",
              "intro": ["A man in a plain coat has sat by Shisun Rui's gate all morning. “A game while you wait, Minister? I have time. I have nothing but time.”"],
              "win": ["“You play like a man with nothing to hide.”"], "done": ["The man in the plain coat has gone."]},
             # --- Chang'an optionals: the old scholar, the officer in the night lane --------------------
-            {"kind": "folk.elder", "near": "gotable", "challenge": "scholar", "until": "2-a17",
+            {"kind": "folk.elder", "near": "gotable", "challenge": "scholar", "view": 3, "until": "2-a17",
              "intro": ["“Sit, Minister. In this city it's safer to talk about stones than people.”"],
              "win": ["“Ha. You read the board the way you read a room.”"], "done": ["“Another day, Minister. The stones keep.”"]},
-            {"kind": "folk.soldier", "near": "lanterns", "challenge": "officer", "when": "node:a5", "until": "2-a6",
+            {"kind": "folk.soldier", "near": "lanterns", "challenge": "officer", "view": 3, "when": "node:a5", "until": "2-a6",
              "intro": ["A Liangzhou officer steps out of a dark lane. “Out after the drum, Minister? Play me for your way home.”"],
              "win": ["“Go on, then. I never saw you.”"], "done": ["“Still out, Minister?”"]},
             # --- townsfolk: about half everyday life; lines change as the story moves -------------------
@@ -190,10 +192,10 @@ PLACES2 = {
         ],
         "npcs": [
             # --- road challengers: Li Su's ride out to Meiwu (before A13) --------------------------------
-            {"kind": "folk.soldier", "near": "fog", "face": "left", "challenge": "roadpatrol", "when": "node:a12", "until": "2-a13",   # blocking
+            {"kind": "folk.soldier", "near": "fog", "face": "left", "challenge": "roadpatrol", "blocks": {"exit": "Meiwu"}, "view": 7, "when": "node:a12", "until": "2-a13",   # blocking
              "intro": ["A patrol of the Grand Preceptor's horsemen bars the road. “Rider from Chang'an! Halt, and show us what you carry.”"],
              "win": ["“An edict for the Grand Preceptor? Ride on, then, and ride fast.”"], "done": ["The patrol waves you through."]},
-            {"kind": "folk.elder", "near": "post", "challenge": "postkeeper", "when": "node:a12", "until": "2-a13",
+            {"kind": "folk.elder", "near": "post", "challenge": "postkeeper", "view": 3, "when": "node:a12", "until": "2-a13",
              "say": "“Thirty li to the next post, sir. Mind the ruts after the bridge.”",
              "intro": ["The post keeper has a board out on the bench. “Long nights out here. Sit a moment, sir.”"],
              "win": ["“The road's yours. Mind the ruts.”"], "done": ["“Safe road, sir.”"]},
@@ -228,14 +230,14 @@ PLACES2 = {
         ],
         "npcs": [
             # --- road challenger: Li Su at the gate (before A13) ---------------------------------------
-            {"kind": "folk.soldier", "near": "gate", "face": "down", "challenge": "gateguard", "when": "node:a12", "until": "2-a13",   # blocking
+            {"kind": "folk.soldier", "near": "gate", "face": "down", "challenge": "gateguard", "blocks": "gate", "view": 5, "when": "node:a12", "until": "2-a13",   # blocking
              "intro": ["The gate captain turns the edict over in his hands. “Seals can be made in Chang'an. Prove you're who you say.”"],
              "win": ["“Pass, Commandant Li. Open the gate!”"], "done": ["The gate stands open for you."]},
             # --- road challengers: the raid, as Lü Bu (before A15m) ------------------------------------
-            {"kind": "folk.soldier", "near": "treasury", "face": "down", "challenge": "straggler", "when": "node:a15", "until": "2-a15m",   # blocking
+            {"kind": "folk.soldier", "near": "treasury", "face": "down", "challenge": "straggler", "blocks": "diaochan", "view": 5, "when": "node:a15", "until": "2-a15m",   # blocking
              "intro": ["One of Dong Zhuo's guards still holds the treasury door, spear levelled. “The Grand Preceptor's gold! Nobody touches it!”"],
              "win": ["“…He's dead, isn't he. Take it. Take all of it.”"], "done": ["The guard has thrown down his spear."]},
-            {"kind": "folk.soldier", "near": "dongzhuo", "challenge": "bearofficer", "when": "node:a15", "until": "2-a15m",
+            {"kind": "folk.soldier", "near": "dongzhuo", "challenge": "bearofficer", "view": 3, "when": "node:a15", "until": "2-a15m",
              "intro": ["A Flying Bear officer crouches in a side court, sword half drawn. “General Lü. I always wondered which of us was better.”"],
              "win": ["“So now I know.”"], "done": ["The officer sits against the wall and does not look up."]},
             # --- townsfolk ---------------------------------------------------------------------------
@@ -269,14 +271,14 @@ PLACES2 = {
         ],
         "npcs": [
             # --- road challengers: Jia Xu between the villages ------------------------------------------
-            {"kind": "folk.elder", "near": "v2", "challenge": "headman", "when": "node:a16a", "until": "2-a16b",
+            {"kind": "folk.elder", "near": "v2", "challenge": "headman", "view": 3, "when": "node:a16a", "until": "2-a16b",
              "intro": ["A headman sits on a stone by the road, a stick across his knees. “You're spreading tales from Chang'an. Convince me first.”"],
              "win": ["“…Then it's true. I'll tell the others myself.”"], "done": ["“I've told them. They're coming.”"]},
-            {"kind": "folk.official", "near": "v3", "face": "left", "challenge": "constable", "when": "node:a16b", "until": "2-a16c",   # blocking
+            {"kind": "folk.official", "near": "v3", "face": "left", "challenge": "constable", "blocks": "v3", "view": 5, "when": "node:a16b", "until": "2-a16c",   # blocking
              "intro": ["The constable stands at the pavilion, arms folded. “A man without an army is just a man on a road. I've tied up better.”"],
              "win": ["“…That's no road gang behind you. That's Liangzhou.”"], "done": ["The constable has taken down his rope."]},
             # --- road challenger: Li Jue before Ren Valley -----------------------------------------------
-            {"kind": "folk.soldier", "near": "rengu", "challenge": "scout", "when": "node:a16m", "until": "2-a17",
+            {"kind": "folk.soldier", "near": "rengu", "challenge": "scout", "view": 3, "when": "node:a16m", "until": "2-a17",
              "intro": ["A scout calls down from his post on the hill. “General! Lü Bu's dust on the east road. Want to know how many?”"],
              "win": ["“Then you know as well as I do. Ready the gongs and drums.”"], "done": ["The scout watches the east road."]},
             # --- townsfolk ---------------------------------------------------------------------------
