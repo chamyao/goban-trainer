@@ -307,4 +307,6 @@ ZH_PLACES2 = {
     "Go to the Son of Heaven at the Xuanping Gate, at the east end of the market street.": "到市街东头的宣平门去见天子。",
     # the legibility pass (claude/plot-places c232ced)
     "The market tower": "市楼",
+    # a12a, reworded for the palace-terrace lane (claude/plot-places f0b4816)
+    "Sound out Shisun Rui, on the lane at the foot of the palace terrace, at its west end.": "密访士孙瑞，宅在宫台脚下小巷的西头。",
 }
