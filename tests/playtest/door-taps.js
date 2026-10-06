@@ -21,7 +21,7 @@ for(const place of ['lousang-village','zhuo-county']){
   for(const d of doors){
     // the road just in front of the door: stand to one side, tap it
     const iso=await p.evaluate(()=>!!window.__w.iso);   // isometric: the doorstep is drawn on the building's base, so "in front" is a little further out
-    for(const [what,tx,ty,expectIn] of [['road in front',d.x,d.bottom+(iso?12:3),false],['road beside',d.x+24,d.bottom+3,false],['road beside',d.x-24,d.bottom+3,false],['building face',d.x,d.cy-30,true]]){
+    for(let [what,tx,ty,expectIn] of [['road in front',d.x,d.bottom+(iso?12:3),false],['road beside',d.x+24,d.bottom+3,false],['road beside',d.x-24,d.bottom+3,false],['building face',d.x,d.cy-30,true]]){
       if(await p.evaluate(pl=>window.__w.placeId!==pl,place))await go(place);
       const ok=await p.evaluate(([x,y])=>{const w=window.__w,G=w.walkGrid(),C=G.C;for(const dx of [40,-40,0])for(const dy of [30,50]){const px=x+dx,py=y+dy;if(G.free(Math.floor(px/C),Math.floor((py-3)/C))){w.player.setPosition(px,py);return true;}}return false;},[d.x,d.bottom+14]);
       if(!ok){console.log(`skip ${place} -> ${d.to}: no open ground near the door`);continue;}
@@ -33,6 +33,8 @@ for(const place of ['lousang-village','zhuo-county']){
       let kind=await p.evaluate(([x,y])=>{const t=window.__w.pick(x,y);return t?t.kind:'ground';},[tx,ty]);
       // a villager wandering across the spot right then: wait for him to pass, as a player would
       for(let k=0;k<6&&kind==='npc';k++){await p.waitForTimeout(800);kind=await p.evaluate(([x,y])=>{const t=window.__w.pick(x,y);return t?t.kind:'ground';},[tx,ty]);}
+      // someone standing in front of the building, not moving on: tap the building's face beside them, as a player would
+      if(kind==='npc'&&expectIn)for(const dx of [16,-16,28,-28]){const k2=await p.evaluate(([x,y])=>{const t=window.__w.pick(x,y);return t?t.kind:'ground';},[tx+dx,ty]);if(k2==='door'){tx+=dx;kind=k2;break;}}
       if(process.env.DEBUG_DOOR&&d.to===process.env.DEBUG_DOOR&&expectIn){p.on('console',m=>{if(m.text().startsWith('DBG'))console.log('   ',m.text());});
         console.log('    DBG target screen:',await p.evaluate(([x,y])=>{const w=window.__w,cam=w.cameras.main,cv=w.game.canvas,r=cv.getBoundingClientRect(),k=cv.clientWidth/w.scale.width;const sx=r.left+((window.__w.view?window.__w.view(x,y).x:x)-cam.worldView.x)*cam.zoom*k,sy=r.top+((window.__w.view?window.__w.view(x,y).y:y)-cam.worldView.y)*cam.zoom*k;const el=document.elementFromPoint(sx,sy);const g=document.querySelector('.town-goal').getBoundingClientRect();return JSON.stringify({sx:Math.round(sx),sy:Math.round(sy),on:el&&(el.tagName+' '+(el.getAttribute('class')||'')+' < '+(el.parentElement&&(el.parentElement.tagName+'.'+(el.parentElement.getAttribute('class')||'')))+' < '+(el.closest('[class]')&&el.closest('[class]').getAttribute('class'))+' z'+getComputedStyle(el.closest('svg')||el).zIndex),goal:[g.top,g.bottom].map(Math.round)});},[tx,ty]));
         await p.evaluate(()=>{const w=window.__w;if(w.__dbg)return;w.__dbg=1;const ta=w.tapAt.bind(w),wt=w.walkTo.bind(w);w.tapAt=(x,y)=>{console.log('DBG tapAt '+Math.round(x)+','+Math.round(y)+' canMove '+w.canMove()+' busy '+w.ui.busy()+' pick '+JSON.stringify(w.pick(x,y)&&w.pick(x,y).kind));return ta(x,y);};w.walkTo=(a,b,o)=>{const r=wt(a,b,o);console.log('DBG walkTo '+Math.round(a)+','+Math.round(b)+' -> '+r+' walk '+!!w.walk);return r;};});}
