@@ -207,13 +207,14 @@ These come from the research. They apply to every map below.
 | `a10` | `xf-hall`: the sword on the wall | Diaochan | Dong Zhuo calls her in. The carriage then leaves from the gate, and Lü Bu stands in the crowd outside. |
 | `a11` | `ridge`, then `wy-secret` | Wang Yun | Walk out the Heng Gate. Lü Bu stands on the ridge watching the dust; come up behind him. |
 | `a12a`, `a12b` | `shisun`, `huangwan` | Wang Yun | Legwork, in either order. Each minister comes back to the secret room once won (his chair fills). |
+| `a12y` | `caiyong`: Cai Yong's house near the palace, his study | Wang Yun | A game of go at his study table, among bamboo-slip books and the scorched-tail qin. Wang Yun decides Cai Yong is Dong Zhuo's man. |
 | `a12p` | `wy-secret` | Wang Yun | The plan, with the two ministers (no board). |
 | `a12c` | `palace`: the emperor's side hall, behind the North Side Gate | Wang Yun | Legwork, and a stealth step: cross the gate court past two of Dong Zhuo's eunuchs to the side hall. Gained: the secret edict. |
 | `a12` | `wy-secret` | Wang Yun | Li Su is brought in. The broken arrow is the handoff to Li Su, who rides out of the Heng Gate. |
 | `a13d` | The avenue before the palace | Li Su | The Taoist with the cloth, as the procession comes down the avenue (no board). |
 | `a14` | `north-gate` | Wang Yun | Stand with the officials. The procession comes down the avenue. Boss. |
 | `a15` | `market` | Wang Yun | Walk the celebrating city to the body under its lamp. Li Ru is brought in bound at the gate court. |
-| `a15m` *(proposed)* | Meiwu, Diaochan's rooms | Lü Bu | A short walk with no board through the opened fortress, past Huangfu Song freeing the women, to Diaochan's rooms. |
+| `a15m` | Meiwu, Diaochan's rooms (`diaochan`) | Lü Bu | A short walk through the opened fortress: past a straggler holding the treasury doors at the inner gate (blocking challenger), past Huangfu Song freeing the women, to Diaochan's rooms. The scene there has no board. |
 | `a15c` | `dutang`, the great hall of state in the palace | Wang Yun | The victory feast; Cai Yong is reported weeping over the body (no board). |
 | `a18` | `xuanping` tower | Wang Yun | The sack. Through the burning streets to the east gate. **Outside the Qingsuo Gate** Lü Bu begs him to flee: that's a palace gate, so this moment plays at the palace steps on the way. Then climb the tower. |
 
@@ -281,7 +282,7 @@ The people who matter stand still where you pass them. The rest wander. Lines ar
 - *Old woman:* "East! Get to the Xuanping Gate, the Son of Heaven is there!"
 - *The labourer from Meiwu:* "I built his walls. Now his men burn mine."
 
-### Optional challengers in Chang'an
+### Challengers in Chang'an (superseded: see Road challengers below)
 - **The old scholar at the market go table,** in states 1, 3 and 5.
 - **A Liangzhou officer** who blocks a side lane at night (state 2) and spots you: "Out after the drum, Minister? Play me for your way home."
 - **Question for Plot:** Cai Yong at the go table in state 1. He served Dong Zhuo, was famous for music and learning, and his execution in A15 lands harder if the player has met him. It is not an event in the novel, only his presence in the city.
@@ -441,3 +442,29 @@ Its saying is 「吾事成，雄踞天下；不成，守此足以终老」 ("If 
 | A15 | day; night for the lamp |
 | A16–A17 | harsh day; dust at Ren Valley |
 | A18 | smoke-dark day |
+
+
+---
+
+## Road challengers (14, 6 blocking)
+
+The user's spec, through Plot. Each sets one go problem (flawless, the usual 30-second wait after a wrong move). The data, with cells and lines, is the `challengers` list of each place in `tools/tk_plans_w2.py`.
+
+**What "blocking" means:** you can't reach the next beat without coming into the challenger's view. He stands across the only way, or watches it. `tools/check_plans_w2.py` proves each block: with his view taken out of the map, the target can't be reached.
+
+| Walk | Protagonist | Challenger | Where | Blocks |
+|---|---|---|---|---|
+| Crown errand (before A3) | Wang Yun | A Chancellor's runner | the ward street, watching Lü Bu's gate | Lü Bu's gate (A3) |
+| | | A Flying Bear soldier with dice | the market street | — |
+| Conspirators' errands (before A12a/b) | Wang Yun | A Flying Bear patrol | across the lane at Huang Wan's gate | Huang Wan's house (A12b) |
+| | | An informer in a plain coat | the west lane by Shisun Rui's gate | — |
+| Chang'an, any time | Wang Yun | The old scholar | the market go table | — |
+| Night (before A6) | Wang Yun | A Liangzhou officer | the east lane | — |
+| Li Su's ride out (before A13) | Li Su | The Grand Preceptor's horsemen | the bend in the middle of the Meiwu Road, road and fields | the way on to Meiwu |
+| | | The post keeper | the thirty-li post | — |
+| | | The gate captain | before the gate of Meiwu | Dong Zhuo's hall (A13) |
+| Meiwu raid (before A15m) | Lü Bu | A straggler of Dong Zhuo's guard | the treasury doors at the inner gate | Diaochan's rooms (A15m) |
+| | | A Flying Bear officer | among the granaries | — |
+| Liangzhou (between villages) | Jia Xu | A headman on a stone | the road between v1 and v2 | — |
+| | | The constable | the post-pavilion at v3 | the post town (A16c) |
+| Ren Valley approach (before A17) | Li Jue | A scout on his hill post | below the gong height | — |

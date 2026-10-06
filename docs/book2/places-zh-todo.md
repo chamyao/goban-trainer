@@ -1,0 +1,60 @@
+# English lines in the place plans with no Chinese yet
+
+For Plot to add to `tools/tk_places_w2_zh.py`. Generated from `tools/tk_plans_w2.py`; delete each line once it has its Chinese.
+
+- A Flying Bear officer crouches among the granaries, sword half drawn. “General Lü. I always wondered which of us was better.”
+- A Flying Bear patrol fills the lane to Huang Wan's gate. “Visiting late, Minister? Every lane in Chang'an answers to the Grand Preceptor.”
+- A Flying Bear soldier lounges against the wall, dice in his fist. “Bored, old man? Play me. Lose, and you buy the wine.”
+- A Liangzhou officer steps out of a dark lane. “Out after the drum, Minister? Play me for your way home.”
+- A headman sits on a stone by the road, a stick across his knees. “You're spreading tales from Chang'an. Convince me first.”
+- A man in a plain coat has sat by Shisun Rui's gate all morning. “A game while you wait, Minister? I have time. I have nothing but time.”
+- A patrol of the Grand Preceptor's horsemen bars the road. “Rider from Chang'an! Halt, and show us what you carry.”
+- A potted plum
+- A qin with a scorched tail
+- A rockery
+- A runner in the Chancellor's colours steps into your path. “Minister Wang, out on foot? The Grand Preceptor likes to know who walks where.”
+- A scout calls down from his post on the hill. “General! Lü Bu's dust on the east road. Want to know how many?”
+- Bamboo-slip books
+- Cai Yong's go table
+- Cai Yong's house
+- Cai Yong's study
+- Changle Palace
+- Lü Bu's horse, tied at the gate
+- Lü Bu's house
+- One of Dong Zhuo's guards still holds the treasury doors, spear levelled. “The Grand Preceptor's gold! Nobody touches it!”
+- The constable has taken down his rope.
+- The constable stands at the pavilion, arms folded. “A man without an army is just a man on a road. I've tied up better.”
+- The garden gate
+- The gate captain turns the edict over in his hands. “Seals can be made in Chang'an. Prove you're who you say.”
+- The gate court
+- The gate of Meiwu
+- The gate stands open for you.
+- The guard has thrown down his spear.
+- The man in the plain coat has gone.
+- The officer sits against the wall and does not look up.
+- The palace steps
+- The patrol has moved on to the next lane.
+- The patrol waves you through.
+- The runner watches you pass, and says nothing.
+- The scout watches the east road.
+- The stable
+- The treasury: gold and silk
+- The treasury: pearls and jade
+- “An edict for the Grand Preceptor? Ride on, then, and ride fast.”
+- “Hah! The old man bites. Go on.”
+- “I've told them. They're coming.”
+- “Minister Wang, so far from the court? The Grand Preceptor will want to hear of it.”
+- “Minister Wang? Out with a parcel? The Grand Preceptor likes to know what his ministers carry.”
+- “Mistress? You've lost your way. The Grand Preceptor likes to know where you are.”
+- “Not again, old man. My purse can't take it.”
+- “Nothing worth reporting, then. Good day, Minister.”
+- “On your way, then. Quickly.”
+- “Pass, Commandant Li. Open the gate!”
+- “So now I know.”
+- “The garden is cold this hour, mistress. Let me walk you back.”
+- “The road's yours. Mind the ruts after the bridge.”
+- “Then you know as well as I do. Ready the gongs and drums.”
+- “You play like a man with nothing to hide.”
+- “…He's dead, isn't he. Take it. Take all of it.”
+- “…That's no road gang behind you. That's Liangzhou.”
+- “…Then it's true. I'll tell the others myself.”
