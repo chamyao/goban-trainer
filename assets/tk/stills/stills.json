@@ -476,10 +476,8 @@
   "prompt": "A peony garden at night under the moon: Diaochan kneels with her forehead near the ground; before her Wang Yun bows low; behind them a small pavilion with a stone weiqi board on its table and two stones on it, no one at it. Only these two. Diaochan is a graceful young woman of sixteen in a flowing, sheer pale silk robe with long translucent gauze sleeves and a light silk shawl drifting around her, hair in an elegant bun with a jade pin. Wang Yun is an old minister with a long grey beard, in dark court robes and a tall official's cap. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
   "provider": "replicate",
   "model": "bytedance/seedream-5-pro",
-  "look": "final",
-  "made": "2026-10-05",
-  "approved": "user, 2026-10-05 (latest generation for all)",
-  "fx": 0.6
+  "look": "final-pick2",
+  "made": "2026-10-06"
  },
  "pavilion_a": {
   "file": "pavilion_a.jpg",
@@ -574,11 +572,9 @@
   "prompt": "A peony garden at night under the moon: Diaochan kneels with her forehead near the ground; before her Wang Yun bows low; behind them a small pavilion with a stone weiqi board on its table and two stones on it, no one at it. Only these two. Diaochan is a graceful young woman of sixteen in a flowing, sheer pale silk robe with long translucent gauze sleeves and a light silk shawl drifting around her, hair in an elegant bun with a jade pin. Wang Yun is an old minister with a long grey beard, in dark court robes and a tall official's cap. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
   "provider": "replicate",
   "model": "bytedance/seedream-5-pro",
-  "look": "final-kept",
+  "look": "final-pick2",
   "made": "2026-10-06",
-  "approved": "user, 2026-10-05 (latest generation for all)",
-  "fx": 0.6,
-  "note": "the user's pick: the garden_a image, kept"
+  "note": "the user's pick: garden_a--final-1"
  },
  "dc_wangkneels": {
   "file": "dc_wangkneels.jpg",
