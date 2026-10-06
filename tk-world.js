@@ -533,6 +533,14 @@ function worldScenes() {
         }
         if (this.iso && (this.kit.isoFlip || []).includes(o.name)) img.setFlipX(true);   // its entrance on the door's face
         if (p.flip) img.setFlipX(!img.flipX);   // a side view facing W (the map compiler mirrors an E-facing sprite)
+        if (p.plaque) {   // a name board over the gate: gold characters on dark lacquer, a gold rim
+          const t = this.add.text(Math.round(o.x), Math.round(o.y - Math.min(30, img.height * .42)), p.plaque, {
+            fontFamily: '"Noto Serif SC", "Songti SC", "SimSun", serif', fontSize: "20px", fontStyle: "bold", color: "#f2cc5a",
+            backgroundColor: "#2a1410", padding: { x: 6, y: 2 }, stroke: "#5a2a18", strokeThickness: 2,
+          }).setOrigin(.5, 1).setScale(.4).setResolution(2).setDepth(img.depth + 1);
+          t.isoFollow = img;   // in the isometric view it stays on its building
+          (this.plaques = this.plaques || []).push(t);
+        }
         if (p.kind === "landmark.shrine") {   // the Star Lords' shrine: its look follows the story (setShrine)
           this.shrine = { img, x: o.x, y: o.y, state: "dark", fx: [] };
           this.setShrine(TK.shrineState?.(this.w.n, this.placeId) || "dark");

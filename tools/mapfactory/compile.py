@@ -312,6 +312,7 @@ def compile_map(m, kit, out_dir):
             kind=o["kind"], fw=o["w"] * T, fh=o["h"] * T, solid=solid, **({"ref": o["id"]} if o.get("id") else {}),
             **({"in": json.dumps([o["in"]] if isinstance(o["in"], str) else o["in"])} if o.get("in") else {}),
             **({"flip": True} if draw_kind == side and faces == "W" else {}),
+            **({"plaque": o["plaque"]} if o.get("plaque") else {}),   # a name board over its gate (tk-world draws it)
             **walls.get(id(o), {}))
     runs = []
     for y in range(H):
