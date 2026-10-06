@@ -288,6 +288,17 @@ class Plan:
         r = c["view"]
         return {(at[0] + dx, at[1] + dy) for dx in range(-r, r + 1) for dy in range(-r, r + 1)}
 
+    def hidden(self, c):
+        """A person is hidden if every tile of their cell lies under the roof or crown of the thing just south
+        of it: a building's roof rises about 3 tiles above its footprint, a tree's or rock's about 2. On a
+        4-tile cell with a 1-tile margin the north half stays clear, and the generator must stand them there."""
+        t = self.owner.get((c[0], c[1] + 1))
+        if t is None or t["kind"] in PASSABLE_THINGS or t["kind"].split(".")[0] not in ("building", "tree", "rock", "garden", "landmark"):
+            return False
+        rise = 3 if t["kind"].startswith("building.") else 2
+        top = (c[1] + 1) * self.C + (0 if t["kind"] in IN_WALL else self.M)   # the footprint's top tile row
+        return top - rise <= c[1] * self.C                                     # no clear row left in the cell
+
     def check_challengers(self, chs, seen_ids):
         for c in chs:
             if c["id"] in seen_ids:
@@ -296,6 +307,8 @@ class Plan:
             if not known_kind(c["kind"]):
                 self.err(f"challenger {c['id']}: unknown kind {c['kind']}")
             at = tuple(c["at"])
+            if self.hidden(at):
+                self.err(f"challenger {c['id']} at {at} stands behind {self.owner[(at[0], at[1] + 1)]['id']}, out of sight")
             if not self.walkable(at):
                 self.err(f"challenger {c['id']} at {at} stands where no one can walk")
             elif at not in self.reach:
@@ -463,6 +476,8 @@ def main():
                 P = Plan(f"{place} / {n['place']}", m)
                 P.check(keys)
                 c = tuple(n["at"])
+                if P.hidden(c):
+                    errors.append(f"{place} / {n['place']}: npc {i + 1} ({n['kind']}) at {c} stands behind {P.owner[(c[0], c[1] + 1)]['id']}, out of sight")
                 if not P.walkable(c) or c not in getattr(P, "reach", set()):
                     errors.append(f"{place} / {n['place']}: npc {i + 1} ({n['kind']}) at {c} stands where no one can walk to")
     # every Shared key that names a Places spot should have one

@@ -27,6 +27,21 @@ from vocab import FOLK, KINDS  # noqa: E402
 N = 2
 
 
+def behind(m):
+    """People the art would hide: in the strip just north of a building (its roof rises about 3 tiles
+    above its footprint) or of a tree or big rock (about 2)."""
+    tall = [o for o in m["objects"] if o["kind"].split(".")[0] in ("building", "tree", "rock", "ruin") and KINDS[o["kind"]][2]]
+    out = []
+    for n in m["npcs"]:
+        x, y = n["x"], n["y"]
+        for o in tall:
+            rise = 3 if o["kind"].startswith("building") else 2
+            if o["x"] - .2 <= x <= o["x"] + o["w"] + .2 and o["y"] - rise <= y < o["y"] + .5:
+                out.append((n.get("challenge") or n.get("gives") or n["kind"], round(x, 1), round(y, 1), o.get("id") or o["kind"]))
+                break
+    return out
+
+
 def main():
     errors, notes = [], []
     world = {**WORLD2, "nodes": [{**n, "key": f"{N}-{n['key']}"} for n in WORLD2["nodes"]],
@@ -106,6 +121,10 @@ def main():
         except RuntimeError as e:
             errors.append(f"factory: {e}")
             continue
+        hidden = behind(m)
+        if hidden:
+            errors.append(f"factory: in {p['id']}, {len(hidden)} people stand behind a roof or a tree, where the player can't see them: "
+                          + "; ".join(f"{who} at {x},{y} behind {what}" for who, x, y, what in hidden))
         rooms = furnish_place(m, p, ROOMS, N)
         for q in region["quests"]:
             if q["place"] == p["id"] and q.get("room"):
