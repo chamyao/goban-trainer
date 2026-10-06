@@ -1481,7 +1481,7 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
     const f = TownUI.portraits[lead];
     if (!f || !side.isConnected) return;
     const src = `assets/tk/portraits/${f}?v=${TownUI.PORTRAIT_V}`;
-    box.classList.add("has-lead");
+    box.classList.add("has-lead"); if (box.__fit) box.__fit();
     box.prepend(h("div", { class: "tk-duel-leadcol" }, [h("img", { class: "tk-duel-lead", alt: "", src })]));
     dlgRow.prepend(h("img", { class: "tk-duel-lead-sm", alt: "", src }));
   });
@@ -1514,11 +1514,13 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
     if (box.parentNode && box.parentNode.classList.contains("tk-duel-full")) return svg.removeAttribute("style");
     const vb = svg.viewBox.baseVal, cs = getComputedStyle(box);
     if (!vb || !vb.width) return;
-    const H = box.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) - 16, W = box.clientWidth * .6 - 16;
+    // with the lead's portrait column (18%) beside it, the board gives up some width, or the words beside it
+    // are left a sliver (a dilemma broken into single words, its dialogue scrolled out of sight)
+    const H = box.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) - 16, W = box.clientWidth * (box.classList.contains("has-lead") ? .46 : .6) - 16;
     const k = Math.min(H / vb.height, W / vb.width);
     svg.style.width = `${Math.floor(vb.width * k)}px`; svg.style.height = `${Math.floor(vb.height * k)}px`;
   };
-  fit();
+  fit(); box.__fit = fit;
   const ro = new ResizeObserver(() => box.isConnected ? fit() : ro.disconnect());
   ro.observe(box);
   window.__trainer = trainer;

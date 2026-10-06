@@ -563,7 +563,13 @@ body:has(.tk-scroll-wrap) .wukong-toggle, body:has(.tk-scroll-wrap) #wukong { vi
 .tk-duel-full .tk-duel-board { height: auto; max-width: 100%; width: min(100%, 520px); }
 .tk-duel-full .tk-duel-board svg { width: 100%; height: auto; }
 .tk-duel-board.explore { outline: 2px dashed #7a3a22; outline-offset: -8px; }
-.tk-duel-side { flex: 1; min-width: 0; align-self: stretch; display: flex; flex-direction: column; justify-content: flex-end; gap: 8px; }
+/* its words sit at the foot of the column (the first child's auto margin, not justify-content: flex-end, which
+   pushed a column taller than the frame out of its top, where it can't be scrolled to: the dilemma lost) */
+.tk-duel-side { flex: 1; min-width: 0; align-self: stretch; display: flex; flex-direction: column; gap: 8px; max-height: 100%; min-height: 0; overflow: hidden; }
+.tk-duel-side > :first-child { margin-top: auto; }
+/* too tall for the frame (a narrow column, a long dilemma): the keys stay put, the words shrink and scroll */
+.tk-duel-side > .tk-duel-keys, .tk-duel-side > .tk-duel-src { flex: none; }
+.tk-duel-side > .tk-duel-dilemma, .tk-duel-side > .tk-duel-dlgrow { flex: 0 1 auto; min-height: 0; overflow-y: auto; scrollbar-width: thin; }
 .tk-duel-full .tk-duel-side { width: min(100%, 520px); flex: none; }
 /* the protagonist at the board (a book with "lead_portrait"), on the left: its own column left of the board
    on a wide screen; on a phone (the stacked layout) a small portrait left of the dialogue box instead */
