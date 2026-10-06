@@ -281,7 +281,7 @@ def _scenes_chain():
             S("wangyun", "I would give this girl to you, Grand Preceptor, if you will have her.", "允欲将此女献上太师，未审肯容纳否？"),
             S("dongzhuo", "Such a gift! How can I repay you?", "如此见惠，何以报德？"),
             S("wangyun", "To serve you is more good fortune than she deserves.", "此女得侍太师，其福太浅。"),
-            ["prop", "car", "cart", "a5", -12, 8],
+            ["prop", "car", "carriage", "a5", -12, 8],
             ["board", "diaochan", "car"],
             N("Wang Yun has a felt-covered carriage made ready, and sends Diaochan ahead to the Chancellor's residence.",
               "允即命备毡车，先将貂蝉送到相府。"),
@@ -533,7 +533,7 @@ def _scenes_chain():
             S("liru", "We will all die at a woman's hand!", "吾等皆死于妇人之手矣！"),
             ["remove", "lr"],
             N("That same day Dong Zhuo orders the return to Meiwu, and all the officials bow him on his way.", "董卓即日下令还郿坞，百官俱拜送。"),
-            ["prop", "car", "cart", "a10", 0, 10],
+            ["prop", "car", "carriage", "a10", 0, 10],
             ["board", "diaochan", "car"],
             ["army", "crowd", "f_official", 6, "a10", -20, 14],
             ["spawn", "lb", "lvbu", "a10", -26, 10],
@@ -730,7 +730,7 @@ def _scenes_chain():
         # A13a-d · The road of omens. Each stop is Li Su explaining one away.
         "a13a": {"title": T("A Broken Wheel", "车折马嘶"), "kind": "main", "steps": [
             ["spawn", "dz", "dongzhuo", "a13a", 10, 0],
-            ["prop", "car", "cart", "a13a", 16, 0],
+            ["prop", "car", "carriage", "a13a", 16, 0],
             ["army", "escort", "f_soldier", 6, "a13a", 24, 6],
             N("Dong Zhuo leaves the fortress in his carriage, guards before and behind, and sets out for Chang'an.", "卓出坞上车，前遮后拥，望长安来。"),
             ["fx", "dust", "a13a", 16, 0], ["camera", "shake"],
@@ -804,7 +804,7 @@ def _scenes_chain():
             ["music", "boss"],
             ["army", "officials", "f_official", 6, "a14", 18, -10],
             ["spawn", "dz", "dongzhuo", "a14", 40, 0],
-            ["prop", "car", "cart", "a14", 40, 0], ["board", "dz", "car"],
+            ["prop", "car", "carriage", "a14", 40, 0], ["board", "dz", "car"],
             ["spawn", "ls", "lisu", "a14", 36, 6],
             ["spawn", "lb", "lvbu", "a14", 48, 0],
             N("The officials, in court dress, line the road to greet him. Li Su walks beside the carriage with a drawn sword in his hand. "
