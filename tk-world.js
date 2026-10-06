@@ -983,11 +983,20 @@ function worldScenes() {
       this.save();
       this.setGoal();
       if (q.role === "boss" && this.opts.onBoss) await this.opts.onBoss();
-      // that was the book's last main beat: a moment, a fade, and on into the next book
-      if (q.role !== "side" && q.role !== "short" && !this.nextMain() && this.opts.onBookDone && TK.world(this.w.n + 1)) {
-        this.goal(`Book ${this.w.n} is complete. On to Book ${this.w.n + 1}…`, `第${this.w.n}卷完。前往第${this.w.n + 1}卷……`);
-        this.leaving = true;
-        this.time.delayedCall(1800, () => { this.cameras.main.fadeOut(600); this.time.delayedCall(650, () => this.opts.onBookDone()); });
+      // the book's main story is over: on into the next book (a moment, a fade). But if side stories are
+      // still open here (Book 2's Diaochan chain opens with its last beat), stay: say so once, and go on
+      // when the last of them is done, or whenever the player picks the next book from the menu.
+      if (!this.nextMain() && this.opts.onBookDone && TK.world(this.w.n + 1)) {
+        const open = this.region.quests.filter(x => (x.role === "side" || x.role === "short") && this.available(x));
+        const n = this.w.n + 1;
+        if (!open.length) {
+          this.goal(`Book ${this.w.n} is complete. On to Book ${n}…`, `第${this.w.n}卷完。前往第${n}卷……`);
+          this.leaving = true;
+          this.time.delayedCall(1800, () => { this.cameras.main.fadeOut(600); this.time.delayedCall(650, () => this.opts.onBookDone()); });
+        } else if (q.role !== "side" && q.role !== "short") {
+          this.talk([["n", `The main story of Book ${this.w.n} is done, but ${open.length === 1 ? "one story is" : `${open.length} stories are`} still untold on these roads. Book ${n} is open whenever you're ready: Menu → Book ${n}.`,
+            `第${this.w.n}卷正篇已完，但这一路上还有${open.length}段故事未曾讲述。第${n}卷已开启，随时可从菜单前往。`]]);
+        }
       }
     }
 
