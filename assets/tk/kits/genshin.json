@@ -802,33 +802,33 @@
     "pinerock",
     0,
     0,
-    51,
-    54
+    32,
+    44
    ],
    [
     "pinerock",
     0,
     0,
-    51,
-    54
+    32,
+    44
    ]
   ],
   "landmark.shrine.lit": [
    [
     "pinerock",
-    51,
+    32,
     0,
-    51,
-    54
+    32,
+    44
    ]
   ],
   "landmark.shrine.settled": [
    [
     "pinerock",
-    102,
+    64,
     0,
-    51,
-    54
+    32,
+    44
    ]
   ],
   "ruin.hall": [

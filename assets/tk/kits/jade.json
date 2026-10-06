@@ -714,26 +714,26 @@
     "pinerock",
     0,
     0,
-    40,
-    38
+    32,
+    44
    ]
   ],
   "landmark.shrine.lit": [
    [
     "pinerock",
-    40,
+    32,
     0,
-    40,
-    38
+    32,
+    44
    ]
   ],
   "landmark.shrine.settled": [
    [
     "pinerock",
-    80,
+    64,
     0,
-    40,
-    38
+    32,
+    44
    ]
   ],
   "ruin.hall": [

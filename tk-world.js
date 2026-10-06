@@ -12,7 +12,7 @@
    are. Hero sprites and the dialogue box come from tk-town.js. */
 
 const WORLD_CLUTTER = /^(plant\.|rock\.small|furn\.rug|furn\.mat)/;  // drawn underfoot (a rug is a floor, not a sheet hung in front of people)
-const WORLD_KIT = "xianxia";  // the default look; the campaign page's art button switches (localStorage tk-kit)
+const WORLD_KIT = "jade";  // the default look (the user: Jade is the main look for now); the campaign page's art button switches (localStorage tk-kit)
 const WORLD_KITS = { jade: { zh: "玉", en: "Jade" }, xianxia: { zh: "仙侠", en: "Xianxia (generated)" },
   genshin: { zh: "原神", en: "Genshin (isometric)", iso: true } };   // iso: drawn for the isometric view (tk-iso.js)
 
@@ -218,7 +218,7 @@ function worldScenes() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
       this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=37`);
-      this.load.json("kit", `assets/tk/kits/${kit}.json?v=33`);
+      this.load.json("kit", `assets/tk/kits/${kit}.json?v=34`);
       this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=38`);
     }
     create() {
@@ -504,7 +504,7 @@ function worldScenes() {
       s.img.setFrame(state === "dark" ? "landmark.shrine#0" : `landmark.shrine.${state}#0`);
       s.fx.forEach(f => f.remove ? f.remove() : f.destroy()); s.fx = [];   // tweens and timers are removed, the glow destroyed
       if (state === "dark") return;
-      const glow = this.add.ellipse(s.x + 6, s.y - 6, 26, 14, state === "lit" ? 0x8ae8ff : 0xf4d27a, state === "lit" ? .35 : .18)
+      const glow = this.add.ellipse(s.x, s.y - 6, 26, 14, state === "lit" ? 0x8ae8ff : 0xf4d27a, state === "lit" ? .35 : .18)
         .setBlendMode(Phaser.BlendModes.ADD).setDepth(s.y + 1);
       glow.isoFollow = s.img;   // in the isometric view it stays on the shrine
       s.fx.push(glow, this.tweens.add({ targets: glow, alpha: state === "lit" ? .12 : .08, duration: state === "lit" ? 900 : 2200, yoyo: true, repeat: -1, ease: "Sine.InOut" }));
@@ -983,11 +983,20 @@ function worldScenes() {
       this.save();
       this.setGoal();
       if (q.role === "boss" && this.opts.onBoss) await this.opts.onBoss();
-      // that was the book's last main beat: a moment, a fade, and on into the next book
-      if (q.role !== "side" && q.role !== "short" && !this.nextMain() && this.opts.onBookDone && TK.world(this.w.n + 1)) {
-        this.goal(`Book ${this.w.n} is complete. On to Book ${this.w.n + 1}…`, `第${this.w.n}卷完。前往第${this.w.n + 1}卷……`);
-        this.leaving = true;
-        this.time.delayedCall(1800, () => { this.cameras.main.fadeOut(600); this.time.delayedCall(650, () => this.opts.onBookDone()); });
+      // the book's main story is over: on into the next book (a moment, a fade). But if side stories are
+      // still open here (Book 2's Diaochan chain opens with its last beat), stay: say so once, and go on
+      // when the last of them is done, or whenever the player picks the next book from the menu.
+      if (!this.nextMain() && this.opts.onBookDone && TK.world(this.w.n + 1)) {
+        const open = this.region.quests.filter(x => (x.role === "side" || x.role === "short") && this.available(x));
+        const n = this.w.n + 1;
+        if (!open.length) {
+          this.goal(`Book ${this.w.n} is complete. On to Book ${n}…`, `第${this.w.n}卷完。前往第${n}卷……`);
+          this.leaving = true;
+          this.time.delayedCall(1800, () => { this.cameras.main.fadeOut(600); this.time.delayedCall(650, () => this.opts.onBookDone()); });
+        } else if (q.role !== "side" && q.role !== "short") {
+          this.talk([["n", `The main story of Book ${this.w.n} is done, but ${open.length === 1 ? "one story is" : `${open.length} stories are`} still untold on these roads. Book ${n} is open whenever you're ready: Menu → Book ${n}.`,
+            `第${this.w.n}卷正篇已完，但这一路上还有${open.length}段故事未曾讲述。第${n}卷已开启，随时可从菜单前往。`]]);
+        }
       }
     }
 
@@ -1460,7 +1469,11 @@ const WorldView = {
   game: null,
   kit() {
     let k = new URLSearchParams(location.search).get("kit");
-    try { k = k || localStorage.getItem("tk-kit"); } catch {}
+    try {
+      // once: everyone starts on the main look (Jade); switching afterwards is kept
+      if (localStorage.getItem("tk-kit-main") !== WORLD_KIT) { localStorage.setItem("tk-kit", WORLD_KIT); localStorage.setItem("tk-kit-main", WORLD_KIT); }
+      k = k || localStorage.getItem("tk-kit");
+    } catch {}
     return k in WORLD_KITS ? k : WORLD_KIT;
   },
   setKit(k) { try { localStorage.setItem("tk-kit", k); } catch {} },
