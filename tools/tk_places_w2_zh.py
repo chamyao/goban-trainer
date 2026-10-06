@@ -281,4 +281,7 @@ ZH_PLACES2 = {
     "The gatekeeper bars the way. “The Grand Preceptor receives no one today.”": "门吏拦住去路。“太师今日不见客。”",
     # the Xuanping tower stair refusal (claude/plot-places 4c4ff83)
     "The guards at the stair cross their halberds. “No one goes up to the Son of Heaven's tower.”": "楼梯口的卫士交叉画戟。“天子之楼，任何人不得上去。”",
+    # a7c and a18p objectives (claude/plot-places 6cdf152)
+    "Show yourself to Lü Bu behind the curtain, where the Grand Preceptor can't see.": "在帘后让吕布看见你，别让太师看见。",
+    "Go to the palace steps.": "到宫阶去。",
 }
