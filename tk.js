@@ -1284,6 +1284,9 @@ async function tkLevelData(worldN, key) {
   const [base, nth] = String(key).split("~"), idx = Math.max(0, (+nth || 1) - 1);
   const node = w && (TK.node(w, base) || (typeof WorldData !== "undefined" && WorldData.node(w, base)));
   if (!node || !(node.town || TK.open(w, base) || TK.cleared(base) || TK.cleared(key))) return null;
+  // no board past the scene's last ("a9~9" when a9 poses three)
+  const nProb = ((w.scenes && w.scenes[node.scene] && w.scenes[node.scene].steps) || []).filter(s => s[0] === "problem").length;
+  if (nth && idx >= Math.max(1, nProb)) return null;
   const [bookId, pid] = TK.problemRef(node, idx);
   const src = await getBook(bookId);
   const p = src.problems.find(x => x.id === pid);
