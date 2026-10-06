@@ -270,6 +270,9 @@ def planks(v, pillar=False):   # gallery or bridge boards; a gallery has red pil
     return g.image()
 
 
+SAME = {"court": "stone", "ward": "stone", "passage": "stone", "road": "dirt", "path": "sand", "camp": "dirt",
+        "city": "dirt", "field": "grass", "plain": "grass", "garden": "grass", "stage": "wood", "curtain": "wood"}
+
 TILES = {
     "field.wheat": [wheat(0), wheat(1)],
     "cliff": [cliff(0), cliff(1)],
@@ -329,6 +332,10 @@ def main():
         for mat, tiles in tpos.items():
             if mat not in kit["materials"] or "drawn_b2_tiles" in str(kit["materials"][mat]):
                 kit["materials"][mat] = {"tiles": tiles}
+        # grounds that are the kit's own tiles under another name: the courtyard is its flagstones, and so on
+        for mat, base in SAME.items():
+            if mat not in kit["materials"] and base in kit["materials"]:
+                kit["materials"][mat] = {"same": base}
         for k, r in pos.items():
             mine = [v for v in kit["kinds"].get(k, []) if v[0] != "drawn_b2"]
             if not mine:   # the kit's own art wins

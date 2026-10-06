@@ -173,7 +173,9 @@ def compile_map(m, kit, out_dir):
     grid = [[legend[c] for c in row] for row in m["terrain"]["rows"]]
     # a ground this kit has no tiles of is drawn as its stand-in (vocab MATERIAL_FALLBACK), edges and all
     sub = {mat: kit.material(mat)[0] for mat in {c for row in grid for c in row}
-           if mat not in kit.k["materials"] and mat not in kit.k.get("room_styles", {}).get(m.get("style"), {})}
+           if (mat not in kit.k["materials"] or "same" in kit.k["materials"][mat])
+           and mat not in kit.k.get("room_styles", {}).get(m.get("style"), {})}
+    sub = {k: v for k, v in sub.items() if k != v}
     if sub:
         grid = [[sub.get(c, c) for c in row] for row in grid]
     rnd = random.Random(m["seed"])
