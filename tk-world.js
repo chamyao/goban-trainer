@@ -132,6 +132,40 @@ const WorldGuide = {
 };
 // Small touches that make the world feel lived in: a soft shadow under everyone,
 // and something in the air that suits the place.
+/* ---------- sound on the map: a source you walk toward (carriage bells in the fog, a children's song) ----------
+   Played with Web Audio (no files): a short pattern repeats, louder as you near its source. Only with the music on. */
+const WorldSound = {
+  ctx: null, gain: null, kind: null, next: 0, step: 0,
+  PATTERNS: {
+    bells: { notes: [1318, 1568, 1760, 1568, 1318], dur: .42, rest: 1.8, type: "sine", decay: 1.4, vol: .16 },
+    children: { notes: [523, 587, 659, 784, 659, 587, 523, 587, 659, 659, 587], dur: .34, rest: 1.4, type: "triangle", decay: .3, vol: .12 },
+    drum: { notes: [98, 98, 82], dur: .5, rest: 1.2, type: "sine", decay: .35, vol: .3 },
+  },
+  set(kind) {
+    if (kind === this.kind) return;
+    if (this.gain) { try { this.gain.disconnect(); } catch { /* gone */ } }
+    this.gain = null; this.kind = kind || null;
+    if (!kind) return;
+    try { this.ctx = this.ctx || new (window.AudioContext || window.webkitAudioContext)(); } catch { return; }
+    this.gain = this.ctx.createGain(); this.gain.gain.value = 0; this.gain.connect(this.ctx.destination);
+    this.next = this.ctx.currentTime + .2; this.step = 0;
+  },
+  level(v) { if (this.gain) this.gain.gain.setTargetAtTime(v, this.ctx.currentTime, .25); },
+  tick() {
+    if (!this.gain) return;
+    const ac = this.ctx, P = this.PATTERNS[this.kind] || this.PATTERNS.bells;
+    if (ac.state === "suspended") ac.resume().catch(() => {});
+    while (this.next < ac.currentTime + .6) {
+      const t = this.next, o = ac.createOscillator(), g = ac.createGain();
+      o.type = P.type; o.frequency.value = P.notes[this.step % P.notes.length];
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(P.vol, t + .01); g.gain.exponentialRampToValueAtTime(.001, t + P.decay);
+      o.connect(g); g.connect(this.gain); o.start(t); o.stop(t + P.decay + .05);
+      this.step++;
+      this.next = t + P.dur + (this.step % P.notes.length === 0 ? P.rest : 0);
+    }
+  },
+};
+
 const WorldFX = {
   textures(scene) {
     const add = (key, w, h, draw) => {
@@ -266,7 +300,7 @@ function worldScenes() {
       this.tw = map.tileWidth || 16;
       // one map, several looks (Places' "states"): the last whose "when" holds and "until" doesn't
       try { this.states = JSON.parse((map.properties || []).find(x => x.name === "states")?.value || "null"); } catch { this.states = null; }
-      this.stated = [];
+      this.stated = []; this.refs = {}; if (this.fog) { this.fog.destroy(); this.fog = null; }
       const sets = map.tilesets.map(ts => map.addTilesetImage(ts.name, `kit-${ts.name}`));
       this.water = null;
       const layers = [];
@@ -374,7 +408,7 @@ function worldScenes() {
       // the window changed shape (full window, a phone turned): the screen-sized effects follow
       const onResize = () => { WorldFX.ambient(this, this.place.archetype); this.fitCamera(); };
       this.scale.on("resize", onResize);
-      this.events.once("shutdown", () => this.scale.off("resize", onResize));
+      this.events.once("shutdown", () => { this.scale.off("resize", onResize); WorldSound.set(null); });
       window.__w = this;  // for tests and the console
       if (this.resume && opts.ret) { const r = opts.ret; opts.ret = null; this.time.delayedCall(400, () => this.returned(r)); }
       // story scenes that start by themselves: on arriving here, or on walking into their area
@@ -502,7 +536,8 @@ function worldScenes() {
       const l = p.cl || p.fw / 2, r = p.cr || p.fw / 2;
       const zone = p.solid ? this.add.zone(o.x + (r - l) / 2, o.y - p.fh / 2, l + r - 2, p.fh - 2) : null;
       if (zone) this.solids.add(zone);
-      if (p.in) this.stated.push({ img, zone, in: JSON.parse(p.in) });   // shown only in some of the map's states
+      if (p.in) this.stated.push({ img, zone, in: JSON.parse(p.in) });
+      if (p.ref) (this.refs = this.refs || {})[p.ref] = { x: o.x, y: o.y - (p.fh || 0) / 2 };   // shown only in some of the map's states
     }
 
     // The shrine's three looks (the rock under the pine): "dark" (an empty board), "lit" (a game in
@@ -1493,7 +1528,47 @@ function worldScenes() {
       this.engaged = null;
     }
 
+    // Where a sound comes from: the procession's carriage, a spot, a landmark or a person by id; else the next beat.
+    soundAt(id) {
+      if (id === "carriage" && this.procession && this.procession.carriage) return this.procession.carriage;
+      const sp = this.spots[id] || this.refs[id] || (this.npcs.find(n => n.id === id) || {}).spr;
+      if (sp) return sp;
+      const q = this.nextMain(), s2 = q && Object.values(this.spots).find(s => s.node === q.node);
+      return s2 || null;
+    }
+    // The map state's fog (seeing only "visibility" tiles round you) and sound (louder as you near it).
+    atmosphere() {
+      const st = this.mapState(), P = this.player, T = this.tw || 16;
+      const vis = st && st.visibility;
+      if (vis && !this.fog) {
+        if (!this.textures.exists("@fog")) {
+          const S = 1024, c = document.createElement("canvas"); c.width = c.height = S;
+          const g = c.getContext("2d");
+          g.fillStyle = "rgba(205,211,216,0.97)"; g.fillRect(0, 0, S, S);
+          g.globalCompositeOperation = "destination-out";
+          const r = g.createRadialGradient(S / 2, S / 2, 36, S / 2, S / 2, 72);
+          r.addColorStop(0, "rgba(0,0,0,1)"); r.addColorStop(1, "rgba(0,0,0,0)");
+          g.fillStyle = r; g.fillRect(0, 0, S, S);
+          this.textures.addCanvas("@fog", c);
+        }
+        this.fog = this.add.image(P.x, P.y, "@fog").setDepth(9e4 - 1);
+      }
+      if (this.fog) {
+        if (!vis) { this.fog.destroy(); this.fog = null; }
+        else this.fog.setScale(vis * T / 54).setPosition(P.x, P.y - 8);
+      }
+      const snd = st && st.sound && Object.entries(st.sound)[0];
+      const on = snd && typeof TKMusic !== "undefined" && TKMusic.on && TKMusic.unlocked;
+      WorldSound.set(on ? snd[0] : null);
+      if (on) {
+        const at = this.soundAt(snd[1]), d = at ? Math.hypot(at.x - P.x, at.y - P.y) : 1e9;
+        WorldSound.level(Math.max(.04, 1 - d / (20 * T)) * (this.ui.busy() ? .4 : 1));
+        WorldSound.tick();
+      }
+    }
+
     update(time, dt) {
+      this.atmosphere();
       this.watchChallengers();
       this.keepPlayerInView();
       this.callOut();
