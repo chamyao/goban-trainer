@@ -11,7 +11,7 @@
   20,
   12
  ],
- "seed": 0.3074359892451325,
+ "seed": 0.23460159181452822,
  "terrain": {
   "legend": {
    "#": "wood",
@@ -103,20 +103,10 @@
    "label": "The Secret Edict"
   }
  ],
- "npcs": [
-  {
-   "id": "in-1",
-   "kind": "folk.woman",
-   "x": 12.5,
-   "y": 6.9,
-   "say": [
-    "“Mind the floor — I've only just swept it.”"
-   ]
-  }
- ],
+ "npcs": [],
  "exits": [
   {
-   "to": "changan",
+   "to": "changan--dutang",
    "side": "S",
    "x": 10,
    "y": 8,
@@ -125,7 +115,7 @@
   }
  ],
  "entries": {
-  "changan": [
+  "changan--dutang": [
    10,
    7
   ],
@@ -133,5 +123,8 @@
    10,
    7
   ]
- }
+ },
+ "links": [
+  "changan--dutang"
+ ]
 }

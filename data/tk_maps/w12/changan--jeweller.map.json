@@ -11,7 +11,7 @@
   20,
   12
  ],
- "seed": 0.0016295292357808577,
+ "seed": 0.7423085719275929,
  "terrain": {
   "legend": {
    "#": "wood",
@@ -133,33 +133,6 @@
    ],
    "given": [
     "“That crown was the best work of my life. I hope it went to someone worth it.”"
-   ]
-  },
-  {
-   "id": "in-2",
-   "kind": "folk.woman",
-   "x": 8.5,
-   "y": 5.9,
-   "say": [
-    "“Sit, have some tea. The storyteller starts soon.”"
-   ]
-  },
-  {
-   "id": "in-3",
-   "kind": "folk.elder",
-   "x": 7.5,
-   "y": 7.9,
-   "say": [
-    "“Another pot, and another tale of the old days.”"
-   ]
-  },
-  {
-   "id": "in-4",
-   "kind": "folk.lady",
-   "x": 14.5,
-   "y": 5.9,
-   "say": [
-    "“More tea? The storyteller's tale of the Yellow Turbans is the talk of the county.”"
    ]
   }
  ],

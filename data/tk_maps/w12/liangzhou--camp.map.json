@@ -11,7 +11,7 @@
   20,
   12
  ],
- "seed": 0.24662805706713065,
+ "seed": 0.29221184923033117,
  "terrain": {
   "legend": {
    "#": "wood",
@@ -102,17 +102,7 @@
   }
  ],
  "spots": [],
- "npcs": [
-  {
-   "id": "in-1",
-   "kind": "folk.soldier",
-   "x": 10.5,
-   "y": 3.9,
-   "say": [
-    "“Orders come at dawn. Keep your weapon close.”"
-   ]
-  }
- ],
+ "npcs": [],
  "exits": [
   {
    "to": "liangzhou",

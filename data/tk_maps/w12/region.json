@@ -27,9 +27,8 @@
     "changan--jeweller",
     "changan--shisun",
     "changan--huangwan",
-    "changan--palace",
-    "changan--side-hall",
     "changan--dutang",
+    "changan--side-hall",
     "changan--caiyong",
     "changan--hall-1",
     "changan--house-1",
@@ -43,23 +42,25 @@
   },
   {
    "id": "changan--wy-hall",
-   "name": "Wang Yun's residence: the front hall",
-   "zh": "王允府：前厅",
+   "name": "The front hall",
+   "zh": "前厅",
    "archetype": "interior",
    "map": "changan--wy-hall.map.json",
    "links": [
-    "changan"
+    "changan",
+    "changan--wy-rearhall"
    ],
    "parent": "changan"
   },
   {
    "id": "changan--wy-rearhall",
-   "name": "Wang Yun's residence: the rear hall",
-   "zh": "王允府：后堂",
+   "name": "The rear hall",
+   "zh": "后堂",
    "archetype": "interior",
    "map": "changan--wy-rearhall.map.json",
    "links": [
-    "changan"
+    "changan--wy-hall",
+    "changan--wy-secret"
    ],
    "parent": "changan",
    "gives": [
@@ -68,34 +69,35 @@
   },
   {
    "id": "changan--wy-secret",
-   "name": "Wang Yun's residence: the secret room",
-   "zh": "王允府：密室",
+   "name": "The secret room",
+   "zh": "密室",
    "archetype": "interior",
    "map": "changan--wy-secret.map.json",
    "links": [
-    "changan"
+    "changan--wy-rearhall"
    ],
    "parent": "changan"
   },
   {
    "id": "changan--xf-hall",
-   "name": "The Chancellor's residence: the middle hall",
-   "zh": "相府：中堂",
+   "name": "The middle hall",
+   "zh": "中堂",
    "archetype": "interior",
    "map": "changan--xf-hall.map.json",
    "links": [
-    "changan"
+    "changan",
+    "changan--xf-bedroom"
    ],
    "parent": "changan"
   },
   {
    "id": "changan--xf-bedroom",
-   "name": "The Chancellor's residence: the bedchamber",
-   "zh": "相府：卧房",
+   "name": "The bedchamber",
+   "zh": "长安·",
    "archetype": "interior",
    "map": "changan--xf-bedroom.map.json",
    "links": [
-    "changan"
+    "changan--xf-hall"
    ],
    "parent": "changan"
   },
@@ -147,13 +149,14 @@
    "parent": "changan"
   },
   {
-   "id": "changan--palace",
-   "name": "Weiyang Palace",
-   "zh": "未央宫",
+   "id": "changan--dutang",
+   "name": "The great hall of state",
+   "zh": "都堂",
    "archetype": "interior",
-   "map": "changan--palace.map.json",
+   "map": "changan--dutang.map.json",
    "links": [
-    "changan"
+    "changan",
+    "changan--side-hall"
    ],
    "parent": "changan"
   },
@@ -164,18 +167,7 @@
    "archetype": "interior",
    "map": "changan--side-hall.map.json",
    "links": [
-    "changan"
-   ],
-   "parent": "changan"
-  },
-  {
-   "id": "changan--dutang",
-   "name": "The great hall of state",
-   "zh": "都堂",
-   "archetype": "interior",
-   "map": "changan--dutang.map.json",
-   "links": [
-    "changan"
+    "changan--dutang"
    ],
    "parent": "changan"
   },
@@ -289,8 +281,8 @@
     "meiwu-road",
     "meiwu--hall",
     "meiwu--mother",
-    "meiwu--treasury",
     "meiwu--diaochan",
+    "meiwu--treasury",
     "meiwu--house-1",
     "meiwu--house-2",
     "meiwu--house-3",
@@ -304,7 +296,8 @@
    "archetype": "interior",
    "map": "meiwu--hall.map.json",
    "links": [
-    "meiwu"
+    "meiwu",
+    "meiwu--mother"
    ],
    "parent": "meiwu"
   },
@@ -315,18 +308,8 @@
    "archetype": "interior",
    "map": "meiwu--mother.map.json",
    "links": [
-    "meiwu"
-   ],
-   "parent": "meiwu"
-  },
-  {
-   "id": "meiwu--treasury",
-   "name": "The treasury",
-   "zh": "库房",
-   "archetype": "interior",
-   "map": "meiwu--treasury.map.json",
-   "links": [
-    "meiwu"
+    "meiwu--hall",
+    "meiwu--diaochan"
    ],
    "parent": "meiwu"
   },
@@ -336,6 +319,17 @@
    "zh": "貂蝉居所",
    "archetype": "interior",
    "map": "meiwu--diaochan.map.json",
+   "links": [
+    "meiwu--mother"
+   ],
+   "parent": "meiwu"
+  },
+  {
+   "id": "meiwu--treasury",
+   "name": "The treasury",
+   "zh": "库房",
+   "archetype": "interior",
+   "map": "meiwu--treasury.map.json",
    "links": [
     "meiwu"
    ],

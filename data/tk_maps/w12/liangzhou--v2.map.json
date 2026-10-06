@@ -11,7 +11,7 @@
   20,
   12
  ],
- "seed": 0.8942411069141745,
+ "seed": 0.3846599006534126,
  "terrain": {
   "legend": {
    "#": "wood",
@@ -109,17 +109,7 @@
   }
  ],
  "spots": [],
- "npcs": [
-  {
-   "id": "in-1",
-   "kind": "folk.villager",
-   "x": 9.5,
-   "y": 3.9,
-   "say": [
-    "“The harvest is in, if the rebels don't take it.”"
-   ]
-  }
- ],
+ "npcs": [],
  "exits": [
   {
    "to": "liangzhou",

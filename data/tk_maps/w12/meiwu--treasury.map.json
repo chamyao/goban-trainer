@@ -11,7 +11,7 @@
   20,
   12
  ],
- "seed": 0.4882649991328303,
+ "seed": 0.8648300206557215,
  "terrain": {
   "legend": {
    "#": "wood",
@@ -116,17 +116,7 @@
   }
  ],
  "spots": [],
- "npcs": [
-  {
-   "id": "in-1",
-   "kind": "folk.villager",
-   "x": 9.5,
-   "y": 3.9,
-   "say": [
-    "“The harvest is in, if the rebels don't take it.”"
-   ]
-  }
- ],
+ "npcs": [],
  "exits": [
   {
    "to": "meiwu",

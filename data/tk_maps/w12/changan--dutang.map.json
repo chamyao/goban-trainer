@@ -11,7 +11,7 @@
   20,
   12
  ],
- "seed": 0.20298843822270474,
+ "seed": 0.549648267717073,
  "terrain": {
   "legend": {
    "#": "wood",
@@ -22,7 +22,7 @@
    " ": "void"
   },
   "rows": [
-   "   WWWWWWWWWWWWWW   ",
+   "   WWWWWWW%WWWWWW   ",
    "   W%%%%%%%%%%%%W   ",
    "   W%%%%%%%%%%%%W   ",
    "   W%%%%%%%%%%%%W   ",
@@ -37,13 +37,6 @@
   ]
  },
  "objects": [
-  {
-   "kind": "furn.screen",
-   "x": 8,
-   "y": 1,
-   "w": 3,
-   "h": 1
-  },
   {
    "kind": "furn.desk",
    "x": 9,
@@ -125,29 +118,27 @@
  "spots": [
   {
    "id": "spot-12-a15c",
-   "x": 9.5,
-   "y": 2.7,
+   "x": 10.5,
+   "y": 1.7,
    "node": "12-a15c",
    "label": "Cai Yong Weeps"
   }
  ],
- "npcs": [
-  {
-   "id": "in-1",
-   "kind": "folk.official",
-   "x": 10.5,
-   "y": 4.9,
-   "say": [
-    "“This is the county office. State your business.”"
-   ]
-  }
- ],
+ "npcs": [],
  "exits": [
   {
    "to": "changan",
    "side": "S",
    "x": 10,
    "y": 9,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "to": "changan--side-hall",
+   "side": "N",
+   "x": 10,
+   "y": 0,
    "w": 1,
    "h": 1
   }
@@ -160,6 +151,14 @@
   "": [
    10,
    8
+  ],
+  "changan--side-hall": [
+   10,
+   1
   ]
- }
+ },
+ "links": [
+  "changan",
+  "changan--side-hall"
+ ]
 }

@@ -3,7 +3,7 @@
  "id": "changan--xf-bedroom",
  "world": 12,
  "parent": "changan",
- "name": "The Chancellor's residence: the bedchamber",
+ "name": "The bedchamber",
  "archetype": "interior",
  "building": "xf-bedroom",
  "style": "building.house",
@@ -113,17 +113,19 @@
  "npcs": [
   {
    "id": "in-1",
-   "kind": "folk.woman",
+   "kind": "folk.maiden",
    "x": 8.5,
    "y": 5.9,
    "say": [
-    "“Mind the floor — I've only just swept it.”"
-   ]
+    "“The Grand Preceptor spent the night with the new girl and hasn't got up.”"
+   ],
+   "until": "12-a8",
+   "when": "node:a6"
   }
  ],
  "exits": [
   {
-   "to": "changan",
+   "to": "changan--xf-hall",
    "side": "S",
    "x": 10,
    "y": 8,
@@ -132,7 +134,7 @@
   }
  ],
  "entries": {
-  "changan": [
+  "changan--xf-hall": [
    10,
    7
   ],
@@ -140,5 +142,8 @@
    10,
    7
   ]
- }
+ },
+ "links": [
+  "changan--xf-hall"
+ ]
 }
