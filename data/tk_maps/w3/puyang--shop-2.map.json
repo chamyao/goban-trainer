@@ -1,0 +1,182 @@
+{
+ "format": "tk-map/1",
+ "id": "puyang--shop-2",
+ "world": 3,
+ "parent": "puyang",
+ "name": "Teahouse, Puyang",
+ "archetype": "interior",
+ "building": "shop-2",
+ "style": "building.shop",
+ "size": [
+  20,
+  12
+ ],
+ "seed": 0.9187101762047454,
+ "terrain": {
+  "legend": {
+   "#": "wood",
+   "%": "stone",
+   "&": "mat",
+   "e": "earth",
+   "W": "wall",
+   " ": "void"
+  },
+  "rows": [
+   "                    ",
+   "    WWWWWWWWWWWW    ",
+   "    W##########W    ",
+   "    W##########W    ",
+   "    W##########W    ",
+   "    W##########W    ",
+   "    W##########W    ",
+   "    W##########W    ",
+   "    WWWWWW#WWWWW    ",
+   "                    ",
+   "                    ",
+   "                    "
+  ]
+ },
+ "objects": [
+  {
+   "kind": "furn.shelf",
+   "x": 9,
+   "y": 2,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.jar",
+   "x": 11,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.jar",
+   "x": 12,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.counter",
+   "x": 12,
+   "y": 3,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "furn.table",
+   "x": 8,
+   "y": 4,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 7,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 10,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.table",
+   "x": 12,
+   "y": 5,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 11,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 14,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.plant",
+   "x": 5,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.barrel",
+   "x": 14,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.plant",
+   "x": 5,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "spots": [],
+ "npcs": [
+  {
+   "id": "in-1",
+   "kind": "folk.woman",
+   "x": 13.5,
+   "y": 4.9,
+   "say": [
+    "“Sit, have some tea. The storyteller starts soon.”"
+   ]
+  },
+  {
+   "id": "in-2",
+   "kind": "folk.elder",
+   "x": 9.5,
+   "y": 5.9,
+   "say": [
+    "“Another pot, and another tale of the old days.”"
+   ]
+  },
+  {
+   "id": "in-3",
+   "kind": "folk.lady",
+   "x": 13.5,
+   "y": 6.9,
+   "say": [
+    "“More tea? The storyteller's tale of the Yellow Turbans is the talk of the county.”"
+   ]
+  }
+ ],
+ "exits": [
+  {
+   "to": "puyang",
+   "side": "S",
+   "x": 10,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "puyang": [
+   10,
+   7
+  ],
+  "": [
+   10,
+   7
+  ]
+ }
+}

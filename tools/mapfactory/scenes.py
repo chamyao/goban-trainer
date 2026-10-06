@@ -585,7 +585,7 @@ def stage_scene(scene, m, spot, party, chars, boss=None):
             st.beats.append({"do": "line", "line": s, "camera": st.frame(st.live())})
         elif op == "say":
             st.say(s, chars)
-    if boss and "victory" not in has:
+    if boss and "victory" not in has and boss.get("victory", True) is not False:   # a reckoning, not a battle, opts out
         st.victory()
     # whoever is still standing at the end, except the party, leaves
     rest = [a for a in st.live() if a not in st.party and st.cast[a].get("who") not in st.party]
