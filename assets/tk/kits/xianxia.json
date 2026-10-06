@@ -19,7 +19,8 @@
   "x_tiles": "assets/tk/xianxia/tiles.png",
   "x_edges": "assets/tk/xianxia/edges.png",
   "x_objects": "assets/tk/xianxia/objects.png",
-  "pinerock": "assets/tk/xianxia/pinerock.png"
+  "pinerock": "assets/tk/xianxia/pinerock.png",
+  "drawn_b2": "assets/tk/drawn_b2.png"
  },
  "materials": {
   "grass": {
@@ -1058,6 +1059,168 @@
     285,
     8,
     14
+   ]
+  ],
+  "corral": [
+   [
+    "drawn_b2",
+    0,
+    0,
+    128,
+    96
+   ]
+  ],
+  "tree.poplar": [
+   [
+    "drawn_b2",
+    129,
+    0,
+    14,
+    42
+   ]
+  ],
+  "tree.willow": [
+   [
+    "drawn_b2",
+    144,
+    0,
+    34,
+    38
+   ]
+  ],
+  "furn.dais": [
+   [
+    "drawn_b2",
+    179,
+    0,
+    48,
+    34
+   ]
+  ],
+  "prop.lanterns": [
+   [
+    "drawn_b2",
+    228,
+    0,
+    14,
+    30
+   ]
+  ],
+  "garden.trellis": [
+   [
+    "drawn_b2",
+    0,
+    97,
+    64,
+    30
+   ]
+  ],
+  "garden.screenwall": [
+   [
+    "drawn_b2",
+    65,
+    97,
+    64,
+    30
+   ]
+  ],
+  "banner.black": [
+   [
+    "drawn_b2",
+    130,
+    97,
+    16,
+    28
+   ]
+  ],
+  "furn.lamp": [
+   [
+    "drawn_b2",
+    147,
+    97,
+    12,
+    26
+   ]
+  ],
+  "furn.swordwall": [
+   [
+    "drawn_b2",
+    160,
+    97,
+    16,
+    24
+   ]
+  ],
+  "landmark.hitchingpost": [
+   [
+    "drawn_b2",
+    177,
+    97,
+    12,
+    24
+   ]
+  ],
+  "furn.window": [
+   [
+    "drawn_b2",
+    190,
+    97,
+    16,
+    18
+   ]
+  ],
+  "milestone": [
+   [
+    "drawn_b2",
+    207,
+    97,
+    12,
+    16
+   ]
+  ],
+  "water.lotus": [
+   [
+    "drawn_b2",
+    220,
+    97,
+    16,
+    16
+   ]
+  ],
+  "plant.peony": [
+   [
+    "drawn_b2",
+    237,
+    97,
+    16,
+    14
+   ]
+  ],
+  "prop.body_lamp": [
+   [
+    "drawn_b2",
+    0,
+    128,
+    22,
+    14
+   ]
+  ],
+  "furn.qin": [
+   [
+    "drawn_b2",
+    23,
+    128,
+    34,
+    12
+   ]
+  ],
+  "furn.seat": [
+   [
+    "drawn_b2",
+    58,
+    128,
+    16,
+    12
    ]
   ]
  },
