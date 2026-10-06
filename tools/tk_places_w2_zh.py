@@ -284,4 +284,7 @@ ZH_PLACES2 = {
     # a7c and a18p objectives (claude/plot-places 6cdf152)
     "Show yourself to Lü Bu behind the curtain, where the Grand Preceptor can't see.": "在帘后让吕布看见你，别让太师看见。",
     "Go to the palace steps.": "到宫阶去。",
+    # the procession leash line and the a7c label (Integration's wording)
+    "Li Su must keep near the Grand Preceptor.": "李肃须紧随太师车驾。",
+    "Behind the curtain": "帘后",
 }
