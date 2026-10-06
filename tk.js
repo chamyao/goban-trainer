@@ -1466,7 +1466,17 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
   // a decision board: the leader's choice named in the side column, over what's said
   const dil = node.dilemma;
   const dilBox = dil ? h("div", { class: "tk-duel-dilemma" }, [h("b", { lang: "zh-CN" }, dil.q_zh || ""), h("span", {}, dil.q)]) : "";
-  box.replaceChildren(boardCard, h("div", { class: "tk-duel-side" }, [dilBox, dlg, keys, srcLine]));
+  const side = h("div", { class: "tk-duel-side" }, [dilBox, dlg, keys, srcLine]);
+  box.replaceChildren(boardCard, side);
+  // A book that shows its protagonist at the board (world "lead_portrait"): the party leader's painted
+  // portrait (assets/tk/portraits) stands over the dialogue box, beside the board. Who leads changes as
+  // the story hands the party on; someone with no portrait yet shows nothing.
+  const wd = TK.world(worldN), lead = wd && wd.lead_portrait && TK.party(wd)[0];
+  if (lead && typeof TownUI !== "undefined") TownUI.loadPortraits().then(() => {
+    const f = TownUI.portraits[lead];
+    if (!f || !side.isConnected) return;
+    side.prepend(h("img", { class: "tk-duel-lead", alt: "", src: `assets/tk/portraits/${f}?v=${TownUI.PORTRAIT_V}` }));
+  });
   // A boss duel: a lacquered red frame, a darker field, and his name over the board.
   box.parentNode && box.parentNode.classList.toggle("tk-duel-boss", !!node.boss);
   if (node.boss) boardCard.prepend(h("div", { class: "tk-duel-bossname" }, [

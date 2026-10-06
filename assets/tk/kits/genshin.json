@@ -23,7 +23,9 @@
   "bg_forest": "assets/tk/genshin/bg_forest.png",
   "bg_mountain": "assets/tk/genshin/bg_mountain.png",
   "bg_ruins": "assets/tk/genshin/bg_ruins.png",
-  "pinerock": "assets/tk/genshin/pinerock.png"
+  "pinerock": "assets/tk/genshin/pinerock.png",
+  "drawn_b2": "assets/tk/drawn_b2.png",
+  "drawn_b2_tiles": "assets/tk/drawn_b2_tiles.png"
  },
  "materials": {
   "grass": {
@@ -188,6 +190,150 @@
   },
   "void": {
    "color": "#120c0a"
+  },
+  "field.wheat": {
+   "tiles": [
+    [
+     "drawn_b2_tiles",
+     0,
+     0,
+     1
+    ],
+    [
+     "drawn_b2_tiles",
+     1,
+     0,
+     1
+    ]
+   ]
+  },
+  "cliff": {
+   "tiles": [
+    [
+     "drawn_b2_tiles",
+     0,
+     1,
+     1
+    ],
+    [
+     "drawn_b2_tiles",
+     1,
+     1,
+     1
+    ]
+   ]
+  },
+  "plateau": {
+   "tiles": [
+    [
+     "drawn_b2_tiles",
+     0,
+     2,
+     1
+    ],
+    [
+     "drawn_b2_tiles",
+     1,
+     2,
+     1
+    ]
+   ]
+  },
+  "wall.city": {
+   "tiles": [
+    [
+     "drawn_b2_tiles",
+     0,
+     3,
+     1
+    ],
+    [
+     "drawn_b2_tiles",
+     1,
+     3,
+     1
+    ]
+   ]
+  },
+  "gallery": {
+   "tiles": [
+    [
+     "drawn_b2_tiles",
+     0,
+     4,
+     1
+    ],
+    [
+     "drawn_b2_tiles",
+     1,
+     4,
+     1
+    ]
+   ]
+  },
+  "bridge": {
+   "tiles": [
+    [
+     "drawn_b2_tiles",
+     0,
+     5,
+     1
+    ],
+    [
+     "drawn_b2_tiles",
+     1,
+     5,
+     1
+    ]
+   ]
+  },
+  "hills": {
+   "tiles": [
+    [
+     "drawn_b2_tiles",
+     0,
+     6,
+     1
+    ],
+    [
+     "drawn_b2_tiles",
+     1,
+     6,
+     1
+    ]
+   ]
+  },
+  "loess": {
+   "tiles": [
+    [
+     "drawn_b2_tiles",
+     0,
+     7,
+     1
+    ],
+    [
+     "drawn_b2_tiles",
+     1,
+     7,
+     1
+    ]
+   ]
+  },
+  "market": {
+   "tiles": [
+    [
+     "drawn_b2_tiles",
+     0,
+     8,
+     1
+    ],
+    [
+     "drawn_b2_tiles",
+     1,
+     8,
+     1
+    ]
+   ]
   }
  },
  "kinds": {
@@ -1105,6 +1251,168 @@
     260,
     69,
     57
+   ]
+  ],
+  "corral": [
+   [
+    "drawn_b2",
+    0,
+    0,
+    128,
+    96
+   ]
+  ],
+  "tree.poplar": [
+   [
+    "drawn_b2",
+    129,
+    0,
+    14,
+    42
+   ]
+  ],
+  "tree.willow": [
+   [
+    "drawn_b2",
+    144,
+    0,
+    34,
+    38
+   ]
+  ],
+  "furn.dais": [
+   [
+    "drawn_b2",
+    179,
+    0,
+    48,
+    34
+   ]
+  ],
+  "prop.lanterns": [
+   [
+    "drawn_b2",
+    228,
+    0,
+    14,
+    30
+   ]
+  ],
+  "garden.trellis": [
+   [
+    "drawn_b2",
+    0,
+    97,
+    64,
+    30
+   ]
+  ],
+  "garden.screenwall": [
+   [
+    "drawn_b2",
+    65,
+    97,
+    64,
+    30
+   ]
+  ],
+  "banner.black": [
+   [
+    "drawn_b2",
+    130,
+    97,
+    16,
+    28
+   ]
+  ],
+  "furn.lamp": [
+   [
+    "drawn_b2",
+    147,
+    97,
+    12,
+    26
+   ]
+  ],
+  "furn.swordwall": [
+   [
+    "drawn_b2",
+    160,
+    97,
+    16,
+    24
+   ]
+  ],
+  "landmark.hitchingpost": [
+   [
+    "drawn_b2",
+    177,
+    97,
+    12,
+    24
+   ]
+  ],
+  "furn.window": [
+   [
+    "drawn_b2",
+    190,
+    97,
+    16,
+    18
+   ]
+  ],
+  "milestone": [
+   [
+    "drawn_b2",
+    207,
+    97,
+    12,
+    16
+   ]
+  ],
+  "water.lotus": [
+   [
+    "drawn_b2",
+    220,
+    97,
+    16,
+    16
+   ]
+  ],
+  "plant.peony": [
+   [
+    "drawn_b2",
+    237,
+    97,
+    16,
+    14
+   ]
+  ],
+  "prop.body_lamp": [
+   [
+    "drawn_b2",
+    0,
+    128,
+    22,
+    14
+   ]
+  ],
+  "furn.qin": [
+   [
+    "drawn_b2",
+    23,
+    128,
+    34,
+    12
+   ]
+  ],
+  "furn.seat": [
+   [
+    "drawn_b2",
+    58,
+    128,
+    16,
+    12
    ]
   ]
  },
