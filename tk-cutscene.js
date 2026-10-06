@@ -280,6 +280,8 @@ const WorldCutscene = {
     const top = a => body(a).getBounds().top;
     const unpose = a => {
       if (a.poseTw) { a.poseTw.stop(); a.poseTw = null; }
+      if (a.poseTw2) { a.poseTw2.stop(); a.poseTw2 = null; }
+      if (a.poseImg) { a.poseImg.destroy(); a.poseImg = null; }
       const t = body(a);
       if (!a.fallen) { t.setAngle(0); if (!a.horse) t.setScale(1); t.clearTint(); }
       a.posed = null;
@@ -302,7 +304,38 @@ const WorldCutscene = {
       else if (pose === "drunk") {
         t.setTint(0xffd0c4);
         a.poseTw = scene.tweens.add({ targets: t, angle: { from: -8, to: 8 }, duration: 650, yoyo: true, repeat: -1, ease: "Sine.easeInOut" });
+      } else if (pose === "dance") {                             // turning and swaying: she spins on the spot
+        a.poseTw = scene.tweens.add({ targets: t, scaleX: { from: 1, to: -1 }, duration: 420, yoyo: true, repeat: -1, ease: "Sine.easeInOut" });
+        a.poseTw2 = scene.tweens.add({ targets: t, angle: { from: -9, to: 9 }, duration: 840, yoyo: true, repeat: -1, ease: "Sine.easeInOut" });
+      } else if (pose === "throat") {                            // a blade held to her own neck, head tipped back
+        t.setAngle(right ? -6 : 6);
+        if (scene.textures.get("tk-props").has("item.twin_swords")) {
+          a.poseImg = scene.add.image(t.x + (right ? 3 : -3), top(a) + 9, "tk-props", "item.twin_swords").setScale(.55)
+            .setAngle(right ? -70 : 70).setDepth(1e5);
+          fx.push(a.poseImg);
+        }
       } else a.posed = null;                                     // stand
+    };
+    const cutarm = async a => {                                  // a cut across the arm for a blood oath: the blade, then drops of red
+      const t = body(a), side = a.dir === "left" ? -1 : 1;
+      if (scene.textures.get("tk-props").has("item.twin_swords")) {
+        const b = scene.add.image(t.x + side * 6, t.y - 12, "tk-props", "item.twin_swords").setScale(.55).setAngle(side * -40).setDepth(1e5);
+        fx.push(b);
+        await tween({ targets: b, angle: side * 30, x: b.x + side * 3, duration: 180, ease: "Quad.easeIn" });
+        b.destroy();
+      }
+      for (let k = 0; k < 4; k++) {
+        const d = scene.add.rectangle(t.x + side * 5, t.y - 9, 1.5, 2, 0xb3141c).setDepth(1e5);
+        fx.push(d);
+        scene.tweens.add({ targets: d, y: t.y - 1, alpha: .2, delay: k * 120, duration: 420, onComplete: () => d.destroy() });
+      }
+      await wait(650);
+    };
+    const leap = async a => {                                    // down from a height: up, out and a long drop to the ground
+      const side = a.dir === "left" ? -1 : a.dir === "right" ? 1 : 0, y0 = a.spr.y, x0 = a.spr.x;
+      await tween({ targets: a.spr, y: y0 - 6, x: x0 + side * 4, duration: 180, ease: "Quad.easeOut", onUpdate: () => sync(a) });
+      await tween({ targets: a.spr, y: y0 + 22, x: x0 + side * 10, duration: 420, ease: "Quad.easeIn", onUpdate: () => sync(a) });
+      a.spr.setDepth(a.spr.y);
     };
     const pose = async (a, p, i) => {
       if (a.prop || a.beast) return;
@@ -315,6 +348,8 @@ const WorldCutscene = {
         await tween({ targets: g, y: top(a) + 6, angle: -side * 60, duration: 260, yoyo: true, hold: 260, repeat: 1 });
         g.destroy();
       } else if (p === "cheer") await hop(a);
+      else if (p === "cutarm") await cutarm(a);
+      else if (p === "leap") await leap(a);
       else if (p === "raise") await Promise.all([hop(a), hold(a, a.item ? `item.${a.item}` : "", 500)]);
       else lasting(a, p);
     };
