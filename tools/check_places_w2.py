@@ -61,7 +61,8 @@ def main():
 
     spotted = set()
     for pname, b in PLACES2.items():
-        ids = {lm.get("id") for lm in b.get("landmarks", [])}
+        ids = {lm.get("id") for lm in b.get("landmarks", [])} | {
+            c["id"] if isinstance(c, dict) else c for lm in b.get("landmarks", []) for c in lm.get("rooms", [])}
         for lm in b.get("landmarks", []):
             if lm["kind"] not in KINDS:
                 errors.append(f"{pname} / {lm.get('id')}: kind {lm['kind']} is not in vocab.py")
@@ -98,7 +99,9 @@ def main():
     for n in world["nodes"]:
         b = PLACES2.get(n["place"], {})
         if n.get("room"):
-            lm = next((l for l in b.get("landmarks", []) if l.get("id") == n["room"]), None)
+            lm = next((l for l in b.get("landmarks", []) if l.get("id") == n["room"]), None) or next(
+                ({"id": c["id"], "kind": c.get("kind", l["kind"])} for l in b.get("landmarks", []) for c in
+                 [c if isinstance(c, dict) else {"id": c} for c in l.get("rooms", [])] if c["id"] == n["room"]), None)
             if lm is None:
                 errors.append(f"{n['key']}: room {n['room']!r} is no building in {n['place']}")
             elif lm["kind"] not in TEMPLATES:
@@ -111,8 +114,7 @@ def main():
         if not n.get("room"):
             notes.append(f"{k}: no landmark; the factory will put its spot at the centre of {n['place']}")
     # the factory, as `mapfactory build` runs it: rooms the story can't use yet are left out so the rest is tried
-    trial = {**world, "nodes": [{k: v for k, v in n.items() if not (k == "room" and not any(
-        l.get("id") == v and l["kind"] in TEMPLATES for l in PLACES2.get(n["place"], {}).get("landmarks", [])))} for n in world["nodes"]]}
+    trial = world
     region = build_region(trial, PLACES2)
     from tk_places import ROOMS
     for p in region["places"]:

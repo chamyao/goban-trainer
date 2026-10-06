@@ -11,10 +11,9 @@ The fuller design (one city in several states, stealth with sight cones, the
 curtain puzzle, the procession, coarse plan grids) is the next pass:
 docs/book2/places-design.md, tools/tk_plans_w2.py.
 
-Rooms: a story node's "room" is a building landmark's id here, and only building
-kinds with an interior (hall, house, shop, inn, lodge, hut, tent) have one. So
-Wang Yun's and the Chancellor's houses appear as several buildings side by side,
-each labelled as the room it holds.
+Rooms: a story node's "room" is a building landmark's id here, or one of the rooms
+in a landmark's "rooms" chain (one building outside, its rooms in a row inside: the
+front door opens into the first, each back wall into the next; main 54ff914).
 
 "inside": True on a person: they stand in the room of their "near" building (the steward
 by the family chest, the jeweller at his bench). The factory honours it (main 4c88e49).
@@ -28,25 +27,26 @@ PLACES2 = {
     # =========================================================================================
     "Chang'an": {
         "archetype": "city",
+        "room_folk": False,
         "shrine": False,
         "banners": "red",
         "landmarks": [
             # outside the north wall
             {"kind": "building.gate", "id": "hengmen", "node": "2-a1", "label": "The Heng Gate: the farewell banquet"},
             {"kind": "rock.big", "id": "ridge", "node": "2-a11", "near": "hengmen", "label": "The earthen ridge"},
-            # Wang Yun's residence: three rooms and the garden, side by side
-            {"kind": "building.hall", "id": "wy-hall", "label": "Wang Yun's residence: the front hall"},
-            {"kind": "building.hall", "id": "wy-rearhall", "near": "wy-hall", "label": "Wang Yun's residence: the rear hall"},
-            {"kind": "building.house", "id": "wy-secret", "near": "wy-rearhall", "label": "Wang Yun's residence: the secret room"},
-            {"kind": "building.moongate", "id": "wy-garden", "node": "2-a2", "near": "wy-rearhall", "label": "Wang Yun's rear garden"},
+            # Wang Yun's residence: one building, its rooms in a row inside; the garden beside it
+            {"kind": "building.hall", "id": "wangyun", "label": "Wang Yun's residence",
+             "rooms": [{"id": "wy-hall", "label": "The front hall"}, {"id": "wy-rearhall", "label": "The rear hall"},
+                       {"id": "wy-secret", "label": "The secret room", "kind": "building.house"}]},
+            {"kind": "building.moongate", "id": "wy-garden", "node": "2-a2", "near": "wangyun", "label": "Wang Yun's rear garden"},
             # the Chancellor's residence
-            {"kind": "building.hall", "id": "xf-hall", "label": "The Chancellor's residence: the middle hall"},
-            {"kind": "building.house", "id": "xf-bedroom", "near": "xf-hall", "label": "The Chancellor's residence: the bedchamber"},
-            {"kind": "building.moongate", "id": "xf-garden", "node": "2-a9", "near": "xf-hall",
+            {"kind": "building.hall", "id": "xiangfu", "label": "The Chancellor's residence",
+             "rooms": [{"id": "xf-hall", "label": "The middle hall"}, {"id": "xf-bedroom", "label": "The bedchamber", "kind": "building.house"}]},
+            {"kind": "building.moongate", "id": "xf-garden", "node": "2-a9", "near": "xiangfu",
              "label": "The Chancellor's rear garden: the Phoenix Pavilion"},
-            {"kind": "lamp.post", "id": "lanterns", "node": "2-a6", "near": "xf-hall", "label": "The red lanterns on the avenue"},
+            {"kind": "lamp.post", "id": "lanterns", "node": "2-a6", "near": "xiangfu", "label": "The red lanterns on the avenue"},
             # Lü Bu's quarters, next door
-            {"kind": "building.house", "id": "lubu", "node": "2-a3", "near": "xf-hall", "label": "Lü Bu's quarters"},
+            {"kind": "building.house", "id": "lubu", "node": "2-a3", "near": "xiangfu", "label": "Lü Bu's quarters"},
             # the market
             {"kind": "building.shop", "id": "jeweller", "label": "The jeweller's"},
             {"kind": "lamp.post", "id": "market", "node": "2-a15", "near": "jeweller", "label": "The market crossroads"},
@@ -55,10 +55,10 @@ PLACES2 = {
             {"kind": "building.house", "id": "shisun", "node": "2-a12a", "label": "Shisun Rui's house"},
             {"kind": "building.house", "id": "huangwan", "node": "2-a12b", "label": "Huang Wan's house"},
             # the palace quarter
-            {"kind": "building.hall", "id": "palace", "label": "Weiyang Palace"},
-            {"kind": "building.house", "id": "side-hall", "near": "palace", "label": "The emperor's side hall"},
+            {"kind": "building.hall", "id": "palace", "label": "Weiyang Palace",
+             "rooms": [{"id": "dutang", "label": "The great hall of state"},
+                       {"id": "side-hall", "label": "The emperor's side hall", "kind": "building.house"}]},
             {"kind": "building.gate", "id": "north-gate", "node": "2-a14", "near": "palace", "label": "The North Side Gate"},
-            {"kind": "building.hall", "id": "dutang", "near": "palace", "label": "The great hall of state"},
             {"kind": "building.house", "id": "caiyong", "near": "palace", "label": "Cai Yong's house"},
             # the east wall
             {"kind": "building.gate", "id": "xuanping", "node": "2-a18", "label": "The Xuanping Gate"},
@@ -106,15 +106,15 @@ PLACES2 = {
             {"kind": "folk.official", "near": "hengmen", "when": "node:a1", "until": "2-a14",
              "say": "“He laughed, and went on eating. I couldn't hold my chopsticks. I still can't, some days.”"},
             {"kind": "folk.child", "until": "2-a14", "say": "“Mother says don't look at the soldiers with the long halberds.”"},
-            {"kind": "folk.soldier", "near": "xf-hall", "face": "down", "until": "2-a14",
+            {"kind": "folk.soldier", "near": "xiangfu", "face": "down", "until": "2-a14",
              "say": "“The Grand Preceptor receives no one today.”"},
             {"kind": "folk.soldier", "near": "lubu", "until": "2-a14",
              "say": "“In Liangzhou we ride before we walk. These Chang'an streets are too narrow for a horse to stretch.”"},
-            {"kind": "folk.maiden", "near": "wy-hall", "when": "node:a5", "until": "2-a10",
+            {"kind": "folk.maiden", "near": "wy-hall", "inside": True, "when": "node:a5", "until": "2-a10",
              "say": "“They say Lady Diaochan went in the covered carriage, straight to the Grand Preceptor's.”"},
-            {"kind": "folk.maiden", "near": "xf-bedroom", "when": "node:a6", "until": "2-a8",
+            {"kind": "folk.maiden", "near": "xf-bedroom", "inside": True, "when": "node:a6", "until": "2-a8",
              "say": "“The Grand Preceptor spent the night with the new girl and hasn't got up.”"},
-            {"kind": "folk.woman", "near": "xf-bedroom", "when": "node:a6", "until": "2-a10",
+            {"kind": "folk.woman", "near": "xf-hall", "inside": True, "when": "node:a6", "until": "2-a10",
              "say": "“Walk softly near the middle hall. He throws things when he's woken.”"},
             {"kind": "folk.soldier", "near": "hengmen", "when": "node:a10", "until": "2-a12",
              "say": "“General Lü stood on that ridge till the dust was gone. Didn't say a word.”"},
@@ -163,6 +163,7 @@ PLACES2 = {
     # =========================================================================================
     "Meiwu Road": {
         "archetype": "road",
+        "room_folk": False,
         "landmarks": [
             {"kind": "building.hut", "id": "post", "label": "The thirty-li post"},
             {"kind": "camp.logs", "id": "wheel", "node": "2-a13a", "label": "The rutted bend"},
@@ -197,13 +198,14 @@ PLACES2 = {
     # =========================================================================================
     "Meiwu": {
         "archetype": "town",
+        "room_folk": False,
         "shrine": False,
         "landmarks": [
             {"kind": "building.gate", "id": "gate", "label": "The gate of Meiwu"},
-            {"kind": "building.hall", "id": "hall", "label": "Dong Zhuo's hall"},
-            {"kind": "building.house", "id": "mother", "near": "hall", "label": "His mother's rooms"},
+            {"kind": "building.hall", "id": "dongzhuo", "label": "Dong Zhuo's hall",
+             "rooms": [{"id": "hall", "label": "Dong Zhuo's hall"}, {"id": "mother", "label": "His mother's rooms", "kind": "building.house"},
+                       {"id": "diaochan", "label": "Diaochan's rooms", "kind": "building.house"}]},
             {"kind": "building.lodge", "id": "treasury", "label": "The treasury"},
-            {"kind": "building.house", "id": "diaochan", "near": "hall", "label": "Diaochan's rooms"},
             {"kind": "camp.hay", "id": "granary", "label": "The granaries: twenty years of grain"},
             {"kind": "camp.hay", "id": "granary-2", "near": "granary"},
         ],
@@ -216,7 +218,7 @@ PLACES2 = {
             {"kind": "folk.soldier", "near": "treasury", "face": "down", "challenge": "straggler", "when": "node:a15", "until": "2-a15m",   # blocking
              "intro": ["One of Dong Zhuo's guards still holds the treasury door, spear levelled. “The Grand Preceptor's gold! Nobody touches it!”"],
              "win": ["“…He's dead, isn't he. Take it. Take all of it.”"], "done": ["The guard has thrown down his spear."]},
-            {"kind": "folk.soldier", "near": "mother", "challenge": "bearofficer", "when": "node:a15", "until": "2-a15m",
+            {"kind": "folk.soldier", "near": "dongzhuo", "challenge": "bearofficer", "when": "node:a15", "until": "2-a15m",
              "intro": ["A Flying Bear officer crouches in a side court, sword half drawn. “General Lü. I always wondered which of us was better.”"],
              "win": ["“So now I know.”"], "done": ["The officer sits against the wall and does not look up."]},
             # --- townsfolk ---------------------------------------------------------------------------
@@ -224,9 +226,9 @@ PLACES2 = {
              "say": "“Walls as thick as Chang'an's. Nothing comes through this gate he doesn't want.”"},
             {"kind": "folk.elder", "near": "granary", "until": "2-a14",
              "say": "“Twenty years of grain. ‘If I succeed I hold the empire,’ he says, ‘and if not, I grow old here.’”"},
-            {"kind": "folk.maiden", "near": "hall", "until": "2-a14",
+            {"kind": "folk.maiden", "near": "dongzhuo", "until": "2-a14",
              "say": "“They took me from my mother's door in Chang'an. Eight hundred of us, picked like peaches.”"},
-            {"kind": "folk.woman", "near": "mother", "until": "2-a14",
+            {"kind": "folk.woman", "near": "mother", "inside": True, "until": "2-a14",
              "say": "“The old lady is ninety. She says her flesh trembles. She hasn't slept in days.”"},
             {"kind": "folk.maiden", "near": "gate", "when": "node:a15", "say": "“The gate is open. Which road goes home?”"},
             {"kind": "folk.official", "near": "treasury", "when": "node:a15m",
@@ -237,6 +239,7 @@ PLACES2 = {
     # =========================================================================================
     "Liangzhou": {
         "archetype": "road",
+        "room_folk": False,
         "banners": "purple",
         "landmarks": [
             {"kind": "building.tent", "id": "camp", "node": "2-a16", "side": "W", "label": "Li Jue's camp"},
