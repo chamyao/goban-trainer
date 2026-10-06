@@ -1050,7 +1050,7 @@ def _nodes_chain():
         return n
     return [
         node("a1", 40, 200, "a1", board=False),
-        node("a2", 60, 190, "a2", room="wy-garden", dilemma=D(
+        node("a2", 60, 190, "a2", dilemma=D(
             "wangyun", "Stake the whole house on a sixteen-year-old girl?", "以一门性命，托付二八少女？",
             "If it leaks, every one of us dies. But no one else can do it.", "事若泄漏，我灭门矣。可满朝文武，无计可施。",
             "Then let it be her.", "既如此，便是她了。",
@@ -1087,7 +1087,7 @@ def _nodes_chain():
             "One sign, and not a sound.", "只一个手势，不出一声。",
             "His heart is breaking. Good.", "他心如碎。好。",
             "Not yet. He's stirring.", "还不行，他在动。")),
-        node("a9", 200, 120, "a9", room="xf-garden", dilemma=D(
+        node("a9", 200, 120, "a9", dilemma=D(
             "diaochan", "Turn Lü Bu against his father.", "教吕布反其父。",
             "He came. Now he must not leave as he came.", "他来了。不可教他原样回去。",
             "He holds me, and will not let go.", "他抱住我，不肯放手。",
@@ -1219,6 +1219,7 @@ def _world():
              "Lü Bu helps the Minister rid the realm of a tyrant; Li Jue takes Jia Xu's advice and attacks Chang'an"],
         ],
         "grades": ["11K", "11K+"],
+        "boss": "redmond",
         "party": ["wangyun"],
         "items": _ITEMS,
         "nodes": _nodes_chain(),
