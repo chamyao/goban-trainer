@@ -206,6 +206,68 @@ def halberd():   # a halberd planted at a camp gate (Book 3, ch. 16): a crescent
     return g.outline().image()
 
 
+def carriage():   # a Han covered carriage, side view: two wheels, a box with felt curtains, a round canopy, shafts
+    g = _grid(34, 28)
+    wood, woodD, felt, feltD, canopy, canopyD = "#8a5a2a", "#5a3a1a", "#b8423a", "#8a2e28", "#3e4350", "#2a2e38"
+    g.rect(0, 17, 10, 1, wood); g.set(0, 16, wood)                                  # the shafts, forward
+    g.rect(8, 9, 20, 9, felt); g.rect(8, 16, 20, 2, feltD)                          # the box, hung with red felt
+    for x in (12, 17, 22):
+        g.rect(x, 9, 1, 7, feltD)                                                   # the curtain folds
+    g.rect(13, 10, 3, 4, "#e6c860"); g.rect(13, 13, 3, 1, feltD)                    # a curtain drawn up at the window
+    g.rect(7, 17, 22, 2, wood)                                                      # the floor beam
+    g.ellipse(18, 5.5, 13, 3.5, canopy); g.ellipse(18, 6.5, 12, 2.2, canopyD)       # the round canopy over it
+    g.rect(17, 0, 2, 3, wood); g.rect(17, 3, 2, 6, wood)                            # its pole
+    for x in (6, 30):
+        g.rect(x, 7, 1, 2, "#e6c14a")                                               # tassels at its rim
+    g.ellipse(22, 21, 6, 6, woodD); g.ellipse(22, 21, 4.6, 4.6, wood); g.ellipse(22, 21, 1.5, 1.5, woodD)   # the wheel
+    for dx, dy in ((0, -4), (0, 4), (-4, 0), (4, 0), (-3, -3), (3, 3), (-3, 3), (3, -3)):
+        g.set(22 + dx // 1, 21 + dy // 1, woodD)                                    # its spokes
+    return g.outline().image()
+
+
+def curtain():   # a bead curtain hung across a room: a lacquered rail and strings of beads
+    g = _grid(36, 30)
+    g.rect(0, 0, 36, 3, "#7a2a22"); g.rect(0, 0, 36, 1, "#a83a32"); g.rect(1, 3, 34, 1, "#e6c14a")   # the rail
+    beads = ("#f4f0e0", "#d8c890", "#c8d8e8")
+    for i, x in enumerate(range(2, 35, 2)):
+        n = 22 + (3 if 8 < x < 28 else 0) - abs(x - 18) // 6                        # the strings hang in a soft curve
+        for y in range(4, 4 + n):
+            if (y + i) % 2 == 0:
+                g.set(x, y, beads[(x // 2 + y // 4) % 3])
+            else:
+                g.set(x, y, "#a8987a")
+    return g.image()   # no outline: the room shows between the strings
+
+
+def pearls():   # a string of pearls coiled on a red cloth: separate beads, each with its highlight
+    g = _grid(16, 10)
+    g.ellipse(8, 6.5, 7.5, 3, "#b8423a"); g.ellipse(8, 7.5, 7, 2, "#8a2e28")
+    for x, y in ((2, 5), (5, 6), (8, 6), (11, 6), (13, 4), (11, 3), (8, 3), (5, 3)):
+        g.rect(x, y, 2, 2, "#e8e4dc"); g.set(x, y, "#ffffff"); g.set(x + 1, y + 1, "#b8b4ac")
+    return g.outline().image()
+
+
+def crown():   # a gold crown set with pearls
+    g = _grid(16, 12)
+    gold, goldD = "#e6c14a", "#b08a2a"
+    g.rect(2, 6, 12, 5, gold); g.rect(2, 10, 12, 1, goldD)
+    for x in (2, 6, 10, 13):
+        g.rect(x, 3, 2, 3, gold); g.set(x, 2, gold)                                 # the points
+    for x in (4, 8, 12):
+        g.ellipse(x, 8, 1.2, 1.2, "#f4f0ea")                                         # the pearls set in it
+    g.set(7, 1, "#c8283c"); g.set(7, 2, gold)                                       # a red stone at the top
+    return g.outline().image()
+
+
+def edict():   # the Emperor's secret edict: a yellow silk scroll, rolled, tied with a red cord
+    g = _grid(16, 10)
+    g.rect(2, 2, 12, 6, "#e8c84a"); g.rect(2, 7, 12, 1, "#c8a030")
+    g.rect(0, 1, 2, 8, "#7a4a22"); g.rect(14, 1, 2, 8, "#7a4a22")                    # the rollers
+    g.rect(7, 2, 2, 6, "#c8283c")                                                   # the cord
+    g.rect(4, 4, 2, 1, "#8a6a2a"); g.rect(10, 4, 2, 1, "#8a6a2a")                   # a glimpse of characters
+    return g.outline().image()
+
+
 # the registry of props: kind -> footprint (w, h tiles) and how to draw it
 PROPS = {
     "cagecart": {"size": [3, 1], "atlas": "cagecart"},
@@ -243,6 +305,9 @@ PROPS = {
     "water": {"size": [2, 1], "atlas": "pond"},
     # Book 3
     "halberd": {"size": [1, 1], "atlas": "halberd"},
+    # the new Book 2 (ch. 8-9)
+    "carriage": {"size": [2, 1], "atlas": "carriage"},
+    "curtain": {"size": [2, 1], "atlas": "curtain"},
 }
 PROPS["forge"]["fire"] = True
 
@@ -284,6 +349,11 @@ def main():
         "mirror": mirror(),
         "pond": pond(),
         "halberd": halberd(),
+        "carriage": carriage(),
+        "curtain": curtain(),
+        "item.pearls": pearls(),
+        "item.crown": crown(),
+        "item.edict": edict(),
     }
     # one row, 1px apart
     W = sum(f.width + 1 for f in frames.values())

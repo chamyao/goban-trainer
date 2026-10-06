@@ -204,6 +204,36 @@
    0,
    16,
    36
+  ],
+  "carriage": [
+   642,
+   0,
+   34,
+   28
+  ],
+  "curtain": [
+   677,
+   0,
+   36,
+   30
+  ],
+  "item.pearls": [
+   714,
+   0,
+   16,
+   10
+  ],
+  "item.crown": [
+   731,
+   0,
+   16,
+   12
+  ],
+  "item.edict": [
+   748,
+   0,
+   16,
+   10
   ]
  },
  "kinds": {
@@ -481,6 +511,20 @@
     1
    ],
    "atlas": "halberd"
+  },
+  "carriage": {
+   "size": [
+    2,
+    1
+   ],
+   "atlas": "carriage"
+  },
+  "curtain": {
+   "size": [
+    2,
+    1
+   ],
+   "atlas": "curtain"
   }
  }
 }
