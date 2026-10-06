@@ -1148,7 +1148,7 @@ def _nodes_chain():
             "The song says his name, and says he dies. Turn it round.", "童谣暗藏其名，又说他死。要反过来说。",
             "The house of Dong will rise.", "董氏当兴。",
             "He's listening hard. Again.", "他听得仔细。再来。")),
-        node("a13d", 340, 36, "a13d", place="Meiwu Road", board=False),
+        node("a13d", 340, 36, "a13d", board=False),
         node("a14", 350, 30, "a14", role="boss",
              boss={"who": "dongzhuo", "title": T("Dong Zhuo", "董卓") + ", " + T("Grand Preceptor", "太师"),
                    "taunt": T("What are the swords for?", "持剑是何意？")},
