@@ -735,6 +735,7 @@ function worldScenes() {
     }
     // Who is here and how the shrine looks follow the story; redone whenever it moves on.
     refreshStory() {
+      this.grid = null; this.sgrid = null;   // what's in the way may have changed
       const st = this.mapState();
       for (const n of this.npcs) if (n.when || n.in) {
         const on = this.cond(n.when) && (!n.in || !!(st && n.in.some(i => st.ids.includes(i))));
@@ -1209,6 +1210,7 @@ function worldScenes() {
       const C = 8, b = this.physics.world.bounds, cols = Math.ceil(b.width / C), rows = Math.ceil(b.height / C);
       const block = new Uint8Array(cols * rows), pad = 5;
       for (const z of this.solids.getChildren()) {
+        if (!z.body || !z.body.enable || (z.visibleWith && !z.visibleWith.visible)) continue;   // hidden by the story (another map state, a blocker stood aside): not in the way
         const bd = z.body, x0 = Math.floor((bd.x - pad) / C), x1 = Math.floor((bd.right + pad) / C), y0 = Math.floor((bd.y - 3) / C), y1 = Math.floor((bd.bottom + 3) / C);
         for (let y = Math.max(0, y0); y <= Math.min(rows - 1, y1); y++) for (let x = Math.max(0, x0); x <= Math.min(cols - 1, x1); x++) block[y * cols + x] = 1;
       }
@@ -1556,7 +1558,7 @@ function worldScenes() {
       if (won) {
         this.returned({ key: n.challenge, win: true });
         // a blocker stands aside: off your way, and no longer in it
-        n.spr.body.enable = false;
+        n.spr.body.enable = false; this.grid = null;
         const side = Math.abs(dx) > Math.abs(dy) ? { x: 0, y: T } : { x: T, y: 0 };
         this.tweens.add({ targets: n.spr, x: n.spr.x + side.x, y: n.spr.y + side.y, duration: 400, onUpdate: () => n.spr.setDepth(n.spr.y) });
       } else {
