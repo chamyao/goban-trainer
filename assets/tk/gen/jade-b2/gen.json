@@ -340,5 +340,23 @@
   ],
   "seconds": 28.9,
   "made": "2026-10-06"
+ },
+ "building.markettower": {
+  "model": "retro-diffusion/rd-plus",
+  "input": {
+   "style": "topdown_asset",
+   "width": 96,
+   "height": 128,
+   "remove_bg": true,
+   "prompt": "a Han market tower: a slender two-storey timber tower with a tiled hip roof, a big drum in the open upper storey, and a long red flag on a tall pole beside it, front view, 16-bit JRPG town tileset style, bold black outlines, warm wood and red-brown tiled roofs, cream plaster walls, Han dynasty China, 3/4 top-down game sprite",
+   "num_images": 2
+  },
+  "n": 2,
+  "size": [
+   96,
+   128
+  ],
+  "seconds": 37.6,
+  "made": "2026-10-06"
  }
 }
