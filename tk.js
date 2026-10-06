@@ -563,7 +563,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) this.data = await (await fetch("data/tk.json?v=55")).json();
+    if (!this.data) this.data = await (await fetch("data/tk.json?v=56")).json();
     return this.data;
   },
   ls(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } },
@@ -1467,16 +1467,23 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
   const nth = Math.max(0, (+String(key).split("~")[1] || 1) - 1);   // which board of the scene
   const dil = Array.isArray(node.dilemma) ? node.dilemma[Math.min(nth, node.dilemma.length - 1)] : node.dilemma;
   const dilBox = dil ? h("div", { class: "tk-duel-dilemma" }, [h("b", { lang: "zh-CN" }, dil.q_zh || ""), h("span", {}, dil.q)]) : "";
-  const side = h("div", { class: "tk-duel-side" }, [dilBox, dlg, keys, srcLine]);
+  const dlgRow = h("div", { class: "tk-duel-dlgrow" }, [dlg]);
+  const side = h("div", { class: "tk-duel-side" }, [dilBox, dlgRow, keys, srcLine]);
   box.replaceChildren(boardCard, side);
   // A book that shows its protagonist at the board (world "lead_portrait"): the party leader's painted
-  // portrait (assets/tk/portraits) stands over the dialogue box, beside the board. Who leads changes as
-  // the story hands the party on; someone with no portrait yet shows nothing.
-  const wd = TK.world(worldN), lead = wd && wd.lead_portrait && TK.party(wd)[0];
+  // portrait (assets/tk/portraits) on the left: a column of its own left of the board on a wide screen,
+  // a small one left of the dialogue box on a phone (style.css shows one of the two). Who leads changes
+  // as the story hands the party on; someone with no portrait yet shows nothing.
+  // whose board it is: the decider its dilemma names, else whoever is walking (the two can differ mid-scene: Diaochan
+  // called in to Wang Yun's banquet decides its board while he is still the one walking)
+  const wd = TK.world(worldN), lead = wd && wd.lead_portrait && ((dil && dil.who) || TK.party(wd)[0]);
   if (lead && typeof TownUI !== "undefined") TownUI.loadPortraits().then(() => {
     const f = TownUI.portraits[lead];
     if (!f || !side.isConnected) return;
-    side.prepend(h("img", { class: "tk-duel-lead", alt: "", src: `assets/tk/portraits/${f}?v=${TownUI.PORTRAIT_V}` }));
+    const src = `assets/tk/portraits/${f}?v=${TownUI.PORTRAIT_V}`;
+    box.classList.add("has-lead");
+    box.prepend(h("div", { class: "tk-duel-leadcol" }, [h("img", { class: "tk-duel-lead", alt: "", src })]));
+    dlgRow.prepend(h("img", { class: "tk-duel-lead-sm", alt: "", src }));
   });
   // A boss duel: a lacquered red frame, a darker field, and his name over the board.
   box.parentNode && box.parentNode.classList.toggle("tk-duel-boss", !!node.boss);
