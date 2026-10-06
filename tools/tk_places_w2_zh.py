@@ -277,4 +277,6 @@ ZH_PLACES2 = {
     "“Mistress? You've lost your way. The Grand Preceptor likes to know where you are.”": "“小姐？您走错路了。太师喜欢知道您在哪儿。”",
     "“The garden is cold this hour, mistress. Let me walk you back.”": "“这时辰园里凉，小姐。我送您回去吧。”",
     "“The road's yours. Mind the ruts after the bridge.”": "“路是你的了。过了桥小心车辙。”",
+    # the door refusal (claude/plot-places 485d1f2)
+    "The gatekeeper bars the way. “The Grand Preceptor receives no one today.”": "门吏拦住去路。“太师今日不见客。”",
 }
