@@ -16,6 +16,10 @@ kinds with an interior (hall, house, shop, inn, lodge, hut, tent) have one. So
 Wang Yun's and the Chancellor's houses appear as several buildings side by side,
 each labelled as the room it holds.
 
+"inside": True on a person: they stand in the room of their "near" building (the steward
+by the family chest, the jeweller at his bench). Requested from Integration; until the
+factory does it, it ignores the flag and they stand outside the building, 2-3 tiles off.
+
 Road challengers (14; 6 blocking): today a challenger can't block a path or spot
 you, so the blocking ones stand by the landmark you must reach next, and only
 for that walk (when/until). Marked "blocking" in a comment.
@@ -62,12 +66,12 @@ PLACES2 = {
         ],
         "npcs": [
             # --- items: the family pearls, then the crown --------------------------------------------
-            {"kind": "folk.elder", "near": "wy-rearhall", "face": "down",
+            {"kind": "folk.elder", "near": "wy-rearhall", "inside": True, "face": "down",
              "say": "“The master hasn't slept. He walks the garden and sighs.”",
              "gives": "pearls", "gives_when": "node:a2",
              "give": ["The old steward unlocks the family chest. “The pearls your father kept, master. Whatever you need them for, I never saw.”"],
              "given": ["“The chest is locked again, master. No one will know.”"]},
-            {"kind": "folk.noble", "near": "jeweller", "face": "down",
+            {"kind": "folk.noble", "near": "jeweller", "inside": True, "face": "down",
              "say": "“Pearls like these, Minister? Set in gold, they'd crown a general.”",
              "gives": "crown", "gives_when": "item:pearls",
              "give": ["“Pearls from your own house, Minister? Then the crown will be the best thing I ever made.”"],

@@ -452,6 +452,19 @@ def main():
         errors += P.errors
         if "--png" in sys.argv:
             drawn.append(draw(name, P, ROOT / "docs/book2/plans"))
+    # people placed inside a compound or room map ("place": its id, "at": a cell there)
+    for place, b in PLANS2.items():
+        for i, n in enumerate(b.get("npcs", [])):
+            if n.get("place"):
+                m = (b.get("maps") or {}).get(n["place"])
+                if m is None:
+                    errors.append(f"{place}: npc {i + 1} is in {n['place']!r}, which is no map of the place")
+                    continue
+                P = Plan(f"{place} / {n['place']}", m)
+                P.check(keys)
+                c = tuple(n["at"])
+                if not P.walkable(c) or c not in getattr(P, "reach", set()):
+                    errors.append(f"{place} / {n['place']}: npc {i + 1} ({n['kind']}) at {c} stands where no one can walk to")
     # every Shared key that names a Places spot should have one
     placed = {s["node"][2:] for _, p, _ in plans() for s in p.get("spots", []) if s.get("node")}
     placed |= {t["node"][2:] for _, p, _ in plans() for t in p.get("things", []) if t.get("node")}
