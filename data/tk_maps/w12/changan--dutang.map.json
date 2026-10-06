@@ -3,7 +3,7 @@
  "id": "changan--dutang",
  "world": 12,
  "parent": "changan",
- "name": "The Capital Office",
+ "name": "The great hall of state",
  "archetype": "interior",
  "building": "dutang",
  "style": "building.hall",

@@ -3,15 +3,15 @@
  "id": "meiwu--treasury",
  "world": 12,
  "parent": "meiwu",
- "name": "The Meiwu treasury",
+ "name": "The treasury",
  "archetype": "interior",
  "building": "treasury",
- "style": "building.house",
+ "style": "building.lodge",
  "size": [
   20,
   12
  ],
- "seed": 0.3512689840898653,
+ "seed": 0.4882649991328303,
  "terrain": {
   "legend": {
    "#": "wood",
@@ -23,14 +23,14 @@
   },
   "rows": [
    "                    ",
-   "     WWWWWWWWWW     ",
-   "     W########W     ",
-   "     W########W     ",
-   "     W########W     ",
-   "     W########W     ",
-   "     W########W     ",
-   "     W########W     ",
-   "     WWWWW#WWWW     ",
+   "    WWWWWWWWWWW     ",
+   "    WeeeeeeeeeW     ",
+   "    WeeeeeeeeeW     ",
+   "    WeeeeeeeeeW     ",
+   "    WeeeeeeeeeW     ",
+   "    WeeeeeeeeeW     ",
+   "    WeeeeeeeeeW     ",
+   "    WWWWWeWWWWW     ",
    "                    ",
    "                    ",
    "                    "
@@ -38,58 +38,30 @@
  },
  "objects": [
   {
-   "kind": "furn.bed",
-   "x": 7,
+   "kind": "furn.hearth",
+   "x": 8,
    "y": 2,
    "w": 2,
    "h": 1
   },
   {
-   "kind": "furn.drawers",
-   "x": 6,
-   "y": 2,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "furn.shelf",
+   "kind": "furn.bed",
    "x": 11,
    "y": 2,
    "w": 2,
    "h": 1
   },
   {
-   "kind": "furn.table",
-   "x": 7,
-   "y": 4,
-   "w": 2,
-   "h": 1
-  },
-  {
-   "kind": "furn.stool",
-   "x": 6,
-   "y": 4,
+   "kind": "furn.sacks",
+   "x": 5,
+   "y": 3,
    "w": 1,
    "h": 1
   },
   {
-   "kind": "furn.stool",
-   "x": 9,
+   "kind": "furn.sacks",
+   "x": 5,
    "y": 4,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "furn.jar",
-   "x": 13,
-   "y": 2,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "furn.chest",
-   "x": 6,
-   "y": 6,
    "w": 1,
    "h": 1
   },
@@ -99,13 +71,55 @@
    "y": 6,
    "w": 1,
    "h": 1
+  },
+  {
+   "kind": "furn.table",
+   "x": 9,
+   "y": 5,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 8,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 11,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.jar",
+   "x": 5,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.chest",
+   "x": 5,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.jar",
+   "x": 13,
+   "y": 4,
+   "w": 1,
+   "h": 1
   }
  ],
  "spots": [
   {
    "id": "spot-12-a15m",
-   "x": 9.5,
-   "y": 2.7,
+   "x": 10.5,
+   "y": 3.7,
    "node": "12-a15m",
    "label": "Meiwu"
   }
@@ -113,11 +127,11 @@
  "npcs": [
   {
    "id": "in-1",
-   "kind": "folk.woman",
-   "x": 8.5,
-   "y": 5.9,
+   "kind": "folk.villager",
+   "x": 9.5,
+   "y": 3.9,
    "say": [
-    "“Mind the floor — I've only just swept it.”"
+    "“The harvest is in, if the rebels don't take it.”"
    ]
   }
  ],
@@ -125,7 +139,7 @@
   {
    "to": "meiwu",
    "side": "S",
-   "x": 10,
+   "x": 9,
    "y": 8,
    "w": 1,
    "h": 1
@@ -133,11 +147,11 @@
  ],
  "entries": {
   "meiwu": [
-   10,
+   9,
    7
   ],
   "": [
-   10,
+   9,
    7
   ]
  }

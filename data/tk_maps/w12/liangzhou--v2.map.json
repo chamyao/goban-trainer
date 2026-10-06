@@ -1,0 +1,143 @@
+{
+ "format": "tk-map/1",
+ "id": "liangzhou--v2",
+ "world": 12,
+ "parent": "liangzhou",
+ "name": "The walled farm",
+ "archetype": "interior",
+ "building": "v2",
+ "style": "building.lodge",
+ "size": [
+  20,
+  12
+ ],
+ "seed": 0.8942411069141745,
+ "terrain": {
+  "legend": {
+   "#": "wood",
+   "%": "stone",
+   "&": "mat",
+   "e": "earth",
+   "W": "wall",
+   " ": "void"
+  },
+  "rows": [
+   "                    ",
+   "    WWWWWWWWWWW     ",
+   "    WeeeeeeeeeW     ",
+   "    WeeeeeeeeeW     ",
+   "    WeeeeeeeeeW     ",
+   "    WeeeeeeeeeW     ",
+   "    WeeeeeeeeeW     ",
+   "    WeeeeeeeeeW     ",
+   "    WWWWWeWWWWW     ",
+   "                    ",
+   "                    ",
+   "                    "
+  ]
+ },
+ "objects": [
+  {
+   "kind": "furn.hearth",
+   "x": 8,
+   "y": 2,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.bed",
+   "x": 10,
+   "y": 2,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.sacks",
+   "x": 5,
+   "y": 3,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.sacks",
+   "x": 5,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.barrel",
+   "x": 13,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.table",
+   "x": 9,
+   "y": 5,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 8,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 11,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.jar",
+   "x": 5,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.chest",
+   "x": 5,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "spots": [],
+ "npcs": [
+  {
+   "id": "in-1",
+   "kind": "folk.villager",
+   "x": 9.5,
+   "y": 3.9,
+   "say": [
+    "“The harvest is in, if the rebels don't take it.”"
+   ]
+  }
+ ],
+ "exits": [
+  {
+   "to": "liangzhou",
+   "side": "S",
+   "x": 9,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "liangzhou": [
+   9,
+   7
+  ],
+  "": [
+   9,
+   7
+  ]
+ }
+}

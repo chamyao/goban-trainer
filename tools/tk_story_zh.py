@@ -523,6 +523,12 @@ for _k, _v in _ZHD.items():
     ZH.setdefault(_k, _v)
 for _k, _v in _CASTD.items():
     CAST.setdefault(_k, _v)
+try:  # the test book's townsfolk (Places' map; Plot's Chinese)
+    from tk_places_w2_zh import ZH_PLACES2 as _ZHP  # noqa: E402
+    for _k, _v in _ZHP.items():
+        ZH.setdefault(_k, _v)
+except ImportError:
+    pass
 from tk_story_w3 import ZH3 as _ZH3, CAST3 as _CAST3  # noqa: E402
 for _k, _v in _ZH3.items():
     ZH.setdefault(_k, _v)

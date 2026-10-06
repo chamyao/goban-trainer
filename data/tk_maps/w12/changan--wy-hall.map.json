@@ -3,7 +3,7 @@
  "id": "changan--wy-hall",
  "world": 12,
  "parent": "changan",
- "name": "Wang Yun's house",
+ "name": "Wang Yun's residence: the front hall",
  "archetype": "interior",
  "building": "wy-hall",
  "style": "building.hall",

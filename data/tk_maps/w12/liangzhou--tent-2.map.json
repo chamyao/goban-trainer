@@ -3,7 +3,7 @@
  "id": "liangzhou--tent-2",
  "world": 12,
  "parent": "liangzhou",
- "name": "Tent, Liangzhou",
+ "name": "Guo Si's tent",
  "archetype": "interior",
  "building": "tent-2",
  "style": "building.tent",
