@@ -22,6 +22,8 @@ PICKS = {
     # code instead, tools/draw_b2_extras.py); wing_side-1 is a front view
     "building.compound": [1, 2], "building.wing_side": [2], "landmark.heights": [1, 2],
     "building.hut": [1, 2], "building.tent_small": [1, 2],
+    # the third (--set jade-b2c): try 2 shows the drum in the upper storey
+    "building.markettower": [2],
 }
 
 

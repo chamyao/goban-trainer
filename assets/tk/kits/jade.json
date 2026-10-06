@@ -1127,7 +1127,7 @@
    ],
    [
     "b2_buildings",
-    205,
+    267,
     156,
     124,
     106
@@ -1136,7 +1136,7 @@
   "building.gatetower": [
    [
     "b2_buildings",
-    330,
+    392,
     156,
     45,
     96
@@ -1267,7 +1267,7 @@
   "landmark.heights": [
    [
     "b2_buildings",
-    119,
+    181,
     156,
     85,
     107
@@ -1283,7 +1283,7 @@
   "building.wing_side": [
    [
     "b2_buildings",
-    376,
+    438,
     156,
     59,
     94
@@ -1319,6 +1319,15 @@
     366,
     49,
     59
+   ]
+  ],
+  "building.markettower": [
+   [
+    "b2_buildings",
+    119,
+    156,
+    61,
+    113
    ]
   ]
  },
