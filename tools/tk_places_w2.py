@@ -78,9 +78,13 @@ PLACES2 = {
              "rooms": [{"id": "dutang", "label": "The great hall of state"},
                        {"id": "side-hall", "label": "The emperor's side hall", "kind": "building.house"}]},
             {"kind": "building.gate", "id": "north-gate", "node": "2-a14", "near": "palace", "label": "The North Side Gate"},
+            {"kind": "lamp.post", "id": "palace-steps", "node": "2-a18p", "near": "palace", "label": "The palace steps"},
             {"kind": "building.house", "id": "caiyong", "near": "palace", "label": "Cai Yong's house"},
             # the east wall
-            {"kind": "building.gate", "id": "xuanping", "node": "2-a18", "label": "The Xuanping Gate"},
+            {"kind": "building.gate", "id": "xuanping", "label": "The Xuanping Gate"},
+            {"kind": "building.house", "id": "xuanping-top", "near": "xuanping", "label": "The Xuanping Gate tower",
+             "open_to": ["node:a17"],
+             "refuse": ["The guards at the stair cross their halberds. “No one goes up to the Son of Heaven's tower.”"]},
         ],
         "npcs": [
             # --- items: the family pearls, then the crown --------------------------------------------
@@ -163,6 +167,7 @@ PLACES2 = {
             "2-a5": "Dance for the Grand Preceptor in the front hall.",
             "2-a6": "Ride home past the red lanterns.",
             "2-a7": "Go to the window.",
+            "2-a7c": "Show yourself to Lü Bu behind the curtain, where the Grand Preceptor can't see.",
             "2-a8": "Nurse the Grand Preceptor.",
             "2-a9": "Meet Lü Bu at the Phoenix Pavilion.",
             "2-a10": "Answer the Grand Preceptor in the middle hall.",
@@ -176,6 +181,7 @@ PLACES2 = {
             "2-a14": "Wait at the North Side Gate.",
             "2-a15": "Walk the city.",
             "2-a15c": "Go to the victory feast in the great hall of state.",
+            "2-a18p": "Go to the palace steps.",
             "2-a18": "Go to the Son of Heaven at the Xuanping Gate.",
         },
     },
