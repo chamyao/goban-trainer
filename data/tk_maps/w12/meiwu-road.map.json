@@ -5,1527 +5,938 @@
  "name": "Meiwu Road",
  "archetype": "road",
  "size": [
-  46,
-  22
+  144,
+  36
  ],
- "seed": 41174,
+ "seed": 1164,
+ "plan": true,
  "terrain": {
   "legend": {
+   "a": "camp",
+   "b": "field.wheat",
    ".": "grass",
-   "=": "dirt",
-   "~": "water",
-   ":": "sand"
+   "c": "hills",
+   "d": "plain",
+   "f": "road",
+   "~": "water"
   },
   "rows": [
-   "..............................................",
-   "..............................................",
-   "..............................................",
-   "..............................................",
-   "..............................................",
-   "..............................................",
-   "..............................................",
-   "..............................................",
-   "..............................................",
-   "...................................===========",
-   "...................................===========",
-   "................=..................==.........",
-   "===============.=..................==.........",
-   "=====================================.........",
-   ".............========================.........",
-   "..............................................",
-   "..............................................",
-   "..............................................",
-   "..............................................",
-   "..............................................",
-   "..............................................",
-   ".............................................."
-  ]
+   "............................................~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~............................................",
+   "............................................~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~............................................",
+   "............................................~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~............................................",
+   "............................................~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~............................................",
+   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~................................................~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~................................................~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~................................................~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~................................................~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+   ".............................~~.................................................................................................................",
+   ".............................~~.................................................................................................................",
+   ".............................~~.................................................................................................................",
+   ".............................~~.................................................................................................................",
+   ".............................~~.............................................................................ffffffffffffffffffffffffffffffffffff",
+   ".............................~~.............................................................................ffffffffffffffffffffffffffffffffffff",
+   ".............................~~.............................................................................ffffffffffffffffffffffffffffffffffff",
+   ".............................~~.............................................................................ffffffffffffffffffffffffffffffffffff",
+   "ffffffffffffffffffffffffffffffffffffffff........................ffffffffffffffffffffffffffffffffffffffffffffffffaaaaaaaaaaaaaaaaaaaa............",
+   "ffffffffffffffffffffffffffffffffffffffff........................ffffffffffffffffffffffffffffffffffffffffffffffffaaaaaaaaaaaaaaaaaaaa............",
+   "ffffffffffffffffffffffffffffffffffffffff........................ffffffffffffffffffffffffffffffffffffffffffffffffaaaaaaaaaaaaaaaaaaaa............",
+   "ffffffffffffffffffffffffffffffffffffffff........................ffffffffffffffffffffffffffffffffffffffffffffffffaaaaaaaaaaaaaaaaaaaa............",
+   ".............................~~.....ffffffffffffffffffffffffffffffffdddddddddddddddddddddddddddddddd............aaaaaaaaaaaaaaaaaaaa............",
+   ".............................~~.....ffffffffffffffffffffffffffffffffdddddddddddddddddddddddddddddddd............aaaaaaaaaaaaaaaaaaaa............",
+   ".............................~~.....ffffffffffffffffffffffffffffffffdddddddddddddddddddddddddddddddd............aaaaaaaaaaaaaaaaaaaa............",
+   ".............................~~.....ffffffffffffffffffffffffffffffffdddddddddddddddddddddddddddddddd............aaaaaaaaaaaaaaaaaaaa............",
+   "....bbbbbbbbbbbbbbbbbbbbbbbb.~~.....................................dddddddddddddddddddddddddddddddd....bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb....",
+   "....bbbbbbbbbbbbbbbbbbbbbbbb.~~.....................................dddddddddddddddddddddddddddddddd....bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb....",
+   "....bbbbbbbbbbbbbbbbbbbbbbbb.~~.....................................dddddddddddddddddddddddddddddddd....bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb....",
+   "....bbbbbbbbbbbbbbbbbbbbbbbb.~~.....................................dddddddddddddddddddddddddddddddd....bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb....",
+   "....bbbbbbbbbbbbbbbbbbbbbbbb.~~.....................................dddddddddddddddddddddddddddddddd....bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb....",
+   "....bbbbbbbbbbbbbbbbbbbbbbbb.~~.....................................dddddddddddddddddddddddddddddddd....bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb....",
+   "....bbbbbbbbbbbbbbbbbbbbbbbb.~~.....................................dddddddddddddddddddddddddddddddd....bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb....",
+   "....bbbbbbbbbbbbbbbbbbbbbbbb........................................dddddddddddddddddddddddddddddddd....bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb....",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+  ],
+  "walk": {
+   "camp": true,
+   "field.wheat": true,
+   "grass": true,
+   "hills": false,
+   "plain": true,
+   "road": true,
+   "water": false
+  }
  },
+ "lines": [
+  {
+   "id": "wei",
+   "kind": "river",
+   "path": [
+    [
+     0,
+     1
+    ],
+    [
+     11,
+     1
+    ],
+    [
+     11,
+     0
+    ],
+    [
+     24,
+     0
+    ],
+    [
+     24,
+     1
+    ],
+    [
+     35,
+     1
+    ]
+   ],
+   "width": 4,
+   "tiles": 608
+  },
+  {
+   "id": "stream",
+   "kind": "stream",
+   "path": [
+    [
+     7,
+     1
+    ],
+    [
+     7,
+     7
+    ]
+   ],
+   "width": 2,
+   "tiles": 52
+  },
+  {
+   "id": "road",
+   "kind": "road",
+   "path": [
+    [
+     0,
+     4
+    ],
+    [
+     9,
+     4
+    ],
+    [
+     9,
+     5
+    ],
+    [
+     16,
+     5
+    ],
+    [
+     16,
+     4
+    ],
+    [
+     27,
+     4
+    ],
+    [
+     27,
+     3
+    ],
+    [
+     35,
+     3
+    ]
+   ],
+   "width": 3,
+   "tiles": 624
+  }
+ ],
  "objects": [
   {
+   "kind": "building.posthouse",
+   "x": 13,
+   "y": 12,
+   "w": 5,
+   "h": 3,
+   "id": "post-10",
+   "door": "S",
+   "faces": "S",
+   "label": "The ten-li post",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.posthouse",
+   "x": 45,
+   "y": 16,
+   "w": 5,
+   "h": 3,
+   "id": "post-30",
+   "door": "S",
+   "faces": "S",
+   "label": "The thirty-li post",
+   "blocks_sight": true
+  },
+  {
    "kind": "building.hut",
-   "x": 15,
-   "y": 9,
+   "x": 54,
+   "y": 25,
    "w": 3,
    "h": 2,
-   "id": "post",
-   "label": "The thirty-li post"
+   "id": "hamlet-1",
+   "door": "N",
+   "faces": "N",
+   "blocks_sight": true
   },
   {
-   "kind": "camp.logs",
-   "x": 27,
-   "y": 11,
-   "w": 2,
-   "h": 1,
-   "id": "wheel",
-   "label": "The rutted bend"
-  },
-  {
-   "kind": "rock.big",
-   "x": 23,
-   "y": 10,
+   "kind": "building.hut",
+   "x": 62,
+   "y": 29,
    "w": 3,
    "h": 2,
-   "id": "fog",
-   "label": "The open plain"
+   "id": "hamlet-2",
+   "door": null,
+   "faces": "S",
+   "blocks_sight": true
   },
   {
-   "kind": "camp.firepit",
-   "x": 20,
-   "y": 11,
-   "w": 2,
-   "h": 1,
-   "id": "fields",
-   "label": "The night camp outside the walls"
+   "kind": "building.posthouse",
+   "x": 85,
+   "y": 12,
+   "w": 5,
+   "h": 3,
+   "id": "post-100",
+   "door": "S",
+   "faces": "S",
+   "label": "The hundred-li post",
+   "blocks_sight": true
   },
   {
-   "kind": "tree.big",
-   "x": 33,
-   "y": 11,
-   "w": 2,
-   "h": 1,
-   "id": "taoist",
-   "label": "The roadside before the city"
-  },
-  {
-   "kind": "tree.grove",
-   "x": 7,
-   "y": 3,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 7,
-   "y": 5,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 10,
-   "y": 7,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "plant.bush",
-   "x": 10,
-   "y": 5,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 8,
-   "y": 7,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 5,
-   "y": 5,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 7,
-   "y": 7,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 9,
-   "y": 17,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 12,
-   "y": 19,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 9,
-   "y": 19,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 11,
-   "y": 16,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 10,
-   "y": 19,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 9,
-   "y": 18,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 8,
-   "y": 16,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.bush",
-   "x": 13,
-   "y": 19,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 32,
-   "y": 9,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 30,
-   "y": 7,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 26,
-   "y": 9,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 27,
-   "y": 9,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.bush",
-   "x": 29,
-   "y": 9,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 26,
-   "y": 5,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 29,
-   "y": 17,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 28,
-   "y": 19,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 28,
-   "y": 15,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 32,
-   "y": 18,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 30,
-   "y": 16,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 26,
-   "y": 17,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 20,
-   "y": 19,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 23,
-   "y": 15,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 18,
-   "y": 18,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 18,
+   "kind": "building.tent",
+   "x": 122,
    "y": 17,
    "w": 3,
-   "h": 1
+   "h": 2,
+   "id": "tent-dz",
+   "door": null,
+   "faces": "S",
+   "label": "Dong Zhuo's tent",
+   "blocks_sight": true
   },
   {
-   "kind": "tree.pine",
-   "x": 23,
-   "y": 16,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 18,
-   "y": 15,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 38,
-   "y": 5,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 35,
-   "y": 5,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "plant.bush",
-   "x": 36,
-   "y": 2,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 35,
-   "y": 4,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 37,
-   "y": 2,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 34,
-   "y": 2,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 40,
-   "y": 4,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 37,
-   "y": 3,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 7,
-   "y": 0,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 15,
-   "y": 0,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 3,
+   "kind": "building.tent",
+   "x": 114,
    "y": 21,
    "w": 3,
-   "h": 1
+   "h": 2,
+   "id": "tent-2",
+   "door": null,
+   "faces": "S",
+   "blocks_sight": true
   },
   {
-   "kind": "rock.big",
-   "x": 43,
-   "y": 14,
-   "w": 3,
-   "h": 2
-  },
-  {
-   "kind": "rock.big",
-   "x": 42,
-   "y": 20,
-   "w": 3,
-   "h": 2
-  },
-  {
-   "kind": "tree.small",
-   "x": 31,
+   "kind": "tree.poplar",
+   "x": 0,
    "y": 20,
    "w": 1,
    "h": 1
   },
   {
-   "kind": "rock.big",
-   "x": 33,
-   "y": 0,
-   "w": 3,
-   "h": 2
-  },
-  {
-   "kind": "tree.pine",
-   "x": 13,
-   "y": 21,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
+   "kind": "tree.poplar",
    "x": 1,
-   "y": 0,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 41,
-   "y": 0,
+   "y": 15,
    "w": 1,
    "h": 1
   },
   {
-   "kind": "rock.big",
-   "x": 26,
-   "y": 1,
-   "w": 3,
-   "h": 2
-  },
-  {
-   "kind": "tree.grove",
-   "x": 28,
-   "y": 20,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "rock.big",
-   "x": 38,
-   "y": 0,
-   "w": 3,
-   "h": 2
-  },
-  {
-   "kind": "rock.big",
-   "x": 8,
-   "y": 20,
-   "w": 3,
-   "h": 2
-  },
-  {
-   "kind": "tree.pine",
-   "x": 1,
-   "y": 9,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 7,
-   "y": 21,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 17,
-   "y": 1,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "rock.big",
-   "x": 36,
-   "y": 20,
-   "w": 3,
-   "h": 2
-  },
-  {
-   "kind": "tree.small",
+   "kind": "tree.poplar",
    "x": 4,
-   "y": 1,
+   "y": 20,
    "w": 1,
    "h": 1
   },
   {
-   "kind": "tree.grove",
+   "kind": "tree.poplar",
+   "x": 5,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
    "x": 8,
-   "y": 1,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 0,
-   "y": 3,
+   "y": 20,
    "w": 1,
    "h": 1
   },
   {
-   "kind": "tree.small",
-   "x": 34,
-   "y": 21,
+   "kind": "tree.poplar",
+   "x": 9,
+   "y": 15,
    "w": 1,
    "h": 1
   },
   {
-   "kind": "tree.pine",
-   "x": 0,
-   "y": 5,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
+   "kind": "tree.poplar",
    "x": 12,
    "y": 20,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 36,
-   "y": 0,
    "w": 1,
    "h": 1
   },
   {
-   "kind": "rock.big",
-   "x": 22,
-   "y": 1,
-   "w": 3,
-   "h": 2
-  },
-  {
-   "kind": "tree.grove",
-   "x": 27,
-   "y": 0,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 0,
-   "y": 17,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 31,
-   "y": 1,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 11,
-   "y": 0,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 11,
-   "y": 21,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 45,
-   "y": 5,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
+   "kind": "tree.poplar",
    "x": 13,
-   "y": 1,
+   "y": 15,
    "w": 1,
    "h": 1
   },
   {
-   "kind": "tree.small",
-   "x": 45,
+   "kind": "tree.poplar",
+   "x": 16,
    "y": 20,
    "w": 1,
    "h": 1
   },
   {
-   "kind": "tree.pine",
-   "x": 15,
-   "y": 20,
+   "kind": "tree.poplar",
+   "x": 17,
+   "y": 15,
    "w": 1,
    "h": 1
   },
   {
-   "kind": "rock.big",
-   "x": 19,
-   "y": 0,
-   "w": 3,
-   "h": 2
-  },
-  {
-   "kind": "rock.big",
-   "x": 0,
-   "y": 7,
-   "w": 3,
-   "h": 2
-  },
-  {
-   "kind": "tree.pine",
+   "kind": "tree.poplar",
    "x": 20,
    "y": 20,
    "w": 1,
    "h": 1
   },
   {
-   "kind": "tree.pine",
-   "x": 26,
-   "y": 0,
+   "kind": "tree.poplar",
+   "x": 21,
+   "y": 15,
    "w": 1,
    "h": 1
   },
   {
-   "kind": "tree.pine",
-   "x": 0,
-   "y": 19,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 19,
-   "y": 21,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 26,
-   "y": 21,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 31,
-   "y": 21,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 45,
-   "y": 4,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 43,
-   "y": 19,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 14,
-   "y": 1,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 15,
-   "y": 21,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 43,
-   "y": 2,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 34,
+   "kind": "tree.poplar",
+   "x": 24,
    "y": 20,
    "w": 1,
    "h": 1
   },
   {
-   "kind": "tree.small",
-   "x": 2,
+   "kind": "tree.poplar",
+   "x": 25,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 28,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 32,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 33,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 35,
    "y": 21,
    "w": 1,
    "h": 1
   },
   {
-   "kind": "tree.grove",
-   "x": 30,
-   "y": 0,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 0,
-   "y": 4,
+   "kind": "tree.poplar",
+   "x": 36,
+   "y": 24,
    "w": 1,
    "h": 1
   },
   {
-   "kind": "tree.grove",
-   "x": 16,
-   "y": 21,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 0,
-   "y": 6,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 43,
-   "y": 0,
+   "kind": "tree.poplar",
+   "x": 37,
+   "y": 15,
    "w": 1,
    "h": 1
   },
   {
-   "kind": "tree.small",
+   "kind": "tree.poplar",
+   "x": 40,
+   "y": 16,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 40,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 41,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 44,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
    "x": 45,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 48,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 49,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 52,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 53,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 57,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 60,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 61,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 63,
+   "y": 17,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 64,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 65,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 68,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 69,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 72,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 73,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 76,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 77,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 80,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 81,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 84,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 85,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 88,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 89,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 92,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 93,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 96,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 97,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 100,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 101,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 104,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 105,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 107,
    "y": 13,
    "w": 1,
    "h": 1
   },
   {
-   "kind": "tree.small",
+   "kind": "tree.poplar",
+   "x": 108,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 109,
+   "y": 11,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 112,
+   "y": 16,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 113,
+   "y": 11,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 116,
+   "y": 16,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 117,
+   "y": 11,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 120,
+   "y": 16,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 121,
+   "y": 11,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 124,
+   "y": 16,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 125,
+   "y": 11,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 128,
+   "y": 16,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 129,
+   "y": 11,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 132,
+   "y": 16,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 133,
+   "y": 11,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 136,
+   "y": 16,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 137,
+   "y": 11,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 140,
+   "y": 16,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 141,
+   "y": 11,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
    "x": 28,
-   "y": 21,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 18,
-   "y": 20,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 39,
-   "y": 20,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 44,
-   "y": 4,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 12,
-   "y": 0,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 41,
-   "y": 20,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "rock.big",
-   "x": 21,
-   "y": 20,
-   "w": 3,
-   "h": 2
-  },
-  {
-   "kind": "tree.small",
-   "x": 0,
-   "y": 0,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 39,
-   "y": 21,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 33,
-   "y": 20,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 1,
-   "y": 20,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 1,
-   "y": 3,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 32,
-   "y": 20,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 5,
-   "y": 20,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 1,
-   "y": 21,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 2,
-   "y": 20,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 45,
-   "y": 0,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 1,
-   "y": 18,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 1,
-   "y": 2,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 29,
-   "y": 1,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "rock.big",
-   "x": 1,
-   "y": 4,
-   "w": 3,
-   "h": 2
-  },
-  {
-   "kind": "tree.small",
-   "x": 44,
-   "y": 16,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 20,
-   "y": 21,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 43,
-   "y": 1,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 42,
-   "y": 0,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 0,
-   "y": 16,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 1,
-   "y": 19,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 14,
-   "y": 0,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 30,
-   "y": 1,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 24,
-   "y": 0,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 5,
-   "y": 1,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 0,
-   "y": 18,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 1,
-   "y": 16,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 42,
-   "y": 1,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 45,
-   "y": 18,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 44,
-   "y": 17,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 3,
-   "y": 20,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 40,
-   "y": 20,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 0,
-   "y": 20,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 1,
-   "y": 1,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 8,
-   "y": 0,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 44,
-   "y": 13,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 37,
-   "y": 0,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 6,
-   "y": 20,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
-   "x": 16,
-   "y": 0,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 35,
-   "y": 21,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 45,
-   "y": 3,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 24,
-   "y": 20,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 41,
-   "y": 1,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 45,
-   "y": 17,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 0,
-   "y": 1,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 44,
-   "y": 3,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 16,
-   "y": 20,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 5,
-   "y": 0,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 16,
-   "y": 1,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 13,
-   "y": 0,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 45,
-   "y": 6,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.grass",
-   "x": 18,
-   "y": 11,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.grass",
-   "x": 39,
-   "y": 14,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.grass",
-   "x": 37,
-   "y": 17,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.grass",
-   "x": 34,
    "y": 8,
    "w": 1,
    "h": 1
   },
   {
-   "kind": "plant.grass",
-   "x": 41,
-   "y": 5,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.grass",
-   "x": 26,
-   "y": 18,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.grass",
-   "x": 43,
-   "y": 4,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.grass",
-   "x": 15,
-   "y": 15,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.grass",
-   "x": 3,
-   "y": 14,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.grass",
-   "x": 26,
-   "y": 15,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.grass",
-   "x": 7,
-   "y": 15,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.grass",
-   "x": 34,
-   "y": 19,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.grass",
-   "x": 14,
-   "y": 5,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.grass",
-   "x": 38,
-   "y": 7,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.grass",
-   "x": 6,
-   "y": 15,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.grass",
-   "x": 37,
-   "y": 6,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.grass",
-   "x": 14,
-   "y": 8,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.grass",
-   "x": 14,
-   "y": 6,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.grass",
-   "x": 7,
-   "y": 8,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.grass",
-   "x": 23,
-   "y": 7,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.grass",
-   "x": 24,
-   "y": 6,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.grass",
-   "x": 32,
-   "y": 19,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.bush",
-   "x": 11,
-   "y": 5,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.bush",
-   "x": 29,
-   "y": 18,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.bush",
-   "x": 37,
-   "y": 18,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.bush",
-   "x": 3,
-   "y": 6,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.bush",
-   "x": 17,
-   "y": 19,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.bush",
-   "x": 33,
-   "y": 15,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.bush",
-   "x": 42,
-   "y": 2,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.bush",
-   "x": 33,
-   "y": 8,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.bush",
-   "x": 32,
-   "y": 17,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.bush",
-   "x": 43,
+   "kind": "tree.willow",
+   "x": 28,
    "y": 12,
    "w": 1,
    "h": 1
   },
   {
-   "kind": "plant.bush",
-   "x": 4,
-   "y": 19,
+   "kind": "tree.willow",
+   "x": 28,
+   "y": 24,
    "w": 1,
    "h": 1
   },
   {
-   "kind": "plant.bush",
-   "x": 24,
-   "y": 19,
+   "kind": "tree.willow",
+   "x": 28,
+   "y": 28,
    "w": 1,
    "h": 1
   },
   {
-   "kind": "rock.small",
-   "x": 10,
-   "y": 14,
+   "kind": "tree.willow",
+   "x": 29,
+   "y": 31,
    "w": 1,
    "h": 1
   },
   {
-   "kind": "rock.small",
-   "x": 37,
-   "y": 12,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "rock.small",
-   "x": 41,
-   "y": 3,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "rock.small",
-   "x": 40,
-   "y": 6,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "rock.small",
-   "x": 26,
-   "y": 11,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "rock.small",
-   "x": 3,
-   "y": 17,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 21,
+   "kind": "tree.willow",
+   "x": 31,
    "y": 9,
    "w": 1,
    "h": 1
   },
   {
-   "kind": "tree.small",
-   "x": 41,
-   "y": 11,
+   "kind": "tree.willow",
+   "x": 31,
+   "y": 13,
    "w": 1,
    "h": 1
   },
   {
-   "kind": "tree.small",
-   "x": 18,
-   "y": 7,
+   "kind": "tree.willow",
+   "x": 31,
+   "y": 21,
    "w": 1,
    "h": 1
   },
   {
-   "kind": "tree.small",
-   "x": 33,
-   "y": 4,
+   "kind": "tree.willow",
+   "x": 31,
+   "y": 25,
    "w": 1,
    "h": 1
   },
   {
-   "kind": "tree.small",
-   "x": 6,
+   "kind": "tree.willow",
+   "x": 31,
+   "y": 29,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 10,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 35,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 46,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 51,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 66,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 68,
+   "y": 22,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 70,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 75,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 90,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 95,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 110,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 112,
    "y": 18,
    "w": 1,
    "h": 1
   },
   {
-   "kind": "tree.small",
-   "x": 12,
-   "y": 10,
+   "kind": "milestone",
+   "x": 114,
+   "y": 16,
    "w": 1,
    "h": 1
   },
   {
-   "kind": "plant.flower",
-   "x": 5,
+   "kind": "milestone",
+   "x": 119,
    "y": 11,
    "w": 1,
    "h": 1
   },
   {
-   "kind": "plant.flower",
-   "x": 31,
-   "y": 12,
+   "kind": "milestone",
+   "x": 134,
+   "y": 16,
    "w": 1,
    "h": 1
   },
   {
-   "kind": "plant.flower",
-   "x": 12,
-   "y": 14,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.flower",
-   "x": 39,
-   "y": 8,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.flower",
-   "x": 23,
-   "y": 3,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.flower",
-   "x": 12,
-   "y": 15,
+   "kind": "milestone",
+   "x": 139,
+   "y": 11,
    "w": 1,
    "h": 1
   }
@@ -1533,41 +944,110 @@
  "spots": [
   {
    "id": "wheel",
-   "x": 28,
-   "y": 12.7,
+   "x": 37.5,
+   "y": 21.7,
    "node": "12-a13a",
-   "label": "The rutted bend"
+   "label": "The broken wheel",
+   "trigger": "near"
   },
   {
    "id": "fog",
-   "x": 24.5,
-   "y": 13.7,
+   "x": 81.5,
+   "y": 17.7,
    "node": "12-a13b",
-   "label": "The open plain"
+   "label": "Wind and fog",
+   "trigger": "near"
   },
   {
    "id": "fields",
-   "x": 21,
-   "y": 12.7,
+   "x": 133.5,
+   "y": 29.7,
    "node": "12-a13c",
-   "label": "The night camp outside the walls"
-  },
-  {
-   "id": "taoist",
-   "x": 34,
-   "y": 13.7,
-   "node": "12-a13d",
-   "label": "The roadside before the city"
+   "label": "Children singing in the fields",
+   "trigger": "near"
   }
  ],
  "npcs": [
   {
    "id": "npc-1",
+   "kind": "folk.villager",
+   "x": 57.5,
+   "y": 21.9,
+   "say": [
+    "“We built it, and they sent us home with nothing but a sore back.”"
+   ],
+   "in": [
+    "ride-out"
+   ]
+  },
+  {
+   "id": "npc-2",
+   "kind": "folk.villager",
+   "x": 57.5,
+   "y": 25.9,
+   "say": [
+    "“Heads down, heads down. Don't let him see your face.”"
+   ],
+   "face": "down",
+   "in": [
+    "procession"
+   ]
+  },
+  {
+   "id": "npc-3",
    "kind": "folk.soldier",
-   "x": 22.5,
-   "y": 14.9,
+   "x": 41.5,
+   "y": 21.9,
+   "say": [
+    "“A new carriage by noon. The Grand Preceptor says it's a sign: the new for the old.”"
+   ],
+   "when": "node:a13a",
+   "in": [
+    "procession"
+   ]
+  },
+  {
+   "id": "npc-4",
+   "kind": "folk.soldier",
+   "x": 77.5,
+   "y": 17.9,
+   "say": [
+    "“I can't see the horse in front of me. Where's the carriage?”"
+   ],
+   "in": [
+    "fog"
+   ]
+  },
+  {
+   "id": "npc-5",
+   "kind": "folk.villager",
+   "x": 115.5,
+   "y": 23.9,
+   "say": [
+    "“Children in the fields at this hour? Whose children?”"
+   ],
+   "in": [
+    "night"
+   ]
+  },
+  {
+   "id": "npc-6",
+   "kind": "hero.lubu",
+   "x": 123.5,
+   "y": 19.9,
+   "say": [
+    "Lü Bu sleeps outside the Grand Preceptor's tent, his halberd across his knees."
+   ],
+   "in": [
+    "night"
+   ]
+  },
+  {
+   "id": "roadpatrol",
+   "kind": "folk.soldier",
+   "x": 65.5,
+   "y": 17.9,
    "say": [],
-   "challenge": "roadpatrol",
    "intro": [
     "A patrol of the Grand Preceptor's horsemen bars the road. “Rider from Chang'an! Halt, and show us what you carry.”"
    ],
@@ -1578,139 +1058,139 @@
     "The patrol waves you through."
    ],
    "until": "12-a13",
-   "face": "left",
    "when": "node:a12",
-   "view": 7,
    "blocks": {
     "exit": "Meiwu"
    },
-   "guard": [
-    43.5,
-    10.5
-   ]
+   "view": 12,
+   "challenge": "roadpatrol"
   },
   {
-   "id": "npc-2",
+   "id": "postkeeper",
    "kind": "folk.elder",
-   "x": 18.5,
-   "y": 12.9,
-   "say": [
-    "“Thirty li to the next post, sir. Mind the ruts after the bridge.”"
-   ],
-   "challenge": "postkeeper",
+   "x": 49.5,
+   "y": 21.9,
+   "say": [],
    "intro": [
     "The post keeper has a board out on the bench. “Long nights out here. Sit a moment, sir.”"
    ],
    "win": [
-    "“The road's yours. Mind the ruts.”"
+    "“The road's yours. Mind the ruts after the bridge.”"
    ],
    "done": [
     "“Safe road, sir.”"
    ],
    "until": "12-a13",
    "when": "node:a12",
-   "view": 3
-  },
-  {
-   "id": "npc-3",
-   "kind": "folk.villager",
-   "x": 14.5,
-   "y": 13.9,
-   "say": [
-    "“We built Meiwu, and they sent us home with nothing but a sore back.”"
-   ],
-   "until": "12-a13",
-   "when": "node:a12"
-  },
-  {
-   "id": "npc-4",
-   "kind": "folk.villager",
-   "x": 26.5,
-   "y": 13.9,
-   "say": [
-    "“Heads down, heads down. Don't let him see your face.”"
-   ],
-   "until": "12-a13c",
-   "face": "down",
-   "when": "node:a13"
-  },
-  {
-   "id": "npc-5",
-   "kind": "folk.soldier",
-   "x": 26.5,
-   "y": 12.9,
-   "say": [
-    "“A new carriage by noon. The Grand Preceptor says it's a sign: the new for the old.”"
-   ],
-   "until": "12-a13c",
-   "when": "node:a13a"
-  },
-  {
-   "id": "npc-6",
-   "kind": "folk.soldier",
-   "x": 24.5,
-   "y": 14.9,
-   "say": [
-    "“I can't see the horse in front of me. Where's the carriage?”"
-   ],
-   "until": "12-a13b",
-   "when": "node:a13a"
-  },
-  {
-   "id": "npc-7",
-   "kind": "folk.villager",
-   "x": 21.5,
-   "y": 14.9,
-   "say": [
-    "“Children in the fields at this hour? Whose children?”"
-   ],
-   "until": "12-a13c",
-   "when": "node:a13b"
+   "view": 4,
+   "challenge": "postkeeper"
   }
  ],
  "exits": [
   {
    "to": "meiwu",
-   "side": "E",
-   "x": 45,
-   "y": 9,
+   "side": "W",
+   "x": 0,
+   "y": 16,
    "w": 1,
-   "h": 2
+   "h": 4
   },
   {
    "to": "changan",
-   "side": "W",
-   "x": 0,
+   "side": "E",
+   "x": 143,
    "y": 12,
    "w": 1,
-   "h": 2
-  },
-  {
-   "to": "meiwu-road--post",
-   "side": "N",
-   "x": 16.1,
-   "y": 10.85,
-   "w": 0.8,
-   "h": 0.45,
-   "door": true
+   "h": 4
   }
  ],
  "entries": {
   "meiwu": [
-   43,
-   10
+   5,
+   17
   ],
   "changan": [
-   2,
+   137,
    13
   ],
   "": [
-   2,
+   137,
    13
-  ],
-  "meiwu-road--post": [
-   16,
-   11
   ]
- }
+ },
+ "states": [
+  {
+   "id": "ride-out",
+   "when": "node:a12",
+   "until": "node:a13",
+   "light": "day"
+  },
+  {
+   "id": "procession",
+   "when": "node:a13",
+   "until": "node:a13c",
+   "light": "day",
+   "procession": {
+    "column": [
+     "outriders",
+     "carriage:dongzhuo",
+     "carriage:diaochan",
+     "player",
+     "rearguard"
+    ],
+    "path": "road",
+    "from": [
+     1.5,
+     17.5
+    ],
+    "to": [
+     141.5,
+     13.5
+    ],
+    "leash": 24,
+    "leash_line": "Li Su must keep near the Grand Preceptor.",
+    "stops": [
+     "wheel",
+     "fog",
+     "fields"
+    ]
+   }
+  },
+  {
+   "id": "fog",
+   "when": "node:a13a",
+   "until": "node:a13b",
+   "sound": {
+    "bells": "carriage"
+   },
+   "light": "storm",
+   "weather": "storm",
+   "visibility": 12
+  },
+  {
+   "id": "night",
+   "when": "node:a13b",
+   "until": "node:a13c",
+   "sound": {
+    "children": "fields"
+   },
+   "light": "night"
+  },
+  {
+   "id": "raid",
+   "when": "node:a15",
+   "until": "node:a16",
+   "light": "day"
+  },
+  {
+   "id": "march",
+   "when": "node:a16m",
+   "light": "day",
+   "weather": "dust"
+  }
+ ],
+ "links": [
+  "changan",
+  "meiwu"
+ ]
 }

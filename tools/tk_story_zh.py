@@ -518,6 +518,7 @@ for _k, _v in _ZH2.items():
     ZH.setdefault(_k, _v)
 CAST.update(_CAST2)
 ZH.setdefault("Meiwu Road", "郿坞道"); ZH.setdefault("Liangzhou", "凉州")
+ZH.setdefault("Li Su must keep near the Grand Preceptor.", "李肃须紧随太师车驾。"); ZH.setdefault("Behind the curtain", "帘后")
 from tk_story_w2_new import ZH2 as _ZHD, CAST2 as _CASTD  # noqa: E402  (the test book, world 12)
 for _k, _v in _ZHD.items():
     ZH.setdefault(_k, _v)

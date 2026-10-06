@@ -2,148 +2,130 @@
  "format": "tk-map/1",
  "id": "changan--xf-bedroom",
  "world": 12,
- "parent": "changan",
- "name": "The bedchamber",
+ "name": "Dong Zhuo's bedchamber",
  "archetype": "interior",
- "building": "xf-bedroom",
- "style": "building.house",
  "size": [
   20,
-  12
+  14
  ],
- "seed": 0.15975591726964555,
+ "seed": 1877,
+ "plan": true,
  "terrain": {
   "legend": {
-   "#": "wood",
    "%": "stone",
-   "&": "mat",
-   "e": "earth",
-   "W": "wall",
-   " ": "void"
+   " ": "void",
+   "W": "wall"
   },
   "rows": [
    "                    ",
-   "     WWWWWWWWWW     ",
-   "     W########W     ",
-   "     W########W     ",
-   "     W########W     ",
-   "     W########W     ",
-   "     W########W     ",
-   "     W########W     ",
-   "     WWWWW#WWWW     ",
-   "                    ",
-   "                    ",
+   " WWWWWWWWW%%WWWWWWW ",
+   " W%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%W ",
+   " WWWWWWWWWWWWWWWWWW ",
    "                    "
-  ]
+  ],
+  "walk": {
+   "stone": true,
+   "void": false,
+   "wall": false
+  }
  },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    10,
+    7
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     5,
+     0
+    ]
+   },
+   "tiles": 56
+  }
+ ],
  "objects": [
   {
    "kind": "furn.bed",
    "x": 6,
-   "y": 2,
+   "y": 7,
    "w": 2,
-   "h": 1
+   "h": 1,
+   "id": "bed"
+  },
+  {
+   "kind": "furn.window",
+   "x": 16,
+   "y": 4,
+   "w": 1,
+   "h": 1,
+   "id": "window",
+   "label": "The window over the pond"
   },
   {
    "kind": "furn.drawers",
-   "x": 10,
-   "y": 2,
+   "x": 16,
+   "y": 8,
    "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "furn.shelf",
-   "x": 12,
-   "y": 2,
-   "w": 2,
-   "h": 1
-  },
-  {
-   "kind": "furn.table",
-   "x": 7,
-   "y": 4,
-   "w": 2,
-   "h": 1
-  },
-  {
-   "kind": "furn.stool",
-   "x": 6,
-   "y": 4,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "furn.stool",
-   "x": 9,
-   "y": 4,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "furn.jar",
-   "x": 6,
-   "y": 7,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "furn.plant",
-   "x": 13,
-   "y": 7,
-   "w": 1,
-   "h": 1
+   "h": 1,
+   "id": "mirror",
+   "label": "A dressing table"
   }
  ],
  "spots": [
   {
-   "id": "spot-12-a7",
-   "x": 9.5,
-   "y": 2.7,
+   "id": "a7",
+   "x": 14.5,
+   "y": 4.7,
    "node": "12-a7",
-   "label": "The Face in the Pond"
+   "label": "The window"
   },
   {
-   "id": "spot-12-a8",
-   "x": 9.5,
-   "y": 2.7,
+   "id": "a8",
+   "x": 6.5,
+   "y": 4.7,
    "node": "12-a8",
-   "label": "Behind the Sickbed"
+   "label": "Behind the bed"
   }
  ],
- "npcs": [
-  {
-   "id": "in-1",
-   "kind": "folk.maiden",
-   "x": 8.5,
-   "y": 5.9,
-   "say": [
-    "“The Grand Preceptor spent the night with the new girl and hasn't got up.”"
-   ],
-   "until": "12-a8",
-   "when": "node:a6"
-  }
- ],
+ "npcs": [],
  "exits": [
   {
-   "to": "changan--xf-hall",
+   "to": "changan--xiangfu",
    "side": "S",
    "x": 10,
-   "y": 8,
-   "w": 1,
+   "y": 1,
+   "w": 2,
    "h": 1
   }
  ],
  "entries": {
-  "changan--xf-hall": [
+  "changan--xiangfu": [
    10,
-   7
+   1
   ],
   "": [
    10,
-   7
+   1
   ]
  },
+ "parent": "changan",
+ "building": "xf-bedroom",
  "links": [
-  "changan--xf-hall"
+  "changan--xiangfu"
  ]
 }

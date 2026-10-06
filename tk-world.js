@@ -251,9 +251,9 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=52`);
-      this.load.json("kit", `assets/tk/kits/${kit}.json?v=36`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=52`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=53`);
+      this.load.json("kit", `assets/tk/kits/${kit}.json?v=37`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=53`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
@@ -262,7 +262,7 @@ function worldScenes() {
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
       for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=58`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=59`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -680,7 +680,7 @@ function worldScenes() {
       if (this.worldShade) { this.worldShade.destroy(); this.worldShade = null; }
       for (const g of this.glows || []) g.destroy();
       this.glows = [];
-      const c = { night: 0x46559c, dusk: 0xf0c0a0, dawn: 0xd8c8e8, storm: 0x80868e, smoke: 0xb39c8a }[this.st.light];
+      const c = { night: 0x46559c, dusk: 0xf0c0a0, dawn: 0xd8c8e8, storm: 0x80868e, smoke: 0xb39c8a, dust: 0xe9d6ac }[this.st.light];
       if (!c) return;
       const W = this.scale.width, H = this.scale.height;
       this.worldShade = this.add.rectangle(W / 2, H / 2, W * 3, H * 3, c).setScrollFactor(0).setDepth(9e4).setBlendMode(Phaser.BlendModes.MULTIPLY);
@@ -745,7 +745,7 @@ function worldScenes() {
         if (o.zone && o.zone.body) o.zone.body.enable = on;
       }
       if (st && "light" in st) {   // the state's light (day clears a scene's night)
-        const L = { day: null, morning: "dawn", dawn: "dawn", dusk: "dusk", night: "night", storm: "storm", smoke: "smoke" }[st.light];
+        const L = { day: st.weather === "dust" ? "dust" : null, morning: "dawn", dawn: "dawn", dusk: "dusk", night: "night", lantern: "night", storm: "storm", smoke: "smoke" }[st.light];
         if ((this.st.light || null) !== (L || null)) { this.st.light = L || null; if (this.player) this.applyWorldLight(); }   // (on arrival the scene applies it once built)
       }
       // one of each person at a time: a brother standing here in his own right (Guan Yu on his

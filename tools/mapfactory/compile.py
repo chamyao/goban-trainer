@@ -155,6 +155,9 @@ class Kit:
         return f"{kind if kind in kinds else FOLK_FALLBACK}#{i}", False
 
 
+SEEN = {}   # the world's seen_lines, by key (filled by compile_world)
+
+
 def voiced_states(states):
     """A procession's leash line as a spoken step (Chinese and voice clip)."""
     out = []
@@ -329,7 +332,7 @@ def compile_map(m, kit, out_dir):
             **{k: n[k] for k in ("challenge", "until", "face", "when", "gives", "gives_when") if n.get(k)},
             **({"view": json.dumps(n["view"])} if n.get("view") else {}),
             **({"watch": json.dumps({**n["watch"], "seen": [place_step(l, n["kind"])[0] for l in
-                                                            ([n["watch"]["seen"]] if isinstance(n["watch"].get("seen"), str) else n["watch"].get("seen") or [])]},
+                                                            (SEEN.get(n["watch"]["seen"], []) if isinstance(n["watch"].get("seen"), str) else n["watch"].get("seen") or [])]},
                                     ensure_ascii=False)} if n.get("watch") else {}),
             **({"in": json.dumps([n["in"]] if isinstance(n["in"], str) else n["in"])} if n.get("in") else {}),
             **({"guard_x": n["guard"][0] * T, "guard_y": n["guard"][1] * T} if n.get("guard") else {}),
@@ -436,8 +439,12 @@ def compile_world(n, kit_name, preview=False):
     kit = Kit(kit_name)
     region = json.loads((src / "region.json").read_text())
     shots = []
+    maps = {p["id"]: json.loads((src / p["map"]).read_text()) for p in region["places"]}
+    SEEN.clear()   # a watcher's "seen" may name lines kept on another map of the world (the city's seen_lines)
+    for m in maps.values():
+        SEEN.update(m.get("seen_lines") or {})
     for p in region["places"]:
-        m = json.loads((src / p["map"]).read_text())
+        m = maps[p["id"]]
         tmj = compile_map(m, kit, out)
         if preview:
             img = render(tmj, kit, out)

@@ -1,0 +1,245 @@
+{
+ "format": "tk-map/1",
+ "id": "changan--palace",
+ "world": 12,
+ "name": "Weiyang Palace",
+ "archetype": "compound",
+ "size": [
+  32,
+  24
+ ],
+ "seed": 1480,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "court",
+   ".": "grass",
+   "W": "wall"
+  },
+  "rows": [
+   "................................",
+   ".WWWWWWWWWWWWWaaWWWWWWWWWWWWWWW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".Waaaa........................W.",
+   ".Waaaa........................W.",
+   ".Waaaa........................W.",
+   ".Waaaa........................W.",
+   ".Waaaa........................W.",
+   ".Waaaa........................W.",
+   ".Waaaa........................W.",
+   ".Waaaa........................W.",
+   ".Waaaa........................W.",
+   ".Waaaa........................W.",
+   ".WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW.",
+   "................................"
+  ],
+  "walk": {
+   "court": true,
+   "grass": true,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    16,
+    12
+   ],
+   "width": 1,
+   "gates": {
+    "north-gate": [
+     7,
+     0
+    ]
+   },
+   "tiles": 100
+  }
+ ],
+ "objects": [
+  {
+   "kind": "building.gatehouse",
+   "x": 14,
+   "y": 1,
+   "w": 2,
+   "h": 1,
+   "id": "north-gate",
+   "width": 2,
+   "wall": "walls",
+   "door": "S"
+  },
+  {
+   "kind": "building.hall_grand",
+   "x": 11,
+   "y": 14,
+   "w": 10,
+   "h": 5,
+   "id": "dutang",
+   "door": "N",
+   "faces": "N",
+   "label": "The great hall of state",
+   "map": "dutang",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.wing",
+   "x": 24,
+   "y": 14,
+   "w": 6,
+   "h": 4,
+   "id": "side-hall",
+   "door": "N",
+   "faces": "N",
+   "label": "The emperor's side hall",
+   "map": "side-hall",
+   "blocks_sight": true
+  }
+ ],
+ "spots": [
+  {
+   "id": "inside-gate",
+   "x": 14.5,
+   "y": 6.7,
+   "node": "",
+   "label": "Inside the North Side Gate",
+   "note": "A14 starts at the gate on the city map and plays on in here"
+  },
+  {
+   "id": "li-ru",
+   "x": 18.5,
+   "y": 8.7,
+   "node": "",
+   "label": "The gate court",
+   "note": "A15: Li Ru is brought in bound"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "eunuch-1",
+   "kind": "folk.official",
+   "say": [],
+   "watch": {
+    "id": "eunuch-1",
+    "cone": 8,
+    "beat": [
+     [
+      6.5,
+      4.9
+     ],
+     [
+      6.5,
+      10.9
+     ],
+     [
+      12.5,
+      10.9
+     ]
+    ],
+    "in_beats": [
+     "12-a12c"
+    ],
+    "seen": "eunuch",
+    "back_to": "north-gate",
+    "shape": "L"
+   },
+   "x": 6.5,
+   "y": 4.9
+  },
+  {
+   "id": "eunuch-2",
+   "kind": "folk.official",
+   "say": [],
+   "watch": {
+    "id": "eunuch-2",
+    "cone": 8,
+    "beat": [
+     [
+      26.5,
+      4.9
+     ],
+     [
+      20.5,
+      4.9
+     ],
+     [
+      20.5,
+      10.9
+     ]
+    ],
+    "in_beats": [
+     "12-a12c"
+    ],
+    "seen": "eunuch",
+    "back_to": "north-gate",
+    "shape": "L"
+   },
+   "x": 26.5,
+   "y": 4.9
+  }
+ ],
+ "exits": [
+  {
+   "to": "changan--dutang",
+   "side": "N",
+   "x": 15.6,
+   "y": 13.7,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changan--side-hall",
+   "side": "N",
+   "x": 26.6,
+   "y": 13.7,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changan",
+   "side": "N",
+   "x": 14,
+   "y": 1,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "changan--dutang": [
+   16,
+   13
+  ],
+  "changan--side-hall": [
+   27,
+   13
+  ],
+  "changan": [
+   15,
+   1
+  ],
+  "": [
+   16,
+   13
+  ]
+ },
+ "parent": "changan",
+ "building": "palace",
+ "links": [
+  "changan",
+  "changan--dutang",
+  "changan--side-hall"
+ ]
+}

@@ -108,6 +108,26 @@ def place_lines():
             for l in ([p["say"]] if isinstance(p.get("say"), str) else p.get("say", [])):
                 step, voice = place_step(l, p["kind"])
                 lines[step[-1]] = (step[-2], voice, step[1] if step[0] == "n" else step[2])
+    # and whatever the built maps say that isn't in a brief (a book built from plan grids, tools/mapfactory/plans.py)
+    import json as _json
+    for f in sorted((ROOT / "data" / "tk_maps").glob("w*/*.map.json")):
+        m = _json.loads(f.read_text())
+        said = [(l, None) for ls in (m.get("seen_lines") or {}).values() for l in ls]
+        said += [(l, None) for e in m.get("exits", []) for l in e.get("refuse") or []]
+        said += [(st["procession"]["leash_line"], None) for st in m.get("states") or [] if (st.get("procession") or {}).get("leash_line")]
+        for sp in m.get("spots", []):
+            said += [(l, None) for k in ("intro", "outro", "empty", "waiting", "deliver", "delivered", "call") for l in sp.get(k) or []]
+        for n in m.get("npcs", []):
+            for k in ("say", "intro", "win", "done", "give", "given", "call"):
+                v = n.get(k)
+                said += [(l, n["kind"]) for l in ([v] if isinstance(v, str) else v or [])]
+            seen = (n.get("watch") or {}).get("seen")
+            said += [(l, n["kind"]) for l in (seen if isinstance(seen, list) else [])]
+        for l, kind in said:
+            if not isinstance(l, str):
+                continue
+            step, voice = place_step(l, kind)
+            lines.setdefault(step[-1], (step[-2], voice, step[1] if step[0] == "n" else step[2]))
     return lines
 
 
