@@ -25,8 +25,12 @@ for(const [from,to] of pairs){
   await p.evaluate(pl=>{const w=window.__w,r=w.region.places.find(x=>x.id===pl);if(r&&r.parent&&!w.st.visited.includes(r.parent))w.st.visited.push(r.parent);w.save();w.leaving=false;w.cine=null;w.go(pl);},from);await p.waitForTimeout(1200);await ready();
   const ex=await p.evaluate(to=>{const w=window.__w,e=w.exits.find(e=>e.to===to);return e&&{x:e.rect.centerX,y:e.rect.centerY,r:[e.rect.x,e.rect.y,e.rect.width,e.rect.height].map(Math.round),side:e.side};},to);
   if(!check(!!ex,`${from}: a way through to ${to}`))continue;
-  await settle();const s=await toS(ex.x,ex.y);const on=s[0]>=s[4]&&s[0]<=s[4]+s[2]&&s[1]>=s[5]+60&&s[1]<=s[5]+s[3];
-  check(on,`${from}: the door to ${to} is on screen (at ${s.slice(0,2).map(Math.round)})`);
+  // a big compound: the door may be off screen where he comes in; he walks toward it first, as a player would
+  const onS=s=>s[0]>=s[4]+8&&s[0]<=s[4]+s[2]-8&&s[1]>=s[5]+60&&s[1]<=s[5]+s[3]-8;
+  await settle();let s=await toS(ex.x,ex.y),walks=0;
+  for(;!onS(s)&&walks<6;walks++){const cx=s[4]+s[2]/2,cy=s[5]+s[3]/2,k=Math.min(1,(s[2]/2-30)/Math.max(1,Math.abs(s[0]-cx)),(s[3]/2-80)/Math.max(1,Math.abs(s[1]-cy)));
+    await p.touchscreen.tap(cx+(s[0]-cx)*k,cy+(s[1]-cy)*k);await p.waitForTimeout(1800);await settle();s=await toS(ex.x,ex.y);}
+  check(onS(s),`${from}: the door to ${to} is on screen${walks?` after ${walks} tap(s) toward it`:''} (at ${s.slice(0,2).map(Math.round)})`);
   await p.touchscreen.tap(s[0],s[1]);let t0=Date.now(),arrived=false;for(let i=0;i<50;i++){await p.waitForTimeout(150);if(await p.evaluate(to=>window.__w.placeId===to&&!window.__w.leaving&&!!window.__w.player,to)){arrived=true;break;}}
   if(!check(arrived,`${from}: a tap on the door walks him through to ${to}${arrived?` (${((Date.now()-t0)/1000).toFixed(1)} s)`:` (still in ${await p.evaluate(()=>window.__w.placeId)})`}`))continue;
   await ready();await p.waitForTimeout(900);
@@ -36,7 +40,7 @@ for(const [from,to] of pairs){
     return {place:w.placeId,P:[Math.round(P.x),Math.round(P.y)],free,onBack:!!onBack,back:back&&{x:back.rect.centerX,y:back.rect.centerY}};},from);
   check(a.place===to&&a.free,`${to}: he arrives on open floor (${a.P})${a.onBack?' (on the doorway back, as when walking in from the street)':''}`);
   // his first step from there, a tap on the floor further in, keeps him in the room (no bounce back through the door)
-  const inner=await p.evaluate(()=>{const w=window.__w,G=w.walkGrid(),P=w.player;for(const d of [40,32,24,48,16])for(const [dx,dy] of [[0,-d],[d,-d],[-d,-d]]){const x=P.x+dx,y=P.y+dy;if(G.free(Math.floor(x/G.C),Math.floor(y/G.C))&&!w.pick(x,y))return [x,y];}return null;});
+  const inner=await p.evaluate(from=>{const w=window.__w,G=w.walkGrid(),P=w.player,bk=w.exits.find(e=>e.to===from);/* away from the door he came in by, whichever wall it's in */const [ux,uy]={N:[0,1],S:[0,-1],W:[1,0],E:[-1,0]}[bk&&bk.side]||[0,-1];for(const d of [40,32,24,48,16])for(const [dx,dy] of [[ux*d,uy*d],[ux*d-uy*d,uy*d+ux*d],[ux*d+uy*d,uy*d-ux*d]]){const x=P.x+dx,y=P.y+dy;if(G.free(Math.floor(x/G.C),Math.floor(y/G.C))&&!w.pick(x,y))return [x,y];}return null;},from);
   if(inner){await settle();const si=await toS(inner[0],inner[1]);await p.touchscreen.tap(si[0],si[1]);await p.waitForTimeout(1500);
     const st=await p.evaluate(()=>({place:window.__w.placeId,leaving:window.__w.leaving,P:[Math.round(window.__w.player.x),Math.round(window.__w.player.y)]}));
     check(st.place===to&&!st.leaving,`${to}: his first step further in keeps him in the room (now ${st.place} at ${st.P})`);}

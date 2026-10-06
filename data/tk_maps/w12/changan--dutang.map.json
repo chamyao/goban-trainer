@@ -99,7 +99,7 @@
  "exits": [
   {
    "to": "changan--palace",
-   "side": "S",
+   "side": "N",
    "x": 16,
    "y": 1,
    "w": 2,
@@ -108,7 +108,7 @@
  ],
  "entries": {
   "changan--palace": [
-   15,
+   16,
    2
   ],
   "": [

@@ -106,7 +106,7 @@
  "exits": [
   {
    "to": "changan--xiangfu",
-   "side": "S",
+   "side": "N",
    "x": 10,
    "y": 1,
    "w": 2,
@@ -115,7 +115,7 @@
  ],
  "entries": {
   "changan--xiangfu": [
-   9,
+   10,
    2
   ],
   "": [

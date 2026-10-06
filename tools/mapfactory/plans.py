@@ -360,13 +360,13 @@ class MapBuilder:
             return ok[0]
         return self.near_tile((int(cx), int(cy)), want_visible, taken)
 
-    def near_tile(self, t0, want_visible=True, taken=(), front=None):
+    def near_tile(self, t0, want_visible=True, taken=(), front=None, keep_ok=False):
         for r in range(0, 12):
             ring = [(t0[0] + dx, t0[1] + dy) for dx in range(-r, r + 1) for dy in range(-r, r + 1) if max(abs(dx), abs(dy)) == r]
             if front:   # in front of a door first
                 ring.sort(key=lambda t: -((t[1] - t0[1]) * front[1] + (t[0] - t0[0]) * front[0]))
             for t in ring:
-                if self.walkable(t) and t not in taken and t not in self.keep and not (want_visible and self.hidden(t)):
+                if self.walkable(t) and t not in taken and (keep_ok or t not in self.keep) and not (want_visible and self.hidden(t)):
                     return t
         return None
 
@@ -509,6 +509,20 @@ def state(st, mb, plans):
     return out
 
 
+INWARD = {"N": (0, 1), "S": (0, -1), "W": (1, 0), "E": (-1, 0)}
+
+
+def edge_side(r, mb):
+    """The side of the room a door is on: the nearest edge (a door in the top wall is N, not S)."""
+    d = {"N": r["y"], "S": mb.H - (r["y"] + r["h"]), "W": r["x"], "E": mb.W - (r["x"] + r["w"])}
+    return min(d, key=lambda k: (d[k], k != "S"))
+
+
+def spot_tiles(mb):
+    """Where the story's spots are: no one arrives on one (its scene would start at once)."""
+    return {(int(x["x"]), int(x["y"])) for x in mb.spots}
+
+
 def rect_tiles(r):
     return {(x, y) for x in range(r["x"], r["x"] + r["w"]) for y in range(r["y"], r["y"] + r["h"])}
 
@@ -615,9 +629,11 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
                 rect = {"x": 0 if side == "W" else mb.W - 1 if side == "E" else x0,
                         "y": 0 if side == "N" else mb.H - 1 if side == "S" else y0,
                         "w": 1 if side in "EW" else mb.C, "h": 1 if side in "NS" else mb.C}
-            m["exits"].append({"to": target, "side": e.get("side", "S"), **rect})
-            # arriving through it: the nearest tile off the exit itself (on it, you'd walk straight back out)
-            inside = mb.near_tile((rect["x"] + rect["w"] // 2, rect["y"] + rect["h"] // 2), want_visible=False, taken=rect_tiles(rect))
+            m["exits"].append({"to": target, "side": e.get("side") or edge_side(rect, mb), **rect})
+            # arriving through it: the nearest tile off the exit itself, on the inside (on it, or beyond it,
+            # your first step would take you straight back out)
+            inside = mb.near_tile((rect["x"] + rect["w"] // 2, rect["y"] + rect["h"] // 2), want_visible=False, taken=rect_tiles(rect) | spot_tiles(mb),
+                                  front=INWARD[m["exits"][-1]["side"]], keep_ok=True)
             m["entries"].setdefault(target, list(inside))
         # a room's own door leads back to whatever opens into it
         if m.get("parent") and owner.get(mid_) and not any(x["to"] == owner[mid_] for x in m["exits"]):
@@ -625,13 +641,20 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
             if gap:
                 xs, ys = [t[0] for t in gap], [t[1] for t in gap]
                 rect = {"x": min(xs), "y": min(ys), "w": max(xs) - min(xs) + 1, "h": max(ys) - min(ys) + 1}
-                m["exits"].append({"to": owner[mid_], "side": "S", **rect})
-                m["entries"].setdefault(owner[mid_], list(mb.near_tile((rect["x"], rect["y"]), want_visible=False, taken=rect_tiles(rect))))
+                m["exits"].append({"to": owner[mid_], "side": edge_side(rect, mb), **rect})
+                m["entries"].setdefault(owner[mid_], list(mb.near_tile((rect["x"] + rect["w"] // 2, rect["y"] + rect["h"] // 2), want_visible=False, taken=rect_tiles(rect) | spot_tiles(mb),
+                                                                      front=INWARD[m["exits"][-1]["side"]], keep_ok=True)))
         on_exit = set().union(*[rect_tiles(x) for x in m["exits"] if not x.get("door")])
         for k, v in P.get("entries", {}).items():
             key = map_of(pid, k) if k else ""
             if key is not None:
                 t = mb.near_cell(tuple(v), want_visible=False, taken=on_exit)
+                # the plan's cell is the way in itself: just inside it, as for an exit's own arrival
+                way = next((x for x in sorted(m["exits"], key=lambda x: x["to"] != key) if not x.get("door")
+                            and rect_tiles(x) & set(mb.cell_tiles(*tuple(v)))), None)
+                if way:
+                    t = mb.near_tile((way["x"] + way["w"] // 2, way["y"] + way["h"] // 2), want_visible=False,
+                                     taken=on_exit | spot_tiles(mb), front=INWARD[way["side"]], keep_ok=True) or t
                 m["entries"][key] = list(t)
         if "" not in m["entries"]:
             first = next(iter(m["entries"].values()), None)
