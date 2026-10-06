@@ -182,6 +182,7 @@ def _scenes_chain():
               "王允使人将金冠密送吕布。冠上所嵌，乃王家所藏明珠。"),
             ["pose", "lb", "raise"],
             N("Lü Bu is delighted, and comes in person to Wang Yun's house to thank him.", "布大喜，亲到王允宅致谢。"),
+            ["party", ["diaochan"], {"to": "a4"}],
         ]},
         "a3_wait": {"title": T("Not Yet", "尚未齐备"), "kind": "main", "steps": [
             S("wangyun", "Not yet. The crown has to be made first.", "且慢。须先造成金冠。"),
@@ -205,8 +206,7 @@ def _scenes_chain():
             N("Wang Yun sends the attendants out, keeping only a few serving girls to pour. When the wine is half drunk, he says:",
               "允叱退左右，只留侍妾数人劝酒。酒至半酣，允曰："),
             S("wangyun", "Call my daughter in.", "唤孩儿来。"),
-            ["spawn", "dc", "diaochan", "a4", -14, -6],
-            ["move", "dc", "a4", 8, -4],
+            ["move", "diaochan", "a4", 8, -4],
             N("Two maids in blue lead Diaochan out, dressed in all her finery.", "少顷，二青衣引貂蝉艳妆而出。"),
             ["emote", "lb", "!"],
             S("lvbu", "Who is this?", "此是何人？"),
@@ -221,7 +221,7 @@ def _scenes_chain():
               "孩儿央及将军痛饮几杯。吾一家全靠着将军哩。"),
             N("Lü Bu asks Diaochan to sit. She makes as if to go back inside.", "布请貂蝉坐，貂蝉假意欲入。"),
             S("wangyun", "The general is my dearest friend. What harm in sitting, child?", "将军吾之至友，孩儿便坐何妨？"),
-            ["pose", "dc", "sit"],
+            ["pose", "diaochan", "sit"],
             N("Diaochan sits at Wang Yun's side. Lü Bu cannot take his eyes off her.", "貂蝉便坐于允侧。吕布目不转睛的看。"),
             S("wangyun", "I would give this girl to you as a concubine. Will you have her?", "吾欲将此女送与将军为妾，还肯纳否？"),
             ["pose", "lb", "bow"],
@@ -233,7 +233,6 @@ def _scenes_chain():
               "本欲留将军止宿，恐太师见疑。"),
             N("Lü Bu bows his thanks again and again, and goes.", "布再三拜谢而去。"),
             ["remove", "lb"],
-            ["party", ["diaochan"]],
         ]},
 
         # A5 · The second banquet. Diaochan's dance; the board is her making Dong Zhuo take her.
@@ -673,15 +672,16 @@ def _scenes_chain():
               "允入见天子。天子病体新愈，亲书密诏，允藏于袖中而出。"),
             ["gain", "edict"],
             ["remove", "xd"],
+            N("That night, Li Su, Commander of Cavalry, is sent for in secret.", "是夜，骑都尉李肃被密召而至。"),
+            ["party", ["lisu"], {"to": "a12"}],
         ]},
         "a12": {"title": T("The Broken Arrow", "折箭为誓"), "kind": "main", "steps": [
+            ["spawn", "wy", "wangyun", "a12", 8, 4],
             ["spawn", "lb", "lvbu", "a12", 12, -4],
-            N("Wang Yun calls Lü Bu in to plan with them, and gives him the Emperor's secret edict.", "允请吕布共议，以天子密诏付之。"),
-            ["give", "wangyun", "lb", "edict"],
+            N("Wang Yun has called Lü Bu in to plan with them, and gives him the Emperor's secret edict.", "允请吕布共议，以天子密诏付之。"),
+            ["give", "wy", "lb", "edict"],
             S("lvbu", "Li Su? He's the one who talked me into killing Ding Jianyang. If he won't go now, I'll cut him down first.",
               "昔日劝吾杀丁建阳，亦此人也。今若不去，吾先斩之。"),
-            N("They send for Li Su in secret.", "使人密请肃至。"),
-            ["spawn", "ls", "lisu", "a12", 30, 2], ["move", "ls", "a12", 16, 4],
             S("lvbu", "Once you talked me into killing Ding Jianyang and going over to Dong Zhuo. Now Dong Zhuo cheats the Son of Heaven above "
               "and tortures the people below. His crimes are full to the brim, and men and gods hate him alike. "
               "Take the Emperor's summons to Meiwu, call Dong Zhuo to court, and we'll ambush and kill him. "
@@ -695,7 +695,6 @@ def _scenes_chain():
             ["still", "ls_arrow", "slow zoom in"],
             N("He snaps an arrow, as his oath.", "遂折箭为誓。"),
             S("wangyun", "If you can carry this off, how could you fail to rise high?", "公若能干此事，何患不得显官？"),
-            ["party", ["lisu"]],
         ]},
 
         # A13 · Meiwu. Li Su's lie; Dong Zhuo's mother; Diaochan's last act for him.
