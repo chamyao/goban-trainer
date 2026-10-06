@@ -305,6 +305,8 @@ def compile_map(m, kit, out_dir):
             **({"drawn": True} if drawn else {}),
             say=json.dumps([place_step(l, n["kind"])[0] for l in n.get("say", [])], ensure_ascii=False),
             **{k: n[k] for k in ("challenge", "until", "face", "when", "gives", "gives_when") if n.get(k)},
+            **({"view": json.dumps(n["view"])} if n.get("view") else {}),
+            **({"guard_x": n["guard"][0] * T, "guard_y": n["guard"][1] * T} if n.get("guard") else {}),
             **{k: json.dumps([place_step(l, n["kind"])[0] for l in ([n[k]] if isinstance(n[k], str) else n[k])], ensure_ascii=False)
                for k in ("intro", "win", "done", "give", "given", "call") if n.get(k)})
     for e in m["exits"]:

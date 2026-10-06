@@ -435,12 +435,32 @@ class Layout:
                     if p["kind"].startswith("folk.") and not p.get("near") and not p.get("challenge"):
                         npc["wander"] = True
                     for k in ("challenge", "intro", "win", "done", "until", "face",   # challengers and story people
-                              "when", "gives", "gives_when", "give", "given", "call"):     # present once…; gives an item once…; calls out when you come near able to act
+                              "when", "gives", "gives_when", "give", "given", "call", "view", "blocks"):     # present once…; gives an item once…; calls out when you come near able to act
                         if p.get(k):
                             npc[k] = p[k]
                     self.npcs.append(npc)
                     self.used.add((x, y))
                     break
+
+    def resolve_guards(self):
+        """A blocking challenger's "blocks" (a beat, a landmark or room by id, or {"exit": place}) becomes the
+        point he guards: come near it before he's beaten and he stops you."""
+        slug = lambda name: "".join(ch for ch in name.lower().replace(" ", "-") if ch.isalnum() or ch == "-")
+        for n in self.npcs:
+            b = n.get("blocks")
+            if not b:
+                continue
+            at = None
+            if isinstance(b, dict) and b.get("exit"):
+                e = self.entries.get(slug(b["exit"])) or self.entries.get(b["exit"])
+                at = (e[0], e[1]) if e else None
+            elif b in self.anchors:
+                at = self.anchors[b]
+            else:
+                sp = next((sp for sp in self.spots if sp.get("node", "").endswith("-" + b) or sp["id"] == b), None)
+                at = (sp["x"], sp["y"]) if sp else None
+            if at:
+                n["guard"] = [round(at[0] + .5, 2), round(at[1] + .5, 2)]
 
     # ---------- 6. check ----------
     def walkable(self, c):
@@ -484,6 +504,7 @@ class Layout:
         self.lay_border()
         self.lay_decor()
         self.lay_npcs()
+        self.resolve_guards()
         missing = self.check()
         if missing:
             raise RuntimeError("unreachable: " + ", ".join(missing))

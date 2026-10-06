@@ -35,7 +35,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=46`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=47`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
@@ -217,7 +217,7 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=46`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=47`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=34`);
       this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=48`);
     }
@@ -228,7 +228,7 @@ function worldScenes() {
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
       for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=53`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=54`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -263,6 +263,7 @@ function worldScenes() {
 
       // ground and terrain layers, then objects
       const map = this.make.tilemap({ key: `map-${this.placeId}` });
+      this.tw = map.tileWidth || 16;
       const sets = map.tilesets.map(ts => map.addTilesetImage(ts.name, `kit-${ts.name}`));
       this.water = null;
       const layers = [];
@@ -547,6 +548,9 @@ function worldScenes() {
       if (p.challenge) {
         n.challenge = `${this.w.n}-${this.placeId}-c-${p.challenge}`;
         n.intro = own(J(p.intro)); n.win = own(J(p.win)); n.done = own(J(p.done));
+        // sight: "view" tiles all round, or a cone the way he faces; "guard": the point he keeps you from
+        n.view = p.view ? JSON.parse(p.view) : 0; n.cone = !!(n.view && p.face); n.face0 = face;
+        n.guard = p.guard_x != null ? { x: p.guard_x, y: p.guard_y } : null;
         n.mark = this.add.image(o.x, o.y - spr.height - 2, "@bang").setOrigin(.5, 1).setDepth(9999).setVisible(!TK.cleared(n.challenge) && (!n.when || this.cond(n.when)));
       }
       this.physics.add.collider(spr, this.solids);
@@ -1399,7 +1403,63 @@ function worldScenes() {
       this.cameras.main.once("camerafadeoutcomplete", () => this.scene.restart({ place: to, from: this.placeId }));
     }
 
+    // Road challengers: one who sees you (in range, and in his cone if he faces one way) or catches you
+    // near what he guards calls out, walks over and sets his problem. Lose and you're walked back a
+    // step, and he waits till you've gone and come again; beat him and he stands aside.
+    watchChallengers() {
+      if (this.engaged || this.ui.busy() || this.leaving || this.seated || this.cine) return;
+      const P = this.player, T = this.tw || 16;
+      for (const n of this.npcs) {
+        if (!n.challenge || !n.spr.visible || !(n.view || n.guard) || TK.cleared(n.challenge)) continue;
+        const d = Math.hypot(n.spr.x - P.x, n.spr.y - P.y), dg = n.guard ? Math.hypot(n.guard.x - P.x, n.guard.y - P.y) : Infinity;
+        if (n.cool) { if (d > (n.view || 2) * T + 2 * T && dg > 4 * T) n.cool = false; continue; }
+        const seen = n.view && d <= n.view * T + T / 2 && (!n.cone || this.inCone(n, P)) || dg < 2.5 * T;
+        if (seen) { this.engage(n); return; }
+      }
+    }
+    inCone(n, P) {
+      const [fx, fy] = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }[n.face0] || [0, 1];
+      const dx = P.x - n.spr.x, dy = P.y - n.spr.y, d = Math.hypot(dx, dy) || 1;
+      return (dx * fx + dy * fy) / d > Math.cos(Math.PI * 55 / 180);
+    }
+    async engage(n) {
+      this.engaged = n;
+      const P = this.player, T = this.tw || 16, wait = ms => new Promise(r => this.time.delayedCall(ms, r));
+      this.walk = null; this.auto = null; P.setVelocity(0); P.anims.stop();
+      const wander = n.wander; n.wander = false; n.spr.setVelocity(0);
+      if (n.mark) this.tweens.add({ targets: n.mark, scale: { from: 2, to: 1 }, duration: 320, ease: "Back.easeOut" });
+      await wait(420);
+      // he walks up to stand a step from you
+      const dx = P.x - n.spr.x, dy = P.y - n.spr.y, d = Math.hypot(dx, dy) || 1, go = Math.max(0, d - T * 1.2);
+      n.dir = Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? "left" : "right") : (dy < 0 ? "up" : "down");
+      if (go > 2) {
+        n.spr.anims.play(n.who ? `h-${n.who}-${n.dir}` : `fk-${n.sprite}-${n.dir}`, true);
+        await new Promise(r => this.tweens.add({ targets: n.spr, x: n.spr.x + dx / d * go, y: n.spr.y + dy / d * go, duration: go / 60 * 1000,
+          onUpdate: () => n.spr.setDepth(n.spr.y), onComplete: r }));
+      }
+      this.faceNpc(n);
+      P.facing = { up: "down", down: "up", left: "right", right: "left" }[n.dir]; P.setTexture(`h-${this.lead}-${P.facing}-0`);
+      await new Promise(r => this.talk(worldLines(n.intro), r));
+      const won = await this.duel(n.challenge, { id: n.challenge.split("-c-")[1], who: n.who, face: this.faceOf(n) });
+      if (won) {
+        this.returned({ key: n.challenge, win: true });
+        // a blocker stands aside: off your way, and no longer in it
+        n.spr.body.enable = false;
+        const side = Math.abs(dx) > Math.abs(dy) ? { x: 0, y: T } : { x: T, y: 0 };
+        this.tweens.add({ targets: n.spr, x: n.spr.x + side.x, y: n.spr.y + side.y, duration: 400, onUpdate: () => n.spr.setDepth(n.spr.y) });
+      } else {
+        // walked back a step; he goes back to his post and waits till you come again
+        P.setPosition(P.x - dx / d * T * 1.5, P.y - dy / d * T * 1.5);
+        n.cool = true;
+        this.tweens.add({ targets: n.spr, x: n.home.x, y: n.home.y, duration: Math.max(200, go / 60 * 1000), onUpdate: () => n.spr.setDepth(n.spr.y),
+          onComplete: () => { n.dir = n.face0; this.faceNpc(n); } });
+      }
+      n.wander = wander;
+      this.engaged = null;
+    }
+
     update(time, dt) {
+      this.watchChallengers();
       this.keepPlayerInView();
       this.callOut();
       WorldFX.shadows(this);
