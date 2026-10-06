@@ -293,7 +293,7 @@
    "spot": "a1",
    "scene": "a1",
    "title": "The Roadside Banquet",
-   "objective": "See the Grand Preceptor off at the Heng Gate.",
+   "objective": "See the Grand Preceptor off: out through the Heng Gate, at the north end of the avenue, to the banquet tent.",
    "after": [],
    "grade": "11K",
    "pool": [
@@ -419,7 +419,7 @@
     ]
    ],
    "board": false,
-   "objective_zh": "往横门外，为太师送行。",
+   "objective_zh": "为太师送行：出大街北头的横门，到宴帐去。",
    "title_zh": "横门设宴"
   },
   {
@@ -429,7 +429,7 @@
    "spot": "a2",
    "scene": "a2",
    "title": "The Peony Pavilion",
-   "objective": "Walk out into the rear garden.",
+   "objective": "Go home to your residence, on the ward street just west of the avenue, and walk out into the rear garden.",
    "after": [
     "12-a1"
    ],
@@ -556,7 +556,7 @@
      44168
     ]
    ],
-   "objective_zh": "到后园中走走。",
+   "objective_zh": "回大街西侧坊街上的府邸，到后园中走走。",
    "title_zh": "牡丹亭"
   },
   {
@@ -566,7 +566,7 @@
    "spot": "a3",
    "scene": "a3",
    "title": "The Gold Crown",
-   "objective": "Have the family pearls set into a gold crown, and send it to Lü Bu in secret.",
+   "objective": "Take the crown to Lü Bu's side door, at the east end of the ward street, past the Chancellor's gate.",
    "after": [
     "12-a2"
    ],
@@ -703,7 +703,7 @@
      "count": false,
      "at": "Chang'an",
      "place": "changan",
-     "objective_zh": "向老管家取出家藏明珠。"
+     "objective_zh": ""
     },
     {
      "needs": [
@@ -714,10 +714,10 @@
      "count": false,
      "at": "Chang'an",
      "place": "changan",
-     "objective_zh": "将明珠送到珠宝铺，嵌造金冠。"
+     "objective_zh": ""
     }
    ],
-   "objective_zh": "将家藏明珠嵌成金冠，密送吕布。",
+   "objective_zh": "将金冠送到坊街东头吕布府的侧门，须经过相府门前。",
    "title_zh": "金冠"
   },
   {
@@ -1001,7 +1001,7 @@
    "spot": "a6",
    "scene": "a6",
    "title": "Red Lanterns",
-   "objective": "Ride home down the avenue.",
+   "objective": "Ride home down the avenue, between the red lanterns.",
    "after": [
     "12-a5"
    ],
@@ -1128,7 +1128,7 @@
      3608
     ]
    ],
-   "objective_zh": "沿大街骑马回府。",
+   "objective_zh": "沿大街骑马回府，经过两行红灯。",
    "title_zh": "红灯照道"
   },
   {
@@ -1824,7 +1824,7 @@
    "spot": "a11",
    "scene": "a11",
    "title": "You Are a Lü, He Is a Dong",
-   "objective": "Find Lü Bu outside the Heng Gate.",
+   "objective": "Find Lü Bu on the earthen ridge above the west road, outside the Heng Gate.",
    "after": [
     "12-a10"
    ],
@@ -1951,7 +1951,7 @@
      160670
     ]
    ],
-   "objective_zh": "到横门外去寻吕布。",
+   "objective_zh": "出横门，到西路上方的土冈寻吕布。",
    "title_zh": "将军自姓吕"
   },
   {
@@ -1961,7 +1961,7 @@
    "spot": "shisun",
    "scene": "a12a",
    "title": "Shisun Rui",
-   "objective": "Sound out Shisun Rui.",
+   "objective": "Sound out Shisun Rui, on the lane at the foot of the palace terrace, at its west end.",
    "after": [
     "12-a11"
    ],
@@ -2088,7 +2088,7 @@
      42374
     ]
    ],
-   "objective_zh": "密访士孙瑞。",
+   "objective_zh": "密访士孙瑞，宅在宫台脚下小巷的西头。",
    "title_zh": "士孙瑞"
   },
   {
@@ -2098,7 +2098,7 @@
    "spot": "huangwan",
    "scene": "a12b",
    "title": "Huang Wan",
-   "objective": "Sound out Huang Wan.",
+   "objective": "Sound out Huang Wan, next door to Shisun Rui.",
    "after": [
     "12-a12a"
    ],
@@ -2225,7 +2225,7 @@
      266259
     ]
    ],
-   "objective_zh": "密访黄琬。",
+   "objective_zh": "密访黄琬，宅在士孙瑞隔壁。",
    "title_zh": "黄琬"
   },
   {
@@ -2235,7 +2235,7 @@
    "spot": "a12y",
    "scene": "a12y",
    "title": "Stones, Not Men",
-   "objective": "Go to Chang'an.",
+   "objective": "Call on Cai Yong, across the avenue from Huang Wan, near the palace steps.",
    "after": [
     "12-a12b"
    ],
@@ -2362,7 +2362,7 @@
      25509
     ]
    ],
-   "objective_zh": "",
+   "objective_zh": "去拜访蔡邕，宅在大街东侧、与黄琬隔街相对，近宫阶。",
    "title_zh": "只谈棋子"
   },
   {
@@ -2372,7 +2372,7 @@
    "spot": "secret",
    "scene": "a12p",
    "title": "The Plan",
-   "objective": "Meet in the secret room.",
+   "objective": "Return to the secret room in your residence.",
    "after": [
     "12-a12y"
    ],
@@ -2500,7 +2500,7 @@
     ]
    ],
    "board": false,
-   "objective_zh": "到密室会合。",
+   "objective_zh": "回府中密室。",
    "title_zh": "定计"
   },
   {
@@ -2510,7 +2510,7 @@
    "spot": "a12c",
    "scene": "a12c",
    "title": "The Secret Edict",
-   "objective": "Reach the Son of Heaven unseen.",
+   "objective": "Reach the Son of Heaven unseen: into the palace by the North Side Gate, at the south end of the avenue.",
    "after": [
     "12-a12p"
    ],
@@ -2637,7 +2637,7 @@
      295416
     ]
    ],
-   "objective_zh": "避开耳目，面见天子。",
+   "objective_zh": "避开耳目面见天子：从大街南头的北掖门入宫。",
    "title_zh": "天子密诏"
   },
   {
@@ -3470,7 +3470,7 @@
    "spot": "north-gate",
    "scene": "a14",
    "title": "There Is an Edict to Kill a Traitor",
-   "objective": "Wait at the North Side Gate.",
+   "objective": "Wait at the North Side Gate, at the south end of the avenue.",
    "after": [
     "12-a13d"
    ],
@@ -3604,7 +3604,7 @@
     "taunt_zh": "持剑是何意？",
     "taunt_vid": "9d1453795afc"
    },
-   "objective_zh": "在北掖门等候。",
+   "objective_zh": "在大街南头的北掖门等候。",
    "title_zh": "有诏讨贼"
   },
   {
@@ -3890,7 +3890,7 @@
    "spot": "a15c",
    "scene": "a15c",
    "title": "Cai Yong Weeps",
-   "objective": "Go to the victory feast in the great hall of state.",
+   "objective": "Go to the victory feast in the great hall of state, inside the palace.",
    "after": [
     "12-a15m"
    ],
@@ -4018,7 +4018,7 @@
     ]
    ],
    "board": false,
-   "objective_zh": "到都堂赴庆功宴。",
+   "objective_zh": "到宫中都堂赴庆功宴。",
    "title_zh": "蔡邕哭尸"
   },
   {
@@ -4865,7 +4865,7 @@
    "spot": "qingsuo",
    "scene": "a18p",
    "title": "To Save Myself by Running",
-   "objective": "Go to the palace steps.",
+   "objective": "Go to the palace steps, beside the North Side Gate.",
    "after": [
     "12-a17"
    ],
@@ -4993,7 +4993,7 @@
     ]
    ],
    "board": false,
-   "objective_zh": "到宫阶去。",
+   "objective_zh": "到北掖门旁的宫阶去。",
    "title_zh": "临难苟免"
   },
   {
@@ -5003,7 +5003,7 @@
    "spot": "a18",
    "scene": "a18",
    "title": "Wang Yun Is Here",
-   "objective": "Go to the Son of Heaven at the Xuanping Gate.",
+   "objective": "Go to the Son of Heaven at the Xuanping Gate, at the east end of the market street.",
    "after": [
     "12-a18p"
    ],
@@ -5131,7 +5131,7 @@
     ]
    ],
    "board": false,
-   "objective_zh": "到宣平门去见天子。",
+   "objective_zh": "到市街东头的宣平门去见天子。",
    "title_zh": "王允在此"
   }
  ]
