@@ -333,7 +333,7 @@ PLANS2 = {
                      "cone": 4, "in_beats": ["2-a9"], "seen": "maid", "back_to": "xf-bedroom"},
                     {"id": "maid-2", "kind": "folk.maiden", "beat": [[15, 10], [9, 10], [9, 10], [15, 10]], "shape": "U", "pause": [9, 10, 3],
                      "cone": 4, "in_beats": ["2-a9"], "seen": "maid", "back_to": "xf-bedroom"},
-                    {"id": "steward", "kind": "folk.official", "beat": [[7, 7], [11, 7], [7, 7]], "shape": "U", "pause": [11, 7, 2],
+                    {"id": "steward", "kind": "folk.official", "beat": [[9, 7], [11, 7], [9, 7]], "shape": "U", "pause": [11, 7, 2],
                      "cone": 5, "in_beats": ["2-a9"], "seen": "steward", "back_to": "xf-bedroom"},
                     {"id": "guard-1", "kind": "folk.soldier", "at": [6, 19], "face": "N", "cone": 6, "in_beats": ["2-a7", "2-a7c", "2-a8", "2-a9", "2-a10"]},
                     {"id": "guard-2", "kind": "folk.soldier", "at": [11, 19], "face": "N", "cone": 6, "in_beats": ["2-a7", "2-a7c", "2-a8", "2-a9", "2-a10"]},
