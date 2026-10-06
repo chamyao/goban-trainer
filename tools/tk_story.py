@@ -219,7 +219,6 @@ WORLDS = [
                 ["still", "oath_a", "slow pan across"],
                 ["n", "The next day, in the peach garden behind Zhang Fei's farm, the blossoms are in full bloom."],
                 ["fx", "petals", "n2", 0, -20],
-                ["problem", "starred"],  # the immortals at the board (their intro and outro are in tk_places.py); the oath plays once it is solved
                 ["prop", "ox", "ox", "n2", -26, 14], ["prop", "wh", "whitehorse", "n2", -14, 18],
                 ["n", "With a black ox and a white horse for sacrifice, the three burn incense and bow."],
                 ["fx", "incense", "n2", -14, -4],
@@ -234,6 +233,7 @@ WORLDS = [
                 ["still", "oath_c", "slow pan up"],
                 ["n", "Liu Bei becomes eldest brother, Guan Yu second, Zhang Fei youngest. Five hundred village braves join them, and they drink in the garden until they can drink no more."],
                 ["pose", "braves", "bow"], ["pose", "zhangfei", "drunk"], ["emote", "zhangfei", "zzz"], ["wait", 900], ["pose", "braves", "stand"],
+                ["problem", "starred"],  # after the oath: the old men at their board (intro and outro in tk_places.py)
                 ["n", "The next day they gather their weapons, but they have no horses to ride."],
             ]},
             "daxing": {"title": "First Blood at Daxing Mountain", "kind": "main", "steps": [
@@ -386,7 +386,11 @@ WORLDS = [
                 ["army", "han", "militia", 6, "n7", -30, 0],
                 ["spawn", "zb", "zhangbao", "n7", 70, 0],
                 ["army", "yt", "rebel", 14, "n7", 86, 0],
+                ["light", "night", 0],   # they left Dong Zhuo's camp at night (office); the night carries into the march
+                ["n", "They ride all night, and reach Zhu Jun's camp in the hills as the sky grows pale."],
+                ["light", "dawn", 1500],
                 ["n", "Zhu Jun receives them warmly. The two armies join, and Zhu Jun makes Liu Bei his vanguard against Zhang Bao."],
+                ["light", "day", 1500],
                 ["still", "zhangbao_a", "slow pan across"],
                 ["n", "Zhang Bao is Zhang Jiao's brother, the Yellow Turbans' General of Earth, and he is said to command sorcery: he calls up wind and thunder, and armies out of thin air. He has eighty or ninety thousand men camped behind the hills."],
                 ["n", "If he is not stopped, Zhu Jun's army cannot advance."],
@@ -660,15 +664,16 @@ WORLDS = [
                 ["prop", "forge", "forge", "as", -24, -16], ["prop", "anvil", "anvil", "as", -12, -12],
                 ["spawn", "smith", "f_porter", "as", -14, -4],
                 ["fx", "sparkle", "as", -12, -12], ["wait", 300], ["fx", "sparkle", "as", -12, -12],
-                ["still", "horses_b", "slow pan across"],
                 ["n", "Liu Bei has twin swords forged. Guan Yu's blade is the Green Dragon Crescent, eighty-two jin, called Cold Beauty. Zhang Fei's is an eighteen-foot serpent spear of steel."],
                 ["give", "smith", "liubei", "twin_swords"],
                 ["give", "smith", "guanyu", "green_dragon"],
                 ["give", "smith", "zhangfei", "serpent_spear"],
                 ["pose", "party", "raise"],
+                ["still", "horses_b", "slow pan across"],   # after the gives, so nothing moves under it
                 ["n", "Armed and mounted at last, the brothers lead their five hundred to the governor."],
             ]},
             "bribe": {"title": "A Bribe Refused", "kind": "side", "steps": [
+                ["n", "How did Lu Zhi come to be in that cart? Go back a few weeks, to his camp."],
                 ["n", "At Guangzong, Lu Zhi had Zhang Jiao penned in, though the rebel's sorcery kept him from the final blow. Then the court's envoy arrived: the eunuch Zuo Feng."],
                 ["say", "zuofeng", "Your victories are splendid, general. And where is the gift for the Emperor's envoy?"],
                 ["problem"],  # the board comes up here; the rest plays once it is solved

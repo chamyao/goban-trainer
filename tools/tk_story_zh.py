@@ -292,7 +292,7 @@ ZH = {
     # ---- ladies and girls about town ----
     "“Brother Xuande! When you're rich, will you buy me a hairpin with a flower on it?”": "“玄德哥哥！等你富贵了，给我买一支带花的簪子好不好？”",
     "“They say the volunteers march next month. Half the girls in town will be weeping at the gate.”": "“听说义兵下月就要出征，城里一半的姑娘都要在城门口哭了。”",
-    "“A man nine feet tall, with a face as red as a ripe date, just walked into the inn. Who do you suppose he is?”": "“刚才有个身长九尺、面如重枣的大汉进了酒店，你说他是什么人？”",
+    "“Men are coming in from every village to join the volunteers. One of them is pushing a cart this way, the biggest man I ever saw.”": "“各村的人都赶来投军。有一个推着车子往这边来了，是我见过的最高大的汉子。”",
     "“More tea? The storyteller's tale of the Yellow Turbans is the talk of the county.”": "“再添些茶吧？说书先生讲的黄巾故事，全县都在传呢。”",
     # ---- World 1 places: townsfolk, challengers and story spots (tools/tk_places.py) ----
     "“Off to sell your sandals in town, Xuande? Mind the road.”": "“玄德，又进城卖草鞋？路上小心。”",
@@ -319,8 +319,8 @@ ZH = {
     "A clerk from the county office looks up. “The magistrate set this one. Nobody here has solved it.”": "县衙的一位书吏抬起头。“这道题是县令出的，这里还没人解得出。”",
     "“Remarkable. I'll tell the magistrate a sandal-seller did it.”": "“了不起。我要告诉县令，是个卖草鞋的解出来的。”",
     "“The magistrate still doesn't believe me.”": "“县令到现在还不信我。”",
-    "Under the great peach tree two old men sit over a weiqi board, one in grey, one in red.": "大桃树下，两位老人对坐下棋，一位穿灰衣，一位穿红衣。",
-    "Three young men, come to swear before Heaven? Heaven is listening. But first, show us how you read the stones.": "三位年轻人，要来对天盟誓吗？上天在听着。不过，先让我们看看你们怎么看这盘棋。",
+    "When the cups are empty, the brothers see two old men under the great peach tree, one in grey, one in red, sitting over a weiqi board. No one saw them come.": "酒尽之时，兄弟三人忽见大桃树下坐着两位老人，一位穿灰衣，一位穿红衣，对着一盘棋。谁也没看见他们是何时来的。",
+    "Three brothers, sworn before Heaven. Heaven heard you. Now show us how you read the stones.": "三位兄弟，已对天盟誓。上天听见了。现在，让我们看看你们怎么看这盘棋。",
     "Good. The road ahead forks, and fortune favours the one who reads it.": "好。前路分岔，福气只眷顾看得清路的人。",
     "When the brothers look up, the two old men are gone. Only the board remains, and a drift of petals.": "兄弟三人抬起头时，两位老人已不见踪影，只剩下一盘棋和满地落花。",
     "The old man in grey studies the board and says nothing.": "灰衣老人凝视着棋盘，一言不发。",
@@ -347,7 +347,7 @@ ZH = {
     "Go into the village inn.": "走进村店。",
     "Report to Lu Zhi in his tent.": "到卢植帐中拜见。",
     "Read the notice in the town square.": "去城中广场看榜文。",
-    "Sit at the old men's weiqi board under the great peach tree.": "在大桃树下，坐到两位老人的棋盘前。",
+    "Swear brotherhood under the great peach tree.": "在大桃树下结为兄弟。",
     "Side story: find the old man in the hills.": "支线：去山中寻找那位老人。",
     "Side story: hear Zhang Jiao's sermon in Julu.": "支线：到巨鹿听张角传道。",
     "Side story: the betrayal in the Yellow Hills.": "支线：黄冈的背叛。",
@@ -360,7 +360,7 @@ ZH = {
     "Side story: red banners at Changshe.": "支线：长社红旗。",
     "Side story: the five-coloured staves at the city gates.": "支线：城门上的五色棒。",
     "Side story: the fire plan in the Han camp.": "支线：汉军营中的火攻之计。",
-    "Shortcut: the envoy on the road.": "捷径：路上的使者。",
+    "Shortcut: how Lu Zhi came to be in the cage cart.": "捷径：卢植是怎样被关进槛车的。",
     "Head home to Zhuo.": "回涿郡去。",
     "Break Zhang Bao's sorcery in the hills.": "在山中破张宝的妖术。",
     "Yingchuan, Too Late": "颍川，来迟一步",
@@ -461,6 +461,8 @@ ZH = {
     "The farm east of the pine": "大松树东边的农庄",
     "The ridge is empty. Go to the shrine under the pine first.": "山岭上空无一人。先去松树下的星君祠。",
     "Go to the shrine under the old pine, where a game has been laid out.": "到老松树下的星君祠去，那里摆开了一局棋。",
+    "How did Lu Zhi come to be in that cart? Go back a few weeks, to his camp.": "卢植怎么会坐进那辆槛车？且说几个星期前，他的营中。",
+    "They ride all night, and reach Zhu Jun's camp in the hills as the sky grows pale.": "三人连夜行军，天色微明时，到了山中朱儁的营寨。",
 }
 
 # Pronunciation fixes for the voice only (the text shown keeps the real
