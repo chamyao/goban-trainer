@@ -181,3 +181,45 @@ python3 tools/mapfactory compile --world 1 --kit jade --preview    # the default
 ```
 
 `--preview` writes PNGs of every map and an overview to `docs/maps/`.
+
+## Book 2 additions (runtime)
+
+These are read by the factory (tools/mapfactory) and played by the engine (tk-world.js).
+
+### Map states
+A brief's `"states"`: `[{"id", "when", "until", "light", "visibility", "sound", "procession", "exits_open", "exits_closed"}]`.
+Every state whose `when` holds and whose `until` doesn't is active; they merge in order, so a later one's light, fog or sound wins.
+- `light`: `day` (none), `morning`, `dusk`, `night`, `storm`, `smoke`.
+- People and landmarks with `"in": [state ids]` are there only while one of those states is active.
+- `exits_open` / `exits_closed`: place ids whose exits are opened or barred while the state lasts.
+- `visibility`: N tiles. A fog closes round the player.
+- `sound`: `{"bells" | "children" | "drum": source}`. A synthesised pattern grows louder as you near the source: `"carriage"` (the procession's), a spot id, a landmark id or a person's id. If none is given, the source is the next beat's spot. It plays only while the music is on.
+- `procession`: `{"column": [...], "from": [x, y], "to": [x, y], "leash": tiles, "leash_line": "…", "stops": [spot ids]}`.
+  - The column walks the road at walking pace. `outriders` and `rearguard` are two soldiers each, `carriage:…` is a carriage, and `player` is your place in it.
+  - It halts when the carriage reaches a stop whose beat hasn't played, and goes on once it has.
+  - Stray farther than `leash` tiles from the carriage and you're brought back with `leash_line` (voiced).
+
+### Challengers
+An npc with `"challenge"` may also have:
+- `"view"`: N tiles. With `"face"` it's a 110° cone that way, otherwise a circle. Inside it, he spots you: "!" pops, he walks over, then intro and problem.
+- `"blocks"`: a node (`"a3"`), a landmark or room id, or `{"exit": "Meiwu"}`. Come within 2.5 tiles of it unbeaten and he stops you.
+- Lose: you're stepped back, and he waits until you've left and come again. Win: he stands aside and is no longer in the way.
+
+### Stealth
+An npc's `"watch"`: `{"id", "cone": tiles, "face" | "turns": [dirs], "beat": [[x, y], …], "pause": [x, y, seconds], "in_beats": [nodes], "seen": [lines] | key, "back_to": id}`.
+- He walks his beat (or turns between `turns` every few seconds), and his 110° cone is drawn on the ground. Solid things stop the cone (walls, buildings, trees, rocks, screens); a `wall.lattice` doesn't.
+- He watches only while one of `in_beats` is open (always, if none are given).
+- If he sees you, he says `seen` (lines, or a key into the brief's `"seen_lines"`), and you're walked back to `back_to`: a spot, landmark, entry, or another room or place by id. There's no game over.
+- A watcher with no `seen` or `back_to` only looks: use it for sight puzzles.
+- **Sight puzzle:** a spot (landmark) with `"sight": {"seen_by": id, "unseen_by": id}` plays its beat once the player has stood, for a moment, where the first watcher sees them and the second doesn't (A7, the curtain).
+
+### Doors and rooms
+- A building's `"open_to"` is a list of protagonist ids or conditions (`"item:edict"`). Anyone else is turned back with `"refuse"` lines (voiced).
+- A building's `"rooms"`: `[id | {"id", "label", "kind"}]` puts rooms in a row behind one street door, each with a back door to the next.
+- An npc with `"inside": True` and `"near": <building or room id>` stands in that room.
+- A brief's `"room_folk": False` keeps the stock room people out.
+
+### Story steps
+`["crowd", n]` (or `"+3"`): townsfolk fall in behind the party.
+`["party", [...], {"to": node | {"place", "from"}}]`: where the new lead begins.
+New poses: `dance` and `throat` (lasting); `cutarm` and `leap` (once).

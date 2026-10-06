@@ -13,7 +13,7 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw
 
-from vocab import FALLBACK, FOLK_FALLBACK, KINDS, MATERIALS
+from vocab import FALLBACK, FOLK_FALLBACK, KINDS, MATERIAL_FALLBACK, MATERIALS
 from build_tk import place_step  # lines get their Chinese and voice clip here
 from tk_story_zh import ZH
 
@@ -124,6 +124,8 @@ class Kit:
         return rnd.choice(table[best])
 
     def material(self, mat):
+        if mat not in self.k["materials"]:   # a ground this kit has no tiles of: its stand-in
+            mat = next((m for m in MATERIAL_FALLBACK.get(mat, []) if m in self.k["materials"]), mat)
         d = self.k["materials"].get(mat)
         seen = set()
         while d and "same" in d and d["same"] not in seen:
@@ -153,11 +155,32 @@ class Kit:
         return f"{kind if kind in kinds else FOLK_FALLBACK}#{i}", False
 
 
+SEEN = {}   # the world's seen_lines, by key (filled by compile_world)
+
+
+def voiced_states(states):
+    """A procession's leash line as a spoken step (Chinese and voice clip)."""
+    out = []
+    for st in states:
+        pr = st.get("procession")
+        if pr and isinstance(pr.get("leash_line"), str):
+            st = {**st, "procession": {**pr, "leash_line": place_step(pr["leash_line"])[0]}}
+        out.append(st)
+    return out
+
+
 def compile_map(m, kit, out_dir):
     T = kit.T
     W, H = m["size"]
     legend = m["terrain"]["legend"]
     grid = [[legend[c] for c in row] for row in m["terrain"]["rows"]]
+    # a ground this kit has no tiles of is drawn as its stand-in (vocab MATERIAL_FALLBACK), edges and all
+    sub = {mat: kit.material(mat)[0] for mat in {c for row in grid for c in row}
+           if (mat not in kit.k["materials"] or "same" in kit.k["materials"][mat])
+           and mat not in kit.k.get("room_styles", {}).get(m.get("style"), {})}
+    sub = {k: v for k, v in sub.items() if k != v}
+    if sub:
+        grid = [[sub.get(c, c) for c in row] for row in grid]
     rnd = random.Random(m["seed"])
 
     # tilesets: every kit sheet used by a material, plus a swatch sheet for flat colours
@@ -275,11 +298,17 @@ def compile_map(m, kit, out_dir):
 
     walls = building_walls(m, kit, T)
     for o in m["objects"]:
-        key, spr = kit.sprite(o["kind"], f"{m['id']}/{o['x']},{o['y']}")
+        # a building whose front faces E or W (a siheyuan wing): its side view, if the kit has one; the side
+        # sprite's door faces E, so a W-facing one is drawn mirrored
+        faces = o.get("faces") or o.get("door")
+        side = f"{o['kind']}_side" if faces in ("E", "W") else None
+        draw_kind = side if side and kit.k["kinds"].get(side) else o["kind"]
+        key, spr = kit.sprite(draw_kind, f"{m['id']}/{o['x']},{o['y']}")
         solid = KINDS[o["kind"]][2]
         obj(key or "", "prop", (o["x"] + o["w"] / 2) * T, (o["y"] + o["h"]) * T,
             kind=o["kind"], fw=o["w"] * T, fh=o["h"] * T, solid=solid, **({"ref": o["id"]} if o.get("id") else {}),
             **({"in": json.dumps([o["in"]] if isinstance(o["in"], str) else o["in"])} if o.get("in") else {}),
+            **({"flip": True} if draw_kind == side and faces == "W" else {}),
             **walls.get(id(o), {}))
     runs = []
     for y in range(H):
@@ -297,6 +326,7 @@ def compile_map(m, kit, out_dir):
         obj(s["id"], "spot", s["x"] * T, s["y"] * T, node=s["node"], label=s.get("label", ""), label_zh=ZH.get(s.get("label", ""), ""),
             **({"trigger": s["trigger"]} if s.get("trigger") else {}), **({"use": s["use"]} if s.get("use") else {}),
             **({"needs": json.dumps(s["needs"] if isinstance(s["needs"], list) else [s["needs"]])} if s.get("needs") else {}),
+            **({"sight": json.dumps(s["sight"])} if s.get("sight") else {}),
             **{k: s[k] for k in ("delivers", "when") if s.get(k)},
             **{k: json.dumps([place_step(l)[0] for l in s[k]], ensure_ascii=False) for k in ("empty", "waiting", "deliver", "delivered", "call") if s.get(k)},
             **{k: json.dumps([place_step(l)[0] for l in s[k]], ensure_ascii=False) for k in ("intro", "outro") if s.get(k)})
@@ -307,6 +337,9 @@ def compile_map(m, kit, out_dir):
             say=json.dumps([place_step(l, n["kind"])[0] for l in n.get("say", [])], ensure_ascii=False),
             **{k: n[k] for k in ("challenge", "until", "face", "when", "gives", "gives_when") if n.get(k)},
             **({"view": json.dumps(n["view"])} if n.get("view") else {}),
+            **({"watch": json.dumps({**n["watch"], "seen": [place_step(l, n["kind"])[0] for l in
+                                                            (SEEN.get(n["watch"]["seen"], []) if isinstance(n["watch"].get("seen"), str) else n["watch"].get("seen") or [])]},
+                                    ensure_ascii=False)} if n.get("watch") else {}),
             **({"in": json.dumps([n["in"]] if isinstance(n["in"], str) else n["in"])} if n.get("in") else {}),
             **({"guard_x": n["guard"][0] * T, "guard_y": n["guard"][1] * T} if n.get("guard") else {}),
             **{k: json.dumps([place_step(l, n["kind"])[0] for l in ([n[k]] if isinstance(n[k], str) else n[k])], ensure_ascii=False)
@@ -334,7 +367,7 @@ def compile_map(m, kit, out_dir):
            "nextlayerid": len(layers) + 2, "nextobjectid": len(objs) + 1,
            "properties": [{"name": "kit", "type": "string", "value": kit.k["kit"]},
                           {"name": "source", "type": "string", "value": f"{m['id']}.map.json"}]
-                         + ([{"name": "states", "type": "string", "value": json.dumps(m["states"], ensure_ascii=False)}] if m.get("states") else []),
+                         + ([{"name": "states", "type": "string", "value": json.dumps(voiced_states(m["states"]), ensure_ascii=False)}] if m.get("states") else []),
            "tilesets": tilesets,
            "layers": [{"id": i + 1, "name": n, "type": "tilelayer", "width": W, "height": H, "x": 0, "y": 0,
                        "opacity": 1, "visible": True, "data": data} for i, (n, data) in enumerate(layers)] +
@@ -412,8 +445,12 @@ def compile_world(n, kit_name, preview=False):
     kit = Kit(kit_name)
     region = json.loads((src / "region.json").read_text())
     shots = []
+    maps = {p["id"]: json.loads((src / p["map"]).read_text()) for p in region["places"]}
+    SEEN.clear()   # a watcher's "seen" may name lines kept on another map of the world (the city's seen_lines)
+    for m in maps.values():
+        SEEN.update(m.get("seen_lines") or {})
     for p in region["places"]:
-        m = json.loads((src / p["map"]).read_text())
+        m = maps[p["id"]]
         tmj = compile_map(m, kit, out)
         if preview:
             img = render(tmj, kit, out)

@@ -277,4 +277,11 @@ ZH_PLACES2 = {
     "“Mistress? You've lost your way. The Grand Preceptor likes to know where you are.”": "“小姐？您走错路了。太师喜欢知道您在哪儿。”",
     "“The garden is cold this hour, mistress. Let me walk you back.”": "“这时辰园里凉，小姐。我送您回去吧。”",
     "“The road's yours. Mind the ruts after the bridge.”": "“路是你的了。过了桥小心车辙。”",
+    # the door refusal (claude/plot-places 485d1f2)
+    "The gatekeeper bars the way. “The Grand Preceptor receives no one today.”": "门吏拦住去路。“太师今日不见客。”",
+    # the Xuanping tower stair refusal (claude/plot-places 4c4ff83)
+    "The guards at the stair cross their halberds. “No one goes up to the Son of Heaven's tower.”": "楼梯口的卫士交叉画戟。“天子之楼，任何人不得上去。”",
+    # a7c and a18p objectives (claude/plot-places 6cdf152)
+    "Show yourself to Lü Bu behind the curtain, where the Grand Preceptor can't see.": "在帘后让吕布看见你，别让太师看见。",
+    "Go to the palace steps.": "到宫阶去。",
 }

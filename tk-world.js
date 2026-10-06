@@ -25,7 +25,7 @@ const WorldState = {
   load(n, region) {
     let s = {};
     try { s = JSON.parse(localStorage.getItem(this.key(n)) || "{}"); } catch { s = {}; }
-    return { visited: (s.visited || [region.start]).map(worldRenamed), party: s.party || TK.party(TK.world(n)) || region.party, place: s.place, pos: s.pos || null, light: s.light || null };   // light: a scene's last light, kept onto the next map
+    return { visited: (s.visited || [region.start]).map(worldRenamed), party: s.party || TK.party(TK.world(n)) || region.party, place: s.place, pos: s.pos || null, light: s.light || null, crowd: s.crowd || 0 };   // light: a scene's last light, kept onto the next map
   },
   save(n, st) { try { localStorage.setItem(this.key(n), JSON.stringify(st)); } catch { /* private mode */ } },
 };
@@ -35,7 +35,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=49`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=50`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
@@ -132,6 +132,40 @@ const WorldGuide = {
 };
 // Small touches that make the world feel lived in: a soft shadow under everyone,
 // and something in the air that suits the place.
+/* ---------- sound on the map: a source you walk toward (carriage bells in the fog, a children's song) ----------
+   Played with Web Audio (no files): a short pattern repeats, louder as you near its source. Only with the music on. */
+const WorldSound = {
+  ctx: null, gain: null, kind: null, next: 0, step: 0,
+  PATTERNS: {
+    bells: { notes: [1318, 1568, 1760, 1568, 1318], dur: .42, rest: 1.8, type: "sine", decay: 1.4, vol: .16 },
+    children: { notes: [523, 587, 659, 784, 659, 587, 523, 587, 659, 659, 587], dur: .34, rest: 1.4, type: "triangle", decay: .3, vol: .12 },
+    drum: { notes: [98, 98, 82], dur: .5, rest: 1.2, type: "sine", decay: .35, vol: .3 },
+  },
+  set(kind) {
+    if (kind === this.kind) return;
+    if (this.gain) { try { this.gain.disconnect(); } catch { /* gone */ } }
+    this.gain = null; this.kind = kind || null;
+    if (!kind) return;
+    try { this.ctx = this.ctx || new (window.AudioContext || window.webkitAudioContext)(); } catch { return; }
+    this.gain = this.ctx.createGain(); this.gain.gain.value = 0; this.gain.connect(this.ctx.destination);
+    this.next = this.ctx.currentTime + .2; this.step = 0;
+  },
+  level(v) { if (this.gain) this.gain.gain.setTargetAtTime(v, this.ctx.currentTime, .25); },
+  tick() {
+    if (!this.gain) return;
+    const ac = this.ctx, P = this.PATTERNS[this.kind] || this.PATTERNS.bells;
+    if (ac.state === "suspended") ac.resume().catch(() => {});
+    while (this.next < ac.currentTime + .6) {
+      const t = this.next, o = ac.createOscillator(), g = ac.createGain();
+      o.type = P.type; o.frequency.value = P.notes[this.step % P.notes.length];
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(P.vol, t + .01); g.gain.exponentialRampToValueAtTime(.001, t + P.decay);
+      o.connect(g); g.connect(this.gain); o.start(t); o.stop(t + P.decay + .05);
+      this.step++;
+      this.next = t + P.dur + (this.step % P.notes.length === 0 ? P.rest : 0);
+    }
+  },
+};
+
 const WorldFX = {
   textures(scene) {
     const add = (key, w, h, draw) => {
@@ -217,9 +251,9 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=49`);
-      this.load.json("kit", `assets/tk/kits/${kit}.json?v=34`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=48`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=55`);
+      this.load.json("kit", `assets/tk/kits/${kit}.json?v=38`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=54`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
@@ -228,7 +262,7 @@ function worldScenes() {
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
       for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=56`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=61`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -250,7 +284,7 @@ function worldScenes() {
     create() {
       const region = this.region = this.cache.json.get("region"), kit = this.kit = this.cache.json.get("kit");
       const opts = this.opts = this.game.worldOpts, w = this.w = opts.w;
-      this.grid = this.walk = this.lampFx = this.ambientFx = this.cine = this.auto = this.player = null; this.seated = false;   // the scene object outlives a change of place: no old map's walk grid or tap-walk
+      this.grid = this.walk = this.lampFx = this.ambientFx = this.cine = this.auto = this.player = this.engaged = this.carried = null; this.glows = []; this.seated = this.caught = false;   // the scene object outlives a change of place: no old map's walk grid or tap-walk
       this.story = w.scenes;
       // a save from an older map: a renamed place is found under its new name (arriving as if walking in);
       // a removed one sends him back to the start
@@ -266,7 +300,7 @@ function worldScenes() {
       this.tw = map.tileWidth || 16;
       // one map, several looks (Places' "states"): the last whose "when" holds and "until" doesn't
       try { this.states = JSON.parse((map.properties || []).find(x => x.name === "states")?.value || "null"); } catch { this.states = null; }
-      this.stated = [];
+      this.stated = []; this.refs = {}; this.lights = []; this.sightZones = []; this.sgrid = null; if (this.coneG) { this.coneG.destroy(); this.coneG = null; } if (this.fog) { this.fog.destroy(); this.fog = null; } this.procession = null;
       const sets = map.tilesets.map(ts => map.addTilesetImage(ts.name, `kit-${ts.name}`));
       this.water = null;
       const layers = [];
@@ -290,7 +324,8 @@ function worldScenes() {
         else if (o.type === "spot") this.spots[o.name] = { x: o.x, y: o.y, node: p.node, label: p.label, labelZh: p.label_zh || "", intro: J(p.intro), outro: J(p.outro), trigger: p.trigger || "near", use: p.use || "",
           // a place to deliver to (a ridge): mark, condition, what it needs, and its lines
           ...(p.needs ? { needs: J(p.needs), delivers: p.delivers || o.name, when: p.when || "", empty: J(p.empty), waiting: J(p.waiting), call: J(p.call),
-                          deliver: J(p.deliver), delivered: J(p.delivered) } : {}) };
+                          deliver: J(p.deliver), delivered: J(p.delivered) } : {}),
+          sight: p.sight ? JSON.parse(p.sight) : null };   // a sight puzzle: it plays once one watcher sees you and another doesn't
         else if (o.type === "npc") this.addNpc(o, p, J);
         else if (o.type === "exit") this.exits.push({ to: p.to, side: p.side, rect: new Phaser.Geom.Rectangle(o.x, o.y, o.width, o.height),
           openTo: p.open_to ? JSON.parse(p.open_to) : null, refuse: J(p.refuse) });
@@ -374,7 +409,7 @@ function worldScenes() {
       // the window changed shape (full window, a phone turned): the screen-sized effects follow
       const onResize = () => { WorldFX.ambient(this, this.place.archetype); this.fitCamera(); };
       this.scale.on("resize", onResize);
-      this.events.once("shutdown", () => this.scale.off("resize", onResize));
+      this.events.once("shutdown", () => { this.scale.off("resize", onResize); WorldSound.set(null); });
       window.__w = this;  // for tests and the console
       if (this.resume && opts.ret) { const r = opts.ret; opts.ret = null; this.time.delayedCall(400, () => this.returned(r)); }
       // story scenes that start by themselves: on arriving here, or on walking into their area
@@ -459,6 +494,13 @@ function worldScenes() {
       const P = this.player;
       for (const s of Object.values(this.spots)) {
         if (s.trigger === "talk") continue;
+        if (s.sight) {   // seen by one and not by the other, for a moment: wherever she stands
+          const by = id => this.npcs.find(n => n.watch && (n.watch.id === id || n.id === id));
+          const a = by(s.sight.seen_by), b = by(s.sight.unseen_by), ok = a && a.sees && !(b && b.sees);
+          s.held = ok ? (s.held || 0) + this.game.loop.delta : 0;
+          if (s.held > 700) { s.held = 0; const q = this.openQuest(s); if (q) return this.approach(q, s); }
+          continue;
+        }
         const d = Math.hypot(P.x - s.x, P.y - s.y);
         if (d > WORLD_NEAR + 16) s.armed = true;
         else if (s.armAt && Math.hypot(P.x - s.armAt.x, P.y - s.armAt.y) > 28) { s.armed = true; s.armAt = null; }
@@ -489,6 +531,7 @@ function worldScenes() {
           if (WORLD_CLUTTER.test(p.kind)) img.setDepth(img.depth - 400);   // a rug still lies underfoot
         }
         if (this.iso && (this.kit.isoFlip || []).includes(o.name)) img.setFlipX(true);   // its entrance on the door's face
+        if (p.flip) img.setFlipX(!img.flipX);   // a side view facing W (the map compiler mirrors an E-facing sprite)
         if (p.kind === "landmark.shrine") {   // the Star Lords' shrine: its look follows the story (setShrine)
           this.shrine = { img, x: o.x, y: o.y, state: "dark", fx: [] };
           this.setShrine(TK.shrineState?.(this.w.n, this.placeId) || "dark");
@@ -502,7 +545,10 @@ function worldScenes() {
       const l = p.cl || p.fw / 2, r = p.cr || p.fw / 2;
       const zone = p.solid ? this.add.zone(o.x + (r - l) / 2, o.y - p.fh / 2, l + r - 2, p.fh - 2) : null;
       if (zone) this.solids.add(zone);
-      if (p.in) this.stated.push({ img, zone, in: JSON.parse(p.in) });   // shown only in some of the map's states
+      if (zone && p.kind !== "wall.lattice") (this.sightZones = this.sightZones || []).push(zone);   // what blocks a watcher's sight (a lattice doesn't)
+      if (p.in) this.stated.push({ img, zone, in: JSON.parse(p.in) });
+      if (p.ref) (this.refs = this.refs || {})[p.ref] = { x: o.x, y: o.y - (p.fh || 0) / 2 };
+      if (/^(lamp\.|prop\.lantern|camp\.(firepit|cookfire)|furn\.(lamp|hearth))/.test(p.kind || "")) (this.lights = this.lights || []).push({ x: o.x, y: o.y - (p.fh || 16) / 2, kind: p.kind, img });   // shown only in some of the map's states
     }
 
     // The shrine's three looks (the rock under the pine): "dark" (an empty board), "lit" (a game in
@@ -559,6 +605,15 @@ function worldScenes() {
         n.guard = p.guard_x != null ? { x: p.guard_x, y: p.guard_y } : null;
         n.mark = this.add.image(o.x, o.y - spr.height - 2, "@bang").setOrigin(.5, 1).setDepth(9999).setVisible(!TK.cleared(n.challenge) && (!n.when || this.cond(n.when)));
       }
+      if (p.watch) {   // a stealth watcher: a cone, a beat to walk or ways to turn, what he says and where he sends you
+        try { n.watch = JSON.parse(p.watch); } catch { n.watch = null; }
+        if (n.watch) {
+          const T = this.tw || 16, D = { N: "up", S: "down", W: "left", E: "right" }, dir = d => D[d] || d;
+          Object.assign(n.watch, { pts: (n.watch.beat || []).map(([x, y]) => ({ x: (x + .5) * T, y: (y + .9) * T })), leg: 0, wait: 0, turn: 0, t: 0,
+            dir: dir(n.watch.face || face), turns: (n.watch.turns || []).map(dir) });
+          n.wander = false;
+        }
+      }
       this.physics.add.collider(spr, this.solids);
       if (this.water) this.physics.add.collider(spr, this.water);
       this.npcs.push(n);
@@ -599,27 +654,56 @@ function worldScenes() {
         this.hero(who);
         return { who, spr: this.add.sprite(this.player.x, this.player.y, `h-${who}-down-0`).setOrigin(.5, 1) };
       });
+      // a crowd that has fallen in behind (["crowd", n]: Jia Xu's Liangzhou men, more with each village)
+      const folk = ["f_farmer", "f_youth", "f_soldier", "f_farmer2", "f_elder", "f_hunter", "f_porter"];
+      for (let k = 0; k < (this.st.crowd || 0); k++) {
+        const who = folk[k % folk.length];
+        this.hero(who);
+        this.followers.push({ who, crowd: true, spr: this.add.sprite(this.player.x, this.player.y, `h-${who}-down-0`).setOrigin(.5, 1) });
+      }
       if (this.npcs) this.refreshStory();
-      this.trail = Array(60).fill({ x: this.player.x, y: this.player.y, f: this.player.facing });
+      this.trailLen = Math.max(60, (this.followers.length + 1) * 14 + 1);
+      this.trail = Array(this.trailLen).fill({ x: this.player.x, y: this.player.y, f: this.player.facing });
     }
 
     /* ---------- quests: progress is the campaign save ---------- */
     save() { WorldState.save(this.w.n, this.st); }
     // The light a scene left the world in (tk-cutscene.js): kept on the map, and on the next map, until
     // a scene sets another. Day is none.
+    // Every state that holds now, merged in order (a later one's light, fog or sound wins); ids: all of them.
     mapState() {
       if (!this.states) return null;
-      let cur = null;
-      for (const st of this.states) if (this.cond(st.when) && !(st.until && this.cond(st.until))) cur = st;
-      return cur;
+      const on = this.states.filter(st => this.cond(st.when) && !(st.until && this.cond(st.until)));
+      return on.length ? Object.assign({}, ...on, { ids: on.map(st => st.id) }) : null;
     }
     setWorldLight(tint) { this.st.light = tint || null; this.save(); this.applyWorldLight(); }
     applyWorldLight() {
       if (this.worldShade) { this.worldShade.destroy(); this.worldShade = null; }
-      const c = { night: 0x46559c, dusk: 0xf0c0a0, dawn: 0xd8c8e8, storm: 0x80868e, smoke: 0xb39c8a }[this.st.light];
+      for (const g of this.glows || []) g.destroy();
+      this.glows = [];
+      const c = { night: 0x46559c, dusk: 0xf0c0a0, dawn: 0xd8c8e8, storm: 0x80868e, smoke: 0xb39c8a, dust: 0xe9d6ac }[this.st.light];
       if (!c) return;
       const W = this.scale.width, H = this.scale.height;
       this.worldShade = this.add.rectangle(W / 2, H / 2, W * 3, H * 3, c).setScrollFactor(0).setDepth(9e4).setBlendMode(Phaser.BlendModes.MULTIPLY);
+      // at night the lamps, lanterns and fires light the ground round them (and you carry a little light yourself)
+      if (this.st.light === "night" || this.st.light === "dusk") {
+        if (!this.textures.exists("@glow")) {
+          const S = 128, cv = document.createElement("canvas"); cv.width = cv.height = S;
+          const g = cv.getContext("2d"), r = g.createRadialGradient(S / 2, S / 2, 0, S / 2, S / 2, S / 2);
+          r.addColorStop(0, "rgba(255,214,140,0.9)"); r.addColorStop(.45, "rgba(255,190,110,0.35)"); r.addColorStop(1, "rgba(255,170,90,0)");
+          g.fillStyle = r; g.fillRect(0, 0, S, S);
+          this.textures.addCanvas("@glow", cv);
+        }
+        const night = this.st.light === "night";
+        for (const L of this.lights || []) {
+          if (L.img && !L.img.visible) continue;
+          const big = /firepit|cookfire|hearth/.test(L.kind) ? 1.1 : /lantern/.test(L.kind) ? .9 : .75;
+          const g = this.add.image(L.x, L.y, "@glow").setBlendMode(Phaser.BlendModes.ADD).setDepth(9e4 + 1).setScale(big).setAlpha(night ? .75 : .4);
+          this.tweens.add({ targets: g, alpha: g.alpha * .8, duration: 700 + Math.random() * 500, yoyo: true, repeat: -1, ease: "Sine.easeInOut" });
+          this.glows.push(g);
+        }
+        if (night && this.player) { this.carried = this.add.image(this.player.x, this.player.y - 8, "@glow").setBlendMode(Phaser.BlendModes.ADD).setDepth(9e4 + 1).setScale(.55).setAlpha(.35); this.glows.push(this.carried); }
+      }
     }
     // A beat counts as done once anything after it is: saves from before a beat was
     // added (the mulberry tree, the indoor scenes) aren't sent back to it.
@@ -652,17 +736,17 @@ function worldScenes() {
     refreshStory() {
       const st = this.mapState();
       for (const n of this.npcs) if (n.when || n.in) {
-        const on = this.cond(n.when) && (!n.in || !!(st && n.in.includes(st.id)));
+        const on = this.cond(n.when) && (!n.in || !!(st && n.in.some(i => st.ids.includes(i))));
         n.spr.setVisible(on); n.spr.body.enable = on;
         if (n.mark) n.mark.setVisible(on && !TK.cleared(n.challenge));   // a challenger not here yet has no "!" either
       }
       for (const o of this.stated || []) {
-        const on = !!(st && o.in.includes(st.id));
+        const on = !!(st && o.in.some(i => st.ids.includes(i)));
         if (o.img) o.img.setVisible(on);
         if (o.zone && o.zone.body) o.zone.body.enable = on;
       }
       if (st && "light" in st) {   // the state's light (day clears a scene's night)
-        const L = { day: null, morning: "dawn", dawn: "dawn", dusk: "dusk", night: "night", storm: "storm", smoke: "smoke" }[st.light];
+        const L = { day: st.weather === "dust" ? "dust" : null, morning: "dawn", dawn: "dawn", dusk: "dusk", night: "night", lantern: "night", storm: "storm", smoke: "smoke" }[st.light];
         if ((this.st.light || null) !== (L || null)) { this.st.light = L || null; if (this.player) this.applyWorldLight(); }   // (on arrival the scene applies it once built)
       }
       // one of each person at a time: a brother standing here in his own right (Guan Yu on his
@@ -1031,7 +1115,9 @@ function worldScenes() {
 
     // What a won story beat leaves behind: who joined, what was given, the next goal.
     async finishQuest(q, steps) {
-      for (const s of steps) if (s[0] === "party") { this.st.party = s[1]; TK.setParty(this.w, s[1]); this.setParty(s[1]); }
+      for (const s of steps) if (s[0] === "crowd") this.st.crowd = Math.max(0, typeof s[1] === "string" ? (this.st.crowd || 0) + +s[1] : +s[1] || 0);
+      for (const s of steps) if (s[0] === "party") { this.st.party = s[1]; TK.setParty(this.w, s[1]); }
+      if (steps.some(s => s[0] === "party" || s[0] === "crowd")) this.setParty(this.st.party);
       if (typeof WorldItems !== "undefined") WorldItems.gainFrom(this, steps);   // what the scene gave
       if (q.scene) TK.markSeen(`${this.w.n}:${q.scene}`);
       // a gated battle won: the supplies it needed have done their job
@@ -1483,7 +1569,215 @@ function worldScenes() {
       this.engaged = null;
     }
 
+    // A procession (a map state's "procession"): its column walks the road from "from" to "to" at a walk;
+    // the player is free inside it on a soft leash to the carriage; it halts at each stop whose beat is
+    // still to play, and goes on once it has. On coming back it starts from the last stop passed.
+    procession_() {
+      const st = this.mapState(), pr = st && st.procession;
+      if (!pr) { if (this.procession) { this.procession.members.forEach(m => m.spr.destroy()); this.procession = null; } return; }
+      if (this.procession && this.procession.pr === pr) return;
+      const T = this.tw || 16, at = c => ({ x: (c[0] + .5) * T, y: (c[1] + .9) * T });
+      const a = at(pr.from || [0, 0]), b = at(pr.to || [0, 0]);
+      const path = [a, ...(this.findPath(a.x, a.y, b.x, b.y) || [b])];
+      const cum = [0];
+      for (let i = 1; i < path.length; i++) cum.push(cum[i - 1] + Math.hypot(path[i].x - path[i - 1].x, path[i].y - path[i - 1].y));
+      const pos = d => {
+        d = Math.max(0, Math.min(cum[cum.length - 1], d));
+        let i = 1; while (i < cum.length - 1 && cum[i] < d) i++;
+        const t = (d - cum[i - 1]) / ((cum[i] - cum[i - 1]) || 1), p0 = path[i - 1], p1 = path[i];
+        return { x: p0.x + (p1.x - p0.x) * t, y: p0.y + (p1.y - p0.y) * t, dir: Math.abs(p1.x - p0.x) > Math.abs(p1.y - p0.y) ? (p1.x > p0.x ? "right" : "left") : (p1.y > p0.y ? "down" : "up") };
+      };
+      const near = (pt, d0) => { let best = 0, bd = 1e9; for (let d = 0; d <= cum[cum.length - 1]; d += 4) { const q = pos(d), e = Math.hypot(q.x - pt.x, q.y - pt.y); if (e < bd) { bd = e; best = d; } } return best; };
+      const stops = (pr.stops || []).map(id => this.spots[id]).filter(Boolean).map(sp => ({ sp, d: near(sp) }));
+      // the column, head first; the player keeps his own feet
+      const members = [];
+      let gap = 0, carriage = null;
+      for (const c of pr.column || []) {
+        const [what] = String(c).split(":");
+        if (what === "player") { gap += 1.5 * T; continue; }
+        const n = what === "outriders" || what === "rearguard" ? 2 : 1;
+        for (let k = 0; k < n; k++) {
+          let spr;
+          if (what.startsWith("carriage") && this.textures.get("tk-props").has("carriage")) spr = this.add.image(0, 0, "tk-props", "carriage").setOrigin(.5, 1);
+          else { this.hero("f_soldier"); spr = this.add.sprite(0, 0, "h-f_soldier-down-0").setOrigin(.5, 1); spr.walker = "f_soldier"; }
+          const m = { spr, back: gap + (k ? T * .2 : 0), side: n > 1 ? (k ? 7 : -7) : 0 };
+          members.push(m);
+          if (what === "carriage" && !carriage) carriage = m;
+          gap += (what.startsWith("carriage") ? 2.2 : n > 1 && k === 0 ? 0 : 1.4) * T;
+        }
+      }
+      // starts from the last stop already played
+      const passed = stops.filter(x => x.sp.node && this.done(x.sp.node)), cb = carriage ? carriage.back : 0;
+      const d0 = passed.length ? passed[passed.length - 1].d + T : 0;
+      this.procession = { id: st.id, pr, pos, len: cum[cum.length - 1], head: d0 + cb, stops, members, total: gap, cb,
+        get carriage() { return carriage && carriage.spr; }, pulled: 0 };
+    }
+    processionStep(dt) {
+      const R = this.procession;
+      if (!R) return;
+      const T = this.tw || 16, P = this.player;
+      const stop = R.stops.find(x => x.sp.node && !this.done(x.sp.node) && R.head - R.cb >= x.d - T);   // the carriage has reached it
+      const moving = !stop && !this.ui.busy() && !this.cine && R.head < R.len + R.total;
+      if (moving) R.head += 26 * dt / 1000;
+      for (const m of R.members) {
+        const q = R.pos(R.head - m.back);
+        const dx = q.dir === "up" || q.dir === "down" ? m.side : 0, dy = q.dir === "left" || q.dir === "right" ? m.side * .5 : 0;
+        m.spr.setPosition(q.x + dx, q.y + dy).setDepth(q.y + dy);
+        if (m.spr.walker) { if (moving) m.spr.anims.play(`h-${m.spr.walker}-${q.dir}`, true); else { m.spr.anims.stop(); m.spr.setTexture(`h-${m.spr.walker}-${q.dir}-0`); } }
+        else m.spr.setFlipX(q.dir === "left");
+      }
+      // the soft leash: wander too far from the carriage and you're brought back beside it
+      const c = R.carriage, L = (R.pr.leash || 6) * T;
+      R.pulled = Math.max(0, R.pulled - dt);
+      if (c && !this.ui.busy() && !this.cine && Math.hypot(P.x - c.x, P.y - c.y) > L && !R.pulled) {
+        R.pulled = 4000;
+        const d = Math.hypot(P.x - c.x, P.y - c.y), k = (L - T) / d;
+        P.setPosition(c.x + (P.x - c.x) * k, c.y + (P.y - c.y) * k);
+        this.walk = null;
+        const line = R.pr.leash_line;
+        this.talk(line ? [line] : [["n", "Keep with the procession.", "跟紧车队。"]]);
+      }
+    }
+
+    // ---------- stealth: watchers with sight cones ----------
+    sightGrid() {
+      if (this.sgrid) return this.sgrid;
+      const C = 8, b = this.physics.world.bounds, cols = Math.ceil(b.width / C), rows = Math.ceil(b.height / C), block = new Uint8Array(cols * rows);
+      for (const z of this.sightZones || []) {
+        const bd = z.body || z.getBounds(), x0 = Math.floor(bd.x / C), x1 = Math.floor((bd.right || bd.x + bd.width) / C), y0 = Math.floor(bd.y / C), y1 = Math.floor((bd.bottom || bd.y + bd.height) / C);
+        for (let y = Math.max(0, y0); y <= Math.min(rows - 1, y1); y++) for (let x = Math.max(0, x0); x <= Math.min(cols - 1, x1); x++) block[y * cols + x] = 1;
+      }
+      return (this.sgrid = { C, cols, rows, block });
+    }
+    // how far a watcher sees along a ray before something solid stops it
+    ray(x, y, ang, len) {
+      const G = this.sightGrid(), dx = Math.cos(ang), dy = Math.sin(ang);
+      for (let d = 6; d < len; d += 4) {
+        const cx = Math.floor((x + dx * d) / G.C), cy = Math.floor((y + dy * d) / G.C);
+        if (cx < 0 || cy < 0 || cx >= G.cols || cy >= G.rows || G.block[cy * G.cols + cx]) return d;
+      }
+      return len;
+    }
+    watching(n) {
+      const w = n.watch;
+      if (!w || !n.spr.visible) return false;
+      return !w.in_beats || w.in_beats.some(k => { const q = this.region.quests.find(x => x.node === k); return q && this.available(q); });
+    }
+    sees(n, P) {
+      const w = n.watch, T = this.tw || 16, R = (w.cone || 4) * T, ex = n.spr.x, ey = n.spr.y - 6;
+      const dx = P.x - ex, dy = P.y - 6 - ey, d = Math.hypot(dx, dy);
+      if (d > R) return false;
+      const [fx, fy] = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }[w.dir] || [0, 1];
+      if ((dx * fx + dy * fy) / (d || 1) < Math.cos(Math.PI * 55 / 180)) return false;
+      return this.ray(ex, ey, Math.atan2(dy, dx), d) >= d - 2;
+    }
+    watchStep(dt) {
+      const P = this.player, T = this.tw || 16, calm = this.ui.busy() || this.cine || this.leaving || this.engaged;
+      if (!this.coneG) this.coneG = this.add.graphics().setDepth(-990);
+      this.coneG.clear();
+      for (const n of this.npcs) {
+        const w = n.watch;
+        if (!w) continue;
+        n.sees = false;
+        if (!this.watching(n)) continue;
+        // his beat: walk it, stopping where it says to; or turn between the ways he faces
+        if (!calm && w.pts.length) {
+          if (w.wait > 0) w.wait -= dt;
+          else {
+            const tg = w.pts[w.leg], dx = tg.x - n.spr.x, dy = tg.y - n.spr.y, d = Math.hypot(dx, dy), v = 30 * dt / 1000;
+            if (d <= v) {
+              n.spr.setPosition(tg.x, tg.y);
+              const c = (w.beat || [])[w.leg], pz = w.pause;
+              if (pz && c && c[0] === pz[0] && c[1] === pz[1]) w.wait = (pz[2] || 2) * 1000;
+              w.leg = (w.leg + 1) % w.pts.length;
+            } else {
+              n.spr.setPosition(n.spr.x + dx / d * v, n.spr.y + dy / d * v);
+              w.dir = Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? "left" : "right") : (dy < 0 ? "up" : "down");
+            }
+            n.dir = w.dir;
+            n.spr.anims.play(n.who ? `h-${n.who}-${w.dir}` : `fk-${n.sprite}-${w.dir}`, true);
+          }
+          if (w.wait > 0) { n.dir = w.dir; this.faceNpc(n); }
+          n.spr.setDepth(n.spr.y);
+        } else if (!calm && w.turns.length) {
+          w.t += dt;
+          if (w.t > 2600) { w.t = 0; w.turn = (w.turn + 1) % w.turns.length; w.dir = n.dir = w.turns[w.turn]; this.faceNpc(n); }
+        }
+        // his cone, drawn on the ground and stopped by walls, trees and screens
+        const ex = n.spr.x, ey = n.spr.y - 6, R = (w.cone || 4) * T, a0 = { up: -Math.PI / 2, down: Math.PI / 2, left: Math.PI, right: 0 }[w.dir] || 0;
+        n.sees = this.sees(n, P);
+        const pts = [{ x: ex, y: ey }];
+        for (let k = 0; k <= 14; k++) { const a = a0 - Math.PI * 55 / 180 + k * (Math.PI * 110 / 180) / 14, r = this.ray(ex, ey, a, R); pts.push({ x: ex + Math.cos(a) * r, y: ey + Math.sin(a) * r }); }
+        this.coneG.fillStyle(n.sees ? 0xff5a4a : 0xffe08a, n.sees ? .3 : .18).fillPoints(pts, true);
+        if (n.sees && !calm && !this.caught && (w.seen || w.back_to)) this.caughtBy(n);
+      }
+    }
+    // Seen: he says so, and you're walked back to where he sends you (no game over)
+    async caughtBy(n) {
+      this.caught = true;
+      const w = n.watch, P = this.player;
+      this.walk = null; this.auto = null; P.setVelocity(0); P.anims.stop();
+      if (n.mark) n.mark.setVisible(true);
+      await new Promise(r => this.talk(w.seen && w.seen.length ? w.seen : [["n", "You've been seen.", "被人发现了。"]], r));
+      const id = w.back_to;
+      const here = id && (this.spots[id] || this.refs[id] || (this.entries[id] && this.entries[id]));
+      const away = !here && id && this.region.places.find(p => p.id === id || p.id.endsWith("--" + id));
+      this.cameras.main.fadeOut(300);
+      await new Promise(r => this.cameras.main.once("camerafadeoutcomplete", r));
+      if (away && away.id !== this.placeId) { this.st.pos = null; this.save(); this.scene.restart({ place: away.id, from: null }); return; }
+      const to = here || this.entries[""];
+      P.setPosition(to.x, to.y + (this.spots[id] ? 18 : 0));
+      this.trail = Array(this.trailLen || 60).fill({ x: P.x, y: P.y, f: P.facing });
+      if (n.mark && !n.challenge) n.mark.setVisible(false);
+      this.cameras.main.fadeIn(300);
+      this.time.delayedCall(800, () => { this.caught = false; });
+    }
+
+    // Where a sound comes from: the procession's carriage, a spot, a landmark or a person by id; else the next beat.
+    soundAt(id) {
+      if (id === "carriage" && this.procession && this.procession.carriage) return this.procession.carriage;
+      const sp = this.spots[id] || this.refs[id] || (this.npcs.find(n => n.id === id) || {}).spr;
+      if (sp) return sp;
+      const q = this.nextMain(), s2 = q && Object.values(this.spots).find(s => s.node === q.node);
+      return s2 || null;
+    }
+    // The map state's fog (seeing only "visibility" tiles round you) and sound (louder as you near it).
+    atmosphere() {
+      const st = this.mapState(), P = this.player, T = this.tw || 16;
+      const vis = st && st.visibility;
+      if (vis && !this.fog) {
+        if (!this.textures.exists("@fog")) {
+          const S = 1024, c = document.createElement("canvas"); c.width = c.height = S;
+          const g = c.getContext("2d");
+          g.fillStyle = "rgba(205,211,216,0.97)"; g.fillRect(0, 0, S, S);
+          g.globalCompositeOperation = "destination-out";
+          const r = g.createRadialGradient(S / 2, S / 2, 36, S / 2, S / 2, 72);
+          r.addColorStop(0, "rgba(0,0,0,1)"); r.addColorStop(1, "rgba(0,0,0,0)");
+          g.fillStyle = r; g.fillRect(0, 0, S, S);
+          this.textures.addCanvas("@fog", c);
+        }
+        this.fog = this.add.image(P.x, P.y, "@fog").setDepth(9e4 - 1);
+      }
+      if (this.fog) {
+        if (!vis) { this.fog.destroy(); this.fog = null; }
+        else this.fog.setScale(vis * T / 54).setPosition(P.x, P.y - 8);
+      }
+      const snd = st && st.sound && Object.entries(st.sound)[0];
+      const on = snd && typeof TKMusic !== "undefined" && TKMusic.on && TKMusic.unlocked;
+      WorldSound.set(on ? snd[0] : null);
+      if (on) {
+        const at = this.soundAt(snd[1]), d = at ? Math.hypot(at.x - P.x, at.y - P.y) : 1e9;
+        WorldSound.level(Math.max(.04, 1 - d / (20 * T)) * (this.ui.busy() ? .4 : 1));
+        WorldSound.tick();
+      }
+    }
+
     update(time, dt) {
+      if (this.carried && this.carried.active) this.carried.setPosition(this.player.x, this.player.y - 8);
+      this.watchStep(dt);
+      this.procession_();
+      this.processionStep(dt);
+      this.atmosphere();
       this.watchChallengers();
       this.keepPlayerInView();
       this.callOut();
@@ -1535,9 +1829,12 @@ function worldScenes() {
         }
       }
 
-      if (vx || vy) { this.trail.unshift({ x: P.x, y: P.y, f: P.facing }); this.trail.length = 60; }
+      if (vx || vy) { this.trail.unshift({ x: P.x, y: P.y, f: P.facing }); this.trail.length = this.trailLen || 60; }
       this.followers.forEach((F, i) => {
-        let p = this.trail[Math.min(this.trail.length - 1, (i + 1) * 14)] || { x: P.x, y: P.y, f: P.facing };
+        // the party in single file; a crowd behind them closer together, two abreast
+        const nParty = this.followers.filter(f => !f.crowd).length, k = i - nParty;
+        let p = this.trail[Math.min(this.trail.length - 1, F.crowd ? (nParty + 1) * 14 + (k >> 1) * 9 : (i + 1) * 14)] || { x: P.x, y: P.y, f: P.facing };
+        if (F.crowd) p = { ...p, x: p.x + (p.f === "up" || p.f === "down" ? (k % 2 ? 6 : -6) : 0), y: p.y + (p.f === "left" || p.f === "right" ? (k % 2 ? 4 : -4) : 0) };
         // no trail yet (just arrived, or a scene put him here): beside him, not on top of him
         if (Math.hypot(p.x - P.x, p.y - P.y) < 6) p = { x: P.x + (i % 2 ? 11 : -11) * (1 + (i >> 1)), y: P.y - 2, f: p.f };
         const moving = Math.hypot(F.spr.x - p.x, F.spr.y - p.y) > .5;

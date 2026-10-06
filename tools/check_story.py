@@ -46,7 +46,7 @@ TOOLS = ROOT / "tools"
 STEPS = {
     "n", "say", "spawn", "army", "move", "run", "pose", "fx", "remove", "party", "gain", "wait", "scroll",
     "problem", "prop", "board", "unboard", "emote", "give", "surround", "close", "camera", "mood", "light",
-    "music", "boss", "victory", "vanish", "still",
+    "music", "boss", "victory", "vanish", "still", "crowd",
 }
 # steps whose 4th/5th fields name a node: [op, id, who?, at, dx, dy]
 AT_POS = {"spawn": 3, "army": 4, "move": 2, "run": 2, "fx": 2, "prop": 3, "surround": None, "close": None}

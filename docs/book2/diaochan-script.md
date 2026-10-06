@@ -49,7 +49,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 
 ## A2 · The Peony Pavilion (牡丹亭)
-*Chang'an / wy-garden* · board decider: **Wang Yun** — “Stake the whole house on a sixteen-year-old girl?”
+*Chang'an* · board decider: **Wang Yun** — “Stake the whole house on a sixteen-year-old girl?”
 
 *Late at night, under a bright moon, Wang Yun walks into the rear garden leaning on his staff. He stands by the rose trellis, looks up at the sky, and weeps.*  
 至夜深月明，王允策杖步入后园，立于荼蘼架侧，仰天垂泪。
@@ -119,6 +119,12 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 *Wang Yun bows to her and thanks her.*  
 王允拜谢。
+
+*The first link of the chain is Lü Bu himself. He cannot simply be invited: a minister who sends for the Grand Preceptor's general will be watched, after Zhang Wen. But a gift he must come to give thanks for will bring him to the house of his own accord.*  
+连环第一环，便是吕布。不可径直相请：张温之事在前，司徒召见太师之将，必遭疑忌。唯有送一件他必亲来致谢的厚礼，方能教他自己登门。
+
+**Wang Yun:** The family pearls. Set in gold, as a crown for a hero. He'll come to thank me himself, and then he will see her.  
+家藏明珠，嵌成金冠，赠与英雄。他必亲来致谢，那时便教他见着她。
 
 
 ## A3 · The Gold Crown (金冠)
@@ -356,6 +362,10 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 *Lü Bu watches a long while, and goes. A little later he comes back in.*  
 吕布窥视良久，乃出；少顷，又入。
 
+
+## A7C · Half a Face (微露半面)
+*Chang'an / xf-hall* · no board
+
 **Dong Zhuo:** All quiet outside?  
 外面无事乎？
 
@@ -420,7 +430,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 
 ## A9 · The Phoenix Pavilion (凤仪亭)
-*Chang'an / xf-garden* · board decider: **Diaochan** — “Turn Lü Bu against his father.”
+*Chang'an* · board decider: **Diaochan** — “Turn Lü Bu against his father.”
 
 *When Dong Zhuo is well, he goes to court, with Lü Bu behind him holding his halberd. Seeing Dong Zhuo deep in talk with the Emperor, Lü Bu slips out of the inner gate, mounts, and rides straight to the Chancellor's residence. He ties his horse at the gate and goes into the rear hall to find Diaochan.*  
 卓疾既愈，入朝议事。布执戟相随，见卓与献帝共谈，便乘间提戟出内门，上马径投相府来；系马府前，提戟入后堂，寻见貂蝉。
@@ -782,7 +792,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 
 ## A12C · The Secret Edict (天子密诏)
-*Chang'an* · board decider: **Wang Yun** — “Reach the Emperor unseen.”
+*Chang'an / side-hall* · board decider: **Wang Yun** — “Reach the Emperor unseen.”
 
 **▶ GO PROBLEM**
 
@@ -961,7 +971,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 
 ## A13D · The Taoist's Cloth (道人布竿)
-*Meiwu Road* · no board
+*Chang'an* · no board
 
 *Early the next morning, Dong Zhuo sets out for court in full procession. Suddenly he sees a Taoist in a blue robe and white headcloth, holding a long pole. Tied to it is a strip of cloth ten feet long, with the character for 'mouth' written at each end.*  
 次日侵晨，董卓摆列仪从入朝，忽见一道人，青袍白巾，手执长竿，上缚布一丈，两头各书一“口”字。
@@ -1052,7 +1062,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 
 ## A15M · Meiwu (郿坞)
-*Meiwu / treasury* · no board
+*Meiwu / diaochan* · no board
 
 [still: `dc_meiwu`]
 
@@ -1188,7 +1198,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 *(the player is now: Wang Yun)*
 
 
-## A18 · Wang Yun Is Here (王允在此)
+## A18P · To Save Myself by Running (临难苟免)
 *Chang'an* · no board
 
 *A few days later, Li Meng and Wang Fang, Dong Zhuo's men still inside the city, secretly open the gates, and the rebel armies pour in from all four sides.*  
@@ -1202,6 +1212,10 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 *Lü Bu begs him again and again, but Wang Yun will not go. Soon flames rise from every gate to the sky. Lü Bu has to leave his own family behind, and flees through the pass with a hundred riders, to join Yuan Shu.*  
 吕布再三相劝，王允只是不肯去。不一时，各门火焰竟天，吕布只得弃却家小，引百余骑飞奔出关，投袁术去了。
+
+
+## A18 · Wang Yun Is Here (王允在此)
+*Chang'an / xuanping-top* · no board
 
 *Li Jue and Guo Si let their men loot the city. Minister after minister dies for the dynasty. The rebels close round the inner palace, and the Emperor's attendants beg him to go up on the Xuanping Gate tower to stop the slaughter.*  
 李傕、郭汜纵兵大掠，众臣多死于国难。贼兵围绕内庭至急，侍臣请天子上宣平门止乱。

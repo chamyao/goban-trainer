@@ -294,7 +294,7 @@ class Layout:
         in_room = {n["key"] for n in self.place["nodes"] if n.get("room")}
         for lm in b.get("landmarks", []):
             lines = {k: lm[k] for k in ("intro", "outro", "trigger",   # and a place to deliver to (a ridge):
-                                        "needs", "delivers", "when", "empty", "waiting", "deliver", "delivered", "call") if lm.get(k)}
+                                        "needs", "delivers", "when", "empty", "waiting", "deliver", "delivered", "call", "sight") if lm.get(k)}
             node = lm.get("node") if lm.get("node") not in in_room else None
             o = self.place_landmark(lm["kind"], lm.get("id"), lm.get("label"), node, near=lm.get("near"), lines=lines,
                                     use=lm.get("use"), side=lm.get("side"), clear=lm.get("clear"))
@@ -438,9 +438,11 @@ class Layout:
                     if p["kind"].startswith("folk.") and not p.get("near") and not p.get("challenge"):
                         npc["wander"] = True
                     for k in ("challenge", "intro", "win", "done", "until", "face",   # challengers and story people
-                              "when", "gives", "gives_when", "give", "given", "call", "view", "blocks", "in"):     # present once…; gives an item once…; calls out when you come near able to act
+                              "when", "gives", "gives_when", "give", "given", "call", "view", "blocks", "in", "watch"):     # present once…; gives an item once…; calls out when you come near able to act
                         if p.get(k):
                             npc[k] = p[k]
+                    if isinstance((npc.get("watch") or {}).get("seen"), str):   # a key into the brief's seen_lines
+                        npc["watch"] = {**npc["watch"], "seen": self.place["brief"].get("seen_lines", {}).get(npc["watch"]["seen"], [])}
                     self.npcs.append(npc)
                     self.used.add((x, y))
                     break

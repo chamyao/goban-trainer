@@ -2,132 +2,158 @@
  "format": "tk-map/1",
  "id": "changan--lubu",
  "world": 12,
- "parent": "changan",
  "name": "Lü Bu's quarters",
- "archetype": "interior",
- "building": "lubu",
- "style": "building.house",
+ "archetype": "compound",
  "size": [
-  20,
-  12
+  16,
+  24
  ],
- "seed": 0.7298420397411437,
+ "seed": 1306,
+ "plan": true,
  "terrain": {
   "legend": {
-   "#": "wood",
-   "%": "stone",
-   "&": "mat",
-   "e": "earth",
-   "W": "wall",
-   " ": "void"
+   "a": "court",
+   ".": "grass",
+   "W": "wall"
   },
   "rows": [
-   "                    ",
-   "     WWWWWWWWWW     ",
-   "     W########W     ",
-   "     W########W     ",
-   "     W########W     ",
-   "     W########W     ",
-   "     W########W     ",
-   "     W########W     ",
-   "     WWWWW#WWWW     ",
-   "                    ",
-   "                    ",
-   "                    "
-  ]
+   "................",
+   ".WWWWWWWWWWWWWW.",
+   ".W............W.",
+   ".W............W.",
+   ".W............W.",
+   ".W............W.",
+   ".W............W.",
+   ".W............W.",
+   ".W............W.",
+   ".W............W.",
+   ".W............W.",
+   ".W............W.",
+   ".WaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaW.",
+   ".WWWWWaaWWWWWWW.",
+   "................"
+  ],
+  "walk": {
+   "court": true,
+   "grass": true,
+   "wall": false
+  }
  },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    8,
+    12
+   ],
+   "width": 1,
+   "gates": {
+    "gate": [
+     3,
+     11
+    ]
+   },
+   "tiles": 68
+  }
+ ],
  "objects": [
   {
-   "kind": "furn.bed",
-   "x": 7,
-   "y": 2,
-   "w": 2,
-   "h": 1
-  },
-  {
-   "kind": "furn.drawers",
-   "x": 11,
-   "y": 2,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "furn.shelf",
-   "x": 9,
-   "y": 2,
-   "w": 2,
-   "h": 1
-  },
-  {
-   "kind": "furn.table",
-   "x": 11,
-   "y": 5,
-   "w": 2,
-   "h": 1
-  },
-  {
-   "kind": "furn.stool",
-   "x": 10,
-   "y": 5,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "furn.stool",
-   "x": 13,
-   "y": 5,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "furn.jar",
+   "kind": "building.gatehouse",
    "x": 6,
-   "y": 2,
-   "w": 1,
-   "h": 1
+   "y": 22,
+   "w": 2,
+   "h": 1,
+   "id": "gate",
+   "width": 2,
+   "wall": "walls",
+   "door": "S"
   },
   {
-   "kind": "furn.plant",
-   "x": 13,
-   "y": 2,
-   "w": 1,
-   "h": 1
+   "kind": "building.hall_grand",
+   "x": 2,
+   "y": 3,
+   "w": 10,
+   "h": 5,
+   "id": "lubu-house",
+   "door": "S",
+   "faces": "S",
+   "label": "Lü Bu's hall",
+   "map": "lubu-hall",
+   "blocks_sight": true
   },
   {
-   "kind": "furn.barrel",
-   "x": 13,
-   "y": 7,
-   "w": 1,
-   "h": 1
+   "kind": "building.wing",
+   "x": 8,
+   "y": 12,
+   "w": 6,
+   "h": 4,
+   "id": "stable",
+   "door": "W",
+   "faces": "W",
+   "label": "The stable",
+   "note": "Red Hare is here",
+   "blocks_sight": true
   },
   {
-   "kind": "furn.sacks",
-   "x": 6,
-   "y": 6,
-   "w": 1,
-   "h": 1
+   "kind": "furn.rack",
+   "x": 2,
+   "y": 14,
+   "w": 2,
+   "h": 1,
+   "id": "rack"
   }
  ],
  "spots": [],
  "npcs": [],
  "exits": [
   {
+   "to": "changan--lubu-hall",
+   "side": "S",
+   "x": 6.6,
+   "y": 7.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
    "to": "changan",
    "side": "S",
-   "x": 10,
-   "y": 8,
-   "w": 1,
+   "x": 6,
+   "y": 22,
+   "w": 2,
    "h": 1
   }
  ],
  "entries": {
+  "changan--lubu-hall": [
+   7,
+   8
+  ],
   "changan": [
-   10,
-   7
+   7,
+   22
   ],
   "": [
-   10,
-   7
+   7,
+   8
   ]
- }
+ },
+ "parent": "changan",
+ "building": "lubu",
+ "links": [
+  "changan",
+  "changan--lubu-hall"
+ ]
 }

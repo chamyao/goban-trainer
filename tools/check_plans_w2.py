@@ -189,6 +189,8 @@ class Plan:
             for c in w.get("beat") or [w["at"]]:
                 if not self.walkable(tuple(c)):
                     self.err(f"watcher {w['id']}: beat point {c} is not walkable")
+                elif self.hidden(tuple(c)):
+                    self.err(f"watcher {w['id']}: beat point {c} is behind {self.owner[(c[0], c[1] + 1)]['id']}; the player must see the watchers")
         start = None
         for k in ("",):
             if k in p.get("entries", {}):
