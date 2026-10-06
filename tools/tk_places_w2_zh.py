@@ -284,4 +284,10 @@ ZH_PLACES2 = {
     # a7c and a18p objectives (claude/plot-places 6cdf152)
     "Show yourself to Lü Bu behind the curtain, where the Grand Preceptor can't see.": "在帘后让吕布看见你，别让太师看见。",
     "Go to the palace steps.": "到宫阶去。",
+    # the procession leash line and the a7c label (Integration's wording)
+    "Li Su must keep near the Grand Preceptor.": "李肃须紧随太师车驾。",
+    "Behind the curtain": "帘后",
+    # shut roads (claude/plot-places dc30e3a)
+    "The long road west runs on to Liangzhou. There's no errand for you there.": "西去的长路通往凉州。那边没有你的差事。",
+    "Not yet. Lü Bu holds the road east. The mouth of Ren Valley comes first.": "还不行。吕布扼住东路。先到任谷口。",
 }
