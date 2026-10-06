@@ -305,4 +305,6 @@ ZH_PLACES2 = {
     "Go to the victory feast in the great hall of state, inside the palace.": "到宫中都堂赴庆功宴。",
     "Go to the palace steps, beside the North Side Gate.": "到北掖门旁的宫阶去。",
     "Go to the Son of Heaven at the Xuanping Gate, at the east end of the market street.": "到市街东头的宣平门去见天子。",
+    # the legibility pass (claude/plot-places c232ced)
+    "The market tower": "市楼",
 }
