@@ -1680,8 +1680,8 @@
   {
    "id": "npc-1",
    "kind": "folk.elder",
-   "x": 22.5,
-   "y": 10.9,
+   "x": 18.5,
+   "y": 12.9,
    "say": [],
    "challenge": "headman",
    "intro": [
@@ -1699,8 +1699,8 @@
   {
    "id": "npc-2",
    "kind": "folk.official",
-   "x": 24.5,
-   "y": 18.9,
+   "x": 20.5,
+   "y": 19.9,
    "say": [],
    "challenge": "constable",
    "intro": [
@@ -1719,8 +1719,8 @@
   {
    "id": "npc-3",
    "kind": "folk.soldier",
-   "x": 31.5,
-   "y": 15.9,
+   "x": 34.5,
+   "y": 14.9,
    "say": [],
    "challenge": "scout",
    "intro": [
@@ -1748,8 +1748,8 @@
   {
    "id": "npc-5",
    "kind": "folk.elder",
-   "x": 22.5,
-   "y": 9.9,
+   "x": 24.5,
+   "y": 13.9,
    "say": [
     "“Wang Yun? A man of the east. What does he know of Liangzhou?”"
    ],
@@ -1758,8 +1758,8 @@
   {
    "id": "npc-6",
    "kind": "folk.elder",
-   "x": 22.5,
-   "y": 13.9,
+   "x": 26.5,
+   "y": 10.9,
    "say": [
     "“Then we're dead men either way. Better on horseback.”"
    ],
@@ -1778,7 +1778,7 @@
    "id": "npc-8",
    "kind": "folk.soldier",
    "x": 19.5,
-   "y": 14.9,
+   "y": 15.9,
    "say": [
     "“Better die marching than in our beds.”"
    ],

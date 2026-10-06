@@ -1845,7 +1845,7 @@
    "id": "npc-1",
    "kind": "folk.soldier",
    "x": 27.5,
-   "y": 16.9,
+   "y": 18.9,
    "say": [],
    "challenge": "gateguard",
    "intro": [
@@ -1903,8 +1903,8 @@
   {
    "id": "npc-4",
    "kind": "folk.soldier",
-   "x": 31.5,
-   "y": 15.9,
+   "x": 29.5,
+   "y": 18.9,
    "say": [
     "“Walls as thick as Chang'an's. Nothing comes through this gate he doesn't want.”"
    ],
@@ -1933,8 +1933,8 @@
   {
    "id": "npc-7",
    "kind": "folk.woman",
-   "x": 12.5,
-   "y": 15.9,
+   "x": 8.5,
+   "y": 17.9,
    "say": [
     "“The old lady is ninety. She says her flesh trembles. She hasn't slept in days.”"
    ],
@@ -1943,8 +1943,8 @@
   {
    "id": "npc-8",
    "kind": "folk.maiden",
-   "x": 30.5,
-   "y": 18.9,
+   "x": 27.5,
+   "y": 17.9,
    "say": [
     "“The gate is open. Which road goes home?”"
    ],
@@ -1954,7 +1954,7 @@
    "id": "npc-9",
    "kind": "folk.official",
    "x": 28.5,
-   "y": 10.9,
+   "y": 13.9,
    "say": [
     "“Gold, tens of thousands of jin. Silver, millions. I've stopped counting the silk.”"
    ],

@@ -300,6 +300,10 @@ class Layout:
                                     use=lm.get("use"), side=lm.get("side"), clear=lm.get("clear"))
             if o is None:
                 raise RuntimeError(f"no room for {lm['kind']}")
+            if lm.get("rooms"):   # one building outside, several rooms in a row inside (interiors.build_chain)
+                o["rooms"] = lm["rooms"]
+                for c in lm["rooms"]:
+                    self.anchors.setdefault(c["id"] if isinstance(c, dict) else c, self.anchors.get(lm.get("id")))
             if lm.get("node"):
                 done_nodes.add(lm["node"])
         # the Star Lords' weiqi shrine, by the centre of every town (a brief can say "shrine": True or False,
@@ -408,6 +412,12 @@ class Layout:
 
     # ---------- 5. people ----------
     def lay_npcs(self):
+        # never in the strip a roof (3 tiles) or a tree or big rock's crown (2) draws over
+        hidden = set()
+        for o in self.objects:
+            if o["kind"].split(".")[0] in ("building", "tree", "rock", "ruin") and KINDS[o["kind"]][2]:
+                rise = 3 if o["kind"].startswith("building") else 2
+                hidden |= {(xx, yy) for xx in range(o["x"], o["x"] + o["w"]) for yy in range(o["y"] - rise, o["y"])}
         for i, p in enumerate(self.place["brief"].get("npcs", [])):
             if p.get("inside") and p.get("near") in self.anchors:   # seated in that building's room instead (interiors.py)
                 continue
@@ -416,7 +426,8 @@ class Layout:
                 cands = [(cx + dx, cy + dy) for dx in range(-r, r + 1) for dy in range(-r, r + 1)
                          if abs(dx) + abs(dy) >= 2]
                 self.rng.shuffle(cands)
-                ok = [c for c in cands if self.inb(*c, 2) and c not in self.used and c not in self.keep
+                cands.sort(key=lambda c: c[1] <= cy)   # in front of (south of) the door first
+                ok = [c for c in cands if self.inb(*c, 2) and c not in self.used and c not in self.keep and c not in hidden
                       and self.t[c[1]][c[0]] != "~" and not any(abs(c[0] - n["x"]) + abs(c[1] - n["y"]) < 2 for n in self.npcs)]
                 if ok:
                     x, y = ok[0]

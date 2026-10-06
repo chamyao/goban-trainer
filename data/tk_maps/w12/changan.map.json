@@ -1580,8 +1580,8 @@
   {
    "id": "npc-3",
    "kind": "folk.official",
-   "x": 18.5,
-   "y": 26.9,
+   "x": 14.5,
+   "y": 27.9,
    "say": [],
    "challenge": "runner",
    "intro": [
@@ -1639,8 +1639,8 @@
   {
    "id": "npc-6",
    "kind": "folk.villager",
-   "x": 28.5,
-   "y": 15.9,
+   "x": 29.5,
+   "y": 17.9,
    "say": [],
    "challenge": "informer",
    "intro": [
@@ -1676,8 +1676,8 @@
   {
    "id": "npc-8",
    "kind": "folk.soldier",
-   "x": 14.5,
-   "y": 16.9,
+   "x": 13.5,
+   "y": 18.9,
    "say": [],
    "challenge": "officer",
    "intro": [
@@ -1695,8 +1695,8 @@
   {
    "id": "npc-9",
    "kind": "folk.soldier",
-   "x": 19.5,
-   "y": 9.9,
+   "x": 22.5,
+   "y": 13.9,
    "say": [
     "“Keep to the side lanes. The middle of the avenue is the Son of Heaven's. And the Grand Preceptor's.”"
    ],
@@ -1716,7 +1716,7 @@
    "id": "npc-11",
    "kind": "folk.woman",
    "x": 15.5,
-   "y": 8.9,
+   "y": 11.9,
    "say": [
     "“They drove us west from Luoyang like geese. My house is ash, and here I sell turnips.”"
    ],
@@ -1725,7 +1725,7 @@
   {
    "id": "npc-12",
    "kind": "folk.official",
-   "x": 23.5,
+   "x": 24.5,
    "y": 16.9,
    "say": [
     "“He laughed, and went on eating. I couldn't hold my chopsticks. I still can't, some days.”"
@@ -1747,7 +1747,7 @@
   {
    "id": "npc-14",
    "kind": "folk.soldier",
-   "x": 16.5,
+   "x": 18.5,
    "y": 22.9,
    "say": [
     "“The Grand Preceptor receives no one today.”"
@@ -1759,7 +1759,7 @@
    "id": "npc-15",
    "kind": "folk.soldier",
    "x": 18.5,
-   "y": 25.9,
+   "y": 26.9,
    "say": [
     "“In Liangzhou we ride before we walk. These Chang'an streets are too narrow for a horse to stretch.”"
    ],
@@ -1780,7 +1780,7 @@
    "id": "npc-17",
    "kind": "folk.maiden",
    "x": 24.5,
-   "y": 21.9,
+   "y": 23.9,
    "say": [
     "“The Grand Preceptor spent the night with the new girl and hasn't got up.”"
    ],
@@ -1801,7 +1801,7 @@
   {
    "id": "npc-19",
    "kind": "folk.soldier",
-   "x": 22.5,
+   "x": 26.5,
    "y": 16.9,
    "say": [
     "“General Lü stood on that ridge till the dust was gone. Didn't say a word.”"
@@ -1823,8 +1823,8 @@
   {
    "id": "npc-21",
    "kind": "folk.official",
-   "x": 33.5,
-   "y": 9.9,
+   "x": 32.5,
+   "y": 11.9,
    "say": [
     "“The Son of Heaven is recovered from his illness! All officials to the Weiyang Hall!”"
    ],
@@ -1867,8 +1867,8 @@
   {
    "id": "npc-25",
    "kind": "folk.child",
-   "x": 23.5,
-   "y": 11.9,
+   "x": 19.5,
+   "y": 10.9,
    "say": [
     "“Ten thousand years! Ten thousand years!”"
    ],
@@ -1879,7 +1879,7 @@
    "id": "npc-26",
    "kind": "folk.official",
    "x": 15.5,
-   "y": 11.9,
+   "y": 9.9,
    "say": [
     "“I held a cup today. My hand didn't shake once.”"
    ],
@@ -1889,7 +1889,7 @@
   {
    "id": "npc-27",
    "kind": "folk.villager",
-   "x": 23.5,
+   "x": 19.5,
    "y": 9.9,
    "say": [
     "“The Liangzhou men are inside! Li Meng and Wang Fang opened the gates!”"
@@ -1910,7 +1910,7 @@
    "id": "npc-29",
    "kind": "folk.villager",
    "x": 18.5,
-   "y": 24.9,
+   "y": 25.9,
    "say": [
     "“I built his walls. Now his men burn mine.”"
    ],

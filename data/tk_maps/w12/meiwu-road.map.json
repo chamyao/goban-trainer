@@ -1617,7 +1617,7 @@
    "id": "npc-4",
    "kind": "folk.villager",
    "x": 26.5,
-   "y": 12.9,
+   "y": 13.9,
    "say": [
     "“Heads down, heads down. Don't let him see your face.”"
    ],
@@ -1628,8 +1628,8 @@
   {
    "id": "npc-5",
    "kind": "folk.soldier",
-   "x": 29.5,
-   "y": 11.9,
+   "x": 26.5,
+   "y": 12.9,
    "say": [
     "“A new carriage by noon. The Grand Preceptor says it's a sign: the new for the old.”"
    ],
@@ -1639,8 +1639,8 @@
   {
    "id": "npc-6",
    "kind": "folk.soldier",
-   "x": 26.5,
-   "y": 10.9,
+   "x": 24.5,
+   "y": 14.9,
    "say": [
     "“I can't see the horse in front of me. Where's the carriage?”"
    ],
@@ -1650,8 +1650,8 @@
   {
    "id": "npc-7",
    "kind": "folk.villager",
-   "x": 22.5,
-   "y": 11.9,
+   "x": 21.5,
+   "y": 14.9,
    "say": [
     "“Children in the fields at this hour? Whose children?”"
    ],
