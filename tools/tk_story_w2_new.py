@@ -292,7 +292,7 @@ def _scenes_chain():
               "允即命备毡车，先将貂蝉送到相府。"),
             ["move", "car", "a5", -40, 8],
             ["remove", "car"],
-            ["party", ["wangyun"]],
+            ["party", ["wangyun"], {"to": "a6"}],
         ]},
 
         # A6 · Red lanterns on the road. Wang Yun's lie under Lü Bu's hand.
@@ -331,7 +331,7 @@ def _scenes_chain():
               "小女稍有妆奁，待过将军府下，便当送至。"),
             N("Lü Bu thanks him and goes.", "布谢去。"),
             ["remove", "lb"],
-            ["party", ["diaochan"]],
+            ["party", ["diaochan"], {"to": "a7"}],
         ]},
 
         # A7 · The window. Diaochan acts grief for the face in the pond.
@@ -547,7 +547,7 @@ def _scenes_chain():
               "貂蝉在车上，遥见吕布于稠人之内，眼望车中。貂蝉虚掩其面，如痛哭之状。"),
             ["move", "car", "a10", 50, 10],
             ["remove", "car"], ["remove", "crowd"], ["remove", "lb"],
-            ["party", ["wangyun"]],
+            ["party", ["wangyun"], {"to": "a11"}],
         ]},
 
         # A11 · The ridge and the secret room. Three boards: the provocation, "you are a Lü", the choice.
@@ -801,7 +801,7 @@ def _scenes_chain():
             N("Li Su calls the soldiers to drive him off. Two mouths, one above the other, make the character Lü.",
               "呼将士驱去。两“口”相叠，便是“吕”字。"),
             ["run", "dr", "a13d", -40, 10], ["remove", "dr"],
-            ["party", ["wangyun"]],
+            ["party", ["wangyun"], {"to": "a14"}],
         ]},
 
         # A14 · The North Side Gate. The boss: three boards on the way to "There is an edict to kill a traitor!"
@@ -862,7 +862,7 @@ def _scenes_chain():
             N("Wang Yun sends Lü Bu, Huangfu Song and Li Su with fifty thousand men to Meiwu, to take Dong Zhuo's household and goods. "
               "Hearing that Dong Zhuo is dead and Lü Bu is coming, Li Jue, Guo Si, Zhang Ji and Fan Chou flee to Liangzhou that night with the Flying Bear army.",
               "王允又命吕布同皇甫嵩、李肃领兵五万，至郿坞抄籍董卓家产人口。李傕、郭汜、张济、樊稠闻董卓已死，吕布将至，便引了飞熊军连夜奔凉州去了。"),
-            ["party", ["lvbu"]],
+            ["party", ["lvbu"], {"to": "a13"}],
         ]},
         # A15m · Meiwu raided. Played as Lü Bu: a walk through the opened fortress (road challengers on the way), then this scene, no board.
         "a15m": {"title": T("Meiwu", "郿坞"), "kind": "main", "steps": [
@@ -877,7 +877,7 @@ def _scenes_chain():
               "his mother among them. Gold by the hundred thousand, silks, pearls, vessels and grain beyond counting are listed and brought back to Wang Yun.",
               "皇甫嵩命将坞中所藏良家子女，尽行释放。但系董卓亲属，不分老幼，悉皆诛戮。卓母亦被杀。收籍坞中所蓄黄金数十万，绮罗、珠宝、器皿、粮食不计其数，回报王允。"),
             ["remove", "dc"],
-            ["party", ["wangyun"]],
+            ["party", ["wangyun"], {"to": "a15c"}],
         ]},
         "a15c": {"title": T("Cai Yong Weeps", "蔡邕哭尸"), "kind": "main", "steps": [
             ["army", "officials", "f_official", 6, "a15c", 10, -10],
@@ -912,7 +912,7 @@ def _scenes_chain():
             ["remove", "cy"],
             N("Wang Yun does not listen. He has Cai Yong strangled in prison. When the scholars hear of it, they all weep.",
               "王允不听马日磾之言，命将蔡邕下狱中缢死。一时士大夫闻者，尽为流涕。"),
-            ["party", ["jiaxu"]],
+            ["party", ["jiaxu"], {"to": "a16"}],
         ]},
 
         # A16 · The villains' turn. Jia Xu's advice, his rumour through Liangzhou, the march.
@@ -956,7 +956,7 @@ def _scenes_chain():
               "and sends him on ahead.",
               "于是聚众十余万，分作四路，杀奔长安来。路逢董卓女婿中郎将牛辅，引军五千人，欲去与丈人报仇，李傕便与合兵，使为前驱。"),
             ["move", "host", "a16m", 60, 0],
-            ["party", ["lijue"]],
+            ["party", ["lijue"], {"to": "a17"}],
         ]},
 
         "a16m_wait": {"title": T("Not Enough Men", "人马未齐"), "kind": "main", "steps": [
@@ -993,7 +993,7 @@ def _scenes_chain():
             N("Then a rider brings word: Zhang Ji and Fan Chou are at Chang'an. Lü Bu hurries back, and loses many men on the way.",
               "忽然飞马报来，说张济、樊稠两路军马，竟犯长安，京城危急。布急领军回，折了好些人马。"),
             ["run", "lb", "a17", 80, 0], ["remove", "lb"], ["remove", "theirs"],
-            ["party", ["wangyun"]],
+            ["party", ["wangyun"], {"to": "a18"}],
         ]},
 
         # A18 · Xuanping Gate. No board: Wang Yun's choice, which the novel has already made.
