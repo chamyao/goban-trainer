@@ -862,7 +862,7 @@ def _scenes_chain():
             N("Wang Yun sends Lü Bu, Huangfu Song and Li Su with fifty thousand men to Meiwu, to take Dong Zhuo's household and goods. "
               "Hearing that Dong Zhuo is dead and Lü Bu is coming, Li Jue, Guo Si, Zhang Ji and Fan Chou flee to Liangzhou that night with the Flying Bear army.",
               "王允又命吕布同皇甫嵩、李肃领兵五万，至郿坞抄籍董卓家产人口。李傕、郭汜、张济、樊稠闻董卓已死，吕布将至，便引了飞熊军连夜奔凉州去了。"),
-            ["party", ["lvbu"], {"to": "a13"}],
+            ["party", ["lvbu"], {"to": {"place": "Meiwu", "from": "Meiwu Road"}}],
         ]},
         # A15m · Meiwu raided. Played as Lü Bu: a walk through the opened fortress (road challengers on the way), then this scene, no board.
         "a15m": {"title": T("Meiwu", "郿坞"), "kind": "main", "steps": [
