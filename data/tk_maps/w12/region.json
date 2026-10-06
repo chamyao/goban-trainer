@@ -28,9 +28,9 @@
     "changan--shisun",
     "changan--huangwan",
     "changan--palace",
+    "changan--side-hall",
     "changan--dutang",
     "changan--caiyong",
-    "changan--side-hall",
     "changan--hall-1",
     "changan--house-1",
     "changan--house-2",
@@ -152,6 +152,17 @@
    "parent": "changan"
   },
   {
+   "id": "changan--side-hall",
+   "name": "The emperor's side hall",
+   "zh": "天子偏殿",
+   "archetype": "interior",
+   "map": "changan--side-hall.map.json",
+   "links": [
+    "changan"
+   ],
+   "parent": "changan"
+  },
+  {
    "id": "changan--dutang",
    "name": "The great hall of state",
    "zh": "都堂",
@@ -168,17 +179,6 @@
    "zh": "蔡邕宅",
    "archetype": "interior",
    "map": "changan--caiyong.map.json",
-   "links": [
-    "changan"
-   ],
-   "parent": "changan"
-  },
-  {
-   "id": "changan--side-hall",
-   "name": "side-hall",
-   "zh": "长安·",
-   "archetype": "interior",
-   "map": "changan--side-hall.map.json",
    "links": [
     "changan"
    ],
@@ -326,8 +326,8 @@
   },
   {
    "id": "meiwu--diaochan",
-   "name": "diaochan",
-   "zh": "郿坞·",
+   "name": "Diaochan's rooms",
+   "zh": "貂蝉居所",
    "archetype": "interior",
    "map": "meiwu--diaochan.map.json",
    "links": [

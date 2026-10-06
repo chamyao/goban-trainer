@@ -21,13 +21,13 @@
    "........................................",
    "........................................",
    "........................................",
-   "........::....................:::::::...",
-   ".........:......................:.......",
+   "........::.......................::::...",
+   ".........:.......................:......",
    ".........:...::................:::......",
-   ".......:::....:..................:......",
+   ".......:::....:..................::::...",
    "........:.....:...........::.....:......",
-   "........:...:::............:...:.:..:...",
-   "......:::....:...:.........:...:.:..:...",
+   "........:...:::............:...:.:......",
+   "......:::....:...:.........:...:.:.:....",
    "........:....:...:::::::::::::::::::::::",
    "......:::::::::...::::::::::::::::::::::",
    "..............::::::::..................",
@@ -37,13 +37,13 @@
    "..............::::::::::::::::::::::::::",
    "..................::::::::::::::::::::::",
    "..................::....................",
-   "...........:::::::::.......:............",
-   "..................::..:....:....:.......",
+   "...........:::::::::....................",
+   "..................::..:........:........",
    "..................::::::::::::::::::::::",
    "..................::::::::::::::::::::::",
-   "..................:........:............",
-   "..................:........:............",
-   "................:::::::....:::..........",
+   "..................:...........:.........",
+   "..................:::.........:.........",
+   "................:::.........::::::......",
    "........................................",
    "........................................",
    "........................................"
@@ -204,9 +204,18 @@
    "label": "Weiyang Palace"
   },
   {
+   "kind": "building.house",
+   "x": 29,
+   "y": 4,
+   "w": 4,
+   "h": 2,
+   "id": "side-hall",
+   "label": "The emperor's side hall"
+  },
+  {
    "kind": "building.gate",
-   "x": 30,
-   "y": 5,
+   "x": 34,
+   "y": 9,
    "w": 2,
    "h": 1,
    "id": "north-gate",
@@ -214,8 +223,8 @@
   },
   {
    "kind": "building.hall",
-   "x": 28,
-   "y": 2,
+   "x": 24,
+   "y": 6,
    "w": 4,
    "h": 2,
    "id": "dutang",
@@ -223,8 +232,8 @@
   },
   {
    "kind": "building.house",
-   "x": 24,
-   "y": 6,
+   "x": 34,
+   "y": 5,
    "w": 4,
    "h": 2,
    "id": "caiyong",
@@ -232,33 +241,24 @@
   },
   {
    "kind": "building.gate",
-   "x": 26,
-   "y": 19,
+   "x": 19,
+   "y": 24,
    "w": 2,
    "h": 1,
    "id": "xuanping",
    "label": "The Xuanping Gate"
   },
   {
-   "kind": "building.hall",
-   "x": 34,
-   "y": 7,
-   "w": 4,
-   "h": 2,
-   "id": "side-hall",
-   "label": "side-hall"
-  },
-  {
    "kind": "camp.table",
-   "x": 15,
-   "y": 13,
+   "x": 25,
+   "y": 20,
    "w": 2,
    "h": 1,
    "id": "spot-12-a13d"
   },
   {
    "kind": "building.hall",
-   "x": 20,
+   "x": 26,
    "y": 24,
    "w": 4,
    "h": 2,
@@ -298,16 +298,16 @@
   },
   {
    "kind": "building.house",
-   "x": 30,
-   "y": 19,
+   "x": 31,
+   "y": 24,
    "w": 4,
    "h": 2,
    "id": "house-3"
   },
   {
    "kind": "building.shop",
-   "x": 28,
-   "y": 24,
+   "x": 30,
+   "y": 19,
    "w": 3,
    "h": 2,
    "id": "shop-2"
@@ -363,37 +363,37 @@
    "h": 1
   },
   {
-   "kind": "tree.small",
-   "x": 3,
-   "y": 22,
+   "kind": "plant.bush",
+   "x": 7,
+   "y": 24,
    "w": 1,
    "h": 1
   },
   {
    "kind": "tree.pine",
    "x": 8,
-   "y": 26,
+   "y": 21,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 4,
+   "y": 22,
    "w": 1,
    "h": 1
   },
   {
    "kind": "plant.bush",
-   "x": 6,
-   "y": 22,
+   "x": 3,
+   "y": 23,
    "w": 1,
    "h": 1
   },
   {
    "kind": "tree.pine",
    "x": 5,
-   "y": 24,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.bush",
-   "x": 5,
-   "y": 23,
+   "y": 21,
    "w": 1,
    "h": 1
   },
@@ -525,13 +525,6 @@
   },
   {
    "kind": "tree.grove",
-   "x": 33,
-   "y": 28,
-   "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.grove",
    "x": 1,
    "y": 9,
    "w": 3,
@@ -569,6 +562,13 @@
    "kind": "tree.pine",
    "x": 19,
    "y": 29,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 24,
+   "y": 28,
    "w": 1,
    "h": 1
   },
@@ -1113,6 +1113,13 @@
   },
   {
    "kind": "tree.pine",
+   "x": 20,
+   "y": 28,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
    "x": 0,
    "y": 3,
    "w": 1,
@@ -1141,13 +1148,6 @@
   },
   {
    "kind": "tree.pine",
-   "x": 32,
-   "y": 28,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
    "x": 15,
    "y": 1,
    "w": 1,
@@ -1165,13 +1165,6 @@
    "x": 0,
    "y": 11,
    "w": 3,
-   "h": 1
-  },
-  {
-   "kind": "tree.pine",
-   "x": 38,
-   "y": 7,
-   "w": 1,
    "h": 1
   },
   {
@@ -1259,6 +1252,13 @@
    "h": 1
   },
   {
+   "kind": "tree.grove",
+   "x": 21,
+   "y": 28,
+   "w": 3,
+   "h": 1
+  },
+  {
    "kind": "tree.pine",
    "x": 35,
    "y": 0,
@@ -1323,15 +1323,15 @@
   },
   {
    "kind": "plant.bush",
-   "x": 33,
-   "y": 5,
+   "x": 36,
+   "y": 19,
    "w": 1,
    "h": 1
   },
   {
    "kind": "plant.bush",
-   "x": 36,
-   "y": 19,
+   "x": 37,
+   "y": 9,
    "w": 1,
    "h": 1
   },
@@ -1358,13 +1358,6 @@
   },
   {
    "kind": "plant.bush",
-   "x": 32,
-   "y": 26,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.bush",
    "x": 12,
    "y": 27,
    "w": 1,
@@ -1385,14 +1378,7 @@
    "h": 1
   },
   {
-   "kind": "plant.grass",
-   "x": 19,
-   "y": 24,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.grass",
+   "kind": "plant.bush",
    "x": 27,
    "y": 2,
    "w": 1,
@@ -1442,13 +1428,6 @@
   },
   {
    "kind": "plant.grass",
-   "x": 8,
-   "y": 21,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "plant.grass",
    "x": 22,
    "y": 14,
    "w": 1,
@@ -1469,6 +1448,27 @@
    "h": 1
   },
   {
+   "kind": "plant.grass",
+   "x": 31,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 7,
+   "y": 14,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 7,
+   "y": 22,
+   "w": 1,
+   "h": 1
+  },
+  {
    "kind": "lamp.post",
    "x": 10,
    "y": 25,
@@ -1477,22 +1477,15 @@
   },
   {
    "kind": "tree.small",
-   "x": 32,
-   "y": 24,
+   "x": 8,
+   "y": 26,
    "w": 1,
    "h": 1
   },
   {
    "kind": "tree.small",
-   "x": 25,
-   "y": 24,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.small",
-   "x": 34,
-   "y": 25,
+   "x": 23,
+   "y": 26,
    "w": 1,
    "h": 1
   }
@@ -1563,22 +1556,22 @@
   },
   {
    "id": "north-gate",
-   "x": 31,
-   "y": 6.7,
+   "x": 35,
+   "y": 10.7,
    "node": "12-a14",
    "label": "The North Side Gate"
   },
   {
    "id": "xuanping",
-   "x": 27,
-   "y": 20.7,
+   "x": 20,
+   "y": 25.7,
    "node": "12-a18",
    "label": "The Xuanping Gate"
   },
   {
    "id": "spot-12-a13d",
-   "x": 16,
-   "y": 14.7,
+   "x": 26,
+   "y": 21.7,
    "node": "12-a13d",
    "label": ""
   }
@@ -1588,7 +1581,7 @@
    "id": "npc-1",
    "kind": "folk.elder",
    "x": 13.5,
-   "y": 11.9,
+   "y": 12.9,
    "say": [
     "“The master hasn't slept. He walks the garden and sighs.”"
    ],
@@ -1605,8 +1598,8 @@
   {
    "id": "npc-2",
    "kind": "folk.noble",
-   "x": 15.5,
-   "y": 11.9,
+   "x": 16.5,
+   "y": 12.9,
    "say": [
     "“Pearls like these, Minister? Set in gold, they'd crown a general.”"
    ],
@@ -1643,8 +1636,8 @@
   {
    "id": "npc-4",
    "kind": "folk.soldier",
-   "x": 19.5,
-   "y": 9.9,
+   "x": 15.5,
+   "y": 10.9,
    "say": [],
    "challenge": "flyingbear",
    "intro": [
@@ -1662,8 +1655,8 @@
   {
    "id": "npc-5",
    "kind": "folk.soldier",
-   "x": 4.5,
-   "y": 10.9,
+   "x": 8.5,
+   "y": 11.9,
    "say": [],
    "challenge": "patrol",
    "intro": [
@@ -1682,8 +1675,8 @@
   {
    "id": "npc-6",
    "kind": "folk.villager",
-   "x": 32.5,
-   "y": 13.9,
+   "x": 31.5,
+   "y": 17.9,
    "say": [],
    "challenge": "informer",
    "intro": [
@@ -1701,7 +1694,7 @@
   {
    "id": "npc-7",
    "kind": "folk.elder",
-   "x": 19.5,
+   "x": 22.5,
    "y": 5.9,
    "say": [],
    "challenge": "scholar",
@@ -1719,7 +1712,7 @@
   {
    "id": "npc-8",
    "kind": "folk.soldier",
-   "x": 17.5,
+   "x": 16.5,
    "y": 16.9,
    "say": [],
    "challenge": "officer",
@@ -1738,8 +1731,8 @@
   {
    "id": "npc-9",
    "kind": "folk.soldier",
-   "x": 22.5,
-   "y": 9.9,
+   "x": 19.5,
+   "y": 13.9,
    "say": [
     "“Keep to the side lanes. The middle of the avenue is the Son of Heaven's. And the Grand Preceptor's.”"
    ],
@@ -1748,8 +1741,8 @@
   {
    "id": "npc-10",
    "kind": "folk.villager",
-   "x": 22.5,
-   "y": 13.9,
+   "x": 21.5,
+   "y": 10.9,
    "say": [
     "“Two hundred and fifty thousand of us built Meiwu. Walls as high as these. Twenty years of grain inside, they say.”"
    ],
@@ -1758,8 +1751,8 @@
   {
    "id": "npc-11",
    "kind": "folk.woman",
-   "x": 15.5,
-   "y": 10.9,
+   "x": 18.5,
+   "y": 12.9,
    "say": [
     "“They drove us west from Luoyang like geese. My house is ash, and here I sell turnips.”"
    ],
@@ -1769,7 +1762,7 @@
    "id": "npc-12",
    "kind": "folk.official",
    "x": 22.5,
-   "y": 16.9,
+   "y": 13.9,
    "say": [
     "“He laughed, and went on eating. I couldn't hold my chopsticks. I still can't, some days.”"
    ],
@@ -1779,8 +1772,8 @@
   {
    "id": "npc-13",
    "kind": "folk.child",
-   "x": 18.5,
-   "y": 13.9,
+   "x": 20.5,
+   "y": 17.9,
    "say": [
     "“Mother says don't look at the soldiers with the long halberds.”"
    ],
@@ -1790,7 +1783,7 @@
   {
    "id": "npc-14",
    "kind": "folk.soldier",
-   "x": 15.5,
+   "x": 16.5,
    "y": 22.9,
    "say": [
     "“The Grand Preceptor receives no one today.”"
@@ -1802,7 +1795,7 @@
    "id": "npc-15",
    "kind": "folk.soldier",
    "x": 18.5,
-   "y": 24.9,
+   "y": 26.9,
    "say": [
     "“In Liangzhou we ride before we walk. These Chang'an streets are too narrow for a horse to stretch.”"
    ],
@@ -1812,7 +1805,7 @@
    "id": "npc-16",
    "kind": "folk.maiden",
    "x": 10.5,
-   "y": 15.9,
+   "y": 16.9,
    "say": [
     "“They say Lady Diaochan went in the covered carriage, straight to the Grand Preceptor's.”"
    ],
@@ -1822,7 +1815,7 @@
   {
    "id": "npc-17",
    "kind": "folk.maiden",
-   "x": 24.5,
+   "x": 20.5,
    "y": 23.9,
    "say": [
     "“The Grand Preceptor spent the night with the new girl and hasn't got up.”"
@@ -1834,7 +1827,7 @@
    "id": "npc-18",
    "kind": "folk.woman",
    "x": 24.5,
-   "y": 22.9,
+   "y": 23.9,
    "say": [
     "“Walk softly near the middle hall. He throws things when he's woken.”"
    ],
@@ -1845,7 +1838,7 @@
    "id": "npc-19",
    "kind": "folk.soldier",
    "x": 26.5,
-   "y": 15.9,
+   "y": 14.9,
    "say": [
     "“General Lü stood on that ridge till the dust was gone. Didn't say a word.”"
    ],
@@ -1856,7 +1849,7 @@
    "id": "npc-20",
    "kind": "folk.villager",
    "x": 21.5,
-   "y": 9.9,
+   "y": 13.9,
    "say": [
     "“The Grand Preceptor's at Meiwu. The streets breathe again.”"
    ],
@@ -1866,8 +1859,8 @@
   {
    "id": "npc-21",
    "kind": "folk.official",
-   "x": 33.5,
-   "y": 7.9,
+   "x": 29.5,
+   "y": 10.9,
    "say": [
     "“The Son of Heaven is recovered from his illness! All officials to the Weiyang Hall!”"
    ],
@@ -1877,8 +1870,8 @@
   {
    "id": "npc-22",
    "kind": "folk.official",
-   "x": 33.5,
-   "y": 6.9,
+   "x": 35.5,
+   "y": 12.9,
    "say": [
     "“Why are we all wearing swords to a celebration?”"
    ],
@@ -1888,8 +1881,8 @@
   {
    "id": "npc-23",
    "kind": "folk.villager",
-   "x": 18.5,
-   "y": 12.9,
+   "x": 19.5,
+   "y": 10.9,
    "say": [
     "“Sell the coat! Buy wine! The old traitor is dead!”"
    ],
@@ -1899,8 +1892,8 @@
   {
    "id": "npc-24",
    "kind": "folk.villager",
-   "x": 22.5,
-   "y": 12.9,
+   "x": 21.5,
+   "y": 9.9,
    "say": [
     "“That one's for my brother, who died on the road from Luoyang.”"
    ],
@@ -1910,8 +1903,8 @@
   {
    "id": "npc-25",
    "kind": "folk.child",
-   "x": 23.5,
-   "y": 8.9,
+   "x": 19.5,
+   "y": 9.9,
    "say": [
     "“Ten thousand years! Ten thousand years!”"
    ],
@@ -1922,7 +1915,7 @@
    "id": "npc-26",
    "kind": "folk.official",
    "x": 15.5,
-   "y": 9.9,
+   "y": 8.9,
    "say": [
     "“I held a cup today. My hand didn't shake once.”"
    ],
@@ -1932,8 +1925,8 @@
   {
    "id": "npc-27",
    "kind": "folk.villager",
-   "x": 22.5,
-   "y": 8.9,
+   "x": 23.5,
+   "y": 9.9,
    "say": [
     "“The Liangzhou men are inside! Li Meng and Wang Fang opened the gates!”"
    ],
@@ -1942,8 +1935,8 @@
   {
    "id": "npc-28",
    "kind": "folk.woman",
-   "x": 29.5,
-   "y": 20.9,
+   "x": 22.5,
+   "y": 25.9,
    "say": [
     "“East! Get to the Xuanping Gate, the Son of Heaven is there!”"
    ],
@@ -1952,8 +1945,8 @@
   {
    "id": "npc-29",
    "kind": "folk.villager",
-   "x": 28.5,
-   "y": 19.9,
+   "x": 19.5,
+   "y": 23.9,
    "say": [
     "“I built his walls. Now his men burn mine.”"
    ],
@@ -2076,16 +2069,16 @@
    "door": true
   },
   {
-   "to": "changan--dutang",
+   "to": "changan--side-hall",
    "side": "N",
-   "x": 29.6,
-   "y": 3.85,
+   "x": 30.6,
+   "y": 5.85,
    "w": 0.8,
    "h": 0.45,
    "door": true
   },
   {
-   "to": "changan--caiyong",
+   "to": "changan--dutang",
    "side": "N",
    "x": 25.6,
    "y": 7.85,
@@ -2094,10 +2087,10 @@
    "door": true
   },
   {
-   "to": "changan--side-hall",
+   "to": "changan--caiyong",
    "side": "N",
    "x": 35.6,
-   "y": 8.85,
+   "y": 6.85,
    "w": 0.8,
    "h": 0.45,
    "door": true
@@ -2105,7 +2098,7 @@
   {
    "to": "changan--hall-1",
    "side": "N",
-   "x": 21.6,
+   "x": 27.6,
    "y": 25.85,
    "w": 0.8,
    "h": 0.45,
@@ -2150,8 +2143,8 @@
   {
    "to": "changan--house-3",
    "side": "N",
-   "x": 31.6,
-   "y": 20.85,
+   "x": 32.6,
+   "y": 25.85,
    "w": 0.8,
    "h": 0.45,
    "door": true
@@ -2159,8 +2152,8 @@
   {
    "to": "changan--shop-2",
    "side": "N",
-   "x": 29.1,
-   "y": 25.85,
+   "x": 31.1,
+   "y": 20.85,
    "w": 0.8,
    "h": 0.45,
    "door": true
@@ -2232,20 +2225,20 @@
    31,
    9
   ],
-  "changan--dutang": [
-   30,
-   4
+  "changan--side-hall": [
+   31,
+   6
   ],
-  "changan--caiyong": [
+  "changan--dutang": [
    26,
    8
   ],
-  "changan--side-hall": [
+  "changan--caiyong": [
    36,
-   9
+   7
   ],
   "changan--hall-1": [
-   22,
+   28,
    26
   ],
   "changan--house-1": [
@@ -2265,12 +2258,12 @@
    15
   ],
   "changan--house-3": [
-   32,
-   21
+   33,
+   26
   ],
   "changan--shop-2": [
-   29,
-   26
+   31,
+   21
   ],
   "changan--house-4": [
    36,
