@@ -90,7 +90,9 @@ Voices for all are in `CAST2`.
 
 ## Engine requests
 1. **The player walks as the current protagonist.** `["party", ["diaochan"]]` makes Diaochan the one the player
-   walks as, not Liu Bei. The most important request.
+   walks as, not Liu Bei. The most important request. *(Live.)*
+1b. **A handoff says where the new protagonist begins** (found in the playtest: Diaochan appeared where Wang Yun
+   stood). Proposed `["party", ["diaochan"], {"to": "a7"}]`, with a short fade. Every handoff in the arc needs it.
 2. **Several `["problem"]` steps in one scene**, with dialogue between them; failing a later one resumes at that one.
 3. Challengers who spot the player and walk over; challengers who block a path.
 4. Stealth: guards with sight lines; being seen sends you back to the door (Dong Zhuo's residence, the crown delivery).
