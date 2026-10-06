@@ -671,6 +671,14 @@
  },
  "states": [
   {
+   "id": "road-east-shut",
+   "until": "node:a17",
+   "light": "day",
+   "exits_closed": [
+    "meiwu"
+   ]
+  },
+  {
    "id": "rumour",
    "light": "day",
    "weather": "harsh"
@@ -682,15 +690,6 @@
    "weather": "dust"
   }
  ],
- "followers": {
-  "grow_with": [
-   "node:a16a",
-   "node:a16b",
-   "node:a16c"
-  ],
-  "kind": "folk.soldier",
-  "per_step": 4
- },
  "banners": "black",
  "links": [
   "meiwu"

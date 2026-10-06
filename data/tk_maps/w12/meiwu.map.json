@@ -704,6 +704,14 @@
    "light": "day"
   },
   {
+   "id": "road-west-shut",
+   "until": "node:a16m",
+   "light": "day",
+   "exits_closed": [
+    "liangzhou"
+   ]
+  },
+  {
    "id": "raided",
    "when": "node:a14",
    "gate": "open",

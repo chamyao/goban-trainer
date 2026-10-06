@@ -132,9 +132,8 @@
    "id": "curtain",
    "x": 2.5,
    "y": 8.7,
-   "node": "",
+   "node": "12-a7c",
    "label": "Behind the curtain",
-   "note": "A7's curtain: needs its own beat key from Plot (proposed a7c)",
    "sight": {
     "seen_by": "lubu",
     "unseen_by": "dongzhuo"
@@ -160,7 +159,7 @@
      "left"
     ],
     "in_beats": [
-     "12-a7"
+     "12-a7c"
     ]
    },
    "x": 12.5,
@@ -181,7 +180,7 @@
     ],
     "face": "left",
     "in_beats": [
-     "12-a7"
+     "12-a7c"
     ]
    },
    "x": 10.5,

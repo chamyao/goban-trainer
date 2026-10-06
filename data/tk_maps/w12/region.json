@@ -1269,13 +1269,13 @@
    "title_zh": "池中人影"
   },
   {
-   "node": "12-a8",
+   "node": "12-a7c",
    "role": "main",
-   "place": "changan--xf-bedroom",
-   "spot": "a8",
-   "scene": "a8",
-   "title": "Behind the Sickbed",
-   "objective": "Nurse the Grand Preceptor.",
+   "place": "changan--xf-hall",
+   "spot": "curtain",
+   "scene": "a7c",
+   "title": "Half a Face",
+   "objective": "Show yourself to Lü Bu behind the curtain, where the Grand Preceptor can't see.",
    "after": [
     "12-a7"
    ],
@@ -1402,19 +1402,20 @@
      3732
     ]
    ],
-   "objective_zh": "服侍太师养病。",
-   "title_zh": "床后指心"
+   "board": false,
+   "objective_zh": "在帘后让吕布看见你，别让太师看见。",
+   "title_zh": "微露半面"
   },
   {
-   "node": "12-a9",
+   "node": "12-a8",
    "role": "main",
-   "place": "changan--xiangfu",
-   "spot": "a9",
-   "scene": "a9",
-   "title": "The Phoenix Pavilion",
-   "objective": "Meet Lü Bu at the Phoenix Pavilion, unseen.",
+   "place": "changan--xf-bedroom",
+   "spot": "a8",
+   "scene": "a8",
+   "title": "Behind the Sickbed",
+   "objective": "Nurse the Grand Preceptor.",
    "after": [
-    "12-a8"
+    "12-a7c"
    ],
    "grade": "11K",
    "pool": [
@@ -1539,19 +1540,19 @@
      751
     ]
    ],
-   "objective_zh": "避开耳目，到凤仪亭与吕布相会。",
-   "title_zh": "凤仪亭"
+   "objective_zh": "服侍太师养病。",
+   "title_zh": "床后指心"
   },
   {
-   "node": "12-a10",
+   "node": "12-a9",
    "role": "main",
-   "place": "changan--xf-hall",
-   "spot": "a10",
-   "scene": "a10",
-   "title": "The Sword on the Wall",
-   "objective": "Answer the Grand Preceptor in the middle hall.",
+   "place": "changan--xiangfu",
+   "spot": "a9",
+   "scene": "a9",
+   "title": "The Phoenix Pavilion",
+   "objective": "Meet Lü Bu at the Phoenix Pavilion, unseen.",
    "after": [
-    "12-a9"
+    "12-a8"
    ],
    "grade": "11K",
    "pool": [
@@ -1676,19 +1677,19 @@
      143451
     ]
    ],
-   "objective_zh": "到中堂回太师的话。",
-   "title_zh": "壁间宝剑"
+   "objective_zh": "避开耳目，到凤仪亭与吕布相会。",
+   "title_zh": "凤仪亭"
   },
   {
-   "node": "12-a11",
+   "node": "12-a10",
    "role": "main",
-   "place": "changan",
-   "spot": "a11",
-   "scene": "a11",
-   "title": "You Are a Lü, He Is a Dong",
-   "objective": "Find Lü Bu outside the Heng Gate.",
+   "place": "changan--xf-hall",
+   "spot": "a10",
+   "scene": "a10",
+   "title": "The Sword on the Wall",
+   "objective": "Answer the Grand Preceptor in the middle hall.",
    "after": [
-    "12-a10"
+    "12-a9"
    ],
    "grade": "11K",
    "pool": [
@@ -1813,19 +1814,19 @@
      27449
     ]
    ],
-   "objective_zh": "到横门外去寻吕布。",
-   "title_zh": "将军自姓吕"
+   "objective_zh": "到中堂回太师的话。",
+   "title_zh": "壁间宝剑"
   },
   {
-   "node": "12-a12a",
+   "node": "12-a11",
    "role": "main",
    "place": "changan",
-   "spot": "shisun",
-   "scene": "a12a",
-   "title": "Shisun Rui",
-   "objective": "Sound out Shisun Rui.",
+   "spot": "a11",
+   "scene": "a11",
+   "title": "You Are a Lü, He Is a Dong",
+   "objective": "Find Lü Bu outside the Heng Gate.",
    "after": [
-    "12-a11"
+    "12-a10"
    ],
    "grade": "11K",
    "pool": [
@@ -1950,19 +1951,19 @@
      160670
     ]
    ],
-   "objective_zh": "密访士孙瑞。",
-   "title_zh": "士孙瑞"
+   "objective_zh": "到横门外去寻吕布。",
+   "title_zh": "将军自姓吕"
   },
   {
-   "node": "12-a12b",
+   "node": "12-a12a",
    "role": "main",
    "place": "changan",
-   "spot": "huangwan",
-   "scene": "a12b",
-   "title": "Huang Wan",
-   "objective": "Sound out Huang Wan.",
+   "spot": "shisun",
+   "scene": "a12a",
+   "title": "Shisun Rui",
+   "objective": "Sound out Shisun Rui.",
    "after": [
-    "12-a12a"
+    "12-a11"
    ],
    "grade": "11K",
    "pool": [
@@ -2087,19 +2088,19 @@
      42374
     ]
    ],
-   "objective_zh": "密访黄琬。",
-   "title_zh": "黄琬"
+   "objective_zh": "密访士孙瑞。",
+   "title_zh": "士孙瑞"
   },
   {
-   "node": "12-a12y",
+   "node": "12-a12b",
    "role": "main",
-   "place": "changan--caiyong",
-   "spot": "a12y",
-   "scene": "a12y",
-   "title": "Stones, Not Men",
-   "objective": "Go to Chang'an.",
+   "place": "changan",
+   "spot": "huangwan",
+   "scene": "a12b",
+   "title": "Huang Wan",
+   "objective": "Sound out Huang Wan.",
    "after": [
-    "12-a12b"
+    "12-a12a"
    ],
    "grade": "11K",
    "pool": [
@@ -2224,19 +2225,19 @@
      266259
     ]
    ],
-   "objective_zh": "",
-   "title_zh": "只谈棋子"
+   "objective_zh": "密访黄琬。",
+   "title_zh": "黄琬"
   },
   {
-   "node": "12-a12p",
+   "node": "12-a12y",
    "role": "main",
-   "place": "changan--wy-secret",
-   "spot": "secret",
-   "scene": "a12p",
-   "title": "The Plan",
-   "objective": "Meet in the secret room.",
+   "place": "changan--caiyong",
+   "spot": "a12y",
+   "scene": "a12y",
+   "title": "Stones, Not Men",
+   "objective": "Go to Chang'an.",
    "after": [
-    "12-a12y"
+    "12-a12b"
    ],
    "grade": "11K",
    "pool": [
@@ -2361,20 +2362,19 @@
      25509
     ]
    ],
-   "board": false,
-   "objective_zh": "到密室会合。",
-   "title_zh": "定计"
+   "objective_zh": "",
+   "title_zh": "只谈棋子"
   },
   {
-   "node": "12-a12c",
+   "node": "12-a12p",
    "role": "main",
-   "place": "changan--side-hall",
-   "spot": "a12c",
-   "scene": "a12c",
-   "title": "The Secret Edict",
-   "objective": "Reach the Son of Heaven unseen.",
+   "place": "changan--wy-secret",
+   "spot": "secret",
+   "scene": "a12p",
+   "title": "The Plan",
+   "objective": "Meet in the secret room.",
    "after": [
-    "12-a12p"
+    "12-a12y"
    ],
    "grade": "11K",
    "pool": [
@@ -2499,19 +2499,20 @@
      43909
     ]
    ],
-   "objective_zh": "避开耳目，面见天子。",
-   "title_zh": "天子密诏"
+   "board": false,
+   "objective_zh": "到密室会合。",
+   "title_zh": "定计"
   },
   {
-   "node": "12-a12",
+   "node": "12-a12c",
    "role": "main",
-   "place": "changan--wy-secret",
-   "spot": "a12",
-   "scene": "a12",
-   "title": "The Broken Arrow",
-   "objective": "Bring Li Su into the plan.",
+   "place": "changan--side-hall",
+   "spot": "a12c",
+   "scene": "a12c",
+   "title": "The Secret Edict",
+   "objective": "Reach the Son of Heaven unseen.",
    "after": [
-    "12-a12c"
+    "12-a12p"
    ],
    "grade": "11K",
    "pool": [
@@ -2636,19 +2637,19 @@
      295416
     ]
    ],
-   "objective_zh": "说李肃入伙。",
-   "title_zh": "折箭为誓"
+   "objective_zh": "避开耳目，面见天子。",
+   "title_zh": "天子密诏"
   },
   {
-   "node": "12-a13",
+   "node": "12-a12",
    "role": "main",
-   "place": "meiwu--hall",
-   "spot": "a13",
-   "scene": "a13",
-   "title": "A Dragon in a Dream",
-   "objective": "Bring the edict to Dong Zhuo in his hall.",
+   "place": "changan--wy-secret",
+   "spot": "a12",
+   "scene": "a12",
+   "title": "The Broken Arrow",
+   "objective": "Bring Li Su into the plan.",
    "after": [
-    "12-a12"
+    "12-a12c"
    ],
    "grade": "11K",
    "pool": [
@@ -2773,19 +2774,19 @@
      1354
     ]
    ],
-   "objective_zh": "持诏往董卓堂上。",
-   "title_zh": "夜梦龙罩"
+   "objective_zh": "说李肃入伙。",
+   "title_zh": "折箭为誓"
   },
   {
-   "node": "12-a13a",
+   "node": "12-a13",
    "role": "main",
-   "place": "meiwu-road",
-   "spot": "wheel",
-   "scene": "a13a",
-   "title": "A Broken Wheel",
-   "objective": "Ride beside the Grand Preceptor's carriage.",
+   "place": "meiwu--hall",
+   "spot": "a13",
+   "scene": "a13",
+   "title": "A Dragon in a Dream",
+   "objective": "Bring the edict to Dong Zhuo in his hall.",
    "after": [
-    "12-a13"
+    "12-a12"
    ],
    "grade": "11K",
    "pool": [
@@ -2910,19 +2911,19 @@
      144127
     ]
    ],
-   "objective_zh": "骑马随在太师车旁。",
-   "title_zh": "车折马嘶"
+   "objective_zh": "持诏往董卓堂上。",
+   "title_zh": "夜梦龙罩"
   },
   {
-   "node": "12-a13b",
+   "node": "12-a13a",
    "role": "main",
    "place": "meiwu-road",
-   "spot": "fog",
-   "scene": "a13b",
-   "title": "Wind and Fog",
-   "objective": "Find the Grand Preceptor in the fog.",
+   "spot": "wheel",
+   "scene": "a13a",
+   "title": "A Broken Wheel",
+   "objective": "Ride beside the Grand Preceptor's carriage.",
    "after": [
-    "12-a13a"
+    "12-a13"
    ],
    "grade": "11K",
    "pool": [
@@ -3047,19 +3048,19 @@
      21182
     ]
    ],
-   "objective_zh": "在雾中找到太师。",
-   "title_zh": "狂风昏雾"
+   "objective_zh": "骑马随在太师车旁。",
+   "title_zh": "车折马嘶"
   },
   {
-   "node": "12-a13c",
+   "node": "12-a13b",
    "role": "main",
    "place": "meiwu-road",
-   "spot": "fields",
-   "scene": "a13c",
-   "title": "Grass of a Thousand Li",
-   "objective": "Follow the singing into the fields.",
+   "spot": "fog",
+   "scene": "a13b",
+   "title": "Wind and Fog",
+   "objective": "Find the Grand Preceptor in the fog.",
    "after": [
-    "12-a13b"
+    "12-a13a"
    ],
    "grade": "11K",
    "pool": [
@@ -3184,19 +3185,19 @@
      619
     ]
    ],
-   "objective_zh": "循着歌声走进田野。",
-   "title_zh": "千里草"
+   "objective_zh": "在雾中找到太师。",
+   "title_zh": "狂风昏雾"
   },
   {
-   "node": "12-a13d",
+   "node": "12-a13c",
    "role": "main",
-   "place": "changan",
-   "spot": "a13d",
-   "scene": "a13d",
-   "title": "The Taoist's Cloth",
-   "objective": "Escort the Grand Preceptor to the palace.",
+   "place": "meiwu-road",
+   "spot": "fields",
+   "scene": "a13c",
+   "title": "Grass of a Thousand Li",
+   "objective": "Follow the singing into the fields.",
    "after": [
-    "12-a13c"
+    "12-a13b"
    ],
    "grade": "11K",
    "pool": [
@@ -3319,6 +3320,143 @@
     [
      "weiqi-life-and-death-1000-problems-part-2",
      1506
+    ]
+   ],
+   "objective_zh": "循着歌声走进田野。",
+   "title_zh": "千里草"
+  },
+  {
+   "node": "12-a13d",
+   "role": "main",
+   "place": "changan",
+   "spot": "a13d",
+   "scene": "a13d",
+   "title": "The Taoist's Cloth",
+   "objective": "Escort the Grand Preceptor to the palace.",
+   "after": [
+    "12-a13c"
+   ],
+   "grade": "11K",
+   "pool": [
+    [
+     "bedtime-tsumego-part-1",
+     135684
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     553
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     371855
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     149199
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     294019
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-2",
+     144214
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     148959
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     127031
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     371862
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     399121
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     294018
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     292907
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     149229
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     145879
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3552
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     156162
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     149069
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     399124
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3629
+    ],
+    [
+     "hitomi-tsumego",
+     60366
+    ],
+    [
+     "weiqi-life-and-death-drills-beginner-part-3",
+     63419
+    ],
+    [
+     "200-basic-go-problems",
+     176544
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     640
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     148925
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     148910
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-1",
+     132097
+    ],
+    [
+     "common-life-and-death-problems",
+     26038
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     149215
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     148950
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160698
     ]
    ],
    "board": false,
@@ -3483,144 +3621,6 @@
    "grade": "11K",
    "pool": [
     [
-     "bedtime-tsumego-part-1",
-     135684
-    ],
-    [
-     "lee-chang-hos-selected-tsumego-part-1",
-     553
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     371855
-    ],
-    [
-     "specialized-training-in-tsumego-4",
-     149199
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     294019
-    ],
-    [
-     "ohashi-style-power-up-tsumego-part-2",
-     144214
-    ],
-    [
-     "specialized-training-in-tsumego-4",
-     148959
-    ],
-    [
-     "specialized-training-in-tsumego-5",
-     127031
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     371862
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     399121
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     294018
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     292907
-    ],
-    [
-     "specialized-training-in-tsumego-4",
-     149229
-    ],
-    [
-     "compact-go-puzzles-to-learn-the-basics",
-     145879
-    ],
-    [
-     "weiqi-rapid-drill-800-part-3",
-     3552
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     156162
-    ],
-    [
-     "specialized-training-in-tsumego-3",
-     149069
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     399124
-    ],
-    [
-     "weiqi-rapid-drill-800-part-4",
-     3629
-    ],
-    [
-     "hitomi-tsumego",
-     60366
-    ],
-    [
-     "weiqi-life-and-death-drills-beginner-part-3",
-     63419
-    ],
-    [
-     "200-basic-go-problems",
-     176544
-    ],
-    [
-     "specialized-training-in-tsumego-5",
-     640
-    ],
-    [
-     "specialized-training-in-tsumego-4",
-     148925
-    ],
-    [
-     "specialized-training-in-tsumego-4",
-     148910
-    ],
-    [
-     "ohashi-style-power-up-tsumego-part-1",
-     132097
-    ],
-    [
-     "common-life-and-death-problems",
-     26038
-    ],
-    [
-     "specialized-training-in-tsumego-4",
-     149215
-    ],
-    [
-     "specialized-training-in-tsumego-4",
-     148950
-    ],
-    [
-     "go-puzzles-at-a-glance",
-     160698
-    ]
-   ],
-   "board": false,
-   "objective_zh": "在城中走走。",
-   "title_zh": "脐中为灯"
-  },
-  {
-   "node": "12-a15m",
-   "role": "main",
-   "place": "meiwu--diaochan",
-   "spot": "a15m",
-   "scene": "a15m",
-   "title": "Meiwu",
-   "objective": "Go to Meiwu.",
-   "after": [
-    "12-a15"
-   ],
-   "grade": "11K",
-   "pool": [
-    [
      "specialized-training-in-tsumego-4",
      148924
     ],
@@ -3742,19 +3742,19 @@
     ]
    ],
    "board": false,
-   "objective_zh": "",
-   "title_zh": "郿坞"
+   "objective_zh": "在城中走走。",
+   "title_zh": "脐中为灯"
   },
   {
-   "node": "12-a15c",
+   "node": "12-a15m",
    "role": "main",
-   "place": "changan--dutang",
-   "spot": "a15c",
-   "scene": "a15c",
-   "title": "Cai Yong Weeps",
-   "objective": "Go to the victory feast in the great hall of state.",
+   "place": "meiwu--diaochan",
+   "spot": "a15m",
+   "scene": "a15m",
+   "title": "Meiwu",
+   "objective": "Go to Meiwu.",
    "after": [
-    "12-a15m"
+    "12-a15"
    ],
    "grade": "11K",
    "pool": [
@@ -3880,19 +3880,19 @@
     ]
    ],
    "board": false,
-   "objective_zh": "到都堂赴庆功宴。",
-   "title_zh": "蔡邕哭尸"
+   "objective_zh": "",
+   "title_zh": "郿坞"
   },
   {
-   "node": "12-a16",
+   "node": "12-a15c",
    "role": "main",
-   "place": "liangzhou",
-   "spot": "camp",
-   "scene": "a16",
-   "title": "No Pardon",
-   "objective": "Hear the envoy at Li Jue's camp.",
+   "place": "changan--dutang",
+   "spot": "a15c",
+   "scene": "a15c",
+   "title": "Cai Yong Weeps",
+   "objective": "Go to the victory feast in the great hall of state.",
    "after": [
-    "12-a15c"
+    "12-a15m"
    ],
    "grade": "11K",
    "pool": [
@@ -4017,19 +4017,20 @@
      149191
     ]
    ],
-   "objective_zh": "到李傕营中听使者回报。",
-   "title_zh": "求赦不得"
+   "board": false,
+   "objective_zh": "到都堂赴庆功宴。",
+   "title_zh": "蔡邕哭尸"
   },
   {
-   "node": "12-a16a",
+   "node": "12-a16",
    "role": "main",
    "place": "liangzhou",
-   "spot": "v1",
-   "scene": "a16a",
-   "title": "A Rumour in Liangzhou",
-   "objective": "Spread the word in the herders' village.",
+   "spot": "camp",
+   "scene": "a16",
+   "title": "No Pardon",
+   "objective": "Hear the envoy at Li Jue's camp.",
    "after": [
-    "12-a16"
+    "12-a15c"
    ],
    "grade": "11K",
    "pool": [
@@ -4154,19 +4155,19 @@
      148921
     ]
    ],
-   "objective_zh": "在牧人村散布消息。",
-   "title_zh": "流言西凉"
+   "objective_zh": "到李傕营中听使者回报。",
+   "title_zh": "求赦不得"
   },
   {
-   "node": "12-a16b",
+   "node": "12-a16a",
    "role": "main",
    "place": "liangzhou",
-   "spot": "v2",
-   "scene": "a16b",
-   "title": "Fear",
-   "objective": "Spread the word at the walled farm.",
+   "spot": "v1",
+   "scene": "a16a",
+   "title": "A Rumour in Liangzhou",
+   "objective": "Spread the word in the herders' village.",
    "after": [
-    "12-a16a"
+    "12-a16"
    ],
    "grade": "11K",
    "pool": [
@@ -4291,19 +4292,19 @@
      43961
     ]
    ],
-   "objective_zh": "在庄堡散布消息。",
-   "title_zh": "众皆惊惶"
+   "objective_zh": "在牧人村散布消息。",
+   "title_zh": "流言西凉"
   },
   {
-   "node": "12-a16c",
+   "node": "12-a16b",
    "role": "main",
    "place": "liangzhou",
-   "spot": "v3",
-   "scene": "a16c",
-   "title": "Will You Follow Me?",
-   "objective": "Win over the constable at the post town.",
+   "spot": "v2",
+   "scene": "a16b",
+   "title": "Fear",
+   "objective": "Spread the word at the walled farm.",
    "after": [
-    "12-a16b"
+    "12-a16a"
    ],
    "grade": "11K",
    "pool": [
@@ -4428,19 +4429,19 @@
      3636
     ]
    ],
-   "objective_zh": "说服驿镇的亭长。",
-   "title_zh": "能从我反乎"
+   "objective_zh": "在庄堡散布消息。",
+   "title_zh": "众皆惊惶"
   },
   {
-   "node": "12-a16m",
+   "node": "12-a16c",
    "role": "main",
    "place": "liangzhou",
-   "spot": "march",
-   "scene": "a16m",
-   "title": "The March on Chang'an",
-   "objective": "March east.",
+   "spot": "v3",
+   "scene": "a16c",
+   "title": "Will You Follow Me?",
+   "objective": "Win over the constable at the post town.",
    "after": [
-    "12-a16c"
+    "12-a16b"
    ],
    "grade": "11K",
    "pool": [
@@ -4565,34 +4566,19 @@
      132145
     ]
    ],
-   "board": false,
-   "gate": [
-    {
-     "needs": [
-      "node:a16a",
-      "node:a16b",
-      "node:a16c"
-     ],
-     "else": "a16m_wait",
-     "objective": "Spread the rumour through the villages of Liangzhou.",
-     "at": "Liangzhou",
-     "place": "liangzhou",
-     "objective_zh": "在西凉各乡散布流言。"
-    }
-   ],
-   "objective_zh": "向东进发。",
-   "title_zh": "杀奔长安"
+   "objective_zh": "说服驿镇的亭长。",
+   "title_zh": "能从我反乎"
   },
   {
-   "node": "12-a17",
+   "node": "12-a16m",
    "role": "main",
    "place": "liangzhou",
-   "spot": "rengu",
-   "scene": "a17",
-   "title": "Gong to Advance, Drum to Withdraw",
-   "objective": "Hold the mouth of Ren Valley.",
+   "spot": "march",
+   "scene": "a16m",
+   "title": "The March on Chang'an",
+   "objective": "March east.",
    "after": [
-    "12-a16m"
+    "12-a16c"
    ],
    "grade": "11K",
    "pool": [
@@ -4717,19 +4703,34 @@
      156152
     ]
    ],
-   "objective_zh": "守住任谷口。",
-   "title_zh": "鸣金进兵"
+   "board": false,
+   "gate": [
+    {
+     "needs": [
+      "node:a16a",
+      "node:a16b",
+      "node:a16c"
+     ],
+     "else": "a16m_wait",
+     "objective": "Spread the rumour through the villages of Liangzhou.",
+     "at": "Liangzhou",
+     "place": "liangzhou",
+     "objective_zh": "在西凉各乡散布流言。"
+    }
+   ],
+   "objective_zh": "向东进发。",
+   "title_zh": "杀奔长安"
   },
   {
-   "node": "12-a18",
+   "node": "12-a17",
    "role": "main",
-   "place": "changan--xuanping-top",
-   "spot": "a18",
-   "scene": "a18",
-   "title": "Wang Yun Is Here",
-   "objective": "Go to the Son of Heaven at the Xuanping Gate.",
+   "place": "liangzhou",
+   "spot": "rengu",
+   "scene": "a17",
+   "title": "Gong to Advance, Drum to Withdraw",
+   "objective": "Hold the mouth of Ren Valley.",
    "after": [
-    "12-a17"
+    "12-a16m"
    ],
    "grade": "11K",
    "pool": [
@@ -4852,6 +4853,281 @@
     [
      "ohashi-style-power-up-tsumego-part-2",
      144404
+    ]
+   ],
+   "objective_zh": "守住任谷口。",
+   "title_zh": "鸣金进兵"
+  },
+  {
+   "node": "12-a18p",
+   "role": "main",
+   "place": "changan",
+   "spot": "qingsuo",
+   "scene": "a18p",
+   "title": "To Save Myself by Running",
+   "objective": "Go to the palace steps.",
+   "after": [
+    "12-a17"
+   ],
+   "grade": "11K",
+   "pool": [
+    [
+     "go-puzzles-at-a-glance",
+     160720
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-1",
+     20557
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     370640
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     44203
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     292901
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     399113
+    ],
+    [
+     "ishida-yoshio-tesuji",
+     45758
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     292905
+    ],
+    [
+     "segoe-tsumego-dictionary-part-1",
+     15685
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     149238
+    ],
+    [
+     "specialized-training-in-tesuji-1",
+     282319
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     149206
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     148869
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     223305
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     294020
+    ],
+    [
+     "segoe-tsumego-dictionary-part-2",
+     15963
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     3186
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     293913
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-2",
+     132701
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     458
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     127070
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     294026
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     6565
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     134877
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-1",
+     1193
+    ],
+    [
+     "beautiful-dan-level-tsumego-100",
+     138891
+    ],
+    [
+     "the-great-tesuji-encyclopedia-3",
+     46571
+    ],
+    [
+     "go-seigen-tsumego-collection-part-1",
+     30932
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3474
+    ],
+    [
+     "200-basic-go-problems",
+     175714
+    ]
+   ],
+   "board": false,
+   "objective_zh": "到宫阶去。",
+   "title_zh": "临难苟免"
+  },
+  {
+   "node": "12-a18",
+   "role": "main",
+   "place": "changan--xuanping-top",
+   "spot": "a18",
+   "scene": "a18",
+   "title": "Wang Yun Is Here",
+   "objective": "Go to the Son of Heaven at the Xuanping Gate.",
+   "after": [
+    "12-a18p"
+   ],
+   "grade": "11K",
+   "pool": [
+    [
+     "200-basic-go-problems",
+     176625
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     148929
+    ],
+    [
+     "weiqi-rapid-drill-800-part-1",
+     555
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     149059
+    ],
+    [
+     "common-life-and-death-problems",
+     25910
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     149077
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     149205
+    ],
+    [
+     "specialized-training-in-tesuji-5",
+     131116
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3520
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     294030
+    ],
+    [
+     "weiqi-rapid-drill-800-part-1",
+     3144
+    ],
+    [
+     "bedtime-tsumego-part-2",
+     138208
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-2",
+     626
+    ],
+    [
+     "fujisawa-shuko-classroom",
+     265233
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-2",
+     624
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     554
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     85053
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-1",
+     142250
+    ],
+    [
+     "common-life-and-death-problems",
+     42459
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-2",
+     144230
+    ],
+    [
+     "beautiful-dan-level-tsumego-100",
+     134649
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     294031
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147924
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     149218
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     567
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-2",
+     132714
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160692
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     149063
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     43969
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-2",
+     1498
     ]
    ],
    "board": false,

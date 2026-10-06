@@ -469,8 +469,12 @@
    "faces": "W",
    "label": "The Xuanping Gate tower",
    "map": "xuanping-top",
-   "open_when": "node:a17",
-   "climb": true,
+   "open_to": [
+    "node:a17"
+   ],
+   "refuse": [
+    "The guards at the stair cross their halberds. “No one goes up to the Son of Heaven's tower.”"
+   ],
    "blocks_sight": true
   },
   {
@@ -1166,9 +1170,9 @@
    "id": "qingsuo",
    "x": 29.5,
    "y": 41.7,
-   "node": "",
+   "node": "12-a18p",
    "label": "The palace steps",
-   "note": "A18: Lü Bu's plea outside the Qingsuo Gate, on the way to the Xuanping Gate"
+   "note": "Lü Bu's plea outside the Qingsuo Gate"
   }
  ],
  "npcs": [
