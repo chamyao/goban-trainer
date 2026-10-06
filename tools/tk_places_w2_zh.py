@@ -290,4 +290,21 @@ ZH_PLACES2 = {
     # shut roads (claude/plot-places dc30e3a)
     "The long road west runs on to Liangzhou. There's no errand for you there.": "西去的长路通往凉州。那边没有你的差事。",
     "Not yet. Lü Bu holds the road east. The mouth of Ren Valley comes first.": "还不行。吕布扼住东路。先到任谷口。",
+    # Chang'an objectives with directions (proposed to Places after the user's playtest)
+    "See the Grand Preceptor off: out through the Heng Gate, at the north end of the avenue, to the banquet tent.": "为太师送行：出大街北头的横门，到宴帐去。",
+    "Go home to your residence, on the ward street just west of the avenue, and walk out into the rear garden.": "回大街西侧坊街上的府邸，到后园中走走。",
+    "Take the crown to Lü Bu's side door, at the east end of the ward street, past the Chancellor's gate.": "将金冠送到坊街东头吕布府的侧门，须经过相府门前。",
+    "Ride home down the avenue, between the red lanterns.": "沿大街骑马回府，经过两行红灯。",
+    "Find Lü Bu on the earthen ridge above the west road, outside the Heng Gate.": "出横门，到西路上方的土冈寻吕布。",
+    "Sound out Shisun Rui, at the west end of the ward street, on the south side.": "密访士孙瑞，宅在坊街西头南侧。",
+    "Sound out Huang Wan, next door to Shisun Rui.": "密访黄琬，宅在士孙瑞隔壁。",
+    "Call on Cai Yong, across the avenue from Huang Wan, near the palace steps.": "去拜访蔡邕，宅在大街东侧、与黄琬隔街相对，近宫阶。",
+    "Return to the secret room in your residence.": "回府中密室。",
+    "Reach the Son of Heaven unseen: into the palace by the North Side Gate, at the south end of the avenue.": "避开耳目面见天子：从大街南头的北掖门入宫。",
+    "Wait at the North Side Gate, at the south end of the avenue.": "在大街南头的北掖门等候。",
+    "Go to the victory feast in the great hall of state, inside the palace.": "到宫中都堂赴庆功宴。",
+    "Go to the palace steps, beside the North Side Gate.": "到北掖门旁的宫阶去。",
+    "Go to the Son of Heaven at the Xuanping Gate, at the east end of the market street.": "到市街东头的宣平门去见天子。",
+    # the legibility pass (claude/plot-places c232ced)
+    "The market tower": "市楼",
 }

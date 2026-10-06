@@ -25,7 +25,7 @@ const WorldState = {
   load(n, region) {
     let s = {};
     try { s = JSON.parse(localStorage.getItem(this.key(n)) || "{}"); } catch { s = {}; }
-    return { visited: (s.visited || [region.start]).map(worldRenamed), party: s.party || TK.party(TK.world(n)) || region.party, place: s.place, pos: s.pos || null, light: s.light || null, crowd: s.crowd || 0 };   // light: a scene's last light, kept onto the next map
+    return { visited: (s.visited || [region.start]).map(worldRenamed), party: s.party || TK.party(TK.world(n)) || region.party, place: s.place, pos: s.pos || null, light: s.light || null, crowd: s.crowd || 0, routes: s.routes || [] };   // routes: destinations already shown the way to   // light: a scene's last light, kept onto the next map
   },
   save(n, st) { try { localStorage.setItem(this.key(n), JSON.stringify(st)); } catch { /* private mode */ } },
 };
@@ -791,6 +791,7 @@ function worldScenes() {
 
     setGoal() {
       this.goalAt = this.goalPoint();
+      this.showRoute();
       if (this.fairy) this.fairy.wp = null;
       const q = this.nextMain();
       if (!q) return TK.world(this.w.n + 1)
@@ -958,6 +959,49 @@ function worldScenes() {
         L.el.hidden = !on;
         if (on) { L.el.style.left = `${r.left - rr.left + sx * k}px`; L.el.style.top = `${r.top - rr.top + sy * k}px`; }
       }
+    }
+
+    // The first time the story sends you somewhere new, the way there lights up on the ground: a run of
+    // golden lights from your feet to it, then a glow where it is, fading after a few seconds. Once per
+    // destination (kept with the save); Wukong is still there for being stuck later.
+    showRoute(tries = 0) {
+      const t = this.goalAt, P = this.player;
+      if (!t || !P || !this.region) return;
+      const T = this.tw || 16, key = `${this.placeId}|${Math.round(t.x / T)},${Math.round(t.y / T)}`;
+      this.st.routes = this.st.routes || [];
+      if (this.st.routes.includes(key)) return;
+      if (this.ui.busy() || this.cine || this.leaving || this.seated) {   // after the scene or the line, not under it
+        if (tries < 60) this.time.delayedCall(500, () => this.showRoute(tries + 1));
+        return;
+      }
+      if (this.goalAt !== t) return;
+      this.st.routes.push(key); this.save();
+      if (!this.textures.exists("@route")) {
+        const S = 24, cv = document.createElement("canvas"); cv.width = cv.height = S;
+        const g = cv.getContext("2d"), r = g.createRadialGradient(S / 2, S / 2, 0, S / 2, S / 2, S / 2);
+        r.addColorStop(0, "rgba(255,236,160,1)"); r.addColorStop(.4, "rgba(255,206,90,.75)"); r.addColorStop(1, "rgba(255,180,60,0)");
+        g.fillStyle = r; g.fillRect(0, 0, S, S);
+        this.textures.addCanvas("@route", cv);
+      }
+      const pts = [{ x: P.x, y: P.y }, ...(this.findPath(P.x, P.y, t.x, t.y) || [t])];
+      const dots = [];
+      let carry = 0;
+      for (let i = 1; i < pts.length; i++) {
+        const a = pts[i - 1], b = pts[i], d = Math.hypot(b.x - a.x, b.y - a.y);
+        for (let u = carry; u < d; u += 11) dots.push({ x: a.x + (b.x - a.x) * u / d, y: a.y + (b.y - a.y) * u / d });
+        carry = (carry - d) % 11; if (carry < 0) carry += 11;
+      }
+      const made = dots.slice(2).map((p, i) => {
+        const im = this.add.image(p.x, p.y - 2, "@route").setDepth(-985).setScale(.55).setAlpha(0).setBlendMode(Phaser.BlendModes.ADD);
+        this.tweens.add({ targets: im, alpha: .9, delay: i * 22, duration: 200 });
+        return im;
+      });
+      const end = this.add.image(t.x, t.y, "@route").setDepth(-985).setScale(2.4).setAlpha(0).setBlendMode(Phaser.BlendModes.ADD);
+      this.tweens.add({ targets: end, alpha: .85, delay: made.length * 22, duration: 300 });
+      this.tweens.add({ targets: end, scale: 3.2, delay: made.length * 22 + 300, duration: 700, yoyo: true, repeat: 3, ease: "Sine.easeInOut" });
+      const all = [...made, end];
+      this.time.delayedCall(made.length * 22 + 5500, () => this.tweens.add({ targets: all, alpha: 0, duration: 900,
+        onComplete: () => all.forEach(im => im.destroy()) }));
     }
 
     goalGuide(time) {
