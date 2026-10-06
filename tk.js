@@ -576,7 +576,7 @@ const TK = {
   setAt(n, key) { const a = this.ls("tk-at"); a[n] = key; this.lsSet("tk-at", a); },
   party(w) { return this.ls("tk-party")[w.n] || w.party; },
   setParty(w, list) { const a = this.ls("tk-party"); a[w.n] = list; this.lsSet("tk-party", a); },
-  problemRef(node) { const d = this.ls("tk-draw"); return node.pool[(d[node.key] || 0) % node.pool.length]; },
+  problemRef(node, idx = 0) { const d = this.ls("tk-draw"); return node.pool[((d[node.key] || 0) + idx) % node.pool.length]; },
   // A wrong move keeps the problem but rests it: TK_REST ms before it can be tried again.
   rest(key) { const d = this.ls("tk-rest"); d[key] = Date.now() + TK_REST; this.lsSet("tk-rest", d); },
   restLeft(key) { return Math.max(0, (this.ls("tk-rest")[key] || 0) - Date.now()); },
@@ -1270,9 +1270,11 @@ async function tkLevelData(worldN, key) {
   await TK.load();
   const w = TK.world(worldN);
   if (w && !TK.node(w, key) && typeof WorldData !== "undefined") await WorldData.region(w.n);  // a challenger in the world
-  const node = w && (TK.node(w, key) || (typeof WorldData !== "undefined" && WorldData.node(w, key)));
-  if (!node || !(node.town || TK.open(w, key) || TK.cleared(key))) return null;
-  const [bookId, pid] = TK.problemRef(node);
+  // "NODE~2": a scene's second problem, drawn from the same pool
+  const [base, nth] = String(key).split("~"), idx = Math.max(0, (+nth || 1) - 1);
+  const node = w && (TK.node(w, base) || (typeof WorldData !== "undefined" && WorldData.node(w, base)));
+  if (!node || !(node.town || TK.open(w, base) || TK.cleared(base) || TK.cleared(key))) return null;
+  const [bookId, pid] = TK.problemRef(node, idx);
   const src = await getBook(bookId);
   const p = src.problems.find(x => x.id === pid);
   return { w, node, src, p, book: Object.assign({}, src, { problems: [p] }) };
