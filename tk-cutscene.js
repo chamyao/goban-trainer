@@ -594,8 +594,11 @@ const WorldCutscene = {
     // the scene starts in the light the map is in, until it sets its own
     if (scene.worldShade) scene.worldShade.setVisible(false);
     if (tintNow) light(tintNow, 0);
+    let pi = 0;   // which of the scene's problems this is (a scene may pose several)
     for (const b of cs.beats) {
       if (b.do === "problem") {
+        const i = pi++;
+        if (opts.problemDone && opts.problemDone(i)) { if (!skip) solved = true; continue; }   // solved before: on past it
         if (skip) {                               // fast-forwarded here: frame the scene, and say the last line again on a retry
           const ff = opts.ffToProblem;
           skip = false;
@@ -603,7 +606,7 @@ const WorldCutscene = {
           if (to) { const [x, y] = seen(to); cam.centerOn(x, y - 8); }
           if (ff && lastLine) await run(lastLine);
         }
-        if (opts.onProblem && !(await opts.onProblem())) { left = true; break; }
+        if (opts.onProblem && !(await opts.onProblem(i))) { left = true; break; }
         solved = true;
         continue;
       }

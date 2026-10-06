@@ -209,8 +209,8 @@ def check_world(w, ZH, CAST, errors, warnings, needs=None, folk=None):
             if not seen:
                 warnings.append(f"{name}: {where}: still {st[1]!r} is hidden at once (no line before the next {nx[0] if i + 1 < len(steps) else 'end'!r})")
         problems = [s for s in steps if s[0] == "problem"]
-        if need_problem and len(problems) != 1:
-            errors.append(f"{name}: {where} has {len(problems)} problems (needs exactly 1)")
+        if need_problem and not problems:   # several are fine: posed in turn, each kept on its own (NODE~2, …)
+            errors.append(f"{name}: {where} has no problem (needs at least 1)")
         for st in steps:
             op = st[0]
             if op not in STEPS:
