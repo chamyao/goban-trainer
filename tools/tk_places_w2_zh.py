@@ -309,4 +309,6 @@ ZH_PLACES2 = {
     "The market tower": "市楼",
     # a12a, reworded for the palace-terrace lane (claude/plot-places f0b4816)
     "Sound out Shisun Rui, on the lane at the foot of the palace terrace, at its west end.": "密访士孙瑞，宅在宫台脚下小巷的西头。",
+    # a15m objective
+    "Go to Meiwu.": "前往郿坞。",
 }
