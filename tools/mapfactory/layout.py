@@ -300,6 +300,9 @@ class Layout:
                                     use=lm.get("use"), side=lm.get("side"), clear=lm.get("clear"))
             if o is None:
                 raise RuntimeError(f"no room for {lm['kind']}")
+            for k in ("open_to", "refuse"):   # a door that opens only for some (a protagonist, or a condition)
+                if lm.get(k):
+                    o[k] = lm[k]
             if lm.get("rooms"):   # one building outside, several rooms in a row inside (interiors.build_chain)
                 o["rooms"] = lm["rooms"]
                 for c in lm["rooms"]:

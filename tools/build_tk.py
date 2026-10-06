@@ -90,7 +90,7 @@ def place_lines():
     for places in PLACES.values():
         for b in places.values():
             said = [(l, None) for lm in b.get("landmarks", [])
-                    for k in ("intro", "outro", "empty", "waiting", "deliver", "delivered", "call") for l in lm.get(k, [])]
+                    for k in ("intro", "outro", "empty", "waiting", "deliver", "delivered", "call", "refuse") for l in lm.get(k, [])]
             for p in b.get("npcs", []):
                 for k in ("say", "intro", "win", "done", "give", "given", "call"):
                     v = p.get(k)

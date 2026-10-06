@@ -247,7 +247,8 @@ def furnish_place(m, place, rooms, world_n):
             built = build_chain(m, place, o, chain, rooms, world_n)
             if built:
                 dx = o["x"] + o["w"] / 2
-                m["exits"].append({"to": built[0]["id"], "side": "N", "x": round(dx - .4, 2), "y": o["y"] + o["h"] - .15, "w": .8, "h": .45, "door": True})
+                m["exits"].append({"to": built[0]["id"], "side": "N", "x": round(dx - .4, 2), "y": o["y"] + o["h"] - .15, "w": .8, "h": .45, "door": True,
+                              **{k: o[k] for k in ("open_to", "refuse") if o.get(k)}})
                 m["entries"][built[0]["id"]] = [int(dx - .5) if o["w"] % 2 else int(dx), o["y"] + o["h"]]
                 out += built
             continue
@@ -268,7 +269,8 @@ def furnish_place(m, place, rooms, world_n):
             continue
         # the door: press against the middle of the building's front wall
         dx = o["x"] + o["w"] / 2
-        m["exits"].append({"to": rid, "side": "N", "x": round(dx - .4, 2), "y": o["y"] + o["h"] - .15, "w": .8, "h": .45, "door": True})
+        m["exits"].append({"to": rid, "side": "N", "x": round(dx - .4, 2), "y": o["y"] + o["h"] - .15, "w": .8, "h": .45, "door": True,
+                              **{k: o[k] for k in ("open_to", "refuse") if o.get(k)}})
         m["entries"][rid] = [int(dx - .5) if o["w"] % 2 else int(dx), o["y"] + o["h"]]
         out.append(room)
     return out

@@ -35,7 +35,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=47`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=48`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
@@ -217,7 +217,7 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=47`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=48`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=34`);
       this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=48`);
     }
@@ -228,7 +228,7 @@ function worldScenes() {
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
       for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=54`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=55`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -289,7 +289,8 @@ function worldScenes() {
           ...(p.needs ? { needs: J(p.needs), delivers: p.delivers || o.name, when: p.when || "", empty: J(p.empty), waiting: J(p.waiting), call: J(p.call),
                           deliver: J(p.deliver), delivered: J(p.delivered) } : {}) };
         else if (o.type === "npc") this.addNpc(o, p, J);
-        else if (o.type === "exit") this.exits.push({ to: p.to, side: p.side, rect: new Phaser.Geom.Rectangle(o.x, o.y, o.width, o.height) });
+        else if (o.type === "exit") this.exits.push({ to: p.to, side: p.side, rect: new Phaser.Geom.Rectangle(o.x, o.y, o.width, o.height),
+          openTo: p.open_to ? JSON.parse(p.open_to) : null, refuse: J(p.refuse) });
         else if (o.type === "entry") this.entries[p.from || ""] = { x: o.x, y: o.y };
       }
       // a town's shrine with no story spot of its own: touching it still answers (dark, or its hint)
@@ -1491,7 +1492,16 @@ function worldScenes() {
       this.blocked = Math.max(0, this.blocked - dt);
       for (const e of this.exits) {
         if (!Phaser.Geom.Rectangle.Contains(e.rect, P.x, P.y - 3)) continue;
-        if (this.placeOpen(e.to)) this.go(e.to);
+        // a door only some may pass: the protagonist named, or a condition ("item:edict") that holds
+        const barred = e.openTo && !e.openTo.some(w => w.includes(":") ? this.cond(w) : w === this.lead);
+        if (barred) {
+          if (!this.blocked) {
+            this.blocked = 1500;
+            const back = { N: [0, 1], S: [0, -1], E: [-1, 0], W: [1, 0] }[e.side];
+            P.setPosition(P.x + back[0] * 10, P.y + back[1] * 10);
+            this.talk(e.refuse.length ? worldLines(e.refuse) : [["n", "The door is barred to you.", "此门不为你开。"]]);
+          }
+        } else if (this.placeOpen(e.to)) this.go(e.to);
         else if (!this.blocked) {
           this.blocked = 1500;
           const back = { N: [0, 1], S: [0, -1], E: [-1, 0], W: [1, 0] }[e.side];

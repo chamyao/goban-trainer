@@ -310,7 +310,10 @@ def compile_map(m, kit, out_dir):
             **{k: json.dumps([place_step(l, n["kind"])[0] for l in ([n[k]] if isinstance(n[k], str) else n[k])], ensure_ascii=False)
                for k in ("intro", "win", "done", "give", "given", "call") if n.get(k)})
     for e in m["exits"]:
-        obj(f"exit-{e['to']}", "exit", e["x"] * T, e["y"] * T, e["w"] * T, e["h"] * T, to=e["to"], side=e["side"])
+        obj(f"exit-{e['to']}", "exit", e["x"] * T, e["y"] * T, e["w"] * T, e["h"] * T, to=e["to"], side=e["side"],
+            **({"open_to": json.dumps(e["open_to"])} if e.get("open_to") else {}),
+            **({"refuse": json.dumps([place_step(l)[0] for l in ([e["refuse"]] if isinstance(e["refuse"], str) else e["refuse"])], ensure_ascii=False)}
+               if e.get("refuse") else {}))
     for k, (x, y) in m["entries"].items():
         obj(f"entry-{k}" if k else "entry", "entry", (x + .5) * T, (y + .9) * T, **({"from": k} if k else {}))
 
