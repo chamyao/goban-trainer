@@ -219,7 +219,6 @@ WORLDS = [
                 ["still", "oath_a", "slow pan across"],
                 ["n", "The next day, in the peach garden behind Zhang Fei's farm, the blossoms are in full bloom."],
                 ["fx", "petals", "n2", 0, -20],
-                ["problem", "starred"],  # the immortals at the board (their intro and outro are in tk_places.py); the oath plays once it is solved
                 ["prop", "ox", "ox", "n2", -26, 14], ["prop", "wh", "whitehorse", "n2", -14, 18],
                 ["n", "With a black ox and a white horse for sacrifice, the three burn incense and bow."],
                 ["fx", "incense", "n2", -14, -4],
@@ -234,6 +233,7 @@ WORLDS = [
                 ["still", "oath_c", "slow pan up"],
                 ["n", "Liu Bei becomes eldest brother, Guan Yu second, Zhang Fei youngest. Five hundred village braves join them, and they drink in the garden until they can drink no more."],
                 ["pose", "braves", "bow"], ["pose", "zhangfei", "drunk"], ["emote", "zhangfei", "zzz"], ["wait", 900], ["pose", "braves", "stand"],
+                ["problem", "starred"],  # after the oath: the old men at their board (intro and outro in tk_places.py)
                 ["n", "The next day they gather their weapons, but they have no horses to ride."],
             ]},
             "daxing": {"title": "First Blood at Daxing Mountain", "kind": "main", "steps": [

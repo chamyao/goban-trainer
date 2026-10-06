@@ -86,14 +86,13 @@ PLACES = {
         "The Peach Garden": {
             "archetype": "garden",
             "landmarks": [
-                {"kind": "tree.peach_big", "id": "altar", "label": "The great peach tree"},
-                {"kind": "furniture.gotable", "id": "board", "near": "altar", "node": "1-n2", "label": "The weiqi board",
-                 "trigger": "talk",
-                 # everything the old men say comes before the board opens; when it closes they are simply gone
-                 "intro": ["Under the great peach tree two old men sit over a weiqi board, one in grey, one in red.",
-                           ["starred", "Three young men, come to swear before Heaven? Heaven is listening. But first, show us how you read the stones."],
+                # the oath plays at the tree first; the old men's board comes after it (the user: the board before the oath felt like an interruption)
+                {"kind": "tree.peach_big", "id": "altar", "node": "1-n2", "trigger": "talk", "label": "The great peach tree",
+                 "intro": ["When the cups are empty, the brothers see two old men under the great peach tree, one in grey, one in red, sitting over a weiqi board. No one saw them come.",
+                           ["starred", "Three brothers, sworn before Heaven. Heaven heard you. Now show us how you read the stones."],
                            ["stargrey", "Fortune favours the one who reads the stones."]],
                  "outro": ["When the brothers look up, the two old men are gone. Only the board remains, and a drift of petals."]},
+                {"kind": "furniture.gotable", "id": "board", "near": "altar", "label": "The weiqi board"},
                 {"kind": "building.moongate", "id": "gate"},
             ],
             # The Star Lords of the plan (docs/three-kingdoms-plan.md), unnamed until World 11.
@@ -103,7 +102,7 @@ PLACES = {
                 {"kind": "hero.starred", "near": "board", "until": "1-n2", "face": "left",
                  "say": "“Patience. Heaven is in no hurry.”"},
             ],
-            "objectives": {"1-n2": "Sit at the old men's weiqi board under the great peach tree."},
+            "objectives": {"1-n2": "Swear brotherhood under the great peach tree."},
         },
         "Road to Julu": {
             "archetype": "road",
