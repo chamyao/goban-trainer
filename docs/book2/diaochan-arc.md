@@ -303,6 +303,7 @@ Written from the Chinese original (第八回、第九回). Everything in a beat 
 | `a10` | The sword on the wall | Chang'an / `xf-hall` |
 | `a11` | The ridge | Chang'an / `ridge`, then `wy-secret` |
 | `a12a`, `a12b` | Shisun Rui, Huang Wan (legwork) | Chang'an / their houses |
+| `a12y` | Cai Yong: a game of go at his house. **Not in the novel**; added on the user's call because it plants A15c | Chang'an / `caiyong` (his house and study) |
 | `a12p` | The plan (no board) | Chang'an / `wy-secret` |
 | `a12c` | The secret edict (legwork) | Chang'an / `palace` |
 | `a12` | Recruiting Li Su | Chang'an / `wy-secret` |
@@ -312,7 +313,8 @@ Written from the Chinese original (第八回、第九回). Everything in a beat 
 | `a13c` | Omen: the children's song (night) | Meiwu Road / `fields` |
 | `a13d` | The Taoist with the cloth (no board) | Chang'an / street before the palace |
 | `a14` | North Side Gate (boss) | Chang'an / `north-gate` |
-| `a15` | Li Ru taken; the lamp in the market; Meiwu raided (no board) | Chang'an / `market` |
+| `a15` | Li Ru taken; the lamp in the market (no board) | Chang'an / `market` |
+| `a15m` | Meiwu raided, played as Lü Bu (no board; road challengers on the walk) | Meiwu / `treasury` (Diaochan's rooms beyond it) |
 | `a15c` | Cai Yong weeps (no board) | Chang'an / `dutang` (the great hall of state) |
 | `a16` | No pardon; Jia Xu's advice | Liangzhou / `camp` |
 | `a16a`–`a16c` | Rumour villages (legwork) | Liangzhou / `v1`–`v3` |

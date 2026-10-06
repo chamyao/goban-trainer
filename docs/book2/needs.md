@@ -19,6 +19,7 @@ themselves, the voices, the art and the engine are other sessions' work.
 | A10 Sword on the wall | before the lie; before the sword; before turning it on Li Ru | Diaochan | **3** |
 | A11 The ridge | before the provocation; before "you are a Lü"; before "loyal minister or traitor" | Wang Yun | **3** |
 | A12a / A12b | before the scene (legwork: sounding out each minister) | Wang Yun | 1 each |
+| A12y Cai Yong (**not in the novel**) | before the talk: a game with Cai Yong (setter `caiyong`) | Wang Yun | 1 |
 | A12c Secret edict | before the scene (legwork: reaching the Emperor unseen) | Wang Yun | 1 |
 | A12 Broken arrow | before Li Su's answer | Li Su | 1 |
 | A13 Meiwu | before Li Su's lie about the abdication | Li Su | 1 |
@@ -33,6 +34,24 @@ themselves, the voices, the art and the engine are other sessions' work.
 
 Difficulty within a three-problem scene should rise, the third hardest.
 
+## Road challengers (map, not story: built by Places)
+
+14 in the Diaochan arc: 6 blocking (you can't reach the next beat without passing them), 8 optional.
+Each is one problem, flawless, with the 30-second wait after a wrong move.
+
+| Walk | Protagonist | Total | Blocking | Who |
+|---|---|---|---|---|
+| Crown errand (before A3) | Wang Yun | 2 | 1 | a Chancellor's runner past the Chancellor's gate (blocking); a Flying Bear soldier at a corner |
+| Conspirators' errands (before A12a/A12b) | Wang Yun | 2 | 1 | a Flying Bear patrol in Huang Wan's lane (blocking); an informer by Shisun Rui's gate |
+| Chang'an optionals | Wang Yun | 2 | 0 | the old scholar at the market go table; the Liangzhou officer in the night lane |
+| Li Su's ride out (before A13) | Li Su | 3 | 2 | a road patrol (blocking); the Meiwu gate guard checking the edict (blocking); the post-pavilion keeper |
+| Procession back (A13a–c) | Li Su | 0 | 0 | the omen stops are the problems |
+| Meiwu raid (A15 walk) | Lü Bu (pending) | 2 | 1 | a straggler at the treasure house door (blocking); a Flying Bear officer in a side court |
+| Liangzhou (A16a–c) | Jia Xu | 2 | 1 | the v3 constable (blocking); a headman between v1 and v2 |
+| Ren Valley approach (before A17) | Li Jue | 1 | 0 | a scout's hill post |
+
+Cai Yong is not a road challenger: on the user's call he is a main beat (A12y).
+
 ## Items
 | Key | Name | Chinese | How it is gained |
 |---|---|---|---|
@@ -44,7 +63,7 @@ Difficulty within a three-problem scene should rise, the third hardest.
 | Kind | Exists today? | Used in |
 |---|---|---|
 | `table`, `winejars`, `cart` | yes | A1, A4, A5, A10 |
-| `curtain` (a bead curtain across a room) | **no** | A5 |
+| `curtain` (a bead curtain across a room) | **no** (the only new prop; `halberd` and `mirror` already exist) | A5 |
 | covered carriage (the `cart` with a canopy and curtains, someone boarded) | `cart` only | A5, A10 |
 
 ## Poses (new)
@@ -55,17 +74,19 @@ Difficulty within a three-problem scene should rise, the third hardest.
 | `throat` (a sword held to one's own neck) | A10 |
 | `cutarm` (cutting one's own arm for a blood oath) | A11 |
 
-## New cast (all need a look; voices in `CAST2`)
-王允 Wang Yun, 貂蝉 Diaochan, 吕布 Lü Bu, 李儒 Li Ru, 李肃 Li Su, 张温 Zhang Wen, 士孙瑞 Shisun Rui,
-黄琬 Huang Wan, 汉献帝 Emperor Xian (a boy), and later 董卓之母 Dong Zhuo's mother, 蔡邕 Cai Yong,
-马日磾 Ma Midi, 李傕 Li Jue, 郭汜 Guo Si, 贾诩 Jia Xu, 牛辅 Niu Fu, 胡赤儿 Hu Chi'er, the Taoist.
-Dong Zhuo is Book 1's.
+## Cast
+Already drawn (TK_CHARS): 王允 wangyun, 貂蝉 diaochan, 吕布 lvbu, 李儒 liru, 李肃 lisu, 董卓之母 dongmu, 蔡邕 caiyong,
+李傕 lijue, 郭汜 guosi, 汉献帝 xiandi, and Book 1's 董卓 dongzhuo and 皇甫嵩 huangfusong.
+
+**New looks needed (8):** 贾诩 jiaxu (priority: leads the villains' turn); 士孙瑞 shisunrui, 黄琬 huangwan, 马日磾 mamidi,
+the Taoist daoren (on screen, with lines); 张温 zhangwen (no lines), 牛辅 niufu and 胡赤儿 huchier (narrated only), for whom a folk stand-in is fine.
+Voices for all are in `CAST2`.
 
 ## Stills written so far (briefs in `assets/tk/stills/scene_prompts.json`)
 `dz_roadside`, `dz_redtray`, `dc_garden`, `dc_wangkneels`, `dc_wine`, `dc_dance`, `dc_lanterns`, `dc_window`,
 `dc_sickbed`, `dc_pavilion`, `dc_halberd`, `dc_sword`, `dc_carriage`, `lb_ridge`, `lb_blood`, `ls_arrow`,
 `dz_mother`, `omen_wheel`, `omen_fog`, `omen_song`, `omen_taoist`, `dz_gate`, `dz_lamp`, `dc_meiwu`, `cy_weeps`,
-`ren_valley`, `wy_tower`. (27 in all.)
+`ren_valley`, `wy_tower`, `cy_study`. (28 in all.)
 
 ## Engine requests
 1. **The player walks as the current protagonist.** `["party", ["diaochan"]]` makes Diaochan the one the player

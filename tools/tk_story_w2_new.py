@@ -618,6 +618,31 @@ def _scenes_chain():
             ["spawn", "hw", "huangwan", "a12b", 10, 0],
             N("Then the Colonel of the Capital, Huang Wan. He will come too.", "又密访司隶校尉黄琬。琬亦愿同谋。"),
         ]},
+        # A12y · Cai Yong. NOT IN THE NOVEL (the user's call: it serves the plot). Wang Yun weighs the one scholar Dong Zhuo truly valued,
+        # and decides he is Dong Zhuo's man. Plants what returns in A15c: the gratitude, the unfinished history, Wang Yun's judgment.
+        "a12y": {"title": T("Stones, Not Men", "只谈棋子"), "kind": "main", "steps": [
+            ["spawn", "cy", "caiyong", "a12y", 12, 0],
+            ["prop", "slips", "book", "a12y", 18, -6],
+            N("Cai Yong, the Palace Attendant, is the greatest scholar of the age. When Dong Zhuo took power he sent for him, and Cai Yong refused. "
+              "Dong Zhuo sent word: come, or your whole clan dies. He came. Then Dong Zhuo promoted him three times in a single month.",
+              "侍中蔡邕，当世大儒。董卓秉政，征之，邕不赴。卓使人谓邕曰：“如不来，当灭汝族。”邕惧，只得应命而至。卓见邕大喜，一月三迁其官。"),
+            N("If any man in Chang'an could turn the Grand Preceptor's ear, it is Cai Yong. Wang Yun goes to his house.",
+              "长安城中，若有一人能进言于太师，便是蔡邕。王允往其宅中。"),
+            ["still", "cy_study", "slow zoom in"],
+            S("caiyong", "Minister Wang. Sit down. Will you play a game? In this city it's safer to talk about stones than about men.",
+              "王司徒，请坐。手谈一局如何？这长安城里，谈棋子比谈人安稳。"),
+            ["problem", "caiyong"],  # Wang Yun plays the scholar, and reads him while he plays
+            S("caiyong", "You play like a man with something on his mind.", "司徒落子，似有心事。"),
+            S("wangyun", "And you, Bojie? They say the Grand Preceptor can't do enough for you.", "伯喈又如何？人言太师待君甚厚。"),
+            S("caiyong", "He said he would kill my whole family if I didn't come. Then he promoted me three times in a month. "
+              "I don't know what to make of a man like that. But he is the only one who ever asked me what I was writing.",
+              "他说我若不来，便灭我满门。来了，一月之内三迁我官。这样的人，我实在看不透。可满朝之中，问我在写什么的，只有他一个。"),
+            S("wangyun", "And what are you writing?", "君在写什么？"),
+            S("caiyong", "The history of the Han. Someone has to finish it, while there's still a Han to write about.", "汉史。总得有人写完它，趁汉室还在。"),
+            N("Wang Yun says nothing of what he came for. He thanks him for the game, and goes.", "王允对来意只字未提，谢过这一局，告辞而去。"),
+            N("On the way home he thinks: a man who owes his life and his rank to Dong Zhuo will weep for him one day. Cai Yong cannot be told.",
+              "归途之中，允自思：此人身家官爵，皆出董卓之手；他日必为卓而哭。此事断不可令蔡邕知道。"),
+        ]},
         "a12p": {"title": T("The Plan", "定计"), "kind": "main", "steps": [
             ["spawn", "sr", "shisunrui", "a12p", 10, -4], ["spawn", "hw", "huangwan", "a12p", 12, 4],
             N("Wang Yun brings Shisun Rui and Huang Wan together in the secret room.", "允即请仆射士孙瑞、司隶校尉黄琬商议。"),
@@ -832,11 +857,22 @@ def _scenes_chain():
             N("Wang Yun sends Lü Bu, Huangfu Song and Li Su with fifty thousand men to Meiwu, to take Dong Zhuo's household and goods. "
               "Hearing that Dong Zhuo is dead and Lü Bu is coming, Li Jue, Guo Si, Zhang Ji and Fan Chou flee to Liangzhou that night with the Flying Bear army.",
               "王允又命吕布同皇甫嵩、李肃领兵五万，至郿坞抄籍董卓家产人口。李傕、郭汜、张济、樊稠闻董卓已死，吕布将至，便引了飞熊军连夜奔凉州去了。"),
+            ["party", ["lvbu"]],
+        ]},
+        # A15m · Meiwu raided. Played as Lü Bu: a walk through the opened fortress (road challengers on the way), then this scene, no board.
+        "a15m": {"title": T("Meiwu", "郿坞"), "kind": "main", "steps": [
+            ["spawn", "hs", "huangfusong", "a15m", -16, 6],
+            ["army", "freed", "f_maiden", 5, "a15m", -24, 10],
+            ["spawn", "dc", "diaochan", "a15m", 12, -4],
             ["still", "dc_meiwu", "slow zoom in"],
             N("At Meiwu, the first thing Lü Bu does is take Diaochan.", "吕布至郿坞，先取了貂蝉。"),
+            ["move", "lvbu", "a15m", 8, -4],
+            ["move", "freed", "a15m", -50, 12], ["remove", "freed"],
             N("Huangfu Song sets free all the girls of good family held in the fortress. Every relative of Dong Zhuo, old or young, is put to death, "
               "his mother among them. Gold by the hundred thousand, silks, pearls, vessels and grain beyond counting are listed and brought back to Wang Yun.",
               "皇甫嵩命将坞中所藏良家子女，尽行释放。但系董卓亲属，不分老幼，悉皆诛戮。卓母亦被杀。收籍坞中所蓄黄金数十万，绮罗、珠宝、器皿、粮食不计其数，回报王允。"),
+            ["remove", "dc"],
+            ["party", ["wangyun"]],
         ]},
         "a15c": {"title": T("Cai Yong Weeps", "蔡邕哭尸"), "kind": "main", "steps": [
             ["army", "officials", "f_official", 6, "a15c", 10, -10],
@@ -1076,6 +1112,11 @@ def _nodes_chain():
             "One more, and no more.", "再一人，便够了。",
             "He is with us.", "他愿同谋。",
             "Careful. Not like that.", "小心，不可如此说。")),
+        node("a12y", 265, 83, "a12y", room="caiyong", dilemma=D(
+            "wangyun", "Read Cai Yong.", "看清蔡邕。",
+            "He is the one man Dong Zhuo listens to. Is he Dong Zhuo's, or the Han's?", "太师唯听此人之言。他是董卓的人，还是汉家的人？",
+            "I know where he stands.", "我知道他站在哪边了。",
+            "He's guarded. Watch him more closely.", "他有戒心，再看仔细。")),
         node("a12p", 270, 80, "a12p", room="wy-secret", board=False),
         node("a12c", 280, 74, "a12c", dilemma=D(
             "wangyun", "Reach the Emperor unseen.", "避开耳目，面见天子。",
@@ -1116,6 +1157,7 @@ def _nodes_chain():
                        "There is an edict to kill a traitor!", "有诏讨贼！",
                        "Not yet. Hold.", "且慢，稳住。")),
         node("a15", 360, 24, "a15", board=False),
+        node("a15m", 366, 22, "a15m", place="Meiwu", room="treasury", board=False),
         node("a15c", 370, 20, "a15c", room="dutang", board=False),
         node("a16", 380, 16, "a16", place="Liangzhou", dilemma=D(
             "jiaxu", "Keep them from scattering.", "劝住诸将，勿散。",
@@ -1150,9 +1192,9 @@ def _nodes_chain():
 
 
 _EDGES_CHAIN = [["a1", "a2"], ["a2", "a3"], ["a3", "a4"], ["a4", "a5"], ["a5", "a6"], ["a6", "a7"], ["a7", "a8"], ["a8", "a9"],
-                ["a9", "a10"], ["a10", "a11"], ["a11", "a12a"], ["a12a", "a12b"], ["a12b", "a12p"], ["a12p", "a12c"], ["a12c", "a12"],
+                ["a9", "a10"], ["a10", "a11"], ["a11", "a12a"], ["a12a", "a12b"], ["a12b", "a12y"], ["a12y", "a12p"], ["a12p", "a12c"], ["a12c", "a12"],
                 ["a12", "a13"], ["a13", "a13a"], ["a13a", "a13b"], ["a13b", "a13c"], ["a13c", "a13d"], ["a13d", "a14"], ["a14", "a15"],
-                ["a15", "a15c"], ["a15c", "a16"], ["a16", "a16a"], ["a16a", "a16b"], ["a16b", "a16c"], ["a16c", "a16m"], ["a16m", "a17"],
+                ["a15", "a15m"], ["a15m", "a15c"], ["a15c", "a16"], ["a16", "a16a"], ["a16a", "a16b"], ["a16b", "a16c"], ["a16c", "a16m"], ["a16m", "a17"],
                 ["a17", "a18"]]
 
 _ITEMS = {
