@@ -24,6 +24,22 @@ MATERIALS = {
     "wall": False,   # a room's walls
     "void": False,   # outside the room: drawn black
 }
+# the plan grids' grounds and lines (tools/mapfactory/plans.py writes them as materials)
+MATERIALS.update({
+    "court": True, "ward": True, "passage": True, "plateau": True, "city": True, "market": True, "camp": True,
+    "road": True, "path": True, "bridge": True, "gallery": True, "stage": True, "curtain": True,
+    "garden": True, "field": True, "field.wheat": True, "plain": True, "loess": True, "hills": False,
+    "cliff": False, "wall.city": False, "wall.lattice": False,
+})
+# what a kit draws for a material it has no tiles of (tried in order)
+MATERIAL_FALLBACK = {
+    "court": ["stone"], "ward": ["stone"], "passage": ["stone"], "plateau": ["stone"],
+    "city": ["dirt"], "market": ["dirt"], "camp": ["dirt"], "road": ["dirt"], "path": ["sand", "dirt"],
+    "bridge": ["wood"], "gallery": ["wood"], "stage": ["wood"], "curtain": ["wood"],
+    "garden": ["grass"], "field": ["grass"], "plain": ["grass"], "hills": ["grass"],
+    "field.wheat": ["sand", "grass"], "loess": ["sand"], "cliff": ["sand"],
+    "wall.city": ["wall"], "wall.lattice": ["wall"],
+}
 
 # kind -> (footprint w, h in tiles, solid)
 KINDS = {
@@ -126,6 +142,14 @@ KINDS.update({
     "furn.lamp": (1, 1, True),
     "furn.seat": (1, 1, False),
     "furn.qin": (2, 1, True),
+    # dress and props the plan grids use
+    "tree.poplar": (1, 1, True),            # tall and slender, in roadside rows
+    "plant.peony": (1, 1, False),
+    "water.lotus": (1, 1, False),           # lotus leaves and flowers on a pond tile
+    "milestone": (1, 1, True),
+    "banner.black": (1, 1, True),           # the Chancellor's
+    "prop.lanterns": (1, 1, True),          # a red paper lantern on a stand
+    "prop.body_lamp": (1, 1, False),        # a covered body in the street, a lamp flame on it
 })
 # line kinds -> (walkable, blocks sight); zone kinds -> walkable (the plan grids' lines and zones)
 LINE_KINDS = {"road": (True, False), "path": (True, False), "bridge": (True, False), "gallery": (True, False),
@@ -203,6 +227,13 @@ FALLBACK = {
     "furn.lamp": ["lamp.post"],
     "furn.seat": ["furn.stool"],
     "furn.qin": ["furn.desk", "furn.table"],
+    "tree.poplar": ["tree.pine", "tree.small"],
+    "plant.peony": ["plant.flower", "plant.bush"],
+    "water.lotus": ["plant.flower"],
+    "milestone": ["rock.small"],
+    "banner.black": ["banner.purple", "banner.red"],
+    "prop.lanterns": ["lamp.post"],
+    "prop.body_lamp": ["rock.small"],
 }
 
 # people: folk.* are townsfolk drawn by the kit; hero.<id> are story

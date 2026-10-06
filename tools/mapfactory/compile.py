@@ -13,7 +13,7 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw
 
-from vocab import FALLBACK, FOLK_FALLBACK, KINDS, MATERIALS
+from vocab import FALLBACK, FOLK_FALLBACK, KINDS, MATERIAL_FALLBACK, MATERIALS
 from build_tk import place_step  # lines get their Chinese and voice clip here
 from tk_story_zh import ZH
 
@@ -124,6 +124,8 @@ class Kit:
         return rnd.choice(table[best])
 
     def material(self, mat):
+        if mat not in self.k["materials"]:   # a ground this kit has no tiles of: its stand-in
+            mat = next((m for m in MATERIAL_FALLBACK.get(mat, []) if m in self.k["materials"]), mat)
         d = self.k["materials"].get(mat)
         seen = set()
         while d and "same" in d and d["same"] not in seen:
@@ -158,6 +160,11 @@ def compile_map(m, kit, out_dir):
     W, H = m["size"]
     legend = m["terrain"]["legend"]
     grid = [[legend[c] for c in row] for row in m["terrain"]["rows"]]
+    # a ground this kit has no tiles of is drawn as its stand-in (vocab MATERIAL_FALLBACK), edges and all
+    sub = {mat: kit.material(mat)[0] for mat in {c for row in grid for c in row}
+           if mat not in kit.k["materials"] and mat not in kit.k.get("room_styles", {}).get(m.get("style"), {})}
+    if sub:
+        grid = [[sub.get(c, c) for c in row] for row in grid]
     rnd = random.Random(m["seed"])
 
     # tilesets: every kit sheet used by a material, plus a swatch sheet for flat colours
