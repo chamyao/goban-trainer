@@ -56,7 +56,8 @@ NEW_KINDS = {
     "furn.swordwall": (1, 1, True),                 # a sword hanging on the wall
     "furn.window": (1, 1, True),
     "furn.lamp": (1, 1, True),
-    "furn.seat": (1, 1, False),                     # a chair that fills as legwork is done
+    "furn.seat": (1, 1, False),
+    "furn.qin": (2, 1, True),                       # a qin on its stand (Cai Yong's, the scorched tail)                     # a chair that fills as legwork is done
 }
 # line kinds: walkable or not, and whether they block sight
 LINE_KINDS = {"road": (True, False), "path": (True, False), "bridge": (True, False), "gallery": (True, False),
@@ -129,13 +130,13 @@ PLANS2 = {
                  "node": "2-a12a"},
                 {"id": "huangwan", "kind": "building.house", "rect": [4, 10, 2, 1], "door": "N", "label": "Huang Wan's house",
                  "node": "2-a12b"},
-                {"id": "house-1", "kind": "building.house", "rect": [8, 10, 2, 1], "door": "N"},
+                {"id": "caiyong", "kind": "building.house", "rect": [8, 10, 2, 1], "door": "N", "label": "Cai Yong's house", "map": "caiyong"},
                 {"id": "house-2", "kind": "building.house", "rect": [10, 10, 2, 1], "door": "N"},
                 {"id": "house-3", "kind": "building.house", "rect": [12, 10, 2, 1], "door": "N"},
                 # the palace on its plateau
                 {"id": "palace", "kind": "building.palace", "rect": [3, 11, 7, 4], "door": "N", "label": "Weiyang Palace",
                  "map": "palace", "gate_label": "The North Side Gate"},
-                {"id": "changle", "kind": "building.palace", "rect": [11, 11, 3, 3], "label": "Changle Palace (roofs only)"},
+                {"id": "changle", "kind": "building.palace", "rect": [11, 11, 3, 3], "label": "Changle Palace", "note": "roofs only: not enterable"},
                 {"id": "xuanping", "kind": "building.gatetower", "rect": [15, 5, 1, 2], "label": "The Xuanping Gate tower",
                  "climb": True, "open_when": "node:a17"},
             ],
@@ -148,10 +149,10 @@ PLANS2 = {
                 {"id": "a13d", "at": [6, 8], "node": "2-a13d", "label": "The street before the palace", "trigger": "near"},
                 {"id": "north-gate", "at": [6, 10], "node": "2-a14", "label": "The North Side Gate", "trigger": "near"},
                 {"id": "a18", "at": [14, 5], "node": "2-a18", "label": "The foot of the Xuanping Gate tower", "trigger": "near"},
-                {"id": "qingsuo", "at": [7, 10], "label": "The palace steps (Lü Bu's plea, on the way to A18)"},
+                {"id": "qingsuo", "at": [7, 10], "label": "The palace steps", "note": "A18: Lü Bu's plea outside the Qingsuo Gate, on the way to the Xuanping Gate"},
             ],
             "props": [   # on the lines layer: claim no cell
-                {"kind": "landmark.hitchingpost", "at": [10, 9], "in": ["capital"], "label": "Lü Bu's horse, tied at the gate (A9)",
+                {"kind": "landmark.hitchingpost", "at": [10, 9], "in": ["capital"], "label": "Lü Bu's horse, tied at the gate", "note": "A9: the clue that gives him away",
                  "when": "node:a8", "until": "node:a9"},
                 {"kind": "prop.lanterns", "along": "avenue", "from": [6, 3], "to": [6, 9], "in": ["night-a6"]},
                 {"kind": "prop.body_lamp", "at": [6, 5], "in": ["after"]},
@@ -244,17 +245,17 @@ PLANS2 = {
                      "map": "xf-bedroom", "window": "E"},
                     {"id": "phoenix", "kind": "building.pavilion", "rect": [11, 3, 2, 2], "on": "water", "door": "S",
                      "label": "The Phoenix Pavilion"},
-                    {"id": "rockery", "kind": "garden.rockery", "rect": [3, 5, 2, 2], "label": "Rockery (cover beside the path)"},
+                    {"id": "rockery", "kind": "garden.rockery", "rect": [3, 5, 2, 2], "label": "A rockery", "note": "cover beside the path"},
                     {"id": "willow-1", "kind": "tree.willow", "rect": [3, 8, 1, 1]},
                     {"id": "willow-2", "kind": "tree.willow", "rect": [5, 6, 1, 1]},
                     {"id": "willow-3", "kind": "tree.willow", "rect": [8, 9, 1, 1]},
                     {"id": "willow-4", "kind": "tree.willow", "rect": [11, 8, 1, 1]},
                     {"id": "halberds", "kind": "furn.rack", "rect": [14, 16, 1, 1], "label": "A halberd rack"},
-                    {"id": "plant-e", "kind": "furn.plant", "rect": [11, 14, 1, 1], "label": "A potted plum: a niche behind it is always safe"},
+                    {"id": "plant-e", "kind": "furn.plant", "rect": [11, 14, 1, 1], "label": "A potted plum", "note": "the niche behind it is always safe"},
                 ],
                 "spots": [
                     {"id": "a9", "at": [12, 5], "node": "2-a9", "label": "The Phoenix Pavilion", "trigger": "near"},
-                    {"id": "collision", "at": [16, 5], "label": "The garden gate (Dong Zhuo runs into Li Ru, end of A9)"},
+                    {"id": "collision", "at": [16, 5], "label": "The garden gate", "note": "Dong Zhuo runs into Li Ru here, at the end of A9"},
                 ],
                 "dress": [{"kind": "plant.flower", "along": "flower-path", "every": 1}, {"kind": "water.lotus", "in": "lotus"}],
                 "exits": [{"to": "Chang'an", "at": [8, 19], "side": "S"}],
@@ -280,7 +281,7 @@ PLANS2 = {
                 "lines": [{"id": "walls", "kind": "wall", "outline": [0, 0, 8, 12], "width": 1, "gates": {"gate": [3, 11]}}],
                 "things": [
                     {"id": "lubu-house", "kind": "building.hall_grand", "rect": [1, 1, 5, 3], "door": "S", "label": "Lü Bu's hall", "map": "lubu-hall"},
-                    {"id": "stable", "kind": "building.wing", "rect": [4, 6, 3, 2], "door": "W", "label": "The stable (Red Hare)"},
+                    {"id": "stable", "kind": "building.wing", "rect": [4, 6, 3, 2], "door": "W", "label": "The stable", "note": "Red Hare is here"},
                     {"id": "rack", "kind": "furn.rack", "rect": [1, 7, 1, 1]},
                 ],
                 "exits": [{"to": "Chang'an", "at": [3, 11], "side": "S"}],
@@ -297,8 +298,8 @@ PLANS2 = {
                      "map": "side-hall"},
                 ],
                 "spots": [
-                    {"id": "a14", "at": [7, 3], "node": "2-a14", "label": "Inside the North Side Gate", "trigger": "arrive"},
-                    {"id": "li-ru", "at": [9, 4], "label": "Li Ru brought in bound (A15)"},
+                    {"id": "inside-gate", "at": [7, 3], "label": "Inside the North Side Gate", "note": "A14 starts at the gate on the city map and plays on in here"},
+                    {"id": "li-ru", "at": [9, 4], "label": "The gate court", "note": "A15: Li Ru is brought in bound"},
                 ],
                 "exits": [{"to": "Chang'an", "at": [7, 0], "side": "N"}],
                 "watchers": [   # A12c: reaching the emperor unseen past Dong Zhuo's eunuchs
@@ -352,7 +353,7 @@ PLANS2 = {
             "lubu-hall": room([12, 7], [6, 6], floor="wood",
                               things=[{"id": "rack", "kind": "furn.rack", "rect": [1, 1, 2, 1]},
                                       {"id": "table", "kind": "furn.table", "rect": [5, 2, 2, 1]}],
-                              spots=[{"id": "a6-house", "at": [6, 4], "label": "Lü Bu's house (A6, after the lanterns)"}]),
+                              spots=[{"id": "a6-house", "at": [6, 4], "label": "Lü Bu's house", "note": "A6 plays on in here after the lanterns"}]),
             "jeweller": room([10, 6], [5, 5], floor="wood",
                              things=[{"id": "bench", "kind": "furn.counter", "rect": [3, 1, 3, 1], "label": "The workbench"},
                                      {"id": "lamp", "kind": "furn.lamp", "rect": [7, 1, 1, 1]}]),
@@ -361,6 +362,12 @@ PLANS2 = {
                                    {"id": "table-1", "kind": "furn.table", "rect": [3, 3, 2, 1]},
                                    {"id": "table-2", "kind": "furn.table", "rect": [11, 3, 2, 1]}],
                            spots=[{"id": "a15c", "at": [8, 3], "node": "2-a15c", "label": "The victory feast"}]),
+            "caiyong": room([10, 7], [5, 6], floor="wood",
+                            things=[{"id": "slips-1", "kind": "furn.shelf", "rect": [1, 1, 2, 1], "label": "Bamboo-slip books"},
+                                    {"id": "slips-2", "kind": "furn.shelf", "rect": [7, 1, 2, 1], "label": "Bamboo-slip books"},
+                                    {"id": "gotable", "kind": "furniture.gotable", "rect": [4, 2, 1, 1], "label": "Cai Yong's go table"},
+                                    {"id": "qin", "kind": "furn.qin", "rect": [7, 4, 2, 1], "label": "A qin with a scorched tail"}],
+                            spots=[{"id": "a12y", "at": [5, 3], "node": "2-a12y", "label": "Cai Yong's study"}]),
             "side-hall": room([10, 6], [5, 0],
                               things=[{"id": "seat", "kind": "furn.dais", "rect": [4, 3, 2, 1], "label": "The boy emperor"}],
                               spots=[{"id": "a12c", "at": [5, 2], "node": "2-a12c", "label": "The secret edict"}]),
@@ -389,14 +396,8 @@ PLANS2 = {
                        "back_to": "market"}},
             {"kind": "folk.soldier", "near": "lubu", "in": ["capital"],
              "say": "“In Liangzhou we ride before we walk. These Chang'an streets are too narrow for a horse to stretch.”"},
-            {"kind": "folk.elder", "near": "gotable", "challenge": "scholar", "in": ["capital", "away", "after"],
-             "intro": ["“Sit, Minister. In this city it's safer to talk about stones than people.”"],
-             "win": ["“Ha. You read the board the way you read a room.”"], "done": ["“Another day, Minister. The stones keep.”"]},
             {"kind": "folk.villager", "at": [6, 6], "in": ["night-a2", "night-a6"],
              "say": "“Second watch, and all's well. Keep your lantern lit, sir. The Liangzhou patrols take a dark street for a guilty one.”"},
-            {"kind": "folk.soldier", "at": [14, 7], "in": ["night-a6"], "challenge": "officer",
-             "intro": ["A Liangzhou officer steps out of the lane. “Out after the drum, Minister? Play me for your way home.”"],
-             "win": ["“Go on, then. I never saw you.”"], "done": ["“Still out, Minister?”"]},
             {"kind": "folk.maiden", "near": "wangyun", "in": ["night-a6", "capital"], "when": "node:a5", "until": "node:a10",
              "say": "“They say Lady Diaochan went in the covered carriage, straight to the Grand Preceptor's.”"},
             {"kind": "folk.villager", "near": "stalls", "in": ["away"], "say": "“The Grand Preceptor's at Meiwu. The streets breathe again.”"},
@@ -495,10 +496,6 @@ PLANS2 = {
             {"id": "march", "when": "node:a16m", "light": "dust"},
         ],
         "npcs": [
-            {"kind": "folk.elder", "near": "post-30", "in": ["ride-out"], "challenge": "postkeeper",
-             "say": "“Thirty li to the next post, sir. Mind the ruts after the bridge.”",
-             "intro": ["The post keeper has a board out on the bench. “Long nights out here. Sit a moment, sir.”"],
-             "win": ["“The road's yours. Mind the ruts.”"], "done": ["“Safe road, sir.”"]},
             {"kind": "folk.villager", "at": [14, 5], "in": ["ride-out"], "say": "“We built it, and they sent us home with nothing but a sore back.”"},
             {"kind": "folk.villager", "at": [14, 6], "in": ["procession"], "face": "down", "say": "“Heads down, heads down. Don't let him see your face.”"},
             {"kind": "folk.soldier", "at": [10, 5], "in": ["procession"], "when": "node:a13a",
@@ -533,7 +530,7 @@ PLANS2 = {
             "things": [
                 {"id": "hall", "kind": "building.hall_grand", "rect": [5, 2, 4, 2], "door": "S", "label": "Dong Zhuo's hall", "map": "hall"},
                 {"id": "mother", "kind": "building.wing", "rect": [2, 2, 2, 2], "door": "E", "label": "His mother's rooms", "map": "mother"},
-                {"id": "diaochan", "kind": "building.wing", "rect": [10, 2, 2, 2], "door": "W", "label": "Diaochan's rooms", "map": "diaochan-rooms"},
+                {"id": "diaochan", "kind": "building.wing", "rect": [10, 2, 2, 2], "door": "W", "label": "Diaochan's rooms", "map": "diaochan"},
                 {"id": "women-w", "kind": "building.wing", "rect": [2, 4, 2, 2], "door": "E", "label": "The women's quarters"},
                 {"id": "women-e", "kind": "building.wing", "rect": [10, 4, 2, 2], "door": "W", "label": "The women's quarters"},
                 # granaries in two rows facing an aisle: twenty years of grain, and the hall always in view up the spine
@@ -541,12 +538,11 @@ PLANS2 = {
                 {"id": "granary-2", "kind": "building.granary", "rect": [4, 7, 2, 1], "door": "S"},
                 {"id": "granary-3", "kind": "building.granary", "rect": [2, 9, 2, 1], "door": "N"},
                 {"id": "granary-4", "kind": "building.granary", "rect": [4, 9, 2, 1], "door": "N"},
-                {"id": "store-1", "kind": "building.storehouse", "rect": [9, 7, 2, 1], "door": "S", "label": "Gold and silk"},
-                {"id": "store-2", "kind": "building.storehouse", "rect": [9, 9, 2, 1], "door": "N", "label": "Pearls and jade"},
+                {"id": "store-1", "kind": "building.storehouse", "rect": [8, 7, 2, 1], "door": "W", "label": "The treasury: gold and silk"},
+                {"id": "store-2", "kind": "building.storehouse", "rect": [8, 9, 2, 1], "door": "W", "label": "The treasury: pearls and jade"},
             ],
             "spots": [
-                {"id": "gate", "at": [7, 10], "label": "The gate (opens for Li Su with the edict)"},
-                {"id": "a15m", "at": [9, 3], "label": "Diaochan's rooms (A15m, Lü Bu; Plot to confirm the key)"},
+                {"id": "gate", "at": [7, 10], "label": "The gate of Meiwu", "note": "opens for Li Su with the edict"},
             ],
             "dress": [{"kind": "tree.poplar", "along": "road", "every": 2}],
             "exits": [{"to": "Meiwu Road", "at": [15, 11], "side": "E"},
@@ -564,7 +560,8 @@ PLANS2 = {
                          spots=[{"id": "a13", "at": [7, 4], "node": "2-a13", "label": "Dong Zhuo's hall"}]),
             "mother": room([8, 6], [7, 3], floor="wood", things=[{"id": "bed", "kind": "furn.bed", "rect": [2, 1, 2, 1]},
                                                                   {"id": "incense", "kind": "furn.lamp", "rect": [5, 1, 1, 1]}]),
-            "diaochan-rooms": room([8, 6], [0, 3], floor="wood", things=[{"id": "mirror", "kind": "furn.drawers", "rect": [5, 1, 1, 1]}]),
+            "diaochan": room([8, 6], [0, 3], floor="wood", things=[{"id": "mirror", "kind": "furn.drawers", "rect": [5, 1, 1, 1]}],
+                             spots=[{"id": "a15m", "at": [4, 3], "node": "2-a15m", "label": "Diaochan's rooms"}]),
         },
         "npcs": [
             {"kind": "folk.soldier", "near": "gate", "in": ["fortress"], "say": "“Walls as thick as Chang'an's. Nothing comes through this gate he doesn't want.”"},
@@ -633,8 +630,6 @@ PLANS2 = {
              "say": "“Wang Yun? A man of the east. What does he know of Liangzhou?”"},
             {"kind": "folk.elder", "near": "corral", "when": "node:a16a", "say": "“Then we're dead men either way. Better on horseback.”"},
             {"kind": "folk.woman", "near": "farm-1", "say": "“We have a wall. Walls kept out the Qiang. Will they keep out Chang'an?”"},
-            {"kind": "folk.official", "near": "posthouse", "face": "W", "until": "node:a16c",
-             "say": "“A man without an army is just a man on a road. I've tied up better.”"},
             {"kind": "folk.soldier", "follower": True, "say": "“Better die marching than in our beds.”"},
         ],
         "objectives": {"2-a16": "Hear the envoy at Li Jue's camp.", "2-a16a": "Spread the word in the herders' village.",
@@ -653,3 +648,80 @@ _xf_hall["watchers"] = [
 _xf_hall["checks"] = [{"check": "sight_puzzle", "seen_by": "lubu", "unseen_by": "dongzhuo", "in": "behind-curtain"}]
 
 
+
+# ---- road challengers: 14 on the arc's walks, 6 of them blocking -------------------------------------------
+# Each sets one go problem (flawless, the usual 30-second wait after a wrong move). "at" is a cell of the
+# plan they stand in ("map": a compound or room of the place, else the place's own plan). A blocking one has
+# "blocks": the spot, thing (its door) or {"exit": place} you can't reach without coming into his view;
+# "view" is how far he sees: a radius in cells, or with "face" a cone. check_plans_w2.py proves the block.
+def _ch(cid, kind, at, when, until, intro, win, done, blocks=None, view=1, face=None, map=None, entry=None):
+    c = {"id": cid, "kind": kind, "at": at, "when": when, "until": until, "intro": [intro], "win": [win], "done": [done],
+         "view": view}
+    for k, v in (("blocks", blocks), ("face", face), ("map", map), ("from", entry)):
+        if v is not None:
+            c[k] = v
+    return c
+
+
+PLANS2["Chang'an"]["challengers"] = [
+    # the crown errand (before A3): a runner watches Lü Bu's gate from across the ward street
+    _ch("runner", "folk.official", [11, 9], "node:a2", "node:a3",
+        "A runner in the Chancellor's colours steps into your path. “Minister Wang, out on foot? The Grand Preceptor likes to know who walks where.”",
+        "“Nothing worth reporting, then. Good day, Minister.”", "The runner watches you pass, and says nothing.",
+        blocks="a3", face="E", view=3),
+    _ch("flyingbear", "folk.soldier", [5, 5], "node:a2", "node:a3",
+        "A Flying Bear soldier lounges against the wall, dice in his fist. “Bored, old man? Play me. Lose, and you buy the wine.”",
+        "“Hah! The old man bites. Go on.”", "“Not again, old man. My purse can't take it.”"),
+    # the conspirators' errands (before A12a/A12b): a patrol stands across the lane at Huang Wan's gate
+    _ch("patrol", "folk.soldier", [4, 9], "node:a11", "node:a12b",
+        "A Flying Bear patrol fills the lane to Huang Wan's gate. “Visiting late, Minister? Every lane in Chang'an answers to the Grand Preceptor.”",
+        "“On your way, then. Quickly.”", "The patrol has moved on to the next lane.", blocks="huangwan"),
+    _ch("informer", "folk.villager", [2, 8], "node:a11", "node:a12a",
+        "A man in a plain coat has sat by Shisun Rui's gate all morning. “A game while you wait, Minister? I have time. I have nothing but time.”",
+        "“You play like a man with nothing to hide.”", "The man in the plain coat has gone."),
+    # Chang'an optionals
+    _ch("scholar", "folk.elder", [10, 5], None, "node:a17",
+        "“Sit, Minister. In this city it's safer to talk about stones than people.”",
+        "“Ha. You read the board the way you read a room.”", "“Another day, Minister. The stones keep.”", face="N"),
+    _ch("officer", "folk.soldier", [14, 7], "node:a5", "node:a6",
+        "A Liangzhou officer steps out of a dark lane. “Out after the drum, Minister? Play me for your way home.”",
+        "“Go on, then. I never saw you.”", "“Still out, Minister?”"),
+]
+PLANS2["Meiwu Road"]["challengers"] = [
+    # Li Su's ride out (before A13), from the Chang'an end: horsemen across the road and the fields beside it
+    _ch("roadpatrol", "folk.soldier", [16, 4], "node:a12", "node:a13",
+        "A patrol of the Grand Preceptor's horsemen bars the road. “Rider from Chang'an! Halt, and show us what you carry.”",
+        "“An edict for the Grand Preceptor? Ride on, then, and ride fast.”", "The patrol waves you through.",
+        blocks={"exit": "Meiwu"}, view=3, entry=[34, 3]),
+    _ch("postkeeper", "folk.elder", [12, 5], "node:a12", "node:a13",
+        "The post keeper has a board out on the bench. “Long nights out here. Sit a moment, sir.”",
+        "“The road's yours. Mind the ruts after the bridge.”", "“Safe road, sir.”"),
+]
+PLANS2["Meiwu"]["challengers"] = [
+    # Li Su at the gate (before A13)
+    _ch("gateguard", "folk.soldier", [7, 11], "node:a12", "node:a13",
+        "The gate captain turns the edict over in his hands. “Seals can be made in Chang'an. Prove you're who you say.”",
+        "“Pass, Commandant Li. Open the gate!”", "The gate stands open for you.", blocks="hall", entry=[14, 11]),
+    # the raid, as Lü Bu (before A15m): one guard still holds the treasury doors at the inner gate
+    _ch("straggler", "folk.soldier", [7, 7], "node:a15", "node:a15m",
+        "One of Dong Zhuo's guards still holds the treasury doors, spear levelled. “The Grand Preceptor's gold! Nobody touches it!”",
+        "“…He's dead, isn't he. Take it. Take all of it.”", "The guard has thrown down his spear.", blocks="diaochan"),
+    _ch("bearofficer", "folk.soldier", [3, 8], "node:a15", "node:a15m",
+        "A Flying Bear officer crouches among the granaries, sword half drawn. “General Lü. I always wondered which of us was better.”",
+        "“So now I know.”", "The officer sits against the wall and does not look up."),
+]
+PLANS2["Liangzhou"]["challengers"] = [
+    # Jia Xu between the villages
+    _ch("headman", "folk.elder", [15, 4], "node:a16a", "node:a16b",
+        "A headman sits on a stone by the road, a stick across his knees. “You're spreading tales from Chang'an. Convince me first.”",
+        "“…Then it's true. I'll tell the others myself.”", "“I've told them. They're coming.”"),
+    _ch("constable", "folk.official", [25, 5], "node:a16b", "node:a16c",
+        "The constable stands at the pavilion, arms folded. “A man without an army is just a man on a road. I've tied up better.”",
+        "“…That's no road gang behind you. That's Liangzhou.”", "The constable has taken down his rope.", blocks="v3"),
+    # Li Jue before Ren Valley
+    _ch("scout", "folk.soldier", [30, 4], "node:a16m", "node:a17",
+        "A scout calls down from his post on the hill. “General! Lü Bu's dust on the east road. Want to know how many?”",
+        "“Then you know as well as I do. Ready the gongs and drums.”", "The scout watches the east road."),
+]
+
+from tk_places_w2_zh import ZH_PLACES2  # noqa: E402,F401  (Plot's file: English line -> Chinese)

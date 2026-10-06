@@ -253,6 +253,61 @@ class Plan:
                 views.append(self.cone((a[0] + (b[0] - a[0]) * k // n, a[1] + (b[1] - a[1]) * k // n), f, w["cone"]))
         return views
 
+    def bfs(self, start, avoid=frozenset()):
+        seen, q = {start}, deque([start])
+        while q:
+            c = q.popleft()
+            for dx, dy in SIDES.values():
+                n = (c[0] + dx, c[1] + dy)
+                if n not in seen and n not in avoid and self.walkable(n):
+                    seen.add(n)
+                    q.append(n)
+        return seen
+
+    def target_cells(self, t):
+        if isinstance(t, dict):
+            return {tuple(e["at"]) for e in self.p.get("exits", []) if e["to"] == t["exit"]}
+        s = next((s for s in self.p.get("spots", []) if s["id"] == t), None)
+        if s:
+            return {tuple(s["at"])}
+        thing = next((x for x in self.p.get("things", []) if x["id"] == t), None)
+        if thing:
+            x, y, w, h = thing["rect"]
+            out = set()
+            for d in thing.get("doors") or [thing.get("door", "S")]:
+                out |= {"N": {(i, y - 1) for i in range(x, x + w)}, "S": {(i, y + h) for i in range(x, x + w)},
+                        "W": {(x - 1, j) for j in range(y, y + h)}, "E": {(x + w, j) for j in range(y, y + h)}}[d]
+            return {c for c in out if self.walkable(c)}
+        self.err(f"challenger target {t!r} names no spot, thing or exit")
+        return set()
+
+    def view_of(self, c):
+        at = tuple(c["at"])
+        if c.get("face"):
+            return self.cone(at, c["face"], c["view"]) | {at}
+        r = c["view"]
+        return {(at[0] + dx, at[1] + dy) for dx in range(-r, r + 1) for dy in range(-r, r + 1)}
+
+    def check_challengers(self, chs, seen_ids):
+        for c in chs:
+            if c["id"] in seen_ids:
+                self.err(f"challenger id {c['id']!r} used twice")
+            seen_ids.add(c["id"])
+            if not known_kind(c["kind"]):
+                self.err(f"challenger {c['id']}: unknown kind {c['kind']}")
+            at = tuple(c["at"])
+            if not self.walkable(at):
+                self.err(f"challenger {c['id']} at {at} stands where no one can walk")
+            elif at not in self.reach:
+                self.err(f"challenger {c['id']} at {at} can't be reached")
+            if c.get("blocks") is not None:
+                start = tuple(c.get("from") or self.p.get("entries", {}).get("") or at)
+                goal = self.target_cells(c["blocks"])
+                if not goal & self.bfs(start):
+                    self.err(f"challenger {c['id']}: {c['blocks']} can't be reached even without him")
+                elif goal & self.bfs(start, frozenset(self.view_of(c))):
+                    self.err(f"challenger {c['id']} doesn't block: {c['blocks']} can be reached from {start} without coming into his view")
+
     def play_check(self, chk):
         beats = set(chk.get("beats", []))
         ws = [w for w in self.p.get("watchers", []) if not beats or beats & set(w.get("in_beats", []))]
@@ -356,6 +411,17 @@ def draw(name, P, out):
             d.rectangle([c[0] * T, c[1] * T, (c[0] + 1) * T - 1, (c[1] + 1) * T - 1], fill=(255, 60, 60, 45))
         for b in w.get("beat") or [w["at"]]:
             d.ellipse([b[0] * T + T / 2 - 4, b[1] * T + T / 2 - 4, b[0] * T + T / 2 + 4, b[1] * T + T / 2 + 4], fill=(200, 30, 30))
+    for c in getattr(P, "challengers", []):
+        if c.get("map"):
+            continue
+        if c.get("blocks") is not None:
+            for v in P.view_of(c):
+                if P.inb(v):
+                    d.rectangle([v[0] * T, v[1] * T, (v[0] + 1) * T - 1, (v[1] + 1) * T - 1], fill=(60, 90, 255, 45))
+        x, y = c["at"]
+        d.ellipse([x * T + T / 2 - 6, y * T + T / 2 - 6, x * T + T / 2 + 6, y * T + T / 2 + 6], fill=(40, 70, 230),
+                  outline=(255, 255, 255) if c.get("blocks") is not None else (0, 0, 0), width=2)
+        d.text((x * T + T / 2 + 7, y * T + T / 2 + 2), c["id"], fill=(20, 30, 120), font=font)
     for s in P.p.get("spots", []):
         x, y = s["at"]
         r = 6 if s.get("node") else 4
@@ -376,9 +442,13 @@ def draw(name, P, out):
 def main():
     keys = shared_keys()
     errors, drawn = [], []
-    for name, p, _ in plans():
+    ch_ids = set()
+    for name, p, b in plans():
         P = Plan(name, p)
         P.check(keys)
+        if p is b["plan"] and hasattr(P, "reach"):
+            P.check_challengers([c for c in b.get("challengers", []) if not c.get("map")], ch_ids)
+            P.challengers = b.get("challengers", [])
         errors += P.errors
         if "--png" in sys.argv:
             drawn.append(draw(name, P, ROOT / "docs/book2/plans"))
@@ -388,6 +458,8 @@ def main():
     missing = sorted(keys - placed)
     for e in errors:
         print("ERROR", e)
+    chs = [c for b in PLANS2.values() for c in b.get("challengers", [])]
+    print(f"{len(chs)} road challengers, {sum(1 for c in chs if c.get('blocks') is not None)} blocking")
     print(f"{sum(1 for _ in plans())} plans, {len(errors)} errors; beats with no spot: {', '.join(missing) or 'none'}")
     for fn in drawn:
         print("drew", fn.relative_to(ROOT))

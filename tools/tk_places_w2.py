@@ -1,4 +1,6 @@
-"""Book 2 places (Hulao Pass), the Diaochan arc: the first playable pass, in today's format.
+"""Book 2 places (Hulao Pass), the Diaochan arc: a STOPGAP in today's format, for testing only.
+
+The main work is the plan grids in tools/tk_plans_w2.py (the user's direction: a good job first).
 
 Unwired: tk_places.py still reads Book 2 from tk_story_w2.py; Plot switches both
 imports in one commit. Same shape as PLACES[1] in tk_places.py (see its docstring),
@@ -266,4 +268,4 @@ PLACES2 = {
     },
 }
 
-ZH_PLACES2 = {}   # English line -> Chinese; Plot fills these with the story's Chinese
+from tk_places_w2_zh import ZH_PLACES2  # noqa: E402,F401  (Plot's file: English line -> Chinese)
