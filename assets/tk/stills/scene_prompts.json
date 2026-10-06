@@ -474,5 +474,194 @@
     "beat": "Chen Gong walks down the tower stairs alone, and does not look back.",
     "scene": "A steep wooden stair inside a gate tower. A thin scholar in a plain blue robe, Chen Gong, walks down it alone, back straight, hands bound before him. At the top of the stairs Cao Cao has half risen, one hand reaching after him, his face wet with tears. Guards stand aside and do not hold him.",
     "notes": "transition beat"
+  },
+  "dz_roadside": {
+    "book": 2,
+    "category": "intrigue",
+    "beat": "Dong Zhuo's roadside banquet: the ministers frozen with terror while he eats and laughs.",
+    "scene": "A long banquet tent pitched beside a dusty road outside a city gate of Chang'an, afternoon. Rows of Han ministers in dark court robes and black caps kneel at low tables; their faces are pale, eyes lowered, and several have dropped their chopsticks onto the tables. At the head table a huge, fat warlord in rich brocade and a jewelled cap holds up a wine cup, laughing with his mouth open. Whatever they are watching is off the edge of the picture, to the right; nothing of it is shown. Medium-wide shot from behind the ministers' shoulders toward the laughing man.",
+    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+  },
+  "dz_redtray": {
+    "book": 2,
+    "category": "intrigue",
+    "beat": "A covered red tray carried down a line of pale officials (Zhang Wen's head; never shown).",
+    "scene": "Inside a lamp-lit government hall, two rows of officials in court robes sit at low tables facing each other. Down the aisle between them a servant walks carrying a lacquered red tray covered with a cloth. Every official has turned rigid, staring at the tray, faces grey with fear; one has half risen. At the far end of the hall the fat warlord Dong Zhuo sits smiling. The tray stays covered. Low angle down the aisle.",
+    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+  },
+  "dc_garden": {
+    "book": 2,
+    "category": "intrigue",
+    "beat": "Diaochan kneeling by the peony pavilion under the moon; Wang Yun has caught her sighing.",
+    "scene": "A private rear garden at night under a full moon. Beside a small open pavilion surrounded by peonies, a sixteen-year-old girl in pale silk with her hair up has dropped to her knees on the stone path, startled, looking up. Before her stands an elderly minister with a grey beard in a dark robe, leaning on a walking staff, his face wet with tears. Moonlight, a trellis of white roses behind him. Only these two.",
+    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+  },
+  "dc_wangkneels": {
+    "book": 2,
+    "category": "intrigue",
+    "beat": "In the painted pavilion the old minister kneels and bows his head to the floor before the girl.",
+    "scene": "Inside a small painted pavilion lit by one lamp, at night. The elderly minister Wang Yun, grey-bearded, in a dark robe, kneels and touches his forehead to the floor. Before him, seated on the only chair where he has placed her, the young singer Diaochan in pale silk shrinks back with her hands raised, shocked that her master is bowing to her. Painted beams and screens, no one else present.",
+    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+  },
+  "dc_wine": {
+    "book": 2,
+    "category": "intrigue",
+    "beat": "Diaochan pours Lü Bu's wine; their eyes meet; Wang Yun plays drunk beside them.",
+    "scene": "A warm rear hall at evening, low tables laden with dishes. Diaochan, dressed in her finest silks and hair ornaments, kneels to offer a cup of wine with both hands to a towering young general, Lü Bu, in a crimson robe with a gold crown on his head; they are looking straight into each other's eyes. Beside them the grey-bearded host Wang Yun slumps with a flushed face, pretending to be drunk, watching from the corner of his eye. Two maids in blue stand by the door.",
+    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+  },
+  "dc_dance": {
+    "book": 2,
+    "category": "intrigue",
+    "beat": "Diaochan dances on the far side of a bead curtain while Dong Zhuo watches.",
+    "scene": "A hall lit by painted candles at night. A bead curtain hangs across the room. On the far side of it a slender young woman in flowing silk sleeves dances, turning, her sleeves in the air, seen half-hidden through the strands of beads. On the near side, a huge fat warlord in brocade sits at a table with a wine cup, leaning forward, watching her hungrily. An old minister sits a little behind him. Musicians with reed pipes at the edge of the light.",
+    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+  },
+  "dc_lanterns": {
+    "book": 2,
+    "category": "intrigue",
+    "beat": "Lü Bu on horseback in two rows of red lanterns, gripping Wang Yun's collar.",
+    "scene": "A night street in Chang'an lit by two long rows of red lanterns carried by soldiers on either side. A huge young general in armour on a great red horse leans down from the saddle and grips an old minister in court robes by the collar; the minister, on a smaller horse, holds up a hand to calm him. A halberd rests across the general's saddle. Deep shadows, red light on their faces.",
+    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+  },
+  "dc_window": {
+    "book": 2,
+    "category": "intrigue",
+    "beat": "Diaochan combing her hair at the window sees Lü Bu's reflection in the pond.",
+    "scene": "Morning in an inner bedroom of a great mansion. A young woman in a loose silk robe sits at an open lattice window combing her long black hair. Below the window is a small garden pond, and on its still surface is the reflection of a very tall man in a hair-binding cap, peering from behind a rock out of sight. She has seen the reflection; her eyes slide toward it while her brows knit in feigned sorrow, a perfumed handkerchief at her eye.",
+    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+  },
+  "dc_sickbed": {
+    "book": 2,
+    "category": "intrigue",
+    "beat": "Behind the sleeping Dong Zhuo, Diaochan points to her heart, then to him, weeping.",
+    "scene": "A dim bedchamber with a large curtained bed. On it a huge fat man lies asleep under brocade covers. Behind the bed, half leaning out from the bed-curtains, a young woman points with one hand at her own heart and with the other at the sleeping man, tears on her cheeks, looking across the room. At the room's entrance stands a tall young general in armour, frozen, staring back at her. Only these three.",
+    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+  },
+  "dc_pavilion": {
+    "book": 2,
+    "category": "intrigue",
+    "beat": "At the Phoenix Pavilion, Lü Bu catches Diaochan as she makes to leap into the lotus pond.",
+    "scene": "A garden pavilion with a curved red rail above a pond full of lotus flowers, afternoon. A young woman in pale silk has one hand on the rail and is leaning out over the water as if to jump; a towering young general in armour has caught her round the waist with both arms and pulled her back against him. His painted halberd leans against the pavilion pillar. Willows and flowering branches all round.",
+    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+  },
+  "dc_halberd": {
+    "book": 2,
+    "category": "intrigue",
+    "beat": "Dong Zhuo hurls the halberd across the garden; Lü Bu knocks it aside.",
+    "scene": "A mansion garden with winding paths. In the foreground a huge, fat man in brocade, red-faced with rage, has just thrown a long painted halberd with all his strength. In the background a tall young general in armour, running away, twists round and strikes the flying halberd aside with his arm. The Phoenix Pavilion and lotus pond behind. A young woman watches from the pavilion, hand to her mouth.",
+    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+  },
+  "dc_sword": {
+    "book": 2,
+    "category": "intrigue",
+    "beat": "Diaochan snatches the sword from the wall and puts it to her own throat; Dong Zhuo lunges for it.",
+    "scene": "A rear hall in a great mansion, a rack on the wall with one sword missing. A young woman in silk has drawn that sword and holds the blade to her own neck, eyes shut, face set. A huge fat man in brocade lunges toward her with both hands out to grab the sword, his face full of alarm. No blood. Only these two.",
+    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+  },
+  "dc_carriage": {
+    "book": 2,
+    "category": "intrigue",
+    "beat": "From the carriage on the way to Meiwu, Diaochan covers her face toward Lü Bu in the crowd.",
+    "scene": "A great curtained carriage drawn by horses moves out through a city gate, surrounded by guards and a crowd of officials bowing by the roadside. From the carriage window, the curtain lifted, a young woman looks back and covers her face with her sleeve as if weeping. Far back in the crowd, a head taller than everyone, a young general in armour stares at the carriage.",
+    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+  },
+  "lb_ridge": {
+    "book": 2,
+    "category": "intrigue",
+    "beat": "Lü Bu alone on an earthen ridge, watching the dust of the carriage.",
+    "scene": "A bare earthen ridge outside the walls of Chang'an, late afternoon. A lone huge warrior in armour and a pheasant-plumed helmet sits on a great red horse, reins slack, gazing after a column whose dust hangs on the road far away. Behind him, small, an old minister in court robes is walking up the slope toward him. Wide shot, long shadows.",
+    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+  },
+  "lb_blood": {
+    "book": 2,
+    "category": "intrigue",
+    "beat": "In the secret room, Lü Bu cuts his arm and swears in blood; Wang Yun kneels.",
+    "scene": "A small windowless room lit by one lamp, wine cups on a low table. A towering young general has drawn a short knife from his belt and drawn it across his forearm, holding the arm out over the table, face fierce with resolve; a thin line of red on the arm. Opposite him an old grey-bearded minister has gone down on his knees with his hands clasped. Only these two.",
+    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+  },
+  "ls_arrow": {
+    "book": 2,
+    "category": "plan",
+    "beat": "Li Su snaps an arrow as his oath before Lü Bu and Wang Yun.",
+    "scene": "The same lamp-lit secret room. A wiry officer in a cavalry commander's robe, a sly, hungry face, snaps an arrow in two between his fists. Watching him, the huge general Lü Bu stands with a hand on his sword, and the old minister Wang Yun sits with an imperial edict scroll tucked in his sleeve. Two other officials sit at the table's edge.",
+    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+  },
+  "dz_mother": {
+    "book": 2,
+    "category": "omen",
+    "beat": "Dong Zhuo's ninety-year-old mother clutches his sleeve: her flesh trembles, it is not a good sign.",
+    "scene": "Inside a richly furnished hall of a fortress, a tiny, very old woman of over ninety, white hair thin, sits on a couch and clutches the brocade sleeve of her enormous fat son, who stands over her laughing, ready to leave. Her face is creased with dread; his is full of greed and joy. Through a doorway behind him, a waiting procession and banners. Only these two in the room.",
+    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+  },
+  "omen_wheel": {
+    "book": 2,
+    "category": "omen",
+    "beat": "On the road from Meiwu, the wheel of Dong Zhuo's great carriage snaps.",
+    "scene": "A wide dirt road across yellow loess hills. A great ornate carriage with a canopy has lurched to one side, one big wheel splintered and broken off its axle. Guards in armour have stopped around it, staring. A huge fat man in brocade is being helped down from it, scowling, while a groom leads up a horse. A wiry officer walks beside him, smoothing his face into a smile.",
+    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+  },
+  "omen_fog": {
+    "book": 2,
+    "category": "omen",
+    "beat": "A wild wind springs up and dark fog swallows the procession.",
+    "scene": "A long procession of guards, banners and a mounted lord on a road, swallowed by a sudden storm of wind: banners whip sideways, dust and dark fog blot out the sky, riders bend their heads. In the middle, the fat lord on horseback looks up at the darkened sky, uneasy; an officer rides close beside him, talking.",
+    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+  },
+  "omen_song": {
+    "book": 2,
+    "category": "omen",
+    "beat": "Children sing in the moonlit fields outside Chang'an; the wind carries the song into Dong Zhuo's tent.",
+    "scene": "Night outside the walls of Chang'an, a full moon over the fields. A ring of small children in plain clothes stand in the grass, singing, their faces solemn. In the near distance, the glowing tent of a great lord, its flap stirred by the wind, a guard at its entrance turning his head toward the song. The city wall dark behind.",
+    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+  },
+  "omen_taoist": {
+    "book": 2,
+    "category": "omen",
+    "beat": "A Taoist with a cloth on a pole, marked with the character 口 at each end, by the roadside.",
+    "scene": "Early morning on a broad street leading to a palace gate. By the roadside stands a thin Taoist in a blue robe and white headcloth, holding up a long pole from which hangs a long strip of white cloth; at each end of the cloth is written a single large black character 口. A grand procession is passing; from his horse a fat lord in brocade has turned to stare at the cloth. Soldiers are moving to drive the Taoist off.",
+    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+  },
+  "dz_gate": {
+    "book": 2,
+    "category": "battle",
+    "beat": "At the North Side Gate, Lü Bu raises the edict over the fallen Dong Zhuo.",
+    "scene": "Inside a palace gate, morning. An overturned carriage, soldiers with halberds in a ring. In the centre the towering general Lü Bu holds his halberd in his left hand and with his right raises an unrolled yellow imperial edict high above his head, shouting. At his feet, a huge fat body in brocade lies face down beside the carriage, the face not shown. Officials in court robes holding swords stand at the hall gate behind, and officers are raising their arms in a cheer. No blood shown.",
+    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+  },
+  "dz_lamp": {
+    "book": 2,
+    "category": "aftermath",
+    "beat": "Night in the market: a lamp burns on the dark mound of Dong Zhuo's body.",
+    "scene": "A city market street at night, deserted stalls. In the middle of the street lies a great dark mound under a rough cloth, only its outline seen; on top of it a small flame burns like a lamp, and dark grease has spread across the paving stones around it. Two soldiers stand guard with spears, their faces lit by the flame. In the shadows at the edge of the street, townspeople look on. Nothing of the body is shown but the covered shape.",
+    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+  },
+  "dc_meiwu": {
+    "book": 2,
+    "category": "aftermath",
+    "beat": "At Meiwu, the first thing Lü Bu does is take Diaochan.",
+    "scene": "The courtyard of a high-walled fortress, soldiers pouring in through the gate behind. In the foreground the towering general Lü Bu, still in armour, has taken the hand of a young woman in pale silk and is leading her away from a doorway. Her face is calm and unreadable, her eyes lowered. Around them, soldiers carry out chests of gold and bolts of silk, and a line of young women is being let out through another gate.",
+    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+  },
+  "cy_weeps": {
+    "book": 2,
+    "category": "aftermath",
+    "beat": "Cai Yong, the scholar, kneels weeping and is brought before Wang Yun's feast.",
+    "scene": "A great hall during a victory feast, officials in court robes at low tables. Two guards have brought in and forced to kneel an elderly scholar with a long grey beard and a scholar's cap, his face wet with tears, hands raised in supplication. At the head of the hall the old minister Wang Yun sits rigid and cold. The officials stare, shocked; one has half risen as if to plead.",
+    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+  },
+  "ren_valley": {
+    "book": 2,
+    "category": "battle",
+    "beat": "At the mouth of Ren Valley, Lü Bu's army is caught between gongs and drums.",
+    "scene": "A narrow valley mouth between steep hills. Stones and arrows rain down from a hillside held by an enemy army; behind Lü Bu's army, another enemy column is pulling back as drums roll. In the middle, the great general on his red horse wheels around in fury, halberd raised, not knowing which way to charge. Gongs and drums on stands on both hillsides.",
+    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+  },
+  "wy_tower": {
+    "book": 2,
+    "category": "aftermath",
+    "beat": "Wang Yun on the Xuanping Gate tower above the rebel army, the boy Emperor behind him.",
+    "scene": "The top of a high city gate tower at dusk, smoke and flames rising from the city behind. A frail grey-bearded minister in court robes stands at the very edge of the parapet, looking down. Behind him under a yellow canopy, a pale boy Emperor of about twelve reaches out a hand as if to stop him. Far below, a vast rebel army fills the square, and two generals on horseback look up with swords drawn.",
+    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
   }
 }
