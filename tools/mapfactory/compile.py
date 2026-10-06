@@ -308,6 +308,7 @@ def compile_map(m, kit, out_dir):
         obj(s["id"], "spot", s["x"] * T, s["y"] * T, node=s["node"], label=s.get("label", ""), label_zh=ZH.get(s.get("label", ""), ""),
             **({"trigger": s["trigger"]} if s.get("trigger") else {}), **({"use": s["use"]} if s.get("use") else {}),
             **({"needs": json.dumps(s["needs"] if isinstance(s["needs"], list) else [s["needs"]])} if s.get("needs") else {}),
+            **({"sight": json.dumps(s["sight"])} if s.get("sight") else {}),
             **{k: s[k] for k in ("delivers", "when") if s.get(k)},
             **{k: json.dumps([place_step(l)[0] for l in s[k]], ensure_ascii=False) for k in ("empty", "waiting", "deliver", "delivered", "call") if s.get(k)},
             **{k: json.dumps([place_step(l)[0] for l in s[k]], ensure_ascii=False) for k in ("intro", "outro") if s.get(k)})
@@ -318,6 +319,9 @@ def compile_map(m, kit, out_dir):
             say=json.dumps([place_step(l, n["kind"])[0] for l in n.get("say", [])], ensure_ascii=False),
             **{k: n[k] for k in ("challenge", "until", "face", "when", "gives", "gives_when") if n.get(k)},
             **({"view": json.dumps(n["view"])} if n.get("view") else {}),
+            **({"watch": json.dumps({**n["watch"], "seen": [place_step(l, n["kind"])[0] for l in
+                                                            ([n["watch"]["seen"]] if isinstance(n["watch"].get("seen"), str) else n["watch"].get("seen") or [])]},
+                                    ensure_ascii=False)} if n.get("watch") else {}),
             **({"in": json.dumps([n["in"]] if isinstance(n["in"], str) else n["in"])} if n.get("in") else {}),
             **({"guard_x": n["guard"][0] * T, "guard_y": n["guard"][1] * T} if n.get("guard") else {}),
             **{k: json.dumps([place_step(l, n["kind"])[0] for l in ([n[k]] if isinstance(n[k], str) else n[k])], ensure_ascii=False)

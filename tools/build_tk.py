@@ -95,6 +95,8 @@ def place_lines():
                 for k in ("say", "intro", "win", "done", "give", "given", "call"):
                     v = p.get(k)
                     said += [(l, p["kind"]) for l in ([v] if isinstance(v, str) else v or [])]
+            said += [(l, None) for ls in b.get("seen_lines", {}).values() for l in ls]   # a stealth watcher who sees you
+            said += [(l, p["kind"]) for p in b.get("npcs", []) if isinstance((p.get("watch") or {}).get("seen"), list) for l in p["watch"]["seen"]]
             said += [(st["procession"]["leash_line"], None) for st in b.get("states", [])   # the procession's pull back
                      if (st.get("procession") or {}).get("leash_line")]
             for l, kind in said:

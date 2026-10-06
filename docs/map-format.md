@@ -205,6 +205,14 @@ An npc with `"challenge"` may also have:
 - `"blocks"`: a node (`"a3"`), a landmark or room id, or `{"exit": "Meiwu"}`. Come within 2.5 tiles of it unbeaten and he stops you.
 - Lose: you're stepped back, and he waits until you've left and come again. Win: he stands aside and is no longer in the way.
 
+### Stealth
+An npc's `"watch"`: `{"id", "cone": tiles, "face" | "turns": [dirs], "beat": [[x, y], …], "pause": [x, y, seconds], "in_beats": [nodes], "seen": [lines] | key, "back_to": id}`.
+- He walks his beat (or turns between `turns` every few seconds), and his 110° cone is drawn on the ground. Solid things stop the cone (walls, buildings, trees, rocks, screens); a `wall.lattice` doesn't.
+- He watches only while one of `in_beats` is open (always, if none are given).
+- If he sees you, he says `seen` (lines, or a key into the brief's `"seen_lines"`), and you're walked back to `back_to`: a spot, landmark, entry, or another room or place by id. There's no game over.
+- A watcher with no `seen` or `back_to` only looks: use it for sight puzzles.
+- **Sight puzzle:** a spot (landmark) with `"sight": {"seen_by": id, "unseen_by": id}` plays its beat once the player has stood, for a moment, where the first watcher sees them and the second doesn't (A7, the curtain).
+
 ### Doors and rooms
 - A building's `"open_to"` is a list of protagonist ids or conditions (`"item:edict"`). Anyone else is turned back with `"refuse"` lines (voiced).
 - A building's `"rooms"`: `[id | {"id", "label", "kind"}]` puts rooms in a row behind one street door, each with a back door to the next.
