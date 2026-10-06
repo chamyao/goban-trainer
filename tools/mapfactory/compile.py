@@ -153,6 +153,17 @@ class Kit:
         return f"{kind if kind in kinds else FOLK_FALLBACK}#{i}", False
 
 
+def voiced_states(states):
+    """A procession's leash line as a spoken step (Chinese and voice clip)."""
+    out = []
+    for st in states:
+        pr = st.get("procession")
+        if pr and isinstance(pr.get("leash_line"), str):
+            st = {**st, "procession": {**pr, "leash_line": place_step(pr["leash_line"])[0]}}
+        out.append(st)
+    return out
+
+
 def compile_map(m, kit, out_dir):
     T = kit.T
     W, H = m["size"]
@@ -334,7 +345,7 @@ def compile_map(m, kit, out_dir):
            "nextlayerid": len(layers) + 2, "nextobjectid": len(objs) + 1,
            "properties": [{"name": "kit", "type": "string", "value": kit.k["kit"]},
                           {"name": "source", "type": "string", "value": f"{m['id']}.map.json"}]
-                         + ([{"name": "states", "type": "string", "value": json.dumps(m["states"], ensure_ascii=False)}] if m.get("states") else []),
+                         + ([{"name": "states", "type": "string", "value": json.dumps(voiced_states(m["states"]), ensure_ascii=False)}] if m.get("states") else []),
            "tilesets": tilesets,
            "layers": [{"id": i + 1, "name": n, "type": "tilelayer", "width": W, "height": H, "x": 0, "y": 0,
                        "opacity": 1, "visible": True, "data": data} for i, (n, data) in enumerate(layers)] +

@@ -95,6 +95,8 @@ def place_lines():
                 for k in ("say", "intro", "win", "done", "give", "given", "call"):
                     v = p.get(k)
                     said += [(l, p["kind"]) for l in ([v] if isinstance(v, str) else v or [])]
+            said += [(st["procession"]["leash_line"], None) for st in b.get("states", [])   # the procession's pull back
+                     if (st.get("procession") or {}).get("leash_line")]
             for l, kind in said:
                 step, voice = place_step(l, kind)
                 lines[step[-1]] = (step[-2], voice, step[1] if step[0] == "n" else step[2])

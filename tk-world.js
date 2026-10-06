@@ -300,7 +300,7 @@ function worldScenes() {
       this.tw = map.tileWidth || 16;
       // one map, several looks (Places' "states"): the last whose "when" holds and "until" doesn't
       try { this.states = JSON.parse((map.properties || []).find(x => x.name === "states")?.value || "null"); } catch { this.states = null; }
-      this.stated = []; this.refs = {}; if (this.fog) { this.fog.destroy(); this.fog = null; }
+      this.stated = []; this.refs = {}; if (this.fog) { this.fog.destroy(); this.fog = null; } this.procession = null;
       const sets = map.tilesets.map(ts => map.addTilesetImage(ts.name, `kit-${ts.name}`));
       this.water = null;
       const layers = [];
@@ -650,11 +650,11 @@ function worldScenes() {
     save() { WorldState.save(this.w.n, this.st); }
     // The light a scene left the world in (tk-cutscene.js): kept on the map, and on the next map, until
     // a scene sets another. Day is none.
+    // Every state that holds now, merged in order (a later one's light, fog or sound wins); ids: all of them.
     mapState() {
       if (!this.states) return null;
-      let cur = null;
-      for (const st of this.states) if (this.cond(st.when) && !(st.until && this.cond(st.until))) cur = st;
-      return cur;
+      const on = this.states.filter(st => this.cond(st.when) && !(st.until && this.cond(st.until)));
+      return on.length ? Object.assign({}, ...on, { ids: on.map(st => st.id) }) : null;
     }
     setWorldLight(tint) { this.st.light = tint || null; this.save(); this.applyWorldLight(); }
     applyWorldLight() {
@@ -695,12 +695,12 @@ function worldScenes() {
     refreshStory() {
       const st = this.mapState();
       for (const n of this.npcs) if (n.when || n.in) {
-        const on = this.cond(n.when) && (!n.in || !!(st && n.in.includes(st.id)));
+        const on = this.cond(n.when) && (!n.in || !!(st && n.in.some(i => st.ids.includes(i))));
         n.spr.setVisible(on); n.spr.body.enable = on;
         if (n.mark) n.mark.setVisible(on && !TK.cleared(n.challenge));   // a challenger not here yet has no "!" either
       }
       for (const o of this.stated || []) {
-        const on = !!(st && o.in.includes(st.id));
+        const on = !!(st && o.in.some(i => st.ids.includes(i)));
         if (o.img) o.img.setVisible(on);
         if (o.zone && o.zone.body) o.zone.body.enable = on;
       }
@@ -1528,6 +1528,76 @@ function worldScenes() {
       this.engaged = null;
     }
 
+    // A procession (a map state's "procession"): its column walks the road from "from" to "to" at a walk;
+    // the player is free inside it on a soft leash to the carriage; it halts at each stop whose beat is
+    // still to play, and goes on once it has. On coming back it starts from the last stop passed.
+    procession_() {
+      const st = this.mapState(), pr = st && st.procession;
+      if (!pr) { if (this.procession) { this.procession.members.forEach(m => m.spr.destroy()); this.procession = null; } return; }
+      if (this.procession && this.procession.pr === pr) return;
+      const T = this.tw || 16, at = c => ({ x: (c[0] + .5) * T, y: (c[1] + .9) * T });
+      const a = at(pr.from || [0, 0]), b = at(pr.to || [0, 0]);
+      const path = [a, ...(this.findPath(a.x, a.y, b.x, b.y) || [b])];
+      const cum = [0];
+      for (let i = 1; i < path.length; i++) cum.push(cum[i - 1] + Math.hypot(path[i].x - path[i - 1].x, path[i].y - path[i - 1].y));
+      const pos = d => {
+        d = Math.max(0, Math.min(cum[cum.length - 1], d));
+        let i = 1; while (i < cum.length - 1 && cum[i] < d) i++;
+        const t = (d - cum[i - 1]) / ((cum[i] - cum[i - 1]) || 1), p0 = path[i - 1], p1 = path[i];
+        return { x: p0.x + (p1.x - p0.x) * t, y: p0.y + (p1.y - p0.y) * t, dir: Math.abs(p1.x - p0.x) > Math.abs(p1.y - p0.y) ? (p1.x > p0.x ? "right" : "left") : (p1.y > p0.y ? "down" : "up") };
+      };
+      const near = (pt, d0) => { let best = 0, bd = 1e9; for (let d = 0; d <= cum[cum.length - 1]; d += 4) { const q = pos(d), e = Math.hypot(q.x - pt.x, q.y - pt.y); if (e < bd) { bd = e; best = d; } } return best; };
+      const stops = (pr.stops || []).map(id => this.spots[id]).filter(Boolean).map(sp => ({ sp, d: near(sp) }));
+      // the column, head first; the player keeps his own feet
+      const members = [];
+      let gap = 0, carriage = null;
+      for (const c of pr.column || []) {
+        const [what] = String(c).split(":");
+        if (what === "player") { gap += 1.5 * T; continue; }
+        const n = what === "outriders" || what === "rearguard" ? 2 : 1;
+        for (let k = 0; k < n; k++) {
+          let spr;
+          if (what.startsWith("carriage") && this.textures.get("tk-props").has("carriage")) spr = this.add.image(0, 0, "tk-props", "carriage").setOrigin(.5, 1);
+          else { this.hero("f_soldier"); spr = this.add.sprite(0, 0, "h-f_soldier-down-0").setOrigin(.5, 1); spr.walker = "f_soldier"; }
+          const m = { spr, back: gap + (k ? T * .2 : 0), side: n > 1 ? (k ? 7 : -7) : 0 };
+          members.push(m);
+          if (what === "carriage" && !carriage) carriage = m;
+          gap += (what.startsWith("carriage") ? 2.2 : n > 1 && k === 0 ? 0 : 1.4) * T;
+        }
+      }
+      // starts from the last stop already played
+      const passed = stops.filter(x => x.sp.node && this.done(x.sp.node)), cb = carriage ? carriage.back : 0;
+      const d0 = passed.length ? passed[passed.length - 1].d + T : 0;
+      this.procession = { id: st.id, pr, pos, len: cum[cum.length - 1], head: d0 + cb, stops, members, total: gap, cb,
+        get carriage() { return carriage && carriage.spr; }, pulled: 0 };
+    }
+    processionStep(dt) {
+      const R = this.procession;
+      if (!R) return;
+      const T = this.tw || 16, P = this.player;
+      const stop = R.stops.find(x => x.sp.node && !this.done(x.sp.node) && R.head - R.cb >= x.d - T);   // the carriage has reached it
+      const moving = !stop && !this.ui.busy() && !this.cine && R.head < R.len + R.total;
+      if (moving) R.head += 26 * dt / 1000;
+      for (const m of R.members) {
+        const q = R.pos(R.head - m.back);
+        const dx = q.dir === "up" || q.dir === "down" ? m.side : 0, dy = q.dir === "left" || q.dir === "right" ? m.side * .5 : 0;
+        m.spr.setPosition(q.x + dx, q.y + dy).setDepth(q.y + dy);
+        if (m.spr.walker) { if (moving) m.spr.anims.play(`h-${m.spr.walker}-${q.dir}`, true); else { m.spr.anims.stop(); m.spr.setTexture(`h-${m.spr.walker}-${q.dir}-0`); } }
+        else m.spr.setFlipX(q.dir === "left");
+      }
+      // the soft leash: wander too far from the carriage and you're brought back beside it
+      const c = R.carriage, L = (R.pr.leash || 6) * T;
+      R.pulled = Math.max(0, R.pulled - dt);
+      if (c && !this.ui.busy() && !this.cine && Math.hypot(P.x - c.x, P.y - c.y) > L && !R.pulled) {
+        R.pulled = 4000;
+        const d = Math.hypot(P.x - c.x, P.y - c.y), k = (L - T) / d;
+        P.setPosition(c.x + (P.x - c.x) * k, c.y + (P.y - c.y) * k);
+        this.walk = null;
+        const line = R.pr.leash_line;
+        this.talk(line ? [line] : [["n", "Keep with the procession.", "跟紧车队。"]]);
+      }
+    }
+
     // Where a sound comes from: the procession's carriage, a spot, a landmark or a person by id; else the next beat.
     soundAt(id) {
       if (id === "carriage" && this.procession && this.procession.carriage) return this.procession.carriage;
@@ -1568,6 +1638,8 @@ function worldScenes() {
     }
 
     update(time, dt) {
+      this.procession_();
+      this.processionStep(dt);
       this.atmosphere();
       this.watchChallengers();
       this.keepPlayerInView();
