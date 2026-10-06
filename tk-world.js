@@ -245,7 +245,7 @@ function worldScenes() {
 
   class WorldScene extends Phaser.Scene {
     constructor() { super("world"); }
-    init(d) { this.placeId = d.place; this.from = d.from; this.resume = d.resume; }
+    init(d) { this.placeId = d.place; this.from = d.from; this.resume = d.resume; this.toNode = d.toNode || null; }
 
     create() {
       const region = this.region = this.cache.json.get("region"), kit = this.kit = this.cache.json.get("kit");
@@ -315,7 +315,10 @@ function worldScenes() {
         return ok && q.x >= 0 && q.y >= 0 && q.x <= this.physics.world.bounds.width && q.y <= this.physics.world.bounds.height;
       };
       const pos = this.resume && this.st.pos && this.st.pos.place === this.placeId && standable(this.st.pos) ? this.st.pos : null;
-      const at = pos || this.entries[this.from || ""] || this.entries[""];
+      // a handoff (["party", [...], {to}]): the new lead starts just in front of that beat's spot
+      const hs = this.toNode && Object.values(this.spots).find(s => s.node === this.toNode);
+      const hand = hs && standable({ x: hs.x, y: hs.y + 26 }) ? { x: hs.x, y: hs.y + 26 } : null;
+      const at = hand || pos || this.entries[this.from || ""] || this.entries[""];
       this.player = this.physics.add.sprite(at.x, at.y, `h-${this.lead}-down-0`).setOrigin(.5, 1);
       this.footBody(this.player);
       this.player.setCollideWorldBounds(true);
@@ -1009,6 +1012,15 @@ function worldScenes() {
       this.refreshStory();
       this.save();
       this.setGoal();
+      // a handoff to a new lead who is somewhere else: a fade, and they begin by the next beat
+      const hand = steps.find(s => s[0] === "party" && s[2] && s[2].to);
+      const toQ = hand && this.region.quests.find(x => x.node === `${this.w.n}-${hand[2].to}`);
+      if (toQ) {
+        this.leaving = true; this.st.pos = null; this.save();
+        this.cameras.main.fadeOut(500);
+        this.cameras.main.once("camerafadeoutcomplete", () => this.scene.restart({ place: toQ.place, from: null, toNode: toQ.node }));
+        return;
+      }
       if (q.role === "boss" && this.opts.onBoss) await this.opts.onBoss();
       // the book's main story is over: on into the next book (a moment, a fade). But if side stories are
       // still open here (Book 2's Diaochan chain opens with its last beat), stay: say so once, and go on
