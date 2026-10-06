@@ -35,7 +35,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=50`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=62`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
