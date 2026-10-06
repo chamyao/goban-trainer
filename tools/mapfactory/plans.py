@@ -10,7 +10,7 @@ moves; the detail is drawn with a seed, so a rebuild is identical.
 Every place gives one outdoor map; every compound or room in its "maps" gives another
 (city → compound → room), linked by their doors and gates. Story spots, people,
 challengers and stealth watchers come through in tiles, with the plan's own fields
-(states, watchers, challengers, procession, followers) kept for the game.
+(states, watchers, challengers, the procession) kept for the game.
 
     python3 tools/mapfactory/plans.py --world 2 [--out DIR] [--png]     # build Book 2 from its plans
     python3 tools/mapfactory build --world 12 --plans 2                # the test book, from Book 2's plans
@@ -226,7 +226,7 @@ class MapBuilder:
             if kind.startswith("building."):
                 o["door"] = door
                 o["faces"] = t.get("faces") or (door if door in SIDES else "S")
-            for k in ("label", "note", "map", "open_to", "refuse", "open_when", "climb", "gives", "when", "until", "window"):
+            for k in ("label", "note", "map", "open_to", "refuse", "gives", "when", "until", "window"):
                 if t.get(k) is not None:
                     o[k] = t[k]
             if t.get("doors"):
@@ -547,7 +547,7 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
         chs = [c for c in b.get("challengers", []) if not c.get("map")]
         m = mb.build(b, [rename(p) for p in outdoor_people], chs, [rename(w) for w in P.get("watchers", [])])
         m["states"] = [state(st, mb, plans) for st in b.get("states", [])]
-        for k in ("followers", "seen_lines", "banners"):
+        for k in ("seen_lines", "banners"):
             if b.get(k):
                 m[k] = b[k]
         maps[pid] = (m, mb)

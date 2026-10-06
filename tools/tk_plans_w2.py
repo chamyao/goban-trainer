@@ -203,7 +203,8 @@ PLANS2 = {
                  "map": "palace", "gate_label": "The North Side Gate"},
                 {"id": "changle", "kind": "building.palace", "rect": [11, 11, 3, 3], "label": "Changle Palace", "note": "roofs only: not enterable"},
                 {"id": "xuanping", "kind": "building.gatetower", "rect": [15, 5, 1, 2], "label": "The Xuanping Gate tower",
-                 "door": "W", "map": "xuanping-top", "climb": True, "open_when": "node:a17"},
+                 "door": "W", "map": "xuanping-top", "open_to": ["node:a17"],
+                 "refuse": ["The guards at the stair cross their halberds. “No one goes up to the Son of Heaven's tower.”"]},
             ],
             "spots": [
                 {"id": "a1", "at": [10, 2], "node": "2-a1", "label": "The farewell banquet", "trigger": "near"},
@@ -214,7 +215,7 @@ PLANS2 = {
                 {"id": "a13d", "at": [6, 8], "node": "2-a13d", "label": "The street before the palace", "trigger": "near"},
                 {"id": "north-gate", "at": [6, 10], "node": "2-a14", "label": "The North Side Gate", "trigger": "near"},
                 {"id": "xuanping-foot", "at": [14, 5], "label": "The foot of the Xuanping Gate tower", "note": "the stair up to the tower top (A18)"},
-                {"id": "qingsuo", "at": [7, 10], "label": "The palace steps", "note": "A18: Lü Bu's plea outside the Qingsuo Gate, on the way to the Xuanping Gate"},
+                {"id": "qingsuo", "at": [7, 10], "node": "2-a18p", "label": "The palace steps", "note": "Lü Bu's plea outside the Qingsuo Gate"},
             ],
             "props": [   # on the lines layer: claim no cell
                 {"kind": "landmark.hitchingpost", "at": [10, 9], "in": ["capital"], "label": "Lü Bu's horse, tied at the gate", "note": "A9: the clue that gives him away",
@@ -333,8 +334,8 @@ PLANS2 = {
                      "cone": 4, "in_beats": ["2-a9"], "seen": "maid", "back_to": "xf-bedroom"},
                     {"id": "steward", "kind": "folk.official", "beat": [[7, 6], [7, 4], [5, 4], [7, 4]], "shape": "L",
                      "cone": 5, "in_beats": ["2-a9"], "seen": "steward", "back_to": "xf-bedroom"},
-                    {"id": "guard-1", "kind": "folk.soldier", "at": [6, 19], "face": "N", "cone": 6, "in_beats": ["2-a7", "2-a8", "2-a9", "2-a10"]},
-                    {"id": "guard-2", "kind": "folk.soldier", "at": [11, 19], "face": "N", "cone": 6, "in_beats": ["2-a7", "2-a8", "2-a9", "2-a10"]},
+                    {"id": "guard-1", "kind": "folk.soldier", "at": [6, 19], "face": "N", "cone": 6, "in_beats": ["2-a7", "2-a7c", "2-a8", "2-a9", "2-a10"]},
+                    {"id": "guard-2", "kind": "folk.soldier", "at": [11, 19], "face": "N", "cone": 6, "in_beats": ["2-a7", "2-a7c", "2-a8", "2-a9", "2-a10"]},
                 ],
                 "checks": [   # play checks the generated details must pass (places-notes.md, request 6)
                     {"check": "covered_route", "from": [13, 10], "to": [12, 5], "beats": ["2-a9"]},
@@ -408,8 +409,8 @@ PLANS2 = {
                             ground=[{"id": "behind-curtain", "kind": "stage", "rect": [1, 1, 1, 5]}],
                             lines=[{"id": "curtain", "kind": "curtain", "path": [[2, 1], [2, 3]], "width": 1}],
                             spots=[{"id": "a10", "at": [9, 4], "node": "2-a10", "label": "The sword on the wall"},
-                                   {"id": "curtain", "at": [1, 4], "label": "Behind the curtain", "sight": {"seen_by": "lubu", "unseen_by": "dongzhuo"},
-                                    "note": "A7's curtain: needs its own beat key from Plot (proposed a7c)"}],
+                                   {"id": "curtain", "at": [1, 4], "node": "2-a7c", "label": "Behind the curtain",
+                                    "sight": {"seen_by": "lubu", "unseen_by": "dongzhuo"}}],
                             exits=[{"to": "gallery", "at": [4, 0], "side": "N"}]),
             "xf-bedroom": room([10, 7], [5, 0],
                                things=[{"id": "bed", "kind": "furn.bed", "rect": [2, 3, 3, 2]},
@@ -508,6 +509,7 @@ PLANS2 = {
             "2-a5": "Dance for the Grand Preceptor in the front hall.",
             "2-a6": "Ride home down the avenue.",
             "2-a7": "Go to the window.",
+            "2-a7c": "Show yourself to Lü Bu behind the curtain, where the Grand Preceptor can't see.",
             "2-a8": "Nurse the Grand Preceptor.",
             "2-a9": "Meet Lü Bu at the Phoenix Pavilion, unseen.",
             "2-a10": "Answer the Grand Preceptor in the middle hall.",
@@ -521,6 +523,7 @@ PLANS2 = {
             "2-a14": "Wait at the North Side Gate.",
             "2-a15": "Walk the city.",
             "2-a15c": "Go to the victory feast in the great hall of state.",
+            "2-a18p": "Go to the palace steps.",
             "2-a18": "Go to the Son of Heaven at the Xuanping Gate.",
         },
     },
@@ -623,11 +626,12 @@ PLANS2 = {
             ],
             "dress": [{"kind": "tree.poplar", "along": "road", "every": 2}],
             "exits": [{"to": "Meiwu Road", "at": [15, 11], "side": "E"},
-                      {"to": "Liangzhou", "at": [0, 11], "side": "W", "open_when": "node:a16m"}],
+                      {"to": "Liangzhou", "at": [0, 11], "side": "W"}],
             "entries": {"": [14, 11], "Meiwu Road": [14, 11], "Liangzhou": [1, 11]},
         },
         "states": [
             {"id": "fortress", "light": "day"},
+            {"id": "road-west-shut", "until": "node:a16m", "exits_closed": ["Liangzhou"]},
             {"id": "raided", "when": "node:a14", "light": "day", "gate": "open"},
             {"id": "empty", "when": "node:a16", "light": "day", "weather": "dust", "gate": "open"},
         ],
@@ -696,11 +700,11 @@ PLANS2 = {
                 {"id": "rengu", "at": [32, 5], "node": "2-a17", "label": "The mouth of Ren Valley"},
             ],
             "dress": [{"kind": "rock.small", "count": 20}, {"kind": "tree.dead", "count": 8}],
-            "exits": [{"to": "Meiwu", "at": [35, 5], "side": "E", "open_when": "node:a17"}],
+            "exits": [{"to": "Meiwu", "at": [35, 5], "side": "E"}],
             "entries": {"": [2, 5], "Meiwu": [34, 5]},
         },
-        "states": [{"id": "rumour", "light": "day", "weather": "harsh"}, {"id": "army", "when": "node:a16m", "light": "day", "weather": "dust"}],
-        "followers": {"grow_with": ["node:a16a", "node:a16b", "node:a16c"], "kind": "folk.soldier", "per_step": 4},
+        "states": [{"id": "road-east-shut", "until": "node:a17", "exits_closed": ["Meiwu"]},
+                   {"id": "rumour", "light": "day", "weather": "harsh"}, {"id": "army", "when": "node:a16m", "light": "day", "weather": "dust"}],
         "npcs": [
             {"kind": "folk.soldier", "near": "camp", "in": ["rumour"], "say": "“No pardon. The envoy came back with nothing. I'm going home to my mother.”"},
             {"kind": "folk.elder", "near": "corral", "in": ["rumour"], "until": "node:a16a",
@@ -719,8 +723,8 @@ PLANS2 = {
 # Diaochan must stand where Lü Bu sees her and Dong Zhuo doesn't. "turns": he faces each way in turn.
 _xf_hall = PLANS2["Chang'an"]["maps"]["xf-hall"]
 _xf_hall["watchers"] = [
-    {"id": "dongzhuo", "kind": "hero.dongzhuo", "at": [6, 2], "turns": ["S", "W"], "cone": 6, "in_beats": ["2-a7"]},
-    {"id": "lubu", "kind": "hero.lubu", "at": [5, 6], "face": "W", "cone": 5, "in_beats": ["2-a7"]},
+    {"id": "dongzhuo", "kind": "hero.dongzhuo", "at": [6, 2], "turns": ["S", "W"], "cone": 6, "in_beats": ["2-a7c"]},
+    {"id": "lubu", "kind": "hero.lubu", "at": [5, 6], "face": "W", "cone": 5, "in_beats": ["2-a7c"]},
 ]
 _xf_hall["checks"] = [{"check": "sight_puzzle", "seen_by": "lubu", "unseen_by": "dongzhuo", "in": "behind-curtain"}]
 
