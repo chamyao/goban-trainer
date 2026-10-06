@@ -33,12 +33,12 @@ for(const pl of places){
   // through it by a tap: both sides on open floor, inside the place (not past a room's outer wall)
   for(const g of gaps.filter(g=>g.open)){
     const r=await p.evaluate(g=>new Promise(done=>{const w=window.__w,G=w.walkGrid(),C=G.C,d=22,[a,b]=g.across==='up and down'?[[g.x,g.y-d],[g.x,g.y+d]]:[[g.x-d,g.y],[g.x+d,g.y]];
-        const ok=q=>G.free(Math.floor(q[0]/C),Math.floor((q[1]-3)/C))&&!w.exits.some(e=>Phaser.Geom.Rectangle.Contains(e.rect,q[0],q[1]-3));if(!ok(a)||!ok(b)){done('skip');return;}
+        const ok=q=>G.free(Math.floor(q[0]/C),Math.floor((q[1]-3)/C))&&!w.exits.some(e=>Phaser.Geom.Rectangle.Contains(e.rect,q[0],q[1]-3));if(!ok(a)||!ok(b)||!w.canMove()){done('skip');return;}   /* (a scene playing on arrival: he isn't free to walk) */
         const seg=new Phaser.Geom.Line(a[0],a[1]-3,b[0],b[1]-3);if(w.exits.some(e=>Phaser.Geom.Intersects.LineToRectangle(seg,e.rect))){done('skip');return;}   // a doorway: across it is out of the place
         if(w.npcs.some(n=>n.spr.visible&&Phaser.Geom.Line.GetNearestPoint&&Phaser.Math.Distance.Between(n.spr.x,n.spr.y,...(()=>{const q=Phaser.Geom.Line.GetNearestPoint(seg,{x:n.spr.x,y:n.spr.y});return [q.x,q.y];})())<14)){done('skip');return;}   // someone standing in it
         w.walk=null;w.player.body.reset(a[0],a[1]);if(!w.walkTo(b[0],b[1],{ring:false})){done('no path');return;}
         const len=w.walk.path.reduce((s,q,i,arr)=>s+Math.hypot(q.x-(i?arr[i-1].x:a[0]),q.y-(i?arr[i-1].y:a[1])),0);if(len>4*d){w.walk=null;done('skip');return;}   // the far side is another part of the map
-        const here=w.placeId;setTimeout(()=>{const P=w.player;if(w.placeId!==here||w.leaving){done('skip');return;}done(Math.hypot(P.x-b[0],P.y-b[1])<12?'ok':`stopped at ${P.x|0},${P.y|0}`);},2200);}),g);
+        const here=w.placeId;setTimeout(()=>{const P=w.player;if(w.placeId!==here||w.leaving||!w.canMove()){done('skip');return;}done(Math.hypot(P.x-b[0],P.y-b[1])<12?'ok':`stopped at ${P.x|0},${P.y|0}`);},2200);}),g);
     if(r==='skip')continue;walkedAll++;check(r==='ok',`${pl}: a tap across the gap at ${g.x|0},${g.y|0} walks him through (${r})`);}
 }
 console.log(`walk-gaps: ${checked-fails}/${checked} (${gapsAll} narrow gaps, ${walkedAll} walked through by a tap)`);await b.close();process.exit(fails?1:0);})();
