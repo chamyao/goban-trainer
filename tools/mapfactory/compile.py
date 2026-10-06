@@ -284,10 +284,16 @@ def compile_map(m, kit, out_dir):
 
     walls = building_walls(m, kit, T)
     for o in m["objects"]:
-        key, spr = kit.sprite(o["kind"], f"{m['id']}/{o['x']},{o['y']}")
+        # a building whose front faces E or W (a siheyuan wing): its side view, if the kit has one; the side
+        # sprite's door faces E, so a W-facing one is drawn mirrored
+        faces = o.get("faces") or o.get("door")
+        side = f"{o['kind']}_side" if faces in ("E", "W") else None
+        draw_kind = side if side and kit.k["kinds"].get(side) else o["kind"]
+        key, spr = kit.sprite(draw_kind, f"{m['id']}/{o['x']},{o['y']}")
         solid = KINDS[o["kind"]][2]
         obj(key or "", "prop", (o["x"] + o["w"] / 2) * T, (o["y"] + o["h"]) * T,
             kind=o["kind"], fw=o["w"] * T, fh=o["h"] * T, solid=solid, **({"ref": o["id"]} if o.get("id") else {}),
+            **({"flip": True} if draw_kind == side and faces == "W" else {}),
             **walls.get(id(o), {}))
     runs = []
     for y in range(H):
