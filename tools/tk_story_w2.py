@@ -32,7 +32,7 @@ CAST2 = {
     "dingyuan": "zm_020", "yuanshao": "zm_031", "yuanshu": "zm_035", "chengong": "zm_050",
     "caohong": "zm_054", "sunjian": "zm_056", "zumao": "zm_062", "chengpu": "zm_066",
     "handang": "zm_095", "caiyong": "zm_091", "gongsunzan": "zm_037", "lijue": "zm_058",
-    "guosi": "zm_061", "lvboshe": "zm_014", "diaochan": "zf_023", "hetaihou": "zf_022",
+    "guosi": "zm_061", "lvboshe": "zm_014", "diaochan": "zf_044", "hetaihou": "zf_022",
     "tangfei": "zf_017", "shaodi": "zf_002", "xiandi": "zf_002", "dongmu": "zf_022",
 }
 

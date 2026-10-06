@@ -255,7 +255,7 @@ def furnish_place(m, place, rooms, world_n):
         brief = rooms.get(o["kind"], {})
         # the place's own people marked "inside" by this building come first, then the room's usual folk
         mine = [p for p in (place.get("brief") or {}).get("npcs", []) if p.get("inside") and p.get("near") == o["id"]]
-        people = mine + brief.get("people", [])
+        people = mine + (brief.get("people", []) if (place.get("brief") or {}).get("room_folk", True) else [])   # "room_folk": False, only its own people
         seed = sum(map(ord, rid))
         room = None
         for k in range(20):
@@ -284,7 +284,8 @@ def build_chain(m, place, o, chain, rooms, world_n):
         b = {**o, "id": c["id"], "kind": c.get("kind", o["kind"]), "label": c.get("label") or o.get("label")}
         b.pop("rooms", None)
         mine = [p for p in (place.get("brief") or {}).get("npcs", []) if p.get("inside") and p.get("near") == c["id"]]
-        people = mine + rooms.get(b["kind"], {}).get("people", []) * (k == 0)
+        folk = rooms.get(b["kind"], {}).get("people", []) if (place.get("brief") or {}).get("room_folk", True) else []
+        people = mine + folk * (k == 0)
         seed, room = sum(map(ord, ids[k])), None
         for t in range(20):
             r = Room({"id": m["id"], "name": m["name"]}, b, seed + t * 101, people)

@@ -11,7 +11,7 @@
   20,
   12
  ],
- "seed": 0.30850835015636324,
+ "seed": 0.5899737083423005,
  "terrain": {
   "legend": {
    "#": "wood",
@@ -95,17 +95,7 @@
   }
  ],
  "spots": [],
- "npcs": [
-  {
-   "id": "in-1",
-   "kind": "folk.woman",
-   "x": 10.5,
-   "y": 5.9,
-   "say": [
-    "“Mind the floor — I've only just swept it.”"
-   ]
-  }
- ],
+ "npcs": [],
  "exits": [
   {
    "to": "changan",

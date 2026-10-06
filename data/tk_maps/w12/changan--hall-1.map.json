@@ -11,7 +11,7 @@
   20,
   12
  ],
- "seed": 0.8763661542137554,
+ "seed": 0.20971525095234467,
  "terrain": {
   "legend": {
    "#": "wood",
@@ -123,17 +123,7 @@
   }
  ],
  "spots": [],
- "npcs": [
-  {
-   "id": "in-1",
-   "kind": "folk.official",
-   "x": 10.5,
-   "y": 4.9,
-   "say": [
-    "“This is the county office. State your business.”"
-   ]
-  }
- ],
+ "npcs": [],
  "exits": [
   {
    "to": "changan",

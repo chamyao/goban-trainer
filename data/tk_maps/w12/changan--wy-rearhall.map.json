@@ -3,7 +3,7 @@
  "id": "changan--wy-rearhall",
  "world": 12,
  "parent": "changan",
- "name": "Wang Yun's residence: the rear hall",
+ "name": "The rear hall",
  "archetype": "interior",
  "building": "wy-rearhall",
  "style": "building.hall",
@@ -11,7 +11,7 @@
   20,
   12
  ],
- "seed": 0.16374051319414396,
+ "seed": 0.7753554890839383,
  "terrain": {
   "legend": {
    "#": "wood",
@@ -22,7 +22,7 @@
    " ": "void"
   },
   "rows": [
-   "   WWWWWWWWWWWWWW   ",
+   "   WWWWWWW%WWWWWW   ",
    "   W%%%%%%%%%%%%W   ",
    "   W%%%%%%%%%%%%W   ",
    "   W%%%%%%%%%%%%W   ",
@@ -37,13 +37,6 @@
   ]
  },
  "objects": [
-  {
-   "kind": "furn.screen",
-   "x": 8,
-   "y": 1,
-   "w": 3,
-   "h": 1
-  },
   {
    "kind": "furn.desk",
    "x": 9,
@@ -74,28 +67,28 @@
   },
   {
    "kind": "furn.shelf",
-   "x": 11,
+   "x": 4,
    "y": 1,
    "w": 2,
    "h": 1
   },
   {
    "kind": "furn.shelf",
-   "x": 4,
+   "x": 14,
    "y": 1,
    "w": 2,
    "h": 1
   },
   {
    "kind": "furn.plant",
-   "x": 15,
-   "y": 1,
+   "x": 4,
+   "y": 8,
    "w": 1,
    "h": 1
   },
   {
    "kind": "furn.plant",
-   "x": 4,
+   "x": 15,
    "y": 8,
    "w": 1,
    "h": 1
@@ -111,8 +104,8 @@
  "spots": [
   {
    "id": "spot-12-a4",
-   "x": 9.5,
-   "y": 2.7,
+   "x": 10.5,
+   "y": 1.7,
    "node": "12-a4",
    "label": "The First Banquet"
   }
@@ -135,35 +128,42 @@
    "given": [
     "“The chest is locked again, master. No one will know.”"
    ]
-  },
-  {
-   "id": "in-2",
-   "kind": "folk.official",
-   "x": 11.5,
-   "y": 4.9,
-   "say": [
-    "“This is the county office. State your business.”"
-   ]
   }
  ],
  "exits": [
   {
-   "to": "changan",
+   "to": "changan--wy-hall",
    "side": "S",
    "x": 10,
    "y": 9,
    "w": 1,
    "h": 1
+  },
+  {
+   "to": "changan--wy-secret",
+   "side": "N",
+   "x": 10,
+   "y": 0,
+   "w": 1,
+   "h": 1
   }
  ],
  "entries": {
-  "changan": [
+  "changan--wy-hall": [
    10,
    8
   ],
   "": [
    10,
    8
+  ],
+  "changan--wy-secret": [
+   10,
+   1
   ]
- }
+ },
+ "links": [
+  "changan--wy-hall",
+  "changan--wy-secret"
+ ]
 }

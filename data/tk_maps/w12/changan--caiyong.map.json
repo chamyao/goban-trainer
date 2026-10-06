@@ -11,7 +11,7 @@
   20,
   12
  ],
- "seed": 0.1746199465149716,
+ "seed": 0.40418395734340873,
  "terrain": {
   "legend": {
    "#": "wood",
@@ -110,17 +110,7 @@
    "label": "Stones, Not Men"
   }
  ],
- "npcs": [
-  {
-   "id": "in-1",
-   "kind": "folk.woman",
-   "x": 8.5,
-   "y": 5.9,
-   "say": [
-    "“Mind the floor — I've only just swept it.”"
-   ]
-  }
- ],
+ "npcs": [],
  "exits": [
   {
    "to": "changan",

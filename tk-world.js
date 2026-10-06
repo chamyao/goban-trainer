@@ -35,7 +35,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=44`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=46`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
@@ -217,9 +217,9 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=44`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=46`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=34`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=45`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=48`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
@@ -228,7 +228,7 @@ function worldScenes() {
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
       for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=51`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=53`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -245,7 +245,7 @@ function worldScenes() {
 
   class WorldScene extends Phaser.Scene {
     constructor() { super("world"); }
-    init(d) { this.placeId = d.place; this.from = d.from; this.resume = d.resume; }
+    init(d) { this.placeId = d.place; this.from = d.from; this.resume = d.resume; this.toNode = d.toNode || null; }
 
     create() {
       const region = this.region = this.cache.json.get("region"), kit = this.kit = this.cache.json.get("kit");
@@ -315,7 +315,10 @@ function worldScenes() {
         return ok && q.x >= 0 && q.y >= 0 && q.x <= this.physics.world.bounds.width && q.y <= this.physics.world.bounds.height;
       };
       const pos = this.resume && this.st.pos && this.st.pos.place === this.placeId && standable(this.st.pos) ? this.st.pos : null;
-      const at = pos || this.entries[this.from || ""] || this.entries[""];
+      // a handoff (["party", [...], {to}]): the new lead starts just in front of that beat's spot
+      const hs = this.toNode && Object.values(this.spots).find(s => s.node === this.toNode);
+      const hand = hs && standable({ x: hs.x, y: hs.y + 26 }) ? { x: hs.x, y: hs.y + 26 } : null;
+      const at = hand || pos || this.entries[this.from || ""] || this.entries[""];
       this.player = this.physics.add.sprite(at.x, at.y, `h-${this.lead}-down-0`).setOrigin(.5, 1);
       this.footBody(this.player);
       this.player.setCollideWorldBounds(true);
@@ -1009,6 +1012,19 @@ function worldScenes() {
       this.refreshStory();
       this.save();
       this.setGoal();
+      // a handoff to a new lead who is somewhere else: a fade, and they begin by the next beat
+      // ({"to": node}: by that beat's spot; {"to": {"place", "from"}}: arriving in that place as if from that one)
+      const hand = steps.find(s => s[0] === "party" && s[2] && s[2].to), to = hand && hand[2].to;
+      const placeOf = name => name && this.region.places.find(p => p.id === name || p.name === name);
+      const toQ = typeof to === "string" && this.region.quests.find(x => x.node === `${this.w.n}-${to}`);
+      const toP = to && typeof to === "object" && placeOf(to.place);
+      if (toQ || toP) {
+        this.leaving = true; this.st.pos = null; this.save();
+        this.cameras.main.fadeOut(500);
+        this.cameras.main.once("camerafadeoutcomplete", () => this.scene.restart(toQ ? { place: toQ.place, from: null, toNode: toQ.node }
+          : { place: toP.id, from: (placeOf(to.from) || {}).id || null }));
+        return;
+      }
       if (q.role === "boss" && this.opts.onBoss) await this.opts.onBoss();
       // the book's main story is over: on into the next book (a moment, a fade). But if side stories are
       // still open here (Book 2's Diaochan chain opens with its last beat), stay: say so once, and go on

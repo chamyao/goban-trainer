@@ -11,7 +11,7 @@
   20,
   12
  ],
- "seed": 0.9192204433894101,
+ "seed": 0.4899294767836082,
  "terrain": {
   "legend": {
    "#": "wood",
@@ -123,35 +123,7 @@
   }
  ],
  "spots": [],
- "npcs": [
-  {
-   "id": "in-1",
-   "kind": "folk.woman",
-   "x": 13.5,
-   "y": 4.9,
-   "say": [
-    "“Sit, have some tea. The storyteller starts soon.”"
-   ]
-  },
-  {
-   "id": "in-2",
-   "kind": "folk.elder",
-   "x": 7.5,
-   "y": 5.9,
-   "say": [
-    "“Another pot, and another tale of the old days.”"
-   ]
-  },
-  {
-   "id": "in-3",
-   "kind": "folk.lady",
-   "x": 7.5,
-   "y": 7.9,
-   "say": [
-    "“More tea? The storyteller's tale of the Yellow Turbans is the talk of the county.”"
-   ]
-  }
- ],
+ "npcs": [],
  "exits": [
   {
    "to": "changan",

@@ -11,7 +11,7 @@
   20,
   12
  ],
- "seed": 0.6036715335164643,
+ "seed": 0.025493045748488763,
  "terrain": {
   "legend": {
    "#": "wood",
@@ -81,17 +81,7 @@
   }
  ],
  "spots": [],
- "npcs": [
-  {
-   "id": "in-1",
-   "kind": "folk.elder",
-   "x": 11.5,
-   "y": 4.9,
-   "say": [
-    "“It isn't much, but the roof keeps the rain off.”"
-   ]
-  }
- ],
+ "npcs": [],
  "exits": [
   {
    "to": "meiwu-road",

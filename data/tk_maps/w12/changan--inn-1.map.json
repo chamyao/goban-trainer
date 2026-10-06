@@ -11,7 +11,7 @@
   20,
   12
  ],
- "seed": 0.14333888477051482,
+ "seed": 0.5581410704534209,
  "terrain": {
   "legend": {
    "#": "wood",
@@ -137,26 +137,7 @@
   }
  ],
  "spots": [],
- "npcs": [
-  {
-   "id": "in-1",
-   "kind": "folk.villager",
-   "x": 6.5,
-   "y": 5.9,
-   "say": [
-    "“Wine, pork, a bed for the night — we have it all.”"
-   ]
-  },
-  {
-   "id": "in-2",
-   "kind": "folk.hunter",
-   "x": 8.5,
-   "y": 7.9,
-   "say": [
-    "“They say the governor is raising volunteers. I've half a mind to join.”"
-   ]
-  }
- ],
+ "npcs": [],
  "exits": [
   {
    "to": "changan",
