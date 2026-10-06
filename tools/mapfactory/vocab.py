@@ -121,6 +121,7 @@ KINDS.update({
     "building.pavilion": (3, 3, True),      # open-sided; may stand on water
     "building.pavilion_painted": (3, 3, True),
     "building.gatetower": (3, 6, True),     # a gate tower in a city wall, climbable
+    "building.markettower": (6, 2, True),   # a Han market tower (市楼): tall, a drum and a flag on top (stand-in until Graphics draws it)
     "building.granary": (6, 2, True),
     "building.storehouse": (6, 2, True),
     "building.posthouse": (5, 3, True),     # a Han post-pavilion (亭)
@@ -207,6 +208,7 @@ FALLBACK = {
     "building.pavilion": ["building.moongate", "building.shop", "building.house"],
     "building.pavilion_painted": ["building.pavilion", "building.shop", "building.house"],
     "building.gatetower": ["building.gate"],
+    "building.markettower": ["building.gatetower", "building.hall"],
     "building.granary": ["building.lodge", "building.house"],
     "building.storehouse": ["building.lodge", "building.house"],
     "building.posthouse": ["building.house"],

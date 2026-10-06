@@ -6,13 +6,13 @@
  "archetype": "city",
  "size": [
   68,
-  64
+  68
  ],
  "seed": 866,
  "plan": true,
  "terrain": {
   "legend": {
-   "a": "court",
+   "a": "city",
    "b": "field",
    "c": "field.wheat",
    ".": "grass",
@@ -64,10 +64,14 @@
    "......hhgggggggggggggggggggggggggggggggggggggggggggggggggggghh......",
    "......hhgggggggggggggggggggggggggggggggggggggggggggggggggggghh......",
    "......hhgggggggggggggggggggggggggggggggggggggggggggggggggggghh......",
-   "......hhiiiiiiiiiiiiiiiiggggaaaaiiiiiiiiiiiiiiiiiiiiiiiiiiiihh......",
-   "......hhiiiiiiiiiiiiiiiiggggaaaaiiiiiiiiiiiiiiiiiiiiiiiiiiiihh......",
-   "......hhiiiiiiiiiiiiiiiiggggaaaaiiiiiiiiiiiiiiiiiiiiiiiiiiiihh......",
-   "......hhiiiiiiiiiiiiiiiiggggaaaaiiiiiiiiiiiiiiiiiiiiiiiiiiiihh......",
+   "......hhiiiiiiiiiiiiiiiiggggiiiiiiiiiiiiiiiiiiiiiiiiiiiiiggihh......",
+   "......hhiiiiiiiiiiiiiiiiggggiiiiiiiiiiiiiiiiiiiiiiiiiiiiiggihh......",
+   "......hhiiiiiiiiiiiiiiiiggggiiiiiiiiiiiiiiiiiiiiiiiiiiiiiggihh......",
+   "......hhiiiiiiiiiiiiiiiiggggiiiiiiiiiiiiiiiiiiiiiiiiiiiiiggihh......",
+   "......hhaaaaaaaaaaaaaaaaggggaaaaaaaaaaaaaaaaaaaaaaaaaaaaaggahh......",
+   "......hhaggggggggggggggggggggggggggggggggggggggggggggggggggahh......",
+   "......hhaggggggggggggggggggggggggggggggggggggggggggggggggggahh......",
+   "......hhaaaaaaaaaaaaaaaaggggaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaahh......",
    "......hhffffffffffffffffffffffffffffffffffffffffffffffffffffhh......",
    "......hhffffffffffffffffffffffffffffffffffffffffffffffffffffhh......",
    "......hhffffffffffffffffffffffffffffffffffffffffffffffffffffhh......",
@@ -90,7 +94,7 @@
    "...................................................................."
   ],
   "walk": {
-   "court": true,
+   "city": true,
    "field": true,
    "field.wheat": true,
    "grass": true,
@@ -126,7 +130,7 @@
     1,
     3,
     15,
-    13
+    14
    ],
    "width": 2,
    "gates": {
@@ -139,7 +143,7 @@
      5
     ]
    },
-   "tiles": 400
+   "tiles": 416
   },
   {
    "id": "west-road",
@@ -167,7 +171,7 @@
     ],
     [
      6,
-     10
+     11
     ]
    ],
    "width": 4,
@@ -177,7 +181,7 @@
     1
    ],
    "middle": "the emperor's lane: no one walks it",
-   "tiles": 144
+   "tiles": 160
   },
   {
    "id": "market-street",
@@ -237,11 +241,27 @@
     ],
     [
      14,
-     9
+     11
     ]
    ],
    "width": 2,
-   "tiles": 36
+   "tiles": 52
+  },
+  {
+   "id": "palace-lane",
+   "kind": "road",
+   "path": [
+    [
+     2,
+     11
+    ],
+    [
+     14,
+     11
+    ]
+   ],
+   "width": 2,
+   "tiles": 100
   }
  ],
  "objects": [
@@ -312,8 +332,21 @@
    "blocks_sight": true
   },
   {
+   "kind": "building.markettower",
+   "x": 37,
+   "y": 17,
+   "w": 6,
+   "h": 2,
+   "id": "market-tower",
+   "door": null,
+   "faces": "S",
+   "label": "The market tower",
+   "note": "a Han 市楼: two storeys, a flag and a drum; seen from all over the north of the city",
+   "blocks_sight": true
+  },
+  {
    "kind": "furniture.gotable",
-   "x": 41,
+   "x": 53,
    "y": 17,
    "w": 1,
    "h": 1,
@@ -339,6 +372,7 @@
    "faces": "S",
    "label": "Wang Yun's residence",
    "map": "wangyun",
+   "plaque": "王府",
    "blocks_sight": true
   },
   {
@@ -358,6 +392,7 @@
    "refuse": [
     "The gatekeeper bars the way. “The Grand Preceptor receives no one today.”"
    ],
+   "plaque": "相府",
    "blocks_sight": true
   },
   {
@@ -371,6 +406,7 @@
    "faces": "S",
    "label": "Lü Bu's quarters",
    "map": "lubu",
+   "plaque": "吕府",
    "blocks_sight": true
   },
   {
@@ -380,9 +416,10 @@
    "w": 4,
    "h": 2,
    "id": "shisun",
-   "door": "N",
-   "faces": "N",
+   "door": "S",
+   "faces": "S",
    "label": "Shisun Rui's house",
+   "plaque": "士孙府",
    "blocks_sight": true
   },
   {
@@ -392,9 +429,10 @@
    "w": 4,
    "h": 2,
    "id": "huangwan",
-   "door": "N",
-   "faces": "N",
+   "door": "S",
+   "faces": "S",
    "label": "Huang Wan's house",
+   "plaque": "黄府",
    "blocks_sight": true
   },
   {
@@ -404,10 +442,11 @@
    "w": 4,
    "h": 2,
    "id": "caiyong",
-   "door": "N",
-   "faces": "N",
+   "door": "S",
+   "faces": "S",
    "label": "Cai Yong's house",
    "map": "caiyong",
+   "plaque": "蔡府",
    "blocks_sight": true
   },
   {
@@ -417,8 +456,8 @@
    "w": 4,
    "h": 2,
    "id": "house-2",
-   "door": "N",
-   "faces": "N",
+   "door": "S",
+   "faces": "S",
    "blocks_sight": true
   },
   {
@@ -428,14 +467,14 @@
    "w": 4,
    "h": 2,
    "id": "house-3",
-   "door": "N",
-   "faces": "N",
+   "door": "S",
+   "faces": "S",
    "blocks_sight": true
   },
   {
    "kind": "building.palace",
    "x": 13,
-   "y": 45,
+   "y": 49,
    "w": 26,
    "h": 14,
    "id": "palace",
@@ -443,12 +482,13 @@
    "faces": "N",
    "label": "Weiyang Palace",
    "map": "palace",
+   "plaque": "北掖门",
    "blocks_sight": true
   },
   {
    "kind": "building.palace",
    "x": 45,
-   "y": 45,
+   "y": 49,
    "w": 10,
    "h": 10,
    "id": "changle",
@@ -507,6 +547,13 @@
   },
   {
    "kind": "tree.willow",
+   "x": 24,
+   "y": 48,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
    "x": 28,
    "y": 8,
    "w": 1,
@@ -523,6 +570,13 @@
    "kind": "tree.willow",
    "x": 28,
    "y": 32,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 28,
+   "y": 44,
    "w": 1,
    "h": 1
   },
@@ -698,6 +752,55 @@
    "kind": "tree.poplar",
    "x": 23,
    "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "banner.black",
+   "x": 38,
+   "y": 35,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "banner.black",
+   "x": 42,
+   "y": 35,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "prop.lanterns",
+   "x": 16,
+   "y": 35,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "prop.lanterns",
+   "x": 20,
+   "y": 35,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.rack",
+   "x": 49,
+   "y": 35,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "banner.red",
+   "x": 23,
+   "y": 48,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "banner.red",
+   "x": 28,
+   "y": 48,
    "w": 1,
    "h": 1
   },
@@ -897,6 +1000,26 @@
   },
   {
    "kind": "prop.lanterns",
+   "x": 23,
+   "y": 44,
+   "w": 1,
+   "h": 1,
+   "in": [
+    "night-a6"
+   ]
+  },
+  {
+   "kind": "prop.lanterns",
+   "x": 23,
+   "y": 46,
+   "w": 1,
+   "h": 1,
+   "in": [
+    "night-a6"
+   ]
+  },
+  {
+   "kind": "prop.lanterns",
    "x": 28,
    "y": 8,
    "w": 1,
@@ -1076,6 +1199,26 @@
    ]
   },
   {
+   "kind": "prop.lanterns",
+   "x": 28,
+   "y": 44,
+   "w": 1,
+   "h": 1,
+   "in": [
+    "night-a6"
+   ]
+  },
+  {
+   "kind": "prop.lanterns",
+   "x": 28,
+   "y": 46,
+   "w": 1,
+   "h": 1,
+   "in": [
+    "night-a6"
+   ]
+  },
+  {
    "kind": "prop.body_lamp",
    "x": 25,
    "y": 21,
@@ -1090,14 +1233,14 @@
   {
    "id": "shisun",
    "x": 12.5,
-   "y": 40.7,
+   "y": 43.7,
    "node": "12-a12a",
    "label": "Shisun Rui's house"
   },
   {
    "id": "huangwan",
    "x": 20.5,
-   "y": 40.7,
+   "y": 43.7,
    "node": "12-a12b",
    "label": "Huang Wan's house"
   },
@@ -1153,7 +1296,7 @@
   {
    "id": "north-gate",
    "x": 25.5,
-   "y": 41.7,
+   "y": 45.7,
    "node": "12-a14",
    "label": "The North Side Gate",
    "trigger": "near"
@@ -1169,7 +1312,7 @@
   {
    "id": "qingsuo",
    "x": 29.5,
-   "y": 41.7,
+   "y": 45.7,
    "node": "12-a18p",
    "label": "The palace steps",
    "note": "Lü Bu's plea outside the Qingsuo Gate"
@@ -1507,7 +1650,7 @@
    "id": "patrol",
    "kind": "folk.soldier",
    "x": 17.5,
-   "y": 37.9,
+   "y": 45.9,
    "say": [],
    "intro": [
     "A Flying Bear patrol fills the lane to Huang Wan's gate. “Visiting late, Minister? Every lane in Chang'an answers to the Grand Preceptor.”"
@@ -1547,7 +1690,7 @@
   {
    "id": "scholar",
    "kind": "folk.elder",
-   "x": 41.5,
+   "x": 53.5,
    "y": 21.9,
    "say": [],
    "intro": [
@@ -1630,9 +1773,9 @@
   },
   {
    "to": "changan--caiyong",
-   "side": "N",
+   "side": "S",
    "x": 35.6,
-   "y": 40.7,
+   "y": 42.85,
    "w": 0.8,
    "h": 0.45,
    "door": true
@@ -1641,7 +1784,7 @@
    "to": "changan--palace",
    "side": "N",
    "x": 25.6,
-   "y": 44.7,
+   "y": 48.7,
    "w": 0.8,
    "h": 0.45,
    "door": true
@@ -1689,11 +1832,11 @@
   ],
   "changan--caiyong": [
    36,
-   40
+   43
   ],
   "changan--palace": [
    26,
-   44
+   48
   ],
   "changan--xuanping-top": [
    59,
