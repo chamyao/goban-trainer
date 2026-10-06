@@ -1118,7 +1118,7 @@ def _nodes_chain():
             "I know where he stands.", "我知道他站在哪边了。",
             "He's guarded. Watch him more closely.", "他有戒心，再看仔细。")),
         node("a12p", 270, 80, "a12p", room="wy-secret", board=False),
-        node("a12c", 280, 74, "a12c", dilemma=D(
+        node("a12c", 280, 74, "a12c", room="side-hall", dilemma=D(
             "wangyun", "Reach the Emperor unseen.", "避开耳目，面见天子。",
             "The Chancellor's men watch every door of the palace.", "宫中门门皆有相府耳目。",
             "The edict is in my sleeve.", "密诏已在袖中。",
@@ -1157,7 +1157,7 @@ def _nodes_chain():
                        "There is an edict to kill a traitor!", "有诏讨贼！",
                        "Not yet. Hold.", "且慢，稳住。")),
         node("a15", 360, 24, "a15", board=False),
-        node("a15m", 366, 22, "a15m", place="Meiwu", room="treasury", board=False),
+        node("a15m", 366, 22, "a15m", place="Meiwu", room="diaochan", board=False),
         node("a15c", 370, 20, "a15c", room="dutang", board=False),
         node("a16", 380, 16, "a16", place="Liangzhou", dilemma=D(
             "jiaxu", "Keep them from scattering.", "劝住诸将，勿散。",
