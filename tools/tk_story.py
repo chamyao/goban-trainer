@@ -57,7 +57,7 @@ WORLDS = [
         # side (long road), short (shortcut), boss. The horse dealers are a
         # main point; the long road branches off after them and rejoins at Daxing.
         "nodes": [
-            {"key": "start", "x": 34, "y": 236, "role": "main", "place": "Lousang Village", "step": 0.0, "scene": "tree", "trigger": "arrive"},
+            {"key": "start", "x": 34, "y": 236, "role": "main", "place": "Lousang Village", "step": 0.0, "scene": "tree"},
             {"key": "c1", "x": 52, "y": 226, "role": "main", "place": "Zhuo County", "room": "office", "step": 0.0, "scene": "council"},
             {"key": "n1", "x": 70, "y": 214, "role": "main", "place": "Zhuo County", "step": 0.0, "scene": "notice"},
             {"key": "i1", "x": 89, "y": 200, "role": "main", "place": "Zhuo County", "room": "inn", "step": 0.05, "scene": "inn"},
