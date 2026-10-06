@@ -1493,13 +1493,6 @@
  ],
  "spots": [
   {
-   "id": "northgate",
-   "x": 19,
-   "y": 21.7,
-   "node": "1-b2",
-   "label": "The north gate of Luoyang"
-  },
-  {
    "id": "spot-1-b2g",
    "x": 21,
    "y": 14.7,

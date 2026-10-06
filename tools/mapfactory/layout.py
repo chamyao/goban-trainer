@@ -289,10 +289,14 @@ class Layout:
     def lay_landmarks(self):
         b = self.place["brief"]
         done_nodes = set()
+        # a beat played inside one of this place's buildings has its spot in that room, never out here: its
+        # landmark is just the building (its door leads in), and no stand-in table goes on the street
+        in_room = {n["key"] for n in self.place["nodes"] if n.get("room")}
         for lm in b.get("landmarks", []):
             lines = {k: lm[k] for k in ("intro", "outro", "trigger",   # and a place to deliver to (a ridge):
                                         "needs", "delivers", "when", "empty", "waiting", "deliver", "delivered", "call") if lm.get(k)}
-            o = self.place_landmark(lm["kind"], lm.get("id"), lm.get("label"), lm.get("node"), near=lm.get("near"), lines=lines,
+            node = lm.get("node") if lm.get("node") not in in_room else None
+            o = self.place_landmark(lm["kind"], lm.get("id"), lm.get("label"), node, near=lm.get("near"), lines=lines,
                                     use=lm.get("use"), side=lm.get("side"), clear=lm.get("clear"))
             if o is None:
                 raise RuntimeError(f"no room for {lm['kind']}")
@@ -306,7 +310,7 @@ class Layout:
                 raise RuntimeError("no room for the shrine")
         # nodes without a landmark: a spot at the hub
         for n in self.place["nodes"]:
-            if n.get("scene") and n["key"] not in done_nodes:
+            if n.get("scene") and n["key"] not in done_nodes and n["key"] not in in_room:
                 self.place_landmark("camp.table", f"spot-{n['key']}", "", n["key"], near_hub=True)
         for kind in self.A["fill"]:
             self.place_landmark(kind)

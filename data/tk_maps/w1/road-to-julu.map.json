@@ -1480,15 +1480,7 @@
    "h": 1
   }
  ],
- "spots": [
-  {
-   "id": "cave",
-   "x": 20.5,
-   "y": 11.7,
-   "node": "1-a1",
-   "label": "A hermit's shelter"
-  }
- ],
+ "spots": [],
  "npcs": [
   {
    "id": "npc-1",
@@ -1538,8 +1530,8 @@
    11
   ],
   "": [
-   43,
-   11
+   20,
+   12
   ],
   "road-to-julu--cave": [
    20,

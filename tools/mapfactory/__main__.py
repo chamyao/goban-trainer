@@ -41,7 +41,7 @@ def build(n):
         m = layout(p, n, zlib.crc32(f"{n}/{p['id']}".encode()) % 100000)
         (d / f"{p['id']}.map.json").write_text(json.dumps(m, ensure_ascii=False, indent=1))
         for q in region["quests"]:
-            if q["place"] == p["id"]:
+            if q["place"] == p["id"] and not q.get("room"):   # a beat in a room gets its spot in that room, below
                 q["spot"] = next(s["id"] for s in m["spots"] if s["node"] == q["node"])
         # a room behind every building's door (interiors.py)
         rooms = furnish_place(m, p, ROOMS, n)
