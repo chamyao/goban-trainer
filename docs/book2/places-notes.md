@@ -30,7 +30,7 @@ What the design in `places-design.md` needs that the map format and the engine d
 4. **Roads as one long, ordered route with milestones.** A route map with markers along it (post-pavilions), stops in a fixed order, and its two ends named by place.
    - *Used by:* the Meiwu Road.
 5. **Places that sit beyond another place, in one line.** Liangzhou is reached through Meiwu (the long road west), and its exit east opens after A17.
-6. **Generated, but steerable: relations and checks in the brief.** Nothing is hand-placed; every map stays generated so the approach scales to every book. The brief gains two things the generator must honour:
+6. **Generated, but steerable: a coarse plan grid, relations and checks in the brief.** The plan grid is specified in `plan-grid.md` (cells, claims, no overlaps, roads with their own widths). On top of it: Nothing is hand-placed; every map stays generated so the approach scales to every book. The brief gains two things the generator must honour:
    - **Spatial relations** between landmarks: `south of`, `at the end of` (a road), `facing` (across a road), `inside`, `in` (water), `behind`, `beside`, `on the axis` (a straight avenue between two landmarks), `raised`, `outside the wall`. Each one becomes a placement rule or a score term, in the same place-and-score loop the factory already uses.
    - **Play checks**, run after layout like today's walkability check. A failed check re-rolls the seed.
      - *Visible:* the landmark can be seen from most of the walkable map.
