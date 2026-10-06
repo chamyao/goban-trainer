@@ -709,7 +709,12 @@
    "light": "day",
    "exits_closed": [
     "liangzhou"
-   ]
+   ],
+   "exits_closed_say": {
+    "liangzhou": [
+     "The long road west runs on to Liangzhou. There's no errand for you there."
+    ]
+   }
   },
   {
    "id": "raided",

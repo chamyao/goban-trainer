@@ -676,7 +676,12 @@
    "light": "day",
    "exits_closed": [
     "meiwu"
-   ]
+   ],
+   "exits_closed_say": {
+    "meiwu": [
+     "Not yet. Lü Bu holds the road east. The mouth of Ren Valley comes first."
+    ]
+   }
   },
   {
    "id": "rumour",

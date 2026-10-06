@@ -6,7 +6,7 @@
  "archetype": "compound",
  "size": [
   32,
-  24
+  30
  ],
  "seed": 1480,
  "plan": true,
@@ -14,6 +14,7 @@
   "legend": {
    "a": "court",
    ".": "grass",
+   "b": "passage",
    "W": "wall"
   },
   "rows": [
@@ -27,24 +28,31 @@
    ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
    ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
    ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WbbbbbbbbbbbbbbbbbbbbbbbbbbbbW.",
+   ".WbbbbbbbbbbbbbbbbbbbbbbbbbbbbW.",
+   ".WbbbbbbbbbbbbbbbbbbbbbbbbbbbbW.",
+   ".WbbbbbbbbbbbbbbbbbbbbbbbbbbbbW.",
+   ".WbbbbbbbbbbbbbbbbbbbbbbbbbbbbW.",
+   ".WbbbbbbbbbbbbbbbbbbbbbbbbbbbbW.",
+   ".WbbbbbbbbbbbbbbbbbbbbbbbbbbbbW.",
+   ".WbbbbbbbbbbbbbbbbbbbbbbbbbbbbW.",
+   ".WbbbbbbbbbbbbbbbbbbbbbbbbbbbbW.",
+   ".WbbbbbbbbbbbbbbbbbbbbbbbbbbbbW.",
    ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
    ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
-   ".Waaaa........................W.",
-   ".Waaaa........................W.",
-   ".Waaaa........................W.",
-   ".Waaaa........................W.",
-   ".Waaaa........................W.",
-   ".Waaaa........................W.",
-   ".Waaaa........................W.",
-   ".Waaaa........................W.",
-   ".Waaaa........................W.",
-   ".Waaaa........................W.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
    ".WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW.",
    "................................"
   ],
   "walk": {
    "court": true,
    "grass": true,
+   "passage": true,
    "wall": false
   }
  },
@@ -56,7 +64,7 @@
     0,
     0,
     16,
-    12
+    15
    ],
    "width": 1,
    "gates": {
@@ -65,7 +73,7 @@
      0
     ]
    },
-   "tiles": 100
+   "tiles": 112
   }
  ],
  "objects": [
@@ -82,26 +90,26 @@
   },
   {
    "kind": "building.hall_grand",
-   "x": 11,
-   "y": 14,
+   "x": 8,
+   "y": 13,
    "w": 10,
    "h": 5,
    "id": "dutang",
-   "door": "N",
-   "faces": "N",
+   "door": "S",
+   "faces": "S",
    "label": "The great hall of state",
    "map": "dutang",
    "blocks_sight": true
   },
   {
    "kind": "building.wing",
-   "x": 24,
-   "y": 14,
-   "w": 6,
-   "h": 4,
+   "x": 22,
+   "y": 12,
+   "w": 4,
+   "h": 6,
    "id": "side-hall",
-   "door": "N",
-   "faces": "N",
+   "door": "S",
+   "faces": "S",
    "label": "The emperor's side hall",
    "map": "side-hall",
    "blocks_sight": true
@@ -111,7 +119,7 @@
   {
    "id": "inside-gate",
    "x": 14.5,
-   "y": 6.7,
+   "y": 4.7,
    "node": "",
    "label": "Inside the North Side Gate",
    "note": "A14 starts at the gate on the city map and plays on in here"
@@ -119,7 +127,7 @@
   {
    "id": "li-ru",
    "x": 18.5,
-   "y": 8.7,
+   "y": 4.7,
    "node": "",
    "label": "The gate court",
    "note": "A15: Li Ru is brought in bound"
@@ -135,16 +143,16 @@
     "cone": 8,
     "beat": [
      [
-      6.5,
+      2.5,
       4.9
      ],
      [
-      6.5,
-      10.9
+      2.5,
+      22.9
      ],
      [
-      12.5,
-      10.9
+      10.5,
+      22.9
      ]
     ],
     "in_beats": [
@@ -154,7 +162,7 @@
     "back_to": "north-gate",
     "shape": "L"
    },
-   "x": 6.5,
+   "x": 2.5,
    "y": 4.9
   },
   {
@@ -166,16 +174,16 @@
     "cone": 8,
     "beat": [
      [
-      26.5,
-      4.9
+      28.5,
+      6.9
+     ],
+     [
+      28.5,
+      22.9
      ],
      [
       20.5,
-      4.9
-     ],
-     [
-      20.5,
-      10.9
+      22.9
      ]
     ],
     "in_beats": [
@@ -185,25 +193,25 @@
     "back_to": "north-gate",
     "shape": "L"
    },
-   "x": 26.5,
-   "y": 4.9
+   "x": 28.5,
+   "y": 6.9
   }
  ],
  "exits": [
   {
    "to": "changan--dutang",
-   "side": "N",
-   "x": 15.6,
-   "y": 13.7,
+   "side": "S",
+   "x": 12.6,
+   "y": 17.85,
    "w": 0.8,
    "h": 0.45,
    "door": true
   },
   {
    "to": "changan--side-hall",
-   "side": "N",
-   "x": 26.6,
-   "y": 13.7,
+   "side": "S",
+   "x": 23.6,
+   "y": 17.85,
    "w": 0.8,
    "h": 0.45,
    "door": true
@@ -219,20 +227,20 @@
  ],
  "entries": {
   "changan--dutang": [
-   16,
-   13
+   13,
+   18
   ],
   "changan--side-hall": [
-   27,
-   13
+   24,
+   18
   ],
   "changan": [
    14,
    2
   ],
   "": [
-   16,
-   13
+   13,
+   18
   ]
  },
  "parent": "changan",
