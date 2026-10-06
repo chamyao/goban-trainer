@@ -386,7 +386,11 @@ WORLDS = [
                 ["army", "han", "militia", 6, "n7", -30, 0],
                 ["spawn", "zb", "zhangbao", "n7", 70, 0],
                 ["army", "yt", "rebel", 14, "n7", 86, 0],
+                ["light", "night", 0],   # they left Dong Zhuo's camp at night (office); the night carries into the march
+                ["n", "They ride all night, and reach Zhu Jun's camp in the hills as the sky grows pale."],
+                ["light", "dawn", 1500],
                 ["n", "Zhu Jun receives them warmly. The two armies join, and Zhu Jun makes Liu Bei his vanguard against Zhang Bao."],
+                ["light", "day", 1500],
                 ["still", "zhangbao_a", "slow pan across"],
                 ["n", "Zhang Bao is Zhang Jiao's brother, the Yellow Turbans' General of Earth, and he is said to command sorcery: he calls up wind and thunder, and armies out of thin air. He has eighty or ninety thousand men camped behind the hills."],
                 ["n", "If he is not stopped, Zhu Jun's army cannot advance."],
