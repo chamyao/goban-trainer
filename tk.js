@@ -563,7 +563,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) this.data = await (await fetch("data/tk.json?v=55")).json();
+    if (!this.data) this.data = await (await fetch("data/tk.json?v=58")).json();
     return this.data;
   },
   ls(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } },
@@ -1284,6 +1284,9 @@ async function tkLevelData(worldN, key) {
   const [base, nth] = String(key).split("~"), idx = Math.max(0, (+nth || 1) - 1);
   const node = w && (TK.node(w, base) || (typeof WorldData !== "undefined" && WorldData.node(w, base)));
   if (!node || !(node.town || TK.open(w, base) || TK.cleared(base) || TK.cleared(key))) return null;
+  // no board past the scene's last ("a9~9" when a9 poses three)
+  const nProb = ((w.scenes && w.scenes[node.scene] && w.scenes[node.scene].steps) || []).filter(s => s[0] === "problem").length;
+  if (nth && idx >= Math.max(1, nProb)) return null;
   const [bookId, pid] = TK.problemRef(node, idx);
   const src = await getBook(bookId);
   const p = src.problems.find(x => x.id === pid);
@@ -1467,16 +1470,23 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
   const nth = Math.max(0, (+String(key).split("~")[1] || 1) - 1);   // which board of the scene
   const dil = Array.isArray(node.dilemma) ? node.dilemma[Math.min(nth, node.dilemma.length - 1)] : node.dilemma;
   const dilBox = dil ? h("div", { class: "tk-duel-dilemma" }, [h("b", { lang: "zh-CN" }, dil.q_zh || ""), h("span", {}, dil.q)]) : "";
-  const side = h("div", { class: "tk-duel-side" }, [dilBox, dlg, keys, srcLine]);
+  const dlgRow = h("div", { class: "tk-duel-dlgrow" }, [dlg]);
+  const side = h("div", { class: "tk-duel-side" }, [dilBox, dlgRow, keys, srcLine]);
   box.replaceChildren(boardCard, side);
   // A book that shows its protagonist at the board (world "lead_portrait"): the party leader's painted
-  // portrait (assets/tk/portraits) stands over the dialogue box, beside the board. Who leads changes as
-  // the story hands the party on; someone with no portrait yet shows nothing.
-  const wd = TK.world(worldN), lead = wd && wd.lead_portrait && TK.party(wd)[0];
+  // portrait (assets/tk/portraits) on the left: a column of its own left of the board on a wide screen,
+  // a small one left of the dialogue box on a phone (style.css shows one of the two). Who leads changes
+  // as the story hands the party on; someone with no portrait yet shows nothing.
+  // whose board it is: the decider its dilemma names, else whoever is walking (the two can differ mid-scene: Diaochan
+  // called in to Wang Yun's banquet decides its board while he is still the one walking)
+  const wd = TK.world(worldN), lead = wd && wd.lead_portrait && ((dil && dil.who) || TK.party(wd)[0]);
   if (lead && typeof TownUI !== "undefined") TownUI.loadPortraits().then(() => {
     const f = TownUI.portraits[lead];
     if (!f || !side.isConnected) return;
-    side.prepend(h("img", { class: "tk-duel-lead", alt: "", src: `assets/tk/portraits/${f}?v=${TownUI.PORTRAIT_V}` }));
+    const src = `assets/tk/portraits/${f}?v=${TownUI.PORTRAIT_V}`;
+    box.classList.add("has-lead"); if (box.__fit) box.__fit();
+    box.prepend(h("div", { class: "tk-duel-leadcol" }, [h("img", { class: "tk-duel-lead", alt: "", src })]));
+    dlgRow.prepend(h("img", { class: "tk-duel-lead-sm", alt: "", src }));
   });
   // A boss duel: a lacquered red frame, a darker field, and his name over the board.
   box.parentNode && box.parentNode.classList.toggle("tk-duel-boss", !!node.boss);
@@ -1507,11 +1517,13 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
     if (box.parentNode && box.parentNode.classList.contains("tk-duel-full")) return svg.removeAttribute("style");
     const vb = svg.viewBox.baseVal, cs = getComputedStyle(box);
     if (!vb || !vb.width) return;
-    const H = box.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) - 16, W = box.clientWidth * .6 - 16;
+    // with the lead's portrait column (18%) beside it, the board gives up some width, or the words beside it
+    // are left a sliver (a dilemma broken into single words, its dialogue scrolled out of sight)
+    const H = box.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) - 16, W = box.clientWidth * (box.classList.contains("has-lead") ? .46 : .6) - 16;
     const k = Math.min(H / vb.height, W / vb.width);
     svg.style.width = `${Math.floor(vb.width * k)}px`; svg.style.height = `${Math.floor(vb.height * k)}px`;
   };
-  fit();
+  fit(); box.__fit = fit;
   const ro = new ResizeObserver(() => box.isConnected ? fit() : ro.disconnect());
   ro.observe(box);
   window.__trainer = trainer;
@@ -1554,12 +1566,14 @@ const TKOverlay = {
       document.querySelectorAll(".tk-duel").forEach(el => el.remove());
       const host = at.host && at.host.isConnected ? at.host : null;
       const box = h("div", { class: "tk-duel-stage" });
-      const wrap = h("div", { class: "tk-duel" + (!host || host.clientWidth < 640 ? " tk-duel-full" : ""), role: "dialog", "aria-modal": "true", "aria-label": "Go problem 死活题" },
+      // the whole window, not the game's frame, when the frame is narrow or short (a phone held sideways)
+      const cramped = el => !el || !el.isConnected || el.clientWidth < 640 || el.clientHeight < 420;
+      const wrap = h("div", { class: "tk-duel" + (cramped(host) ? " tk-duel-full" : ""), role: "dialog", "aria-modal": "true", "aria-label": "Go problem 死活题" },
         [h("div", { class: "tk-duel-wipe" }), box]);
       (wrap.classList.contains("tk-duel-full") ? document.body : host).append(wrap);
       // a phone turned sideways or back: the whole screen or inside the game's window, decided again
       const relayout = () => {
-        const full = !host || !host.isConnected || host.clientWidth < 640;
+        const full = cramped(host);
         if (full === wrap.classList.contains("tk-duel-full")) return;
         wrap.classList.toggle("tk-duel-full", full);
         wrap.classList.add("tk-relaid");   // moved, not opened: no wipe again

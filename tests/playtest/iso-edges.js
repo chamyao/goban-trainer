@@ -22,7 +22,7 @@ for(const place of places){
     // the cells he can walk to from where he arrived
     const seen=new Set(),q=[[Math.floor(w.player.x/C),Math.floor((w.player.y-3)/C)]];const key=(x,y)=>x+','+y;
     for(const [x,y] of q.splice(0)){q.push([x,y]);}
-    for(let i=0;i<q.length;i++){const [x,y]=q[i];if(seen.has(key(x,y)))continue;seen.add(key(x,y));for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+dx,ny=y+dy;if(!seen.has(key(nx,ny))&&G.free(nx,ny))q.push([nx,ny]);}}
+    for(let i=0;i<q.length;i++){const [x,y]=q[i];if(seen.has(key(x,y)))continue;seen.add(key(x,y));for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+dx,ny=y+dy;if(!seen.has(key(nx,ny))&&(G.roomy?G.roomy(nx,ny):G.free(nx,ny)))q.push([nx,ny]);}}
     const near=(x,y)=>{const cx=Math.floor(x/C),cy=Math.floor(y/C);for(let r=0;r<40;r++)for(let dy=-r;dy<=r;dy++)for(let dx=-r;dx<=r;dx++)if(seen.has(key(cx+dx,cy+dy)))return [(cx+dx)*C+C/2,(cy+dy)*C+C/2];return null;};
     for(const [n,fx,fy] of [['NW corner',0,0],['NE corner',1,0],['SW corner',0,1],['SE corner',1,1],['N edge',.5,0],['S edge',.5,1],['W edge',0,.5],['E edge',1,.5]]){const q=near(fx*W,fy*H);if(q)out.push({n,at:q});}
     for(const e of w.exits){const r=e.rect,inw={W:[1,0],E:[-1,0],N:[0,1],S:[0,-1]}[e.side]||[0,1],inX=Math.min(Math.max(r.centerX+inw[0]*(r.width/2+2*C),C),W-C),inY=Math.min(Math.max(r.centerY+inw[1]*(r.height/2+2*C),C),H-C);   /* two cells in from it: on it he would leave */

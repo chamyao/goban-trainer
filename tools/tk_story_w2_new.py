@@ -107,13 +107,15 @@ def _scenes_chain():
         # A2 · The peony pavilion. The board is Wang Yun deciding to stake his house on her.
         "a2": {"title": T("The Peony Pavilion", "牡丹亭"), "kind": "main", "steps": [
             ["light", "night"],
-            ["spawn", "dc", "diaochan", "a2", 14, -4],
+            ["prop", "bench", "bench", "a2", 14, -4],
+            ["spawn", "dc", "diaochan", "a2", 14, -4], ["pose", "dc", "sit"],
             N("Late at night, under a bright moon, Wang Yun walks into the rear garden leaning on his staff. "
               "He stands by the rose trellis, looks up at the sky, and weeps.",
               "至夜深月明，王允策杖步入后园，立于荼蘼架侧，仰天垂泪。"),
             N("Then he hears someone sighing by the peony pavilion. He steps softly closer to look. "
               "It is Diaochan, the singing girl of his household.",
               "忽闻有人在牡丹亭畔，长吁短叹。允潜步窥之，乃府中歌伎貂蝉也。"),
+            ["emote", "dc", "..."],
             ["still", "dc_garden", "slow zoom in"],
             N("She was chosen as a small girl and brought up in his house, and taught to sing and dance. "
               "She is sixteen, as gifted as she is beautiful, and Wang Yun treats her as his own daughter.",
@@ -122,6 +124,7 @@ def _scenes_chain():
             ["emote", "dc", "!"],
             S("wangyun", "Shameless girl! Are you meeting a lover?", "贱人将有私情耶？"),
             ["pose", "dc", "kneel"],
+            N("Startled, she drops to her knees to answer.", "貂蝉惊跪答曰："),
             S("diaochan", "How would your servant dare have a lover!", "贱妾安敢有私！"),
             S("wangyun", "Then why are you sighing so late at night?", "无私，何夜深长叹？"),
             S("diaochan", "Let me tell you what is in my heart.", "容妾伸肺腑之言。"),
@@ -233,6 +236,7 @@ def _scenes_chain():
               "本欲留将军止宿，恐太师见疑。"),
             N("Lü Bu bows his thanks again and again, and goes.", "布再三拜谢而去。"),
             ["remove", "lb"],
+            ["remove", "dc"],
             ["party", ["diaochan"]],
         ]},
 
@@ -695,6 +699,7 @@ def _scenes_chain():
             ["still", "ls_arrow", "slow zoom in"],
             N("He snaps an arrow, as his oath.", "遂折箭为誓。"),
             S("wangyun", "If you can carry this off, how could you fail to rise high?", "公若能干此事，何患不得显官？"),
+            ["remove", "ls"],
             ["party", ["lisu"]],
         ]},
 
