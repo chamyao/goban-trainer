@@ -39,6 +39,7 @@ NEW_KINDS = {
     "building.storehouse": (6, 2, True),
     "building.posthouse": (5, 3, True),             # a Han post-pavilion (亭)
     "building.gatehouse": (4, 1, False),            # a compound's gate: you walk through it
+    "building.markettower": (6, 2, True),           # a Han market tower (市楼): tall, a flag and a drum on top
     "building.tent_small": (2, 2, True),
     "camp.banquet": (10, 2, True),                  # a long banquet table under awnings
     "landmark.ridge": (6, 2, False),                # raised earth you stand on
@@ -73,6 +74,7 @@ ART = {
     "building.storehouse": "a treasury storehouse: stout walls, heavy double doors with bronze fittings, tiled roof",
     "building.posthouse": "a Han post-pavilion (亭): a small walled station with a gate and a lookout, a signboard by the road",
     "building.gatehouse": "a compound's gatehouse: a roofed gateway in the compound wall, double doors",
+    "building.markettower": "a Han market tower (市楼): a slender two-storey timber tower with a hip roof, a drum in the upper storey and a long flag on a pole; tall, so it reads from afar",
     "building.tent_small": "a small square officer's tent",
     "camp.banquet": "a long banquet table under awnings, low tables and cushions in a row, wine jars",
     "landmark.ridge": "an earthen ridge: raised bare earth with a gentle slope, grass on its flanks",
@@ -150,27 +152,27 @@ PLANS2 = {
         "archetype": "city",
         "banners": "black",          # the Chancellor's banners; red (Han) from state "after"
         "plan": {
-            "grid": [17, 16], "cell": 4, "margin": 1,
+            "grid": [17, 17], "cell": 4, "margin": 1,
             "ground": [
                 {"id": "farewell", "kind": "field", "rect": [8, 1, 4, 2]},            # outside the north wall
                 {"id": "wheat-n", "kind": "field.wheat", "rect": [13, 1, 3, 2]},
-                {"id": "city", "kind": "city", "rect": [2, 4, 13, 11]},
+                {"id": "city", "kind": "city", "rect": [2, 4, 13, 12]},
                 {"id": "markets", "kind": "market", "rect": [2, 4, 13, 2]},
                 {"id": "ward", "kind": "ward", "rect": [2, 6, 13, 5]},
-                {"id": "forecourt", "kind": "court", "rect": [6, 10, 2, 1]},           # before the palace steps
-                {"id": "plateau", "kind": "plateau", "rect": [2, 11, 13, 4], "raised": True},   # Longshou: the palace stands high
+                {"id": "plateau", "kind": "plateau", "rect": [2, 12, 13, 4], "raised": True},   # Longshou: the palace stands high
             ],
             "lines": [
                 {"id": "wei", "kind": "river", "path": [[0, 0], [16, 0]], "width": 4},
-                {"id": "wall", "kind": "wall.city", "outline": [1, 3, 15, 13], "width": 2,
+                {"id": "wall", "kind": "wall.city", "outline": [1, 3, 15, 14], "width": 2,
                  "gates": {"hengmen-gate": [6, 3], "xuanping-gate": [15, 5]}},
                 {"id": "west-road", "kind": "road", "path": [[0, 2], [6, 2]], "width": 3},
-                {"id": "avenue", "kind": "road", "path": [[6, 2], [6, 10]], "width": 4,   # Heng Gate to the North Side Gate
+                {"id": "avenue", "kind": "road", "path": [[6, 2], [6, 11]], "width": 4,   # Heng Gate to the North Side Gate
                  "lanes": [1, 2, 1], "middle": "the emperor's lane: no one walks it"},
                 {"id": "market-street", "kind": "road", "path": [[2, 5], [15, 5]], "width": 3},
                 {"id": "ward-street", "kind": "road", "path": [[2, 9], [14, 9]], "width": 3},
                 {"id": "west-lane", "kind": "road", "path": [[2, 5], [2, 9]], "width": 2},   # loops: no dead ends
-                {"id": "east-lane", "kind": "road", "path": [[14, 5], [14, 9]], "width": 2},
+                {"id": "east-lane", "kind": "road", "path": [[14, 5], [14, 11]], "width": 2},
+                {"id": "palace-lane", "kind": "road", "path": [[2, 11], [14, 11]], "width": 2},   # along the foot of the terrace
             ],
             "things": [
                 # outside the walls
@@ -181,27 +183,29 @@ PLANS2 = {
                  "map": "jeweller"},
                 {"id": "wineshop", "kind": "building.shop", "rect": [4, 4, 2, 1], "door": "S", "label": "A wine shop"},
                 {"id": "teahouse", "kind": "building.shop", "rect": [7, 4, 2, 1], "door": "S", "label": "A teahouse"},
-                {"id": "gotable", "kind": "furniture.gotable", "rect": [10, 4, 1, 1], "label": "The market go table"},
+                {"id": "market-tower", "kind": "building.markettower", "rect": [9, 4, 2, 1], "label": "The market tower",
+                 "note": "a Han 市楼: two storeys, a flag and a drum; seen from all over the north of the city"},
+                {"id": "gotable", "kind": "furniture.gotable", "rect": [13, 4, 1, 1], "label": "The market go table"},
                 {"id": "stalls", "kind": "market.stalls", "rect": [11, 4, 2, 1]},
                 # the officials' ward: compounds face south onto the ward street
                 {"id": "wangyun", "kind": "building.compound", "rect": [3, 6, 3, 3], "door": "S", "label": "Wang Yun's residence",
-                 "map": "wangyun"},
+                 "map": "wangyun", "plaque": "王府"},
                 {"id": "xiangfu", "kind": "building.compound", "rect": [8, 6, 4, 3], "door": "S", "label": "The Chancellor's residence",
-                 "map": "xiangfu", "open_to": ["diaochan"],
+                 "map": "xiangfu", "plaque": "相府", "open_to": ["diaochan"],
                  "refuse": ["The gatekeeper bars the way. “The Grand Preceptor receives no one today.”"]},
                 {"id": "lubu", "kind": "building.compound", "rect": [12, 6, 2, 3], "door": "S", "label": "Lü Bu's quarters",
-                 "map": "lubu"},
-                {"id": "shisun", "kind": "building.house", "rect": [2, 10, 2, 1], "door": "N", "label": "Shisun Rui's house",
+                 "map": "lubu", "plaque": "吕府"},
+                {"id": "shisun", "kind": "building.house", "rect": [2, 10, 2, 1], "door": "S", "label": "Shisun Rui's house", "plaque": "士孙府",
                  "node": "2-a12a"},
-                {"id": "huangwan", "kind": "building.house", "rect": [4, 10, 2, 1], "door": "N", "label": "Huang Wan's house",
+                {"id": "huangwan", "kind": "building.house", "rect": [4, 10, 2, 1], "door": "S", "label": "Huang Wan's house", "plaque": "黄府",
                  "node": "2-a12b"},
-                {"id": "caiyong", "kind": "building.house", "rect": [8, 10, 2, 1], "door": "N", "label": "Cai Yong's house", "map": "caiyong"},
-                {"id": "house-2", "kind": "building.house", "rect": [10, 10, 2, 1], "door": "N"},
-                {"id": "house-3", "kind": "building.house", "rect": [12, 10, 2, 1], "door": "N"},
+                {"id": "caiyong", "kind": "building.house", "rect": [8, 10, 2, 1], "door": "S", "label": "Cai Yong's house", "map": "caiyong", "plaque": "蔡府"},
+                {"id": "house-2", "kind": "building.house", "rect": [10, 10, 2, 1], "door": "S"},
+                {"id": "house-3", "kind": "building.house", "rect": [12, 10, 2, 1], "door": "S"},
                 # the palace on its plateau
-                {"id": "palace", "kind": "building.palace", "rect": [3, 11, 7, 4], "door": "N", "label": "Weiyang Palace",
-                 "map": "palace", "gate_label": "The North Side Gate"},
-                {"id": "changle", "kind": "building.palace", "rect": [11, 11, 3, 3], "label": "Changle Palace", "note": "roofs only: not enterable"},
+                {"id": "palace", "kind": "building.palace", "rect": [3, 12, 7, 4], "door": "N", "label": "Weiyang Palace",
+                 "map": "palace", "gate_label": "The North Side Gate", "plaque": "北掖门"},
+                {"id": "changle", "kind": "building.palace", "rect": [11, 12, 3, 3], "label": "Changle Palace", "note": "roofs only: not enterable"},
                 {"id": "xuanping", "kind": "building.gatetower", "rect": [15, 5, 1, 2], "label": "The Xuanping Gate tower",
                  "door": "W", "map": "xuanping-top", "open_to": ["node:a17"],
                  "refuse": ["The guards at the stair cross their halberds. “No one goes up to the Son of Heaven's tower.”"]},
@@ -213,9 +217,9 @@ PLANS2 = {
                 {"id": "a11", "at": [3, 1], "node": "2-a11", "label": "Lü Bu on the ridge", "trigger": "near", "on": "ridge"},
                 {"id": "market", "at": [6, 5], "node": "2-a15", "label": "The market crossroads", "trigger": "near"},
                 {"id": "a13d", "at": [6, 8], "node": "2-a13d", "label": "The street before the palace", "trigger": "near"},
-                {"id": "north-gate", "at": [6, 10], "node": "2-a14", "label": "The North Side Gate", "trigger": "near"},
+                {"id": "north-gate", "at": [6, 11], "node": "2-a14", "label": "The North Side Gate", "trigger": "near"},
                 {"id": "xuanping-foot", "at": [14, 5], "label": "The foot of the Xuanping Gate tower", "note": "the stair up to the tower top (A18)"},
-                {"id": "qingsuo", "at": [7, 10], "node": "2-a18p", "label": "The palace steps", "note": "Lü Bu's plea outside the Qingsuo Gate"},
+                {"id": "qingsuo", "at": [7, 11], "node": "2-a18p", "label": "The palace steps", "note": "Lü Bu's plea outside the Qingsuo Gate"},
             ],
             "props": [   # on the lines layer: claim no cell
                 {"kind": "landmark.hitchingpost", "at": [10, 9], "in": ["capital"], "label": "Lü Bu's horse, tied at the gate", "note": "A9: the clue that gives him away",
@@ -229,6 +233,10 @@ PLANS2 = {
                 {"kind": "lamp.post", "along": "market-street", "every": 4},
                 {"kind": "tree.poplar", "along": "west-road", "every": 3},
                 {"kind": "banner", "at_gates": True},
+                {"kind": "banner.black", "at_door": "xiangfu", "pair": True},     # the Chancellor's black banners
+                {"kind": "prop.lanterns", "at_door": "wangyun", "pair": True},    # Wang Yun's red lanterns
+                {"kind": "furn.rack", "at_door": "lubu"},                         # a weapon rack at the soldier's gate
+                {"kind": "banner.red", "at_door": "palace", "pair": True},
             ],
             "exits": [{"to": "Meiwu Road", "at": [0, 2], "side": "W"}],
             "entries": {"": [6, 4], "Meiwu Road": [1, 2]},
@@ -760,14 +768,14 @@ PLANS2["Chang'an"]["challengers"] = [
         "A Flying Bear soldier lounges against the wall, dice in his fist. “Bored, old man? Play me. Lose, and you buy the wine.”",
         "“Hah! The old man bites. Go on.”", "“Not again, old man. My purse can't take it.”"),
     # the conspirators' errands (before A12a/A12b): a patrol stands across the lane at Huang Wan's gate
-    _ch("patrol", "folk.soldier", [4, 9], "node:a11", "node:a12b",
+    _ch("patrol", "folk.soldier", [4, 11], "node:a11", "node:a12b",
         "A Flying Bear patrol fills the lane to Huang Wan's gate. “Visiting late, Minister? Every lane in Chang'an answers to the Grand Preceptor.”",
         "“On your way, then. Quickly.”", "The patrol has moved on to the next lane.", blocks="huangwan"),
     _ch("informer", "folk.villager", [2, 8], "node:a11", "node:a12a",
         "A man in a plain coat has sat by Shisun Rui's gate all morning. “A game while you wait, Minister? I have time. I have nothing but time.”",
         "“You play like a man with nothing to hide.”", "The man in the plain coat has gone."),
     # Chang'an optionals
-    _ch("scholar", "folk.elder", [10, 5], None, "node:a17",
+    _ch("scholar", "folk.elder", [13, 5], None, "node:a17",
         "“Sit, Minister. In this city it's safer to talk about stones than people.”",
         "“Ha. You read the board the way you read a room.”", "“Another day, Minister. The stones keep.”", face="N"),
     _ch("officer", "folk.soldier", [14, 7], "node:a5", "node:a6",

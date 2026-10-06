@@ -226,7 +226,7 @@ class MapBuilder:
             if kind.startswith("building."):
                 o["door"] = door
                 o["faces"] = t.get("faces") or (door if door in SIDES else "S")
-            for k in ("label", "note", "map", "open_to", "refuse", "gives", "when", "until", "window"):
+            for k in ("label", "note", "map", "open_to", "refuse", "gives", "when", "until", "window", "plaque"):
                 if t.get(k) is not None:
                     o[k] = t[k]
             if t.get("doors"):
@@ -313,6 +313,15 @@ class MapBuilder:
                         break
                     if self.put(kind, t):
                         n -= 1
+            elif d.get("at_door") in self.anchor:   # flanking a door, so you know it from down the street
+                ax, ay = self.anchor[d["at_door"]]
+                fx, fy, fw, fh = self.foot[d["at_door"]]
+                y = fy + fh - 1 if not self.free((ax - 2, ay)) else ay
+                sides = (-2, 2) if d.get("pair") else (-2,)
+                for dx in sides:
+                    for t in ((ax + dx, ay), (ax + dx + (1 if dx > 0 else -1), ay), (ax + dx, ay - 1)):
+                        if self.put(kind, t):
+                            break
             elif d.get("at_gates"):
                 for gid, gap in self.gate_tiles.items():
                     gx = min(t[0] for t in gap) - 1
