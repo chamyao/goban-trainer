@@ -492,8 +492,8 @@
   "dc_garden": {
     "book": 2,
     "category": "intrigue",
-    "beat": "Diaochan kneeling by the peony pavilion under the moon; Wang Yun has caught her sighing.",
-    "scene": "A private rear garden at night under a full moon. Beside a small open pavilion surrounded by peonies, a sixteen-year-old girl in pale silk with her hair up has dropped to her knees on the stone path, startled, looking up. Before her stands an elderly minister with a grey beard in a dark robe, leaning on a walking staff, his face wet with tears. Moonlight, a trellis of white roses behind him. Only these two.",
+    "beat": "Diaochan sits on a stone bench by the peony pavilion at night, sighing; Wang Yun has come upon her.",
+    "scene": "A private rear garden at night under a full moon. Beside a small open pavilion surrounded by peonies, a sixteen-year-old girl in pale silk with her hair up sits alone on a stone bench, hands in her lap, looking up at the moon and sighing. Half hidden by a trellis of white roses, an elderly grey-bearded minister in a dark robe, leaning on a walking staff, has stopped to watch her. Moonlight. Only these two.",
     "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
   },
   "dc_wangkneels": {

@@ -57,13 +57,13 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 *Then he hears someone sighing by the peony pavilion. He steps softly closer to look. It is Diaochan, the singing girl of his household.*  
 忽闻有人在牡丹亭畔，长吁短叹。允潜步窥之，乃府中歌伎貂蝉也。
 
+[still: `dc_garden`]
+
 *She was chosen as a small girl and brought up in his house, and taught to sing and dance. She is sixteen, as gifted as she is beautiful, and Wang Yun treats her as his own daughter.*  
 其女自幼选入府中，教以歌舞，年方二八，色伎俱佳，允以亲女待之。
 
 **Wang Yun:** Shameless girl! Are you meeting a lover?  
 贱人将有私情耶？
-
-[still: `dc_garden`]
 
 *Startled, she drops to her knees to answer.*  
 貂蝉惊跪答曰：

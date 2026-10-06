@@ -116,6 +116,7 @@ def _scenes_chain():
               "It is Diaochan, the singing girl of his household.",
               "忽闻有人在牡丹亭畔，长吁短叹。允潜步窥之，乃府中歌伎貂蝉也。"),
             ["emote", "dc", "..."],
+            ["still", "dc_garden", "slow zoom in"],
             N("She was chosen as a small girl and brought up in his house, and taught to sing and dance. "
               "She is sixteen, as gifted as she is beautiful, and Wang Yun treats her as his own daughter.",
               "其女自幼选入府中，教以歌舞，年方二八，色伎俱佳，允以亲女待之。"),
@@ -123,7 +124,6 @@ def _scenes_chain():
             ["emote", "dc", "!"],
             S("wangyun", "Shameless girl! Are you meeting a lover?", "贱人将有私情耶？"),
             ["pose", "dc", "kneel"],
-            ["still", "dc_garden", "slow zoom in"],
             N("Startled, she drops to her knees to answer.", "貂蝉惊跪答曰："),
             S("diaochan", "How would your servant dare have a lover!", "贱妾安敢有私！"),
             S("wangyun", "Then why are you sighing so late at night?", "无私，何夜深长叹？"),
