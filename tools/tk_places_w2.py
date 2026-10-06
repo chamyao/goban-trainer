@@ -17,8 +17,7 @@ Wang Yun's and the Chancellor's houses appear as several buildings side by side,
 each labelled as the room it holds.
 
 "inside": True on a person: they stand in the room of their "near" building (the steward
-by the family chest, the jeweller at his bench). Requested from Integration; until the
-factory does it, it ignores the flag and they stand outside the building, 2-3 tiles off.
+by the family chest, the jeweller at his bench). The factory honours it (main 4c88e49).
 
 Road challengers (14; 6 blocking): today a challenger can't block a path or spot
 you, so the blocking ones stand by the landmark you must reach next, and only
