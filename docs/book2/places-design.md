@@ -2,7 +2,7 @@
 
 This is the Places session's design for the four places of the Diaochan arc: **Chang'an, Meiwu, the Meiwu Road and Liangzhou**. It follows `diaochan-arc.md` and uses its Shared keys. The research behind it is in `map-research.md`.
 
-It is written for the best game, not for what the map generator can say today. Wherever the design needs something new, the request is listed in `places-notes.md`. Once those are settled, the design will be turned into `PLACES[2]` data.
+It is written for the best game, not for what the map generator can say today. Every map stays generated: the layout sketches below are the relations a generated map must satisfy (what is south of what, what faces what, what sits in the pond), not drawings to copy. The stealth spaces come with play checks the generator must pass (a covered route exists, the curtain puzzle has a valid spot). See request 6 in `places-notes.md`. Wherever the design needs something new, the request is listed in `places-notes.md`. Once those are settled, the design will be turned into `PLACES[2]` data.
 
 ---
 

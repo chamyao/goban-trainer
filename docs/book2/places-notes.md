@@ -22,7 +22,7 @@ What the design in `places-design.md` needs that the map format and the engine d
               {"id": "night", "when": "node:a1", "until": "node:a2", "light": "night"}, …]
    ```
    People and props then take `"in": ["capital", "after"]`.
-2. **Compounds: a building with several named rooms and courts.** Rooms are linked by doors and passages, walked court by court, each laid out on purpose (the pavilion on a spit in the pond, the window over a small pond court, a secret room behind a screen).
+2. **Compounds: a building with several named rooms and courts, generated.** A compound template (for example a siheyuan: gate, front court, halls on one axis, a rear garden) is filled from a brief listing its rooms and what each must contain. The brief uses the relations in request 6: the pavilion *in* the pond, the window *overlooking* a small pond court, the secret room *behind* a screen in the rear hall.
    - Today a building has one generated room. A beat needs `place` + building + **room** (`wy-garden`, `xf-hall`…).
    - *Used by:* Wang Yun's residence (5 rooms), the Chancellor's residence (4 rooms plus gallery and courts), Meiwu (hall, mother's rooms, Diaochan's rooms, courts).
 3. **Doors open by protagonist.** A door or gate open only to certain protagonists, with a refusal line from someone in the story.
@@ -30,7 +30,16 @@ What the design in `places-design.md` needs that the map format and the engine d
 4. **Roads as one long, ordered route with milestones.** A route map with markers along it (post-pavilions), stops in a fixed order, and its two ends named by place.
    - *Used by:* the Meiwu Road.
 5. **Places that sit beyond another place, in one line.** Liangzhou is reached through Meiwu (the long road west), and its exit east opens after A17.
-6. **Hand-placed layout where the story needs it.** Let a brief fix relative positions: the avenue running from the Heng Gate to the North Side Gate, the palace raised in the south, a landmark visible from most of the map. The rest can still be generated.
+6. **Generated, but steerable: relations and checks in the brief.** Nothing is hand-placed; every map stays generated so the approach scales to every book. The brief gains two things the generator must honour:
+   - **Spatial relations** between landmarks: `south of`, `at the end of` (a road), `facing` (across a road), `inside`, `in` (water), `behind`, `beside`, `on the axis` (a straight avenue between two landmarks), `raised`, `outside the wall`. Each one becomes a placement rule or a score term, in the same place-and-score loop the factory already uses.
+   - **Play checks**, run after layout like today's walkability check. A failed check re-rolls the seed.
+     - *Visible:* the landmark can be seen from most of the walkable map.
+     - *Route under cover:* a path exists from A to B that avoids every watcher's cone at some timing (the A9 garden).
+     - *Sight-puzzle spot:* at least one tile is inside one watcher's cone and outside another's (the A7 curtain).
+     - *Safe spot:* each stealth room has a tile no cone ever reaches.
+     - *Distance:* a building is within N steps of the hub (keeps Chang'an tight).
+
+   The design in `places-design.md` reads as a list of these relations and checks, not a drawing.
 7. **New kinds:**
    - Buildings: `building.compound`, `building.gatetower` (climbable), `building.pavilion` (open-sided, on water), `building.granary`, `building.storehouse`, `building.stable`, `building.posthouse` (亭).
    - Landmarks: `landmark.hitchingpost`, `landmark.ridge` (raised earth you stand on), `landmark.heights` (two heights over a valley).
