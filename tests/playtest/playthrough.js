@@ -18,8 +18,8 @@ const go=async place=>{await p.evaluate(pl=>{window.__w.leaving=false;window.__w
 await p.goto((process.env.PLAYTEST_URL||'http://localhost:8765')+'/index.html'+(process.env.PLAYTEST_KIT?'?kit='+process.env.PLAYTEST_KIT:'')+'#/tk/1');await p.waitForTimeout(1500);const c=p.getByText('Cancel',{exact:true});if(await c.count())await c.first().tap();
 for(let i=0;i<6;i++){const g=p.locator('.tk-scroll-go');if(await g.count()){await g.first().tap();await p.waitForTimeout(400);}}
 await ready();
-if(BOOK>1){await p.evaluate(B=>{for(let n=1;n<B;n++)TK.world(n).nodes.forEach(x=>{TK.markCleared(x.key);TK.markSeen(n+':'+x.scene);});localStorage.setItem('tk-guide','off');localStorage.setItem('tk-book',String(B));},BOOK);
-  await p.goto((process.env.PLAYTEST_URL||'http://localhost:8765')+'/index.html'+(process.env.PLAYTEST_KIT?'?kit='+process.env.PLAYTEST_KIT:'')+'#/tk/'+BOOK);await p.reload();await p.waitForTimeout(1500);
+if(BOOK>1){await p.evaluate(B=>{for(let n=1;n<Math.min(B,4);n++)if(TK.world(n))TK.world(n).nodes.forEach(x=>{TK.markCleared(x.key);TK.markSeen(n+':'+x.scene);});localStorage.setItem('tk-guide','off');localStorage.setItem('tk-book',String(B));},BOOK);
+  await p.goto((process.env.PLAYTEST_URL||'http://localhost:8765')+'/index.html'+(BOOK>9?'?test=1'+(process.env.PLAYTEST_KIT?'&kit='+process.env.PLAYTEST_KIT:''):(process.env.PLAYTEST_KIT?'?kit='+process.env.PLAYTEST_KIT:''))+'#/tk/'+BOOK);await p.reload();await p.waitForTimeout(1500);
   for(let i=0;i<8;i++){const c=p.getByText('Cancel',{exact:true});if(await c.count()&&await c.first().isVisible())await c.first().tap();const g=p.locator('.tk-scroll-go');if(await g.count()){await g.first().tap();await p.waitForTimeout(400);}}
   await ready();}
 console.log('fresh goal:',await p.evaluate(()=>document.querySelector('.town-goal').textContent),'| next:',await p.evaluate(()=>window.__w.nextMain().node));
