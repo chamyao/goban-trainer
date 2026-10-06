@@ -334,6 +334,42 @@
      1
     ]
    ]
+  },
+  "court": {
+   "same": "stone"
+  },
+  "ward": {
+   "same": "stone"
+  },
+  "passage": {
+   "same": "stone"
+  },
+  "road": {
+   "same": "dirt"
+  },
+  "path": {
+   "same": "sand"
+  },
+  "camp": {
+   "same": "dirt"
+  },
+  "city": {
+   "same": "dirt"
+  },
+  "field": {
+   "same": "grass"
+  },
+  "plain": {
+   "same": "grass"
+  },
+  "garden": {
+   "same": "grass"
+  },
+  "stage": {
+   "same": "wood"
+  },
+  "curtain": {
+   "same": "wood"
   }
  },
  "kinds": {
