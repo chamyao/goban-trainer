@@ -662,12 +662,352 @@ def _scenes_chain():
             S("wangyun", "If you can carry this off, how could you fail to rise high?", "公若能干此事，何患不得显官？"),
             ["party", ["lisu"]],
         ]},
+
+        # A13 · Meiwu. Li Su's lie; Dong Zhuo's mother; Diaochan's last act for him.
+        "a13": {"title": T("A Dragon in a Dream", "夜梦龙罩"), "kind": "main", "steps": [
+            ["spawn", "dz", "dongzhuo", "a13", 18, 0],
+            N("The next day Li Su rides to Meiwu with a dozen horsemen. Word goes in that an edict has come from the Emperor, and Dong Zhuo calls him in.",
+              "次日，李肃引十数骑，前到郿坞。人报天子有诏，卓叫唤入。"),
+            ["pose", "lisu", "bow"],
+            S("dongzhuo", "What does the Emperor's edict say?", "天子有何诏？"),
+            ["problem"],  # Li Su: the lie, to Dong Zhuo's face
+            S("lisu", "His Majesty has recovered from his illness, and wishes to gather all his officials in the Weiyang Hall, "
+              "to discuss yielding the throne to you, Grand Preceptor. Hence this edict.",
+              "天子病体新痊，欲会文武于未央殿，议将禅位于太师，故有此诏。"),
+            S("dongzhuo", "And what does Wang Yun think?", "王允之意若何？"),
+            S("lisu", "Minister Wang has already had a platform built for the abdication. It waits only for you, my lord.",
+              "王司徒已命人筑“受禅台”，只等主公来。"),
+            ["emote", "dz", "music"],
+            S("dongzhuo", "Last night I dreamed a dragon wrapped itself around me, and now this news! The moment has come. I must not lose it!",
+              "吾夜梦一龙罩身，今果得此喜信。时哉不可失！"),
+            N("He orders his trusted generals Li Jue, Guo Si, Zhang Ji and Fan Chou to hold Meiwu with three thousand of the Flying Bear army, "
+              "and makes ready to leave for the capital that same day.",
+              "便命心腹将李傕、郭汜、张济、樊稠，四人领飞熊军三千守郿坞，自己即日排驾回京。"),
+            S("dongzhuo", "When I am Emperor, you shall be Bearer of the Golden Mace.", "吾为帝，汝当为执金吾。"),
+            N("Li Su bows, and calls himself his subject.", "肃拜谢称臣。"),
+            ["spawn", "dm", "dongmu", "a13", 26, -8],
+            ["move", "dz", "a13", 22, -6],
+            ["still", "dz_mother", "slow zoom in"],
+            N("Dong Zhuo goes in to take leave of his mother, who is over ninety.", "卓入辞其母。母时年九十余矣。"),
+            S("dongmu", "Where are you going, my son?", "吾儿何往？"),
+            S("dongzhuo", "I'm going to receive the Han's abdication, Mother. Soon you'll be the Empress Dowager!", "儿将往受汉禅，母亲早晚为太后也！"),
+            S("dongmu", "My flesh has been trembling and my heart starting these past days. I'm afraid it's not a good sign.", "吾近日肉颤心惊，恐非吉兆。"),
+            S("dongzhuo", "You're about to be the mother of the realm. Of course you'd have a few starts first!", "将为国母，岂不预有惊报！"),
+            ["remove", "dm"],
+            ["spawn", "dc", "diaochan", "a13", 30, 4],
+            N("As he goes, he says to Diaochan:", "遂辞母而行。临行谓貂蝉曰："),
+            S("dongzhuo", "When I am Son of Heaven, I'll make you my Precious Consort.", "吾为天子，当立汝为贵妃。"),
+            ["pose", "dc", "bow"],
+            N("Diaochan already knows what is coming. She pretends to be overjoyed, and bows her thanks.", "貂蝉已明知就里，假作欢喜拜谢。"),
+            ["remove", "dc"],
+        ]},
+
+        # A13a-d · The road of omens. Each stop is Li Su explaining one away.
+        "a13a": {"title": T("A Broken Wheel", "车折马嘶"), "kind": "main", "steps": [
+            ["spawn", "dz", "dongzhuo", "a13a", 10, 0],
+            ["prop", "car", "cart", "a13a", 16, 0],
+            ["army", "escort", "f_soldier", 6, "a13a", 24, 6],
+            N("Dong Zhuo leaves the fortress in his carriage, guards before and behind, and sets out for Chang'an.", "卓出坞上车，前遮后拥，望长安来。"),
+            ["fx", "dust", "a13a", 16, 0], ["camera", "shake"],
+            ["still", "omen_wheel", "slow pull back"],
+            N("Before they have gone thirty li, a wheel of his carriage snaps. He gets down and mounts a horse. "
+              "Before they have gone ten li more, the horse rears and screams, and snaps its bridle.",
+              "行不到三十里，所乘之车，忽折一轮，卓下车乘马。又行不到十里，那马咆哮嘶喊，掣断辔头。"),
+            S("dongzhuo", "The carriage breaks a wheel, the horse snaps its bridle. What does it mean?", "车折轮，马断辔，其兆若何？"),
+            ["problem"],
+            S("lisu", "It means you are to receive the Han's throne, Grand Preceptor. You cast off the old for the new, "
+              "and will ride in a jade carriage with a golden saddle.",
+              "乃太师应受汉禅，弃旧换新，将乘玉辇金鞍之兆也。"),
+            N("Dong Zhuo is pleased, and believes him.", "卓喜而信其言。"),
+            ["remove", "car"],
+        ]},
+        "a13b": {"title": T("Wind and Fog", "狂风昏雾"), "kind": "main", "steps": [
+            ["spawn", "dz", "dongzhuo", "a13b", 10, 0],
+            ["army", "escort", "f_soldier", 6, "a13b", 24, 6],
+            ["light", "storm", 1200],
+            ["still", "omen_fog", "slow pan across"],
+            N("The next day, as they ride on, a wild wind suddenly springs up, and dark fog blots out the sky.", "次日，正行间，忽然狂风骤起，昏雾蔽天。"),
+            S("dongzhuo", "What sign is this?", "此何祥也？"),
+            ["problem"],
+            S("lisu", "When you ascend the dragon throne, my lord, there is bound to be red light and purple mist, to add to Heaven's majesty.",
+              "主公登龙位，必有红光紫雾，以壮天威耳。"),
+            N("Again Dong Zhuo is pleased, and has no doubt at all.", "卓又喜而不疑。"),
+            ["light", "day", 1500],
+        ]},
+        "a13c": {"title": T("Grass of a Thousand Li", "千里草"), "kind": "main", "steps": [
+            ["spawn", "dz", "dongzhuo", "a13c", 10, 0],
+            ["spawn", "lb", "lvbu", "a13c", 24, 4],
+            N("At the city, all the officials come out to meet him. Only Li Ru stays at home, ill. "
+              "Dong Zhuo goes to the Chancellor's residence, and Lü Bu comes in to congratulate him.",
+              "即至城外，百官俱出迎接。只有李儒抱病在家，不能出迎。卓进至相府，吕布入贺。"),
+            ["move", "lb", "a13c", 14, 2],
+            S("dongzhuo", "When I ascend the throne, you shall command all the armies of the realm.", "吾登九五，汝当总督天下兵马。"),
+            ["pose", "lb", "bow"],
+            N("Lü Bu bows his thanks, and sleeps outside Dong Zhuo's tent.", "布拜谢，就帐前歇宿。"),
+            ["light", "night", 1500],
+            ["army", "children", "f_child", 6, "a13c", -30, 12],
+            ["still", "omen_song", "slow zoom in"],
+            N("That night a dozen children sing in the fields outside the walls, and the wind carries the song into the tent:",
+              "是夜有十数小儿于郊外作歌，风吹歌声入帐。歌曰："),
+            N("Grass of a thousand li, so green, so green! Ten days up, and it will not live!", "千里草，何青青！十日上，不得生！"),
+            N("The song is sad and piercing.", "歌声悲切。"),
+            S("dongzhuo", "What does this children's song foretell?", "童谣主何吉凶？"),
+            ["problem"],
+            S("lisu", "It only means the house of Liu will fall, and the house of Dong will rise.", "亦只是言刘氏灭，董氏兴之意。"),
+            N("Thousand, li and grass, written together, make the character Dong. Ten, sun and the stroke above it make Zhuo.",
+              "千、里、草合为“董”字；十、日、卜合为“卓”字。"),
+            ["remove", "children"],
+        ]},
+        "a13d": {"title": T("The Taoist's Cloth", "道人布竿"), "kind": "main", "steps": [
+            ["light", "dawn"],
+            ["spawn", "dz", "dongzhuo", "a13d", 10, 0],
+            ["spawn", "dr", "daoren", "a13d", -18, 8],
+            N("Early the next morning, Dong Zhuo sets out for court in full procession. Suddenly he sees a Taoist in a blue robe and white headcloth, "
+              "holding a long pole. Tied to it is a strip of cloth ten feet long, with the character for 'mouth' written at each end.",
+              "次日侵晨，董卓摆列仪从入朝，忽见一道人，青袍白巾，手执长竿，上缚布一丈，两头各书一“口”字。"),
+            ["still", "omen_taoist", "slow zoom in"],
+            S("dongzhuo", "What does this Taoist mean by it?", "此道人何意？"),
+            S("lisu", "He's a madman.", "乃心恙之人也。"),
+            N("Li Su calls the soldiers to drive him off. Two mouths, one above the other, make the character Lü.",
+              "呼将士驱去。两“口”相叠，便是“吕”字。"),
+            ["run", "dr", "a13d", -40, 10], ["remove", "dr"],
+            ["party", ["wangyun"]],
+        ]},
+
+        # A14 · The North Side Gate. The boss: three boards on the way to "There is an edict to kill a traitor!"
+        "a14": {"title": T("There Is an Edict to Kill a Traitor", "有诏讨贼"), "kind": "main", "steps": [
+            ["music", "boss"],
+            ["army", "officials", "f_official", 6, "a14", 18, -10],
+            ["spawn", "dz", "dongzhuo", "a14", 40, 0],
+            ["prop", "car", "cart", "a14", 40, 0], ["board", "dz", "car"],
+            ["spawn", "ls", "lisu", "a14", 36, 6],
+            ["spawn", "lb", "lvbu", "a14", 48, 0],
+            N("The officials, in court dress, line the road to greet him. Li Su walks beside the carriage with a drawn sword in his hand. "
+              "At the North Side Gate the guards are all stopped outside. Only the twenty-odd men drawing the carriage go in with it.",
+              "卓进朝，群臣各具朝服，迎谒于道。李肃手执宝剑扶车而行。到北掖门，军兵尽挡在门外，独有御车二十余人同入。"),
+            ["move", "car", "a14", 20, 0], ["move", "ls", "a14", 18, 6], ["move", "lb", "a14", 28, 0],
+            ["boss", "dongzhuo"],
+            ["problem"],  # 1
+            N("Far off, Dong Zhuo sees Wang Yun and the others standing at the hall gate, each with a sword in his hand.",
+              "董卓遥见王允等各执宝剑立于殿门。"),
+            S("dongzhuo", "What are the swords for?", "持剑是何意？"),
+            N("Li Su does not answer. He pushes the carriage straight in.", "肃不应，推车直入。"),
+            ["move", "car", "a14", 10, 0],
+            ["problem"],  # 2
+            S("wangyun", "The traitor is here! Where are the soldiers?", "反贼至此，武士何在？"),
+            ["army", "ambush", "f_soldier", 8, "a14", 10, 12],
+            ["surround", "ambush", "car", 16],
+            N("A hundred men spring out on either side and stab at him with halberds and spears. But Dong Zhuo wears armour under his robes, "
+              "and the blades do not go in. Wounded in the arm, he tumbles from the carriage.",
+              "两旁转出百余人，持戟挺槊刺之。卓裹甲不入，伤臂坠车。"),
+            ["unboard", "dz"],
+            ["problem"],  # 3
+            S("dongzhuo", "Where is my son Fengxian?", "吾儿奉先何在？"),
+            ["run", "lb", "a14", 14, 0],
+            S("lvbu", "There is an edict to kill a traitor!", "有诏讨贼！"),
+            ["pose", "lb", "strike"], ["fx", "flash", "a14", 12, 0], ["pose", "dz", "fall"],
+            N("One thrust of his halberd goes through Dong Zhuo's throat, and Li Su takes the head.", "一戟直刺咽喉，李肃早割头在手。"),
+            ["still", "dz_gate", "slow pull back"],
+            N("Lü Bu holds his halberd in his left hand, draws the edict from his breast with his right, and cries out:",
+              "吕布左手持戟，右手怀中取诏，大呼曰："),
+            S("lvbu", "By the Emperor's edict, the traitor Dong Zhuo is slain! No one else will be punished!", "奉诏讨贼臣董卓，其余不问！"),
+            N("Officers and officials all cry: Long live the Emperor!", "将吏皆呼万岁。"),
+            ["victory"],
+        ]},
+
+        # A15 · The aftermath. No board.
+        "a15": {"title": T("A Lamp in the Market", "脐中为灯"), "kind": "main", "steps": [
+            ["spawn", "lb", "lvbu", "a15", 16, 0], ["spawn", "ls", "lisu", "a15", 20, 6],
+            S("lvbu", "It was Li Ru who helped Dong Zhuo in all his cruelty! Who will take him?", "助卓为虐者，皆李儒也！谁可擒之？"),
+            S("lisu", "I will!", "肃愿往！"),
+            N("Then there is shouting outside the gate: Li Ru's own household slaves have tied him up and brought him in. "
+              "Wang Yun has him taken to the market and beheaded, and Dong Zhuo's body put on show in the main street.",
+              "忽听朝门外发喊，人报李儒家奴已将李儒绑缚来献。王允命缚赴市曹斩之；又将董卓尸首，号令通衢。"),
+            ["light", "night", 1200],
+            ["still", "dz_lamp", "slow pull back"],
+            N("The body is so fat that the soldiers guarding it set a wick in its navel for a lamp, and the grease runs all over the ground. "
+              "Every passer-by strikes the head or kicks the body.",
+              "卓尸肥胖，看尸军士以火置其脐中为灯，膏油满地。百姓过者，莫不手掷其头，足践其尸。"),
+            ["light", "day", 1200],
+            N("Wang Yun sends Lü Bu, Huangfu Song and Li Su with fifty thousand men to Meiwu, to take Dong Zhuo's household and goods. "
+              "Hearing that Dong Zhuo is dead and Lü Bu is coming, Li Jue, Guo Si, Zhang Ji and Fan Chou flee to Liangzhou that night with the Flying Bear army.",
+              "王允又命吕布同皇甫嵩、李肃领兵五万，至郿坞抄籍董卓家产人口。李傕、郭汜、张济、樊稠闻董卓已死，吕布将至，便引了飞熊军连夜奔凉州去了。"),
+            ["still", "dc_meiwu", "slow zoom in"],
+            N("At Meiwu, the first thing Lü Bu does is take Diaochan.", "吕布至郿坞，先取了貂蝉。"),
+            N("Huangfu Song sets free all the girls of good family held in the fortress. Every relative of Dong Zhuo, old or young, is put to death, "
+              "his mother among them. Gold by the hundred thousand, silks, pearls, vessels and grain beyond counting are listed and brought back to Wang Yun.",
+              "皇甫嵩命将坞中所藏良家子女，尽行释放。但系董卓亲属，不分老幼，悉皆诛戮。卓母亦被杀。收籍坞中所蓄黄金数十万，绮罗、珠宝、器皿、粮食不计其数，回报王允。"),
+        ]},
+        "a15c": {"title": T("Cai Yong Weeps", "蔡邕哭尸"), "kind": "main", "steps": [
+            ["army", "officials", "f_official", 6, "a15c", 10, -10],
+            N("Wang Yun feasts the army, and gathers the officials in the great hall to drink in celebration. "
+              "In the middle of the feast a man reports that someone is lying across Dong Zhuo's body in the market, weeping aloud.",
+              "允乃大犒军士，设宴于都堂，召集众官，酌酒称庆。正饮宴间，忽人报曰：“董卓暴尸于市，忽有一人伏其尸而大哭。”"),
+            S("wangyun", "Dong Zhuo has been put to death, and every man rejoices. Who dares weep for him? Seize him and bring him here!",
+              "董卓伏诛，士民莫不称贺；此何人，敢哭耶？与吾擒来！"),
+            ["spawn", "cy", "caiyong", "a15c", 30, 4], ["move", "cy", "a15c", 14, 4], ["pose", "cy", "kneel"],
+            ["still", "cy_weeps", "slow zoom in"],
+            N("When he is brought in, the officials are aghast. It is the Palace Attendant, Cai Yong.", "须臾擒至。众官见之，无不惊骇：原来那人乃侍中蔡邕也。"),
+            S("wangyun", "Dong Zhuo was a traitor, and today he has met his end. It is the nation's great good fortune. "
+              "You are a minister of the Han. Instead of rejoicing for the realm, you weep for a traitor. Why?",
+              "董卓逆贼，今日伏诛，国之大幸。汝为汉臣，乃不为国庆，反为贼哭，何也？"),
+            S("caiyong", "Little as I am, I know where my duty lies. How could I turn against the realm and side with Dong Zhuo? "
+              "I wept only because, for a moment, I remembered that he once valued me. I know my crime is great. I beg your mercy. "
+              "Brand my face and cut off my feet, but let me finish the history of the Han to make amends. That would be my good fortune.",
+              "邕虽不才，亦知大义，岂肯背国而向卓？只因一时知遇之感，不觉为之一哭，自知罪大。愿公见原：倘得黥首刖足，使续成汉史，以赎其辜，邕之幸也。"),
+            ["spawn", "mm", "mamidi", "a15c", 4, -6],
+            N("The officials all value his learning, and plead for him. The Grand Tutor, Ma Midi, speaks to Wang Yun privately.",
+              "众官惜邕之才，皆力救之。太傅马日磾亦密谓允曰："),
+            S("mamidi", "Bojie is a talent such as appears once in an age. If he were allowed to finish the history of the Han, it would be a great thing. "
+              "And his filial conduct is well known. Kill him so suddenly, and I fear you will lose people's trust.",
+              "伯喈旷世逸才，若使续成汉史，诚为盛事。且其孝行素著，若遽杀之，恐失人望。"),
+            S("wangyun", "Long ago Emperor Wu spared Sima Qian and let him write his history, and slanders of the throne have come down to us ever since. "
+              "The dynasty is weak now, and the court in disorder. We cannot let a flatterer hold the brush beside the young Emperor, and make us the butt of his gibes.",
+              "昔孝武不杀司马迁，后使作史，遂致谤书流于后世。方今国运衰微，朝政错乱，不可令佞臣执笔于幼主左右，使吾等蒙其讪议也。"),
+            N("Ma Midi has nothing to say, and withdraws. Privately, he tells the officials:", "日磾无言而退，私谓众官曰："),
+            S("mamidi", "Wang Yun will leave no heirs! Good men are the bones of a nation, and its writings are its law. "
+              "Destroy the bones and cast aside the law, and how long can it last?",
+              "王允其无后乎！善人，国之纪也；制作，国之典也。灭纪废典，岂能久乎？"),
+            ["remove", "cy"],
+            N("Wang Yun does not listen. He has Cai Yong strangled in prison. When the scholars hear of it, they all weep.",
+              "王允不听马日磾之言，命将蔡邕下狱中缢死。一时士大夫闻者，尽为流涕。"),
+            ["party", ["jiaxu"]],
+        ]},
+
+        # A16 · The villains' turn. Jia Xu's advice, his rumour through Liangzhou, the march.
+        "a16": {"title": T("No Pardon", "求赦不得"), "kind": "main", "steps": [
+            ["spawn", "lj", "lijue", "a16", 14, 0], ["spawn", "gs", "guosi", "a16", 18, 6],
+            N("Li Jue, Guo Si, Zhang Ji and Fan Chou, hiding in Shaanxi, send a memorial to Chang'an begging for a pardon.",
+              "李傕、郭汜、张济、樊稠逃居陕西，使人至长安上表求赦。"),
+            N("Wang Yun answers: Dong Zhuo's tyranny was all the work of these four. The whole realm is pardoned, but not them.",
+              "王允曰：“卓之跋扈，皆此四人助之；今虽大赦天下，独不赦此四人。”"),
+            S("lijue", "No pardon. Then every man for himself.", "求赦不得，各自逃生可也。"),
+            ["problem"],  # Jia Xu: stop them scattering
+            S("jiaxu", "Leave your armies and go off alone, and any village constable can tie you up. "
+              "Better to gather the men of Shaanxi, join them to your own troops, and fight your way into Chang'an to avenge Dong Zhuo. "
+              "If it works, we hold the court and set the realm right. If not, there's still time to run.",
+              "诸君若弃军单行，则一亭长能缚君矣。不若诱集陕人，并本部军马，杀入长安，与董卓报仇。事济，奉朝廷以正天下；若其不胜，走亦未迟。"),
+            N("Li Jue and the others agree.", "傕等然其说。"),
+        ]},
+        "a16a": {"title": T("A Rumour in Liangzhou", "流言西凉"), "kind": "main", "steps": [
+            ["problem"],
+            ["army", "villagers", "f_villager", 6, "a16a", 14, 0],
+            N("In the first village, the word goes round: Wang Yun means to wipe out every man of Liangzhou.", "遂流言于西凉州曰：“王允将欲洗荡此方之人矣。”"),
+            ["emote", "villagers", "!"],
+        ]},
+        "a16b": {"title": T("Fear", "众皆惊惶"), "kind": "main", "steps": [
+            ["problem"],
+            ["army", "villagers", "f_villager", 6, "a16b", 14, 0],
+            N("By the second village it has run ahead of them. The people are terrified.", "众皆惊惶。"),
+            ["emote", "villagers", "sweat"],
+        ]},
+        "a16c": {"title": T("Will You Follow Me?", "能从我反乎"), "kind": "main", "steps": [
+            ["problem"],
+            ["army", "villagers", "f_villager", 6, "a16c", 14, 0],
+            N("In the third, they put the question plainly: Why die for nothing? Will you rise with us? And every man will.",
+              "乃复扬言曰：“徒死无益，能从我反乎？”众皆愿从。"),
+            ["pose", "villagers", "cheer"],
+        ]},
+        "a16m": {"title": T("The March on Chang'an", "杀奔长安"), "kind": "main", "steps": [
+            ["army", "host", "rebel", 9, "a16m", 20, 0],
+            N("They gather more than a hundred thousand men, split them into four columns, and march on Chang'an. "
+              "On the road they meet Dong Zhuo's son-in-law, Niu Fu, coming with five thousand men to avenge him. Li Jue joins forces with him, "
+              "and sends him on ahead.",
+              "于是聚众十余万，分作四路，杀奔长安来。路逢董卓女婿中郎将牛辅，引军五千人，欲去与丈人报仇，李傕便与合兵，使为前驱。"),
+            ["move", "host", "a16m", 60, 0],
+            ["party", ["lijue"]],
+        ]},
+
+        "a16m_wait": {"title": T("Not Enough Men", "人马未齐"), "kind": "main", "steps": [
+            S("jiaxu", "Not yet. There are villages still that haven't heard.", "还不可。尚有乡里未闻此言。"),
+        ]},
+
+        # A17 · Ren Valley. Li Su's end, Niu Fu's end, and the gong-and-drum trick.
+        "a17": {"title": T("Gong to Advance, Drum to Withdraw", "鸣金进兵"), "kind": "main", "steps": [
+            N("Lü Bu sends Li Su out against them. Li Su beats Niu Fu in the first fight, but that night, the second watch, Niu Fu raids his camp. "
+              "Li Su loses half his army and flees thirty li. Lü Bu is furious, has him beheaded, and hangs his head at the camp gate.",
+              "布遂引李肃将兵出敌。肃当先迎战，正与牛辅相遇，大杀一阵。不想是夜二更，牛辅乘肃不备，竟来劫寨。肃军乱窜，败走三十余里，折军大半。"
+              "布大怒，遂斩李肃，悬头军门。"),
+            N("The next day Lü Bu beats Niu Fu himself. That night Niu Fu slips away with his gold and a few men. At a river crossing his own man, "
+              "Hu Chi'er, kills him for the gold and takes the head to Lü Bu. Niu Fu's men tell the truth, and Lü Bu has Hu Chi'er killed too.",
+              "次日，吕布进兵与牛辅对敌，牛辅大败而走。是夜牛辅暗藏金珠，弃营而走。将渡一河，胡赤儿欲谋取金珠，竟杀死牛辅，将头来献吕布。"
+              "从人出首，布怒，即将赤儿诛杀。"),
+            ["spawn", "gs", "guosi", "a17", 10, 8],
+            S("lijue", "Lü Bu is brave but has no strategy. Nothing to fear. I'll hold the mouth of Ren Valley and draw him out to fight every day. "
+              "General Guo, you hit him from behind. We'll do what Peng Yue did to wear down Chu: sound the gong to advance, beat the drum to withdraw. "
+              "Zhang and Fan split their forces and go straight for Chang'an. He can't save his head and his tail at once. He's sure to be beaten.",
+              "吕布虽勇，然而无谋，不足为虑。我引军守任谷口，每日诱他厮杀。郭将军可领军抄击其后，效彭越挠楚之法，鸣金进兵，擂鼓收兵。"
+              "张、樊二公，却分兵两路，径取长安。彼首尾不能救应，必然大败。"),
+            ["army", "ours", "rebel", 6, "a17", 10, 0],
+            ["spawn", "lb", "lvbu", "a17", 50, 0], ["army", "theirs", "militia", 6, "a17", 54, 6],
+            ["music", "battle"],
+            ["run", "lb", "a17", 26, 0],
+            ["problem"],  # Li Jue: hold him at the valley mouth
+            ["still", "ren_valley", "slow pan across"],
+            N("Lü Bu charges up the hill, and stones and arrows rain down on him. Guo Si's men strike from behind. He turns, and the drums roll, "
+              "and they are gone. He means to withdraw, and the gongs ring, and Li Jue is on him again. Day after day it goes on. "
+              "He can neither fight nor stop.",
+              "布忿怒冲杀过去，傕退走上山。山上矢石如雨，布军不能进。郭汜在阵后杀来，布急回战。只闻鼓声大震，汜军已退。布方欲收军，锣声响处，傕军又来。"
+              "一连如此几日，欲战不得，欲止不得。"),
+            N("Then a rider brings word: Zhang Ji and Fan Chou are at Chang'an. Lü Bu hurries back, and loses many men on the way.",
+              "忽然飞马报来，说张济、樊稠两路军马，竟犯长安，京城危急。布急领军回，折了好些人马。"),
+            ["run", "lb", "a17", 80, 0], ["remove", "lb"], ["remove", "theirs"],
+            ["party", ["wangyun"]],
+        ]},
+
+        # A18 · Xuanping Gate. No board: Wang Yun's choice, which the novel has already made.
+        "a18": {"title": T("Wang Yun Is Here", "王允在此"), "kind": "main", "steps": [
+            ["light", "dusk"],
+            N("A few days later, Li Meng and Wang Fang, Dong Zhuo's men still inside the city, secretly open the gates, and the rebel armies pour in from all four sides.",
+              "数日之后，董卓余党李蒙、王方在城中为贼内应，偷开城门，四路贼军一齐拥入。"),
+            ["spawn", "lb", "lvbu", "a18", 20, 0], ["run", "lb", "a18", 8, 0],
+            S("lvbu", "It's hopeless! Mount up, Minister, and come out through the pass with me. We'll find another way.", "势急矣！请司徒上马，同出关去，别图良策。"),
+            S("wangyun", "If the spirits of the dynasty help me bring the realm to peace, that is all I wish. If not, I give my life. "
+              "To save myself by running in a crisis: that I will not do. Thank the lords east of the pass for me, and tell them to keep the realm in their hearts!",
+              "若蒙社稷之灵，得安国家，吾之愿也；若不获已，则允奉身以死。临难苟免，吾不为也。为吾谢关东诸公，努力以国家为念！"),
+            N("Lü Bu begs him again and again, but Wang Yun will not go. Soon flames rise from every gate to the sky. "
+              "Lü Bu has to leave his own family behind, and flees through the pass with a hundred riders, to join Yuan Shu.",
+              "吕布再三相劝，王允只是不肯去。不一时，各门火焰竟天，吕布只得弃却家小，引百余骑飞奔出关，投袁术去了。"),
+            ["run", "lb", "a18", -50, 0], ["remove", "lb"],
+            ["fx", "fire", "a18", 30, -10], ["fx", "fire", "a18", -20, -8],
+            N("Li Jue and Guo Si let their men loot the city. Minister after minister dies for the dynasty. The rebels close round the inner palace, "
+              "and the Emperor's attendants beg him to go up on the Xuanping Gate tower to stop the slaughter.",
+              "李傕、郭汜纵兵大掠，众臣多死于国难。贼兵围绕内庭至急，侍臣请天子上宣平门止乱。"),
+            ["spawn", "xd", "xiandi", "a18", 4, -6],
+            ["army", "rebels", "rebel", 9, "a18", 30, 10],
+            ["spawn", "lj", "lijue", "a18", 24, 6], ["spawn", "gs", "guosi", "a18", 26, 12],
+            ["still", "wy_tower", "slow pull back"],
+            N("Seeing the yellow canopy, Li Jue and Guo Si hold back their men, and cry: Long live the Emperor!", "李傕等望见黄盖，约住军士，口呼万岁。"),
+            S("xiandi", "You came into Chang'an without waiting for my summons. What do you mean by it?", "卿不候奏请，辄入长安，意欲何为？"),
+            S("lijue", "Grand Preceptor Dong was the pillar of Your Majesty's throne, and Wang Yun murdered him for nothing. "
+              "We've come only to avenge him, not to rebel. Give us Wang Yun, and we'll withdraw.",
+              "董太师乃陛下社稷之臣，无端被王允谋杀，臣等特来报仇，非敢造反。但见王允，臣便退兵。"),
+            S("wangyun", "Everything I did was for the realm. Now it has come to this, Your Majesty must not spare me and ruin the nation. Let me go down to these two rebels.",
+              "臣本为社稷计。事已至此，陛下不可惜臣，以误国家。臣请下见二贼。"),
+            N("The Emperor hesitates, and cannot bear it. Wang Yun leaps down from the Xuanping Gate tower, crying out:", "帝徘徊不忍。允自宣平门楼上跳下楼去，大呼曰："),
+            ["pose", "wangyun", "leap"],
+            ["run", "wangyun", "a18", 18, 6],
+            S("wangyun", "Wang Yun is here!", "王允在此！"),
+            S("lijue", "What crime had the Grand Preceptor committed, that you killed him?", "董太师何罪而见杀？"),
+            S("wangyun", "Dong Zhuo's crimes filled heaven and earth, more than words can tell. The day he died, everyone in Chang'an rejoiced. Have you alone not heard?",
+              "董贼之罪，弥天亘地，不可胜言。受诛之日，长安士民，皆相庆贺，汝独不闻乎？"),
+            S("guosi", "So the Grand Preceptor was guilty. What were we guilty of, that you wouldn't pardon us?", "太师有罪；我等何罪，不肯相赦？"),
+            S("wangyun", "Traitors, why waste words? I, Wang Yun, have only death today!", "逆贼何必多言！我王允今日有死而已！"),
+            ["mood", "dark"],
+            ["pose", "wangyun", "fall"],
+            N("The two rebels raise their swords, and Wang Yun is cut down below the tower.", "二贼手起，把王允杀于楼下。"),
+            N("They send men to kill his whole clan, old and young. Scholars and common people alike weep for him.", "众贼杀了王允，一面又差人将王允宗族老幼，尽行杀害。士民无不下泪。"),
+            N("Then Li Jue and Guo Si think: having come this far, why not kill the Son of Heaven and take the great prize? "
+              "They draw their swords and storm into the palace, shouting.",
+              "当下李傕、郭汜寻思曰：“既到这里，不杀天子谋大事，更待何时？”便持剑大呼，杀入内来。"),
+            N("What became of Emperor Xian? Hear the next chapter.", "未知献帝性命如何，且听下文分解。"),
+        ]},
     }
 
 
 def _nodes_chain():
-    def node(key, x, y, scene, room=None, **extra):
-        n = {"key": key, "x": x, "y": y, "role": "main", "place": "Chang'an", "scene": scene}
+    def node(key, x, y, scene, room=None, place="Chang'an", role="main", **extra):
+        n = {"key": key, "x": x, "y": y, "role": role, "place": place, "scene": scene}
         if room:
             n["room"] = room
         n.update(extra)
@@ -747,11 +1087,73 @@ def _nodes_chain():
             "He never promoted me. And Lü Bu will kill me if I say no.", "他从不迁我官。况我若不从，吕布先斩我。",
             "I break the arrow.", "折箭为誓。",
             "Not yet. Think.", "且慢，再想。")),
+        node("a13", 300, 60, "a13", place="Meiwu", room="hall", dilemma=D(
+            "lisu", "Lie to the Grand Preceptor.", "骗过太师。",
+            "He reads men for a living. One flicker and I'm dead.", "此人阅人无数。一丝破绽，我便死了。",
+            "He dreamed of a dragon, he says.", "他说夜梦一龙罩身。",
+            "He's looking at me. Steady.", "他在看我。稳住。")),
+        node("a13a", 310, 54, "a13a", place="Meiwu Road", dilemma=D(
+            "lisu", "Explain away the broken wheel.", "解说车折轮、马断辔。",
+            "Heaven itself is warning him. Make it sound like good news.", "天在警他。要说成吉兆。",
+            "He believes it.", "他信了。",
+            "That won't hold.", "这说不通。")),
+        node("a13b", 320, 48, "a13b", place="Meiwu Road", dilemma=D(
+            "lisu", "Explain away the wind and the fog.", "解说狂风昏雾。",
+            "Darkness at noon. Make it majesty.", "白日昏暗。要说成天威。",
+            "He has no doubt at all.", "他毫不起疑。",
+            "Too clever. Simpler.", "太巧了，说简单些。")),
+        node("a13c", 330, 42, "a13c", place="Meiwu Road", dilemma=D(
+            "lisu", "Explain away the children's song.", "解说童谣。",
+            "The song says his name, and says he dies. Turn it round.", "童谣暗藏其名，又说他死。要反过来说。",
+            "The house of Dong will rise.", "董氏当兴。",
+            "He's listening hard. Again.", "他听得仔细。再来。")),
+        node("a13d", 340, 36, "a13d", place="Meiwu Road", board=False),
+        node("a14", 350, 30, "a14", role="boss",
+             boss={"who": "dongzhuo", "title": T("Dong Zhuo", "董卓") + ", " + T("Grand Preceptor", "太师"),
+                   "taunt": T("What are the swords for?", "持剑是何意？")},
+             dilemma=D("wangyun", "Kill the traitor at the palace gate.", "诛贼于北掖门。",
+                       "His guards are shut outside. It has to be now.", "卫兵尽挡在门外。只在此刻。",
+                       "There is an edict to kill a traitor!", "有诏讨贼！",
+                       "Not yet. Hold.", "且慢，稳住。")),
+        node("a15", 360, 24, "a15", board=False),
+        node("a15c", 370, 20, "a15c", room="dutang", board=False),
+        node("a16", 380, 16, "a16", place="Liangzhou", dilemma=D(
+            "jiaxu", "Keep them from scattering.", "劝住诸将，勿散。",
+            "If they run alone, a village constable will take them. Together, they can take Chang'an.", "若各自逃生，一亭长能缚之。合兵，则长安可取。",
+            "They agree.", "傕等然其说。",
+            "They're not listening. Again.", "他们不听。再说。")),
+        node("a16a", 388, 12, "a16a", place="Liangzhou", dilemma=D(
+            "jiaxu", "Spread the rumour.", "散布流言。",
+            "Fear will raise an army faster than gold.", "恐惧聚兵，快过金银。",
+            "They believe it.", "众皆信之。",
+            "They don't believe it yet.", "他们还不信。")),
+        node("a16b", 396, 10, "a16b", place="Liangzhou", dilemma=D(
+            "jiaxu", "Let the fear spread.", "使流言传开。",
+            "It has run ahead of us. Keep it running.", "流言已先我而至。让它再传。",
+            "The whole county is afraid.", "一州皆惧。",
+            "Too loud. Quieter.", "太张扬了，低些。")),
+        node("a16c", 404, 8, "a16c", place="Liangzhou", dilemma=D(
+            "jiaxu", "Ask them to rise.", "问他们肯反否。",
+            "Why die for nothing?", "徒死无益。",
+            "Every man will follow.", "众皆愿从。",
+            "Not yet. They're wavering.", "还未。他们在犹豫。")),
+        node("a16m", 412, 6, "a16m", place="Liangzhou", board=False,
+             gate=[{"needs": ["node:a16a", "node:a16b", "node:a16c"], "else": "a16m_wait",
+                    "objective": T("Spread the rumour through the villages of Liangzhou.", "在西凉各乡散布流言。"), "at": "Liangzhou"}]),
+        node("a17", 420, 6, "a17", place="Liangzhou", dilemma=D(
+            "lijue", "Hold Lü Bu at the mouth of Ren Valley.", "在任谷口拖住吕布。",
+            "He is brave, and nothing else. Never let him fight the battle he wants.", "他只有勇而已。决不教他打想打的仗。",
+            "He can neither fight nor stop.", "他欲战不得，欲止不得。",
+            "He's breaking through. Again.", "他要冲破了。再来。")),
+        node("a18", 430, 6, "a18", board=False),
     ]
 
 
 _EDGES_CHAIN = [["a1", "a2"], ["a2", "a3"], ["a3", "a4"], ["a4", "a5"], ["a5", "a6"], ["a6", "a7"], ["a7", "a8"], ["a8", "a9"],
-                ["a9", "a10"], ["a10", "a11"], ["a11", "a12a"], ["a12a", "a12b"], ["a12b", "a12p"], ["a12p", "a12c"], ["a12c", "a12"]]
+                ["a9", "a10"], ["a10", "a11"], ["a11", "a12a"], ["a12a", "a12b"], ["a12b", "a12p"], ["a12p", "a12c"], ["a12c", "a12"],
+                ["a12", "a13"], ["a13", "a13a"], ["a13a", "a13b"], ["a13b", "a13c"], ["a13c", "a13d"], ["a13d", "a14"], ["a14", "a15"],
+                ["a15", "a15c"], ["a15c", "a16"], ["a16", "a16a"], ["a16a", "a16b"], ["a16b", "a16c"], ["a16c", "a16m"], ["a16m", "a17"],
+                ["a17", "a18"]]
 
 _ITEMS = {
     "pearls": {"name": "Family pearls", "zh": "家藏明珠", "kind": "treasure"},

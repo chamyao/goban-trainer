@@ -303,15 +303,21 @@ Written from the Chinese original (第八回、第九回). Everything in a beat 
 | `a10` | The sword on the wall | Chang'an / `xf-hall` |
 | `a11` | The ridge | Chang'an / `ridge`, then `wy-secret` |
 | `a12a`, `a12b` | Shisun Rui, Huang Wan (legwork) | Chang'an / their houses |
+| `a12p` | The plan (no board) | Chang'an / `wy-secret` |
 | `a12c` | The secret edict (legwork) | Chang'an / `palace` |
 | `a12` | Recruiting Li Su | Chang'an / `wy-secret` |
-| `a13` | Meiwu: the lie | Meiwu / `hall` |
-| `a13a`–`a13d` | Omens: wheel, bridle, fog, children's song | Meiwu Road |
+| `a13` | Meiwu: the lie, Dong Zhuo's mother | Meiwu / `hall` |
+| `a13a` | Omen: the broken wheel and snapped bridle | Meiwu Road / `wheel` |
+| `a13b` | Omen: wind and fog | Meiwu Road / `fog` |
+| `a13c` | Omen: the children's song (night) | Meiwu Road / `fields` |
+| `a13d` | The Taoist with the cloth (no board) | Chang'an / street before the palace |
 | `a14` | North Side Gate (boss) | Chang'an / `north-gate` |
-| `a15` | Aftermath (Li Ru, Meiwu raid, Cai Yong) | Chang'an / `market`, Meiwu |
+| `a15` | Li Ru taken; the lamp in the market; Meiwu raided (no board) | Chang'an / `market` |
+| `a15c` | Cai Yong weeps (no board) | Chang'an / `dutang` (the great hall of state) |
+| `a16` | No pardon; Jia Xu's advice | Liangzhou / `camp` |
 | `a16a`–`a16c` | Rumour villages (legwork) | Liangzhou / `v1`–`v3` |
-| `a16` | The march | Liangzhou / `camp` |
+| `a16m` | The march (no board; gated on the three villages) | Liangzhou / road out |
 | `a17` | Ren Valley | Liangzhou / `rengu` |
-| `a18` | Xuanping Gate | Chang'an / `xuanping` |
+| `a18` | Xuanping Gate (no board) | Chang'an / `xuanping` |
 
-The keys may be renamed when the story is written, but Plot will say so.
+These match `tools/tk_story_w2_new.py`. The keys may be renamed when the story is written, but Plot will say so.

@@ -4,7 +4,7 @@ Kept by Plot, updated with each batch of `tools/tk_story_w2_new.py`. Plot writes
 dialogue (English and Chinese) and marks where each go problem is posed; the problems
 themselves, the voices, the art and the engine are other sessions' work.
 
-## Where go problems are posed (so far: the chain, A1–A12)
+## Where go problems are posed (the whole chain, A1–A18)
 
 | Beat | When the board comes | Decider | How many |
 |---|---|---|---|
@@ -21,7 +21,15 @@ themselves, the voices, the art and the engine are other sessions' work.
 | A12a / A12b | before the scene (legwork: sounding out each minister) | Wang Yun | 1 each |
 | A12c Secret edict | before the scene (legwork: reaching the Emperor unseen) | Wang Yun | 1 |
 | A12 Broken arrow | before Li Su's answer | Li Su | 1 |
-| A1, A12p | no board | | |
+| A13 Meiwu | before Li Su's lie about the abdication | Li Su | 1 |
+| A13a Broken wheel | after "What does it mean?" | Li Su | 1 |
+| A13b Wind and fog | after "What sign is this?" | Li Su | 1 |
+| A13c Children's song | after "What does this children's song foretell?" | Li Su | 1 |
+| A14 North Side Gate (**boss**, Dong Zhuo) | before he sees the swords; before "Where are the soldiers?"; before "Where is my son Fengxian?" | Wang Yun | **3** |
+| A16 No pardon | before Jia Xu's advice | Jia Xu | 1 |
+| A16a / A16b / A16c | before each village scene (legwork: the rumour) | Jia Xu | 1 each |
+| A17 Ren Valley | as Lü Bu charges the valley mouth | Li Jue | 1 |
+| A1, A12p, A13d, A15, A15c, A16m, A18 | no board | | |
 
 Difficulty within a three-problem scene should rise, the third hardest.
 
@@ -43,6 +51,7 @@ Difficulty within a three-problem scene should rise, the third hardest.
 | Pose | Used in |
 |---|---|
 | `dance` | A5 |
+| `leap` (jumping down from a gate tower) | A18 |
 | `throat` (a sword held to one's own neck) | A10 |
 | `cutarm` (cutting one's own arm for a blood oath) | A11 |
 
@@ -54,7 +63,9 @@ Dong Zhuo is Book 1's.
 
 ## Stills written so far (briefs in `assets/tk/stills/scene_prompts.json`)
 `dz_roadside`, `dz_redtray`, `dc_garden`, `dc_wangkneels`, `dc_wine`, `dc_dance`, `dc_lanterns`, `dc_window`,
-`dc_sickbed`, `dc_pavilion`, `dc_halberd`, `dc_sword`, `dc_carriage`, `lb_ridge`, `lb_blood`, `ls_arrow`.
+`dc_sickbed`, `dc_pavilion`, `dc_halberd`, `dc_sword`, `dc_carriage`, `lb_ridge`, `lb_blood`, `ls_arrow`,
+`dz_mother`, `omen_wheel`, `omen_fog`, `omen_song`, `omen_taoist`, `dz_gate`, `dz_lamp`, `dc_meiwu`, `cy_weeps`,
+`ren_valley`, `wy_tower`. (27 in all.)
 
 ## Engine requests
 1. **The player walks as the current protagonist.** `["party", ["diaochan"]]` makes Diaochan the one the player
