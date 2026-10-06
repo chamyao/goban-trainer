@@ -287,4 +287,7 @@ ZH_PLACES2 = {
     # the procession leash line and the a7c label (Integration's wording)
     "Li Su must keep near the Grand Preceptor.": "李肃须紧随太师车驾。",
     "Behind the curtain": "帘后",
+    # shut roads (claude/plot-places dc30e3a)
+    "The long road west runs on to Liangzhou. There's no errand for you there.": "西去的长路通往凉州。那边没有你的差事。",
+    "Not yet. Lü Bu holds the road east. The mouth of Ren Valley comes first.": "还不行。吕布扼住东路。先到任谷口。",
 }

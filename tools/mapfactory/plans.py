@@ -487,7 +487,8 @@ class MapBuilder:
 # ---------- the world: every place, compound and room, linked ----------
 def state(st, mb, plans):
     """A plan's state → the engine's: light from light+weather, distances and points in tiles of this map."""
-    out = {k: v for k, v in st.items() if k not in ("light", "weather", "visibility", "procession", "exits_open", "exits_closed")}
+    out = {k: v for k, v in st.items() if k not in ("light", "weather", "visibility", "procession", "exits_open", "exits_closed",
+                                                    "exits_closed_say")}
     light = LIGHT.get((st.get("light"), st.get("weather"))) or LIGHT.get((st.get("light"), None)) or st.get("light", "day")
     out["light"] = light if light in ("day", "morning", "dusk", "night", "storm", "smoke") else "day"
     if st.get("weather"):
@@ -506,6 +507,8 @@ def state(st, mb, plans):
         ids = [slug(x) for x in st.get(k, []) if slug(x) in places]
         if ids:
             out[k] = ids
+    if st.get("exits_closed_say"):   # what a shut road says, by the place it leads to
+        out["exits_closed_say"] = {slug(k): v for k, v in st["exits_closed_say"].items() if slug(k) in places}
     return out
 
 
