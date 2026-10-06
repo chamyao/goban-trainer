@@ -312,7 +312,8 @@ Written from the Chinese original (第八回、第九回). Everything in a beat 
 | `a13c` | Omen: the children's song (night) | Meiwu Road / `fields` |
 | `a13d` | The Taoist with the cloth (no board) | Chang'an / street before the palace |
 | `a14` | North Side Gate (boss) | Chang'an / `north-gate` |
-| `a15` | Li Ru taken; the lamp in the market; Meiwu raided (no board) | Chang'an / `market` |
+| `a15` | Li Ru taken; the lamp in the market (no board) | Chang'an / `market` |
+| `a15m` | Meiwu raided, played as Lü Bu (no board; road challengers on the walk) | Meiwu / `treasury` (Diaochan's rooms beyond it) |
 | `a15c` | Cai Yong weeps (no board) | Chang'an / `dutang` (the great hall of state) |
 | `a16` | No pardon; Jia Xu's advice | Liangzhou / `camp` |
 | `a16a`–`a16c` | Rumour villages (legwork) | Liangzhou / `v1`–`v3` |

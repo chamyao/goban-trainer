@@ -832,11 +832,22 @@ def _scenes_chain():
             N("Wang Yun sends Lü Bu, Huangfu Song and Li Su with fifty thousand men to Meiwu, to take Dong Zhuo's household and goods. "
               "Hearing that Dong Zhuo is dead and Lü Bu is coming, Li Jue, Guo Si, Zhang Ji and Fan Chou flee to Liangzhou that night with the Flying Bear army.",
               "王允又命吕布同皇甫嵩、李肃领兵五万，至郿坞抄籍董卓家产人口。李傕、郭汜、张济、樊稠闻董卓已死，吕布将至，便引了飞熊军连夜奔凉州去了。"),
+            ["party", ["lvbu"]],
+        ]},
+        # A15m · Meiwu raided. Played as Lü Bu: a walk through the opened fortress (road challengers on the way), then this scene, no board.
+        "a15m": {"title": T("Meiwu", "郿坞"), "kind": "main", "steps": [
+            ["spawn", "hs", "huangfusong", "a15m", -16, 6],
+            ["army", "freed", "f_maiden", 5, "a15m", -24, 10],
+            ["spawn", "dc", "diaochan", "a15m", 12, -4],
             ["still", "dc_meiwu", "slow zoom in"],
             N("At Meiwu, the first thing Lü Bu does is take Diaochan.", "吕布至郿坞，先取了貂蝉。"),
+            ["move", "lvbu", "a15m", 8, -4],
+            ["move", "freed", "a15m", -50, 12], ["remove", "freed"],
             N("Huangfu Song sets free all the girls of good family held in the fortress. Every relative of Dong Zhuo, old or young, is put to death, "
               "his mother among them. Gold by the hundred thousand, silks, pearls, vessels and grain beyond counting are listed and brought back to Wang Yun.",
               "皇甫嵩命将坞中所藏良家子女，尽行释放。但系董卓亲属，不分老幼，悉皆诛戮。卓母亦被杀。收籍坞中所蓄黄金数十万，绮罗、珠宝、器皿、粮食不计其数，回报王允。"),
+            ["remove", "dc"],
+            ["party", ["wangyun"]],
         ]},
         "a15c": {"title": T("Cai Yong Weeps", "蔡邕哭尸"), "kind": "main", "steps": [
             ["army", "officials", "f_official", 6, "a15c", 10, -10],
@@ -1116,6 +1127,7 @@ def _nodes_chain():
                        "There is an edict to kill a traitor!", "有诏讨贼！",
                        "Not yet. Hold.", "且慢，稳住。")),
         node("a15", 360, 24, "a15", board=False),
+        node("a15m", 366, 22, "a15m", place="Meiwu", room="treasury", board=False),
         node("a15c", 370, 20, "a15c", room="dutang", board=False),
         node("a16", 380, 16, "a16", place="Liangzhou", dilemma=D(
             "jiaxu", "Keep them from scattering.", "劝住诸将，勿散。",
@@ -1152,7 +1164,7 @@ def _nodes_chain():
 _EDGES_CHAIN = [["a1", "a2"], ["a2", "a3"], ["a3", "a4"], ["a4", "a5"], ["a5", "a6"], ["a6", "a7"], ["a7", "a8"], ["a8", "a9"],
                 ["a9", "a10"], ["a10", "a11"], ["a11", "a12a"], ["a12a", "a12b"], ["a12b", "a12p"], ["a12p", "a12c"], ["a12c", "a12"],
                 ["a12", "a13"], ["a13", "a13a"], ["a13a", "a13b"], ["a13b", "a13c"], ["a13c", "a13d"], ["a13d", "a14"], ["a14", "a15"],
-                ["a15", "a15c"], ["a15c", "a16"], ["a16", "a16a"], ["a16a", "a16b"], ["a16b", "a16c"], ["a16c", "a16m"], ["a16m", "a17"],
+                ["a15", "a15m"], ["a15m", "a15c"], ["a15c", "a16"], ["a16", "a16a"], ["a16a", "a16b"], ["a16b", "a16c"], ["a16c", "a16m"], ["a16m", "a17"],
                 ["a17", "a18"]]
 
 _ITEMS = {

@@ -1010,6 +1010,12 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 *Wang Yun sends Lü Bu, Huangfu Song and Li Su with fifty thousand men to Meiwu, to take Dong Zhuo's household and goods. Hearing that Dong Zhuo is dead and Lü Bu is coming, Li Jue, Guo Si, Zhang Ji and Fan Chou flee to Liangzhou that night with the Flying Bear army.*  
 王允又命吕布同皇甫嵩、李肃领兵五万，至郿坞抄籍董卓家产人口。李傕、郭汜、张济、樊稠闻董卓已死，吕布将至，便引了飞熊军连夜奔凉州去了。
 
+*(the player is now: Lü Bu)*
+
+
+## A15M · Meiwu (郿坞)
+*Meiwu / treasury* · no board
+
 [still: `dc_meiwu`]
 
 *At Meiwu, the first thing Lü Bu does is take Diaochan.*  
@@ -1017,6 +1023,8 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 *Huangfu Song sets free all the girls of good family held in the fortress. Every relative of Dong Zhuo, old or young, is put to death, his mother among them. Gold by the hundred thousand, silks, pearls, vessels and grain beyond counting are listed and brought back to Wang Yun.*  
 皇甫嵩命将坞中所藏良家子女，尽行释放。但系董卓亲属，不分老幼，悉皆诛戮。卓母亦被杀。收籍坞中所蓄黄金数十万，绮罗、珠宝、器皿、粮食不计其数，回报王允。
+
+*(the player is now: Wang Yun)*
 
 
 ## A15C · Cai Yong Weeps (蔡邕哭尸)
