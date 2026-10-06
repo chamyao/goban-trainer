@@ -54,22 +54,56 @@ for(const q of beats){
   if(w0.back)check(!after.caught,`${q.node}: and sent back to ${w0.back} (now ${after.place}${after.place===q.cross?', at its door':''})`);
   // patient: back in, then on to the spot, a step at a time, waiting while a catcher would see the next one
   await setUp(q.node,q.cross,null);await p.waitForTimeout(800);
-  const pts=await p.evaluate(([spot,room])=>{const w=window.__w,e=w.exits.find(e=>e.to===room),s=w.spots[spot]||(e&&{x:e.rect.centerX,y:e.rect.centerY-7});   /* into the doorway itself (the walk ends 10 px below its target) */if(!s)return null;const path=w.findPath(w.player.x,w.player.y,s.x,s.y+10)||[];let last=[w.player.x,w.player.y];const out=[];
-    for(const q of path){const [x,y]=Array.isArray(q)?q:[q.x,q.y];const d=Math.hypot(x-last[0],y-last[1]),n=Math.max(1,Math.ceil(d/8));for(let k=1;k<=n;k++)out.push([last[0]+(x-last[0])*k/n,last[1]+(y-last[1])*k/n]);last=[x,y];}
-    /* the path stops on open floor: the last steps into the doorway */if(!w.spots[spot]){const [x,y]=[s.x,s.y+10],d=Math.hypot(x-last[0],y-last[1]),n=Math.max(1,Math.ceil(d/8));for(let k=1;k<=n;k++)out.push([last[0]+(x-last[0])*k/n,last[1]+(y-last[1])*k/n]);}return out;},[q.spot,q.place]);
-  if(!check(pts&&pts.length,`${q.node}: a way from where she comes in to the spot`))continue;
-  let i=0,waits=0,res='timeout',t0=Date.now();
-  while(Date.now()-t0<120000){
-    const st=await p.evaluate(([n,cross])=>({cine:!!window.__w.cine||!!document.querySelector('.tk-duel')||TK.cleared(n)||window.__w.placeId!==cross&&!window.__w.caught,caught:!!window.__w.caught,busy:window.__w.ui.busy()}),[q.node,q.cross]);
-    if(st.cine){res='scene';break;}if(st.caught){res='caught';if(process.env.DEBUG)console.log('  at the catch:',await p.evaluate(()=>{const w=window.__w;return JSON.stringify({P:[w.player.x|0,w.player.y|0],w:w.npcs.filter(n=>n.watch).map(n=>[n.id,n.spr.x|0,n.spr.y|0,n.watch.dir,n.watch.leg,w.sees(n,w.player),w.watching(n),n.spr.visible])});}));break;}if(st.busy){await p.evaluate(()=>window.__w.ui.advance());await p.waitForTimeout(150);continue;}
-    if(i>=pts.length){await p.waitForTimeout(300);if(++i>pts.length+15){res='no scene at the spot';break;}continue;}
-    const mv=await p.evaluate(([nx,ny,bx,by])=>{const w=window.__w,T=w.tw||16;
-      const danger=P=>w.npcs.some(n=>{if(!(n.watch&&((n.watch.seen||[]).length||n.watch.back_to)&&w.watching(n)))return false;if(w.sees(n,P))return true;
-        /* about to turn (the end of his beat, or a pause): any way he may face next */const W=n.watch,tg=W.pts&&W.pts.length>1&&W.pts[W.leg];if(W.wait>0||tg&&Math.hypot(tg.x-n.spr.x,tg.y-n.spr.y)<4*T){const d0=W.dir;const any=['up','down','left','right'].some(d=>{W.dir=d;return w.sees(n,P);});W.dir=d0;if(any)return true;}
-        const [fx,fy]={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]}[n.watch.dir]||[0,0],x0=n.spr.x,y0=n.spr.y;n.spr.x+=fx*T*1.5;n.spr.y+=fy*T*1.5;const r=w.sees(n,P);n.spr.x=x0;n.spr.y=y0;return r;});
-      const P=w.player;if(!danger({x:nx,y:ny})){w.walk=null;P.body.reset(nx,ny);return 1;}if(bx!=null&&danger({x:P.x,y:P.y})&&!danger({x:bx,y:by})){w.walk=null;P.body.reset(bx,by);return -1;}return 0;},[...pts[i],...(i>0?pts[i-1]:[null,null])]);
-    if(mv)i+=mv;else waits++;await p.waitForTimeout(mv?110:200);}
-  check(res==='scene',`${q.node}: waiting out the cones (${waits} waits, ${((Date.now()-t0)/1000).toFixed(0)} s), she reaches the spot and the scene begins (${res})`);
+  // plan, then walk it: the patrols simulated ahead (their beats, pauses and turns, as the game moves them), and
+  // a search over (place, time) for a way at his running pace that no catcher ever sees; the wait is how much
+  // longer that takes than running straight there
+  const planAt=walk=>p.evaluate(([spot,room,node,walk])=>{const w=window.__w,T=w.tw||16,C=16,DT=50,STEP=3,F=1200;
+    const e=w.exits.find(e=>e.to===room),s=w.spots[spot];const goal=s?{x:s.x,y:s.y+10}:e&&{x:e.rect.centerX,y:e.rect.centerY+3};if(!goal)return {err:'no spot or door'};
+    const G=w.walkGrid(),cols=Math.ceil(G.cols*G.C/C),rows=Math.ceil(G.rows*G.C/C),free=(cx,cy)=>G.free(Math.floor((cx*C+8)/G.C),Math.floor((cy*C+10)/G.C));
+    const cat=w.npcs.filter(n=>n.watch&&((n.watch.seen||[]).length||n.watch.back_to)&&w.watching(n));
+    // the patrols, frame by frame
+    const tracks=cat.map(n=>{const W=n.watch,st={x:n.spr.x,y:n.spr.y,leg:W.leg,wait:W.wait,dir:W.dir,t:W.t,turn:W.turn},out=[];
+      for(let f=0;f<F;f++){out.push({x:st.x,y:st.y,dir:st.dir});
+        if(W.pts.length>1){if(st.wait>0)st.wait-=DT;else{const tg=W.pts[st.leg],dx=tg.x-st.x,dy=tg.y-st.y,d=Math.hypot(dx,dy),v=30*DT/1000;
+          if(d<=v){st.x=tg.x;st.y=tg.y;const c=(W.beat||[])[st.leg],pz=W.pause;if(pz&&c&&c[0]===pz[0]&&c[1]===pz[1])st.wait=(pz[2]||2)*1000;st.leg=(st.leg+1)%W.pts.length;}
+          else{st.x+=dx/d*v;st.y+=dy/d*v;st.dir=Math.abs(dx)>Math.abs(dy)?(dx<0?'left':'right'):(dy<0?'up':'down');}}}
+        else if(W.turns.length){st.t+=DT;if(st.t>2600){st.t=0;st.turn=(st.turn+1)%W.turns.length;st.dir=W.turns[st.turn];}}}
+      return {n,out};});
+    const at=(cx,cy)=>({x:cx*C+8,y:cy*C+12});
+    const seenAt=new Uint8Array(cols*rows*F);
+    for(const {n,out} of tracks){const R=(n.watch.cone||4)*T+C;for(let f=0;f<F;f++){const o=out[f],stub={watch:{cone:n.watch.cone,dir:o.dir},spr:{x:o.x,y:o.y}};
+      for(let cy=Math.max(0,Math.floor((o.y-R)/C));cy<=Math.min(rows-1,Math.floor((o.y+R)/C));cy++)for(let cx=Math.max(0,Math.floor((o.x-R)/C));cx<=Math.min(cols-1,Math.floor((o.x+R)/C));cx++)
+        if(w.sees(stub,at(cx,cy)))seenAt[(f*rows+cy)*cols+cx]=1;}}
+    const safe=(cx,cy,f)=>{for(let k=Math.max(0,f-2);k<=Math.min(F-1,f+STEP+2);k++)if(seenAt[(k*rows+cy)*cols+cx])return false;return true;};
+    const P=w.player,sx=Math.floor(P.x/C),sy=Math.floor((P.y-4)/C),gx=Math.floor(goal.x/C),gy=Math.floor((goal.y-4)/C);
+    // straight there, no one about: the shortest way in steps
+    const par=new Int32Array(cols*rows).fill(-1);const bfs=()=>{const d=new Int32Array(cols*rows).fill(-1),q=[sx+sy*cols];d[q[0]]=0;for(let i=0;i<q.length;i++){const c=q[i],x=c%cols,y=(c-x)/cols;for(const [a,b] of [[1,0],[-1,0],[0,1],[0,-1]]){const X=x+a,Y=y+b;if(X<0||Y<0||X>=cols||Y>=rows||d[X+Y*cols]>=0)continue;if(!free(X,Y)&&!(X===gx&&Y===gy))continue;d[X+Y*cols]=d[c]+1;par[X+Y*cols]=c;q.push(X+Y*cols);}}return d[gx+gy*cols];};
+    const direct=bfs();
+    /* running the shortest way, not looking: is she seen? */let careless=false;{const ws=[];for(let c=gx+gy*cols;c>=0&&c!==sx+sy*cols;c=par[c])ws.unshift(c);ws.forEach((c,k)=>{const x=c%cols;if(!safe(x,(c-x)/cols,(k+1)*STEP))careless=true;});}if(direct<0)return {err:'no way to the goal at all'};
+    // (cell, step) search: move or wait each step, never where a catcher sees
+    let cur=new Map([[sx+sy*cols,null]]);const hist=[cur];let found=-1;
+    for(let k=0;(k+1)*STEP<F;k++){const nx=new Map();for(const c of cur.keys()){const x=c%cols,y=(c-x)/cols;for(const [a,b] of [[0,0],[1,0],[-1,0],[0,1],[0,-1]]){const X=x+a,Y=y+b,id=X+Y*cols;
+        if(X<0||Y<0||X>=cols||Y>=rows||nx.has(id))continue;if(!free(X,Y)&&!(X===gx&&Y===gy))continue;if(!safe(X,Y,(k+1)*STEP))continue;nx.set(id,c);}}
+      hist.push(nx);cur=nx;if(nx.has(gx+gy*cols)){found=k+1;break;}if(!nx.size)break;}
+    if(found<0)return {err:'no unseen way within '+(F*DT/1000)+' s',direct,careless};
+    const path=[];let c=gx+gy*cols;for(let k=found;k>=0;k--){path.unshift(c);c=hist[k].get(c);}
+    const cells=path.map(c=>{const x=c%cols;return at(x,(c-x)/cols);});cells[cells.length-1]=goal;
+    // walk it in step with the game's own clock
+    if(!walk)return {steps:found,direct,careless,secs:found*STEP*DT/1000,wait:((found-direct)*STEP*DT/1000)};
+    window.__plan={cells,i:0,acc:0,done:false};const h=(t,delta)=>{const pl=window.__plan;if(pl.done||w.caught||w.cine||w.leaving){w.events.off('update',h);return;}if(w.ui.busy())return;pl.acc+=delta;const k=Math.min(pl.cells.length-1,Math.floor(pl.acc/(STEP*DT)));const q=pl.cells[k];w.walk=null;P.body.reset(q.x,q.y);if(k>=pl.cells.length-1){pl.done=true;}};
+    w.events.on('update',h);
+    return {steps:found,direct,secs:found*STEP*DT/1000,wait:((found-direct)*STEP*DT/1000)};},[q.spot,q.place,q.node,walk]);
+  // the wait depends on when she sets off: a few moments, a second and a half apart
+  const sample=[];let caughtRuns=0;for(let k=0;k<6;k++){const r=await planAt(false);sample.push(r.err?null:r.wait);if(r.careless)caughtRuns++;await p.waitForTimeout(1500);}
+  const ok=sample.filter(x=>x!=null);console.log(`  waits from 6 starting moments: ${sample.map(x=>x==null?'none':x.toFixed(1)+' s').join(', ')}; running the shortest way without looking, seen ${caughtRuns} of 6`);
+  const plan=await planAt(true);
+  if(!check(!plan.err,`${q.node}: an unseen way to ${q.spot&&!(await p.evaluate(s=>!!window.__w.spots[s],q.spot))?'the door of '+q.place:'the spot'} (${plan.err||`${plan.secs.toFixed(1)} s, of which ${plan.wait.toFixed(1)} s waiting for the cones; running straight would take ${(plan.direct*0.15).toFixed(1)} s`})`))continue;
+  let res='timeout',t0=Date.now();
+  while(Date.now()-t0<plan.secs*1000*4+20000){
+    const st=await p.evaluate(([n,cross])=>({cine:!!window.__w.cine||!!document.querySelector('.tk-duel')||TK.cleared(n)||window.__w.placeId!==cross&&!window.__w.caught,caught:!!window.__w.caught}),[q.node,q.cross]);
+    if(st.cine){res='scene';break;}if(st.caught){res='caught';break;}if(await p.evaluate(()=>window.__w.ui.busy()&&!window.__w.cine))await p.evaluate(()=>window.__w.ui.advance());await p.waitForTimeout(100);}
+  const waits=plan.wait.toFixed(1)+' s';
+  check(res==='scene',`${q.node}: walking that way she isn't seen, and the scene begins (${res}, ${((Date.now()-t0)/1000).toFixed(0)} s)`);
 }
 check(found>0,`stealth beats found: ${found}`);
 console.log(`stealth-12: ${checked-fails}/${checked}`);await b.close();process.exit(fails?1:0);})();
