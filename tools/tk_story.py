@@ -698,3 +698,10 @@ from tk_story_w2 import WORLD2 as _WORLD2  # noqa: E402
 WORLDS.append(_WORLD2)
 from tk_story_w3 import WORLD3 as _WORLD3  # noqa: E402
 WORLDS.append(_WORLD3)
+# ---- the new Book 2, as a test book (world 12) until it replaces World 2: #/tk/12 in test mode ----
+import copy as _copy  # noqa: E402
+from tk_story_w2_new import WORLD2 as _DRAFT2  # noqa: E402
+_DRAFT2 = _copy.deepcopy(_DRAFT2)
+_DRAFT2.update(n=12, name="Diaochan (draft)", zh="貂蝉（草稿）", chapters=[8, 9], draft=True)
+_DRAFT2.setdefault("boss", "redmond")  # Book 2's boss pool
+WORLDS.append(_DRAFT2)

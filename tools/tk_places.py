@@ -304,3 +304,7 @@ from tk_story_w2 import PLACES2 as _PLACES2  # noqa: E402
 PLACES[2] = _PLACES2
 from tk_story_w3 import PLACES3 as _PLACES3  # noqa: E402
 PLACES[3] = _PLACES3
+# The Book 2 draft (test world 12): Places' Book 2 map, its "2-a…" nodes renamed to the test book's "12-a…"
+import json as _json  # noqa: E402
+from tk_places_w2 import PLACES2 as _P2  # noqa: E402
+PLACES[12] = _json.loads(_json.dumps(_P2).replace('"2-a', '"12-a'))

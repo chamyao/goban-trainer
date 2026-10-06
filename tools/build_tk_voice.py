@@ -40,6 +40,7 @@ EN_VOICE = {
     "zm_052": "am_adam", "zm_100": "bm_daniel", "zm_069": "am_liam", "zm_057": "bm_fable",        # townsfolk: villager, elder, monk, noble
     "zm_045": "am_eric", "zm_016": "am_fenrir", "zm_030": "am_liam", "zm_064": "bm_lewis",        # soldier, rebel, hunter, official
     "zf_022": "af_sarah", "zf_002": "af_sky", "zf_017": "bf_isabella", "zf_023": "af_bella",     # woman, child and girl, lady, maiden
+    "zf_044": "af_bella",                                                                          # Diaochan (Book 2 draft)
     # Book 2
     "zm_097": "am_onyx", "zm_009": "bm_lewis", "zm_010": "am_puck", "zm_012": "am_eric",          # Lü Bu, Wang Yun, Li Ru, Li Su
     "zm_015": "am_fenrir", "zm_020": "bm_george", "zm_031": "bm_fable", "zm_035": "am_echo",      # Hua Xiong, Ding Yuan, Yuan Shao, Yuan Shu

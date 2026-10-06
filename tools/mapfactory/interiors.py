@@ -171,6 +171,9 @@ class Room:
             npc = {"id": f"in-{i + 1}", "kind": p["kind"], "x": x + .5, "y": y + .9, "say": [p["say"]] if isinstance(p.get("say"), str) else p.get("say", [])}
             if p.get("wander"):
                 npc["wander"] = True
+            for k in STORY_KEYS:   # a story person seated inside ("inside": True in the place's npcs)
+                if p.get(k):
+                    npc[k] = p[k]
             self.npcs.append(npc)
 
     def build(self, rid, world_n):
@@ -181,14 +184,21 @@ class Room:
         if len(self.reach(self.door)) < floor_cells * .8:
             raise RuntimeError("furniture blocks the room")
         b = self.b
+        back = getattr(self, "back", None) or self.parent["id"]   # the room before this one, or the street
+        on = getattr(self, "next", None)
+        exits = [{"to": back, "side": "S", "x": self.door[0], "y": self.door[1], "w": 1, "h": 1}]
+        entries = {back: list(inside), "": list(inside)}
+        if on:   # a door in the back wall to the next room of the residence
+            exits.append({"to": on, "side": "N", "x": self.door[0], "y": self.ry - 1, "w": 1, "h": 1})
+            entries[on] = [self.door[0], self.ry]
         return {
             "format": "tk-map/1", "id": rid, "world": world_n, "parent": self.parent["id"],
             "name": b.get("label") or f"{NAMES[b['kind']]}, {self.parent['name']}", "archetype": "interior",
             "building": b.get("id"), "style": b["kind"], "size": [self.W, self.H], "seed": self.rng.random(),
             "terrain": {"legend": LEGEND, "rows": ["".join(r) for r in self.t]},
             "objects": self.objects, "spots": [], "npcs": self.npcs,
-            "exits": [{"to": self.parent["id"], "side": "S", "x": self.door[0], "y": self.door[1], "w": 1, "h": 1}],
-            "entries": {self.parent["id"]: list(inside), "": list(inside)},
+            "exits": exits, "entries": entries,
+            **({"links": [back] + ([on] if on else [])} if back != self.parent["id"] or on else {}),
         }
 
 
@@ -220,6 +230,9 @@ def add_spot(r, node, label="", trigger=None):
     return spot["id"]
 
 
+STORY_KEYS = ("challenge", "intro", "win", "done", "until", "face", "when", "gives", "gives_when", "give", "given", "call", "view", "blocks", "in")
+
+
 def furnish_place(m, place, rooms, world_n):
     """Give every building in an outdoor map a door and a room. Returns the interiors."""
     out, counts = [], {}
@@ -229,9 +242,21 @@ def furnish_place(m, place, rooms, world_n):
         if not o.get("id"):
             counts[o["kind"]] = counts.get(o["kind"], 0) + 1
             o["id"] = f"{o['kind'].split('.')[1]}-{counts[o['kind']]}"
+        chain = o.get("rooms")
+        if chain:   # one residence, several rooms: front hall → rear hall → …, each with a door to the next
+            built = build_chain(m, place, o, chain, rooms, world_n)
+            if built:
+                dx = o["x"] + o["w"] / 2
+                m["exits"].append({"to": built[0]["id"], "side": "N", "x": round(dx - .4, 2), "y": o["y"] + o["h"] - .15, "w": .8, "h": .45, "door": True,
+                              **{k: o[k] for k in ("open_to", "refuse") if o.get(k)}})
+                m["entries"][built[0]["id"]] = [int(dx - .5) if o["w"] % 2 else int(dx), o["y"] + o["h"]]
+                out += built
+            continue
         rid = f"{m['id']}--{o['id']}"
         brief = rooms.get(o["kind"], {})
-        people = brief.get("people", [])
+        # the place's own people marked "inside" by this building come first, then the room's usual folk
+        mine = [p for p in (place.get("brief") or {}).get("npcs", []) if p.get("inside") and p.get("near") == o["id"]]
+        people = mine + (brief.get("people", []) if (place.get("brief") or {}).get("room_folk", True) else [])   # "room_folk": False, only its own people
         seed = sum(map(ord, rid))
         room = None
         for k in range(20):
@@ -244,7 +269,39 @@ def furnish_place(m, place, rooms, world_n):
             continue
         # the door: press against the middle of the building's front wall
         dx = o["x"] + o["w"] / 2
-        m["exits"].append({"to": rid, "side": "N", "x": round(dx - .4, 2), "y": o["y"] + o["h"] - .15, "w": .8, "h": .45, "door": True})
+        m["exits"].append({"to": rid, "side": "N", "x": round(dx - .4, 2), "y": o["y"] + o["h"] - .15, "w": .8, "h": .45, "door": True,
+                              **{k: o[k] for k in ("open_to", "refuse") if o.get(k)}})
         m["entries"][rid] = [int(dx - .5) if o["w"] % 2 else int(dx), o["y"] + o["h"]]
+        out.append(room)
+    return out
+
+
+def build_chain(m, place, o, chain, rooms, world_n):
+    """The rooms of one residence, in order. A room is an id, or {"id", "label", "kind"}; the
+    first is behind the street door, each later one behind the back wall of the one before."""
+    specs = [c if isinstance(c, dict) else {"id": c} for c in chain]
+    ids = [f"{m['id']}--{c['id']}" for c in specs]
+    out = []
+    for k, c in enumerate(specs):
+        b = {**o, "id": c["id"], "kind": c.get("kind", o["kind"]), "label": c.get("label") or o.get("label")}
+        b.pop("rooms", None)
+        mine = [p for p in (place.get("brief") or {}).get("npcs", []) if p.get("inside") and p.get("near") == c["id"]]
+        folk = rooms.get(b["kind"], {}).get("people", []) if (place.get("brief") or {}).get("room_folk", True) else []
+        people = mine + folk * (k == 0)
+        seed, room = sum(map(ord, ids[k])), None
+        for t in range(20):
+            r = Room({"id": m["id"], "name": m["name"]}, b, seed + t * 101, people)
+            r.back = ids[k - 1] if k else None
+            r.next = ids[k + 1] if k + 1 < len(ids) else None
+            if r.next:   # the back-wall gap, and an aisle to it kept clear
+                r.t[r.ry - 1][r.door[0]] = FLOOR[r.T["floor"]]
+                r.keep |= {(r.door[0] + dx, y) for dx in (-1, 0, 1) for y in range(r.ry, r.ry + 2)}
+            try:
+                room = r.build(ids[k], world_n)
+                break
+            except RuntimeError:
+                continue
+        if room is None:
+            return out
         out.append(room)
     return out

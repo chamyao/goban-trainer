@@ -300,6 +300,13 @@ class Layout:
                                     use=lm.get("use"), side=lm.get("side"), clear=lm.get("clear"))
             if o is None:
                 raise RuntimeError(f"no room for {lm['kind']}")
+            for k in ("open_to", "refuse", "in"):   # a door only for some; "in": shown only in those map states
+                if lm.get(k):
+                    o[k] = lm[k]
+            if lm.get("rooms"):   # one building outside, several rooms in a row inside (interiors.build_chain)
+                o["rooms"] = lm["rooms"]
+                for c in lm["rooms"]:
+                    self.anchors.setdefault(c["id"] if isinstance(c, dict) else c, self.anchors.get(lm.get("id")))
             if lm.get("node"):
                 done_nodes.add(lm["node"])
         # the Star Lords' weiqi shrine, by the centre of every town (a brief can say "shrine": True or False,
@@ -408,13 +415,22 @@ class Layout:
 
     # ---------- 5. people ----------
     def lay_npcs(self):
+        # never in the strip a roof (3 tiles) or a tree or big rock's crown (2) draws over
+        hidden = set()
+        for o in self.objects:
+            if o["kind"].split(".")[0] in ("building", "tree", "rock", "ruin") and KINDS[o["kind"]][2]:
+                rise = 3 if o["kind"].startswith("building") else 2
+                hidden |= {(xx, yy) for xx in range(o["x"], o["x"] + o["w"]) for yy in range(o["y"] - rise, o["y"])}
         for i, p in enumerate(self.place["brief"].get("npcs", [])):
+            if p.get("inside") and p.get("near") in self.anchors:   # seated in that building's room instead (interiors.py)
+                continue
             cx, cy = self.anchors.get(p.get("near"), self.hub)
             for r in range(2, 9):
                 cands = [(cx + dx, cy + dy) for dx in range(-r, r + 1) for dy in range(-r, r + 1)
                          if abs(dx) + abs(dy) >= 2]
                 self.rng.shuffle(cands)
-                ok = [c for c in cands if self.inb(*c, 2) and c not in self.used and c not in self.keep
+                cands.sort(key=lambda c: c[1] <= cy)   # in front of (south of) the door first
+                ok = [c for c in cands if self.inb(*c, 2) and c not in self.used and c not in self.keep and c not in hidden
                       and self.t[c[1]][c[0]] != "~" and not any(abs(c[0] - n["x"]) + abs(c[1] - n["y"]) < 2 for n in self.npcs)]
                 if ok:
                     x, y = ok[0]
@@ -422,12 +438,32 @@ class Layout:
                     if p["kind"].startswith("folk.") and not p.get("near") and not p.get("challenge"):
                         npc["wander"] = True
                     for k in ("challenge", "intro", "win", "done", "until", "face",   # challengers and story people
-                              "when", "gives", "gives_when", "give", "given", "call"):     # present once…; gives an item once…; calls out when you come near able to act
+                              "when", "gives", "gives_when", "give", "given", "call", "view", "blocks", "in"):     # present once…; gives an item once…; calls out when you come near able to act
                         if p.get(k):
                             npc[k] = p[k]
                     self.npcs.append(npc)
                     self.used.add((x, y))
                     break
+
+    def resolve_guards(self):
+        """A blocking challenger's "blocks" (a beat, a landmark or room by id, or {"exit": place}) becomes the
+        point he guards: come near it before he's beaten and he stops you."""
+        slug = lambda name: "".join(ch for ch in name.lower().replace(" ", "-") if ch.isalnum() or ch == "-")
+        for n in self.npcs:
+            b = n.get("blocks")
+            if not b:
+                continue
+            at = None
+            if isinstance(b, dict) and b.get("exit"):
+                e = self.entries.get(slug(b["exit"])) or self.entries.get(b["exit"])
+                at = (e[0], e[1]) if e else None
+            elif b in self.anchors:
+                at = self.anchors[b]
+            else:
+                sp = next((sp for sp in self.spots if sp.get("node", "").endswith("-" + b) or sp["id"] == b), None)
+                at = (sp["x"], sp["y"]) if sp else None
+            if at:
+                n["guard"] = [round(at[0] + .5, 2), round(at[1] + .5, 2)]
 
     # ---------- 6. check ----------
     def walkable(self, c):
@@ -471,6 +507,7 @@ class Layout:
         self.lay_border()
         self.lay_decor()
         self.lay_npcs()
+        self.resolve_guards()
         missing = self.check()
         if missing:
             raise RuntimeError("unreachable: " + ", ".join(missing))
@@ -492,6 +529,7 @@ class Layout:
             "npcs": self.npcs,
             "exits": self.exits,
             "entries": {k: list(v) for k, v in self.entries.items()},
+            **({"states": b["states"]} if (b := self.place["brief"]).get("states") else {}),   # one map, several looks
         }
 
 

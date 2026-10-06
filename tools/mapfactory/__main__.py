@@ -58,7 +58,8 @@ def build(n):
             (d / f"{r['id']}.map.json").write_text(json.dumps(r, ensure_ascii=False, indent=1))
             kind_zh = ZH.get(r["name"].split(",")[0], "")
             places.append({"id": r["id"], "name": r["name"], "zh": ZH.get(r["name"]) or f"{ZH.get(p['name'], '')}·{kind_zh}",
-                           "archetype": "interior", "map": f"{r['id']}.map.json", "links": [p["id"]], "parent": p["id"]})
+                           "archetype": "interior", "map": f"{r['id']}.map.json", "links": r.get("links", [p["id"]]), "parent": p["id"],
+                           **({"gives": g} if (g := [n["gives"] for n in r["npcs"] if n.get("gives")]) else {})})   # the guide finds givers indoors
         print(f"  {p['id']:22} {m['archetype']:9} {m['size'][0]}x{m['size'][1]}  "
               f"{len(m['objects'])} objects, {len(m['spots'])} spots, {len(m['npcs'])} people, {len(m['exits'])} exits")
     # the overworld: every place on one walkable map (overworld.py)

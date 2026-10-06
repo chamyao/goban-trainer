@@ -1,0 +1,2110 @@
+{
+ "format": "tk-map/1",
+ "id": "changan",
+ "world": 12,
+ "name": "Chang'an",
+ "archetype": "city",
+ "size": [
+  40,
+  30
+ ],
+ "seed": 54400,
+ "terrain": {
+  "legend": {
+   ".": "grass",
+   "=": "dirt",
+   "~": "water",
+   ":": "sand"
+  },
+  "rows": [
+   "........................................",
+   "........................................",
+   "........................................",
+   "........................................",
+   "...............................:........",
+   "............:..........:::.....:........",
+   "............:::::::......:.....:::......",
+   ".......:::....:..........:.......:......",
+   ".........:....:........:::.......:......",
+   "........:::::::...:....:.......:.:......",
+   "..............:...:....:.......:.:......",
+   "............:.:...::::::::::::::::::::::",
+   "............:::...::::::::::::::::::::::",
+   "..............::::::::..................",
+   "..............::::::::..:...............",
+   "............::::::::::..:.....:.........",
+   "..............::::::::..:.....:...:.....",
+   "..............::::::::::::::::::::::::::",
+   "..................::::::::::::::::::::::",
+   "..................::....................",
+   "................::::.:..................",
+   "..................::.:......:...........",
+   "..................::::::::::::::::::::::",
+   "..................::::::::::::::::::::::",
+   ".........................:..............",
+   ".........................:..............",
+   ".......................:::::............",
+   "........................................",
+   "........................................",
+   "........................................"
+  ]
+ },
+ "objects": [
+  {
+   "kind": "building.gate",
+   "x": 23,
+   "y": 13,
+   "w": 2,
+   "h": 1,
+   "id": "hengmen",
+   "label": "The Heng Gate: the farewell banquet"
+  },
+  {
+   "kind": "rock.big",
+   "x": 24,
+   "y": 9,
+   "w": 3,
+   "h": 2,
+   "id": "ridge",
+   "label": "The earthen ridge"
+  },
+  {
+   "kind": "building.hall",
+   "x": 10,
+   "y": 13,
+   "w": 4,
+   "h": 2,
+   "id": "wangyun",
+   "label": "Wang Yun's residence",
+   "rooms": [
+    {
+     "id": "wy-hall",
+     "label": "The front hall"
+    },
+    {
+     "id": "wy-rearhall",
+     "label": "The rear hall"
+    },
+    {
+     "id": "wy-secret",
+     "label": "The secret room",
+     "kind": "building.house"
+    }
+   ]
+  },
+  {
+   "kind": "building.moongate",
+   "x": 11,
+   "y": 10,
+   "w": 3,
+   "h": 1,
+   "id": "wy-garden",
+   "label": "Wang Yun's rear garden"
+  },
+  {
+   "kind": "building.hall",
+   "x": 29,
+   "y": 7,
+   "w": 4,
+   "h": 2,
+   "id": "xiangfu",
+   "label": "The Chancellor's residence",
+   "rooms": [
+    {
+     "id": "xf-hall",
+     "label": "The middle hall"
+    },
+    {
+     "id": "xf-bedroom",
+     "label": "The bedchamber",
+     "kind": "building.house"
+    }
+   ]
+  },
+  {
+   "kind": "building.moongate",
+   "x": 32,
+   "y": 5,
+   "w": 3,
+   "h": 1,
+   "id": "xf-garden",
+   "label": "The Chancellor's rear garden: the Phoenix Pavilion"
+  },
+  {
+   "kind": "lamp.post",
+   "x": 30,
+   "y": 5,
+   "w": 1,
+   "h": 1,
+   "id": "lanterns",
+   "label": "The red lanterns on the avenue"
+  },
+  {
+   "kind": "building.house",
+   "x": 29,
+   "y": 2,
+   "w": 4,
+   "h": 2,
+   "id": "lubu",
+   "label": "Lü Bu's quarters"
+  },
+  {
+   "kind": "building.shop",
+   "x": 29,
+   "y": 13,
+   "w": 3,
+   "h": 2,
+   "id": "jeweller",
+   "label": "The jeweller's"
+  },
+  {
+   "kind": "lamp.post",
+   "x": 27,
+   "y": 14,
+   "w": 1,
+   "h": 1,
+   "id": "market",
+   "label": "The market crossroads"
+  },
+  {
+   "kind": "furniture.gotable",
+   "x": 28,
+   "y": 10,
+   "w": 1,
+   "h": 1,
+   "id": "gotable",
+   "label": "The market go table"
+  },
+  {
+   "kind": "building.house",
+   "x": 14,
+   "y": 18,
+   "w": 4,
+   "h": 2,
+   "id": "shisun",
+   "label": "Shisun Rui's house"
+  },
+  {
+   "kind": "building.house",
+   "x": 16,
+   "y": 7,
+   "w": 4,
+   "h": 2,
+   "id": "huangwan",
+   "label": "Huang Wan's house"
+  },
+  {
+   "kind": "building.hall",
+   "x": 10,
+   "y": 7,
+   "w": 4,
+   "h": 2,
+   "id": "palace",
+   "label": "Weiyang Palace",
+   "rooms": [
+    {
+     "id": "dutang",
+     "label": "The great hall of state"
+    },
+    {
+     "id": "side-hall",
+     "label": "The emperor's side hall",
+     "kind": "building.house"
+    }
+   ]
+  },
+  {
+   "kind": "building.gate",
+   "x": 7,
+   "y": 8,
+   "w": 2,
+   "h": 1,
+   "id": "north-gate",
+   "label": "The North Side Gate"
+  },
+  {
+   "kind": "building.house",
+   "x": 10,
+   "y": 3,
+   "w": 4,
+   "h": 2,
+   "id": "caiyong",
+   "label": "Cai Yong's house"
+  },
+  {
+   "kind": "building.gate",
+   "x": 20,
+   "y": 19,
+   "w": 2,
+   "h": 1,
+   "id": "xuanping",
+   "label": "The Xuanping Gate"
+  },
+  {
+   "kind": "camp.table",
+   "x": 15,
+   "y": 15,
+   "w": 2,
+   "h": 1,
+   "id": "spot-12-a13d"
+  },
+  {
+   "kind": "building.hall",
+   "x": 21,
+   "y": 24,
+   "w": 4,
+   "h": 2,
+   "id": "hall-1"
+  },
+  {
+   "kind": "building.house",
+   "x": 21,
+   "y": 6,
+   "w": 4,
+   "h": 2,
+   "id": "house-1"
+  },
+  {
+   "kind": "building.house",
+   "x": 26,
+   "y": 19,
+   "w": 4,
+   "h": 2,
+   "id": "house-2"
+  },
+  {
+   "kind": "building.inn",
+   "x": 21,
+   "y": 3,
+   "w": 4,
+   "h": 2,
+   "id": "inn-1"
+  },
+  {
+   "kind": "building.shop",
+   "x": 26,
+   "y": 24,
+   "w": 3,
+   "h": 2,
+   "id": "shop-1"
+  },
+  {
+   "kind": "building.house",
+   "x": 16,
+   "y": 4,
+   "w": 4,
+   "h": 2,
+   "id": "house-3"
+  },
+  {
+   "kind": "building.shop",
+   "x": 33,
+   "y": 14,
+   "w": 3,
+   "h": 2,
+   "id": "shop-2"
+  },
+  {
+   "kind": "building.house",
+   "x": 5,
+   "y": 5,
+   "w": 4,
+   "h": 2,
+   "id": "house-4"
+  },
+  {
+   "kind": "banner.red",
+   "x": 27,
+   "y": 13,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "banner.red",
+   "x": 15,
+   "y": 10,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "banner.red",
+   "x": 36,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "banner.red",
+   "x": 27,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "banner.red",
+   "x": 28,
+   "y": 3,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "banner.red",
+   "x": 13,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 9,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.small",
+   "x": 5,
+   "y": 21,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.small",
+   "x": 7,
+   "y": 22,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 9,
+   "y": 22,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 5,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 11,
+   "y": 21,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 7,
+   "y": 0,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 1,
+   "y": 2,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 1,
+   "y": 9,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 16,
+   "y": 28,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 39,
+   "y": 3,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 1,
+   "y": 26,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 36,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 16,
+   "y": 29,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 36,
+   "y": 29,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 33,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 18,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 37,
+   "y": 8,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 29,
+   "y": 0,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 1,
+   "y": 13,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 17,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 8,
+   "y": 28,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 32,
+   "y": 28,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 0,
+   "y": 19,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 1,
+   "y": 28,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 38,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 25,
+   "y": 29,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 10,
+   "y": 29,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 11,
+   "y": 1,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 6,
+   "y": 29,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 33,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 27,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 37,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 35,
+   "y": 28,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 17,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 1,
+   "y": 25,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 26,
+   "y": 29,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 1,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 38,
+   "y": 26,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 14,
+   "y": 1,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 1,
+   "y": 18,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 1,
+   "y": 29,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 38,
+   "y": 28,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 19,
+   "y": 1,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 34,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 27,
+   "y": 29,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 21,
+   "y": 0,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 30,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 1,
+   "y": 17,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 21,
+   "y": 29,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 20,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 38,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 0,
+   "y": 3,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 39,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 0,
+   "y": 4,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 1,
+   "y": 21,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 37,
+   "y": 5,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 19,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 10,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 20,
+   "y": 29,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 11,
+   "y": 28,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 1,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 39,
+   "y": 29,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 1,
+   "y": 1,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 36,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 29,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 14,
+   "y": 29,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 3,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 31,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 6,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 11,
+   "y": 0,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 12,
+   "y": 28,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 16,
+   "y": 0,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 38,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 13,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 11,
+   "y": 29,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 0,
+   "y": 27,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 8,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 1,
+   "y": 7,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 32,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 14,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 38,
+   "y": 3,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 1,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 5,
+   "y": 28,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 37,
+   "y": 1,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 39,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 31,
+   "y": 29,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 23,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 24,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 28,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 1,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 22,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 7,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 1,
+   "y": 14,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 37,
+   "y": 27,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 24,
+   "y": 0,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 9,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 39,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 27,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 0,
+   "y": 12,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 35,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 15,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 0,
+   "y": 16,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 0,
+   "y": 10,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 26,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 1,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 34,
+   "y": 29,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 2,
+   "y": 29,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 4,
+   "y": 28,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 9,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 25,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 4,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 22,
+   "y": 29,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 1,
+   "y": 11,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 22,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 18,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 28,
+   "y": 29,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 21,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 1,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 1,
+   "y": 5,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 0,
+   "y": 0,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 5,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 15,
+   "y": 29,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 1,
+   "y": 22,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 32,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 5,
+   "y": 16,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 26,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 17,
+   "y": 25,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 35,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 31,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 4,
+   "y": 27,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 25,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 33,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 10,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 37,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 22,
+   "y": 14,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 3,
+   "y": 27,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 11,
+   "y": 25,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 20,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 35,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 26,
+   "y": 21,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 4,
+   "y": 16,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 12,
+   "y": 27,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 28,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 15,
+   "y": 11,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 3,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 15,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 33,
+   "y": 21,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.small",
+   "x": 5,
+   "y": 12,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.small",
+   "x": 6,
+   "y": 18,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.small",
+   "x": 8,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "spots": [
+  {
+   "id": "hengmen",
+   "x": 24,
+   "y": 14.7,
+   "node": "12-a1",
+   "label": "The Heng Gate: the farewell banquet"
+  },
+  {
+   "id": "ridge",
+   "x": 25.5,
+   "y": 12.7,
+   "node": "12-a11",
+   "label": "The earthen ridge"
+  },
+  {
+   "id": "wy-garden",
+   "x": 12.5,
+   "y": 11.7,
+   "node": "12-a2",
+   "label": "Wang Yun's rear garden"
+  },
+  {
+   "id": "xf-garden",
+   "x": 33.5,
+   "y": 6.7,
+   "node": "12-a9",
+   "label": "The Chancellor's rear garden: the Phoenix Pavilion"
+  },
+  {
+   "id": "lanterns",
+   "x": 30.5,
+   "y": 6.7,
+   "node": "12-a6",
+   "label": "The red lanterns on the avenue"
+  },
+  {
+   "id": "lubu",
+   "x": 31,
+   "y": 4.7,
+   "node": "12-a3",
+   "label": "Lü Bu's quarters"
+  },
+  {
+   "id": "market",
+   "x": 27.5,
+   "y": 15.7,
+   "node": "12-a15",
+   "label": "The market crossroads"
+  },
+  {
+   "id": "shisun",
+   "x": 16,
+   "y": 20.7,
+   "node": "12-a12a",
+   "label": "Shisun Rui's house"
+  },
+  {
+   "id": "huangwan",
+   "x": 18,
+   "y": 9.7,
+   "node": "12-a12b",
+   "label": "Huang Wan's house"
+  },
+  {
+   "id": "north-gate",
+   "x": 8,
+   "y": 9.7,
+   "node": "12-a14",
+   "label": "The North Side Gate"
+  },
+  {
+   "id": "xuanping",
+   "x": 21,
+   "y": 20.7,
+   "node": "12-a18",
+   "label": "The Xuanping Gate"
+  },
+  {
+   "id": "spot-12-a13d",
+   "x": 16,
+   "y": 16.7,
+   "node": "12-a13d",
+   "label": ""
+  }
+ ],
+ "npcs": [
+  {
+   "id": "npc-3",
+   "kind": "folk.official",
+   "x": 33.5,
+   "y": 4.9,
+   "say": [],
+   "challenge": "runner",
+   "intro": [
+    "A runner in the Chancellor's colours steps into your path. “Minister Wang, out on foot? The Grand Preceptor likes to know who walks where.”"
+   ],
+   "win": [
+    "“Nothing worth reporting, then. Good day, Minister.”"
+   ],
+   "done": [
+    "The runner watches you pass, and says nothing."
+   ],
+   "until": "12-a3",
+   "face": "left",
+   "when": "node:a2"
+  },
+  {
+   "id": "npc-4",
+   "kind": "folk.soldier",
+   "x": 32.5,
+   "y": 17.9,
+   "say": [],
+   "challenge": "flyingbear",
+   "intro": [
+    "A Flying Bear soldier lounges against the wall, dice in his fist. “Bored, old man? Play me. Lose, and you buy the wine.”"
+   ],
+   "win": [
+    "“Hah! The old man bites. Go on.”"
+   ],
+   "done": [
+    "“Not again, old man. My purse can't take it.”"
+   ],
+   "until": "12-a3",
+   "when": "node:a2"
+  },
+  {
+   "id": "npc-5",
+   "kind": "folk.soldier",
+   "x": 20.5,
+   "y": 10.9,
+   "say": [],
+   "challenge": "patrol",
+   "intro": [
+    "A Flying Bear patrol fills the lane to Huang Wan's gate. “Visiting late, Minister? Every lane in Chang'an answers to the Grand Preceptor.”"
+   ],
+   "win": [
+    "“On your way, then. Quickly.”"
+   ],
+   "done": [
+    "The patrol has moved on to the next lane."
+   ],
+   "until": "12-a12b",
+   "face": "down",
+   "when": "node:a11"
+  },
+  {
+   "id": "npc-6",
+   "kind": "folk.villager",
+   "x": 16.5,
+   "y": 22.9,
+   "say": [],
+   "challenge": "informer",
+   "intro": [
+    "A man in a plain coat has sat by Shisun Rui's gate all morning. “A game while you wait, Minister? I have time. I have nothing but time.”"
+   ],
+   "win": [
+    "“You play like a man with nothing to hide.”"
+   ],
+   "done": [
+    "The man in the plain coat has gone."
+   ],
+   "until": "12-a12a",
+   "when": "node:a11"
+  },
+  {
+   "id": "npc-7",
+   "kind": "folk.elder",
+   "x": 28.5,
+   "y": 13.9,
+   "say": [],
+   "challenge": "scholar",
+   "intro": [
+    "“Sit, Minister. In this city it's safer to talk about stones than people.”"
+   ],
+   "win": [
+    "“Ha. You read the board the way you read a room.”"
+   ],
+   "done": [
+    "“Another day, Minister. The stones keep.”"
+   ],
+   "until": "12-a17"
+  },
+  {
+   "id": "npc-8",
+   "kind": "folk.soldier",
+   "x": 28.5,
+   "y": 8.9,
+   "say": [],
+   "challenge": "officer",
+   "intro": [
+    "A Liangzhou officer steps out of a dark lane. “Out after the drum, Minister? Play me for your way home.”"
+   ],
+   "win": [
+    "“Go on, then. I never saw you.”"
+   ],
+   "done": [
+    "“Still out, Minister?”"
+   ],
+   "until": "12-a6",
+   "when": "node:a5"
+  },
+  {
+   "id": "npc-9",
+   "kind": "folk.soldier",
+   "x": 25.5,
+   "y": 17.9,
+   "say": [
+    "“Keep to the side lanes. The middle of the avenue is the Son of Heaven's. And the Grand Preceptor's.”"
+   ],
+   "until": "12-a14"
+  },
+  {
+   "id": "npc-10",
+   "kind": "folk.villager",
+   "x": 25.5,
+   "y": 16.9,
+   "say": [
+    "“Two hundred and fifty thousand of us built Meiwu. Walls as high as these. Twenty years of grain inside, they say.”"
+   ],
+   "until": "12-a14"
+  },
+  {
+   "id": "npc-11",
+   "kind": "folk.woman",
+   "x": 30.5,
+   "y": 17.9,
+   "say": [
+    "“They drove us west from Luoyang like geese. My house is ash, and here I sell turnips.”"
+   ],
+   "until": "12-a14"
+  },
+  {
+   "id": "npc-12",
+   "kind": "folk.official",
+   "x": 24.5,
+   "y": 16.9,
+   "say": [
+    "“He laughed, and went on eating. I couldn't hold my chopsticks. I still can't, some days.”"
+   ],
+   "until": "12-a14",
+   "when": "node:a1"
+  },
+  {
+   "id": "npc-13",
+   "kind": "folk.child",
+   "x": 20.5,
+   "y": 16.9,
+   "say": [
+    "“Mother says don't look at the soldiers with the long halberds.”"
+   ],
+   "wander": true,
+   "until": "12-a14"
+  },
+  {
+   "id": "npc-14",
+   "kind": "folk.soldier",
+   "x": 32.5,
+   "y": 11.9,
+   "say": [
+    "“The Grand Preceptor receives no one today.”"
+   ],
+   "until": "12-a14",
+   "face": "down"
+  },
+  {
+   "id": "npc-15",
+   "kind": "folk.soldier",
+   "x": 33.5,
+   "y": 3.9,
+   "say": [
+    "“In Liangzhou we ride before we walk. These Chang'an streets are too narrow for a horse to stretch.”"
+   ],
+   "until": "12-a14"
+  },
+  {
+   "id": "npc-19",
+   "kind": "folk.soldier",
+   "x": 23.5,
+   "y": 16.9,
+   "say": [
+    "“General Lü stood on that ridge till the dust was gone. Didn't say a word.”"
+   ],
+   "until": "12-a12",
+   "when": "node:a10"
+  },
+  {
+   "id": "npc-20",
+   "kind": "folk.villager",
+   "x": 26.5,
+   "y": 13.9,
+   "say": [
+    "“The Grand Preceptor's at Meiwu. The streets breathe again.”"
+   ],
+   "until": "12-a13",
+   "when": "node:a10"
+  },
+  {
+   "id": "npc-21",
+   "kind": "folk.official",
+   "x": 14.5,
+   "y": 11.9,
+   "say": [
+    "“The Son of Heaven is recovered from his illness! All officials to the Weiyang Hall!”"
+   ],
+   "until": "12-a14",
+   "when": "node:a13c"
+  },
+  {
+   "id": "npc-22",
+   "kind": "folk.official",
+   "x": 7.5,
+   "y": 11.9,
+   "say": [
+    "“Why are we all wearing swords to a celebration?”"
+   ],
+   "until": "12-a14",
+   "when": "node:a13c"
+  },
+  {
+   "id": "npc-23",
+   "kind": "folk.villager",
+   "x": 25.5,
+   "y": 13.9,
+   "say": [
+    "“Sell the coat! Buy wine! The old traitor is dead!”"
+   ],
+   "until": "12-a16",
+   "when": "node:a14"
+  },
+  {
+   "id": "npc-24",
+   "kind": "folk.villager",
+   "x": 23.5,
+   "y": 19.9,
+   "say": [
+    "“That one's for my brother, who died on the road from Luoyang.”"
+   ],
+   "until": "12-a16",
+   "when": "node:a14"
+  },
+  {
+   "id": "npc-25",
+   "kind": "folk.child",
+   "x": 23.5,
+   "y": 11.9,
+   "say": [
+    "“Ten thousand years! Ten thousand years!”"
+   ],
+   "until": "12-a16",
+   "when": "node:a14"
+  },
+  {
+   "id": "npc-26",
+   "kind": "folk.official",
+   "x": 32.5,
+   "y": 16.9,
+   "say": [
+    "“I held a cup today. My hand didn't shake once.”"
+   ],
+   "until": "12-a16",
+   "when": "node:a14"
+  },
+  {
+   "id": "npc-27",
+   "kind": "folk.villager",
+   "x": 32.5,
+   "y": 20.9,
+   "say": [
+    "“The Liangzhou men are inside! Li Meng and Wang Fang opened the gates!”"
+   ],
+   "when": "node:a17"
+  },
+  {
+   "id": "npc-28",
+   "kind": "folk.woman",
+   "x": 19.5,
+   "y": 21.9,
+   "say": [
+    "“East! Get to the Xuanping Gate, the Son of Heaven is there!”"
+   ],
+   "when": "node:a17"
+  },
+  {
+   "id": "npc-29",
+   "kind": "folk.villager",
+   "x": 22.5,
+   "y": 19.9,
+   "say": [
+    "“I built his walls. Now his men burn mine.”"
+   ],
+   "when": "node:a17"
+  }
+ ],
+ "exits": [
+  {
+   "to": "meiwu",
+   "side": "E",
+   "x": 39,
+   "y": 11,
+   "w": 1,
+   "h": 2
+  },
+  {
+   "to": "meiwu-road",
+   "side": "E",
+   "x": 39,
+   "y": 17,
+   "w": 1,
+   "h": 2
+  },
+  {
+   "to": "liangzhou",
+   "side": "E",
+   "x": 39,
+   "y": 22,
+   "w": 1,
+   "h": 2
+  },
+  {
+   "to": "changan--wy-hall",
+   "side": "N",
+   "x": 11.6,
+   "y": 14.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changan--xf-hall",
+   "side": "N",
+   "x": 30.6,
+   "y": 8.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changan--lubu",
+   "side": "N",
+   "x": 30.6,
+   "y": 3.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changan--jeweller",
+   "side": "N",
+   "x": 30.1,
+   "y": 14.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changan--shisun",
+   "side": "N",
+   "x": 15.6,
+   "y": 19.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changan--huangwan",
+   "side": "N",
+   "x": 17.6,
+   "y": 8.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changan--dutang",
+   "side": "N",
+   "x": 11.6,
+   "y": 8.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changan--caiyong",
+   "side": "N",
+   "x": 11.6,
+   "y": 4.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changan--hall-1",
+   "side": "N",
+   "x": 22.6,
+   "y": 25.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changan--house-1",
+   "side": "N",
+   "x": 22.6,
+   "y": 7.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changan--house-2",
+   "side": "N",
+   "x": 27.6,
+   "y": 20.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changan--inn-1",
+   "side": "N",
+   "x": 22.6,
+   "y": 4.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changan--shop-1",
+   "side": "N",
+   "x": 27.1,
+   "y": 25.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changan--house-3",
+   "side": "N",
+   "x": 17.6,
+   "y": 5.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changan--shop-2",
+   "side": "N",
+   "x": 34.1,
+   "y": 15.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changan--house-4",
+   "side": "N",
+   "x": 6.6,
+   "y": 6.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  }
+ ],
+ "entries": {
+  "meiwu": [
+   37,
+   12
+  ],
+  "meiwu-road": [
+   37,
+   18
+  ],
+  "liangzhou": [
+   37,
+   23
+  ],
+  "": [
+   37,
+   23
+  ],
+  "changan--wy-hall": [
+   12,
+   15
+  ],
+  "changan--xf-hall": [
+   31,
+   9
+  ],
+  "changan--lubu": [
+   31,
+   4
+  ],
+  "changan--jeweller": [
+   30,
+   15
+  ],
+  "changan--shisun": [
+   16,
+   20
+  ],
+  "changan--huangwan": [
+   18,
+   9
+  ],
+  "changan--dutang": [
+   12,
+   9
+  ],
+  "changan--caiyong": [
+   12,
+   5
+  ],
+  "changan--hall-1": [
+   23,
+   26
+  ],
+  "changan--house-1": [
+   23,
+   8
+  ],
+  "changan--house-2": [
+   28,
+   21
+  ],
+  "changan--inn-1": [
+   23,
+   5
+  ],
+  "changan--shop-1": [
+   27,
+   26
+  ],
+  "changan--house-3": [
+   18,
+   6
+  ],
+  "changan--shop-2": [
+   34,
+   16
+  ],
+  "changan--house-4": [
+   7,
+   7
+  ]
+ }
+}

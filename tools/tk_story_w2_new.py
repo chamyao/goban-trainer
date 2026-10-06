@@ -42,7 +42,7 @@ def D(who, q, q_zh, open_, open_zh, win, win_zh, slip, slip_zh):
 # Voices for the people Book 2 adds (Kokoro Mandarin ids). Book 1's cast
 # (caocao, dongzhuo, luzhi, huangfusong, ...) keeps its voices from tk_story_zh.CAST.
 CAST2 = {
-    "wangyun": "zm_010", "diaochan": "zf_023", "lvbu": "zm_097", "liru": "zm_012", "lisu": "zm_015",
+    "wangyun": "zm_010", "diaochan": "zf_044", "lvbu": "zm_097", "liru": "zm_012", "lisu": "zm_015",
     "zhangwen": "zm_020", "shisunrui": "zm_031", "huangwan": "zm_035", "dongmu": "zf_022",
     "caiyong": "zm_091", "mamidi": "zm_037", "lijue": "zm_058", "guosi": "zm_061", "jiaxu": "zm_050",
     "xiandi": "zf_002", "niufu": "zm_054", "huchier": "zm_056", "daoren": "zm_080",
@@ -165,6 +165,11 @@ def _scenes_chain():
             S("diaochan", "Do not worry, my lord. If I fail this great cause, let me die under ten thousand blades.",
               "大人勿忧。妾若不报大义，死于万刃之下。"),
             N("Wang Yun bows to her and thanks her.", "王允拜谢。"),
+            N("The first link of the chain is Lü Bu himself. He cannot simply be invited: a minister who sends for the Grand Preceptor's general "
+              "will be watched, after Zhang Wen. But a gift he must come to give thanks for will bring him to the house of his own accord.",
+              "连环第一环，便是吕布。不可径直相请：张温之事在前，司徒召见太师之将，必遭疑忌。唯有送一件他必亲来致谢的厚礼，方能教他自己登门。"),
+            S("wangyun", "The family pearls. Set in gold, as a crown for a hero. He'll come to thank me himself, and then he will see her.",
+              "家藏明珠，嵌成金冠，赠与英雄。他必亲来致谢，那时便教他见着她。"),
         ]},
 
         # A3 · The gold crown. Legwork: the board comes first (slipping it past Dong Zhuo's men), then the scene.
@@ -281,13 +286,13 @@ def _scenes_chain():
             S("wangyun", "I would give this girl to you, Grand Preceptor, if you will have her.", "允欲将此女献上太师，未审肯容纳否？"),
             S("dongzhuo", "Such a gift! How can I repay you?", "如此见惠，何以报德？"),
             S("wangyun", "To serve you is more good fortune than she deserves.", "此女得侍太师，其福太浅。"),
-            ["prop", "car", "cart", "a5", -12, 8],
+            ["prop", "car", "carriage", "a5", -12, 8],
             ["board", "diaochan", "car"],
             N("Wang Yun has a felt-covered carriage made ready, and sends Diaochan ahead to the Chancellor's residence.",
               "允即命备毡车，先将貂蝉送到相府。"),
             ["move", "car", "a5", -40, 8],
             ["remove", "car"],
-            ["party", ["wangyun"]],
+            ["party", ["wangyun"], {"to": "a6"}],
         ]},
 
         # A6 · Red lanterns on the road. Wang Yun's lie under Lü Bu's hand.
@@ -326,7 +331,7 @@ def _scenes_chain():
               "小女稍有妆奁，待过将军府下，便当送至。"),
             N("Lü Bu thanks him and goes.", "布谢去。"),
             ["remove", "lb"],
-            ["party", ["diaochan"]],
+            ["party", ["diaochan"], {"to": "a7"}],
         ]},
 
         # A7 · The window. Diaochan acts grief for the face in the pond.
@@ -533,7 +538,7 @@ def _scenes_chain():
             S("liru", "We will all die at a woman's hand!", "吾等皆死于妇人之手矣！"),
             ["remove", "lr"],
             N("That same day Dong Zhuo orders the return to Meiwu, and all the officials bow him on his way.", "董卓即日下令还郿坞，百官俱拜送。"),
-            ["prop", "car", "cart", "a10", 0, 10],
+            ["prop", "car", "carriage", "a10", 0, 10],
             ["board", "diaochan", "car"],
             ["army", "crowd", "f_official", 6, "a10", -20, 14],
             ["spawn", "lb", "lvbu", "a10", -26, 10],
@@ -542,7 +547,7 @@ def _scenes_chain():
               "貂蝉在车上，遥见吕布于稠人之内，眼望车中。貂蝉虚掩其面，如痛哭之状。"),
             ["move", "car", "a10", 50, 10],
             ["remove", "car"], ["remove", "crowd"], ["remove", "lb"],
-            ["party", ["wangyun"]],
+            ["party", ["wangyun"], {"to": "a11"}],
         ]},
 
         # A11 · The ridge and the secret room. Three boards: the provocation, "you are a Lü", the choice.
@@ -730,7 +735,7 @@ def _scenes_chain():
         # A13a-d · The road of omens. Each stop is Li Su explaining one away.
         "a13a": {"title": T("A Broken Wheel", "车折马嘶"), "kind": "main", "steps": [
             ["spawn", "dz", "dongzhuo", "a13a", 10, 0],
-            ["prop", "car", "cart", "a13a", 16, 0],
+            ["prop", "car", "carriage", "a13a", 16, 0],
             ["army", "escort", "f_soldier", 6, "a13a", 24, 6],
             N("Dong Zhuo leaves the fortress in his carriage, guards before and behind, and sets out for Chang'an.", "卓出坞上车，前遮后拥，望长安来。"),
             ["fx", "dust", "a13a", 16, 0], ["camera", "shake"],
@@ -796,7 +801,7 @@ def _scenes_chain():
             N("Li Su calls the soldiers to drive him off. Two mouths, one above the other, make the character Lü.",
               "呼将士驱去。两“口”相叠，便是“吕”字。"),
             ["run", "dr", "a13d", -40, 10], ["remove", "dr"],
-            ["party", ["wangyun"]],
+            ["party", ["wangyun"], {"to": "a14"}],
         ]},
 
         # A14 · The North Side Gate. The boss: three boards on the way to "There is an edict to kill a traitor!"
@@ -804,7 +809,7 @@ def _scenes_chain():
             ["music", "boss"],
             ["army", "officials", "f_official", 6, "a14", 18, -10],
             ["spawn", "dz", "dongzhuo", "a14", 40, 0],
-            ["prop", "car", "cart", "a14", 40, 0], ["board", "dz", "car"],
+            ["prop", "car", "carriage", "a14", 40, 0], ["board", "dz", "car"],
             ["spawn", "ls", "lisu", "a14", 36, 6],
             ["spawn", "lb", "lvbu", "a14", 48, 0],
             N("The officials, in court dress, line the road to greet him. Li Su walks beside the carriage with a drawn sword in his hand. "
@@ -857,7 +862,7 @@ def _scenes_chain():
             N("Wang Yun sends Lü Bu, Huangfu Song and Li Su with fifty thousand men to Meiwu, to take Dong Zhuo's household and goods. "
               "Hearing that Dong Zhuo is dead and Lü Bu is coming, Li Jue, Guo Si, Zhang Ji and Fan Chou flee to Liangzhou that night with the Flying Bear army.",
               "王允又命吕布同皇甫嵩、李肃领兵五万，至郿坞抄籍董卓家产人口。李傕、郭汜、张济、樊稠闻董卓已死，吕布将至，便引了飞熊军连夜奔凉州去了。"),
-            ["party", ["lvbu"]],
+            ["party", ["lvbu"], {"to": {"place": "Meiwu", "from": "Meiwu Road"}}],
         ]},
         # A15m · Meiwu raided. Played as Lü Bu: a walk through the opened fortress (road challengers on the way), then this scene, no board.
         "a15m": {"title": T("Meiwu", "郿坞"), "kind": "main", "steps": [
@@ -872,7 +877,7 @@ def _scenes_chain():
               "his mother among them. Gold by the hundred thousand, silks, pearls, vessels and grain beyond counting are listed and brought back to Wang Yun.",
               "皇甫嵩命将坞中所藏良家子女，尽行释放。但系董卓亲属，不分老幼，悉皆诛戮。卓母亦被杀。收籍坞中所蓄黄金数十万，绮罗、珠宝、器皿、粮食不计其数，回报王允。"),
             ["remove", "dc"],
-            ["party", ["wangyun"]],
+            ["party", ["wangyun"], {"to": "a15c"}],
         ]},
         "a15c": {"title": T("Cai Yong Weeps", "蔡邕哭尸"), "kind": "main", "steps": [
             ["army", "officials", "f_official", 6, "a15c", 10, -10],
@@ -907,7 +912,7 @@ def _scenes_chain():
             ["remove", "cy"],
             N("Wang Yun does not listen. He has Cai Yong strangled in prison. When the scholars hear of it, they all weep.",
               "王允不听马日磾之言，命将蔡邕下狱中缢死。一时士大夫闻者，尽为流涕。"),
-            ["party", ["jiaxu"]],
+            ["party", ["jiaxu"], {"to": "a16"}],
         ]},
 
         # A16 · The villains' turn. Jia Xu's advice, his rumour through Liangzhou, the march.
@@ -951,7 +956,7 @@ def _scenes_chain():
               "and sends him on ahead.",
               "于是聚众十余万，分作四路，杀奔长安来。路逢董卓女婿中郎将牛辅，引军五千人，欲去与丈人报仇，李傕便与合兵，使为前驱。"),
             ["move", "host", "a16m", 60, 0],
-            ["party", ["lijue"]],
+            ["party", ["lijue"], {"to": "a17"}],
         ]},
 
         "a16m_wait": {"title": T("Not Enough Men", "人马未齐"), "kind": "main", "steps": [
@@ -988,7 +993,7 @@ def _scenes_chain():
             N("Then a rider brings word: Zhang Ji and Fan Chou are at Chang'an. Lü Bu hurries back, and loses many men on the way.",
               "忽然飞马报来，说张济、樊稠两路军马，竟犯长安，京城危急。布急领军回，折了好些人马。"),
             ["run", "lb", "a17", 80, 0], ["remove", "lb"], ["remove", "theirs"],
-            ["party", ["wangyun"]],
+            ["party", ["wangyun"], {"to": "a18"}],
         ]},
 
         # A18 · Xuanping Gate. No board: Wang Yun's choice, which the novel has already made.
@@ -1050,13 +1055,16 @@ def _nodes_chain():
         return n
     return [
         node("a1", 40, 200, "a1", board=False),
-        node("a2", 60, 190, "a2", room="wy-garden", dilemma=D(
+        node("a2", 60, 190, "a2", dilemma=D(
             "wangyun", "Stake the whole house on a sixteen-year-old girl?", "以一门性命，托付二八少女？",
             "If it leaks, every one of us dies. But no one else can do it.", "事若泄漏，我灭门矣。可满朝文武，无计可施。",
             "Then let it be her.", "既如此，便是她了。",
             "Not yet. Let me think it through.", "且慢，容我再想。")),
-        node("a3", 80, 180, "a3", gate=[{"needs": ["item:crown"], "else": "a3_wait",
-                                          "objective": T("Have the family pearls set into a gold crown.", "取家藏明珠，令良匠嵌造金冠。"),
+        node("a3", 80, 180, "a3", gate=[{"needs": ["item:pearls"], "else": "a3_wait",
+                                          "objective": T("Fetch the family pearls from the old steward.", "向老管家取出家藏明珠。"),
+                                          "count": False, "at": "Chang'an"},
+                                         {"needs": ["item:crown"], "else": "a3_wait",
+                                          "objective": T("Take the pearls to the jeweller, to be set into a gold crown.", "将明珠送到珠宝铺，嵌造金冠。"),
                                           "count": False, "at": "Chang'an"}],
              dilemma=D("wangyun", "Get the crown to Lü Bu unseen.", "将金冠密送吕布，勿令人知。",
                        "The Chancellor's men are everywhere. After Zhang Wen, one wrong step is the end.", "相府耳目遍布。张温之事在前，一步差错，万事皆休。",
@@ -1087,7 +1095,7 @@ def _nodes_chain():
             "One sign, and not a sound.", "只一个手势，不出一声。",
             "His heart is breaking. Good.", "他心如碎。好。",
             "Not yet. He's stirring.", "还不行，他在动。")),
-        node("a9", 200, 120, "a9", room="xf-garden", dilemma=D(
+        node("a9", 200, 120, "a9", dilemma=D(
             "diaochan", "Turn Lü Bu against his father.", "教吕布反其父。",
             "He came. Now he must not leave as he came.", "他来了。不可教他原样回去。",
             "He holds me, and will not let go.", "他抱住我，不肯放手。",
@@ -1118,7 +1126,7 @@ def _nodes_chain():
             "I know where he stands.", "我知道他站在哪边了。",
             "He's guarded. Watch him more closely.", "他有戒心，再看仔细。")),
         node("a12p", 270, 80, "a12p", room="wy-secret", board=False),
-        node("a12c", 280, 74, "a12c", dilemma=D(
+        node("a12c", 280, 74, "a12c", room="side-hall", dilemma=D(
             "wangyun", "Reach the Emperor unseen.", "避开耳目，面见天子。",
             "The Chancellor's men watch every door of the palace.", "宫中门门皆有相府耳目。",
             "The edict is in my sleeve.", "密诏已在袖中。",
@@ -1148,7 +1156,7 @@ def _nodes_chain():
             "The song says his name, and says he dies. Turn it round.", "童谣暗藏其名，又说他死。要反过来说。",
             "The house of Dong will rise.", "董氏当兴。",
             "He's listening hard. Again.", "他听得仔细。再来。")),
-        node("a13d", 340, 36, "a13d", place="Meiwu Road", board=False),
+        node("a13d", 340, 36, "a13d", board=False),
         node("a14", 350, 30, "a14", role="boss",
              boss={"who": "dongzhuo", "title": T("Dong Zhuo", "董卓") + ", " + T("Grand Preceptor", "太师"),
                    "taunt": T("What are the swords for?", "持剑是何意？")},
@@ -1157,7 +1165,7 @@ def _nodes_chain():
                        "There is an edict to kill a traitor!", "有诏讨贼！",
                        "Not yet. Hold.", "且慢，稳住。")),
         node("a15", 360, 24, "a15", board=False),
-        node("a15m", 366, 22, "a15m", place="Meiwu", room="treasury", board=False),
+        node("a15m", 366, 22, "a15m", place="Meiwu", room="diaochan", board=False),
         node("a15c", 370, 20, "a15c", room="dutang", board=False),
         node("a16", 380, 16, "a16", place="Liangzhou", dilemma=D(
             "jiaxu", "Keep them from scattering.", "劝住诸将，勿散。",
@@ -1219,6 +1227,7 @@ def _world():
              "Lü Bu helps the Minister rid the realm of a tyrant; Li Jue takes Jia Xu's advice and attacks Chang'an"],
         ],
         "grades": ["11K", "11K+"],
+        "boss": "redmond",
         "party": ["wangyun"],
         "items": _ITEMS,
         "nodes": _nodes_chain(),

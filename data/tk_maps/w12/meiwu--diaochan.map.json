@@ -1,0 +1,130 @@
+{
+ "format": "tk-map/1",
+ "id": "meiwu--diaochan",
+ "world": 12,
+ "parent": "meiwu",
+ "name": "Diaochan's rooms",
+ "archetype": "interior",
+ "building": "diaochan",
+ "style": "building.house",
+ "size": [
+  20,
+  12
+ ],
+ "seed": 0.510771354236032,
+ "terrain": {
+  "legend": {
+   "#": "wood",
+   "%": "stone",
+   "&": "mat",
+   "e": "earth",
+   "W": "wall",
+   " ": "void"
+  },
+  "rows": [
+   "                    ",
+   "     WWWWWWWWWW     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     WWWWW#WWWW     ",
+   "                    ",
+   "                    ",
+   "                    "
+  ]
+ },
+ "objects": [
+  {
+   "kind": "furn.bed",
+   "x": 6,
+   "y": 2,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.drawers",
+   "x": 11,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.shelf",
+   "x": 9,
+   "y": 2,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.table",
+   "x": 9,
+   "y": 5,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 8,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 11,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.jar",
+   "x": 13,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.plant",
+   "x": 6,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "spots": [
+  {
+   "id": "spot-12-a15m",
+   "x": 10.5,
+   "y": 3.7,
+   "node": "12-a15m",
+   "label": "Meiwu"
+  }
+ ],
+ "npcs": [],
+ "exits": [
+  {
+   "to": "meiwu--mother",
+   "side": "S",
+   "x": 10,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "meiwu--mother": [
+   10,
+   7
+  ],
+  "": [
+   10,
+   7
+  ]
+ },
+ "links": [
+  "meiwu--mother"
+ ]
+}

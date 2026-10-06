@@ -1,0 +1,147 @@
+{
+ "format": "tk-map/1",
+ "id": "changan--shop-2",
+ "world": 12,
+ "parent": "changan",
+ "name": "Teahouse, Chang'an",
+ "archetype": "interior",
+ "building": "shop-2",
+ "style": "building.shop",
+ "size": [
+  20,
+  12
+ ],
+ "seed": 0.4899294767836082,
+ "terrain": {
+  "legend": {
+   "#": "wood",
+   "%": "stone",
+   "&": "mat",
+   "e": "earth",
+   "W": "wall",
+   " ": "void"
+  },
+  "rows": [
+   "                    ",
+   "    WWWWWWWWWWWW    ",
+   "    W##########W    ",
+   "    W##########W    ",
+   "    W##########W    ",
+   "    W##########W    ",
+   "    W##########W    ",
+   "    W##########W    ",
+   "    WWWWWW#WWWWW    ",
+   "                    ",
+   "                    ",
+   "                    "
+  ]
+ },
+ "objects": [
+  {
+   "kind": "furn.shelf",
+   "x": 9,
+   "y": 2,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.jar",
+   "x": 5,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.jar",
+   "x": 14,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.counter",
+   "x": 12,
+   "y": 3,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "furn.table",
+   "x": 6,
+   "y": 4,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 5,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 8,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.table",
+   "x": 6,
+   "y": 6,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 5,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 8,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.plant",
+   "x": 5,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.plant",
+   "x": 14,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "spots": [],
+ "npcs": [],
+ "exits": [
+  {
+   "to": "changan",
+   "side": "S",
+   "x": 10,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "changan": [
+   10,
+   7
+  ],
+  "": [
+   10,
+   7
+  ]
+ }
+}

@@ -35,12 +35,12 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=37`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=49`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
   },
-  has(n) { return n >= 1 && n <= 3; },  // worlds whose places have been built
+  has(n) { return (n >= 1 && n <= 3) || n === 12; },  // worlds whose places have been built (12: the Book 2 draft, test mode)
   // "1-zhuo-county-c-elder": a challenger in a place, drawing from the world's problems.
   node(w, key) {
     const region = this.regions[w.n];
@@ -217,9 +217,9 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=37`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=49`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=34`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=38`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=48`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
@@ -228,7 +228,7 @@ function worldScenes() {
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
       for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=45`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=56`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -245,12 +245,12 @@ function worldScenes() {
 
   class WorldScene extends Phaser.Scene {
     constructor() { super("world"); }
-    init(d) { this.placeId = d.place; this.from = d.from; this.resume = d.resume; }
+    init(d) { this.placeId = d.place; this.from = d.from; this.resume = d.resume; this.toNode = d.toNode || null; }
 
     create() {
       const region = this.region = this.cache.json.get("region"), kit = this.kit = this.cache.json.get("kit");
       const opts = this.opts = this.game.worldOpts, w = this.w = opts.w;
-      this.grid = this.walk = this.lampFx = this.ambientFx = this.cine = this.auto = null; this.seated = false;   // the scene object outlives a change of place: no old map's walk grid or tap-walk
+      this.grid = this.walk = this.lampFx = this.ambientFx = this.cine = this.auto = this.player = null; this.seated = false;   // the scene object outlives a change of place: no old map's walk grid or tap-walk
       this.story = w.scenes;
       // a save from an older map: a renamed place is found under its new name (arriving as if walking in);
       // a removed one sends him back to the start
@@ -263,6 +263,10 @@ function worldScenes() {
 
       // ground and terrain layers, then objects
       const map = this.make.tilemap({ key: `map-${this.placeId}` });
+      this.tw = map.tileWidth || 16;
+      // one map, several looks (Places' "states"): the last whose "when" holds and "until" doesn't
+      try { this.states = JSON.parse((map.properties || []).find(x => x.name === "states")?.value || "null"); } catch { this.states = null; }
+      this.stated = [];
       const sets = map.tilesets.map(ts => map.addTilesetImage(ts.name, `kit-${ts.name}`));
       this.water = null;
       const layers = [];
@@ -288,7 +292,8 @@ function worldScenes() {
           ...(p.needs ? { needs: J(p.needs), delivers: p.delivers || o.name, when: p.when || "", empty: J(p.empty), waiting: J(p.waiting), call: J(p.call),
                           deliver: J(p.deliver), delivered: J(p.delivered) } : {}) };
         else if (o.type === "npc") this.addNpc(o, p, J);
-        else if (o.type === "exit") this.exits.push({ to: p.to, side: p.side, rect: new Phaser.Geom.Rectangle(o.x, o.y, o.width, o.height) });
+        else if (o.type === "exit") this.exits.push({ to: p.to, side: p.side, rect: new Phaser.Geom.Rectangle(o.x, o.y, o.width, o.height),
+          openTo: p.open_to ? JSON.parse(p.open_to) : null, refuse: J(p.refuse) });
         else if (o.type === "entry") this.entries[p.from || ""] = { x: o.x, y: o.y };
       }
       // a town's shrine with no story spot of its own: touching it still answers (dark, or its hint)
@@ -315,7 +320,10 @@ function worldScenes() {
         return ok && q.x >= 0 && q.y >= 0 && q.x <= this.physics.world.bounds.width && q.y <= this.physics.world.bounds.height;
       };
       const pos = this.resume && this.st.pos && this.st.pos.place === this.placeId && standable(this.st.pos) ? this.st.pos : null;
-      const at = pos || this.entries[this.from || ""] || this.entries[""];
+      // a handoff (["party", [...], {to}]): the new lead starts just in front of that beat's spot
+      const hs = this.toNode && Object.values(this.spots).find(s => s.node === this.toNode);
+      const hand = hs && standable({ x: hs.x, y: hs.y + 26 }) ? { x: hs.x, y: hs.y + 26 } : null;
+      const at = hand || pos || this.entries[this.from || ""] || this.entries[""];
       this.player = this.physics.add.sprite(at.x, at.y, `h-${this.lead}-down-0`).setOrigin(.5, 1);
       this.footBody(this.player);
       this.player.setCollideWorldBounds(true);
@@ -492,7 +500,9 @@ function worldScenes() {
       // a building's wall follows its art, which is often wider or narrower than its footprint:
       // cl and cr either side of its centre (worked out with its neighbours by the map tools)
       const l = p.cl || p.fw / 2, r = p.cr || p.fw / 2;
-      if (p.solid) this.solids.add(this.add.zone(o.x + (r - l) / 2, o.y - p.fh / 2, l + r - 2, p.fh - 2));
+      const zone = p.solid ? this.add.zone(o.x + (r - l) / 2, o.y - p.fh / 2, l + r - 2, p.fh - 2) : null;
+      if (zone) this.solids.add(zone);
+      if (p.in) this.stated.push({ img, zone, in: JSON.parse(p.in) });   // shown only in some of the map's states
     }
 
     // The shrine's three looks (the rock under the pine): "dark" (an empty board), "lit" (a game in
@@ -538,13 +548,16 @@ function worldScenes() {
       // townsfolk drawn like the heroes speak with their own portrait and name
       const own = p.drawn ? L => L.map(l => l[0] === "n" ? ["say", who, ...l.slice(1)] : l) : L => L;
       const n = { id: o.name, spr, who, folk, sprite: p.sprite, say: own(J(p.say)), wander: p.wander, home: { x: o.x, y: o.y }, t: 0, dir: face, until: p.until,
-        when: p.when || "" };   // only here once the story's condition holds (Guan Yu on his ridge)
+        when: p.when || "", in: p.in ? JSON.parse(p.in) : null };   // only here once the story's condition holds (Guan Yu on his ridge)
       if (p.gives) Object.assign(n, { gives: p.gives, givesWhen: p.gives_when || "", give: own(J(p.give)), given: own(J(p.given)) });
       n.call = own(J(p.call));
       if (p.challenge) {
         n.challenge = `${this.w.n}-${this.placeId}-c-${p.challenge}`;
         n.intro = own(J(p.intro)); n.win = own(J(p.win)); n.done = own(J(p.done));
-        n.mark = this.add.image(o.x, o.y - spr.height - 2, "@bang").setOrigin(.5, 1).setDepth(9999).setVisible(!TK.cleared(n.challenge));
+        // sight: "view" tiles all round, or a cone the way he faces; "guard": the point he keeps you from
+        n.view = p.view ? JSON.parse(p.view) : 0; n.cone = !!(n.view && p.face); n.face0 = face;
+        n.guard = p.guard_x != null ? { x: p.guard_x, y: p.guard_y } : null;
+        n.mark = this.add.image(o.x, o.y - spr.height - 2, "@bang").setOrigin(.5, 1).setDepth(9999).setVisible(!TK.cleared(n.challenge) && (!n.when || this.cond(n.when)));
       }
       this.physics.add.collider(spr, this.solids);
       if (this.water) this.physics.add.collider(spr, this.water);
@@ -594,10 +607,16 @@ function worldScenes() {
     save() { WorldState.save(this.w.n, this.st); }
     // The light a scene left the world in (tk-cutscene.js): kept on the map, and on the next map, until
     // a scene sets another. Day is none.
+    mapState() {
+      if (!this.states) return null;
+      let cur = null;
+      for (const st of this.states) if (this.cond(st.when) && !(st.until && this.cond(st.until))) cur = st;
+      return cur;
+    }
     setWorldLight(tint) { this.st.light = tint || null; this.save(); this.applyWorldLight(); }
     applyWorldLight() {
       if (this.worldShade) { this.worldShade.destroy(); this.worldShade = null; }
-      const c = { night: 0x46559c, dusk: 0xf0c0a0, dawn: 0xd8c8e8, storm: 0x80868e }[this.st.light];
+      const c = { night: 0x46559c, dusk: 0xf0c0a0, dawn: 0xd8c8e8, storm: 0x80868e, smoke: 0xb39c8a }[this.st.light];
       if (!c) return;
       const W = this.scale.width, H = this.scale.height;
       this.worldShade = this.add.rectangle(W / 2, H / 2, W * 3, H * 3, c).setScrollFactor(0).setDepth(9e4).setBlendMode(Phaser.BlendModes.MULTIPLY);
@@ -631,7 +650,21 @@ function worldScenes() {
     }
     // Who is here and how the shrine looks follow the story; redone whenever it moves on.
     refreshStory() {
-      for (const n of this.npcs) if (n.when) { const on = this.cond(n.when); n.spr.setVisible(on); n.spr.body.enable = on; }
+      const st = this.mapState();
+      for (const n of this.npcs) if (n.when || n.in) {
+        const on = this.cond(n.when) && (!n.in || !!(st && n.in.includes(st.id)));
+        n.spr.setVisible(on); n.spr.body.enable = on;
+        if (n.mark) n.mark.setVisible(on && !TK.cleared(n.challenge));   // a challenger not here yet has no "!" either
+      }
+      for (const o of this.stated || []) {
+        const on = !!(st && o.in.includes(st.id));
+        if (o.img) o.img.setVisible(on);
+        if (o.zone && o.zone.body) o.zone.body.enable = on;
+      }
+      if (st && "light" in st) {   // the state's light (day clears a scene's night)
+        const L = { day: null, morning: "dawn", dawn: "dawn", dusk: "dusk", night: "night", storm: "storm", smoke: "smoke" }[st.light];
+        if ((this.st.light || null) !== (L || null)) { this.st.light = L || null; if (this.player) this.applyWorldLight(); }   // (on arrival the scene applies it once built)
+      }
       // one of each person at a time: a brother standing here in his own right (Guan Yu on his
       // ridge) isn't also following Liu Bei
       const here = new Set(this.npcs.filter(n => n.who && n.spr.visible).map(n => n.who));
@@ -771,13 +804,17 @@ function worldScenes() {
       if (!q) return null;
       const g = this.available(q) && this.gateFor(q);
       if (g && g.place && g.objective) {   // the nearest giver or delivery place still to visit
-        if (this.placeIn(this.placeId, g.place) && this.placeId === g.place) {
+        if (this.placeIn(this.placeId, g.place)) {   // in the place, or in one of its rooms
           const P = this.player, need = [].concat(g.needs || []).filter(c => !this.cond(c)), d = t => Math.hypot(t.x - P.x, t.y - P.y);
           const items = need.filter(c => c.startsWith("item:")).map(c => c.slice(5)), marks = need.filter(c => c.startsWith("mark:")).map(c => c.slice(5));
           const ts = [...this.npcs.filter(n => n.gives && items.includes(n.gives) && n.spr.visible).map(n => ({ x: n.spr.x, y: n.spr.y - 8 })),
                       ...Object.values(this.spots).filter(s => s.needs && marks.includes(s.delivers)).map(s => ({ x: s.x, y: s.y - 4 }))];
           this.goalHops = 0;
           if (ts.length) return ts.sort((a, b) => d(a) - d(b))[0];
+          // a giver seated indoors: the door of their room, or out of this room first
+          const room = this.region.places.find(p => p.parent === g.place && (p.gives || []).some(x => items.includes(x)));
+          if (room && room.id !== this.placeId) return this.routeTo([{ place: room.id }]);
+          if (this.placeId !== g.place) return this.routeTo([{ place: g.place }]);
         } else return this.routeTo([{ place: g.place }]);
       }
       return this.routeTo(this.available(q) ? [q] : this.leadsTo(q));
@@ -1005,6 +1042,19 @@ function worldScenes() {
       this.refreshStory();
       this.save();
       this.setGoal();
+      // a handoff to a new lead who is somewhere else: a fade, and they begin by the next beat
+      // ({"to": node}: by that beat's spot; {"to": {"place", "from"}}: arriving in that place as if from that one)
+      const hand = steps.find(s => s[0] === "party" && s[2] && s[2].to), to = hand && hand[2].to;
+      const placeOf = name => name && this.region.places.find(p => p.id === name || p.name === name);
+      const toQ = typeof to === "string" && this.region.quests.find(x => x.node === `${this.w.n}-${to}`);
+      const toP = to && typeof to === "object" && placeOf(to.place);
+      if (toQ || toP) {
+        this.leaving = true; this.st.pos = null; this.save();
+        this.cameras.main.fadeOut(500);
+        this.cameras.main.once("camerafadeoutcomplete", () => this.scene.restart(toQ ? { place: toQ.place, from: null, toNode: toQ.node }
+          : { place: toP.id, from: (placeOf(to.from) || {}).id || null }));
+        return;
+      }
       if (q.role === "boss" && this.opts.onBoss) await this.opts.onBoss();
       // the book's main story is over: on into the next book (a moment, a fade). But if side stories are
       // still open here (Book 2's Diaochan chain opens with its last beat), stay: say so once, and go on
@@ -1378,7 +1428,63 @@ function worldScenes() {
       this.cameras.main.once("camerafadeoutcomplete", () => this.scene.restart({ place: to, from: this.placeId }));
     }
 
+    // Road challengers: one who sees you (in range, and in his cone if he faces one way) or catches you
+    // near what he guards calls out, walks over and sets his problem. Lose and you're walked back a
+    // step, and he waits till you've gone and come again; beat him and he stands aside.
+    watchChallengers() {
+      if (this.engaged || this.ui.busy() || this.leaving || this.seated || this.cine) return;
+      const P = this.player, T = this.tw || 16;
+      for (const n of this.npcs) {
+        if (!n.challenge || !n.spr.visible || !(n.view || n.guard) || TK.cleared(n.challenge)) continue;
+        const d = Math.hypot(n.spr.x - P.x, n.spr.y - P.y), dg = n.guard ? Math.hypot(n.guard.x - P.x, n.guard.y - P.y) : Infinity;
+        if (n.cool) { if (d > (n.view || 2) * T + 2 * T && dg > 4 * T) n.cool = false; continue; }
+        const seen = n.view && d <= n.view * T + T / 2 && (!n.cone || this.inCone(n, P)) || dg < 2.5 * T;
+        if (seen) { this.engage(n); return; }
+      }
+    }
+    inCone(n, P) {
+      const [fx, fy] = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }[n.face0] || [0, 1];
+      const dx = P.x - n.spr.x, dy = P.y - n.spr.y, d = Math.hypot(dx, dy) || 1;
+      return (dx * fx + dy * fy) / d > Math.cos(Math.PI * 55 / 180);
+    }
+    async engage(n) {
+      this.engaged = n;
+      const P = this.player, T = this.tw || 16, wait = ms => new Promise(r => this.time.delayedCall(ms, r));
+      this.walk = null; this.auto = null; P.setVelocity(0); P.anims.stop();
+      const wander = n.wander; n.wander = false; n.spr.setVelocity(0);
+      if (n.mark) this.tweens.add({ targets: n.mark, scale: { from: 2, to: 1 }, duration: 320, ease: "Back.easeOut" });
+      await wait(420);
+      // he walks up to stand a step from you
+      const dx = P.x - n.spr.x, dy = P.y - n.spr.y, d = Math.hypot(dx, dy) || 1, go = Math.max(0, d - T * 1.2);
+      n.dir = Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? "left" : "right") : (dy < 0 ? "up" : "down");
+      if (go > 2) {
+        n.spr.anims.play(n.who ? `h-${n.who}-${n.dir}` : `fk-${n.sprite}-${n.dir}`, true);
+        await new Promise(r => this.tweens.add({ targets: n.spr, x: n.spr.x + dx / d * go, y: n.spr.y + dy / d * go, duration: go / 60 * 1000,
+          onUpdate: () => n.spr.setDepth(n.spr.y), onComplete: r }));
+      }
+      this.faceNpc(n);
+      P.facing = { up: "down", down: "up", left: "right", right: "left" }[n.dir]; P.setTexture(`h-${this.lead}-${P.facing}-0`);
+      await new Promise(r => this.talk(worldLines(n.intro), r));
+      const won = await this.duel(n.challenge, { id: n.challenge.split("-c-")[1], who: n.who, face: this.faceOf(n) });
+      if (won) {
+        this.returned({ key: n.challenge, win: true });
+        // a blocker stands aside: off your way, and no longer in it
+        n.spr.body.enable = false;
+        const side = Math.abs(dx) > Math.abs(dy) ? { x: 0, y: T } : { x: T, y: 0 };
+        this.tweens.add({ targets: n.spr, x: n.spr.x + side.x, y: n.spr.y + side.y, duration: 400, onUpdate: () => n.spr.setDepth(n.spr.y) });
+      } else {
+        // walked back a step; he goes back to his post and waits till you come again
+        P.setPosition(P.x - dx / d * T * 1.5, P.y - dy / d * T * 1.5);
+        n.cool = true;
+        this.tweens.add({ targets: n.spr, x: n.home.x, y: n.home.y, duration: Math.max(200, go / 60 * 1000), onUpdate: () => n.spr.setDepth(n.spr.y),
+          onComplete: () => { n.dir = n.face0; this.faceNpc(n); } });
+      }
+      n.wander = wander;
+      this.engaged = null;
+    }
+
     update(time, dt) {
+      this.watchChallengers();
       this.keepPlayerInView();
       this.callOut();
       WorldFX.shadows(this);
@@ -1410,7 +1516,17 @@ function worldScenes() {
       this.blocked = Math.max(0, this.blocked - dt);
       for (const e of this.exits) {
         if (!Phaser.Geom.Rectangle.Contains(e.rect, P.x, P.y - 3)) continue;
-        if (this.placeOpen(e.to)) this.go(e.to);
+        // a door only some may pass: the protagonist named, or a condition ("item:edict") that holds
+        const ms = this.mapState(), shut = ms && (ms.exits_closed || []).includes(e.to), opened = ms && (ms.exits_open || []).includes(e.to);
+        const barred = shut || e.openTo && !e.openTo.some(w => w.includes(":") ? this.cond(w) : w === this.lead);
+        if (barred) {
+          if (!this.blocked) {
+            this.blocked = 1500;
+            const back = { N: [0, 1], S: [0, -1], E: [-1, 0], W: [1, 0] }[e.side];
+            P.setPosition(P.x + back[0] * 10, P.y + back[1] * 10);
+            this.talk(e.refuse.length ? worldLines(e.refuse) : [["n", "The door is barred to you.", "此门不为你开。"]]);
+          }
+        } else if (opened || this.placeOpen(e.to)) this.go(e.to);
         else if (!this.blocked) {
           this.blocked = 1500;
           const back = { N: [0, 1], S: [0, -1], E: [-1, 0], W: [1, 0] }[e.side];

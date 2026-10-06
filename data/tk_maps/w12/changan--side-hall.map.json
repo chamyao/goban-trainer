@@ -1,0 +1,130 @@
+{
+ "format": "tk-map/1",
+ "id": "changan--side-hall",
+ "world": 12,
+ "parent": "changan",
+ "name": "The emperor's side hall",
+ "archetype": "interior",
+ "building": "side-hall",
+ "style": "building.house",
+ "size": [
+  20,
+  12
+ ],
+ "seed": 0.23460159181452822,
+ "terrain": {
+  "legend": {
+   "#": "wood",
+   "%": "stone",
+   "&": "mat",
+   "e": "earth",
+   "W": "wall",
+   " ": "void"
+  },
+  "rows": [
+   "                    ",
+   "     WWWWWWWWWW     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     WWWWW#WWWW     ",
+   "                    ",
+   "                    ",
+   "                    "
+  ]
+ },
+ "objects": [
+  {
+   "kind": "furn.bed",
+   "x": 6,
+   "y": 2,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.drawers",
+   "x": 8,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.shelf",
+   "x": 12,
+   "y": 2,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.table",
+   "x": 11,
+   "y": 5,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 10,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 13,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.jar",
+   "x": 6,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.chest",
+   "x": 6,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "spots": [
+  {
+   "id": "spot-12-a12c",
+   "x": 9.5,
+   "y": 2.7,
+   "node": "12-a12c",
+   "label": "The Secret Edict"
+  }
+ ],
+ "npcs": [],
+ "exits": [
+  {
+   "to": "changan--dutang",
+   "side": "S",
+   "x": 10,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "changan--dutang": [
+   10,
+   7
+  ],
+  "": [
+   10,
+   7
+  ]
+ },
+ "links": [
+  "changan--dutang"
+ ]
+}

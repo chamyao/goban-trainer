@@ -1,0 +1,153 @@
+{
+ "format": "tk-map/1",
+ "id": "meiwu--mother",
+ "world": 12,
+ "parent": "meiwu",
+ "name": "His mother's rooms",
+ "archetype": "interior",
+ "building": "mother",
+ "style": "building.house",
+ "size": [
+  20,
+  12
+ ],
+ "seed": 0.1787831885921486,
+ "terrain": {
+  "legend": {
+   "#": "wood",
+   "%": "stone",
+   "&": "mat",
+   "e": "earth",
+   "W": "wall",
+   " ": "void"
+  },
+  "rows": [
+   "                    ",
+   "     WWWWW#WWWW     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     W########W     ",
+   "     WWWWW#WWWW     ",
+   "                    ",
+   "                    ",
+   "                    "
+  ]
+ },
+ "objects": [
+  {
+   "kind": "furn.bed",
+   "x": 7,
+   "y": 2,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.drawers",
+   "x": 12,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.table",
+   "x": 9,
+   "y": 5,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 8,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.stool",
+   "x": 11,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.jar",
+   "x": 6,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.plant",
+   "x": 13,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.chest",
+   "x": 6,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.barrel",
+   "x": 13,
+   "y": 3,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "spots": [],
+ "npcs": [
+  {
+   "id": "in-1",
+   "kind": "folk.woman",
+   "x": 12.5,
+   "y": 6.9,
+   "say": [
+    "“The old lady is ninety. She says her flesh trembles. She hasn't slept in days.”"
+   ],
+   "until": "12-a14"
+  }
+ ],
+ "exits": [
+  {
+   "to": "meiwu--hall",
+   "side": "S",
+   "x": 10,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "to": "meiwu--diaochan",
+   "side": "N",
+   "x": 10,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "meiwu--hall": [
+   10,
+   7
+  ],
+  "": [
+   10,
+   7
+  ],
+  "meiwu--diaochan": [
+   10,
+   2
+  ]
+ },
+ "links": [
+  "meiwu--hall",
+  "meiwu--diaochan"
+ ]
+}

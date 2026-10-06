@@ -216,6 +216,12 @@ def check_world(w, ZH, CAST, errors, warnings, needs=None, folk=None):
             if op not in STEPS:
                 errors.append(f"{name}: {where} uses unknown step {op!r}")
                 continue
+            if op == "party" and len(st) > 2 and not isinstance((st[2] or {}).get("to"), dict) \
+                    and (st[2] or {}).get("to") not in {n["key"] for n in w["nodes"]}:
+                errors.append(f"{name}: {where}: handoff to {(st[2] or {}).get('to')!r}, which is no node")
+            if op == "party" and len(st) > 2 and isinstance((st[2] or {}).get("to"), dict) \
+                    and st[2]["to"].get("place") not in {n.get("place") for n in w["nodes"]}:
+                errors.append(f"{name}: {where}: handoff to place {st[2]['to'].get('place')!r}, which the story never visits")
             if op == "say" and st[1] not in CAST:
                 errors.append(f"{name}: {where}: speaker {st[1]!r} has no voice in CAST")
             if op == "problem" and len(st) > 1 and st[1] not in CAST:
