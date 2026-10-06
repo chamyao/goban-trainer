@@ -41,7 +41,8 @@ for(;;){
   await go(place);
   const lightIn=await p.evaluate(()=>(window.__w.st&&window.__w.st.light)||'day');
   // the light the last beat left (night after a night scene) is still the light here: it carries onto the next map
-  if(typeof lastLight!=='undefined'&&lastLight!==lightIn)console.log(`FAIL the light didn't carry over: the last beat left ${lastLight}, ${node} at ${place} opens in ${lightIn}`);
+  const NEXT={night:'dawn',dawn:'day',day:'dusk',dusk:'night'};   // time moving on a step (dawn after the night) is the story, not a lost light
+  if(typeof lastLight!=='undefined'&&lastLight!==lightIn&&NEXT[lastLight]!==lightIn)console.log(`FAIL the light didn't carry over: the last beat left ${lastLight}, ${node} at ${place} opens in ${lightIn}`);
   console.log(`\n=== ${node} @ ${place}  face ${await front(node)}  light on arrival: ${lightIn}`);
   await p.evaluate(()=>{const w=window.__w;w.player.y+=10;}); await p.waitForTimeout(1200); await tapSpot(node); await p.waitForTimeout(1500); await p.waitForTimeout(200);
   // a sight puzzle (seen by one watcher, not by the other): stand where one sees her and the other, whichever way he turns, doesn't

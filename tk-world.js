@@ -424,7 +424,8 @@ function worldScenes() {
       this.time.delayedCall(900, () => {
         // indoors a story starts as you come in (the room is the scene); outdoors only spots marked
         // "arrive" do, the rest wait for you to walk up. Not when you're put back where you were.
-        const indoor = !!(this.place.parent || this.place.archetype === "interior");
+        // (a compound, a whole residence with courts and a garden, is walked like outdoors: to the pavilion past the maids)
+        const indoor = this.place.archetype !== "compound" && !!(this.place.parent || this.place.archetype === "interior");
         const s = Object.values(this.spots).find(s => (s.trigger === "arrive" || (indoor && !pos && s.trigger !== "talk")) && this.openQuest(s));
         if (s && !this.ui.busy() && !this.leaving && !this.cine) this.playQuest(this.openQuest(s), s);
         else if (typeof TKTable !== "undefined") TKTable.arrived(this);   // back from signing in at the go table
