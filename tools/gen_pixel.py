@@ -105,16 +105,16 @@ def run(model, inp):
 def kit_set(a):
     """The xianxia kit (tools/xianxia_spec.py) into assets/tk/gen/xianxia/<name>-<i>.png."""
     from xianxia_spec import GROUND, OBJECTS
-    if a.set in ("jade-b2", "jade-b2b"):   # the new Book 2's big buildings for the Jade kit, in Jade's colours
-        from xianxia_spec import B2_BUILDINGS, B2_BUILDINGS2, JADE_LOOK
-        B2_BUILDINGS = B2_BUILDINGS2 if a.set == "jade-b2b" else B2_BUILDINGS
+    if a.set in ("jade-b2", "jade-b2b", "jade-b2c"):   # the new Book 2's big buildings for the Jade kit, in Jade's colours
+        from xianxia_spec import B2_BUILDINGS, B2_BUILDINGS2, B2_BUILDINGS3, JADE_LOOK
+        B2_BUILDINGS = {"jade-b2b": B2_BUILDINGS2, "jade-b2c": B2_BUILDINGS3}.get(a.set, B2_BUILDINGS)
         out = OUT / "jade-b2"
         out.mkdir(parents=True, exist_ok=True)
         a.pal_which = "jade"
         a.jobs_override = [(k, "rd-plus", {"style": "topdown_asset", "width": w, "height": h, "remove_bg": True,
                                            "prompt": f"{p}, {JADE_LOOK}, 3/4 top-down game sprite"}, n)
                            for k, (p, (w, h), n) in B2_BUILDINGS.items()]
-    out = OUT / ("xianxia" if a.set in ("xianxia", "xianxia-chars") else "jade-b2" if a.set in ("jade-b2", "jade-b2b") else
+    out = OUT / ("xianxia" if a.set in ("xianxia", "xianxia-chars") else "jade-b2" if a.set in ("jade-b2", "jade-b2b", "jade-b2c") else
                  "genshin" if a.set.startswith("genshin") and a.set != "genshin-redo2" else a.set)   # parallel sets: own folders
     out.mkdir(parents=True, exist_ok=True)
     log_path = out / "gen.json"
@@ -219,7 +219,7 @@ def main():
     ap.add_argument("--only", action="append")
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--list", action="store_true")
-    ap.add_argument("--set", choices=["xianxia", "xianxia-chars", "xianxia-redo", "xianxia-interior", "xianxia-chars2", "xianxia-props", "genshin-pilot", "genshin", "genshin-redo", "genshin-redo2", "genshin-bg", "jade-b2", "jade-b2b"], help="generate a whole kit's pieces (tools/xianxia_spec.py)")
+    ap.add_argument("--set", choices=["xianxia", "xianxia-chars", "xianxia-redo", "xianxia-interior", "xianxia-chars2", "xianxia-props", "genshin-pilot", "genshin", "genshin-redo", "genshin-redo2", "genshin-bg", "jade-b2", "jade-b2b", "jade-b2c"], help="generate a whole kit's pieces (tools/xianxia_spec.py)")
     ap.add_argument("--pause", type=float, default=12, help="seconds between requests (rate limits)")
     ap.add_argument("--jobs", type=int, default=8, help="requests at once")
     a = ap.parse_args()
