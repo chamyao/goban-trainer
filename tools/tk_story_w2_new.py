@@ -165,6 +165,11 @@ def _scenes_chain():
             S("diaochan", "Do not worry, my lord. If I fail this great cause, let me die under ten thousand blades.",
               "大人勿忧。妾若不报大义，死于万刃之下。"),
             N("Wang Yun bows to her and thanks her.", "王允拜谢。"),
+            N("The first link of the chain is Lü Bu himself. He cannot simply be invited: a minister who sends for the Grand Preceptor's general "
+              "will be watched, after Zhang Wen. But a gift he must come to give thanks for will bring him to the house of his own accord.",
+              "连环第一环，便是吕布。不可径直相请：张温之事在前，司徒召见太师之将，必遭疑忌。唯有送一件他必亲来致谢的厚礼，方能教他自己登门。"),
+            S("wangyun", "The family pearls. Set in gold, as a crown for a hero. He'll come to thank me himself, and then he will see her.",
+              "家藏明珠，嵌成金冠，赠与英雄。他必亲来致谢，那时便教他见着她。"),
         ]},
 
         # A3 · The gold crown. Legwork: the board comes first (slipping it past Dong Zhuo's men), then the scene.
