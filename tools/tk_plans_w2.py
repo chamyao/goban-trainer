@@ -288,7 +288,8 @@ PLANS2 = {
                 "grid": [18, 22], "cell": 2, "margin": 0,
                 "ground": [
                     {"id": "front-court", "kind": "court", "rect": [1, 17, 16, 4]},
-                    {"id": "inner-court", "kind": "court", "rect": [1, 11, 16, 2]},   # keeps the gallery clear of the halls' roofs
+                    {"id": "inner-court", "kind": "court", "rect": [1, 11, 16, 2]},
+                    {"id": "bedroom-step", "kind": "passage", "rect": [12, 16, 3, 1]},   # in front of the bedchamber, to the east passage   # keeps the gallery clear of the halls' roofs
                     {"id": "passage-w", "kind": "passage", "rect": [4, 13, 1, 4]},
                     {"id": "passage-e", "kind": "passage", "rect": [11, 13, 1, 4]},
                     {"id": "pond-court", "kind": "court", "rect": [15, 13, 2, 3]},
@@ -308,7 +309,7 @@ PLANS2 = {
                     {"id": "xf-hall", "kind": "building.hall_grand", "rect": [5, 13, 6, 4], "doors": ["S", "N"],
                      "label": "The middle hall", "map": "xf-hall"},
                     {"id": "wing-w", "kind": "building.wing", "rect": [1, 13, 3, 3], "door": "N", "label": "The maids' rooms"},
-                    {"id": "xf-bedroom", "kind": "building.wing", "rect": [12, 13, 3, 3], "door": "N", "label": "Dong Zhuo's bedchamber",
+                    {"id": "xf-bedroom", "kind": "building.wing", "rect": [12, 13, 3, 3], "door": "S", "label": "Dong Zhuo's bedchamber",
                      "map": "xf-bedroom", "window": "E"},
                     {"id": "phoenix", "kind": "building.pavilion", "rect": [11, 3, 2, 2], "on": "water", "door": "S",
                      "label": "The Phoenix Pavilion"},
@@ -338,7 +339,7 @@ PLANS2 = {
                     {"id": "guard-2", "kind": "folk.soldier", "at": [11, 19], "face": "N", "cone": 6, "in_beats": ["2-a7", "2-a7c", "2-a8", "2-a9", "2-a10"]},
                 ],
                 "checks": [   # play checks the generated details must pass (places-notes.md, request 6)
-                    {"check": "covered_route", "from": [13, 10], "to": [12, 5], "beats": ["2-a9"]},
+                    {"check": "covered_route", "from": [13, 16], "to": [12, 5], "beats": ["2-a9"]},
                     {"check": "safe_spot", "in": ["passage-e", "xf-garden"]},
                 ],
             },
@@ -415,7 +416,7 @@ PLANS2 = {
                                    {"id": "curtain", "at": [1, 4], "node": "2-a7c", "label": "Behind the curtain",
                                     "sight": {"seen_by": "lubu", "unseen_by": "dongzhuo"}}],
                             exits=[{"to": "gallery", "at": [4, 0], "side": "N"}]),
-            "xf-bedroom": room([10, 7], [5, 0],
+            "xf-bedroom": room([10, 7], [5, 6],
                                things=[{"id": "bed", "kind": "furn.bed", "rect": [2, 3, 3, 2]},
                                        {"id": "window", "kind": "furn.window", "rect": [8, 2, 1, 1], "label": "The window over the pond"},
                                        {"id": "mirror", "kind": "furn.drawers", "rect": [8, 4, 1, 1], "label": "A dressing table"}],
