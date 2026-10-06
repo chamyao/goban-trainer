@@ -1208,17 +1208,38 @@ function worldScenes() {
     walkGrid() {
       if (this.grid) return this.grid;
       const C = 8, b = this.physics.world.bounds, cols = Math.ceil(b.width / C), rows = Math.ceil(b.height / C);
-      const block = new Uint8Array(cols * rows), pad = 5;
+      // two grids. "block": a cell any solid (grown by about half his feet, 10 x 6) touches; the roomy way,
+      // clear of walls. "tight": only a cell whose centre his feet can't stand on. One-tile gaps in a wall are
+      // shut in the first and open in the second; a tap through one used to walk him round the compound
+      const block = new Uint8Array(cols * rows), tight = new Uint8Array(cols * rows), pad = 5;
       for (const z of this.solids.getChildren()) {
         if (!z.body || !z.body.enable || (z.visibleWith && !z.visibleWith.visible)) continue;   // hidden by the story (another map state, a blocker stood aside): not in the way
         const bd = z.body, x0 = Math.floor((bd.x - pad) / C), x1 = Math.floor((bd.right + pad) / C), y0 = Math.floor((bd.y - 3) / C), y1 = Math.floor((bd.bottom + 3) / C);
-        for (let y = Math.max(0, y0); y <= Math.min(rows - 1, y1); y++) for (let x = Math.max(0, x0); x <= Math.min(cols - 1, x1); x++) block[y * cols + x] = 1;
+        for (let y = Math.max(0, y0); y <= Math.min(rows - 1, y1); y++) for (let x = Math.max(0, x0); x <= Math.min(cols - 1, x1); x++) {
+          block[y * cols + x] = 1;
+          const cx = x * C + C / 2, cy = y * C + C / 2;
+          if (cx > bd.x - 5 && cx < bd.right + 5 && cy > bd.y - 3 && cy < bd.bottom + 3) tight[y * cols + x] = 1;
+        }
+      }
+      // a building's doorway (not the map's edge): walking through it takes him in, so a walk past the
+      // houses keeps off their doorsteps (the one he's going into is the last step, after the path)
+      for (const e of this.exits || []) {
+        const r = e.rect;
+        if (r.width >= 16 || r.height >= 16) continue;   // the map's edge, or a wall's gate: walked through on purpose
+        // he goes in when the point 3 above his feet (a cell's centre, as paths count it) is in the doorway
+        for (let y = Math.max(0, Math.floor((r.y - 6) / C)); y <= Math.min(rows - 1, Math.floor((r.bottom + 6) / C)); y++)
+          for (let x = Math.max(0, Math.floor((r.x - 6) / C)); x <= Math.min(cols - 1, Math.floor((r.right + 6) / C)); x++) {
+            const cx = x * C + C / 2, cy = y * C + C / 2;
+            if (cx > r.x - 6 && cx < r.right + 6 && cy > r.y - 6 && cy < r.bottom + 6) block[y * cols + x] = 1;
+            if (cx > r.x - 2 && cx < r.right + 2 && cy > r.y - 2 && cy < r.bottom + 2) tight[y * cols + x] = 1;
+          }
       }
       if (this.water) this.water.forEachTile(t => {
         if (t.index === -1) return;
-        for (let y = Math.floor(t.pixelY / C); y < Math.ceil((t.pixelY + t.height) / C); y++) for (let x = Math.floor(t.pixelX / C); x < Math.ceil((t.pixelX + t.width) / C); x++) if (x < cols && y < rows) block[y * cols + x] = 1;
+        for (let y = Math.floor(t.pixelY / C); y < Math.ceil((t.pixelY + t.height) / C); y++) for (let x = Math.floor(t.pixelX / C); x < Math.ceil((t.pixelX + t.width) / C); x++) if (x < cols && y < rows) block[y * cols + x] = tight[y * cols + x] = 1;
       });
-      return (this.grid = { C, cols, rows, block, free: (x, y) => x >= 0 && y >= 0 && x < cols && y < rows && !block[y * cols + x] });
+      const inside = (x, y) => x >= 0 && y >= 0 && x < cols && y < rows;
+      return (this.grid = { C, cols, rows, block, tight, free: (x, y) => inside(x, y) && !tight[y * cols + x], roomy: (x, y) => inside(x, y) && !block[y * cols + x] });
     }
     // A* over the grid (8 directions, no corner-cutting), then the path pulled straight.
     // People standing about count as in the way (all but `skip`, the one being walked up to).
@@ -1252,7 +1273,7 @@ function worldScenes() {
         for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]]) {
           const nx = x + dx, ny = y + dy;
           if (!G.free(nx, ny) || (dx && dy && (!G.free(x + dx, y) || !G.free(x, y + dy)))) continue;
-          const c = g.get(key(x, y)) + (dx && dy ? 1.414 : 1);
+          const c = g.get(key(x, y)) + (dx && dy ? 1.414 : 1) * (G0.roomy(nx, ny) ? 1 : 3);   // hugging a wall, or through a gap, only when it saves the way round
           if (c < (g.get(key(nx, ny)) ?? Infinity)) { g.set(key(nx, ny), c); from.set(key(nx, ny), [x, y]); open.push([c + h(nx, ny), nx, ny]); }
         }
       }
@@ -1267,11 +1288,24 @@ function worldScenes() {
       for (let c = [gx, gy]; c; c = from.get(key(c[0], c[1]))) cells.unshift(c);
       // keep only the turning points that can't be seen past
       const clear = (a, b) => { const steps = Math.ceil(Math.hypot(b[0] - a[0], b[1] - a[1]) * 2);
-        for (let i = 1; i < steps; i++) { const x = Math.round(a[0] + (b[0] - a[0]) * i / steps), y = Math.round(a[1] + (b[1] - a[1]) * i / steps); if (!G.free(x, y)) return false; } return true; };
+        for (let i = 1; i < steps; i++) { const x = Math.round(a[0] + (b[0] - a[0]) * i / steps), y = Math.round(a[1] + (b[1] - a[1]) * i / steps); if (!G.free(x, y) || !G0.roomy(x, y)) return false; } return true; };
       const pts = [cells[0]];
       for (let i = 1; i < cells.length; i++) if (!clear(pts[pts.length - 1], cells[i])) pts.push(cells[i - 1]);
       pts.push(cells[cells.length - 1]);
-      return pts.slice(1).map(([x, y]) => ({ x: x * C + C / 2, y: y * C + C / 2 }));
+      // a point in a tight cell (a gap, along a wall): to the middle of the gap, or a little off the wall, so
+      // his feet don't catch on its edge
+      const ease = (x, y, ax) => {
+        const step = (k) => ax ? G0.free(x + k, y) : G0.free(x, y + k);
+        let lo = 0, hi = 0;
+        while (lo > -3 && step(lo - 1)) lo--;
+        while (hi < 3 && step(hi + 1)) hi++;
+        if (lo > -3 && hi < 3) return (lo + hi) / 2 * C;   // a gap: its middle
+        if (lo > -3 && !step(lo - 1)) return lo === 0 ? 3 : 0;   // a wall on that side, close by
+        if (hi < 3 && !step(hi + 1)) return hi === 0 ? -3 : 0;
+        return 0;
+      };
+      return pts.slice(1).map(([x, y]) => G0.roomy(x, y) ? { x: x * C + C / 2, y: y * C + C / 2 }
+        : { x: x * C + C / 2 + ease(x, y, true), y: y * C + C / 2 + ease(x, y, false) });
     }
     // What's under a point of the world: someone (their figure, not the ground beside them),
     // a story spot, or a building's door; null for open ground.
