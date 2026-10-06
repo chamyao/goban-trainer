@@ -115,6 +115,8 @@ def place_lines():
         said = [(l, None) for ls in (m.get("seen_lines") or {}).values() for l in ls]
         said += [(l, None) for e in m.get("exits", []) for l in e.get("refuse") or []]
         said += [(st["procession"]["leash_line"], None) for st in m.get("states") or [] if (st.get("procession") or {}).get("leash_line")]
+        said += [(l, None) for st in m.get("states") or [] for v in (st.get("exits_closed_say") or {}).values()
+                 for l in ([v] if isinstance(v, str) else v)]
         for sp in m.get("spots", []):
             said += [(l, None) for k in ("intro", "outro", "empty", "waiting", "deliver", "delivered", "call") for l in sp.get(k) or []]
         for n in m.get("npcs", []):

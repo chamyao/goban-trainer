@@ -165,6 +165,9 @@ def voiced_states(states):
         pr = st.get("procession")
         if pr and isinstance(pr.get("leash_line"), str):
             st = {**st, "procession": {**pr, "leash_line": place_step(pr["leash_line"])[0]}}
+        if st.get("exits_closed_say"):   # what you're told at a road the state has shut
+            st = {**st, "exits_closed_say": {k: [place_step(l)[0] for l in ([v] if isinstance(v, str) else v)]
+                                             for k, v in st["exits_closed_say"].items()}}
         out.append(st)
     return out
 

@@ -1820,7 +1820,8 @@ function worldScenes() {
             this.blocked = 1500;
             const back = { N: [0, 1], S: [0, -1], E: [-1, 0], W: [1, 0] }[e.side];
             P.setPosition(P.x + back[0] * 10, P.y + back[1] * 10);
-            this.talk(e.refuse.length ? worldLines(e.refuse) : [["n", "The door is barred to you.", "此门不为你开。"]]);
+            const said = shut && ms.exits_closed_say && ms.exits_closed_say[e.to];
+            this.talk(said ? said : e.refuse.length ? worldLines(e.refuse) : [["n", "The door is barred to you.", "此门不为你开。"]]);
           }
         } else if (opened || this.placeOpen(e.to)) this.go(e.to);
         else if (!this.blocked) {
