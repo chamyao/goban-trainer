@@ -1,29 +1,13 @@
 [
  {
-  "kind": "banner.black",
-  "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
-  },
-  "size": [
-   1,
-   1
-  ],
-  "maps": [
-   "changan"
-  ],
-  "count": 1,
-  "brief": "a black banner on a pole (the Chancellor's)"
- },
- {
   "kind": "bridge",
   "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
+   "genshin": "stand-in: wood",
+   "jade": "stand-in: wood",
+   "xianxia": "stand-in: wood"
   },
   "size": null,
+  "ground": true,
   "maps": [
    "changan--xiangfu"
   ],
@@ -33,14 +17,15 @@
  {
   "kind": "building.compound",
   "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
+   "genshin": "stand-in: building.hall",
+   "jade": "stand-in: building.hall",
+   "xianxia": "stand-in: building.hall"
   },
   "size": [
    10,
    10
   ],
+  "ground": false,
   "maps": [
    "changan"
   ],
@@ -50,14 +35,15 @@
  {
   "kind": "building.gatehouse",
   "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
+   "genshin": "stand-in: building.gate",
+   "jade": "stand-in: building.gate",
+   "xianxia": "stand-in: building.gate"
   },
   "size": [
    2,
    1
   ],
+  "ground": false,
   "maps": [
    "changan--lubu",
    "changan--palace",
@@ -72,14 +58,15 @@
  {
   "kind": "building.gatetower",
   "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
+   "genshin": "stand-in: building.gate",
+   "jade": "stand-in: building.gate",
+   "xianxia": "stand-in: building.gate"
   },
   "size": [
    3,
    6
   ],
+  "ground": false,
   "maps": [
    "changan"
   ],
@@ -89,14 +76,15 @@
  {
   "kind": "building.granary",
   "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
+   "genshin": "stand-in: building.lodge",
+   "jade": "stand-in: building.lodge",
+   "xianxia": "stand-in: building.lodge"
   },
   "size": [
    6,
    2
   ],
+  "ground": false,
   "maps": [
    "meiwu"
   ],
@@ -106,14 +94,15 @@
  {
   "kind": "building.hall_grand",
   "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
+   "genshin": "stand-in: building.hall",
+   "jade": "stand-in: building.hall",
+   "xianxia": "stand-in: building.hall"
   },
   "size": [
    10,
    5
   ],
+  "ground": false,
   "maps": [
    "changan--lubu",
    "changan--palace",
@@ -135,6 +124,7 @@
    3,
    2
   ],
+  "ground": false,
   "maps": [
    "liangzhou",
    "meiwu-road"
@@ -145,14 +135,15 @@
  {
   "kind": "building.palace",
   "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
+   "genshin": "stand-in: building.hall",
+   "jade": "stand-in: building.hall",
+   "xianxia": "stand-in: building.hall"
   },
   "size": [
    26,
    14
   ],
+  "ground": false,
   "maps": [
    "changan"
   ],
@@ -162,14 +153,15 @@
  {
   "kind": "building.pavilion",
   "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
+   "genshin": "stand-in: building.moongate",
+   "jade": "stand-in: building.moongate",
+   "xianxia": "stand-in: building.moongate"
   },
   "size": [
    3,
    3
   ],
+  "ground": false,
   "maps": [
    "changan--wangyun",
    "changan--xiangfu"
@@ -180,14 +172,15 @@
  {
   "kind": "building.pavilion_painted",
   "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
+   "genshin": "stand-in: building.shop",
+   "jade": "stand-in: building.shop",
+   "xianxia": "stand-in: building.shop"
   },
   "size": [
    3,
    3
   ],
+  "ground": false,
   "maps": [
    "changan--wangyun"
   ],
@@ -197,14 +190,15 @@
  {
   "kind": "building.posthouse",
   "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
+   "genshin": "stand-in: building.house",
+   "jade": "stand-in: building.house",
+   "xianxia": "stand-in: building.house"
   },
   "size": [
    5,
    3
   ],
+  "ground": false,
   "maps": [
    "liangzhou",
    "meiwu-road"
@@ -215,14 +209,15 @@
  {
   "kind": "building.storehouse",
   "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
+   "genshin": "stand-in: building.lodge",
+   "jade": "stand-in: building.lodge",
+   "xianxia": "stand-in: building.lodge"
   },
   "size": [
    6,
    2
   ],
+  "ground": false,
   "maps": [
    "meiwu"
   ],
@@ -232,14 +227,15 @@
  {
   "kind": "building.tent_small",
   "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
+   "genshin": "stand-in: building.tent",
+   "jade": "stand-in: building.tent",
+   "xianxia": "stand-in: building.tent"
   },
   "size": [
    2,
    2
   ],
+  "ground": false,
   "maps": [
    "liangzhou"
   ],
@@ -249,14 +245,15 @@
  {
   "kind": "building.wing",
   "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
+   "genshin": "stand-in: building.lodge",
+   "jade": "stand-in: building.lodge",
+   "xianxia": "stand-in: building.lodge"
   },
   "size": [
    4,
    6
   ],
+  "ground": false,
   "maps": [
    "changan--lubu",
    "changan--palace",
@@ -270,11 +267,12 @@
  {
   "kind": "camp",
   "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
+   "genshin": "stand-in: dirt",
+   "jade": "stand-in: dirt",
+   "xianxia": "stand-in: dirt"
   },
   "size": null,
+  "ground": true,
   "maps": [
    "liangzhou",
    "meiwu-road"
@@ -285,14 +283,15 @@
  {
   "kind": "camp.banquet",
   "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
+   "genshin": "stand-in: camp.table",
+   "jade": "stand-in: camp.table",
+   "xianxia": "stand-in: camp.table"
   },
   "size": [
    10,
    2
   ],
+  "ground": false,
   "maps": [
    "changan"
   ],
@@ -302,11 +301,12 @@
  {
   "kind": "cliff",
   "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
+   "genshin": "stand-in: sand",
+   "jade": "stand-in: sand",
+   "xianxia": "stand-in: sand"
   },
   "size": null,
+  "ground": true,
   "maps": [
    "liangzhou"
   ],
@@ -314,30 +314,14 @@
   "brief": "a loess cliff face"
  },
  {
-  "kind": "corral",
-  "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
-  },
-  "size": [
-   8,
-   6
-  ],
-  "maps": [
-   "liangzhou"
-  ],
-  "count": 1,
-  "brief": "a wooden-railed corral with two or three horses"
- },
- {
   "kind": "court",
   "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
+   "genshin": "stand-in: stone",
+   "jade": "stand-in: stone",
+   "xianxia": "stand-in: stone"
   },
   "size": null,
+  "ground": true,
   "maps": [
    "changan",
    "changan--lubu",
@@ -353,11 +337,12 @@
  {
   "kind": "curtain",
   "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
+   "genshin": "stand-in: wood",
+   "jade": "stand-in: wood",
+   "xianxia": "stand-in: wood"
   },
   "size": null,
+  "ground": true,
   "maps": [
    "changan--wy-hall",
    "changan--xf-hall"
@@ -368,25 +353,27 @@
  {
   "kind": "field",
   "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
+   "genshin": "stand-in: grass",
+   "jade": "stand-in: grass",
+   "xianxia": "stand-in: grass"
   },
   "size": null,
+  "ground": true,
   "maps": [
    "changan"
   ],
   "count": 0,
-  "brief": ""
+  "brief": "open meadow outside the walls, longer grass"
  },
  {
   "kind": "field.wheat",
   "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
+   "genshin": "stand-in: sand",
+   "jade": "stand-in: sand",
+   "xianxia": "stand-in: sand"
   },
   "size": null,
+  "ground": true,
   "maps": [
    "changan",
    "meiwu",
@@ -396,203 +383,14 @@
   "brief": "a wheat field in rows"
  },
  {
-  "kind": "folk.child",
-  "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
-  },
-  "size": null,
-  "maps": [
-   "changan"
-  ],
-  "count": 0,
-  "brief": ""
- },
- {
-  "kind": "folk.elder",
-  "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
-  },
-  "size": null,
-  "maps": [
-   "changan",
-   "changan--wy-rearhall",
-   "liangzhou",
-   "meiwu",
-   "meiwu-road"
-  ],
-  "count": 0,
-  "brief": ""
- },
- {
-  "kind": "folk.noble",
-  "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
-  },
-  "size": null,
-  "maps": [
-   "changan--jeweller"
-  ],
-  "count": 0,
-  "brief": ""
- },
- {
-  "kind": "folk.official",
-  "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
-  },
-  "size": null,
-  "maps": [
-   "changan",
-   "changan--palace",
-   "changan--xiangfu",
-   "liangzhou",
-   "meiwu"
-  ],
-  "count": 0,
-  "brief": ""
- },
- {
-  "kind": "folk.soldier",
-  "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
-  },
-  "size": null,
-  "maps": [
-   "changan",
-   "changan--xiangfu",
-   "liangzhou",
-   "meiwu",
-   "meiwu-road"
-  ],
-  "count": 0,
-  "brief": ""
- },
- {
-  "kind": "furn.dais",
-  "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
-  },
-  "size": [
-   3,
-   2
-  ],
-  "maps": [
-   "changan--dutang",
-   "changan--side-hall",
-   "changan--wy-hall",
-   "changan--xf-hall",
-   "meiwu--hall"
-  ],
-  "count": 5,
-  "brief": "a raised dais with a low seat and armrest, a screen behind"
- },
- {
-  "kind": "furn.lamp",
-  "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
-  },
-  "size": [
-   1,
-   1
-  ],
-  "maps": [
-   "changan--jeweller",
-   "changan--wy-secret",
-   "meiwu--mother"
-  ],
-  "count": 3,
-  "brief": "a bronze standing lamp, lit"
- },
- {
-  "kind": "furn.qin",
-  "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
-  },
-  "size": [
-   2,
-   1
-  ],
-  "maps": [
-   "changan--caiyong"
-  ],
-  "count": 1,
-  "brief": "a guqin on its stand (Cai Yong's, its tail scorched)"
- },
- {
-  "kind": "furn.seat",
-  "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
-  },
-  "size": [
-   1,
-   1
-  ],
-  "maps": [
-   "changan--wy-secret"
-  ],
-  "count": 4,
-  "brief": "a floor cushion with a low armrest"
- },
- {
-  "kind": "furn.swordwall",
-  "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
-  },
-  "size": [
-   1,
-   1
-  ],
-  "maps": [
-   "changan--xf-hall"
-  ],
-  "count": 1,
-  "brief": "a sword in its scabbard hanging on a wall rack"
- },
- {
-  "kind": "furn.window",
-  "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
-  },
-  "size": [
-   1,
-   1
-  ],
-  "maps": [
-   "changan--xf-bedroom"
-  ],
-  "count": 1,
-  "brief": "a latticed window in a wall"
- },
- {
   "kind": "gallery",
   "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
+   "genshin": "stand-in: wood",
+   "jade": "stand-in: wood",
+   "xianxia": "stand-in: wood"
   },
   "size": null,
+  "ground": true,
   "maps": [
    "changan--xiangfu"
   ],
@@ -602,11 +400,12 @@
  {
   "kind": "garden",
   "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
+   "genshin": "stand-in: grass",
+   "jade": "stand-in: grass",
+   "xianxia": "stand-in: grass"
   },
   "size": null,
+  "ground": true,
   "maps": [
    "changan--wangyun",
    "changan--xiangfu"
@@ -617,14 +416,15 @@
  {
   "kind": "garden.rockery",
   "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
+   "genshin": "stand-in: rock.crag",
+   "jade": "stand-in: rock.crag",
+   "xianxia": "stand-in: rock.crag"
   },
   "size": [
    2,
    2
   ],
+  "ground": false,
   "maps": [
    "changan--wangyun",
    "changan--xiangfu"
@@ -633,47 +433,14 @@
   "brief": "a garden rockery of pierced Taihu stones"
  },
  {
-  "kind": "garden.screenwall",
-  "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
-  },
-  "size": [
-   4,
-   1
-  ],
-  "maps": [
-   "changan--wangyun"
-  ],
-  "count": 1,
-  "brief": "a spirit screen (影壁): a free-standing wall inside a gate, tiled coping"
- },
- {
-  "kind": "garden.trellis",
-  "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
-  },
-  "size": [
-   4,
-   1
-  ],
-  "maps": [
-   "changan--wangyun"
-  ],
-  "count": 1,
-  "brief": "a 荼蘼 (rose) trellis arching over a garden path, white flowers"
- },
- {
   "kind": "hills",
   "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
+   "genshin": "stand-in: grass",
+   "jade": "stand-in: grass",
+   "xianxia": "stand-in: grass"
   },
   "size": null,
+  "ground": true,
   "maps": [
    "liangzhou",
    "meiwu-road"
@@ -684,14 +451,15 @@
  {
   "kind": "landmark.heights",
   "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
+   "genshin": "stand-in: rock.crag",
+   "jade": "stand-in: rock.crag",
+   "xianxia": "stand-in: rock.crag"
   },
   "size": [
    10,
    6
   ],
+  "ground": false,
   "maps": [
    "liangzhou"
   ],
@@ -699,33 +467,17 @@
   "brief": "a rocky height over a valley mouth, a signal post on top (gongs on one, drums on the other)"
  },
  {
-  "kind": "landmark.hitchingpost",
-  "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
-  },
-  "size": [
-   1,
-   1
-  ],
-  "maps": [
-   "changan"
-  ],
-  "count": 1,
-  "brief": "a wooden hitching post; with a tethered horse when Lü Bu is inside"
- },
- {
   "kind": "landmark.ridge",
   "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
+   "genshin": "stand-in: rock.small",
+   "jade": "stand-in: rock.small",
+   "xianxia": "stand-in: rock.small"
   },
   "size": [
    6,
    2
   ],
+  "ground": false,
   "maps": [
    "changan"
   ],
@@ -735,11 +487,12 @@
  {
   "kind": "loess",
   "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
+   "genshin": "stand-in: sand",
+   "jade": "stand-in: sand",
+   "xianxia": "stand-in: sand"
   },
   "size": null,
+  "ground": true,
   "maps": [
    "liangzhou"
   ],
@@ -749,11 +502,12 @@
  {
   "kind": "market",
   "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
+   "genshin": "stand-in: dirt",
+   "jade": "stand-in: dirt",
+   "xianxia": "stand-in: dirt"
   },
   "size": null,
+  "ground": true,
   "maps": [
    "changan"
   ],
@@ -763,14 +517,15 @@
  {
   "kind": "market.stalls",
   "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
+   "genshin": "stand-in: building.shop",
+   "jade": "stand-in: building.shop",
+   "xianxia": "stand-in: building.shop"
   },
   "size": [
    6,
    2
   ],
+  "ground": false,
   "maps": [
    "changan"
   ],
@@ -778,30 +533,14 @@
   "brief": "a row of market stalls with cloth awnings, baskets and goods"
  },
  {
-  "kind": "milestone",
-  "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
-  },
-  "size": [
-   1,
-   1
-  ],
-  "maps": [
-   "meiwu-road"
-  ],
-  "count": 16,
-  "brief": "a small stone road marker"
- },
- {
   "kind": "passage",
   "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
+   "genshin": "stand-in: stone",
+   "jade": "stand-in: stone",
+   "xianxia": "stand-in: stone"
   },
   "size": null,
+  "ground": true,
   "maps": [
    "changan--wangyun",
    "changan--xiangfu"
@@ -812,11 +551,12 @@
  {
   "kind": "path",
   "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
+   "genshin": "stand-in: sand",
+   "jade": "stand-in: sand",
+   "xianxia": "stand-in: sand"
   },
   "size": null,
+  "ground": true,
   "maps": [
    "changan--wangyun",
    "changan--xiangfu"
@@ -827,11 +567,12 @@
  {
   "kind": "plain",
   "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
+   "genshin": "stand-in: grass",
+   "jade": "stand-in: grass",
+   "xianxia": "stand-in: grass"
   },
   "size": null,
+  "ground": true,
   "maps": [
    "meiwu-road"
   ],
@@ -839,30 +580,14 @@
   "brief": "open treeless grassland"
  },
  {
-  "kind": "plant.peony",
-  "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
-  },
-  "size": [
-   1,
-   1
-  ],
-  "maps": [
-   "changan--wangyun"
-  ],
-  "count": 28,
-  "brief": "a bed of peonies, large pink and red blooms"
- },
- {
   "kind": "plateau",
   "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
+   "genshin": "stand-in: stone",
+   "jade": "stand-in: stone",
+   "xianxia": "stand-in: stone"
   },
   "size": null,
+  "ground": true,
   "maps": [
    "changan"
   ],
@@ -870,47 +595,14 @@
   "brief": "the raised Longshou terrace: an edge of dressed stone, steps where roads climb it"
  },
  {
-  "kind": "prop.body_lamp",
-  "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
-  },
-  "size": [
-   1,
-   1
-  ],
-  "maps": [
-   "changan"
-  ],
-  "count": 1,
-  "brief": "a dark covered mound in the street with a small lamp flame on it (non-graphic)"
- },
- {
-  "kind": "prop.lanterns",
-  "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
-  },
-  "size": [
-   1,
-   1
-  ],
-  "maps": [
-   "changan"
-  ],
-  "count": 36,
-  "brief": "a red paper lantern on a stand, for rows along the avenue at night"
- },
- {
   "kind": "road",
   "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
+   "genshin": "stand-in: dirt",
+   "jade": "stand-in: dirt",
+   "xianxia": "stand-in: dirt"
   },
   "size": null,
+  "ground": true,
   "maps": [
    "changan",
    "liangzhou",
@@ -923,11 +615,12 @@
  {
   "kind": "stage",
   "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
+   "genshin": "stand-in: wood",
+   "jade": "stand-in: wood",
+   "xianxia": "stand-in: wood"
   },
   "size": null,
+  "ground": true,
   "maps": [
    "changan--wy-hall",
    "changan--xf-hall"
@@ -936,52 +629,14 @@
   "brief": "a raised wooden stage floor behind a curtain"
  },
  {
-  "kind": "tree.poplar",
-  "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
-  },
-  "size": [
-   1,
-   1
-  ],
-  "maps": [
-   "changan",
-   "meiwu",
-   "meiwu-road"
-  ],
-  "count": 99,
-  "brief": "a tall slender poplar, for roadside rows"
- },
- {
-  "kind": "tree.willow",
-  "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
-  },
-  "size": [
-   1,
-   1
-  ],
-  "maps": [
-   "changan",
-   "changan--wangyun",
-   "changan--xiangfu",
-   "meiwu-road"
-  ],
-  "count": 35,
-  "brief": "a weeping willow, long drooping green strands"
- },
- {
   "kind": "wall.city",
   "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
+   "genshin": "stand-in: wall",
+   "jade": "stand-in: wall",
+   "xianxia": "stand-in: wall"
   },
   "size": null,
+  "ground": true,
   "maps": [
    "changan",
    "meiwu"
@@ -992,32 +647,16 @@
  {
   "kind": "ward",
   "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
+   "genshin": "stand-in: stone",
+   "jade": "stand-in: stone",
+   "xianxia": "stand-in: stone"
   },
   "size": null,
+  "ground": true,
   "maps": [
    "changan"
   ],
   "count": 0,
   "brief": "the paved ground of an officials' ward"
- },
- {
-  "kind": "water.lotus",
-  "status": {
-   "genshin": "missing",
-   "jade": "missing",
-   "xianxia": "missing"
-  },
-  "size": [
-   1,
-   1
-  ],
-  "maps": [
-   "changan--xiangfu"
-  ],
-  "count": 28,
-  "brief": "lotus leaves and flowers floating on a pond tile"
  }
 ]

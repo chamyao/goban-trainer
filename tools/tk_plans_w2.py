@@ -113,6 +113,7 @@ ART = {
     "market": "packed earth with straw and litter, a busy market",
     "plateau": "the raised Longshou terrace: an edge of dressed stone, steps where roads climb it",
     "field.wheat": "a wheat field in rows",
+    "field": "open meadow outside the walls, longer grass",
     "loess": "dry yellow loess ground",
     "cliff": "a loess cliff face",
     "hills": "rough hill ground, scrub",

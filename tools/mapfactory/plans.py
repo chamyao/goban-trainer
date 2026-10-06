@@ -679,10 +679,12 @@ def verify(maps):
     return out
 
 
-def assets(maps, tables):
+def assets(maps, tables, kits_dir=None):
     """Every kind the built maps use, per art kit: drawn by the kit, standing in (a vocab fallback), or missing.
     What isn't drawn natively goes on the list to generate, with its footprint, where it's used and its brief."""
+    import vocab
     from vocab import FALLBACK, FOLK
+    mat_fb = getattr(vocab, "MATERIAL_FALLBACK", {})   # Graphics' stand-in grounds
     used = {}
     for mid, m in maps.items():
         for o in m["objects"]:
@@ -696,20 +698,23 @@ def assets(maps, tables):
                 used.setdefault(n["kind"], {"maps": set(), "count": 0, "size": None, "folk": True})["maps"].add(mid)
     art = tables.get("ART", {})
     kits = {}
-    for f in sorted((ROOT / "assets/tk/kits").glob("*.json")):
+    for f in sorted(Path(kits_dir or ROOT / "assets/tk/kits").glob("*.json")):
         k = json.loads(f.read_text())
-        kits[k["kit"]] = (set(k.get("kinds", {})), set(k.get("materials", {})), set((k.get("folk") or {}).get("kinds", {})))
+        folk = k.get("folk") or {}
+        kits[k["kit"]] = (set(k.get("kinds", {})), set(k.get("materials", {})), set(folk.get("kinds", {})) | set(folk.get("drawn", {})))
     rows = []
     for kind, u in sorted(used.items()):
         status = {}
         for kit, (kk, mats, folk) in kits.items():
             have = mats if u.get("ground") else folk if u.get("folk") else kk
-            if kind in have or (u.get("folk") and kind in FOLK and kind in ("folk.lady", "folk.maiden", "folk.girl")):
+            if kind in have:
                 status[kit] = "drawn"
                 continue
-            stand = next((fb for fb in FALLBACK.get(kind, []) if fb in have), None)
+            chain = mat_fb.get(kind, []) if u.get("ground") else \
+                [getattr(vocab, "FOLK_FALLBACK", "folk.villager")] if u.get("folk") else FALLBACK.get(kind, [])
+            stand = next((fb for fb in chain if fb in have), None)
             status[kit] = f"stand-in: {stand}" if stand else "missing"
-        rows.append({"kind": kind, "status": status, "size": u["size"], "maps": sorted(u["maps"]), "count": u["count"],
+        rows.append({"kind": kind, "status": status, "size": u["size"], "ground": bool(u.get("ground")), "maps": sorted(u["maps"]), "count": u["count"],
                      "brief": art.get(kind, "")})
     return rows
 
@@ -773,6 +778,7 @@ def main():
     ap.add_argument("--out", default=None, help="write the maps and region.json here (default: print a summary only)")
     ap.add_argument("--png", action="store_true", help="also draw each map as a PNG next to it")
     ap.add_argument("--assets", default=None, help="write the art to generate (kinds no kit draws natively) to this .md (and .json)")
+    ap.add_argument("--kits", default=None, help="the kits folder to check against (default assets/tk/kits)")
     a = ap.parse_args()
     pw = a.plans or a.world
     plans, tables, zh = load(pw)
@@ -786,7 +792,7 @@ def main():
         print("PROBLEM", x)
     print(f"{len(maps)} maps, {len(quests)} quests, {len(problems)} problems")
     if a.assets:
-        rows = assets(maps, tables)
+        rows = assets(maps, tables, a.kits)
         need = [r for r in rows if any(v != "drawn" for v in r["status"].values())]
         md = [f"# Art to generate for Book {pw}'s maps", "",
               f"Written by `python3 tools/mapfactory/plans.py --world {a.world} --assets {a.assets}` from the built maps. "
@@ -797,7 +803,7 @@ def main():
               "| Kind | Size (tiles) | Used | " + " | ".join(sorted(rows[0]["status"])) + " | Brief |",
               "|---|---|---|" + "---|" * len(rows[0]["status"]) + "---|"]
         for r in need:
-            size = f"{r['size'][0]}×{r['size'][1]}" if r["size"] else "ground" if r["kind"] not in tables["NEW_KINDS"] and "." not in r["kind"] else "—"
+            size = f"{r['size'][0]}×{r['size'][1]}" if r["size"] else "ground" if r["ground"] else "—"
             md.append(f"| `{r['kind']}` | {size} | {r['count'] or ''} in {len(r['maps'])} map{'s' * (len(r['maps']) != 1)} | "
                       + " | ".join(r["status"][k] for k in sorted(r["status"])) + f" | {r['brief']} |")
         Path(a.assets).write_text("\n".join(md) + "\n")
