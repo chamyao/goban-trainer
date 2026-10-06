@@ -40,7 +40,7 @@ const WorldData = {
     }
     return this.regions[n];
   },
-  has(n) { return n === 1 || n === 2; },  // worlds whose places have been built
+  has(n) { return n >= 1 && n <= 3; },  // worlds whose places have been built
   // "1-zhuo-county-c-elder": a challenger in a place, drawing from the world's problems.
   node(w, key) {
     const region = this.regions[w.n];
