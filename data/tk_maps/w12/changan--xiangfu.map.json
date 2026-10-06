@@ -56,8 +56,8 @@
    ".W......ff............ff......bb::W.",
    ".W......ff............ff......bbbbW.",
    ".W......ff............ff......bbbbW.",
-   ".W......ff............ff..........W.",
-   ".W......ff............ff..........W.",
+   ".W......ff............ffffffff....W.",
+   ".W......ff............ffffffff....W.",
    ".WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW.",
    ".WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW.",
    ".WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW.",
@@ -232,12 +232,12 @@
   {
    "kind": "building.wing",
    "x": 24,
-   "y": 26,
+   "y": 28,
    "w": 6,
    "h": 4,
    "id": "xf-bedroom",
-   "door": "N",
-   "faces": "N",
+   "door": "S",
+   "faces": "S",
    "label": "Dong Zhuo's bedchamber",
    "map": "xf-bedroom",
    "window": "E",
@@ -1085,9 +1085,9 @@
   },
   {
    "to": "changan--xf-bedroom",
-   "side": "N",
+   "side": "S",
    "x": 26.6,
-   "y": 25.7,
+   "y": 31.85,
    "w": 0.8,
    "h": 0.45,
    "door": true
@@ -1108,7 +1108,7 @@
   ],
   "changan--xf-bedroom": [
    27,
-   25
+   32
   ],
   "changan": [
    16,
