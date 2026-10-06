@@ -33,6 +33,24 @@ themselves, the voices, the art and the engine are other sessions' work.
 
 Difficulty within a three-problem scene should rise, the third hardest.
 
+## Road challengers (map, not story: built by Places)
+
+14 in the Diaochan arc: 6 blocking (you can't reach the next beat without passing them), 8 optional.
+Each is one problem, flawless, with the 30-second wait after a wrong move.
+
+| Walk | Protagonist | Total | Blocking | Who |
+|---|---|---|---|---|
+| Crown errand (before A3) | Wang Yun | 2 | 1 | a Chancellor's runner past the Chancellor's gate (blocking); a Flying Bear soldier at a corner |
+| Conspirators' errands (before A12a/A12b) | Wang Yun | 2 | 1 | a Flying Bear patrol in Huang Wan's lane (blocking); an informer by Shisun Rui's gate |
+| Chang'an optionals | Wang Yun | 2 | 0 | the old scholar at the market go table; the Liangzhou officer in the night lane |
+| Li Su's ride out (before A13) | Li Su | 3 | 2 | a road patrol (blocking); the Meiwu gate guard checking the edict (blocking); the post-pavilion keeper |
+| Procession back (A13a–c) | Li Su | 0 | 0 | the omen stops are the problems |
+| Meiwu raid (A15 walk) | Lü Bu (pending) | 2 | 1 | a straggler at the treasure house door (blocking); a Flying Bear officer in a side court |
+| Liangzhou (A16a–c) | Jia Xu | 2 | 1 | the v3 constable (blocking); a headman between v1 and v2 |
+| Ren Valley approach (before A17) | Li Jue | 1 | 0 | a scout's hill post |
+
+Pending the user: Cai Yong at the Chang'an go table (optional) would be a 15th.
+
 ## Items
 | Key | Name | Chinese | How it is gained |
 |---|---|---|---|
