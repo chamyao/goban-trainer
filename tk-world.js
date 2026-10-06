@@ -35,12 +35,12 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=37`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=38`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
   },
-  has(n) { return n >= 1 && n <= 3; },  // worlds whose places have been built
+  has(n) { return (n >= 1 && n <= 3) || n === 12; },  // worlds whose places have been built (12: the Book 2 draft, test mode)
   // "1-zhuo-county-c-elder": a challenger in a place, drawing from the world's problems.
   node(w, key) {
     const region = this.regions[w.n];
@@ -217,9 +217,9 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=37`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=38`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=34`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=38`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=39`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");

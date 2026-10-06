@@ -517,6 +517,12 @@ from tk_story_w2 import ZH2 as _ZH2, CAST2 as _CAST2  # noqa: E402
 for _k, _v in _ZH2.items():
     ZH.setdefault(_k, _v)
 CAST.update(_CAST2)
+ZH.setdefault("Meiwu Road", "郿坞道"); ZH.setdefault("Liangzhou", "凉州")
+from tk_story_w2_new import ZH2 as _ZHD, CAST2 as _CASTD  # noqa: E402  (the test book, world 12)
+for _k, _v in _ZHD.items():
+    ZH.setdefault(_k, _v)
+for _k, _v in _CASTD.items():
+    CAST.setdefault(_k, _v)
 from tk_story_w3 import ZH3 as _ZH3, CAST3 as _CAST3  # noqa: E402
 for _k, _v in _ZH3.items():
     ZH.setdefault(_k, _v)

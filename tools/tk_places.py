@@ -304,3 +304,9 @@ from tk_story_w2 import PLACES2 as _PLACES2  # noqa: E402
 PLACES[2] = _PLACES2
 from tk_story_w3 import PLACES3 as _PLACES3  # noqa: E402
 PLACES[3] = _PLACES3
+# The Book 2 draft (test world 12): the Places session's map when it lands, a stand-in until then
+try:
+    from tk_places_w2 import PLACES2 as _PLACES12  # noqa: E402
+except ImportError:
+    from tk_places_w12_stub import PLACES12 as _PLACES12  # noqa: E402
+PLACES[12] = _PLACES12

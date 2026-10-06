@@ -200,7 +200,7 @@ def main():
                 node["place_zh"] = zh(node["place"])
             role = src.get("role")
             if role == "boss":
-                if w["boss"] == "redmond":
+                if w.get("boss") == "redmond":
                     pool = redmond[:60]
                 else:
                     pool = [r for g, r in maeda if hi < g <= hi + 3] or [r for g, r in sorted(maeda, key=lambda t: -t[0])]

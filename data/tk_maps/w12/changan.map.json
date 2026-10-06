@@ -1,0 +1,1836 @@
+{
+ "format": "tk-map/1",
+ "id": "changan",
+ "world": 12,
+ "name": "Chang'an",
+ "archetype": "city",
+ "size": [
+  40,
+  30
+ ],
+ "seed": 54400,
+ "terrain": {
+  "legend": {
+   ".": "grass",
+   "=": "dirt",
+   "~": "water",
+   ":": "sand"
+  },
+  "rows": [
+   "........................................",
+   "........................................",
+   "........................................",
+   "........................................",
+   "........................................",
+   "...............::::.....................",
+   "..................:.......::::..........",
+   "..................:.......:.............",
+   "................:::.....:::.............",
+   ".................:.......:...:......:...",
+   ".................:.......:...:......:...",
+   "...............:.:::::::::::::::::::::::",
+   "...............:..::::::::::::::::::::::",
+   "..............::::::::..................",
+   "..............::::::::..................",
+   "..............::::::::...:.....:........",
+   "..............::::::::...:.....:........",
+   "..............::::::::::::::::::::::::::",
+   "..................::::::::::::::::::::::",
+   "..................::....................",
+   "..................::....................",
+   "..........::::::::::..:...........:.....",
+   "..................::::::::::::::::::::::",
+   "..................::::::::::::::::::::::",
+   "..................:............:........",
+   "..................:............:........",
+   "................:::::::......:::::......",
+   "........................................",
+   "........................................",
+   "........................................"
+  ]
+ },
+ "objects": [
+  {
+   "kind": "building.hall",
+   "x": 14,
+   "y": 19,
+   "w": 4,
+   "h": 2,
+   "id": "wy-hall",
+   "label": "Wang Yun's house"
+  },
+  {
+   "kind": "building.house",
+   "x": 8,
+   "y": 19,
+   "w": 4,
+   "h": 2,
+   "id": "wy-rearhall",
+   "label": "Wang Yun's rear hall"
+  },
+  {
+   "kind": "building.house",
+   "x": 20,
+   "y": 19,
+   "w": 4,
+   "h": 2,
+   "id": "wy-garden",
+   "label": "Wang Yun's garden pavilion"
+  },
+  {
+   "kind": "building.house",
+   "x": 14,
+   "y": 24,
+   "w": 4,
+   "h": 2,
+   "id": "wy-secret",
+   "label": "Wang Yun's secret room"
+  },
+  {
+   "kind": "building.hall",
+   "x": 13,
+   "y": 9,
+   "w": 4,
+   "h": 2,
+   "id": "xf-hall",
+   "label": "Dong Zhuo's mansion"
+  },
+  {
+   "kind": "building.house",
+   "x": 14,
+   "y": 6,
+   "w": 4,
+   "h": 2,
+   "id": "xf-bedroom",
+   "label": "Dong Zhuo's inner rooms"
+  },
+  {
+   "kind": "building.house",
+   "x": 13,
+   "y": 3,
+   "w": 4,
+   "h": 2,
+   "id": "xf-garden",
+   "label": "The Phoenix Pavilion"
+  },
+  {
+   "kind": "building.hall",
+   "x": 23,
+   "y": 13,
+   "w": 4,
+   "h": 2,
+   "id": "dutang",
+   "label": "The Capital Office"
+  },
+  {
+   "kind": "building.house",
+   "x": 29,
+   "y": 13,
+   "w": 4,
+   "h": 2,
+   "id": "caiyong",
+   "label": "Cai Yong's house"
+  },
+  {
+   "kind": "landmark.shrine",
+   "x": 16,
+   "y": 17,
+   "w": 2,
+   "h": 1,
+   "id": "shrine"
+  },
+  {
+   "kind": "camp.table",
+   "x": 12,
+   "y": 16,
+   "w": 2,
+   "h": 1,
+   "id": "spot-12-a1"
+  },
+  {
+   "kind": "camp.table",
+   "x": 12,
+   "y": 14,
+   "w": 2,
+   "h": 1,
+   "id": "spot-12-a3"
+  },
+  {
+   "kind": "camp.table",
+   "x": 19,
+   "y": 9,
+   "w": 2,
+   "h": 1,
+   "id": "spot-12-a6"
+  },
+  {
+   "kind": "camp.table",
+   "x": 23,
+   "y": 9,
+   "w": 2,
+   "h": 1,
+   "id": "spot-12-a11"
+  },
+  {
+   "kind": "camp.table",
+   "x": 16,
+   "y": 15,
+   "w": 2,
+   "h": 1,
+   "id": "spot-12-a12a"
+  },
+  {
+   "kind": "camp.table",
+   "x": 20,
+   "y": 15,
+   "w": 2,
+   "h": 1,
+   "id": "spot-12-a12b"
+  },
+  {
+   "kind": "camp.table",
+   "x": 25,
+   "y": 20,
+   "w": 2,
+   "h": 1,
+   "id": "spot-12-a12c"
+  },
+  {
+   "kind": "camp.table",
+   "x": 19,
+   "y": 6,
+   "w": 2,
+   "h": 1,
+   "id": "spot-12-a14"
+  },
+  {
+   "kind": "camp.table",
+   "x": 18,
+   "y": 4,
+   "w": 2,
+   "h": 1,
+   "id": "spot-12-a15"
+  },
+  {
+   "kind": "camp.table",
+   "x": 20,
+   "y": 13,
+   "w": 2,
+   "h": 1,
+   "id": "spot-12-a18"
+  },
+  {
+   "kind": "building.hall",
+   "x": 34,
+   "y": 7,
+   "w": 4,
+   "h": 2,
+   "id": "hall-1"
+  },
+  {
+   "kind": "building.house",
+   "x": 27,
+   "y": 7,
+   "w": 4,
+   "h": 2,
+   "id": "house-1"
+  },
+  {
+   "kind": "building.house",
+   "x": 20,
+   "y": 24,
+   "w": 4,
+   "h": 2,
+   "id": "house-2"
+  },
+  {
+   "kind": "building.inn",
+   "x": 32,
+   "y": 19,
+   "w": 4,
+   "h": 2,
+   "id": "inn-1"
+  },
+  {
+   "kind": "building.shop",
+   "x": 32,
+   "y": 24,
+   "w": 3,
+   "h": 2,
+   "id": "shop-1"
+  },
+  {
+   "kind": "building.house",
+   "x": 27,
+   "y": 24,
+   "w": 4,
+   "h": 2,
+   "id": "house-3"
+  },
+  {
+   "kind": "building.shop",
+   "x": 23,
+   "y": 6,
+   "w": 3,
+   "h": 2,
+   "id": "shop-2"
+  },
+  {
+   "kind": "building.house",
+   "x": 27,
+   "y": 4,
+   "w": 4,
+   "h": 2,
+   "id": "house-4"
+  },
+  {
+   "kind": "tree.pine",
+   "x": 4,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 6,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 5,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.small",
+   "x": 3,
+   "y": 3,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.small",
+   "x": 5,
+   "y": 3,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.small",
+   "x": 6,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 3,
+   "y": 17,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 2,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 2,
+   "y": 16,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 4,
+   "y": 17,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.small",
+   "x": 4,
+   "y": 14,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 6,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.small",
+   "x": 2,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.small",
+   "x": 8,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 5,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 6,
+   "y": 26,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.small",
+   "x": 5,
+   "y": 25,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 4,
+   "y": 26,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 6,
+   "y": 27,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 7,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 15,
+   "y": 0,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 1,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 0,
+   "y": 11,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 19,
+   "y": 28,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 13,
+   "y": 29,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 1,
+   "y": 10,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 1,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 28,
+   "y": 1,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 26,
+   "y": 29,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 18,
+   "y": 29,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 4,
+   "y": 0,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 39,
+   "y": 26,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 35,
+   "y": 1,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 3,
+   "y": 29,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 27,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 38,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 1,
+   "y": 13,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 9,
+   "y": 29,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 33,
+   "y": 29,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 7,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 23,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 34,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 37,
+   "y": 29,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 29,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 20,
+   "y": 1,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 29,
+   "y": 29,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 15,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 1,
+   "y": 14,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 2,
+   "y": 1,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 1,
+   "y": 0,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 22,
+   "y": 29,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 36,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 1,
+   "y": 28,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 38,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 38,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 12,
+   "y": 29,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 8,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 5,
+   "y": 28,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 7,
+   "y": 29,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 4,
+   "y": 28,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 6,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 30,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 8,
+   "y": 0,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 12,
+   "y": 0,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 19,
+   "y": 0,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 12,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 3,
+   "y": 28,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 34,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 0,
+   "y": 27,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 39,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 37,
+   "y": 0,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 24,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 11,
+   "y": 28,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 8,
+   "y": 29,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 1,
+   "y": 22,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 1,
+   "y": 6,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 17,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 1,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 10,
+   "y": 28,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 5,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 1,
+   "y": 19,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 1,
+   "y": 16,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 24,
+   "y": 29,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 31,
+   "y": 1,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 38,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 9,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 36,
+   "y": 28,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 21,
+   "y": 29,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 1,
+   "y": 25,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 26,
+   "y": 0,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 39,
+   "y": 28,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 9,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 4,
+   "y": 29,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 1,
+   "y": 21,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 31,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 0,
+   "y": 3,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 1,
+   "y": 24,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 11,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 1,
+   "y": 9,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 1,
+   "y": 12,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 1,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 30,
+   "y": 29,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 21,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 37,
+   "y": 28,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 37,
+   "y": 3,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 34,
+   "y": 29,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 0,
+   "y": 18,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 13,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 14,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 1,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 39,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 37,
+   "y": 27,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 32,
+   "y": 29,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 25,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 16,
+   "y": 1,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 18,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 1,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 22,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 23,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 39,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 1,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 38,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 28,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 24,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 9,
+   "y": 28,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 22,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 14,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 39,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 29,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 2,
+   "y": 28,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 25,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 1,
+   "y": 4,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 25,
+   "y": 28,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 39,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 0,
+   "y": 26,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.grove",
+   "x": 1,
+   "y": 26,
+   "w": 3,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 10,
+   "y": 1,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 26,
+   "y": 10,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 8,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 9,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 27,
+   "y": 16,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 5,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 14,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 10,
+   "y": 18,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 3,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 9,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 15,
+   "y": 18,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 24,
+   "y": 25,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 8,
+   "y": 27,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 4,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 23,
+   "y": 3,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 13,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 34,
+   "y": 14,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 6,
+   "y": 12,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 3,
+   "y": 16,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 5,
+   "y": 12,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 9,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 13,
+   "y": 22,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 8,
+   "y": 11,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 6,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.small",
+   "x": 32,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.small",
+   "x": 8,
+   "y": 13,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.small",
+   "x": 9,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "spots": [
+  {
+   "id": "spot-12-a1",
+   "x": 13,
+   "y": 17.7,
+   "node": "12-a1",
+   "label": ""
+  },
+  {
+   "id": "spot-12-a3",
+   "x": 13,
+   "y": 15.7,
+   "node": "12-a3",
+   "label": ""
+  },
+  {
+   "id": "spot-12-a6",
+   "x": 20,
+   "y": 10.7,
+   "node": "12-a6",
+   "label": ""
+  },
+  {
+   "id": "spot-12-a11",
+   "x": 24,
+   "y": 10.7,
+   "node": "12-a11",
+   "label": ""
+  },
+  {
+   "id": "spot-12-a12a",
+   "x": 17,
+   "y": 16.7,
+   "node": "12-a12a",
+   "label": ""
+  },
+  {
+   "id": "spot-12-a12b",
+   "x": 21,
+   "y": 16.7,
+   "node": "12-a12b",
+   "label": ""
+  },
+  {
+   "id": "spot-12-a12c",
+   "x": 26,
+   "y": 21.7,
+   "node": "12-a12c",
+   "label": ""
+  },
+  {
+   "id": "spot-12-a14",
+   "x": 20,
+   "y": 7.7,
+   "node": "12-a14",
+   "label": ""
+  },
+  {
+   "id": "spot-12-a15",
+   "x": 19,
+   "y": 5.7,
+   "node": "12-a15",
+   "label": ""
+  },
+  {
+   "id": "spot-12-a18",
+   "x": 21,
+   "y": 14.7,
+   "node": "12-a18",
+   "label": ""
+  }
+ ],
+ "npcs": [],
+ "exits": [
+  {
+   "to": "meiwu",
+   "side": "E",
+   "x": 39,
+   "y": 11,
+   "w": 1,
+   "h": 2
+  },
+  {
+   "to": "meiwu-road",
+   "side": "E",
+   "x": 39,
+   "y": 17,
+   "w": 1,
+   "h": 2
+  },
+  {
+   "to": "liangzhou",
+   "side": "E",
+   "x": 39,
+   "y": 22,
+   "w": 1,
+   "h": 2
+  },
+  {
+   "to": "changan--wy-hall",
+   "side": "N",
+   "x": 15.6,
+   "y": 20.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changan--wy-rearhall",
+   "side": "N",
+   "x": 9.6,
+   "y": 20.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changan--wy-garden",
+   "side": "N",
+   "x": 21.6,
+   "y": 20.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changan--wy-secret",
+   "side": "N",
+   "x": 15.6,
+   "y": 25.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changan--xf-hall",
+   "side": "N",
+   "x": 14.6,
+   "y": 10.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changan--xf-bedroom",
+   "side": "N",
+   "x": 15.6,
+   "y": 7.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changan--xf-garden",
+   "side": "N",
+   "x": 14.6,
+   "y": 4.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changan--dutang",
+   "side": "N",
+   "x": 24.6,
+   "y": 14.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changan--caiyong",
+   "side": "N",
+   "x": 30.6,
+   "y": 14.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changan--hall-1",
+   "side": "N",
+   "x": 35.6,
+   "y": 8.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changan--house-1",
+   "side": "N",
+   "x": 28.6,
+   "y": 8.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changan--house-2",
+   "side": "N",
+   "x": 21.6,
+   "y": 25.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changan--inn-1",
+   "side": "N",
+   "x": 33.6,
+   "y": 20.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changan--shop-1",
+   "side": "N",
+   "x": 33.1,
+   "y": 25.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changan--house-3",
+   "side": "N",
+   "x": 28.6,
+   "y": 25.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changan--shop-2",
+   "side": "N",
+   "x": 24.1,
+   "y": 7.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changan--house-4",
+   "side": "N",
+   "x": 28.6,
+   "y": 5.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  }
+ ],
+ "entries": {
+  "meiwu": [
+   37,
+   12
+  ],
+  "meiwu-road": [
+   37,
+   18
+  ],
+  "liangzhou": [
+   37,
+   23
+  ],
+  "": [
+   37,
+   18
+  ],
+  "changan--wy-hall": [
+   16,
+   21
+  ],
+  "changan--wy-rearhall": [
+   10,
+   21
+  ],
+  "changan--wy-garden": [
+   22,
+   21
+  ],
+  "changan--wy-secret": [
+   16,
+   26
+  ],
+  "changan--xf-hall": [
+   15,
+   11
+  ],
+  "changan--xf-bedroom": [
+   16,
+   8
+  ],
+  "changan--xf-garden": [
+   15,
+   5
+  ],
+  "changan--dutang": [
+   25,
+   15
+  ],
+  "changan--caiyong": [
+   31,
+   15
+  ],
+  "changan--hall-1": [
+   36,
+   9
+  ],
+  "changan--house-1": [
+   29,
+   9
+  ],
+  "changan--house-2": [
+   22,
+   26
+  ],
+  "changan--inn-1": [
+   34,
+   21
+  ],
+  "changan--shop-1": [
+   33,
+   26
+  ],
+  "changan--house-3": [
+   29,
+   26
+  ],
+  "changan--shop-2": [
+   24,
+   8
+  ],
+  "changan--house-4": [
+   29,
+   6
+  ]
+ }
+}

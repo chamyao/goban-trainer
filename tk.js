@@ -563,7 +563,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) this.data = await (await fetch("data/tk.json?v=37")).json();
+    if (!this.data) this.data = await (await fetch("data/tk.json?v=38")).json();
     return this.data;
   },
   ls(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } },
@@ -580,7 +580,8 @@ const TK = {
   isStart(key) { return key.endsWith("-start"); },
   // open: a start, the first beat of a book (nothing before it: Book 2 has no start node), or one whose way in is cleared
   open(w, key) { const p = this.preds(w, key); return this.isStart(key) || !p.length || p.some(k => this.isStart(k) || this.cleared(k)); },
-  worldOpen(n) { return n === 1 || this.cleared(`${n - 1}-boss`) || (typeof TK_TEST !== "undefined" && TK_TEST); },   // test mode opens every book
+  worldOpen(n) { if ((this.world(n) || {}).draft) return typeof TK_TEST !== "undefined" && TK_TEST;   // a draft book: test mode only
+    return n === 1 || this.cleared(`${n - 1}-boss`) || (typeof TK_TEST !== "undefined" && TK_TEST); },   // test mode opens every book
   at(n) { return this.ls("tk-at")[n] || `${n}-start`; },
   setAt(n, key) { const a = this.ls("tk-at"); a[n] = key; this.lsSet("tk-at", a); },
   party(w) { return this.ls("tk-party")[w.n] || w.party; },
@@ -1063,7 +1064,7 @@ async function viewTK(worldN) {
     h("div", { class: "tk-head-btns" }, [voiceBtn, chron]),
   ]));
   root.append(h("div", { class: "tk-worlds" }, [
-    ...D.worlds.map(x => TK.worldOpen(x.n)
+    ...D.worlds.filter(x => !x.draft || TK_TEST).map(x => TK.worldOpen(x.n)
       ? h("a", { class: "tk-world" + (x.n === n ? " on" : ""), href: `#/tk/${x.n}` }, `${x.n} · ${x.zh} ${x.name}`)
       : h("span", { class: "tk-world lock" }, `${x.n} · ${x.zh} ${x.name} — 先完成第${x.n - 1}卷 after Book ${x.n - 1}`)),
   ]));

@@ -1,0 +1,129 @@
+{
+ "format": "tk-map/1",
+ "id": "liangzhou--tent-2",
+ "world": 12,
+ "parent": "liangzhou",
+ "name": "Tent, Liangzhou",
+ "archetype": "interior",
+ "building": "tent-2",
+ "style": "building.tent",
+ "size": [
+  20,
+  12
+ ],
+ "seed": 0.12985531707513798,
+ "terrain": {
+  "legend": {
+   "#": "wood",
+   "%": "stone",
+   "&": "mat",
+   "e": "earth",
+   "W": "wall",
+   " ": "void"
+  },
+  "rows": [
+   "                    ",
+   "     WWWWWWWWWW     ",
+   "     WeeeeeeeeW     ",
+   "     WeeeeeeeeW     ",
+   "     WeeeeeeeeW     ",
+   "     WeeeeeeeeW     ",
+   "     WeeeeeeeeW     ",
+   "     WeeeeeeeeW     ",
+   "     WWWWWeWWWW     ",
+   "                    ",
+   "                    ",
+   "                    "
+  ]
+ },
+ "objects": [
+  {
+   "kind": "furn.desk",
+   "x": 9,
+   "y": 2,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.rack",
+   "x": 6,
+   "y": 3,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.mat",
+   "x": 12,
+   "y": 3,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "furn.chest",
+   "x": 6,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.barrel",
+   "x": 13,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.sacks",
+   "x": 6,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.jar",
+   "x": 13,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "banner.red",
+   "x": 8,
+   "y": 2,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "spots": [],
+ "npcs": [
+  {
+   "id": "in-1",
+   "kind": "folk.soldier",
+   "x": 10.5,
+   "y": 3.9,
+   "say": [
+    "“Orders come at dawn. Keep your weapon close.”"
+   ]
+  }
+ ],
+ "exits": [
+  {
+   "to": "liangzhou",
+   "side": "S",
+   "x": 10,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "liangzhou": [
+   10,
+   7
+  ],
+  "": [
+   10,
+   7
+  ]
+ }
+}
