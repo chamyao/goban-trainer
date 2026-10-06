@@ -353,29 +353,32 @@ PLANS2 = {
                 ],
                 "exits": [{"to": "Chang'an", "at": [3, 11], "side": "S"}],
             },
-            "palace": {   # behind the North Side Gate: the gate court, the hall of state, the emperor's side hall
-                "grid": [16, 12], "cell": 2, "margin": 0,
-                "ground": [{"id": "gate-court", "kind": "court", "rect": [1, 1, 14, 5]},
-                           {"id": "inner-court", "kind": "court", "rect": [1, 6, 2, 5]}],
-                "lines": [{"id": "walls", "kind": "wall", "outline": [0, 0, 16, 12], "width": 1, "gates": {"north-gate": [7, 0]}}],
+            "palace": {   # behind the North Side Gate: the gate court, round the halls by the side passages to their south fronts
+                "grid": [16, 15], "cell": 2, "margin": 0,
+                "ground": [{"id": "gate-court", "kind": "court", "rect": [1, 1, 14, 4]},
+                           {"id": "passages", "kind": "passage", "rect": [1, 5, 14, 5]},     # either side of the halls
+                           {"id": "front-court", "kind": "court", "rect": [1, 10, 14, 4]}],
+                "lines": [{"id": "walls", "kind": "wall", "outline": [0, 0, 16, 15], "width": 1, "gates": {"north-gate": [7, 0]}}],
                 "things": [
-                    {"id": "dutang", "kind": "building.hall_grand", "rect": [4, 7, 8, 4], "door": "N", "label": "The great hall of state",
+                    # halls face south, as halls do: you come in at the back by the North Side Gate and walk round to the front
+                    {"id": "dutang", "kind": "building.hall_grand", "rect": [3, 5, 7, 4], "door": "S", "label": "The great hall of state",
                      "map": "dutang"},
-                    {"id": "side-hall", "kind": "building.wing", "rect": [12, 7, 3, 3], "door": "N", "label": "The emperor's side hall",
+                    {"id": "side-hall", "kind": "building.wing", "rect": [11, 6, 2, 3], "door": "S", "label": "The emperor's side hall",
                      "map": "side-hall"},
                 ],
                 "spots": [
-                    {"id": "inside-gate", "at": [7, 3], "label": "Inside the North Side Gate", "note": "A14 starts at the gate on the city map and plays on in here"},
-                    {"id": "li-ru", "at": [9, 4], "label": "The gate court", "note": "A15: Li Ru is brought in bound"},
+                    {"id": "inside-gate", "at": [7, 2], "label": "Inside the North Side Gate", "note": "A14 starts at the gate on the city map and plays on in here"},
+                    {"id": "li-ru", "at": [9, 2], "label": "The gate court", "note": "A15: Li Ru is brought in bound"},
                 ],
                 "exits": [{"to": "Chang'an", "at": [7, 0], "side": "N"}],
-                "watchers": [   # A12c: reaching the emperor unseen past Dong Zhuo's eunuchs
-                    {"id": "eunuch-1", "kind": "folk.official", "beat": [[3, 2], [3, 5], [6, 5]], "shape": "L", "cone": 4,
+                "watchers": [   # A12c: reaching the emperor unseen past Dong Zhuo's eunuchs, down a side passage
+                    {"id": "eunuch-1", "kind": "folk.official", "beat": [[1, 2], [1, 11], [5, 11]], "shape": "L", "cone": 4,
                      "in_beats": ["2-a12c"], "seen": "eunuch", "back_to": "north-gate"},
-                    {"id": "eunuch-2", "kind": "folk.official", "beat": [[13, 2], [10, 2], [10, 5]], "shape": "L", "cone": 4,
+                    {"id": "eunuch-2", "kind": "folk.official", "beat": [[14, 3], [14, 11], [10, 11]], "shape": "L", "cone": 4,
                      "in_beats": ["2-a12c"], "seen": "eunuch", "back_to": "north-gate"},
                 ],
-                "checks": [{"check": "covered_route", "from": [7, 1], "to": [13, 6], "beats": ["2-a12c"]}],
+                "checks": [{"check": "covered_route", "from": [7, 1], "to": [12, 9], "beats": ["2-a12c"]},
+                           {"check": "safe_spot", "in": ["passages"]}],
             },
             # ---- rooms: each a small map of its own ----------------------------------------------------
             "wy-hall": room([12, 7], [6, 6],
@@ -631,7 +634,8 @@ PLANS2 = {
         },
         "states": [
             {"id": "fortress", "light": "day"},
-            {"id": "road-west-shut", "until": "node:a16m", "exits_closed": ["Liangzhou"]},
+            {"id": "road-west-shut", "until": "node:a16m", "exits_closed": ["Liangzhou"],
+             "exits_closed_say": {"Liangzhou": ["The long road west runs on to Liangzhou. There's no errand for you there."]}},
             {"id": "raided", "when": "node:a14", "light": "day"},
             {"id": "empty", "when": "node:a16", "light": "day", "weather": "dust"},
         ],
@@ -703,7 +707,8 @@ PLANS2 = {
             "exits": [{"to": "Meiwu", "at": [35, 5], "side": "E"}],
             "entries": {"": [2, 5], "Meiwu": [34, 5]},
         },
-        "states": [{"id": "road-east-shut", "until": "node:a17", "exits_closed": ["Meiwu"]},
+        "states": [{"id": "road-east-shut", "until": "node:a17", "exits_closed": ["Meiwu"],
+                    "exits_closed_say": {"Meiwu": ["Not yet. Lü Bu holds the road east. The mouth of Ren Valley comes first."]}},
                    {"id": "rumour", "light": "day", "weather": "harsh"}, {"id": "army", "when": "node:a16m", "light": "day", "weather": "dust"}],
         "npcs": [
             {"kind": "folk.soldier", "near": "camp", "in": ["rumour"], "say": "“No pardon. The envoy came back with nothing. I'm going home to my mother.”"},
