@@ -1,0 +1,66 @@
+# Book 2 rewrite: what the draft needs
+
+Kept by Plot, updated with each batch of `tools/tk_story_w2_new.py`. Plot writes the
+dialogue (English and Chinese) and marks where each go problem is posed; the problems
+themselves, the voices, the art and the engine are other sessions' work.
+
+## Where go problems are posed (so far: the chain, A1–A12)
+
+| Beat | When the board comes | Decider | How many |
+|---|---|---|---|
+| A2 Peony pavilion | after "If this ever leaks, my whole family will be wiped out." | Wang Yun | 1 |
+| A3 Gold crown | before the scene (legwork: slipping it to Lü Bu's door) | Wang Yun | 1 |
+| A4 First banquet | as Diaochan pours Lü Bu's wine | Diaochan | 1 |
+| A5 Second banquet | during the dance behind the curtain | Diaochan | 1 |
+| A6 Red lanterns | before the lie, with Lü Bu's hand on his collar | Wang Yun | 1 |
+| A7 The window | when she sees his reflection in the pond | Diaochan | 1 |
+| A8 The sickbed | before her signal behind the bed | Diaochan | 1 |
+| A9 Phoenix Pavilion | before her story; when he says he must go; before the taunt | Diaochan | **3** |
+| A10 Sword on the wall | before the lie; before the sword; before turning it on Li Ru | Diaochan | **3** |
+| A11 The ridge | before the provocation; before "you are a Lü"; before "loyal minister or traitor" | Wang Yun | **3** |
+| A12a / A12b | before the scene (legwork: sounding out each minister) | Wang Yun | 1 each |
+| A12c Secret edict | before the scene (legwork: reaching the Emperor unseen) | Wang Yun | 1 |
+| A12 Broken arrow | before Li Su's answer | Li Su | 1 |
+| A1, A12p | no board | | |
+
+Difficulty within a three-problem scene should rise, the third hardest.
+
+## Items
+| Key | Name | Chinese | How it is gained |
+|---|---|---|---|
+| `pearls` | Family pearls | 家藏明珠 | Wang Yun's chest in his rear hall (Places) |
+| `crown` | Gold crown set with pearls | 嵌珠金冠 | the jeweller, once the pearls are brought (Places: `gives_when: item:pearls`) |
+| `edict` | The Emperor's secret edict | 天子密诏 | A12c (`gain`), then given to Lü Bu in A12 |
+
+## Props
+| Kind | Exists today? | Used in |
+|---|---|---|
+| `table`, `winejars`, `cart` | yes | A1, A4, A5, A10 |
+| `curtain` (a bead curtain across a room) | **no** | A5 |
+| covered carriage (the `cart` with a canopy and curtains, someone boarded) | `cart` only | A5, A10 |
+
+## Poses (new)
+| Pose | Used in |
+|---|---|
+| `dance` | A5 |
+| `throat` (a sword held to one's own neck) | A10 |
+| `cutarm` (cutting one's own arm for a blood oath) | A11 |
+
+## New cast (all need a look; voices in `CAST2`)
+王允 Wang Yun, 貂蝉 Diaochan, 吕布 Lü Bu, 李儒 Li Ru, 李肃 Li Su, 张温 Zhang Wen, 士孙瑞 Shisun Rui,
+黄琬 Huang Wan, 汉献帝 Emperor Xian (a boy), and later 董卓之母 Dong Zhuo's mother, 蔡邕 Cai Yong,
+马日磾 Ma Midi, 李傕 Li Jue, 郭汜 Guo Si, 贾诩 Jia Xu, 牛辅 Niu Fu, 胡赤儿 Hu Chi'er, the Taoist.
+Dong Zhuo is Book 1's.
+
+## Stills written so far (briefs in `assets/tk/stills/scene_prompts.json`)
+`dz_roadside`, `dz_redtray`, `dc_garden`, `dc_wangkneels`, `dc_wine`, `dc_dance`, `dc_lanterns`, `dc_window`,
+`dc_sickbed`, `dc_pavilion`, `dc_halberd`, `dc_sword`, `dc_carriage`, `lb_ridge`, `lb_blood`, `ls_arrow`.
+
+## Engine requests
+1. **The player walks as the current protagonist.** `["party", ["diaochan"]]` makes Diaochan the one the player
+   walks as, not Liu Bei. The most important request.
+2. **Several `["problem"]` steps in one scene**, with dialogue between them; failing a later one resumes at that one.
+3. Challengers who spot the player and walk over; challengers who block a path.
+4. Stealth: guards with sight lines; being seen sends you back to the door (Dong Zhuo's residence, the crown delivery).
+5. A procession ride along a route (the Meiwu road).
+6. The poses and props above.
