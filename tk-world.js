@@ -35,7 +35,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=45`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=46`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
@@ -217,9 +217,9 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=45`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=46`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=34`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=46`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=47`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
@@ -228,7 +228,7 @@ function worldScenes() {
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
       for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=52`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=53`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -1013,12 +1013,16 @@ function worldScenes() {
       this.save();
       this.setGoal();
       // a handoff to a new lead who is somewhere else: a fade, and they begin by the next beat
-      const hand = steps.find(s => s[0] === "party" && s[2] && s[2].to);
-      const toQ = hand && this.region.quests.find(x => x.node === `${this.w.n}-${hand[2].to}`);
-      if (toQ) {
+      // ({"to": node}: by that beat's spot; {"to": {"place", "from"}}: arriving in that place as if from that one)
+      const hand = steps.find(s => s[0] === "party" && s[2] && s[2].to), to = hand && hand[2].to;
+      const placeOf = name => name && this.region.places.find(p => p.id === name || p.name === name);
+      const toQ = typeof to === "string" && this.region.quests.find(x => x.node === `${this.w.n}-${to}`);
+      const toP = to && typeof to === "object" && placeOf(to.place);
+      if (toQ || toP) {
         this.leaving = true; this.st.pos = null; this.save();
         this.cameras.main.fadeOut(500);
-        this.cameras.main.once("camerafadeoutcomplete", () => this.scene.restart({ place: toQ.place, from: null, toNode: toQ.node }));
+        this.cameras.main.once("camerafadeoutcomplete", () => this.scene.restart(toQ ? { place: toQ.place, from: null, toNode: toQ.node }
+          : { place: toP.id, from: (placeOf(to.from) || {}).id || null }));
         return;
       }
       if (q.role === "boss" && this.opts.onBoss) await this.opts.onBoss();
