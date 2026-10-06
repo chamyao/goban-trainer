@@ -1566,12 +1566,14 @@ const TKOverlay = {
       document.querySelectorAll(".tk-duel").forEach(el => el.remove());
       const host = at.host && at.host.isConnected ? at.host : null;
       const box = h("div", { class: "tk-duel-stage" });
-      const wrap = h("div", { class: "tk-duel" + (!host || host.clientWidth < 640 ? " tk-duel-full" : ""), role: "dialog", "aria-modal": "true", "aria-label": "Go problem 死活题" },
+      // the whole window, not the game's frame, when the frame is narrow or short (a phone held sideways)
+      const cramped = el => !el || !el.isConnected || el.clientWidth < 640 || el.clientHeight < 420;
+      const wrap = h("div", { class: "tk-duel" + (cramped(host) ? " tk-duel-full" : ""), role: "dialog", "aria-modal": "true", "aria-label": "Go problem 死活题" },
         [h("div", { class: "tk-duel-wipe" }), box]);
       (wrap.classList.contains("tk-duel-full") ? document.body : host).append(wrap);
       // a phone turned sideways or back: the whole screen or inside the game's window, decided again
       const relayout = () => {
-        const full = !host || !host.isConnected || host.clientWidth < 640;
+        const full = cramped(host);
         if (full === wrap.classList.contains("tk-duel-full")) return;
         wrap.classList.toggle("tk-duel-full", full);
         wrap.classList.add("tk-relaid");   // moved, not opened: no wipe again
