@@ -25,7 +25,7 @@ const WorldState = {
   load(n, region) {
     let s = {};
     try { s = JSON.parse(localStorage.getItem(this.key(n)) || "{}"); } catch { s = {}; }
-    return { visited: (s.visited || [region.start]).map(worldRenamed), party: s.party || TK.party(TK.world(n)) || region.party, place: s.place, pos: s.pos || null };
+    return { visited: (s.visited || [region.start]).map(worldRenamed), party: s.party || TK.party(TK.world(n)) || region.party, place: s.place, pos: s.pos || null, light: s.light || null };   // light: a scene's last light, kept onto the next map
   },
   save(n, st) { try { localStorage.setItem(this.key(n), JSON.stringify(st)); } catch { /* private mode */ } },
 };
