@@ -1,6 +1,6 @@
 # The Diaochan arc: script (generated from tools/tk_story_w2_new.py)
 
-Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in brackets.
+Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in brackets. A12y is not in the novel (added on the user's call).
 
 ## A1 · The Roadside Banquet (横门设宴)
 *Chang'an* · no board
@@ -722,6 +722,44 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 *Then the Colonel of the Capital, Huang Wan. He will come too.*  
 又密访司隶校尉黄琬。琬亦愿同谋。
+
+
+## A12Y · Stones, Not Men (只谈棋子)
+*Chang'an / caiyong* · board decider: **Wang Yun** — “Read Cai Yong.”
+
+*Cai Yong, the Palace Attendant, is the greatest scholar of the age. When Dong Zhuo took power he sent for him, and Cai Yong refused. Dong Zhuo sent word: come, or your whole clan dies. He came. Then Dong Zhuo promoted him three times in a single month.*  
+侍中蔡邕，当世大儒。董卓秉政，征之，邕不赴。卓使人谓邕曰：“如不来，当灭汝族。”邕惧，只得应命而至。卓见邕大喜，一月三迁其官。
+
+*If any man in Chang'an could turn the Grand Preceptor's ear, it is Cai Yong. Wang Yun goes to his house.*  
+长安城中，若有一人能进言于太师，便是蔡邕。王允往其宅中。
+
+[still: `cy_study`]
+
+**Cai Yong:** Minister Wang. Sit down. Will you play a game? In this city it's safer to talk about stones than about men.  
+王司徒，请坐。手谈一局如何？这长安城里，谈棋子比谈人安稳。
+
+**▶ GO PROBLEM**
+
+**Cai Yong:** You play like a man with something on his mind.  
+司徒落子，似有心事。
+
+**Wang Yun:** And you, Bojie? They say the Grand Preceptor can't do enough for you.  
+伯喈又如何？人言太师待君甚厚。
+
+**Cai Yong:** He said he would kill my whole family if I didn't come. Then he promoted me three times in a month. I don't know what to make of a man like that. But he is the only one who ever asked me what I was writing.  
+他说我若不来，便灭我满门。来了，一月之内三迁我官。这样的人，我实在看不透。可满朝之中，问我在写什么的，只有他一个。
+
+**Wang Yun:** And what are you writing?  
+君在写什么？
+
+**Cai Yong:** The history of the Han. Someone has to finish it, while there's still a Han to write about.  
+汉史。总得有人写完它，趁汉室还在。
+
+*Wang Yun says nothing of what he came for. He thanks him for the game, and goes.*  
+王允对来意只字未提，谢过这一局，告辞而去。
+
+*On the way home he thinks: a man who owes his life and his rank to Dong Zhuo will weep for him one day. Cai Yong cannot be told.*  
+归途之中，允自思：此人身家官爵，皆出董卓之手；他日必为卓而哭。此事断不可令蔡邕知道。
 
 
 ## A12P · The Plan (定计)

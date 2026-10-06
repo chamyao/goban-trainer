@@ -19,6 +19,7 @@ themselves, the voices, the art and the engine are other sessions' work.
 | A10 Sword on the wall | before the lie; before the sword; before turning it on Li Ru | Diaochan | **3** |
 | A11 The ridge | before the provocation; before "you are a Lü"; before "loyal minister or traitor" | Wang Yun | **3** |
 | A12a / A12b | before the scene (legwork: sounding out each minister) | Wang Yun | 1 each |
+| A12y Cai Yong (**not in the novel**) | before the talk: a game with Cai Yong (setter `caiyong`) | Wang Yun | 1 |
 | A12c Secret edict | before the scene (legwork: reaching the Emperor unseen) | Wang Yun | 1 |
 | A12 Broken arrow | before Li Su's answer | Li Su | 1 |
 | A13 Meiwu | before Li Su's lie about the abdication | Li Su | 1 |
@@ -49,7 +50,7 @@ Each is one problem, flawless, with the 30-second wait after a wrong move.
 | Liangzhou (A16a–c) | Jia Xu | 2 | 1 | the v3 constable (blocking); a headman between v1 and v2 |
 | Ren Valley approach (before A17) | Li Jue | 1 | 0 | a scout's hill post |
 
-Pending the user: Cai Yong at the Chang'an go table (optional) would be a 15th.
+Cai Yong is not a road challenger: on the user's call he is a main beat (A12y).
 
 ## Items
 | Key | Name | Chinese | How it is gained |
@@ -83,7 +84,7 @@ Dong Zhuo is Book 1's.
 `dz_roadside`, `dz_redtray`, `dc_garden`, `dc_wangkneels`, `dc_wine`, `dc_dance`, `dc_lanterns`, `dc_window`,
 `dc_sickbed`, `dc_pavilion`, `dc_halberd`, `dc_sword`, `dc_carriage`, `lb_ridge`, `lb_blood`, `ls_arrow`,
 `dz_mother`, `omen_wheel`, `omen_fog`, `omen_song`, `omen_taoist`, `dz_gate`, `dz_lamp`, `dc_meiwu`, `cy_weeps`,
-`ren_valley`, `wy_tower`. (27 in all.)
+`ren_valley`, `wy_tower`, `cy_study`. (28 in all.)
 
 ## Engine requests
 1. **The player walks as the current protagonist.** `["party", ["diaochan"]]` makes Diaochan the one the player
