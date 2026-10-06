@@ -281,7 +281,7 @@ def _scenes_chain():
             S("wangyun", "I would give this girl to you, Grand Preceptor, if you will have her.", "允欲将此女献上太师，未审肯容纳否？"),
             S("dongzhuo", "Such a gift! How can I repay you?", "如此见惠，何以报德？"),
             S("wangyun", "To serve you is more good fortune than she deserves.", "此女得侍太师，其福太浅。"),
-            ["prop", "car", "cart", "a5", -12, 8],
+            ["prop", "car", "carriage", "a5", -12, 8],
             ["board", "diaochan", "car"],
             N("Wang Yun has a felt-covered carriage made ready, and sends Diaochan ahead to the Chancellor's residence.",
               "允即命备毡车，先将貂蝉送到相府。"),
@@ -533,7 +533,7 @@ def _scenes_chain():
             S("liru", "We will all die at a woman's hand!", "吾等皆死于妇人之手矣！"),
             ["remove", "lr"],
             N("That same day Dong Zhuo orders the return to Meiwu, and all the officials bow him on his way.", "董卓即日下令还郿坞，百官俱拜送。"),
-            ["prop", "car", "cart", "a10", 0, 10],
+            ["prop", "car", "carriage", "a10", 0, 10],
             ["board", "diaochan", "car"],
             ["army", "crowd", "f_official", 6, "a10", -20, 14],
             ["spawn", "lb", "lvbu", "a10", -26, 10],
@@ -730,7 +730,7 @@ def _scenes_chain():
         # A13a-d · The road of omens. Each stop is Li Su explaining one away.
         "a13a": {"title": T("A Broken Wheel", "车折马嘶"), "kind": "main", "steps": [
             ["spawn", "dz", "dongzhuo", "a13a", 10, 0],
-            ["prop", "car", "cart", "a13a", 16, 0],
+            ["prop", "car", "carriage", "a13a", 16, 0],
             ["army", "escort", "f_soldier", 6, "a13a", 24, 6],
             N("Dong Zhuo leaves the fortress in his carriage, guards before and behind, and sets out for Chang'an.", "卓出坞上车，前遮后拥，望长安来。"),
             ["fx", "dust", "a13a", 16, 0], ["camera", "shake"],
@@ -804,7 +804,7 @@ def _scenes_chain():
             ["music", "boss"],
             ["army", "officials", "f_official", 6, "a14", 18, -10],
             ["spawn", "dz", "dongzhuo", "a14", 40, 0],
-            ["prop", "car", "cart", "a14", 40, 0], ["board", "dz", "car"],
+            ["prop", "car", "carriage", "a14", 40, 0], ["board", "dz", "car"],
             ["spawn", "ls", "lisu", "a14", 36, 6],
             ["spawn", "lb", "lvbu", "a14", 48, 0],
             N("The officials, in court dress, line the road to greet him. Li Su walks beside the carriage with a drawn sword in his hand. "
@@ -1050,7 +1050,7 @@ def _nodes_chain():
         return n
     return [
         node("a1", 40, 200, "a1", board=False),
-        node("a2", 60, 190, "a2", room="wy-garden", dilemma=D(
+        node("a2", 60, 190, "a2", dilemma=D(
             "wangyun", "Stake the whole house on a sixteen-year-old girl?", "以一门性命，托付二八少女？",
             "If it leaks, every one of us dies. But no one else can do it.", "事若泄漏，我灭门矣。可满朝文武，无计可施。",
             "Then let it be her.", "既如此，便是她了。",
@@ -1087,7 +1087,7 @@ def _nodes_chain():
             "One sign, and not a sound.", "只一个手势，不出一声。",
             "His heart is breaking. Good.", "他心如碎。好。",
             "Not yet. He's stirring.", "还不行，他在动。")),
-        node("a9", 200, 120, "a9", room="xf-garden", dilemma=D(
+        node("a9", 200, 120, "a9", dilemma=D(
             "diaochan", "Turn Lü Bu against his father.", "教吕布反其父。",
             "He came. Now he must not leave as he came.", "他来了。不可教他原样回去。",
             "He holds me, and will not let go.", "他抱住我，不肯放手。",
@@ -1148,7 +1148,7 @@ def _nodes_chain():
             "The song says his name, and says he dies. Turn it round.", "童谣暗藏其名，又说他死。要反过来说。",
             "The house of Dong will rise.", "董氏当兴。",
             "He's listening hard. Again.", "他听得仔细。再来。")),
-        node("a13d", 340, 36, "a13d", place="Meiwu Road", board=False),
+        node("a13d", 340, 36, "a13d", board=False),
         node("a14", 350, 30, "a14", role="boss",
              boss={"who": "dongzhuo", "title": T("Dong Zhuo", "董卓") + ", " + T("Grand Preceptor", "太师"),
                    "taunt": T("What are the swords for?", "持剑是何意？")},
@@ -1219,6 +1219,7 @@ def _world():
              "Lü Bu helps the Minister rid the realm of a tyrant; Li Jue takes Jia Xu's advice and attacks Chang'an"],
         ],
         "grades": ["11K", "11K+"],
+        "boss": "redmond",
         "party": ["wangyun"],
         "items": _ITEMS,
         "nodes": _nodes_chain(),
