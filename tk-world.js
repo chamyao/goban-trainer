@@ -218,7 +218,7 @@ function worldScenes() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
       this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=37`);
-      this.load.json("kit", `assets/tk/kits/${kit}.json?v=33`);
+      this.load.json("kit", `assets/tk/kits/${kit}.json?v=34`);
       this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=38`);
     }
     create() {

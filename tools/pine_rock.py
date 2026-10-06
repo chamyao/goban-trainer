@@ -1,11 +1,11 @@
-"""The Star Lords' shrine, in each kit: a small stone shrine to the two Dippers under an old pine, on a flat
-rock whose offering table has a go board cut into it (ch. 69: the Star Lords play go under a great pine).
+"""The Star Lords' shrine, in each kit: a stone monkey statue seated on a plinth, its offering table in front
+with a go board cut into it.
 
     python3 tools/pine_rock.py            # every kit: jade, xianxia, genshin
     python3 tools/pine_rock.py genshin    # one
 
-Each kit's look is made from its own art, so it matches: the kit's first pine (tree.pine), the little shrine
-and the slab of its offering table drawn in colours taken from the kit's big rock (rock.big). Three looks,
+Each kit's look matches its own art: the statue and the slab of its offering table are drawn in colours
+taken from the kit's big rock (rock.big). Three looks,
 side by side in assets/tk/<dir>/pinerock.png, replace the old shrine's:
     landmark.shrine           dark: the offering table empty, the board bare
     landmark.shrine.lit       a game in progress, two wine cups and a plate of dried meat beside it
@@ -96,54 +96,46 @@ def slab(w, pal, state):
     return im
 
 
-def shrine(pal, state):
-    """The little stone shrine: a tiled cap, a body with a niche, and in the niche the two Dippers (two
-    marks, gold when the Star Lords are about)."""
-    w, h = 12, 15
-    im = Image.new("RGBA", (w, h))
-    p = im.load()
-    roof, roofL = (62, 67, 80, 255), (92, 98, 112, 255)
-    for x in range(1, w - 1):
-        p[x, 1] = roof
-    for x in range(w):
-        p[x, 2] = roofL if 0 < x < w - 1 else roof
-    for x in range(4, 8):
-        p[x, 0] = roof
-    for y in range(3, 13):
-        for x in range(2, w - 2):
-            p[x, y] = pal["body"] if x < w - 3 else pal["shadow"]
-    for y in range(5, 11):
-        for x in range(4, 8):
-            p[x, y] = (40, 38, 44, 255)                      # the niche
-    star = (240, 206, 96, 255) if state != "dark" else (110, 108, 112, 255)
-    p[4, 6], p[5, 7], p[6, 8], p[7, 9] = star, star, (40, 38, 44, 255), star   # the two Dippers, as a few points
-    p[6, 6] = star
-    for y in range(12, h):
-        for x in range(1, w - 1):
-            p[x, y] = pal["shadow"]
-    filled = {(x, y) for x in range(w) for y in range(h) if p[x, y][3]}
-    for x, y in filled:
-        if any((x + dx, y + dy) not in filled for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1))) and p[x, y] not in (roof, roofL):
-            p[x, y] = pal["line"]
-    return im
+def monkey(pal, state):
+    """The stone monkey on its plinth, seated, hugging its knees, its tail curled up beside it; its eyes
+    gold when the Star Lords are about (lit, settled)."""
+    import sys
+    sys.path.insert(0, str(ROOT / "tools"))
+    from draw_tk_extras import Grid
+    hx = lambda c: "#%02x%02x%02x" % c[:3]
+    body, top, shadow, line = hx(pal["body"]), hx(pal["top"]), hx(pal["shadow"]), hx(pal["line"])
+    g = Grid(24, 30)
+    g.rect(2, 24, 20, 5, shadow); g.rect(3, 23, 18, 2, body); g.rect(2, 28, 20, 1, line)   # the plinth
+    for x, y in ((18, 22), (19, 21), (20, 20), (21, 19), (21, 18), (21, 17), (20, 16), (19, 16)):
+        g.set(x, y, body)                                                       # the tail, curled up its side
+    g.ellipse(12, 17, 6.5, 6, body); g.ellipse(14.5, 17, 3.5, 5.5, shadow)       # the body, shaded on the right
+    g.ellipse(9, 21, 2.6, 2, top); g.ellipse(15, 21, 2.6, 2, body)              # the knees
+    g.rect(7, 18, 10, 2, top)                                                   # the arms round them
+    g.rect(7, 23, 3, 1, body); g.rect(14, 23, 3, 1, shadow)                     # the feet
+    g.ellipse(4.5, 8, 2.2, 2.4, body); g.ellipse(19.5, 8, 2.2, 2.4, shadow)      # the round ears
+    g.set(4, 8, top); g.set(19, 8, body)
+    g.ellipse(12, 7.5, 6, 5.5, body); g.ellipse(14.5, 7.5, 3.5, 5, shadow)       # the head
+    g.ellipse(10, 8, 2.4, 2.4, top); g.ellipse(14, 8, 2.4, 2.4, top)            # the pale face: two eye hollows
+    g.ellipse(12, 11, 3.4, 2.2, top)                                            # and the muzzle
+    g.rect(7, 5, 10, 1, shadow)                                                 # the heavy brow
+    eye = {"dark": "#2a2830", "lit": "#ffd84a", "settled": "#d8b860"}[state]
+    g.rect(9, 8, 2, 1, eye); g.rect(13, 8, 2, 1, eye)
+    g.set(11, 10, shadow); g.set(13, 10, shadow)                                # nostrils
+    g.rect(10, 12, 4, 1, shadow)                                                # the mouth
+    return g.outline().image()
 
 
 def build(name):
     path = ROOT / "assets/tk/kits" / f"{name}.json"
     kit = json.loads(path.read_text())
-    pine = crop(kit, kit["kinds"]["tree.pine"][0])
     pal = palette(crop(kit, kit["kinds"]["rock.big"][0]))
-    bb = pine.getbbox()
-    pine = pine.crop(bb)
     sw = 26
-    W = max(pine.width + 8, sw + 4)
-    H = pine.height + 6
+    W, H = 32, 44
     frames = []
     for state in STATES:
         im = Image.new("RGBA", (W, H))
-        im.alpha_composite(pine, (0, 0))                       # the pine behind, to the left
-        im.alpha_composite(shrine(pal, state), (W - 13, H - 26))     # the shrine on the rock, behind its table
-        im.alpha_composite(slab(sw, pal, state), (W - sw, H - 15))   # the offering table in front, under the branches
+        im.alpha_composite(monkey(pal, state), ((W - 24) // 2, 0))           # the statue behind
+        im.alpha_composite(slab(sw, pal, state), ((W - sw) // 2, H - 15))     # the offering table in front of it
         frames.append(im)
     out = ROOT / "assets/tk" / KITS[name] / "pinerock.png"
     sheet = Image.new("RGBA", (W * len(frames), H))
