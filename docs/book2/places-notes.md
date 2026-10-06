@@ -74,7 +74,7 @@ What the design in `places-design.md` needs that the map format and the engine d
 18. **Seats that fill:** chairs in a room that fill as legwork is done. *Used by:* the secret room in A12. Today's `when` on people may already cover it.
 
 ## New kinds the plans use
-Listed with their footprints in `NEW_KINDS` at the top of `tools/tk_places_w2.py`; line and zone kinds are in `LINE_KINDS` and `ZONE_KINDS` there. They include:
+Listed with their footprints in `NEW_KINDS` at the top of `tools/tk_plans_w2.py`; line and zone kinds are in `LINE_KINDS` and `ZONE_KINDS` there. They include:
 - Buildings: compound, palace, grand hall, wing, pavilion (and painted pavilion), gate tower, granary, storehouse, post-house, gatehouse, small tent.
 - Landmarks and features: ridge, heights, hitching post, stalls, rockery, trellis, spirit screen, willow, corral.
 - Furniture: dais, curtain, sword on the wall, window, lamp, seat.

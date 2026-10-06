@@ -1,6 +1,6 @@
 # Book 2 places: the Diaochan arc
 
-**The plans themselves are data:** `tools/tk_places_w2.py`, checked by `tools/check_places_w2.py`, with drawings in `docs/book2/plans/`. Where this document and the data differ, the data wins.
+**The plans themselves are data:** `tools/tk_plans_w2.py`, checked by `tools/check_plans_w2.py`, with drawings in `docs/book2/plans/`. Where this document and the data differ, the data wins.
 
 This is the Places session's design for the four places of the Diaochan arc: **Chang'an, Meiwu, the Meiwu Road and Liangzhou**. It follows `diaochan-arc.md` and uses its Shared keys. The research behind it is in `map-research.md`.
 

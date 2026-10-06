@@ -74,7 +74,7 @@ The generator rounds the edges, so it reads as a pond, not a block.
 
 ## 6. Compounds and rooms: maps of their own
 
-A compound (Wang Yun's residence, the Chancellor's residence, the palace) is a walled block in the place's plan, and **walking through its gate opens a map of its own**. That map has its own plan grid at a finer cell, by default **2×2 tiles**, with margin 0. Its courts, halls and garden are laid out by the same rules. A hall inside it opens onto a **room**, a small map again (`room()` in `tools/tk_places_w2.py`: walls round the edge, a door, furniture). So the levels are city → compound → room, like Pokémon's town → house.
+A compound (Wang Yun's residence, the Chancellor's residence, the palace) is a walled block in the place's plan, and **walking through its gate opens a map of its own**. That map has its own plan grid at a finer cell, by default **2×2 tiles**, with margin 0. Its courts, halls and garden are laid out by the same rules. A hall inside it opens onto a **room**, a small map again (`room()` in `tools/tk_plans_w2.py`: walls round the edge, a door, furniture). So the levels are city → compound → room, like Pokémon's town → house.
 
 Stealth spaces carry **watchers** (a position or a beat, a facing, a cone length) and **play checks**:
 - **covered route:** a path from A to B that no watcher sees at every point of its beat, so there is always a moment to move.
@@ -88,7 +88,7 @@ Stealth spaces carry **watchers** (a position or a beat, a facing, a cone length
 
 ## 7. What the checker reports
 
-The checker is `tools/check_places_w2.py` (`--png` draws every plan into `docs/book2/plans/`). It runs **before** generation, on the plan alone. Errors stop the build:
+The checker is `tools/check_plans_w2.py` (`--png` draws every plan into `docs/book2/plans/`). It runs **before** generation, on the plan alone. Errors stop the build:
 - **Overlap:** two things claim the same cell, or a thing sits on a line. Named, with the cells.
 - **Too small:** a claim smaller than the kind's footprint plus margin. Shows the size needed.
 - **Off the grid:** a rect or path outside `[cols, rows]`.
