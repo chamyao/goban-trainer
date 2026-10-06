@@ -48,7 +48,7 @@ for(;;){
   const noBoard=await p.evaluate(n=>TK.world(window.__w.w.n).nodes.find(x=>x.key===n).board===false,node);
   for(let i=0;i<500;i++){ if(await p.locator('.tk-duel svg').count())break; if(noBoard&&i>20&&!(await busy())&&!(await p.evaluate(()=>!!window.__w.cine)))break; const l=await line(); if(l&&before[before.length-1]!==l)before.push(l); await act(); await p.waitForTimeout(80);}
   console.log(' BEFORE ('+((Date.now()-t0)/1000).toFixed(0)+'s): '+before.map(x=>x.slice(0,90)).join('\n   '));
-  if(noBoard){const ok=await p.evaluate(n=>TK.cleared(n),node);console.log(' (no board) cleared',ok);if(!ok)console.log('FAIL '+node+' not cleared by its scene');continue;}
+  if(noBoard){const ok=await p.evaluate(n=>TK.cleared(n),node);lastLight=await p.evaluate(()=>(window.__w.st&&window.__w.st.light)||'day');console.log(' (no board) cleared',ok,'light after:',lastLight);if(!ok)console.log('FAIL '+node+' not cleared by its scene');continue;}
   await p.waitForTimeout(900);
   const who=await p.evaluate(()=>{const d=document.querySelector('.tk-duel-dlg');return d?d.querySelector('.town-who').textContent+' | '+d.querySelector('.town-en').textContent:'?'});
   console.log(' BOARD: '+who); await shot(node);
