@@ -775,8 +775,13 @@ function worldScenes() {
     placeOpen(id) {
       const room = this.region.places.find(p => p.id === id);
       if (room && room.parent) return this.placeOpen(room.parent);   // a building is open when its place is
-      return id === this.region.start || this.st.visited.includes(id) ||
-        this.region.quests.some(q => this.placeIn(q.place, id) && (this.available(q) || this.done(q.node)));
+      const direct = x => x === this.region.start || this.st.visited.includes(x) ||
+        this.region.quests.some(q => this.placeIn(q.place, x) && (this.available(q) || this.done(q.node)));
+      if (direct(id)) return true;
+      // a road is open once two of the places it joins are: the Meiwu Road, with nothing of its own until A13a,
+      // still carries Li Su from Chang'an to Meiwu for A13
+      const p = this.region.places.find(x => x.id === id);
+      return !!(p && p.archetype === "road" && (p.links || []).filter(l => direct(l)).length >= 2);
     }
     // a place, or a building in it (the county office is in Zhuo County)
     placeIn(place, id) {
