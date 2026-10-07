@@ -19,7 +19,7 @@ check(s.test!=='1','not in test mode');
 check(s.n===12,`#/tk opens the Diaochan book (world ${s.n}, ${s.hash})`);
 check(s.books.length===1&&/Diaochan|貂蝉/.test(s.books[0])&&/^2\b/.test(s.books[0]),`the book list has only it, as Book 2 (${JSON.stringify(s.books)})`);
 check(/Book 2\b/.test(s.sub)&&!/draft|草稿/i.test(s.sub),`its title line says Book 2 and not draft ("${s.sub.slice(0,80)}")`);
-for(const h of ['#/tk/1','#/tk/2','#/tk/3','#/tk/1/1-n1']){await fresh();s=await at(h);check(s.n===12,`${h} falls back to the Diaochan book (world ${s.n}, now ${s.hash})`);}
+for(const h of ['#/tk/1','#/tk/2','#/tk/3','#/tk/1/1-n1']){await fresh();s=await at(h);check(s.n===12&&s.hash==='#/tk/12',`${h} falls back to the Diaochan book, the address rewritten to it (world ${s.n}, now ${s.hash})`);}
 // a returning player whose save last had Book 1 open
 await fresh({'tk-book':'1'});s=await at('#/tk');check(s.n===12,`a save that last played Book 1: #/tk opens the Diaochan book (world ${s.n})`);
 // and the test switch still opens a hidden book
