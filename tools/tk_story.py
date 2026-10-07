@@ -702,6 +702,10 @@ WORLDS.append(_WORLD3)
 import copy as _copy  # noqa: E402
 from tk_story_w2_new import WORLD2 as _DRAFT2  # noqa: E402
 _DRAFT2 = _copy.deepcopy(_DRAFT2)
-_DRAFT2.update(n=12, name="Diaochan (draft)", zh="貂蝉（草稿）", chapters=[8, 9], draft=True)
+_DRAFT2.update(n=12, name="Diaochan", zh="貂蝉", chapters=[8, 9], open=True, book=2)   # live, open to everyone (the user, 2026-10-07)
 _DRAFT2.setdefault("boss", "redmond")  # Book 2's boss pool
 WORLDS.append(_DRAFT2)
+# Books 1-3 are taken down for now (the user, 2026-10-07): kept, and still open in test mode (?test=1)
+for _w in WORLDS:
+    if _w["n"] in (1, 2, 3):
+        _w["hidden"] = True

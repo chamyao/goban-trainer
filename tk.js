@@ -563,7 +563,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) this.data = await (await fetch("data/tk.json?v=58")).json();
+    if (!this.data) this.data = await (await fetch("data/tk.json?v=59")).json();
     return this.data;
   },
   ls(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } },
@@ -580,7 +580,9 @@ const TK = {
   isStart(key) { return key.endsWith("-start"); },
   // open: a start, the first beat of a book (nothing before it: Book 2 has no start node), or one whose way in is cleared
   open(w, key) { const p = this.preds(w, key); return this.isStart(key) || !p.length || p.some(k => this.isStart(k) || this.cleared(k)); },
-  worldOpen(n) { if ((this.world(n) || {}).draft) return typeof TK_TEST !== "undefined" && TK_TEST;   // a draft book: test mode only
+  worldOpen(n) { const wd = this.world(n) || {}, test = typeof TK_TEST !== "undefined" && TK_TEST;
+    if (wd.draft || wd.hidden) return test;   // a draft or a book taken down: test mode only
+    if (wd.open) return true;                  // a book open to everyone from the start
     return n === 1 || this.cleared(`${n - 1}-boss`) || (typeof TK_TEST !== "undefined" && TK_TEST); },   // test mode opens every book
   at(n) { return this.ls("tk-at")[n] || `${n}-start`; },
   setAt(n, key) { const a = this.ls("tk-at"); a[n] = key; this.lsSet("tk-at", a); },
@@ -1043,7 +1045,8 @@ async function viewTK(worldN) {
   if (nav !== routeSeq) return;
   // no book named (the library card): the book last played; a named one becomes the last played
   let last = 1; try { last = +localStorage.getItem("tk-book") || 1; } catch {}
-  let n = worldN && TK.world(worldN) && TK.worldOpen(worldN) ? worldN : TK.world(last) && TK.worldOpen(last) ? last : 1;
+  const first = (D.worlds.find(x => TK.worldOpen(x.n)) || D.worlds[0]).n;   // the first book a player can open
+  let n = worldN && TK.world(worldN) && TK.worldOpen(worldN) ? worldN : TK.world(last) && TK.worldOpen(last) ? last : first;
   try { localStorage.setItem("tk-book", String(n)); } catch {}
   const w = TK.world(n);
   crumbs.innerHTML = "";
@@ -1060,12 +1063,12 @@ async function viewTK(worldN) {
   voiceBtn.onclick = () => { TKVoice.lang = { zh: "en", en: "off", off: "zh" }[TKVoice.lang]; voiceLabel(); };
   root.append(h("div", { class: "tk-head" }, [
     h("div", {}, [h("h2", {}, [h("span", { class: "zh" }, D.native), " ", D.title]),
-      h("div", { class: "sub" }, `第${w.n}卷 Book ${w.n} · ${w.name} ${w.zh} · chapters ${w.chapters.join("–")} · ${w.grades} · ${done}/${levels.length} cleared`)]),
+      h("div", { class: "sub" }, `第${w.book || w.n}卷 Book ${w.book || w.n} · ${w.name} ${w.zh} · chapters ${w.chapters.join("–")} · ${w.grades} · ${done}/${levels.length} cleared`)]),
     h("div", { class: "tk-head-btns" }, [voiceBtn, chron]),
   ]));
   root.append(h("div", { class: "tk-worlds" }, [
-    ...D.worlds.filter(x => !x.draft || TK_TEST).map(x => TK.worldOpen(x.n)
-      ? h("a", { class: "tk-world" + (x.n === n ? " on" : ""), href: `#/tk/${x.n}` }, `${x.n} · ${x.zh} ${x.name}`)
+    ...D.worlds.filter(x => !(x.draft || x.hidden) || TK_TEST).map(x => TK.worldOpen(x.n)
+      ? h("a", { class: "tk-world" + (x.n === n ? " on" : ""), href: `#/tk/${x.n}` }, `${x.book || x.n} · ${x.zh} ${x.name}`)
       : h("span", { class: "tk-world lock" }, `${x.n} · ${x.zh} ${x.name} — 先完成第${x.n - 1}卷 after Book ${x.n - 1}`)),
   ]));
   const host = h("div", { class: "tk-map" });
@@ -1115,7 +1118,7 @@ async function viewTK(worldN) {
     // the other books, once open (Book 2 after Book 1's boss)
     for (const x of D.worlds) if (x.n !== w.n && TK.worldOpen(x.n))
       root.querySelector(".tk-head-btns").append(h("button", { class: "tk-chron-btn", type: "button", onclick: () => { location.hash = `#/tk/${x.n}`; } },
-        `第${x.n}卷 Book ${x.n} · ${x.zh} ${x.name} ▸`));
+        `第${x.book || x.n}卷 Book ${x.book || x.n} · ${x.zh} ${x.name} ▸`));
     // The buttons live in a menu inside the game window, with the controls.
     const panel = h("div", { class: "tk-menu-panel", hidden: "" }, [root.querySelector(".tk-head-btns"),
       h("div", { class: "tk-menu-keys" }, TK_TOUCH ? "点击地面移动 Tap to move · 点击人物对话 Tap to talk · 按住拖动 Hold and drag to steer"
@@ -1260,7 +1263,7 @@ async function viewTK(worldN) {
   }
   function showDone() {
     info.innerHTML = "";
-    info.append(h("div", { class: "tk-info-text" }, [h("b", {}, `★ 第${w.n}卷完 Book ${w.n} complete`), h("div", { class: "meta" }, "第二卷《虎牢关》即将推出。Book 2, Hulao Pass, is coming next.")]));
+    info.append(h("div", { class: "tk-info-text" }, [h("b", {}, `★ 第${w.book || w.n}卷完 Book ${w.book || w.n} complete`), h("div", { class: "meta" }, "下一卷即将推出。The next book is coming.")]));
   }
   if (!TK.seen(`${w.n}:opening`)) {
     await run(w.opening); TK.markSeen(`${w.n}:opening`);
