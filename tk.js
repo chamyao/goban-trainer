@@ -586,7 +586,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) this.data = await (await fetch("data/tk.json?v=66")).json();
+    if (!this.data) this.data = await (await fetch("data/tk.json?v=67")).json();
     return this.data;
   },
   ls(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } },
@@ -611,11 +611,17 @@ const TK = {
   setAt(n, key) { const a = this.ls("tk-at"); a[n] = key; this.lsSet("tk-at", a); },
   party(w) { return this.ls("tk-party")[w.n] || w.party; },
   setParty(w, list) { const a = this.ls("tk-party"); a[w.n] = list; this.lsSet("tk-party", a); },
-  // Difficulty (the menu): Easy draws a board from its easy pool (a book with "easy_grades"), Hard from its own.
-  get easy() { try { return localStorage.getItem("tk-diff") !== "hard"; } catch { return true; } },   // Easy unless Hard was chosen (the user)
-  set easy(v) { try { localStorage.setItem("tk-diff", v ? "easy" : "hard"); } catch {} },
+  // Difficulty (the menu, a book with "easy_grades"): Adaptive (the default) picks each board by the player's
+  // rating (TKElo); Easy draws from the board's easy pool, Hard from its own. Boss boards keep their own pool.
+  get mode() { try { const v = localStorage.getItem("tk-diff"); return v === "easy" || v === "hard" ? v : "adaptive"; } catch { return "adaptive"; } },
+  set mode(v) { try { localStorage.setItem("tk-diff", v); } catch {} },
+  get easy() { return this.mode === "easy"; },
+  set easy(v) { this.mode = v ? "easy" : "hard"; },
   problemRef(node, idx = 0) {
-    const d = this.ls("tk-draw"), pool = this.easy && node.pool_easy && node.pool_easy.length ? node.pool_easy : node.pool;
+    const d = this.ls("tk-draw"), w = this.world(+String(node.key).split("-")[0]);
+    if (this.mode === "adaptive" && node.role !== "boss" && w && w.rated && w.rated.length)
+      return TKElo.pick(w, `${node.key}~${idx}~${d[node.key] || 0}`);   // a slip deals the next draw: a fresh pick
+    const pool = this.easy && node.pool_easy && node.pool_easy.length ? node.pool_easy : node.pool;
     return pool[((d[node.key] || 0) + idx) % pool.length];
   },
   // A wrong move keeps the problem but rests it: TK_REST ms before it can be tried again.
@@ -1117,9 +1123,13 @@ async function viewTK(worldN) {
     if (typeof WorldTravel !== "undefined") WorldTravel.addButtons(root.querySelector(".tk-head-btns"), w);   // map and start over (tk-travel.js)
     // difficulty, in a book that has an easy version: which problems its boards draw from
     if (w.easy_grades) {
-      const diff = h("button", { class: "tk-chron-btn", type: "button", title: "易：第一卷的难度 Easy: Book 1's level · 难：本卷的难度 Hard: this book's own" });
-      const show = () => { diff.textContent = TK.easy ? `难度：易 Easy (${w.easy_grades[0]})` : `难度：难 Hard (${w.grades.split("–")[0]})`; diff.setAttribute("aria-pressed", String(TK.easy)); };
-      diff.onclick = () => { TK.easy = !TK.easy; show(); };
+      const diff = h("button", { class: "tk-chron-btn", type: "button", title: "自适应：按你的水平出题 Adaptive: problems at your level, rising as you solve first try · 易 Easy: fixed easy problems · 难 Hard: this book's own" });
+      const show = () => {
+        const m = TK.mode;
+        diff.textContent = m === "adaptive" ? `难度：自适应 Adaptive (~${TKElo.label()})` : m === "easy" ? `难度：易 Easy (${w.easy_grades[0]})` : `难度：难 Hard (${w.grades.split("–")[0]})`;
+        diff.setAttribute("aria-pressed", String(m !== "hard"));
+      };
+      diff.onclick = () => { TK.mode = { adaptive: "easy", easy: "hard", hard: "adaptive" }[TK.mode]; show(); };
       show();
       root.querySelector(".tk-head-btns").prepend(diff);
     }
@@ -1392,6 +1402,7 @@ function tkLevelBuild(host, worldN, key, { w, node, src, p, book }, { back, agai
     if (!verdict.isConnected) return removeEventListener("tczw:result", onResult);
     if (trainer !== t || settled) return;
     settled = true;
+    TKElo.result(w, node, [src.id, p.id], e.detail === "ok" && !t.flawed);   // adaptive difficulty: first try only
     verdict.innerHTML = "";
     if (e.detail === "ok" && !t.flawed) {
       TK.markCleared(key);
@@ -1575,6 +1586,7 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
     if (!box.isConnected) return removeEventListener("tczw:result", onResult);
     if (trainer !== t || settled) return;
     settled = true;
+    TKElo.result(TK.world(worldN), node, [src.id, p.id], e.detail === "ok" && !t.flawed);   // adaptive difficulty: first try only
     const go = (label, fn) => h("button", { type: "button", class: "tk-duel-go", onclick: fn }, [label, h("b", {}, " ⏎")]);
     if (e.detail === "ok" && !t.flawed) {
       TK.markCleared(key);
@@ -1857,6 +1869,45 @@ const TKTalk = {
     if (!Sync.chatKey()) return askKey(false);
     draw(); poll();
     setTimeout(() => ta.focus(), 50);
+  },
+};
+
+// Adaptive difficulty (the user, apo110): an Elo rating kept in the synced progress. A board solved on the first
+// try (no slip, no hint) is a win, anything else a loss, against the problem's own grade; the next board is the
+// unused problem nearest the rating (one of the nearest few, so it isn't predictable). 15K = 600, 100 a grade,
+// 1K = 2000, 1D = 2100. Starts at 14K, the old Easy.
+const TKElo = {
+  START: 700,
+  of(rank) { return 600 + rank * 50; },
+  state(p = loadProgress()) { return p.tkElo || (p.tkElo = { r: this.START, n: 0, used: [], slots: {} }); },
+  get rating() { return this.state().r; },
+  label(r = this.rating) {
+    const i = Math.max(0, Math.round((r - 600) / 50));
+    return i < 30 ? `${15 - Math.floor(i / 2)}K${i % 2 ? "+" : ""}` : `${1 + Math.floor((i - 30) / 2)}D${(i - 30) % 2 ? "+" : ""}`;
+  },
+  pick(w, slot) {
+    const p = loadProgress(), s = this.state(p);
+    s.slots = s.slots || {}; s.used = s.used || [];
+    if (s.slots[slot]) return s.slots[slot];
+    const used = new Set(s.used), near = w.rated.filter(x => !used.has(`${x[0]}:${x[1]}`))
+      .sort((a, b) => Math.abs(this.of(a[2]) - s.r) - Math.abs(this.of(b[2]) - s.r)).slice(0, 6);
+    const x = near[Math.floor(Math.random() * near.length)] || w.rated[0];
+    s.slots[slot] = [x[0], x[1]];
+    s.used.push(`${x[0]}:${x[1]}`);
+    if (s.used.length > 500) s.used = s.used.slice(-500);
+    const keys = Object.keys(s.slots); if (keys.length > 80) for (const k of keys.slice(0, keys.length - 80)) delete s.slots[k];
+    TK.saveProg(p);
+    return s.slots[slot];
+  },
+  // a board's first result, in Adaptive (bosses aside): the rating moves (faster for the first ten boards)
+  result(w, node, ref, win) {
+    if (TK.mode !== "adaptive" || !w || !w.rated || !node || node.role === "boss") return;
+    const x = w.rated.find(y => y[0] === ref[0] && y[1] === ref[1]);
+    if (!x) return;
+    const p = loadProgress(), s = this.state(p), E = 1 / (1 + Math.pow(10, (this.of(x[2]) - s.r) / 400));
+    s.r = Math.round(Math.max(300, Math.min(2800, s.r + (s.n < 10 ? 64 : 32) * ((win ? 1 : 0) - E))));
+    s.n = (s.n || 0) + 1;
+    TK.saveProg(p);
   },
 };
 

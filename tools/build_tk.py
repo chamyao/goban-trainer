@@ -257,6 +257,15 @@ def main():
                     k += 1
         key = lambda k: f"{w['n']}-{k}"
         out = {k: v for k, v in w.items() if k not in ("nodes", "edges")}
+        # adaptive difficulty (the menu's default; tk.js TKElo): problems at every grade from 15K to 3D, each with
+        # its grade's rank, for the game to pick by the player's rating; KataGo-clean first, never rejected ones
+        if w.get("easy_grades"):
+            rated = []
+            for r in range(0, RANK["3D"] + 1):
+                xs = [x for x in by_grade.get(GRADES[r], []) if vet(x) is not False]
+                xs.sort(key=lambda x: vet(x) is not True)
+                rated += [[x[0], x[1], r] for x in xs[:30]]
+            out["rated"] = rated
         out["nodes"] = nodes
         out["edges"] = [[key(a), key(b)] for a, b in w["edges"]]
         out["grades"] = f"{w['grades'][0]}–{w['grades'][-1]}"
