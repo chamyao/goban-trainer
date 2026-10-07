@@ -1327,7 +1327,7 @@ function worldScenes() {
     // What a won story beat leaves behind: who joined, what was given, the next goal.
     async finishQuest(q, steps) {
       for (const s of steps) if (s[0] === "crowd") this.st.crowd = Math.max(0, typeof s[1] === "string" ? (this.st.crowd || 0) + +s[1] : +s[1] || 0);
-      for (const s of steps) if (s[0] === "party") { this.st.party = s[1]; TK.setParty(this.w, s[1]); }
+      for (const s of steps) if (s[0] === "party") { this.st.party = s[1]; TK.setParty(this.w, s[1]); this.ui.lead(); }
       if (steps.some(s => s[0] === "party" || s[0] === "crowd")) this.setParty(this.st.party);
       if (typeof WorldItems !== "undefined") WorldItems.gainFrom(this, steps);   // what the scene gave
       if (q.scene) TK.markSeen(`${this.w.n}:${q.scene}`);

@@ -250,7 +250,10 @@ const TownUI = {
       // Chinese leads, English follows.
       // hint: [en, zh] of counsel still to act on, kept quieter under the goal
       goal(t, zh, hint) {
-        const g = $(".town-goal"); g.textContent = zh || t;
+        const g = $(".town-goal"); g.textContent = "";
+        g.append(Object.assign(document.createElement("span"), { className: "town-lead" }));   // who you're playing (apo110: the party leader changes in Book 2)
+        this.lead();
+        g.append(Object.assign(document.createElement("span"), { className: "town-goal-main", textContent: zh || t }));
         g.onclick = e => { e.stopPropagation(); if (scene.walkToGoal) scene.walkToGoal(); };   // tap the goal: head for it
         if (zh) g.append(Object.assign(document.createElement("span"), { className: "town-goal-en", textContent: t }));
         if (hint && hint[0]) {
@@ -259,6 +262,17 @@ const TownUI = {
           if (hint[1]) h.append(Object.assign(document.createElement("span"), { className: "town-goal-en", textContent: `“${hint[0]}”` }));
           g.append(h);
         }
+      },
+      // the chip at the top of the goal box: the walker's pixel bust and name
+      lead() {
+        const el = $(".town-lead"), who = scene.lead;
+        if (!el || !who) return;
+        if (el.dataset.who === who) return;
+        el.dataset.who = who; el.textContent = "";
+        const c = Object.assign(document.createElement("canvas"), { width: 34, height: 34, className: "town-lead-face" });
+        try { c.getContext("2d").drawImage(TKArt.get(who, "bust"), 0, 0); } catch {}
+        el.append(c, Object.assign(document.createElement("span"), { textContent: tkName(who) }));
+        el.title = `你在扮演 ${tkName(who)} · You are playing`;
       },
       place(name, zh) {
         const el = $(".town-place"); el.textContent = zh || name; el.lang = zh ? "zh-CN" : "en";
