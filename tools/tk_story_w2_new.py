@@ -970,7 +970,7 @@ def _scenes_chain():
               "and sends him on ahead.",
               "于是聚众十余万，分作四路，杀奔长安来。路逢董卓女婿中郎将牛辅，引军五千人，欲去与丈人报仇，李傕便与合兵，使为前驱。"),
             ["move", "host", "a16m", 60, 0],
-            ["party", ["lijue"], {"to": "a17"}],
+            ["party", ["lijue"], {"to": "a16m"}],
         ]},
 
         "a16m_wait": {"title": T("Not Enough Men", "人马未齐"), "kind": "main", "steps": [
