@@ -245,7 +245,9 @@ PLANS2 = {
             {"id": "capital", "light": "day"},
             {"id": "night-a2", "when": "node:a1", "until": "node:a2", "light": "night"},
             {"id": "night-a6", "when": "node:a5", "until": "node:a6", "light": "lantern"},
-            {"id": "away", "when": "node:a10", "until": "node:a13", "light": "day"},
+            {"id": "away", "when": "node:a10", "until": "node:a13", "light": "day",   # Dong Zhuo has taken her to Meiwu
+             "exits_closed": ["xiangfu"],
+             "exits_closed_say": {"xiangfu": ["The gatekeeper shakes his head. “The Grand Preceptor has gone back to Meiwu.”"]}},
             {"id": "gate-day", "when": "node:a13c", "until": "node:a14", "light": "day", "weather": "clear"},
             {"id": "after", "when": "node:a14", "until": "node:a16", "light": "day", "banners": "red"},
             {"id": "sack", "when": "node:a17", "light": "dusk", "weather": "smoke", "exits_open": ["xuanping"]},
@@ -668,7 +670,7 @@ PLANS2 = {
             {"kind": "folk.official", "near": "store-1", "in": ["raided"], "say": "“Gold, tens of thousands of jin. Silver, millions. I've stopped counting the silk.”"},
             {"kind": "hero.huangfusong", "at": [6, 8], "in": ["raided"], "say": "“Let them out. All of them. Give each a little silver for the road.”"},
         ],
-        "objectives": {"2-a13": "Bring the edict to Dong Zhuo in his hall."},
+        "objectives": {"2-a13": "Ride out to Meiwu and bring the edict to Dong Zhuo in his hall."},
     },
     # =========================================================================================
     "Liangzhou": {
