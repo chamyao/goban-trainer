@@ -40,3 +40,10 @@ How the screenshots were taken:
 The goal box's lead chip followed the party in every view: Wang Yun → Diaochan → Wang Yun → Diaochan → Wang Yun → Li Su → Wang Yun → Lü Bu → Wang Yun → Jia Xu → Li Jue → Wang Yun.
 - At 360 it was empty once, for a moment at the start of a1 (the first frame the player could walk).
 - It was right everywhere after that.
+
+## After Graphics' upright-phone fix (0010705)
+- Re-run on iPhone 13 and 360, walking the whole book (35/35 beats).
+- All 9 painted speakers now stand on the box's top edge with head and shoulders clear. The Story tab sits at the box's right end, and no face or text is covered.
+- See `sheet-phone-after-fix.png`, `sheet-360-after-fix.png` and `phone-wangyun-after-fix.png`.
+- The chip followed the party in both runs, with no empty moment this time.
+- Still open: Li Jue and Jia Xu have no painting yet, pending the user's OK.
