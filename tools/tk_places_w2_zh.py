@@ -326,4 +326,5 @@ ZH_PLACES2 = {
     "“Thirty years I've drunk tea in this room. Chancellors come and go; the tea stays the same.”": "“我在这屋里喝了三十年茶。相国换了一个又一个，茶还是这个味。”",
     "“The back room? Some scholar rents it. Writes all day and hardly says a word.”": "“后间？租给一位学士了。整天写字，难得说一句话。”",
     "The scholar is lost in his scrolls.": "学士埋首书卷之中。",
+    "Her mirror stand": "她的镜台",
 }
