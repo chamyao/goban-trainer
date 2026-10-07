@@ -19,7 +19,12 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   const b = await chromium.launch({ args: ['--use-gl=swiftshader', '--enable-webgl'] });
   const VIEW = process.env.VIEW || 'phone', TAPM = VIEW === 'desktop' ? 'click' : 'tap', KIT = process.env.KIT || '', SHOTS = process.env.SHOTS || '';   // VIEW phone | landscape | 360 | desktop (apo110's 1390x745 window); SHOTS: a folder for each speaker's first line
   const p = await (await b.newContext(VIEW === 'desktop' ? { viewport: { width: 1390, height: 745 } } : VIEW === '360' ? { ...devices['Galaxy S9+'], viewport: { width: 360, height: 640 } } : VIEW === 'landscape' ? { ...devices['iPhone 13 landscape'] } : { ...devices['iPhone 13'] })).newPage();
-  await p.route(/script\.google\.com/, r => r.fulfill({ status: 200, contentType: 'application/json', body: '{"data":null}' }));
+  // the save sync (Apps Script): SYNC=1 keeps what's saved and hands it back on a pull, as the real one does; else nothing to pull
+  const SYNC = !!process.env.SYNC, store = {}; let syncPosts = 0;
+  await p.route(/script\.google\.com/, r => { const req = r.request(), u = new URL(req.url());
+    if (SYNC && req.method() === 'POST') { let j = {}; try { j = JSON.parse(req.postData() || '{}'); } catch {} if (j.kind === 'progress') { store[j.username] = j.data; syncPosts++; } return r.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' }); }
+    if (SYNC && (u.searchParams.get('kind') || 'progress') === 'progress') return r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ data: store[u.searchParams.get('username')] || {} }) });
+    return r.fulfill({ status: 200, contentType: 'application/json', body: '{"data":null}' }); });
   const errs = []; p.on('pageerror', e => { errs.push(e.message); console.log('ERR', e.message); });
   await p.route('**/phaser.min.js', r => r.fulfill({ path: path.join(__dirname, 'vendor/phaser.min.js'), contentType: 'application/javascript' }));
   await p.route('**/*.mp3', r => r.fulfill({ status: 404, body: '' }));
@@ -44,6 +49,10 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   for (let i = 0; i < 40 && !(await p.evaluate(() => typeof TKOverlay !== 'undefined')); i++) await p.waitForTimeout(250);
   const hook = () => p.evaluate(() => { if (typeof TKOverlay === 'undefined' || TKOverlay.__hooked) return; const o = TKOverlay.open.bind(TKOverlay); TKOverlay.open = (n, key, at) => { window.__boardKey = key; return o(n, key, at); }; TKOverlay.__hooked = true; }).catch(() => {});
   await hook();
+  // SYNC: every route() call counted, and whether a scene, a line or a board was up when it came (a reroute mid-scene)
+  const hookRoute = () => SYNC && p.evaluate(() => { if (typeof route !== 'function' || window.__routeHooked) return; const r0 = route; window.__routes = window.__routes || []; window.__routeHooked = true;
+    window.route = function (...a) { const w = window.__w; window.__routes.push({ at: Date.now(), hash: location.hash, busy: !!(w && w.ui && w.ui.busy()), cine: !!(w && w.cine), duel: !!document.querySelector('.tk-duel svg') }); return r0.apply(this, a); }; }).catch(() => {});
+  await hookRoute(); let lastVis = Date.now(), visFlips = 0;
 
   // the page, as the loop needs it each tick
   const look = () => p.evaluate(() => {
@@ -186,7 +195,10 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       if (!errand && /isn't open yet|还没有开通|barred|不为你开|not open|turns you away|No one goes|receives no one/i.test(s.line)) refused = `refused: "${s.line.slice(0, 90)}"`; }
     if (s.cancel) { await p.getByText('Cancel', { exact: true }).first()[TAPM]().catch(() => {}); continue; }
     if (s.scroll) { await tapEl('.tk-scroll-go'); await p.waitForTimeout(300); continue; }
-    if (!s.duel) await hook();   // (again after a reload)
+    if (!s.duel) { await hook(); await hookRoute(); }   // (again after a reload)
+    if (SYNC && Date.now() - lastVis > 45000) {   // the tab hidden and shown again (a phone app switch): the game pulls, and reroutes only if something changed
+      lastVis = Date.now(); visFlips++;
+      await p.evaluate(async () => { for (const v of ['hidden', 'visible']) { Object.defineProperty(document, 'visibilityState', { value: v, configurable: true }); Object.defineProperty(document, 'hidden', { value: v === 'hidden', configurable: true }); document.dispatchEvent(new Event('visibilitychange')); await new Promise(r => setTimeout(r, 300)); } }).catch(() => {}); }
     if (s.duel) {   // a board: win it with Skip, note what it drew, then Continue
       if (s.cont) { await tapEl('.tk-duel-go'); await p.waitForTimeout(400); continue; }
       if (s.skip) {
@@ -259,6 +271,10 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   fs.writeFileSync(path.join(__dirname, 'out', `walk-playthrough-${BOOK}-${DIFF || 'default'}.json`), JSON.stringify(out, null, 1));
   if (diffCheck.off && diffCheck.off.length) console.log(`FAIL boards drawn from the wrong pool (${diffCheck.adaptive ? 'rated' : diffCheck.easy ? 'easy' : 'hard'}): ${diffCheck.off.join(', ')}`);
   console.log(`walk-playthrough Book ${BOOK} (${DIFF || 'default'}): ${report.length - fails}/${report.length} beats walked and played in ${out.minutes} min (${recovered.length} needed a reload, ${held.length} held by a scene); ${boards.length} boards (${diffCheck.ok} from the ${diffCheck.adaptive ? 'rated' : diffCheck.easy ? 'easy' : 'hard'} pool)`);
+  if (SYNC) { const rs = await p.evaluate(() => window.__routes || []).catch(() => []), mid = rs.filter(r => r.busy || r.cine || r.duel);
+    console.log(`sync: ${syncPosts} saves to the mocked script, ${visFlips} hide/show flips, ${rs.length} reroutes after the start${mid.length ? `; FAIL ${mid.length} came mid-scene (${mid.map(r => `${r.hash}${r.cine ? ' cine' : ''}${r.busy ? ' line' : ''}${r.duel ? ' board' : ''}`).join(', ')})` : ''}`);
+    if (mid.length) held.push(`${mid.length} mid-scene reroutes`); }
+  const audio = errs.filter(e => /AudioContext/.test(e)); if (audio.length) console.log(`     note: ${audio.length} AudioContext page errors (${audio[0].slice(0, 80)})`);
   console.log(`the goal box's chip followed the party: ${chipSeen.join(' → ') || 'never shown'}${chipBad.size ? ` (wrong at ${[...chipBad].join(', ')})` : ''}`);
   if (OPTIONAL) console.log(`optional: ${errands.filter(e => e.status === 'pass').length}/${errands.length} walked to, ${errands.filter(e => e.status === 'gone').length} gone before he got there (${errands.filter(e => e.id.startsWith('challenger')).length} challengers, ${errands.filter(e => e.id.startsWith('door')).length} doors and rooms)`);
   await b.close(); process.exit(chipBad.size || errands.some(e => e.status === 'fail') || fails || held.length || recovered.length || (diffCheck.off && diffCheck.off.length) ? 1 : 0);

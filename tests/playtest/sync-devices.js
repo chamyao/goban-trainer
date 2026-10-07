@@ -28,4 +28,7 @@ const s=store.synctest.progress.tk;check(s['12-a3']===1&&s['12-a4']===1,`a stale
 // B returns to its tab: picks up A's a4
 await B.evaluate(()=>{Object.defineProperty(document,'visibilityState',{value:'visible',configurable:true});document.dispatchEvent(new Event('visibilitychange'));});await B.waitForTimeout(2500);
 check(await B.evaluate(()=>TK.cleared('12-a4')),'B, back on its tab, picks up A\'s newer solve');
+// the reroute on coming back closes the old game's audio while Phaser resumes it (a "closed AudioContext" page error); the new game's own must be live
+await B.waitForTimeout(2500);const snd=await B.evaluate(()=>{const g=window.__w&&window.__w.game,c=g&&g.sound&&g.sound.context;return {has:!!(window.__w&&window.__w.player),state:c?c.state:'none'};});
+check(snd.has&&snd.state!=='closed',`after that reroute the world is back and its sound is live (AudioContext ${snd.state})`);
 await b.close();console.log(fails?`sync: ${fails} failed`:'sync: all ok');process.exit(fails?1:0);})();
