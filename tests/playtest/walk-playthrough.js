@@ -67,8 +67,8 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     else await p.evaluate(([x, y]) => { const w = window.__w, cam = w.cameras.main, v = w.view ? w.view(x, y) : { x, y }; w.tapAt(x, y, (v.x - cam.worldView.x) * cam.zoom, (v.y - cam.worldView.y) * cam.zoom); }, [x, y]);
   };
   // the patrols ahead, and a way to the goal none of them sees: cells, one per 150 ms (stealth-12's planner)
-  const plan = () => p.evaluate(() => {
-    const w = window.__w, T = w.tw || 16, C = 16, DT = 50, STEP = 3, F = 1200, goal = w.goalAt; if (!goal) return null;
+  const plan = (STEP) => p.evaluate(STEP => {   // STEP frames of 50 ms a cell: 3 is his running pace, 4 the pace a walk a cell at a time surely keeps
+    const w = window.__w, T = w.tw || 16, C = 16, DT = 50, F = 1600, goal = w.goalAt; if (!goal) return null;
     const G = w.walkGrid(), cols = Math.ceil(G.cols * G.C / C), rows = Math.ceil(G.rows * G.C / C), free = (cx, cy) => G.free(Math.floor((cx * C + 8) / G.C), Math.floor((cy * C + 10) / G.C));
     const cat = w.npcs.filter(n => n.watch && ((n.watch.seen || []).length || n.watch.back_to) && w.watching(n));
     const tracks = cat.map(n => { const W = n.watch, st = { x: n.spr.x, y: n.spr.y, leg: W.leg, wait: W.wait, dir: W.dir, t: W.t, turn: W.turn }, out = [];
@@ -91,7 +91,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     if (found < 0) return null;
     const cells = []; let c = gx + gy * cols; for (let k = found; k >= 0; k--) { cells.unshift(c); c = hist[k].get(c); }
     return cells.map(c => { const x = c % cols; return at(x, (c - x) / cols); });
-  });
+  }, STEP);
 
   const report = [], t0 = Date.now(); let beat = null, beatT = 0, lastProgress = Date.now(), progressKey = '', lastLine = '', refused = '', boards = [];
   const leadFor = await p.evaluate(B => { const w = TK.world(B), out = {}; let party = null;   // the lead the story gives each beat: its last party step before it
@@ -99,7 +99,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   let beatLead = '';
   const close = (status, why, s) => { if (!beat) return; if (leadFor[beat] && beatLead && leadFor[beat] !== beatLead) console.log(`     note ${beat}: played by ${beatLead}, but the story's last handoff gave ${leadFor[beat]}`); const r = { beat, status, secs: Math.round((Date.now() - beatT) / 1000), place: s && s.place, at: s && s.P, lead: s && s.lead, why: why || '', line: lastLine.slice(0, 120) };
     report.push(r); console.log(`${status === 'pass' ? 'ok  ' : 'FAIL'} ${beat}  ${r.secs}s  ${r.lead || ''} in ${r.place || '?'}${status === 'pass' ? '' : `  at ${r.at}: ${why}${r.line ? ` ("${r.line}")` : ''}`}`); };
-  let plannedSteps = null, planT = 0, stealthTries = 0, lastTap = 0, skipped = false, reloads = 0, catches = 0, wasCaught = false; const held = [], recovered = [];
+  let plannedSteps = null, planT = 0, pace = 3, stealthTries = 0, lastTap = 0, skipped = false, reloads = 0, catches = 0, wasCaught = false; const held = [], recovered = [];
   for (;;) {
     if ((Date.now() - t0) / 60000 > MAXMIN) { const s = await look(); close('fail', `out of time (${MAXMIN} min)`, s); break; }
     const s = await look();
@@ -152,12 +152,15 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       console.log(`FAIL ${beat}: held by a scene with no line showing (the game busy, only a Skip button up); a player has to press Skip`); held.push(`${beat} in ${s.place}`);
       await p.locator('.town-skip').first().tap().catch(() => {}); await p.waitForTimeout(800); continue; }
     if (s.busy) { await p.evaluate(() => window.__w.ui.advance()); await p.waitForTimeout(250); continue; }   // a line: on to the next
+    if (s.caught) plannedSteps = null;   // sent back: plan again from there
     if (s.cine || s.leaving || s.engaged || s.caught) { await p.waitForTimeout(300); continue; }
     if (!s.goal) { close('fail', 'no goal to go to', s); break; }
     // a stealth beat here: time the way past the cones, then walk it a cell at a time
-    if (s.watchers && !plannedSteps && stealthTries < 4) { plannedSteps = await plan(); planT = Date.now(); stealthTries++; if (!plannedSteps) { close('fail', 'no unseen way past the watchers', s); break; } }
+    if (s.watchers && !plannedSteps) {   // the running pace first; after a catch the slower one, if it has a way
+      pace = catches ? 4 : 3; plannedSteps = await plan(pace); if (!plannedSteps && pace === 4) { pace = 3; plannedSteps = await plan(3); }
+      planT = Date.now(); stealthTries++; if (!plannedSteps) { close('fail', 'no unseen way past the watchers', s); break; } }
     if (plannedSteps) {
-      const k = Math.min(plannedSteps.length - 1, Math.floor((Date.now() - planT) / 150)), c = plannedSteps[k];
+      const k = Math.min(plannedSteps.length - 1, Math.floor((Date.now() - planT) / (pace * 50))), c = plannedSteps[k];
       await p.evaluate(c => { const w = window.__w; if (!w.walk || Math.hypot(w.walk.path[w.walk.path.length - 1].x - c.x, w.walk.path[w.walk.path.length - 1].y - (c.y - 3)) > 2) w.walkTo(c.x, c.y, { ring: false }); }, c);
       if (k >= plannedSteps.length - 1) { plannedSteps = null; await tapWorld(s.goal[0], s.goal[1]); }   // there: tap it (a spot that starts on a tap)
       await p.waitForTimeout(60); continue;
