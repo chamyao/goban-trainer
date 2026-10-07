@@ -21,7 +21,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 sys.path.insert(0, str(ROOT / "tools" / "mapfactory"))
-from tk_plans_w2 import LINE_KINDS, NEW_KINDS, PLANS2, ZONE_KINDS  # noqa: E402
+ARC = sys.argv[sys.argv.index("--arc") + 1] if "--arc" in sys.argv else "diaochan"
+if ARC == "cc":   # the Cao Cao arc (tools/tk_plans_cc.py, docs/book2/caocao-arc.md)
+    from tk_plans_cc import LINE_KINDS, NEW_KINDS, PLANS_CC as PLANS2, ZONE_KINDS  # noqa: E402
+else:
+    from tk_plans_w2 import LINE_KINDS, NEW_KINDS, PLANS2, ZONE_KINDS  # noqa: E402
 from vocab import FOLK, KINDS  # noqa: E402
 
 SIDES = {"N": (0, -1), "S": (0, 1), "W": (-1, 0), "E": (1, 0)}
@@ -34,6 +38,9 @@ EXTRA_KINDS = {"prop.lanterns", "prop.body_lamp", "milestone", "banner", "plant.
 
 
 def shared_keys():
+    if ARC == "cc":   # the "Shared keys" table: | c1 | Luoyang | ...
+        text = (ROOT / "docs/book2/caocao-arc.md").read_text().split("## Shared keys")[1]
+        return set(re.findall(r"^\| (c\d+) \|", text, re.M))
     text = (ROOT / "docs/book2/diaochan-arc.md").read_text()
     table = text.split("**Beat keys**")[1]
     keys = set()
@@ -428,9 +435,7 @@ def draw(name, P, out):
             d.rectangle([c[0] * T, c[1] * T, (c[0] + 1) * T - 1, (c[1] + 1) * T - 1], fill=(255, 60, 60, 45))
         for b in w.get("beat") or [w["at"]]:
             d.ellipse([b[0] * T + T / 2 - 4, b[1] * T + T / 2 - 4, b[0] * T + T / 2 + 4, b[1] * T + T / 2 + 4], fill=(200, 30, 30))
-    for c in getattr(P, "challengers", []):
-        if c.get("map"):
-            continue
+    for c in getattr(P, "challengers", []):   # already only this map's
         if c.get("blocks") is not None:
             for v in P.view_of(c):
                 if P.inb(v):
@@ -463,12 +468,13 @@ def main():
     for name, p, b in plans():
         P = Plan(name, p)
         P.check(keys)
-        if p is b["plan"] and hasattr(P, "reach"):
-            P.check_challengers([c for c in b.get("challengers", []) if not c.get("map")], ch_ids)
-            P.challengers = b.get("challengers", [])
+        mid = name.split(" / ", 1)[1] if " / " in name else None
+        if hasattr(P, "reach"):   # the place's own challengers, or those placed in this compound map
+            P.check_challengers([c for c in b.get("challengers", []) if c.get("map") == mid], ch_ids)
+            P.challengers = [c for c in b.get("challengers", []) if c.get("map") == mid]
         errors += P.errors
         if "--png" in sys.argv:
-            drawn.append(draw(name, P, ROOT / "docs/book2/plans"))
+            drawn.append(draw(name, P, ROOT / ("docs/book2/plans-cc" if ARC == "cc" else "docs/book2/plans")))
     # people placed inside a compound or room map ("place": its id, "at": a cell there)
     for place, b in PLANS2.items():
         for i, n in enumerate(b.get("npcs", [])):

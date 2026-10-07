@@ -1,0 +1,122 @@
+{
+ "format": "tk-map/1",
+ "id": "chenggao--lbs-hall",
+ "world": 13,
+ "name": "Lü Boshe's front hall",
+ "archetype": "interior",
+ "size": [
+  24,
+  14
+ ],
+ "seed": 1758,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   " ": "void",
+   "W": "wall",
+   "#": "wood"
+  },
+  "rows": [
+   "                        ",
+   " WWWWWWWWWWWWWWWWWWWWWW ",
+   " W####################W ",
+   " W####################W ",
+   " W####################W ",
+   " W####################W ",
+   " W####################W ",
+   " W####################W ",
+   " W####################W ",
+   " W####################W ",
+   " W####################W ",
+   " W####################W ",
+   " WWWWWWWWWWW##WWWWWWWWW ",
+   "                        "
+  ],
+  "walk": {
+   "void": false,
+   "wall": false,
+   "wood": true
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    12,
+    7
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     6,
+     6
+    ]
+   },
+   "tiles": 64
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.table",
+   "x": 11,
+   "y": 4,
+   "w": 2,
+   "h": 1,
+   "id": "table"
+  },
+  {
+   "kind": "furn.hearth",
+   "x": 2,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "hearth"
+  },
+  {
+   "kind": "furn.jar",
+   "x": 20,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "jars"
+  }
+ ],
+ "spots": [
+  {
+   "id": "c20",
+   "x": 12.5,
+   "y": 8.7,
+   "node": "13-c20",
+   "label": "Lü Boshe's front hall"
+  }
+ ],
+ "npcs": [],
+ "exits": [
+  {
+   "to": "chenggao",
+   "side": "S",
+   "x": 12,
+   "y": 12,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "chenggao": [
+   12,
+   11
+  ],
+  "": [
+   12,
+   11
+  ]
+ },
+ "parent": "chenggao",
+ "building": "lbs-hall",
+ "links": [
+  "chenggao"
+ ]
+}

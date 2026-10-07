@@ -113,6 +113,21 @@ const TK_CHARS = {
   houcheng: { name: "Hou Cheng", skin: "#e8b88c", hair: "#2a2024", hat: "helmet", hatC: "#858a94", robe: "#5a3a6a", trim: "#c8c8c8", beard: "short", eyes: "round", weapon: "sword" },
   yanshi: { name: "Lady Yan", skin: "#fbefe8", hair: "#1a1418", hat: "lady", pin: "#e6c14a", pin2: "#c8283c", flower: "#c8283c", robe: "#7a2a3a", trim: "#e6c14a", beard: "none", eyes: "narrow", makeup: true },
   zhangkai: { name: "Zhang Kai", skin: "#d8a47c", hair: "#2a2024", hat: "yellowband", hatC: "#e8bc2a", robe: "#6a5a3a", trim: "#e8bc2a", beard: "bristle", eyes: "narrow", weapon: "sword" },
+  // the Cao Cao arc (test book 13)
+  caoren: { name: "Cao Ren", skin: "#e2b089", hair: "#2a2024", hat: "helmet", hatC: "#5a5a64", robe: "#8a3a2a", trim: "#c8c8c8", beard: "short", eyes: "round", weapon: "spear" },
+  xiahouyuan: { name: "Xiahou Yuan", skin: "#e8b88c", hair: "#1a1416", hat: "helmet", hatC: "#4a4a5c", robe: "#3a4a6a", trim: "#c8c8c8", beard: "thin", eyes: "phoenix", weapon: "sword" },
+  lidian: { name: "Li Dian", skin: "#efc59d", hair: "#2a2024", hat: "helmet", hatC: "#858a94", robe: "#4a5a3a", trim: "#d6d2c4", beard: "thin", eyes: "kind", weapon: "sword" },
+  yuejin: { name: "Yue Jin", skin: "#d8a47c", hair: "#1a1416", hat: "helmet", hatC: "#6a5a4a", robe: "#6a4a2a", trim: "#c8c8c8", beard: "bristle", eyes: "wild", weapon: "spear" },
+  hejin: { name: "He Jin", skin: "#e8b88c", hair: "#2a2024", hat: "guan", hatC: "#1e1e24", robe: "#7a2a2a", trim: "#e6c14a", beard: "short", eyes: "round", fat: true },
+  chenlin: { name: "Chen Lin", skin: "#f0cfac", hair: "#2a2024", hat: "scholar", hatC: "#2e3a5a", robe: "#4a5a6a", trim: "#d6d2c4", beard: "thin", eyes: "narrow" },
+  cuiyi: { name: "Cui Yi", skin: "#e8c4a0", hair: "#9a9a9a", hat: "topknot", hatC: "#9a9a9a", pin: "#6a6a6a", robe: "#7a6a4a", trim: "#4a3a2a", beard: "long", beardC: "#b8b8b8", eyes: "kind" },
+  mingong: { name: "Min Gong", skin: "#e2b089", hair: "#2a2024", hat: "band", hatC: "#3a3236", robe: "#5a6a7a", trim: "#d6d2c4", beard: "short", eyes: "round", weapon: "sword" },
+  taihou: { name: "Empress Dowager He", skin: "#fbefe8", hair: "#1a1418", hat: "lady", pin: "#e6c14a", pin2: "#c8283c", flower: "#e6c14a", robe: "#6a2a4a", trim: "#e6c14a", beard: "none", eyes: "narrow", makeup: true },
+  weihong: { name: "Wei Hong", skin: "#f0cfac", hair: "#5a5256", hat: "guan", hatC: "#1e1e24", robe: "#6a4a7a", trim: "#e6c14a", beard: "long", beardC: "#6a6266", eyes: "kind" },
+  wufu: { name: "Wu Fu", skin: "#e8b88c", hair: "#2a2024", hat: "guan", hatC: "#1e1e24", robe: "#5a3a3a", trim: "#c8c8c8", beard: "short", eyes: "round" },
+  dingguan: { name: "Ding Guan", skin: "#eec7a0", hair: "#9a9a9a", hat: "guan", hatC: "#1e1e24", robe: "#3e5f8a", trim: "#d6d2c4", beard: "long", beardC: "#c0c0c0", eyes: "narrow" },
+  // Red Hare, led by Li Su: a horse, not a person (horse: the coat in assets/tk/horses/); the look fields are a fallback
+  redhare: { name: "Red Hare", horse: "red", skin: "#b83a22", robe: "#b83a22", trim: "#2a2024", hair: "#2a2024", beard: "none" },
   caosong: { name: "Cao Song", skin: "#efd8c0", hair: "#d8d2c8", hat: "guan", hatC: "#1e1e24", robe: "#7b4a2a", trim: "#d4ad42", beard: "long", beardC: "#e0dcd4", eyes: "kind" },
   // the Talk with Claude book: Clawd, the Claude Code mascot, drawn by TKArt.clawd instead of as a person
   claude: { name: "Claude", clawd: true, skin: "#d97757", robe: "#d97757", trim: "#d97757", hair: "#d97757", beard: "none" },
@@ -586,7 +601,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) this.data = await (await fetch("data/tk.json?v=68")).json();
+    if (!this.data) this.data = await (await fetch("data/tk.json?v=69")).json();
     return this.data;
   },
   ls(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } },

@@ -706,6 +706,11 @@ _DRAFT2.update(n=12, name="Diaochan", zh="貂蝉", chapters=[8, 9], open=True, b
                easy_grades=["14K", "14K+"])   # the menu's Easy: 14K problems (the user, 2026-10-07)   # live, open to everyone (the user, 2026-10-07)
 _DRAFT2.setdefault("boss", "redmond")  # Book 2's boss pool
 WORLDS.append(_DRAFT2)
+# ---- the Cao Cao arc (novel chapters 3-5), a test book (world 13) standing on its own: #/tk/13 in test mode ----
+from tk_story_w2_new import WORLD2_CC as _CC  # noqa: E402
+_CC = _copy.deepcopy(_CC)
+_CC.update(n=13, name="Cao Cao", zh="曹操", open=True, book=3, hidden=True, easy_grades=["14K", "14K+"])
+WORLDS.append(_CC)
 # Books 1-3 are taken down for now (the user, 2026-10-07): kept, and still open in test mode (?test=1)
 for _w in WORLDS:
     if _w["n"] in (1, 2, 3):

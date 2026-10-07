@@ -1,0 +1,463 @@
+{
+ "format": "tk-map/1",
+ "id": "chenliu",
+ "world": 13,
+ "name": "Chenliu",
+ "archetype": "village",
+ "size": [
+  80,
+  52
+ ],
+ "seed": 891,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "camp",
+   "b": "field.wheat",
+   ".": "grass",
+   "c": "market",
+   "d": "road",
+   "f": "ward"
+  },
+  "rows": [
+   "................................................................................",
+   "................................................................................",
+   "................................................................................",
+   "................................................................................",
+   "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+   "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+   "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+   "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+   "ffffffffffffffffffffffffffffffffffffffffffffccccccccccccccccccccffffffffffffffff",
+   "ffffffffffffffffffffffffffffffffffffffffffffccccccccccccccccccccffffffffffffffff",
+   "ffffffffffffffffffffffffffffffffffffffffffffccccccccccccccccccccffffffffffffffff",
+   "ffffffffffffffffffffffffffffffffffffffffffffccccccccccccccccccccffffffffffffffff",
+   "ffffffffffffffffffffffffffffffffffffffffffffccccccccccccccccccccffffffffffffffff",
+   "ffffffffffffffffffffffffffffffffffffffffffffccccccccccccccccccccffffffffffffffff",
+   "ffffffffffffffffffffffffffffffffffffffffffffccccccccccccccccccccffffffffffffffff",
+   "ffffffffffffffffffffffffffffffffffffffffffffccccccccccccccccccccffffffffffffffff",
+   "ffffffffffffffffffffffffffffffffffffffffffffccccccccccccccccccccffffffffffffffff",
+   "ffffffffffffffffffffffffffffffffffffffffffffccccccccccccccccccccffffffffffffffff",
+   "ffffffffffffffffffffffffffffffffffffffffffffccccccccccccccccccccffffffffffffffff",
+   "ffffffffffffffffffffffffffffffffffffffffffffccccccccccccccccccccffffffffffffffff",
+   "ffffffffffffffffffffffffffffffffffffffffffffccccccccccccccccccccffffffffffffffff",
+   "ffffffffffffffffffffffffffffffffffffffffffffccccccccccccccccccccffffffffffffffff",
+   "ffffffffffffffffffffffffffffffffffffffffffffccccccccccccccccccccffffffffffffffff",
+   "ffffffffffffffffffffffffffffffffffffffffffffccccccccccccccccccccffffffffffffffff",
+   "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+   "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+   "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+   "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+   "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+   "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+   "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+   "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+   "bbbbbbbbbbbbbbbbbbbbbbbb....aaaaaaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaa........",
+   "bbbbbbbbbbbbbbbbbbbbbbbb....aaaaaaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaa........",
+   "bbbbbbbbbbbbbbbbbbbbbbbb....aaaaaaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaa........",
+   "bbbbbbbbbbbbbbbbbbbbbbbb....aaaaaaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaa........",
+   "bbbbbbbbbbbbbbbbbbbbbbbb....aaaaaaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaa........",
+   "bbbbbbbbbbbbbbbbbbbbbbbb....aaaaaaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaa........",
+   "bbbbbbbbbbbbbbbbbbbbbbbb....aaaaaaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaa........",
+   "bbbbbbbbbbbbbbbbbbbbbbbb....aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa........",
+   "bbbbbbbbbbbbbbbbbbbbbbbb....aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa........",
+   "bbbbbbbbbbbbbbbbbbbbbbbb....aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa........",
+   "bbbbbbbbbbbbbbbbbbbbbbbb....aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa........",
+   "bbbbbbbbbbbbbbbbbbbbbbbb....aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa........",
+   "bbbbbbbbbbbbbbbbbbbbbbbb....aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa........",
+   "bbbbbbbbbbbbbbbbbbbbbbbb....aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa........",
+   "bbbbbbbbbbbbbbbbbbbbbbbb....aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa........",
+   "bbbbbbbbbbbbbbbbbbbbbbbb....aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa........",
+   "bbbbbbbbbbbbbbbbbbbbbbbb........................................................",
+   "bbbbbbbbbbbbbbbbbbbbbbbb........................................................",
+   "bbbbbbbbbbbbbbbbbbbbbbbb........................................................",
+   "bbbbbbbbbbbbbbbbbbbbbbbb........................................................"
+  ],
+  "walk": {
+   "camp": true,
+   "field.wheat": true,
+   "grass": true,
+   "market": true,
+   "road": true,
+   "ward": true
+  }
+ },
+ "lines": [
+  {
+   "id": "road",
+   "kind": "road",
+   "path": [
+    [
+     0,
+     7
+    ],
+    [
+     19,
+     7
+    ]
+   ],
+   "width": 3,
+   "tiles": 320
+  },
+  {
+   "id": "drill-way",
+   "kind": "road",
+   "path": [
+    [
+     12,
+     7
+    ],
+    [
+     12,
+     9
+    ]
+   ],
+   "width": 2,
+   "tiles": 20
+  }
+ ],
+ "objects": [
+  {
+   "kind": "building.hall",
+   "x": 10,
+   "y": 25,
+   "w": 4,
+   "h": 2,
+   "id": "cao-house",
+   "door": "S",
+   "faces": "S",
+   "label": "The Cao family house",
+   "plaque": "曹府",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.hall_grand",
+   "x": 25,
+   "y": 22,
+   "w": 10,
+   "h": 5,
+   "id": "weihong",
+   "door": "S",
+   "faces": "S",
+   "label": "Wei Hong's mansion",
+   "map": "wh-hall",
+   "plaque": "卫府",
+   "blocks_sight": true
+  },
+  {
+   "kind": "market.stalls",
+   "x": 49,
+   "y": 13,
+   "w": 6,
+   "h": 2,
+   "id": "stalls",
+   "label": "Grain stalls"
+  },
+  {
+   "kind": "building.house",
+   "x": 66,
+   "y": 25,
+   "w": 4,
+   "h": 2,
+   "id": "house-1",
+   "door": "S",
+   "faces": "S",
+   "blocks_sight": true
+  },
+  {
+   "kind": "banner.white",
+   "x": 49,
+   "y": 41,
+   "w": 1,
+   "h": 1,
+   "id": "banner",
+   "label": "The white banner, 忠义",
+   "when": "node:c22"
+  },
+  {
+   "kind": "tree.willow",
+   "x": 0,
+   "y": 32,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 5,
+   "y": 27,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 8,
+   "y": 32,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 16,
+   "y": 32,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 21,
+   "y": 27,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 24,
+   "y": 32,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 32,
+   "y": 32,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 37,
+   "y": 27,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 40,
+   "y": 32,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 45,
+   "y": 27,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 48,
+   "y": 32,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 53,
+   "y": 27,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 56,
+   "y": 32,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 61,
+   "y": 27,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 64,
+   "y": 32,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 72,
+   "y": 32,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 77,
+   "y": 27,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "spots": [
+  {
+   "id": "c23",
+   "x": 53.5,
+   "y": 37.7,
+   "node": "13-c23",
+   "label": "The village drilling ground",
+   "trigger": "near"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "npc-1",
+   "kind": "folk.elder",
+   "x": 10.5,
+   "y": 29.9,
+   "say": [
+    "“Money, son. An army eats before it fights.”"
+   ],
+   "label": "Cao Song"
+  },
+  {
+   "id": "npc-2",
+   "kind": "folk.villager",
+   "x": 61.5,
+   "y": 41.9,
+   "say": [
+    "“They put up a white banner. Loyalty and right. I came for the rice, and I'll stay for the banner.”"
+   ],
+   "in": [
+    "rally"
+   ]
+  },
+  {
+   "id": "npc-3",
+   "kind": "folk.hunter",
+   "x": 37.5,
+   "y": 41.9,
+   "say": [
+    "“Two thousand of us from the hills, and more coming. Is it true he went at Dong Zhuo with a sword?”"
+   ],
+   "in": [
+    "rally"
+   ]
+  },
+  {
+   "id": "swordsman",
+   "kind": "folk.soldier",
+   "x": 65.5,
+   "y": 41.9,
+   "say": [],
+   "intro": [
+    "A volunteer swordsman blocks the recruiter's table. “I'll follow a man who can think. Show me you can.”"
+   ],
+   "win": [
+    "“…Put my name down.”"
+   ],
+   "done": [
+    "The swordsman is drilling with the others."
+   ],
+   "when": "node:c22",
+   "view": 4,
+   "challenge": "swordsman"
+  },
+  {
+   "id": "merchant",
+   "kind": "folk.villager",
+   "x": 57.5,
+   "y": 17.9,
+   "say": [],
+   "intro": [
+    "A grain merchant eyes Wei Hong's carts. “An army needs grain, and I have grain. Let's see what kind of bargainer you are.”"
+   ],
+   "win": [
+    "“…Done. Half the price, for the banner.”"
+   ],
+   "done": [
+    "“The carts go out tomorrow, Lord Cao.”"
+   ],
+   "when": "node:c22",
+   "view": 4,
+   "challenge": "merchant"
+  }
+ ],
+ "exits": [
+  {
+   "to": "chenliu--wh-hall",
+   "side": "N",
+   "x": 29.6,
+   "y": 26.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "chenggao",
+   "side": "W",
+   "x": 0,
+   "y": 28,
+   "w": 1,
+   "h": 4
+  }
+ ],
+ "entries": {
+  "chenliu--wh-hall": [
+   30,
+   27
+  ],
+  "chenggao": [
+   5,
+   29
+  ],
+  "": [
+   5,
+   29
+  ]
+ },
+ "states": [
+  {
+   "id": "home",
+   "light": "day"
+  },
+  {
+   "id": "rally",
+   "when": "node:c22",
+   "light": "day"
+  }
+ ],
+ "ways": {
+  "nodes": [
+   [
+    2.0,
+    30.0
+   ],
+   [
+    50.0,
+    30.0
+   ],
+   [
+    78.0,
+    30.0
+   ],
+   [
+    50.0,
+    38.0
+   ]
+  ],
+  "edges": [
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    3
+   ]
+  ]
+ },
+ "links": [
+  "chenggao",
+  "chenliu--wh-hall"
+ ]
+}

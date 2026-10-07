@@ -10,7 +10,7 @@
 
 const WorldItems = {
   KEY: "tk-items",
-  COATS: ["brown", "black", "white", "gray", "golden"],
+  COATS: ["brown", "black", "white", "gray", "golden", "red"],   // red: Red Hare (TK_CHARS.redhare.horse)
   FRAME: [38, 38],
   ROWS: ["down", "left", "right", "up"],
   // Where a rider sits, per facing: the frame row of the hooves (the horse's

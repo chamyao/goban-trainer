@@ -894,12 +894,31 @@ def assets(maps, tables, kits_dir=None):
     return rows
 
 
+ARCS = {13: "cc"}   # test books whose plans are an arc's: Book 13 is the Cao Cao arc
+
+
+def key_prefix(plans_world):
+    """The book number the plans' beat keys carry ("2-c1" for the Cao Cao arc's plans)."""
+    return "2" if ARCS.get(plans_world, plans_world) == "cc" else str(plans_world)
+
+
+def plans_arg(v):
+    """--plans: a book number, or an arc's name ("cc")."""
+    return int(v) if str(v).isdigit() else v
+
+
 def load(plans_world):
     """The plans module of a book: (PLANS, tables, zh)."""
+    plans_world = ARCS.get(plans_world, plans_world)
     if plans_world == 2:
         import tk_plans_w2 as mod
         return mod.PLANS2, {"NEW_KINDS": mod.NEW_KINDS, "LINE_KINDS": mod.LINE_KINDS, "ZONE_KINDS": mod.ZONE_KINDS,
                             "ART": getattr(mod, "ART", {})}, getattr(mod, "ZH_PLACES2", {})
+    if plans_world == "cc":   # the Cao Cao arc (Book 2's chapters 3-5): beat keys "2-c…"
+        import tk_plans_cc as mod
+        from tk_places_w2_zh import ZH_PLACES2
+        return mod.PLANS_CC, {"NEW_KINDS": mod.NEW_KINDS, "LINE_KINDS": mod.LINE_KINDS, "ZONE_KINDS": mod.ZONE_KINDS,
+                              "ART": mod.ART}, ZH_PLACES2
     if plans_world == 90:   # Talk with Claude: the study, no story
         import tk_plans_w90 as mod
         return mod.PLANS90, mod.TABLES, mod.ZH_PLACES90
@@ -908,10 +927,13 @@ def load(plans_world):
 
 def story_world(n, plans_world):
     """The story for a book, keyed as the game keys it ("<n>-<key>")."""
+    plans_world = ARCS.get(plans_world, plans_world)
     if plans_world == 2:
         from tk_story_w2_new import WORLD2 as W
     elif plans_world == 90:
         from tk_plans_w90 import WORLD90 as W
+    elif plans_world == "cc":
+        from tk_story_w2_new import WORLD2_CC as W
     else:
         raise SystemExit(f"no story for book {plans_world}")
     return {**W, "nodes": [{**nd, "key": f"{n}-{nd['key']}"} for nd in W["nodes"]],
@@ -954,7 +976,7 @@ def main():
     import argparse
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--world", type=int, default=2, help="the book number the maps are for")
-    ap.add_argument("--plans", type=int, default=None, help="whose plans (default: the same book)")
+    ap.add_argument("--plans", type=plans_arg, default=None, help="whose plans: a book number, or an arc (cc) (default: the same book)")
     ap.add_argument("--out", default=None, help="write the maps and region.json here (default: print a summary only)")
     ap.add_argument("--png", action="store_true", help="also draw each map as a PNG next to it")
     ap.add_argument("--assets", default=None, help="write the art to generate (kinds no kit draws natively) to this .md (and .json)")
@@ -963,7 +985,8 @@ def main():
     pw = a.plans or a.world
     plans, tables, zh = load(pw)
     world = story_world(a.world, pw)
-    maps, places, quests = build_world(a.world, world, plans, tables, zh, prefix=str(pw) if pw != a.world else None)
+    maps, places, quests = build_world(a.world, world, plans, tables, zh,
+                                       prefix=key_prefix(pw) if key_prefix(pw) != str(a.world) else None)
     for mid, m in maps.items():
         print(f"  {mid:28} {m['archetype']:9} {m['size'][0]:3}x{m['size'][1]:<3} {len(m['objects']):3} objects, "
               f"{len(m['spots'])} spots, {len(m['npcs'])} people, exits to {', '.join(sorted({e['to'] for e in m['exits']}))}")

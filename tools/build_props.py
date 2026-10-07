@@ -300,6 +300,7 @@ PROPS = {
     "straw": {"size": [2, 1], "kit": ["camp.hay", "furn.sacks"]},
     "redbanner": {"size": [1, 1], "kit": ["banner.red"]},
     "yellowbanner": {"size": [1, 1], "kit": ["banner.yellow", "banner.red"]},
+    "whitebanner": {"size": [1, 1], "kit": ["banner.white", "banner.red"]},
     "winejars": {"size": [2, 1], "kit": ["furn.jar", "furn.barrel"], "pair": True, "with": "gourd"},
     "table": {"size": [2, 1], "kit": ["furn.table", "camp.table"]},
     "rack": {"size": [2, 1], "kit": ["furn.rack"]},

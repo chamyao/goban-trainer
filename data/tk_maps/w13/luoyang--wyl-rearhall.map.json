@@ -1,0 +1,131 @@
+{
+ "format": "tk-map/1",
+ "id": "luoyang--wyl-rearhall",
+ "world": 13,
+ "name": "Wang Yun's house",
+ "archetype": "interior",
+ "size": [
+  24,
+  14
+ ],
+ "seed": 2150,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   " ": "void",
+   "W": "wall",
+   "#": "wood"
+  },
+  "rows": [
+   "                        ",
+   " WWWWWWWWWWWWWWWWWWWWWW ",
+   " W####################W ",
+   " W####################W ",
+   " W####################W ",
+   " W####################W ",
+   " W####################W ",
+   " W####################W ",
+   " W####################W ",
+   " W####################W ",
+   " W####################W ",
+   " W####################W ",
+   " WWWWWWWWWWW##WWWWWWWWW ",
+   "                        "
+  ],
+  "walk": {
+   "void": false,
+   "wall": false,
+   "wood": true
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    12,
+    7
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     6,
+     6
+    ]
+   },
+   "tiles": 64
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.table",
+   "x": 7,
+   "y": 4,
+   "w": 2,
+   "h": 1,
+   "id": "table-1"
+  },
+  {
+   "kind": "furn.table",
+   "x": 15,
+   "y": 4,
+   "w": 2,
+   "h": 1,
+   "id": "table-2"
+  },
+  {
+   "kind": "furn.lamp",
+   "x": 20,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "lamp"
+  },
+  {
+   "kind": "furn.chest",
+   "x": 2,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "chest",
+   "label": "Where the Seven-Star Sword is kept"
+  }
+ ],
+ "spots": [
+  {
+   "id": "c15",
+   "x": 12.5,
+   "y": 8.7,
+   "node": "13-c15",
+   "label": "Wang Yun's \"birthday\""
+  }
+ ],
+ "npcs": [],
+ "exits": [
+  {
+   "to": "luoyang",
+   "side": "S",
+   "x": 12,
+   "y": 12,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "luoyang": [
+   12,
+   11
+  ],
+  "": [
+   12,
+   11
+  ]
+ },
+ "parent": "luoyang",
+ "building": "wyl-rearhall",
+ "links": [
+  "luoyang"
+ ]
+}

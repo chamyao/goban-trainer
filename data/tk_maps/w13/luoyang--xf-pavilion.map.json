@@ -1,0 +1,133 @@
+{
+ "format": "tk-map/1",
+ "id": "luoyang--xf-pavilion",
+ "world": 13,
+ "name": "The small pavilion",
+ "archetype": "interior",
+ "size": [
+  20,
+  14
+ ],
+ "seed": 2047,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   " ": "void",
+   "W": "wall",
+   "#": "wood"
+  },
+  "rows": [
+   "                    ",
+   " WWWWWWWWWWWWWWWWWW ",
+   " W################W ",
+   " W################W ",
+   " W################W ",
+   " W################W ",
+   " W################W ",
+   " W################W ",
+   " W################W ",
+   " W################W ",
+   " W################W ",
+   " W################W ",
+   " WWWWWWWWW##WWWWWWW ",
+   "                    "
+  ],
+  "walk": {
+   "void": false,
+   "wall": false,
+   "wood": true
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    10,
+    7
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     5,
+     6
+    ]
+   },
+   "tiles": 56
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.bed",
+   "x": 5,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "couch",
+   "label": "The couch where he lies down"
+  },
+  {
+   "kind": "furn.mirror",
+   "x": 10,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "mirror",
+   "label": "The dressing mirror"
+  },
+  {
+   "kind": "furn.screen",
+   "x": 14,
+   "y": 2,
+   "w": 3,
+   "h": 1,
+   "id": "screen",
+   "blocks_sight": true
+  },
+  {
+   "kind": "furn.lamp",
+   "x": 16,
+   "y": 8,
+   "w": 1,
+   "h": 1,
+   "id": "lamp"
+  }
+ ],
+ "spots": [
+  {
+   "id": "c16",
+   "x": 10.5,
+   "y": 8.7,
+   "node": "13-c16",
+   "label": "The small pavilion"
+  }
+ ],
+ "npcs": [],
+ "exits": [
+  {
+   "to": "luoyang--xiangfu",
+   "side": "S",
+   "x": 10,
+   "y": 12,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "luoyang--xiangfu": [
+   10,
+   11
+  ],
+  "": [
+   10,
+   11
+  ]
+ },
+ "parent": "luoyang",
+ "building": "xf-pavilion",
+ "links": [
+  "luoyang--xiangfu"
+ ]
+}

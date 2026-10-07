@@ -35,12 +35,12 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=79`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=81`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
   },
-  has(n) { return (n >= 1 && n <= 3) || n === 12 || n === 90; },  // worlds whose places have been built (12: Book 2; 90: the study where you talk with Claude)
+  has(n) { return (n >= 1 && n <= 3) || n === 12 || n === 13 || n === 90; },  // worlds whose places have been built (12: Book 2; 13: the Cao Cao arc, a test book; 90: the study where you talk with Claude)
   // "1-zhuo-county-c-elder": a challenger in a place, drawing from the world's problems.
   node(w, key) {
     const region = this.regions[w.n];
@@ -253,9 +253,9 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=79`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=81`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=43`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=78`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=80`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
@@ -264,7 +264,7 @@ function worldScenes() {
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
       for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=87`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=89`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -666,6 +666,8 @@ function worldScenes() {
       this.hero(lead);
       if (this.player) { this.player.anims.stop(); this.player.setTexture(`h-${lead}-${this.player.facing || "down"}-0`); }
       this.followers = (list || []).filter(x => x !== lead).map(who => {
+        const coat = TK_CHARS[who] && TK_CHARS[who].horse;   // a horse in the party (Red Hare, led behind Li Su) walks as a horse
+        if (coat && typeof WorldItems !== "undefined") return { who, coat, spr: WorldItems.horse(this, coat, this.player.x, this.player.y) };
         this.hero(who);
         return { who, spr: this.add.sprite(this.player.x, this.player.y, `h-${who}-down-0`).setOrigin(.5, 1) };
       });
@@ -1018,6 +1020,7 @@ function worldScenes() {
         for (let u = carry; u < d; u += STEP) band.push({ x: a.x + (b.x - a.x) * u / d, y: a.y + (b.y - a.y) * u / d, ang });
         carry = (carry - d) % STEP; if (carry < 0) carry += STEP;
       }
+      if (this.st.light === "night") return this.fireflyRoute(band.slice(3), t);   // at night the way is shown by fireflies (Plot's c4, Beimang)
       const made = band.slice(3).map((p, i) => {
         const im = this.add.image(p.x, p.y - 2, "@route", "band").setDepth(-985).setRotation(p.ang).setScale(.5).setAlpha(0)
           .setBlendMode(Phaser.BlendModes.ADD);
@@ -1030,6 +1033,19 @@ function worldScenes() {
       // it stays until the place itself is in sight (well inside the view), or the goal moves on; never under 2.5 s
       if (this.routeFx) this.fadeRoute();
       this.routeFx = { all: [...made, end], t, from: this.time.now + made.length * 7 + 2500 };
+    }
+    // Fireflies along the way, one every few steps, drifting and blinking, and a little swarm where it leads
+    fireflyRoute(band, t) {
+      const fly = (x, y, delay) => {
+        const im = this.add.image(x, y, "@route", "dot").setDepth(9e4 + 2).setScale(.22).setAlpha(0).setTint(0xd6ff8a).setBlendMode(Phaser.BlendModes.ADD);
+        this.tweens.add({ targets: im, alpha: { from: 0, to: .95 }, delay, duration: 400 + Math.random() * 500, yoyo: true, repeat: -1, repeatDelay: Math.random() * 700 });
+        this.tweens.add({ targets: im, x: x + (Math.random() - .5) * 14, y: y - 4 - Math.random() * 8, duration: 1600 + Math.random() * 1400, yoyo: true, repeat: -1, ease: "Sine.easeInOut" });
+        return im;
+      };
+      const made = band.filter((_, i) => i % 4 === 0).map((p, i) => fly(p.x + (Math.random() - .5) * 6, p.y - 6, i * 28));
+      for (let k = 0; k < 9; k++) made.push(fly(t.x + (Math.random() - .5) * 26, t.y - 4 - Math.random() * 18, made.length * 28 + k * 60));
+      if (this.routeFx) this.fadeRoute();
+      this.routeFx = { all: made, t, from: this.time.now + made.length * 28 + 2500 };
     }
     fadeRoute(ms = 900) {
       const R = this.routeFx;
@@ -2114,7 +2130,8 @@ function worldScenes() {
         if (Math.hypot(p.x - P.x, p.y - P.y) < 6) p = { x: P.x + (i % 2 ? 11 : -11) * (1 + (i >> 1)), y: P.y - 2, f: p.f };
         const moving = Math.hypot(F.spr.x - p.x, F.spr.y - p.y) > .5;
         F.spr.setPosition(p.x, p.y).setDepth(p.y - .5);   // Liu Bei in front where they meet
-        if (moving) F.spr.anims.play(`h-${F.who}-${p.f}`, true); else { F.spr.anims.stop(); F.spr.setTexture(`h-${F.who}-${p.f}-0`); }
+        if (F.coat) WorldItems.pose(F.spr, F.coat, p.f, moving);
+        else if (moving) F.spr.anims.play(`h-${F.who}-${p.f}`, true); else { F.spr.anims.stop(); F.spr.setTexture(`h-${F.who}-${p.f}-0`); }
       });
 
       for (const n of this.npcs) {

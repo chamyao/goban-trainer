@@ -398,6 +398,16 @@
     "banner.red"
    ]
   },
+  "whitebanner": {
+   "size": [
+    1,
+    1
+   ],
+   "kit": [
+    "banner.white",
+    "banner.red"
+   ]
+  },
   "winejars": {
    "size": [
     2,

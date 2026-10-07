@@ -46,7 +46,7 @@ FRIENDLY = {"militia"}  # extras on the party's side
 # assets/tk/props.json "kinds"); a kind not there yet is 1x1 (drawn as a crate)
 PROPS = {k: tuple(v["size"]) for k, v in json.loads((ROOT / "assets/tk/props.json").read_text()).get("kinds", {}).items()}
 STAND_IN = "f_farmer"   # who plays a character that has no look yet
-POSES = {"drink", "cheer", "bow", "kneel", "sit", "drunk", "raise", "sleep", "stand", "dance", "throat", "cutarm", "leap"}
+POSES = {"drink", "cheer", "bow", "kneel", "sit", "drunk", "raise", "sleep", "stand", "dance", "throat", "cutarm", "leap", "crouch", "listen"}
 EMOTES = {"!", "?", "...", "music", "anger", "sweat", "zzz", "heart"}
 LIGHTS = {"day", "night", "dusk", "dawn", "storm"}   # or "#rrggbb"
 CUES = {"boss", "battle", "calm", "victory", "none"}
