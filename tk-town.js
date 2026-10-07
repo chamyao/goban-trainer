@@ -195,13 +195,15 @@ const TownUI = {
     return this._pp;
   },
   mount(scene, host) {
-    if (scene.kit && scene.kit.dialogue === "genshin") this.loadPortraits();
+    // painted portraits: the Genshin look, and a kit that asks for them over its own box ("portraits" in kits/<kit>.json, Jade)
+    const portraits = !!(scene.kit && (scene.kit.dialogue === "genshin" || scene.kit.portraits));
+    if (portraits) this.loadPortraits();
     host.querySelectorAll(":scope > .town-ui").forEach(el => el.remove());  // a new place replaces the old overlay
     const root = document.createElement("div");
     // the dialogue look follows the art kit ("dialogue" in kits/<kit>.json): "genshin" is the big cut-out
     // portrait in a dark gradient box (style.css); the other kits keep the original box and pixel bust
-    const look = (scene.kit && scene.kit.dialogue) || "", painted = look === "genshin";
-    root.className = "town-ui" + (look ? " " + look : "");
+    const look = (scene.kit && scene.kit.dialogue) || "", painted = portraits;
+    root.className = "town-ui" + (look ? " " + look : "") + (portraits && !look ? " portraits" : "");
     const TOUCH = typeof TK_TOUCH !== "undefined" && TK_TOUCH;
     root.innerHTML = `<div class="town-goal"></div><div class="town-keys"><b>点击</b>移动 click to move · <b>点击人物</b>对话 click someone to talk</div>
       <div class="town-place"></div><div class="town-hint" hidden>${TOUCH ? "点击 Tap" : "点击 Click"}</div><div class="town-focus" hidden>${TOUCH ? "Tap the map to play" : "Click the map to play"}</div>
