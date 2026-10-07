@@ -4,6 +4,12 @@
 // Script property (Project Settings > Script properties): GITHUB_TOKEN, a fine-grained token for
 // goban-trainer with Pull requests: read and write. Without it feedback is only logged.
 
+// Run this from the editor to check the setup: it posts a test comment and logs GitHub's reply (201 = posted).
+function testFire() {
+  const r = postFeedbackComment_("TEST from the Apps Script editor", "#/tk · test", "");
+  Logger.log(r ? r.getResponseCode() + " " + r.getContentText().slice(0, 300) : "GITHUB_TOKEN is not set");
+}
+
 function getSheet_(name, headers) {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   let sheet = ss.getSheetByName(name);
@@ -100,7 +106,7 @@ function postFeedbackComment_(message, context, username) {
   const body = "**In-game feedback**" + (username ? " from " + username : "") + "\n\n> " +
     String(message).replace(/\n/g, "\n> ") + "\n\n`" + String(context).replace(/`/g, "'") + "`";
   try {
-    UrlFetchApp.fetch("https://api.github.com/repos/chamyao/goban-trainer/issues/3/comments", {
+    return UrlFetchApp.fetch("https://api.github.com/repos/chamyao/goban-trainer/issues/3/comments", {
       method: "post",
       contentType: "application/json",
       headers: { Authorization: "Bearer " + token, Accept: "application/vnd.github+json" },
@@ -109,8 +115,6 @@ function postFeedbackComment_(message, context, username) {
     });
   } catch (err) { console.error(err); }
 }
-
-function testFire() { postFeedbackComment_("TEST from the Apps Script editor", "#/tk · test", ""); }
 
 function jsonOut_(obj) {
   return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
