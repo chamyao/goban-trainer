@@ -361,7 +361,7 @@ Places that the user had "changed priorities". That was Plot's inference, and Pl
    - the story file
    - the needs doc: where problems are posed, challengers, items, props, poses, cast, stills, engine requests
    - still briefs in `scene_prompts.json`
-   - a generated readable script
+   - a generated readable script (`python3 tools/tk_script_md.py <WORLD> <out.md> "<title>"`)
    - the shared keys
 9. **Check and hand off:**
    - Run `check_story`, the arc checker and `build_tk`, then restore `data/`.
