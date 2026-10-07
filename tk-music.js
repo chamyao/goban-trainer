@@ -66,7 +66,10 @@ const TKMusic = {
   },
 
   tick() {
-    const want = this.on && this.unlocked ? this.pick() : null;
+    // the site's own Spotify player (app.js Music) playing: it has the floor, so the game's music fades out
+    // (the voiced lines are TKVoice's and keep playing) (the user: "Spotify should override the game music, not dialogue")
+    const spotify = typeof Music !== "undefined" && Music.now && Music.now.playing;
+    const want = this.on && this.unlocked && !spotify ? this.pick() : null;
     const voiced = typeof TKVoice !== "undefined" && TKVoice.audio && !TKVoice.audio.paused;
     for (const [name, a] of Object.entries(this.els)) {
       const target = name === want ? this.TRACKS[name].vol * (voiced ? this.DUCK : 1) : 0;
