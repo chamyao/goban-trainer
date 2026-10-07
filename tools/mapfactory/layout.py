@@ -260,6 +260,8 @@ class Layout:
                 score = abs(hubd - 3) * 4 + self.rng.random()
             else:
                 score = abs(d - (2 if building else 1)) * 3 + (hubd * (.5 if (node or near_hub) else .05)) + self.rng.random() * 2
+            if building and any((door[0] + dx, door[1] + dy) in self.used for dx in (-1, 0, 1) for dy in (1, 2)):
+                score += 1000   # its door faces something already standing there (a rock on the doorstep): only if nothing else will do
             if best is None or score < best[0]:
                 best = (score, x, y, door)
         if best is None:
