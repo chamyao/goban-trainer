@@ -1872,7 +1872,15 @@
    "id": "away",
    "when": "node:a10",
    "until": "node:a13",
-   "light": "day"
+   "light": "day",
+   "exits_closed": [
+    "changan--xiangfu"
+   ],
+   "exits_closed_say": {
+    "changan--xiangfu": [
+     "The gatekeeper shakes his head. “The Grand Preceptor has gone back to Meiwu.”"
+    ]
+   }
   },
   {
    "id": "gate-day",
@@ -1892,7 +1900,10 @@
    "id": "sack",
    "when": "node:a17",
    "light": "smoke",
-   "weather": "smoke"
+   "weather": "smoke",
+   "exits_open": [
+    "changan--xuanping-top"
+   ]
   }
  ],
  "ways": {

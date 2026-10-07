@@ -162,6 +162,7 @@ ZH_PLACES2 = {
     "“Gold, tens of thousands of jin. Silver, millions. I've stopped counting the silk.”": "“黄金几万斤，白银几百万。绸缎我已经不数了。”",
     "“Let them out. All of them. Give each a little silver for the road.”": "“放她们出去，一个不留。每人给些盘缠。”",
     "Bring the edict to Dong Zhuo in his hall.": "持诏往董卓堂上。",
+    "Ride out to Meiwu and bring the edict to Dong Zhuo in his hall.": "出城往郿坞，持诏至董卓堂上。",
     "Li Jue's tent": "李傕帐",
     "Guo Si's tent": "郭汜帐",
     "Zhang Ji's tent": "张济帐",
@@ -280,6 +281,7 @@ ZH_PLACES2 = {
     "“The road's yours. Mind the ruts after the bridge.”": "“路是你的了。过了桥小心车辙。”",
     # the door refusal (claude/plot-places 485d1f2)
     "The gatekeeper bars the way. “The Grand Preceptor receives no one today.”": "门吏拦住去路。“太师今日不见客。”",
+    "The gatekeeper shakes his head. “The Grand Preceptor has gone back to Meiwu.”": "门吏摇头道：“太师已回郿坞去了。”",
     # the Xuanping tower stair refusal (claude/plot-places 4c4ff83)
     "The guards at the stair cross their halberds. “No one goes up to the Son of Heaven's tower.”": "楼梯口的卫士交叉画戟。“天子之楼，任何人不得上去。”",
     # a7c and a18p objectives (claude/plot-places 6cdf152)

@@ -560,12 +560,14 @@ def state(st, mb, plans):
         pr["leash"] = pr.get("leash", 4) * mb.C
         out["procession"] = pr
     places = {slug(p) for p in plans}
+    doors = {t["id"]: f"{mb.mid}--{t['map']}" for t in mb.p.get("things", []) if t.get("map")}   # a door, by its building's id
+    to = lambda x: doors.get(x) or (slug(x) if slug(x) in places else None)   # noqa: E731
     for k in ("exits_open", "exits_closed"):
-        ids = [slug(x) for x in st.get(k, []) if slug(x) in places]
+        ids = [to(x) for x in st.get(k, []) if to(x)]
         if ids:
             out[k] = ids
-    if st.get("exits_closed_say"):   # what a shut road says, by the place it leads to
-        out["exits_closed_say"] = {slug(k): v for k, v in st["exits_closed_say"].items() if slug(k) in places}
+    if st.get("exits_closed_say"):   # what a shut road or door says, by the place it leads to
+        out["exits_closed_say"] = {to(k): v for k, v in st["exits_closed_say"].items() if to(k)}
     return out
 
 
@@ -765,7 +767,9 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
                            "map": f"{mid_}.map.json", "links": m["links"], "parent": m["parent"],
                            **({"gives": g} if (g := [x["gives"] for x in m["npcs"] if x.get("gives")]) else {})})
         else:
-            links = sorted({b2 for a, b2 in edges if a == mid_} | {x for x in m["links"]})
+            # the roads that really leave this map (its exits), so the lit route and the travel map follow them;
+            # a story edge with no road (Chang'an to Meiwu, with the Meiwu Road between) is only a fallback
+            links = sorted(set(m["links"]) or {b2 for a, b2 in edges if a == mid_})
             places.append({"id": mid_, "name": m["name"], "zh": zh.get(m["name"], ""), "archetype": m["archetype"],
                            "map": f"{mid_}.map.json", "links": links})
     return {k: v[0] for k, v in maps.items()}, places, quests

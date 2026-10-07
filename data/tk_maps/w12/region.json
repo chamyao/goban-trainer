@@ -22,8 +22,6 @@
     "changan--wangyun",
     "changan--xiangfu",
     "changan--xuanping-top",
-    "liangzhou",
-    "meiwu",
     "meiwu-road"
    ]
   },
@@ -224,7 +222,6 @@
    "archetype": "fortress",
    "map": "meiwu.map.json",
    "links": [
-    "changan",
     "liangzhou",
     "meiwu--diaochan",
     "meiwu--hall",
@@ -272,7 +269,6 @@
    "archetype": "loess",
    "map": "liangzhou.map.json",
    "links": [
-    "changan",
     "meiwu"
    ]
   },
@@ -3684,7 +3680,7 @@
    "spot": "a13",
    "scene": "a13",
    "title": "A Dragon in a Dream",
-   "objective": "Bring the edict to Dong Zhuo in his hall.",
+   "objective": "Ride out to Meiwu and bring the edict to Dong Zhuo in his hall.",
    "after": [
     "12-a12"
    ],
@@ -3861,7 +3857,7 @@
      63817
     ]
    ],
-   "objective_zh": "持诏往董卓堂上。",
+   "objective_zh": "出城往郿坞，持诏至董卓堂上。",
    "title_zh": "夜梦龙罩"
   },
   {
