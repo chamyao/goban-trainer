@@ -310,6 +310,22 @@ def compile_map(m, kit, out_dir):
         draw_kind = side if side and kit.k["kinds"].get(side) else o["kind"]
         key, spr = kit.sprite(draw_kind, f"{m['id']}/{o['x']},{o['y']}")
         solid = KINDS[o["kind"]][2]
+        drawn = (key or "").split("#")[0]
+        gated = any(x.get("id") == f"{o.get('id')}-gate" for x in m["objects"])   # its door already has a gatehouse drawn
+        if key and not gated and drawn != draw_kind and o["kind"].startswith("building.") and drawn in KINDS and \
+                (KINDS[drawn][0] < o["w"] or KINDS[drawn][1] < o["h"]):
+            # a big building (a walled compound, a palace) this kit draws with a smaller stand-in: the stand-in
+            # stands at the door on a footprint of its own, so the door is at the building you see (the iso view
+            # draws art at its footprint's centre), solid where it's drawn
+            fw, fh = min(KINDS[drawn][0], o["w"]), min(KINDS[drawn][1], o["h"])
+            d = o.get("door") or "S"
+            fx = o["x"] + (o["w"] - fw) / 2 if d in ("N", "S") else (o["x"] + o["w"] - fw if d == "E" else o["x"])
+            fy = o["y"] + (o["h"] - fh) / 2 if d in ("E", "W") else (o["y"] + o["h"] - fh if d == "S" else o["y"])
+            obj(key, "prop", (fx + fw / 2) * T, (fy + fh) * T, kind=o["kind"], fw=fw * T, fh=fh * T, solid=solid,
+                **({"ref": o["id"]} if o.get("id") else {}),
+                **({"in": json.dumps([o["in"]] if isinstance(o["in"], str) else o["in"])} if o.get("in") else {}),
+                **({"plaque": o["plaque"]} if o.get("plaque") else {}))
+            continue
         obj(key or "", "prop", (o["x"] + o["w"] / 2) * T, (o["y"] + o["h"]) * T,
             kind=o["kind"], fw=o["w"] * T, fh=o["h"] * T, solid=solid, **({"ref": o["id"]} if o.get("id") else {}),
             **({"in": json.dumps([o["in"]] if isinstance(o["in"], str) else o["in"])} if o.get("in") else {}),
