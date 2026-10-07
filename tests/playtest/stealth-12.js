@@ -1,4 +1,6 @@
 // Phone: Book 2's stealth beats (BOOK, default 12; test mode): every beat that has watchers who can catch you
+// (The way through is stepped, a cell at a time, by setting her there: the timing of the beat checked. Walking it
+// with the game's own tap-walk is walk-playthrough.js, which crosses all three.)
 // (lines or somewhere to send you). Coming into the place doesn't start the beat's scene by itself (a residence
 // is walked, not entered like a room); step into a watcher's sight and he says his line and sends you where he
 // sends you; wait for the cones to pass and walk on, and the beat's scene begins at its spot.
@@ -93,7 +95,7 @@ for(const q of beats){
     const cells=path.map(c=>{const x=c%cols;return at(x,(c-x)/cols);});cells[cells.length-1]=goal;
     // walk it in step with the game's own clock
     if(!walk)return {steps:found,direct,careless,secs:found*STEP*DT/1000,wait:((found-direct)*STEP*DT/1000)};
-    window.__plan={cells,i:0,acc:0,done:false};const h=(t,delta)=>{const pl=window.__plan;if(pl.done||w.caught||w.cine||w.leaving){w.events.off('update',h);return;}if(w.ui.busy())return;pl.acc+=delta;const k=Math.min(pl.cells.length-1,Math.floor(pl.acc/(STEP*DT)));const q=pl.cells[k];if(pl.k!==k){pl.k=k;w.walkTo(q.x,q.y,{ring:false});}   /* walked: the game's own tap-walk, a cell at a time, not set there */if(k>=pl.cells.length-1){pl.done=true;}};
+    window.__plan={cells,i:0,acc:0,done:false};const h=(t,delta)=>{const pl=window.__plan;if(pl.done||w.caught||w.cine||w.leaving){w.events.off('update',h);return;}if(w.ui.busy())return;pl.acc+=delta;const k=Math.min(pl.cells.length-1,Math.floor(pl.acc/(STEP*DT)));const q=pl.cells[k];w.walk=null;P.body.reset(q.x,q.y);   /* set there a cell at a time (walk-playthrough walks it) */if(k>=pl.cells.length-1){pl.done=true;}};
     w.events.on('update',h);
     return {steps:found,direct,secs:found*STEP*DT/1000,wait:((found-direct)*STEP*DT/1000)};},[q.spot,q.place,q.node,walk]);
   // the wait depends on when she sets off: a few moments, a second and a half apart
@@ -109,7 +111,7 @@ for(const q of beats){
       await p.evaluate(spot=>{const w=window.__w,s=w.spots[spot];w.tapAt(s.x,s.y);},q.spot);
     if(st.cine){res='scene';break;}if(st.caught){res='caught';if(process.env.DEBUG)console.log('  caught:',await p.evaluate(()=>{const w=window.__w,P=w.player,pl=window.__plan;return JSON.stringify({P:[P.x|0,P.y|0],step:pl&&Math.floor(pl.acc/150)+'/'+pl.cells.length,done:pl&&pl.done,goal:pl&&pl.cells[pl.cells.length-1],w:w.npcs.filter(n=>n.watch&&w.watching(n)).map(n=>[n.id,n.spr.x|0,n.spr.y|0,n.watch.dir,w.sees(n,P)]),spot:Object.values(w.spots).filter(s=>s.node==='12-a3').map(s=>[s.x,s.y,s.armed,s.trigger,!!w.openQuest(s)]),items:['pearls','crown'].map(i=>i+':'+w.cond('item:'+i)),next:w.nextMain().node,avail:w.available(w.nextMain()),gate:JSON.stringify(w.gateFor(w.nextMain())).slice(0,120),near:Math.hypot(P.x-856,P.y-603)|0});}));break;}if(await p.evaluate(()=>window.__w.ui.busy()&&!window.__w.cine))await p.evaluate(()=>window.__w.ui.advance());await p.waitForTimeout(100);}
   const waits=plan.wait.toFixed(1)+' s';
-  check(res==='scene',`${q.node}: walking that way she isn't seen, and the scene begins (${res}, ${((Date.now()-t0)/1000).toFixed(0)} s)`);
+  check(res==='scene',`${q.node}: stepped along that way (set a cell at a time, not walked: walk-playthrough walks it) she isn't seen, and the scene begins (${res}, ${((Date.now()-t0)/1000).toFixed(0)} s)`);
 }
 check(found>0,`stealth beats found: ${found}`);
 console.log(`stealth-12: ${checked-fails}/${checked}`);await b.close();process.exit(fails?1:0);})();

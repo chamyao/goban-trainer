@@ -10,7 +10,7 @@
 // change to maps, region links, map states or placeOpen.
 const { chromium, devices } = require(require('child_process').execSync('npm root -g', { env: { ...process.env, NODE_OPTIONS: '' } }).toString().trim() + '/playwright');
 const fs = require('fs'), path = require('path');
-const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +(process.env.STUCK || 60), MAXMIN = +(process.env.MAXMIN || 55);
+const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +(process.env.STUCK || 60), MAXMIN = +(process.env.MAXMIN || 55), BEATMAX = +(process.env.BEATMAX || 300);
 (async () => {
   const b = await chromium.launch({ args: ['--use-gl=swiftshader', '--enable-webgl'] });
   const p = await (await b.newContext({ ...devices['iPhone 13'] })).newPage();
@@ -99,7 +99,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   let beatLead = '';
   const close = (status, why, s) => { if (!beat) return; if (leadFor[beat] && beatLead && leadFor[beat] !== beatLead) console.log(`     note ${beat}: played by ${beatLead}, but the story's last handoff gave ${leadFor[beat]}`); const r = { beat, status, secs: Math.round((Date.now() - beatT) / 1000), place: s && s.place, at: s && s.P, lead: s && s.lead, why: why || '', line: lastLine.slice(0, 120) };
     report.push(r); console.log(`${status === 'pass' ? 'ok  ' : 'FAIL'} ${beat}  ${r.secs}s  ${r.lead || ''} in ${r.place || '?'}${status === 'pass' ? '' : `  at ${r.at}: ${why}${r.line ? ` ("${r.line}")` : ''}`}`); };
-  let plannedSteps = null, planT = 0, stealthTries = 0, lastTap = 0, skipped = false, reloads = 0; const held = [], recovered = [];
+  let plannedSteps = null, planT = 0, stealthTries = 0, lastTap = 0, skipped = false, reloads = 0, catches = 0, wasCaught = false; const held = [], recovered = [];
   for (;;) {
     if ((Date.now() - t0) / 60000 > MAXMIN) { const s = await look(); close('fail', `out of time (${MAXMIN} min)`, s); break; }
     const s = await look();
@@ -108,7 +108,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     if (s.next !== beat) {   // a new beat
       if (beat) close('pass', '', s);
       if (UNTIL && beat === UNTIL) break;
-      beat = s.next; beatT = Date.now(); lastProgress = Date.now(); refused = ''; stealthTries = 0; plannedSteps = null; skipped = false; reloads = 0;
+      beat = s.next; beatT = Date.now(); lastProgress = Date.now(); refused = ''; stealthTries = 0; plannedSteps = null; skipped = false; reloads = 0; catches = 0;
     }
     if (process.env.TRACE === beat && (!globalThis.__tr || Date.now() - globalThis.__tr > 2000)) { globalThis.__tr = Date.now();
       console.log('     trace', JSON.stringify({ ...s, items: undefined, extra: await p.evaluate(() => { const w = window.__w, d = document;
@@ -117,13 +117,17 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     // progress: a new place, a beat or item gained, or getting nearer the goal
     const key = `${s.place}|${s.cleared}|${s.items}|${s.goal}|${s.line}|${s.cine}|${s.duel}|${Math.round(Math.hypot(s.P[0] - (s.goal ? s.goal[0] : 0), s.P[1] - (s.goal ? s.goal[1] : 0)) / 24)}`;
     if (key !== progressKey) { progressKey = key; lastProgress = Date.now(); }
-    if (Date.now() - lastProgress > STUCK * 1000) {
+    if (s.caught && !wasCaught) catches++; wasCaught = s.caught;
+    const overBeat = Date.now() - beatT > BEATMAX * 1000 * (reloads + 1);   // going round in circles: caught again and again, or walking back and forth
+    if (Date.now() - lastProgress > STUCK * 1000 || overBeat) {
+      if (overBeat) refused = refused || `over ${BEATMAX}s on this beat (caught ${catches} times)`;
+      if (overBeat && reloads < 1) refused = '';
       const why = await p.evaluate(() => { const w = window.__w, P = w.player, g = w.goalAt, path = g && w.findPath(P.x, P.y - 3, g.x, g.y - 3);
         return `canMove ${w.canMove()}, seated ${!!w.seated}, approaching ${!!w.approaching}, walk ${w.walk ? w.walk.path.length : 'none'}, a way ${path ? path.length + ' points' : 'none'}, near: ${w.npcs.filter(n => n.spr.visible && Math.hypot(n.spr.x - P.x, n.spr.y - P.y) < 40).map(n => n.id).join(' ') || 'nobody'}`; }).catch(e => String(e));
       await p.screenshot({ path: path.join(__dirname, 'out', `walk-stuck-${beat}.png`) }).catch(() => {});
       const ui = await p.evaluate(() => ({ lead: window.__w.lead, party: window.__w.st.party, line: (document.querySelector('.town-ui .town-dlg')||{}).textContent, dlgHidden: (document.querySelector('.town-ui .town-dlg')||{}).hidden, busy: window.__w.ui.busy(), cine: !!window.__w.cine, leaving: !!window.__w.leaving, html: [...document.querySelectorAll('.town-ui button, .town-ui .town-dlg')].filter(e => e.offsetParent).map(e => e.className + ':' + e.textContent.trim().slice(0, 40)).slice(0, 6) })).catch(() => ({}));
       console.log('     ui:', JSON.stringify(ui));
-      const msg = refused || `stuck: no progress for ${STUCK}s (goal ${s.goal || 'none'}; ${why})`;
+      const msg = refused || (overBeat ? `over ${BEATMAX}s on this beat (caught ${catches} times; goal ${s.goal || 'none'})` : '') || `stuck: no progress for ${STUCK}s (goal ${s.goal || 'none'}; ${why})`;
       if (reloads < 1 && !refused) {   // what a player would do: reload, and go on from the save
         reloads++; recovered.push({ beat, at: s.P, place: s.place, why: msg, line: lastLine.slice(0, 120) });
         console.log(`FAIL ${beat}  at ${s.P} in ${s.place}: ${msg}${lastLine ? ` ("${lastLine.slice(0, 90)}")` : ''}; reloading, as a player would, and playing on`);

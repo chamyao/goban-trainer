@@ -41,6 +41,9 @@ const cases=[
   ['a17','lijue','meiwu','liangzhou',true,"Meiwu's west road after a16m"],
   ['a17','lijue','liangzhou','meiwu',false,"Liangzhou's east road before a17"],
   ['a18p','wangyun','liangzhou','meiwu',true,"Liangzhou's east road after a17"],
+  // the Meiwu Road (a road: open once two of the places it links are open): shut before Meiwu's beats, open at a13
+  ['a2','wangyun','changan','meiwu-road',false,'the Meiwu Road out of Chang\'an at a2'],
+  ['a13','lisu','changan','meiwu-road',true,'the Meiwu Road out of Chang\'an at a13'],
 ];
 for(const [stop,lead,place,to,open,what] of cases){
   const s=await at(stop,lead,place);if(!check(s.place===place,`${what}: set up in ${place} as ${lead} (in ${s.place} as ${s.lead})`))continue;
