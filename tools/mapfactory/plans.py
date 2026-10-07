@@ -68,6 +68,7 @@ class MapBuilder:
         self.cols, self.rows = plan["grid"]
         self.W, self.H = self.cols * self.C, self.rows * self.C
         self.K = kinds_of(tables)
+        self.gatehouse = {}   # building id -> width of the gatehouse drawn at its far-side door
         self.LINE = tables["LINE_KINDS"]
         self.ZONE = tables["ZONE_KINDS"]
         self.rng = random.Random(seed)
@@ -252,7 +253,16 @@ class MapBuilder:
                 ax, ay = {"S": (fx + fw // 2, fy + fh), "N": (fx + fw // 2, fy - 1),
                           "E": (fx + fw, fy + fh // 2), "W": (fx - 1, fy + fh // 2)}[d]
                 self.anchor.setdefault(t["id"], (ax, ay))
-                self.keep |= {(ax + dx, ay + dy) for dx in (-1, 0, 1) for dy in (0, 1) if d in "NS"} | {(ax, ay)}
+                ox_, oy_ = {"S": (0, 1), "N": (0, -1), "E": (1, 0), "W": (-1, 0)}[d]   # outward, away from the building
+                self.keep |= {(ax + dx + k * ox_, ay + k * oy_) for dx in (-1, 0, 1) for k in (0, 1) if d in "NS"} | \
+                             {(ax + k * ox_, ay + dy) for dy in (-1, 0, 1) for k in (0, 1) if d in "EW"} | {(ax, ay)}
+                if d == "N" and d == door and t.get("map") and kind.startswith("building.") and kind not in IN_WALL:
+                    # a door on the far side, which the camera can't see: a gatehouse stands at it, so the way in shows
+                    gw = self.K.get("building.gatehouse", (4, 1, False))[0]
+                    self.keep |= {(i, j) for i in range(ax - gw // 2 - 1, ax - gw // 2 + gw + 1) for j in (fy - 2, fy - 1)}   # no tree before it
+                    self.gatehouse[t["id"]] = gw
+                    self.objects.append({"kind": "building.gatehouse", "x": ax - gw // 2, "y": fy, "w": gw, "h": 1,
+                                         "id": f"{t['id']}-gate", "faces": "S", **({"label": t["gate_label"]} if t.get("gate_label") else {})})
             if t["id"] not in self.anchor:
                 self.anchor[t["id"]] = (fx + fw // 2, fy + fh)
 
@@ -317,9 +327,10 @@ class MapBuilder:
                 ax, ay = self.anchor[d["at_door"]]
                 fx, fy, fw, fh = self.foot[d["at_door"]]
                 y = fy + fh - 1 if not self.free((ax - 2, ay)) else ay
-                sides = (-2, 2) if d.get("pair") else (-2,)
+                off = self.gatehouse[d["at_door"]] // 2 + 1 if d["at_door"] in self.gatehouse else 2   # outside a gatehouse
+                sides = (-off, off) if d.get("pair") else (-off,)
                 for dx in sides:
-                    for t in ((ax + dx, ay), (ax + dx + (1 if dx > 0 else -1), ay), (ax + dx, ay - 1)):
+                    for t in ((ax + dx, ay), (ax + dx + (1 if dx > 0 else -1), ay), (ax + dx, ay - 1), (ax + dx, ay - 2)):
                         if self.put(kind, t):
                             break
             elif d.get("at_gates"):

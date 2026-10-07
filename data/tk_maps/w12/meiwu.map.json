@@ -507,8 +507,8 @@
   {
    "id": "npc-3",
    "kind": "folk.maiden",
-   "x": 15.5,
-   "y": 21.9,
+   "x": 13.5,
+   "y": 22.9,
    "say": [
     "“They took me from my mother's door in Chang'an. Eight hundred of us, picked like peaches.”"
    ],
@@ -519,8 +519,8 @@
   {
    "id": "npc-4",
    "kind": "folk.woman",
-   "x": 15.5,
-   "y": 13.9,
+   "x": 13.5,
+   "y": 14.9,
    "say": [
     "“The old lady is ninety. She says her flesh trembles. She hasn't slept in days.”"
    ],
@@ -531,8 +531,8 @@
   {
    "id": "npc-5",
    "kind": "folk.maiden",
-   "x": 39.5,
-   "y": 21.9,
+   "x": 38.5,
+   "y": 22.9,
    "say": [
     "“The gate is open. Which road goes home?”"
    ],
@@ -543,7 +543,7 @@
   {
    "id": "npc-6",
    "kind": "folk.official",
-   "x": 31.5,
+   "x": 33.5,
    "y": 31.9,
    "say": [
     "“Gold, tens of thousands of jin. Silver, millions. I've stopped counting the silk.”"
