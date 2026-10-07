@@ -56,7 +56,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   // the page, as the loop needs it each tick
   const look = () => p.evaluate(() => {
     const w = window.__w, d = document;
-    const dlg = d.querySelector('.town-ui .town-dlg'), line = dlg && !dlg.hidden ? (dlg.querySelector('.town-en') || dlg).textContent.trim() : '';
+    const dlg = [...d.querySelectorAll('.town-ui .town-dlg')].find(x => !x.hidden && x.offsetParent) || d.querySelector('.town-ui .town-dlg'),   /* the box showing (a narrator's line can be a second one) */ line = dlg && !dlg.hidden ? (dlg.querySelector('.town-en') || dlg).textContent.trim() : '';
     const vis = s => { const e = d.querySelector(s); return !!(e && e.offsetParent !== null); };
     if (!w || !w.player || !w.w) return { boot: true, scroll: vis('.tk-scroll-go'), cancel: [...d.querySelectorAll('button')].some(b => b.textContent.trim() === 'Cancel' && b.offsetParent) };
     const q = w.nextMain();
@@ -167,9 +167,11 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
         if (s.place !== e.from) done = s.place === e.to ? `fail: went through to ${s.place}` : `gone: the story took him to ${s.place} first`;
         else if (s.line) {   // its own line, as it types out (a story scene's lines on the way are let go by)
           const own = e.say.includes(s.line.slice(0, 24)) || (e.kind === 'notyet' && /isn't open yet/.test(s.line));
-          if (own && s.line.length >= 12) { e.said = s.line; done = 'pass'; } else if (!own) e.other = s.line; }
+          if (own && (s.line.length >= 12 || e.say.includes(JSON.stringify(s.line)))) { e.said = s.line; done = 'pass'; }   /* (a short line counts once it's whole: "East. Home.") */ else if (!own) e.other = s.line; }
       } else if (s.place === e.to) done = 'pass';
       else if (s.place !== e.from && !s.busy && !s.cine && !s.leaving) done = `gone: the story took him to ${s.place} first`;
+      if (!done && secs > 90) await p.screenshot({ path: path.join(__dirname, 'out', `walk-errand-${e.id.replace(/[^\w]+/g, '_').slice(0, 60)}.png`) }).catch(() => {});
+      if (!done && secs > 90) console.log('     on screen:', JSON.stringify(await p.evaluate(() => [...document.querySelectorAll('.town-ui *')].filter(x => x.offsetParent && x.children.length === 0 && (x.textContent || '').trim()).map(x => `${x.className}: ${x.textContent.trim().slice(0, 40)}`).slice(0, 12)).catch(() => [])));
       if (!done && secs > 90) done = `fail: not reached in 90s (at ${s.P} in ${s.place}${e.other ? `; last line "${e.other.slice(0, 60)}"` : ''})`;
       if (done) { errand = null; beatT += secs * 1000; lastProgress = Date.now();
         const st = done === 'pass' ? 'pass' : done.startsWith('gone') ? 'gone' : 'fail';
@@ -278,10 +280,10 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   if (BOOK === 13) { const F = k => facts[k] || { light: new Set(), route: new Set(), horses: new Set(), crouch: false, place: new Set() };
     const c4 = F('13-c4'), c9 = F('13-c9'), c20 = F('13-c20');
     const ff = [...c4.route].some(r => r.startsWith('fireflies@beimang')), band = [...c4.route].some(r => r.startsWith('band@beimang'));
-    console.log(`${band ? 'FAIL' : ff ? 'ok  ' : 'note'} c4: the way at night at Beimang is shown by fireflies, never the day's band (light ${[...c4.light].join('/') || '?'}; route ${[...c4.route].join(', ') || 'not drawn while watched: the goal in sight at once'})`);
-    console.log(`${c9.horses.has('red') ? 'ok  ' : 'FAIL'} c9: Red Hare walks behind Li Su as a red horse (followers on horses: ${[...c9.horses].join(', ') || 'none'})`);
-    console.log(`${c20.crouch ? 'ok  ' : 'FAIL'} c20: someone crouches in the scene (a figure drawn low, 0.72-0.76 of its height)`);
-    if (band || !c9.horses.has('red') || !c20.crouch) featureFails.push('book 13 features'); }
+    if (facts['13-c4']) console.log(`${band ? 'FAIL' : ff ? 'ok  ' : 'note'} c4: the way at night at Beimang is shown by fireflies, never the day's band (light ${[...c4.light].join('/') || '?'}; route ${[...c4.route].join(', ') || 'not drawn while watched: the goal in sight at once'})`);
+    if (facts['13-c9']) console.log(`${c9.horses.has('red') ? 'ok  ' : 'FAIL'} c9: Red Hare walks behind Li Su as a red horse (followers on horses: ${[...c9.horses].join(', ') || 'none'})`);
+    if (facts['13-c20']) console.log(`${c20.crouch ? 'ok  ' : 'FAIL'} c20: someone crouches in the scene (a figure drawn low, 0.72-0.76 of its height)`);
+    if (band || (facts['13-c9'] && !c9.horses.has('red')) || (facts['13-c20'] && !c20.crouch)) featureFails.push('book 13 features'); }   // (each judged only when its beat was walked)
   // after the book: once things settle, who the walk plays as (END_LEAD: who it must be, e.g. lijue after Book 12's a18)
   let after = null;
   for (let i = 0; i < 60; i++) { const s = await look().catch(() => null); if (s && !s.boot && !s.busy && !s.cine && !s.leaving && !s.duel) { after = s; break; }

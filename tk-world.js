@@ -44,7 +44,7 @@ const WorldData = {
   // "1-zhuo-county-c-elder": a challenger in a place, drawing from the world's problems.
   node(w, key) {
     const region = this.regions[w.n];
-    const m = region && key.match(/^(\d+)-(.+)-c-(\w+)$/);
+    const m = region && key.match(/^(\d+)-(.+)-c-([\w-]+)$/);   // a challenger id may have a hyphen ("post-guard")
     if (!m) return null;
     const place = region.places.find(p => p.id === m[2]);
     if (!place) return null;
