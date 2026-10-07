@@ -392,8 +392,12 @@ class MapBuilder:
 
     def lay_spots(self):
         for t in self.p.get("things", []):   # a building that hosts a beat: its spot is at its door
-            if t.get("node") and t["id"] in self.anchor:
+            if t.get("node") and t["id"] in self.anchor:   # a step out from the door, clear of the roof drawn over the doorstep
                 a = self.anchor[t["id"]]
+                d = t.get("door") or (t.get("doors") or ["S"])[0]
+                ox, oy = {"S": (0, 1), "N": (0, -1), "E": (1, 0), "W": (-1, 0)}.get(d, (0, 1))
+                if self.walkable((a[0] + ox, a[1] + oy)):
+                    a = (a[0] + ox, a[1] + oy)
                 self.spots.append({"id": t["id"], "x": a[0] + .5, "y": a[1] + .7, "node": t["node"], "label": t.get("label", "")})
         for s in self.p.get("spots", []):
             c = tuple(s["at"])

@@ -678,7 +678,7 @@ PLANS2 = {
                 {"id": "store-2", "kind": "building.storehouse", "rect": [8, 9, 2, 1], "door": "W", "label": "The treasury: pearls and jade"},
             ],
             "spots": [
-                {"id": "gate", "at": [7, 10], "label": "The gate of Meiwu", "note": "opens for Li Su with the edict"},
+                {"id": "gate", "at": [7, 11], "label": "The gate of Meiwu", "note": "opens for Li Su with the edict"},
             ],
             "dress": [{"kind": "tree.poplar", "along": "road", "every": 2}],
             "exits": [{"to": "Meiwu Road", "at": [15, 11], "side": "E"},
