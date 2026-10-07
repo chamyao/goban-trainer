@@ -1021,15 +1021,18 @@ function worldScenes() {
       if (this.routeFx) this.fadeRoute();
       this.routeFx = { all: [...made, end], t, from: this.time.now + made.length * 7 + 2500 };
     }
-    fadeRoute() {
+    fadeRoute(ms = 900) {
       const R = this.routeFx;
       if (!R) return;
       this.routeFx = null;
-      this.tweens.add({ targets: R.all, alpha: 0, duration: 900, onComplete: () => R.all.forEach(im => im.destroy()) });
+      this.tweens.killTweensOf(R.all);
+      this.tweens.add({ targets: R.all, alpha: 0, duration: ms, onComplete: () => R.all.forEach(im => im.destroy()) });
     }
     watchRoute() {
       const R = this.routeFx;
-      if (!R || this.time.now < R.from) return;
+      if (!R) return;
+      if (this.ui.busy() || this.cine || this.leaving || this.seated) return this.fadeRoute(250);   // a scene, a line or a door: the light goes at once
+      if (this.time.now < R.from) return;
       const v = this.cameras.main.worldView, m = Math.min(v.width, v.height) * .15;
       const seen = R.t.x > v.x + m && R.t.x < v.right - m && R.t.y > v.y + m && R.t.y < v.bottom - m;
       if (seen || this.goalAt !== R.t) this.fadeRoute();
