@@ -1555,7 +1555,17 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
   trainer = new Trainer(Object.assign({}, src, { problems: [p] }), 0, { svg, boardCard, status, treePanel, ...hidden, noEngine: true });
   // Size the board to the window it sits in, keeping its shape (it's cropped to the corner in play).
   const fit = () => {
-    if (box.parentNode && box.parentNode.classList.contains("tk-duel-full")) return svg.removeAttribute("style");
+    if (box.parentNode && box.parentNode.classList.contains("tk-duel-full")) {
+      // a phone upright: the board takes the width, but a tall crop (an adaptive pick, 7 wide by 12 tall) at most
+      // ~52% of the height, so the dilemma, the dialogue and the keys stay on screen under it
+      svg.removeAttribute("style"); boardCard.style.width = "";
+      const vb = svg.viewBox.baseVal;
+      if (!vb || !vb.width || matchMedia("(orientation: landscape) and (max-height: 560px)").matches) return;
+      const W = Math.min(box.clientWidth - 32, 520) - 16, H = innerHeight * .52 - 16, k = Math.min(W / vb.width, H / vb.height);
+      if (vb.height * W / vb.width <= H) return;   // fits by width: as before
+      svg.style.width = `${Math.floor(vb.width * k)}px`; svg.style.height = `${Math.floor(vb.height * k)}px`; boardCard.style.width = "auto";
+      return;
+    }
     const vb = svg.viewBox.baseVal, cs = getComputedStyle(box);
     if (!vb || !vb.width) return;
     // with the lead's portrait column (18%) beside it, the board gives up some width, or the words beside it
