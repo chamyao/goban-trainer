@@ -16,8 +16,8 @@ const fs = require('fs'), path = require('path');
 const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +(process.env.STUCK || 60), MAXMIN = +(process.env.MAXMIN || 55), BEATMAX = +(process.env.BEATMAX || 300);
 (async () => {
   const b = await chromium.launch({ args: ['--use-gl=swiftshader', '--enable-webgl'] });
-  const VIEW = process.env.VIEW || 'phone', TAPM = VIEW === 'desktop' ? 'click' : 'tap', KIT = process.env.KIT || '', SHOTS = process.env.SHOTS || '';   // VIEW phone | 360 | desktop (apo110's 1390x745 window); SHOTS: a folder for each speaker's first line
-  const p = await (await b.newContext(VIEW === 'desktop' ? { viewport: { width: 1390, height: 745 } } : VIEW === '360' ? { ...devices['Galaxy S9+'], viewport: { width: 360, height: 640 } } : { ...devices['iPhone 13'] })).newPage();
+  const VIEW = process.env.VIEW || 'phone', TAPM = VIEW === 'desktop' ? 'click' : 'tap', KIT = process.env.KIT || '', SHOTS = process.env.SHOTS || '';   // VIEW phone | landscape | 360 | desktop (apo110's 1390x745 window); SHOTS: a folder for each speaker's first line
+  const p = await (await b.newContext(VIEW === 'desktop' ? { viewport: { width: 1390, height: 745 } } : VIEW === '360' ? { ...devices['Galaxy S9+'], viewport: { width: 360, height: 640 } } : VIEW === 'landscape' ? { ...devices['iPhone 13 landscape'] } : { ...devices['iPhone 13'] })).newPage();
   await p.route(/script\.google\.com/, r => r.fulfill({ status: 200, contentType: 'application/json', body: '{"data":null}' }));
   const errs = []; p.on('pageerror', e => { errs.push(e.message); console.log('ERR', e.message); });
   await p.route('**/phaser.min.js', r => r.fulfill({ path: path.join(__dirname, 'vendor/phaser.min.js'), contentType: 'application/javascript' }));
