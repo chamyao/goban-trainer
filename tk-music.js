@@ -52,6 +52,10 @@ const TKMusic = {
     const s = typeof WorldView !== "undefined" && WorldView.game && WorldView.game.scene.getScene("world");
     if (!s || !s.sys || !s.sys.isActive() || !s.region) return null;
     const p = s.region.places.find(x => x.id === s.placeId);
+    // a go board open (a boss's or a scene's): the place's calm piece, whatever the scene asked for, so the
+    // problem has your attention (the user: "I can't concentrate with this boss fight music")
+    const board = document.querySelector(".tk-duel-board, .tk-level");
+    if (board && board.isConnected && board.offsetParent !== null) return (p && this.BY_PLACE[p.archetype]) || "lotus";
     if (s.cine && s.musicCue) {                                    // the scene asked for it
       if (s.musicCue === "none") return null;
       if (this.CUES[s.musicCue]) return this.CUES[s.musicCue];
