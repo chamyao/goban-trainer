@@ -212,7 +212,7 @@ PLANS2 = {
             ],
             "spots": [
                 {"id": "a1", "at": [10, 2], "node": "2-a1", "label": "The farewell banquet", "trigger": "near"},
-                {"id": "a3", "at": [13, 9], "node": "2-a3", "label": "Lü Bu's side door", "trigger": "talk"},
+                {"id": "a3", "at": [13, 9], "at_door": "lubu", "node": "2-a3", "label": "Lü Bu's gate", "trigger": "talk"},
                 {"id": "a6", "at": [6, 7], "node": "2-a6", "label": "Between the red lanterns", "trigger": "near"},
                 {"id": "a11", "at": [3, 1], "node": "2-a11", "label": "Lü Bu on the ridge", "trigger": "near", "on": "ridge"},
                 {"id": "market", "at": [6, 5], "node": "2-a15", "label": "The market crossroads", "trigger": "near"},
@@ -516,7 +516,7 @@ PLANS2 = {
         "objectives": {
             "2-a1": "See the Grand Preceptor off: out through the Heng Gate, at the north end of the avenue, to the banquet tent.",
             "2-a2": "Go home to your residence, on the ward street just west of the avenue, and walk out into the rear garden.",
-            "2-a3": "Take the crown to Lü Bu's side door, at the east end of the ward street, past the Chancellor's gate.",
+            "2-a3": "Take the crown to Lü Bu's gate, with the weapon rack, at the east end of the ward street, past the Chancellor's gate.",
             "2-a4": "Receive Lü Bu in the rear hall.",
             "2-a5": "Dance for the Grand Preceptor in the front hall.",
             "2-a6": "Ride home down the avenue, between the red lanterns.",

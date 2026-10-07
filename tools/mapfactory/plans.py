@@ -386,7 +386,11 @@ class MapBuilder:
                 self.spots.append({"id": t["id"], "x": a[0] + .5, "y": a[1] + .7, "node": t["node"], "label": t.get("label", "")})
         for s in self.p.get("spots", []):
             c = tuple(s["at"])
-            if s.get("on") and s["on"] in self.foot:
+            if s.get("at_door") in self.anchor:      # square in front of a building's door, a step out so you don't walk in (the crown at Lü Bu's gate)
+                ax, ay = self.anchor[s["at_door"]]
+                d = next((x.get("door") for x in self.objects if x.get("id") == s["at_door"]), "S")
+                t = {"S": (ax, ay + 1), "N": (ax, ay - 1), "E": (ax + 1, ay), "W": (ax - 1, ay)}.get(d, (ax, ay + 1))
+            elif s.get("on") and s["on"] in self.foot:
                 fx, fy, fw, fh = self.foot[s["on"]]
                 t = (fx + fw // 2, fy + fh // 2)
             else:

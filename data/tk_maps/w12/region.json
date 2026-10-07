@@ -666,7 +666,7 @@
    "spot": "a3",
    "scene": "a3",
    "title": "The Gold Crown",
-   "objective": "Take the crown to Lü Bu's side door, at the east end of the ward street, past the Chancellor's gate.",
+   "objective": "Take the crown to Lü Bu's gate, with the weapon rack, at the east end of the ward street, past the Chancellor's gate.",
    "after": [
     "12-a2"
    ],
@@ -867,7 +867,7 @@
      "objective_zh": "将明珠送到市街西头的珠宝铺，嵌造金冠。"
     }
    ],
-   "objective_zh": "将金冠送到坊街东头吕布府的侧门，须经过相府门前。",
+   "objective_zh": "将金冠送到坊街东头吕布府门前（门边有兵器架），须经过相府门前。",
    "title_zh": "金冠"
   },
   {
