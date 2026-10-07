@@ -1,8 +1,8 @@
 # The Cao Cao arc (novel chapters 3–4, and the start of 5): design draft
 
 Written from the Chinese original (第三回、第四回, and the start of 第五回), following `docs/plot-playbook.md`.
-Everything in a beat happens in the novel unless it is marked **(invented)**. This is the design, for the user to review
-before drafting. No story code has been written yet.
+Everything in a beat happens in the novel unless it is marked **(invented)**. The user approved this design, and the draft is in `tools/tk_story_w2_new.py` as `WORLD2_CC`.
+The readable script is `docs/book2/caocao-script.md`.
 
 **How to read this:**
 - **Contest:** a go problem *mid-scene*, at a real moment of risk in the novel.
@@ -368,7 +368,7 @@ closed); `palace_fire`; `fireflies` (two boys tied together by their robes, foll
 `prince_dz` (a nine-year-old on horseback before a wall of banners, Dong Zhuo dismounting); `wm_lubu` (behind Ding Yuan,
 a young man with a halberd and furious eyes); `lb_charge`; `red_hare` (the horse, fire-red, rearing); `lb_gold` (gold,
 pearls and a jade belt laid out on a camp table); `lb_candle` (Ding Yuan reading by a candle, a shadow at the tent flap);
-`lb_kneels` (Lü Bu kneeling to Dong Zhuo); `ys_seal` (a seal of office hanging from the East Gate at dawn);
+`lb_kneels` (Lü Bu kneeling to Dong Zhuo); `ys_sword` (Yuan Shao and Dong Zhuo with drawn swords across a banquet table);
 `deposition` (a boy kneeling facing north, his seal ribbons in another's hands); `swallows` (a boy at a tower window
 watching two swallows); `heads_gate` (carts at the gate, smoke); `wy_birthday` (ministers weeping at a banquet, one man
 laughing); `seven_star` (the sword, seven jewels); `the_mirror` (a fat man lying down, looking up into a mirror, a drawn

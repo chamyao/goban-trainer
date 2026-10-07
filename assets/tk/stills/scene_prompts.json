@@ -670,5 +670,180 @@
     "beat": "Cai Yong at his go board in a study piled with the unfinished history of the Han; Wang Yun across from him.",
     "scene": "A scholar's study in the afternoon, lattice light. Bundles of bamboo-slip books are stacked everywhere, and on a stand rests a qin zither whose tail end is scorched black. At a low go board, mid-game, sits an elderly scholar with a long grey beard and a gentle, tired face, holding a stone between two fingers. Across from him, the grey-bearded minister Wang Yun studies him rather than the board. Only these two.",
     "notes": "Book 2 rewrite. Not in the novel: added on the user's call (docs/book2/diaochan-arc.md, A12y). The scorched-tail qin is Cai Yong's legendary 焦尾琴."
+  },
+  "cc_council": {
+    "book": 2,
+    "category": "intrigue",
+    "beat": "Cao Cao walks out of He Jin's council, having warned him in vain.",
+    "scene": "Inside a general's lamp-lit hall, officials in court robes sit stiffly at low tables. In the foreground, walking away from them toward the open doors, is Cao Cao: a compact man in his thirties in an officer's dark robe, thin moustache, sharp narrowed eyes, his jaw set. Behind him, at the head of the hall, the heavy-set general He Jin in rich armour-robes glowers after him. Cool daylight beyond the doors.",
+    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+  },
+  "hj_head": {
+    "book": 2,
+    "category": "intrigue",
+    "beat": "He Jin's head is thrown over the palace wall (never shown directly).",
+    "scene": "Seen from below, outside a closed red palace gate in a high wall: a small dark object arcs over the top of the wall against a grey sky, too small and far to make out. Below, two officers in armour (Yuan Shao, tall and proud; Cao Cao, shorter) stand frozen, looking up. Soldiers behind them recoil. The gate stays shut.",
+    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+  },
+  "palace_fire": {
+    "book": 2,
+    "category": "battle",
+    "beat": "The Luoyang palace burns at night after the eunuchs are slaughtered.",
+    "scene": "Night. Rows of palace halls with sweeping tiled roofs burn against a black sky, flames and sparks pouring upward, a red glow on the smoke. In the courtyard below, small figures of soldiers run with buckets and spears. In the foreground Cao Cao, lit orange from the side, points and shouts orders.",
+    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+  },
+  "fireflies": {
+    "book": 2,
+    "category": "omen",
+    "beat": "The young Emperor and the Prince of Chenliu, their robes knotted together, follow a river of fireflies through the dark.",
+    "scene": "Night on a thorny hillside above a dark river. Two small boys in torn, mud-stained imperial robes, the hems knotted together so they cannot lose each other, climb hand in hand. The younger one, about nine, leads, looking up in wonder. Around them hundreds of fireflies stream in a glowing ribbon that curves ahead up the slope, lighting a path through the thorns. Deep blue darkness everywhere else.",
+    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+  },
+  "prince_dz": {
+    "book": 2,
+    "category": "intrigue",
+    "beat": "The nine-year-old Prince of Chenliu faces Dong Zhuo's army on the road; Dong Zhuo dismounts.",
+    "scene": "A country road under a sky darkened by dust. A wall of embroidered banners and armoured cavalry fills the background. In front of them, the huge, fat warlord Dong Zhuo in heavy armour is climbing down from his horse in haste. Facing him, small and straight-backed on a horse beside a trembling older boy, the nine-year-old Prince of Chenliu in dusty imperial robes looks him in the eye. Ministers in court robes watch from the side, astonished.",
+    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+  },
+  "wm_lubu": {
+    "book": 2,
+    "category": "intrigue",
+    "beat": "At the Wenming Garden banquet, a young warrior with a painted halberd glares from behind Ding Yuan.",
+    "scene": "An outdoor banquet in a palace garden: officials at low tables under blossoming trees. In the centre the governor Ding Yuan, older, grey-bearded, has pushed back his table and stands defiantly. Directly behind him towers Lü Bu: young, tall and splendid, in a gold hair-crown with long pheasant plumes, holding a crescent-bladed painted halberd upright, glaring across the garden with furious eyes. The viewpoint is from across the garden, from Dong Zhuo's side.",
+    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+  },
+  "lb_charge": {
+    "book": 2,
+    "category": "battle",
+    "beat": "Lü Bu charges straight at Dong Zhuo on the field outside Luoyang.",
+    "scene": "A dusty battlefield outside a city wall. Lü Bu gallops straight toward the viewer, in a gold hair-crown with pheasant plumes, a robe embroidered with a hundred flowers over lion-headed armour, his painted halberd levelled. Behind him Ding Yuan's army surges forward. Dust and fluttering banners; a sense of overwhelming speed.",
+    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+  },
+  "red_hare": {
+    "book": 2,
+    "category": "everyday",
+    "beat": "Red Hare, the horse that goes a thousand li a day, is led into Lü Bu's camp.",
+    "scene": "Inside a military camp at dusk. A magnificent horse, red as burning charcoal from nose to tail without one hair of another colour, rears up against the sky, mane flying, held on a halter by a groom. Lü Bu, young and tall in armour, stares at it, delighted. Li Su, a smiling courtier-officer, stands beside him with an open hand, presenting it.",
+    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+  },
+  "lb_gold": {
+    "book": 2,
+    "category": "intrigue",
+    "beat": "Li Su lays out gold, pearls and a jade belt before Lü Bu.",
+    "scene": "A lamp-lit camp tent. On a low table: stacked gold ingots, a heap of bright pearls spilling from a silk pouch, and a white jade belt. Lü Bu, young and powerful, sits behind the table, staring at the treasure with wine forgotten in his hand. Across from him Li Su leans in, smiling, speaking low. Warm, conspiratorial light.",
+    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+  },
+  "lb_candle": {
+    "book": 2,
+    "category": "intrigue",
+    "beat": "At the second watch, Lü Bu enters Ding Yuan's tent while Ding Yuan reads by candlelight.",
+    "scene": "Night, inside a plain command tent. The old governor Ding Yuan sits at a desk reading a bamboo-slip book by a single candle, looking up kindly. In the tent's open flap stands the dark shape of Lü Bu, a blade in his hand, his face half in shadow. Only the candle lights the scene.",
+    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+  },
+  "lb_kneels": {
+    "book": 2,
+    "category": "intrigue",
+    "beat": "Lü Bu kneels to Dong Zhuo as his adopted son.",
+    "scene": "Inside a warlord's tent hung with banners. The huge, fat Dong Zhuo, in rich robes, stands with arms open, beaming. Before him Lü Bu kneels on one knee in golden armour, head bowed, offering himself. Li Su watches from the side, pleased. Officers line the walls.",
+    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+  },
+  "ys_sword": {
+    "book": 2,
+    "category": "intrigue",
+    "beat": "Yuan Shao draws his sword on Dong Zhuo at the Secretariat banquet.",
+    "scene": "A crowded banquet hall lined with armoured guards. In the centre two men face each other with drawn swords across a low table: the huge warlord Dong Zhuo, flushed and furious, and Yuan Shao, tall, handsome and proud in an officer's robe, his sword raised level. The seated officials shrink back. Among them, at one table, Cao Cao watches closely.",
+    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+  },
+  "deposition": {
+    "book": 2,
+    "category": "intrigue",
+    "beat": "The young Emperor is deposed in the Jiade Hall, kneeling facing north.",
+    "scene": "A vast throne hall. At the foot of the empty throne a boy of about fourteen in imperial robes kneels facing away from the throne, his seal ribbons being untied by an attendant. Above him on the dais the fat warlord Dong Zhuo stands with a drawn sword. Rows of ministers in court robes bow their heads, some weeping. A small boy of nine, in new imperial yellow, is being led toward the throne.",
+    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+  },
+  "swallows": {
+    "book": 2,
+    "category": "aftermath",
+    "beat": "The deposed Emperor watches two swallows from a tower window in the Yong'an Palace.",
+    "scene": "A spring afternoon. A boy of about fourteen in plain, worn robes leans at a high lattice window of a shut-up palace tower, looking out at two swallows flying over a courtyard of new green grass. Far off, beyond the walls, the roofs of the great palace. His face is thin and sad. Quiet, soft, and very still.",
+    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+  },
+  "heads_gate": {
+    "book": 2,
+    "category": "aftermath",
+    "beat": "Dong Zhuo's carts return to Luoyang from the Yangcheng festival massacre (the heads never shown clearly).",
+    "scene": "A city gate in late afternoon. A line of ox carts rolls in under the gate tower, loaded with sacks and bundles of looted goods, their undersides draped and in shadow. Soldiers march beside them, cheering. In front of the gate, a bonfire sends up thick black smoke. Townspeople along the road turn away, covering their faces. The cargo stays indistinct.",
+    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+  },
+  "wy_birthday": {
+    "book": 2,
+    "category": "intrigue",
+    "beat": "At Wang Yun's false birthday banquet, the ministers weep, and Cao Cao laughs.",
+    "scene": "Evening in a minister's rear hall, lamps lit. Old ministers in court robes sit at low tables, weeping into their sleeves. At the head, the grey-bearded minister Wang Yun covers his face. At one table Cao Cao leans back, clapping his hands and laughing, the only dry-eyed man in the room. Several of the weeping men stare at him, shocked.",
+    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+  },
+  "seven_star": {
+    "book": 2,
+    "category": "everyday",
+    "beat": "The Seven-Star Sword.",
+    "scene": "Close-up on a short sword a little over a foot long, half drawn from a lacquered sheath on a dark table. The hilt and scabbard are inlaid with seven jewels in a line like the Big Dipper. The exposed blade is very bright and keen. Warm lamplight; a hand rests near it.",
+    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+  },
+  "the_mirror": {
+    "book": 2,
+    "category": "intrigue",
+    "beat": "Dong Zhuo, lying down, sees Cao Cao in the dressing mirror with a drawn sword.",
+    "scene": "A small, richly furnished pavilion room. On a couch, the huge, fat Dong Zhuo lies on his side facing the wall. Above him on a stand is a bronze dressing mirror, and in the mirror is reflected Cao Cao standing behind him with a short jewelled sword drawn, about to strike. Dong Zhuo's eyes have just opened, looking up into the mirror. The reflection is the focus.",
+    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+  },
+  "east_gate": {
+    "book": 2,
+    "category": "battle",
+    "beat": "Cao Cao gallops out through Luoyang's East Gate.",
+    "scene": "A great city gate at midday. A lone rider, Cao Cao, bursts through the gate passage at a full gallop on a fine horse, cloak streaming, whip raised. A gate guard turns to watch him go. Beyond the gate, an open road runs east across the plain.",
+    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+  },
+  "wanted": {
+    "book": 2,
+    "category": "aftermath",
+    "beat": "Cao Cao's wanted portrait on a post-station wall.",
+    "scene": "A plastered wall at a roadside post station. Pasted on it is an official notice with a painted portrait of Cao Cao, his sharp eyes and thin moustache, and red seal stamps. A few travellers and a soldier stand reading it. Dusty light.",
+    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+  },
+  "cg_unties": {
+    "book": 2,
+    "category": "bond",
+    "beat": "At midnight in the jail's back courtyard, Chen Gong unties Cao Cao.",
+    "scene": "Night, a small courtyard behind a county office, lit by one lantern. Cao Cao, his robe dishevelled, sits bound on a stool. A lean, earnest county magistrate in his thirties, Chen Gong, kneels before him, untying the ropes with his own hands, looking up at him with admiration. No one else.",
+    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+  },
+  "boshe_pig": {
+    "book": 2,
+    "category": "aftermath",
+    "beat": "In Lü Boshe's kitchen, a pig tied up for the slaughter.",
+    "scene": "A dark farmhouse kitchen at dusk, lit only by the last light through a doorway. On the floor a pig lies with its legs tied, ready to be killed; a sharpened knife lies on a block beside it. In the doorway, Cao Cao and Chen Gong stand frozen, swords in hand, the blades lowered. No bodies are shown.",
+    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+  },
+  "boshe_road": {
+    "book": 2,
+    "category": "aftermath",
+    "beat": "Lü Boshe, returning with wine, turns to look back on the road.",
+    "scene": "A country road through a wood at dusk. An old, kindly man on a donkey, two jars of wine hanging from his saddle and a bundle of fruit and greens in his hand, has twisted round to look back down the road. Behind him, a little way off, a rider has turned his horse back toward him with a drawn sword. The old man's face shows only mild puzzlement.",
+    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+  },
+  "cg_inn": {
+    "book": 2,
+    "category": "intrigue",
+    "beat": "Chen Gong stands over the sleeping Cao Cao with a drawn sword.",
+    "scene": "A plain room in a roadside inn, moonlight through the window. Cao Cao lies asleep on a low bed. Standing over him, Chen Gong holds a drawn sword, his face torn with doubt. The moonlight falls across the blade and the sleeping man's face.",
+    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+  },
+  "white_banner": {
+    "book": 2,
+    "category": "plan",
+    "beat": "Cao Cao raises the white banner of 'Loyalty and Right' at Chenliu.",
+    "scene": "A village drilling ground on a bright morning. A tall white banner flies from a pole, two large black characters on it: 忠义. Beneath it Cao Cao stands on a low platform. Before him volunteers stream in from every direction, farmers and young men with spears, and a few armoured officers arrive on horseback with men behind them. Hopeful, rising energy.",
+    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
   }
 }
