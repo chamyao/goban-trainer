@@ -74,8 +74,8 @@ meaning (see R5).
   *Octopath Traveler* is the warning: separate stories that never merge felt disconnected.
 - **What it means:** switch the lead at a moment when the outgoing and incoming characters are on screen together, so it
   feels like being passed on rather than cut away.
-- **In the arc:** the lead changes 11 times, each at a meeting or a parting. For example, Wang Yun hands Diaochan to Dong
-  Zhuo's carriage, and Li Su receives the edict from Wang Yun.
+- **In the arc:** the lead changes 11 times, each at a meeting or a parting. For example, Wang Yun sees Diaochan off in Dong
+  Zhuo's carriage, and Li Su takes over in Wang Yun's secret room, where he breaks an arrow and swears to the plot.
 - **Learned in playtest:** a meeting is necessary, but not enough. The new lead must start in the right place, the old
   lead must finish their own stretch first, and the screen must say who you are now. The rules are in R3.
 
@@ -327,7 +327,8 @@ Places that the user had "changed priorities". That was Plot's inference, and Pl
    in the scratchpad.
 2. **Survey the tasks.** List every task in the chapters: actor, goal, obstacle, outcome, whether the text **shows** it or
    **summarises** it, a quote, and how well it fits play. Subagents can split this by chapter. The survey decides the rest.
-3. **Choose leads and handoffs** from the survey (R3). Hand off at meetings. For each handoff, write where the new
+3. **Choose the thread figure, leads and handoffs** from the survey. Name the figure who ties the cast together (C4),
+   then choose the leads (R3). Hand off at meetings. For each handoff, write where the new
    lead starts.
 4. **Classify every beat** as legwork, contest or settled (R4). Mark failed tasks (R7). Give hard
    contests two or three problems at the dialogue's turns (R6).
@@ -335,6 +336,11 @@ Places that the user had "changed priorities". That was Plot's inference, and Pl
    where** (R11). Write the place's needs (buildings, rooms, who stands where) as **shared keys** for Places.
 6. **Set road challengers** per walk, with exact totals and how many are blocking (R8).
 7. **Write the scenes:**
+   - Open the arc on a first impression that teaches its tone (C8).
+   - Land one plot fact per scene, and leave the colour to townsfolk (C2).
+   - Leave gaps in the story, never in the task (C1).
+   - Plant what later scenes pay off, using the novel's own echoes (C6).
+   - Start some beats already under way (C7).
    - Use the novel's lines in Chinese, with plain English.
    - Put motives in the characters' own words.
    - Add stills for moments the map can't show, with a one-line brief each.
@@ -358,6 +364,10 @@ Places that the user had "changed priorities". That was Plot's inference, and Pl
 
 ## Part 4: Checklist before pushing an arc
 
+- [ ] The arc's first scene teaches its tone (C8).
+- [ ] Every scene lands one plot fact (C2).
+- [ ] Every payoff is planted earlier in the arc or book (C6).
+- [ ] The thread figure appears in or drives every lead's stretch (C4).
 - [ ] Every beat comes from the novel, or is marked "not in the novel, added on the user's call".
 - [ ] One chain. Every gate is an obstacle the novel contains.
 - [ ] Each beat is legwork, contest or settled. No board decides an outcome the novel already decided.
@@ -373,6 +383,7 @@ Places that the user had "changed priorities". That was Plot's inference, and Pl
 
 1. **Failed tasks**: whether the user chose option (b) (see R7).
 2. **Per-handoff role line** ("Jia Xu, adviser to Li Jue"): Integration is asking apo110 whether it's wanted.
-3. **The rest of Book 2** (Cao Cao in chapters 3–4, the coalition in chapters 5–7): the outline in
+3. **Novel verses at act ends:** keep this research lesson or drop it? The Diaochan arc uses none.
+4. **The rest of Book 2** (Cao Cao in chapters 3–4, the coalition in chapters 5–7): the outline in
    `docs/book2/research.md` Part 5 is provisional. Several of its questions are unanswered: folding the first beats into
    the opening scroll, how to stage the Lü Boshe killings, and length.
