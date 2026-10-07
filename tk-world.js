@@ -1000,7 +1000,7 @@ function worldScenes() {
         tex.add("dot", 0, 0, 0, S, S); tex.add("band", 0, S, (S - h) / 2, w, h);
       }
       // the way, rounded at its corners and laid every few pixels: a road lit from your feet to the goal
-      const pts = this.roundCorners(this.routePoints({ x: P.x, y: P.y }, t), 10), STEP = 5, band = [];
+      const pts = this.squareCorners(this.routePoints({ x: P.x, y: P.y }, t)), STEP = 5, band = [];
       let carry = 0;
       for (let i = 1; i < pts.length; i++) {
         const a = pts[i - 1], b = pts[i], d = Math.hypot(b.x - a.x, b.y - a.y), ang = Math.atan2(b.y - a.y, b.x - a.x);
@@ -1071,6 +1071,24 @@ function worldScenes() {
     }
 
     // Round a polyline's corners (radius r px), so a lit way bends like a road, not a ruler.
+    // The route as right-angle turns (the user's wish): each slanting stretch becomes an L, bent on whichever
+    // side is open ground; a slant with no clear L either way stays as it is.
+    squareCorners(pts) {
+      const G = this.walkGrid(), C = G.C;
+      const clear = (a, b) => { const n = Math.ceil(Math.hypot(b.x - a.x, b.y - a.y) / 4);
+        for (let i = 0; i <= n; i++) { const x = a.x + (b.x - a.x) * i / n, y = a.y + (b.y - a.y) * i / n; if (!G.free(Math.floor(x / C), Math.floor(y / C))) return false; } return true; };
+      const out = [pts[0]];
+      for (let i = 1; i < pts.length; i++) {
+        const a = out[out.length - 1], b = pts[i];
+        if (Math.abs(b.x - a.x) > 2 && Math.abs(b.y - a.y) > 2) {
+          const e1 = { x: b.x, y: a.y }, e2 = { x: a.x, y: b.y };
+          if (clear(a, e1) && clear(e1, b)) out.push(e1);
+          else if (clear(a, e2) && clear(e2, b)) out.push(e2);
+        }
+        out.push(b);
+      }
+      return out;
+    }
     roundCorners(pts, r) {
       const out = [];
       for (let i = 0; i < pts.length; i++) {
