@@ -114,6 +114,8 @@ const TK_CHARS = {
   yanshi: { name: "Lady Yan", skin: "#fbefe8", hair: "#1a1418", hat: "lady", pin: "#e6c14a", pin2: "#c8283c", flower: "#c8283c", robe: "#7a2a3a", trim: "#e6c14a", beard: "none", eyes: "narrow", makeup: true },
   zhangkai: { name: "Zhang Kai", skin: "#d8a47c", hair: "#2a2024", hat: "yellowband", hatC: "#e8bc2a", robe: "#6a5a3a", trim: "#e8bc2a", beard: "bristle", eyes: "narrow", weapon: "sword" },
   caosong: { name: "Cao Song", skin: "#efd8c0", hair: "#d8d2c8", hat: "guan", hatC: "#1e1e24", robe: "#7b4a2a", trim: "#d4ad42", beard: "long", beardC: "#e0dcd4", eyes: "kind" },
+  // the Talk with Claude book: Clawd, the Claude Code mascot, drawn by TKArt.clawd instead of as a person
+  claude: { name: "Claude", clawd: true, skin: "#d97757", robe: "#d97757", trim: "#d97757", hair: "#d97757", beard: "none" },
 };
 // Someone the story names but nobody has drawn yet: the stand-in's look (their own name still shows).
 const tkLook = who => TK_CHARS[who] || TK_CHARS.f_farmer;
@@ -300,10 +302,31 @@ const TKArt = {
     else if (d.hat === "straw") { E(16, 8, 15, 3, H); E(16, 5, 7, 4, H); Ln(2, 8, 30, 8, this.shade(H, -.25)); }
     return this.canvas(this.outline(g));
   },
+  // Clawd: a flat clay-orange block with two tall black eyes, a nub of an arm each side and four short legs.
+  // view: down | up | side (facing right) | bust; frame 0-3 walks (1 and 3 lift a pair of legs, the body bobs).
+  clawd(view, frame = 0) {
+    const C = "#d97757", hi = "#e89a7c", lo = "#b85f42", eye = "#1c1418";
+    const big = view === "bust", g = this.grid(big ? 34 : 16, big ? 34 : 20), k = big ? 2 : 1;
+    const R = (x, y, w, h, c) => this.rect(g, x * k + (big ? 1 : 0), y * k + (big ? -6 : 0), w * k, h * k, c);
+    const bob = frame % 2 ? 1 : 0, side = view === "side";
+    const [bx, bw] = side ? [3, 10] : [2, 12], top = 6 + bob;
+    R(bx, top, bw, 8, C); R(bx, top, bw, 1, hi); R(bx, top + 7, bw, 1, lo);
+    if (side) R(bx + bw, top + 3, 2, 2, C);                       // the arm nub in front
+    else { R(0, top + 3, 2, 2, C); R(14, top + 3, 2, 2, C); }
+    const legs = side ? [4, 6, 9, 11] : [3, 5, 10, 12];
+    legs.forEach((x, i) => {
+      const up = frame === 1 ? i % 2 === 0 : frame === 3 ? i % 2 === 1 : false;
+      R(x, top + 8, 1, (up ? 2 : 3) - bob, lo);
+    });
+    if (view === "down" || big) { R(5, top + 2, 1, 2, eye); R(10, top + 2, 1, 2, eye); }
+    if (side) R(10, top + 2, 1, 2, eye);
+    return this.canvas(this.outline(g, "#5a2a1c"));
+  },
   cache: {},
   get(who, kind, frame = 0, pose = "stand") {
     const k = `${who}|${kind}|${frame}|${pose}`;
-    if (!this.cache[k]) this.cache[k] = kind === "bust" ? this.bust(tkLook(who)) : this.sprite(tkLook(who), frame, pose);
+    if (!this.cache[k]) this.cache[k] = tkLook(who).clawd ? this.clawd(kind === "bust" ? "bust" : "down", frame)
+      : kind === "bust" ? this.bust(tkLook(who)) : this.sprite(tkLook(who), frame, pose);
     return this.cache[k];
   },
   // Flipped copy for walking left.
