@@ -473,7 +473,7 @@
   {
    "id": "gate",
    "x": 29.5,
-   "y": 41.7,
+   "y": 45.7,
    "node": "",
    "label": "The gate of Meiwu",
    "note": "opens for Li Su with the edict"
@@ -567,7 +567,7 @@
   {
    "id": "gateguard",
    "kind": "folk.soldier",
-   "x": 29.5,
+   "x": 30.5,
    "y": 45.9,
    "say": [],
    "intro": [
