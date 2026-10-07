@@ -6,7 +6,8 @@
 // A stealth beat is crossed by timing (the patrols simulated ahead), still walked a cell at a time.
 // Fails a beat, with the place, position and last line, when the player is refused a way (a closed road, a
 // barred door), gets stuck (no progress for STUCK seconds) or has nowhere to go. Writes a per-beat report
-// to out/walk-playthrough-<book>-<diff>.json. OPTIONAL=1 also walks, on each map as he comes to it, to every
+// to out/walk-playthrough-<book>-<diff>.json. Whenever he can walk, the goal box's chip must name the lead (it follows
+// the party through the hand-offs). OPTIONAL=1 also walks, on each map as he comes to it, to every
 // road challenger still there (he must open a board and lose his "!" once beaten), every conditional door in the
 // state it's in (barred: its own line and he stays; open: through it) and every side room (in, and on again).
 // Slow (about half an hour): run before a release and after any
@@ -54,7 +55,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     return {
       book: w.w.n, place: w.placeId, lead: w.lead, party: (w.st.party || []).join(','), next: q && q.node, P: [Math.round(w.player.x), Math.round(w.player.y)],
       goal: w.goalAt && [Math.round(w.goalAt.x), Math.round(w.goalAt.y)], busy: w.ui.busy(), cine: !!w.cine, leaving: !!w.leaving, walking: !!w.walk,
-      caught: !!w.caught, engaged: !!w.engaged, line, who: dlg && !dlg.hidden ? ((dlg.querySelector('.town-who') || {}).textContent || '').trim() : '', scroll: vis('.tk-scroll-go'), duel: !!d.querySelector('.tk-duel svg'), cont: vis('.tk-duel-go'),
+      caught: !!w.caught, engaged: !!w.engaged, chip: ((d.querySelector('.town-goal .town-lead') || {}).textContent || '').trim(), leadName: typeof tkName === 'function' ? tkName(w.lead) : w.lead, line, who: dlg && !dlg.hidden ? ((dlg.querySelector('.town-who') || {}).textContent || '').trim() : '', scroll: vis('.tk-scroll-go'), duel: !!d.querySelector('.tk-duel svg'), cont: vis('.tk-duel-go'),
       skip: !!d.querySelector('.tk-duel-keys button') && [...d.querySelectorAll('.tk-duel-keys button')].some(b => /Skip/.test(b.textContent)),
       cleared: TK.world(w.w.n).nodes.filter(n => TK.cleared(n.key)).length, items: JSON.stringify((typeof WorldItems !== 'undefined' && WorldItems.list && WorldItems.list(w.w)) || []),
       cancel: [...d.querySelectorAll('button')].some(b => b.textContent.trim() === 'Cancel' && b.offsetParent),
@@ -123,7 +124,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   const close = (status, why, s) => { if (!beat) return; if (leadFor[beat] && beatLead && leadFor[beat] !== beatLead) console.log(`     note ${beat}: played by ${beatLead}, but the story's last handoff gave ${leadFor[beat]}`); const r = { beat, status, secs: Math.max(0, Math.round((Date.now() - beatT) / 1000)), place: s && s.place, at: s && s.P, lead: s && s.lead, why: why || '', line: lastLine.slice(0, 120) };
     report.push(r); console.log(`${status === 'pass' ? 'ok  ' : 'FAIL'} ${beat}  ${r.secs}s  ${r.lead || ''} in ${r.place || '?'}${status === 'pass' ? '' : `  at ${r.at}: ${why}${r.line ? ` ("${r.line}")` : ''}`}`); };
   let plannedSteps = null, planT = 0, pace = 3, stealthTries = 0, lastTap = 0, skipped = false, reloads = 0, catches = 0, wasCaught = false; const held = [], recovered = [];
-  const shotWho = new Set(), shots = []; let lastPlace = '', arrivedAt = null; const OPTIONAL = !!process.env.OPTIONAL, visited = new Set(), errands = []; let errand = null;
+  const chipBad = new Set(), chipSeen = [], shotWho = new Set(), shots = []; let lastPlace = '', arrivedAt = null; const OPTIONAL = !!process.env.OPTIONAL, visited = new Set(), errands = []; let errand = null;
   for (;;) {
     if ((Date.now() - t0) / 60000 > MAXMIN) { const s = await look(); close('fail', `out of time (${MAXMIN} min)`, s); break; }
     const s = await look();
@@ -194,7 +195,10 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
         await p.locator('.tk-duel-keys button', { hasText: 'Skip' }).first()[TAPM]().catch(() => {}); await p.waitForTimeout(600); continue; }
       await p.waitForTimeout(300); continue;
     }
-    if (!s.busy && !s.cine && !s.leaving) beatLead = s.lead;   // who is walking the beat
+    if (!s.busy && !s.cine && !s.leaving) { beatLead = s.lead;   // who is walking the beat
+      // the goal box's chip (apo110: who am I playing): the lead's name, as the party hands on
+      if (!s.chip || !s.leadName || !s.chip.includes(s.leadName)) { if (!chipBad.has(beat)) { chipBad.add(beat); console.log(`FAIL ${beat}: the goal box's chip says "${s.chip}", but ${s.lead} (${s.leadName}) is walking`); } }
+      else if (chipSeen[chipSeen.length - 1] !== s.chip) chipSeen.push(s.chip); }
     // a scene's Skip button up with no line showing, and nothing moving on: what a player would press
     if (s.busy && !s.cine && !s.line && !skipped && Date.now() - lastProgress > 8000 && await p.locator('.town-skip').count() && !(await p.locator('.tk-still').count())) { skipped = true;   // (not a scene picture showing, which has no line either)
       console.log(`FAIL ${beat}: held by a scene with no line showing (the game busy, only a Skip button up); a player has to press Skip`); held.push(`${beat} in ${s.place}`);
@@ -255,6 +259,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   fs.writeFileSync(path.join(__dirname, 'out', `walk-playthrough-${BOOK}-${DIFF || 'default'}.json`), JSON.stringify(out, null, 1));
   if (diffCheck.off && diffCheck.off.length) console.log(`FAIL boards drawn from the wrong pool (${diffCheck.adaptive ? 'rated' : diffCheck.easy ? 'easy' : 'hard'}): ${diffCheck.off.join(', ')}`);
   console.log(`walk-playthrough Book ${BOOK} (${DIFF || 'default'}): ${report.length - fails}/${report.length} beats walked and played in ${out.minutes} min (${recovered.length} needed a reload, ${held.length} held by a scene); ${boards.length} boards (${diffCheck.ok} from the ${diffCheck.adaptive ? 'rated' : diffCheck.easy ? 'easy' : 'hard'} pool)`);
+  console.log(`the goal box's chip followed the party: ${chipSeen.join(' → ') || 'never shown'}${chipBad.size ? ` (wrong at ${[...chipBad].join(', ')})` : ''}`);
   if (OPTIONAL) console.log(`optional: ${errands.filter(e => e.status === 'pass').length}/${errands.length} walked to, ${errands.filter(e => e.status === 'gone').length} gone before he got there (${errands.filter(e => e.id.startsWith('challenger')).length} challengers, ${errands.filter(e => e.id.startsWith('door')).length} doors and rooms)`);
-  await b.close(); process.exit(errands.some(e => e.status === 'fail') || fails || held.length || recovered.length || (diffCheck.off && diffCheck.off.length) ? 1 : 0);
+  await b.close(); process.exit(chipBad.size || errands.some(e => e.status === 'fail') || fails || held.length || recovered.length || (diffCheck.off && diffCheck.off.length) ? 1 : 0);
 })();
