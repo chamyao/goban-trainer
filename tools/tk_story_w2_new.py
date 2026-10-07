@@ -812,7 +812,6 @@ def _scenes_chain():
             N("Li Su calls the soldiers to drive him off. Two mouths, one above the other, make the character Lü.",
               "呼将士驱去。两“口”相叠，便是“吕”字。"),
             ["run", "dr", "a13d", -40, 10], ["remove", "dr"],
-            ["party", ["wangyun"], {"to": "a14"}],
         ]},
 
         # A14 · The North Side Gate. The boss: three boards on the way to "There is an edict to kill a traitor!"
@@ -821,12 +820,12 @@ def _scenes_chain():
             ["army", "officials", "f_official", 6, "a14", 18, -10],
             ["spawn", "dz", "dongzhuo", "a14", 40, 0],
             ["prop", "car", "carriage", "a14", 40, 0], ["board", "dz", "car"],
-            ["spawn", "ls", "lisu", "a14", 36, 6],
+            ["spawn", "wy", "wangyun", "a14", 8, -8],
             ["spawn", "lb", "lvbu", "a14", 48, 0],
             N("The officials, in court dress, line the road to greet him. Li Su walks beside the carriage with a drawn sword in his hand. "
               "At the North Side Gate the guards are all stopped outside. Only the twenty-odd men drawing the carriage go in with it.",
               "卓进朝，群臣各具朝服，迎谒于道。李肃手执宝剑扶车而行。到北掖门，军兵尽挡在门外，独有御车二十余人同入。"),
-            ["move", "car", "a14", 20, 0], ["move", "ls", "a14", 18, 6], ["move", "lb", "a14", 28, 0],
+            ["move", "car", "a14", 20, 0], ["move", "lisu", "a14", 18, 6], ["move", "lb", "a14", 28, 0],
             ["boss", "dongzhuo"],
             ["problem"],  # 1
             N("Far off, Dong Zhuo sees Wang Yun and the others standing at the hall gate, each with a sword in his hand.",
@@ -854,6 +853,7 @@ def _scenes_chain():
             S("lvbu", "By the Emperor's edict, the traitor Dong Zhuo is slain! No one else will be punished!", "奉诏讨贼臣董卓，其余不问！"),
             N("Officers and officials all cry: Long live the Emperor!", "将吏皆呼万岁。"),
             ["victory"],
+            ["party", ["wangyun"], {"to": "a15"}],
         ]},
 
         # A15 · The aftermath. No board.
@@ -1257,13 +1257,13 @@ def _multi_dilemmas():
               "He has sworn in blood.", "他已刺臂为誓。", "He wavers. Again.", "他在犹豫。再来。"),
         ],
         "a14": [
-            D("wangyun", "Get the carriage through the gate.", "让车驾入门。",
+            D("lisu", "Get the carriage through the gate.", "让车驾入门。",
               "His guards are shut outside. Only the carriage men come in.", "卫兵都挡在门外，只有车驾进来。",
               "The gate closes behind him.", "门已在他身后关上。", "Not yet. He's looking.", "还不行，他在看。"),
-            D("wangyun", "Spring the ambush.", "伏兵齐出。",
-              "He has seen the swords. Now, before he turns back.", "他已看见了剑。就是现在，趁他还没回头。",
-              "The blades are on him.", "刀枪齐至。", "Too soon. Hold.", "太早了，稳住。"),
-            D("wangyun", "Finish it.", "了结此贼。",
+            D("lisu", "Push the carriage straight in.", "推车直入。",
+              "He has seen the swords. Don't answer him, and don't stop.", "他已看见了剑。不要答话，不要停。",
+              "He is inside. The soldiers are coming.", "车已入内，武士齐出。", "Too soon. Hold.", "太早了，稳住。"),
+            D("lisu", "Finish it.", "了结此贼。",
               "The blades won't go in. Only one man can do this.", "刀枪不入。只有一人能了结他。",
               "There is an edict to kill a traitor!", "有诏讨贼！", "He's calling for his son. Hold.", "他在喊他的儿子。稳住。"),
         ],
