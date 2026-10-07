@@ -1060,7 +1060,10 @@ def _scenes_chain():
             N("Then Li Jue and Guo Si think: having come this far, why not kill the Son of Heaven and take the great prize? "
               "They draw their swords and storm into the palace, shouting.",
               "当下李傕、郭汜寻思曰：“既到这里，不杀天子谋大事，更待何时？”便持剑大呼，杀入内来。"),
+            ["run", "lj", "a18", 6, -2], ["run", "gs", "a18", 8, 2],
             N("What became of Emperor Xian? Hear the next chapter.", "未知献帝性命如何，且听下文分解。"),
+            ["remove", "lj"],
+            ["party", ["lijue"], {"to": "a18"}],
         ]},
     }
 
