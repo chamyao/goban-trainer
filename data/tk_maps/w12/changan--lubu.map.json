@@ -100,6 +100,7 @@
    "w": 6,
    "h": 4,
    "id": "stable",
+   "enter": "S",
    "door": "W",
    "faces": "W",
    "label": "The stable",

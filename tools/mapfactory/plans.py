@@ -43,6 +43,7 @@ WALK = {"grass": True, "dirt": True, "sand": True, "water": False, "void": False
 IN_WALL = {"building.gate", "building.gatehouse", "building.gatetower", "building.moongate"}
 PASSABLE = {"furn.seat", "furn.curtain", "furn.rug", "landmark.ridge", "building.gatehouse", "building.gate", "building.moongate",
             "plant.flower", "plant.bush", "plant.grass", "plant.peony", "rock.small", "water.lotus"}
+SIDE_DRAWN = {"building.wing"}   # drawn in side view when it faces E or W, its doorway on the front
 TALL = ("building", "tree", "rock", "ruin", "garden", "landmark")   # what a roof or crown rises above
 NPC_KEYS = ("challenge", "intro", "win", "done", "until", "face", "when", "gives", "gives_when", "give", "given", "call",
             "in", "in_beats", "inside", "follower", "blocks", "view", "label", "note")
@@ -224,6 +225,11 @@ class MapBuilder:
             if door is None and kind.startswith("building."):
                 fy = oy + ch - fh                              # no door: it still faces south, onto the open side
             o = {"kind": kind, "x": fx, "y": fy, "w": fw, "h": fh, "id": t["id"]}
+            # a wing facing E or W is drawn in side view with its doorway on the front, at the bottom (Jade's
+            # wing_side; the stand-ins face front too): the way in is there, while it still faces its court
+            enter = "S" if kind in SIDE_DRAWN and door in ("E", "W") else door
+            if enter != door:
+                o["enter"] = enter
             if kind.startswith("building."):
                 o["door"] = door
                 o["faces"] = t.get("faces") or (door if door in SIDES else "S")
@@ -249,7 +255,7 @@ class MapBuilder:
             if kind.startswith(("tree.", "garden.rockery", "furn.plant", "furn.screen", "garden.screenwall")) or kind.startswith("building."):
                 o["blocks_sight"] = True
             # the tile in front of each door, kept clear; the anchor for people and spots
-            for d in (t.get("doors") or ([door] if door else [])):
+            for d in [enter if d == door else d for d in (t.get("doors") or ([door] if door else []))]:
                 ax, ay = {"S": (fx + fw // 2, fy + fh), "N": (fx + fw // 2, fy - 1),
                           "E": (fx + fw, fy + fh // 2), "W": (fx - 1, fy + fh // 2)}[d]
                 self.anchor.setdefault(t["id"], (ax, ay))
@@ -394,7 +400,8 @@ class MapBuilder:
         for t in self.p.get("things", []):   # a building that hosts a beat: its spot is at its door
             if t.get("node") and t["id"] in self.anchor:   # a step out from the door, clear of the roof drawn over the doorstep
                 a = self.anchor[t["id"]]
-                d = t.get("door") or (t.get("doors") or ["S"])[0]
+                d = next((x.get("enter") for x in self.objects if x.get("id") == t["id"] and x.get("enter")), None) or \
+                    t.get("door") or (t.get("doors") or ["S"])[0]
                 ox, oy = {"S": (0, 1), "N": (0, -1), "E": (1, 0), "W": (-1, 0)}.get(d, (0, 1))
                 if self.walkable((a[0] + ox, a[1] + oy)):
                     a = (a[0] + ox, a[1] + oy)
@@ -403,7 +410,7 @@ class MapBuilder:
             c = tuple(s["at"])
             if s.get("at_door") in self.anchor:      # square in front of a building's door, a step out so you don't walk in (the crown at Lü Bu's gate)
                 ax, ay = self.anchor[s["at_door"]]
-                d = next((x.get("door") for x in self.objects if x.get("id") == s["at_door"]), "S")
+                d = next((x.get("enter") or x.get("door") for x in self.objects if x.get("id") == s["at_door"]), "S")
                 t = {"S": (ax, ay + 1), "N": (ax, ay - 1), "E": (ax + 1, ay), "W": (ax - 1, ay)}.get(d, (ax, ay + 1))
             elif s.get("on") and s["on"] in self.foot:
                 fx, fy, fw, fh = self.foot[s["on"]]
@@ -686,7 +693,7 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
                 child = f"{pid}--{o['map']}"
                 if child not in maps:
                     continue
-                d = o.get("door") or "S"
+                d = o.get("enter") or o.get("door") or "S"
                 fx, fy, fw, fh = o["x"], o["y"], o["w"], o["h"]
                 ex = {"S": {"x": round(fx + fw / 2 - .4, 2), "y": fy + fh - .15, "w": .8, "h": .45},
                       "N": {"x": round(fx + fw / 2 - .4, 2), "y": fy - .3, "w": .8, "h": .45},
