@@ -143,6 +143,23 @@ const Sync = {
     if (!res.ok) throw new Error(`feedback failed (${res.status})`);
   },
 
+  // The campaign's chat with Claude (tk.js viewTKChat): messages go to the Feedback inbox PR through the
+  // Apps Script, and the thread (yours and Claude's replies) comes back from it.
+  async sendChat(message, context = location.hash) {
+    const res = await fetch(this.API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ username: this.username || "", kind: "chat", data: { message, context } }),
+    });
+    if (!res.ok) throw new Error(`chat failed (${res.status})`);
+  },
+  async fetchChat() {
+    const res = await fetch(`${this.API_URL}?username=${encodeURIComponent(this.username || "")}&kind=chat`);
+    if (!res.ok) throw new Error(`chat fetch failed (${res.status})`);
+    const body = await res.json();
+    return (body.data && body.data.messages) || [];
+  },
+
   renderChip() {
     const chip = document.getElementById("authChip");
     if (!chip) return;
@@ -3387,6 +3404,7 @@ async function route() {
   if (parts[0] === "review") viewReview();
   else if (parts[0] === "play") viewPlay(parts[1]);
   else if (parts[0] === "feedback") viewFeedback();
+  else if (parts[0] === "tk" && parts[1] === "chat") await viewTKChat();
   else if (parts[0] === "tk" && parts[1] && parts[2]) await viewTKLevel(parseInt(parts[1], 10), parts[2]);
   else if (parts[0] === "tk") await viewTK(parseInt(parts[1], 10) || 0);
   else if (parts[0] === "book" && parts[1] && parts[2]) await viewPlayer(parts[1], parseInt(parts[2], 10) || 1);

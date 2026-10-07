@@ -1,8 +1,10 @@
 // The Goban sheet's Apps Script (Extensions > Apps Script on the "Goban" sheet), deployed as the web app
 // at Sync.API_URL. Progress, review games and feedback, as before; new feedback is also posted as a comment
 // on the Feedback inbox PR (chamyao/goban-trainer#3), which wakes the Integration session at once.
+// The campaign's chat with Claude goes the same way: "**Chat** from <name>" comments out, Claude's
+// "**Reply** to <name>" comments read back (kind=chat).
 // Script property (Project Settings > Script properties): GITHUB_TOKEN, a fine-grained token for
-// goban-trainer with Pull requests: read and write. Without it feedback is only logged.
+// goban-trainer with Pull requests and Issues: read and write. Without it feedback and chat are only logged.
 
 // Run this from the editor to check the setup: it posts a test comment and logs GitHub's reply (201 = posted).
 function testFire() {
@@ -37,6 +39,8 @@ function findGameRow_(sheet, username, gameId) {
 function doGet(e) {
   const username = e.parameter.username;
   if (!username) return jsonOut_({ error: "username required" });
+
+  if (e.parameter.kind === "chat") return jsonOut_({ username, data: { messages: chatThread_(username) } });
 
   if (e.parameter.kind === "review") {
     const sheet = reviewSheet_();
@@ -73,6 +77,18 @@ function doPost(e) {
     return jsonOut_({ ok: true, posted: posted ? posted.getResponseCode() : "no token" });
   }
 
+  // The chat with Claude: logged, then posted to the inbox PR as "**Chat** from <username>".
+  if (body.kind === "chat") {
+    const msg = body.data && body.data.message;
+    if (!msg || !body.username) return jsonOut_({ error: "message and username required" });
+    const context = (body.data && body.data.context) || "";
+    getSheet_("Chat", ["timestamp", "username", "message", "context"]).appendRow([now, body.username, msg, context]);
+    const posted = postComment_("**Chat** from " + body.username + "\n\n> " + String(msg).replace(/\n/g, "\n> ") +
+      "\n\n`" + String(context).replace(/`/g, "'") + "`");
+    CacheService.getScriptCache().remove("chat:" + body.username);
+    return jsonOut_({ ok: true, posted: posted ? posted.getResponseCode() : "no token" });
+  }
+
   if (!body.username) return jsonOut_({ error: "username required" });
 
   if (body.kind === "review") {
@@ -99,12 +115,10 @@ function doPost(e) {
   return jsonOut_({ ok: true });
 }
 
-// Post the note as a comment on the Feedback inbox PR, which the Integration session watches.
-function postFeedbackComment_(message, context, username) {
+// Post a comment on the Feedback inbox PR (chamyao/goban-trainer#3), which the Integration session watches.
+function postComment_(body) {
   const token = PropertiesService.getScriptProperties().getProperty("GITHUB_TOKEN");
-  if (!token) return;
-  const body = "**In-game feedback**" + (username ? " from " + username : "") + "\n\n> " +
-    String(message).replace(/\n/g, "\n> ") + "\n\n`" + String(context).replace(/`/g, "'") + "`";
+  if (!token) return null;
   try {
     return UrlFetchApp.fetch("https://api.github.com/repos/chamyao/goban-trainer/issues/3/comments", {
       method: "post",
@@ -113,7 +127,39 @@ function postFeedbackComment_(message, context, username) {
       payload: JSON.stringify({ body: body }),
       muteHttpExceptions: true,
     });
-  } catch (err) { console.error(err); }
+  } catch (err) { console.error(err); return null; }
+}
+
+function postFeedbackComment_(message, context, username) {
+  return postComment_("**In-game feedback**" + (username ? " from " + username : "") + "\n\n> " +
+    String(message).replace(/\n/g, "\n> ") + "\n\n`" + String(context).replace(/`/g, "'") + "`");
+}
+
+// One player's chat thread from the inbox PR: their "**Chat** from <name>" messages and Claude's
+// "**Reply** to <name>" answers, oldest first (the last 100), cached for a few seconds.
+function chatThread_(username) {
+  const cache = CacheService.getScriptCache(), key = "chat:" + username, hit = cache.get(key);
+  if (hit) return JSON.parse(hit);
+  const token = PropertiesService.getScriptProperties().getProperty("GITHUB_TOKEN");
+  if (!token) return [];
+  const out = [];
+  for (let page = 1; page <= 10; page++) {
+    const r = UrlFetchApp.fetch("https://api.github.com/repos/chamyao/goban-trainer/issues/3/comments?per_page=100&page=" + page, {
+      headers: { Authorization: "Bearer " + token, Accept: "application/vnd.github+json" }, muteHttpExceptions: true });
+    if (r.getResponseCode() !== 200) break;
+    const list = JSON.parse(r.getContentText());
+    for (const c of list) {
+      const b = String(c.body || "").replace(/\r/g, ""), head = b.split("\n")[0].trim();
+      if (head === "**Chat** from " + username)
+        out.push({ who: "you", text: (b.split("\n\n")[1] || "").replace(/^> ?/gm, ""), at: c.created_at });
+      else if (head === "**Reply** to " + username)
+        out.push({ who: "claude", text: b.slice(b.indexOf("\n") + 1).replace(/\n+---\n+_Generated by[\s\S]*$/, "").trim(), at: c.created_at });
+    }
+    if (list.length < 100) break;
+  }
+  const last = out.slice(-100);
+  cache.put(key, JSON.stringify(last), 5);
+  return last;
 }
 
 function jsonOut_(obj) {

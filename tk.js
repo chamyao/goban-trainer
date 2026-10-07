@@ -1077,6 +1077,7 @@ async function viewTK(worldN) {
     ...D.worlds.filter(x => !(x.draft || x.hidden) || TK_TEST).map(x => TK.worldOpen(x.n)
       ? h("a", { class: "tk-world" + (x.n === n ? " on" : ""), href: `#/tk/${x.n}` }, `${x.book || x.n} · ${x.zh} ${x.name}${x.hidden ? " · 下架 off" : ""}`)
       : h("span", { class: "tk-world lock" }, `${x.n} · ${x.zh} ${x.name} — 先完成第${x.n - 1}卷 after Book ${x.n - 1}`)),
+    ...(tkChatAllowed() ? [h("a", { class: "tk-world tk-world-chat", href: "#/tk/chat" }, "对话 · Talk with Claude")] : []),
   ]));
   const host = h("div", { class: "tk-map" });
   root.append(host);
@@ -1629,6 +1630,76 @@ const TKOverlay = {
 
 // Where the player is, for a feedback note: book, place, position, the next beat and its goal line,
 // what's open on screen, and the device and settings.
+// Talk with Claude: a two-way chat, listed with the books (the user, apo110). A message goes through the Apps
+// Script to the Feedback inbox PR, which wakes the Integration session; its replies come back the same way, and
+// the window asks for them every few seconds while it's open. Only for apo110 (and test mode).
+function tkChatAllowed() {
+  return (typeof Sync !== "undefined" && Sync.username === "apo110") || (typeof TK_TEST !== "undefined" && TK_TEST);
+}
+let tkChatTimer = null;
+async function viewTKChat() {
+  const nav = routeSeq;
+  clearTimeout(tkChatTimer);
+  crumbs.innerHTML = "";
+  crumbs.append(h("a", { href: "#/" }, "Library"), " / ", h("a", { href: "#/tk" }, "三国演义"), " / 对话 Talk with Claude");
+  root.innerHTML = "";
+  if (!tkChatAllowed()) {
+    root.append(h("div", { class: "tk-chat" }, [h("p", {}, "这一卷不对外开放。This book isn't open.")]));
+    return;
+  }
+  const log = h("div", { class: "tk-chat-log" });
+  const ta = h("textarea", { class: "tk-chat-in", rows: "2", placeholder: "写给 Claude… Message Claude (Enter sends, Shift+Enter for a new line)" });
+  const send = h("button", { class: "tk-chat-send", type: "button" }, "发送 Send");
+  const note = h("div", { class: "tk-chat-note" });
+  root.append(h("div", { class: "tk-chat" }, [
+    h("div", { class: "tk-chat-head" }, [h("b", {}, "对话 · Talk with Claude"), h("small", {}, "Claude replies here, usually within a minute or two.")]),
+    log, h("div", { class: "tk-chat-row" }, [ta, send]), note]));
+  let list = [], pending = [], shown = "";
+  const when = at => at ? new Date(at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "…";
+  const draw = () => {
+    const key = JSON.stringify([list.length, list.length && list[list.length - 1].at, pending.length]);
+    if (key === shown) return;
+    shown = key;
+    const atEnd = log.scrollHeight - log.scrollTop - log.clientHeight < 40;
+    log.innerHTML = "";
+    if (!list.length && !pending.length) log.append(h("div", { class: "tk-chat-empty" }, "还没有消息。No messages yet: say hello."));
+    for (const m of [...list, ...pending])
+      log.append(h("div", { class: "tk-chat-m " + (m.who === "claude" ? "them" : "me") + (m.pending ? " pending" : "") },
+        [h("div", { class: "tk-chat-text" }, m.text), h("small", {}, (m.who === "claude" ? "Claude · " : "") + when(m.at))]));
+    if (atEnd || pending.length) log.scrollTop = log.scrollHeight;
+  };
+  const poll = async () => {
+    if (nav !== routeSeq) return;
+    try {
+      list = await Sync.fetchChat();
+      if (nav !== routeSeq) return;
+      pending = pending.filter(p => !list.some(m => m.who === "you" && m.text === p.text));
+      note.textContent = "";
+      draw();
+    } catch (e) { console.error(e); note.textContent = "连不上对话 Can't reach the chat right now; trying again."; }
+    if (nav === routeSeq) tkChatTimer = setTimeout(poll, 8000);
+  };
+  send.onclick = async () => {
+    const text = ta.value.trim();
+    if (!text) return;
+    send.disabled = true;
+    pending.push({ who: "you", text, pending: true });
+    ta.value = "";
+    draw();
+    try { await Sync.sendChat(text, `#/tk/chat · last book ${(() => { try { return localStorage.getItem("tk-book") || "?"; } catch { return "?"; } })()}`); }
+    catch (e) { console.error(e); note.textContent = "没发出去 Couldn't send; your message is back in the box."; pending.pop(); ta.value = text; draw(); }
+    send.disabled = false;
+    clearTimeout(tkChatTimer);
+    tkChatTimer = setTimeout(poll, 1500);
+  };
+  ta.addEventListener("keydown", e => {
+    e.stopPropagation();
+    if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); send.click(); }
+  });
+  draw();
+  poll();
+}
+
 function tkFeedbackContext(w) {
   const sc = window.__w, parts = [location.hash, `Book ${w.n}`];
   try {
