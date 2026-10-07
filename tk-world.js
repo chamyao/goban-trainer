@@ -1237,7 +1237,8 @@ function worldScenes() {
             if (G.free(x, y) && (!best || Math.hypot(dx, dy) < best.d)) best = { x: x * C + C / 2, y: y * C + C / 2 + 3, d: Math.hypot(dx, dy) };
           }
           if (best) { this.player.setPosition(best.x, best.y); this.trail = Array(60).fill({ x: best.x, y: best.y, f: "down" }); }
-          spot.armed = false; spot.armAt = { x: this.player.x, y: this.player.y };
+          // out of its reach, not just a step (Xiapi: the way to Zhang Fei's post runs past the road, which would refuse again)
+          spot.armed = false; spot.armAt = null;
         }
         this.setGoal();
       });

@@ -113,7 +113,8 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     if (process.env.TRACE === beat && (!globalThis.__tr || Date.now() - globalThis.__tr > 2000)) { globalThis.__tr = Date.now();
       console.log('     trace', JSON.stringify({ ...s, items: undefined, extra: await p.evaluate(() => { const w = window.__w, d = document;
         return { dlg: [...d.querySelectorAll('.town-dlg')].map(e => (e.hidden ? 'hidden:' : 'shown:') + e.className + ':' + e.textContent.trim().slice(0, 50)), skip: d.querySelectorAll('.town-skip').length, uis: d.querySelectorAll('.town-ui').length,
-          scenes: w.scene.manager.getScenes(true).map(x => x.scene.key), canMove: w.canMove(), approaching: !!w.approaching, seated: !!w.seated }; }) })); }
+          scenes: w.scene.manager.getScenes(true).map(x => x.scene.key), canMove: w.canMove(), approaching: !!w.approaching, seated: !!w.seated,
+          marks: WorldMarks.all(w.w), spots: Object.entries(w.spots).map(([k, v]) => `${k}@${Math.round(v.x)},${Math.round(v.y)}${v.trigger && v.trigger !== 'near' ? '/' + v.trigger : ''}`) }; }) })); }
     // progress: a new place, a beat or item gained, or getting nearer the goal
     const key = `${s.place}|${s.cleared}|${s.items}|${s.goal}|${s.line}|${s.cine}|${s.duel}|${Math.round(Math.hypot(s.P[0] - (s.goal ? s.goal[0] : 0), s.P[1] - (s.goal ? s.goal[1] : 0)) / 24)}`;
     if (key !== progressKey) { progressKey = key; lastProgress = Date.now(); }
