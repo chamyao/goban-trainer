@@ -313,8 +313,8 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 ## C9 · An Old Friend (故人来见)
 *The Camps* · room `lb-tent` · boards: **Li Su**: “Make him ashamed of his master.” / **Li Su**: “Show him a better master.” / **Li Su**: “Lay out the gold.”
 
-- Gate: needs item:redhare. Objective: Fetch Red Hare from the stable master, at the back of the camp.
-- Gate: needs item:gold. Objective: Fetch the gold, the pearls and the jade belt from the paymaster's tent, beside the Grand Preceptor's.
+- Gate: needs item:redhare. Objective: Fetch Red Hare from the stable master, at the stables on the field side of the camp.
+- Gate: needs item:gold. Objective: Fetch the gold, the pearls and the jade belt from the paymaster's tent, just east of the Grand Preceptor's.
 
 *Ambush pickets surround him on the road. Li Su says: tell General Lü an old friend has come. Lü Bu has him brought in.*  
 伏路军人围住。肃曰：“可速报吕将军，有故人来见。”军人报知，布命入见。
