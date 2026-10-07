@@ -1,3 +1,5 @@
+// Each beat in order, its scenes and boards played, but NOT walked: it teleports to each beat (w.go, setPosition)
+// and supplies gate items. walk-playthrough.js walks a book for real; this one is the quick check of the scenes.
 const { chromium, devices } = require(require('child_process').execSync('npm root -g').toString().trim()+'/playwright');
 const SP=require('path').join(__dirname,'out');require('fs').mkdirSync(SP,{recursive:true});
 (async()=>{const b=await chromium.launch({args:['--use-gl=swiftshader','--enable-webgl']});const ctx=await b.newContext({...devices['iPhone 13']});const p=await ctx.newPage();

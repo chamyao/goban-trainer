@@ -2,7 +2,8 @@
 // The Chancellor's residence lets Diaochan in and turns Wang Yun away with the gatekeeper's line; the Xuanping
 // tower stair is barred until a17; the road between Meiwu and Liangzhou is shut each way by the map's state
 // (Meiwu's west road until a16m, Liangzhou's east road until a17). Walking into a barred way: the line, a step
-// back, still here; into an open one: through.
+// back, still here; into an open one: through. (It sets the story and stands him on the doorstep: the rule at
+// each door. Reaching the doors on foot, through the story as played, is walk-playthrough.js.)
 const { chromium, devices } = require(require('child_process').execSync('npm root -g').toString().trim()+'/playwright');
 const BOOK=+(process.env.BOOK||12);
 (async()=>{const b=await chromium.launch({args:['--use-gl=swiftshader','--enable-webgl']});const p=await (await b.newContext({...devices['iPhone 13']})).newPage();
@@ -40,6 +41,9 @@ const cases=[
   ['a17','lijue','meiwu','liangzhou',true,"Meiwu's west road after a16m"],
   ['a17','lijue','liangzhou','meiwu',false,"Liangzhou's east road before a17"],
   ['a18p','wangyun','liangzhou','meiwu',true,"Liangzhou's east road after a17"],
+  // the Meiwu Road (a road: open once two of the places it links are open): shut before Meiwu's beats, open at a13
+  ['a2','wangyun','changan','meiwu-road',false,'the Meiwu Road out of Chang\'an at a2'],
+  ['a13','lisu','changan','meiwu-road',true,'the Meiwu Road out of Chang\'an at a13'],
 ];
 for(const [stop,lead,place,to,open,what] of cases){
   const s=await at(stop,lead,place);if(!check(s.place===place,`${what}: set up in ${place} as ${lead} (in ${s.place} as ${s.lead})`))continue;
