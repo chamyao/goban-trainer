@@ -46,6 +46,10 @@ CAST2 = {
     "zhangwen": "zm_020", "shisunrui": "zm_031", "huangwan": "zm_035", "dongmu": "zf_022",
     "caiyong": "zm_091", "mamidi": "zm_037", "lijue": "zm_058", "guosi": "zm_061", "jiaxu": "zm_050",
     "xiandi": "zf_002", "niufu": "zm_054", "huchier": "zm_056", "daoren": "zm_080",
+    # the Cao Cao arc (chapters 3-4)
+    "hejin": "zm_066", "yuanshao": "zm_031", "chenlin": "zm_064", "cuiyi": "zm_100", "dingyuan": "zm_045",
+    "dingguan": "zm_011", "wufu": "zm_041", "chengong": "zm_062", "lvboshe": "zm_014", "weihong": "zm_057",
+    "xiahoudun": "zm_016",
 }
 
 
@@ -1286,6 +1290,915 @@ _ITEMS = {
 }
 
 
+# ---------------------------------------------------------------- Act I: Cao Cao (chapters 3-4, and the start of 5)
+# Design: docs/book2/caocao-arc.md. Beat keys c1-c23 follow its Shared keys table.
+# The arc stands on its own (there is no Book 1): people are named on their first line, and the opening scroll
+# carries the little the first scene needs.
+
+def _scenes_caocao():
+    return {
+        # C1 · He Jin's council. No board: it introduces Cao Cao and the danger. The council is already arguing.
+        "c1": {"title": T("A Jailer Would Be Enough", "付一狱吏足矣"), "kind": "main", "steps": [
+            ["party", ["caocao"]],
+            ["army", "officials", "f_official", 5, "c1", -8, 8],
+            ["spawn", "hj", "hejin", "c1", 14, -4],
+            ["spawn", "ys", "yuanshao", "c1", 4, -6],
+            N("The house of He Jin, General-in-Chief. The council has been arguing since morning. "
+              "Yuan Shao has just urged him to call the frontier armies into the capital, to wipe out the eunuchs.",
+              "大将军何进府中，众官议事已久。袁绍方才献计：召四方英雄之士，勒兵来京，尽诛阉竖。"),
+            ["move", "caocao", "c1", 2, 4],
+            S("caocao", "I am Cao Cao, Colonel of the Army. General, eunuchs have done harm in every age. "
+              "But the fault lies with the rulers who gave them power. If you mean to punish them, punish the ringleaders. "
+              "A jailer would be enough. Why call in armies from outside?",
+              "典军校尉曹操在此。宦官之祸，古今皆有；但世主不当假之权宠，使至于此。若欲治罪，当除元恶，但付一狱吏足矣，何必纷纷召外兵乎？"),
+            S("caocao", "Try to kill them all, and it will get out. I tell you this will fail.", "欲尽诛之，事必宣露。吾料其必败也。"),
+            ["emote", "hj", "anger"],
+            S("hejin", "Mengde, do you have some private motive of your own?", "孟德亦怀私意耶？"),
+            ["move", "caocao", "c1", -6, 10],
+            S("caocao", "The man who throws the realm into chaos will be He Jin.", "乱天下者，必进也。"),
+            N("That night He Jin's messengers ride out with secret edicts to the frontier commanders.", "进乃暗差使命赍密诏，星夜往各镇去。"),
+            ["still", "cc_council", "slow pull back"],
+            N("In the west, Dong Zhuo, Governor of Xiliang, reads his edict with delight. He marches on Luoyang with two hundred thousand men.",
+              "西凉刺史董卓得诏大喜，统西州大军二十万，提兵望洛阳进发。"),
+            N("The censor Zheng Tai warns: Dong Zhuo is a wolf. Let him into the capital and he will eat men. Lu Zhi warns the same. "
+              "He Jin will not listen, and they leave their posts. More than half the court goes with them.",
+              "侍御史郑泰谏曰：“董卓乃豺狼也，引入京城，必食人矣。”卢植亦谏。进不听，郑泰、卢植皆弃官而去。朝廷大臣，去者大半。"),
+        ]},
+
+        # C2 · The Jiade Gate. Contest, fails: Cao Cao cannot keep He Jin out of the palace.
+        "c2": {"title": T("The Jiade Gate", "嘉德门"), "kind": "main", "steps": [
+            ["spawn", "hj", "hejin", "c2", 6, 4],
+            ["spawn", "ys", "yuanshao", "c2", 2, 8],
+            ["spawn", "cl", "chenlin", "c2", 10, 8],
+            ["army", "guard", "f_soldier", 6, "c2", -10, 14],
+            N("The eunuchs strike first. In the name of the Empress Dowager, He Jin is summoned into the palace.",
+              "十常侍先下手，假太后之诏，宣大将军入宫。"),
+            S("chenlin", "This edict is the eunuchs' work, General. Don't go. If you go, you won't come back.",
+              "太后此诏，必是十常侍之谋，切不可去。去必有祸。"),
+            S("hejin", "The Empress Dowager summons me. What harm can come of it?", "太后诏我，有何祸事？"),
+            S("yuanshao", "The plot is out, General. And you still mean to go in?", "今谋已泄，事已露，将军尚欲入宫耶？"),
+            S("caocao", "Have the eunuchs called out first. Then go in.", "先召十常侍出，然后可入。"),
+            S("hejin", "A child's idea! I hold the power of the whole realm. What can the eunuchs do to me?",
+              "此小儿之见也。吾掌天下之权，十常侍敢待如何？"),
+            ["problem"],
+            S("caocao", "General, wait—", "将军且慢——"),
+            N("At the palace gate the herald calls: The Empress Dowager summons the General-in-Chief alone. No one else may enter. "
+              "Yuan Shao and Cao Cao are stopped outside.",
+              "黄门传懿旨云：“太后特宣大将军，余人不许辄入。”将袁绍、曹操等都阻住宫门外。"),
+            ["move", "hj", "c2", 6, -16], ["remove", "hj"],
+            ["wait", 1500],
+            S("yuanshao", "General! Your carriage is waiting!", "请将军上车！"),
+            ["fx", "flash", "c2", 6, -12],
+            ["still", "hj_head", "slow zoom in"],
+            N("Over the wall comes He Jin's head. A voice calls: He Jin plotted rebellion and has been executed. All who followed him are pardoned.",
+              "让等将何进首级从墙上掷出，宣谕曰：“何进谋反，已伏诛矣。其余胁从，尽皆赦宥。”"),
+            ["emote", "ys", "anger"],
+            S("yuanshao", "The eunuchs have murdered a minister of state! Whoever will kill traitors, follow me!", "阉官谋杀大臣！诛恶党者前来助战！"),
+            N("He Jin's officer Wu Kuang sets fire to the Qingsuo Gate. Yuan Shu breaks into the palace, and every eunuch they find, young or old, is cut down.",
+              "何进部将吴匡，便于青琐门外放起火来。袁术引兵突入宫庭，但见阉官，不论大小，尽皆杀之。"),
+            ["fx", "fire", "c2", 0, -10],
+            ["run", "guard", "c2", 6, -14],
+        ]},
+        # C3 · The palace burns. Legwork: the board comes first.
+        "c3": {"title": T("The Palace Burns", "宫中火起"), "kind": "main", "steps": [
+            ["problem"],  # putting out the fire and sending out the search
+            ["light", "night"],
+            ["fx", "fire", "c3", 12, -8],
+            ["spawn", "lz", "luzhi", "c3", 14, 4],
+            ["spawn", "th", "taihou", "c3", 18, 2],
+            ["still", "palace_fire", "slow pull back"],
+            N("The palace burns into the sky. The eunuchs Zhang Rang and Duan Gui have seized the young Emperor and his brother, "
+              "the Prince of Chenliu, and fled by the back ways.",
+              "宫中火焰冲天。张让、段圭劫拥少帝及陈留王，从后道走北宫。"),
+            S("luzhi", "I caught Duan Gui dragging the Empress Dowager past. She jumped from the window, and I have her safe.",
+              "段圭逆贼劫太后过阁，太后从窗中跳出，植已救得。"),
+            S("caocao", "Put out the fires. Ask the Empress Dowager to take charge of affairs for now. "
+              "Send men after Zhang Rang, and find the Emperor.",
+              "速救灭宫中之火。请何太后权摄大事。遣兵追袭张让等，寻觅少帝。"),
+            N("The soldiers scatter in every direction. No one knows where the Emperor is.", "军马四散去赶，不知帝之所在。"),
+            N("Meanwhile, at the foot of Mount Beimang, north of the city…", "且说城北北邙山下……"),
+            ["party", ["xiandi"], {"to": "c4"}],
+        ]},
+
+        # C4 · The fireflies. Played as the Prince of Chenliu, nine years old. Legwork: the board first.
+        "c4": {"title": T("The Fireflies", "流萤引路"), "kind": "main", "steps": [
+            ["light", "night"],
+            ["spawn", "sd", "shaodi", "c4", -4, 2],
+            N("The fourth watch. The Emperor and the Prince of Chenliu lie in the reeds by the river, not daring to make a sound. "
+              "The pursuers have gone by. The dew is falling, and they are hungry. They hold each other and cry, with their hands over their mouths.",
+              "帝与陈留王伏于河边乱草之内，不敢高声。伏至四更，露水又下，腹中饥馁，相抱而哭；又怕人知觉，吞声草莽之中。"),
+            S("xiandi", "We can't stay here. We have to find a way out.", "此间不可久恋，须别寻活路。"),
+            N("They knot their robes together and climb the bank. The slope is all thorns, and in the dark they cannot see a path.",
+              "于是二人以衣相结，爬上岸边。满地荆棘，黑暗之中，不见行路。"),
+            ["problem"],
+            ["fx", "sparkle", "c4", 6, -4],
+            ["still", "fireflies", "slow pull back"],
+            N("Then fireflies come, hundreds of them, a whole river of light, circling in front of the Emperor.",
+              "忽有流萤千百成群，光芒照耀，只在帝前飞转。"),
+            S("xiandi", "Heaven is helping us!", "此天助我兄弟也！"),
+            ["move", "xiandi", "c4", 24, -8], ["move", "sd", "c4", 22, -6],
+            ["prop", "hay", "straw", "c4", 28, -10],
+            N("They follow the fireflies until they find the road. By the fifth watch their feet are too sore to go on, "
+              "and they lie down beside a haystack below a farm.",
+              "遂随萤火而行，渐渐见路。行至五更，足痛不能行。山冈边见一草堆，帝与王卧于草堆之畔。"),
+            ["pose", "sd", "sleep"],
+            ["spawn", "cy", "cuiyi", "c4", 34, -16],
+            N("That night the farmer dreamed that two red suns fell behind his house. He wakes, and sees a red glow above the haystack.",
+              "庄主是夜梦两红日坠于庄后，惊觉，披衣出户，见庄后草堆上红光冲天。"),
+            ["move", "cy", "c4", 30, -12],
+            S("cuiyi", "Whose sons are you, boys?", "二少年谁家之子？"),
+            S("xiandi", "This is the Emperor. He fled here from the eunuchs' rising. I am his brother, the Prince of Chenliu.",
+              "此是当今皇帝，遭十常侍之乱，逃难到此。吾乃皇弟陈留王也。"),
+            ["pose", "cy", "kneel"],
+            S("cuiyi", "Your servant is Cui Yi, brother of the late Minister Cui Lie. I saw the eunuchs selling offices, and came here to hide.",
+              "臣先朝司徒崔烈之弟崔毅也。因见十常侍卖官嫉贤，故隐于此。"),
+            N("He helps them into the farm, and kneels to bring them food and wine.", "遂扶帝入庄，跪进酒食。"),
+        ]},
+
+        # C5 · The road back. Contest: the prince faces Dong Zhuo.
+        "c5": {"title": T("To Protect Us, or to Seize Us?", "保驾劫驾"), "kind": "main", "steps": [
+            ["light", "day"],
+            ["spawn", "sd", "shaodi", "c5", 0, 4],
+            ["spawn", "mg", "mingong", "c5", 6, 2],
+            ["spawn", "wy", "wangyun", "c5", 16, -2],
+            ["army", "officials", "f_official", 5, "c5", 20, 2],
+            N("Min Gong, an officer of Henan, has caught Duan Gui and hung his head from his saddle. He finds the farm, and the Emperor weeps to see him. "
+              "On the road back they meet the ministers, Wang Yun among them, with a few hundred horsemen. Ministers and Emperor weep together.",
+              "河南中部掾吏闵贡拿住段圭，悬头于马项下，寻至崔毅庄，君臣痛哭。离庄而行，不到三里，司徒王允等一行人众，数百人马，接着车驾，君臣皆哭。"),
+            ["army", "xiliang", "horse", 9, "c5", 60, -4],
+            ["fx", "dust", "c5", 50, -4],
+            N("They have gone only a few li when banners blot out the sun and dust hides the sky. An army is coming. The ministers go pale.",
+              "车驾行不到数里，忽见旌旗蔽日，尘土遮天，一枝人马到来。百官失色，帝亦大惊。"),
+            ["spawn", "dz", "dongzhuo", "c5", 44, -2],
+            ["run", "dz", "c5", 24, 0],
+            S("dongzhuo", "Where is the Son of Heaven?", "天子何在？"),
+            ["emote", "sd", "sweat"],
+            N("The Emperor trembles and cannot speak.", "帝战栗不能言。"),
+            ["problem"],
+            ["move", "xiandi", "c5", 14, 2],
+            S("xiandi", "Who are you?", "来者何人？"),
+            S("dongzhuo", "Dong Zhuo, Governor of Xiliang.", "西凉刺史董卓也。"),
+            S("xiandi", "Have you come to protect us, or to seize us?", "汝来保驾耶？汝来劫驾耶？"),
+            S("dongzhuo", "I have come to protect you.", "特来保驾。"),
+            S("xiandi", "If you have come to protect us, the Son of Heaven is here. Why are you still on your horse?",
+              "既来保驾，天子在此，何不下马？"),
+            ["emote", "dz", "!"],
+            ["pose", "dz", "bow"],
+            ["still", "prince_dz", "slow zoom in"],
+            N("Dong Zhuo is startled, gets down quickly, and bows by the road. The prince speaks kindly to him, and from first to last says nothing wrong.",
+              "卓大惊，慌忙下马，拜于道左。陈留王以言抚慰董卓，自初至终，并无失语。"),
+            N("Dong Zhuo marvels at him in secret. Already he is thinking of putting this boy on the throne in his brother's place.",
+              "卓暗奇之，已怀废立之意。"),
+            N("Back in the palace, the Imperial Seal is found to be missing.", "是日还宫，检点宫中，不见了传国玉玺。"),
+            ["party", ["dongzhuo"], {"to": "c6"}],
+        ]},
+
+        # C6 · The Wenming Garden. Played as Dong Zhuo. Contest, fails.
+        "c6": {"title": T("The Wenming Garden", "温明园"), "kind": "main", "steps": [
+            ["spawn", "lr", "liru", "c6", -6, 4],
+            N("Dong Zhuo camps outside the city. Every day he rides in with his armoured horsemen, and the people are terrified. "
+              "He takes over He Jin's soldiers.",
+              "董卓屯兵城外，每日带铁甲马军入城，横行街市，百姓惶惶不安。卓招诱何进兄弟部下之兵，尽归掌握。"),
+            S("dongzhuo", "I mean to depose the Emperor and put the Prince of Chenliu on the throne. What do you think?",
+              "吾欲废帝立陈留王，何如？"),
+            S("liru", "The court has no master. Do it now, or it will slip away. Tomorrow, gather the officials in the Wenming Garden and tell them. "
+              "Behead any who refuse.",
+              "今朝廷无主，不就此时行事，迟则有变矣。来日于温明园中，召集百官，谕以废立；有不从者斩之。"),
+            ["army", "officials", "f_official", 8, "c6", 14, 6],
+            ["prop", "tbl", "table", "c6", 14, 0],
+            ["spawn", "dy", "dingyuan", "c6", 20, 2],
+            ["spawn", "lb", "lvbu", "c6", 24, 8],
+            ["spawn", "lz", "luzhi", "c6", 10, 4],
+            ["spawn", "wy", "wangyun", "c6", 8, 8],
+            N("The officials are all afraid of Dong Zhuo, and every one of them comes. He arrives last, gets down at the garden gate, and takes his seat with his sword on.",
+              "公卿皆惧董卓，谁敢不到？卓待百官到了，然后徐徐到园门下马，带剑入席。"),
+            ["move", "dongzhuo", "c6", 14, -2],
+            N("After a few rounds of wine, he stops the wine and the music.", "酒行数巡，卓教停酒止乐。"),
+            ["problem"],
+            S("dongzhuo", "The Son of Heaven is master of all the people. Without majesty he cannot serve the ancestral temple. "
+              "The present Emperor is weak. The Prince of Chenliu is clever and loves learning; he can take the throne. "
+              "I mean to depose the Emperor and set up the Prince. What do you say, gentlemen?",
+              "天子为万民之主，无威仪不可以奉宗庙社稷。今上懦弱，不若陈留王聪明好学，可承大位。吾欲废帝，立陈留王，诸大臣以为何如？"),
+            N("No one dares make a sound. Then a man pushes back his table and stands up in front of the feast.", "诸官听罢，不敢出声。座上一人推案直出，立于筵前。"),
+            ["move", "dy", "c6", 16, 2],
+            S("dingyuan", "No! No! Who are you, to talk like this? The Emperor is the late Emperor's heir by his true wife, and has done no wrong. "
+              "Do you mean to usurp the throne?",
+              "不可！不可！汝是何人，敢发大语？天子乃先帝嫡子，初无过失，何得妄议废立？汝欲为篡逆耶？"),
+            ["emote", "dongzhuo", "anger"],
+            S("dongzhuo", "Those who follow me live. Those who oppose me die!", "顺我者生，逆我者死！"),
+            ["pose", "dongzhuo", "strike"],
+            ["move", "lb", "c6", 20, 4],
+            ["still", "wm_lubu", "slow zoom in"],
+            N("Dong Zhuo draws his sword. But Li Ru sees a man behind Ding Yuan: tall and splendid, a painted halberd in his hand, glaring.",
+              "遂掣佩剑欲斩丁原。时李儒见丁原背后一人，生得器宇轩昂，威风凛凛，手执方天画戟，怒目而视。"),
+            S("liru", "This is a banquet, not the place for affairs of state. Let it be argued in the council hall tomorrow.",
+              "今日饮宴之处，不可谈国政；来日向都堂公论未迟。"),
+            ["move", "dy", "c6", 40, 10], ["move", "lb", "c6", 42, 12], ["remove", "dy"], ["remove", "lb"],
+            S("luzhi", "You are wrong, my lord. The Emperor is young, but he is clever and kind and has done nothing wrong. "
+              "You are a governor from the provinces with no part in the government. How can you force a deposition?",
+              "明公差矣。今上虽幼，聪明仁智，并无分毫过失。公乃外郡刺史，素未参与国政，何可强主废立之事？"),
+            S("wangyun", "A deposition is not to be settled over wine. Let it be discussed another day.", "废立之事，不可酒后相商，另日再议。"),
+            N("The officials leave. Dong Zhuo stands at the garden gate with his hand on his sword. Outside, a man gallops back and forth with a halberd.",
+              "于是百官皆散。卓按剑立于园门，忽见一人跃马持戟，于园门外往来驰骤。"),
+            ["spawn", "lb", "lvbu", "c6", 30, -10], ["run", "lb", "c6", 10, -12], ["run", "lb", "c6", 30, -12],
+            S("dongzhuo", "Who is that?", "此何人也？"),
+            S("liru", "Ding Yuan's adopted son, Lü Bu. My lord had better keep out of his way.", "此丁原义儿：姓吕，名布，字奉先者也。主公且须避之。"),
+            ["remove", "lb"],
+            N("Dong Zhuo goes back into the garden to hide.", "卓乃入园潜避。"),
+        ]},
+
+        # C7 · The rout. No board. Played as Dong Zhuo; hands to Li Su in the tent.
+        "c7": {"title": T("Lü Bu at the Front", "吕布阵前"), "kind": "main", "steps": [
+            ["spawn", "dy", "dingyuan", "c7", 30, 0],
+            ["spawn", "lb", "lvbu", "c7", 34, 4],
+            ["army", "dyarmy", "f_soldier", 8, "c7", 44, 2],
+            ["army", "dzarmy", "f_soldier", 8, "c7", -8, 2],
+            N("The next day Ding Yuan brings his army outside the city and challenges him to battle.", "次日，人报丁原引军城外搦战。卓怒，引军同李儒出迎。"),
+            S("dingyuan", "The realm is unlucky. Eunuchs seized power, and the people were trampled into the mud. "
+              "You have done nothing for this dynasty. How dare you talk of deposing the Emperor?",
+              "国家不幸，阉官弄权，以致万民涂炭。尔无尺寸之功，焉敢妄言废立，欲乱朝廷？"),
+            ["still", "lb_charge", "slow zoom in"],
+            N("Before Dong Zhuo can answer, Lü Bu charges straight at him, in a gold hair-crown, a robe of a hundred flowers and lion-headed armour.",
+              "董卓未及回言，吕布头束发金冠，披百花战袍，擐唐猊铠甲，纵马挺戟，直杀过来。"),
+            ["run", "lb", "c7", 4, 0],
+            ["run", "dongzhuo", "c7", -24, 6],
+            ["run", "dzarmy", "c7", -30, 6],
+            N("Dong Zhuo flees. His army is badly beaten, and falls back thirty li to camp.", "董卓慌走。卓兵大败，退三十余里下寨。"),
+            ["remove", "dy"], ["remove", "lb"], ["remove", "dyarmy"], ["remove", "dzarmy"],
+            ["spawn", "lr", "liru", "c7", -30, 2],
+            ["spawn", "ls", "lisu", "c7", -22, 8],
+            S("dongzhuo", "That Lü Bu is no ordinary man. If I had him, what would I have to fear in all the realm?",
+              "吾观吕布非常人也。吾若得此人，何虑天下哉？"),
+            ["move", "ls", "c7", -26, 4],
+            S("lisu", "Don't worry, my lord. I am Li Su, a captain of your guard, and Lü Bu is from my home county. "
+              "He is brave but has no judgment, and forgets loyalty at the sight of gain. "
+              "With this tongue of mine I can talk him into coming over to you, hands folded.",
+              "主公勿忧：某虎贲中郎将李肃，与吕布同乡，知其勇而无谋，见利忘义。某凭三寸不烂之舌，说吕布拱手来降，可乎？"),
+            S("dongzhuo", "And how will you talk him round?", "汝将何以说之？"),
+            S("lisu", "My lord has a famous horse called Red Hare, that goes a thousand li in a day. Give me the horse, and gold and pearls to win his heart. "
+              "Then a few words from me, and Lü Bu will turn on Ding Yuan and come to you.",
+              "某闻主公有名马一匹，号曰赤兔，日行千里。须得此马，再用金珠，以利结其心。某更进说词，吕布必反丁原，来投主公矣。"),
+            S("dongzhuo", "Is that wise?", "此言可乎？"),
+            S("liru", "My lord means to take the realm. Why grudge a horse?", "主公欲取天下，何惜一马？"),
+            N("Dong Zhuo gladly agrees, and adds a thousand taels of gold, some dozens of bright pearls and a jade belt.",
+              "卓欣然与之，更与黄金一千两、明珠数十颗、玉带一条。"),
+            ["remove", "ls"],
+            ["party", ["lisu"], {"to": "c7"}],
+        ]},
+
+        # C8 · The gifts. Played as Li Su. Delivery errand, no board: the gate on C9 needs both items.
+        "c8": {"title": T("The Gifts", "金珠赤兔"), "kind": "main", "steps": [
+            N("Li Su has Red Hare led out on a halter, and the gold, the pearls and the jade belt packed into a box.", "李肃牵了赤兔，赍了金珠玉带。"),
+            S("lisu", "Lü Bu's camp is on the far side of the field. Ding Yuan will have men out on the road.", "吕布寨在原野那头。丁原必有伏路军人。"),
+        ]},
+        "c9_wait": {"title": T("Not Yet", "尚未齐备"), "kind": "main", "steps": [
+            S("lisu", "Not yet. I can't go to him empty-handed: I need the horse and the gold.", "且慢。空手岂能说他？须得赤兔与金珠。"),
+        ]},
+
+        # C9 · An old friend. Contest, three boards: the same three-step persuasion Wang Yun uses on the ridge (A11).
+        "c9": {"title": T("An Old Friend", "故人来见"), "kind": "main", "steps": [
+            ["spawn", "lb", "lvbu", "c9", 10, -4],
+            ["prop", "tbl", "table", "c9", 6, -2], ["prop", "jars", "winejars", "c9", 12, -2],
+            N("Ambush pickets surround him on the road. Li Su says: tell General Lü an old friend has come. Lü Bu has him brought in.",
+              "伏路军人围住。肃曰：“可速报吕将军，有故人来见。”军人报知，布命入见。"),
+            S("lisu", "Brother! Are you well, since we parted?", "贤弟别来无恙！"),
+            S("lvbu", "It's been a long time. Where are you now?", "久不相见，今居何处？"),
+            S("lisu", "I'm a captain of the guard. I heard you were defending the dynasty, and I was delighted. "
+              "I've brought you a horse that goes a thousand li a day, through water and up mountains as if on flat ground. Its name is Red Hare.",
+              "见任虎贲中郎将之职。闻贤弟匡扶社稷，不胜之喜。有良马一匹，日行千里，渡水登山，如履平地，名曰赤兔：特献与贤弟，以助虎威。"),
+            ["spawn", "rh", "redhare", "c9", 18, 4],
+            ["still", "red_hare", "slow pull back"],
+            N("The horse is red as burning charcoal from head to tail, without one hair of another colour. A zhang long from head to tail, "
+              "eight chi high at the shoulder. It neighs and rears as if it would leap into the sky or plunge into the sea.",
+              "那马浑身上下，火炭般赤，无半根杂毛；从头至尾，长一丈；从蹄至项，高八尺；嘶喊咆哮，有腾空入海之状。"),
+            N("A poem of later times on Red Hare: It gallops a thousand li, shaking off the dust; it crosses rivers, climbs mountains, and parts the purple mist. "
+              "It snaps its silken rein and tosses its jade bit: a fire dragon flying down from the ninth heaven.",
+              "后人有诗单道赤兔马曰：奔腾千里荡尘埃，渡水登山紫雾开。掣断丝缰摇玉辔，火龙飞下九天来。"),
+            S("lvbu", "You give me such a horse, brother. How can I repay you?", "兄赐此良驹，将何以为报？"),
+            S("lisu", "I came out of friendship. Who wants repaying?", "某为义气而来，岂望报乎？"),
+            ["pose", "lb", "drink"],
+            N("Lü Bu sets out wine. When they are well into it, Li Su speaks.", "布置酒相待。酒酣，肃曰："),
+            ["problem"],  # 1
+            S("lisu", "I see you so seldom, brother. But your father, I see often.", "肃与贤弟少得相见；令尊却常会来。"),
+            S("lvbu", "You're drunk, brother. My father died years ago. How could you see him?", "兄醉矣！先父弃世多年，安得与兄相会？"),
+            S("lisu", "No, no. I mean the Governor, Ding Yuan.", "非也；某说今日丁刺史耳。"),
+            ["emote", "lb", "sweat"],
+            S("lvbu", "I'm with Ding Yuan because I have no choice.", "某在丁建阳处，亦出于无奈。"),
+            ["problem"],  # 2
+            S("lisu", "You have the strength to hold up the sky. Who in the four seas doesn't admire you? Rank and riches are yours for the reaching. "
+              "Why say you have no choice, and serve under another man?",
+              "贤弟有擎天驾海之才，四海孰不钦敬？功名富贵，如探囊取物，何言无奈而在人之下乎？"),
+            S("lvbu", "I just haven't found the right master.", "恨不逢其主耳。"),
+            S("lisu", "A good bird chooses its tree. A good man chooses his master. Miss the moment, and you'll regret it.",
+              "良禽择木而栖，贤臣择主而事。见机不早，悔之晚矣。"),
+            S("lvbu", "You're at court, brother. Who do you see as the hero of the age?", "兄在朝廷，观何人为世之英雄？"),
+            S("lisu", "I've looked at them all, and none of them comes near Dong Zhuo. He honours worthy men and rewards and punishes fairly. "
+              "He will do great things.",
+              "某遍观群臣，皆不如董卓。董卓为人敬贤礼士，赏罚分明，终成大业。"),
+            S("lvbu", "I'd follow him, but I have no way in.", "某欲从之，恨无门路。"),
+            ["problem"],  # 3
+            ["prop", "gold", "chest", "c9", 8, -2],
+            ["still", "lb_gold", "slow zoom in"],
+            N("Li Su lays out the gold, the pearls and the jade belt in front of him.", "肃取金珠、玉带列于布前。"),
+            S("lvbu", "What's this?", "何为有此？"),
+            S("lisu", "Lord Dong has long admired your name, and sent me to give you these. Red Hare is his gift too.",
+              "此是董公久慕大名，特令某将此奉献。赤兔马亦董公所赠也。"),
+            S("lvbu", "Lord Dong thinks so well of me. What can I give him in return?", "董公如此见爱，某将何以报之？"),
+            S("lisu", "Someone as useless as me is a captain of the guard. If you went to him, there'd be no end to your rank.",
+              "如某之不才，尚为虎贲中郎将；公若到彼，贵不可言。"),
+            S("lvbu", "I've done nothing to offer him when I come.", "恨无涓埃之功，以为进见之礼。"),
+            S("lisu", "That could be done in the turn of a hand. You only have to be willing.", "功在翻手之间，公不肯为耳。"),
+            ["wait", 1200],
+            S("lvbu", "I'll kill Ding Yuan, and bring his army over to Dong Zhuo. How's that?", "吾欲杀丁原，引军归董卓，何如？"),
+            S("lisu", "If you can do that, it's the greatest service of all! But don't wait. Decide quickly.", "贤弟若能如此，真莫大之功也！但事不宜迟，在于速决。"),
+            N("Lü Bu promises to come over the next day, and Li Su takes his leave.", "布与肃约于明日来降，肃别去。"),
+        ]},
+
+        # C10 · The second watch. No board: the killing is Lü Bu's, and settled. Hands to Cao Cao.
+        "c10": {"title": T("The Second Watch", "二更时分"), "kind": "main", "steps": [
+            ["light", "night"],
+            ["spawn", "dy", "dingyuan", "c10", 0, -4],
+            ["prop", "desk", "desk", "c10", 0, -6], ["prop", "bk", "book", "c10", 2, -6],
+            ["pose", "dy", "sit"],
+            ["spawn", "lb", "lvbu", "c10", 20, 6],
+            N("That night, at the second watch, Lü Bu walks into Ding Yuan's tent with a blade in his hand. Ding Yuan is reading by candlelight.",
+              "是夜二更时分，布提刀径入丁原帐中。原正秉烛观书。"),
+            ["move", "lb", "c10", 4, 0],
+            ["still", "lb_candle", "slow zoom in"],
+            S("dingyuan", "My son, what brings you here?", "吾儿来有何事故？"),
+            S("lvbu", "I'm a man in my own right! Why would I be your son?", "吾堂堂丈夫，安肯为汝子乎！"),
+            S("dingyuan", "Fengxian, why has your heart turned?", "奉先何故心变？"),
+            ["mood", "dark"],
+            ["pose", "lb", "strike"],
+            N("The candle goes out.", "烛灭。"),
+            ["remove", "dy"],
+            ["mood", "clear"],
+            S("lvbu", "Ding Yuan was no good, and I've killed him! Whoever will follow me, stay. Whoever won't, go!",
+              "左右！丁原不仁，吾已杀之。肯从吾者在此，不从者自去！"),
+            N("More than half the soldiers scatter.", "军士散其大半。"),
+            ["light", "day"],
+            N("The next day Lü Bu brings Ding Yuan's head to Li Su, and Li Su takes him to Dong Zhuo.", "次日，布持丁原首级，往见李肃。肃遂引布见卓。"),
+            ["spawn", "dz", "dongzhuo", "c10", -16, -2],
+            ["move", "lisu", "c10", -8, 2], ["move", "lb", "c10", -10, 0],
+            ["pose", "dz", "bow"],
+            S("dongzhuo", "Now that I have you, General, I'm like a parched seedling getting sweet rain.", "卓今得将军，如旱苗之得甘雨也。"),
+            ["pose", "lb", "kneel"],
+            ["still", "lb_kneels", "slow pull back"],
+            S("lvbu", "If you will have me, my lord, let me bow to you as your adopted son.", "公若不弃，布请拜为义父。"),
+            N("Dong Zhuo gives him golden armour and a brocade robe. From then on his power grows by the day. Li Ru urges him to settle the deposition at once.",
+              "卓以金甲锦袍赐布。卓自是威势越大。李儒劝卓早定废立之计。"),
+            N("Dong Zhuo holds a banquet in the Secretariat, and has Lü Bu stand guard with a thousand armoured men. Li Su leads them in. "
+              "Among the officials sits Cao Cao.",
+              "卓乃于省中设宴，会集公卿，令吕布将甲士千余，侍卫左右。座中百官，曹操亦在。"),
+            ["party", ["caocao"], {"to": "c11"}],
+        ]},
+
+        # C11 · The Secretariat banquet. No board: Yuan Shao's sword, and his walk out of the East Gate (planted for C17).
+        "c11": {"title": T("Your Sword Is Sharp, and So Is Mine", "汝剑利，吾剑未尝不利"), "kind": "main", "steps": [
+            ["army", "officials", "f_official", 8, "c11", 10, 6],
+            ["army", "guards", "f_soldier", 8, "c11", 0, -12],
+            ["spawn", "dz", "dongzhuo", "c11", 14, -6],
+            ["spawn", "lb", "lvbu", "c11", 20, -8],
+            ["spawn", "ls", "lisu", "c11", 24, -6],
+            ["spawn", "lr", "liru", "c11", 8, -6],
+            ["spawn", "ys", "yuanshao", "c11", 20, 4],
+            ["pose", "caocao", "sit"],
+            N("After a few rounds of wine, Dong Zhuo draws his sword.", "酒行数巡，卓拔剑曰："),
+            S("dongzhuo", "The Emperor is weak and foolish, and unfit to serve the ancestral temple. "
+              "I shall follow the old precedents, depose him as Prince of Hongnong, and set up the Prince of Chenliu. Anyone who refuses, dies!",
+              "今上闇弱，不可以奉宗庙；吾将依伊尹、霍光故事，废帝为弘农王，立陈留王为帝。有不从者斩！"),
+            ["emote", "officials", "sweat"],
+            ["move", "ys", "c11", 16, 0],
+            S("yuanshao", "I am Yuan Shao, Colonel of the Centre. The Emperor has not been on the throne long, and has done nothing wrong. "
+              "You would put down the true heir for a younger son. What is that but rebellion?",
+              "中军校尉袁绍在此。今上即位未几，并无失德；汝欲废嫡立庶，非反而何？"),
+            S("dongzhuo", "The realm is in my hands! When I act, who dares refuse? Do you think my sword isn't sharp?",
+              "天下事在我！我今为之，谁敢不从？汝视我之剑不利否？"),
+            ["pose", "ys", "strike"],
+            ["still", "ys_sword", "slow zoom in"],
+            S("yuanshao", "Your sword is sharp. And so is mine!", "汝剑利，吾剑未尝不利！"),
+            S("liru", "Nothing is settled yet. You can't kill him now.", "事未可定，不可妄杀。"),
+            N("Yuan Shao takes leave of the officials with his sword in his hand, hangs his seal of office on the East Gate, and rides for Jizhou.",
+              "袁绍手提宝剑，辞别百官而出，悬节东门，奔冀州去了。"),
+            ["move", "ys", "c11", 40, 10], ["remove", "ys"],
+            S("caocao", "He drew a sword on Dong Zhuo, and walked out alive.", "拔剑向董卓，竟得生出东门。"),
+            N("Dong Zhuo turns to the officials. Anyone who stands in the way of the great plan will be dealt with by military law. "
+              "The ministers shake. We will do as you command, they all say.",
+              "卓曰：“敢有阻大议者，以军法从事。”群臣震恐，皆云：“一听尊命。”"),
+        ]},
+
+        # C12 · The deposition. No board. Also plants Cai Yong (A12y and his death).
+        "c12": {"title": T("The Jiade Hall", "嘉德殿"), "kind": "main", "steps": [
+            ["army", "officials", "f_official", 8, "c12", 10, 8],
+            ["spawn", "dz", "dongzhuo", "c12", 14, -8],
+            ["spawn", "lr", "liru", "c12", 8, -6],
+            ["spawn", "sd", "shaodi", "c12", 0, -10],
+            ["spawn", "xd", "xiandi", "c12", -6, -4],
+            ["spawn", "dg", "dingguan", "c12", 16, 6],
+            N("On the first day of the ninth month the Emperor is brought to the Jiade Hall, and all the court is gathered. "
+              "Dong Zhuo, sword in hand, has Li Ru read the decree: the Emperor is frivolous and unfit to rule, and is deposed as Prince of Hongnong.",
+              "九月朔，请帝升嘉德殿，大会文武。卓拔剑在手，令李儒读策：帝天资轻佻，威仪不恪，废为弘农王；请奉陈留王为皇帝。"),
+            ["move", "sd", "c12", 0, -2],
+            ["pose", "sd", "kneel"],
+            ["still", "deposition", "slow pull back"],
+            N("They help the Emperor down from the throne and untie his seal ribbons. He kneels facing north, and calls himself a subject. "
+              "He and the Empress Dowager weep aloud. Every minister grieves.",
+              "卓叱左右扶帝下殿，解其玺绶，北面长跪，称臣听命。帝后皆号哭。群臣无不悲惨。"),
+            ["move", "dg", "c12", 12, -4],
+            S("dingguan", "Traitor Dong Zhuo! You dare deceive Heaven! I will spatter you with the blood of my own neck!",
+              "贼臣董卓，敢为欺天之谋，吾当以颈血溅之！"),
+            ["pose", "dg", "strike"],
+            N("He strikes at Dong Zhuo with the ivory tablet in his hand. He is Ding Guan, of the Secretariat. Dong Zhuo has him dragged out and beheaded. "
+              "He curses until he dies, and his face never changes.",
+              "挥手中象简，直击董卓。乃尚书丁管也。卓命牵出斩之。管骂不绝口，至死神色不变。"),
+            ["remove", "dg"],
+            ["move", "xd", "c12", 0, -10],
+            N("The Prince of Chenliu takes the throne. He is Emperor Xian, nine years old. Dong Zhuo makes himself Chancellor, "
+              "and comes to court with his sword and shoes on.",
+              "陈留王登殿，即献帝也，时年九岁。董卓为相国，赞拜不名，入朝不趋，剑履上殿。"),
+            ["remove", "sd"],
+            ["spawn", "cy", "caiyong", "c12", 30, 6],
+            N("Li Ru tells him to raise famous men to office, to win people's hearts, and names the scholar Cai Yong. Cai Yong refuses to come.",
+              "李儒劝卓擢用名流，以收人望，因荐蔡邕之才。卓命征之，邕不赴。"),
+            S("dongzhuo", "Tell him: if he doesn't come, I'll wipe out his clan.", "如不来，当灭汝族。"),
+            ["move", "cy", "c12", 18, -2], ["pose", "cy", "bow"],
+            N("Cai Yong is afraid, and comes. Dong Zhuo is delighted with him, and promotes him three times in one month.",
+              "邕惧，只得应命而至。卓见邕大喜，一月三迁其官，拜为侍中，甚见亲厚。"),
+        ]},
+
+        # C13 · Luoyang under Dong Zhuo. Walked; no board. The young Emperor's death is narrated over a still (user's call).
+        "c13": {"title": T("The Swallows", "双燕"), "kind": "main", "steps": [
+            N("The deposed Emperor, his mother and the Lady Tang are shut up in the Yong'an Palace, short of clothes and food. One day he sees two swallows in the courtyard, and makes a poem.",
+              "少帝与何太后、唐妃困于永安宫中，衣服饮食，渐渐欠缺。一日，偶见双燕飞于庭中，遂吟诗一首。"),
+            ["still", "swallows", "slow zoom in"],
+            N("The young grass is green as mist; two swallows fly, light and free. The Luo flows blue below; people on the road look on with envy. "
+              "Far off, deep in the blue clouds, stands my old palace. Who will act for loyalty, and lift the grief in my heart?",
+              "嫩草绿凝烟，袅袅双飞燕。洛水一条青，陌上人称羡。远望碧云深，是吾旧宫殿。何人仗忠义，泄我心中怨！"),
+            N("Dong Zhuo's spies bring him the poem. He sends Li Ru with poisoned wine. The Empress Dowager is thrown from the tower, "
+              "the Lady Tang is strangled, and the young Emperor is made to drink.",
+              "卓曰：“怨望作诗，杀之有名矣。”遂命李儒入宫弑帝：攛太后下楼，绞死唐妃，以鸩酒灌杀少帝。"),
+            ["mood", "dark"],
+            ["wait", 1200],
+            ["mood", "clear"],
+            ["prop", "cart1", "cart", "c13", 44, 0], ["prop", "cart2", "cart", "c13", 50, 2],
+            ["move", "cart1", "c13", 24, 0], ["move", "cart2", "c13", 30, 2],
+            ["fx", "fire", "c13", 30, -6],
+            ["still", "heads_gate", "slow pull back"],
+            N("Carts come in through the gate, with more than a thousand heads hung beneath them. Dong Zhuo's men say they have won a great victory over bandits. "
+              "They were villagers at a spring festival in Yangcheng. The heads are burned under the city gate, and the women and goods shared out among the soldiers.",
+              "卓尝引军出城，行到阳城地方，时当二月，村民社赛。卓命军士围住，尽皆杀之，悬头千余颗于车下，扬言杀贼大胜而回；于城门下焚烧人头，以妇女财物分散众军。"),
+            ["remove", "cart1"], ["remove", "cart2"],
+            S("caocao", "I will serve him, and wait. One day I'll be near enough.", "且屈身事之，乘间图之。"),
+        ]},
+
+        # C14 · Wu Fu. No board: a hidden-knife attempt fails, just before Cao Cao's own.
+        "c14": {"title": T("Wu Fu", "伍孚"), "kind": "main", "steps": [
+            ["spawn", "dz", "dongzhuo", "c14", 20, 0],
+            ["spawn", "lb", "lvbu", "c14", 28, 2],
+            ["spawn", "wf", "wufu", "c14", 8, 4],
+            N("Wu Fu, a colonel of cavalry, cannot bear Dong Zhuo's cruelty. He wears light armour under his court robes, and hides a short knife.",
+              "越骑校尉伍孚，见卓残暴，愤恨不平。尝于朝服内披小铠，藏短刀，欲伺便杀卓。"),
+            ["move", "dz", "c14", 12, 0],
+            ["run", "wf", "c14", 11, 1],
+            ["pose", "wf", "strike"],
+            ["fx", "flash", "c14", 12, 0],
+            N("As Dong Zhuo comes into court, Wu Fu meets him below the gallery and stabs at him. Dong Zhuo is strong, and seizes his arms. "
+              "Lü Bu comes in and throws him down.",
+              "一日，卓入朝，孚迎至阁下，拔刀直刺卓。卓气力大，两手抠住；吕布便入，揪倒伍孚。"),
+            ["run", "lb", "c14", 10, 2], ["pose", "wf", "fall"],
+            S("dongzhuo", "Who told you to rebel?", "谁教汝反？"),
+            S("wufu", "You are not my lord, and I am not your subject. How can it be rebellion? Your crimes fill the sky, and every man wants you dead!",
+              "汝非吾君，吾非汝臣，何反之有？汝罪恶盈天，人人愿得而诛之！"),
+            N("Dong Zhuo has him taken out and cut to pieces. He curses until he dies.", "卓大怒，命牵出剖剐之。孚至死骂不绝口。"),
+            ["remove", "wf"],
+            N("From then on, Dong Zhuo goes nowhere without armoured guards.", "董卓自此出入常带甲士护卫。"),
+            S("caocao", "A knife in a sleeve is not enough. He has to trust you first.", "袖中藏刀，不足成事。须先教他信我。"),
+        ]},
+
+        # C15 · The false birthday. Contest: asking Wang Yun for the sword.
+        "c15": {"title": T("The False Birthday", "司徒寿宴"), "kind": "main", "steps": [
+            ["light", "dusk"],
+            ["spawn", "wy", "wangyun", "c15", 8, -6],
+            ["army", "officials", "f_official", 6, "c15", 10, 4],
+            ["prop", "tbl", "table", "c15", 10, 0],
+            N("Yuan Shao, in Bohai, sends Wang Yun a secret letter: Dong Zhuo has deposed the Emperor, and you sit and watch. If you have the heart, strike when you can. "
+              "Wang Yun has no plan. He tells the old ministers it is his birthday, and asks them to his house that evening.",
+              "时袁绍在渤海，差人赍密书来见王允：“卓贼欺天废主……公若有心，当乘间图之。”王允得书，寻思无计。谓旧臣曰：“今日老夫贱降，晚间敢屈众位到舍小酌。”"),
+            ["pose", "caocao", "sit"],
+            N("After a few rounds of wine, Wang Yun suddenly covers his face and weeps.", "酒行数巡，王允忽然掩面大哭。"),
+            S("wangyun", "It isn't my birthday. I wanted you all here, and feared Dong Zhuo would suspect us. Dong Zhuo bullies the throne, "
+              "and the dynasty may fall any day. The founder destroyed Qin and Chu and won the realm, and now it will be lost to Dong Zhuo. That is why I weep.",
+              "今日并非贱降，因欲与众位一叙，恐董卓见疑，故托言耳。董卓欺主弄权，社稷旦夕难保。想高皇诛秦灭楚，奄有天下；谁想传至今日，乃丧于董卓之手：此吾所以哭也。"),
+            ["emote", "officials", "..."],
+            N("All the officials weep with him. Then one man claps his hands and laughs.", "于是众官皆哭。坐中一人抚掌大笑。"),
+            ["still", "wy_birthday", "slow pull back"],
+            S("caocao", "The whole court weeps from night till morning and from morning till night. Can you weep Dong Zhuo to death?",
+              "满朝公卿，夜哭到明，明哭到夜，焉能哭死董卓耶？"),
+            ["emote", "wy", "anger"],
+            S("wangyun", "Your forefathers ate the Han's bread too. You don't think of serving the realm, and you laugh?",
+              "汝祖宗亦食禄汉朝，今不思报国而反笑耶？"),
+            ["problem"],
+            S("caocao", "I'm not laughing at that. I'm laughing that not one of you has a plan to kill Dong Zhuo. I'm no great talent, "
+              "but I'll cut off his head and hang it on the city gate.",
+              "吾非笑别事，笑众位无一计杀董卓耳。操虽不才，愿即断董卓头，悬之都门，以谢天下。"),
+            S("wangyun", "What do you have in mind, Mengde?", "孟德有何高见？"),
+            S("caocao", "I've bent myself to serve him only to wait my chance. Now he trusts me, and I can get close. "
+              "I hear you have a Seven-Star Sword. Lend it to me. I'll go into his residence and stab him. I don't mind dying for it.",
+              "近日操屈身以事卓者，实欲乘间图之耳。今卓颇信操，操因得时近卓。闻司徒有七星宝刀一口，愿借与操入相府刺杀之，虽死不恨！"),
+            S("wangyun", "If you truly mean it, Mengde, the realm is lucky.", "孟德果有是心，天下幸甚！"),
+            ["pose", "caocao", "stand"],
+            N("Wang Yun pours him wine with his own hands. Cao Cao pours it out on the ground as an oath. Wang Yun brings the sword.",
+              "遂亲自酌酒奉操。操沥酒设誓，允随取宝刀与之。"),
+            ["still", "seven_star", "slow zoom in"],
+            N("Cao Cao hides the sword, finishes his wine and leaves.", "操藏刀，饮酒毕，即起身辞别众官而去。"),
+            ["gain", "sevenstar"],
+        ]},
+
+        # C16 · The mirror. The boss: two boards. The first attempt fails; the second saves him.
+        "c16": {"title": T("The Mirror", "衣镜"), "kind": "main", "steps": [
+            ["music", "boss"],
+            ["spawn", "dz", "dongzhuo", "c16", 10, -6],
+            ["spawn", "lb", "lvbu", "c16", 16, -4],
+            ["prop", "bed", "bench", "c16", 10, -8],
+            ["prop", "mir", "mirror", "c16", 4, -10],
+            ["pose", "dz", "sit"],
+            ["boss", "dongzhuo"],
+            N("The next day Cao Cao goes to the Chancellor's residence with the sword at his side. Dong Zhuo is in the small pavilion, sitting on his couch, with Lü Bu beside him.",
+              "次日，曹操佩着宝刀，来至相府。董卓坐于床上，吕布侍立于侧。"),
+            S("dongzhuo", "Why so late, Mengde?", "孟德来何迟？"),
+            S("caocao", "My horse is weak, and slow.", "马羸行迟耳。"),
+            S("dongzhuo", "Fengxian, some good horses have come in from Xiliang. Go and choose one yourself, and give it to Mengde.",
+              "吾有西凉进来好马，奉先可亲去拣一骑赐与孟德。"),
+            ["move", "lb", "c16", 40, 4], ["remove", "lb"],
+            S("caocao", "The traitor's time has come.", "此贼合死！"),
+            N("But Dong Zhuo is very strong, and Cao Cao does not dare move. Dong Zhuo is too fat to sit for long. He lies down, and turns his face to the wall.",
+              "即欲拔刀刺之。惧卓力大，未敢轻动。卓胖大不耐久坐，遂倒身而卧，转面向内。"),
+            ["pose", "dz", "sleep"],
+            ["problem"],  # 1 — the attempt; it fails as written
+            S("caocao", "Now he's finished.", "此贼当休矣！"),
+            ["move", "caocao", "c16", 8, -4],
+            ["pose", "caocao", "strike"],
+            ["still", "the_mirror", "slow zoom in"],
+            N("Cao Cao draws the sword. He is about to strike when Dong Zhuo looks up into the dressing mirror, and sees him behind his back with the blade drawn.",
+              "急掣宝刀在手。恰待要刺，不想董卓仰面看衣镜中，照见曹操在背后拔刀。"),
+            ["pose", "dz", "sit"],
+            ["emote", "dz", "!"],
+            S("dongzhuo", "Mengde, what are you doing?", "孟德何为？"),
+            ["spawn", "lb", "lvbu", "c16", 40, 4], ["move", "lb", "c16", 22, 0],
+            N("Lü Bu is already outside the pavilion with the horse.", "时吕布已牵马至阁外。"),
+            ["problem"],  # 2 — turning the blade into a gift
+            ["pose", "caocao", "kneel"],
+            S("caocao", "I have a precious sword, and I wish to present it to Your Excellency.", "操有宝刀一口，献上恩相。"),
+            N("Dong Zhuo takes it and looks at it. It is more than a chi long, set with seven jewels, and very sharp: a precious sword indeed. "
+              "He hands it to Lü Bu, and Cao Cao gives him the sheath.",
+              "卓接视之，见其刀长尺余，七宝嵌饰，极其锋利，果宝刀也；遂递与吕布收了。操解鞘付布。"),
+            ["give", "caocao", "lb", "sevenstar"],
+            ["pose", "caocao", "stand"],
+            ["prop", "horse", "whitehorse", "c16", 26, 4],
+            N("Dong Zhuo takes him out to look at the horse.", "卓引操出阁看马。"),
+            S("caocao", "May I try him?", "借愿试一骑。"),
+            N("Dong Zhuo has a saddle put on it. Cao Cao leads the horse out of the residence, whips it, and rides off to the south-east.",
+              "卓就教与鞍辔。操牵马出相府，加鞭望东南而去。"),
+            ["move", "caocao", "c16", 50, 10],
+            ["victory"],
+        ]},
+
+        # C17 · The East Gate. Legwork: the board first. The jailers go to his lodging while he rides.
+        "c17": {"title": T("The East Gate", "东门"), "kind": "main", "steps": [
+            ["problem"],  # getting through the gate before the word does
+            ["spawn", "gk", "f_soldier", "c17", 4, -2],
+            N("The gate captain stops him, and asks where he is going.", "门吏问之。"),
+            S("caocao", "The Chancellor has sent me on urgent business.", "丞相差我有紧急公事。"),
+            ["run", "caocao", "c17", 30, -2],
+            ["still", "east_gate", "slow pull back"],
+            N("Behind him, at the residence, Lü Bu says: Cao Cao looked like he meant to stab you. When he was caught, he offered the sword. "
+              "Li Ru says: send for him. If he comes, it was a gift. If he doesn't, it was murder.",
+              "布对卓曰：“适来曹操似有行刺之状，及被喝破，故推献刀。”李儒曰：“今差人往召，如彼无疑而便来，则是献刀；如推托不来，则必是行刺。”"),
+            N("Four jailers go to his lodging. They come back: he never went home. He rode out through the East Gate, saying the Chancellor had sent him on urgent business.",
+              "即差狱卒四人往唤操。回报曰：“操不曾回寓，乘马飞出东门。门吏问之，操曰：丞相差我有紧急公事，纵马而去矣。”"),
+            ["still", "wanted", "slow zoom in"],
+            N("Dong Zhuo is furious. Orders go out everywhere, with Cao Cao's portrait: a thousand gold and a marquisate of ten thousand households for whoever takes him. "
+              "Whoever hides him shares his crime.",
+              "卓大怒，遂令遍行文书，画影图形，捉拿曹操。擒献者，赏千金，封万户侯；窝藏者同罪。"),
+        ]},
+
+        # C18 · Zhongmou. Contest, fails: the disguise does not hold.
+        "c18": {"title": T("Zhongmou", "中牟"), "kind": "main", "steps": [
+            ["army", "pass", "f_soldier", 4, "c18", 6, -4],
+            ["spawn", "cg", "chengong", "c18", 14, -8],
+            N("Cao Cao rides hard for his home in Qiao. At the pass of Zhongmou county the guards seize him, and take him to the magistrate.",
+              "且说曹操逃出城外，飞奔谯郡。路经中牟县，为守关军士所获，擒见县令。"),
+            S("caocao", "I'm a travelling merchant. My name is Huangfu.", "我是客商，复姓皇甫。"),
+            N("The magistrate looks at him closely for a long time.", "县令熟视曹操，沉吟半晌。"),
+            ["problem"],
+            S("chengong", "When I was in Luoyang looking for office, I knew you. You are Cao Cao. Why hide it? "
+              "Lock him up. Tomorrow he goes to the capital, for the reward.",
+              "吾前在洛阳求官时，曾认得汝是曹操，如何隐讳？且把来监下，明日解去京师请赏。"),
+            N("The guards at the pass are given wine and food, and go.", "把关军士赐以酒食而去。"),
+        ]},
+
+        # C19 · The back courtyard. Contest: Chen Gong frees him.
+        "c19": {"title": T("The Back Courtyard", "后院审曹"), "kind": "main", "steps": [
+            ["light", "night"],
+            ["spawn", "cg", "chengong", "c19", 8, -4],
+            N("At midnight the magistrate has his own man bring Cao Cao out in secret, into the back courtyard, to question him.",
+              "至夜分，县令唤亲随人暗地取出曹操，直至后院中审究。"),
+            S("chengong", "I hear the Chancellor treated you well. Why bring this on yourself?", "我闻丞相待汝不薄，何故自取其祸？"),
+            S("caocao", "What do sparrows know of the swan's ambitions? You've caught me. Take me in for the reward.",
+              "燕雀安知鸿鹄志哉！汝既拿住我，便当解去请赏。"),
+            N("The magistrate sends everyone away.", "县令屏退左右。"),
+            S("chengong", "Don't look down on me. I'm no ordinary official. I just haven't found the right master.", "汝休小觑我。我非俗吏，奈未遇其主耳。"),
+            ["problem"],
+            S("caocao", "My forefathers have eaten the Han's bread for generations. If I didn't think of repaying it, how would I be better than a beast? "
+              "I bent myself to serve Dong Zhuo so I could get close and rid the realm of him. It failed. That is Heaven's will.",
+              "吾祖宗世食汉禄，若不思报国，与禽兽何异？吾屈身事卓者，欲乘间图之，为国除害耳。今事不成，乃天意也！"),
+            S("chengong", "And where will you go now, Mengde?", "孟德此行，将欲何往？"),
+            S("caocao", "Home. I'll send out an edict in the Emperor's name and call every lord in the realm to raise troops and kill Dong Zhuo. That is all I want.",
+              "吾将归乡里，发矫诏，召天下诸侯兴兵共诛董卓，吾之愿也。"),
+            ["pose", "cg", "kneel"],
+            ["still", "cg_unties", "slow zoom in"],
+            N("The magistrate unties him with his own hands, seats him in the place of honour, and bows twice.", "县令闻言，乃亲释其缚，扶之上坐，再拜。"),
+            S("chengong", "You truly are the most loyal man in the realm!", "公真天下忠义之士也！"),
+            S("chengong", "My name is Chen Gong. My mother, my wife and my children are in Dongjun. Your loyalty has moved me. "
+              "I'll give up my post and go with you.",
+              "吾姓陈，名宫，字公台。老母妻子，皆在东郡。今感公忠义，愿弃一官，从公而逃。"),
+            N("That night Chen Gong gathers money for the road. They change into plain clothes, each with a sword on his back, and ride for Cao Cao's home.",
+              "是夜陈宫收拾盘费，与曹操更衣易服，各背剑一口，乘马投故乡来。"),
+            ["remove", "cg"],
+            ["party", ["caocao", "chengong"]],
+        ]},
+
+        # C20 · Lü Boshe. No board (user's call: overhear on foot; the killing as darkness and sound; the pig as a still; then the road).
+        "c20": {"title": T("Lü Boshe", "吕伯奢"), "kind": "main", "steps": [
+            ["light", "dusk"],
+            ["spawn", "lbs", "lvboshe", "c20", 10, -4],
+            N("Three days on, at Chenggao, as the light fails. Cao Cao points his whip into the deep wood.", "行了三日，至成皋地方，天色向晚。操以鞭指林深处。"),
+            S("caocao", "A man named Lü Boshe lives there. He's my father's sworn brother. Let's ask for news of home, and a bed for the night.",
+              "此间有一人姓吕，名伯奢，是吾父结义弟兄；就往问家中消息，觅一宿，如何？"),
+            S("chengong", "Good.", "最好。"),
+            S("lvboshe", "I hear the court has sent out warrants for you everywhere. Your father has fled to Chenliu. How did you get here?",
+              "我闻朝廷遍行文书，捉汝甚急，汝父已避陈留去了。汝如何得至此？"),
+            S("caocao", "If it weren't for Magistrate Chen here, I'd have been ground to powder.", "若非陈县令，已粉骨碎身矣。"),
+            ["pose", "lbs", "bow"],
+            S("lvboshe", "Sir, if not for you, the whole Cao family would have died. Rest easy. You'll sleep here tonight. "
+              "I have no good wine in the house. Let me go to the west village and buy some.",
+              "小侄若非使君，曹氏灭门矣。使君宽怀安坐，今晚便可下榻草舍。老夫家无好酒，容往西村沽一樽来相待。"),
+            ["move", "lbs", "c20", 50, 6], ["remove", "lbs"],
+            ["wait", 1500],
+            N("They sit a long time. Then, from behind the house, comes the sound of a blade being sharpened.", "操与宫坐久，忽闻庄后有磨刀之声。"),
+            S("caocao", "Lü Boshe is no close kin of mine, and he went off in a hurry. Let's listen.", "吕伯奢非吾至亲，此去可疑，当窃听之。"),
+            ["move", "caocao", "c20", -8, -14], ["move", "chengong", "c20", -6, -12],
+            ["pose", "caocao", "kneel"],
+            N("They creep round behind the thatched hall. A voice says: Tie it up and kill it. How about that?", "二人潜步入草堂后，但闻人语曰：“缚而杀之，何如？”"),
+            S("caocao", "So that's it. If we don't strike first, we'll be taken.", "是矣！今若不先下手，必遭擒获。"),
+            ["mood", "dark"],
+            N("They draw their swords and go in. They kill everyone, men and women, eight in all.", "遂与宫拔剑直入，不问男女，皆杀之，一连杀死八口。"),
+            ["wait", 1500],
+            ["mood", "clear"],
+            ["prop", "pig", "pig", "c20", -14, -16],
+            ["still", "boshe_pig", "slow zoom in"],
+            N("In the kitchen they find a pig, tied up, ready to be killed.", "搜至厨下，却见缚一猪欲杀。"),
+            S("chengong", "You were too suspicious, Mengde. We've killed good people!", "孟德心多，误杀好人矣！"),
+            ["remove", "pig"],
+            N("They mount in haste and ride. Less than two li on, they meet Lü Boshe, two jars of wine hanging from his saddle, fruit and greens in his hand.",
+              "急出庄上马而行。行不到二里，只见伯奢驴鞍前鞒悬酒二瓶，手携果菜而来。"),
+            ["spawn", "lbs", "lvboshe", "c20", 40, 4], ["move", "lbs", "c20", 24, 2],
+            S("lvboshe", "Nephew, sir, why are you leaving?", "贤侄与使君何故便去？"),
+            S("caocao", "A wanted man can't stay long anywhere.", "被罪之人，不可久住。"),
+            S("lvboshe", "I've told the household to kill a pig for you. Why not stay the night? Turn back, quickly.",
+              "吾已分付家人宰一猪相款，贤侄、使君何憎一宿？速请转骑。"),
+            ["move", "caocao", "c20", 30, 6],
+            N("Cao Cao rides on without a word. A few paces on, he draws his sword and turns back.", "操不顾，策马便行。行不数步，忽拔剑复回。"),
+            S("caocao", "Who is that coming?", "此来者何人？"),
+            ["still", "boshe_road", "slow zoom in"],
+            N("Lü Boshe turns his head to look, and Cao Cao cuts him down from his donkey.", "伯奢回头看时，操挥剑砍伯奢于驴下。"),
+            ["pose", "lbs", "fall"],
+            S("chengong", "That was a mistake before. What is this?", "适才误耳，今何为也？"),
+            S("caocao", "When Lü Boshe got home and saw so many dead, would he let it rest? He'd come after us with men, and that would be the end of us.",
+              "伯奢到家，见杀死多人，安肯干休？若率众来追，必遭其祸矣。"),
+            S("chengong", "To kill a man knowing he's innocent is a great wrong!", "知而故杀，大不义也！"),
+            S("caocao", "I would rather wrong the whole world than let the world wrong me.", "宁教我负天下人，休教天下人负我。"),
+            N("Chen Gong says nothing.", "陈宫默然。"),
+            ["remove", "lbs"],
+            ["party", ["chengong"], {"to": "c21"}],
+        ]},
+
+        # C21 · The inn. Played as Chen Gong; no board. Hands back to Cao Cao, who wakes alone.
+        "c21": {"title": T("The Inn", "客店"), "kind": "main", "steps": [
+            ["light", "night"],
+            ["spawn", "cc", "caocao", "c21", 6, -6],
+            ["pose", "cc", "sleep"],
+            N("That night they ride a few li more, and knock up an inn by moonlight. They feed the horses. Cao Cao falls asleep first.",
+              "当夜行数里，月明中敲开客店门投宿。喂饱了马，曹操先睡。"),
+            S("chengong", "I thought Cao Cao was a good man, and I gave up my post to follow him. He's a man with a cruel heart. "
+              "Leave him alive today, and there'll be trouble later.",
+              "我将谓曹操是好人，弃官跟他；原来是个狠心之徒！今日留之，必为后患。"),
+            ["move", "chengong", "c21", 4, -4],
+            ["pose", "chengong", "strike"],
+            ["still", "cg_inn", "slow zoom in"],
+            N("He draws his sword to kill Cao Cao. Then he stops.", "便欲拔剑来杀曹操。忽转念曰："),
+            S("chengong", "I followed him this far for the sake of the realm. To kill him would be a wrong too. Better to leave him, and go elsewhere.",
+              "我为国家跟他到此，杀之不义。不若弃而他往。"),
+            ["pose", "chengong", "stand"],
+            N("He sheathes his sword, mounts, and rides for Dongjun before it is light.", "插剑上马，不等天明，自投东郡去了。"),
+            N("A heart that cruel is no good man. Cao Cao and Dong Zhuo are of one kind.", "设心狠毒非良士，操卓原来一路人。"),
+            ["move", "chengong", "c21", 40, 6],
+            ["light", "dawn"],
+            ["pose", "cc", "stand"],
+            ["remove", "cc"],
+            ["party", ["caocao"], {"to": "c21"}],
+        ]},
+
+        # C22 · Wei Hong. Legwork: the board first.
+        "c22": {"title": T("Wei Hong", "卫弘"), "kind": "main", "steps": [
+            ["problem"],  # winning over Wei Hong
+            ["spawn", "wh", "weihong", "c22", 10, -4],
+            ["prop", "tbl", "table", "c22", 8, 0],
+            N("Cao Cao wakes to find Chen Gong gone. That man heard what I said, and thinks me cruel. I must move fast, and not stay. "
+              "He rides through the night to Chenliu, finds his father, and tells him everything. He means to spend the family's money raising an army. "
+              "His father tells him it is too little, and that there is a man here, Wei Hong, generous, upright, and very rich.",
+              "操觉，不见陈宫，寻思：“此人见我说了这两句，疑我不仁，弃我而去；吾当急行，不可久留。”遂连夜到陈留，寻见父亲，备说前事；欲散家资，招募义兵。父言：“资少恐不成事。此间有孝廉卫弘，疏财仗义，其家巨富；若得相助，事可图矣。”"),
+            N("Cao Cao sets out a feast and invites Wei Hong.", "操置酒张筵，拜请卫弘到家。"),
+            S("caocao", "The Han has no master. Dong Zhuo holds all power, cheats the Emperor and harms the people, and the whole realm grinds its teeth. "
+              "I want to hold up the dynasty, but I haven't the strength. You are a loyal man. I've come to ask your help.",
+              "今汉室无主，董卓专权，欺君害民，天下切齿。操欲力扶社稷，恨力不足。公乃忠义之士，敢求相助。"),
+            S("weihong", "I've had that wish a long time. I just never met a hero. If you have such ambitions, Mengde, my fortune is yours.",
+              "吾有是心久矣，恨未遇英雄耳。既孟德有大志，愿将家资相助。"),
+            ["gain", "weihong"],
+        ]},
+
+        # C23 · The white banner. No board: the officers come of their own will, as in the novel.
+        "c23": {"title": T("The White Banner", "忠义白旗"), "kind": "main", "steps": [
+            ["prop", "banner", "whitebanner", "c23", 0, -8],
+            ["still", "white_banner", "slow pull back"],
+            N("Cao Cao sends out a forged edict in the Emperor's name, and raises a white banner to call for volunteers. On it are two words: Loyalty and Right.",
+              "于是先发矫诏，驰报各道，然后招集义兵，竖起招兵白旗一面，上书“忠义”二字。"),
+            ["crowd", 3],
+            N("Within days, volunteers pour in like rain.", "不数日间，应募之士，如雨骈集。"),
+            ["spawn", "yj", "yuejin", "c23", 30, 6], ["move", "yj", "c23", 8, 4],
+            ["spawn", "ld", "lidian", "c23", 32, 8], ["move", "ld", "c23", 10, 6],
+            N("Yue Jin of Yangping comes, and Li Dian of Shanyang. Cao Cao keeps them both on his staff.", "阳平卫国人乐进、山阳巨鹿人李典，来投曹操。操皆留为帐前吏。"),
+            ["spawn", "xhd", "xiahoudun", "c23", 34, -4], ["move", "xhd", "c23", 12, -2],
+            ["spawn", "xhy", "xiahouyuan", "c23", 36, -2], ["move", "xhy", "c23", 14, 0],
+            ["crowd", "+3"],
+            N("Xiahou Dun comes with a thousand men, and his cousin Xiahou Yuan with another thousand. Xiahou Dun once killed a man for insulting his teacher, and had to flee.",
+              "夏侯惇，自小习枪棒；有人辱骂其师，惇杀之，逃于外方；闻知曹操起兵，与其族弟夏侯渊两个，各引壮士千人来会。"),
+            S("xiahoudun", "Brother, we heard you'd raised the banner. Here we are.", "闻兄起兵，特来相会。"),
+            ["spawn", "cr", "caoren", "c23", 36, 8], ["move", "cr", "c23", 14, 8],
+            ["spawn", "ch", "caohong", "c23", 38, 10], ["move", "ch", "c23", 16, 10],
+            ["crowd", "+3"],
+            N("Then his own clansmen, Cao Ren and Cao Hong, come with more than a thousand men each. Wei Hong spends his whole fortune on armour and banners. "
+              "Grain comes in from every side.",
+              "不数日，曹氏兄弟曹仁、曹洪，各引兵千余来助。卫弘尽出家财，置办衣甲旗幡。四方送粮者，不计其数。"),
+            ["spawn", "ys", "yuanshao", "c23", 50, 0], ["move", "ys", "c23", 20, -4],
+            N("Yuan Shao receives the edict, and comes from Bohai with thirty thousand men. Cao Cao writes the call to arms, and sends it to every commandery.",
+              "时袁绍得操矫诏，乃聚麾下文武，引兵三万，离渤海来与曹操会盟。操作檄文以达诸郡。"),
+            ["prop", "ltr", "letter", "c23", 4, -2],
+            S("caocao", "We proclaim to the realm: Dong Zhuo deceives Heaven and Earth. He has destroyed the state and murdered the Emperor, "
+              "defiled the palace and slaughtered the people. His crimes are piled high. "
+              "We have gathered a righteous army, and sworn to sweep the land clean. Raise your armies! Uphold the house of Han! Save the people! "
+              "When this reaches you, act at once!",
+              "操等谨以大义布告天下：董卓欺天罔地，灭国弑君；秽乱宫禁，残害生灵；狼戾不仁，罪恶充积！今奉天子密诏，大集义兵，誓欲扫清华夏，剿戮群凶。望兴义师，共泄公愤；扶持王室，拯救黎民。檄文到日，可速奉行！"),
+            N("The call goes out. Seventeen lords answer, and their armies march. In Pingyuan, a magistrate named Liu Bei hears the news…",
+              "檄文发去，十七镇诸侯应之，各起兵来。平原县令刘备闻知……"),
+        ]},
+    }
+
+
+def _nodes_caocao():
+    def node(key, x, y, scene, room=None, place="Luoyang", role="main", **extra):
+        n = {"key": key, "x": x, "y": y, "role": role, "place": place, "scene": scene}
+        if room:
+            n["room"] = room
+        n.update(extra)
+        return n
+    return [
+        node("c1", 40, 200, "c1", room="hj-hall", board=False),
+        node("c2", 55, 192, "c2", dilemma=D(
+            "caocao", "Keep He Jin out of the palace.", "劝何进勿入宫。",
+            "He laughs at me. One more try, before he walks through that gate.", "他笑我是小儿之见。在他进门之前，再劝一次。",
+            "I've said all I can.", "该说的，都说了。",
+            "He isn't listening. Find other words.", "他听不进。换个说法。")),
+        node("c3", 70, 184, "c3", dilemma=D(
+            "caocao", "Get the fire under control, and find the Emperor.", "救灭宫火，寻觅天子。",
+            "The palace is burning and the Emperor is gone. First things first.", "宫中火起，天子不知去向。先后要分清。",
+            "The fires are out. The search is out.", "火已救灭，兵已四出。",
+            "Not that way. The fire is spreading.", "不对，火势在蔓延。")),
+        node("c4", 85, 176, "c4", place="Beimang", dilemma=D(
+            "xiandi", "Find a way out of the dark.", "黑暗中寻一条活路。",
+            "Thorns everywhere, and no path. My brother is crying.", "满地荆棘，不见行路。兄长在哭。",
+            "There! A light.", "看！有光。",
+            "Not that way. Thorns.", "那边不通，全是荆棘。")),
+        node("c5", 100, 168, "c5", place="Beimang", dilemma=D(
+            "xiandi", "Answer for your brother.", "替兄长答话。",
+            "My brother can't speak. Someone has to.", "兄长说不出话。总得有人说。",
+            "He is getting down from his horse.", "他下马了。",
+            "Not like that. Stand straighter.", "不是这样。站直些。")),
+        node("c6", 115, 160, "c6", dilemma=D(
+            "dongzhuo", "Put the deposition to the court.", "当众议废立。",
+            "Those who follow me live. Let them see who rules here.", "顺我者生。让他们看清，谁说了算。",
+            "No one dares speak.", "无人敢出声。",
+            "Not yet. Let them be more afraid.", "还不行。让他们再怕些。")),
+        node("c7", 130, 152, "c7", place="The Camps", room="dz-tent", board=False),
+        node("c8", 140, 146, "c8", place="The Camps", board=False),
+        node("c9", 155, 140, "c9", place="The Camps", room="lb-tent",
+             gate=[{"needs": ["item:redhare"], "else": "c9_wait",
+                    "objective": T("Fetch Red Hare from the stable master, at the back of the camp.", "到营后，向马夫牵出赤兔马。"),
+                    "count": False, "at": "The Camps"},
+                   {"needs": ["item:gold"], "else": "c9_wait",
+                    "objective": T("Fetch the gold, the pearls and the jade belt from the paymaster's tent, beside the Grand Preceptor's.", "到太师帐旁的支应帐，取黄金、明珠与玉带。"),
+                    "count": False, "at": "The Camps"}]),
+        node("c10", 170, 134, "c10", place="The Camps", room="dy-tent", board=False),
+        node("c11", 185, 128, "c11", room="sheng-hall", board=False),
+        node("c12", 200, 122, "c12", room="jiade-hall", board=False),
+        node("c13", 212, 116, "c13", board=False),
+        node("c14", 224, 110, "c14", board=False),
+        node("c15", 236, 104, "c15", room="wyl-rearhall", dilemma=D(
+            "caocao", "Ask for the Seven-Star Sword.", "借七星宝刀。",
+            "They weep, and weeping kills no one. Make the old man trust me with it.", "众官只会哭，哭死不了董卓。要教老司徒信我。",
+            "He pours for me himself.", "他亲自为我斟酒。",
+            "He's still angry. Not like that.", "他还在恼。不是这样说。")),
+        node("c16", 250, 98, "c16", room="xf-pavilion", role="boss"),
+        node("c17", 262, 92, "c17", dilemma=D(
+            "caocao", "Get through the East Gate.", "闯出东门。",
+            "Before he wonders why I don't come back.", "趁他还没起疑。",
+            "Through.", "出来了。",
+            "The gate captain is looking. Steady.", "门吏在看。稳住。")),
+        node("c18", 280, 84, "c18", place="The East Road", dilemma=D(
+            "caocao", "Pass for a merchant named Huangfu.", "冒作客商皇甫。",
+            "My face is on every wall from here to Luoyang.", "从这里到洛阳，处处都挂着我的画像。",
+            "He's still looking at me.", "他还在看我。",
+            "Too eager. A merchant wouldn't say that.", "太急了。客商不会这么说。")),
+        node("c19", 292, 78, "c19", place="The East Road", room="jail-court", dilemma=D(
+            "caocao", "Tell him why.", "告诉他，为什么。",
+            "He sent the others away. He wants the truth.", "他屏退了左右。他要听真话。",
+            "He's untying me.", "他亲手为我松绑。",
+            "That isn't the truth. Again.", "那不是真话。再说。")),
+        node("c20", 306, 72, "c20", place="Chenggao", room="lbs-hall", board=False),
+        node("c21", 318, 66, "c21", place="Chenggao", room="inn-room", board=False),
+        node("c22", 334, 60, "c22", place="Chenliu", room="wh-hall", dilemma=D(
+            "caocao", "Win over Wei Hong.", "说动卫弘。",
+            "My father's money won't raise an army. His will.", "家资不足以成事。卫弘的可以。",
+            "His fortune is ours.", "家资尽付。",
+            "Not that. He's a man of honour, not a merchant.", "不是这样。他是义士，不是商人。")),
+        node("c23", 348, 54, "c23", place="Chenliu", board=False),
+    ]
+
+
+def _multi_dilemmas_cc():
+    return {
+        "c9": [
+            D("lisu", "Make him ashamed of his master.", "教他耻于其主。",
+              "He's drunk and pleased with his horse. Now remind him whose son he is.", "他喝得正酣，又得了好马。此时提一提，他是谁的儿子。",
+              "He says he has no choice.", "他说，他是出于无奈。",
+              "Too blunt. He'll take offence.", "太直了。他会恼。"),
+            D("lisu", "Show him a better master.", "指给他一个明主。",
+              "He says he has no master worth the name. Give him one.", "他说他未逢其主。那就给他一个。",
+              "He wants a way in.", "他想要一条门路。",
+              "Not yet. He isn't ready to hear the name.", "还不行。他还不愿听这个名字。"),
+            D("lisu", "Lay out the gold.", "献上金珠。",
+              "He wants it. Let him see what it's worth.", "他动心了。让他看看值多少。",
+              "I'll kill Ding Yuan, he says.", "他说，要杀丁原。",
+              "He's hesitating. Hold.", "他还在犹豫。稳住。"),
+        ],
+        "c16": [
+            D("caocao", "Strike while his back is turned.", "趁他背身，下手。",
+              "He's lying down with his face to the wall. Lü Bu is gone. Now.", "他转面向内而卧。吕布已去。就是此刻。",
+              "The blade is out.", "刀已出鞘。",
+              "He's stirring. Wait.", "他在动。再等等。"),
+            D("caocao", "Turn the blade into a gift.", "将刀化作礼物。",
+              "He saw me in the mirror. Lü Bu is at the door. One breath to think.", "他从镜中看见了我。吕布已到门外。只有一口气的工夫。",
+              "He takes the sword, and admires it.", "他接过刀，赞不绝口。",
+              "He's reaching for help. Think again.", "他要喊人了。再想。"),
+        ],
+    }
+
+
+_EDGES_CAOCAO = [["c1", "c2"], ["c2", "c3"], ["c3", "c4"], ["c4", "c5"], ["c5", "c6"], ["c6", "c7"], ["c7", "c8"], ["c8", "c9"],
+                 ["c9", "c10"], ["c10", "c11"], ["c11", "c12"], ["c12", "c13"], ["c13", "c14"], ["c14", "c15"], ["c15", "c16"],
+                 ["c16", "c17"], ["c17", "c18"], ["c18", "c19"], ["c19", "c20"], ["c20", "c21"], ["c21", "c22"], ["c22", "c23"]]
+
+_ITEMS_CAOCAO = {
+    "redhare": {"name": "Red Hare", "zh": "赤兔马", "kind": "treasure"},
+    "gold": {"name": "Gold, pearls and a jade belt", "zh": "黄金、明珠、玉带", "kind": "treasure"},
+    "sevenstar": {"name": "The Seven-Star Sword", "zh": "七星宝刀", "kind": "treasure"},
+    "weihong": {"name": "Wei Hong's fortune", "zh": "卫弘家资", "kind": "treasure"},
+}
+
+_OPENING_CAOCAO = [
+    ["scroll", T("Chapter 3", "第三回"), [
+        T("At the Wenming council Dong Zhuo shouts down Ding Yuan; with gold and pearls Li Su wins over Lü Bu.",
+          "议温明董卓叱丁原，馈金珠李肃说吕布。"),
+        T("The Han has ruled for four hundred years. Emperor Ling is dead, and his young son is on the throne.",
+          "汉室传四百年。灵帝崩，少帝即位。"),
+        T("The palace belongs to the eunuchs, the Ten Attendants. The army belongs to He Jin, the Empress Dowager's brother, who began life as a butcher.",
+          "宫中十常侍弄权；大将军何进，太后之兄，本屠户出身，掌天下兵马。"),
+        T("He Jin means to destroy the eunuchs, and he has been advised to call the frontier armies into the capital to do it.",
+          "何进欲诛宦官，有人献计：召外兵入京。"),
+    ]],
+]
+
+
 def _world():
     scenes = {}
     scenes.update(_scenes_chain())
@@ -1314,3 +2227,33 @@ def _world():
 
 
 WORLD2 = _world()
+
+
+def _world_caocao():
+    multi = _multi_dilemmas_cc()
+    return {
+        "n": 2,
+        "name": T("Hulao Pass", "虎牢关"),
+        "zh": "虎牢关",
+        "chapters": [3, 4, 5],
+        "couplets": [
+            ["议温明董卓叱丁原　馈金珠李肃说吕布",
+             "At the Wenming council Dong Zhuo shouts down Ding Yuan; with gold and pearls Li Su wins over Lü Bu"],
+            ["废汉帝陈留为皇　谋董贼孟德献刀",
+             "The Han Emperor is deposed and the Prince of Chenliu enthroned; plotting against Dong Zhuo, Mengde presents a sword"],
+        ],
+        "grades": ["11K", "11K+"],
+        "boss": "redmond",
+        "party": ["caocao"],
+        "lead_portrait": True,
+        "items": _ITEMS_CAOCAO,
+        "nodes": [dict(n, dilemma=multi[n["key"]]) if n["key"] in multi else n for n in _nodes_caocao()],
+        "edges": _EDGES_CAOCAO,
+        "scenes": _scenes_caocao(),
+        "opening": _OPENING_CAOCAO,
+        "closing": [],
+    }
+
+
+# The Cao Cao arc as its own world, so it can be built as a separate test book without touching the Diaochan chain.
+WORLD2_CC = _world_caocao()

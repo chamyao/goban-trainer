@@ -22,15 +22,20 @@ def main():
     ZH.update(new.ZH2)
     CAST = dict(zh.CAST)
     CAST.update(new.CAST2)
-    errors, warnings = [], []
-    cs.check_world(new.WORLD2, ZH, CAST, errors, warnings, {}, zh.FOLK_VOICE)
-    errors = [e for e in errors if "problems (needs exactly 1)" not in e or " has 0 problems" in e]
-    for m in warnings:
-        print("warning:", m)
-    for m in errors:
-        print("ERROR:", m)
-    print(f"{len(new.WORLD2['scenes'])} scenes, {len(new.WORLD2['nodes'])} nodes checked: {len(errors)} errors, {len(warnings)} warnings")
-    sys.exit(1 if errors else 0)
+    bad = 0
+    for label, world in (("Diaochan arc (WORLD2)", new.WORLD2), ("Cao Cao arc (WORLD2_CC)", getattr(new, "WORLD2_CC", None))):
+        if world is None:
+            continue
+        errors, warnings = [], []
+        cs.check_world(world, ZH, CAST, errors, warnings, {}, zh.FOLK_VOICE)
+        errors = [e for e in errors if "problems (needs exactly 1)" not in e or " has 0 problems" in e]
+        for m in warnings:
+            print(f"warning [{label}]:", m)
+        for m in errors:
+            print(f"ERROR [{label}]:", m)
+        print(f"{label}: {len(world['scenes'])} scenes, {len(world['nodes'])} nodes checked: {len(errors)} errors, {len(warnings)} warnings")
+        bad += len(errors)
+    sys.exit(1 if bad else 0)
 
 
 if __name__ == "__main__":
