@@ -76,7 +76,7 @@ const path = require('path');
   await p.locator('.tk-duel-go').first().tap().catch(() => {}); await p.waitForTimeout(800); await ready();
   // the rating has moved: the board seen keeps its problem
   await p.evaluate(() => { const p0 = loadProgress(); p0.tkElo.r = 1500; TK.saveProg(p0); });
-  const id3 = await p.evaluate(() => { const w = TK.world(12), n = w.nodes.find(n => n.key === '12-a9'), d = TK.ls('tk-draw'); return TKElo.pick(w, `12-a9~0~${d['12-a9'] || 0}`)[1]; });
+  const id3 = await p.evaluate(() => { const w = TK.world(12); return TK.problemRef(TK.node(w, '12-a9'))[1]; });   // what the beat would deal now
   check(id3 === id1, `after the rating moves (to 1500), the board already seen is still the same problem (${id1} → ${id3})`);
   // a flawed solve (a hint) is a loss
   await p.evaluate(() => { const p0 = loadProgress(); p0.tkElo.r = 900; TK.saveProg(p0); });
