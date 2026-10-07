@@ -1,0 +1,20 @@
+[
+ {
+  "kind": "furn.computer",
+  "status": {
+   "genshin": "stand-in: furn.desk",
+   "jade": "stand-in: furn.desk",
+   "xianxia": "stand-in: furn.desk"
+  },
+  "size": [
+   2,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "claude-study"
+  ],
+  "count": 3,
+  "brief": "a low dark-wood scholar's desk with a slim glowing screen on it, a soft blue-white light on the desk top and the floor in front; a brush pot and a few papers beside the screen; the same 3/4 view and scale as furn.desk"
+ }
+]
