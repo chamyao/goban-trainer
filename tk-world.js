@@ -1008,13 +1008,13 @@ function worldScenes() {
         carry = (carry - d) % STEP; if (carry < 0) carry += STEP;
       }
       const made = band.slice(3).map((p, i) => {
-        const im = this.add.image(p.x, p.y - 2, "@route", "band").setDepth(-985).setRotation(p.ang).setScale(.7).setAlpha(0)
+        const im = this.add.image(p.x, p.y - 2, "@route", "band").setDepth(-985).setRotation(p.ang).setScale(.5).setAlpha(0)
           .setBlendMode(Phaser.BlendModes.ADD);
-        this.tweens.add({ targets: im, alpha: .5, delay: i * 7, duration: 260 });   // it sweeps out from your feet
+        this.tweens.add({ targets: im, alpha: .13, delay: i * 7, duration: 260 });   // it sweeps out from your feet (faint: the strokes overlap)
         return im;
       });
-      const end = this.add.image(t.x, t.y, "@route", "dot").setDepth(-985).setScale(2.4).setAlpha(0).setBlendMode(Phaser.BlendModes.ADD);
-      this.tweens.add({ targets: end, alpha: .85, delay: made.length * 7, duration: 300 });
+      const end = this.add.image(t.x, t.y, "@route", "dot").setDepth(-985).setScale(1.8).setAlpha(0).setBlendMode(Phaser.BlendModes.ADD);
+      this.tweens.add({ targets: end, alpha: .4, delay: made.length * 7, duration: 300 });
       this.tweens.add({ targets: end, scale: 3.2, delay: made.length * 7 + 300, duration: 700, yoyo: true, repeat: 3, ease: "Sine.easeInOut" });
       const all = [...made, end];
       this.time.delayedCall(made.length * 7 + 5500, () => this.tweens.add({ targets: all, alpha: 0, duration: 900,
@@ -1872,7 +1872,9 @@ function worldScenes() {
         n.sees = this.sees(n, P);
         const pts = [{ x: ex, y: ey }];
         for (let k = 0; k <= 14; k++) { const a = a0 - Math.PI * 55 / 180 + k * (Math.PI * 110 / 180) / 14, r = this.ray(ex, ey, a, R); pts.push({ x: ex + Math.cos(a) * r, y: ey + Math.sin(a) * r }); }
-        this.coneG.fillStyle(n.sees ? 0xff5a4a : 0xffe08a, n.sees ? .3 : .18).fillPoints(pts, true);
+        // drawn only for someone whose sight matters: who catches you, or whom a sight puzzle turns on
+        const puzzle = Object.values(this.spots).some(sp => sp.sight && [sp.sight.seen_by, sp.sight.unseen_by].includes(w.id || n.id));
+        if ((w.seen && w.seen.length) || w.back_to || puzzle) this.coneG.fillStyle(n.sees ? 0xff5a4a : 0xffe08a, n.sees ? .3 : .18).fillPoints(pts, true);
         // he catches you if he has something to say or somewhere to send you; not the one a sight puzzle wants you seen by
         const wanted = Object.values(this.spots).some(s => s.sight && s.sight.seen_by === (w.id || n.id));
         if (n.sees && !calm && !this.caught && !wanted && ((w.seen && w.seen.length) || w.back_to)) this.caughtBy(n);
