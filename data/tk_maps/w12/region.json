@@ -19,6 +19,7 @@
     "changan--jeweller",
     "changan--lubu",
     "changan--palace",
+    "changan--teahouse",
     "changan--wangyun",
     "changan--xiangfu",
     "changan--xuanping-top",
@@ -143,6 +144,29 @@
    "map": "changan--lubu-hall.map.json",
    "links": [
     "changan--lubu"
+   ],
+   "parent": "changan"
+  },
+  {
+   "id": "changan--teahouse",
+   "name": "A teahouse",
+   "zh": "茶馆",
+   "archetype": "interior",
+   "map": "changan--teahouse.map.json",
+   "links": [
+    "changan",
+    "changan--claude-study"
+   ],
+   "parent": "changan"
+  },
+  {
+   "id": "changan--claude-study",
+   "name": "The back room",
+   "zh": "后间",
+   "archetype": "interior",
+   "map": "changan--claude-study.map.json",
+   "links": [
+    "changan--teahouse"
    ],
    "parent": "changan"
   },

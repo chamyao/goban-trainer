@@ -27,7 +27,7 @@ from vocab import FOLK, KINDS  # noqa: E402
 SIDES = {"N": (0, -1), "S": (0, 1), "W": (-1, 0), "E": (1, 0)}
 OPEN_GROUND = {"court", "passage", "garden", "field", "field.wheat", "market", "camp", "plain", "loess", "stage", "floor", "ward",
                "city", "plateau"}
-PASSABLE_THINGS = {"furn.seat", "furn.curtain", "landmark.ridge", "building.gatehouse", "building.gate", "building.moongate"}
+PASSABLE_THINGS = {"furn.seat", "furn.curtain", "furn.rug", "landmark.ridge", "building.gatehouse", "building.gate", "building.moongate"}
 IN_WALL = {"building.gate", "building.gatehouse", "building.gatetower", "building.moongate"}   # stand in a wall: no margin
 EXTRA_KINDS = {"prop.lanterns", "prop.body_lamp", "milestone", "banner", "plant.peony", "water.lotus", "tree.poplar", "tree.willow",
                "camp.gong", "camp.drum"}
@@ -482,7 +482,16 @@ def main():
                 c = tuple(n["at"])
                 if P.hidden(c):
                     errors.append(f"{place} / {n['place']}: npc {i + 1} ({n['kind']}) at {c} stands behind {P.owner[(c[0], c[1] + 1)]['id']}, out of sight")
-                if not P.walkable(c) or c not in getattr(P, "reach", set()):
+                if n.get("behind"):   # at a desk: reached across it, so a cell beside the thing must be reachable
+                    t = next((t for t in m.get("things", []) if t["id"] == n["behind"]), None)
+                    if t is None:
+                        errors.append(f"{place} / {n['place']}: npc {i + 1} stands behind {n['behind']!r}, which is no thing there")
+                    else:
+                        x, y, w, h = t["rect"]
+                        around = {(i2, j) for i2 in range(x - 1, x + w + 1) for j in range(y - 1, y + h + 1)} - {(i2, j) for i2 in range(x, x + w) for j in range(y, y + h)}
+                        if not around & getattr(P, "reach", set()):
+                            errors.append(f"{place} / {n['place']}: npc {i + 1} ({n['kind']}) behind {n['behind']}: no one can walk up to it")
+                elif not P.walkable(c) or c not in getattr(P, "reach", set()):
                     errors.append(f"{place} / {n['place']}: npc {i + 1} ({n['kind']}) at {c} stands where no one can walk to")
     # every Shared key that names a Places spot should have one
     placed = {s["node"][2:] for _, p, _ in plans() for s in p.get("spots", []) if s.get("node")}

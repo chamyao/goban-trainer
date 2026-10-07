@@ -3410,7 +3410,7 @@ async function route() {
   if (parts[0] === "review") viewReview();
   else if (parts[0] === "play") viewPlay(parts[1]);
   else if (parts[0] === "feedback") viewFeedback();
-  else if (parts[0] === "tk" && parts[1] === "chat") await viewTKChat(parts[2] === "plain");
+  else if (parts[0] === "tk" && parts[1] === "chat") await viewTKChat(true);   // the plain chat window (Claude himself now sits in the Chang'an teahouse)
   else if (parts[0] === "tk" && parts[1] && parts[2]) await viewTKLevel(parseInt(parts[1], 10), parts[2]);
   else if (parts[0] === "tk") await viewTK(parseInt(parts[1], 10) || 0);
   else if (parts[0] === "book" && parts[1] && parts[2]) await viewPlayer(parts[1], parseInt(parts[2], 10) || 1);

@@ -1,0 +1,212 @@
+{
+ "format": "tk-map/1",
+ "id": "changan--teahouse",
+ "world": 12,
+ "name": "A teahouse",
+ "archetype": "interior",
+ "size": [
+  20,
+  14
+ ],
+ "seed": 1728,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   " ": "void",
+   "W": "wall",
+   "#": "wood"
+  },
+  "rows": [
+   "                    ",
+   " WWWWWWWWWWWWWWW##W ",
+   " W################W ",
+   " W################W ",
+   " W################W ",
+   " W################W ",
+   " W################W ",
+   " W################W ",
+   " W################W ",
+   " W################W ",
+   " W################W ",
+   " W################W ",
+   " WWWWWWWWW##WWWWWWW ",
+   "                    "
+  ],
+  "walk": {
+   "void": false,
+   "wall": false,
+   "wood": true
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    10,
+    7
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     5,
+     6
+    ],
+    "to-claude-study": [
+     8,
+     0
+    ]
+   },
+   "tiles": 56
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.counter",
+   "x": 2,
+   "y": 2,
+   "w": 3,
+   "h": 1,
+   "id": "counter",
+   "label": "The tea counter"
+  },
+  {
+   "kind": "furn.jar",
+   "x": 6,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "jar-1"
+  },
+  {
+   "kind": "furn.lamp",
+   "x": 12,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "lamp"
+  },
+  {
+   "kind": "furn.table",
+   "x": 4,
+   "y": 6,
+   "w": 2,
+   "h": 1,
+   "id": "table-1"
+  },
+  {
+   "kind": "furn.table",
+   "x": 8,
+   "y": 6,
+   "w": 2,
+   "h": 1,
+   "id": "table-2"
+  },
+  {
+   "kind": "furn.table",
+   "x": 12,
+   "y": 6,
+   "w": 2,
+   "h": 1,
+   "id": "table-3"
+  },
+  {
+   "kind": "furn.stool",
+   "x": 4,
+   "y": 8,
+   "w": 1,
+   "h": 1,
+   "id": "stool-1"
+  },
+  {
+   "kind": "furn.stool",
+   "x": 12,
+   "y": 8,
+   "w": 1,
+   "h": 1,
+   "id": "stool-2"
+  },
+  {
+   "kind": "furn.plant",
+   "x": 2,
+   "y": 10,
+   "w": 1,
+   "h": 1,
+   "id": "plant",
+   "blocks_sight": true
+  }
+ ],
+ "spots": [],
+ "npcs": [
+  {
+   "id": "npc-1",
+   "kind": "folk.villager",
+   "x": 4.5,
+   "y": 4.9,
+   "say": [
+    "“Tea, sir? The spring leaves came up from Shu this week.”"
+   ],
+   "face": "S"
+  },
+  {
+   "id": "npc-2",
+   "kind": "folk.elder",
+   "x": 6.5,
+   "y": 8.9,
+   "say": [
+    "“Thirty years I've drunk tea in this room. Chancellors come and go; the tea stays the same.”"
+   ],
+   "face": "E"
+  },
+  {
+   "id": "npc-3",
+   "kind": "folk.official",
+   "x": 14.5,
+   "y": 6.9,
+   "say": [
+    "“The back room? Some scholar rents it. Writes all day and hardly says a word.”"
+   ],
+   "face": "W"
+  }
+ ],
+ "exits": [
+  {
+   "to": "changan--claude-study",
+   "side": "N",
+   "x": 16,
+   "y": 1,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "to": "changan",
+   "side": "S",
+   "x": 10,
+   "y": 12,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "changan--claude-study": [
+   16,
+   2
+  ],
+  "changan": [
+   10,
+   11
+  ],
+  "": [
+   10,
+   11
+  ]
+ },
+ "parent": "changan",
+ "building": "teahouse",
+ "links": [
+  "changan",
+  "changan--claude-study"
+ ]
+}

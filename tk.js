@@ -1100,7 +1100,6 @@ async function viewTK(worldN) {
     ...D.worlds.filter(x => !x.chat && (!(x.draft || x.hidden) || TK_TEST)).map(x => TK.worldOpen(x.n)
       ? h("a", { class: "tk-world" + (x.n === n ? " on" : ""), href: `#/tk/${x.n}` }, `${x.book || x.n} · ${x.zh} ${x.name}${x.hidden ? " · 下架 off" : ""}`)
       : h("span", { class: "tk-world lock" }, `${x.n} · ${x.zh} ${x.name} — 先完成第${x.n - 1}卷 after Book ${x.n - 1}`)),
-    ...(tkChatAllowed() ? [h("a", { class: "tk-world tk-world-chat", href: "#/tk/chat" }, "对话 · Talk with Claude")] : []),
   ]));
   const host = h("div", { class: "tk-map" });
   root.append(host);
@@ -1209,6 +1208,7 @@ async function viewTK(worldN) {
       await WorldView.mount({
         w, host, ret: ret && ret.world === w.n ? ret : null,
         onPuzzle: (key, at) => TKOverlay.open(w.n, key, at),  // the board comes up inside the game window
+        onTalkTo: tkChatAllowed() ? scene => TKTalk.open(scene, host) : null,   // Claude in the teahouse's back room (Chang'an): the chat
         onBoss: async () => { if (!TK.seen(`${w.n}:closing`)) { await run(w.closing); TK.markSeen(`${w.n}:closing`); } },
         // the book's last beat done: on into the next book, no menus (its opening scroll plays there)
         onBookDone: () => { if (TK.world(w.n + 1)) { try { localStorage.setItem("tk-book", String(w.n + 1)); } catch {} location.hash = `#/tk/${w.n + 1}`; } },
@@ -1811,7 +1811,7 @@ const TKTalk = {
       if (waiting) log.append(h("div", { class: "tk-talk-line them thinking" }, "……"));
       log.scrollTop = log.scrollHeight;
     };
-    const locked = () => { close(); Sync.setChatKey(""); viewTKChat(); };
+    const locked = () => { Sync.setChatKey(""); askKey(true); };
     const poll = async () => {
       try {
         list = await Sync.fetchChat();
@@ -1840,6 +1840,21 @@ const TKTalk = {
     });
     el.addEventListener("mousedown", e => e.stopPropagation());
     el.addEventListener("pointerdown", e => e.stopPropagation());
+    // the chat's password (the script's CHAT_KEY), asked here in the box the first time, kept in this browser
+    const row = el.querySelector(".tk-talk-row");
+    const askKey = wrong => {
+      clearTimeout(timer);
+      log.innerHTML = "";
+      log.append(h("div", { class: "tk-talk-line them" }, wrong ? "密码不对。Wrong password, try again." : "先说暗号。The password, please."));
+      const pw = h("input", { class: "tk-talk-in", type: "password", placeholder: "密码 Password", autocomplete: "current-password" });
+      const ok = h("button", { class: "tk-talk-send", type: "button" }, "进 Enter");
+      const go = () => { const k = pw.value.trim(); if (!k) return; Sync.setChatKey(k); row.replaceChildren(ta, send); shown = ""; draw(); poll(); setTimeout(() => ta.focus(), 50); };
+      ok.onclick = go;
+      pw.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); go(); } else if (e.key === "Escape") { e.preventDefault(); close(); } });
+      row.replaceChildren(pw, ok);
+      setTimeout(() => pw.focus(), 50);
+    };
+    if (!Sync.chatKey()) return askKey(false);
     draw(); poll();
     setTimeout(() => ta.focus(), 50);
   },

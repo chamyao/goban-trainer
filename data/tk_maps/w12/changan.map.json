@@ -329,6 +329,8 @@
    "door": "S",
    "faces": "S",
    "label": "A teahouse",
+   "map": "teahouse",
+   "plaque": "茶肆",
    "blocks_sight": true
   },
   {
@@ -1742,6 +1744,15 @@
    "door": true
   },
   {
+   "to": "changan--teahouse",
+   "side": "S",
+   "x": 31.1,
+   "y": 18.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
    "to": "changan--wangyun",
    "side": "S",
    "x": 17.6,
@@ -1819,6 +1830,10 @@
  "entries": {
   "changan--jeweller": [
    11,
+   19
+  ],
+  "changan--teahouse": [
+   31,
    19
   ],
   "changan--wangyun": [
@@ -2036,6 +2051,7 @@
   "changan--jeweller",
   "changan--lubu",
   "changan--palace",
+  "changan--teahouse",
   "changan--wangyun",
   "changan--xiangfu",
   "changan--xuanping-top",
