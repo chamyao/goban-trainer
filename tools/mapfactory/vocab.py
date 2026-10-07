@@ -102,6 +102,7 @@ KINDS.update({
     "furn.barrel": (1, 1, True),
     "furn.chest": (1, 1, True),
     "furn.desk": (2, 1, True),
+    "furn.computer": (2, 1, True),   # a desk with a glowing screen (Book 90, the study)
     "furn.screen": (3, 1, True),      # a folding screen behind a seat of honour
     "furn.rug": (3, 2, False),
     "furn.plant": (1, 1, True),
@@ -191,6 +192,7 @@ FALLBACK = {
     "furniture.gotable": ["camp.table"],
     "furn.table": ["camp.table"],
     "furn.desk": ["furn.table", "camp.table"],
+    "furn.computer": ["furn.desk", "furn.table"],
     "furn.counter": ["furn.table", "camp.table"],
     "furn.hearth": ["camp.cookfire", "camp.firepit"],
     "furn.barrel": ["furn.jar"],

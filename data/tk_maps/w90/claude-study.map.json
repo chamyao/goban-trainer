@@ -1,0 +1,210 @@
+{
+ "format": "tk-map/1",
+ "id": "claude-study",
+ "world": 90,
+ "name": "Claude's Study",
+ "archetype": "interior",
+ "size": [
+  16,
+  12
+ ],
+ "seed": 1388,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   " ": "void",
+   "W": "wall",
+   "#": "wood"
+  },
+  "rows": [
+   "                ",
+   " WWWWWWWWWWWWWW ",
+   " W############W ",
+   " W############W ",
+   " W############W ",
+   " W############W ",
+   " W############W ",
+   " W############W ",
+   " W############W ",
+   " W############W ",
+   " WWWWWWW##WWWWW ",
+   "                "
+  ],
+  "walk": {
+   "void": false,
+   "wall": false,
+   "wood": true
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    8,
+    6
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     4,
+     5
+    ]
+   },
+   "tiles": 44
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.shelf",
+   "x": 2,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "shelf-1",
+   "label": "Bookshelves"
+  },
+  {
+   "kind": "furn.shelf",
+   "x": 4,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "shelf-2"
+  },
+  {
+   "kind": "furn.window",
+   "x": 6,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "window-w",
+   "label": "A window"
+  },
+  {
+   "kind": "furn.window",
+   "x": 10,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "window-e"
+  },
+  {
+   "kind": "furn.shelf",
+   "x": 12,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "shelf-3"
+  },
+  {
+   "kind": "furn.computer",
+   "x": 8,
+   "y": 4,
+   "w": 2,
+   "h": 1,
+   "id": "desk",
+   "label": "Claude's desk"
+  },
+  {
+   "kind": "furn.computer",
+   "x": 2,
+   "y": 4,
+   "w": 2,
+   "h": 1,
+   "id": "desk-w"
+  },
+  {
+   "kind": "furn.computer",
+   "x": 12,
+   "y": 4,
+   "w": 2,
+   "h": 1,
+   "id": "desk-e"
+  },
+  {
+   "kind": "furniture.gotable",
+   "x": 2,
+   "y": 6,
+   "w": 1,
+   "h": 1,
+   "id": "gotable",
+   "label": "A go board on a low table"
+  },
+  {
+   "kind": "furn.stool",
+   "x": 4,
+   "y": 6,
+   "w": 1,
+   "h": 1,
+   "id": "stool"
+  },
+  {
+   "kind": "furn.rug",
+   "x": 6,
+   "y": 6,
+   "w": 3,
+   "h": 2,
+   "id": "rug"
+  },
+  {
+   "kind": "furn.lamp",
+   "x": 12,
+   "y": 6,
+   "w": 1,
+   "h": 1,
+   "id": "lamp"
+  },
+  {
+   "kind": "furn.plant",
+   "x": 2,
+   "y": 8,
+   "w": 1,
+   "h": 1,
+   "id": "plant-w",
+   "blocks_sight": true
+  },
+  {
+   "kind": "furn.plant",
+   "x": 12,
+   "y": 8,
+   "w": 1,
+   "h": 1,
+   "id": "plant-e",
+   "blocks_sight": true
+  }
+ ],
+ "spots": [
+  {
+   "id": "claude",
+   "x": 8.5,
+   "y": 6.7,
+   "node": "",
+   "label": "Claude's desk",
+   "trigger": "talk",
+   "note": "the talk spot, in front of the desk: the engine drives the conversation"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "claude",
+   "kind": "hero.claude",
+   "x": 8.5,
+   "y": 2.9,
+   "say": [],
+   "face": "S",
+   "label": "Claude"
+  }
+ ],
+ "exits": [],
+ "entries": {
+  "": [
+   8,
+   10
+  ]
+ },
+ "states": [],
+ "links": []
+}

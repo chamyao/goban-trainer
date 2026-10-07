@@ -1,0 +1,19 @@
+{
+ "format": "tk-region/1",
+ "world": 90,
+ "name": "Talk with Claude",
+ "zh": "与Claude对话",
+ "start": "claude-study",
+ "party": [],
+ "places": [
+  {
+   "id": "claude-study",
+   "name": "Claude's Study",
+   "zh": "Claude的书房",
+   "archetype": "interior",
+   "map": "claude-study.map.json",
+   "links": []
+  }
+ ],
+ "quests": []
+}

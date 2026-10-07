@@ -612,7 +612,7 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
     maps, places = {}, []
     owner = {}   # map id -> the map that opens into it (through a door, or an exit by name)
     for pname, b in plans.items():
-        pid = slug(pname)
+        pid = b.get("id") or slug(pname)   # a plan may name its own id
         P = b["plan"]
         for t in P.get("things", []):
             if t.get("map"):
@@ -626,7 +626,7 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
                     owner[f"{pid}--{e['to']}"] = f"{pid}--{mid}"
 
     for pname, b in plans.items():
-        pid = slug(pname)
+        pid = b.get("id") or slug(pname)   # a plan may name its own id
         P = b["plan"]
         seed = sum(map(ord, f"{n}/{pid}"))
         rename = lambda p: {**p, **({"node": node(p["node"])} if p.get("node") else {}),   # noqa: E731
@@ -882,6 +882,9 @@ def load(plans_world):
         import tk_plans_w2 as mod
         return mod.PLANS2, {"NEW_KINDS": mod.NEW_KINDS, "LINE_KINDS": mod.LINE_KINDS, "ZONE_KINDS": mod.ZONE_KINDS,
                             "ART": getattr(mod, "ART", {})}, getattr(mod, "ZH_PLACES2", {})
+    if plans_world == 90:   # Talk with Claude: the study, no story
+        import tk_plans_w90 as mod
+        return mod.PLANS90, mod.TABLES, mod.ZH_PLACES90
     raise SystemExit(f"no plans for book {plans_world}")
 
 
@@ -889,6 +892,8 @@ def story_world(n, plans_world):
     """The story for a book, keyed as the game keys it ("<n>-<key>")."""
     if plans_world == 2:
         from tk_story_w2_new import WORLD2 as W
+    elif plans_world == 90:
+        from tk_plans_w90 import WORLD90 as W
     else:
         raise SystemExit(f"no story for book {plans_world}")
     return {**W, "nodes": [{**nd, "key": f"{n}-{nd['key']}"} for nd in W["nodes"]],
@@ -974,7 +979,7 @@ def main():
             if a.png:
                 draw_png(m, d / f"{mid}.png")
         out = {"format": "tk-region/1", "world": a.world, "name": world["name"], "zh": world.get("zh", ""),
-               "start": slug(world["nodes"][0]["place"]), "party": world.get("party", []), "places": places, "quests": quests}
+               "start": slug(world.get("start") or world["nodes"][0]["place"]), "party": world.get("party", []), "places": places, "quests": quests}
         (d / "region.json").write_text(json.dumps(out, ensure_ascii=False, indent=1))
         print("wrote", d)
 
