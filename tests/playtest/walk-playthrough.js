@@ -120,7 +120,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   const close = (status, why, s) => { if (!beat) return; if (leadFor[beat] && beatLead && leadFor[beat] !== beatLead) console.log(`     note ${beat}: played by ${beatLead}, but the story's last handoff gave ${leadFor[beat]}`); const r = { beat, status, secs: Math.max(0, Math.round((Date.now() - beatT) / 1000)), place: s && s.place, at: s && s.P, lead: s && s.lead, why: why || '', line: lastLine.slice(0, 120) };
     report.push(r); console.log(`${status === 'pass' ? 'ok  ' : 'FAIL'} ${beat}  ${r.secs}s  ${r.lead || ''} in ${r.place || '?'}${status === 'pass' ? '' : `  at ${r.at}: ${why}${r.line ? ` ("${r.line}")` : ''}`}`); };
   let plannedSteps = null, planT = 0, pace = 3, stealthTries = 0, lastTap = 0, skipped = false, reloads = 0, catches = 0, wasCaught = false; const held = [], recovered = [];
-  const OPTIONAL = !!process.env.OPTIONAL, visited = new Set(), errands = []; let errand = null;
+  let lastPlace = '', arrivedAt = null; const OPTIONAL = !!process.env.OPTIONAL, visited = new Set(), errands = []; let errand = null;
   for (;;) {
     if ((Date.now() - t0) / 60000 > MAXMIN) { const s = await look(); close('fail', `out of time (${MAXMIN} min)`, s); break; }
     const s = await look();
@@ -139,12 +139,13 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     // progress: a new place, a beat or item gained, or getting nearer the goal
     const key = `${s.place}|${s.cleared}|${s.items}|${s.goal}|${s.line}|${s.cine}|${s.duel}|${Math.round(Math.hypot(s.P[0] - (s.goal ? s.goal[0] : 0), s.P[1] - (s.goal ? s.goal[1] : 0)) / 24)}`;
     if (key !== progressKey) { progressKey = key; lastProgress = Date.now(); }
+    if (s.place !== lastPlace && !s.leaving && !s.cine) { lastPlace = s.place; arrivedAt = s.P; }
     if (errand) {   // an optional thing on the way: done, or given up on
       const e = errand, secs = (Date.now() - e.t0) / 1000; let done = null;
       if (e.kind === 'challenger') {
-        if (s.duel) e.board = true;
+        if (s.duel && await p.evaluate(() => window.__boardKey) === e.key) e.board = true;   // his board (not the beat's)
         const there = !e.board && await p.evaluate(k => { const n = window.__w.npcs.find(n => n.challenge === k); return !!(n && n.spr.visible); }, e.key);
-        if (!e.board && !s.busy && !s.cine && !s.leaving && (s.place !== e.from || !there)) done = 'gone: the story moved on before he got to him';
+        if (!s.duel && !s.busy && !s.cine && !s.leaving && (s.place !== e.from || (!e.board && !there))) done = 'gone: the story moved on before he got to him';
         if (!s.duel && !s.busy && await p.evaluate(k => TK.cleared(k), e.key)) { const mark = await p.evaluate(k => { const n = window.__w.npcs.find(n => n.challenge === k); return !!(n && n.mark && n.mark.visible); }, e.key);
           done = e.board && !mark ? 'pass' : `fail: ${e.board ? '' : 'no board opened; '}${mark ? 'his "!" still up after the win' : ''}`; }
       } else if (e.kind === 'barred' || e.kind === 'notyet') {
@@ -211,7 +212,12 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     // a stealth beat here: time the way past the cones, then walk it a cell at a time
     if (s.watchers && !plannedSteps) {   // the running pace first; after a catch the slower one, if it has a way
       pace = catches ? 4 : 3; plannedSteps = await plan(pace); if (!plannedSteps && pace === 4) { pace = 3; plannedSteps = await plan(3); }
-      planT = Date.now(); stealthTries++; if (!plannedSteps) { close('fail', 'no unseen way past the watchers', s); break; } }
+      planT = Date.now(); stealthTries++;
+      if (!plannedSteps && stealthTries <= 3 && arrivedAt && Math.hypot(s.P[0] - arrivedAt[0], s.P[1] - arrivedAt[1]) > 12) {   // no way from here (an errand left him there): back to where he came in, and plan again
+        await p.evaluate(a => window.__w.walkTo(a[0], a[1], { ring: false }), arrivedAt);
+        for (let i = 0; i < 60 && await p.evaluate(() => !!window.__w.walk && !window.__w.caught); i++) await p.waitForTimeout(250);
+        continue; }
+      if (!plannedSteps) { close('fail', 'no unseen way past the watchers', s); break; } }
     if (plannedSteps) {
       const k = Math.min(plannedSteps.length - 1, Math.floor((Date.now() - planT) / (pace * 50))), c = plannedSteps[k];
       await p.evaluate(c => { const w = window.__w; if (!w.walk || Math.hypot(w.walk.path[w.walk.path.length - 1].x - c.x, w.walk.path[w.walk.path.length - 1].y - (c.y - 3)) > 2) w.walkTo(c.x, c.y, { ring: false }); }, c);
