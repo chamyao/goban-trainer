@@ -14,7 +14,7 @@
 const { chromium, devices } = require(require('child_process').execSync('npm root -g', { env: { ...process.env, NODE_OPTIONS: '' } }).toString().trim() + '/playwright');
 const fs = require('fs'), path = require('path');
 const PLACES = (process.env.PLACES || 'changan,liangzhou,meiwu').split(','), DEVS = (process.env.DEV || 'both') === 'both' ? ['desktop', 'phone'] : [process.env.DEV];
-const KIT = process.env.KIT || 'genshin', SAMPLE = +(process.env.SAMPLE || 3), PARTS = (process.env.PARTS || 'doors,drawing,close').split(',');
+const WAIT = +(process.env.WAIT || 12), KIT = process.env.KIT || 'genshin', SAMPLE = +(process.env.SAMPLE || 3), PARTS = (process.env.PARTS || 'doors,drawing,close').split(',');
 const AT = process.env.AT || '12-a14', OUT = path.join(__dirname, 'out', 'iso-close'); fs.mkdirSync(OUT, { recursive: true });
 const slug = s => String(s).replace(/^.*--/, '').replace(/[^\w]+/g, '_');
 (async () => {
@@ -38,7 +38,9 @@ const slug = s => String(s).replace(/^.*--/, '').replace(/[^\w]+/g, '_');
       const c = p.getByText('Cancel', { exact: true }); if (await c.count() && await c.first().isVisible()) await c.first().click().catch(() => {});
       const g = p.locator('.tk-scroll-go'); if (await g.count() && await g.first().isVisible()) await g.first().click().catch(() => {});
       await p.waitForTimeout(250); }
-    const quiet = async () => { for (let i = 0; i < 40; i++) { const s = await p.evaluate(() => { const w = window.__w; return w && w.player && { busy: w.ui.busy(), cine: !!w.cine, leaving: !!w.leaving }; }); if (s && !s.busy && !s.cine && !s.leaving) return; if (s && s.busy) await p.evaluate(() => window.__w.ui.advance()); await p.waitForTimeout(250); } };
+    const quiet = async () => { for (let i = 0; i < 40; i++) {
+      if (await p.locator('.tk-duel svg').count()) { await p.locator('.tk-duel-keys button', { hasText: 'Leave' }).first().click().catch(() => {}); await p.waitForTimeout(600); continue; }   /* a story board opened (the a14 boss): out of it */
+ const s = await p.evaluate(() => { const w = window.__w; return w && w.player && { busy: w.ui.busy(), cine: !!w.cine, leaving: !!w.leaving }; }); if (s && !s.busy && !s.cine && !s.leaving) return; if (s && s.busy) await p.evaluate(() => window.__w.ui.advance()); await p.waitForTimeout(250); } };
     // where things are drawn: captured each frame after the view has placed them
     const hook = () => p.evaluate(() => { const w = window.__w; if (w.player.__isoHook) return; w.player.__isoHook = true;   // (on the player: a new place restarts the scene, and its listeners go)
       const rec = o => ({ x: o.x, y: o.y, d: o._depth, w: o.displayWidth, h: o.displayHeight, ox: o.originX, oy: o.originY, sx: o.scaleX, sy: o.scaleY, key: o.texture.key, fr: o.frame.name, fx: o.flipX, vis: o.visible });
@@ -54,12 +56,12 @@ const slug = s => String(s).replace(/^.*--/, '').replace(/[^\w]+/g, '_');
     const shot = (name, s, wd = 360, ht = 300) => s && s.on ? p.screenshot({ path: path.join(OUT, `${KIT}-${dev}-${name}.png`), clip: { x: Math.max(0, s.sx - wd / 2), y: Math.max(0, s.sy - ht * .6), width: wd, height: ht } }).catch(() => {}) : null;
     // what a click or tap did, within 6 s: in (a place), a line, a walk that stopped short, or nothing
     const outcome = async (place, to, p0, door) => { let out = null, line = '';
-      for (let i = 0; i < 24 && !out; i++) { await p.waitForTimeout(250);
+      for (let i = 0; i < WAIT * 4 && !out; i++) { await p.waitForTimeout(250);
         const s = await p.evaluate(() => { const w = window.__w, dl = document.querySelector('.town-ui .town-dlg'); return { pl: w.placeId, walk: !!w.walk, line: dl && !dl.hidden ? ((dl.querySelector('.town-en') || dl).textContent || '').trim() : '', P: [w.player.x, w.player.y] }; });
         if (to && s.pl === to) out = 'in'; else if (s.pl !== place) out = `went to ${s.pl}`;
         else if (s.line) { line = s.line; out = 'a line'; }
         else if (!s.walk && i > 3) { const moved = Math.hypot(s.P[0] - p0[0], s.P[1] - p0[1]); out = moved < 2 ? 'nothing happened' : door ? `walked ${Math.round(moved)} px, stopped ${Math.round(Math.hypot(s.P[0] - door[0], s.P[1] - door[1]))} px from the door` : `walked ${Math.round(moved)} px, no line`; } }
-      return { out: out || 'still walking after 6 s', line: line.slice(0, 90) }; };
+      return { out: out || `still walking after ${WAIT} s`, line: line.slice(0, 90) }; };
     const report = { kit: KIT, dev, at: AT, places: {} };
 
     for (const place of PLACES) {
