@@ -55,9 +55,9 @@ const WorldIso = {
     // the view's depth: how far down the screen an object's feet are. Objects drawn above everything
     // (marks, emotes, flashes: depth >= 9000) and behind everything (<= -9000) keep theirs; the rest
     // keep their offset from the flat depth (a tree's clutter below, a rider above his horse).
-    const saved = [];
+    const saved = [], figs = [], blds = [];
     const project = () => {
-      saved.length = 0;
+      saved.length = 0; figs.length = 0; blds.length = 0;
       for (const o of scene.children.list) {
         if (o.isoFixed || o.isoFollow || o.scrollFactorX === 0 || !o.visible) continue;
         const a = o.isoAt;   // a building or prop: its footprint's centre, and the drop to its front corner
@@ -66,7 +66,44 @@ const WorldIso = {
         saved.push(o, o.x, o.y, o._depth);
         o.x = q.x + (b ? o.x - b[0] : 0); o.y = q.y + (a ? a[2] : b ? o.y - b[1] : 0);
         const d = o._depth;
-        if (d > -9000 && d < 9000) o._depth = q.y + (a ? a[2] : 0) + (a ? 0 : d - ly);
+        if (d > -9000 && d < 9000) {
+          o._depth = q.y + (a ? a[2] : 0) + (a ? 0 : d - ly);
+          if (a && o.isoBox) {
+            // the walls, not the art: the solid it stands on (a shop's art is drawn wider than its footprint, a
+            // hall's footprint wider than its walls); found once, when the map's solids are in
+            if (!o.isoBoxSolid && scene.solids && scene.solids.getLength()) {
+              o.isoBoxSolid = true;
+              const z = scene.solids.getChildren().map(c => c.body).find(b => b && lx > b.x && lx < b.right && ly > b.y && ly < b.bottom);
+              if (z) o.isoBox = [z.x, z.y, z.right, z.bottom];
+            }
+            blds.push(o);
+          } else if (!a) figs.push(o, lx, ly);
+        }
+      }
+      // A building's one depth is its front corner, so someone along its east or south face, nearer the screen than
+      // the face but higher up than the corner, was drawn under it (Testing's iso survey: hidden at 36-59% of the
+      // spots beside buildings). Near a building, its footprint decides: east or south of it is in front, north or
+      // west behind.
+      if (blds.length) for (let i = 0; i < figs.length; i += 3) {
+        const o = figs[i], fx = figs[i + 1], fy = figs[i + 2];
+        const ow = o.displayWidth || 16, oh = o.displayHeight || 24, ol = o.x - ow * (o.originX ?? .5), ot = o.y - oh * (o.originY ?? 1);
+        let lo = -Infinity, hi = Infinity;   // over every building he's in front of, under every one he's behind
+        for (const b of blds) {
+          const [x0, y0, x1, y1] = b.isoBox, M = 96;
+          if (fx < x0 - M || fx > x1 + M || fy < y0 - M || fy > y1 + M) continue;
+          // only a building he overlaps as drawn: a tree or house beside him on the map has no say
+          const bw = b.displayWidth, bh = b.displayHeight, bl = b.x - bw * (b.originX ?? .5), bt = b.y - bh * (b.originY ?? 1);
+          if (ol >= bl + bw || bl >= ol + ow || ot >= bt + bh || bt >= ot + oh) continue;
+          let front = fx >= x1 || fy >= y1, back = !front && (fx <= x0 || fy <= y0);
+          if (!front && !back) {   // inside the art's footprint (under the eaves of a hall drawn wider than its walls): the nearest edge says
+            const m = Math.min(x1 - fx, y1 - fy, fx - x0, fy - y0);
+            front = m === x1 - fx || m === y1 - fy; back = !front;
+          }
+          if (front) lo = Math.max(lo, b._depth);
+          else if (back) hi = Math.min(hi, b._depth);
+        }
+        if (lo < hi) { if (o._depth <= lo) o._depth = Math.min(lo + .5, (lo + hi) / 2); else if (o._depth >= hi) o._depth = Math.max(hi - .5, (lo + hi) / 2); }
+        else if (hi < Infinity) o._depth = hi - .5;   // can't be both: behind wins (the nearer thing covers him)
       }
       // a glow or smoke drawn on a building or prop (isoFollow): it keeps its flat offset from that thing's
       // anchor, so it stays where it was drawn on the art
@@ -183,5 +220,6 @@ const WorldIso = {
   anchor(scene, obj, cx, cy, wPx, hPx) {
     if (!scene.iso) return;
     obj.isoAt = [cx, cy, (wPx + hPx) / 4];
+    obj.isoBox = [cx - wPx / 2, cy - hPx / 2, cx + wPx / 2, cy + hPx / 2];   // its footprint, for who stands in front
   },
 };
