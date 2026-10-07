@@ -943,5 +943,230 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-06"
+ },
+ "cc_council": {
+  "file": "cc_council.jpg",
+  "scene": "cc",
+  "prompt": "Inside a general's lamp-lit hall, officials in court robes sit stiffly at low tables. In the foreground, walking away from them toward the open doors, is Cao Cao: a compact man in his thirties in an officer's dark robe, thin moustache, sharp narrowed eyes, his jaw set. Behind him, at the head of the hall, the heavy-set general He Jin in rich armour-robes glowers after him. Cool daylight beyond the doors. Cao Cao is a lean man of about thirty with a thin moustache and a quick, sharp look, black official's cap, dark red robe with gold trim. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-07"
+ },
+ "hj_head": {
+  "file": "hj_head.jpg",
+  "scene": "hj",
+  "prompt": "Seen from below, outside a closed red palace gate in a high wall: a small dark object arcs over the top of the wall against a grey sky, too small and far to make out. Below, two officers in armour (Yuan Shao, tall and proud; Cao Cao, shorter) stand frozen, looking up. Soldiers behind them recoil. The gate stays shut. Yuan Shao is a proud, richly dressed nobleman in his forties with a neat beard, in a purple brocade robe and a tall official's cap. Cao Cao is a lean man of about thirty with a thin moustache and a quick, sharp look, black official's cap, dark red robe with gold trim. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-07"
+ },
+ "palace_fire": {
+  "file": "palace_fire.jpg",
+  "scene": "palace",
+  "prompt": "Night. Rows of palace halls with sweeping tiled roofs burn against a black sky, flames and sparks pouring upward, a red glow on the smoke. In the courtyard below, small figures of soldiers run with buckets and spears. In the foreground Cao Cao, lit orange from the side, points and shouts orders. Cao Cao is a lean man of about thirty with a thin moustache and a quick, sharp look, black official's cap, dark red robe with gold trim. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-07"
+ },
+ "fireflies": {
+  "file": "fireflies.jpg",
+  "scene": "fireflies",
+  "prompt": "Night on a thorny hillside above a dark river. Two small boys in torn, mud-stained imperial robes, the hems knotted together so they cannot lose each other, climb hand in hand. The younger one, about nine, leads, looking up in wonder. Around them hundreds of fireflies stream in a glowing ribbon that curves ahead up the slope, lighting a path through the thorns. Deep blue darkness everywhere else. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-07"
+ },
+ "prince_dz": {
+  "file": "prince_dz.jpg",
+  "scene": "prince",
+  "prompt": "A country road under a sky darkened by dust. A wall of embroidered banners and armoured cavalry fills the background. In front of them, the huge, fat warlord Dong Zhuo in heavy armour is climbing down from his horse in haste. Facing him, small and straight-backed on a horse beside a trembling older boy, the nine-year-old Prince of Chenliu in dusty imperial robes looks him in the eye. Ministers in court robes watch from the side, astonished. Dong Zhuo is a huge, heavy, bearded bully of a warlord with a sneer, in a general's armour. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-07"
+ },
+ "wm_lubu": {
+  "file": "wm_lubu.jpg",
+  "scene": "wm",
+  "prompt": "An outdoor banquet in a palace garden: officials at low tables under blossoming trees. In the centre the governor Ding Yuan, older, grey-bearded, has pushed back his table and stands defiantly. Directly behind him towers Lü Bu: young, tall and splendid, in a gold hair-crown with long pheasant plumes, holding a crescent-bladed painted halberd upright, glaring across the garden with furious eyes. The viewpoint is from across the garden, from Dong Zhuo's side. Ding Yuan is an old provincial governor with a grey beard, in a dark official robe. Lü Bu is a tall, strikingly handsome young warrior, broad-shouldered, in ornate red and gold armour with a gold crown bearing two long pheasant-feather plumes, carrying a tall crescent-bladed halberd. Dong Zhuo is a huge, heavy, bearded bully of a warlord with a sneer, in a general's armour. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-07"
+ },
+ "lb_charge": {
+  "file": "lb_charge.jpg",
+  "scene": "lb",
+  "prompt": "A dusty battlefield outside a city wall. Lü Bu gallops straight toward the viewer, in a gold hair-crown with pheasant plumes, a robe embroidered with a hundred flowers over lion-headed armour, his painted halberd levelled. Behind him Ding Yuan's army surges forward. Dust and fluttering banners; a sense of overwhelming speed. Lü Bu is a tall, strikingly handsome young warrior, broad-shouldered, in ornate red and gold armour with a gold crown bearing two long pheasant-feather plumes, carrying a tall crescent-bladed halberd. Ding Yuan is an old provincial governor with a grey beard, in a dark official robe. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-07"
+ },
+ "red_hare": {
+  "file": "red_hare.jpg",
+  "scene": "red",
+  "prompt": "Inside a military camp at dusk. A magnificent horse, red as burning charcoal from nose to tail without one hair of another colour, rears up against the sky, mane flying, held on a halter by a groom. Lü Bu, young and tall in armour, stares at it, delighted. Li Su, a smiling courtier-officer, stands beside him with an open hand, presenting it. Lü Bu is a tall, strikingly handsome young warrior, broad-shouldered, in ornate red and gold armour with a gold crown bearing two long pheasant-feather plumes, carrying a tall crescent-bladed halberd. Li Su is a lean officer in plain armour with a drawn sword. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-07"
+ },
+ "lb_gold": {
+  "file": "lb_gold.jpg",
+  "scene": "lb",
+  "prompt": "A lamp-lit camp tent. On a low table: stacked gold ingots, a heap of bright pearls spilling from a silk pouch, and a white jade belt. Lü Bu, young and powerful, sits behind the table, staring at the treasure with wine forgotten in his hand. Across from him Li Su leans in, smiling, speaking low. Warm, conspiratorial light. Lü Bu is a tall, strikingly handsome young warrior, broad-shouldered, in ornate red and gold armour with a gold crown bearing two long pheasant-feather plumes, carrying a tall crescent-bladed halberd. Li Su is a lean officer in plain armour with a drawn sword. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-07"
+ },
+ "lb_candle": {
+  "file": "lb_candle.jpg",
+  "scene": "lb",
+  "prompt": "Night, inside a plain command tent. The old governor Ding Yuan sits at a desk reading a bamboo-slip book by a single candle, looking up kindly. In the tent's open flap stands the dark shape of Lü Bu, a blade in his hand, his face half in shadow. Only the candle lights the scene. Ding Yuan is an old provincial governor with a grey beard, in a dark official robe. Lü Bu is a tall, strikingly handsome young warrior, broad-shouldered, in ornate red and gold armour with a gold crown bearing two long pheasant-feather plumes, carrying a tall crescent-bladed halberd. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-07"
+ },
+ "lb_kneels": {
+  "file": "lb_kneels.jpg",
+  "scene": "lb",
+  "prompt": "Inside a warlord's tent hung with banners. The huge, fat Dong Zhuo, in rich robes, stands with arms open, beaming. Before him Lü Bu kneels on one knee in golden armour, head bowed, offering himself. Li Su watches from the side, pleased. Officers line the walls. Dong Zhuo is a huge, heavy, bearded bully of a warlord with a sneer, in a general's armour. Lü Bu is a tall, strikingly handsome young warrior, broad-shouldered, in ornate red and gold armour with a gold crown bearing two long pheasant-feather plumes, carrying a tall crescent-bladed halberd. Li Su is a lean officer in plain armour with a drawn sword. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-07"
+ },
+ "ys_sword": {
+  "file": "ys_sword.jpg",
+  "scene": "ys",
+  "prompt": "A crowded banquet hall lined with armoured guards. In the centre two men face each other with drawn swords across a low table: the huge warlord Dong Zhuo, flushed and furious, and Yuan Shao, tall, handsome and proud in an officer's robe, his sword raised level. The seated officials shrink back. Among them, at one table, Cao Cao watches closely. Dong Zhuo is a huge, heavy, bearded bully of a warlord with a sneer, in a general's armour. Yuan Shao is a proud, richly dressed nobleman in his forties with a neat beard, in a purple brocade robe and a tall official's cap. Cao Cao is a lean man of about thirty with a thin moustache and a quick, sharp look, black official's cap, dark red robe with gold trim. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-07"
+ },
+ "deposition": {
+  "file": "deposition.jpg",
+  "scene": "deposition",
+  "prompt": "A vast throne hall. At the foot of the empty throne a boy of about fourteen in imperial robes kneels facing away from the throne, his seal ribbons being untied by an attendant. Above him on the dais the fat warlord Dong Zhuo stands with a drawn sword. Rows of ministers in court robes bow their heads, some weeping. A small boy of nine, in new imperial yellow, is being led toward the throne. Dong Zhuo is a huge, heavy, bearded bully of a warlord with a sneer, in a general's armour. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-07"
+ },
+ "swallows": {
+  "file": "swallows.jpg",
+  "scene": "swallows",
+  "prompt": "A spring afternoon. A boy of about fourteen in plain, worn robes leans at a high lattice window of a shut-up palace tower, looking out at two swallows flying over a courtyard of new green grass. Far off, beyond the walls, the roofs of the great palace. His face is thin and sad. Quiet, soft, and very still. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-07"
+ },
+ "heads_gate": {
+  "file": "heads_gate.jpg",
+  "scene": "heads",
+  "prompt": "A city gate in late afternoon. A line of ox carts rolls in under the gate tower, loaded with sacks and bundles of looted goods, their undersides draped and in shadow. Soldiers march beside them, cheering. In front of the gate, a bonfire sends up thick black smoke. Townspeople along the road turn away, covering their faces. The cargo stays indistinct. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-07"
+ },
+ "wy_birthday": {
+  "file": "wy_birthday.jpg",
+  "scene": "wy",
+  "prompt": "Evening in a minister's rear hall, lamps lit. Old ministers in court robes sit at low tables, weeping into their sleeves. At the head, the grey-bearded minister Wang Yun covers his face. At one table Cao Cao leans back, clapping his hands and laughing, the only dry-eyed man in the room. Several of the weeping men stare at him, shocked. Wang Yun is an old minister with a long grey beard, in dark court robes and a tall official's cap. Cao Cao is a lean man of about thirty with a thin moustache and a quick, sharp look, black official's cap, dark red robe with gold trim. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-07"
+ },
+ "seven_star": {
+  "file": "seven_star.jpg",
+  "scene": "seven",
+  "prompt": "Close-up on a short sword a little over a foot long, half drawn from a lacquered sheath on a dark table. The hilt and scabbard are inlaid with seven jewels in a line like the Big Dipper. The exposed blade is very bright and keen. Warm lamplight; a hand rests near it. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-07"
+ },
+ "the_mirror": {
+  "file": "the_mirror.jpg",
+  "scene": "the",
+  "prompt": "A small, richly furnished pavilion room. On a couch, the huge, fat Dong Zhuo lies on his side facing the wall. Above him on a stand is a bronze dressing mirror, and in the mirror is reflected Cao Cao standing behind him with a short jewelled sword drawn, about to strike. Dong Zhuo's eyes have just opened, looking up into the mirror. The reflection is the focus. Dong Zhuo is a huge, heavy, bearded bully of a warlord with a sneer, in a general's armour. Cao Cao is a lean man of about thirty with a thin moustache and a quick, sharp look, black official's cap, dark red robe with gold trim. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-07"
+ },
+ "east_gate": {
+  "file": "east_gate.jpg",
+  "scene": "east",
+  "prompt": "A great city gate at midday. A lone rider, Cao Cao, bursts through the gate passage at a full gallop on a fine horse, cloak streaming, whip raised. A gate guard turns to watch him go. Beyond the gate, an open road runs east across the plain. Cao Cao is a lean man of about thirty with a thin moustache and a quick, sharp look, black official's cap, dark red robe with gold trim. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-07"
+ },
+ "wanted": {
+  "file": "wanted.jpg",
+  "scene": "wanted",
+  "prompt": "A plastered wall at a roadside post station. Pasted on it is an official notice with a painted portrait of Cao Cao, his sharp eyes and thin moustache, and red seal stamps. A few travellers and a soldier stand reading it. Dusty light. Cao Cao is a lean man of about thirty with a thin moustache and a quick, sharp look, black official's cap, dark red robe with gold trim. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-07"
+ },
+ "cg_unties": {
+  "file": "cg_unties.jpg",
+  "scene": "cg",
+  "prompt": "Night, a small courtyard behind a county office, lit by one lantern. Cao Cao, his robe dishevelled, sits bound on a stool. A lean, earnest county magistrate in his thirties, Chen Gong, kneels before him, untying the ropes with his own hands, looking up at him with admiration. No one else. Cao Cao is a lean man of about thirty with a thin moustache and a quick, sharp look, black official's cap, dark red robe with gold trim. Chen Gong is a thin, upright county magistrate in his thirties with a sparse beard, in a plain dark robe and scholar's cap. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-07"
+ },
+ "boshe_pig": {
+  "file": "boshe_pig.jpg",
+  "scene": "boshe",
+  "prompt": "A dim farmhouse kitchen at dusk, lit by the last light through a doorway. On the straw-covered floor a fat pig lies trussed with rope, alive and wide-eyed; a cleaver rests on a wooden chopping block beside a basket of vegetables and a wine jar. In the doorway Cao Cao and Chen Gong stand still, swords lowered, staring at the pig as they realise their mistake. Cao Cao is a lean man of about thirty with a thin moustache and a quick, sharp look, black official's cap, dark red robe with gold trim. Chen Gong is a thin, upright county magistrate in his thirties with a sparse beard, in a plain dark robe and scholar's cap. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-07"
+ },
+ "boshe_road": {
+  "file": "boshe_road.jpg",
+  "scene": "boshe",
+  "prompt": "A country road through a wood at dusk. An old, kindly man on a donkey, two jars of wine hanging from his saddle and a bundle of fruit and greens in his hand, has twisted round to look back down the road. Behind him, a little way off, a rider has turned his horse back toward him with a drawn sword. The old man's face shows only mild puzzlement. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-07"
+ },
+ "cg_inn": {
+  "file": "cg_inn.jpg",
+  "scene": "cg",
+  "prompt": "A plain room in a roadside inn, moonlight through the window. Cao Cao lies asleep on a low bed. Standing over him, Chen Gong holds a drawn sword, his face torn with doubt. The moonlight falls across the blade and the sleeping man's face. Cao Cao is a lean man of about thirty with a thin moustache and a quick, sharp look, black official's cap, dark red robe with gold trim. Chen Gong is a thin, upright county magistrate in his thirties with a sparse beard, in a plain dark robe and scholar's cap. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-07"
+ },
+ "white_banner": {
+  "file": "white_banner.jpg",
+  "scene": "white",
+  "prompt": "A village drilling ground on a bright morning. A tall white banner flies from a pole, two large black characters on it: 忠义. Beneath it Cao Cao stands on a low platform. Before him volunteers stream in from every direction, farmers and young men with spears, and a few armoured officers arrive on horseback with men behind them. Hopeful, rising energy. Cao Cao is a lean man of about thirty with a thin moustache and a quick, sharp look, black official's cap, dark red robe with gold trim. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-07"
  }
 }
