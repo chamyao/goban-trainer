@@ -1,7 +1,7 @@
 // A survey, not a pass/fail test (apo110: "isometric door entry is not usable, rendering around buildings is not
 // great"): close-up interactions with buildings, in the isometric kit (KIT=genshin, default) or the flat one (KIT=jade)
 // for comparison; Book 12 at a14 (as reported); DEV desktop (1920x1080, mouse) | phone (iPhone 13, taps) | both.
-// PLACES (default changan,liangzhou,meiwu): every door in Chang'an, the first SAMPLE (3) elsewhere.
+// BOOK (12; another book from its first beat, AT to choose), PLACES (default changan,liangzhou,meiwu; another book: all its outdoor places): every door in Chang'an, the first SAMPLE (3) elsewhere.
 //  1 Doors: for each open building door (whichever way it faces), from the door's side and the building's other
 //    sides: a click or tap on the doorway as drawn, on the building as drawn, on the ground before the door; and
 //    the arrow key toward it (the map's north is Up) from the door's side. In, or what happened instead.
@@ -13,9 +13,9 @@
 // Writes out/iso-close-<kit>-<dev>.json and crops of each case in out/iso-close/.
 const { chromium, devices } = require(require('child_process').execSync('npm root -g', { env: { ...process.env, NODE_OPTIONS: '' } }).toString().trim() + '/playwright');
 const fs = require('fs'), path = require('path');
-const PLACES = (process.env.PLACES || 'changan,liangzhou,meiwu').split(','), DEVS = (process.env.DEV || 'both') === 'both' ? ['desktop', 'phone'] : [process.env.DEV];
+const PLACES0 = process.env.PLACES ? process.env.PLACES.split(',') : null, DEVS = (process.env.DEV || 'both') === 'both' ? ['desktop', 'phone'] : [process.env.DEV];
 const WAIT = +(process.env.WAIT || 12), KIT = process.env.KIT || 'genshin', SAMPLE = +(process.env.SAMPLE || 3), PARTS = (process.env.PARTS || 'doors,drawing,close').split(',');
-const AT = process.env.AT || '12-a14', OUT = path.join(__dirname, 'out', 'iso-close'); fs.mkdirSync(OUT, { recursive: true });
+const BOOK = +(process.env.BOOK || 12), AT = process.env.AT || (BOOK === 12 ? '12-a14' : `${BOOK}-c1`), OUT = path.join(__dirname, 'out', 'iso-close'); fs.mkdirSync(OUT, { recursive: true });
 const slug = s => String(s).replace(/^.*--/, '').replace(/[^\w]+/g, '_');
 (async () => {
   const b = await chromium.launch({ args: ['--use-gl=swiftshader', '--enable-webgl'] });
@@ -28,12 +28,12 @@ const slug = s => String(s).replace(/^.*--/, '').replace(/[^\w]+/g, '_');
     await p.route('**/*.mp3', r => r.fulfill({ status: 404, body: '' }));
     await p.route(/script\.google\.com/, r => r.fulfill({ status: 200, contentType: 'application/json', body: '{"data":null}' }));   // the save sync: nothing to pull
     await p.goto(BASE + '#/');
-    await p.evaluate(K => { for (const k of Object.keys(localStorage)) if (/^tk-|gt-progress/.test(k) && k !== 'tk-test') localStorage.removeItem(k);
+    await p.evaluate(([K, B]) => { for (const k of Object.keys(localStorage)) if (/^tk-|gt-progress/.test(k) && k !== 'tk-test') localStorage.removeItem(k);
       localStorage.setItem('gt-username', 'playtest-survey');   // (no username: a sign-in box over the page)
-      localStorage.setItem('tk-guide', 'off'); localStorage.setItem('tk-book', '12'); localStorage.setItem('tk-kit', K); localStorage.setItem('tk-kit-main', 'jade'); }, KIT);
-    await p.evaluate(F => TK.load().then(() => { const w = TK.world(12), ks = w.nodes.map(n => n.key), i = ks.indexOf(F);   // the story as far as the report (setup only)
-      for (const [j, n] of w.nodes.entries()) if (j < i && !['side', 'short'].includes(n.role)) TK.markCleared(n.key); TK.markSeen('12:opening'); }), AT);
-    await p.goto(BASE + '#/tk/12'); await p.reload();
+      localStorage.setItem('tk-guide', 'off'); localStorage.setItem('tk-book', String(B)); localStorage.setItem('tk-kit', K); localStorage.setItem('tk-kit-main', 'jade'); }, [KIT, BOOK]);
+    await p.evaluate(([F, B]) => TK.load().then(() => { const w = TK.world(B), ks = w.nodes.map(n => n.key), i = ks.indexOf(F);   // the story as far as the report (setup only)
+      for (const [j, n] of w.nodes.entries()) if (j < i && !['side', 'short'].includes(n.role)) TK.markCleared(n.key); TK.markSeen(B + ':opening'); }), [AT, BOOK]);
+    await p.goto(BASE + '#/tk/' + BOOK); await p.reload();
     for (let i = 0; i < 120 && !(await p.evaluate(() => !!(window.__w && window.__w.player))); i++) {
       const c = p.getByText('Cancel', { exact: true }); if (await c.count() && await c.first().isVisible()) await c.first().click().catch(() => {});
       const g = p.locator('.tk-scroll-go'); if (await g.count() && await g.first().isVisible()) await g.first().click().catch(() => {});
@@ -64,6 +64,7 @@ const slug = s => String(s).replace(/^.*--/, '').replace(/[^\w]+/g, '_');
       return { out: out || `still walking after ${WAIT} s`, line: line.slice(0, 90) }; };
     const report = { kit: KIT, dev, at: AT, places: {} };
 
+    const PLACES = PLACES0 || (BOOK === 12 ? ['changan', 'liangzhou', 'meiwu'] : await p.evaluate(() => window.__w.region.places.filter(q => !q.parent).map(q => q.id)));   // another book: all its outdoor places
     for (const place of PLACES) {
       await goPlace(place); await hook();
       const info = await p.evaluate(() => { const w = window.__w, G = w.walkGrid(), C = G.C, ms = w.mapState();
