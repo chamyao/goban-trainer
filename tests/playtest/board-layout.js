@@ -5,23 +5,32 @@
 const { chromium, devices } = require(require('child_process').execSync('npm root -g').toString().trim()+'/playwright');
 const OUT=require('path').join(__dirname,'out');let fails=0,checked=0;
 const SIZES=[['phone',{...devices['iPhone 13']}],['phone-small',{...devices['Galaxy S9+'],viewport:{width:360,height:640}}],['phone-land',{...devices['iPhone 13 landscape']}],['desktop',{viewport:{width:1280,height:800}}],['wide',{viewport:{width:1920,height:1080}}]];
-const KEYS=(process.env.KEYS||process.argv[2]||'12-a9~2,12-a14,12-a2,12-a17').split(',');
+const KEYS=(process.env.KEYS||process.argv[2]||'12-a9~2,12-a14,12-a2,12-a17,12-a14!tall').split(',');   // !tall: the boss pinned to a tall crop (an adaptive pick can be 7 wide by 12 tall)
+let TALL=null;
 (async()=>{const b=await chromium.launch({args:['--use-gl=swiftshader','--enable-webgl']});
 for(const [name,dev] of SIZES){const ctx=await b.newContext(dev);const p=await ctx.newPage();p.on('pageerror',e=>console.log('ERR',e.message));
   await p.route('**/phaser.min.js',r=>r.fulfill({path:require('path').join(__dirname,'vendor/phaser.min.js'),contentType:'application/javascript'}));
   await p.route('**/*.mp3',r=>r.fulfill({status:404,body:''}));
   await p.goto((process.env.PLAYTEST_URL||'http://localhost:8765')+'/index.html?test=1#/');await p.waitForTimeout(800);await p.evaluate(()=>TK.load());
-  for(const key of KEYS){const base=key.split('~')[0];
+  for(const key0 of KEYS){const key=key0.split('!')[0],base=key.split('~')[0];
     await p.evaluate(base=>{localStorage.setItem('tk-guide','off');const w=TK.world(12),ks=w.nodes.map(n=>n.key),i=ks.indexOf(base);for(const [j,n] of w.nodes.entries())if(j<i&&!['side','short'].includes(n.role))TK.markCleared(n.key);
       // the party the story has by then (its last party step), so the right lead shows
       let party=null;for(const k of ks.slice(0,i)){const sc=w.scenes&&w.scenes[(w.nodes.find(n=>n.key===k)||{}).scene];for(const s of (sc&&sc.steps)||[])if(s[0]==='party')party=s[1];}if(party)TK.setParty(w,party);},base);
     await p.evaluate(()=>{location.hash='#/tk/12';});await p.reload();
     for(let i=0;i<80;i++){const c=p.getByText('Cancel',{exact:true});if(await c.count()&&await c.first().isVisible())await c.first().tap().catch(()=>c.first().click());const g=p.locator('.tk-scroll-go');if(await g.count())await g.first().click().catch(()=>{});if(await p.evaluate(()=>!!(window.__w&&window.__w.player&&!window.__w.leaving&&!window.__w.cine)))break;await p.waitForTimeout(150);}
     for(let i=0;i<30&&await p.evaluate(()=>window.__w.ui.busy());i++){await p.evaluate(()=>window.__w.ui.advance());await p.waitForTimeout(120);}
+    if(key0.endsWith('!tall')){   // find a tall crop in the rated pool once (open the boss on each until one is), then pin the boss to it
+      const pin=ref=>p.evaluate(([k,ref])=>{const p0=loadProgress();p0.tkElo=p0.tkElo||{r:700,n:0,used:[],slots:{}};p0.tkElo.slots=p0.tkElo.slots||{};p0.tkElo.slots[k+'~0']=ref;TK.saveProg(p0);},[key,ref]);
+      const aspect=async()=>{await p.evaluate(k=>{window.__w.duel(k);},key);for(let i=0;i<40;i++){await p.waitForTimeout(200);const a=await p.evaluate(()=>{const v=document.querySelector('.tk-duel svg');const b=v&&v.viewBox.baseVal;return b&&b.width?b.height/b.width:null;});if(a)return a;}return null;};
+      if(!TALL){const cands=await p.evaluate(()=>{const r=TK.world(12).rated.slice();for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]];}return r.slice(0,60).map(x=>[x[0],x[1]]);});
+        for(const ref of cands){await pin(ref);const a=await aspect();if(a&&a>=1.5){TALL=ref;console.log(`     a tall crop: ${ref.join(':')} (${a.toFixed(2)} tall to 1 wide)`);break;}await p.reload();await p.waitForTimeout(1500);for(let i=0;i<30&&await p.evaluate(()=>!(window.__w&&window.__w.player));i++)await p.waitForTimeout(200);}
+        if(!TALL){checked++;fails++;console.log(`FAIL ${name} ${key0}: no crop 1.5x taller than wide among 60 rated problems`);continue;}
+        await p.reload();await p.waitForTimeout(1500);for(let i=0;i<30&&await p.evaluate(()=>!(window.__w&&window.__w.player));i++)await p.waitForTimeout(200);}
+      await pin(TALL);}
     await p.evaluate(k=>{window.__w.duel(k);},key);
     let ok=false;for(let i=0;i<40;i++){await p.waitForTimeout(250);if(await p.locator('.tk-duel svg').count()){ok=true;break;}}
     const hash=await p.evaluate(()=>location.hash);
-    checked++;if(!ok){fails++;console.log(`FAIL ${name} ${key}: no board (now at ${hash})`);continue;}
+    checked++;if(!ok){fails++;console.log(`FAIL ${name} ${key0}: no board (now at ${hash})`);continue;}
     await p.waitForTimeout(1500);
     const r=await p.evaluate(()=>{const q=s=>[...document.querySelectorAll(s)].filter(e=>e.offsetParent!==null||getComputedStyle(e).position==='fixed');const box=e=>{const r=e.getBoundingClientRect();return {x:r.left|0,y:r.top|0,r:r.right|0,b:r.bottom|0,w:r.width|0,h:r.height|0};};
       const parts={board:q('.tk-duel svg')[0],dilemma:q('.tk-duel-dilemma')[0],dialog:q('.tk-duel-dlgrow')[0],keys:q('.tk-duel-keys')[0],lead:q('.tk-duel-lead')[0],leadsm:q('.tk-duel-lead-sm')[0],src:q('.tk-duel-src')[0]};
