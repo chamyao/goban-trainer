@@ -122,6 +122,7 @@ ZH_PLACES2 = {
     "Reach the Son of Heaven unseen.": "避开耳目，面见天子。",
     "Bring Li Su into the plan.": "说李肃入伙。",
     "Escort the Grand Preceptor to the palace.": "护送太师入宫。",
+    "Escort the Grand Preceptor's carriage down the avenue to the North Side Gate, the red gatehouse at its south end.": "护送太师车驾沿大街至北掖门，即大街南头的朱红门楼。",
     "Wait at the North Side Gate.": "在北掖门等候。",
     "Walk the city.": "在城中走走。",
     "Go to the victory feast in the great hall of state.": "到都堂赴庆功宴。",
