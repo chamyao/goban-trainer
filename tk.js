@@ -1767,6 +1767,11 @@ async function viewTKStudy(w) {
   crumbs.innerHTML = "";
   crumbs.append(h("a", { href: "#/" }, "Library"), " / ", h("a", { href: "#/tk" }, "三国演义"), " / 对话 Talk with Claude");
   root.innerHTML = "";
+  // straight back to the book you were playing (the user: "I can't navigate back to Diaochan Book 2 quickly")
+  let back = 12; try { back = +localStorage.getItem("tk-book") || 12; } catch {}
+  const bw = TK.world(back) && !TK.world(back).chat && TK.worldOpen(back) ? TK.world(back) : (TK.data.worlds.find(x => !x.chat && TK.worldOpen(x.n)) || {});
+  root.append(h("div", { class: "tk-worlds" }, [h("a", { class: "tk-world tk-world-back", href: `#/tk/${bw.n || ""}` },
+    `◀ 回第${bw.book || bw.n}卷 Back to Book ${bw.book || bw.n} · ${bw.zh || ""} ${bw.name || ""}`)]));
   root.append(h("div", { class: "tk-info" }, [h("div", { class: "tk-info-text" }, [h("b", {}, "与Claude对话 · Talk with Claude"),
     h("div", { class: "meta" }, ["走到书桌前和 Claude 说话。Walk up to Claude at the desk and talk. ", h("a", { href: "#/tk/chat/plain" }, "纯文字 Plain chat window")])])]));
   const host = h("div", { class: "tk-map" });
