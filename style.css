@@ -492,7 +492,10 @@ body:has(.tk-scroll-wrap) .wukong-toggle, body:has(.tk-scroll-wrap) #wukong { vi
 .town-ui [hidden] { display: none !important; }
 .town-ui { position: absolute; inset: 0; pointer-events: none; color: #f4ead2; font-size: clamp(11px, 1.6vw, 15px); }
 .town-goal { pointer-events: auto; cursor: pointer; position: absolute; top: 10px; left: 10px; max-width: 46ch; padding: 4px 10px; background: rgba(40, 24, 16, .82); border: 2px solid #c79a4a; border-radius: 6px; }
-.town-goal::before { content: "◆ "; color: #e6c14a; }
+.town-goal-main::before { content: "◆ "; color: #e6c14a; }
+.town-lead { display: flex; align-items: center; gap: 6px; margin: 0 0 3px; padding-bottom: 3px; border-bottom: 1px solid rgba(199, 154, 74, .45); font-size: .85em; color: #f0dca8; }
+.town-lead:empty { display: none; }
+.town-lead-face { width: 22px; height: 22px; image-rendering: pixelated; background: #e2d2ac; border: 1px solid #c79a4a; border-radius: 3px; flex: none; }
 .town-keys { position: absolute; right: 10px; top: 10px; padding: 4px 8px; background: rgba(40, 24, 16, .7); border-radius: 6px; font: 11px/1.5 system-ui, sans-serif; color: #e8dcc0; }
 .town-keys b { display: inline-block; min-width: 1.4em; padding: 0 3px; text-align: center; background: #f4ead2; color: #3a2416; border-radius: 3px; }
 .town-hint { position: absolute; transform: translate(-50%, -100%); padding: 0 5px; background: #f4ead2; color: #3a2416; border: 2px solid #3a2416; border-radius: 4px; font: bold 10px/1.4 system-ui, sans-serif; }
