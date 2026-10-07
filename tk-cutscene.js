@@ -30,7 +30,10 @@ const WorldCutscene = {
   async play(scene, cs, done, opts = {}) {
     const T = 16, ui = scene.ui, cam = scene.cameras.main;
     await WorldCutscene.load(scene);
-    const realBusy = ui.busy, zoom0 = cam.zoom;
+    // one scene at a time: one started while another plays (quick taps over a handoff) waits its turn, and the
+    // UI's own busy() is kept once, so a nested scene can't restore the stand-in below and leave the game busy forever
+    while (scene.cine) await new Promise(r => setTimeout(r, 100));
+    const realBusy = ui._realBusy || (ui._realBusy = ui.busy), zoom0 = cam.zoom;
     ui.busy = () => true;                       // the world stops walking and wandering while the scene plays
     scene.cine = cs;
     const actors = {}, fx = [], timers = [];
