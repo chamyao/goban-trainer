@@ -103,6 +103,10 @@ KINDS.update({
     "furn.chest": (1, 1, True),
     "furn.desk": (2, 1, True),
     "furn.computer": (2, 1, True),   # a desk with a glowing screen (Book 90, the study)
+    "furn.mirror": (1, 1, True),     # a bronze dressing mirror on a stand (the Cao Cao arc, C16)
+    "building.tower": (3, 5, True),  # a palace tower: Cuihua Tower, Yong'an Palace (the Cao Cao arc)
+    "building.stable": (6, 3, True), # a long stable, stalls open to the yard (the Cao Cao arc)
+    "banner.white": (1, 1, True),    # the volunteers' white banner, 忠义 (the Cao Cao arc, C23)
     "furn.screen": (3, 1, True),      # a folding screen behind a seat of honour
     "furn.rug": (3, 2, False),
     "furn.plant": (1, 1, True),
@@ -193,6 +197,10 @@ FALLBACK = {
     "furn.table": ["camp.table"],
     "furn.desk": ["furn.table", "camp.table"],
     "furn.computer": ["furn.desk", "furn.table"],
+    "furn.mirror": ["furn.drawers", "furn.shelf"],
+    "building.tower": ["building.gatetower", "building.markettower", "building.hall"],
+    "building.stable": ["building.storehouse", "building.granary", "building.lodge"],
+    "banner.white": ["banner.red", "banner", "landmark.notice"],
     "furn.counter": ["furn.table", "camp.table"],
     "furn.hearth": ["camp.cookfire", "camp.firepit"],
     "furn.barrel": ["furn.jar"],

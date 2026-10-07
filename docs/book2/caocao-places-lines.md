@@ -1,0 +1,184 @@
+# The Cao Cao arc's place lines, for Chinese
+
+Every line a player reads on the arc's maps (`tools/tk_plans_cc.py`): place names, labels, townsfolk, the givers, the road challengers, objectives and closed-road lines. Lines already in `tools/tk_places_w2_zh.py` are left out.
+
+178 lines.
+
+- Luoyang
+- The banquet in the Wenming Garden
+- He Jin's residence
+- Wang Yun's house
+- The Jiade Gate
+- The tower of Yong'an Palace
+- Cao Cao's lodging
+- Market stalls
+- A go table in the market
+- Before the Jiade Gate
+- The Wenming Garden banquet
+- The street under Dong Zhuo
+- The East Gate
+- Yuan Shao's seal of office, hanging on the East Gate
+- The north gate is shut. The whole city waits on He Jin.
+- Outside the walls is no place for a colonel today. He Jin's council is sitting.
+- Not now. The council is sitting at He Jin's.
+- The gates are barred. The Emperor is somewhere inside the burning palace.
+- Xiliang horsemen hold the north gate. No one leaves without Dong Zhuo's word.
+- Xiliang horsemen hold the East Gate. No one leaves without Dong Zhuo's word.
+- Not that way. East, out of the city, before they think to send for you.
+- The East Gate is ahead. Ride up to it as if you had every right.
+- Your face is on every gate in Luoyang now. East, and keep going.
+- Cuihua Tower
+- The Jiade Hall
+- The Secretariat
+- A palace storehouse
+- By Cuihua Tower
+- The palace gallery
+- Inside the Jiade Gate
+- The throne
+- Lü Bu's armoured men
+- The Secretariat banquet
+- He Jin's seat
+- He Jin's council
+- Where the Seven-Star Sword is kept
+- Wang Yun's "birthday"
+- The Chancellor's hall
+- The small pavilion
+- The stables
+- Where Lü Bu brings the horse
+- Inside the Chancellor's gate
+- The couch where he lies down
+- The dressing mirror
+- “Xiliang horsemen ride down the middle of the street. You step aside or you're ridden down.”
+- “Zheng Tai went, and Lu Zhi went. A man with a family stays, and bows, and says nothing.”
+- “The old emperor sits in the tower of Yong'an Palace. They say he wrote a poem about two swallows.”
+- “The Prince of Hongnong is dead. They don't say how. No one asks.”
+- “Carts came in from Yangcheng with heads hung under them. ‘Bandits,’ they said. It was market day there.”
+- “The Jiade Gate is shut. The general went in to see the Empress, and he's not come out.”
+- “The Ten Attendants and He Jin both want the court. Whoever wins, we pay.”
+- Go to He Jin's residence, on the main street west of the palace. The council is already sitting.
+- Go to the Jiade Gate of the palace, at the north side of the main street.
+- Get through the burning palace to Cuihua Tower, at its north-west corner.
+- Go to the banquet in the Wenming Garden, beside the palace.
+- Go to the Secretariat, in the palace behind the Qingsuo Gate.
+- Go to the Jiade Hall, in the palace behind the Qingsuo Gate.
+- Walk the main street east towards the gate.
+- Go to the gallery in the palace, east of the inner court.
+- Go to Wang Yun's house, on the main street beside He Jin's.
+- Go to the Chancellor's residence, south of the palace, and find him in the small pavilion.
+- Ride for the East Gate, at the end of the main street.
+- A eunuch's guardsman bars the Qingsuo Gate, blade out, smoke pouring past him. “No one goes in! The Attendants' orders!”
+- “…The Attendants are fled. Go in, then. Find him.”
+- The guardsman has thrown down his blade and gone.
+- A man with an armful of palace silk backs out of the storehouse. “Everyone's taking something. Want to stop me? Play me for it.”
+- “…Fine. Fine! It's back on the shelf.”
+- The silk is back on the shelf.
+- A Xiliang horseman wheels in front of you. “Colonel Cao. The Chancellor's man, now? Prove you can think as well as bow.”
+- “Huh. Not a fool, then.”
+- The horseman rides on down the middle of the street.
+- An old official sits at the market go table in a plain robe. “I resigned with Lu Zhi. Sit, Colonel, and tell me with stones why you didn't.”
+- “…So you have a plan of your own. Good. Don't tell me.”
+- “Go on, Colonel. Whatever you mean to do, do it well.”
+- Beimang
+- Cui Yi's farm
+- Cui Yi's haystack
+- A barn
+- Hiding in the reeds
+- The road back to the capital
+- Not in the dark, with Zhang Rang's men still out. Find somewhere to hide.
+- Follow the fireflies up from the river to a farm.
+- Go out to the road back to the capital, south of the farm.
+- The Camps
+- Ding Yuan's tent
+- Lü Bu's tent
+- Dong Zhuo's stables
+- The paymaster's tent
+- The field between the camps
+- Lü Bu's halberd
+- Ding Yuan's desk
+- The candle
+- The stable master
+- “Red Hare. A thousand li a day, and he bites.”
+- The stable master brings out a horse red as coals, and puts the halter in your hand. “Mind his teeth.”
+- “Red Hare's gone, then. The stall looks empty without him.”
+- The paymaster
+- “Nothing goes out of here without the Lord's seal.”
+- The paymaster counts out a thousand taels of gold, a few dozen bright pearls and a jade belt, and makes you sign for each.
+- “A thousand taels, signed for. I hope he's worth it.”
+- “The young general rides in front. No one in the Xiliang army can stand against him.”
+- “Thirty li we fell back. One man did that. One man and a halberd.”
+- Go to Dong Zhuo's tent.
+- Collect the gifts: Red Hare from the stables, the gold from the paymaster.
+- Take the gifts to Lü Bu's tent, in Ding Yuan's camp to the west.
+- Go to Ding Yuan's tent.
+- Pickets lying in ambush by the road spring up and surround you. “Who rides to General Lü's camp with a horse like that?”
+- “…An old friend of the general's. Pass, then.”
+- The pickets wave you through.
+- One of Ding Yuan's scouts reins in beside you. “Xiliang colours, and gifts. What does Dong Zhuo want with us?”
+- “…Peace, then. I hope so.”
+- The scout rides back to watch the road.
+- The East Road
+- A post station
+- A wanted portrait: “a thousand gold and a marquisate”
+- The ferryman's hut
+- The same portrait, nailed up again
+- Zhongmou county jail
+- The pass at Zhongmou
+- The stocks
+- The magistrate's table
+- The back courtyard of the jail
+- Your portrait hangs on every gate of Luoyang. There's no going back.
+- Zhongmou's pass is shut to a man with your face. Get through it first.
+- Not back. East, to your father's country.
+- “They say he tried to kill the Chancellor with a jewelled sword. A thousand gold for him, and a marquisate.”
+- “Our magistrate came from Dongjun. He keeps his own counsel.”
+- Ride on east to the pass at Zhongmou.
+- The jail's back courtyard.
+- The post-station guard holds up the portrait and looks from it to you. “Your name, and your business on this road.”
+- “…No. He'd be older. Go on.”
+- The guard is looking at someone else now.
+- The ferryman leans on his pole. “Crossing's a coin. Or a game, if you're short. I've seen your face somewhere, I think.”
+- “…No, I haven't. Get in.”
+- “Same price as before, sir.”
+- A man with the portrait folded in his belt falls in beside you. “A thousand gold. Thinking of it makes a man sharp.”
+- “…Not sharp enough, it seems.”
+- The bounty hunter studies every face that passes.
+- Chenggao
+- Lü Boshe's front hall
+- The thatched rear hall
+- The kitchen
+- A roadside inn
+- Behind the thatched hall
+- The road towards the west village
+- Where Cao Cao sleeps
+- The inn, by moonlight
+- Back towards the pass? Not with Chen Gong's post deserted behind you.
+- It's nearly dark. Lü Boshe's farm is here, your father's sworn brother's.
+- Not back. Not now.
+- Not in the dark. The inn first.
+- East. Home.
+- Go to Lü Boshe's farm, in the walled yard north of the road.
+- Go into the roadside inn.
+- A woodcutter sets down his load in the deep wood. “Two riders, at dusk, off the road. Play me, and I'll forget I saw you.”
+- “…I never saw you. Lü Boshe's farm is just past the trees.”
+- The woodcutter goes back to his axe.
+- Chenliu
+- The Cao family house
+- Wei Hong's mansion
+- Grain stalls
+- The white banner, 忠义
+- The village drilling ground
+- Wei Hong's seat
+- Wei Hong's strongbox
+- Wei Hong's banquet
+- Cao Song
+- “Money, son. An army eats before it fights.”
+- “They put up a white banner. Loyalty and right. I came for the rice, and I'll stay for the banner.”
+- “Two thousand of us from the hills, and more coming. Is it true he went at Dong Zhuo with a sword?”
+- Go to Wei Hong's mansion, on the road east of your father's house.
+- Take Wei Hong's fortune to the drilling ground, south of the road.
+- A volunteer swordsman blocks the recruiter's table. “I'll follow a man who can think. Show me you can.”
+- “…Put my name down.”
+- The swordsman is drilling with the others.
+- A grain merchant eyes Wei Hong's carts. “An army needs grain, and I have grain. Let's see what kind of bargainer you are.”
+- “…Done. Half the price, for the banner.”
+- “The carts go out tomorrow, Lord Cao.”
