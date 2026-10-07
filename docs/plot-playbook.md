@@ -222,11 +222,11 @@ because it can't be kept up across a long game. The dilemma caption carries the 
 
 ### R7. When the novel's task fails, the player still solves, and the story still fails.
 
-The problem is framed as **the attempt** ("Talk your way past the guard"), and the novel decides the result. This is how
-it was recorded in the Diaochan arc.
+> "yes failed tasks are solved but still fail"
 
-**To confirm with the user:** the user's reply was "(b) lets hand the act around", which answered the handoff question
-for certain. Whether "(b)" also chose this option for failed tasks was Plot's reading. Ask before relying on it.
+The problem is framed as **the attempt** ("Talk your way past the guard"), and the novel decides the result. The player's
+solve is real; it just isn't enough against what the novel decided. Write the dilemma caption as the attempt, never as the
+outcome.
 
 ### R8. Road challengers are the trainers on the route, in exact numbers.
 
@@ -381,9 +381,8 @@ Places that the user had "changed priorities". That was Plot's inference, and Pl
 
 ## Part 5: Open items to confirm with the user
 
-1. **Failed tasks**: whether the user chose option (b) (see R7).
-2. **Per-handoff role line** ("Jia Xu, adviser to Li Jue"): Integration is asking apo110 whether it's wanted.
-3. **Novel verses at act ends:** keep this research lesson or drop it? The Diaochan arc uses none.
-4. **The rest of Book 2** (Cao Cao in chapters 3–4, the coalition in chapters 5–7): the outline in
+1. **Per-handoff role line** ("Jia Xu, adviser to Li Jue"): Integration is asking apo110 whether it's wanted.
+2. **Novel verses at act ends:** keep this research lesson or drop it? The Diaochan arc uses none.
+3. **The rest of Book 2** (Cao Cao in chapters 3–4, the coalition in chapters 5–7): the outline in
    `docs/book2/research.md` Part 5 is provisional. Several of its questions are unanswered: folding the first beats into
    the opening scroll, how to stage the Lü Boshe killings, and length.
