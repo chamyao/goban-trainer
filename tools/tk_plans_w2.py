@@ -534,7 +534,7 @@ PLANS2 = {
             "2-a12c": "Reach the Son of Heaven unseen: into the palace by the North Side Gate, at the south end of the avenue.",
             "2-a12": "Bring Li Su into the plan.",
             "2-a13d": "Escort the Grand Preceptor to the palace.",
-            "2-a14": "Wait at the North Side Gate, at the south end of the avenue.",
+            "2-a14": "Escort the Grand Preceptor's carriage down the avenue to the North Side Gate, the red gatehouse at its south end.",
             "2-a15": "Walk the city.",
             "2-a15c": "Go to the victory feast in the great hall of state, inside the palace.",
             "2-a18p": "Go to the palace steps, beside the North Side Gate.",
