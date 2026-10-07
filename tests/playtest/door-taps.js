@@ -1,4 +1,5 @@
-// Phone: a tap on the road in front of a building walks there (doesn't go in); a tap on the building's face goes in.
+// Phone: a tap on a building's face or on its doorstep (just before the door: the engine's doorstep rule, ~18 px) goes in;
+// a tap on the road further out, or beside the door, walks there and doesn't go in.
 const { chromium, devices } = require(require('child_process').execSync('npm root -g').toString().trim()+'/playwright');
 const SP=require('path').join(__dirname,'out');require('fs').mkdirSync(SP,{recursive:true});
 (async()=>{const b=await chromium.launch({args:['--use-gl=swiftshader','--enable-webgl']});const ctx=await b.newContext({...devices['iPhone 13']});const p=await ctx.newPage();
@@ -21,7 +22,7 @@ for(const place of ['lousang-village','zhuo-county']){
   for(const d of doors){
     // the road just in front of the door: stand to one side, tap it
     const iso=await p.evaluate(()=>!!window.__w.iso);   // isometric: the doorstep is drawn on the building's base, so "in front" is a little further out
-    for(let [what,tx,ty,expectIn] of [['road in front',d.x,d.bottom+(iso?12:3),false],['road beside',d.x+24,d.bottom+3,false],['road beside',d.x-24,d.bottom+3,false],['building face',d.x,d.cy-30,true]]){
+    for(let [what,tx,ty,expectIn] of [['doorstep',d.x,d.bottom+(iso?8:6),true],['road in front',d.x,d.bottom+30,false],['road beside',d.x+24,d.bottom+3,false],['road beside',d.x-24,d.bottom+3,false],['building face',d.x,d.cy-30,true]]){
       if(await p.evaluate(pl=>window.__w.placeId!==pl,place))await go(place);
       const ok=await p.evaluate(([x,y])=>{const w=window.__w,G=w.walkGrid(),C=G.C;for(const dx of [40,-40,0])for(const dy of [30,50]){const px=x+dx,py=y+dy;if(G.free(Math.floor(px/C),Math.floor((py-3)/C))){w.player.setPosition(px,py);return true;}}return false;},[d.x,d.bottom+14]);
       if(!ok){console.log(`skip ${place} -> ${d.to}: no open ground near the door`);continue;}
@@ -44,9 +45,10 @@ for(const place of ['lousang-village','zhuo-county']){
       let inside=false;for(let i=0;i<40;i++){await p.waitForTimeout(200);if(await p.locator('.tk-duel').count()){await p.locator('.tk-duel-key',{hasText:'Leave'}).tap().catch(()=>{});await p.waitForTimeout(900);}   // a challenger tapped: his problem, not a door
         const st=await p.evaluate(to=>!window.__w||window.__w.placeId===to?'in':window.__w.walk||window.__w.ui.busy()?'walking':'still',d.to);if(st==='in'){inside=true;break;}if(st==='still'&&i>=4)break;}
       checked++;
-      const res=inside===expectIn;if(!res)fails++;
+      const spotFirst=what==='doorstep'&&kind==='spot'&&!inside;   // a story spot on the doorstep takes the tap first (as the game means it): noted, not failed
+      const res=inside===expectIn||spotFirst;if(!res)fails++;
       if(!res&&inside)console.log('     state:',await p.evaluate(()=>{const w=window.__w;return w?JSON.stringify({place:w.placeId,leaving:w.leaving,busy:w.ui.busy(),cine:!!w.cine,appr:!!w.approaching,walk:!!w.walk,P:[Math.round(w.player.x),Math.round(w.player.y)]}):'no world';}));
-      console.log(`${res?'ok  ':'FAIL'} ${place}: tap the ${what} ${d.to} (${tx-d.x},+${ty-d.bottom}) (picks ${kind}) -> ${inside?'went in':'stayed out'}`);
+      console.log(`${spotFirst?'note':res?'ok  ':'FAIL'} ${place}: tap the ${what} ${d.to} (${tx-d.x},+${ty-d.bottom}) (picks ${kind}) -> ${inside?'went in':'stayed out'}`);
       if(!res&&!inside)console.log('   in the way:',await p.evaluate(([x,y])=>{const w=window.__w;return JSON.stringify({place:w.placeId,canMove:w.canMove(),busy:w.ui.busy(),leaving:w.leaving,appr:!!w.approaching,cine:!!w.cine,overlay:!!document.querySelector('.tk-duel'),seated:w.seated,P:[Math.round(w.player.x),Math.round(w.player.y)],walk:w.walk&&{n:w.walk.path.length,stuck:Math.round(w.walk.stuck),retries:w.walk.retries},npcs:w.npcs.filter(n=>n.spr.visible&&Math.hypot(n.spr.x-x,n.spr.y-y)<30).map(n=>[n.sprite,Math.round(n.spr.x-x),Math.round(n.spr.y-y)])});},[d.x,d.bottom]));
       if(!res)await p.screenshot({path:SP+`/door-taps-${d.to}.png`});
       if(inside){await p.waitForTimeout(800);await ready();

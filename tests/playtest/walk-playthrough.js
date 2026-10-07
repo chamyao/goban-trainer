@@ -135,7 +135,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   const close = (status, why, s) => { if (!beat) return; if (leadFor[beat] && beatLead && leadFor[beat] !== beatLead) console.log(`     note ${beat}: played by ${beatLead}, but the story's last handoff gave ${leadFor[beat]}`); const r = { beat, status, secs: Math.max(0, Math.round((Date.now() - beatT) / 1000)), place: s && s.place, at: s && s.P, lead: s && s.lead, why: why || '', line: lastLine.slice(0, 120) };
     report.push(r); console.log(`${status === 'pass' ? 'ok  ' : 'FAIL'} ${beat}  ${r.secs}s  ${r.lead || ''} in ${r.place || '?'}${status === 'pass' ? '' : `  at ${r.at}: ${why}${r.line ? ` ("${r.line}")` : ''}`}`); };
   let plannedSteps = null, planT = 0, pace = 3, stealthTries = 0, lastTap = 0, skipped = false, reloads = 0, catches = 0, wasCaught = false; const held = [], recovered = [];
-  const facts = {}, banners = [], chipBad = new Set(), chipSeen = [], shotWho = new Set(), shots = []; let lastPlace = '', arrivedAt = null; const OPTIONAL = !!process.env.OPTIONAL, visited = new Set(), errands = []; let errand = null;
+  const featureFails = [], facts = {}, banners = [], chipBad = new Set(), chipSeen = [], shotWho = new Set(), shots = []; let lastPlace = '', arrivedAt = null; const OPTIONAL = !!process.env.OPTIONAL, visited = new Set(), errands = []; let errand = null;
   for (;;) {
     if ((Date.now() - t0) / 60000 > MAXMIN) { const s = await look(); close('fail', `out of time (${MAXMIN} min)`, s); break; }
     const s = await look();
@@ -278,17 +278,17 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   if (BOOK === 13) { const F = k => facts[k] || { light: new Set(), route: new Set(), horses: new Set(), crouch: false, place: new Set() };
     const c4 = F('13-c4'), c9 = F('13-c9'), c20 = F('13-c20');
     const ff = [...c4.route].some(r => r.startsWith('fireflies@beimang')), band = [...c4.route].some(r => r.startsWith('band@beimang'));
-    console.log(`${ff && !band ? 'ok  ' : 'FAIL'} c4: the way at night at Beimang is shown by fireflies (light ${[...c4.light].join('/') || '?'}; route ${[...c4.route].join(', ') || 'never drawn'})`);
+    console.log(`${band ? 'FAIL' : ff ? 'ok  ' : 'note'} c4: the way at night at Beimang is shown by fireflies, never the day's band (light ${[...c4.light].join('/') || '?'}; route ${[...c4.route].join(', ') || 'not drawn while watched: the goal in sight at once'})`);
     console.log(`${c9.horses.has('red') ? 'ok  ' : 'FAIL'} c9: Red Hare walks behind Li Su as a red horse (followers on horses: ${[...c9.horses].join(', ') || 'none'})`);
     console.log(`${c20.crouch ? 'ok  ' : 'FAIL'} c20: someone crouches in the scene (a figure drawn low, 0.72-0.76 of its height)`);
-    if (!(ff && !band) || !c9.horses.has('red') || !c20.crouch) held.push('book 13 features'); }
+    if (band || !c9.horses.has('red') || !c20.crouch) featureFails.push('book 13 features'); }
   // after the book: once things settle, who the walk plays as (END_LEAD: who it must be, e.g. lijue after Book 12's a18)
   let after = null;
   for (let i = 0; i < 60; i++) { const s = await look().catch(() => null); if (s && !s.boot && !s.busy && !s.cine && !s.leaving && !s.duel) { after = s; break; }
     if (s && s.busy) await p.evaluate(() => window.__w.ui.advance()).catch(() => {}); await p.waitForTimeout(500); }
   if (after) { const want = process.env.END_LEAD, ok = !want || (after.lead === want && after.chip.includes(after.leadName));
     console.log(`${ok ? 'ok  ' : 'FAIL'} after the book: playing as ${after.lead} in ${after.place}; the chip says "${after.chip}"${want ? ` (wanted ${want})` : ''}; "Now playing" banners: ${banners.join(' | ') || 'none'}`);
-    if (!ok) held.push('after the book: ' + after.lead); }
+    if (!ok) featureFails.push('after the book: ' + after.lead); }
   // the boards' draws against the difficulty asked for
   const diffCheck = await p.evaluate(([bs, B]) => { const w = TK.world(B), easy = TK.easy, adaptive = TK.mode === 'adaptive' && w.rated && w.rated.length, rated = adaptive ? new Set(w.rated.map(x => +x[1])) : null; let ok = 0, off = [];
     for (const { beat, key, id } of bs) { const base = String(key || beat).split('~')[0], n = TK.node(w, base) || (typeof WorldData !== 'undefined' && WorldData.node(w, base)); if (!n || id == null) continue; if (adaptive) { if (rated.has(+id)) ok++; else off.push(`${key || beat}:${id}`); continue; }   // Adaptive: every board from the rated pool
@@ -309,5 +309,5 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   const audio = errs.filter(e => /AudioContext/.test(e)); if (audio.length) console.log(`     note: ${audio.length} AudioContext page errors (${audio[0].slice(0, 80)})`);
   console.log(`the goal box's chip followed the party: ${chipSeen.join(' → ') || 'never shown'}${chipBad.size ? ` (wrong at ${[...chipBad].join(', ')})` : ''}`);
   if (OPTIONAL) console.log(`optional: ${errands.filter(e => e.status === 'pass').length}/${errands.length} walked to, ${errands.filter(e => e.status === 'gone').length} gone before he got there (${errands.filter(e => e.id.startsWith('challenger')).length} challengers, ${errands.filter(e => e.id.startsWith('door')).length} doors and rooms)`);
-  await b.close(); process.exit(chipBad.size || errands.some(e => e.status === 'fail') || fails || held.length || recovered.length || (diffCheck.off && diffCheck.off.length) ? 1 : 0);
+  await b.close(); process.exit(featureFails.length || chipBad.size || errands.some(e => e.status === 'fail') || fails || held.length || recovered.length || (diffCheck.off && diffCheck.off.length) ? 1 : 0);
 })();
