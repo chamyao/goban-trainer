@@ -64,7 +64,7 @@ const Sync = {
   // by a username they supply, in a Sheet with nothing else in it. It's a
   // Google Apps Script Web App, not a credential — nothing here can be
   // "revoked" the way a leaked API token would be.
-  API_URL: "https://script.google.com/macros/s/AKfycbwP229Vb_1u5WJlV0-XGWtbxTooXlgF1ceOeUx7OB-oR5_sOikIMEoQr28sP93j6ZRhrg/exec",
+  API_URL: "https://script.google.com/macros/s/AKfycbx3ASkDqcnrLGbLNAyk5UcxPHkJn2Y72455Mydai90g0vTM9nF3VlwUVePZYi2iYKJvdg/exec",
   USERNAME_KEY: "gt-username",
   username: null,
   saveTimer: null,
