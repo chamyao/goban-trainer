@@ -35,6 +35,20 @@ def banner_black():   # the Chancellor's black banner: Jade's red banner, dyed
     return im
 
 
+def banner_white():   # a white mourning banner: Jade's red banner, bleached (the folds a pale grey)
+    kit = json.loads((ROOT / "assets/tk/kits/jade.json").read_text())
+    sheet, x, y, w, h = kit["kinds"]["banner.red"][0]
+    im = Image.open(ROOT / kit["sheets"][sheet]).convert("RGBA").crop((x, y, x + w, y + h))
+    px = im.load()
+    for j in range(h):
+        for i in range(w):
+            r, g, b, a = px[i, j]
+            if a and r > g + 40 and r > b + 40:
+                v = (r + g + b) // 3
+                px[i, j] = (min(255, 170 + v // 2), min(255, 170 + v // 2), min(255, 176 + v // 2), a)
+    return im
+
+
 def milestone():   # a small stone road marker with a rounded top and a carved line
     g = Grid(12, 16)
     g.rect(2, 4, 8, 10, "#9a9ea6"); g.rect(3, 2, 6, 2, "#9a9ea6"); g.rect(8, 4, 2, 10, "#7a7e86")
@@ -309,7 +323,7 @@ def ridge():   # an earthen ridge: a long low mound of bare yellow earth, grass 
 
 
 PIECES = {
-    "banner.black": banner_black, "milestone": milestone, "plant.peony": peony, "water.lotus": lotus,
+    "banner.black": banner_black, "banner.white": banner_white, "milestone": milestone, "plant.peony": peony, "water.lotus": lotus,
     "prop.lanterns": lantern_stand, "prop.body_lamp": body_lamp, "tree.poplar": poplar, "tree.willow": willow,
     "garden.trellis": trellis, "garden.screenwall": screenwall, "furn.qin": qin, "furn.window": window,
     "furn.swordwall": swordwall, "furn.seat": seat, "furn.lamp": lamp, "furn.dais": dais, "corral": corral,
