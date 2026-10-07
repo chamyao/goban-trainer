@@ -521,6 +521,7 @@ def _scenes_chain():
             ["still", "dc_sword", "slow zoom in"],
             N("She snatches the sword from the wall and puts it to her own throat.", "遂掣壁间宝剑欲自刎。"),
             ["run", "dz", "a10", 8, 0],
+            ["pose", "diaochan", "stand"],   # the blade is out of her hands
             N("Dong Zhuo wrenches the sword away and holds her.", "卓慌夺剑拥抱。"),
             S("dongzhuo", "I was only teasing you!", "吾戏汝！"),
             ["problem"],  # 3: turn it on Li Ru

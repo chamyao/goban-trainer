@@ -63,7 +63,7 @@ def build_region(world, briefs):
             ROLE_DEFAULT[n.get("role", "main")].format(place=n["place"], title=scene["title"])
         q = {"node": n["key"], "role": n.get("role", "main"), "place": p["id"], "spot": None,
              "scene": n["scene"], "title": scene["title"], "objective": objective,
-             "after": after[n["key"]], "grade": n.get("grade"), "pool": n.get("pool", [])}
+             "after": after[n["key"]], "grade": n.get("grade"), "pool": n.get("pool", []), **({"pool_easy": n["pool_easy"]} if n.get("pool_easy") else {})}
         if n.get("boss"):
             q["boss"] = n["boss"]
         if n.get("board") is False:   # a scene with no board (a defeat): playing it is the beat

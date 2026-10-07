@@ -35,7 +35,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=66`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=70`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
@@ -48,12 +48,14 @@ const WorldData = {
     if (!m) return null;
     const place = region.places.find(p => p.id === m[2]);
     if (!place) return null;
-    const all = [], seen = new Set();
+    const all = [], seen = new Set(), easy = [], seenE = new Set();
     for (const q of region.quests) if (q.pool && q.role !== "boss") for (const p of q.pool) { const k = p.join(":"); if (!seen.has(k)) { seen.add(k); all.push(p); } }
+    for (const q of region.quests) if (q.pool_easy && q.role !== "boss") for (const p of q.pool_easy) { const k = p.join(":"); if (!seenE.has(k)) { seenE.add(k); easy.push(p); } }   // the menu's Easy
     let h = 0;
     for (const ch of key) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
     const i = all.length ? h % all.length : 0;
-    return { key, town: true, place: place.name, place_zh: place.zh, role: "challenge", grade: w.grades.split("–")[0], pool: all.slice(i).concat(all.slice(0, i)) };
+    return { key, town: true, place: place.name, place_zh: place.zh, role: "challenge", grade: w.grades.split("–")[0], pool: all.slice(i).concat(all.slice(0, i)),
+      ...(easy.length ? { pool_easy: easy.slice(h % easy.length).concat(easy.slice(0, h % easy.length)) } : {}) };
   },
 };
 
@@ -251,9 +253,9 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=66`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=70`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=40`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=64`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=67`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
@@ -262,7 +264,7 @@ function worldScenes() {
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
       for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=70`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=75`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -284,7 +286,7 @@ function worldScenes() {
     create() {
       const region = this.region = this.cache.json.get("region"), kit = this.kit = this.cache.json.get("kit");
       const opts = this.opts = this.game.worldOpts, w = this.w = opts.w;
-      this.grid = this.walk = this.lampFx = this.ambientFx = this.cine = this.auto = this.player = this.engaged = this.carried = null; this.glows = []; this.seated = this.caught = false;   // the scene object outlives a change of place: no old map's walk grid or tap-walk
+      this.grid = this.walk = this.lampFx = this.ambientFx = this.cine = this.auto = this.player = this.engaged = this.carried = this.routeFx = null; this.glows = []; this.seated = this.caught = false;   // the scene object outlives a change of place: no old map's walk grid or tap-walk
       this.story = w.scenes;
       // a save from an older map: a renamed place is found under its new name (arriving as if walking in);
       // a removed one sends him back to the start
@@ -300,6 +302,8 @@ function worldScenes() {
       this.tw = map.tileWidth || 16;
       // one map, several looks (Places' "states"): the last whose "when" holds and "until" doesn't
       try { this.states = JSON.parse((map.properties || []).find(x => x.name === "states")?.value || "null"); } catch { this.states = null; }
+      try { this.ways = JSON.parse((map.properties || []).find(x => x.name === "ways")?.value || "null"); } catch { this.ways = null; }   // the streets (Places), for the lit route
+      this.pathRows = ((map.properties || []).find(x => x.name === "paths")?.value || "").split("|").filter(Boolean);   // drawn roads and paths, by tile
       this.stated = []; this.refs = {}; this.lights = []; this.sightZones = []; this.sgrid = null; if (this.coneG) { this.coneG.destroy(); this.coneG = null; } if (this.fog) { this.fog.destroy(); this.fog = null; } this.procession = null;
       const sets = map.tilesets.map(ts => map.addTilesetImage(ts.name, `kit-${ts.name}`));
       this.water = null;
@@ -984,32 +988,142 @@ function worldScenes() {
       }
       if (this.goalAt !== t) return;
       this.st.routes.push(key); this.save();
-      if (!this.textures.exists("@route")) {
-        const S = 24, cv = document.createElement("canvas"); cv.width = cv.height = S;
+      if (!this.textures.exists("@route")) {   // one sheet, two frames: a round glow ("dot") and a soft stroke of light longer than it is wide ("band")
+        const S = 24, w = 32, h = 16, cv = document.createElement("canvas"); cv.width = S + w; cv.height = S;
         const g = cv.getContext("2d"), r = g.createRadialGradient(S / 2, S / 2, 0, S / 2, S / 2, S / 2);
         r.addColorStop(0, "rgba(255,236,160,1)"); r.addColorStop(.4, "rgba(255,206,90,.75)"); r.addColorStop(1, "rgba(255,180,60,0)");
         g.fillStyle = r; g.fillRect(0, 0, S, S);
-        this.textures.addCanvas("@route", cv);
+        g.save(); g.translate(S + w / 2, S / 2); g.scale(1, h / w);
+        const q = g.createRadialGradient(0, 0, 0, 0, 0, w / 2);
+        q.addColorStop(0, "rgba(255,232,150,.95)"); q.addColorStop(.45, "rgba(255,200,90,.55)"); q.addColorStop(1, "rgba(255,170,60,0)");
+        g.fillStyle = q; g.beginPath(); g.arc(0, 0, w / 2, 0, Math.PI * 2); g.fill(); g.restore();
+        const tex = this.textures.addCanvas("@route", cv);
+        tex.add("dot", 0, 0, 0, S, S); tex.add("band", 0, S, (S - h) / 2, w, h);
       }
-      const pts = [{ x: P.x, y: P.y }, ...(this.findPath(P.x, P.y, t.x, t.y) || [t])];
-      const dots = [];
+      // the way, rounded at its corners and laid every few pixels: a road lit from your feet to the goal
+      const pts = this.squareCorners(this.routePoints({ x: P.x, y: P.y }, t)), STEP = 5, band = [];
       let carry = 0;
       for (let i = 1; i < pts.length; i++) {
-        const a = pts[i - 1], b = pts[i], d = Math.hypot(b.x - a.x, b.y - a.y);
-        for (let u = carry; u < d; u += 11) dots.push({ x: a.x + (b.x - a.x) * u / d, y: a.y + (b.y - a.y) * u / d });
-        carry = (carry - d) % 11; if (carry < 0) carry += 11;
+        const a = pts[i - 1], b = pts[i], d = Math.hypot(b.x - a.x, b.y - a.y), ang = Math.atan2(b.y - a.y, b.x - a.x);
+        for (let u = carry; u < d; u += STEP) band.push({ x: a.x + (b.x - a.x) * u / d, y: a.y + (b.y - a.y) * u / d, ang });
+        carry = (carry - d) % STEP; if (carry < 0) carry += STEP;
       }
-      const made = dots.slice(2).map((p, i) => {
-        const im = this.add.image(p.x, p.y - 2, "@route").setDepth(-985).setScale(.55).setAlpha(0).setBlendMode(Phaser.BlendModes.ADD);
-        this.tweens.add({ targets: im, alpha: .9, delay: i * 22, duration: 200 });
+      const made = band.slice(3).map((p, i) => {
+        const im = this.add.image(p.x, p.y - 2, "@route", "band").setDepth(-985).setRotation(p.ang).setScale(.5).setAlpha(0)
+          .setBlendMode(Phaser.BlendModes.ADD);
+        this.tweens.add({ targets: im, alpha: .13, delay: i * 7, duration: 260 });   // it sweeps out from your feet (faint: the strokes overlap)
         return im;
       });
-      const end = this.add.image(t.x, t.y, "@route").setDepth(-985).setScale(2.4).setAlpha(0).setBlendMode(Phaser.BlendModes.ADD);
-      this.tweens.add({ targets: end, alpha: .85, delay: made.length * 22, duration: 300 });
-      this.tweens.add({ targets: end, scale: 3.2, delay: made.length * 22 + 300, duration: 700, yoyo: true, repeat: 3, ease: "Sine.easeInOut" });
-      const all = [...made, end];
-      this.time.delayedCall(made.length * 22 + 5500, () => this.tweens.add({ targets: all, alpha: 0, duration: 900,
-        onComplete: () => all.forEach(im => im.destroy()) }));
+      const end = this.add.image(t.x, t.y, "@route", "dot").setDepth(-985).setScale(1.8).setAlpha(0).setBlendMode(Phaser.BlendModes.ADD);
+      this.tweens.add({ targets: end, alpha: .4, delay: made.length * 7, duration: 300 });
+      this.tweens.add({ targets: end, scale: 3.2, delay: made.length * 7 + 300, duration: 700, yoyo: true, repeat: 3, ease: "Sine.easeInOut" });
+      // it stays until the place itself is in sight (well inside the view), or the goal moves on; never under 2.5 s
+      if (this.routeFx) this.fadeRoute();
+      this.routeFx = { all: [...made, end], t, from: this.time.now + made.length * 7 + 2500 };
+    }
+    fadeRoute(ms = 900) {
+      const R = this.routeFx;
+      if (!R) return;
+      this.routeFx = null;
+      this.tweens.killTweensOf(R.all);
+      this.tweens.add({ targets: R.all, alpha: 0, duration: ms, onComplete: () => R.all.forEach(im => im.destroy()) });
+    }
+    watchRoute() {
+      const R = this.routeFx;
+      if (!R) return;
+      if (this.ui.busy() || this.cine || this.leaving || this.seated) return this.fadeRoute(250);   // a scene, a line or a door: the light goes at once
+      if (this.time.now < R.from) return;
+      const v = this.cameras.main.worldView, m = Math.min(v.width, v.height) * .15;
+      const seen = R.t.x > v.x + m && R.t.x < v.right - m && R.t.y > v.y + m && R.t.y < v.bottom - m;
+      if (seen || this.goalAt !== R.t) this.fadeRoute();
+    }
+
+    // The way to light: down the streets where the map has them (Places' "ways", the centre lines of its
+    // roads, lanes, garden paths, bridges and galleries), joining the nearest street from your feet and
+    // leaving it at the one nearest the goal, with the walking path for the steps on and off. Without
+    // streets, or when they'd be the long way round, the walking path itself.
+    routePoints(from, to) {
+      const T = this.tw || 16, W = this.ways;
+      const walk = (a, b) => [a, ...(this.findPath(a.x, a.y, b.x, b.y, null, true) || [b])];
+      const direct = Math.hypot(to.x - from.x, to.y - from.y);
+      if (!W || !W.edges || !W.edges.length || direct < 5 * T) return walk(from, to);
+      const N = W.nodes.map(([x, y]) => ({ x: x * T, y: y * T })), adj = N.map(() => []);
+      for (const [a, b] of W.edges) { const d = Math.hypot(N[a].x - N[b].x, N[a].y - N[b].y); adj[a].push([b, d]); adj[b].push([a, d]); }
+      const onStreet = p => {   // the nearest point on any street
+        let best = null;
+        for (const [a, b] of W.edges) {
+          const A = N[a], B = N[b], dx = B.x - A.x, dy = B.y - A.y, L2 = dx * dx + dy * dy || 1;
+          const u = Math.max(0, Math.min(1, ((p.x - A.x) * dx + (p.y - A.y) * dy) / L2)), q = { x: A.x + dx * u, y: A.y + dy * u };
+          const d = Math.hypot(p.x - q.x, p.y - q.y);
+          if (!best || d < best.d) best = { a, b, q, d };
+        }
+        return best;
+      };
+      const s = onStreet(from), g = onStreet(to);
+      const dist = new Map(), prev = new Map(), Q = [];
+      const relax = (i, d, p) => { if (d < (dist.get(i) ?? Infinity)) { dist.set(i, d); prev.set(i, p); Q.push([d, i]); } };
+      relax(s.a, Math.hypot(s.q.x - N[s.a].x, s.q.y - N[s.a].y), -1);
+      relax(s.b, Math.hypot(s.q.x - N[s.b].x, s.q.y - N[s.b].y), -1);
+      while (Q.length) {
+        Q.sort((x, y) => x[0] - y[0]);
+        const [d, i] = Q.shift();
+        if (d > dist.get(i)) continue;
+        for (const [j, w] of adj[i]) relax(j, d + w, i);
+      }
+      let chain = [], along = Math.hypot(g.q.x - s.q.x, g.q.y - s.q.y);
+      const same = (s.a === g.a && s.b === g.b) || (s.a === g.b && s.b === g.a);
+      if (!same) {
+        let end = -1;
+        along = Infinity;
+        for (const i of [g.a, g.b]) {
+          const d = (dist.get(i) ?? Infinity) + Math.hypot(g.q.x - N[i].x, g.q.y - N[i].y);
+          if (d < along) { along = d; end = i; }
+        }
+        if (end < 0 || along === Infinity) return walk(from, to);
+        for (let i = end; i !== -1 && i !== undefined; i = prev.get(i)) chain.unshift(N[i]);
+      }
+      if (s.d + along + g.d > direct * 2.2) return walk(from, to);   // the streets would be the long way round
+      const on = walk(from, s.q), off = walk(g.q, to);
+      return [...on, ...chain, ...off.slice(0)];
+    }
+
+    // Round a polyline's corners (radius r px), so a lit way bends like a road, not a ruler.
+    // The route as right-angle turns (the user's wish): each slanting stretch becomes an L, bent on whichever
+    // side is open ground; a slant with no clear L either way stays as it is.
+    squareCorners(pts) {
+      const G = this.walkGrid(), C = G.C;
+      const clear = (a, b) => { const n = Math.ceil(Math.hypot(b.x - a.x, b.y - a.y) / 4);
+        for (let i = 0; i <= n; i++) { const x = a.x + (b.x - a.x) * i / n, y = a.y + (b.y - a.y) * i / n; if (!G.free(Math.floor(x / C), Math.floor(y / C))) return false; } return true; };
+      const out = [pts[0]];
+      for (let i = 1; i < pts.length; i++) {
+        const a = out[out.length - 1], b = pts[i];
+        if (Math.abs(b.x - a.x) > 2 && Math.abs(b.y - a.y) > 2) {
+          const e1 = { x: b.x, y: a.y }, e2 = { x: a.x, y: b.y };
+          const T = this.tw || 16, road = (p, q) => { let k = 0; for (let i = 0; i <= 8; i++) { const x = p.x + (q.x - p.x) * i / 8, y = p.y + (q.y - p.y) * i / 8,
+            r = this.pathRows && this.pathRows[Math.floor(y / T)]; if (r && r[Math.floor(x / T)] === "1") k++; } return k; };
+          const ok1 = clear(a, e1) && clear(e1, b), ok2 = clear(a, e2) && clear(e2, b);
+          if (ok1 && ok2) out.push(road(a, e1) + road(e1, b) >= road(a, e2) + road(e2, b) ? e1 : e2);   // the L that keeps to the road
+          else if (ok1) out.push(e1);
+          else if (ok2) out.push(e2);
+        }
+        out.push(b);
+      }
+      return out;
+    }
+    roundCorners(pts, r) {
+      const out = [];
+      for (let i = 0; i < pts.length; i++) {
+        const p = pts[i];
+        if (i === 0 || i === pts.length - 1) { out.push(p); continue; }
+        const a = pts[i - 1], b = pts[i + 1];
+        const la = Math.hypot(p.x - a.x, p.y - a.y), lb = Math.hypot(b.x - p.x, b.y - p.y);
+        const k = Math.min(r, la / 2, lb / 2);
+        if (k < 1) { out.push(p); continue; }
+        const p0 = { x: p.x + (a.x - p.x) * k / la, y: p.y + (a.y - p.y) * k / la }, p1 = { x: p.x + (b.x - p.x) * k / lb, y: p.y + (b.y - p.y) * k / lb };
+        for (let u = 0; u <= 1.0001; u += .25)   // a quadratic curve through the corner
+          out.push({ x: (1 - u) * (1 - u) * p0.x + 2 * (1 - u) * u * p.x + u * u * p1.x, y: (1 - u) * (1 - u) * p0.y + 2 * (1 - u) * u * p.y + u * u * p1.y });
+      }
+      return out.filter((p, i) => i === 0 || Math.hypot(p.x - out[i - 1].x, p.y - out[i - 1].y) > .5);
     }
 
     goalGuide(time) {
@@ -1295,8 +1409,11 @@ function worldScenes() {
     }
     // A* over the grid (8 directions, no corner-cutting), then the path pulled straight.
     // People standing about count as in the way (all but `skip`, the one being walked up to).
-    findPath(fx, fy, tx, ty, skip = null) {
-      const G0 = this.walkGrid(), C = G0.C, key = (x, y) => y * G0.cols + x;
+    // prefer: keep to the drawn roads and paths where that's practical (the lit route), ground off them costing more
+    findPath(fx, fy, tx, ty, skip = null, prefer = false) {
+      const G0 = this.walkGrid(), C = G0.C, key = (x, y) => y * G0.cols + x, T = this.tw || 16;
+      const onPath = (x, y) => { const r = this.pathRows && this.pathRows[Math.floor(y * C / T)]; return !!r && r[Math.floor(x * C / T)] === "1"; };
+      const usePaths = prefer && this.pathRows && this.pathRows.length;
       const people = new Set();
       for (const n of this.npcs) {
         if (n === skip || !n.spr.visible) continue;
@@ -1325,7 +1442,8 @@ function worldScenes() {
         for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]]) {
           const nx = x + dx, ny = y + dy;
           if (!G.free(nx, ny) || (dx && dy && (!G.free(x + dx, y) || !G.free(x, y + dy)))) continue;
-          const c = g.get(key(x, y)) + (dx && dy ? 1.414 : 1) * (G0.roomy(nx, ny) ? 1 : 3);   // hugging a wall, or through a gap, only when it saves the way round
+          const c = g.get(key(x, y)) + (dx && dy ? 1.414 : 1) * (G0.roomy(nx, ny) ? 1 : 3)   // hugging a wall, or through a gap, only when it saves the way round
+            * (usePaths && !onPath(nx, ny) ? 2.5 : 1);                                       // off the road only when the road is the long way
           if (c < (g.get(key(nx, ny)) ?? Infinity)) { g.set(key(nx, ny), c); from.set(key(nx, ny), [x, y]); open.push([c + h(nx, ny), nx, ny]); }
         }
       }
@@ -1340,7 +1458,8 @@ function worldScenes() {
       for (let c = [gx, gy]; c; c = from.get(key(c[0], c[1]))) cells.unshift(c);
       // keep only the turning points that can't be seen past
       const clear = (a, b) => { const steps = Math.ceil(Math.hypot(b[0] - a[0], b[1] - a[1]) * 2);
-        for (let i = 1; i < steps; i++) { const x = Math.round(a[0] + (b[0] - a[0]) * i / steps), y = Math.round(a[1] + (b[1] - a[1]) * i / steps); if (!G.free(x, y) || !G0.roomy(x, y)) return false; } return true; };
+        const road = usePaths && onPath(a[0], a[1]) && onPath(b[0], b[1]);   // a road stretch isn't straightened across the grass
+        for (let i = 1; i < steps; i++) { const x = Math.round(a[0] + (b[0] - a[0]) * i / steps), y = Math.round(a[1] + (b[1] - a[1]) * i / steps); if (!G.free(x, y) || !G0.roomy(x, y) || (road && !onPath(x, y))) return false; } return true; };
       const pts = [cells[0]];
       for (let i = 1; i < cells.length; i++) if (!clear(pts[pts.length - 1], cells[i])) pts.push(cells[i - 1]);
       pts.push(cells[cells.length - 1]);
@@ -1797,7 +1916,9 @@ function worldScenes() {
         n.sees = this.sees(n, P);
         const pts = [{ x: ex, y: ey }];
         for (let k = 0; k <= 14; k++) { const a = a0 - Math.PI * 55 / 180 + k * (Math.PI * 110 / 180) / 14, r = this.ray(ex, ey, a, R); pts.push({ x: ex + Math.cos(a) * r, y: ey + Math.sin(a) * r }); }
-        this.coneG.fillStyle(n.sees ? 0xff5a4a : 0xffe08a, n.sees ? .3 : .18).fillPoints(pts, true);
+        // drawn only for someone whose sight matters: who catches you, or whom a sight puzzle turns on
+        const puzzle = Object.values(this.spots).some(sp => sp.sight && [sp.sight.seen_by, sp.sight.unseen_by].includes(w.id || n.id));
+        if ((w.seen && w.seen.length) || w.back_to || puzzle) this.coneG.fillStyle(n.sees ? 0xff5a4a : 0xffe08a, n.sees ? .3 : .18).fillPoints(pts, true);
         // he catches you if he has something to say or somewhere to send you; not the one a sight puzzle wants you seen by
         const wanted = Object.values(this.spots).some(s => s.sight && s.sight.seen_by === (w.id || n.id));
         if (n.sees && !calm && !this.caught && !wanted && ((w.seen && w.seen.length) || w.back_to)) this.caughtBy(n);
@@ -1864,6 +1985,7 @@ function worldScenes() {
     }
 
     update(time, dt) {
+      this.watchRoute();
       if (this.carried && this.carried.active) this.carried.setPosition(this.player.x, this.player.y - 8);
       this.watchStep(dt);
       this.procession_();

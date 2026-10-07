@@ -386,7 +386,11 @@ class MapBuilder:
                 self.spots.append({"id": t["id"], "x": a[0] + .5, "y": a[1] + .7, "node": t["node"], "label": t.get("label", "")})
         for s in self.p.get("spots", []):
             c = tuple(s["at"])
-            if s.get("on") and s["on"] in self.foot:
+            if s.get("at_door") in self.anchor:      # square in front of a building's door, a step out so you don't walk in (the crown at Lü Bu's gate)
+                ax, ay = self.anchor[s["at_door"]]
+                d = next((x.get("door") for x in self.objects if x.get("id") == s["at_door"]), "S")
+                t = {"S": (ax, ay + 1), "N": (ax, ay - 1), "E": (ax + 1, ay), "W": (ax - 1, ay)}.get(d, (ax, ay + 1))
+            elif s.get("on") and s["on"] in self.foot:
                 fx, fy, fw, fh = self.foot[s["on"]]
                 t = (fx + fw // 2, fy + fh // 2)
             else:
@@ -494,6 +498,50 @@ class MapBuilder:
 
 
 # ---------- the world: every place, compound and room, linked ----------
+def ways(mb):
+    """The streets of a map as a graph, in tiles: nodes at every bend, end and crossing of a road, lane,
+    garden path, bridge or gallery (their centre lines), edges along them. The game's lit route follows it,
+    so the way shown runs down the streets, not across roofs and lawns."""
+    C = mb.C
+    segs = []
+    for l in mb.p.get("lines", []):
+        if l["kind"] not in ("road", "path", "bridge", "gallery") or "path" not in l:
+            continue
+        pts = [((x + .5) * C, (y + .5) * C) for x, y in l["path"]]
+        segs += [(a, b, l["kind"]) for a, b in zip(pts, pts[1:]) if a != b]
+    cuts = {i: {0.0, 1.0} for i in range(len(segs))}
+    for i, (a, b, _) in enumerate(segs):   # crossings and T-joins: the lines are straight and axis-aligned
+        for j, (c, d, _) in enumerate(segs):
+            if i == j:
+                continue
+            for p in (c, d):   # an end of one line lying on the other
+                if min(a[0], b[0]) - .01 <= p[0] <= max(a[0], b[0]) + .01 and min(a[1], b[1]) - .01 <= p[1] <= max(a[1], b[1]) + .01:
+                    L = math.hypot(b[0] - a[0], b[1] - a[1])
+                    cuts[i].add(round(math.hypot(p[0] - a[0], p[1] - a[1]) / L, 4))
+            if (a[0] == b[0]) != (c[0] == d[0]):   # one vertical, one horizontal: a crossing?
+                v, h = ((a, b), (c, d)) if a[0] == b[0] else ((c, d), (a, b))
+                x, y = v[0][0], h[0][1]
+                if min(h[0][0], h[1][0]) <= x <= max(h[0][0], h[1][0]) and min(v[0][1], v[1][1]) <= y <= max(v[0][1], v[1][1]):
+                    L = math.hypot(b[0] - a[0], b[1] - a[1])
+                    cuts[i].add(round(math.hypot(x - a[0], y - a[1]) / L, 4))
+    nodes, index, edges = [], {}, set()
+
+    def node(p):
+        k = (round(p[0], 2), round(p[1], 2))
+        if k not in index:
+            index[k] = len(nodes)
+            nodes.append([k[0], k[1]])
+        return index[k]
+    for i, (a, b, _) in enumerate(segs):
+        ts = sorted(cuts[i])
+        ps = [(a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t) for t in ts]
+        for p, q in zip(ps, ps[1:]):
+            u, v = node(p), node(q)
+            if u != v:
+                edges.add((min(u, v), max(u, v)))
+    return {"nodes": nodes, "edges": sorted(edges)} if edges else None
+
+
 def state(st, mb, plans):
     """A plan's state → the engine's: light from light+weather, distances and points in tiles of this map."""
     out = {k: v for k, v in st.items() if k not in ("light", "weather", "visibility", "procession", "exits_open", "exits_closed",
@@ -577,6 +625,8 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
         chs = [c for c in b.get("challengers", []) if not c.get("map")]
         m = mb.build(b, [rename(p) for p in outdoor_people], chs, [rename(w) for w in P.get("watchers", [])])
         m["states"] = [state(st, mb, plans) for st in b.get("states", [])]
+        if (w := ways(mb)):
+            m["ways"] = w
         for k in ("seen_lines", "banners"):
             if b.get(k):
                 m[k] = b[k]
@@ -590,6 +640,8 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
             smb = MapBuilder(n, pid, sid, subn, tables, seed + sum(map(ord, mid)), label, arch)
             sm = smb.build(b, [rename(p) for p in b.get("npcs", []) if p.get("place") == mid],
                            [c for c in b.get("challengers", []) if c.get("map") == mid], [rename(w) for w in sub.get("watchers", [])])
+            if (w := ways(smb)):
+                sm["ways"] = w
             sm["parent"] = pid
             sm["building"] = mid
             maps[sid] = (sm, smb)
@@ -689,7 +741,7 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
         objective = pb.get("objectives", {}).get(key) or pb.get("objectives", {}).get(f"{src}-{key.split('-', 1)[1]}") or f"Go to {nd['place']}."
         q = {"node": key, "role": nd.get("role", "main"), "place": where[0], "spot": where[1], "scene": nd["scene"],
              "title": scene["title"], "objective": objective, "after": after.get(key, []), "grade": nd.get("grade"),
-             "pool": nd.get("pool", [])}
+             "pool": nd.get("pool", []), **({"pool_easy": nd["pool_easy"]} if nd.get("pool_easy") else {})}
         for k in ("boss", "hint", "shrine"):
             if nd.get(k):
                 q[k] = nd[k]

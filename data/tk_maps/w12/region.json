@@ -1,8 +1,8 @@
 {
  "format": "tk-region/1",
  "world": 12,
- "name": "Diaochan (draft)",
- "zh": "貂蝉（草稿）",
+ "name": "Diaochan",
+ "zh": "貂蝉",
  "start": "changan",
  "party": [
   "wangyun"
@@ -418,6 +418,56 @@
      108347
     ]
    ],
+   "pool_easy": [
+    [
+     "bedtime-tsumego-part-1",
+     107155
+    ],
+    [
+     "specialized-training-in-tesuji-3",
+     81323
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     50508
+    ],
+    [
+     "200-basic-go-problems",
+     174150
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62348
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-2",
+     1450
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     127061
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     148967
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3657
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62352
+    ],
+    [
+     "specialized-training-in-tesuji-3",
+     81169
+    ],
+    [
+     "common-life-and-death-problems",
+     10969
+    ]
+   ],
    "board": false,
    "objective_zh": "为太师送行：出大街北头的横门，到宴帐去。",
    "title_zh": "横门设宴"
@@ -556,6 +606,56 @@
      44168
     ]
    ],
+   "pool_easy": [
+    [
+     "specialized-training-in-tsumego-3",
+     148967
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3657
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62352
+    ],
+    [
+     "specialized-training-in-tesuji-3",
+     81169
+    ],
+    [
+     "common-life-and-death-problems",
+     10969
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63788
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-1",
+     143887
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147210
+    ],
+    [
+     "fujisawa-shuko-classroom",
+     264974
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     134917
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63832
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-1",
+     1225
+    ]
+   ],
    "objective_zh": "回大街西侧坊街上的府邸，到后园中走走。",
    "title_zh": "牡丹亭"
   },
@@ -566,7 +666,7 @@
    "spot": "a3",
    "scene": "a3",
    "title": "The Gold Crown",
-   "objective": "Take the crown to Lü Bu's side door, at the east end of the ward street, past the Chancellor's gate.",
+   "objective": "Take the crown to Lü Bu's gate, with the weapon rack, at the east end of the ward street, past the Chancellor's gate.",
    "after": [
     "12-a2"
    ],
@@ -693,6 +793,56 @@
      50644
     ]
    ],
+   "pool_easy": [
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147210
+    ],
+    [
+     "fujisawa-shuko-classroom",
+     264974
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     134917
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63832
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-1",
+     1225
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3699
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     108348
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     169252
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     169244
+    ],
+    [
+     "200-basic-go-problems",
+     174783
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63793
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62353
+    ]
+   ],
    "gate": [
     {
      "needs": [
@@ -717,7 +867,7 @@
      "objective_zh": "将明珠送到市街西头的珠宝铺，嵌造金冠。"
     }
    ],
-   "objective_zh": "将金冠送到坊街东头吕布府的侧门，须经过相府门前。",
+   "objective_zh": "将金冠送到坊街东头吕布府门前（门边有兵器架），须经过相府门前。",
    "title_zh": "金冠"
   },
   {
@@ -852,6 +1002,56 @@
     [
      "weiqi-rapid-drill-800-part-3",
      3448
+    ]
+   ],
+   "pool_easy": [
+    [
+     "specialized-training-in-tsumego-4",
+     169252
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     169244
+    ],
+    [
+     "200-basic-go-problems",
+     174783
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63793
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62353
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     108279
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160634
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-1",
+     142206
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     108263
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     11044
+    ],
+    [
+     "specialized-training-in-tesuji-4",
+     81410
+    ],
+    [
+     "bedtime-tsumego-part-3",
+     59523
     ]
    ],
    "objective_zh": "在后堂款待吕布。",
@@ -991,6 +1191,56 @@
      3160
     ]
    ],
+   "pool_easy": [
+    [
+     "ohashi-style-power-up-tsumego-part-1",
+     142206
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     108263
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     11044
+    ],
+    [
+     "specialized-training-in-tesuji-4",
+     81410
+    ],
+    [
+     "bedtime-tsumego-part-3",
+     59523
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     108338
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63825
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     224833
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     68092
+    ],
+    [
+     "bedtime-tsumego-part-2",
+     137662
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     43874
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     169253
+    ]
+   ],
    "objective_zh": "在前厅为太师献舞。",
    "title_zh": "帘外之舞"
   },
@@ -1126,6 +1376,56 @@
     [
      "weiqi-rapid-drill-800-part-3",
      3608
+    ]
+   ],
+   "pool_easy": [
+    [
+     "specialized-training-in-tsumego-1",
+     224833
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     68092
+    ],
+    [
+     "bedtime-tsumego-part-2",
+     137662
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     43874
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     169253
+    ],
+    [
+     "bedtime-tsumego-part-2",
+     12133
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147179
+    ],
+    [
+     "the-unexpected-tesuji",
+     110763
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     49295
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     108342
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     111276
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     395507
     ]
    ],
    "objective_zh": "沿大街骑马回府，经过两行红灯。",
@@ -1265,6 +1565,56 @@
      3071
     ]
    ],
+   "pool_easy": [
+    [
+     "the-unexpected-tesuji",
+     110763
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     49295
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     108342
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     111276
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     395507
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63795
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     131662
+    ],
+    [
+     "specialized-training-in-tesuji-4",
+     81394
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3434
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147180
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     84594
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     196297
+    ]
+   ],
    "objective_zh": "到窗前去。",
    "title_zh": "池中人影"
   },
@@ -1400,6 +1750,56 @@
     [
      "weiqi-rapid-drill-800-part-4",
      3732
+    ]
+   ],
+   "pool_easy": [
+    [
+     "specialized-training-in-tesuji-4",
+     81394
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3434
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147180
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     84594
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     196297
+    ],
+    [
+     "common-life-and-death-problems",
+     26032
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3715
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     56906
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3430
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     169481
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     13966
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     103150
     ]
    ],
    "board": false,
@@ -1540,6 +1940,56 @@
      751
     ]
    ],
+   "pool_easy": [
+    [
+     "specialized-training-in-tsumego-1",
+     56906
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3430
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     169481
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     13966
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     103150
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     107941
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-2",
+     1434
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     50507
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     103401
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     22131
+    ],
+    [
+     "specialized-training-in-tesuji-1",
+     166788
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160642
+    ]
+   ],
    "objective_zh": "服侍太师养病。",
    "title_zh": "床后指心"
   },
@@ -1675,6 +2125,56 @@
     [
      "ohashi-style-power-up-tsumego-part-1",
      143451
+    ]
+   ],
+   "pool_easy": [
+    [
+     "specialized-training-in-tsumego-4",
+     50507
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     103401
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     22131
+    ],
+    [
+     "specialized-training-in-tesuji-1",
+     166788
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160642
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63810
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63800
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     103405
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     22136
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3640
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     84635
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63807
     ]
    ],
    "objective_zh": "避开耳目，到凤仪亭与吕布相会。",
@@ -1814,6 +2314,56 @@
      27449
     ]
    ],
+   "pool_easy": [
+    [
+     "specialized-training-in-tsumego-2",
+     103405
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     22136
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3640
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     84635
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63807
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     25869
+    ],
+    [
+     "fujisawa-shuko-classroom",
+     102253
+    ],
+    [
+     "specialized-training-in-tesuji-1",
+     210494
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63781
+    ],
+    [
+     "specialized-training-in-tesuji-4",
+     81205
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     50705
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62338
+    ]
+   ],
    "objective_zh": "到中堂回太师的话。",
    "title_zh": "壁间宝剑"
   },
@@ -1949,6 +2499,56 @@
     [
      "go-puzzles-at-a-glance",
      160670
+    ]
+   ],
+   "pool_easy": [
+    [
+     "specialized-training-in-tesuji-1",
+     210494
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63781
+    ],
+    [
+     "specialized-training-in-tesuji-4",
+     81205
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     50705
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62338
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160646
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63776
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     103412
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63801
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     167172
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63830
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     108058
     ]
    ],
    "objective_zh": "出横门，到西路上方的土冈寻吕布。",
@@ -2088,6 +2688,56 @@
      42374
     ]
    ],
+   "pool_easy": [
+    [
+     "specialized-training-in-tsumego-2",
+     103412
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63801
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     167172
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63830
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     108058
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     166753
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63802
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     50644
+    ],
+    [
+     "specialized-training-in-tesuji-3",
+     81338
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63782
+    ],
+    [
+     "common-life-and-death-problems",
+     8275
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     103153
+    ]
+   ],
    "objective_zh": "密访士孙瑞，宅在宫台脚下小巷的西头。",
    "title_zh": "士孙瑞"
   },
@@ -2223,6 +2873,56 @@
     [
      "fujisawa-shuko-classroom",
      266259
+    ]
+   ],
+   "pool_easy": [
+    [
+     "specialized-training-in-tsumego-4",
+     50644
+    ],
+    [
+     "specialized-training-in-tesuji-3",
+     81338
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63782
+    ],
+    [
+     "common-life-and-death-problems",
+     8275
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     103153
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63811
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     103426
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     103427
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     103417
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     21214
+    ],
+    [
+     "common-life-and-death-problems",
+     12612
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62335
     ]
    ],
    "objective_zh": "密访黄琬，宅在士孙瑞隔壁。",
@@ -2362,6 +3062,56 @@
      25509
     ]
    ],
+   "pool_easy": [
+    [
+     "specialized-training-in-tsumego-2",
+     103427
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     103417
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     21214
+    ],
+    [
+     "common-life-and-death-problems",
+     12612
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62335
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     108054
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     50692
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     167174
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     7407
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     84636
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62345
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63774
+    ]
+   ],
    "objective_zh": "去拜访蔡邕，宅在大街东侧、与黄琬隔街相对，近宫阶。",
    "title_zh": "只谈棋子"
   },
@@ -2497,6 +3247,56 @@
     [
      "specialized-training-in-tsumego-5",
      43909
+    ]
+   ],
+   "pool_easy": [
+    [
+     "specialized-training-in-tsumego-1",
+     167174
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     7407
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     84636
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62345
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63774
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62340
+    ],
+    [
+     "bedtime-tsumego-part-1",
+     48341
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     108354
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     50495
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62330
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62343
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62342
     ]
    ],
    "board": false,
@@ -2637,6 +3437,56 @@
      295416
     ]
    ],
+   "pool_easy": [
+    [
+     "specialized-training-in-tsumego-4",
+     108354
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     50495
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62330
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62343
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62342
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     127020
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     103154
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62346
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     108349
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62319
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     108352
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     50697
+    ]
+   ],
    "objective_zh": "避开耳目面见天子：从大街南头的北掖门入宫。",
    "title_zh": "天子密诏"
   },
@@ -2772,6 +3622,56 @@
     [
      "200-selected-problems-for-repetitive-practice",
      1354
+    ]
+   ],
+   "pool_easy": [
+    [
+     "specialized-training-in-tsumego-1",
+     62346
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     108349
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62319
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     108352
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     50697
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160633
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62331
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     84624
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     7407
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62344
+    ],
+    [
+     "fujisawa-shuko-classroom",
+     44586
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63818
     ]
    ],
    "objective_zh": "说李肃入伙。",
@@ -2911,6 +3811,56 @@
      144127
     ]
    ],
+   "pool_easy": [
+    [
+     "specialized-training-in-tsumego-2",
+     84624
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     7407
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62344
+    ],
+    [
+     "fujisawa-shuko-classroom",
+     44586
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63818
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     21877
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63808
+    ],
+    [
+     "specialized-training-in-tsumego-3",
+     63817
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62323
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     108347
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     108344
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63817
+    ]
+   ],
    "objective_zh": "持诏往董卓堂上。",
    "title_zh": "夜梦龙罩"
   },
@@ -3046,6 +3996,56 @@
     [
      "specialized-training-in-tsumego-5",
      21182
+    ]
+   ],
+   "pool_easy": [
+    [
+     "specialized-training-in-tsumego-3",
+     63817
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62323
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     108347
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     108344
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63817
+    ],
+    [
+     "lee-chang-hos-selected-tesuji-part-2",
+     233
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3639
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63783
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63804
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     84639
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62350
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63809
     ]
    ],
    "objective_zh": "骑马随在太师车旁。",
@@ -3185,6 +4185,56 @@
      619
     ]
    ],
+   "pool_easy": [
+    [
+     "specialized-training-in-tsumego-1",
+     63783
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63804
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     84639
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62350
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63809
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62322
+    ],
+    [
+     "seedling-project",
+     27540
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3518
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63777
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3739
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     103425
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     166755
+    ]
+   ],
    "objective_zh": "在雾中找到太师。",
    "title_zh": "狂风昏雾"
   },
@@ -3322,6 +4372,56 @@
      1506
     ]
    ],
+   "pool_easy": [
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3518
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63777
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3739
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     103425
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     166755
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62325
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63835
+    ],
+    [
+     "nie-weipings-tsumego-encyclopedia",
+     52775
+    ],
+    [
+     "weiqi-rapid-drill-800-part-1",
+     3105
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62351
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63806
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62328
+    ]
+   ],
    "objective_zh": "循着歌声走进田野。",
    "title_zh": "千里草"
   },
@@ -3457,6 +4557,56 @@
     [
      "go-puzzles-at-a-glance",
      160698
+    ]
+   ],
+   "pool_easy": [
+    [
+     "nie-weipings-tsumego-encyclopedia",
+     52775
+    ],
+    [
+     "weiqi-rapid-drill-800-part-1",
+     3105
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62351
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63806
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62328
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     79967
+    ],
+    [
+     "common-life-and-death-problems",
+     26107
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62337
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     54414
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     130333
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63819
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     44168
     ]
    ],
    "board": false,
@@ -3741,6 +4891,56 @@
      149221
     ]
    ],
+   "pool_easy": [
+    [
+     "specialized-training-in-tsumego-1",
+     62337
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     54414
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     130333
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63819
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     44168
+    ],
+    [
+     "weiqi-rapid-drill-800-part-1",
+     3122
+    ],
+    [
+     "bedtime-tsumego-part-1",
+     135040
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     224832
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62341
+    ],
+    [
+     "bedtime-tsumego-part-1",
+     135039
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62354
+    ],
+    [
+     "weiqi-small-leisure-collection",
+     25463
+    ]
+   ],
    "board": false,
    "objective_zh": "在城中走走。",
    "title_zh": "脐中为灯"
@@ -3877,6 +5077,56 @@
     [
      "specialized-training-in-tsumego-6",
      22874
+    ]
+   ],
+   "pool_easy": [
+    [
+     "specialized-training-in-tsumego-1",
+     224832
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62341
+    ],
+    [
+     "bedtime-tsumego-part-1",
+     135039
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62354
+    ],
+    [
+     "weiqi-small-leisure-collection",
+     25463
+    ],
+    [
+     "bedtime-tsumego-part-1",
+     135081
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147206
+    ],
+    [
+     "seedling-project",
+     27412
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63789
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     120155
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63790
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     11216
     ]
    ],
    "board": false,
@@ -4017,6 +5267,56 @@
      149191
     ]
    ],
+   "pool_easy": [
+    [
+     "seedling-project",
+     27412
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63789
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     120155
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63790
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     11216
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     108051
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3480
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62336
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     21883
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     50643
+    ],
+    [
+     "specialized-training-in-tesuji-4",
+     81240
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63805
+    ]
+   ],
    "board": false,
    "objective_zh": "到宫中都堂赴庆功宴。",
    "title_zh": "蔡邕哭尸"
@@ -4153,6 +5453,56 @@
     [
      "specialized-training-in-tsumego-4",
      148921
+    ]
+   ],
+   "pool_easy": [
+    [
+     "specialized-training-in-tsumego-1",
+     62336
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     21883
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     50643
+    ],
+    [
+     "specialized-training-in-tesuji-4",
+     81240
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63805
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63785
+    ],
+    [
+     "specialized-training-in-tesuji-3",
+     81157
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63833
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3475
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     145876
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63826
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     169237
     ]
    ],
    "objective_zh": "到李傕营中听使者回报。",
@@ -4292,6 +5642,56 @@
      43961
     ]
    ],
+   "pool_easy": [
+    [
+     "specialized-training-in-tsumego-1",
+     63833
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3475
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     145876
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63826
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     169237
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     169222
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     103403
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     21876
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3442
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62329
+    ],
+    [
+     "ishida-yoshio-tesuji",
+     45735
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     108052
+    ]
+   ],
    "objective_zh": "在牧人村散布消息。",
    "title_zh": "流言西凉"
   },
@@ -4427,6 +5827,56 @@
     [
      "fighting-and-escaping-part-1",
      3636
+    ]
+   ],
+   "pool_easy": [
+    [
+     "specialized-training-in-tsumego-2",
+     21876
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3442
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62329
+    ],
+    [
+     "ishida-yoshio-tesuji",
+     45735
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     108052
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     127065
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     108379
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3689
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160700
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     108053
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3752
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62339
     ]
    ],
    "objective_zh": "在庄堡散布消息。",
@@ -4566,6 +6016,56 @@
      132145
     ]
    ],
+   "pool_easy": [
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3689
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160700
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     108053
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3752
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62339
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     169239
+    ],
+    [
+     "lee-chang-hos-selected-tesuji-part-2",
+     129
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     127242
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     51100
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147208
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     50706
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62313
+    ]
+   ],
    "objective_zh": "说服驿镇的亭长。",
    "title_zh": "能从我反乎"
   },
@@ -4701,6 +6201,56 @@
     [
      "specialized-training-in-tsumego-2",
      156152
+    ]
+   ],
+   "pool_easy": [
+    [
+     "specialized-training-in-tsumego-6",
+     127242
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     51100
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147208
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     50706
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62313
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62349
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     120154
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     103151
+    ],
+    [
+     "weiqi-rapid-drill-800-part-1",
+     3114
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3504
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     103408
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     166751
     ]
    ],
    "board": false,
@@ -4855,6 +6405,56 @@
      144404
     ]
    ],
+   "pool_easy": [
+    [
+     "specialized-training-in-tsumego-2",
+     103151
+    ],
+    [
+     "weiqi-rapid-drill-800-part-1",
+     3114
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3504
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     103408
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     166751
+    ],
+    [
+     "weiqi-rapid-drill-800-part-2",
+     3214
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     44076
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62324
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63798
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     84633
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     44587
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     104308
+    ]
+   ],
    "objective_zh": "守住任谷口。",
    "title_zh": "鸣金进兵"
   },
@@ -4990,6 +6590,56 @@
     [
      "200-basic-go-problems",
      175714
+    ]
+   ],
+   "pool_easy": [
+    [
+     "specialized-training-in-tsumego-1",
+     62324
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63798
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     84633
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     44587
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     104308
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62318
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62321
+    ],
+    [
+     "weiqi-rapid-drill-800-part-2",
+     3254
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     104313
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3446
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62326
+    ],
+    [
+     "specialized-training-in-tesuji-4",
+     81320
     ]
    ],
    "board": false,
@@ -5128,6 +6778,56 @@
     [
      "weiqi-life-and-death-1000-problems-part-2",
      1498
+    ]
+   ],
+   "pool_easy": [
+    [
+     "weiqi-rapid-drill-800-part-2",
+     3254
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     104313
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3446
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62326
+    ],
+    [
+     "specialized-training-in-tesuji-4",
+     81320
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62320
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3551
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63786
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     108351
+    ],
+    [
+     "bedtime-tsumego-part-1",
+     107155
+    ],
+    [
+     "specialized-training-in-tesuji-3",
+     81323
+    ],
+    [
+     "specialized-training-in-tsumego-4",
+     50508
     ]
    ],
    "board": false,
