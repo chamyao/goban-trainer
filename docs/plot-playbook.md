@@ -1,0 +1,270 @@
+# Plot playbook: how to write a book of *Tian Cai Zhi Wang*
+
+This is the process the Plot session used for the Diaochan arc (Book 2, novel chapters 8–9), written down so the next arc
+and the next book can be done the same way. It holds the **principles**, the **reasoning** behind each one, and the
+**steps**.
+
+## How much weight each source carries
+
+1. **The user's own words come first.** Each principle below quotes the message it comes from. If a rule here seems to
+   conflict with something the user says later, the later words win, and this file should be updated.
+2. **Playtest findings come next.** These are what the user (or a playtester such as apo110) ran into while playing.
+   Each one became a rule because a real player was confused.
+3. **Plot's own reasoning, where the user agreed to it**, comes third. It is marked *(Plot, agreed)*.
+4. **Research and Plot's own ideas that the user never confirmed** carry the least weight. They are marked
+   *(Plot, not confirmed)*.
+
+Quotes are kept as the user typed them.
+
+---
+
+## Part 1: Guiding principles
+
+### 1. Tell the novel faithfully. Invent only where it serves the plot.
+
+> "well I would say that a primary goal of this is to tell the story of the novel faithfully btw"
+
+> "not optional then, if it serves the plot, make it a main part of the game even if its not canon"
+
+- The novel decides **what happens, in what order, and who wins**. Use its own lines wherever it has them: translate
+  from the Chinese original and check the meaning against Brewitt-Taylor (1925).
+- Invention is allowed when it **serves the novel's plot**. When it does, make it main content, not optional content.
+  The example is Cai Yong. The novel has no go game between him and Wang Yun before his death. Adding one (A12y, "Stones,
+  Not Men") plants the three things his death scene pays off: his gratitude to Dong Zhuo, the history he is writing, and
+  Wang Yun's judgment of him. The user's reasoning was that something that serves the plot should not be skippable.
+- Mark every invented beat in the docs as **not in the novel, added on the user's call**.
+- Dark events stay in, because they are the story. Graphic moments happen offscreen or in a still *(Plot, agreed)*.
+
+### 2. One path, like Pokémon. No branches or side threads.
+
+> "btw I no longer want branching/side threads the threading should be more like a pokemon game"
+
+- Every beat is on one chain: route, then town, then the big beat, then the road opens.
+- Gates on that chain should be **obstacles the novel itself contains**, for example "you can't reach Dong Zhuo except
+  through Lü Bu" *(Plot, agreed)*.
+- The player chooses only where to walk first and whom to talk to. Nothing they do changes the story.
+
+### 3. Follow whom the novel follows. Hand the lead around, villains included.
+
+> "the game is designed to hand off who we follow i believe, we starte with liu bei and hist broteres, the cast is set to
+> shift, so you can decide when we switch protagonists do what you feel is natrual"
+
+> "(b) lets hand the act around. its also fine to play the villian"
+
+- The lead is **whoever is acting in that stretch of the novel**, not whoever is most famous. When the user asked "why
+  would she save the dynasty" and "why her though… what can she even do", the answer showed that Diaochan carries out the
+  chain plot. So her moments of risk became hers to play, and Wang Yun kept the legwork. The user's reply was "yeah I like
+  that".
+- To find who acts, survey the chapters for tasks (Part 2, step 2). That survey showed that in chapters 5–7 Liu Bei has no
+  task of his own, so the act is handed around.
+- Playing the villain is fine when the novel's focus goes there: Li Su's lie at Meiwu, Jia Xu's rumour, Li Jue at Ren
+  Valley.
+- **Hand off where the two characters meet or part on screen**, so it feels like being passed on rather than a cut
+  *(Plot, agreed)*.
+
+**Playtest rules for handoffs.** Each of these came from a player being confused:
+
+| What the player hit | Rule |
+|---|---|
+| "I walked back as wang yun, and the siwtched to diaochan was the location supposed to switch" | Every handoff says where the new lead starts (`{"to": node}` or a place entrance). The new lead never appears where the old one was standing. |
+| "I think the character switch went wrong, I'm the old man not Li Su" (apo110) | Don't switch away from the character the player has been playing until **that character's** stretch is done. Li Su rode in beside the carriage, so he stays the lead through the gate. |
+| "can i have some indicator showing what character im playing" (apo110) | Integration built it: a lead portrait in the goal box and a "Now playing" banner at each handoff. Count your handoffs and keep the switches meaningful. |
+| The portrait at the a4 board was Wang Yun's, but "that problem is part of her plot, not Wang Yun's" | A board belongs to whoever is deciding. Set the dilemma's `"who"` to that character, not the walking lead. |
+| Moving the handoff earlier put Diaochan at the banquet before she is called in: "doesn't make sense" | Never stage a character in a scene before the novel brings them in. Fix the engine (here, the portrait), not the staging. |
+
+### 4. Go problems are not story beats. Mix them.
+
+> "maybe beats as go problems is the wrong way to think about this"
+
+> "yeah no reason not to mix"
+
+> "yeah I think its fine to have scenes that arent tied to problems"
+
+The reasoning: a problem placed at a decision the novel has already made is a toll in front of a cutscene. The player
+"decides" something that would happen anyway. So every beat is one of three kinds:
+
+| Kind | When the board comes | Use it for |
+|---|---|---|
+| **Legwork** | **Before** the scene, as the way in | Things the novel summarises in a sentence, such as persuading, recruiting, getting past a checkpoint or delivering in secret. The scene plays as the reward. |
+| **Contest** | **Inside** the scene, at the turn | The novel's real moments of risk, such as a duel, a bluff under suspicion or a nerve held. |
+| **Settled** | **No board** | Outcomes nothing can change: an execution, a suicide, a report. A problem there would let the player "win" a death. |
+
+Plot only marks **where** a problem is posed. Choosing the problem is another session's work.
+
+### 5. Don't force the go tactic to mirror the story.
+
+> "this will not be realistic for us, we want a large scale game with many chapters I we wont be able to consistently
+> deliver these connections"
+
+Plot had proposed matching the problem's shape to the scene, for example a ladder for an escape. The user rejected it
+because it can't be kept up across a long game. The dilemma caption carries the meaning, and the problem doesn't need to.
+
+### 6. One problem per encounter, solved flawlessly. Hard scenes get several, with dialogue between them.
+
+> "right now we have encounters give 1 problem, and if you make a wrong move, you have to wait 30s before trying again this
+> incentivizes actual learning on a problem why did you want m/n did you have a reason"
+
+> "yeah, it would be cool if a difficult scene progressed with dialogue and had multiple beats I suppose"
+
+- No "pass 4 of 5" sets. Plot had borrowed that from another game without a reason of its own. A set lets players guess
+  past problems, and the game is for learning go.
+- A hard scene gets two or three problems **at the turns the novel's dialogue gives**, with lines between them. A slip
+  resumes at the unsolved problem, and the third problem is the hardest.
+- Lesson: **don't borrow a feature because another game has it.** Ask what our game needs.
+
+### 7. When the novel's task fails, the player still solves, and the story still fails.
+
+The problem is framed as **the attempt** ("Talk your way past the guard"), and the novel decides the result. This is how
+it was recorded in the Diaochan arc.
+
+**To confirm with the user:** the user's reply was "(b) lets hand the act around", which answered the handoff question
+for certain. Whether "(b)" also chose this option for failed tasks was Plot's reading. Ask before relying on it.
+
+### 8. Road challengers are the trainers on the route, in exact numbers.
+
+> "I wonder if we can have bandits on the road be go problems"
+
+> "you should specify exactly how many"
+
+- Every walk gets challengers who fit the novel's world (patrols, informers, stragglers, headmen). They don't advance the
+  plot.
+- Plot sets **exact counts** per walk: how many in total, how many **blocking** (you can't reach the next beat without
+  solving them) and how many optional. Places must not change the count. If a layout can't fit it, Places says so.
+- Leave a route clear when the story already fills it. In the Meiwu procession, the omens are the problems.
+- Check that every challenger can actually be met. The Liangzhou scout was unreachable because a handoff dropped the lead
+  onto the next beat's spot.
+
+### 9. Design for the best game, not for what exists today. Don't check what exists.
+
+> "i mean dont be afraid to ask or more stills of your own. its great if we can reuse them as well too, but dont use what
+> we have today as a factor in deciding what the best game would be"
+
+> "no dont check whats existing, you focus on plot, the other sessions can check whats needed for execution"
+
+- Ask for every still, pose, prop or engine feature the best version needs. Reuse is a bonus, not a constraint.
+- List what each scene **calls for**. Integration and Graphics check what already exists.
+- If the engine can't do something, ask Integration. Don't work around it in data.
+
+### 10. Plot's outputs: what to write, and what not to
+
+> "let me clarify the outputs: you don't have to choose a go problem, only specify when one should be posed, you should
+> output what props are needed, items, but you do not need to create the voiced lines, only write the dialogue, other
+> sessions handle that"
+
+Plot writes:
+- the beats and scenes, with dialogue in English and Chinese
+- where each problem is posed, with its dilemma caption
+- gates and items
+- props and poses
+- still briefs
+- the exact road-challenger counts
+- the Chinese for Places' map lines
+
+Plot does **not** choose problems, record voices, paint, or build maps.
+
+### 11. The player must always know why and where
+
+> "what is the crown for?"
+
+> "the first part before we meet diaochen is difficult to play because I don't know where any of the locations are"
+
+- **If the player has to ask why they're doing something, the script has failed.** Every errand states its purpose in a
+  line before the player walks. The novel often leaves the motive unsaid, so write it in.
+- **Every objective says where**, relative to something the player already knows ("at the west end of the market
+  street"). Integration also built a route light for the first time a destination comes up.
+- An errand with several steps gets one objective per step, each gated on its own item. A single gate on the last item
+  made Wukong point at the wrong person.
+- A character's motive must be in their own words in the scene (Diaochan's debt to Wang Yun). Otherwise the player only
+  sees her being handed between men.
+
+### 12. Research the genre, then check fit against the text
+
+> "I want you do do some research first on rpg plot writing"
+
+> "you need to do more research, I would like you to actually gather through wikis or some other way, the actual
+> scripts/plots/game designs for chinses rpg and adapt them to our framework as an exercise"
+
+> "can you check the novel for times that the characters have to accomplish tasks? that will tell us if it fits"
+
+- Research means **real scripts and beat structures**, adapted into our format as an exercise. General advice isn't
+  enough.
+- The fit test is the novel's own task list: who has to get what done, against what obstacle.
+- Some research changes nothing, and that's fine. On cultivation games: "no this doesnt necessarily affect anything".
+
+### 13. Settle the anatomy first; length can wait
+
+> "lets not worry about the length for now… length is an easy question to asnwer later. we still havent pinned down the
+> anatomy of the game lets focus on that"
+
+### 14. Play before scaling
+
+> "i'd like to play the diaochen arc first before we make a second"
+
+> "if this turns out well, my aim is to make this process scalable rather than jump into a second arc"
+
+Draft one arc, get it playable in a test book, and fix what the playtest shows before starting the next arc.
+
+### 15. Relay only what the user said
+
+When messaging other sessions, quote the user's actual words and mark Plot's own suggestions as Plot's. Plot once told
+Places that the user had "changed priorities". That was Plot's inference, and Places had to check with the user.
+
+---
+
+## Part 2: The process, step by step (one arc)
+
+0. **Meet the user first.** Say what you understand the job to be, ask how they want it to go, and wait. Bring open
+   questions with a recommendation for each, so the user can just confirm.
+1. **Read the chapters in full in Chinese** (Wikisource), with Brewitt-Taylor beside them for meaning. Keep the raw text
+   in the scratchpad.
+2. **Survey the tasks.** List every task in the chapters: actor, goal, obstacle, outcome, whether the text **shows** it or
+   **summarises** it, a quote, and how well it fits play. Subagents can split this by chapter. The survey decides the rest.
+3. **Choose leads and handoffs** from the survey (principle 3). Hand off at meetings. For each handoff, write where the new
+   lead starts.
+4. **Classify every beat** as legwork, contest or settled (principle 4). Mark failed tasks (principle 7). Give hard
+   contests two or three problems at the dialogue's turns (principle 6).
+5. **Lay out the chain.** For each beat, set its place and room, gate and items, and an objective that says **why and
+   where** (principle 11). Write the place's needs (buildings, rooms, who stands where) as **shared keys** for Places.
+6. **Set road challengers** per walk, with exact totals and how many are blocking (principle 8).
+7. **Write the scenes:**
+   - Use the novel's lines in Chinese, with plain English.
+   - Put motives in the characters' own words.
+   - Add stills for moments the map can't show, with a one-line brief each.
+   - Add poses and props.
+   - Each dilemma's `who` is the character deciding.
+8. **Write the outputs:**
+   - the story file
+   - the needs doc: where problems are posed, challengers, items, props, poses, cast, stills, engine requests
+   - still briefs in `scene_prompts.json`
+   - a generated readable script
+   - the shared keys
+9. **Check and hand off:**
+   - Run `check_story`, the arc checker and `build_tk`, then restore `data/`.
+   - Commit and push.
+   - Message Integration with the commit, the scenes, stills, cast, props and engine needs.
+   - Message Places with any key or map changes.
+   - Add the Chinese for Places' new lines.
+10. **Playtest loop.** The user plays the test book. Treat every question they ask as a script bug until shown otherwise.
+    Sort each finding as story (Plot fixes it), map (Places) or engine (Integration). Fix, push, and tell the user plainly
+    what changed and what is still waiting on whom.
+
+## Part 3: Checklist before pushing an arc
+
+- [ ] Every beat comes from the novel, or is marked "not in the novel, added on the user's call".
+- [ ] One chain. Every gate is an obstacle the novel contains.
+- [ ] Each beat is legwork, contest or settled. No board decides an outcome the novel already decided.
+- [ ] Every errand's purpose is said in-game before the walk. Every objective says where.
+- [ ] Every handoff has a start point. The lead doesn't change in the middle of their own stretch.
+- [ ] Every dilemma's `who` is the decider. No character appears before they are brought in.
+- [ ] Road-challenger counts are exact, and every challenger can be reached.
+- [ ] Each multi-problem scene's third problem is the hardest.
+- [ ] English and Chinese for every line. Stills and props listed without checking what exists.
+- [ ] Messages to other sessions quote the user's words and mark Plot's suggestions as Plot's.
+
+## Part 4: Open items to confirm with the user
+
+1. **Failed tasks**: whether the user chose option (b) (see principle 7).
+2. **Per-handoff role line** ("Jia Xu, adviser to Li Jue"): Integration is asking apo110 whether it's wanted.
+3. **The rest of Book 2** (Cao Cao in chapters 3–4, the coalition in chapters 5–7): the outline in
+   `docs/book2/research.md` Part 5 is provisional. Several of its questions are unanswered: folding the first beats into
+   the opening scroll, how to stage the Lü Boshe killings, and length.
