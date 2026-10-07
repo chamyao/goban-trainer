@@ -1006,7 +1006,7 @@ function worldScenes() {
         tex.add("dot", 0, 0, 0, S, S); tex.add("band", 0, S, (S - h) / 2, w, h);
       }
       // the way, rounded at its corners and laid every few pixels: a road lit from your feet to the goal
-      const pts = this.roundCorners(this.squareCorners(this.routePoints({ x: P.x, y: P.y }, t)), this.tw || 16), STEP = 5, band = [];
+      const T0 = this.tw || 16, pts = this.roundCorners(this.easeRoute(this.squareCorners(this.routePoints({ x: P.x, y: P.y }, t)), T0 * 4.5), T0 * 12), STEP = 5, band = [];
       let carry = 0;
       for (let i = 1; i < pts.length; i++) {
         const a = pts[i - 1], b = pts[i], d = Math.hypot(b.x - a.x, b.y - a.y), ang = Math.atan2(b.y - a.y, b.x - a.x);
@@ -1119,6 +1119,32 @@ function worldScenes() {
     }
     // Round the turns (radius up to r px, never past half of either leg), so the right-angle route bends like a
     // road rather than a ruler (the user: "allow curved edges").
+    // Open ground between two points (the walk grid, sampled every 4 px).
+    clearLine(a, b) {
+      const G = this.walkGrid(), C = G.C, n = Math.max(1, Math.ceil(Math.hypot(b.x - a.x, b.y - a.y) / 4));
+      for (let i = 0; i <= n; i++) if (!G.free(Math.floor((a.x + (b.x - a.x) * i / n) / C), Math.floor((a.y + (b.y - a.y) * i / n) / C))) return false;
+      return true;
+    }
+    // Fold small jogs into longer lines (Douglas-Peucker, tolerance tol px), wherever the straighter line is still
+    // open ground: a road drawn as a staircase of short steps reads as one long bend (the user, on the Meiwu Road).
+    easeRoute(pts, tol) {
+      if (pts.length < 3) return pts;
+      const keep = new Set([0, pts.length - 1]);
+      const split = (i, j) => {
+        if (j - i < 2) return;
+        const A = pts[i], B = pts[j], L = Math.hypot(B.x - A.x, B.y - A.y) || 1;
+        let far = -1, d = 0;
+        for (let k = i + 1; k < j; k++) {
+          const e = Math.abs((B.x - A.x) * (A.y - pts[k].y) - (A.x - pts[k].x) * (B.y - A.y)) / L;
+          if (e > d) { d = e; far = k; }
+        }
+        if (d > tol || !this.clearLine(A, B)) { keep.add(far); split(i, far); split(far, j); }
+      };
+      split(0, pts.length - 1);
+      return pts.filter((p, i) => keep.has(i));
+    }
+    // Round the turns (radius up to r px, never past half of either leg, narrower where the wide bend would cut
+    // across something solid), so the route bends like a road rather than a ruler (the user: "allow curved edges").
     roundCorners(pts, r) {
       const out = [];
       for (let i = 0; i < pts.length; i++) {
@@ -1126,10 +1152,14 @@ function worldScenes() {
         if (i === 0 || i === pts.length - 1) { out.push(p); continue; }
         const a = pts[i - 1], b = pts[i + 1];
         const la = Math.hypot(p.x - a.x, p.y - a.y), lb = Math.hypot(b.x - p.x, b.y - p.y);
-        const k = Math.min(r, la / 2, lb / 2);
+        let k = Math.min(r, la / 2, lb / 2), p0, p1;
+        for (let tries = 0; ; tries++) {
+          p0 = { x: p.x + (a.x - p.x) * k / la, y: p.y + (a.y - p.y) * k / la }; p1 = { x: p.x + (b.x - p.x) * k / lb, y: p.y + (b.y - p.y) * k / lb };
+          if (k < 4 || tries > 3 || this.clearLine(p0, p1)) break;
+          k /= 2;
+        }
         if (k < 1) { out.push(p); continue; }
-        const p0 = { x: p.x + (a.x - p.x) * k / la, y: p.y + (a.y - p.y) * k / la }, p1 = { x: p.x + (b.x - p.x) * k / lb, y: p.y + (b.y - p.y) * k / lb };
-        for (let u = 0; u <= 1.0001; u += .25)   // a quadratic curve through the corner
+        for (let u = 0; u <= 1.0001; u += .1)   // a quadratic curve through the corner
           out.push({ x: (1 - u) * (1 - u) * p0.x + 2 * (1 - u) * u * p.x + u * u * p1.x, y: (1 - u) * (1 - u) * p0.y + 2 * (1 - u) * u * p.y + u * u * p1.y });
       }
       return out.filter((p, i) => i === 0 || Math.hypot(p.x - out[i - 1].x, p.y - out[i - 1].y) > .5);
