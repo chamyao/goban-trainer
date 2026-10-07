@@ -269,6 +269,8 @@ const TownUI = {
         if (!el || !who) return;
         if (el.dataset.who === who) return;
         el.dataset.who = who; el.textContent = "";
+        if (TownUI._lastLead && TownUI._lastLead !== who) this.place(`Now playing: ${tkName(who).replace(/^\S+\s/, "")}`, `现在扮演：${TK_NAMES_ZH[who] || tkName(who)}`);   // a hand-off: say so, as a place name is shown
+        TownUI._lastLead = who;
         const c = Object.assign(document.createElement("canvas"), { width: 34, height: 34, className: "town-lead-face" });
         try { c.getContext("2d").drawImage(TKArt.get(who, "bust"), 0, 0); } catch {}
         el.append(c, Object.assign(document.createElement("span"), { textContent: tkName(who) }));
