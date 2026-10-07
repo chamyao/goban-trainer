@@ -426,5 +426,6 @@ Beat spots are `2-c1` … `2-c23`. Place names and rooms:
 | c22 | Chenliu | `wh-hall` | Wei Hong's mansion (the Cao house nearby) |
 | c23 | Chenliu | — | the village drilling ground |
 
-Place order on the road, west to east: Luoyang (with Beimang to its north and the camps outside its walls) → the
-East Road (Zhongmou) → Chenggao → Chenliu.
+Place order on the road, in the novel's order: Luoyang (with Beimang to its north and the camps outside its walls) → the
+East Road (Zhongmou) → Chenggao → Chenliu. (On a real map Chenggao lies west of Zhongmou. The novel puts it after, and
+the game follows the novel.)
