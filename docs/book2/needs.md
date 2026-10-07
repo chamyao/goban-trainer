@@ -26,7 +26,7 @@ themselves, the voices, the art and the engine are other sessions' work.
 | A13a Broken wheel | after "What does it mean?" | Li Su | 1 |
 | A13b Wind and fog | after "What sign is this?" | Li Su | 1 |
 | A13c Children's song | after "What does this children's song foretell?" | Li Su | 1 |
-| A14 North Side Gate (**boss**, Dong Zhuo) | before he sees the swords; before "Where are the soldiers?"; before "Where is my son Fengxian?" | Wang Yun | **3** |
+| A14 North Side Gate (**boss**, Dong Zhuo) | before he sees the swords; before "Where are the soldiers?"; before "Where is my son Fengxian?" | Li Su (he escorts the carriage; Wang Yun leads again from A15) | **3** |
 | A16 No pardon | before Jia Xu's advice | Jia Xu | 1 |
 | A16a / A16b / A16c | before each village scene (legwork: the rumour) | Jia Xu | 1 each |
 | A17 Ren Valley | as Lü Bu charges the valley mouth | Li Jue | 1 |

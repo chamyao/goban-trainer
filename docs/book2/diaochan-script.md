@@ -993,11 +993,9 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 *Li Su calls the soldiers to drive him off. Two mouths, one above the other, make the character Lü.*  
 呼将士驱去。两“口”相叠，便是“吕”字。
 
-*(the player is now: Wang Yun)*
-
 
 ## A14 · There Is an Edict to Kill a Traitor (有诏讨贼)
-*Chang'an* · boards: **Wang Yun** — “Get the carriage through the gate.” / **Wang Yun** — “Spring the ambush.” / **Wang Yun** — “Finish it.” · **BOSS**
+*Chang'an* · boards: **Li Su** — “Get the carriage through the gate.” / **Li Su** — “Push the carriage straight in.” / **Li Su** — “Finish it.” · **BOSS**
 
 *The officials, in court dress, line the road to greet him. Li Su walks beside the carriage with a drawn sword in his hand. At the North Side Gate the guards are all stopped outside. Only the twenty-odd men drawing the carriage go in with it.*  
 卓进朝，群臣各具朝服，迎谒于道。李肃手执宝剑扶车而行。到北掖门，军兵尽挡在门外，独有御车二十余人同入。
@@ -1043,6 +1041,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 *Officers and officials all cry: Long live the Emperor!*  
 将吏皆呼万岁。
 
+*(the player is now: Wang Yun)*
 
 ## A15 · A Lamp in the Market (脐中为灯)
 *Chang'an* · no board
