@@ -1,0 +1,118 @@
+// The Goban sheet's Apps Script (Extensions > Apps Script on the "Goban" sheet), deployed as the web app
+// at Sync.API_URL. Progress, review games and feedback, as before; new feedback also fires the
+// "Game feedback" routine so a session picks it up at once.
+// Script properties (Project Settings > Script properties): ROUTINE_URL (the routine's API trigger URL,
+// ending in /fire) and ROUTINE_TOKEN (its generated token). Without them feedback is only logged.
+
+function getSheet_(name, headers) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = ss.getSheetByName(name);
+  if (!sheet) {
+    sheet = ss.insertSheet(name);
+    sheet.appendRow(headers);
+  }
+  return sheet;
+}
+function progressSheet_() { return getSheet_("Progress", ["username", "data", "updated_at"]); }
+function reviewSheet_() { return getSheet_("ReviewGames", ["username", "game_id", "data", "updated_at"]); }
+function feedbackSheet_() { return getSheet_("Feedback", ["timestamp", "username", "message", "context"]); }
+
+function findRow_(sheet, username) {
+  const values = sheet.getDataRange().getValues();
+  for (let i = 1; i < values.length; i++) if (values[i][0] === username) return i + 1;
+  return -1;
+}
+function findGameRow_(sheet, username, gameId) {
+  const values = sheet.getDataRange().getValues();
+  for (let i = 1; i < values.length; i++) if (values[i][0] === username && values[i][1] === gameId) return i + 1;
+  return -1;
+}
+
+function doGet(e) {
+  const username = e.parameter.username;
+  if (!username) return jsonOut_({ error: "username required" });
+
+  if (e.parameter.kind === "review") {
+    const sheet = reviewSheet_();
+    const values = sheet.getDataRange().getValues();
+    const games = [];
+    for (let i = 1; i < values.length; i++) {
+      if (values[i][0] !== username) continue;
+      try { games.push(JSON.parse(values[i][2] || "{}")); } catch (err) {}
+    }
+    return jsonOut_({ username, data: { games } });
+  }
+
+  const sheet = progressSheet_();
+  const row = findRow_(sheet, username);
+  if (row === -1) return jsonOut_({ username, data: {} });
+  let data = {};
+  try { data = JSON.parse(sheet.getRange(row, 2).getValue() || "{}"); } catch (err) {}
+  return jsonOut_({ username, data });
+}
+
+function doPost(e) {
+  let body;
+  try { body = JSON.parse(e.postData.contents); }
+  catch (err) { return jsonOut_({ error: "bad json" }); }
+  const now = new Date().toISOString();
+
+  // Append-only feedback log — no username required, nothing to look up.
+  if (body.kind === "feedback") {
+    const msg = body.data && body.data.message;
+    if (!msg) return jsonOut_({ error: "message required" });
+    const context = (body.data && body.data.context) || "";
+    feedbackSheet_().appendRow([now, body.username || "", msg, context]);
+    fireFeedbackRoutine_(msg, context, body.username || "");   // after the row is saved: a failed fire loses nothing
+    return jsonOut_({ ok: true });
+  }
+
+  if (!body.username) return jsonOut_({ error: "username required" });
+
+  if (body.kind === "review") {
+    if (!body.id) return jsonOut_({ error: "id required" });
+    const sheet = reviewSheet_();
+    const row = findGameRow_(sheet, body.username, body.id);
+    if (body.delete) {
+      if (row !== -1) sheet.deleteRow(row);
+      return jsonOut_({ ok: true });
+    }
+    if (typeof body.data !== "object") return jsonOut_({ error: "data required" });
+    const json = JSON.stringify(body.data);
+    if (row === -1) sheet.appendRow([body.username, body.id, json, now]);
+    else sheet.getRange(row, 3, 1, 2).setValues([[json, now]]);
+    return jsonOut_({ ok: true });
+  }
+
+  if (typeof body.data !== "object") return jsonOut_({ error: "data required" });
+  const sheet = progressSheet_();
+  const row = findRow_(sheet, body.username);
+  const json = JSON.stringify(body.data);
+  if (row === -1) sheet.appendRow([body.username, json, now]);
+  else sheet.getRange(row, 2, 1, 2).setValues([[json, now]]);
+  return jsonOut_({ ok: true });
+}
+
+// Fire the "Game feedback" routine with the note and where the player was.
+function fireFeedbackRoutine_(message, context, username) {
+  const p = PropertiesService.getScriptProperties();
+  const url = p.getProperty("ROUTINE_URL"), token = p.getProperty("ROUTINE_TOKEN");
+  if (!url || !token) return;
+  try {
+    UrlFetchApp.fetch(url, {
+      method: "post",
+      contentType: "application/json",
+      headers: {
+        Authorization: "Bearer " + token,
+        "anthropic-beta": "experimental-cc-routine-2026-04-01",
+        "anthropic-version": "2023-06-01",
+      },
+      payload: JSON.stringify({ text: String(message) + "\n\n" + String(context) + (username ? "\nfrom " + username : "") }),
+      muteHttpExceptions: true,
+    });
+  } catch (err) { console.error(err); }
+}
+
+function jsonOut_(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
+}
