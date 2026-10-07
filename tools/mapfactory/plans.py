@@ -446,7 +446,11 @@ class MapBuilder:
             if t is None:
                 raise RuntimeError(f"{self.mid}: no place for npc {i + 1} ({p['kind']})")
             taken.add(t)
-            self.npcs.append(self.person(i, p, t))
+            n = self.person(i, p, t)
+            if p.get("behind") in self.foot:   # seated at a desk: feet just inside its top edge, so it hides the legs
+                fx, fy, fw, fh = self.foot[p["behind"]]
+                n["x"], n["y"] = fx + fw / 2, fy + .35
+            self.npcs.append(n)
         for i, c in enumerate(challengers):
             t = self.near_cell(tuple(c["at"]), taken=taken)
             taken.add(t)

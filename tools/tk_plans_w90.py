@@ -48,7 +48,7 @@ PLANS90 = {
                     "note": "the talk spot, in front of the desk: the engine drives the conversation"}],
         ),
         # Claude behind the main desk, facing the door; the engine supplies what's said
-        "npcs": [{"id": "claude", "kind": "hero.claude", "at": [4, 1], "face": "S", "label": "Claude"}],
+        "npcs": [{"id": "claude", "kind": "hero.claude", "at": [4, 1], "behind": "desk", "face": "S", "label": "Claude"}],
     },
 }
 

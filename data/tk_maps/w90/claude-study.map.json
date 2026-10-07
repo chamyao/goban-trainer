@@ -191,8 +191,8 @@
   {
    "id": "claude",
    "kind": "hero.claude",
-   "x": 8.5,
-   "y": 2.9,
+   "x": 9.0,
+   "y": 4.35,
    "say": [],
    "face": "S",
    "label": "Claude"
