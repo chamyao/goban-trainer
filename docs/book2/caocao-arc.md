@@ -13,14 +13,33 @@ before drafting. No story code has been written yet.
 
 ## The arc in one paragraph
 
-Book 1 ends on its hook: "What did Cao Cao propose? Hear the next chapter." Book 2 answers it. The player is Cao Cao, the
-one clear-headed man at a doomed court. He tries to stop He Jin, fails, and watches Dong Zhuo take the capital. Then the
+The arc stands on its own: there is no Book 1, and books need not be played in order (see "Standing on its own" below).
+An opening scroll sets the scene in a few lines, and then the player is Cao Cao, the one clear-headed man at a doomed
+court. He tries to stop He Jin, fails, and watches Dong Zhuo take the capital. Then the
 player briefly plays Dong Zhuo's side: the boy prince who stares him down, Dong Zhuo himself at the Wenming Garden, and Li
 Su buying Lü Bu with Red Hare. Back as Cao Cao, the player serves the tyrant and watches the court break one man at a time.
 He takes Wang Yun's Seven-Star Sword, fails to stab Dong Zhuo, bluffs his way out of the city and down the road, and is
 saved by Chen Gong. Then, at Lü Boshe's farm, he becomes the man the novel will remember: 「宁教我负天下人，休教天下人负我。」
 Chen Gong stands over him with a sword in the night and walks away. The arc ends at Chenliu, where Cao Cao raises the
 white banner and the call to arms goes out. That call hands the book to the coalition.
+
+## Standing on its own
+
+> "consider that book 1 is not a thing anymore, I did away with that, our game doesnt have to have all the books in
+> chronological order completely although some continuity would be cool"
+
+- The player may arrive knowing nothing. Every person is introduced by what they do in the scene, and their name and
+  title go on the first line that names them. Nothing relies on an earlier book.
+- **The opening scroll** carries only what the first scene needs, in the novel's own terms:
+  - 「灵帝崩」: Emperor Ling is dead, and his young son is on the throne.
+  - He Jin, the Empress's brother, once a butcher, now commands the armies.
+  - The Ten Attendants, the palace eunuchs, hold the court.
+  - He Jin means to destroy them, and has been advised to call the frontier armies into the capital.
+  - Title: the chapter couplet 「议温明董卓叱丁原　馈金珠李肃说吕布」.
+- **Continuity is a bonus, kept where it is cheap:** the payoffs into the Diaochan arc (C6 below) work whichever arc is
+  played first. Played first, they plant; played second, they explain.
+- The Liu Bei brothers are not assumed either. The coalition arc must introduce them from scratch (the Peach Garden oath
+  can be told on its scroll).
 
 ## Core principles in this arc
 
@@ -83,7 +102,9 @@ meets him again as the frightened emperor of the Diaochan arc.
 - Cao Cao: 「若欲治罪，当除元恶，但付一狱吏足矣，何必纷纷召外兵乎？」 He Jin: 「孟德亦怀私意耶？」 Cao Cao, leaving:
   「乱天下者，必进也。」
 - Narration: the secret edicts go out by night; Dong Zhuo marches; Zheng Tai and Lu Zhi warn and resign.
-**No board:** it answers Book 1's hook and sets up Cao Cao as the voice of sense. His first failure is the next beat.
+**No board:** it introduces Cao Cao, and the danger, in one scene (C2: the one fact is "He Jin is about to let a wolf in").
+Cao Cao is the voice of sense, and the player starts on his side (C8). His first failure is the next beat.
+- His first line names him: Cao Cao, Colonel of the Army (典军校尉).
 
 #### C2 · The Jiade Gate *(Cao Cao)* · Contest, **fails**
 **Place:** outside Changle Palace.
@@ -363,15 +384,14 @@ wine jars, turning to look back); `cg_inn` (moonlight, a man standing over a sle
    already possible with a beat spot and a pose.
 4. Poses: kneel-north, creep, and the mirror prop.
 
-## Open questions for the user
-1. **The opening.** I'd play C1 briefly, not fold it into the opening scroll. It answers Book 1's hook and starts the
-   player liking Cao Cao (C8). He Jin's background and the eunuchs' fear can go on the scroll.
-2. **The Lü Boshe killings.** I recommend C20 as written: the player walks Cao Cao to overhear the knives and the
-   whisper, the killing is darkness and sound, then the pig is a still, then the road. Or narrate it all over a still?
-3. **The young Emperor's death** (Li Ru's poison, the Empress thrown from the tower, the consort strangled). I recommend
-   narrating it over the `swallows` still with his poem, and carrying the news through a townsperson. It isn't a task
-   for anyone the player plays.
-4. **The thread to the coalition arc.** C23 ends as the call to arms goes out. Should the book then cut straight to Liu
-   Bei at Pingyuan (the coalition arc's opening)?
-5. **Verses at act ends** (playbook open item). This arc has two strong ones: the Red Hare verse (c9) and the chapter 4
-   couplet 「设心狠毒非良士，操卓原来一路人」 (c21). I'd use both.
+## Decisions (the user took all five recommendations)
+
+> "ill take your recommendations for everything else"
+
+1. **The opening:** C1 is played, briefly, after a short opening scroll (see "Standing on its own").
+2. **The Lü Boshe killings:** staged as in C20. Overhear on foot, the killing as darkness and sound, the pig as a still,
+   then the road.
+3. **The young Emperor's death:** narrated over the `swallows` still with his poem, and carried by a townsperson.
+4. **After the call to arms:** the book cuts to Liu Bei at Pingyuan, which opens the coalition arc. That arc introduces
+   the brothers itself.
+5. **Verses:** the Red Hare verse in C9, and the chapter 4 couplet closing C21.

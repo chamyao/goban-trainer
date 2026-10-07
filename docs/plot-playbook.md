@@ -313,6 +313,16 @@ Plot does **not** choose problems, record voices, paint, or build maps.
 
 Draft one arc, get it playable in a test book, and fix what the playtest shows before starting the next arc.
 
+### R16. Each book stands on its own
+
+> "consider that book 1 is not a thing anymore, I did away with that, our game doesnt have to have all the books in
+> chronological order completely although some continuity would be cool"
+
+- Never rely on an earlier book. Introduce every person by what they do, and name them on their first line. Put the
+  minimum setup on the opening scroll.
+- Continuity across books and arcs is a bonus. Plant payoffs so they work in either order: played first they plant,
+  played second they explain.
+
 ### R15. Relay only what the user said
 
 When messaging other sessions, quote the user's actual words and mark Plot's own suggestions as Plot's. Plot once told
@@ -383,7 +393,6 @@ Places that the user had "changed priorities". That was Plot's inference, and Pl
 ## Part 5: Open items to confirm with the user
 
 1. **Per-handoff role line** ("Jia Xu, adviser to Li Jue"): Integration is asking apo110 whether it's wanted.
-2. **Novel verses at act ends:** keep this research lesson or drop it? The Diaochan arc uses none.
-3. **The rest of Book 2** (Cao Cao in chapters 3–4, the coalition in chapters 5–7): the outline in
-   `docs/book2/research.md` Part 5 is provisional. Several of its questions are unanswered: folding the first beats into
-   the opening scroll, how to stage the Lü Boshe killings, and length.
+2. **Novel verses:** the user accepted using them in the Cao Cao arc ("ill take your recommendations"). Whether every
+   act should end on one is still open. The Diaochan arc uses none.
+3. **The coalition arc** (chapters 5–7): not designed yet. Length is still open.
