@@ -135,7 +135,7 @@ const WorldCutscene = {
     // A mounted actor: a.spr stays the invisible anchor that moves and fades;
     // the horse, the seated rider and (facing us) the horse's head follow it.
     const mount = a => {
-      const coat = a.who === "horse" ? null : coatFor(a.who);
+      const coat = a.who === "horse" || a.beast ? null : coatFor(a.who);
       if (coat && !a.horse) {
         a.coat = coat; a.horse = Items.horse(scene, coat, a.spr.x, a.spr.y); a.head = Items.head(scene, a.horse);
         a.seat = scene.add.image(a.spr.x, a.spr.y, Items.riderTexture(scene, a.who, a.dir || "down"));
@@ -196,8 +196,9 @@ const WorldCutscene = {
         return a;
       }
       if (!a) {
-        if (who === "horse" && Items) {
-          const coat = herdCoat(id);
+        const own = typeof TK_CHARS !== "undefined" && TK_CHARS[who] && TK_CHARS[who].horse;   // a named horse (Red Hare) in its own coat
+        if ((who === "horse" || own) && Items) {
+          const coat = own || herdCoat(id);
           a = actors[id] = { id, who, coat, beast: true, spr: Items.horse(scene, coat, 0, 0) };
         } else {
           scene.hero(who);
@@ -303,6 +304,10 @@ const WorldCutscene = {
       if (pose === "bow") t.setAngle(a.dir === "down" || a.dir === "up" ? 0 : right ? 14 : -14).setScale(1, a.dir === "down" ? .9 : 1);
       else if (pose === "kneel") t.setScale(1, .8);
       else if (pose === "sit") t.setScale(1, .86);
+      else if (pose === "crouch" || pose === "listen") {        // low behind a screen, leaning toward the voices (Plot's c20 overhearing)
+        t.setScale(1, .76).setAngle(a.dir === "left" ? -10 : a.dir === "right" ? 10 : 0);
+        a.poseTw = scene.tweens.add({ targets: t, scaleY: { from: .76, to: .72 }, duration: 900, yoyo: true, repeat: -1, ease: "Sine.easeInOut" });
+      }
       else if (pose === "sleep") t.setAngle(right ? 90 : -90);
       else if (pose === "drunk") {
         t.setTint(0xffd0c4);

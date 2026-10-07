@@ -1,0 +1,333 @@
+{
+ "format": "tk-map/1",
+ "id": "luoyang--palace",
+ "world": 13,
+ "name": "Changle Palace",
+ "archetype": "compound",
+ "size": [
+  36,
+  32
+ ],
+ "seed": 1528,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "court",
+   "b": "gallery",
+   ".": "grass",
+   "W": "wall"
+  },
+  "rows": [
+   "....................................",
+   ".WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW.",
+   ".W................................W.",
+   ".W................................W.",
+   ".W................................W.",
+   ".W................................W.",
+   ".W................................W.",
+   ".W................................W.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbW.",
+   ".WaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WWWWWWWWWWWWWWWaaWWWWWWWWWWWWWWWWW.",
+   ".WWWWWWWWWWWWWWWaaWWWWWWWWWWWWWWWWW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WWWWWWWWWWWWWWWaaWWWWWWWWWWWWWWWWW.",
+   "...................................."
+  ],
+  "walk": {
+   "court": true,
+   "gallery": true,
+   "grass": true,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    18,
+    16
+   ],
+   "width": 1,
+   "gates": {
+    "jiade-gate": [
+     8,
+     15
+    ]
+   },
+   "tiles": 124
+  },
+  {
+   "id": "inner-wall",
+   "kind": "wall",
+   "path": [
+    [
+     1,
+     9
+    ],
+    [
+     16,
+     9
+    ]
+   ],
+   "width": 1,
+   "gates": {
+    "qingsuo-gate": [
+     8,
+     9
+    ]
+   },
+   "tiles": 64
+  },
+  {
+   "id": "gallery",
+   "kind": "gallery",
+   "path": [
+    [
+     11,
+     6
+    ],
+    [
+     16,
+     6
+    ]
+   ],
+   "width": 2,
+   "tiles": 24
+  }
+ ],
+ "objects": [
+  {
+   "kind": "building.gatehouse",
+   "x": 16,
+   "y": 30,
+   "w": 2,
+   "h": 1,
+   "id": "jiade-gate",
+   "width": 2,
+   "wall": "walls",
+   "door": "S"
+  },
+  {
+   "kind": "building.gatehouse",
+   "x": 16,
+   "y": 18,
+   "w": 2,
+   "h": 2,
+   "id": "qingsuo-gate",
+   "width": 2,
+   "wall": "inner-wall",
+   "door": "S"
+  },
+  {
+   "kind": "building.tower",
+   "x": 2,
+   "y": 3,
+   "w": 3,
+   "h": 5,
+   "id": "cuihua",
+   "door": null,
+   "faces": "S",
+   "label": "Cuihua Tower",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.hall_grand",
+   "x": 8,
+   "y": 3,
+   "w": 10,
+   "h": 5,
+   "id": "jiade-hall",
+   "door": "S",
+   "faces": "S",
+   "label": "The Jiade Hall",
+   "map": "jiade-hall",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.hall_grand",
+   "x": 22,
+   "y": 3,
+   "w": 10,
+   "h": 5,
+   "id": "sheng",
+   "door": "S",
+   "faces": "S",
+   "label": "The Secretariat",
+   "map": "sheng-hall",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.storehouse",
+   "x": 2,
+   "y": 22,
+   "w": 6,
+   "h": 2,
+   "id": "store",
+   "door": "S",
+   "faces": "S",
+   "label": "A palace storehouse",
+   "blocks_sight": true
+  }
+ ],
+ "spots": [
+  {
+   "id": "c3",
+   "x": 6.5,
+   "y": 8.7,
+   "node": "13-c3",
+   "label": "By Cuihua Tower",
+   "trigger": "near"
+  },
+  {
+   "id": "c14",
+   "x": 26.5,
+   "y": 12.7,
+   "node": "13-c14",
+   "label": "The palace gallery",
+   "trigger": "near"
+  },
+  {
+   "id": "inside-gate",
+   "x": 16.5,
+   "y": 26.7,
+   "node": "",
+   "label": "Inside the Jiade Gate",
+   "note": "C2: He Jin goes in alone; C3 starts here"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "gate-guard",
+   "kind": "folk.soldier",
+   "x": 16.5,
+   "y": 20.9,
+   "say": [],
+   "intro": [
+    "A eunuch's guardsman bars the Qingsuo Gate, blade out, smoke pouring past him. “No one goes in! The Attendants' orders!”"
+   ],
+   "win": [
+    "“…The Attendants are fled. Go in, then. Find him.”"
+   ],
+   "done": [
+    "The guardsman has thrown down his blade and gone."
+   ],
+   "until": "13-c3",
+   "when": "node:c2",
+   "blocks": "c3",
+   "view": 2,
+   "challenge": "gate-guard"
+  },
+  {
+   "id": "looter",
+   "kind": "folk.villager",
+   "x": 6.5,
+   "y": 26.9,
+   "say": [],
+   "intro": [
+    "A man with an armful of palace silk backs out of the storehouse. “Everyone's taking something. Want to stop me? Play me for it.”"
+   ],
+   "win": [
+    "“…Fine. Fine! It's back on the shelf.”"
+   ],
+   "done": [
+    "The silk is back on the shelf."
+   ],
+   "until": "13-c3",
+   "when": "node:c2",
+   "view": 2,
+   "challenge": "looter"
+  }
+ ],
+ "exits": [
+  {
+   "to": "luoyang--jiade-hall",
+   "side": "N",
+   "x": 12.6,
+   "y": 7.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "luoyang--sheng-hall",
+   "side": "N",
+   "x": 26.6,
+   "y": 7.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "luoyang",
+   "side": "S",
+   "x": 16,
+   "y": 30,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "luoyang--jiade-hall": [
+   13,
+   8
+  ],
+  "luoyang--sheng-hall": [
+   27,
+   8
+  ],
+  "luoyang": [
+   16,
+   29
+  ],
+  "": [
+   13,
+   8
+  ]
+ },
+ "ways": {
+  "nodes": [
+   [
+    23.0,
+    13.0
+   ],
+   [
+    33.0,
+    13.0
+   ]
+  ],
+  "edges": [
+   [
+    0,
+    1
+   ]
+  ]
+ },
+ "parent": "luoyang",
+ "building": "palace",
+ "links": [
+  "luoyang",
+  "luoyang--jiade-hall",
+  "luoyang--sheng-hall"
+ ]
+}

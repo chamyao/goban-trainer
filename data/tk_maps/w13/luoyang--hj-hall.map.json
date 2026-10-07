@@ -1,0 +1,132 @@
+{
+ "format": "tk-map/1",
+ "id": "luoyang--hj-hall",
+ "world": 13,
+ "name": "He Jin's residence",
+ "archetype": "interior",
+ "size": [
+  24,
+  14
+ ],
+ "seed": 1586,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "%": "stone",
+   " ": "void",
+   "W": "wall"
+  },
+  "rows": [
+   "                        ",
+   " WWWWWWWWWWWWWWWWWWWWWW ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " WWWWWWWWWWW%%WWWWWWWWW ",
+   "                        "
+  ],
+  "walk": {
+   "stone": true,
+   "void": false,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    12,
+    7
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     6,
+     6
+    ]
+   },
+   "tiles": 64
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.dais",
+   "x": 10,
+   "y": 2,
+   "w": 3,
+   "h": 2,
+   "id": "dais",
+   "label": "He Jin's seat"
+  },
+  {
+   "kind": "furn.table",
+   "x": 6,
+   "y": 6,
+   "w": 2,
+   "h": 1,
+   "id": "table-1"
+  },
+  {
+   "kind": "furn.table",
+   "x": 16,
+   "y": 6,
+   "w": 2,
+   "h": 1,
+   "id": "table-2"
+  },
+  {
+   "kind": "furn.screen",
+   "x": 18,
+   "y": 2,
+   "w": 3,
+   "h": 1,
+   "id": "screen",
+   "blocks_sight": true
+  }
+ ],
+ "spots": [
+  {
+   "id": "c1",
+   "x": 12.5,
+   "y": 8.7,
+   "node": "13-c1",
+   "label": "He Jin's council"
+  }
+ ],
+ "npcs": [],
+ "exits": [
+  {
+   "to": "luoyang",
+   "side": "S",
+   "x": 12,
+   "y": 12,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "luoyang": [
+   12,
+   11
+  ],
+  "": [
+   12,
+   11
+  ]
+ },
+ "parent": "luoyang",
+ "building": "hj-hall",
+ "links": [
+  "luoyang"
+ ]
+}

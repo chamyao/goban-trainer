@@ -1,0 +1,124 @@
+{
+ "format": "tk-map/1",
+ "id": "the-camps--dy-tent",
+ "world": 13,
+ "name": "Ding Yuan's tent",
+ "archetype": "interior",
+ "size": [
+  20,
+  14
+ ],
+ "seed": 1754,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   " ": "void",
+   "W": "wall",
+   "#": "wood"
+  },
+  "rows": [
+   "                    ",
+   " WWWWWWWWWWWWWWWWWW ",
+   " W################W ",
+   " W################W ",
+   " W################W ",
+   " W################W ",
+   " W################W ",
+   " W################W ",
+   " W################W ",
+   " W################W ",
+   " W################W ",
+   " W################W ",
+   " WWWWWWWWW##WWWWWWW ",
+   "                    "
+  ],
+  "walk": {
+   "void": false,
+   "wall": false,
+   "wood": true
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    10,
+    7
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     5,
+     6
+    ]
+   },
+   "tiles": 56
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.desk",
+   "x": 9,
+   "y": 4,
+   "w": 2,
+   "h": 1,
+   "id": "desk",
+   "label": "Ding Yuan's desk"
+  },
+  {
+   "kind": "furn.lamp",
+   "x": 12,
+   "y": 4,
+   "w": 1,
+   "h": 1,
+   "id": "lamp",
+   "label": "The candle"
+  },
+  {
+   "kind": "furn.bed",
+   "x": 3,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "bed"
+  }
+ ],
+ "spots": [
+  {
+   "id": "c10",
+   "x": 10.5,
+   "y": 8.7,
+   "node": "13-c10",
+   "label": "Ding Yuan's tent"
+  }
+ ],
+ "npcs": [],
+ "exits": [
+  {
+   "to": "the-camps",
+   "side": "S",
+   "x": 10,
+   "y": 12,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "the-camps": [
+   10,
+   11
+  ],
+  "": [
+   10,
+   11
+  ]
+ },
+ "parent": "the-camps",
+ "building": "dy-tent",
+ "links": [
+  "the-camps"
+ ]
+}

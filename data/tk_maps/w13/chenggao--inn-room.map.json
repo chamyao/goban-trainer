@@ -1,0 +1,123 @@
+{
+ "format": "tk-map/1",
+ "id": "chenggao--inn-room",
+ "world": 13,
+ "name": "A roadside inn",
+ "archetype": "interior",
+ "size": [
+  20,
+  14
+ ],
+ "seed": 1790,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   " ": "void",
+   "W": "wall",
+   "#": "wood"
+  },
+  "rows": [
+   "                    ",
+   " WWWWWWWWWWWWWWWWWW ",
+   " W################W ",
+   " W################W ",
+   " W################W ",
+   " W################W ",
+   " W################W ",
+   " W################W ",
+   " W################W ",
+   " W################W ",
+   " W################W ",
+   " W################W ",
+   " WWWWWWWWW##WWWWWWW ",
+   "                    "
+  ],
+  "walk": {
+   "void": false,
+   "wall": false,
+   "wood": true
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    10,
+    7
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     5,
+     6
+    ]
+   },
+   "tiles": 56
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.bed",
+   "x": 3,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "bed-1",
+   "label": "Where Cao Cao sleeps"
+  },
+  {
+   "kind": "furn.bed",
+   "x": 15,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "bed-2"
+  },
+  {
+   "kind": "furn.lamp",
+   "x": 8,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "lamp"
+  }
+ ],
+ "spots": [
+  {
+   "id": "c21",
+   "x": 10.5,
+   "y": 8.7,
+   "node": "13-c21",
+   "label": "The inn, by moonlight"
+  }
+ ],
+ "npcs": [],
+ "exits": [
+  {
+   "to": "chenggao",
+   "side": "S",
+   "x": 10,
+   "y": 12,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "chenggao": [
+   10,
+   11
+  ],
+  "": [
+   10,
+   11
+  ]
+ },
+ "parent": "chenggao",
+ "building": "inn-room",
+ "links": [
+  "chenggao"
+ ]
+}
