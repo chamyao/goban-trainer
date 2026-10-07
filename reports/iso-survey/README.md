@@ -58,7 +58,7 @@ Places' door fix (a708c3b, Book 12's doors given the walking direction) is merge
   - Lü Bu's from N;
   - Meiwu hall from N, E and W.
 - Also with Jade on phone.
-- Repro: Meiwu, Genshin, stand west of the hall (408,212 area), click the hall. He arrives at the doorway and stays outside.
+- Repro: Meiwu, Genshin, stand west of the hall (its door at 448,241), click the hall. He arrives at the doorway and stays outside. With `iso-close.js` and PLACES=meiwu it is the row "hall, W side, building".
 
 ### 4. A tap on the ground right before a door doesn't go in (engine, pick()). Medium.
 - Since the fix, Book 12's doors are side N.
