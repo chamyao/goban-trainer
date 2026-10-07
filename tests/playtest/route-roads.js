@@ -1,4 +1,4 @@
-// The lit route keeps to the drawn roads (Book 2's maps: "paths" by tile, "ways" the streets' centre lines).
+// The lit route, as drawn (routePoints, squared, eased, its bends rounded), keeps to the drawn roads (Book 2's maps: "paths" by tile, "ways" the streets' centre lines).
 // On each outdoor Book 2 map, many pairs of open ground: the route reaches the goal, never crosses anything
 // solid, runs on road more than the walking path does where that's practical, and is never an absurd detour
 // (over 2x the walking path, or 3x the straight line). Walking itself (findPath without prefer) is unchanged:
@@ -30,7 +30,8 @@ for(const pl of places){
     const out={pairs:0,stuck:[],through:[],detour:[],roadR:0,roadW:0,lenR:0,lenW:0,ms:0,worst:[]};
     for(let i=0;i<N;i++){const a=free(),b2=free();if(!a||!b2||Math.hypot(a.x-b2.x,a.y-b2.y)<48)continue;
       const wp=w.findPath(a.x,a.y,b2.x,b2.y);if(!wp)continue;   // no walking way either (an island, a walled yard): not the route's doing
-      const W=[a,...wp];const t0=performance.now();const R=w.routePoints(a,b2);out.ms=Math.max(out.ms,performance.now()-t0);out.pairs++;
+      const W=[a,...wp];const t0=performance.now();const T0=w.tw||16;   // the route as drawn: its streets, squared, eased into long legs, its bends rounded
+      const R=w.roundCorners?w.roundCorners(w.easeRoute(w.squareCorners(w.routePoints(a,b2)),T0*4.5),T0*12):w.routePoints(a,b2);out.ms=Math.max(out.ms,performance.now()-t0);out.pairs++;
       if(!R||!R.length||Math.hypot(R[R.length-1].x-b2.x,R[R.length-1].y-b2.y)>16){out.stuck.push([a.x|0,a.y|0,b2.x|0,b2.y|0]);continue;}
       const hit=solid(R);if(hit)out.through.push({from:[a.x|0,a.y|0],to:[b2.x|0,b2.y|0],at:hit});
       const lr=len(R),lw=len(W),st=Math.hypot(a.x-b2.x,a.y-b2.y);out.lenR+=lr;out.lenW+=lw;const sr=share(R),sw=share(W);out.roadR+=sr;out.roadW+=sw;

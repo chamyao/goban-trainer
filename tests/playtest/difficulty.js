@@ -1,4 +1,4 @@
-// The Diaochan book's difficulty switch (menu: 难度 Hard / Easy, localStorage tk-diff; Hard by default). It shows
+// The Diaochan book's difficulty switch (menu: 难度 Hard / Easy, localStorage tk-diff; Easy by default). It shows
 // and sticks over a reload; at the same beat an Easy board is drawn from the beat's pool_easy (Book 1's grades)
 // and a Hard one from its own pool, the second and third boards (~2, ~3) too; road challengers follow it; the
 // boss (a14) has no easy pool and stays as it is; Book 1 (test mode) has no switch and its boards don't change.
@@ -23,16 +23,16 @@ const board=async key=>{await p.evaluate(k=>{window.__w.duel(k);},key);let ok=fa
   await p.locator('.tk-duel-keys button',{hasText:'Leave'}).first().tap().catch(()=>{});await p.waitForTimeout(800);await ready();return r;};
 const pools=(book,key)=>p.evaluate(async([book,key])=>{const w=TK.world(book);if(!TK.node(w,key)&&typeof WorldData!=='undefined')await WorldData.region(w.n);const n=TK.node(w,key)||(typeof WorldData!=='undefined'&&WorldData.node(w,key));return n?{hard:(n.pool||[]).map(x=>+x[1]),easy:(n.pool_easy||[]).map(x=>+x[1]),grade:n.grade}:null;},[book,key]);
 const setDiff=v=>p.evaluate(v=>localStorage.setItem('tk-diff',v),v);
-// 1. the switch: in the menu, Hard by default, sticks
+// 1. the switch: in the menu, Easy by default, sticks
 await p.goto(BASE+'#/tk/12');await p.waitForTimeout(600);await p.evaluate(()=>localStorage.removeItem('tk-diff'));await at(12,'12-a9');
 const btn=()=>p.locator('.tk-menu-panel button',{hasText:'难度'});
 await p.locator('.tk-menu-btn',{hasText:'Menu'}).tap();await p.waitForTimeout(400);
 if(check(await btn().count()===1,'the menu has the difficulty switch')){
-  check(/Hard/.test(await btn().textContent()),`Hard by default ("${(await btn().textContent()).trim()}")`);
+  check(/Easy/.test(await btn().textContent()),`Easy by default ("${(await btn().textContent()).trim()}")`);
   await btn().tap();await p.waitForTimeout(400);
-  check(/Easy/.test(await btn().textContent())&&await p.evaluate(()=>localStorage.getItem('tk-diff'))==='easy',`a tap sets Easy ("${(await btn().textContent()).trim()}", tk-diff ${await p.evaluate(()=>localStorage.getItem('tk-diff'))})`);
+  check(/Hard/.test(await btn().textContent())&&await p.evaluate(()=>localStorage.getItem('tk-diff'))==='hard',`a tap sets Hard ("${(await btn().textContent()).trim()}", tk-diff ${await p.evaluate(()=>localStorage.getItem('tk-diff'))})`);
   await p.reload();await p.waitForTimeout(1000);await ready();await p.locator('.tk-menu-btn',{hasText:'Menu'}).tap();await p.waitForTimeout(400);
-  check(/Easy/.test(await btn().textContent()),'it sticks over a reload');
+  check(/Hard/.test(await btn().textContent()),'it sticks over a reload');
   await p.locator('.tk-menu-btn',{hasText:'Menu'}).tap();await p.waitForTimeout(300);}
 // 2. the same beat's boards, Easy then Hard (each from its own pool)
 for(const key of ['12-a9','12-a9~2','12-a9~3']){const base=key.split('~')[0],P=await pools(12,base);
