@@ -395,3 +395,36 @@ wine jars, turning to look back); `cg_inn` (moonlight, a man standing over a sle
 4. **After the call to arms:** the book cuts to Liu Bei at Pingyuan, which opens the coalition arc. That arc introduces
    the brothers itself.
 5. **Verses:** the Red Hare verse in C9, and the chapter 4 couplet closing C21.
+
+## Shared keys (for Places)
+
+Beat spots are `2-c1` … `2-c23`. Place names and rooms:
+
+| Beat | Place | Room (indoor) | Spot |
+|---|---|---|---|
+| c1 | Luoyang | `hj-hall` (He Jin's hall) | He Jin's residence |
+| c2 | Luoyang | — | before the Jiade Gate of Changle Palace (Qingsuo Gate behind) |
+| c3 | Luoyang | — | inside the palace, by Cuihua Tower; night, fire |
+| c4 | Beimang | — | the riverbank reeds → Cui Yi's haystack |
+| c5 | Beimang | — | the road back to the capital |
+| c6 | Luoyang | — | the Wenming Garden, its banquet and its gate |
+| c7 | The Camps | `dz-tent` | the field, then Dong Zhuo's tent 30 li back |
+| c8 | The Camps | — | Dong Zhuo's stables and paymaster (two givers: `redhare`, `gold`) |
+| c9 | The Camps | `lb-tent` | Lü Bu's tent in Ding Yuan's camp (pickets on the road before it) |
+| c10 | The Camps | `dy-tent` | Ding Yuan's tent |
+| c11 | Luoyang | `sheng-hall` | the Secretariat (省中) |
+| c12 | Luoyang | `jiade-hall` | the Jiade Hall |
+| c13 | Luoyang | — | the street to the city gate (Yong'an Palace's tower visible on the way) |
+| c14 | Luoyang | — | the palace gallery (阁下) |
+| c15 | Luoyang | `wyl-rearhall` | Wang Yun's Luoyang house, rear hall |
+| c16 | Luoyang | `xf-pavilion` | the Chancellor's residence, small pavilion (stables beside it) |
+| c17 | Luoyang | — | the East Gate (also used in c11 for Yuan Shao's seal) |
+| c18 | The East Road | — | the pass at Zhongmou |
+| c19 | The East Road | `jail-court` | Zhongmou county jail, back courtyard |
+| c20 | Chenggao | `lbs-hall` | Lü Boshe's farm; spot behind the thatched hall; the road toward the west village |
+| c21 | Chenggao | `inn-room` | a roadside inn |
+| c22 | Chenliu | `wh-hall` | Wei Hong's mansion (the Cao house nearby) |
+| c23 | Chenliu | — | the village drilling ground |
+
+Place order on the road, west to east: Luoyang (with Beimang to its north and the camps outside its walls) → the
+East Road (Zhongmou) → Chenggao → Chenliu.
