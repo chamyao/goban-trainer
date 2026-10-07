@@ -286,7 +286,7 @@ function worldScenes() {
     create() {
       const region = this.region = this.cache.json.get("region"), kit = this.kit = this.cache.json.get("kit");
       const opts = this.opts = this.game.worldOpts, w = this.w = opts.w;
-      this.grid = this.walk = this.lampFx = this.ambientFx = this.cine = this.auto = this.player = this.engaged = this.carried = null; this.glows = []; this.seated = this.caught = false;   // the scene object outlives a change of place: no old map's walk grid or tap-walk
+      this.grid = this.walk = this.lampFx = this.ambientFx = this.cine = this.auto = this.player = this.engaged = this.carried = this.routeFx = null; this.glows = []; this.seated = this.caught = false;   // the scene object outlives a change of place: no old map's walk grid or tap-walk
       this.story = w.scenes;
       // a save from an older map: a renamed place is found under its new name (arriving as if walking in);
       // a removed one sends him back to the start
@@ -1016,9 +1016,22 @@ function worldScenes() {
       const end = this.add.image(t.x, t.y, "@route", "dot").setDepth(-985).setScale(1.8).setAlpha(0).setBlendMode(Phaser.BlendModes.ADD);
       this.tweens.add({ targets: end, alpha: .4, delay: made.length * 7, duration: 300 });
       this.tweens.add({ targets: end, scale: 3.2, delay: made.length * 7 + 300, duration: 700, yoyo: true, repeat: 3, ease: "Sine.easeInOut" });
-      const all = [...made, end];
-      this.time.delayedCall(made.length * 7 + 5500, () => this.tweens.add({ targets: all, alpha: 0, duration: 900,
-        onComplete: () => all.forEach(im => im.destroy()) }));
+      // it stays until the place itself is in sight (well inside the view), or the goal moves on; never under 2.5 s
+      if (this.routeFx) this.fadeRoute();
+      this.routeFx = { all: [...made, end], t, from: this.time.now + made.length * 7 + 2500 };
+    }
+    fadeRoute() {
+      const R = this.routeFx;
+      if (!R) return;
+      this.routeFx = null;
+      this.tweens.add({ targets: R.all, alpha: 0, duration: 900, onComplete: () => R.all.forEach(im => im.destroy()) });
+    }
+    watchRoute() {
+      const R = this.routeFx;
+      if (!R || this.time.now < R.from) return;
+      const v = this.cameras.main.worldView, m = Math.min(v.width, v.height) * .15;
+      const seen = R.t.x > v.x + m && R.t.x < v.right - m && R.t.y > v.y + m && R.t.y < v.bottom - m;
+      if (seen || this.goalAt !== R.t) this.fadeRoute();
     }
 
     // The way to light: down the streets where the map has them (Places' "ways", the centre lines of its
@@ -1959,6 +1972,7 @@ function worldScenes() {
     }
 
     update(time, dt) {
+      this.watchRoute();
       if (this.carried && this.carried.active) this.carried.setPosition(this.player.x, this.player.y - 8);
       this.watchStep(dt);
       this.procession_();
