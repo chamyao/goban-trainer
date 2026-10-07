@@ -77,7 +77,7 @@ const Sync = {
     document.addEventListener("visibilitychange", () => {
       // back to this tab: pick up what another device did meanwhile (and redraw if anything came in)
       if (document.visibilityState === "visible") {
-        if (this.username && !this.saveTimer) this.pullAndMerge().then(changed => { if (changed) route(); }).catch(e => console.error("[sync]", e));
+        if (this.username && !this.saveTimer) this.pullAndMerge().then(changed => { if (changed) whenIdle(route); }).catch(e => console.error("[sync]", e));
         return;
       }
       if (this.saveTimer) { clearTimeout(this.saveTimer); this.saveProgress(); }
@@ -3490,6 +3490,16 @@ window.__engine = Engine;
 window.__review = Review;
 Sync.init();
 
+// Run fn once the campaign isn't in the middle of something (a scene's lines or camera, a board, a walk out, a
+// scripted move), so a redraw from sync or a new build never cuts a scene off; idle for 2 s running.
+function whenIdle(fn) {
+  let calm = 0;
+  const busy = () => { const w = window.__w;
+    return !!(document.querySelector(".tk-duel") || (w && ((w.ui && w.ui.busy()) || w.cine || w.leaving || w.auto))); };
+  const tick = () => { calm = busy() ? 0 : calm + 1; if (calm >= 4) fn(); else setTimeout(tick, 500); };
+  tick();
+}
+
 // A device still running an older build (a cached index.html keeps loading the old scripts, whatever their keys):
 // on load and on coming back to the tab, a fresh index.html is compared with the running one's file versions,
 // and if they differ the cache is refreshed and the page reloaded, once per new build.
@@ -3505,7 +3515,7 @@ const Fresh = {
       if (sessionStorage.getItem("gt-fresh") === now) return;   // reloaded for this build already: don't loop
       sessionStorage.setItem("gt-fresh", now);
       await fetch(url, { cache: "reload" });   // put the new page in the HTTP cache, then load it
-      location.reload();
+      whenIdle(() => location.reload());
     } catch (e) { console.warn("[fresh]", e); }
   },
 };

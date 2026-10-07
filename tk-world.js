@@ -2232,7 +2232,7 @@ const WorldView = {
   destroy() {
     if (this.watch) { this.watch.disconnect(); this.watch = null; }
     if (typeof TKVoice !== "undefined") TKVoice.stop();
-    if (this.game) { this.game.destroy(true); this.game = null; }
+    if (this.game) { if (this.game.sound) this.game.sound.pauseOnBlur = false; this.game.destroy(true); this.game = null; }   // a closing game's sound doesn't answer the tab's focus (its context is closed)
     window.__w = null;
   },
 };
