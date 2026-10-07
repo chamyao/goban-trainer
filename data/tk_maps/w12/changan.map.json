@@ -486,6 +486,16 @@
    "blocks_sight": true
   },
   {
+   "kind": "building.gatehouse",
+   "x": 24,
+   "y": 49,
+   "w": 4,
+   "h": 1,
+   "id": "palace-gate",
+   "faces": "S",
+   "label": "The North Side Gate"
+  },
+  {
    "kind": "building.palace",
    "x": 45,
    "y": 49,
@@ -542,13 +552,6 @@
    "kind": "tree.willow",
    "x": 23,
    "y": 43,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.willow",
-   "x": 24,
-   "y": 48,
    "w": 1,
    "h": 1
   },
@@ -792,14 +795,14 @@
   },
   {
    "kind": "banner.red",
-   "x": 23,
+   "x": 22,
    "y": 48,
    "w": 1,
    "h": 1
   },
   {
    "kind": "banner.red",
-   "x": 28,
+   "x": 29,
    "y": 48,
    "w": 1,
    "h": 1
