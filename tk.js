@@ -612,15 +612,15 @@ const TK = {
   party(w) { return this.ls("tk-party")[w.n] || w.party; },
   setParty(w, list) { const a = this.ls("tk-party"); a[w.n] = list; this.lsSet("tk-party", a); },
   // Difficulty (the menu, a book with "easy_grades"): Adaptive (the default) picks each board by the player's
-  // rating (TKElo); Easy draws from the board's easy pool, Hard from its own. Boss boards keep their own pool.
+  // rating (TKElo), bosses included; Easy draws from the board's easy pool, Hard from its own.
   get mode() { try { const v = localStorage.getItem("tk-diff"); return v === "easy" || v === "hard" ? v : "adaptive"; } catch { return "adaptive"; } },
   set mode(v) { try { localStorage.setItem("tk-diff", v); } catch {} },
   get easy() { return this.mode === "easy"; },
   set easy(v) { this.mode = v ? "easy" : "hard"; },
   problemRef(node, idx = 0) {
     const d = this.ls("tk-draw"), w = this.world(+String(node.key).split("-")[0]);
-    if (this.mode === "adaptive" && node.role !== "boss" && w && w.rated && w.rated.length)
-      return TKElo.pick(w, `${node.key}~${idx}~${d[node.key] || 0}`);   // a slip deals the next draw: a fresh pick
+    if (this.mode === "adaptive" && w && w.rated && w.rated.length)   // once a beat's board is seen it stays (a retry, a revisit)
+      return TKElo.pick(w, `${node.key}~${idx}`, node.role === "boss" ? TKElo.BOSS : TKElo.BOARD);
     const pool = this.easy && node.pool_easy && node.pool_easy.length ? node.pool_easy : node.pool;
     return pool[((d[node.key] || 0) + idx) % pool.length];
   },
@@ -1878,6 +1878,9 @@ const TKTalk = {
 // 1K = 2000, 1D = 2100. Starts at 14K, the old Easy.
 const TKElo = {
   START: 700,
+  // the problem's rating against the player's: a board is aimed at a 3-in-4 first-try solve, a boss at 1-in-2
+  // (the user). Elo's expectation 1/(1+10^(d/400)) is 3/4 at d = -400·log10(3) ≈ -191, 1/2 at d = 0.
+  BOARD: -Math.round(400 * Math.log10(3)), BOSS: 0,
   of(rank) { return 600 + rank * 50; },
   state(p = loadProgress()) { return p.tkElo || (p.tkElo = { r: this.START, n: 0, used: [], slots: {} }); },
   get rating() { return this.state().r; },
@@ -1885,23 +1888,24 @@ const TKElo = {
     const i = Math.max(0, Math.round((r - 600) / 50));
     return i < 30 ? `${15 - Math.floor(i / 2)}K${i % 2 ? "+" : ""}` : `${1 + Math.floor((i - 30) / 2)}D${(i - 30) % 2 ? "+" : ""}`;
   },
-  pick(w, slot) {
+  pick(w, slot, offset = this.BOARD) {
     const p = loadProgress(), s = this.state(p);
     s.slots = s.slots || {}; s.used = s.used || [];
     if (s.slots[slot]) return s.slots[slot];
-    const used = new Set(s.used), near = w.rated.filter(x => !used.has(`${x[0]}:${x[1]}`))
-      .sort((a, b) => Math.abs(this.of(a[2]) - s.r) - Math.abs(this.of(b[2]) - s.r)).slice(0, 6);
+    const aim = s.r + offset, used = new Set(s.used), near = w.rated.filter(x => !used.has(`${x[0]}:${x[1]}`))
+      .sort((a, b) => Math.abs(this.of(a[2]) - aim) - Math.abs(this.of(b[2]) - aim)).slice(0, 6);
     const x = near[Math.floor(Math.random() * near.length)] || w.rated[0];
     s.slots[slot] = [x[0], x[1]];
     s.used.push(`${x[0]}:${x[1]}`);
     if (s.used.length > 500) s.used = s.used.slice(-500);
-    const keys = Object.keys(s.slots); if (keys.length > 80) for (const k of keys.slice(0, keys.length - 80)) delete s.slots[k];
+    const keys = Object.keys(s.slots); if (keys.length > 400) for (const k of keys.slice(0, keys.length - 400)) delete s.slots[k];   // a seen board stays
     TK.saveProg(p);
     return s.slots[slot];
   },
-  // a board's first result, in Adaptive (bosses aside): the rating moves (faster for the first ten boards)
+  // a board's first result, in Adaptive: the rating moves (faster for the first ten boards); it shapes the boards
+  // still unseen, never one already dealt
   result(w, node, ref, win) {
-    if (TK.mode !== "adaptive" || !w || !w.rated || !node || node.role === "boss") return;
+    if (TK.mode !== "adaptive" || !w || !w.rated || !node) return;
     const x = w.rated.find(y => y[0] === ref[0] && y[1] === ref[1]);
     if (!x) return;
     const p = loadProgress(), s = this.state(p), E = 1 / (1 + Math.pow(10, (this.of(x[2]) - s.r) / 400));
