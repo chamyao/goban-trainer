@@ -269,7 +269,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       const pool = (easy && n.pool_easy && n.pool_easy.length ? n.pool_easy : n.pool).map(x => +x[1]);
       if (pool.includes(id)) ok++; else off.push(`${key || beat}:${id}`); } return { easy, adaptive: !!adaptive, ok, off }; }, [boards, BOOK]).catch(e => ({ err: String(e) }));
   const fails = report.filter(r => r.status !== 'pass').length;
-  if (SHOTS) fs.writeFileSync(path.join(SHOTS, 'shots.json'), JSON.stringify(shots, null, 1));
+  if (SHOTS) { fs.mkdirSync(SHOTS, { recursive: true }); fs.writeFileSync(path.join(SHOTS, 'shots.json'), JSON.stringify(shots, null, 1)); }
   const out = { book: BOOK, diff: DIFF || 'default', optional: errands, held, recovered, minutes: +((Date.now() - t0) / 60000).toFixed(1), beats: report, boards: boards.length, draws: diffCheck, pageErrors: errs.slice(0, 5) };
   fs.mkdirSync(path.join(__dirname, 'out'), { recursive: true });
   fs.writeFileSync(path.join(__dirname, 'out', `walk-playthrough-${BOOK}-${DIFF || 'default'}.json`), JSON.stringify(out, null, 1));
