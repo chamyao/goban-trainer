@@ -238,6 +238,7 @@ const TownUI = {
         pic.hidden = false;
       } else { pic.hidden = true; pic.dataset.who = ""; }
       $(".town-dlg").classList.toggle("has-portrait", !!file);
+      if (file) requestAnimationFrame(() => root.style.setProperty("--dlg-h", $(".town-dlg").offsetHeight + "px"));   // an upright phone stands the portrait on the box (style.css)
       face.hidden = !who || !!file;
       if (who && !file) fc.drawImage(TKArt.get(who, "bust"), 0, 0);
       if (vid) TKVoice.play(vid); else TKVoice.stop();
