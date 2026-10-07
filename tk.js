@@ -1647,6 +1647,20 @@ async function viewTKChat() {
     root.append(h("div", { class: "tk-chat" }, [h("p", {}, "这一卷不对外开放。This book isn't open.")]));
     return;
   }
+  // the password (checked by the Apps Script against its CHAT_KEY): asked once, kept in this browser
+  const askKey = wrong => {
+    clearTimeout(tkChatTimer);
+    root.innerHTML = "";
+    const pw = h("input", { class: "tk-chat-in", type: "password", placeholder: "密码 Password", autocomplete: "current-password" });
+    const go = h("button", { class: "tk-chat-send", type: "button" }, "进入 Enter");
+    go.onclick = () => { const k = pw.value.trim(); if (!k) return; Sync.setChatKey(k); viewTKChat(); };
+    pw.addEventListener("keydown", e => { e.stopPropagation(); if (e.key === "Enter") go.click(); });
+    root.append(h("div", { class: "tk-chat" }, [
+      h("div", { class: "tk-chat-head" }, [h("b", {}, "对话 · Talk with Claude"), h("small", {}, wrong ? "密码不对 Wrong password, try again." : "这一卷需要密码。This book needs its password.")]),
+      h("div", { class: "tk-chat-row" }, [pw, go])]));
+    pw.focus();
+  };
+  if (!Sync.chatKey()) return askKey(false);
   const log = h("div", { class: "tk-chat-log" });
   const ta = h("textarea", { class: "tk-chat-in", rows: "2", placeholder: "写给 Claude… Message Claude (Enter sends, Shift+Enter for a new line)" });
   const send = h("button", { class: "tk-chat-send", type: "button" }, "发送 Send");
@@ -1676,7 +1690,10 @@ async function viewTKChat() {
       pending = pending.filter(p => !list.some(m => m.who === "you" && m.text === p.text));
       note.textContent = "";
       draw();
-    } catch (e) { console.error(e); note.textContent = "连不上对话 Can't reach the chat right now; trying again."; }
+    } catch (e) {
+      if (e.locked) { Sync.setChatKey(""); return askKey(true); }
+      console.error(e); note.textContent = "连不上对话 Can't reach the chat right now; trying again.";
+    }
     if (nav === routeSeq) tkChatTimer = setTimeout(poll, 8000);
   };
   send.onclick = async () => {
@@ -1687,7 +1704,10 @@ async function viewTKChat() {
     ta.value = "";
     draw();
     try { await Sync.sendChat(text, `#/tk/chat · last book ${(() => { try { return localStorage.getItem("tk-book") || "?"; } catch { return "?"; } })()}`); }
-    catch (e) { console.error(e); note.textContent = "没发出去 Couldn't send; your message is back in the box."; pending.pop(); ta.value = text; draw(); }
+    catch (e) {
+      if (e.locked) { Sync.setChatKey(""); return askKey(true); }
+      console.error(e); note.textContent = "没发出去 Couldn't send; your message is back in the box."; pending.pop(); ta.value = text; draw();
+    }
     send.disabled = false;
     clearTimeout(tkChatTimer);
     tkChatTimer = setTimeout(poll, 1500);

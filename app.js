@@ -145,18 +145,24 @@ const Sync = {
 
   // The campaign's chat with Claude (tk.js viewTKChat): the thread lives in the private Chat sheet behind the
   // Apps Script; a message also pings the Feedback inbox PR (no content), which wakes Claude to answer.
+  // the chat's password (the script's CHAT_KEY), kept in this browser once entered
+  chatKey() { try { return localStorage.getItem("tk-chat-key") || ""; } catch { return ""; } },
+  setChatKey(k) { try { k ? localStorage.setItem("tk-chat-key", k) : localStorage.removeItem("tk-chat-key"); } catch {} },
   async sendChat(message, context = location.hash) {
     const res = await fetch(this.API_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({ username: this.username || "", kind: "chat", data: { message, context } }),
+      body: JSON.stringify({ username: this.username || "", kind: "chat", key: this.chatKey(), data: { message, context } }),
     });
     if (!res.ok) throw new Error(`chat failed (${res.status})`);
+    const body = await res.json().catch(() => ({}));
+    if (body.error === "locked") throw Object.assign(new Error("locked"), { locked: true });
   },
   async fetchChat() {
-    const res = await fetch(`${this.API_URL}?username=${encodeURIComponent(this.username || "")}&kind=chat`);
+    const res = await fetch(`${this.API_URL}?username=${encodeURIComponent(this.username || "")}&kind=chat&key=${encodeURIComponent(this.chatKey())}`);
     if (!res.ok) throw new Error(`chat fetch failed (${res.status})`);
     const body = await res.json();
+    if (body.error === "locked") throw Object.assign(new Error("locked"), { locked: true });
     return (body.data && body.data.messages) || [];
   },
 

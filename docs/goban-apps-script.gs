@@ -4,7 +4,8 @@
 // The campaign's chat with Claude lives in the private "Chat" sheet: the inbox PR only gets a content-free ping.
 // Script properties (Project Settings > Script properties): GITHUB_TOKEN, a fine-grained token for
 // goban-trainer with Pull requests and Issues: read and write (without it feedback and chat are only logged);
-// CHAT_SECRET, shared with the Integration session, so only it can answer as Claude.
+// CHAT_SECRET, shared with the Integration session, so only it can answer as Claude;
+// CHAT_KEY, the chat's password, which the game asks for once per browser (reading and sending both need it).
 
 // Run this from the editor to check the setup: it posts a test comment and logs GitHub's reply (201 = posted).
 function testFire() {
@@ -42,6 +43,7 @@ function doGet(e) {
   if (!username) return jsonOut_({ error: "username required" });
 
   if (e.parameter.kind === "chat") {   // one player's chat thread, oldest first (the last 100)
+    if (!chatKeyOk_(e.parameter.key) && !chatSecretOk_(e.parameter.secret)) return jsonOut_({ error: "locked" });   // the player's password, or Claude's secret
     const values = chatSheet_().getDataRange().getValues(), messages = [];
     for (let i = 1; i < values.length; i++)
       if (values[i][1] === username) messages.push({ at: values[i][0], who: values[i][2], text: values[i][3] });
@@ -87,6 +89,7 @@ function doPost(e) {
   // wakes the Integration session; it reads the message here (kind=chat) and answers with kind "chat-reply".
   if (body.kind === "chat") {
     const msg = body.data && body.data.message;
+    if (!chatKeyOk_(body.key)) return jsonOut_({ error: "locked" });
     if (!msg || !body.username) return jsonOut_({ error: "message and username required" });
     chatSheet_().appendRow([now, body.username, "you", msg, (body.data && body.data.context) || ""]);
     const posted = postComment_("**Chat ping** from " + body.username + " (the message is in the sheet)");
@@ -94,8 +97,7 @@ function doPost(e) {
   }
   // Claude's answer: only with the shared secret (script property CHAT_SECRET), so no one else can post as Claude.
   if (body.kind === "chat-reply") {
-    const secret = PropertiesService.getScriptProperties().getProperty("CHAT_SECRET");
-    if (!secret || body.secret !== secret) return jsonOut_({ error: "not allowed" });
+    if (!chatSecretOk_(body.secret)) return jsonOut_({ error: "not allowed" });
     const msg = body.data && body.data.message;
     if (!msg || !body.username) return jsonOut_({ error: "message and username required" });
     chatSheet_().appendRow([now, body.username, "claude", msg, ""]);
@@ -146,6 +148,17 @@ function postComment_(body) {
 function postFeedbackComment_(message, context, username) {
   return postComment_("**In-game feedback**" + (username ? " from " + username : "") + "\n\n> " +
     String(message).replace(/\n/g, "\n> ") + "\n\n`" + String(context).replace(/`/g, "'") + "`");
+}
+
+// The chat's password: the script property CHAT_KEY (no CHAT_KEY: the chat is closed).
+function chatKeyOk_(key) {
+  const want = PropertiesService.getScriptProperties().getProperty("CHAT_KEY");
+  return !!want && key === want;
+}
+
+function chatSecretOk_(secret) {
+  const want = PropertiesService.getScriptProperties().getProperty("CHAT_SECRET");
+  return !!want && secret === want;
 }
 
 function jsonOut_(obj) {
