@@ -51,7 +51,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   await hook();
   // SYNC: a reroute rebuilds the world (a new game); the game running before each hide/show flip is tagged, and a flip
   // after which the tag is gone was a reroute (app.js calls route() by its own reference, so a wrapper can't see it)
-  let lastVis = Date.now(), visFlips = 0; const reroutes = [];
+  let lastVis = Date.now(), visFlips = 0, flipAt = 0, prevS = null; const reroutes = [];
 
   // the page, as the loop needs it each tick
   const look = () => p.evaluate(() => {
@@ -63,7 +63,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     return {
       book: w.w.n, place: w.placeId, lead: w.lead, party: (w.st.party || []).join(','), next: q && q.node, P: [Math.round(w.player.x), Math.round(w.player.y)],
       goal: w.goalAt && [Math.round(w.goalAt.x), Math.round(w.goalAt.y)], busy: w.ui.busy(), cine: !!w.cine, leaving: !!w.leaving, walking: !!w.walk,
-      caught: !!w.caught, engaged: !!w.engaged, chip: ((d.querySelector('.town-goal .town-lead') || {}).textContent || '').trim(), leadName: typeof tkName === 'function' ? tkName(w.lead) : w.lead, line, who: dlg && !dlg.hidden ? ((dlg.querySelector('.town-who') || {}).textContent || '').trim() : '', scroll: vis('.tk-scroll-go'), duel: !!d.querySelector('.tk-duel svg'), cont: vis('.tk-duel-go'),
+      caught: !!w.caught, engaged: !!w.engaged, gtag: w.game && w.game.__flip, chip: ((d.querySelector('.town-goal .town-lead') || {}).textContent || '').trim(), leadName: typeof tkName === 'function' ? tkName(w.lead) : w.lead, line, who: dlg && !dlg.hidden ? ((dlg.querySelector('.town-who') || {}).textContent || '').trim() : '', scroll: vis('.tk-scroll-go'), duel: !!d.querySelector('.tk-duel svg'), cont: vis('.tk-duel-go'),
       skip: !!d.querySelector('.tk-duel-keys button') && [...d.querySelectorAll('.tk-duel-keys button')].some(b => /Skip/.test(b.textContent)),
       cleared: TK.world(w.w.n).nodes.filter(n => TK.cleared(n.key)).length, items: JSON.stringify((typeof WorldItems !== 'undefined' && WorldItems.list && WorldItems.list(w.w)) || []),
       cancel: [...d.querySelectorAll('button')].some(b => b.textContent.trim() === 'Cancel' && b.offsetParent),
@@ -200,9 +200,13 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       if (process.env.SYNC_PUSH && visFlips === 3) for (const u of Object.keys(store)) { const d = store[u]; d.progress = d.progress || {}; d.progress.tk = d.progress.tk || {}; d.progress.tk['12-from-elsewhere'] = 1; }   // another device's solve: this one should pull it and rebuild
       const before = await p.evaluate(n => { const w = window.__w; if (w && w.game) w.game.__flip = n; return { busy: !!(w && w.ui && w.ui.busy()), cine: !!(w && w.cine), duel: !!document.querySelector('.tk-duel svg'), place: w && w.placeId }; }, visFlips).catch(() => ({}));
       await p.evaluate(async () => { for (const v of ['hidden', 'visible']) { Object.defineProperty(document, 'visibilityState', { value: v, configurable: true }); Object.defineProperty(document, 'hidden', { value: v === 'hidden', configurable: true }); document.dispatchEvent(new Event('visibilitychange')); await new Promise(r => setTimeout(r, 300)); } }).catch(() => {});
-      await p.waitForTimeout(1500);
-      const same = await p.evaluate(n => { const w = window.__w; return !!(w && w.game && w.game.__flip === n); }, visFlips).catch(() => false);
-      if (!same) { reroutes.push({ beat, ...before }); console.log(`     sync: the world was rebuilt after a hide/show at ${beat} (${before.place}${before.cine ? ', mid-scene' : ''}${before.busy ? ', a line up' : ''}${before.duel ? ', a board up' : ''})`); } }
+      flipAt = Date.now(); }
+    // a rebuilt world (route() makes a new game): the tag's gone; what was up the moment before, and how long after the flip
+    if (SYNC && visFlips && s.gtag !== visFlips && !s.boot) {
+      const b4 = prevS || {}; reroutes.push({ beat, place: b4.place, busy: !!b4.busy, cine: !!b4.cine, duel: !!b4.duel, secs: Math.round((Date.now() - flipAt) / 1000) });
+      console.log(`     sync: the world was rebuilt at ${beat}, ${Math.round((Date.now() - flipAt) / 1000)} s after a hide/show (${b4.place}${b4.cine ? ', mid-scene' : ''}${b4.busy ? ', a line up' : ''}${b4.duel ? ', a board up' : ''})`);
+      await p.evaluate(n => { const w = window.__w; if (w && w.game) w.game.__flip = n; }, visFlips).catch(() => {}); }
+    prevS = s;
     if (s.duel) {   // a board: win it with Skip, note what it drew, then Continue
       if (s.cont) { await tapEl('.tk-duel-go'); await p.waitForTimeout(400); continue; }
       if (s.skip) {
@@ -276,6 +280,8 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   if (diffCheck.off && diffCheck.off.length) console.log(`FAIL boards drawn from the wrong pool (${diffCheck.adaptive ? 'rated' : diffCheck.easy ? 'easy' : 'hard'}): ${diffCheck.off.join(', ')}`);
   console.log(`walk-playthrough Book ${BOOK} (${DIFF || 'default'}): ${report.length - fails}/${report.length} beats walked and played in ${out.minutes} min (${recovered.length} needed a reload, ${held.length} held by a scene); ${boards.length} boards (${diffCheck.ok} from the ${diffCheck.adaptive ? 'rated' : diffCheck.easy ? 'easy' : 'hard'} pool)`);
   if (SYNC) { const mid = reroutes.filter(r => r.busy || r.cine || r.duel);
+    if (process.env.SYNC_PUSH) { const got = await p.evaluate(() => TK.cleared('12-from-elsewhere')).catch(() => false);
+      console.log(`${got && reroutes.length ? 'ok  ' : 'FAIL'} sync: the other device's solve ${got ? 'arrived' : 'never arrived'}${reroutes.length ? `, the world rebuilt ${reroutes.map(r => `${r.secs} s after the flip${r.busy || r.cine || r.duel ? ' MID-SCENE' : ' while idle'}`).join(', ')}` : ', no rebuild'}`); }
     console.log(`sync: ${syncPosts} saves to the mocked script, ${visFlips} hide/show flips (${visFlips - reroutes.length} with the world kept, ${reroutes.length} rebuilt)${mid.length ? `; FAIL ${mid.length} rebuilt mid-scene (${mid.map(r => `${r.beat} in ${r.place}`).join(', ')})` : ''}`);
     if (mid.length) held.push(`${mid.length} mid-scene reroutes`); }
   const audio = errs.filter(e => /AudioContext/.test(e)); if (audio.length) console.log(`     note: ${audio.length} AudioContext page errors (${audio[0].slice(0, 80)})`);
