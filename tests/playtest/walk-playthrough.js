@@ -6,7 +6,10 @@
 // A stealth beat is crossed by timing (the patrols simulated ahead), still walked a cell at a time.
 // Fails a beat, with the place, position and last line, when the player is refused a way (a closed road, a
 // barred door), gets stuck (no progress for STUCK seconds) or has nowhere to go. Writes a per-beat report
-// to out/walk-playthrough-<book>-<diff>.json. Slow (about half an hour): run before a release and after any
+// to out/walk-playthrough-<book>-<diff>.json. OPTIONAL=1 also walks, on each map as he comes to it, to every
+// road challenger still there (he must open a board and lose his "!" once beaten), every conditional door in the
+// state it's in (barred: its own line and he stays; open: through it) and every side room (in, and on again).
+// Slow (about half an hour): run before a release and after any
 // change to maps, region links, map states or placeOpen.
 const { chromium, devices } = require(require('child_process').execSync('npm root -g', { env: { ...process.env, NODE_OPTIONS: '' } }).toString().trim() + '/playwright');
 const fs = require('fs'), path = require('path');
@@ -93,6 +96,23 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     return cells.map(c => { const x = c % cols; return at(x, (c - x) / cols); });
   }, STEP);
 
+  // what's optional on this map, as a player sees it: challengers standing with their "!", doors only some may pass
+  // or the story shuts (and in which state), rooms off this place
+  const optional = () => p.evaluate(() => {
+    const w = window.__w, out = [], ms = w.mapState(), top = id => { const x = w.region.places.find(q => q.id === id); return x && x.parent || id; };
+    for (const n of w.npcs) if (n.challenge && n.spr.visible && !TK.cleared(n.challenge)) out.push({ id: `challenger ${n.challenge}`, kind: 'challenger', key: n.challenge, x: n.spr.x, y: n.spr.y });
+    for (const e of w.exits) {
+      if (!e.to) continue;
+      const shut = ms && (ms.exits_closed || []).includes(e.to), opened = ms && (ms.exits_open || []).includes(e.to);
+      const barred = shut || e.openTo && !e.openTo.some(c => c.includes(':') ? w.cond(c) : c === w.lead), open = !barred && (opened || w.placeOpen(e.to));
+      const room = w.region.places.find(q => q.id === e.to && q.parent && q.parent === top(w.placeId));
+      if (!(e.openTo || shut || opened || room)) continue;
+      const say = barred ? (shut && ms.exits_closed_say && ms.exits_closed_say[e.to]) || (e.refuse.length ? e.refuse : null) : null;
+      out.push({ id: `door ${w.placeId} > ${e.to} (${barred ? 'barred to ' + w.lead : open ? 'open' : 'not open yet'})`, kind: barred ? 'barred' : open ? 'open' : 'notyet', to: e.to,
+        from: w.placeId, x: e.rect.centerX, y: e.rect.centerY, say: say ? JSON.stringify(say) : barred ? 'The door is barred to you.' : `isn't open yet` });
+    }
+    return out;
+  });
   const report = [], t0 = Date.now(); let beat = null, beatT = 0, lastProgress = Date.now(), progressKey = '', lastLine = '', refused = '', boards = [];
   const leadFor = await p.evaluate(B => { const w = TK.world(B), out = {}; let party = null;   // the lead the story gives each beat: its last party step before it
     for (const n of w.nodes) { out[n.key] = party && party[0]; const sc = w.scenes && w.scenes[n.scene]; for (const s of (sc && sc.steps) || []) if (s[0] === 'party') party = s[1]; } return out; }, BOOK).catch(() => ({}));
@@ -100,6 +120,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   const close = (status, why, s) => { if (!beat) return; if (leadFor[beat] && beatLead && leadFor[beat] !== beatLead) console.log(`     note ${beat}: played by ${beatLead}, but the story's last handoff gave ${leadFor[beat]}`); const r = { beat, status, secs: Math.round((Date.now() - beatT) / 1000), place: s && s.place, at: s && s.P, lead: s && s.lead, why: why || '', line: lastLine.slice(0, 120) };
     report.push(r); console.log(`${status === 'pass' ? 'ok  ' : 'FAIL'} ${beat}  ${r.secs}s  ${r.lead || ''} in ${r.place || '?'}${status === 'pass' ? '' : `  at ${r.at}: ${why}${r.line ? ` ("${r.line}")` : ''}`}`); };
   let plannedSteps = null, planT = 0, pace = 3, stealthTries = 0, lastTap = 0, skipped = false, reloads = 0, catches = 0, wasCaught = false; const held = [], recovered = [];
+  const OPTIONAL = !!process.env.OPTIONAL, visited = new Set(), errands = []; let errand = null;
   for (;;) {
     if ((Date.now() - t0) / 60000 > MAXMIN) { const s = await look(); close('fail', `out of time (${MAXMIN} min)`, s); break; }
     const s = await look();
@@ -118,6 +139,23 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     // progress: a new place, a beat or item gained, or getting nearer the goal
     const key = `${s.place}|${s.cleared}|${s.items}|${s.goal}|${s.line}|${s.cine}|${s.duel}|${Math.round(Math.hypot(s.P[0] - (s.goal ? s.goal[0] : 0), s.P[1] - (s.goal ? s.goal[1] : 0)) / 24)}`;
     if (key !== progressKey) { progressKey = key; lastProgress = Date.now(); }
+    if (errand) {   // an optional thing on the way: done, or given up on
+      const e = errand, secs = (Date.now() - e.t0) / 1000; let done = null;
+      if (e.kind === 'challenger') {
+        if (s.duel) e.board = true;
+        if (!s.duel && !s.busy && await p.evaluate(k => TK.cleared(k), e.key)) { const mark = await p.evaluate(k => { const n = window.__w.npcs.find(n => n.challenge === k); return !!(n && n.mark && n.mark.visible); }, e.key);
+          done = e.board && !mark ? 'pass' : `fail: ${e.board ? '' : 'no board opened; '}${mark ? 'his "!" still up after the win' : ''}`; }
+      } else if (e.kind === 'barred' || e.kind === 'notyet') {
+        if (s.place !== e.from) done = `fail: went through to ${s.place}`;
+        else if (s.line) { if (s.line.length > (e.said || '').length) e.said = s.line; }   // (it types out: the longest seen)
+        else if (e.said && !s.busy) { const said = e.said.slice(0, 24); done = e.say.includes(said) || (e.kind === 'notyet' && /isn't open yet/.test(e.said)) ? 'pass' : `fail: said "${e.said.slice(0, 80)}", not its own line`; }
+      } else if (s.place === e.to) done = 'pass';
+      if (!done && secs > 90) done = `fail: not reached in 90s (at ${s.P} in ${s.place})`;
+      if (done) { errand = null; beatT += secs * 1000; lastProgress = Date.now();
+        errands.push({ beat, id: e.id, status: done === 'pass' ? 'pass' : 'fail', why: done === 'pass' ? '' : done.slice(6), secs: Math.round(secs), line: (e.said || '').slice(0, 100) });
+        console.log(`${done === 'pass' ? 'ok  ' : 'FAIL'}   optional: ${e.id}  ${Math.round(secs)}s${done === 'pass' ? '' : '  ' + done.slice(6)}${e.said ? `  ("${e.said.slice(0, 70)}")` : ''}`); }
+      else lastProgress = Date.now();
+    }
     if (s.caught && !wasCaught) catches++; wasCaught = s.caught;
     const overBeat = Date.now() - beatT > BEATMAX * 1000 * (reloads + 1);   // going round in circles: caught again and again, or walking back and forth
     if (Date.now() - lastProgress > STUCK * 1000 || overBeat) {
@@ -135,7 +173,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
         await p.reload(); lastProgress = Date.now(); plannedSteps = null; skipped = false; await p.waitForTimeout(1500); continue; }
       close('fail', msg, s); break; }
     if (s.line && s.line !== lastLine) { lastLine = s.line;
-      if (/isn't open yet|还没有开通|barred|不为你开|not open|turns you away|No one goes|receives no one/i.test(s.line)) refused = `refused: "${s.line.slice(0, 90)}"`; }
+      if (!errand && /isn't open yet|还没有开通|barred|不为你开|not open|turns you away|No one goes|receives no one/i.test(s.line)) refused = `refused: "${s.line.slice(0, 90)}"`; }
     if (s.cancel) { await p.getByText('Cancel', { exact: true }).first().tap().catch(() => {}); continue; }
     if (s.scroll) { await tapEl('.tk-scroll-go'); await p.waitForTimeout(300); continue; }
     if (!s.duel) await hook();   // (again after a reload)
@@ -155,6 +193,14 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     if (s.busy) { await p.evaluate(() => window.__w.ui.advance()); await p.waitForTimeout(250); continue; }   // a line: on to the next
     if (s.caught) plannedSteps = null;   // sent back: plan again from there
     if (s.cine || s.leaving || s.engaged || s.caught) { await p.waitForTimeout(300); continue; }
+    if (OPTIONAL && !errand && !s.watchers && !s.walking && !plannedSteps) {
+      const next = (await optional()).find(t => !visited.has(t.id));
+      if (next) { visited.add(next.id); errand = { ...next, t0: Date.now() }; lastTap = 0; }
+    }
+    if (errand) {
+      if (s.walking || Date.now() - lastTap < 1500) { await p.waitForTimeout(200); continue; }
+      lastTap = Date.now(); await tapWorld(errand.x, errand.y); await p.waitForTimeout(500); continue;
+    }
     if (!s.goal) { close('fail', 'no goal to go to', s); break; }
     // a stealth beat here: time the way past the cones, then walk it a cell at a time
     if (s.watchers && !plannedSteps) {   // the running pace first; after a catch the slower one, if it has a way
@@ -175,10 +221,11 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     for (const { beat, key, id } of bs) { const base = String(key || beat).split('~')[0], n = TK.node(w, base) || (typeof WorldData !== 'undefined' && WorldData.node(w, base)); if (!n || id == null) continue; const pool = (easy && n.pool_easy && n.pool_easy.length ? n.pool_easy : n.pool).map(x => +x[1]);
       if (pool.includes(id)) ok++; else off.push(`${key || beat}:${id}`); } return { easy, ok, off }; }, [boards, BOOK]).catch(e => ({ err: String(e) }));
   const fails = report.filter(r => r.status !== 'pass').length;
-  const out = { book: BOOK, diff: DIFF || 'default', held, recovered, minutes: +((Date.now() - t0) / 60000).toFixed(1), beats: report, boards: boards.length, draws: diffCheck, pageErrors: errs.slice(0, 5) };
+  const out = { book: BOOK, diff: DIFF || 'default', optional: errands, held, recovered, minutes: +((Date.now() - t0) / 60000).toFixed(1), beats: report, boards: boards.length, draws: diffCheck, pageErrors: errs.slice(0, 5) };
   fs.mkdirSync(path.join(__dirname, 'out'), { recursive: true });
   fs.writeFileSync(path.join(__dirname, 'out', `walk-playthrough-${BOOK}-${DIFF || 'default'}.json`), JSON.stringify(out, null, 1));
   if (diffCheck.off && diffCheck.off.length) console.log(`FAIL boards drawn from the wrong pool (${diffCheck.easy ? 'easy' : 'hard'}): ${diffCheck.off.join(', ')}`);
   console.log(`walk-playthrough Book ${BOOK} (${DIFF || 'default'}): ${report.length - fails}/${report.length} beats walked and played in ${out.minutes} min (${recovered.length} needed a reload, ${held.length} held by a scene); ${boards.length} boards (${diffCheck.ok} from the ${diffCheck.easy ? 'easy' : 'hard'} pool)`);
-  await b.close(); process.exit(fails || held.length || recovered.length || (diffCheck.off && diffCheck.off.length) ? 1 : 0);
+  if (OPTIONAL) console.log(`optional: ${errands.filter(e => e.status === 'pass').length}/${errands.length} walked to (${errands.filter(e => e.id.startsWith('challenger')).length} challengers, ${errands.filter(e => e.id.startsWith('door')).length} doors and rooms)`);
+  await b.close(); process.exit(errands.some(e => e.status !== 'pass') || fails || held.length || recovered.length || (diffCheck.off && diffCheck.off.length) ? 1 : 0);
 })();
