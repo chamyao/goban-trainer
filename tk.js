@@ -563,7 +563,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) this.data = await (await fetch("data/tk.json?v=59")).json();
+    if (!this.data) this.data = await (await fetch("data/tk.json?v=60")).json();
     return this.data;
   },
   ls(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } },
@@ -588,7 +588,13 @@ const TK = {
   setAt(n, key) { const a = this.ls("tk-at"); a[n] = key; this.lsSet("tk-at", a); },
   party(w) { return this.ls("tk-party")[w.n] || w.party; },
   setParty(w, list) { const a = this.ls("tk-party"); a[w.n] = list; this.lsSet("tk-party", a); },
-  problemRef(node, idx = 0) { const d = this.ls("tk-draw"); return node.pool[((d[node.key] || 0) + idx) % node.pool.length]; },
+  // Difficulty (the menu): Easy draws a board from its easy pool (a book with "easy_grades"), Hard from its own.
+  get easy() { try { return localStorage.getItem("tk-diff") === "easy"; } catch { return false; } },
+  set easy(v) { try { localStorage.setItem("tk-diff", v ? "easy" : "hard"); } catch {} },
+  problemRef(node, idx = 0) {
+    const d = this.ls("tk-draw"), pool = this.easy && node.pool_easy && node.pool_easy.length ? node.pool_easy : node.pool;
+    return pool[((d[node.key] || 0) + idx) % pool.length];
+  },
   // A wrong move keeps the problem but rests it: TK_REST ms before it can be tried again.
   rest(key) { const d = this.ls("tk-rest"); d[key] = Date.now() + TK_REST; this.lsSet("tk-rest", d); },
   restLeft(key) { return Math.max(0, (this.ls("tk-rest")[key] || 0) - Date.now()); },
@@ -1085,6 +1091,14 @@ async function viewTK(worldN) {
     root.querySelector(".tk-head-btns").prepend(h("button", { class: "tk-chron-btn", type: "button", title: `Switch to ${WORLD_KITS[next].en}`,
       onclick: () => { WorldView.setKit(next); viewTK(w.n); } }, `画风：${WORLD_KITS[kit].zh} ${WORLD_KITS[kit].en}`));
     if (typeof WorldTravel !== "undefined") WorldTravel.addButtons(root.querySelector(".tk-head-btns"), w);   // map and start over (tk-travel.js)
+    // difficulty, in a book that has an easy version: which problems its boards draw from
+    if (w.easy_grades) {
+      const diff = h("button", { class: "tk-chron-btn", type: "button", title: "易：第一卷的难度 Easy: Book 1's level · 难：本卷的难度 Hard: this book's own" });
+      const show = () => { diff.textContent = TK.easy ? `难度：易 Easy (${w.easy_grades[0]})` : `难度：难 Hard (${w.grades.split("–")[0]})`; diff.setAttribute("aria-pressed", String(TK.easy)); };
+      diff.onclick = () => { TK.easy = !TK.easy; show(); };
+      show();
+      root.querySelector(".tk-head-btns").prepend(diff);
+    }
     // on a phone: whether a tap on a small board shows a ghost stone first (Auto) or plays at once (Never)
     if (TK_TOUCH && typeof Goban !== "undefined") {
       const conf = h("button", { class: "tk-chron-btn", type: "button" });

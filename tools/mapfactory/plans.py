@@ -689,7 +689,7 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
         objective = pb.get("objectives", {}).get(key) or pb.get("objectives", {}).get(f"{src}-{key.split('-', 1)[1]}") or f"Go to {nd['place']}."
         q = {"node": key, "role": nd.get("role", "main"), "place": where[0], "spot": where[1], "scene": nd["scene"],
              "title": scene["title"], "objective": objective, "after": after.get(key, []), "grade": nd.get("grade"),
-             "pool": nd.get("pool", [])}
+             "pool": nd.get("pool", []), **({"pool_easy": nd["pool_easy"]} if nd.get("pool_easy") else {})}
         for k in ("boss", "hint", "shrine"):
             if nd.get(k):
                 q[k] = nd[k]

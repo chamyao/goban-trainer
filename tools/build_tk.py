@@ -240,6 +240,15 @@ def main():
                 node["grade"] = GRADES[rank]
                 node["pool"] = draw(rank)
             nodes.append(node)
+        # an easy version (the menu's difficulty): every board's problems drawn again at easier grades, in a
+        # second pass so the book's own (hard) pools stay exactly as they were
+        if w.get("easy_grades"):
+            elo, ehi = RANK[w["easy_grades"][0]], RANK[w["easy_grades"][-1]]
+            for node, src in zip(nodes, w["nodes"]):
+                role = src.get("role")
+                if role and role != "boss":
+                    r = min(round(elo + (ehi - elo) * src.get("step", 0)) + (SHORTCUT if role == "short" else 0), len(GRADES) - 1)
+                    node["grade_easy"], node["pool_easy"] = GRADES[r], draw(r, 12)
         key = lambda k: f"{w['n']}-{k}"
         out = {k: v for k, v in w.items() if k not in ("nodes", "edges")}
         out["nodes"] = nodes
