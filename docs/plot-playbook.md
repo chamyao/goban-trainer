@@ -178,6 +178,7 @@ These came from the second research round, on *Chinese Paladin*, *Xuan-Yuan Swor
 | "I think the character switch went wrong, I'm the old man not Li Su" (apo110) | Don't switch away from the character the player has been playing until **that character's** stretch is done. Li Su rode in beside the carriage, so he stays the lead through the gate. |
 | "can i have some indicator showing what character im playing" (apo110) | Integration built it: a lead portrait in the goal box and a "Now playing" banner at each handoff. Count your handoffs and keep the switches meaningful. |
 | The portrait at the a4 board was Wang Yun's, but "that problem is part of her plot, not Wang Yun's" | A board belongs to whoever is deciding. Set the dilemma's `"who"` to that character, not the walking lead. |
+| "book goes on as wang yun but he just died" (apo110) | The lead is never a dead character. If the lead dies, hand off in the same scene to whoever carries the story on, including after a book's last scene. |
 | Moving the handoff earlier put Diaochan at the banquet before she is called in: "doesn't make sense" | Never stage a character in a scene before the novel brings them in. Fix the engine (here, the portrait), not the staging. |
 
 ### R4. Go problems are not story beats. Mix them.
