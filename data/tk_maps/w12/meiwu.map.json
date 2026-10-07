@@ -238,6 +238,7 @@
    "w": 6,
    "h": 4,
    "id": "mother",
+   "enter": "S",
    "door": "E",
    "faces": "E",
    "label": "His mother's rooms",
@@ -251,6 +252,7 @@
    "w": 6,
    "h": 4,
    "id": "diaochan",
+   "enter": "S",
    "door": "W",
    "faces": "W",
    "label": "Diaochan's rooms",
@@ -264,6 +266,7 @@
    "w": 6,
    "h": 4,
    "id": "women-w",
+   "enter": "S",
    "door": "E",
    "faces": "E",
    "label": "The women's quarters",
@@ -276,6 +279,7 @@
    "w": 6,
    "h": 4,
    "id": "women-e",
+   "enter": "S",
    "door": "W",
    "faces": "W",
    "label": "The women's quarters",
@@ -507,8 +511,8 @@
   {
    "id": "npc-3",
    "kind": "folk.maiden",
-   "x": 13.5,
-   "y": 22.9,
+   "x": 10.5,
+   "y": 24.9,
    "say": [
     "“They took me from my mother's door in Chang'an. Eight hundred of us, picked like peaches.”"
    ],
@@ -519,7 +523,7 @@
   {
    "id": "npc-4",
    "kind": "folk.woman",
-   "x": 13.5,
+   "x": 10.5,
    "y": 14.9,
    "say": [
     "“The old lady is ninety. She says her flesh trembles. She hasn't slept in days.”"
@@ -531,8 +535,8 @@
   {
    "id": "npc-5",
    "kind": "folk.maiden",
-   "x": 38.5,
-   "y": 22.9,
+   "x": 42.5,
+   "y": 24.9,
    "say": [
     "“The gate is open. Which road goes home?”"
    ],
@@ -639,20 +643,20 @@
   },
   {
    "to": "meiwu--mother",
-   "side": "W",
-   "x": 14.85,
-   "y": 11.6,
-   "w": 0.45,
-   "h": 0.8,
+   "side": "N",
+   "x": 11.6,
+   "y": 13.85,
+   "w": 0.8,
+   "h": 0.45,
    "door": true
   },
   {
    "to": "meiwu--diaochan",
-   "side": "E",
-   "x": 40.7,
-   "y": 11.6,
-   "w": 0.45,
-   "h": 0.8,
+   "side": "N",
+   "x": 43.6,
+   "y": 13.85,
+   "w": 0.8,
+   "h": 0.45,
    "door": true
   },
   {
@@ -678,12 +682,12 @@
    15
   ],
   "meiwu--mother": [
-   15,
-   12
+   12,
+   14
   ],
   "meiwu--diaochan": [
-   40,
-   12
+   44,
+   14
   ],
   "meiwu-road": [
    57,

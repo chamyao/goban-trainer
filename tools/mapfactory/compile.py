@@ -318,7 +318,7 @@ def compile_map(m, kit, out_dir):
             # stands at the door on a footprint of its own, so the door is at the building you see (the iso view
             # draws art at its footprint's centre), solid where it's drawn
             fw, fh = min(KINDS[drawn][0], o["w"]), min(KINDS[drawn][1], o["h"])
-            d = o.get("door") or "S"
+            d = o.get("enter") or o.get("door") or "S"
             fx = o["x"] + (o["w"] - fw) / 2 if d in ("N", "S") else (o["x"] + o["w"] - fw if d == "E" else o["x"])
             fy = o["y"] + (o["h"] - fh) / 2 if d in ("E", "W") else (o["y"] + o["h"] - fh if d == "S" else o["y"])
             obj(key, "prop", (fx + fw / 2) * T, (fy + fh) * T, kind=o["kind"], fw=fw * T, fh=fh * T, solid=solid,
