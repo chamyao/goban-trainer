@@ -40,11 +40,11 @@ const slug = s => String(s).replace(/^.*--/, '').replace(/[^\w]+/g, '_');
       await p.waitForTimeout(250); }
     const quiet = async () => { for (let i = 0; i < 40; i++) { const s = await p.evaluate(() => { const w = window.__w; return w && w.player && { busy: w.ui.busy(), cine: !!w.cine, leaving: !!w.leaving }; }); if (s && !s.busy && !s.cine && !s.leaving) return; if (s && s.busy) await p.evaluate(() => window.__w.ui.advance()); await p.waitForTimeout(250); } };
     // where things are drawn: captured each frame after the view has placed them
-    const hook = () => p.evaluate(() => { const w = window.__w; if (w.__isoHook) return; w.__isoHook = true;
+    const hook = () => p.evaluate(() => { const w = window.__w; if (w.player.__isoHook) return; w.player.__isoHook = true;   // (on the player: a new place restarts the scene, and its listeners go)
       const rec = o => ({ x: o.x, y: o.y, d: o._depth, w: o.displayWidth, h: o.displayHeight, ox: o.originX, oy: o.originY, sx: o.scaleX, sy: o.scaleY, key: o.texture.key, fr: o.frame.name, fx: o.flipX, vis: o.visible });
-      w.events.on('prerender', () => { w.__drawn = { p: rec(w.player), n: w.npcs.map(n => rec(n.spr)), b: (w.buildings || []).map(b => rec(b.img)) }; }); });
+      w.__drawn = null; w.events.on('prerender', () => { w.__drawn = { p: rec(w.player), n: w.npcs.map(n => rec(n.spr)), b: (w.buildings || []).map(b => rec(b.img)) }; }); });
     const goPlace = async id => { if (await p.evaluate(id => window.__w.placeId === id, id)) return; await p.evaluate(id => { const w = window.__w; w.leaving = false; w.cine = null; w.go(id); }, id); await p.waitForTimeout(1800); await quiet(); await hook(); };
-    const back = async place => { await quiet(); if (await p.evaluate(pl => window.__w.placeId !== pl, place)) await goPlace(place); };
+    const back = async place => { await quiet(); if (await p.evaluate(pl => window.__w.placeId !== pl, place)) await goPlace(place); await hook(); };
     const screenOf = (x, y) => p.evaluate(([x, y]) => { const w = window.__w, cam = w.cameras.main, cv = w.game.canvas, r = cv.getBoundingClientRect(), k = cv.clientWidth / w.scale.width, v = w.view(x, y);
       const sx = r.left + (v.x - cam.worldView.x) * cam.zoom * k, sy = r.top + (v.y - cam.worldView.y) * cam.zoom * k; return { sx, sy, on: sx > r.left + 4 && sx < r.right - 4 && sy > r.top + 60 && sy < r.bottom - 4 }; }, [x, y]);
     const drawnOf = (which, i, fy = .55) => p.evaluate(([which, i, fy]) => { const w = window.__w, D = w.__drawn, B = D && (which === 'p' ? D.p : D[which][i]); if (!B) return null; const cv = w.game.canvas, r = cv.getBoundingClientRect(), cam = w.cameras.main, k = cv.clientWidth / w.scale.width;
@@ -79,7 +79,8 @@ const slug = s => String(s).replace(/^.*--/, '').replace(/[^\w]+/g, '_');
             const own = v[0] > 0 ? 'E' : v[0] < 0 ? 'W' : v[1] > 0 ? 'S' : 'N';
             const starts = { 'door side': near(cx + v[0] * 30, cy + v[1] * 30) }; for (const k of ['N', 'E', 'S', 'W']) if (k !== own) starts[`${k} side`] = sides[k];
             const tx = cx + v[0] * (e.rect.width / 2 + 10), ty = cy + v[1] * (e.rect.height / 2 + 8) + 3;   // where a tap on it walks him first (tapAt)
-            return { to: e.to, side: e.side, cx, cy, gx: cx + v[0] * 12, gy: cy + v[1] * 12 + 3, key: { N: 'ArrowUp', S: 'ArrowDown', E: 'ArrowRight', W: 'ArrowLeft' }[e.side], bi, starts, approach: [tx, ty], approachFree: free(tx, ty) }; });
+            const ln = [cx + v[0] * 24, cy + v[1] * 24 + 3];   // on the door's line, for the key
+            return { to: e.to, side: e.side, cx, cy, keyStart: free(ln[0], ln[1]) ? ln : null, gx: cx + v[0] * 12, gy: cy + v[1] * 12 + 3, key: { N: 'ArrowUp', S: 'ArrowDown', E: 'ArrowRight', W: 'ArrowLeft' }[e.side], bi, starts, approach: [tx, ty], approachFree: free(tx, ty) }; });
         const npcs = w.npcs.map((n, i) => ({ i, id: n.id || n.who, x: n.spr.x, y: n.spr.y, vis: n.spr.visible, near: blds.filter(b => dist(b.foot, n.spr.x, n.spr.y) < 64).map(b => b.i), stand: near(n.spr.x + 40, n.spr.y + 30) || near(n.spr.x - 40, n.spr.y + 30) }));
         const spots = Object.entries(w.spots).map(([k, s]) => ({ k, x: s.x, y: s.y, inside: blds.filter(b => dist(b.foot, s.x, s.y + 12) === 0).map(b => b.frame), targetFree: free(s.x, s.y + 12) }));
         return { blds, doors, npcs, spots };
@@ -104,17 +105,16 @@ const slug = s => String(s).replace(/^.*--/, '').replace(/[^\w]+/g, '_');
               if (o.out !== 'in') await shot(`${place}-door-${slug(d.to)}-${from.replace(/ /g, '')}-${how.replace(/ /g, '')}`, tgt);
             }
           }
-          if (d.starts['door side']) {   // the key toward the door, from its side
-            await back(place); const st = d.starts['door side']; await stand(st[0], st[1]); await p.waitForTimeout(500);
+          if (d.keyStart || d.starts['door side']) {   // the key toward the door, from its side: on its line (else the nearest free spot)
+            await back(place); const st = d.keyStart || d.starts['door side']; await stand(st[0], st[1]); await p.waitForTimeout(500);
             await p.evaluate(() => window.__w.game.canvas.focus && window.__w.game.canvas.focus());
             const a = await screenOf(st[0], st[1]); await p.keyboard.down(d.key); let inn = false;
             for (let i = 0; i < 14 && !inn; i++) { await p.waitForTimeout(200); inn = await p.evaluate(to => window.__w.placeId === to, d.to); }
             await p.keyboard.up(d.key);
             const z = inn ? null : await screenOf(...(await p.evaluate(() => [window.__w.player.x, window.__w.player.y])));
-            rows.push({ to: d.to, side: d.side, from: 'door side', how: 'key', key: d.key, out: inn ? 'in' : 'not in after 3 s', screen: z ? [Math.round(z.sx - a.sx), Math.round(a.sy - z.sy)] : null });
+            rows.push({ to: d.to, side: d.side, from: 'door side', how: 'key', key: d.key, onLine: !!d.keyStart, out: inn ? 'in' : `not in after 3 s${d.keyStart ? '' : ' (no free ground on the door\'s line)'}`, screen: z ? [Math.round(z.sx - a.sx), Math.round(a.sy - z.sy)] : null });
             if (!inn) await shot(`${place}-door-${slug(d.to)}-key`, z);
           }
-          rows.push({ to: d.to, side: d.side, how: 'approach point', out: d.approachFree ? 'free' : 'inside a wall or footprint', at: d.approach });
         }
         const by = k => rows.filter(r => r.how === k && r.out !== 'off screen'), ok = rs => rs.filter(r => r.out === 'in').length;
         console.log(`-- ${KIT} ${dev} ${place}: ${doors.length} open building doors (of ${info.doors.length}), facing ${[...new Set(doors.map(d => d.side))].join(' ')}`);
@@ -123,7 +123,6 @@ const slug = s => String(s).replace(/^.*--/, '').replace(/[^\w]+/g, '_');
         for (const s of ['N', 'S', 'E', 'W']) { const rs = rows.filter(r => r.side === s && !['key', 'approach point'].includes(r.how) && r.out !== 'off screen' && r.how !== '-'); if (rs.length) console.log(`   doors facing ${s}: in ${ok(rs)}/${rs.length}`); }
         const tally = {}; for (const r of rows) if (r.out !== 'in' && r.how !== 'approach point') { const k = `${r.how}: ${r.out.replace(/\d+ px/g, 'N px')}`; tally[k] = (tally[k] || 0) + 1; }
         console.log('   not in:', JSON.stringify(tally));
-        const bad = rows.filter(r => r.how === 'approach point' && r.out !== 'free'); if (bad.length) console.log(`   approach point inside a wall: ${bad.map(r => slug(r.to)).join(', ')}`);
       }
 
       // ---- 2 drawing ----
