@@ -264,7 +264,7 @@ function worldScenes() {
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
       for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=72`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=73`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -303,6 +303,7 @@ function worldScenes() {
       // one map, several looks (Places' "states"): the last whose "when" holds and "until" doesn't
       try { this.states = JSON.parse((map.properties || []).find(x => x.name === "states")?.value || "null"); } catch { this.states = null; }
       try { this.ways = JSON.parse((map.properties || []).find(x => x.name === "ways")?.value || "null"); } catch { this.ways = null; }   // the streets (Places), for the lit route
+      this.pathRows = ((map.properties || []).find(x => x.name === "paths")?.value || "").split("|").filter(Boolean);   // drawn roads and paths, by tile
       this.stated = []; this.refs = {}; this.lights = []; this.sightZones = []; this.sgrid = null; if (this.coneG) { this.coneG.destroy(); this.coneG = null; } if (this.fog) { this.fog.destroy(); this.fog = null; } this.procession = null;
       const sets = map.tilesets.map(ts => map.addTilesetImage(ts.name, `kit-${ts.name}`));
       this.water = null;
@@ -1040,7 +1041,7 @@ function worldScenes() {
     // streets, or when they'd be the long way round, the walking path itself.
     routePoints(from, to) {
       const T = this.tw || 16, W = this.ways;
-      const walk = (a, b) => [a, ...(this.findPath(a.x, a.y, b.x, b.y) || [b])];
+      const walk = (a, b) => [a, ...(this.findPath(a.x, a.y, b.x, b.y, null, true) || [b])];
       const direct = Math.hypot(to.x - from.x, to.y - from.y);
       if (!W || !W.edges || !W.edges.length || direct < 5 * T) return walk(from, to);
       const N = W.nodes.map(([x, y]) => ({ x: x * T, y: y * T })), adj = N.map(() => []);
@@ -1095,8 +1096,12 @@ function worldScenes() {
         const a = out[out.length - 1], b = pts[i];
         if (Math.abs(b.x - a.x) > 2 && Math.abs(b.y - a.y) > 2) {
           const e1 = { x: b.x, y: a.y }, e2 = { x: a.x, y: b.y };
-          if (clear(a, e1) && clear(e1, b)) out.push(e1);
-          else if (clear(a, e2) && clear(e2, b)) out.push(e2);
+          const T = this.tw || 16, road = (p, q) => { let k = 0; for (let i = 0; i <= 8; i++) { const x = p.x + (q.x - p.x) * i / 8, y = p.y + (q.y - p.y) * i / 8,
+            r = this.pathRows && this.pathRows[Math.floor(y / T)]; if (r && r[Math.floor(x / T)] === "1") k++; } return k; };
+          const ok1 = clear(a, e1) && clear(e1, b), ok2 = clear(a, e2) && clear(e2, b);
+          if (ok1 && ok2) out.push(road(a, e1) + road(e1, b) >= road(a, e2) + road(e2, b) ? e1 : e2);   // the L that keeps to the road
+          else if (ok1) out.push(e1);
+          else if (ok2) out.push(e2);
         }
         out.push(b);
       }
@@ -1401,8 +1406,11 @@ function worldScenes() {
     }
     // A* over the grid (8 directions, no corner-cutting), then the path pulled straight.
     // People standing about count as in the way (all but `skip`, the one being walked up to).
-    findPath(fx, fy, tx, ty, skip = null) {
-      const G0 = this.walkGrid(), C = G0.C, key = (x, y) => y * G0.cols + x;
+    // prefer: keep to the drawn roads and paths where that's practical (the lit route), ground off them costing more
+    findPath(fx, fy, tx, ty, skip = null, prefer = false) {
+      const G0 = this.walkGrid(), C = G0.C, key = (x, y) => y * G0.cols + x, T = this.tw || 16;
+      const onPath = (x, y) => { const r = this.pathRows && this.pathRows[Math.floor(y * C / T)]; return !!r && r[Math.floor(x * C / T)] === "1"; };
+      const usePaths = prefer && this.pathRows && this.pathRows.length;
       const people = new Set();
       for (const n of this.npcs) {
         if (n === skip || !n.spr.visible) continue;
@@ -1431,7 +1439,8 @@ function worldScenes() {
         for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]]) {
           const nx = x + dx, ny = y + dy;
           if (!G.free(nx, ny) || (dx && dy && (!G.free(x + dx, y) || !G.free(x, y + dy)))) continue;
-          const c = g.get(key(x, y)) + (dx && dy ? 1.414 : 1) * (G0.roomy(nx, ny) ? 1 : 3);   // hugging a wall, or through a gap, only when it saves the way round
+          const c = g.get(key(x, y)) + (dx && dy ? 1.414 : 1) * (G0.roomy(nx, ny) ? 1 : 3)   // hugging a wall, or through a gap, only when it saves the way round
+            * (usePaths && !onPath(nx, ny) ? 2.5 : 1);                                       // off the road only when the road is the long way
           if (c < (g.get(key(nx, ny)) ?? Infinity)) { g.set(key(nx, ny), c); from.set(key(nx, ny), [x, y]); open.push([c + h(nx, ny), nx, ny]); }
         }
       }
@@ -1446,7 +1455,8 @@ function worldScenes() {
       for (let c = [gx, gy]; c; c = from.get(key(c[0], c[1]))) cells.unshift(c);
       // keep only the turning points that can't be seen past
       const clear = (a, b) => { const steps = Math.ceil(Math.hypot(b[0] - a[0], b[1] - a[1]) * 2);
-        for (let i = 1; i < steps; i++) { const x = Math.round(a[0] + (b[0] - a[0]) * i / steps), y = Math.round(a[1] + (b[1] - a[1]) * i / steps); if (!G.free(x, y) || !G0.roomy(x, y)) return false; } return true; };
+        const road = usePaths && onPath(a[0], a[1]) && onPath(b[0], b[1]);   // a road stretch isn't straightened across the grass
+        for (let i = 1; i < steps; i++) { const x = Math.round(a[0] + (b[0] - a[0]) * i / steps), y = Math.round(a[1] + (b[1] - a[1]) * i / steps); if (!G.free(x, y) || !G0.roomy(x, y) || (road && !onPath(x, y))) return false; } return true; };
       const pts = [cells[0]];
       for (let i = 1; i < cells.length; i++) if (!clear(pts[pts.length - 1], cells[i])) pts.push(cells[i - 1]);
       pts.push(cells[cells.length - 1]);

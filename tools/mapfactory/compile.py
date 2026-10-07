@@ -373,6 +373,9 @@ def compile_map(m, kit, out_dir):
                           {"name": "source", "type": "string", "value": f"{m['id']}.map.json"}]
                          + ([{"name": "states", "type": "string", "value": json.dumps(voiced_states(m["states"]), ensure_ascii=False)}] if m.get("states") else [])
                          + ([{"name": "ways", "type": "string", "value": json.dumps(m["ways"], separators=(",", ":"))}] if m.get("ways") else []),   # the streets, for the lit route
+                         + ([{"name": "paths", "type": "string", "value": "|".join("".join("1" if ch in "=:" else "0" for ch in row)
+                                                                                 for row in m["terrain"]["rows"])}]
+                            if m.get("archetype") != "interior" else []),   # the drawn roads and paths, which the lit route keeps to
            "tilesets": tilesets,
            "layers": [{"id": i + 1, "name": n, "type": "tilelayer", "width": W, "height": H, "x": 0, "y": 0,
                        "opacity": 1, "visible": True, "data": data} for i, (n, data) in enumerate(layers)] +
