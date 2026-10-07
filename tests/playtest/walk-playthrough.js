@@ -51,7 +51,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   await hook();
   // SYNC: a reroute rebuilds the world (a new game); the game running before each hide/show flip is tagged, and a flip
   // after which the tag is gone was a reroute (app.js calls route() by its own reference, so a wrapper can't see it)
-  let lastVis = Date.now(), visFlips = 0, flipAt = 0, prevS = null; const reroutes = [];
+  let lastVis = Date.now(), visFlips = 0, flipAt = 0, prevS = null, pushWait = false; const reroutes = [];
 
   // the page, as the loop needs it each tick
   const look = () => p.evaluate(() => {
@@ -200,13 +200,14 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       if (process.env.SYNC_PUSH && visFlips === 3) for (const u of Object.keys(store)) { const d = store[u]; d.progress = d.progress || {}; d.progress.tk = d.progress.tk || {}; d.progress.tk['12-from-elsewhere'] = 1; }   // another device's solve: this one should pull it and rebuild
       const before = await p.evaluate(n => { const w = window.__w; if (w && w.game) w.game.__flip = n; return { busy: !!(w && w.ui && w.ui.busy()), cine: !!(w && w.cine), duel: !!document.querySelector('.tk-duel svg'), place: w && w.placeId }; }, visFlips).catch(() => ({}));
       await p.evaluate(async () => { for (const v of ['hidden', 'visible']) { Object.defineProperty(document, 'visibilityState', { value: v, configurable: true }); Object.defineProperty(document, 'hidden', { value: v === 'hidden', configurable: true }); document.dispatchEvent(new Event('visibilitychange')); await new Promise(r => setTimeout(r, 300)); } }).catch(() => {});
-      flipAt = Date.now(); }
+      flipAt = Date.now(); if (process.env.SYNC_PUSH && visFlips === 3) pushWait = true; continue; }   // (this tick's look came before the tag: judge from the next one)
     // a rebuilt world (route() makes a new game): the tag's gone; what was up the moment before, and how long after the flip
     if (SYNC && visFlips && s.gtag !== visFlips && !s.boot) {
       const b4 = prevS || {}; reroutes.push({ beat, place: b4.place, busy: !!b4.busy, cine: !!b4.cine, duel: !!b4.duel, secs: Math.round((Date.now() - flipAt) / 1000) });
       console.log(`     sync: the world was rebuilt at ${beat}, ${Math.round((Date.now() - flipAt) / 1000)} s after a hide/show (${b4.place}${b4.cine ? ', mid-scene' : ''}${b4.busy ? ', a line up' : ''}${b4.duel ? ', a board up' : ''})`);
       await p.evaluate(n => { const w = window.__w; if (w && w.game) w.game.__flip = n; }, visFlips).catch(() => {}); }
     prevS = s;
+    if (pushWait && !s.busy && !s.cine && !s.duel && !s.leaving && !s.walking) { pushWait = false; await p.waitForTimeout(4000); continue; }   // SYNC_PUSH: a still moment after the scene, as a player reading would
     if (s.duel) {   // a board: win it with Skip, note what it drew, then Continue
       if (s.cont) { await tapEl('.tk-duel-go'); await p.waitForTimeout(400); continue; }
       if (s.skip) {

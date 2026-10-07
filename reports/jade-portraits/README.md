@@ -47,3 +47,8 @@ The goal box's lead chip followed the party in every view: Wang Yun → Diaochan
 - See `sheet-phone-after-fix.png`, `sheet-360-after-fix.png` and `phone-wangyun-after-fix.png`.
 - The chip followed the party in both runs, with no empty moment this time.
 - Still open: Li Jue and Jia Xu have no painting yet, pending the user's OK.
+
+## Li Jue and Jia Xu (e9553e8)
+- Their scenes (a15–a16a) were walked on Jade desktop, iPhone 13 and 360, and on Genshin desktop.
+- Both now show their painted portrait everywhere: `phone-jiaxu.png`, `phone-lijue.png`, `desktop-jiaxu.png`, `genshin-desktop-lijue.png`.
+- Ma Midi still uses the pixel bust.
