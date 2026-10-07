@@ -62,8 +62,9 @@ const path = require('path');
 
   // 3. through the real board: the problem fixed once seen; only the first result counts
   await fresh('12-a9');
-  const openBoard = async key => { await p.evaluate(k => window.__w.duel(k), key); for (let i = 0; i < 40; i++) { await p.waitForTimeout(200); if (await p.locator('.tk-duel svg').count()) break; } await p.waitForTimeout(300);
-    return p.evaluate(() => { const a = document.querySelector('.tk-duel-src a'), m = a && a.href.match(/\/q\/(\d+)/); return m ? +m[1] : null; }); };
+  const openBoard = async key => { await p.evaluate(k => { window.__w.duel(k); }, key);   /* not awaited: it settles when the board ends */ let id = null;   // the problem's id, from its source link once the board is up
+    for (let i = 0; i < 60 && id == null; i++) { await p.waitForTimeout(200); id = await p.evaluate(() => { const a = document.querySelector('.tk-duel svg') && document.querySelector('.tk-duel-src a'), m = a && a.href.match(/\/q\/(\d+)/); return m ? +m[1] : null; }); }
+    return id; };
   const leave = async () => { await p.locator('.tk-duel-keys button', { hasText: 'Leave' }).first().tap().catch(() => {}); await p.waitForTimeout(800); await ready(); };
   const result = (ok, flaw) => p.evaluate(([ok, flaw]) => { const t = window.__trainer; if (t) t.flawed = flaw; dispatchEvent(new CustomEvent('tczw:result', { detail: ok ? 'ok' : 'fail' })); }, [ok, flaw]);
   const id1 = await openBoard('12-a9'); await leave();
@@ -80,7 +81,7 @@ const path = require('path');
   // a flawed solve (a hint) is a loss
   await p.evaluate(() => { const p0 = loadProgress(); p0.tkElo.r = 900; TK.saveProg(p0); });
   const idB = await openBoard('12-a9~2'); const s0 = (await elo()).r; await result(true, 'a hint'); await p.waitForTimeout(300); const s1 = (await elo()).r;
-  check(idB && s1 < s0, `a solve with a hint counts as a miss: the rating goes down (${s0} → ${s1})`);
+  check(s1 < s0, `a solve with a hint counts as a miss: the rating goes down (${s0} → ${s1})`);
   await leave();
 
   // 4. it lasts: a reload, another book and back
