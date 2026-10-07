@@ -709,6 +709,21 @@ FACE_LOOKS = {
     "caiyong": ("Cai Yong", "a sorrowful old scholar with a grey beard, in a plain scholar's robe and cap"),
     "chengpu": ("Cheng Pu", "a veteran general with a grizzled beard, in red armour, holding a long spear"),
     "handang": ("Han Dang", "a tough general with a square jaw and short beard, in red armour, holding a broadsword"),
+    # the Cao Cao arc's speakers (test book 13)
+    "hejin": ("He Jin", "a heavy-set, proud General-in-Chief in his forties, a butcher's son risen high, short beard, "
+                        "in rich red court robes over armour and a black official's cap"),
+    "chenlin": ("Chen Lin", "a sharp-eyed young secretary and writer in his thirties with a thin beard, in a blue-grey "
+                            "scholar's robe and cap, a brush in his hand"),
+    "cuiyi": ("Cui Yi", "a gentle retired official of sixty living as a farmer, grey hair in a topknot, a long grey "
+                        "beard, in a plain brown hemp robe"),
+    "dingguan": ("Ding Guan", "a stern, upright old minister with grey hair and a long grey beard, in a dark blue court "
+                              "robe and black official's cap"),
+    "wufu": ("Wu Fu", "a bold court officer in his thirties with a short beard and fierce eyes, in a dark red court "
+                      "robe and black cap, a short knife hidden in his sleeve"),
+    "weihong": ("Wei Hong", "a wealthy, generous gentleman of Chenliu in his fifties with a long greying beard, in a "
+                            "purple silk robe with gold trim and a black cap"),
+    "xiahoudun": ("Xiahou Dun", "a fierce general in his thirties with a short black beard and a black eye patch over "
+                                "his left eye, in dark iron armour with red cloth, holding a spear"),
     "jiaxu": ("Jia Xu", "a shrewd, calm strategist in his forties with a thin beard and heavy-lidded eyes, in a dark robe "
                         "and scholar's cap"),
     "lijue": ("Li Jue", "a coarse, bristle-bearded Liangzhou general in his thirties, in dark iron armour with purple "
@@ -755,4 +770,5 @@ _SP = _Path(__file__).resolve().parent.parent / "assets/tk/stills/scene_prompts.
 if _SP.exists():
     for _id, _e in _json.loads(_SP.read_text()).items():
         if _e.get("scene"):   # a new still (a transition beat) is added; scene "zhangbao" from "zhangbao_a"
-            STILLS.setdefault(_id, {"scene": _id.rsplit("_", 1)[0], "lens": _id.rsplit("_", 1)[1]})["prompt"] = _e["scene"]
+            _sc, _, _ln = _id.rpartition("_")   # an id with no "_" (fireflies) is its own scene
+            STILLS.setdefault(_id, {"scene": _sc or _id, "lens": _ln})["prompt"] = _e["scene"]
