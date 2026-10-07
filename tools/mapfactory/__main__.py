@@ -32,9 +32,10 @@ def out_dir(n):
 
 def build_from_plans(n, pw, world):
     """A book whose places are written as plan grids (plans.py): every map, room and quest from its plans."""
-    from plans import build_world, load, verify
+    from plans import build_world, key_prefix, load, verify
     plans, tables, zh = load(pw)
-    maps, places, quests = build_world(n, world, plans, tables, {**ZH, **zh}, prefix=str(pw) if pw != n else None)
+    maps, places, quests = build_world(n, world, plans, tables, {**ZH, **zh},
+                                       prefix=key_prefix(pw) if key_prefix(pw) != str(n) else None)
     problems = verify(maps)
     if problems:
         sys.exit("plans: " + "; ".join(problems))
@@ -116,7 +117,7 @@ def main():
     ap.add_argument("--world", type=int, default=1)
     ap.add_argument("--kit", action="append", help="art kit(s) to compile for (default: xianxia, jade, genshin)")
     ap.add_argument("--preview", action="store_true", help="also render PNG previews into docs/maps/")
-    ap.add_argument("--plans", type=int, default=None, help="build the places from this book's plan grids (plans.py), e.g. --world 12 --plans 2")
+    ap.add_argument("--plans", type=lambda v: int(v) if v.isdigit() else v, default=None, help="build the places from this book's plan grids (plans.py), e.g. --world 12 --plans 2, or an arc: --plans cc")
     a = ap.parse_args()
     if a.cmd in ("build", "all"):
         build(a.world, a.plans)
