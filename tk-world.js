@@ -342,8 +342,10 @@ function worldScenes() {
       for (const s of Object.values(this.spots)) {   // a story waiting here: a slow glow on the ground, gold for the main story, cooler for side stories
         const q = s.node && this.region.quests.find(x => x.node === s.node);
         if (!q || q.shrine || s.use === "shrine") continue;   // shrines have their own looks
-        s.glow = this.add.ellipse(s.x, s.y + 2, 30, 11, q.role === "side" || q.role === "short" ? 0x9fd8ff : 0xffd27a, .5).setDepth(-995).setVisible(false);
-        this.tweens.add({ targets: s.glow, scaleX: 1.25, scaleY: 1.25, alpha: .2, duration: 1100, yoyo: true, repeat: -1, ease: "Sine.easeInOut" });
+        // a dark rim round it, so it still reads on yellow sand and pale paving (apo110: gold on yellow vanished)
+        s.glow = this.add.ellipse(s.x, s.y + 2, 30, 11, q.role === "side" || q.role === "short" ? 0x9fd8ff : 0xffd27a, .6)
+          .setStrokeStyle(2, q.role === "side" || q.role === "short" ? 0x1c3a5a : 0x6a2a0c, .9).setDepth(-995).setVisible(false);
+        this.tweens.add({ targets: s.glow, scaleX: 1.25, scaleY: 1.25, alpha: .45, duration: 1100, yoyo: true, repeat: -1, ease: "Sine.easeInOut" });
       }
       this.focusMark = this.add.ellipse(0, 0, 20, 8).setStrokeStyle(1.5, 0xfff3c4, .85).setDepth(-994).setVisible(false);
       this.tweens.add({ targets: this.focusMark, alpha: .35, duration: 700, yoyo: true, repeat: -1, ease: "Sine.easeInOut" });
