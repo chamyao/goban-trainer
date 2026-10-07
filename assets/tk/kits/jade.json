@@ -2,7 +2,6 @@
  "kit": "jade",
  "name": "Jade",
  "credit": "Jade Tileset Pack by Willibab, https://willibab.itch.io/free-jade-tileset-pack, CC-BY Notice board, go table, moon gate, gateway, fire pit and water drawn for the game (tools/draw_tk_extras.py).",
- "portraits": true,
  "tile": 16,
  "sheets": {
   "tiles": "assets/tk/jade/tiles.png",
@@ -1797,5 +1796,6 @@
     "under": "void"
    }
   }
- }
+ },
+ "portraits": true
 }
