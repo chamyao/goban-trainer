@@ -1546,10 +1546,16 @@ function worldScenes() {
       if (spot) return { kind: "spot", k: spot.key, s: spot.s };
       // a way out: a building's door (tap the building or its doorway), or any other exit
       // (a room's door out, a road off the edge of the map), tapped on or near
-      const doorway = e => e.side === "N" && e.rect.width < 16;
+      // a building's doorway, whichever face it's on (a small rect; the map's edges and wall gates are long)
+      const doorway = e => e.rect.width < 16 && e.rect.height < 16;
+      const step = e => {   // the doorstep: ~12 px out from the doorway, where a player taps in the iso view
+        const v = { N: [0, 1], S: [0, -1], E: [-1, 0], W: [1, 0] }[e.side] || [0, 0], r = e.rect;
+        return x > Math.min(r.x, r.x + v[0] * 14) - 4 && x < Math.max(r.right, r.right + v[0] * 14) + 4
+          && y > Math.min(r.y, r.y + v[1] * 14) - 4 && y < Math.max(r.bottom, r.bottom + v[1] * 14) + 4;
+      };
       const door = this.exits.filter(e => doorway(e)
-          // the building itself (its face, from the door up), not the road in front of it
-          ? this.onBuilding(e, x, y, at, sx, sy) && this.placeOpen(e.to)
+          // the building itself (as drawn), or the doorstep right before its door
+          ? (this.onBuilding(e, x, y, at, sx, sy) || step(e)) && this.placeOpen(e.to)
           : x > e.rect.x - 20 && x < e.rect.right + 20 && y > e.rect.y - 20 && y < e.rect.bottom + 20)
         .sort((a, b) => Math.hypot(a.rect.centerX - x, a.rect.centerY - y) - Math.hypot(b.rect.centerX - x, b.rect.centerY - y))[0];
       if (door) return { kind: "door", e: door };
@@ -1566,7 +1572,12 @@ function worldScenes() {
     }
     // A tap on the building a door belongs to (as drawn), or just above its door.
     onBuilding(e, x, y, at = () => ({ x, y }), sx, sy) {
-      const b = (this.buildings || []).find(b => Math.abs(b.x - e.rect.centerX) < b.w / 2 && Math.abs(b.bottom - e.rect.bottom) < 20);
+      // the building whose walls the door is in (any face): its solid's box, or the art's flat bounds
+      const box = b => (b.img && b.img.isoBox) || [b.x - b.w / 2, b.bottom - b.h, b.x + b.w / 2, b.bottom];
+      const gap = b => { const [x0, y0, x1, y1] = box(b), cx = e.rect.centerX, cy = e.rect.centerY;
+        return Math.hypot(Math.max(x0 - cx, 0, cx - x1), Math.max(y0 - cy, 0, cy - y1)); };
+      const b = (this.buildings || []).filter(b => gap(b) < 20).sort((p, q) => gap(p) - gap(q))[0]
+        || (this.buildings || []).find(b => Math.abs(b.x - e.rect.centerX) < b.w / 2 && Math.abs(b.bottom - e.rect.bottom) < 20);
       // isometric: the building as drawn, its painted pixels only (not the empty corners or the road before it)
       if (b && this.iso && b.img && sx != null) {
         // where the view draws it (between frames img.x, img.y are back on the flat map), and a mirrored building's pixels
@@ -1609,7 +1620,10 @@ function worldScenes() {
     walkTo(tx, ty, { then = null, aim = null, door = null, ring = true } = {}) {
       const P = this.player, path = this.findPath(P.x, P.y - 3, tx, ty - 3, aim && aim.kind === "npc" ? aim.n : null);
       if (!path) return false;
-      if (door) path.push({ x: door.rect.centerX, y: door.rect.centerY - (door.side === "N" ? 2 : 0) });
+      // the doorway's centre and a little on, the way in: arriving within a few px of the centre left him outside
+      // its small rect from a building's side or back (Testing's iso survey: stopped 4-6 px short)
+      if (door) { const vin = { N: [0, -1], S: [0, 1], E: [1, 0], W: [-1, 0] }[door.side] || [0, 0];
+        path.push({ x: door.rect.centerX + vin[0] * 3, y: door.rect.centerY + vin[1] * 3 }); }
       this.walk = { path, then, aim, door: !!door, last: { x: P.x, y: P.y }, stuck: 0, retries: 0 };
       if (ring) {
         const r = this.add.circle(tx, ty, 5).setStrokeStyle(1, 0xfff3c4, .9).setDepth(-997);
@@ -1636,7 +1650,7 @@ function worldScenes() {
       const W = this.walk, P = this.player, p = W.path[0];
       if (!p) return [0, 0];
       const dx = p.x - P.x, dy = p.y - (P.y - 3), d = Math.hypot(dx, dy);
-      if (d < 4) {
+      if (d < (W.door && W.path.length === 1 ? 1.5 : 4)) {   // the doorway itself: right in, not near
         W.path.shift();
         if (!W.path.length) { this.arrive(W); return [0, 0]; }
         return this.followWalk(dt);
