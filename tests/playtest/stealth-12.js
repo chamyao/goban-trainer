@@ -93,7 +93,7 @@ for(const q of beats){
     const cells=path.map(c=>{const x=c%cols;return at(x,(c-x)/cols);});cells[cells.length-1]=goal;
     // walk it in step with the game's own clock
     if(!walk)return {steps:found,direct,careless,secs:found*STEP*DT/1000,wait:((found-direct)*STEP*DT/1000)};
-    window.__plan={cells,i:0,acc:0,done:false};const h=(t,delta)=>{const pl=window.__plan;if(pl.done||w.caught||w.cine||w.leaving){w.events.off('update',h);return;}if(w.ui.busy())return;pl.acc+=delta;const k=Math.min(pl.cells.length-1,Math.floor(pl.acc/(STEP*DT)));const q=pl.cells[k];w.walk=null;P.body.reset(q.x,q.y);if(k>=pl.cells.length-1){pl.done=true;}};
+    window.__plan={cells,i:0,acc:0,done:false};const h=(t,delta)=>{const pl=window.__plan;if(pl.done||w.caught||w.cine||w.leaving){w.events.off('update',h);return;}if(w.ui.busy())return;pl.acc+=delta;const k=Math.min(pl.cells.length-1,Math.floor(pl.acc/(STEP*DT)));const q=pl.cells[k];if(pl.k!==k){pl.k=k;w.walkTo(q.x,q.y,{ring:false});}   /* walked: the game's own tap-walk, a cell at a time, not set there */if(k>=pl.cells.length-1){pl.done=true;}};
     w.events.on('update',h);
     return {steps:found,direct,secs:found*STEP*DT/1000,wait:((found-direct)*STEP*DT/1000)};},[q.spot,q.place,q.node,walk]);
   // the wait depends on when she sets off: a few moments, a second and a half apart
