@@ -49,10 +49,9 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   for (let i = 0; i < 40 && !(await p.evaluate(() => typeof TKOverlay !== 'undefined')); i++) await p.waitForTimeout(250);
   const hook = () => p.evaluate(() => { if (typeof TKOverlay === 'undefined' || TKOverlay.__hooked) return; const o = TKOverlay.open.bind(TKOverlay); TKOverlay.open = (n, key, at) => { window.__boardKey = key; return o(n, key, at); }; TKOverlay.__hooked = true; }).catch(() => {});
   await hook();
-  // SYNC: every route() call counted, and whether a scene, a line or a board was up when it came (a reroute mid-scene)
-  const hookRoute = () => SYNC && p.evaluate(() => { if (typeof route !== 'function' || window.__routeHooked) return; const r0 = route; window.__routes = window.__routes || []; window.__routeHooked = true;
-    window.route = function (...a) { const w = window.__w; window.__routes.push({ at: Date.now(), hash: location.hash, busy: !!(w && w.ui && w.ui.busy()), cine: !!(w && w.cine), duel: !!document.querySelector('.tk-duel svg') }); return r0.apply(this, a); }; }).catch(() => {});
-  await hookRoute(); let lastVis = Date.now(), visFlips = 0;
+  // SYNC: a reroute rebuilds the world (a new game); the game running before each hide/show flip is tagged, and a flip
+  // after which the tag is gone was a reroute (app.js calls route() by its own reference, so a wrapper can't see it)
+  let lastVis = Date.now(), visFlips = 0; const reroutes = [];
 
   // the page, as the loop needs it each tick
   const look = () => p.evaluate(() => {
@@ -195,10 +194,15 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       if (!errand && /isn't open yet|还没有开通|barred|不为你开|not open|turns you away|No one goes|receives no one/i.test(s.line)) refused = `refused: "${s.line.slice(0, 90)}"`; }
     if (s.cancel) { await p.getByText('Cancel', { exact: true }).first()[TAPM]().catch(() => {}); continue; }
     if (s.scroll) { await tapEl('.tk-scroll-go'); await p.waitForTimeout(300); continue; }
-    if (!s.duel) { await hook(); await hookRoute(); }   // (again after a reload)
+    if (!s.duel) await hook();   // (again after a reload)
     if (SYNC && Date.now() - lastVis > 45000) {   // the tab hidden and shown again (a phone app switch): the game pulls, and reroutes only if something changed
       lastVis = Date.now(); visFlips++;
-      await p.evaluate(async () => { for (const v of ['hidden', 'visible']) { Object.defineProperty(document, 'visibilityState', { value: v, configurable: true }); Object.defineProperty(document, 'hidden', { value: v === 'hidden', configurable: true }); document.dispatchEvent(new Event('visibilitychange')); await new Promise(r => setTimeout(r, 300)); } }).catch(() => {}); }
+      if (process.env.SYNC_PUSH && visFlips === 3) for (const u of Object.keys(store)) { const d = store[u]; d.progress = d.progress || {}; d.progress.tk = d.progress.tk || {}; d.progress.tk['12-from-elsewhere'] = 1; }   // another device's solve: this one should pull it and rebuild
+      const before = await p.evaluate(n => { const w = window.__w; if (w && w.game) w.game.__flip = n; return { busy: !!(w && w.ui && w.ui.busy()), cine: !!(w && w.cine), duel: !!document.querySelector('.tk-duel svg'), place: w && w.placeId }; }, visFlips).catch(() => ({}));
+      await p.evaluate(async () => { for (const v of ['hidden', 'visible']) { Object.defineProperty(document, 'visibilityState', { value: v, configurable: true }); Object.defineProperty(document, 'hidden', { value: v === 'hidden', configurable: true }); document.dispatchEvent(new Event('visibilitychange')); await new Promise(r => setTimeout(r, 300)); } }).catch(() => {});
+      await p.waitForTimeout(1500);
+      const same = await p.evaluate(n => { const w = window.__w; return !!(w && w.game && w.game.__flip === n); }, visFlips).catch(() => false);
+      if (!same) { reroutes.push({ beat, ...before }); console.log(`     sync: the world was rebuilt after a hide/show at ${beat} (${before.place}${before.cine ? ', mid-scene' : ''}${before.busy ? ', a line up' : ''}${before.duel ? ', a board up' : ''})`); } }
     if (s.duel) {   // a board: win it with Skip, note what it drew, then Continue
       if (s.cont) { await tapEl('.tk-duel-go'); await p.waitForTimeout(400); continue; }
       if (s.skip) {
@@ -271,8 +275,8 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   fs.writeFileSync(path.join(__dirname, 'out', `walk-playthrough-${BOOK}-${DIFF || 'default'}.json`), JSON.stringify(out, null, 1));
   if (diffCheck.off && diffCheck.off.length) console.log(`FAIL boards drawn from the wrong pool (${diffCheck.adaptive ? 'rated' : diffCheck.easy ? 'easy' : 'hard'}): ${diffCheck.off.join(', ')}`);
   console.log(`walk-playthrough Book ${BOOK} (${DIFF || 'default'}): ${report.length - fails}/${report.length} beats walked and played in ${out.minutes} min (${recovered.length} needed a reload, ${held.length} held by a scene); ${boards.length} boards (${diffCheck.ok} from the ${diffCheck.adaptive ? 'rated' : diffCheck.easy ? 'easy' : 'hard'} pool)`);
-  if (SYNC) { const rs = await p.evaluate(() => window.__routes || []).catch(() => []), mid = rs.filter(r => r.busy || r.cine || r.duel);
-    console.log(`sync: ${syncPosts} saves to the mocked script, ${visFlips} hide/show flips, ${rs.length} reroutes after the start${mid.length ? `; FAIL ${mid.length} came mid-scene (${mid.map(r => `${r.hash}${r.cine ? ' cine' : ''}${r.busy ? ' line' : ''}${r.duel ? ' board' : ''}`).join(', ')})` : ''}`);
+  if (SYNC) { const mid = reroutes.filter(r => r.busy || r.cine || r.duel);
+    console.log(`sync: ${syncPosts} saves to the mocked script, ${visFlips} hide/show flips (${visFlips - reroutes.length} with the world kept, ${reroutes.length} rebuilt)${mid.length ? `; FAIL ${mid.length} rebuilt mid-scene (${mid.map(r => `${r.beat} in ${r.place}`).join(', ')})` : ''}`);
     if (mid.length) held.push(`${mid.length} mid-scene reroutes`); }
   const audio = errs.filter(e => /AudioContext/.test(e)); if (audio.length) console.log(`     note: ${audio.length} AudioContext page errors (${audio[0].slice(0, 80)})`);
   console.log(`the goal box's chip followed the party: ${chipSeen.join(' → ') || 'never shown'}${chipBad.size ? ` (wrong at ${[...chipBad].join(', ')})` : ''}`);
