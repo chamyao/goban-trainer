@@ -63,7 +63,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     return {
       book: w.w.n, place: w.placeId, lead: w.lead, party: (w.st.party || []).join(','), next: q && q.node, P: [Math.round(w.player.x), Math.round(w.player.y)],
       goal: w.goalAt && [Math.round(w.goalAt.x), Math.round(w.goalAt.y)], busy: w.ui.busy(), cine: !!w.cine, leaving: !!w.leaving, walking: !!w.walk,
-      caught: !!w.caught, engaged: !!w.engaged, gtag: w.game && w.game.__flip, chip: ((d.querySelector('.town-goal .town-lead') || {}).textContent || '').trim(), leadName: typeof tkName === 'function' ? tkName(w.lead) : w.lead, line, who: dlg && !dlg.hidden ? ((dlg.querySelector('.town-who') || {}).textContent || '').trim() : '', scroll: vis('.tk-scroll-go'), duel: !!d.querySelector('.tk-duel svg'), cont: vis('.tk-duel-go'),
+      caught: !!w.caught, engaged: !!w.engaged, gtag: w.game && w.game.__flip, banner: ((d.querySelector('.town-ui .town-place') || {}).textContent || '').trim(), chip: ((d.querySelector('.town-goal .town-lead') || {}).textContent || '').trim(), leadName: typeof tkName === 'function' ? tkName(w.lead) : w.lead, line, who: dlg && !dlg.hidden ? ((dlg.querySelector('.town-who') || {}).textContent || '').trim() : '', scroll: vis('.tk-scroll-go'), duel: !!d.querySelector('.tk-duel svg'), cont: vis('.tk-duel-go'),
       skip: !!d.querySelector('.tk-duel-keys button') && [...d.querySelectorAll('.tk-duel-keys button')].some(b => /Skip/.test(b.textContent)),
       cleared: TK.world(w.w.n).nodes.filter(n => TK.cleared(n.key)).length, items: JSON.stringify((typeof WorldItems !== 'undefined' && WorldItems.list && WorldItems.list(w.w)) || []),
       cancel: [...d.querySelectorAll('button')].some(b => b.textContent.trim() === 'Cancel' && b.offsetParent),
@@ -132,7 +132,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   const close = (status, why, s) => { if (!beat) return; if (leadFor[beat] && beatLead && leadFor[beat] !== beatLead) console.log(`     note ${beat}: played by ${beatLead}, but the story's last handoff gave ${leadFor[beat]}`); const r = { beat, status, secs: Math.max(0, Math.round((Date.now() - beatT) / 1000)), place: s && s.place, at: s && s.P, lead: s && s.lead, why: why || '', line: lastLine.slice(0, 120) };
     report.push(r); console.log(`${status === 'pass' ? 'ok  ' : 'FAIL'} ${beat}  ${r.secs}s  ${r.lead || ''} in ${r.place || '?'}${status === 'pass' ? '' : `  at ${r.at}: ${why}${r.line ? ` ("${r.line}")` : ''}`}`); };
   let plannedSteps = null, planT = 0, pace = 3, stealthTries = 0, lastTap = 0, skipped = false, reloads = 0, catches = 0, wasCaught = false; const held = [], recovered = [];
-  const chipBad = new Set(), chipSeen = [], shotWho = new Set(), shots = []; let lastPlace = '', arrivedAt = null; const OPTIONAL = !!process.env.OPTIONAL, visited = new Set(), errands = []; let errand = null;
+  const banners = [], chipBad = new Set(), chipSeen = [], shotWho = new Set(), shots = []; let lastPlace = '', arrivedAt = null; const OPTIONAL = !!process.env.OPTIONAL, visited = new Set(), errands = []; let errand = null;
   for (;;) {
     if ((Date.now() - t0) / 60000 > MAXMIN) { const s = await look(); close('fail', `out of time (${MAXMIN} min)`, s); break; }
     const s = await look();
@@ -207,6 +207,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       console.log(`     sync: the world was rebuilt at ${beat}, ${Math.round((Date.now() - flipAt) / 1000)} s after a hide/show (${b4.place}${b4.cine ? ', mid-scene' : ''}${b4.busy ? ', a line up' : ''}${b4.duel ? ', a board up' : ''})`);
       await p.evaluate(n => { const w = window.__w; if (w && w.game) w.game.__flip = n; }, visFlips).catch(() => {}); }
     prevS = s;
+    if (/Now playing/.test(s.banner || '') && banners[banners.length - 1] !== s.banner) banners.push(s.banner);
     if (pushWait && !s.busy && !s.cine && !s.duel && !s.leaving && !s.walking) { pushWait = false; await p.waitForTimeout(4000); continue; }   // SYNC_PUSH: a still moment after the scene, as a player reading would
     if (s.duel) {   // a board: win it with Skip, note what it drew, then Continue
       if (s.cont) { await tapEl('.tk-duel-go'); await p.waitForTimeout(400); continue; }
@@ -268,6 +269,13 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     if (Date.now() - lastTap < 1200) { await p.waitForTimeout(200); continue; }
     lastTap = Date.now(); await tapWorld(s.goal[0], s.goal[1]); await p.waitForTimeout(500);
   }
+  // after the book: once things settle, who the walk plays as (END_LEAD: who it must be, e.g. lijue after Book 12's a18)
+  let after = null;
+  for (let i = 0; i < 60; i++) { const s = await look().catch(() => null); if (s && !s.boot && !s.busy && !s.cine && !s.leaving && !s.duel) { after = s; break; }
+    if (s && s.busy) await p.evaluate(() => window.__w.ui.advance()).catch(() => {}); await p.waitForTimeout(500); }
+  if (after) { const want = process.env.END_LEAD, ok = !want || (after.lead === want && after.chip.includes(after.leadName));
+    console.log(`${ok ? 'ok  ' : 'FAIL'} after the book: playing as ${after.lead} in ${after.place}; the chip says "${after.chip}"${want ? ` (wanted ${want})` : ''}; "Now playing" banners: ${banners.join(' | ') || 'none'}`);
+    if (!ok) held.push('after the book: ' + after.lead); }
   // the boards' draws against the difficulty asked for
   const diffCheck = await p.evaluate(([bs, B]) => { const w = TK.world(B), easy = TK.easy, adaptive = TK.mode === 'adaptive' && w.rated && w.rated.length, rated = adaptive ? new Set(w.rated.map(x => +x[1])) : null; let ok = 0, off = [];
     for (const { beat, key, id } of bs) { const base = String(key || beat).split('~')[0], n = TK.node(w, base) || (typeof WorldData !== 'undefined' && WorldData.node(w, base)); if (!n || id == null) continue; if (adaptive) { if (rated.has(+id)) ok++; else off.push(`${key || beat}:${id}`); continue; }   // Adaptive: every board from the rated pool
