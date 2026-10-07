@@ -316,4 +316,14 @@ ZH_PLACES2 = {
     "Sound out Shisun Rui, on the lane at the foot of the palace terrace, at its west end.": "密访士孙瑞，宅在宫台脚下小巷的西头。",
     # a15m objective
     "Go to Meiwu.": "前往郿坞。",
+    # the teahouse and the scholar's study behind it
+    "The tea counter": "茶柜",
+    "The back room": "后间",
+    "The scholar's desk": "学士的书桌",
+    "Bookshelves": "书架",
+    "A go board on a low table": "矮几上的棋盘",
+    "“Tea, sir? The spring leaves came up from Shu this week.”": "“客官喝茶？这礼拜的春茶刚从蜀中运到。”",
+    "“Thirty years I've drunk tea in this room. Chancellors come and go; the tea stays the same.”": "“我在这屋里喝了三十年茶。相国换了一个又一个，茶还是这个味。”",
+    "“The back room? Some scholar rents it. Writes all day and hardly says a word.”": "“后间？租给一位学士了。整天写字，难得说一句话。”",
+    "The scholar is lost in his scrolls.": "学士埋首书卷之中。",
 }

@@ -41,7 +41,7 @@ LIGHT = {("lantern", None): "night", ("day", "clear"): "morning", ("dusk", "stor
 WALK = {"grass": True, "dirt": True, "sand": True, "water": False, "void": False, "wall": False,
         "wood": True, "stone": True, "mat": True, "earth": True}
 IN_WALL = {"building.gate", "building.gatehouse", "building.gatetower", "building.moongate"}
-PASSABLE = {"furn.seat", "furn.curtain", "landmark.ridge", "building.gatehouse", "building.gate", "building.moongate",
+PASSABLE = {"furn.seat", "furn.curtain", "furn.rug", "landmark.ridge", "building.gatehouse", "building.gate", "building.moongate",
             "plant.flower", "plant.bush", "plant.grass", "plant.peony", "rock.small", "water.lotus"}
 TALL = ("building", "tree", "rock", "ruin", "garden", "landmark")   # what a roof or crown rises above
 NPC_KEYS = ("challenge", "intro", "win", "done", "until", "face", "when", "gives", "gives_when", "give", "given", "call",
@@ -652,7 +652,7 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
             sid = f"{pid}--{mid}"
             arch = "interior" if sub.get("floor") or sub.get("cell", 4) == 2 and any(z["kind"] == "floor" for z in sub.get("ground", [])) else "compound"
             subn = {**sub, "spots": [rename(s) for s in sub.get("spots", [])], "things": [rename(t) for t in sub.get("things", [])]}
-            label = next((t.get("label") for src_plan in [P] + list((b.get("maps") or {}).values())
+            label = sub.get("label") or next((t.get("label") for src_plan in [P] + list((b.get("maps") or {}).values())
                           for t in src_plan.get("things", []) if t.get("map") == mid and t.get("label")), None) or mid
             smb = MapBuilder(n, pid, sid, subn, tables, seed + sum(map(ord, mid)), label, arch)
             sm = smb.build(b, [rename(p) for p in b.get("npcs", []) if p.get("place") == mid],
