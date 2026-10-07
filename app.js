@@ -75,8 +75,12 @@ const Sync = {
     if (this.username) this.pullAndMerge().then(route).catch(e => console.error("[sync]", e));
     else this.promptUsername();
     document.addEventListener("visibilitychange", () => {
-      if (document.visibilityState !== "hidden") return;
-      if (this.saveTimer) { clearTimeout(this.saveTimer); this.save("progress", { progress: loadProgress(), favorites: [...loadFavorites()] }); }
+      // back to this tab: pick up what another device did meanwhile (and redraw if anything came in)
+      if (document.visibilityState === "visible") {
+        if (this.username && !this.saveTimer) this.pullAndMerge().then(changed => { if (changed) route(); }).catch(e => console.error("[sync]", e));
+        return;
+      }
+      if (this.saveTimer) { clearTimeout(this.saveTimer); this.saveProgress(); }
       if (Review.saveTimer) { clearTimeout(Review.saveTimer); Review.saveState(); }
     });
   },
@@ -94,23 +98,54 @@ const Sync = {
 
   // Pull this username's row, merge into local (solved sticks, favorites
   // union), so a fresh browser/device picks up prior progress + favorites.
-  async pullAndMerge() {
-    const remote = await this.fetchRemote("progress");
-    const local = loadProgress();
-    for (const bookId in remote.progress || {}) {
-      const b = local[bookId] || (local[bookId] = {});
-      for (const pid in remote.progress[bookId]) if (b[pid] !== 1) b[pid] = remote.progress[bookId][pid];
-    }
+  // The campaign's own place in each book (TK_SYNC: where you stand, the party, the beat) follows the
+  // device that played last: the row's stamp against this browser's. Returns whether anything changed.
+  async pullAndMerge(remote) {
+    remote = remote || await this.fetchRemote("progress");
+    const local = loadProgress(), before = JSON.stringify(local);
+    this.mergeInto(local, remote.progress || {});
     localStorage.setItem(PROGRESS_KEY, JSON.stringify(local));
-    const favs = loadFavorites();
+    const favs = loadFavorites(), nf = favs.size;
     for (const bookId of remote.favorites || []) favs.add(bookId);
     localStorage.setItem(FAVORITES_KEY, JSON.stringify([...favs]));
+    let moved = false;
+    if (remote.tkLocal && (remote.stamp || 0) > this.stamp()) {
+      for (const k of Object.keys(localStorage)) if (this.tkKey(k) && !(k in remote.tkLocal)) localStorage.removeItem(k);
+      for (const [k, v] of Object.entries(remote.tkLocal)) if (this.tkKey(k)) localStorage.setItem(k, v);
+      this.setStamp(remote.stamp); moved = true;
+    }
+    return moved || JSON.stringify(local) !== before || favs.size !== nf;
   },
+  // solved sticks (1 beats anything); the adaptive rating keeps whichever has played more boards
+  mergeInto(local, remote) {
+    for (const bookId in remote) {
+      if (bookId === "tkElo") { const r = remote.tkElo, l = local.tkElo; if (r && (!l || (r.n || 0) > (l.n || 0))) local.tkElo = r; continue; }
+      const b = local[bookId] || (local[bookId] = {});
+      for (const pid in remote[bookId]) if (b[pid] !== 1) b[pid] = remote[bookId][pid];
+    }
+  },
+  tkKey: k => /^tk-world-\d+$/.test(k) || k === "tk-at" || k === "tk-party" || k === "tk-draw" || k === "tk-book",
+  tkLocal() { const o = {}; for (const k of Object.keys(localStorage)) if (this.tkKey(k)) o[k] = localStorage.getItem(k); return o; },
+  stamp() { try { return +localStorage.getItem("gt-sync-stamp") || 0; } catch { return 0; } },
+  setStamp(t) { try { localStorage.setItem("gt-sync-stamp", String(t)); } catch {} },
 
   scheduleSave() {
     if (!this.username) return;
     clearTimeout(this.saveTimer);
-    this.saveTimer = setTimeout(() => this.save("progress", { progress: loadProgress(), favorites: [...loadFavorites()] }), 3000);
+    this.saveTimer = setTimeout(() => this.saveProgress(), 3000);
+  },
+  // read, merge, write: the row is replaced whole, so another device's newer solves are folded in first
+  // (a tab left open elsewhere would otherwise write its older state over them)
+  async saveProgress() {
+    this.saveTimer = null;
+    if (!this.username) return;
+    try {
+      const remote = await this.fetchRemote("progress"), local = loadProgress();
+      this.mergeInto(local, remote.progress || {});
+      localStorage.setItem(PROGRESS_KEY, JSON.stringify(local));
+    } catch (e) { console.error("[sync] merge before save", e); }
+    const stamp = Date.now(); this.setStamp(stamp);
+    return this.save("progress", { progress: loadProgress(), favorites: [...loadFavorites()], tkLocal: this.tkLocal(), stamp });
   },
 
   // Google Sheets caps a cell at 50,000 characters — stay well clear of it
@@ -3454,6 +3489,28 @@ document.querySelector('#tabs a[data-tab="review"]').addEventListener("click", (
 window.__engine = Engine;
 window.__review = Review;
 Sync.init();
+
+// A device still running an older build (a cached index.html keeps loading the old scripts, whatever their keys):
+// on load and on coming back to the tab, a fresh index.html is compared with the running one's file versions,
+// and if they differ the cache is refreshed and the page reloaded, once per new build.
+const Fresh = {
+  vers: html => (html.match(/\.(?:js|css)\?v=\d+/g) || []).sort().join(" "),
+  async check() {
+    if (location.protocol === "file:" || /^(localhost|127\.)/.test(location.hostname)) return;   // tests, the app shell
+    try {
+      const url = location.pathname.replace(/[^/]*$/, "") + "index.html";
+      const html = await (await fetch(url, { cache: "no-store" })).text(), now = this.vers(html);
+      const running = this.vers([...document.querySelectorAll("script[src], link[rel=stylesheet]")].map(e => e.getAttribute("src") || e.getAttribute("href")).join(" "));
+      if (!now || now === running) return;
+      if (sessionStorage.getItem("gt-fresh") === now) return;   // reloaded for this build already: don't loop
+      sessionStorage.setItem("gt-fresh", now);
+      await fetch(url, { cache: "reload" });   // put the new page in the HTTP cache, then load it
+      location.reload();
+    } catch (e) { console.warn("[fresh]", e); }
+  },
+};
+Fresh.check();
+document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") Fresh.check(); });
 // Back from OGS's login page with ?code=&state=: finish the login, then
 // drop the query string and land on the Play tab.
 const loginParams = new URLSearchParams(location.search);

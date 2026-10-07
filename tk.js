@@ -590,7 +590,7 @@ const TK = {
     return this.data;
   },
   ls(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } },
-  lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
+  lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} if (typeof Sync !== "undefined" && Sync.tkKey(k)) Sync.scheduleSave(); },
   saveProg(p) { localStorage.setItem(PROGRESS_KEY, JSON.stringify(p)); if (typeof Sync !== "undefined") Sync.scheduleSave(); },
   cleared(key) { return (loadProgress().tk || {})[key] === 1; },
   markCleared(key) { const p = loadProgress(); (p.tk || (p.tk = {}))[key] = 1; this.saveProg(p); },

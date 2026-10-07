@@ -27,7 +27,7 @@ const WorldState = {
     try { s = JSON.parse(localStorage.getItem(this.key(n)) || "{}"); } catch { s = {}; }
     return { visited: (s.visited || [region.start]).map(worldRenamed), party: s.party || TK.party(TK.world(n)) || region.party, place: s.place, pos: s.pos || null, light: s.light || null, crowd: s.crowd || 0, routes: s.routes || [] };   // routes: destinations already shown the way to   // light: a scene's last light, kept onto the next map
   },
-  save(n, st) { try { localStorage.setItem(this.key(n), JSON.stringify(st)); } catch { /* private mode */ } },
+  save(n, st) { try { localStorage.setItem(this.key(n), JSON.stringify(st)); } catch { /* private mode */ } if (typeof Sync !== "undefined") Sync.scheduleSave(); },   // follows you to another device (app.js Sync)
 };
 
 /* ---------- regions, and challengers as campaign levels ---------- */
