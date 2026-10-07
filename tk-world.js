@@ -1048,10 +1048,13 @@ function worldScenes() {
       const direct = Math.hypot(to.x - from.x, to.y - from.y);
       if (!W || !W.edges || !W.edges.length || direct < 5 * T) return walk(from, to);
       const N = W.nodes.map(([x, y]) => ({ x: x * T, y: y * T })), adj = N.map(() => []);
-      for (const [a, b] of W.edges) { const d = Math.hypot(N[a].x - N[b].x, N[a].y - N[b].y); adj[a].push([b, d]); adj[b].push([a, d]); }
+      const G = this.walkGrid(), solid = N.map(p => !G.free(Math.floor(p.x / G.C), Math.floor(p.y / G.C)));
+      const E = W.edges.filter(([a, b]) => !solid[a] && !solid[b]);   // a street that ends inside a building stops short of it
+      if (!E.length) return walk(from, to);
+      for (const [a, b] of E) { const d = Math.hypot(N[a].x - N[b].x, N[a].y - N[b].y); adj[a].push([b, d]); adj[b].push([a, d]); }
       const onStreet = p => {   // the nearest point on any street
         let best = null;
-        for (const [a, b] of W.edges) {
+        for (const [a, b] of E) {
           const A = N[a], B = N[b], dx = B.x - A.x, dy = B.y - A.y, L2 = dx * dx + dy * dy || 1;
           const u = Math.max(0, Math.min(1, ((p.x - A.x) * dx + (p.y - A.y) * dy) / L2)), q = { x: A.x + dx * u, y: A.y + dy * u };
           const d = Math.hypot(p.x - q.x, p.y - q.y);
