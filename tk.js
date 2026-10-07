@@ -611,12 +611,12 @@ const TK = {
   setAt(n, key) { const a = this.ls("tk-at"); a[n] = key; this.lsSet("tk-at", a); },
   party(w) { return this.ls("tk-party")[w.n] || w.party; },
   setParty(w, list) { const a = this.ls("tk-party"); a[w.n] = list; this.lsSet("tk-party", a); },
-  // Difficulty (the menu, a book with "easy_grades"): Adaptive (the default) picks each board by the player's
-  // rating (TKElo), bosses included; Easy draws from the board's easy pool, Hard from its own.
-  get mode() { try { const v = localStorage.getItem("tk-diff"); return v === "easy" || v === "hard" ? v : "adaptive"; } catch { return "adaptive"; } },
-  set mode(v) { try { localStorage.setItem("tk-diff", v); } catch {} },
-  get easy() { return this.mode === "easy"; },
-  set easy(v) { this.mode = v ? "easy" : "hard"; },
+  // Difficulty: Adaptive only. Each board is picked by the player's rating (TKElo), bosses included; a book
+  // without a rated pool deals its own boards. An old Easy/Hard choice (tk-diff) is ignored and cleared.
+  get mode() { try { localStorage.removeItem("tk-diff"); } catch {} return "adaptive"; },
+  set mode(v) {},
+  get easy() { return false; },
+  set easy(v) {},
   problemRef(node, idx = 0) {
     const d = this.ls("tk-draw"), w = this.world(+String(node.key).split("-")[0]);
     if (this.mode === "adaptive" && w && w.rated && w.rated.length)   // once a beat's board is seen it stays (a retry, a revisit)
@@ -1121,18 +1121,6 @@ async function viewTK(worldN) {
     root.querySelector(".tk-head-btns").prepend(h("button", { class: "tk-chron-btn", type: "button", title: `Switch to ${WORLD_KITS[next].en}`,
       onclick: () => { WorldView.setKit(next); viewTK(w.n); } }, `画风：${WORLD_KITS[kit].zh} ${WORLD_KITS[kit].en}`));
     if (typeof WorldTravel !== "undefined") WorldTravel.addButtons(root.querySelector(".tk-head-btns"), w);   // map and start over (tk-travel.js)
-    // difficulty, in a book that has an easy version: which problems its boards draw from
-    if (w.easy_grades) {
-      const diff = h("button", { class: "tk-chron-btn", type: "button", title: "自适应：按你的水平出题 Adaptive: problems at your level, rising as you solve first try · 易 Easy: fixed easy problems · 难 Hard: this book's own" });
-      const show = () => {
-        const m = TK.mode;
-        diff.textContent = m === "adaptive" ? `难度：自适应 Adaptive (~${TKElo.label()})` : m === "easy" ? `难度：易 Easy (${w.easy_grades[0]})` : `难度：难 Hard (${w.grades.split("–")[0]})`;
-        diff.setAttribute("aria-pressed", String(m !== "hard"));
-      };
-      diff.onclick = () => { TK.mode = { adaptive: "easy", easy: "hard", hard: "adaptive" }[TK.mode]; show(); };
-      show();
-      root.querySelector(".tk-head-btns").prepend(diff);
-    }
     // on a phone: whether a tap on a small board shows a ghost stone first (Auto) or plays at once (Never)
     if (TK_TOUCH && typeof Goban !== "undefined") {
       const conf = h("button", { class: "tk-chron-btn", type: "button" });
@@ -1909,7 +1897,7 @@ const TKElo = {
     const x = w.rated.find(y => y[0] === ref[0] && y[1] === ref[1]);
     if (!x) return;
     const p = loadProgress(), s = this.state(p), E = 1 / (1 + Math.pow(10, (this.of(x[2]) - s.r) / 400));
-    s.r = Math.round(Math.max(300, Math.min(2800, s.r + (s.n < 10 ? 64 : 32) * ((win ? 1 : 0) - E))));
+    s.r = Math.round(Math.max(300, Math.min(2800, s.r + (s.n < 10 ? 96 : s.n < 30 ? 64 : 32) * ((win ? 1 : 0) - E))));
     s.n = (s.n || 0) + 1;
     TK.saveProg(p);
   },
