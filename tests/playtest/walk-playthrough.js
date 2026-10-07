@@ -16,16 +16,19 @@ const fs = require('fs'), path = require('path');
 const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +(process.env.STUCK || 60), MAXMIN = +(process.env.MAXMIN || 55), BEATMAX = +(process.env.BEATMAX || 300);
 (async () => {
   const b = await chromium.launch({ args: ['--use-gl=swiftshader', '--enable-webgl'] });
-  const p = await (await b.newContext({ ...devices['iPhone 13'] })).newPage();
+  const VIEW = process.env.VIEW || 'phone', TAPM = VIEW === 'desktop' ? 'click' : 'tap', KIT = process.env.KIT || '', SHOTS = process.env.SHOTS || '';   // VIEW phone | 360 | desktop (apo110's 1390x745 window); SHOTS: a folder for each speaker's first line
+  const p = await (await b.newContext(VIEW === 'desktop' ? { viewport: { width: 1390, height: 745 } } : VIEW === '360' ? { ...devices['Galaxy S9+'], viewport: { width: 360, height: 640 } } : { ...devices['iPhone 13'] })).newPage();
+  await p.route(/script\.google\.com/, r => r.fulfill({ status: 200, contentType: 'application/json', body: '{"data":null}' }));
   const errs = []; p.on('pageerror', e => { errs.push(e.message); console.log('ERR', e.message); });
   await p.route('**/phaser.min.js', r => r.fulfill({ path: path.join(__dirname, 'vendor/phaser.min.js'), contentType: 'application/javascript' }));
   await p.route('**/*.mp3', r => r.fulfill({ status: 404, body: '' }));
   const BASE = (process.env.PLAYTEST_URL || 'http://localhost:8765') + '/index.html?test=1';
   await p.goto(BASE + '#/');
-  await p.evaluate(([B, D]) => {
+  await p.evaluate(([B, D, K]) => {
     for (const k of Object.keys(localStorage)) if (/^tk-|gt-progress/.test(k) && k !== 'tk-test') localStorage.removeItem(k);
     localStorage.setItem('tk-guide', 'off'); localStorage.setItem('tk-book', String(B)); if (D) localStorage.setItem('tk-diff', D);
-  }, [BOOK, DIFF]);
+    if (K) { localStorage.setItem('tk-kit', K); localStorage.setItem('tk-kit-main', 'jade'); } localStorage.setItem('gt-username', 'playtest-walk');
+  }, [BOOK, DIFF, KIT]);
   const FROM = process.env.FROM || '', UNTIL = process.env.UNTIL || '';
   if (FROM) await p.evaluate(([B, F]) => {   // setup only: what the beats before FROM leave behind is taken as given (FROM= is for a quick check; a release runs the whole book)
     return TK.load().then(() => { const w = TK.world(B), ks = w.nodes.map(n => n.key), i = ks.indexOf(F); let party = null;
@@ -51,14 +54,14 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     return {
       book: w.w.n, place: w.placeId, lead: w.lead, party: (w.st.party || []).join(','), next: q && q.node, P: [Math.round(w.player.x), Math.round(w.player.y)],
       goal: w.goalAt && [Math.round(w.goalAt.x), Math.round(w.goalAt.y)], busy: w.ui.busy(), cine: !!w.cine, leaving: !!w.leaving, walking: !!w.walk,
-      caught: !!w.caught, engaged: !!w.engaged, line, scroll: vis('.tk-scroll-go'), duel: !!d.querySelector('.tk-duel svg'), cont: vis('.tk-duel-go'),
+      caught: !!w.caught, engaged: !!w.engaged, line, who: dlg && !dlg.hidden ? ((dlg.querySelector('.town-who') || {}).textContent || '').trim() : '', scroll: vis('.tk-scroll-go'), duel: !!d.querySelector('.tk-duel svg'), cont: vis('.tk-duel-go'),
       skip: !!d.querySelector('.tk-duel-keys button') && [...d.querySelectorAll('.tk-duel-keys button')].some(b => /Skip/.test(b.textContent)),
       cleared: TK.world(w.w.n).nodes.filter(n => TK.cleared(n.key)).length, items: JSON.stringify((typeof WorldItems !== 'undefined' && WorldItems.list && WorldItems.list(w.w)) || []),
       cancel: [...d.querySelectorAll('button')].some(b => b.textContent.trim() === 'Cancel' && b.offsetParent),
       watchers: w.npcs.filter(n => n.watch && ((n.watch.seen || []).length || n.watch.back_to) && w.watching(n)).length,
     };
   });
-  const tapEl = async sel => { const e = p.locator(sel).first(); if (await e.count()) await e.tap({ timeout: 2000 }).catch(() => {}); };
+  const tapEl = async sel => { const e = p.locator(sel).first(); if (await e.count()) await e[TAPM]({ timeout: 2000 }).catch(() => {}); };
   // a tap on a point of the world: on screen, a real tap there; off screen, the game's own tap handler
   const tapWorld = async (x, y) => {
     const s = await p.evaluate(([x, y]) => { const w = window.__w, cam = w.cameras.main, cv = w.game.canvas, r = cv.getBoundingClientRect(), k = cv.clientWidth / w.scale.width, v = w.view ? w.view(x, y) : { x, y };
@@ -66,7 +69,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       const goalLine = d => { const g = d.querySelector('.town-goal'); return g && g.getBoundingClientRect(); };
       const g = goalLine(document), hud = g ? g.bottom + 6 : r.top + 60;
       return { sx, sy, on: sx > r.left + 8 && sx < r.right - 8 && sy > hud && sy < r.bottom - 8 }; }, [x, y]);
-    if (s.on) await p.touchscreen.tap(s.sx, s.sy);
+    if (s.on) await (VIEW === 'desktop' ? p.mouse.click(s.sx, s.sy) : p.touchscreen.tap(s.sx, s.sy));   // a click on a desktop
     else await p.evaluate(([x, y]) => { const w = window.__w, cam = w.cameras.main, v = w.view ? w.view(x, y) : { x, y }; w.tapAt(x, y, (v.x - cam.worldView.x) * cam.zoom, (v.y - cam.worldView.y) * cam.zoom); }, [x, y]);
   };
   // the patrols ahead, and a way to the goal none of them sees: cells, one per 150 ms (stealth-12's planner)
@@ -120,11 +123,11 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   const close = (status, why, s) => { if (!beat) return; if (leadFor[beat] && beatLead && leadFor[beat] !== beatLead) console.log(`     note ${beat}: played by ${beatLead}, but the story's last handoff gave ${leadFor[beat]}`); const r = { beat, status, secs: Math.max(0, Math.round((Date.now() - beatT) / 1000)), place: s && s.place, at: s && s.P, lead: s && s.lead, why: why || '', line: lastLine.slice(0, 120) };
     report.push(r); console.log(`${status === 'pass' ? 'ok  ' : 'FAIL'} ${beat}  ${r.secs}s  ${r.lead || ''} in ${r.place || '?'}${status === 'pass' ? '' : `  at ${r.at}: ${why}${r.line ? ` ("${r.line}")` : ''}`}`); };
   let plannedSteps = null, planT = 0, pace = 3, stealthTries = 0, lastTap = 0, skipped = false, reloads = 0, catches = 0, wasCaught = false; const held = [], recovered = [];
-  let lastPlace = '', arrivedAt = null; const OPTIONAL = !!process.env.OPTIONAL, visited = new Set(), errands = []; let errand = null;
+  const shotWho = new Set(), shots = []; let lastPlace = '', arrivedAt = null; const OPTIONAL = !!process.env.OPTIONAL, visited = new Set(), errands = []; let errand = null;
   for (;;) {
     if ((Date.now() - t0) / 60000 > MAXMIN) { const s = await look(); close('fail', `out of time (${MAXMIN} min)`, s); break; }
     const s = await look();
-    if (s.boot) { if (s.cancel) await p.getByText('Cancel', { exact: true }).first().tap().catch(() => {}); if (s.scroll) await tapEl('.tk-scroll-go'); await p.waitForTimeout(250); continue; }
+    if (s.boot) { if (s.cancel) await p.getByText('Cancel', { exact: true }).first()[TAPM]().catch(() => {}); if (s.scroll) await tapEl('.tk-scroll-go'); await p.waitForTimeout(250); continue; }
     if (s.book !== BOOK || !s.next) { if (beat) close('pass', '', s); break; }   // the book is done (or handed on to the next)
     if (s.next !== beat) {   // a new beat
       if (beat) close('pass', '', s);
@@ -180,7 +183,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       close('fail', msg, s); break; }
     if (s.line && s.line !== lastLine) { lastLine = s.line;
       if (!errand && /isn't open yet|还没有开通|barred|不为你开|not open|turns you away|No one goes|receives no one/i.test(s.line)) refused = `refused: "${s.line.slice(0, 90)}"`; }
-    if (s.cancel) { await p.getByText('Cancel', { exact: true }).first().tap().catch(() => {}); continue; }
+    if (s.cancel) { await p.getByText('Cancel', { exact: true }).first()[TAPM]().catch(() => {}); continue; }
     if (s.scroll) { await tapEl('.tk-scroll-go'); await p.waitForTimeout(300); continue; }
     if (!s.duel) await hook();   // (again after a reload)
     if (s.duel) {   // a board: win it with Skip, note what it drew, then Continue
@@ -188,14 +191,26 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       if (s.skip) {
         const drawn = await p.evaluate(() => { const a = document.querySelector('.tk-duel-src a'), m = a && a.href.match(/\/q\/(\d+)/); return { id: m ? +m[1] : null, key: window.__boardKey }; });
         if (!boards.some(x => x.key === drawn.key && x.id === drawn.id)) boards.push({ beat, key: drawn.key, id: drawn.id });
-        await p.locator('.tk-duel-keys button', { hasText: 'Skip' }).first().tap().catch(() => {}); await p.waitForTimeout(600); continue; }
+        await p.locator('.tk-duel-keys button', { hasText: 'Skip' }).first()[TAPM]().catch(() => {}); await p.waitForTimeout(600); continue; }
       await p.waitForTimeout(300); continue;
     }
     if (!s.busy && !s.cine && !s.leaving) beatLead = s.lead;   // who is walking the beat
     // a scene's Skip button up with no line showing, and nothing moving on: what a player would press
     if (s.busy && !s.cine && !s.line && !skipped && Date.now() - lastProgress > 8000 && await p.locator('.town-skip').count() && !(await p.locator('.tk-still').count())) { skipped = true;   // (not a scene picture showing, which has no line either)
       console.log(`FAIL ${beat}: held by a scene with no line showing (the game busy, only a Skip button up); a player has to press Skip`); held.push(`${beat} in ${s.place}`);
-      await p.locator('.town-skip').first().tap().catch(() => {}); await p.waitForTimeout(800); continue; }
+      await p.locator('.town-skip').first()[TAPM]().catch(() => {}); await p.waitForTimeout(800); continue; }
+    if (SHOTS && s.line && s.who && !shotWho.has(s.who)) {   // a speaker's first line: once typed out, the box as it stands
+      shotWho.add(s.who); await p.waitForTimeout(1400);
+      const m = await p.evaluate(() => { const r = q => { const e = document.querySelector(q); if (!e || e.hidden || !e.offsetParent && getComputedStyle(e).position !== 'fixed') return null; const b = e.getBoundingClientRect(); return b.width ? [Math.round(b.left), Math.round(b.top), Math.round(b.width), Math.round(b.height)] : null; };
+        const box = r('.town-ui .town-dlg'), pic = r('.town-ui .town-portrait'), face = r('.town-ui .town-face'), text = r('.town-ui .town-en'), zh = r('.town-ui .town-zh');
+        const over = (a, c) => a && c && a[0] < c[0] + c[2] && c[0] < a[0] + a[2] && a[1] < c[1] + c[3] && c[1] < a[1] + a[3];
+        const inView = a => !a || (a[0] >= -1 && a[1] >= -1 && a[0] + a[2] <= innerWidth + 1 && a[1] + a[3] <= innerHeight + 1);
+        return { box, pic, face, text, picOverText: over(pic, text) || over(pic, zh), boxInView: inView(box), picInView: inView(pic), w: innerWidth, h: innerHeight }; });
+      const f = `${String(shotWho.size).padStart(2, '0')}-${s.who.replace(/[^\w\u4e00-\u9fff]+/g, '_').slice(0, 30)}.png`;
+      fs.mkdirSync(SHOTS, { recursive: true }); await p.screenshot({ path: path.join(SHOTS, f) });
+      shots.push({ beat, who: s.who, file: f, ...m });
+      console.log(`     shot ${f}: ${m.pic ? 'portrait' : m.face ? 'pixel bust' : 'no face'}${m.picOverText ? ', PORTRAIT OVER THE TEXT' : ''}${m.boxInView ? '' : ', BOX OFF SCREEN'}${m.picInView ? '' : ', PORTRAIT OFF SCREEN'}`);
+    }
     if (s.busy) { await p.evaluate(() => window.__w.ui.advance()); await p.waitForTimeout(250); continue; }   // a line: on to the next
     if (s.caught) plannedSteps = null;   // sent back: plan again from there
     if (s.cine || s.leaving || s.engaged || s.caught) { await p.waitForTimeout(300); continue; }
@@ -229,15 +244,17 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     lastTap = Date.now(); await tapWorld(s.goal[0], s.goal[1]); await p.waitForTimeout(500);
   }
   // the boards' draws against the difficulty asked for
-  const diffCheck = await p.evaluate(([bs, B]) => { const w = TK.world(B), easy = TK.easy; let ok = 0, off = [];
-    for (const { beat, key, id } of bs) { const base = String(key || beat).split('~')[0], n = TK.node(w, base) || (typeof WorldData !== 'undefined' && WorldData.node(w, base)); if (!n || id == null) continue; const pool = (easy && n.pool_easy && n.pool_easy.length ? n.pool_easy : n.pool).map(x => +x[1]);
-      if (pool.includes(id)) ok++; else off.push(`${key || beat}:${id}`); } return { easy, ok, off }; }, [boards, BOOK]).catch(e => ({ err: String(e) }));
+  const diffCheck = await p.evaluate(([bs, B]) => { const w = TK.world(B), easy = TK.easy, adaptive = TK.mode === 'adaptive' && w.rated && w.rated.length, rated = adaptive ? new Set(w.rated.map(x => +x[1])) : null; let ok = 0, off = [];
+    for (const { beat, key, id } of bs) { const base = String(key || beat).split('~')[0], n = TK.node(w, base) || (typeof WorldData !== 'undefined' && WorldData.node(w, base)); if (!n || id == null) continue; if (adaptive) { if (rated.has(+id)) ok++; else off.push(`${key || beat}:${id}`); continue; }   // Adaptive: every board from the rated pool
+      const pool = (easy && n.pool_easy && n.pool_easy.length ? n.pool_easy : n.pool).map(x => +x[1]);
+      if (pool.includes(id)) ok++; else off.push(`${key || beat}:${id}`); } return { easy, adaptive: !!adaptive, ok, off }; }, [boards, BOOK]).catch(e => ({ err: String(e) }));
   const fails = report.filter(r => r.status !== 'pass').length;
+  if (SHOTS) fs.writeFileSync(path.join(SHOTS, 'shots.json'), JSON.stringify(shots, null, 1));
   const out = { book: BOOK, diff: DIFF || 'default', optional: errands, held, recovered, minutes: +((Date.now() - t0) / 60000).toFixed(1), beats: report, boards: boards.length, draws: diffCheck, pageErrors: errs.slice(0, 5) };
   fs.mkdirSync(path.join(__dirname, 'out'), { recursive: true });
   fs.writeFileSync(path.join(__dirname, 'out', `walk-playthrough-${BOOK}-${DIFF || 'default'}.json`), JSON.stringify(out, null, 1));
-  if (diffCheck.off && diffCheck.off.length) console.log(`FAIL boards drawn from the wrong pool (${diffCheck.easy ? 'easy' : 'hard'}): ${diffCheck.off.join(', ')}`);
-  console.log(`walk-playthrough Book ${BOOK} (${DIFF || 'default'}): ${report.length - fails}/${report.length} beats walked and played in ${out.minutes} min (${recovered.length} needed a reload, ${held.length} held by a scene); ${boards.length} boards (${diffCheck.ok} from the ${diffCheck.easy ? 'easy' : 'hard'} pool)`);
+  if (diffCheck.off && diffCheck.off.length) console.log(`FAIL boards drawn from the wrong pool (${diffCheck.adaptive ? 'rated' : diffCheck.easy ? 'easy' : 'hard'}): ${diffCheck.off.join(', ')}`);
+  console.log(`walk-playthrough Book ${BOOK} (${DIFF || 'default'}): ${report.length - fails}/${report.length} beats walked and played in ${out.minutes} min (${recovered.length} needed a reload, ${held.length} held by a scene); ${boards.length} boards (${diffCheck.ok} from the ${diffCheck.adaptive ? 'rated' : diffCheck.easy ? 'easy' : 'hard'} pool)`);
   if (OPTIONAL) console.log(`optional: ${errands.filter(e => e.status === 'pass').length}/${errands.length} walked to, ${errands.filter(e => e.status === 'gone').length} gone before he got there (${errands.filter(e => e.id.startsWith('challenger')).length} challengers, ${errands.filter(e => e.id.startsWith('door')).length} doors and rooms)`);
   await b.close(); process.exit(errands.some(e => e.status === 'fail') || fails || held.length || recovered.length || (diffCheck.off && diffCheck.off.length) ? 1 : 0);
 })();
