@@ -1,8 +1,11 @@
 # Plot playbook: how to write a book of *Tian Cai Zhi Wang*
 
 This is the process the Plot session used for the Diaochan arc (Book 2, novel chapters 8–9), written down so the next arc
-and the next book can be done the same way. It holds the **principles**, the **reasoning** behind each one, and the
-**steps**.
+and the next book can be done the same way. It has three layers:
+
+- **Part 1, the core principles:** the craft of telling the story. This part comes first.
+- **Part 2, how the game works:** the rules and decisions that shape every arc.
+- **Parts 3–5:** the steps, a checklist, and the questions still open.
 
 ## How much weight each source carries
 
@@ -18,9 +21,114 @@ Quotes are kept as the user typed them.
 
 ---
 
-## Part 1: Guiding principles
+## Part 1: Core principles (how to tell the story)
 
-### 1. Tell the novel faithfully. Invent only where it serves the plot.
+These came from the RPG plot-writing research the user asked for at the very start ("I want you do do some research first
+on rpg plot writing"). Plot proposed eight. The user rejected one and accepted the rest:
+
+> "this will not be realistic for us, we want a large scale game with many chapters I we wont be able to consistently
+> deliver these connections. I agree with your other points"
+
+Under each principle: where it comes from, what it means, how the Diaochan arc used it, and what we learned.
+
+### C1. Make the player want the story by leaving gaps
+
+- **Source:** CD Projekt's quest designers (*The Witcher 3*, *Cyberpunk 2077*).
+- **What it means:** hold back key facts so the player wants to find them out. Cut exposition that repeats: no two
+  characters retell the same news.
+- **In the arc:** Dong Zhuo is never introduced. A1 opens on what he does, and the player works out who he is from that.
+  On the Meiwu road the player, as Li Su, knows what each omen means while Dong Zhuo doesn't.
+- **Learned in playtest:** gaps belong in the **story**, never in the **player's task**. "what is the crown for?" showed
+  that a missing reason for an errand reads as a broken script, not a mystery. Hold back the mystery, never the reason
+  for the errand (see R11).
+
+### C2. Keep the main plot point separate from the flavour
+
+- **Source:** CD Projekt.
+- **What it means:** each critical fact gets its own quiet moment, and the lesser talk happens around the player while
+  they do something else.
+- **In the arc:** each scene lands one fact. For example, A2 is Diaochan's offer and A12y is Wang Yun deciding Cai Yong
+  can't be trusted. Townsfolk carry the colour: rumours, fear of the Flying Bear soldiers.
+- **Check:** if a scene has to land two facts, split it, or move one into a townsperson's line.
+
+### ~~C3. Let the gameplay stand for the story~~ (rejected)
+
+The idea was that each problem's shape mirrors its scene: a ladder for an escape, a sacrifice for the burning of Luoyang.
+**The user rejected it** because it can't be kept up across a game with many chapters. The dilemma caption carries the
+meaning (see R5).
+
+### C4. One villain ties a shifting cast together
+
+- **Source:** *Final Fantasy VI*. It has 14 leads and no single hero, and it holds together because every character has a
+  problem with Kefka, who is the third most talkative character in the first half.
+- **What it means:** Dong Zhuo is the thread through Book 2. He gets plenty of lines and appears in every act, whoever we
+  are following.
+- **In the arc:** six leads, one target. Wang Yun, Diaochan, Li Su and Lü Bu all work against Dong Zhuo. After his death,
+  Jia Xu and Li Jue take over because he is dead: they march to avenge him.
+- **For every book:** name the book's thread figure before laying out beats, and check that every lead's stretch connects
+  to them.
+
+### C5. Open each part with a clear start, and hand off where characters meet
+
+- **Source:** *FF6* (each part begins with a different character waking), and *Suikoden III* (one war, three viewpoints).
+  *Octopath Traveler* is the warning: separate stories that never merge felt disconnected.
+- **What it means:** switch the lead at a moment when the outgoing and incoming characters are on screen together, so it
+  feels like being passed on rather than cut away.
+- **In the arc:** the lead changes 11 times, each at a meeting or a parting. For example, Wang Yun hands Diaochan to Dong
+  Zhuo's carriage, and Li Su receives the edict from Wang Yun.
+- **Learned in playtest:** a meeting is necessary, but not enough. The new lead must start in the right place, the old
+  lead must finish their own stretch first, and the screen must say who you are now. The rules are in R3.
+
+### C6. Pay off early moments later
+
+- **Source:** CD Projekt: an early moment that returns unexpectedly hits hardest.
+- **What it means:** plant something, then bring it back. The novel is full of its own echoes, so use them rather than
+  inventing new ones.
+- **In the arc:**
+  - **The halberd:** Dong Zhuo throws it at Lü Bu (A9). Wang Yun uses it ("When he threw that halberd, was there any
+    father in it?", A11). Lü Bu's halberd kills Dong Zhuo (A14).
+  - **Cai Yong:** the go game added on the user's call (A12y) plants his gratitude, his history and Wang Yun's judgment.
+    All three come back when he weeps over the body and is put to death.
+  - **Li Su:** he bribed Lü Bu with Red Hare (chapter 3), lures Dong Zhuo to his death, and is then beheaded by Lü Bu.
+    This only lands fully once Act I is written.
+- **Learned:** this principle is why invention is allowed when it "serves the plot" (R1). A planted beat earns its place
+  by what it sets up.
+
+### C7. Let scenes happen around the player
+
+- **Source:** *Chrono Trigger* plays many story events in the world while the player can still move.
+- **What it means:** some beats are already under way when the player walks in. Not everything waits for them.
+- **In the arc:** A1's banquet is already going when Wang Yun arrives. In the Liangzhou villages the crowd behind Jia Xu
+  grows as the rumour spreads (the `crowd` step), so the story is visible on the map.
+- **Not used much yet.** Most beats still start when the player steps on the spot. Look for more of these in the next arc.
+
+### C8. Teach the tone through a first impression
+
+- **Source:** *Undertale*'s opening builds trust in a friendly character, then breaks it.
+- **What it means:** the first scene of a book or arc shows what kind of world it is, and the player learns the rules of
+  the world by feeling them.
+- **In the arc:** A1 opens on the roadside banquet. Dong Zhuo eats and laughs while prisoners are mutilated in front of the
+  ministers, then Zhang Wen's head comes in on a red tray. Before anyone is introduced, the player knows what is at stake.
+- **Planned for Act I:** the player helps Cao Cao escape and comes to like him, then he kills Lü Boshe's family.
+
+### Also from the research: lessons from Chinese RPGs (Plot, not confirmed)
+
+These came from the second research round, on *Chinese Paladin*, *Xuan-Yuan Sword* and other Three Kingdoms games
+(`docs/book2/research.md` Part 2). The user never reviewed them one by one, so they carry less weight than C1–C8.
+
+- **Pace each place like *Chinese Paladin*:** town and townsfolk, a small conflict, the big beat, then the party changes
+  or the road opens. The Diaochan arc follows this loosely in Chang'an.
+- **Give full scenes to what other adaptations skip.** Most Three Kingdoms games cut Red Hare, Lü Boshe, the chain plot
+  and Wang Yun's fall. A faithful version stands out. The Diaochan arc does this.
+- **End each act on a verse from the novel and a still,** with the novel's paired chapter titles on the scrolls between
+  acts. **Not done in the Diaochan arc:** it uses none of the novel's verses (后人有诗曰…). Decide with the user whether
+  to keep this.
+
+---
+
+## Part 2: How the game works (rules and decisions)
+
+### R1. Tell the novel faithfully. Invent only where it serves the plot.
 
 > "well I would say that a primary goal of this is to tell the story of the novel faithfully btw"
 
@@ -35,7 +143,7 @@ Quotes are kept as the user typed them.
 - Mark every invented beat in the docs as **not in the novel, added on the user's call**.
 - Dark events stay in, because they are the story. Graphic moments happen offscreen or in a still *(Plot, agreed)*.
 
-### 2. One path, like Pokémon. No branches or side threads.
+### R2. One path, like Pokémon. No branches or side threads.
 
 > "btw I no longer want branching/side threads the threading should be more like a pokemon game"
 
@@ -44,7 +152,7 @@ Quotes are kept as the user typed them.
   through Lü Bu" *(Plot, agreed)*.
 - The player chooses only where to walk first and whom to talk to. Nothing they do changes the story.
 
-### 3. Follow whom the novel follows. Hand the lead around, villains included.
+### R3. Follow whom the novel follows. Hand the lead around, villains included.
 
 > "the game is designed to hand off who we follow i believe, we starte with liu bei and hist broteres, the cast is set to
 > shift, so you can decide when we switch protagonists do what you feel is natrual"
@@ -72,7 +180,7 @@ Quotes are kept as the user typed them.
 | The portrait at the a4 board was Wang Yun's, but "that problem is part of her plot, not Wang Yun's" | A board belongs to whoever is deciding. Set the dilemma's `"who"` to that character, not the walking lead. |
 | Moving the handoff earlier put Diaochan at the banquet before she is called in: "doesn't make sense" | Never stage a character in a scene before the novel brings them in. Fix the engine (here, the portrait), not the staging. |
 
-### 4. Go problems are not story beats. Mix them.
+### R4. Go problems are not story beats. Mix them.
 
 > "maybe beats as go problems is the wrong way to think about this"
 
@@ -91,7 +199,7 @@ The reasoning: a problem placed at a decision the novel has already made is a to
 
 Plot only marks **where** a problem is posed. Choosing the problem is another session's work.
 
-### 5. Don't force the go tactic to mirror the story.
+### R5. Don't force the go tactic to mirror the story.
 
 > "this will not be realistic for us, we want a large scale game with many chapters I we wont be able to consistently
 > deliver these connections"
@@ -99,7 +207,7 @@ Plot only marks **where** a problem is posed. Choosing the problem is another se
 Plot had proposed matching the problem's shape to the scene, for example a ladder for an escape. The user rejected it
 because it can't be kept up across a long game. The dilemma caption carries the meaning, and the problem doesn't need to.
 
-### 6. One problem per encounter, solved flawlessly. Hard scenes get several, with dialogue between them.
+### R6. One problem per encounter, solved flawlessly. Hard scenes get several, with dialogue between them.
 
 > "right now we have encounters give 1 problem, and if you make a wrong move, you have to wait 30s before trying again this
 > incentivizes actual learning on a problem why did you want m/n did you have a reason"
@@ -112,7 +220,7 @@ because it can't be kept up across a long game. The dilemma caption carries the 
   resumes at the unsolved problem, and the third problem is the hardest.
 - Lesson: **don't borrow a feature because another game has it.** Ask what our game needs.
 
-### 7. When the novel's task fails, the player still solves, and the story still fails.
+### R7. When the novel's task fails, the player still solves, and the story still fails.
 
 The problem is framed as **the attempt** ("Talk your way past the guard"), and the novel decides the result. This is how
 it was recorded in the Diaochan arc.
@@ -120,7 +228,7 @@ it was recorded in the Diaochan arc.
 **To confirm with the user:** the user's reply was "(b) lets hand the act around", which answered the handoff question
 for certain. Whether "(b)" also chose this option for failed tasks was Plot's reading. Ask before relying on it.
 
-### 8. Road challengers are the trainers on the route, in exact numbers.
+### R8. Road challengers are the trainers on the route, in exact numbers.
 
 > "I wonder if we can have bandits on the road be go problems"
 
@@ -134,7 +242,7 @@ for certain. Whether "(b)" also chose this option for failed tasks was Plot's re
 - Check that every challenger can actually be met. The Liangzhou scout was unreachable because a handoff dropped the lead
   onto the next beat's spot.
 
-### 9. Design for the best game, not for what exists today. Don't check what exists.
+### R9. Design for the best game, not for what exists today. Don't check what exists.
 
 > "i mean dont be afraid to ask or more stills of your own. its great if we can reuse them as well too, but dont use what
 > we have today as a factor in deciding what the best game would be"
@@ -145,7 +253,7 @@ for certain. Whether "(b)" also chose this option for failed tasks was Plot's re
 - List what each scene **calls for**. Integration and Graphics check what already exists.
 - If the engine can't do something, ask Integration. Don't work around it in data.
 
-### 10. Plot's outputs: what to write, and what not to
+### R10. Plot's outputs: what to write, and what not to
 
 > "let me clarify the outputs: you don't have to choose a go problem, only specify when one should be posed, you should
 > output what props are needed, items, but you do not need to create the voiced lines, only write the dialogue, other
@@ -162,7 +270,7 @@ Plot writes:
 
 Plot does **not** choose problems, record voices, paint, or build maps.
 
-### 11. The player must always know why and where
+### R11. The player must always know why and where
 
 > "what is the crown for?"
 
@@ -177,7 +285,7 @@ Plot does **not** choose problems, record voices, paint, or build maps.
 - A character's motive must be in their own words in the scene (Diaochan's debt to Wang Yun). Otherwise the player only
   sees her being handed between men.
 
-### 12. Research the genre, then check fit against the text
+### R12. Research the genre, then check fit against the text
 
 > "I want you do do some research first on rpg plot writing"
 
@@ -191,12 +299,12 @@ Plot does **not** choose problems, record voices, paint, or build maps.
 - The fit test is the novel's own task list: who has to get what done, against what obstacle.
 - Some research changes nothing, and that's fine. On cultivation games: "no this doesnt necessarily affect anything".
 
-### 13. Settle the anatomy first; length can wait
+### R13. Settle the anatomy first; length can wait
 
 > "lets not worry about the length for now… length is an easy question to asnwer later. we still havent pinned down the
 > anatomy of the game lets focus on that"
 
-### 14. Play before scaling
+### R14. Play before scaling
 
 > "i'd like to play the diaochen arc first before we make a second"
 
@@ -204,14 +312,14 @@ Plot does **not** choose problems, record voices, paint, or build maps.
 
 Draft one arc, get it playable in a test book, and fix what the playtest shows before starting the next arc.
 
-### 15. Relay only what the user said
+### R15. Relay only what the user said
 
 When messaging other sessions, quote the user's actual words and mark Plot's own suggestions as Plot's. Plot once told
 Places that the user had "changed priorities". That was Plot's inference, and Places had to check with the user.
 
 ---
 
-## Part 2: The process, step by step (one arc)
+## Part 3: The process, step by step (one arc)
 
 0. **Meet the user first.** Say what you understand the job to be, ask how they want it to go, and wait. Bring open
    questions with a recommendation for each, so the user can just confirm.
@@ -219,13 +327,13 @@ Places that the user had "changed priorities". That was Plot's inference, and Pl
    in the scratchpad.
 2. **Survey the tasks.** List every task in the chapters: actor, goal, obstacle, outcome, whether the text **shows** it or
    **summarises** it, a quote, and how well it fits play. Subagents can split this by chapter. The survey decides the rest.
-3. **Choose leads and handoffs** from the survey (principle 3). Hand off at meetings. For each handoff, write where the new
+3. **Choose leads and handoffs** from the survey (R3). Hand off at meetings. For each handoff, write where the new
    lead starts.
-4. **Classify every beat** as legwork, contest or settled (principle 4). Mark failed tasks (principle 7). Give hard
-   contests two or three problems at the dialogue's turns (principle 6).
+4. **Classify every beat** as legwork, contest or settled (R4). Mark failed tasks (R7). Give hard
+   contests two or three problems at the dialogue's turns (R6).
 5. **Lay out the chain.** For each beat, set its place and room, gate and items, and an objective that says **why and
-   where** (principle 11). Write the place's needs (buildings, rooms, who stands where) as **shared keys** for Places.
-6. **Set road challengers** per walk, with exact totals and how many are blocking (principle 8).
+   where** (R11). Write the place's needs (buildings, rooms, who stands where) as **shared keys** for Places.
+6. **Set road challengers** per walk, with exact totals and how many are blocking (R8).
 7. **Write the scenes:**
    - Use the novel's lines in Chinese, with plain English.
    - Put motives in the characters' own words.
@@ -248,7 +356,7 @@ Places that the user had "changed priorities". That was Plot's inference, and Pl
     Sort each finding as story (Plot fixes it), map (Places) or engine (Integration). Fix, push, and tell the user plainly
     what changed and what is still waiting on whom.
 
-## Part 3: Checklist before pushing an arc
+## Part 4: Checklist before pushing an arc
 
 - [ ] Every beat comes from the novel, or is marked "not in the novel, added on the user's call".
 - [ ] One chain. Every gate is an obstacle the novel contains.
@@ -261,9 +369,9 @@ Places that the user had "changed priorities". That was Plot's inference, and Pl
 - [ ] English and Chinese for every line. Stills and props listed without checking what exists.
 - [ ] Messages to other sessions quote the user's words and mark Plot's suggestions as Plot's.
 
-## Part 4: Open items to confirm with the user
+## Part 5: Open items to confirm with the user
 
-1. **Failed tasks**: whether the user chose option (b) (see principle 7).
+1. **Failed tasks**: whether the user chose option (b) (see R7).
 2. **Per-handoff role line** ("Jia Xu, adviser to Li Jue"): Integration is asking apo110 whether it's wanted.
 3. **The rest of Book 2** (Cao Cao in chapters 3–4, the coalition in chapters 5–7): the outline in
    `docs/book2/research.md` Part 5 is provisional. Several of its questions are unanswered: folding the first beats into
