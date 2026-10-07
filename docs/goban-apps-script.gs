@@ -1,8 +1,8 @@
 // The Goban sheet's Apps Script (Extensions > Apps Script on the "Goban" sheet), deployed as the web app
-// at Sync.API_URL. Progress, review games and feedback, as before; new feedback also fires the
-// "Game feedback" routine so a session picks it up at once.
-// Script properties (Project Settings > Script properties): ROUTINE_URL (the routine's API trigger URL,
-// ending in /fire) and ROUTINE_TOKEN (its generated token). Without them feedback is only logged.
+// at Sync.API_URL. Progress, review games and feedback, as before; new feedback is also posted as a comment
+// on the Feedback inbox PR (chamyao/goban-trainer#3), which wakes the Integration session at once.
+// Script property (Project Settings > Script properties): GITHUB_TOKEN, a fine-grained token for
+// goban-trainer with Pull requests: read and write. Without it feedback is only logged.
 
 function getSheet_(name, headers) {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -63,7 +63,7 @@ function doPost(e) {
     if (!msg) return jsonOut_({ error: "message required" });
     const context = (body.data && body.data.context) || "";
     feedbackSheet_().appendRow([now, body.username || "", msg, context]);
-    fireFeedbackRoutine_(msg, context, body.username || "");   // after the row is saved: a failed fire loses nothing
+    postFeedbackComment_(msg, context, body.username || "");   // after the row is saved: a failed post loses nothing
     return jsonOut_({ ok: true });
   }
 
@@ -93,25 +93,24 @@ function doPost(e) {
   return jsonOut_({ ok: true });
 }
 
-// Fire the "Game feedback" routine with the note and where the player was.
-function fireFeedbackRoutine_(message, context, username) {
-  const p = PropertiesService.getScriptProperties();
-  const url = p.getProperty("ROUTINE_URL"), token = p.getProperty("ROUTINE_TOKEN");
-  if (!url || !token) return;
+// Post the note as a comment on the Feedback inbox PR, which the Integration session watches.
+function postFeedbackComment_(message, context, username) {
+  const token = PropertiesService.getScriptProperties().getProperty("GITHUB_TOKEN");
+  if (!token) return;
+  const body = "**In-game feedback**" + (username ? " from " + username : "") + "\n\n> " +
+    String(message).replace(/\n/g, "\n> ") + "\n\n`" + String(context).replace(/`/g, "'") + "`";
   try {
-    UrlFetchApp.fetch(url, {
+    UrlFetchApp.fetch("https://api.github.com/repos/chamyao/goban-trainer/issues/3/comments", {
       method: "post",
       contentType: "application/json",
-      headers: {
-        Authorization: "Bearer " + token,
-        "anthropic-beta": "experimental-cc-routine-2026-04-01",
-        "anthropic-version": "2023-06-01",
-      },
-      payload: JSON.stringify({ text: String(message) + "\n\n" + String(context) + (username ? "\nfrom " + username : "") }),
+      headers: { Authorization: "Bearer " + token, Accept: "application/vnd.github+json" },
+      payload: JSON.stringify({ body: body }),
       muteHttpExceptions: true,
     });
   } catch (err) { console.error(err); }
 }
+
+function testFire() { postFeedbackComment_("TEST from the Apps Script editor", "#/tk · test", ""); }
 
 function jsonOut_(obj) {
   return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
