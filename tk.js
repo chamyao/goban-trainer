@@ -589,7 +589,7 @@ const TK = {
   party(w) { return this.ls("tk-party")[w.n] || w.party; },
   setParty(w, list) { const a = this.ls("tk-party"); a[w.n] = list; this.lsSet("tk-party", a); },
   // Difficulty (the menu): Easy draws a board from its easy pool (a book with "easy_grades"), Hard from its own.
-  get easy() { try { return localStorage.getItem("tk-diff") === "easy"; } catch { return false; } },
+  get easy() { try { return localStorage.getItem("tk-diff") !== "hard"; } catch { return true; } },   // Easy unless Hard was chosen (the user)
   set easy(v) { try { localStorage.setItem("tk-diff", v ? "easy" : "hard"); } catch {} },
   problemRef(node, idx = 0) {
     const d = this.ls("tk-draw"), pool = this.easy && node.pool_easy && node.pool_easy.length ? node.pool_easy : node.pool;

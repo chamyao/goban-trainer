@@ -1001,7 +1001,7 @@ function worldScenes() {
         tex.add("dot", 0, 0, 0, S, S); tex.add("band", 0, S, (S - h) / 2, w, h);
       }
       // the way, rounded at its corners and laid every few pixels: a road lit from your feet to the goal
-      const pts = this.squareCorners(this.routePoints({ x: P.x, y: P.y }, t)), STEP = 5, band = [];
+      const pts = this.roundCorners(this.squareCorners(this.routePoints({ x: P.x, y: P.y }, t)), this.tw || 16), STEP = 5, band = [];
       let carry = 0;
       for (let i = 1; i < pts.length; i++) {
         const a = pts[i - 1], b = pts[i], d = Math.hypot(b.x - a.x, b.y - a.y), ang = Math.atan2(b.y - a.y, b.x - a.x);
@@ -1090,7 +1090,6 @@ function worldScenes() {
       return [...on, ...chain, ...off.slice(0)];
     }
 
-    // Round a polyline's corners (radius r px), so a lit way bends like a road, not a ruler.
     // The route as right-angle turns (the user's wish): each slanting stretch becomes an L, bent on whichever
     // side is open ground; a slant with no clear L either way stays as it is.
     squareCorners(pts) {
@@ -1113,6 +1112,8 @@ function worldScenes() {
       }
       return out;
     }
+    // Round the turns (radius up to r px, never past half of either leg), so the right-angle route bends like a
+    // road rather than a ruler (the user: "allow curved edges").
     roundCorners(pts, r) {
       const out = [];
       for (let i = 0; i < pts.length; i++) {
