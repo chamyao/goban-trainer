@@ -1630,9 +1630,9 @@ const TKOverlay = {
 
 // Where the player is, for a feedback note: book, place, position, the next beat and its goal line,
 // what's open on screen, and the device and settings.
-// Talk with Claude: a two-way chat, listed with the books (the user, apo110). A message goes through the Apps
-// Script to the Feedback inbox PR, which wakes the Integration session; its replies come back the same way, and
-// the window asks for them every few seconds while it's open. Only for apo110 (and test mode).
+// Talk with Claude: a two-way chat, listed with the books (the user, apo110). The thread lives in the private Chat
+// sheet behind the Apps Script; a message pings the Feedback inbox PR (no content) to wake the Integration session,
+// whose reply lands in the sheet, and the window asks for it every few seconds while open. apo110 and test mode only.
 function tkChatAllowed() {
   return (typeof Sync !== "undefined" && Sync.username === "apo110") || (typeof TK_TEST !== "undefined" && TK_TEST);
 }

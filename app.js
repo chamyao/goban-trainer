@@ -143,8 +143,8 @@ const Sync = {
     if (!res.ok) throw new Error(`feedback failed (${res.status})`);
   },
 
-  // The campaign's chat with Claude (tk.js viewTKChat): messages go to the Feedback inbox PR through the
-  // Apps Script, and the thread (yours and Claude's replies) comes back from it.
+  // The campaign's chat with Claude (tk.js viewTKChat): the thread lives in the private Chat sheet behind the
+  // Apps Script; a message also pings the Feedback inbox PR (no content), which wakes Claude to answer.
   async sendChat(message, context = location.hash) {
     const res = await fetch(this.API_URL, {
       method: "POST",
