@@ -243,12 +243,18 @@ def main():
         # an easy version (the menu's difficulty): every board's problems drawn again at easier grades, in a
         # second pass so the book's own (hard) pools stay exactly as they were
         if w.get("easy_grades"):
+            # too few problems this easy to give every board its own: the boards share the easy grades' problems
+            # (within a grade of them, never rejected), each board starting further along so neighbours differ;
+            # problems other books use are allowed here
             elo, ehi = RANK[w["easy_grades"][0]], RANK[w["easy_grades"][-1]]
+            near = [x for r in range(max(0, elo - 2), min(len(GRADES), ehi + 3)) for x in by_grade.get(GRADES[r], []) if vet(x) is not False]
+            near.sort(key=lambda x: vet(x) is not True)   # KataGo-clean first
+            k = 0
             for node, src in zip(nodes, w["nodes"]):
-                role = src.get("role")
-                if role and role != "boss":
-                    r = min(round(elo + (ehi - elo) * src.get("step", 0)) + (SHORTCUT if role == "short" else 0), len(GRADES) - 1)
-                    node["grade_easy"], node["pool_easy"] = GRADES[r], draw(r, 12)
+                if src.get("role") and src.get("role") != "boss" and near:
+                    node["grade_easy"] = w["easy_grades"][0]
+                    node["pool_easy"] = [near[(k * 7 + j) % len(near)] for j in range(12)]
+                    k += 1
         key = lambda k: f"{w['n']}-{k}"
         out = {k: v for k, v in w.items() if k not in ("nodes", "edges")}
         out["nodes"] = nodes
