@@ -32,8 +32,8 @@ for(const [name,dev] of SIZES){
   await click(p.locator('.tk-menu-btn',{hasText:'Menu'}));await p.waitForTimeout(400);
   // every menu button on screen, or reachable by scrolling the menu
   let mbs=await inView('.tk-menu-panel button');
-  if(mbs.some(x=>!x.ok)){await p.evaluate(()=>{const b=[...document.querySelectorAll('.tk-menu-panel button')].filter(b=>!b.hidden).pop();b.scrollIntoView({block:'nearest'});});await p.waitForTimeout(300);
-    const last=(await inView('.tk-menu-panel button')).pop();const pageScrolled=await p.evaluate(()=>scrollY>0);
+  if(mbs.some(x=>!x.ok)){const y0=await p.evaluate(()=>scrollY);   /* the game may have scrolled the page to itself already */await p.evaluate(()=>{const b=[...document.querySelectorAll('.tk-menu-panel button')].filter(b=>!b.hidden).pop();b.scrollIntoView({block:'nearest'});});await p.waitForTimeout(300);
+    const last=(await inView('.tk-menu-panel button')).pop();const pageScrolled=await p.evaluate(y0=>scrollY!==y0,y0);
     bad(last&&last.ok&&!pageScrolled,'menu buttons off screen'+(pageScrolled?' (only by scrolling the page)':'')+': '+mbs.filter(x=>!x.ok).map(x=>x.t+' '+x.r).join(', '));
     if(last&&last.ok)console.log(`NOTE ${name}: the menu scrolls to reach "${last.t}"`);}
   else bad(mbs.length>=5,'the menu has too few buttons');

@@ -19,7 +19,7 @@ if [[ "$PLAYTEST_URL" == http://localhost:8765 ]] && ! curl -s -o /dev/null loca
 fi
 # every test's pages start in test mode (testmode.js: Books 1-3 are taken down for players); live-books checks the player's view
 export NODE_OPTIONS="--require $PWD/testmode.js${NODE_OPTIONS:+ $NODE_OPTIONS}"
-declare -A ENVS=( [live-books]="PLAYTEST_LIVE=1" )
+declare -A ENVS=( [live-books]="PLAYTEST_LIVE=1" [test-mode]="PLAYTEST_LIVE=1" )
 declare -A ARGS=( [tap-after-talk]="zhuo-county" [go-table-ogs]="phone" )
 declare -A LIMIT=( [playthrough]=2400 [playthrough-3]=2400 [book-handoff-2]=400 [huainan-gate]=400 [tap-after-talk]=400 [spot-reach]=300 [ending]=600 [door-taps]=400 [side-stories]=500 [blackwind]=600 [boards-open]=1500 [book-handoff]=400 [feedback]=120 [decision-boards]=900 [iso-edges]=900 [iso-apron]=400 [stills-phone]=900 [app-boot]=600 [hints]=200 [doors-12]=400 [stealth-12]=600 [walk-gaps]=900 [board-layout]=900 [route-lights]=600 [textures]=600 [challengers-12]=900 [back-doors]=900 )
 tests=("$@")

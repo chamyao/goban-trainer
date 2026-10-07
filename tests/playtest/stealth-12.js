@@ -29,7 +29,10 @@ const setUp=async(node,place,from)=>{await p.evaluate(([node,B])=>{for(const k o
   // the lead the story gives this beat: the last party step before it
   await p.evaluate(node=>{const w=window.__w,ks=TK.world(w.w.n).nodes.map(n=>n.key),i=ks.indexOf(node);let party=null;
     for(const k of ks.slice(0,i)){const sc=w.story[(TK.world(w.w.n).nodes.find(n=>n.key===k)||{}).scene];for(const s of (sc&&sc.steps)||[])if(s[0]==='party')party=s[1];}
-    if(party){w.st.party=party;w.setParty(party);}const top=w.region.places.find(x=>x.id===w.region.quests.find(q=>q.node===node).place);for(const id of [top&&top.parent,top&&top.id])if(id&&!w.st.visited.includes(id))w.st.visited.push(id);w.save();},node);
+    if(party){w.st.party=party;w.setParty(party);}const top=w.region.places.find(x=>x.id===w.region.quests.find(q=>q.node===node).place);for(const id of [top&&top.parent,top&&top.id])if(id&&!w.st.visited.includes(id))w.st.visited.push(id);
+    // what the beat's gate asks for (a3: the pearls and the crown from the errand), as the playthrough supplies it
+    for(const g of (w.region.quests.find(q=>q.node===node)||{}).gate||[])for(const c of [].concat(g.needs||[])){const [k,v]=String(c).split(':');if(k==='item')WorldItems.add(w.w,v);if(k==='mark')WorldMarks.add(w.w,v);}
+    w.save();},node);
   if(from){await p.evaluate(f=>{const w=window.__w;w.leaving=false;w.cine=null;w.go(f);},from);await p.waitForTimeout(1300);await ready();await settled();}
   await p.evaluate(pl=>{const w=window.__w;w.leaving=false;w.cine=null;w.go(pl);},place);await p.waitForTimeout(1300);await ready();};
 const watchersHere=node=>p.evaluate(node=>{const w=window.__w;return w.npcs.filter(n=>n.watch&&((n.watch.seen||[]).length||n.watch.back_to)&&(n.watch.in_beats||[]).includes(node)).map(n=>({id:n.id,back:n.watch.back_to||''}));},node);
@@ -101,7 +104,10 @@ for(const q of beats){
   let res='timeout',t0=Date.now();
   while(Date.now()-t0<plan.secs*1000*4+20000){
     const st=await p.evaluate(([n,cross])=>({cine:!!window.__w.cine||!!document.querySelector('.tk-duel')||TK.cleared(n)||window.__w.placeId!==cross&&!window.__w.caught,caught:!!window.__w.caught}),[q.node,q.cross]);
-    if(st.cine){res='scene';break;}if(st.caught){res='caught';break;}if(await p.evaluate(()=>window.__w.ui.busy()&&!window.__w.cine))await p.evaluate(()=>window.__w.ui.advance());await p.waitForTimeout(100);}
+    // a spot that starts on a tap (a3: knocking at Lu Bu's door), reached: tap it, as a player would
+    if(await p.evaluate(spot=>{const w=window.__w,pl=window.__plan,s=w.spots[spot];return !!(pl&&pl.done&&s&&s.trigger==='talk'&&!w.ui.busy()&&!w.cine&&!w.walk);},q.spot))
+      await p.evaluate(spot=>{const w=window.__w,s=w.spots[spot];w.tapAt(s.x,s.y);},q.spot);
+    if(st.cine){res='scene';break;}if(st.caught){res='caught';if(process.env.DEBUG)console.log('  caught:',await p.evaluate(()=>{const w=window.__w,P=w.player,pl=window.__plan;return JSON.stringify({P:[P.x|0,P.y|0],step:pl&&Math.floor(pl.acc/150)+'/'+pl.cells.length,done:pl&&pl.done,goal:pl&&pl.cells[pl.cells.length-1],w:w.npcs.filter(n=>n.watch&&w.watching(n)).map(n=>[n.id,n.spr.x|0,n.spr.y|0,n.watch.dir,w.sees(n,P)]),spot:Object.values(w.spots).filter(s=>s.node==='12-a3').map(s=>[s.x,s.y,s.armed,s.trigger,!!w.openQuest(s)]),items:['pearls','crown'].map(i=>i+':'+w.cond('item:'+i)),next:w.nextMain().node,avail:w.available(w.nextMain()),gate:JSON.stringify(w.gateFor(w.nextMain())).slice(0,120),near:Math.hypot(P.x-856,P.y-603)|0});}));break;}if(await p.evaluate(()=>window.__w.ui.busy()&&!window.__w.cine))await p.evaluate(()=>window.__w.ui.advance());await p.waitForTimeout(100);}
   const waits=plan.wait.toFixed(1)+' s';
   check(res==='scene',`${q.node}: walking that way she isn't seen, and the scene begins (${res}, ${((Date.now()-t0)/1000).toFixed(0)} s)`);
 }
