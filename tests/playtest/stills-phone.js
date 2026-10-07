@@ -12,7 +12,7 @@ await p.route('**/phaser.min.js',r=>r.fulfill({path:require('path').join(__dirna
 await p.route('**/*.mp3',r=>r.fulfill({status:404,body:''}));
 const BASE=(process.env.PLAYTEST_URL||'http://localhost:8765')+'/index.html?test=1'+(process.env.PLAYTEST_KIT?'&kit='+process.env.PLAYTEST_KIT:'');
 await p.goto(BASE+'#/tk/1');await p.waitForTimeout(1500);
-const cases=(process.env.NODES||'1-n2,2-boss,2-d1').split(',').map(k=>({w:+k[0],key:k}));
+const cases=(process.env.NODES||'1-n2,2-boss,2-d1').split(',').map(k=>({w:+k.split('-')[0],key:k}));
 const only=process.env.ONLY?process.env.ONLY.split(','):null;
 
 for(const c of cases.filter(c=>!only||only.includes(c.key))){
