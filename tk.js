@@ -1074,7 +1074,7 @@ async function viewTK(worldN) {
     h("div", { class: "tk-head-btns" }, [voiceBtn, chron]),
   ]));
   root.append(h("div", { class: "tk-worlds" }, [
-    ...D.worlds.filter(x => !(x.draft || x.hidden) || TK_TEST).map(x => TK.worldOpen(x.n)
+    ...D.worlds.filter(x => !x.chat && (!(x.draft || x.hidden) || TK_TEST)).map(x => TK.worldOpen(x.n)
       ? h("a", { class: "tk-world" + (x.n === n ? " on" : ""), href: `#/tk/${x.n}` }, `${x.book || x.n} · ${x.zh} ${x.name}${x.hidden ? " · 下架 off" : ""}`)
       : h("span", { class: "tk-world lock" }, `${x.n} · ${x.zh} ${x.name} — 先完成第${x.n - 1}卷 after Book ${x.n - 1}`)),
     ...(tkChatAllowed() ? [h("a", { class: "tk-world tk-world-chat", href: "#/tk/chat" }, "对话 · Talk with Claude")] : []),
@@ -1132,7 +1132,7 @@ async function viewTK(worldN) {
       root.querySelector(".tk-head-btns").append(h("div", { class: "tk-fb" }, [ta, h("div", { class: "tk-fb-row" }, [send, msg])]));
     }
     // the other books, once open (Book 2 after Book 1's boss)
-    for (const x of D.worlds) if (x.n !== w.n && TK.worldOpen(x.n))
+    for (const x of D.worlds) if (x.n !== w.n && !x.chat && TK.worldOpen(x.n))
       root.querySelector(".tk-head-btns").append(h("button", { class: "tk-chron-btn", type: "button", onclick: () => { location.hash = `#/tk/${x.n}`; } },
         `第${x.book || x.n}卷 Book ${x.book || x.n} · ${x.zh} ${x.name}${x.hidden ? " · 下架 off" : ""} ▸`));   // testers see which books players can't
     // The buttons live in a menu inside the game window, with the controls.
@@ -1637,8 +1637,26 @@ function tkChatAllowed() {
   return (typeof Sync !== "undefined" && Sync.username === "apo110") || (typeof TK_TEST !== "undefined" && TK_TEST);
 }
 let tkChatTimer = null;
-async function viewTKChat() {
+// The study (world 90, Places' map) where you walk up to Claude and talk; the conversation plays in a dialogue box
+// with a line to type in (TKTalk). It isn't a story book: registered here, hidden from every book list.
+const TK_CHAT_WORLD = 90;
+function tkChatWorld(D) {
+  let w = D.worlds.find(x => x.n === TK_CHAT_WORLD);
+  if (!w) {
+    const b2 = TK.world(12), lead = (b2 && TK.party(b2) || [])[0] || "wangyun";   // you walk in as Book 2's lead
+    w = { n: TK_CHAT_WORLD, name: "Talk with Claude", zh: "与Claude对话", chat: true, hidden: true, party: [lead],
+      nodes: [], scenes: {}, cast: {}, chapters: [], grades: "", opening: [], closing: [] };
+    D.worlds.push(w);
+  }
+  return w;
+}
+async function viewTKChat(plain) {
   const nav = routeSeq;
+  if (!plain && tkChatAllowed() && Sync.chatKey() && typeof WorldView !== "undefined") {
+    const D = await TK.load(), region = await WorldData.region(TK_CHAT_WORLD);
+    if (nav !== routeSeq) return;
+    if (region) return viewTKStudy(tkChatWorld(D));
+  }
   clearTimeout(tkChatTimer);
   crumbs.innerHTML = "";
   crumbs.append(h("a", { href: "#/" }, "Library"), " / ", h("a", { href: "#/tk" }, "三国演义"), " / 对话 Talk with Claude");
@@ -1653,7 +1671,7 @@ async function viewTKChat() {
     root.innerHTML = "";
     const pw = h("input", { class: "tk-chat-in", type: "password", placeholder: "密码 Password", autocomplete: "current-password" });
     const go = h("button", { class: "tk-chat-send", type: "button" }, "进入 Enter");
-    go.onclick = () => { const k = pw.value.trim(); if (!k) return; Sync.setChatKey(k); viewTKChat(); };
+    go.onclick = () => { const k = pw.value.trim(); if (!k) return; Sync.setChatKey(k); viewTKChat(plain); };
     pw.addEventListener("keydown", e => { e.stopPropagation(); if (e.key === "Enter") go.click(); });
     root.append(h("div", { class: "tk-chat" }, [
       h("div", { class: "tk-chat-head" }, [h("b", {}, "对话 · Talk with Claude"), h("small", {}, wrong ? "密码不对 Wrong password, try again." : "这一卷需要密码。This book needs its password.")]),
@@ -1666,7 +1684,7 @@ async function viewTKChat() {
   const send = h("button", { class: "tk-chat-send", type: "button" }, "发送 Send");
   const note = h("div", { class: "tk-chat-note" });
   root.append(h("div", { class: "tk-chat" }, [
-    h("div", { class: "tk-chat-head" }, [h("b", {}, "对话 · Talk with Claude"), h("small", {}, "Claude replies here, usually within a minute or two.")]),
+    h("div", { class: "tk-chat-head" }, [h("b", {}, "对话 · Talk with Claude"), h("small", {}, ["Claude replies here, usually within a minute or two. ", h("a", { href: "#/tk/chat" }, "回书房 Back to the study")])]),
     log, h("div", { class: "tk-chat-row" }, [ta, send]), note]));
   let list = [], pending = [], shown = "";
   const when = at => at ? new Date(at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "…";
@@ -1719,6 +1737,83 @@ async function viewTKChat() {
   draw();
   poll();
 }
+
+async function viewTKStudy(w) {
+  const nav = routeSeq;
+  clearTimeout(tkChatTimer);
+  crumbs.innerHTML = "";
+  crumbs.append(h("a", { href: "#/" }, "Library"), " / ", h("a", { href: "#/tk" }, "三国演义"), " / 对话 Talk with Claude");
+  root.innerHTML = "";
+  root.append(h("div", { class: "tk-info" }, [h("div", { class: "tk-info-text" }, [h("b", {}, "与Claude对话 · Talk with Claude"),
+    h("div", { class: "meta" }, ["走到书桌前和 Claude 说话。Walk up to Claude at the desk and talk. ", h("a", { href: "#/tk/chat/plain" }, "纯文字 Plain chat window")])])]));
+  const host = h("div", { class: "tk-map" });
+  root.append(host);
+  try { await WorldView.mount({ w, host, onTalkTo: scene => TKTalk.open(scene, host) }); }
+  catch (e) { host.textContent = e.message; }
+  if (nav !== routeSeq) WorldView.destroy();
+}
+
+// The conversation with Claude in the study: Claude's lines in a dialogue box with the portrait, and a line for
+// yours underneath. The same private thread as the plain chat window (app.js Sync.sendChat / fetchChat).
+const TKTalk = {
+  open(scene, host) {
+    if (host.querySelector(".tk-talk")) return;
+    scene.seated = true;
+    if (scene.player) scene.player.setVelocity(0);
+    const file = typeof TownUI !== "undefined" && TownUI.portraits && TownUI.portraits.claude;
+    const log = h("div", { class: "tk-talk-log" });
+    const ta = h("textarea", { class: "tk-talk-in", rows: "1", placeholder: "你说… Say something (Enter sends, Esc leaves)" });
+    const send = h("button", { class: "tk-talk-send", type: "button" }, "说 Say");
+    const leave = h("button", { class: "tk-talk-leave", type: "button", title: "Leave the conversation" }, "✕");
+    const el = h("div", { class: "tk-talk town-dlg" + (file ? " has-portrait" : "") }, [
+      ...(file ? [h("img", { class: "tk-talk-face", src: `assets/tk/portraits/${file}?v=${TownUI.PORTRAIT_V}`, alt: "" })] : []),
+      h("div", { class: "tk-talk-body" }, [h("div", { class: "town-who" }, ["Claude", leave]), log, h("div", { class: "tk-talk-row" }, [ta, send])])]);
+    host.append(el);
+    let list = [], pending = [], waiting = false, timer = null, shown = "";
+    const draw = () => {
+      const key = JSON.stringify([list.length, list.length && list[list.length - 1].at, pending.length, waiting]);
+      if (key === shown) return;
+      shown = key;
+      log.innerHTML = "";
+      const all = [...list.slice(-6), ...pending];
+      if (!all.length) log.append(h("div", { class: "tk-talk-line them" }, "你好！有什么想聊的？Hello! What would you like to talk about?"));
+      for (const m of all) log.append(h("div", { class: "tk-talk-line " + (m.who === "claude" ? "them" : "me") + (m.pending ? " pending" : "") }, (m.who === "claude" ? "" : "你 You: ") + m.text));
+      if (waiting) log.append(h("div", { class: "tk-talk-line them thinking" }, "……"));
+      log.scrollTop = log.scrollHeight;
+    };
+    const locked = () => { close(); Sync.setChatKey(""); viewTKChat(); };
+    const poll = async () => {
+      try {
+        list = await Sync.fetchChat();
+        pending = pending.filter(p => !list.some(m => m.who === "you" && m.text === p.text));
+        const last = list[list.length - 1];
+        if (waiting && last && last.who === "claude") waiting = false;
+        draw();
+      } catch (e) { if (e.locked) return locked(); console.error(e); }
+      if (el.isConnected) timer = setTimeout(poll, waiting ? 4000 : 8000);
+    };
+    const close = () => { clearTimeout(timer); el.remove(); scene.seated = false; host.focus(); };
+    send.onclick = async () => {
+      const text = ta.value.trim();
+      if (!text) return;
+      ta.value = ""; pending.push({ who: "you", text, pending: true }); waiting = true; draw();
+      try { await Sync.sendChat(text, "#/tk/chat · the study"); }
+      catch (e) { if (e.locked) return locked(); console.error(e); pending.pop(); waiting = false; ta.value = text; draw(); }
+      clearTimeout(timer); timer = setTimeout(poll, 1500);
+    };
+    leave.onclick = close;
+    // keys typed here are for the conversation, not for walking
+    for (const ev of ["keydown", "keyup", "keypress"]) el.addEventListener(ev, e => e.stopPropagation());
+    ta.addEventListener("keydown", e => {
+      if (e.key === "Escape") { e.preventDefault(); close(); }
+      else if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); send.click(); }
+    });
+    el.addEventListener("mousedown", e => e.stopPropagation());
+    el.addEventListener("pointerdown", e => e.stopPropagation());
+    draw(); poll();
+    setTimeout(() => ta.focus(), 50);
+  },
+};
 
 function tkFeedbackContext(w) {
   const sc = window.__w, parts = [location.hash, `Book ${w.n}`];

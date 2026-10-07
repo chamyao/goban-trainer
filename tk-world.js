@@ -40,7 +40,7 @@ const WorldData = {
     }
     return this.regions[n];
   },
-  has(n) { return (n >= 1 && n <= 3) || n === 12; },  // worlds whose places have been built (12: the Book 2 draft, test mode)
+  has(n) { return (n >= 1 && n <= 3) || n === 12 || n === 90; },  // worlds whose places have been built (12: Book 2; 90: the study where you talk with Claude)
   // "1-zhuo-county-c-elder": a challenger in a place, drawing from the world's problems.
   node(w, key) {
     const region = this.regions[w.n];
@@ -811,6 +811,7 @@ function worldScenes() {
       this.showRoute();
       if (this.fairy) this.fairy.wp = null;
       const q = this.nextMain();
+      if (this.w.chat) return this.goal("Talk to Claude at the desk.", "到书桌前和 Claude 说话。");   // the study (tk.js viewTKStudy): no story, just the conversation
       if (!q) return TK.world(this.w.n + 1)
         ? this.goal(`This book is complete. Book ${this.w.n + 1} is open: Menu → Book ${this.w.n + 1}.`, `这一卷已经完成。第${this.w.n + 1}卷已开启：菜单 → 第${this.w.n + 1}卷。`)
         : this.goal("This book is complete. The road goes on…", "这一卷已经完成。路还在前方……");
@@ -1694,6 +1695,7 @@ function worldScenes() {
         const n = t.n;
         n.dir = { up: "down", down: "up", left: "right", right: "left" }[this.player.facing];
         this.faceNpc(n);
+        if (n.who === "claude" && this.opts.onTalkTo) return this.opts.onTalkTo(this, n);   // the chat with Claude (tk.js TKTalk)
         if (n.gives) return this.giveFrom(n);
         // someone standing at a place to deliver to (Guan Yu at his ridge) takes the delivery
         const at = Object.values(this.spots).find(s => s.needs && Math.hypot(s.x - n.spr.x, s.y - n.spr.y) < 64);
@@ -1703,6 +1705,7 @@ function worldScenes() {
         return;
       }
       const spot = this.spots[t.k];
+      if (t.k === "claude" && this.opts.onTalkTo) return this.opts.onTalkTo(this, null);   // the rug before Claude's desk
       if (spot.use === "ogs") return TKTable.sit(this, t.k);   // the travellers' go table (tk-table.js)
       if (spot.needs) return this.deliverAt(spot);
       if (spot.use === "shrine") return this.shrineTalk();
