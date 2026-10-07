@@ -762,6 +762,13 @@
   },
   {
    "kind": "banner.black",
+   "x": 59,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "banner.black",
    "x": 38,
    "y": 35,
    "w": 1,
@@ -1807,7 +1814,7 @@
    "to": "changan--xuanping-top",
    "side": "E",
    "x": 59.7,
-   "y": 23.6,
+   "y": 26.1,
    "w": 0.45,
    "h": 0.8,
    "door": true,
@@ -1858,7 +1865,7 @@
   ],
   "changan--xuanping-top": [
    59,
-   24
+   26
   ],
   "meiwu-road": [
    5,

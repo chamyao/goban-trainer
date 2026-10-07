@@ -43,6 +43,7 @@ WALK = {"grass": True, "dirt": True, "sand": True, "water": False, "void": False
 IN_WALL = {"building.gate", "building.gatehouse", "building.gatetower", "building.moongate"}
 PASSABLE = {"furn.seat", "furn.curtain", "furn.rug", "landmark.ridge", "building.gatehouse", "building.gate", "building.moongate",
             "plant.flower", "plant.bush", "plant.grass", "plant.peony", "rock.small", "water.lotus"}
+DOOR_AT_FOOT = {"building.gatetower"}   # drawn front-on in a wall: an E/W door is at the foot of that face, by the drawn arch
 SIDE_DRAWN = {"building.wing"}   # drawn in side view when it faces E or W, its doorway on the front
 TALL = ("building", "tree", "rock", "ruin", "garden", "landmark")   # what a roof or crown rises above
 NPC_KEYS = ("challenge", "intro", "win", "done", "until", "face", "when", "gives", "gives_when", "give", "given", "call",
@@ -256,8 +257,9 @@ class MapBuilder:
                 o["blocks_sight"] = True
             # the tile in front of each door, kept clear; the anchor for people and spots
             for d in [enter if d == door else d for d in (t.get("doors") or ([door] if door else []))]:
+                low = kind in DOOR_AT_FOOT and d in ("E", "W")   # its doorway is drawn at the bottom of the front
                 ax, ay = {"S": (fx + fw // 2, fy + fh), "N": (fx + fw // 2, fy - 1),
-                          "E": (fx + fw, fy + fh // 2), "W": (fx - 1, fy + fh // 2)}[d]
+                          "E": (fx + fw, fy + fh - 1 if low else fy + fh // 2), "W": (fx - 1, fy + fh - 1 if low else fy + fh // 2)}[d]
                 self.anchor.setdefault(t["id"], (ax, ay))
                 ox_, oy_ = {"S": (0, 1), "N": (0, -1), "E": (1, 0), "W": (-1, 0)}[d]   # outward, away from the building
                 self.keep |= {(ax + dx + k * ox_, ay + k * oy_) for dx in (-1, 0, 1) for k in (0, 1) if d in "NS"} | \
@@ -697,8 +699,8 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
                 fx, fy, fw, fh = o["x"], o["y"], o["w"], o["h"]
                 ex = {"S": {"x": round(fx + fw / 2 - .4, 2), "y": fy + fh - .15, "w": .8, "h": .45},
                       "N": {"x": round(fx + fw / 2 - .4, 2), "y": fy - .3, "w": .8, "h": .45},
-                      "E": {"x": fx + fw - .15, "y": round(fy + fh / 2 - .4, 2), "w": .45, "h": .8},
-                      "W": {"x": fx - .3, "y": round(fy + fh / 2 - .4, 2), "w": .45, "h": .8}}[d]
+                      "E": {"x": fx + fw - .15, "y": round((fy + fh - .5 if o["kind"] in DOOR_AT_FOOT else fy + fh / 2) - .4, 2), "w": .45, "h": .8},
+                      "W": {"x": fx - .3, "y": round((fy + fh - .5 if o["kind"] in DOOR_AT_FOOT else fy + fh / 2) - .4, 2), "w": .45, "h": .8}}[d]
                 # a door only some may pass (the protagonist named, or a condition), and what it says to the rest
                 # the engine's side is the way you walk to go in (Book 1: a south-facing door is side "N")
                 m["exits"].append({"to": child, "side": {"S": "N", "N": "S", "E": "W", "W": "E"}[d], **ex, "door": True, **{k: o[k] for k in ("open_to", "refuse") if o.get(k)}})
