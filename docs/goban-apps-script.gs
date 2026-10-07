@@ -69,8 +69,8 @@ function doPost(e) {
     if (!msg) return jsonOut_({ error: "message required" });
     const context = (body.data && body.data.context) || "";
     feedbackSheet_().appendRow([now, body.username || "", msg, context]);
-    postFeedbackComment_(msg, context, body.username || "");   // after the row is saved: a failed post loses nothing
-    return jsonOut_({ ok: true });
+    const posted = postFeedbackComment_(msg, context, body.username || "");   // after the row is saved: a failed post loses nothing
+    return jsonOut_({ ok: true, posted: posted ? posted.getResponseCode() : "no token" });
   }
 
   if (!body.username) return jsonOut_({ error: "username required" });
