@@ -1550,9 +1550,13 @@ def _scenes_caocao():
         "c8": {"title": T("The Gifts", "金珠赤兔"), "kind": "main", "steps": [
             N("Li Su has Red Hare led out on a halter, and the gold, the pearls and the jade belt packed into a box.", "李肃牵了赤兔，赍了金珠玉带。"),
             S("lisu", "Lü Bu's camp is on the far side of the field. Ding Yuan will have men out on the road.", "吕布寨在原野那头。丁原必有伏路军人。"),
+            ["party", ["lisu", "redhare"]],
+        ]},
+        "c8_wait": {"title": T("Not Yet", "尚未齐备"), "kind": "main", "steps": [
+            S("lisu", "The horse first. The stable master has him.", "先牵马。赤兔在马夫那里。"),
         ]},
         "c9_wait": {"title": T("Not Yet", "尚未齐备"), "kind": "main", "steps": [
-            S("lisu", "Not yet. I can't go to him empty-handed: I need the horse and the gold.", "且慢。空手岂能说他？须得赤兔与金珠。"),
+            S("lisu", "Not yet. I can't go to him with only a horse: I need the gold.", "且慢。只牵一匹马，岂能说他？须得金珠。"),
         ]},
 
         # C9 · An old friend. Contest, three boards: the same three-step persuasion Wang Yun uses on the ridge (A11).
@@ -1566,7 +1570,6 @@ def _scenes_caocao():
             S("lisu", "I'm a captain of the guard. I heard you were defending the dynasty, and I was delighted. "
               "I've brought you a horse that goes a thousand li a day, through water and up mountains as if on flat ground. Its name is Red Hare.",
               "见任虎贲中郎将之职。闻贤弟匡扶社稷，不胜之喜。有良马一匹，日行千里，渡水登山，如履平地，名曰赤兔：特献与贤弟，以助虎威。"),
-            ["spawn", "rh", "redhare", "c9", 18, 4],
             ["still", "red_hare", "slow pull back"],
             N("The horse is red as burning charcoal from head to tail, without one hair of another colour. A zhang long from head to tail, "
               "eight chi high at the shoulder. It neighs and rears as if it would leap into the sky or plunge into the sea.",
@@ -1612,6 +1615,7 @@ def _scenes_caocao():
             S("lvbu", "I'll kill Ding Yuan, and bring his army over to Dong Zhuo. How's that?", "吾欲杀丁原，引军归董卓，何如？"),
             S("lisu", "If you can do that, it's the greatest service of all! But don't wait. Decide quickly.", "贤弟若能如此，真莫大之功也！但事不宜迟，在于速决。"),
             N("Lü Bu promises to come over the next day, and Li Su takes his leave.", "布与肃约于明日来降，肃别去。"),
+            ["party", ["lisu"]],
         ]},
 
         # C10 · The second watch. No board: the killing is Lü Bu's, and settled. Hands to Cao Cao.
@@ -1948,7 +1952,7 @@ def _scenes_caocao():
             N("They sit a long time. Then, from behind the house, comes the sound of a blade being sharpened.", "操与宫坐久，忽闻庄后有磨刀之声。"),
             S("caocao", "Lü Boshe is no close kin of mine, and he went off in a hurry. Let's listen.", "吕伯奢非吾至亲，此去可疑，当窃听之。"),
             ["move", "caocao", "c20", -8, -14], ["move", "chengong", "c20", -6, -12],
-            ["pose", "caocao", "kneel"],
+            ["pose", "caocao", "crouch"], ["pose", "chengong", "crouch"],
             N("They creep round behind the thatched hall. A voice says: Tie it up and kill it. How about that?", "二人潜步入草堂后，但闻人语曰：“缚而杀之，何如？”"),
             S("caocao", "So that's it. If we don't strike first, we'll be taken.", "是矣！今若不先下手，必遭擒获。"),
             ["mood", "dark"],
@@ -2100,13 +2104,13 @@ def _nodes_caocao():
             "No one dares speak.", "无人敢出声。",
             "Not yet. Let them be more afraid.", "还不行。让他们再怕些。")),
         node("c7", 130, 152, "c7", place="The Camps", room="dz-tent", board=False),
-        node("c8", 140, 146, "c8", place="The Camps", board=False),
+        node("c8", 140, 146, "c8", place="The Camps", board=False,
+             gate=[{"needs": ["item:redhare"], "else": "c8_wait",
+                    "objective": T("Fetch Red Hare from the stable master, at the stables on the field side of the camp.", "到营寨临原野一侧的马厩，向马夫牵出赤兔马。"),
+                    "count": False, "at": "The Camps"}]),
         node("c9", 155, 140, "c9", place="The Camps", room="lb-tent",
-             gate=[{"needs": ["item:redhare"], "else": "c9_wait",
-                    "objective": T("Fetch Red Hare from the stable master, at the back of the camp.", "到营后，向马夫牵出赤兔马。"),
-                    "count": False, "at": "The Camps"},
-                   {"needs": ["item:gold"], "else": "c9_wait",
-                    "objective": T("Fetch the gold, the pearls and the jade belt from the paymaster's tent, beside the Grand Preceptor's.", "到太师帐旁的支应帐，取黄金、明珠与玉带。"),
+             gate=[{"needs": ["item:gold"], "else": "c9_wait",
+                    "objective": T("Fetch the gold, the pearls and the jade belt from the paymaster's tent, just east of the Grand Preceptor's.", "到太师帐东边不远的支应帐，取黄金、明珠与玉带。"),
                     "count": False, "at": "The Camps"}]),
         node("c10", 170, 134, "c10", place="The Camps", room="dy-tent", board=False),
         node("c11", 185, 128, "c11", room="sheng-hall", board=False),
