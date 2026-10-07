@@ -1,0 +1,126 @@
+{
+ "format": "tk-map/1",
+ "id": "the-east-road--jail-court",
+ "world": 13,
+ "name": "The back courtyard of the jail",
+ "archetype": "interior",
+ "size": [
+  24,
+  16
+ ],
+ "seed": 2427,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "%": "stone",
+   " ": "void",
+   "W": "wall"
+  },
+  "rows": [
+   "                        ",
+   " WWWWWWWWWWWWWWWWWWWWWW ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " WWWWWWWWWWW%%WWWWWWWWW ",
+   "                        "
+  ],
+  "walk": {
+   "stone": true,
+   "void": false,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    12,
+    8
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     6,
+     7
+    ]
+   },
+   "tiles": 68
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.rack",
+   "x": 4,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "stocks",
+   "label": "The stocks"
+  },
+  {
+   "kind": "furn.lamp",
+   "x": 18,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "lamp"
+  },
+  {
+   "kind": "furn.table",
+   "x": 11,
+   "y": 4,
+   "w": 2,
+   "h": 1,
+   "id": "table",
+   "label": "The magistrate's table"
+  }
+ ],
+ "spots": [
+  {
+   "id": "c19",
+   "x": 12.5,
+   "y": 10.7,
+   "node": "13-c19",
+   "label": "The back courtyard of the jail"
+  }
+ ],
+ "npcs": [],
+ "exits": [
+  {
+   "to": "the-east-road",
+   "side": "S",
+   "x": 12,
+   "y": 14,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "the-east-road": [
+   12,
+   13
+  ],
+  "": [
+   12,
+   13
+  ]
+ },
+ "parent": "the-east-road",
+ "building": "jail-court",
+ "links": [
+  "the-east-road"
+ ]
+}

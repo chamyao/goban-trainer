@@ -1,0 +1,722 @@
+{
+ "format": "tk-map/1",
+ "id": "chenggao",
+ "world": 13,
+ "name": "Chenggao",
+ "archetype": "village",
+ "size": [
+  96,
+  48
+ ],
+ "seed": 975,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "court",
+   "b": "field",
+   "c": "field.wheat",
+   ".": "grass",
+   "d": "path",
+   "f": "road",
+   "W": "wall"
+  },
+  "rows": [
+   "................................................................................................",
+   "................................................................................................",
+   "................................................................................................",
+   "................................................................................................",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbb....................................bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbb....................................bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbb....................................bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbb.......WWWWWWWWWWWWWWWWWWWWWWWWWW...bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbb....aaaWaaaaaaaaaaaaaaaaaaaaaaaaWaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbb....aaaWaaaaaaaaaaaaaaaaaaaaaaaaWaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbb....aaaWaaaaaaaaaaaaaaaaaaaaaaaaWaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbb....aaaWaaaaaaaaaaaaaaaaaaaaaaaaWaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbb....aaaWaaaaaaaaaaaaaaaaaaaaaaaaWaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbddbbbbbbbbbbbbb....aaaWaaaaaaaaaaaaaaaaaaaaaaaaWaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbddbbbbbbbbbbbbb....aaaWaaaaaaaaaaaaaaaaaaaaaaaaWaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbddbbbbbbbbbbbbb....aaaWaaaaaaaaaaaaaaaaaaaaaaaaWaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbddbbbbbbbbbbbbb....aaaWaaaaaaaaaaaaaaaaaaaaaaaaWaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbddbbbbbbbbbbbbb....aaaWaaaaaaaaaaaaaaaaaaaaaaaaWaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbddbbbbbbbbbbbbb....aaaWaaaaaaaaaaaaaaaaaaaaaaaaWaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbddbbbbbbbbbbbbb....aaaWaaaaaaaaaaaaaaaaaaaaaaaaWaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbddbbbbbbbbbbbbb....aaaWaaaaaaaaaaaaaaaaaaaaaaaaWaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbddbbbbbbbbbbbbb....aaaWaaaaaaaaaaaaaaaaaaaaaaaaWaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbddbbbbbbbbbbbbb....aaaWaaaaaaaaaaaaaaaaaaaaaaaaWaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbddbbbbbbbbbbbbb....aaaWaaaaaaaaaaaaaaaaaaaaaaaaWaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbddbbbbbbbbbbbbb....aaaWaaaaaaaaaaaaaaaaaaaaaaaaWaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbddbbbbbbbbbbbbb....aaaWaaaaaaaaaaaaaaaaaaaaaaaaWaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbddbbbbbbbbbbbbb....aaaWaaaaaaaaaaaaaaaaaaaaaaaaWaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbddbbbbbbbbbbbbb....aaaWaaaaaaaaaaaaaaaaaaaaaaaaWaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbddbbbbbbbbbbbbb.......WWWWWWWWWWWWWWddWWWWWWWWWW...bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbddbbbbbbbbbbbbb.....................dd.............bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbddbbbbbbbbbbbbb.....................dd.............bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbddbbbbbbbbbbbbb.....................dd.............bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "fffffffffffffddffffffffffffffffffffffffffffffffffddfffffffffffffffffffffffffffffffffffffffffffff",
+   "fffffffffffffddffffffffffffffffffffffffffffffffffddfffffffffffffffffffffffffffffffffffffffffffff",
+   "fffffffffffffddffffffffffffffffffffffffffffffffffddfffffffffffffffffffffffffffffffffffffffffffff",
+   "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbb....cccccccccccccccccccccccccccccccc................................",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbb....cccccccccccccccccccccccccccccccc................................",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbb....cccccccccccccccccccccccccccccccc................................",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbb....cccccccccccccccccccccccccccccccc................................",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbb....cccccccccccccccccccccccccccccccc................................",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbb....cccccccccccccccccccccccccccccccc................................",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbb....cccccccccccccccccccccccccccccccc................................",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbb....cccccccccccccccccccccccccccccccc................................",
+   "................................cccccccccccccccccccccccccccccccc................................",
+   "................................cccccccccccccccccccccccccccccccc................................",
+   "................................cccccccccccccccccccccccccccccccc................................",
+   "................................cccccccccccccccccccccccccccccccc................................"
+  ],
+  "walk": {
+   "court": true,
+   "field": true,
+   "field.wheat": true,
+   "grass": true,
+   "path": true,
+   "road": true,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "road",
+   "kind": "road",
+   "path": [
+    [
+     0,
+     8
+    ],
+    [
+     23,
+     8
+    ]
+   ],
+   "width": 3,
+   "tiles": 384
+  },
+  {
+   "id": "wood-path",
+   "kind": "path",
+   "path": [
+    [
+     3,
+     8
+    ],
+    [
+     3,
+     3
+    ]
+   ],
+   "width": 2,
+   "tiles": 44
+  },
+  {
+   "id": "farm-lane",
+   "kind": "path",
+   "path": [
+    [
+     12,
+     7
+    ],
+    [
+     12,
+     8
+    ]
+   ],
+   "width": 2,
+   "tiles": 12
+  },
+  {
+   "id": "farm-wall",
+   "kind": "wall",
+   "outline": [
+    8,
+    1,
+    8,
+    7
+   ],
+   "width": 1,
+   "gates": {
+    "farm-gate": [
+     12,
+     7
+    ]
+   },
+   "tiles": 92
+  }
+ ],
+ "objects": [
+  {
+   "kind": "building.gatehouse",
+   "x": 49,
+   "y": 28,
+   "w": 2,
+   "h": 1,
+   "id": "farm-gate",
+   "width": 2,
+   "wall": "farm-wall",
+   "door": "S"
+  },
+  {
+   "kind": "building.house",
+   "x": 46,
+   "y": 17,
+   "w": 4,
+   "h": 2,
+   "id": "lbs-hall",
+   "door": "S",
+   "faces": "S",
+   "label": "Lü Boshe's front hall",
+   "map": "lbs-hall",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.hut",
+   "x": 38,
+   "y": 9,
+   "w": 3,
+   "h": 2,
+   "id": "rear-hall",
+   "door": "S",
+   "faces": "S",
+   "label": "The thatched rear hall",
+   "note": "the knives are being sharpened behind it (C20)",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.hut",
+   "x": 54,
+   "y": 9,
+   "w": 3,
+   "h": 2,
+   "id": "kitchen",
+   "door": "S",
+   "faces": "S",
+   "label": "The kitchen",
+   "note": "where the pig is tied up for the slaughter",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.inn",
+   "x": 78,
+   "y": 29,
+   "w": 4,
+   "h": 2,
+   "id": "inn",
+   "door": "S",
+   "faces": "S",
+   "label": "A roadside inn",
+   "map": "inn-room",
+   "blocks_sight": true
+  },
+  {
+   "kind": "tree.big",
+   "x": 25,
+   "y": 43,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "tree.big",
+   "x": 0,
+   "y": 16,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "tree.big",
+   "x": 6,
+   "y": 43,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "tree.big",
+   "x": 5,
+   "y": 40,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "tree.big",
+   "x": 18,
+   "y": 19,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "tree.big",
+   "x": 6,
+   "y": 37,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "tree.big",
+   "x": 1,
+   "y": 31,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "tree.big",
+   "x": 5,
+   "y": 15,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "tree.big",
+   "x": 20,
+   "y": 38,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "tree.big",
+   "x": 5,
+   "y": 42,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "tree.big",
+   "x": 20,
+   "y": 36,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "tree.big",
+   "x": 22,
+   "y": 15,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "tree.big",
+   "x": 4,
+   "y": 12,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "tree.big",
+   "x": 1,
+   "y": 17,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "tree.big",
+   "x": 10,
+   "y": 37,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "tree.big",
+   "x": 17,
+   "y": 24,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "tree.small",
+   "x": 24,
+   "y": 25,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.small",
+   "x": 25,
+   "y": 17,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.small",
+   "x": 0,
+   "y": 42,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.small",
+   "x": 11,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.small",
+   "x": 21,
+   "y": 29,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.small",
+   "x": 9,
+   "y": 12,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.small",
+   "x": 17,
+   "y": 43,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.small",
+   "x": 22,
+   "y": 22,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.small",
+   "x": 5,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.small",
+   "x": 1,
+   "y": 28,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 4,
+   "y": 36,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 9,
+   "y": 31,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 14,
+   "y": 36,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 19,
+   "y": 31,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 24,
+   "y": 36,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 29,
+   "y": 31,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 34,
+   "y": 36,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 39,
+   "y": 31,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 44,
+   "y": 36,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 54,
+   "y": 36,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 59,
+   "y": 31,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 64,
+   "y": 36,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 69,
+   "y": 31,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 74,
+   "y": 36,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 84,
+   "y": 36,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 89,
+   "y": 31,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 94,
+   "y": 36,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "spots": [
+  {
+   "id": "overhear",
+   "x": 37.5,
+   "y": 13.7,
+   "node": "",
+   "label": "Behind the thatched hall",
+   "trigger": "near",
+   "note": "C20, walked: Cao Cao creeps here and hears 「缚而杀之，何如？」 (crouched)"
+  },
+  {
+   "id": "boshe-road",
+   "x": 69.5,
+   "y": 33.7,
+   "node": "",
+   "label": "The road towards the west village",
+   "note": "C20: Lü Boshe comes back with the wine"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "woodcutter",
+   "kind": "folk.villager",
+   "x": 13.5,
+   "y": 17.9,
+   "say": [],
+   "intro": [
+    "A woodcutter sets down his load in the deep wood. “Two riders, at dusk, off the road. Play me, and I'll forget I saw you.”"
+   ],
+   "win": [
+    "“…I never saw you. Lü Boshe's farm is just past the trees.”"
+   ],
+   "done": [
+    "The woodcutter goes back to his axe."
+   ],
+   "until": "13-c20",
+   "when": "node:c19",
+   "view": 4,
+   "challenge": "woodcutter"
+  }
+ ],
+ "exits": [
+  {
+   "to": "chenggao--lbs-hall",
+   "side": "N",
+   "x": 47.6,
+   "y": 18.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "chenggao--inn-room",
+   "side": "N",
+   "x": 79.6,
+   "y": 30.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "the-east-road",
+   "side": "W",
+   "x": 0,
+   "y": 32,
+   "w": 1,
+   "h": 4
+  },
+  {
+   "to": "chenliu",
+   "side": "E",
+   "x": 95,
+   "y": 32,
+   "w": 1,
+   "h": 4
+  }
+ ],
+ "entries": {
+  "chenggao--lbs-hall": [
+   48,
+   19
+  ],
+  "chenggao--inn-room": [
+   80,
+   31
+  ],
+  "the-east-road": [
+   5,
+   33
+  ],
+  "chenliu": [
+   89,
+   33
+  ],
+  "": [
+   5,
+   33
+  ]
+ },
+ "states": [
+  {
+   "id": "dusk",
+   "until": "node:c20",
+   "light": "dusk",
+   "exits_closed": [
+    "the-east-road",
+    "chenliu"
+   ],
+   "exits_closed_say": {
+    "the-east-road": [
+     "Back towards the pass? Not with Chen Gong's post deserted behind you."
+    ],
+    "chenliu": [
+     "It's nearly dark. Lü Boshe's farm is here, your father's sworn brother's."
+    ]
+   }
+  },
+  {
+   "id": "night",
+   "when": "node:c20",
+   "until": "node:c21",
+   "light": "night",
+   "exits_closed": [
+    "the-east-road",
+    "chenliu"
+   ],
+   "exits_closed_say": {
+    "the-east-road": [
+     "Not back. Not now."
+    ],
+    "chenliu": [
+     "Not in the dark. The inn first."
+    ]
+   }
+  },
+  {
+   "id": "morning",
+   "when": "node:c21",
+   "light": "morning",
+   "exits_closed": [
+    "the-east-road"
+   ],
+   "exits_closed_say": {
+    "the-east-road": [
+     "East. Home."
+    ]
+   }
+  }
+ ],
+ "ways": {
+  "nodes": [
+   [
+    2.0,
+    34.0
+   ],
+   [
+    14.0,
+    34.0
+   ],
+   [
+    50.0,
+    34.0
+   ],
+   [
+    94.0,
+    34.0
+   ],
+   [
+    14.0,
+    14.0
+   ],
+   [
+    50.0,
+    30.0
+   ]
+  ],
+  "edges": [
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    2,
+    5
+   ]
+  ]
+ },
+ "links": [
+  "chenggao--inn-room",
+  "chenggao--lbs-hall",
+  "chenliu",
+  "the-east-road"
+ ]
+}

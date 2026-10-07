@@ -1,0 +1,180 @@
+{
+ "format": "tk-map/1",
+ "id": "luoyang--xiangfu",
+ "world": 13,
+ "name": "The Chancellor's residence",
+ "archetype": "compound",
+ "size": [
+  28,
+  24
+ ],
+ "seed": 1668,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "court",
+   ".": "grass",
+   "W": "wall"
+  },
+  "rows": [
+   "............................",
+   ".WWWWWWWWWWWWWWWWWWWWWWWWWW.",
+   ".W........................W.",
+   ".W........................W.",
+   ".W........................W.",
+   ".W........................W.",
+   ".W........................W.",
+   ".W........................W.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WWWWWWWWWWWaaWWWWWWWWWWWWW.",
+   "............................"
+  ],
+  "walk": {
+   "court": true,
+   "grass": true,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    14,
+    12
+   ],
+   "width": 1,
+   "gates": {
+    "gate": [
+     6,
+     11
+    ]
+   },
+   "tiles": 92
+  }
+ ],
+ "objects": [
+  {
+   "kind": "building.gatehouse",
+   "x": 12,
+   "y": 22,
+   "w": 2,
+   "h": 1,
+   "id": "gate",
+   "width": 2,
+   "wall": "walls",
+   "door": "S"
+  },
+  {
+   "kind": "building.hall_grand",
+   "x": 2,
+   "y": 3,
+   "w": 10,
+   "h": 5,
+   "id": "hall",
+   "door": "S",
+   "faces": "S",
+   "label": "The Chancellor's hall",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.lodge",
+   "x": 12,
+   "y": 4,
+   "w": 4,
+   "h": 2,
+   "id": "pavilion",
+   "door": "S",
+   "faces": "S",
+   "label": "The small pavilion",
+   "map": "xf-pavilion",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.stable",
+   "x": 18,
+   "y": 3,
+   "w": 6,
+   "h": 3,
+   "id": "stables",
+   "door": "S",
+   "faces": "S",
+   "label": "The stables",
+   "note": "Lü Bu goes to choose a horse (C16)",
+   "blocks_sight": true
+  },
+  {
+   "kind": "landmark.hitchingpost",
+   "x": 22,
+   "y": 10,
+   "w": 1,
+   "h": 1,
+   "id": "post",
+   "label": "Where Lü Bu brings the horse"
+  }
+ ],
+ "spots": [
+  {
+   "id": "xf-gate",
+   "x": 12.5,
+   "y": 18.7,
+   "node": "",
+   "label": "Inside the Chancellor's gate"
+  }
+ ],
+ "npcs": [],
+ "exits": [
+  {
+   "to": "luoyang--xf-pavilion",
+   "side": "N",
+   "x": 13.6,
+   "y": 5.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "luoyang",
+   "side": "S",
+   "x": 12,
+   "y": 22,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "luoyang--xf-pavilion": [
+   14,
+   6
+  ],
+  "luoyang": [
+   12,
+   21
+  ],
+  "": [
+   14,
+   6
+  ]
+ },
+ "parent": "luoyang",
+ "building": "xiangfu",
+ "links": [
+  "luoyang",
+  "luoyang--xf-pavilion"
+ ]
+}

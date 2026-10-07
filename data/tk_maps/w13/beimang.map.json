@@ -1,0 +1,552 @@
+{
+ "format": "tk-map/1",
+ "id": "beimang",
+ "world": 13,
+ "name": "Beimang",
+ "archetype": "hills",
+ "size": [
+  64,
+  48
+ ],
+ "seed": 870,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "field",
+   ".": "grass",
+   "b": "hills",
+   "c": "path",
+   "d": "road",
+   "~": "water"
+  },
+  "rows": [
+   "................................................................",
+   "................................................................",
+   "................................................................",
+   "................................................................",
+   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaccaaaaaaaaaaaaaaaaaaaaaddddddddaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaacccccccccccccccccccccccddddddddaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaacccccccccccccccccccccccddddddddaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaddddddddaaaaaaaaaaaaaaaaaaaa",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaddddaaaaaaaabbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaddddaaaaaaaabbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaddddaaaaaaaabbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaddddaaaaaaaabbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaddddaaaaaaaabbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaddddaaaaaaaabbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaddddaaaaaaaabbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaddddaaaaaaaabbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaddddaaaaaaaabbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaddddaaaaaaaabbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaddddaaaaaaaabbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaddddaaaaaaaabbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaddddaaaaaaaabbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaddddaaaaaaaabbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaddddaaaaaaaabbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaddddaaaaaaaabbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaddddaaaaaaaabbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaddddaaaaaaaabbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaddddaaaaaaaabbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaddddaaaaaaaabbbbbbbbbbbb"
+  ],
+  "walk": {
+   "field": true,
+   "grass": true,
+   "hills": false,
+   "path": true,
+   "road": true,
+   "water": false
+  }
+ },
+ "lines": [
+  {
+   "id": "river",
+   "kind": "river",
+   "path": [
+    [
+     0,
+     1
+    ],
+    [
+     15,
+     1
+    ]
+   ],
+   "width": 4,
+   "tiles": 256
+  },
+  {
+   "id": "firefly-path",
+   "kind": "path",
+   "path": [
+    [
+     3,
+     3
+    ],
+    [
+     3,
+     6
+    ],
+    [
+     9,
+     6
+    ]
+   ],
+   "width": 2,
+   "tiles": 76
+  },
+  {
+   "id": "road",
+   "kind": "road",
+   "path": [
+    [
+     9,
+     6
+    ],
+    [
+     10,
+     6
+    ],
+    [
+     10,
+     11
+    ]
+   ],
+   "width": 3,
+   "tiles": 112
+  }
+ ],
+ "objects": [
+  {
+   "kind": "building.hut",
+   "x": 38,
+   "y": 17,
+   "w": 3,
+   "h": 2,
+   "id": "farmhouse",
+   "door": "S",
+   "faces": "S",
+   "label": "Cui Yi's farm",
+   "blocks_sight": true
+  },
+  {
+   "kind": "camp.hay",
+   "x": 49,
+   "y": 21,
+   "w": 2,
+   "h": 1,
+   "id": "haystack",
+   "label": "Cui Yi's haystack"
+  },
+  {
+   "kind": "building.hut",
+   "x": 50,
+   "y": 17,
+   "w": 3,
+   "h": 2,
+   "id": "barn",
+   "door": null,
+   "faces": "S",
+   "label": "A barn",
+   "blocks_sight": true
+  },
+  {
+   "kind": "plant.grass",
+   "x": 10,
+   "y": 10,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 8,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 26,
+   "y": 10,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 15,
+   "y": 10,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 6,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 12,
+   "y": 10,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 11,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 4,
+   "y": 11,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 5,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 24,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 9,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 25,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 22,
+   "y": 12,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 26,
+   "y": 12,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 15,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 19,
+   "y": 10,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 20,
+   "y": 9,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 25,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 8,
+   "y": 9,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 7,
+   "y": 11,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 11,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 10,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 25,
+   "y": 10,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.grass",
+   "x": 13,
+   "y": 11,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 21,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 21,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 19,
+   "y": 16,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 20,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 8,
+   "y": 26,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 16,
+   "y": 18,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 12,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 8,
+   "y": 17,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 18,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 18,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 20,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 26,
+   "y": 22,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 17,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 9,
+   "y": 22,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "spots": [
+  {
+   "id": "reeds-hide",
+   "x": 9.5,
+   "y": 13.7,
+   "node": "",
+   "label": "Hiding in the reeds",
+   "note": "C4 starts here: the two brothers, wet with dew"
+  },
+  {
+   "id": "c4",
+   "x": 49.5,
+   "y": 25.7,
+   "node": "13-c4",
+   "label": "Cui Yi's haystack",
+   "trigger": "near"
+  },
+  {
+   "id": "c5",
+   "x": 41.5,
+   "y": 37.7,
+   "node": "13-c5",
+   "label": "The road back to the capital",
+   "trigger": "near"
+  }
+ ],
+ "npcs": [],
+ "exits": [
+  {
+   "to": "luoyang",
+   "side": "S",
+   "x": 40,
+   "y": 47,
+   "w": 4,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "luoyang": [
+   41,
+   41
+  ],
+  "": [
+   9,
+   13
+  ]
+ },
+ "states": [
+  {
+   "id": "night",
+   "until": "node:c4",
+   "light": "night",
+   "exits_closed": [
+    "luoyang"
+   ],
+   "exits_closed_say": {
+    "luoyang": [
+     "Not in the dark, with Zhang Rang's men still out. Find somewhere to hide."
+    ]
+   }
+  },
+  {
+   "id": "morning",
+   "when": "node:c4",
+   "light": "morning"
+  }
+ ],
+ "ways": {
+  "nodes": [
+   [
+    14.0,
+    14.0
+   ],
+   [
+    14.0,
+    26.0
+   ],
+   [
+    38.0,
+    26.0
+   ],
+   [
+    42.0,
+    26.0
+   ],
+   [
+    42.0,
+    46.0
+   ]
+  ],
+  "edges": [
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    4
+   ]
+  ]
+ },
+ "links": [
+  "luoyang"
+ ]
+}

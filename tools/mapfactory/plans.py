@@ -894,9 +894,12 @@ def assets(maps, tables, kits_dir=None):
     return rows
 
 
+ARCS = {13: "cc"}   # test books whose plans are an arc's: Book 13 is the Cao Cao arc
+
+
 def key_prefix(plans_world):
     """The book number the plans' beat keys carry ("2-c1" for the Cao Cao arc's plans)."""
-    return "2" if plans_world == "cc" else str(plans_world)
+    return "2" if ARCS.get(plans_world, plans_world) == "cc" else str(plans_world)
 
 
 def plans_arg(v):
@@ -906,6 +909,7 @@ def plans_arg(v):
 
 def load(plans_world):
     """The plans module of a book: (PLANS, tables, zh)."""
+    plans_world = ARCS.get(plans_world, plans_world)
     if plans_world == 2:
         import tk_plans_w2 as mod
         return mod.PLANS2, {"NEW_KINDS": mod.NEW_KINDS, "LINE_KINDS": mod.LINE_KINDS, "ZONE_KINDS": mod.ZONE_KINDS,
@@ -923,6 +927,7 @@ def load(plans_world):
 
 def story_world(n, plans_world):
     """The story for a book, keyed as the game keys it ("<n>-<key>")."""
+    plans_world = ARCS.get(plans_world, plans_world)
     if plans_world == 2:
         from tk_story_w2_new import WORLD2 as W
     elif plans_world == 90:
