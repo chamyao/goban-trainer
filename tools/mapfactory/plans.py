@@ -689,7 +689,8 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
                       "E": {"x": fx + fw - .15, "y": round(fy + fh / 2 - .4, 2), "w": .45, "h": .8},
                       "W": {"x": fx - .3, "y": round(fy + fh / 2 - .4, 2), "w": .45, "h": .8}}[d]
                 # a door only some may pass (the protagonist named, or a condition), and what it says to the rest
-                m["exits"].append({"to": child, "side": d, **ex, "door": True, **{k: o[k] for k in ("open_to", "refuse") if o.get(k)}})
+                # the engine's side is the way you walk to go in (Book 1: a south-facing door is side "N")
+                m["exits"].append({"to": child, "side": {"S": "N", "N": "S", "E": "W", "W": "E"}[d], **ex, "door": True, **{k: o[k] for k in ("open_to", "refuse") if o.get(k)}})
                 m["entries"][child] = list(mb.anchor[o["id"]])
         # gates and edges with "to": back to the owner, to another room, to another place
         P = mb.p

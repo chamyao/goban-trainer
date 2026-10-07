@@ -1084,7 +1084,7 @@
  "exits": [
   {
    "to": "changan--xf-hall",
-   "side": "S",
+   "side": "N",
    "x": 15.6,
    "y": 33.85,
    "w": 0.8,
@@ -1093,7 +1093,7 @@
   },
   {
    "to": "changan--xf-bedroom",
-   "side": "S",
+   "side": "N",
    "x": 26.6,
    "y": 31.85,
    "w": 0.8,

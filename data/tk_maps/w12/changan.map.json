@@ -1736,7 +1736,7 @@
  "exits": [
   {
    "to": "changan--jeweller",
-   "side": "S",
+   "side": "N",
    "x": 11.1,
    "y": 18.85,
    "w": 0.8,
@@ -1745,7 +1745,7 @@
   },
   {
    "to": "changan--teahouse",
-   "side": "S",
+   "side": "N",
    "x": 31.1,
    "y": 18.85,
    "w": 0.8,
@@ -1754,7 +1754,7 @@
   },
   {
    "to": "changan--wangyun",
-   "side": "S",
+   "side": "N",
    "x": 17.6,
    "y": 34.85,
    "w": 0.8,
@@ -1763,7 +1763,7 @@
   },
   {
    "to": "changan--xiangfu",
-   "side": "S",
+   "side": "N",
    "x": 39.6,
    "y": 34.85,
    "w": 0.8,
@@ -1778,7 +1778,7 @@
   },
   {
    "to": "changan--lubu",
-   "side": "S",
+   "side": "N",
    "x": 51.6,
    "y": 34.85,
    "w": 0.8,
@@ -1787,7 +1787,7 @@
   },
   {
    "to": "changan--caiyong",
-   "side": "S",
+   "side": "N",
    "x": 35.6,
    "y": 42.85,
    "w": 0.8,
@@ -1796,7 +1796,7 @@
   },
   {
    "to": "changan--palace",
-   "side": "N",
+   "side": "S",
    "x": 25.6,
    "y": 48.7,
    "w": 0.8,
@@ -1805,7 +1805,7 @@
   },
   {
    "to": "changan--xuanping-top",
-   "side": "W",
+   "side": "E",
    "x": 59.7,
    "y": 23.6,
    "w": 0.45,

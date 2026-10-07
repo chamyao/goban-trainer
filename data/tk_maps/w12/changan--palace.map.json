@@ -210,7 +210,7 @@
  "exits": [
   {
    "to": "changan--dutang",
-   "side": "S",
+   "side": "N",
    "x": 12.6,
    "y": 17.85,
    "w": 0.8,
@@ -219,7 +219,7 @@
   },
   {
    "to": "changan--side-hall",
-   "side": "S",
+   "side": "N",
    "x": 23.6,
    "y": 17.85,
    "w": 0.8,
