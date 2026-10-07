@@ -73,14 +73,16 @@ const slug = s => String(s).replace(/^.*--/, '').replace(/[^\w]+/g, '_');
         const OUTV = { N: [0, 1], S: [0, -1], E: [-1, 0], W: [1, 0] };   // from the doorway, the way out (where he stands before going in)
         const dist = (f, x, y) => f ? Math.hypot(Math.max(f[0] - x, 0, x - f[2]), Math.max(f[1] - y, 0, y - f[3])) : 1e9;
         const doors = w.exits.filter(e => e.rect.width < 16 && e.rect.height < 16 && e.to && w.placeOpen(e.to) && !(ms && (ms.exits_closed || []).includes(e.to)) && !(e.openTo && !e.openTo.some(c => c.includes(':') ? w.cond(c) : c === w.lead)))
-          .map(e => { const cx = e.rect.centerX, cy = e.rect.centerY, v = OUTV[e.side] || [0, 1];
+          .map(e => { const cx = e.rect.centerX, cy = e.rect.centerY, ev = OUTV[e.side] || [0, 1];
+            // the door's real outside: the side with open ground (the engine's reading of "side" is ev; Book 12's maps name the face, the other way)
+            const open = v => [12, 16, 20, 24].filter(d => free(cx + v[0] * d, cy + v[1] * d + 3)).length, flip = open([-ev[0], -ev[1]]) > open(ev), v = flip ? [-ev[0], -ev[1]] : ev;
             const bi = blds.map(b => b.i).sort((a, c) => dist(blds[a].foot, cx, cy) - dist(blds[c].foot, cx, cy))[0], f = blds[bi] && dist(blds[bi].foot, cx, cy) < 16 ? blds[bi].foot : [cx - 24, cy - 24, cx + 24, cy + 24];
             const mx = (f[0] + f[2]) / 2, my = (f[1] + f[3]) / 2, sides = { E: near(f[2] + 22, my), W: near(f[0] - 22, my), S: near(mx, f[3] + 22), N: near(mx, f[1] - 22) };
             const own = v[0] > 0 ? 'E' : v[0] < 0 ? 'W' : v[1] > 0 ? 'S' : 'N';
             const starts = { 'door side': near(cx + v[0] * 30, cy + v[1] * 30) }; for (const k of ['N', 'E', 'S', 'W']) if (k !== own) starts[`${k} side`] = sides[k];
             const tx = cx + v[0] * (e.rect.width / 2 + 10), ty = cy + v[1] * (e.rect.height / 2 + 8) + 3;   // where a tap on it walks him first (tapAt)
             const ln = [cx + v[0] * 24, cy + v[1] * 24 + 3];   // on the door's line, for the key
-            return { to: e.to, side: e.side, cx, cy, keyStart: free(ln[0], ln[1]) ? ln : null, gx: cx + v[0] * 12, gy: cy + v[1] * 12 + 3, key: { N: 'ArrowUp', S: 'ArrowDown', E: 'ArrowRight', W: 'ArrowLeft' }[e.side], bi, starts, approach: [tx, ty], approachFree: free(tx, ty) }; });
+            return { to: e.to, side: e.side, sideReversed: flip, cx, cy, keyStart: free(ln[0], ln[1]) ? ln : null, gx: cx + v[0] * 12, gy: cy + v[1] * 12 + 3, key: v[1] > 0 ? 'ArrowUp' : v[1] < 0 ? 'ArrowDown' : v[0] > 0 ? 'ArrowLeft' : 'ArrowRight', bi, starts, approach: [tx, ty], approachFree: free(tx, ty) }; });
         const npcs = w.npcs.map((n, i) => ({ i, id: n.id || n.who, x: n.spr.x, y: n.spr.y, vis: n.spr.visible, near: blds.filter(b => dist(b.foot, n.spr.x, n.spr.y) < 64).map(b => b.i), stand: near(n.spr.x + 40, n.spr.y + 30) || near(n.spr.x - 40, n.spr.y + 30) }));
         const spots = Object.entries(w.spots).map(([k, s]) => ({ k, x: s.x, y: s.y, inside: blds.filter(b => dist(b.foot, s.x, s.y + 12) === 0).map(b => b.frame), targetFree: free(s.x, s.y + 12) }));
         return { blds, doors, npcs, spots };
@@ -117,7 +119,7 @@ const slug = s => String(s).replace(/^.*--/, '').replace(/[^\w]+/g, '_');
           }
         }
         const by = k => rows.filter(r => r.how === k && r.out !== 'off screen'), ok = rs => rs.filter(r => r.out === 'in').length;
-        console.log(`-- ${KIT} ${dev} ${place}: ${doors.length} open building doors (of ${info.doors.length}), facing ${[...new Set(doors.map(d => d.side))].join(' ')}`);
+        console.log(`-- ${KIT} ${dev} ${place}: ${doors.length} open building doors (of ${info.doors.length}), marked ${[...new Set(doors.map(d => d.side))].join(' ')}; ${doors.filter(d => d.sideReversed).length} open on the side opposite the engine's reading of their mark`);
         for (const k of ['doorway', 'building', 'ground before', 'key']) console.log(`   ${k.padEnd(14)} in ${ok(by(k))}/${by(k).length}${rows.some(r => r.how === k && r.out === 'off screen') ? ` (${rows.filter(r => r.how === k && r.out === 'off screen').length} off screen)` : ''}`);
         for (const f of ['door side', 'N side', 'E side', 'S side', 'W side']) { const rs = rows.filter(r => r.from === f && !['key', 'approach point'].includes(r.how) && r.out !== 'off screen' && r.how !== '-'); if (rs.length) console.log(`   from ${f.padEnd(9)} in ${ok(rs)}/${rs.length}`); }
         for (const s of ['N', 'S', 'E', 'W']) { const rs = rows.filter(r => r.side === s && !['key', 'approach point'].includes(r.how) && r.out !== 'off screen' && r.how !== '-'); if (rs.length) console.log(`   doors facing ${s}: in ${ok(rs)}/${rs.length}`); }
