@@ -161,6 +161,15 @@ const TownArt = {
 
   // Register textures hero-<who>-<dir>-<frame> and walk animations.
   hero(scene, who) {
+    if (tkLook(who).clawd) {   // Clawd walks on four legs, drawn whole for every view
+      const f = { down: [0, 1, 2, 3].map(k => TKArt.clawd("down", k)), up: [0, 1, 2, 3].map(k => TKArt.clawd("up", k)), right: [0, 1, 2, 3].map(k => TKArt.clawd("side", k)) };
+      f.left = f.right.map(cv => TKArt.flip(cv));
+      for (const [dir, list] of Object.entries(f)) {
+        list.forEach((cv, k) => scene.textures.addCanvas(`h-${who}-${dir}-${k}`, cv));
+        if (!scene.anims.exists(`h-${who}-${dir}`)) scene.anims.create({ key: `h-${who}-${dir}`, frames: list.map((_, k) => ({ key: `h-${who}-${dir}-${k}` })), frameRate: 8, repeat: -1 });
+      }
+      return;
+    }
     const front = TKArt.get(who, "sprite", 0), back = this.back(who, 0);
     const frames = {
       down: [front, this.step(front, true), front, this.step(front, false)],
