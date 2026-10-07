@@ -4616,7 +4616,7 @@
    "spot": "north-gate",
    "scene": "a14",
    "title": "There Is an Edict to Kill a Traitor",
-   "objective": "Wait at the North Side Gate, at the south end of the avenue.",
+   "objective": "Escort the Grand Preceptor's carriage down the avenue to the North Side Gate, the red gatehouse at its south end.",
    "after": [
     "12-a13d"
    ],
@@ -4750,7 +4750,7 @@
     "taunt_zh": "持剑是何意？",
     "taunt_vid": "9d1453795afc"
    },
-   "objective_zh": "在大街南头的北掖门等候。",
+   "objective_zh": "",
    "title_zh": "有诏讨贼"
   },
   {
