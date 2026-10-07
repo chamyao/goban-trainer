@@ -371,7 +371,8 @@ def compile_map(m, kit, out_dir):
            "nextlayerid": len(layers) + 2, "nextobjectid": len(objs) + 1,
            "properties": [{"name": "kit", "type": "string", "value": kit.k["kit"]},
                           {"name": "source", "type": "string", "value": f"{m['id']}.map.json"}]
-                         + ([{"name": "states", "type": "string", "value": json.dumps(voiced_states(m["states"]), ensure_ascii=False)}] if m.get("states") else []),
+                         + ([{"name": "states", "type": "string", "value": json.dumps(voiced_states(m["states"]), ensure_ascii=False)}] if m.get("states") else [])
+                         + ([{"name": "ways", "type": "string", "value": json.dumps(m["ways"], separators=(",", ":"))}] if m.get("ways") else []),   # the streets, for the lit route
            "tilesets": tilesets,
            "layers": [{"id": i + 1, "name": n, "type": "tilelayer", "width": W, "height": H, "x": 0, "y": 0,
                        "opacity": 1, "visible": True, "data": data} for i, (n, data) in enumerate(layers)] +

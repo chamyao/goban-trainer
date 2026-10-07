@@ -302,6 +302,7 @@ function worldScenes() {
       this.tw = map.tileWidth || 16;
       // one map, several looks (Places' "states"): the last whose "when" holds and "until" doesn't
       try { this.states = JSON.parse((map.properties || []).find(x => x.name === "states")?.value || "null"); } catch { this.states = null; }
+      try { this.ways = JSON.parse((map.properties || []).find(x => x.name === "ways")?.value || "null"); } catch { this.ways = null; }   // the streets (Places), for the lit route
       this.stated = []; this.refs = {}; this.lights = []; this.sightZones = []; this.sgrid = null; if (this.coneG) { this.coneG.destroy(); this.coneG = null; } if (this.fog) { this.fog.destroy(); this.fog = null; } this.procession = null;
       const sets = map.tilesets.map(ts => map.addTilesetImage(ts.name, `kit-${ts.name}`));
       this.water = null;
@@ -986,32 +987,104 @@ function worldScenes() {
       }
       if (this.goalAt !== t) return;
       this.st.routes.push(key); this.save();
-      if (!this.textures.exists("@route")) {
-        const S = 24, cv = document.createElement("canvas"); cv.width = cv.height = S;
+      if (!this.textures.exists("@route")) {   // one sheet, two frames: a round glow ("dot") and a soft stroke of light longer than it is wide ("band")
+        const S = 24, w = 32, h = 16, cv = document.createElement("canvas"); cv.width = S + w; cv.height = S;
         const g = cv.getContext("2d"), r = g.createRadialGradient(S / 2, S / 2, 0, S / 2, S / 2, S / 2);
         r.addColorStop(0, "rgba(255,236,160,1)"); r.addColorStop(.4, "rgba(255,206,90,.75)"); r.addColorStop(1, "rgba(255,180,60,0)");
         g.fillStyle = r; g.fillRect(0, 0, S, S);
-        this.textures.addCanvas("@route", cv);
+        g.save(); g.translate(S + w / 2, S / 2); g.scale(1, h / w);
+        const q = g.createRadialGradient(0, 0, 0, 0, 0, w / 2);
+        q.addColorStop(0, "rgba(255,232,150,.95)"); q.addColorStop(.45, "rgba(255,200,90,.55)"); q.addColorStop(1, "rgba(255,170,60,0)");
+        g.fillStyle = q; g.beginPath(); g.arc(0, 0, w / 2, 0, Math.PI * 2); g.fill(); g.restore();
+        const tex = this.textures.addCanvas("@route", cv);
+        tex.add("dot", 0, 0, 0, S, S); tex.add("band", 0, S, (S - h) / 2, w, h);
       }
-      const pts = [{ x: P.x, y: P.y }, ...(this.findPath(P.x, P.y, t.x, t.y) || [t])];
-      const dots = [];
+      // the way, rounded at its corners and laid every few pixels: a road lit from your feet to the goal
+      const pts = this.roundCorners(this.routePoints({ x: P.x, y: P.y }, t), 10), STEP = 5, band = [];
       let carry = 0;
       for (let i = 1; i < pts.length; i++) {
-        const a = pts[i - 1], b = pts[i], d = Math.hypot(b.x - a.x, b.y - a.y);
-        for (let u = carry; u < d; u += 11) dots.push({ x: a.x + (b.x - a.x) * u / d, y: a.y + (b.y - a.y) * u / d });
-        carry = (carry - d) % 11; if (carry < 0) carry += 11;
+        const a = pts[i - 1], b = pts[i], d = Math.hypot(b.x - a.x, b.y - a.y), ang = Math.atan2(b.y - a.y, b.x - a.x);
+        for (let u = carry; u < d; u += STEP) band.push({ x: a.x + (b.x - a.x) * u / d, y: a.y + (b.y - a.y) * u / d, ang });
+        carry = (carry - d) % STEP; if (carry < 0) carry += STEP;
       }
-      const made = dots.slice(2).map((p, i) => {
-        const im = this.add.image(p.x, p.y - 2, "@route").setDepth(-985).setScale(.55).setAlpha(0).setBlendMode(Phaser.BlendModes.ADD);
-        this.tweens.add({ targets: im, alpha: .9, delay: i * 22, duration: 200 });
+      const made = band.slice(3).map((p, i) => {
+        const im = this.add.image(p.x, p.y - 2, "@route", "band").setDepth(-985).setRotation(p.ang).setScale(.7).setAlpha(0)
+          .setBlendMode(Phaser.BlendModes.ADD);
+        this.tweens.add({ targets: im, alpha: .5, delay: i * 7, duration: 260 });   // it sweeps out from your feet
         return im;
       });
-      const end = this.add.image(t.x, t.y, "@route").setDepth(-985).setScale(2.4).setAlpha(0).setBlendMode(Phaser.BlendModes.ADD);
-      this.tweens.add({ targets: end, alpha: .85, delay: made.length * 22, duration: 300 });
-      this.tweens.add({ targets: end, scale: 3.2, delay: made.length * 22 + 300, duration: 700, yoyo: true, repeat: 3, ease: "Sine.easeInOut" });
+      const end = this.add.image(t.x, t.y, "@route", "dot").setDepth(-985).setScale(2.4).setAlpha(0).setBlendMode(Phaser.BlendModes.ADD);
+      this.tweens.add({ targets: end, alpha: .85, delay: made.length * 7, duration: 300 });
+      this.tweens.add({ targets: end, scale: 3.2, delay: made.length * 7 + 300, duration: 700, yoyo: true, repeat: 3, ease: "Sine.easeInOut" });
       const all = [...made, end];
-      this.time.delayedCall(made.length * 22 + 5500, () => this.tweens.add({ targets: all, alpha: 0, duration: 900,
+      this.time.delayedCall(made.length * 7 + 5500, () => this.tweens.add({ targets: all, alpha: 0, duration: 900,
         onComplete: () => all.forEach(im => im.destroy()) }));
+    }
+
+    // The way to light: down the streets where the map has them (Places' "ways", the centre lines of its
+    // roads, lanes, garden paths, bridges and galleries), joining the nearest street from your feet and
+    // leaving it at the one nearest the goal, with the walking path for the steps on and off. Without
+    // streets, or when they'd be the long way round, the walking path itself.
+    routePoints(from, to) {
+      const T = this.tw || 16, W = this.ways;
+      const walk = (a, b) => [a, ...(this.findPath(a.x, a.y, b.x, b.y) || [b])];
+      const direct = Math.hypot(to.x - from.x, to.y - from.y);
+      if (!W || !W.edges || !W.edges.length || direct < 5 * T) return walk(from, to);
+      const N = W.nodes.map(([x, y]) => ({ x: x * T, y: y * T })), adj = N.map(() => []);
+      for (const [a, b] of W.edges) { const d = Math.hypot(N[a].x - N[b].x, N[a].y - N[b].y); adj[a].push([b, d]); adj[b].push([a, d]); }
+      const onStreet = p => {   // the nearest point on any street
+        let best = null;
+        for (const [a, b] of W.edges) {
+          const A = N[a], B = N[b], dx = B.x - A.x, dy = B.y - A.y, L2 = dx * dx + dy * dy || 1;
+          const u = Math.max(0, Math.min(1, ((p.x - A.x) * dx + (p.y - A.y) * dy) / L2)), q = { x: A.x + dx * u, y: A.y + dy * u };
+          const d = Math.hypot(p.x - q.x, p.y - q.y);
+          if (!best || d < best.d) best = { a, b, q, d };
+        }
+        return best;
+      };
+      const s = onStreet(from), g = onStreet(to);
+      const dist = new Map(), prev = new Map(), Q = [];
+      const relax = (i, d, p) => { if (d < (dist.get(i) ?? Infinity)) { dist.set(i, d); prev.set(i, p); Q.push([d, i]); } };
+      relax(s.a, Math.hypot(s.q.x - N[s.a].x, s.q.y - N[s.a].y), -1);
+      relax(s.b, Math.hypot(s.q.x - N[s.b].x, s.q.y - N[s.b].y), -1);
+      while (Q.length) {
+        Q.sort((x, y) => x[0] - y[0]);
+        const [d, i] = Q.shift();
+        if (d > dist.get(i)) continue;
+        for (const [j, w] of adj[i]) relax(j, d + w, i);
+      }
+      let chain = [], along = Math.hypot(g.q.x - s.q.x, g.q.y - s.q.y);
+      const same = (s.a === g.a && s.b === g.b) || (s.a === g.b && s.b === g.a);
+      if (!same) {
+        let end = -1;
+        along = Infinity;
+        for (const i of [g.a, g.b]) {
+          const d = (dist.get(i) ?? Infinity) + Math.hypot(g.q.x - N[i].x, g.q.y - N[i].y);
+          if (d < along) { along = d; end = i; }
+        }
+        if (end < 0 || along === Infinity) return walk(from, to);
+        for (let i = end; i !== -1 && i !== undefined; i = prev.get(i)) chain.unshift(N[i]);
+      }
+      if (s.d + along + g.d > direct * 2.2) return walk(from, to);   // the streets would be the long way round
+      const on = walk(from, s.q), off = walk(g.q, to);
+      return [...on, ...chain, ...off.slice(0)];
+    }
+
+    // Round a polyline's corners (radius r px), so a lit way bends like a road, not a ruler.
+    roundCorners(pts, r) {
+      const out = [];
+      for (let i = 0; i < pts.length; i++) {
+        const p = pts[i];
+        if (i === 0 || i === pts.length - 1) { out.push(p); continue; }
+        const a = pts[i - 1], b = pts[i + 1];
+        const la = Math.hypot(p.x - a.x, p.y - a.y), lb = Math.hypot(b.x - p.x, b.y - p.y);
+        const k = Math.min(r, la / 2, lb / 2);
+        if (k < 1) { out.push(p); continue; }
+        const p0 = { x: p.x + (a.x - p.x) * k / la, y: p.y + (a.y - p.y) * k / la }, p1 = { x: p.x + (b.x - p.x) * k / lb, y: p.y + (b.y - p.y) * k / lb };
+        for (let u = 0; u <= 1.0001; u += .25)   // a quadratic curve through the corner
+          out.push({ x: (1 - u) * (1 - u) * p0.x + 2 * (1 - u) * u * p.x + u * u * p1.x, y: (1 - u) * (1 - u) * p0.y + 2 * (1 - u) * u * p.y + u * u * p1.y });
+      }
+      return out.filter((p, i) => i === 0 || Math.hypot(p.x - out[i - 1].x, p.y - out[i - 1].y) > .5);
     }
 
     goalGuide(time) {
