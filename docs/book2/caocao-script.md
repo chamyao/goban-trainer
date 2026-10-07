@@ -303,18 +303,21 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 ## C8 · The Gifts (金珠赤兔)
 *The Camps* · no board
 
+- Gate: needs item:redhare. Objective: Fetch Red Hare from the stable master, at the stables on the field side of the camp.
+
 *Li Su has Red Hare led out on a halter, and the gold, the pearls and the jade belt packed into a box.*  
 李肃牵了赤兔，赍了金珠玉带。
 
 **Li Su:** Lü Bu's camp is on the far side of the field. Ding Yuan will have men out on the road.  
 吕布寨在原野那头。丁原必有伏路军人。
 
+*(the player is now: Li Su and redhare)*
+
 
 ## C9 · An Old Friend (故人来见)
 *The Camps* · room `lb-tent` · boards: **Li Su**: “Make him ashamed of his master.” / **Li Su**: “Show him a better master.” / **Li Su**: “Lay out the gold.”
 
-- Gate: needs item:redhare. Objective: Fetch Red Hare from the stable master, at the back of the camp.
-- Gate: needs item:gold. Objective: Fetch the gold, the pearls and the jade belt from the paymaster's tent, beside the Grand Preceptor's.
+- Gate: needs item:gold. Objective: Fetch the gold, the pearls and the jade belt from the paymaster's tent, just east of the Grand Preceptor's.
 
 *Ambush pickets surround him on the road. Li Su says: tell General Lü an old friend has come. Lü Bu has him brought in.*  
 伏路军人围住。肃曰：“可速报吕将军，有故人来见。”军人报知，布命入见。
@@ -412,6 +415,8 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 *Lü Bu promises to come over the next day, and Li Su takes his leave.*  
 布与肃约于明日来降，肃别去。
+
+*(the player is now: Li Su)*
 
 
 ## C10 · The Second Watch (二更时分)
