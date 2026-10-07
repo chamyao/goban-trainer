@@ -1053,6 +1053,7 @@ async function viewTK(worldN) {
   let last = 1; try { last = +localStorage.getItem("tk-book") || 1; } catch {}
   const first = (D.worlds.find(x => TK.worldOpen(x.n)) || D.worlds[0]).n;   // the first book a player can open
   let n = worldN && TK.world(worldN) && TK.worldOpen(worldN) ? worldN : TK.world(last) && TK.worldOpen(last) ? last : first;
+  if (worldN && worldN !== n && /^#\/tk\/\d+/.test(location.hash)) history.replaceState(null, "", `#/tk/${n}`);   // a closed book's address shows the book that opened
   try { localStorage.setItem("tk-book", String(n)); } catch {}
   const w = TK.world(n);
   crumbs.innerHTML = "";
@@ -1074,7 +1075,7 @@ async function viewTK(worldN) {
   ]));
   root.append(h("div", { class: "tk-worlds" }, [
     ...D.worlds.filter(x => !(x.draft || x.hidden) || TK_TEST).map(x => TK.worldOpen(x.n)
-      ? h("a", { class: "tk-world" + (x.n === n ? " on" : ""), href: `#/tk/${x.n}` }, `${x.book || x.n} · ${x.zh} ${x.name}`)
+      ? h("a", { class: "tk-world" + (x.n === n ? " on" : ""), href: `#/tk/${x.n}` }, `${x.book || x.n} · ${x.zh} ${x.name}${x.hidden ? " · 下架 off" : ""}`)
       : h("span", { class: "tk-world lock" }, `${x.n} · ${x.zh} ${x.name} — 先完成第${x.n - 1}卷 after Book ${x.n - 1}`)),
   ]));
   const host = h("div", { class: "tk-map" });
@@ -1132,7 +1133,7 @@ async function viewTK(worldN) {
     // the other books, once open (Book 2 after Book 1's boss)
     for (const x of D.worlds) if (x.n !== w.n && TK.worldOpen(x.n))
       root.querySelector(".tk-head-btns").append(h("button", { class: "tk-chron-btn", type: "button", onclick: () => { location.hash = `#/tk/${x.n}`; } },
-        `第${x.book || x.n}卷 Book ${x.book || x.n} · ${x.zh} ${x.name} ▸`));
+        `第${x.book || x.n}卷 Book ${x.book || x.n} · ${x.zh} ${x.name}${x.hidden ? " · 下架 off" : ""} ▸`));   // testers see which books players can't
     // The buttons live in a menu inside the game window, with the controls.
     const panel = h("div", { class: "tk-menu-panel", hidden: "" }, [root.querySelector(".tk-head-btns"),
       h("div", { class: "tk-menu-keys" }, TK_TOUCH ? "点击地面移动 Tap to move · 点击人物对话 Tap to talk · 按住拖动 Hold and drag to steer"
