@@ -320,7 +320,7 @@ def compile_map(m, kit, out_dir):
             fw, fh = min(KINDS[drawn][0], o["w"]), min(KINDS[drawn][1], o["h"])
             d = o.get("enter") or o.get("door") or "S"
             fx = o["x"] + (o["w"] - fw) / 2 if d in ("N", "S") else (o["x"] + o["w"] - fw if d == "E" else o["x"])
-            fy = o["y"] + (o["h"] - fh) / 2 if d in ("E", "W") else (o["y"] + o["h"] - fh if d == "S" else o["y"])
+            fy = (o["y"] + o["h"] - fh if o["kind"] == "building.gatetower" else o["y"] + (o["h"] - fh) / 2) if d in ("E", "W") else (o["y"] + o["h"] - fh if d == "S" else o["y"])
             obj(key, "prop", (fx + fw / 2) * T, (fy + fh) * T, kind=o["kind"], fw=fw * T, fh=fh * T, solid=solid,
                 **({"ref": o["id"]} if o.get("id") else {}),
                 **({"in": json.dumps([o["in"]] if isinstance(o["in"], str) else o["in"])} if o.get("in") else {}),
