@@ -24,7 +24,8 @@ KEYS_LB = {f"x{i}" for i in range(1, 21)}
 NEW_KINDS = {**NEW_KINDS2,
              "prop.halberd": (1, 1, True),      # a halberd planted upright in the ground (x6: 150 paces from the tent)
              "prop.carriage": (4, 2, True),     # a covered carriage hung with red silk (x9: the bride's)
-             "prop.gateshut": (2, 2, False),    # a gate's leaves shut across it (Xuzhou's gates in moon and locked)
+             "prop.gateshut": (2, 4, False),    # a gate's leaves shut across it (Xuzhou's gates in moon and locked)
+             "prop.gateshut_ns": (4, 2, False), # the same in a north or south wall
              }
 ART = {**ART2,
        "prop.halberd": "Lü Bu's sky-piercer halberd (方天画戟) planted upright in the earth, its crescent blade catching the "

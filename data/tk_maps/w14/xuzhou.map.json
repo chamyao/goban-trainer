@@ -600,7 +600,7 @@
    ]
   },
   {
-   "kind": "prop.gateshut",
+   "kind": "prop.gateshut_ns",
    "x": 36,
    "y": 52,
    "w": 4,
@@ -611,7 +611,7 @@
    ]
   },
   {
-   "kind": "prop.gateshut",
+   "kind": "prop.gateshut_ns",
    "x": 36,
    "y": 6,
    "w": 4,
