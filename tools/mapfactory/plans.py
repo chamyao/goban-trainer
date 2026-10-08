@@ -421,7 +421,7 @@ class MapBuilder:
             else:
                 t = self.near_cell(c, want_visible=False)
             spot = {"id": s["id"], "x": t[0] + .5, "y": t[1] + .7, "node": s.get("node", ""), "label": s.get("label", "")}
-            for k in ("trigger", "note", "on", "sight"):
+            for k in ("trigger", "note", "on", "sight", "cover"):
                 if s.get(k):
                     spot[k] = s[k]
             self.spots.append(spot)
@@ -536,7 +536,7 @@ class MapBuilder:
             px, py, secs = w["pause"]
             t = self.near_cell((px, py), want_visible=False)
             out["pause"] = [t[0] + .5, t[1] + .9, secs]
-        for k in ("in_beats", "seen", "back_to", "shape"):
+        for k in ("in_beats", "seen", "back_to", "shape", "hide"):   # hide: he hunts by sight, so cover hides you from him
             if w.get(k) is not None:
                 out[k] = w[k]
         return out

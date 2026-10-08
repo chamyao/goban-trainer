@@ -106,7 +106,7 @@
  "npcs": [],
  "exits": [
   {
-   "to": "changan",
+   "to": "changan--burning-ward",
    "side": "S",
    "x": 12,
    "y": 12,
@@ -115,7 +115,7 @@
   }
  ],
  "entries": {
-  "changan": [
+  "changan--burning-ward": [
    12,
    11
   ],
@@ -127,6 +127,6 @@
  "parent": "changan",
  "building": "lb-house",
  "links": [
-  "changan"
+  "changan--burning-ward"
  ]
 }

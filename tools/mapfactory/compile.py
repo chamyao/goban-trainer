@@ -320,6 +320,10 @@ def compile_map(m, kit, out_dir):
                                 "float" if isinstance(v, float) else "string", "value": v} for k, v in props.items()]
         objs.append(o)
 
+    for s in m.get("spots", []):   # cover to hide in (hide and wait): a two-tile square round the spot, a "cover" object
+        if s.get("cover"):
+            obj(s["id"], "cover", (s["x"] - 1) * T, (s["y"] - 1.5) * T, 2 * T, 2 * T, label=s.get("label", ""),
+                label_zh=ZH.get(s.get("label", ""), ""))
     walls = building_walls(m, kit, T)
     for o in m["objects"]:
         # a building whose front faces E or W (a siheyuan wing): its side view, if the kit has one; the side

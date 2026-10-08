@@ -18,16 +18,23 @@ Every beat key has a spot or room, named as in the design's table. The lines for
 
 ## Chang'an, the night it falls (x0a, x0b): the prologue
 
-The Diaochan arc's city, kept as its streets, at night, burning (state `sack`: night, smoke) under Li Jue's black
-banners. Its rooms, beats and people are left out.
-- **Lü Bu's house** (the Diaochan arc's Lü Bu's quarters, on the ward street): its room `lb-house` holds x0a. The walk
-  starts at its gate (`lubu-gate`).
-- **Pang Shu's house** (the house on the palace lane): its room `pangshu-house` holds x0b, the back room.
-- **The walk** (in x0b): out of Lü Bu's gate, down the east lane, along the palace lane to Pang Shu's door. Two of Li
-  Jue's looters walk those lanes (watchers, in_beats 3-x0b, cone 3). Seen, she's sent back to Lü Bu's gate.
-  - **Cover** for hide and wait: spots with `"cover": true` (a dark doorway, an overturned hay cart, a well-house). When
-    the engine has it, a looter who sees her should send her back to the last cover she reached, not the start.
-  - The checker proves a covered route that needs a wait, and Testing's walk-playthrough crosses it (13–16 s).
+The Diaochan arc's city at night, burning (state `sack`: night, smoke) under Li Jue's black banners. Its rooms, beats
+and people are left out. Lü Bu's compound on the ward street now opens onto **the burning ward**
+(`burning-ward`), a walled map of its own. Both houses are in it:
+- **Lü Bu's house** (room `lb-house`, x0a) is at the top;
+- **Pang Shu's house** (room `pangshu-house`, x0b) is at the bottom.
+
+**The walk** (in x0b) runs through three narrow lanes joined end to end, between burnt-out houses walled off from them.
+- **Looters:** two to each lane (watchers with `"hide": true`, `"back_to": "@cover"`, cone 5 cells), walking it in
+  opposite phase. If she follows one, the other comes at her. Each looter stops at his lane's end turned to the gap into
+  the next lane.
+- **Cover:** six spots with `"cover": true` (doorways, a hay cart, a well-house, a screen wall, a cart). compile writes
+  each as a `cover` object, a 2×2-tile square. In one and still, she's hidden. If seen, she goes back to the last cover.
+- **Proof** (`tools/proofs/hide_ward_lb.py`) uses tk-world's rules: looters walk at 30 px/s, see 10 tiles down a 55°
+  half-cone, and walls stop sight. She walks at 110 px/s and is unseen only when still in cover.
+  - With the cover, the walk takes 20.8 s, and the fastest way hides twice (at the hay cart and the well-house).
+  - Without it, the only way is 87 s of exact waiting in the wall recesses.
+  - Testing's walk-playthrough doesn't yet hide in cover, so its planner finds no unseen way through x0b.
 
 ## Xuzhou (x1–x4, x6, x7, x9, x11, x13)
 
