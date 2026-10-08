@@ -267,6 +267,11 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       if (s.cine && ps.scene < 2) { if (!ps.t) ps.t = Date.now(); const due = [2000, 7000][ps.scene]; if (Date.now() - ps.t >= due) { await snap(`scene-${due / 1000}s`); ps.scene++; } }
     }
     prevS = s;
+    // where each beat's lead is first free to walk: after a handoff (a new lead) he starts some way off, not on the beat's spot
+    if (beat && s.next === beat && !s.busy && !s.cine && !s.leaving && !s.caught && !(facts[beat] && facts[beat].firstFree)) {
+      const ff = await p.evaluate(() => { const w = window.__w, q = w && w.nextMain(), sp = q && w.placeId === q.place && w.spots[q.spot];
+        return w && w.player ? { lead: w.lead, place: w.placeId, P: [Math.round(w.player.x), Math.round(w.player.y)], spot: q && q.spot, tiles: sp ? Math.hypot(sp.x - w.player.x, sp.y - w.player.y) / (w.tw || 16) : null, spotPlace: q && q.place } : null; }).catch(() => null);
+      if (ff) { (facts[beat] || (facts[beat] = { light: new Set(), route: new Set(), horses: new Set(), crouch: false, place: new Set(), mount: new Set(), wetRide: false, carry: new Set(), lvnv: false, mstate: new Set(), redhare: new Set(), walker: new Set(), lastRed: null, hid: 0, caughtAt: [] })).firstFree = ff; } }
     if (beat) { const f = facts[beat] || (facts[beat] = { light: new Set(), route: new Set(), horses: new Set(), crouch: false, place: new Set(), mount: new Set(), wetRide: false, carry: new Set(), lvnv: false, mstate: new Set(), redhare: new Set(), walker: new Set(), lastRed: null, hid: 0, caughtAt: [] });   // what each beat showed
       if (s.light) f.light.add(s.light); if (s.route) f.route.add(`${s.route}@${s.place}`); if (s.horses) f.horses.add(s.horses.split('@')[0]); if (s.crouch) f.crouch = true; f.place.add(s.place); if (s.wet && s.wades && !s.cine) f.wetRide = true; if (s.carry) f.carry.add(s.carry + (s.cine ? ' (scene)' : ' (map)')); if (s.lvnv && s.cine) f.lvnv = true; if (s.mstate) f.mstate.add(`${s.place}:${s.mstate}`); f.redhare.add(s.redhare); f.lastRed = s.redhare; if (s.hidden && !f.wasHidden) f.hid++; f.wasHidden = s.hidden; if (s.caught && !f.wasCaught) f.caughtAt.push(s.P.join(',')); f.wasCaught = s.caught; if (!s.busy && !s.cine && !s.leaving && s.lead) f.walker.add(s.lead); if (!s.leaving && s.place && (s.cine || !s.busy)) f.mount.add(`${s.place}${s.indoors ? ' (indoors)' : ''}${s.cine ? ' in a scene' : ''}: ${s.mounts}`); }
     if (/Now playing/.test(s.banner || '') && banners[banners.length - 1] !== s.banner) banners.push(s.banner);
@@ -373,6 +378,14 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     if (Date.now() - lastTap < 1200) { await p.waitForTimeout(200); continue; }
     lastTap = Date.now(); await tapWorld(s.goal[0], s.goal[1]); await p.waitForTimeout(500);
   }
+  // handoffs: a beat whose lead differs from the beat before's starts him at least 6 tiles from the beat's spot (another place
+  // counts as far); he walks to it, he isn't set down on it. Kept as cuts: Book 14's x14 (yan-start) and x18 (stables-door), Book 13's c19
+  { const KEEP = new Set(['14-x14', '14-x18', '13-c19']), seq = report.map(r => r.beat).filter(k => facts[k] && facts[k].firstFree), near = [], far = [];
+    for (let i = 1; i < seq.length; i++) { const a = facts[seq[i - 1]].firstFree, b = facts[seq[i]].firstFree; if (a.lead === b.lead) continue;
+      const d = b.tiles == null ? `in ${b.place}, the spot in ${b.spotPlace}` : `${b.tiles.toFixed(1)} tiles from ${b.spot}`, line = `${seq[i].replace(/^\d+-/, '')} ${a.lead}>${b.lead} ${d}`;
+      if (KEEP.has(seq[i])) { far.push(line + ' (kept as a cut)'); continue; }
+      (b.tiles != null && b.tiles < 6 ? near : far).push(line); }
+    if (near.length || far.length) { console.log(`${near.length ? 'FAIL' : 'ok  '} after each handoff the new lead starts 6+ tiles from the beat's spot (${near.length ? 'too near: ' + near.join('; ') + ' | ' : ''}${far.join('; ')})`); if (near.length) featureFails.push('handoff starts on the spot'); } }
   // Book 14 (Lü Bu's fall): who leads each beat, Red Hare (x1 to x19), the flood rides, the daughter on his back, the states
   if (BOOK === 14) { const bad = [], say = (ok, w) => { console.log(`${ok ? 'ok  ' : 'FAIL'} ${w}`); if (!ok) bad.push(w); };
     const LEAD = { 0: 'yanshi', 8: 'zhangliao', 10: 'chengong', 12: 'chendeng', 15: 'yanshi', 19: 'houcheng', 20: 'caocao' };   // 0: the prologue, x0a and x0b
