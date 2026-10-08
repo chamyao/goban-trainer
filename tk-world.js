@@ -2050,7 +2050,9 @@ function worldScenes() {
           R.repath = (R.repath || 0) - dt;
           if (R.repath <= 0 || !R.path || !R.path.length) { R.repath = 400; R.path = (this.findPath(n.spr.x, n.spr.y, P.x, P.y) || [{ x: P.x, y: P.y }]).slice(1); }
           const nx = R.path[0] || { x: P.x, y: P.y };
-          if (at(nx.x, nx.y, 88) && R.path.length) R.path.shift();
+          // a rider is four-fifths of your pace: 88 against you on foot, 132 against you mounted (1.5x)
+          const pace = 88 * (this.mounts && this.mounts.length && typeof WorldItems !== "undefined" ? WorldItems.SPEED : 1);
+          if (at(nx.x, nx.y, pace) && R.path.length) R.path.shift();
           continue;
         }
         // on its beat; it sees you down its cone, if nothing solid is between
