@@ -433,7 +433,7 @@ PLANS_LB = {
                 {"id": "hills", "kind": "hills", "rect": [0, 0, 24, 16]},
                 {"id": "valley", "kind": "plain", "rect": [10, 9, 6, 7]},          # the Xuzhou side, below the climb
                 {"id": "top", "kind": "plain", "rect": [5, 1, 9, 5]},              # the top of the pass: Chen Gong's men
-                {"id": "cliff", "kind": "cliff", "rect": [4, 1, 1, 7]},            # the drop to the west
+                {"id": "cliff", "kind": "cliff", "rect": [4, 1, 1, 7], "drop": "W"},   # the drop to the west
                 {"id": "cao-camp", "kind": "camp", "rect": [0, 1, 4, 7]},           # Cao Cao's camp, below: seen, not reached
             ],
             "lines": [{"id": "pass-road", "kind": "road", "path": [[12, 15], [12, 8], [8, 8], [8, 5]], "width": 3}],

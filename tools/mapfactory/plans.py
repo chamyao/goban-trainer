@@ -315,6 +315,33 @@ class MapBuilder:
                     return False
         return self.mat[y][x] not in ("road", "path", "bridge", "gallery", "court", "market", "stage")
 
+    def cliff_rims(self):
+        """A cliff reads as a drop only with a lip and a rocky face. The cliff tile alone draws like paving, and Xiao Pass's "cliff's
+        edge" looked like nothing of the kind (apo110). So stones line the rim on the side you walk on. Spots keep their
+        tiles clear, so a lookout is a gap in the lip. A zone says which way it falls ("drop"), so the lip is on top;
+        without it, every side has one. A zone may opt out with "rim": False."""
+        for z in self.p.get("ground", []):
+            if z["kind"] != "cliff" or z.get("rim") is False:
+                continue
+            face = {t for c in self.zone_cells(z) for t in self.cell_tiles(*c)}
+            # the lip is on the high side: away from the way the ground falls ("drop": "W" is a cliff falling west)
+            tops = [SIDES[{"N": "S", "S": "N", "E": "W", "W": "E"}[z["drop"]]]] if z.get("drop") else list(SIDES.values())
+            rim = sorted({(x + dx, y + dy) for x, y in face for dx, dy in tops} - face)
+            looks = [(int(sp["x"]), int(sp["y"])) for sp in self.spots]   # a lookout on the rim: a gap in the lip
+            # the face itself: crags down it (it's never walked, so they block nothing), so it reads as rock falling away
+            cw_, ch_ = self.K.get("rock.crag", (3, 2, True))[:2]
+            x0, y0 = min(t[0] for t in face), min(t[1] for t in face)
+            for y in range(y0, max(t[1] for t in face) + 1, ch_):
+                for x in range(x0 + (y - y0) // ch_ % 2, max(t[0] for t in face) + 1, cw_):
+                    if all((i, j) in face and (i, j) not in self.covered for i in range(x, x + cw_) for j in range(y, y + ch_)):
+                        self.objects.append({"kind": "rock.crag", "x": x, "y": y, "w": cw_, "h": ch_})
+                        self.covered |= {(i, j) for i in range(x, x + cw_) for j in range(y, y + ch_)}
+            for t in rim:
+                if any(abs(t[0] - lx) <= 1 and abs(t[1] - ly) <= 1 for lx, ly in looks):
+                    continue
+                if 0 <= t[0] < self.W and 0 <= t[1] < self.H and self.walkable(t) and self.mat[t[1]][t[0]] != "cliff":
+                    self.put("rock.small", t)
+
     def put(self, kind, t, **extra):
         fw, fh, solid = self.K.get(kind, (1, 1, False))
         x, y = t
@@ -329,6 +356,7 @@ class MapBuilder:
 
     def lay_dress(self):
         banners = self.place_brief.get("banners")
+        self.cliff_rims()
         for d in self.p.get("dress", []):
             kind = d["kind"]
             if kind == "banner":

@@ -99,6 +99,10 @@ These were each learned from a real complaint, and each is a rule, not a one-off
   trigger, since the walls funnel her in. Centred in its claim instead, an 8-tile house put its door on a tile edge, a
   tile off a gate that fills its cell, and no one could walk into Pang Shu's house (Testing). The build fails if a door
   can't be centred. `tests/playtest/door-gate.js` walks in at the centre and a few px either side.
+- **A cliff has a face and a lip** (`cliff_rims`). The cliff tile alone draws like paving in every kit, so a "cliff's
+  edge" looked like nothing of the kind (apo110, Xiao Pass). Crags fill the face, which is never walked, so they block
+  nothing. Stones line the rim on the high side: a zone says which way it falls (`"drop": "W"`), and without it every
+  side gets a rim. A spot on the rim is a gap in the lip, so the lookout shows.
 - **Cover is a thing you see.** A hide-and-wait cover names what she hides by (`"with"`: a hay cart, jars, a screen
   wall). It's drawn on the cover's own tile and walked through, so she stands in front of it. A ring on bare paving
   doesn't tell a player to hide there.
