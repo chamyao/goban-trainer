@@ -38,6 +38,7 @@ for(const [name,dev] of SIZES){const ctx=await b.newContext(dev);const p=await c
       const vw=innerWidth,vh=innerHeight,issues=[];
       const names=Object.keys(B);for(let i=0;i<names.length;i++)for(let j=i+1;j<names.length;j++){const a=B[names[i]],c=B[names[j]];
         if(names[i]==='dialog'&&names[j]==='leadsm'||names[j]==='dialog'&&names[i]==='leadsm')continue;   // the small portrait sits inside the dialogue row
+        if([names[i],names[j]].sort().join()==='board,lead'&&+getComputedStyle(parts.lead).zIndex<+getComputedStyle(parts.board.closest('.tk-duel-board')||parts.board).zIndex)continue;   // the big portrait tucks behind the board's edge (the user's note): below it, never over it
         const ox=Math.min(a.r,c.r)-Math.max(a.x,c.x),oy=Math.min(a.b,c.b)-Math.max(a.y,c.y);if(ox>2&&oy>2)issues.push(`${names[i]} overlaps ${names[j]} (${ox}x${oy})`);}
       for(const [k,a] of Object.entries(B)){if(a.x<-1||a.r>vw+1)issues.push(`${k} off screen sideways (${a.x}..${a.r} of ${vw})`);if(a.b>vh+1&&k!=='src')issues.push(`${k} below the fold (${a.y}..${a.b} of ${vh})`);}
       // text: clipped, or too small to read

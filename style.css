@@ -581,9 +581,13 @@ body:has(.tk-scroll-wrap) .wukong-toggle, body:has(.tk-scroll-wrap) #wukong { vi
    on a wide screen; on a phone (the stacked layout) a small portrait left of the dialogue box instead */
 .tk-duel-dlgrow { display: flex; align-items: flex-end; gap: 10px; }
 .tk-duel-dlgrow > .town-dlg { flex: 1; min-width: 0; }
-.tk-duel-leadcol { flex: 0 0 18%; align-self: stretch; display: flex; align-items: flex-end; justify-content: center; min-width: 0; }
-.tk-duel-lead { display: block; max-width: 100%; max-height: 88%; object-fit: contain; object-position: bottom;
-  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, .45)); pointer-events: none; animation: tkPortraitIn .35s ease-out; }
+/* the column only keeps the board clear; the cut-out itself stands in the frame's bottom-left corner, flush with
+   its foot (the figure is cut at the waist, so a gap under it read as cut off), as tall as the frame allows and
+   tucked a little behind the board's edge (the user's note) */
+.tk-duel-leadcol { flex: 0 0 20%; align-self: stretch; min-width: 0; }
+.tk-duel-lead { position: absolute; left: 0; bottom: 0; height: 94%; max-width: 32%; object-fit: contain; object-position: bottom left;
+  z-index: 0; filter: drop-shadow(0 6px 16px rgba(0, 0, 0, .45)); pointer-events: none; animation: tkPortraitIn .35s ease-out; }
+.has-lead > .tk-duel-board, .has-lead > .tk-duel-side { position: relative; z-index: 1; }
 .tk-duel-lead-sm { display: none; }
 .tk-duel-full .tk-duel-leadcol { display: none; }
 .tk-duel-full .tk-duel-lead-sm { display: block; flex: none; width: 76px; max-height: 120px; object-fit: contain; object-position: bottom;
