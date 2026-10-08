@@ -22,7 +22,7 @@
   {
    "id": "changan--burning-ward",
    "name": "The burning ward",
-   "zh": "",
+   "zh": "焚烧的街坊",
    "archetype": "compound",
    "map": "changan--burning-ward.map.json",
    "links": [
@@ -606,7 +606,7 @@
      1225
     ]
    ],
-   "objective_zh": "",
+   "objective_zh": "带着女儿穿过燃烧的小巷，前往庞舒家。乱兵过来时，躲进暗处，不要动。",
    "title_zh": "私藏"
   },
   {
