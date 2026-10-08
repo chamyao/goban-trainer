@@ -15,10 +15,12 @@ New in the plans, for the flood and for gates the story shuts (plans.py writes t
       and proved state by state ("flood_afoot": what must and must not be reached on foot).
   state "shut": {gate id: [lines]}             a gate of a wall shut in that state, and what it says
 """
-from tk_plans_w2 import ART as ART2, LINE_KINDS, NEW_KINDS as NEW_KINDS2, ZONE_KINDS, _ch, room
+import copy
+
+from tk_plans_w2 import ART as ART2, LINE_KINDS, NEW_KINDS as NEW_KINDS2, PLANS2, ZONE_KINDS, _ch, room
 
 # the beats this arc's plans place (the design's table: x1 ... x20)
-KEYS_LB = {f"x{i}" for i in range(1, 21)}
+KEYS_LB = {f"x{i}" for i in range(1, 21)} | {"x0a", "x0b"}   # x0a, x0b: the prologue in Chang'an
 
 # Kinds this arc adds: footprint in tiles (w, h, solid)
 NEW_KINDS = {**NEW_KINDS2,
@@ -41,7 +43,80 @@ def _talk(kind, at, say, **kw):
     return {"kind": kind, "at": at, "say": say, **kw}
 
 
+# =========================================================================================
+# Chang'an, the night it falls (the prologue, x0a-x0b): the Diaochan arc's city, burning, Li Jue's men looting the lanes
+# (「縱兵大掠」). Lady Yan and her daughter are left in Lü Bu's house (x0a, lb-house) and go through the lanes to Pang
+# Shu's house (x0b, pangshu-house), hiding from the looters as they pass: a looter who sees her sends her back to the
+# last cover. Only the city's streets are kept: the Diaochan arc's rooms, beats and people are left out.
+_ca = copy.deepcopy(PLANS2["Chang'an"])
+_cap = _ca["plan"]
+for _t in _cap["things"]:
+    for _k in ("node", "map", "open_to", "refuse"):
+        _t.pop(_k, None)
+    if _t["id"] == "lubu":
+        _t.update(label="Lü Bu's house", map="lb-house")
+    if _t["id"] == "house-2":
+        _t.update(id="pangshu", label="Pang Shu's house", plaque="庞府", map="pangshu-house")
+_cap["things"] = [t for t in _cap["things"] if t["id"] not in ("hengmen", "ridge")]   # the Diaochan arc's farewell, long over
+_cap["spots"] = [
+    {"id": "lubu-gate", "at": [13, 9], "at_door": "lubu", "label": "Lü Bu's gate", "note": "the walk to Pang Shu's starts here"},
+    {"id": "pangshu-gate", "at": [10, 11], "at_door": "pangshu", "label": "Pang Shu's door"},
+    # cover on the way (hide and wait): a doorway, a hay cart, a well-house; seen, she's sent back to the last one
+    {"id": "cover-door", "at": [14, 8], "label": "A dark doorway", "cover": True},
+    {"id": "cover-cart", "at": [14, 10], "label": "An overturned hay cart", "cover": True},
+    {"id": "cover-well", "at": [12, 11], "label": "A well-house", "cover": True},
+]
+_cap["props"] = [{"kind": "camp.hay", "at": [14, 10], "label": "An overturned hay cart"},
+                 {"kind": "camp.firepit", "at": [8, 5], "label": "A burning cart"},
+                 {"kind": "camp.firepit", "at": [4, 9], "label": "A burning cart"}]
+_cap["dress"] = [d for d in _cap["dress"] if d.get("at_door") not in ("wangyun", "palace")] + [
+    {"kind": "banner.black", "at_gates": True}]
+_cap["exits"] = []
+_cap["entries"] = {"": [13, 9]}
+_cap["checks"] = [{"check": "covered_route", "from": [13, 9], "to": [10, 11], "beats": ["3-x0b"], "must_wait": True}]
+# Li Jue's looters (the walk to x0b), as the Diaochan arc's watchers: down the east lane and along the palace lane
+_cap["watchers"] = [
+    {"id": "looter-east", "kind": "folk.soldier", "beat": [[14, 6], [14, 11], [14, 6]], "shape": "U", "pause": [14, 11, 2],
+     "cone": 3, "in_beats": ["3-x0b"], "seen": "looter", "back_to": "lubu-gate"},
+    {"id": "looter-lane", "kind": "folk.soldier", "beat": [[13, 11], [6, 11], [13, 11]], "shape": "U", "pause": [6, 11, 2],
+     "cone": 3, "in_beats": ["3-x0b"], "seen": "looter", "back_to": "lubu-gate"},
+]
+_ca.update(
+    banners="black",
+    states=[{"id": "sack", "light": "night", "weather": "smoke"}],
+    seen_lines={"looter": ["“There! A woman and a girl!” She drags her daughter back into the dark before he can look again."]},
+    npcs=[
+        _talk("folk.soldier", [8, 9], "“Burn what you can't carry! The Grand Preceptor's dead, and the city's ours!”"),
+        _talk("folk.soldier", [5, 5], "“Silk, jade, anything that shines. Kick the door in if they won't open it.”"),
+    ],
+    maps={
+        # Lü Bu's house, the night he rides out without them (x0a)
+        "lb-house": room([12, 7], [6, 6],
+                         things=[{"id": "screen", "kind": "furn.screen", "rect": [5, 1, 2, 1]},
+                                 {"id": "rack", "kind": "furn.rack", "rect": [1, 1, 1, 1], "label": "An empty weapons rack"},
+                                 {"id": "chest", "kind": "furn.chest", "rect": [9, 1, 1, 1]},
+                                 {"id": "table", "kind": "furn.table", "rect": [3, 3, 2, 1]}],
+                         spots=[{"id": "x0a", "at": [6, 4], "node": "3-x0a", "label": "Lü Bu's house"}])
+        | {"label": "Lü Bu's house"},
+        # Pang Shu's house, a modest officer's house: the back room where he hides them (x0b)
+        "pangshu-house": room([10, 7], [5, 6], floor="wood",
+                              things=[{"id": "screen", "kind": "furn.screen", "rect": [3, 1, 2, 1]},
+                                      {"id": "bed", "kind": "furn.bed", "rect": [1, 1, 1, 1], "label": "Where they hid"},
+                                      {"id": "chest", "kind": "furn.chest", "rect": [8, 1, 1, 1]},
+                                      {"id": "table", "kind": "furn.table", "rect": [6, 3, 1, 1]}],
+                              spots=[{"id": "x0b", "at": [5, 4], "node": "3-x0b", "label": "Pang Shu's back room"}])
+        | {"label": "Pang Shu's house"},
+    },
+    challengers=[],
+    objectives={
+        "3-x0a": "Lü Bu's house, the night Chang'an falls.",
+        "3-x0b": "Take your daughter through the lanes to Pang Shu's house, on the palace lane. When looters come, get into cover and keep still.",
+    },
+)
+
+
 PLANS_LB = {
+    "Chang'an": _ca,
     # =========================================================================================
     # Xuzhou: the prefecture's city. Liu Bei takes Lü Bu in (x2-x4); the night gate (x5); Lü Bu holds it (x7-x10);
     # locked out under its wall (x14).

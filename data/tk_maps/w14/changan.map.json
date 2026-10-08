@@ -1,0 +1,1070 @@
+{
+ "format": "tk-map/1",
+ "id": "changan",
+ "world": 14,
+ "name": "Chang'an",
+ "archetype": "city",
+ "size": [
+  68,
+  68
+ ],
+ "seed": 868,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "city",
+   "b": "field",
+   "c": "field.wheat",
+   ".": "grass",
+   "d": "market",
+   "f": "plateau",
+   "g": "road",
+   "h": "wall.city",
+   "i": "ward",
+   "~": "water"
+  },
+  "rows": [
+   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+   "................................bbbbbbbbbbbbbbbb....cccccccccccc....",
+   "................................bbbbbbbbbbbbbbbb....cccccccccccc....",
+   "................................bbbbbbbbbbbbbbbb....cccccccccccc....",
+   "................................bbbbbbbbbbbbbbbb....cccccccccccc....",
+   "gggggggggggggggggggggggggggg....bbbbbbbbbbbbbbbb....cccccccccccc....",
+   "gggggggggggggggggggggggggggg....bbbbbbbbbbbbbbbb....cccccccccccc....",
+   "gggggggggggggggggggggggggggg....bbbbbbbbbbbbbbbb....cccccccccccc....",
+   "gggggggggggggggggggggggggggg....bbbbbbbbbbbbbbbb....cccccccccccc....",
+   "........................gggg........................................",
+   "........................gggg........................................",
+   "......hhhhhhhhhhhhhhhhhhgggghhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh......",
+   "......hhhhhhhhhhhhhhhhhhgggghhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh......",
+   "......hhddddddddddddddddggggddddddddddddddddddddddddddddddddhh......",
+   "......hhddddddddddddddddggggddddddddddddddddddddddddddddddddhh......",
+   "......hhddddddddddddddddggggddddddddddddddddddddddddddddddddhh......",
+   "......hhddddddddddddddddggggddddddddddddddddddddddddddddddddhh......",
+   "......hhgggggggggggggggggggggggggggggggggggggggggggggggggggggggg....",
+   "......hhgggggggggggggggggggggggggggggggggggggggggggggggggggggggg....",
+   "......hhgggggggggggggggggggggggggggggggggggggggggggggggggggggggg....",
+   "......hhgggggggggggggggggggggggggggggggggggggggggggggggggggggggg....",
+   "......hhiggiiiiiiiiiiiiiggggiiiiiiiiiiiiiiiiiiiiiiiiiiiiiggihh......",
+   "......hhiggiiiiiiiiiiiiiggggiiiiiiiiiiiiiiiiiiiiiiiiiiiiiggihh......",
+   "......hhiggiiiiiiiiiiiiiggggiiiiiiiiiiiiiiiiiiiiiiiiiiiiiggihh......",
+   "......hhiggiiiiiiiiiiiiiggggiiiiiiiiiiiiiiiiiiiiiiiiiiiiiggihh......",
+   "......hhiggiiiiiiiiiiiiiggggiiiiiiiiiiiiiiiiiiiiiiiiiiiiiggihh......",
+   "......hhiggiiiiiiiiiiiiiggggiiiiiiiiiiiiiiiiiiiiiiiiiiiiiggihh......",
+   "......hhiggiiiiiiiiiiiiiggggiiiiiiiiiiiiiiiiiiiiiiiiiiiiiggihh......",
+   "......hhiggiiiiiiiiiiiiiggggiiiiiiiiiiiiiiiiiiiiiiiiiiiiiggihh......",
+   "......hhiggiiiiiiiiiiiiiggggiiiiiiiiiiiiiiiiiiiiiiiiiiiiiggihh......",
+   "......hhiggiiiiiiiiiiiiiggggiiiiiiiiiiiiiiiiiiiiiiiiiiiiiggihh......",
+   "......hhiggiiiiiiiiiiiiiggggiiiiiiiiiiiiiiiiiiiiiiiiiiiiiggihh......",
+   "......hhiggiiiiiiiiiiiiiggggiiiiiiiiiiiiiiiiiiiiiiiiiiiiiggihh......",
+   "......hhgggggggggggggggggggggggggggggggggggggggggggggggggggghh......",
+   "......hhgggggggggggggggggggggggggggggggggggggggggggggggggggghh......",
+   "......hhgggggggggggggggggggggggggggggggggggggggggggggggggggghh......",
+   "......hhgggggggggggggggggggggggggggggggggggggggggggggggggggghh......",
+   "......hhiiiiiiiiiiiiiiiiggggiiiiiiiiiiiiiiiiiiiiiiiiiiiiiggihh......",
+   "......hhiiiiiiiiiiiiiiiiggggiiiiiiiiiiiiiiiiiiiiiiiiiiiiiggihh......",
+   "......hhiiiiiiiiiiiiiiiiggggiiiiiiiiiiiiiiiiiiiiiiiiiiiiiggihh......",
+   "......hhiiiiiiiiiiiiiiiiggggiiiiiiiiiiiiiiiiiiiiiiiiiiiiiggihh......",
+   "......hhaaaaaaaaaaaaaaaaggggaaaaaaaaaaaaaaaaaaaaaaaaaaaaaggahh......",
+   "......hhaggggggggggggggggggggggggggggggggggggggggggggggggggahh......",
+   "......hhaggggggggggggggggggggggggggggggggggggggggggggggggggahh......",
+   "......hhaaaaaaaaaaaaaaaaggggaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaahh......",
+   "......hhffffffffffffffffffffffffffffffffffffffffffffffffffffhh......",
+   "......hhffffffffffffffffffffffffffffffffffffffffffffffffffffhh......",
+   "......hhffffffffffffffffffffffffffffffffffffffffffffffffffffhh......",
+   "......hhffffffffffffffffffffffffffffffffffffffffffffffffffffhh......",
+   "......hhffffffffffffffffffffffffffffffffffffffffffffffffffffhh......",
+   "......hhffffffffffffffffffffffffffffffffffffffffffffffffffffhh......",
+   "......hhffffffffffffffffffffffffffffffffffffffffffffffffffffhh......",
+   "......hhffffffffffffffffffffffffffffffffffffffffffffffffffffhh......",
+   "......hhffffffffffffffffffffffffffffffffffffffffffffffffffffhh......",
+   "......hhffffffffffffffffffffffffffffffffffffffffffffffffffffhh......",
+   "......hhffffffffffffffffffffffffffffffffffffffffffffffffffffhh......",
+   "......hhffffffffffffffffffffffffffffffffffffffffffffffffffffhh......",
+   "......hhffffffffffffffffffffffffffffffffffffffffffffffffffffhh......",
+   "......hhffffffffffffffffffffffffffffffffffffffffffffffffffffhh......",
+   "......hhffffffffffffffffffffffffffffffffffffffffffffffffffffhh......",
+   "......hhffffffffffffffffffffffffffffffffffffffffffffffffffffhh......",
+   "......hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh......",
+   "......hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh......",
+   "....................................................................",
+   "...................................................................."
+  ],
+  "walk": {
+   "city": true,
+   "field": true,
+   "field.wheat": true,
+   "grass": true,
+   "market": true,
+   "plateau": true,
+   "road": true,
+   "wall.city": false,
+   "ward": true,
+   "water": false
+  }
+ },
+ "lines": [
+  {
+   "id": "wei",
+   "kind": "river",
+   "path": [
+    [
+     0,
+     0
+    ],
+    [
+     16,
+     0
+    ]
+   ],
+   "width": 4,
+   "tiles": 272
+  },
+  {
+   "id": "wall",
+   "kind": "wall.city",
+   "outline": [
+    1,
+    3,
+    15,
+    14
+   ],
+   "width": 2,
+   "gates": {
+    "hengmen-gate": [
+     6,
+     3
+    ],
+    "xuanping-gate": [
+     15,
+     5
+    ]
+   },
+   "tiles": 416
+  },
+  {
+   "id": "west-road",
+   "kind": "road",
+   "path": [
+    [
+     0,
+     2
+    ],
+    [
+     6,
+     2
+    ]
+   ],
+   "width": 3,
+   "tiles": 112
+  },
+  {
+   "id": "avenue",
+   "kind": "road",
+   "path": [
+    [
+     6,
+     2
+    ],
+    [
+     6,
+     11
+    ]
+   ],
+   "width": 4,
+   "lanes": [
+    1,
+    2,
+    1
+   ],
+   "middle": "the emperor's lane: no one walks it",
+   "tiles": 160
+  },
+  {
+   "id": "market-street",
+   "kind": "road",
+   "path": [
+    [
+     2,
+     5
+    ],
+    [
+     15,
+     5
+    ]
+   ],
+   "width": 3,
+   "tiles": 224
+  },
+  {
+   "id": "ward-street",
+   "kind": "road",
+   "path": [
+    [
+     2,
+     9
+    ],
+    [
+     14,
+     9
+    ]
+   ],
+   "width": 3,
+   "tiles": 208
+  },
+  {
+   "id": "west-lane",
+   "kind": "road",
+   "path": [
+    [
+     2,
+     5
+    ],
+    [
+     2,
+     9
+    ]
+   ],
+   "width": 2,
+   "tiles": 36
+  },
+  {
+   "id": "east-lane",
+   "kind": "road",
+   "path": [
+    [
+     14,
+     5
+    ],
+    [
+     14,
+     11
+    ]
+   ],
+   "width": 2,
+   "tiles": 52
+  },
+  {
+   "id": "palace-lane",
+   "kind": "road",
+   "path": [
+    [
+     2,
+     11
+    ],
+    [
+     14,
+     11
+    ]
+   ],
+   "width": 2,
+   "tiles": 100
+  }
+ ],
+ "objects": [
+  {
+   "kind": "building.gate",
+   "x": 24,
+   "y": 14,
+   "w": 4,
+   "h": 2,
+   "id": "hengmen-gate",
+   "width": 4,
+   "wall": "wall",
+   "door": "S"
+  },
+  {
+   "kind": "building.shop",
+   "x": 10,
+   "y": 17,
+   "w": 3,
+   "h": 2,
+   "id": "jeweller",
+   "door": "S",
+   "faces": "S",
+   "label": "The jeweller's",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.shop",
+   "x": 18,
+   "y": 17,
+   "w": 3,
+   "h": 2,
+   "id": "wineshop",
+   "door": "S",
+   "faces": "S",
+   "label": "A wine shop",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.shop",
+   "x": 30,
+   "y": 17,
+   "w": 3,
+   "h": 2,
+   "id": "teahouse",
+   "door": "S",
+   "faces": "S",
+   "label": "A teahouse",
+   "plaque": "茶肆",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.markettower",
+   "x": 37,
+   "y": 17,
+   "w": 6,
+   "h": 2,
+   "id": "market-tower",
+   "door": null,
+   "faces": "S",
+   "label": "The market tower",
+   "note": "a Han 市楼: two storeys, a flag and a drum; seen from all over the north of the city",
+   "blocks_sight": true
+  },
+  {
+   "kind": "furniture.gotable",
+   "x": 53,
+   "y": 17,
+   "w": 1,
+   "h": 1,
+   "id": "gotable",
+   "label": "The market go table"
+  },
+  {
+   "kind": "market.stalls",
+   "x": 45,
+   "y": 17,
+   "w": 6,
+   "h": 2,
+   "id": "stalls"
+  },
+  {
+   "kind": "building.compound",
+   "x": 13,
+   "y": 25,
+   "w": 10,
+   "h": 10,
+   "id": "wangyun",
+   "door": "S",
+   "faces": "S",
+   "label": "Wang Yun's residence",
+   "plaque": "王府",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.compound",
+   "x": 33,
+   "y": 25,
+   "w": 14,
+   "h": 10,
+   "id": "xiangfu",
+   "door": "S",
+   "faces": "S",
+   "label": "The Chancellor's residence",
+   "plaque": "相府",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.compound",
+   "x": 49,
+   "y": 25,
+   "w": 6,
+   "h": 10,
+   "id": "lubu",
+   "door": "S",
+   "faces": "S",
+   "label": "Lü Bu's house",
+   "map": "lb-house",
+   "plaque": "吕府",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.house",
+   "x": 10,
+   "y": 41,
+   "w": 4,
+   "h": 2,
+   "id": "shisun",
+   "door": "S",
+   "faces": "S",
+   "label": "Shisun Rui's house",
+   "plaque": "士孙府",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.house",
+   "x": 18,
+   "y": 41,
+   "w": 4,
+   "h": 2,
+   "id": "huangwan",
+   "door": "S",
+   "faces": "S",
+   "label": "Huang Wan's house",
+   "plaque": "黄府",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.house",
+   "x": 34,
+   "y": 41,
+   "w": 4,
+   "h": 2,
+   "id": "caiyong",
+   "door": "S",
+   "faces": "S",
+   "label": "Cai Yong's house",
+   "plaque": "蔡府",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.house",
+   "x": 42,
+   "y": 41,
+   "w": 4,
+   "h": 2,
+   "id": "pangshu",
+   "door": "S",
+   "faces": "S",
+   "label": "Pang Shu's house",
+   "map": "pangshu-house",
+   "plaque": "庞府",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.house",
+   "x": 50,
+   "y": 41,
+   "w": 4,
+   "h": 2,
+   "id": "house-3",
+   "door": "S",
+   "faces": "S",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.palace",
+   "x": 13,
+   "y": 49,
+   "w": 26,
+   "h": 14,
+   "id": "palace",
+   "door": "N",
+   "faces": "N",
+   "label": "Weiyang Palace",
+   "plaque": "北掖门",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.palace",
+   "x": 45,
+   "y": 49,
+   "w": 10,
+   "h": 10,
+   "id": "changle",
+   "door": null,
+   "faces": "S",
+   "label": "Changle Palace",
+   "note": "roofs only: not enterable",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.gatetower",
+   "x": 60,
+   "y": 21,
+   "w": 3,
+   "h": 6,
+   "id": "xuanping",
+   "door": "W",
+   "faces": "W",
+   "label": "The Xuanping Gate tower",
+   "blocks_sight": true
+  },
+  {
+   "kind": "tree.willow",
+   "x": 23,
+   "y": 13,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 23,
+   "y": 25,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 23,
+   "y": 31,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 23,
+   "y": 43,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 24,
+   "y": 48,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 28,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 28,
+   "y": 26,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 28,
+   "y": 32,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 28,
+   "y": 44,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 8,
+   "y": 40,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 13,
+   "y": 35,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 16,
+   "y": 40,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 21,
+   "y": 35,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 29,
+   "y": 35,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 32,
+   "y": 40,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 37,
+   "y": 35,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 40,
+   "y": 40,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 45,
+   "y": 35,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 48,
+   "y": 40,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 56,
+   "y": 40,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 8,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 16,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 32,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 40,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 48,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 56,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 0,
+   "y": 12,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 5,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 6,
+   "y": 12,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 11,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 12,
+   "y": 12,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 17,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 18,
+   "y": 12,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 23,
+   "y": 7,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "banner.black",
+   "x": 59,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "banner.black",
+   "x": 38,
+   "y": 35,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "banner.black",
+   "x": 42,
+   "y": 35,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.rack",
+   "x": 49,
+   "y": 35,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "camp.hay",
+   "x": 57,
+   "y": 41,
+   "w": 1,
+   "h": 1,
+   "label": "An overturned hay cart"
+  },
+  {
+   "kind": "camp.firepit",
+   "x": 33,
+   "y": 21,
+   "w": 1,
+   "h": 1,
+   "label": "A burning cart"
+  },
+  {
+   "kind": "camp.firepit",
+   "x": 17,
+   "y": 37,
+   "w": 1,
+   "h": 1,
+   "label": "A burning cart"
+  }
+ ],
+ "spots": [
+  {
+   "id": "lubu-gate",
+   "x": 52.5,
+   "y": 36.7,
+   "node": "",
+   "label": "Lü Bu's gate",
+   "note": "the walk to Pang Shu's starts here"
+  },
+  {
+   "id": "pangshu-gate",
+   "x": 44.5,
+   "y": 44.7,
+   "node": "",
+   "label": "Pang Shu's door"
+  },
+  {
+   "id": "cover-door",
+   "x": 57.5,
+   "y": 33.7,
+   "node": "",
+   "label": "A dark doorway"
+  },
+  {
+   "id": "cover-cart",
+   "x": 57.5,
+   "y": 41.7,
+   "node": "",
+   "label": "An overturned hay cart"
+  },
+  {
+   "id": "cover-well",
+   "x": 49.5,
+   "y": 45.7,
+   "node": "",
+   "label": "A well-house"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "npc-1",
+   "kind": "folk.soldier",
+   "x": 33.5,
+   "y": 37.9,
+   "say": [
+    "“Burn what you can't carry! The Grand Preceptor's dead, and the city's ours!”"
+   ]
+  },
+  {
+   "id": "npc-2",
+   "kind": "folk.soldier",
+   "x": 21.5,
+   "y": 21.9,
+   "say": [
+    "“Silk, jade, anything that shines. Kick the door in if they won't open it.”"
+   ]
+  },
+  {
+   "id": "looter-east",
+   "kind": "folk.soldier",
+   "say": [],
+   "watch": {
+    "id": "looter-east",
+    "cone": 12,
+    "beat": [
+     [
+      57.5,
+      25.9
+     ],
+     [
+      57.5,
+      45.9
+     ],
+     [
+      57.5,
+      25.9
+     ]
+    ],
+    "pause": [
+     57.5,
+     45.9,
+     2
+    ],
+    "in_beats": [
+     "14-x0b"
+    ],
+    "seen": "looter",
+    "back_to": "lubu-gate",
+    "shape": "U"
+   },
+   "x": 57.5,
+   "y": 25.9
+  },
+  {
+   "id": "looter-lane",
+   "kind": "folk.soldier",
+   "say": [],
+   "watch": {
+    "id": "looter-lane",
+    "cone": 12,
+    "beat": [
+     [
+      53.5,
+      45.9
+     ],
+     [
+      25.5,
+      45.9
+     ],
+     [
+      53.5,
+      45.9
+     ]
+    ],
+    "pause": [
+     25.5,
+     45.9,
+     2
+    ],
+    "in_beats": [
+     "14-x0b"
+    ],
+    "seen": "looter",
+    "back_to": "lubu-gate",
+    "shape": "U"
+   },
+   "x": 53.5,
+   "y": 45.9
+  }
+ ],
+ "exits": [
+  {
+   "to": "changan--lb-house",
+   "side": "N",
+   "x": 51.6,
+   "y": 34.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changan--pangshu-house",
+   "side": "N",
+   "x": 43.6,
+   "y": 42.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  }
+ ],
+ "entries": {
+  "changan--lb-house": [
+   52,
+   35
+  ],
+  "changan--pangshu-house": [
+   44,
+   43
+  ],
+  "": [
+   53,
+   37
+  ]
+ },
+ "states": [
+  {
+   "id": "sack",
+   "light": "night",
+   "weather": "smoke"
+  }
+ ],
+ "ways": {
+  "nodes": [
+   [
+    2.0,
+    10.0
+   ],
+   [
+    26.0,
+    10.0
+   ],
+   [
+    26.0,
+    22.0
+   ],
+   [
+    26.0,
+    38.0
+   ],
+   [
+    26.0,
+    46.0
+   ],
+   [
+    10.0,
+    22.0
+   ],
+   [
+    58.0,
+    22.0
+   ],
+   [
+    62.0,
+    22.0
+   ],
+   [
+    10.0,
+    38.0
+   ],
+   [
+    58.0,
+    38.0
+   ],
+   [
+    58.0,
+    46.0
+   ],
+   [
+    10.0,
+    46.0
+   ]
+  ],
+  "edges": [
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    2,
+    5
+   ],
+   [
+    2,
+    6
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    3,
+    8
+   ],
+   [
+    3,
+    9
+   ],
+   [
+    4,
+    10
+   ],
+   [
+    4,
+    11
+   ],
+   [
+    5,
+    8
+   ],
+   [
+    6,
+    7
+   ],
+   [
+    6,
+    9
+   ],
+   [
+    9,
+    10
+   ]
+  ]
+ },
+ "seen_lines": {
+  "looter": [
+   "“There! A woman and a girl!” She drags her daughter back into the dark before he can look again."
+  ]
+ },
+ "banners": "black",
+ "links": [
+  "changan--lb-house",
+  "changan--pangshu-house"
+ ]
+}
