@@ -68,6 +68,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       goal: w.goalAt && [Math.round(w.goalAt.x), Math.round(w.goalAt.y)], busy: w.ui.busy(), cine: !!w.cine, leaving: !!w.leaving, walking: !!w.walk,
       caught: !!w.caught, engaged: !!w.engaged, gtag: w.game && w.game.__flip, light: w.st && w.st.light || '',
       route: w.routeFx && w.routeFx.all && w.routeFx.all[0] ? (w.routeFx.all.some(im => im.tintTopLeft === 0xd6ff8a) ? 'fireflies' : 'band') : '',
+      hidden: !!w.hidden, inCover: !!(w.inCover && w.covers && w.covers.length && w.inCover()),
       wet: !!(w.onWater && w.onWater()), wades: !!(w.wades && w.wades()), carry: w.st && w.st.carry ? w.st.carry.whom : '', mstate: ((w.mapState && w.mapState()) || {}).ids ? w.mapState().ids.join('+') : '',
       lvnv: w.children.list.some(o => o.visible && o.alpha > .1 && o.texture && /^(h|ride)-lvnv/.test(o.texture.key)), redhare: typeof WorldItems !== 'undefined' && WorldItems.has(w.w, 'redhare'),
       mounts: (w.cine ? [...new Set(w.children.list.filter(o => o.visible && o.alpha > .1 && o.texture && /^ride-/.test(o.texture.key)).map(o => o.texture.key.split('-')[1]))].map(x => x + ':?')   // in a scene: who is drawn in the saddle
@@ -229,8 +230,8 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       if (s.cine && ps.scene < 2) { if (!ps.t) ps.t = Date.now(); const due = [2000, 7000][ps.scene]; if (Date.now() - ps.t >= due) { await snap(`scene-${due / 1000}s`); ps.scene++; } }
     }
     prevS = s;
-    if (beat) { const f = facts[beat] || (facts[beat] = { light: new Set(), route: new Set(), horses: new Set(), crouch: false, place: new Set(), mount: new Set(), wetRide: false, carry: new Set(), lvnv: false, mstate: new Set(), redhare: new Set(), walker: new Set(), lastRed: null });   // what each beat showed
-      if (s.light) f.light.add(s.light); if (s.route) f.route.add(`${s.route}@${s.place}`); if (s.horses) f.horses.add(s.horses.split('@')[0]); if (s.crouch) f.crouch = true; f.place.add(s.place); if (s.wet && s.wades && !s.cine) f.wetRide = true; if (s.carry) f.carry.add(s.carry + (s.cine ? ' (scene)' : ' (map)')); if (s.lvnv && s.cine) f.lvnv = true; if (s.mstate) f.mstate.add(`${s.place}:${s.mstate}`); f.redhare.add(s.redhare); f.lastRed = s.redhare; if (!s.busy && !s.cine && !s.leaving && s.lead) f.walker.add(s.lead); if (!s.leaving && s.place && (s.cine || !s.busy)) f.mount.add(`${s.place}${s.indoors ? ' (indoors)' : ''}${s.cine ? ' in a scene' : ''}: ${s.mounts}`); }
+    if (beat) { const f = facts[beat] || (facts[beat] = { light: new Set(), route: new Set(), horses: new Set(), crouch: false, place: new Set(), mount: new Set(), wetRide: false, carry: new Set(), lvnv: false, mstate: new Set(), redhare: new Set(), walker: new Set(), lastRed: null, hid: 0, caughtAt: [] });   // what each beat showed
+      if (s.light) f.light.add(s.light); if (s.route) f.route.add(`${s.route}@${s.place}`); if (s.horses) f.horses.add(s.horses.split('@')[0]); if (s.crouch) f.crouch = true; f.place.add(s.place); if (s.wet && s.wades && !s.cine) f.wetRide = true; if (s.carry) f.carry.add(s.carry + (s.cine ? ' (scene)' : ' (map)')); if (s.lvnv && s.cine) f.lvnv = true; if (s.mstate) f.mstate.add(`${s.place}:${s.mstate}`); f.redhare.add(s.redhare); f.lastRed = s.redhare; if (s.hidden && !f.wasHidden) f.hid++; f.wasHidden = s.hidden; if (s.caught && !f.wasCaught) f.caughtAt.push(s.P.join(',')); f.wasCaught = s.caught; if (!s.busy && !s.cine && !s.leaving && s.lead) f.walker.add(s.lead); if (!s.leaving && s.place && (s.cine || !s.busy)) f.mount.add(`${s.place}${s.indoors ? ' (indoors)' : ''}${s.cine ? ' in a scene' : ''}: ${s.mounts}`); }
     if (/Now playing/.test(s.banner || '') && banners[banners.length - 1] !== s.banner) banners.push(s.banner);
     if (pushWait && !s.busy && !s.cine && !s.duel && !s.leaving && !s.walking) { pushWait = false; await p.waitForTimeout(4000); continue; }   // SYNC_PUSH: a still moment after the scene, as a player reading would
     if (s.duel) {   // a board: win it with Skip, note what it drew, then Continue
@@ -322,13 +323,15 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   }
   // Book 14 (Lü Bu's fall): who leads each beat, Red Hare (x1 to x19), the flood rides, the daughter on his back, the states
   if (BOOK === 14) { const bad = [], say = (ok, w) => { console.log(`${ok ? 'ok  ' : 'FAIL'} ${w}`); if (!ok) bad.push(w); };
-    const LEAD = { 8: 'zhangliao', 10: 'chengong', 12: 'chendeng', 15: 'yanshi', 19: 'houcheng', 20: 'caocao' };
-    const leads = report.map(r => [r.beat, [...((facts[r.beat] || {}).walker || [])].join('/') || r.lead]).filter(([k]) => /^14-x\d+$/.test(k));   // who walked the beat (free to move)
+    const LEAD = { 0: 'yanshi', 8: 'zhangliao', 10: 'chengong', 12: 'chendeng', 15: 'yanshi', 19: 'houcheng', 20: 'caocao' };   // 0: the prologue, x0a and x0b
+    const leads = report.map(r => [r.beat, [...((facts[r.beat] || {}).walker || [])].join('/') || r.lead]).filter(([k]) => /^14-x\d+[ab]?$/.test(k));   // who walked the beat (free to move)
     const exp = n => LEAD[n] || 'lvbu', selfStart = [];
-    const wrong = leads.filter(([k, l]) => { const n = +k.slice(4), set = l.split('/'); if (set.includes(exp(n))) return false;
-      if (set.length === 1 && set[0] === exp(n + 1)) { selfStart.push(k.slice(3)); return false; } return true; });   // never free in its own beat: it starts by itself (only the next lead, after the handoff)
+    const wrong = leads.filter(([k, l]) => { const n = parseInt(k.slice(4), 10), set = l.split('/'); if (set.includes(exp(n))) return false;
+      if (set.length === 1 && set[0] === exp(/[ab]$/.test(k) ? 1 : n + 1)) { selfStart.push(k.slice(3)); return false; } return true; });   // never free in its own beat: it starts by itself (only the next lead, after the handoff)
     if (selfStart.length) console.log(`note ${selfStart.join(', ')}: started by itself (the lead never free to walk it before the handoff)`);
-    say(leads.length && !wrong.length, `x1-x20 each led by the right one (${wrong.length ? 'wrong: ' + wrong.map(([k, l]) => `${k} ${l}, not ${LEAD[+k.slice(4)] || 'lvbu'}`).join('; ') : leads.map(([k, l]) => k.slice(3) + ' ' + l).filter((x, i, a) => i === 0 || x.split(' ')[1] !== a[i - 1].split(' ')[1]).join(' > ')})`);
+    say(leads.length && !wrong.length, `each beat led by the right one (${wrong.length ? 'wrong: ' + wrong.map(([k, l]) => `${k} ${l}, not ${LEAD[+k.slice(4)] || 'lvbu'}`).join('; ') : leads.map(([k, l]) => k.slice(3) + ' ' + l).filter((x, i, a) => i === 0 || x.split(' ')[1] !== a[i - 1].split(' ')[1]).join(' > ')})`);
+    // the prologue (x0b): the looters, the covers; she hides (keeps still in cover) at least once
+    if (facts['14-x0b']) { const f = facts['14-x0b']; say(f.hid > 0, `x0b in burning Chang'an: she hid in cover ${f.hid} time${f.hid === 1 ? '' : 's'}${f.caughtAt.length ? `; caught at ${f.caughtAt.join(' | ')}` : ', never caught'}`); }
     const F = k => facts[k] || { redhare: new Set(), mount: new Set(), mstate: new Set(), carry: new Set() };
     const rh = k => [...F(k).redhare];
     if (facts['14-x2']) say(rh('14-x2').includes(true), `Red Hare is his from x1 (x2: ${rh('14-x2')})`);
