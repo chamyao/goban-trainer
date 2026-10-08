@@ -1235,9 +1235,9 @@ def story_world(n, plans_world):
         from tk_story_w2_new import WORLD2_CC as W
     elif plans_world == "lb":
         try:
-            from tk_story_w2_new import WORLD3_LB as W
+            from tk_story_w2_new import WORLD2_LB as W
         except ImportError:
-            raise SystemExit("no story yet for Lü Bu's fall (Plot's WORLD3_LB in tools/tk_story_w2_new.py)")
+            raise SystemExit("no story yet for Lü Bu's fall (Plot's WORLD2_LB in tools/tk_story_w2_new.py)")
     else:
         raise SystemExit(f"no story for book {plans_world}")
     return {**W, "nodes": [{**nd, "key": f"{n}-{nd['key']}"} for nd in W["nodes"]],
