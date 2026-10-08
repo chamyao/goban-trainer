@@ -399,6 +399,61 @@ def gateshut_ns():   # the same shut gate for a north or south wall's gap (64x32
     return gateshut().transpose(Image.Transpose.ROTATE_90)
 
 
+def _plume(im, cx, base, top, rnd, width=7):   # billowing smoke: puffs widening and drifting as they rise, lighter grey at the rims
+    p = im.load(); W, H = im.size
+    for _ in range(60):
+        t = rnd.random(); y = int(base - t * (base - top)); r = int(2 + t * width * .6 + rnd.random() * 2)
+        x = int(cx + (rnd.random() - .5) * (2 + t * width) + t * 4)
+        for dy in range(-r, r + 1):
+            for dx in range(-r, r + 1):
+                d = dx * dx + dy * dy
+                if d <= r * r and 0 <= x + dx < W and 0 <= y + dy < H:
+                    rim = d > (r - 1) ** 2
+                    v = (62 if rim else 34) + int(t * 26) + (dy < 0) * 8
+                    if p[x + dx, y + dy][3] == 0 or not rim:
+                        p[x + dx, y + dy] = (v, v - 4, v - 2, 215)
+
+
+def burning_house():   # Jade's own house, on fire: walls scorched, a hole burnt through the roof with a beam fallen
+    # in, flames out of the windows and the roof, black smoke rising (for a city sacked at night)
+    import random
+    kit = json.loads((ROOT / "assets/tk/kits/jade.json").read_text())
+    sheet, x, y, w, h = kit["kinds"]["building.house"][0]
+    house = Image.open(ROOT / kit["sheets"][sheet]).convert("RGBA").crop((x, y, x + w, y + h))
+    W, H, top = w + 8, h + 22, 22                                   # room above for the flames and smoke
+    im = Image.new("RGBA", (W, H)); im.alpha_composite(house, (4, top))
+    px = im.load(); rnd = random.Random(7)
+    for j in range(H):                                              # scorch: everything darker, redder toward the top
+        for i in range(W):
+            r, g, b, a = px[i, j]
+            if a:
+                k = .55 + .25 * (j - top) / h
+                px[i, j] = (int(min(255, r * k + 18)), int(g * k * .8), int(b * k * .6), a)
+    g = Grid(W, H)
+    hx, hy = W // 2 - 6, top + 6                                    # the hole in the roof, a charred beam across it
+    g.ellipse(hx + 6, hy + 4, 9, 5, "#1a0e08"); g.ellipse(hx + 6, hy + 4, 6, 3, "#3a1a0c")
+    for t in range(16):
+        g.set(hx - 2 + t, hy + 1 + t // 3, "#2a1a10")
+    def flame(cx, base, ht, wd):                                    # a tongue of flame: red, orange, yellow core
+        for k2, col in ((1.0, "#c8321a"), (.72, "#f07a1e"), (.42, "#ffd24a")):
+            hh, ww = ht * k2, wd * k2
+            for dy in range(int(hh)):
+                half = ww * (1 - dy / hh) ** .7
+                for dx in range(-int(half), int(half) + 1):
+                    g.set(int(cx + dx + (rnd.random() - .5) * (dy / hh) * 2), base - dy, col)
+    flame(hx + 6, hy + 6, 22, 8); flame(hx - 6, top + 14, 14, 5); flame(hx + 18, top + 12, 16, 5)
+    for wx in (12, W - 16):                                         # flames licking out of the windows
+        flame(wx, top + h - 10, 11, 4)
+    sm = Image.new("RGBA", (W, H)); _plume(sm, hx + 6, top + 4, 0, rnd, 9)      # black smoke above the fire
+    im.alpha_composite(sm); im.alpha_composite(g.image())
+    return im
+
+
+def smoke_column():   # a column of black smoke, about 1x3 tiles, to stand over fires
+    import random
+    im = Image.new("RGBA", (16, 48)); _plume(im, 6, 46, 2, random.Random(3), 6)
+    return im
+
 PIECES = {
     "banner.black": banner_black, "banner.white": banner_white, "milestone": milestone, "plant.peony": peony, "water.lotus": lotus,
     "prop.lanterns": lantern_stand, "prop.body_lamp": body_lamp, "tree.poplar": poplar, "tree.willow": willow,
@@ -406,7 +461,7 @@ PIECES = {
     "furn.swordwall": swordwall, "furn.seat": seat, "furn.lamp": lamp, "furn.dais": dais, "corral": corral,
     "landmark.hitchingpost": hitchingpost, "garden.rockery": rockery, "landmark.ridge": ridge,
     "furn.jailcell": jailcell, "landmark.torch": torch, "wall.stairs": wallstairs, "prop.halberd": halberd,
-    "prop.carriage": bridal_carriage, "prop.gateshut": gateshut, "prop.gateshut_ns": gateshut_ns,
+    "prop.carriage": bridal_carriage, "prop.gateshut": gateshut, "prop.gateshut_ns": gateshut_ns, "ruin.burning": burning_house, "fx.smoke": smoke_column,
 }
 
 
