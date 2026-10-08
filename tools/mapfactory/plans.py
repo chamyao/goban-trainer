@@ -255,6 +255,16 @@ class MapBuilder:
             self.objects.append(o)
             self.foot[t["id"]] = (fx, fy, fw, fh)
             tiles = {(i, j) for j in range(fy, fy + fh) for i in range(fx, fx + fw)}
+            if kind in IN_WALL and solid and kind not in PASSABLE:
+                # a tower in a wall stands beside its gates, never on one: on the White Gate it shut the gate's passage,
+                # and a player walked into the wall under it (apo110)
+                for gid, gap in self.gate_tiles.items():
+                    if gid != f"{t['id']}-gate" and tiles & set(gap):   # "<tower>-gate" is its own seat in the wall
+                        raise RuntimeError(f"{self.mid}: {t['id']} ({kind}) stands on gate {gid}: move one of them")
+            if kind in DOOR_AT_FOOT and door == "N":
+                # drawn front-on, its arch on the south face: a north door is on the face the camera never sees
+                raise RuntimeError(f"{self.mid}: {t['id']} ({kind}) has its door on the north face, which isn't drawn; "
+                                   f"it's entered at its arch (S), or from the side (E/W)")
             if solid and kind not in PASSABLE:
                 self.solid |= tiles
             self.covered |= tiles
@@ -1086,6 +1096,8 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
                       "N": {"x": round(fx + fw / 2 - .4, 2), "y": fy - .3, "w": .8, "h": .45},
                       "E": {"x": fx + fw - .15, "y": round((fy + fh - .5 if o["kind"] in DOOR_AT_FOOT else fy + fh / 2) - .4, 2), "w": .45, "h": .8},
                       "W": {"x": fx - .3, "y": round((fy + fh - .5 if o["kind"] in DOOR_AT_FOOT else fy + fh / 2) - .4, 2), "w": .45, "h": .8}}[d]
+                if o["kind"] in DOOR_AT_FOOT and d == "S":   # a gate tower's arch, drawn front-on: the arch is the door
+                    ex.update({"x": round(fx + fw / 2 - 1, 2), "w": 2})
                 if o.get("id") in mb.door_gap:   # through a wall's gate: the walls funnel her in, so the whole gap is the door
                     g0, gw = mb.door_gap[o["id"]]
                     ex.update({"x": g0, "w": gw} if d in ("N", "S") else {"y": g0, "h": gw})

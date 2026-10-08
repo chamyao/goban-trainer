@@ -118,7 +118,8 @@ A walled city with the Si along its west and the Yi along its north.
     - x15 starts in Lady Yan's rooms (spot `yan-start`). She crosses the court to his hall.
   - the granary;
   - the stables, down in the south-west (x19: Hou Cheng starts at `stables-door`);
-  - the White Gate tower over the south gate (`white-gate`, x20).
+  - the White Gate tower in the south wall, beside the south gate (`white-gate`, x20). It's entered at its arch on the
+    south face, by a path from the south street outside the gate.
 - **Outside:**
   - Cao Cao's siege camp, east;
   - Liu Bei's camp on the Huainan road, south. x16 is its line, where Lü Bu turns back.
