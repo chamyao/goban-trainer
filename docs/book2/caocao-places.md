@@ -70,7 +70,9 @@ South of it, walled wards (see the chase, below):
 - The river can only be crossed at the ferry.
 - A second post station has the same portrait nailed up again.
 - The wall of Zhongmou's pass comes next (c18 before it).
-- Zhongmou town has the county jail (`jail-court`, its back courtyard, c19).
+- Zhongmou town has the county jail: a hall behind its own wall, its gate (县狱) on the street. Inside is `jail-court`,
+  its back courtyard at night (c19): high walls all round, a row of barred cells along the north wall, the guardroom
+  by the gate, torches, the stocks and the magistrate's table.
 - Luoyang is shut behind you. Chenggao opens after c19. c18 → c19 is night.
 
 ## Chenggao (c20, c21)
@@ -118,6 +120,8 @@ These are in `NEW_KINDS` and `vocab.py`, each with a stand-in until Graphics dra
 - `building.stable`
 - `furn.mirror`: the dressing mirror in c16.
 - `banner.white`: 忠义.
+- `furn.jailcell`: a barred jail cell (c19).
+- `landmark.torch`: a torch on a pole (c19).
 - `wall.stairs`: the steps up the inside of the city wall (马道), where the wall guards come down in the chase.
 
 ## For Integration (engine), from the design
