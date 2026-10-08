@@ -47,6 +47,11 @@ these stories first, and give the women real moments to play and real lines, as 
 their stories are told as the novel tells them. Invention is allowed only where it serves the plot, never to give someone
 a role the novel doesn't support.
 
+> "I just want you to emphasize if theres opportunity to highlight the female characters, not force"
+
+Emphasise, don't force. Check every claim about a woman's role against the text before writing it. An early Lü Bu design
+said "the women win every time"; the novel gives them two turning points, and that is what the arc says now.
+
 **Give each arc a new mechanic drawn from its story.**
 
 > "did you introduce any new game mechanics? for example an interesting on in the diaochan arc was the stealth mechanic I

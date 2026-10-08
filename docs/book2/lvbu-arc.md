@@ -5,17 +5,24 @@ novel unless it is marked **(invented)**. Being built as its own book (n=14 sugg
 
 ## The narrative (Part 0)
 
-**The house of Lü Bu, and the two voices that pull at it.** Lü Bu has a halberd, Red Hare, and no judgment. Two kinds of
-counsel fight for him. **Chen Gong**, the man who walked away from Cao Cao at the inn, gives him plan after plan, and
-none is taken. **The women of his house** speak for keeping the family together, and they win every time: Lady Yan
-decides their daughter's marriage, then talks him out of Chen Gong's last plan twice, and Diaochan has the last word.
-The novel passes its own verdict in the closing poem: 「戀妻不納陳宮諫」 ("he loved his wife, and would not take Chen Gong's
-advice"). The arc ends at White Gate Tower, where Chen Gong chooses death over Cao Cao, and Liu Bei asks Cao Cao: 「公不見丁建陽、董卓之事乎？」
+**The house of Lü Bu, and the two voices that pull at it.** Lü Bu has a halberd, Red Hare, and no judgment. **Chen Gong**
+gives him counsel throughout. Some of it is taken (seizing Xuzhou in ch. 14; sending the bride off at once in ch. 16,
+which Chen Gui then undoes), but his most important plans are refused, above all at the end in Xiapi. **The women of his
+house** decide two turning points in the novel's own words. Lady Yan settles their daughter's marriage (「布意遂決」), though
+that match is broken off days later. At Xiapi, after Lady Yan's first plea leaves him undecided for three days
+(「布躊躇未決，三日不出」), her second plea and Diaochan's 「將軍與妾作主，勿輕騎自出」 end Chen Gong's last plan, together with
+Lü Bu's own boast 「吾有畫戟、赤兔馬，誰敢近我？」. The novel's verdict is in its closing poem, 「戀妻不納陳宮諫」, and in Song Xian's
+charge, 「聽妻妾言，不聽將計」. The arc ends at White Gate Tower, where Chen Gong chooses death over Cao Cao, and Liu Bei asks
+Cao Cao: 「公不見丁建陽、董卓之事乎？」
+
+(Corrected after the user asked whether this was all true to the novel. An earlier draft overstated it: "none is taken",
+"the women win every time". The user's direction: "I just want you to emphasize if theres opportunity to highlight the
+female characters, not force".)
 
 **Why it's a good arc:**
 - **Stakes in a centre:** a family under siege, a daughter Lü Bu loves more than anything (「布最鍾愛」), a wife he
   abandoned once already.
-- **Women who turn the plot**, in the novel's own words. Lady Yan decides twice; Diaochan has the last word.
+- **Women at the turning points**, in the novel's own words. Lady Yan settles the marriage and pleads twice at Xiapi; Diaochan speaks last before he gives up the plan.
 - **It pays off both arcs already built:**
   - Chen Gong spared Cao Cao at the inn (Cao Cao arc). Here he refuses Cao Cao and walks down the stairs to die.
   - Lü Bu killed Ding Yuan and Dong Zhuo (both arcs). Here Liu Bei names them both.
