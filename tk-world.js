@@ -342,6 +342,7 @@ function worldScenes() {
 
       const P = o => Object.fromEntries((o.properties || []).map(p => [p.name, p.value]));
       const J = v => { try { return JSON.parse(v || "[]"); } catch { return []; } };
+      this.covers = []; this.lastCover = null; this.hidden = false; this.hideTold = false;
       this.spots = {}; this.npcs = []; this.actMarks = new Map(); this.exits = []; this.propBoxes = []; this.entries = {}; this.shrine = null;
       for (const o of map.getObjectLayer("objects").objects) {
         const p = P(o);
@@ -355,6 +356,12 @@ function worldScenes() {
         else if (o.type === "exit") this.exits.push({ to: p.to, side: p.side, rect: new Phaser.Geom.Rectangle(o.x, o.y, o.width, o.height),
           openTo: p.open_to ? JSON.parse(p.open_to) : null, refuse: J(p.refuse) });
         else if (o.type === "entry") this.entries[p.from || ""] = { x: o.x, y: o.y };
+        // cover to hide in (a doorway, a cart, a well-house): a "cover" object, or any object with cover=true.
+        // Standing still in it, a watcher who hunts by sight ("hide": true, the looters) passes you by
+        if (o.type === "cover" || p.cover) {
+          const top = o.gid ? o.y - o.height : o.y;
+          (this.covers = this.covers || []).push(new Phaser.Geom.Rectangle(o.x - 4, top - 4, (o.width || 16) + 8, (o.height || 16) + 8));
+        }
       }
       // a town's shrine with no story spot of its own: touching it still answers (dark, or its hint)
       if (this.shrine && !Object.values(this.spots).some(s => Math.hypot(s.x - this.shrine.x, s.y - this.shrine.y) < 30))
@@ -2033,8 +2040,11 @@ function worldScenes() {
       if (!w || !n.spr.visible) return false;
       return !w.in_beats || w.in_beats.some(k => { const q = this.region.quests.find(x => x.node === k); return q && this.available(q); });
     }
+    // in cover and keeping still: hidden from the looters (watchers with "hide")
+    inCover(P = this.player) { return (this.covers || []).find(r => Phaser.Geom.Rectangle.Contains(r, P.x, P.y - 3)) || null; }
     sees(n, P) {
       const w = n.watch, T = this.tw || 16, R = (w.cone || 4) * T, ex = n.spr.x, ey = n.spr.y - 6;
+      if (w.hide && this.hidden) return false;
       const dx = P.x - ex, dy = P.y - 6 - ey, d = Math.hypot(dx, dy);
       if (d > R) return false;
       const [fx, fy] = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }[w.dir] || [0, 1];
@@ -2045,6 +2055,15 @@ function worldScenes() {
       const P = this.player, T = this.tw || 16, calm = this.ui.busy() || this.cine || this.leaving || this.engaged;
       if (!this.coneG) this.coneG = this.add.graphics().setDepth(-990);
       this.coneG.clear();
+      // hide and wait: in cover, still, you're hidden (drawn faded, a little marker); leaving cover remembers it, for a catch
+      const cov = this.covers && this.covers.length ? this.inCover(P) : null, still = !P.body || P.body.speed < 4;
+      if (cov) this.lastCover = { x: cov.centerX, y: cov.bottom - 4 };
+      const hid = !!cov && still && !this.walk && !this.auto;
+      if (hid !== this.hidden) {
+        this.hidden = hid;
+        P.setAlpha(hid ? .55 : 1);
+        if (hid && !this.hideTold && typeof WorldItems !== "undefined") { this.hideTold = true; WorldItems.notice(this, { zh: "藏好了，别动", name: "Hidden: keep still" }, true); }
+      }
       for (const n of this.npcs) {
         const w = n.watch;
         if (!w) continue;
@@ -2334,7 +2353,9 @@ function worldScenes() {
       if (n.mark) n.mark.setVisible(true);
       await new Promise(r => this.talk(w.seen && w.seen.length ? w.seen : [["n", "You've been seen.", "被人发现了。"]], r));
       const id = w.back_to;
-      const here = id && (this.spots[id] || this.refs[id] || (this.entries[id] && this.entries[id]));
+      // "@cover": back to the last cover you hid in (hide and wait), else where you came in
+      const here = id === "@cover" ? (this.lastCover || this.entries[this.from || ""] || this.entries[""])
+        : id && (this.spots[id] || this.refs[id] || (this.entries[id] && this.entries[id]));
       const away = !here && id && this.region.places.find(p => p.id === id || p.id.endsWith("--" + id));
       this.cameras.main.fadeOut(300);
       await new Promise(r => this.cameras.main.once("camerafadeoutcomplete", r));
