@@ -2371,7 +2371,7 @@ def _scenes_lvbu():
         "x6": {"title": T("A Match for a Princess", "許婚袁術"), "kind": "main", "steps": [
             ["spawn", "yan", "yanshi", "x6", 6, -4],
             N("Yuan Shu changes his plan. His envoy Han Yin comes asking for Lü Bu's daughter as a wife for Yuan Shu's son. "
-              "Lü Bu has a wife, Lady Yan, and two other women, Diaochan and Cao Bao's daughter, now dead. Lady Yan alone has given him a child: a daughter, the one he loves most.",
+              "Lü Bu has two wives and a concubine: Lady Yan, his first wife; Diaochan, his concubine; and his second wife, Cao Bao's daughter, who has died childless. Diaochan has no child either. Only Lady Yan has given him one: a daughter, the one he loves most.",
               "袁術遣韓胤為媒，往徐州求親。原來呂布有二妻一妾：先娶嚴氏為正妻，後娶貂蟬為妾；又娶曹豹之女為次妻。曹氏先亡無出，貂蟬亦無所出，惟嚴氏生一女，布最鍾愛。"),
             N("Lü Bu goes in to consult his wife.", "布入謀於妻嚴氏。"),
             ["problem"],
