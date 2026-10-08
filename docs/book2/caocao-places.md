@@ -118,7 +118,7 @@ These are in `NEW_KINDS` and `vocab.py`, each with a stand-in until Graphics dra
 - `building.stable`
 - `furn.mirror`: the dressing mirror in c16.
 - `banner.white`: 忠义.
-- `building.wallstairs`: the steps up the inside of the city wall (马道), where the wall guards come down in the chase.
+- `wall.stairs`: the steps up the inside of the city wall (马道), where the wall guards come down in the chase.
 
 ## For Integration (engine), from the design
 
@@ -137,10 +137,17 @@ These are in `NEW_KINDS` and `vocab.py`, each with a stand-in until Graphics dra
 This is the user's redesign (`caocao-arc.md`, "Redesign"):
 - A **wave** of Dong Zhuo's men pours out of the Chancellor's gate after Cao Cao. It follows his trail, a little slower
   than his horse.
-- **Ambushers** spring out of gates, lane mouths and the wall stairs ahead of him, and dash across the street.
+- **Ambushers** spring out of gates, lane mouths and the wall stairs ahead of him, and run at him.
 
-`PLANS_CC["Luoyang"]["chase"]` holds the posts and the routes. `plans.py` lays them on tiles (`lay_chase`) and proves
-them (`prove_chase`). It writes the result as the map's `chase`: in `luoyang.map.json`, and as the tmj property `chase`.
+`PLANS_CC["Luoyang"]["chase"]` holds the ambushers' doorways and the three routes. The wave is the story's: Plot's
+c17 spec sends six of the guard out of `xf-gate` after a 2 s start, at 0.92 of his pace. `plans.py` does three things:
+- `lay_chase` puts each ambusher on his doorstep, in tiles.
+- It gives each one a reach. This is as far across his street as still leaves a strip of a tile or so on the far side
+  out of it.
+- It writes each one as an npc with Integration's `ambush` property, `{chase: "c17", reach, dash: 2.5}`, standing where
+  he waits.
+
+`prove_chase` then rides every route at the engine's numbers. The build fails if a route stops passing.
 
 **The city, for it:** Luoyang's south half is walled wards (坊), as Han Luoyang was. So its streets are real streets, 5–6
 tiles between walls, in every kit. Along them:
@@ -161,19 +168,22 @@ the north road's mouth. The grid grew from 22×15 to 22×17 cells.
 | **South street:** under the wall, then up the east lane | the south street, narrow | ward-lane mouth (N) · west stairs (S) · market-lane mouth (N) · east stairs (S) · market's south-east gate (N) · market's east gate (across the east lane) |
 | **Market:** in at the south gate, among the stalls, out at the north gate | crowded, with stalls to swerve round | ward-lane mouth · west stairs · market-lane mouth · east stairs · a soldier from behind the stalls · then the north-east gate and the lodging on the main street |
 
-**Ambushers:** the sides alternate where the street allows, 2–3 cells apart. That is about a second at the gallop, so
-one is barely past before the next springs.
+**Ambushers:** the sides alternate where the street allows, 2–3 cells apart. That is about a second at the gallop.
 
-**What the build proves** (at the numbers in `pace`, which are Integration's to change; rerun the build after):
-- **Speeds:** the horse rides at 165 px/s (110 × 1.5 mounted), and the wave at 150. The wave leaves the gate 1 s behind
-  him.
-- **Ambushers:** each springs when he can just reach Cao Cao's line as Cao Cao reaches his (`lead` 0.1 s), and dashes
-  across at 140. He stands 1 s at the far side, then falls in with the wave.
-- **A touch:** a hit is within 0.8 tiles.
-- **Ridden straight, at a gallop, down the middle,** each route is hit by every ambush on it, or all but one.
-- **A clean ride exists on every route.** It is found tile by tile, waiting where it helps, and nothing touches him.
-  - It takes 7.8 s on the main street, 8.0 s on the south street and 8.4 s through the market. Ridden straight, each takes
-    about 7.6 s.
-  - So dodging costs 0.2–0.8 s, and the wave reaches him after about 1.6 s lost. It is pressure, not a timer: a rider
-    who brakes too long, or hits a dead end, is taken.
-- The build fails if any route stops having a clean ride.
+**What the build proves.** It uses tk-world's chaseStep, at the numbers in `pace`. Rerun the build if they change.
+- **Speeds:** mounted, Cao Cao rides at 165 px/s. An ambusher runs at him at 150 for 2.5 s, then walks home at 90 and
+  hides. He's ready again once Cao Cao is reach + 3 tiles off.
+- **A touch:** within 12 px. That's the one-try board.
+- **The wave:** it follows his trail at 151.8, 2 s behind.
+- **Ridden straight down the middle,** every route is caught at least once. Most of the ambushers on it spring.
+  - Main street: caught 3 times, 6 spring.
+  - South street: caught twice, 5 spring.
+  - Market: caught twice, 7 spring.
+- **Weaving** (keeping wide of the doorways where the street allows), every route gets through untouched: 8.1, 8.3 and
+  8.6 s, against about 7.5 s straight.
+- At Plot's wave numbers the wave is never nearer than about 20 tiles to a rider who keeps moving. It catches only one
+  who stops.
+
+`tests/playtest/ambush-13.js` checks this in the game:
+- the twelve wait hidden in state `sword`, and there are no riders;
+- riding down the middle past the lodging's gate, its jailer springs out and catches Cao Cao: a board.
