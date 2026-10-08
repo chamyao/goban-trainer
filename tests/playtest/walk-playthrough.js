@@ -358,7 +358,8 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       // the plan stays); here only its end, a catch, and a fresh plan every 1.2 s in the open
       // (the plan is followed in the page from the moment it was made: see plan())
       const k = Math.floor((await p.evaluate(() => window.__execT || 0)) / (pace * 50));
-      if (Date.now() - planT > 1200 && !(await p.evaluate(() => !!window.__w.auto))) {   /* a fresh plan every 1.2 s, from a cell she's on (the patrols' simulation drifts over a long plan); none just now: the one she's on goes on */
+      const nextMove = (() => { const ps = plannedSteps; for (let j = Math.max(0, k); j < ps.length - 1; j++) if (ps[j + 1].x !== ps[j].x || ps[j + 1].y !== ps[j].y) return (j + 1 - k) * pace * 50; return Infinity; })();
+      if (Date.now() - planT > 1200 && nextMove > 2000 && !(await p.evaluate(() => !!window.__w.auto))) {   /* not just before she sets off: a fresh plan starts with a hold and would miss the gap */   /* a fresh plan every 1.2 s, from a cell she's on (the patrols' simulation drifts over a long plan); none just now: the one she's on goes on */
         const tgt = plannedSteps[plannedSteps.length - 1].hold ? plannedSteps[plannedSteps.length - 1] : null, here = await p.evaluate(() => [window.__w.player.x, window.__w.player.y]);
         const aim = tgt && Math.hypot(here[0] - tgt.x, here[1] - tgt.y) > 9 ? { x: tgt.x, y: tgt.y } : null;   /* not there yet: on to it */
         let np = await plan(4, aim), npP = 4; if (!np) { np = await plan(3, aim); npP = 3; }
