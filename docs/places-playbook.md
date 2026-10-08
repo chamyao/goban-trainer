@@ -113,9 +113,15 @@ These run when the map is built, and a failure stops the build with the reason:
   cell, `"door"` (the doorstep of what he blocks) or the exit he bars.
   - When the proof fails, the map changes. A wall that stopped short of the hills is carried into them. A patrol on an
     open bend moves to the bridge, the one crossing.
-- **Hide and wait** (`tools/proofs/hide_ward_lb.py`). The walk is timed against the looters' beats at the engine's
-  sight rules: the fewest hides a way needs, and that a player who stands at any way in, for longer than a looter's
-  round, is safe and still has a way through.
+- **Hide and wait** (`tools/proofs/hide_ward_lb.py`). Worked backwards in time against the looters' beats, at the
+  engine's sight rules, it gives the fastest unseen way to the goal from every tile at every moment. It proves three
+  things:
+  - with cover the walk is quick;
+  - without cover there's no way through;
+  - from every cover, at the worst moment to arrive, all the waiting to the goal is short (22 s at most).
+
+  Watchers who each walk a whole lane in opposite phase close it for most of a minute. Give each his own stretch, and
+  search the beats against this proof.
 - **Chases** (`prove_chase`). The chase layout (posts, dash lines, routes) is laid on tiles and ridden at the engine's
   own numbers. The same rule is used to the letter as tk-world's `ambushStep`: springing, running, holding, the touch
   radius, and the wave on the trail.
