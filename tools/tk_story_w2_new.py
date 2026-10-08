@@ -1864,6 +1864,7 @@ def _scenes_caocao():
             S("caocao", "May I try him?", "借愿试一骑。"),
             N("Dong Zhuo has a saddle put on it. Cao Cao leads the horse out of the residence, whips it, and rides off to the south-east.",
               "卓就教与鞍辔。操牵马出相府，加鞭望东南而去。"),
+            ["gain", "horse"],
             ["move", "caocao", "c16", 50, 10],
             ["victory"],
         ]},
@@ -2199,6 +2200,9 @@ _ITEMS_CAOCAO = {
     "gold": {"name": "Gold, pearls and a jade belt", "zh": "黄金、明珠、玉带", "kind": "treasure"},
     "sevenstar": {"name": "The Seven-Star Sword", "zh": "七星宝刀", "kind": "treasure"},
     "weihong": {"name": "Wei Hong's fortune", "zh": "卫弘家资", "kind": "treasure"},
+    # The Xiliang horse Dong Zhuo gives him in c16. He and Chen Gong ride from then on (「乘馬投故鄉來」).
+    "horse": {"name": "A horse from the Chancellor's stable", "zh": "相府良马", "kind": "mount",
+              "coats": {"caocao": "black", "chengong": "brown"}},
 }
 
 # Closes the Cao Cao arc and bridges to the Diaochan arc: chapters 5-7 in a few lines, in the novel's own order.
