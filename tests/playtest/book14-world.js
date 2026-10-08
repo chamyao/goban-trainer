@@ -87,5 +87,10 @@ const path = require('path');
       check(!foot.wades && !foot.stables && !foot.residence, `on foot neither can be reached (${JSON.stringify(foot)})`);
       await p.evaluate(() => { const w = window.__w; WorldItems.setRiding(w.w, true); w.mountSig = null; });
     } }
+  // Xiapi at night (x19): the south and west gates shut (the watchers taken off for this, so only the gates are tried)
+  await setup('14-x19', 'xiapi'); await p.evaluate(() => { for (const n of window.__w.npcs) if (n.watch) n.spr.setVisible(false); });
+  g = await gates();
+  check(g.state.includes('night') && g.on.length === 2 && g.drawn >= 2, `Xiapi at x19 (${g.state.join('+')}): the south and west gates are shut and drawn shut (${g.on.join(' | ')}; ${g.drawn} drawn)`);
+  for (const [name, [rect, dir]] of Object.entries({ 'south-gate': [[48, 64, 4, 2], 'down'], 'west-gate': [[18, 36, 2, 4], 'left'] })) { r = await tryGate(rect, dir); check(r.stopped && r.gateLine, `Xiapi's ${name} at night: stopped at ${r.P.x},${r.P.y}, and its line: "${r.line}"`); }
   console.log(`book14-world: ${checked - fails}/${checked}`); await b.close(); process.exit(fails ? 1 : 0);
 })();
