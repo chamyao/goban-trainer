@@ -245,12 +245,12 @@ PLANS_CC = {
         # can be ridden clean (prove_chase), and writes the result as the map's "chase" (tiles) for the engine.
         "chase": {
             "chase": "c17", "state": "sword", "from": "xf-gate", "to": "c17",
-            # the engine's numbers this layout is proved against (tk-world chaseStep; px/s, s, tiles): mounted 110 x 1.5; the
-            # wave as Plot's c17 spec has it (0.92 of his pace, 2 s start); an ambusher 100 x 1.5 out, 60 x 1.5 home,
-            # springing within `reach` of his home and running at you for `dash` s; a touch within 12 px
-            "pace": {"horse": 165, "wave": 151.8, "wave_after": 2.0, "ambusher": 150, "back": 90, "reach": 4, "dash": 2.5, "hit": 0.75},
-            # where each soldier waits (a gate of a wall, a cell, or a thing he stands in front of), and which way he
-            # comes out of it
+            # the engine's numbers this layout is proved against (px/s, s, tiles; tk-world reads this "chase" as it is, and
+            # springs an ambusher only while Cao Cao heads toward his line): Integration's to change; rerun the build
+            "pace": {"horse": 165, "wave": 150, "wave_after": 1.0, "ambusher": 140, "reach": 9, "lead": 0.1, "hold": 1.0, "hit": 0.8},
+            "wave": {"from": "xf-gate", "kind": "folk.soldier", "count": 8},
+            # where each soldier waits (a gate of a wall, a cell, or a thing he stands in front of) and which way he
+            # dashes: straight across the street, to its far side
             "ambush": [
                 {"id": "side-gate", "post": "side-gate", "dash": "E", "note": "the Chancellor's side gate, onto the ward lane"},
                 {"id": "jiade", "post": [11, 7], "dash": "S", "note": "palace guards from the Jiade Gate, across the main street"},

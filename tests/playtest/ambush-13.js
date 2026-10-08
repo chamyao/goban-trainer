@@ -1,5 +1,5 @@
-// Book 13's chase ambushers (Places' layout): twelve soldiers in Luoyang's doorways in state "sword", each with
-// Integration's "ambush" {chase c17, reach, dash}; hidden till you come near, then out at you; a touch is a board.
+// Book 13's chase ambushers (Places' layout, luoyang.tmj's "chase"): twelve soldiers in Luoyang's doorways in state
+// "sword", hidden till Cao Cao rides at their line, then across the street; a touch is a board.
 const { chromium } = require(require('child_process').execSync('npm root -g').toString().trim()+'/playwright');
 (async()=>{const b=await chromium.launch({args:['--use-gl=swiftshader','--enable-webgl']});const p=await (await b.newContext({viewport:{width:1200,height:800}})).newPage();
 let fails=0;const check=(ok,w)=>{if(!ok)fails++;console.log((ok?'ok   ':'FAIL ')+w);};
@@ -13,14 +13,14 @@ await p.evaluate(async()=>{localStorage.clear();localStorage.setItem('tk-guide',
 await p.reload();
 for(let i=0;i<100;i++){const g=p.locator('.tk-scroll-go');if(await g.count())await g.first().click().catch(()=>{});if(await p.evaluate(()=>!!(window.__w&&window.__w.player&&!window.__w.leaving&&!window.__w.ui.busy())))break;await p.waitForTimeout(200);}
 for(let i=0;i<10;i++){if(await p.locator('.town-dlg:not([hidden])').count())await p.keyboard.press('Enter');await p.waitForTimeout(200);}
-const s1=await p.evaluate(()=>{const w=window.__w;const a=w.npcs.filter(n=>n.ambush);return {place:w.placeId,chase:!!w.chase,n:a.length,hidden:a.every(n=>!n.spr.visible),riders:w.npcs.filter(n=>n.rider).length};});
+const s1=await p.evaluate(()=>{const w=window.__w,a=(w.chase&&w.chase.amb)||[];return {place:w.placeId,chase:!!w.chase,n:a.length,hidden:a.every(x=>!x.spr.visible),riders:w.npcs.filter(n=>n.rider).length};});
 check(s1.place==='luoyang'&&s1.chase&&s1.n===12&&s1.hidden&&s1.riders===0,`twelve ambushers, hidden in their doorways, no riders (${JSON.stringify(s1)})`);
 for(let i=0;i<20;i++){if(!await p.evaluate(()=>window.__w.ui.busy()))break;await p.keyboard.press('Enter');await p.waitForTimeout(250);}
 // hold the wave back; ride up to the jailers at the lodging's gate down the middle of the main street
-await p.evaluate(()=>{const w=window.__w;w.chase.wt=-60000;const n=w.npcs.find(m=>m.id==='lodging');w.player.setPosition(n.home.x-6*16,n.home.y+2*16);});
-let out=false,board=false;for(let i=0;i<30;i++){await p.evaluate(()=>{const w=window.__w;if(!w.engaged)w.player.setPosition(w.player.x+8,w.player.y);});
- const s=await p.evaluate(()=>{const w=window.__w,n=w.npcs.find(m=>m.id==='lodging');return {out:n.ambush.out,vis:n.spr.visible,armed:n.ambush.armed,reach:n.ambush.reach,dh:Math.round(Math.hypot(w.player.x-n.home.x,w.player.y-n.home.y)),busy:w.ui.busy(),eng:!!w.engaged,cine:!!w.cine,chase:!!w.chase,dropped:w.chase&&w.chase.dropped.has(n.id)};});if(s.out||s.vis)out=true;
+await p.evaluate(()=>{const w=window.__w;w.chase.wt=-60000;const a=w.chase.amb.find(m=>m.id==='lodging');w.player.setPosition(a.post.x-8*16,a.post.y+3*16);});
+let out=false,board=false;for(let i=0;i<30;i++){await p.evaluate(()=>{const w=window.__w;if(!w.engaged)w.player.setVelocity(165,0);w.player.setPosition(w.player.x+8,w.player.y);});
+ const s=await p.evaluate(()=>{const a=window.__w.chase.amb.find(m=>m.id==='lodging');return {out:a.st!=='wait',vis:a.spr.visible};});if(s.out||s.vis)out=true;
  if(await p.locator('.tk-duel').count()){board=true;break;}await p.waitForTimeout(50);}
-check(out,'riding up the middle, the lodging\'s jailer springs out of his gate');
+check(out,'riding along the main street, the lodging\'s jailer springs out of his gate');
 console.log('     (and catches him: '+board+')');
 await b.close();console.log(fails?`ambush: ${fails} failed`:'ambush: all ok');})();

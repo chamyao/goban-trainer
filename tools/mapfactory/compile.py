@@ -363,7 +363,6 @@ def compile_map(m, kit, out_dir):
                                                             (SEEN.get(n["watch"]["seen"], []) if isinstance(n["watch"].get("seen"), str) else n["watch"].get("seen") or [])]},
                                     ensure_ascii=False)} if n.get("watch") else {}),
             **({"rider": json.dumps(n["rider"])} if n.get("rider") else {}),   # a chase rider (tk-world chaseStep)
-            **({"ambush": json.dumps(n["ambush"])} if n.get("ambush") else {}),   # a chase ambusher in his doorway (chaseStep)
             **({"in": json.dumps([n["in"]] if isinstance(n["in"], str) else n["in"])} if n.get("in") else {}),
             **({"guard_x": n["guard"][0] * T, "guard_y": n["guard"][1] * T} if n.get("guard") else {}),
             **{k: json.dumps([place_step(l, n["kind"])[0] for l in ([n[k]] if isinstance(n[k], str) else n[k])], ensure_ascii=False)
@@ -393,6 +392,7 @@ def compile_map(m, kit, out_dir):
                           {"name": "source", "type": "string", "value": f"{m['id']}.map.json"}]
                          + ([{"name": "states", "type": "string", "value": json.dumps(voiced_states(m["states"]), ensure_ascii=False)}] if m.get("states") else [])
                          + ([{"name": "ways", "type": "string", "value": json.dumps(m["ways"], separators=(",", ":"))}] if m.get("ways") else [])   # the streets, for the lit route
+                         + ([{"name": "chase", "type": "string", "value": json.dumps(m["chase"], separators=(",", ":"))}] if m.get("chase") else [])   # a wave and ambushes (tiles): tk-world reads it
                          + ([{"name": "paths", "type": "string", "value": "|".join("".join("1" if m["terrain"]["legend"].get(ch, "") in ROADLIKE else "0" for ch in row)
                                                                                  for row in m["terrain"]["rows"])}]
                             if m.get("archetype") != "interior" else []),   # the drawn roads and paths, which the lit route keeps to
