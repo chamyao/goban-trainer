@@ -55,12 +55,14 @@ const WorldTravel = {
     for (const n of before) if (!TK.cleared(n.key)) TK.markCleared(n.key);
     const p = loadProgress();
     for (const k of Object.keys(p.tk || {})) if (later.has(k.split("~")[0])) TK.undoCleared(p, k);
+    TK.rolledBack(p, w.n);
     TK.saveProg(p);
     // the party and possessions as the beats before left them
     let party = w.party, crowd = 0; const items = [];
     for (const n of before) for (const s of ((n.scene && w.scenes[n.scene]) || {}).steps || []) {
       if (s[0] === "party") party = s[1];
       if (s[0] === "gain" && !items.includes(s[1])) items.push(s[1]);
+      if (s[0] === "lose" && items.includes(s[1])) items.splice(items.indexOf(s[1]), 1);
       if (s[0] === "crowd") crowd = Math.max(0, typeof s[1] === "string" ? crowd + +s[1] : +s[1] || 0);   // the men who've fallen in behind, as then
     }
     const pa = TK.ls("tk-party"); pa[w.n] = party; TK.lsSet("tk-party", pa);
@@ -163,6 +165,7 @@ const WorldTravel = {
     const p = loadProgress(), pre = `${w.n}-`;
     for (const k of Object.keys(p.tk || {})) if (k.startsWith(pre)) TK.undoCleared(p, k);
     for (const k of Object.keys(p.tkSeen || {})) if (k.startsWith(`${w.n}:`)) delete p.tkSeen[k];
+    TK.rolledBack(p, w.n);
     TK.saveProg(p);
     for (const key of ["tk-party", "tk-items", "tk-at", "tk-ride", "tk-marks"]) { const a = TK.ls(key); delete a[w.n]; TK.lsSet(key, a); }
     try { localStorage.removeItem(WorldState.key(w.n)); } catch {}

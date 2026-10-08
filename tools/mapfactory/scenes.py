@@ -565,6 +565,11 @@ def stage_scene(scene, m, spot, party, chars, boss=None):
             st.beats.append({"do": "party", "list": s[1]})
         elif op == "gain":
             st.beats.append({"do": "gain", "item": s[1]})
+        elif op == "lose":    # ["lose", item]: taken from the party (Red Hare stolen in the night)
+            st.beats.append({"do": "lose", "item": s[1]})
+        elif op == "carry":   # ["carry", who, whom]: whom rides on who's back; ["carry", who] sets them down
+            if s[1] in st.cast:
+                st.beats.append({"do": "carry", "actor": s[1], "rider": s[2] if len(s) > 2 and s[2] in st.cast else None})
         elif op == "wait":
             st.beats.append({"do": "wait", "ms": s[1]})
         elif op == "still":   # ["still", id, move]: a painted still over the map while the next lines play

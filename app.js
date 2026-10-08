@@ -72,6 +72,7 @@ const Sync = {
   async init() {
     this.username = localStorage.getItem(this.USERNAME_KEY);
     this.renderChip();
+    this.onStale = () => whenIdle(route);   // a rollback from another device came in while saving: redraw from it
     if (this.username) this.pullAndMerge().then(route).catch(e => console.error("[sync]", e));
     else if (!/^#\/tk/.test(location.hash)) this.promptUsername();   // not over the game's opening scroll: there the header chip offers it
     document.addEventListener("visibilitychange", () => {
@@ -110,16 +111,21 @@ const Sync = {
     localStorage.setItem(FAVORITES_KEY, JSON.stringify([...favs]));
     let moved = false;
     if (remote.tkLocal && (remote.stamp || 0) > this.stamp()) {
+      // a world this device rolled back (or took a rollback of) after the other copy was made: keep ours of it
+      const mine = this.tkLocal(), seenL = this.seen(mine), seenR = this.seen(remote.tkLocal);
+      const keep = Object.keys(seenL).filter(n => (seenL[n] || 0) > (seenR[n] || 0));
       for (const k of Object.keys(localStorage)) if (this.tkKey(k) && !(k in remote.tkLocal)) localStorage.removeItem(k);
       for (const [k, v] of Object.entries(remote.tkLocal)) if (this.tkKey(k)) localStorage.setItem(k, v);
+      for (const n of keep) this.takeWorld(mine, n);
       this.setStamp(remote.stamp); moved = true;
     }
+    if (this.catchUp(local, remote.tkLocal)) moved = true;
     return moved || JSON.stringify(local) !== before || favs.size !== nf;
   },
   // solved sticks (1 beats anything); the adaptive rating keeps whichever has played more boards
   mergeInto(local, remote) {
     for (const bookId in remote) {
-      if (bookId === "tkAt" || bookId === "tkUndo") {   // dated: the later date wins (TK.cleared)
+      if (bookId === "tkAt" || bookId === "tkUndo" || bookId === "tkReplay") {   // dated: the later date wins (TK.cleared)
         const b = local[bookId] || (local[bookId] = {});
         for (const k in remote[bookId]) b[k] = Math.max(b[k] || 0, remote[bookId][k] || 0);
         continue;
@@ -129,7 +135,29 @@ const Sync = {
       for (const pid in remote[bookId]) if (b[pid] !== 1) b[pid] = remote[bookId][pid];
     }
   },
-  tkKey: k => /^tk-world-\d+$/.test(k) || k === "tk-at" || k === "tk-party" || k === "tk-draw" || k === "tk-book" || k === "tk-items",
+  tkKey: k => /^tk-world-\d+$/.test(k) || k === "tk-at" || k === "tk-party" || k === "tk-draw" || k === "tk-book" || k === "tk-items" || k === "tk-seen",
+  // per world, the newest rollback a copy of the campaign was made after
+  seen(tkLocal) { try { return JSON.parse((tkLocal || {})["tk-seen"] || "{}") || {}; } catch { return {}; } },
+  // put one world's place, party, things and beat from a copy (tkLocal) into this browser, the rest as is
+  takeWorld(copy, n) {
+    const wk = `tk-world-${n}`;
+    if (copy[wk] != null) localStorage.setItem(wk, copy[wk]); else localStorage.removeItem(wk);
+    for (const k of ["tk-at", "tk-party", "tk-items", "tk-seen"]) {
+      let from = {}, to = {};
+      try { from = JSON.parse(copy[k] || "{}") || {}; } catch {}
+      try { to = JSON.parse(localStorage.getItem(k) || "{}") || {}; } catch {}
+      if (n in from) to[n] = from[n]; else delete to[n];
+      localStorage.setItem(k, JSON.stringify(to));
+    }
+  },
+  // a world rolled back elsewhere (progress.tkReplay newer than what this browser's copy was made after):
+  // this browser's place, party and things there are from before it, so take the other copy's
+  catchUp(progress, remoteTk) {
+    const rb = (progress && progress.tkReplay) || {}, seenL = this.seen(this.tkLocal()), seenR = this.seen(remoteTk);
+    let moved = false;
+    for (const n of Object.keys(rb)) if ((seenL[n] || 0) < rb[n] && remoteTk && (seenR[n] || 0) >= rb[n]) { this.takeWorld(remoteTk, n); moved = true; }
+    return moved;
+  },
   tkLocal() { const o = {}; for (const k of Object.keys(localStorage)) if (this.tkKey(k)) o[k] = localStorage.getItem(k); return o; },
   stamp() { try { return +localStorage.getItem("gt-sync-stamp") || 0; } catch { return 0; } },
   setStamp(t) { try { localStorage.setItem("gt-sync-stamp", String(t)); } catch {} },
@@ -148,6 +176,8 @@ const Sync = {
       const remote = await this.fetchRemote("progress"), local = loadProgress();
       this.mergeInto(local, remote.progress || {});
       localStorage.setItem(PROGRESS_KEY, JSON.stringify(local));
+      // a world rolled back on another device since this one's copy: take that copy of it before writing ours over it
+      if (this.catchUp(local, remote.tkLocal) && this.onStale) this.onStale();
     } catch (e) { console.error("[sync] merge before save", e); }
     const stamp = Date.now(); this.setStamp(stamp);
     return this.save("progress", { progress: loadProgress(), favorites: [...loadFavorites()], tkLocal: this.tkLocal(), stamp });

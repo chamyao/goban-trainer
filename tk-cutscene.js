@@ -139,7 +139,10 @@ const WorldCutscene = {
       if (coat && !a.horse) {
         a.coat = coat; a.horse = Items.horse(scene, coat, a.spr.x, a.spr.y); a.head = Items.head(scene, a.horse);
         a.seat = scene.add.image(a.spr.x, a.spr.y, Items.riderTexture(scene, a.who, a.dir || "down"));
-        a.spr.setScale(0);
+        a.scale0 = a.spr.scaleX; a.spr.setScale(0);
+      } else if (!coat && a.horse && !a.beast) {   // the mount taken (["lose", "redhare"]): on foot again
+        for (const o of [a.horse, a.seat, a.head]) if (o) o.destroy();
+        a.horse = a.seat = a.head = null; a.spr.setScale(a.scale0 || 1);
       }
       sync(a);
     };
@@ -165,6 +168,14 @@ const WorldCutscene = {
         Items.place(a.horse, a.seat, a.head, a.spr.x, a.spr.y, dir);
       }
       a.spr.setDepth(a.spr.y);
+      if (a.carry && actors[a.carry]) {           // ["carry", who, whom]: whom on who's back, small, on the far side of him
+        const r = actors[a.carry], dir = a.dir || "down", back = { down: [0, -7, -.4], up: [0, -7, .4], left: [3, -8, -.4], right: [-3, -8, -.4] }[dir] || [0, -7, -.4];
+        r.spr.setPosition(a.spr.x + back[0], a.spr.y + back[1]).setScale((r.scale0 || 1) * .72).setVisible(a.spr.visible).setAlpha(a.spr.alpha);
+        look(r, dir);
+        r.spr.setDepth(a.spr.y + back[2]); r.ground = a.spr.y;
+        r.spr.isoBase = [a.spr.x, a.spr.y];
+        if (r.shadow) r.shadow.setVisible(false);
+      }
       // a soft shadow at the feet, the world's own (tk-world.js WorldFX "@shadow"), so
       // nothing jumps when a scene starts; none for someone sitting inside a prop
       const big = a.horse || a.beast;
@@ -173,6 +184,20 @@ const WorldCutscene = {
       a.shadow.setScale(big ? 24 / 14 : a.fallen ? 16 / 14 : Math.max(1, a.spr.displayWidth / 14), big ? 1.4 : 1)
         .setPosition(Math.round(a.spr.x), Math.round(a.ground ?? a.spr.y) - 1).setDepth(-999)
         .setVisible(a.spr.visible && !a.inside).setAlpha(a.spr.alpha);
+    };
+    // ["carry", who, whom]: whom up on who's back (Lü Bu's daughter strapped on for the breakout); rider null sets them down beside him
+    const carry = b => {
+      const a = actors[b.actor];
+      if (!a) return;
+      if (a.carry && actors[a.carry] && actors[a.carry] !== actors[b.rider]) {
+        const r = actors[a.carry];
+        r.spr.setScale(r.scale0 || 1).setPosition(a.spr.x + 10, a.spr.y); r.ground = null; r.spr.isoBase = null;
+        if (r.shadow) r.shadow.setVisible(r.spr.visible);
+        sync(r);
+      }
+      a.carry = b.rider || null;
+      if (a.carry && actors[a.carry]) { const r = actors[a.carry]; if (r.scale0 == null) r.scale0 = r.spr.scaleX; r.carried = true; }
+      sync(a);
     };
     // a puff of dust at someone's feet (running, falling)
     const puff = (x, y, n = 4, c = 0xcdb98e) => {
@@ -438,7 +463,9 @@ const WorldCutscene = {
       shade = scene.add.rectangle(W / 2, H / 2, W * 3, H * 3, c).setScrollFactor(0).setDepth(9e4).setBlendMode(Phaser.BlendModes.MULTIPLY);
       fx.push(shade);
       if (night) {
-        scene.children.list.filter(o => o.type === "Image" && o.frame && /^(camp\.firepit|camp\.cookfire|lamp\.post|furn\.hearth)#/.test(o.frame.name)).forEach(glow);
+        const lit = new Set(scene.children.list.filter(o => o.type === "Image" && o.frame && /^(camp\.firepit|camp\.cookfire|lamp\.post|furn\.hearth|landmark\.(torch|brazier))#/.test(o.frame.name)));
+        for (const L of scene.lights || []) if (L.img && L.img.visible && /^(landmark\.(torch|brazier)|camp\.)/.test(L.kind || "")) lit.add(L.img);   // the map's torches (the jail court), whatever art stands in for them
+        lit.forEach(glow);
         Object.values(actors).filter(a => a.prop && FIRES.includes(a.prop)).forEach(a => { a.glow = glow(a.spr); });
       }
       const all = [shade, ...glows];
@@ -602,6 +629,8 @@ const WorldCutscene = {
         case "fx": await WorldFx.play(scene, b.name, px(b.at), fx); break;
         case "wait": await wait(b.ms); break;
         case "party": break;                       // applied by the world when the scene ends
+        case "lose": if (Items) { Items.lose(scene, b.item); Object.values(actors).forEach(mount); } break;   // Red Hare stolen: everyone afoot
+        case "carry": carry(b); break;
         case "gain":                                  // a gift: saved now, and a mount seats the party at once
           if (Items) { Items.gain(scene, b.item); Object.values(actors).forEach(mount); }
           break;
@@ -631,6 +660,8 @@ const WorldCutscene = {
         case "mood": mood(b.dark, 0); break;
         case "fade": case "vanish": b.actors.filter(id => actors[id]).forEach(id => { actors[id].spr.setVisible(false); sync(actors[id]); }); break;
         case "gain": if (Items) { Items.gain(scene, b.item); Object.values(actors).forEach(mount); } break;
+        case "lose": if (Items) { Items.lose(scene, b.item); Object.values(actors).forEach(mount); } break;
+        case "carry": carry(b); break;
       }
     };
 
@@ -692,7 +723,7 @@ const WorldCutscene = {
   // the prop atlas (props, emote bubbles, gift icons), loaded once per game
   // the stills that exist (tools/gen_stills.py writes assets/tk/stills/stills.json), fetched once
   stillIndex() {
-    if (!this._stills) this._stills = fetch("assets/tk/stills/stills.json?v=24").then(r => r.ok ? r.json() : {}).catch(() => ({}));
+    if (!this._stills) this._stills = fetch("assets/tk/stills/stills.json?v=25").then(r => r.ok ? r.json() : {}).catch(() => ({}));
     return this._stills;
   },
   stillSrc(m) { return `assets/tk/stills/${m.file}?v=${m.made || ""}${m.look || ""}`; },   // a redone still is fetched anew
