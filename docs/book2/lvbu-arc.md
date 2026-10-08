@@ -131,14 +131,22 @@ at a time, I dont want it rushing or getting ahead of itself ... and I approve a
    small one: a visual carry with a scripted turn-back. The reversed chase is **not used**, because the user put the
    chase on hold. Zhang Liao's ride is a ride with a board.
 2. **Playing as a woman:** Lady Yan leads x15, where the novel gives her the initiative (「布妻嚴氏聞之，出問曰：『君欲何往？』」). The user agreed: "im cool with this". On the balance: "it would be nice to have an opportunity to play as a woman again", but "do not push the women thing too far".
-3. **Prologue:** cut. Lady Yan's own line at Xiapi (「妾昔在長安，已為將軍所棄」) carries it.
+3. **Prologue:** first cut (the walk-out past patrols was invented: in the text she does nothing, she is hidden and sent).
+   **Restored without invention** at the user's word: "I think we should bring it back just dont invent", and "cant we have
+   her show up as hid and wait actions". Played as Lady Yan, whose actions are the ones the text gives her: hiding and
+   waiting (「龐舒在長安城中，私藏呂布妻小，送還呂布」, ch. 11). She has no lines (the novel gives her none there); her voice
+   comes at x15. The opening scroll briefs the player that she is Lü Bu's first wife and Diaochan his concubine
+   (「先娶嚴氏為正妻，後娶貂蟬為妾」, ch. 16), because the Diaochan arc ends with him and Diaochan: the user, "just have to
+   make it not confusing … player should get the briefing".
 4. **White Gate Tower:** played as **Cao Cao**.
-5. **Puyang:** told in narration (opening scroll and the end of the prologue), not played.
+5. **Puyang:** told in narration (the Chapter 13 scroll at the end of the prologue), not played.
 
 ### Beat keys and places (shared keys for Places: `3-x1` … `3-x20`, renumbered by Integration)
 
 | Key | Beat | Lead | Place | Room | Board |
 |---|---|---|---|---|---|
+| x0a | Left Behind | Lady Yan (+ daughter) | Chang'an (burning; reuse the Diaochan arc's map) | `lb-house` (Lü Bu's house) | — |
+| x0b | Hidden | Lady Yan (+ daughter) | Chang'an | `pangshu-house` (Pang Shu's house, new) | legwork: reach it unseen, ducking into cover while Li Jue's looters pass; the board is the wait |
 | x1 | A Guest at Xuzhou | Lü Bu | Xuzhou | `xz-hall` (the prefecture hall) | — |
 | x2 | Wife and Daughter | Lü Bu | Xuzhou | `lb-reartang` (Lü Bu's rear hall) | contest, **fails** (win Liu Bei over) |
 | x3 | Two Tigers | Lü Bu | Xuzhou | `xz-hall` | — |
@@ -207,3 +215,21 @@ Cao Cao, Xu Huang, Xu Chu, Cao Ren (flags only).
 `cg_condolence`, `zl_bride`, `cd_hawk`, `cg_courier`, `xiao_letters`, `xiao_dark`, `mz_wall`, `counsel_cg`,
 `ly_weeps`, `dc_word`, `lb_daughter`, `flood_xiapi`, `lb_mirror`, `hc_redhare`, `lb_bound`, `wgt_cg`, `wgt_lb`.
 (25. Briefs go in `scene_prompts.json` with the draft.)
+
+## Prologue: hide and wait (x0a–x0b)
+
+**Text** (all of it): ch. 9 「不一時，各門火燄竟天，呂布只得棄卻家小，引百餘騎飛奔出關」 and 「李傕、郭汜縱兵大掠」; ch. 11
+「時龐舒在長安城中，私藏呂布妻小，送還呂布。李傕、郭汜知之，遂斬龐舒，寫書與張揚，教殺呂布」; ch. 19, her own memory at x15.
+
+**Staging (ours, not events):** the route to Pang Shu's house, the lanes the looters pass down, where she hides. No deed is
+given to her that the text doesn't: she is hidden, and she waits. Pang Shu has no lines either.
+
+**The small mechanic: hide and wait** (asked of Integration). The Diaochan arc's stealth is not being seen while moving.
+This is the reverse: when looters come down a lane, step into cover (a doorway, a cart, a well-house) and stay still until
+they pass. Moving while they are in sight is caught: back to the last cover. The daughter follows.
+
+**Beats:** x0a (scene, no board): the burning city; Lü Bu rides out without them; Pang Shu takes them in. Then the walk to
+Pang Shu's house, hiding from looters. x0b: hidden in his house; the board is the wait; Lü Bu's wanderings in narration;
+Pang Shu sends them back; his execution in narration; the Chapter 13 scroll; the lead passes to Lü Bu at x1.
+
+**Stills:** `yan_left` (she watches him ride away), `yan_hidden` (the back room, the soldiers' shadows).

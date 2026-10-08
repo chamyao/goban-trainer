@@ -1006,5 +1006,19 @@
     "beat": "Liu Bei speaks the line that seals Lü Bu's fate.",
     "scene": "The top of a gate tower. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, bound in a ball of ropes, kneels, glaring up. Cao Cao, seated, turns to Liu Bei, who speaks calmly. Guan Yu and Zhang Fei stand behind.",
     "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+  },
+  "yan_left": {
+    "book": 3,
+    "category": "aftermath",
+    "beat": "Lady Yan, holding her daughter, watches Lü Bu ride out of burning Chang'an without them.",
+    "scene": "Dusk, Chang'an burning, flames above the gate towers. In a courtyard doorway, Lady Yan, in her thirties, a lady of a great house, holds a small girl close and looks out. Far down the street, Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, on a fiery red horse, rides away with a band of horsemen, not looking back.",
+    "notes": "Book 3 (Lü Bu's fall), prologue x0a, docs/book2/lvbu-arc.md. Chapter 9: 呂布只得棄卻家小."
+  },
+  "yan_hidden": {
+    "book": 3,
+    "category": "intrigue",
+    "beat": "Lady Yan and her daughter hidden in Pang Shu's house while the city is plundered.",
+    "scene": "Night, a dim back room of a modest official's house, one shaded lamp. Lady Yan, in her thirties, sits very still against the wall, her arm round a small girl, listening. Through a lattice, the red glow of fires and the shadows of soldiers passing in the lane. A middle-aged officer, Pang Shu, stands by the door, listening too.",
+    "notes": "Book 3 (Lü Bu's fall), prologue x0b, docs/book2/lvbu-arc.md. Chapter 11: 龐舒在長安城中，私藏呂布妻小."
   }
 }
