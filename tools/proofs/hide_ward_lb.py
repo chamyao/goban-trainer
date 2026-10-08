@@ -1,5 +1,5 @@
 # Book 14 prologue (x0b) proof at the engine's hide-and-wait rules: Lady Yan on foot (110 px/s) from Lü Bu's gate to Pang
-# Shu's door; looters walk their beats at 30 px/s and see 12 tiles down a 55-degree half-cone; walls stop sight; in a
+# Shu's door; looters walk their beats at 30 px/s and see their cone (5 cells: 10 tiles here) down a 55-degree half-cone; walls stop sight; in a
 # cover (the spot's 2x2 tiles, padded 4 px) and still, she's unseen. Counts the hides a way needs.
 import sys, math, itertools; sys.path[:0] = ['tools', 'tools/mapfactory']
 import plans
