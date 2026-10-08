@@ -79,7 +79,8 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   });
   const tapEl = async sel => { const e = p.locator(sel).first(); if (await e.count()) await e[TAPM]({ timeout: 2000 }).catch(() => {}); };
   // a tap on a point of the world: on screen, a real tap there; off screen, the game's own tap handler
-  const tapWorld = async (x, y) => {
+  let worldTaps = 0;   // taps on the world (walking), to tell a beat that starts by itself from one walked to
+  const tapWorld = async (x, y) => { worldTaps++;
     const s = await p.evaluate(([x, y]) => { const w = window.__w, cam = w.cameras.main, cv = w.game.canvas, r = cv.getBoundingClientRect(), k = cv.clientWidth / w.scale.width, v = w.view ? w.view(x, y) : { x, y };
       const sx = r.left + (v.x - cam.worldView.x) * cam.zoom * k, sy = r.top + (v.y - cam.worldView.y) * cam.zoom * k;
       const goalLine = d => { const g = d.querySelector('.town-goal'); return g && g.getBoundingClientRect(); };
@@ -132,7 +133,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     }
     return out;
   });
-  const report = [], t0 = Date.now(); let beat = null, beatT = 0, lastProgress = Date.now(), progressKey = '', lastLine = '', refused = '', boards = [], chaseLog = [], chaseTries = 0;
+  const report = [], t0 = Date.now(); let beat = null, beatT = 0, lastProgress = Date.now(), progressKey = '', lastLine = '', refused = '', boards = [], chaseLog = [], chaseTries = 0; const beatStart = {};
   const leadFor = await p.evaluate(B => { const w = TK.world(B), out = {}; let party = null;   // the lead the story gives each beat: its last party step before it
     for (const n of w.nodes) { out[n.key] = party && party[0]; const sc = w.scenes && w.scenes[n.scene]; for (const s of (sc && sc.steps) || []) if (s[0] === 'party') party = s[1]; } return out; }, BOOK).catch(() => ({}));
   let beatLead = '';
@@ -148,7 +149,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     if (s.next !== beat) {   // a new beat
       if (beat) close('pass', '', s);
       if (UNTIL && beat === UNTIL) break;
-      beat = s.next; beatT = Date.now(); lastProgress = Date.now(); refused = ''; stealthTries = 0; plannedSteps = null; skipped = false; reloads = 0; catches = 0;
+      beat = s.next; beatStart[beat] = { taps: worldTaps, P: s.P, scene: null }; beatT = Date.now(); lastProgress = Date.now(); refused = ''; stealthTries = 0; plannedSteps = null; skipped = false; reloads = 0; catches = 0;
     }
     if (process.env.TRACE === beat && (!globalThis.__tr || Date.now() - globalThis.__tr > 2000)) { globalThis.__tr = Date.now();
       console.log('     trace', JSON.stringify({ ...s, items: undefined, extra: await p.evaluate(() => { const w = window.__w, d = document;
@@ -215,6 +216,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       const b4 = prevS || {}; reroutes.push({ beat, place: b4.place, busy: !!b4.busy, cine: !!b4.cine, duel: !!b4.duel, secs: Math.round((Date.now() - flipAt) / 1000) });
       console.log(`     sync: the world was rebuilt at ${beat}, ${Math.round((Date.now() - flipAt) / 1000)} s after a hide/show (${b4.place}${b4.cine ? ', mid-scene' : ''}${b4.busy ? ', a line up' : ''}${b4.duel ? ', a board up' : ''})`);
       await p.evaluate(n => { const w = window.__w; if (w && w.game) w.game.__flip = n; }, visFlips).catch(() => {}); }
+    if (beat && beatStart[beat] && !beatStart[beat].scene && (s.cine || s.busy)) beatStart[beat].scene = { taps: worldTaps - beatStart[beat].taps, moved: Math.round(Math.hypot(s.P[0] - beatStart[beat].P[0], s.P[1] - beatStart[beat].P[1])) };   // how the beat's scene began
     prevS = s;
     if (beat) { const f = facts[beat] || (facts[beat] = { light: new Set(), route: new Set(), horses: new Set(), crouch: false, place: new Set(), mount: new Set() });   // what each beat showed
       if (s.light) f.light.add(s.light); if (s.route) f.route.add(`${s.route}@${s.place}`); if (s.horses) f.horses.add(s.horses.split('@')[0]); if (s.crouch) f.crouch = true; f.place.add(s.place); if (!s.leaving && s.place && (s.cine || !s.busy)) f.mount.add(`${s.place}${s.indoors ? ' (indoors)' : ''}${s.cine ? ' in a scene' : ''}: ${s.mounts}`); }
@@ -303,13 +305,17 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     if (facts['13-c4']) console.log(`${band ? 'FAIL' : ff ? 'ok  ' : 'note'} c4: the way at night at Beimang is shown by fireflies, never the day's band (light ${[...c4.light].join('/') || '?'}; route ${[...c4.route].join(', ') || 'not drawn while watched: the goal in sight at once'})`);
     if (facts['13-c9']) console.log(`${c9.horses.has('red') ? 'ok  ' : 'FAIL'} c9: Red Hare walks behind Li Su as a red horse (followers on horses: ${[...c9.horses].join(', ') || 'none'})`);
     if (facts['13-c20']) console.log(`${c20.crouch ? 'ok  ' : 'FAIL'} c20: someone crouches in the scene (a figure drawn low, 0.72-0.76 of its height)`);
-    // the Chancellor's horse (end of c16): Cao Cao rides it outdoors (black), Chen Gong beside him from c19 (brown); indoors both walk
+    // the Chancellor's horse (end of c16): Cao Cao rides it outdoors, Chen Gong beside him from c19, each in the coat the book gives; indoors both walk
+    const coats = await p.evaluate(() => { const h = (TK.world(13).items || {}).horse; return (h && h.coats) || {}; });   // the horse's coats as the book gives them (Cao Cao's white, Chen Gong's brown)
+    // c19 follows c18 by a fade into the jail court: its scene starts with no walk
+    if (facts['13-c19'] && beatStart['13-c19']) { const st = beatStart['13-c19'].scene, ok = !!st && st.taps === 0 && st.moved < 16;
+      console.log(`${ok ? 'ok  ' : 'FAIL'} c19: starts by itself after c18, no walk (${st ? `${st.taps} taps on the way, moved ${st.moved} px` : 'its scene never seen'})`); if (!ok) featureFails.push('c19 starts by itself'); }
     let mountBad = false;
     for (const k of Object.keys(facts).filter(k => /^13-c(1[7-9]|2\d)$/.test(k))) for (const m of facts[k].mount) {
-      const [place, who] = m.split(': '), inside = / \(indoors\)/.test(place), inScene = / in a scene$/.test(place), party = +k.slice(4) >= 20 || (k === '13-c19' && /chengong/.test(who)) ? ['caocao:black', 'chengong:brown'] : ['caocao:black'];
+      const [place, who] = m.split(': '), inside = / \(indoors\)/.test(place), inScene = / in a scene$/.test(place);
       if (inScene && !inside) continue;   // outdoors in a scene: who rides is the scene's to say
-      const ok = inside ? who === 'on foot' : who.split(',').includes('caocao:black') && (!/chengong/.test(who) || who.includes('chengong:brown'));
-      if (!ok) mountBad = true; console.log(`${ok ? 'ok  ' : 'FAIL'} ${k} ${place}: ${who}${inside ? ' (indoors: on foot)' : ''}`); void party; }
+      const ok = inside ? who === 'on foot' : who.split(',').includes(`caocao:${coats.caocao}`) && (!/chengong/.test(who) || who.includes(`chengong:${coats.chengong}`));
+      if (!ok) mountBad = true; console.log(`${ok ? 'ok  ' : 'FAIL'} ${k} ${place}: ${who}${inside ? ' (indoors: on foot)' : ''}`); }
     if (mountBad) featureFails.push('book 13 mounts');
     if (band || (facts['13-c9'] && !c9.horses.has('red')) || (facts['13-c20'] && !c20.crouch)) featureFails.push('book 13 features'); }   // (each judged only when its beat was walked)
   // after the book: once things settle, who the walk plays as (END_LEAD: who it must be, e.g. lijue after Book 12's a18)
