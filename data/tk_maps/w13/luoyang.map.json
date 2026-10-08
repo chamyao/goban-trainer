@@ -652,6 +652,14 @@
    "node": "13-c17",
    "label": "The East Gate",
    "trigger": "near"
+  },
+  {
+   "id": "xf-gate",
+   "x": 41.5,
+   "y": 49.7,
+   "node": "",
+   "label": "The Chancellor's gate",
+   "note": "the chase out of Luoyang starts (and restarts) here"
   }
  ],
  "npcs": [
@@ -781,6 +789,98 @@
    "when": "node:c12",
    "view": 4,
    "challenge": "resigned"
+  },
+  {
+   "id": "rider-market",
+   "kind": "folk.soldier",
+   "x": 53.5,
+   "y": 45.9,
+   "say": [],
+   "face": "E",
+   "rider": {
+    "chase": "c17",
+    "beat": [
+     [
+      53,
+      45
+     ],
+     [
+      69,
+      45
+     ]
+    ],
+    "cone": 4,
+    "dir": "E"
+   }
+  },
+  {
+   "id": "rider-lane",
+   "kind": "folk.soldier",
+   "x": 77.5,
+   "y": 49.9,
+   "say": [],
+   "face": "N",
+   "rider": {
+    "chase": "c17",
+    "beat": [
+     [
+      77,
+      49
+     ],
+     [
+      77,
+      37
+     ]
+    ],
+    "cone": 5,
+    "dir": "N"
+   }
+  },
+  {
+   "id": "rider-west",
+   "kind": "folk.soldier",
+   "x": 9.5,
+   "y": 41.9,
+   "say": [],
+   "face": "S",
+   "rider": {
+    "chase": "c17",
+    "beat": [
+     [
+      9,
+      37
+     ],
+     [
+      9,
+      49
+     ]
+    ],
+    "cone": 5,
+    "dir": "S"
+   }
+  },
+  {
+   "id": "rider-gate",
+   "kind": "folk.soldier",
+   "x": 65.5,
+   "y": 33.9,
+   "say": [],
+   "face": "W",
+   "rider": {
+    "chase": "c17",
+    "beat": [
+     [
+      37,
+      33
+     ],
+     [
+      69,
+      33
+     ]
+    ],
+    "cone": 6,
+    "dir": "W"
+   }
   }
  ],
  "exits": [

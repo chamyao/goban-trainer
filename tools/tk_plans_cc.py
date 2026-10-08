@@ -83,6 +83,7 @@ PLANS_CC = {
                 {"id": "c13", "at": [15, 8], "node": "2-c13", "label": "The street under Dong Zhuo", "trigger": "near",
                  "note": "the tower of Yong'an Palace in view to the north-east; the carts come in by the East Gate"},
                 {"id": "c17", "at": [19, 8], "node": "2-c17", "label": "The East Gate", "trigger": "near"},
+                {"id": "xf-gate", "at": [10, 12], "label": "The Chancellor's gate", "note": "the chase out of Luoyang starts (and restarts) here"},
             ],
             "props": [
                 {"kind": "landmark.notice", "at": [20, 7], "in": ["dong"], "label": "Yuan Shao's seal of office, hanging on the East Gate",
@@ -214,29 +215,29 @@ PLANS_CC = {
         ],
         # The chase out of Luoyang (caocao-arc.md, "New mechanic"), in state "sword" (c16 -> c17): from the Chancellor's gate
         # to the East Gate. A draft for Integration's data shape: cells as in the plan; cones and speeds in tiles.
-        "chase": {
-            "state": "sword", "from": "xiangfu", "to": "c17",
-            "start": [10, 12],          # out of the Chancellor's gate onto the south street (the compound's xf-gate is inside)
+        "chase": {   # read by plans.py: each rider becomes an npc with a "rider" property (Integration's chase engine)
+            "chase": "c17", "state": "sword", "from": "xf-gate", "to": "c17",
             # where the horse outruns a rider (wide, straight), and where a rider can corner him (narrow, or crowded)
             "open": ["main-street", "south-street"],
             "narrow": ["west-lane", "east-lane", "garden-lane", "market"],
             "routes": {   # the three ways to the gate, one rider on each, so the choice is which to dare and when
-                "market cut": [[10, 12], [13, 12], [13, 11], [17, 9], [17, 8], [19, 8]],      # shortest; through the crowd
+                "market cut": [[10, 12], [17, 12], [17, 9], [18, 9], [18, 8], [19, 8]],       # up the market's east edge: the
+                                                                                              # one a careful rider slips through
                 "east lane": [[10, 12], [19, 12], [19, 8]],                                   # fast street, then a narrow lane
                 "long way": [[10, 12], [2, 12], [2, 8], [19, 8]],                              # narrow lane, then the long main street
             },
+            # beats are cells (a loop: back and forth); cone in tiles; dir is the facing at the post
             "riders": [
-                # the market: walks the stalls, slow among the crowd; you slip by when his back is to you
-                {"id": "rider-market", "post": [13, 11], "beat": [[13, 11], [17, 11], [13, 11]], "pause": [17, 11, 2], "cone": 4},
+                # the market: walks the stalls; you slip by when his back is to you
+                {"id": "rider-market", "kind": "folk.soldier", "post": [13, 11], "beat": [[13, 11], [17, 11]], "cone": 4, "dir": "E"},
                 # the east lane: rides up and down it; meet him in the lane and there is nowhere to go
-                {"id": "rider-lane", "post": [19, 12], "beat": [[19, 12], [19, 9], [19, 12]], "pause": [19, 9, 1], "cone": 5},
-                # the west lane, at the far end of the long way: the same, but you see him coming
-                {"id": "rider-west", "post": [2, 10], "beat": [[2, 9], [2, 12], [2, 9]], "cone": 5},
-                # the main street before the gate: every route ends here; on the open street the horse outruns him,
-                # so it is a race to the gate, not a trap
-                {"id": "rider-gate", "post": [16, 8], "beat": [[9, 8], [17, 8], [9, 8]], "pause": [17, 8, 2], "cone": 6},
+                {"id": "rider-lane", "kind": "folk.soldier", "post": [19, 12], "beat": [[19, 12], [19, 9]], "cone": 5, "dir": "N"},
+                # the west lane, at the far end of the long way: you see him coming
+                {"id": "rider-west", "kind": "folk.soldier", "post": [2, 10], "beat": [[2, 9], [2, 12]], "cone": 5, "dir": "S"},
+                # the main street before the gate: every route but the east lane ends here; on the open street the horse
+                # outruns him, so it is a race to the gate, not a trap
+                {"id": "rider-gate", "kind": "folk.soldier", "post": [16, 8], "beat": [[9, 8], [17, 8]], "cone": 6, "dir": "W"},
             ],
-            "speeds": {"walk": 1.0, "rider": 1.5, "gallop": 2.0},   # relative; a rider gains in the lanes (he turns tighter)
         },
         "objectives": {
             "2-c1": "Go to He Jin's residence, on the main street west of the palace. The council is already sitting.",
