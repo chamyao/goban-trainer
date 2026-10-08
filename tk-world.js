@@ -369,8 +369,9 @@ function worldScenes() {
         this.spots.shrine_ = { x: this.shrine.x, y: this.shrine.y + 12, node: "", label: "The shrine under the pine", labelZh: "松下星君祠", intro: [], outro: [], trigger: "talk", use: "shrine" };
       // cover to hide in, marked faintly on the ground (a doorway, a cart, a well-house): the player can see where to hide
       this.coverMarks = (this.covers || []).map(r => {
-        const g = this.add.ellipse(r.centerX, r.bottom - 5, Math.max(18, r.width * .8), 9, 0x9fd8a8, .16).setStrokeStyle(1.5, 0xcff5d2, .55).setDepth(-995);
-        this.tweens.add({ targets: g, alpha: .55, duration: 1400, yoyo: true, repeat: -1, ease: "Sine.easeInOut" });
+        // drawn over the night or firelight (not under it), so it reads in the dark; an outline, not a fill, so it never hides her feet
+        const g = this.add.ellipse(r.centerX, r.bottom - 5, Math.max(22, r.width * .85), 11, 0x9fd8a8, .12).setStrokeStyle(2, 0xd8ffd8, .9).setDepth(9e4 + 2).setAlpha(.45);
+        this.tweens.add({ targets: g, alpha: .95, duration: 1100, yoyo: true, repeat: -1, ease: "Sine.easeInOut" });
         return g;
       });
       this.refreshStory();
