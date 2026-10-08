@@ -1120,162 +1120,6 @@
    "when": "node:c12",
    "view": 4,
    "challenge": "resigned"
-  },
-  {
-   "id": "side-gate",
-   "kind": "folk.soldier",
-   "x": 31.0,
-   "y": 46.4,
-   "say": [],
-   "face": "E",
-   "ambush": {
-    "chase": "c17",
-    "reach": 6,
-    "dash": 2.5
-   }
-  },
-  {
-   "id": "jiade",
-   "kind": "folk.soldier",
-   "x": 45.5,
-   "y": 30.9,
-   "say": [],
-   "face": "S",
-   "ambush": {
-    "chase": "c17",
-    "reach": 4.5,
-    "dash": 2.5
-   }
-  },
-  {
-   "id": "lane-mouth",
-   "kind": "folk.soldier",
-   "x": 53.5,
-   "y": 36.9,
-   "say": [],
-   "face": "N",
-   "ambush": {
-    "chase": "c17",
-    "reach": 6,
-    "dash": 2.5
-   }
-  },
-  {
-   "id": "market-n",
-   "kind": "folk.soldier",
-   "x": 70.0,
-   "y": 37.4,
-   "say": [],
-   "face": "N",
-   "ambush": {
-    "chase": "c17",
-    "reach": 4.5,
-    "dash": 2.5
-   }
-  },
-  {
-   "id": "lodging",
-   "kind": "folk.soldier",
-   "x": 74.0,
-   "y": 31.4,
-   "say": [],
-   "face": "S",
-   "ambush": {
-    "chase": "c17",
-    "reach": 3.5,
-    "dash": 2.5
-   }
-  },
-  {
-   "id": "ward-lane",
-   "kind": "folk.soldier",
-   "x": 33.5,
-   "y": 54.9,
-   "say": [],
-   "face": "S",
-   "ambush": {
-    "chase": "c17",
-    "reach": 3.5,
-    "dash": 2.5
-   }
-  },
-  {
-   "id": "stairs-w",
-   "kind": "folk.soldier",
-   "x": 46.0,
-   "y": 59.9,
-   "say": [],
-   "face": "N",
-   "ambush": {
-    "chase": "c17",
-    "reach": 3,
-    "dash": 2.5
-   }
-  },
-  {
-   "id": "lane-mouth-s",
-   "kind": "folk.soldier",
-   "x": 53.5,
-   "y": 54.9,
-   "say": [],
-   "face": "S",
-   "ambush": {
-    "chase": "c17",
-    "reach": 3.5,
-    "dash": 2.5
-   }
-  },
-  {
-   "id": "market-s",
-   "kind": "folk.soldier",
-   "x": 70.0,
-   "y": 55.4,
-   "say": [],
-   "face": "S",
-   "ambush": {
-    "chase": "c17",
-    "reach": 3,
-    "dash": 2.5
-   }
-  },
-  {
-   "id": "stairs-e",
-   "kind": "folk.soldier",
-   "x": 62.0,
-   "y": 59.9,
-   "say": [],
-   "face": "N",
-   "ambush": {
-    "chase": "c17",
-    "reach": 3,
-    "dash": 2.5
-   }
-  },
-  {
-   "id": "market-e",
-   "kind": "folk.soldier",
-   "x": 75.0,
-   "y": 46.4,
-   "say": [],
-   "face": "E",
-   "ambush": {
-    "chase": "c17",
-    "reach": 3,
-    "dash": 2.5
-   }
-  },
-  {
-   "id": "stall",
-   "kind": "folk.soldier",
-   "x": 62.5,
-   "y": 45.9,
-   "say": [],
-   "face": "E",
-   "ambush": {
-    "chase": "c17",
-    "reach": 6,
-    "dash": 2.5
-   }
   }
  ],
  "exits": [
@@ -1387,235 +1231,242 @@
   ],
   "pace": {
    "horse": 165,
-   "wave": 151.8,
-   "wave_after": 2.0,
-   "ambusher": 150,
-   "back": 90,
-   "reach": 4,
-   "dash": 2.5,
-   "hit": 0.75
+   "wave": 150,
+   "wave_after": 1.0,
+   "ambusher": 140,
+   "reach": 9,
+   "lead": 0.1,
+   "hold": 1.0,
+   "hit": 0.8
+  },
+  "wave": {
+   "from": [
+    21.5,
+    57.7
+   ],
+   "kind": "folk.soldier",
+   "count": 8
   },
   "ambush": [
    {
     "id": "side-gate",
-    "home": [
-     31.0,
-     46.4
+    "post": [
+     30.0,
+     46.0
     ],
-    "out": "E",
-    "reach": 6,
-    "dash": 2.5,
-    "across": 12,
+    "to": [
+     38.0,
+     46.0
+    ],
+    "dash": "E",
     "kind": "folk.soldier"
    },
    {
     "id": "jiade",
-    "home": [
+    "post": [
      45.5,
-     30.9
+     29.5
     ],
-    "out": "S",
-    "reach": 4.5,
-    "dash": 2.5,
-    "across": 6,
+    "to": [
+     45.5,
+     36.5
+    ],
+    "dash": "S",
     "kind": "folk.soldier"
    },
    {
     "id": "lane-mouth",
-    "home": [
+    "post": [
      53.5,
-     36.9
+     37.5
     ],
-    "out": "N",
-    "reach": 6,
-    "dash": 2.5,
-    "across": 9,
+    "to": [
+     53.5,
+     29.5
+    ],
+    "dash": "N",
     "kind": "folk.soldier"
    },
    {
     "id": "market-n",
-    "home": [
+    "post": [
      70.0,
-     37.4
+     38.0
     ],
-    "out": "N",
-    "reach": 4.5,
-    "dash": 2.5,
-    "across": 6,
+    "to": [
+     70.0,
+     31.0
+    ],
+    "dash": "N",
     "kind": "folk.soldier"
    },
    {
     "id": "lodging",
-    "home": [
+    "post": [
      74.0,
-     31.4
+     30.0
     ],
-    "out": "S",
-    "reach": 3.5,
-    "dash": 2.5,
-    "across": 5,
+    "to": [
+     74.0,
+     36.0
+    ],
+    "dash": "S",
     "kind": "folk.soldier"
    },
    {
     "id": "ward-lane",
-    "home": [
+    "post": [
      33.5,
-     54.9
+     53.5
     ],
-    "out": "S",
-    "reach": 3.5,
-    "dash": 2.5,
-    "across": 5,
+    "to": [
+     33.5,
+     59.5
+    ],
+    "dash": "S",
     "kind": "folk.soldier"
    },
    {
     "id": "stairs-w",
-    "home": [
+    "post": [
      46.0,
-     59.9
+     59.5
     ],
-    "out": "N",
-    "reach": 3,
-    "dash": 2.5,
-    "across": 4,
+    "to": [
+     46.0,
+     55.5
+    ],
+    "dash": "N",
     "kind": "folk.soldier"
    },
    {
     "id": "lane-mouth-s",
-    "home": [
+    "post": [
      53.5,
-     54.9
+     53.5
     ],
-    "out": "S",
-    "reach": 3.5,
-    "dash": 2.5,
-    "across": 5,
+    "to": [
+     53.5,
+     59.5
+    ],
+    "dash": "S",
     "kind": "folk.soldier"
    },
    {
     "id": "market-s",
-    "home": [
+    "post": [
      70.0,
-     55.4
+     54.0
     ],
-    "out": "S",
-    "reach": 3,
-    "dash": 2.5,
-    "across": 4,
+    "to": [
+     70.0,
+     59.0
+    ],
+    "dash": "S",
     "kind": "folk.soldier"
    },
    {
     "id": "stairs-e",
-    "home": [
+    "post": [
      62.0,
-     59.9
+     59.5
     ],
-    "out": "N",
-    "reach": 3,
-    "dash": 2.5,
-    "across": 4,
+    "to": [
+     62.0,
+     55.5
+    ],
+    "dash": "N",
     "kind": "folk.soldier"
    },
    {
     "id": "market-e",
-    "home": [
-     75.0,
-     46.4
+    "post": [
+     74.0,
+     46.0
     ],
-    "out": "E",
-    "reach": 3,
-    "dash": 2.5,
-    "across": 4,
+    "to": [
+     79.0,
+     46.0
+    ],
+    "dash": "E",
     "kind": "folk.soldier"
    },
    {
     "id": "stall",
-    "home": [
-     62.5,
-     45.9
+    "post": [
+     61.5,
+     45.5
     ],
-    "out": "E",
-    "reach": 6,
-    "dash": 2.5,
-    "across": 12,
+    "to": [
+     69.5,
+     45.5
+    ],
+    "dash": "E",
     "kind": "folk.soldier"
    }
   ],
   "routes": {
    "main street": {
-    "middle": {
-     "s": 7.5,
-     "caught_by": [
-      "ward-lane",
-      "side-gate",
-      "lane-mouth"
-     ],
-     "sprung": [
-      "ward-lane",
-      "side-gate",
-      "jiade",
-      "lane-mouth",
-      "market-n",
-      "lodging"
-     ]
-    },
-    "weave": {
-     "s": 8.1,
-     "sprung": [
-      "ward-lane",
-      "side-gate",
-      "jiade",
-      "market-n"
-     ],
-     "wave_gap_tiles": 20.6
-    }
+    "tiles": 78,
+    "straight_hits": [
+     "side-gate",
+     "jiade",
+     "lane-mouth",
+     "market-n",
+     "lodging",
+     "ward-lane"
+    ],
+    "clean_s": 7.7,
+    "sprung": [
+     "side-gate",
+     "jiade",
+     "lane-mouth",
+     "market-n",
+     "lodging",
+     "ward-lane"
+    ]
    },
    "south street": {
-    "middle": {
-     "s": 7.6,
-     "caught_by": [
-      "stairs-w",
-      "stairs-e"
-     ],
-     "sprung": [
-      "ward-lane",
-      "stairs-w",
-      "lane-mouth-s",
-      "stairs-e",
-      "market-s"
-     ]
-    },
-    "weave": {
-     "s": 8.3,
-     "sprung": [],
-     "wave_gap_tiles": 20.6
-    }
+    "tiles": 79,
+    "straight_hits": [
+     "ward-lane",
+     "stairs-w",
+     "lane-mouth-s",
+     "market-s",
+     "stairs-e",
+     "market-e"
+    ],
+    "clean_s": 8.0,
+    "sprung": [
+     "ward-lane",
+     "stairs-w",
+     "lane-mouth-s",
+     "market-s",
+     "stairs-e",
+     "market-e"
+    ]
    },
    "market": {
-    "middle": {
-     "s": 7.5,
-     "caught_by": [
-      "stairs-w",
-      "stairs-e"
-     ],
-     "sprung": [
-      "ward-lane",
-      "stairs-w",
-      "lane-mouth-s",
-      "stairs-e",
-      "stall",
-      "market-n",
-      "lodging"
-     ]
-    },
-    "weave": {
-     "s": 8.6,
-     "sprung": [
-      "market-n",
-      "lodging"
-     ],
-     "wave_gap_tiles": 20.6
-    }
+    "tiles": 78,
+    "straight_hits": [
+     "market-n",
+     "lodging",
+     "ward-lane",
+     "stairs-w",
+     "lane-mouth-s",
+     "stairs-e",
+     "stall"
+    ],
+    "clean_s": 8.0,
+    "sprung": [
+     "lodging",
+     "ward-lane",
+     "stairs-w",
+     "lane-mouth-s",
+     "market-s",
+     "stairs-e",
+     "market-e"
+    ]
    }
   }
  },
