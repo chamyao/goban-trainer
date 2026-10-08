@@ -1170,5 +1170,212 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-07"
+ },
+ "lb_seal": {
+  "file": "lb_seal.jpg",
+  "scene": "lb",
+  "prompt": "A prefecture hall. Liu Bei, gentle-faced with long ear lobes, holds out a seal of office with both hands. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, half reaches for it. Behind Liu Bei, red-faced long-bearded Guan Yu and fierce black-bearded Zhang Fei glare at him. Chen Gong stands at Lü Bu's shoulder. Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold. Lü Bu is a tall, strikingly handsome young warrior, broad-shouldered, in ornate red and gold armour with a gold crown bearing two long pheasant-feather plumes, carrying a tall crescent-bladed halberd. Guan Yu is a towering giant of a man, a head taller than anyone, with massive shoulders and a thick neck, a deep red face (only his face is red; his neck and hands are normal skin), a very long black beard down to his chest and narrow eyes under heavy brows, hair in a topknot, in a green robe. Zhang Fei is a stocky, barrel-chested, powerfully muscled man, broad rather than tall, with a fierce square jaw, big glaring eyes and a wild bristling black beard, hair in a topknot, in black and dark brown clothes. Chen Gong is a thin, upright county magistrate in his thirties with a sparse beard, in a plain dark robe and scholar's cap. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-08"
+ },
+ "lb_wifebow": {
+  "file": "lb_wifebow.jpg",
+  "scene": "lb",
+  "prompt": "A warmly lit rear hall after a banquet. A dignified woman in her thirties in rich robes (Lady Yan) and a girl of about fifteen bow to Liu Bei, who raises his hands to decline. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, beams beside them. Zhang Fei, in the doorway, glowers. Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold. Lü Bu is a tall, strikingly handsome young warrior, broad-shouldered, in ornate red and gold armour with a gold crown bearing two long pheasant-feather plumes, carrying a tall crescent-bladed halberd. Zhang Fei is a stocky, barrel-chested, powerfully muscled man, broad rather than tall, with a fierce square jaw, big glaring eyes and a wild bristling black beard, hair in a topknot, in black and dark brown clothes. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-08"
+ },
+ "lb_letter": {
+  "file": "lb_letter.jpg",
+  "scene": "lb",
+  "prompt": "A private rear hall. Liu Bei holds out an unrolled letter. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, reads it, his face shifting from shock to tears. A single lamp. Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold. Lü Bu is a tall, strikingly handsome young warrior, broad-shouldered, in ornate red and gold armour with a gold crown bearing two long pheasant-feather plumes, carrying a tall crescent-bladed halberd. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-08"
+ },
+ "lb_nightgate": {
+  "file": "lb_nightgate.jpg",
+  "scene": "lb",
+  "prompt": "Night under a bright full moon. A city gate swings open from inside. Outside, a column of horsemen waits in shadow; at its head Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, on a fiery red horse. On the wall above, a single officer with a lantern. Lü Bu is a tall, strikingly handsome young warrior, broad-shouldered, in ornate red and gold armour with a gold crown bearing two long pheasant-feather plumes, carrying a tall crescent-bladed halberd. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-08"
+ },
+ "lb_halberd": {
+  "file": "lb_halberd.jpg",
+  "scene": "lb",
+  "prompt": "A military camp at the camp gate. In the foreground Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, has just loosed an arrow, bow still drawn wide like an autumn moon. Far off, a painted halberd planted upright at the gate; the arrow is striking its small side-blade. Behind Lü Bu, Liu Bei and the general Ji Ling stare, and soldiers throw up their arms. Lü Bu is a tall, strikingly handsome young warrior, broad-shouldered, in ornate red and gold armour with a gold crown bearing two long pheasant-feather plumes, carrying a tall crescent-bladed halberd. Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-08"
+ },
+ "ly_decides": {
+  "file": "ly_decides.jpg",
+  "scene": "ly",
+  "prompt": "Lady Yan's private rooms, silk hangings. Lady Yan, a dignified woman in her thirties, speaks earnestly to Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, who listens. Through a doorway, their daughter, about fifteen, is glimpsed at an embroidery frame. Lü Bu is a tall, strikingly handsome young warrior, broad-shouldered, in ornate red and gold armour with a gold crown bearing two long pheasant-feather plumes, carrying a tall crescent-bladed halberd. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-08"
+ },
+ "bride_drums": {
+  "file": "bride_drums.jpg",
+  "scene": "bride",
+  "prompt": "A city gate by torchlight. A curtained bridal carriage decorated with red silk rolls out, surrounded by musicians beating drums and blowing horns, and an escort of riders. Townspeople watch. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-08"
+ },
+ "cg_condolence": {
+  "file": "cg_condolence.jpg",
+  "scene": "cg",
+  "prompt": "A hall. A frail old minister in white mourning clothes, helped by a servant, bows in condolence before Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, who stands astonished. Lü Bu is a tall, strikingly handsome young warrior, broad-shouldered, in ornate red and gold armour with a gold crown bearing two long pheasant-feather plumes, carrying a tall crescent-bladed halberd. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-08"
+ },
+ "zl_bride": {
+  "file": "zl_bride.jpg",
+  "scene": "zl",
+  "prompt": "A country road at dawn. A bearded cavalry general, Zhang Liao, reins in his horse across the road in front of a red bridal carriage. His riders surround it. The envoy Han Yin raises his hands. The carriage curtain is drawn. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-08"
+ },
+ "cd_hawk": {
+  "file": "cd_hawk.jpg",
+  "scene": "cd",
+  "prompt": "A hall. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, has a sword half raised. Before him a sharp-eyed young official, Chen Deng, laughs openly, one hand raised as if telling a story; a hawk on a perch stands in the corner of the room. Lü Bu is a tall, strikingly handsome young warrior, broad-shouldered, in ornate red and gold armour with a gold crown bearing two long pheasant-feather plumes, carrying a tall crescent-bladed halberd. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-08"
+ },
+ "cg_courier": {
+  "file": "cg_courier.jpg",
+  "scene": "cg",
+  "prompt": "Open hunting country, autumn. A lean, earnest strategist on horseback, Chen Gong, cuts across from a side path and blocks a post rider on the main road. His hunting companions close in. A hunting hawk circles above. Chen Gong is a thin, upright county magistrate in his thirties with a sparse beard, in a plain dark robe and scholar's cap. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-08"
+ },
+ "xiao_letters": {
+  "file": "xiao_letters.jpg",
+  "scene": "xiao",
+  "prompt": "Night on a mountain pass fort. A young official, Chen Deng, leans over the battlements and looses an arrow with a rolled letter tied to it toward the camp fires far below. Two more letter-arrows lie beside him. The sentries' backs are turned. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-08"
+ },
+ "xiao_dark": {
+  "file": "xiao_dark.jpg",
+  "scene": "xiao",
+  "prompt": "A mountain pass at night, lit only by a fire on the gate tower. Two forces of the same army clash in confusion in the dark, unable to see each other's banners. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-08"
+ },
+ "mz_wall": {
+  "file": "mz_wall.jpg",
+  "scene": "mz",
+  "prompt": "Dawn under a city wall. Arrows fly down. On the wall a calm official, Mi Zhu, points down. Below, Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, on a red horse, looks up furious; Chen Gong beside him. Lü Bu is a tall, strikingly handsome young warrior, broad-shouldered, in ornate red and gold armour with a gold crown bearing two long pheasant-feather plumes, carrying a tall crescent-bladed halberd. Chen Gong is a thin, upright county magistrate in his thirties with a sparse beard, in a plain dark robe and scholar's cap. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-08"
+ },
+ "ly_weeps": {
+  "file": "ly_weeps.jpg",
+  "scene": "ly",
+  "prompt": "A residence room in winter, a half-packed chest of padded clothes. Lady Yan, in her thirties, weeps, holding Lü Bu's sleeve. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, stands torn, a travelling cloak over one arm. Lü Bu is a tall, strikingly handsome young warrior, broad-shouldered, in ornate red and gold armour with a gold crown bearing two long pheasant-feather plumes, carrying a tall crescent-bladed halberd. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-08"
+ },
+ "dc_word": {
+  "file": "dc_word.jpg",
+  "scene": "dc",
+  "prompt": "An inner room with lanterns. Diaochan, a graceful woman in silk, lays her hand on Lü Bu's arm and speaks softly. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, looks down at her, his resolve fading. Diaochan is a graceful young woman of sixteen in a flowing, sheer pale silk robe with long translucent gauze sleeves and a light silk shawl drifting around her, hair in an elegant bun with a jade pin. Lü Bu is a tall, strikingly handsome young warrior, broad-shouldered, in ornate red and gold armour with a gold crown bearing two long pheasant-feather plumes, carrying a tall crescent-bladed halberd. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-08"
+ },
+ "lb_daughter": {
+  "file": "lb_daughter.jpg",
+  "scene": "lb",
+  "prompt": "Night at a city gate. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, on a fiery red horse, rides out; on his back, a girl wrapped in silk floss and armour is bound to him. Torches of the besiegers' camp ahead. Lü Bu is a tall, strikingly handsome young warrior, broad-shouldered, in ornate red and gold armour with a gold crown bearing two long pheasant-feather plumes, carrying a tall crescent-bladed halberd. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-08"
+ },
+ "flood_xiapi": {
+  "file": "flood_xiapi.jpg",
+  "scene": "flood",
+  "prompt": "A walled city seen from high ground, its streets and gates drowned under brown floodwater from two broken river dykes. Only a raised causeway to the east gate stands clear. On the hills around, the besieging army's tents. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-08"
+ },
+ "lb_mirror": {
+  "file": "lb_mirror.jpg",
+  "scene": "lb",
+  "prompt": "A dim room, wine jars everywhere. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, now hollow-cheeked and haggard, stares into a bronze mirror held up in front of him, shocked. Lü Bu is a tall, strikingly handsome young warrior, broad-shouldered, in ornate red and gold armour with a gold crown bearing two long pheasant-feather plumes, carrying a tall crescent-bladed halberd. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-08"
+ },
+ "hc_redhare": {
+  "file": "hc_redhare.jpg",
+  "scene": "hc",
+  "prompt": "Night, a stable yard half under water. An officer, Hou Cheng, leads a magnificent fire-red horse out through the water by its bridle, glancing back. Lantern light on the water. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-08"
+ },
+ "lb_bound": {
+  "file": "lb_bound.jpg",
+  "scene": "lb",
+  "prompt": "A gate tower at noon. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, slumped asleep in a chair, wakes as two of his own officers wind ropes around him. One holds his painted halberd away. A white flag is being raised on the wall. Lü Bu is a tall, strikingly handsome young warrior, broad-shouldered, in ornate red and gold armour with a gold crown bearing two long pheasant-feather plumes, carrying a tall crescent-bladed halberd. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-08"
+ },
+ "wgt_cg": {
+  "file": "wgt_cg.jpg",
+  "scene": "wgt",
+  "prompt": "The top of a gate tower. Chen Gong, lean and calm, walks down the stone stairs alone, guards unable to hold him. Behind him, Cao Cao has risen from his seat, weeping. Liu Bei sits beside the empty seat. Chen Gong is a thin, upright county magistrate in his thirties with a sparse beard, in a plain dark robe and scholar's cap. Cao Cao is a lean man of about thirty with a thin moustache and a quick, sharp look, black official's cap, dark red robe with gold trim. Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-08"
+ },
+ "wgt_lb": {
+  "file": "wgt_lb.jpg",
+  "scene": "wgt",
+  "prompt": "The top of a gate tower. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, bound in a ball of ropes, kneels, glaring up. Cao Cao, seated, turns to Liu Bei, who speaks calmly. Guan Yu and Zhang Fei stand behind. Lü Bu is a tall, strikingly handsome young warrior, broad-shouldered, in ornate red and gold armour with a gold crown bearing two long pheasant-feather plumes, carrying a tall crescent-bladed halberd. Cao Cao is a lean man of about thirty with a thin moustache and a quick, sharp look, black official's cap, dark red robe with gold trim. Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold. Guan Yu is a towering giant of a man, a head taller than anyone, with massive shoulders and a thick neck, a deep red face (only his face is red; his neck and hands are normal skin), a very long black beard down to his chest and narrow eyes under heavy brows, hair in a topknot, in a green robe. Zhang Fei is a stocky, barrel-chested, powerfully muscled man, broad rather than tall, with a fierce square jaw, big glaring eyes and a wild bristling black beard, hair in a topknot, in black and dark brown clothes. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-08"
  }
 }

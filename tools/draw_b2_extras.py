@@ -322,12 +322,91 @@ def ridge():   # an earthen ridge: a long low mound of bare yellow earth, grass 
     return g.outline().image()
 
 
+def jailcell():   # a county jail cell (牢房) against a high wall: black inside, thick iron-bound timber bars, a barred door with a lock
+    g = Grid(64, 44)
+    g.rect(0, 0, 64, 8, "#8a7a62"); g.rect(0, 0, 64, 2, "#a8987a"); g.rect(0, 7, 64, 1, "#5a4a3a")   # the wall's top
+    g.rect(0, 8, 64, 32, "#14100e"); g.rect(2, 30, 60, 10, "#1e1812")                                  # the dark inside
+    for x in range(4, 60, 7):                                                                          # straw on the floor
+        g.set(x, 36, "#6a5a2a"); g.set(x + 2, 37, "#7a6a32"); g.set(x + 1, 38, "#5a4a22")
+    g.rect(0, 8, 64, 3, "#3a2a1c"); g.rect(0, 9, 64, 1, "#5a4a3a")                                     # the lintel beam
+    g.rect(0, 38, 64, 4, "#3a2a1c"); g.rect(0, 38, 64, 1, "#5a4a3a")                                   # the sill beam
+    for x in list(range(1, 64, 7)):                                                                    # the bars: thick dark timber, the black cell between
+        g.rect(x, 11, 3, 27, "#4a3626"); g.rect(x, 11, 1, 27, "#7a5c40")
+        for y in (15, 30):
+            g.rect(x, y, 3, 1, "#6a6a72")                                                              # iron bands
+    g.rect(42, 23, 15, 2, "#4a3626")                                                                   # the door's cross-bar
+    g.rect(52, 22, 4, 5, "#8a8a92"); g.rect(53, 25, 2, 1, "#2a2a30"); g.set(53, 21, "#8a8a92"); g.set(54, 20, "#8a8a92")   # the iron lock
+    g.rect(0, 42, 64, 2, "#4a3a2a")
+    return g.outline().image()
+
+
+def torch():   # a burning torch on a wooden pole, about head height
+    g = Grid(10, 30)
+    g.rect(4, 9, 2, 19, "#6a4a2a"); g.rect(4, 9, 1, 19, "#8a6a3a"); g.rect(2, 27, 6, 2, "#4a3a2a")   # the pole and its foot
+    g.rect(3, 7, 4, 3, "#3a2a1c"); g.rect(3, 8, 4, 1, "#8a8a92")                                       # the bound head
+    g.ellipse(5, 4, 3, 3.6, "#e8661e"); g.ellipse(5, 4.6, 2, 2.4, "#ffb23a"); g.rect(4, 4, 2, 2, "#fff0a0")   # the flame
+    g.set(5, 0, "#ff8a2a")
+    return g.outline().image()
+
+
+def wallstairs():   # rammed-earth steps (马道) climbing the inside face of a city wall to the wall-walk, rising left to right
+    g = Grid(64, 34)
+    g.rect(0, 0, 64, 34, "#a8885a"); g.rect(0, 0, 64, 2, "#c8a878")                                   # the wall face behind
+    for y in range(6, 34, 6):
+        g.rect(0, y, 64, 1, "#94744a")                                                                 # rammed-earth layers
+    for i in range(8):                                                                                 # eight steps
+        x, top = i * 8, 30 - i * 4
+        g.rect(x, top, 64 - x, 34 - top, "#8a6a42"); g.rect(x, top, 64 - x, 1, "#c8a878"); g.rect(x, top + 1, 64 - x, 1, "#b09060")
+    g.rect(0, 0, 2, 34, "#6a4a2a")
+    return g.outline().image()
+
+
+def _prop(name, scale=1):   # a cutscene prop from assets/tk/props.png, as a map piece
+    meta = json.loads((ROOT / "assets/tk/props.json").read_text())
+    x, y, w, h = meta["frames"][name]
+    im = Image.open(ROOT / meta["image"]).convert("RGBA").crop((x, y, x + w, y + h))
+    return im.resize((w * scale, h * scale), Image.NEAREST) if scale != 1 else im
+
+
+def halberd():   # Lü Bu's sky-piercer halberd planted upright (the cutscene prop's art)
+    return _prop("halberd")
+
+
+def bridal_carriage():   # a covered Han carriage hung with red silk (the cutscene prop's art, at map size)
+    return _prop("carriage", 2)
+
+
+def gateshut():   # a city gate drawn shut across the gap in a west or east wall (32x64): two heavy studded timber
+    # leaves meeting in the middle, iron bands, and a great beam barring them, the passage running across
+    g = Grid(32, 64)
+    for y0 in (0, 32):                                                       # the two leaves
+        g.rect(1, y0 + 1, 30, 30, "#6a3a22"); g.rect(1, y0 + 1, 30, 2, "#8a5232"); g.rect(1, y0 + 29, 30, 2, "#4a2614")
+        for x in range(5, 30, 6):
+            g.rect(x, y0 + 3, 1, 26, "#5a301c")                              # planks
+        for y in (y0 + 7, y0 + 24):
+            g.rect(1, y, 30, 2, "#3a3a42")                                   # iron bands
+        for yy in (y0 + 12, y0 + 16, y0 + 20):
+            for x in range(4, 30, 5):
+                g.set(x, yy, "#d8b050"); g.set(x, yy + 1, "#7a5a22")         # gilt studs
+    g.rect(1, 31, 30, 2, "#2a160c")                                          # the seam where they meet
+    g.rect(13, 0, 6, 64, "#4a2a18"); g.rect(13, 0, 2, 64, "#7a4a2a")         # the bar across both leaves
+    for y in (10, 30, 50):
+        g.rect(11, y, 10, 3, "#3a3a42")                                      # its iron brackets
+    return g.outline().image()
+
+
+def gateshut_ns():   # the same shut gate for a north or south wall's gap (64x32), the passage running north-south
+    return gateshut().transpose(Image.Transpose.ROTATE_90)
+
+
 PIECES = {
     "banner.black": banner_black, "banner.white": banner_white, "milestone": milestone, "plant.peony": peony, "water.lotus": lotus,
     "prop.lanterns": lantern_stand, "prop.body_lamp": body_lamp, "tree.poplar": poplar, "tree.willow": willow,
     "garden.trellis": trellis, "garden.screenwall": screenwall, "furn.qin": qin, "furn.window": window,
     "furn.swordwall": swordwall, "furn.seat": seat, "furn.lamp": lamp, "furn.dais": dais, "corral": corral,
     "landmark.hitchingpost": hitchingpost, "garden.rockery": rockery, "landmark.ridge": ridge,
+    "furn.jailcell": jailcell, "landmark.torch": torch, "wall.stairs": wallstairs, "prop.halberd": halberd,
+    "prop.carriage": bridal_carriage, "prop.gateshut": gateshut, "prop.gateshut_ns": gateshut_ns,
 }
 
 
