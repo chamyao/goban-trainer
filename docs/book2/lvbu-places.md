@@ -16,6 +16,19 @@ The arc is registered as Book 14 (`ARCS[14] = "lb"`; beat keys `3-x1` … `3-x20
 Every beat key has a spot or room, named as in the design's table. The lines for Chinese are in
 `docs/book2/lvbu-places-lines.md` (110 lines).
 
+## Chang'an, the night it falls (x0a, x0b): the prologue
+
+The Diaochan arc's city, kept as its streets, at night, burning (state `sack`: night, smoke) under Li Jue's black
+banners. Its rooms, beats and people are left out.
+- **Lü Bu's house** (the Diaochan arc's Lü Bu's quarters, on the ward street): its room `lb-house` holds x0a. The walk
+  starts at its gate (`lubu-gate`).
+- **Pang Shu's house** (the house on the palace lane): its room `pangshu-house` holds x0b, the back room.
+- **The walk** (in x0b): out of Lü Bu's gate, down the east lane, along the palace lane to Pang Shu's door. Two of Li
+  Jue's looters walk those lanes (watchers, in_beats 3-x0b, cone 3). Seen, she's sent back to Lü Bu's gate.
+  - **Cover** for hide and wait: spots with `"cover": true` (a dark doorway, an overturned hay cart, a well-house). When
+    the engine has it, a looter who sees her should send her back to the last cover she reached, not the start.
+  - The checker proves a covered route that needs a wait, and Testing's walk-playthrough crosses it (13–16 s).
+
 ## Xuzhou (x1–x4, x6, x7, x9, x11, x13)
 
 A walled city with four gates and a crossroads at its centre.
