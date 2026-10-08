@@ -42,10 +42,11 @@ const path = require('path');
       if (seen.has(`${pl}|${ids}|${ride}`)) continue; seen.add(`${pl}|${ids}|${ride}`);   /* each place once per map state */ if (!(await p.evaluate(pl => window.__w.placeId === pl, pl))) { console.log(`note book ${book}: ${pl} didn't open`); continue; }
       const mounted = await p.evaluate(() => { const w = window.__w; return !!(typeof WorldItems !== 'undefined' && WorldItems.mountedHere && WorldItems.mountedHere(w, w.lead)); });
       if (ride && !mounted) continue;   /* the riding pass: only where he rides (outdoors, with a horse) */
+      let builds = []; try { builds = (JSON.parse(require('fs').readFileSync(path.join(__dirname, `../../data/tk_maps/w${book}/${pl}.map.json`), 'utf8')).objects || []).filter(o => /^building\./.test(o.kind || '') && o.faces); } catch (e) {}   /* the buildings and the side each is drawn facing (its arch, its doorway) */
       const arrive = await p.evaluate(() => [window.__w.player.x, window.__w.player.y]);   /* where she comes into the place: the door's front must be reachable from here */
       for (const d of doors) {
         // from open ground just outside it (her feet clear of every solid), each way that has some, straight at it
-        const starts = await p.evaluate(([d, arrive]) => { const w = window.__w, P = w.player, fb = { x: P.body.x - P.x, y: P.body.y - P.y, w: P.body.width, h: P.body.height };
+        const { starts, face } = await p.evaluate(([d, arrive, builds]) => { const w = window.__w, P = w.player, fb = { x: P.body.x - P.x, y: P.body.y - P.y, w: P.body.width, h: P.body.height };
           const solid = w.solids.getChildren().filter(z => z.body && z.body.enable && !(z.visibleWith && !z.visibleWith.visible)).map(z => z.body);
           const feetFree = (x, y) => { const L = x + fb.x, T0 = y + fb.y, R = L + fb.w, B = T0 + fb.h; return !solid.some(o => L < o.right && R > o.x && T0 < o.bottom && B > o.y); };
           const [rx, ry, rw, rh] = d.r, cx = rx + rw / 2, cy = ry + rh / 2 + 3, out = [];
@@ -55,23 +56,37 @@ const path = require('path');
               if (Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(rx, ry, rw, rh), sx, sy - 3) || !feetFree(sx, sy)) continue;
               if (!w.findPath(arrive[0], arrive[1] - 3, sx, sy - 3)) continue;   /* ground she can walk to from where she came in */
               out.push([key, sx, sy]); break; }
-          return [...new Map(out.map(o => [o[0], o])).values()]; }, [d, arrive]);
-        let res = starts.length ? null : { in: false, why: 'no open ground before it on any side that she can walk to from where she comes in' };
-        for (const [key, sx, sy] of starts) {
-          const r = await p.evaluate(async ([sx, sy, key, pl]) => { const w = window.__w, P = w.player; w.walk = null; w.auto = null; P.body.reset(sx, sy); P.setVelocity(0);
+          const uniq = [...new Map(out.map(o => [o[0], o])).values()];
+          /* the door's building (its footprint, 20 px round it, holds the door) and the face it's drawn on: she comes at it from there */
+          const T = w.tw || 16, bs = builds.map(o => ({ o, r: new Phaser.Geom.Rectangle(o.x * T - 20, o.y * T - 20, o.w * T + 40, o.h * T + 40) })).filter(x => Phaser.Geom.Rectangle.Contains(x.r, cx, cy - 3));
+          const bld = bs.sort((a, b) => a.o.w * a.o.h - b.o.w * b.o.h)[0];
+          let face = null;
+          if (bld) { const o = bld.o, L = o.x * T, Tp = o.y * T, R = (o.x + o.w) * T, Bt = (o.y + o.h) * T, drawn = o.kind === 'building.gatetower' ? 'S' : o.faces, F = { S: ['up', 0, 1], N: ['down', 0, -1], E: ['left', 1, 0], W: ['right', -1, 0] }[drawn];   /* a gate tower is drawn front-on, its arch on the south face (Places' rule); the rest as they face */
+            face = { id: o.id || o.kind, faces: drawn, start: null };
+            if (F) for (const back of [28, 40, 56, 72]) for (const off of [0, -3, 3]) {
+              const sx = F[1] ? (F[1] > 0 ? R : L) + F[1] * back : cx + off, sy = F[2] ? (F[2] > 0 ? Bt : Tp) + F[2] * back : cy + off;
+              if (!feetFree(sx, sy) || !w.findPath(arrive[0], arrive[1] - 3, sx, sy - 3)) continue;
+              face.start = [F[0], sx, sy]; break; }
+            }
+          return { starts: uniq, face }; }, [d, arrive, builds]);
+        const walkIn = ([key, sx, sy]) => p.evaluate(async ([sx, sy, key, pl]) => { const w = window.__w, P = w.player; w.walk = null; w.auto = null; P.body.reset(sx, sy); P.setVelocity(0);
             await new Promise(r => setTimeout(r, 250)); const at = [Math.round(P.x), Math.round(P.y)];
             w.auto = key; const t0 = performance.now(); let line = '';
             while (performance.now() - t0 < 2000 && w.placeId === pl && !w.leaving) { await new Promise(r => setTimeout(r, 50)); if (w.ui.busy()) { line = ((document.querySelector('.town-ui .town-dlg:not([hidden])') || {}).textContent || '').replace(/\s+/g, ' ').trim().slice(0, 80); break; } }
             w.auto = null; const went = w.leaving || w.placeId !== pl;
-            return { in: went, from: at, stop: [Math.round(P.x), Math.round(P.y)], line }; }, [sx, sy, key, pl]);
-          res = { ...r, key }; if (r.in) break;
-          if (await p.evaluate(() => window.__w.ui.busy())) await ready();
-        }
+            return { in: went, from: at, stop: [Math.round(P.x), Math.round(P.y)], line }; }, [sx, sy, key, pl]).then(r => ({ ...r, key }));
+        const back = async () => { if (await p.evaluate(pl => window.__w.placeId !== pl || window.__w.leaving, pl)) { for (let i = 0; i < 30 && await p.evaluate(() => !window.__w.player || window.__w.leaving); i++) await p.waitForTimeout(150); await goTo(pl); } else if (await p.evaluate(() => window.__w.ui.busy())) await ready(); };
+        // first from the face its building is drawn on (the arch, the doorway a player walks up to): that one must go in
+        let faceRes = null;
+        if (face) { faceRes = face.start ? await walkIn(face.start) : { in: false, why: `no open ground before its ${face.faces} face she can walk to` }; await back(); }
+        let res = faceRes && faceRes.in ? faceRes : (starts.length ? null : { in: false, why: 'no open ground before it on any side that she can walk to from where she comes in' });
+        if (!res || !res.in) for (const st of starts) { const r = await walkIn(st); await back(); res = r; if (r.in) break; }
         const wet = !res.in && /walk to from where/.test(res.why || '') && await p.evaluate(() => (window.__w.waters || []).some(x => x.on));
         if (wet) { console.log(`note book ${book} ${pl}${ids ? ` (${ids})` : ''}, ${how}: the door to ${d.to} is cut off by the water in this state (as the story has it: the flood)`); continue; }
+        if (faceRes && !faceRes.in && !(/walk to/.test(faceRes.why || '') && await p.evaluate(() => (window.__w.waters || []).some(x => x.on)))) { n++; bad++;
+          check(false, `book ${book} ${pl}${ids ? ` (${ids})` : ''}, ${how}: from the ${face.faces} face of ${face.id} (where it's drawn), walking ${faceRes.key || '?'} into the door to ${d.to} (${d.r.map(Math.round).join(',')}): ${faceRes.why || `stopped at ${faceRes.stop} from ${faceRes.from}${faceRes.line ? `, "${faceRes.line}"` : ''}`}${res.in ? ` (it goes in walking ${res.key} from another side)` : ''}`); continue; }
         n++; if (!res.in) bad++;
-        check(res.in, `book ${book} ${pl}${ids ? ` (${ids})` : ''}, ${how}: walking ${res.key || '?'} into the door to ${d.to} (${d.r.map(Math.round).join(',')})${res.in ? '' : `: ${res.why || `stopped at ${res.stop} from ${res.from}${res.line ? `, "${res.line}"` : ''}`}`}`);
-        if (res.in) { for (let i = 0; i < 30 && await p.evaluate(() => !window.__w.player || window.__w.leaving); i++) await p.waitForTimeout(150); await goTo(pl); }
+        check(res.in, `book ${book} ${pl}${ids ? ` (${ids})` : ''}, ${how}: walking ${res.key || '?'}${faceRes && faceRes.in ? ` from the ${face.faces} face of ${face.id}` : ''} into the door to ${d.to} (${d.r.map(Math.round).join(',')})${res.in ? '' : `: ${res.why || `stopped at ${res.stop} from ${res.from}${res.line ? `, "${res.line}"` : ''}`}`}`);
       }
     }
     if (n) console.log(`book ${book} ${how}${K ? ` at ${K}` : ''}: ${n - bad}/${n} doors walked into`); return whens;
