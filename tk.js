@@ -1143,7 +1143,7 @@ async function viewTK(worldN) {
     // test mode is remembered (a ?test=1 link); say so, and offer the way out (the user didn't know they were in it)
     if (TK_TEST) {
       root.querySelector(".tk-head-btns").append(h("button", { class: "tk-chron-btn", type: "button", title: "Leave test mode: no Skip key, the hidden books hidden again",
-        onclick: () => { try { localStorage.setItem("tk-test", "0"); } catch {} location.href = location.pathname + location.hash; } }, "退出测试模式 Exit test mode"));
+        onclick: () => { try { sessionStorage.setItem("tk-test", "0"); localStorage.removeItem("tk-test"); } catch {} location.href = location.pathname + location.hash; } }, "退出测试模式 Exit test mode"));
       const sub = root.querySelector(".sub");
       if (sub) sub.append(h("span", { class: "tk-test-badge", title: "Test mode: problems have a Skip key and hidden books are open. Menu → Exit test mode." }, " · 测试模式 Test mode"));
     }
@@ -1463,12 +1463,19 @@ TK_SETTER_LINES.starred = TK_SETTER_LINES.stargrey;
 const TK_REST = 30000;
 // A touch screen (a phone or tablet): tap to move and tap to talk.
 // Test mode, for trying the story without solving: open the page with ?test=1 (?test=0 ends it).
-// Problems then get a Skip key that counts as a flawless solve.
+// Problems then get a Skip key that counts as a flawless solve. It lasts the browser tab (sessionStorage):
+// once it was kept for good, and a player who followed one ?test=1 link stayed in it without knowing.
+// The playtest harness (tests/playtest/testmode.js, which sets tk-harness) keeps its saved localStorage tk-test.
 const TK_TEST = (() => {
   try {
     const q = new URLSearchParams(location.search).get("test");
-    if (q != null) localStorage.setItem("tk-test", q === "0" ? "0" : "1");
-    return localStorage.getItem("tk-test") === "1";
+    if (q != null) sessionStorage.setItem("tk-test", q === "0" ? "0" : "1");
+    if (localStorage.getItem("tk-harness") === "1") {   // the tests: kept as before
+      if (q != null) localStorage.setItem("tk-test", q === "0" ? "0" : "1");
+      return localStorage.getItem("tk-test") === "1";
+    }
+    localStorage.removeItem("tk-test");   // the old for-good flag, from a link followed once
+    return sessionStorage.getItem("tk-test") === "1";
   } catch { return false; }
 })();
 const TK_TOUCH = typeof matchMedia !== "undefined" && matchMedia("(pointer: coarse)").matches;
