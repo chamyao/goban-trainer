@@ -36,10 +36,16 @@ const WorldItems = {
   hasMount(w) { const d = this.defs(w); return this.owned(w).some(k => d[k] && d[k].kind === "mount"); },
   indoors(scene) { const p = scene.region && scene.region.places.find(x => x.id === scene.placeId); return !!(p && p.parent); },
   mountedHere(scene, who) { return this.riding(scene.w) && !this.indoors(scene) ? this.coat(scene.w, who) : null; },
+  // On a mount that crosses water (Red Hare: "crosses_water"), the party rides over the water layers.
+  wades(scene) {
+    const d = this.defs(scene.w), m = this.owned(scene.w).map(k => d[k]).find(x => x && x.kind === "mount");
+    return !!(m && m.crosses_water && this.riding(scene.w) && !this.indoors(scene));
+  },
   toggle(scene) {
     const w = scene.w;
     if (!this.hasMount(w)) return;
     if (this.indoors(scene)) return this.say(scene, "屋里不能骑马", "No riding indoors");
+    if (this.riding(w) && scene.onWater && scene.onWater()) return this.say(scene, "水中不能下马", "Not in the water");
     this.setRiding(w, !this.riding(w));
     scene.mountSig = null;
     this.say(scene, this.riding(w) ? "上马" : "下马", this.riding(w) ? "Mounted" : "On foot");
@@ -172,6 +178,7 @@ const WorldItems = {
           return { who: r.who, spr: r.spr, coat, horse, head: this.head(scene, horse), seat: scene.add.image(r.spr.x, r.spr.y, this.riderTexture(scene, r.who, "down")) };
         });
         scene.mountSig = sig;
+        scene.grid = null;   // a horse that crosses water opens the water to taps
       }
       const busyScene = !!scene.cine;
       for (const m of scene.mounts) {
@@ -203,6 +210,7 @@ const WorldItems = {
     for (const s of steps) {
       if (s[0] === "gain") this.gain(scene, s[1]);
       else if (s[0] === "give") this.gain(scene, s[3]);   // ["give", from, to, item]
+      else if (s[0] === "lose") this.lose(scene, s[1]);
     }
   },
   gain(scene, key) {
@@ -211,6 +219,15 @@ const WorldItems = {
     const d = this.defs(w)[key];
     this.notice(scene, d);
     scene.mountSig = null;   // re-seat the party
+  },
+  // ["lose", key]: taken from the party (Red Hare stolen), with a notice
+  lose(scene, key) {
+    const w = scene.w;
+    if (!this.remove(w, key)) return;
+    const d = this.defs(w)[key] || {};
+    this.notice(scene, { zh: `失去 · ${d.zh || ""}`, name: `Lost: ${d.name || key}` }, true);
+    scene.mountSig = null; scene.grid = null;   // off the horse; the water is in the way again
+    if (this.onChange) this.onChange();
   },
   notice(scene, d, brief) {
     const host = (scene.game.worldOpts && scene.game.worldOpts.host) || document.body;

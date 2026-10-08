@@ -308,11 +308,22 @@ function worldScenes() {
       this.stated = []; this.refs = {}; this.lights = []; this.sightZones = []; this.sgrid = null; if (this.coneG) { this.coneG.destroy(); this.coneG = null; } if (this.fog) { this.fog.destroy(); this.fog = null; } this.procession = null;
       const sets = map.tilesets.map(ts => map.addTilesetImage(ts.name, `kit-${ts.name}`));
       this.water = null;
-      const layers = [];
+      // water: "water" always; "water:flood1,flood2" only in those map states (Xiapi's rising flood, Places)
+      this.waters = [];
+      const layers = [], st0 = this.mapState();
       for (const l of map.layers) {
         const layer = map.createLayer(l.name, sets, 0, 0).setDepth(-1000);
+        const m = /^water(?::(.+))?$/.exec(l.name);
+        if (m) {
+          layer.setCollisionByExclusion([-1]);
+          const w = { layer, ids: m[1] ? m[1].split(",").map(x => x.trim()) : null };
+          w.on = !w.ids || !!(st0 && w.ids.some(i => st0.ids.includes(i)));
+          layer.setVisible(w.on);
+          this.waters.push(w);
+          if (!m[1]) this.water = layer;
+          if (!w.on && m[1]) continue;   // (the isometric view draws a state's water only if it's on when the map is built)
+        }
         layers.push(layer);
-        if (l.name === "water") { layer.setCollisionByExclusion([-1]); this.water = layer; }
       }
       // an isometric kit: the same flat map, drawn as a diamond world (tk-iso.js)
       this.iso = typeof WorldIso !== "undefined" && WorldIso.on(kit) ? WorldIso.mount(this, map, layers) : null;
@@ -371,7 +382,7 @@ function worldScenes() {
       this.player.setCollideWorldBounds(true);
       this.player.facing = pos ? pos.f : "down";
       this.physics.add.collider(this.player, this.solids);
-      if (this.water) this.physics.add.collider(this.player, this.water);
+      this.addWater(this.player, true);
       this.physics.add.collider(this.player, this.npcs.map(n => n.spr));
       this.followers = [];
       this.trail = [];
@@ -644,7 +655,7 @@ function worldScenes() {
         }
       }
       this.physics.add.collider(spr, this.solids);
-      if (this.water) this.physics.add.collider(spr, this.water);
+      this.addWater(spr, false);
       this.npcs.push(n);
     }
 
@@ -706,6 +717,16 @@ function worldScenes() {
       if (!this.states) return null;
       const on = this.states.filter(st => this.cond(st.when) && !(st.until && this.cond(st.until)));
       return on.length ? Object.assign({}, ...on, { ids: on.map(st => st.id) }) : null;
+    }
+    // Water stops people, unless it's a state's water and that state is off, or (the party) on a mount that crosses water (Red Hare)
+    addWater(spr, party) {
+      for (const w of this.waters || []) this.physics.add.collider(spr, w.layer, null, () => w.on && !(party && this.wades()), this);
+    }
+    wades() { return typeof WorldItems !== "undefined" && WorldItems.wades(this); }
+    // the lead stands on water now (a state's water counts only when on)
+    onWater() {
+      const p = this.player;
+      return !!p && (this.waters || []).some(w => w.on && w.layer.getTileAtWorldXY(p.x, p.y - 2));
     }
     setWorldLight(tint) { this.st.light = tint || null; this.save(); this.applyWorldLight(); }
     applyWorldLight() {
@@ -772,6 +793,7 @@ function worldScenes() {
         n.spr.setVisible(on); n.spr.body.enable = on;
         if (n.mark) n.mark.setVisible(on && !TK.cleared(n.challenge));   // a challenger not here yet has no "!" either
       }
+      for (const w of this.waters || []) if (w.ids) { w.on = !!(st && w.ids.some(i => st.ids.includes(i))); if (!this.iso) w.layer.setVisible(w.on); }
       for (const o of this.stated || []) {
         const on = !!(st && o.in.some(i => st.ids.includes(i)));
         if (o.img) o.img.setVisible(on);
@@ -1477,7 +1499,8 @@ function worldScenes() {
             if (cx > r.x - 2 && cx < r.right + 2 && cy > r.y - 2 && cy < r.bottom + 2) tight[y * cols + x] = 1;
           }
       }
-      if (this.water) this.water.forEachTile(t => {
+      const wade = this.wades();   // on Red Hare the water is open ground
+      for (const w of this.waters || []) if (w.on && !wade) w.layer.forEachTile(t => {
         if (t.index === -1) return;
         for (let y = Math.floor(t.pixelY / C); y < Math.ceil((t.pixelY + t.height) / C); y++) for (let x = Math.floor(t.pixelX / C); x < Math.ceil((t.pixelX + t.width) / C); x++) if (x < cols && y < rows) block[y * cols + x] = tight[y * cols + x] = 1;
       });
