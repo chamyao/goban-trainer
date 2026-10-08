@@ -378,6 +378,71 @@ class Plan:
                     self.err(f"safe spot: no cell in {zid} is out of every cone")
 
 
+def chase_slip(P, ch, start, goal, corridor=None, horizon=400):
+    """Steps (one cell each, at the player's gallop) of the quickest way from start to goal that no rider sees, waiting
+    where it must, or None. Riders walk their beats in a loop at the engine's pace; one sees a cell in his cone (cone
+    tiles rounded up to cells, the way he rides) or anywhere in his own cell (the engine's 2-tile ring). Cells are the
+    plan's; corridor (a route's waypoints) keeps the search to that route's cells."""
+    T, C = 16, P.C
+    r_step = (42 / T / C) / (110 / T / C)          # cells a rider rides while the player gallops one
+    riders = []
+    for r in ch["riders"]:
+        pts = [tuple(c) for c in r["beat"]] or [tuple(r["post"])]
+        loop = pts + pts[-2:0:-1] if len(pts) > 1 else pts      # there and back
+        segs = [(a, b) for a, b in zip(loop, loop[1:] + loop[:1]) if a != b]
+        riders.append((segs, -(-r.get("cone", 5) // C), r.get("dir", "S")))
+    cache = {}
+
+    def seen_at(k):
+        if k in cache:
+            return cache[k]
+        out = set()
+        for segs, cone, d0 in riders:
+            if not segs:
+                pos, f = None, d0
+            else:
+                L = sum(max(abs(b[0] - a[0]), abs(b[1] - a[1])) for a, b in segs)
+                d = (k * r_step) % L
+                for a, b in segs:
+                    n = max(abs(b[0] - a[0]), abs(b[1] - a[1]))
+                    if d <= n:
+                        pos = (round(a[0] + (b[0] - a[0]) * d / n), round(a[1] + (b[1] - a[1]) * d / n))
+                        f = "E" if b[0] > a[0] else "W" if b[0] < a[0] else "S" if b[1] > a[1] else "N"
+                        break
+                    d -= n
+            pos = pos or tuple(ch["riders"][riders.index((segs, cone, d0))]["post"])
+            out |= P.cone(pos, f, cone) | {pos}
+        cache[k] = out
+        return out
+    allowed = None
+    if corridor:
+        allowed = set()
+        for a, b in zip(corridor, corridor[1:]):
+            x, y = a
+            while True:
+                allowed.add((x, y))
+                if (x, y) == tuple(b):
+                    break
+                x += (b[0] > x) - (b[0] < x) if x != b[0] else 0
+                y += (b[1] > y) - (b[1] < y) if x == b[0] else 0
+    if start in seen_at(0):
+        return None
+    seen, q = {(start, 0)}, deque([(start, 0)])
+    while q:
+        c, k = q.popleft()
+        if c == goal:
+            return k
+        if k >= horizon:
+            continue
+        for dx, dy in list(SIDES.values()) + [(0, 0)]:
+            n = (c[0] + dx, c[1] + dy)
+            if (n, k + 1) in seen or not P.walkable(n) or (allowed is not None and n not in allowed) or n in seen_at(k + 1):
+                continue
+            seen.add((n, k + 1))
+            q.append((n, k + 1))
+    return None
+
+
 def plans():
     for place, b in PLANS2.items():
         yield place, b["plan"], b
@@ -472,6 +537,17 @@ def main():
         if hasattr(P, "reach"):   # the place's own challengers, or those placed in this compound map
             P.check_challengers([c for c in b.get("challengers", []) if c.get("map") == mid], ch_ids)
             P.challengers = [c for c in b.get("challengers", []) if c.get("map") == mid]
+        if b.get("chase") and p is b["plan"]:   # a chase: the riders must leave some way through, with the right timing
+            spot = {s["id"]: s["at"] for s in p.get("spots", [])}
+            ch = b["chase"]
+            free = chase_slip(P, ch, tuple(spot[ch["from"]]), tuple(spot[ch["to"]]))
+            if free is None:
+                P.err("chase: no timing gets from the Chancellor's gate to the goal unseen by every rider")
+            P.chase_routes = {r: chase_slip(P, ch, tuple(spot[ch["from"]]), tuple(spot[ch["to"]]), corridor=pts)
+                              for r, pts in ch.get("routes", {}).items()}
+            if "--verbose" in sys.argv:
+                print(f"chase in {name}: unseen in {free} steps;", ", ".join(f"{r}: {'unseen in %d steps' % v if v else 'no unseen timing'}"
+                                                                       for r, v in P.chase_routes.items()))
         errors += P.errors
         if "--png" in sys.argv:
             drawn.append(draw(name, P, ROOT / ("docs/book2/plans-cc" if ARC == "cc" else "docs/book2/plans")))

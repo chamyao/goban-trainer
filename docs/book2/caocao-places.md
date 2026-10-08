@@ -128,3 +128,32 @@ These are in `NEW_KINDS` and `vocab.py`, each with a stand-in until Graphics dra
 ## Lines for Chinese
 
 `docs/book2/caocao-places-lines.md` lists every line a player reads on these maps, for Plot.
+
+## The chase out of Luoyang (state `sword`, c16 → c17)
+
+`PLANS_CC["Luoyang"]["chase"]` is read by `plans.py`. Each rider becomes an npc with Integration's `rider` property:
+`{"chase": "c17", "beat": [[tx,ty]…], "cone": tiles, "dir": "E"}`. The run starts, and restarts, at the `xf-gate` spot on
+the street outside the Chancellor's gate, and it ends at the East Gate (the c17 spot). The north and west gates are shut
+in this state, so the East Gate is the only way out.
+
+**Ground:**
+- Open, where the horse outruns a rider: the main street and the south street.
+- Narrow, where a rider can corner him: the lanes and the market.
+
+| Route | Cells | What it asks |
+|---|---|---|
+| **Market cut**: east along the south street, up the market's east edge, onto the main street at the gate | 17 | **timing**: it is the one way a careful player slips past every cone unseen (the checker finds it) |
+| **East lane**: the open south street, then up the narrow east lane | 15 | a gamble: the lane rider rides the whole lane, so meet him there and you're caught |
+| **Long way**: west, up the west lane, then the whole main street | 32 | nerve: the west-lane rider, then the gate rider on the open street, where the gallop outruns him |
+
+| Rider | Post (cell) | Beat (cells, there and back) | Cone (tiles) |
+|---|---|---|---|
+| `rider-market` | [13,11] | [13,11] ↔ [17,11], along the market's south row | 4 |
+| `rider-lane` | [19,12] | [19,12] ↔ [19,9], the east lane | 5 |
+| `rider-west` | [2,10] | [2,9] ↔ [2,12], the west lane | 5 |
+| `rider-gate` | [16,8] | [9,8] ↔ [17,8], the main street before the gate | 6 |
+
+**Check (`check_plans_w2.py --arc cc --verbose`):**
+- The riders walk their beats at the engine's pace (42 px/s, against the gallop's 110).
+- A rider sees his cone, with tiles rounded up to cells, the way he rides. He also sees his own cell.
+- A timed search must find a way from `xf-gate` to the goal that no rider sees, waiting where needed. It does, in 17 steps, by the market cut.
