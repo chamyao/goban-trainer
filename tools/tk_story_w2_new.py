@@ -2129,13 +2129,19 @@ def _nodes_caocao():
             # The chase out of Luoyang (the user's design): a caught rider means one go problem, one try;
             # solve it and that rider drops out, fail it and the chase restarts at the Chancellor's gate.
             "from": "xf-gate",
-            "spotted": [["n", "A Xiliang rider has seen him, and wheels his horse round.", "一名西凉骑兵望见了他，拨转马头追来。"]],
-            "caught": [["n", "The rider cuts across his path: Colonel Cao! The Chancellor wants a word with you.",
-                        "骑兵横马拦住去路：“曹校尉！相国有话问你。”"]],
+            # The user's redesign: a wave pours out of the gate behind him (slightly slower than his horse),
+            # and soldiers spring out of the side lanes ahead. A collision with one is a board, one try.
+            "spotted": [["n", "Behind him the Chancellor's gate bursts open, and the guard pours out after him: Stop Cao Cao!",
+                         "身后相府门开，卫士蜂拥追出：“拿住曹操！”"]],
+            "caught": [["n", "A soldier leaps out of a lane and grabs at his bridle: Colonel Cao! The Chancellor wants a word with you.",
+                        "一名军士从巷中跃出，扯住马辔：“曹校尉！相国有话问你。”"]],
             "solved": [["say", "caocao", "I'm trying out the horse the Chancellor gave me. Ask him yourself.",
                         "相国赐我良马，我正试骑。不信，你自去问他。"]],
             "restart": [["n", "They take him back. Cao Cao rides out again, before anyone thinks to ask why.",
                          "被截回府。曹操再度牵马出门，趁无人起疑。"]],
+            # the guard behind him: a little slower than his horse, on his own trail
+            "wave": {"count": 6, "delay": 2, "who": "f_soldier", "pace": 0.92},
+            "overrun": [["n", "The guard closes round him, and hands drag him from the saddle.", "卫士一拥而上，将他扯下马来。"]],
         }, dilemma=D(
             "caocao", "Get through the East Gate.", "闯出东门。",
             "Before he wonders why I don't come back.", "趁他还没起疑。",

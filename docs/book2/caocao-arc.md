@@ -474,3 +474,24 @@ Dong Zhuo's men sent to fetch him back for "a word with the Chancellor". It's ma
 **Needs:** Integration: chasers, the catch trigger, a one-attempt board and the chase restart, with whatever field names
 it chooses. Places: the riders' starting posts and search paths in Luoyang's "sword" state, and the open streets where the
 horse can outrun them. Plot wires the lines in once the syntax exists.
+
+### Redesign (the user's, after the first version): a wave behind, ambushes from the sides
+
+> "instead of the people waiting on the road, we should have a wave of people chasing him from behind. he is slightly
+> faster than them but he also has soldiers ambushing him from either side so he has to dodge them. if he collides with
+> soldiers, he has to fend them off with a go problem"
+
+This replaces the four riders on fixed posts.
+- **The wave:** a body of Dong Zhuo's men pours out of the Chancellor's gate after Cao Cao and follows his trail. It is
+  **slightly slower** than he is on horseback, so he gains on it only while he keeps moving.
+- **The ambushes:** soldiers burst out of side lanes and doorways, from either side of the street, ahead of him. He has
+  to **dodge** them.
+- **Collision with an ambusher:** one go problem, one try (the earlier rule). Solved: he fends the soldier off and rides
+  on. Failed: taken, and the chase restarts at the Chancellor's gate.
+- **Plot's choices, confirmed by the user ("yes this is good"):**
+  - If the **wave** itself catches him, there is no board. He's taken and the chase restarts. Fending off a whole wave
+    with one problem would be too easy.
+  - The board **pauses** the chase while it's up, but the time lost slowing down to dodge is real. So the wave
+    is a pressure, not a timer.
+- **Lines:** the "spotted" line becomes the wave's cry as it pours out of the gate. The "caught" line goes to an ambusher.
+  The solved and restart lines stay.
