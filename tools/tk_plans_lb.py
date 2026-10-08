@@ -118,7 +118,8 @@ PLANS_LB = {
                             spots=[{"id": "x1", "at": [6, 5], "node": "3-x1", "label": "The prefecture hall"},
                                    {"id": "x3", "at": [10, 5], "node": "3-x3", "label": "Cao Cao's letter"},
                                    {"id": "x7", "at": [6, 4], "node": "3-x7", "label": "The condolence call"},
-                                   {"id": "x9", "at": [10, 4], "node": "3-x9", "label": "The hawk"}])
+                                   {"id": "x9", "at": [10, 4], "node": "3-x9", "label": "The hawk"},
+                                   {"id": "x11", "at": [8, 5], "node": "3-x11", "label": "Chen Deng's advice"}])
             | {"label": "The prefecture hall"},
             # ---- Lü Bu's lodging: a walled court, the rear hall at the back, Lady Yan's rooms on the east ----
             "lb-lodging": {
@@ -174,6 +175,7 @@ PLANS_LB = {
             "3-x6": "Go to Lady Yan's rooms, in the lodging's court.",
             "3-x7": "Go to the prefecture hall: Chen Gui has come to call.",
             "3-x9": "Go to the prefecture hall.",
+            "3-x11": "Go to the prefecture hall: Chen Deng has advice for you.",
             "3-x13": "Ride back to Xuzhou's west gate.",
         },
     },
@@ -364,22 +366,21 @@ PLANS_LB = {
             "things": [
                 {"id": "inn", "kind": "building.inn", "rect": [16, 3, 2, 1], "door": "S", "label": "A roadside inn"},
             ],
-            "spots": [{"id": "x11", "at": [34, 4], "node": "3-x11", "label": "Xiapi in sight", "trigger": "near"}],
+            # the household's carts on the road to Xiapi, from x11 (Lü Bu doesn't go with them: he rides for Xiao Pass)
+            "props": [{"kind": "prop.carriage", "at": [12, 3], "label": "The household's carriages, bound for Xiapi", "in": ["move"]},
+                      {"kind": "prop.carriage", "at": [20, 5], "label": "Grain carts for Xiapi", "in": ["move"]},
+                      {"kind": "prop.carriage", "at": [27, 3], "in": ["move"]}],
             "dress": [{"kind": "milestone", "along": "road", "every": 5}, {"kind": "tree.willow", "along": "road", "every": 3}],
             "exits": [{"to": "Xuzhou", "at": [0, 4], "side": "W"}, {"to": "Xiapi", "at": [35, 4], "side": "E"}],
             "entries": {"": [1, 4], "Xuzhou": [1, 4], "Xiapi": [34, 4]},
         },
         "states": [
             {"id": "road", "light": "day"},
-            {"id": "move", "when": "node:x10", "until": "node:x11", "light": "day",
-             "procession": {"column": ["outriders", "carriage:yan", "carriage:diaochan", "player", "carriage:grain", "carriage:grain",
-                                       "rearguard"],
-                            "path": "road", "from": [0, 4], "to": [35, 4], "leash": 6,
-                            "leash_line": "Lü Bu keeps beside his household's carriages.", "stops": ["x11"]}},
+            {"id": "move", "when": "node:x11", "until": "node:x13", "light": "day"},
         ],
         "npcs": [_talk("folk.villager", [16, 4], "“Grain carts, all morning. Whatever's coming to Xuzhou, the general isn't staying to meet it.”",
                        **{"in": ["road"]})],
-        "objectives": {"3-x11": "Escort your household and the grain carts down the road to Xiapi."},
+        "objectives": {},
     },
 
     # =========================================================================================

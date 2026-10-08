@@ -6,21 +6,21 @@ These are the maps for `docs/book2/lvbu-arc.md` (novel chapters 13–19). They a
     python3 tools/check_plans_w2.py --arc lb --png     # 15 plans, 0 errors; 8 road challengers, 2 blocking
 
 The arc is registered as Book 14 (`ARCS[14] = "lb"`; beat keys `3-x1` … `3-x20`). Its story isn't in yet:
-`mapfactory build --world 14 --plans lb` waits for Plot's `WORLD3_LB` in `tools/tk_story_w2_new.py`. With a stand-in
-story made from the design's beat table:
-- all 15 maps build;
+`mapfactory build --world 14 --plans lb` waits for Plot's `WORLD2_LB` in `tools/tk_story_w2_new.py`. Built with Plot's story
+(claude/plot 75d1b473):
+- all 15 maps build, and every beat x1–x20 lands on its spot;
 - the two blockers' guard points are proven;
 - the flood is proven state by state;
 - `verify` finds no problems.
 
 Every beat key has a spot or room, named as in the design's table. The lines for Chinese are in
-`docs/book2/lvbu-places-lines.md` (109 lines).
+`docs/book2/lvbu-places-lines.md` (110 lines).
 
-## Xuzhou (x1–x4, x6, x7, x9, x13)
+## Xuzhou (x1–x4, x6, x7, x9, x11, x13)
 
 A walled city with four gates and a crossroads at its centre.
 - **North of the main street:**
-  - the prefecture hall (`xz-hall`: x1, x3, x7, x9);
+  - the prefecture hall (`xz-hall`: x1, x3, x7, x9, x11);
   - Lü Bu's lodging (`lb-lodging`), a walled court. Inside are the rear hall (`lb-reartang`, x2) and Lady Yan's rooms
     (`yan-room`, x6).
 - **South of the main street:**
@@ -64,12 +64,11 @@ At night.
   - a Taishan bandit on the bend, who **blocks** x12;
   - one of Chen Gong's sentries in the valley.
 
-## The Xiapi Road (x11)
+## The Xiapi Road
 
-From Xuzhou to Xiapi, past an inn and a marsh, over the Si.
-- In `move` (x10 → x11) it's a **procession**: outriders, Lady Yan's carriage, Diaochan's carriage, the player, two
-  grain carts (`carriage:grain`), the rearguard.
-- The column halts at x11.
+From Xuzhou to Xiapi, past an inn and a marsh, over the Si. No beat is played here: x11 (Chen Deng's advice) is a scene
+in Xuzhou's prefecture hall, and Lü Bu rides for Xiao Pass, not with his family. From x11 to x13 (state `move`) the
+household's carriages and the grain carts stand on the road to Xiapi as scenery.
 
 ## Xiapi (x14–x20): the flood
 

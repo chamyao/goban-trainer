@@ -2,7 +2,7 @@
 
 Every line a player reads on the arc's maps (`tools/tk_plans_lb.py`): place names, labels, townsfolk, the road challengers, objectives, shut gates and the caught-by-a-patrol lines. Lines already in `tools/tk_places_w2_zh.py` are left out.
 
-109 lines.
+110 lines.
 
 - Xuzhou
 - The prefecture hall
@@ -17,6 +17,7 @@ Every line a player reads on the arc's maps (`tools/tk_plans_lb.py`): place name
 - Cao Cao's letter
 - The condolence call
 - The hawk
+- Chen Deng's advice
 - Lady Yan's rooms
 - The bride's chest
 - “The Lord Liu gave Lü Bu a feast. Lord Zhang Fei didn't come, they say. Or came, and left shouting.”
@@ -35,6 +36,7 @@ Every line a player reads on the arc's maps (`tools/tk_plans_lb.py`): place name
 - Go to Lady Yan's rooms, in the lodging's court.
 - Go to the prefecture hall: Chen Gui has come to call.
 - Go to the prefecture hall.
+- Go to the prefecture hall: Chen Deng has advice for you.
 - Ride back to Xuzhou's west gate.
 - Xiaopei
 - Lü Bu's halberd, planted at the camp gate
@@ -76,10 +78,9 @@ Every line a player reads on the arc's maps (`tools/tk_plans_lb.py`): place name
 - “Who goes there? Oh, Master Chen. The Adviser said no one comes up tonight.” You're sent back down the road.
 - Climb the pass road at night and reach the cliff's edge above Cao Cao's camp, unseen by Chen Gong's men.
 - The Xiapi Road
-- Xiapi in sight
-- Lü Bu keeps beside his household's carriages.
+- The household's carriages, bound for Xiapi
+- Grain carts for Xiapi
 - “Grain carts, all morning. Whatever's coming to Xuzhou, the general isn't staying to meet it.”
-- Escort your household and the grain carts down the road to Xiapi.
 - Xiapi
 - Lü Bu's residence
 - The granary
