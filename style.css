@@ -507,6 +507,9 @@ body:has(.tk-scroll-wrap) .wukong-toggle, body:has(.tk-scroll-wrap) #wukong { vi
 .town-txt { min-width: 0; }
 .town-who { font-weight: bold; color: #8a2a1a; }
 .town-zh { font-size: 1.15em; }
+/* a phone (apo110: dialogue too small on mobile): the box's words don't shrink with the narrow map, upright or on its side */
+@media (max-width: 700px) { .town-ui .town-dlg { font-size: clamp(14px, 3.7vw, 16px); } }
+@media (pointer: coarse) and (max-height: 500px) { .town-ui .town-dlg { font-size: 14px; } }
 .town-en { margin-top: 4px; color: #6a5440; font-size: .92em; }
 .town-more { position: absolute; right: 12px; bottom: 4px; color: #8a2a1a; animation: townBob 1s infinite; }
 @keyframes townBob { 50% { transform: translateY(3px); } }
