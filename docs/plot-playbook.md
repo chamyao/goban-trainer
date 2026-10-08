@@ -1,9 +1,10 @@
 # Plot playbook: how to write a book of *Tian Cai Zhi Wang*
 
-This is the process the Plot session used for the Diaochan arc (Book 2, novel chapters 8–9), written down so the next arc
+This is the process the Plot session used for the Diaochan and Cao Cao arcs (Book 2, novel chapters 8–9), written down so the next arc
 and the next book can be done the same way. It has three layers:
 
-- **Part 1, the core principles:** the craft of telling the story. This part comes first.
+- **Part 0, the foundation:** the game is built around the novel's most interesting narratives.
+- **Part 1, the core principles:** the craft of telling the story.
 - **Part 2, how the game works:** the rules and decisions that shape every arc.
 - **Parts 3–5:** the steps, a checklist, and the questions still open.
 
@@ -20,6 +21,26 @@ and the next book can be done the same way. It has three layers:
 Quotes are kept as the user typed them.
 
 ---
+
+## Part 0: The foundation (what the game is built around)
+
+> "yes we should base the game around interesting narratives within the novel such as diaochans"
+
+> "but I like what we did with her, it made the gameplay much more interesting to center it on her"
+
+**The game is built from the novel's most interesting narratives, not from a chapter-by-chapter walk through it.** Each arc
+takes one compelling story inside the novel and builds itself around it. A good arc has:
+- **A centre with stakes:** a person whose own moments carry risk, nerve or cost, so they are good to play. Diaochan between
+  two dangerous men; Cao Cao from the voice of sense to "I'd rather wrong the world".
+- **A shape:** a beginning, a turn and an end inside the novel. The chain plot runs from the garden vow to Dong Zhuo's death
+  and its price.
+- **Its own world:** a few places, a cast, and payoffs planted and paid inside the arc.
+
+What this changes:
+- **Choosing what to make next** means choosing a narrative, not the next chapters. Chronology still decides the order in
+  which published arcs are chained (the Cao Cao arc leads into the Diaochan arc), and scrolls bridge what lies between (R16).
+- **Choosing the lead** means choosing whoever makes that narrative best to play (R3: follow the actor, not the narrator).
+- **Faithfulness** still holds inside the arc (R1): the novel's events, in its order, in its words.
 
 ## Part 1: Core principles (how to tell the story)
 
