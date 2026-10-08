@@ -631,6 +631,14 @@
    "label": "Liu Bei's gate"
   },
   {
+   "id": "lodging-door",
+   "x": 52.5,
+   "y": 24.7,
+   "node": "",
+   "label": "Lü Bu's gate",
+   "note": "x9, x11: Lü Bu starts here and walks to the prefecture hall"
+  },
+  {
    "id": "x4",
    "x": 1.5,
    "y": 33.7,
@@ -794,16 +802,16 @@
    25
   ],
   "the-xiapi-road": [
-   73,
+   78,
    29
   ],
   "the-shouchun-road": [
    37,
-   53
+   58
   ],
   "xiao-pass": [
    37,
-   5
+   1
   ],
   "": [
    37,
@@ -839,12 +847,12 @@
   {
    "id": "held",
    "when": "node:x4",
-   "until": "node:x13",
+   "until": "node:x12",
    "light": "day"
   },
   {
    "id": "locked",
-   "when": "node:x13",
+   "when": "node:x12",
    "banners": "blue",
    "light": "day",
    "shut": [

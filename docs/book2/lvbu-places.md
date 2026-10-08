@@ -63,8 +63,12 @@ A walled city with four gates and a crossroads at its centre.
 
 **Outside the west gate:**
 - x4, the night gate. In state `moon` (x3 → x4: night, clear) the west gate is **shut** until it's opened.
-- x13, under the wall where Mi Zhu shouts down. In `locked` (from x13) all four gates are shut, and Cao Cao's blue
-  banners fly.
+- x13, under the wall where Mi Zhu shouts down. In `locked` (from x12, while Lü Bu is away at Xiao Pass) all four
+  gates are shut, and Cao Cao's blue banners fly. He rides back from Xiao Pass to a shut city: every road arrives
+  outside its gate, and the way round the outside of the wall reaches x13 and every road out, but not the city (checked
+  on the built map).
+
+Lü Bu's gate (spot `lodging-door`) is where he starts at x9 and x11, walking to the prefecture hall.
 
 **Roads:** west to Xiaopei, east to the Xiapi Road, south to the Shouchun Road, north to Xiao Pass.
 
@@ -92,7 +96,8 @@ At night.
 - The pass road climbs from the Xuzhou side through a valley and a narrow bend to the top of the pass.
 - **On the top:** Chen Gong's men's tents and a watch fire, with two sentries as watchers. The checker proves a covered
   route to the cliff's edge, and that you have to wait for it.
-- **x12** is the cliff's edge above Cao Cao's camp, which lies below to the west.
+- **x12** is the cliff's edge above Cao Cao's camp, which lies below to the west. The cliff (`"drop": "W"`) has crags
+  down its face and a lip of stones along the top, with a gap at x12 (`docs/book2/plans-lb/xiao-pass-cliff.png`).
 - **Challengers:**
   - a Taishan bandit on the bend, who **blocks** x12;
   - one of Chen Gong's sentries in the valley.
