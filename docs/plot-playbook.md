@@ -163,6 +163,15 @@ These came from the second research round, on *Chinese Paladin*, *Xuan-Yuan Swor
   would she save the dynasty" and "why her though… what can she even do", the answer showed that Diaochan carries out the
   chain plot. So her moments of risk became hers to play, and Wang Yun kept the legwork. The user's reply was "yeah I like
   that".
+- **Follow the actor, not the narrator.** The novel's narration in chapters 8–9 stays with Wang Yun, Dong Zhuo and Lü Bu.
+  Diaochan is the hinge of the plot but is mostly seen from outside, and the chapter titles don't name her. We centred
+  the arc on her anyway, because her moments are the ones with the most risk and nerve, which makes them the best things
+  to play. The user confirmed it worked:
+
+  > "but I like what we did with her, it made the gameplay much more interesting to center it on her"
+
+  Faithfulness is about the novel's events, order and words. It isn't about whose eyes the novel watches through. Pick the
+  lead whose moments make the best play, as long as every event still happens as written.
 - To find who acts, survey the chapters for tasks (Part 2, step 2). That survey showed that in chapters 5–7 Liu Bei has no
   task of his own, so the act is handed around.
 - Playing the villain is fine when the novel's focus goes there: Li Su's lie at Meiwu, Jia Xu's rumour, Li Jue at Ren
