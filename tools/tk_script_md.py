@@ -24,6 +24,10 @@ NAMES = {
     "shisunrui": ("Shisun Rui", "士孙瑞"), "huangwan": ("Huang Wan", "黄琬"), "dongmu": ("Dong Zhuo's mother", "董母"),
     "mamidi": ("Ma Midi", "马日磾"), "lijue": ("Li Jue", "李傕"), "guosi": ("Guo Si", "郭汜"), "jiaxu": ("Jia Xu", "贾诩"),
     "daoren": ("the Taoist", "道人"), "huangfusong": ("Huangfu Song", "皇甫嵩"),
+    "yanshi": ("Lady Yan", "嚴氏"), "chendeng": ("Chen Deng", "陳登"), "chengui": ("Chen Gui", "陳珪"), "hanyin": ("Han Yin", "韓胤"),
+    "jiling": ("Ji Ling", "紀靈"), "houcheng": ("Hou Cheng", "侯成"), "songxian": ("Song Xian", "宋憲"), "weixu": ("Wei Xu", "魏續"),
+    "zhangliao": ("Zhang Liao", "張遼"), "mizhu": ("Mi Zhu", "糜竺"), "liubei": ("Liu Bei", "劉備"), "guanyu": ("Guan Yu", "關羽"),
+    "zhangfei": ("Zhang Fei", "張飛"), "lvnv": ("Lü Bu's daughter", "呂布之女"),
 }
 
 
