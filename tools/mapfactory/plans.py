@@ -916,6 +916,32 @@ def ways(mb):
     return {"nodes": nodes, "edges": sorted(edges)} if edges else None
 
 
+def doors_reachable(m, mb):
+    """Every door's exit must touch ground she can walk to from where she comes in: its own tiles, or the tile just
+    outside on its open side. Otherwise a building has hidden its door in its own wall (the White Gate tower's north
+    door, inside the tower's solid: apo110 "I cant go up the tower")."""
+    start = tuple(m["entries"].get("") or ())
+    if not start:
+        return
+    seen, todo = {start}, [start]
+    while todo:
+        x, y = todo.pop()
+        for dx, dy in SIDES.values():
+            u = (x + dx, y + dy)
+            if u not in seen and 0 <= u[0] < mb.W and 0 <= u[1] < mb.H and mb.walkable(u):
+                seen.add(u)
+                todo.append(u)
+    for e in m["exits"]:
+        if not e.get("door"):
+            continue
+        ox, oy = {"N": (0, 1), "S": (0, -1), "E": (-1, 0), "W": (1, 0)}[e["side"]]   # the side she walks in from
+        tiles = {(int(e["x"] + i * .5), int(e["y"] + j * .5)) for i in range(int(e["w"] * 2) + 1) for j in range(int(e["h"] * 2) + 1)}
+        tiles |= {(x + ox, y + oy) for x, y in tiles}
+        if not tiles & seen:
+            raise RuntimeError(f"{m['id']}: the door to {e['to']} (exit at {e['x']}, {e['y']}) can't be walked to from "
+                               f"the entry: it is inside a wall or a solid")
+
+
 def entry_covers(m):
     """Hide and wait: on a map whose watchers hunt by sight, every way in is a cover (the doorway she comes out of, the
     shadow of a gate). A catch sends her back to her last cover, or to where she came in, before her first hide; that
@@ -1156,6 +1182,7 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
             first = next(iter(m["entries"].values()), None)
             m["entries"][""] = first or list(mb.near_cell((mb.cols // 2, mb.rows // 2), want_visible=False))
         entry_covers(m)
+        doors_reachable(m, mb)
         m["links"] = sorted({x["to"] for x in m["exits"]})
 
     # the story's quests: each node's spot, in whichever map holds it

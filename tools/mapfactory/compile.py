@@ -177,6 +177,31 @@ def voiced_states(states):
     return out
 
 
+def doors_blocked(objs):
+    """The doors (small exits) that the engine's player, a 10 x 6 body with her feet at its bottom edge, can't overlap
+    without touching a solid. Each solid is the box tk-world makes from a prop: cl/cr either side of x, fh tall, less 1 px
+    all round. A door drawn into its own building's solid (the White Gate tower's north door) fails here."""
+    P = lambda o: {p["name"]: p["value"] for p in o.get("properties", [])}   # noqa: E731
+    zones = []
+    for o in objs:
+        p = P(o)
+        if o["type"] != "prop" or not p.get("solid") or p.get("in"):
+            continue
+        l, r = p.get("cl", p.get("fw", 0) / 2), p.get("cr", p.get("fw", 0) / 2)
+        cx, cy, w, h = o["x"] + (r - l) / 2, o["y"] - p.get("fh", 0) / 2, l + r - 2, p.get("fh", 0) - 2
+        zones.append((cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2))
+    hit = lambda a: any(a[0] < z[2] and z[0] < a[2] and a[1] < z[3] and z[1] < a[3] for z in zones)   # noqa: E731
+    bad = []
+    for o in objs:
+        if o["type"] != "exit" or o["width"] >= 16 or o["height"] >= 16:
+            continue   # a map's edge or a wall's gate: long, walked through
+        ex = (o["x"], o["y"], o["x"] + o["width"], o["y"] + o["height"])
+        if not any(not hit((fx - 5, fy - 6, fx + 5, fy))
+                   for fx in range(int(ex[0]) - 4, int(ex[2]) + 5) for fy in range(int(ex[1]) + 1, int(ex[3]) + 6)):
+            bad.append(P(o).get("to", o["name"]))
+    return bad
+
+
 def compile_map(m, kit, out_dir):
     T = kit.T
     W, H = m["size"]
@@ -367,6 +392,23 @@ def compile_map(m, kit, out_dir):
             x += 1
     for x0, y, n in runs:
         obj("", "prop", (x0 + n / 2) * T, (y + 1) * T, kind="wall", fw=n * T, fh=T, solid=True)
+    # every other ground the plan says can't be walked (a city wall, hills, a cliff face) is solid too: the engine
+    # collides only with solid props and water, so without these she walked through Xiapi's city wall and over Xiao
+    # Pass's hills, and the plans' proofs (blockers, covered routes, shut gates) held only on paper. Water has its own
+    # layers (the flood's included), and a compound's wall its runs above
+    walk = m["terrain"].get("walk", {})
+    plain = [[legend[c] for c in row] for row in m["terrain"]["rows"]]
+    for y in range(H):
+        x = 0
+        while x < W:
+            mat = plain[y][x]
+            if walk.get(mat, True) is False and mat not in ("water", "wall"):
+                x0 = x
+                while x < W and plain[y][x] == mat:
+                    x += 1
+                obj("", "prop", (x0 + (x - x0) / 2) * T, (y + 1) * T, kind="wall", fw=(x - x0) * T, fh=T, solid=True)
+            else:
+                x += 1
     for s in m["spots"]:
         obj(s["id"], "spot", s["x"] * T, s["y"] * T, node=s["node"], label=s.get("label", ""), label_zh=ZH.get(s.get("label", ""), ""),
             **({"trigger": s["trigger"]} if s.get("trigger") else {}), **({"use": s["use"]} if s.get("use") else {}),
@@ -424,6 +466,9 @@ def compile_map(m, kit, out_dir):
                        "opacity": 1, "visible": True, "data": data} for i, (n, data) in enumerate(layers)] +
                      [{"id": len(layers) + 1, "name": "objects", "type": "objectgroup", "draworder": "topdown",
                        "x": 0, "y": 0, "opacity": 1, "visible": True, "objects": objs}]}
+    bad = doors_blocked(objs)
+    if bad:
+        raise RuntimeError(f"{m['id']} ({kit.k['kit']}): no one can step into the door to {', '.join(bad)}: it is inside a solid")
     (out_dir / f"{m['id']}.tmj").write_text(json.dumps(tmj, ensure_ascii=False, separators=(",", ":")))
     return tmj
 

@@ -99,6 +99,13 @@ These were each learned from a real complaint, and each is a rule, not a one-off
   trigger, since the walls funnel her in. Centred in its claim instead, an 8-tile house put its door on a tile edge, a
   tile off a gate that fills its cell, and no one could walk into Pang Shu's house (Testing). The build fails if a door
   can't be centred. `tests/playtest/door-gate.js` walks in at the centre and a few px either side.
+- **What the plan can't walk, the game can't walk.** Compile makes every unwalkable ground solid: a city wall, hills,
+  a cliff face, the void outside a room. Water has its own layers. The engine collides only with solid props and water,
+  and for a while compile wrote solids only for compound walls. In the game you could walk through Xiapi's city wall and
+  over Xiao Pass's hills, so every proof that leaned on them held only on paper.
+- **Every door can be stepped into.** The build fails in two places. plans (`doors_reachable`): if a door's exit
+  doesn't touch ground walkable from the map's entry. compile (`doors_blocked`): if the player's 10×6 body can't overlap
+  the exit without touching one of the engine's solid boxes.
 - **A tower in a wall stands beside its gates, and is entered where it's drawn.** A gate tower (`building.gatetower`)
   is drawn front-on, with its arch on the south face. Its door is that arch (S), and the whole arch is the trigger. A
   side door (E/W) is at the foot of its face. A north door would be on the face the camera never sees, so the build
