@@ -2191,7 +2191,7 @@ _ITEMS_CAOCAO = {
     "weihong": {"name": "Wei Hong's fortune", "zh": "卫弘家资", "kind": "treasure"},
     # The Xiliang horse Dong Zhuo gives him in c16. He and Chen Gong ride from then on (「乘馬投故鄉來」).
     "horse": {"name": "A horse from the Chancellor's stable", "zh": "相府良马", "kind": "mount",
-              "coats": {"caocao": "black", "chengong": "brown"}},
+              "coats": {"caocao": "white", "chengong": "brown"}},
 }
 
 # Closes the Cao Cao arc and bridges to the Diaochan arc: chapters 5-7 in a few lines, in the novel's own order.
