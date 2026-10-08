@@ -575,6 +575,51 @@
    "y": 23,
    "w": 2,
    "h": 1
+  },
+  {
+   "kind": "prop.gateshut",
+   "x": 6,
+   "y": 28,
+   "w": 2,
+   "h": 4,
+   "id": "west-gate-shut",
+   "in": [
+    "moon",
+    "locked"
+   ]
+  },
+  {
+   "kind": "prop.gateshut",
+   "x": 72,
+   "y": 28,
+   "w": 2,
+   "h": 4,
+   "id": "east-gate-shut",
+   "in": [
+    "locked"
+   ]
+  },
+  {
+   "kind": "prop.gateshut_ns",
+   "x": 36,
+   "y": 52,
+   "w": 4,
+   "h": 2,
+   "id": "south-gate-shut",
+   "in": [
+    "locked"
+   ]
+  },
+  {
+   "kind": "prop.gateshut_ns",
+   "x": 36,
+   "y": 6,
+   "w": 4,
+   "h": 2,
+   "id": "north-gate-shut",
+   "in": [
+    "locked"
+   ]
   }
  ],
  "spots": [
