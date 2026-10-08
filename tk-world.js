@@ -825,8 +825,9 @@ function worldScenes() {
       if (this.fairy) this.fairy.wp = null;
       const q = this.nextMain();
       if (this.w.chat) return this.goal("Talk to Claude at the desk.", "到书桌前和 Claude 说话。");   // the study (tk.js viewTKStudy): no story, just the conversation
-      if (!q) return TK.world(this.w.n + 1)
-        ? this.goal(`This book is complete. Book ${this.w.n + 1} is open: Menu → Book ${this.w.n + 1}.`, `这一卷已经完成。第${this.w.n + 1}卷已开启：菜单 → 第${this.w.n + 1}卷。`)
+      const nb = TK.world(this.w.next || this.w.n + 1), nn = nb && (nb.book || nb.n);   // a book can name the one after it (13 → 12), shown by its book number
+      if (!q) return nb
+        ? this.goal(`This book is complete. Book ${nn} is open: Menu → Book ${nn}.`, `这一卷已经完成。第${nn}卷已开启：菜单 → 第${nn}卷。`)
         : this.goal("This book is complete. The road goes on…", "这一卷已经完成。路还在前方……");
       const g = this.available(q) && this.gateFor(q);
       if (g && g.objective) {   // what the battle still needs, with a count
@@ -1383,16 +1384,17 @@ function worldScenes() {
       // the book's main story is over: on into the next book (a moment, a fade). But if side stories are
       // still open here (Book 2's Diaochan chain opens with its last beat), stay: say so once, and go on
       // when the last of them is done, or whenever the player picks the next book from the menu.
-      if (!this.nextMain() && this.opts.onBookDone && TK.world(this.w.n + 1)) {
+      const nb = TK.world(this.w.next || this.w.n + 1);   // the book after this one: named by the book (13 → 12), else the next number
+      if (!this.nextMain() && this.opts.onBookDone && nb) {
         const open = this.region.quests.filter(x => (x.role === "side" || x.role === "short") && this.available(x));
-        const n = this.w.n + 1;
+        const n = nb.book || nb.n, me = this.w.book || this.w.n;
         if (!open.length) {
-          this.goal(`Book ${this.w.n} is complete. On to Book ${n}…`, `第${this.w.n}卷完。前往第${n}卷……`);
+          this.goal(`Book ${me} is complete. On to Book ${n}…`, `第${me}卷完。前往第${n}卷……`);
           this.leaving = true;
           this.time.delayedCall(1800, () => { this.cameras.main.fadeOut(600); this.time.delayedCall(650, () => this.opts.onBookDone()); });
         } else if (q.role !== "side" && q.role !== "short") {
-          this.talk([["n", `The main story of Book ${this.w.n} is done, but ${open.length === 1 ? "one story is" : `${open.length} stories are`} still untold on these roads. Book ${n} is open whenever you're ready: Menu → Book ${n}.`,
-            `第${this.w.n}卷正篇已完，但这一路上还有${open.length}段故事未曾讲述。第${n}卷已开启，随时可从菜单前往。`]]);
+          this.talk([["n", `The main story of Book ${me} is done, but ${open.length === 1 ? "one story is" : `${open.length} stories are`} still untold on these roads. Book ${n} is open whenever you're ready: Menu → Book ${n}.`,
+            `第${me}卷正篇已完，但这一路上还有${open.length}段故事未曾讲述。第${n}卷已开启，随时可从菜单前往。`]]);
         }
       }
     }

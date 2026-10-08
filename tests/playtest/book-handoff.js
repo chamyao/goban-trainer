@@ -53,7 +53,8 @@ if(untold){
   const K=(untold.match(/(\d+) stories|one story/)||[])[0];
   check(!r.handed&&(await p.evaluate(()=>location.hash))==='#/tk/'+F,`side stories open (${open.join(', ')}): it stays in Book ${F} ("${untold.slice(0,150)}")`);
   check(K===(open.length===1?'one story':`${open.length} stories`),`the line's count (${K}) matches the open side stories (${open.length})`);
-  check(new RegExp('Book '+T+' is open').test(r.goal),`the goal says Book ${T} is open: "${r.goal.trim().slice(0,90)}"`);
+  const TB=await p.evaluate(T=>{const x=TK.world(T);return x.book||x.n;},T);   // shown by its book number (world 12 is Book 2)
+  check(new RegExp('Book '+TB+' is open').test(r.goal),`the goal says Book ${TB} is open: "${r.goal.trim().slice(0,90)}"`);
   // all but one of them done (the last of one thread left): playing it hands on
   const leaf=await p.evaluate(()=>{const w=window.__w,Q=w.region.quests,done=k=>w.done(k);
     const pend=Q.filter(q=>(q.role==='side'||q.role==='short')&&!done(q.node));const leaves=pend.filter(q=>!Q.some(x=>x.after.includes(q.node)&&!done(x.node)));

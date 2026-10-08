@@ -11,7 +11,7 @@ await p.route('**/*.mp3',r=>r.fulfill({status:404,body:''}));
 const BASE=(process.env.PLAYTEST_URL||'http://localhost:8765')+'/index.html';
 const fresh=async(extra)=>{await p.goto(BASE+'#/');await p.waitForTimeout(500);await p.evaluate(extra=>{for(const k of Object.keys(localStorage))if(/^tk-|gt-progress/.test(k))localStorage.removeItem(k);if(extra)for(const [k,v] of Object.entries(extra))localStorage.setItem(k,v);},extra||null);};
 // what's showing: the world the game opened (its number and how it's titled), the hash, and the book list
-const at=async(hash)=>{await p.goto(BASE+hash);for(let i=0;i<40;i++){await p.waitForTimeout(250);if(await p.evaluate(()=>!!(window.__w&&window.__w.w)))break;}await p.waitForTimeout(500);
+const at=async(hash)=>{await p.goto(BASE+hash);for(let i=0;i<60;i++){await p.waitForTimeout(250);const x=p.getByText('Cancel',{exact:true});if(await x.count()&&await x.first().isVisible())await x.first().click({timeout:1000}).catch(()=>{});/* a new player's username prompt, declined */const g=p.locator('.tk-scroll-go');if(await g.count()&&await g.first().isVisible())await g.first().click({timeout:1000}).catch(()=>{});/* a fresh book's opening scroll, tapped through */if(await p.evaluate(()=>!!(window.__w&&window.__w.w)))break;}await p.waitForTimeout(500);
   return p.evaluate(()=>({n:window.__w&&window.__w.w&&window.__w.w.n,hash:location.hash,test:localStorage.getItem('tk-test'),
     books:[...document.querySelectorAll('.tk-world')].map(a=>a.textContent.trim()),sub:(document.querySelector('.sub')||{}).textContent||''}));};
 await fresh();
@@ -26,7 +26,7 @@ await fresh();s=await at('#/tk/12');check(s.n===12&&s.hash==='#/tk/12',`#/tk/12 
 await fresh({'tk-book':'12'});s=await at('#/tk');check(s.n===12,`a save that last played the Diaochan book (tk-book 12): #/tk still opens it (world ${s.n})`);
 await fresh({'tk-book':'1'});s=await at('#/tk');check(s.n===13,`a save that last played the old Book 1: #/tk opens the Cao Cao book (world ${s.n})`);
 // and the test switch still opens a hidden book (the old Book 1, world 1)
-await fresh();await p.goto(BASE+'?test=1#/tk/1');await p.reload();let wn=null;
-for(let i=0;i<40;i++){await p.waitForTimeout(250);wn=await p.evaluate(()=>window.__w&&window.__w.w&&window.__w.w.n);if(wn===1)break;}
+await fresh();let wn=null;
+wn=(await at('?test=1#/tk/1').catch(()=>({}))).n;
 check(wn===1,`with ?test=1, the old Book 1 (world 1) still opens (world ${wn})`);
 console.log(`live-books: ${checked-fails}/${checked}`);await b.close();process.exit(fails?1:0);})();
