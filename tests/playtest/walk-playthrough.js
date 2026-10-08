@@ -123,15 +123,16 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
         if (X < 0 || Y < 0 || X >= cols || Y >= rows || nx.has(id)) continue; if (!free(X, Y) && !(X === gx && Y === gy)) continue; if ((a || b) && !passes(x, y, X, Y) && !(X === gx && Y === gy)) continue; if (!(a === 0 && b === 0 && inCov(X, Y)) && !safe(X, Y, (k + 1) * STEP)) continue; if ((a || b) && inCov(x, y) && !safe(x, y, k * STEP)) continue; nx.set(id, c); } }   /* keeping still in cover: hidden (the looters pass her by); stepping out of it she's seen where she was, moving there */
       hist.push(nx); cur = nx; if (nx.has(gx + gy * cols)) { found = k + 1; break; } if (!nx.size) break; }
     let end = gx + gy * cols, hold = false;
-    if (found < 0) {   /* no unseen way all the way: to the cover nearest the goal she can reach unseen (and wait there; a fresh plan goes on from it) */
-      if (!covs.length) return null;
+    const NEAR = Math.floor(30000 / (STEP * DT));   /* the patrols' simulation holds for some seconds, not a minute: a whole way only if it's within 30 s */
+    if ((found < 0 || found > NEAR) && covs.length) {   /* else to the cover nearest the goal she can reach unseen within that (and wait there; a fresh plan goes on from it) */
       const dist = new Int32Array(cols * rows).fill(-1), q = [gx + gy * cols]; dist[q[0]] = 0;
       for (let i = 0; i < q.length; i++) { const c = q[i], x = c % cols, y = (c - x) / cols; for (const [a, b] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const X = x + a, Y = y + b, id = X + Y * cols;
         if (X < 0 || Y < 0 || X >= cols || Y >= rows || dist[id] >= 0 || !free(X, Y) || !passes(x, y, X, Y)) continue; dist[id] = dist[c] + 1; q.push(id); } }
       const d0 = dist[sx + sy * cols]; let best = null;
-      for (let k = 0; k < hist.length; k++) for (const c of hist[k].keys()) { const x = c % cols; if (dist[c] < 0 || !inCov(x, (c - x) / cols)) continue; if (d0 >= 0 && dist[c] >= d0) continue;
+      for (let k = 0; k < Math.min(hist.length, NEAR + 1); k++) for (const c of hist[k].keys()) { const x = c % cols; if (dist[c] < 0 || !inCov(x, (c - x) / cols)) continue; if (d0 >= 0 && dist[c] >= d0) continue;
         if (!best || dist[c] < best.d) best = { d: dist[c], k, c }; }
-      if (!best) return null; found = best.k; end = best.c; hold = true; }
+      if (best) { found = best.k; end = best.c; hold = true; } }
+    if (found < 0) return null;
     const cells = []; let c = end; for (let k = found; k >= 0; k--) { cells.unshift(c); c = hist[k].get(c); }
     const pts = cells.map(c => { const x = c % cols; return at(x, (c - x) / cols); }); if (hold) pts[pts.length - 1].hold = true;
     // follow it here, on the same clock as the game's resume (a start from the test's side would come late)
