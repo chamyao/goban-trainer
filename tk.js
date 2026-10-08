@@ -602,14 +602,17 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) this.data = await (await fetch("data/tk.json?v=79")).json();
+    if (!this.data) this.data = await (await fetch("data/tk.json?v=80")).json();
     return this.data;
   },
   ls(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } },
   lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} if (typeof Sync !== "undefined" && Sync.tkKey(k)) Sync.scheduleSave(); },
   saveProg(p) { localStorage.setItem(PROGRESS_KEY, JSON.stringify(p)); if (typeof Sync !== "undefined") Sync.scheduleSave(); },
-  cleared(key) { return (loadProgress().tk || {})[key] === 1; },
-  markCleared(key) { const p = loadProgress(); (p.tk || (p.tk = {}))[key] = 1; this.saveProg(p); },
+  // cleared, unless undone since (a replay or a start over: "tkUndo", dated, so another device's or the server's old
+  // copy can't bring a beat back; clearing it again later, "tkAt", wins)
+  cleared(key) { const p = loadProgress(); return (p.tk || {})[key] === 1 && !(((p.tkUndo || {})[key] || 0) > ((p.tkAt || {})[key] || 0)); },
+  markCleared(key) { const p = loadProgress(); (p.tk || (p.tk = {}))[key] = 1; (p.tkAt || (p.tkAt = {}))[key] = Date.now(); this.saveProg(p); },
+  undoCleared(p, key) { if (p.tk) delete p.tk[key]; (p.tkUndo || (p.tkUndo = {}))[key] = Date.now(); },
   seen(id) { return !!(loadProgress().tkSeen || {})[id]; },
   markSeen(id) { const p = loadProgress(); (p.tkSeen || (p.tkSeen = {}))[id] = 1; this.saveProg(p); },
   world(n) { return this.data.worlds.find(w => w.n === n); },
@@ -1137,6 +1140,13 @@ async function viewTK(worldN) {
     root.querySelector(".tk-head-btns").prepend(h("button", { class: "tk-chron-btn", type: "button", title: `Switch to ${WORLD_KITS[next].en}`,
       onclick: () => { WorldView.setKit(next); viewTK(w.n); } }, `画风：${WORLD_KITS[kit].zh} ${WORLD_KITS[kit].en}`));
     if (typeof WorldTravel !== "undefined") WorldTravel.addButtons(root.querySelector(".tk-head-btns"), w);   // map and start over (tk-travel.js)
+    // test mode is remembered (a ?test=1 link); say so, and offer the way out (the user didn't know they were in it)
+    if (TK_TEST) {
+      root.querySelector(".tk-head-btns").append(h("button", { class: "tk-chron-btn", type: "button", title: "Leave test mode: no Skip key, the hidden books hidden again",
+        onclick: () => { try { localStorage.setItem("tk-test", "0"); } catch {} location.href = location.pathname + location.hash; } }, "退出测试模式 Exit test mode"));
+      const sub = root.querySelector(".sub");
+      if (sub) sub.append(h("span", { class: "tk-test-badge", title: "Test mode: problems have a Skip key and hidden books are open. Menu → Exit test mode." }, " · 测试模式 Test mode"));
+    }
     // on a phone: whether a tap on a small board shows a ghost stone first (Auto) or plays at once (Never)
     if (TK_TOUCH && typeof Goban !== "undefined") {
       const conf = h("button", { class: "tk-chron-btn", type: "button" });

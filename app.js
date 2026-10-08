@@ -119,12 +119,17 @@ const Sync = {
   // solved sticks (1 beats anything); the adaptive rating keeps whichever has played more boards
   mergeInto(local, remote) {
     for (const bookId in remote) {
+      if (bookId === "tkAt" || bookId === "tkUndo") {   // dated: the later date wins (TK.cleared)
+        const b = local[bookId] || (local[bookId] = {});
+        for (const k in remote[bookId]) b[k] = Math.max(b[k] || 0, remote[bookId][k] || 0);
+        continue;
+      }
       if (bookId === "tkElo") { const r = remote.tkElo, l = local.tkElo; if (r && (!l || (r.n || 0) > (l.n || 0))) local.tkElo = r; continue; }
       const b = local[bookId] || (local[bookId] = {});
       for (const pid in remote[bookId]) if (b[pid] !== 1) b[pid] = remote[bookId][pid];
     }
   },
-  tkKey: k => /^tk-world-\d+$/.test(k) || k === "tk-at" || k === "tk-party" || k === "tk-draw" || k === "tk-book",
+  tkKey: k => /^tk-world-\d+$/.test(k) || k === "tk-at" || k === "tk-party" || k === "tk-draw" || k === "tk-book" || k === "tk-items",
   tkLocal() { const o = {}; for (const k of Object.keys(localStorage)) if (this.tkKey(k)) o[k] = localStorage.getItem(k); return o; },
   stamp() { try { return +localStorage.getItem("gt-sync-stamp") || 0; } catch { return 0; } },
   setStamp(t) { try { localStorage.setItem("gt-sync-stamp", String(t)); } catch {} },

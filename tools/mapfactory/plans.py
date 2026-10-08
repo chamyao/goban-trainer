@@ -41,7 +41,7 @@ LIGHT = {("lantern", None): "night", ("day", "clear"): "morning", ("dusk", "stor
 # what a tile is made of, and whether you can walk on it (zones and lines become materials)
 WALK = {"grass": True, "dirt": True, "sand": True, "water": False, "void": False, "wall": False,
         "wood": True, "stone": True, "mat": True, "earth": True}
-IN_WALL = {"building.gate", "building.gatehouse", "building.gatetower", "building.moongate"}
+IN_WALL = {"building.gate", "building.gatehouse", "building.gatetower", "building.moongate", "wall.stairs"}
 PASSABLE = {"furn.seat", "furn.curtain", "furn.rug", "landmark.ridge", "building.gatehouse", "building.gate", "building.moongate",
             "plant.flower", "plant.bush", "plant.grass", "plant.peony", "rock.small", "water.lotus"}
 DOOR_AT_FOOT = {"building.gatetower"}   # drawn front-on in a wall: an E/W door is at the foot of that face, by the drawn arch
@@ -644,18 +644,20 @@ def chase_run(mb, out, corridor, pts, naive=False, spare=20, horizon=500):
 
     vpt, vat = pc["horse"] / T, pc["ambusher"] / T
 
-    def springs(i, cx, cy):   # he springs when he can just reach Cao Cao's line as Cao Cao reaches his
+    def springs(i, cx, cy, mv):   # he springs when he can just reach Cao Cao's line as Cao Cao reaches his
         px, py, qx, qy, _o, d = amb[i]
         ux, uy = (qx - px) / d, (qy - py) / d                      # his way across
         across = (cx - px) * ux + (cy - py) * uy                    # how far out Cao Cao's line is
-        along = abs((cx - px) * uy - (cy - py) * ux)                # how far Cao Cao is from crossing his
-        return -.5 <= across <= d + .5 and along <= pc["reach"] and along / vpt <= max(across, 0) / vat + pc["lead"]
+        side = (cx - px) * uy - (cy - py) * ux                      # how far Cao Cao is from crossing his, signed
+        toward = side * (mv[0] * uy - mv[1] * ux) < 0               # and heading for it (tk-world: never once past it)
+        near = (cx - px) ** 2 + (cy - py) ** 2 < pc["reach"] ** 2   # as tk-world's ambushStep has it, to the letter
+        return toward and near and abs(side) / vpt <= min(d, abs(across)) / vat + pc["lead"]
 
-    def advance(tile, t, trig, at=None):   # spring whoever is due; drop those gone home; hit?
+    def advance(tile, t, trig, at=None, mv=(0, 0)):   # spring whoever is due; drop those gone home; hit?
         cx, cy = at or (tile[0] + .5, tile[1] + .5)
         nt, hits = list(trig), []
         for i in range(len(amb)):
-            if nt[i] == -1 and springs(i, cx, cy):
+            if nt[i] == -1 and springs(i, cx, cy, mv):
                 nt[i] = t
             if nt[i] >= 0:
                 w = where(i, t - nt[i])
@@ -673,7 +675,7 @@ def chase_run(mb, out, corridor, pts, naive=False, spare=20, horizon=500):
             d = math.hypot(bx - ax, by - ay)
             for j in range(int(d * sub)):
                 x, y = ax + (bx - ax) * j / (d * sub), ay + (by - ay) * j / (d * sub)
-                trig, h = advance(None, ridden, trig, at=(x, y))
+                trig, h = advance(None, ridden, trig, at=(x, y), mv=(bx - ax, by - ay))
                 hit |= set(h)
                 if (x - gx) ** 2 + (y - gy) ** 2 <= (36 / T) ** 2:
                     return round(ridden), [out["ambush"][i]["id"] for i in sorted(hit)]
@@ -705,7 +707,7 @@ def chase_run(mb, out, corridor, pts, naive=False, spare=20, horizon=500):
                 r = ridden + (dx != 0 or dy != 0)
                 if r - max(0, t - after) * vw < pc["hit"]:      # the wave is on him
                     continue
-                ntrig, hits = advance(u, t, trig)
+                ntrig, hits = advance(u, t, trig, mv=(dx, dy))
                 if hits:
                     continue
                 if goal(u):

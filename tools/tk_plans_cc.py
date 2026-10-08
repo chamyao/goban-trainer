@@ -17,14 +17,14 @@ NEW_KINDS = {**NEW_KINDS2,
              "building.stable": (6, 3, True),    # a long stable with stalls open to the yard
              "furn.mirror": (1, 1, True),        # a bronze dressing mirror on a stand (C16)
              "banner.white": (1, 1, True),       # the white banner of the volunteers, 忠义 (C23)
-             "building.wallstairs": (4, 1, True),   # stairs up the inside of a city wall (马道), against its foot
+             "wall.stairs": (4, 1, True),   # stairs up the inside of a city wall (马道), against its foot
              }
 ART = {**ART2,
        "building.tower": "a tall Han palace tower (阙/楼): three storeys of timber on a rammed-earth base, hip roof of dark tiles, a balcony at the top; reads from far off",
        "building.stable": "a long Han stable: a tiled roof on posts, stalls open to the yard, hay racks, a horse or two looking out",
        "furn.mirror": "a polished bronze dressing mirror on a wooden stand, about head height when sitting",
        "banner.white": "a tall white banner on a pole, two black characters 忠义",
-       "building.wallstairs": "a flight of rammed-earth steps (马道) climbing the inside face of a city wall to the wall-walk, "
+       "wall.stairs": "a flight of rammed-earth steps (马道) climbing the inside face of a city wall to the wall-walk, "
                               "four tiles long, one deep; drawn against the wall's foot, the same 3/4 view as the wall",
        }
 
@@ -66,7 +66,8 @@ PLANS_CC = {
                 {"id": "east-lane", "kind": "road", "path": [[19, 8], [19, 14]], "width": 2},
                 {"id": "south-street", "kind": "road", "path": [[2, 14], [19, 14]], "width": 3},
                 # the north side of the main street, east of the palace: a ward wall, the lodging's gate in it
-                {"id": "ward-ne", "kind": "wall", "path": [[13, 6], [13, 7], [20, 7]], "width": 1, "gates": {"lodging-gate": [18, 7]}},
+                {"id": "ward-ne", "kind": "wall", "path": [[14, 6], [14, 7], [20, 7]], "width": 1, "gates": {"lodging-gate": [18, 7]}},
+                {"id": "ward-ne-w", "kind": "wall", "path": [[14, 2], [14, 6]], "width": 3},   # its west wall, against the palace's
                 # the wards south of the main street, each walled, with its gates
                 {"id": "ward-xf", "kind": "wall", "path": [[3, 9], [7, 9], [7, 13], [3, 13], [3, 9]], "width": 1,
                  "gates": {"chancellor-gate": [5, 13], "side-gate": [7, 11]}},          # the Chancellor's ward
@@ -96,10 +97,10 @@ PLANS_CC = {
                 {"id": "stalls", "kind": "market.stalls", "rect": [15, 10, 2, 1], "label": "Market stalls"},
                 {"id": "stalls-2", "kind": "market.stalls", "rect": [16, 12, 2, 1]},
                 {"id": "gotable", "kind": "furniture.gotable", "rect": [17, 10, 1, 1], "label": "A go table in the market"},
-                # stairs up the inside of the city wall (马道): the wall's guards come down them onto the south street
-                {"id": "stairs-w", "kind": "building.wallstairs", "rect": [11, 14, 1, 1], "margin": 0, "on": "edge",
+                # stairs up the inside of the city wall (马道), in the wall's band: its guards come down them onto the south street
+                {"id": "stairs-w", "kind": "wall.stairs", "rect": [11, 15, 1, 1], "door": "N",
                  "label": "Stairs up the city wall"},
-                {"id": "stairs-e", "kind": "building.wallstairs", "rect": [15, 14, 1, 1], "margin": 0, "on": "edge"},
+                {"id": "stairs-e", "kind": "wall.stairs", "rect": [15, 15, 1, 1], "door": "N"},
             ],
             "spots": [
                 {"id": "c2", "at": [10, 7], "node": "2-c2", "label": "Before the Jiade Gate", "trigger": "near"},
@@ -244,7 +245,8 @@ PLANS_CC = {
         # can be ridden clean (prove_chase), and writes the result as the map's "chase" (tiles) for the engine.
         "chase": {
             "chase": "c17", "state": "sword", "from": "xf-gate", "to": "c17",
-            # the engine's numbers this layout is proved against (px/s, s, tiles): Integration's to change; rerun the build
+            # the engine's numbers this layout is proved against (px/s, s, tiles; tk-world reads this "chase" as it is, and
+            # springs an ambusher only while Cao Cao heads toward his line): Integration's to change; rerun the build
             "pace": {"horse": 165, "wave": 150, "wave_after": 1.0, "ambusher": 140, "reach": 9, "lead": 0.1, "hold": 1.0, "hit": 0.8},
             "wave": {"from": "xf-gate", "kind": "folk.soldier", "count": 8},
             # where each soldier waits (a gate of a wall, a cell, or a thing he stands in front of) and which way he

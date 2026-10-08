@@ -118,7 +118,7 @@ These are in `NEW_KINDS` and `vocab.py`, each with a stand-in until Graphics dra
 - `building.stable`
 - `furn.mirror`: the dressing mirror in c16.
 - `banner.white`: 忠义.
-- `building.wallstairs`: the steps up the inside of the city wall (马道), where the wall guards come down in the chase.
+- `wall.stairs`: the steps up the inside of the city wall (马道), where the wall guards come down in the chase.
 
 ## For Integration (engine), from the design
 
@@ -141,6 +141,7 @@ This is the user's redesign (`caocao-arc.md`, "Redesign"):
 
 `PLANS_CC["Luoyang"]["chase"]` holds the posts and the routes. `plans.py` lays them on tiles (`lay_chase`) and proves
 them (`prove_chase`). It writes the result as the map's `chase`: in `luoyang.map.json`, and as the tmj property `chase`.
+tk-world reads that property as it stands (`ambushStart`/`ambushStep`), with these names and numbers.
 
 **The city, for it:** Luoyang's south half is walled wards (坊), as Han Luoyang was. So its streets are real streets, 5–6
 tiles between walls, in every kit. Along them:
@@ -150,9 +151,9 @@ tiles between walls, in every kit. Along them:
 - **The walled market**, with two gates in its north wall and two in its south wall. You ride through one, and an
   ambusher waits in the other. It also has an east gate.
 - **Four lanes:** the west lane, the ward lane, the market lane and the east lane.
-- **The wall stairs (马道),** on the south street's wall side.
+- **The wall stairs (马道, `wall.stairs`),** drawn in the city wall's band on the south street's side.
 
-North of the main street, a ward wall runs from the palace to the East Gate. In it are the gate of Cao Cao's lodging and
+North of the main street, a ward wall runs from the palace (closing on it) to the East Gate. In it are the gate of Cao Cao's lodging and
 the north road's mouth. The grid grew from 22×15 to 22×17 cells.
 
 | Route | Cells | Ambushes on it, in order |
@@ -167,13 +168,16 @@ one is barely past before the next springs.
 **What the build proves** (at the numbers in `pace`, which are Integration's to change; rerun the build after):
 - **Speeds:** the horse rides at 165 px/s (110 × 1.5 mounted), and the wave at 150. The wave leaves the gate 1 s behind
   him.
-- **Ambushers:** each springs when he can just reach Cao Cao's line as Cao Cao reaches his (`lead` 0.1 s), and dashes
-  across at 140. He stands 1 s at the far side, then falls in with the wave.
+- **Ambushers:** each springs when he can just reach Cao Cao's line as Cao Cao reaches his (`lead` 0.1 s), while
+  Cao Cao is within `reach` 9 tiles of him and heading for that line (tk-world's rule: never once past it). He dashes
+  across at 140, stands 1 s at the far side, then fades out.
 - **A touch:** a hit is within 0.8 tiles.
-- **Ridden straight, at a gallop, down the middle,** each route is hit by every ambush on it, or all but one.
+- **Ridden straight, at a gallop, down the middle,** each route is hit by every ambush on it.
 - **A clean ride exists on every route.** It is found tile by tile, waiting where it helps, and nothing touches him.
-  - It takes 7.8 s on the main street, 8.0 s on the south street and 8.4 s through the market. Ridden straight, each takes
-    about 7.6 s.
-  - So dodging costs 0.2–0.8 s, and the wave reaches him after about 1.6 s lost. It is pressure, not a timer: a rider
+  - It takes 7.7 s on the main street and 8.0 s on each of the others. Ridden straight, each takes about 7.6 s.
+  - So dodging costs 0.1–0.4 s, and the wave reaches him after about 1.6 s lost. It is pressure, not a timer: a rider
     who brakes too long, or hits a dead end, is taken.
 - The build fails if any route stops having a clean ride.
+
+`tests/playtest/ambush-13.js` checks it in the game: twelve wait hidden in state `sword`, there are no riders, and
+riding along the main street past the lodging's gate, its jailer springs out and catches him (a board).
