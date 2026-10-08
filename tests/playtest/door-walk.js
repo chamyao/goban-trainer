@@ -42,7 +42,7 @@ const path = require('path');
       if (seen.has(`${pl}|${ids}|${ride}`)) continue; seen.add(`${pl}|${ids}|${ride}`);   /* each place once per map state */ if (!(await p.evaluate(pl => window.__w.placeId === pl, pl))) { console.log(`note book ${book}: ${pl} didn't open`); continue; }
       const mounted = await p.evaluate(() => { const w = window.__w; return !!(typeof WorldItems !== 'undefined' && WorldItems.mountedHere && WorldItems.mountedHere(w, w.lead)); });
       if (ride && !mounted) continue;   /* the riding pass: only where he rides (outdoors, with a horse) */
-      let builds = []; try { builds = (JSON.parse(require('fs').readFileSync(path.join(__dirname, `../../data/tk_maps/w${book}/${pl}.map.json`), 'utf8')).objects || []).filter(o => /^building\./.test(o.kind || '') && o.faces); } catch (e) {}   /* the buildings and the side each is drawn facing (its arch, its doorway) */
+      let builds = []; try { builds = (JSON.parse(require('fs').readFileSync(path.join(__dirname, `../../data/tk_maps/w${book}/${pl}.map.json`), 'utf8')).objects || []).filter(o => /^building\./.test(o.kind || '') && o.faces && o.door && !/^building\.(gate|gatehouse)$/.test(o.kind));   /* a building one goes into (its door); a wall's gate is walked through both ways (door-gate.js) */ } catch (e) {}   /* the buildings and the side each is drawn facing (its arch, its doorway) */
       const arrive = await p.evaluate(() => [window.__w.player.x, window.__w.player.y]);   /* where she comes into the place: the door's front must be reachable from here */
       for (const d of doors) {
         // from open ground just outside it (her feet clear of every solid), each way that has some, straight at it
@@ -83,7 +83,8 @@ const path = require('path');
         if (!res || !res.in) for (const st of starts) { const r = await walkIn(st); await back(); res = r; if (r.in) break; }
         const wet = !res.in && /walk to from where/.test(res.why || '') && await p.evaluate(() => (window.__w.waters || []).some(x => x.on));
         if (wet) { console.log(`note book ${book} ${pl}${ids ? ` (${ids})` : ''}, ${how}: the door to ${d.to} is cut off by the water in this state (as the story has it: the flood)`); continue; }
-        if (faceRes && !faceRes.in && !(/walk to/.test(faceRes.why || '') && await p.evaluate(() => (window.__w.waters || []).some(x => x.on)))) { n++; bad++;
+        if (faceRes && !faceRes.in && faceRes.line && res.in) console.log(`note book ${book} ${pl}${ids ? ` (${ids})` : ''}, ${how}: from the ${face.faces} face of ${face.id}, someone stands in the way of the door to ${d.to} ("${faceRes.line.replace(/^主线 · Story/, '').slice(0, 40)}…", at ${faceRes.stop}); it goes in walking ${res.key} a little to the side`);
+        else if (faceRes && !faceRes.in && !(/walk to/.test(faceRes.why || '') && await p.evaluate(() => (window.__w.waters || []).some(x => x.on)))) { n++; bad++;
           check(false, `book ${book} ${pl}${ids ? ` (${ids})` : ''}, ${how}: from the ${face.faces} face of ${face.id} (where it's drawn), walking ${faceRes.key || '?'} into the door to ${d.to} (${d.r.map(Math.round).join(',')}): ${faceRes.why || `stopped at ${faceRes.stop} from ${faceRes.from}${faceRes.line ? `, "${faceRes.line}"` : ''}`}${res.in ? ` (it goes in walking ${res.key} from another side)` : ''}`); continue; }
         n++; if (!res.in) bad++;
         check(res.in, `book ${book} ${pl}${ids ? ` (${ids})` : ''}, ${how}: walking ${res.key || '?'}${faceRes && faceRes.in ? ` from the ${face.faces} face of ${face.id}` : ''} into the door to ${d.to} (${d.r.map(Math.round).join(',')})${res.in ? '' : `: ${res.why || `stopped at ${res.stop} from ${res.from}${res.line ? `, "${res.line}"` : ''}`}`}`);
