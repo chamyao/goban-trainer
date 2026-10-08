@@ -58,7 +58,9 @@ const path = require('path');
   let caught = null; const t0 = Date.now();
   while (Date.now() - t0 < 20000 && !caught) {
     await p.evaluate(o => { const w = window.__w; if (!w.caught && !w.ui.busy()) w.walkTo(o.x, o.y, { ring: false }); }, out); await p.waitForTimeout(200);
-    const s = await look(); if (s.caught) caught = { s, line: await p.evaluate(() => ((document.querySelector('.town-ui .town-dlg:not([hidden])') || {}).textContent || '').replace(/\s+/g, ' ').trim()) };
+    const s = await look(); if (s.caught) { const dlg = () => p.evaluate(() => ((document.querySelector('.town-ui .town-dlg:not([hidden])') || {}).textContent || '').replace(/\s+/g, ' ').trim());
+      let line = await dlg(), prev = ''; for (let i = 0; i < 30 && (line !== prev || !line); i++) { await p.waitForTimeout(150); prev = line; line = await dlg(); }   /* the line typed out in full (it types in), then read */
+      caught = { s, line }; }
     const o2 = await p.evaluate(() => { const w = window.__w, n = w.npcs.find(n => n.watch && w.watching(n)), T = 16, D = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }[n.watch.dir] || [0, 1]; return { x: n.spr.x + D[0] * 3 * T, y: n.spr.y + D[1] * 3 * T + 6 }; }); out.x = o2.x; out.y = o2.y; }
   for (let i = 0; i < 20 && await p.evaluate(() => window.__w.ui.busy()); i++) { await p.evaluate(() => window.__w.ui.advance()); await p.waitForTimeout(250); }
   let back = await look(); for (let i = 0; i < 30 && back.caught; i++) { await p.waitForTimeout(200); if (await p.evaluate(() => window.__w.ui.busy())) await p.evaluate(() => window.__w.ui.advance()); back = await look(); }   // the catch's fade out, back and in

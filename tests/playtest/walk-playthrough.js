@@ -123,7 +123,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     const HOLD = Math.ceil(700 / (STEP * DT));   /* still for the first 0.7 s: the frame after a plan can be long (the patrols jump on, she hasn't moved) */
     let cur = new Map([[sx + sy * cols, null]]); const hist = [cur]; let found = -1;
     for (let k = 0; (k + 1) * STEP < F; k++) { const nx = new Map(); for (const c of cur.keys()) { const x = c % cols, y = (c - x) / cols; for (const [a, b] of k < HOLD ? [[0, 0]] : [[0, 0], [1, 0], [-1, 0], [0, 1], [0, -1]]) { const X = x + a, Y = y + b, id = X + Y * cols;
-        if (X < 0 || Y < 0 || X >= cols || Y >= rows || nx.has(id)) continue; if (!free(X, Y) && !(X === gx && Y === gy)) continue; if ((a || b) && !passes(x, y, X, Y) && !(X === gx && Y === gy)) continue; if (!(a === 0 && b === 0 && inCov(X, Y)) && !safe(X, Y, (k + 1) * STEP)) continue; if ((a || b) && inCov(x, y) && !safe(x, y, k * STEP)) continue; nx.set(id, c); } }   /* keeping still in cover: hidden (the looters pass her by); stepping out of it she's seen where she was, moving there */
+        if (X < 0 || Y < 0 || X >= cols || Y >= rows || nx.has(id)) continue; if (!free(X, Y) && !(X === gx && Y === gy) && !(X === sx && Y === sy)) continue;   /* (the cell she stands on is hers to stay on, a scene may have set her down against a wall) */ if ((a || b) && !passes(x, y, X, Y) && !(X === gx && Y === gy)) continue; if (!(a === 0 && b === 0 && inCov(X, Y)) && !safe(X, Y, (k + 1) * STEP)) continue; if ((a || b) && inCov(x, y) && !safe(x, y, k * STEP)) continue; nx.set(id, c); } }   /* keeping still in cover: hidden (the looters pass her by); stepping out of it she's seen where she was, moving there */
       hist.push(nx); cur = nx; if (nx.has(gx + gy * cols)) { found = k + 1; break; } if (!nx.size) break; }
     let end = gx + gy * cols, hold = false;
     const NEAR = Math.floor(30000 / (STEP * DT));   /* the patrols' simulation holds for some seconds, not a minute: a whole way only if it's within 30 s */
@@ -136,7 +136,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
         const keep = TGT && Math.hypot(at(x, (c - x) / cols).x - TGT.x, at(x, (c - x) / cols).y - TGT.y) < 9;   /* the cover she's on her way to, while it's still reachable: kept (a target changed every plan, she never got anywhere) */
         if (!best || (keep && !best.keep) || (keep === !!best.keep && dist[c] < best.d)) best = { d: dist[c], k, c, keep }; }
       if (best) { found = best.k; end = best.c; hold = true; } }
-    if (found < 0) return null;
+    if (found < 0) { window.__planDbg = { sizes: hist.slice(0, 8).map(m => m.size).join(','), startFree: free(sx, sy), nb: [[1, 0], [-1, 0], [0, 1], [0, -1]].map(([a, b]) => `${free(sx + a, sy + b) ? 'f' : 'x'}${passes(sx, sy, sx + a, sy + b) ? 'p' : 'x'}${safe(sx + a, sy + b, HOLD * STEP) ? 's' : 'u'}`).join(' '), startSafe: [0, 4, 8, 16].map(f => safe(sx, sy, f) ? 1 : 0).join(''), covs: covs.length, ox, oy }; return null; }
     const cells = []; let c = end; for (let k = found; k >= 0; k--) { cells.unshift(c); c = hist[k].get(c); }
     const pts = cells.map(c => { const x = c % cols; return at(x, (c - x) / cols); }); if (hold) pts[pts.length - 1].hold = true;
     // follow it here, on the same clock as the game's resume (a start from the test's side would come late)
@@ -340,7 +340,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     if (s.watchers && !plannedSteps) {   // a steady pace first; the running one if only it has a way
       pace = 4; plannedSteps = await plan(4); if (!plannedSteps) { pace = 3; plannedSteps = await plan(3); }   /* a cell in 200 ms first: 80 px/s, slack on her 110 px/s run for the turns (150 ms is 107 px/s, barely in hand) */
       if (!plannedSteps && await p.evaluate(() => !!(window.__w.mounts && window.__w.mounts.length))) { pace = 2; plannedSteps = await plan(2); if (plannedSteps) console.log(`     ${beat}: a way past the watchers at his mounted pace (a cell every 100 ms)`); }   // on horseback he's quicker
-      if (process.env.STEALTHDBG) { const P0 = await p.evaluate(() => [Math.round(window.__w.player.x), Math.round(window.__w.player.y)]); console.log(`     dbg plan from ${P0}: ${plannedSteps ? `${plannedSteps.length} steps at pace ${pace} to ${[plannedSteps[plannedSteps.length - 1].x, plannedSteps[plannedSteps.length - 1].y]}${plannedSteps[plannedSteps.length - 1].hold ? ' (a cover on the way)' : ''}` : 'none'}`); }
+      if (process.env.STEALTHDBG) { const P0 = await p.evaluate(() => [Math.round(window.__w.player.x), Math.round(window.__w.player.y)]); console.log(`     dbg plan from ${P0}: ${!plannedSteps ? JSON.stringify(await p.evaluate(() => window.__planDbg)) + ' ' : ''}${plannedSteps ? `${plannedSteps.length} steps at pace ${pace} to ${[plannedSteps[plannedSteps.length - 1].x, plannedSteps[plannedSteps.length - 1].y]}${plannedSteps[plannedSteps.length - 1].hold ? ' (a cover on the way)' : ''}` : 'none'}`); }
       planT = Date.now() + 80; stealthTries++; await p.evaluate(() => { const w = window.__w; w.walk = null; });
       if (!plannedSteps && stealthTries <= 3 && arrivedAt && Math.hypot(s.P[0] - arrivedAt[0], s.P[1] - arrivedAt[1]) > 12) {   // no way from here (an errand left him there): back to where he came in, and plan again
         await p.evaluate(a => window.__w.walkTo(a[0], a[1], { ring: false }), arrivedAt);
@@ -358,7 +358,8 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       // the plan stays); here only its end, a catch, and a fresh plan every 1.2 s in the open
       // (the plan is followed in the page from the moment it was made: see plan())
       const k = Math.floor((await p.evaluate(() => window.__execT || 0)) / (pace * 50));
-      if (Date.now() - planT > 1200 && !(await p.evaluate(() => !!window.__w.auto))) {   /* a fresh plan every 1.2 s, from a cell she's on (the patrols' simulation drifts over a long plan); none just now: the one she's on goes on */
+      const nextMove = (() => { const ps = plannedSteps; for (let j = Math.max(0, k); j < ps.length - 1; j++) if (ps[j + 1].x !== ps[j].x || ps[j + 1].y !== ps[j].y) return (j + 1 - k) * pace * 50; return Infinity; })();
+      if (Date.now() - planT > 1200 && nextMove > 2000 && !(await p.evaluate(() => !!window.__w.auto))) {   /* not just before she sets off: a fresh plan starts with a hold and would miss the gap */   /* a fresh plan every 1.2 s, from a cell she's on (the patrols' simulation drifts over a long plan); none just now: the one she's on goes on */
         const tgt = plannedSteps[plannedSteps.length - 1].hold ? plannedSteps[plannedSteps.length - 1] : null, here = await p.evaluate(() => [window.__w.player.x, window.__w.player.y]);
         const aim = tgt && Math.hypot(here[0] - tgt.x, here[1] - tgt.y) > 9 ? { x: tgt.x, y: tgt.y } : null;   /* not there yet: on to it */
         let np = await plan(4, aim), npP = 4; if (!np) { np = await plan(3, aim); npP = 3; }
