@@ -2437,6 +2437,8 @@ def _scenes_lvbu():
             S("chendeng", "Yuan Shu, Sun Ce, Yuan Shao, Liu Biao, Liu Zhang, Zhang Lu. All of them.", "淮南袁術、江東孫策、冀州袁紹、荊州劉表、益州劉璋、漢中張魯，皆狐兔也。"),
             ["still", "cd_hawk", "slow zoom in"],
             S("lvbu", "Ha! Lord Cao understands me!", "曹公知我也！"),
+            N("Chen Gong watches the Chens with growing unease.", "陳宮見陳珪父子日親，心中不安。"),
+            ["party", ["chengong"], {"to": "x10"}],
         ]},
 
         # X10 · The hunt. Played as Chen Gong. Legwork: the board first.

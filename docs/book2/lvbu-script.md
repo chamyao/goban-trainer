@@ -269,6 +269,11 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 **Lü Bu:** Ha! Lord Cao understands me!  
 曹公知我也！
 
+*Chen Gong watches the Chens with growing unease.*  
+陳宮見陳珪父子日親，心中不安。
+
+*(the player is now: Chen Gong)*
+
 
 ## X10 · The Hunt (陳宮截書)
 *Xiaopei* · boards: **Chen Gong**: “Ride the courier down.”
