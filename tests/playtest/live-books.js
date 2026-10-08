@@ -11,12 +11,15 @@ await p.route('**/*.mp3',r=>r.fulfill({status:404,body:''}));
 const BASE=(process.env.PLAYTEST_URL||'http://localhost:8765')+'/index.html';
 const fresh=async(extra)=>{await p.goto(BASE+'#/');await p.waitForTimeout(500);await p.evaluate(extra=>{for(const k of Object.keys(localStorage))if(/^tk-|gt-progress/.test(k))localStorage.removeItem(k);if(extra)for(const [k,v] of Object.entries(extra))localStorage.setItem(k,v);},extra||null);};
 // what's showing: the world the game opened (its number and how it's titled), the hash, and the book list
-const at=async(hash)=>{await p.goto(BASE+hash);for(let i=0;i<60;i++){await p.waitForTimeout(250);const x=p.getByText('Cancel',{exact:true});if(await x.count()&&await x.first().isVisible())await x.first().click({timeout:1000}).catch(()=>{});/* a new player's username prompt, declined */const g=p.locator('.tk-scroll-go');if(await g.count()&&await g.first().isVisible())await g.first().click({timeout:1000}).catch(()=>{});/* a fresh book's opening scroll, tapped through */if(await p.evaluate(()=>!!(window.__w&&window.__w.w)))break;}await p.waitForTimeout(500);
+const dlg=()=>p.evaluate(()=>[...document.querySelectorAll('button')].some(b=>b.textContent.trim()==='Cancel'&&b.offsetParent));   // the username prompt
+const at=async(hash)=>{await p.goto(BASE+hash);await p.reload();/* loaded at this route, as a player opening the link */for(let i=0;i<60;i++){await p.waitForTimeout(250);const g=p.locator('.tk-scroll-go');if(await g.count()&&await g.first().isVisible())await g.first().click({timeout:1000}).catch(()=>{});/* a fresh book's opening scroll, tapped through */if(await p.evaluate(()=>!!(window.__w&&window.__w.w)))break;}await p.waitForTimeout(500);
   return p.evaluate(()=>({n:window.__w&&window.__w.w&&window.__w.w.n,hash:location.hash,test:localStorage.getItem('tk-test'),
     books:[...document.querySelectorAll('.tk-world')].map(a=>a.textContent.trim()),sub:(document.querySelector('.sub')||{}).textContent||''}));};
 await fresh();
 let s=await at('#/tk');
 check(s.test!=='1','not in test mode');
+check(!(await dlg()),'a new player opening #/tk is not stopped by the username prompt');
+await fresh();await p.goto(BASE+'#/');await p.reload();await p.waitForTimeout(1500);check(await dlg(),'a new player opening the library (#/) is asked for a username');
 check(s.n===13,`a fresh player's #/tk opens the Cao Cao book (world ${s.n}, ${s.hash})`);
 check(s.books.length===2&&/Cao Cao|曹操/.test(s.books[0])&&/^1\b/.test(s.books[0])&&/Diaochan|貂蝉/.test(s.books[1])&&/^2\b/.test(s.books[1]),`the book list has the two, Cao Cao as Book 1 then Diaochan as Book 2 (${JSON.stringify(s.books)})`);
 check(/Book 1\b/.test(s.sub)&&!/draft|草稿/i.test(s.sub),`its title line says Book 1 and not draft ("${s.sub.slice(0,80)}")`);
