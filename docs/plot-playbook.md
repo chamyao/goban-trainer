@@ -47,6 +47,16 @@ these stories first, and give the women real moments to play and real lines, as 
 their stories are told as the novel tells them. Invention is allowed only where it serves the plot, never to give someone
 a role the novel doesn't support.
 
+**Give each arc a new mechanic drawn from its story.**
+
+> "did you introduce any new game mechanics? for example an interesting on in the diaochan arc was the stealth mechanic I
+> enjoyed something like that"
+
+The Diaochan arc brought stealth (Diaochan moving unseen through Dong Zhuo's residence). The Cao Cao arc brought no new
+mechanic: only cosmetic touches (fireflies on the route light, a led horse, a crouch pose). That was a miss. Every arc
+should introduce at least one new way to play, and it should come out of the narrative itself, the way stealth came out
+of a woman who must not be seen. Design it with the arc, not after, and send it to Integration and Places with the design.
+
 What this changes:
 - **Choosing what to make next** means choosing a narrative, not the next chapters. Chronology still decides the order in
   which published arcs are chained (the Cao Cao arc leads into the Diaochan arc), and scrolls bridge what lies between (R16).
