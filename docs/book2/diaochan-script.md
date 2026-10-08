@@ -1246,7 +1246,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 *Seeing the yellow canopy, Li Jue and Guo Si hold back their men, and cry: Long live the Emperor!*  
 李傕等望见黄盖，约住军士，口呼万岁。
 
-**the Prince of Chenliu:** You came into Chang'an without waiting for my summons. What do you mean by it?  
+**Emperor Xian:** You came into Chang'an without waiting for my summons. What do you mean by it?  
 卿不候奏请，辄入长安，意欲何为？
 
 **Li Jue:** Grand Preceptor Dong was the pillar of Your Majesty's throne, and Wang Yun murdered him for nothing. We've come only to avenge him, not to rebel. Give us Wang Yun, and we'll withdraw.  

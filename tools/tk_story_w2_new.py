@@ -1070,7 +1070,7 @@ def _scenes_chain():
             ["run", "lj", "a18", 6, -2], ["run", "gs", "a18", 8, 2],
             N("What became of Emperor Xian? Hear the next chapter.", "未知献帝性命如何，且听下文分解。"),
             ["remove", "lj"],
-            ["party", ["lijue"], {"to": "a18"}],
+            ["party", ["lijue"]],
         ]},
     }
 
