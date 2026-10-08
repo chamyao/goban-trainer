@@ -74,7 +74,7 @@ const path = require('path');
         if (res.in) { for (let i = 0; i < 30 && await p.evaluate(() => !window.__w.player || window.__w.leaving); i++) await p.waitForTimeout(150); await goTo(pl); }
       }
     }
-    console.log(`book ${book} ${how}${K ? ` at ${K}` : ''}: ${n - bad}/${n} doors walked into`); return whens;
+    if (n) console.log(`book ${book} ${how}${K ? ` at ${K}` : ''}: ${n - bad}/${n} doors walked into`); return whens;
   };
   for (const book of BOOKS) for (const ride of [false, true]) {
     const whens = await pass(book, ride, null, null);   /* the book as it opens; then each map state as the story turns it on */
