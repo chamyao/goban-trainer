@@ -1,131 +1,120 @@
 # Lü Bu's fall: places
 
-These are the maps for `docs/book2/lvbu-arc.md` (novel chapters 13–19, with the Chang'an prologue). They are written as
-plan grids in `tools/tk_plans_lb.py`, in the format of `docs/book2/plan-grid.md`. Previews are in `docs/book2/plans-lb/`.
+These are the maps for `docs/book2/lvbu-arc.md` (novel chapters 13–19). They are written as plan grids in
+`tools/tk_plans_lb.py`, in the format of `docs/book2/plan-grid.md`. Previews are in `docs/book2/plans-lb/`.
 
-    python3 tools/check_plans_w2.py --arc lb --png     # 15 plans, 0 errors; 10 road challengers, 3 blocking
+    python3 tools/check_plans_w2.py --arc lb --png     # 15 plans, 0 errors; 8 road challengers, 2 blocking
 
 The arc is registered as Book 14 (`ARCS[14] = "lb"`; beat keys `3-x1` … `3-x20`). Its story isn't in yet:
-`mapfactory build --world 14 --plans lb` waits for Plot's `WORLD3_LB` in `tools/tk_story_w2_new.py`. Built with a
-stand-in story made from the design's beat table, all 15 maps build. The three blockers' guard points are proven, and
-`verify` finds no problems.
+`mapfactory build --world 14 --plans lb` waits for Plot's `WORLD3_LB` in `tools/tk_story_w2_new.py`. With a stand-in
+story made from the design's beat table:
+- all 15 maps build;
+- the two blockers' guard points are proven;
+- the flood is proven state by state;
+- `verify` finds no problems.
 
-Every beat key has a spot, and every room is named as in the design's table. The lines for Chinese are in
-`docs/book2/lvbu-places-lines.md` (122 lines).
+Every beat key has a spot or room, named as in the design's table. The lines for Chinese are in
+`docs/book2/lvbu-places-lines.md` (109 lines).
 
-## Chang'an, after its fall (x1)
-
-This is the Diaochan arc's city, kept as its streets. Its rooms, beats and people are left out, and so is the farewell
-banquet outside the Heng Gate. It is dusk, with smoke over the city and Li Jue's black banners.
-- **Pang Shu's house** (`pangshu`) is the house on the palace lane where Lady Yan and her daughter hide. The walk starts
-  at its door.
-- **The west gate** is cut in the west wall at the end of the ward street. That is x1.
-- **Three of Li Jue's patrols** (watchers) ride the avenue, the ward street and the palace lane. If one sees her, she's
-  taken back to Pang Shu's door.
-  - The checker proves a covered route: there is a way past them, and none that avoids waiting for them.
-- **Challengers:**
-  - a Liangzhou looter at the west lane's mouth, by the gate. He blocks x1, with his guard point on the gate.
-  - a soldier dicing by a fire on the market street.
-
-## Xuzhou (x2–x5, x7, x8, x10, x14)
+## Xuzhou (x1–x4, x6, x7, x9, x13)
 
 A walled city with four gates and a crossroads at its centre.
 - **North of the main street:**
-  - the prefecture hall (`xz-hall`: x2, x4, x8 and x10);
-  - Lü Bu's lodging, a walled court. Inside are the rear hall (`lb-reartang`, x3) and Lady Yan's rooms (`yan-room`, x7).
+  - the prefecture hall (`xz-hall`: x1, x3, x7, x9);
+  - Lü Bu's lodging (`lb-lodging`), a walled court. Inside are the rear hall (`lb-reartang`, x2) and Lady Yan's rooms
+    (`yan-room`, x6).
 - **South of the main street:**
-  - Liu Bei's residence, not enterable. From x5 a soldier keeps its gate: "No one troubles the Lord Liu's ladies."
+  - Liu Bei's residence, not enterable. From x4 a soldier keeps its gate.
   - the wine shop where Zhang Fei drinks;
   - the market.
 
 **Outside the west gate:**
-- x5, the night gate. In state `moon` (x4 → x5: night, clear) the west gate is **shut**, until the gate is opened.
-- x14, under the wall where Mi Zhu shouts down. In state `locked` (from x14) all four gates are shut, and Cao Cao's blue
+- x4, the night gate. In state `moon` (x3 → x4: night, clear) the west gate is **shut** until it's opened.
+- x13, under the wall where Mi Zhu shouts down. In `locked` (from x13) all four gates are shut, and Cao Cao's blue
   banners fly.
 
-**Roads:**
-- west to Xiaopei;
-- east to the Xiapi Road;
-- south to the Shouchun Road;
-- north to Xiao Pass.
+**Roads:** west to Xiaopei, east to the Xiapi Road, south to the Shouchun Road, north to Xiao Pass.
 
 **Challengers:** one of Zhang Fei's drinking companions, and a Danyang soldier of Cao Bao's. Neither blocks.
 
-## Xiaopei (x6, x11)
+## Xiaopei (x5, x10)
 
 - **Lü Bu's camp**, inside a palisade west of the little walled town:
-  - his tent (`lb-camp`, x6), its door facing east down the camp;
-  - the **halberd** planted by the camp gate, about 24 tiles off, so the shot goes out of the tent door to it.
-- **The hunting ground** lies south of the road, wooded. Its **side path** cuts through to the courier's road. x11 is
-  where the path meets the road.
-- From x14 Xiaopei flies Cao Ren's blue banners.
+  - his tent (`lb-camp`, x5), its door facing east;
+  - the **halberd** planted by the camp gate, about 24 tiles off. The shot goes out of the tent door to it.
+- **The hunting ground**, south of the road. Its side path cuts through to the courier's road; x10 is where they meet.
+- From x13 the town flies Cao Ren's blue banners.
 - **Challenger:** a falconer in the hunting ground.
 
-## The Shouchun Road (x9)
+## The Shouchun Road (x8)
 
-Thirty li south from Xuzhou, with a milestone every three cells.
-- The road narrows through a defile between two spurs. One of Ji Ling's outriders holds it. He **blocks** x9: his guard
+Thirty li south from Xuzhou.
+- The road narrows through a defile between two spurs. One of Ji Ling's outriders holds it. He **blocks** x8: his guard
   is on the defile, and the hills leave no way round.
-- The bridal party has halted beyond the defile: the red bridal carriage (new kind `prop.carriage`) and the drums.
+- The bridal party has halted beyond it, with the red bridal carriage and the drums.
 
-## Xiao Pass (x13)
+## Xiao Pass (x12)
 
-At night. The pass road climbs from the Xuzhou side, through a valley, then a narrow bend, to the top of the pass.
-- **On the top:** Chen Gong's men's tents and a watch fire. Two sentries are watchers.
-  - The checker proves a covered route from the head of the road to the cliff's edge, and that you have to wait for it.
-- **x13** is the cliff's edge above Cao Cao's camp, which lies below to the west: seen, never reached.
+At night.
+- The pass road climbs from the Xuzhou side through a valley and a narrow bend to the top of the pass.
+- **On the top:** Chen Gong's men's tents and a watch fire, with two sentries as watchers. The checker proves a covered
+  route to the cliff's edge, and that you have to wait for it.
+- **x12** is the cliff's edge above Cao Cao's camp, which lies below to the west.
 - **Challengers:**
-  - a Taishan bandit on the narrow bend. He **blocks** x13, with his guard there.
+  - a Taishan bandit on the bend, who **blocks** x12;
   - one of Chen Gong's sentries in the valley.
 
-## The Xiapi Road (x12)
+## The Xiapi Road (x11)
 
-From Xuzhou to Xiapi, past a roadside inn and a marsh, over the Si by a bridge.
-- In state `move` (x11 → x12) it is a **procession**, as on the Diaochan arc's Meiwu Road. The column runs: outriders,
-  Lady Yan's carriage, Diaochan's carriage, the player, two grain carts (`carriage:grain`), the rearguard.
-- The column halts at x12, with Xiapi in sight.
+From Xuzhou to Xiapi, past an inn and a marsh, over the Si.
+- In `move` (x10 → x11) it's a **procession**: outriders, Lady Yan's carriage, Diaochan's carriage, the player, two
+  grain carts (`carriage:grain`), the rearguard.
+- The column halts at x11.
 
-## Xiapi (x15–x20): the flood
+## Xiapi (x14–x20): the flood
 
 A walled city with the Si along its west and the Yi along its north.
 - **Inside:**
-  - Lü Bu's residence (`lb-fu`: x15 the counsel, x17 the mirror, x18 the lashes);
+  - **Lü Bu's residence** (`lb-residence`), a walled court. In it are his hall (`lb-fu`) and Lady Yan's rooms
+    (`yan-room`).
+    - The hall holds x14 (Chen Gong's plan), x15 (where he is packing), x17 (the mirror) and x18 (the lashes).
+    - x15 starts in Lady Yan's rooms (spot `yan-start`). She crosses the court to his hall.
   - the granary;
-  - the stables by the east gate, where Red Hare is (x19);
+  - the stables by the east gate (x19: Hou Cheng starts at `stables-door`);
   - the White Gate tower over the south gate (`white-gate`, x20).
 - **Outside:**
   - Cao Cao's siege camp, east;
-  - Liu Bei's camp on the road to Huainan, south. x16 is its line, where Lü Bu turns back.
-
-**The flood** (`plan["floods"]`, cells; a state's `"water"` names one):
+  - Liu Bei's camp on the Huainan road, south. x16 is its line, where Lü Bu turns back.
 
 | State | Beats | Water |
 |---|---|---|
 | `siege` | until x16 | none |
-| `flood1` | x16 → x17 | the low ground: the whole south band and the west band. The south and west gates are under; the east gate stays dry. |
-| `flood2` | x17 → x19 (night x18 → x19) | everything but the causeway: the main street from the middle of the city out through the east gate (「只剩得東門無水」) |
-| `taken` | from x19 | back to `flood1`'s water; Cao Cao's banners |
+| `flood1` | x16 → x17 | the low ground: the south and west bands, with the south and west gates; the east gate dry |
+| `flood2` | x17 → x19 (`night` x18 → x19) | all but the causeway, the main street from the middle out through the east gate (「只剩得東門無水」) |
+| `taken` | from x19 | none: the water drains, so x20 is on foot |
 
-What it gives:
-- **x17:** Lü Bu's residence is under water from flood1 onward. On foot, there's no dry way from its door to the east
-  gate. Only Red Hare gets him round the city and home.
-- **x19:** In flood2 the stables are cut off on foot from the causeway, but on Red Hare there is a way to the east gate.
-  Two of Lü Bu's men watch the causeway and the gate (watchers), so Hou Cheng goes round them by the water.
+**Challengers** (siege, x14–x16): an officer of Hou Cheng's, and a sentry at the foot of the wall. Neither blocks.
 
-**Challengers** (siege, x15–x16): an officer of Hou Cheng's, grumbling, and a sentry at the foot of the wall. Neither
-blocks.
+**x19:** two of Lü Bu's men watch the causeway and the gate (watchers). Hou Cheng, on Red Hare, goes round them by the
+water.
 
 ## For Integration (engine)
 
-Two state keys are new. `plans.py` writes both in tiles.
-1. **`"water": [[x, y, w, h], …]`.** Tile rects under water in that state. No one crosses them except on a mount with
-   `crosses_water` (Red Hare, in Plot's items). Draw them as water. Rivers are already water; these rects are added to
-   them.
-2. **`"shut": [{"gate": id, "rect": [x, y, w, h], "say": [lines]}]`.** A wall's gate shut in that state: block its
-   tiles, and say the lines when the player walks into it. Xuzhou uses it for the night gate (x5) and the lockout (x14).
+1. **The flood** uses tk-world's per-state water layers. `plans.py` works out which states each tile is under water in.
+   `compile.py` writes one tile layer for each set of states:
+   - `water:flood1,flood2,night`: the low ground.
+   - `water:flood2,night`: the rest, all but the causeway.
+
+   `plans.py` also proves each flood state from the entry on the causeway, and the build fails if a proof fails:
+   - On Red Hare, every spot and door can be reached.
+   - On foot, x19 can be reached, but the stables (flood2) and the residence can't. These are the plan's `flood_afoot`
+     rules.
+2. **`"shut": [{"gate": id, "rect": [x, y, w, h], "say": [lines]}]`** in a state is a wall's gate shut in that state.
+   Block its tiles, and say the lines when the player walks into it. It's used for Xuzhou's west gate in `moon` (x4),
+   and all four gates in `locked` (from x13).
 
 ## New kinds
 
 These are in `NEW_KINDS` and `vocab.py`, each with a stand-in and a brief (`ART`):
-- `prop.halberd`: the halberd at the camp gate (x6). Its stand-in is the weapon rack.
-- `prop.carriage`: the red bridal carriage (x9).
+- `prop.halberd`: the halberd at the camp gate (x5).
+- `prop.carriage`: the red bridal carriage (x8).

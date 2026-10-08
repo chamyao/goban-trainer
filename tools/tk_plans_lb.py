@@ -1,23 +1,21 @@
-"""Lü Bu's fall (novel chapters 13–19, with the Chang'an prologue), as plan grids (docs/book2/plan-grid.md).
+"""Lü Bu's fall (novel chapters 13–19), as plan grids (docs/book2/plan-grid.md).
 
 Design: docs/book2/lvbu-arc.md (Plot), "Building it". Beat keys are its shared keys, 3-x1 ... 3-x20.
 
     python3 tools/check_plans_w2.py --arc lb [--png]       # check (and draw into docs/book2/plans-lb/)
     python3 tools/mapfactory build --world 14 --plans lb   # once Plot's story for the arc is in
 
-The places, in the story's order: Chang'an after its fall (reusing the Diaochan arc's map) -> Xuzhou -> Xiaopei ->
-the Shouchun Road -> Xiao Pass -> the Xiapi Road -> Xiapi, which floods in stages (the arc's mechanic). Road
-challengers: 10, 3 of them blocking (the design's table). Cells, claims, lines, rooms and states work as in
-tools/tk_plans_w2.py, whose kinds and room() this reuses.
+The places, in the story's order: Xuzhou -> Xiaopei -> the Shouchun Road -> Xiao Pass -> the Xiapi Road -> Xiapi,
+which floods in stages (the arc's mechanic). Road challengers: 8, 2 of them blocking (the design's table). Cells,
+claims, lines, rooms and states work as in tools/tk_plans_w2.py, whose kinds and room() this reuses.
 
-Two state keys are new, for the flood and for gates shut by the story (Integration's engine):
-  "water": [[x, y, w, h], ...]   cells under water in that state: no one crosses but a mount that crosses water
-  "shut":  {gate id: [lines]}    a gate of a wall shut in that state, and what it says when you try it
-plans.py turns both into tiles ("water": tile rects; "shut": the gate's tile rect and its lines).
+New in the plans, for the flood and for gates the story shuts (plans.py writes them for tk-world):
+  plan "floods": {name: [[x, y, w, h], ...]}   cells under water, by name; a state's "water" names one. Written as
+      tile layers "water:<state ids>" (tk-world shows them, and no one but Red Hare crosses them, while a state is on),
+      and proved state by state ("flood_afoot": what must and must not be reached on foot).
+  state "shut": {gate id: [lines]}             a gate of a wall shut in that state, and what it says
 """
-import copy
-
-from tk_plans_w2 import ART as ART2, LINE_KINDS, NEW_KINDS as NEW_KINDS2, PLANS2, ZONE_KINDS, _ch, room
+from tk_plans_w2 import ART as ART2, LINE_KINDS, NEW_KINDS as NEW_KINDS2, ZONE_KINDS, _ch, room
 
 # the beats this arc's plans place (the design's table: x1 ... x20)
 KEYS_LB = {f"x{i}" for i in range(1, 21)}
@@ -39,74 +37,7 @@ def _talk(kind, at, say, **kw):
     return {"kind": kind, "at": at, "say": say, **kw}
 
 
-# =========================================================================================
-# Chang'an after its fall: the Diaochan arc's city, taken by Li Jue and Guo Si. Lady Yan and her daughter come out of
-# Pang Shu's house and walk to the west gate past the patrols (x1). Only the city's streets and Pang Shu's house are
-# kept: the Diaochan arc's rooms, beats and people are left out, and a west gate is cut in the wall.
-_ca = copy.deepcopy(PLANS2["Chang'an"])
-_cap = _ca["plan"]
-for _t in _cap["things"]:
-    for _k in ("node", "map", "open_to", "refuse"):
-        _t.pop(_k, None)
-    if _t["id"] == "house-2":
-        _t.update(id="pangshu", label="Pang Shu's house", plaque="庞府", map="pangshu")
-next(l for l in _cap["lines"] if l["id"] == "wall")["gates"]["west-gate"] = [1, 9]
-next(l for l in _cap["lines"] if l["id"] == "ward-street")["path"] = [[0, 9], [14, 9]]   # out through the west gate
-_cap["things"] = [t for t in _cap["things"] if t["id"] not in ("hengmen", "ridge")]   # the Diaochan arc's farewell, long over
-_cap["checks"] = [{"check": "covered_route", "from": [10, 11], "to": [1, 9], "beats": ["3-x1"], "must_wait": True}]
-_cap["spots"] = [
-    {"id": "pangshu-gate", "at": [10, 11], "at_door": "pangshu", "label": "Pang Shu's door", "note": "x1: where the walk starts"},
-    {"id": "x1", "at": [1, 9], "node": "3-x1", "label": "The west gate", "trigger": "near"},
-]
-_cap["props"] = [{"kind": "camp.firepit", "at": [11, 5], "label": "A soldiers' fire"}]
-_cap["dress"] = [d for d in _cap["dress"] if d.get("at_door") not in ("wangyun", "palace")] + [
-    {"kind": "banner.black", "at_gates": True}]
-_cap["exits"] = []
-_cap["entries"] = {"": [10, 11]}
-# Li Jue's patrols (x1): stealth, as the Diaochan arc's watchers. Caught, she's taken back to Pang Shu's door.
-_cap["watchers"] = [
-    {"id": "patrol-avenue", "kind": "folk.soldier", "beat": [[6, 5], [6, 10], [6, 5]], "shape": "U", "pause": [6, 10, 2],
-     "cone": 5, "in_beats": ["3-x1"], "seen": "patrol", "back_to": "pangshu-gate"},
-    {"id": "patrol-ward", "kind": "folk.soldier", "beat": [[3, 9], [12, 9], [3, 9]], "shape": "U", "pause": [12, 9, 3],
-     "cone": 5, "in_beats": ["3-x1"], "seen": "patrol", "back_to": "pangshu-gate"},
-    {"id": "patrol-lane", "kind": "folk.soldier", "beat": [[13, 11], [3, 11], [13, 11]], "shape": "U", "pause": [3, 11, 2],
-     "cone": 4, "in_beats": ["3-x1"], "seen": "patrol", "back_to": "pangshu-gate"},
-]
-_ca.update(
-    banners="black",
-    states=[{"id": "fallen", "light": "dusk", "weather": "smoke"}],
-    seen_lines={"patrol": ["“Halt! Whose women are these?” Pang Shu's servant hurries them back indoors before the patrol looks again."]},
-    npcs=[
-        _talk("folk.villager", [8, 5], "“Li Jue's men took the market this morning. Whatever they want, they take.”"),
-        _talk("folk.elder", [12, 7], "“Wang Yun is dead, and General Lü fled with a hundred horsemen. He left his own family behind.”"),
-    ],
-    maps={
-        # Pang Shu's house, where he hides Lü Bu's wife and daughter (「龐舒在長安城中，私藏呂布妻小」)
-        "pangshu": room([10, 7], [5, 6], floor="wood",
-                        things=[{"id": "screen", "kind": "furn.screen", "rect": [3, 1, 2, 1]},
-                                {"id": "bed", "kind": "furn.bed", "rect": [1, 1, 1, 1], "label": "Where they hid"},
-                                {"id": "chest", "kind": "furn.chest", "rect": [8, 1, 1, 1]},
-                                {"id": "table", "kind": "furn.table", "rect": [6, 3, 1, 1]}],
-                        spots=[{"id": "pangshu-in", "at": [5, 4], "label": "Pang Shu's house", "note": "x1 starts in here"}])
-        | {"label": "Pang Shu's house"},
-    },
-    challengers=[
-        # the walk to the west gate (x1): a looter at the west lane's mouth, by the gate (blocking); a soldier dicing by a fire
-        _ch("looter", "folk.soldier", [2, 8], None, "node:x1",
-            "A Liangzhou soldier steps out of the lane, a bundle of silk under his arm. “Where are you off to, with the city burning? Show me what's in your sleeves.”",
-            "“…Bah. Nothing worth the trouble. Go on.”", "The looter has gone after richer pickings.",
-            blocks="x1", view=1, guard="door"),
-        _ch("dicer", "folk.soldier", [10, 5], None, "node:x1",
-            "A soldier squats by the fire, rattling dice. “A game, lady? Win, and I never saw you.”",
-            "“Ha! Then I never saw you.”", "The dicer is busy with his own game."),
-    ],
-    objectives={"3-x1": "Walk Lady Yan and her daughter from Pang Shu's house to the west gate, past Li Jue's patrols."},
-)
-
-
 PLANS_LB = {
-    "Chang'an": _ca,
-
     # =========================================================================================
     # Xuzhou: the prefecture's city. Liu Bei takes Lü Bu in (x2-x4); the night gate (x5); Lü Bu holds it (x7-x10);
     # locked out under its wall (x14).
@@ -149,9 +80,9 @@ PLANS_LB = {
             ],
             "spots": [
                 {"id": "liubei-gate", "at": [5, 7], "at_door": "liubei", "label": "Liu Bei's gate"},
-                {"id": "x5", "at": [0, 8], "node": "3-x5", "label": "The west gate, at night", "trigger": "near",
+                {"id": "x4", "at": [0, 8], "node": "3-x4", "label": "The west gate, at night", "trigger": "near",
                  "note": "outside the gate: 「劉使君有機密使人至」"},
-                {"id": "x14", "at": [0, 4], "node": "3-x14", "label": "Under Xuzhou's wall", "trigger": "near",
+                {"id": "x13", "at": [0, 4], "node": "3-x13", "label": "Under Xuzhou's wall", "trigger": "near",
                  "note": "Mi Zhu shouts down from the wall above"},
             ],
             "dress": [
@@ -169,10 +100,10 @@ PLANS_LB = {
         },
         "states": [
             {"id": "guest", "light": "day"},
-            {"id": "moon", "when": "node:x4", "until": "node:x5", "light": "night", "weather": "clear",   # 「是夜月白風清」
+            {"id": "moon", "when": "node:x3", "until": "node:x4", "light": "night", "weather": "clear",   # 「是夜月白風清」
              "shut": {"west-gate": ["The gate is barred for the night. Someone inside must open it."]}},
-            {"id": "held", "when": "node:x5", "until": "node:x14", "light": "day"},
-            {"id": "locked", "when": "node:x14", "light": "day", "banners": "blue",
+            {"id": "held", "when": "node:x4", "until": "node:x13", "light": "day"},
+            {"id": "locked", "when": "node:x13", "light": "day", "banners": "blue",
              "shut": {g: ["The gate stays shut. Up on the wall, Mi Zhu has Cao Cao's banners raised."]
                       for g in ("west-gate", "east-gate", "south-gate", "north-gate")}},
         ],
@@ -184,10 +115,10 @@ PLANS_LB = {
                                     {"id": "table-1", "kind": "furn.table", "rect": [3, 3, 1, 1]},
                                     {"id": "table-2", "kind": "furn.table", "rect": [12, 3, 1, 1]},
                                     {"id": "rack", "kind": "furn.rack", "rect": [1, 5, 1, 1]}],
-                            spots=[{"id": "x2", "at": [6, 5], "node": "3-x2", "label": "The prefecture hall"},
-                                   {"id": "x4", "at": [10, 5], "node": "3-x4", "label": "Cao Cao's letter"},
-                                   {"id": "x8", "at": [6, 4], "node": "3-x8", "label": "The condolence call"},
-                                   {"id": "x10", "at": [10, 4], "node": "3-x10", "label": "The hawk"}])
+                            spots=[{"id": "x1", "at": [6, 5], "node": "3-x1", "label": "The prefecture hall"},
+                                   {"id": "x3", "at": [10, 5], "node": "3-x3", "label": "Cao Cao's letter"},
+                                   {"id": "x7", "at": [6, 4], "node": "3-x7", "label": "The condolence call"},
+                                   {"id": "x9", "at": [10, 4], "node": "3-x9", "label": "The hawk"}])
             | {"label": "The prefecture hall"},
             # ---- Lü Bu's lodging: a walled court, the rear hall at the back, Lady Yan's rooms on the east ----
             "lb-lodging": {
@@ -208,7 +139,7 @@ PLANS_LB = {
                                         {"id": "table-2", "kind": "furn.table", "rect": [7, 2, 2, 1]},
                                         {"id": "screen", "kind": "furn.screen", "rect": [5, 1, 2, 1]},
                                         {"id": "lamp", "kind": "furn.lamp", "rect": [10, 1, 1, 1]}],
-                                spots=[{"id": "x3", "at": [6, 4], "node": "3-x3", "label": "The rear hall",
+                                spots=[{"id": "x2", "at": [6, 4], "node": "3-x2", "label": "The rear hall",
                                         "note": "「布令妻女出拜玄德」"}])
             | {"label": "The rear hall"},
             "yan-room": room([10, 7], [5, 6], floor="wood",
@@ -216,7 +147,7 @@ PLANS_LB = {
                                      {"id": "mirror", "kind": "furn.mirror", "rect": [4, 1, 1, 1]},
                                      {"id": "screen", "kind": "furn.screen", "rect": [6, 1, 2, 1]},
                                      {"id": "chest", "kind": "furn.chest", "rect": [8, 1, 1, 1], "label": "The bride's chest"}],
-                             spots=[{"id": "x7", "at": [5, 4], "node": "3-x7", "label": "Lady Yan's rooms"}])
+                             spots=[{"id": "x6", "at": [5, 4], "node": "3-x6", "label": "Lady Yan's rooms"}])
             | {"label": "Lady Yan's rooms"},
         },
         "npcs": [
@@ -228,22 +159,22 @@ PLANS_LB = {
         ],
         "challengers": [
             # Xuzhou's streets (x2-x10): neither blocks
-            _ch("drinker", "folk.villager", [8, 7], "node:x1", "node:x10",
+            _ch("drinker", "folk.villager", [8, 7], "node:x1", "node:x9",
                 "One of Zhang Fei's drinking companions sways out of the wine shop. “You're the one he calls the slave of three surnames! A game, and if you lose, you drink!”",
                 "“…Hic. You play better than he says.”", "Zhang Fei's friend is asleep on the bench."),
-            _ch("danyang", "folk.soldier", [2, 9], "node:x1", "node:x10",
+            _ch("danyang", "folk.soldier", [2, 9], "node:x1", "node:x9",
                 "A Danyang soldier of Cao Bao's leans on his spear. “Our general's daughter married you, didn't she? Let's see if you're worth her.”",
                 "“Hah. You'll do.”", "The Danyang soldier salutes."),
         ],
         "objectives": {
-            "3-x2": "Go to the prefecture hall, on the main street west of the cross, where Liu Bei receives you.",
-            "3-x3": "Go to your lodging's rear hall, on the north side of the main street east of the cross.",
-            "3-x4": "Go to the prefecture hall: Liu Bei has something to show you.",
-            "3-x5": "Ride to Xuzhou's west gate in the moonlight.",
-            "3-x7": "Go to Lady Yan's rooms, in the lodging's court.",
-            "3-x8": "Go to the prefecture hall: Chen Gui has come to call.",
-            "3-x10": "Go to the prefecture hall.",
-            "3-x14": "Ride back to Xuzhou's west gate.",
+            "3-x1": "Go to the prefecture hall, on the main street west of the cross, where Liu Bei receives you.",
+            "3-x2": "Go to your lodging's rear hall, on the north side of the main street east of the cross.",
+            "3-x3": "Go to the prefecture hall: Liu Bei has something to show you.",
+            "3-x4": "Ride to Xuzhou's west gate in the moonlight.",
+            "3-x6": "Go to Lady Yan's rooms, in the lodging's court.",
+            "3-x7": "Go to the prefecture hall: Chen Gui has come to call.",
+            "3-x9": "Go to the prefecture hall.",
+            "3-x13": "Ride back to Xuzhou's west gate.",
         },
     },
 
@@ -274,7 +205,7 @@ PLANS_LB = {
                 {"id": "tent-3", "kind": "building.tent", "rect": [6, 3, 2, 1], "door": "S"},
                 {"id": "tent-4", "kind": "building.tent", "rect": [6, 8, 2, 1], "door": "N"},
                 {"id": "halberd", "kind": "prop.halberd", "rect": [10, 5, 1, 1], "label": "Lü Bu's halberd, planted at the camp gate",
-                 "note": "x6: 150 paces from the tent; 「吾若一箭射中戟上小枝，你兩家罷兵」"},
+                 "note": "x5: 150 paces from the tent; 「吾若一箭射中戟上小枝，你兩家罷兵」"},
                 {"id": "fire", "kind": "camp.firepit", "rect": [8, 6, 1, 1]},
                 {"id": "town-hall", "kind": "building.hall", "rect": [18, 3, 2, 2], "door": "S", "label": "Xiaopei's county hall"},
                 {"id": "town-house-1", "kind": "building.house", "rect": [21, 3, 2, 2], "door": "S"},
@@ -283,7 +214,7 @@ PLANS_LB = {
             ],
             "spots": [
                 {"id": "camp-gate", "at": [12, 6], "label": "The camp gate", "note": "the halberd stands just inside"},
-                {"id": "x11", "at": [12, 13], "node": "3-x11", "label": "Where the side path meets the road", "trigger": "near",
+                {"id": "x10", "at": [12, 13], "node": "3-x10", "label": "Where the side path meets the road", "trigger": "near",
                  "note": "Chen Gong cuts the courier off here"},
             ],
             "dress": [
@@ -297,7 +228,7 @@ PLANS_LB = {
         },
         "states": [
             {"id": "camp", "light": "day"},
-            {"id": "cao", "when": "node:x14", "light": "day", "banners": "blue"},   # Cao Ren's flags on Xiaopei's wall
+            {"id": "cao", "when": "node:x13", "light": "day", "banners": "blue"},   # Cao Ren's flags on Xiaopei's wall
         ],
         "maps": {
             # ---- Lü Bu's tent: the banquet with Ji Ling and Liu Bei, the bow (x6) ----
@@ -306,24 +237,24 @@ PLANS_LB = {
                                     {"id": "table-1", "kind": "furn.table", "rect": [2, 3, 1, 1], "label": "Ji Ling's table"},
                                     {"id": "table-2", "kind": "furn.table", "rect": [9, 3, 1, 1], "label": "Liu Bei's table"},
                                     {"id": "rack", "kind": "furn.rack", "rect": [1, 1, 1, 1], "label": "The bow and the arrows"}],
-                            spots=[{"id": "x6", "at": [6, 5], "node": "3-x6", "label": "Lü Bu's tent",
+                            spots=[{"id": "x5", "at": [6, 5], "node": "3-x5", "label": "Lü Bu's tent",
                                     "note": "the shot goes out of the tent door, east, to the halberd at the camp gate"}])
             | {"label": "Lü Bu's tent"},
         },
         "npcs": [
             _talk("folk.soldier", [9, 4], "“They say the general can put an arrow through a halberd's side blade at a hundred and fifty paces. I say nobody can.”",
-                  **{"until": "node:x6"}),
+                  **{"until": "node:x5"}),
             _talk("folk.soldier", [9, 4], "“I saw it. Straight through the little blade. Ji Ling went home without a fight.”",
-                  **{"when": "node:x6"}),
+                  **{"when": "node:x5"}),
         ],
         "challengers": [
-            _ch("falconer", "folk.villager", [5, 12], "node:x10", "node:x11",
+            _ch("falconer", "folk.villager", [5, 12], "node:x9", "node:x10",
                 "A falconer looks up from his bird. “Out hunting, Adviser? The hawk won't fly for a man in a hurry. Play me while she settles.”",
                 "“She'll fly for you now.”", "The falconer's hawk is on the wing."),
         ],
         "objectives": {
-            "3-x6": "Go to your tent in the camp, west of Xiaopei. The halberd stands at the camp gate.",
-            "3-x11": "Take the side path through the hunting ground to the road, and cut the courier off.",
+            "3-x5": "Go to your tent in the camp, west of Xiaopei. The halberd stands at the camp gate.",
+            "3-x10": "Take the side path through the hunting ground to the road, and cut the courier off.",
         },
     },
 
@@ -347,7 +278,7 @@ PLANS_LB = {
                 {"id": "carriage", "kind": "prop.carriage", "rect": [31, 2, 2, 1], "label": "The bridal carriage"},
                 {"id": "drums", "kind": "camp.table", "rect": [29, 2, 1, 1], "label": "The drums and pipes"},
             ],
-            "spots": [{"id": "x9", "at": [31, 4], "node": "3-x9", "label": "The bridal party", "trigger": "near"}],
+            "spots": [{"id": "x8", "at": [31, 4], "node": "3-x8", "label": "The bridal party", "trigger": "near"}],
             "dress": [{"kind": "milestone", "along": "road", "every": 3}, {"kind": "tree.poplar", "along": "road", "every": 3},
                       {"kind": "banner.red", "at_door": "carriage", "pair": True}],
             "exits": [{"to": "Xuzhou", "at": [0, 4], "side": "W"}],
@@ -356,12 +287,12 @@ PLANS_LB = {
         "states": [{"id": "road", "light": "day"}],
         "npcs": [_talk("folk.villager", [10, 5], "“Drums and pipes went by an hour ago, with a red carriage. A wedding for the south, they said.”")],
         "challengers": [
-            _ch("outrider", "folk.soldier", [24, 4], "node:x8", "node:x9",
+            _ch("outrider", "folk.soldier", [24, 4], "node:x7", "node:x8",
                 "One of Ji Ling's outriders wheels his horse across the narrows. “The bride of the House of Yuan rides under our guard. Turn back.”",
                 "“…Lü Bu's own man. Then go and argue with her escort, not me.”", "The outrider has ridden back to the column.",
-                blocks="x9", view=2, guard=[24, 4]),
+                blocks="x8", view=2, guard=[24, 4]),
         ],
-        "objectives": {"3-x9": "Ride the Shouchun road south after the bridal party, thirty li, and bring the bride home."},
+        "objectives": {"3-x8": "Ride the Shouchun road south after the bridal party, thirty li, and bring the bride home."},
     },
 
     # =========================================================================================
@@ -386,15 +317,15 @@ PLANS_LB = {
                 {"id": "cao-tent-1", "kind": "building.tent", "rect": [1, 2, 2, 1], "label": "Cao Cao's camp, below the pass"},
                 {"id": "cao-tent-2", "kind": "building.tent", "rect": [1, 5, 2, 1]},
             ],
-            "checks": [{"check": "covered_route", "from": [8, 6], "to": [5, 4], "beats": ["3-x13"], "must_wait": True}],
+            "checks": [{"check": "covered_route", "from": [8, 6], "to": [5, 4], "beats": ["3-x12"], "must_wait": True}],
             "spots": [{"id": "pass-foot", "at": [8, 6], "label": "The top of the pass road"},
-                      {"id": "x13", "at": [5, 4], "node": "3-x13", "label": "The cliff's edge above Cao Cao's camp", "trigger": "near",
+                      {"id": "x12", "at": [5, 4], "node": "3-x12", "label": "The cliff's edge above Cao Cao's camp", "trigger": "near",
                        "note": "the three arrow letters go down from here"}],
             "watchers": [   # Chen Gong's men on the top of the pass (x13): get the letters down unseen
                 {"id": "sentry-fire", "kind": "folk.soldier", "beat": [[7, 3], [12, 3], [7, 3]], "shape": "U", "pause": [12, 3, 2],
-                 "cone": 4, "in_beats": ["3-x13"], "seen": "sentry", "back_to": "pass-foot"},
+                 "cone": 4, "in_beats": ["3-x12"], "seen": "sentry", "back_to": "pass-foot"},
                 {"id": "sentry-edge", "kind": "folk.soldier", "beat": [[6, 1], [6, 5], [6, 1]], "shape": "U", "pause": [6, 1, 3],
-                 "cone": 4, "in_beats": ["3-x13"], "seen": "sentry", "back_to": "pass-foot"},
+                 "cone": 4, "in_beats": ["3-x12"], "seen": "sentry", "back_to": "pass-foot"},
             ],
             "dress": [{"kind": "tree.poplar", "in": "valley", "count": 5}, {"kind": "banner.blue", "in": "cao-camp", "count": 3}],
             "exits": [{"to": "Xuzhou", "at": [12, 15], "side": "S"}],
@@ -403,15 +334,15 @@ PLANS_LB = {
         "states": [{"id": "night", "light": "night"}],
         "seen_lines": {"sentry": ["“Who goes there? Oh, Master Chen. The Adviser said no one comes up tonight.” You're sent back down the road."]},
         "challengers": [
-            _ch("bandit", "folk.villager", [10, 8], "node:x12", "node:x13",
+            _ch("bandit", "folk.villager", [10, 8], "node:x11", "node:x12",
                 "A Taishan bandit blocks the narrow road, a club on his shoulder. “Toll, scholar. Or a game, if you're too poor for silver.”",
                 "“…Go on, then. I never liked Chen Gong's lot anyway.”", "The bandit has melted back into the hills.",
-                blocks="x13", view=1, guard=[10, 8]),
-            _ch("sentry", "folk.soldier", [13, 10], "node:x12", "node:x13",
+                blocks="x12", view=1, guard=[10, 8]),
+            _ch("sentry", "folk.soldier", [13, 10], "node:x11", "node:x12",
                 "One of Chen Gong's sentries leans on his spear by the bend. “Cold night for a walk, sir. Keep me awake a while?”",
                 "“Ha. Now I'm awake.”", "The sentry stamps his feet against the cold."),
         ],
-        "objectives": {"3-x13": "Climb the pass road at night and reach the cliff's edge above Cao Cao's camp, unseen by Chen Gong's men."},
+        "objectives": {"3-x12": "Climb the pass road at night and reach the cliff's edge above Cao Cao's camp, unseen by Chen Gong's men."},
     },
 
     # =========================================================================================
@@ -433,22 +364,22 @@ PLANS_LB = {
             "things": [
                 {"id": "inn", "kind": "building.inn", "rect": [16, 3, 2, 1], "door": "S", "label": "A roadside inn"},
             ],
-            "spots": [{"id": "x12", "at": [34, 4], "node": "3-x12", "label": "Xiapi in sight", "trigger": "near"}],
+            "spots": [{"id": "x11", "at": [34, 4], "node": "3-x11", "label": "Xiapi in sight", "trigger": "near"}],
             "dress": [{"kind": "milestone", "along": "road", "every": 5}, {"kind": "tree.willow", "along": "road", "every": 3}],
             "exits": [{"to": "Xuzhou", "at": [0, 4], "side": "W"}, {"to": "Xiapi", "at": [35, 4], "side": "E"}],
             "entries": {"": [1, 4], "Xuzhou": [1, 4], "Xiapi": [34, 4]},
         },
         "states": [
             {"id": "road", "light": "day"},
-            {"id": "move", "when": "node:x11", "until": "node:x12", "light": "day",
+            {"id": "move", "when": "node:x10", "until": "node:x11", "light": "day",
              "procession": {"column": ["outriders", "carriage:yan", "carriage:diaochan", "player", "carriage:grain", "carriage:grain",
                                        "rearguard"],
                             "path": "road", "from": [0, 4], "to": [35, 4], "leash": 6,
-                            "leash_line": "Lü Bu keeps beside his household's carriages.", "stops": ["x12"]}},
+                            "leash_line": "Lü Bu keeps beside his household's carriages.", "stops": ["x11"]}},
         ],
         "npcs": [_talk("folk.villager", [16, 4], "“Grain carts, all morning. Whatever's coming to Xuzhou, the general isn't staying to meet it.”",
                        **{"in": ["road"]})],
-        "objectives": {"3-x12": "Escort your household and the grain carts down the road to Xiapi."},
+        "objectives": {"3-x11": "Escort your household and the grain carts down the road to Xiapi."},
     },
 
     # =========================================================================================
@@ -477,8 +408,8 @@ PLANS_LB = {
                 {"id": "fu-lane", "kind": "road", "path": [[8, 7], [8, 9]], "width": 2},
             ],
             "things": [
-                {"id": "lbfu", "kind": "building.hall_grand", "rect": [6, 5, 4, 2], "door": "S", "label": "Lü Bu's residence",
-                 "map": "lb-fu", "plaque": "吕府"},
+                {"id": "lbfu", "kind": "building.compound", "rect": [6, 5, 4, 2], "door": "S", "label": "Lü Bu's residence",
+                 "map": "lb-residence", "plaque": "吕府"},
                 {"id": "granary", "kind": "building.granary", "rect": [14, 5, 2, 1], "label": "The granary"},
                 {"id": "house-1", "kind": "building.house", "rect": [16, 5, 2, 1]},
                 {"id": "stables", "kind": "building.stable", "rect": [15, 11, 3, 2], "door": "N", "label": "The stables",
@@ -519,19 +450,41 @@ PLANS_LB = {
                 "flood1": [[0, 11, 26, 9], [0, 2, 9, 9]],
                 "flood2": [[0, 0, 26, 9], [0, 10, 26, 10], [0, 9, 13, 1]],
             },
+            # what the flood must leave on foot, state by state, from the causeway ("!": only Red Hare gets there)
+            "flood_afoot": {"flood1": ["x19", "!door:lbfu"], "flood2": ["x19", "!stables-door", "!door:lbfu"],
+                            "night": ["x19", "!stables-door"]},
             "exits": [{"to": "The Xiapi Road", "at": [0, 9], "side": "W"}],
-            "entries": {"": [10, 9], "The Xiapi Road": [3, 9]},
+            "entries": {"": [16, 9], "The Xiapi Road": [3, 9]},   # the default on the causeway: dry in every state
         },
         "states": [
             {"id": "siege", "until": "node:x16", "light": "day"},
             {"id": "flood1", "when": "node:x16", "until": "node:x17", "light": "day", "weather": "rain", "water": "flood1"},
             {"id": "flood2", "when": "node:x17", "until": "node:x19", "light": "day", "weather": "rain", "water": "flood2"},
             {"id": "night", "when": "node:x18", "until": "node:x19", "light": "night", "water": "flood2"},
-            {"id": "taken", "when": "node:x19", "light": "day", "water": "flood1", "banners": "blue"},
+            {"id": "taken", "when": "node:x19", "light": "day", "banners": "blue"},   # the water drains: everyone on foot (x20)
         ],
         "seen_lines": {"guard": ["“Who's at the horses? General Hou?” The guard peers through the rain, and you back off into the dark."]},
         "maps": {
-            # ---- Lü Bu's residence: the counsel (x15), the mirror (x17), the lashes (x18) ----
+            # ---- Lü Bu's residence: a walled court, his hall (lb-fu) at the back, Lady Yan's rooms (yan-room) on the east.
+            # x15: she walks from her rooms across the court to the hall, where he is packing to ride out ----
+            "lb-residence": {
+                "grid": [14, 12], "cell": 2, "margin": 0, "label": "Lü Bu's residence",
+                "ground": [{"id": "court", "kind": "court", "rect": [1, 5, 12, 6]}],
+                "lines": [{"id": "walls", "kind": "wall", "outline": [0, 0, 14, 12], "width": 1, "gates": {"gate": [6, 11]}}],
+                "things": [
+                    {"id": "hall", "kind": "building.hall_grand", "rect": [1, 1, 7, 3], "door": "S", "label": "Lü Bu's hall", "map": "lb-fu"},
+                    {"id": "yan", "kind": "building.wing", "rect": [9, 1, 4, 3], "door": "S", "label": "Lady Yan's rooms", "map": "yan-room"},
+                    {"id": "rack", "kind": "furn.rack", "rect": [1, 8, 1, 1], "label": "Red Hare's saddle, ready"},
+                ],
+                "exits": [{"to": "Xiapi", "at": [6, 11], "side": "S"}],
+            },
+            "yan-room": room([10, 7], [5, 6], floor="wood",
+                             things=[{"id": "bed", "kind": "furn.bed", "rect": [1, 1, 1, 1]},
+                                     {"id": "screen", "kind": "furn.screen", "rect": [4, 1, 2, 1]},
+                                     {"id": "chest", "kind": "furn.chest", "rect": [8, 1, 1, 1]}],
+                             spots=[{"id": "yan-start", "at": [5, 4], "label": "Lady Yan's rooms", "note": "x15 starts here"}])
+            | {"label": "Lady Yan's rooms"},
+            # ---- his hall: Chen Gong's plan (x14), Lady Yan's pleas and Diaochan's word (x15), the mirror (x17), the lashes (x18) ----
             "lb-fu": room([16, 8], [8, 7],
                           things=[{"id": "dais", "kind": "furn.dais", "rect": [7, 1, 2, 1], "label": "Lü Bu's seat"},
                                   {"id": "screen", "kind": "furn.screen", "rect": [10, 1, 2, 1]},
@@ -540,10 +493,11 @@ PLANS_LB = {
                                   {"id": "table-1", "kind": "furn.table", "rect": [3, 3, 1, 1]},
                                   {"id": "table-2", "kind": "furn.table", "rect": [12, 3, 1, 1]},
                                   {"id": "rack", "kind": "furn.rack", "rect": [1, 1, 1, 1], "label": "The halberd"}],
-                          spots=[{"id": "x15", "at": [8, 5], "node": "3-x15", "label": "The counsel"},
+                          spots=[{"id": "x14", "at": [8, 5], "node": "3-x14", "label": "Chen Gong's plan"},
+                                 {"id": "x15", "at": [10, 5], "node": "3-x15", "label": "Where Lü Bu is packing"},
                                  {"id": "x17", "at": [13, 3], "node": "3-x17", "label": "The mirror"},
                                  {"id": "x18", "at": [5, 5], "node": "3-x18", "label": "Fifty lashes"}])
-            | {"label": "Lü Bu's residence"},
+            | {"label": "Lü Bu's hall"},
             # ---- the top of the White Gate tower: Lü Bu asleep in his chair; Cao Cao's judgement (x20) ----
             "white-gate": room([14, 8], [7, 7],
                                things=[{"id": "chair", "kind": "furn.seat", "rect": [6, 2, 1, 1], "label": "The chair where Lü Bu dozed"},
@@ -561,15 +515,16 @@ PLANS_LB = {
         ],
         "challengers": [
             # Xiapi before the flood (x15-x16): neither blocks
-            _ch("grumbler", "folk.soldier", [10, 10], "node:x14", "node:x16",
+            _ch("grumbler", "folk.soldier", [10, 10], "node:x13", "node:x16",
                 "An officer of Hou Cheng's spits in the gutter. “No wine, no pay, and the general up there with his women. Play me, General, and tell me why I should stay.”",
                 "“…Fair enough. I'll stay. For now.”", "The officer goes back to his post, still muttering."),
-            _ch("wall-sentry", "folk.soldier", [19, 12], "node:x14", "node:x16",
+            _ch("wall-sentry", "folk.soldier", [19, 12], "node:x13", "node:x16",
                 "A sentry at the foot of the wall stairs stands to. “General! I've counted Cao Cao's fires all night. Shall I count them for you?”",
                 "“Then you know what I know.”", "The sentry has gone back up the wall."),
         ],
         "objectives": {
-            "3-x15": "Go to your residence, on the north-west of the city, where Chen Gong waits.",
+            "3-x14": "Go to your residence, on the north-west of the city, where Chen Gong waits in your hall.",
+            "3-x15": "Go from your rooms across the court to his hall, where he is packing to ride out.",
             "3-x16": "Carry your daughter out by the White Gate and down the Huainan road to Liu Bei's lines.",
             "3-x17": "Ride Red Hare round the flooded city, then back to your residence.",
             "3-x18": "Go to your residence.",

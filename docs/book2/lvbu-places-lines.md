@@ -2,24 +2,8 @@
 
 Every line a player reads on the arc's maps (`tools/tk_plans_lb.py`): place names, labels, townsfolk, the road challengers, objectives, shut gates and the caught-by-a-patrol lines. Lines already in `tools/tk_places_w2_zh.py` are left out.
 
-122 lines.
+109 lines.
 
-- Chang'an
-- Pang Shu's house
-- Pang Shu's door
-- The west gate
-- A soldiers' fire
-- Where they hid
-- “Li Jue's men took the market this morning. Whatever they want, they take.”
-- “Wang Yun is dead, and General Lü fled with a hundred horsemen. He left his own family behind.”
-- A Liangzhou soldier steps out of the lane, a bundle of silk under his arm. “Where are you off to, with the city burning? Show me what's in your sleeves.”
-- “…Bah. Nothing worth the trouble. Go on.”
-- The looter has gone after richer pickings.
-- A soldier squats by the fire, rattling dice. “A game, lady? Win, and I never saw you.”
-- “Ha! Then I never saw you.”
-- The dicer is busy with his own game.
-- “Halt! Whose women are these?” Pang Shu's servant hurries them back indoors before the patrol looks again.
-- Walk Lady Yan and her daughter from Pang Shu's house to the west gate, past Li Jue's patrols.
 - Xuzhou
 - The prefecture hall
 - Lü Bu's lodging
@@ -105,9 +89,11 @@ Every line a player reads on the arc's maps (`tools/tk_plans_lb.py`): place name
 - The stables' door
 - Liu Bei's lines
 - Out of the east gate
+- Red Hare's saddle, ready
 - The mirror
 - The halberd
-- The counsel
+- Chen Gong's plan
+- Where Lü Bu is packing
 - Fifty lashes
 - The chair where Lü Bu dozed
 - White flags
@@ -120,7 +106,8 @@ Every line a player reads on the arc's maps (`tools/tk_plans_lb.py`): place name
 - “Then you know what I know.”
 - The sentry has gone back up the wall.
 - “Who's at the horses? General Hou?” The guard peers through the rain, and you back off into the dark.
-- Go to your residence, on the north-west of the city, where Chen Gong waits.
+- Go to your residence, on the north-west of the city, where Chen Gong waits in your hall.
+- Go from your rooms across the court to his hall, where he is packing to ride out.
 - Carry your daughter out by the White Gate and down the Huainan road to Liu Bei's lines.
 - Ride Red Hare round the flooded city, then back to your residence.
 - Go to your residence.
