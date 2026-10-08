@@ -1437,7 +1437,7 @@ function worldScenes() {
       // {"to": {"place", "spot"}}: by that spot)
       const hand = steps.find(s => s[0] === "party" && s[2] && s[2].to), to = hand && hand[2].to;
       const placeOf = name => name && this.region.places.find(p => p.id === name || p.name === name);
-      const toQ = typeof to === "string" && this.region.quests.find(x => x.node === `${this.w.n}-${to}`);
+      const toQ = typeof to === "string" && this.region.quests.find(x => x.node === `${this.w.n}-${to}` && !TK.cleared(x.node));   // (not a beat already done: Book 2's last, a18, hands on to itself)
       const toP = to && typeof to === "object" && placeOf(to.place);
       if (toQ || toP) {
         this.leaving = true; this.st.pos = null; this.save();

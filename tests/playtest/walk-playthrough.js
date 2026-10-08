@@ -30,7 +30,8 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   const errs = []; p.on('pageerror', e => { errs.push(e.message); console.log('ERR', e.message); });
   await p.route('**/phaser.min.js', r => r.fulfill({ path: path.join(__dirname, 'vendor/phaser.min.js'), contentType: 'application/javascript' }));
   await p.route('**/*.mp3', r => r.fulfill({ status: 404, body: '' }));
-  const BASE = (process.env.PLAYTEST_URL || 'http://localhost:8765') + '/index.html?test=1';
+  const LIVE = !!process.env.PLAYTEST_LIVE;   // player mode: no ?test=1, no Skip key; boards solved as a solve is reported
+  const BASE = (process.env.PLAYTEST_URL || 'http://localhost:8765') + '/index.html' + (LIVE ? '' : '?test=1');
   await p.goto(BASE + '#/');
   await p.evaluate(([B, D, K]) => {
     for (const k of Object.keys(localStorage)) if (/^tk-|gt-progress/.test(k) && k !== 'tk-test') localStorage.removeItem(k);
@@ -79,7 +80,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       watchers: w.npcs.filter(n => n.watch && ((n.watch.seen || []).length || n.watch.back_to) && w.watching(n)).length,
     };
   });
-  const tapEl = async sel => { const e = p.locator(sel).first(); if (await e.count()) await e[TAPM]({ timeout: 2000 }).catch(() => {}); };
+  const tapEl = async sel => { const e = p.locator(sel).first(); if (await e.count()) await e[TAPM]({ timeout: 2000 }).catch(() => e[TAPM]({ timeout: 1000, force: true }).catch(() => {})); };   // (a button still moving: a real tap where it is)
   // a tap on a point of the world: on screen, a real tap there; off screen, the game's own tap handler
   let worldTaps = 0;   // taps on the world (walking), to tell a beat that starts by itself from one walked to
   const tapWorld = async (x, y) => { worldTaps++;
@@ -135,7 +136,8 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     }
     return out;
   });
-  const report = [], t0 = Date.now(); let beat = null, beatT = 0, lastProgress = Date.now(), progressKey = '', lastLine = '', refused = '', boards = [], chaseLog = [], chaseTries = 0; const beatStart = {}, placeShots = {};
+  { const tm = await p.evaluate(() => typeof TK_TEST !== 'undefined' && TK_TEST === true); console.log(`     mode: ${LIVE ? 'player' : 'test'} (the game's test mode ${tm ? 'on' : 'off'})`); if (LIVE && tm) { console.log('FAIL player mode asked for, but the game is in test mode'); process.exitCode = 1; } }
+  const report = [], t0 = Date.now(); let beat = null, beatT = 0, lastProgress = Date.now(), progressKey = '', lastLine = '', refused = '', boards = [], chaseLog = [], chaseTries = 0; let liveSolved = ''; const beatStart = {}, placeShots = {};
   const leadFor = await p.evaluate(B => { const w = TK.world(B), out = {}; let party = null;   // the lead the story gives each beat: its last party step before it
     for (const n of w.nodes) { out[n.key] = party && party[0]; const sc = w.scenes && w.scenes[n.scene]; for (const s of (sc && sc.steps) || []) if (s[0] === 'party') party = s[1]; } return out; }, BOOK).catch(() => ({}));
   let beatLead = '';
@@ -250,6 +252,11 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
             console.log(`${ok ? 'ok  ' : 'FAIL'} ${beat}: failing the catch restarts the chase at ${ch.from}${r ? ` (${r.at}), wave and ambushes reset: ${r.home}` : ': no restart seen in 6 s'}`);
             continue; } }
         await p.locator('.tk-duel-keys button', { hasText: 'Skip' }).first()[TAPM]().catch(() => {}); await p.waitForTimeout(600); continue; }
+      if (LIVE && !s.cont) {   // player mode: no Skip key; once the board is up, solve it (the result a solve sends)
+        const drawn = await p.evaluate(() => { const a = document.querySelector('.tk-duel-src a'), m = a && a.href.match(/\/q\/(\d+)/); return { id: m ? +m[1] : null, key: window.__boardKey }; });
+        if (drawn.key && liveSolved !== drawn.key + '|' + drawn.id) { await p.waitForTimeout(900); liveSolved = drawn.key + '|' + drawn.id;
+          if (!boards.some(x => x.key === drawn.key && x.id === drawn.id)) boards.push({ beat, key: drawn.key, id: drawn.id });
+          await p.evaluate(() => { if (window.__trainer) window.__trainer.flawed = null; dispatchEvent(new CustomEvent('tczw:result', { detail: 'ok' })); }); continue; } }
       await p.waitForTimeout(300); continue;
     }
     if (!s.busy && !s.cine && !s.leaving) { beatLead = s.lead;   // who is walking the beat
@@ -330,7 +337,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     const wet = ['14-x16', '14-x17', '14-x18'].filter(k => facts[k] && F(k).wetRide).map(k => k.slice(3));
     console.log(`${wet.length ? 'ok  ' : 'note'} the flood: he rode through the water in ${wet.join(', ') || 'none of x16-x18 (the way to the goal stayed dry)'}`);
     if (facts['14-x20']) { const after = facts['14-x20'].lastRed, feet = [...F('14-x20').mount].filter(m => !/in a scene/.test(m)).every(m => !/red|\?/.test(m.split(': ')[1])); say(after === false && feet, `x19 takes Red Hare: in x20 he's gone (owned: ${after}) and nobody rides him (${[...F('14-x20').mount].join(' | ')})`); }
-    if (facts['14-x16']) say(F('14-x16').lvnv, `x16: the daughter is carried on Lü Bu's back in its scene (lvnv drawn: ${F('14-x16').lvnv}; carry: ${[...F('14-x16').carry].join(', ') || 'none on the map'})`);
+    if (facts['14-x16']) say(F('14-x16').lvnv && [...F('14-x16').carry].some(c => /lvnv \(map\)/.test(c)), `x16: the daughter is on Lü Bu's back on the open map (from x15's end) and in its scene (lvnv drawn: ${F('14-x16').lvnv}; carry: ${[...F('14-x16').carry].join(', ') || 'none on the map'})`);
     const ST = { '14-x16': /xiapi:siege/, '14-x17': /xiapi:flood1/, '14-x18': /xiapi:flood2/, '14-x19': /xiapi:flood2\+night|xiapi:night\+flood2/, '14-x20': /xiapi:taken/, '14-x4': /xuzhou:[^ ]*moon/, '14-x14': /xuzhou:[^ ]*locked/ };
     for (const [k, re] of Object.entries(ST)) if (facts[k]) { const seen = [...F(k).mstate].filter(x => re.source.startsWith('xiapi') ? x.startsWith('xiapi') : x.startsWith('xuzhou')); if (seen.length) say(seen.some(x => re.test(x)), `${k.slice(3)}: ${re.source.split(':')[0]} is in ${re.source.split(':')[1].replace(/\\|\[\^ \]\*/g, '')} (${seen.join(', ')})`); }
     if (bad.length) featureFails.push('book 14'); }
