@@ -1901,6 +1901,9 @@ def _scenes_caocao():
               "Lock him up. Tomorrow he goes to the capital, for the reward.",
               "吾前在洛阳求官时，曾认得汝是曹操，如何隐讳？且把来监下，明日解去京师请赏。"),
             N("The guards at the pass are given wine and food, and go.", "把关军士赐以酒食而去。"),
+            N("Cao Cao is led away in chains to the county jail.", "曹操被押入县狱。"),
+            # carry him straight into the jail courtyard: a captive must not walk himself there (playtest)
+            ["party", ["caocao"], {"to": "c19"}],
         ]},
 
         # C19 · The back courtyard. Contest: Chen Gong frees him.
@@ -2125,27 +2128,7 @@ def _nodes_caocao():
             "He pours for me himself.", "他亲自为我斟酒。",
             "He's still angry. Not like that.", "他还在恼。不是这样说。")),
         node("c16", 250, 98, "c16", room="xf-pavilion", role="boss"),
-        node("c17", 262, 92, "c17", chase={
-            # The chase out of Luoyang (the user's design): a caught rider means one go problem, one try;
-            # solve it and that rider drops out, fail it and the chase restarts at the Chancellor's gate.
-            "from": "xf-gate",
-            # The user's redesign: a wave pours out of the gate behind him (slightly slower than his horse),
-            # and soldiers spring out of the side lanes ahead. A collision with one is a board, one try.
-            "spotted": [["n", "Behind him the Chancellor's gate bursts open, and the guard pours out after him: Stop Cao Cao!",
-                         "身后相府门开，卫士蜂拥追出：“拿住曹操！”"]],
-            "caught": [["n", "A soldier leaps out of a lane and grabs at his bridle: Colonel Cao! The Chancellor wants a word with you.",
-                        "一名军士从巷中跃出，扯住马辔：“曹校尉！相国有话问你。”"]],
-            # the four jailers Li Ru sent to his lodging (「即差獄卒四人往喚操」) burst out of its gate
-            "caught_at": {"lodging": [["n", "Four jailers burst out of his lodging's gate: The Chancellor sends for you, Colonel Cao!",
-                                       "四名狱卒从寓所门内冲出：“曹校尉，相国有请！”"]]},
-            "solved": [["say", "caocao", "I'm trying out the horse the Chancellor gave me. Ask him yourself.",
-                        "相国赐我良马，我正试骑。不信，你自去问他。"]],
-            "restart": [["n", "They take him back. Cao Cao rides out again, before anyone thinks to ask why.",
-                         "被截回府。曹操再度牵马出门，趁无人起疑。"]],
-            # the guard behind him: a little slower than his horse, on his own trail
-            "wave": {"count": 6, "delay": 2, "who": "f_soldier", "pace": 0.92},
-            "overrun": [["n", "The guard closes round him, and hands drag him from the saddle.", "卫士一拥而上，将他扯下马来。"]],
-        }, dilemma=D(
+        node("c17", 262, 92, "c17", dilemma=D(
             "caocao", "Get through the East Gate.", "闯出东门。",
             "Before he wonders why I don't come back.", "趁他还没起疑。",
             "Through.", "出来了。",
@@ -2211,7 +2194,7 @@ _ITEMS_CAOCAO = {
     "weihong": {"name": "Wei Hong's fortune", "zh": "卫弘家资", "kind": "treasure"},
     # The Xiliang horse Dong Zhuo gives him in c16. He and Chen Gong ride from then on (「乘馬投故鄉來」).
     "horse": {"name": "A horse from the Chancellor's stable", "zh": "相府良马", "kind": "mount",
-              "coats": {"caocao": "black", "chengong": "brown"}},
+              "coats": {"caocao": "white", "chengong": "brown"}},
 }
 
 # Closes the Cao Cao arc and bridges to the Diaochan arc: chapters 5-7 in a few lines, in the novel's own order.

@@ -25,6 +25,17 @@ check(s.place==='luoyang'&&s.party.join()==='caocao'&&s.items.includes('horse')&
 check(s.chase,'the chase is on again');
 const fol=await p.evaluate(()=>({crowd:window.__w.st.crowd,followers:window.__w.followers.length}));
 check(fol.crowd===0&&fol.followers===0,`no crowd from later in the book follows him (${JSON.stringify(fol)})`);
+
+// replay from earlier, then forward again to a beat that earlier replay undid: it puts back what came before
+// (the chase is on now, and its wave or a line can cover the menu: open the picker directly)
+await p.evaluate(()=>WorldTravel.replayPick(TK.world(13)));await p.waitForTimeout(300);
+await p.selectOption('.tk-replay-sel','13-c15');await p.locator('.tk-replay button',{hasText:'Replay'}).last().click();await p.waitForTimeout(3000);
+await p.evaluate(()=>WorldTravel.replayPick(TK.world(13)));await p.waitForTimeout(300);
+const o2=await p.evaluate(()=>[...document.querySelectorAll('.tk-replay-sel option')].map(o=>o.value));
+check(o2.includes('13-c17'),'after replaying from c15, c17 is still offered');
+await p.selectOption('.tk-replay-sel','13-c17');await p.locator('.tk-replay button',{hasText:'Replay'}).last().click();await p.waitForTimeout(3000);
+const f=await p.evaluate(()=>({c15:TK.cleared('13-c15'),c16:TK.cleared('13-c16'),c17:TK.cleared('13-c17'),place:window.__w&&window.__w.placeId,horse:WorldItems.owned(TK.world(13)).includes('horse'),chase:!!(window.__w&&window.__w.chaseNow())}));
+check(f.c15&&f.c16&&!f.c17&&f.place==='luoyang'&&f.horse&&f.chase,`forward again to c17: c15 and c16 back, at the chase, mounted (${JSON.stringify(f)})`);
 // a stale copy (another device, the server) merged in doesn't bring them back
 const after=await p.evaluate(st=>{const local=loadProgress();Sync.mergeInto(local,st);localStorage.setItem('gt-progress',JSON.stringify(local));return {c17:TK.cleared('13-c17'),c20:TK.cleared('13-c20'),c16:TK.cleared('13-c16')};},stale);
 check(!after.c17&&!after.c20&&after.c16,`a stale copy merged in keeps them undone (${JSON.stringify(after)})`);
