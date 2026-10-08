@@ -274,6 +274,9 @@ because it can't be kept up across a long game. The dilemma caption carries the 
 
 > "yeah, it would be cool if a difficult scene progressed with dialogue and had multiple beats I suppose"
 
+- **Exception, chases:** when a chaser catches you, you get one attempt at a problem. Solve it and play on; fail it and the
+  whole chase restarts. In the user's words: "if he gets cuaght could get one attempt to sovle a problem and continue, if
+  fail, restart the whole scene".
 - No "pass 4 of 5" sets. Plot had borrowed that from another game without a reason of its own. A set lets players guess
   past problems, and the game is for learning go.
 - A hard scene gets two or three problems **at the turns the novel's dialogue gives**, with lines between them. A slip

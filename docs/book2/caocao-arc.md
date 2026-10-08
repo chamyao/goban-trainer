@@ -438,3 +438,39 @@ listed first as Book 1, with the Diaochan arc (world 12) as Book 2 after it. Fin
   Hulao; the burning of Luoyang, Cao Cao's lone pursuit and the seal in the well; the lords falling out.
 - **The Diaochan arc's new opening scroll** (chapter 8): Chang'an under Dong Zhuo, with Lü Bu at his side. It stands on
   its own for a player who starts there.
+
+## New mechanic: the chase out of Luoyang (between C16 and C17)
+
+The user asked for it ("yeah add the chase"), and designed how go fits into it:
+
+> "we could combine it with go, if he gets cuaght could get one attempt to sovle a problem and continue, if fail, restart
+> the whole scene"
+
+**Where:** Luoyang, from the Chancellor's gate (`xf-gate`) to the East Gate (the C17 spot). It starts when C16 ends, with
+Cao Cao mounted on Dong Zhuo's horse.
+
+**Faithfulness:** the novel doesn't stage a chase. But it does send four jailers to Cao Cao's lodging while he rides, on Li
+Ru's test, and he rides out "on urgent business" before word can follow. The chase plays that race: the riders are
+Dong Zhuo's men sent to fetch him back for "a word with the Chancellor". It's marked as invented, on the user's call.
+
+**How it plays:**
+- A few Xiliang riders search the streets. One that sees Cao Cao rides after him, faster than walking but slower than his
+  galloping horse on open street.
+- **Caught:** a board comes up at once. **One attempt only** (not the usual 30-second wait); this is the chase's own rule.
+  - Solved: Cao Cao talks his way past, the rider falls back (gone for this run), and the chase goes on.
+  - Failed: fade, and the whole chase restarts at the Chancellor's gate, with every rider back.
+- Reaching the East Gate ends the chase. C17's own board (the gate captain) then plays as before.
+
+**Lines (story's part):**
+- Start: N "Cao Cao leads the horse out of the residence, mounts, and whips it toward the south-east. Behind him, Lü Bu
+  says: Cao Cao looked like he meant to stab you." / 「操牵马出相府，加鞭望东南而去。身后，吕布对卓曰：适来曹操似有行刺之状。」
+- Catch board (decider Cao Cao): q "Talk your way past the rider." / 「巧言脱身。」 · open "He's one of the Chancellor's men.
+  One wrong word and I go back in chains." / 「这是相府的人。一言有失，便是枷锁回去。」 · win "He lets me go." / 「他放我走了。」 ·
+  slip "He doesn't believe me." / 「他不信。」
+- Rider, on catching him: "Colonel Cao! The Chancellor wants a word with you." / 「曹校尉！相国有话问你。」
+- Cao Cao, on the solve: "I'm trying out the horse the Chancellor gave me. Ask him yourself." / 「相国赐我良马，我正试骑。不信，你自去问他。」
+- Restart: N "They take him back. Cao Cao rides out again, before anyone thinks to ask why." / 「被截回府。曹操再度牵马出门，趁无人起疑。」
+
+**Needs:** Integration: chasers, the catch trigger, a one-attempt board and the chase restart, with whatever field names
+it chooses. Places: the riders' starting posts and search paths in Luoyang's "sword" state, and the open streets where the
+horse can outrun them. Plot wires the lines in once the syntax exists.
