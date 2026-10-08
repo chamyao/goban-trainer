@@ -488,7 +488,7 @@ This replaces the four riders on fixed posts.
   to **dodge** them.
 - **Collision with an ambusher:** one go problem, one try (the earlier rule). Solved: he fends the soldier off and rides
   on. Failed: taken, and the chase restarts at the Chancellor's gate.
-- **Plot's choices, for the user to confirm:**
+- **Plot's choices, confirmed by the user ("yes this is good"):**
   - If the **wave** itself catches him, there is no board. He's taken and the chase restarts. Fending off a whole wave
     with one problem would be too easy.
   - The board **pauses** the chase while it's up, but the time lost slowing down to dodge is real. So the wave
