@@ -64,7 +64,7 @@ for _t in _cap["things"]:
         _t.update(kind="ruin.burning", label="A burning house")
 _cap["things"] = [t for t in _cap["things"] if t["id"] not in ("hengmen", "ridge")]   # the Diaochan arc's farewell, long over
 _cap["spots"] = [{"id": "lubu-gate", "at": [13, 9], "at_door": "lubu", "label": "Lü Bu's gate"}]
-_cap["props"] = [   # the city burning: fires down every street (they glow at night), the ash falls (archetype "ruins")
+_cap["props"] = [   # the city burning: fires down every street (they glow at night); embers rise (the state's fx)
     {"kind": "camp.firepit" if k % 3 else "fx.smoke", "at": [x, y], "label": "A burning cart" if k % 3 else "Smoke"}
     for k, (x, y) in enumerate([(3, 5), (8, 5), (12, 5), (4, 9), (8, 9), (11, 9), (6, 7), (9, 11), (12, 11), (3, 11),
                                 (14, 7), (10, 2)])]
@@ -74,9 +74,9 @@ _cap["exits"] = []
 _cap["entries"] = {"": [13, 9]}
 # Li Jue's looters (the walk to x0b), as the Diaochan arc's watchers: down the east lane and along the palace lane
 _ca.update(
-    archetype="ruins",   # tk-world's ambient for ruins: falling ash
+    # archetype stays "city": tk-world's "ruins" drains the colour (burnt-out Luoyang), which fights the fire light
     banners="black",
-    states=[{"id": "sack", "light": "fire", "weather": "smoke", "fx": "embers"}],   # tk-world: fire light, embers rising
+    states=[{"id": "sack", "light": "fire", "fx": "embers"}],   # tk-world: fire light, embers rising
     seen_lines={"looter": ["“There! A woman and a girl!” She drags her daughter back into the dark before he can look again."]},
     npcs=[
         _talk("folk.soldier", [8, 9], "“Burn what you can't carry! The Grand Preceptor's dead, and the city's ours!”"),
@@ -88,7 +88,7 @@ _ca.update(
         # and keeps still till he's by. Lü Bu's house at the top, Pang Shu's at the bottom. Cells of 2 tiles. ----
         "burning-ward": {
             "grid": [20, 17], "cell": 2, "margin": 0, "label": "The burning ward",
-            "states": [{"id": "sack", "light": "fire", "weather": "smoke", "fx": "embers"}],
+            "states": [{"id": "sack", "light": "fire", "fx": "embers"}],
             "ground": [{"id": "lanes", "kind": "court", "rect": [1, 3, 18, 11]}],
             "lines": [{"id": "walls", "kind": "wall", "outline": [0, 0, 20, 17], "width": 1, "gates": {"to-city": [0, 4]}},
                       {"id": "row-n", "kind": "wall", "path": [[0, 2], [19, 2]], "width": 1, "gates": {"lb-gate": [3, 2]}},

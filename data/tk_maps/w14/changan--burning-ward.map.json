@@ -649,8 +649,7 @@
   {
    "id": "sack",
    "fx": "embers",
-   "light": "fire",
-   "weather": "smoke"
+   "light": "fire"
   }
  ],
  "parent": "changan",

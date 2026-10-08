@@ -13,7 +13,7 @@
    "id": "changan",
    "name": "Chang'an",
    "zh": "长安",
-   "archetype": "ruins",
+   "archetype": "city",
    "map": "changan.map.json",
    "links": [
     "changan--burning-ward"
