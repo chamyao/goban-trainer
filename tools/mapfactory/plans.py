@@ -474,11 +474,53 @@ class MapBuilder:
             n["view"] = c.get("view", 1) * self.C   # how far he sees you, in tiles
             if c.get("blocks") is not None:         # what he guards
                 n["blocks"] = c["blocks"]
+            if c.get("guard") is not None:          # the point he holds, declined or not: a gate's gap, or a cell
+                g = c["guard"]
+                if g == "door":                      # on the doorstep of what he blocks (a thing's door, or a spot)
+                    b = c["blocks"]
+                    spot = next((s for s in self.spots if s["id"] == b), None)
+                    d = (int(spot["x"]), int(spot["y"])) if spot else self.anchor[b]
+                    n["guard"] = [d[0] + .5, d[1] + .5]
+                elif isinstance(g, str):
+                    gap = self.gate_tiles[g]
+                    n["guard"] = [sum(t[0] for t in gap) / len(gap) + .5, sum(t[1] for t in gap) / len(gap) + .5]
+                else:
+                    n["guard"] = [g[0] * self.C + self.C / 2, g[1] * self.C + self.C / 2]
+                self.prove_guard(c, n)
             self.npcs.append(n)
         for i, w in enumerate(watchers):
             n = {"id": w["id"], "kind": w["kind"], "say": [], "watch": self.watch(w)}
             n["x"], n["y"] = n["watch"]["beat"][0]
             self.npcs.append(n)
+
+    def prove_guard(self, c, n):
+        """A guard holds the way: from where the walk starts, what he blocks can't be reached without passing within
+        2.5 tiles of his point (the engine's reach). Raises if there's a way round."""
+        start = self.near_cell(tuple(c.get("from") or self.p.get("entries", {}).get("") or c["at"]), want_visible=False)
+        b = c.get("blocks")
+        if isinstance(b, dict):   # a road out: any tile of that exit's cell
+            e = next((e for e in self.p.get("exits", []) if e["to"] == b.get("exit")), None)
+            if e is None:
+                raise RuntimeError(f"{self.mid}: guard {c['id']} blocks {b!r}, which is no exit here")
+            goals = {(e["at"][0] * self.C + i, e["at"][1] * self.C + j) for i in range(self.C) for j in range(self.C)}
+        else:
+            spot = next((s for s in self.spots if s["id"] == b), None)
+            goal = (int(spot["x"]), int(spot["y"])) if spot else self.anchor.get(b)
+            if goal is None:
+                raise RuntimeError(f"{self.mid}: guard {c['id']} blocks {b!r}, which is no spot or thing here")
+            goals = {tuple(goal)}
+        gx, gy = n["guard"]
+        near = lambda t: (t[0] + .5 - gx) ** 2 + (t[1] + .5 - gy) ** 2 < 2.5 ** 2   # noqa: E731
+        seen, q = {start}, deque([start])
+        while q:
+            t = q.popleft()
+            if t in goals:
+                raise RuntimeError(f"{self.mid}: {c['id']} doesn't hold the way: {b} can be reached round his guard point")
+            for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                u = (t[0] + dx, t[1] + dy)
+                if u not in seen and 0 <= u[0] < self.W and 0 <= u[1] < self.H and (self.walkable(u) or u in goals) and not near(u):
+                    seen.add(u)
+                    q.append(u)
 
     def watch(self, w):
         """A stealth watcher in the engine's terms (docs/map-format.md, Book 2 additions): tiles, not cells."""

@@ -392,10 +392,10 @@ PLANS_CC = {
             ],
             "lines": [
                 {"id": "road", "kind": "road", "path": [[0, 4], [35, 4]], "width": 3},
-                {"id": "post-barrier", "kind": "wall", "path": [[8, 2], [8, 6]], "width": 1, "gates": {"post-gate": [8, 4]}},
+                {"id": "post-barrier", "kind": "wall", "path": [[8, 1], [8, 7]], "width": 1, "gates": {"post-gate": [8, 4]}},
                 {"id": "river", "kind": "river", "path": [[16, 0], [16, 8]], "width": 4},
                 {"id": "ferry", "kind": "bridge", "path": [[15, 4], [17, 4]], "width": 2},      # the ferry landing and the crossing
-                {"id": "pass-wall", "kind": "wall", "path": [[26, 2], [26, 6]], "width": 1, "gates": {"pass-gate": [26, 4]}},
+                {"id": "pass-wall", "kind": "wall", "path": [[26, 1], [26, 7]], "width": 1, "gates": {"pass-gate": [26, 4]}},
             ],
             "things": [
                 {"id": "posthouse", "kind": "building.posthouse", "rect": [5, 2, 2, 2], "door": "S", "label": "A post station"},
@@ -558,7 +558,7 @@ PLANS_CC["Luoyang"]["challengers"] = [
     _ch("gate-guard", "folk.soldier", [8, 10], "node:c2", "node:c3",
         "A eunuch's guardsman bars the Qingsuo Gate, blade out, smoke pouring past him. “No one goes in! The Attendants' orders!”",
         "“…The Attendants are fled. Go in, then. Find him.”", "The guardsman has thrown down his blade and gone.",
-        blocks="c3", view=1, map="palace", entry=[8, 14]),
+        blocks="c3", view=1, map="palace", entry=[8, 14], guard="qingsuo-gate"),
     _ch("looter", "folk.villager", [3, 13], "node:c2", "node:c3",
         "A man with an armful of palace silk backs out of the storehouse. “Everyone's taking something. Want to stop me? Play me for it.”",
         "“…Fine. Fine! It's back on the shelf.”", "The silk is back on the shelf.", map="palace"),
@@ -574,7 +574,7 @@ PLANS_CC["The Camps"]["challengers"] = [
     # Li Su's ride to Lü Bu (C9): the novel's own ambush pickets, blocking the gate of Ding Yuan's camp; one of Ding Yuan's scouts
     _ch("pickets", "folk.soldier", [8, 6], "node:c8", "node:c9",
         "Pickets lying in ambush by the road spring up and surround you. “Who rides to General Lü's camp with a horse like that?”",
-        "“…An old friend of the general's. Pass, then.”", "The pickets wave you through.", blocks="lb-tent", view=1, entry=[20, 6]),
+        "“…An old friend of the general's. Pass, then.”", "The pickets wave you through.", blocks="lb-tent", view=1, entry=[20, 6], guard="dy-gate"),
     _ch("scout", "folk.soldier", [11, 3], "node:c8", "node:c9",
         "One of Ding Yuan's scouts reins in beside you. “Xiliang colours, and gifts. What does Dong Zhuo want with us?”",
         "“…Peace, then. I hope so.”", "The scout rides back to watch the road."),
@@ -583,10 +583,10 @@ PLANS_CC["The East Road"]["challengers"] = [
     # the east road (C17-C18), Cao Cao: a post station checking faces (blocking), the ferryman (blocking), a bounty hunter
     _ch("post-guard", "folk.soldier", [7, 4], "node:c17", "node:c18",
         "The post-station guard holds up the portrait and looks from it to you. “Your name, and your business on this road.”",
-        "“…No. He'd be older. Go on.”", "The guard is looking at someone else now.", blocks="c18", view=1),
+        "“…No. He'd be older. Go on.”", "The guard is looking at someone else now.", blocks="c18", view=1, guard="post-gate"),
     _ch("ferryman", "folk.villager", [14, 4], "node:c17", "node:c18",
         "The ferryman leans on his pole. “Crossing's a coin. Or a game, if you're short. I've seen your face somewhere, I think.”",
-        "“…No, I haven't. Get in.”", "“Same price as before, sir.”", blocks="c18", view=1),
+        "“…No, I haven't. Get in.”", "“Same price as before, sir.”", blocks="c18", view=1, guard=[16, 4]),
     _ch("bounty", "folk.hunter", [20, 5], "node:c17", "node:c18",
         "A man with the portrait folded in his belt falls in beside you. “A thousand gold. Thinking of it makes a man sharp.”",
         "“…Not sharp enough, it seems.”", "The bounty hunter studies every face that passes."),

@@ -46,8 +46,8 @@
    ".....ddd........aaaaaaaaaaaaccccaaaaaaaa........ddd.............",
    ".....ddd........aaaaaaaaaaaaccccaaaaaaaa........ddd.............",
    ".....ddd....................cccc................ddd.............",
-   ".....ddd.WWWWWWWWWWWWWWWWWWWccccWWWWWWWWWWWWWWW.ddd.............",
-   ".....ddd.WWWWWWWWWWWWWWWWWWWccccWWWWWWWWWWWWWWW.ddd.............",
+   ".....WWWWWWWWWWWWWWWWWWWWWWWccccWWWWWWWWWWWWWWWWWWW.............",
+   ".....WWWWWWWWWWWWWWWWWWWWWWWccccWWWWWWWWWWWWWWWWWWW.............",
    ".....ddd....................cccc................ddd.............",
    ".....dddaaaaaaaaaaaaaaaaaaaaccccaaaaaaaaaaaaaaaaddd.............",
    ".....dddaaaaaaaaaaaaaaaaaaaaccccaaaaaaaaaaaaaaaaddd.............",
@@ -125,11 +125,11 @@
    "kind": "wall",
    "path": [
     [
-     2,
+     1,
      6
     ],
     [
-     11,
+     12,
      6
     ]
    ],
@@ -140,7 +140,7 @@
      6
     ]
    },
-   "tiles": 76
+   "tiles": 92
   },
   {
    "id": "road",
@@ -587,7 +587,11 @@
    "when": "node:a12",
    "blocks": "hall",
    "view": 4,
-   "challenge": "gateguard"
+   "challenge": "gateguard",
+   "guard": [
+    30.0,
+    41.5
+   ]
   },
   {
    "id": "straggler",
@@ -608,7 +612,11 @@
    "when": "node:a15",
    "blocks": "diaochan",
    "view": 4,
-   "challenge": "straggler"
+   "challenge": "straggler",
+   "guard": [
+    30.0,
+    26.0
+   ]
   },
   {
    "id": "bearofficer",

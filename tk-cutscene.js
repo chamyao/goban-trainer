@@ -130,7 +130,7 @@ const WorldCutscene = {
     // Horses: "horse" in the cast is a riderless horse; the party rides once it owns a mount (tk-items.js).
     const Items = typeof WorldItems !== "undefined" ? WorldItems : null;
     const party = new Set(cs.party || []);
-    const coatFor = who => Items && party.has(who) ? Items.coat(scene.w, who) : null;
+    const coatFor = who => Items && party.has(who) ? Items.mountedHere(scene, who) : null;   // as in the world: not indoors, and not when he has chosen to walk
     const herdCoat = id => Items ? Items.COATS[[...id].reduce((h, c) => h + c.charCodeAt(0), 0) % 3] : null;
     // A mounted actor: a.spr stays the invisible anchor that moves and fades;
     // the horse, the seated rider and (facing us) the horse's head follow it.

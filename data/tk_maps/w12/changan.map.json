@@ -1636,7 +1636,11 @@
    "when": "node:a2",
    "blocks": "a3",
    "view": 4,
-   "challenge": "runner"
+   "challenge": "runner",
+   "guard": [
+    52.5,
+    36.5
+   ]
   },
   {
    "id": "flyingbear",
@@ -1677,7 +1681,11 @@
    "when": "node:a11",
    "blocks": "huangwan",
    "view": 4,
-   "challenge": "patrol"
+   "challenge": "patrol",
+   "guard": [
+    20.5,
+    44.5
+   ]
   },
   {
    "id": "informer",

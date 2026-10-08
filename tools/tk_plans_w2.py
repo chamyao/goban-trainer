@@ -658,7 +658,7 @@ PLANS2 = {
                 {"id": "wei", "kind": "river", "path": [[0, 0], [15, 0]], "width": 3},
                 {"id": "walls", "kind": "wall.city", "outline": [1, 1, 12, 10], "width": 3, "height": "as Chang'an's",
                  "gates": {"gate": [7, 10]}},
-                {"id": "inner-wall", "kind": "wall", "path": [[2, 6], [11, 6]], "width": 1, "gates": {"inner-gate": [7, 6]}},
+                {"id": "inner-wall", "kind": "wall", "path": [[1, 6], [12, 6]], "width": 1, "gates": {"inner-gate": [7, 6]}},
                 {"id": "road", "kind": "road", "path": [[15, 11], [7, 11], [7, 10]], "width": 3},
                 {"id": "west-road", "kind": "road", "path": [[7, 11], [0, 11]], "width": 2},   # the long road west, to Liangzhou
                 {"id": "spine", "kind": "road", "path": [[7, 10], [7, 4]], "width": 3},
@@ -803,10 +803,10 @@ _xf_hall["checks"] = [{"check": "sight_puzzle", "seen_by": "lubu", "unseen_by": 
 # plan they stand in ("map": a compound or room of the place, else the place's own plan). A blocking one has
 # "blocks": the spot, thing (its door) or {"exit": place} you can't reach without coming into his view;
 # "view" is how far he sees: a radius in cells, or with "face" a cone. check_plans_w2.py proves the block.
-def _ch(cid, kind, at, when, until, intro, win, done, blocks=None, view=1, face=None, map=None, entry=None):
+def _ch(cid, kind, at, when, until, intro, win, done, blocks=None, view=1, face=None, map=None, entry=None, guard=None):
     c = {"id": cid, "kind": kind, "at": at, "when": when, "until": until, "intro": [intro], "win": [win], "done": [done],
          "view": view}
-    for k, v in (("blocks", blocks), ("face", face), ("map", map), ("from", entry)):
+    for k, v in (("blocks", blocks), ("face", face), ("map", map), ("from", entry), ("guard", guard)):
         if v is not None:
             c[k] = v
     return c
@@ -817,14 +817,14 @@ PLANS2["Chang'an"]["challengers"] = [
     _ch("runner", "folk.official", [14, 8], "node:a2", "node:a3",
         "A runner in the Chancellor's colours steps into your path. “Minister Wang, out on foot? The Grand Preceptor likes to know who walks where.”",
         "“Nothing worth reporting, then. Good day, Minister.”", "The runner watches you pass, and says nothing.",
-        blocks="a3", view=1),
+        blocks="a3", view=1, guard="door"),
     _ch("flyingbear", "folk.soldier", [5, 5], "node:a2", "node:a3",
         "A Flying Bear soldier lounges against the wall, dice in his fist. “Bored, old man? Play me. Lose, and you buy the wine.”",
         "“Hah! The old man bites. Go on.”", "“Not again, old man. My purse can't take it.”"),
     # the conspirators' errands (before A12a/A12b): a patrol stands across the lane at Huang Wan's gate
     _ch("patrol", "folk.soldier", [4, 11], "node:a11", "node:a12b",
         "A Flying Bear patrol fills the lane to Huang Wan's gate. “Visiting late, Minister? Every lane in Chang'an answers to the Grand Preceptor.”",
-        "“On your way, then. Quickly.”", "The patrol has moved on to the next lane.", blocks="huangwan"),
+        "“On your way, then. Quickly.”", "The patrol has moved on to the next lane.", blocks="huangwan", guard="door"),
     _ch("informer", "folk.villager", [2, 8], "node:a11", "node:a12a",
         "A man in a plain coat has sat by Shisun Rui's gate all morning. “A game while you wait, Minister? I have time. I have nothing but time.”",
         "“You play like a man with nothing to hide.”", "The man in the plain coat has gone."),
@@ -837,11 +837,11 @@ PLANS2["Chang'an"]["challengers"] = [
         "“Go on, then. I never saw you.”", "“Still out, Minister?”"),
 ]
 PLANS2["Meiwu Road"]["challengers"] = [
-    # Li Su's ride out (before A13), from the Chang'an end: horsemen across the road and the fields beside it
-    _ch("roadpatrol", "folk.soldier", [16, 4], "node:a12", "node:a13",
+    # Li Su's ride out (before A13), from the Chang'an end: horsemen hold the bridge over the stream, the one crossing
+    _ch("roadpatrol", "folk.soldier", [8, 4], "node:a12", "node:a13",
         "A patrol of the Grand Preceptor's horsemen bars the road. “Rider from Chang'an! Halt, and show us what you carry.”",
         "“An edict for the Grand Preceptor? Ride on, then, and ride fast.”", "The patrol waves you through.",
-        blocks={"exit": "Meiwu"}, view=3, entry=[34, 3]),
+        blocks={"exit": "Meiwu"}, view=3, entry=[34, 3], guard=[7, 4]),
     _ch("postkeeper", "folk.elder", [12, 5], "node:a12", "node:a13",
         "The post keeper has a board out on the bench. “Long nights out here. Sit a moment, sir.”",
         "“The road's yours. Mind the ruts after the bridge.”", "“Safe road, sir.”"),
@@ -850,11 +850,11 @@ PLANS2["Meiwu"]["challengers"] = [
     # Li Su at the gate (before A13)
     _ch("gateguard", "folk.soldier", [7, 11], "node:a12", "node:a13",
         "The gate captain turns the edict over in his hands. “Seals can be made in Chang'an. Prove you're who you say.”",
-        "“Pass, Commandant Li. Open the gate!”", "The gate stands open for you.", blocks="hall", entry=[14, 11]),
+        "“Pass, Commandant Li. Open the gate!”", "The gate stands open for you.", blocks="hall", entry=[14, 11], guard="gate"),
     # the raid, as Lü Bu (before A15m): one guard still holds the treasury doors at the inner gate
     _ch("straggler", "folk.soldier", [7, 7], "node:a15", "node:a15m",
         "One of Dong Zhuo's guards still holds the treasury doors, spear levelled. “The Grand Preceptor's gold! Nobody touches it!”",
-        "“…He's dead, isn't he. Take it. Take all of it.”", "The guard has thrown down his spear.", blocks="diaochan"),
+        "“…He's dead, isn't he. Take it. Take all of it.”", "The guard has thrown down his spear.", blocks="diaochan", guard="inner-gate"),
     _ch("bearofficer", "folk.soldier", [3, 8], "node:a15", "node:a15m",
         "A Flying Bear officer crouches among the granaries, sword half drawn. “General Lü. I always wondered which of us was better.”",
         "“So now I know.”", "The officer sits against the wall and does not look up."),
@@ -866,7 +866,7 @@ PLANS2["Liangzhou"]["challengers"] = [
         "“…Then it's true. I'll tell the others myself.”", "“I've told them. They're coming.”"),
     _ch("constable", "folk.official", [25, 5], "node:a16b", "node:a16c",
         "The constable stands at the pavilion, arms folded. “A man without an army is just a man on a road. I've tied up better.”",
-        "“…That's no road gang behind you. That's Liangzhou.”", "The constable has taken down his rope.", blocks="v3"),
+        "“…That's no road gang behind you. That's Liangzhou.”", "The constable has taken down his rope.", blocks="v3", guard="door"),
     # Li Jue before Ren Valley
     _ch("scout", "folk.soldier", [30, 4], "node:a16m", "node:a17",
         "A scout calls down from his post on the hill. “General! Lü Bu's dust on the east road. Want to know how many?”",

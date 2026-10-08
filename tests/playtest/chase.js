@@ -22,7 +22,10 @@ const path = require('path');
   const fresh = async () => {
     await p.goto(BASE + '#/'); await p.evaluate(async () => { for (const k of Object.keys(localStorage)) if (/^tk-|gt-progress/.test(k) && k !== 'tk-test') localStorage.removeItem(k);
       localStorage.setItem('tk-guide', 'off'); localStorage.setItem('tk-book', '13'); localStorage.setItem('gt-username', 'chase');
-      await TK.load(); const w = TK.world(13); for (const n of w.nodes) { if (n.key === '13-c17') break; TK.markCleared(n.key); } TK.markSeen('13:opening'); });
+      await TK.load(); const w = TK.world(13); let party = null;   // what the beats before c17 leave: cleared, the party (Cao Cao), the items (the Chancellor's horse, from c16's end)
+      for (const n of w.nodes) { if (n.key === '13-c17') break; TK.markCleared(n.key); const sc = w.scenes && w.scenes[n.scene];
+        for (const st of (sc && sc.steps) || []) { if (st[0] === 'party') party = st[1]; if (st[0] === 'item' || st[0] === 'gain') WorldItems.add(w, st[1]); } }
+      TK.markSeen('13:opening'); if (party) TK.setParty(w, party); });
     await p.goto(BASE + '#/tk/13'); await p.reload();
     for (let i = 0; i < 120; i++) { const g = p.locator('.tk-scroll-go'); if (await g.count() && await g.first().isVisible()) await g.first().click().catch(() => {});
       if (await p.evaluate(() => !!(window.__w && window.__w.player && !window.__w.leaving))) break; await p.waitForTimeout(250); }
@@ -35,16 +38,17 @@ const path = require('path');
   const quiet = async () => { for (let i = 0; i < 60; i++) { const s = await p.evaluate(() => { const w = window.__w; return w && { busy: w.ui.busy(), cine: !!w.cine, duel: !!document.querySelector('.tk-duel svg') }; }); if (s && !s.busy && !s.cine && !s.duel) return; if (s && s.busy && !s.duel) await p.evaluate(() => window.__w.ui.advance()); await p.waitForTimeout(200); } };
   const state = () => p.evaluate(() => { const w = window.__w, C = w.chase; return { P: [Math.round(w.player.x), Math.round(w.player.y)], place: w.placeId, on: !!w.chaseNow(), tries: C ? C.tries : null,
     dropped: C ? [...C.dropped] : [], engaged: !!w.engaged, busy: w.ui.busy(), duel: !!document.querySelector('.tk-duel svg'), key: window.__boardKey || null, c17: TK.cleared('13-c17'),
-    riders: w.npcs.filter(n => n.rider).map(n => ({ id: n.id, x: Math.round(n.spr.x), y: Math.round(n.spr.y), hx: Math.round(n.home.x), hy: Math.round(n.home.y), vis: n.spr.visible, hunting: !!n.rider.hunting, dir: n.dir })) }; });
+    riders: w.npcs.filter(n => n.rider).map(n => ({ id: n.id, x: Math.round(n.spr.x), y: Math.round(n.spr.y), hx: Math.round(n.home.x), hy: Math.round(n.home.y), vis: n.spr.visible, hunting: !!n.rider.hunting, dir: n.dir, v: Math.round(n.spr.body.velocity.length()) })) }; });
   await p.evaluate(() => {}).catch(() => {});
   const hookBoard = () => p.evaluate(() => { if (TKOverlay.__hooked) return; const o = TKOverlay.open.bind(TKOverlay); TKOverlay.open = (n, key, at) => { window.__boardKey = key; (window.__boards = window.__boards || []).push(key); window.__boardOnce = !!(at && at.once); return o(n, key, at); }; TKOverlay.__hooked = true; });
   // ride a route (pixel waypoints) at a gallop; stop on a catch (a board) or at the end. spotted lines are tapped through
+  let huntV = 0;   // the fastest a hunting rider was seen riding
   const ride = async (pts, opts = {}) => {
     for (const q of pts) {
       if (opts.before) await opts.before(q);
       await p.evaluate(q => window.__w.walkTo(q.x, q.y, { ring: false }), q);
       for (let i = 0; i < 80; i++) { await p.waitForTimeout(150);
-        const s = await state();
+        const s = await state(); for (const x of s.riders) if (x.hunting) huntV = Math.max(huntV, x.v);
         if (s.duel && /~/.test(s.key || '')) return { caught: true, s };
         if (s.duel) return { caught: false, board: s.key, s };   // the gate's own board: he got there
         if (s.busy && !s.engaged) await p.evaluate(() => window.__w.ui.advance());   // the "spotted" line, tapped through as he rides
@@ -62,9 +66,12 @@ const path = require('path');
   // 1-2. the east lane: caught; fail → restart; caught again; solve → that rider drops out
   await fresh(); await hookBoard();
   let s0 = await state();
+  const mounted = await p.evaluate(() => (window.__w.mounts || []).map(m => `${m.who}:${m.coat}`));
+  check(mounted.includes('caocao:black'), `outdoors in Luoyang he rides the Chancellor's horse (${mounted.join(', ') || 'on foot'})`);
   check(s0.on && s0.riders.length === 4, `the chase is on in Luoyang after c16, with Places' four riders (${s0.riders.map(r => r.id).join(', ')})`);
   let r = await ride(eastLane);
   check(r.caught && /^13-c17~2\d$/.test(r.s.key || '') && await p.evaluate(() => window.__boardOnce), `up the east lane at a gallop: caught, and a one-try board opens (${r.s.key}; once ${await p.evaluate(() => window.__boardOnce)})`);
+  check(huntV >= 125 && huntV <= 140, `a hunting rider keeps four-fifths of his mounted pace: ${huntV} px/s (132 against 165)`);
   const by = (r.s.riders.find(x => x.hunting) || {}).id;
   // fail it, and look the moment the restart lands (the riders set off again at once)
   let s1 = null; const xf0 = await p.evaluate(() => { const s = window.__w.spots['xf-gate']; return [s.x, s.y]; });
@@ -92,10 +99,10 @@ const path = require('path');
   // a 55° cone of their cone's tiles or the 2-tile ring; walls ignored, so on the safe side), nobody will see him on it,
   // nor while he waits at its end for the next 3 s. Places' checker proves such timings exist; this finds one live.
   const installSafe = () => p.evaluate(() => { window.__safe = (from, pts, hold) => {
-    const w = window.__w, T = 16, cos = Math.cos(Math.PI * 55 / 180), dt = 50;
+    const w = window.__w, T = 16, cos = Math.cos(Math.PI * 55 / 180), dt = 50, V = 110 * (w.mounts && w.mounts.length ? WorldItems.SPEED : 1);   // his pace, mounted or not
     let path = [from]; for (const q of pts) { const a = path[path.length - 1], f = w.findPath(a.x, a.y, q.x, q.y) || [a, q]; path.push(...f.slice(1), q); }
     const me = [];   // where he is, every 50 ms: galloping the path, then holding at its end
-    let cur = { ...path[0] }, i = 1; while (i < path.length) { let left = 110 * dt / 1000; while (left > 0 && i < path.length) { const q = path[i], d = Math.hypot(q.x - cur.x, q.y - cur.y); if (d <= left) { cur = { ...q }; left -= d; i++; } else { cur.x += (q.x - cur.x) / d * left; cur.y += (q.y - cur.y) / d * left; left = 0; } } me.push({ ...cur }); }
+    let cur = { ...path[0] }, i = 1; while (i < path.length) { let left = V * dt / 1000; while (left > 0 && i < path.length) { const q = path[i], d = Math.hypot(q.x - cur.x, q.y - cur.y); if (d <= left) { cur = { ...q }; left -= d; i++; } else { cur.x += (q.x - cur.x) / d * left; cur.y += (q.y - cur.y) / d * left; left = 0; } } me.push({ ...cur }); }
     for (let k = 0; k < (hold || 0) / dt; k++) me.push({ ...cur });
     for (const n of w.npcs) { if (!n.rider || !n.spr.visible) continue; const R = n.rider; if (R.hunting) return false;
       const r = { x: n.spr.x, y: n.spr.y, leg: R.leg, wait: R.wait || 0, dir: n.dir };
