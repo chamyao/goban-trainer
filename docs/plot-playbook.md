@@ -1,7 +1,7 @@
 # Plot playbook: how to write a book of *Tian Cai Zhi Wang*
 
-This is the process the Plot session used for the Diaochan and Cao Cao arcs (Book 2, novel chapters 8–9), written down so the next arc
-and the next book can be done the same way. It has three layers:
+This is the process the Plot session used for the Cao Cao arc (novel chapters 3–4) and the Diaochan arc (chapters 8–9),
+written down so the next arc can be done the same way. It is laid out in these parts:
 
 - **Part 0, the foundation:** the game is built around the novel's most interesting narratives.
 - **Part 1, the core principles:** the craft of telling the story.
