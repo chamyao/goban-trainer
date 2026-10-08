@@ -620,6 +620,13 @@ function worldScenes() {
         n.guard = p.guard_x != null ? { x: p.guard_x, y: p.guard_y } : null;
         n.mark = this.add.image(o.x, o.y - spr.height - 2, "@bang").setOrigin(.5, 1).setDepth(9999).setVisible(!TK.cleared(n.challenge) && (!n.when || this.cond(n.when)));
       }
+      if (p.rider) {   // a chase rider (Places: {"chase": "c17", "beat": [[x,y]..], "cone": 5, "dir": "E"}): about only while that chase is on
+        try {
+          const r = JSON.parse(p.rider), T = this.tw || 16, D = { N: "up", S: "down", W: "left", E: "right" };
+          n.rider = { chase: `${this.w.n}-${r.chase}`, cone: r.cone || 5, dir: D[r.dir] || r.dir || face,
+            pts: (r.beat && r.beat.length ? r.beat : [[o.x / T - .5, o.y / T - .9]]).map(([x, y]) => ({ x: (x + .5) * T, y: (y + .9) * T })), leg: 0 };
+        } catch { n.rider = null; }
+      }
       if (p.watch) {   // a stealth watcher: a cone, a beat to walk or ways to turn, what he says and where he sends you
         try { n.watch = JSON.parse(p.watch); } catch { n.watch = null; }
         if (n.watch) {
@@ -1390,7 +1397,7 @@ function worldScenes() {
 
     // Bring up the problem over the map; resolves true on a flawless solve.
     // The world waits behind it.
-    async duel(key, foe) {
+    async duel(key, foe, extra = {}) {
       const P = this.player;
       this.st.pos = { place: this.placeId, x: Math.round(P.x), y: Math.round(P.y), f: P.facing };
       this.save();
@@ -1398,7 +1405,7 @@ function worldScenes() {
       P.setVelocity(0); P.anims.stop();
       this.ui.hint(null);
       // solved: whoever was here only until this beat (the Star Lords) is gone at once, behind the board
-      const win = await this.opts.onPuzzle(key, { host: this.opts.host, foe, onWin: () => this.vanish(key.split("~")[0]) });
+      const win = await this.opts.onPuzzle(key, { host: this.opts.host, foe, onWin: () => this.vanish(key.split("~")[0]), ...extra });
       if (!this.sys.isActive()) return false;  // the page moved on meanwhile
       this.leaving = false;
       this.opts.host.focus();
@@ -2002,6 +2009,88 @@ function worldScenes() {
       }
     }
     // Seen: he says so, and you're walked back to where he sends you (no game over)
+    // ---------- a chase (Plot's "chase" on a story node; Places' riders): ride for the goal ----------
+    // While the node is the open beat and its riders are in this place, they ride their beats; one that sees
+    // you rides at you (faster than a walk, slower than you at a run). Caught: ONE try at a board. Solved,
+    // that rider drops out for this run; failed, the screen fades and the chase starts again from its start
+    // spot with every rider back. The node's own spot (its gate) ends it, as any beat's spot does.
+    chaseNow() {
+      const riders = this.npcs.filter(n => n.rider);
+      if (!riders.length) return null;
+      const key = riders[0].rider.chase, node = (TK.world(this.w.n).nodes || []).find(x => x.key === key), q = this.region.quests.find(x => x.node === key);
+      if (!node || !node.chase || !q || TK.cleared(key) || !this.available(q)) return null;
+      if (!this.chase || this.chase.key !== key) this.chase = { key, spec: node.chase, dropped: new Set(), tries: 0 };
+      return this.chase;
+    }
+    chaseStep(dt) {
+      const C = this.chaseNow(), T = this.tw || 16, P = this.player;
+      for (const n of this.npcs) {
+        if (!n.rider) continue;
+        const on = !!C && !C.dropped.has(n.id);
+        n.spr.setVisible(on); n.spr.body.enable = on;
+        if (!on) { n.spr.setVelocity(0); continue; }
+        if (this.engaged || this.ui.busy() || this.cine || this.leaving || this.caught) { n.spr.setVelocity(0); n.spr.anims.stop(); continue; }
+        const R = n.rider, at = (tx, ty, v) => {   // ride toward a point; true when there
+          const dx = tx - n.spr.x, dy = ty - n.spr.y, d = Math.hypot(dx, dy);
+          if (d < 3) { n.spr.setVelocity(0); return true; }
+          n.spr.setVelocity(dx / d * v, dy / d * v);
+          const dir = Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? "left" : "right") : (dy < 0 ? "up" : "down");
+          if (dir !== n.dir || !n.spr.anims.isPlaying) { n.dir = dir; n.spr.anims.play(n.who ? `h-${n.who}-${dir}` : `fk-${n.sprite}-${dir}`, true); }
+          return false;
+        };
+        n.spr.setDepth(n.spr.y);
+        const d = Math.hypot(P.x - n.spr.x, P.y - n.spr.y);
+        if (R.hunting) {
+          if (d < 12) { n.spr.setVelocity(0); this.chaseCaught(n); return; }
+          if (d > 14 * T) { R.hunting = false; R.path = null; if (n.mark) n.mark.setVisible(false); continue; }   // lost you
+          R.repath = (R.repath || 0) - dt;
+          if (R.repath <= 0 || !R.path || !R.path.length) { R.repath = 400; R.path = (this.findPath(n.spr.x, n.spr.y, P.x, P.y) || [{ x: P.x, y: P.y }]).slice(1); }
+          const nx = R.path[0] || { x: P.x, y: P.y };
+          if (at(nx.x, nx.y, 88) && R.path.length) R.path.shift();
+          continue;
+        }
+        // on its beat; it sees you down its cone, if nothing solid is between
+        const tg = R.pts[R.leg % R.pts.length];
+        if (at(tg.x, tg.y, 42)) R.leg++;
+        const look = R.pts.length > 1 ? n.dir : R.dir, [fx, fy] = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }[look] || [0, 1];
+        const dx = P.x - n.spr.x, dy = P.y - n.spr.y;
+        if (d < R.cone * T && ((dx * fx + dy * fy) / (d || 1) > Math.cos(Math.PI * 55 / 180) || d < 2 * T) && this.ray(n.spr.x, n.spr.y - 6, Math.atan2(dy, dx), d) >= d - 2) {
+          R.hunting = true; R.repath = 0;
+          if (!n.mark) n.mark = this.add.image(n.spr.x, n.spr.y - n.spr.height - 2, "@bang").setOrigin(.5, 1).setDepth(9999);
+          n.mark.setVisible(true);
+          if (C.spec.spotted && !C.spotTalked) { C.spotTalked = true; this.talk(worldLines(C.spec.spotted)); }
+        }
+        if (n.mark) n.mark.setPosition(n.spr.x, n.spr.y - n.spr.height - 2);
+      }
+    }
+    async chaseCaught(n) {
+      const C = this.chase, P = this.player, spec = C.spec;
+      this.engaged = n; this.walk = null; this.auto = null; P.setVelocity(0); P.anims.stop();
+      for (const m of this.npcs) if (m.rider) m.spr.setVelocity(0);
+      await new Promise(r => this.talk(worldLines(spec.caught || [["n", "A rider has caught up with you!", "追兵赶上来了！"]]), r));
+      // one try: a board of its own each time (the beat's own problems, slots past its story boards)
+      const idx = 20 + C.tries * 8 + this.npcs.filter(m => m.rider).indexOf(n);
+      const won = await this.duel(`${C.key}~${idx}`, { id: n.id, who: n.who, face: this.faceOf(n) }, { once: true, onWin: () => {} });
+      if (won) {
+        C.dropped.add(n.id); n.rider.hunting = false;
+        if (n.mark) n.mark.setVisible(false);
+        this.tweens.add({ targets: n.spr, alpha: 0, duration: 500, onComplete: () => { n.spr.setVisible(false).setAlpha(1); } });
+        if (spec.solved) await new Promise(r => this.talk(worldLines(spec.solved), r));
+      } else {
+        C.tries++;
+        this.cameras.main.fadeOut(400);
+        await new Promise(r => this.cameras.main.once("camerafadeoutcomplete", r));
+        C.dropped.clear(); C.spotTalked = false;
+        for (const m of this.npcs) if (m.rider) { m.spr.setPosition(m.home.x, m.home.y).setVelocity(0); Object.assign(m.rider, { hunting: false, path: null, leg: 0 }); if (m.mark) m.mark.setVisible(false); }
+        const s0 = spec.from && (this.spots[spec.from] || this.refs[spec.from] || this.entries[spec.from]) || this.entries[""];
+        if (s0) P.setPosition(s0.x, s0.y + (this.spots[spec.from] ? 18 : 0));
+        this.trail = Array(this.trailLen || 60).fill({ x: P.x, y: P.y, f: P.facing });
+        this.cameras.main.fadeIn(400);
+        if (spec.restart) await new Promise(r => this.talk(worldLines(spec.restart), r));
+      }
+      this.engaged = null;
+    }
+
     async caughtBy(n) {
       this.caught = true;
       const w = n.watch, P = this.player;
@@ -2069,6 +2158,7 @@ function worldScenes() {
       this.processionStep(dt);
       this.atmosphere();
       this.watchChallengers();
+      this.chaseStep(dt);
       this.keepPlayerInView();
       this.callOut();
       WorldFX.shadows(this);
@@ -2136,6 +2226,7 @@ function worldScenes() {
 
       for (const n of this.npcs) {
         if (n.mark) n.mark.setPosition(n.spr.x, Math.round(n.spr.y - n.spr.height - 1 + Math.sin(time / 250) * 1.5));
+        if (n.rider) continue;   // chase riders move themselves (chaseStep)
         if (!n.wander || this.ui.busy()) { n.spr.setVelocity(0); continue; }
         n.t -= dt;
         if (n.t <= 0) {

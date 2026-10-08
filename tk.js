@@ -1341,7 +1341,7 @@ async function tkLevelData(worldN, key) {
   if (!node || !(node.town || TK.open(w, base) || TK.cleared(base) || TK.cleared(key))) return null;
   // no board past the scene's last ("a9~9" when a9 poses three)
   const nProb = ((w.scenes && w.scenes[node.scene] && w.scenes[node.scene].steps) || []).filter(s => s[0] === "problem").length;
-  if (nth && idx >= Math.max(1, nProb)) return null;
+  if (nth && idx >= Math.max(1, nProb) && !(node.chase && idx >= 19)) return null;   // a chase's catches draw from slot 20 on (tk-world.js chaseCaught)
   const [bookId, pid] = TK.problemRef(node, idx);
   const src = await getBook(bookId);
   const p = src.problems.find(x => x.id === pid);
@@ -1488,7 +1488,7 @@ const TK_FOES = {
 // A level as a duel inside the game window: the opponent's portrait, a board on a
 // wooden frame, and the game's own dialogue box for what's said and what happened.
 // foe: { id, who, face } from the world (null for a story beat with no opponent).
-function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, onWin }) {
+function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, onWin, once }) {
   const svg = document.createElementNS(SVGNS, "svg");
   const boardCard = h("div", { class: "tk-duel-board" }, [svg]);
   const status = h("div", { class: "tk-duel-status" });
@@ -1609,6 +1609,9 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
       else if (lord) { say(...lord.win, go("继续 Continue ▸", leave)); if (dil && dil.win_vid && TKVoice.has(dil.win_vid)) TKVoice.play(dil.win_vid); }
       else if (foe) say("好棋！我认输。", "Well played. I resign.", go("继续 Continue ▸", leave));
       else say("★ 完美！", "Flawless!", go("继续 Continue ▸", leave));
+    } else if (once) {   // one try (a chase): no second go; back to the world, which decides what follows
+      dlg.classList.add("slip");
+      say(...(e.detail === "ok" ? [`解出了，但不算完美（${t.flawed}）。被擒了！`, `Solved, but not flawless (${t.flawed}). You're taken!`] : ["被擒了！", "You're taken!"]), go("继续 Continue ▸", leave));
     } else {
       TK.rest(key);
       dlg.classList.add("slip");
@@ -1669,7 +1672,7 @@ const TKOverlay = {
         const d = await tkLevelData(worldN, key);
         if (closed) return;
         if (!d) return close();
-        tkDuelBuild(box, worldN, key, d, at.foe || null, { leave: close, again: show, onWin: () => { won = true; if (at.onWin) at.onWin(); } });
+        tkDuelBuild(box, worldN, key, d, at.foe || null, { leave: close, again: show, once: !!at.once, onWin: () => { won = true; if (at.onWin) at.onWin(); } });
       };
       await show();
     });
