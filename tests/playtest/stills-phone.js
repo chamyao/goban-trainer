@@ -17,7 +17,7 @@ const only=process.env.ONLY?process.env.ONLY.split(','):null;
 
 for(const c of cases.filter(c=>!only||only.includes(c.key))){
   await p.goto(BASE+'#/tk/'+c.w);await p.waitForTimeout(800);
-  await p.evaluate(c=>{localStorage.clear();localStorage.setItem('tk-test','1');localStorage.setItem('tk-guide','off');for(let n=1;n<c.w;n++)TK.world(n).nodes.forEach(x=>TK.markCleared(x.key));
+  await p.evaluate(c=>{localStorage.clear();localStorage.setItem('tk-test','1');localStorage.setItem('tk-guide','off');for(let n=1;n<c.w;n++)(TK.world(n)||{nodes:[]}).nodes.forEach(x=>TK.markCleared(x.key));
     const w=TK.world(c.w),seen=new Set(),st=w.edges.filter(e=>e[1]===c.key).map(e=>e[0]);while(st.length){const k=st.pop();if(seen.has(k))continue;seen.add(k);TK.markCleared(k);st.push(...w.edges.filter(e=>e[1]===k).map(e=>e[0]));}
     for(const k of seen)TK.markSeen(`${c.w}:${(w.nodes.find(x=>x.key===k)||{}).scene}`);TK.markSeen(`${c.w}:opening`);},c);
   await p.reload();await p.waitForTimeout(1500);
