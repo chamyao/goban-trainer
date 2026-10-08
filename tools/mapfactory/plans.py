@@ -654,6 +654,16 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
         outdoor_people = [p for p in b.get("npcs", []) if not p.get("place")]
         chs = [c for c in b.get("challengers", []) if not c.get("map")]
         m = mb.build(b, [rename(p) for p in outdoor_people], chs, [rename(w) for w in P.get("watchers", [])])
+        if b.get("chase"):   # a chase's riders (Integration's engine): an npc each, its beat in tiles
+            ch = b["chase"]
+            for r in ch["riders"]:
+                post = mb.near_cell(tuple(r["post"]), want_visible=False)
+                beat = [list(mb.near_cell(tuple(c), want_visible=False)) for c in r.get("beat", [])]
+                m["npcs"].append({"id": r["id"], "kind": r.get("kind", "folk.soldier"), "x": post[0] + .5, "y": post[1] + .9, "say": [],
+                                  "face": r.get("dir", "S"), "rider": {"chase": ch["chase"], "beat": beat, "cone": r.get("cone", 5),
+                                                                      "dir": r.get("dir", "S"),
+                                                                      **({"pause": [*mb.near_cell(tuple(r["pause"][:2]), want_visible=False),
+                                                                                    r["pause"][2]]} if r.get("pause") else {})}})
         m["states"] = [state(st, mb, plans) for st in b.get("states", [])]
         if (w := ways(mb)):
             m["ways"] = w
