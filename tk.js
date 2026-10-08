@@ -613,6 +613,14 @@ const TK = {
   cleared(key) { const p = loadProgress(); return (p.tk || {})[key] === 1 && !(((p.tkUndo || {})[key] || 0) > ((p.tkAt || {})[key] || 0)); },
   markCleared(key) { const p = loadProgress(); (p.tk || (p.tk = {}))[key] = 1; (p.tkAt || (p.tkAt = {}))[key] = Date.now(); this.saveProg(p); },
   undoCleared(p, key) { if (p.tk) delete p.tk[key]; (p.tkUndo || (p.tkUndo = {}))[key] = Date.now(); },
+  // A world rolled back (Replay from…, Start over): dated in the progress (synced, the later wins), and this
+  // device's place, party and things in that world marked as made after it ("tk-seen"). Another device's
+  // copy of that world from before it is stale, and isn't taken (app.js Sync)
+  rolledBack(p, n) {
+    const t = Date.now();
+    (p.tkReplay || (p.tkReplay = {}))[n] = t;
+    const seen = this.ls("tk-seen"); seen[n] = t; this.lsSet("tk-seen", seen);
+  },
   seen(id) { return !!(loadProgress().tkSeen || {})[id]; },
   markSeen(id) { const p = loadProgress(); (p.tkSeen || (p.tkSeen = {}))[id] = 1; this.saveProg(p); },
   world(n) { return this.data.worlds.find(w => w.n === n); },

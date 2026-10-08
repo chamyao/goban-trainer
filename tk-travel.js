@@ -55,6 +55,7 @@ const WorldTravel = {
     for (const n of before) if (!TK.cleared(n.key)) TK.markCleared(n.key);
     const p = loadProgress();
     for (const k of Object.keys(p.tk || {})) if (later.has(k.split("~")[0])) TK.undoCleared(p, k);
+    TK.rolledBack(p, w.n);
     TK.saveProg(p);
     // the party and possessions as the beats before left them
     let party = w.party, crowd = 0; const items = [];
@@ -164,6 +165,7 @@ const WorldTravel = {
     const p = loadProgress(), pre = `${w.n}-`;
     for (const k of Object.keys(p.tk || {})) if (k.startsWith(pre)) TK.undoCleared(p, k);
     for (const k of Object.keys(p.tkSeen || {})) if (k.startsWith(`${w.n}:`)) delete p.tkSeen[k];
+    TK.rolledBack(p, w.n);
     TK.saveProg(p);
     for (const key of ["tk-party", "tk-items", "tk-at", "tk-ride", "tk-marks"]) { const a = TK.ls(key); delete a[w.n]; TK.lsSet(key, a); }
     try { localStorage.removeItem(WorldState.key(w.n)); } catch {}

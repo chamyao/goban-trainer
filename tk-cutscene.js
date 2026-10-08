@@ -463,7 +463,9 @@ const WorldCutscene = {
       shade = scene.add.rectangle(W / 2, H / 2, W * 3, H * 3, c).setScrollFactor(0).setDepth(9e4).setBlendMode(Phaser.BlendModes.MULTIPLY);
       fx.push(shade);
       if (night) {
-        scene.children.list.filter(o => o.type === "Image" && o.frame && /^(camp\.firepit|camp\.cookfire|lamp\.post|furn\.hearth)#/.test(o.frame.name)).forEach(glow);
+        const lit = new Set(scene.children.list.filter(o => o.type === "Image" && o.frame && /^(camp\.firepit|camp\.cookfire|lamp\.post|furn\.hearth|landmark\.(torch|brazier))#/.test(o.frame.name)));
+        for (const L of scene.lights || []) if (L.img && L.img.visible && /^(landmark\.(torch|brazier)|camp\.)/.test(L.kind || "")) lit.add(L.img);   // the map's torches (the jail court), whatever art stands in for them
+        lit.forEach(glow);
         Object.values(actors).filter(a => a.prop && FIRES.includes(a.prop)).forEach(a => { a.glow = glow(a.spr); });
       }
       const all = [shade, ...glows];
