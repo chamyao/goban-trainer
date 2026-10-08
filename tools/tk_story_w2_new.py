@@ -2189,6 +2189,32 @@ _ITEMS_CAOCAO = {
     "weihong": {"name": "Wei Hong's fortune", "zh": "卫弘家资", "kind": "treasure"},
 }
 
+# Closes the Cao Cao arc and bridges to the Diaochan arc: chapters 5-7 in a few lines, in the novel's own order.
+_CLOSING_CAOCAO = [
+    ["scroll", T("The Coalition", "诸侯会盟"), [
+        T("Eighteen lords answered Cao Cao's call, with Yuan Shao as their leader. Among those who came with Gongsun Zan were Liu Bei and his sworn brothers, Guan Yu and Zhang Fei.",
+          "十八路诸侯应操之召，共推袁绍为盟主。随公孙瓒而来的，有刘备与他的结义兄弟关羽、张飞。"),
+        T("At Sishui Pass, Guan Yu cut down Dong Zhuo's champion Hua Xiong before the wine Cao Cao had poured him was cold. At Hulao Pass the three brothers fought Lü Bu together, and drove him back.",
+          "汜水关前，关羽温酒斩华雄。虎牢关下，三英战吕布。"),
+        T("Dong Zhuo burned Luoyang and drove the Emperor and millions of people west to Chang'an. Cao Cao pursued him alone, and barely escaped with his life. In the ruins, Sun Jian found the Imperial Seal in a well.",
+          "董卓火烧洛阳，驱天子与百姓数百万口西迁长安。曹操独自追击，几乎丧命。孙坚在废墟井中得了传国玉玺。"),
+        T("Then the lords fell out, and went home to fight one another. Dong Zhuo was left master of Chang'an.",
+          "诸侯各怀异心，散归本镇，自相攻伐。董卓独据长安。"),
+    ]],
+]
+
+# Opens the Diaochan arc for a player who starts here (each book stands on its own).
+_OPENING_CHAIN = [
+    ["scroll", T("Chapter 8", "第八回"), [
+        T("Minister Wang cleverly sets the chain of schemes; Grand Preceptor Dong storms the Phoenix Pavilion.",
+          "王司徒巧使连环计，董太师大闹凤仪亭。"),
+        T("Dong Zhuo has burned Luoyang and moved the court west to Chang'an. The lords who rose against him have fallen to fighting one another.",
+          "董卓火烧洛阳，迁都长安。起兵讨董的诸侯，已自相攻伐。"),
+        T("In Chang'an he does as he pleases, with Lü Bu, the strongest warrior alive, at his side as his adopted son. No minister dares to speak.",
+          "长安城中，董卓为所欲为。天下第一猛将吕布，是他的义子，随侍左右。满朝公卿，无人敢言。"),
+    ]],
+]
+
 _OPENING_CAOCAO = [
     ["scroll", T("Chapter 3", "第三回"), [
         T("At the Wenming council Dong Zhuo shouts down Ding Yuan; with gold and pearls Li Su wins over Lü Bu.",
@@ -2225,7 +2251,7 @@ def _world():
         "nodes": [dict(n, dilemma=_multi_dilemmas()[n["key"]]) if n["key"] in _multi_dilemmas() else n for n in _nodes_chain()],
         "edges": _EDGES_CHAIN,
         "scenes": scenes,
-        "opening": [],
+        "opening": _OPENING_CHAIN,
         "closing": [],
     }
 
@@ -2255,7 +2281,7 @@ def _world_caocao():
         "edges": _EDGES_CAOCAO,
         "scenes": _scenes_caocao(),
         "opening": _OPENING_CAOCAO,
-        "closing": [],
+        "closing": _CLOSING_CAOCAO,
     }
 
 
