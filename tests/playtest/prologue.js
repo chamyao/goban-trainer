@@ -61,7 +61,7 @@ const path = require('path');
     const s = await look(); if (s.caught) caught = { s, line: await p.evaluate(() => ((document.querySelector('.town-ui .town-dlg:not([hidden])') || {}).textContent || '').replace(/\s+/g, ' ').trim()) };
     const o2 = await p.evaluate(() => { const w = window.__w, n = w.npcs.find(n => n.watch && w.watching(n)), T = 16, D = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }[n.watch.dir] || [0, 1]; return { x: n.spr.x + D[0] * 3 * T, y: n.spr.y + D[1] * 3 * T + 6 }; }); out.x = o2.x; out.y = o2.y; }
   for (let i = 0; i < 20 && await p.evaluate(() => window.__w.ui.busy()); i++) { await p.evaluate(() => window.__w.ui.advance()); await p.waitForTimeout(250); }
-  await p.waitForTimeout(800); const back = await look();
+  let back = await look(); for (let i = 0; i < 30 && back.caught; i++) { await p.waitForTimeout(200); if (await p.evaluate(() => window.__w.ui.busy())) await p.evaluate(() => window.__w.ui.advance()); back = await look(); }   // the catch's fade out, back and in
   const home = Math.hypot(back.P[0] - cq.x, back.P[1] - cq.y) < 20;
   check(!!caught && /Who's there|There!|woman/i.test(caught.line), `out of ${cname} into a looter's sight: caught, and his line: "${caught ? caught.line.slice(0, 90) : 'never caught in 20 s'}"`);
   check(caught && home && !back.caught, `and she's back at ${cname}, the cover she last hid in (${back.P}; the cover at ${Math.round(cq.x)},${Math.round(cq.y)})`);
