@@ -367,6 +367,12 @@ function worldScenes() {
       // a town's shrine with no story spot of its own: touching it still answers (dark, or its hint)
       if (this.shrine && !Object.values(this.spots).some(s => Math.hypot(s.x - this.shrine.x, s.y - this.shrine.y) < 30))
         this.spots.shrine_ = { x: this.shrine.x, y: this.shrine.y + 12, node: "", label: "The shrine under the pine", labelZh: "松下星君祠", intro: [], outro: [], trigger: "talk", use: "shrine" };
+      // cover to hide in, marked faintly on the ground (a doorway, a cart, a well-house): the player can see where to hide
+      this.coverMarks = (this.covers || []).map(r => {
+        const g = this.add.ellipse(r.centerX, r.bottom - 5, Math.max(18, r.width * .8), 9, 0x9fd8a8, .16).setStrokeStyle(1.5, 0xcff5d2, .55).setDepth(-995);
+        this.tweens.add({ targets: g, alpha: .55, duration: 1400, yoyo: true, repeat: -1, ease: "Sine.easeInOut" });
+        return g;
+      });
       this.refreshStory();
       for (const s of Object.values(this.spots)) {   // a story waiting here: a slow glow on the ground, gold for the main story, cooler for side stories
         const q = s.node && this.region.quests.find(x => x.node === s.node);
@@ -2063,6 +2069,7 @@ function worldScenes() {
       if (hid !== this.hidden) {
         this.hidden = hid;
         P.setAlpha(hid ? .55 : 1);
+        for (const g of this.coverMarks || []) g.setFillStyle(0x9fd8a8, hid ? .32 : .16);
         if (hid && !this.hideTold && typeof WorldItems !== "undefined") { this.hideTold = true; WorldItems.notice(this, { zh: "藏好了，别动", name: "Hidden: keep still" }, true); }
       }
       for (const n of this.npcs) {
