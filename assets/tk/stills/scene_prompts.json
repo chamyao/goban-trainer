@@ -845,5 +845,166 @@
   "beat": "Cao Cao raises the white banner of 'Loyalty and Right' at Chenliu.",
   "scene": "A village drilling ground on a bright morning. A tall white banner flies from a pole, two large black characters on it: 忠义. Beneath it Cao Cao stands on a low platform. Before him volunteers stream in from every direction, farmers and young men with spears, and a few armoured officers arrive on horseback with men behind them. Hopeful, rising energy.",
   "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+ },
+ "lb_seal": {
+  "book": 3,
+  "category": "intrigue",
+  "beat": "Liu Bei offers Lü Bu the seal of Xuzhou; Guan Yu and Zhang Fei glare.",
+  "scene": "A prefecture hall. Liu Bei, gentle-faced with long ear lobes, holds out a seal of office with both hands. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, half reaches for it. Behind Liu Bei, red-faced long-bearded Guan Yu and fierce black-bearded Zhang Fei glare at him. Chen Gong stands at Lü Bu's shoulder.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "lb_wifebow": {
+  "book": 3,
+  "category": "bond",
+  "beat": "Lü Bu's wife and daughter bow to Liu Bei in Lü Bu's rear hall.",
+  "scene": "A warmly lit rear hall after a banquet. A dignified woman in her thirties in rich robes (Lady Yan) and a girl of about fifteen bow to Liu Bei, who raises his hands to decline. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, beams beside them. Zhang Fei, in the doorway, glowers.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "lb_letter": {
+  "book": 3,
+  "category": "intrigue",
+  "beat": "Liu Bei shows Lü Bu Cao Cao's secret letter.",
+  "scene": "A private rear hall. Liu Bei holds out an unrolled letter. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, reads it, his face shifting from shock to tears. A single lamp.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "lb_nightgate": {
+  "book": 3,
+  "category": "battle",
+  "beat": "A city gate opens at the fourth watch under a clear moon.",
+  "scene": "Night under a bright full moon. A city gate swings open from inside. Outside, a column of horsemen waits in shadow; at its head Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, on a fiery red horse. On the wall above, a single officer with a lantern.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "lb_halberd": {
+  "book": 3,
+  "category": "battle",
+  "beat": "Lü Bu's arrow strikes the small blade of a halberd at a hundred and fifty paces.",
+  "scene": "A military camp at the camp gate. In the foreground Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, has just loosed an arrow, bow still drawn wide like an autumn moon. Far off, a painted halberd planted upright at the gate; the arrow is striking its small side-blade. Behind Lü Bu, Liu Bei and the general Ji Ling stare, and soldiers throw up their arms.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "ly_decides": {
+  "book": 3,
+  "category": "intrigue",
+  "beat": "Lady Yan advises Lü Bu to accept Yuan Shu's match for their daughter.",
+  "scene": "Lady Yan's private rooms, silk hangings. Lady Yan, a dignified woman in her thirties, speaks earnestly to Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, who listens. Through a doorway, their daughter, about fifteen, is glimpsed at an embroidery frame.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "bride_drums": {
+  "book": 3,
+  "category": "everyday",
+  "beat": "The bride is sent out of Xuzhou with drums and music.",
+  "scene": "A city gate by torchlight. A curtained bridal carriage decorated with red silk rolls out, surrounded by musicians beating drums and blowing horns, and an escort of riders. Townspeople watch.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "cg_condolence": {
+  "book": 3,
+  "category": "intrigue",
+  "beat": "Old Chen Gui pays a mock condolence call on the living Lü Bu.",
+  "scene": "A hall. A frail old minister in white mourning clothes, helped by a servant, bows in condolence before Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, who stands astonished.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "zl_bride": {
+  "book": 3,
+  "category": "battle",
+  "beat": "Zhang Liao catches the bridal party thirty li out and turns it back.",
+  "scene": "A country road at dawn. A bearded cavalry general, Zhang Liao, reins in his horse across the road in front of a red bridal carriage. His riders surround it. The envoy Han Yin raises his hands. The carriage curtain is drawn.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "cd_hawk": {
+  "book": 3,
+  "category": "intrigue",
+  "beat": "Chen Deng laughs at Lü Bu's sword and tells him of the hawk.",
+  "scene": "A hall. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, has a sword half raised. Before him a sharp-eyed young official, Chen Deng, laughs openly, one hand raised as if telling a story; a hawk on a perch stands in the corner of the room.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "cg_courier": {
+  "book": 3,
+  "category": "battle",
+  "beat": "Chen Gong, out hunting, rides a courier down by a side path.",
+  "scene": "Open hunting country, autumn. A lean, earnest strategist on horseback, Chen Gong, cuts across from a side path and blocks a post rider on the main road. His hunting companions close in. A hunting hawk circles above.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "xiao_letters": {
+  "book": 3,
+  "category": "intrigue",
+  "beat": "Chen Deng shoots letters down from Xiao Pass at night.",
+  "scene": "Night on a mountain pass fort. A young official, Chen Deng, leans over the battlements and looses an arrow with a rolled letter tied to it toward the camp fires far below. Two more letter-arrows lie beside him. The sentries' backs are turned.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "xiao_dark": {
+  "book": 3,
+  "category": "battle",
+  "beat": "Lü Bu's men and Chen Gong's kill each other in the dark.",
+  "scene": "A mountain pass at night, lit only by a fire on the gate tower. Two forces of the same army clash in confusion in the dark, unable to see each other's banners.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "mz_wall": {
+  "book": 3,
+  "category": "intrigue",
+  "beat": "Mi Zhu shouts down from Xuzhou's wall: the city is not Lü Bu's.",
+  "scene": "Dawn under a city wall. Arrows fly down. On the wall a calm official, Mi Zhu, points down. Below, Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, on a red horse, looks up furious; Chen Gong beside him.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "ly_weeps": {
+  "book": 3,
+  "category": "bond",
+  "beat": "Lady Yan weeps and pleads with Lü Bu not to leave the city.",
+  "scene": "A residence room in winter, a half-packed chest of padded clothes. Lady Yan, in her thirties, weeps, holding Lü Bu's sleeve. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, stands torn, a travelling cloak over one arm.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "dc_word": {
+  "book": 3,
+  "category": "bond",
+  "beat": "Diaochan asks Lü Bu not to ride out alone.",
+  "scene": "An inner room with lanterns. Diaochan, a graceful woman in silk, lays her hand on Lü Bu's arm and speaks softly. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, looks down at her, his resolve fading.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "lb_daughter": {
+  "book": 3,
+  "category": "battle",
+  "beat": "Lü Bu rides out at night with his daughter tied to his back.",
+  "scene": "Night at a city gate. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, on a fiery red horse, rides out; on his back, a girl wrapped in silk floss and armour is bound to him. Torches of the besiegers' camp ahead.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "flood_xiapi": {
+  "book": 3,
+  "category": "aftermath",
+  "beat": "Xiapi under water; only the east gate is dry.",
+  "scene": "A walled city seen from high ground, its streets and gates drowned under brown floodwater from two broken river dykes. Only a raised causeway to the east gate stands clear. On the hills around, the besieging army's tents.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "lb_mirror": {
+  "book": 3,
+  "category": "aftermath",
+  "beat": "Lü Bu looks at himself in a mirror, worn by wine.",
+  "scene": "A dim room, wine jars everywhere. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, now hollow-cheeked and haggard, stares into a bronze mirror held up in front of him, shocked.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "hc_redhare": {
+  "book": 3,
+  "category": "intrigue",
+  "beat": "Hou Cheng steals Red Hare from the flooded stables at night.",
+  "scene": "Night, a stable yard half under water. An officer, Hou Cheng, leads a magnificent fire-red horse out through the water by its bridle, glancing back. Lantern light on the water.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "lb_bound": {
+  "book": 3,
+  "category": "aftermath",
+  "beat": "Lü Bu, asleep in his chair on the gate tower, is bound by his own officers.",
+  "scene": "A gate tower at noon. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, slumped asleep in a chair, wakes as two of his own officers wind ropes around him. One holds his painted halberd away. A white flag is being raised on the wall.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "wgt_cg": {
+  "book": 3,
+  "category": "aftermath",
+  "beat": "Chen Gong walks down the tower stairs to his death without looking back; Cao Cao rises weeping.",
+  "scene": "The top of a gate tower. Chen Gong, lean and calm, walks down the stone stairs alone, guards unable to hold him. Behind him, Cao Cao has risen from his seat, weeping. Liu Bei sits beside the empty seat.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "wgt_lb": {
+  "book": 3,
+  "category": "aftermath",
+  "beat": "Liu Bei speaks the line that seals Lü Bu's fate.",
+  "scene": "The top of a gate tower. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, bound in a ball of ropes, kneels, glaring up. Cao Cao, seated, turns to Liu Bei, who speaks calmly. Guan Yu and Zhang Fei stand behind.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
  }
 }

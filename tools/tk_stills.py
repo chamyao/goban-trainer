@@ -709,6 +709,27 @@ FACE_LOOKS = {
     "caiyong": ("Cai Yong", "a sorrowful old scholar with a grey beard, in a plain scholar's robe and cap"),
     "chengpu": ("Cheng Pu", "a veteran general with a grizzled beard, in red armour, holding a long spear"),
     "handang": ("Han Dang", "a tough general with a square jaw and short beard, in red armour, holding a broadsword"),
+    # Lü Bu's fall (book 14)
+    "yanshi": ("Lady Yan", "Lü Bu's elegant, anxious wife in her thirties, in a deep red silk robe with gold hairpins and "
+                           "a pearl ornament, hair in a high bun"),
+    "chendeng": ("Chen Deng", "a shrewd, composed young official in his thirties with a neat goatee and narrow watchful "
+                              "eyes, in a dark green court robe and black cap"),
+    "chengui": ("Chen Gui", "Chen Deng's father, a wily old official of seventy with white hair and a long white beard, in "
+                            "a dark green robe and black cap, leaning on a staff"),
+    "hanyin": ("Han Yin", "Yuan Shu's pompous envoy in his forties with a goatee, in an ochre silk robe with gold trim and "
+                          "an official's cap, holding a letter"),
+    "jiling": ("Ji Ling", "Yuan Shu's hulking general with a short beard, in gold-trimmed armour, holding a heavy "
+                          "three-pointed blade"),
+    "houcheng": ("Hou Cheng", "one of Lü Bu's officers, a weathered horseman in his thirties with a short beard, in grey "
+                              "iron armour over a purple robe"),
+    "songxian": ("Song Xian", "one of Lü Bu's officers, a stocky soldier with a short beard and a hard face, in red-brown "
+                              "lamellar armour and a helmet, holding a spear"),
+    "weixu": ("Wei Xu", "one of Lü Bu's officers, a lean, sullen soldier with a bristling beard, in dark iron armour and "
+                        "a helmet, a sword at his side"),
+    "zhangliao": ("Zhang Liao", "a brave, steady general in his late twenties with a short beard and a calm, resolute "
+                                "gaze, in dark armour with a purple cloak, holding a crescent glaive"),
+    "mizhu": ("Mi Zhu", "a wealthy, kindly merchant turned official in his forties with a thin beard, in a rich ochre "
+                        "silk robe and a blue scholar's cap"),
     # the Cao Cao arc's speakers (test book 13)
     "hejin": ("He Jin", "a heavy-set, proud General-in-Chief in his forties, a butcher's son risen high, short beard, "
                         "in rich red court robes over armour and a black official's cap"),

@@ -114,6 +114,12 @@ const TK_CHARS = {
   houcheng: { name: "Hou Cheng", skin: "#e8b88c", hair: "#2a2024", hat: "helmet", hatC: "#858a94", robe: "#5a3a6a", trim: "#c8c8c8", beard: "short", eyes: "round", weapon: "sword" },
   yanshi: { name: "Lady Yan", skin: "#fbefe8", hair: "#1a1418", hat: "lady", pin: "#e6c14a", pin2: "#c8283c", flower: "#c8283c", robe: "#7a2a3a", trim: "#e6c14a", beard: "none", eyes: "narrow", makeup: true },
   zhangkai: { name: "Zhang Kai", skin: "#d8a47c", hair: "#2a2024", hat: "yellowband", hatC: "#e8bc2a", robe: "#6a5a3a", trim: "#e8bc2a", beard: "bristle", eyes: "narrow", weapon: "sword" },
+  // Lü Bu's fall (book 14)
+  lvnv: { name: "Lü Bu's daughter", skin: "#f8dcc4", hair: "#1a1418", hat: "twinloops", pin: "#e6c14a", robe: "#c8392c", trim: "#e6c14a", beard: "none", eyes: "phoenix", makeup: true },
+  chengui: { name: "Chen Gui", skin: "#eec7a0", hair: "#d8d2c8", hat: "guan", hatC: "#1e1e24", robe: "#3a5a4a", trim: "#d6d2c4", beard: "long", beardC: "#e0dcd4", eyes: "narrow" },
+  hanyin: { name: "Han Yin", skin: "#f0cfac", hair: "#2a2024", hat: "guan", hatC: "#1e1e24", robe: "#8a6a2a", trim: "#e6c14a", beard: "goatee", eyes: "narrow" },
+  songxian: { name: "Song Xian", skin: "#e2b089", hair: "#2a2024", hat: "helmet", hatC: "#5a5a64", robe: "#7a3a2a", trim: "#c8c8c8", beard: "short", eyes: "round", weapon: "spear" },
+  weixu: { name: "Wei Xu", skin: "#d8a47c", hair: "#1a1416", hat: "helmet", hatC: "#4a4a5c", robe: "#4a4a3a", trim: "#c8c8c8", beard: "bristle", eyes: "narrow", weapon: "sword" },
   // the Cao Cao arc (test book 13)
   caoren: { name: "Cao Ren", skin: "#e2b089", hair: "#2a2024", hat: "helmet", hatC: "#5a5a64", robe: "#8a3a2a", trim: "#c8c8c8", beard: "short", eyes: "round", weapon: "spear" },
   xiahouyuan: { name: "Xiahou Yuan", skin: "#e8b88c", hair: "#1a1416", hat: "helmet", hatC: "#4a4a5c", robe: "#3a4a6a", trim: "#c8c8c8", beard: "thin", eyes: "phoenix", weapon: "sword" },
