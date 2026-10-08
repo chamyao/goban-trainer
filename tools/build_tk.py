@@ -147,6 +147,10 @@ def all_lines(worlds):
                 elif s[0] == "scroll":
                     lines.update((k, (t, NARRATOR, e)) for k, t, e in zip(s[5], s[4], s[2]))
         for n in w["nodes"]:
+            for k in ("spotted", "caught", "solved", "restart"):   # a chase's lines (tk-world.js chaseStep), voiced
+                for l in (n.get("chase") or {}).get(k, []):
+                    if l[0] == "n": lines[l[3] if len(l) > 3 else voice_id(l[2])] = (l[2], NARRATOR, l[1])
+                    elif l[0] == "say": lines[l[4] if len(l) > 4 else voice_id(l[3], voice_of(l[1]))] = (l[3], voice_of(l[1]), l[2])
             if "boss" in n:
                 lines[n["boss"]["taunt_vid"]] = (n["boss"]["taunt_zh"], voice_of(n["boss"]["who"]), n["boss"]["taunt"])
             dl = n.get("dilemma") or {}
@@ -223,6 +227,11 @@ def main():
         for src in w["nodes"]:
             node = {k: v for k, v in src.items() if k != "step"}
             node["key"] = f"{w['n']}-{src['key']}"
+            if node.get("chase"):   # its lines get their clip ids, as scene lines do: [n, en, zh, vid], [say, who, en, zh, vid]
+                ch = node["chase"] = dict(node["chase"])
+                for k in ("spotted", "caught", "solved", "restart"):
+                    ch[k] = [list(l) + [voice_id(l[2])] if l[0] == "n" and len(l) == 3
+                             else list(l) + [voice_id(l[3], voice_of(l[1]))] if l[0] == "say" and len(l) == 4 else l for l in ch.get(k, [])]
             if "place" in node:
                 node["place_zh"] = zh(node["place"])
             role = src.get("role")
