@@ -94,6 +94,11 @@ These were each learned from a real complaint, and each is a rule, not a one-off
 - **Keep-clear tiles** go outward from every door and spot, so dressing never blocks a way in.
 - **People are seen.** No one stands under a roof or behind a crown (`hidden`). A beat spot hosted by a building sits
   one step out. A person behind a desk is reached across it.
+- **Cover is a thing you see.** A hide-and-wait cover names what she hides by (`"with"`: a hay cart, jars, a screen
+  wall). It's drawn on the cover's own tile and walked through, so she stands in front of it. A ring on bare paving
+  doesn't tell a player to hide there.
+- **Every way in is a cover** on a map whose watchers hunt by sight (`entry_covers`). A catch before the first hide
+  sends her back to where she came in, so that place must be one she can wait in.
 - **Margins.** A thing sits inside its claim with a margin (1 tile in towns). In-wall kinds (gates, the wall stairs)
   have none, and a plan may set `margin` per thing.
 
@@ -108,6 +113,9 @@ These run when the map is built, and a failure stops the build with the reason:
   cell, `"door"` (the doorstep of what he blocks) or the exit he bars.
   - When the proof fails, the map changes. A wall that stopped short of the hills is carried into them. A patrol on an
     open bend moves to the bridge, the one crossing.
+- **Hide and wait** (`tools/proofs/hide_ward_lb.py`). The walk is timed against the looters' beats at the engine's
+  sight rules: the fewest hides a way needs, and that a player who stands at any way in, for longer than a looter's
+  round, is safe and still has a way through.
 - **Chases** (`prove_chase`). The chase layout (posts, dash lines, routes) is laid on tiles and ridden at the engine's
   own numbers. The same rule is used to the letter as tk-world's `ambushStep`: springing, running, holding, the touch
   radius, and the wave on the trail.

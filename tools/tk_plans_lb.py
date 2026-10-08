@@ -107,12 +107,12 @@ _ca.update(
             "spots": [
                 {"id": "lb-door", "at": [3, 3], "label": "Lü Bu's door", "note": "the walk starts here"},
                 {"id": "pangshu-gate", "at": [16, 13], "label": "Pang Shu's door"},
-                {"id": "cover-1", "at": [8, 3], "label": "A dark doorway", "cover": True},
-                {"id": "cover-2", "at": [13, 5], "label": "An overturned hay cart", "cover": True},
-                {"id": "cover-3", "at": [12, 7], "label": "A well-house", "cover": True},
-                {"id": "cover-4", "at": [5, 9], "label": "A broken screen wall", "cover": True},
-                {"id": "cover-5", "at": [7, 13], "label": "A burnt-out cart", "cover": True},
-                {"id": "cover-6", "at": [12, 11], "label": "A dark doorway", "cover": True},
+                {"id": "cover-1", "at": [8, 3], "label": "Barrels by a doorway", "with": "furn.barrel", "cover": True},
+                {"id": "cover-2", "at": [13, 5], "label": "An overturned hay cart", "with": "camp.hay", "cover": True},
+                {"id": "cover-3", "at": [12, 7], "label": "Water jars by the well", "with": "furn.jar", "cover": True},
+                {"id": "cover-4", "at": [5, 9], "label": "A broken screen wall", "with": "garden.screenwall", "cover": True},
+                {"id": "cover-5", "at": [7, 13], "label": "Sacks spilled from a burnt-out cart", "with": "furn.sacks", "cover": True},
+                {"id": "cover-6", "at": [12, 11], "label": "Wine jars by a doorway", "with": "furn.jar", "cover": True},
             ],
             # the houses either side burn, behind the lanes' walls (so they light the lanes and hide no one)
             "props": [{"kind": "camp.firepit", "at": [x, y], "label": "A burning cart"} for x, y in [(5, 1), (15, 1), (5, 15)]]

@@ -332,7 +332,7 @@ def compile_map(m, kit, out_dir):
         side = f"{o['kind']}_side" if faces in ("E", "W") else None
         draw_kind = side if side and kit.k["kinds"].get(side) else o["kind"]
         key, spr = kit.sprite(draw_kind, f"{m['id']}/{o['x']},{o['y']}")
-        solid = KINDS[o["kind"]][2]
+        solid = o.get("solid", KINDS[o["kind"]][2])   # a cover's thing is walked through
         drawn = (key or "").split("#")[0]
         gated = any(x.get("id") == f"{o.get('id')}-gate" for x in m["objects"])   # its door already has a gatehouse drawn
         if key and not gated and drawn != draw_kind and o["kind"].startswith("building.") and drawn in KINDS and \

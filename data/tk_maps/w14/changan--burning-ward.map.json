@@ -258,6 +258,60 @@
    "faces": "S"
   },
   {
+   "kind": "furn.barrel",
+   "x": 16,
+   "y": 6,
+   "w": 1,
+   "h": 1,
+   "solid": false,
+   "label": "Barrels by a doorway"
+  },
+  {
+   "kind": "camp.hay",
+   "x": 26,
+   "y": 10,
+   "w": 1,
+   "h": 1,
+   "solid": false,
+   "label": "An overturned hay cart"
+  },
+  {
+   "kind": "furn.jar",
+   "x": 24,
+   "y": 14,
+   "w": 1,
+   "h": 1,
+   "solid": false,
+   "label": "Water jars by the well"
+  },
+  {
+   "kind": "garden.screenwall",
+   "x": 10,
+   "y": 18,
+   "w": 1,
+   "h": 1,
+   "solid": false,
+   "label": "A broken screen wall"
+  },
+  {
+   "kind": "furn.sacks",
+   "x": 14,
+   "y": 26,
+   "w": 1,
+   "h": 1,
+   "solid": false,
+   "label": "Sacks spilled from a burnt-out cart"
+  },
+  {
+   "kind": "furn.jar",
+   "x": 24,
+   "y": 22,
+   "w": 1,
+   "h": 1,
+   "solid": false,
+   "label": "Wine jars by a doorway"
+  },
+  {
    "kind": "camp.firepit",
    "x": 10,
    "y": 2,
@@ -343,7 +397,7 @@
    "x": 16.5,
    "y": 6.7,
    "node": "",
-   "label": "A dark doorway",
+   "label": "Barrels by a doorway",
    "cover": true
   },
   {
@@ -359,7 +413,7 @@
    "x": 24.5,
    "y": 14.7,
    "node": "",
-   "label": "A well-house",
+   "label": "Water jars by the well",
    "cover": true
   },
   {
@@ -375,7 +429,7 @@
    "x": 14.5,
    "y": 26.7,
    "node": "",
-   "label": "A burnt-out cart",
+   "label": "Sacks spilled from a burnt-out cart",
    "cover": true
   },
   {
@@ -383,8 +437,40 @@
    "x": 24.5,
    "y": 22.7,
    "node": "",
-   "label": "A dark doorway",
+   "label": "Wine jars by a doorway",
    "cover": true
+  },
+  {
+   "id": "cover-way-start",
+   "x": 6.5,
+   "y": 6.7,
+   "node": "",
+   "cover": true,
+   "label": "A dark doorway"
+  },
+  {
+   "id": "cover-way-changan",
+   "x": 2.5,
+   "y": 8.7,
+   "node": "",
+   "cover": true,
+   "label": "The shadow of the gateway"
+  },
+  {
+   "id": "cover-way-changan--lb-house",
+   "x": 6.5,
+   "y": 4.7,
+   "node": "",
+   "cover": true,
+   "label": "A dark doorway"
+  },
+  {
+   "id": "cover-way-changan--pangshu-house",
+   "x": 32.5,
+   "y": 29.7,
+   "node": "",
+   "cover": true,
+   "label": "A dark doorway"
   }
  ],
  "npcs": [
@@ -422,7 +508,8 @@
      "14-x0b"
     ],
     "seen": "looter",
-    "back_to": "@cover"
+    "back_to": "@cover",
+    "hide": true
    },
    "x": 34.5,
    "y": 10.9
@@ -461,7 +548,8 @@
      "14-x0b"
     ],
     "seen": "looter",
-    "back_to": "@cover"
+    "back_to": "@cover",
+    "hide": true
    },
    "x": 4.5,
    "y": 18.9
@@ -500,7 +588,8 @@
      "14-x0b"
     ],
     "seen": "looter",
-    "back_to": "@cover"
+    "back_to": "@cover",
+    "hide": true
    },
    "x": 4.5,
    "y": 24.9
@@ -531,7 +620,8 @@
      "14-x0b"
     ],
     "seen": "looter",
-    "back_to": "@cover"
+    "back_to": "@cover",
+    "hide": true
    },
    "x": 4.5,
    "y": 8.9
@@ -562,7 +652,8 @@
      "14-x0b"
     ],
     "seen": "looter",
-    "back_to": "@cover"
+    "back_to": "@cover",
+    "hide": true
    },
    "x": 34.5,
    "y": 16.9
@@ -593,7 +684,8 @@
      "14-x0b"
     ],
     "seen": "looter",
-    "back_to": "@cover"
+    "back_to": "@cover",
+    "hide": true
    },
    "x": 34.5,
    "y": 24.9

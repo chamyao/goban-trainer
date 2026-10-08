@@ -31,13 +31,21 @@ out. Lü Bu's compound on the ward street now opens onto **the burning ward**
 - **Looters:** two to each lane (watchers with `"hide": true`, `"back_to": "@cover"`, cone 5 cells), walking it in
   opposite phase. If she follows one, the other comes at her. Each looter stops at his lane's end turned to the gap into
   the next lane.
-- **Cover:** six spots with `"cover": true` (doorways, a hay cart, a well-house, a screen wall, a cart). compile writes
-  each as a `cover` object, a 2×2-tile square. In one and still, she's hidden. If seen, she goes back to the last cover.
-- **Proof** (`tools/proofs/hide_ward_lb.py`) uses tk-world's rules: looters walk at 30 px/s, see 10 tiles down a 55°
-  half-cone, and walls stop sight. She walks at 110 px/s and is unseen only when still in cover.
-  - With the cover, the walk takes 20.8 s, and the fastest way hides twice (at the hay cart and the well-house).
+- **Cover:** six spots with `"cover": true`, each with the thing she hides by (`"with"`): barrels by a doorway, an
+  overturned hay cart, water jars by the well, a broken screen wall, sacks spilled from a burnt-out cart, wine jars by a
+  doorway. These are kinds every kit draws. The thing stands on the cover's own tile and is walked through, so she
+  crouches in front of it. compile writes each cover as a `cover` object, a 2×2-tile square. In one and still, she's
+  hidden. If seen, she goes back to the last cover.
+- **Every way in is a cover too** (`plans.entry_covers`): her own doorway, the shadow of the ward gate. Before her first
+  hide, a catch sends her back to where she came in. If she could be seen standing there, a pause at the door was a loop
+  (Testing found looter-1 caught her at the entrance at 15.9 s).
+- **Proof** (`tools/proofs/hide_ward_lb.py`, reading the covers and ways in from the built map) uses tk-world's rules:
+  looters walk at 30 px/s, see 10 tiles down a 55° half-cone, and walls stop sight. She walks at 110 px/s and is unseen
+  only when still in cover.
+  - With the cover, the walk takes 20.8 s, and the fastest way hides twice (at the hay cart and the water jars).
   - Without it, the only way is 87 s of exact waiting in the wall recesses.
-  - Testing's walk-playthrough doesn't yet hide in cover, so its planner finds no unseen way through x0b.
+  - At every way in, she's safe standing for 70 s (more than a looter's round). Whenever she sets off, there is still a
+    way through.
 
 ## Xuzhou (x1–x4, x6, x7, x9, x11, x13)
 

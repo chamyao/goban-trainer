@@ -426,6 +426,11 @@ class MapBuilder:
                     spot[k] = s[k]
             self.spots.append(spot)
             self.keep.add(t)
+            if s.get("cover") and s.get("with"):
+                # what she hides behind (a hay cart, a well-house, jars by a doorway), drawn on the cover's own tile so it
+                # stands in front of her; walked through, so she can crouch in it (it never blocks the lane)
+                self.objects.append({"kind": s["with"], "x": t[0], "y": t[1], "w": 1, "h": 1, "solid": False,
+                                     "label": s.get("label", "")})
 
     def person(self, i, p, t, prefix="npc"):
         say = p.get("say")
@@ -536,7 +541,7 @@ class MapBuilder:
             px, py, secs = w["pause"]
             t = self.near_cell((px, py), want_visible=False)
             out["pause"] = [t[0] + .5, t[1] + .9, secs]
-        for k in ("in_beats", "seen", "back_to", "shape"):
+        for k in ("in_beats", "seen", "back_to", "shape", "hide"):
             if w.get(k) is not None:
                 out[k] = w[k]
         return out
@@ -842,6 +847,23 @@ def ways(mb):
     return {"nodes": nodes, "edges": sorted(edges)} if edges else None
 
 
+def entry_covers(m):
+    """Hide and wait: on a map whose watchers hunt by sight, every way in is a cover (the doorway she comes out of, the
+    shadow of a gate). A catch sends her back to her last cover, or to where she came in, before her first hide; that
+    place must be one she can wait in, or a pause there is a loop (Testing, the burning ward)."""
+    if not any((n.get("watch") or {}).get("hide") for n in m["npcs"]):
+        return
+    covers = [(s["x"], s["y"]) for s in m["spots"] if s.get("cover")]
+    gates = {x["to"] for x in m["exits"] if not x.get("door")}
+    for k, (x, y) in sorted(m["entries"].items()):
+        px, py = x + .5, y + .7
+        if any(abs(px - cx) <= 1 and -.5 <= py - cy <= 1.5 for cx, cy in covers):
+            continue   # already in a cover
+        m["spots"].append({"id": f"cover-way-{k or 'start'}", "x": px, "y": py, "node": "", "cover": True,
+                           "label": "The shadow of the gateway" if k in gates else "A dark doorway"})
+        covers.append((px, py))
+
+
 def state(st, mb, plans):
     """A plan's state → the engine's: light from light+weather, distances and points in tiles of this map."""
     out = {k: v for k, v in st.items() if k not in ("light", "weather", "visibility", "procession", "exits_open", "exits_closed",
@@ -1059,6 +1081,7 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
         if "" not in m["entries"]:
             first = next(iter(m["entries"].values()), None)
             m["entries"][""] = first or list(mb.near_cell((mb.cols // 2, mb.rows // 2), want_visible=False))
+        entry_covers(m)
         m["links"] = sorted({x["to"] for x in m["exits"]})
 
     # the story's quests: each node's spot, in whichever map holds it

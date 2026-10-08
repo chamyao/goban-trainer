@@ -643,6 +643,11 @@ ZH_PLACES2 = {
     "A burnt-out cart": "烧毁的车子",
     "A burning house": "燃烧的房屋",
     "Smoke": "浓烟",
+    "The shadow of the gateway": "门洞的阴影",
+    "Wine jars by a doorway": "门边的酒坛",
+    "Sacks spilled from a burnt-out cart": "烧毁的车旁散落的麻袋",
+    "Water jars by the well": "井边的水缸",
+    "Barrels by a doorway": "门边的木桶",
     "A burnt-out house": "烧毁的房屋",
     "Take your daughter through the burning lanes to Pang Shu's house. When looters come, get into cover and keep still.": "带着女儿穿过燃烧的小巷，前往庞舒家。乱兵过来时，躲进暗处，不要动。",
 }
