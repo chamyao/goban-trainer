@@ -364,6 +364,9 @@ function worldScenes() {
             : Object.assign(new Phaser.Geom.Rectangle(o.x - 14, o.y - 18, 28, 26), { at: { x: o.x, y: o.y } }));   // a point (Places' cover spots): the ground round it
         }
       }
+      // a cover's own spot (Places names it as the cover), with no beat of its own: a place to hide, not to visit,
+      // so it never takes a tap meant for a door beside it
+      for (const o of map.getObjectLayer("objects").objects) if (o.type === "cover" && this.spots[o.name] && !this.spots[o.name].node) delete this.spots[o.name];
       // a town's shrine with no story spot of its own: touching it still answers (dark, or its hint)
       if (this.shrine && !Object.values(this.spots).some(s => Math.hypot(s.x - this.shrine.x, s.y - this.shrine.y) < 30))
         this.spots.shrine_ = { x: this.shrine.x, y: this.shrine.y + 12, node: "", label: "The shrine under the pine", labelZh: "松下星君祠", intro: [], outro: [], trigger: "talk", use: "shrine" };
