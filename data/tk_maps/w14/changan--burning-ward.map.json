@@ -190,7 +190,7 @@
   },
   {
    "kind": "building.hall",
-   "x": 4,
+   "x": 5,
    "y": 2,
    "w": 4,
    "h": 2,
@@ -236,7 +236,7 @@
   },
   {
    "kind": "building.house",
-   "x": 30,
+   "x": 31,
    "y": 30,
    "w": 4,
    "h": 2,
@@ -250,7 +250,7 @@
   },
   {
    "kind": "building.gatehouse",
-   "x": 30,
+   "x": 31,
    "y": 30,
    "w": 4,
    "h": 1,
@@ -369,7 +369,7 @@
   },
   {
    "kind": "fx.smoke",
-   "x": 3,
+   "x": 4,
    "y": 2,
    "w": 1,
    "h": 1,
@@ -458,7 +458,7 @@
   },
   {
    "id": "cover-way-changan--lb-house",
-   "x": 6.5,
+   "x": 7.5,
    "y": 4.7,
    "node": "",
    "cover": true,
@@ -466,7 +466,7 @@
   },
   {
    "id": "cover-way-changan--pangshu-house",
-   "x": 32.5,
+   "x": 33.5,
    "y": 29.7,
    "node": "",
    "cover": true,
@@ -661,18 +661,18 @@
   {
    "to": "changan--lb-house",
    "side": "N",
-   "x": 5.6,
+   "x": 6,
    "y": 3.85,
-   "w": 0.8,
+   "w": 2,
    "h": 0.45,
    "door": true
   },
   {
    "to": "changan--pangshu-house",
    "side": "S",
-   "x": 31.6,
+   "x": 32,
    "y": 29.7,
-   "w": 0.8,
+   "w": 2,
    "h": 0.45,
    "door": true
   },
@@ -687,11 +687,11 @@
  ],
  "entries": {
   "changan--lb-house": [
-   6,
+   7,
    4
   ],
   "changan--pangshu-house": [
-   32,
+   33,
    29
   ],
   "changan": [

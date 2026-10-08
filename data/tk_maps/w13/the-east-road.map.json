@@ -284,7 +284,7 @@
   },
   {
    "kind": "building.hall",
-   "x": 118,
+   "x": 120,
    "y": 9,
    "w": 4,
    "h": 2,
@@ -703,9 +703,9 @@
   {
    "to": "the-east-road--jail-court",
    "side": "N",
-   "x": 119.6,
+   "x": 121,
    "y": 10.85,
-   "w": 0.8,
+   "w": 2,
    "h": 0.45,
    "door": true
   },
@@ -728,7 +728,7 @@
  ],
  "entries": {
   "the-east-road--jail-court": [
-   120,
+   122,
    11
   ],
   "luoyang": [

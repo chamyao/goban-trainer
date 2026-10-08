@@ -94,6 +94,11 @@ These were each learned from a real complaint, and each is a rule, not a one-off
 - **Keep-clear tiles** go outward from every door and spot, so dressing never blocks a way in.
 - **People are seen.** No one stands under a roof or behind a crown (`hidden`). A beat spot hosted by a building sits
   one step out. A person behind a desk is reached across it.
+- **A door through a gate is centred in it** (`door_to_gate`). A building whose door opens through a wall's gate slides
+  along its claim, into its margin if need be, until the door is centred in the gap. The whole gap becomes the door's
+  trigger, since the walls funnel her in. Centred in its claim instead, an 8-tile house put its door on a tile edge, a
+  tile off a gate that fills its cell, and no one could walk into Pang Shu's house (Testing). The build fails if a door
+  can't be centred. `tests/playtest/door-gate.js` walks in at the centre and a few px either side.
 - **Cover is a thing you see.** A hide-and-wait cover names what she hides by (`"with"`: a hay cart, jars, a screen
   wall). It's drawn on the cover's own tile and walked through, so she stands in front of it. A ring on bare paving
   doesn't tell a player to hide there.

@@ -85,6 +85,7 @@ class MapBuilder:
         self.anchor = {}                                 # thing id -> the tile in front of its door
         self.foot = {}                                   # thing id -> footprint (x, y, w, h) in tiles
         self.gate_tiles = {}                             # gate id -> tiles of the doorway
+        self.door_gap = {}                               # building id -> (first tile, width) of the gate its door opens through
 
     # ---------- helpers ----------
     def cell_tiles(self, cx, cy):
@@ -226,6 +227,9 @@ class MapBuilder:
             fy = oy + (ch - fh) // 2 if door not in ("N", "S") else (oy + ch - fh if door == "S" else oy)
             if door is None and kind.startswith("building."):
                 fy = oy + ch - fh                              # no door: it still faces south, onto the open side
+            if door and kind not in IN_WALL:
+                # it may slide into its claim's margin: a door that can be walked through comes first
+                fx, fy = self.door_to_gate(t["id"], door, fx, fy, fw, fh, ox - m, oy - m, cw + 2 * m, ch + 2 * m)
             o = {"kind": kind, "x": fx, "y": fy, "w": fw, "h": fh, "id": t["id"]}
             # a wing facing E or W is drawn in side view with its doorway on the front, at the bottom (Jade's
             # wing_side; the stand-ins face front too): the way in is there, while it still faces its court
@@ -274,6 +278,33 @@ class MapBuilder:
                                          "id": f"{t['id']}-gate", "faces": "S", **({"label": t["gate_label"]} if t.get("gate_label") else {})})
             if t["id"] not in self.anchor:
                 self.anchor[t["id"]] = (fx + fw // 2, fy + fh)
+
+    def door_to_gate(self, tid, door, fx, fy, fw, fh, ox, oy, cw, ch):
+        """A door that opens through a wall's gate (Pang Shu's door, through the lane wall): the building slides along
+        its claim so the door is centred in the gap. Centred in its claim instead, an even-width house puts its door on
+        a tile edge, a tile off a gate that fills its cell, and her feet (10 px) can't get through (Testing). The build
+        fails if the door still doesn't clear the gap's sides by her half-width."""
+        along = 0 if door in ("N", "S") else 1                 # the axis the door slides along
+        out = {"N": (0, -1), "S": (0, 1), "E": (1, 0), "W": (-1, 0)}[door]
+        mid = (fx + fw / 2, fy + fh / 2)[along]
+        edge = {"N": fy - 1, "S": fy + fh, "W": fx - 1, "E": fx + fw}[door]   # the row (or column) just outside the door
+        for gid, gap in self.gate_tiles.items():
+            rows = {t[1 - along] for t in gap}
+            hit = [r for r in (edge + k * out[1 - along] for k in range(3)) if r in rows]
+            if not hit or not any(abs(t[along] + .5 - mid) <= 1.5 for t in gap if t[1 - along] == hit[0]):   # the gap the door opens into
+                continue
+            span = [t[along] for t in gap if t[1 - along] == hit[0]]
+            g0, gw = min(span), max(span) - min(span) + 1
+            size, lo, hi = (fw, ox, ox + cw - fw) if along == 0 else (fh, oy, oy + ch - fh)
+            at = min(max(round(g0 + (gw - size) / 2), lo), hi)
+            fx, fy = (at, fy) if along == 0 else (fx, at)
+            self.door_gap[tid] = (g0, gw)
+            c = at + size / 2
+            if not (g0 + 6 / 16 <= c <= g0 + gw - 6 / 16):
+                raise RuntimeError(f"{self.mid}: {tid}'s door ({door}) can't be centred in gate {gid} (tiles {g0}..{g0 + gw - 1}); "
+                                   f"its claim leaves it at {c:.1f} (claim {lo}..{hi + size}, size {size})")
+            break
+        return fx, fy
 
     # ---------- 3. dress: planting and props from the plan's hints ----------
     def free(self, t, margin=0):
@@ -1027,6 +1058,9 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
                       "N": {"x": round(fx + fw / 2 - .4, 2), "y": fy - .3, "w": .8, "h": .45},
                       "E": {"x": fx + fw - .15, "y": round((fy + fh - .5 if o["kind"] in DOOR_AT_FOOT else fy + fh / 2) - .4, 2), "w": .45, "h": .8},
                       "W": {"x": fx - .3, "y": round((fy + fh - .5 if o["kind"] in DOOR_AT_FOOT else fy + fh / 2) - .4, 2), "w": .45, "h": .8}}[d]
+                if o.get("id") in mb.door_gap:   # through a wall's gate: the walls funnel her in, so the whole gap is the door
+                    g0, gw = mb.door_gap[o["id"]]
+                    ex.update({"x": g0, "w": gw} if d in ("N", "S") else {"y": g0, "h": gw})
                 # a door only some may pass (the protagonist named, or a condition), and what it says to the rest
                 # the engine's side is the way you walk to go in (Book 1: a south-facing door is side "N")
                 m["exits"].append({"to": child, "side": {"S": "N", "N": "S", "E": "W", "W": "E"}[d], **ex, "door": True, **{k: o[k] for k in ("open_to", "refuse") if o.get(k)}})
