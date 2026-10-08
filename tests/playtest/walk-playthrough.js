@@ -331,7 +331,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     if (selfStart.length) console.log(`note ${selfStart.join(', ')}: started by itself (the lead never free to walk it before the handoff)`);
     say(leads.length && !wrong.length, `each beat led by the right one (${wrong.length ? 'wrong: ' + wrong.map(([k, l]) => `${k} ${l}, not ${LEAD[+k.slice(4)] || 'lvbu'}`).join('; ') : leads.map(([k, l]) => k.slice(3) + ' ' + l).filter((x, i, a) => i === 0 || x.split(' ')[1] !== a[i - 1].split(' ')[1]).join(' > ')})`);
     // the prologue (x0b): the looters, the covers; she hides (keeps still in cover) at least once
-    if (facts['14-x0b']) { const f = facts['14-x0b']; say(f.hid > 0, `x0b in burning Chang'an: she hid in cover ${f.hid} time${f.hid === 1 ? '' : 's'}${f.caughtAt.length ? `; caught at ${f.caughtAt.join(' | ')}` : ', never caught'}`); }
+    if (facts['14-x0b']) { const f = facts['14-x0b']; if (!f.hid && !f.caughtAt.length) console.log(`note x0b in burning Chang'an: the way to Pang Shu's never came into a looter's sight, so she had no need to hide (prologue.js hides her for real)`); else say(f.hid > 0, `x0b in burning Chang'an: she hid in cover ${f.hid} time${f.hid === 1 ? '' : 's'}${f.caughtAt.length ? `; caught at ${f.caughtAt.join(' | ')}` : ', never caught'}`); }
     const F = k => facts[k] || { redhare: new Set(), mount: new Set(), mstate: new Set(), carry: new Set() };
     const rh = k => [...F(k).redhare];
     if (facts['14-x2']) say(rh('14-x2').includes(true), `Red Hare is his from x1 (x2: ${rh('14-x2')})`);
