@@ -271,16 +271,64 @@
   },
   {
    "kind": "camp.firepit",
-   "x": 20,
-   "y": 6,
+   "x": 10,
+   "y": 2,
    "w": 1,
    "h": 1,
    "label": "A burning house"
   },
   {
    "kind": "camp.firepit",
-   "x": 8,
+   "x": 20,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "label": "A burning house"
+  },
+  {
+   "kind": "camp.firepit",
+   "x": 30,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "label": "A burning house"
+  },
+  {
+   "kind": "camp.firepit",
+   "x": 34,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "label": "A burning house"
+  },
+  {
+   "kind": "camp.firepit",
+   "x": 10,
    "y": 30,
+   "w": 1,
+   "h": 1,
+   "label": "A burning house"
+  },
+  {
+   "kind": "camp.firepit",
+   "x": 22,
+   "y": 30,
+   "w": 1,
+   "h": 1,
+   "label": "A burning house"
+  },
+  {
+   "kind": "camp.firepit",
+   "x": 26,
+   "y": 30,
+   "w": 1,
+   "h": 1,
+   "label": "A burning house"
+  },
+  {
+   "kind": "camp.firepit",
+   "x": 3,
+   "y": 2,
    "w": 1,
    "h": 1,
    "label": "A burning house"
@@ -609,6 +657,13 @@
    6
   ]
  },
+ "states": [
+  {
+   "id": "sack",
+   "light": "night",
+   "weather": "smoke"
+  }
+ ],
  "parent": "changan",
  "building": "burning-ward",
  "links": [

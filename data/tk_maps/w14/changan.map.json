@@ -3,7 +3,7 @@
  "id": "changan",
  "world": 14,
  "name": "Chang'an",
- "archetype": "city",
+ "archetype": "ruins",
  "size": [
   68,
   68
@@ -750,6 +750,14 @@
   },
   {
    "kind": "camp.firepit",
+   "x": 13,
+   "y": 21,
+   "w": 1,
+   "h": 1,
+   "label": "A burning house"
+  },
+  {
+   "kind": "camp.firepit",
    "x": 33,
    "y": 21,
    "w": 1,
@@ -758,8 +766,80 @@
   },
   {
    "kind": "camp.firepit",
+   "x": 49,
+   "y": 21,
+   "w": 1,
+   "h": 1,
+   "label": "A burning house"
+  },
+  {
+   "kind": "camp.firepit",
    "x": 17,
    "y": 37,
+   "w": 1,
+   "h": 1,
+   "label": "A burning cart"
+  },
+  {
+   "kind": "camp.firepit",
+   "x": 33,
+   "y": 37,
+   "w": 1,
+   "h": 1,
+   "label": "A burning house"
+  },
+  {
+   "kind": "camp.firepit",
+   "x": 45,
+   "y": 37,
+   "w": 1,
+   "h": 1,
+   "label": "A burning cart"
+  },
+  {
+   "kind": "camp.firepit",
+   "x": 25,
+   "y": 29,
+   "w": 1,
+   "h": 1,
+   "label": "A burning house"
+  },
+  {
+   "kind": "camp.firepit",
+   "x": 37,
+   "y": 45,
+   "w": 1,
+   "h": 1,
+   "label": "A burning cart"
+  },
+  {
+   "kind": "camp.firepit",
+   "x": 49,
+   "y": 45,
+   "w": 1,
+   "h": 1,
+   "label": "A burning house"
+  },
+  {
+   "kind": "camp.firepit",
+   "x": 13,
+   "y": 45,
+   "w": 1,
+   "h": 1,
+   "label": "A burning cart"
+  },
+  {
+   "kind": "camp.firepit",
+   "x": 57,
+   "y": 29,
+   "w": 1,
+   "h": 1,
+   "label": "A burning house"
+  },
+  {
+   "kind": "camp.firepit",
+   "x": 41,
+   "y": 9,
    "w": 1,
    "h": 1,
    "label": "A burning cart"

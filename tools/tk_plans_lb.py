@@ -57,15 +57,17 @@ for _t in _cap["things"]:
         _t.update(label="Lü Bu's house", map="burning-ward")
 _cap["things"] = [t for t in _cap["things"] if t["id"] not in ("hengmen", "ridge")]   # the Diaochan arc's farewell, long over
 _cap["spots"] = [{"id": "lubu-gate", "at": [13, 9], "at_door": "lubu", "label": "Lü Bu's gate"}]
-_cap["props"] = [
-                 {"kind": "camp.firepit", "at": [8, 5], "label": "A burning cart"},
-                 {"kind": "camp.firepit", "at": [4, 9], "label": "A burning cart"}]
+_cap["props"] = [   # the city burning: fires down every street (they glow at night), the ash falls (archetype "ruins")
+    {"kind": "camp.firepit", "at": [x, y], "label": "A burning cart" if k % 2 else "A burning house"}
+    for k, (x, y) in enumerate([(3, 5), (8, 5), (12, 5), (4, 9), (8, 9), (11, 9), (6, 7), (9, 11), (12, 11), (3, 11),
+                                (14, 7), (10, 2)])]
 _cap["dress"] = [d for d in _cap["dress"] if d.get("at_door") not in ("wangyun", "palace")] + [
     {"kind": "banner.black", "at_gates": True}]
 _cap["exits"] = []
 _cap["entries"] = {"": [13, 9]}
 # Li Jue's looters (the walk to x0b), as the Diaochan arc's watchers: down the east lane and along the palace lane
 _ca.update(
+    archetype="ruins",   # tk-world's ambient for ruins: falling ash
     banners="black",
     states=[{"id": "sack", "light": "night", "weather": "smoke"}],
     seen_lines={"looter": ["“There! A woman and a girl!” She drags her daughter back into the dark before he can look again."]},
@@ -79,6 +81,7 @@ _ca.update(
         # and keeps still till he's by. Lü Bu's house at the top, Pang Shu's at the bottom. Cells of 2 tiles. ----
         "burning-ward": {
             "grid": [20, 17], "cell": 2, "margin": 0, "label": "The burning ward",
+            "states": [{"id": "sack", "light": "night", "weather": "smoke"}],
             "ground": [{"id": "lanes", "kind": "court", "rect": [1, 3, 18, 11]}],
             "lines": [{"id": "walls", "kind": "wall", "outline": [0, 0, 20, 17], "width": 1, "gates": {"to-city": [0, 4]}},
                       {"id": "row-n", "kind": "wall", "path": [[0, 2], [19, 2]], "width": 1, "gates": {"lb-gate": [3, 2]}},
@@ -104,8 +107,9 @@ _ca.update(
                 {"id": "cover-5", "at": [7, 13], "label": "A burnt-out cart", "cover": True},
                 {"id": "cover-6", "at": [12, 11], "label": "A dark doorway", "cover": True},
             ],
-            "props": [{"kind": "camp.firepit", "at": [10, 2], "label": "A burning house"},
-                      {"kind": "camp.firepit", "at": [4, 15], "label": "A burning house"}],
+            # the houses either side burn, behind the lanes' walls (so they light the lanes and hide no one)
+            "props": [{"kind": "camp.firepit", "at": [x, y], "label": "A burning house"}
+                      for x, y in [(5, 1), (10, 1), (15, 1), (17, 1), (5, 15), (11, 15), (13, 15), (2, 1)]],
             "watchers": [   # one to a lane, walking it end to end: she meets him, or he turns back on her
                 # each walks his lane and stops at its end turned to the gap into the next, so no one slips by him there
                 {"id": "looter-1", "kind": "folk.soldier", "beat": [[17, 5], [17, 4], [2, 4], [17, 4]], "pause": [17, 5, 3],

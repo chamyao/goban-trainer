@@ -974,6 +974,8 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
                            [c for c in b.get("challengers", []) if c.get("map") == mid], [rename(w) for w in sub.get("watchers", [])])
             if (w := ways(smb)):
                 sm["ways"] = w
+            if sub.get("states"):   # a compound or room with looks of its own (the burning ward's night)
+                sm["states"] = [state(st, smb, plans) for st in sub["states"]]
             sm["parent"] = pid
             sm["building"] = mid
             maps[sid] = (sm, smb)
