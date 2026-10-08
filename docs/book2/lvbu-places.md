@@ -18,8 +18,9 @@ Every beat key has a spot or room, named as in the design's table. The lines for
 
 ## Chang'an, the night it falls (x0a, x0b): the prologue
 
-The Diaochan arc's city, burning under Li Jue's black banners: state `sack` has tk-world's `fire` light, smoke and
-`"fx": "embers"`, and the ward does too. Every house and shop on its streets is a `ruin.burning` (by rule, in the plan's
+The Diaochan arc's city, burning under Li Jue's black banners: state `sack` has tk-world's `fire` light and
+`"fx": "embers"`, and the ward does too. There is no smoke weather, and the archetype stays `city`: both washed the
+fire's colour out (`ruins` desaturates, for a city burnt out long ago). Every house and shop on its streets is a `ruin.burning` (by rule, in the plan's
 copy), with burning carts (`camp.firepit`) and smoke (`fx.smoke`) in the streets. Its rooms, beats and people are left
 out. Lü Bu's compound on the ward street now opens onto **the burning ward**
 (`burning-ward`), a walled map of its own. Both houses are in it:
