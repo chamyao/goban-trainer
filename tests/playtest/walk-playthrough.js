@@ -133,7 +133,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     }
     return out;
   });
-  const report = [], t0 = Date.now(); let beat = null, beatT = 0, lastProgress = Date.now(), progressKey = '', lastLine = '', refused = '', boards = [], chaseLog = [], chaseTries = 0; const beatStart = {};
+  const report = [], t0 = Date.now(); let beat = null, beatT = 0, lastProgress = Date.now(), progressKey = '', lastLine = '', refused = '', boards = [], chaseLog = [], chaseTries = 0; const beatStart = {}, placeShots = {};
   const leadFor = await p.evaluate(B => { const w = TK.world(B), out = {}; let party = null;   // the lead the story gives each beat: its last party step before it
     for (const n of w.nodes) { out[n.key] = party && party[0]; const sc = w.scenes && w.scenes[n.scene]; for (const s of (sc && sc.steps) || []) if (s[0] === 'party') party = s[1]; } return out; }, BOOK).catch(() => ({}));
   let beatLead = '';
@@ -217,6 +217,13 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       console.log(`     sync: the world was rebuilt at ${beat}, ${Math.round((Date.now() - flipAt) / 1000)} s after a hide/show (${b4.place}${b4.cine ? ', mid-scene' : ''}${b4.busy ? ', a line up' : ''}${b4.duel ? ', a board up' : ''})`);
       await p.evaluate(n => { const w = window.__w; if (w && w.game) w.game.__flip = n; }, visFlips).catch(() => {}); }
     if (beat && beatStart[beat] && !beatStart[beat].scene && (s.cine || s.busy)) beatStart[beat].scene = { taps: worldTaps - beatStart[beat].taps, moved: Math.round(Math.hypot(s.P[0] - beatStart[beat].P[0], s.P[1] - beatStart[beat].P[1])) };   // how the beat's scene began
+    // PLACESHOTS=place,place (with SHOTS): the place as he's free to walk it, and its first scene 2 s and 7 s in
+    if (SHOTS && process.env.PLACESHOTS && process.env.PLACESHOTS.split(',').includes(s.place)) {
+      const ps = placeShots[s.place] || (placeShots[s.place] = { walk: false, scene: 0, t: 0 });
+      const snap = async tag => { fs.mkdirSync(SHOTS, { recursive: true }); await p.screenshot({ path: `${SHOTS}/place-${s.place}-${tag}.png` }); console.log(`     shot: ${s.place} ${tag} (${beat})`); };
+      if (!ps.walk && !s.busy && !s.cine && !s.leaving && !s.walking) { ps.walk = true; await snap('walk'); }
+      if (s.cine && ps.scene < 2) { if (!ps.t) ps.t = Date.now(); const due = [2000, 7000][ps.scene]; if (Date.now() - ps.t >= due) { await snap(`scene-${due / 1000}s`); ps.scene++; } }
+    }
     prevS = s;
     if (beat) { const f = facts[beat] || (facts[beat] = { light: new Set(), route: new Set(), horses: new Set(), crouch: false, place: new Set(), mount: new Set() });   // what each beat showed
       if (s.light) f.light.add(s.light); if (s.route) f.route.add(`${s.route}@${s.place}`); if (s.horses) f.horses.add(s.horses.split('@')[0]); if (s.crouch) f.crouch = true; f.place.add(s.place); if (!s.leaving && s.place && (s.cine || !s.busy)) f.mount.add(`${s.place}${s.indoors ? ' (indoors)' : ''}${s.cine ? ' in a scene' : ''}: ${s.mounts}`); }

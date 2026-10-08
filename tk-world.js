@@ -329,6 +329,15 @@ function worldScenes() {
       this.iso = typeof WorldIso !== "undefined" && WorldIso.on(kit) ? WorldIso.mount(this, map, layers) : null;
       this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
       this.solids = this.physics.add.staticGroup(); this.buildings = [];
+      // a wall's gate shut in some of the map's states (Places' "shut": [{gate, rect: [x, y, w, h] in tiles, say}]):
+      // a solid over its opening, on only in that state, and what you're told when you walk into it
+      this.shutGates = [];
+      for (const st of this.states || []) for (const g of st.shut || []) {
+        const T = this.tw, [x, y, w, h] = g.rect || [0, 0, 0, 0];
+        const zone = this.add.zone((x + w / 2) * T, (y + h / 2) * T, w * T, h * T);
+        this.physics.add.existing(zone, true); this.solids.add(zone);
+        this.shutGates.push({ zone, state: st.id, say: g.say, rect: new Phaser.Geom.Rectangle(x * T - 8, y * T - 8, w * T + 16, h * T + 16) });
+      }
       for (const who of new Set([this.lead, ...this.st.party])) this.hero(who);
 
       const P = o => Object.fromEntries((o.properties || []).map(p => [p.name, p.value]));
@@ -575,7 +584,7 @@ function worldScenes() {
       if (zone && p.kind !== "wall.lattice") (this.sightZones = this.sightZones || []).push(zone);   // what blocks a watcher's sight (a lattice doesn't)
       if (p.in) this.stated.push({ img, zone, in: JSON.parse(p.in) });
       if (p.ref) (this.refs = this.refs || {})[p.ref] = { x: o.x, y: o.y - (p.fh || 0) / 2 };
-      if (/^(lamp\.|prop\.lantern|camp\.(firepit|cookfire)|furn\.(lamp|hearth))/.test(p.kind || "")) (this.lights = this.lights || []).push({ x: o.x, y: o.y - (p.fh || 16) / 2, kind: p.kind, img });   // shown only in some of the map's states
+      if (/^(lamp\.|prop\.lantern|camp\.(firepit|cookfire)|landmark\.(torch|brazier)|furn\.(lamp|hearth))/.test(p.kind || "")) (this.lights = this.lights || []).push({ x: o.x, y: o.y - (p.fh || 16) / 2, kind: p.kind, img });   // shown only in some of the map's states
     }
 
     // The shrine's three looks (the rock under the pine): "dark" (an empty board), "lit" (a game in
@@ -793,6 +802,7 @@ function worldScenes() {
         n.spr.setVisible(on); n.spr.body.enable = on;
         if (n.mark) n.mark.setVisible(on && !TK.cleared(n.challenge));   // a challenger not here yet has no "!" either
       }
+      for (const g of this.shutGates || []) { const on = !!(st && st.ids.includes(g.state)); g.zone.body.enable = on; g.on = on; }
       for (const w of this.waters || []) if (w.ids) { w.on = !!(st && w.ids.some(i => st.ids.includes(i))); if (!this.iso) w.layer.setVisible(w.on); }
       for (const o of this.stated || []) {
         const on = !!(st && o.in.some(i => st.ids.includes(i)));
@@ -2385,6 +2395,10 @@ function worldScenes() {
 
       // exits: walk off the edge to the next place, if the story has opened it
       this.blocked = Math.max(0, this.blocked - dt);
+      for (const g of this.shutGates || []) if (g.on && !this.blocked && Phaser.Geom.Rectangle.Contains(g.rect, P.x, P.y - 3)) {
+        this.blocked = 1500;
+        this.talk(g.say && g.say.length ? worldLines(g.say) : [["n", "The gate is shut.", "城门紧闭。"]]);
+      }
       for (const e of this.exits) {
         if (!Phaser.Geom.Rectangle.Contains(e.rect, P.x, P.y - 3)) continue;
         // a door only some may pass: the protagonist named, or a condition ("item:edict") that holds

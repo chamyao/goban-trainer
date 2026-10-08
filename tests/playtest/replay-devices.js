@@ -36,19 +36,29 @@ const path = require('path');
   await A.evaluate(() => WorldTravel.replayPick(TK.world(13))); await A.waitForTimeout(300);
   await A.selectOption('.tk-replay-sel', '13-c17'); await A.locator('.tk-replay button', { hasText: 'Replay' }).last().click(); await A.waitForTimeout(3000); await ready(A);
   let aa = await beats(A); check(aa.c16 && !aa.c17 && !aa.c20 && !aa.c22, `A replays from c17: c17 on undone, c16 kept (${JSON.stringify(aa)})`);
+  const partyNow = p => p.evaluate(() => TK.party(TK.world(13)).join(',') + ' / ' + WorldItems.owned(TK.world(13)).sort().join(','));   // the party / the things he has
+  const pa0 = await partyNow(A);
   await A.waitForTimeout(4500);
   let sv = server(); check(sv.c16 && !sv.c17 && !sv.c22, `the server's copy has the undo (${JSON.stringify(sv)})`);
   // B, stale, plays something and saves its old copy
   await B.evaluate(() => { TK.markCleared('12-start'); }); await B.waitForTimeout(4500);
   sv = server(); check(sv.c16 && !sv.c17 && !sv.c20 && !sv.c22 && store.replaysync.progress.tk['12-start'], `B's stale save doesn't bring them back on the server (${JSON.stringify(sv)}; B's own play kept: ${!!store.replaysync.progress.tk['12-start']})`);
+  const pB = await partyNow(B);
   // A pulls B's save
   await back(A); await A.waitForTimeout(3000); aa = await beats(A);
+  const pa1 = await partyNow(A);
+  check(pa0 === pa1 && /^caocao \//.test(pa1) && !/weihong/.test(pa1), `the party and possessions at c17 (Cao Cao alone; no Wei Hong's fortune, c23's) stay as the replay left them through B's stale save (A after the replay: ${pa0}; B's stale tab: ${pB}; A after pulling B's save: ${pa1})`);
   check(!aa.c17 && !aa.c20 && aa.c16 && await A.evaluate(() => TK.cleared('12-start')), `A pulls B's save: B's play arrives, the replayed beats stay undone (${JSON.stringify(aa)})`);
   // B comes back to its tab: it takes the undo
   await back(B); await B.waitForTimeout(3000); bb = await beats(B);
   check(!bb.c17 && !bb.c20 && bb.c16, `B, back on its tab, takes the undo (${JSON.stringify(bb)})`);
   await B.reload(); await ready(B); bb = await beats(B);
   check(!bb.c17 && !bb.c22 && bb.c16, `and on a reload too (${JSON.stringify(bb)})`);
+  // and both stand at c17 the same: in Luoyang, the party and the crowd as the story has them there
+  const where = p => p.evaluate(() => { const w = window.__w; return { place: w && w.placeId, party: TK.party(TK.world(13)).join(','), crowd: w && w.st ? w.st.crowd || 0 : null, followers: w ? w.followers.length : null, next: w && w.nextMain() && w.nextMain().node }; });
+  await A.reload(); await ready(A);
+  const wa = await where(A), wb = await where(B);
+  check(JSON.stringify(wa) === JSON.stringify(wb) && wa.place === 'luoyang' && wa.party === 'caocao' && wa.next === '13-c17', `A and B both stand at c17 alike (A ${JSON.stringify(wa)}; B ${JSON.stringify(wb)})`);
   // clearing c17 again (on B) counts, there and on A
   await B.evaluate(() => TK.markCleared('13-c17')); await B.waitForTimeout(4500); await back(A); await A.waitForTimeout(3000);
   check(await B.evaluate(() => TK.cleared('13-c17')) && server().c17 && await A.evaluate(() => TK.cleared('13-c17')) && !(await A.evaluate(() => TK.cleared('13-c20'))), 'c17 cleared again on B counts on the server and on A (c20 still undone)');
