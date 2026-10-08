@@ -14,7 +14,7 @@ design's Shared keys table.
 
 ## Luoyang
 
-The capital in one map (22×15 cells), walled, with three gates:
+The capital in one map (22×17 cells), walled, with three gates:
 - **North gate:** to Beimang.
 - **West gate:** to the camps.
 - **East Gate:** to the East Road.
@@ -27,9 +27,11 @@ The main street runs from the west gate to the East Gate. North of it, all facin
 - the tower of Yong'an Palace, which you see from the street in c13;
 - Cao Cao's lodging.
 
-South of it:
-- the Chancellor's residence (相府), a compound with its hall, the small pavilion (`xf-pavilion`, c16) and the stables;
-- the market, with a go table.
+South of it, walled wards (see the chase, below):
+- the Chancellor's residence (相府) in its own ward: a compound with its hall, the small pavilion (`xf-pavilion`, c16)
+  and the stables;
+- a ward of houses;
+- the walled market, with a go table.
 
 | State | When | Light | Roads shut |
 |---|---|---|---|
@@ -116,6 +118,7 @@ These are in `NEW_KINDS` and `vocab.py`, each with a stand-in until Graphics dra
 - `building.stable`
 - `furn.mirror`: the dressing mirror in c16.
 - `banner.white`: 忠义.
+- `building.wallstairs`: the steps up the inside of the city wall (马道), where the wall guards come down in the chase.
 
 ## For Integration (engine), from the design
 
@@ -131,29 +134,46 @@ These are in `NEW_KINDS` and `vocab.py`, each with a stand-in until Graphics dra
 
 ## The chase out of Luoyang (state `sword`, c16 → c17)
 
-`PLANS_CC["Luoyang"]["chase"]` is read by `plans.py`. Each rider becomes an npc with Integration's `rider` property:
-`{"chase": "c17", "beat": [[tx,ty]…], "cone": tiles, "dir": "E"}`. The run starts, and restarts, at the `xf-gate` spot on
-the street outside the Chancellor's gate, and it ends at the East Gate (the c17 spot). The north and west gates are shut
-in this state, so the East Gate is the only way out.
+This is the user's redesign (`caocao-arc.md`, "Redesign"):
+- A **wave** of Dong Zhuo's men pours out of the Chancellor's gate after Cao Cao. It follows his trail, a little slower
+  than his horse.
+- **Ambushers** spring out of gates, lane mouths and the wall stairs ahead of him, and dash across the street.
 
-**Ground:**
-- Open, where the horse outruns a rider: the main street and the south street.
-- Narrow, where a rider can corner him: the lanes and the market.
+`PLANS_CC["Luoyang"]["chase"]` holds the posts and the routes. `plans.py` lays them on tiles (`lay_chase`) and proves
+them (`prove_chase`). It writes the result as the map's `chase`: in `luoyang.map.json`, and as the tmj property `chase`.
 
-| Route | Cells | What it asks |
+**The city, for it:** Luoyang's south half is walled wards (坊), as Han Luoyang was. So its streets are real streets, 5–6
+tiles between walls, in every kit. Along them:
+- **The Chancellor's ward**, holding the residence. Its south gate is the Chancellor's gate, the start. It also has a side
+  gate onto the ward lane.
+- **A ward of houses**, with an alley through it.
+- **The walled market**, with two gates in its north wall and two in its south wall. You ride through one, and an
+  ambusher waits in the other. It also has an east gate.
+- **Four lanes:** the west lane, the ward lane, the market lane and the east lane.
+- **The wall stairs (马道),** on the south street's wall side.
+
+North of the main street, a ward wall runs from the palace to the East Gate. In it are the gate of Cao Cao's lodging and
+the north road's mouth. The grid grew from 22×15 to 22×17 cells.
+
+| Route | Cells | Ambushes on it, in order |
 |---|---|---|
-| **Market cut**: east along the south street, up the market's east edge, onto the main street at the gate | 17 | **timing**: it is the one way a careful player slips past every cone unseen (the checker finds it) |
-| **East lane**: the open south street, then up the narrow east lane | 15 | a gamble: the lane rider rides the whole lane, so meet him there and you're caught |
-| **Long way**: west, up the west lane, then the whole main street | 32 | nerve: the west-lane rider, then the gate rider on the open street, where the gallop outruns him |
+| **Main street:** up the ward lane, then east along the main street | the main street, wide | side gate · Jiade Gate guards (N) · market-lane mouth (S) · market's north-east gate (S) · the lodging's gate (N) |
+| **South street:** under the wall, then up the east lane | the south street, narrow | ward-lane mouth (N) · west stairs (S) · market-lane mouth (N) · east stairs (S) · market's south-east gate (N) · market's east gate (across the east lane) |
+| **Market:** in at the south gate, among the stalls, out at the north gate | crowded, with stalls to swerve round | ward-lane mouth · west stairs · market-lane mouth · east stairs · a soldier from behind the stalls · then the north-east gate and the lodging on the main street |
 
-| Rider | Post (cell) | Beat (cells, there and back) | Cone (tiles) |
-|---|---|---|---|
-| `rider-market` | [13,11] | [13,11] ↔ [17,11], along the market's south row | 4 |
-| `rider-lane` | [19,12] | [19,12] ↔ [19,9], the east lane | 5 |
-| `rider-west` | [2,10] | [2,9] ↔ [2,12], the west lane | 5 |
-| `rider-gate` | [16,8] | [9,8] ↔ [17,8], the main street before the gate | 6 |
+**Ambushers:** the sides alternate where the street allows, 2–3 cells apart. That is about a second at the gallop, so
+one is barely past before the next springs.
 
-**Check (`check_plans_w2.py --arc cc --verbose`):**
-- The riders walk their beats at the engine's pace (42 px/s, against the gallop's 110).
-- A rider sees his cone, with tiles rounded up to cells, the way he rides. He also sees his own cell.
-- A timed search must find a way from `xf-gate` to the goal that no rider sees, waiting where needed. It does, in 17 steps, by the market cut.
+**What the build proves** (at the numbers in `pace`, which are Integration's to change; rerun the build after):
+- **Speeds:** the horse rides at 165 px/s (110 × 1.5 mounted), and the wave at 150. The wave leaves the gate 1 s behind
+  him.
+- **Ambushers:** each springs when he can just reach Cao Cao's line as Cao Cao reaches his (`lead` 0.1 s), and dashes
+  across at 140. He stands 1 s at the far side, then falls in with the wave.
+- **A touch:** a hit is within 0.8 tiles.
+- **Ridden straight, at a gallop, down the middle,** each route is hit by every ambush on it, or all but one.
+- **A clean ride exists on every route.** It is found tile by tile, waiting where it helps, and nothing touches him.
+  - It takes 7.8 s on the main street, 8.0 s on the south street and 8.4 s through the market. Ridden straight, each takes
+    about 7.6 s.
+  - So dodging costs 0.2–0.8 s, and the wave reaches him after about 1.6 s lost. It is pressure, not a timer: a rider
+    who brakes too long, or hits a dead end, is taken.
+- The build fails if any route stops having a clean ride.

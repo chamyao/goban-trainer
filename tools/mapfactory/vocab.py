@@ -107,6 +107,7 @@ KINDS.update({
     "building.tower": (3, 5, True),  # a palace tower: Cuihua Tower, Yong'an Palace (the Cao Cao arc)
     "building.stable": (6, 3, True), # a long stable, stalls open to the yard (the Cao Cao arc)
     "banner.white": (1, 1, True),    # the volunteers' white banner, 忠义 (the Cao Cao arc, C23)
+    "building.wallstairs": (4, 1, True),   # steps up the inside of a city wall (马道), at its foot (the Cao Cao arc's chase)
     "furn.screen": (3, 1, True),      # a folding screen behind a seat of honour
     "furn.rug": (3, 2, False),
     "furn.plant": (1, 1, True),
@@ -201,6 +202,7 @@ FALLBACK = {
     "building.tower": ["building.gatetower", "building.markettower", "building.hall"],
     "building.stable": ["building.storehouse", "building.granary", "building.lodge"],
     "banner.white": ["banner.red", "banner", "landmark.notice"],
+    "building.wallstairs": ["furn.rack", "landmark.notice"],
     "furn.counter": ["furn.table", "camp.table"],
     "furn.hearth": ["camp.cookfire", "camp.firepit"],
     "furn.barrel": ["furn.jar"],

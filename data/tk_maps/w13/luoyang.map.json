@@ -6,7 +6,7 @@
  "archetype": "city",
  "size": [
   88,
-  60
+  68
  ],
  "seed": 914,
  "plan": true,
@@ -19,6 +19,7 @@
    ".": "grass",
    "f": "market",
    "g": "road",
+   "W": "wall",
    "h": "wall.city"
   },
   "rows": [
@@ -46,30 +47,38 @@
    "......hhaaaaaaaaaaaaaaaaaaaaaggaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaggggaaaaaaaaaaaahh......",
    "......hhaaaaaaaaaaaaaaaaaaaaaggaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaggggaaaaaaaaaaaahh......",
    "......hhaaaaaaaaaaaaaaaaaaaaaggaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaggggaaaaaaaaaaaahh......",
-   "......hhaaaaaaaaaaaaaaaaaaaaaggaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaggggaaaaaaaaaaaahh......",
-   "......hhaaaaaaaaaaaaaaaaaaaaaggaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaggggaaaaaaaaaaaahh......",
-   "......hhaaaaaaaaaaaaaaaaaaaaaggaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaggggaaaaaaaaaaaahh......",
-   "......hhaaaaaaaaaaaaaaaaaaaaaggaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaggggaaaaaaaaaaaahh......",
-   "......hhaaaaaaaaaaaaaaaaaaaaaggabbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaggggaaaaaaaaaaaahh......",
-   "......hhaaaaaaaaaaaaaaaaaaaaaggabbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaggggaaaaaaaaaaaahh......",
-   "......hhaaaaaaaaaaaaaaaaaaaaaggabbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaggggaaaaaaaaaaaahh......",
+   "......hhaaaaaaaaaaaaaaaaaaaaaggaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaggggbbbbbbbbaaaahh......",
+   "......hhaaaaaaaaaaaaaaaaaaaaaggaaaaaaaaaaaaaaaaaaaaaaWWaaaaaaaaaggggbbbbbbbbaaaahh......",
+   "......hhaaaaaaaaaaaaaaaaaaaaaggaaaaaaaaaaaaaaaaaaaaaaWWaaaaaaaaaggggbbbbbbbbaaaahh......",
+   "......hhaaaaaaaaaaaaaaaaaaaaaggaaaaaaaaaaaaaaaaaaaaaaWWaaaaaaaaaggggbbbbbbbbaaaahh......",
+   "......hhaaaaaaaaaaaaaaaaaaaaaggabbbbbbbbbbbbbbbbbbbbbWWbaaaaaaaaggggaaaaaaaaaaaahh......",
+   "......hhaaaaaaaaaaaaaaaaaaaaaggabbbbbbbbbbbbbbbbbbbbbWWWWWWWWWWWggggWWWWWbbWWWWWWWW.....",
+   "......hhaaaaaaaaaaaaaaaaaaaaaggabbbbbbbbbbbbbbbbbbbbbWWWWWWWWWWWggggWWWWWbbWWWWWWWW.....",
    "......hhaaaaaaaaaaaaaaaaaaaaaggabbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaggggaaaaaaaaaaaahh......",
    "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg",
    "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg",
    "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg",
    "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg",
-   "......hhaggaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaffffffffffffffffffffaaaaaggahh......",
-   "......hhaggaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaffffffffffffffffffffaaaaaggahh......",
-   "......hhaggaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaffffffffffffffffffffaaaaaggahh......",
-   "......hhaggaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaffffffffffffffffffffaaaaaggahh......",
-   "......hhaggaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaffffffffffffffffffffaaaaaggahh......",
-   "......hhaggaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaffffffffffffffffffffaaaaaggahh......",
-   "......hhaggaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaffffffffffffffffffffaaaaaggahh......",
-   "......hhaggaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaffffffffffffffffffffaaaaaggahh......",
-   "......hhaggaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaffffffffffffffffffffaaaaaggahh......",
-   "......hhaggaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaffffffffffffffffffffaaaaaggahh......",
-   "......hhaggaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaffffffffffffffffffffaaaaaggahh......",
-   "......hhaggaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaffffffffffffffffffffaaaaaggahh......",
+   "......hhaggaaaaaaaaaaaaaaaaaaaaaaggaaaaaaaaaaaaaaaaaaggaaaaaaaaaaaaaaaaaaaaaaggahh......",
+   "......hhaggaaWWWWWWWWWWWWWWWWWWaaggaaWWWWWWWWWWWWWWaaggaaWWWWWWWWbbWWbbWWWWaaggahh......",
+   "......hhaggaaWWWWWWWWWWWWWWWWWWaaggaaWWWWWWWWWWWWWWaaggaaWWWWWWWWbbWWbbWWWWaaggahh......",
+   "......hhaggaaWWaaaaaaaaaaaaaaWWaaggaaWWaaaaaaaaaaWWaaggaaWWaaaaaaaaaaaaaaWWaaggahh......",
+   "......hhaggaaWWaaaaaaaaaaaaaaWWaaggaaWWabbbbbbbbaWWaaggaaWWaffffffffffffaWWaaggahh......",
+   "......hhaggaaWWaaaaaaaaaaaaaaWWaaggaaWWabbbbbbbbaWWaaggaaWWaffffffffffffaWWaaggahh......",
+   "......hhaggaaWWaaaaaaaaaaaaaaWWaaggaaWWabbbbbbbbaWWaaggaaWWaffffffffffffaWWaaggahh......",
+   "......hhaggaaWWaaaaaaaaaaaaaaWWaaggaaWWabbbbbbbbaWWaaggaaWWaffffffffffffaWWaaggahh......",
+   "......hhaggaaWWaaaaaaaaaaaaaaWWaaggaaWWabbbbbbbbaWWaaggaaWWaffffffffffffaWWaaggahh......",
+   "......hhaggaaWWaaaaaaaaaaaaaabbaaggaabbabbbbbbbbabbaaggaaWWaffffffffffffabbaaggahh......",
+   "......hhaggaaWWaaaaaaaaaaaaaabbaaggaabbabbbbbbbbabbaaggaaWWaffffffffffffabbaaggahh......",
+   "......hhaggaaWWaaaaaaaaaaaaaaWWaaggaaWWabbbbbbbbaWWaaggaaWWaffffffffffffaWWaaggahh......",
+   "......hhaggaaWWabbbbbbbbbbbbaWWaaggaaWWabbbbbbbbaWWaaggaaWWaffffffffffffaWWaaggahh......",
+   "......hhaggaaWWabbbbbbbbbbbbaWWaaggaaWWabbbbbbbbaWWaaggaaWWaffffffffffffaWWaaggahh......",
+   "......hhaggaaWWabbbbbbbbbbbbaWWaaggaaWWabbbbbbbbaWWaaggaaWWaffffffffffffaWWaaggahh......",
+   "......hhaggaaWWabbbbbbbbbbbbaWWaaggaaWWabbbbbbbbaWWaaggaaWWaffffffffffffaWWaaggahh......",
+   "......hhaggaaWWaaaaaaaaaaaaaaWWaaggaaWWaaaaaaaaaaWWaaggaaWWaaaaaaaaaaaaaaWWaaggahh......",
+   "......hhaggaaWWWWWWWWbbWWWWWWWWaaggaaWWWWWWWWWWWWWWaaggaaWWWWWWWWbbWWbbWWWWaaggahh......",
+   "......hhaggaaWWWWWWWWbbWWWWWWWWaaggaaWWWWWWWWWWWWWWaaggaaWWWWWWWWbbWWbbWWWWaaggahh......",
+   "......hhaggaaaaaaaaaaaaaaaaaaaaaaggaaaaaaaaaaaaaaaaaaggaaaaaaaaaaaaaaaaaaaaaaggahh......",
    "......hhgggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggghh......",
    "......hhgggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggghh......",
    "......hhgggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggghh......",
@@ -91,6 +100,7 @@
    "grass": true,
    "market": true,
    "road": true,
+   "wall": false,
    "wall.city": false
   }
  },
@@ -102,7 +112,7 @@
     1,
     1,
     20,
-    13
+    15
    ],
    "width": 2,
    "gates": {
@@ -119,7 +129,7 @@
      8
     ]
    },
-   "tiles": 480
+   "tiles": 512
   },
   {
    "id": "main-street",
@@ -179,11 +189,43 @@
     ],
     [
      2,
-     12
+     14
     ]
    ],
    "width": 2,
-   "tiles": 36
+   "tiles": 52
+  },
+  {
+   "id": "ward-lane",
+   "kind": "road",
+   "path": [
+    [
+     8,
+     8
+    ],
+    [
+     8,
+     14
+    ]
+   ],
+   "width": 2,
+   "tiles": 52
+  },
+  {
+   "id": "market-lane",
+   "kind": "road",
+   "path": [
+    [
+     13,
+     8
+    ],
+    [
+     13,
+     14
+    ]
+   ],
+   "width": 2,
+   "tiles": 52
   },
   {
    "id": "east-lane",
@@ -195,11 +237,11 @@
     ],
     [
      19,
-     12
+     14
     ]
    ],
    "width": 2,
-   "tiles": 36
+   "tiles": 52
   },
   {
    "id": "south-street",
@@ -207,15 +249,167 @@
    "path": [
     [
      2,
-     12
+     14
     ],
     [
      19,
-     12
+     14
     ]
    ],
    "width": 3,
    "tiles": 288
+  },
+  {
+   "id": "ward-ne",
+   "kind": "wall",
+   "path": [
+    [
+     13,
+     6
+    ],
+    [
+     13,
+     7
+    ],
+    [
+     20,
+     7
+    ]
+   ],
+   "width": 1,
+   "gates": {
+    "lodging-gate": [
+     18,
+     7
+    ]
+   },
+   "tiles": 68
+  },
+  {
+   "id": "ward-xf",
+   "kind": "wall",
+   "path": [
+    [
+     3,
+     9
+    ],
+    [
+     7,
+     9
+    ],
+    [
+     7,
+     13
+    ],
+    [
+     3,
+     13
+    ],
+    [
+     3,
+     9
+    ]
+   ],
+   "width": 1,
+   "gates": {
+    "chancellor-gate": [
+     5,
+     13
+    ],
+    "side-gate": [
+     7,
+     11
+    ]
+   },
+   "tiles": 128
+  },
+  {
+   "id": "ward-s",
+   "kind": "wall",
+   "path": [
+    [
+     9,
+     9
+    ],
+    [
+     12,
+     9
+    ],
+    [
+     12,
+     13
+    ],
+    [
+     9,
+     13
+    ],
+    [
+     9,
+     9
+    ]
+   ],
+   "width": 1,
+   "gates": {
+    "ward-w-gate": [
+     9,
+     11
+    ],
+    "ward-e-gate": [
+     12,
+     11
+    ]
+   },
+   "tiles": 112
+  },
+  {
+   "id": "market-wall",
+   "kind": "wall",
+   "path": [
+    [
+     14,
+     9
+    ],
+    [
+     18,
+     9
+    ],
+    [
+     18,
+     13
+    ],
+    [
+     14,
+     13
+    ],
+    [
+     14,
+     9
+    ]
+   ],
+   "width": 1,
+   "gates": {
+    "market-n-gate": [
+     16,
+     9
+    ],
+    "market-ne-gate": [
+     17,
+     9
+    ],
+    "market-s-gate": [
+     16,
+     13
+    ],
+    "market-se-gate": [
+     17,
+     13
+    ],
+    "market-e-gate": [
+     18,
+     11
+    ]
+   },
+   "tiles": 128
   }
  ],
  "objects": [
@@ -250,6 +444,116 @@
    "id": "east-gate",
    "width": 4,
    "wall": "wall",
+   "door": "E"
+  },
+  {
+   "kind": "building.gatehouse",
+   "x": 73,
+   "y": 29,
+   "w": 2,
+   "h": 2,
+   "id": "lodging-gate",
+   "width": 2,
+   "wall": "ward-ne",
+   "door": "S"
+  },
+  {
+   "kind": "building.gatehouse",
+   "x": 21,
+   "y": 53,
+   "w": 2,
+   "h": 2,
+   "id": "chancellor-gate",
+   "width": 2,
+   "wall": "ward-xf",
+   "door": "S"
+  },
+  {
+   "kind": "building.gatehouse",
+   "x": 29,
+   "y": 45,
+   "w": 2,
+   "h": 2,
+   "id": "side-gate",
+   "width": 2,
+   "wall": "ward-xf",
+   "door": "W"
+  },
+  {
+   "kind": "building.gatehouse",
+   "x": 37,
+   "y": 45,
+   "w": 2,
+   "h": 2,
+   "id": "ward-w-gate",
+   "width": 2,
+   "wall": "ward-s",
+   "door": "W"
+  },
+  {
+   "kind": "building.gatehouse",
+   "x": 49,
+   "y": 45,
+   "w": 2,
+   "h": 2,
+   "id": "ward-e-gate",
+   "width": 2,
+   "wall": "ward-s",
+   "door": "E"
+  },
+  {
+   "kind": "building.gatehouse",
+   "x": 65,
+   "y": 37,
+   "w": 2,
+   "h": 2,
+   "id": "market-n-gate",
+   "width": 2,
+   "wall": "market-wall",
+   "door": "S"
+  },
+  {
+   "kind": "building.gatehouse",
+   "x": 69,
+   "y": 37,
+   "w": 2,
+   "h": 2,
+   "id": "market-ne-gate",
+   "width": 2,
+   "wall": "market-wall",
+   "door": "S"
+  },
+  {
+   "kind": "building.gatehouse",
+   "x": 65,
+   "y": 53,
+   "w": 2,
+   "h": 2,
+   "id": "market-s-gate",
+   "width": 2,
+   "wall": "market-wall",
+   "door": "S"
+  },
+  {
+   "kind": "building.gatehouse",
+   "x": 69,
+   "y": 53,
+   "w": 2,
+   "h": 2,
+   "id": "market-se-gate",
+   "width": 2,
+   "wall": "market-wall",
+   "door": "S"
+  },
+  {
+   "kind": "building.gatehouse",
+   "x": 73,
+   "y": 45,
+   "w": 2,
+   "h": 2,
+   "id": "market-e-gate",
+   "width": 2,
+   "wall": "market-wall",
    "door": "E"
   },
   {
@@ -306,7 +610,7 @@
   {
    "kind": "building.tower",
    "x": 70,
-   "y": 14,
+   "y": 10,
    "w": 3,
    "h": 5,
    "id": "yongan",
@@ -319,7 +623,7 @@
   {
    "kind": "building.house",
    "x": 70,
-   "y": 29,
+   "y": 21,
    "w": 4,
    "h": 2,
    "id": "lodging",
@@ -330,10 +634,10 @@
   },
   {
    "kind": "building.compound",
-   "x": 33,
-   "y": 37,
-   "w": 18,
-   "h": 10,
+   "x": 17,
+   "y": 41,
+   "w": 10,
+   "h": 6,
    "id": "xiangfu",
    "door": "S",
    "faces": "S",
@@ -344,8 +648,8 @@
   },
   {
    "kind": "building.house",
-   "x": 14,
-   "y": 45,
+   "x": 42,
+   "y": 41,
    "w": 4,
    "h": 2,
    "id": "house-1",
@@ -355,32 +659,63 @@
   },
   {
    "kind": "building.house",
-   "x": 22,
-   "y": 45,
+   "x": 42,
+   "y": 49,
    "w": 4,
    "h": 2,
    "id": "house-2",
-   "door": "S",
-   "faces": "S",
+   "door": "N",
+   "faces": "N",
    "blocks_sight": true
   },
   {
    "kind": "market.stalls",
-   "x": 57,
-   "y": 37,
+   "x": 61,
+   "y": 41,
    "w": 6,
    "h": 2,
    "id": "stalls",
    "label": "Market stalls"
   },
   {
-   "kind": "furniture.gotable",
+   "kind": "market.stalls",
    "x": 65,
+   "y": 49,
+   "w": 6,
+   "h": 2,
+   "id": "stalls-2"
+  },
+  {
+   "kind": "furniture.gotable",
+   "x": 69,
    "y": 41,
    "w": 1,
    "h": 1,
    "id": "gotable",
    "label": "A go table in the market"
+  },
+  {
+   "kind": "building.wallstairs",
+   "x": 44,
+   "y": 59,
+   "w": 4,
+   "h": 1,
+   "id": "stairs-w",
+   "door": null,
+   "faces": "S",
+   "label": "Stairs up the city wall",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.wallstairs",
+   "x": 60,
+   "y": 59,
+   "w": 4,
+   "h": 1,
+   "id": "stairs-e",
+   "door": null,
+   "faces": "S",
+   "blocks_sight": true
   },
   {
    "kind": "tree.willow",
@@ -467,90 +802,6 @@
    "h": 1
   },
   {
-   "kind": "tree.willow",
-   "x": 1,
-   "y": 31,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.willow",
-   "x": 4,
-   "y": 36,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.willow",
-   "x": 9,
-   "y": 31,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.willow",
-   "x": 12,
-   "y": 36,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.willow",
-   "x": 17,
-   "y": 31,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.willow",
-   "x": 20,
-   "y": 36,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.willow",
-   "x": 28,
-   "y": 36,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.willow",
-   "x": 36,
-   "y": 36,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.willow",
-   "x": 44,
-   "y": 36,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.willow",
-   "x": 57,
-   "y": 31,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.willow",
-   "x": 76,
-   "y": 36,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.willow",
-   "x": 84,
-   "y": 36,
-   "w": 1,
-   "h": 1
-  },
-  {
    "kind": "banner.red",
    "x": 63,
    "y": 8,
@@ -573,6 +824,76 @@
   },
   {
    "kind": "banner.red",
+   "x": 72,
+   "y": 31,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "banner.red",
+   "x": 20,
+   "y": 55,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "banner.red",
+   "x": 28,
+   "y": 47,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "banner.red",
+   "x": 36,
+   "y": 47,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "banner.red",
+   "x": 48,
+   "y": 47,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "banner.red",
+   "x": 64,
+   "y": 39,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "banner.red",
+   "x": 68,
+   "y": 39,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "banner.red",
+   "x": 64,
+   "y": 55,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "banner.red",
+   "x": 68,
+   "y": 55,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "banner.red",
+   "x": 72,
+   "y": 47,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "banner.red",
    "x": 42,
    "y": 27,
    "w": 1,
@@ -587,14 +908,14 @@
   },
   {
    "kind": "banner.black",
-   "x": 40,
+   "x": 20,
    "y": 47,
    "w": 1,
    "h": 1
   },
   {
    "kind": "banner.black",
-   "x": 44,
+   "x": 24,
    "y": 47,
    "w": 1,
    "h": 1
@@ -602,7 +923,7 @@
   {
    "kind": "landmark.notice",
    "x": 82,
-   "y": 29,
+   "y": 28,
    "w": 1,
    "h": 1,
    "in": [
@@ -638,7 +959,7 @@
   },
   {
    "id": "c13",
-   "x": 61.5,
+   "x": 57.5,
    "y": 33.7,
    "node": "13-c13",
    "label": "The street under Dong Zhuo",
@@ -655,8 +976,8 @@
   },
   {
    "id": "xf-gate",
-   "x": 41.5,
-   "y": 49.7,
+   "x": 21.5,
+   "y": 57.7,
    "node": "",
    "label": "The Chancellor's gate",
    "note": "the chase out of Luoyang starts (and restarts) here"
@@ -679,7 +1000,7 @@
    "id": "npc-2",
    "kind": "folk.official",
    "x": 25.5,
-   "y": 37.9,
+   "y": 33.9,
    "say": [
     "“Zheng Tai went, and Lu Zhi went. A man with a family stays, and bows, and says nothing.”"
    ],
@@ -716,8 +1037,8 @@
   {
    "id": "npc-5",
    "kind": "folk.elder",
-   "x": 73.5,
-   "y": 37.9,
+   "x": 69.5,
+   "y": 45.9,
    "say": [
     "“Carts came in from Yangcheng with heads hung under them. ‘Bandits,’ they said. It was market day there.”"
    ],
@@ -729,7 +1050,7 @@
   {
    "id": "npc-6",
    "kind": "folk.soldier",
-   "x": 53.5,
+   "x": 49.5,
    "y": 29.9,
    "say": [
     "“The Jiade Gate is shut. The general went in to see the Empress, and he's not come out.”"
@@ -789,113 +1110,6 @@
    "when": "node:c12",
    "view": 4,
    "challenge": "resigned"
-  },
-  {
-   "id": "rider-market",
-   "kind": "folk.soldier",
-   "x": 53.5,
-   "y": 45.9,
-   "say": [],
-   "face": "E",
-   "rider": {
-    "chase": "c17",
-    "beat": [
-     [
-      53,
-      45
-     ],
-     [
-      69,
-      45
-     ]
-    ],
-    "cone": 4,
-    "dir": "E",
-    "pause": [
-     69,
-     45,
-     2
-    ]
-   }
-  },
-  {
-   "id": "rider-lane",
-   "kind": "folk.soldier",
-   "x": 77.5,
-   "y": 49.9,
-   "say": [],
-   "face": "N",
-   "rider": {
-    "chase": "c17",
-    "beat": [
-     [
-      77,
-      49
-     ],
-     [
-      77,
-      37
-     ]
-    ],
-    "cone": 5,
-    "dir": "N",
-    "pause": [
-     77,
-     37,
-     1
-    ]
-   }
-  },
-  {
-   "id": "rider-west",
-   "kind": "folk.soldier",
-   "x": 9.5,
-   "y": 41.9,
-   "say": [],
-   "face": "S",
-   "rider": {
-    "chase": "c17",
-    "beat": [
-     [
-      9,
-      37
-     ],
-     [
-      9,
-      49
-     ]
-    ],
-    "cone": 5,
-    "dir": "S"
-   }
-  },
-  {
-   "id": "rider-gate",
-   "kind": "folk.soldier",
-   "x": 65.5,
-   "y": 33.9,
-   "say": [],
-   "face": "W",
-   "rider": {
-    "chase": "c17",
-    "beat": [
-     [
-      37,
-      33
-     ],
-     [
-      69,
-      33
-     ]
-    ],
-    "cone": 6,
-    "dir": "W",
-    "pause": [
-     69,
-     33,
-     2
-    ]
-   }
   }
  ],
  "exits": [
@@ -929,7 +1143,7 @@
   {
    "to": "luoyang--xiangfu",
    "side": "N",
-   "x": 41.6,
+   "x": 21.6,
    "y": 46.85,
    "w": 0.8,
    "h": 0.45,
@@ -974,7 +1188,7 @@
    27
   ],
   "luoyang--xiangfu": [
-   42,
+   22,
    47
   ],
   "beimang": [
@@ -993,6 +1207,258 @@
    41,
    33
   ]
+ },
+ "chase": {
+  "chase": "c17",
+  "state": "sword",
+  "from": [
+   21.5,
+   57.7
+  ],
+  "to": [
+   77.5,
+   33.7
+  ],
+  "pace": {
+   "horse": 165,
+   "wave": 150,
+   "wave_after": 1.0,
+   "ambusher": 140,
+   "reach": 9,
+   "lead": 0.1,
+   "hold": 1.0,
+   "hit": 0.8
+  },
+  "wave": {
+   "from": [
+    21.5,
+    57.7
+   ],
+   "kind": "folk.soldier",
+   "count": 8
+  },
+  "ambush": [
+   {
+    "id": "side-gate",
+    "post": [
+     30.0,
+     46.0
+    ],
+    "to": [
+     38.0,
+     46.0
+    ],
+    "dash": "E",
+    "kind": "folk.soldier"
+   },
+   {
+    "id": "jiade",
+    "post": [
+     45.5,
+     29.5
+    ],
+    "to": [
+     45.5,
+     36.5
+    ],
+    "dash": "S",
+    "kind": "folk.soldier"
+   },
+   {
+    "id": "lane-mouth",
+    "post": [
+     53.5,
+     37.5
+    ],
+    "to": [
+     53.5,
+     31.5
+    ],
+    "dash": "N",
+    "kind": "folk.soldier"
+   },
+   {
+    "id": "market-n",
+    "post": [
+     70.0,
+     38.0
+    ],
+    "to": [
+     70.0,
+     31.0
+    ],
+    "dash": "N",
+    "kind": "folk.soldier"
+   },
+   {
+    "id": "lodging",
+    "post": [
+     74.0,
+     30.0
+    ],
+    "to": [
+     74.0,
+     36.0
+    ],
+    "dash": "S",
+    "kind": "folk.soldier"
+   },
+   {
+    "id": "ward-lane",
+    "post": [
+     33.5,
+     53.5
+    ],
+    "to": [
+     33.5,
+     59.5
+    ],
+    "dash": "S",
+    "kind": "folk.soldier"
+   },
+   {
+    "id": "stairs-w",
+    "post": [
+     46.0,
+     58.5
+    ],
+    "to": [
+     46.0,
+     55.5
+    ],
+    "dash": "N",
+    "kind": "folk.soldier"
+   },
+   {
+    "id": "lane-mouth-s",
+    "post": [
+     53.5,
+     53.5
+    ],
+    "to": [
+     53.5,
+     59.5
+    ],
+    "dash": "S",
+    "kind": "folk.soldier"
+   },
+   {
+    "id": "market-s",
+    "post": [
+     70.0,
+     54.0
+    ],
+    "to": [
+     70.0,
+     59.0
+    ],
+    "dash": "S",
+    "kind": "folk.soldier"
+   },
+   {
+    "id": "stairs-e",
+    "post": [
+     62.0,
+     58.5
+    ],
+    "to": [
+     62.0,
+     55.5
+    ],
+    "dash": "N",
+    "kind": "folk.soldier"
+   },
+   {
+    "id": "market-e",
+    "post": [
+     74.0,
+     46.0
+    ],
+    "to": [
+     79.0,
+     46.0
+    ],
+    "dash": "E",
+    "kind": "folk.soldier"
+   },
+   {
+    "id": "stall",
+    "post": [
+     61.5,
+     45.5
+    ],
+    "to": [
+     69.5,
+     45.5
+    ],
+    "dash": "E",
+    "kind": "folk.soldier"
+   }
+  ],
+  "routes": {
+   "main street": {
+    "tiles": 78,
+    "straight_hits": [
+     "side-gate",
+     "jiade",
+     "lane-mouth",
+     "market-n",
+     "lodging",
+     "ward-lane"
+    ],
+    "clean_s": 7.8,
+    "sprung": [
+     "side-gate",
+     "jiade",
+     "lane-mouth",
+     "market-n",
+     "lodging",
+     "ward-lane"
+    ]
+   },
+   "south street": {
+    "tiles": 79,
+    "straight_hits": [
+     "ward-lane",
+     "stairs-w",
+     "lane-mouth-s",
+     "market-s",
+     "stairs-e",
+     "market-e"
+    ],
+    "clean_s": 8.0,
+    "sprung": [
+     "lodging",
+     "ward-lane",
+     "stairs-w",
+     "lane-mouth-s",
+     "market-s",
+     "stairs-e",
+     "market-e"
+    ]
+   },
+   "market": {
+    "tiles": 78,
+    "straight_hits": [
+     "market-n",
+     "ward-lane",
+     "stairs-w",
+     "lane-mouth-s",
+     "stairs-e",
+     "stall"
+    ],
+    "clean_s": 8.4,
+    "sprung": [
+     "market-n",
+     "lodging",
+     "ward-lane",
+     "stairs-w",
+     "lane-mouth-s",
+     "stairs-e",
+     "stall"
+    ]
+   }
+  }
  },
  "states": [
   {
@@ -1114,6 +1580,14 @@
     34.0
    ],
    [
+    34.0,
+    34.0
+   ],
+   [
+    54.0,
+    34.0
+   ],
+   [
     66.0,
     34.0
    ],
@@ -1135,11 +1609,19 @@
    ],
    [
     10.0,
-    50.0
+    58.0
+   ],
+   [
+    34.0,
+    58.0
+   ],
+   [
+    54.0,
+    58.0
    ],
    [
     78.0,
-    50.0
+    58.0
    ]
   ],
   "edges": [
@@ -1153,7 +1635,7 @@
    ],
    [
     1,
-    8
+    10
    ],
    [
     2,
@@ -1161,7 +1643,7 @@
    ],
    [
     2,
-    7
+    9
    ],
    [
     3,
@@ -1169,7 +1651,7 @@
    ],
    [
     3,
-    6
+    11
    ],
    [
     4,
@@ -1177,11 +1659,35 @@
    ],
    [
     4,
-    9
+    12
    ],
    [
-    8,
-    9
+    5,
+    6
+   ],
+   [
+    5,
+    8
+   ],
+   [
+    6,
+    7
+   ],
+   [
+    6,
+    13
+   ],
+   [
+    10,
+    11
+   ],
+   [
+    11,
+    12
+   ],
+   [
+    12,
+    13
    ]
   ]
  },
