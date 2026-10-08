@@ -16,7 +16,7 @@ import tk_story_w2_new as story  # noqa: E402
 # Display names for speakers and leads (English, Chinese). Anything missing falls back to the id.
 NAMES = {
     "caocao": ("Cao Cao", "曹操"), "hejin": ("He Jin", "何进"), "yuanshao": ("Yuan Shao", "袁绍"), "chenlin": ("Chen Lin", "陈琳"),
-    "luzhi": ("Lu Zhi", "卢植"), "xiandi": ("the Prince of Chenliu", "陈留王"), "cuiyi": ("Cui Yi", "崔毅"),
+    "luzhi": ("Lu Zhi", "卢植"), "xiandi": ("Emperor Xian", "献帝"), "chenliu": ("the Prince of Chenliu", "陈留王"), "cuiyi": ("Cui Yi", "崔毅"),
     "dongzhuo": ("Dong Zhuo", "董卓"), "liru": ("Li Ru", "李儒"), "dingyuan": ("Ding Yuan", "丁原"), "lvbu": ("Lü Bu", "吕布"),
     "lisu": ("Li Su", "李肃"), "wangyun": ("Wang Yun", "王允"), "dingguan": ("Ding Guan", "丁管"), "caiyong": ("Cai Yong", "蔡邕"),
     "wufu": ("Wu Fu", "伍孚"), "chengong": ("Chen Gong", "陈宫"), "lvboshe": ("Lü Boshe", "吕伯奢"), "weihong": ("Wei Hong", "卫弘"),
