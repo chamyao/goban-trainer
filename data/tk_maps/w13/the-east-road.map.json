@@ -13,53 +13,55 @@
  "terrain": {
   "legend": {
    "a": "bridge",
-   "b": "hills",
-   "c": "plain",
-   "d": "road",
+   "b": "court",
+   "c": "hills",
+   "d": "plain",
+   "f": "road",
    "W": "wall",
-   "f": "ward",
+   "g": "ward",
    "~": "water"
   },
   "rows": [
-   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb~~~~bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb~~~~bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb~~~~bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb~~~~bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb~~~~bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbWWbbbbbbbbbbbbbbbbbbbbbbbbbbbbb~~~~bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbWWbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbWWbbbbbbbbbbbbbbbbbbbbbbbbbbbbb~~~~bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbWWbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbWWbbbbbbbbbbbbbbbbbbbbbbbbbbbbb~~~~bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbWWbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-   "cccccccccccccccccccccccccccccccccWWccccccccccccccccccccccccccccc~~~~cccccccccccccccccccccccccccccccccccccWWcffffffffffffffffffffffffffffffffcccc",
-   "cccccccccccccccccccccccccccccccccWWccccccccccccccccccccccccccccc~~~~cccccccccccccccccccccccccccccccccccccWWcffffffffffffffffffffffffffffffffcccc",
-   "cccccccccccccccccccccccccccccccccWWccccccccccccccccccccccccccccc~~~~cccccccccccccccccccccccccccccccccccccWWcffffffffffffffffffffffffffffffffcccc",
-   "cccccccccccccccccccccccccccccccccWWccccccccccccccccccccccccccccc~~~~cccccccccccccccccccccccccccccccccccccWWcffffffffffffffffffffffffffffffffcccc",
-   "cccccccccccccccccccccccccccccccccWWccccccccccccccccccccccccccccc~~~~cccccccccccccccccccccccccccccccccccccWWcffffffffffffffffffffffffffffffffcccc",
-   "cccccccccccccccccccccccccccccccccWWccccccccccccccccccccccccccccc~~~~cccccccccccccccccccccccccccccccccccccWWcffffffffffffffffffffffffffffffffcccc",
-   "cccccccccccccccccccccccccccccccccWWccccccccccccccccccccccccccccc~~~~cccccccccccccccccccccccccccccccccccccWWcffffffffffffffffffffffffffffffffcccc",
-   "cccccccccccccccccccccccccccccccccWWccccccccccccccccccccccccccccc~~~~cccccccccccccccccccccccccccccccccccccWWcffffffffffffffffffffffffffffffffcccc",
-   "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
-   "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddaaaaaaaaaaddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
-   "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddaaaaaaaaaaddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
-   "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
-   "cccccccccccccccccccccccccccccccccWWccccccccccccccccccccccccccccc~~~~cccccccccccccccccccccccccccccccccccccWWcffffffffffffffffffffffffffffffffcccc",
-   "cccccccccccccccccccccccccccccccccWWccccccccccccccccccccccccccccc~~~~cccccccccccccccccccccccccccccccccccccWWcffffffffffffffffffffffffffffffffcccc",
-   "cccccccccccccccccccccccccccccccccWWccccccccccccccccccccccccccccc~~~~cccccccccccccccccccccccccccccccccccccWWcffffffffffffffffffffffffffffffffcccc",
-   "cccccccccccccccccccccccccccccccccWWccccccccccccccccccccccccccccc~~~~cccccccccccccccccccccccccccccccccccccWWcffffffffffffffffffffffffffffffffcccc",
-   "cccccccccccccccccccccccccccccccccWWccccccccccccccccccccccccccccc~~~~cccccccccccccccccccccccccccccccccccccWWcffffffffffffffffffffffffffffffffcccc",
-   "cccccccccccccccccccccccccccccccccWWccccccccccccccccccccccccccccc~~~~cccccccccccccccccccccccccccccccccccccWWcffffffffffffffffffffffffffffffffcccc",
-   "cccccccccccccccccccccccccccccccccWWccccccccccccccccccccccccccccc~~~~cccccccccccccccccccccccccccccccccccccWWcffffffffffffffffffffffffffffffffcccc",
-   "cccccccccccccccccccccccccccccccccWWccccccccccccccccccccccccccccc~~~~cccccccccccccccccccccccccccccccccccccWWcffffffffffffffffffffffffffffffffcccc",
-   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbWWbbbbbbbbbbbbbbbbbbbbbbbbbbbbb~~~~bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbWWbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbWWbbbbbbbbbbbbbbbbbbbbbbbbbbbbb~~~~bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbWWbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbWWbbbbbbbbbbbbbbbbbbbbbbbbbbbbb~~~~bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbWWbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb~~~~bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb~~~~bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb~~~~bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb~~~~bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb~~~~bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc~~~~cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc~~~~cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc~~~~cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc~~~~cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc~~~~cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccWWccccccccccccccccccccccccccccc~~~~cccccccccccccccccccccccccccccccccccccWWccccccWWccccccccccWWccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccWWccccccccccccccccccccccccccccc~~~~cccccccccccccccccccccccccccccccccccccWWccccccWWccccccccccWWccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccWWccccccccccccccccccccccccccccc~~~~cccccccccccccccccccccccccccccccccccccWWccccccWWccccccccccWWccccccccccccccccc",
+   "dddddddddddddddddddddddddddddddddWWddddddddddddddddddddddddddddd~~~~dddddddddddddddddddddddddddddddddddddWWdgggggWWggggggggggWWgggggggggggggdddd",
+   "dddddddddddddddddddddddddddddddddWWddddddddddddddddddddddddddddd~~~~dddddddddddddddddddddddddddddddddddddWWdgggggWWggggggggggWWgggggggggggggdddd",
+   "dddddddddddddddddddddddddddddddddWWddddddddddddddddddddddddddddd~~~~dddddddddddddddddddddddddddddddddddddWWdgggggWWggggggggggWWgggggggggggggdddd",
+   "dddddddddddddddddddddddddddddddddWWddddddddddddddddddddddddddddd~~~~dddddddddddddddddddddddddddddddddddddWWdgggggWWggggggggggWWgggggggggggggdddd",
+   "dddddddddddddddddddddddddddddddddWWddddddddddddddddddddddddddddd~~~~dddddddddddddddddddddddddddddddddddddWWdgggggWWgbbbbbbbbgWWgggggggggggggdddd",
+   "dddddddddddddddddddddddddddddddddWWddddddddddddddddddddddddddddd~~~~dddddddddddddddddddddddddddddddddddddWWdgggggWWWWWWWWbbWWWWgggggggggggggdddd",
+   "dddddddddddddddddddddddddddddddddWWddddddddddddddddddddddddddddd~~~~dddddddddddddddddddddddddddddddddddddWWdgggggWWWWWWWWbbWWWWgggggggggggggdddd",
+   "dddddddddddddddddddddddddddddddddWWddddddddddddddddddddddddddddd~~~~dddddddddddddddddddddddddddddddddddddWWdggggggggbbbbbbbbggggggggggggggggdddd",
+   "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+   "fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffaaaaaaaaaafffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+   "fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffaaaaaaaaaafffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+   "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+   "dddddddddddddddddddddddddddddddddWWddddddddddddddddddddddddddddd~~~~dddddddddddddddddddddddddddddddddddddWWdggggggggggggggggggggggggggggggggdddd",
+   "dddddddddddddddddddddddddddddddddWWddddddddddddddddddddddddddddd~~~~dddddddddddddddddddddddddddddddddddddWWdggggggggggggggggggggggggggggggggdddd",
+   "dddddddddddddddddddddddddddddddddWWddddddddddddddddddddddddddddd~~~~dddddddddddddddddddddddddddddddddddddWWdggggggggggggggggggggggggggggggggdddd",
+   "dddddddddddddddddddddddddddddddddWWddddddddddddddddddddddddddddd~~~~dddddddddddddddddddddddddddddddddddddWWdggggggggggggggggggggggggggggggggdddd",
+   "dddddddddddddddddddddddddddddddddWWddddddddddddddddddddddddddddd~~~~dddddddddddddddddddddddddddddddddddddWWdggggggggggggggggggggggggggggggggdddd",
+   "dddddddddddddddddddddddddddddddddWWddddddddddddddddddddddddddddd~~~~dddddddddddddddddddddddddddddddddddddWWdggggggggggggggggggggggggggggggggdddd",
+   "dddddddddddddddddddddddddddddddddWWddddddddddddddddddddddddddddd~~~~dddddddddddddddddddddddddddddddddddddWWdggggggggggggggggggggggggggggggggdddd",
+   "dddddddddddddddddddddddddddddddddWWddddddddddddddddddddddddddddd~~~~dddddddddddddddddddddddddddddddddddddWWdggggggggggggggggggggggggggggggggdddd",
+   "cccccccccccccccccccccccccccccccccWWccccccccccccccccccccccccccccc~~~~cccccccccccccccccccccccccccccccccccccWWccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccWWccccccccccccccccccccccccccccc~~~~cccccccccccccccccccccccccccccccccccccWWccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccWWccccccccccccccccccccccccccccc~~~~cccccccccccccccccccccccccccccccccccccWWccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc~~~~cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc~~~~cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc~~~~cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc~~~~cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc~~~~cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
   ],
   "walk": {
    "bridge": true,
+   "court": true,
    "hills": false,
    "plain": true,
    "road": true,
@@ -160,6 +162,36 @@
     ]
    },
    "tiles": 52
+  },
+  {
+   "id": "jail-wall",
+   "kind": "wall",
+   "path": [
+    [
+     28,
+     1
+    ],
+    [
+     28,
+     3
+    ],
+    [
+     31,
+     3
+    ],
+    [
+     31,
+     1
+    ]
+   ],
+   "width": 1,
+   "gates": {
+    "jail-gate": [
+     30,
+     3
+    ]
+   },
+   "tiles": 60
   }
  ],
  "objects": [
@@ -184,6 +216,17 @@
    "width": 4,
    "wall": "pass-wall",
    "door": "E"
+  },
+  {
+   "kind": "building.gatehouse",
+   "x": 121,
+   "y": 13,
+   "w": 2,
+   "h": 2,
+   "id": "jail-gate",
+   "width": 2,
+   "wall": "jail-wall",
+   "door": "S"
   },
   {
    "kind": "building.posthouse",
@@ -242,7 +285,7 @@
   {
    "kind": "building.hall",
    "x": 118,
-   "y": 13,
+   "y": 9,
    "w": 4,
    "h": 2,
    "id": "jail",
@@ -250,6 +293,7 @@
    "faces": "S",
    "label": "Zhongmou county jail",
    "map": "jail-court",
+   "plaque": "县狱",
    "blocks_sight": true
   },
   {
@@ -383,13 +427,6 @@
    "kind": "milestone",
    "x": 112,
    "y": 20,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "milestone",
-   "x": 117,
-   "y": 15,
    "w": 1,
    "h": 1
   },
@@ -542,13 +579,6 @@
   },
   {
    "kind": "tree.poplar",
-   "x": 123,
-   "y": 15,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.poplar",
    "x": 130,
    "y": 20,
    "w": 1,
@@ -674,7 +704,7 @@
    "to": "the-east-road--jail-court",
    "side": "N",
    "x": 119.6,
-   "y": 14.85,
+   "y": 10.85,
    "w": 0.8,
    "h": 0.45,
    "door": true
@@ -699,7 +729,7 @@
  "entries": {
   "the-east-road--jail-court": [
    120,
-   15
+   11
   ],
   "luoyang": [
    5,

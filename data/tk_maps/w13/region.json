@@ -176,7 +176,7 @@
    "id": "the-east-road--jail-court",
    "name": "The back courtyard of the jail",
    "zh": "县狱后院",
-   "archetype": "interior",
+   "archetype": "compound",
    "map": "the-east-road--jail-court.map.json",
    "links": [
     "the-east-road"

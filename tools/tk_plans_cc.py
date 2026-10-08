@@ -18,12 +18,17 @@ NEW_KINDS = {**NEW_KINDS2,
              "furn.mirror": (1, 1, True),        # a bronze dressing mirror on a stand (C16)
              "banner.white": (1, 1, True),       # the white banner of the volunteers, 忠义 (C23)
              "wall.stairs": (4, 1, True),   # stairs up the inside of a city wall (马道), against its foot
+             "furn.jailcell": (4, 2, True),     # a barred jail cell (牢房): timber bars across the front, straw inside (C19)
+             "landmark.torch": (1, 1, True),    # a torch on a pole, burning (C19, the jail at night)
              }
 ART = {**ART2,
        "building.tower": "a tall Han palace tower (阙/楼): three storeys of timber on a rammed-earth base, hip roof of dark tiles, a balcony at the top; reads from far off",
        "building.stable": "a long Han stable: a tiled roof on posts, stalls open to the yard, hay racks, a horse or two looking out",
        "furn.mirror": "a polished bronze dressing mirror on a wooden stand, about head height when sitting",
        "banner.white": "a tall white banner on a pole, two black characters 忠义",
+       "furn.jailcell": "a Han county jail cell (牢房): a small cell built against a high wall, its front a row of thick timber bars "
+                        "with a barred door and an iron lock, straw on the floor inside, dark; four tiles wide, two deep, the same 3/4 view",
+       "landmark.torch": "a burning torch on a wooden pole, about head height, a warm orange flame and glow on the ground",
        "wall.stairs": "a flight of rammed-earth steps (马道) climbing the inside face of a city wall to the wall-walk, "
                               "four tiles long, one deep; drawn against the wall's foot, the same 3/4 view as the wall",
        }
@@ -422,6 +427,7 @@ PLANS_CC = {
                 {"id": "hills-n", "kind": "hills", "rect": [0, 0, 36, 2]},
                 {"id": "hills-s", "kind": "hills", "rect": [0, 7, 36, 2]},
                 {"id": "zhongmou", "kind": "ward", "rect": [27, 2, 8, 5]},
+                {"id": "jail-yard", "kind": "court", "rect": [29, 3, 2, 1]},
             ],
             "lines": [
                 {"id": "road", "kind": "road", "path": [[0, 4], [35, 4]], "width": 3},
@@ -429,6 +435,8 @@ PLANS_CC = {
                 {"id": "river", "kind": "river", "path": [[16, 0], [16, 8]], "width": 4},
                 {"id": "ferry", "kind": "bridge", "path": [[15, 4], [17, 4]], "width": 2},      # the ferry landing and the crossing
                 {"id": "pass-wall", "kind": "wall", "path": [[26, 1], [26, 7]], "width": 1, "gates": {"pass-gate": [26, 4]}},
+                # the jail's own wall, from the hills to the road, its gate on the street
+                {"id": "jail-wall", "kind": "wall", "path": [[28, 1], [28, 3], [31, 3], [31, 1]], "width": 1, "gates": {"jail-gate": [30, 3]}},
             ],
             "things": [
                 {"id": "posthouse", "kind": "building.posthouse", "rect": [5, 2, 2, 2], "door": "S", "label": "A post station"},
@@ -436,7 +444,8 @@ PLANS_CC = {
                 {"id": "ferry-hut", "kind": "building.hut", "rect": [12, 2, 2, 1], "door": "S", "label": "The ferryman's hut"},
                 {"id": "posthouse-2", "kind": "building.posthouse", "rect": [21, 2, 2, 2], "door": "S", "label": "A post station"},
                 {"id": "notice-2", "kind": "landmark.notice", "rect": [22, 5, 1, 1], "label": "The same portrait, nailed up again"},
-                {"id": "jail", "kind": "building.hall", "rect": [29, 3, 2, 1], "door": "S", "label": "Zhongmou county jail", "map": "jail-court"},
+                {"id": "jail", "kind": "building.hall", "rect": [29, 2, 2, 1], "door": "S", "label": "Zhongmou county jail", "map": "jail-court",
+                 "plaque": "县狱"},
                 {"id": "zm-house-1", "kind": "building.house", "rect": [32, 3, 2, 1], "door": "S"},
                 {"id": "zm-house-2", "kind": "building.house", "rect": [29, 5, 2, 1], "door": "N"},
             ],
@@ -448,12 +457,34 @@ PLANS_CC = {
             "entries": {"": [1, 4], "Luoyang": [1, 4], "Chenggao": [34, 4]},
         },
         "maps": {
-            "jail-court": room([12, 8], [6, 7], floor="stone",
-                               things=[{"id": "stocks", "kind": "furn.rack", "rect": [2, 1, 1, 1], "label": "The stocks"},
-                                       {"id": "lamp", "kind": "furn.lamp", "rect": [9, 1, 1, 1]},
-                                       {"id": "table", "kind": "furn.table", "rect": [5, 2, 2, 1], "label": "The magistrate's table"}],
-                               spots=[{"id": "c19", "at": [6, 5], "node": "2-c19", "label": "The back courtyard of the jail"}])
-            | {"label": "The back courtyard of the jail"},
+            # ---- Zhongmou county jail, its back courtyard at night (C19): high walls all round, a row of barred cells
+            # along the north wall, the guardroom and the gate on the south, torches; the magistrate's table ----
+            "jail-court": {
+                "grid": [18, 12], "cell": 2, "margin": 0, "label": "The back courtyard of the jail",
+                "ground": [{"id": "court", "kind": "court", "rect": [1, 1, 16, 10]}],
+                "lines": [{"id": "walls", "kind": "wall", "outline": [0, 0, 18, 12], "width": 2, "gates": {"gate": [9, 11]}}],
+                "things": [
+                    {"id": "cell-1", "kind": "furn.jailcell", "rect": [1, 1, 2, 1], "door": "S", "label": "The cells"},
+                    {"id": "cell-2", "kind": "furn.jailcell", "rect": [3, 1, 2, 1], "door": "S"},
+                    {"id": "cell-3", "kind": "furn.jailcell", "rect": [5, 1, 2, 1], "door": "S"},
+                    {"id": "cell-4", "kind": "furn.jailcell", "rect": [11, 1, 2, 1], "door": "S"},
+                    {"id": "cell-5", "kind": "furn.jailcell", "rect": [13, 1, 2, 1], "door": "S"},
+                    {"id": "cell-6", "kind": "furn.jailcell", "rect": [15, 1, 2, 1], "door": "S"},
+                    {"id": "table", "kind": "furn.table", "rect": [9, 4, 2, 1], "label": "The magistrate's table"},
+                    {"id": "stocks", "kind": "furn.rack", "rect": [1, 6, 1, 1], "label": "The stocks"},
+                    {"id": "guardroom", "kind": "building.hut", "rect": [13, 8, 2, 2], "door": "W", "label": "The guardroom"},
+                    {"id": "rack", "kind": "furn.rack", "rect": [15, 7, 2, 1]},
+                    {"id": "torch-1", "kind": "landmark.torch", "rect": [8, 1, 1, 1]},
+                    {"id": "torch-2", "kind": "landmark.torch", "rect": [9, 1, 1, 1]},
+                    {"id": "torch-3", "kind": "landmark.torch", "rect": [1, 9, 1, 1]},
+                    {"id": "torch-4", "kind": "landmark.torch", "rect": [16, 5, 1, 1]},
+                    {"id": "torch-5", "kind": "landmark.torch", "rect": [7, 10, 1, 1]},
+                    {"id": "torch-6", "kind": "landmark.torch", "rect": [11, 10, 1, 1]},
+                ],
+                "spots": [{"id": "c19", "at": [5, 7], "node": "2-c19", "label": "The back courtyard of the jail",
+                           "note": "Chen Gong stands 8 tiles east, 4 north: by his table"}],
+                "exits": [{"to": "The East Road", "at": [9, 11], "side": "S"}],
+            },
         },
         "states": [
             {"id": "road", "until": "node:c19", "light": "day",

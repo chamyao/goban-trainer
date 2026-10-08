@@ -108,6 +108,8 @@ KINDS.update({
     "building.stable": (6, 3, True), # a long stable, stalls open to the yard (the Cao Cao arc)
     "banner.white": (1, 1, True),    # the volunteers' white banner, 忠义 (the Cao Cao arc, C23)
     "wall.stairs": (4, 1, True),   # steps up the inside of a city wall (马道), at its foot (the Cao Cao arc's chase)
+    "furn.jailcell": (4, 2, True),         # a barred jail cell (the Cao Cao arc, C19)
+    "landmark.torch": (1, 1, True),        # a torch on a pole (the Cao Cao arc, C19)
     "furn.screen": (3, 1, True),      # a folding screen behind a seat of honour
     "furn.rug": (3, 2, False),
     "furn.plant": (1, 1, True),
@@ -203,6 +205,8 @@ FALLBACK = {
     "building.stable": ["building.storehouse", "building.granary", "building.lodge"],
     "banner.white": ["banner.red", "banner", "landmark.notice"],
     "wall.stairs": ["furn.rack", "landmark.notice"],
+    "furn.jailcell": ["furn.screen", "furn.shelf"],
+    "landmark.torch": ["furn.lamp", "lamp.post"],
     "furn.counter": ["furn.table", "camp.table"],
     "furn.hearth": ["camp.cookfire", "camp.firepit"],
     "furn.barrel": ["furn.jar"],
