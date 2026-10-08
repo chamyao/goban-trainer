@@ -624,7 +624,9 @@ function worldScenes() {
         try {
           const r = JSON.parse(p.rider), T = this.tw || 16, D = { N: "up", S: "down", W: "left", E: "right" };
           n.rider = { chase: `${this.w.n}-${r.chase}`, cone: r.cone || 5, dir: D[r.dir] || r.dir || face,
-            pts: (r.beat && r.beat.length ? r.beat : [[o.x / T - .5, o.y / T - .9]]).map(([x, y]) => ({ x: (x + .5) * T, y: (y + .9) * T })), leg: 0 };
+            pts: (r.beat && r.beat.length ? r.beat : [[o.x / T - .5, o.y / T - .9]]).map(([x, y]) => ({ x: (x + .5) * T, y: (y + .9) * T })), leg: 0,
+            beat: r.beat || [], pause: r.pause || null, wait: 0 };   // pause: [x, y, seconds] at that beat point, as the watchers'
+
         } catch { n.rider = null; }
       }
       if (p.watch) {   // a stealth watcher: a cone, a beat to walk or ways to turn, what he says and where he sends you
@@ -2051,7 +2053,12 @@ function worldScenes() {
         }
         // on its beat; it sees you down its cone, if nothing solid is between
         const tg = R.pts[R.leg % R.pts.length];
-        if (at(tg.x, tg.y, 42)) R.leg++;
+        if (R.wait > 0) { R.wait -= dt; n.spr.setVelocity(0); n.spr.anims.stop(); }
+        else if (at(tg.x, tg.y, 42)) {
+          const c = (R.beat || [])[R.leg % R.pts.length], pz = R.pause;
+          if (pz && c && c[0] === pz[0] && c[1] === pz[1]) R.wait = (pz[2] || 2) * 1000;
+          R.leg++;
+        }
         const look = R.pts.length > 1 ? n.dir : R.dir, [fx, fy] = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }[look] || [0, 1];
         const dx = P.x - n.spr.x, dy = P.y - n.spr.y;
         if (d < R.cone * T && ((dx * fx + dy * fy) / (d || 1) > Math.cos(Math.PI * 55 / 180) || d < 2 * T) && this.ray(n.spr.x, n.spr.y - 6, Math.atan2(dy, dx), d) >= d - 2) {
