@@ -14,3 +14,10 @@ Notes:
 - If the north wall's slatted fronts are the barred cells, they read as wooden shutters or crates rather than bars: orange, with no dark gaps. Darker iron bars with the dark of the cell behind would say "cell" at a glance.
 - At night in c19 the court is mostly black on the phone. The cells and the torches' light barely show; more torchlight would help the scene read.
 - c18's own scene (the checkpoint on the bridge, Cao Cao on the white horse) is in `c18-c19-*.png`.
+
+## After the torch glow (main a7c6aca1)
+`c19-night-before-after-phone.png`: left before, middle after (2 s into c19), right as he's free to walk.
+- The torch stands now glow, lighting the gate and the court's south end; the north wall shows a warm light.
+- The picture's mean brightness went from 51 to 60 of 255.
+- Cao Cao and Chen Gong read clearly. The middle of the court is still dim, but it reads as night rather than black.
+- On an upright phone the north wall's cells are still under the goal box during the scene, so they don't show there.
