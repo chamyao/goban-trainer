@@ -229,14 +229,14 @@ PLANS_CC = {
             # beats are cells (a loop: back and forth); cone in tiles; dir is the facing at the post
             "riders": [
                 # the market: walks the stalls; you slip by when his back is to you
-                {"id": "rider-market", "kind": "folk.soldier", "post": [13, 11], "beat": [[13, 11], [17, 11]], "cone": 4, "dir": "E"},
+                {"id": "rider-market", "kind": "folk.soldier", "post": [13, 11], "beat": [[13, 11], [17, 11]], "pause": [17, 11, 2], "cone": 4, "dir": "E"},
                 # the east lane: rides up and down it; meet him in the lane and there is nowhere to go
-                {"id": "rider-lane", "kind": "folk.soldier", "post": [19, 12], "beat": [[19, 12], [19, 9]], "cone": 5, "dir": "N"},
+                {"id": "rider-lane", "kind": "folk.soldier", "post": [19, 12], "beat": [[19, 12], [19, 9]], "pause": [19, 9, 1], "cone": 5, "dir": "N"},
                 # the west lane, at the far end of the long way: you see him coming
                 {"id": "rider-west", "kind": "folk.soldier", "post": [2, 10], "beat": [[2, 9], [2, 12]], "cone": 5, "dir": "S"},
                 # the main street before the gate: every route but the east lane ends here; on the open street the horse
                 # outruns him, so it is a race to the gate, not a trap
-                {"id": "rider-gate", "kind": "folk.soldier", "post": [16, 8], "beat": [[9, 8], [17, 8]], "cone": 6, "dir": "W"},
+                {"id": "rider-gate", "kind": "folk.soldier", "post": [16, 8], "beat": [[9, 8], [17, 8]], "pause": [17, 8, 2], "cone": 6, "dir": "W"},
             ],
         },
         "objectives": {

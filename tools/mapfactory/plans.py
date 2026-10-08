@@ -661,7 +661,9 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
                 beat = [list(mb.near_cell(tuple(c), want_visible=False)) for c in r.get("beat", [])]
                 m["npcs"].append({"id": r["id"], "kind": r.get("kind", "folk.soldier"), "x": post[0] + .5, "y": post[1] + .9, "say": [],
                                   "face": r.get("dir", "S"), "rider": {"chase": ch["chase"], "beat": beat, "cone": r.get("cone", 5),
-                                                                      "dir": r.get("dir", "S")}})
+                                                                      "dir": r.get("dir", "S"),
+                                                                      **({"pause": [*mb.near_cell(tuple(r["pause"][:2]), want_visible=False),
+                                                                                    r["pause"][2]]} if r.get("pause") else {})}})
         m["states"] = [state(st, mb, plans) for st in b.get("states", [])]
         if (w := ways(mb)):
             m["ways"] = w
