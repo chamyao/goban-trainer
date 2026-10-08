@@ -25,7 +25,48 @@ const WorldTravel = {
     if (typeof TKMusic !== "undefined") bar.append(TKMusic.button(btn("", "Music on or off", null)));   // tk-music.js
     bar.append(
       btn("地图 Map", "Out onto the world map", () => this.overworld(w)),
+      btn("重玩一段 Replay from…", "Go back to an earlier story beat and play on from there", () => this.replayPick(w)),
       btn("重新开始 Start over", "Forget this world's progress and start again", () => this.reset(w)));
+  },
+
+  // Replay from a beat: choose one of the story beats already played; it and everything after it are undone (with
+  // their boards), you stand where it starts, with the party and possessions you had then.
+  replayPick(w) {
+    const beats = w.nodes.filter(n => (n.role === "main" || n.role === "boss") && TK.cleared(n.key));
+    if (!beats.length) return alert("还没有可以重玩的段落。No story beat played yet.");
+    document.querySelectorAll(".tk-replay").forEach(el => el.remove());
+    const label = n => { const sc = n.scene && w.scenes[n.scene]; return `${n.key.split("-").pop()} · ${sc ? sc.title : n.place || n.key}`; };
+    const sel = h("select", { class: "tk-replay-sel" }, beats.map(n => h("option", { value: n.key }, label(n))));
+    sel.value = beats[beats.length - 1].key;
+    const box = h("div", { class: "tk-replay", role: "dialog", "aria-modal": "true" }, [h("div", { class: "tk-replay-card" }, [
+      h("b", {}, "重玩一段 Replay from a beat"), h("p", {}, "这一段及其后的进度将被撤回。This beat and everything after it are undone."), sel,
+      h("div", { class: "tk-replay-btns" }, [
+        h("button", { type: "button", class: "tk-chron-btn", onclick: () => box.remove() }, "取消 Cancel"),
+        h("button", { type: "button", class: "tk-chron-btn", onclick: () => { box.remove(); this.replay(w, sel.value); } }, "重玩 Replay")])])]);
+    document.body.append(box);
+  },
+  async replay(w, key) {
+    const idx = w.nodes.findIndex(n => n.key === key);
+    if (idx < 0) return;
+    const later = new Set(w.nodes.slice(idx).map(n => n.key)), before = w.nodes.slice(0, idx).filter(n => TK.cleared(n.key));
+    const p = loadProgress();
+    for (const k of Object.keys(p.tk || {})) if (later.has(k.split("~")[0])) TK.undoCleared(p, k);
+    TK.saveProg(p);
+    // the party and possessions as the beats before left them
+    let party = w.party; const items = [];
+    for (const n of before) for (const s of ((n.scene && w.scenes[n.scene]) || {}).steps || []) {
+      if (s[0] === "party") party = s[1];
+      if (s[0] === "gain" && !items.includes(s[1])) items.push(s[1]);
+    }
+    const pa = TK.ls("tk-party"); pa[w.n] = party; TK.lsSet("tk-party", pa);
+    if (typeof WorldItems !== "undefined") { const it = TK.ls(WorldItems.KEY); it[w.n] = items; TK.lsSet(WorldItems.KEY, it); }
+    const at = TK.ls("tk-at"); at[w.n] = key; TK.lsSet("tk-at", at);
+    const region = await WorldData.region(w.n), q = region && region.quests.find(x => x.node === key);
+    const st = (() => { try { return JSON.parse(localStorage.getItem(WorldState.key(w.n)) || "{}"); } catch { return {}; } })();
+    Object.assign(st, { party, place: q ? q.place : st.place, pos: null });
+    WorldState.save(w.n, st);
+    WorldView.destroy();
+    viewTK(w.n);
   },
 
   scene() { return WorldView.game && WorldView.game.scene.getScene("world"); },
@@ -115,7 +156,7 @@ const WorldTravel = {
   reset(w) {
     if (!confirm(`Start ${w.name} over? This forgets every problem cleared, scene seen, companion, possession and place visited in this world.`)) return;
     const p = loadProgress(), pre = `${w.n}-`;
-    for (const k of Object.keys(p.tk || {})) if (k.startsWith(pre)) delete p.tk[k];
+    for (const k of Object.keys(p.tk || {})) if (k.startsWith(pre)) TK.undoCleared(p, k);
     for (const k of Object.keys(p.tkSeen || {})) if (k.startsWith(`${w.n}:`)) delete p.tkSeen[k];
     TK.saveProg(p);
     for (const key of ["tk-party", "tk-items", "tk-at", "tk-ride", "tk-marks"]) { const a = TK.ls(key); delete a[w.n]; TK.lsSet(key, a); }

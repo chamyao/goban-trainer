@@ -608,8 +608,11 @@ const TK = {
   ls(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } },
   lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} if (typeof Sync !== "undefined" && Sync.tkKey(k)) Sync.scheduleSave(); },
   saveProg(p) { localStorage.setItem(PROGRESS_KEY, JSON.stringify(p)); if (typeof Sync !== "undefined") Sync.scheduleSave(); },
-  cleared(key) { return (loadProgress().tk || {})[key] === 1; },
-  markCleared(key) { const p = loadProgress(); (p.tk || (p.tk = {}))[key] = 1; this.saveProg(p); },
+  // cleared, unless undone since (a replay or a start over: "tkUndo", dated, so another device's or the server's old
+  // copy can't bring a beat back; clearing it again later, "tkAt", wins)
+  cleared(key) { const p = loadProgress(); return (p.tk || {})[key] === 1 && !(((p.tkUndo || {})[key] || 0) > ((p.tkAt || {})[key] || 0)); },
+  markCleared(key) { const p = loadProgress(); (p.tk || (p.tk = {}))[key] = 1; (p.tkAt || (p.tkAt = {}))[key] = Date.now(); this.saveProg(p); },
+  undoCleared(p, key) { if (p.tk) delete p.tk[key]; (p.tkUndo || (p.tkUndo = {}))[key] = Date.now(); },
   seen(id) { return !!(loadProgress().tkSeen || {})[id]; },
   markSeen(id) { const p = loadProgress(); (p.tkSeen || (p.tkSeen = {}))[id] = 1; this.saveProg(p); },
   world(n) { return this.data.worlds.find(w => w.n === n); },
