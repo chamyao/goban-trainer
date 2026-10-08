@@ -46,7 +46,8 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   await p.goto(BASE + '#/tk/' + BOOK); await p.reload();
   if (FROM) { for (let i = 0; i < 80 && !(await p.evaluate(() => !!(window.__w && window.__w.player))); i++) await p.waitForTimeout(250);
     await p.evaluate(([B, F]) => { const w = window.__w, Q = w.region.quests, i = Q.findIndex(q => q.node === F), prev = Q.slice(0, i).reverse().find(q => q.role === 'main' || q.role === 'boss');
-      const pl = prev ? prev.place : w.region.start, top = w.region.places.find(x => x.id === pl); for (const id of [top && top.parent, pl]) if (id && !w.st.visited.includes(id)) w.st.visited.push(id);
+      const city = id => { const x = w.region.places.find(q => q.id === id); return x && (x.parent || x.id); }, me = Q[i];
+      const pl = prev && !(me && me.place && city(me.place) !== city(prev.place)) ? prev.place : (me && me.place) || w.region.start, top = w.region.places.find(x => x.id === pl);   /* the beat in another city than the one before it (a scene took them there): start in its own place */ for (const id of [top && top.parent, pl]) if (id && !w.st.visited.includes(id)) w.st.visited.push(id);
       w.save(); w.leaving = false; w.cine = null; if (w.placeId !== pl) w.go(pl); }, [BOOK, FROM]); await p.waitForTimeout(1500); }
   // which board is up: the key the game opened it with
   for (let i = 0; i < 40 && !(await p.evaluate(() => typeof TKOverlay !== 'undefined')); i++) await p.waitForTimeout(250);
