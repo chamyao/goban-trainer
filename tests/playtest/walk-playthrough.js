@@ -108,7 +108,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
           if (d <= v) { st.x = tg.x; st.y = tg.y; const c = (W.beat || [])[st.leg], pz = W.pause; if (pz && c && c[0] === pz[0] && c[1] === pz[1]) st.wait = (pz[2] || 2) * 1000; st.leg = (st.leg + 1) % W.pts.length; }
           else { st.x += dx / d * v; st.y += dy / d * v; st.dir = Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? 'left' : 'right') : (dy < 0 ? 'up' : 'down'); } } }
         else if (W.turns.length) { st.t += DT; if (st.t > 2600) { st.t = 0; st.turn = (st.turn + 1) % W.turns.length; st.dir = W.turns[st.turn]; } } }
-      return { n, out }; }); window.__trk = tracks.map(t => ({ id: t.n.id, out: t.out }));
+      return { n, out }; }); const trk = tracks.map(t => ({ id: t.n.id, out: t.out }));
     const at = (cx, cy) => ({ x: cx * C + ox, y: cy * C + oy }), seen = new Uint8Array(cols * rows * F), wasHidden = w.hidden; w.hidden = false;   // (sees() answers for her as she is now: hidden, nobody sees anything; the map of sight is for her out in the open)
     for (const { n, out } of tracks) { const R = (n.watch.cone || 4) * T + C; for (let f = 0; f < F; f++) { const o = out[f], stub = { watch: { cone: n.watch.cone, dir: o.dir }, spr: { x: o.x, y: o.y } };
       for (let cy = Math.max(0, Math.floor((o.y - R) / C)); cy <= Math.min(rows - 1, Math.floor((o.y + R) / C)); cy++) for (let cx = Math.max(0, Math.floor((o.x - R) / C)); cx <= Math.min(cols - 1, Math.floor((o.x + R) / C)); cx++)
@@ -139,7 +139,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     /* followed in the page on the game's own clock: the time the patrols move by (the scene's update, held while the
        scene is paused or the game calm), each frame a step to the planned cell, or still where the plan stays */
     clearInterval(window.__execI); if (window.__execF) w.events.off('update', window.__execF); w.auto = null;
-    let gt = 0; window.__execT = 0; window.__ring = []; window.__pts = pts; window.__ms = STEP * 50; const ms = STEP * 50;
+    let gt = 0; window.__trk = trk; window.__execT = 0; window.__ring = []; window.__pts = pts; window.__ms = STEP * 50; const ms = STEP * 50;
     window.__execF = (t, d) => { const w = window.__w; if (!w || !w.player || w.caught || w.ui.busy() || w.cine || w.leaving || w.engaged) return;
       gt += d; window.__execT = gt;
       const k = Math.max(0, Math.min(pts.length - 1, Math.floor(gt / ms))), c = pts[k], P = w.player;
@@ -354,7 +354,11 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       // the plan stays); here only its end, a catch, and a fresh plan every 1.2 s in the open
       // (the plan is followed in the page from the moment it was made: see plan())
       const k = Math.floor((await p.evaluate(() => window.__execT || 0)) / (pace * 50));
-      if (Date.now() - planT > 1200 && !(await p.evaluate(() => !!window.__w.auto))) {   /* a fresh plan every 1.2 s, from a cell she's on (the patrols' simulation drifts over a long plan) */ await p.evaluate(() => (clearInterval(window.__execI), window.__execF && window.__w && window.__w.events.off('update', window.__execF), window.__execF = null, window.__w && (window.__w.auto = null))); plannedSteps = null; continue; }
+      if (Date.now() - planT > 1200 && !(await p.evaluate(() => !!window.__w.auto))) {   /* a fresh plan every 1.2 s, from a cell she's on (the patrols' simulation drifts over a long plan); none just now: the one she's on goes on */
+        let np = await plan(4), npP = 4; if (!np) { np = await plan(3); npP = 3; }
+        if (np) { plannedSteps = np; pace = npP; planT = Date.now() + 80; await p.evaluate(() => { window.__w.walk = null; }); if (process.env.STEALTHDBG) console.log(`     dbg replan: ${np.length} steps to ${[np[np.length - 1].x, np[np.length - 1].y]}${np[np.length - 1].hold ? ' (a cover on the way)' : ''}`); }
+        else { planT = Date.now(); if (process.env.STEALTHDBG) console.log('     dbg replan: none, keeping the plan she is on'); }
+        continue; }
       if (k >= plannedSteps.length - 1 && !plannedSteps[plannedSteps.length - 1].hold) { await p.evaluate(() => (clearInterval(window.__execI), window.__execF && window.__w && window.__w.events.off('update', window.__execF), window.__execF = null, window.__w && (window.__w.auto = null))); plannedSteps = null; await tapWorld(s.goal[0], s.goal[1]); }   // there: tap it (a spot that starts on a tap)
       await p.waitForTimeout(100); continue;
     }
