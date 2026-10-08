@@ -474,11 +474,41 @@ class MapBuilder:
             n["view"] = c.get("view", 1) * self.C   # how far he sees you, in tiles
             if c.get("blocks") is not None:         # what he guards
                 n["blocks"] = c["blocks"]
+            if c.get("guard") is not None:          # the point he holds, declined or not: a gate's gap, or a cell
+                g = c["guard"]
+                if isinstance(g, str):
+                    gap = self.gate_tiles[g]
+                    n["guard"] = [sum(t[0] for t in gap) / len(gap) + .5, sum(t[1] for t in gap) / len(gap) + .5]
+                else:
+                    n["guard"] = [g[0] * self.C + self.C / 2, g[1] * self.C + self.C / 2]
+                self.prove_guard(c, n)
             self.npcs.append(n)
         for i, w in enumerate(watchers):
             n = {"id": w["id"], "kind": w["kind"], "say": [], "watch": self.watch(w)}
             n["x"], n["y"] = n["watch"]["beat"][0]
             self.npcs.append(n)
+
+    def prove_guard(self, c, n):
+        """A guard holds the way: from where the walk starts, what he blocks can't be reached without passing within
+        2.5 tiles of his point (the engine's reach). Raises if there's a way round."""
+        start = self.near_cell(tuple(c.get("from") or self.p.get("entries", {}).get("") or c["at"]), want_visible=False)
+        b = c.get("blocks")
+        spot = next((s for s in self.spots if s["id"] == b), None)
+        goal = (int(spot["x"]), int(spot["y"])) if spot else self.anchor.get(b)
+        if goal is None:
+            raise RuntimeError(f"{self.mid}: guard {c['id']} blocks {b!r}, which is no spot or thing here")
+        gx, gy = n["guard"]
+        near = lambda t: (t[0] + .5 - gx) ** 2 + (t[1] + .5 - gy) ** 2 < 2.5 ** 2   # noqa: E731
+        seen, q = {start}, deque([start])
+        while q:
+            t = q.popleft()
+            if t == goal:
+                raise RuntimeError(f"{self.mid}: {c['id']} doesn't hold the way: {b} can be reached round his guard point")
+            for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                u = (t[0] + dx, t[1] + dy)
+                if u not in seen and 0 <= u[0] < self.W and 0 <= u[1] < self.H and (self.walkable(u) or u == goal) and not near(u):
+                    seen.add(u)
+                    q.append(u)
 
     def watch(self, w):
         """A stealth watcher in the engine's terms (docs/map-format.md, Book 2 additions): tiles, not cells."""
