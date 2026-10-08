@@ -35,7 +35,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=102`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=103`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
@@ -253,7 +253,7 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=102`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=103`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=46`);
       this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=105`);
     }
@@ -264,7 +264,7 @@ function worldScenes() {
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
       for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=115`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=116`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -370,10 +370,11 @@ function worldScenes() {
         Phaser.Geom.Intersects.RectangleToRectangle(r, new Phaser.Geom.Rectangle(z.body.x, z.body.y, z.body.width, z.body.height)));
       for (const e of this.exits) {
         const r = e.rect;
-        if (r.width >= 16 || r.height >= 16 || !hits(r)) continue;
+        // (within 6 px of a solid counts: his body stops him short of a door drawn on a wall's face)
+        if (r.width > 40 || r.height >= 16 || !hits(new Phaser.Geom.Rectangle(r.x - 6, r.y - 6, r.width + 12, r.height + 12))) continue;
         const sides = [[0, -10, 0, 10], [0, 0, 0, 10], [-10, 0, 10, 0], [0, 0, 10, 0]]   // grow up, down, left, right
           .map(([dx, dy, dw, dh]) => ({ grow: new Phaser.Geom.Rectangle(r.x + dx, r.y + dy, r.width + dw, r.height + dh), strip: dy ? new Phaser.Geom.Rectangle(r.x, r.y - 10, r.width, 10) : dh ? new Phaser.Geom.Rectangle(r.x, r.bottom, r.width, 10) : dx ? new Phaser.Geom.Rectangle(r.x - 10, r.y, 10, r.height) : new Phaser.Geom.Rectangle(r.right, r.y, 10, r.height) }))
-          .filter(o => !hits(o.strip));
+          .filter(o => !hits(o.strip) && hits(new Phaser.Geom.Rectangle(o.strip.x - 1, o.strip.y - 1, o.strip.width + 2, o.strip.height + 2)) === false);
         if (sides.length) e.reach = sides.reduce((u, o) => Phaser.Geom.Rectangle.Union(u, o.grow), new Phaser.Geom.Rectangle(r.x, r.y, r.width, r.height));
       }
       // a cover's own spot (Places names it as the cover), with no beat of its own: a place to hide, not to visit,
