@@ -506,4 +506,5 @@ ZH_PLACES2 = {
     "A grain merchant eyes Wei Hong's carts. “An army needs grain, and I have grain. Let's see what kind of bargainer you are.”": "一个粮商打量着卫弘的车队。“军队要粮，我有粮。看看你是什么样的买家。”",
     "“…Done. Half the price, for the banner.”": "“……成交。看在这面旗的份上，半价。”",
     "“The carts go out tomorrow, Lord Cao.”": "“车队明日出发，曹公。”",
+    "Stairs up the city wall": "登城石阶",
 }
