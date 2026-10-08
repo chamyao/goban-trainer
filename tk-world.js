@@ -35,7 +35,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=84`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=85`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
@@ -253,7 +253,7 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=84`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=85`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=43`);
       this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=90`);
     }
@@ -264,7 +264,7 @@ function worldScenes() {
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
       for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=94`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=95`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -2251,7 +2251,8 @@ function worldScenes() {
       const C = this.chase, P = this.player, spec = C.spec;
       this.engaged = n; this.walk = null; this.auto = null; P.setVelocity(0); P.anims.stop();
       for (const m of this.npcs) if (m.rider) m.spr.setVelocity(0);
-      await new Promise(r => this.talk(worldLines(spec.caught || [["n", "A rider has caught up with you!", "追兵赶上来了！"]]), r));
+      // a post can have its own line (the chase's "caught_at": {ambush id: lines}), else the chase's own
+      await new Promise(r => this.talk(worldLines((spec.caught_at && spec.caught_at[n.id]) || spec.caught || [["n", "A rider has caught up with you!", "追兵赶上来了！"]]), r));
       // one try: a board of its own each time (the beat's own problems, slots past its story boards)
       const idx = 20 + (C.tries % 10) * 8 + (n.idx != null ? n.idx : this.npcs.filter(m => m.rider || m.ambush).indexOf(n)) % 8;
       const won = await this.duel(`${C.key}~${idx}`, { id: n.id, who: n.who, face: this.faceOf(n) }, { once: true, onWin: () => {} });
