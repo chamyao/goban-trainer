@@ -2139,6 +2139,9 @@ def _nodes_caocao():
                         "相国赐我良马，我正试骑。不信，你自去问他。"]],
             "restart": [["n", "They take him back. Cao Cao rides out again, before anyone thinks to ask why.",
                          "被截回府。曹操再度牵马出门，趁无人起疑。"]],
+            # the guard behind him: a little slower than his horse, on his own trail
+            "wave": {"count": 6, "delay": 2, "who": "f_soldier", "pace": 0.92},
+            "overrun": [["n", "The guard closes round him, and hands drag him from the saddle.", "卫士一拥而上，将他扯下马来。"]],
         }, dilemma=D(
             "caocao", "Get through the East Gate.", "闯出东门。",
             "Before he wonders why I don't come back.", "趁他还没起疑。",
