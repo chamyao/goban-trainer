@@ -364,6 +364,18 @@ function worldScenes() {
             : Object.assign(new Phaser.Geom.Rectangle(o.x - 14, o.y - 18, 28, 26), { at: { x: o.x, y: o.y } }));   // a point (Places' cover spots): the ground round it
         }
       }
+      // a doorway drawn into its building's solid (the White Gate tower) can't be stood in: its trigger reaches out
+      // 10 px on whichever side is open ground, so walking up to the door goes in. Doors clear of solids are unchanged
+      const hits = r => this.solids.getChildren().some(z => z.body && z.body.enable && !(z.visibleWith && !z.visibleWith.visible) &&
+        Phaser.Geom.Intersects.RectangleToRectangle(r, new Phaser.Geom.Rectangle(z.body.x, z.body.y, z.body.width, z.body.height)));
+      for (const e of this.exits) {
+        const r = e.rect;
+        if (r.width >= 16 || r.height >= 16 || !hits(r)) continue;
+        const sides = [[0, -10, 0, 10], [0, 0, 0, 10], [-10, 0, 10, 0], [0, 0, 10, 0]]   // grow up, down, left, right
+          .map(([dx, dy, dw, dh]) => ({ grow: new Phaser.Geom.Rectangle(r.x + dx, r.y + dy, r.width + dw, r.height + dh), strip: dy ? new Phaser.Geom.Rectangle(r.x, r.y - 10, r.width, 10) : dh ? new Phaser.Geom.Rectangle(r.x, r.bottom, r.width, 10) : dx ? new Phaser.Geom.Rectangle(r.x - 10, r.y, 10, r.height) : new Phaser.Geom.Rectangle(r.right, r.y, 10, r.height) }))
+          .filter(o => !hits(o.strip));
+        if (sides.length) e.reach = sides.reduce((u, o) => Phaser.Geom.Rectangle.Union(u, o.grow), new Phaser.Geom.Rectangle(r.x, r.y, r.width, r.height));
+      }
       // a cover's own spot (Places names it as the cover), with no beat of its own: a place to hide, not to visit,
       // so it never takes a tap meant for a door beside it
       for (const o of map.getObjectLayer("objects").objects) if (o.type === "cover" && this.spots[o.name] && !this.spots[o.name].node) delete this.spots[o.name];
@@ -2476,7 +2488,9 @@ function worldScenes() {
         this.talk(g.say && g.say.length ? worldLines(g.say) : [["n", "The gate is shut.", "城门紧闭。"]]);
       }
       for (const e of this.exits) {
-        if (!Phaser.Geom.Rectangle.Contains(e.rect, P.x, P.y - 3)) continue;
+        // the reach counts only once he has stood outside it (coming out of that very door he lands inside it)
+        if (e.reach && !e.armed && !Phaser.Geom.Rectangle.Contains(e.reach, P.x, P.y - 3)) e.armed = true;
+        if (!Phaser.Geom.Rectangle.Contains(e.reach && e.armed ? e.reach : e.rect, P.x, P.y - 3)) continue;
         // a door only some may pass: the protagonist named, or a condition ("item:edict") that holds
         const ms = this.mapState(), shut = ms && (ms.exits_closed || []).includes(e.to), opened = ms && (ms.exits_open || []).includes(e.to);
         const barred = shut || e.openTo && !e.openTo.some(w => w.includes(":") ? this.cond(w) : w === this.lead);
