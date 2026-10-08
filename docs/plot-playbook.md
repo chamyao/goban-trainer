@@ -322,6 +322,9 @@ Draft one arc, get it playable in a test book, and fix what the playtest shows b
   minimum setup on the opening scroll.
 - Continuity across books and arcs is a bonus. Plant payoffs so they work in either order: played first they plant,
   played second they explain.
+- When books are chained (a world's `next`), the earlier book's **closing scroll** bridges what lies between in the
+  novel's own order, and the later book's **opening scroll** still stands alone for a player who starts there. Example:
+  the Cao Cao arc closes on chapters 5–7 in four lines; the Diaochan arc opens on Chang'an under Dong Zhuo.
 
 ### R15. Relay only what the user said
 
@@ -384,6 +387,8 @@ Places that the user had "changed priorities". That was Plot's inference, and Pl
 - [ ] Each beat is legwork, contest or settled. No board decides an outcome the novel already decided.
 - [ ] Every errand's purpose is said in-game before the walk. Every objective says where.
 - [ ] Every handoff has a start point. The lead doesn't change in the middle of their own stretch.
+- [ ] Every `strike` names its target (`["pose", actor, "strike", target]`). Otherwise the engine picks the nearest
+      "enemy", which in a hall is often the lead (Lü Bu once stabbed Li Su instead of Dong Zhuo).
 - [ ] Every dilemma's `who` is the decider. No character appears before they are brought in.
 - [ ] Road-challenger counts are exact, and every challenger can be reached.
 - [ ] Each multi-problem scene's third problem is the hardest.

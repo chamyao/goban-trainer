@@ -429,3 +429,12 @@ Beat spots are `2-c1` … `2-c23`. Place names and rooms:
 Place order on the road, in the novel's order: Luoyang (with Beimang to its north and the camps outside its walls) → the
 East Road (Zhongmou) → Chenggao → Chenliu. (On a real map Chenggao lies west of Zhongmou. The novel puts it after, and
 the game follows the novel.)
+
+## Published
+
+The user asked to publish this arc ("chronologically it goes before diaochan arc right"). Integration made it world 13,
+listed first as Book 1, with the Diaochan arc (world 12) as Book 2 after it. Finishing 13 leads to 12.
+- **Closing scroll** ("The Coalition"): chapters 5–7 in four lines. Eighteen lords and the brothers; Hua Xiong and
+  Hulao; the burning of Luoyang, Cao Cao's lone pursuit and the seal in the well; the lords falling out.
+- **The Diaochan arc's new opening scroll** (chapter 8): Chang'an under Dong Zhuo, with Lü Bu at his side. It stands on
+  its own for a player who starts there.

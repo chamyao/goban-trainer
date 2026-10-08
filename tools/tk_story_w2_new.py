@@ -849,7 +849,7 @@ def _scenes_chain():
             S("dongzhuo", "Where is my son Fengxian?", "吾儿奉先何在？"),
             ["run", "lb", "a14", 14, 0],
             S("lvbu", "There is an edict to kill a traitor!", "有诏讨贼！"),
-            ["pose", "lb", "strike"], ["fx", "flash", "a14", 12, 0], ["pose", "dz", "fall"],
+            ["pose", "lb", "strike", "dz"], ["fx", "flash", "a14", 12, 0], ["pose", "dz", "fall"],
             N("One thrust of his halberd goes through Dong Zhuo's throat, and Li Su takes the head.", "一戟直刺咽喉，李肃早割头在手。"),
             ["still", "dz_gate", "slow pull back"],
             N("Lü Bu holds his halberd in his left hand, draws the edict from his breast with his right, and cries out:",
@@ -1486,7 +1486,7 @@ def _scenes_caocao():
               "不可！不可！汝是何人，敢发大语？天子乃先帝嫡子，初无过失，何得妄议废立？汝欲为篡逆耶？"),
             ["emote", "dongzhuo", "anger"],
             S("dongzhuo", "Those who follow me live. Those who oppose me die!", "顺我者生，逆我者死！"),
-            ["pose", "dongzhuo", "strike"],
+            ["pose", "dongzhuo", "strike", "dy"],
             ["move", "lb", "c6", 20, 4],
             ["still", "wm_lubu", "slow zoom in"],
             N("Dong Zhuo draws his sword. But Li Ru sees a man behind Ding Yuan: tall and splendid, a painted halberd in his hand, glaring.",
@@ -1633,7 +1633,7 @@ def _scenes_caocao():
             S("lvbu", "I'm a man in my own right! Why would I be your son?", "吾堂堂丈夫，安肯为汝子乎！"),
             S("dingyuan", "Fengxian, why has your heart turned?", "奉先何故心变？"),
             ["mood", "dark"],
-            ["pose", "lb", "strike"],
+            ["pose", "lb", "strike", "dy"],
             N("The candle goes out.", "烛灭。"),
             ["remove", "dy"],
             ["mood", "clear"],
@@ -1678,7 +1678,7 @@ def _scenes_caocao():
               "中军校尉袁绍在此。今上即位未几，并无失德；汝欲废嫡立庶，非反而何？"),
             S("dongzhuo", "The realm is in my hands! When I act, who dares refuse? Do you think my sword isn't sharp?",
               "天下事在我！我今为之，谁敢不从？汝视我之剑不利否？"),
-            ["pose", "ys", "strike"],
+            ["pose", "ys", "strike", "dz"],
             ["still", "ys_sword", "slow zoom in"],
             S("yuanshao", "Your sword is sharp. And so is mine!", "汝剑利，吾剑未尝不利！"),
             S("liru", "Nothing is settled yet. You can't kill him now.", "事未可定，不可妄杀。"),
@@ -1711,7 +1711,7 @@ def _scenes_caocao():
             ["move", "dg", "c12", 12, -4],
             S("dingguan", "Traitor Dong Zhuo! You dare deceive Heaven! I will spatter you with the blood of my own neck!",
               "贼臣董卓，敢为欺天之谋，吾当以颈血溅之！"),
-            ["pose", "dg", "strike"],
+            ["pose", "dg", "strike", "dz"],
             N("He strikes at Dong Zhuo with the ivory tablet in his hand. He is Ding Guan, of the Secretariat. Dong Zhuo has him dragged out and beheaded. "
               "He curses until he dies, and his face never changes.",
               "挥手中象简，直击董卓。乃尚书丁管也。卓命牵出斩之。管骂不绝口，至死神色不变。"),
@@ -1764,7 +1764,7 @@ def _scenes_caocao():
               "越骑校尉伍孚，见卓残暴，愤恨不平。尝于朝服内披小铠，藏短刀，欲伺便杀卓。"),
             ["move", "dz", "c14", 12, 0],
             ["run", "wf", "c14", 11, 1],
-            ["pose", "wf", "strike"],
+            ["pose", "wf", "strike", "dz"],
             ["fx", "flash", "c14", 12, 0],
             N("As Dong Zhuo comes into court, Wu Fu meets him below the gallery and stabs at him. Dong Zhuo is strong, and seizes his arms. "
               "Lü Bu comes in and throws him down.",
@@ -1841,7 +1841,7 @@ def _scenes_caocao():
             ["problem"],  # 1 — the attempt; it fails as written
             S("caocao", "Now he's finished.", "此贼当休矣！"),
             ["move", "caocao", "c16", 8, -4],
-            ["pose", "caocao", "strike"],
+            ["pose", "caocao", "strike", "dz"],
             ["still", "the_mirror", "slow zoom in"],
             N("Cao Cao draws the sword. He is about to strike when Dong Zhuo looks up into the dressing mirror, and sees him behind his back with the blade drawn.",
               "急掣宝刀在手。恰待要刺，不想董卓仰面看衣镜中，照见曹操在背后拔刀。"),
@@ -1998,7 +1998,7 @@ def _scenes_caocao():
               "Leave him alive today, and there'll be trouble later.",
               "我将谓曹操是好人，弃官跟他；原来是个狠心之徒！今日留之，必为后患。"),
             ["move", "chengong", "c21", 4, -4],
-            ["pose", "chengong", "strike"],
+            ["pose", "chengong", "strike", "cc"],
             ["still", "cg_inn", "slow zoom in"],
             N("He draws his sword to kill Cao Cao. Then he stops.", "便欲拔剑来杀曹操。忽转念曰："),
             S("chengong", "I followed him this far for the sake of the realm. To kill him would be a wrong too. Better to leave him, and go elsewhere.",
@@ -2189,6 +2189,32 @@ _ITEMS_CAOCAO = {
     "weihong": {"name": "Wei Hong's fortune", "zh": "卫弘家资", "kind": "treasure"},
 }
 
+# Closes the Cao Cao arc and bridges to the Diaochan arc: chapters 5-7 in a few lines, in the novel's own order.
+_CLOSING_CAOCAO = [
+    ["scroll", T("The Coalition", "诸侯会盟"), [
+        T("Eighteen lords answered Cao Cao's call, with Yuan Shao as their leader. Among those who came with Gongsun Zan were Liu Bei and his sworn brothers, Guan Yu and Zhang Fei.",
+          "十八路诸侯应操之召，共推袁绍为盟主。随公孙瓒而来的，有刘备与他的结义兄弟关羽、张飞。"),
+        T("At Sishui Pass, Guan Yu cut down Dong Zhuo's champion Hua Xiong before the wine Cao Cao had poured him was cold. At Hulao Pass the three brothers fought Lü Bu together, and drove him back.",
+          "汜水关前，关羽温酒斩华雄。虎牢关下，三英战吕布。"),
+        T("Dong Zhuo burned Luoyang and drove the Emperor and millions of people west to Chang'an. Cao Cao pursued him alone, and barely escaped with his life. In the ruins, Sun Jian found the Imperial Seal in a well.",
+          "董卓火烧洛阳，驱天子与百姓数百万口西迁长安。曹操独自追击，几乎丧命。孙坚在废墟井中得了传国玉玺。"),
+        T("Then the lords fell out, and went home to fight one another. Dong Zhuo was left master of Chang'an.",
+          "诸侯各怀异心，散归本镇，自相攻伐。董卓独据长安。"),
+    ]],
+]
+
+# Opens the Diaochan arc for a player who starts here (each book stands on its own).
+_OPENING_CHAIN = [
+    ["scroll", T("Chapter 8", "第八回"), [
+        T("Minister Wang cleverly sets the chain of schemes; Grand Preceptor Dong storms the Phoenix Pavilion.",
+          "王司徒巧使连环计，董太师大闹凤仪亭。"),
+        T("Dong Zhuo has burned Luoyang and moved the court west to Chang'an. The lords who rose against him have fallen to fighting one another.",
+          "董卓火烧洛阳，迁都长安。起兵讨董的诸侯，已自相攻伐。"),
+        T("In Chang'an he does as he pleases, with Lü Bu, the strongest warrior alive, at his side as his adopted son. No minister dares to speak.",
+          "长安城中，董卓为所欲为。天下第一猛将吕布，是他的义子，随侍左右。满朝公卿，无人敢言。"),
+    ]],
+]
+
 _OPENING_CAOCAO = [
     ["scroll", T("Chapter 3", "第三回"), [
         T("At the Wenming council Dong Zhuo shouts down Ding Yuan; with gold and pearls Li Su wins over Lü Bu.",
@@ -2225,7 +2251,7 @@ def _world():
         "nodes": [dict(n, dilemma=_multi_dilemmas()[n["key"]]) if n["key"] in _multi_dilemmas() else n for n in _nodes_chain()],
         "edges": _EDGES_CHAIN,
         "scenes": scenes,
-        "opening": [],
+        "opening": _OPENING_CHAIN,
         "closing": [],
     }
 
@@ -2255,7 +2281,7 @@ def _world_caocao():
         "edges": _EDGES_CAOCAO,
         "scenes": _scenes_caocao(),
         "opening": _OPENING_CAOCAO,
-        "closing": [],
+        "closing": _CLOSING_CAOCAO,
     }
 
 

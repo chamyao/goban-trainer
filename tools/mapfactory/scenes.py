@@ -357,11 +357,15 @@ class Stage:
         self.beats.append({"do": "line", "line": step, "speaker": speaker, "face": turns,
                            "camera": self.frame([speaker] + ([other] if other else []))})
 
-    def strike(self, aid):
+    def strike(self, aid, target=None):
+        """["pose", who, "strike"] at the nearest enemy, or ["pose", who, "strike", target] at that cast member
+        (the guess picks by side and distance, and in a hall the nearest "enemy" is often a bystander)."""
+        if target is not None and (target not in self.cast or target in self.gone):
+            raise ValueError(f"strike target {target!r} is not on stage (cast ids: {sorted(self.cast)})")
         for a in self.members(aid):
             if a not in self.cast or a in self.gone:
                 continue
-            t = self.enemy_of(a)
+            t = target if target is not None else self.enemy_of(a)
             self.beats.append({"do": "strike", "actor": a, **({"target": t} if t else {})})
 
     def fall(self, aid, count=None):
@@ -516,7 +520,7 @@ def stage_scene(scene, m, spot, party, chars, boss=None):
             st.move(s[1], st.offset(s[3], s[4]), RUN if op == "run" else WALK)
         elif op == "pose":
             if s[2] == "strike":
-                st.strike(s[1])
+                st.strike(s[1], s[3] if len(s) > 3 else None)
             elif s[2] == "fall":
                 st.fall(s[1], s[3] if len(s) > 3 else None)
             elif s[2] in POSES:
