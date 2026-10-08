@@ -2,18 +2,58 @@
 
 Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in brackets.
 
-## Opening scroll: Chapter 13
+## Opening scroll: Chapter 9
 
-> When Dong Zhuo's generals took Chang'an, Lü Bu fled with a hundred riders and left his family behind. An officer named Pang Shu hid them, and later sent them on to him.  
-> 李傕、郭汜犯長安，呂布只得棄卻家小，引百餘騎飛奔出關。龐舒私藏呂布妻小，送還呂布。
-> With Chen Gong he seized Yanzhou while Cao Cao was away, and at Puyang Chen Gong's fire trap nearly killed Cao Cao. But Cao Cao drove them out.  
-> 呂布與陳宮乘曹操東征，襲取兗州。陳宮設計火燒濮陽，曹操幾死；終被曹操所破。
-> With nowhere left to go, Lü Bu turned to Liu Bei, who had just taken charge of Xuzhou.  
-> 無處安身，呂布乃投新領徐州的劉玄德。
+> Dong Zhuo is dead, and Lü Bu, who killed him, holds Chang'an with Minister Wang Yun. But Dong Zhuo's old generals, Li Jue and Guo Si, are marching on the city.  
+> 董卓既誅，呂布與王司徒共掌長安。董卓舊將李傕、郭汜，引兵殺奔長安來。
+> You are Lady Yan, Lü Bu's wife: his first and principal wife, married long before Diaochan came to him as his concubine. With you is your daughter, Lü Bu's only child.  
+> 你是嚴氏，呂布的正妻。呂布先娶嚴氏為正妻，後娶貂蟬為妾。你身邊是女兒，呂布唯一的孩子。
+
+
+## X0A · Left Behind (棄卻家小)
+*Chang'an* · room `lb-house` · no board
+
+*Chang'an, the night it falls. Dong Zhuo's old generals Li Jue and Guo Si are inside the walls, and flames rise from every gate.*  
+李傕、郭汜兵入長安，各門火燄竟天。
+
+[still: `yan_left`]
+
+*Lü Bu cannot hold the city. He has to leave his family behind, and rides out through the pass with a hundred horsemen.*  
+呂布只得棄卻家小，引百餘騎飛奔出關。
+
+*Li Jue and Guo Si turn their soldiers loose to plunder the city.*  
+李傕、郭汜縱兵大掠。
+
+*Pang Shu, an officer in Chang'an, takes Lü Bu's wife and child in, in secret.*  
+時龐舒在長安城中，私藏呂布妻小。
+
+
+## X0B · Hidden (私藏)
+*Chang'an* · room `pangshu-house` · boards: **Lady Yan**: “Stay hidden.”
+
+[still: `yan_hidden`]
+
+*In Pang Shu's house they stay hidden, while the city outside is plundered.*  
+龐舒私藏呂布妻小。
+
+**▶ GO PROBLEM**
+
+*Far away, Lü Bu wanders. Yuan Shu will not take him in. Yuan Shao takes him in, then wants him dead. At last Zhang Yang takes him in.*  
+呂布逃出武關，去投袁術；術拒而不納。投袁紹，紹納之；紹欲殺之，布乃去投張揚，揚納之。
+
+*Then Pang Shu sends Lü Bu's wife and child back to him.*  
+龐舒送還呂布妻小。
+
+*Li Jue and Guo Si find out. They behead Pang Shu, and write to Zhang Yang telling him to kill Lü Bu. So Lü Bu leaves Zhang Yang and moves on.*  
+李傕、郭汜知之，遂斬龐舒，寫書與張揚，教殺呂布；布因棄張揚去投張邈。
+
+*(the player is now: Lü Bu)*
 
 
 ## X1 · A Guest at Xuzhou (投奔徐州)
 *Xuzhou* · room `xz-hall` · no board
+
+*(the player is now: Lü Bu)*
 
 *(gained: redhare)*
 

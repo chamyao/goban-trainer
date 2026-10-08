@@ -51,6 +51,10 @@ How to apply it:
 - **The test:** in the novel's own text, does she act, decide or go to someone? Is her moment interesting to play? If both
   hold, she leads that stretch (Diaochan's scenes; Lady Yan going to Lü Bu at Xiapi, 「布妻嚴氏聞之，出問曰」).
 - **If she is only present or spoken of,** she isn't the lead. Stage her moment fully and let her speak her lines.
+- **If things are done to her, she can still lead by playing what happens to her.** The user, on Lady Yan in Chang'an:
+  "cant we have her show up as hid and wait actions". She was hidden, so the player hides and waits. Give her only the
+  actions the text gives her, and no lines the text doesn't. If it would confuse after an earlier arc, brief the player
+  on who she is ("just have to make it not confusing").
 - **Don't** invent scenes to give her more presence, or overstate her role. Check every claim against the text. (An early Lü Bu draft said "the women win every time" and added an invented Lady Yan prologue.
   Both were cut.)
 - **Known opportunities in later chapters** are listed in `docs/plot-opportunities.md`, so none are missed.
