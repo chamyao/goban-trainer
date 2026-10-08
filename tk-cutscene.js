@@ -434,7 +434,7 @@ const WorldCutscene = {
       }
     };
     // light: the whole scene tinted for the time of day; at night fires and lamps glow
-    const LIGHT = { night: 0x46559c, dusk: 0xf0c0a0, dawn: 0xd8c8e8, storm: 0x80868e };
+    const LIGHT = { night: 0x46559c, dusk: 0xf0c0a0, dawn: 0xd8c8e8, storm: 0x80868e, fire: 0xc87850 };
     let shade = null, glows = [], night = false;
     let tintNow = (scene.st && scene.st.light) || null;   // the map's light going in (a scene that ended at night left it)
     const glow = o => {                                          // warm light round a fire or a lamp
@@ -456,15 +456,15 @@ const WorldCutscene = {
       const out = o => ms ? scene.tweens.add({ targets: o, alpha: 0, duration: ms, onComplete: () => o.destroy() }) : o.destroy();
       if (old) out(old);
       oldGlows.forEach(out);
-      night = tint === "night";
+      night = tint === "night" || tint === "fire";
       tintNow = c == null ? null : tint;
       if (c == null) return;
       // fixed to the screen and big enough to cover it at any zoom; multiplied over the map and the cast, under bubbles
       shade = scene.add.rectangle(W / 2, H / 2, W * 3, H * 3, c).setScrollFactor(0).setDepth(9e4).setBlendMode(Phaser.BlendModes.MULTIPLY);
       fx.push(shade);
       if (night) {
-        const lit = new Set(scene.children.list.filter(o => o.type === "Image" && o.frame && /^(camp\.firepit|camp\.cookfire|lamp\.post|furn\.hearth|landmark\.(torch|brazier))#/.test(o.frame.name)));
-        for (const L of scene.lights || []) if (L.img && L.img.visible && /^(landmark\.(torch|brazier)|camp\.)/.test(L.kind || "")) lit.add(L.img);   // the map's torches (the jail court), whatever art stands in for them
+        const lit = new Set(scene.children.list.filter(o => o.type === "Image" && o.frame && /^(camp\.firepit|camp\.cookfire|lamp\.post|furn\.hearth|landmark\.(torch|brazier)|ruin\.burning)#/.test(o.frame.name)));
+        for (const L of scene.lights || []) if (L.img && L.img.visible && /^(landmark\.(torch|brazier)|camp\.|ruin\.burning)/.test(L.kind || "")) lit.add(L.img);   // the map's torches (the jail court), whatever art stands in for them
         lit.forEach(glow);
         Object.values(actors).filter(a => a.prop && FIRES.includes(a.prop)).forEach(a => { a.glow = glow(a.spr); });
       }

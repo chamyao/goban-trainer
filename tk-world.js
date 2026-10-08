@@ -35,7 +35,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=95`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=96`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
@@ -253,9 +253,9 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=95`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=96`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=44`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=103`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=104`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
@@ -264,7 +264,7 @@ function worldScenes() {
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
       for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=106`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=107`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -286,7 +286,7 @@ function worldScenes() {
     create() {
       const region = this.region = this.cache.json.get("region"), kit = this.kit = this.cache.json.get("kit");
       const opts = this.opts = this.game.worldOpts, w = this.w = opts.w;
-      this.grid = this.walk = this.lampFx = this.ambientFx = this.cine = this.auto = this.player = this.engaged = this.carried = this.routeFx = null; this.glows = []; this.seated = this.caught = false;   // the scene object outlives a change of place: no old map's walk grid or tap-walk
+      this.grid = this.walk = this.lampFx = this.ambientFx = this.cine = this.auto = this.player = this.engaged = this.carried = this.routeFx = null; this.glows = []; this.stateFx = this.stateFxKind = null; this.seated = this.caught = false;   // the scene object outlives a change of place: no old map's walk grid or tap-walk
       this.story = w.scenes;
       // a save from an older map: a renamed place is found under its new name (arriving as if walking in);
       // a removed one sends him back to the start
@@ -601,7 +601,7 @@ function worldScenes() {
       if (zone && p.kind !== "wall.lattice") (this.sightZones = this.sightZones || []).push(zone);   // what blocks a watcher's sight (a lattice doesn't)
       if (p.in) this.stated.push({ img, zone, in: JSON.parse(p.in) });
       if (p.ref) (this.refs = this.refs || {})[p.ref] = { x: o.x, y: o.y - (p.fh || 0) / 2 };
-      if (/^(lamp\.|prop\.lantern|camp\.(firepit|cookfire)|landmark\.(torch|brazier)|furn\.(lamp|hearth))/.test(p.kind || "")) (this.lights = this.lights || []).push({ x: o.x, y: o.y - (p.fh || 16) / 2, kind: p.kind, img });   // shown only in some of the map's states
+      if (/^(lamp\.|prop\.lantern|camp\.(firepit|cookfire)|landmark\.(torch|brazier)|ruin\.burning|furn\.(lamp|hearth))/.test(p.kind || "")) (this.lights = this.lights || []).push({ x: o.x, y: o.y - (p.fh || 16) / 2, kind: p.kind, img });   // shown only in some of the map's states
     }
 
     // The shrine's three looks (the rock under the pine): "dark" (an empty board), "lit" (a game in
@@ -781,12 +781,12 @@ function worldScenes() {
       if (this.worldShade) { this.worldShade.destroy(); this.worldShade = null; }
       for (const g of this.glows || []) g.destroy();
       this.glows = [];
-      const c = { night: 0x46559c, dusk: 0xf0c0a0, dawn: 0xd8c8e8, storm: 0x80868e, smoke: 0xb39c8a, dust: 0xe9d6ac }[this.st.light];
+      const c = { night: 0x46559c, dusk: 0xf0c0a0, dawn: 0xd8c8e8, storm: 0x80868e, smoke: 0xb39c8a, dust: 0xe9d6ac, fire: 0xc87850 }[this.st.light];   // fire: a city burning at night (Chang'an sacked)
       if (!c) return;
       const W = this.scale.width, H = this.scale.height;
       this.worldShade = this.add.rectangle(W / 2, H / 2, W * 3, H * 3, c).setScrollFactor(0).setDepth(9e4).setBlendMode(Phaser.BlendModes.MULTIPLY);
       // at night the lamps, lanterns and fires light the ground round them (and you carry a little light yourself)
-      if (this.st.light === "night" || this.st.light === "dusk") {
+      if (["night", "dusk", "fire"].includes(this.st.light)) {
         if (!this.textures.exists("@glow")) {
           const S = 128, cv = document.createElement("canvas"); cv.width = cv.height = S;
           const g = cv.getContext("2d"), r = g.createRadialGradient(S / 2, S / 2, 0, S / 2, S / 2, S / 2);
@@ -794,10 +794,10 @@ function worldScenes() {
           g.fillStyle = r; g.fillRect(0, 0, S, S);
           this.textures.addCanvas("@glow", cv);
         }
-        const night = this.st.light === "night";
+        const night = this.st.light === "night" || this.st.light === "fire";
         for (const L of this.lights || []) {
           if (L.img && !L.img.visible) continue;
-          const big = /firepit|cookfire|hearth/.test(L.kind) ? 1.1 : /lantern/.test(L.kind) ? .9 : .75;
+          const big = /firepit|cookfire|hearth|burning/.test(L.kind) ? 1.1 : /lantern/.test(L.kind) ? .9 : .75;
           const g = this.add.image(L.x, L.y, "@glow").setBlendMode(Phaser.BlendModes.ADD).setDepth(9e4 + 1).setScale(big).setAlpha(night ? .75 : .4);
           this.tweens.add({ targets: g, alpha: g.alpha * .8, duration: 700 + Math.random() * 500, yoyo: true, repeat: -1, ease: "Sine.easeInOut" });
           this.glows.push(g);
@@ -848,8 +848,21 @@ function worldScenes() {
         if (o.img) o.img.setVisible(on);
         if (o.zone && o.zone.body) o.zone.body.enable = on;
       }
+      // a state's own air: "fx": "embers" (a city burning), rising over the whole map while the state holds
+      const sfx = st && st.fx;
+      if ((this.stateFxKind || null) !== (sfx || null)) {
+        if (this.stateFx) { this.stateFx.destroy(); this.stateFx = null; }
+        this.stateFxKind = sfx || null;
+        if (sfx === "embers" && this.add.particles) {
+          const W = this.scale.width;
+          this.stateFx = this.add.particles(0, 0, "@ember", { x: { min: 0, max: W }, y: this.scale.height + 6, quantity: 1, frequency: 160,
+            speedY: { min: -26, max: -12 }, speedX: { min: -8, max: 8 }, lifespan: 9000, alpha: { start: 1, end: 0 }, rotate: { min: 0, max: 360 } })
+            .setScrollFactor(0).setDepth(1e5);
+          this.stateFx.fastForward && this.stateFx.fastForward(6000);
+        }
+      }
       if (st && "light" in st) {   // the state's light (day clears a scene's night)
-        const L = { day: st.weather === "dust" ? "dust" : null, morning: "dawn", dawn: "dawn", dusk: "dusk", night: "night", lantern: "night", storm: "storm", smoke: "smoke" }[st.light];
+        const L = { day: st.weather === "dust" ? "dust" : null, morning: "dawn", dawn: "dawn", dusk: "dusk", night: "night", lantern: "night", storm: "storm", smoke: "smoke", fire: "fire" }[st.light];
         if ((this.st.light || null) !== (L || null)) { this.st.light = L || null; if (this.player) this.applyWorldLight(); }   // (on arrival the scene applies it once built)
       }
       // one of each person at a time: a brother standing here in his own right (Guan Yu on his
