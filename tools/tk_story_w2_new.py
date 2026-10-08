@@ -2285,7 +2285,7 @@ def _scenes_lvbu():
                 T("With nowhere left to go, Lü Bu turned to Liu Bei, who had just taken charge of Xuzhou.",
                   "無處安身，呂布乃投新領徐州的劉玄德。"),
             ]],
-            ["party", ["lvbu"], {"to": "x1"}],
+            ["party", ["lvbu"], {"to": {"place": "Xuzhou", "from": "Xiaopei"}}],
         ]},
 
         # X1 · Xuzhou takes him in. No board.
@@ -2447,7 +2447,7 @@ def _scenes_lvbu():
               "其意蓋欲以公女為質，隨後就來攻玄德而取小沛。小沛亡，徐州危矣。且彼或來借糧，或來借兵；公若應之，是疲於奔命；若其不允，是棄親而啟兵端也。況聞袁術已有稱帝之意，是造反也。彼若造反，則公乃反賊親屬矣，得無為天下所不容乎？"),
             ["emote", "lvbu", "!"],
             S("lvbu", "Chen Gong has misled me! Zhang Liao, after them!", "陳宮誤我！張遼，急引兵追趕之！"),
-            ["party", ["zhangliao"], {"to": "x8"}],
+            ["party", ["zhangliao"], {"to": {"place": "The Shouchun Road", "from": "Xuzhou"}}],
         ]},
 
         # X8 · Thirty li. Played as Zhang Liao. Legwork: the board first.
@@ -2459,7 +2459,7 @@ def _scenes_lvbu():
             N("Thirty li out, Zhang Liao catches the bridal party, and brings the girl home. Han Yin is taken back too, and held.",
               "三十里之外將女搶歸；連韓胤都拏回監禁。"),
             N("A message goes to Yuan Shu: the dowry wasn't ready. She'll be sent when it is.", "卻令人回復袁術，只說女兒妝奩未備，俟備畢便自送來。"),
-            ["party", ["lvbu"], {"to": "x9"}],
+            ["party", ["lvbu"], {"to": {"place": "Xuzhou", "spot": "lodging-door"}}],
         ]},
 
         # X9 · The hawk. No board.
@@ -2480,7 +2480,7 @@ def _scenes_lvbu():
             ["still", "cd_hawk", "slow zoom in"],
             S("lvbu", "Ha! Lord Cao understands me!", "曹公知我也！"),
             N("Chen Gong watches the Chens with growing unease.", "陳宮見陳珪父子日親，心中不安。"),
-            ["party", ["chengong"], {"to": "x10"}],
+            ["party", ["chengong"], {"to": {"place": "Xiaopei", "from": "Xuzhou"}}],
         ]},
 
         # X10 · The hunt. Played as Chen Gong. Legwork: the board first.
@@ -2497,7 +2497,7 @@ def _scenes_lvbu():
             N("Your command is to destroy Lü Bu. I am at your service day and night. If you march, I will lead the way.",
               "奉明命欲圖呂布，敢不夙夜用心？丞相若興大師，備當為前驅。"),
             N("Chen Gong takes the man and the letter to Lü Bu. Lü Bu beheads the messenger and goes to war on Liu Bei.", "宮即連人與書，拿見呂布。布遂將使者斬首，令高順、張遼取沛城，攻玄德。"),
-            ["party", ["lvbu"], {"to": "x11"}],
+            ["party", ["lvbu"], {"to": {"place": "Xuzhou", "spot": "lodging-door"}}],
         ]},
 
         # X11 · The family moves. No board. Hands to Chen Deng on the road to the pass.
@@ -2513,7 +2513,7 @@ def _scenes_lvbu():
               "遂令宋憲、魏續保護妻小與錢糧移屯下邳；一面自引軍與陳登往救蕭關。"),
             S("chendeng", "Let me ride ahead to the pass and see how things stand.", "容某先到關探曹兵虛實，主公方可行。"),
             ["remove", "cd"],
-            ["party", ["chendeng"], {"to": "x12"}],
+            ["party", ["chendeng"], {"to": {"place": "Xiao Pass", "from": "Xuzhou"}}],
         ]},
 
         # X12 · Three letters. Played as Chen Deng. Legwork: the board first.
@@ -2533,7 +2533,7 @@ def _scenes_lvbu():
             ["still", "xiao_dark", "slow pull back"],
             N("Lü Bu charges in the dark, and his men and Chen Gong's kill each other until dawn.", "呂布乘黑殺至，陳宮軍和呂布軍在黑暗裏自相掩殺。"),
             ["remove", "cg"],
-            ["party", ["lvbu"], {"to": "x13"}],
+            ["party", ["lvbu"], {"to": {"place": "Xuzhou", "from": "Xiao Pass"}}],
         ]},
 
         # X13 · Locked out. No board.
@@ -2616,7 +2616,7 @@ def _scenes_lvbu():
               "次夜二更時分，呂布將女以綿纏身，用甲包裹，負於背上。"),
             ["carry", "lb"], ["remove", "lvnv"], ["remove", "lb"],
             ["carry", "lvbu", "lvnv"],  # world state: carried on the open map until x16 sets her down
-            ["party", ["lvbu"], {"to": "x16"}],
+            ["party", ["lvbu"]],  # he starts where she stood, and walks out with the girl on his back,
         ]},
 
         # X16 · Through the lines. The daughter on his back; he turns back, as written. No board.
@@ -2697,7 +2697,7 @@ def _scenes_lvbu():
             ["still", "lb_bound", "slow pull back"],
             N("They wave the white flag. Cao's army pours in. Gao Shun and Zhang Liao are trapped by the water and taken; Chen Gong is caught at the south gate.",
               "把白旗一招，曹兵一擁而入。高順、張遼在西門，水圍難出，為曹兵所擒。陳宮奔至南門，為徐晃所獲。"),
-            ["party", ["caocao"], {"to": "x20"}],
+            ["party", ["caocao"], {"to": {"place": "Xiapi", "from": "The Xiapi Road"}}],
         ]},
 
         # X20 · White Gate Tower. Played as Cao Cao. The boss: three boards.
