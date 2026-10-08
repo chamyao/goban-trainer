@@ -35,7 +35,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=83`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=84`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
@@ -253,9 +253,9 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=83`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=84`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=43`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=89`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=90`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
@@ -264,7 +264,7 @@ function worldScenes() {
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
       for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=93`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=94`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -303,7 +303,8 @@ function worldScenes() {
       // one map, several looks (Places' "states"): the last whose "when" holds and "until" doesn't
       try { this.states = JSON.parse((map.properties || []).find(x => x.name === "states")?.value || "null"); } catch { this.states = null; }
       try { this.ways = JSON.parse((map.properties || []).find(x => x.name === "ways")?.value || "null"); } catch { this.ways = null; }   // the streets (Places), for the lit route
-      this.pathRows = ((map.properties || []).find(x => x.name === "paths")?.value || "").split("|").filter(Boolean);   // drawn roads and paths, by tile
+      this.pathRows = ((map.properties || []).find(x => x.name === "paths")?.value || "").split("|").filter(Boolean);
+      try { this.mapChase = JSON.parse((map.properties || []).find(x => x.name === "chase")?.value || "null"); } catch { this.mapChase = null; }   // Places' chase layout (wave, ambushes, pace)   // drawn roads and paths, by tile
       this.stated = []; this.refs = {}; this.lights = []; this.sightZones = []; this.sgrid = null; if (this.coneG) { this.coneG.destroy(); this.coneG = null; } if (this.fog) { this.fog.destroy(); this.fog = null; } this.procession = null;
       const sets = map.tilesets.map(ts => map.addTilesetImage(ts.name, `kit-${ts.name}`));
       this.water = null;
@@ -2031,15 +2032,15 @@ function worldScenes() {
     // spot with every rider back. The node's own spot (its gate) ends it, as any beat's spot does.
     chaseNow() {
       // the chase of the beat open here: one whose riders or ambushers are in this place, or whose own spot is
-      const own = this.npcs.find(n => n.rider || n.ambush), nodes = TK.world(this.w.n).nodes || [];
-      const here = !own && this.region.quests.find(x => x.place === this.placeId && !TK.cleared(x.node) && (nodes.find(n => n.key === x.node) || {}).chase);
-      if (!own && !here) { this.waveClear(); return null; }
-      const key = own ? (own.rider || own.ambush).chase : here.node, node = nodes.find(x => x.key === key), q = this.region.quests.find(x => x.node === key);
+      const own = this.npcs.find(n => n.rider || n.ambush), nodes = TK.world(this.w.n).nodes || [], MC = this.mapChase;
+      const here = !own && !MC && this.region.quests.find(x => x.place === this.placeId && !TK.cleared(x.node) && (nodes.find(n => n.key === x.node) || {}).chase);
+      if (!own && !here && !MC) { this.waveClear(); return null; }
+      const key = MC ? `${this.w.n}-${MC.chase}` : own ? (own.rider || own.ambush).chase : here.node, node = nodes.find(x => x.key === key), q = this.region.quests.find(x => x.node === key);
       if (!node || !node.chase || !q || TK.cleared(key) || !this.available(q)) { this.waveClear(); return null; }
       if (!this.chase || this.chase.key !== key || this.chase.place !== this.placeId) {
         this.waveClear();
-        this.chase = { key, place: this.placeId, spec: node.chase, dropped: new Set(), tries: 0 };
-        this.waveStart(this.chase);
+        this.chase = { key, place: this.placeId, spec: node.chase, map: MC, dropped: new Set(), tries: 0 };
+        this.waveStart(this.chase); this.ambushStart(this.chase);
       }
       return this.chase;
     }
@@ -2047,21 +2048,72 @@ function worldScenes() {
     // start spot after a head start and follows your own trail, a little slower than you; it gains only when you stop.
     // Reaching you, you're taken: no board, the chase starts again.
     chaseFrom(spec) {
+      const MC = this.chase && this.chase.map, T = this.tw || 16;
+      if (MC && MC.from) return { x: MC.from[0] * T, y: MC.from[1] * T, map: true };
       return spec.from && (this.spots[spec.from] || this.refs[spec.from] || this.entries[spec.from]) || this.entries[""];
     }
     waveStart(C) {
-      const W = C.spec.wave;
+      const M = C.map, W = M && M.wave ? { count: M.wave.count, delay: (M.pace || {}).wave_after, speed: (M.pace || {}).wave, who: "f_soldier" } : C.spec.wave;
       if (!W) return;
+      C.waveSpec = W;
       const s0 = this.chaseFrom(C.spec), P = this.player;
-      C.trail = [{ x: s0 ? s0.x : P.x, y: s0 ? s0.y + 18 : P.y, d: 0 }];
+      C.trail = [{ x: s0 ? s0.x : P.x, y: s0 ? s0.y + (s0.map ? 0 : 18) : P.y, d: 0 }];
       C.wd = 0; C.wt = -(W.delay != null ? W.delay : 2) * 1000;
       const who = W.who || "f_soldier";
       this.hero(who);
       C.wave = Array.from({ length: W.count || 6 }, () => this.add.sprite(C.trail[0].x, C.trail[0].y, `h-${who}-down-0`).setOrigin(.5, 1).setVisible(false));
       C.waveWho = who;
     }
+    // The map's ambushes: each waits hidden at its post and dashes straight across the street to "to" when it can just
+    // meet Cao Cao on his line (his time to the dash line <= its time to his line + lead, within reach, and only while
+    // he's heading for it); it stands "hold" at the far side, then drops back. Touching one: the one-try board.
+    ambushStart(C) {
+      const M = C.map;
+      if (C.amb) C.amb.forEach(a => a.spr.destroy());
+      C.amb = null;
+      if (!M || !M.ambush) return;
+      const T = this.tw || 16;
+      this.hero("f_soldier");
+      C.amb = M.ambush.map((a, i) => ({ id: a.id, idx: i, who: "f_soldier", dash: a.dash, post: { x: a.post[0] * T, y: a.post[1] * T }, to: { x: a.to[0] * T, y: a.to[1] * T },
+        st: "wait", t: 0, spr: this.add.sprite(a.post[0] * T, a.post[1] * T, "h-f_soldier-down-0").setOrigin(.5, 1).setVisible(false) }));
+    }
+    ambushStep(C, dt, calm) {
+      if (!C.amb) return;
+      const P = this.player, T = this.tw || 16, pace = C.map.pace || {}, mounted = this.mounts && this.mounts.length;
+      const horse = (pace.horse || 165) * (mounted ? 1 : 110 / 165), run = pace.ambusher || 140, vx = P.body ? P.body.velocity.x : 0, vy = P.body ? P.body.velocity.y : 0;
+      for (const a of C.amb) {
+        if (C.dropped.has(a.id) || a.st === "gone") { a.spr.setVisible(false); continue; }
+        if (calm) { a.spr.anims.stop(); continue; }
+        const vert = a.dash === "N" || a.dash === "S";
+        if (a.st === "wait") {
+          const dC = vert ? Math.abs(P.x - a.post.x) : Math.abs(P.y - a.post.y);   // his distance to the dash line
+          const toward = vert ? (a.post.x - P.x) * vx > 0 : (a.post.y - P.y) * vy > 0;
+          const span = Math.hypot(a.to.x - a.post.x, a.to.y - a.post.y);
+          const rn = Math.min(span, vert ? Math.abs(P.y - a.post.y) : Math.abs(P.x - a.post.x));   // its run to his line
+          if (toward && Math.hypot(P.x - a.post.x, P.y - a.post.y) < (pace.reach || 9) * T && dC / horse <= rn / run + (pace.lead || .1)) {
+            a.st = "dash"; a.spr.setVisible(true).setPosition(a.post.x, a.post.y);
+          }
+          continue;
+        }
+        if (Math.hypot(P.x - a.spr.x, P.y - (a.spr.y - 4)) < (pace.hit || .8) * T) { this.chaseCaught(a); return; }
+        if (a.st === "dash") {
+          const dx = a.to.x - a.spr.x, dy = a.to.y - a.spr.y, d = Math.hypot(dx, dy), step = run * dt / 1000;
+          if (d <= step) { a.spr.setPosition(a.to.x, a.to.y); a.st = "hold"; a.t = (pace.hold || 1) * 1000; a.spr.anims.stop(); }
+          else {
+            a.spr.setPosition(a.spr.x + dx / d * step, a.spr.y + dy / d * step);
+            const dir = { N: "up", S: "down", E: "right", W: "left" }[a.dash] || "down";
+            a.spr.anims.play(`h-f_soldier-${dir}`, true);
+          }
+        } else if (a.st === "hold") {
+          a.t -= dt;
+          if (a.t <= 0) { a.st = "gone"; this.tweens.add({ targets: a.spr, alpha: 0, duration: 400, onComplete: () => a.spr.setVisible(false).setAlpha(1) }); }
+        }
+        a.spr.setDepth(a.spr.y);
+      }
+    }
     waveClear() {
       if (this.chase && this.chase.wave) { this.chase.wave.forEach(s => s.destroy()); this.chase.wave = null; }
+      if (this.chase && this.chase.amb) { this.chase.amb.forEach(a => a.spr.destroy()); this.chase.amb = null; }
     }
     trailAt(C, d) {   // the point a distance d along your trail
       const T = C.trail;
@@ -2081,7 +2133,7 @@ function worldScenes() {
       C.wt += dt;
       if (C.wt < 0) return;
       const fast = this.mounts && this.mounts.length && typeof WorldItems !== "undefined" ? WorldItems.SPEED : 1;
-      const v = 110 * fast * (C.spec.wave.pace || .92);
+      const v = C.waveSpec.speed || 110 * fast * (C.waveSpec.pace || .92);
       C.wd = Math.min(T[T.length - 1].d, C.wd + v * dt / 1000);
       C.wave.forEach((s, i) => {
         const at = this.trailAt(C, C.wd - i * 11 - (i % 2) * 3), side = (i % 2 ? 5 : -5);
@@ -2111,9 +2163,9 @@ function worldScenes() {
         if (m.ambush) { m.spr.setPosition(m.home.x, m.home.y).setVelocity(0).setVisible(false); Object.assign(m.ambush, { t: 0, armed: true, out: false }); }
       }
       const s0 = this.chaseFrom(spec);
-      if (s0) P.setPosition(s0.x, s0.y + (this.spots[spec.from] ? 18 : 0));
+      if (s0) P.setPosition(s0.x, s0.y + (!s0.map && this.spots[spec.from] ? 18 : 0));
       this.trail = Array(this.trailLen || 60).fill({ x: P.x, y: P.y, f: P.facing });
-      if (C.wave) { this.waveClear(); this.waveStart(C); }
+      if (C.wave || C.amb) { this.waveClear(); this.waveStart(C); this.ambushStart(C); }
       this.cameras.main.fadeIn(400);
       if (!said && spec.restart) await new Promise(r => this.talk(worldLines(spec.restart), r));
     }
@@ -2122,6 +2174,7 @@ function worldScenes() {
       const calm = this.engaged || this.ui.busy() || this.cine || this.leaving || this.caught;
       if (C) {
         this.waveStep(C, dt, calm);
+        this.ambushStep(C, dt, calm);
         if (!C.spotTalked && C.wave && C.wt >= 0 && C.spec.spotted) { C.spotTalked = true; this.talk(worldLines(C.spec.spotted)); }
       }
       // ambushers: out of their doorways at you when you come near, for a dash; dodge them
@@ -2200,7 +2253,7 @@ function worldScenes() {
       for (const m of this.npcs) if (m.rider) m.spr.setVelocity(0);
       await new Promise(r => this.talk(worldLines(spec.caught || [["n", "A rider has caught up with you!", "追兵赶上来了！"]]), r));
       // one try: a board of its own each time (the beat's own problems, slots past its story boards)
-      const idx = 20 + (C.tries % 10) * 8 + this.npcs.filter(m => m.rider || m.ambush).indexOf(n) % 8;
+      const idx = 20 + (C.tries % 10) * 8 + (n.idx != null ? n.idx : this.npcs.filter(m => m.rider || m.ambush).indexOf(n)) % 8;
       const won = await this.duel(`${C.key}~${idx}`, { id: n.id, who: n.who, face: this.faceOf(n) }, { once: true, onWin: () => {} });
       if (won) {
         C.dropped.add(n.id); if (n.rider) n.rider.hunting = false;
