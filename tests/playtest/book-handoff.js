@@ -10,10 +10,10 @@ let fails=0;const check=(ok,what)=>{if(!ok)fails++;console.log((ok?'ok   ':'FAIL
 p.on('pageerror',e=>console.log('ERR',e.message));
 await p.route('**/phaser.min.js',r=>r.fulfill({path:require('path').join(__dirname,'vendor/phaser.min.js'),contentType:'application/javascript'}));
 await p.route('**/*.mp3',r=>r.fulfill({status:404,body:''}));
-const F=+(process.env.FROM||1),T=F+1;   // FROM=2: Book 2's last beat hands on to Book 3
+const F=+(process.env.FROM||1),T=+(process.env.TO||F+1);   // FROM=2: Book 2's last beat hands on to Book 3; TO when a book names its next (13 → 12)
 const BASE=(process.env.PLAYTEST_URL||'http://localhost:8765')+'/index.html?test=1'+(process.env.PLAYTEST_KIT?'&kit='+process.env.PLAYTEST_KIT:'');
 await p.goto(BASE+'#/tk/'+F);await p.waitForTimeout(1500);
-const LAST=await p.evaluate(F=>{const w=TK.world(F);localStorage.clear();localStorage.setItem('tk-test','1');localStorage.setItem('tk-guide','off');for(let n=1;n<F;n++)TK.world(n).nodes.forEach(x=>{TK.markCleared(x.key);TK.markSeen(n+':'+x.scene);});
+const LAST=await p.evaluate(F=>{const w=TK.world(F);localStorage.clear();localStorage.setItem('tk-test','1');localStorage.setItem('tk-guide','off');for(let n=1;n<F;n++){const W=TK.world(n);if(W)W.nodes.forEach(x=>{TK.markCleared(x.key);TK.markSeen(n+':'+x.scene);});}
   // the last main beat: the last main beat in the book with nothing after it; everything else done
   const main=w.nodes.filter(n=>!['side','short'].includes(n.role)).map(n=>n.key),last=[...main].reverse().find(k=>!w.edges.some(e=>e[0]===k&&main.includes(e[1])));
   const after=new Set([last]);for(let ch=true;ch;){ch=false;for(const [a,b] of w.edges)if(after.has(a)&&!after.has(b)){after.add(b);ch=true;}}   // what comes after it (its side stories) stays to play
