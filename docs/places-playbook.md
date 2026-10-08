@@ -99,6 +99,11 @@ These were each learned from a real complaint, and each is a rule, not a one-off
   trigger, since the walls funnel her in. Centred in its claim instead, an 8-tile house put its door on a tile edge, a
   tile off a gate that fills its cell, and no one could walk into Pang Shu's house (Testing). The build fails if a door
   can't be centred. `tests/playtest/door-gate.js` walks in at the centre and a few px either side.
+- **A tower in a wall stands beside its gates, and is entered where it's drawn.** A gate tower (`building.gatetower`)
+  is drawn front-on, with its arch on the south face. Its door is that arch (S), and the whole arch is the trigger. A
+  side door (E/W) is at the foot of its face. A north door would be on the face the camera never sees, so the build
+  fails on one. A tower may not cover a gate's gap, except its own seat (`<tower>-gate`). The White Gate tower once
+  stood on Xiapi's south gate with its door on the north face: the passage was shut, and apo110 couldn't go up.
 - **A cliff has a face and a lip** (`cliff_rims`). The cliff tile alone draws like paving in every kit, so a "cliff's
   edge" looked like nothing of the kind (apo110, Xiao Pass). Crags fill the face, which is never walked, so they block
   nothing. Stones line the rim on the high side: a zone says which way it falls (`"drop": "W"`), and without it every

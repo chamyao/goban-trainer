@@ -539,6 +539,7 @@ PLANS_LB = {
                 {"id": "main-street", "kind": "road", "path": [[0, 9], [25, 9]], "width": 3},
                 {"id": "south-street", "kind": "road", "path": [[12, 9], [12, 19]], "width": 3},   # out by the White Gate, to Huainan
                 {"id": "fu-lane", "kind": "road", "path": [[8, 7], [8, 9]], "width": 2},
+                {"id": "tower-path", "kind": "road", "path": [[12, 17], [14, 17]], "width": 2},   # outside the gate, to the tower's arch
             ],
             "things": [
                 {"id": "lbfu", "kind": "building.compound", "rect": [6, 5, 4, 2], "door": "S", "label": "Lü Bu's residence",
@@ -550,7 +551,9 @@ PLANS_LB = {
                 {"id": "house-2", "kind": "building.house", "rect": [6, 11, 2, 1]},
                 {"id": "house-3", "kind": "building.house", "rect": [8, 11, 2, 1]},
                 {"id": "house-4", "kind": "building.house", "rect": [6, 13, 2, 1]},
-                {"id": "white-gate", "kind": "building.gatetower", "rect": [12, 16, 2, 1], "door": "N", "label": "The White Gate tower",
+                # the White Gate tower beside the south gate (never on it: it shut the passage), entered at its arch on the
+                # south face, the one that's drawn (a north door was on the face the camera never sees: apo110 couldn't go up)
+                {"id": "white-gate", "kind": "building.gatetower", "rect": [13, 16, 2, 1], "door": "S", "label": "The White Gate tower",
                  "map": "white-gate", "plaque": "白门"},
                 {"id": "cao-tent-1", "kind": "building.tent", "rect": [23, 4, 2, 1], "door": "W", "label": "Cao Cao's siege camp"},
                 {"id": "cao-tent-2", "kind": "building.tent", "rect": [23, 12, 2, 1], "door": "W"},

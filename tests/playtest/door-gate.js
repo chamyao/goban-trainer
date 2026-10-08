@@ -1,10 +1,12 @@
-// Doors that open through a wall's gate (Places' door_to_gate rule): walk straight in at the gap's centre and a few px
+// Doors that open through a wall's gate (Places' door_to_gate rule), and a gate tower's arch: walk straight in at the gap's centre and a few px
 // either side, and each must take her through the door. Pang Shu's door (Book 14's burning ward, through the lane wall)
 // and the East Road jail (Book 13, through its yard wall). Run with the site served on :8765 (tests/playtest/run.sh).
 const { chromium } = require(require('child_process').execSync('npm root -g').toString().trim()+'/playwright');
 const URL = process.env.PLAYTEST_URL || 'http://localhost:8765';
 const CASES = [
   { world: 14, place: 'changan--burning-ward', upto: '14-x0b', to: 'changan--pangshu-house', xs: [520, 528, 536], y: 420, key: 'ArrowDown' },
+  // the White Gate tower (Book 14, x20): entered at its arch, on the south face, beside the south gate
+  { world: 14, place: 'xiapi', upto: '14-x20', to: 'xiapi--white-gate', xs: [884, 896, 908], y: 1140, key: 'ArrowUp' },
   { world: 13, place: 'the-east-road', upto: null, to: 'the-east-road--jail-court', xs: [1940, 1952, 1964], y: 300, key: 'ArrowUp' },
 ];
 (async () => {
