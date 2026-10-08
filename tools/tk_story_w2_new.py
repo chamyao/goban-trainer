@@ -2572,7 +2572,8 @@ def _scenes_lvbu():
             N("Lü Bu's envoys get through to Yuan Shu, who answers: Lü Bu breaks his word. Send the girl first, and then I'll send troops.",
               "許汜、王楷至壽春見袁術，術曰：「奉先反覆無信，可先送女，然後發兵。」"),
             S("lvbu", "Then I'll take her through myself.", "我親送至二百里外。"),
-            ["party", ["lvbu", "lvnv"]],  # she rides on his back (Integration: carry)
+            ["spawn", "lvnv", "lvnv", "x16", -2, 0],
+            ["carry", "lvbu", "lvnv"],  # she rides on his back
             ["still", "lb_daughter", "slow zoom in"],
             N("At the second watch he wraps his daughter in silk floss, covers her in armour, and ties her on his back. He takes up his halberd and rides out of the gate.",
               "次夜二更時分，呂布將女以綿纏身，用甲包裹，負於背上，提戟上馬。放開城門，布當先出城。"),
@@ -2586,7 +2587,7 @@ def _scenes_lvbu():
             ["move", "lvbu", "x16", -4, 0],
             N("He turns back into the city, and drinks.", "布見軍來太急，只得仍退入城。回到城中，心中憂悶，只是飲酒。"),
             ["remove", "gy"], ["remove", "zf"], ["remove", "pursuers"],
-            ["party", ["lvbu"]],
+            ["carry", "lvbu"], ["remove", "lvnv"],
         ]},
 
         # X17 · The flood. The new mechanic: the city floods; Red Hare crosses water. No board.
@@ -2633,7 +2634,7 @@ def _scenes_lvbu():
             ["problem"],
             ["light", "night"],
             ["still", "hc_redhare", "slow zoom in"],
-            N("That night Hou Cheng slips into the stables, steals Red Hare, and rides for the east gate, the only one still dry.", "是夜侯成暗至馬院，盜了那匹赤兔馬，飛奔東門來。"),
+            N("Hou Cheng has slipped into the stables, stolen Red Hare, and ridden for the east gate, the only one still dry.", "侯成暗至馬院，盜了那匹赤兔馬，飛奔東門來。"),
             ["spawn", "wx", "weixu", "x19", 30, 0],
             N("Wei Xu opens the gate to let him out, then makes a show of chasing him.", "魏續便開門放出，卻佯作追趕之狀。"),
             ["run", "houcheng", "x19", 50, 0],
@@ -2779,9 +2780,9 @@ def _nodes_lvbu():
         node("x17", 265, 92, "x17", place="Xiapi", room="lb-fu", board=False),
         node("x18", 275, 86, "x18", place="Xiapi", room="lb-fu", board=False),
         node("x19", 285, 80, "x19", place="Xiapi", dilemma=D(
-            "houcheng", "Get to the stables unseen.", "暗中摸到馬院。",
-            "Everything he trusts is in that stable. Through the water, past the guards.", "他所倚恃的，都在那馬院裏。涉水，避開守卒。",
-            "Red Hare is mine.", "赤兔到手。",
+            "houcheng", "Get Red Hare out by the east gate unseen.", "牽赤兔暗出東門。",
+            "Everything he trusts is under me now. Across the water, past the guards, to the one dry gate.", "他所倚恃的，如今在我胯下。涉水過去，避開守卒，直奔唯一的旱門。",
+            "The gate is open.", "城門開了。",
             "A guard. Back into the dark.", "有守卒。退回暗處。")),
         node("x20", 300, 74, "x20", place="Xiapi", room="white-gate", role="boss"),
     ]

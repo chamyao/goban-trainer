@@ -465,8 +465,6 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 **Lü Bu:** Then I'll take her through myself.  
 我親送至二百里外。
 
-*(the player is now: Lü Bu and Lü Bu's daughter)*
-
 [still: `lb_daughter`]
 
 *At the second watch he wraps his daughter in silk floss, covers her in armour, and ties her on his back. He takes up his halberd and rides out of the gate.*  
@@ -480,8 +478,6 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 *He turns back into the city, and drinks.*  
 布見軍來太急，只得仍退入城。回到城中，心中憂悶，只是飲酒。
-
-*(the player is now: Lü Bu)*
 
 
 ## X17 · The Flood (水淹下邳)
@@ -538,14 +534,14 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 
 ## X19 · Red Hare (盜赤兔)
-*Xiapi* · boards: **Hou Cheng**: “Get to the stables unseen.”
+*Xiapi* · boards: **Hou Cheng**: “Get Red Hare out by the east gate unseen.”
 
 **▶ GO PROBLEM**
 
 [still: `hc_redhare`]
 
-*That night Hou Cheng slips into the stables, steals Red Hare, and rides for the east gate, the only one still dry.*  
-是夜侯成暗至馬院，盜了那匹赤兔馬，飛奔東門來。
+*Hou Cheng has slipped into the stables, stolen Red Hare, and ridden for the east gate, the only one still dry.*  
+侯成暗至馬院，盜了那匹赤兔馬，飛奔東門來。
 
 *Wei Xu opens the gate to let him out, then makes a show of chasing him.*  
 魏續便開門放出，卻佯作追趕之狀。
