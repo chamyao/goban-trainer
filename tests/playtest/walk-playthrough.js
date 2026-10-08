@@ -52,7 +52,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   for (let i = 0; i < 40 && !(await p.evaluate(() => typeof TKOverlay !== 'undefined')); i++) await p.waitForTimeout(250);
   const hook = () => p.evaluate(() => { if (typeof TKOverlay === 'undefined' || TKOverlay.__hooked) return; const o = TKOverlay.open.bind(TKOverlay); TKOverlay.open = (n, key, at) => { window.__boardKey = key; return o(n, key, at); }; TKOverlay.__hooked = true; }).catch(() => {});
   await hook();
-  if (process.env.STEALTHDBG) await p.addInitScript(() => {}).then(() => p.evaluate(() => { const wrap = () => { const w = window.__w; if (!w || w.__wrapped) return; const o = w.walkTo.bind(w); w.walkTo = (x, y, opt) => { (window.__walks = window.__walks || []).push({ t: Math.round(performance.now()), x: Math.round(x), y: Math.round(y), from: (new Error().stack || '').split('\n')[2].trim().slice(0, 70) }); return o(x, y, opt); }; w.__wrapped = true; }; setInterval(wrap, 200); }));
+  if (process.env.STEALTHDBG) await p.addInitScript(() => {}).then(() => p.evaluate(() => { const wrap = () => { const w = window.__w; if (!w || w.__wrapped) return; const o = w.walkTo.bind(w); w.walkTo = (x, y, opt) => { (window.__walks = window.__walks || []).push({ t: Math.round(performance.now()), x: Math.round(x), y: Math.round(y), from: (new Error().stack || '').split('\n')[2].trim().slice(0, 70) }); return o(x, y, opt); }; const oc = w.caughtBy.bind(w); w.caughtBy = n => { const P = w.player; const fr = Math.floor((window.__execT || 0) / 50), pr = (window.__trk || []).find(t => t.id === n.id), po = pr && pr.out[fr]; window.__catch = { pred: po && [Math.round(po.x), Math.round(po.y), po.dir, fr], ring: (window.__ring || []).slice(-25).map(r => r.join(' ')).join(' | '), P: [Math.round(P.x), Math.round(P.y)], hidden: w.hidden, walk: !!w.walk, auto: w.auto, speed: Math.round(P.body.speed), cover: !!(w.covers.length && w.inCover(P)), by: `${n.id}@${Math.round(n.spr.x)},${Math.round(n.spr.y)} ${n.watch.dir}`, gt: Math.round(window.__execT || 0), plan: window.__pts && window.__pts.slice(Math.floor((window.__execT || 0) / window.__ms) - 1, Math.floor((window.__execT || 0) / window.__ms) + 2).map(q => [q.x, q.y]) }; return oc(n); }; w.__wrapped = true; }; setInterval(wrap, 200); }));
   // SYNC: a reroute rebuilds the world (a new game); the game running before each hide/show flip is tagged, and a flip
   // after which the tag is gone was a reroute (app.js calls route() by its own reference, so a wrapper can't see it)
   let lastVis = Date.now(), visFlips = 0, flipAt = 0, prevS = null, pushWait = false; const reroutes = [];
@@ -98,7 +98,9 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   const plan = (STEP) => p.evaluate(STEP => {   // STEP frames of 50 ms a cell: 3 is his running pace, 4 the pace a walk a cell at a time surely keeps, 2 mounted
     const w = window.__w, T = w.tw || 16, C = 16, DT = 50, F = 1600, goal = w.goalAt; if (!goal) return null;
     w.scene.pause(); setTimeout(() => w.scene.resume(), 80);   // the game held while he plans, and past the long frame after it (else the patrols jump ahead by the time the plan took)
-    const G = w.walkGrid(), cols = Math.ceil(G.cols * G.C / C), rows = Math.ceil(G.rows * G.C / C), free = (cx, cy) => G.free(Math.floor((cx * C + 8) / G.C), Math.floor((cy * C + 10) / G.C));
+    const G = w.walkGrid(), cols = Math.ceil(G.cols * G.C / C), rows = Math.ceil(G.rows * G.C / C), P = w.player, ox = ((Math.round(P.x) % C) + C) % C, oy = ((Math.round(P.y) % C) + C) % C, solid = w.solids.getChildren().filter(z => z.body && z.body.enable && !(z.visibleWith && !z.visibleWith.visible)).map(z => z.body), fb = { x: P.body.x - P.x, y: P.body.y - P.y, w: P.body.width, h: P.body.height }, wb = w.physics.world.bounds,
+      feetFree = (x, y) => { const L = x + fb.x + .5, T0 = y + fb.y + .5, R = L + fb.w - 1, B = T0 + fb.h - 1; if (L < wb.x || T0 < wb.y || R > wb.right || B > wb.bottom) return false; return !solid.some(b => L < b.right && R > b.x && T0 < b.bottom && B > b.y); },
+      free = (cx, cy) => feetFree(cx * C + ox, cy * C + oy), passes = (x, y, X, Y) => feetFree((x + X) / 2 * C + ox, (y + Y) / 2 * C + oy);   /* her feet (the physics body) clear of every solid, on the cell and half way there */   /* the grid laid from where she stands (no first shuffle onto a cell centre)) */
     const cat = w.npcs.filter(n => n.watch && ((n.watch.seen || []).length || n.watch.back_to) && w.watching(n));
     const tracks = cat.map(n => { const W = n.watch, st = { x: n.spr.x, y: n.spr.y, leg: W.leg, wait: W.wait, dir: W.dir, t: W.t, turn: W.turn }, out = [];
       for (let f = 0; f < F; f++) { out.push({ x: st.x, y: st.y, dir: st.dir });
@@ -106,34 +108,46 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
           if (d <= v) { st.x = tg.x; st.y = tg.y; const c = (W.beat || [])[st.leg], pz = W.pause; if (pz && c && c[0] === pz[0] && c[1] === pz[1]) st.wait = (pz[2] || 2) * 1000; st.leg = (st.leg + 1) % W.pts.length; }
           else { st.x += dx / d * v; st.y += dy / d * v; st.dir = Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? 'left' : 'right') : (dy < 0 ? 'up' : 'down'); } } }
         else if (W.turns.length) { st.t += DT; if (st.t > 2600) { st.t = 0; st.turn = (st.turn + 1) % W.turns.length; st.dir = W.turns[st.turn]; } } }
-      return { n, out }; });
-    const at = (cx, cy) => ({ x: cx * C + 8, y: cy * C + 12 }), seen = new Uint8Array(cols * rows * F), wasHidden = w.hidden; w.hidden = false;   // (sees() answers for her as she is now: hidden, nobody sees anything; the map of sight is for her out in the open)
+      return { n, out }; }); window.__trk = tracks.map(t => ({ id: t.n.id, out: t.out }));
+    const at = (cx, cy) => ({ x: cx * C + ox, y: cy * C + oy }), seen = new Uint8Array(cols * rows * F), wasHidden = w.hidden; w.hidden = false;   // (sees() answers for her as she is now: hidden, nobody sees anything; the map of sight is for her out in the open)
     for (const { n, out } of tracks) { const R = (n.watch.cone || 4) * T + C; for (let f = 0; f < F; f++) { const o = out[f], stub = { watch: { cone: n.watch.cone, dir: o.dir }, spr: { x: o.x, y: o.y } };
       for (let cy = Math.max(0, Math.floor((o.y - R) / C)); cy <= Math.min(rows - 1, Math.floor((o.y + R) / C)); cy++) for (let cx = Math.max(0, Math.floor((o.x - R) / C)); cx <= Math.min(cols - 1, Math.floor((o.x + R) / C)); cx++)
         if (w.sees(stub, at(cx, cy))) seen[(f * rows + cy) * cols + cx] = 1; } }
     const covs = (w.covers || []).length && cat.some(n => n.watch.hide || n.watch.hide !== false) ? w.covers : [], inCov = (cx, cy) => { const q = at(cx, cy); return covs.some(r => Phaser.Geom.Rectangle.Contains(r, q.x, q.y - 3)); };
     w.hidden = wasHidden;
     const safe = (cx, cy, f) => { for (let k = Math.max(0, f - 2); k <= Math.min(F - 1, f + STEP + 2); k++) if (seen[(k * rows + cy) * cols + cx]) return false; return true; };
-    const P = w.player, sx = Math.floor(P.x / C), sy = Math.floor((P.y - 4) / C), gx = Math.floor(goal.x / C), gy = Math.floor((goal.y - 4) / C);
+    const sx = Math.round((Math.round(P.x) - ox) / C), sy = Math.round((Math.round(P.y) - oy) / C), gx = Math.round((goal.x - ox) / C), gy = Math.round((goal.y - oy) / C);
+    const HOLD = Math.ceil(700 / (STEP * DT));   /* still for the first 0.7 s: the frame after a plan can be long (the patrols jump on, she hasn't moved) */
     let cur = new Map([[sx + sy * cols, null]]); const hist = [cur]; let found = -1;
-    for (let k = 0; (k + 1) * STEP < F; k++) { const nx = new Map(); for (const c of cur.keys()) { const x = c % cols, y = (c - x) / cols; for (const [a, b] of [[0, 0], [1, 0], [-1, 0], [0, 1], [0, -1]]) { const X = x + a, Y = y + b, id = X + Y * cols;
-        if (X < 0 || Y < 0 || X >= cols || Y >= rows || nx.has(id)) continue; if (!free(X, Y) && !(X === gx && Y === gy)) continue; if (!(a === 0 && b === 0 && inCov(X, Y)) && !safe(X, Y, (k + 1) * STEP)) continue; if ((a || b) && inCov(x, y) && !safe(x, y, k * STEP)) continue; nx.set(id, c); } }   /* keeping still in cover: hidden (the looters pass her by); stepping out of it she's seen where she was, moving there */
+    for (let k = 0; (k + 1) * STEP < F; k++) { const nx = new Map(); for (const c of cur.keys()) { const x = c % cols, y = (c - x) / cols; for (const [a, b] of k < HOLD ? [[0, 0]] : [[0, 0], [1, 0], [-1, 0], [0, 1], [0, -1]]) { const X = x + a, Y = y + b, id = X + Y * cols;
+        if (X < 0 || Y < 0 || X >= cols || Y >= rows || nx.has(id)) continue; if (!free(X, Y) && !(X === gx && Y === gy)) continue; if ((a || b) && !passes(x, y, X, Y) && !(X === gx && Y === gy)) continue; if (!(a === 0 && b === 0 && inCov(X, Y)) && !safe(X, Y, (k + 1) * STEP)) continue; if ((a || b) && inCov(x, y) && !safe(x, y, k * STEP)) continue; nx.set(id, c); } }   /* keeping still in cover: hidden (the looters pass her by); stepping out of it she's seen where she was, moving there */
       hist.push(nx); cur = nx; if (nx.has(gx + gy * cols)) { found = k + 1; break; } if (!nx.size) break; }
-    if (found < 0) return null;
-    const cells = []; let c = gx + gy * cols; for (let k = found; k >= 0; k--) { cells.unshift(c); c = hist[k].get(c); }
-    const pts = cells.map(c => { const x = c % cols; return at(x, (c - x) / cols); });
+    let end = gx + gy * cols, hold = false;
+    if (found < 0) {   /* no unseen way all the way: to the cover nearest the goal she can reach unseen (and wait there; a fresh plan goes on from it) */
+      if (!covs.length) return null;
+      const dist = new Int32Array(cols * rows).fill(-1), q = [gx + gy * cols]; dist[q[0]] = 0;
+      for (let i = 0; i < q.length; i++) { const c = q[i], x = c % cols, y = (c - x) / cols; for (const [a, b] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const X = x + a, Y = y + b, id = X + Y * cols;
+        if (X < 0 || Y < 0 || X >= cols || Y >= rows || dist[id] >= 0 || !free(X, Y) || !passes(x, y, X, Y)) continue; dist[id] = dist[c] + 1; q.push(id); } }
+      const d0 = dist[sx + sy * cols]; let best = null;
+      for (let k = 0; k < hist.length; k++) for (const c of hist[k].keys()) { const x = c % cols; if (dist[c] < 0 || !inCov(x, (c - x) / cols)) continue; if (d0 >= 0 && dist[c] >= d0) continue;
+        if (!best || dist[c] < best.d) best = { d: dist[c], k, c }; }
+      if (!best) return null; found = best.k; end = best.c; hold = true; }
+    const cells = []; let c = end; for (let k = found; k >= 0; k--) { cells.unshift(c); c = hist[k].get(c); }
+    const pts = cells.map(c => { const x = c % cols; return at(x, (c - x) / cols); }); if (hold) pts[pts.length - 1].hold = true;
     // follow it here, on the same clock as the game's resume (a start from the test's side would come late)
     /* followed in the page on the game's own clock: the time the patrols move by (the scene's update, held while the
        scene is paused or the game calm), each frame a step to the planned cell, or still where the plan stays */
-    clearInterval(window.__execI); if (window.__execF) w.events.off('update', window.__execF);
-    let gt = 0; window.__execT = 0; const ms = STEP * 50;
+    clearInterval(window.__execI); if (window.__execF) w.events.off('update', window.__execF); w.auto = null;
+    let gt = 0; window.__execT = 0; window.__ring = []; window.__pts = pts; window.__ms = STEP * 50; const ms = STEP * 50;
     window.__execF = (t, d) => { const w = window.__w; if (!w || !w.player || w.caught || w.ui.busy() || w.cine || w.leaving || w.engaged) return;
       gt += d; window.__execT = gt;
       const k = Math.max(0, Math.min(pts.length - 1, Math.floor(gt / ms))), c = pts[k], P = w.player;
-      const cov = w.covers && w.covers.length && w.inCover();
-      if (Math.hypot(P.x - c.x, P.y - c.y) < 4 || (cov && Phaser.Geom.Rectangle.Contains(cov, c.x, c.y - 3) && Math.hypot(P.x - c.x, P.y - c.y) < 16)) { w.walk = null; P.setVelocity(0); return; }   /* on the planned cell, or the plan stays in the cover she's in: still (a shuffle in cover is seen) */
-      const end = w.walk && w.walk.path && w.walk.path[w.walk.path.length - 1];
-      if (!end || Math.hypot(end.x - c.x, end.y - (c.y - 3)) > 2) { if (!w.walkTo(c.x, c.y, { ring: false })) { w.walk = null; P.setVelocity(0); } } };
+      /* the plan's steps are a cell up, down, left or right on a grid laid from where she stood: steered straight
+         there (the game's own direction input), and still on the cell (no walk, no steer: hidden in cover) */
+      const dx = c.x - P.x, dy = c.y - P.y; w.walk = null;
+      const go = Math.abs(dx) > 3 ? (dx < 0 ? 'left' : 'right') : Math.abs(dy) > 3 ? (dy < 0 ? 'up' : 'down') : null;
+      if (go !== w.auto) { w.auto = go; if (!go) P.setVelocity(0); }
+      const R = window.__ring = window.__ring || []; R.push([Math.round(gt), k, Math.round(P.x), Math.round(P.y), go, Math.round(P.body.speed), Math.round(d)]); if (R.length > 40) R.shift(); };
     w.events.on('update', window.__execF); window.__execI = 0;
     return pts;
   }, STEP);
@@ -172,7 +186,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     if (s.next !== beat) {   // a new beat
       if (beat) close('pass', '', s);
       if (UNTIL && beat === UNTIL) break;
-      beat = s.next; beatStart[beat] = { taps: worldTaps, P: s.P, scene: null }; beatT = Date.now(); lastProgress = Date.now(); refused = ''; stealthTries = 0; plannedSteps = null; noWaySince = 0; await p.evaluate(() => (clearInterval(window.__execI), window.__execF && window.__w && window.__w.events.off('update', window.__execF), window.__execF = null)).catch(() => {}); skipped = false; reloads = 0; catches = 0;
+      beat = s.next; beatStart[beat] = { taps: worldTaps, P: s.P, scene: null }; beatT = Date.now(); lastProgress = Date.now(); refused = ''; stealthTries = 0; plannedSteps = null; noWaySince = 0; await p.evaluate(() => (clearInterval(window.__execI), window.__execF && window.__w && window.__w.events.off('update', window.__execF), window.__execF = null, window.__w && (window.__w.auto = null))).catch(() => {}); skipped = false; reloads = 0; catches = 0;
     }
     if (process.env.TRACE === beat && (!globalThis.__tr || Date.now() - globalThis.__tr > 2000)) { globalThis.__tr = Date.now();
       console.log('     trace', JSON.stringify({ ...s, items: undefined, extra: await p.evaluate(() => { const w = window.__w, d = document;
@@ -299,10 +313,10 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       console.log(`     shot ${f}: ${m.pic ? 'portrait' : m.face ? 'pixel bust' : 'no face'}${m.picOverText ? ', PORTRAIT OVER THE TEXT' : ''}${m.boxInView ? '' : ', BOX OFF SCREEN'}${m.picInView ? '' : ', PORTRAIT OFF SCREEN'}`);
     }
     if (s.busy) { await p.evaluate(() => window.__w.ui.advance()); await p.waitForTimeout(250); continue; }   // a line: on to the next
-    if (s.caught && process.env.STEALTHDBG) console.log('     dbg walks', await p.evaluate(() => JSON.stringify((window.__walks || []).slice(-4))));
+    if (s.caught && process.env.STEALTHDBG) console.log('     dbg at the catch', await p.evaluate(() => JSON.stringify(window.__catch)), 'walks', await p.evaluate(() => JSON.stringify((window.__walks || []).slice(-2).map(o => [o.t, o.x, o.y]))));
     if (s.caught && process.env.STEALTHDBG) await p.evaluate(() => { window.__walks = []; });
     if (s.caught && plannedSteps && process.env.STEALTHDBG) { const k = Math.floor((Date.now() - planT) / (pace * 50)); console.log('     dbg by', await p.evaluate(() => window.__w.npcs.filter(n => n.watch && n.sees).map(n => `${n.id}@${Math.round(n.spr.x)},${Math.round(n.spr.y)} ${n.watch.dir} leg ${n.watch.leg} wait ${Math.round(n.watch.wait || 0)}`).join('; ')), 'planned', ((Date.now() - planT) / 1000).toFixed(1), 's ago'); console.log(`     dbg caught at ${s.P} hidden ${s.hidden} inCover ${s.inCover}; plan step ${k}/${plannedSteps.length} at ${plannedSteps[Math.min(k, plannedSteps.length - 1)].x},${plannedSteps[Math.min(k, plannedSteps.length - 1)].y}; next ${JSON.stringify(plannedSteps.slice(k, k + 4).map(c => [c.x, c.y]))}`); }
-    if (s.caught) { if (plannedSteps) await p.evaluate(() => (clearInterval(window.__execI), window.__execF && window.__w && window.__w.events.off('update', window.__execF), window.__execF = null)); plannedSteps = null; await p.waitForTimeout(200); continue; }   // sent back (the game walks her there): plan again once she's there
+    if (s.caught) { if (plannedSteps) await p.evaluate(() => (clearInterval(window.__execI), window.__execF && window.__w && window.__w.events.off('update', window.__execF), window.__execF = null, window.__w && (window.__w.auto = null))); plannedSteps = null; await p.waitForTimeout(200); continue; }   // sent back (the game walks her there): plan again once she's there
     if (s.cine || s.leaving || s.engaged || s.caught) { await p.waitForTimeout(300); continue; }
     if (OPTIONAL && !errand && !s.watchers && !s.walking && !plannedSteps) {
       const next = (await optional()).find(t => !visited.has(t.id));
@@ -321,6 +335,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     if (s.watchers && !plannedSteps) {   // a steady pace first; the running one if only it has a way
       pace = 4; plannedSteps = await plan(4); if (!plannedSteps) { pace = 3; plannedSteps = await plan(3); }   /* a cell in 200 ms first: 80 px/s, slack on her 110 px/s run for the turns (150 ms is 107 px/s, barely in hand) */
       if (!plannedSteps && await p.evaluate(() => !!(window.__w.mounts && window.__w.mounts.length))) { pace = 2; plannedSteps = await plan(2); if (plannedSteps) console.log(`     ${beat}: a way past the watchers at his mounted pace (a cell every 100 ms)`); }   // on horseback he's quicker
+      if (process.env.STEALTHDBG) { const P0 = await p.evaluate(() => [Math.round(window.__w.player.x), Math.round(window.__w.player.y)]); console.log(`     dbg plan from ${P0}: ${plannedSteps ? `${plannedSteps.length} steps at pace ${pace} to ${[plannedSteps[plannedSteps.length - 1].x, plannedSteps[plannedSteps.length - 1].y]}${plannedSteps[plannedSteps.length - 1].hold ? ' (a cover on the way)' : ''}` : 'none'}`); }
       planT = Date.now() + 80; stealthTries++; await p.evaluate(() => { const w = window.__w; w.walk = null; });
       if (!plannedSteps && stealthTries <= 3 && arrivedAt && Math.hypot(s.P[0] - arrivedAt[0], s.P[1] - arrivedAt[1]) > 12) {   // no way from here (an errand left him there): back to where he came in, and plan again
         await p.evaluate(a => window.__w.walkTo(a[0], a[1], { ring: false }), arrivedAt);
@@ -333,12 +348,13 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
           return `a way there ignoring them: ${f && f.length ? f.length + ' steps' : 'none'} (${dense.length} points: ${wet} in water, ${blocked} blocked in the walk grid the planner uses); goal ${g && [Math.round(g.x), Math.round(g.y)]}; wading ${w.wades()}; watchers ${cat.map(n => `${n.id}@${Math.round(n.spr.x)},${Math.round(n.spr.y)} cone ${n.watch.cone} ${n.watch.dir}${w.sees ? (w.sees(n, P) ? ' SEES HIM' : '') : ''}`).join('; ')}`; });
         close('fail', `no unseen way past the watchers (${why})`, s); break; } }
     if (plannedSteps) {
+      if (s.hidden) lastProgress = Date.now();   // waiting in cover, on a plan, for the patrols to open a way: not stuck
       // the plan is followed in the page, on the game's clock (every 30 ms: a step to the planned cell, or still where
       // the plan stays); here only its end, a catch, and a fresh plan every 1.2 s in the open
       // (the plan is followed in the page from the moment it was made: see plan())
       const k = Math.floor((await p.evaluate(() => window.__execT || 0)) / (pace * 50));
-      if (Date.now() - planT > 1200 && !(await p.evaluate(() => !!(window.__w.inCover && window.__w.covers && window.__w.covers.length && window.__w.inCover())))) { await p.evaluate(() => (clearInterval(window.__execI), window.__execF && window.__w && window.__w.events.off('update', window.__execF), window.__execF = null)); plannedSteps = null; continue; }
-      if (k >= plannedSteps.length - 1) { await p.evaluate(() => (clearInterval(window.__execI), window.__execF && window.__w && window.__w.events.off('update', window.__execF), window.__execF = null)); plannedSteps = null; await tapWorld(s.goal[0], s.goal[1]); }   // there: tap it (a spot that starts on a tap)
+      if (Date.now() - planT > 1200 && !(await p.evaluate(() => !!window.__w.auto))) {   /* a fresh plan every 1.2 s, from a cell she's on (the patrols' simulation drifts over a long plan) */ await p.evaluate(() => (clearInterval(window.__execI), window.__execF && window.__w && window.__w.events.off('update', window.__execF), window.__execF = null, window.__w && (window.__w.auto = null))); plannedSteps = null; continue; }
+      if (k >= plannedSteps.length - 1 && !plannedSteps[plannedSteps.length - 1].hold) { await p.evaluate(() => (clearInterval(window.__execI), window.__execF && window.__w && window.__w.events.off('update', window.__execF), window.__execF = null, window.__w && (window.__w.auto = null))); plannedSteps = null; await tapWorld(s.goal[0], s.goal[1]); }   // there: tap it (a spot that starts on a tap)
       await p.waitForTimeout(100); continue;
     }
     if (s.walking) { await p.waitForTimeout(250); continue; }
