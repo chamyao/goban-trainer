@@ -36,6 +36,17 @@ takes one compelling story inside the novel and builds itself around it. A good 
   and its price.
 - **Its own world:** a few places, a cast, and payoffs planted and paid inside the arc.
 
+**Draw on the women's stories.**
+
+> "also, in general I find it more intersting to have women have an emphasis to the plot such as diaochan, so while the
+> characters are majority men, we should try to draw on the female stories as well to keep it more entertaining"
+
+The novel's cast is mostly men, but its women often stand at the turning points: Diaochan, Lady Zou at Wancheng, Lady Yan
+and Lü Bu's daughter at Xiapi, Lady Mi at Changban, Lady Sun's marriage. When choosing a narrative or a lead, look for
+these stories first, and give the women real moments to play and real lines, as the Diaochan arc did. The limit is R1:
+their stories are told as the novel tells them. Invention is allowed only where it serves the plot, never to give someone
+a role the novel doesn't support.
+
 What this changes:
 - **Choosing what to make next** means choosing a narrative, not the next chapters. Chronology still decides the order in
   which published arcs are chained (the Cao Cao arc leads into the Diaochan arc), and scrolls bridge what lies between (R16).
