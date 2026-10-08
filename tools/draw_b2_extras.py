@@ -238,14 +238,25 @@ def wheat(v):   # wheat in rows: gold stalks, darker furrows
     return g.image()
 
 
-def cliff(v):   # a loess cliff face: layered ochre bands, cracks
-    g = Grid(16, 16)
-    for y, c in ((0, "#c89a58"), (4, "#b08448"), (8, "#c89a58"), (12, "#a07038")):
-        g.rect(0, y, 16, 4, c)
-    for y in (3, 7, 11, 15):
-        g.rect(0, y, 16, 1, "#7a5228")
-    for x, y in ((3 + v, 1), (11 - v, 5), (6, 9), (13, 13)):
-        g.rect(x, y, 1, 2, "#6a4420")
+def cliff(v):   # broken rock: chunky boulders and slabs, lit on their upper left, shadowed lower right, dark cracks
+    # between (the old layered bands read as paving from above; Places' note). Wraps at the tile's edges.
+    import random
+    r = random.Random(23 + v * 7)
+    W = 16
+    g = Grid(W, W)
+    g.rect(0, 0, W, W, "#2a221c")                                           # the cracks show through
+    rocks = [(r.uniform(0, W), r.uniform(0, W), r.uniform(3, 5.5), r.uniform(2.5, 4)) for _ in range(9)]
+    for cx, cy, rx, ry in sorted(rocks, key=lambda t: t[1]):
+        tone = r.choice(((112, 98, 82), (96, 84, 70), (124, 110, 92)))
+        for ox in (-W, 0, W):
+            for oy in (-W, 0, W):
+                for y in range(W):
+                    for x in range(W):
+                        dx, dy = (x + .5 - cx - ox) / rx, (y + .5 - cy - oy) / ry
+                        d = dx * dx + dy * dy
+                        if d <= 1:
+                            k = 1.25 if dx + dy < -.9 else .62 if dx + dy > .7 or d > .8 else 1
+                            g.set(x, y, "#%02x%02x%02x" % tuple(min(255, int(c * k)) for c in tone))
     return g.image()
 
 
