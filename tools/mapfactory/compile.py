@@ -320,6 +320,10 @@ def compile_map(m, kit, out_dir):
                                 "float" if isinstance(v, float) else "string", "value": v} for k, v in props.items()]
         objs.append(o)
 
+    for s in m.get("spots", []):   # cover to hide in (hide and wait): a two-tile square round the spot, a "cover" object
+        if s.get("cover"):
+            obj(s["id"], "cover", (s["x"] - 1) * T, (s["y"] - 1.5) * T, 2 * T, 2 * T, label=s.get("label", ""),
+                label_zh=ZH.get(s.get("label", ""), ""))
     walls = building_walls(m, kit, T)
     for o in m["objects"]:
         # a building whose front faces E or W (a siheyuan wing): its side view, if the kit has one; the side
@@ -368,7 +372,6 @@ def compile_map(m, kit, out_dir):
             **({"trigger": s["trigger"]} if s.get("trigger") else {}), **({"use": s["use"]} if s.get("use") else {}),
             **({"needs": json.dumps(s["needs"] if isinstance(s["needs"], list) else [s["needs"]])} if s.get("needs") else {}),
             **({"sight": json.dumps(s["sight"])} if s.get("sight") else {}),
-            **({"cover": True} if s.get("cover") else {}),   # hide and wait: a spot to hide at
             **{k: s[k] for k in ("delivers", "when") if s.get(k)},
             **{k: json.dumps([place_step(l)[0] for l in s[k]], ensure_ascii=False) for k in ("empty", "waiting", "deliver", "delivered", "call") if s.get(k)},
             **{k: json.dumps([place_step(l)[0] for l in s[k]], ensure_ascii=False) for k in ("intro", "outro") if s.get(k)})
