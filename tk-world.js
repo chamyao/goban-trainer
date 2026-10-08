@@ -360,7 +360,8 @@ function worldScenes() {
         // Standing still in it, a watcher who hunts by sight ("hide": true, the looters) passes you by
         if (o.type === "cover" || p.cover) {
           const top = o.gid ? o.y - o.height : o.y;
-          (this.covers = this.covers || []).push(new Phaser.Geom.Rectangle(o.x - 4, top - 4, (o.width || 16) + 8, (o.height || 16) + 8));
+          (this.covers = this.covers || []).push(o.width ? new Phaser.Geom.Rectangle(o.x - 4, top - 4, o.width + 8, o.height + 8)
+            : new Phaser.Geom.Rectangle(o.x - 14, o.y - 18, 28, 26));   // a point (Places' cover spots): the ground round it
         }
       }
       // a town's shrine with no story spot of its own: touching it still answers (dark, or its hint)
@@ -2044,7 +2045,7 @@ function worldScenes() {
     inCover(P = this.player) { return (this.covers || []).find(r => Phaser.Geom.Rectangle.Contains(r, P.x, P.y - 3)) || null; }
     sees(n, P) {
       const w = n.watch, T = this.tw || 16, R = (w.cone || 4) * T, ex = n.spr.x, ey = n.spr.y - 6;
-      if (w.hide && this.hidden) return false;
+      if (this.hidden && (w.hide || (w.hide !== false && this.covers.length))) return false;   // on a map with cover, watchers hunt by sight
       const dx = P.x - ex, dy = P.y - 6 - ey, d = Math.hypot(dx, dy);
       if (d > R) return false;
       const [fx, fy] = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }[w.dir] || [0, 1];
@@ -2354,14 +2355,15 @@ function worldScenes() {
       await new Promise(r => this.talk(w.seen && w.seen.length ? w.seen : [["n", "You've been seen.", "被人发现了。"]], r));
       const id = w.back_to;
       // "@cover": back to the last cover you hid in (hide and wait), else where you came in
-      const here = id === "@cover" ? (this.lastCover || this.entries[this.from || ""] || this.entries[""])
+      const toCover = id === "@cover" || (this.covers.length && w.hide !== false && this.lastCover);   // hide and wait: back to the last cover she reached
+      const here = toCover ? (this.lastCover || this.entries[this.from || ""] || this.entries[""])
         : id && (this.spots[id] || this.refs[id] || (this.entries[id] && this.entries[id]));
       const away = !here && id && this.region.places.find(p => p.id === id || p.id.endsWith("--" + id));
       this.cameras.main.fadeOut(300);
       await new Promise(r => this.cameras.main.once("camerafadeoutcomplete", r));
       if (away && away.id !== this.placeId) { this.st.pos = null; this.save(); this.scene.restart({ place: away.id, from: null }); return; }
       const to = here || this.entries[""];
-      P.setPosition(to.x, to.y + (this.spots[id] ? 18 : 0));
+      P.setPosition(to.x, to.y + (!toCover && this.spots[id] ? 18 : 0));
       this.trail = Array(this.trailLen || 60).fill({ x: P.x, y: P.y, f: P.facing });
       if (n.mark && !n.challenge) n.mark.setVisible(false);
       this.cameras.main.fadeIn(300);
