@@ -141,6 +141,7 @@ These run when the map is built, and a failure stops the build with the reason:
 ```
 python3 tools/check_plans_w2.py                     # Book 2's plans (and Book 12, built from them)
 python3 tools/check_plans_w2.py --arc cc --png      # the Cao Cao arc (Book 13), with previews in docs/book2/plans-cc/
+python3 tools/check_plans_w2.py --arc lb --png      # Lü Bu's fall (Book 14), previews in docs/book2/plans-lb/
 python3 tools/mapfactory build --world 12 --plans 2
 python3 tools/mapfactory build --world 13 --plans cc          # CHASE_VERBOSE=1 prints the chase proof
 for k in xianxia jade genshin; do python3 tools/mapfactory compile --world 13 --kit $k; done

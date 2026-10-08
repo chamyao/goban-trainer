@@ -737,6 +737,67 @@ def prove_chase(mb, ch, out):
                   f"clean in {clean[0] * dt:.1f}s past {clean[1]}")
 
 
+def flood_tiles(mb, name):
+    """The open ground under a plan's named flood (cells), in tiles: walls and buildings stand above it."""
+    C = mb.C
+    return {(x, y) for X, Y, W, H in mb.p["floods"][name] for x in range(X * C, (X + W) * C) for y in range(Y * C, (Y + H) * C)
+            if 0 <= x < mb.W and 0 <= y < mb.H and mb.walkable((x, y))}
+
+
+def flood_layers(mb, states):
+    """tk-world's per-state water: one tile layer for each set of states a tile is under water in, named
+    "water:<state ids>" ("water:flood1,flood2"). Returns [{"states": [...], "tiles": [[x, y], ...]}]."""
+    wet = {}
+    for st in states:
+        if st.get("water"):
+            for t in flood_tiles(mb, st["water"]):
+                wet.setdefault(t, []).append(st["id"])
+    groups = {}
+    for t, ids in wet.items():
+        groups.setdefault(tuple(ids), []).append(list(t))
+    return [{"states": list(k), "tiles": sorted(v)} for k, v in sorted(groups.items())]
+
+
+def prove_flood(mb, states, afoot):
+    """In each state with water: on a horse that crosses water (Red Hare), every spot and door can be reached from the
+    map's entry; on foot, the places `afoot` names for that state can be, and none it marks "!" (a horse is needed).
+    In a state with no water, everything is reachable on foot (verify checks that as for any map). Raises if not."""
+    start = mb.near_cell(tuple(mb.p.get("entries", {}).get("") or (0, 0)), want_visible=False)
+    targets = {s["id"]: (int(s["x"]), int(s["y"])) for s in mb.spots}
+    targets.update({f"door:{k}": v for k, v in mb.anchor.items()})
+
+    def reach(ok):
+        seen, q = {start}, deque([start])
+        while q:
+            t = q.popleft()
+            for dx, dy in STEP4:
+                u = (t[0] + dx, t[1] + dy)
+                if u not in seen and ok(u):
+                    seen.add(u)
+                    q.append(u)
+        return seen
+
+    near = lambda r, t: any((t[0] + i, t[1] + j) in r for i in (-1, 0, 1) for j in (-1, 0, 1))   # noqa: E731
+    for st in states:
+        if not st.get("water"):
+            continue
+        w = flood_tiles(mb, st["water"])
+        horse = reach(mb.walkable)                                  # water is no bar to Red Hare
+        foot = reach(lambda t: mb.walkable(t) and t not in w)
+        lost = sorted(k for k, t in targets.items() if not near(horse, t))
+        if lost:
+            raise RuntimeError(f"{mb.mid}: in {st['id']}, even on Red Hare these can't be reached: {lost}")
+        for k in afoot.get(st["id"], []):
+            need_horse = k.startswith("!")
+            t = targets[k.lstrip("!")]
+            if near(foot, t) == need_horse:
+                raise RuntimeError(f"{mb.mid}: in {st['id']}, {k.lstrip('!')} " +
+                                   ("can be reached on foot, but the flood should cut it off" if need_horse else "can't be reached on foot"))
+        if "--verbose" in sys.argv or os.environ.get("CHASE_VERBOSE"):
+            dry = sorted(k for k, t in targets.items() if near(foot, t))
+            print(f"  flood {st['id']}: {len(w)} tiles under water; on foot from the entry: {dry}")
+
+
 def ways(mb):
     """The streets of a map as a graph, in tiles: nodes at every bend, end and crossing of a road, lane,
     garden path, bridge or gallery (their centre lines), edges along them. The game's lit route follows it,
@@ -784,7 +845,7 @@ def ways(mb):
 def state(st, mb, plans):
     """A plan's state → the engine's: light from light+weather, distances and points in tiles of this map."""
     out = {k: v for k, v in st.items() if k not in ("light", "weather", "visibility", "procession", "exits_open", "exits_closed",
-                                                    "exits_closed_say")}
+                                                    "exits_closed_say", "water", "shut")}
     light = LIGHT.get((st.get("light"), st.get("weather"))) or LIGHT.get((st.get("light"), None)) or st.get("light", "day")
     out["light"] = light if light in ("day", "morning", "dusk", "night", "storm", "smoke") else "day"
     if st.get("weather"):
@@ -807,6 +868,13 @@ def state(st, mb, plans):
             out[k] = ids
     if st.get("exits_closed_say"):   # what a shut road or door says, by the place it leads to
         out["exits_closed_say"] = {to(k): v for k, v in st["exits_closed_say"].items() if to(k)}
+    if st.get("shut"):    # gates of a wall shut in this state: their tiles, and what they say
+        out["shut"] = []
+        for gid, say in st["shut"].items():
+            gap = mb.gate_tiles[gid]
+            x0, y0 = min(t[0] for t in gap), min(t[1] for t in gap)
+            out["shut"].append({"gate": gid, "rect": [x0, y0, max(t[0] for t in gap) - x0 + 1, max(t[1] for t in gap) - y0 + 1],
+                                "say": say})
     return out
 
 
@@ -879,6 +947,9 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
             m["chase"] = lay_chase(mb, b["chase"])
             prove_chase(mb, b["chase"], m["chase"])
         m["states"] = [state(st, mb, plans) for st in b.get("states", [])]
+        if P.get("floods"):   # a flood that rises with the states: tile layers "water:<state ids>", proved state by state
+            m["water_layers"] = flood_layers(mb, b.get("states", []))
+            prove_flood(mb, b.get("states", []), P.get("flood_afoot", {}))
         if (w := ways(mb)):
             m["ways"] = w
         for k in ("seen_lines", "banners"):
@@ -1118,12 +1189,12 @@ def assets(maps, tables, kits_dir=None):
     return rows
 
 
-ARCS = {13: "cc"}   # test books whose plans are an arc's: Book 13 is the Cao Cao arc
+ARCS = {13: "cc", 14: "lb"}   # books whose plans are an arc's: Book 13 is the Cao Cao arc, Book 14 Lü Bu's fall
 
 
 def key_prefix(plans_world):
     """The book number the plans' beat keys carry ("2-c1" for the Cao Cao arc's plans)."""
-    return "2" if ARCS.get(plans_world, plans_world) == "cc" else str(plans_world)
+    return {"cc": "2", "lb": "3"}.get(ARCS.get(plans_world, plans_world), str(plans_world))
 
 
 def plans_arg(v):
@@ -1143,6 +1214,10 @@ def load(plans_world):
         from tk_places_w2_zh import ZH_PLACES2
         return mod.PLANS_CC, {"NEW_KINDS": mod.NEW_KINDS, "LINE_KINDS": mod.LINE_KINDS, "ZONE_KINDS": mod.ZONE_KINDS,
                               "ART": mod.ART}, ZH_PLACES2
+    if plans_world == "lb":   # Lü Bu's fall (Book 3's chapters 13-19): beat keys "3-x…"
+        import tk_plans_lb as mod
+        from tk_places_w2_zh import ZH_PLACES2
+        return mod.PLANS_LB, mod.TABLES, ZH_PLACES2
     if plans_world == 90:   # Talk with Claude: the study, no story
         import tk_plans_w90 as mod
         return mod.PLANS90, mod.TABLES, mod.ZH_PLACES90
@@ -1158,6 +1233,11 @@ def story_world(n, plans_world):
         from tk_plans_w90 import WORLD90 as W
     elif plans_world == "cc":
         from tk_story_w2_new import WORLD2_CC as W
+    elif plans_world == "lb":
+        try:
+            from tk_story_w2_new import WORLD3_LB as W
+        except ImportError:
+            raise SystemExit("no story yet for Lü Bu's fall (Plot's WORLD3_LB in tools/tk_story_w2_new.py)")
     else:
         raise SystemExit(f"no story for book {plans_world}")
     return {**W, "nodes": [{**nd, "key": f"{n}-{nd['key']}"} for nd in W["nodes"]],

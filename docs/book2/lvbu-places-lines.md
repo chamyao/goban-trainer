@@ -1,0 +1,115 @@
+# Lü Bu's fall: place lines, for Chinese
+
+Every line a player reads on the arc's maps (`tools/tk_plans_lb.py`): place names, labels, townsfolk, the road challengers, objectives, shut gates and the caught-by-a-patrol lines. Lines already in `tools/tk_places_w2_zh.py` are left out.
+
+109 lines.
+
+- Xuzhou
+- The prefecture hall
+- Lü Bu's lodging
+- Liu Bei's residence
+- Liu Bei's gate
+- The west gate, at night
+- Under Xuzhou's wall
+- The gate is barred for the night. Someone inside must open it.
+- The gate stays shut. Up on the wall, Mi Zhu has Cao Cao's banners raised.
+- The prefect's seat
+- Cao Cao's letter
+- The condolence call
+- The hawk
+- Lady Yan's rooms
+- The bride's chest
+- “The Lord Liu gave Lü Bu a feast. Lord Zhang Fei didn't come, they say. Or came, and left shouting.”
+- “Cao Bao keeps the west gate. A Danyang man, and Lü Bu is his son-in-law, you know.”
+- “No one troubles the Lord Liu's ladies. General Lü's orders.”
+- One of Zhang Fei's drinking companions sways out of the wine shop. “You're the one he calls the slave of three surnames! A game, and if you lose, you drink!”
+- “…Hic. You play better than he says.”
+- Zhang Fei's friend is asleep on the bench.
+- A Danyang soldier of Cao Bao's leans on his spear. “Our general's daughter married you, didn't she? Let's see if you're worth her.”
+- “Hah. You'll do.”
+- The Danyang soldier salutes.
+- Go to the prefecture hall, on the main street west of the cross, where Liu Bei receives you.
+- Go to your lodging's rear hall, on the north side of the main street east of the cross.
+- Go to the prefecture hall: Liu Bei has something to show you.
+- Ride to Xuzhou's west gate in the moonlight.
+- Go to Lady Yan's rooms, in the lodging's court.
+- Go to the prefecture hall: Chen Gui has come to call.
+- Go to the prefecture hall.
+- Ride back to Xuzhou's west gate.
+- Xiaopei
+- Lü Bu's halberd, planted at the camp gate
+- Xiaopei's county hall
+- The camp gate
+- Where the side path meets the road
+- Lü Bu's seat
+- Ji Ling's table
+- Liu Bei's table
+- The bow and the arrows
+- “They say the general can put an arrow through a halberd's side blade at a hundred and fifty paces. I say nobody can.”
+- “I saw it. Straight through the little blade. Ji Ling went home without a fight.”
+- A falconer looks up from his bird. “Out hunting, Adviser? The hawk won't fly for a man in a hurry. Play me while she settles.”
+- “She'll fly for you now.”
+- The falconer's hawk is on the wing.
+- Go to your tent in the camp, west of Xiaopei. The halberd stands at the camp gate.
+- Take the side path through the hunting ground to the road, and cut the courier off.
+- The Shouchun Road
+- The bridal carriage
+- The drums and pipes
+- The bridal party
+- “Drums and pipes went by an hour ago, with a red carriage. A wedding for the south, they said.”
+- One of Ji Ling's outriders wheels his horse across the narrows. “The bride of the House of Yuan rides under our guard. Turn back.”
+- “…Lü Bu's own man. Then go and argue with her escort, not me.”
+- The outrider has ridden back to the column.
+- Ride the Shouchun road south after the bridal party, thirty li, and bring the bride home.
+- Xiao Pass
+- Chen Gong's men's tents
+- A watch fire
+- Cao Cao's camp, below the pass
+- The top of the pass road
+- The cliff's edge above Cao Cao's camp
+- A Taishan bandit blocks the narrow road, a club on his shoulder. “Toll, scholar. Or a game, if you're too poor for silver.”
+- “…Go on, then. I never liked Chen Gong's lot anyway.”
+- The bandit has melted back into the hills.
+- One of Chen Gong's sentries leans on his spear by the bend. “Cold night for a walk, sir. Keep me awake a while?”
+- “Ha. Now I'm awake.”
+- The sentry stamps his feet against the cold.
+- “Who goes there? Oh, Master Chen. The Adviser said no one comes up tonight.” You're sent back down the road.
+- Climb the pass road at night and reach the cliff's edge above Cao Cao's camp, unseen by Chen Gong's men.
+- The Xiapi Road
+- Xiapi in sight
+- Lü Bu keeps beside his household's carriages.
+- “Grain carts, all morning. Whatever's coming to Xuzhou, the general isn't staying to meet it.”
+- Escort your household and the grain carts down the road to Xiapi.
+- Xiapi
+- Lü Bu's residence
+- The granary
+- The White Gate tower
+- Cao Cao's siege camp
+- Liu Bei's camp
+- The stables' door
+- Liu Bei's lines
+- Out of the east gate
+- Red Hare's saddle, ready
+- The mirror
+- The halberd
+- Chen Gong's plan
+- Where Lü Bu is packing
+- Fifty lashes
+- The chair where Lü Bu dozed
+- White flags
+- “Cao Cao's dug in on three sides and Liu Bei sits on the Huainan road. Nobody's getting out.”
+- “The water's up to the doorsteps on the south side. The east gate's the only dry way left.”
+- An officer of Hou Cheng's spits in the gutter. “No wine, no pay, and the general up there with his women. Play me, General, and tell me why I should stay.”
+- “…Fair enough. I'll stay. For now.”
+- The officer goes back to his post, still muttering.
+- A sentry at the foot of the wall stairs stands to. “General! I've counted Cao Cao's fires all night. Shall I count them for you?”
+- “Then you know what I know.”
+- The sentry has gone back up the wall.
+- “Who's at the horses? General Hou?” The guard peers through the rain, and you back off into the dark.
+- Go to your residence, on the north-west of the city, where Chen Gong waits in your hall.
+- Go from your rooms across the court to his hall, where he is packing to ride out.
+- Carry your daughter out by the White Gate and down the Huainan road to Liu Bei's lines.
+- Ride Red Hare round the flooded city, then back to your residence.
+- Go to your residence.
+- Take Red Hare from the stables and ride out of the dry east gate, unseen.
+- Go up the White Gate tower.

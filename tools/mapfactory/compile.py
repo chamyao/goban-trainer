@@ -256,6 +256,22 @@ def compile_map(m, kit, out_dir):
             else:
                 data[y * W + x] = plain(d, rm)
         layers.append((rm, data))
+    # a flood that rises with the map's states (Places' "water_layers"): a water layer for each set of states, named
+    # "water:<state ids>", which tk-world shows and makes impassable only while one of those states is on
+    wd, wrm = kit.material("water")[1], kit.material("water")[0]
+    base_water = {(x, y) for y in range(H) for x in range(W) if grid[y][x] == "water"}
+    for wl in m.get("water_layers", []):
+        cells = [tuple(t) for t in wl["tiles"]]
+        inside = set(cells) | base_water
+        data = [0] * (W * H)
+        for x, y in cells:
+            if wd and "blob" in wd:
+                sig = [k for k in ORDER if not (0 <= x + DIRS[k][0] < W and 0 <= y + DIRS[k][1] < H)
+                       or (x + DIRS[k][0], y + DIRS[k][1]) in inside]
+                data[y * W + x] = gid(*kit.pick_blob(wrm, sig, rnd))
+            elif wd:
+                data[y * W + x] = plain(wd, wrm)
+        layers.append(("water:" + ",".join(wl["states"]), data))
 
     # small ground detail (sprouts, petals) scattered over open grass, if the
     # kit has it: "detail": {"tiles": [[sheet, tx, ty, weight], ...], "density": 0.08}

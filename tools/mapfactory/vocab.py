@@ -110,6 +110,8 @@ KINDS.update({
     "wall.stairs": (4, 1, True),   # steps up the inside of a city wall (马道), at its foot (the Cao Cao arc's chase)
     "furn.jailcell": (4, 2, True),         # a barred jail cell (the Cao Cao arc, C19)
     "landmark.torch": (1, 1, True),        # a torch on a pole (the Cao Cao arc, C19)
+    "prop.halberd": (1, 1, True),          # a halberd planted upright (Lü Bu's fall, x6)
+    "prop.carriage": (4, 2, True),         # a bridal carriage hung with red silk (Lü Bu's fall, x9)
     "furn.screen": (3, 1, True),      # a folding screen behind a seat of honour
     "furn.rug": (3, 2, False),
     "furn.plant": (1, 1, True),
@@ -207,6 +209,8 @@ FALLBACK = {
     "wall.stairs": ["furn.rack", "landmark.notice"],
     "furn.jailcell": ["furn.screen", "furn.shelf"],
     "landmark.torch": ["furn.lamp", "lamp.post"],
+    "prop.halberd": ["furn.rack", "lamp.post"],
+    "prop.carriage": ["camp.table", "furn.table"],
     "furn.counter": ["furn.table", "camp.table"],
     "furn.hearth": ["camp.cookfire", "camp.firepit"],
     "furn.barrel": ["furn.jar"],
