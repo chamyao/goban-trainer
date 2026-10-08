@@ -2135,6 +2135,9 @@ def _nodes_caocao():
                          "身后相府门开，卫士蜂拥追出：“拿住曹操！”"]],
             "caught": [["n", "A soldier leaps out of a lane and grabs at his bridle: Colonel Cao! The Chancellor wants a word with you.",
                         "一名军士从巷中跃出，扯住马辔：“曹校尉！相国有话问你。”"]],
+            # the four jailers Li Ru sent to his lodging (「即差獄卒四人往喚操」) burst out of its gate
+            "caught_at": {"lodging": [["n", "Four jailers burst out of his lodging's gate: The Chancellor sends for you, Colonel Cao!",
+                                       "四名狱卒从寓所门内冲出：“曹校尉，相国有请！”"]]},
             "solved": [["say", "caocao", "I'm trying out the horse the Chancellor gave me. Ask him yourself.",
                         "相国赐我良马，我正试骑。不信，你自去问他。"]],
             "restart": [["n", "They take him back. Cao Cao rides out again, before anyone thinks to ask why.",
