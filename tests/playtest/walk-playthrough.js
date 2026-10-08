@@ -95,10 +95,10 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     else await p.evaluate(([x, y]) => { const w = window.__w, cam = w.cameras.main, v = w.view ? w.view(x, y) : { x, y }; w.tapAt(x, y, (v.x - cam.worldView.x) * cam.zoom, (v.y - cam.worldView.y) * cam.zoom); }, [x, y]);
   };
   // the patrols ahead, and a way to the goal none of them sees: cells, one per 150 ms (stealth-12's planner)
-  const plan = (STEP) => p.evaluate(STEP => {   // STEP frames of 50 ms a cell: 3 is his running pace, 4 the pace a walk a cell at a time surely keeps, 2 mounted
+  const plan = (STEP, TGT = null) => p.evaluate(([STEP, TGT]) => {   // STEP frames of 50 ms a cell: 3 is his running pace, 4 the pace a walk a cell at a time surely keeps, 2 mounted
     const w = window.__w, T = w.tw || 16, C = 16, DT = 50, F = 1600, goal = w.goalAt; if (!goal) return null;
-    w.scene.pause(); try { return planIn(w, STEP); } finally { setTimeout(() => w.scene.resume(), 80); }   /* resumed after the planning (a long task) and a few paused frames: the long frame lands on the paused scene, not on the patrols */
-    function planIn(w, STEP) {
+    w.scene.pause(); try { return planIn(w, STEP, TGT); } finally { setTimeout(() => w.scene.resume(), 80); }   /* resumed after the planning (a long task) and a few paused frames: the long frame lands on the paused scene, not on the patrols */
+    function planIn(w, STEP, TGT) {
     const T = w.tw || 16, C = 16, DT = 50, F = 800, goal = w.goalAt; if (!goal) return null;   /* 40 s of the patrols (plans go 30 s at most; a long sight map was a long task, a long frame) */ // the game held while he plans, and past the long frame after it (else the patrols jump ahead by the time the plan took)
     const G = w.walkGrid(), cols = Math.ceil(G.cols * G.C / C), rows = Math.ceil(G.rows * G.C / C), P = w.player, ox = ((Math.round(P.x) % C) + C) % C, oy = ((Math.round(P.y) % C) + C) % C, solid = w.solids.getChildren().filter(z => z.body && z.body.enable && !(z.visibleWith && !z.visibleWith.visible)).map(z => z.body), fb = { x: P.body.x - P.x, y: P.body.y - P.y, w: P.body.width, h: P.body.height }, wb = w.physics.world.bounds,
       feetFree = (x, y) => { const L = x + fb.x + .5, T0 = y + fb.y + .5, R = L + fb.w - 1, B = T0 + fb.h - 1; if (L < wb.x || T0 < wb.y || R > wb.right || B > wb.bottom) return false; return !solid.some(b => L < b.right && R > b.x && T0 < b.bottom && B > b.y); },
@@ -132,7 +132,8 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
         if (X < 0 || Y < 0 || X >= cols || Y >= rows || dist[id] >= 0 || !free(X, Y) || !passes(x, y, X, Y)) continue; dist[id] = dist[c] + 1; q.push(id); } }
       const d0 = dist[sx + sy * cols]; let best = null;
       for (let k = 0; k < Math.min(hist.length, NEAR + 1); k++) for (const c of hist[k].keys()) { const x = c % cols; if (dist[c] < 0 || !inCov(x, (c - x) / cols)) continue; if (d0 >= 0 && dist[c] >= d0) continue;
-        if (!best || dist[c] < best.d) best = { d: dist[c], k, c }; }
+        const keep = TGT && Math.hypot(at(x, (c - x) / cols).x - TGT.x, at(x, (c - x) / cols).y - TGT.y) < 9;   /* the cover she's on her way to, while it's still reachable: kept (a target changed every plan, she never got anywhere) */
+        if (!best || (keep && !best.keep) || (keep === !!best.keep && dist[c] < best.d)) best = { d: dist[c], k, c, keep }; }
       if (best) { found = best.k; end = best.c; hold = true; } }
     if (found < 0) return null;
     const cells = []; let c = end; for (let k = found; k >= 0; k--) { cells.unshift(c); c = hist[k].get(c); }
@@ -153,7 +154,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       const R = window.__ring = window.__ring || []; R.push([Math.round(gt), k, Math.round(P.x), Math.round(P.y), go, Math.round(P.body.speed), Math.round(d)]); if (R.length > 40) R.shift(); };
     w.events.on('update', window.__execF); window.__execI = 0;
     window.__planAt = performance.now(); return pts;
-  } }, STEP);
+  } }, [STEP, TGT]);
 
   // what's optional on this map, as a player sees it: challengers standing with their "!", doors only some may pass
   // or the story shuts (and in which state), rooms off this place
@@ -357,7 +358,9 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       // (the plan is followed in the page from the moment it was made: see plan())
       const k = Math.floor((await p.evaluate(() => window.__execT || 0)) / (pace * 50));
       if (Date.now() - planT > 1200 && !(await p.evaluate(() => !!window.__w.auto))) {   /* a fresh plan every 1.2 s, from a cell she's on (the patrols' simulation drifts over a long plan); none just now: the one she's on goes on */
-        let np = await plan(4), npP = 4; if (!np) { np = await plan(3); npP = 3; }
+        const tgt = plannedSteps[plannedSteps.length - 1].hold ? plannedSteps[plannedSteps.length - 1] : null, here = await p.evaluate(() => [window.__w.player.x, window.__w.player.y]);
+        const aim = tgt && Math.hypot(here[0] - tgt.x, here[1] - tgt.y) > 9 ? { x: tgt.x, y: tgt.y } : null;   /* not there yet: on to it */
+        let np = await plan(4, aim), npP = 4; if (!np) { np = await plan(3, aim); npP = 3; }
         if (np) { plannedSteps = np; pace = npP; planT = Date.now() + 80; await p.evaluate(() => { window.__w.walk = null; }); if (process.env.STEALTHDBG) console.log(`     dbg replan: ${np.length} steps to ${[np[np.length - 1].x, np[np.length - 1].y]}${np[np.length - 1].hold ? ' (a cover on the way)' : ''}`); }
         else { planT = Date.now(); if (process.env.STEALTHDBG) console.log('     dbg replan: none, keeping the plan she is on'); }
         continue; }
