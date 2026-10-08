@@ -407,8 +407,17 @@ class MapBuilder:
                 y = fy + fh - 1 if not self.free((ax - 2, ay)) else ay
                 off = self.gatehouse[d["at_door"]] // 2 + 1 if d["at_door"] in self.gatehouse else 2   # outside a gatehouse
                 sides = (-off, off) if d.get("pair") else (-off,)
+                # along the door's own face: left and right of a N or S door, above and below an E or W one (a pair set
+                # left and right of an east door put one banner straight out in front of it: Lü Bu's tent, Testing)
+                o_ = next((x for x in self.objects if x.get("id") == d["at_door"]), {})
+                face = o_.get("enter") or o_.get("door") or "S"
+                (px, py), (bx, by) = ((1, 0), (0, -1)) if face in ("N", "S") else ((0, 1), (-1 if face == "E" else 1, 0))
+                if face == "N":
+                    by = 1
                 for dx in sides:
-                    for t in ((ax + dx, ay), (ax + dx + (1 if dx > 0 else -1), ay), (ax + dx, ay - 1), (ax + dx, ay - 2)):
+                    sgn = 1 if dx > 0 else -1
+                    cx, cy = ax + px * dx, ay + py * dx
+                    for t in ((cx, cy), (cx + px * sgn, cy + py * sgn), (cx + bx, cy + by), (cx + 2 * bx, cy + 2 * by)):
                         if self.put(kind, t):
                             break
             elif d.get("at_gates"):
@@ -521,8 +530,23 @@ class MapBuilder:
             n["wander"] = True
         return n
 
+    def door_lanes(self):
+        """The way straight in to every door you can enter: 3 tiles wide, 6 deep from its doorstep."""
+        lanes = set()
+        for o in self.objects:
+            if not o.get("map") or o.get("id") not in self.anchor:
+                continue
+            ax, ay = self.anchor[o["id"]]
+            ux, uy = {"S": (0, 1), "N": (0, -1), "E": (1, 0), "W": (-1, 0)}[o.get("enter") or o.get("door") or "S"]
+            lanes |= {(ax + k * ux + j * uy, ay + k * uy + j * ux) for k in range(6) for j in (-1, 0, 1)}
+        return lanes
+
     def lay_people(self, npcs, challengers, watchers):
         taken = {(int(s["x"]), int(s["y"])) for s in self.spots}
+        # townsfolk stand aside from the way in to a door (a farmer in front of Xuzhou's hall: Testing); challengers and
+        # watchers keep their cells, which their proofs are about
+        lanes = self.door_lanes()
+        taken |= lanes
         for i, p in enumerate(npcs):
             if p.get("at"):
                 t = self.near_cell(tuple(p["at"]), taken=taken)
@@ -539,6 +563,7 @@ class MapBuilder:
                 fx, fy, fw, fh = self.foot[p["behind"]]
                 n["x"], n["y"] = fx + fw / 2, fy + .35
             self.npcs.append(n)
+        taken -= lanes - {(int(s_["x"]), int(s_["y"])) for s_ in self.spots}
         for i, c in enumerate(challengers):
             t = self.near_cell(tuple(c["at"]), taken=taken)
             taken.add(t)

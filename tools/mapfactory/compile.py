@@ -205,6 +205,42 @@ def doors_blocked(objs):
     return bad
 
 
+def doors_front_blocked(objs, T):
+    """The doors you can't walk straight into: from 3 tiles out on the face it's entered by, along the door's middle,
+    her body (10 x 6) meets a solid or someone standing there before the point 3 px above her feet is in the exit. A
+    banner set before Lü Bu's tent door, a farmer before Xuzhou's hall (Testing)."""
+    P = lambda o: {p["name"]: p["value"] for p in o.get("properties", [])}   # noqa: E731
+    boxes = []
+    for o in objs:
+        p = P(o)
+        if o["type"] == "prop" and p.get("solid") and not p.get("in"):
+            l, r = p.get("cl", p.get("fw", 0) / 2), p.get("cr", p.get("fw", 0) / 2)
+            cx, cy, w, h = o["x"] + (r - l) / 2, o["y"] - p.get("fh", 0) / 2, l + r - 2, p.get("fh", 0) - 2
+            boxes.append((cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2))
+        elif o["type"] == "npc":
+            boxes.append((o["x"] - 5, o["y"] - 6, o["x"] + 5, o["y"]))
+    hit = lambda a: any(a[0] < z[2] and z[0] < a[2] and a[1] < z[3] and z[1] < a[3] for z in boxes)   # noqa: E731
+    bad = []
+    for o in objs:
+        if o["type"] != "exit" or o["width"] >= 16 or o["height"] >= 16:
+            continue
+        side = P(o).get("side", "N")
+        ux, uy = {"N": (0, 1), "S": (0, -1), "E": (-1, 0), "W": (1, 0)}[side]   # out, the way she comes from
+        ex = (o["x"], o["y"], o["x"] + o["width"], o["y"] + o["height"])
+        fx, fy = (ex[0] + ex[2]) / 2, (ex[1] + ex[3]) / 2 + 3   # feet: the point 3 px above them at the exit's middle
+        ok = False
+        for k in range(3 * T, -1, -2):
+            x, y = fx + ux * k, fy + uy * k
+            if hit((x - 5, y - 6, x + 5, y)):
+                break
+            if ex[0] <= x <= ex[2] and ex[1] <= y - 3 <= ex[3]:
+                ok = True
+                break
+        if not ok:
+            bad.append(P(o).get("to", o["name"]))
+    return bad
+
+
 def compile_map(m, kit, out_dir):
     T = kit.T
     W, H = m["size"]
@@ -472,6 +508,9 @@ def compile_map(m, kit, out_dir):
     bad = doors_blocked(objs)
     if bad:
         raise RuntimeError(f"{m['id']} ({kit.k['kit']}): no one can step into the door to {', '.join(bad)}: it is inside a solid")
+    bad = doors_front_blocked(objs, T)
+    if bad:
+        raise RuntimeError(f"{m['id']} ({kit.k['kit']}): the straight way in to the door to {', '.join(bad)} is blocked")
     (out_dir / f"{m['id']}.tmj").write_text(json.dumps(tmj, ensure_ascii=False, separators=(",", ":")))
     return tmj
 

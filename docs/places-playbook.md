@@ -106,6 +106,14 @@ These were each learned from a real complaint, and each is a rule, not a one-off
 - **Every door can be stepped into.** The build fails in two places. plans (`doors_reachable`): if a door's exit
   doesn't touch ground walkable from the map's entry. compile (`doors_blocked`): if the player's 10×6 body can't overlap
   the exit without touching one of the engine's solid boxes.
+- **The way in to a door is clear.**
+  - Dressing set "at" a door flanks it along its own face: left and right of a north or south door, above and below an
+    east or west one.
+  - Townsfolk stand off a lane 3 tiles wide and 6 deep before every door you can enter. Challengers and watchers keep
+    their cells.
+  - compile (`doors_front_blocked`) fails the build if she can't walk straight in from 3 tiles out. A banner set before
+    Lü Bu's tent door had blocked her.
+  - A door's trigger reaches .6 of a tile out from its face. Coming out, she arrives clear of it, never on it.
 - **A tower in a wall stands beside its gates, and is entered where it's drawn.** A gate tower (`building.gatetower`)
   is drawn front-on, with its arch on the south face. Its door is that arch (S), and the whole arch is the trigger. A
   side door (E/W) is at the foot of its face. A north door would be on the face the camera never sees, so the build
