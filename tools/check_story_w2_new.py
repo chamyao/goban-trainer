@@ -23,7 +23,7 @@ def main():
     CAST = dict(zh.CAST)
     CAST.update(new.CAST2)
     bad = 0
-    for label, world in (("Diaochan arc (WORLD2)", new.WORLD2), ("Cao Cao arc (WORLD2_CC)", getattr(new, "WORLD2_CC", None))):
+    for label, world in (("Diaochan arc (WORLD2)", new.WORLD2), ("Cao Cao arc (WORLD2_CC)", getattr(new, "WORLD2_CC", None)), ("Lü Bu arc (WORLD2_LB)", getattr(new, "WORLD2_LB", None))):
         if world is None:
             continue
         errors, warnings = [], []

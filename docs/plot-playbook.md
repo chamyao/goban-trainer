@@ -36,16 +36,24 @@ takes one compelling story inside the novel and builds itself around it. A good 
   and its price.
 - **Its own world:** a few places, a cast, and payoffs planted and paid inside the arc.
 
-**Draw on the women's stories.**
+**When a stretch can be told from a woman's perspective in an interesting and natural way, tell it that way.**
 
-> "also, in general I find it more intersting to have women have an emphasis to the plot such as diaochan, so while the
-> characters are majority men, we should try to draw on the female stories as well to keep it more entertaining"
+> "if theres an opportunity to tell the narrative from a female characters perspective in an interesting and natrual way
+> then we should opt to do so"
 
-The novel's cast is mostly men, but its women often stand at the turning points: Diaochan, Lady Zou at Wancheng, Lady Yan
-and Lü Bu's daughter at Xiapi, Lady Mi at Changban, Lady Sun's marriage. When choosing a narrative or a lead, look for
-these stories first, and give the women real moments to play and real lines, as the Diaochan arc did. The limit is R1:
-their stories are told as the novel tells them. Invention is allowed only where it serves the plot, never to give someone
-a role the novel doesn't support.
+This is the rule the user settled on, after a few rounds of finding the balance:
+- "we should try to draw on the female stories as well to keep it more entertaining"
+- "emphasize if theres opportunity … not force"
+- "do not push the women thing too far … drawing out opportunities would be a nice to have"
+- "it would be nice to have an opportunity to play as a woman again"
+
+How to apply it:
+- **The test:** in the novel's own text, does she act, decide or go to someone? Is her moment interesting to play? If both
+  hold, she leads that stretch (Diaochan's scenes; Lady Yan going to Lü Bu at Xiapi, 「布妻嚴氏聞之，出問曰」).
+- **If she is only present or spoken of,** she isn't the lead. Stage her moment fully and let her speak her lines.
+- **Don't** invent scenes to give her more presence, or overstate her role. Check every claim against the text. (An early Lü Bu draft said "the women win every time" and added an invented Lady Yan prologue.
+  Both were cut.)
+- **Known opportunities in later chapters** are listed in `docs/plot-opportunities.md`, so none are missed.
 
 **Give each arc a new mechanic drawn from its story.**
 
@@ -56,6 +64,13 @@ The Diaochan arc brought stealth (Diaochan moving unseen through Dong Zhuo's res
 mechanic: only cosmetic touches (fireflies on the route light, a led horse, a crouch pose). That was a miss. Every arc
 should introduce at least one new way to play, and it should come out of the narrative itself, the way stealth came out
 of a woman who must not be seen. Design it with the arc, not after, and send it to Integration and Places with the design.
+
+A new mechanic does not have to involve go:
+
+> "the mechanics dont have to fit w go btw"
+
+Go stays the game's core, through boards and challengers. But a mechanic can stand on its own (stealth, a flood, a chase)
+and only touch go where that genuinely helps, as the chase's catch board did.
 
 Small touches that dress an existing system in the story are worth doing too, alongside the new mechanic rather than
 instead of it. At Beimang the route light became the novel's fireflies:
