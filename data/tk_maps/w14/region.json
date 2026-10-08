@@ -16,9 +16,21 @@
    "archetype": "city",
    "map": "changan.map.json",
    "links": [
+    "changan--burning-ward"
+   ]
+  },
+  {
+   "id": "changan--burning-ward",
+   "name": "The burning ward",
+   "zh": "焚烧的街坊",
+   "archetype": "compound",
+   "map": "changan--burning-ward.map.json",
+   "links": [
+    "changan",
     "changan--lb-house",
     "changan--pangshu-house"
-   ]
+   ],
+   "parent": "changan"
   },
   {
    "id": "changan--lb-house",
@@ -27,7 +39,7 @@
    "archetype": "interior",
    "map": "changan--lb-house.map.json",
    "links": [
-    "changan"
+    "changan--burning-ward"
    ],
    "parent": "changan"
   },
@@ -38,7 +50,7 @@
    "archetype": "interior",
    "map": "changan--pangshu-house.map.json",
    "links": [
-    "changan"
+    "changan--burning-ward"
    ],
    "parent": "changan"
   },
@@ -417,7 +429,7 @@
    "spot": "x0b",
    "scene": "x0b",
    "title": "Hidden",
-   "objective": "Take your daughter through the lanes to Pang Shu's house, on the palace lane. When looters come, get into cover and keep still.",
+   "objective": "Take your daughter through the burning lanes to Pang Shu's house. When looters come, get into cover and keep still.",
    "after": [
     "14-x0a"
    ],
@@ -594,7 +606,7 @@
      1225
     ]
    ],
-   "objective_zh": "带着女儿穿过小巷，前往宫前巷的庞舒家。乱兵过来时，躲进暗处，不要动。",
+   "objective_zh": "带着女儿穿过燃烧的小巷，前往庞舒家。乱兵过来时，躲进暗处，不要动。",
    "title_zh": "私藏"
   },
   {

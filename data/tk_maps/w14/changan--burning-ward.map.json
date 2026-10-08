@@ -1,0 +1,619 @@
+{
+ "format": "tk-map/1",
+ "id": "changan--burning-ward",
+ "world": 14,
+ "name": "The burning ward",
+ "archetype": "compound",
+ "size": [
+  40,
+  34
+ ],
+ "seed": 2100,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "court",
+   ".": "grass",
+   "W": "wall"
+  },
+  "rows": [
+   "........................................",
+   ".WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW.",
+   ".W....................................W.",
+   ".W....................................W.",
+   "WWWWWWaaWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+   "WWWWWWaaWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWaaaaaaW.",
+   "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+   ".WaaaaaaWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWaaWWWWWW",
+   "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWaaWWWWWW",
+   ".W....................................W.",
+   ".W....................................W.",
+   ".WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW.",
+   "........................................"
+  ],
+  "walk": {
+   "court": true,
+   "grass": true,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    20,
+    17
+   ],
+   "width": 1,
+   "gates": {
+    "to-city": [
+     0,
+     4
+    ]
+   },
+   "tiles": 136
+  },
+  {
+   "id": "row-n",
+   "kind": "wall",
+   "path": [
+    [
+     0,
+     2
+    ],
+    [
+     19,
+     2
+    ]
+   ],
+   "width": 1,
+   "gates": {
+    "lb-gate": [
+     3,
+     2
+    ]
+   },
+   "tiles": 80
+  },
+  {
+   "id": "row-s",
+   "kind": "wall",
+   "path": [
+    [
+     0,
+     14
+    ],
+    [
+     19,
+     14
+    ]
+   ],
+   "width": 1,
+   "gates": {
+    "pangshu-door": [
+     16,
+     14
+    ]
+   },
+   "tiles": 80
+  },
+  {
+   "id": "block-1",
+   "kind": "wall",
+   "path": [
+    [
+     0,
+     6
+    ],
+    [
+     15,
+     6
+    ]
+   ],
+   "width": 1,
+   "tiles": 64
+  },
+  {
+   "id": "block-2",
+   "kind": "wall",
+   "path": [
+    [
+     4,
+     10
+    ],
+    [
+     19,
+     10
+    ]
+   ],
+   "width": 1,
+   "tiles": 64
+  }
+ ],
+ "objects": [
+  {
+   "kind": "building.gatehouse",
+   "x": 1,
+   "y": 8,
+   "w": 1,
+   "h": 2,
+   "id": "to-city",
+   "width": 2,
+   "wall": "walls",
+   "door": "W"
+  },
+  {
+   "kind": "building.gatehouse",
+   "x": 6,
+   "y": 4,
+   "w": 2,
+   "h": 2,
+   "id": "lb-gate",
+   "width": 2,
+   "wall": "row-n",
+   "door": "S"
+  },
+  {
+   "kind": "building.gatehouse",
+   "x": 32,
+   "y": 28,
+   "w": 2,
+   "h": 2,
+   "id": "pangshu-door",
+   "width": 2,
+   "wall": "row-s",
+   "door": "S"
+  },
+  {
+   "kind": "building.hall",
+   "x": 4,
+   "y": 2,
+   "w": 4,
+   "h": 2,
+   "id": "lb-hall",
+   "door": "S",
+   "faces": "S",
+   "label": "Lü Bu's house",
+   "map": "lb-house",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.house",
+   "x": 14,
+   "y": 2,
+   "w": 4,
+   "h": 2,
+   "id": "burnt-1",
+   "door": null,
+   "faces": "S",
+   "label": "A burnt-out house",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.house",
+   "x": 24,
+   "y": 2,
+   "w": 4,
+   "h": 2,
+   "id": "burnt-2",
+   "door": null,
+   "faces": "S",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.house",
+   "x": 4,
+   "y": 30,
+   "w": 4,
+   "h": 2,
+   "id": "burnt-3",
+   "door": null,
+   "faces": "S",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.house",
+   "x": 16,
+   "y": 30,
+   "w": 4,
+   "h": 2,
+   "id": "burnt-4",
+   "door": null,
+   "faces": "S",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.house",
+   "x": 30,
+   "y": 30,
+   "w": 4,
+   "h": 2,
+   "id": "pangshu",
+   "door": "N",
+   "faces": "N",
+   "label": "Pang Shu's house",
+   "map": "pangshu-house",
+   "plaque": "庞府",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.gatehouse",
+   "x": 30,
+   "y": 30,
+   "w": 4,
+   "h": 1,
+   "id": "pangshu-gate",
+   "faces": "S"
+  },
+  {
+   "kind": "camp.firepit",
+   "x": 20,
+   "y": 6,
+   "w": 1,
+   "h": 1,
+   "label": "A burning house"
+  },
+  {
+   "kind": "camp.firepit",
+   "x": 8,
+   "y": 30,
+   "w": 1,
+   "h": 1,
+   "label": "A burning house"
+  }
+ ],
+ "spots": [
+  {
+   "id": "lb-door",
+   "x": 6.5,
+   "y": 6.7,
+   "node": "",
+   "label": "Lü Bu's door",
+   "note": "the walk starts here"
+  },
+  {
+   "id": "pangshu-gate",
+   "x": 32.5,
+   "y": 26.7,
+   "node": "",
+   "label": "Pang Shu's door"
+  },
+  {
+   "id": "cover-1",
+   "x": 16.5,
+   "y": 6.7,
+   "node": "",
+   "label": "A dark doorway",
+   "cover": true
+  },
+  {
+   "id": "cover-2",
+   "x": 26.5,
+   "y": 10.7,
+   "node": "",
+   "label": "An overturned hay cart",
+   "cover": true
+  },
+  {
+   "id": "cover-3",
+   "x": 24.5,
+   "y": 14.7,
+   "node": "",
+   "label": "A well-house",
+   "cover": true
+  },
+  {
+   "id": "cover-4",
+   "x": 10.5,
+   "y": 18.7,
+   "node": "",
+   "label": "A broken screen wall",
+   "cover": true
+  },
+  {
+   "id": "cover-5",
+   "x": 14.5,
+   "y": 26.7,
+   "node": "",
+   "label": "A burnt-out cart",
+   "cover": true
+  },
+  {
+   "id": "cover-6",
+   "x": 24.5,
+   "y": 22.7,
+   "node": "",
+   "label": "A dark doorway",
+   "cover": true
+  }
+ ],
+ "npcs": [
+  {
+   "id": "looter-1",
+   "kind": "folk.soldier",
+   "say": [],
+   "watch": {
+    "id": "looter-1",
+    "cone": 10,
+    "beat": [
+     [
+      34.5,
+      10.9
+     ],
+     [
+      34.5,
+      8.9
+     ],
+     [
+      4.5,
+      8.9
+     ],
+     [
+      34.5,
+      8.9
+     ]
+    ],
+    "pause": [
+     34.5,
+     10.9,
+     3
+    ],
+    "in_beats": [
+     "14-x0b"
+    ],
+    "seen": "looter",
+    "back_to": "@cover"
+   },
+   "x": 34.5,
+   "y": 10.9
+  },
+  {
+   "id": "looter-2",
+   "kind": "folk.soldier",
+   "say": [],
+   "watch": {
+    "id": "looter-2",
+    "cone": 10,
+    "beat": [
+     [
+      4.5,
+      18.9
+     ],
+     [
+      4.5,
+      16.9
+     ],
+     [
+      34.5,
+      16.9
+     ],
+     [
+      4.5,
+      16.9
+     ]
+    ],
+    "pause": [
+     4.5,
+     18.9,
+     3
+    ],
+    "in_beats": [
+     "14-x0b"
+    ],
+    "seen": "looter",
+    "back_to": "@cover"
+   },
+   "x": 4.5,
+   "y": 18.9
+  },
+  {
+   "id": "looter-3",
+   "kind": "folk.soldier",
+   "say": [],
+   "watch": {
+    "id": "looter-3",
+    "cone": 10,
+    "beat": [
+     [
+      4.5,
+      24.9
+     ],
+     [
+      34.5,
+      24.9
+     ],
+     [
+      34.5,
+      26.9
+     ],
+     [
+      34.5,
+      24.9
+     ]
+    ],
+    "pause": [
+     34.5,
+     26.9,
+     3
+    ],
+    "in_beats": [
+     "14-x0b"
+    ],
+    "seen": "looter",
+    "back_to": "@cover"
+   },
+   "x": 4.5,
+   "y": 24.9
+  },
+  {
+   "id": "looter-1b",
+   "kind": "folk.soldier",
+   "say": [],
+   "watch": {
+    "id": "looter-1b",
+    "cone": 10,
+    "beat": [
+     [
+      4.5,
+      8.9
+     ],
+     [
+      34.5,
+      8.9
+     ]
+    ],
+    "pause": [
+     4.5,
+     8.9,
+     2
+    ],
+    "in_beats": [
+     "14-x0b"
+    ],
+    "seen": "looter",
+    "back_to": "@cover"
+   },
+   "x": 4.5,
+   "y": 8.9
+  },
+  {
+   "id": "looter-2b",
+   "kind": "folk.soldier",
+   "say": [],
+   "watch": {
+    "id": "looter-2b",
+    "cone": 10,
+    "beat": [
+     [
+      34.5,
+      16.9
+     ],
+     [
+      4.5,
+      16.9
+     ]
+    ],
+    "pause": [
+     34.5,
+     16.9,
+     2
+    ],
+    "in_beats": [
+     "14-x0b"
+    ],
+    "seen": "looter",
+    "back_to": "@cover"
+   },
+   "x": 34.5,
+   "y": 16.9
+  },
+  {
+   "id": "looter-3b",
+   "kind": "folk.soldier",
+   "say": [],
+   "watch": {
+    "id": "looter-3b",
+    "cone": 10,
+    "beat": [
+     [
+      34.5,
+      24.9
+     ],
+     [
+      4.5,
+      24.9
+     ]
+    ],
+    "pause": [
+     4.5,
+     24.9,
+     2
+    ],
+    "in_beats": [
+     "14-x0b"
+    ],
+    "seen": "looter",
+    "back_to": "@cover"
+   },
+   "x": 34.5,
+   "y": 24.9
+  }
+ ],
+ "exits": [
+  {
+   "to": "changan--lb-house",
+   "side": "N",
+   "x": 5.6,
+   "y": 3.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changan--pangshu-house",
+   "side": "S",
+   "x": 31.6,
+   "y": 29.7,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "changan",
+   "side": "W",
+   "x": 1,
+   "y": 8,
+   "w": 1,
+   "h": 2
+  }
+ ],
+ "entries": {
+  "changan--lb-house": [
+   6,
+   4
+  ],
+  "changan--pangshu-house": [
+   32,
+   29
+  ],
+  "changan": [
+   2,
+   8
+  ],
+  "": [
+   6,
+   6
+  ]
+ },
+ "parent": "changan",
+ "building": "burning-ward",
+ "links": [
+  "changan",
+  "changan--lb-house",
+  "changan--pangshu-house"
+ ]
+}

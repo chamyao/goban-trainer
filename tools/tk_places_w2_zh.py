@@ -637,4 +637,11 @@ ZH_PLACES2 = {
     "“There! A woman and a girl!” She drags her daughter back into the dark before he can look again.": "“那边！一个妇人带着个女娃！”她拉着女儿退回暗处，那人再看时已不见踪影。",
     "Lü Bu's house, the night Chang'an falls.": "长安城破之夜，吕布府中。",
     "Take your daughter through the lanes to Pang Shu's house, on the palace lane. When looters come, get into cover and keep still.": "带着女儿穿过小巷，前往宫前巷的庞舒家。乱兵过来时，躲进暗处，不要动。",
+    "The burning ward": "焚烧的街坊",
+    "Lü Bu's door": "吕布家门口",
+    "A broken screen wall": "残破的照壁",
+    "A burnt-out cart": "烧毁的车子",
+    "A burning house": "燃烧的房屋",
+    "A burnt-out house": "烧毁的房屋",
+    "Take your daughter through the burning lanes to Pang Shu's house. When looters come, get into cover and keep still.": "带着女儿穿过燃烧的小巷，前往庞舒家。乱兵过来时，躲进暗处，不要动。",
 }

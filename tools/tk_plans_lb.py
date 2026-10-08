@@ -54,33 +54,17 @@ for _t in _cap["things"]:
     for _k in ("node", "map", "open_to", "refuse"):
         _t.pop(_k, None)
     if _t["id"] == "lubu":
-        _t.update(label="Lü Bu's house", map="lb-house")
-    if _t["id"] == "house-2":
-        _t.update(id="pangshu", label="Pang Shu's house", plaque="庞府", map="pangshu-house")
+        _t.update(label="Lü Bu's house", map="burning-ward")
 _cap["things"] = [t for t in _cap["things"] if t["id"] not in ("hengmen", "ridge")]   # the Diaochan arc's farewell, long over
-_cap["spots"] = [
-    {"id": "lubu-gate", "at": [13, 9], "at_door": "lubu", "label": "Lü Bu's gate", "note": "the walk to Pang Shu's starts here"},
-    {"id": "pangshu-gate", "at": [10, 11], "at_door": "pangshu", "label": "Pang Shu's door"},
-    # cover on the way (hide and wait): a doorway, a hay cart, a well-house; seen, she's sent back to the last one
-    {"id": "cover-door", "at": [14, 8], "label": "A dark doorway", "cover": True},
-    {"id": "cover-cart", "at": [14, 10], "label": "An overturned hay cart", "cover": True},
-    {"id": "cover-well", "at": [12, 11], "label": "A well-house", "cover": True},
-]
-_cap["props"] = [{"kind": "camp.hay", "at": [14, 10], "label": "An overturned hay cart"},
+_cap["spots"] = [{"id": "lubu-gate", "at": [13, 9], "at_door": "lubu", "label": "Lü Bu's gate"}]
+_cap["props"] = [
                  {"kind": "camp.firepit", "at": [8, 5], "label": "A burning cart"},
                  {"kind": "camp.firepit", "at": [4, 9], "label": "A burning cart"}]
 _cap["dress"] = [d for d in _cap["dress"] if d.get("at_door") not in ("wangyun", "palace")] + [
     {"kind": "banner.black", "at_gates": True}]
 _cap["exits"] = []
 _cap["entries"] = {"": [13, 9]}
-_cap["checks"] = [{"check": "covered_route", "from": [13, 9], "to": [10, 11], "beats": ["3-x0b"], "must_wait": True}]
 # Li Jue's looters (the walk to x0b), as the Diaochan arc's watchers: down the east lane and along the palace lane
-_cap["watchers"] = [
-    {"id": "looter-east", "kind": "folk.soldier", "beat": [[14, 6], [14, 11], [14, 6]], "shape": "U", "pause": [14, 11, 2],
-     "cone": 3, "in_beats": ["3-x0b"], "seen": "looter", "back_to": "lubu-gate"},
-    {"id": "looter-lane", "kind": "folk.soldier", "beat": [[13, 11], [6, 11], [13, 11]], "shape": "U", "pause": [6, 11, 2],
-     "cone": 3, "in_beats": ["3-x0b"], "seen": "looter", "back_to": "lubu-gate"},
-]
 _ca.update(
     banners="black",
     states=[{"id": "sack", "light": "night", "weather": "smoke"}],
@@ -90,6 +74,57 @@ _ca.update(
         _talk("folk.soldier", [5, 5], "“Silk, jade, anything that shines. Kick the door in if they won't open it.”"),
     ],
     maps={
+        # ---- the burning ward behind Lü Bu's house (the walk to x0b): three narrow lanes joined end to end, between
+        # burnt-out houses; a looter walks each, and where he comes her way she hides (a doorway, a cart, a well-house)
+        # and keeps still till he's by. Lü Bu's house at the top, Pang Shu's at the bottom. Cells of 2 tiles. ----
+        "burning-ward": {
+            "grid": [20, 17], "cell": 2, "margin": 0, "label": "The burning ward",
+            "ground": [{"id": "lanes", "kind": "court", "rect": [1, 3, 18, 11]}],
+            "lines": [{"id": "walls", "kind": "wall", "outline": [0, 0, 20, 17], "width": 1, "gates": {"to-city": [0, 4]}},
+                      {"id": "row-n", "kind": "wall", "path": [[0, 2], [19, 2]], "width": 1, "gates": {"lb-gate": [3, 2]}},
+                      {"id": "row-s", "kind": "wall", "path": [[0, 14], [19, 14]], "width": 1, "gates": {"pangshu-door": [16, 14]}},
+                      {"id": "block-1", "kind": "wall", "path": [[0, 6], [15, 6]], "width": 1},     # lane 1 turns at its east end
+                      {"id": "block-2", "kind": "wall", "path": [[4, 10], [19, 10]], "width": 1}],  # lane 2 at its west end
+            "things": [
+                {"id": "lb-hall", "kind": "building.hall", "rect": [1, 1, 4, 1], "door": "S", "label": "Lü Bu's house", "map": "lb-house"},
+                {"id": "burnt-1", "kind": "building.house", "rect": [6, 1, 4, 1], "label": "A burnt-out house"},
+                {"id": "burnt-2", "kind": "building.house", "rect": [11, 1, 4, 1]},
+                {"id": "burnt-3", "kind": "building.house", "rect": [1, 15, 4, 1]},
+                {"id": "burnt-4", "kind": "building.house", "rect": [7, 15, 4, 1]},
+                {"id": "pangshu", "kind": "building.house", "rect": [14, 15, 4, 1], "door": "N", "label": "Pang Shu's house",
+                 "plaque": "庞府", "map": "pangshu-house"},
+            ],
+            "spots": [
+                {"id": "lb-door", "at": [3, 3], "label": "Lü Bu's door", "note": "the walk starts here"},
+                {"id": "pangshu-gate", "at": [16, 13], "label": "Pang Shu's door"},
+                {"id": "cover-1", "at": [8, 3], "label": "A dark doorway", "cover": True},
+                {"id": "cover-2", "at": [13, 5], "label": "An overturned hay cart", "cover": True},
+                {"id": "cover-3", "at": [12, 7], "label": "A well-house", "cover": True},
+                {"id": "cover-4", "at": [5, 9], "label": "A broken screen wall", "cover": True},
+                {"id": "cover-5", "at": [7, 13], "label": "A burnt-out cart", "cover": True},
+                {"id": "cover-6", "at": [12, 11], "label": "A dark doorway", "cover": True},
+            ],
+            "props": [{"kind": "camp.firepit", "at": [10, 2], "label": "A burning house"},
+                      {"kind": "camp.firepit", "at": [4, 15], "label": "A burning house"}],
+            "watchers": [   # one to a lane, walking it end to end: she meets him, or he turns back on her
+                # each walks his lane and stops at its end turned to the gap into the next, so no one slips by him there
+                {"id": "looter-1", "kind": "folk.soldier", "beat": [[17, 5], [17, 4], [2, 4], [17, 4]], "pause": [17, 5, 3],
+                 "cone": 5, "in_beats": ["3-x0b"], "seen": "looter", "back_to": "@cover", "hide": True},
+                {"id": "looter-2", "kind": "folk.soldier", "beat": [[2, 9], [2, 8], [17, 8], [2, 8]], "pause": [2, 9, 3],
+                 "cone": 5, "in_beats": ["3-x0b"], "seen": "looter", "back_to": "@cover", "hide": True},
+                {"id": "looter-3", "kind": "folk.soldier", "beat": [[2, 12], [17, 12], [17, 13], [17, 12]], "pause": [17, 13, 3],
+                 "cone": 5, "in_beats": ["3-x0b"], "seen": "looter", "back_to": "@cover", "hide": True},
+                # and a second in each lane, the other way round: follow one, and the other comes at you
+                {"id": "looter-1b", "kind": "folk.soldier", "beat": [[2, 4], [17, 4]], "pause": [2, 4, 2],
+                 "cone": 5, "in_beats": ["3-x0b"], "seen": "looter", "back_to": "@cover", "hide": True},
+                {"id": "looter-2b", "kind": "folk.soldier", "beat": [[17, 8], [2, 8]], "pause": [17, 8, 2],
+                 "cone": 5, "in_beats": ["3-x0b"], "seen": "looter", "back_to": "@cover", "hide": True},
+                {"id": "looter-3b", "kind": "folk.soldier", "beat": [[17, 12], [2, 12]], "pause": [2, 12, 2],
+                 "cone": 5, "in_beats": ["3-x0b"], "seen": "looter", "back_to": "@cover", "hide": True},
+            ],
+            "exits": [{"to": "Chang'an", "at": [0, 4], "side": "W"}],
+            "entries": {"": [3, 3]},
+        },
         # Lü Bu's house, the night he rides out without them (x0a)
         "lb-house": room([12, 7], [6, 6],
                          things=[{"id": "screen", "kind": "furn.screen", "rect": [5, 1, 2, 1]},
@@ -110,7 +145,7 @@ _ca.update(
     challengers=[],
     objectives={
         "3-x0a": "Lü Bu's house, the night Chang'an falls.",
-        "3-x0b": "Take your daughter through the lanes to Pang Shu's house, on the palace lane. When looters come, get into cover and keep still.",
+        "3-x0b": "Take your daughter through the burning lanes to Pang Shu's house. When looters come, get into cover and keep still.",
     },
 )
 
