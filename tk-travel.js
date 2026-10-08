@@ -58,9 +58,10 @@ const WorldTravel = {
     TK.rolledBack(p, w.n);
     TK.saveProg(p);
     // the party and possessions as the beats before left them
-    let party = w.party, crowd = 0; const items = [];
+    let party = w.party, crowd = 0, carry = null; const items = [];
     for (const n of before) for (const s of ((n.scene && w.scenes[n.scene]) || {}).steps || []) {
       if (s[0] === "party") party = s[1];
+      if (s[0] === "carry") carry = s[2] ? { who: s[1], whom: s[2] } : null;
       if (s[0] === "gain" && !items.includes(s[1])) items.push(s[1]);
       if (s[0] === "lose" && items.includes(s[1])) items.splice(items.indexOf(s[1]), 1);
       if (s[0] === "crowd") crowd = Math.max(0, typeof s[1] === "string" ? crowd + +s[1] : +s[1] || 0);   // the men who've fallen in behind, as then
@@ -70,7 +71,7 @@ const WorldTravel = {
     const at = TK.ls("tk-at"); at[w.n] = key; TK.lsSet("tk-at", at);
     const region = await WorldData.region(w.n), q = region && region.quests.find(x => x.node === key);
     const st = (() => { try { return JSON.parse(localStorage.getItem(WorldState.key(w.n)) || "{}"); } catch { return {}; } })();
-    Object.assign(st, { party, crowd, place: q ? q.place : st.place, pos: null });
+    Object.assign(st, { party, crowd, carry, place: q ? q.place : st.place, pos: null });
     WorldState.save(w.n, st);
     WorldView.destroy();
     viewTK(w.n);

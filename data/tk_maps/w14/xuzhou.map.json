@@ -1,0 +1,956 @@
+{
+ "format": "tk-map/1",
+ "id": "xuzhou",
+ "world": 14,
+ "name": "Xuzhou",
+ "archetype": "city",
+ "size": [
+  80,
+  60
+ ],
+ "seed": 839,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "city",
+   "b": "court",
+   ".": "grass",
+   "c": "market",
+   "d": "road",
+   "f": "wall.city"
+  },
+  "rows": [
+   "....................................dddd........................................",
+   "....................................dddd........................................",
+   "....................................dddd........................................",
+   "....................................dddd........................................",
+   "....................................dddd........................................",
+   "....................................dddd........................................",
+   "......ffffffffffffffffffffffffffffffddddffffffffffffffffffffffffffffffffff......",
+   "......ffffffffffffffffffffffffffffffddddffffffffffffffffffffffffffffffffff......",
+   "......ffaaaaaaaaaaaaaaaaaaaaaaaaaaaaddddaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaff......",
+   "......ffaaaaaaaaaaaaaaaaaaaaaaaaaaaaddddaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaff......",
+   "......ffaaaaaaaaaaaaaaaaaaaaaaaaaaaaddddaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaff......",
+   "......ffaaaaaaaaaaaaaaaaaaaaaaaaaaaaddddaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaff......",
+   "......ffaaaaaaaaaaaaaaaaaaaaaaaaaaaaddddaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaff......",
+   "......ffaaaaaaaaaaaaaaaaaaaaaaaaaaaaddddaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaff......",
+   "......ffaaaaaaaaaaaaaaaaaaaaaaaaaaaaddddaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaff......",
+   "......ffaaaaaaaaaaaaaaaaaaaaaaaaaaaaddddaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaff......",
+   "......ffaaaaaaaaaaaaaaaaaaaaaaaaaaaaddddaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaff......",
+   "......ffaaaaaaaaaaaaaaaaaaaaaaaaaaaaddddaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaff......",
+   "......ffaaaaaaaaaaaaaaaaaaaaaaaaaaaaddddaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaff......",
+   "......ffaaaaaaaaaaaaaaaaaaaaaaaaaaaaddddaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaff......",
+   "......ffaaaaaaaaaaaaaaaaaaaaaaaaaaaaddddaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaff......",
+   "......ffaaaaaaaaaaaaaaaaaaaaaaaaaaaaddddaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaff......",
+   "......ffaaaaaaaaaaaaaaaaaaaaaaaaaaaaddddaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaff......",
+   "......ffaaaaaaaaaaaaaaaaaaaaaaaaaaaaddddaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaff......",
+   "......ffaaaabbbbbbbbbbbbbbbbaaaaaaaaddddaaaabbbbbbbbbbbbbbbbaaaaaaaaaaaaff......",
+   "......ffaaaabbbbbbbbbbbbbbbbaaaaaaaaddddaaaabbbbbbbbbbbbbbbbaaaaaaaaaaaaff......",
+   "......ffaaaabbbbbbbbbbbbbbbbaaaaaaaaddddaaaabbbbbbbbbbbbbbbbaaaaaaaaaaaaff......",
+   "......ffaaaabbbbbbbbbbbbbbbbaaaaaaaaddddaaaabbbbbbbbbbbbbbbbaaaaaaaaaaaaff......",
+   "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+   "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+   "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+   "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+   "......ffaddaaaaaaaaaaaaaaaaaaaaaaaaaddddaaaaaaaaaaaaaaaaaaaaaaaaaddaaaaaff......",
+   "......ffaddaaaaaaaaaaaaaaaaaaaaaaaaaddddaaaaaaaaaaaaaaaaaaaaaaaaaddaaaaaff......",
+   "......ffaddaaaaaaaaaaaaaaaaaaaaaaaaaddddaaaaaaaaaaaaaaaaaaaaaaaaaddaaaaaff......",
+   "......ffaddaaaaaaaaaaaaaaaaaaaaaaaaaddddaaaaaaaaaaaaaaaaaaaaaaaaaddaaaaaff......",
+   "......ffaddaaaaaaaaaaaaaaaaaaaaaaaaaddddaaaaccccccccccccccccaaaaaddaaaaaff......",
+   "......ffaddaaaaaaaaaaaaaaaaaaaaaaaaaddddaaaaccccccccccccccccaaaaaddaaaaaff......",
+   "......ffaddaaaaaaaaaaaaaaaaaaaaaaaaaddddaaaaccccccccccccccccaaaaaddaaaaaff......",
+   "......ffaddaaaaaaaaaaaaaaaaaaaaaaaaaddddaaaaccccccccccccccccaaaaaddaaaaaff......",
+   "......ffaddaaaaaaaaaaaaaaaaaaaaaaaaaddddaaaaccccccccccccccccaaaaaddaaaaaff......",
+   "......ffaddaaaaaaaaaaaaaaaaaaaaaaaaaddddaaaaccccccccccccccccaaaaaddaaaaaff......",
+   "......ffaddaaaaaaaaaaaaaaaaaaaaaaaaaddddaaaaccccccccccccccccaaaaaddaaaaaff......",
+   "......ffaddaaaaaaaaaaaaaaaaaaaaaaaaaddddaaaaccccccccccccccccaaaaaddaaaaaff......",
+   "......ffaddaaaaaaaaaaaaaaaaaaaaaaaaaddddaaaaccccccccccccccccaaaaaddaaaaaff......",
+   "......ffaddaaaaaaaaaaaaaaaaaaaaaaaaaddddaaaaccccccccccccccccaaaaaddaaaaaff......",
+   "......ffaddaaaaaaaaaaaaaaaaaaaaaaaaaddddaaaaccccccccccccccccaaaaaddaaaaaff......",
+   "......ffaddaaaaaaaaaaaaaaaaaaaaaaaaaddddaaaaccccccccccccccccaaaaaddaaaaaff......",
+   "......ffaddaaaaaaaaaaaaaaaaaaaaaaaaaddddaaaaaaaaaaaaaaaaaaaaaaaaaddaaaaaff......",
+   "......ffaddddddddddddddddddddddddddddddddddddddddddddddddddddddddddaaaaaff......",
+   "......ffaddddddddddddddddddddddddddddddddddddddddddddddddddddddddddaaaaaff......",
+   "......ffaaaaaaaaaaaaaaaaaaaaaaaaaaaaddddaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaff......",
+   "......ffffffffffffffffffffffffffffffddddffffffffffffffffffffffffffffffffff......",
+   "......ffffffffffffffffffffffffffffffddddffffffffffffffffffffffffffffffffff......",
+   "....................................dddd........................................",
+   "....................................dddd........................................",
+   "....................................dddd........................................",
+   "....................................dddd........................................",
+   "....................................dddd........................................",
+   "....................................dddd........................................"
+  ],
+  "walk": {
+   "city": true,
+   "court": true,
+   "grass": true,
+   "market": true,
+   "road": true,
+   "wall.city": false
+  }
+ },
+ "lines": [
+  {
+   "id": "wall",
+   "kind": "wall.city",
+   "outline": [
+    1,
+    1,
+    18,
+    13
+   ],
+   "width": 2,
+   "gates": {
+    "west-gate": [
+     1,
+     7
+    ],
+    "east-gate": [
+     18,
+     7
+    ],
+    "south-gate": [
+     9,
+     13
+    ],
+    "north-gate": [
+     9,
+     1
+    ]
+   },
+   "tiles": 448
+  },
+  {
+   "id": "main-street",
+   "kind": "road",
+   "path": [
+    [
+     0,
+     7
+    ],
+    [
+     19,
+     7
+    ]
+   ],
+   "width": 3,
+   "tiles": 320
+  },
+  {
+   "id": "cross-street",
+   "kind": "road",
+   "path": [
+    [
+     9,
+     0
+    ],
+    [
+     9,
+     14
+    ]
+   ],
+   "width": 3,
+   "tiles": 240
+  },
+  {
+   "id": "west-lane",
+   "kind": "road",
+   "path": [
+    [
+     2,
+     7
+    ],
+    [
+     2,
+     12
+    ]
+   ],
+   "width": 2,
+   "tiles": 44
+  },
+  {
+   "id": "east-lane",
+   "kind": "road",
+   "path": [
+    [
+     16,
+     7
+    ],
+    [
+     16,
+     12
+    ]
+   ],
+   "width": 2,
+   "tiles": 44
+  },
+  {
+   "id": "back-street",
+   "kind": "road",
+   "path": [
+    [
+     2,
+     12
+    ],
+    [
+     16,
+     12
+    ]
+   ],
+   "width": 2,
+   "tiles": 116
+  }
+ ],
+ "objects": [
+  {
+   "kind": "building.gate",
+   "x": 6,
+   "y": 28,
+   "w": 2,
+   "h": 4,
+   "id": "west-gate",
+   "width": 4,
+   "wall": "wall",
+   "door": "W"
+  },
+  {
+   "kind": "building.gate",
+   "x": 72,
+   "y": 28,
+   "w": 2,
+   "h": 4,
+   "id": "east-gate",
+   "width": 4,
+   "wall": "wall",
+   "door": "E"
+  },
+  {
+   "kind": "building.gate",
+   "x": 36,
+   "y": 52,
+   "w": 4,
+   "h": 2,
+   "id": "south-gate",
+   "width": 4,
+   "wall": "wall",
+   "door": "S"
+  },
+  {
+   "kind": "building.gate",
+   "x": 36,
+   "y": 6,
+   "w": 4,
+   "h": 2,
+   "id": "north-gate",
+   "width": 4,
+   "wall": "wall",
+   "door": "S"
+  },
+  {
+   "kind": "building.hall_grand",
+   "x": 15,
+   "y": 18,
+   "w": 10,
+   "h": 5,
+   "id": "zhoufu",
+   "door": "S",
+   "faces": "S",
+   "label": "The prefecture hall",
+   "map": "xz-hall",
+   "plaque": "徐州府",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.house",
+   "x": 30,
+   "y": 21,
+   "w": 4,
+   "h": 2,
+   "id": "house-n1",
+   "door": null,
+   "faces": "S",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.compound",
+   "x": 45,
+   "y": 13,
+   "w": 14,
+   "h": 10,
+   "id": "lodging",
+   "door": "S",
+   "faces": "S",
+   "label": "Lü Bu's lodging",
+   "map": "lb-lodging",
+   "plaque": "吕府",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.house",
+   "x": 62,
+   "y": 21,
+   "w": 4,
+   "h": 2,
+   "id": "house-n2",
+   "door": null,
+   "faces": "S",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.compound",
+   "x": 13,
+   "y": 33,
+   "w": 14,
+   "h": 10,
+   "id": "liubei",
+   "door": "N",
+   "faces": "N",
+   "label": "Liu Bei's residence",
+   "plaque": "刘府",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.shop",
+   "x": 30,
+   "y": 33,
+   "w": 3,
+   "h": 2,
+   "id": "wineshop",
+   "door": "N",
+   "faces": "N",
+   "label": "A wine shop",
+   "note": "where Zhang Fei drinks",
+   "blocks_sight": true
+  },
+  {
+   "kind": "market.stalls",
+   "x": 49,
+   "y": 37,
+   "w": 6,
+   "h": 2,
+   "id": "stalls",
+   "label": "Market stalls"
+  },
+  {
+   "kind": "furniture.gotable",
+   "x": 45,
+   "y": 45,
+   "w": 1,
+   "h": 1,
+   "id": "gotable",
+   "label": "A go table in the market"
+  },
+  {
+   "kind": "building.house",
+   "x": 30,
+   "y": 41,
+   "w": 4,
+   "h": 2,
+   "id": "house-s1",
+   "door": null,
+   "faces": "S",
+   "blocks_sight": true
+  },
+  {
+   "kind": "tree.willow",
+   "x": 0,
+   "y": 32,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 5,
+   "y": 27,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 8,
+   "y": 32,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 16,
+   "y": 32,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 24,
+   "y": 32,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 29,
+   "y": 27,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 40,
+   "y": 32,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 48,
+   "y": 32,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 56,
+   "y": 32,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 61,
+   "y": 27,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 64,
+   "y": 32,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 69,
+   "y": 27,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 77,
+   "y": 27,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 35,
+   "y": 5,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 35,
+   "y": 13,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 35,
+   "y": 21,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 35,
+   "y": 37,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 35,
+   "y": 45,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 40,
+   "y": 0,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 40,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 40,
+   "y": 16,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 40,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 40,
+   "y": 40,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 40,
+   "y": 48,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 40,
+   "y": 56,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "banner.red",
+   "x": 5,
+   "y": 32,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "banner.red",
+   "x": 71,
+   "y": 32,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "banner.red",
+   "x": 35,
+   "y": 54,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "banner.red",
+   "x": 35,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "banner.red",
+   "x": 18,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "banner.red",
+   "x": 22,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "furn.rack",
+   "x": 49,
+   "y": 23,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "spots": [
+  {
+   "id": "liubei-gate",
+   "x": 20.5,
+   "y": 31.7,
+   "node": "",
+   "label": "Liu Bei's gate"
+  },
+  {
+   "id": "x4",
+   "x": 1.5,
+   "y": 33.7,
+   "node": "14-x4",
+   "label": "The west gate, at night",
+   "trigger": "near",
+   "note": "outside the gate: 「劉使君有機密使人至」"
+  },
+  {
+   "id": "x13",
+   "x": 1.5,
+   "y": 17.7,
+   "node": "14-x13",
+   "label": "Under Xuzhou's wall",
+   "trigger": "near",
+   "note": "Mi Zhu shouts down from the wall above"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "npc-1",
+   "kind": "folk.villager",
+   "x": 41.5,
+   "y": 29.9,
+   "say": [
+    "“The Lord Liu gave Lü Bu a feast. Lord Zhang Fei didn't come, they say. Or came, and left shouting.”"
+   ],
+   "in": [
+    "guest"
+   ]
+  },
+  {
+   "id": "npc-2",
+   "kind": "folk.elder",
+   "x": 53.5,
+   "y": 29.9,
+   "say": [
+    "“Cao Bao keeps the west gate. A Danyang man, and Lü Bu is his son-in-law, you know.”"
+   ],
+   "in": [
+    "guest",
+    "moon"
+   ]
+  },
+  {
+   "id": "npc-3",
+   "kind": "folk.soldier",
+   "x": 17.5,
+   "y": 29.9,
+   "say": [
+    "“No one troubles the Lord Liu's ladies. General Lü's orders.”"
+   ],
+   "in": [
+    "held"
+   ]
+  },
+  {
+   "id": "drinker",
+   "kind": "folk.villager",
+   "x": 33.5,
+   "y": 29.9,
+   "say": [],
+   "intro": [
+    "One of Zhang Fei's drinking companions sways out of the wine shop. “You're the one he calls the slave of three surnames! A game, and if you lose, you drink!”"
+   ],
+   "win": [
+    "“…Hic. You play better than he says.”"
+   ],
+   "done": [
+    "Zhang Fei's friend is asleep on the bench."
+   ],
+   "until": "14-x9",
+   "when": "node:x1",
+   "view": 4,
+   "challenge": "drinker"
+  },
+  {
+   "id": "danyang",
+   "kind": "folk.soldier",
+   "x": 9.5,
+   "y": 37.9,
+   "say": [],
+   "intro": [
+    "A Danyang soldier of Cao Bao's leans on his spear. “Our general's daughter married you, didn't she? Let's see if you're worth her.”"
+   ],
+   "win": [
+    "“Hah. You'll do.”"
+   ],
+   "done": [
+    "The Danyang soldier salutes."
+   ],
+   "until": "14-x9",
+   "when": "node:x1",
+   "view": 4,
+   "challenge": "danyang"
+  }
+ ],
+ "exits": [
+  {
+   "to": "xuzhou--xz-hall",
+   "side": "N",
+   "x": 19.6,
+   "y": 22.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "xuzhou--lb-lodging",
+   "side": "N",
+   "x": 51.6,
+   "y": 22.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "xiaopei",
+   "side": "W",
+   "x": 0,
+   "y": 28,
+   "w": 1,
+   "h": 4
+  },
+  {
+   "to": "the-xiapi-road",
+   "side": "E",
+   "x": 79,
+   "y": 28,
+   "w": 1,
+   "h": 4
+  },
+  {
+   "to": "the-shouchun-road",
+   "side": "S",
+   "x": 36,
+   "y": 59,
+   "w": 4,
+   "h": 1
+  },
+  {
+   "to": "xiao-pass",
+   "side": "N",
+   "x": 36,
+   "y": 0,
+   "w": 4,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "xuzhou--xz-hall": [
+   20,
+   23
+  ],
+  "xuzhou--lb-lodging": [
+   52,
+   23
+  ],
+  "xiaopei": [
+   1,
+   25
+  ],
+  "the-xiapi-road": [
+   73,
+   29
+  ],
+  "the-shouchun-road": [
+   37,
+   53
+  ],
+  "xiao-pass": [
+   37,
+   5
+  ],
+  "": [
+   37,
+   29
+  ]
+ },
+ "states": [
+  {
+   "id": "guest",
+   "light": "day"
+  },
+  {
+   "id": "moon",
+   "when": "node:x3",
+   "until": "node:x4",
+   "light": "night",
+   "weather": "clear",
+   "shut": [
+    {
+     "gate": "west-gate",
+     "rect": [
+      6,
+      28,
+      2,
+      4
+     ],
+     "say": [
+      "The gate is barred for the night. Someone inside must open it."
+     ]
+    }
+   ]
+  },
+  {
+   "id": "held",
+   "when": "node:x4",
+   "until": "node:x13",
+   "light": "day"
+  },
+  {
+   "id": "locked",
+   "when": "node:x13",
+   "banners": "blue",
+   "light": "day",
+   "shut": [
+    {
+     "gate": "west-gate",
+     "rect": [
+      6,
+      28,
+      2,
+      4
+     ],
+     "say": [
+      "The gate stays shut. Up on the wall, Mi Zhu has Cao Cao's banners raised."
+     ]
+    },
+    {
+     "gate": "east-gate",
+     "rect": [
+      72,
+      28,
+      2,
+      4
+     ],
+     "say": [
+      "The gate stays shut. Up on the wall, Mi Zhu has Cao Cao's banners raised."
+     ]
+    },
+    {
+     "gate": "south-gate",
+     "rect": [
+      36,
+      52,
+      4,
+      2
+     ],
+     "say": [
+      "The gate stays shut. Up on the wall, Mi Zhu has Cao Cao's banners raised."
+     ]
+    },
+    {
+     "gate": "north-gate",
+     "rect": [
+      36,
+      6,
+      4,
+      2
+     ],
+     "say": [
+      "The gate stays shut. Up on the wall, Mi Zhu has Cao Cao's banners raised."
+     ]
+    }
+   ]
+  }
+ ],
+ "ways": {
+  "nodes": [
+   [
+    2.0,
+    30.0
+   ],
+   [
+    10.0,
+    30.0
+   ],
+   [
+    38.0,
+    30.0
+   ],
+   [
+    66.0,
+    30.0
+   ],
+   [
+    78.0,
+    30.0
+   ],
+   [
+    38.0,
+    2.0
+   ],
+   [
+    38.0,
+    50.0
+   ],
+   [
+    38.0,
+    58.0
+   ],
+   [
+    10.0,
+    50.0
+   ],
+   [
+    66.0,
+    50.0
+   ]
+  ],
+  "edges": [
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    8
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    2,
+    5
+   ],
+   [
+    2,
+    6
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    3,
+    9
+   ],
+   [
+    6,
+    7
+   ],
+   [
+    6,
+    8
+   ],
+   [
+    6,
+    9
+   ]
+  ]
+ },
+ "banners": "red",
+ "links": [
+  "the-shouchun-road",
+  "the-xiapi-road",
+  "xiao-pass",
+  "xiaopei",
+  "xuzhou--lb-lodging",
+  "xuzhou--xz-hall"
+ ]
+}

@@ -711,6 +711,12 @@ _CC = _copy.deepcopy(_CC)
 _CC.update(n=13, name="Cao Cao", zh="曹操", open=True, book=1, next=12, easy_grades=["14K", "14K+"])
 WORLDS.append(_CC)   # listed before the Diaochan arc: new players start here
 WORLDS.append(_DRAFT2)
+# ---- Lü Bu's fall (novel chapters 10-19, White Gate Tower), world 14: test-only (hidden, open in test mode) until the user publishes it ----
+from tk_story_w2_new import WORLD2_LB as _LB  # noqa: E402
+_LB = _copy.deepcopy(_LB)
+_LB.update(n=14, name="White Gate Tower", zh="白门楼", open=True, book=3, hidden=True, easy_grades=["14K", "14K+"])
+_LB.setdefault("boss", "redmond")
+WORLDS.append(_LB)
 # Books 1-3 are taken down for now (the user, 2026-10-07): kept, and still open in test mode (?test=1)
 for _w in WORLDS:
     if _w["n"] in (1, 2, 3):

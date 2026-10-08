@@ -1,0 +1,173 @@
+{
+ "format": "tk-map/1",
+ "id": "xuzhou--lb-lodging",
+ "world": 14,
+ "name": "Lü Bu's lodging",
+ "archetype": "compound",
+ "size": [
+  28,
+  24
+ ],
+ "seed": 1830,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "court",
+   ".": "grass",
+   "W": "wall"
+  },
+  "rows": [
+   "............................",
+   ".WWWWWWWWWWWWWWWWWWWWWWWWWW.",
+   ".W........................W.",
+   ".W........................W.",
+   ".W........................W.",
+   ".W........................W.",
+   ".W........................W.",
+   ".W........................W.",
+   ".W........................W.",
+   ".W........................W.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WWWWWWWWWWWaaWWWWWWWWWWWWW.",
+   "............................"
+  ],
+  "walk": {
+   "court": true,
+   "grass": true,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    14,
+    12
+   ],
+   "width": 1,
+   "gates": {
+    "gate": [
+     6,
+     11
+    ]
+   },
+   "tiles": 92
+  }
+ ],
+ "objects": [
+  {
+   "kind": "building.gatehouse",
+   "x": 12,
+   "y": 22,
+   "w": 2,
+   "h": 1,
+   "id": "gate",
+   "width": 2,
+   "wall": "walls",
+   "door": "S"
+  },
+  {
+   "kind": "building.hall_grand",
+   "x": 4,
+   "y": 3,
+   "w": 10,
+   "h": 5,
+   "id": "reartang",
+   "door": "S",
+   "faces": "S",
+   "label": "The rear hall",
+   "map": "lb-reartang",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.wing",
+   "x": 19,
+   "y": 4,
+   "w": 6,
+   "h": 4,
+   "id": "yan",
+   "door": "S",
+   "faces": "S",
+   "label": "Lady Yan's rooms",
+   "map": "yan-room",
+   "blocks_sight": true
+  },
+  {
+   "kind": "furn.rack",
+   "x": 2,
+   "y": 16,
+   "w": 2,
+   "h": 1,
+   "id": "rack"
+  }
+ ],
+ "spots": [],
+ "npcs": [],
+ "exits": [
+  {
+   "to": "xuzhou--lb-reartang",
+   "side": "N",
+   "x": 8.6,
+   "y": 7.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "xuzhou--yan-room",
+   "side": "N",
+   "x": 21.6,
+   "y": 7.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "xuzhou",
+   "side": "S",
+   "x": 12,
+   "y": 22,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "xuzhou--lb-reartang": [
+   9,
+   8
+  ],
+  "xuzhou--yan-room": [
+   22,
+   8
+  ],
+  "xuzhou": [
+   12,
+   21
+  ],
+  "": [
+   9,
+   8
+  ]
+ },
+ "parent": "xuzhou",
+ "building": "lb-lodging",
+ "links": [
+  "xuzhou",
+  "xuzhou--lb-reartang",
+  "xuzhou--yan-room"
+ ]
+}

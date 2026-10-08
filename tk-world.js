@@ -35,12 +35,12 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=88`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=89`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
   },
-  has(n) { return (n >= 1 && n <= 3) || n === 12 || n === 13 || n === 90; },  // worlds whose places have been built (12: Book 2; 13: the Cao Cao arc, a test book; 90: the study where you talk with Claude)
+  has(n) { return (n >= 1 && n <= 3) || n === 12 || n === 13 || n === 14 || n === 90; },  // worlds whose places have been built (12: Book 2; 13: the Cao Cao arc, a test book; 90: the study where you talk with Claude)
   // "1-zhuo-county-c-elder": a challenger in a place, drawing from the world's problems.
   node(w, key) {
     const region = this.regions[w.n];
@@ -253,9 +253,9 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=88`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=89`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=43`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=95`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=96`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
@@ -264,7 +264,7 @@ function worldScenes() {
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
       for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=98`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=99`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -281,7 +281,7 @@ function worldScenes() {
 
   class WorldScene extends Phaser.Scene {
     constructor() { super("world"); }
-    init(d) { this.placeId = d.place; this.from = d.from; this.resume = d.resume; this.toNode = d.toNode || null; }
+    init(d) { this.placeId = d.place; this.from = d.from; this.resume = d.resume; this.toNode = d.toNode || null; this.toSpot = d.toSpot || null; }
 
     create() {
       const region = this.region = this.cache.json.get("region"), kit = this.kit = this.cache.json.get("kit");
@@ -383,7 +383,9 @@ function worldScenes() {
       };
       const pos = this.resume && this.st.pos && this.st.pos.place === this.placeId && standable(this.st.pos) ? this.st.pos : null;
       // a handoff (["party", [...], {to}]): the new lead starts just in front of that beat's spot
-      const hs = this.toNode && Object.values(this.spots).find(s => s.node === this.toNode);
+      // ({"to": {"place", "spot"}}: by a named spot of that place, a beat's or not (Hou Cheng at the stables' door))
+      const hs = this.toNode && Object.values(this.spots).find(s => s.node === this.toNode)
+        || this.toSpot && (this.spots[this.toSpot] || Object.values(this.spots).find(s => s.id === this.toSpot || s.name === this.toSpot) || this.entries[this.toSpot]);
       const hand = hs && standable({ x: hs.x, y: hs.y + 26 }) ? { x: hs.x, y: hs.y + 26 } : null;
       const at = hand || pos || this.entries[this.from || ""] || this.entries[""];
       this.player = this.physics.add.sprite(at.x, at.y, `h-${this.lead}-down-0`).setOrigin(.5, 1);
@@ -396,6 +398,7 @@ function worldScenes() {
       this.followers = [];
       this.trail = [];
       this.setParty(this.st.party);
+      this.setCarry();
       this.save();
 
       const cam = this.cameras.main;
@@ -694,6 +697,28 @@ function worldScenes() {
     // else, e.g. ["party", ["diaochan"]] in Book 2). The rest follow.
     get lead() { const p = this.st && this.st.party; return (p && p[0]) || "liubei"; }
 
+    // ["carry", who, whom] left standing by a scene: whom rides small on the lead's back on the open map
+    setCarry() {
+      if (this.carrySpr) { this.carrySpr.destroy(); this.carrySpr = null; }
+      const c = this.st && this.st.carry;
+      if (!c || c.who !== this.lead || !this.player) return;
+      this.hero(c.whom);
+      this.carrySpr = this.add.sprite(this.player.x, this.player.y, `h-${c.whom}-down-0`).setOrigin(.5, 1).setScale(.72);
+      if (!this.carryHooked) {
+        this.carryHooked = true;
+        const step = () => {
+          const S = this.carrySpr, P = this.player;
+          if (!S || !S.active || !P) return;
+          const f = P.facing || "down", back = { down: [0, -7, -.4], up: [0, -7, .4], left: [3, -8, -.4], right: [-3, -8, -.4] }[f] || [0, -7, -.4];
+          const up = this.mounts && this.mounts.length ? 12 : 0;   // up behind him on the horse
+          S.setPosition(P.x + back[0], P.y + back[1] - up).setDepth(P.y + back[2] + (up ? 1 : 0)).setVisible(P.visible && !this.cine);
+          S.setTexture(`h-${this.st.carry.whom}-${f}-0`);
+          if (S.isoBase !== undefined || this.iso) S.isoBase = [P.x, P.y];
+        };
+        this.events.on("postupdate", step);
+        this.events.once("shutdown", () => { this.events.off("postupdate", step); this.carryHooked = false; this.carrySpr = null; });
+      }
+    }
     setParty(list) {
       for (const F of this.followers) F.spr.destroy();
       const lead = (list && list[0]) || "liubei";
@@ -1393,6 +1418,8 @@ function worldScenes() {
     async finishQuest(q, steps) {
       for (const s of steps) if (s[0] === "crowd") this.st.crowd = Math.max(0, typeof s[1] === "string" ? (this.st.crowd || 0) + +s[1] : +s[1] || 0);
       for (const s of steps) if (s[0] === "party") { this.st.party = s[1]; TK.setParty(this.w, s[1]); this.ui.lead(); }
+      for (const s of steps) if (s[0] === "carry") this.st.carry = s[2] ? { who: s[1], whom: s[2] } : null;   // she stays on his back after the scene (the walk to x16)
+      if (steps.some(s => s[0] === "carry")) this.setCarry();
       if (steps.some(s => s[0] === "party" || s[0] === "crowd")) this.setParty(this.st.party);
       if (typeof WorldItems !== "undefined") WorldItems.gainFrom(this, steps);   // what the scene gave
       if (q.scene) TK.markSeen(`${this.w.n}:${q.scene}`);
@@ -1405,7 +1432,8 @@ function worldScenes() {
       this.save();
       this.setGoal();
       // a handoff to a new lead who is somewhere else: a fade, and they begin by the next beat
-      // ({"to": node}: by that beat's spot; {"to": {"place", "from"}}: arriving in that place as if from that one)
+      // ({"to": node}: by that beat's spot; {"to": {"place", "from"}}: arriving in that place as if from that one;
+      // {"to": {"place", "spot"}}: by that spot)
       const hand = steps.find(s => s[0] === "party" && s[2] && s[2].to), to = hand && hand[2].to;
       const placeOf = name => name && this.region.places.find(p => p.id === name || p.name === name);
       const toQ = typeof to === "string" && this.region.quests.find(x => x.node === `${this.w.n}-${to}`);
@@ -1414,7 +1442,7 @@ function worldScenes() {
         this.leaving = true; this.st.pos = null; this.save();
         this.cameras.main.fadeOut(500);
         this.cameras.main.once("camerafadeoutcomplete", () => this.scene.restart(toQ ? { place: toQ.place, from: null, toNode: toQ.node }
-          : { place: toP.id, from: (placeOf(to.from) || {}).id || null }));
+          : { place: toP.id, from: (placeOf(to.from) || {}).id || null, toSpot: to.spot || null }));
         return;
       }
       if (q.role === "boss" && this.opts.onBoss) await this.opts.onBoss();

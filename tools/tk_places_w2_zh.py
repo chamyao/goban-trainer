@@ -441,6 +441,8 @@ ZH_PLACES2 = {
     "“…Peace, then. I hope so.”": "“……是求和吧。但愿如此。”",
     "The scout rides back to watch the road.": "探马回去守望大路。",
     "The East Road": "东路",
+    "The Shouchun Road": "寿春道",   # Lü Bu's fall (Integration: build needed it)
+    "Xiao Pass": "萧关",
     "A post station": "驿站",
     "A wanted portrait: “a thousand gold and a marquisate”": "悬赏画像：“赏千金，封万户侯”",
     "The ferryman's hut": "渡口船夫的小屋",
