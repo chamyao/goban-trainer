@@ -32,7 +32,9 @@ const WorldTravel = {
   // Replay from a beat: choose one of the story beats already played; it and everything after it are undone (with
   // their boards), you stand where it starts, with the party and possessions you had then.
   replayPick(w) {
-    const beats = w.nodes.filter(n => (n.role === "main" || n.role === "boss") && TK.cleared(n.key));
+    // beats played: cleared now, or played once and undone by an earlier replay (picking one of those puts back what came before it)
+    const undone = loadProgress().tkUndo || {};
+    const beats = w.nodes.filter(n => (n.role === "main" || n.role === "boss") && (TK.cleared(n.key) || undone[n.key]));
     if (!beats.length) return alert("还没有可以重玩的段落。No story beat played yet.");
     document.querySelectorAll(".tk-replay").forEach(el => el.remove());
     const label = n => { const sc = n.scene && w.scenes[n.scene]; return `${n.key.split("-").pop()} · ${sc ? sc.title : n.place || n.key}`; };
@@ -48,7 +50,9 @@ const WorldTravel = {
   async replay(w, key) {
     const idx = w.nodes.findIndex(n => n.key === key);
     if (idx < 0) return;
-    const later = new Set(w.nodes.slice(idx).map(n => n.key)), before = w.nodes.slice(0, idx).filter(n => TK.cleared(n.key));
+    // everything before it played (put back what an earlier replay undid), it and everything after not
+    const later = new Set(w.nodes.slice(idx).map(n => n.key)), before = w.nodes.slice(0, idx);
+    for (const n of before) if (!TK.cleared(n.key)) TK.markCleared(n.key);
     const p = loadProgress();
     for (const k of Object.keys(p.tk || {})) if (later.has(k.split("~")[0])) TK.undoCleared(p, k);
     TK.saveProg(p);
