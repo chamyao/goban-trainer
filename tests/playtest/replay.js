@@ -10,7 +10,7 @@ await p.goto((process.env.PLAYTEST_URL||'http://localhost:8765')+'/index.html#/t
 const stale=await p.evaluate(async()=>{localStorage.clear();localStorage.setItem('tk-guide','off');await TK.load();const w=TK.world(13);
  for(const n of w.nodes){if(n.key==='13-c23')break;TK.markCleared(n.key);}TK.markCleared('13-start');
  TK.lsSet(WorldItems.KEY,{13:['horse','redhare','gold','sevenstar','weihong']});TK.setParty(w,['caocao','chengong']);
- localStorage.setItem('tk-world-13',JSON.stringify({place:'chenliu',party:['caocao','chengong']}));
+ localStorage.setItem('tk-world-13',JSON.stringify({place:'chenliu',party:['caocao','chengong'],crowd:15}));
  return JSON.parse(JSON.stringify(loadProgress()));});
 await p.reload();await p.waitForTimeout(2500);
 for(let i=0;i<10;i++){const g=p.locator('.tk-scroll-go');if(await g.count())await g.first().click().catch(()=>{});await p.waitForTimeout(200);}
@@ -23,6 +23,8 @@ const s=await p.evaluate(()=>({c16:TK.cleared('13-c16'),c17:TK.cleared('13-c17')
 check(s.c16&&!s.c17&&!s.c20,`c17 on are undone, c16 kept (${JSON.stringify({c16:s.c16,c17:s.c17,c20:s.c20})})`);
 check(s.place==='luoyang'&&s.party.join()==='caocao'&&s.items.includes('horse')&&!s.items.includes('weihong'),`back in Luoyang as Cao Cao alone, with the horse and nothing after (${JSON.stringify({place:s.place,party:s.party,items:s.items})})`);
 check(s.chase,'the chase is on again');
+const fol=await p.evaluate(()=>({crowd:window.__w.st.crowd,followers:window.__w.followers.length}));
+check(fol.crowd===0&&fol.followers===0,`no crowd from later in the book follows him (${JSON.stringify(fol)})`);
 // a stale copy (another device, the server) merged in doesn't bring them back
 const after=await p.evaluate(st=>{const local=loadProgress();Sync.mergeInto(local,st);localStorage.setItem('gt-progress',JSON.stringify(local));return {c17:TK.cleared('13-c17'),c20:TK.cleared('13-c20'),c16:TK.cleared('13-c16')};},stale);
 check(!after.c17&&!after.c20&&after.c16,`a stale copy merged in keeps them undone (${JSON.stringify(after)})`);
