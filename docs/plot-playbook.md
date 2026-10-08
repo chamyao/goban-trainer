@@ -51,6 +51,12 @@ Xiapi, Lady Mi at Changban), stage it fully and let her speak her lines. Don't b
 invent scenes to give women more presence, and check every claim about a woman's role against the text. (An early Lü Bu
 draft framed the arc as "the women win every time" and added an invented Lady Yan prologue. Both were cut.)
 
+> "it would be nice to have an opportunity to play as a woman again though do you understand the balance im going for"
+
+The balance: when the novel gives a woman **initiative** of her own (she acts, she decides, she goes to someone), let the
+player play her for that stretch, as with Diaochan's scenes and Lady Yan at Xiapi (「布妻嚴氏聞之，出問曰」). If she is only
+present or spoken of, she is not the lead.
+
 **Give each arc a new mechanic drawn from its story.**
 
 > "did you introduce any new game mechanics? for example an interesting on in the diaochan arc was the stealth mechanic I

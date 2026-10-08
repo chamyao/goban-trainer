@@ -130,11 +130,12 @@ at a time, I dont want it rushing or getting ahead of itself ... and I approve a
 1. **Mechanic:** the flood and Red Hare's water crossing, as a map mechanic with no go tie-in. Carrying the daughter is a
    small one: a visual carry with a scripted turn-back. The reversed chase is **not used**, because the user put the
    chase on hold. Zhang Liao's ride is a ride with a board.
-2. **Prologue:** cut. Lady Yan's own line at Xiapi (「妾昔在長安，已為將軍所棄」) carries it.
-3. **White Gate Tower:** played as **Cao Cao**.
-4. **Puyang:** told in narration (opening scroll and the end of the prologue), not played.
+2. **Playing as a woman:** Lady Yan leads x15, where the novel gives her the initiative (「布妻嚴氏聞之，出問曰：『君欲何往？』」). The user agreed: "im cool with this". On the balance: "it would be nice to have an opportunity to play as a woman again", but "do not push the women thing too far".
+3. **Prologue:** cut. Lady Yan's own line at Xiapi (「妾昔在長安，已為將軍所棄」) carries it.
+4. **White Gate Tower:** played as **Cao Cao**.
+5. **Puyang:** told in narration (opening scroll and the end of the prologue), not played.
 
-### Beat keys and places (shared keys for Places: `3-x1` … `3-x19`, renumbered by Integration)
+### Beat keys and places (shared keys for Places: `3-x1` … `3-x20`, renumbered by Integration)
 
 | Key | Beat | Lead | Place | Room | Board |
 |---|---|---|---|---|---|
@@ -151,16 +152,17 @@ at a time, I dont want it rushing or getting ahead of itself ... and I approve a
 | x11 | The Family Moves | Lü Bu | The Xiapi Road | — | — (escort walk) |
 | x12 | Three Letters | Chen Deng | Xiao Pass | — (the pass at night) | legwork (get the letters down unseen) |
 | x13 | Locked Out | Lü Bu | Xuzhou | — (under the wall) | — |
-| x14 | The Counsel | Lü Bu (deciders on the boards: Chen Gong, Lady Yan, Diaochan) | Xiapi | `lb-fu` (Lü Bu's residence) | **3**: Chen Gong (fails), Lady Yan, Diaochan |
-| x15 | Through the Lines | Lü Bu | Xiapi | — (the gate → Liu Bei's camp) | — (carry; turns back) |
-| x16 | The Flood | Lü Bu | Xiapi | `lb-fu` at the end | — (ride the flooded city on Red Hare; the mirror) |
-| x17 | Fifty Lashes | Lü Bu | Xiapi | `lb-fu` | — |
-| x18 | Red Hare | Hou Cheng | Xiapi | — (the stables → the east gate) | legwork (out unseen); stealth |
-| x19 | White Gate Tower | Cao Cao | Xiapi | `white-gate` (the gate tower) | **3**, boss (Gao Shun, Chen Gong, Lü Bu) |
+| x14 | Chen Gong's Plan | Lü Bu | Xiapi | `lb-fu` (Lü Bu's residence) | contest, **fails**; the decider on the board is Chen Gong (「此乃犄角之勢也」) |
+| x15 | Where Are You Going? | **Lady Yan** | Xiapi | `yan-room` in `lb-fu` → where Lü Bu is packing | **3**: her first plea, her second plea (three days later, when Chen Gong tries again), then Diaochan's word (decider Diaochan). Ends with Lü Bu telling Chen Gong the plan is off. |
+| x16 | Through the Lines | Lü Bu | Xiapi | — (the gate → Liu Bei's camp) | — (carry; turns back) |
+| x17 | The Flood | Lü Bu | Xiapi | `lb-fu` at the end | — (ride the flooded city on Red Hare; the mirror) |
+| x18 | Fifty Lashes | Lü Bu | Xiapi | `lb-fu` | — |
+| x19 | Red Hare | Hou Cheng | Xiapi | — (the stables → the east gate) | legwork (out unseen); stealth |
+| x20 | White Gate Tower | Cao Cao | Xiapi | `white-gate` (the gate tower) | **3**, boss (Gao Shun, Chen Gong, Lü Bu) |
 
-**14 story boards.** Two boards are attempts that fail as written (x2, the first board of x14), and the x15 breakout fails without a board.
-The lead passes Lü Bu → Zhang Liao (x8) → Lü Bu → Chen Gong (x10) → Lü Bu → Chen Deng (x12) → Lü Bu → Hou Cheng (x18) →
-Cao Cao (x19). Nobody playable dies.
+**14 story boards.** Two boards are attempts that fail as written (x2, x14), and the x16 breakout fails without a board.
+The lead passes Lü Bu → Zhang Liao (x8) → Lü Bu → Chen Gong (x10) → Lü Bu → Chen Deng (x12) → Lü Bu → **Lady Yan (x15)** →
+Lü Bu → Hou Cheng (x19) → Cao Cao (x20). Nobody playable dies.
 
 ### Road challengers (exact, for Places): 8, of which 2 blocking
 | Walk | Lead | Total | Blocking | Who |
@@ -169,28 +171,28 @@ Cao Cao (x19). Nobody playable dies.
 | The Shouchun road (x8) | Zhang Liao | 1 | 1 | one of Ji Ling's outriders guarding the bridal party (blocking) |
 | Xiaopei hunting ground (x10) | Chen Gong | 1 | 0 | a falconer |
 | Below Xiao Pass (x12) | Chen Deng | 2 | 1 | a Taishan bandit on the pass road (blocking); one of Chen Gong's sentries |
-| Xiapi, before the flood (x14–x15) | Lü Bu | 2 | 0 | a grumbling officer of Hou Cheng's; a sentry on the wall |
+| Xiapi, before the flood (x14–x16) | Lü Bu | 2 | 0 | a grumbling officer of Hou Cheng's; a sentry on the wall |
 
-The flooded Xiapi walks (x16, x18) have no challengers: the water and the watchers are the obstacles.
+The flooded Xiapi walks (x17, x19) have no challengers: the water and the watchers are the obstacles.
 
 ### Items
 | Key | Name | Chinese | Kind | How |
 |---|---|---|---|---|
-| `redhare` | Red Hare | 赤兔马 | **mount, crosses water** (coat red; lvbu, houcheng) | Lü Bu has it from the start of x1. Hou Cheng takes it in x18 and it leaves the book with him. |
+| `redhare` | Red Hare | 赤兔马 | **mount, crosses water** (coat red; lvbu, houcheng) | Lü Bu has it from the start of x1. Hou Cheng takes it in x19 and it leaves the book with him. |
 | `letters` | Three arrow letters | 箭书三封 | treasure | written and shot in x12 |
 | `pearlbox` | The bride's dowry | 妆奁 | treasure | (flavour; optional) |
 
 ### The flood (engine and map spec)
-- **Xiapi's states:** `siege` (x14–x15), `flood1` (x16: the low streets and the south and west gates under water),
-  `flood2` (x17–x18: everything but a causeway to the east gate). In `flood2`, 「只剩得東門無水」.
+- **Xiapi's states:** `siege` (x14–x16), `flood1` (x17: the low streets and the south and west gates under water),
+  `flood2` (x18–x19: everything but a causeway to the east gate). In `flood2`, 「只剩得東門無水」.
 - **Water** is impassable on foot or on an ordinary horse. A mount with `"crosses_water": true` (Red Hare) rides across it.
-- **x16:** Lü Bu rides the flooded city on Red Hare to inspect the gates. The player feels the power: only he can cross.
-- **x18:** Hou Cheng steals Red Hare and rides it out of the dry east gate. Riding Red Hare, he can cut across the water
+- **x17:** Lü Bu rides the flooded city on Red Hare to inspect the gates. The player feels the power: only he can cross.
+- **x19:** Hou Cheng steals Red Hare and rides it out of the dry east gate. Riding Red Hare, he can cut across the water
   past the watchers, so the player gets to use the power one last time as the thief. Wei Xu opens the gate and "chases"
   him for show.
-- **After x18:** a step removes Red Hare from Lü Bu's items (`["lose", "redhare"]`). In x19 everyone is on foot.
+- **After x19:** a step removes Red Hare from Lü Bu's items (`["lose", "redhare"]`). In x20 everyone is on foot.
 
-### Carrying the daughter (x15)
+### Carrying the daughter (x16)
 - Lü Bu's daughter rides on his back (a carry pose or follower drawn on his back). With her there he can't fight. The
   scene's walk ends at Liu Bei's camp line, where Guan Yu and Zhang Fei block the way, then Xu Huang and Xu Chu come up
   behind. He turns back (scripted, faithful).
