@@ -37,9 +37,8 @@ On main 29ee30dd, with my fixes on claude/tk-playtest.
 - **Screenshots** (`prologue-phone.png`, `prologue-desktop.png`): Chang'an under the sack (night, smoke), Lü Bu's house with yan_left, and Pang Shu's house with yan_hidden.
   - The prologue is all narration, so there are no speaker portraits; Pang Shu appears as his sprite.
 
-## The burning ward (changan--burning-ward, Places' 97960879)
+## The burning ward (changan--burning-ward, after Places' visible-covers fix)
 `ward-phone.png`, `ward-desktop.png`, left to right: the way in, hidden in a cover while a looter looks at her, caught.
-- **prologue.js:** 12/12. There are 6 covers and 6 looters. She's hidden in every cover, and stays hidden while a looter looks right at her. Stepping out, she's caught and returned to that cover.
-- **The covers aren't drawn.** She hides (drawn faded) on open paving by a wall; nothing on the map shows a doorway, cart or anything else to hide behind.
-- **The way in is in sight.** A player standing still where she comes in (40,142) is caught every ~15 s, at 15.9 s and 31.2 s, by looter-1 or looter-1b on his westward walk along the lane at y≈157. After a catch before her first hide, she's put back there.
-- **The walker:** x0b still fails, caught 11 times in 200 s, mostly at the way in.
+- **prologue.js:** 16/16 in player mode. There are 10 covers (6 in the lanes, 1 at each way in) and 6 looters. She's hidden in every cover, and stays hidden while a looter looks right at her. Stepping out, she's caught and returned to that cover.
+- **Covers are drawn now.** Each one is a pale ring on the paving, and every way in has one, so she's no longer caught standing at the way in.
+- **The walker:** x0b still fails. Its prediction of what the looters see is accurate, but it doesn't follow its own plan well: she drifts from the planned cells and overshoots by up to about 40 px. This is a test-tool problem, not a game bug.
