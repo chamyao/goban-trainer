@@ -421,7 +421,7 @@ class MapBuilder:
             else:
                 t = self.near_cell(c, want_visible=False)
             spot = {"id": s["id"], "x": t[0] + .5, "y": t[1] + .7, "node": s.get("node", ""), "label": s.get("label", "")}
-            for k in ("trigger", "note", "on", "sight"):
+            for k in ("trigger", "note", "on", "sight", "cover"):   # cover: a place to hide (hide and wait)
                 if s.get(k):
                     spot[k] = s[k]
             self.spots.append(spot)
