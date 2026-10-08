@@ -1377,5 +1377,23 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-08"
+ },
+ "yan_left": {
+  "file": "yan_left.jpg",
+  "scene": "yan",
+  "prompt": "Dusk, Chang'an burning, flames above the gate towers. In a courtyard doorway, Lady Yan, in her thirties, a lady of a great house, holds a small girl close and looks out. Far down the street, Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, on a fiery red horse, rides away with a band of horsemen, not looking back. Lü Bu is a tall, strikingly handsome young warrior, broad-shouldered, in ornate red and gold armour with a gold crown bearing two long pheasant-feather plumes, carrying a tall crescent-bladed halberd. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-08"
+ },
+ "yan_hidden": {
+  "file": "yan_hidden.jpg",
+  "scene": "yan",
+  "prompt": "Night, a dim back room of a modest official's house, one shaded lamp. Lady Yan, in her thirties, sits very still against the wall, her arm round a small girl, listening. Through a lattice, the red glow of fires and the shadows of soldiers passing in the lane. A middle-aged officer, Pang Shu, stands by the door, listening too. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-08"
  }
 }

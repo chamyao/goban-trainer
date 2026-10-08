@@ -379,7 +379,7 @@
    "door": "S",
    "faces": "S",
    "label": "Lü Bu's house",
-   "map": "burning-ward",
+   "map": "lb-house",
    "plaque": "吕府",
    "blocks_sight": true
   },
@@ -428,9 +428,12 @@
    "y": 41,
    "w": 4,
    "h": 2,
-   "id": "house-2",
+   "id": "pangshu",
    "door": "S",
    "faces": "S",
+   "label": "Pang Shu's house",
+   "map": "pangshu-house",
+   "plaque": "庞府",
    "blocks_sight": true
   },
   {
@@ -749,6 +752,14 @@
    "h": 1
   },
   {
+   "kind": "camp.hay",
+   "x": 57,
+   "y": 41,
+   "w": 1,
+   "h": 1,
+   "label": "An overturned hay cart"
+  },
+  {
    "kind": "camp.firepit",
    "x": 33,
    "y": 21,
@@ -771,7 +782,39 @@
    "x": 52.5,
    "y": 36.7,
    "node": "",
-   "label": "Lü Bu's gate"
+   "label": "Lü Bu's gate",
+   "note": "the walk to Pang Shu's starts here"
+  },
+  {
+   "id": "pangshu-gate",
+   "x": 44.5,
+   "y": 44.7,
+   "node": "",
+   "label": "Pang Shu's door"
+  },
+  {
+   "id": "cover-door",
+   "x": 57.5,
+   "y": 33.7,
+   "node": "",
+   "label": "A dark doorway",
+   "cover": true
+  },
+  {
+   "id": "cover-cart",
+   "x": 57.5,
+   "y": 41.7,
+   "node": "",
+   "label": "An overturned hay cart",
+   "cover": true
+  },
+  {
+   "id": "cover-well",
+   "x": 49.5,
+   "y": 45.7,
+   "node": "",
+   "label": "A well-house",
+   "cover": true
   }
  ],
  "npcs": [
@@ -792,23 +835,108 @@
    "say": [
     "“Silk, jade, anything that shines. Kick the door in if they won't open it.”"
    ]
+  },
+  {
+   "id": "looter-east",
+   "kind": "folk.soldier",
+   "say": [],
+   "watch": {
+    "id": "looter-east",
+    "cone": 12,
+    "beat": [
+     [
+      57.5,
+      25.9
+     ],
+     [
+      57.5,
+      45.9
+     ],
+     [
+      57.5,
+      25.9
+     ]
+    ],
+    "pause": [
+     57.5,
+     45.9,
+     2
+    ],
+    "in_beats": [
+     "14-x0b"
+    ],
+    "seen": "looter",
+    "back_to": "lubu-gate",
+    "shape": "U"
+   },
+   "x": 57.5,
+   "y": 25.9
+  },
+  {
+   "id": "looter-lane",
+   "kind": "folk.soldier",
+   "say": [],
+   "watch": {
+    "id": "looter-lane",
+    "cone": 12,
+    "beat": [
+     [
+      53.5,
+      45.9
+     ],
+     [
+      25.5,
+      45.9
+     ],
+     [
+      53.5,
+      45.9
+     ]
+    ],
+    "pause": [
+     25.5,
+     45.9,
+     2
+    ],
+    "in_beats": [
+     "14-x0b"
+    ],
+    "seen": "looter",
+    "back_to": "lubu-gate",
+    "shape": "U"
+   },
+   "x": 53.5,
+   "y": 45.9
   }
  ],
  "exits": [
   {
-   "to": "changan--burning-ward",
+   "to": "changan--lb-house",
    "side": "N",
    "x": 51.6,
    "y": 34.85,
    "w": 0.8,
    "h": 0.45,
    "door": true
+  },
+  {
+   "to": "changan--pangshu-house",
+   "side": "N",
+   "x": 43.6,
+   "y": 42.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
   }
  ],
  "entries": {
-  "changan--burning-ward": [
+  "changan--lb-house": [
    52,
    35
+  ],
+  "changan--pangshu-house": [
+   44,
+   43
   ],
   "": [
    53,
@@ -939,6 +1067,7 @@
  },
  "banners": "black",
  "links": [
-  "changan--burning-ward"
+  "changan--lb-house",
+  "changan--pangshu-house"
  ]
 }
