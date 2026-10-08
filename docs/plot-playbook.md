@@ -36,26 +36,25 @@ takes one compelling story inside the novel and builds itself around it. A good 
   and its price.
 - **Its own world:** a few places, a cast, and payoffs planted and paid inside the arc.
 
-**Draw on the women's stories where the novel offers them (a nice-to-have).**
+**When a stretch can be told from a woman's perspective in an interesting and natural way, tell it that way.**
 
-> "also, in general I find it more intersting to have women have an emphasis to the plot such as diaochan, so while the
-> characters are majority men, we should try to draw on the female stories as well to keep it more entertaining"
+> "if theres an opportunity to tell the narrative from a female characters perspective in an interesting and natrual way
+> then we should opt to do so"
 
-> "I just want you to emphasize if theres opportunity to highlight the female characters, not force"
+This is the rule the user settled on, after a few rounds of finding the balance:
+- "we should try to draw on the female stories as well to keep it more entertaining"
+- "emphasize if theres opportunity … not force"
+- "do not push the women thing too far … drawing out opportunities would be a nice to have"
+- "it would be nice to have an opportunity to play as a woman again"
 
-> "yeah do not push the women thing too far this is not a feminist movement game or anything like that, I just meant
-> that drawing out opportunities would be a nice to have"
-
-This is a nice-to-have, not a theme. When the novel gives a woman a real moment (Diaochan's scenes, Lady Yan's plea at
-Xiapi, Lady Mi at Changban), stage it fully and let her speak her lines. Don't build an arc's framing around it, don't
-invent scenes to give women more presence, and check every claim about a woman's role against the text. (An early Lü Bu
-draft framed the arc as "the women win every time" and added an invented Lady Yan prologue. Both were cut.)
-
-> "it would be nice to have an opportunity to play as a woman again though do you understand the balance im going for"
-
-The balance: when the novel gives a woman **initiative** of her own (she acts, she decides, she goes to someone), let the
-player play her for that stretch, as with Diaochan's scenes and Lady Yan at Xiapi (「布妻嚴氏聞之，出問曰」). If she is only
-present or spoken of, she is not the lead.
+How to apply it:
+- **The test:** in the novel's own text, does she act, decide or go to someone? Is her moment interesting to play? If both
+  hold, she leads that stretch (Diaochan's scenes; Lady Yan going to Lü Bu at Xiapi, 「布妻嚴氏聞之，出問曰」).
+- **If she is only present or spoken of,** she isn't the lead. Stage her moment fully and let her speak her lines.
+- **Don't** build an arc's framing around it, invent scenes to give her more presence, or overstate her role. Check every
+  claim against the text. (An early Lü Bu draft said "the women win every time" and added an invented Lady Yan prologue.
+  Both were cut.)
+- **Known opportunities in later chapters** are listed in `docs/plot-opportunities.md`, so none are missed.
 
 **Give each arc a new mechanic drawn from its story.**
 
