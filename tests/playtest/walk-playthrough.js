@@ -96,6 +96,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   // the patrols ahead, and a way to the goal none of them sees: cells, one per 150 ms (stealth-12's planner)
   const plan = (STEP) => p.evaluate(STEP => {   // STEP frames of 50 ms a cell: 3 is his running pace, 4 the pace a walk a cell at a time surely keeps, 2 mounted
     const w = window.__w, T = w.tw || 16, C = 16, DT = 50, F = 1600, goal = w.goalAt; if (!goal) return null;
+    w.scene.pause(); setTimeout(() => w.scene.resume(), 80);   // the game held while he plans, and past the long frame after it (else the patrols jump ahead by the time the plan took)
     const G = w.walkGrid(), cols = Math.ceil(G.cols * G.C / C), rows = Math.ceil(G.rows * G.C / C), free = (cx, cy) => G.free(Math.floor((cx * C + 8) / G.C), Math.floor((cy * C + 10) / G.C));
     const cat = w.npcs.filter(n => n.watch && ((n.watch.seen || []).length || n.watch.back_to) && w.watching(n));
     const tracks = cat.map(n => { const W = n.watch, st = { x: n.spr.x, y: n.spr.y, leg: W.leg, wait: W.wait, dir: W.dir, t: W.t, turn: W.turn }, out = [];
@@ -105,11 +106,12 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
           else { st.x += dx / d * v; st.y += dy / d * v; st.dir = Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? 'left' : 'right') : (dy < 0 ? 'up' : 'down'); } } }
         else if (W.turns.length) { st.t += DT; if (st.t > 2600) { st.t = 0; st.turn = (st.turn + 1) % W.turns.length; st.dir = W.turns[st.turn]; } } }
       return { n, out }; });
-    const at = (cx, cy) => ({ x: cx * C + 8, y: cy * C + 12 }), seen = new Uint8Array(cols * rows * F);
+    const at = (cx, cy) => ({ x: cx * C + 8, y: cy * C + 12 }), seen = new Uint8Array(cols * rows * F), wasHidden = w.hidden; w.hidden = false;   // (sees() answers for her as she is now: hidden, nobody sees anything; the map of sight is for her out in the open)
     for (const { n, out } of tracks) { const R = (n.watch.cone || 4) * T + C; for (let f = 0; f < F; f++) { const o = out[f], stub = { watch: { cone: n.watch.cone, dir: o.dir }, spr: { x: o.x, y: o.y } };
       for (let cy = Math.max(0, Math.floor((o.y - R) / C)); cy <= Math.min(rows - 1, Math.floor((o.y + R) / C)); cy++) for (let cx = Math.max(0, Math.floor((o.x - R) / C)); cx <= Math.min(cols - 1, Math.floor((o.x + R) / C)); cx++)
         if (w.sees(stub, at(cx, cy))) seen[(f * rows + cy) * cols + cx] = 1; } }
     const covs = (w.covers || []).length && cat.some(n => n.watch.hide || n.watch.hide !== false) ? w.covers : [], inCov = (cx, cy) => { const q = at(cx, cy); return covs.some(r => Phaser.Geom.Rectangle.Contains(r, q.x, q.y - 3)); };
+    w.hidden = wasHidden;
     const safe = (cx, cy, f) => { for (let k = Math.max(0, f - 2); k <= Math.min(F - 1, f + STEP + 2); k++) if (seen[(k * rows + cy) * cols + cx]) return false; return true; };
     const P = w.player, sx = Math.floor(P.x / C), sy = Math.floor((P.y - 4) / C), gx = Math.floor(goal.x / C), gy = Math.floor((goal.y - 4) / C);
     let cur = new Map([[sx + sy * cols, null]]); const hist = [cur]; let found = -1;
@@ -282,6 +284,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       console.log(`     shot ${f}: ${m.pic ? 'portrait' : m.face ? 'pixel bust' : 'no face'}${m.picOverText ? ', PORTRAIT OVER THE TEXT' : ''}${m.boxInView ? '' : ', BOX OFF SCREEN'}${m.picInView ? '' : ', PORTRAIT OFF SCREEN'}`);
     }
     if (s.busy) { await p.evaluate(() => window.__w.ui.advance()); await p.waitForTimeout(250); continue; }   // a line: on to the next
+    if (s.caught && plannedSteps && process.env.STEALTHDBG) { const k = Math.floor((Date.now() - planT) / (pace * 50)); console.log('     dbg by', await p.evaluate(() => window.__w.npcs.filter(n => n.watch && n.sees).map(n => `${n.id}@${Math.round(n.spr.x)},${Math.round(n.spr.y)} ${n.watch.dir} leg ${n.watch.leg} wait ${Math.round(n.watch.wait || 0)}`).join('; ')), 'planned', ((Date.now() - planT) / 1000).toFixed(1), 's ago'); console.log(`     dbg caught at ${s.P} hidden ${s.hidden} inCover ${s.inCover}; plan step ${k}/${plannedSteps.length} at ${plannedSteps[Math.min(k, plannedSteps.length - 1)].x},${plannedSteps[Math.min(k, plannedSteps.length - 1)].y}; next ${JSON.stringify(plannedSteps.slice(k, k + 4).map(c => [c.x, c.y]))}`); }
     if (s.caught) plannedSteps = null;   // sent back: plan again from there
     if (s.cine || s.leaving || s.engaged || s.caught) { await p.waitForTimeout(300); continue; }
     if (OPTIONAL && !errand && !s.watchers && !s.walking && !plannedSteps) {
@@ -301,7 +304,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     if (s.watchers && !plannedSteps) {   // the running pace first; after a catch the slower one, if it has a way
       pace = catches ? 4 : 3; plannedSteps = await plan(pace); if (!plannedSteps && pace === 4) { pace = 3; plannedSteps = await plan(3); }
       if (!plannedSteps && await p.evaluate(() => !!(window.__w.mounts && window.__w.mounts.length))) { pace = 2; plannedSteps = await plan(2); if (plannedSteps) console.log(`     ${beat}: a way past the watchers at his mounted pace (a cell every 100 ms)`); }   // on horseback he's quicker
-      planT = Date.now(); stealthTries++;
+      planT = Date.now() + 80; stealthTries++;
       if (!plannedSteps && stealthTries <= 3 && arrivedAt && Math.hypot(s.P[0] - arrivedAt[0], s.P[1] - arrivedAt[1]) > 12) {   // no way from here (an errand left him there): back to where he came in, and plan again
         await p.evaluate(a => window.__w.walkTo(a[0], a[1], { ring: false }), arrivedAt);
         for (let i = 0; i < 60 && await p.evaluate(() => !!window.__w.walk && !window.__w.caught); i++) await p.waitForTimeout(250);
@@ -313,8 +316,12 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
           return `a way there ignoring them: ${f && f.length ? f.length + ' steps' : 'none'} (${dense.length} points: ${wet} in water, ${blocked} blocked in the walk grid the planner uses); goal ${g && [Math.round(g.x), Math.round(g.y)]}; wading ${w.wades()}; watchers ${cat.map(n => `${n.id}@${Math.round(n.spr.x)},${Math.round(n.spr.y)} cone ${n.watch.cone} ${n.watch.dir}${w.sees ? (w.sees(n, P) ? ' SEES HIM' : '') : ''}`).join('; ')}`; });
         close('fail', `no unseen way past the watchers (${why})`, s); break; } }
     if (plannedSteps) {
-      const k = Math.min(plannedSteps.length - 1, Math.floor((Date.now() - planT) / (pace * 50))), c = plannedSteps[k];
-      await p.evaluate(c => { const w = window.__w; if (!w.walk || Math.hypot(w.walk.path[w.walk.path.length - 1].x - c.x, w.walk.path[w.walk.path.length - 1].y - (c.y - 3)) > 2) w.walkTo(c.x, c.y, { ring: false }); }, c);
+      const k = Math.max(0, Math.min(plannedSteps.length - 1, Math.floor((Date.now() - planT) / (pace * 50)))), c = plannedSteps[k];
+      if (Date.now() - planT > 1200 && !(await p.evaluate(() => !!(window.__w.inCover && window.__w.covers && window.__w.covers.length && window.__w.inCover())))) { plannedSteps = null; continue; }   // out in the open: plan again from here every 1.2 s (no drift from the plan's clock)
+      await p.evaluate(c => { const w = window.__w, P = w.player, cov = w.covers && w.covers.length && w.inCover();
+        if (cov && Phaser.Geom.Rectangle.Contains(cov, c.x, c.y - 3)) { w.walk = null; P.setVelocity(0); return; }   /* the plan stays in the cover she's in: keep still there (moving in cover is seen) */
+        if (!w.walk && Math.hypot(P.x - c.x, P.y - c.y) < 6) { P.setVelocity(0); return; }   /* there: keep still */
+        if (!w.walk || Math.hypot(w.walk.path[w.walk.path.length - 1].x - c.x, w.walk.path[w.walk.path.length - 1].y - (c.y - 3)) > 2) w.walkTo(c.x, c.y, { ring: false }); }, c);
       if (k >= plannedSteps.length - 1) { plannedSteps = null; await tapWorld(s.goal[0], s.goal[1]); }   // there: tap it (a spot that starts on a tap)
       await p.waitForTimeout(60); continue;
     }
