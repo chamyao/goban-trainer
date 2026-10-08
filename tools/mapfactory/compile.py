@@ -368,6 +368,7 @@ def compile_map(m, kit, out_dir):
             **({"trigger": s["trigger"]} if s.get("trigger") else {}), **({"use": s["use"]} if s.get("use") else {}),
             **({"needs": json.dumps(s["needs"] if isinstance(s["needs"], list) else [s["needs"]])} if s.get("needs") else {}),
             **({"sight": json.dumps(s["sight"])} if s.get("sight") else {}),
+            **({"cover": True} if s.get("cover") else {}),   # hide and wait: a spot to hide at
             **{k: s[k] for k in ("delivers", "when") if s.get(k)},
             **{k: json.dumps([place_step(l)[0] for l in s[k]], ensure_ascii=False) for k in ("empty", "waiting", "deliver", "delivered", "call") if s.get(k)},
             **{k: json.dumps([place_step(l)[0] for l in s[k]], ensure_ascii=False) for k in ("intro", "outro") if s.get(k)})
