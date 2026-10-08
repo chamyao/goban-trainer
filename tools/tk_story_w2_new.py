@@ -2562,21 +2562,27 @@ def _scenes_lvbu():
             N("He goes out to Chen Gong.", "乃出謂陳宮曰："),
             S("lvbu", "The grain they say is coming is a trick. Cao Cao is full of tricks. I won't move.", "操軍糧至者，詐也。操多詭計，吾未敢動。"),
             N("Chen Gong goes out sighing: we will die with no ground to be buried in.", "宮出歎曰：「吾等死無葬身之地矣！」"),
-            ["remove", "lb"], ["remove", "dc"],
+            ["remove", "dc"],
+            N("Lü Bu's envoys get through to Yuan Shu, who answers: Lü Bu breaks his word. Send the girl first, and then I'll send troops.",
+              "許汜、王楷至壽春見袁術，術曰：「奉先反覆無信，可先送女，然後發兵。」"),
+            S("lvbu", "Then I'll take her through myself.", "我親送至二百里外。"),
+            ["light", "night"],
+            ["spawn", "lvnv", "lvnv", "x15", -8, -4],
+            ["carry", "lb", "lvnv"],  # she rides on his back, and stays there on the walk to x16
+            ["still", "lb_daughter", "slow zoom in"],
+            N("At the second watch he wraps his daughter in silk floss, covers her in armour, and ties her on his back.",
+              "次夜二更時分，呂布將女以綿纏身，用甲包裹，負於背上。"),
+            ["carry", "lb"], ["remove", "lvnv"], ["remove", "lb"],
+            ["carry", "lvbu", "lvnv"],  # world state: carried on the open map until x16 sets her down
             ["party", ["lvbu"], {"to": "x16"}],
         ]},
 
         # X16 · Through the lines. The daughter on his back; he turns back, as written. No board.
         "x16": {"title": T("Through the Lines", "負女突圍"), "kind": "main", "steps": [
             ["light", "night"],
-            N("Lü Bu's envoys get through to Yuan Shu, who answers: Lü Bu breaks his word. Send the girl first, and then I'll send troops.",
-              "許汜、王楷至壽春見袁術，術曰：「奉先反覆無信，可先送女，然後發兵。」"),
-            S("lvbu", "Then I'll take her through myself.", "我親送至二百里外。"),
             ["spawn", "lvnv", "lvnv", "x16", -2, 0],
-            ["carry", "lvbu", "lvnv"],  # she rides on his back
-            ["still", "lb_daughter", "slow zoom in"],
-            N("At the second watch he wraps his daughter in silk floss, covers her in armour, and ties her on his back. He takes up his halberd and rides out of the gate.",
-              "次夜二更時分，呂布將女以綿纏身，用甲包裹，負於背上，提戟上馬。放開城門，布當先出城。"),
+            ["carry", "lvbu", "lvnv"],  # she rides on his back (carried here from x15)
+            N("He takes up his halberd and rides out of the gate.", "提戟上馬。放開城門，布當先出城。"),
             ["spawn", "gy", "guanyu", "x16", 16, -2], ["spawn", "zf", "zhangfei", "x16", 16, 4],
             ["fx", "flash", "x16", 14, 0],
             S("zhangfei", "Don't run!", "休走！"),
@@ -2847,7 +2853,7 @@ def _world_lvbu():
         "n": 2,
         "name": T("White Gate Tower", "白门楼"),
         "zh": "白门楼",
-        "chapters": [13, 14, 15, 16, 17, 18, 19],
+        "chapters": [13, 19],
         "couplets": [
             ["呂奉先射戟轅門　曹孟德敗師淯水", "Lü Fengxian shoots the halberd at the camp gate; Cao Mengde is routed on the Yu river"],
             ["下邳城曹操鏖兵　白門樓呂布殞命", "Cao Cao battles at Xiapi; Lü Bu dies at White Gate Tower"],
@@ -2872,7 +2878,7 @@ def _world():
         "n": 2,
         "name": T("Hulao Pass", "虎牢关"),
         "zh": "虎牢关",
-        "chapters": [3, 4, 5, 6, 7, 8, 9],
+        "chapters": [3, 9],
         "couplets": [
             ["王司徒巧使连环计　董太师大闹凤仪亭",
              "Minister Wang cleverly sets the chain of schemes; Grand Preceptor Dong storms the Phoenix Pavilion"],
@@ -2901,7 +2907,7 @@ def _world_caocao():
         "n": 2,
         "name": T("Hulao Pass", "虎牢关"),
         "zh": "虎牢关",
-        "chapters": [3, 4, 5],
+        "chapters": [3, 5],
         "couplets": [
             ["议温明董卓叱丁原　馈金珠李肃说吕布",
              "At the Wenming council Dong Zhuo shouts down Ding Yuan; with gold and pearls Li Su wins over Lü Bu"],

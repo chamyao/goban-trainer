@@ -453,12 +453,6 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 *Chen Gong goes out sighing: we will die with no ground to be buried in.*  
 宮出歎曰：「吾等死無葬身之地矣！」
 
-*(the player is now: Lü Bu)*
-
-
-## X16 · Through the Lines (負女突圍)
-*Xiapi* · no board
-
 *Lü Bu's envoys get through to Yuan Shu, who answers: Lü Bu breaks his word. Send the girl first, and then I'll send troops.*  
 許汜、王楷至壽春見袁術，術曰：「奉先反覆無信，可先送女，然後發兵。」
 
@@ -467,8 +461,17 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 [still: `lb_daughter`]
 
-*At the second watch he wraps his daughter in silk floss, covers her in armour, and ties her on his back. He takes up his halberd and rides out of the gate.*  
-次夜二更時分，呂布將女以綿纏身，用甲包裹，負於背上，提戟上馬。放開城門，布當先出城。
+*At the second watch he wraps his daughter in silk floss, covers her in armour, and ties her on his back.*  
+次夜二更時分，呂布將女以綿纏身，用甲包裹，負於背上。
+
+*(the player is now: Lü Bu)*
+
+
+## X16 · Through the Lines (負女突圍)
+*Xiapi* · no board
+
+*He takes up his halberd and rides out of the gate.*  
+提戟上馬。放開城門，布當先出城。
 
 **Zhang Fei:** Don't run!  
 休走！
