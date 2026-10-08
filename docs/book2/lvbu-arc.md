@@ -159,7 +159,7 @@ at a time, I dont want it rushing or getting ahead of itself ... and I approve a
 | x19 | Red Hare | Hou Cheng | Xiapi | — (the stables → the east gate) | legwork (out unseen); stealth |
 | x20 | White Gate Tower | Cao Cao | Xiapi | `white-gate` (the gate tower) | **3**, boss (Gao Shun, Chen Gong, Lü Bu) |
 
-**12 story boards.** Three of the attempts fail as written (x3, the first board of x15, and x16, which has no board).
+**15 story boards.** Two boards are attempts that fail as written (x3, the first board of x15), and the x16 breakout fails without a board.
 The lead passes Lady Yan → Lü Bu → Lady Yan → Lü Bu → Zhang Liao → Lü Bu → Chen Gong → Lü Bu → Chen Deng → Lü Bu →
 Chen Gong / Lady Yan / Diaochan (boards in x15, Lü Bu walking) → Lü Bu → Hou Cheng → Lü Bu (the gate tower sleep is
 narrated in x19) → Cao Cao. Nobody playable dies.
