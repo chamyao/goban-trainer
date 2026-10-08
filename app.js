@@ -73,7 +73,7 @@ const Sync = {
     this.username = localStorage.getItem(this.USERNAME_KEY);
     this.renderChip();
     if (this.username) this.pullAndMerge().then(route).catch(e => console.error("[sync]", e));
-    else this.promptUsername();
+    else if (!/^#\/tk/.test(location.hash)) this.promptUsername();   // not over the game's opening scroll: there the header chip offers it
     document.addEventListener("visibilitychange", () => {
       // back to this tab: pick up what another device did meanwhile (and redraw if anything came in)
       if (document.visibilityState === "visible") {
