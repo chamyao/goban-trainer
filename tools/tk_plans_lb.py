@@ -117,20 +117,20 @@ _ca.update(
             # the houses either side burn, behind the lanes' walls (so they light the lanes and hide no one)
             "props": [{"kind": "camp.firepit", "at": [x, y], "label": "A burning cart"} for x, y in [(5, 1), (15, 1), (5, 15)]]
                      + [{"kind": "fx.smoke", "at": [x, y], "label": "Smoke"} for x, y in [(10, 1), (17, 1), (11, 15), (13, 15), (2, 1)]],
-            "watchers": [   # one to a lane, walking it end to end: she meets him, or he turns back on her
-                # each walks his lane and stops at its end turned to the gap into the next, so no one slips by him there
-                {"id": "looter-1", "kind": "folk.soldier", "beat": [[17, 5], [17, 4], [2, 4], [17, 4]], "pause": [17, 5, 3],
+            "watchers": [   # two to a lane, each walking his own stretch of it, so a gap opens every few seconds somewhere
+                # (tuned by search at the engine's rules: from any cover, at any moment she gets there, all her waiting to
+                # Pang Shu's door is at most 21 s; without cover there is no way through: tools/proofs/hide_ward_lb.py)
+                {"id": "looter-1", "kind": "folk.soldier", "beat": [[6, 4], [16, 4]],
                  "cone": 5, "in_beats": ["3-x0b"], "seen": "looter", "back_to": "@cover", "hide": True},
-                {"id": "looter-2", "kind": "folk.soldier", "beat": [[2, 9], [2, 8], [17, 8], [2, 8]], "pause": [2, 9, 3],
+                {"id": "looter-1b", "kind": "folk.soldier", "beat": [[17, 4], [8, 4]], "pause": [8, 4, 2],
                  "cone": 5, "in_beats": ["3-x0b"], "seen": "looter", "back_to": "@cover", "hide": True},
-                {"id": "looter-3", "kind": "folk.soldier", "beat": [[2, 12], [17, 12], [17, 13], [17, 12]], "pause": [17, 13, 3],
+                {"id": "looter-2", "kind": "folk.soldier", "beat": [[4, 8], [9, 8]],
                  "cone": 5, "in_beats": ["3-x0b"], "seen": "looter", "back_to": "@cover", "hide": True},
-                # and a second in each lane, the other way round: follow one, and the other comes at you
-                {"id": "looter-1b", "kind": "folk.soldier", "beat": [[2, 4], [17, 4]], "pause": [2, 4, 2],
+                {"id": "looter-2b", "kind": "folk.soldier", "beat": [[7, 8], [11, 8]], "pause": [11, 8, 2],
                  "cone": 5, "in_beats": ["3-x0b"], "seen": "looter", "back_to": "@cover", "hide": True},
-                {"id": "looter-2b", "kind": "folk.soldier", "beat": [[17, 8], [2, 8]], "pause": [17, 8, 2],
+                {"id": "looter-3", "kind": "folk.soldier", "beat": [[13, 12], [3, 12]], "pause": [3, 12, 2],
                  "cone": 5, "in_beats": ["3-x0b"], "seen": "looter", "back_to": "@cover", "hide": True},
-                {"id": "looter-3b", "kind": "folk.soldier", "beat": [[17, 12], [2, 12]], "pause": [2, 12, 2],
+                {"id": "looter-3b", "kind": "folk.soldier", "beat": [[3, 12], [17, 12]], "pause": [3, 12, 8],
                  "cone": 5, "in_beats": ["3-x0b"], "seen": "looter", "back_to": "@cover", "hide": True},
             ],
             "exits": [{"to": "Chang'an", "at": [0, 4], "side": "W"}],

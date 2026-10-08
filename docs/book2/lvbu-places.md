@@ -28,9 +28,10 @@ out. Lü Bu's compound on the ward street now opens onto **the burning ward**
 - **Pang Shu's house** (room `pangshu-house`, x0b) is at the bottom.
 
 **The walk** (in x0b) runs through three narrow lanes joined end to end, between burnt-out houses walled off from them.
-- **Looters:** two to each lane (watchers with `"hide": true`, `"back_to": "@cover"`, cone 5 cells), walking it in
-  opposite phase. If she follows one, the other comes at her. Each looter stops at his lane's end turned to the gap into
-  the next lane.
+- **Looters:** two to each lane (watchers with `"hide": true`, `"back_to": "@cover"`, cone 5 cells), each walking
+  his own stretch of it. Their stretches and pauses were found by a search at the engine's rules, for the shortest worst
+  wait that still leaves no way through without cover. When both walked the whole lane in opposite phase, a lane opened
+  about once a minute, and a player who reached a cover at the wrong moment sat there up to 53 s (Testing).
 - **Cover:** six spots with `"cover": true`, each with the thing she hides by (`"with"`): barrels by a doorway, an
   overturned hay cart, water jars by the well, a broken screen wall, sacks spilled from a burnt-out cart, wine jars by a
   doorway. These are kinds every kit draws. The thing stands on the cover's own tile and is walked through, so she
@@ -41,11 +42,12 @@ out. Lü Bu's compound on the ward street now opens onto **the burning ward**
   (Testing found looter-1 caught her at the entrance at 15.9 s).
 - **Proof** (`tools/proofs/hide_ward_lb.py`, reading the covers and ways in from the built map) uses tk-world's rules:
   looters walk at 30 px/s, see 10 tiles down a 55° half-cone, and walls stop sight. She walks at 110 px/s and is unseen
-  only when still in cover.
-  - With the cover, the walk takes 20.8 s, and the fastest way hides twice (at the hay cart and the water jars).
-  - Without it, the only way is 87 s of exact waiting in the wall recesses.
-  - At every way in, she's safe standing for 70 s (more than a looter's round). Whenever she sets off, there is still a
-    way through.
+  only when still in cover. It works backwards in time, giving the fastest unseen way to Pang Shu's door from every tile
+  at every moment:
+  - With cover, the fastest way from her door takes 23.1 s.
+  - Without cover there is no way through.
+  - From every cover, whatever moment she gets there, all her waiting on the way to the door is at most 21.1 s. The
+    build's limit is 22 s.
 
 ## Xuzhou (x1–x4, x6, x7, x9, x11, x13)
 
