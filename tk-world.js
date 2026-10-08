@@ -1819,8 +1819,10 @@ function worldScenes() {
       for (const n of this.npcs) {
         if (!n.challenge || !n.spr.visible || !(n.view || n.guard) || TK.cleared(n.challenge)) continue;
         const d = Math.hypot(n.spr.x - P.x, n.spr.y - P.y), dg = n.guard ? Math.hypot(n.guard.x - P.x, n.guard.y - P.y) : Infinity;
-        if (n.cool) { if (d > (n.view || 2) * T + 2 * T && dg > 4 * T) n.cool = false; continue; }
-        const seen = n.view && d <= n.view * T + T / 2 && (!n.cone || this.inCone(n, P)) || dg < 2.5 * T;
+        if (n.cool && d > (n.view || 2) * T + 2 * T && dg > 4 * T) n.cool = false;
+        // a blocker holds his point even after you've turned him down (apo110: declined every one and rode on through);
+        // one who only spots you lets you be until you've gone and come again
+        const seen = !n.cool && n.view && d <= n.view * T + T / 2 && (!n.cone || this.inCone(n, P)) || dg < 2.5 * T;
         if (seen) { this.engage(n); return; }
       }
     }
@@ -1855,8 +1857,13 @@ function worldScenes() {
         const side = Math.abs(dx) > Math.abs(dy) ? { x: 0, y: T } : { x: T, y: 0 };
         this.tweens.add({ targets: n.spr, x: n.spr.x + side.x, y: n.spr.y + side.y, duration: 400, onUpdate: () => n.spr.setDepth(n.spr.y) });
       } else {
-        // walked back a step; he goes back to his post and waits till you come again
-        P.setPosition(P.x - dx / d * T * 1.5, P.y - dy / d * T * 1.5);
+        // walked back a step (from a blocker, back out of his reach, the way you came); he goes back to his post
+        if (n.guard) {
+          const gx = P.x - n.guard.x, gy = P.y - n.guard.y, gd = Math.hypot(gx, gy) || 1;
+          const ux = gd > 1 ? gx / gd : -dx / d, uy = gd > 1 ? gy / gd : -dy / d;
+          P.setPosition(n.guard.x + ux * T * 3.2, n.guard.y + uy * T * 3.2);
+        } else P.setPosition(P.x - dx / d * T * 1.5, P.y - dy / d * T * 1.5);
+        this.walk = null; this.auto = null;
         n.cool = true;
         this.tweens.add({ targets: n.spr, x: n.home.x, y: n.home.y, duration: Math.max(200, go / 60 * 1000), onUpdate: () => n.spr.setDepth(n.spr.y),
           onComplete: () => { n.dir = n.face0; this.faceNpc(n); } });
