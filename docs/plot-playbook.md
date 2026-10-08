@@ -451,6 +451,8 @@ Places that the user had "changed priorities". That was Plot's inference, and Pl
 - [ ] Every handoff has a start point. The lead doesn't change in the middle of their own stretch.
 - [ ] Every `strike` names its target (`["pose", actor, "strike", target]`). Otherwise the engine picks the nearest
       "enemy", which in a hall is often the lead (Lü Bu once stabbed Li Su instead of Dong Zhuo).
+- [ ] Every character's name label matches who they are at that moment. A title that changes mid-story needs its own
+      cast id until the change (the Prince of Chenliu was labelled "Emperor Xian" while calling his brother the Emperor).
 - [ ] Every dilemma's `who` is the decider. No character appears before they are brought in.
 - [ ] Road-challenger counts are exact, and every challenger can be reached.
 - [ ] Each multi-problem scene's third problem is the hardest.
