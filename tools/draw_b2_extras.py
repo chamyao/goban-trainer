@@ -395,6 +395,10 @@ def gateshut():   # a city gate drawn shut across the gap in a west or east wall
     return g.outline().image()
 
 
+def gateshut_ns():   # the same shut gate for a north or south wall's gap (64x32), the passage running north-south
+    return gateshut().transpose(Image.Transpose.ROTATE_90)
+
+
 PIECES = {
     "banner.black": banner_black, "banner.white": banner_white, "milestone": milestone, "plant.peony": peony, "water.lotus": lotus,
     "prop.lanterns": lantern_stand, "prop.body_lamp": body_lamp, "tree.poplar": poplar, "tree.willow": willow,
@@ -402,7 +406,7 @@ PIECES = {
     "furn.swordwall": swordwall, "furn.seat": seat, "furn.lamp": lamp, "furn.dais": dais, "corral": corral,
     "landmark.hitchingpost": hitchingpost, "garden.rockery": rockery, "landmark.ridge": ridge,
     "furn.jailcell": jailcell, "landmark.torch": torch, "wall.stairs": wallstairs, "prop.halberd": halberd,
-    "prop.carriage": bridal_carriage, "prop.gateshut": gateshut,
+    "prop.carriage": bridal_carriage, "prop.gateshut": gateshut, "prop.gateshut_ns": gateshut_ns,
 }
 
 
