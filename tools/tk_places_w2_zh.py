@@ -642,6 +642,7 @@ ZH_PLACES2 = {
     "A broken screen wall": "残破的照壁",
     "A burnt-out cart": "烧毁的车子",
     "A burning house": "燃烧的房屋",
+    "Smoke": "浓烟",
     "A burnt-out house": "烧毁的房屋",
     "Take your daughter through the burning lanes to Pang Shu's house. When looters come, get into cover and keep still.": "带着女儿穿过燃烧的小巷，前往庞舒家。乱兵过来时，躲进暗处，不要动。",
 }

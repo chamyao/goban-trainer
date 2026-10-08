@@ -28,6 +28,8 @@ NEW_KINDS = {**NEW_KINDS2,
              "prop.carriage": (4, 2, True),     # a covered carriage hung with red silk (x9: the bride's)
              "prop.gateshut": (2, 4, False),    # a gate's leaves shut across it (Xuzhou's gates in moon and locked)
              "prop.gateshut_ns": (4, 2, False), # the same in a north or south wall
+             "ruin.burning": (4, 2, True),      # a house alight (Chang'an sacked, the prologue); glows at night
+             "fx.smoke": (1, 1, False),         # a column of smoke, three tiles tall, walked through
              }
 ART = {**ART2,
        "prop.halberd": "Lü Bu's sky-piercer halberd (方天画戟) planted upright in the earth, its crescent blade catching the "
@@ -36,6 +38,9 @@ ART = {**ART2,
                         "drawn to fill the gate's opening in the wall, the same view as the wall",
        "prop.carriage": "a Han bridal carriage: a covered two-wheeled carriage hung with red silk and tassels, its shafts "
                         "down (no horse), four tiles wide and two deep",
+       "ruin.burning": "a Han house set alight: scorched walls, the roof burnt through, flames from roof and windows, a "
+                       "smoke plume; the same view and size as building.house",
+       "fx.smoke": "a column of billowing grey smoke rising from the ground, one tile wide and three tall",
        }
 
 
@@ -55,10 +60,12 @@ for _t in _cap["things"]:
         _t.pop(_k, None)
     if _t["id"] == "lubu":
         _t.update(label="Lü Bu's house", map="burning-ward")
+    elif _t["kind"] in ("building.house", "building.shop"):   # the sack: every house and shop on the streets burns
+        _t.update(kind="ruin.burning", label="A burning house")
 _cap["things"] = [t for t in _cap["things"] if t["id"] not in ("hengmen", "ridge")]   # the Diaochan arc's farewell, long over
 _cap["spots"] = [{"id": "lubu-gate", "at": [13, 9], "at_door": "lubu", "label": "Lü Bu's gate"}]
 _cap["props"] = [   # the city burning: fires down every street (they glow at night), the ash falls (archetype "ruins")
-    {"kind": "camp.firepit", "at": [x, y], "label": "A burning cart" if k % 2 else "A burning house"}
+    {"kind": "camp.firepit" if k % 3 else "fx.smoke", "at": [x, y], "label": "A burning cart" if k % 3 else "Smoke"}
     for k, (x, y) in enumerate([(3, 5), (8, 5), (12, 5), (4, 9), (8, 9), (11, 9), (6, 7), (9, 11), (12, 11), (3, 11),
                                 (14, 7), (10, 2)])]
 _cap["dress"] = [d for d in _cap["dress"] if d.get("at_door") not in ("wangyun", "palace")] + [
@@ -69,7 +76,7 @@ _cap["entries"] = {"": [13, 9]}
 _ca.update(
     archetype="ruins",   # tk-world's ambient for ruins: falling ash
     banners="black",
-    states=[{"id": "sack", "light": "night", "weather": "smoke"}],
+    states=[{"id": "sack", "light": "fire", "weather": "smoke", "fx": "embers"}],   # tk-world: fire light, embers rising
     seen_lines={"looter": ["“There! A woman and a girl!” She drags her daughter back into the dark before he can look again."]},
     npcs=[
         _talk("folk.soldier", [8, 9], "“Burn what you can't carry! The Grand Preceptor's dead, and the city's ours!”"),
@@ -81,7 +88,7 @@ _ca.update(
         # and keeps still till he's by. Lü Bu's house at the top, Pang Shu's at the bottom. Cells of 2 tiles. ----
         "burning-ward": {
             "grid": [20, 17], "cell": 2, "margin": 0, "label": "The burning ward",
-            "states": [{"id": "sack", "light": "night", "weather": "smoke"}],
+            "states": [{"id": "sack", "light": "fire", "weather": "smoke", "fx": "embers"}],
             "ground": [{"id": "lanes", "kind": "court", "rect": [1, 3, 18, 11]}],
             "lines": [{"id": "walls", "kind": "wall", "outline": [0, 0, 20, 17], "width": 1, "gates": {"to-city": [0, 4]}},
                       {"id": "row-n", "kind": "wall", "path": [[0, 2], [19, 2]], "width": 1, "gates": {"lb-gate": [3, 2]}},
@@ -90,10 +97,10 @@ _ca.update(
                       {"id": "block-2", "kind": "wall", "path": [[4, 10], [19, 10]], "width": 1}],  # lane 2 at its west end
             "things": [
                 {"id": "lb-hall", "kind": "building.hall", "rect": [1, 1, 4, 1], "door": "S", "label": "Lü Bu's house", "map": "lb-house"},
-                {"id": "burnt-1", "kind": "building.house", "rect": [6, 1, 4, 1], "label": "A burnt-out house"},
-                {"id": "burnt-2", "kind": "building.house", "rect": [11, 1, 4, 1]},
-                {"id": "burnt-3", "kind": "building.house", "rect": [1, 15, 4, 1]},
-                {"id": "burnt-4", "kind": "building.house", "rect": [7, 15, 4, 1]},
+                {"id": "burnt-1", "kind": "ruin.burning", "rect": [6, 1, 4, 1], "label": "A burning house"},
+                {"id": "burnt-2", "kind": "ruin.burning", "rect": [11, 1, 4, 1]},
+                {"id": "burnt-3", "kind": "ruin.burning", "rect": [1, 15, 4, 1]},
+                {"id": "burnt-4", "kind": "ruin.burning", "rect": [7, 15, 4, 1]},
                 {"id": "pangshu", "kind": "building.house", "rect": [14, 15, 4, 1], "door": "N", "label": "Pang Shu's house",
                  "plaque": "庞府", "map": "pangshu-house"},
             ],
@@ -108,8 +115,8 @@ _ca.update(
                 {"id": "cover-6", "at": [12, 11], "label": "A dark doorway", "cover": True},
             ],
             # the houses either side burn, behind the lanes' walls (so they light the lanes and hide no one)
-            "props": [{"kind": "camp.firepit", "at": [x, y], "label": "A burning house"}
-                      for x, y in [(5, 1), (10, 1), (15, 1), (17, 1), (5, 15), (11, 15), (13, 15), (2, 1)]],
+            "props": [{"kind": "camp.firepit", "at": [x, y], "label": "A burning cart"} for x, y in [(5, 1), (15, 1), (5, 15)]]
+                     + [{"kind": "fx.smoke", "at": [x, y], "label": "Smoke"} for x, y in [(10, 1), (17, 1), (11, 15), (13, 15), (2, 1)]],
             "watchers": [   # one to a lane, walking it end to end: she meets him, or he turns back on her
                 # each walks his lane and stops at its end turned to the gap into the next, so no one slips by him there
                 {"id": "looter-1", "kind": "folk.soldier", "beat": [[17, 5], [17, 4], [2, 4], [17, 4]], "pause": [17, 5, 3],

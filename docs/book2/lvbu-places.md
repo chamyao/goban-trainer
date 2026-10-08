@@ -18,8 +18,10 @@ Every beat key has a spot or room, named as in the design's table. The lines for
 
 ## Chang'an, the night it falls (x0a, x0b): the prologue
 
-The Diaochan arc's city at night, burning (state `sack`: night, smoke) under Li Jue's black banners. Its rooms, beats
-and people are left out. Lü Bu's compound on the ward street now opens onto **the burning ward**
+The Diaochan arc's city, burning under Li Jue's black banners: state `sack` has tk-world's `fire` light, smoke and
+`"fx": "embers"`, and the ward does too. Every house and shop on its streets is a `ruin.burning` (by rule, in the plan's
+copy), with burning carts (`camp.firepit`) and smoke (`fx.smoke`) in the streets. Its rooms, beats and people are left
+out. Lü Bu's compound on the ward street now opens onto **the burning ward**
 (`burning-ward`), a walled map of its own. Both houses are in it:
 - **Lü Bu's house** (room `lb-house`, x0a) is at the top;
 - **Pang Shu's house** (room `pangshu-house`, x0b) is at the bottom.
@@ -141,3 +143,5 @@ ride takes 6.1 s. Testing's walk-playthrough crosses it (16 s, 3 of 3 runs).
 These are in `NEW_KINDS` and `vocab.py`, each with a stand-in and a brief (`ART`):
 - `prop.halberd`: the halberd at the camp gate (x5).
 - `prop.carriage`: the red bridal carriage (x8).
+- `ruin.burning`: a house alight, 4×2 tiles like `building.house`, glowing at night (Chang'an and the burning ward).
+- `fx.smoke`: a smoke column, one tile you walk through, drawn three tall.

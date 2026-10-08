@@ -202,49 +202,37 @@
    "blocks_sight": true
   },
   {
-   "kind": "building.house",
+   "kind": "ruin.burning",
    "x": 14,
    "y": 2,
    "w": 4,
    "h": 2,
    "id": "burnt-1",
-   "door": null,
-   "faces": "S",
-   "label": "A burnt-out house",
-   "blocks_sight": true
+   "label": "A burning house"
   },
   {
-   "kind": "building.house",
+   "kind": "ruin.burning",
    "x": 24,
    "y": 2,
    "w": 4,
    "h": 2,
-   "id": "burnt-2",
-   "door": null,
-   "faces": "S",
-   "blocks_sight": true
+   "id": "burnt-2"
   },
   {
-   "kind": "building.house",
+   "kind": "ruin.burning",
    "x": 4,
    "y": 30,
    "w": 4,
    "h": 2,
-   "id": "burnt-3",
-   "door": null,
-   "faces": "S",
-   "blocks_sight": true
+   "id": "burnt-3"
   },
   {
-   "kind": "building.house",
+   "kind": "ruin.burning",
    "x": 16,
    "y": 30,
    "w": 4,
    "h": 2,
-   "id": "burnt-4",
-   "door": null,
-   "faces": "S",
-   "blocks_sight": true
+   "id": "burnt-4"
   },
   {
    "kind": "building.house",
@@ -275,15 +263,7 @@
    "y": 2,
    "w": 1,
    "h": 1,
-   "label": "A burning house"
-  },
-  {
-   "kind": "camp.firepit",
-   "x": 20,
-   "y": 2,
-   "w": 1,
-   "h": 1,
-   "label": "A burning house"
+   "label": "A burning cart"
   },
   {
    "kind": "camp.firepit",
@@ -291,15 +271,7 @@
    "y": 2,
    "w": 1,
    "h": 1,
-   "label": "A burning house"
-  },
-  {
-   "kind": "camp.firepit",
-   "x": 34,
-   "y": 2,
-   "w": 1,
-   "h": 1,
-   "label": "A burning house"
+   "label": "A burning cart"
   },
   {
    "kind": "camp.firepit",
@@ -307,31 +279,47 @@
    "y": 30,
    "w": 1,
    "h": 1,
-   "label": "A burning house"
+   "label": "A burning cart"
   },
   {
-   "kind": "camp.firepit",
+   "kind": "fx.smoke",
+   "x": 20,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "label": "Smoke"
+  },
+  {
+   "kind": "fx.smoke",
+   "x": 34,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "label": "Smoke"
+  },
+  {
+   "kind": "fx.smoke",
    "x": 22,
    "y": 30,
    "w": 1,
    "h": 1,
-   "label": "A burning house"
+   "label": "Smoke"
   },
   {
-   "kind": "camp.firepit",
+   "kind": "fx.smoke",
    "x": 26,
    "y": 30,
    "w": 1,
    "h": 1,
-   "label": "A burning house"
+   "label": "Smoke"
   },
   {
-   "kind": "camp.firepit",
+   "kind": "fx.smoke",
    "x": 3,
    "y": 2,
    "w": 1,
    "h": 1,
-   "label": "A burning house"
+   "label": "Smoke"
   }
  ],
  "spots": [
@@ -660,7 +648,8 @@
  "states": [
   {
    "id": "sack",
-   "light": "night",
+   "fx": "embers",
+   "light": "fire",
    "weather": "smoke"
   }
  ],

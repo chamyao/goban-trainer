@@ -277,41 +277,32 @@
    "door": "S"
   },
   {
-   "kind": "building.shop",
+   "kind": "ruin.burning",
    "x": 10,
    "y": 17,
-   "w": 3,
+   "w": 4,
    "h": 2,
    "id": "jeweller",
-   "door": "S",
-   "faces": "S",
-   "label": "The jeweller's",
-   "blocks_sight": true
+   "label": "A burning house"
   },
   {
-   "kind": "building.shop",
+   "kind": "ruin.burning",
    "x": 18,
    "y": 17,
-   "w": 3,
+   "w": 4,
    "h": 2,
    "id": "wineshop",
-   "door": "S",
-   "faces": "S",
-   "label": "A wine shop",
-   "blocks_sight": true
+   "label": "A burning house"
   },
   {
-   "kind": "building.shop",
+   "kind": "ruin.burning",
    "x": 30,
    "y": 17,
-   "w": 3,
+   "w": 4,
    "h": 2,
    "id": "teahouse",
-   "door": "S",
-   "faces": "S",
-   "label": "A teahouse",
-   "plaque": "茶肆",
-   "blocks_sight": true
+   "label": "A burning house",
+   "plaque": "茶肆"
   },
   {
    "kind": "building.markettower",
@@ -384,65 +375,52 @@
    "blocks_sight": true
   },
   {
-   "kind": "building.house",
+   "kind": "ruin.burning",
    "x": 10,
    "y": 41,
    "w": 4,
    "h": 2,
    "id": "shisun",
-   "door": "S",
-   "faces": "S",
-   "label": "Shisun Rui's house",
-   "plaque": "士孙府",
-   "blocks_sight": true
+   "label": "A burning house",
+   "plaque": "士孙府"
   },
   {
-   "kind": "building.house",
+   "kind": "ruin.burning",
    "x": 18,
    "y": 41,
    "w": 4,
    "h": 2,
    "id": "huangwan",
-   "door": "S",
-   "faces": "S",
-   "label": "Huang Wan's house",
-   "plaque": "黄府",
-   "blocks_sight": true
+   "label": "A burning house",
+   "plaque": "黄府"
   },
   {
-   "kind": "building.house",
+   "kind": "ruin.burning",
    "x": 34,
    "y": 41,
    "w": 4,
    "h": 2,
    "id": "caiyong",
-   "door": "S",
-   "faces": "S",
-   "label": "Cai Yong's house",
-   "plaque": "蔡府",
-   "blocks_sight": true
+   "label": "A burning house",
+   "plaque": "蔡府"
   },
   {
-   "kind": "building.house",
+   "kind": "ruin.burning",
    "x": 42,
    "y": 41,
    "w": 4,
    "h": 2,
    "id": "house-2",
-   "door": "S",
-   "faces": "S",
-   "blocks_sight": true
+   "label": "A burning house"
   },
   {
-   "kind": "building.house",
+   "kind": "ruin.burning",
    "x": 50,
    "y": 41,
    "w": 4,
    "h": 2,
    "id": "house-3",
-   "door": "S",
-   "faces": "S",
-   "blocks_sight": true
+   "label": "A burning house"
   },
   {
    "kind": "building.palace",
@@ -749,12 +727,12 @@
    "h": 1
   },
   {
-   "kind": "camp.firepit",
+   "kind": "fx.smoke",
    "x": 13,
    "y": 21,
    "w": 1,
    "h": 1,
-   "label": "A burning house"
+   "label": "Smoke"
   },
   {
    "kind": "camp.firepit",
@@ -770,15 +748,15 @@
    "y": 21,
    "w": 1,
    "h": 1,
-   "label": "A burning house"
+   "label": "A burning cart"
   },
   {
-   "kind": "camp.firepit",
+   "kind": "fx.smoke",
    "x": 17,
    "y": 37,
    "w": 1,
    "h": 1,
-   "label": "A burning cart"
+   "label": "Smoke"
   },
   {
    "kind": "camp.firepit",
@@ -786,7 +764,7 @@
    "y": 37,
    "w": 1,
    "h": 1,
-   "label": "A burning house"
+   "label": "A burning cart"
   },
   {
    "kind": "camp.firepit",
@@ -797,12 +775,12 @@
    "label": "A burning cart"
   },
   {
-   "kind": "camp.firepit",
+   "kind": "fx.smoke",
    "x": 25,
    "y": 29,
    "w": 1,
    "h": 1,
-   "label": "A burning house"
+   "label": "Smoke"
   },
   {
    "kind": "camp.firepit",
@@ -818,15 +796,15 @@
    "y": 45,
    "w": 1,
    "h": 1,
-   "label": "A burning house"
+   "label": "A burning cart"
   },
   {
-   "kind": "camp.firepit",
+   "kind": "fx.smoke",
    "x": 13,
    "y": 45,
    "w": 1,
    "h": 1,
-   "label": "A burning cart"
+   "label": "Smoke"
   },
   {
    "kind": "camp.firepit",
@@ -834,7 +812,7 @@
    "y": 29,
    "w": 1,
    "h": 1,
-   "label": "A burning house"
+   "label": "A burning cart"
   },
   {
    "kind": "camp.firepit",
@@ -898,7 +876,8 @@
  "states": [
   {
    "id": "sack",
-   "light": "night",
+   "fx": "embers",
+   "light": "fire",
    "weather": "smoke"
   }
  ],

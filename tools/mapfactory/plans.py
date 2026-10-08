@@ -847,7 +847,7 @@ def state(st, mb, plans):
     out = {k: v for k, v in st.items() if k not in ("light", "weather", "visibility", "procession", "exits_open", "exits_closed",
                                                     "exits_closed_say", "water", "shut")}
     light = LIGHT.get((st.get("light"), st.get("weather"))) or LIGHT.get((st.get("light"), None)) or st.get("light", "day")
-    out["light"] = light if light in ("day", "morning", "dusk", "night", "storm", "smoke") else "day"
+    out["light"] = light if light in ("day", "morning", "dusk", "night", "storm", "smoke", "fire") else "day"   # fire: a city burning
     if st.get("weather"):
         out["weather"] = st["weather"]
     if st.get("visibility"):

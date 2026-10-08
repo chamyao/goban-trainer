@@ -58,6 +58,8 @@ KINDS = {
     "ruin.hall": (4, 2, True),           # Book 2's burned Luoyang: a roofless hall, charred pillars
     "ruin.columns": (2, 1, True),
     "ruin.rubble": (1, 1, False),        # stones and burnt timber you walk over
+    "ruin.burning": (4, 2, True),        # a house alight, flames from its roof (Book 14's Chang'an sacked); glows at night
+    "fx.smoke": (1, 1, False),           # a column of smoke rising, drawn three tiles tall; you walk through it
     "landmark.shrine": (2, 1, True),     # the Star Lords' weiqi shrine: one per town (looks: dark, lit, settled)
     # trees and plants
     "tree.small": (1, 1, True),
@@ -211,6 +213,8 @@ FALLBACK = {
     "wall.stairs": ["furn.rack", "landmark.notice"],
     "furn.jailcell": ["furn.screen", "furn.shelf"],
     "landmark.torch": ["furn.lamp", "lamp.post"],
+    "ruin.burning": ["ruin.hall", "building.house"],
+    "fx.smoke": ["ruin.rubble"],
     "prop.halberd": ["furn.rack", "lamp.post"],
     "prop.carriage": ["camp.table", "furn.table"],
     "prop.gateshut": ["camp.logs", "furn.rack"],
