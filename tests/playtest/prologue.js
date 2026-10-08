@@ -38,7 +38,8 @@ const path = require('path');
   const look = () => p.evaluate(() => { const w = window.__w, P = w.player, h = w.hidden; w.hidden = false;   // who would see her, the hiding set aside for the look
     const by = w.npcs.filter(n => n.watch && w.watching(n) && w.sees(n, P)).map(n => n.id); w.hidden = h;
     return { hidden: !!w.hidden, caught: !!w.caught, busy: w.ui.busy(), by, P: [Math.round(P.x), Math.round(P.y)], last: w.lastCover && [Math.round(w.lastCover.centerX), Math.round(w.lastCover.centerY)] }; });
-  const spots = await p.evaluate(() => Object.fromEntries((window.__w.covers || []).map((r, i) => [`cover ${i + 1}`, { x: r.centerX, y: r.bottom - 6 }])));   // the ward's cover objects (2x2-tile rects): standing at the foot of each
+  const spots = await p.evaluate(() => { const w = window.__w, inExit = (x, y) => (w.exits || []).some(e => Phaser.Geom.Rectangle.Contains(e.rect, x, y - 3));
+    return Object.fromEntries((w.covers || []).map((r, i) => [`cover ${i + 1}`, [{ x: r.centerX, y: r.bottom - 6 }, { x: r.centerX, y: r.centerY + 3 }, { x: r.centerX, y: r.y + 9 }].find(q => !inExit(q.x, q.y)) || { x: r.centerX, y: r.centerY }])); });   // the ward's cover objects (2x2-tile rects): standing at the foot of each, or further in where the foot is a way out (the cover at a door)
 
   // 1-2. each cover: still there, hidden; and wait for a looter to look right at her
   let watched = null;
