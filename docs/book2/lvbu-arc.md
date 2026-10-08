@@ -5,24 +5,19 @@ novel unless it is marked **(invented)**. Being built as its own book (n=14 sugg
 
 ## The narrative (Part 0)
 
-**The house of Lü Bu, and the two voices that pull at it.** Lü Bu has a halberd, Red Hare, and no judgment. **Chen Gong**
-gives him counsel throughout. Some of it is taken (seizing Xuzhou in ch. 14; sending the bride off at once in ch. 16,
-which Chen Gui then undoes), but his most important plans are refused, above all at the end in Xiapi. **The women of his
-house** decide two turning points in the novel's own words. Lady Yan settles their daughter's marriage (「布意遂決」), though
-that match is broken off days later. At Xiapi, after Lady Yan's first plea leaves him undecided for three days
-(「布躊躇未決，三日不出」), her second plea and Diaochan's 「將軍與妾作主，勿輕騎自出」 end Chen Gong's last plan, together with
-Lü Bu's own boast 「吾有畫戟、赤兔馬，誰敢近我？」. The novel's verdict is in its closing poem, 「戀妻不納陳宮諫」, and in Song Xian's
-charge, 「聽妻妾言，不聽將計」. The arc ends at White Gate Tower, where Chen Gong chooses death over Cao Cao, and Liu Bei asks
-Cao Cao: 「公不見丁建陽、董卓之事乎？」
+**Lü Bu's fall.** The strongest warrior alive, with a halberd, Red Hare, and no judgment, gets a city and loses it. He takes
+Xuzhou from the man who sheltered him, settles a war with one arrow, betrothes his daughter and snatches her back, and is
+worn down by the Chen father and son's double game. At Xiapi he refuses Chen Gong's last plans, swayed by his wife's and
+Diaochan's pleas and by his own boast 「吾有畫戟、赤兔馬，誰敢近我？」. Then the flood, the wine, the theft of Red Hare, and his
+own officers binding him in his sleep. The novel's verdict is in its closing poem, 「戀妻不納陳宮諫」. The arc ends at White
+Gate Tower, where Chen Gong chooses death over Cao Cao, and Liu Bei asks Cao Cao: 「公不見丁建陽、董卓之事乎？」
 
-(Corrected after the user asked whether this was all true to the novel. An earlier draft overstated it: "none is taken",
-"the women win every time". The user's direction: "I just want you to emphasize if theres opportunity to highlight the
-female characters, not force".)
+(Reframed twice after the user's notes: "emphasize if theres opportunity … not force", and "do not push the women thing
+too far … drawing out opportunities would be a nice to have". The women appear where the novel puts them: Lady Yan
+deciding the marriage and pleading at Xiapi, Diaochan's word, the daughter on Lü Bu's back.)
 
 **Why it's a good arc:**
-- **Stakes in a centre:** a family under siege, a daughter Lü Bu loves more than anything (「布最鍾愛」), a wife he
-  abandoned once already.
-- **Women at the turning points**, in the novel's own words. Lady Yan settles the marriage and pleads twice at Xiapi; Diaochan speaks last before he gives up the plan.
+- **Stakes in a centre:** a warrior who can't be beaten and can't be trusted, losing everything to his own choices.
 - **It pays off both arcs already built:**
   - Chen Gong spared Cao Cao at the inn (Cao Cao arc). Here he refuses Cao Cao and walks down the stairs to die.
   - Lü Bu killed Ding Yuan and Dong Zhuo (both arcs). Here Liu Bei names them both.
@@ -57,7 +52,6 @@ shoots placards into Xiapi. A letter could fly over the wall and land where the 
 
 | Stretch | Lead | Why |
 |---|---|---|
-| Prologue: Chang'an, after the fall | **Lady Yan** (with Pang Shu) | Abandoned by Lü Bu and hidden by Pang Shu, a one-line event in ch. 11 that she brings up in her decisive speech in ch. 19. **(invented staging)** |
 | Xuzhou, Xiaopei, the halberd | **Lü Bu** | His own deeds: the night raid on Xuzhou, the halberd shot |
 | The bride | **Lady Yan**, then **Zhang Liao** | She decides the marriage; he rides to bring the bride back |
 | The courier | **Chen Gong** | His hunting-day chase, and his warnings no one takes |
@@ -67,7 +61,7 @@ shoots placards into Xiapi. A letter could fly over the wall and land where the 
 | Red Hare stolen | **Hou Cheng** | One beat of stealth theft |
 | White Gate Tower | **Cao Cao** | Nobody playable dies. Cao Cao is on the tower and sees each man face him. |
 
-## The beats (outline)
+## The beats (first outline, superseded by "Building it" below; the L0 prologue is cut)
 
 **Opening scroll:** what lies between. Li Jue took Chang'an; Lü Bu fled with a hundred riders and left his family behind (「呂布只得棄卻家小，引百餘騎飛奔出關」); he and Chen Gong took Yanzhou while
 Cao Cao was away, and lost it at Puyang, where Chen Gong's fire trap almost killed Cao Cao (chapters 11–12 in a few lines).
@@ -136,71 +130,67 @@ at a time, I dont want it rushing or getting ahead of itself ... and I approve a
 1. **Mechanic:** the flood and Red Hare's water crossing, as a map mechanic with no go tie-in. Carrying the daughter is a
    small one: a visual carry with a scripted turn-back. The reversed chase is **not used**, because the user put the
    chase on hold. Zhang Liao's ride is a ride with a board.
-2. **Prologue:** yes. Lady Yan escapes Chang'an with Pang Shu's help **(invented staging of a one-line event)**. It reuses
-   the Diaochan arc's Chang'an map and stealth watchers.
+2. **Prologue:** cut. Lady Yan's own line at Xiapi (「妾昔在長安，已為將軍所棄」) carries it.
 3. **White Gate Tower:** played as **Cao Cao**.
 4. **Puyang:** told in narration (opening scroll and the end of the prologue), not played.
 
-### Beat keys and places (shared keys for Places: `3-x1` … `3-x20`, renumbered by Integration)
+### Beat keys and places (shared keys for Places: `3-x1` … `3-x19`, renumbered by Integration)
 
 | Key | Beat | Lead | Place | Room | Board |
 |---|---|---|---|---|---|
-| x1 | Left Behind | Lady Yan | Chang'an | `pangshu` (Pang Shu's house) → the west gate | legwork (the gate), stealth walk |
-| x2 | A Guest at Xuzhou | Lü Bu | Xuzhou | `xz-hall` (the prefecture hall) | — |
-| x3 | Wife and Daughter | Lü Bu | Xuzhou | `lb-reartang` (Lü Bu's rear hall) | contest, **fails** (win Liu Bei over) |
-| x4 | Two Tigers | Lü Bu | Xuzhou | `xz-hall` | — |
-| x5 | The Night Gate | Lü Bu | Xuzhou | — (the city gate, moonlit) | legwork (get the gate opened) |
-| x6 | The Halberd at the Camp Gate | Lü Bu | Xiaopei | `lb-camp` (Lü Bu's camp tent; the camp gate 150 paces off) | contest (the shot) |
-| x7 | A Match for a Princess | Lady Yan | Xuzhou | `yan-room` (Lady Yan's rooms) | contest (she decides) |
-| x8 | The Condolence Call | Lü Bu | Xuzhou | `xz-hall` | — |
-| x9 | Thirty Li | Zhang Liao | The Shouchun Road | — | legwork (catch the bridal party) |
-| x10 | The Hawk | Lü Bu | Xuzhou | `xz-hall` | — |
-| x11 | The Hunt | Chen Gong | Xiaopei | — (hunting ground, a side path) | legwork (ride down and search the courier) |
-| x12 | The Family Moves | Lü Bu | The Xiapi Road | — | — (escort walk) |
-| x13 | Three Letters | Chen Deng | Xiao Pass | — (the pass at night) | legwork (get the letters down unseen) |
-| x14 | Locked Out | Lü Bu | Xuzhou | — (under the wall) | — |
-| x15 | The Counsel | Chen Gong → Lady Yan → Diaochan | Xiapi | `lb-fu` (Lü Bu's residence) | **3**: Chen Gong (fails), Lady Yan, Diaochan |
-| x16 | Through the Lines | Lü Bu | Xiapi | — (the gate → Liu Bei's camp) | — (carry; turns back) |
-| x17 | The Flood | Lü Bu | Xiapi | `lb-fu` at the end | — (ride the flooded city on Red Hare; the mirror) |
-| x18 | Fifty Lashes | Lü Bu | Xiapi | `lb-fu` | — |
-| x19 | Red Hare | Hou Cheng | Xiapi | — (the stables → the east gate) | legwork (out unseen); stealth |
-| x20 | White Gate Tower | Cao Cao | Xiapi | `white-gate` (the gate tower) | **3**, boss (Gao Shun, Chen Gong, Lü Bu) |
+| x1 | A Guest at Xuzhou | Lü Bu | Xuzhou | `xz-hall` (the prefecture hall) | — |
+| x2 | Wife and Daughter | Lü Bu | Xuzhou | `lb-reartang` (Lü Bu's rear hall) | contest, **fails** (win Liu Bei over) |
+| x3 | Two Tigers | Lü Bu | Xuzhou | `xz-hall` | — |
+| x4 | The Night Gate | Lü Bu | Xuzhou | — (the city gate, moonlit) | legwork (get the gate opened) |
+| x5 | The Halberd at the Camp Gate | Lü Bu | Xiaopei | `lb-camp` (Lü Bu's camp tent; the camp gate 150 paces off) | contest (the shot) |
+| x6 | A Match for a Princess | Lü Bu | Xuzhou | `yan-room` (Lady Yan's rooms) | contest; the decider on the board is Lady Yan (「布入謀於妻嚴氏」) |
+| x7 | The Condolence Call | Lü Bu | Xuzhou | `xz-hall` | — |
+| x8 | Thirty Li | Zhang Liao | The Shouchun Road | — | legwork (catch the bridal party) |
+| x9 | The Hawk | Lü Bu | Xuzhou | `xz-hall` | — |
+| x10 | The Hunt | Chen Gong | Xiaopei | — (hunting ground, a side path) | legwork (ride down and search the courier) |
+| x11 | The Family Moves | Lü Bu | The Xiapi Road | — | — (escort walk) |
+| x12 | Three Letters | Chen Deng | Xiao Pass | — (the pass at night) | legwork (get the letters down unseen) |
+| x13 | Locked Out | Lü Bu | Xuzhou | — (under the wall) | — |
+| x14 | The Counsel | Lü Bu (deciders on the boards: Chen Gong, Lady Yan, Diaochan) | Xiapi | `lb-fu` (Lü Bu's residence) | **3**: Chen Gong (fails), Lady Yan, Diaochan |
+| x15 | Through the Lines | Lü Bu | Xiapi | — (the gate → Liu Bei's camp) | — (carry; turns back) |
+| x16 | The Flood | Lü Bu | Xiapi | `lb-fu` at the end | — (ride the flooded city on Red Hare; the mirror) |
+| x17 | Fifty Lashes | Lü Bu | Xiapi | `lb-fu` | — |
+| x18 | Red Hare | Hou Cheng | Xiapi | — (the stables → the east gate) | legwork (out unseen); stealth |
+| x19 | White Gate Tower | Cao Cao | Xiapi | `white-gate` (the gate tower) | **3**, boss (Gao Shun, Chen Gong, Lü Bu) |
 
-**15 story boards.** Two boards are attempts that fail as written (x3, the first board of x15), and the x16 breakout fails without a board.
-The lead passes Lady Yan → Lü Bu → Lady Yan → Lü Bu → Zhang Liao → Lü Bu → Chen Gong → Lü Bu → Chen Deng → Lü Bu →
-Chen Gong / Lady Yan / Diaochan (boards in x15, Lü Bu walking) → Lü Bu → Hou Cheng → Lü Bu (the gate tower sleep is
-narrated in x19) → Cao Cao. Nobody playable dies.
+**14 story boards.** Two boards are attempts that fail as written (x2, the first board of x14), and the x15 breakout fails without a board.
+The lead passes Lü Bu → Zhang Liao (x8) → Lü Bu → Chen Gong (x10) → Lü Bu → Chen Deng (x12) → Lü Bu → Hou Cheng (x18) →
+Cao Cao (x19). Nobody playable dies.
 
-### Road challengers (exact, for Places): 10, of which 3 blocking
+### Road challengers (exact, for Places): 8, of which 2 blocking
 | Walk | Lead | Total | Blocking | Who |
 |---|---|---|---|---|
-| Chang'an, to the west gate (x1) | Lady Yan | 2 | 1 | a Liangzhou looter at a lane mouth (blocking); a soldier dicing by a fire |
-| Xuzhou streets (x2–x10) | Lü Bu | 2 | 0 | one of Zhang Fei's drinking companions; a Danyang soldier of Cao Bao's |
-| The Shouchun road (x9) | Zhang Liao | 1 | 1 | one of Ji Ling's outriders guarding the bridal party (blocking) |
-| Xiaopei hunting ground (x11) | Chen Gong | 1 | 0 | a falconer |
-| Below Xiao Pass (x13) | Chen Deng | 2 | 1 | a Taishan bandit on the pass road (blocking); one of Chen Gong's sentries |
-| Xiapi, before the flood (x15–x16) | Lü Bu | 2 | 0 | a grumbling officer of Hou Cheng's; a sentry on the wall |
+| Xuzhou streets (x1–x9) | Lü Bu | 2 | 0 | one of Zhang Fei's drinking companions; a Danyang soldier of Cao Bao's |
+| The Shouchun road (x8) | Zhang Liao | 1 | 1 | one of Ji Ling's outriders guarding the bridal party (blocking) |
+| Xiaopei hunting ground (x10) | Chen Gong | 1 | 0 | a falconer |
+| Below Xiao Pass (x12) | Chen Deng | 2 | 1 | a Taishan bandit on the pass road (blocking); one of Chen Gong's sentries |
+| Xiapi, before the flood (x14–x15) | Lü Bu | 2 | 0 | a grumbling officer of Hou Cheng's; a sentry on the wall |
 
-The flooded Xiapi walks (x17, x19) have no challengers: the water and the watchers are the obstacles.
+The flooded Xiapi walks (x16, x18) have no challengers: the water and the watchers are the obstacles.
 
 ### Items
 | Key | Name | Chinese | Kind | How |
 |---|---|---|---|---|
-| `redhare` | Red Hare | 赤兔马 | **mount, crosses water** (coat red; lvbu, houcheng) | Lü Bu has it from the start of x2. Hou Cheng takes it in x19 and it leaves the book with him. |
-| `letters` | Three arrow letters | 箭书三封 | treasure | written and shot in x13 |
+| `redhare` | Red Hare | 赤兔马 | **mount, crosses water** (coat red; lvbu, houcheng) | Lü Bu has it from the start of x1. Hou Cheng takes it in x18 and it leaves the book with him. |
+| `letters` | Three arrow letters | 箭书三封 | treasure | written and shot in x12 |
 | `pearlbox` | The bride's dowry | 妆奁 | treasure | (flavour; optional) |
 
 ### The flood (engine and map spec)
-- **Xiapi's states:** `siege` (x15–x16), `flood1` (x17: the low streets and the south and west gates under water),
-  `flood2` (x18–x19: everything but a causeway to the east gate). In `flood2`, 「只剩得東門無水」.
+- **Xiapi's states:** `siege` (x14–x15), `flood1` (x16: the low streets and the south and west gates under water),
+  `flood2` (x17–x18: everything but a causeway to the east gate). In `flood2`, 「只剩得東門無水」.
 - **Water** is impassable on foot or on an ordinary horse. A mount with `"crosses_water": true` (Red Hare) rides across it.
-- **x17:** Lü Bu rides the flooded city on Red Hare to inspect the gates. The player feels the power: only he can cross.
-- **x19:** Hou Cheng steals Red Hare and rides it out of the dry east gate. Riding Red Hare, he can cut across the water
+- **x16:** Lü Bu rides the flooded city on Red Hare to inspect the gates. The player feels the power: only he can cross.
+- **x18:** Hou Cheng steals Red Hare and rides it out of the dry east gate. Riding Red Hare, he can cut across the water
   past the watchers, so the player gets to use the power one last time as the thief. Wei Xu opens the gate and "chases"
   him for show.
-- **After x19:** a step removes Red Hare from Lü Bu's items (`["lose", "redhare"]`). In x20 everyone is on foot.
+- **After x18:** a step removes Red Hare from Lü Bu's items (`["lose", "redhare"]`). In x19 everyone is on foot.
 
-### Carrying the daughter (x16)
+### Carrying the daughter (x15)
 - Lü Bu's daughter rides on his back (a carry pose or follower drawn on his back). With her there he can't fight. The
   scene's walk ends at Liu Bei's camp line, where Guan Yu and Zhang Fei block the way, then Xu Huang and Xu Chu come up
   behind. He turns back (scripted, faithful).

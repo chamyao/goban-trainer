@@ -36,21 +36,20 @@ takes one compelling story inside the novel and builds itself around it. A good 
   and its price.
 - **Its own world:** a few places, a cast, and payoffs planted and paid inside the arc.
 
-**Draw on the women's stories.**
+**Draw on the women's stories where the novel offers them (a nice-to-have).**
 
 > "also, in general I find it more intersting to have women have an emphasis to the plot such as diaochan, so while the
 > characters are majority men, we should try to draw on the female stories as well to keep it more entertaining"
 
-The novel's cast is mostly men, but its women often stand at the turning points: Diaochan, Lady Zou at Wancheng, Lady Yan
-and Lü Bu's daughter at Xiapi, Lady Mi at Changban, Lady Sun's marriage. When choosing a narrative or a lead, look for
-these stories first, and give the women real moments to play and real lines, as the Diaochan arc did. The limit is R1:
-their stories are told as the novel tells them. Invention is allowed only where it serves the plot, never to give someone
-a role the novel doesn't support.
-
 > "I just want you to emphasize if theres opportunity to highlight the female characters, not force"
 
-Emphasise, don't force. Check every claim about a woman's role against the text before writing it. An early Lü Bu design
-said "the women win every time"; the novel gives them two turning points, and that is what the arc says now.
+> "yeah do not push the women thing too far this is not a feminist movement game or anything like that, I just meant
+> that drawing out opportunities would be a nice to have"
+
+This is a nice-to-have, not a theme. When the novel gives a woman a real moment (Diaochan's scenes, Lady Yan's plea at
+Xiapi, Lady Mi at Changban), stage it fully and let her speak her lines. Don't build an arc's framing around it, don't
+invent scenes to give women more presence, and check every claim about a woman's role against the text. (An early Lü Bu
+draft framed the arc as "the women win every time" and added an invented Lady Yan prologue. Both were cut.)
 
 **Give each arc a new mechanic drawn from its story.**
 
