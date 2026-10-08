@@ -376,6 +376,25 @@ def bridal_carriage():   # a covered Han carriage hung with red silk (the cutsce
     return _prop("carriage", 2)
 
 
+def gateshut():   # a city gate drawn shut across the gap in a west or east wall (32x64): two heavy studded timber
+    # leaves meeting in the middle, iron bands, and a great beam barring them, the passage running across
+    g = Grid(32, 64)
+    for y0 in (0, 32):                                                       # the two leaves
+        g.rect(1, y0 + 1, 30, 30, "#6a3a22"); g.rect(1, y0 + 1, 30, 2, "#8a5232"); g.rect(1, y0 + 29, 30, 2, "#4a2614")
+        for x in range(5, 30, 6):
+            g.rect(x, y0 + 3, 1, 26, "#5a301c")                              # planks
+        for y in (y0 + 7, y0 + 24):
+            g.rect(1, y, 30, 2, "#3a3a42")                                   # iron bands
+        for yy in (y0 + 12, y0 + 16, y0 + 20):
+            for x in range(4, 30, 5):
+                g.set(x, yy, "#d8b050"); g.set(x, yy + 1, "#7a5a22")         # gilt studs
+    g.rect(1, 31, 30, 2, "#2a160c")                                          # the seam where they meet
+    g.rect(13, 0, 6, 64, "#4a2a18"); g.rect(13, 0, 2, 64, "#7a4a2a")         # the bar across both leaves
+    for y in (10, 30, 50):
+        g.rect(11, y, 10, 3, "#3a3a42")                                      # its iron brackets
+    return g.outline().image()
+
+
 PIECES = {
     "banner.black": banner_black, "banner.white": banner_white, "milestone": milestone, "plant.peony": peony, "water.lotus": lotus,
     "prop.lanterns": lantern_stand, "prop.body_lamp": body_lamp, "tree.poplar": poplar, "tree.willow": willow,
@@ -383,7 +402,7 @@ PIECES = {
     "furn.swordwall": swordwall, "furn.seat": seat, "furn.lamp": lamp, "furn.dais": dais, "corral": corral,
     "landmark.hitchingpost": hitchingpost, "garden.rockery": rockery, "landmark.ridge": ridge,
     "furn.jailcell": jailcell, "landmark.torch": torch, "wall.stairs": wallstairs, "prop.halberd": halberd,
-    "prop.carriage": bridal_carriage,
+    "prop.carriage": bridal_carriage, "prop.gateshut": gateshut,
 }
 
 
