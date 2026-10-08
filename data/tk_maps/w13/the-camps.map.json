@@ -449,7 +449,11 @@
    "when": "node:c8",
    "blocks": "lb-tent",
    "view": 4,
-   "challenge": "pickets"
+   "challenge": "pickets",
+   "guard": [
+    28.5,
+    26.0
+   ]
   },
   {
    "id": "scout",

@@ -803,10 +803,10 @@ _xf_hall["checks"] = [{"check": "sight_puzzle", "seen_by": "lubu", "unseen_by": 
 # plan they stand in ("map": a compound or room of the place, else the place's own plan). A blocking one has
 # "blocks": the spot, thing (its door) or {"exit": place} you can't reach without coming into his view;
 # "view" is how far he sees: a radius in cells, or with "face" a cone. check_plans_w2.py proves the block.
-def _ch(cid, kind, at, when, until, intro, win, done, blocks=None, view=1, face=None, map=None, entry=None):
+def _ch(cid, kind, at, when, until, intro, win, done, blocks=None, view=1, face=None, map=None, entry=None, guard=None):
     c = {"id": cid, "kind": kind, "at": at, "when": when, "until": until, "intro": [intro], "win": [win], "done": [done],
          "view": view}
-    for k, v in (("blocks", blocks), ("face", face), ("map", map), ("from", entry)):
+    for k, v in (("blocks", blocks), ("face", face), ("map", map), ("from", entry), ("guard", guard)):
         if v is not None:
             c[k] = v
     return c
