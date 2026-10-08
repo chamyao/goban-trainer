@@ -97,7 +97,9 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   // the patrols ahead, and a way to the goal none of them sees: cells, one per 150 ms (stealth-12's planner)
   const plan = (STEP) => p.evaluate(STEP => {   // STEP frames of 50 ms a cell: 3 is his running pace, 4 the pace a walk a cell at a time surely keeps, 2 mounted
     const w = window.__w, T = w.tw || 16, C = 16, DT = 50, F = 1600, goal = w.goalAt; if (!goal) return null;
-    w.scene.pause(); setTimeout(() => w.scene.resume(), 80);   // the game held while he plans, and past the long frame after it (else the patrols jump ahead by the time the plan took)
+    w.scene.pause(); try { return planIn(w, STEP); } finally { setTimeout(() => w.scene.resume(), 80); }   /* resumed after the planning (a long task) and a few paused frames: the long frame lands on the paused scene, not on the patrols */
+    function planIn(w, STEP) {
+    const T = w.tw || 16, C = 16, DT = 50, F = 1600, goal = w.goalAt; if (!goal) return null;   // the game held while he plans, and past the long frame after it (else the patrols jump ahead by the time the plan took)
     const G = w.walkGrid(), cols = Math.ceil(G.cols * G.C / C), rows = Math.ceil(G.rows * G.C / C), P = w.player, ox = ((Math.round(P.x) % C) + C) % C, oy = ((Math.round(P.y) % C) + C) % C, solid = w.solids.getChildren().filter(z => z.body && z.body.enable && !(z.visibleWith && !z.visibleWith.visible)).map(z => z.body), fb = { x: P.body.x - P.x, y: P.body.y - P.y, w: P.body.width, h: P.body.height }, wb = w.physics.world.bounds,
       feetFree = (x, y) => { const L = x + fb.x + .5, T0 = y + fb.y + .5, R = L + fb.w - 1, B = T0 + fb.h - 1; if (L < wb.x || T0 < wb.y || R > wb.right || B > wb.bottom) return false; return !solid.some(b => L < b.right && R > b.x && T0 < b.bottom && B > b.y); },
       free = (cx, cy) => feetFree(cx * C + ox, cy * C + oy), passes = (x, y, X, Y) => feetFree((x + X) / 2 * C + ox, (y + Y) / 2 * C + oy);   /* her feet (the physics body) clear of every solid, on the cell and half way there */   /* the grid laid from where she stands (no first shuffle onto a cell centre)) */
@@ -151,7 +153,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       const R = window.__ring = window.__ring || []; R.push([Math.round(gt), k, Math.round(P.x), Math.round(P.y), go, Math.round(P.body.speed), Math.round(d)]); if (R.length > 40) R.shift(); };
     w.events.on('update', window.__execF); window.__execI = 0;
     return pts;
-  }, STEP);
+  } }, STEP);
 
   // what's optional on this map, as a player sees it: challengers standing with their "!", doors only some may pass
   // or the story shuts (and in which state), rooms off this place
