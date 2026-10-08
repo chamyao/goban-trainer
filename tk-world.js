@@ -1231,7 +1231,8 @@ function worldScenes() {
           const e = Math.abs((B.x - A.x) * (A.y - pts[k].y) - (A.x - pts[k].x) * (B.y - A.y)) / L;
           if (e > d) { d = e; far = k; }
         }
-        if (d > tol || !this.clearLine(A, B)) { keep.add(far); split(i, far); split(far, j); }
+        if (d > tol || !this.clearLine(A, B)) { if (far < 0) far = (i + j) >> 1;   // all in line but the straight way is blocked: split at the middle
+          keep.add(far); split(i, far); split(far, j); }
       };
       split(0, pts.length - 1);
       return pts.filter((p, i) => keep.has(i));

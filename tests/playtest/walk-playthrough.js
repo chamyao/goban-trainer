@@ -67,6 +67,8 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       goal: w.goalAt && [Math.round(w.goalAt.x), Math.round(w.goalAt.y)], busy: w.ui.busy(), cine: !!w.cine, leaving: !!w.leaving, walking: !!w.walk,
       caught: !!w.caught, engaged: !!w.engaged, gtag: w.game && w.game.__flip, light: w.st && w.st.light || '',
       route: w.routeFx && w.routeFx.all && w.routeFx.all[0] ? (w.routeFx.all.some(im => im.tintTopLeft === 0xd6ff8a) ? 'fireflies' : 'band') : '',
+      wet: !!(w.onWater && w.onWater()), wades: !!(w.wades && w.wades()), carry: w.st && w.st.carry ? w.st.carry.whom : '', mstate: ((w.mapState && w.mapState()) || {}).ids ? w.mapState().ids.join('+') : '',
+      lvnv: w.children.list.some(o => o.visible && o.alpha > .1 && o.texture && /^(h|ride)-lvnv/.test(o.texture.key)), redhare: typeof WorldItems !== 'undefined' && WorldItems.has(w.w, 'redhare'),
       mounts: (w.cine ? [...new Set(w.children.list.filter(o => o.visible && o.alpha > .1 && o.texture && /^ride-/.test(o.texture.key)).map(o => o.texture.key.split('-')[1]))].map(x => x + ':?')   // in a scene: who is drawn in the saddle
         : (w.mounts || []).filter(m => m.horse && m.horse.visible).map(m => `${m.who}:${m.coat}`)).sort().join(',') || 'on foot', indoors: typeof WorldItems !== 'undefined' && WorldItems.indoors(w),
       horses: (w.followers || []).filter(F => F.coat && F.spr && F.spr.visible).map(F => `${F.coat}@${Math.round(Math.hypot(F.spr.x - w.player.x, F.spr.y - w.player.y))}`).join(','),
@@ -225,8 +227,8 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       if (s.cine && ps.scene < 2) { if (!ps.t) ps.t = Date.now(); const due = [2000, 7000][ps.scene]; if (Date.now() - ps.t >= due) { await snap(`scene-${due / 1000}s`); ps.scene++; } }
     }
     prevS = s;
-    if (beat) { const f = facts[beat] || (facts[beat] = { light: new Set(), route: new Set(), horses: new Set(), crouch: false, place: new Set(), mount: new Set() });   // what each beat showed
-      if (s.light) f.light.add(s.light); if (s.route) f.route.add(`${s.route}@${s.place}`); if (s.horses) f.horses.add(s.horses.split('@')[0]); if (s.crouch) f.crouch = true; f.place.add(s.place); if (!s.leaving && s.place && (s.cine || !s.busy)) f.mount.add(`${s.place}${s.indoors ? ' (indoors)' : ''}${s.cine ? ' in a scene' : ''}: ${s.mounts}`); }
+    if (beat) { const f = facts[beat] || (facts[beat] = { light: new Set(), route: new Set(), horses: new Set(), crouch: false, place: new Set(), mount: new Set(), wetRide: false, carry: new Set(), lvnv: false, mstate: new Set(), redhare: new Set() });   // what each beat showed
+      if (s.light) f.light.add(s.light); if (s.route) f.route.add(`${s.route}@${s.place}`); if (s.horses) f.horses.add(s.horses.split('@')[0]); if (s.crouch) f.crouch = true; f.place.add(s.place); if (s.wet && s.wades && !s.cine) f.wetRide = true; if (s.carry) f.carry.add(s.carry + (s.cine ? ' (scene)' : ' (map)')); if (s.lvnv && s.cine) f.lvnv = true; if (s.mstate) f.mstate.add(`${s.place}:${s.mstate}`); f.redhare.add(s.redhare); if (!s.leaving && s.place && (s.cine || !s.busy)) f.mount.add(`${s.place}${s.indoors ? ' (indoors)' : ''}${s.cine ? ' in a scene' : ''}: ${s.mounts}`); }
     if (/Now playing/.test(s.banner || '') && banners[banners.length - 1] !== s.banner) banners.push(s.banner);
     if (pushWait && !s.busy && !s.cine && !s.duel && !s.leaving && !s.walking) { pushWait = false; await p.waitForTimeout(4000); continue; }   // SYNC_PUSH: a still moment after the scene, as a player reading would
     if (s.duel) {   // a board: win it with Skip, note what it drew, then Continue
@@ -305,6 +307,24 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     if (Date.now() - lastTap < 1200) { await p.waitForTimeout(200); continue; }
     lastTap = Date.now(); await tapWorld(s.goal[0], s.goal[1]); await p.waitForTimeout(500);
   }
+  // Book 14 (Lü Bu's fall): who leads each beat, Red Hare (x1 to x19), the flood rides, the daughter on his back, the states
+  if (BOOK === 14) { const bad = [], say = (ok, w) => { console.log(`${ok ? 'ok  ' : 'FAIL'} ${w}`); if (!ok) bad.push(w); };
+    const LEAD = { 8: 'zhangliao', 10: 'chengong', 12: 'chendeng', 15: 'yanshi', 19: 'houcheng', 20: 'caocao' };
+    const leads = report.map(r => [r.beat, r.lead]).filter(([k]) => /^14-x\d+$/.test(k));
+    const wrong = leads.filter(([k, l]) => l !== (LEAD[+k.slice(4)] || 'lvbu'));
+    say(leads.length && !wrong.length, `x1-x20 each led by the right one (${wrong.length ? 'wrong: ' + wrong.map(([k, l]) => `${k} ${l}, not ${LEAD[+k.slice(4)] || 'lvbu'}`).join('; ') : leads.map(([k, l]) => k.slice(3) + ' ' + l).filter((x, i, a) => i === 0 || x.split(' ')[1] !== a[i - 1].split(' ')[1]).join(' > ')})`);
+    const F = k => facts[k] || { redhare: new Set(), mount: new Set(), mstate: new Set(), carry: new Set() };
+    const rh = k => [...F(k).redhare];
+    if (facts['14-x2']) say(rh('14-x2').includes(true), `Red Hare is his from x1 (x2: ${rh('14-x2')})`);
+    const redRides = Object.keys(facts).filter(k => /^14-x([2-9]|1[0-8])$/.test(k)).filter(k => [...F(k).mount].some(m => /lvbu:red/.test(m))).map(k => k.slice(3));
+    say(redRides.length > 0, `Lü Bu rides Red Hare outdoors (${redRides.join(', ') || 'never seen mounted'}; coats seen: ${[...new Set(Object.values(facts).flatMap(f => [...f.mount]).map(m => m.split(': ')[1]).filter(x => x && x !== 'on foot'))].join(' | ')})`);
+    const wet = ['14-x16', '14-x17', '14-x18'].filter(k => facts[k] && F(k).wetRide).map(k => k.slice(3));
+    console.log(`${wet.length ? 'ok  ' : 'note'} the flood: he rode through the water in ${wet.join(', ') || 'none of x16-x18 (the way to the goal stayed dry)'}`);
+    if (facts['14-x20']) { const after = rh('14-x20'), feet = [...F('14-x20').mount].every(m => !/red/.test(m)); say(!after.includes(true) && feet, `x19 takes Red Hare: in x20 he's gone (owned: ${after}) and nobody rides him (${[...F('14-x20').mount].join(' | ')})`); }
+    if (facts['14-x16']) say(F('14-x16').lvnv, `x16: the daughter is carried on Lü Bu's back in its scene (lvnv drawn: ${F('14-x16').lvnv}; carry: ${[...F('14-x16').carry].join(', ') || 'none on the map'})`);
+    const ST = { '14-x16': /xiapi:siege/, '14-x17': /xiapi:flood1/, '14-x18': /xiapi:flood2/, '14-x19': /xiapi:flood2\+night|xiapi:night\+flood2/, '14-x20': /xiapi:taken/, '14-x4': /xuzhou:[^ ]*moon/, '14-x14': /xuzhou:[^ ]*locked/ };
+    for (const [k, re] of Object.entries(ST)) if (facts[k]) { const seen = [...F(k).mstate].filter(x => re.source.startsWith('xiapi') ? x.startsWith('xiapi') : x.startsWith('xuzhou')); if (seen.length) say(seen.some(x => re.test(x)), `${k.slice(3)}: ${re.source.split(':')[0]} is in ${re.source.split(':')[1].replace(/\\|\[\^ \]\*/g, '')} (${seen.join(', ')})`); }
+    if (bad.length) featureFails.push('book 14'); }
   // Book 13's new engine bits, seen on the walk: fireflies for the route at night at Beimang (c4), Red Hare walking as a red horse behind Li Su (c9), the crouch at c20
   if (BOOK === 13) { const F = k => facts[k] || { light: new Set(), route: new Set(), horses: new Set(), crouch: false, place: new Set() };
     const c4 = F('13-c4'), c9 = F('13-c9'), c20 = F('13-c20');
