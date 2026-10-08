@@ -1118,10 +1118,12 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
                     continue
                 d = o.get("enter") or o.get("door") or "S"
                 fx, fy, fw, fh = o["x"], o["y"], o["w"], o["h"]
-                ex = {"S": {"x": round(fx + fw / 2 - .4, 2), "y": fy + fh - .15, "w": .8, "h": .45},
-                      "N": {"x": round(fx + fw / 2 - .4, 2), "y": fy - .3, "w": .8, "h": .45},
-                      "E": {"x": fx + fw - .15, "y": round((fy + fh - .5 if o["kind"] in DOOR_AT_FOOT else fy + fh / 2) - .4, 2), "w": .45, "h": .8},
-                      "W": {"x": fx - .3, "y": round((fy + fh - .5 if o["kind"] in DOOR_AT_FOOT else fy + fh / 2) - .4, 2), "w": .45, "h": .8}}[d]
+                # reaching .6 of a tile out from the face: she goes in when the point 3 px above her feet is in it, and her
+                # body (6 px tall) stops at the face, so a door that reached .3 out was barely enterable (Integration)
+                ex = {"S": {"x": round(fx + fw / 2 - .4, 2), "y": fy + fh - .15, "w": .8, "h": .75},
+                      "N": {"x": round(fx + fw / 2 - .4, 2), "y": fy - .6, "w": .8, "h": .75},
+                      "E": {"x": fx + fw - .15, "y": round((fy + fh - .5 if o["kind"] in DOOR_AT_FOOT else fy + fh / 2) - .4, 2), "w": .75, "h": .8},
+                      "W": {"x": fx - .6, "y": round((fy + fh - .5 if o["kind"] in DOOR_AT_FOOT else fy + fh / 2) - .4, 2), "w": .75, "h": .8}}[d]
                 if o["kind"] in DOOR_AT_FOOT and d == "S":   # a gate tower's arch, drawn front-on: the arch is the door
                     ex.update({"x": round(fx + fw / 2 - 1, 2), "w": 2})
                 if o.get("id") in mb.door_gap:   # through a wall's gate: the walls funnel her in, so the whole gap is the door
@@ -1130,7 +1132,16 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
                 # a door only some may pass (the protagonist named, or a condition), and what it says to the rest
                 # the engine's side is the way you walk to go in (Book 1: a south-facing door is side "N")
                 m["exits"].append({"to": child, "side": {"S": "N", "N": "S", "E": "W", "W": "E"}[d], **ex, "door": True, **{k: o[k] for k in ("open_to", "refuse") if o.get(k)}})
-                m["entries"][child] = list(mb.anchor[o["id"]])
+                # coming out, she arrives clear of the door: the engine tests (x, y - 3) against the exit each frame, and
+                # arriving on it sends her straight back in. Step out from the doorstep until the point is off the exit
+                ax, ay = mb.anchor[o["id"]]
+                ux, uy = {"S": (0, 1), "N": (0, -1), "E": (1, 0), "W": (-1, 0)}[d]
+                for _ in range(3):
+                    px, py = ax + .5, ay + .9 - 3 / 16
+                    if not (ex["x"] <= px <= ex["x"] + ex["w"] and ex["y"] <= py <= ex["y"] + ex["h"]) or not mb.walkable((ax + ux, ay + uy)):
+                        break
+                    ax, ay = ax + ux, ay + uy
+                m["entries"][child] = [ax, ay]
         # gates and edges with "to": back to the owner, to another room, to another place
         P = mb.p
         for e in P.get("exits", []):

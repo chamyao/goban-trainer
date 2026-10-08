@@ -178,8 +178,8 @@ def voiced_states(states):
 
 
 def doors_blocked(objs):
-    """The doors (small exits) that the engine's player, a 10 x 6 body with her feet at its bottom edge, can't overlap
-    without touching a solid. Each solid is the box tk-world makes from a prop: cl/cr either side of x, fh tall, less 1 px
+    """The doors (small exits) the engine's player can't go into: no stance puts the point 3 px above her feet in the
+    exit while her body (10 x 6, feet at its bottom edge) is clear of every solid. Each solid is the box tk-world makes from a prop: cl/cr either side of x, fh tall, less 1 px
     all round. A door drawn into its own building's solid (the White Gate tower's north door) fails here."""
     P = lambda o: {p["name"]: p["value"] for p in o.get("properties", [])}   # noqa: E731
     zones = []
@@ -196,8 +196,11 @@ def doors_blocked(objs):
         if o["type"] != "exit" or o["width"] >= 16 or o["height"] >= 16:
             continue   # a map's edge or a wall's gate: long, walked through
         ex = (o["x"], o["y"], o["x"] + o["width"], o["y"] + o["height"])
-        if not any(not hit((fx - 5, fy - 6, fx + 5, fy))
-                   for fx in range(int(ex[0]) - 4, int(ex[2]) + 5) for fy in range(int(ex[1]) + 1, int(ex[3]) + 6)):
+        # she goes in when the point 3 px above her feet is in the exit: some stance must put it there with her body
+        # (10 x 6 above her feet, and 2 px more each way for where the physics settles her) clear of every solid
+        if not any(not hit((fx - 7, fy - 8, fx + 7, fy + 2))
+                   for fx in range(int(ex[0]), int(ex[2]) + 1) for fy in range(int(ex[1]) + 3, int(ex[3]) + 4)
+                   if ex[0] <= fx <= ex[2] and ex[1] <= fy - 3 <= ex[3]):
             bad.append(P(o).get("to", o["name"]))
     return bad
 
