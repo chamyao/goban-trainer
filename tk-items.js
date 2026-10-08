@@ -161,7 +161,7 @@ const WorldItems = {
     const w = scene.w;
     scene.mounts = [];
     const sync = () => {
-      const riders = [{ who: "liubei", spr: scene.player, moving: scene.player.body.velocity.lengthSq() > 1 },
+      const riders = [{ who: scene.lead, spr: scene.player, moving: scene.player.body.velocity.lengthSq() > 1 },
         ...scene.followers.map(f => ({ who: f.who, spr: f.spr, moving: !!(f.spr.anims && f.spr.anims.isPlaying) }))];
       // rebuild when the party changes
       const sig = riders.map(r => r.who + ":" + (this.mountedHere(scene, r.who) || "")).join(",");

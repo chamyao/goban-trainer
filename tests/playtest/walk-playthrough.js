@@ -40,7 +40,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   const FROM = process.env.FROM || '', UNTIL = process.env.UNTIL || '';
   if (FROM) await p.evaluate(([B, F]) => {   // setup only: what the beats before FROM leave behind is taken as given (FROM= is for a quick check; a release runs the whole book)
     return TK.load().then(() => { const w = TK.world(B), ks = w.nodes.map(n => n.key), i = ks.indexOf(F); let party = null;
-      for (const [j, n] of w.nodes.entries()) if (j < i) { if (!['side', 'short'].includes(n.role)) TK.markCleared(n.key); const sc = w.scenes && w.scenes[n.scene]; for (const st of (sc && sc.steps) || []) { if (st[0] === 'party') party = st[1]; if (st[0] === 'item' && typeof WorldItems !== 'undefined') WorldItems.add(w, st[1]); } }
+      for (const [j, n] of w.nodes.entries()) if (j < i) { if (!['side', 'short'].includes(n.role)) TK.markCleared(n.key); const sc = w.scenes && w.scenes[n.scene]; for (const st of (sc && sc.steps) || []) { if (st[0] === 'party') party = st[1]; if ((st[0] === 'item' || st[0] === 'gain') && typeof WorldItems !== 'undefined') WorldItems.add(w, st[1]); } }
       TK.markSeen(B + ':opening'); if (party) TK.setParty(w, party); }); }, [BOOK, FROM]);
   await p.goto(BASE + '#/tk/' + BOOK); await p.reload();
   if (FROM) { for (let i = 0; i < 80 && !(await p.evaluate(() => !!(window.__w && window.__w.player))); i++) await p.waitForTimeout(250);
@@ -67,6 +67,8 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       goal: w.goalAt && [Math.round(w.goalAt.x), Math.round(w.goalAt.y)], busy: w.ui.busy(), cine: !!w.cine, leaving: !!w.leaving, walking: !!w.walk,
       caught: !!w.caught, engaged: !!w.engaged, gtag: w.game && w.game.__flip, light: w.st && w.st.light || '',
       route: w.routeFx && w.routeFx.all && w.routeFx.all[0] ? (w.routeFx.all.some(im => im.tintTopLeft === 0xd6ff8a) ? 'fireflies' : 'band') : '',
+      mounts: (w.cine ? [...new Set(w.children.list.filter(o => o.visible && o.alpha > .1 && o.texture && /^ride-/.test(o.texture.key)).map(o => o.texture.key.split('-')[1]))].map(x => x + ':?')   // in a scene: who is drawn in the saddle
+        : (w.mounts || []).filter(m => m.horse && m.horse.visible).map(m => `${m.who}:${m.coat}`)).sort().join(',') || 'on foot', indoors: typeof WorldItems !== 'undefined' && WorldItems.indoors(w),
       horses: (w.followers || []).filter(F => F.coat && F.spr && F.spr.visible).map(F => `${F.coat}@${Math.round(Math.hypot(F.spr.x - w.player.x, F.spr.y - w.player.y))}`).join(','),
       crouch: !!w.cine && w.children.list.some(o => o.visible && o.texture && /^h-/.test(o.texture.key) && o.scaleY > .69 && o.scaleY < .78), banner: ((d.querySelector('.town-ui .town-place') || {}).textContent || '').trim(), chip: ((d.querySelector('.town-goal .town-lead') || {}).textContent || '').trim(), leadName: typeof tkName === 'function' ? tkName(w.lead) : w.lead, line, who: dlg && !dlg.hidden ? ((dlg.querySelector('.town-who') || {}).textContent || '').trim() : '', scroll: vis('.tk-scroll-go'), duel: !!d.querySelector('.tk-duel svg'), cont: vis('.tk-duel-go'),
       skip: !!d.querySelector('.tk-duel-keys button') && [...d.querySelectorAll('.tk-duel-keys button')].some(b => /Skip/.test(b.textContent)),
@@ -214,8 +216,8 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       console.log(`     sync: the world was rebuilt at ${beat}, ${Math.round((Date.now() - flipAt) / 1000)} s after a hide/show (${b4.place}${b4.cine ? ', mid-scene' : ''}${b4.busy ? ', a line up' : ''}${b4.duel ? ', a board up' : ''})`);
       await p.evaluate(n => { const w = window.__w; if (w && w.game) w.game.__flip = n; }, visFlips).catch(() => {}); }
     prevS = s;
-    if (beat) { const f = facts[beat] || (facts[beat] = { light: new Set(), route: new Set(), horses: new Set(), crouch: false, place: new Set() });   // what each beat showed
-      if (s.light) f.light.add(s.light); if (s.route) f.route.add(`${s.route}@${s.place}`); if (s.horses) f.horses.add(s.horses.split('@')[0]); if (s.crouch) f.crouch = true; f.place.add(s.place); }
+    if (beat) { const f = facts[beat] || (facts[beat] = { light: new Set(), route: new Set(), horses: new Set(), crouch: false, place: new Set(), mount: new Set() });   // what each beat showed
+      if (s.light) f.light.add(s.light); if (s.route) f.route.add(`${s.route}@${s.place}`); if (s.horses) f.horses.add(s.horses.split('@')[0]); if (s.crouch) f.crouch = true; f.place.add(s.place); if (!s.leaving && s.place && (s.cine || !s.busy)) f.mount.add(`${s.place}${s.indoors ? ' (indoors)' : ''}${s.cine ? ' in a scene' : ''}: ${s.mounts}`); }
     if (/Now playing/.test(s.banner || '') && banners[banners.length - 1] !== s.banner) banners.push(s.banner);
     if (pushWait && !s.busy && !s.cine && !s.duel && !s.leaving && !s.walking) { pushWait = false; await p.waitForTimeout(4000); continue; }   // SYNC_PUSH: a still moment after the scene, as a player reading would
     if (s.duel) {   // a board: win it with Skip, note what it drew, then Continue
@@ -306,6 +308,14 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     if (facts['13-c4']) console.log(`${band ? 'FAIL' : ff ? 'ok  ' : 'note'} c4: the way at night at Beimang is shown by fireflies, never the day's band (light ${[...c4.light].join('/') || '?'}; route ${[...c4.route].join(', ') || 'not drawn while watched: the goal in sight at once'})`);
     if (facts['13-c9']) console.log(`${c9.horses.has('red') ? 'ok  ' : 'FAIL'} c9: Red Hare walks behind Li Su as a red horse (followers on horses: ${[...c9.horses].join(', ') || 'none'})`);
     if (facts['13-c20']) console.log(`${c20.crouch ? 'ok  ' : 'FAIL'} c20: someone crouches in the scene (a figure drawn low, 0.72-0.76 of its height)`);
+    // the Chancellor's horse (end of c16): Cao Cao rides it outdoors (black), Chen Gong beside him from c19 (brown); indoors both walk
+    let mountBad = false;
+    for (const k of Object.keys(facts).filter(k => /^13-c(1[7-9]|2\d)$/.test(k))) for (const m of facts[k].mount) {
+      const [place, who] = m.split(': '), inside = / \(indoors\)/.test(place), inScene = / in a scene$/.test(place), party = +k.slice(4) >= 20 || (k === '13-c19' && /chengong/.test(who)) ? ['caocao:black', 'chengong:brown'] : ['caocao:black'];
+      if (inScene && !inside) continue;   // outdoors in a scene: who rides is the scene's to say
+      const ok = inside ? who === 'on foot' : who.split(',').includes('caocao:black') && (!/chengong/.test(who) || who.includes('chengong:brown'));
+      if (!ok) mountBad = true; console.log(`${ok ? 'ok  ' : 'FAIL'} ${k} ${place}: ${who}${inside ? ' (indoors: on foot)' : ''}`); void party; }
+    if (mountBad) featureFails.push('book 13 mounts');
     if (band || (facts['13-c9'] && !c9.horses.has('red')) || (facts['13-c20'] && !c20.crouch)) featureFails.push('book 13 features'); }   // (each judged only when its beat was walked)
   // after the book: once things settle, who the walk plays as (END_LEAD: who it must be, e.g. lijue after Book 12's a18)
   let after = null;
