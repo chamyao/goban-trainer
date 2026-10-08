@@ -15,8 +15,8 @@ Written from `tools/tk_plans_cc.py` (the built maps), as `docs/book2/assets-need
 | `building.storehouse` | 6×2 | 1 in 1 map | stand-in: building.lodge | drawn | stand-in: building.lodge | a treasury storehouse: stout walls, heavy double doors with bronze fittings, tiled roof |
 | `building.tent_small` | 2×2 | 1 in 1 map | stand-in: building.tent | drawn | stand-in: building.tent | a small square officer's tent |
 | `building.tower` | 3×5 | 2 in 2 maps | stand-in: building.hall | stand-in: building.gatetower | stand-in: building.hall | a tall Han palace tower (阙/楼): three storeys of timber on a rammed-earth base, hip roof of dark tiles, a balcony at the top; reads from far off |
-| `building.wallstairs` | 4×1 | 2 in 1 map | stand-in: furn.rack | stand-in: furn.rack | stand-in: furn.rack | a flight of rammed-earth steps (马道) climbing the inside face of a city wall to the wall-walk, four tiles long, one deep; drawn against the wall's foot, the same 3/4 view as the wall |
 | `camp.banquet` | 10×2 | 1 in 1 map | stand-in: camp.table | drawn | stand-in: camp.table | a long banquet table under awnings, low tables and cushions in a row, wine jars |
 | `furn.hearth` | 2×1 | 1 in 1 map | drawn | stand-in: camp.cookfire | drawn |  |
 | `furn.mirror` | 1×1 | 1 in 1 map | stand-in: furn.drawers | stand-in: furn.drawers | stand-in: furn.drawers | a polished bronze dressing mirror on a wooden stand, about head height when sitting |
 | `market.stalls` | 6×2 | 3 in 2 maps | stand-in: building.shop | drawn | stand-in: building.shop | a row of market stalls with cloth awnings, baskets and goods |
+| `wall.stairs` | 4×1 | 2 in 1 map | stand-in: furn.rack | stand-in: furn.rack | stand-in: furn.rack | a flight of rammed-earth steps (马道) climbing the inside face of a city wall to the wall-walk, four tiles long, one deep; drawn against the wall's foot, the same 3/4 view as the wall |

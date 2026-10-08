@@ -32,7 +32,7 @@ SIDES = {"N": (0, -1), "S": (0, 1), "W": (-1, 0), "E": (1, 0)}
 OPEN_GROUND = {"court", "passage", "garden", "field", "field.wheat", "market", "camp", "plain", "loess", "stage", "floor", "ward",
                "city", "plateau"}
 PASSABLE_THINGS = {"furn.seat", "furn.curtain", "furn.rug", "landmark.ridge", "building.gatehouse", "building.gate", "building.moongate"}
-IN_WALL = {"building.gate", "building.gatehouse", "building.gatetower", "building.moongate"}   # stand in a wall: no margin
+IN_WALL = {"building.gate", "building.gatehouse", "building.gatetower", "building.moongate", "wall.stairs"}   # stand in a wall: no margin
 EXTRA_KINDS = {"prop.lanterns", "prop.body_lamp", "milestone", "banner", "plant.peony", "water.lotus", "tree.poplar", "tree.willow",
                "camp.gong", "camp.drum"}
 
@@ -151,7 +151,7 @@ class Plan:
                     self.err(f"too small: {t['id']} ({t['kind']}) needs {fw}x{fh} tiles + {self.M} margin = {need_w}x{need_h} cells; "
                              f"the plan gives {w}x{h}")
             on_line = [(c, k) for c in cells for k in self.line_at.get(c, []) if c not in self.gates]
-            if on_line and t["kind"] not in PASSABLE_THINGS | IN_WALL and t.get("on") != "edge":   # "edge": against the street's far side
+            if on_line and t["kind"] not in PASSABLE_THINGS | IN_WALL:
                 self.err(f"on a line: {t['id']} on {on_line[0][1]} at {on_line[0][0]}")
             wet = [c for c in cells if self.zone.get(c) == "water"]
             if wet and t.get("on") != "water":
