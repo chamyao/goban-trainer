@@ -60,6 +60,7 @@ const TK_CHARS = {
   yuanshao: { name: "Yuan Shao", skin: "#f0cfac", hair: "#2a2024", hat: "guan", hatC: "#1e1e24", robe: "#8a6a2a", trim: "#e6c14a", beard: "goatee", eyes: "narrow", weapon: "sword" },
   yuanshu: { name: "Yuan Shu", skin: "#f2d0ae", hair: "#2a2024", hat: "guan", hatC: "#1e1e24", robe: "#c89a2a", trim: "#7a3a4a", beard: "thin", eyes: "narrow" },
   xiandi: { name: "Emperor Xian", skin: "#f8dcc4", hair: "#2a2024", hat: "guan", hatC: "#1e1e24", robe: "#d8b02a", trim: "#7a2a2a", beard: "none", eyes: "kind" },
+  chenliu: { name: "Prince of Chenliu", skin: "#f8dcc4", hair: "#2a2024", hat: "guan", hatC: "#1e1e24", robe: "#d8b02a", trim: "#7a2a2a", beard: "none", eyes: "kind" },   // the boy before he is enthroned (book 13, c4-c12)
   shaodi: { name: "Emperor Shao", skin: "#f8dcc4", hair: "#2a2024", hat: "guan", hatC: "#1e1e24", robe: "#c8a02a", trim: "#2a2a3a", beard: "none", eyes: "round" },
   hetaihou: { name: "Empress Dowager He", skin: "#fbefe8", hair: "#1a1418", hat: "lady", pin: "#e6c14a", pin2: "#c8283c", flower: "#e6c14a", robe: "#6a2a4a", trim: "#e6c14a", beard: "none", eyes: "narrow", makeup: true },
   tangfei: { name: "Consort Tang", skin: "#fbefe8", hair: "#1a1418", hat: "lady", pin: "#d8d8e0", pin2: "#e6c14a", flower: "#ffffff", robe: "#d8c8d8", trim: "#6a4a6a", beard: "none", eyes: "kind", makeup: true },
@@ -601,7 +602,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) this.data = await (await fetch("data/tk.json?v=75")).json();
+    if (!this.data) this.data = await (await fetch("data/tk.json?v=76")).json();
     return this.data;
   },
   ls(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } },

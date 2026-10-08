@@ -22,7 +22,7 @@ const TK_NAMES_ZH = {
   // Book 2
   caiyong: "蔡邕", caohong: "曹洪", chengong: "陈宫", chengpu: "程普", diaochan: "貂蝉", dingyuan: "丁原", dongmu: "董卓之母",
   gongsunzan: "公孙瓒", handang: "韩当", hetaihou: "何太后", liru: "李儒", lisu: "李肃", lvbu: "吕布", shaodi: "少帝",
-  sunjian: "孙坚", tangfei: "唐妃", wangyun: "王允", xiandi: "献帝", yuanshao: "袁绍", yuanshu: "袁术", zumao: "祖茂",
+  sunjian: "孙坚", tangfei: "唐妃", wangyun: "王允", xiandi: "献帝", chenliu: "陈留王", yuanshao: "袁绍", yuanshu: "袁术", zumao: "祖茂",
   // Book 3
   taishici: "太史慈", kongrong: "孔融", guanhai: "管亥", taoqian: "陶谦", mizhu: "糜竺", chendeng: "陈登", zhaoyun: "赵云", jiling: "纪灵",
   zhangliao: "张辽", haomeng: "郝萌", gaoshun: "高顺", xunyu: "荀彧", guojia: "郭嘉", sunqian: "孙乾", sunce: "孙策", dianwei: "典韦",
@@ -35,7 +35,7 @@ const TK_NAMES_ZH = {
 const TK_NAMES_EN = {
   caiyong: "Cai Yong", caohong: "Cao Hong", chengong: "Chen Gong", chengpu: "Cheng Pu", diaochan: "Diaochan", dingyuan: "Ding Yuan",
   dongmu: "Dong Zhuo's mother", gongsunzan: "Gongsun Zan", handang: "Han Dang", hetaihou: "Empress He", liru: "Li Ru", lisu: "Li Su",
-  lvbu: "Lü Bu", shaodi: "Emperor Shao", sunjian: "Sun Jian", tangfei: "Consort Tang", wangyun: "Wang Yun", xiandi: "Emperor Xian",
+  lvbu: "Lü Bu", shaodi: "Emperor Shao", sunjian: "Sun Jian", tangfei: "Consort Tang", wangyun: "Wang Yun", xiandi: "Emperor Xian", chenliu: "Prince of Chenliu",
   yuanshao: "Yuan Shao", yuanshu: "Yuan Shu", zumao: "Zu Mao",
   // Book 3
   taishici: "Taishi Ci", kongrong: "Kong Rong", guanhai: "Guan Hai", taoqian: "Tao Qian", mizhu: "Mi Zhu", chendeng: "Chen Deng", zhaoyun: "Zhao Yun", jiling: "Ji Ling",
@@ -188,7 +188,7 @@ const TownArt = {
 /* ---------- DOM overlay: goal, dialogue with portraits and voice ---------- */
 const TownUI = {
   // who -> portrait file (assets/tk/portraits/portraits.json, tools/build_portraits.py), fetched once
-  portraits: {}, PORTRAIT_V: 5,
+  portraits: {}, PORTRAIT_V: 6,
   loadPortraits() {
     if (!this._pp) this._pp = fetch(`assets/tk/portraits/portraits.json?v=${this.PORTRAIT_V}`).then(r => r.ok ? r.json() : {})
       .catch(() => ({})).then(m => { this.portraits = m; for (const f of Object.values(m)) new Image().src = `assets/tk/portraits/${f}?v=${this.PORTRAIT_V}`; });
