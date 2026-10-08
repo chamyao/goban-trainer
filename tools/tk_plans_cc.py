@@ -212,6 +212,32 @@ PLANS_CC = {
             _talk("folk.soldier", [13, 7], "“The Jiade Gate is shut. The general went in to see the Empress, and he's not come out.”", **{"in": ["court"]}),
             _talk("folk.villager", [5, 8], "“The Ten Attendants and He Jin both want the court. Whoever wins, we pay.”", **{"in": ["court"]}),
         ],
+        # The chase out of Luoyang (caocao-arc.md, "New mechanic"), in state "sword" (c16 -> c17): from the Chancellor's gate
+        # to the East Gate. A draft for Integration's data shape: cells as in the plan; cones and speeds in tiles.
+        "chase": {
+            "state": "sword", "from": "xiangfu", "to": "c17",
+            "start": [10, 12],          # out of the Chancellor's gate onto the south street (the compound's xf-gate is inside)
+            # where the horse outruns a rider (wide, straight), and where a rider can corner him (narrow, or crowded)
+            "open": ["main-street", "south-street"],
+            "narrow": ["west-lane", "east-lane", "garden-lane", "market"],
+            "routes": {   # the three ways to the gate, one rider on each, so the choice is which to dare and when
+                "market cut": [[10, 12], [13, 12], [13, 11], [17, 9], [17, 8], [19, 8]],      # shortest; through the crowd
+                "east lane": [[10, 12], [19, 12], [19, 8]],                                   # fast street, then a narrow lane
+                "long way": [[10, 12], [2, 12], [2, 8], [19, 8]],                              # narrow lane, then the long main street
+            },
+            "riders": [
+                # the market: walks the stalls, slow among the crowd; you slip by when his back is to you
+                {"id": "rider-market", "post": [13, 11], "beat": [[13, 11], [17, 11], [13, 11]], "pause": [17, 11, 2], "cone": 4},
+                # the east lane: rides up and down it; meet him in the lane and there is nowhere to go
+                {"id": "rider-lane", "post": [19, 12], "beat": [[19, 12], [19, 9], [19, 12]], "pause": [19, 9, 1], "cone": 5},
+                # the west lane, at the far end of the long way: the same, but you see him coming
+                {"id": "rider-west", "post": [2, 10], "beat": [[2, 9], [2, 12], [2, 9]], "cone": 5},
+                # the main street before the gate: every route ends here; on the open street the horse outruns him,
+                # so it is a race to the gate, not a trap
+                {"id": "rider-gate", "post": [16, 8], "beat": [[9, 8], [17, 8], [9, 8]], "pause": [17, 8, 2], "cone": 6},
+            ],
+            "speeds": {"walk": 1.0, "rider": 1.5, "gallop": 2.0},   # relative; a rider gains in the lanes (he turns tighter)
+        },
         "objectives": {
             "2-c1": "Go to He Jin's residence, on the main street west of the palace. The council is already sitting.",
             "2-c2": "Go to the Jiade Gate of the palace, at the north side of the main street.",
