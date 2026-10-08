@@ -865,3 +865,4 @@ html.tk-fullwin-on, html.tk-fullwin-on body { overflow: hidden; overscroll-behav
 .tk-replay-card p { margin: 6px 0 10px; font-size: .9em; }
 .tk-replay-sel { width: 100%; font: inherit; padding: 6px; }
 .tk-replay-btns { display: flex; gap: 8px; justify-content: flex-end; margin-top: 12px; }
+.tk-test-badge { color: #b4402a; font-weight: bold; }

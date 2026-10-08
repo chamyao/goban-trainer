@@ -1140,6 +1140,13 @@ async function viewTK(worldN) {
     root.querySelector(".tk-head-btns").prepend(h("button", { class: "tk-chron-btn", type: "button", title: `Switch to ${WORLD_KITS[next].en}`,
       onclick: () => { WorldView.setKit(next); viewTK(w.n); } }, `画风：${WORLD_KITS[kit].zh} ${WORLD_KITS[kit].en}`));
     if (typeof WorldTravel !== "undefined") WorldTravel.addButtons(root.querySelector(".tk-head-btns"), w);   // map and start over (tk-travel.js)
+    // test mode is remembered (a ?test=1 link); say so, and offer the way out (the user didn't know they were in it)
+    if (TK_TEST) {
+      root.querySelector(".tk-head-btns").append(h("button", { class: "tk-chron-btn", type: "button", title: "Leave test mode: no Skip key, the hidden books hidden again",
+        onclick: () => { try { localStorage.setItem("tk-test", "0"); } catch {} location.href = location.pathname + location.hash; } }, "退出测试模式 Exit test mode"));
+      const sub = root.querySelector(".sub");
+      if (sub) sub.append(h("span", { class: "tk-test-badge", title: "Test mode: problems have a Skip key and hidden books are open. Menu → Exit test mode." }, " · 测试模式 Test mode"));
+    }
     // on a phone: whether a tap on a small board shows a ghost stone first (Auto) or plays at once (Never)
     if (TK_TOUCH && typeof Goban !== "undefined") {
       const conf = h("button", { class: "tk-chron-btn", type: "button" });
