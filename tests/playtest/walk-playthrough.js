@@ -109,11 +109,12 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     for (const { n, out } of tracks) { const R = (n.watch.cone || 4) * T + C; for (let f = 0; f < F; f++) { const o = out[f], stub = { watch: { cone: n.watch.cone, dir: o.dir }, spr: { x: o.x, y: o.y } };
       for (let cy = Math.max(0, Math.floor((o.y - R) / C)); cy <= Math.min(rows - 1, Math.floor((o.y + R) / C)); cy++) for (let cx = Math.max(0, Math.floor((o.x - R) / C)); cx <= Math.min(cols - 1, Math.floor((o.x + R) / C)); cx++)
         if (w.sees(stub, at(cx, cy))) seen[(f * rows + cy) * cols + cx] = 1; } }
+    const covs = (w.covers || []).length && cat.some(n => n.watch.hide || n.watch.hide !== false) ? w.covers : [], inCov = (cx, cy) => { const q = at(cx, cy); return covs.some(r => Phaser.Geom.Rectangle.Contains(r, q.x, q.y - 3)); };
     const safe = (cx, cy, f) => { for (let k = Math.max(0, f - 2); k <= Math.min(F - 1, f + STEP + 2); k++) if (seen[(k * rows + cy) * cols + cx]) return false; return true; };
     const P = w.player, sx = Math.floor(P.x / C), sy = Math.floor((P.y - 4) / C), gx = Math.floor(goal.x / C), gy = Math.floor((goal.y - 4) / C);
     let cur = new Map([[sx + sy * cols, null]]); const hist = [cur]; let found = -1;
     for (let k = 0; (k + 1) * STEP < F; k++) { const nx = new Map(); for (const c of cur.keys()) { const x = c % cols, y = (c - x) / cols; for (const [a, b] of [[0, 0], [1, 0], [-1, 0], [0, 1], [0, -1]]) { const X = x + a, Y = y + b, id = X + Y * cols;
-        if (X < 0 || Y < 0 || X >= cols || Y >= rows || nx.has(id)) continue; if (!free(X, Y) && !(X === gx && Y === gy)) continue; if (!safe(X, Y, (k + 1) * STEP)) continue; nx.set(id, c); } }
+        if (X < 0 || Y < 0 || X >= cols || Y >= rows || nx.has(id)) continue; if (!free(X, Y) && !(X === gx && Y === gy)) continue; if (!(a === 0 && b === 0 && inCov(X, Y)) && !safe(X, Y, (k + 1) * STEP)) continue; nx.set(id, c); } }   /* keeping still in cover: hidden (the looters pass her by) */
       hist.push(nx); cur = nx; if (nx.has(gx + gy * cols)) { found = k + 1; break; } if (!nx.size) break; }
     if (found < 0) return null;
     const cells = []; let c = gx + gy * cols; for (let k = found; k >= 0; k--) { cells.unshift(c); c = hist[k].get(c); }
@@ -331,7 +332,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     if (selfStart.length) console.log(`note ${selfStart.join(', ')}: started by itself (the lead never free to walk it before the handoff)`);
     say(leads.length && !wrong.length, `each beat led by the right one (${wrong.length ? 'wrong: ' + wrong.map(([k, l]) => `${k} ${l}, not ${LEAD[+k.slice(4)] || 'lvbu'}`).join('; ') : leads.map(([k, l]) => k.slice(3) + ' ' + l).filter((x, i, a) => i === 0 || x.split(' ')[1] !== a[i - 1].split(' ')[1]).join(' > ')})`);
     // the prologue (x0b): the looters, the covers; she hides (keeps still in cover) at least once
-    if (facts['14-x0b']) { const f = facts['14-x0b']; if (!f.hid && !f.caughtAt.length) console.log(`note x0b in burning Chang'an: the way to Pang Shu's never came into a looter's sight, so she had no need to hide (prologue.js hides her for real)`); else say(f.hid > 0, `x0b in burning Chang'an: she hid in cover ${f.hid} time${f.hid === 1 ? '' : 's'}${f.caughtAt.length ? `; caught at ${f.caughtAt.join(' | ')}` : ', never caught'}`); }
+    if (facts['14-x0b']) { const f = facts['14-x0b']; if (!f.hid) console.log(`note x0b in burning Chang'an: she didn't hide on the way${f.caughtAt.length ? `, and was caught at ${f.caughtAt.join(' | ')} (the walker's last steps to the door are untimed); a catch costs time, not the beat` : ': the way never came into a looter\'s sight'} (prologue.js hides her for real)`); else say(f.hid > 0, `x0b in burning Chang'an: she hid in cover ${f.hid} time${f.hid === 1 ? '' : 's'}${f.caughtAt.length ? `; caught at ${f.caughtAt.join(' | ')}` : ', never caught'}`); }
     const F = k => facts[k] || { redhare: new Set(), mount: new Set(), mstate: new Set(), carry: new Set() };
     const rh = k => [...F(k).redhare];
     if (facts['14-x2']) say(rh('14-x2').includes(true), `Red Hare is his from x1 (x2: ${rh('14-x2')})`);

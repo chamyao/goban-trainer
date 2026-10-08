@@ -26,3 +26,13 @@ On main 29ee30dd, with my fixes on claude/tk-playtest.
   - The Farmer and the Soldier keep the pixel bust, as in the other books.
 - **Places** (`places-phone.png`, `places-desktop.png`): the 15 places, each as he's first free to walk it.
 - **Note:** `xiao-pass-night-phone.png`. Xiao Pass at night (x12) is near black on the phone; the place name shows, but the road and the goal hardly do.
+
+## The prologue (x0a "Left Behind", x0b "Hidden": Lady Yan in burning Chang'an)
+- **prologue.js** (player mode, 9/9):
+  - a new player's Book 3 opens with the Chapter 9 briefing;
+  - x0b has 3 covers and 2 looters;
+  - keeping still in each cover she is hidden, and stays hidden while looter-east looks right at her;
+  - out of cover into his sight she's caught ("There! A woman and a girl!…") and returned exactly to that cover.
+- **Full player-mode walk from x0a:** 22/22. The walker's planner now counts keeping still in cover as safe. Its last steps to Pang Shu's door are untimed and can be seen: a catch costs time, not the beat.
+- **Screenshots** (`prologue-phone.png`, `prologue-desktop.png`): Chang'an under the sack (night, smoke), Lü Bu's house with yan_left, and Pang Shu's house with yan_hidden.
+  - The prologue is all narration, so there are no speaker portraits; Pang Shu appears as his sprite.
