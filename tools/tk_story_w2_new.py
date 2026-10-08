@@ -1901,6 +1901,9 @@ def _scenes_caocao():
               "Lock him up. Tomorrow he goes to the capital, for the reward.",
               "吾前在洛阳求官时，曾认得汝是曹操，如何隐讳？且把来监下，明日解去京师请赏。"),
             N("The guards at the pass are given wine and food, and go.", "把关军士赐以酒食而去。"),
+            N("Cao Cao is led away in chains to the county jail.", "曹操被押入县狱。"),
+            # carry him straight into the jail courtyard: a captive must not walk himself there (playtest)
+            ["party", ["caocao"], {"to": "c19"}],
         ]},
 
         # C19 · The back courtyard. Contest: Chen Gong frees him.
