@@ -974,11 +974,12 @@
  "fireflies": {
   "file": "fireflies.jpg",
   "scene": "fireflies",
-  "prompt": "Night on a thorny hillside above a dark river. Two small boys in torn, mud-stained imperial robes, the hems knotted together so they cannot lose each other, climb hand in hand. The younger one, about nine, leads, looking up in wonder. Around them hundreds of fireflies stream in a glowing ribbon that curves ahead up the slope, lighting a path through the thorns. Deep blue darkness everywhere else. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "prompt": "At night in tall river reeds, two boys in torn silk robes, one about fourteen and one about nine, hold hands, scratched and tired. In front of them a line of fireflies hangs over the water, leading off between the reeds, and the younger boy points after it. Only the two boys, seen from behind and slightly to the side. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
   "provider": "replicate",
   "model": "bytedance/seedream-5-pro",
-  "look": "final",
-  "made": "2026-10-07"
+  "look": "final-kept",
+  "made": "2026-10-08",
+  "note": "the user's pick: the fireflies_a image, kept (2026-10-08)"
  },
  "prince_dz": {
   "file": "prince_dz.jpg",

@@ -22,7 +22,8 @@ await p.selectOption('.tk-replay-sel','13-c17');await p.locator('.tk-replay butt
 const s=await p.evaluate(()=>({c16:TK.cleared('13-c16'),c17:TK.cleared('13-c17'),c20:TK.cleared('13-c20'),place:window.__w&&window.__w.placeId,party:TK.party(TK.world(13)),items:WorldItems.owned(TK.world(13)),chase:!!(window.__w&&window.__w.chaseNow())}));
 check(s.c16&&!s.c17&&!s.c20,`c17 on are undone, c16 kept (${JSON.stringify({c16:s.c16,c17:s.c17,c20:s.c20})})`);
 check(s.place==='luoyang'&&s.party.join()==='caocao'&&s.items.includes('horse')&&!s.items.includes('weihong'),`back in Luoyang as Cao Cao alone, with the horse and nothing after (${JSON.stringify({place:s.place,party:s.party,items:s.items})})`);
-check(s.chase,'the chase is on again');
+const hasChase=await p.evaluate(()=>!!(TK.world(13).nodes.find(n=>n.key==='13-c17')||{}).chase);   // (the chase is on hold with the user: c17 may have none)
+check(s.chase===hasChase,hasChase?'the chase is on again':'no chase at c17 (on hold): none runs');
 const fol=await p.evaluate(()=>({crowd:window.__w.st.crowd,followers:window.__w.followers.length}));
 check(fol.crowd===0&&fol.followers===0,`no crowd from later in the book follows him (${JSON.stringify(fol)})`);
 
@@ -35,7 +36,7 @@ const o2=await p.evaluate(()=>[...document.querySelectorAll('.tk-replay-sel opti
 check(o2.includes('13-c17'),'after replaying from c15, c17 is still offered');
 await p.selectOption('.tk-replay-sel','13-c17');await p.locator('.tk-replay button',{hasText:'Replay'}).last().click();await p.waitForTimeout(3000);
 const f=await p.evaluate(()=>({c15:TK.cleared('13-c15'),c16:TK.cleared('13-c16'),c17:TK.cleared('13-c17'),place:window.__w&&window.__w.placeId,horse:WorldItems.owned(TK.world(13)).includes('horse'),chase:!!(window.__w&&window.__w.chaseNow())}));
-check(f.c15&&f.c16&&!f.c17&&f.place==='luoyang'&&f.horse&&f.chase,`forward again to c17: c15 and c16 back, at the chase, mounted (${JSON.stringify(f)})`);
+check(f.c15&&f.c16&&!f.c17&&f.place==='luoyang'&&f.horse&&f.chase===hasChase,`forward again to c17: c15 and c16 back, in Luoyang${hasChase?' at the chase':''}, mounted (${JSON.stringify(f)})`);
 // a stale copy (another device, the server) merged in doesn't bring them back
 const after=await p.evaluate(st=>{const local=loadProgress();Sync.mergeInto(local,st);localStorage.setItem('gt-progress',JSON.stringify(local));return {c17:TK.cleared('13-c17'),c20:TK.cleared('13-c20'),c16:TK.cleared('13-c16')};},stale);
 check(!after.c17&&!after.c20&&after.c16,`a stale copy merged in keeps them undone (${JSON.stringify(after)})`);

@@ -61,6 +61,7 @@ const WorldTravel = {
     for (const n of before) for (const s of ((n.scene && w.scenes[n.scene]) || {}).steps || []) {
       if (s[0] === "party") party = s[1];
       if (s[0] === "gain" && !items.includes(s[1])) items.push(s[1]);
+      if (s[0] === "lose" && items.includes(s[1])) items.splice(items.indexOf(s[1]), 1);
       if (s[0] === "crowd") crowd = Math.max(0, typeof s[1] === "string" ? crowd + +s[1] : +s[1] || 0);   // the men who've fallen in behind, as then
     }
     const pa = TK.ls("tk-party"); pa[w.n] = party; TK.lsSet("tk-party", pa);
