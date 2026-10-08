@@ -205,6 +205,8 @@ PLANS_LB = {
             ],
             "spots": [
                 {"id": "liubei-gate", "at": [5, 7], "at_door": "liubei", "label": "Liu Bei's gate"},
+                {"id": "lodging-door", "at": [13, 6], "at_door": "lodging", "label": "Lü Bu's gate",
+                 "note": "x9, x11: Lü Bu starts here and walks to the prefecture hall"},
                 {"id": "x4", "at": [0, 8], "node": "3-x4", "label": "The west gate, at night", "trigger": "near",
                  "note": "outside the gate: 「劉使君有機密使人至」"},
                 {"id": "x13", "at": [0, 4], "node": "3-x13", "label": "Under Xuzhou's wall", "trigger": "near",
@@ -221,14 +223,17 @@ PLANS_LB = {
                       {"to": "The Xiapi Road", "at": [19, 7], "side": "E"},
                       {"to": "The Shouchun Road", "at": [9, 14], "side": "S"},
                       {"to": "Xiao Pass", "at": [9, 0], "side": "N"}],
-            "entries": {"": [9, 7], "Xiaopei": [0, 6], "The Xiapi Road": [18, 7], "The Shouchun Road": [9, 13], "Xiao Pass": [9, 1]},
+            # every road arrives outside its gate (a gate may be shut: x13 on, Lü Bu rides back from Xiao Pass to a city
+            # Mi Zhu has already shut, and round the outside of the wall to the west gate)
+            "entries": {"": [9, 7], "Xiaopei": [0, 6], "The Xiapi Road": [19, 7], "The Shouchun Road": [9, 14], "Xiao Pass": [9, 0]},
         },
         "states": [
             {"id": "guest", "light": "day"},
             {"id": "moon", "when": "node:x3", "until": "node:x4", "light": "night", "weather": "clear",   # 「是夜月白風清」
              "shut": {"west-gate": ["The gate is barred for the night. Someone inside must open it."]}},
-            {"id": "held", "when": "node:x4", "until": "node:x13", "light": "day"},
-            {"id": "locked", "when": "node:x13", "light": "day", "banners": "blue",
+            {"id": "held", "when": "node:x4", "until": "node:x12", "light": "day"},
+            # from x12: while Lü Bu is at Xiao Pass, Mi Zhu shuts the city (「糜竺在城上」), so he rides back to shut gates (x13)
+            {"id": "locked", "when": "node:x12", "light": "day", "banners": "blue",
              "shut": {g: ["The gate stays shut. Up on the wall, Mi Zhu has Cao Cao's banners raised."]
                       for g in ("west-gate", "east-gate", "south-gate", "north-gate")}},
         ],
