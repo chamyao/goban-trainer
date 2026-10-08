@@ -234,12 +234,8 @@ const TKArt = {
     else if (d.hat === "scholar") { R(1, 0 + dy, 8, 3, H); R(3, -1 + dy, 4, 1, H); s(9, 1 + dy, H); s(10, 2 + dy, H); }
     else if (d.hat === "straw") { R(-1, 2 + dy, 12, 1, H); R(2, 0 + dy, 6, 2, H); R(3, -1 + dy, 4, 1, H); }
     // weapons in front
-    // swords hang sheathed at the hip (a dark scabbard under a gold hilt); bare steel only in a strike (apo110: a bare
-    // blade on everyone who carries one read as a sword drawn at a banquet)
-    if (pose !== "strike") {
-      if (d.weapon === "swords") { s(-1, 11 + dy, "#c8a03a"); R(-1, 12 + dy, 1, 3, "#3a2a22"); s(10, 11 + dy, "#c8a03a"); R(10, 12 + dy, 1, 3, "#3a2a22"); }
-      if (d.weapon === "sword") { s(10, 10 + dy, "#c8a03a"); R(10, 11 + dy, 1, 4, "#3a2a22"); }
-    }
+    if (d.weapon === "swords") { R(-1, 11 + dy, 1, 3, "#d0d4d8"); R(10, 11 + dy, 1, 3, "#d0d4d8"); }
+    if (d.weapon === "sword") { R(10, 9 + dy, 1, 4, "#d0d4d8"); s(10, 13 + dy, "#7a5a3a"); }
     if (pose === "strike") {
       const pole = d.weapon === "glaive" ? "#6a4a2a" : "#7a5a3a";
       if (d.weapon === "spear" || d.weapon === "glaive") { for (let x = 6; x < 14; x++) s(x, 9 + dy, pole); R(13, 8 + dy, 2, 3, "#d0d4d8"); }
