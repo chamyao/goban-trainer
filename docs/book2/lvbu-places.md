@@ -79,7 +79,7 @@ A walled city with the Si along its west and the Yi along its north.
     - The hall holds x14 (Chen Gong's plan), x15 (where he is packing), x17 (the mirror) and x18 (the lashes).
     - x15 starts in Lady Yan's rooms (spot `yan-start`). She crosses the court to his hall.
   - the granary;
-  - the stables by the east gate (x19: Hou Cheng starts at `stables-door`);
+  - the stables, down in the south-west (x19: Hou Cheng starts at `stables-door`);
   - the White Gate tower over the south gate (`white-gate`, x20).
 - **Outside:**
   - Cao Cao's siege camp, east;
@@ -94,8 +94,12 @@ A walled city with the Si along its west and the Yi along its north.
 
 **Challengers** (siege, x14–x16): an officer of Hou Cheng's, and a sentry at the foot of the wall. Neither blocks.
 
-**x19:** two of Lü Bu's men watch the causeway and the gate (watchers). Hou Cheng, on Red Hare, goes round them by the
-water.
+**x19:** at night the south and west gates are shut (`shut`), so the east gate is the only way out. The
+stables stand in the flooded south-west, where no one sees their door; Hou Cheng rides Red Hare east through the water,
+then up to the gate while the causeway guard, who walks the causeway to the gate and back, has his back to it.
+Proved by the checker (a covered route that needs a wait) and at the engine's sight rules (30 px/s beat, 12-tile
+55° cone, walls): the door is never seen, riding straight out is seen at about 4 start times in 10, and an unseen
+ride takes 6.1 s. Testing's walk-playthrough crosses it (16 s, 3 of 3 runs).
 
 ## For Integration (engine)
 

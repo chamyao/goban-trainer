@@ -399,7 +399,7 @@ PLANS_LB = {
             "ground": [
                 {"id": "city", "kind": "city", "rect": [5, 4, 15, 12]},
                 {"id": "fore-fu", "kind": "court", "rect": [6, 7, 4, 1]},
-                {"id": "stable-yard", "kind": "court", "rect": [15, 10, 3, 1]},
+                {"id": "stable-yard", "kind": "court", "rect": [8, 12, 3, 1]},
                 {"id": "cao-camp", "kind": "camp", "rect": [22, 3, 4, 13]},
                 {"id": "liubei-camp", "kind": "camp", "rect": [8, 18, 9, 2]},
             ],
@@ -417,7 +417,7 @@ PLANS_LB = {
                  "map": "lb-residence", "plaque": "吕府"},
                 {"id": "granary", "kind": "building.granary", "rect": [14, 5, 2, 1], "label": "The granary"},
                 {"id": "house-1", "kind": "building.house", "rect": [16, 5, 2, 1]},
-                {"id": "stables", "kind": "building.stable", "rect": [15, 11, 3, 2], "door": "N", "label": "The stables",
+                {"id": "stables", "kind": "building.stable", "rect": [8, 13, 3, 2], "door": "N", "label": "The stables",
                  "note": "x19: Red Hare is here"},
                 {"id": "house-2", "kind": "building.house", "rect": [6, 11, 2, 1]},
                 {"id": "house-3", "kind": "building.house", "rect": [8, 11, 2, 1]},
@@ -430,18 +430,21 @@ PLANS_LB = {
                 {"id": "lb-tent-2", "kind": "building.tent", "rect": [14, 18, 2, 1]},
             ],
             "spots": [
-                {"id": "stables-door", "at": [16, 10], "at_door": "stables", "label": "The stables' door",
+                {"id": "stables-door", "at": [9, 12], "at_door": "stables", "label": "The stables' door",
                  "note": "x19: Hou Cheng starts here"},
                 {"id": "x16", "at": [12, 18], "node": "3-x16", "label": "Liu Bei's lines", "trigger": "near",
                  "note": "Guan Yu and Zhang Fei bar the way; he turns back"},
                 {"id": "x19", "at": [22, 9], "node": "3-x19", "label": "Out of the east gate", "trigger": "near",
                  "note": "Wei Xu opens the gate and 'chases' him for show"},
             ],
+            # x19: from the stables, down in the flooded south-west, Hou Cheng rides Red Hare east through the water, then up to
+            # the gate while the causeway guard has his back to it; the stables' door is in no one's sight (he's sent back there)
+            "checks": [{"check": "covered_route", "from": [9, 12], "to": [22, 9], "beats": ["3-x19"], "must_wait": True,
+                        "shut": ["south-gate", "west-gate"]}],
             "watchers": [   # x19: Lü Bu's men on the causeway, the one dry road; Hou Cheng on Red Hare can go round by the water
-                {"id": "guard-causeway", "kind": "folk.soldier", "beat": [[13, 9], [18, 9], [13, 9]], "shape": "U", "pause": [18, 9, 2],
-                 "cone": 5, "in_beats": ["3-x19"], "seen": "guard", "back_to": "stables-door"},
-                {"id": "guard-gate", "kind": "folk.soldier", "at": [19, 9], "turns": ["W", "S"], "cone": 4, "in_beats": ["3-x19"],
-                 "seen": "guard", "back_to": "stables-door"},
+                # he walks the causeway to the gate and back, looking the way he walks: wait for his back
+                {"id": "guard-causeway", "kind": "folk.soldier", "beat": [[13, 9], [19, 9], [13, 9]], "shape": "U", "pause": [19, 9, 2],
+                 "cone": 3, "in_beats": ["3-x19"], "seen": "guard", "back_to": "stables-door"},
             ],
             "dress": [
                 {"kind": "tree.willow", "along": "main-street", "every": 4},
@@ -465,7 +468,9 @@ PLANS_LB = {
             {"id": "siege", "until": "node:x16", "light": "day"},
             {"id": "flood1", "when": "node:x16", "until": "node:x17", "light": "day", "weather": "rain", "water": "flood1"},
             {"id": "flood2", "when": "node:x17", "until": "node:x19", "light": "day", "weather": "rain", "water": "flood2"},
-            {"id": "night", "when": "node:x18", "until": "node:x19", "light": "night", "water": "flood2"},
+            {"id": "night", "when": "node:x18", "until": "node:x19", "light": "night", "water": "flood2",
+             "shut": {g: ["The gate is barred, and the water stands at its arch. Only the east gate opens."]
+                      for g in ("south-gate", "west-gate")}},
             {"id": "taken", "when": "node:x19", "light": "day", "banners": "blue"},   # the water drains: everyone on foot (x20)
         ],
         "seen_lines": {"guard": ["“Who's at the horses? General Hou?” The guard peers through the rain, and you back off into the dark."]},

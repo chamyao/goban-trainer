@@ -344,17 +344,19 @@ class Plan:
             always |= set.intersection(*views) if len(views) > 1 else views[0]
         if chk["check"] == "covered_route":
             a, b = tuple(chk["from"]), tuple(chk["to"])
+            # gates the beat's state shuts ("shut" in tk-world): not a way out, whoever rides
+            shut = {c for c, gid in self.gates.items() if gid in chk.get("shut", [])}
             seen, q = {a}, deque([a])
             while q:
                 c = q.popleft()
                 for dx, dy in SIDES.values():
                     n = (c[0] + dx, c[1] + dy)
-                    if n not in seen and self.walkable(n) and n not in always:
+                    if n not in seen and self.walkable(n) and n not in always and n not in shut:
                         seen.add(n)
                         q.append(n)
             if b not in seen:
                 self.err(f"covered route {a}→{b}: every way passes a cell some watcher never stops seeing")
-            if chk.get("must_wait") and b in self.bfs(a, frozenset(ever)):   # too easy: a way no watcher ever sees
+            if chk.get("must_wait") and b in self.bfs(a, frozenset(ever | shut)):   # too easy: a way no watcher ever sees
                 self.err(f"covered route {a}→{b}: there's a way no watcher ever sees, so the player never has to wait")
             self.covered = (a, b, len([c for c in seen if c not in ever]))
         elif chk["check"] == "sight_puzzle":   # for each way the one watcher faces, some cell the other sees and he doesn't

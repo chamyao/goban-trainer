@@ -61,10 +61,6 @@
    "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
    "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
    "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
-   "....~~~~..........ffbbbbbbbbbbbbbbbbbbbbbbbbbbbbddddbbbbbbbbccccccccccccbbbbbbbbff......aaaaaaaaaaaaaaaa",
-   "....~~~~..........ffbbbbbbbbbbbbbbbbbbbbbbbbbbbbddddbbbbbbbbccccccccccccbbbbbbbbff......aaaaaaaaaaaaaaaa",
-   "....~~~~..........ffbbbbbbbbbbbbbbbbbbbbbbbbbbbbddddbbbbbbbbccccccccccccbbbbbbbbff......aaaaaaaaaaaaaaaa",
-   "....~~~~..........ffbbbbbbbbbbbbbbbbbbbbbbbbbbbbddddbbbbbbbbccccccccccccbbbbbbbbff......aaaaaaaaaaaaaaaa",
    "....~~~~..........ffbbbbbbbbbbbbbbbbbbbbbbbbbbbbddddbbbbbbbbbbbbbbbbbbbbbbbbbbbbff......aaaaaaaaaaaaaaaa",
    "....~~~~..........ffbbbbbbbbbbbbbbbbbbbbbbbbbbbbddddbbbbbbbbbbbbbbbbbbbbbbbbbbbbff......aaaaaaaaaaaaaaaa",
    "....~~~~..........ffbbbbbbbbbbbbbbbbbbbbbbbbbbbbddddbbbbbbbbbbbbbbbbbbbbbbbbbbbbff......aaaaaaaaaaaaaaaa",
@@ -73,6 +69,10 @@
    "....~~~~..........ffbbbbbbbbbbbbbbbbbbbbbbbbbbbbddddbbbbbbbbbbbbbbbbbbbbbbbbbbbbff......aaaaaaaaaaaaaaaa",
    "....~~~~..........ffbbbbbbbbbbbbbbbbbbbbbbbbbbbbddddbbbbbbbbbbbbbbbbbbbbbbbbbbbbff......aaaaaaaaaaaaaaaa",
    "....~~~~..........ffbbbbbbbbbbbbbbbbbbbbbbbbbbbbddddbbbbbbbbbbbbbbbbbbbbbbbbbbbbff......aaaaaaaaaaaaaaaa",
+   "....~~~~..........ffbbbbbbbbbbbbccccccccccccbbbbddddbbbbbbbbbbbbbbbbbbbbbbbbbbbbff......aaaaaaaaaaaaaaaa",
+   "....~~~~..........ffbbbbbbbbbbbbccccccccccccbbbbddddbbbbbbbbbbbbbbbbbbbbbbbbbbbbff......aaaaaaaaaaaaaaaa",
+   "....~~~~..........ffbbbbbbbbbbbbccccccccccccbbbbddddbbbbbbbbbbbbbbbbbbbbbbbbbbbbff......aaaaaaaaaaaaaaaa",
+   "....~~~~..........ffbbbbbbbbbbbbccccccccccccbbbbddddbbbbbbbbbbbbbbbbbbbbbbbbbbbbff......aaaaaaaaaaaaaaaa",
    "....~~~~..........ffbbbbbbbbbbbbbbbbbbbbbbbbbbbbddddbbbbbbbbbbbbbbbbbbbbbbbbbbbbff......aaaaaaaaaaaaaaaa",
    "....~~~~..........ffbbbbbbbbbbbbbbbbbbbbbbbbbbbbddddbbbbbbbbbbbbbbbbbbbbbbbbbbbbff......aaaaaaaaaaaaaaaa",
    "....~~~~..........ffbbbbbbbbbbbbbbbbbbbbbbbbbbbbddddbbbbbbbbbbbbbbbbbbbbbbbbbbbbff......aaaaaaaaaaaaaaaa",
@@ -282,8 +282,8 @@
   },
   {
    "kind": "building.stable",
-   "x": 63,
-   "y": 45,
+   "x": 35,
+   "y": 53,
    "w": 6,
    "h": 3,
    "id": "stables",
@@ -486,6 +486,13 @@
   },
   {
    "kind": "tree.willow",
+   "x": 64,
+   "y": 40,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
    "x": 69,
    "y": 35,
    "w": 1,
@@ -616,13 +623,35 @@
    "y": 77,
    "w": 1,
    "h": 1
+  },
+  {
+   "kind": "prop.gateshut_ns",
+   "x": 48,
+   "y": 64,
+   "w": 4,
+   "h": 2,
+   "id": "south-gate-shut",
+   "in": [
+    "night"
+   ]
+  },
+  {
+   "kind": "prop.gateshut",
+   "x": 18,
+   "y": 36,
+   "w": 2,
+   "h": 4,
+   "id": "west-gate-shut",
+   "in": [
+    "night"
+   ]
   }
  ],
  "spots": [
   {
    "id": "stables-door",
-   "x": 66.5,
-   "y": 43.7,
+   "x": 38.5,
+   "y": 51.7,
    "node": "",
    "label": "The stables' door",
    "note": "x19: Hou Cheng starts here"
@@ -717,14 +746,14 @@
    "say": [],
    "watch": {
     "id": "guard-causeway",
-    "cone": 20,
+    "cone": 12,
     "beat": [
      [
       53.5,
       37.9
      ],
      [
-      73.5,
+      77.5,
       37.9
      ],
      [
@@ -733,7 +762,7 @@
      ]
     ],
     "pause": [
-     73.5,
+     77.5,
      37.9,
      2
     ],
@@ -745,32 +774,6 @@
     "shape": "U"
    },
    "x": 53.5,
-   "y": 37.9
-  },
-  {
-   "id": "guard-gate",
-   "kind": "folk.soldier",
-   "say": [],
-   "watch": {
-    "id": "guard-gate",
-    "cone": 16,
-    "beat": [
-     [
-      77.5,
-      37.9
-     ]
-    ],
-    "turns": [
-     "left",
-     "down"
-    ],
-    "in_beats": [
-     "14-x19"
-    ],
-    "seen": "guard",
-    "back_to": "stables-door"
-   },
-   "x": 77.5,
    "y": 37.9
   }
  ],
@@ -844,7 +847,33 @@
    "id": "night",
    "when": "node:x18",
    "until": "node:x19",
-   "light": "night"
+   "light": "night",
+   "shut": [
+    {
+     "gate": "south-gate",
+     "rect": [
+      48,
+      64,
+      4,
+      2
+     ],
+     "say": [
+      "The gate is barred, and the water stands at its arch. Only the east gate opens."
+     ]
+    },
+    {
+     "gate": "west-gate",
+     "rect": [
+      18,
+      36,
+      2,
+      4
+     ],
+     "say": [
+      "The gate is barred, and the water stands at its arch. Only the east gate opens."
+     ]
+    }
+   ]
   },
   {
    "id": "taken",
@@ -9015,18 +9044,6 @@
     ],
     [
      35,
-     53
-    ],
-    [
-     35,
-     54
-    ],
-    [
-     35,
-     55
-    ],
-    [
-     35,
      56
     ],
     [
@@ -9143,18 +9160,6 @@
     ],
     [
      36,
-     53
-    ],
-    [
-     36,
-     54
-    ],
-    [
-     36,
-     55
-    ],
-    [
-     36,
      56
     ],
     [
@@ -9268,18 +9273,6 @@
     [
      37,
      52
-    ],
-    [
-     37,
-     53
-    ],
-    [
-     37,
-     54
-    ],
-    [
-     37,
-     55
     ],
     [
      37,
@@ -9407,18 +9400,6 @@
     ],
     [
      38,
-     53
-    ],
-    [
-     38,
-     54
-    ],
-    [
-     38,
-     55
-    ],
-    [
-     38,
      56
     ],
     [
@@ -9535,18 +9516,6 @@
     ],
     [
      39,
-     53
-    ],
-    [
-     39,
-     54
-    ],
-    [
-     39,
-     55
-    ],
-    [
-     39,
      56
     ],
     [
@@ -9660,18 +9629,6 @@
     [
      40,
      52
-    ],
-    [
-     40,
-     53
-    ],
-    [
-     40,
-     54
-    ],
-    [
-     40,
-     55
     ],
     [
      40,
@@ -12699,6 +12656,18 @@
     ],
     [
      63,
+     45
+    ],
+    [
+     63,
+     46
+    ],
+    [
+     63,
+     47
+    ],
+    [
+     63,
      48
     ],
     [
@@ -12820,6 +12789,18 @@
     [
      64,
      44
+    ],
+    [
+     64,
+     45
+    ],
+    [
+     64,
+     46
+    ],
+    [
+     64,
+     47
     ],
     [
      64,
@@ -12944,6 +12925,18 @@
     [
      65,
      44
+    ],
+    [
+     65,
+     45
+    ],
+    [
+     65,
+     46
+    ],
+    [
+     65,
+     47
     ],
     [
      65,
@@ -13068,6 +13061,18 @@
     [
      66,
      44
+    ],
+    [
+     66,
+     45
+    ],
+    [
+     66,
+     46
+    ],
+    [
+     66,
+     47
     ],
     [
      66,
@@ -13192,6 +13197,18 @@
     [
      67,
      44
+    ],
+    [
+     67,
+     45
+    ],
+    [
+     67,
+     46
+    ],
+    [
+     67,
+     47
     ],
     [
      67,
@@ -13316,6 +13333,18 @@
     [
      68,
      44
+    ],
+    [
+     68,
+     45
+    ],
+    [
+     68,
+     46
+    ],
+    [
+     68,
+     47
     ],
     [
      68,
@@ -22804,10 +22833,6 @@
     [
      64,
      35
-    ],
-    [
-     64,
-     40
     ],
     [
      64,

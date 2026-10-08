@@ -621,4 +621,5 @@ ZH_PLACES2 = {
     "Go to the prefecture hall: Chen Deng has advice for you.": "前往州衙正堂：陈登有话要对你说。",
     "The household's carriages, bound for Xiapi": "家眷的车驾，往下邳去",
     "Grain carts for Xiapi": "运往下邳的粮车",
+    "The gate is barred, and the water stands at its arch. Only the east gate opens.": "城门已闩，水已漫到门洞。只有东门还开着。",
 }
