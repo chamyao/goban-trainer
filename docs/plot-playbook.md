@@ -1,9 +1,10 @@
 # Plot playbook: how to write a book of *Tian Cai Zhi Wang*
 
-This is the process the Plot session used for the Diaochan arc (Book 2, novel chapters 8–9), written down so the next arc
-and the next book can be done the same way. It has three layers:
+This is the process the Plot session used for the Cao Cao arc (novel chapters 3–4) and the Diaochan arc (chapters 8–9),
+written down so the next arc can be done the same way. It is laid out in these parts:
 
-- **Part 1, the core principles:** the craft of telling the story. This part comes first.
+- **Part 0, the foundation:** the game is built around the novel's most interesting narratives.
+- **Part 1, the core principles:** the craft of telling the story.
 - **Part 2, how the game works:** the rules and decisions that shape every arc.
 - **Parts 3–5:** the steps, a checklist, and the questions still open.
 
@@ -20,6 +21,55 @@ and the next book can be done the same way. It has three layers:
 Quotes are kept as the user typed them.
 
 ---
+
+## Part 0: The foundation (what the game is built around)
+
+> "yes we should base the game around interesting narratives within the novel such as diaochans"
+
+> "but I like what we did with her, it made the gameplay much more interesting to center it on her"
+
+**The game is built from the novel's most interesting narratives, not from a chapter-by-chapter walk through it.** Each arc
+takes one compelling story inside the novel and builds itself around it. A good arc has:
+- **A centre with stakes:** a person whose own moments carry risk, nerve or cost, so they are good to play. Diaochan between
+  two dangerous men; Cao Cao from the voice of sense to "I'd rather wrong the world".
+- **A shape:** a beginning, a turn and an end inside the novel. The chain plot runs from the garden vow to Dong Zhuo's death
+  and its price.
+- **Its own world:** a few places, a cast, and payoffs planted and paid inside the arc.
+
+**Draw on the women's stories.**
+
+> "also, in general I find it more intersting to have women have an emphasis to the plot such as diaochan, so while the
+> characters are majority men, we should try to draw on the female stories as well to keep it more entertaining"
+
+The novel's cast is mostly men, but its women often stand at the turning points: Diaochan, Lady Zou at Wancheng, Lady Yan
+and Lü Bu's daughter at Xiapi, Lady Mi at Changban, Lady Sun's marriage. When choosing a narrative or a lead, look for
+these stories first, and give the women real moments to play and real lines, as the Diaochan arc did. The limit is R1:
+their stories are told as the novel tells them. Invention is allowed only where it serves the plot, never to give someone
+a role the novel doesn't support.
+
+**Give each arc a new mechanic drawn from its story.**
+
+> "did you introduce any new game mechanics? for example an interesting on in the diaochan arc was the stealth mechanic I
+> enjoyed something like that"
+
+The Diaochan arc brought stealth (Diaochan moving unseen through Dong Zhuo's residence). The Cao Cao arc brought no new
+mechanic: only cosmetic touches (fireflies on the route light, a led horse, a crouch pose). That was a miss. Every arc
+should introduce at least one new way to play, and it should come out of the narrative itself, the way stealth came out
+of a woman who must not be seen. Design it with the arc, not after, and send it to Integration and Places with the design.
+
+Small touches that dress an existing system in the story are worth doing too, alongside the new mechanic rather than
+instead of it. At Beimang the route light became the novel's fireflies:
+
+> "fireflies drawn on the route light this was a good touch though I liked it"
+
+Look for these in every arc: something the novel shows (fireflies, lanterns, a horse, a banner) can become how the game
+shows something it already does.
+
+What this changes:
+- **Choosing what to make next** means choosing a narrative, not the next chapters. Chronology still decides the order in
+  which published arcs are chained (the Cao Cao arc leads into the Diaochan arc), and scrolls bridge what lies between (R16).
+- **Choosing the lead** means choosing whoever makes that narrative best to play (R3: follow the actor, not the narrator).
+- **Faithfulness** still holds inside the arc (R1): the novel's events, in its order, in its words.
 
 ## Part 1: Core principles (how to tell the story)
 
@@ -163,6 +213,15 @@ These came from the second research round, on *Chinese Paladin*, *Xuan-Yuan Swor
   would she save the dynasty" and "why her though… what can she even do", the answer showed that Diaochan carries out the
   chain plot. So her moments of risk became hers to play, and Wang Yun kept the legwork. The user's reply was "yeah I like
   that".
+- **Follow the actor, not the narrator.** The novel's narration in chapters 8–9 stays with Wang Yun, Dong Zhuo and Lü Bu.
+  Diaochan is the hinge of the plot but is mostly seen from outside, and the chapter titles don't name her. We centred
+  the arc on her anyway, because her moments are the ones with the most risk and nerve, which makes them the best things
+  to play. The user confirmed it worked:
+
+  > "but I like what we did with her, it made the gameplay much more interesting to center it on her"
+
+  Faithfulness is about the novel's events, order and words. It isn't about whose eyes the novel watches through. Pick the
+  lead whose moments make the best play, as long as every event still happens as written.
 - To find who acts, survey the chapters for tasks (Part 2, step 2). That survey showed that in chapters 5–7 Liu Bei has no
   task of his own, so the act is handed around.
 - Playing the villain is fine when the novel's focus goes there: Li Su's lie at Meiwu, Jia Xu's rumour, Li Jue at Ren
@@ -215,6 +274,9 @@ because it can't be kept up across a long game. The dilemma caption carries the 
 
 > "yeah, it would be cool if a difficult scene progressed with dialogue and had multiple beats I suppose"
 
+- **Exception, chases:** when a chaser catches you, you get one attempt at a problem. Solve it and play on; fail it and the
+  whole chase restarts. In the user's words: "if he gets cuaght could get one attempt to sovle a problem and continue, if
+  fail, restart the whole scene".
 - No "pass 4 of 5" sets. Plot had borrowed that from another game without a reason of its own. A set lets players guess
   past problems, and the game is for learning go.
 - A hard scene gets two or three problems **at the turns the novel's dialogue gives**, with lines between them. A slip
