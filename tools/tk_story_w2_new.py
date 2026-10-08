@@ -2527,7 +2527,7 @@ def _scenes_lvbu():
             S("lvbu", "You're right.", "公言極是。"),
             N("Lü Bu goes home to make ready. It is bitter winter, and he tells his servants to pack plenty of padded clothes.", "遂歸府收拾戎裝。時方冬寒，分付從人多帶綿衣。"),
             N("In her rooms, his wife hears of it.", "布妻嚴氏聞之。"),
-            ["party", ["yanshi"], {"to": "x15"}],
+            ["party", ["yanshi"], {"to": {"place": "Xiapi", "spot": "yan-start"}}],
         ]},
 
         # X15 · Where are you going? Played as Lady Yan (the novel gives her the initiative). Three boards.
@@ -2626,7 +2626,7 @@ def _scenes_lvbu():
             S("houcheng", "What he trusts in is Red Hare. If you two will open the gate and take him, I'll steal the horse first and take it to Lord Cao.",
               "布所倚恃者，赤兔馬也。汝二人果能獻門擒布，吾當先盜馬去見曹公。"),
             ["remove", "hc"], ["remove", "sx"], ["remove", "wx"],
-            ["party", ["houcheng"], {"to": "x18"}],
+            ["party", ["houcheng"], {"to": {"place": "Xiapi", "spot": "stables-door"}}],
         ]},
 
         # X19 · Red Hare. Played as Hou Cheng. Legwork: the board first (getting to the stables unseen).
