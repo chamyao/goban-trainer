@@ -57,6 +57,14 @@ mechanic: only cosmetic touches (fireflies on the route light, a led horse, a cr
 should introduce at least one new way to play, and it should come out of the narrative itself, the way stealth came out
 of a woman who must not be seen. Design it with the arc, not after, and send it to Integration and Places with the design.
 
+Small touches that dress an existing system in the story are worth doing too, alongside the new mechanic rather than
+instead of it. At Beimang the route light became the novel's fireflies:
+
+> "fireflies drawn on the route light this was a good touch though I liked it"
+
+Look for these in every arc: something the novel shows (fireflies, lanterns, a horse, a banner) can become how the game
+shows something it already does.
+
 What this changes:
 - **Choosing what to make next** means choosing a narrative, not the next chapters. Chronology still decides the order in
   which published arcs are chained (the Cao Cao arc leads into the Diaochan arc), and scrolls bridge what lies between (R16).
