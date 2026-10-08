@@ -1,11 +1,19 @@
-# The Diaochan arc: script (generated from tools/tk_story_w2_new.py)
+# The Diaochan arc: script (generated from tools/tk_story_w2_new.py by tools/tk_script_md.py)
 
-Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in brackets. A12y is not in the novel (added on the user's call).
+Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in brackets.
+
+## Opening scroll: Chapter 8
+
+> Minister Wang cleverly sets the chain of schemes; Grand Preceptor Dong storms the Phoenix Pavilion.  
+> 王司徒巧使连环计，董太师大闹凤仪亭。
+> Dong Zhuo has burned Luoyang and moved the court west to Chang'an. The lords who rose against him have fallen to fighting one another.  
+> 董卓火烧洛阳，迁都长安。起兵讨董的诸侯，已自相攻伐。
+> In Chang'an he does as he pleases, with Lü Bu, the strongest warrior alive, at his side as his adopted son. No minister dares to speak.  
+> 长安城中，董卓为所欲为。天下第一猛将吕布，是他的义子，随侍左右。满朝公卿，无人敢言。
+
 
 ## A1 · The Roadside Banquet (横门设宴)
 *Chang'an* · no board
-
-*(the player is now: Wang Yun)*
 
 *Dong Zhuo now calls himself Honoured Father, and comes and goes with an emperor's regalia. Whenever he leaves Chang'an by the Heng Gate, every minister must line the road to see him off.*  
 董卓自号为尚父，出入僭天子仪仗。卓往来长安，公卿皆候送于横门外。
@@ -49,7 +57,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 
 ## A2 · The Peony Pavilion (牡丹亭)
-*Chang'an* · boards: **Wang Yun** — “Stake the whole house on a sixteen-year-old girl?”
+*Chang'an* · boards: **Wang Yun**: “Stake the whole house on a sixteen-year-old girl?”
 
 *Late at night, under a bright moon, Wang Yun walks into the rear garden leaning on his staff. He stands by the rose trellis, looks up at the sky, and weeps.*  
 至夜深月明，王允策杖步入后园，立于荼蘼架侧，仰天垂泪。
@@ -134,7 +142,10 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 
 ## A3 · The Gold Crown (金冠)
-*Chang'an* · boards: **Wang Yun** — “Get the crown to Lü Bu unseen.”
+*Chang'an* · boards: **Wang Yun**: “Get the crown to Lü Bu unseen.”
+
+- Gate: needs item:pearls. Objective: Fetch the family pearls from the old steward, in your rear hall.
+- Gate: needs item:crown. Objective: Take the pearls to the jeweller's, at the west end of the market street, to be set into a gold crown.
 
 **▶ GO PROBLEM**
 
@@ -146,7 +157,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 
 ## A4 · The First Banquet (初宴吕布)
-*Chang'an / wy-rearhall* · boards: **Diaochan** — “Win him.”
+*Chang'an* · room `wy-rearhall` · boards: **Diaochan**: “Win him.”
 
 *Wang Yun has laid out the finest food. He goes out to the gate to welcome Lü Bu, leads him to the rear hall, and seats him in the place of honour.*  
 允预备嘉肴美馔；候吕布至，允出门迎迓，接入后堂，延之上坐。
@@ -219,7 +230,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 
 ## A5 · The Dance Behind the Curtain (帘外之舞)
-*Chang'an / wy-hall* · boards: **Diaochan** — “Make the Grand Preceptor take me.”
+*Chang'an* · room `wy-hall` · boards: **Diaochan**: “Make the Grand Preceptor take me.”
 
 *A few days later, at court, Wang Yun waits until Lü Bu is away from Dong Zhuo's side, then kneels and invites the Grand Preceptor to dine at his house.*  
 过了数日，王允在朝堂，见了董卓，趁吕布不在侧，伏地拜请太师到草舍赴宴。
@@ -301,7 +312,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 
 ## A6 · Red Lanterns (红灯照道)
-*Chang'an* · boards: **Wang Yun** — “Lie to Lü Bu's face.”
+*Chang'an* · boards: **Wang Yun**: “Lie to Lü Bu's face.”
 
 *Wang Yun escorts Dong Zhuo all the way to the Chancellor's residence, then rides home. He is not halfway there when two rows of red lanterns light up the road. Lü Bu is riding toward him, halberd in hand.*  
 允亲送董卓直到相府，然后辞回。乘马而行，不到半路，只见两行红灯照道，吕布骑马执戟而来。
@@ -344,7 +355,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 
 ## A7 · The Face in the Pond (池中人影)
-*Chang'an / xf-bedroom* · boards: **Diaochan** — “Make him believe the tears.”
+*Chang'an* · room `xf-bedroom` · boards: **Diaochan**: “Make him believe the tears.”
 
 *The next day Lü Bu asks all through the Chancellor's residence, and hears nothing of her. He goes straight into the hall and questions the maids.*  
 次日，吕布在府中打听，绝不闻音耗。布径入堂中，寻问诸侍妾。
@@ -370,7 +381,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 
 ## A7C · Half a Face (微露半面)
-*Chang'an / xf-hall* · no board
+*Chang'an* · room `xf-hall` · no board
 
 **Dong Zhuo:** All quiet outside?  
 外面无事乎？
@@ -389,7 +400,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 
 ## A8 · Behind the Sickbed (床后指心)
-*Chang'an / xf-bedroom* · boards: **Diaochan** — “Tell him, without waking the man between us.”
+*Chang'an* · room `xf-bedroom` · boards: **Diaochan**: “Tell him, without waking the man between us.”
 
 *From the day he takes Diaochan, Dong Zhuo is so bewitched that for a month and more he does not see to affairs of state.*  
 董卓自纳貂蝉后，为色所迷，月余不出理事。
@@ -436,7 +447,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 
 ## A9 · The Phoenix Pavilion (凤仪亭)
-*Chang'an* · boards: **Diaochan** — “Make him believe me.” / **Diaochan** — “Keep him from leaving.” / **Diaochan** — “Shame him into staying.”
+*Chang'an* · boards: **Diaochan**: “Make him believe me.” / **Diaochan**: “Keep him from leaving.” / **Diaochan**: “Shame him into staying.”
 
 *When Dong Zhuo is well, he goes to court, with Lü Bu behind him holding his halberd. Seeing Dong Zhuo deep in talk with the Emperor, Lü Bu slips out of the inner gate, mounts, and rides straight to the Chancellor's residence. He ties his horse at the gate and goes into the rear hall to find Diaochan.*  
 卓疾既愈，入朝议事。布执戟相随，见卓与献帝共谈，便乘间提戟出内门，上马径投相府来；系马府前，提戟入后堂，寻见貂蝉。
@@ -513,7 +524,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 
 ## A10 · The Sword on the Wall (壁间宝剑)
-*Chang'an / xf-hall* · boards: **Diaochan** — “Lie about the pavilion.” / **Diaochan** — “Put the sword to my throat.” / **Diaochan** — “Turn it on Li Ru.”
+*Chang'an* · room `xf-hall` · boards: **Diaochan**: “Lie about the pavilion.” / **Diaochan**: “Put the sword to my throat.” / **Diaochan**: “Turn it on Li Ru.”
 
 *The man was Li Ru. He helps Dong Zhuo up, and they sit down in the study.*  
 撞倒董卓的人，正是李儒。当下李儒扶起董卓，至书院中坐定。
@@ -616,7 +627,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 
 ## A11 · You Are a Lü, He Is a Dong (将军自姓吕)
-*Chang'an* · boards: **Wang Yun** — “Provoke him.” / **Wang Yun** — “Answer 'but he is my father'.” / **Wang Yun** — “Loyal minister, or traitor?”
+*Chang'an* · boards: **Wang Yun**: “Provoke him.” / **Wang Yun**: “Answer 'but he is my father'.” / **Wang Yun**: “Loyal minister, or traitor?”
 
 [still: `lb_ridge`]
 
@@ -723,7 +734,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 
 ## A12A · Shisun Rui (士孙瑞)
-*Chang'an* · boards: **Wang Yun** — “Sound out Shisun Rui.”
+*Chang'an* · boards: **Wang Yun**: “Sound out Shisun Rui.”
 
 **▶ GO PROBLEM**
 
@@ -732,7 +743,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 
 ## A12B · Huang Wan (黄琬)
-*Chang'an* · boards: **Wang Yun** — “Sound out Huang Wan.”
+*Chang'an* · boards: **Wang Yun**: “Sound out Huang Wan.”
 
 **▶ GO PROBLEM**
 
@@ -741,7 +752,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 
 ## A12Y · Stones, Not Men (只谈棋子)
-*Chang'an / caiyong* · boards: **Wang Yun** — “Read Cai Yong.”
+*Chang'an* · room `caiyong` · boards: **Wang Yun**: “Read Cai Yong.”
 
 *Cai Yong, the Palace Attendant, is the greatest scholar of the age. When Dong Zhuo took power he sent for him, and Cai Yong refused. Dong Zhuo sent word: come, or your whole clan dies. He came. Then Dong Zhuo promoted him three times in a single month.*  
 侍中蔡邕，当世大儒。董卓秉政，征之，邕不赴。卓使人谓邕曰：“如不来，当灭汝族。”邕惧，只得应命而至。卓见邕大喜，一月三迁其官。
@@ -779,7 +790,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 
 ## A12P · The Plan (定计)
-*Chang'an / wy-secret* · no board
+*Chang'an* · room `wy-secret` · no board
 
 *Wang Yun brings Shisun Rui and Huang Wan together in the secret room.*  
 允即请仆射士孙瑞、司隶校尉黄琬商议。
@@ -794,25 +805,27 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 吕布同郡骑都尉李肃，以董卓不迁其官，甚是怀怨。若令此人去，卓必不疑。
 
 **Wang Yun:** Good.  
-善。
+最好。
 
 
 ## A12C · The Secret Edict (天子密诏)
-*Chang'an / side-hall* · boards: **Wang Yun** — “Reach the Emperor unseen.”
+*Chang'an* · room `side-hall` · boards: **Wang Yun**: “Reach the Emperor unseen.”
 
 **▶ GO PROBLEM**
 
 *Wang Yun is admitted to the Emperor, newly risen from his sickbed, and comes out with an edict in the Emperor's own hand, hidden in his sleeve.*  
 允入见天子。天子病体新愈，亲书密诏，允藏于袖中而出。
 
-*(gained: The Emperor's secret edict)*
+*(gained: edict)*
 
 
 ## A12 · The Broken Arrow (折箭为誓)
-*Chang'an / wy-secret* · boards: **Li Su** — “Turn on the Grand Preceptor?”
+*Chang'an* · room `wy-secret` · boards: **Li Su**: “Turn on the Grand Preceptor?”
 
 *Wang Yun calls Lü Bu in to plan with them, and gives him the Emperor's secret edict.*  
 允请吕布共议，以天子密诏付之。
+
+*(Wang Yun gives edict to lb)*
 
 **Lü Bu:** Li Su? He's the one who talked me into killing Ding Jianyang. If he won't go now, I'll cut him down first.  
 昔日劝吾杀丁建阳，亦此人也。今若不去，吾先斩之。
@@ -840,7 +853,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 
 ## A13 · A Dragon in a Dream (夜梦龙罩)
-*Meiwu / hall* · boards: **Li Su** — “Lie to the Grand Preceptor.”
+*Meiwu* · room `hall` · boards: **Li Su**: “Lie to the Grand Preceptor.”
 
 *The next day Li Su rides to Meiwu with a dozen horsemen. Word goes in that an edict has come from the Emperor, and Dong Zhuo calls him in.*  
 次日，李肃引十数骑，前到郿坞。人报天子有诏，卓叫唤入。
@@ -899,7 +912,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 
 ## A13A · A Broken Wheel (车折马嘶)
-*Meiwu Road* · boards: **Li Su** — “Explain away the broken wheel.”
+*Meiwu Road* · boards: **Li Su**: “Explain away the broken wheel.”
 
 *Dong Zhuo leaves the fortress in his carriage, guards before and behind, and sets out for Chang'an.*  
 卓出坞上车，前遮后拥，望长安来。
@@ -922,7 +935,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 
 ## A13B · Wind and Fog (狂风昏雾)
-*Meiwu Road* · boards: **Li Su** — “Explain away the wind and the fog.”
+*Meiwu Road* · boards: **Li Su**: “Explain away the wind and the fog.”
 
 [still: `omen_fog`]
 
@@ -942,7 +955,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 
 ## A13C · Grass of a Thousand Li (千里草)
-*Meiwu Road* · boards: **Li Su** — “Explain away the children's song.”
+*Meiwu Road* · boards: **Li Su**: “Explain away the children's song.”
 
 *At the city, all the officials come out to meet him. Only Li Ru stays at home, ill. Dong Zhuo goes to the Chancellor's residence, and Lü Bu comes in to congratulate him.*  
 即至城外，百官俱出迎接。只有李儒抱病在家，不能出迎。卓进至相府，吕布入贺。
@@ -995,7 +1008,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 
 ## A14 · There Is an Edict to Kill a Traitor (有诏讨贼)
-*Chang'an* · boards: **Li Su** — “Get the carriage through the gate.” / **Li Su** — “Push the carriage straight in.” / **Li Su** — “Finish it.” · **BOSS**
+*Chang'an* · boards: **Li Su**: “Get the carriage through the gate.” / **Li Su**: “Push the carriage straight in.” / **Li Su**: “Finish it.” · **BOSS**
 
 *The officials, in court dress, line the road to greet him. Li Su walks beside the carriage with a drawn sword in his hand. At the North Side Gate the guards are all stopped outside. Only the twenty-odd men drawing the carriage go in with it.*  
 卓进朝，群臣各具朝服，迎谒于道。李肃手执宝剑扶车而行。到北掖门，军兵尽挡在门外，独有御车二十余人同入。
@@ -1043,6 +1056,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 *(the player is now: Wang Yun)*
 
+
 ## A15 · A Lamp in the Market (脐中为灯)
 *Chang'an* · no board
 
@@ -1067,7 +1081,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 
 ## A15M · Meiwu (郿坞)
-*Meiwu / diaochan* · no board
+*Meiwu* · room `diaochan` · no board
 
 [still: `dc_meiwu`]
 
@@ -1081,7 +1095,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 
 ## A15C · Cai Yong Weeps (蔡邕哭尸)
-*Chang'an / dutang* · no board
+*Chang'an* · room `dutang` · no board
 
 *Wang Yun feasts the army, and gathers the officials in the great hall to drink in celebration. In the middle of the feast a man reports that someone is lying across Dong Zhuo's body in the market, weeping aloud.*  
 允乃大犒军士，设宴于都堂，召集众官，酌酒称庆。正饮宴间，忽人报曰：“董卓暴尸于市，忽有一人伏其尸而大哭。”
@@ -1122,7 +1136,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 
 ## A16 · No Pardon (求赦不得)
-*Liangzhou* · boards: **Jia Xu** — “Keep them from scattering.”
+*Liangzhou* · boards: **Jia Xu**: “Keep them from scattering.”
 
 *Li Jue, Guo Si, Zhang Ji and Fan Chou, hiding in Shaanxi, send a memorial to Chang'an begging for a pardon.*  
 李傕、郭汜、张济、樊稠逃居陕西，使人至长安上表求赦。
@@ -1143,7 +1157,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 
 ## A16A · A Rumour in Liangzhou (流言西凉)
-*Liangzhou* · boards: **Jia Xu** — “Spread the rumour.”
+*Liangzhou* · boards: **Jia Xu**: “Spread the rumour.”
 
 **▶ GO PROBLEM**
 
@@ -1152,7 +1166,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 
 ## A16B · Fear (众皆惊惶)
-*Liangzhou* · boards: **Jia Xu** — “Let the fear spread.”
+*Liangzhou* · boards: **Jia Xu**: “Let the fear spread.”
 
 **▶ GO PROBLEM**
 
@@ -1161,7 +1175,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 
 ## A16C · Will You Follow Me? (能从我反乎)
-*Liangzhou* · boards: **Jia Xu** — “Ask them to rise.”
+*Liangzhou* · boards: **Jia Xu**: “Ask them to rise.”
 
 **▶ GO PROBLEM**
 
@@ -1172,6 +1186,8 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 ## A16M · The March on Chang'an (杀奔长安)
 *Liangzhou* · no board
 
+- Gate: needs node:a16a, node:a16b, node:a16c. Objective: Spread the rumour through the villages of Liangzhou.
+
 *They gather more than a hundred thousand men, split them into four columns, and march on Chang'an. On the road they meet Dong Zhuo's son-in-law, Niu Fu, coming with five thousand men to avenge him. Li Jue joins forces with him, and sends him on ahead.*  
 于是聚众十余万，分作四路，杀奔长安来。路逢董卓女婿中郎将牛辅，引军五千人，欲去与丈人报仇，李傕便与合兵，使为前驱。
 
@@ -1179,7 +1195,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 
 ## A17 · Gong to Advance, Drum to Withdraw (鸣金进兵)
-*Liangzhou* · boards: **Li Jue** — “Hold Lü Bu at the mouth of Ren Valley.”
+*Liangzhou* · boards: **Li Jue**: “Hold Lü Bu at the mouth of Ren Valley.”
 
 *Lü Bu sends Li Su out against them. Li Su beats Niu Fu in the first fight, but that night, the second watch, Niu Fu raids his camp. Li Su loses half his army and flees thirty li. Lü Bu is furious, has him beheaded, and hangs his head at the camp gate.*  
 布遂引李肃将兵出敌。肃当先迎战，正与牛辅相遇，大杀一阵。不想是夜二更，牛辅乘肃不备，竟来劫寨。肃军乱窜，败走三十余里，折军大半。布大怒，遂斩李肃，悬头军门。
@@ -1220,7 +1236,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 
 ## A18 · Wang Yun Is Here (王允在此)
-*Chang'an / xuanping-top* · no board
+*Chang'an* · room `xuanping-top` · no board
 
 *Li Jue and Guo Si let their men loot the city. Minister after minister dies for the dynasty. The rebels close round the inner palace, and the Emperor's attendants beg him to go up on the Xuanping Gate tower to stop the slaughter.*  
 李傕、郭汜纵兵大掠，众臣多死于国难。贼兵围绕内庭至急，侍臣请天子上宣平门止乱。
@@ -1230,7 +1246,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 *Seeing the yellow canopy, Li Jue and Guo Si hold back their men, and cry: Long live the Emperor!*  
 李傕等望见黄盖，约住军士，口呼万岁。
 
-**Emperor Xian:** You came into Chang'an without waiting for my summons. What do you mean by it?  
+**the Prince of Chenliu:** You came into Chang'an without waiting for my summons. What do you mean by it?  
 卿不候奏请，辄入长安，意欲何为？
 
 **Li Jue:** Grand Preceptor Dong was the pillar of Your Majesty's throne, and Wang Yun murdered him for nothing. We've come only to avenge him, not to rebel. Give us Wang Yun, and we'll withdraw.  
@@ -1269,3 +1285,4 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 *What became of Emperor Xian? Hear the next chapter.*  
 未知献帝性命如何，且听下文分解。
 
+*(the player is now: Li Jue)*

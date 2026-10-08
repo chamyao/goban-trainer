@@ -322,6 +322,9 @@ Draft one arc, get it playable in a test book, and fix what the playtest shows b
   minimum setup on the opening scroll.
 - Continuity across books and arcs is a bonus. Plant payoffs so they work in either order: played first they plant,
   played second they explain.
+- When books are chained (a world's `next`), the earlier book's **closing scroll** bridges what lies between in the
+  novel's own order, and the later book's **opening scroll** still stands alone for a player who starts there. Example:
+  the Cao Cao arc closes on chapters 5–7 in four lines; the Diaochan arc opens on Chang'an under Dong Zhuo.
 
 ### R15. Relay only what the user said
 
