@@ -784,7 +784,7 @@ def ways(mb):
 def state(st, mb, plans):
     """A plan's state → the engine's: light from light+weather, distances and points in tiles of this map."""
     out = {k: v for k, v in st.items() if k not in ("light", "weather", "visibility", "procession", "exits_open", "exits_closed",
-                                                    "exits_closed_say")}
+                                                    "exits_closed_say", "water", "shut")}
     light = LIGHT.get((st.get("light"), st.get("weather"))) or LIGHT.get((st.get("light"), None)) or st.get("light", "day")
     out["light"] = light if light in ("day", "morning", "dusk", "night", "storm", "smoke") else "day"
     if st.get("weather"):
@@ -807,6 +807,16 @@ def state(st, mb, plans):
             out[k] = ids
     if st.get("exits_closed_say"):   # what a shut road or door says, by the place it leads to
         out["exits_closed_say"] = {to(k): v for k, v in st["exits_closed_say"].items() if to(k)}
+    if st.get("water"):   # the flood: the plan's named cells under water, as tile rects (a water-crossing mount crosses)
+        C = mb.C
+        out["water"] = [[x * C, y * C, w * C, h * C] for x, y, w, h in mb.p.get("floods", {})[st["water"]]]
+    if st.get("shut"):    # gates of a wall shut in this state: their tiles, and what they say
+        out["shut"] = []
+        for gid, say in st["shut"].items():
+            gap = mb.gate_tiles[gid]
+            x0, y0 = min(t[0] for t in gap), min(t[1] for t in gap)
+            out["shut"].append({"gate": gid, "rect": [x0, y0, max(t[0] for t in gap) - x0 + 1, max(t[1] for t in gap) - y0 + 1],
+                                "say": say})
     return out
 
 
@@ -1118,12 +1128,12 @@ def assets(maps, tables, kits_dir=None):
     return rows
 
 
-ARCS = {13: "cc"}   # test books whose plans are an arc's: Book 13 is the Cao Cao arc
+ARCS = {13: "cc", 14: "lb"}   # books whose plans are an arc's: Book 13 is the Cao Cao arc, Book 14 Lü Bu's fall
 
 
 def key_prefix(plans_world):
     """The book number the plans' beat keys carry ("2-c1" for the Cao Cao arc's plans)."""
-    return "2" if ARCS.get(plans_world, plans_world) == "cc" else str(plans_world)
+    return {"cc": "2", "lb": "3"}.get(ARCS.get(plans_world, plans_world), str(plans_world))
 
 
 def plans_arg(v):
@@ -1143,6 +1153,10 @@ def load(plans_world):
         from tk_places_w2_zh import ZH_PLACES2
         return mod.PLANS_CC, {"NEW_KINDS": mod.NEW_KINDS, "LINE_KINDS": mod.LINE_KINDS, "ZONE_KINDS": mod.ZONE_KINDS,
                               "ART": mod.ART}, ZH_PLACES2
+    if plans_world == "lb":   # Lü Bu's fall (Book 3's chapters 13-19): beat keys "3-x…"
+        import tk_plans_lb as mod
+        from tk_places_w2_zh import ZH_PLACES2
+        return mod.PLANS_LB, mod.TABLES, ZH_PLACES2
     if plans_world == 90:   # Talk with Claude: the study, no story
         import tk_plans_w90 as mod
         return mod.PLANS90, mod.TABLES, mod.ZH_PLACES90
@@ -1158,6 +1172,11 @@ def story_world(n, plans_world):
         from tk_plans_w90 import WORLD90 as W
     elif plans_world == "cc":
         from tk_story_w2_new import WORLD2_CC as W
+    elif plans_world == "lb":
+        try:
+            from tk_story_w2_new import WORLD3_LB as W
+        except ImportError:
+            raise SystemExit("no story yet for Lü Bu's fall (Plot's WORLD3_LB in tools/tk_story_w2_new.py)")
     else:
         raise SystemExit(f"no story for book {plans_world}")
     return {**W, "nodes": [{**nd, "key": f"{n}-{nd['key']}"} for nd in W["nodes"]],
