@@ -1,0 +1,513 @@
+{
+ "format": "tk-map/1",
+ "id": "the-shouchun-road",
+ "world": 14,
+ "name": "The Shouchun Road",
+ "archetype": "road",
+ "size": [
+  144,
+  36
+ ],
+ "seed": 1858,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "field.wheat",
+   ".": "grass",
+   "b": "hills",
+   "c": "plain",
+   "d": "road"
+  },
+  "rows": [
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "........................................................................................bbbbbbbbbbbbbbbb........cccccccccccccccccccccccccccc....",
+   "........................................................................................bbbbbbbbbbbbbbbb........cccccccccccccccccccccccccccc....",
+   "........................................................................................bbbbbbbbbbbbbbbb........cccccccccccccccccccccccccccc....",
+   "........................................................................................bbbbbbbbbbbbbbbb........cccccccccccccccccccccccccccc....",
+   "........................................................................................bbbbbbbbbbbbbbbb........cccccccccccccccccccccccccccc....",
+   "........................................................................................bbbbbbbbbbbbbbbb........cccccccccccccccccccccccccccc....",
+   "........................................................................................bbbbbbbbbbbbbbbb........cccccccccccccccccccccccccccc....",
+   "........................................................................................bbbbbbbbbbbbbbbb........cccccccccccccccccccccccccccc....",
+   "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+   "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+   "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+   "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+   "........aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa................................bbbbbbbbbbbbbbbb........cccccccccccccccccccccccccccc....",
+   "........aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa................................bbbbbbbbbbbbbbbb........cccccccccccccccccccccccccccc....",
+   "........aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa................................bbbbbbbbbbbbbbbb........cccccccccccccccccccccccccccc....",
+   "........aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa................................bbbbbbbbbbbbbbbb........cccccccccccccccccccccccccccc....",
+   "........aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa................................bbbbbbbbbbbbbbbb........cccccccccccccccccccccccccccc....",
+   "........aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa................................bbbbbbbbbbbbbbbb........cccccccccccccccccccccccccccc....",
+   "........aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa................................bbbbbbbbbbbbbbbb........cccccccccccccccccccccccccccc....",
+   "........aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa................................bbbbbbbbbbbbbbbb........cccccccccccccccccccccccccccc....",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+  ],
+  "walk": {
+   "field.wheat": true,
+   "grass": true,
+   "hills": false,
+   "plain": true,
+   "road": true
+  }
+ },
+ "lines": [
+  {
+   "id": "road",
+   "kind": "road",
+   "path": [
+    [
+     0,
+     4
+    ],
+    [
+     35,
+     4
+    ]
+   ],
+   "width": 3,
+   "tiles": 576
+  }
+ ],
+ "objects": [
+  {
+   "kind": "prop.carriage",
+   "x": 126,
+   "y": 9,
+   "w": 4,
+   "h": 2,
+   "id": "carriage",
+   "label": "The bridal carriage"
+  },
+  {
+   "kind": "camp.table",
+   "x": 117,
+   "y": 9,
+   "w": 2,
+   "h": 1,
+   "id": "drums",
+   "label": "The drums and pipes"
+  },
+  {
+   "kind": "milestone",
+   "x": 3,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 4,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 9,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 10,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 15,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 16,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 21,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 22,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 27,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 28,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 33,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 34,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 39,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 40,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 45,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 46,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 51,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 52,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 57,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 58,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 63,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 64,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 69,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 70,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 75,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 76,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 81,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 82,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 87,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 105,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 106,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 111,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 112,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 117,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 118,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 123,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 124,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 129,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 130,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 135,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 136,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 141,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 142,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "banner.red",
+   "x": 126,
+   "y": 11,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "banner.red",
+   "x": 130,
+   "y": 11,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "spots": [
+  {
+   "id": "x8",
+   "x": 125.5,
+   "y": 17.7,
+   "node": "14-x8",
+   "label": "The bridal party",
+   "trigger": "near"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "npc-1",
+   "kind": "folk.villager",
+   "x": 41.5,
+   "y": 21.9,
+   "say": [
+    "“Drums and pipes went by an hour ago, with a red carriage. A wedding for the south, they said.”"
+   ]
+  },
+  {
+   "id": "outrider",
+   "kind": "folk.soldier",
+   "x": 97.5,
+   "y": 17.9,
+   "say": [],
+   "intro": [
+    "One of Ji Ling's outriders wheels his horse across the narrows. “The bride of the House of Yuan rides under our guard. Turn back.”"
+   ],
+   "win": [
+    "“…Lü Bu's own man. Then go and argue with her escort, not me.”"
+   ],
+   "done": [
+    "The outrider has ridden back to the column."
+   ],
+   "until": "14-x8",
+   "when": "node:x7",
+   "blocks": "x8",
+   "view": 8,
+   "challenge": "outrider",
+   "guard": [
+    98.0,
+    18.0
+   ]
+  }
+ ],
+ "exits": [
+  {
+   "to": "xuzhou",
+   "side": "W",
+   "x": 0,
+   "y": 16,
+   "w": 1,
+   "h": 4
+  }
+ ],
+ "entries": {
+  "xuzhou": [
+   5,
+   17
+  ],
+  "": [
+   5,
+   17
+  ]
+ },
+ "states": [
+  {
+   "id": "road",
+   "light": "day"
+  }
+ ],
+ "ways": {
+  "nodes": [
+   [
+    2.0,
+    18.0
+   ],
+   [
+    142.0,
+    18.0
+   ]
+  ],
+  "edges": [
+   [
+    0,
+    1
+   ]
+  ]
+ },
+ "links": [
+  "xuzhou"
+ ]
+}

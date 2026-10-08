@@ -947,6 +947,12 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
             m["chase"] = lay_chase(mb, b["chase"])
             prove_chase(mb, b["chase"], m["chase"])
         m["states"] = [state(st, mb, plans) for st in b.get("states", [])]
+        shut = {}   # a gate shut in some states is drawn shut in them (tk-world only blocks it)
+        for st in m["states"]:
+            for g in st.get("shut", []):
+                shut.setdefault(g["gate"], (g["rect"], []))[1].append(st["id"])
+        for gid, ((x, y, w, h), ids) in shut.items():
+            m["objects"].append({"kind": "prop.gateshut", "x": x, "y": y, "w": w, "h": h, "id": f"{gid}-shut", "in": ids})
         if P.get("floods"):   # a flood that rises with the states: tile layers "water:<state ids>", proved state by state
             m["water_layers"] = flood_layers(mb, b.get("states", []))
             prove_flood(mb, b.get("states", []), P.get("flood_afoot", {}))

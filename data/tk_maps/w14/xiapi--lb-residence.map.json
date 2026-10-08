@@ -1,0 +1,174 @@
+{
+ "format": "tk-map/1",
+ "id": "xiapi--lb-residence",
+ "world": 14,
+ "name": "Lü Bu's residence",
+ "archetype": "compound",
+ "size": [
+  28,
+  24
+ ],
+ "seed": 1884,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "court",
+   ".": "grass",
+   "W": "wall"
+  },
+  "rows": [
+   "............................",
+   ".WWWWWWWWWWWWWWWWWWWWWWWWWW.",
+   ".W........................W.",
+   ".W........................W.",
+   ".W........................W.",
+   ".W........................W.",
+   ".W........................W.",
+   ".W........................W.",
+   ".W........................W.",
+   ".W........................W.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WWWWWWWWWWWaaWWWWWWWWWWWWW.",
+   "............................"
+  ],
+  "walk": {
+   "court": true,
+   "grass": true,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    14,
+    12
+   ],
+   "width": 1,
+   "gates": {
+    "gate": [
+     6,
+     11
+    ]
+   },
+   "tiles": 92
+  }
+ ],
+ "objects": [
+  {
+   "kind": "building.gatehouse",
+   "x": 12,
+   "y": 22,
+   "w": 2,
+   "h": 1,
+   "id": "gate",
+   "width": 2,
+   "wall": "walls",
+   "door": "S"
+  },
+  {
+   "kind": "building.hall_grand",
+   "x": 4,
+   "y": 3,
+   "w": 10,
+   "h": 5,
+   "id": "hall",
+   "door": "S",
+   "faces": "S",
+   "label": "Lü Bu's hall",
+   "map": "lb-fu",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.wing",
+   "x": 19,
+   "y": 4,
+   "w": 6,
+   "h": 4,
+   "id": "yan",
+   "door": "S",
+   "faces": "S",
+   "label": "Lady Yan's rooms",
+   "map": "yan-room",
+   "blocks_sight": true
+  },
+  {
+   "kind": "furn.rack",
+   "x": 2,
+   "y": 16,
+   "w": 2,
+   "h": 1,
+   "id": "rack",
+   "label": "Red Hare's saddle, ready"
+  }
+ ],
+ "spots": [],
+ "npcs": [],
+ "exits": [
+  {
+   "to": "xiapi--lb-fu",
+   "side": "N",
+   "x": 8.6,
+   "y": 7.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "xiapi--yan-room",
+   "side": "N",
+   "x": 21.6,
+   "y": 7.85,
+   "w": 0.8,
+   "h": 0.45,
+   "door": true
+  },
+  {
+   "to": "xiapi",
+   "side": "S",
+   "x": 12,
+   "y": 22,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "xiapi--lb-fu": [
+   9,
+   8
+  ],
+  "xiapi--yan-room": [
+   22,
+   8
+  ],
+  "xiapi": [
+   12,
+   21
+  ],
+  "": [
+   9,
+   8
+  ]
+ },
+ "parent": "xiapi",
+ "building": "lb-residence",
+ "links": [
+  "xiapi",
+  "xiapi--lb-fu",
+  "xiapi--yan-room"
+ ]
+}

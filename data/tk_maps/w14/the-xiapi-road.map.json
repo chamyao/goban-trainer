@@ -1,0 +1,678 @@
+{
+ "format": "tk-map/1",
+ "id": "the-xiapi-road",
+ "world": 14,
+ "name": "The Xiapi Road",
+ "archetype": "road",
+ "size": [
+  144,
+  36
+ ],
+ "seed": 1520,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "field.wheat",
+   ".": "grass",
+   "b": "hills",
+   "c": "road",
+   ":": "sand",
+   "~": "water"
+  },
+  "rows": [
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb~~~~bbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb~~~~bbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb~~~~bbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb~~~~bbbbbbbbbbbbbbbb",
+   "................aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa....................................................~~~~................",
+   "................aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa....................................................~~~~................",
+   "................aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa....................................................~~~~................",
+   "................aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa....................................................~~~~................",
+   "................aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa....................................................~~~~................",
+   "................aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa....................................................~~~~................",
+   "................aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa....................................................~~~~................",
+   "................aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa....................................................~~~~................",
+   "............................................................................................................................~~~~................",
+   "............................................................................................................................~~~~................",
+   "............................................................................................................................~~~~................",
+   "............................................................................................................................~~~~................",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "............................................................................................................................~~~~................",
+   "............................................................................................................................~~~~................",
+   "............................................................................................................................~~~~................",
+   "............................................................................................................................~~~~................",
+   "........................:~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~:................aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa~~~~................",
+   "........................~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~................aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa~~~~................",
+   "........................~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~................aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa~~~~................",
+   "........................~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~................aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa~~~~................",
+   "........................~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~................aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa~~~~................",
+   "........................~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~................aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa~~~~................",
+   "........................~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~................aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa~~~~................",
+   "........................~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~................aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa~~~~................",
+   "........................~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~....................................................................~~~~................",
+   "........................~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~....................................................................~~~~................",
+   "........................~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~....................................................................~~~~................",
+   "........................:~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~:....................................................................~~~~................"
+  ],
+  "walk": {
+   "field.wheat": true,
+   "grass": true,
+   "hills": false,
+   "road": true,
+   "sand": true,
+   "water": false
+  }
+ },
+ "lines": [
+  {
+   "id": "road",
+   "kind": "road",
+   "path": [
+    [
+     0,
+     4
+    ],
+    [
+     35,
+     4
+    ]
+   ],
+   "width": 3,
+   "tiles": 576
+  },
+  {
+   "id": "si",
+   "kind": "river",
+   "path": [
+    [
+     31,
+     0
+    ],
+    [
+     31,
+     8
+    ]
+   ],
+   "width": 3,
+   "tiles": 144
+  }
+ ],
+ "objects": [
+  {
+   "kind": "building.inn",
+   "x": 66,
+   "y": 13,
+   "w": 4,
+   "h": 2,
+   "id": "inn",
+   "door": "S",
+   "faces": "S",
+   "label": "A roadside inn",
+   "blocks_sight": true
+  },
+  {
+   "kind": "milestone",
+   "x": 0,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 5,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 10,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 15,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 20,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 25,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 30,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 35,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 40,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 45,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 50,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 55,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 60,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 65,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 70,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 75,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 80,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 85,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 90,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 95,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 100,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 105,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 110,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 115,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 120,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 130,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 135,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 140,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 3,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 4,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 9,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 16,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 21,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 22,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 27,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 28,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 33,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 34,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 39,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 46,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 51,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 52,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 57,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 58,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 63,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 64,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 76,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 81,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 82,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 87,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 88,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 93,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 94,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 99,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 106,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 111,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 112,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 117,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 118,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 123,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 129,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 136,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 141,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 142,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "prop.carriage",
+   "x": 49,
+   "y": 13,
+   "w": 1,
+   "h": 1,
+   "in": [
+    "move"
+   ],
+   "label": "The household's carriages, bound for Xiapi"
+  },
+  {
+   "kind": "prop.carriage",
+   "x": 81,
+   "y": 21,
+   "w": 1,
+   "h": 1,
+   "in": [
+    "move"
+   ],
+   "label": "Grain carts for Xiapi"
+  },
+  {
+   "kind": "prop.carriage",
+   "x": 109,
+   "y": 13,
+   "w": 1,
+   "h": 1,
+   "in": [
+    "move"
+   ]
+  }
+ ],
+ "spots": [],
+ "npcs": [
+  {
+   "id": "npc-1",
+   "kind": "folk.villager",
+   "x": 65.5,
+   "y": 17.9,
+   "say": [
+    "“Grain carts, all morning. Whatever's coming to Xuzhou, the general isn't staying to meet it.”"
+   ],
+   "in": [
+    "road"
+   ]
+  }
+ ],
+ "exits": [
+  {
+   "to": "xuzhou",
+   "side": "W",
+   "x": 0,
+   "y": 16,
+   "w": 1,
+   "h": 4
+  },
+  {
+   "to": "xiapi",
+   "side": "E",
+   "x": 143,
+   "y": 16,
+   "w": 1,
+   "h": 4
+  }
+ ],
+ "entries": {
+  "xuzhou": [
+   5,
+   17
+  ],
+  "xiapi": [
+   137,
+   17
+  ],
+  "": [
+   5,
+   17
+  ]
+ },
+ "states": [
+  {
+   "id": "road",
+   "light": "day"
+  },
+  {
+   "id": "move",
+   "when": "node:x11",
+   "until": "node:x13",
+   "light": "day"
+  }
+ ],
+ "ways": {
+  "nodes": [
+   [
+    2.0,
+    18.0
+   ],
+   [
+    142.0,
+    18.0
+   ]
+  ],
+  "edges": [
+   [
+    0,
+    1
+   ]
+  ]
+ },
+ "links": [
+  "xiapi",
+  "xuzhou"
+ ]
+}

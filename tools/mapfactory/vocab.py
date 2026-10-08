@@ -112,6 +112,7 @@ KINDS.update({
     "landmark.torch": (1, 1, True),        # a torch on a pole (the Cao Cao arc, C19)
     "prop.halberd": (1, 1, True),          # a halberd planted upright (Lü Bu's fall, x6)
     "prop.carriage": (4, 2, True),         # a bridal carriage hung with red silk (Lü Bu's fall, x9)
+    "prop.gateshut": (2, 2, False),        # a city gate's leaves shut across its gateway, in a state that shuts it
     "furn.screen": (3, 1, True),      # a folding screen behind a seat of honour
     "furn.rug": (3, 2, False),
     "furn.plant": (1, 1, True),
@@ -211,6 +212,7 @@ FALLBACK = {
     "landmark.torch": ["furn.lamp", "lamp.post"],
     "prop.halberd": ["furn.rack", "lamp.post"],
     "prop.carriage": ["camp.table", "furn.table"],
+    "prop.gateshut": ["camp.logs", "furn.rack"],
     "furn.counter": ["furn.table", "camp.table"],
     "furn.hearth": ["camp.cookfire", "camp.firepit"],
     "furn.barrel": ["furn.jar"],

@@ -1,0 +1,439 @@
+{
+ "format": "tk-map/1",
+ "id": "xiao-pass",
+ "world": 14,
+ "name": "Xiao Pass",
+ "archetype": "hills",
+ "size": [
+  96,
+  64
+ ],
+ "seed": 1065,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "camp",
+   "b": "cliff",
+   "c": "hills",
+   "d": "plain",
+   "f": "road"
+  },
+  "rows": [
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "aaaaaaaaaaaaaaaabbbbddddddddddddddddddddddddddddddddddddcccccccccccccccccccccccccccccccccccccccc",
+   "aaaaaaaaaaaaaaaabbbbddddddddddddddddddddddddddddddddddddcccccccccccccccccccccccccccccccccccccccc",
+   "aaaaaaaaaaaaaaaabbbbddddddddddddddddddddddddddddddddddddcccccccccccccccccccccccccccccccccccccccc",
+   "aaaaaaaaaaaaaaaabbbbddddddddddddddddddddddddddddddddddddcccccccccccccccccccccccccccccccccccccccc",
+   "aaaaaaaaaaaaaaaabbbbddddddddddddddddddddddddddddddddddddcccccccccccccccccccccccccccccccccccccccc",
+   "aaaaaaaaaaaaaaaabbbbddddddddddddddddddddddddddddddddddddcccccccccccccccccccccccccccccccccccccccc",
+   "aaaaaaaaaaaaaaaabbbbddddddddddddddddddddddddddddddddddddcccccccccccccccccccccccccccccccccccccccc",
+   "aaaaaaaaaaaaaaaabbbbddddddddddddddddddddddddddddddddddddcccccccccccccccccccccccccccccccccccccccc",
+   "aaaaaaaaaaaaaaaabbbbddddddddddddddddddddddddddddddddddddcccccccccccccccccccccccccccccccccccccccc",
+   "aaaaaaaaaaaaaaaabbbbddddddddddddddddddddddddddddddddddddcccccccccccccccccccccccccccccccccccccccc",
+   "aaaaaaaaaaaaaaaabbbbddddddddddddddddddddddddddddddddddddcccccccccccccccccccccccccccccccccccccccc",
+   "aaaaaaaaaaaaaaaabbbbddddddddddddddddddddddddddddddddddddcccccccccccccccccccccccccccccccccccccccc",
+   "aaaaaaaaaaaaaaaabbbbddddddddddddddddddddddddddddddddddddcccccccccccccccccccccccccccccccccccccccc",
+   "aaaaaaaaaaaaaaaabbbbddddddddddddddddddddddddddddddddddddcccccccccccccccccccccccccccccccccccccccc",
+   "aaaaaaaaaaaaaaaabbbbddddddddddddddddddddddddddddddddddddcccccccccccccccccccccccccccccccccccccccc",
+   "aaaaaaaaaaaaaaaabbbbddddddddddddddddddddddddddddddddddddcccccccccccccccccccccccccccccccccccccccc",
+   "aaaaaaaaaaaaaaaabbbbddddddddddddffffddddddddddddddddddddcccccccccccccccccccccccccccccccccccccccc",
+   "aaaaaaaaaaaaaaaabbbbddddddddddddffffddddddddddddddddddddcccccccccccccccccccccccccccccccccccccccc",
+   "aaaaaaaaaaaaaaaabbbbddddddddddddffffddddddddddddddddddddcccccccccccccccccccccccccccccccccccccccc",
+   "aaaaaaaaaaaaaaaabbbbddddddddddddffffddddddddddddddddddddcccccccccccccccccccccccccccccccccccccccc",
+   "aaaaaaaaaaaaaaaabbbbccccccccccccffffcccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "aaaaaaaaaaaaaaaabbbbccccccccccccffffcccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "aaaaaaaaaaaaaaaabbbbccccccccccccffffcccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "aaaaaaaaaaaaaaaabbbbccccccccccccffffcccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "aaaaaaaaaaaaaaaabbbbccccccccccccffffcccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "aaaaaaaaaaaaaaaabbbbccccccccccccffffcccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "aaaaaaaaaaaaaaaabbbbccccccccccccffffcccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "aaaaaaaaaaaaaaaabbbbccccccccccccffffcccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccffffffffffffffffffffcccccccccccccccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccffffffffffffffffffffcccccccccccccccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccffffffffffffffffffffcccccccccccccccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccffffffffffffffffffffcccccccccccccccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccccccddddddddffffddddddddddddcccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccccccddddddddffffddddddddddddcccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccccccddddddddffffddddddddddddcccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccccccddddddddffffddddddddddddcccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccccccddddddddffffddddddddddddcccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccccccddddddddffffddddddddddddcccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccccccddddddddffffddddddddddddcccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccccccddddddddffffddddddddddddcccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccccccddddddddffffddddddddddddcccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccccccddddddddffffddddddddddddcccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccccccddddddddffffddddddddddddcccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccccccddddddddffffddddddddddddcccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccccccddddddddffffddddddddddddcccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccccccddddddddffffddddddddddddcccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccccccddddddddffffddddddddddddcccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccccccddddddddffffddddddddddddcccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccccccddddddddffffddddddddddddcccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccccccddddddddffffddddddddddddcccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccccccddddddddffffddddddddddddcccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccccccddddddddffffddddddddddddcccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccccccddddddddffffddddddddddddcccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccccccddddddddffffddddddddddddcccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccccccddddddddffffddddddddddddcccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccccccddddddddffffddddddddddddcccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccccccddddddddffffddddddddddddcccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccccccddddddddffffddddddddddddcccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccccccddddddddffffddddddddddddcccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccccccddddddddffffddddddddddddcccccccccccccccccccccccccccccccc"
+  ],
+  "walk": {
+   "camp": true,
+   "cliff": false,
+   "hills": false,
+   "plain": true,
+   "road": true
+  }
+ },
+ "lines": [
+  {
+   "id": "pass-road",
+   "kind": "road",
+   "path": [
+    [
+     12,
+     15
+    ],
+    [
+     12,
+     8
+    ],
+    [
+     8,
+     8
+    ],
+    [
+     8,
+     5
+    ]
+   ],
+   "width": 3,
+   "tiles": 240
+  }
+ ],
+ "objects": [
+  {
+   "kind": "building.tent",
+   "x": 42,
+   "y": 5,
+   "w": 3,
+   "h": 2,
+   "id": "cg-tent",
+   "door": "S",
+   "faces": "S",
+   "label": "Chen Gong's men's tents",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.tent",
+   "x": 50,
+   "y": 9,
+   "w": 3,
+   "h": 2,
+   "id": "cg-tent-2",
+   "door": "S",
+   "faces": "S",
+   "blocks_sight": true
+  },
+  {
+   "kind": "camp.firepit",
+   "x": 37,
+   "y": 13,
+   "w": 2,
+   "h": 1,
+   "id": "fire",
+   "label": "A watch fire"
+  },
+  {
+   "kind": "building.tent",
+   "x": 6,
+   "y": 9,
+   "w": 3,
+   "h": 2,
+   "id": "cao-tent-1",
+   "door": null,
+   "faces": "S",
+   "label": "Cao Cao's camp, below the pass",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.tent",
+   "x": 6,
+   "y": 21,
+   "w": 3,
+   "h": 2,
+   "id": "cao-tent-2",
+   "door": null,
+   "faces": "S",
+   "blocks_sight": true
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 40,
+   "y": 56,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 45,
+   "y": 59,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 46,
+   "y": 53,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 55,
+   "y": 38,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 47,
+   "y": 53,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "banner.blue",
+   "x": 11,
+   "y": 14,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "banner.blue",
+   "x": 3,
+   "y": 4,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "banner.blue",
+   "x": 2,
+   "y": 16,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "spots": [
+  {
+   "id": "pass-foot",
+   "x": 33.5,
+   "y": 25.7,
+   "node": "",
+   "label": "The top of the pass road"
+  },
+  {
+   "id": "x12",
+   "x": 21.5,
+   "y": 17.7,
+   "node": "14-x12",
+   "label": "The cliff's edge above Cao Cao's camp",
+   "trigger": "near",
+   "note": "the three arrow letters go down from here"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "bandit",
+   "kind": "folk.villager",
+   "x": 41.5,
+   "y": 33.9,
+   "say": [],
+   "intro": [
+    "A Taishan bandit blocks the narrow road, a club on his shoulder. “Toll, scholar. Or a game, if you're too poor for silver.”"
+   ],
+   "win": [
+    "“…Go on, then. I never liked Chen Gong's lot anyway.”"
+   ],
+   "done": [
+    "The bandit has melted back into the hills."
+   ],
+   "until": "14-x12",
+   "when": "node:x11",
+   "blocks": "x12",
+   "view": 4,
+   "challenge": "bandit",
+   "guard": [
+    42.0,
+    34.0
+   ]
+  },
+  {
+   "id": "sentry",
+   "kind": "folk.soldier",
+   "x": 53.5,
+   "y": 41.9,
+   "say": [],
+   "intro": [
+    "One of Chen Gong's sentries leans on his spear by the bend. “Cold night for a walk, sir. Keep me awake a while?”"
+   ],
+   "win": [
+    "“Ha. Now I'm awake.”"
+   ],
+   "done": [
+    "The sentry stamps his feet against the cold."
+   ],
+   "until": "14-x12",
+   "when": "node:x11",
+   "view": 4,
+   "challenge": "sentry"
+  },
+  {
+   "id": "sentry-fire",
+   "kind": "folk.soldier",
+   "say": [],
+   "watch": {
+    "id": "sentry-fire",
+    "cone": 16,
+    "beat": [
+     [
+      29.5,
+      13.9
+     ],
+     [
+      49.5,
+      13.9
+     ],
+     [
+      29.5,
+      13.9
+     ]
+    ],
+    "pause": [
+     49.5,
+     13.9,
+     2
+    ],
+    "in_beats": [
+     "14-x12"
+    ],
+    "seen": "sentry",
+    "back_to": "pass-foot",
+    "shape": "U"
+   },
+   "x": 29.5,
+   "y": 13.9
+  },
+  {
+   "id": "sentry-edge",
+   "kind": "folk.soldier",
+   "say": [],
+   "watch": {
+    "id": "sentry-edge",
+    "cone": 16,
+    "beat": [
+     [
+      25.5,
+      5.9
+     ],
+     [
+      25.5,
+      21.9
+     ],
+     [
+      25.5,
+      5.9
+     ]
+    ],
+    "pause": [
+     25.5,
+     5.9,
+     3
+    ],
+    "in_beats": [
+     "14-x12"
+    ],
+    "seen": "sentry",
+    "back_to": "pass-foot",
+    "shape": "U"
+   },
+   "x": 25.5,
+   "y": 5.9
+  }
+ ],
+ "exits": [
+  {
+   "to": "xuzhou",
+   "side": "S",
+   "x": 48,
+   "y": 63,
+   "w": 4,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "xuzhou": [
+   49,
+   57
+  ],
+  "": [
+   49,
+   57
+  ]
+ },
+ "states": [
+  {
+   "id": "night",
+   "light": "night"
+  }
+ ],
+ "ways": {
+  "nodes": [
+   [
+    50.0,
+    62.0
+   ],
+   [
+    50.0,
+    34.0
+   ],
+   [
+    34.0,
+    34.0
+   ],
+   [
+    34.0,
+    22.0
+   ]
+  ],
+  "edges": [
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    3
+   ]
+  ]
+ },
+ "seen_lines": {
+  "sentry": [
+   "“Who goes there? Oh, Master Chen. The Adviser said no one comes up tonight.” You're sent back down the road."
+  ]
+ },
+ "links": [
+  "xuzhou"
+ ]
+}

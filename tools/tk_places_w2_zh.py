@@ -617,4 +617,8 @@ ZH_PLACES2 = {
     "Go to your residence.": "前往你的府邸。",
     "Take Red Hare from the stables and ride out of the dry east gate, unseen.": "从马院牵出赤兔，悄悄从无水的东门骑出城。",
     "Go up the White Gate tower.": "登上白门楼。",
+    "Chen Deng's advice": "陈登献策",
+    "Go to the prefecture hall: Chen Deng has advice for you.": "前往州府大堂：陈登有话要对你说。",
+    "The household's carriages, bound for Xiapi": "家眷的车驾，往下邳去",
+    "Grain carts for Xiapi": "运往下邳的粮车",
 }

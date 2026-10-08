@@ -24,10 +24,13 @@ KEYS_LB = {f"x{i}" for i in range(1, 21)}
 NEW_KINDS = {**NEW_KINDS2,
              "prop.halberd": (1, 1, True),      # a halberd planted upright in the ground (x6: 150 paces from the tent)
              "prop.carriage": (4, 2, True),     # a covered carriage hung with red silk (x9: the bride's)
+             "prop.gateshut": (2, 2, False),    # a gate's leaves shut across it (Xuzhou's gates in moon and locked)
              }
 ART = {**ART2,
        "prop.halberd": "Lü Bu's sky-piercer halberd (方天画戟) planted upright in the earth, its crescent blade catching the "
                        "light, a red tassel; one tile, tall; the same 3/4 view as the camp props",
+       "prop.gateshut": "the two heavy studded timber leaves of a city gate, shut across the gateway, a beam barring them; "
+                        "drawn to fill the gate's opening in the wall, the same view as the wall",
        "prop.carriage": "a Han bridal carriage: a covered two-wheeled carriage hung with red silk and tassels, its shafts "
                         "down (no horse), four tiles wide and two deep",
        }
