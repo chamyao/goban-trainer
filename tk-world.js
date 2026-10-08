@@ -629,6 +629,10 @@ function worldScenes() {
 
         } catch { n.rider = null; }
       }
+      if (p.ambush) {   // a chase ambusher (Places: {"chase": "c17", "reach": 4, "dash": 2.5}): hidden in his doorway till you come near
+        try { const a = JSON.parse(p.ambush); n.ambush = { chase: `${this.w.n}-${a.chase}`, reach: a.reach || 4, dash: (a.dash || 2.5) * 1000, t: 0, armed: true }; }
+        catch { n.ambush = null; }
+      }
       if (p.watch) {   // a stealth watcher: a cone, a beat to walk or ways to turn, what he says and where he sends you
         try { n.watch = JSON.parse(p.watch); } catch { n.watch = null; }
         if (n.watch) {
@@ -2026,15 +2030,124 @@ function worldScenes() {
     // that rider drops out for this run; failed, the screen fades and the chase starts again from its start
     // spot with every rider back. The node's own spot (its gate) ends it, as any beat's spot does.
     chaseNow() {
-      const riders = this.npcs.filter(n => n.rider);
-      if (!riders.length) return null;
-      const key = riders[0].rider.chase, node = (TK.world(this.w.n).nodes || []).find(x => x.key === key), q = this.region.quests.find(x => x.node === key);
-      if (!node || !node.chase || !q || TK.cleared(key) || !this.available(q)) return null;
-      if (!this.chase || this.chase.key !== key) this.chase = { key, spec: node.chase, dropped: new Set(), tries: 0 };
+      // the chase of the beat open here: one whose riders or ambushers are in this place, or whose own spot is
+      const own = this.npcs.find(n => n.rider || n.ambush), nodes = TK.world(this.w.n).nodes || [];
+      const here = !own && this.region.quests.find(x => x.place === this.placeId && !TK.cleared(x.node) && (nodes.find(n => n.key === x.node) || {}).chase);
+      if (!own && !here) { this.waveClear(); return null; }
+      const key = own ? (own.rider || own.ambush).chase : here.node, node = nodes.find(x => x.key === key), q = this.region.quests.find(x => x.node === key);
+      if (!node || !node.chase || !q || TK.cleared(key) || !this.available(q)) { this.waveClear(); return null; }
+      if (!this.chase || this.chase.key !== key || this.chase.place !== this.placeId) {
+        this.waveClear();
+        this.chase = { key, place: this.placeId, spec: node.chase, dropped: new Set(), tries: 0 };
+        this.waveStart(this.chase);
+      }
       return this.chase;
+    }
+    // The wave (the chase's "wave": {"count", "delay", "who", "pace"}): the Chancellor's guard pours out of the
+    // start spot after a head start and follows your own trail, a little slower than you; it gains only when you stop.
+    // Reaching you, you're taken: no board, the chase starts again.
+    chaseFrom(spec) {
+      return spec.from && (this.spots[spec.from] || this.refs[spec.from] || this.entries[spec.from]) || this.entries[""];
+    }
+    waveStart(C) {
+      const W = C.spec.wave;
+      if (!W) return;
+      const s0 = this.chaseFrom(C.spec), P = this.player;
+      C.trail = [{ x: s0 ? s0.x : P.x, y: s0 ? s0.y + 18 : P.y, d: 0 }];
+      C.wd = 0; C.wt = -(W.delay != null ? W.delay : 2) * 1000;
+      const who = W.who || "f_soldier";
+      this.hero(who);
+      C.wave = Array.from({ length: W.count || 6 }, () => this.add.sprite(C.trail[0].x, C.trail[0].y, `h-${who}-down-0`).setOrigin(.5, 1).setVisible(false));
+      C.waveWho = who;
+    }
+    waveClear() {
+      if (this.chase && this.chase.wave) { this.chase.wave.forEach(s => s.destroy()); this.chase.wave = null; }
+    }
+    trailAt(C, d) {   // the point a distance d along your trail
+      const T = C.trail;
+      if (d <= 0) return T[0];
+      let lo = 0, hi = T.length - 1;
+      if (d >= T[hi].d) return T[hi];
+      while (hi - lo > 1) { const m = (lo + hi) >> 1; if (T[m].d < d) lo = m; else hi = m; }
+      const a = T[lo], b = T[hi], k = (d - a.d) / ((b.d - a.d) || 1);
+      return { x: a.x + (b.x - a.x) * k, y: a.y + (b.y - a.y) * k, dir: Math.abs(b.x - a.x) > Math.abs(b.y - a.y) ? (b.x < a.x ? "left" : "right") : (b.y < a.y ? "up" : "down") };
+    }
+    waveStep(C, dt, calm) {
+      if (!C.wave) return;
+      const P = this.player, T = C.trail, last = T[T.length - 1];
+      const step = Math.hypot(P.x - last.x, P.y - last.y);
+      if (step > 3) T.push({ x: P.x, y: P.y, d: last.d + step });
+      if (calm) { C.wave.forEach(s => s.anims.stop()); return; }
+      C.wt += dt;
+      if (C.wt < 0) return;
+      const fast = this.mounts && this.mounts.length && typeof WorldItems !== "undefined" ? WorldItems.SPEED : 1;
+      const v = 110 * fast * (C.spec.wave.pace || .92);
+      C.wd = Math.min(T[T.length - 1].d, C.wd + v * dt / 1000);
+      C.wave.forEach((s, i) => {
+        const at = this.trailAt(C, C.wd - i * 11 - (i % 2) * 3), side = (i % 2 ? 5 : -5);
+        s.setVisible(C.wd - i * 11 > 0).setPosition(at.x + (at.dir === "up" || at.dir === "down" ? side : 0), at.y + (at.dir === "left" || at.dir === "right" ? side / 2 : 0)).setDepth(at.y);
+        if (at.dir) s.anims.play(`h-${C.waveWho}-${at.dir}`, true);
+      });
+      const head = this.trailAt(C, C.wd);
+      if (C.wd > 0 && Math.hypot(head.x - P.x, head.y - P.y) < 14) this.chaseOverrun();
+    }
+    async chaseOverrun() {
+      const C = this.chase;
+      if (!C || this.engaged) return;
+      this.engaged = { overrun: true };
+      const P = this.player; this.walk = null; this.auto = null; P.setVelocity(0); P.anims.stop();
+      await new Promise(r => this.talk(worldLines(C.spec.overrun || C.spec.restart || [["n", "The guard is on him. He is taken.", "追兵一拥而上，被擒了。"]]), r));
+      await this.chaseRestart(true);
+      this.engaged = null;
+    }
+    async chaseRestart(said) {
+      const C = this.chase, P = this.player, spec = C.spec;
+      C.tries++;
+      this.cameras.main.fadeOut(400);
+      await new Promise(r => this.cameras.main.once("camerafadeoutcomplete", r));
+      C.dropped.clear(); C.spotTalked = false;
+      for (const m of this.npcs) {
+        if (m.rider) { m.spr.setPosition(m.home.x, m.home.y).setVelocity(0); Object.assign(m.rider, { hunting: false, path: null, leg: 0, wait: 0 }); if (m.mark) m.mark.setVisible(false); }
+        if (m.ambush) { m.spr.setPosition(m.home.x, m.home.y).setVelocity(0).setVisible(false); Object.assign(m.ambush, { t: 0, armed: true, out: false }); }
+      }
+      const s0 = this.chaseFrom(spec);
+      if (s0) P.setPosition(s0.x, s0.y + (this.spots[spec.from] ? 18 : 0));
+      this.trail = Array(this.trailLen || 60).fill({ x: P.x, y: P.y, f: P.facing });
+      if (C.wave) { this.waveClear(); this.waveStart(C); }
+      this.cameras.main.fadeIn(400);
+      if (!said && spec.restart) await new Promise(r => this.talk(worldLines(spec.restart), r));
     }
     chaseStep(dt) {
       const C = this.chaseNow(), T = this.tw || 16, P = this.player;
+      const calm = this.engaged || this.ui.busy() || this.cine || this.leaving || this.caught;
+      if (C) {
+        this.waveStep(C, dt, calm);
+        if (!C.spotTalked && C.wave && C.wt >= 0 && C.spec.spotted) { C.spotTalked = true; this.talk(worldLines(C.spec.spotted)); }
+      }
+      // ambushers: out of their doorways at you when you come near, for a dash; dodge them
+      for (const n of this.npcs) {
+        if (!n.ambush) continue;
+        const A = n.ambush, on = !!C && !C.dropped.has(n.id);
+        if (!on) { n.spr.setVisible(false).setVelocity(0); n.spr.body.enable = false; continue; }
+        if (calm) { n.spr.setVelocity(0); n.spr.anims.stop(); continue; }
+        const d = Math.hypot(P.x - n.spr.x, P.y - n.spr.y), dh = Math.hypot(P.x - n.home.x, P.y - n.home.y);
+        if (!A.out) {
+          n.spr.setVisible(false); n.spr.body.enable = false;
+          if (!A.armed && dh > (A.reach + 3) * T) A.armed = true;
+          if (A.armed && dh < A.reach * T) { A.out = true; A.armed = false; A.t = A.dash; n.spr.setVisible(true).setPosition(n.home.x, n.home.y); }
+          continue;
+        }
+        n.spr.body.enable = true; n.spr.setDepth(n.spr.y);
+        if (d < 12) { n.spr.setVelocity(0); this.chaseCaught(n); return; }
+        A.t -= dt;
+        const fast = this.mounts && this.mounts.length && typeof WorldItems !== "undefined" ? WorldItems.SPEED : 1;
+        const tx = A.t > 0 ? P.x : n.home.x, ty = A.t > 0 ? P.y : n.home.y, dx = tx - n.spr.x, dy = ty - n.spr.y, dd = Math.hypot(dx, dy);
+        if (A.t <= 0 && dd < 4) { A.out = false; n.spr.setVelocity(0).setVisible(false); continue; }   // back in his doorway
+        const v = (A.t > 0 ? 100 : 60) * fast;
+        n.spr.setVelocity(dx / (dd || 1) * v, dy / (dd || 1) * v);
+        const dir = Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? "left" : "right") : (dy < 0 ? "up" : "down");
+        if (dir !== n.dir || !n.spr.anims.isPlaying) { n.dir = dir; n.spr.anims.play(n.who ? `h-${n.who}-${dir}` : `fk-${n.sprite}-${dir}`, true); }
+      }
       for (const n of this.npcs) {
         if (!n.rider) continue;
         const on = !!C && !C.dropped.has(n.id);
@@ -2087,25 +2200,14 @@ function worldScenes() {
       for (const m of this.npcs) if (m.rider) m.spr.setVelocity(0);
       await new Promise(r => this.talk(worldLines(spec.caught || [["n", "A rider has caught up with you!", "追兵赶上来了！"]]), r));
       // one try: a board of its own each time (the beat's own problems, slots past its story boards)
-      const idx = 20 + C.tries * 8 + this.npcs.filter(m => m.rider).indexOf(n);
+      const idx = 20 + (C.tries % 10) * 8 + this.npcs.filter(m => m.rider || m.ambush).indexOf(n) % 8;
       const won = await this.duel(`${C.key}~${idx}`, { id: n.id, who: n.who, face: this.faceOf(n) }, { once: true, onWin: () => {} });
       if (won) {
-        C.dropped.add(n.id); n.rider.hunting = false;
+        C.dropped.add(n.id); if (n.rider) n.rider.hunting = false;
         if (n.mark) n.mark.setVisible(false);
         this.tweens.add({ targets: n.spr, alpha: 0, duration: 500, onComplete: () => { n.spr.setVisible(false).setAlpha(1); } });
         if (spec.solved) await new Promise(r => this.talk(worldLines(spec.solved), r));
-      } else {
-        C.tries++;
-        this.cameras.main.fadeOut(400);
-        await new Promise(r => this.cameras.main.once("camerafadeoutcomplete", r));
-        C.dropped.clear(); C.spotTalked = false;
-        for (const m of this.npcs) if (m.rider) { m.spr.setPosition(m.home.x, m.home.y).setVelocity(0); Object.assign(m.rider, { hunting: false, path: null, leg: 0 }); if (m.mark) m.mark.setVisible(false); }
-        const s0 = spec.from && (this.spots[spec.from] || this.refs[spec.from] || this.entries[spec.from]) || this.entries[""];
-        if (s0) P.setPosition(s0.x, s0.y + (this.spots[spec.from] ? 18 : 0));
-        this.trail = Array(this.trailLen || 60).fill({ x: P.x, y: P.y, f: P.facing });
-        this.cameras.main.fadeIn(400);
-        if (spec.restart) await new Promise(r => this.talk(worldLines(spec.restart), r));
-      }
+      } else await this.chaseRestart(false);
       this.engaged = null;
     }
 
@@ -2244,7 +2346,7 @@ function worldScenes() {
 
       for (const n of this.npcs) {
         if (n.mark) n.mark.setPosition(n.spr.x, Math.round(n.spr.y - n.spr.height - 1 + Math.sin(time / 250) * 1.5));
-        if (n.rider) continue;   // chase riders move themselves (chaseStep)
+        if (n.rider || n.ambush) continue;   // chase riders and ambushers move themselves (chaseStep)
         if (!n.wander || this.ui.busy()) { n.spr.setVelocity(0); continue; }
         n.t -= dt;
         if (n.t <= 0) {
