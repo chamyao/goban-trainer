@@ -333,7 +333,9 @@ PLANS_LB = {
                 {"id": "sentry-edge", "kind": "folk.soldier", "beat": [[6, 1], [6, 5], [6, 1]], "shape": "U", "pause": [6, 1, 3],
                  "cone": 4, "in_beats": ["3-x12"], "seen": "sentry", "back_to": "pass-foot"},
             ],
-            "dress": [{"kind": "tree.poplar", "in": "valley", "count": 5}, {"kind": "banner.blue", "in": "cao-camp", "count": 3}],
+            # torches along the pass road and round the top, so the way shows at night (they glow); beside the road, not on it
+            "dress": [{"kind": "tree.poplar", "in": "valley", "count": 5}, {"kind": "banner.blue", "in": "cao-camp", "count": 3},
+                      {"kind": "landmark.torch", "along": "pass-road", "every": 2}, {"kind": "landmark.torch", "in": "top", "count": 4}],
             "exits": [{"to": "Xuzhou", "at": [12, 15], "side": "S"}],
             "entries": {"": [12, 14], "Xuzhou": [12, 14]},
         },

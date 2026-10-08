@@ -229,6 +229,160 @@
    "y": 16,
    "w": 1,
    "h": 1
+  },
+  {
+   "kind": "landmark.torch",
+   "x": 31,
+   "y": 21,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "landmark.torch",
+   "x": 33,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "landmark.torch",
+   "x": 36,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "landmark.torch",
+   "x": 40,
+   "y": 36,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "landmark.torch",
+   "x": 44,
+   "y": 36,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "landmark.torch",
+   "x": 47,
+   "y": 37,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "landmark.torch",
+   "x": 47,
+   "y": 41,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "landmark.torch",
+   "x": 47,
+   "y": 45,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "landmark.torch",
+   "x": 47,
+   "y": 49,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "landmark.torch",
+   "x": 47,
+   "y": 57,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "landmark.torch",
+   "x": 47,
+   "y": 61,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "landmark.torch",
+   "x": 52,
+   "y": 36,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "landmark.torch",
+   "x": 52,
+   "y": 40,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "landmark.torch",
+   "x": 52,
+   "y": 44,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "landmark.torch",
+   "x": 52,
+   "y": 48,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "landmark.torch",
+   "x": 52,
+   "y": 52,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "landmark.torch",
+   "x": 52,
+   "y": 56,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "landmark.torch",
+   "x": 52,
+   "y": 60,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "landmark.torch",
+   "x": 35,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "landmark.torch",
+   "x": 49,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "landmark.torch",
+   "x": 55,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "landmark.torch",
+   "x": 40,
+   "y": 12,
+   "w": 1,
+   "h": 1
   }
  ],
  "spots": [
