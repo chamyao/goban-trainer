@@ -452,6 +452,8 @@ The user's spec, through Plot. Each sets one go problem (flawless, the usual 30-
 
 **What "blocking" means:** you can't reach the next beat without coming into the challenger's view. He stands across the only way, or watches it. `tools/check_plans_w2.py` proves each block: with his view taken out of the map, the target can't be reached.
 
+**Declining doesn't let you through.** Each blocker also holds a guard point (`guard`), compiled as `guard_x`/`guard_y`: within 2.5 tiles of it he always stops you, even after you've turned him down. The guard is the doorstep of what he blocks, or the gap of the gate he stands in, or the bridge. `plans.py` proves each one when it builds: a walk from the start that keeps 2.5 tiles from the guard can't reach the target, or the build fails. For this, Meiwu's inner wall now runs to the fortress walls.
+
 | Walk | Protagonist | Challenger | Where | Blocks |
 |---|---|---|---|---|
 | Crown errand (before A3) | Wang Yun | A Chancellor's runner | the ward street, watching Lü Bu's gate | Lü Bu's gate (A3) |
@@ -460,7 +462,7 @@ The user's spec, through Plot. Each sets one go problem (flawless, the usual 30-
 | | | An informer in a plain coat | the west lane by Shisun Rui's gate | — |
 | Chang'an, any time | Wang Yun | The old scholar | the market go table | — |
 | Night (before A6) | Wang Yun | A Liangzhou officer | the east lane | — |
-| Li Su's ride out (before A13) | Li Su | The Grand Preceptor's horsemen | the bend in the middle of the Meiwu Road, road and fields | the way on to Meiwu |
+| Li Su's ride out (before A13) | Li Su | The Grand Preceptor's horsemen | the bridge over the stream, the one crossing | the way on to Meiwu |
 | | | The post keeper | the thirty-li post | — |
 | | | The gate captain | before the gate of Meiwu | Dong Zhuo's hall (A13) |
 | Meiwu raid (before A15m) | Lü Bu | A straggler of Dong Zhuo's guard | the treasury doors at the inner gate | Diaochan's rooms (A15m) |

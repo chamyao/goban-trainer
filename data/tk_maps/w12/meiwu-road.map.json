@@ -1045,7 +1045,7 @@
   {
    "id": "roadpatrol",
    "kind": "folk.soldier",
-   "x": 65.5,
+   "x": 33.5,
    "y": 17.9,
    "say": [],
    "intro": [
@@ -1063,7 +1063,11 @@
     "exit": "Meiwu"
    },
    "view": 12,
-   "challenge": "roadpatrol"
+   "challenge": "roadpatrol",
+   "guard": [
+    30.0,
+    18.0
+   ]
   },
   {
    "id": "postkeeper",
