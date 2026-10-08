@@ -17,12 +17,15 @@ NEW_KINDS = {**NEW_KINDS2,
              "building.stable": (6, 3, True),    # a long stable with stalls open to the yard
              "furn.mirror": (1, 1, True),        # a bronze dressing mirror on a stand (C16)
              "banner.white": (1, 1, True),       # the white banner of the volunteers, 忠义 (C23)
+             "building.wallstairs": (4, 1, True),   # stairs up the inside of a city wall (马道), against its foot
              }
 ART = {**ART2,
        "building.tower": "a tall Han palace tower (阙/楼): three storeys of timber on a rammed-earth base, hip roof of dark tiles, a balcony at the top; reads from far off",
        "building.stable": "a long Han stable: a tiled roof on posts, stalls open to the yard, hay racks, a horse or two looking out",
        "furn.mirror": "a polished bronze dressing mirror on a wooden stand, about head height when sitting",
        "banner.white": "a tall white banner on a pole, two black characters 忠义",
+       "building.wallstairs": "a flight of rammed-earth steps (马道) climbing the inside face of a city wall to the wall-walk, "
+                              "four tiles long, one deep; drawn against the wall's foot, the same 3/4 view as the wall",
        }
 
 
@@ -37,24 +40,41 @@ PLANS_CC = {
         "archetype": "city",
         "banners": "red",            # Han red; black (the Chancellor's) once Dong Zhuo holds the city
         "plan": {
-            "grid": [22, 15], "cell": 4, "margin": 1,
+            # The south half is walled wards (坊), as Han Luoyang was: their walls make the streets real streets, with
+            # gates and lanes along them. That's where the chase out of the city (state "sword") is ridden.
+            "grid": [22, 17], "cell": 4, "margin": 1,
             "ground": [
-                {"id": "city", "kind": "city", "rect": [2, 2, 18, 11]},
+                {"id": "city", "kind": "city", "rect": [2, 2, 18, 13]},
                 {"id": "wenming", "kind": "garden", "rect": [2, 2, 5, 3]},          # the Wenming Garden, by the palace
                 {"id": "forecourt", "kind": "court", "rect": [8, 7, 6, 1]},         # before the Jiade Gate
-                {"id": "market", "kind": "market", "rect": [13, 9, 5, 3]},
+                {"id": "market", "kind": "market", "rect": [15, 10, 3, 3]},         # inside the market wall
+                {"id": "xf-court", "kind": "court", "rect": [4, 12, 3, 1]},         # inside the Chancellor's ward gate
+                {"id": "ward-court", "kind": "court", "rect": [10, 10, 2, 3]},      # the houses' lane, inside their ward
+                {"id": "lodging-court", "kind": "court", "rect": [17, 6, 2, 1]},    # before Cao Cao's lodging
                 {"id": "fields-n", "kind": "field", "rect": [0, 0, 22, 1]},
-                {"id": "fields-s", "kind": "field", "rect": [0, 14, 22, 1]},
+                {"id": "fields-s", "kind": "field", "rect": [0, 16, 22, 1]},
             ],
             "lines": [
-                {"id": "wall", "kind": "wall.city", "outline": [1, 1, 20, 13], "width": 2,
+                {"id": "wall", "kind": "wall.city", "outline": [1, 1, 20, 15], "width": 2,
                  "gates": {"north-gate": [16, 1], "west-gate": [1, 8], "east-gate": [20, 8]}},
                 {"id": "main-street", "kind": "road", "path": [[0, 8], [21, 8]], "width": 3},   # west gate to the East Gate
                 {"id": "north-road", "kind": "road", "path": [[16, 0], [16, 8]], "width": 3},   # out to Beimang
                 {"id": "garden-lane", "kind": "road", "path": [[7, 2], [7, 8]], "width": 2},    # past the Wenming Garden
-                {"id": "west-lane", "kind": "road", "path": [[2, 8], [2, 12]], "width": 2},
-                {"id": "east-lane", "kind": "road", "path": [[19, 8], [19, 12]], "width": 2},
-                {"id": "south-street", "kind": "road", "path": [[2, 12], [19, 12]], "width": 3},
+                {"id": "west-lane", "kind": "road", "path": [[2, 8], [2, 14]], "width": 2},
+                {"id": "ward-lane", "kind": "road", "path": [[8, 8], [8, 14]], "width": 2},     # between the Chancellor's ward and the next
+                {"id": "market-lane", "kind": "road", "path": [[13, 8], [13, 14]], "width": 2},
+                {"id": "east-lane", "kind": "road", "path": [[19, 8], [19, 14]], "width": 2},
+                {"id": "south-street", "kind": "road", "path": [[2, 14], [19, 14]], "width": 3},
+                # the north side of the main street, east of the palace: a ward wall, the lodging's gate in it
+                {"id": "ward-ne", "kind": "wall", "path": [[13, 6], [13, 7], [20, 7]], "width": 1, "gates": {"lodging-gate": [18, 7]}},
+                # the wards south of the main street, each walled, with its gates
+                {"id": "ward-xf", "kind": "wall", "path": [[3, 9], [7, 9], [7, 13], [3, 13], [3, 9]], "width": 1,
+                 "gates": {"chancellor-gate": [5, 13], "side-gate": [7, 11]}},          # the Chancellor's ward
+                {"id": "ward-s", "kind": "wall", "path": [[9, 9], [12, 9], [12, 13], [9, 13], [9, 9]], "width": 1,
+                 "gates": {"ward-w-gate": [9, 11], "ward-e-gate": [12, 11]}},   # an alley through it, the houses either side
+                {"id": "market-wall", "kind": "wall", "path": [[14, 9], [18, 9], [18, 13], [14, 13], [14, 9]], "width": 1,
+                 "gates": {"market-n-gate": [16, 9], "market-ne-gate": [17, 9], "market-s-gate": [16, 13], "market-se-gate": [17, 13],
+                           "market-e-gate": [18, 11]}},   # two gates each side: one to ride through, one for the ambush
             ],
             "things": [
                 # north of the main street, fronts to the south
@@ -65,25 +85,30 @@ PLANS_CC = {
                  "map": "wyl-rearhall", "plaque": "王府"},
                 {"id": "palace", "kind": "building.palace", "rect": [8, 2, 6, 5], "door": "S", "label": "Changle Palace",
                  "map": "palace", "gate_label": "The Jiade Gate", "plaque": "嘉德门"},
-                {"id": "yongan", "kind": "building.tower", "rect": [17, 3, 2, 2], "label": "The tower of Yong'an Palace",
+                {"id": "yongan", "kind": "building.tower", "rect": [17, 2, 2, 2], "label": "The tower of Yong'an Palace",
                  "note": "the deposed emperor's prison; seen from the street in C13"},
-                {"id": "lodging", "kind": "building.house", "rect": [17, 7, 2, 1], "door": "S", "label": "Cao Cao's lodging"},
-                # south of the main street, fronts to the south street
-                {"id": "xiangfu", "kind": "building.compound", "rect": [8, 9, 5, 3], "door": "S", "label": "The Chancellor's residence",
+                {"id": "lodging", "kind": "building.house", "rect": [17, 5, 2, 1], "door": "S", "label": "Cao Cao's lodging"},
+                # south of the main street: the Chancellor's residence in its own ward, a ward of houses, the market
+                {"id": "xiangfu", "kind": "building.compound", "rect": [4, 10, 3, 2], "door": "S", "label": "The Chancellor's residence",
                  "map": "xiangfu", "plaque": "相府"},
-                {"id": "house-1", "kind": "building.house", "rect": [3, 11, 2, 1], "door": "S"},
-                {"id": "house-2", "kind": "building.house", "rect": [5, 11, 2, 1], "door": "S"},
-                {"id": "stalls", "kind": "market.stalls", "rect": [14, 9, 2, 1], "label": "Market stalls"},
-                {"id": "gotable", "kind": "furniture.gotable", "rect": [16, 10, 1, 1], "label": "A go table in the market"},
+                {"id": "house-1", "kind": "building.house", "rect": [10, 10, 2, 1], "door": "S"},
+                {"id": "house-2", "kind": "building.house", "rect": [10, 12, 2, 1], "door": "N"},
+                {"id": "stalls", "kind": "market.stalls", "rect": [15, 10, 2, 1], "label": "Market stalls"},
+                {"id": "stalls-2", "kind": "market.stalls", "rect": [16, 12, 2, 1]},
+                {"id": "gotable", "kind": "furniture.gotable", "rect": [17, 10, 1, 1], "label": "A go table in the market"},
+                # stairs up the inside of the city wall (马道): the wall's guards come down them onto the south street
+                {"id": "stairs-w", "kind": "building.wallstairs", "rect": [11, 14, 1, 1], "margin": 0, "on": "edge",
+                 "label": "Stairs up the city wall"},
+                {"id": "stairs-e", "kind": "building.wallstairs", "rect": [15, 14, 1, 1], "margin": 0, "on": "edge"},
             ],
             "spots": [
                 {"id": "c2", "at": [10, 7], "node": "2-c2", "label": "Before the Jiade Gate", "trigger": "near"},
                 {"id": "c6", "at": [4, 3], "node": "2-c6", "label": "The Wenming Garden banquet"},
                 {"id": "wenming-gate", "at": [6, 4], "label": "The garden gate", "note": "C6: Lü Bu rides past outside, halberd in hand"},
-                {"id": "c13", "at": [15, 8], "node": "2-c13", "label": "The street under Dong Zhuo", "trigger": "near",
+                {"id": "c13", "at": [14, 8], "node": "2-c13", "label": "The street under Dong Zhuo", "trigger": "near",
                  "note": "the tower of Yong'an Palace in view to the north-east; the carts come in by the East Gate"},
                 {"id": "c17", "at": [19, 8], "node": "2-c17", "label": "The East Gate", "trigger": "near"},
-                {"id": "xf-gate", "at": [10, 12], "label": "The Chancellor's gate", "note": "the chase out of Luoyang starts (and restarts) here"},
+                {"id": "xf-gate", "at": [5, 14], "label": "The Chancellor's gate", "note": "the chase out of Luoyang starts (and restarts) here"},
             ],
             "props": [
                 {"kind": "landmark.notice", "at": [20, 7], "in": ["dong"], "label": "Yuan Shao's seal of office, hanging on the East Gate",
@@ -92,7 +117,6 @@ PLANS_CC = {
             "dress": [
                 {"kind": "tree.willow", "in": "wenming", "count": 4},
                 {"kind": "plant.flower", "in": "wenming", "count": 8},
-                {"kind": "tree.willow", "along": "main-street", "every": 4},
                 {"kind": "banner", "at_gates": True},
                 {"kind": "banner.red", "at_door": "palace", "pair": True},
                 {"kind": "banner.black", "at_door": "xiangfu", "pair": True},
@@ -204,40 +228,47 @@ PLANS_CC = {
         "npcs": [
             # under Dong Zhuo (C13-C15): the town as the novel paints it
             _talk("folk.villager", [12, 8], "“Xiliang horsemen ride down the middle of the street. You step aside or you're ridden down.”", **{"in": ["dong"]}),
-            _talk("folk.official", [6, 9], "“Zheng Tai went, and Lu Zhi went. A man with a family stays, and bows, and says nothing.”", **{"in": ["dong"]}),
+            _talk("folk.official", [6, 8], "“Zheng Tai went, and Lu Zhi went. A man with a family stays, and bows, and says nothing.”", **{"in": ["dong"]}),
             _talk("folk.maiden", [11, 7], "“The old emperor sits in the tower of Yong'an Palace. They say he wrote a poem about two swallows.”",
                   **{"in": ["dong"], "until": "node:c14"}),
             _talk("folk.maiden", [11, 7], "“The Prince of Hongnong is dead. They don't say how. No one asks.”", **{"in": ["dong"], "when": "node:c14"}),
-            _talk("folk.elder", [18, 9], "“Carts came in from Yangcheng with heads hung under them. ‘Bandits,’ they said. It was market day there.”",
+            _talk("folk.elder", [17, 11], "“Carts came in from Yangcheng with heads hung under them. ‘Bandits,’ they said. It was market day there.”",
                   **{"in": ["dong"], "when": "node:c13"}),
-            _talk("folk.soldier", [13, 7], "“The Jiade Gate is shut. The general went in to see the Empress, and he's not come out.”", **{"in": ["court"]}),
+            _talk("folk.soldier", [12, 7], "“The Jiade Gate is shut. The general went in to see the Empress, and he's not come out.”", **{"in": ["court"]}),
             _talk("folk.villager", [5, 8], "“The Ten Attendants and He Jin both want the court. Whoever wins, we pay.”", **{"in": ["court"]}),
         ],
-        # The chase out of Luoyang (caocao-arc.md, "New mechanic"), in state "sword" (c16 -> c17): from the Chancellor's gate
-        # to the East Gate. A draft for Integration's data shape: cells as in the plan; cones and speeds in tiles.
-        "chase": {   # read by plans.py: each rider becomes an npc with a "rider" property (Integration's chase engine)
+        # The chase out of Luoyang (caocao-arc.md, "Redesign"), in state "sword" (c16 -> c17): Cao Cao rides from the
+        # Chancellor's gate to the East Gate. A wave of Dong Zhuo's men pours out of the gate after him and follows his
+        # trail, a little slower than his horse; soldiers spring out of gates, lane mouths and the wall stairs ahead of
+        # him and dash across the street. Read by plans.py, which places each post on its tiles and proves every route
+        # can be ridden clean (prove_chase), and writes the result as the map's "chase" (tiles) for the engine.
+        "chase": {
             "chase": "c17", "state": "sword", "from": "xf-gate", "to": "c17",
-            # where the horse outruns a rider (wide, straight), and where a rider can corner him (narrow, or crowded)
-            "open": ["main-street", "south-street"],
-            "narrow": ["west-lane", "east-lane", "garden-lane", "market"],
-            "routes": {   # the three ways to the gate, one rider on each, so the choice is which to dare and when
-                "market cut": [[10, 12], [17, 12], [17, 9], [18, 9], [18, 8], [19, 8]],       # up the market's east edge: the
-                                                                                              # one a careful rider slips through
-                "east lane": [[10, 12], [19, 12], [19, 8]],                                   # fast street, then a narrow lane
-                "long way": [[10, 12], [2, 12], [2, 8], [19, 8]],                              # narrow lane, then the long main street
-            },
-            # beats are cells (a loop: back and forth); cone in tiles; dir is the facing at the post
-            "riders": [
-                # the market: walks the stalls; you slip by when his back is to you
-                {"id": "rider-market", "kind": "folk.soldier", "post": [13, 11], "beat": [[13, 11], [17, 11]], "pause": [17, 11, 2], "cone": 4, "dir": "E"},
-                # the east lane: rides up and down it; meet him in the lane and there is nowhere to go
-                {"id": "rider-lane", "kind": "folk.soldier", "post": [19, 12], "beat": [[19, 12], [19, 9]], "pause": [19, 9, 1], "cone": 5, "dir": "N"},
-                # the west lane, at the far end of the long way: you see him coming
-                {"id": "rider-west", "kind": "folk.soldier", "post": [2, 10], "beat": [[2, 9], [2, 12]], "cone": 5, "dir": "S"},
-                # the main street before the gate: every route but the east lane ends here; on the open street the horse
-                # outruns him, so it is a race to the gate, not a trap
-                {"id": "rider-gate", "kind": "folk.soldier", "post": [16, 8], "beat": [[9, 8], [17, 8]], "pause": [17, 8, 2], "cone": 6, "dir": "W"},
+            # the engine's numbers this layout is proved against (px/s, s, tiles): Integration's to change; rerun the build
+            "pace": {"horse": 165, "wave": 150, "wave_after": 1.0, "ambusher": 140, "reach": 9, "lead": 0.1, "hold": 1.0, "hit": 0.8},
+            "wave": {"from": "xf-gate", "kind": "folk.soldier", "count": 8},
+            # where each soldier waits (a gate of a wall, a cell, or a thing he stands in front of) and which way he
+            # dashes: straight across the street, to its far side
+            "ambush": [
+                {"id": "side-gate", "post": "side-gate", "dash": "E", "note": "the Chancellor's side gate, onto the ward lane"},
+                {"id": "jiade", "post": [11, 7], "dash": "S", "note": "palace guards from the Jiade Gate, across the main street"},
+                {"id": "lane-mouth", "post": [13, 9], "dash": "N", "note": "out of the market lane, across the main street"},
+                {"id": "market-n", "post": "market-ne-gate", "dash": "N", "note": "out of the market's east north gate"},
+                {"id": "lodging", "post": "lodging-gate", "dash": "S", "note": "the jailers sent to Cao Cao's lodging, out of its gate"},
+                {"id": "ward-lane", "post": [8, 13], "dash": "S", "note": "out of the ward lane, across the south street"},
+                {"id": "stairs-w", "post": "stairs-w", "dash": "N", "note": "down the wall stairs, across the south street"},
+                {"id": "lane-mouth-s", "post": [13, 13], "dash": "S", "note": "out of the market lane, across the south street"},
+                {"id": "market-s", "post": "market-se-gate", "dash": "S", "note": "out of the market's east south gate"},
+                {"id": "stairs-e", "post": "stairs-e", "dash": "N", "note": "down the east wall stairs"},
+                {"id": "market-e", "post": "market-e-gate", "dash": "E", "note": "out of the market's east gate, across the east lane"},
+                {"id": "stall", "post": [15, 11], "dash": "E", "note": "from behind the stalls, along the market's middle aisle"},
             ],
+            # the three ways to the gate (cells); each must have a clean ride, and each ambush on it must be in the way
+            "routes": {
+                "main street": [[5, 14], [8, 14], [8, 8], [19, 8]],       # up the ward lane, then the wide main street
+                "south street": [[5, 14], [19, 14], [19, 8]],             # the south street under the wall, then the east lane
+                "market": [[5, 14], [16, 14], [16, 8], [19, 8]],          # in at the market's south gate, out at its north
+            },
         },
         "objectives": {
             "2-c1": "Go to He Jin's residence, on the main street west of the palace. The council is already sitting.",

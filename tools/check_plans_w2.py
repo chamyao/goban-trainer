@@ -145,13 +145,13 @@ class Plan:
                 self.owner[c] = t
             fw, fh, _ = NEW_KINDS.get(t["kind"]) or KINDS.get(t["kind"], (None, None, None))
             if fw is not None:
-                m = 0 if t["kind"] in IN_WALL else self.M
+                m = t.get("margin", 0 if t["kind"] in IN_WALL else self.M)
                 need_w, need_h = math.ceil((fw + 2 * m) / self.C), math.ceil((fh + 2 * m) / self.C)
                 if (w < need_w or h < need_h) and (w < need_h or h < need_w):   # a footprint may be turned
                     self.err(f"too small: {t['id']} ({t['kind']}) needs {fw}x{fh} tiles + {self.M} margin = {need_w}x{need_h} cells; "
                              f"the plan gives {w}x{h}")
             on_line = [(c, k) for c in cells for k in self.line_at.get(c, []) if c not in self.gates]
-            if on_line and t["kind"] not in PASSABLE_THINGS | IN_WALL:
+            if on_line and t["kind"] not in PASSABLE_THINGS | IN_WALL and t.get("on") != "edge":   # "edge": against the street's far side
                 self.err(f"on a line: {t['id']} on {on_line[0][1]} at {on_line[0][0]}")
             wet = [c for c in cells if self.zone.get(c) == "water"]
             if wet and t.get("on") != "water":
@@ -537,7 +537,8 @@ def main():
         if hasattr(P, "reach"):   # the place's own challengers, or those placed in this compound map
             P.check_challengers([c for c in b.get("challengers", []) if c.get("map") == mid], ch_ids)
             P.challengers = [c for c in b.get("challengers", []) if c.get("map") == mid]
-        if b.get("chase") and p is b["plan"]:   # a chase: the riders must leave some way through, with the right timing
+        if b.get("chase", {}).get("riders") and p is b["plan"]:   # riders on beats: some way through, with the right timing
+            # (a chase with a wave and ambushes is proved at tile level when plans.py builds the map: prove_chase)
             spot = {s["id"]: s["at"] for s in p.get("spots", [])}
             ch = b["chase"]
             free = chase_slip(P, ch, tuple(spot[ch["from"]]), tuple(spot[ch["to"]]))

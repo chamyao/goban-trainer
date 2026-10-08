@@ -19,6 +19,7 @@ Owned by the Places session; the art for the new kinds is Graphics' (vocab fallb
 """
 import json
 import math
+import os
 import random
 import re
 import sys
@@ -211,7 +212,7 @@ class MapBuilder:
             x, y, w, h = t["rect"]
             kind = t["kind"]
             fw, fh, solid = self.K.get(kind, (None, None, True))
-            m = 0 if kind in IN_WALL else self.M
+            m = t.get("margin", 0 if kind in IN_WALL else self.M)   # a thing may stand right against its cell's edge
             cw, ch = w * self.C - 2 * m, h * self.C - 2 * m
             if fw is None:
                 fw, fh = cw, ch                                # a compound or palace fills its claim
@@ -568,6 +569,172 @@ class MapBuilder:
 
 
 # ---------- the world: every place, compound and room, linked ----------
+STEP4 = ((1, 0), (-1, 0), (0, 1), (0, -1))
+DASH = {"N": (0, -1), "S": (0, 1), "E": (1, 0), "W": (-1, 0)}
+
+
+def lay_chase(mb, ch):
+    """A chase with a wave behind and ambushes ahead (caocao-arc.md, "Redesign"), in tiles for the engine. Each ambusher
+    waits at his post (a wall's gate, a thing's front, or a cell) and dashes straight across the street to `to`, the
+    last open tile that way (at most `len` tiles, default 8)."""
+    spot = {s["id"]: (s["x"], s["y"]) for s in mb.spots}
+    out = {"chase": ch["chase"], "state": ch.get("state"), "from": list(spot[ch["from"]]), "to": list(spot[ch["to"]]), "pace": ch["pace"],
+           "wave": {**ch["wave"], "from": list(spot[ch["wave"].get("from", ch["from"])])}, "ambush": [], "routes": {}}
+    for a in ch["ambush"]:
+        dx, dy = DASH[a["dash"]]
+        if isinstance(a["post"], str) and a["post"] in mb.gate_tiles:     # in the gateway
+            gap = mb.gate_tiles[a["post"]]
+            px, py = sum(t[0] for t in gap) / len(gap) + .5, sum(t[1] for t in gap) / len(gap) + .5
+        elif isinstance(a["post"], str):                                 # in front of a thing (the wall stairs)
+            fx, fy, fw, fh = mb.foot[a["post"]]
+            px = fx + fw / 2 if dx == 0 else (fx + fw + .5 if dx > 0 else fx - .5)
+            py = fy + fh / 2 if dy == 0 else (fy + fh + .5 if dy > 0 else fy - .5)
+        else:
+            t = mb.near_cell(tuple(a["post"]), want_visible=False)
+            px, py = t[0] + .5, t[1] + .5
+        t, n = (int(px), int(py)), 0
+        while n < a.get("len", 8) and mb.walkable((t[0] + dx, t[1] + dy)):
+            t, n = (t[0] + dx, t[1] + dy), n + 1
+        to = (px + dx * n, py + dy * n)
+        if n < 2:
+            raise RuntimeError(f"{mb.mid}: ambusher {a['id']} at {a['post']} has nowhere to dash {a['dash']}")
+        out["ambush"].append({"id": a["id"], "post": [round(px, 2), round(py, 2)], "to": [round(to[0], 2), round(to[1], 2)],
+                              "dash": a["dash"], "kind": a.get("kind", "folk.soldier")})
+    return out
+
+
+def _corridor(mb, pts):
+    """The tiles of the cells along a route's waypoints, and one cell either side."""
+    cells = set()
+    for (ax, ay), (bx, by) in zip(pts, pts[1:]):
+        for x in range(min(ax, bx), max(ax, bx) + 1):
+            for y in range(min(ay, by), max(ay, by) + 1):
+                cells |= {(x + i, y + j) for i in (-1, 0, 1) for j in (-1, 0, 1)}
+    return {t for c in cells for t in mb.cell_tiles(*c) if mb.walkable(t)}
+
+
+def chase_run(mb, out, corridor, pts, naive=False, spare=20, horizon=500):
+    """Ride the chase on tiles, a step a tile at the horse's pace. naive: the shortest way, straight on, and which
+    ambushers hit it. Else the quickest clean ride (no ambusher touches him, the wave never reaches him), waiting
+    where it helps, as (steps, ambushers sprung); None if there is none."""
+    pc, T = out["pace"], 16
+    dt = T / pc["horse"]                                        # seconds a step
+    va, vw = pc["ambusher"] / T * dt, pc["wave"] / T * dt       # tiles a step
+    after = pc["wave_after"] / dt                               # steps before the wave is out of the gate
+    hold = pc["hold"] / dt
+    hit2 = pc["hit"] ** 2
+    amb = []
+    for a in out["ambush"]:
+        (px, py), (qx, qy) = a["post"], a["to"]
+        d = math.hypot(qx - px, qy - py)
+        amb.append((px, py, qx, qy, d / va, d))
+    start = (int(out["from"][0]), int(out["from"][1]))
+    gx, gy = out["to"]
+    goal = lambda t: (t[0] + .5 - gx) ** 2 + (t[1] + .5 - gy) ** 2 <= (36 / T) ** 2   # noqa: E731  the spot's own reach
+
+    def where(i, age):   # an ambusher's place, `age` steps after he sprang; None once he's fallen in with the wave
+        px, py, qx, qy, out_s, d = amb[i]
+        if age <= out_s:
+            f = age / out_s
+        elif age <= out_s + hold:
+            f = 1
+        else:
+            return None
+        return px + (qx - px) * f, py + (qy - py) * f
+
+    vpt, vat = pc["horse"] / T, pc["ambusher"] / T
+
+    def springs(i, cx, cy):   # he springs when he can just reach Cao Cao's line as Cao Cao reaches his
+        px, py, qx, qy, _o, d = amb[i]
+        ux, uy = (qx - px) / d, (qy - py) / d                      # his way across
+        across = (cx - px) * ux + (cy - py) * uy                    # how far out Cao Cao's line is
+        along = abs((cx - px) * uy - (cy - py) * ux)                # how far Cao Cao is from crossing his
+        return -.5 <= across <= d + .5 and along <= pc["reach"] and along / vpt <= max(across, 0) / vat + pc["lead"]
+
+    def advance(tile, t, trig, at=None):   # spring whoever is due; drop those gone home; hit?
+        cx, cy = at or (tile[0] + .5, tile[1] + .5)
+        nt, hits = list(trig), []
+        for i in range(len(amb)):
+            if nt[i] == -1 and springs(i, cx, cy):
+                nt[i] = t
+            if nt[i] >= 0:
+                w = where(i, t - nt[i])
+                if w is None:
+                    nt[i] = -2
+                elif (w[0] - cx) ** 2 + (w[1] - cy) ** 2 < hit2:
+                    hits.append(i)
+        return tuple(nt), hits
+
+    if naive:   # straight down the middle of the street, cell centre to cell centre, at a gallop, never slowing
+        C, sub = mb.C, 4
+        line = [(out["from"][0], out["from"][1])] + [((x + .5) * C, (y + .5) * C) for x, y in pts[1:]]
+        trig, hit, k, ridden = tuple([-1] * len(amb)), set(), 0, 0.0
+        for (ax, ay), (bx, by) in zip(line, line[1:]):
+            d = math.hypot(bx - ax, by - ay)
+            for j in range(int(d * sub)):
+                x, y = ax + (bx - ax) * j / (d * sub), ay + (by - ay) * j / (d * sub)
+                trig, h = advance(None, ridden, trig, at=(x, y))
+                hit |= set(h)
+                if (x - gx) ** 2 + (y - gy) ** 2 <= (36 / T) ** 2:
+                    return round(ridden), [out["ambush"][i]["id"] for i in sorted(hit)]
+                ridden += 1 / sub
+        return round(ridden), [out["ambush"][i]["id"] for i in sorted(hit)]
+
+    # how far each tile is from the goal: a ride may run late by `spare` steps, no more (a dodge, not a detour)
+    dist, q = {}, deque()
+    for t in corridor:
+        if goal(t):
+            dist[t] = 0
+            q.append(t)
+    while q:
+        t = q.popleft()
+        for dx, dy in STEP4:
+            u = (t[0] + dx, t[1] + dy)
+            if u in corridor and u not in dist:
+                dist[u] = dist[t] + 1
+                q.append(u)
+    budget = dist.get(start, horizon) + spare
+    layer = {(start, tuple([-1] * len(amb))): 0}               # (tile, springs) -> tiles ridden
+    for t in range(1, horizon):
+        nxt = {}
+        for (tile, trig), ridden in layer.items():
+            for dx, dy in STEP4 + ((0, 0),):
+                u = (tile[0] + dx, tile[1] + dy)
+                if u not in dist or t + dist[u] > budget:
+                    continue
+                r = ridden + (dx != 0 or dy != 0)
+                if r - max(0, t - after) * vw < pc["hit"]:      # the wave is on him
+                    continue
+                ntrig, hits = advance(u, t, trig)
+                if hits:
+                    continue
+                if goal(u):
+                    return t, [out["ambush"][i]["id"] for i, v in enumerate(ntrig) if v != -1]
+                key = (u, ntrig)
+                if nxt.get(key, -1) < r:
+                    nxt[key] = r
+        layer = nxt
+        if not layer:
+            return None
+    return None
+
+
+def prove_chase(mb, ch, out):
+    """Every route can be ridden clean, at the engine's pace, by a rider who dodges well; and riding it straight, the
+    ambushes on it are in the way. Raises if a route has no clean ride. Records each route in out["routes"]."""
+    for name, pts in ch.get("routes", {}).items():
+        corridor = _corridor(mb, pts)
+        steps, hit = chase_run(mb, out, corridor, pts, naive=True)
+        clean = chase_run(mb, out, corridor, pts)
+        if clean is None:
+            raise RuntimeError(f"{mb.mid}: chase route {name!r} can't be ridden clean (the wave or an ambusher always gets him)")
+        dt = 16 / out["pace"]["horse"]
+        out["routes"][name] = {"tiles": steps, "straight_hits": hit, "clean_s": round(clean[0] * dt, 1), "sprung": clean[1]}
+        if "--verbose" in sys.argv or os.environ.get("CHASE_VERBOSE"):
+            print(f"  chase {name}: {steps} tiles ({steps * dt:.1f}s straight), straight on hits {hit}; "
+                  f"clean in {clean[0] * dt:.1f}s past {clean[1]}")
+
+
 def ways(mb):
     """The streets of a map as a graph, in tiles: nodes at every bend, end and crossing of a road, lane,
     garden path, bridge or gallery (their centre lines), edges along them. The game's lit route follows it,
@@ -696,7 +863,7 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
         outdoor_people = [p for p in b.get("npcs", []) if not p.get("place")]
         chs = [c for c in b.get("challengers", []) if not c.get("map")]
         m = mb.build(b, [rename(p) for p in outdoor_people], chs, [rename(w) for w in P.get("watchers", [])])
-        if b.get("chase"):   # a chase's riders (Integration's engine): an npc each, its beat in tiles
+        if b.get("chase", {}).get("riders"):   # a chase's riders (Integration's engine): an npc each, its beat in tiles
             ch = b["chase"]
             for r in ch["riders"]:
                 post = mb.near_cell(tuple(r["post"]), want_visible=False)
@@ -706,6 +873,9 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
                                                                       "dir": r.get("dir", "S"),
                                                                       **({"pause": [*mb.near_cell(tuple(r["pause"][:2]), want_visible=False),
                                                                                     r["pause"][2]]} if r.get("pause") else {})}})
+        elif b.get("chase", {}).get("ambush"):   # a wave behind and ambushes ahead: laid on tiles, then proved
+            m["chase"] = lay_chase(mb, b["chase"])
+            prove_chase(mb, b["chase"], m["chase"])
         m["states"] = [state(st, mb, plans) for st in b.get("states", [])]
         if (w := ways(mb)):
             m["ways"] = w
