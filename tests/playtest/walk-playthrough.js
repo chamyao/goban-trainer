@@ -4,6 +4,8 @@
 // road is really walked through; tap through every line and scene; win each board with the test-mode Skip.
 // Nothing is teleported, marked cleared or handed over: items, marks and party changes come from playing.
 // A stealth beat is crossed by timing (the patrols simulated ahead), still walked a cell at a time.
+// A chase (Book 13, c17) is ridden like any walk; a catch opens a one-try board, solved with Skip and logged. CHASE_LANE=n
+// sends him into the east lane the first n times so a catch is met; CHASE_FAIL=1 fails the first catch and checks the restart.
 // Fails a beat, with the place, position and last line, when the player is refused a way (a closed road, a
 // barred door), gets stuck (no progress for STUCK seconds) or has nowhere to go. Writes a per-beat report
 // to out/walk-playthrough-<book>-<diff>.json. Whenever he can walk, the goal box's chip must name the lead (it follows
@@ -128,7 +130,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     }
     return out;
   });
-  const report = [], t0 = Date.now(); let beat = null, beatT = 0, lastProgress = Date.now(), progressKey = '', lastLine = '', refused = '', boards = [];
+  const report = [], t0 = Date.now(); let beat = null, beatT = 0, lastProgress = Date.now(), progressKey = '', lastLine = '', refused = '', boards = [], chaseLog = []; let laneLeft = +(process.env.CHASE_LANE || 0);
   const leadFor = await p.evaluate(B => { const w = TK.world(B), out = {}; let party = null;   // the lead the story gives each beat: its last party step before it
     for (const n of w.nodes) { out[n.key] = party && party[0]; const sc = w.scenes && w.scenes[n.scene]; for (const s of (sc && sc.steps) || []) if (s[0] === 'party') party = s[1]; } return out; }, BOOK).catch(() => ({}));
   let beatLead = '';
@@ -149,7 +151,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     if (process.env.TRACE === beat && (!globalThis.__tr || Date.now() - globalThis.__tr > 2000)) { globalThis.__tr = Date.now();
       console.log('     trace', JSON.stringify({ ...s, items: undefined, extra: await p.evaluate(() => { const w = window.__w, d = document;
         return { dlg: [...d.querySelectorAll('.town-dlg')].map(e => (e.hidden ? 'hidden:' : 'shown:') + e.className + ':' + e.textContent.trim().slice(0, 50)), skip: d.querySelectorAll('.town-skip').length, uis: d.querySelectorAll('.town-ui').length,
-          scenes: w.scene.manager.getScenes(true).map(x => x.scene.key), canMove: w.canMove(), approaching: !!w.approaching, seated: !!w.seated,
+          scenes: w.scene.manager.getScenes(true).map(x => x.scene.key), canMove: w.canMove(), chase: !!w.chaseNow(), riders: w.npcs.filter(n => n.rider).map(n => `${n.id}@${Math.round(n.spr.x)},${Math.round(n.spr.y)}${n.spr.visible ? "" : " hidden"}${n.rider.hunting ? " hunting" : ""}`), approaching: !!w.approaching, seated: !!w.seated,
           marks: WorldMarks.all(w.w), spots: Object.entries(w.spots).map(([k, v]) => `${k}@${Math.round(v.x)},${Math.round(v.y)}${v.trigger && v.trigger !== 'near' ? '/' + v.trigger : ''}`) }; }) })); }
     // progress: a new place, a beat or item gained, or getting nearer the goal
     const key = `${s.place}|${s.cleared}|${s.items}|${s.goal}|${s.line}|${s.cine}|${s.duel}|${Math.round(Math.hypot(s.P[0] - (s.goal ? s.goal[0] : 0), s.P[1] - (s.goal ? s.goal[1] : 0)) / 24)}`;
@@ -221,6 +223,19 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       if (s.skip) {
         const drawn = await p.evaluate(() => { const a = document.querySelector('.tk-duel-src a'), m = a && a.href.match(/\/q\/(\d+)/); return { id: m ? +m[1] : null, key: window.__boardKey }; });
         if (!boards.some(x => x.key === drawn.key && x.id === drawn.id)) boards.push({ beat, key: drawn.key, id: drawn.id });
+        // a chase's catch (its own one-try board, key~n): logged; CHASE_FAIL=1 fails the first, and the chase must restart
+        const ch = /~\d+$/.test(drawn.key || '') && await p.evaluate(() => { const w = window.__w, C = w.chase; return C && w.chaseNow() ? { by: w.engaged && w.engaged.id, tries: C.tries, from: C.spec.from } : null; });
+        if (ch && !chaseLog.some(x => x.key === drawn.key)) {
+          const fail = process.env.CHASE_FAIL && !chaseLog.some(x => x.failed);
+          chaseLog.push({ beat, key: drawn.key, by: ch.by, failed: !!fail }); console.log(`     ${beat}: caught by ${ch.by} (${drawn.key}); ${fail ? 'failing it' : 'solving it'}`);
+          if (fail) {
+            await p.evaluate(() => { if (window.__trainer) window.__trainer.flawed = null; dispatchEvent(new CustomEvent('tczw:result', { detail: 'fail' })); }); await p.waitForTimeout(600);
+            await tapEl('.tk-duel-go'); let r = null;
+            for (let i = 0; i < 120 && !r; i++) { await p.waitForTimeout(50); r = await p.evaluate(t => { const w = window.__w, C = w.chase, sp = C && w.spots[C.spec.from]; if (!C || C.tries <= t || !sp || Math.hypot(w.player.x - sp.x, w.player.y - sp.y - 18) > 4) return null;
+              return { home: w.npcs.filter(n => n.rider).every(n => Math.hypot(n.spr.x - n.home.x, n.spr.y - n.home.y) < 3 && !n.rider.hunting), at: [Math.round(w.player.x), Math.round(w.player.y)] }; }, ch.tries); }
+            const ok = !!r && r.home; chaseLog[chaseLog.length - 1].restart = ok;
+            console.log(`${ok ? 'ok  ' : 'FAIL'} ${beat}: failing the catch restarts the chase at ${ch.from}${r ? ` (${r.at}), every rider home: ${r.home}` : ': no restart seen in 6 s'}`);
+            continue; } }
         await p.locator('.tk-duel-keys button', { hasText: 'Skip' }).first()[TAPM]().catch(() => {}); await p.waitForTimeout(600); continue; }
       await p.waitForTimeout(300); continue;
     }
@@ -257,6 +272,14 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       await tapWorld(errand.x, errand.y - (errand.building ? [0, 14, 28][(errand.taps - 1) % 3] : 0)); await p.waitForTimeout(500); continue;
     }
     if (!s.goal) { close('fail', 'no goal to go to', s); break; }
+    // CHASE_LANE=n: the first n times a chase is on, wait in the east lane on its rider's beat (Book 13's Luoyang chase:
+    // a sure catch) before making for the goal, so a catch is met (CHASE_FAIL fails the first; the rest are solved)
+    if (laneLeft > 0 && !s.busy && !s.cine && !s.walking && await p.evaluate(() => { const w = window.__w; return !!w.chaseNow() && !w.engaged && w.npcs.some(n => n.id === 'rider-lane' && n.spr.visible); })) {
+      laneLeft--; console.log(`     ${beat}: into the east lane to meet the riders (CHASE_LANE)`);
+      for (const q of [{ x: 1240, y: 700 }]) { await p.evaluate(q => window.__w.walkTo(q.x, q.y, { ring: false }), q);   // mid-lane, on its beat: he waits there for it to come down at him
+        for (let i = 0; i < 160; i++) { await p.waitForTimeout(150); const t = await p.evaluate(q => { const w = window.__w; return { stop: !!w.engaged || w.ui.busy() || !!document.querySelector('.tk-duel svg'), at: !w.walk && Math.hypot(w.player.x - q.x, w.player.y - q.y) < 10 }; }, q); if (t.stop) break; }
+        if (await p.evaluate(() => !!window.__w.engaged || window.__w.ui.busy())) break; }
+      continue; }
     // a stealth beat here: time the way past the cones, then walk it a cell at a time
     if (s.watchers && !plannedSteps) {   // the running pace first; after a catch the slower one, if it has a way
       pace = catches ? 4 : 3; plannedSteps = await plan(pace); if (!plannedSteps && pace === 4) { pace = 3; plannedSteps = await plan(3); }
@@ -311,5 +334,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   const audio = errs.filter(e => /AudioContext/.test(e)); if (audio.length) console.log(`     note: ${audio.length} AudioContext page errors (${audio[0].slice(0, 80)})`);
   console.log(`the goal box's chip followed the party: ${chipSeen.join(' → ') || 'never shown'}${chipBad.size ? ` (wrong at ${[...chipBad].join(', ')})` : ''}`);
   if (OPTIONAL) console.log(`optional: ${errands.filter(e => e.status === 'pass').length}/${errands.length} walked to, ${errands.filter(e => e.status === 'gone').length} gone before he got there (${errands.filter(e => e.id.startsWith('challenger')).length} challengers, ${errands.filter(e => e.id.startsWith('door')).length} doors and rooms)`);
-  await b.close(); process.exit(featureFails.length || chipBad.size || errands.some(e => e.status === 'fail') || fails || held.length || recovered.length || (diffCheck.off && diffCheck.off.length) ? 1 : 0);
+  if (chaseLog.length || process.env.CHASE_FAIL) console.log(`the chase: ${chaseLog.length ? chaseLog.map(x => `${x.beat} caught by ${x.by}, ${x.failed ? `failed (restart ${x.restart ? 'ok' : 'NOT seen'})` : 'solved'}`).join('; ') : 'never caught'}${process.env.CHASE_FAIL && !chaseLog.some(x => x.failed) ? ' (CHASE_FAIL: no catch to fail)' : ''}`);
+  const chaseBad = chaseLog.some(x => x.failed && !x.restart) || (process.env.CHASE_FAIL && !chaseLog.some(x => x.failed));
+  await b.close(); process.exit(chaseBad || featureFails.length || chipBad.size || errands.some(e => e.status === 'fail') || fails || held.length || recovered.length || (diffCheck.off && diffCheck.off.length) ? 1 : 0);
 })();
