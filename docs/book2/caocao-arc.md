@@ -495,3 +495,11 @@ This replaces the four riders on fixed posts.
     is a pressure, not a timer.
 - **Lines:** the "spotted" line becomes the wave's cry as it pours out of the gate. The "caught" line goes to an ambusher.
   The solved and restart lines stay.
+
+### On hold (the user's call)
+
+The user paused the chase while they think it over ("lets revert the chase scene to the way you had it for now while I
+think"), after confirming the novel has no chase. c17 is back to the novel: Cao Cao rides from the residence to the East
+Gate, bluffs the gate captain, then Lü Bu's suspicion, Li Ru's test and the warrants. The chase block (wave, ambushes,
+the lodging jailers' line) is in git at commit 9af2f2cc and can be restored as it was. Places' map and Integration's
+engine still support it; without the `chase` field on c17 it stays off.
