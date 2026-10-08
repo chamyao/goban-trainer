@@ -52,6 +52,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   for (let i = 0; i < 40 && !(await p.evaluate(() => typeof TKOverlay !== 'undefined')); i++) await p.waitForTimeout(250);
   const hook = () => p.evaluate(() => { if (typeof TKOverlay === 'undefined' || TKOverlay.__hooked) return; const o = TKOverlay.open.bind(TKOverlay); TKOverlay.open = (n, key, at) => { window.__boardKey = key; return o(n, key, at); }; TKOverlay.__hooked = true; }).catch(() => {});
   await hook();
+  if (process.env.STEALTHDBG) await p.addInitScript(() => {}).then(() => p.evaluate(() => { const wrap = () => { const w = window.__w; if (!w || w.__wrapped) return; const o = w.walkTo.bind(w); w.walkTo = (x, y, opt) => { (window.__walks = window.__walks || []).push({ t: Math.round(performance.now()), x: Math.round(x), y: Math.round(y), from: (new Error().stack || '').split('\n')[2].trim().slice(0, 70) }); return o(x, y, opt); }; w.__wrapped = true; }; setInterval(wrap, 200); }));
   // SYNC: a reroute rebuilds the world (a new game); the game running before each hide/show flip is tagged, and a flip
   // after which the tag is gone was a reroute (app.js calls route() by its own reference, so a wrapper can't see it)
   let lastVis = Date.now(), visFlips = 0, flipAt = 0, prevS = null, pushWait = false; const reroutes = [];
@@ -120,7 +121,16 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       hist.push(nx); cur = nx; if (nx.has(gx + gy * cols)) { found = k + 1; break; } if (!nx.size) break; }
     if (found < 0) return null;
     const cells = []; let c = gx + gy * cols; for (let k = found; k >= 0; k--) { cells.unshift(c); c = hist[k].get(c); }
-    return cells.map(c => { const x = c % cols; return at(x, (c - x) / cols); });
+    const pts = cells.map(c => { const x = c % cols; return at(x, (c - x) / cols); });
+    // follow it here, on the same clock as the game's resume (a start from the test's side would come late)
+    clearInterval(window.__execI); const t0 = performance.now() + 80, ms = STEP * 50;
+    window.__execI = setInterval(() => { const w = window.__w; if (!w || !w.player || w.caught || w.ui.busy() || w.cine || w.leaving) return;
+      const k = Math.max(0, Math.min(pts.length - 1, Math.floor((performance.now() - t0) / ms))), c = pts[k], P = w.player;
+      const cov = w.covers && w.covers.length && w.inCover();
+      if (Math.hypot(P.x - c.x, P.y - c.y) < 4 || (cov && Phaser.Geom.Rectangle.Contains(cov, c.x, c.y - 3) && Math.hypot(P.x - c.x, P.y - c.y) < 16)) { w.walk = null; P.setVelocity(0); return; }   /* on the planned cell, or the plan stays in the cover she's in: still (a shuffle in cover is seen) */
+      const end = w.walk && w.walk.path && w.walk.path[w.walk.path.length - 1];
+      if (!end || Math.hypot(end.x - c.x, end.y - (c.y - 3)) > 2) { if (!w.walkTo(c.x, c.y, { ring: false })) { w.walk = null; P.setVelocity(0); } } }, 30);
+    return pts;
   }, STEP);
 
   // what's optional on this map, as a player sees it: challengers standing with their "!", doors only some may pass
@@ -157,7 +167,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     if (s.next !== beat) {   // a new beat
       if (beat) close('pass', '', s);
       if (UNTIL && beat === UNTIL) break;
-      beat = s.next; beatStart[beat] = { taps: worldTaps, P: s.P, scene: null }; beatT = Date.now(); lastProgress = Date.now(); refused = ''; stealthTries = 0; plannedSteps = null; noWaySince = 0; skipped = false; reloads = 0; catches = 0;
+      beat = s.next; beatStart[beat] = { taps: worldTaps, P: s.P, scene: null }; beatT = Date.now(); lastProgress = Date.now(); refused = ''; stealthTries = 0; plannedSteps = null; noWaySince = 0; await p.evaluate(() => clearInterval(window.__execI)).catch(() => {}); skipped = false; reloads = 0; catches = 0;
     }
     if (process.env.TRACE === beat && (!globalThis.__tr || Date.now() - globalThis.__tr > 2000)) { globalThis.__tr = Date.now();
       console.log('     trace', JSON.stringify({ ...s, items: undefined, extra: await p.evaluate(() => { const w = window.__w, d = document;
@@ -284,8 +294,10 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       console.log(`     shot ${f}: ${m.pic ? 'portrait' : m.face ? 'pixel bust' : 'no face'}${m.picOverText ? ', PORTRAIT OVER THE TEXT' : ''}${m.boxInView ? '' : ', BOX OFF SCREEN'}${m.picInView ? '' : ', PORTRAIT OFF SCREEN'}`);
     }
     if (s.busy) { await p.evaluate(() => window.__w.ui.advance()); await p.waitForTimeout(250); continue; }   // a line: on to the next
+    if (s.caught && process.env.STEALTHDBG) console.log('     dbg walks', await p.evaluate(() => JSON.stringify((window.__walks || []).slice(-4))));
+    if (s.caught && process.env.STEALTHDBG) await p.evaluate(() => { window.__walks = []; });
     if (s.caught && plannedSteps && process.env.STEALTHDBG) { const k = Math.floor((Date.now() - planT) / (pace * 50)); console.log('     dbg by', await p.evaluate(() => window.__w.npcs.filter(n => n.watch && n.sees).map(n => `${n.id}@${Math.round(n.spr.x)},${Math.round(n.spr.y)} ${n.watch.dir} leg ${n.watch.leg} wait ${Math.round(n.watch.wait || 0)}`).join('; ')), 'planned', ((Date.now() - planT) / 1000).toFixed(1), 's ago'); console.log(`     dbg caught at ${s.P} hidden ${s.hidden} inCover ${s.inCover}; plan step ${k}/${plannedSteps.length} at ${plannedSteps[Math.min(k, plannedSteps.length - 1)].x},${plannedSteps[Math.min(k, plannedSteps.length - 1)].y}; next ${JSON.stringify(plannedSteps.slice(k, k + 4).map(c => [c.x, c.y]))}`); }
-    if (s.caught) plannedSteps = null;   // sent back: plan again from there
+    if (s.caught) { if (plannedSteps) await p.evaluate(() => clearInterval(window.__execI)); plannedSteps = null; await p.waitForTimeout(200); continue; }   // sent back (the game walks her there): plan again once she's there
     if (s.cine || s.leaving || s.engaged || s.caught) { await p.waitForTimeout(300); continue; }
     if (OPTIONAL && !errand && !s.watchers && !s.walking && !plannedSteps) {
       const next = (await optional()).find(t => !visited.has(t.id));
@@ -304,7 +316,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     if (s.watchers && !plannedSteps) {   // the running pace first; after a catch the slower one, if it has a way
       pace = catches ? 4 : 3; plannedSteps = await plan(pace); if (!plannedSteps && pace === 4) { pace = 3; plannedSteps = await plan(3); }
       if (!plannedSteps && await p.evaluate(() => !!(window.__w.mounts && window.__w.mounts.length))) { pace = 2; plannedSteps = await plan(2); if (plannedSteps) console.log(`     ${beat}: a way past the watchers at his mounted pace (a cell every 100 ms)`); }   // on horseback he's quicker
-      planT = Date.now() + 80; stealthTries++;
+      planT = Date.now() + 80; stealthTries++; await p.evaluate(() => { const w = window.__w; w.walk = null; });
       if (!plannedSteps && stealthTries <= 3 && arrivedAt && Math.hypot(s.P[0] - arrivedAt[0], s.P[1] - arrivedAt[1]) > 12) {   // no way from here (an errand left him there): back to where he came in, and plan again
         await p.evaluate(a => window.__w.walkTo(a[0], a[1], { ring: false }), arrivedAt);
         for (let i = 0; i < 60 && await p.evaluate(() => !!window.__w.walk && !window.__w.caught); i++) await p.waitForTimeout(250);
@@ -316,14 +328,13 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
           return `a way there ignoring them: ${f && f.length ? f.length + ' steps' : 'none'} (${dense.length} points: ${wet} in water, ${blocked} blocked in the walk grid the planner uses); goal ${g && [Math.round(g.x), Math.round(g.y)]}; wading ${w.wades()}; watchers ${cat.map(n => `${n.id}@${Math.round(n.spr.x)},${Math.round(n.spr.y)} cone ${n.watch.cone} ${n.watch.dir}${w.sees ? (w.sees(n, P) ? ' SEES HIM' : '') : ''}`).join('; ')}`; });
         close('fail', `no unseen way past the watchers (${why})`, s); break; } }
     if (plannedSteps) {
-      const k = Math.max(0, Math.min(plannedSteps.length - 1, Math.floor((Date.now() - planT) / (pace * 50)))), c = plannedSteps[k];
-      if (Date.now() - planT > 1200 && !(await p.evaluate(() => !!(window.__w.inCover && window.__w.covers && window.__w.covers.length && window.__w.inCover())))) { plannedSteps = null; continue; }   // out in the open: plan again from here every 1.2 s (no drift from the plan's clock)
-      await p.evaluate(c => { const w = window.__w, P = w.player, cov = w.covers && w.covers.length && w.inCover();
-        if (cov && Phaser.Geom.Rectangle.Contains(cov, c.x, c.y - 3)) { w.walk = null; P.setVelocity(0); return; }   /* the plan stays in the cover she's in: keep still there (moving in cover is seen) */
-        if (!w.walk && Math.hypot(P.x - c.x, P.y - c.y) < 6) { P.setVelocity(0); return; }   /* there: keep still */
-        if (!w.walk || Math.hypot(w.walk.path[w.walk.path.length - 1].x - c.x, w.walk.path[w.walk.path.length - 1].y - (c.y - 3)) > 2) w.walkTo(c.x, c.y, { ring: false }); }, c);
-      if (k >= plannedSteps.length - 1) { plannedSteps = null; await tapWorld(s.goal[0], s.goal[1]); }   // there: tap it (a spot that starts on a tap)
-      await p.waitForTimeout(60); continue;
+      // the plan is followed in the page, on the game's clock (every 30 ms: a step to the planned cell, or still where
+      // the plan stays); here only its end, a catch, and a fresh plan every 1.2 s in the open
+      // (the plan is followed in the page from the moment it was made: see plan())
+      const k = Math.floor((Date.now() - planT) / (pace * 50));
+      if (Date.now() - planT > 1200 && !(await p.evaluate(() => !!(window.__w.inCover && window.__w.covers && window.__w.covers.length && window.__w.inCover())))) { await p.evaluate(() => clearInterval(window.__execI)); plannedSteps = null; continue; }
+      if (k >= plannedSteps.length - 1) { await p.evaluate(() => clearInterval(window.__execI)); plannedSteps = null; await tapWorld(s.goal[0], s.goal[1]); }   // there: tap it (a spot that starts on a tap)
+      await p.waitForTimeout(100); continue;
     }
     if (s.walking) { await p.waitForTimeout(250); continue; }
     if (Date.now() - lastTap < 1200) { await p.waitForTimeout(200); continue; }

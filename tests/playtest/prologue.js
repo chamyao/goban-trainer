@@ -1,5 +1,5 @@
 // Book 14's prologue in burning Chang'an (x0b, "Hidden"): Lady Yan and her daughter among the looters, on Places' map
-// in its walled burning ward (changan--burning-ward: six cover objects, six looters). Player mode (no test mode).
+// in its walled burning ward (changan--burning-ward: ten cover objects (six in the lanes, one at each way in), six looters). Player mode (no test mode).
 //  1. In each cover, keeping still, she is hidden.
 //  2. Hidden in cover while a looter looks right at her (his cone over her, by the engine's own sight, the hiding set
 //     aside for the look): not caught.
@@ -32,7 +32,7 @@ const path = require('path');
   for (let i = 0; i < 40; i++) { await p.waitForTimeout(250); if (await p.evaluate(() => { const w = window.__w; return w && w.placeId === 'changan--burning-ward' && w.player && !w.leaving; })) break; }
   await ready();
   const st = await p.evaluate(() => { const w = window.__w; return { next: w.nextMain() && w.nextMain().node, state: (w.mapState() || {}).ids, covers: w.covers.length, spots: ['lb-door', 'pangshu-gate'].filter(k => w.spots[k]), looters: w.npcs.filter(n => n.watch && w.watching(n)).map(n => n.id), lead: w.lead, party: w.st.party }; });
-  check(st.next === '14-x0b' && st.covers === 6 && st.looters.length === 6 && st.spots.length === 2, `x0b in the burning ward (${(st.state || []).join('+')}): ${st.covers} covers, spots ${st.spots.join(', ')}, looters ${st.looters.join(', ')}; ${st.lead} leads (${(st.party || []).join(', ')})`);
+  check(st.next === '14-x0b' && st.covers >= 10 && st.looters.length === 6 && st.spots.length === 2, `x0b in the burning ward (${(st.state || []).join('+')}): ${st.covers} covers, spots ${st.spots.join(', ')}, looters ${st.looters.join(', ')}; ${st.lead} leads (${(st.party || []).join(', ')})`);
 
   const at = (q, dy = 0) => p.evaluate(([q, dy]) => { const w = window.__w; w.walk = null; w.auto = null; w.player.body.reset(q.x, q.y + dy); w.player.setVelocity(0); }, [q, dy]);
   const look = () => p.evaluate(() => { const w = window.__w, P = w.player, h = w.hidden; w.hidden = false;   // who would see her, the hiding set aside for the look
