@@ -57,6 +57,13 @@ mechanic: only cosmetic touches (fireflies on the route light, a led horse, a cr
 should introduce at least one new way to play, and it should come out of the narrative itself, the way stealth came out
 of a woman who must not be seen. Design it with the arc, not after, and send it to Integration and Places with the design.
 
+A new mechanic does not have to involve go:
+
+> "the mechanics dont have to fit w go btw"
+
+Go stays the game's core, through boards and challengers. But a mechanic can stand on its own (stealth, a flood, a chase)
+and only touch go where that genuinely helps, as the chase's catch board did.
+
 Small touches that dress an existing system in the story are worth doing too, alongside the new mechanic rather than
 instead of it. At Beimang the route light became the novel's fireflies:
 

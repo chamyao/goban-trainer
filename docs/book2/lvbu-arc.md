@@ -24,6 +24,8 @@ advice"). The arc ends at White Gate Tower, where Chen Gong chooses death over C
 
 ## The new mechanic (Part 0): the flood, and the horse that crosses water
 
+(Mechanics needn't involve go: "the mechanics dont have to fit w go btw". The flood is a map mechanic in its own right.)
+
 > "did you introduce any new game mechanics? … something like that"
 
 **The flood of Xiapi.** Cao Cao breaks the dykes of the Yi and Si rivers: 「只剩得東門無水；其餘各門，都被水淹」.
