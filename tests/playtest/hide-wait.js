@@ -25,9 +25,12 @@ await p.reload();await p.waitForTimeout(3500);
 const st=()=>p.evaluate(()=>{const s=window.__w;return {hidden:s.hidden,caught:s.caught,x:Math.round(s.player.x),alpha:s.player.alpha,covers:s.covers.length,dlg:(document.querySelector('.town-dlg')||{}).textContent||''};});
 await p.waitForTimeout(1500);
 let r=await st();check(r.covers===1&&r.hidden&&!r.caught&&!/looter/i.test(r.dlg),`in cover and still: hidden, not caught (${JSON.stringify(r)})`);
-// step out of cover away from him (still in his cone)
-await p.keyboard.down('ArrowLeft');await p.waitForTimeout(450);await p.keyboard.up('ArrowLeft');await p.waitForTimeout(600);
-r=await st();check(/looter/i.test(r.dlg)||r.caught,`out of cover in his sight: caught (${JSON.stringify(r)})`);
+// moving away from him (in his cone): from the cover and out of it, as far as she gets before he sees her
+// (held left until she is out of the cover's ground: inCover() null, not a step that leaves her inside it)
+let left=null;await p.evaluate(()=>{window.__w.auto='left';});
+let at0=null;for(let i=0;i<40;i++){await p.waitForTimeout(50);const o=await p.evaluate(()=>{const s=window.__w;return {out:!s.inCover(),caught:!!s.caught,x:Math.round(s.player.x)};});if(o.out&&!left)left=o;if(o.caught){at0=o;break;}if(left&&o.x<left.x-24)break;}
+await p.evaluate(()=>{window.__w.auto=null;});await p.waitForTimeout(600);
+r=await st();check(!!at0&&(/looter/i.test(r.dlg)||r.caught),`moving in his sight: caught (${at0?(at0.out?'out of the cover':'on the first move, still on the cover\'s ground: moving in cover is not hidden'):'never caught'}, at x ${at0&&at0.x}; ${JSON.stringify(r)})`);
 for(let i=0;i<4;i++){await p.keyboard.press('Enter');await p.waitForTimeout(300);}
 await p.waitForTimeout(1500);
 r=await st();check(Math.abs(r.x-at.x)<14,`sent back to the cover he last hid in (x ${r.x}, cover at ${Math.round(at.x)})`);
