@@ -601,7 +601,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) this.data = await (await fetch("data/tk.json?v=70")).json();
+    if (!this.data) this.data = await (await fetch("data/tk.json?v=71")).json();
     return this.data;
   },
   ls(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } },
@@ -1224,7 +1224,7 @@ async function viewTK(worldN) {
         onTalkTo: tkChatAllowed() ? scene => TKTalk.open(scene, host) : null,   // Claude in the teahouse's back room (Chang'an): the chat
         onBoss: async () => { if (!TK.seen(`${w.n}:closing`)) { await run(w.closing); TK.markSeen(`${w.n}:closing`); } },
         // the book's last beat done: on into the next book, no menus (its opening scroll plays there)
-        onBookDone: () => { if (TK.world(w.n + 1)) { try { localStorage.setItem("tk-book", String(w.n + 1)); } catch {} location.hash = `#/tk/${w.n + 1}`; } },
+        onBookDone: () => { const nx = w.next || w.n + 1; if (TK.world(nx)) { try { localStorage.setItem("tk-book", String(nx)); } catch {} location.hash = `#/tk/${nx}`; } },   // a book can name the one after it (the Cao Cao arc → the Diaochan arc)
       });
     } catch (e) { host.textContent = e.message; }
     return;
