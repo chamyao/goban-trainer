@@ -405,7 +405,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     // talk to the townsfolk who haven't heard yet, the nearest first, until it holds (the news then walks on by itself)
     const gossip = await p.evaluate(k => { const w = window.__w, nd = k && (w.w.nodes || []).find(n => n.key === k), c = nd && typeof nd.cutaway === 'string' ? nd.cutaway : '';
       if (!/^told:/.test(c) || w.cond(c) || typeof WorldFeats === 'undefined') return null; const P = w.player;
-      const n = w.npcs.filter(n => n.gossip && n.spr.visible && WorldFeats.gossipActive(w, n) && !WorldFeats.told(w, n.id)).sort((a, b) => Math.hypot(a.spr.x - P.x, a.spr.y - P.y) - Math.hypot(b.spr.x - P.x, b.spr.y - P.y))[0];
+      const n = w.npcs.filter(n => n.gossip && !n.gossip.relay && n.spr.visible && WorldFeats.gossipActive(w, n) && !WorldFeats.told(w, n.id))   /* (a relay hears it only from a neighbour) */.sort((a, b) => Math.hypot(a.spr.x - P.x, a.spr.y - P.y) - Math.hypot(b.spr.x - P.x, b.spr.y - P.y))[0];
       return n ? { id: n.id, x: n.spr.x, y: n.spr.y, cond: c } : { wait: c }; }, s.next).catch(() => null);
     if (gossip && gossip.id) { if (!told.includes(gossip.id)) { told.push(gossip.id); console.log(`     ${s.next} waits on ${gossip.cond}: telling ${gossip.id}`); } lastTap = Date.now(); await tapWorld(gossip.x, gossip.y); await p.waitForTimeout(600); continue; }
     if (gossip && gossip.wait) { await p.waitForTimeout(500); continue; }   // everyone told: the news on its way
