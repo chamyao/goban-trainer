@@ -1028,52 +1028,12 @@
  ],
  "npcs": [
   {
-   "id": "g-dock",
-   "kind": "folk.porter",
-   "x": 29.5,
-   "y": 5.9,
-   "say": [
-    "“Liu Bei, come to marry into Wu! I'll tell the neighbours.”"
-   ],
-   "in": [
-    "news"
-   ],
-   "gossip": {
-    "tells": [
-     "g-h1"
-    ],
-    "in_beats": [
-     "s4"
-    ]
-   }
-  },
-  {
-   "id": "g-h1",
+   "id": "g-lamb",
    "kind": "folk.villager",
-   "x": 25.5,
-   "y": 13.9,
-   "say": [
-    "“The Marquis's sister! Married to Liu Bei! Well, well.”"
-   ],
-   "in": [
-    "news"
-   ],
-   "gossip": {
-    "tells": [
-     "g-h2"
-    ],
-    "in_beats": [
-     "s4"
-    ]
-   }
-  },
-  {
-   "id": "g-h2",
-   "kind": "folk.elder",
-   "x": 25.5,
+   "x": 38.5,
    "y": 29.9,
    "say": [
-    "“Liu Bei's come to be the Marquis's brother-in-law? Wait till the street hears this.”"
+    "“A whole lamb, for Qiao Guolao? So the wedding talk is true!”"
    ],
    "in": [
     "news"
@@ -1088,30 +1048,12 @@
    }
   },
   {
-   "id": "g-h3",
-   "kind": "folk.villager",
-   "x": 29.5,
-   "y": 21.9,
-   "say": [
-    "“A wedding, then! I'll pass it along.”"
-   ],
-   "in": [
-    "news"
-   ],
-   "gossip": {
-    "tells": [],
-    "in_beats": [
-     "s4"
-    ]
-   }
-  },
-  {
-   "id": "g-market",
-   "kind": "folk.porter",
+   "id": "g-wine",
+   "kind": "folk.woman",
    "x": 45.5,
-   "y": 25.9,
+   "y": 33.9,
    "say": [
-    "“Five hundred men in red, buying for Liu Bei's wedding? I'll tell the street.”"
+    "“My best jar, for Liu Bei's wedding gift? Here, take two.”"
    ],
    "in": [
     "news"
@@ -1120,44 +1062,6 @@
     "tells": [
      "g-h4"
     ],
-    "in_beats": [
-     "s4"
-    ]
-   }
-  },
-  {
-   "id": "g-h4",
-   "kind": "folk.villager",
-   "x": 57.5,
-   "y": 21.9,
-   "say": [
-    "“Liu Bei! The whole city will know by evening.”"
-   ],
-   "in": [
-    "news"
-   ],
-   "gossip": {
-    "tells": [
-     "g-h5"
-    ],
-    "in_beats": [
-     "s4"
-    ]
-   }
-  },
-  {
-   "id": "g-h5",
-   "kind": "folk.elder",
-   "x": 73.5,
-   "y": 21.9,
-   "say": [
-    "“A marriage. Somebody should tell the Dowager. Surely she knows.”"
-   ],
-   "in": [
-    "news"
-   ],
-   "gossip": {
-    "tells": [],
     "in_beats": [
      "s4"
     ]
@@ -1184,12 +1088,113 @@
    }
   },
   {
+   "id": "g-h3",
+   "kind": "folk.villager",
+   "x": 29.5,
+   "y": 21.9,
+   "say": [
+    "“So that's what the red cloth is for.”"
+   ],
+   "in": [
+    "news"
+   ],
+   "gossip": {
+    "tells": [
+     "g-h2"
+    ],
+    "in_beats": [
+     "s4"
+    ],
+    "relay": true
+   }
+  },
+  {
+   "id": "g-h2",
+   "kind": "folk.elder",
+   "x": 25.5,
+   "y": 29.9,
+   "say": [
+    "“Liu Bei, the Marquis's brother-in-law?”"
+   ],
+   "in": [
+    "news"
+   ],
+   "gossip": {
+    "tells": [
+     "g-h1"
+    ],
+    "in_beats": [
+     "s4"
+    ],
+    "relay": true
+   }
+  },
+  {
+   "id": "g-h1",
+   "kind": "folk.villager",
+   "x": 25.5,
+   "y": 13.9,
+   "say": [
+    "“The Marquis's sister! Well, well.”"
+   ],
+   "in": [
+    "news"
+   ],
+   "gossip": {
+    "tells": [],
+    "in_beats": [
+     "s4"
+    ],
+    "relay": true
+   }
+  },
+  {
+   "id": "g-h4",
+   "kind": "folk.porter",
+   "x": 57.5,
+   "y": 21.9,
+   "say": [
+    "“No wonder they paid in silver.”"
+   ],
+   "in": [
+    "news"
+   ],
+   "gossip": {
+    "tells": [
+     "g-h5"
+    ],
+    "in_beats": [
+     "s4"
+    ],
+    "relay": true
+   }
+  },
+  {
+   "id": "g-h5",
+   "kind": "folk.elder",
+   "x": 73.5,
+   "y": 21.9,
+   "say": [
+    "“Does the Dowager know?”"
+   ],
+   "in": [
+    "news"
+   ],
+   "gossip": {
+    "tells": [],
+    "in_beats": [
+     "s4"
+    ],
+    "relay": true
+   }
+  },
+  {
    "id": "g-h6",
    "kind": "folk.villager",
    "x": 29.5,
    "y": 37.9,
    "say": [
-    "“Married to the Marquis's sister! I'll go and tell my cousin by the palace.”"
+    "“Qiao Guolao's own steward said so? Then it's certain.”"
    ],
    "in": [
     "news"
@@ -1201,7 +1206,8 @@
     ],
     "in_beats": [
      "s4"
-    ]
+    ],
+    "relay": true
    }
   },
   {
@@ -1210,18 +1216,20 @@
    "x": 41.5,
    "y": 37.9,
    "say": [
-    "“A royal wedding! No wonder they paid in silver.”"
+    "“Her own daughter's wedding, and the Dowager hasn't heard?”"
    ],
    "in": [
     "news"
    ],
    "gossip": {
     "tells": [
+     "wu-gatekeeper",
      "g-h10"
     ],
     "in_beats": [
      "s4"
-    ]
+    ],
+    "relay": true
    }
   },
   {
@@ -1230,7 +1238,7 @@
    "x": 29.5,
    "y": 53.9,
    "say": [
-    "“Liu Bei and the Marquis's sister? Who'd have thought.”"
+    "“Liu Bei? The one whose arms reach past his knees?”"
    ],
    "in": [
     "news"
@@ -1241,7 +1249,8 @@
     ],
     "in_beats": [
      "s4"
-    ]
+    ],
+    "relay": true
    }
   },
   {
@@ -1250,7 +1259,7 @@
    "x": 13.5,
    "y": 53.9,
    "say": [
-    "“Nobody tells the back streets anything. A wedding, you say?”"
+    "“Even the back streets have heard.”"
    ],
    "in": [
     "news"
@@ -1259,7 +1268,8 @@
     "tells": [],
     "in_beats": [
      "s4"
-    ]
+    ],
+    "relay": true
    }
   },
   {
@@ -1268,7 +1278,7 @@
    "x": 41.5,
    "y": 53.9,
    "say": [
-    "“Then she doesn't know? Somebody ought to tell her.”"
+    "“A feast, then. I'll get my good clothes out.”"
    ],
    "in": [
     "news"
@@ -1279,7 +1289,8 @@
     ],
     "in_beats": [
      "s4"
-    ]
+    ],
+    "relay": true
    }
   },
   {
@@ -1288,7 +1299,7 @@
    "x": 61.5,
    "y": 53.9,
    "say": [
-    "“A wedding for her own daughter, and she hasn't heard? I'll go round to the gate.”"
+    "“Red on every door. Ours too!”"
    ],
    "in": [
     "news"
@@ -1299,7 +1310,8 @@
     ],
     "in_beats": [
      "s4"
-    ]
+    ],
+    "relay": true
    }
   },
   {
@@ -1308,18 +1320,17 @@
    "x": 73.5,
    "y": 53.9,
    "say": [
-    "“A wedding! I'm going to tell the palace guards.”"
+    "“The whole city's red, right up to the palace.”"
    ],
    "in": [
     "news"
    ],
    "gossip": {
-    "tells": [
-     "wu-gatekeeper"
-    ],
+    "tells": [],
     "in_beats": [
      "s4"
-    ]
+    ],
+    "relay": true
    }
   },
   {
@@ -1361,8 +1372,8 @@
   },
   {
    "id": "npc-19",
-   "kind": "folk.villager",
-   "x": 37.5,
+   "kind": "folk.porter",
+   "x": 29.5,
    "y": 5.9,
    "say": [
     "“Boats from upriver, flying red? What's all that about?”"
