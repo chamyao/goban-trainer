@@ -92,8 +92,10 @@ a valley in the hills to the north-east (+14, −6).
 
 ## For Integration
 - The data is in your `tk-feats.js` syntax: `gossip`, `told` props, the s4 spot's `fires`, and `yield`.
-- `gossip.relay` needs the engine: a relay can't be told by the player, isn't a talk target until told, and the goal
-  pointer skips him. The pointer should go only to tellable people whose chain reaches the cutaway's `told:` target.
+- `gossip.relay` is in the engine (main d5e43db5): a relay can't be told by the player and isn't a talk target until
+  told; told, his first line floats over him. The goal points only at a tellable gossip whose chain reaches the
+  cutaway's `told:` target (g-qiao). Tellers go by findPath at 80 px/s. Walked: g-qiao to the gatekeeper in 12.5 s
+  (the proof's estimate: 13 s), then s4.
 - `in_beats` is `["s4"]`, the window between s3 (done at the dock) and s4.
 - The yielders' `line` and `caught` lines are written like `say` lines (`["n", en, zh, id]`). `build_tk.py` doesn't
   collect them for voicing yet.
