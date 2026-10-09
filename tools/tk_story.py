@@ -719,10 +719,10 @@ _LB.update(n=14, name="White Gate Tower", zh="白门楼", open=True, book=3, eas
 _LB.setdefault("boss", "redmond")
 WORLDS.append(_LB)
 # ---- Lady Sun's marriage (novel chapters 54-55, Three Silk Pouches), world 15: the book after White Gate Tower ----
-# hidden until its places and art are built; then published (open), and White Gate Tower goes on into it (_LB next=15)
 from tk_story_w2_new import WORLD2_LS as _LS  # noqa: E402
 _LS = _copy.deepcopy(_LS)
-_LS.update(n=15, name="Three Silk Pouches", zh="锦囊妙计", open=True, book=4, hidden=True, easy_grades=["14K", "14K+"])
+_LS.update(n=15, name="Three Silk Pouches", zh="锦囊妙计", open=True, book=4, easy_grades=["14K", "14K+"])   # published (Testing's player walk 15/15, 2026-10-09)
+_LB["next"] = 15   # White Gate Tower goes on into it
 WORLDS.append(_LS)
 # Books 1-3 are taken down for now (the user, 2026-10-07): kept, and still open in test mode (?test=1)
 for _w in WORLDS:

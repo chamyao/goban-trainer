@@ -446,7 +446,8 @@ function worldScenes() {
 
       this.keys = this.input.keyboard.addKeys("W,A,S,D,UP,DOWN,LEFT,RIGHT,E,ENTER");
       // tap (or click) to walk there, tap someone to talk, a building to go in; hold and drag to steer
-      this.input.on("pointerdown", p => { const q = this.flat(p.worldX, p.worldY); this.tapAt(q.x, q.y, p.worldX, p.worldY); });
+      this.input.on("pointerdown", p => { this.game.registry.set("autoGo", false); const q = this.flat(p.worldX, p.worldY); this.tapAt(q.x, q.y, p.worldX, p.worldY); });
+      this.time.addEvent({ delay: 500, loop: true, callback: () => this.autoGoStep() });   // "Take me there", carried on into each new place
       this.input.on("pointermove", p => { this.steer(p); this.hover(p); });
       // After a talk closes, a key starts another only after a pause in pressing (or once he's taken a
       // step): mashing Enter through a talk doesn't loop it. Taps still talk at once.
@@ -1095,15 +1096,35 @@ function worldScenes() {
       const g = this.goalPoint();
       if (!g) return;
       const e = this.exits.find(e => Math.abs(e.rect.centerX - g.x) < 1 && Math.abs(e.rect.centerY - g.y) < 1);
-      if (e) return this.tapAt(e.rect.centerX, e.rect.centerY);
+      if (e) { this.tapAt(e.rect.centerX, e.rect.centerY); return "exit"; }
+      const n = this.npcs.find(n => n.spr.visible && Math.hypot(n.spr.x - g.x, n.spr.y - 8 - g.y) < 2);   // someone to talk to (a townsperson to tell): go and talk
+      if (n) { this.tapAt(n.spr.x, n.spr.y - 8); return "there"; }
       const k = Object.keys(this.spots).find(k => Math.hypot(this.spots[k].x - g.x, this.spots[k].y - g.y) < 8);
       this.walkTo(g.x, g.y + (k ? 12 : 8), k ? { then: "up", aim: { kind: "spot", k } } : {});
+      return "there";
+    }
+    // "Take me there" (the goal box's button; apo110): walk to the goal, place after place, until it's reached.
+    // Any tap on the map or a key takes back control.
+    takeMeThere() {
+      this.game.registry.set("autoGo", true);
+      this.autoGoStep();
+    }
+    autoGoStep() {
+      if (!this.game.registry.get("autoGo") || !this.canMove() || this.walk || document.querySelector(".tk-scroll-go, .tk-scroll, .tk-duel")) return;
+      const r = this.goalPoint() ? this.walkToGoal() : null;
+      if (r !== "exit") this.game.registry.set("autoGo", false);   // there (or nowhere to go): done
     }
     // Where the next objective is from here: its story spot on this map, or
     // the exit that starts the shortest way to its place (rooms included).
     goalPoint() {
       const q = this.nextMain();
       if (!q) return null;
+      // a cutaway still waiting on the news (Book 15 s4, told:wu-gatekeeper): point at the nearest townsperson who hasn't heard it
+      if (this.cutawayNode(q.node) && this.available(q) && !this.cutawayReady(q.node) && typeof WorldFeats !== "undefined") {
+        const P = this.player, ts = this.npcs.filter(n => n.gossip && n.spr.visible && !WorldFeats.told(this, n.id) && WorldFeats.gossipActive(this, n))
+          .sort((a, b) => Math.hypot(a.spr.x - P.x, a.spr.y - P.y) - Math.hypot(b.spr.x - P.x, b.spr.y - P.y));
+        if (ts.length) { this.goalHops = 0; return { x: ts[0].spr.x, y: ts[0].spr.y - 8 }; }
+      }
       const g = this.available(q) && this.gateFor(q);
       if (g && g.place && g.objective) {   // the nearest giver or delivery place still to visit
         if (this.placeIn(this.placeId, g.place)) {   // in the place, or in one of its rooms
@@ -2558,7 +2579,7 @@ function worldScenes() {
         if (K.UP.isDown || K.W.isDown || this.auto === "up") vy -= 1;
         if (K.DOWN.isDown || K.S.isDown || this.auto === "down") vy += 1;
       }
-      if (vx || vy) this.walk = null;   // keys take over from a tap
+      if (vx || vy) { this.walk = null; if (!this.auto) this.game.registry.set("autoGo", false); }   // keys take over from a tap (and from "Take me there")
       else if (this.walk && !this.ui.busy() && !this.leaving) [vx, vy] = this.followWalk(dt);
       const speed = 110, len = Math.hypot(vx, vy) || 1;  // always at a run
       P.setVelocity(vx / len * speed, vy / len * speed);
@@ -2578,7 +2599,12 @@ function worldScenes() {
       for (const e of this.exits) {
         // the reach counts only once he has stood outside it (coming out of that very door he lands inside it)
         if (e.reach && !e.armed && !Phaser.Geom.Rectangle.Contains(e.reach, P.x, P.y - 3)) e.armed = true;
-        if (!Phaser.Geom.Rectangle.Contains(e.reach && e.armed ? e.reach : e.rect, P.x, P.y - 3)) continue;
+        // and only heading into the door, not walking past it along the wall (the Black Wind pens: the folk either side of its door)
+        const inReach = () => { if (!e.reach || !e.armed || !Phaser.Geom.Rectangle.Contains(e.reach, P.x, P.y - 3)) return false;
+          const v = P.body && (P.body.velocity.x || P.body.velocity.y) ? P.body.velocity : { x: { left: -1, right: 1 }[P.facing] || 0, y: { up: -1, down: 1 }[P.facing] || 0 };
+          const dx = e.rect.centerX - P.x, dy = e.rect.centerY - (P.y - 3), lv = Math.hypot(v.x, v.y), ld = Math.hypot(dx, dy);
+          return !ld || (lv && (v.x * dx + v.y * dy) / (lv * ld) > .6); };
+        if (!Phaser.Geom.Rectangle.Contains(e.rect, P.x, P.y - 3) && !inReach()) continue;
         // a door only some may pass: the protagonist named, or a condition ("item:edict") that holds
         const ms = this.mapState(), shut = ms && (ms.exits_closed || []).includes(e.to), opened = ms && (ms.exits_open || []).includes(e.to);
         const barred = shut || e.openTo && !e.openTo.some(w => w.includes(":") ? this.cond(w) : w === this.lead);

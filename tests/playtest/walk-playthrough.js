@@ -30,6 +30,9 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   const errs = []; p.on('pageerror', e => { errs.push(e.message); console.log('ERR', e.message); });
   await p.route('**/phaser.min.js', r => r.fulfill({ path: path.join(__dirname, 'vendor/phaser.min.js'), contentType: 'application/javascript' }));
   await p.route('**/*.mp3', r => r.fulfill({ status: 404, body: '' }));
+  // UNHIDE=15: a book not yet published (hidden: test mode only) opened in player mode all the same, as it will be once it's live
+  if (process.env.UNHIDE) { const un = process.env.UNHIDE.split(',').map(Number);
+    await p.route(/\/data\/tk\.json/, async r => { const res = await r.fetch(), j = await res.json(); for (const w of j.worlds || []) if (un.includes(w.n)) { delete w.hidden; delete w.draft; } r.fulfill({ response: res, body: JSON.stringify(j), contentType: 'application/json' }); }); }
   const LIVE = !!process.env.PLAYTEST_LIVE;   // player mode: no ?test=1, no Skip key; boards solved as a solve is reported
   const BASE = (process.env.PLAYTEST_URL || 'http://localhost:8765') + '/index.html' + (LIVE ? '' : '?test=1');
   await p.goto(BASE + '#/');
@@ -76,7 +79,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       mounts: (w.cine ? [...new Set(w.children.list.filter(o => o.visible && o.alpha > .1 && o.texture && /^ride-/.test(o.texture.key)).map(o => o.texture.key.split('-')[1]))].map(x => x + ':?')   // in a scene: who is drawn in the saddle
         : (w.mounts || []).filter(m => m.horse && m.horse.visible).map(m => `${m.who}:${m.coat}`)).sort().join(',') || 'on foot', indoors: typeof WorldItems !== 'undefined' && WorldItems.indoors(w),
       horses: (w.followers || []).filter(F => F.coat && F.spr && F.spr.visible).map(F => `${F.coat}@${Math.round(Math.hypot(F.spr.x - w.player.x, F.spr.y - w.player.y))}`).join(','),
-      crouch: !!w.cine && w.children.list.some(o => o.visible && o.texture && /^h-/.test(o.texture.key) && o.scaleY > .69 && o.scaleY < .78), banner: ((d.querySelector('.town-ui .town-place') || {}).textContent || '').trim(), chip: ((d.querySelector('.town-goal .town-lead') || {}).textContent || '').trim(), leadName: typeof tkName === 'function' ? tkName(w.lead) : w.lead, line, who: dlg && !dlg.hidden ? ((dlg.querySelector('.town-who') || {}).textContent || '').trim() : '', scroll: vis('.tk-scroll-go'), duel: !!d.querySelector('.tk-duel svg'), cont: vis('.tk-duel-go'),
+      pouch: (() => { const c = d.querySelector('.tk-pouch'); return c && c.getClientRects().length ? c.textContent.replace(/\s+/g, ' ').trim().slice(0, 60) : ''; })(), crouch: !!w.cine && w.children.list.some(o => o.visible && o.texture && /^h-/.test(o.texture.key) && o.scaleY > .69 && o.scaleY < .78), banner: ((d.querySelector('.town-ui .town-place') || {}).textContent || '').trim(), chip: ((d.querySelector('.town-goal .town-lead') || {}).textContent || '').trim(), leadName: typeof tkName === 'function' ? tkName(w.lead) : w.lead, line, who: dlg && !dlg.hidden ? ((dlg.querySelector('.town-who') || {}).textContent || '').trim() : '', scroll: vis('.tk-scroll-go'), duel: !!d.querySelector('.tk-duel svg'), cont: vis('.tk-duel-go'),
       skip: !!d.querySelector('.tk-duel-keys button') && [...d.querySelectorAll('.tk-duel-keys button')].some(b => /Skip/.test(b.textContent)),
       cleared: TK.world(w.w.n).nodes.filter(n => TK.cleared(n.key)).length, items: JSON.stringify((typeof WorldItems !== 'undefined' && WorldItems.list && WorldItems.list(w.w)) || []),
       cancel: [...d.querySelectorAll('button')].some(b => b.textContent.trim() === 'Cancel' && b.offsetParent),
@@ -181,6 +184,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   let beatLead = '';
   const close = (status, why, s) => { if (!beat) return; if (leadFor[beat] && beatLead && leadFor[beat] !== beatLead) console.log(`     note ${beat}: played by ${beatLead}, but the story's last handoff gave ${leadFor[beat]}`); const r = { beat, status, secs: Math.max(0, Math.round((Date.now() - beatT) / 1000)), place: s && s.place, at: s && s.P, lead: s && s.lead, why: why || '', line: lastLine.slice(0, 120) };
     report.push(r); console.log(`${status === 'pass' ? 'ok  ' : 'FAIL'} ${beat}  ${r.secs}s  ${r.lead || ''} in ${r.place || '?'}${status === 'pass' ? '' : `  at ${r.at}: ${why}${r.line ? ` ("${r.line}")` : ''}`}`); };
+  const cutWait = {}, pouches = [], told = [], faced = []; let yErr = 0;
   let noWaySince = 0, plannedSteps = null, planT = 0, pace = 3, stealthTries = 0, lastTap = 0, skipped = false, reloads = 0, catches = 0, wasCaught = false; const held = [], recovered = [];
   const featureFails = [], facts = {}, banners = [], chipBad = new Set(), chipSeen = [], shotWho = new Set(), shots = []; let lastPlace = '', arrivedAt = null; const OPTIONAL = !!process.env.OPTIONAL, visited = new Set(), errands = []; let errand = null;
   for (;;) {
@@ -246,6 +250,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       if (!errand && /isn't open yet|还没有开通|barred|不为你开|not open|turns you away|No one goes|receives no one/i.test(s.line)) refused = `refused: "${s.line.slice(0, 90)}"`; }
     if (s.cancel) { await p.getByText('Cancel', { exact: true }).first()[TAPM]().catch(() => {}); continue; }
     if (s.scroll) { await tapEl('.tk-scroll-go'); await p.waitForTimeout(300); continue; }
+    if (s.pouch) { pouches.push(s.pouch); await tapEl('.tk-pouch button'); await p.waitForTimeout(300); continue; }   // a sealed pouch opened (Book 15): its card read, then on
     if (!s.duel) await hook();   // (again after a reload)
     if (SYNC && Date.now() - lastVis > 45000) {   // the tab hidden and shown again (a phone app switch): the game pulls, and reroutes only if something changed
       lastVis = Date.now(); visFlips++;
@@ -340,7 +345,10 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     { const ct = await p.evaluate(() => { const w = window.__w; return w && w.chase && w.chaseNow() ? w.chase.tries : null; });   // the wave got him: taken, no board, the chase again
       if (ct !== null && ct > chaseTries && !s.duel) { chaseLog.push({ beat, overrun: true }); console.log(`     ${beat}: overrun by the wave at ${s.P}; the chase starts again`); }
       if (ct !== null) chaseTries = ct; }
-    if (!s.goal) { close('fail', 'no goal to go to', s); break; }
+    if (!s.goal) {   // a cutaway (Book 15) plays by itself once open, with nowhere to walk: wait for it (up to 30 s with nothing happening)
+      const cut = await p.evaluate(k => { const w = window.__w, n = k && TK.world(w.w.n).nodes.find(x => x.key === k); return n ? (n.cutaway === true ? 'yes' : n.cutaway ? String(n.cutaway) : '') : ''; }, s.next).catch(() => '');
+      if (cut && Date.now() - lastProgress < 30000) { if (!cutWait[s.next]) { cutWait[s.next] = Date.now(); console.log(`     ${s.next}: a cutaway (${cut}), waiting for it to play by itself`); } await p.waitForTimeout(400); continue; }
+      close('fail', cut ? `the cutaway (${cut}) never started in 30 s` : 'no goal to go to', s); break; }
     // a stealth beat here: time the way past the cones, then walk it a cell at a time
     if (s.watchers && !plannedSteps) {   // a steady pace first; the running one if only it has a way
       pace = 4; plannedSteps = await plan(4); if (!plannedSteps) { pace = 3; plannedSteps = await plan(3); }   /* a cell in 200 ms first: 80 px/s, slack on her 110 px/s run for the turns (150 ms is 107 px/s, barely in hand) */
@@ -374,8 +382,33 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       if (k >= plannedSteps.length - 1 && !plannedSteps[plannedSteps.length - 1].hold) { await p.evaluate(() => (clearInterval(window.__execI), window.__execF && window.__w && window.__w.events.off('update', window.__execF), window.__execF = null, window.__w && (window.__w.auto = null))); plannedSteps = null; await tapWorld(s.goal[0], s.goal[1]); }   // there: tap it (a spot that starts on a tap)
       await p.waitForTimeout(100); continue;
     }
+    // face them down (Book 15): soldiers set to "yield" stand aside one by one for her standing still within reach, facing
+    // them (from the carriage, curtain up); pushing on into one is a catch. Walk up to within reach, stop, face, wait
+    const yd = await p.evaluate(() => { const w = window.__w, P = w.player, T = w.tw || 16, live = w.npcs.filter(n => n.yield && n.spr.visible && !n.stoodAside);
+      if (!live.length) return null; const near = live.map(n => ({ n, d: Math.hypot(n.spr.x - P.x, n.spr.y - P.y) })).sort((a, b) => a.d - b.d)[0];
+      const reach = (near.n.yield.reach || 4) * T; if (near.d > reach + 10 * T) return null;
+      const dx = near.n.spr.x - P.x, dy = near.n.spr.y - P.y, way = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : (dy > 0 ? 'down' : 'up');
+      const curtain = typeof WorldFeats !== 'undefined' && WorldFeats.inCarriage && WorldFeats.inCarriage(w) && !WorldFeats.curtainUp(w);
+      return { id: near.n.id, d: near.d, reach, way, curtain, x: near.n.spr.x, y: near.n.spr.y, P: [P.x, P.y], left: live.length }; }).catch(e => { if (!yErr) { yErr = 1; console.log('     face-down check:', e.message.split('\n')[0]); } return null; });
+    if (yd && !s.busy) {
+      if (!faced.includes(yd.id)) { faced.push(yd.id); console.log(`     ${s.next}: facing down ${yd.id} (${yd.left} still in the way${yd.curtain ? ', the curtain to raise' : ''})`); }
+      if (yd.d > yd.reach - 6) {   // walk up to two-thirds of his reach, straight at him, and stop there
+        const k = (yd.d - yd.reach * 2 / 3) / yd.d, tx = yd.P[0] + (yd.x - yd.P[0]) * k, ty = yd.P[1] + (yd.y - yd.P[1]) * k;
+        if (!s.walking && Date.now() - lastTap > 1200) { lastTap = Date.now(); await tapWorld(tx, ty); }
+        await p.waitForTimeout(300); continue; }
+      await p.evaluate(way => { const w = window.__w, P = w.player; w.walk = null; w.auto = null; P.setVelocity(0); P.facing = way; }, yd.way);   /* a turn on the spot, as an arrow key tapped */
+      if (yd.curtain) { await p.keyboard.press('c'); await p.waitForTimeout(300); }
+      lastProgress = Date.now(); await p.waitForTimeout(400); continue; }
     if (s.walking) { await p.waitForTimeout(250); continue; }
     if (Date.now() - lastTap < 1200) { await p.waitForTimeout(200); continue; }
+    // the loud town (Book 15): the next beat waits on news reaching someone ("cutaway": "told:<id>"); as a player would,
+    // talk to the townsfolk who haven't heard yet, the nearest first, until it holds (the news then walks on by itself)
+    const gossip = await p.evaluate(k => { const w = window.__w, nd = k && (w.w.nodes || []).find(n => n.key === k), c = nd && typeof nd.cutaway === 'string' ? nd.cutaway : '';
+      if (!/^told:/.test(c) || w.cond(c) || typeof WorldFeats === 'undefined') return null; const P = w.player;
+      const n = w.npcs.filter(n => n.gossip && n.spr.visible && WorldFeats.gossipActive(w, n) && !WorldFeats.told(w, n.id)).sort((a, b) => Math.hypot(a.spr.x - P.x, a.spr.y - P.y) - Math.hypot(b.spr.x - P.x, b.spr.y - P.y))[0];
+      return n ? { id: n.id, x: n.spr.x, y: n.spr.y, cond: c } : { wait: c }; }, s.next).catch(() => null);
+    if (gossip && gossip.id) { if (!told.includes(gossip.id)) { told.push(gossip.id); console.log(`     ${s.next} waits on ${gossip.cond}: telling ${gossip.id}`); } lastTap = Date.now(); await tapWorld(gossip.x, gossip.y); await p.waitForTimeout(600); continue; }
+    if (gossip && gossip.wait) { await p.waitForTimeout(500); continue; }   // everyone told: the news on its way
     lastTap = Date.now(); await tapWorld(s.goal[0], s.goal[1]); await p.waitForTimeout(500);
   }
   // handoffs: a beat whose lead differs from the beat before's starts him at least 6 tiles from the beat's spot (another place

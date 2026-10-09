@@ -12,7 +12,10 @@ await p.evaluate(()=>{['1-start','1-c1','1-n1','1-i1'].forEach(k=>TK.markCleared
 for(let i=0;i<6;i++){const g=p.locator('.tk-scroll-go');if(await g.count()){await g.first().tap();await p.waitForTimeout(400);}}
 const ready=async()=>{for(let i=0;i<60;i++){if(await p.evaluate(()=>!!(window.__w&&window.__w.player&&!window.__w.leaving)))break;await p.waitForTimeout(200);}await p.waitForTimeout(500);};
 const go=async pl=>{await p.evaluate(pl=>{window.__w.leaving=false;window.__w.go(pl);},pl);await p.waitForTimeout(1500);await ready();};
-const tapW=async(x,y)=>{await p.evaluate(()=>new Promise(r=>{const w=window.__w;if(!w||!w.cameras){r();return;}const cam=w.cameras.main;let last='',same=0,n=0;const t=setInterval(()=>{const v=Math.round(cam.worldView.x)+','+Math.round(cam.worldView.y);same=v===last?same+1:0;last=v;if(same>=3||++n>40){clearInterval(t);r();}},40);}));/* the camera eases after him: tap once it has settled */const s=await p.evaluate(([x,y])=>{const w=window.__w,cam=w.cameras.main,cv=w.game.canvas,r=cv.getBoundingClientRect(),k=cv.clientWidth/w.scale.width;return [r.left+((window.__w.view?window.__w.view(x,y).x:x)-cam.worldView.x)*cam.zoom*k,r.top+((window.__w.view?window.__w.view(x,y).y:y)-cam.worldView.y)*cam.zoom*k];},[x,y]);await p.touchscreen.tap(...s);};
+const tapW=async(x,y,want)=>{await p.evaluate(()=>new Promise(r=>{const w=window.__w;if(!w||!w.cameras){r();return;}const cam=w.cameras.main;let last='',same=0,n=0;const t=setInterval(()=>{const v=Math.round(cam.worldView.x)+','+Math.round(cam.worldView.y);same=v===last?same+1:0;last=v;if(same>=3||++n>40){clearInterval(t);r();}},40);}));/* the camera eases after him: tap once it has settled */
+  /* and then what's under the finger is what the test means to tap (a villager wandering across it in the wait: let him pass, as a player would) */
+  if(want)for(let k=0;k<12;k++){const kd=await p.evaluate(([x,y])=>{const w0=window.__w,v=w0.view?w0.view(x,y):{x,y},t=w0.pick(x,y,v.x,v.y);return t?t.kind:'ground';},[x,y]);if(kd===want)break;await p.waitForTimeout(400);}
+  const s=await p.evaluate(([x,y])=>{const w=window.__w,cam=w.cameras.main,cv=w.game.canvas,r=cv.getBoundingClientRect(),k=cv.clientWidth/w.scale.width;return [r.left+((window.__w.view?window.__w.view(x,y).x:x)-cam.worldView.x)*cam.zoom*k,r.top+((window.__w.view?window.__w.view(x,y).y:y)-cam.worldView.y)*cam.zoom*k];},[x,y]);await p.touchscreen.tap(...s);};
 await ready();
 let fails=0,checked=0;
 for(const place of ['lousang-village','zhuo-county']){
@@ -31,17 +34,17 @@ for(const place of ['lousang-village','zhuo-county']){
       for(let k=0;k<30&&await p.evaluate(()=>window.__w.ui.busy());k++){await p.evaluate(()=>window.__w.ui.advance());await p.waitForTimeout(120);}
       await p.waitForTimeout(300);if(await p.locator('.tk-duel').count()){await p.locator('.tk-duel-key',{hasText:'Leave'}).tap().catch(()=>{});await p.waitForTimeout(900);}   // a challenger's chat leads into his problem
       await p.waitForTimeout(400);
-      let kind=await p.evaluate(([x,y])=>{const t=window.__w.pick(x,y);return t?t.kind:'ground';},[tx,ty]);
+      let kind=await p.evaluate(([x,y])=>{const w0=window.__w,v=w0.view?w0.view(x,y):{x,y},t=w0.pick(x,y,v.x,v.y);return t?t.kind:'ground';},[tx,ty]);
       // a villager wandering across the spot right then: wait for him to pass, as a player would
-      for(let k=0;k<6&&kind==='npc';k++){await p.waitForTimeout(800);kind=await p.evaluate(([x,y])=>{const t=window.__w.pick(x,y);return t?t.kind:'ground';},[tx,ty]);}
+      for(let k=0;k<6&&kind==='npc';k++){await p.waitForTimeout(800);kind=await p.evaluate(([x,y])=>{const w0=window.__w,v=w0.view?w0.view(x,y):{x,y},t=w0.pick(x,y,v.x,v.y);return t?t.kind:'ground';},[tx,ty]);}
       // someone standing in front of the building, not moving on: tap the building's face beside them, as a player would
-      if(kind==='npc'&&expectIn)for(const dx of [16,-16,28,-28]){const k2=await p.evaluate(([x,y])=>{const t=window.__w.pick(x,y);return t?t.kind:'ground';},[tx+dx,ty]);if(k2==='door'){tx+=dx;kind=k2;break;}}
+      if(kind==='npc'&&expectIn)for(const dx of [16,-16,28,-28]){const k2=await p.evaluate(([x,y])=>{const w0=window.__w,v=w0.view?w0.view(x,y):{x,y},t=w0.pick(x,y,v.x,v.y);return t?t.kind:'ground';},[tx+dx,ty]);if(k2==='door'){tx+=dx;kind=k2;break;}}
       if(process.env.DEBUG_DOOR&&d.to===process.env.DEBUG_DOOR&&expectIn){p.on('console',m=>{if(m.text().startsWith('DBG'))console.log('   ',m.text());});
         console.log('    DBG target screen:',await p.evaluate(([x,y])=>{const w=window.__w,cam=w.cameras.main,cv=w.game.canvas,r=cv.getBoundingClientRect(),k=cv.clientWidth/w.scale.width;const sx=r.left+((window.__w.view?window.__w.view(x,y).x:x)-cam.worldView.x)*cam.zoom*k,sy=r.top+((window.__w.view?window.__w.view(x,y).y:y)-cam.worldView.y)*cam.zoom*k;const el=document.elementFromPoint(sx,sy);const g=document.querySelector('.town-goal').getBoundingClientRect();return JSON.stringify({sx:Math.round(sx),sy:Math.round(sy),on:el&&(el.tagName+' '+(el.getAttribute('class')||'')+' < '+(el.parentElement&&(el.parentElement.tagName+'.'+(el.parentElement.getAttribute('class')||'')))+' < '+(el.closest('[class]')&&el.closest('[class]').getAttribute('class'))+' z'+getComputedStyle(el.closest('svg')||el).zIndex),goal:[g.top,g.bottom].map(Math.round)});},[tx,ty]));
         await p.evaluate(()=>{const w=window.__w;if(w.__dbg)return;w.__dbg=1;const ta=w.tapAt.bind(w),wt=w.walkTo.bind(w);w.tapAt=(x,y)=>{console.log('DBG tapAt '+Math.round(x)+','+Math.round(y)+' canMove '+w.canMove()+' busy '+w.ui.busy()+' pick '+JSON.stringify(w.pick(x,y)&&w.pick(x,y).kind));return ta(x,y);};w.walkTo=(a,b,o)=>{const r=wt(a,b,o);console.log('DBG walkTo '+Math.round(a)+','+Math.round(b)+' -> '+r+' walk '+!!w.walk);return r;};});}
       // the walk to a door may pass a story spot, whose scene would rightly start on the way: spots aside here (spot-reach, spot-tap-once test them)
       await p.evaluate(()=>{const w=window.__w;if(!w.__noSpots){w.__noSpots=w.nearSpots;w.nearSpots=()=>{};}});
-      await tapW(tx,ty);
+      await tapW(tx,ty,kind);
       let inside=false;for(let i=0;i<40;i++){await p.waitForTimeout(200);if(await p.locator('.tk-duel').count()){await p.locator('.tk-duel-key',{hasText:'Leave'}).tap().catch(()=>{});await p.waitForTimeout(900);}   // a challenger tapped: his problem, not a door
         const st=await p.evaluate(to=>!window.__w||window.__w.placeId===to?'in':window.__w.walk||window.__w.ui.busy()?'walking':'still',d.to);if(st==='in'){inside=true;break;}if(st==='still'&&i>=4)break;}
       checked++;

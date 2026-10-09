@@ -30,6 +30,10 @@ const TK_NAMES_ZH = {
   // Book 2 draft (world 12)
   zhangwen: "张温", shisunrui: "士孙瑞", huangwan: "黄琬", mamidi: "马日磾", lijue: "李傕", guosi: "郭汜", jiaxu: "贾诩",
   niufu: "牛辅", huchier: "胡赤儿", daoren: "道人",
+  // Book 4 (world 15, Lady Sun's marriage)
+  ladysun: "孙夫人", ladywu: "吴国太", sunquan: "孙权", zhouyu: "周瑜", lusu: "鲁肃", zhugeliang: "诸葛亮", qiaoguolao: "乔国老",
+  lufan: "吕范", jiahua: "贾华", zhangzhao: "张昭", xusheng: "徐盛", dingfeng: "丁奉", chenwu: "陈武", panzhang: "潘璋",
+  matron: "管家婆", f_maid: "侍女",
 };
 // English names where an id doesn't spell them (TK_CHARS names the heroes and villains it draws)
 const TK_NAMES_EN = {
@@ -44,6 +48,10 @@ const TK_NAMES_EN = {
   // Book 2 draft (world 12)
   zhangwen: "Zhang Wen", shisunrui: "Shisun Rui", huangwan: "Huang Wan", mamidi: "Ma Midi", lijue: "Li Jue", guosi: "Guo Si", jiaxu: "Jia Xu",
   niufu: "Niu Fu", huchier: "Hu Chi'er", daoren: "The Taoist",
+  // Book 4 (world 15)
+  ladysun: "Lady Sun", ladywu: "Lady Wu", sunquan: "Sun Quan", zhouyu: "Zhou Yu", lusu: "Lu Su", zhugeliang: "Zhuge Liang", qiaoguolao: "Qiao Guolao",
+  lufan: "Lü Fan", jiahua: "Jia Hua", zhangzhao: "Zhang Zhao", xusheng: "Xu Sheng", dingfeng: "Ding Feng", chenwu: "Chen Wu", panzhang: "Pan Zhang",
+  matron: "The matron", f_maid: "Maid",
 };
 const tkName = who => [TK_NAMES_ZH[who], TK_CHARS[who] ? TK_CHARS[who].name : TK_NAMES_EN[who] ? TK_NAMES_EN[who]
   : !TK_NAMES_ZH[who] && String(who || "").replace(/^f_/, "").split(/[_-]/).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ")].filter(Boolean).join(" ");
@@ -257,6 +265,12 @@ const TownUI = {
         g.append(Object.assign(document.createElement("span"), { className: "town-goal-main", textContent: zh || t }));
         g.onclick = e => { e.stopPropagation(); if (scene.walkToGoal) scene.walkToGoal(); };   // tap the goal: head for it
         if (zh) g.append(Object.assign(document.createElement("span"), { className: "town-goal-en", textContent: t }));
+        let there = false; try { there = !!(scene.takeMeThere && scene.player && scene.goalPoint()); } catch { there = false; }
+        if (there) {   // "Take me there" (apo110): walks you all the way, place after place
+          const go = Object.assign(document.createElement("button"), { type: "button", className: "town-goal-go", textContent: "带我去 Take me there" });
+          go.onclick = e => { e.stopPropagation(); scene.takeMeThere(); };
+          g.append(go);
+        }
         if (hint && hint[0]) {
           const h = Object.assign(document.createElement("span"), { className: "town-goal-hint" });
           h.append(Object.assign(document.createElement("span"), { lang: "zh-CN", textContent: `“${hint[1] || hint[0]}”` }));
