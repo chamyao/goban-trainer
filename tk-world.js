@@ -467,6 +467,7 @@ function worldScenes() {
       if (typeof WorldItems !== "undefined") WorldItems.attach(this);   // mounts (tk-items.js)
       WorldFX.ambient(this, this.place.archetype);   // petals, leaves, embers, dust
       if (typeof WorldFeats !== "undefined") WorldFeats.init(this);   // pouches, gossip, blockers who yield, the carriage
+      this.cutawayWatch();
       this.worldShade = null; this.applyWorldLight();   // night, dusk or dawn left by the last scene
       // the window changed shape (full window, a phone turned): the screen-sized effects follow
       const onResize = () => { WorldFX.ambient(this, this.place.archetype); this.fitCamera(); };
@@ -550,6 +551,51 @@ function worldScenes() {
       P.facing = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? "right" : "left") : (dy > 0 ? "down" : "up");
       P.anims.stop(); P.setTexture(`h-${this.lead}-${P.facing}-0`);
       this.time.delayedCall(320, () => { this.approaching = false; if (!this.ui.busy() && !this.leaving && !this.cine) this.playQuest(q, s); });
+    }
+    // A cutaway (a node with "cutaway": true, the Lady Sun book): the other side's scene plays by itself as soon
+    // as it's open, at its own place with the party off stage, then the player is put back where the lead stood.
+    cutawayNode(key) { const nd = (this.w.nodes || []).find(n => n.key === key); return !!(nd && nd.cutaway); }
+    nextCutaway() { return this.region.quests.find(q => this.cutawayNode(q.node) && !this.done(q.node) && this.available(q)) || null; }
+    cutawayCheck() {
+      const q = this.nextCutaway();
+      if (!q || this.leaving || this.cine) return false;
+      const P = this.player;
+      if (q.place === this.placeId) {
+        const sp = Object.values(this.spots).find(x => x.node === q.node);
+        if (!sp) return false;
+        this.cutawayMode = true;
+        P.setVisible(false); P.setVelocity(0); this.walk = null;
+        for (const F of this.followers || []) F.spr.setVisible(false);
+        if (this.carrySpr) this.carrySpr.setVisible(false);
+        this.time.delayedCall(450, () => this.playQuest(q, sp));
+        return true;
+      }
+      if (!this.st.cutReturn) this.st.cutReturn = { place: this.placeId, pos: { place: this.placeId, x: P.x, y: P.y, f: P.facing } };
+      this.leaving = true; this.st.pos = null; this.save();
+      this.cameras.main.fadeOut(400);
+      this.cameras.main.once("camerafadeoutcomplete", () => this.scene.restart({ place: q.place, from: null, toNode: q.node }));
+      return true;
+    }
+    cutawayAfter(q) {
+      if (!this.cutawayNode(q.node)) return false;
+      this.cutawayMode = false;
+      if (this.cutawayCheck()) return true;   // another cutaway follows
+      const r = this.st.cutReturn;
+      this.st.cutReturn = null;
+      if (!r) { this.player.setVisible(true); for (const F of this.followers || []) F.spr.setVisible(true); this.save(); return false; }
+      this.leaving = true; this.st.pos = r.pos; this.save();
+      this.cameras.main.fadeOut(400);
+      this.cameras.main.once("camerafadeoutcomplete", () => this.scene.restart({ place: r.place, from: null, resume: true }));
+      return true;
+    }
+    // after the place is built: a cutaway that's open plays, once no opening scroll or line is up
+    cutawayWatch() {
+      if (!(this.w.nodes || []).some(n => n.cutaway)) return;
+      const ev = this.time.addEvent({ delay: 400, loop: true, callback: () => {
+        if (this.leaving || this.cine || this.ui.busy() || document.querySelector(".tk-scroll-go, .tk-scroll")) return;
+        ev.remove();
+        this.cutawayCheck();
+      } });
     }
     // Walking into a story spot's area starts its scene; it re-arms once you walk away.
     nearSpots() {
@@ -1502,6 +1548,7 @@ function worldScenes() {
           : { place: toP.id, from: (placeOf(to.from) || {}).id || null, toSpot: to.spot || null }));
         return;
       }
+      if (this.cutawayAfter(q)) return;   // a cutaway done: back to where the lead stood (or on to the next cutaway)
       if (q.role === "boss" && this.opts.onBoss) await this.opts.onBoss();
       // the book's main story is over: on into the next book (a moment, a fade). But if side stories are
       // still open here (Book 2's Diaochan chain opens with its last beat), stay: say so once, and go on
