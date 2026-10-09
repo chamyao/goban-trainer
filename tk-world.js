@@ -266,7 +266,7 @@ function worldScenes() {
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
       for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=121`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=122`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -1127,7 +1127,8 @@ function worldScenes() {
       if (!q) return null;
       // a cutaway still waiting on the news (Book 15 s4, told:wu-gatekeeper): point at the nearest townsperson who hasn't heard it
       if (this.cutawayNode(q.node) && this.available(q) && !this.cutawayReady(q.node) && typeof WorldFeats !== "undefined") {
-        const P = this.player, ts = this.npcs.filter(n => n.gossip && n.spr.visible && !WorldFeats.told(this, n.id) && WorldFeats.gossipActive(this, n))
+        const X = String(((this.w.nodes || []).find(n => n.key === q.node) || {}).cutaway).replace(/^told:/, "");
+        const P = this.player, ts = this.npcs.filter(n => n.gossip && !n.gossip.relay && n.spr.visible && !WorldFeats.told(this, n.id) && WorldFeats.gossipActive(this, n) && WorldFeats.reaches(this, n, X))
           .sort((a, b) => Math.hypot(a.spr.x - P.x, a.spr.y - P.y) - Math.hypot(b.spr.x - P.x, b.spr.y - P.y));
         if (ts.length) { this.goalHops = 0; return { x: ts[0].spr.x, y: ts[0].spr.y - 8 }; }
       }
@@ -1783,7 +1784,7 @@ function worldScenes() {
       // story spot is (its notice board, its table), counts; the nearest wins
       const cv = this.game.canvas, k = cv.clientWidth ? cv.clientWidth / this.scale.width : 1, r = Math.max(9, 22 / (this.cameras.main.zoom * k));
       const toBox = (b, x, y) => Math.hypot(Math.max(b.x0 - x, 0, x - b.x1), Math.max(b.y0 - y, 0, y - b.y1));
-      const who = this.npcs.filter(n => n.spr.visible).map(n => { const t = at(n.spr.x, n.spr.y);
+      const who = this.npcs.filter(n => n.spr.visible && !(typeof WorldFeats !== "undefined" && WorldFeats.silent(this, n))).map(n => { const t = at(n.spr.x, n.spr.y);
         return { n, d: toBox({ x0: n.spr.x - n.spr.width / 2 + 2, x1: n.spr.x + n.spr.width / 2 - 2, y0: n.spr.y - n.spr.height, y1: n.spr.y + 3 }, t.x, t.y) }; })
         .filter(o => o.d <= r).sort((a, b) => a.d - b.d)[0];
       const spot = Object.entries(this.spots).map(([key, s]) => {
@@ -1944,7 +1945,7 @@ function worldScenes() {
       const fx = P.x + v[0] * 12, fy = P.y - 3 + v[1] * 12;
       let best = null, bd = 20;
       for (const n of this.npcs) {
-        if (!n.spr.visible) continue;
+        if (!n.spr.visible || (typeof WorldFeats !== "undefined" && WorldFeats.silent(this, n))) continue;
         const d = Math.hypot(n.spr.x - fx, n.spr.y - 3 - fy);
         if (d < bd) { bd = d; best = { kind: "npc", n }; }
       }
