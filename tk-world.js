@@ -2578,7 +2578,12 @@ function worldScenes() {
       for (const e of this.exits) {
         // the reach counts only once he has stood outside it (coming out of that very door he lands inside it)
         if (e.reach && !e.armed && !Phaser.Geom.Rectangle.Contains(e.reach, P.x, P.y - 3)) e.armed = true;
-        if (!Phaser.Geom.Rectangle.Contains(e.reach && e.armed ? e.reach : e.rect, P.x, P.y - 3)) continue;
+        // and only heading into the door, not walking past it along the wall (the Black Wind pens: the folk either side of its door)
+        const inReach = () => { if (!e.reach || !e.armed || !Phaser.Geom.Rectangle.Contains(e.reach, P.x, P.y - 3)) return false;
+          const v = P.body && (P.body.velocity.x || P.body.velocity.y) ? P.body.velocity : { x: { left: -1, right: 1 }[P.facing] || 0, y: { up: -1, down: 1 }[P.facing] || 0 };
+          const dx = e.rect.centerX - P.x, dy = e.rect.centerY - (P.y - 3), lv = Math.hypot(v.x, v.y), ld = Math.hypot(dx, dy);
+          return !ld || (lv && (v.x * dx + v.y * dy) / (lv * ld) > .6); };
+        if (!Phaser.Geom.Rectangle.Contains(e.rect, P.x, P.y - 3) && !inReach()) continue;
         // a door only some may pass: the protagonist named, or a condition ("item:edict") that holds
         const ms = this.mapState(), shut = ms && (ms.exits_closed || []).includes(e.to), opened = ms && (ms.exits_open || []).includes(e.to);
         const barred = shut || e.openTo && !e.openTo.some(w => w.includes(":") ? this.cond(w) : w === this.lead);
