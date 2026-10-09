@@ -630,6 +630,7 @@ const WorldCutscene = {
         case "wait": await wait(b.ms); break;
         case "party": break;                       // applied by the world when the scene ends
         case "lose": if (Items) { Items.lose(scene, b.item); Object.values(actors).forEach(mount); } break;   // Red Hare stolen: everyone afoot
+        case "open": if (typeof WorldFeats !== "undefined" && !skip) await WorldFeats.openCard(scene.w, b.item); break;   // a sealed pouch opened: its card
         case "carry": carry(b); break;
         case "gain":                                  // a gift: saved now, and a mount seats the party at once
           if (Items) { Items.gain(scene, b.item); Object.values(actors).forEach(mount); }
