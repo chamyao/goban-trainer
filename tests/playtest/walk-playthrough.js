@@ -184,7 +184,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   let beatLead = '';
   const close = (status, why, s) => { if (!beat) return; if (leadFor[beat] && beatLead && leadFor[beat] !== beatLead) console.log(`     note ${beat}: played by ${beatLead}, but the story's last handoff gave ${leadFor[beat]}`); const r = { beat, status, secs: Math.max(0, Math.round((Date.now() - beatT) / 1000)), place: s && s.place, at: s && s.P, lead: s && s.lead, why: why || '', line: lastLine.slice(0, 120) };
     report.push(r); console.log(`${status === 'pass' ? 'ok  ' : 'FAIL'} ${beat}  ${r.secs}s  ${r.lead || ''} in ${r.place || '?'}${status === 'pass' ? '' : `  at ${r.at}: ${why}${r.line ? ` ("${r.line}")` : ''}`}`); };
-  const cutWait = {}, pouches = [], told = [], faced = []; let yErr = 0;
+  const cutWait = {}, pouches = [], told = [], faced = [], gated = [], markSpots = {}; let yErr = 0;
   let noWaySince = 0, plannedSteps = null, planT = 0, pace = 3, stealthTries = 0, lastTap = 0, skipped = false, reloads = 0, catches = 0, wasCaught = false; const held = [], recovered = [];
   const featureFails = [], facts = {}, banners = [], chipBad = new Set(), chipSeen = [], shotWho = new Set(), shots = []; let lastPlace = '', arrivedAt = null; const OPTIONAL = !!process.env.OPTIONAL, visited = new Set(), errands = []; let errand = null;
   for (;;) {
@@ -401,6 +401,22 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       lastProgress = Date.now(); await p.waitForTimeout(400); continue; }
     if (s.walking) { await p.waitForTimeout(250); continue; }
     if (Date.now() - lastTap < 1200) { await p.waitForTimeout(200); continue; }
+    // a gate of marks (Book 4's s5: mark:axemen_1-3, one in each of three side rooms): to each room in turn, through the
+    // doors, and to the spot that gives the mark. (Straight to the rooms that have one: a player searches six; this is
+    // the beat's flow, not its search.) The spots come from the book's maps
+    const gm = await p.evaluate(() => { const w = window.__w, q = w.nextMain(), g = q && w.gateFor && w.gateFor(q);
+      if (!g) return null; const need = [].concat(g.needs || []).find(c => /^mark:/.test(c) && !w.cond(c)); if (!need) return null;
+      return { mark: need.slice(5), place: w.placeId, parent: (w.region.places.find(x => x.id === w.placeId) || {}).parent || null, exits: w.exits.map(e => ({ to: e.to, x: e.rect.centerX, y: e.rect.centerY })), T: w.tw || 16 }; }).catch(() => null);
+    if (gm) {
+      if (!markSpots[BOOK]) { markSpots[BOOK] = []; const dir = path.join(__dirname, `../../data/tk_maps/w${BOOK}`); for (const f of require('fs').readdirSync(dir).filter(f => f.endsWith('.map.json'))) { try { const d = JSON.parse(require('fs').readFileSync(path.join(dir, f), 'utf8')); for (const sp of d.spots || []) if (sp.delivers) markSpots[BOOK].push({ place: d.id || f.replace('.map.json', ''), id: sp.id, delivers: sp.delivers, x: sp.x, y: sp.y }); } catch (e) {} } }
+      const sp = markSpots[BOOK].find(x => x.delivers === gm.mark);
+      if (sp) {
+        if (!gated.includes(gm.mark)) { gated.push(gm.mark); console.log(`     ${s.next} is gated on mark:${gm.mark}: to ${sp.place} (${sp.id})`); }
+        if (!s.walking && Date.now() - lastTap > 1200 && !s.busy) { lastTap = Date.now();
+          if (gm.place === sp.place) await tapWorld(sp.x * gm.T, sp.y * gm.T);
+          else { const sib = sp.place.replace(/--[^-]+(?:-[^-]+)*$/, ''), e = gm.exits.find(e => e.to === sp.place) || gm.exits.find(e => e.to === sib) || (gm.parent && gm.exits.find(e => e.to === gm.parent)) || gm.exits[0];
+            if (e) await tapWorld(e.x, e.y); } }
+        await p.waitForTimeout(400); continue; } }
     // the loud town (Book 15): the next beat waits on news reaching someone ("cutaway": "told:<id>"); as a player would,
     // talk to the townsfolk who haven't heard yet, the nearest first, until it holds (the news then walks on by itself)
     const gossip = await p.evaluate(k => { const w = window.__w, nd = k && (w.w.nodes || []).find(n => n.key === k), c = nd && typeof nd.cutaway === 'string' ? nd.cutaway : '';
