@@ -23,7 +23,7 @@ const path = require('path');
     await ready();
     // the locks set aside: every way open, to anyone, no map state shutting one; nobody watching or riding at her
     return p.evaluate(() => { const w = window.__w; if (!w.__open) { w.__open = true; w.placeOpen = () => true; const ms = w.mapState.bind(w); w.mapState = () => { const m = ms(); return m ? { ...m, exits_closed: [] } : m; }; }
-      w.wades = () => true; for (const e of w.exits) e.openTo = null; for (const g of w.shutGates || []) g.on = false; for (const n of w.npcs) if (n.watch) n.watch.cone = 0.01;
+      w.wades = () => true; w.nearSpots = () => {}; w.playQuest = () => {};   /* no story beat starting: by a spot she stands near, or as she comes indoors (900 ms on) */ for (const e of w.exits) e.openTo = null; for (const g of w.shutGates || []) g.on = false; for (const n of w.npcs) if (n.watch) n.watch.cone = 0.01;
       const B = w.physics.world.bounds; return { states: (w.states || []).map(st => [st.id, st.when || '']), ids: ((w.mapState() || {}).ids || []).join('+'), doors: w.exits.map((e, i) => ({ i, to: e.to, side: e.side, r: [e.rect.x, e.rect.y, e.rect.width, e.rect.height] }))
         .filter(d => d.r[0] > B.x + 2 && d.r[1] > B.y + 2 && d.r[0] + d.r[2] < B.right - 2 && d.r[1] + d.r[3] < B.bottom - 2) }; });   // not the map's edge
   };
