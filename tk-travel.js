@@ -16,11 +16,21 @@ const WorldTravel = {
     // on and off the horse, once the party has one (also the R key)
     if (typeof WorldItems !== "undefined") {
       const ride = btn("", "Get on or off your horse (R)", () => { const s = this.scene(); if (s && s.sys.isActive()) WorldItems.toggle(s); });
-      const show = () => { ride.hidden = !WorldItems.hasMount(w); ride.textContent = WorldItems.riding(w) ? "下马 Dismount" : "上马 Ride"; };
+      // the bag (sealed pouches and what the story gave) and a carriage's curtain (tk-feats.js)
+      const F = typeof WorldFeats !== "undefined" ? WorldFeats : null;
+      const bag = btn("行囊 Bag", "What you carry (sealed orders show when they may be opened)", () => F && F.bag(w));
+      const curtain = btn("", "Raise or lower the carriage curtain (C)", () => { const s = this.scene(); if (F && s && s.sys.isActive()) F.curtain(s); });
+      const show = () => {
+        ride.hidden = !WorldItems.hasMount(w); ride.textContent = WorldItems.riding(w) ? "下马 Dismount" : "上马 Ride";
+        const sealed = WorldItems.owned(w).some(k => ["sealed", "carriage"].includes((WorldItems.defs(w)[k] || {}).kind));
+        bag.hidden = !(F && sealed);
+        const s = this.scene(), car = F && F.carriage(w);
+        curtain.hidden = !car; curtain.textContent = s && s.st && s.st.curtain ? "放帘 Curtain down" : "卷帘 Curtain up";
+      };
       WorldItems.onChange = show;
       show();
       setInterval(() => { if (ride.isConnected) show(); }, 1500);   // a gift can arrive mid-scene
-      bar.append(ride);
+      bar.append(ride, bag, curtain);
     }
     if (typeof TKMusic !== "undefined") bar.append(TKMusic.button(btn("", "Music on or off", null)));   // tk-music.js
     bar.append(
