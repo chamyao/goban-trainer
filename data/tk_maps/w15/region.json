@@ -1175,7 +1175,11 @@
       "mark:axemen_2",
       "mark:axemen_3"
      ],
-     "else": "s5_wait"
+     "else": "s5_wait",
+     "objective": "Search the side rooms along the temple's corridors for hidden axemen.",
+     "at": "Sweet Dew Temple",
+     "place": "sweet-dew-temple",
+     "objective_zh": "沿着寺里的走廊搜查两边的厢房，找出埋伏的刀斧手。"
     }
    ],
    "objective_zh": "甘露寺里有点不对劲。把走廊两边的厢房搜一遍，然后去方丈室，国太在那里等着。",

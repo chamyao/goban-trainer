@@ -467,7 +467,7 @@ PLANS_LS = {
             {"kind": "folk.elder", "place": "side-w2", "at": [4, 2], "face": "S",
              "say": "A monk copies sutras by lamplight. “Boots went past an hour ago. Heavy ones. Not ours.”"},
             {"kind": "folk.elder", "place": "side-e1", "at": [4, 2], "face": "S",
-             "say": "An old monk sorts incense. “The Dowager's people took the rooms along this side. We were told to keep out of them.”"},
+             "say": "An old monk sorts incense. “The Marquis's people took the rooms along this side. We were told to keep out of them.”"},
             {"kind": "folk.villager", "place": "side-e3", "at": [4, 2], "face": "S",
              "say": "A novice stirs a great pot of rice gruel. “Three hundred bowls, they told us. For whom, I'd like to know.”"},
         ],

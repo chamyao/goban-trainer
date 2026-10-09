@@ -700,7 +700,7 @@ ZH_PLACES2 = {
     "A novice stirs a great pot of rice gruel. “Three hundred bowls, they told us. For whom, I'd like to know.”": '一个小和尚搅着一大锅粥。“说要煮三百碗。我倒想知道是给谁吃的。”',
     "A rack of axes": '一架斧头',
     "An empty side room. Whoever was here has gone.": '空荡荡的厢房。原来在这里的人都走了。',
-    "An old monk sorts incense. “The Dowager's people took the rooms along this side. We were told to keep out of them.”": '一个老和尚在分香。“这一排房间都被国太的人占了。他们叫我们别进去。”',
+    "An old monk sorts incense. “The Marquis's people took the rooms along this side. We were told to keep out of them.”": '一个老和尚在分香。“这一排房间都被吴侯的人占了。他们叫我们别进去。”',
     "Men sitting in the dark with axes, waiting for a signal. Who's going to give it?": '一群人拿着斧头坐在黑暗里，在等信号。是谁要发这个信号？',
     "Axemen in the side room": '厢房里的刀斧手',
     "Axes, and men enough to swing them. These aren't monks. I'll keep my hand on my sword and back out slowly.": '这么多斧头，还有这么多拿斧头的人。这些可不是和尚。我得手按着剑，慢慢退出去。',
