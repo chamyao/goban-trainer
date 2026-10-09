@@ -850,100 +850,124 @@
    "h": 1
   },
   {
-   "kind": "banner.red",
-   "x": 23,
-   "y": 18,
-   "w": 1,
+   "kind": "deco.redhang",
+   "x": 19.5,
+   "y": 16.0625,
+   "w": 3,
    "h": 1,
-   "told": "g-h1"
+   "solid": false,
+   "told": "g-h1",
+   "lift": 6
   },
   {
-   "kind": "banner.red",
-   "x": 23,
-   "y": 30,
-   "w": 1,
+   "kind": "deco.redhang",
+   "x": 19.5,
+   "y": 28.0625,
+   "w": 3,
    "h": 1,
-   "told": "g-h2"
+   "solid": false,
+   "told": "g-h2",
+   "lift": 6
   },
   {
-   "kind": "banner.red",
-   "x": 34,
-   "y": 24,
-   "w": 1,
+   "kind": "deco.redhang",
+   "x": 30.5,
+   "y": 26.0625,
+   "w": 3,
    "h": 1,
-   "told": "g-h3"
+   "solid": false,
+   "told": "g-h3",
+   "lift": 6
   },
   {
-   "kind": "banner.red",
-   "x": 62,
-   "y": 24,
-   "w": 1,
+   "kind": "deco.redhang",
+   "x": 58.5,
+   "y": 26.0625,
+   "w": 3,
    "h": 1,
-   "told": "g-h4"
+   "solid": false,
+   "told": "g-h4",
+   "lift": 6
   },
   {
-   "kind": "banner.red",
-   "x": 74,
-   "y": 24,
-   "w": 1,
+   "kind": "deco.redhang",
+   "x": 70.5,
+   "y": 26.0625,
+   "w": 3,
    "h": 1,
-   "told": "g-h5"
+   "solid": false,
+   "told": "g-h5",
+   "lift": 6
   },
   {
-   "kind": "banner.red",
-   "x": 34,
-   "y": 40,
-   "w": 1,
+   "kind": "deco.redhang",
+   "x": 30.5,
+   "y": 42.0625,
+   "w": 3,
    "h": 1,
-   "told": "g-h6"
+   "solid": false,
+   "told": "g-h6",
+   "lift": 6
   },
   {
-   "kind": "banner.red",
-   "x": 46,
-   "y": 40,
-   "w": 1,
+   "kind": "deco.redhang",
+   "x": 42.5,
+   "y": 42.0625,
+   "w": 3,
    "h": 1,
-   "told": "g-h7"
+   "solid": false,
+   "told": "g-h7",
+   "lift": 6
   },
   {
-   "kind": "banner.red",
-   "x": 18,
-   "y": 56,
-   "w": 1,
+   "kind": "deco.redhang",
+   "x": 14.5,
+   "y": 58.0625,
+   "w": 3,
    "h": 1,
-   "told": "g-h8"
+   "solid": false,
+   "told": "g-h8",
+   "lift": 6
   },
   {
-   "kind": "banner.red",
-   "x": 34,
-   "y": 56,
-   "w": 1,
+   "kind": "deco.redhang",
+   "x": 30.5,
+   "y": 58.0625,
+   "w": 3,
    "h": 1,
-   "told": "g-h9"
+   "solid": false,
+   "told": "g-h9",
+   "lift": 6
   },
   {
-   "kind": "banner.red",
-   "x": 46,
-   "y": 56,
-   "w": 1,
+   "kind": "deco.redhang",
+   "x": 42.5,
+   "y": 58.0625,
+   "w": 3,
    "h": 1,
-   "told": "g-h10"
+   "solid": false,
+   "told": "g-h10",
+   "lift": 6
   },
   {
-   "kind": "banner.red",
-   "x": 66,
-   "y": 56,
-   "w": 1,
+   "kind": "deco.redhang",
+   "x": 62.5,
+   "y": 58.0625,
+   "w": 3,
    "h": 1,
-   "told": "g-h11"
+   "solid": false,
+   "told": "g-h11",
+   "lift": 6
   },
   {
-   "kind": "banner.red",
-   "x": 78,
-   "y": 56,
-   "w": 1,
+   "kind": "deco.redhang",
+   "x": 74.5,
+   "y": 58.0625,
+   "w": 3,
    "h": 1,
-   "told": "g-h12"
+   "solid": false,
+   "told": "g-h12",
+   "lift": 6
   }
  ],
  "spots": [

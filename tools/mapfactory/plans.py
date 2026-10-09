@@ -437,6 +437,13 @@ class MapBuilder:
                         n -= 1
         for pr in self.p.get("props", []):
             extra = {k: pr[k] for k in ("in", "when", "until", "label", "note", "told") if pr.get(k)}
+            if pr.get("over") in self.foot:   # drawn over a building's front, centred (the red hangings on a house)
+                fx, fy, fw, fh = self.foot[pr["over"]]
+                w = self.K.get(pr["kind"], (fw, 1, False))[0]
+                # its foot a pixel in front of the building's, so it draws over it; lifted back up to sit on the front
+                self.objects.append({"kind": pr["kind"], "x": fx + (fw - w) / 2, "y": fy + fh - 1 + 1 / 16, "w": w, "h": 1,
+                                     "solid": False, **extra, **({"lift": pr["lift"]} if pr.get("lift") else {})})
+                continue
             if pr.get("at_door") in self.anchor:   # beside a building's door, along its face (red hangings at a house)
                 o_ = next((x for x in self.objects if x.get("id") == pr["at_door"]), {})
                 face = o_.get("enter") or o_.get("door") or "S"

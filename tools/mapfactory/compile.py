@@ -7,6 +7,7 @@ and an object layer. Objects carry their kind and footprint as properties, so
 the game takes collisions from the abstract map, not from the pack's sprites.
 """
 import json
+import math
 import random
 import zlib
 from pathlib import Path
@@ -344,7 +345,8 @@ def compile_map(m, kit, out_dir):
     # kit has it: "detail": {"tiles": [[sheet, tx, ty, weight], ...], "density": 0.08}
     det = kit.k.get("detail")
     if det:
-        covered = {(xx, yy) for o in m["objects"] for yy in range(o["y"], o["y"] + o["h"]) for xx in range(o["x"], o["x"] + o["w"])}
+        covered = {(xx, yy) for o in m["objects"] for yy in range(int(o["y"]), math.ceil(o["y"] + o["h"]))
+               for xx in range(int(o["x"]), math.ceil(o["x"] + o["w"]))}   # (a prop drawn over a building sits on a fraction)
         drnd = random.Random(f"{m['seed']}/detail")   # its own stream: the other layers don't change
         data = [0] * (W * H)
         for y in range(H):
@@ -419,6 +421,7 @@ def compile_map(m, kit, out_dir):
             **({"flip": True} if draw_kind == side and faces == "W" else {}),
             **({"plaque": o["plaque"]} if o.get("plaque") else {}),   # a name board over its gate (tk-world draws it)
             **({"told": o["told"]} if o.get("told") else {}),   # the loud town: shown once that person has the news (red hangings)
+            **({"lift": o["lift"]} if o.get("lift") else {}),   # px to draw it higher than its foot (which sets its depth)
             **walls.get(id(o), {}))
     runs = []
     for y in range(H):

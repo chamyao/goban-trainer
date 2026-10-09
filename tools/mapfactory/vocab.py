@@ -63,6 +63,7 @@ KINDS = {
     "prop.boat": (4, 2, True),           # a river boat moored at a jetty (Lady Sun's marriage: Nanxu's dock)
     "prop.target": (1, 1, True),         # an archery butt on a stand (the riding ground outside Nanxu)
     "landmark.incense": (2, 1, True),    # a temple's bronze incense burner (Sweet Dew Temple)
+    "deco.redhang": (3, 1, False),       # red wedding hangings over a house front (the loud town): drawn over the house
     "landmark.shrine": (2, 1, True),     # the Star Lords' weiqi shrine: one per town (looks: dark, lit, settled)
     # trees and plants
     "tree.small": (1, 1, True),
@@ -221,6 +222,7 @@ FALLBACK = {
     "prop.boat": ["camp.logs", "prop.carriage"],
     "prop.target": ["landmark.notice", "furn.rack"],
     "landmark.incense": ["furn.jar", "lamp.post"],
+    "deco.redhang": ["banner.red"],
     "prop.halberd": ["furn.rack", "lamp.post"],
     "prop.carriage": ["camp.table", "furn.table"],
     "prop.gateshut": ["camp.logs", "furn.rack"],

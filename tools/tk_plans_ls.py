@@ -211,8 +211,8 @@ PLANS_LS = {
                 {"id": "wu-gate", "at": [17, 9], "at_door": "wufu", "label": "Lady Wu's gate"},
                 {"id": "s9", "at": [24, 13], "node": "4-s9", "label": "The riding ground", "trigger": "near"},
             ],
-            # red hangings at each house's door, shown once its resident has the news
-            "props": [{"kind": "banner.red", "at_door": f"h{i}", "told": f"g-h{i}"} for i in range(1, 13)],
+            # red hangings over each house front (Graphics' deco.redhang), shown once its resident has the news
+            "props": [{"kind": "deco.redhang", "over": f"h{i}", "told": f"g-h{i}", "lift": 6} for i in range(1, 13)],
             "dress": [
                 {"kind": "tree.willow", "along": "main-street", "every": 4},
                 {"kind": "lamp.post", "along": "palace-street", "every": 3},
