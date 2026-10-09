@@ -89,6 +89,14 @@ const WorldFeats = {
     const key = () => { if (!scene.ui.busy() && !scene.cine && !scene.leaving) this.curtain(scene); };
     scene.input.keyboard.on("keydown-C", key);
   },
+  // the beat that was open when this happened (replay forgets what happened at or after the beat replayed from)
+  at(scene, id) { const q = scene.nextMain(); (scene.st.featAt || (scene.st.featAt = {}))[id] = q ? q.node : null; },
+  // replay from key: what happened in it or after is undone (st.told, st.yielded); the curtain down, no cutaway pending
+  rewind(st, later) {
+    const at = st.featAt || {}, keep = id => !(id in at) || !later.has(at[id]);
+    st.told = (st.told || []).filter(keep); st.yielded = (st.yielded || []).filter(keep);
+    st.curtain = false; st.cutReturn = null;
+  },
   told(scene, id) { return !!(scene.st.told || []).includes(id); },
   applyTold(scene) {
     for (const p of scene.toldProps || []) if (p.img) p.img.setVisible(this.told(scene, p.id));
@@ -106,7 +114,7 @@ const WorldFeats = {
   },
   mark(scene, n) {
     if (this.told(scene, n.id)) return;
-    scene.st.told.push(n.id); scene.save();
+    scene.st.told.push(n.id); this.at(scene, n.id); scene.save();
     this.applyTold(scene);
     for (const id of (n.gossip && n.gossip.tells) || []) {
       const m = scene.npcs.find(x => x.id === id);
@@ -184,7 +192,7 @@ const WorldFeats = {
     n.stoodAside = true;
     if (n.spr.body) n.spr.body.enable = false;
     n.wander = false;
-    scene.st.yielded.push(n.id); scene.save(); scene.grid = null;
+    scene.st.yielded.push(n.id); this.at(scene, n.id); scene.save(); scene.grid = null;
     scene.tweens.add({ targets: n.spr, x: n.home.x + a[0] * T, y: n.home.y + a[1] * T, duration: 600, onUpdate: () => n.spr.setDepth(n.spr.y) });
     if (n.yield.line && n.yield.line.length) scene.talk(worldLines(n.yield.line));
     if (live.length === 1) { scene.refreshStory(); scene.setGoal && scene.setGoal(); }

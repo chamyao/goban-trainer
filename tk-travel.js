@@ -82,6 +82,7 @@ const WorldTravel = {
     const region = await WorldData.region(w.n), q = region && region.quests.find(x => x.node === key);
     const st = (() => { try { return JSON.parse(localStorage.getItem(WorldState.key(w.n)) || "{}"); } catch { return {}; } })();
     Object.assign(st, { party, crowd, carry, place: q ? q.place : st.place, pos: null });
+    if (typeof WorldFeats !== "undefined") WorldFeats.rewind(st, later);
     WorldState.save(w.n, st);
     WorldView.destroy();
     viewTK(w.n);
