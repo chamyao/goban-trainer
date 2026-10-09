@@ -120,6 +120,8 @@ These were each learned from a real complaint, and each is a rule, not a one-off
   close moves to the nearest roomy tile he can walk to, and with none within 14 tiles he stands still. compile fails a
   map with a cramped wanderer. Zhuo County's villager lived on the shop's top edge and wandered over its face, so a tap
   on the face picked him instead of the door (Testing). The same was true on 28 more maps in Books 1–3, all settled.
+  The engine keeps its side of this: a wanderer more than 48 px (3 tiles) from home turns back at once, so 3.5 tiles
+  of room holds.
 - **A tower in a wall stands beside its gates, and is entered where it's drawn.** A gate tower (`building.gatetower`)
   is drawn front-on, with its arch on the south face. Its door is that arch (S), and the whole arch is the trigger. A
   side door (E/W) is at the foot of its face. A north door would be on the face the camera never sees, so the build
