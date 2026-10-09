@@ -3099,7 +3099,7 @@ def _scenes_ladysun():
             N("Sun Quan agrees, and sends for Jia Hua.", "孙权就叫贾华预先准备，只看国太的意思行事。"),
             ["remove", "lf"], ["remove", "sq"],
             N("Qiao Guolao sends word to Liu Bei: tomorrow the Marquis and the Dowager will see you. Be careful.", "乔国老派人告诉刘备：明天吴侯和国太要亲自见你，千万小心。"),
-            S("zhaoyun", "Tomorrow's meeting means more harm than good. I'll bring the five hundred.", "明天这次见面，凶多吉少。我亲自带五百军士保护。"),
+            N("Zhao Yun says: tomorrow's meeting means more harm than good. He will bring the five hundred himself.", "赵云说：明天这次见面，凶多吉少，他要亲自带五百军士保护。"),   # told, not spoken: the party is off stage in a cutaway
             ["party", ["zhaoyun", "liubei", "sunqian"], {"to": {"place": "Sweet Dew Temple", "from": "Nanxu"}}],
         ]},
 
