@@ -42,7 +42,7 @@ const path = require('path');
       if (seen.has(`${pl}|${ids}|${ride}`)) continue; seen.add(`${pl}|${ids}|${ride}`);   /* each place once per map state */ if (!(await p.evaluate(pl => window.__w.placeId === pl, pl))) { console.log(`note book ${book}: ${pl} didn't open`); continue; }
       const mounted = await p.evaluate(() => { const w = window.__w; return !!(typeof WorldItems !== 'undefined' && WorldItems.mountedHere && WorldItems.mountedHere(w, w.lead)); });
       if (ride && !mounted) continue;   /* the riding pass: only where he rides (outdoors, with a horse) */
-      let builds = []; try { builds = (JSON.parse(require('fs').readFileSync(path.join(__dirname, `../../data/tk_maps/w${book}/${pl}.map.json`), 'utf8')).objects || []).filter(o => /^building\./.test(o.kind || '') && o.faces && o.door && !/^building\.(gate|gatehouse)$/.test(o.kind));   /* a building one goes into (its door); a wall's gate is walked through both ways (door-gate.js) */ } catch (e) {}   /* the buildings and the side each is drawn facing (its arch, its doorway) */
+      let builds = []; try { builds = (JSON.parse(require('fs').readFileSync(path.join(__dirname, `../../data/tk_maps/w${book}/${pl}.map.json`), 'utf8')).objects || []).filter(o => /^building\./.test(o.kind || '') && o.door && !/^building\.(gate|gatehouse)$/.test(o.kind));   /* a building one goes into (its door); a wall's gate is walked through both ways (door-gate.js) */ } catch (e) {}   /* the buildings and the side each is drawn facing (its arch, its doorway) */
       const arrive = await p.evaluate(() => [window.__w.player.x, window.__w.player.y]);   /* where she comes into the place: the door's front must be reachable from here */
       for (const d of doors) {
         // from open ground just outside it (her feet clear of every solid), each way that has some, straight at it
@@ -61,7 +61,7 @@ const path = require('path');
           const T = w.tw || 16, bs = builds.map(o => ({ o, r: new Phaser.Geom.Rectangle(o.x * T - 20, o.y * T - 20, o.w * T + 40, o.h * T + 40) })).filter(x => Phaser.Geom.Rectangle.Contains(x.r, cx, cy - 3));
           const bld = bs.sort((a, b) => a.o.w * a.o.h - b.o.w * b.o.h)[0];
           let face = null;
-          if (bld) { const o = bld.o, L = o.x * T, Tp = o.y * T, R = (o.x + o.w) * T, Bt = (o.y + o.h) * T, drawn = o.kind === 'building.gatetower' ? 'S' : o.faces, F = { S: ['up', 0, 1], N: ['down', 0, -1], E: ['left', 1, 0], W: ['right', -1, 0] }[drawn];   /* a gate tower is drawn front-on, its arch on the south face (Places' rule); the rest as they face */
+          if (bld) { const o = bld.o, L = o.x * T, Tp = o.y * T, R = (o.x + o.w) * T, Bt = (o.y + o.h) * T, drawn = o.kind === 'building.gatetower' ? 'S' : (o.enter || o.door || 'S'), F = { S: ['up', 0, 1], N: ['down', 0, -1], E: ['left', 1, 0], W: ['right', -1, 0] }[drawn];   /* the face its doorway is drawn on (Places): a gate tower front-on, its arch south; a side-on wing at its bottom front ("enter": "S"); else its door's side, else south */
             face = { id: o.id || o.kind, faces: drawn, start: null };
             if (F) for (const back of [28, 40, 56, 72]) for (const off of [0, -3, 3]) {
               const sx = F[1] ? (F[1] > 0 ? R : L) + F[1] * back : cx + off, sy = F[2] ? (F[2] > 0 ? Bt : Tp) + F[2] * back : cy + off;
@@ -76,11 +76,13 @@ const path = require('path');
             w.auto = null; const went = w.leaving || w.placeId !== pl;
             return { in: went, from: at, stop: [Math.round(P.x), Math.round(P.y)], line }; }, [sx, sy, key, pl]).then(r => ({ ...r, key }));
         const back = async () => { if (await p.evaluate(pl => window.__w.placeId !== pl || window.__w.leaving, pl)) { for (let i = 0; i < 30 && await p.evaluate(() => !window.__w.player || window.__w.leaving); i++) await p.waitForTimeout(150); await goTo(pl); } else if (await p.evaluate(() => window.__w.ui.busy())) await ready(); };
+        // a story scene that starts where she stands (a beat's spot by the door), before she has moved: played out, then the same walk again
+        const walkTwice = async st => { let r = await walkIn(st); if (!r.in && r.line && r.stop[0] === r.from[0] && r.stop[1] === r.from[1]) { await back(); await ready(); r = await walkIn(st); } return r; };
         // first from the face its building is drawn on (the arch, the doorway a player walks up to): that one must go in
         let faceRes = null;
-        if (face) { faceRes = face.start ? await walkIn(face.start) : { in: false, why: `no open ground before its ${face.faces} face she can walk to` }; await back(); }
+        if (face) { faceRes = face.start ? await walkTwice(face.start) : { in: false, why: `no open ground before its ${face.faces} face she can walk to` }; await back(); }
         let res = faceRes && faceRes.in ? faceRes : (starts.length ? null : { in: false, why: 'no open ground before it on any side that she can walk to from where she comes in' });
-        if (!res || !res.in) for (const st of starts) { const r = await walkIn(st); await back(); res = r; if (r.in) break; }
+        if (!res || !res.in) for (const st of starts) { const r = await walkTwice(st); await back(); res = r; if (r.in) break; }
         const wet = !res.in && /walk to from where/.test(res.why || '') && await p.evaluate(() => (window.__w.waters || []).some(x => x.on));
         if (wet) { console.log(`note book ${book} ${pl}${ids ? ` (${ids})` : ''}, ${how}: the door to ${d.to} is cut off by the water in this state (as the story has it: the flood)`); continue; }
         if (faceRes && !faceRes.in && faceRes.line && res.in) console.log(`note book ${book} ${pl}${ids ? ` (${ids})` : ''}, ${how}: from the ${face.faces} face of ${face.id}, someone stands in the way of the door to ${d.to} ("${faceRes.line.replace(/^主线 · Story/, '').slice(0, 40)}…", at ${faceRes.stop}); it goes in walking ${res.key} a little to the side`);

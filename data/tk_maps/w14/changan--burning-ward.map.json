@@ -467,7 +467,7 @@
   {
    "id": "cover-way-changan--pangshu-house",
    "x": 33.5,
-   "y": 29.7,
+   "y": 28.7,
    "node": "",
    "cover": true,
    "label": "A dark doorway"
@@ -664,16 +664,16 @@
    "x": 6,
    "y": 3.85,
    "w": 2,
-   "h": 0.45,
+   "h": 0.75,
    "door": true
   },
   {
    "to": "changan--pangshu-house",
    "side": "S",
    "x": 32,
-   "y": 29.7,
+   "y": 29.4,
    "w": 2,
-   "h": 0.45,
+   "h": 0.75,
    "door": true
   },
   {
@@ -692,7 +692,7 @@
   ],
   "changan--pangshu-house": [
    33,
-   29
+   28
   ],
   "changan": [
    2,

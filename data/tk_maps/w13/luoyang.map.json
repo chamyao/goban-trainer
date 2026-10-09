@@ -1009,7 +1009,7 @@
   {
    "id": "npc-2",
    "kind": "folk.official",
-   "x": 25.5,
+   "x": 26.5,
    "y": 33.9,
    "say": [
     "“Zheng Tai went, and Lu Zhi went. A man with a family stays, and bows, and says nothing.”"
@@ -1021,7 +1021,7 @@
   {
    "id": "npc-3",
    "kind": "folk.maiden",
-   "x": 45.5,
+   "x": 46.5,
    "y": 29.9,
    "say": [
     "“The old emperor sits in the tower of Yong'an Palace. They say he wrote a poem about two swallows.”"
@@ -1035,7 +1035,7 @@
    "id": "npc-4",
    "kind": "folk.maiden",
    "x": 46.5,
-   "y": 29.9,
+   "y": 30.9,
    "say": [
     "“The Prince of Hongnong is dead. They don't say how. No one asks.”"
    ],
@@ -1129,7 +1129,7 @@
    "x": 13.6,
    "y": 30.85,
    "w": 0.8,
-   "h": 0.45,
+   "h": 0.75,
    "door": true
   },
   {
@@ -1138,7 +1138,7 @@
    "x": 23.6,
    "y": 30.85,
    "w": 0.8,
-   "h": 0.45,
+   "h": 0.75,
    "door": true
   },
   {
@@ -1147,7 +1147,7 @@
    "x": 43.6,
    "y": 26.85,
    "w": 0.8,
-   "h": 0.45,
+   "h": 0.75,
    "door": true
   },
   {
@@ -1156,7 +1156,7 @@
    "x": 21.6,
    "y": 46.85,
    "w": 0.8,
-   "h": 0.45,
+   "h": 0.75,
    "door": true
   },
   {

@@ -407,8 +407,17 @@ class MapBuilder:
                 y = fy + fh - 1 if not self.free((ax - 2, ay)) else ay
                 off = self.gatehouse[d["at_door"]] // 2 + 1 if d["at_door"] in self.gatehouse else 2   # outside a gatehouse
                 sides = (-off, off) if d.get("pair") else (-off,)
+                # along the door's own face: left and right of a N or S door, above and below an E or W one (a pair set
+                # left and right of an east door put one banner straight out in front of it: Lü Bu's tent, Testing)
+                o_ = next((x for x in self.objects if x.get("id") == d["at_door"]), {})
+                face = o_.get("enter") or o_.get("door") or "S"
+                (px, py), (bx, by) = ((1, 0), (0, -1)) if face in ("N", "S") else ((0, 1), (-1 if face == "E" else 1, 0))
+                if face == "N":
+                    by = 1
                 for dx in sides:
-                    for t in ((ax + dx, ay), (ax + dx + (1 if dx > 0 else -1), ay), (ax + dx, ay - 1), (ax + dx, ay - 2)):
+                    sgn = 1 if dx > 0 else -1
+                    cx, cy = ax + px * dx, ay + py * dx
+                    for t in ((cx, cy), (cx + px * sgn, cy + py * sgn), (cx + bx, cy + by), (cx + 2 * bx, cy + 2 * by)):
                         if self.put(kind, t):
                             break
             elif d.get("at_gates"):
@@ -521,8 +530,23 @@ class MapBuilder:
             n["wander"] = True
         return n
 
+    def door_lanes(self):
+        """The way straight in to every door you can enter: 3 tiles wide, 6 deep from its doorstep."""
+        lanes = set()
+        for o in self.objects:
+            if not o.get("map") or o.get("id") not in self.anchor:
+                continue
+            ax, ay = self.anchor[o["id"]]
+            ux, uy = {"S": (0, 1), "N": (0, -1), "E": (1, 0), "W": (-1, 0)}[o.get("enter") or o.get("door") or "S"]
+            lanes |= {(ax + k * ux + j * uy, ay + k * uy + j * ux) for k in range(6) for j in (-1, 0, 1)}
+        return lanes
+
     def lay_people(self, npcs, challengers, watchers):
         taken = {(int(s["x"]), int(s["y"])) for s in self.spots}
+        # townsfolk stand aside from the way in to a door (a farmer in front of Xuzhou's hall: Testing); challengers and
+        # watchers keep their cells, which their proofs are about
+        lanes = self.door_lanes()
+        taken |= lanes
         for i, p in enumerate(npcs):
             if p.get("at"):
                 t = self.near_cell(tuple(p["at"]), taken=taken)
@@ -539,6 +563,7 @@ class MapBuilder:
                 fx, fy, fw, fh = self.foot[p["behind"]]
                 n["x"], n["y"] = fx + fw / 2, fy + .35
             self.npcs.append(n)
+        taken -= lanes - {(int(s_["x"]), int(s_["y"])) for s_ in self.spots}
         for i, c in enumerate(challengers):
             t = self.near_cell(tuple(c["at"]), taken=taken)
             taken.add(t)
@@ -916,6 +941,32 @@ def ways(mb):
     return {"nodes": nodes, "edges": sorted(edges)} if edges else None
 
 
+def doors_reachable(m, mb):
+    """Every door's exit must touch ground she can walk to from where she comes in: its own tiles, or the tile just
+    outside on its open side. Otherwise a building has hidden its door in its own wall (the White Gate tower's north
+    door, inside the tower's solid: apo110 "I cant go up the tower")."""
+    start = tuple(m["entries"].get("") or ())
+    if not start:
+        return
+    seen, todo = {start}, [start]
+    while todo:
+        x, y = todo.pop()
+        for dx, dy in SIDES.values():
+            u = (x + dx, y + dy)
+            if u not in seen and 0 <= u[0] < mb.W and 0 <= u[1] < mb.H and mb.walkable(u):
+                seen.add(u)
+                todo.append(u)
+    for e in m["exits"]:
+        if not e.get("door"):
+            continue
+        ox, oy = {"N": (0, 1), "S": (0, -1), "E": (-1, 0), "W": (1, 0)}[e["side"]]   # the side she walks in from
+        tiles = {(int(e["x"] + i * .5), int(e["y"] + j * .5)) for i in range(int(e["w"] * 2) + 1) for j in range(int(e["h"] * 2) + 1)}
+        tiles |= {(x + ox, y + oy) for x, y in tiles}
+        if not tiles & seen:
+            raise RuntimeError(f"{m['id']}: the door to {e['to']} (exit at {e['x']}, {e['y']}) can't be walked to from "
+                               f"the entry: it is inside a wall or a solid")
+
+
 def entry_covers(m):
     """Hide and wait: on a map whose watchers hunt by sight, every way in is a cover (the doorway she comes out of, the
     shadow of a gate). A catch sends her back to her last cover, or to where she came in, before her first hide; that
@@ -1092,10 +1143,12 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
                     continue
                 d = o.get("enter") or o.get("door") or "S"
                 fx, fy, fw, fh = o["x"], o["y"], o["w"], o["h"]
-                ex = {"S": {"x": round(fx + fw / 2 - .4, 2), "y": fy + fh - .15, "w": .8, "h": .45},
-                      "N": {"x": round(fx + fw / 2 - .4, 2), "y": fy - .3, "w": .8, "h": .45},
-                      "E": {"x": fx + fw - .15, "y": round((fy + fh - .5 if o["kind"] in DOOR_AT_FOOT else fy + fh / 2) - .4, 2), "w": .45, "h": .8},
-                      "W": {"x": fx - .3, "y": round((fy + fh - .5 if o["kind"] in DOOR_AT_FOOT else fy + fh / 2) - .4, 2), "w": .45, "h": .8}}[d]
+                # reaching .6 of a tile out from the face: she goes in when the point 3 px above her feet is in it, and her
+                # body (6 px tall) stops at the face, so a door that reached .3 out was barely enterable (Integration)
+                ex = {"S": {"x": round(fx + fw / 2 - .4, 2), "y": fy + fh - .15, "w": .8, "h": .75},
+                      "N": {"x": round(fx + fw / 2 - .4, 2), "y": fy - .6, "w": .8, "h": .75},
+                      "E": {"x": fx + fw - .15, "y": round((fy + fh - .5 if o["kind"] in DOOR_AT_FOOT else fy + fh / 2) - .4, 2), "w": .75, "h": .8},
+                      "W": {"x": fx - .6, "y": round((fy + fh - .5 if o["kind"] in DOOR_AT_FOOT else fy + fh / 2) - .4, 2), "w": .75, "h": .8}}[d]
                 if o["kind"] in DOOR_AT_FOOT and d == "S":   # a gate tower's arch, drawn front-on: the arch is the door
                     ex.update({"x": round(fx + fw / 2 - 1, 2), "w": 2})
                 if o.get("id") in mb.door_gap:   # through a wall's gate: the walls funnel her in, so the whole gap is the door
@@ -1104,7 +1157,16 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
                 # a door only some may pass (the protagonist named, or a condition), and what it says to the rest
                 # the engine's side is the way you walk to go in (Book 1: a south-facing door is side "N")
                 m["exits"].append({"to": child, "side": {"S": "N", "N": "S", "E": "W", "W": "E"}[d], **ex, "door": True, **{k: o[k] for k in ("open_to", "refuse") if o.get(k)}})
-                m["entries"][child] = list(mb.anchor[o["id"]])
+                # coming out, she arrives clear of the door: the engine tests (x, y - 3) against the exit each frame, and
+                # arriving on it sends her straight back in. Step out from the doorstep until the point is off the exit
+                ax, ay = mb.anchor[o["id"]]
+                ux, uy = {"S": (0, 1), "N": (0, -1), "E": (1, 0), "W": (-1, 0)}[d]
+                for _ in range(3):
+                    px, py = ax + .5, ay + .9 - 3 / 16
+                    if not (ex["x"] <= px <= ex["x"] + ex["w"] and ex["y"] <= py <= ex["y"] + ex["h"]) or not mb.walkable((ax + ux, ay + uy)):
+                        break
+                    ax, ay = ax + ux, ay + uy
+                m["entries"][child] = [ax, ay]
         # gates and edges with "to": back to the owner, to another room, to another place
         P = mb.p
         for e in P.get("exits", []):
@@ -1156,6 +1218,7 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
             first = next(iter(m["entries"].values()), None)
             m["entries"][""] = first or list(mb.near_cell((mb.cols // 2, mb.rows // 2), want_visible=False))
         entry_covers(m)
+        doors_reachable(m, mb)
         m["links"] = sorted({x["to"] for x in m["exits"]})
 
     # the story's quests: each node's spot, in whichever map holds it

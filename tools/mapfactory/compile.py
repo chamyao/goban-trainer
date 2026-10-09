@@ -177,6 +177,70 @@ def voiced_states(states):
     return out
 
 
+def doors_blocked(objs):
+    """The doors (small exits) the engine's player can't go into: no stance puts the point 3 px above her feet in the
+    exit while her body (10 x 6, feet at its bottom edge) is clear of every solid. Each solid is the box tk-world makes from a prop: cl/cr either side of x, fh tall, less 1 px
+    all round. A door drawn into its own building's solid (the White Gate tower's north door) fails here."""
+    P = lambda o: {p["name"]: p["value"] for p in o.get("properties", [])}   # noqa: E731
+    zones = []
+    for o in objs:
+        p = P(o)
+        if o["type"] != "prop" or not p.get("solid") or p.get("in"):
+            continue
+        l, r = p.get("cl", p.get("fw", 0) / 2), p.get("cr", p.get("fw", 0) / 2)
+        cx, cy, w, h = o["x"] + (r - l) / 2, o["y"] - p.get("fh", 0) / 2, l + r - 2, p.get("fh", 0) - 2
+        zones.append((cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2))
+    hit = lambda a: any(a[0] < z[2] and z[0] < a[2] and a[1] < z[3] and z[1] < a[3] for z in zones)   # noqa: E731
+    bad = []
+    for o in objs:
+        if o["type"] != "exit" or o["width"] >= 16 or o["height"] >= 16:
+            continue   # a map's edge or a wall's gate: long, walked through
+        ex = (o["x"], o["y"], o["x"] + o["width"], o["y"] + o["height"])
+        # she goes in when the point 3 px above her feet is in the exit: some stance must put it there with her body
+        # (10 x 6 above her feet, and 2 px more each way for where the physics settles her) clear of every solid
+        if not any(not hit((fx - 7, fy - 8, fx + 7, fy + 2))
+                   for fx in range(int(ex[0]), int(ex[2]) + 1) for fy in range(int(ex[1]) + 3, int(ex[3]) + 4)
+                   if ex[0] <= fx <= ex[2] and ex[1] <= fy - 3 <= ex[3]):
+            bad.append(P(o).get("to", o["name"]))
+    return bad
+
+
+def doors_front_blocked(objs, T):
+    """The doors you can't walk straight into: from 3 tiles out on the face it's entered by, along the door's middle,
+    her body (10 x 6) meets a solid or someone standing there before the point 3 px above her feet is in the exit. A
+    banner set before Lü Bu's tent door, a farmer before Xuzhou's hall (Testing)."""
+    P = lambda o: {p["name"]: p["value"] for p in o.get("properties", [])}   # noqa: E731
+    boxes = []
+    for o in objs:
+        p = P(o)
+        if o["type"] == "prop" and p.get("solid") and not p.get("in"):
+            l, r = p.get("cl", p.get("fw", 0) / 2), p.get("cr", p.get("fw", 0) / 2)
+            cx, cy, w, h = o["x"] + (r - l) / 2, o["y"] - p.get("fh", 0) / 2, l + r - 2, p.get("fh", 0) - 2
+            boxes.append((cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2))
+        elif o["type"] == "npc":
+            boxes.append((o["x"] - 5, o["y"] - 6, o["x"] + 5, o["y"]))
+    hit = lambda a: any(a[0] < z[2] and z[0] < a[2] and a[1] < z[3] and z[1] < a[3] for z in boxes)   # noqa: E731
+    bad = []
+    for o in objs:
+        if o["type"] != "exit" or o["width"] >= 16 or o["height"] >= 16:
+            continue
+        side = P(o).get("side", "N")
+        ux, uy = {"N": (0, 1), "S": (0, -1), "E": (-1, 0), "W": (1, 0)}[side]   # out, the way she comes from
+        ex = (o["x"], o["y"], o["x"] + o["width"], o["y"] + o["height"])
+        fx, fy = (ex[0] + ex[2]) / 2, (ex[1] + ex[3]) / 2 + 3   # feet: the point 3 px above them at the exit's middle
+        ok = False
+        for k in range(3 * T, -1, -2):
+            x, y = fx + ux * k, fy + uy * k
+            if hit((x - 5, y - 6, x + 5, y)):
+                break
+            if ex[0] <= x <= ex[2] and ex[1] <= y - 3 <= ex[3]:
+                ok = True
+                break
+        if not ok:
+            bad.append(P(o).get("to", o["name"]))
+    return bad
+
+
 def compile_map(m, kit, out_dir):
     T = kit.T
     W, H = m["size"]
@@ -367,6 +431,23 @@ def compile_map(m, kit, out_dir):
             x += 1
     for x0, y, n in runs:
         obj("", "prop", (x0 + n / 2) * T, (y + 1) * T, kind="wall", fw=n * T, fh=T, solid=True)
+    # every other ground the plan says can't be walked (a city wall, hills, a cliff face) is solid too: the engine
+    # collides only with solid props and water, so without these she walked through Xiapi's city wall and over Xiao
+    # Pass's hills, and the plans' proofs (blockers, covered routes, shut gates) held only on paper. Water has its own
+    # layers (the flood's included), and a compound's wall its runs above
+    walk = m["terrain"].get("walk", {})
+    plain = [[legend[c] for c in row] for row in m["terrain"]["rows"]]
+    for y in range(H):
+        x = 0
+        while x < W:
+            mat = plain[y][x]
+            if walk.get(mat, True) is False and mat not in ("water", "wall"):
+                x0 = x
+                while x < W and plain[y][x] == mat:
+                    x += 1
+                obj("", "prop", (x0 + (x - x0) / 2) * T, (y + 1) * T, kind="wall", fw=(x - x0) * T, fh=T, solid=True)
+            else:
+                x += 1
     for s in m["spots"]:
         obj(s["id"], "spot", s["x"] * T, s["y"] * T, node=s["node"], label=s.get("label", ""), label_zh=ZH.get(s.get("label", ""), ""),
             **({"trigger": s["trigger"]} if s.get("trigger") else {}), **({"use": s["use"]} if s.get("use") else {}),
@@ -424,6 +505,12 @@ def compile_map(m, kit, out_dir):
                        "opacity": 1, "visible": True, "data": data} for i, (n, data) in enumerate(layers)] +
                      [{"id": len(layers) + 1, "name": "objects", "type": "objectgroup", "draworder": "topdown",
                        "x": 0, "y": 0, "opacity": 1, "visible": True, "objects": objs}]}
+    bad = doors_blocked(objs)
+    if bad:
+        raise RuntimeError(f"{m['id']} ({kit.k['kit']}): no one can step into the door to {', '.join(bad)}: it is inside a solid")
+    bad = doors_front_blocked(objs, T)
+    if bad:
+        raise RuntimeError(f"{m['id']} ({kit.k['kit']}): the straight way in to the door to {', '.join(bad)} is blocked")
     (out_dir / f"{m['id']}.tmj").write_text(json.dumps(tmj, ensure_ascii=False, separators=(",", ":")))
     return tmj
 
