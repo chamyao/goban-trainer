@@ -3203,7 +3203,7 @@ def _scenes_ladysun():
               "Liu Bei gives the maids gold and silk, to win them over, and sends Sun Qian home to Jingzhou with the good news.",
               "她笑着叫人把兵器全部撤走，侍女们也解下剑来伺候。当晚两人成亲，十分和美。刘备又拿金银绸缎赏给侍女们，收买她们的心，先让孙乾回荆州报喜。"),
             ["remove", "mt"], ["remove", "lb"],
-            ["party", ["ladysun", "liubei"]],
+            ["party", ["ladysun"]],   # he lives in the east palace now; she goes to him there (s8)
         ]},
 
         # S8 · "Don't lie to me." Winter in the gilded cage; pouch two; the false alarm; Lady Sun sees through it and makes the plan.
@@ -3215,6 +3215,7 @@ def _scenes_ladysun():
               "赵云在外面等了整整一个冬天，只在城外射箭跑马。到了年底，他拆开了第二个锦囊。"),
             ["open", "pouch2"],
             N("The second plan: go to Liu Bei in alarm, with news that Cao Cao is marching on Jingzhou.", "第二条妙计：装作大惊，去报主公，说曹操大军杀向荆州。"),
+            ["spawn", "lb", "liubei", "s8", 2, -2],
             ["spawn", "zy", "zhaoyun", "s8", 16, 4], ["move", "zy", "s8", 6, 0],
             N("A maid announces: Zhao Zilong has urgent news.", "侍女通报：赵子龙有紧急的事来报。"),
             S("zhaoyun", "My lord, shut away in your painted halls, have you forgotten Jingzhou?", "主公深居画堂，难道不想荆州了吗？"),
@@ -3246,6 +3247,8 @@ def _scenes_ladysun():
             S("liubei", "If you'll do that, I won't forget it, alive or dead. Don't let it slip.", "要是这样，我生死都不会忘记夫人。千万别泄露出去。"),
             N("Liu Bei sends for Zhao Yun in secret: on New Year's Day, take the men out of the city first, and wait on the high road.",
               "刘备暗中吩咐赵云：大年初一，你先带军士出城，在官道上等候。我借口祭祖，和夫人一起走。"),
+            ["remove", "lb"],
+            ["party", ["ladysun", "liubei"]],   # on New Year's Day they go in to her mother together
         ]},
 
         # S9 · New Year's Day. Lady Sun asks her mother for leave; out by carriage.

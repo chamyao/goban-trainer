@@ -180,7 +180,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 ## S5 · Sweet Dew Temple (甘露寺)
 *Sweet Dew Temple* · room `gl-abbot` · boards: **Lady Wu**: “Look at the groom.”
 
-- Gate: needs mark:axemen_1, mark:axemen_2, mark:axemen_3. Objective: 
+- Gate: needs mark:axemen_1, mark:axemen_2, mark:axemen_3. Objective: Search the side rooms along the temple's corridors for hidden axemen.
 
 *Lady Wu and Qiao Guolao are already seated in the abbot's hall. Liu Bei wears fine armour under his brocade robe. Zhao Yun, in full armour, has brought the five hundred.*  
 吴国太和乔国老已经在甘露寺方丈里坐好。刘备里面穿着细甲，外面罩着锦袍。赵云全身披挂，带着五百军士跟来。
@@ -338,7 +338,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 *She laughs, has every weapon taken out, and the maids unbuckle their swords. That night they are married, and both are glad of it. Liu Bei gives the maids gold and silk, to win them over, and sends Sun Qian home to Jingzhou with the good news.*  
 她笑着叫人把兵器全部撤走，侍女们也解下剑来伺候。当晚两人成亲，十分和美。刘备又拿金银绸缎赏给侍女们，收买她们的心，先让孙乾回荆州报喜。
 
-*(the player is now: Lady Sun and Liu Bei)*
+*(the player is now: Lady Sun)*
 
 
 ## S8 · Don't Lie to Me (你别瞒我)
@@ -420,6 +420,8 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 *Liu Bei sends for Zhao Yun in secret: on New Year's Day, take the men out of the city first, and wait on the high road.*  
 刘备暗中吩咐赵云：大年初一，你先带军士出城，在官道上等候。我借口祭祖，和夫人一起走。
+
+*(the player is now: Lady Sun and Liu Bei)*
 
 
 ## S9 · New Year's Day (正旦)
