@@ -1020,5 +1020,75 @@
     "beat": "Lady Yan and her daughter hidden in Pang Shu's house while the city is plundered.",
     "scene": "Night, a dim back room of a modest official's house, one shaded lamp. Lady Yan, in her thirties, sits very still against the wall, her arm round a small girl, listening. Through a lattice, the red glow of fires and the shadows of soldiers passing in the lane. A middle-aged officer, Pang Shu, stands by the door, listening too.",
     "notes": "Book 3 (Lü Bu's fall), prologue x0b, docs/book2/lvbu-arc.md. Chapter 11: 龐舒在長安城中，私藏呂布妻小."
+  },
+  "zy_pouches": {
+    "book": 4,
+    "category": "intrigue",
+    "beat": "Zhuge Liang hands Zhao Yun three sealed silk pouches.",
+    "scene": "A Jingzhou hall, a folding screen behind. Zhuge Liang: a calm scholar in a silk turban and Daoist robe, holding a feather fan, leans close and presses three small embroidered silk pouches into the hands of Zhao Yun: a handsome young general in silver-white armour, who listens gravely. Liu Bei: a man near fifty with long ears and a kindly face, greying beard, in a brocade robe, looks on, uneasy.",
+    "notes": "Book 4 (Lady Sun's marriage), docs/book2/ladysun-arc.md."
+  },
+  "nx_red": {
+    "book": 4,
+    "category": "bond",
+    "beat": "Nanxu decked in red as Liu Bei's men spread news of the wedding.",
+    "scene": "A busy riverside city street in winter sun. Soldiers wearing red sashes buy sheep, pigs and baskets of fruit at the stalls, laughing and talking with townsfolk; red cloth and lanterns going up on the shopfronts.",
+    "notes": "Book 4 (Lady Sun's marriage), docs/book2/ladysun-arc.md."
+  },
+  "wu_rage": {
+    "book": 4,
+    "category": "bond",
+    "beat": "Lady Wu beats her breast and scolds Sun Quan.",
+    "scene": "An inner hall in a Wu palace. Lady Wu: an elderly dowager of Wu in rich dark robes, grey hair dressed high, beats her breast and weeps in fury, pointing at Sun Quan: a young lord with a purple-tinged beard and green eyes, in a lord's robe, who stands abashed. An old gentleman, Qiao Guolao, looks on.",
+    "notes": "Book 4 (Lady Sun's marriage), docs/book2/ladysun-arc.md."
+  },
+  "gl_wu": {
+    "book": 4,
+    "category": "bond",
+    "beat": "Lady Wu sees Liu Bei at Sweet Dew Temple and is delighted.",
+    "scene": "The abbot's hall of a hilltop temple above a great river. Lady Wu: an elderly dowager of Wu in rich dark robes, grey hair dressed high, seated, smiles broadly at Liu Bei: a man near fifty with long ears and a kindly face, greying beard, in a brocade robe, who bows before her. Zhao Yun: a handsome young general in silver-white armour, stands behind him with a sword.",
+    "notes": "Book 4 (Lady Sun's marriage), docs/book2/ladysun-arc.md."
+  },
+  "gl_stone": {
+    "book": 4,
+    "category": "intrigue",
+    "beat": "Liu Bei and Sun Quan each cut the same stone, praying in secret.",
+    "scene": "A temple courtyard. A great boulder split crosswise by two sword strokes, sparks still flying. Liu Bei: a man near fifty with long ears and a kindly face, greying beard, in a brocade robe, and Sun Quan: a young lord with a purple-tinged beard and green eyes, in a lord's robe, stand on either side with drawn swords, each glancing sidelong at the other.",
+    "notes": "Book 4 (Lady Sun's marriage), docs/book2/ladysun-arc.md."
+  },
+  "gl_horses": {
+    "book": 4,
+    "category": "bond",
+    "beat": "Liu Bei and Sun Quan rein in their horses on the slope and laugh.",
+    "scene": "A green hill slope above a wide river with white waves. Liu Bei: a man near fifty with long ears and a kindly face, greying beard, in a brocade robe, and Sun Quan: a young lord with a purple-tinged beard and green eyes, in a lord's robe, rein in their horses side by side, whips raised, laughing.",
+    "notes": "Book 4 (Lady Sun's marriage), docs/book2/ladysun-arc.md."
+  },
+  "ls_blades": {
+    "book": 4,
+    "category": "bond",
+    "beat": "The bridal room hung with blades, the maids armed.",
+    "scene": "A bridal chamber lit by rows of red candles, its walls hung with spears and swords. Maids in silk stand on either side with swords at their hips. Liu Bei: a man near fifty with long ears and a kindly face, greying beard, in a brocade robe, stops in the doorway, startled. Lady Sun: a young noblewoman of Wu, proud and spirited, in red silk, a short sword at her waist, sits at the far end, amused.",
+    "notes": "Book 4 (Lady Sun's marriage), docs/book2/ladysun-arc.md."
+  },
+  "ls_curtain": {
+    "book": 4,
+    "category": "battle",
+    "beat": "Lady Sun raises the carriage curtain and faces down Wu's generals.",
+    "scene": "A road below a hill. A covered carriage pushed forward by attendants; Lady Sun: a young noblewoman of Wu, proud and spirited, in red silk, a short sword at her waist, has flung up its curtain and stands in it, commanding. Before her, two armoured Wu generals have leapt from their horses and thrown down their weapons. Zhao Yun: a handsome young general in silver-white armour, glowers on horseback beside the carriage.",
+    "notes": "Book 4 (Lady Sun's marriage), docs/book2/ladysun-arc.md."
+  },
+  "llp_boats": {
+    "book": 4,
+    "category": "aftermath",
+    "beat": "Zhuge Liang laughs from the boats waiting at Liulangpu.",
+    "scene": "A misty riverbank, twenty covered boats in a line. From the nearest, Zhuge Liang: a calm scholar in a silk turban and Daoist robe, holding a feather fan, steps out laughing, fan raised. On the bank, Liu Bei: a man near fifty with long ears and a kindly face, greying beard, in a brocade robe, and Lady Sun: a young noblewoman of Wu, proud and spirited, in red silk, a short sword at her waist, beside her carriage, look on in relief; dust of pursuers in the distance.",
+    "notes": "Book 4 (Lady Sun's marriage), docs/book2/ladysun-arc.md."
+  },
+  "zy_chant": {
+    "book": 4,
+    "category": "aftermath",
+    "beat": "Zhou Yu in his boat, mocked by the soldiers' chant from the shore.",
+    "scene": "A river shore in the evening. Soldiers on the bank shout and jeer toward the water. In a warship, Zhou Yu: a handsome commander of Wu in his thirties, in armour and a red cloak, clutches his side, a wound reopening, held back by his officers.",
+    "notes": "Book 4 (Lady Sun's marriage), docs/book2/ladysun-arc.md."
   }
 }
