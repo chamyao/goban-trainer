@@ -24,26 +24,30 @@ Sun Quan's walled city on the south bank. Its west gate opens onto the road to C
 ground and the road up to Sweet Dew Temple.
 - **The dock** (spot `dock`, where s2's handoff lands) is outside the river gate, with a jetty and two boats from
   Jingzhou. s3 is by it.
-- **The loud town (s3 → s4)**, in the engine's syntax (`tk-feats.js`):
+- **The loud town (s3 → s4)**, in the engine's syntax (`tk-feats.js`). The user found telling many people one by one
+  repetitive, so the player tells only three, and watches the news spread by itself:
+  - The three are all on Liu Bei's errand: the mutton seller (`g-lamb`) and the wine seller (`g-wine`) in the market,
+    and Qiao Guolao's steward at his gate (`g-qiao`).
+  - Each person told hurries to the next house and tells them, and that house tells the next, hanging out red as it
+    goes. Everyone after the first three is a relay (`"relay": true`): told only by a neighbour, never by the player.
+    Each says a line of their own.
   - Gossips carry `"gossip": {"tells": [...], "in_beats": ["s4"]}`. They're open while s4 is: `available()` is "not
     done", so `["s3"]` would shut them the moment the pouch is opened.
-  - There are three chains:
-    - from the dock: g-dock → h1 → h2 → h3;
-    - from the market: g-market → h4 → h5;
-    - from **Qiao Guolao's gate**: g-qiao → h6 → h7 / h9 → h10 → h11 → h12 → Lady Wu's gatekeeper. His household
-      takes the news to her, as in the novel.
-  - Plain townsfolk stand in between and don't pass it on.
-  - The gatekeeper (`wu-gatekeeper`) has no gossip of his own, so he can't be told directly; he hears it from h12.
+  - Only the steward's chain goes to Lady Wu's gate: g-qiao → h6 → h7 → Lady Wu's gatekeeper, with branches lighting
+    the back streets (h6 → h9 → h8; h7 → h10 → h11 → h12). Qiao Guolao's household takes the news to her, as in the
+    novel. The market's chains light their own streets (g-lamb → h3 → h2 → h1; g-wine → h4 → h5) and are optional.
+  - The gatekeeper (`wu-gatekeeper`) has no gossip of his own, so he can't be told directly; he hears it from h7.
   - s4 is a cutaway in Lady Wu's hall (`wu-hall`) that plays once the gatekeeper is told (`"cutaway":
     "told:wu-gatekeeper"`, Plot's). Her palace door is `open_to: told:wu-gatekeeper`, and before that it refuses with
     Plot's line. The spot `wu-gate` marks her gate.
   - Each of the 12 houses has red hangings over its door (Graphics' `deco.redhang`, placed by `"over": "h<n>"` at the
     house's front edge, `"told": "g-h<n>"`, `"lift": 6`), shown once its resident knows. `lift` is in px: the image is
-    drawn that much higher, and its depth stays at its foot. The engine supports it
-    (main ba88bcae).
-  - Proved: every gossip can be walked to from the dock, and every telling that reaches the gatekeeper is on the chain
-    from Qiao Guolao's gate.
+    drawn that much higher, and its depth stays at its foot. The engine supports it (main ba88bcae).
+  - Proved (`tools/proofs/ladysun_ls.py`): the player tells at most three; every relay is reached by one of their
+    chains; only the steward's reaches the gatekeeper, in about 13 s (a teller walking the way at 80 px/s, waiting up
+    to 1.5 s; at most 25 s allowed); every hanging lights.
   - Spots for the errand: `lamb` (the mutton seller), `wine` (the wine shop's door), `qiao-gate`.
+  - Townsfolk who aren't gossips stand in between, for flavour; nothing depends on them.
 - **Rooms:**
   - Lady Wu's hall (`wu-hall`: s4, a cutaway, and s11). Sun Quan comes in from the door 20 tiles east of s4.
   - Sun Quan's hall (`sq-hall`: s8, s12).
@@ -85,6 +89,8 @@ a valley in the hills to the north-east (+14, −6).
 
 ## For Integration
 - The data is in your `tk-feats.js` syntax: `gossip`, `told` props, the s4 spot's `fires`, and `yield`.
+- `gossip.relay` needs the engine: a relay can't be told by the player, isn't a talk target until told, and the goal
+  pointer skips him. The pointer should go only to tellable people whose chain reaches the cutaway's `told:` target.
 - `in_beats` is `["s4"]`, the window between s3 (done at the dock) and s4.
 - The yielders' `line` and `caught` lines are written like `say` lines (`["n", en, zh, id]`). `build_tk.py` doesn't
   collect them for voicing yet.

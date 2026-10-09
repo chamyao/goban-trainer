@@ -731,7 +731,7 @@
    "spot": "s4",
    "scene": "s4",
    "title": "Whose Daughter?",
-   "objective": "Spread the news through Nanxu, and take Liu Bei to Qiao Guolao with a lamb and wine. Let the news reach Lady Wu's gate.",
+   "objective": "Take Liu Bei to Qiao Guolao's gate with a lamb and wine. His household will carry the news to Lady Wu.",
    "after": [
     "15-s3"
    ],
@@ -909,7 +909,7 @@
     ]
    ],
    "board": false,
-   "objective_zh": "在南徐城里把消息传开，带刘备拿着羊和酒去拜见乔国老。让消息传到国太府门口。",
+   "objective_zh": "带刘备拿着羊和酒去乔国老府上。乔家的人会把消息传到国太那里。",
    "title_zh": "女儿是我的"
   },
   {

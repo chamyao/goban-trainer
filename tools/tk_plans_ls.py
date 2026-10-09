@@ -12,6 +12,7 @@ The places, in the story's order: Chaisang (a cutaway only) -> Jingzhou -> Nanxu
 The book's two map mechanics, in the engine's syntax (tk-feats.js, Integration):
   the loud town (Nanxu, while s4 is open):
     npc "gossip": {"tells": [ids], "in_beats": ["s4"]}   told (talked to), they walk to each neighbour named and tell them
+                 + "relay": true                       told only by a neighbour, never by the player
     prop "told": id                                        red hangings at a house door, shown once that person knows
     spot "fires": "told:<id>"                              its beat starts by itself once the news reaches them
   the face-down (the road to Chaisang, after s13):
@@ -45,6 +46,14 @@ def _talk(kind, at, say, **kw):
 def _gossip(gid, kind, at, say, tells, **kw):
     """A townsperson of the loud town: told, they say so, and take the news to each neighbour in "tells"."""
     return {"id": gid, "kind": kind, "at": at, "say": say, "gossip": {"tells": tells, "in_beats": ["s4"]}, "in": ["news"], **kw}
+
+
+def _relay(gid, kind, at, say, tells, **kw):
+    """A townsperson the news reaches only from a neighbour (never from the player): told, they say their line and take
+    it on to each in "tells"."""
+    g = _gossip(gid, kind, at, say, tells, **kw)
+    g["gossip"]["relay"] = True
+    return g
 
 
 def _yield(kind, at, group, aside, line, caught, **kw):
@@ -234,31 +243,33 @@ PLANS_LS = {
             {"id": "newyear", "when": "node:s11", "light": "morning"},                   # New Year's Day: she leaves
         ],
         "npcs": [
-            # the loud town (s3 -> s4): three chains. The dock's runs to the market, the market's to the north-east;
-            # only the one from Qiao Guolao's gate (his household, as in the novel) goes round the back streets to Lady
-            # Wu's gatekeeper, who can't be told himself: he hears it from his neighbour.
-            _gossip("g-dock", "folk.porter", [7, 1], "“Liu Bei, come to marry into Wu! I'll tell the neighbours.”", ["g-h1"]),
-            _gossip("g-h1", "folk.villager", [6, 3], "“The Marquis's sister! Married to Liu Bei! Well, well.”", ["g-h2"]),
-            _gossip("g-h2", "folk.elder", [6, 7], "“Liu Bei's come to be the Marquis's brother-in-law? Wait till the street hears this.”", ["g-h3"]),
-            _gossip("g-h3", "folk.villager", [7, 5], "“A wedding, then! I'll pass it along.”", []),
-            _gossip("g-market", "folk.porter", [11, 6], "“Five hundred men in red, buying for Liu Bei's wedding? I'll tell the street.”", ["g-h4"]),
-            _gossip("g-h4", "folk.villager", [14, 5], "“Liu Bei! The whole city will know by evening.”", ["g-h5"]),
-            _gossip("g-h5", "folk.elder", [18, 5], "“A marriage. Somebody should tell the Dowager. Surely she knows.”", []),
+            # the loud town (s3 -> s4). The player tells three people, all on Liu Bei's errand: the mutton seller and
+            # the wine seller (the lamb and wine), and Qiao Guolao's steward at his gate. Each one told hurries to the
+            # next house, and that house to the next, hanging out red as it goes: the player watches the news travel.
+            # Only the steward's goes to Lady Wu's gate (as in the novel, Qiao Guolao's household takes it to her); the
+            # market's light their own streets. Everyone else is a relay, told only by a neighbour, never by the player.
+            _gossip("g-lamb", "folk.villager", [9, 7], "“A whole lamb, for Qiao Guolao? So the wedding talk is true!”", ["g-h3"]),
+            _gossip("g-wine", "folk.woman", [11, 8], "“My best jar, for Liu Bei's wedding gift? Here, take two.”", ["g-h4"]),
             _gossip("g-qiao", "folk.official", [5, 9], "“A lamb and wine from Liu Bei, for my master? Then it's true. My master will want the Dowager to hear it from him.”",
                     ["g-h6"]),
-            _gossip("g-h6", "folk.villager", [7, 9], "“Married to the Marquis's sister! I'll go and tell my cousin by the palace.”", ["g-h7", "g-h9"]),
-            _gossip("g-h7", "folk.porter", [10, 9], "“A royal wedding! No wonder they paid in silver.”", ["g-h10"]),
-            _gossip("g-h9", "folk.villager", [7, 13], "“Liu Bei and the Marquis's sister? Who'd have thought.”", ["g-h8"]),
-            _gossip("g-h8", "folk.porter", [3, 13], "“Nobody tells the back streets anything. A wedding, you say?”", []),
-            _gossip("g-h10", "folk.elder", [10, 13], "“Then she doesn't know? Somebody ought to tell her.”", ["g-h11"]),
-            _gossip("g-h11", "folk.villager", [15, 13], "“A wedding for her own daughter, and she hasn't heard? I'll go round to the gate.”", ["g-h12"]),
-            _gossip("g-h12", "folk.porter", [18, 13], "“A wedding! I'm going to tell the palace guards.”", ["wu-gatekeeper"]),
+            _relay("g-h3", "folk.villager", [7, 5], "“So that's what the red cloth is for.”", ["g-h2"]),
+            _relay("g-h2", "folk.elder", [6, 7], "“Liu Bei, the Marquis's brother-in-law?”", ["g-h1"]),
+            _relay("g-h1", "folk.villager", [6, 3], "“The Marquis's sister! Well, well.”", []),
+            _relay("g-h4", "folk.porter", [14, 5], "“No wonder they paid in silver.”", ["g-h5"]),
+            _relay("g-h5", "folk.elder", [18, 5], "“Does the Dowager know?”", []),
+            _relay("g-h6", "folk.villager", [7, 9], "“Qiao Guolao's own steward said so? Then it's certain.”", ["g-h7", "g-h9"]),
+            _relay("g-h7", "folk.porter", [10, 9], "“Her own daughter's wedding, and the Dowager hasn't heard?”", ["wu-gatekeeper", "g-h10"]),
+            _relay("g-h9", "folk.villager", [7, 13], "“Liu Bei? The one whose arms reach past his knees?”", ["g-h8"]),
+            _relay("g-h8", "folk.porter", [3, 13], "“Even the back streets have heard.”", []),
+            _relay("g-h10", "folk.elder", [10, 13], "“A feast, then. I'll get my good clothes out.”", ["g-h11"]),
+            _relay("g-h11", "folk.villager", [15, 13], "“Red on every door. Ours too!”", ["g-h12"]),
+            _relay("g-h12", "folk.porter", [18, 13], "“The whole city's red, right up to the palace.”", []),
             {"id": "wu-gatekeeper", "kind": "folk.soldier", "at": [16, 9],
              "say": "“The Dowager is at her prayers. Nothing's been said here about any wedding.”", "in": ["arrival", "news"]},
             # townsfolk in between, who don't pass it on
             _talk("folk.villager", [12, 9], "“Red cloth everywhere today. Is it a festival?”", **{"in": ["news"]}),
             _talk("folk.elder", [13, 12], "“The palace is quiet today. The Dowager's at her prayers.”", **{"in": ["news"]}),
-            _talk("folk.villager", [9, 1], "“Boats from upriver, flying red? What's all that about?”", **{"in": ["arrival", "news"]}),
+            _talk("folk.porter", [7, 1], "“Boats from upriver, flying red? What's all that about?”", **{"in": ["arrival", "news"]}),
             _talk("folk.villager", [12, 5], "“My wife says the butchers have sold out by noon.”", **{"in": ["news"]}),
             _talk("folk.woman", [19, 9], "“I serve in the Dowager's kitchens. Nothing's been said there.”", **{"in": ["news"]}),
             # the wedding and the winter
@@ -322,7 +333,7 @@ PLANS_LS = {
         },
         "objectives": {
             "4-s3": "Land at Nanxu, and open the first silk pouch at the dock.",
-            "4-s4": "Spread the news through Nanxu, and take Liu Bei to Qiao Guolao with a lamb and wine. Let the news reach Lady Wu's gate.",
+            "4-s4": "Take Liu Bei to Qiao Guolao's gate with a lamb and wine. His household will carry the news to Lady Wu.",
             "4-s9": "Ride out by the east gate to the riding ground. The year is ending.",
             "4-s10": "Go to the east palace, to Liu Bei.",
             "4-s11": "Go to Lady Wu's palace, and ask your mother's leave.",
