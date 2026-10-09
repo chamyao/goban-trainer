@@ -1097,6 +1097,8 @@ function worldScenes() {
       if (!g) return;
       const e = this.exits.find(e => Math.abs(e.rect.centerX - g.x) < 1 && Math.abs(e.rect.centerY - g.y) < 1);
       if (e) { this.tapAt(e.rect.centerX, e.rect.centerY); return "exit"; }
+      const n = this.npcs.find(n => n.spr.visible && Math.hypot(n.spr.x - g.x, n.spr.y - 8 - g.y) < 2);   // someone to talk to (a townsperson to tell): go and talk
+      if (n) { this.tapAt(n.spr.x, n.spr.y - 8); return "there"; }
       const k = Object.keys(this.spots).find(k => Math.hypot(this.spots[k].x - g.x, this.spots[k].y - g.y) < 8);
       this.walkTo(g.x, g.y + (k ? 12 : 8), k ? { then: "up", aim: { kind: "spot", k } } : {});
       return "there";
@@ -1117,6 +1119,12 @@ function worldScenes() {
     goalPoint() {
       const q = this.nextMain();
       if (!q) return null;
+      // a cutaway still waiting on the news (Book 15 s4, told:wu-gatekeeper): point at the nearest townsperson who hasn't heard it
+      if (this.cutawayNode(q.node) && this.available(q) && !this.cutawayReady(q.node) && typeof WorldFeats !== "undefined") {
+        const P = this.player, ts = this.npcs.filter(n => n.gossip && n.spr.visible && !WorldFeats.told(this, n.id) && WorldFeats.gossipActive(this, n))
+          .sort((a, b) => Math.hypot(a.spr.x - P.x, a.spr.y - P.y) - Math.hypot(b.spr.x - P.x, b.spr.y - P.y));
+        if (ts.length) { this.goalHops = 0; return { x: ts[0].spr.x, y: ts[0].spr.y - 8 }; }
+      }
       const g = this.available(q) && this.gateFor(q);
       if (g && g.place && g.objective) {   // the nearest giver or delivery place still to visit
         if (this.placeIn(this.placeId, g.place)) {   // in the place, or in one of its rooms
