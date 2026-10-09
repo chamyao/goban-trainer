@@ -1,0 +1,135 @@
+{
+ "format": "tk-map/1",
+ "id": "jingzhou--jz-hall",
+ "world": 15,
+ "name": "The government hall",
+ "archetype": "interior",
+ "size": [
+  36,
+  16
+ ],
+ "seed": 1717,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "%": "stone",
+   " ": "void",
+   "W": "wall"
+  },
+  "rows": [
+   "                                    ",
+   " WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW ",
+   " W%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%W ",
+   " WWWWWWWWWWWWWWWWWWWWWWWWWWWWW%%WWW ",
+   "                                    "
+  ],
+  "walk": {
+   "stone": true,
+   "void": false,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    18,
+    8
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     15,
+     7
+    ]
+   },
+   "tiles": 92
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.dais",
+   "x": 6,
+   "y": 2,
+   "w": 3,
+   "h": 2,
+   "id": "dais",
+   "label": "Liu Bei's seat"
+  },
+  {
+   "kind": "furn.screen",
+   "x": 18,
+   "y": 6,
+   "w": 3,
+   "h": 1,
+   "id": "screen",
+   "label": "A folding screen",
+   "blocks_sight": true
+  },
+  {
+   "kind": "furn.table",
+   "x": 12,
+   "y": 8,
+   "w": 2,
+   "h": 1,
+   "id": "table-1"
+  },
+  {
+   "kind": "furn.rack",
+   "x": 32,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "rack"
+  }
+ ],
+ "spots": [
+  {
+   "id": "s2",
+   "x": 6.5,
+   "y": 12.7,
+   "node": "15-s2",
+   "label": "The government hall"
+  }
+ ],
+ "npcs": [],
+ "exits": [
+  {
+   "to": "jingzhou",
+   "side": "S",
+   "x": 30,
+   "y": 14,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "jingzhou": [
+   30,
+   13
+  ],
+  "": [
+   30,
+   13
+  ]
+ },
+ "parent": "jingzhou",
+ "building": "jz-hall",
+ "links": [
+  "jingzhou"
+ ]
+}
