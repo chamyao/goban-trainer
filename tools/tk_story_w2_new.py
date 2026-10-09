@@ -3056,17 +3056,13 @@ def _scenes_ladysun():
         "s3": {"title": T("The First Pouch", "第一个锦囊"), "kind": "main", "steps": [
             S("zhaoyun", "The Directing General said: three plans, in order. We're here. Time to open the first.", "军师吩咐三条妙计，依次而行。现在已经到了，该先打开第一个锦囊。"),
             ["open", "pouch1"],
+            N("The first plan: go to Qiao Guolao. Dress the men in red, buy for a wedding, and let the whole city know.", "第一条妙计：先拜见乔国老；军士披红挂彩，采办婚礼用品，让全城都知道。"),
             N("Zhao Yun calls the five hundred together and gives each man his orders.", "赵云把五百随行军士叫来，一一吩咐。"),
             ["still", "nx_red", "slow pan across"],
             N("The five hundred put on red and go into the city to buy what a wedding needs, telling everyone they meet: Liu Bei has come to marry into Wu.",
               "五百军士都披红挂彩，进城采办婚礼用品，逢人就说：刘备来东吴入赘了。"),
             N("Qiao Guolao, father of the two Qiao sisters, lives here in Nanxu.", "乔国老是大乔、小乔的父亲，就住在南徐。"),
         ]},
-        # the palace gate before the news has reached it
-        "s4_wait": {"title": T("Whose Daughter?", "女儿是我的"), "kind": "main", "steps": [
-            N("Lady Wu's gate is quiet. The news hasn't reached her yet.", "国太府门前一片安静。消息还没传到她耳朵里。"),
-        ]},
-
         # S4 · Whose daughter? The news reaches Lady Wu (cutaway inside her hall).
         "s4": {"title": T("Whose Daughter?", "女儿是我的"), "kind": "main", "steps": [
             ["spawn", "wu", "ladywu", "s4", 0, -4], ["spawn", "qgl", "qiaoguolao", "s4", 8, 0],
@@ -3227,7 +3223,7 @@ def _scenes_ladysun():
               "The year is ending, and my lord, lost in pleasure, won't even see me. Time for the second.",
               "军师给我三个锦囊，吩咐我：一到南徐，开第一个；住到年底，开第二个；遇到危急、走投无路的时候，开第三个。现在年快过完了，主公贪恋女色，连面都不见，为什么不拆开第二个锦囊，照计行事？"),
             ["open", "pouch2"],
-            N("So that is the plan.", "原来是这样的妙计。"),
+            N("So that is the plan: go to Liu Bei in alarm, with news that Cao Cao is marching on Jingzhou.", "原来是这样的妙计：装作大惊，去报主公，说曹操大军杀向荆州。"),
         ]},
 
         # S10 · "Don't lie to me." The false alarm; Lady Sun sees through it and makes the plan. The lead passes to her.
@@ -3317,6 +3313,7 @@ def _scenes_ladysun():
             S("zhaoyun", "Don't panic, my lord. Two of the Directing General's pouches are opened, and both came true. The third is for when we're in danger. Now's the time.",
               "主公别慌。军师的妙计都在锦囊里，已经拆了两个，都应验了。还有第三个，吩咐遇到危难时才能拆看。今天情况危急，该拆开了。"),
             ["open", "pouch3"],
+            N("The third plan: tell Lady Sun everything, and ask her to save them.", "第三条妙计：把实情全部告诉孙夫人，求她解围。"),
             N("Liu Bei reads it, and goes straight to Lady Sun's carriage, weeping.", "刘备看了，急忙来到车前，哭着对孙夫人说："),
             S("liubei", "There's something in my heart I must tell you now, all of it.", "我有心里话，到了这时候，要全部实说。"),
             S("ladysun", "Husband, tell me the truth.", "夫君有什么话，照实对我说。"),
@@ -3421,8 +3418,7 @@ def _nodes_ladysun():
         node("s1", 20, 210, "s1", place="Chaisang", room="zy-hall", board=False, cutaway=True),
         node("s2", 40, 200, "s2", place="Jingzhou", room="jz-hall", board=False),
         node("s3", 60, 190, "s3", board=False),   # by the dock, where the boats land
-        node("s4", 80, 180, "s4", room="wu-hall", board=False,
-             gate=[{"needs": ["mark:news_wu"], "else": "s4_wait"}]),   # the loud town: fires once the news reaches her gate
+        node("s4", 80, 180, "s4", room="wu-hall", board=False),   # fired by the loud town: its spot has "fires": "told:<her gate>" (Places)
         node("s5", 100, 170, "s5", place="Sweet Dew Temple", room="gl-abbot", dilemma=D(
             "ladywu", "Look at the groom.", "看看这个女婿。",
             "My son calls it a trick. I'll see the man with my own eyes.", "儿子说这是计策。我要亲眼看看这个人。",
@@ -3457,19 +3453,20 @@ _EDGES_LADYSUN = [[f"s{i}", f"s{i + 1}"] for i in range(1, 15)]
 
 _ITEMS_LADYSUN = {
     # Zhuge Liang's three sealed pouches: carried from s2, each opened at its moment (["open", key]) and never before.
+    # The engine's fields (tk-feats.js): "opens" shows in the bag while shut; "plan" is the card on opening (not voiced).
     "pouch1": {"name": "The first silk pouch", "zh": "第一个锦囊", "kind": "sealed",
-               "opens": T("Open on reaching Nanxu.", "到了南徐再打开。"),
-               "plan": T("Go first to Qiao Guolao, father of the two Qiao sisters. Let the five hundred dress in red, buy what a wedding needs, and let the whole city know Liu Bei has come to marry.",
-                         "先去拜见乔国老。五百军士披红挂彩，进城采办婚礼用品，让全城都知道刘备来东吴成亲。")},
+               "opens": "Open on reaching Nanxu.", "opens_zh": "到了南徐再打开。",
+               "plan": "Go first to Qiao Guolao, father of the two Qiao sisters. Let the five hundred dress in red, buy what a wedding needs, and let the whole city know Liu Bei has come to marry.",
+               "plan_zh": "先去拜见乔国老。五百军士披红挂彩，进城采办婚礼用品，让全城都知道刘备来东吴成亲。"},
     "pouch2": {"name": "The second silk pouch", "zh": "第二个锦囊", "kind": "sealed",
-               "opens": T("Open at the year's end.", "住到年底再打开。"),
-               "plan": T("Go to your lord in alarm: Cao Cao has raised five hundred thousand men to avenge Red Cliffs, and Jingzhou is in danger. He must come home.",
-                         "装作大惊，去见主公：曹操起兵五十万，要报赤壁之仇，荆州危急，请主公立刻回去。")},
+               "opens": "Open at the year's end.", "opens_zh": "住到年底再打开。",
+               "plan": "Go to your lord in alarm: Cao Cao has raised five hundred thousand men to avenge Red Cliffs, and Jingzhou is in danger. He must come home.",
+               "plan_zh": "装作大惊，去见主公：曹操起兵五十万，要报赤壁之仇，荆州危急，请主公立刻回去。"},
     "pouch3": {"name": "The third silk pouch", "zh": "第三个锦囊", "kind": "sealed",
-               "opens": T("Open when there is no way out.", "走投无路的时候再打开。"),
-               "plan": T("Let our lord tell his wife everything, and ask her to save him.", "请主公把实情全部告诉夫人，求夫人解围。")},
-    # Lady Sun rides in a pushed carriage (乘車; 叱從人推車直出).
-    "carriage": {"name": "Lady Sun's carriage", "zh": "孙夫人的车", "kind": "carriage"},
+               "opens": "Open when there is no way out.", "opens_zh": "走投无路的时候再打开。",
+               "plan": "Let our lord tell his wife everything, and ask her to save him.", "plan_zh": "请主公把实情全部告诉夫人，求夫人解围。"},
+    # Lady Sun rides in a pushed carriage (乘車; 叱從人推車直出). C raises the curtain; blockers yield only to her face.
+    "carriage": {"name": "Lady Sun's carriage", "zh": "孙夫人的车", "kind": "carriage", "rider": "ladysun"},
 }
 
 _OPENING_LADYSUN = [

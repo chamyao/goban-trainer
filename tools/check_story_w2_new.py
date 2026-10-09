@@ -22,7 +22,6 @@ def main():
     ZH.update(new.ZH2)
     CAST = dict(zh.CAST)
     CAST.update(new.CAST2)
-    cs.STEPS.add("open")   # ["open", pouch]: a sealed pouch opened (Lady Sun's book; an engine request)
     bad = 0
     for label, world in (("Diaochan arc (WORLD2)", new.WORLD2), ("Cao Cao arc (WORLD2_CC)", getattr(new, "WORLD2_CC", None)), ("Lü Bu arc (WORLD2_LB)", getattr(new, "WORLD2_LB", None)), ("Lady Sun (WORLD2_LS)", getattr(new, "WORLD2_LS", None))):
         if world is None:

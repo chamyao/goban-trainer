@@ -97,8 +97,16 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 **Zhao Yun:** The Directing General said: three plans, in order. We're here. Time to open the first.  
 军师吩咐三条妙计，依次而行。现在已经到了，该先打开第一个锦囊。
 
+*The first plan: go to Qiao Guolao. Dress the men in red, buy for a wedding, and let the whole city know.*  
+第一条妙计：先拜见乔国老；军士披红挂彩，采办婚礼用品，让全城都知道。
+
 *Zhao Yun calls the five hundred together and gives each man his orders.*  
 赵云把五百随行军士叫来，一一吩咐。
+
+[still: `nx_red`]
+
+*The five hundred put on red and go into the city to buy what a wedding needs, telling everyone they meet: Liu Bei has come to marry into Wu.*  
+五百军士都披红挂彩，进城采办婚礼用品，逢人就说：刘备来东吴入赘了。
 
 *Qiao Guolao, father of the two Qiao sisters, lives here in Nanxu.*  
 乔国老是大乔、小乔的父亲，就住在南徐。
@@ -106,8 +114,6 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 ## S4 · Whose Daughter? (女儿是我的)
 *Nanxu* · room `wu-hall` · no board
-
-- Gate: needs mark:news_wu. Objective: 
 
 **Qiao Guolao:** Congratulations, Madam!  
 恭喜国太！
@@ -351,8 +357,8 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 **Zhao Yun:** The Directing General said: open the first on reaching Nanxu, the second at the year's end, the third when we're in danger with no way out. The year is ending, and my lord, lost in pleasure, won't even see me. Time for the second.  
 军师给我三个锦囊，吩咐我：一到南徐，开第一个；住到年底，开第二个；遇到危急、走投无路的时候，开第三个。现在年快过完了，主公贪恋女色，连面都不见，为什么不拆开第二个锦囊，照计行事？
 
-*So that is the plan.*  
-原来是这样的妙计。
+*So that is the plan: go to Liu Bei in alarm, with news that Cao Cao is marching on Jingzhou.*  
+原来是这样的妙计：装作大惊，去报主公，说曹操大军杀向荆州。
 
 
 ## S10 · Don't Lie to Me (你别瞒我)
@@ -500,6 +506,9 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 **Zhao Yun:** Don't panic, my lord. Two of the Directing General's pouches are opened, and both came true. The third is for when we're in danger. Now's the time.  
 主公别慌。军师的妙计都在锦囊里，已经拆了两个，都应验了。还有第三个，吩咐遇到危难时才能拆看。今天情况危急，该拆开了。
+
+*The third plan: tell Lady Sun everything, and ask her to save them.*  
+第三条妙计：把实情全部告诉孙夫人，求她解围。
 
 *Liu Bei reads it, and goes straight to Lady Sun's carriage, weeping.*  
 刘备看了，急忙来到车前，哭着对孙夫人说：
