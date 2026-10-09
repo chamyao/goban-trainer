@@ -257,6 +257,12 @@ const TownUI = {
         g.append(Object.assign(document.createElement("span"), { className: "town-goal-main", textContent: zh || t }));
         g.onclick = e => { e.stopPropagation(); if (scene.walkToGoal) scene.walkToGoal(); };   // tap the goal: head for it
         if (zh) g.append(Object.assign(document.createElement("span"), { className: "town-goal-en", textContent: t }));
+        let there = false; try { there = !!(scene.takeMeThere && scene.player && scene.goalPoint()); } catch { there = false; }
+        if (there) {   // "Take me there" (apo110): walks you all the way, place after place
+          const go = Object.assign(document.createElement("button"), { type: "button", className: "town-goal-go", textContent: "带我去 Take me there" });
+          go.onclick = e => { e.stopPropagation(); scene.takeMeThere(); };
+          g.append(go);
+        }
         if (hint && hint[0]) {
           const h = Object.assign(document.createElement("span"), { className: "town-goal-hint" });
           h.append(Object.assign(document.createElement("span"), { lang: "zh-CN", textContent: `“${hint[1] || hint[0]}”` }));

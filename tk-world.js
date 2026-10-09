@@ -446,7 +446,8 @@ function worldScenes() {
 
       this.keys = this.input.keyboard.addKeys("W,A,S,D,UP,DOWN,LEFT,RIGHT,E,ENTER");
       // tap (or click) to walk there, tap someone to talk, a building to go in; hold and drag to steer
-      this.input.on("pointerdown", p => { const q = this.flat(p.worldX, p.worldY); this.tapAt(q.x, q.y, p.worldX, p.worldY); });
+      this.input.on("pointerdown", p => { this.game.registry.set("autoGo", false); const q = this.flat(p.worldX, p.worldY); this.tapAt(q.x, q.y, p.worldX, p.worldY); });
+      this.time.addEvent({ delay: 500, loop: true, callback: () => this.autoGoStep() });   // "Take me there", carried on into each new place
       this.input.on("pointermove", p => { this.steer(p); this.hover(p); });
       // After a talk closes, a key starts another only after a pause in pressing (or once he's taken a
       // step): mashing Enter through a talk doesn't loop it. Taps still talk at once.
@@ -1095,9 +1096,21 @@ function worldScenes() {
       const g = this.goalPoint();
       if (!g) return;
       const e = this.exits.find(e => Math.abs(e.rect.centerX - g.x) < 1 && Math.abs(e.rect.centerY - g.y) < 1);
-      if (e) return this.tapAt(e.rect.centerX, e.rect.centerY);
+      if (e) { this.tapAt(e.rect.centerX, e.rect.centerY); return "exit"; }
       const k = Object.keys(this.spots).find(k => Math.hypot(this.spots[k].x - g.x, this.spots[k].y - g.y) < 8);
       this.walkTo(g.x, g.y + (k ? 12 : 8), k ? { then: "up", aim: { kind: "spot", k } } : {});
+      return "there";
+    }
+    // "Take me there" (the goal box's button; apo110): walk to the goal, place after place, until it's reached.
+    // Any tap on the map or a key takes back control.
+    takeMeThere() {
+      this.game.registry.set("autoGo", true);
+      this.autoGoStep();
+    }
+    autoGoStep() {
+      if (!this.game.registry.get("autoGo") || !this.canMove() || this.walk || document.querySelector(".tk-scroll-go, .tk-scroll, .tk-duel")) return;
+      const r = this.goalPoint() ? this.walkToGoal() : null;
+      if (r !== "exit") this.game.registry.set("autoGo", false);   // there (or nowhere to go): done
     }
     // Where the next objective is from here: its story spot on this map, or
     // the exit that starts the shortest way to its place (rooms included).
@@ -2558,7 +2571,7 @@ function worldScenes() {
         if (K.UP.isDown || K.W.isDown || this.auto === "up") vy -= 1;
         if (K.DOWN.isDown || K.S.isDown || this.auto === "down") vy += 1;
       }
-      if (vx || vy) this.walk = null;   // keys take over from a tap
+      if (vx || vy) { this.walk = null; if (!this.auto) this.game.registry.set("autoGo", false); }   // keys take over from a tap (and from "Take me there")
       else if (this.walk && !this.ui.busy() && !this.leaving) [vx, vy] = this.followWalk(dt);
       const speed = 110, len = Math.hypot(vx, vy) || 1;  // always at a run
       P.setVelocity(vx / len * speed, vy / len * speed);
