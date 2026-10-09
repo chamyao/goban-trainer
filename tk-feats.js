@@ -113,6 +113,28 @@ const WorldFeats = {
     scene.talk(lines, () => this.mark(scene, n));
     return true;
   },
+  // "传开消息 Spread the news" (the goal box, apo110): the whole town hears it at once instead of person by person:
+  // house after house the hangings go up along the chains, then whoever the beat waits on (told:<id>) hears it last
+  spreadAll(scene, target) {
+    if (scene.spreading) return;
+    const gs = scene.npcs.filter(n => n.gossip && this.gossipActive(scene, n));
+    const tellsOf = new Set(gs.flatMap(n => (n.gossip.tells || [])));
+    const order = [], seen = new Set(), queue = gs.filter(n => !tellsOf.has(n.id));   // the chains' heads first, then down each
+    while (queue.length) { const n = queue.shift(); if (seen.has(n.id)) continue; seen.add(n.id); order.push(n.id);
+      for (const id of n.gossip.tells || []) { const m = scene.npcs.find(x => x.id === id); if (m && m.gossip) queue.push(m); else if (!seen.has(id)) { seen.add(id); order.push(id); } } }
+    for (const n of gs) if (!seen.has(n.id)) order.push(n.id);
+    if (target && !order.includes(target)) order.push(target);
+    const todo = order.filter(id => !this.told(scene, id));
+    scene.spreading = true;
+    scene.talk([["n", "Zhao Yun's men spread the word through Nanxu: Liu Bei of Jingzhou is to marry the Marquis's sister. Red hangings go up, house after house.",
+      "赵云的人在南徐城里四处传话：荆州刘皇叔要娶吴侯的妹妹。家家户户挂起了红绸。"]], () => {
+      todo.forEach((id, i) => scene.time.delayedCall(260 * i, () => {
+        if (!this.told(scene, id)) { scene.st.told.push(id); this.at(scene, id); this.applyTold(scene); }
+        if (i === todo.length - 1) { scene.spreading = false; scene.save(); this.fires(scene); scene.setGoal(); }
+      }));
+      if (!todo.length) { scene.spreading = false; scene.setGoal(); }
+    });
+  },
   mark(scene, n) {
     if (this.told(scene, n.id)) return;
     scene.st.told.push(n.id); this.at(scene, n.id); scene.save();

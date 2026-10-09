@@ -892,3 +892,4 @@ html.tk-fullwin-on, html.tk-fullwin-on body { overflow: hidden; overscroll-behav
   background: none; border: none; border-top: 1px solid rgba(199, 154, 74, .45); border-radius: 0; cursor: pointer; }
 .town-goal-go::before { content: "➜ "; }
 .town-goal-go:hover, .town-goal-go:focus-visible { color: #fff0b8; text-decoration: underline; outline: none; }
+.town-goal-news::before { content: "📣 "; }
