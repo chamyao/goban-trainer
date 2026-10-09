@@ -94,7 +94,7 @@ room, with the player's party off stage; then play returns to the lead where the
 | s14 | **The Rearguard**: her words to the four generals; they back away | Lady Sun | The road to Chaisang | — |
 | s15 | **Liulangpu**: no boats; Zhuge Liang in the boats; Guan Yu; the chant | Lady Sun | Liulangpu | — |
 
-Handoffs: s2 → Nanxu spot `dock` (a river crossing); s4 → Sweet Dew Temple from Nanxu; s7 → Nanxu from Sweet Dew Temple;
+Handoffs: s2 → Nanxu spot `dock` (a river crossing); s4 → Sweet Dew Temple from Nanxu; s6 → Nanxu from Sweet Dew Temple (a cutaway carries no handoff);
 s10 → none; s11 → The road to Chaisang from Nanxu; s13 → none (Liu Bei goes ahead); s14 → Liulangpu from The road to
 Chaisang.
 
