@@ -3099,7 +3099,7 @@ def _scenes_ladysun():
             N("Sun Quan agrees, and sends for Jia Hua.", "孙权就叫贾华预先准备，只看国太的意思行事。"),
             ["remove", "lf"], ["remove", "sq"],
             N("Qiao Guolao sends word to Liu Bei: tomorrow the Marquis and the Dowager will see you. Be careful.", "乔国老派人告诉刘备：明天吴侯和国太要亲自见你，千万小心。"),
-            S("zhaoyun", "Tomorrow's meeting means more harm than good. I'll bring the five hundred.", "明天这次见面，凶多吉少。我亲自带五百军士保护。"),
+            N("Zhao Yun says: tomorrow's meeting means more harm than good. He will bring the five hundred himself.", "赵云说：明天这次见面，凶多吉少，他要亲自带五百军士保护。"),   # told, not spoken: the party is off stage in a cutaway
             ["party", ["zhaoyun", "liubei", "sunqian"], {"to": {"place": "Sweet Dew Temple", "from": "Nanxu"}}],
         ]},
 
@@ -3419,7 +3419,7 @@ def _nodes_ladysun():
         node("s1", 20, 210, "s1", place="Chaisang", room="zy-hall", board=False, cutaway=True),
         node("s2", 40, 200, "s2", place="Jingzhou", room="jz-hall", board=False),
         node("s3", 60, 190, "s3", board=False),   # by the dock, where the boats land
-        node("s4", 80, 180, "s4", room="wu-hall", board=False),   # fired by the loud town: its spot has "fires": "told:<her gate>" (Places)
+        node("s4", 80, 180, "s4", room="wu-hall", board=False, cutaway="told:wu-gatekeeper"),   # plays in her hall once the news reaches her gate
         node("s5", 100, 170, "s5", place="Sweet Dew Temple", room="gl-abbot", dilemma=D(
             "ladywu", "Look at the groom.", "看看这个女婿。",
             "My son calls it a trick. I'll see the man with my own eyes.", "儿子说这是计策。我要亲眼看看这个人。",

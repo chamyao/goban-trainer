@@ -171,8 +171,8 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 *Qiao Guolao sends word to Liu Bei: tomorrow the Marquis and the Dowager will see you. Be careful.*  
 乔国老派人告诉刘备：明天吴侯和国太要亲自见你，千万小心。
 
-**Zhao Yun:** Tomorrow's meeting means more harm than good. I'll bring the five hundred.  
-明天这次见面，凶多吉少。我亲自带五百军士保护。
+*Zhao Yun says: tomorrow's meeting means more harm than good. He will bring the five hundred himself.*  
+赵云说：明天这次见面，凶多吉少，他要亲自带五百军士保护。
 
 *(the player is now: Zhao Yun and Liu Bei and Sun Qian)*
 
@@ -298,6 +298,8 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 *Liu Bei lifts his robe, leaps onto a horse, gallops down and back up. The two rein in side by side on the slope and laugh. It is still called Rein-In Slope.*  
 刘备撩起衣襟，一跃上马，飞驰下山，又跑了上来。两人并马站在山坡上，扬鞭大笑。这地方到今天还叫“驻马坡”。
+
+*(the player is now: Zhao Yun and Liu Bei and Sun Qian)*
 
 
 ## S7 · Blades in the Bridal Room (洞房刀枪)
