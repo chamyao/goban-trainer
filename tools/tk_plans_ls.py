@@ -1,34 +1,37 @@
 """Lady Sun's marriage (novel chapters 54–55), as plan grids (docs/book2/plan-grid.md).
 
-Design: docs/book2/ladysun-arc.md (Plot). Beat keys are its keys, 4-s1 ... 4-s15. Every Chinese line here is modern
+Design: docs/book2/ladysun-arc.md (Plot). Beat keys are its keys, 4-s1 ... 4-s14 (reworked: docs/book2/ladysun-arc.md). Every Chinese line here is modern
 Mandarin in simplified characters (the user: "write this book's language in modern Chinese that's easier to understand").
 
     python3 tools/check_plans_w2.py --arc ls [--png]       # check (and draw into docs/book2/plans-ls/)
     python3 tools/mapfactory build --world 15 --plans ls   # with Plot's WORLD2_LS
 
 The places, in the story's order: Chaisang (a cutaway only) -> Jingzhou -> Nanxu (the loud town) -> Sweet Dew Temple
--> Nanxu again (the wedding, the winter, the flight) -> the road to Chaisang (the road block, the face-down) -> Liulangpu.
+(the axemen searched for) -> Nanxu again, as Lady Sun (the bridal room, the winter, New Year's Day) -> the road to
+Chaisang (the road block and the pursuit, two face-downs) -> Liulangpu.
 
-The book's two map mechanics, in the engine's syntax (tk-feats.js, Integration):
+The book's map mechanics, in the engine's syntax (tk-feats.js, Integration):
   the loud town (Nanxu, while s4 is open):
     npc "gossip": {"tells": [ids], "in_beats": ["s4"]}   told (talked to), they walk to each neighbour named and tell them
                  + "relay": true                       told only by a neighbour, never by the player
     prop "told": id                                        red hangings at a house door, shown once that person knows
     spot "fires": "told:<id>"                              its beat starts by itself once the news reaches them
-  the face-down (the road to Chaisang, after s13):
+  the face-downs (the road to Chaisang: Xu Sheng and Ding Feng's men after s11, Chen Wu and Pan Zhang's after s12):
     npc "yield": {"group", "reach" (tiles), "aside" [dx, dy] (tiles), "line", "caught", "back_to": spot}
         standing still and facing them within reach, they step aside one by one; moving within 1.4 tiles of one who
         hasn't is a catch, back to back_to
+  the axemen (Sweet Dew Temple, before s5): a spot that delivers a mark ("needs", "when", "delivers", "deliver"), in
+    three of the six side rooms, by the axemen; s5's gate needs all three marks (Plot)
 """
 from tk_plans_w2 import ART as ART2, LINE_KINDS, NEW_KINDS as NEW_KINDS2, ZONE_KINDS, room
 
-# the beats this arc's plans place (the design's table: s1 ... s15)
-KEYS_LS = {f"s{i}" for i in range(1, 16)}
+# the beats this arc's plans place (the design's table: s1 ... s14)
+KEYS_LS = {f"s{i}" for i in range(1, 15)}
 
 # Kinds this arc adds: footprint in tiles (w, h, solid)
 NEW_KINDS = {**NEW_KINDS2,
              "prop.boat": (4, 2, True),          # a river boat moored at a jetty (Nanxu's dock)
-             "prop.target": (1, 1, True),        # an archery butt on a stand (the riding ground, s9)
+             "prop.target": (1, 1, True),        # an archery butt on a stand (the riding ground outside the east gate)
              "landmark.incense": (2, 1, True),   # a temple's bronze incense burner (Sweet Dew Temple's court)
              }
 ART = {**ART2,
@@ -56,10 +59,56 @@ def _relay(gid, kind, at, say, tells, **kw):
     return g
 
 
-def _yield(kind, at, group, aside, line, caught, **kw):
-    """One of the pursuers across the narrow road: faced down, he steps aside (into the pocket beyond his rank)."""
-    return {"kind": kind, "at": at, "say": [], "when": "node:s13", "until": "node:s14",
-            "yield": {"group": group, "reach": 4, "aside": aside, "line": [line], "caught": [caught], "back_to": "block-start"}, **kw}
+# what Zhao Yun says on finding each group of axemen (s5's gate needs all three)
+FOUND = {
+    "axemen_1": "Axes, and men enough to swing them. These aren't monks. I'll keep my hand on my sword and back out slowly.",
+    "axemen_2": "Men sitting in the dark with axes, waiting for a signal. Who's going to give it?",
+    "axemen_3": "Axemen, hidden right beside the corridor my lord will walk down. This is a trap.",
+}
+
+
+def _axemen(room_id, says):
+    """A side room where Jia Hua's axemen hide: three of them, until the meeting (s5). The one nearest the door, talked
+    to, is found: Zhao Yun's line, and the mark that s5's gate needs (the spot he stands by delivers it)."""
+    return [{"kind": "folk.soldier", "place": room_id, "at": at, "say": say, "until": "node:s5", "face": face}
+            for at, say, face in zip(([4, 2], [2, 2], [6, 2]), says, ("S", "E", "W"))]
+
+
+def _side_room(c, rid, mark=None):
+    """One of the temple's six side rooms (a door on the corridor; c: "w" or "e" side). With a mark, the axemen's: a spot
+    by the door that delivers it once Zhao Yun finds them."""
+    door = [7, 3] if c == "w" else [0, 3]
+    spots = []
+    if mark:
+        spots = [{"id": mark, "at": [4, 3], "label": "Axemen in the side room", "needs": ["node:s4"], "when": "node:s4",
+                  "delivers": mark, "deliver": [["zhaoyun", FOUND[mark]]],
+                  "delivered": ["The axemen watch you from the dark. No one moves yet."],
+                  "empty": ["An empty side room. Whoever was here has gone."]}]
+    things = [{"id": "curtain", "kind": "furn.curtain", "rect": [6 if c == "w" else 1, 3, 1, 1]},
+              {"id": "jar", "kind": "furn.jar", "rect": [1 if c == "w" else 6, 1, 1, 1]}]
+    if mark:
+        things.append({"id": "axes", "kind": "furn.rack", "rect": [3, 1, 1, 1], "label": "A rack of axes"})
+    else:
+        things.append({"id": "table", "kind": "furn.table", "rect": [3, 1, 2, 1]})
+    return room([8, 6], door, things=things, spots=spots) | {"label": "A side room"}
+
+
+def _narrows(n, x, w, ranks):
+    """A narrows in the road, one cell wide between the hills (x .. x+w-1), and a pocket off the road just beyond each
+    rank, for its men to step aside into (reached only past them)."""
+    return [{"id": f"defile-{n}n", "kind": "hills", "rect": [x, 3, w, 2]}, {"id": f"defile-{n}s", "kind": "hills", "rect": [x, 6, w, 2]},
+            *[{"id": f"pocket-{n}{r}{c}", "kind": "plain", "rect": [rx + 1, 4 if c == "n" else 6, 1, 1]}
+              for r, rx in enumerate(ranks) for c in "ns"]]
+
+
+def _rank(x, group, when, until, back_to, caught, men):
+    """A rank of three across a narrows at cell x, from beat `when` until `until`: faced down, each man steps aside into
+    a pocket beyond the rank (two north, one south, the officer first)."""
+    asides = ([4, -4], [4, 4], [6, -4])
+    return [{"kind": kind, "at": [x, 5], "say": [], "when": f"node:{when}", "until": f"node:{until}",
+             "yield": {"group": group, "reach": 4, "aside": aside, "line": [line], "caught": [caught], "back_to": back_to},
+             **({"label": label} if label else {})}
+            for (kind, line, label), aside in zip(men, asides)]
 
 
 PLANS_LS = {
@@ -151,8 +200,8 @@ PLANS_LS = {
     # Nanxu: Sun Quan's city on the south bank. The boats land at the dock outside the river gate (s3). Then the loud
     # town: the five hundred in red buy for the wedding and tell everyone, and the news goes house to house until it
     # reaches Lady Wu's gate, the one person who doesn't know (s4). Liu Bei goes to Qiao Guolao with a lamb and wine.
-    # Later the wedding (red), the winter (snow, Zhao Yun riding and shooting outside the east gate, s9), the east palace
-    # (s10) and Lady Wu's hall again (s11), and out by the west gate onto the road.
+    # Later the wedding (red): Lady Sun leads from her own rooms (ls-rooms) to the bridal room (s7); the winter (snow),
+    # the east palace (s8) and Lady Wu's hall again (s9, New Year's Day), and out by the west gate onto the road.
     "Nanxu": {
         "archetype": "city",
         "banners": "red",
@@ -185,6 +234,8 @@ PLANS_LS = {
                  "map": "sq-hall", "plaque": "吴侯府"},
                 {"id": "dongfu", "kind": "building.compound", "rect": [15, 3, 5, 2], "door": "S", "label": "The east palace",
                  "map": "east-palace", "plaque": "东府"},
+                # Lady Sun's own rooms, beside the east palace: the lead passes to her here (s6 -> s7)
+                {"id": "lsfu", "kind": "building.hall", "rect": [12, 3, 3, 2], "door": "S", "label": "Lady Sun's rooms"},
                 # Lady Wu's palace, south of the main street: shut to the news until it arrives (s4), open after
                 {"id": "wufu", "kind": "building.palace", "rect": [15, 10, 5, 3], "door": "N", "label": "Lady Wu's palace",
                  "map": "wu-hall", "plaque": "国太府", "open_to": ["told:wu-gatekeeper"],
@@ -218,7 +269,8 @@ PLANS_LS = {
                 {"id": "qiao-gate", "at": [4, 9], "at_door": "qiao", "label": "Qiao Guolao's gate"},
                 # where the news has to arrive: her gatekeeper (s4, a cutaway in her hall, plays once he's told)
                 {"id": "wu-gate", "at": [17, 9], "at_door": "wufu", "label": "Lady Wu's gate"},
-                {"id": "s9", "at": [24, 13], "node": "4-s9", "label": "The riding ground", "trigger": "near"},
+                # the lead passes to Lady Sun at her own door (s6's handoff); she goes on to the bridal room (s7)
+                {"id": "ls-rooms", "at": [13, 5], "at_door": "lsfu", "label": "Lady Sun's rooms"},
             ],
             # red hangings over each house front (Graphics' deco.redhang), shown once its resident has the news
             "props": [{"kind": "deco.redhang", "over": f"h{i}", "told": f"g-h{i}", "lift": 6} for i in range(1, 13)],
@@ -238,9 +290,9 @@ PLANS_LS = {
         "states": [
             {"id": "arrival", "until": "node:s3", "light": "day"},
             {"id": "news", "when": "node:s3", "until": "node:s4", "light": "day"},       # the loud town
-            {"id": "wedding", "when": "node:s4", "until": "node:s8", "light": "day"},
-            {"id": "winter", "when": "node:s8", "until": "node:s11", "light": "day", "weather": "snow"},   # 「住到年终」
-            {"id": "newyear", "when": "node:s11", "light": "morning"},                   # New Year's Day: she leaves
+            {"id": "wedding", "when": "node:s4", "until": "node:s7", "light": "day"},
+            {"id": "winter", "when": "node:s7", "until": "node:s9", "light": "day", "weather": "snow"},   # 「住到年终」
+            {"id": "newyear", "when": "node:s9", "light": "morning"},                    # New Year's Day: she leaves
         ],
         "npcs": [
             # the loud town (s3 -> s4). The player tells three people, all on Liu Bei's errand: the mutton seller and
@@ -282,25 +334,24 @@ PLANS_LS = {
         ],
         "maps": {
             # Lady Wu's hall: the news arrives (s4: Lady Wu at 0,-4, Qiao Guolao 8,0, Sun Quan in from the door at 20,2)
-            # and Lady Sun asks her mother's leave (s11: Lady Wu at 0,-6)
+            # and Lady Sun asks her mother's leave (s9: Lady Wu at 0,-6)
             "wu-hall": room([16, 8], [13, 7],
                             things=[{"id": "seat", "kind": "furn.dais", "rect": [3, 1, 2, 1], "label": "Lady Wu's seat"},
                                     {"id": "screen", "kind": "furn.screen", "rect": [6, 1, 2, 1]},
                                     {"id": "table-1", "kind": "furn.table", "rect": [10, 3, 1, 1]},
                                     {"id": "rack", "kind": "furn.jar", "rect": [14, 1, 1, 1]}],
                             spots=[{"id": "s4", "at": [4, 4], "node": "4-s4", "label": "Lady Wu's hall"},   # a cutaway: told:wu-gatekeeper
-                                   {"id": "s11", "at": [5, 5], "node": "4-s11", "label": "Lady Wu's hall"}])
+                                   {"id": "s9", "at": [5, 5], "node": "4-s9", "label": "Lady Wu's hall"}])
             | {"label": "Lady Wu's hall"},
-            # Sun Quan's hall: the cutaways s8 (Sun Quan 0,-4, Zhang Zhao 8,0) and s12 (Cheng Pu at -8,0)
+            # Sun Quan's hall: the cutaway s10 (Sun Quan 0,-4, Zhang Zhao 8,0, Cheng Pu -8,0)
             "sq-hall": room([14, 7], [7, 6],
                             things=[{"id": "seat", "kind": "furn.dais", "rect": [5, 1, 2, 1], "label": "The Marquis's seat"},
                                     {"id": "desk", "kind": "furn.table", "rect": [8, 1, 1, 1], "label": "A desk with a jade inkstone"},
                                     {"id": "rack", "kind": "furn.rack", "rect": [1, 1, 1, 1]}],
-                            spots=[{"id": "s8", "at": [6, 5], "node": "4-s8", "label": "Sun Quan's hall"},
-                                   {"id": "s12", "at": [6, 4], "node": "4-s12", "label": "Sun Quan's hall"}])
+                            spots=[{"id": "s10", "at": [6, 4], "node": "4-s10", "label": "Sun Quan's hall"}])
             | {"label": "Sun Quan's hall"},
             # the east palace: a court before the main hall; the bridal room on the west, Lady Sun's maids on the east.
-            # s10: Liu Bei at 0,-4, Zhao Yun runs in to 16,4, Lady Sun comes from her rooms at -8,-6
+            # s8: Liu Bei at 0,-4, Zhao Yun runs in from 16,4 to 6,0
             "east-palace": {
                 "grid": [22, 14], "cell": 2, "margin": 0, "label": "The east palace",
                 "ground": [{"id": "court", "kind": "court", "rect": [1, 5, 20, 8]},
@@ -314,13 +365,13 @@ PLANS_LS = {
                     {"id": "rack-1", "kind": "furn.rack", "rect": [6, 6, 1, 1], "label": "A rack of spears"},
                     {"id": "rack-2", "kind": "furn.rack", "rect": [15, 6, 1, 1], "label": "A rack of swords"},
                 ],
-                "spots": [{"id": "s10", "at": [11, 8], "node": "4-s10", "label": "The east palace"}],
+                "spots": [{"id": "s8", "at": [11, 8], "node": "4-s8", "label": "The east palace"}],
                 "dress": [{"kind": "plant.peony", "in": "garden", "count": 4}, {"kind": "prop.lanterns", "at_door": "hall", "pair": True}],
                 "exits": [{"to": "Nanxu", "at": [11, 13], "side": "S"}],
                 "entries": {"": [11, 11]},
                 "states": [{"id": "wedding", "light": "day"}],
             },
-            # the bridal room hung with blades, the maids armed (s7, cutaway: Liu Bei at 6,4, Lady Sun at 0,-6, the matron 10,0)
+            # the bridal room hung with blades, the maids armed (s7, played as Lady Sun: Liu Bei at 8,4, the matron 10,0)
             "bridal-room": room([12, 8], [6, 7],
                                 things=[{"id": "bed", "kind": "furn.bed", "rect": [1, 1, 2, 1], "label": "The bridal bed"},
                                         {"id": "rack-1", "kind": "furn.rack", "rect": [4, 1, 1, 1], "label": "Swords on the wall"},
@@ -334,17 +385,19 @@ PLANS_LS = {
         "objectives": {
             "4-s3": "Land at Nanxu, and open the first silk pouch at the dock.",
             "4-s4": "Take Liu Bei to Qiao Guolao's gate with a lamb and wine. His household will carry the news to Lady Wu.",
-            "4-s9": "Ride out by the east gate to the riding ground. The year is ending.",
-            "4-s10": "Go to the east palace, to Liu Bei.",
-            "4-s11": "Go to Lady Wu's palace, and ask your mother's leave.",
+            "4-s7": "Go into the east palace, to the bridal room. It is your wedding night.",
+            "4-s8": "The year is ending. Go to the east palace's courtyard, to your husband.",
+            "4-s9": "It is New Year's Day. Go to Lady Wu's palace, and ask your mother's leave.",
         },
     },
 
     # =========================================================================================
     # Sweet Dew Temple, on a hill above the river. The way up from Nanxu comes in by the south gate into the front court
     # (s6: the stone; the scene sets the rock 4 tiles east, 2 north of its spot). The abbot's hall (s5) stands at the back
-    # and is reached only down the side corridors, walled off from its court, past the doorways where the axemen hide: Zhao Yun walks them
-    # (「雲於廊下巡視，見房內有刀斧手埋伏」). Out of the north gate, the slope runs down to the river (the horses).
+    # and is reached only down the side corridors, walled off from its court. Off the corridors are six side rooms, all
+    # alike from outside; Jia Hua has hidden his axemen in three of them (「伏於兩廊」). The meeting won't start until Zhao
+    # Yun has searched them and found all three (s5 is gated on axemen_1-3; else s5_wait). In the other three are monks,
+    # who have seen and heard things. Out of the north gate, the slope runs down to the river (the horses).
     "Sweet Dew Temple": {
         "archetype": "hills",
         "plan": {
@@ -353,13 +406,13 @@ PLANS_LS = {
                 {"id": "hills", "kind": "hills", "rect": [0, 0, 20, 16]},
                 {"id": "river", "kind": "water", "rect": [0, 0, 20, 2]},
                 {"id": "slope", "kind": "plain", "rect": [5, 2, 10, 3]},          # Rein-In Slope, above the river
-                {"id": "grounds", "kind": "court", "rect": [5, 6, 10, 7]},         # inside the temple walls
+                {"id": "grounds", "kind": "court", "rect": [3, 6, 14, 7]},         # inside the temple walls
                 {"id": "path", "kind": "plain", "rect": [9, 13, 3, 3]},           # the way up from Nanxu
             ],
             "lines": [
-                {"id": "wall", "kind": "wall", "outline": [4, 5, 12, 9], "width": 1,
+                {"id": "wall", "kind": "wall", "outline": [2, 5, 16, 9], "width": 1,
                  "gates": {"south-gate": [10, 13], "north-gate": [12, 5]}},
-                {"id": "inner", "kind": "wall", "path": [[4, 9], [15, 9]], "width": 1, "gates": {"west-way": [5, 9], "east-way": [14, 9]}},
+                {"id": "inner", "kind": "wall", "path": [[2, 9], [17, 9]], "width": 1, "gates": {"west-way": [5, 9], "east-way": [14, 9]}},
                 # the side corridors: walled off from the abbot's court, open to it only at their far ends
                 {"id": "part-w", "kind": "wall", "path": [[6, 6], [6, 9]], "width": 1, "gates": {"w-in": [6, 6]}},
                 {"id": "part-e", "kind": "wall", "path": [[13, 6], [13, 9]], "width": 1, "gates": {"e-in": [13, 6]}},
@@ -374,6 +427,9 @@ PLANS_LS = {
                  "plaque": "方丈"},
                 {"id": "incense", "kind": "landmark.incense", "rect": [7, 10, 1, 1], "label": "An incense burner"},
                 {"id": "bell", "kind": "building.house", "rect": [13, 12, 2, 1], "label": "The bell house"},
+                # the six side rooms, three along each corridor, their doors on it
+                *[{"id": f"side-{c}{i}", "kind": "building.house", "rect": [3 if c == "w" else 15, 5 + i, 2, 1], "door": "E" if c == "w" else "W",
+                   "label": "A side room", "map": f"side-{c}{i}", "margin": 0} for c in "we" for i in (1, 2, 3)],
             ],
             "spots": [
                 {"id": "s6", "at": [9, 11], "node": "4-s6", "label": "The great rock in the courtyard"},
@@ -388,10 +444,32 @@ PLANS_LS = {
             {"id": "after", "when": "node:s5", "light": "day"},
         ],
         "npcs": [
-            # the axemen, at the side rooms' doors on the corridors: they hush and look away
-            _talk("folk.soldier", [5, 7], "The man in the doorway holds an axe behind his back. “Nothing here. Move along.”", **{"in": ["feast"]}),
-            _talk("folk.soldier", [14, 7], "Two men crouch in the side room with axes across their knees. They look away.", **{"in": ["feast"]}),
             _talk("folk.villager", [11, 12], "A monk sweeps the courtyard. “The Dowager is in the abbot's hall. Go round by the side corridors.”"),
+            # Jia Hua's man in each corridor: he watches you, and says nothing you want to hear
+            _talk("folk.soldier", [5, 10], "A guard leans by the corridor's mouth, too heavy in the shoulders for a monk. “Only monks' rooms down there.”",
+                  **{"in": ["feast"]}),
+            _talk("folk.soldier", [14, 10], "A guard watches you from the corridor's mouth, one hand inside his sleeve. He doesn't say a word.",
+                  **{"in": ["feast"]}),
+            # the axemen, hidden in three of the side rooms (until the meeting: then the Dowager sends them away)
+            *_axemen("side-w1", [
+                "The man in the doorway holds an axe behind his back. “Nothing here. Move along.”",
+                "A man sits on a sack with an axe across his knees, and stares at you.",
+                "Three more men stand against the wall. None of them moves."]),
+            *_axemen("side-w3", [
+                "Two men crouch in the side room with axes across their knees. They look away.",
+                "A man by the window tests his blade with his thumb.",
+                "Someone in the dark corner coughs, and is hushed."]),
+            *_axemen("side-e2", [
+                "A man by the curtain grips his axe and holds his breath.",
+                "Men sit shoulder to shoulder on the floor, their axes wrapped in cloth.",
+                "A big man rises halfway, sees your sword, and sits back down."]),
+            # the monks in the other three rooms: each has seen or heard something
+            {"kind": "folk.elder", "place": "side-w2", "at": [4, 2], "face": "S",
+             "say": "A monk copies sutras by lamplight. “Boots went past an hour ago. Heavy ones. Not ours.”"},
+            {"kind": "folk.elder", "place": "side-e1", "at": [4, 2], "face": "S",
+             "say": "An old monk sorts incense. “The Dowager's people took the rooms along this side. We were told to keep out of them.”"},
+            {"kind": "folk.villager", "place": "side-e3", "at": [4, 2], "face": "S",
+             "say": "A novice stirs a great pot of rice gruel. “Three hundred bowls, they told us. For whom, I'd like to know.”"},
         ],
         "maps": {
             # the abbot's hall: Lady Wu at 0,-6, Qiao Guolao 6,-6, Sun Quan -6,-4; Liu Bei kneels at 2,-2; Jia Hua at 14,2
@@ -402,68 +480,78 @@ PLANS_LS = {
                                      {"id": "table-2", "kind": "furn.table", "rect": [10, 3, 1, 1]}],
                              spots=[{"id": "s5", "at": [5, 5], "node": "4-s5", "label": "The abbot's hall"}])
             | {"label": "The abbot's hall"},
+            # the side rooms, all alike: a curtain in the doorway, a room behind it
+            **{f"side-{c}{i}": _side_room(c, f"side-{c}{i}", {"w1": "axemen_1", "w3": "axemen_2", "e2": "axemen_3"}.get(f"{c}{i}"))
+               for c in "we" for i in (1, 2, 3)},
         },
         "objectives": {
-            "4-s5": "Go up to Sweet Dew Temple. Walk the side corridors to the abbot's hall, where Lady Wu waits.",
+            "4-s5": "Something is wrong at Sweet Dew Temple. Search the side rooms along the corridors, then go to the abbot's hall, where Lady Wu waits.",
             "4-s6": "Go out into the temple courtyard.",
         },
     },
 
     # =========================================================================================
-    # The road to Chaisang: the road under the hills from Nanxu toward the border. Xu Sheng and Ding Feng block the mouth
-    # of a defile (s13: they stand 16 tiles ahead of its spot, their men 22). Past it the road narrows between the hills,
-    # and Chen Wu's and Pan Zhang's men come up across it: she stops before each, facing them, and they give way
-    # (「四員將見了孫夫人，只得下馬」). Pushing past sends her back to where the block was. Then the open road (s14).
+    # The road to Chaisang: the road under the hills from Nanxu toward the border, west to east. Two face-downs, each in
+    # a narrows one cell wide between the hills, where she stops before each rank, facing it, and it gives way
+    # (「四員將見了孫夫人，只得下馬」); pushing past a man who hasn't sends her back to where that block began.
+    #   s11 (the road block: Xu Sheng 16 tiles ahead of its spot, their men 22) -> face-down 1, Xu Sheng's and Ding
+    #   Feng's men -> s12 just past it (the boss: the generals 10 ahead, their men 18) -> face-down 2, Chen Wu's and Pan
+    #   Zhang's men -> s13 beyond (they came up from behind: the generals 12 and 18 tiles west of it) -> Liulangpu.
     "The road to Chaisang": {
         "archetype": "road",
         "plan": {
-            "grid": [40, 11], "cell": 4, "margin": 1,
+            "grid": [52, 11], "cell": 4, "margin": 1,
             "ground": [
-                {"id": "hills-n", "kind": "hills", "rect": [0, 0, 40, 3]},
-                {"id": "hills-s", "kind": "hills", "rect": [0, 8, 40, 3]},
-                {"id": "fields", "kind": "field.wheat", "rect": [2, 6, 6, 2]},
-                {"id": "defile-n", "kind": "hills", "rect": [17, 3, 12, 2]},       # the road narrows under the hills: one cell
-                {"id": "defile-s", "kind": "hills", "rect": [17, 6, 12, 2]},
-                # just beyond each rank, a pocket off the road for its men to step aside into (reached only past them)
-                {"id": "pocket-1n", "kind": "plain", "rect": [22, 4, 1, 1]}, {"id": "pocket-1s", "kind": "plain", "rect": [22, 6, 1, 1]},
-                {"id": "pocket-2n", "kind": "plain", "rect": [27, 4, 1, 1]}, {"id": "pocket-2s", "kind": "plain", "rect": [27, 6, 1, 1]},
+                {"id": "hills-n", "kind": "hills", "rect": [0, 0, 52, 3]},
+                {"id": "hills-s", "kind": "hills", "rect": [0, 8, 52, 3]},
+                {"id": "fields", "kind": "field.wheat", "rect": [1, 6, 4, 2]},
+                *_narrows(1, 12, 8, (14, 17)),     # face-down 1: Xu Sheng's men, then Ding Feng's
+                *_narrows(2, 30, 11, (33, 38)),    # face-down 2: Chen Wu's men, then Pan Zhang's
             ],
-            "lines": [{"id": "road", "kind": "road", "path": [[0, 5], [39, 5]], "width": 3}],
+            "lines": [{"id": "road", "kind": "road", "path": [[0, 5], [51, 5]], "width": 3}],
             "spots": [
-                {"id": "s13", "at": [10, 5], "node": "4-s13", "label": "The road under the hill", "trigger": "near"},
-                {"id": "block-start", "at": [13, 5], "label": "Where the road block stood",
-                 "note": "the face-down: pushing past a man without stopping sends her back here"},
-                {"id": "s14", "at": [35, 5], "node": "4-s14", "label": "The open road", "trigger": "near"},   # the generals come up behind (west)
+                {"id": "s11", "at": [5, 5], "node": "4-s11", "label": "The road under the hill", "trigger": "near"},
+                {"id": "block1-start", "at": [8, 5], "label": "Before the road block",
+                 "note": "face-down 1: pushing past a man without stopping sends her back here"},
+                {"id": "s12", "at": [22, 5], "node": "4-s12", "label": "Past the road block", "trigger": "near"},
+                {"id": "block2-start", "at": [27, 5], "label": "Where the pursuit caught up",
+                 "note": "face-down 2: pushing past a man without stopping sends her back here"},
+                {"id": "s13", "at": [46, 5], "node": "4-s13", "label": "The open road", "trigger": "near"},
             ],
-            "dress": [{"kind": "milestone", "along": "road", "every": 4}, {"kind": "tree.poplar", "in": "fields", "count": 4}],
-            "exits": [{"to": "Nanxu", "at": [0, 5], "side": "W"}, {"to": "Liulangpu", "at": [39, 5], "side": "E"}],
-            "entries": {"": [1, 5], "Nanxu": [1, 5], "Liulangpu": [38, 5]},
+            "dress": [{"kind": "milestone", "along": "road", "every": 4}, {"kind": "tree.poplar", "in": "fields", "count": 3}],
+            "exits": [{"to": "Nanxu", "at": [0, 5], "side": "W"}, {"to": "Liulangpu", "at": [51, 5], "side": "E"}],
+            "entries": {"": [1, 5], "Nanxu": [1, 5], "Liulangpu": [50, 5]},
         },
         "states": [{"id": "flight", "light": "day"}],
         "npcs": [
-            # the face-down (s13 -> s14): Chen Wu and two of his men across the narrows, then Pan Zhang and two of his.
-            # 「四員將見了孫夫人，只得下馬，拱手而立」
-            _yield("folk.official", [21, 5], "chenwu", [4, -4], "Chen Wu sees who is in the carriage, swings down from his horse, and stands aside with his hands clasped.",
-                   "“Halt! On the Marquis's orders, no one passes!” You fall back.", label="Chen Wu"),
-            _yield("folk.soldier", [21, 5], "chenwu", [4, 4], "“It's the Lady herself!” He backs his horse off the road.",
-                   "“Halt! On the Marquis's orders, no one passes!” You fall back."),
-            _yield("folk.soldier", [21, 5], "chenwu", [6, -4], "“Not our quarrel, madam.” He leads his horse aside.",
-                   "“Halt! On the Marquis's orders, no one passes!” You fall back."),
-            _yield("folk.official", [26, 5], "panzhang", [4, -4], "Pan Zhang looks at Zhao Yun, then at the Lady, and dismounts. “Madam.”",
-                   "“Stop the carriage!” The spears come down, and you fall back.", label="Pan Zhang"),
-            _yield("folk.soldier", [26, 5], "panzhang", [4, 4], "“Pan Zhang can argue with her himself.” He reins his horse off the road.",
-                   "“Stop the carriage!” The spears come down, and you fall back."),
-            _yield("folk.soldier", [26, 5], "panzhang", [6, 4], "He lowers his spear and gets out of the way.",
-                   "“Stop the carriage!” The spears come down, and you fall back."),
+            # face-down 1 (s11 -> s12): the block Zhou Yu set, Xu Sheng's men, then Ding Feng's, across the first narrows
+            *_rank(14, "xusheng", "s11", "s12", "block1-start", "“Halt! On Grand Commander Zhou's orders, no one passes!” You fall back.", [
+                ("folk.official", "Xu Sheng's captain sees who is in the carriage, and his hand comes off his sword. “Make way!”", "Xu Sheng's captain"),
+                ("folk.soldier", "“The Marquis's own sister…” He lowers his spear and backs off the road.", None),
+                ("folk.soldier", "He looks at his captain, then at her, and leads his horse aside.", None)]),
+            *_rank(17, "dingfeng", "s11", "s12", "block1-start", "“Stop the carriage! Those are our orders!” The spears come down, and you fall back.", [
+                ("folk.official", "Ding Feng's captain swallows. “We were told it was Liu Bei. No one said anything about the Lady.” He stands aside.", "Ding Feng's captain"),
+                ("folk.soldier", "“Not my quarrel, madam.” He steps out of the way.", None),
+                ("folk.soldier", "He drops his eyes, and his spear with them.", None)]),
+            # face-down 2 (s12 -> s13): Chen Wu and two of his men across the second narrows, then Pan Zhang and two of his
+            *_rank(33, "chenwu", "s12", "s13", "block2-start", "“Halt! On the Marquis's orders, no one passes!” You fall back.", [
+                ("folk.official", "Chen Wu sees who is in the carriage, swings down from his horse, and stands aside with his hands clasped.", "Chen Wu"),
+                ("folk.soldier", "“It's the Lady herself!” He backs his horse off the road.", None),
+                ("folk.soldier", "“Not our quarrel, madam.” He leads his horse aside.", None)]),
+            *_rank(38, "panzhang", "s12", "s13", "block2-start", "“Stop the carriage!” The spears come down, and you fall back.", [
+                ("folk.official", "Pan Zhang looks at Zhao Yun, then at the Lady, and dismounts. “Madam.”", "Pan Zhang"),
+                ("folk.soldier", "“Pan Zhang can argue with her himself.” He reins his horse off the road.", None),
+                ("folk.soldier", "He lowers his spear and gets out of the way.", None)]),
         ],
         "objectives": {
-            "4-s13": "Push on along the road, ahead of the pursuit.",
-            "4-s14": "Chen Wu and Pan Zhang's men block the road. Stop in front of them, facing them, and let them see you.",
+            "4-s11": "Push on along the road toward the border, ahead of the pursuit.",
+            "4-s12": "Xu Sheng and Ding Feng's men block the road. Stop in front of each rank, facing it, and let them see who is in the carriage.",
+            "4-s13": "Chen Wu and Pan Zhang's men are on the road. Stop in front of each rank, facing it, and let them see you.",
         },
     },
 
     # =========================================================================================
-    # Liulangpu: a bank of the river with no ferry. The river is 6 tiles below the s15 spot (the boats; Zhuge Liang in
+    # Liulangpu: a bank of the river with no ferry. The river is 6 tiles below the s14 spot (the boats; Zhuge Liang in
     # them at -10,4), Zhou Yu's fleet comes along the water (20,6), and Guan Yu out of a valley to the north-east (14,-6).
     "Liulangpu": {
         "archetype": "road",
@@ -478,13 +566,13 @@ PLANS_LS = {
             ],
             "lines": [{"id": "road", "kind": "road", "path": [[0, 5], [12, 5]], "width": 3},
                       {"id": "valley-path", "kind": "path", "path": [[12, 5], [16, 5], [16, 0]], "width": 2}],
-            "spots": [{"id": "s15", "at": [12, 6], "node": "4-s15", "label": "Liulangpu", "trigger": "near"}],
+            "spots": [{"id": "s14", "at": [12, 6], "node": "4-s14", "label": "Liulangpu", "trigger": "near"}],
             "dress": [{"kind": "tree.willow", "in": "bank", "count": 6}, {"kind": "tree.pine", "in": "hills-w", "count": 5}],
             "exits": [{"to": "The road to Chaisang", "at": [0, 5], "side": "W"}],
             "entries": {"": [1, 5], "The road to Chaisang": [1, 5]},
         },
         "states": [{"id": "river", "light": "day"}],
-        "objectives": {"4-s15": "Go on to the river at Liulangpu."},
+        "objectives": {"4-s14": "Go on to the river at Liulangpu."},
     },
 }
 

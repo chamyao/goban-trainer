@@ -1,0 +1,172 @@
+{
+ "format": "tk-map/1",
+ "id": "sweet-dew-temple--side-e2",
+ "world": 15,
+ "name": "A side room",
+ "archetype": "interior",
+ "size": [
+  16,
+  12
+ ],
+ "seed": 2375,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "%": "stone",
+   " ": "void",
+   "W": "wall"
+  },
+  "rows": [
+   "                ",
+   " WWWWWWWWWWWWWW ",
+   " W%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%W ",
+   " %%%%%%%%%%%%%W ",
+   " %%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%W ",
+   " WWWWWWWWWWWWWW ",
+   "                "
+  ],
+  "walk": {
+   "stone": true,
+   "void": false,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    8,
+    6
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     0,
+     3
+    ]
+   },
+   "tiles": 44
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.curtain",
+   "x": 2,
+   "y": 6,
+   "w": 1,
+   "h": 1,
+   "id": "curtain"
+  },
+  {
+   "kind": "furn.jar",
+   "x": 12,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "jar"
+  },
+  {
+   "kind": "furn.rack",
+   "x": 6,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "axes",
+   "label": "A rack of axes"
+  }
+ ],
+ "spots": [
+  {
+   "id": "axemen_3",
+   "x": 8.5,
+   "y": 6.7,
+   "node": "",
+   "label": "Axemen in the side room",
+   "needs": [
+    "node:s4"
+   ],
+   "delivers": "axemen_3",
+   "when": "node:s4",
+   "empty": [
+    "An empty side room. Whoever was here has gone."
+   ],
+   "deliver": [
+    [
+     "zhaoyun",
+     "Axemen, hidden right beside the corridor my lord will walk down. This is a trap."
+    ]
+   ],
+   "delivered": [
+    "The axemen watch you from the dark. No one moves yet."
+   ]
+  }
+ ],
+ "npcs": [
+  {
+   "id": "npc-1",
+   "kind": "folk.soldier",
+   "x": 8.5,
+   "y": 4.9,
+   "say": [
+    "A man by the curtain grips his axe and holds his breath."
+   ],
+   "until": "15-s5",
+   "face": "S"
+  },
+  {
+   "id": "npc-2",
+   "kind": "folk.soldier",
+   "x": 4.5,
+   "y": 4.9,
+   "say": [
+    "Men sit shoulder to shoulder on the floor, their axes wrapped in cloth."
+   ],
+   "until": "15-s5",
+   "face": "E"
+  },
+  {
+   "id": "npc-3",
+   "kind": "folk.soldier",
+   "x": 12.5,
+   "y": 4.9,
+   "say": [
+    "A big man rises halfway, sees your sword, and sits back down."
+   ],
+   "until": "15-s5",
+   "face": "W"
+  }
+ ],
+ "exits": [
+  {
+   "to": "sweet-dew-temple",
+   "side": "W",
+   "x": 1,
+   "y": 6,
+   "w": 1,
+   "h": 2
+  }
+ ],
+ "entries": {
+  "sweet-dew-temple": [
+   2,
+   6
+  ],
+  "": [
+   2,
+   6
+  ]
+ },
+ "parent": "sweet-dew-temple",
+ "building": "side-e2",
+ "links": [
+  "sweet-dew-temple"
+ ]
+}

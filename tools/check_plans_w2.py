@@ -44,7 +44,7 @@ EXTRA_KINDS = {"prop.lanterns", "prop.body_lamp", "milestone", "banner", "plant.
 def shared_keys():
     if ARC == "lb":   # the design's beat table (x1 ... x20), as the plans module lists it
         return set(KEYS_LB)
-    if ARC == "ls":   # the design's beat table (s1 ... s15)
+    if ARC == "ls":   # the design's beat table (s1 ... s14)
         return set(KEYS_LS)
     if ARC == "cc":   # the "Shared keys" table: | c1 | Luoyang | ...
         text = (ROOT / "docs/book2/caocao-arc.md").read_text().split("## Shared keys")[1]

@@ -117,7 +117,13 @@
    "map": "sweet-dew-temple.map.json",
    "links": [
     "nanxu",
-    "sweet-dew-temple--gl-abbot"
+    "sweet-dew-temple--gl-abbot",
+    "sweet-dew-temple--side-e1",
+    "sweet-dew-temple--side-e2",
+    "sweet-dew-temple--side-e3",
+    "sweet-dew-temple--side-w1",
+    "sweet-dew-temple--side-w2",
+    "sweet-dew-temple--side-w3"
    ]
   },
   {
@@ -126,6 +132,72 @@
    "zh": "方丈",
    "archetype": "interior",
    "map": "sweet-dew-temple--gl-abbot.map.json",
+   "links": [
+    "sweet-dew-temple"
+   ],
+   "parent": "sweet-dew-temple"
+  },
+  {
+   "id": "sweet-dew-temple--side-w1",
+   "name": "A side room",
+   "zh": "厢房",
+   "archetype": "interior",
+   "map": "sweet-dew-temple--side-w1.map.json",
+   "links": [
+    "sweet-dew-temple"
+   ],
+   "parent": "sweet-dew-temple"
+  },
+  {
+   "id": "sweet-dew-temple--side-w2",
+   "name": "A side room",
+   "zh": "厢房",
+   "archetype": "interior",
+   "map": "sweet-dew-temple--side-w2.map.json",
+   "links": [
+    "sweet-dew-temple"
+   ],
+   "parent": "sweet-dew-temple"
+  },
+  {
+   "id": "sweet-dew-temple--side-w3",
+   "name": "A side room",
+   "zh": "厢房",
+   "archetype": "interior",
+   "map": "sweet-dew-temple--side-w3.map.json",
+   "links": [
+    "sweet-dew-temple"
+   ],
+   "parent": "sweet-dew-temple"
+  },
+  {
+   "id": "sweet-dew-temple--side-e1",
+   "name": "A side room",
+   "zh": "厢房",
+   "archetype": "interior",
+   "map": "sweet-dew-temple--side-e1.map.json",
+   "links": [
+    "sweet-dew-temple"
+   ],
+   "parent": "sweet-dew-temple"
+  },
+  {
+   "id": "sweet-dew-temple--side-e2",
+   "name": "A side room",
+   "zh": "厢房",
+   "archetype": "interior",
+   "map": "sweet-dew-temple--side-e2.map.json",
+   "links": [
+    "sweet-dew-temple"
+   ],
+   "parent": "sweet-dew-temple"
+  },
+  {
+   "id": "sweet-dew-temple--side-e3",
+   "name": "A side room",
+   "zh": "厢房",
+   "archetype": "interior",
+   "map": "sweet-dew-temple--side-e3.map.json",
    "links": [
     "sweet-dew-temple"
    ],
@@ -919,7 +991,7 @@
    "spot": "s5",
    "scene": "s5",
    "title": "Sweet Dew Temple",
-   "objective": "Go up to Sweet Dew Temple. Walk the side corridors to the abbot's hall, where Lady Wu waits.",
+   "objective": "Something is wrong at Sweet Dew Temple. Search the side rooms along the corridors, then go to the abbot's hall, where Lady Wu waits.",
    "after": [
     "15-s4"
    ],
@@ -1096,7 +1168,17 @@
      169253
     ]
    ],
-   "objective_zh": "上甘露寺去。沿着两边的走廊走到方丈，国太在那里等着。",
+   "gate": [
+    {
+     "needs": [
+      "mark:axemen_1",
+      "mark:axemen_2",
+      "mark:axemen_3"
+     ],
+     "else": "s5_wait"
+    }
+   ],
+   "objective_zh": "甘露寺里有点不对劲。把走廊两边的厢房搜一遍，然后去方丈室，国太在那里等着。",
    "title_zh": "甘露寺"
   },
   {
@@ -1293,7 +1375,7 @@
    "spot": "s7",
    "scene": "s7",
    "title": "Blades in the Bridal Room",
-   "objective": "Go to Nanxu.",
+   "objective": "Go into the east palace, to the bridal room. It is your wedding night.",
    "after": [
     "15-s6"
    ],
@@ -1470,18 +1552,17 @@
      196297
     ]
    ],
-   "board": false,
-   "objective_zh": "",
+   "objective_zh": "进东府，去洞房。今晚是你的新婚之夜。",
    "title_zh": "洞房刀枪"
   },
   {
    "node": "15-s8",
    "role": "main",
-   "place": "nanxu--sq-hall",
+   "place": "nanxu--east-palace",
    "spot": "s8",
    "scene": "s8",
-   "title": "The Gilded Cage",
-   "objective": "Go to Nanxu.",
+   "title": "Don't Lie to Me",
+   "objective": "The year is ending. Go to the east palace's courtyard, to your husband.",
    "after": [
     "15-s7"
    ],
@@ -1658,18 +1739,17 @@
      103150
     ]
    ],
-   "board": false,
-   "objective_zh": "",
-   "title_zh": "软困"
+   "objective_zh": "快到年底了。去东府的院子里，找你的丈夫。",
+   "title_zh": "你别瞒我"
   },
   {
    "node": "15-s9",
    "role": "main",
-   "place": "nanxu",
+   "place": "nanxu--wu-hall",
    "spot": "s9",
    "scene": "s9",
-   "title": "Year's End",
-   "objective": "Ride out by the east gate to the riding ground. The year is ending.",
+   "title": "New Year's Day",
+   "objective": "It is New Year's Day. Go to Lady Wu's palace, and ask your mother's leave.",
    "after": [
     "15-s8"
    ],
@@ -1846,18 +1926,17 @@
      160642
     ]
    ],
-   "board": false,
-   "objective_zh": "出东门，到跑马场去。一年快过完了。",
-   "title_zh": "岁末"
+   "objective_zh": "今天是大年初一。去国太府，向母亲辞行。",
+   "title_zh": "正旦"
   },
   {
    "node": "15-s10",
    "role": "main",
-   "place": "nanxu--east-palace",
+   "place": "nanxu--sq-hall",
    "spot": "s10",
    "scene": "s10",
-   "title": "Don't Lie to Me",
-   "objective": "Go to the east palace, to Liu Bei.",
+   "title": "The Jade Inkstone",
+   "objective": "Go to Nanxu.",
    "after": [
     "15-s9"
    ],
@@ -2035,17 +2114,17 @@
     ]
    ],
    "board": false,
-   "objective_zh": "去东府找刘备。",
-   "title_zh": "你别瞒我"
+   "objective_zh": "",
+   "title_zh": "玉砚"
   },
   {
    "node": "15-s11",
    "role": "main",
-   "place": "nanxu--wu-hall",
+   "place": "the-road-to-chaisang",
    "spot": "s11",
    "scene": "s11",
-   "title": "New Year's Day",
-   "objective": "Go to Lady Wu's palace, and ask your mother's leave.",
+   "title": "The Road Block",
+   "objective": "Push on along the road toward the border, ahead of the pursuit.",
    "after": [
     "15-s10"
    ],
@@ -2222,21 +2301,22 @@
      62338
     ]
    ],
-   "objective_zh": "去国太府，向母亲辞行。",
-   "title_zh": "正旦"
+   "board": false,
+   "objective_zh": "沿着大路往边界赶，别让追兵追上。",
+   "title_zh": "山脚拦路"
   },
   {
    "node": "15-s12",
-   "role": "main",
-   "place": "nanxu--sq-hall",
+   "role": "boss",
+   "place": "the-road-to-chaisang",
    "spot": "s12",
    "scene": "s12",
-   "title": "The Jade Inkstone",
-   "objective": "Go to Nanxu.",
+   "title": "Are You in Revolt?",
+   "objective": "Xu Sheng and Ding Feng's men block the road. Stop in front of each rank, facing it, and let them see who is in the carriage.",
    "after": [
     "15-s11"
    ],
-   "grade": "11K",
+   "grade": null,
    "pool": [
     [
      "segoe-tsumego-dictionary-part-2",
@@ -2359,72 +2439,21 @@
      3714
     ]
    ],
-   "pool_easy": [
-    [
-     "specialized-training-in-tesuji-1",
-     210494
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     63781
-    ],
-    [
-     "specialized-training-in-tesuji-4",
-     81205
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     50705
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     62338
-    ],
-    [
-     "go-puzzles-at-a-glance",
-     160646
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     63776
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     103412
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     63801
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     167172
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     63830
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     108058
-    ]
-   ],
-   "board": false,
-   "objective_zh": "",
-   "title_zh": "玉砚"
+   "objective_zh": "徐盛、丁奉的兵马拦住了大路。在每一排人面前停下，面对他们，让他们看清车里坐的是谁。",
+   "title_zh": "你们想造反吗"
   },
   {
    "node": "15-s13",
-   "role": "boss",
+   "role": "main",
    "place": "the-road-to-chaisang",
    "spot": "s13",
    "scene": "s13",
-   "title": "The Road Block",
-   "objective": "Push on along the road, ahead of the pursuit.",
+   "title": "The Rearguard",
+   "objective": "Chen Wu and Pan Zhang's men are on the road. Stop in front of each rank, facing it, and let them see you.",
    "after": [
     "15-s12"
    ],
-   "grade": null,
+   "grade": "11K",
    "pool": [
     [
      "redmond-life-and-death",
@@ -2547,17 +2576,68 @@
      19
     ]
    ],
-   "objective_zh": "沿着大路往前赶，别让追兵追上。",
-   "title_zh": "山脚拦路"
+   "pool_easy": [
+    [
+     "specialized-training-in-tesuji-1",
+     210494
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63781
+    ],
+    [
+     "specialized-training-in-tesuji-4",
+     81205
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     50705
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62338
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160646
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63776
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     103412
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63801
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     167172
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63830
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     108058
+    ]
+   ],
+   "board": false,
+   "objective_zh": "陈武、潘璋的兵马挡在路上。在每一排人面前停下，面对他们，让他们看见你。",
+   "title_zh": "断后"
   },
   {
    "node": "15-s14",
    "role": "main",
-   "place": "the-road-to-chaisang",
+   "place": "liulangpu",
    "spot": "s14",
    "scene": "s14",
-   "title": "The Rearguard",
-   "objective": "Chen Wu and Pan Zhang's men block the road. Stop in front of them, facing them, and let them see you.",
+   "title": "Liulangpu",
+   "objective": "Go on to the river at Liulangpu.",
    "after": [
     "15-s13"
    ],
@@ -2732,194 +2812,6 @@
     [
      "specialized-training-in-tsumego-2",
      103153
-    ]
-   ],
-   "board": false,
-   "objective_zh": "陈武、潘璋的人马挡住了大路。走到他们面前停下，面对着他们，让他们看清你是谁。",
-   "title_zh": "断后"
-  },
-  {
-   "node": "15-s15",
-   "role": "main",
-   "place": "liulangpu",
-   "spot": "s15",
-   "scene": "s15",
-   "title": "Liulangpu",
-   "objective": "Go on to the river at Liulangpu.",
-   "after": [
-    "15-s14"
-   ],
-   "grade": "11K",
-   "pool": [
-    [
-     "the-great-tesuji-encyclopedia-6",
-     47683
-    ],
-    [
-     "ohashi-style-power-up-tsumego-part-2",
-     144370
-    ],
-    [
-     "common-life-and-death-problems",
-     25591
-    ],
-    [
-     "fighting-and-escaping-part-2",
-     5264
-    ],
-    [
-     "specialized-training-in-tsumego-6",
-     62723
-    ],
-    [
-     "specialized-training-in-tesuji-4",
-     81263
-    ],
-    [
-     "the-unexpected-tesuji",
-     107304
-    ],
-    [
-     "common-life-and-death-problems",
-     26026
-    ],
-    [
-     "200-basic-go-problems",
-     176600
-    ],
-    [
-     "compact-go-puzzles-to-learn-the-basics",
-     147465
-    ],
-    [
-     "fighting-and-escaping-part-1",
-     7334
-    ],
-    [
-     "weiqi-life-and-death-1000-problems-part-4",
-     2026
-    ],
-    [
-     "lee-chang-hos-selected-tsumego-part-2",
-     712
-    ],
-    [
-     "nie-weipings-tsumego-encyclopedia",
-     52999
-    ],
-    [
-     "go-puzzles-at-a-glance",
-     28687
-    ],
-    [
-     "lee-chang-hos-selected-tsumego-part-2",
-     715
-    ],
-    [
-     "weiqi-rapid-drill-800-part-3",
-     3466
-    ],
-    [
-     "weiqi-rapid-drill-800-part-4",
-     3685
-    ],
-    [
-     "specialized-training-in-tsumego-6",
-     40506
-    ],
-    [
-     "lee-chang-hos-selected-tsumego-part-1",
-     531
-    ],
-    [
-     "go-seigen-tsumego-collection-part-3",
-     31176
-    ],
-    [
-     "specialized-training-in-tsumego-6",
-     65954
-    ],
-    [
-     "segoe-tsumego-dictionary-part-3",
-     16192
-    ],
-    [
-     "segoe-tsumego-dictionary-part-2",
-     865
-    ],
-    [
-     "ohashi-style-power-up-tsumego-part-1",
-     143429
-    ],
-    [
-     "compact-go-puzzles-to-learn-the-basics",
-     147914
-    ],
-    [
-     "lee-chang-hos-selected-tsumego-part-3",
-     865
-    ],
-    [
-     "the-unexpected-tesuji",
-     111493
-    ],
-    [
-     "the-unexpected-tesuji",
-     25612
-    ],
-    [
-     "weiqi-life-and-death-drills-beginner-part-1",
-     14236
-    ]
-   ],
-   "pool_easy": [
-    [
-     "specialized-training-in-tsumego-4",
-     50644
-    ],
-    [
-     "specialized-training-in-tesuji-3",
-     81338
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     63782
-    ],
-    [
-     "common-life-and-death-problems",
-     8275
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     103153
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     63811
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     103426
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     103427
-    ],
-    [
-     "specialized-training-in-tsumego-2",
-     103417
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     21214
-    ],
-    [
-     "common-life-and-death-problems",
-     12612
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     62335
     ]
    ],
    "board": false,

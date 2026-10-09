@@ -174,10 +174,10 @@
  ],
  "spots": [
   {
-   "id": "s10",
+   "id": "s8",
    "x": 22.5,
    "y": 16.7,
-   "node": "15-s10",
+   "node": "15-s8",
    "label": "The east palace"
   }
  ],
