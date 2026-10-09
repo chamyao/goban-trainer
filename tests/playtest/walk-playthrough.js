@@ -30,6 +30,9 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   const errs = []; p.on('pageerror', e => { errs.push(e.message); console.log('ERR', e.message); });
   await p.route('**/phaser.min.js', r => r.fulfill({ path: path.join(__dirname, 'vendor/phaser.min.js'), contentType: 'application/javascript' }));
   await p.route('**/*.mp3', r => r.fulfill({ status: 404, body: '' }));
+  // UNHIDE=15: a book not yet published (hidden: test mode only) opened in player mode all the same, as it will be once it's live
+  if (process.env.UNHIDE) { const un = process.env.UNHIDE.split(',').map(Number);
+    await p.route(/\/data\/tk\.json/, async r => { const res = await r.fetch(), j = await res.json(); for (const w of j.worlds || []) if (un.includes(w.n)) { delete w.hidden; delete w.draft; } r.fulfill({ response: res, body: JSON.stringify(j), contentType: 'application/json' }); }); }
   const LIVE = !!process.env.PLAYTEST_LIVE;   // player mode: no ?test=1, no Skip key; boards solved as a solve is reported
   const BASE = (process.env.PLAYTEST_URL || 'http://localhost:8765') + '/index.html' + (LIVE ? '' : '?test=1');
   await p.goto(BASE + '#/');
@@ -76,7 +79,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       mounts: (w.cine ? [...new Set(w.children.list.filter(o => o.visible && o.alpha > .1 && o.texture && /^ride-/.test(o.texture.key)).map(o => o.texture.key.split('-')[1]))].map(x => x + ':?')   // in a scene: who is drawn in the saddle
         : (w.mounts || []).filter(m => m.horse && m.horse.visible).map(m => `${m.who}:${m.coat}`)).sort().join(',') || 'on foot', indoors: typeof WorldItems !== 'undefined' && WorldItems.indoors(w),
       horses: (w.followers || []).filter(F => F.coat && F.spr && F.spr.visible).map(F => `${F.coat}@${Math.round(Math.hypot(F.spr.x - w.player.x, F.spr.y - w.player.y))}`).join(','),
-      crouch: !!w.cine && w.children.list.some(o => o.visible && o.texture && /^h-/.test(o.texture.key) && o.scaleY > .69 && o.scaleY < .78), banner: ((d.querySelector('.town-ui .town-place') || {}).textContent || '').trim(), chip: ((d.querySelector('.town-goal .town-lead') || {}).textContent || '').trim(), leadName: typeof tkName === 'function' ? tkName(w.lead) : w.lead, line, who: dlg && !dlg.hidden ? ((dlg.querySelector('.town-who') || {}).textContent || '').trim() : '', scroll: vis('.tk-scroll-go'), duel: !!d.querySelector('.tk-duel svg'), cont: vis('.tk-duel-go'),
+      pouch: (() => { const c = d.querySelector('.tk-pouch'); return c && c.getClientRects().length ? c.textContent.replace(/\s+/g, ' ').trim().slice(0, 60) : ''; })(), crouch: !!w.cine && w.children.list.some(o => o.visible && o.texture && /^h-/.test(o.texture.key) && o.scaleY > .69 && o.scaleY < .78), banner: ((d.querySelector('.town-ui .town-place') || {}).textContent || '').trim(), chip: ((d.querySelector('.town-goal .town-lead') || {}).textContent || '').trim(), leadName: typeof tkName === 'function' ? tkName(w.lead) : w.lead, line, who: dlg && !dlg.hidden ? ((dlg.querySelector('.town-who') || {}).textContent || '').trim() : '', scroll: vis('.tk-scroll-go'), duel: !!d.querySelector('.tk-duel svg'), cont: vis('.tk-duel-go'),
       skip: !!d.querySelector('.tk-duel-keys button') && [...d.querySelectorAll('.tk-duel-keys button')].some(b => /Skip/.test(b.textContent)),
       cleared: TK.world(w.w.n).nodes.filter(n => TK.cleared(n.key)).length, items: JSON.stringify((typeof WorldItems !== 'undefined' && WorldItems.list && WorldItems.list(w.w)) || []),
       cancel: [...d.querySelectorAll('button')].some(b => b.textContent.trim() === 'Cancel' && b.offsetParent),
@@ -181,6 +184,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   let beatLead = '';
   const close = (status, why, s) => { if (!beat) return; if (leadFor[beat] && beatLead && leadFor[beat] !== beatLead) console.log(`     note ${beat}: played by ${beatLead}, but the story's last handoff gave ${leadFor[beat]}`); const r = { beat, status, secs: Math.max(0, Math.round((Date.now() - beatT) / 1000)), place: s && s.place, at: s && s.P, lead: s && s.lead, why: why || '', line: lastLine.slice(0, 120) };
     report.push(r); console.log(`${status === 'pass' ? 'ok  ' : 'FAIL'} ${beat}  ${r.secs}s  ${r.lead || ''} in ${r.place || '?'}${status === 'pass' ? '' : `  at ${r.at}: ${why}${r.line ? ` ("${r.line}")` : ''}`}`); };
+  const cutWait = {}, pouches = [];
   let noWaySince = 0, plannedSteps = null, planT = 0, pace = 3, stealthTries = 0, lastTap = 0, skipped = false, reloads = 0, catches = 0, wasCaught = false; const held = [], recovered = [];
   const featureFails = [], facts = {}, banners = [], chipBad = new Set(), chipSeen = [], shotWho = new Set(), shots = []; let lastPlace = '', arrivedAt = null; const OPTIONAL = !!process.env.OPTIONAL, visited = new Set(), errands = []; let errand = null;
   for (;;) {
@@ -246,6 +250,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       if (!errand && /isn't open yet|还没有开通|barred|不为你开|not open|turns you away|No one goes|receives no one/i.test(s.line)) refused = `refused: "${s.line.slice(0, 90)}"`; }
     if (s.cancel) { await p.getByText('Cancel', { exact: true }).first()[TAPM]().catch(() => {}); continue; }
     if (s.scroll) { await tapEl('.tk-scroll-go'); await p.waitForTimeout(300); continue; }
+    if (s.pouch) { pouches.push(s.pouch); await tapEl('.tk-pouch button'); await p.waitForTimeout(300); continue; }   // a sealed pouch opened (Book 15): its card read, then on
     if (!s.duel) await hook();   // (again after a reload)
     if (SYNC && Date.now() - lastVis > 45000) {   // the tab hidden and shown again (a phone app switch): the game pulls, and reroutes only if something changed
       lastVis = Date.now(); visFlips++;
@@ -340,7 +345,10 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     { const ct = await p.evaluate(() => { const w = window.__w; return w && w.chase && w.chaseNow() ? w.chase.tries : null; });   // the wave got him: taken, no board, the chase again
       if (ct !== null && ct > chaseTries && !s.duel) { chaseLog.push({ beat, overrun: true }); console.log(`     ${beat}: overrun by the wave at ${s.P}; the chase starts again`); }
       if (ct !== null) chaseTries = ct; }
-    if (!s.goal) { close('fail', 'no goal to go to', s); break; }
+    if (!s.goal) {   // a cutaway (Book 15) plays by itself once open, with nowhere to walk: wait for it (up to 30 s with nothing happening)
+      const cut = await p.evaluate(k => { const w = window.__w, n = k && TK.world(w.w.n).nodes.find(x => x.key === k); return n ? (n.cutaway === true ? 'yes' : n.cutaway ? String(n.cutaway) : '') : ''; }, s.next).catch(() => '');
+      if (cut && Date.now() - lastProgress < 30000) { if (!cutWait[s.next]) { cutWait[s.next] = Date.now(); console.log(`     ${s.next}: a cutaway (${cut}), waiting for it to play by itself`); } await p.waitForTimeout(400); continue; }
+      close('fail', cut ? `the cutaway (${cut}) never started in 30 s` : 'no goal to go to', s); break; }
     // a stealth beat here: time the way past the cones, then walk it a cell at a time
     if (s.watchers && !plannedSteps) {   // a steady pace first; the running one if only it has a way
       pace = 4; plannedSteps = await plan(4); if (!plannedSteps) { pace = 3; plannedSteps = await plan(3); }   /* a cell in 200 ms first: 80 px/s, slack on her 110 px/s run for the turns (150 ms is 107 px/s, barely in hand) */
