@@ -583,10 +583,10 @@ body:has(.tk-scroll-wrap) .wukong-toggle, body:has(.tk-scroll-wrap) #wukong { vi
 .tk-duel-dlgrow > .town-dlg { flex: 1; min-width: 0; }
 /* the column only keeps the board clear; the cut-out itself stands in the frame's bottom-left corner, flush with
    its foot (the figure is cut at the waist, so a gap under it read as cut off), as tall as the frame allows and
-   tucked a little behind the board's edge (the user's note) */
+   in front of the board's edge (the user: "bring the portrait in front of the go board"; taps pass through it to the board) */
 .tk-duel-leadcol { flex: 0 0 20%; align-self: stretch; min-width: 0; }
 .tk-duel-lead { position: absolute; left: 0; bottom: 0; height: 94%; max-width: 32%; object-fit: contain; object-position: bottom left;
-  z-index: 0; filter: drop-shadow(0 6px 16px rgba(0, 0, 0, .45)); pointer-events: none; animation: tkPortraitIn .35s ease-out; }
+  z-index: 2; filter: drop-shadow(0 6px 16px rgba(0, 0, 0, .45)); pointer-events: none; animation: tkPortraitIn .35s ease-out; }
 .has-lead > .tk-duel-board, .has-lead > .tk-duel-side { position: relative; z-index: 1; }
 .tk-duel-lead-sm { display: none; }
 .tk-duel-full .tk-duel-leadcol { display: none; }
