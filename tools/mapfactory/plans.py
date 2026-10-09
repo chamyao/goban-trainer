@@ -1511,7 +1511,7 @@ def main():
             if a.png:
                 draw_png(m, d / f"{mid}.png")
         out = {"format": "tk-region/1", "world": a.world, "name": world["name"], "zh": world.get("zh", ""),
-               "start": slug(world.get("start") or world["nodes"][0]["place"]), "party": world.get("party", []), "places": places, "quests": quests}
+               "start": slug(world.get("start") or next((nd for nd in world["nodes"] if not nd.get("cutaway")), world["nodes"][0])["place"]), "party": world.get("party", []), "places": places, "quests": quests}
         (d / "region.json").write_text(json.dumps(out, ensure_ascii=False, indent=1))
         print("wrote", d)
 
