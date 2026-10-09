@@ -727,7 +727,7 @@
   {
    "node": "15-s4",
    "role": "main",
-   "place": "nanxu--wu-hall",
+   "place": "nanxu",
    "spot": "s4",
    "scene": "s4",
    "title": "Whose Daughter?",
@@ -909,14 +909,6 @@
     ]
    ],
    "board": false,
-   "gate": [
-    {
-     "needs": [
-      "mark:news_wu"
-     ],
-     "else": "s4_wait"
-    }
-   ],
    "objective_zh": "在南徐城里把消息传开，带刘备拿着羊和酒去拜见乔国老。让消息传到国太府门口。",
    "title_zh": "女儿是我的"
   },
@@ -2565,7 +2557,7 @@
    "spot": "s14",
    "scene": "s14",
    "title": "The Rearguard",
-   "objective": "The pursuers are on the road. Stop before each one, facing him, and let him see who you are.",
+   "objective": "Chen Wu and Pan Zhang's men block the road. Stop in front of them, facing them, and let them see you.",
    "after": [
     "15-s13"
    ],
@@ -2743,7 +2735,7 @@
     ]
    ],
    "board": false,
-   "objective_zh": "追兵挡在路上。走到每个人面前停下，面对着他，让他看清你是谁。",
+   "objective_zh": "陈武、潘璋的人马挡住了大路。走到他们面前停下，面对着他们，让他们看清你是谁。",
    "title_zh": "断后"
   },
   {

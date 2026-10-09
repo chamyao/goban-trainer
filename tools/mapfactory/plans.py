@@ -49,7 +49,7 @@ SIDE_DRAWN = {"building.wing"}   # drawn in side view when it faces E or W, its 
 TALL = ("building", "tree", "rock", "ruin", "garden", "landmark")   # what a roof or crown rises above
 NPC_KEYS = ("challenge", "intro", "win", "done", "until", "face", "when", "gives", "gives_when", "give", "given", "call",
             "in", "in_beats", "inside", "follower", "blocks", "view", "label", "note",
-            "tell", "home", "told", "yield", "yield_say", "back_to")   # the loud town and the face-down (Lady Sun's marriage)
+            "gossip", "yield")   # the loud town and the face-down (Lady Sun's marriage; tk-feats.js)
 
 
 def slug(name):
@@ -240,7 +240,7 @@ class MapBuilder:
             if kind.startswith("building."):
                 o["door"] = door
                 o["faces"] = t.get("faces") or (door if door in SIDES else "S")
-            for k in ("label", "note", "map", "open_to", "refuse", "gives", "when", "until", "window", "plaque", "news"):
+            for k in ("label", "note", "map", "open_to", "refuse", "gives", "when", "until", "window", "plaque"):
                 if t.get(k) is not None:
                     o[k] = t[k]
             if t.get("doors"):
@@ -436,8 +436,16 @@ class MapBuilder:
                     if self.put(kind, t):
                         n -= 1
         for pr in self.p.get("props", []):
-            extra = {k: pr[k] for k in ("in", "when", "until", "label", "note") if pr.get(k)}
-            if pr.get("along"):
+            extra = {k: pr[k] for k in ("in", "when", "until", "label", "note", "told") if pr.get(k)}
+            if pr.get("at_door") in self.anchor:   # beside a building's door, along its face (red hangings at a house)
+                o_ = next((x for x in self.objects if x.get("id") == pr["at_door"]), {})
+                face = o_.get("enter") or o_.get("door") or "S"
+                ax, ay = self.anchor[pr["at_door"]]
+                px, py = (1, 0) if face in ("N", "S") else (0, 1)
+                for k in (2, -2, 3, -3):
+                    if self.put(pr["kind"], (ax + px * k, ay + py * k), **extra):
+                        break
+            elif pr.get("along"):
                 line = next((l for l in self.p.get("lines", []) if l["id"] == pr["along"]), None)
                 edge = sorted({(tx + dx, ty) for tx, ty in (line["_tiles"] if line else ()) for dx in (-1, 1)} - (line["_tiles"] if line else set()))
                 for t in edge[::2]:
@@ -500,7 +508,7 @@ class MapBuilder:
             else:
                 t = self.near_cell(c, want_visible=False)
             spot = {"id": s["id"], "x": t[0] + .5, "y": t[1] + .7, "node": s.get("node", ""), "label": s.get("label", "")}
-            for k in ("trigger", "note", "on", "sight", "cover"):   # cover: a place to hide (hide and wait)
+            for k in ("trigger", "note", "on", "sight", "cover", "fires"):   # cover: a place to hide; fires: starts itself
                 if s.get(k):
                     spot[k] = s[k]
             self.spots.append(spot)

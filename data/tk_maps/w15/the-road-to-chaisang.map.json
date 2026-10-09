@@ -15,7 +15,8 @@
    "a": "field.wheat",
    ".": "grass",
    "b": "hills",
-   "c": "road"
+   "c": "plain",
+   "d": "road"
   },
   "rows": [
    "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
@@ -34,18 +35,18 @@
    "....................................................................bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb............................................",
    "....................................................................bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb............................................",
    "....................................................................bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb............................................",
-   "................................................................................................................................................................",
-   "................................................................................................................................................................",
-   "................................................................................................................................................................",
-   "................................................................................................................................................................",
-   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
-   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
-   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
-   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
-   "........aaaaaaaaaaaaaaaaaaaaaaaa................................................................................................................................",
-   "........aaaaaaaaaaaaaaaaaaaaaaaa................................................................................................................................",
-   "........aaaaaaaaaaaaaaaaaaaaaaaa................................................................................................................................",
-   "........aaaaaaaaaaaaaaaaaaaaaaaa................................................................................................................................",
+   "....................................................................bbbbbbbbbbbbbbbbbbbbccccbbbbbbbbbbbbbbbbccccbbbb............................................",
+   "....................................................................bbbbbbbbbbbbbbbbbbbbccccbbbbbbbbbbbbbbbbccccbbbb............................................",
+   "....................................................................bbbbbbbbbbbbbbbbbbbbccccbbbbbbbbbbbbbbbbccccbbbb............................................",
+   "....................................................................bbbbbbbbbbbbbbbbbbbbccccbbbbbbbbbbbbbbbbccccbbbb............................................",
+   "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+   "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+   "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+   "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+   "........aaaaaaaaaaaaaaaaaaaaaaaa....................................bbbbbbbbbbbbbbbbbbbbccccbbbbbbbbbbbbbbbbccccbbbb............................................",
+   "........aaaaaaaaaaaaaaaaaaaaaaaa....................................bbbbbbbbbbbbbbbbbbbbccccbbbbbbbbbbbbbbbbccccbbbb............................................",
+   "........aaaaaaaaaaaaaaaaaaaaaaaa....................................bbbbbbbbbbbbbbbbbbbbccccbbbbbbbbbbbbbbbbccccbbbb............................................",
+   "........aaaaaaaaaaaaaaaaaaaaaaaa....................................bbbbbbbbbbbbbbbbbbbbccccbbbbbbbbbbbbbbbbccccbbbb............................................",
    "........aaaaaaaaaaaaaaaaaaaaaaaa....................................bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb............................................",
    "........aaaaaaaaaaaaaaaaaaaaaaaa....................................bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb............................................",
    "........aaaaaaaaaaaaaaaaaaaaaaaa....................................bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb............................................",
@@ -67,6 +68,7 @@
    "field.wheat": true,
    "grass": true,
    "hills": false,
+   "plain": true,
    "road": true
   }
  },
@@ -210,70 +212,7 @@
   },
   {
    "kind": "milestone",
-   "x": 69,
-   "y": 19,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "milestone",
-   "x": 72,
-   "y": 24,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "milestone",
-   "x": 77,
-   "y": 19,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "milestone",
-   "x": 80,
-   "y": 24,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "milestone",
-   "x": 85,
-   "y": 19,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "milestone",
    "x": 88,
-   "y": 24,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "milestone",
-   "x": 93,
-   "y": 19,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "milestone",
-   "x": 96,
-   "y": 24,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "milestone",
-   "x": 101,
-   "y": 19,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "milestone",
-   "x": 104,
    "y": 24,
    "w": 1,
    "h": 1
@@ -282,13 +221,6 @@
    "kind": "milestone",
    "x": 109,
    "y": 19,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "milestone",
-   "x": 112,
-   "y": 24,
    "w": 1,
    "h": 1
   },
@@ -417,7 +349,7 @@
   },
   {
    "id": "s14",
-   "x": 125.5,
+   "x": 141.5,
    "y": 21.7,
    "node": "15-s14",
    "label": "The open road",
@@ -427,93 +359,149 @@
  "npcs": [
   {
    "id": "npc-1",
-   "kind": "folk.soldier",
+   "kind": "folk.official",
    "x": 85.5,
-   "y": 17.9,
+   "y": 21.9,
    "say": [],
-   "in_beats": [
-    "15-s14"
-   ],
-   "yield": true,
-   "yield_say": [
-    "“It's the Lady herself!” He swings down from his horse and stands aside."
-   ],
-   "back_to": "block-start"
+   "until": "15-s14",
+   "when": "node:s13",
+   "label": "Chen Wu",
+   "yield": {
+    "group": "chenwu",
+    "reach": 4,
+    "aside": [
+     4,
+     -4
+    ],
+    "line": [
+     "Chen Wu sees who is in the carriage, swings down from his horse, and stands aside with his hands clasped."
+    ],
+    "caught": [
+     "“Halt! On the Marquis's orders, no one passes!” You fall back."
+    ],
+    "back_to": "block-start"
+   }
   },
   {
    "id": "npc-2",
    "kind": "folk.soldier",
-   "x": 85.5,
+   "x": 86.5,
    "y": 21.9,
    "say": [],
-   "in_beats": [
-    "15-s14"
-   ],
-   "yield": true,
-   "yield_say": [
-    "“Madam, we were only told to bring you back…” He looks at Zhao Yun, and steps aside."
-   ],
-   "back_to": "block-start"
+   "until": "15-s14",
+   "when": "node:s13",
+   "yield": {
+    "group": "chenwu",
+    "reach": 4,
+    "aside": [
+     4,
+     4
+    ],
+    "line": [
+     "“It's the Lady herself!” He backs his horse off the road."
+    ],
+    "caught": [
+     "“Halt! On the Marquis's orders, no one passes!” You fall back."
+    ],
+    "back_to": "block-start"
+   }
   },
   {
    "id": "npc-3",
    "kind": "folk.soldier",
    "x": 85.5,
-   "y": 25.9,
+   "y": 22.9,
    "say": [],
-   "in_beats": [
-    "15-s14"
-   ],
-   "yield": true,
-   "yield_say": [
-    "“Dismount! It's the Marquis's sister!” He backs his horse off the road."
-   ],
-   "back_to": "block-start"
+   "until": "15-s14",
+   "when": "node:s13",
+   "yield": {
+    "group": "chenwu",
+    "reach": 4,
+    "aside": [
+     6,
+     -4
+    ],
+    "line": [
+     "“Not our quarrel, madam.” He leads his horse aside."
+    ],
+    "caught": [
+     "“Halt! On the Marquis's orders, no one passes!” You fall back."
+    ],
+    "back_to": "block-start"
+   }
   },
   {
    "id": "npc-4",
-   "kind": "folk.soldier",
+   "kind": "folk.official",
    "x": 105.5,
-   "y": 17.9,
+   "y": 21.9,
    "say": [],
-   "in_beats": [
-    "15-s14"
-   ],
-   "yield": true,
-   "yield_say": [
-    "“Chen Wu said nothing about facing her!” He lowers his spear and gets out of the way."
-   ],
-   "back_to": "block-start"
+   "until": "15-s14",
+   "when": "node:s13",
+   "label": "Pan Zhang",
+   "yield": {
+    "group": "panzhang",
+    "reach": 4,
+    "aside": [
+     4,
+     -4
+    ],
+    "line": [
+     "Pan Zhang looks at Zhao Yun, then at the Lady, and dismounts. “Madam.”"
+    ],
+    "caught": [
+     "“Stop the carriage!” The spears come down, and you fall back."
+    ],
+    "back_to": "block-start"
+   }
   },
   {
    "id": "npc-5",
    "kind": "folk.soldier",
-   "x": 105.5,
+   "x": 106.5,
    "y": 21.9,
    "say": [],
-   "in_beats": [
-    "15-s14"
-   ],
-   "yield": true,
-   "yield_say": [
-    "“Pan Zhang can argue with her himself.” He reins his horse round and off the road."
-   ],
-   "back_to": "block-start"
+   "until": "15-s14",
+   "when": "node:s13",
+   "yield": {
+    "group": "panzhang",
+    "reach": 4,
+    "aside": [
+     4,
+     4
+    ],
+    "line": [
+     "“Pan Zhang can argue with her himself.” He reins his horse off the road."
+    ],
+    "caught": [
+     "“Stop the carriage!” The spears come down, and you fall back."
+    ],
+    "back_to": "block-start"
+   }
   },
   {
    "id": "npc-6",
    "kind": "folk.soldier",
    "x": 105.5,
-   "y": 25.9,
+   "y": 22.9,
    "say": [],
-   "in_beats": [
-    "15-s14"
-   ],
-   "yield": true,
-   "yield_say": [
-    "“Not our quarrel, madam. Not our quarrel.” He leads his horse into the ditch."
-   ],
-   "back_to": "block-start"
+   "until": "15-s14",
+   "when": "node:s13",
+   "yield": {
+    "group": "panzhang",
+    "reach": 4,
+    "aside": [
+     6,
+     4
+    ],
+    "line": [
+     "He lowers his spear and gets out of the way."
+    ],
+    "caught": [
+     "“Stop the carriage!” The spears come down, and you fall back."
+    ],
+    "back_to": "block-start"
+   }
   }
  ],
  "exits": [

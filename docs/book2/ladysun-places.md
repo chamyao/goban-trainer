@@ -6,7 +6,7 @@ line (labels, goals, townsfolk) is plain modern Mandarin in simplified character
 
     python3 tools/check_plans_w2.py --arc ls --png        # 13 plans, 0 errors; every beat s1–s15 has its spot
     python3 tools/mapfactory build --world 15 --plans ls  # with Plot's WORLD2_LS (claude/plot ddbfd87c)
-    python3 tools/proofs/ladysun_ls.py                    # the temple corridors, the face-down, the loud town
+    python3 tools/proofs/ladysun_ls.py                    # the temple corridors, the face-down, the loud town (engine syntax)
 
 The arc is Book 15 (`ARCS[15] = "ls"`, beat keys `4-s1` … `4-s15`). Built with Plot's story, all 14 maps compile in all
 three kits and pass the door checks, and all 15 scenes are staged.
@@ -24,18 +24,25 @@ Sun Quan's walled city on the south bank. Its west gate opens onto the road to C
 ground and the road up to Sweet Dew Temple.
 - **The dock** (spot `dock`, where s2's handoff lands) is outside the river gate, with a jetty and two boats from
   Jingzhou. s3 is by it.
-- **The loud town (s3 → s4).**
-  - 12 houses, the wine shop and the notice board at the crossroads carry `"news": true`: red hangings go up at a house
-    once the news reaches it.
-  - 12 townsfolk carry `"tell": true` and a `"home"`. Each has a line before and a line once told (`"told"`).
-  - The news has to reach **Lady Wu's gate** (spot `wu-gate`). Her palace door is `open_to: mark:news_wu`, and before
-    that it refuses with Plot's line: "Lady Wu's gate is quiet. The news hasn't reached her yet."
-  - Proved: going house to house, each step no more than 20 tiles of walking, the news gets from the dock to her gate
-    (dock → h1 → h2 → h3 → the wine shop → the notice board → h4 → h5 → the gate).
-  - For the errand: spots `lamb` (the mutton seller in the market), `wine` (the wine shop's door) and `qiao-gate`
-    (Qiao Guolao's gate).
+- **The loud town (s3 → s4)**, in the engine's syntax (`tk-feats.js`):
+  - Gossips carry `"gossip": {"tells": [...], "in_beats": ["s4"]}`. They're open while s4 is: `available()` is "not
+    done", so `["s3"]` would shut them the moment the pouch is opened.
+  - There are three chains:
+    - from the dock: g-dock → h1 → h2 → h3;
+    - from the market: g-market → h4 → h5;
+    - from **Qiao Guolao's gate**: g-qiao → h6 → h7 / h9 → h10 → h11 → h12 → Lady Wu's gatekeeper. His household
+      takes the news to her, as in the novel.
+  - Plain townsfolk stand in between and don't pass it on.
+  - The gatekeeper (`wu-gatekeeper`) has no gossip of his own, so he can't be told directly; he hears it from h12.
+  - s4's spot is at Lady Wu's gate, with `"fires": "told:wu-gatekeeper"`. Her palace door is
+    `open_to: told:wu-gatekeeper`, and before that it refuses with Plot's line.
+  - Each of the 12 houses has red hangings at its door (`banner.red`, `"told": "g-h<n>"`), shown once its resident knows.
+  - Proved: every gossip can be walked to from the dock, and every telling that reaches the gatekeeper is on the chain
+    from Qiao Guolao's gate.
+  - Spots for the errand: `lamb` (the mutton seller), `wine` (the wine shop's door), `qiao-gate`.
 - **Rooms:**
-  - Lady Wu's hall (`wu-hall`: s4, s11). Sun Quan comes in from the door 20 tiles east of s4.
+  - Lady Wu's hall (`wu-hall`: s11). s4's spot is at her gate in Nanxu (it fires there), so s4 is staged in front of
+    the gate unless the engine takes it inside.
   - Sun Quan's hall (`sq-hall`: s8, s12).
   - The east palace (`east-palace`: s10), a walled court with the bridal room (`bridal-room`: s7) on its west side and
     the maids' quarters on its east.
@@ -60,16 +67,13 @@ A walled temple on a hill above the river.
 ## The road to Chaisang (s13, s14)
 The road under the hills from Nanxu (west) to Liulangpu (east).
 - **s13:** Xu Sheng and Ding Feng block the mouth of a defile, ahead (east) of s13's spot.
-- **The face-down (s13 → s14):** past the block, the road narrows between the hills. Two ranks of three men (Chen Wu's,
-  then Pan Zhang's) stand across it with `"yield": true`, `"in_beats": ["4-s14"]`, a line each (`"yield_say"`), and
-  `"back_to": "block-start"` (the spot where the block stood).
-  - Proved: no way gets past either rank without coming within 3 tiles of one of its men.
-- **s14:** open road beyond the ranks, with room ahead (east) for the four generals.
-
-Note for Plot:
-- At s13, the block is staged ahead of the spot (+16, +22): the way she's going.
-- At s14, the four generals are staged ahead too (+12, +18), though in the text Chen Wu and Pan Zhang come up from
-  behind. On this map, behind is west (−x). If you want them behind her, flip s14's offsets.
+- **The face-down (s13 → s14):** past the block, the road narrows to one cell between the hills.
+  - Two ranks stand across it, with `"yield": {"group", "reach": 4, "aside", "line", "caught", "back_to": "block-start"}`,
+    from s13 until s14: Chen Wu and two men, then Pan Zhang and two men.
+  - Each man steps aside into a pocket just beyond his rank, which can only be reached past the rank.
+  - Proved, at the engine's catch (moving within 1.4 tiles of a man who hasn't yielded): no way past either rank
+    without coming that close, and every man's step aside lands on open ground off the road.
+- **s14** is on the open road beyond the narrows. The generals come up behind her (west), as Plot now stages them.
 
 ## Liulangpu (s15)
 A riverbank with no ferry. The river starts 6 tiles below the spot, so the scene's boats (−10, +6) are on the water,
@@ -77,12 +81,10 @@ and Zhuge Liang (−10, +4) is on the bank's edge. Zhou Yu's fleet comes along t
 a valley in the hills to the north-east (+14, −6).
 
 ## For Integration
-1. **The loud town:** houses `"news": true`. Townsfolk `"tell": true`, `"home": <house id>` and `"told": [lines]`.
-   Spot `wu-gate` sets `mark:news_wu`. The palace door is `open_to: mark:news_wu`. Spots for the errand: `lamb`, `wine`,
-   `qiao-gate`.
-2. **The face-down:** npcs with `"yield": true`, `"yield_say"` and `"back_to": "block-start"`, active in s14. The proof
-   assumes a catch within 3 tiles of a man not yet faced down.
-3. **Snow:** state weather `"snow"` (Nanxu's `winter`).
+- The data is in your `tk-feats.js` syntax: `gossip`, `told` props, the s4 spot's `fires`, and `yield`.
+- `in_beats` is `["s4"]`, the window between s3 (done at the dock) and s4.
+- The yielders' `line` and `caught` lines are written like `say` lines (`["n", en, zh, id]`). `build_tk.py` doesn't
+  collect them for voicing yet.
 
 ## New kinds
 These are in `NEW_KINDS` and `vocab.py`, each with a stand-in and a brief (`ART`):

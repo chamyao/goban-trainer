@@ -363,9 +363,11 @@
    "label": "Lady Wu's palace",
    "map": "wu-hall",
    "open_to": [
-    "mark:news_wu"
+    "told:wu-gatekeeper"
    ],
-   "refuse": "Lady Wu's gate is quiet. The news hasn't reached her yet.",
+   "refuse": [
+    "Lady Wu's gate is quiet. The news hasn't reached her yet."
+   ],
    "plaque": "国太府",
    "blocks_sight": true
   },
@@ -410,7 +412,6 @@
    "door": "S",
    "faces": "S",
    "label": "The wine shop",
-   "news": true,
    "blocks_sight": true
   },
   {
@@ -420,8 +421,7 @@
    "w": 2,
    "h": 1,
    "id": "notice",
-   "label": "A notice board",
-   "news": true
+   "label": "A notice board"
   },
   {
    "kind": "building.house",
@@ -432,7 +432,6 @@
    "id": "h1",
    "door": "E",
    "faces": "E",
-   "news": true,
    "blocks_sight": true
   },
   {
@@ -444,7 +443,6 @@
    "id": "h2",
    "door": "E",
    "faces": "E",
-   "news": true,
    "blocks_sight": true
   },
   {
@@ -456,7 +454,6 @@
    "id": "h3",
    "door": "N",
    "faces": "N",
-   "news": true,
    "blocks_sight": true
   },
   {
@@ -468,7 +465,6 @@
    "id": "h4",
    "door": "N",
    "faces": "N",
-   "news": true,
    "blocks_sight": true
   },
   {
@@ -480,7 +476,6 @@
    "id": "h5",
    "door": "N",
    "faces": "N",
-   "news": true,
    "blocks_sight": true
   },
   {
@@ -492,7 +487,6 @@
    "id": "h6",
    "door": "N",
    "faces": "N",
-   "news": true,
    "blocks_sight": true
   },
   {
@@ -504,7 +498,6 @@
    "id": "h7",
    "door": "N",
    "faces": "N",
-   "news": true,
    "blocks_sight": true
   },
   {
@@ -516,7 +509,6 @@
    "id": "h8",
    "door": "N",
    "faces": "N",
-   "news": true,
    "blocks_sight": true
   },
   {
@@ -528,7 +520,6 @@
    "id": "h9",
    "door": "N",
    "faces": "N",
-   "news": true,
    "blocks_sight": true
   },
   {
@@ -540,7 +531,6 @@
    "id": "h10",
    "door": "N",
    "faces": "N",
-   "news": true,
    "blocks_sight": true
   },
   {
@@ -552,7 +542,6 @@
    "id": "h11",
    "door": "N",
    "faces": "N",
-   "news": true,
    "blocks_sight": true
   },
   {
@@ -564,7 +553,6 @@
    "id": "h12",
    "door": "N",
    "faces": "N",
-   "news": true,
    "blocks_sight": true
   },
   {
@@ -860,6 +848,102 @@
    "y": 49,
    "w": 1,
    "h": 1
+  },
+  {
+   "kind": "banner.red",
+   "x": 23,
+   "y": 18,
+   "w": 1,
+   "h": 1,
+   "told": "g-h1"
+  },
+  {
+   "kind": "banner.red",
+   "x": 23,
+   "y": 30,
+   "w": 1,
+   "h": 1,
+   "told": "g-h2"
+  },
+  {
+   "kind": "banner.red",
+   "x": 34,
+   "y": 24,
+   "w": 1,
+   "h": 1,
+   "told": "g-h3"
+  },
+  {
+   "kind": "banner.red",
+   "x": 62,
+   "y": 24,
+   "w": 1,
+   "h": 1,
+   "told": "g-h4"
+  },
+  {
+   "kind": "banner.red",
+   "x": 74,
+   "y": 24,
+   "w": 1,
+   "h": 1,
+   "told": "g-h5"
+  },
+  {
+   "kind": "banner.red",
+   "x": 34,
+   "y": 40,
+   "w": 1,
+   "h": 1,
+   "told": "g-h6"
+  },
+  {
+   "kind": "banner.red",
+   "x": 46,
+   "y": 40,
+   "w": 1,
+   "h": 1,
+   "told": "g-h7"
+  },
+  {
+   "kind": "banner.red",
+   "x": 18,
+   "y": 56,
+   "w": 1,
+   "h": 1,
+   "told": "g-h8"
+  },
+  {
+   "kind": "banner.red",
+   "x": 34,
+   "y": 56,
+   "w": 1,
+   "h": 1,
+   "told": "g-h9"
+  },
+  {
+   "kind": "banner.red",
+   "x": 46,
+   "y": 56,
+   "w": 1,
+   "h": 1,
+   "told": "g-h10"
+  },
+  {
+   "kind": "banner.red",
+   "x": 66,
+   "y": 56,
+   "w": 1,
+   "h": 1,
+   "told": "g-h11"
+  },
+  {
+   "kind": "banner.red",
+   "x": 78,
+   "y": 56,
+   "w": 1,
+   "h": 1,
+   "told": "g-h12"
   }
  ],
  "spots": [
@@ -903,12 +987,12 @@
    "label": "Qiao Guolao's gate"
   },
   {
-   "id": "wu-gate",
+   "id": "s4",
    "x": 70.5,
    "y": 39.7,
-   "node": "",
+   "node": "15-s4",
    "label": "Lady Wu's gate",
-   "note": "the news must reach here (mark news_wu)"
+   "fires": "told:wu-gatekeeper"
   },
   {
    "id": "s9",
@@ -921,189 +1005,378 @@
  ],
  "npcs": [
   {
-   "id": "npc-1",
-   "kind": "folk.villager",
-   "x": 17.5,
-   "y": 21.9,
-   "say": [
-    "“Boats from upriver, flying red? What's all that about?”"
-   ],
-   "in": [
-    "news"
-   ],
-   "tell": true,
-   "home": "h1",
-   "told": "“Liu Bei, come to marry into Wu! I'll tell the neighbours.”"
-  },
-  {
-   "id": "npc-2",
-   "kind": "folk.elder",
-   "x": 22.5,
-   "y": 33.9,
-   "say": [
-    "“Men in red buying up every sheep in the market. Whose wedding is it?”"
-   ],
-   "in": [
-    "news"
-   ],
-   "tell": true,
-   "home": "h2",
-   "told": "“The Marquis's sister! Married to Liu Bei! Well, well.”"
-  },
-  {
-   "id": "npc-3",
-   "kind": "folk.villager",
-   "x": 33.5,
-   "y": 21.9,
-   "say": [
-    "“My wife says the butchers have sold out by noon.”"
-   ],
-   "in": [
-    "news"
-   ],
-   "tell": true,
-   "home": "h3",
-   "told": "“Liu Bei's come to be the Marquis's brother-in-law? Wait till the street hears this.”"
-  },
-  {
-   "id": "npc-4",
+   "id": "g-dock",
    "kind": "folk.porter",
-   "x": 61.5,
-   "y": 21.9,
+   "x": 29.5,
+   "y": 5.9,
    "say": [
-    "“Five hundred soldiers in red, and not one of them fighting. Odd times.”"
+    "“Liu Bei, come to marry into Wu! I'll tell the neighbours.”"
    ],
    "in": [
     "news"
    ],
-   "tell": true,
-   "home": "h4",
-   "told": "“A wedding, then! I'll pass it along.”"
+   "gossip": {
+    "tells": [
+     "g-h1"
+    ],
+    "in_beats": [
+     "s4"
+    ]
+   }
   },
   {
-   "id": "npc-5",
+   "id": "g-h1",
    "kind": "folk.villager",
+   "x": 25.5,
+   "y": 13.9,
+   "say": [
+    "“The Marquis's sister! Married to Liu Bei! Well, well.”"
+   ],
+   "in": [
+    "news"
+   ],
+   "gossip": {
+    "tells": [
+     "g-h2"
+    ],
+    "in_beats": [
+     "s4"
+    ]
+   }
+  },
+  {
+   "id": "g-h2",
+   "kind": "folk.elder",
+   "x": 25.5,
+   "y": 29.9,
+   "say": [
+    "“Liu Bei's come to be the Marquis's brother-in-law? Wait till the street hears this.”"
+   ],
+   "in": [
+    "news"
+   ],
+   "gossip": {
+    "tells": [
+     "g-h3"
+    ],
+    "in_beats": [
+     "s4"
+    ]
+   }
+  },
+  {
+   "id": "g-h3",
+   "kind": "folk.villager",
+   "x": 29.5,
+   "y": 21.9,
+   "say": [
+    "“A wedding, then! I'll pass it along.”"
+   ],
+   "in": [
+    "news"
+   ],
+   "gossip": {
+    "tells": [],
+    "in_beats": [
+     "s4"
+    ]
+   }
+  },
+  {
+   "id": "g-market",
+   "kind": "folk.porter",
+   "x": 45.5,
+   "y": 25.9,
+   "say": [
+    "“Five hundred men in red, buying for Liu Bei's wedding? I'll tell the street.”"
+   ],
+   "in": [
+    "news"
+   ],
+   "gossip": {
+    "tells": [
+     "g-h4"
+    ],
+    "in_beats": [
+     "s4"
+    ]
+   }
+  },
+  {
+   "id": "g-h4",
+   "kind": "folk.villager",
+   "x": 57.5,
+   "y": 21.9,
+   "say": [
+    "“Liu Bei! The whole city will know by evening.”"
+   ],
+   "in": [
+    "news"
+   ],
+   "gossip": {
+    "tells": [
+     "g-h5"
+    ],
+    "in_beats": [
+     "s4"
+    ]
+   }
+  },
+  {
+   "id": "g-h5",
+   "kind": "folk.elder",
    "x": 73.5,
    "y": 21.9,
    "say": [
-    "“They're hanging red cloth by the east palace. For whom?”"
+    "“A marriage. Somebody should tell the Dowager. Surely she knows.”"
    ],
    "in": [
     "news"
    ],
-   "tell": true,
-   "home": "h5",
-   "told": "“Liu Bei! The whole city will know by evening.”"
+   "gossip": {
+    "tells": [],
+    "in_beats": [
+     "s4"
+    ]
+   }
   },
   {
-   "id": "npc-6",
-   "kind": "folk.elder",
-   "x": 33.5,
+   "id": "g-qiao",
+   "kind": "folk.official",
+   "x": 21.5,
    "y": 37.9,
    "say": [
-    "“Liu Bei of Jingzhou, here? Then something's afoot.”"
+    "“A lamb and wine from Liu Bei, for my master? Then it's true. My master will want the Dowager to hear it from him.”"
    ],
    "in": [
     "news"
    ],
-   "tell": true,
-   "home": "h6",
-   "told": "“A marriage. Somebody should tell the Dowager. Surely she knows.”"
+   "gossip": {
+    "tells": [
+     "g-h6"
+    ],
+    "in_beats": [
+     "s4"
+    ]
+   }
   },
   {
-   "id": "npc-7",
+   "id": "g-h6",
    "kind": "folk.villager",
-   "x": 45.5,
+   "x": 29.5,
    "y": 37.9,
    "say": [
-    "“Qiao Guolao's had a visitor. With a lamb, and wine.”"
+    "“Married to the Marquis's sister! I'll go and tell my cousin by the palace.”"
    ],
    "in": [
     "news"
    ],
-   "tell": true,
-   "home": "h7",
-   "told": "“Married to the Marquis's sister! I'll go and tell my cousin by the palace.”"
+   "gossip": {
+    "tells": [
+     "g-h7",
+     "g-h9"
+    ],
+    "in_beats": [
+     "s4"
+    ]
+   }
   },
   {
-   "id": "npc-8",
+   "id": "g-h7",
    "kind": "folk.porter",
-   "x": 17.5,
-   "y": 51.9,
+   "x": 41.5,
+   "y": 37.9,
    "say": [
-    "“The red-coats bought my whole cart of wine.”"
+    "“A royal wedding! No wonder they paid in silver.”"
    ],
    "in": [
     "news"
    ],
-   "tell": true,
-   "home": "h8",
-   "told": "“A royal wedding! No wonder they paid in silver.”"
+   "gossip": {
+    "tells": [
+     "g-h10"
+    ],
+    "in_beats": [
+     "s4"
+    ]
+   }
   },
   {
-   "id": "npc-9",
+   "id": "g-h9",
    "kind": "folk.villager",
-   "x": 33.5,
-   "y": 49.9,
+   "x": 29.5,
+   "y": 53.9,
    "say": [
-    "“Nobody tells the back streets anything.”"
+    "“Liu Bei and the Marquis's sister? Who'd have thought.”"
    ],
    "in": [
     "news"
    ],
-   "tell": true,
-   "home": "h9",
-   "told": "“Liu Bei and the Marquis's sister? Who'd have thought.”"
+   "gossip": {
+    "tells": [
+     "g-h8"
+    ],
+    "in_beats": [
+     "s4"
+    ]
+   }
   },
   {
-   "id": "npc-10",
+   "id": "g-h8",
+   "kind": "folk.porter",
+   "x": 13.5,
+   "y": 53.9,
+   "say": [
+    "“Nobody tells the back streets anything. A wedding, you say?”"
+   ],
+   "in": [
+    "news"
+   ],
+   "gossip": {
+    "tells": [],
+    "in_beats": [
+     "s4"
+    ]
+   }
+  },
+  {
+   "id": "g-h10",
    "kind": "folk.elder",
-   "x": 45.5,
+   "x": 41.5,
+   "y": 53.9,
+   "say": [
+    "“Then she doesn't know? Somebody ought to tell her.”"
+   ],
+   "in": [
+    "news"
+   ],
+   "gossip": {
+    "tells": [
+     "g-h11"
+    ],
+    "in_beats": [
+     "s4"
+    ]
+   }
+  },
+  {
+   "id": "g-h11",
+   "kind": "folk.villager",
+   "x": 61.5,
+   "y": 53.9,
+   "say": [
+    "“A wedding for her own daughter, and she hasn't heard? I'll go round to the gate.”"
+   ],
+   "in": [
+    "news"
+   ],
+   "gossip": {
+    "tells": [
+     "g-h12"
+    ],
+    "in_beats": [
+     "s4"
+    ]
+   }
+  },
+  {
+   "id": "g-h12",
+   "kind": "folk.porter",
+   "x": 73.5,
+   "y": 53.9,
+   "say": [
+    "“A wedding! I'm going to tell the palace guards.”"
+   ],
+   "in": [
+    "news"
+   ],
+   "gossip": {
+    "tells": [
+     "wu-gatekeeper"
+    ],
+    "in_beats": [
+     "s4"
+    ]
+   }
+  },
+  {
+   "id": "wu-gatekeeper",
+   "kind": "folk.soldier",
+   "x": 65.5,
+   "y": 37.9,
+   "say": [
+    "“The Dowager is at her prayers. Nothing's been said here about any wedding.”"
+   ],
+   "in": [
+    "arrival",
+    "news"
+   ]
+  },
+  {
+   "id": "npc-17",
+   "kind": "folk.villager",
+   "x": 49.5,
+   "y": 37.9,
+   "say": [
+    "“Red cloth everywhere today. Is it a festival?”"
+   ],
+   "in": [
+    "news"
+   ]
+  },
+  {
+   "id": "npc-18",
+   "kind": "folk.elder",
+   "x": 53.5,
    "y": 49.9,
    "say": [
     "“The palace is quiet today. The Dowager's at her prayers.”"
    ],
    "in": [
     "news"
-   ],
-   "tell": true,
-   "home": "h10",
-   "told": "“Then she doesn't know? Somebody ought to tell her.”"
+   ]
   },
   {
-   "id": "npc-11",
+   "id": "npc-19",
    "kind": "folk.villager",
-   "x": 65.5,
-   "y": 53.9,
+   "x": 37.5,
+   "y": 5.9,
+   "say": [
+    "“Boats from upriver, flying red? What's all that about?”"
+   ],
+   "in": [
+    "arrival",
+    "news"
+   ]
+  },
+  {
+   "id": "npc-20",
+   "kind": "folk.villager",
+   "x": 49.5,
+   "y": 21.9,
+   "say": [
+    "“My wife says the butchers have sold out by noon.”"
+   ],
+   "in": [
+    "news"
+   ]
+  },
+  {
+   "id": "npc-21",
+   "kind": "folk.woman",
+   "x": 77.5,
+   "y": 37.9,
    "say": [
     "“I serve in the Dowager's kitchens. Nothing's been said there.”"
    ],
    "in": [
     "news"
-   ],
-   "tell": true,
-   "home": "h11",
-   "told": "“A wedding for her own daughter, and she hasn't heard? I'll go round to the gate.”"
+   ]
   },
   {
-   "id": "npc-12",
-   "kind": "folk.porter",
-   "x": 77.5,
-   "y": 53.9,
-   "say": [
-    "“Red cloth everywhere today. Is it a festival?”"
-   ],
-   "in": [
-    "news"
-   ],
-   "tell": true,
-   "home": "h12",
-   "told": "“A wedding! I'm going to tell the palace guards.”"
-  },
-  {
-   "id": "npc-13",
+   "id": "npc-22",
    "kind": "folk.villager",
-   "x": 49.5,
+   "x": 50.5,
    "y": 37.9,
    "say": [
     "“Red lanterns on every street. The Marquis's sister is married, and the whole city's had a feast.”"
@@ -1113,7 +1386,7 @@
    ]
   },
   {
-   "id": "npc-14",
+   "id": "npc-23",
    "kind": "folk.soldier",
    "x": 81.5,
    "y": 37.9,
@@ -1126,7 +1399,7 @@
    ]
   },
   {
-   "id": "npc-15",
+   "id": "npc-24",
    "kind": "folk.elder",
    "x": 49.5,
    "y": 49.9,
@@ -1166,9 +1439,11 @@
    "h": 0.75,
    "door": true,
    "open_to": [
-    "mark:news_wu"
+    "told:wu-gatekeeper"
    ],
-   "refuse": "Lady Wu's gate is quiet. The news hasn't reached her yet."
+   "refuse": [
+    "Lady Wu's gate is quiet. The news hasn't reached her yet."
+   ]
   },
   {
    "to": "the-road-to-chaisang",

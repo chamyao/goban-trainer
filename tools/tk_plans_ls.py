@@ -9,16 +9,15 @@ Mandarin in simplified characters (the user: "write this book's language in mode
 The places, in the story's order: Chaisang (a cutaway only) -> Jingzhou -> Nanxu (the loud town) -> Sweet Dew Temple
 -> Nanxu again (the wedding, the winter, the flight) -> the road to Chaisang (the road block, the face-down) -> Liulangpu.
 
-New in these plans, for the book's two map mechanics (Integration builds them in tk-world):
-  the loud town (Nanxu):
-    thing "news": true            a house the news can reach: red hangings go up at its door once it knows
-    npc "tell": true, "home": id  a townsperson who can be told; told, they take the news to the next house
-    npc "told": [lines]           what they say once they know
-    the palace gate's spot "wu-gate" is where the news has to arrive (mark news_wu)
-  the face-down (the road to Chaisang):
-    npc "yield": true             stands across the road; she stops in front of them, facing them, and they give way
-    npc "yield_say": [lines]      what each says as they dismount
-    npc "back_to": spot           pushing past without stopping sends her back there
+The book's two map mechanics, in the engine's syntax (tk-feats.js, Integration):
+  the loud town (Nanxu, while s4 is open):
+    npc "gossip": {"tells": [ids], "in_beats": ["s4"]}   told (talked to), they walk to each neighbour named and tell them
+    prop "told": id                                        red hangings at a house door, shown once that person knows
+    spot "fires": "told:<id>"                              its beat starts by itself once the news reaches them
+  the face-down (the road to Chaisang, after s13):
+    npc "yield": {"group", "reach" (tiles), "aside" [dx, dy] (tiles), "line", "caught", "back_to": spot}
+        standing still and facing them within reach, they step aside one by one; moving within 1.4 tiles of one who
+        hasn't is a catch, back to back_to
 """
 from tk_plans_w2 import ART as ART2, LINE_KINDS, NEW_KINDS as NEW_KINDS2, ZONE_KINDS, room
 
@@ -43,14 +42,15 @@ def _talk(kind, at, say, **kw):
     return {"kind": kind, "at": at, "say": say, **kw}
 
 
-def _tell(kind, at, home, say, told, **kw):
-    """A townsperson of the loud town: before the news, and once told."""
-    return {"kind": kind, "at": at, "say": say, "tell": True, "home": home, "told": told, **kw}
+def _gossip(gid, kind, at, say, tells, **kw):
+    """A townsperson of the loud town: told, they say so, and take the news to each neighbour in "tells"."""
+    return {"id": gid, "kind": kind, "at": at, "say": say, "gossip": {"tells": tells, "in_beats": ["s4"]}, "in": ["news"], **kw}
 
 
-def _yield(kind, at, say, back_to="block-start", **kw):
-    """One of the pursuers across the road: faced down, they dismount and give way."""
-    return {"kind": kind, "at": at, "say": [], "yield": True, "yield_say": say, "back_to": back_to, **kw}
+def _yield(kind, at, group, aside, line, caught, **kw):
+    """One of the pursuers across the narrow road: faced down, he steps aside (into the pocket beyond his rank)."""
+    return {"kind": kind, "at": at, "say": [], "when": "node:s13", "until": "node:s14",
+            "yield": {"group": group, "reach": 4, "aside": aside, "line": [line], "caught": [caught], "back_to": "block-start"}, **kw}
 
 
 PLANS_LS = {
@@ -178,28 +178,28 @@ PLANS_LS = {
                  "map": "east-palace", "plaque": "东府"},
                 # Lady Wu's palace, south of the main street: shut to the news until it arrives (s4), open after
                 {"id": "wufu", "kind": "building.palace", "rect": [15, 10, 5, 3], "door": "N", "label": "Lady Wu's palace",
-                 "map": "wu-hall", "plaque": "国太府", "open_to": ["mark:news_wu"],
-                 "refuse": "Lady Wu's gate is quiet. The news hasn't reached her yet."},
+                 "map": "wu-hall", "plaque": "国太府", "open_to": ["told:wu-gatekeeper"],
+                 "refuse": ["Lady Wu's gate is quiet. The news hasn't reached her yet."]},
                 {"id": "qiao", "kind": "building.compound", "rect": [3, 10, 3, 3], "door": "N", "label": "Qiao Guolao's house",
                  "plaque": "乔府"},
                 # the market: the men in red buy sheep and wine here
                 {"id": "stalls", "kind": "market.stalls", "rect": [9, 6, 2, 1], "label": "A mutton seller"},
-                {"id": "wineshop", "kind": "building.shop", "rect": [10, 7, 2, 1], "door": "S", "label": "The wine shop", "news": True},
+                {"id": "wineshop", "kind": "building.shop", "rect": [10, 7, 2, 1], "door": "S", "label": "The wine shop"},
                 # the notice board at the crossroads: the wedding is posted there, and the news crosses the palace street
-                {"id": "notice", "kind": "landmark.notice", "rect": [12, 8, 1, 1], "label": "A notice board", "news": True},
+                {"id": "notice", "kind": "landmark.notice", "rect": [12, 8, 1, 1], "label": "A notice board"},
                 # the houses the news goes round (each hangs out red once it knows)
-                {"id": "h1", "kind": "building.house", "rect": [4, 3, 2, 2], "door": "E", "news": True},
-                {"id": "h2", "kind": "building.house", "rect": [4, 6, 2, 2], "door": "E", "news": True},
-                {"id": "h3", "kind": "building.house", "rect": [7, 6, 2, 2], "door": "N", "news": True},
-                {"id": "h4", "kind": "building.house", "rect": [14, 6, 2, 2], "door": "N", "news": True},
-                {"id": "h5", "kind": "building.house", "rect": [17, 6, 2, 2], "door": "N", "news": True},
-                {"id": "h6", "kind": "building.house", "rect": [7, 10, 2, 2], "door": "N", "news": True},
-                {"id": "h7", "kind": "building.house", "rect": [10, 10, 2, 2], "door": "N", "news": True},
-                {"id": "h8", "kind": "building.house", "rect": [3, 14, 2, 2], "door": "N", "news": True},
-                {"id": "h9", "kind": "building.house", "rect": [7, 14, 2, 2], "door": "N", "news": True},
-                {"id": "h10", "kind": "building.house", "rect": [10, 14, 2, 2], "door": "N", "news": True},
-                {"id": "h11", "kind": "building.house", "rect": [15, 14, 2, 2], "door": "N", "news": True},
-                {"id": "h12", "kind": "building.house", "rect": [18, 14, 2, 2], "door": "N", "news": True},
+                {"id": "h1", "kind": "building.house", "rect": [4, 3, 2, 2], "door": "E"},
+                {"id": "h2", "kind": "building.house", "rect": [4, 6, 2, 2], "door": "E"},
+                {"id": "h3", "kind": "building.house", "rect": [7, 6, 2, 2], "door": "N"},
+                {"id": "h4", "kind": "building.house", "rect": [14, 6, 2, 2], "door": "N"},
+                {"id": "h5", "kind": "building.house", "rect": [17, 6, 2, 2], "door": "N"},
+                {"id": "h6", "kind": "building.house", "rect": [7, 10, 2, 2], "door": "N"},
+                {"id": "h7", "kind": "building.house", "rect": [10, 10, 2, 2], "door": "N"},
+                {"id": "h8", "kind": "building.house", "rect": [3, 14, 2, 2], "door": "N"},
+                {"id": "h9", "kind": "building.house", "rect": [7, 14, 2, 2], "door": "N"},
+                {"id": "h10", "kind": "building.house", "rect": [10, 14, 2, 2], "door": "N"},
+                {"id": "h11", "kind": "building.house", "rect": [15, 14, 2, 2], "door": "N"},
+                {"id": "h12", "kind": "building.house", "rect": [18, 14, 2, 2], "door": "N"},
             ],
             "spots": [
                 {"id": "dock", "at": [5, 1], "label": "The dock", "note": "the boats from Jingzhou land here (s2's handoff)"},
@@ -207,10 +207,12 @@ PLANS_LS = {
                 {"id": "lamb", "at": [9, 7], "label": "A mutton seller", "note": "the lamb for Qiao Guolao"},
                 {"id": "wine", "at": [11, 8], "at_door": "wineshop", "label": "The wine shop", "note": "the wine for Qiao Guolao"},
                 {"id": "qiao-gate", "at": [4, 9], "at_door": "qiao", "label": "Qiao Guolao's gate"},
-                {"id": "wu-gate", "at": [17, 9], "at_door": "wufu", "label": "Lady Wu's gate",
-                 "note": "the news must reach here (mark news_wu)"},
+                # s4 starts by itself once the news reaches her gatekeeper (the loud town); Plot took the gate off the node
+                {"id": "s4", "at": [17, 9], "at_door": "wufu", "node": "4-s4", "label": "Lady Wu's gate", "fires": "told:wu-gatekeeper"},
                 {"id": "s9", "at": [24, 13], "node": "4-s9", "label": "The riding ground", "trigger": "near"},
             ],
+            # red hangings at each house's door, shown once its resident has the news
+            "props": [{"kind": "banner.red", "at_door": f"h{i}", "told": f"g-h{i}"} for i in range(1, 13)],
             "dress": [
                 {"kind": "tree.willow", "along": "main-street", "every": 4},
                 {"kind": "lamp.post", "along": "palace-street", "every": 3},
@@ -232,31 +234,33 @@ PLANS_LS = {
             {"id": "newyear", "when": "node:s11", "light": "morning"},                   # New Year's Day: she leaves
         ],
         "npcs": [
-            # the loud town (s3 -> s4): each can be told, and takes the news to the next house
-            _tell("folk.villager", [4, 5], "h1", "“Boats from upriver, flying red? What's all that about?”",
-                  "“Liu Bei, come to marry into Wu! I'll tell the neighbours.”", **{"in": ["news"]}),
-            _tell("folk.elder", [5, 8], "h2", "“Men in red buying up every sheep in the market. Whose wedding is it?”",
-                  "“The Marquis's sister! Married to Liu Bei! Well, well.”", **{"in": ["news"]}),
-            _tell("folk.villager", [8, 5], "h3", "“My wife says the butchers have sold out by noon.”",
-                  "“Liu Bei's come to be the Marquis's brother-in-law? Wait till the street hears this.”", **{"in": ["news"]}),
-            _tell("folk.porter", [15, 5], "h4", "“Five hundred soldiers in red, and not one of them fighting. Odd times.”",
-                  "“A wedding, then! I'll pass it along.”", **{"in": ["news"]}),
-            _tell("folk.villager", [18, 5], "h5", "“They're hanging red cloth by the east palace. For whom?”",
-                  "“Liu Bei! The whole city will know by evening.”", **{"in": ["news"]}),
-            _tell("folk.elder", [8, 9], "h6", "“Liu Bei of Jingzhou, here? Then something's afoot.”",
-                  "“A marriage. Somebody should tell the Dowager. Surely she knows.”", **{"in": ["news"]}),
-            _tell("folk.villager", [11, 9], "h7", "“Qiao Guolao's had a visitor. With a lamb, and wine.”",
-                  "“Married to the Marquis's sister! I'll go and tell my cousin by the palace.”", **{"in": ["news"]}),
-            _tell("folk.porter", [4, 12], "h8", "“The red-coats bought my whole cart of wine.”",
-                  "“A royal wedding! No wonder they paid in silver.”", **{"in": ["news"]}),
-            _tell("folk.villager", [8, 12], "h9", "“Nobody tells the back streets anything.”",
-                  "“Liu Bei and the Marquis's sister? Who'd have thought.”", **{"in": ["news"]}),
-            _tell("folk.elder", [11, 12], "h10", "“The palace is quiet today. The Dowager's at her prayers.”",
-                  "“Then she doesn't know? Somebody ought to tell her.”", **{"in": ["news"]}),
-            _tell("folk.villager", [16, 13], "h11", "“I serve in the Dowager's kitchens. Nothing's been said there.”",
-                  "“A wedding for her own daughter, and she hasn't heard? I'll go round to the gate.”", **{"in": ["news"]}),
-            _tell("folk.porter", [19, 13], "h12", "“Red cloth everywhere today. Is it a festival?”",
-                  "“A wedding! I'm going to tell the palace guards.”", **{"in": ["news"]}),
+            # the loud town (s3 -> s4): three chains. The dock's runs to the market, the market's to the north-east;
+            # only the one from Qiao Guolao's gate (his household, as in the novel) goes round the back streets to Lady
+            # Wu's gatekeeper, who can't be told himself: he hears it from his neighbour.
+            _gossip("g-dock", "folk.porter", [7, 1], "“Liu Bei, come to marry into Wu! I'll tell the neighbours.”", ["g-h1"]),
+            _gossip("g-h1", "folk.villager", [6, 3], "“The Marquis's sister! Married to Liu Bei! Well, well.”", ["g-h2"]),
+            _gossip("g-h2", "folk.elder", [6, 7], "“Liu Bei's come to be the Marquis's brother-in-law? Wait till the street hears this.”", ["g-h3"]),
+            _gossip("g-h3", "folk.villager", [7, 5], "“A wedding, then! I'll pass it along.”", []),
+            _gossip("g-market", "folk.porter", [11, 6], "“Five hundred men in red, buying for Liu Bei's wedding? I'll tell the street.”", ["g-h4"]),
+            _gossip("g-h4", "folk.villager", [14, 5], "“Liu Bei! The whole city will know by evening.”", ["g-h5"]),
+            _gossip("g-h5", "folk.elder", [18, 5], "“A marriage. Somebody should tell the Dowager. Surely she knows.”", []),
+            _gossip("g-qiao", "folk.official", [5, 9], "“A lamb and wine from Liu Bei, for my master? Then it's true. My master will want the Dowager to hear it from him.”",
+                    ["g-h6"]),
+            _gossip("g-h6", "folk.villager", [7, 9], "“Married to the Marquis's sister! I'll go and tell my cousin by the palace.”", ["g-h7", "g-h9"]),
+            _gossip("g-h7", "folk.porter", [10, 9], "“A royal wedding! No wonder they paid in silver.”", ["g-h10"]),
+            _gossip("g-h9", "folk.villager", [7, 13], "“Liu Bei and the Marquis's sister? Who'd have thought.”", ["g-h8"]),
+            _gossip("g-h8", "folk.porter", [3, 13], "“Nobody tells the back streets anything. A wedding, you say?”", []),
+            _gossip("g-h10", "folk.elder", [10, 13], "“Then she doesn't know? Somebody ought to tell her.”", ["g-h11"]),
+            _gossip("g-h11", "folk.villager", [15, 13], "“A wedding for her own daughter, and she hasn't heard? I'll go round to the gate.”", ["g-h12"]),
+            _gossip("g-h12", "folk.porter", [18, 13], "“A wedding! I'm going to tell the palace guards.”", ["wu-gatekeeper"]),
+            {"id": "wu-gatekeeper", "kind": "folk.soldier", "at": [16, 9],
+             "say": "“The Dowager is at her prayers. Nothing's been said here about any wedding.”", "in": ["arrival", "news"]},
+            # townsfolk in between, who don't pass it on
+            _talk("folk.villager", [12, 9], "“Red cloth everywhere today. Is it a festival?”", **{"in": ["news"]}),
+            _talk("folk.elder", [13, 12], "“The palace is quiet today. The Dowager's at her prayers.”", **{"in": ["news"]}),
+            _talk("folk.villager", [9, 1], "“Boats from upriver, flying red? What's all that about?”", **{"in": ["arrival", "news"]}),
+            _talk("folk.villager", [12, 5], "“My wife says the butchers have sold out by noon.”", **{"in": ["news"]}),
+            _talk("folk.woman", [19, 9], "“I serve in the Dowager's kitchens. Nothing's been said there.”", **{"in": ["news"]}),
             # the wedding and the winter
             _talk("folk.villager", [12, 9], "“Red lanterns on every street. The Marquis's sister is married, and the whole city's had a feast.”",
                   **{"in": ["wedding"]}),
@@ -273,8 +277,7 @@ PLANS_LS = {
                                     {"id": "screen", "kind": "furn.screen", "rect": [6, 1, 2, 1]},
                                     {"id": "table-1", "kind": "furn.table", "rect": [10, 3, 1, 1]},
                                     {"id": "rack", "kind": "furn.jar", "rect": [14, 1, 1, 1]}],
-                            spots=[{"id": "s4", "at": [4, 4], "node": "4-s4", "label": "Lady Wu's hall"},
-                                   {"id": "s11", "at": [5, 5], "node": "4-s11", "label": "Lady Wu's hall"}])
+                            spots=[{"id": "s11", "at": [5, 5], "node": "4-s11", "label": "Lady Wu's hall"}])
             | {"label": "Lady Wu's hall"},
             # Sun Quan's hall: the cutaways s8 (Sun Quan 0,-4, Zhang Zhao 8,0) and s12 (Cheng Pu at -8,0)
             "sq-hall": room([14, 7], [7, 6],
@@ -407,15 +410,18 @@ PLANS_LS = {
                 {"id": "hills-n", "kind": "hills", "rect": [0, 0, 40, 3]},
                 {"id": "hills-s", "kind": "hills", "rect": [0, 8, 40, 3]},
                 {"id": "fields", "kind": "field.wheat", "rect": [2, 6, 6, 2]},
-                {"id": "defile-n", "kind": "hills", "rect": [17, 3, 12, 1]},       # the road narrows under the hills
-                {"id": "defile-s", "kind": "hills", "rect": [17, 7, 12, 1]},
+                {"id": "defile-n", "kind": "hills", "rect": [17, 3, 12, 2]},       # the road narrows under the hills: one cell
+                {"id": "defile-s", "kind": "hills", "rect": [17, 6, 12, 2]},
+                # just beyond each rank, a pocket off the road for its men to step aside into (reached only past them)
+                {"id": "pocket-1n", "kind": "plain", "rect": [22, 4, 1, 1]}, {"id": "pocket-1s", "kind": "plain", "rect": [22, 6, 1, 1]},
+                {"id": "pocket-2n", "kind": "plain", "rect": [27, 4, 1, 1]}, {"id": "pocket-2s", "kind": "plain", "rect": [27, 6, 1, 1]},
             ],
             "lines": [{"id": "road", "kind": "road", "path": [[0, 5], [39, 5]], "width": 3}],
             "spots": [
                 {"id": "s13", "at": [10, 5], "node": "4-s13", "label": "The road under the hill", "trigger": "near"},
                 {"id": "block-start", "at": [13, 5], "label": "Where the road block stood",
                  "note": "the face-down: pushing past a man without stopping sends her back here"},
-                {"id": "s14", "at": [31, 5], "node": "4-s14", "label": "The open road", "trigger": "near"},
+                {"id": "s14", "at": [35, 5], "node": "4-s14", "label": "The open road", "trigger": "near"},   # the generals come up behind (west)
             ],
             "dress": [{"kind": "milestone", "along": "road", "every": 4}, {"kind": "tree.poplar", "in": "fields", "count": 4}],
             "exits": [{"to": "Nanxu", "at": [0, 5], "side": "W"}, {"to": "Liulangpu", "at": [39, 5], "side": "E"}],
@@ -423,17 +429,24 @@ PLANS_LS = {
         },
         "states": [{"id": "flight", "light": "day"}],
         "npcs": [
-            # the face-down (s13 -> s14): Chen Wu's men, then Pan Zhang's, each rank three across the narrow road
-            _yield("folk.soldier", [21, 4], ["“It's the Lady herself!” He swings down from his horse and stands aside."], **{"in_beats": ["4-s14"]}),
-            _yield("folk.soldier", [21, 5], ["“Madam, we were only told to bring you back…” He looks at Zhao Yun, and steps aside."], **{"in_beats": ["4-s14"]}),
-            _yield("folk.soldier", [21, 6], ["“Dismount! It's the Marquis's sister!” He backs his horse off the road."], **{"in_beats": ["4-s14"]}),
-            _yield("folk.soldier", [26, 4], ["“Chen Wu said nothing about facing her!” He lowers his spear and gets out of the way."], **{"in_beats": ["4-s14"]}),
-            _yield("folk.soldier", [26, 5], ["“Pan Zhang can argue with her himself.” He reins his horse round and off the road."], **{"in_beats": ["4-s14"]}),
-            _yield("folk.soldier", [26, 6], ["“Not our quarrel, madam. Not our quarrel.” He leads his horse into the ditch."], **{"in_beats": ["4-s14"]}),
+            # the face-down (s13 -> s14): Chen Wu and two of his men across the narrows, then Pan Zhang and two of his.
+            # 「四員將見了孫夫人，只得下馬，拱手而立」
+            _yield("folk.official", [21, 5], "chenwu", [4, -4], "Chen Wu sees who is in the carriage, swings down from his horse, and stands aside with his hands clasped.",
+                   "“Halt! On the Marquis's orders, no one passes!” You fall back.", label="Chen Wu"),
+            _yield("folk.soldier", [21, 5], "chenwu", [4, 4], "“It's the Lady herself!” He backs his horse off the road.",
+                   "“Halt! On the Marquis's orders, no one passes!” You fall back."),
+            _yield("folk.soldier", [21, 5], "chenwu", [6, -4], "“Not our quarrel, madam.” He leads his horse aside.",
+                   "“Halt! On the Marquis's orders, no one passes!” You fall back."),
+            _yield("folk.official", [26, 5], "panzhang", [4, -4], "Pan Zhang looks at Zhao Yun, then at the Lady, and dismounts. “Madam.”",
+                   "“Stop the carriage!” The spears come down, and you fall back.", label="Pan Zhang"),
+            _yield("folk.soldier", [26, 5], "panzhang", [4, 4], "“Pan Zhang can argue with her himself.” He reins his horse off the road.",
+                   "“Stop the carriage!” The spears come down, and you fall back."),
+            _yield("folk.soldier", [26, 5], "panzhang", [6, 4], "He lowers his spear and gets out of the way.",
+                   "“Stop the carriage!” The spears come down, and you fall back."),
         ],
         "objectives": {
             "4-s13": "Push on along the road, ahead of the pursuit.",
-            "4-s14": "The pursuers are on the road. Stop before each one, facing him, and let him see who you are.",
+            "4-s14": "Chen Wu and Pan Zhang's men block the road. Stop in front of them, facing them, and let them see you.",
         },
     },
 
