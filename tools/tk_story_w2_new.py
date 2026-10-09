@@ -3170,6 +3170,7 @@ def _scenes_ladysun():
             N("Liu Bei lifts his robe, leaps onto a horse, gallops down and back up. The two rein in side by side on the slope and laugh. It is still called Rein-In Slope.",
               "刘备撩起衣襟，一跃上马，飞驰下山，又跑了上来。两人并马站在山坡上，扬鞭大笑。这地方到今天还叫“驻马坡”。"),
             ["remove", "sq"],
+            ["party", ["zhaoyun", "liubei", "sunqian"], {"to": {"place": "Nanxu", "from": "Sweet Dew Temple"}}],   # back down to Nanxu; then the s7 cutaway
         ]},
 
         # S7 · Blades in the bridal room. Cutaway inside: Lady Sun's first appearance.
@@ -3194,7 +3195,7 @@ def _scenes_ladysun():
               "Liu Bei gives the maids gold and silk, to win them over, and sends Sun Qian home to Jingzhou with the good news.",
               "她叫人把兵器全部撤走，侍女们也解下剑来伺候。当晚两人成亲，十分和美。刘备又拿金银绸缎赏给侍女们，收买她们的心，先让孙乾回荆州报喜。"),
             ["remove", "mt"], ["remove", "lb"], ["remove", "ls"],
-            ["party", ["zhaoyun"], {"to": {"place": "Nanxu", "from": "Sweet Dew Temple"}}],
+            ["party", ["zhaoyun"]],   # Liu Bei stays with his bride, Sun Qian goes home; a cutaway carries no handoff
         ]},
 
         # S8 · The gilded cage. Cutaway: Zhou Yu's letter, read out in Sun Quan's hall.
