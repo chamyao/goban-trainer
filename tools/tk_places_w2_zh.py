@@ -715,7 +715,7 @@ ZH_PLACES2 = {
     'The bridal bed': '婚床',
     'Swords on the wall': '墙上挂着刀剑',
     'Spears on the wall': '墙上挂着长枪',
-    'Halberds on the wall': '墙上挂着画戟',
+    'Halberds on the wall': '墙上挂着长戟',
     'Land at Nanxu, and open the first silk pouch at the dock.': '在南徐码头上岸，打开第一个锦囊。',
     "Spread the news through Nanxu, and take Liu Bei to Qiao Guolao with a lamb and wine. Let the news reach Lady Wu's gate.": '在南徐城里把消息传开，带刘备拿着羊和酒去拜见乔国老。让消息传到国太府门口。',
     'Ride out by the east gate to the riding ground. The year is ending.': '出东门，到跑马场去。一年快过完了。',
