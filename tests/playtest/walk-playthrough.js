@@ -184,7 +184,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   let beatLead = '';
   const close = (status, why, s) => { if (!beat) return; if (leadFor[beat] && beatLead && leadFor[beat] !== beatLead) console.log(`     note ${beat}: played by ${beatLead}, but the story's last handoff gave ${leadFor[beat]}`); const r = { beat, status, secs: Math.max(0, Math.round((Date.now() - beatT) / 1000)), place: s && s.place, at: s && s.P, lead: s && s.lead, why: why || '', line: lastLine.slice(0, 120) };
     report.push(r); console.log(`${status === 'pass' ? 'ok  ' : 'FAIL'} ${beat}  ${r.secs}s  ${r.lead || ''} in ${r.place || '?'}${status === 'pass' ? '' : `  at ${r.at}: ${why}${r.line ? ` ("${r.line}")` : ''}`}`); };
-  const cutWait = {}, pouches = [], told = [], faced = [];
+  const cutWait = {}, pouches = [], told = [], faced = []; let yErr = 0;
   let noWaySince = 0, plannedSteps = null, planT = 0, pace = 3, stealthTries = 0, lastTap = 0, skipped = false, reloads = 0, catches = 0, wasCaught = false; const held = [], recovered = [];
   const featureFails = [], facts = {}, banners = [], chipBad = new Set(), chipSeen = [], shotWho = new Set(), shots = []; let lastPlace = '', arrivedAt = null; const OPTIONAL = !!process.env.OPTIONAL, visited = new Set(), errands = []; let errand = null;
   for (;;) {
@@ -382,8 +382,6 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       if (k >= plannedSteps.length - 1 && !plannedSteps[plannedSteps.length - 1].hold) { await p.evaluate(() => (clearInterval(window.__execI), window.__execF && window.__w && window.__w.events.off('update', window.__execF), window.__execF = null, window.__w && (window.__w.auto = null))); plannedSteps = null; await tapWorld(s.goal[0], s.goal[1]); }   // there: tap it (a spot that starts on a tap)
       await p.waitForTimeout(100); continue;
     }
-    if (s.walking) { await p.waitForTimeout(250); continue; }
-    if (Date.now() - lastTap < 1200) { await p.waitForTimeout(200); continue; }
     // face them down (Book 15): soldiers set to "yield" stand aside one by one for her standing still within reach, facing
     // them (from the carriage, curtain up); pushing on into one is a catch. Walk up to within reach, stop, face, wait
     const yd = await p.evaluate(() => { const w = window.__w, P = w.player, T = w.tw || 16, live = w.npcs.filter(n => n.yield && n.spr.visible && !n.stoodAside);
@@ -391,7 +389,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       const reach = (near.n.yield.reach || 4) * T; if (near.d > reach + 10 * T) return null;
       const dx = near.n.spr.x - P.x, dy = near.n.spr.y - P.y, way = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : (dy > 0 ? 'down' : 'up');
       const curtain = typeof WorldFeats !== 'undefined' && WorldFeats.inCarriage && WorldFeats.inCarriage(w) && !WorldFeats.curtainUp(w);
-      return { id: near.n.id, d: near.d, reach, way, curtain, x: near.n.spr.x, y: near.n.spr.y, P: [P.x, P.y], left: live.length }; }).catch(() => null);
+      return { id: near.n.id, d: near.d, reach, way, curtain, x: near.n.spr.x, y: near.n.spr.y, P: [P.x, P.y], left: live.length }; }).catch(e => { if (!yErr) { yErr = 1; console.log('     face-down check:', e.message.split('\n')[0]); } return null; });
     if (yd && !s.busy) {
       if (!faced.includes(yd.id)) { faced.push(yd.id); console.log(`     ${s.next}: facing down ${yd.id} (${yd.left} still in the way${yd.curtain ? ', the curtain to raise' : ''})`); }
       if (yd.d > yd.reach - 6) {   // walk up to two-thirds of his reach, straight at him, and stop there
@@ -401,6 +399,8 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       await p.evaluate(way => { const w = window.__w, P = w.player; w.walk = null; w.auto = null; P.setVelocity(0); P.facing = way; }, yd.way);   /* a turn on the spot, as an arrow key tapped */
       if (yd.curtain) { await p.keyboard.press('c'); await p.waitForTimeout(300); }
       lastProgress = Date.now(); await p.waitForTimeout(400); continue; }
+    if (s.walking) { await p.waitForTimeout(250); continue; }
+    if (Date.now() - lastTap < 1200) { await p.waitForTimeout(200); continue; }
     // the loud town (Book 15): the next beat waits on news reaching someone ("cutaway": "told:<id>"); as a player would,
     // talk to the townsfolk who haven't heard yet, the nearest first, until it holds (the news then walks on by itself)
     const gossip = await p.evaluate(k => { const w = window.__w, nd = k && (w.w.nodes || []).find(n => n.key === k), c = nd && typeof nd.cutaway === 'string' ? nd.cutaway : '';
