@@ -35,7 +35,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=103`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=104`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
@@ -253,7 +253,7 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=103`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=104`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=46`);
       this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=105`);
     }
@@ -264,7 +264,7 @@ function worldScenes() {
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
       for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=116`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=117`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -1186,6 +1186,7 @@ function worldScenes() {
     // streets, or when they'd be the long way round, the walking path itself.
     routePoints(from, to) {
       const T = this.tw || 16, W = this.ways;
+      const len = q => { let l = 0; for (let i = 1; i < q.length; i++) l += Math.hypot(q[i].x - q[i - 1].x, q[i].y - q[i - 1].y); return l; };
       const walk = (a, b) => [a, ...(this.findPath(a.x, a.y, b.x, b.y, null, true) || [b])];
       const direct = Math.hypot(to.x - from.x, to.y - from.y);
       if (!W || !W.edges || !W.edges.length || direct < 5 * T) return walk(from, to);
@@ -1228,8 +1229,13 @@ function worldScenes() {
         for (let i = end; i !== -1 && i !== undefined; i = prev.get(i)) chain.unshift(N[i]);
       }
       if (s.d + along + g.d > direct * 2.2) return walk(from, to);   // the streets would be the long way round
-      const on = walk(from, s.q), off = walk(g.q, to);
-      return [...on, ...chain, ...off.slice(0)];
+      const on = walk(from, s.q), off = walk(g.q, to), full = [...on, ...chain, ...off.slice(0)];
+      // getting on and off the streets is walked too: from outside a walled city that can be the long way round
+      if (len(on) + len(off) > s.d + g.d + 12 * T) {   // (only then is it worth the walking path's cost)
+        const plain = walk(from, to);
+        if (len(full) > len(plain) * 1.8) return plain;
+      }
+      return full;
     }
 
     // The route as right-angle turns (the user's wish): each slanting stretch becomes an L, bent on whichever
@@ -2540,7 +2546,15 @@ function worldScenes() {
         }
         // keep out of doorways and roads out (a villager standing there blocks the way in), and step
         // aside for Liu Bei when he's walking somewhere and comes close
-        const door = this.exits.find(e => n.spr.x > e.rect.x - 28 && n.spr.x < e.rect.right + 28 && n.spr.y > e.rect.y - 24 && n.spr.y < e.rect.bottom + 30);
+        // (and the lane in front of a building's door: 3 tiles wide, 6 out on its open side, where she walks in)
+        const T6 = (this.tw || 16), lane = e => { const r = e.rect, c = { x: r.centerX, y: r.centerY }, side = e.side;
+          if (r.width >= 3 * T6 && r.height >= 3 * T6) return false;   // the map's edge: no lane
+          const w = 1.5 * T6, L = 6 * T6;
+          return side === "N" ? Math.abs(n.spr.x - c.x) < w && n.spr.y < r.y && n.spr.y > r.y - L
+            : side === "E" ? Math.abs(n.spr.y - c.y) < w && n.spr.x > r.right && n.spr.x < r.right + L
+            : side === "W" ? Math.abs(n.spr.y - c.y) < w && n.spr.x < r.x && n.spr.x > r.x - L
+            : Math.abs(n.spr.x - c.x) < w && n.spr.y > r.bottom && n.spr.y < r.bottom + L; };
+        const door = this.exits.find(e => n.spr.x > e.rect.x - 28 && n.spr.x < e.rect.right + 28 && n.spr.y > e.rect.y - 24 && n.spr.y < e.rect.bottom + 30 || lane(e));
         const P = this.player, close = this.walk && Math.hypot(n.spr.x - P.x, n.spr.y - P.y) < 28;
         const from = door ? { x: door.rect.centerX, y: door.rect.centerY } : close ? P : null;
         if (from) {
