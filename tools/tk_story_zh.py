@@ -339,7 +339,7 @@ ZH = {
 
     # ---- World 1 places, objectives and story spots (map factory, tk-world.js) ----
     "Lousang Village": "楼桑村", "Zhuo County": "涿县", "The Peach Garden": "桃园", "Road to Julu": "巨鹿道上",
-    "Julu": "巨鹿", "Yellow Hills": "黄冈", "Horse Trail": "马道", "Daxing Mountain": "大兴山", "Qingzhou": "青州",
+    "Julu": "巨鹿", "Yellow Hills": "黄冈", "Horse Trail": "马道", "Daxing Mountain": "大兴山", "Qingzhou": "青州", "Chaisang": "柴桑", "Jingzhou": "荆州", "Nanxu": "南徐", "The road to Chaisang": "柴桑道上",
     "Guangzong Road": "广宗道上", "Qiao": "谯郡", "Luoyang Gates": "洛阳城门", "Changshe": "长社",
     "Envoy's Road": "使者路上", "The Hills North of Guangzong": "广宗以北的山岭", "Hills of Black Wind": "黑风岭", "Yangcheng": "阳城",
     "Sit under the great mulberry tree by your home.": "到屋旁的大桑树下坐坐。",
