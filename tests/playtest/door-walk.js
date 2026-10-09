@@ -42,7 +42,7 @@ const path = require('path');
       if (seen.has(`${pl}|${ids}|${ride}`)) continue; seen.add(`${pl}|${ids}|${ride}`);   /* each place once per map state */ if (!(await p.evaluate(pl => window.__w.placeId === pl, pl))) { console.log(`note book ${book}: ${pl} didn't open`); continue; }
       const mounted = await p.evaluate(() => { const w = window.__w; return !!(typeof WorldItems !== 'undefined' && WorldItems.mountedHere && WorldItems.mountedHere(w, w.lead)); });
       if (ride && !mounted) continue;   /* the riding pass: only where he rides (outdoors, with a horse) */
-      let builds = []; try { builds = (JSON.parse(require('fs').readFileSync(path.join(__dirname, `../../data/tk_maps/w${book}/${pl}.map.json`), 'utf8')).objects || []).filter(o => /^building\./.test(o.kind || '') && o.faces && o.door && !/^building\.(gate|gatehouse)$/.test(o.kind));   /* a building one goes into (its door); a wall's gate is walked through both ways (door-gate.js) */ } catch (e) {}   /* the buildings and the side each is drawn facing (its arch, its doorway) */
+      let builds = []; try { builds = (JSON.parse(require('fs').readFileSync(path.join(__dirname, `../../data/tk_maps/w${book}/${pl}.map.json`), 'utf8')).objects || []).filter(o => /^building\./.test(o.kind || '') && o.door && !/^building\.(gate|gatehouse)$/.test(o.kind));   /* a building one goes into (its door); a wall's gate is walked through both ways (door-gate.js) */ } catch (e) {}   /* the buildings and the side each is drawn facing (its arch, its doorway) */
       const arrive = await p.evaluate(() => [window.__w.player.x, window.__w.player.y]);   /* where she comes into the place: the door's front must be reachable from here */
       for (const d of doors) {
         // from open ground just outside it (her feet clear of every solid), each way that has some, straight at it
@@ -61,7 +61,7 @@ const path = require('path');
           const T = w.tw || 16, bs = builds.map(o => ({ o, r: new Phaser.Geom.Rectangle(o.x * T - 20, o.y * T - 20, o.w * T + 40, o.h * T + 40) })).filter(x => Phaser.Geom.Rectangle.Contains(x.r, cx, cy - 3));
           const bld = bs.sort((a, b) => a.o.w * a.o.h - b.o.w * b.o.h)[0];
           let face = null;
-          if (bld) { const o = bld.o, L = o.x * T, Tp = o.y * T, R = (o.x + o.w) * T, Bt = (o.y + o.h) * T, drawn = o.kind === 'building.gatetower' ? 'S' : o.faces, F = { S: ['up', 0, 1], N: ['down', 0, -1], E: ['left', 1, 0], W: ['right', -1, 0] }[drawn];   /* a gate tower is drawn front-on, its arch on the south face (Places' rule); the rest as they face */
+          if (bld) { const o = bld.o, L = o.x * T, Tp = o.y * T, R = (o.x + o.w) * T, Bt = (o.y + o.h) * T, drawn = o.kind === 'building.gatetower' ? 'S' : (o.enter || o.door || 'S'), F = { S: ['up', 0, 1], N: ['down', 0, -1], E: ['left', 1, 0], W: ['right', -1, 0] }[drawn];   /* the face its doorway is drawn on (Places): a gate tower front-on, its arch south; a side-on wing at its bottom front ("enter": "S"); else its door's side, else south */
             face = { id: o.id || o.kind, faces: drawn, start: null };
             if (F) for (const back of [28, 40, 56, 72]) for (const off of [0, -3, 3]) {
               const sx = F[1] ? (F[1] > 0 ? R : L) + F[1] * back : cx + off, sy = F[2] ? (F[2] > 0 ? Bt : Tp) + F[2] * back : cy + off;
