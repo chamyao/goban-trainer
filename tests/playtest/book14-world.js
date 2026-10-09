@@ -41,9 +41,13 @@ const path = require('path');
       if (s.duel) { const go = p.locator('.tk-duel .tk-duel-go'), k = p.locator('.tk-duel-keys button', { hasText: 'Skip' }); if (await go.count() && await go.first().isVisible()) await go.first().click({ timeout: 800 }).catch(() => {}); else if (await k.count()) await k.first().click({ timeout: 800 }).catch(() => {}); }
       else if (s.busy) await p.evaluate(() => window.__w.ui.advance());
       await p.waitForTimeout(250); } };
+  // the story done placing him: lines cleared, any handoff it starts played (x19's walk-in puts Hou Cheng at the stables door), and still
+  const settle = async () => { let still = 0, last = ''; for (let i = 0; i < 60 && still < 4; i++) { await clearUp();
+      const now = await p.evaluate(() => { const w = window.__w; return w.cine || w.leaving || w.ui.busy() || w.walk || w.approaching ? 'busy' : `${Math.round(w.player.x)},${Math.round(w.player.y)}`; });
+      still = now !== 'busy' && now === last ? still + 1 : 0; last = now; await p.waitForTimeout(250); } };
   const tryGate = async (rect, dir) => { const [x, y, gw, gh] = rect, cx = (x + gw / 2) * T, cy = (y + gh / 2) * T;
     const [dx, dy] = { left: [1, 0], right: [-1, 0], up: [0, 1], down: [0, -1] }[dir], start = { x: cx + dx * 4 * T, y: cy + dy * 4 * T + 8 };
-    await clearUp();
+    await settle();
     // a start on open ground, 4 tiles in (further if that's solid)
     const st = await p.evaluate(([cx, cy, dx, dy]) => { const w = window.__w, G = w.walkGrid(), T = 16; for (let k = 4; k < 9; k++) { const x = cx + dx * k * T, y = cy + dy * k * T + 8; if (G.free(Math.floor(x / G.C), Math.floor(y / G.C))) return { x, y }; } return { x: cx + dx * 4 * T, y: cy + dy * 4 * T + 8 }; }, [cx, cy, dx, dy]);
     start.x = st.x; start.y = st.y;
