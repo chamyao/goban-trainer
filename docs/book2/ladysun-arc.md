@@ -80,7 +80,7 @@ room, with the player's party off stage; then play returns to the lead where the
 | s1 | **The Bait** (香饵): Zhou Yu lays the trap; the bride described by her enemy | cutaway | Chaisang · `zy-hall` | — |
 | s2 | **Three Silk Pouches**: Lü Fan the matchmaker; Zhuge Liang behind the screen; the pouches. Ends landing at Nanxu (spot `dock`) | Zhao Yun | Jingzhou · `jz-hall` | — |
 | s3 | **The First Pouch**: opened at the dock; the men in red. Then the loud town (map) | Zhao Yun | Nanxu, by the dock | — |
-| s4 | **Whose Daughter?** Fired when the news reaches Lady Wu's gate (a spot with `"fires": "told:<gate>"`); inside, Lady Wu and Sun Quan | Zhao Yun (scene inside) | Nanxu · `wu-hall` | — |
+| s4 | **Whose Daughter?** A cutaway that waits for the news (`"cutaway": "told:wu-gatekeeper"`), then plays inside her hall, Lady Wu and Sun Quan | Zhao Yun (scene inside) | Nanxu · `wu-hall` | — |
 | s5 | **Sweet Dew Temple**: 「真吾婿也」; the axemen; Liu Bei kneels | Zhao Yun | Sweet Dew Temple · `gl-abbot` | Lady Wu: "Look at the groom." |
 | s6 | **The Stone**: two prayers aloud, two in secret; the horses on the slope | Zhao Yun | Sweet Dew Temple (courtyard, the slope) | Liu Bei: "Cut the stone in two." |
 | s7 | **Blades in the Bridal Room**: Lady Sun's first appearance | cutaway | Nanxu · `bridal-room` | — |

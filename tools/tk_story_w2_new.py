@@ -3419,7 +3419,7 @@ def _nodes_ladysun():
         node("s1", 20, 210, "s1", place="Chaisang", room="zy-hall", board=False, cutaway=True),
         node("s2", 40, 200, "s2", place="Jingzhou", room="jz-hall", board=False),
         node("s3", 60, 190, "s3", board=False),   # by the dock, where the boats land
-        node("s4", 80, 180, "s4", room="wu-hall", board=False),   # fired by the loud town: its spot has "fires": "told:<her gate>" (Places)
+        node("s4", 80, 180, "s4", room="wu-hall", board=False, cutaway="told:wu-gatekeeper"),   # plays in her hall once the news reaches her gate
         node("s5", 100, 170, "s5", place="Sweet Dew Temple", room="gl-abbot", dilemma=D(
             "ladywu", "Look at the groom.", "看看这个女婿。",
             "My son calls it a trick. I'll see the man with my own eyes.", "儿子说这是计策。我要亲眼看看这个人。",
