@@ -1657,8 +1657,8 @@
   {
    "id": "npc-1",
    "kind": "folk.villager",
-   "x": 25.5,
-   "y": 17.9,
+   "x": 24.5,
+   "y": 16.9,
    "say": [
     "“We had Lü Bu here, then Lord Liu, then Lü Bu's men again. We just keep our heads down.”"
    ],

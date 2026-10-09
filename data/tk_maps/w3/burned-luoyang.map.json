@@ -1298,8 +1298,8 @@
   {
    "id": "npc-1",
    "kind": "folk.official",
-   "x": 18.5,
-   "y": 14.9,
+   "x": 24.5,
+   "y": 16.9,
    "say": [
     "“We hold court standing up. There is nothing left to sit on.”"
    ],

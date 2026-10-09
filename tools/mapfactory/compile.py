@@ -16,6 +16,7 @@ from PIL import Image, ImageDraw
 
 from vocab import FALLBACK, FOLK_FALLBACK, KINDS, MATERIAL_FALLBACK, MATERIALS
 from build_tk import place_step  # lines get their Chinese and voice clip here
+import wander
 from tk_story_zh import ZH
 
 ROOT = Path(__file__).resolve().parent.parent.parent
@@ -519,6 +520,9 @@ def compile_map(m, kit, out_dir):
     bad = doors_front_blocked(objs, T)
     if bad:
         raise RuntimeError(f"{m['id']} ({kit.k['kit']}): the straight way in to the door to {', '.join(bad)} is blocked")
+    bad = wander.cramped(m)
+    if bad:
+        raise RuntimeError(f"{m['id']}: {', '.join(bad)} would wander over a drawn face: settle the map (wander.settle)")
     (out_dir / f"{m['id']}.tmj").write_text(json.dumps(tmj, ensure_ascii=False, separators=(",", ":")))
     return tmj
 

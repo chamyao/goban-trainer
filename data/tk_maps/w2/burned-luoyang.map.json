@@ -1300,8 +1300,8 @@
   {
    "id": "npc-1",
    "kind": "folk.elder",
-   "x": 18.5,
-   "y": 15.9,
+   "x": 20.5,
+   "y": 23.9,
    "say": [
     "“The palace burned for three days. I watched it from the hills.”"
    ],

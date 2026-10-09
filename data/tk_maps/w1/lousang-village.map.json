@@ -1717,8 +1717,8 @@
   {
    "id": "npc-1",
    "kind": "folk.woman",
-   "x": 20.5,
-   "y": 12.9,
+   "x": 16.5,
+   "y": 13.9,
    "say": [
     "“Off to sell your sandals in town, Xuande? Mind the road.”"
    ],
@@ -1727,8 +1727,8 @@
   {
    "id": "npc-2",
    "kind": "folk.child",
-   "x": 23.5,
-   "y": 11.9,
+   "x": 25.5,
+   "y": 12.9,
    "say": [
     "“That mulberry looks like a carriage canopy! Mother says someone from this house will ride under one.”"
    ],
@@ -1751,7 +1751,7 @@
    "say": [
     "“The Yellow Turbans are burning villages in the south. Strange times.”"
    ],
-   "wander": true
+   "wander": false
   },
   {
    "id": "npc-5",

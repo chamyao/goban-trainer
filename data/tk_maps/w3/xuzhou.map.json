@@ -1415,8 +1415,8 @@
   {
    "id": "npc-1",
    "kind": "folk.elder",
-   "x": 20.5,
-   "y": 13.9,
+   "x": 19.5,
+   "y": 14.9,
    "say": [
     "“Cao Cao's men dug up the graves along the road. Old Tao Qian wept when he heard.”"
    ],
@@ -1425,7 +1425,7 @@
   {
    "id": "npc-2",
    "kind": "folk.woman",
-   "x": 20.5,
+   "x": 19.5,
    "y": 17.9,
    "say": [
     "“Lord Liu came through Cao Cao's lines with a red banner. I saw it from the wall.”"

@@ -114,6 +114,12 @@ These were each learned from a real complaint, and each is a rule, not a one-off
   - compile (`doors_front_blocked`) fails the build if she can't walk straight in from 3 tiles out. A banner set before
     Lü Bu's tent door had blocked her.
   - A door's trigger reaches .6 of a tile out from its face. Coming out, she arrives clear of it, never on it.
+- **A wanderer has room to roam** (`wander.py`). The engine turns a wandering townsperson back once he's 40 px (2.5
+  tiles) from home. So his home keeps 3.5 tiles from every drawn face (a building's footprint and the 3 tiles of roof
+  drawn above it, a tree's or rock's 2), and off every door lane. Both builders settle their wanderers: each one too
+  close moves to the nearest roomy tile he can walk to, and with none within 14 tiles he stands still. compile fails a
+  map with a cramped wanderer. Zhuo County's villager lived on the shop's top edge and wandered over its face, so a tap
+  on the face picked him instead of the door (Testing). The same was true on 28 more maps in Books 1–3, all settled.
 - **A tower in a wall stands beside its gates, and is entered where it's drawn.** A gate tower (`building.gatetower`)
   is drawn front-on, with its arch on the south face. Its door is that arch (S), and the whole arch is the trigger. A
   side door (E/W) is at the foot of its face. A north door would be on the face the camera never sees, so the build

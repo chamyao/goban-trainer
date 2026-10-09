@@ -1452,7 +1452,7 @@
    "say": [
     "“Two of them fighting over the Emperor, like dogs over a bone.”"
    ],
-   "wander": true
+   "wander": false
   }
  ],
  "exits": [

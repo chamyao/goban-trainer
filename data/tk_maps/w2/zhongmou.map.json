@@ -1716,8 +1716,8 @@
   {
    "id": "npc-1",
    "kind": "folk.villager",
-   "x": 18.5,
-   "y": 15.9,
+   "x": 20.5,
+   "y": 16.9,
    "say": [
     "“They stopped a man at the pass today. Said he was a merchant.”"
    ],

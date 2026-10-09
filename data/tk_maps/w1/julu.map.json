@@ -1598,8 +1598,8 @@
   {
    "id": "npc-1",
    "kind": "folk.monk",
-   "x": 16.5,
-   "y": 15.9,
+   "x": 14.5,
+   "y": 17.9,
    "say": [
     "“The Way of Great Peace heals the sick. Drink the charm-water, brother.”"
    ],
@@ -1609,7 +1609,7 @@
    "id": "npc-2",
    "kind": "folk.villager",
    "x": 15.5,
-   "y": 14.9,
+   "y": 13.9,
    "say": [
     "“Half the county wears yellow now.”"
    ],

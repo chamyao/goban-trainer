@@ -1493,8 +1493,8 @@
   {
    "id": "npc-1",
    "kind": "folk.villager",
-   "x": 19.5,
-   "y": 16.9,
+   "x": 18.5,
+   "y": 18.9,
    "say": [
     "“They say the Chancellor is dead. They say it, but quietly.”"
    ],

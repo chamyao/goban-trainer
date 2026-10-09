@@ -14,6 +14,7 @@ import random
 from collections import deque
 
 from vocab import KINDS
+import wander
 
 LEGEND = {".": "grass", "=": "dirt", "~": "water", ":": "sand"}
 MAT = {v: k for k, v in LEGEND.items()}
@@ -541,7 +542,9 @@ def layout(place, world_n, base_seed, tries=40):
     last = None
     for k in range(tries):
         try:
-            return Layout(place, world_n, base_seed + k * 7919).build()
+            m = Layout(place, world_n, base_seed + k * 7919).build()
+            wander.settle(m)   # a wanderer's home has room to roam clear of every drawn face (wander.py)
+            return m
         except RuntimeError as e:
             last = e
     raise RuntimeError(f"{place['name']}: no valid layout after {tries} tries ({last})")

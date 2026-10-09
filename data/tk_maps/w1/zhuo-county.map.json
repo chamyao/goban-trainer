@@ -1878,8 +1878,8 @@
   {
    "id": "npc-2",
    "kind": "folk.villager",
-   "x": 18.5,
-   "y": 16.9,
+   "x": 17.5,
+   "y": 22.9,
    "say": [
     "“They say the Yellow Turbans wear scarves the colour of the earth.”"
    ],
@@ -1888,8 +1888,8 @@
   {
    "id": "npc-3",
    "kind": "folk.woman",
-   "x": 17.5,
-   "y": 13.9,
+   "x": 9.5,
+   "y": 15.9,
    "say": [
     "“Liu Bei? The sandal-seller? Kind man. Ears down to his shoulders, you know.”"
    ],

@@ -1200,7 +1200,7 @@
   {
    "id": "npc-1",
    "kind": "folk.hunter",
-   "x": 20.5,
+   "x": 28.5,
    "y": 15.9,
    "say": [
     "“Stones roll down this ridge in the dark. Don't come here at night.”"

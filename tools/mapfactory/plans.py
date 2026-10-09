@@ -32,6 +32,7 @@ sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(ROOT / "tools"))
 
 from vocab import KINDS  # noqa: E402
+import wander  # noqa: E402
 
 SIDES = {"N": (0, -1), "S": (0, 1), "W": (-1, 0), "E": (1, 0)}
 DIRS = {"N": "up", "S": "down", "W": "left", "E": "right"}
@@ -680,6 +681,7 @@ class MapBuilder:
                            "walk": {m: self.walk.get(m, WALK.get(m, True)) for m in mats}},
                "lines": [{k: v for k, v in l.items() if k != "_tiles"} | {"tiles": len(l["_tiles"])} for l in self.p.get("lines", [])],
                "objects": self.objects, "spots": self.spots, "npcs": self.npcs, "exits": self.exits, "entries": self.entries}
+        wander.settle(out, self.walkable)   # a wanderer's home has room to roam clear of every drawn face (wander.py)
         return out
 
 
