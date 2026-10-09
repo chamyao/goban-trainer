@@ -265,7 +265,7 @@ const TownUI = {
         g.append(Object.assign(document.createElement("span"), { className: "town-goal-main", textContent: zh || t }));
         g.onclick = e => { e.stopPropagation(); if (scene.walkToGoal) scene.walkToGoal(); };   // tap the goal: head for it
         if (zh) g.append(Object.assign(document.createElement("span"), { className: "town-goal-en", textContent: t }));
-        let there = false; try { there = !!(scene.takeMeThere && scene.player && scene.goalPoint()); } catch { there = false; }
+        let there = false; try { there = !!(scene.takeMeThere && scene.player && !scene.cutawayMode && !(scene.nextCutaway && scene.nextCutaway()) && scene.goalPoint()); } catch { there = false; }   // (not while a cutaway is about to play)
         let news = null; try { news = scene.newsTarget && scene.player && scene.newsTarget(); } catch { news = null; }
         if (news) {   // the news to spread (Book 15 s4): all at once, or talk to the townsfolk yourself (apo110)
           const sp = Object.assign(document.createElement("button"), { type: "button", className: "town-goal-go town-goal-news", textContent: "传开消息 Spread the news" });

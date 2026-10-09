@@ -626,8 +626,25 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) this.data = await (await fetch("data/tk.json?v=101")).json();
+    if (!this.data) { this.data = await (await fetch("data/tk.json?v=102")).json(); this.migrate(); }
     return this.data;
+  },
+  // A book whose beats were renumbered after players began it: their cleared beats moved to the new keys, once
+  // (Book 4, Three Silk Pouches, reworked: old s10-s15 are s8-s14 now, old s13 split in two; old s8 and s9 are gone)
+  migrate() {
+    const p = loadProgress(), m = p.tkMig || (p.tkMig = {});
+    if ((m[15] || 0) >= 2) return;
+    const old = new Set(Object.keys(p.tk || {}).filter(k => /^15-s\d+$/.test(k) && this.cleared(k)).map(k => k.slice(3)));
+    if (old.size) {
+      const map = { s10: ["s8"], s11: ["s9"], s12: ["s10"], s13: ["s11", "s12"], s14: ["s13"], s15: ["s14"] };
+      const now = new Set([...old].filter(k => /^s[1-7]$/.test(k)));
+      for (const [o, ns] of Object.entries(map)) if (old.has(o)) ns.forEach(n => now.add(n));
+      const t = Date.now();
+      for (const k of old) if (!now.has(k)) this.undoCleared(p, `15-${k}`);
+      for (const k of now) { (p.tk || (p.tk = {}))[`15-${k}`] = 1; (p.tkAt || (p.tkAt = {}))[`15-${k}`] = t + 1; }
+    }
+    m[15] = 2;
+    this.saveProg(p);
   },
   ls(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } },
   lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} if (typeof Sync !== "undefined" && Sync.tkKey(k)) Sync.scheduleSave(); },
