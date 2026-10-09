@@ -98,6 +98,15 @@ const WorldFeats = {
     st.told = (st.told || []).filter(keep); st.yielded = (st.yielded || []).filter(keep);
     st.curtain = false; st.cutReturn = null;
   },
+  // an untold relay while the news is going round: not someone to talk to
+  silent(scene, n) { return !!(n.gossip && n.gossip.relay && !this.told(scene, n.id) && this.gossipActive(scene, n)); },
+  // who the news reaches from n, along the tells
+  reaches(scene, n, target) {
+    const seen = new Set(), q = [n.id];
+    while (q.length) { const id = q.shift(); if (id === target) return true; if (seen.has(id)) continue; seen.add(id);
+      const m = scene.npcs.find(x => x.id === id); for (const t of (m && m.gossip && m.gossip.tells) || []) q.push(t); }
+    return false;
+  },
   told(scene, id) { return !!(scene.st.told || []).includes(id); },
   applyTold(scene) {
     for (const p of scene.toldProps || []) if (p.img) p.img.setVisible(this.told(scene, p.id));
@@ -109,6 +118,7 @@ const WorldFeats = {
   // talking to a townsperson with the news to tell: they know now, and pass it on
   tell(scene, n) {
     if (!this.gossipActive(scene, n) || this.told(scene, n.id)) return false;
+    if (n.gossip.relay) return true;   // a relay hears it only from a neighbour (and isn't a talk target till then: tk-world pick)
     const lines = n.say.length ? worldLines(n.say) : [["n", "“A wedding? Liu Bei of Jingzhou, to the Marquis's sister? I must tell the neighbours!”", "“刘皇叔要娶吴侯的妹妹？我得告诉街坊去！”"]];
     scene.talk(lines, () => this.mark(scene, n));
     return true;
@@ -161,20 +171,44 @@ const WorldFeats = {
     for (const g of scene.gossipWalks.slice()) {
       if ((g.t -= dt) > 0) continue;
       scene.gossipWalks.splice(scene.gossipWalks.indexOf(g), 1);
-      const { n, to } = g, at = { x: to.spr.x + (n.spr.x < to.spr.x ? -14 : 14), y: to.spr.y };
-      const go = Math.hypot(at.x - n.spr.x, at.y - n.spr.y), was = n.wander;
-      n.wander = false;
-      scene.tweens.add({ targets: n.spr, x: at.x, y: at.y, duration: Math.max(300, go / 40 * 1000), onUpdate: () => n.spr.setDepth(n.spr.y),
-        onComplete: () => {
-          this.bubble(scene, n.spr, "!");
-          this.mark(scene, to);
-          scene.time.delayedCall(700, () => scene.tweens.add({ targets: n.spr, x: n.home.x, y: n.home.y, duration: Math.max(300, go / 40 * 1000),
-            onUpdate: () => n.spr.setDepth(n.spr.y), onComplete: () => { n.wander = was; } }));
-        } });
+      const { n, to } = g, at = { x: to.spr.x + (n.spr.x < to.spr.x ? -14 : 14), y: to.spr.y }, was = n.wander;
+      n.wander = false; n.spr.setVelocity && n.spr.setVelocity(0);
+      // by the streets (findPath), not through a house, and in a hurry (Places: about 80 px/s)
+      const there = this.pathFor(scene, n.spr, at, to), back = () => this.walkAlong(scene, n.spr, this.pathFor(scene, n.spr, n.home, null), 60, () => { n.wander = was; });
+      this.walkAlong(scene, n.spr, there, 80, () => {
+        this.bubble(scene, n.spr, "!");
+        this.mark(scene, to);
+        this.caption(scene, to);   // the one told says it aloud, over his head, without stopping play
+        scene.time.delayedCall(700, back);
+      });
     }
     this.fires(scene);
     this.yieldStep(scene, dt);
     this.carriageStep(scene);
+  },
+  pathFor(scene, spr, to, skip) {
+    const p = scene.findPath ? scene.findPath(spr.x, spr.y - 3, to.x, to.y - 3, skip) : null;
+    return (p || [{ x: to.x, y: to.y - 3 }]).map(q => ({ x: q.x, y: q.y + 3 }));
+  },
+  walkAlong(scene, spr, pts, speed, done) {
+    const next = () => {
+      const q = pts.shift();
+      if (!q) return done && done();
+      const d = Math.hypot(q.x - spr.x, q.y - spr.y);
+      scene.tweens.add({ targets: spr, x: q.x, y: q.y, duration: Math.max(40, d / speed * 1000), onUpdate: () => spr.setDepth(spr.y), onComplete: next });
+    };
+    next();
+  },
+  // a floating line over someone (a relay told by his neighbour): his first say line, Chinese over English, gone in a few seconds
+  caption(scene, n) {
+    const l = worldLines(n.say || [])[0];
+    if (!l) return;
+    const en = l[0] === "say" ? l[2] : l[1], zh = l[0] === "say" ? l[3] : l[2];
+    const txt = [zh, en].filter(Boolean).join("\n");
+    if (!txt) return;
+    const t = scene.add.text(n.spr.x, n.spr.y - n.spr.height - 6, txt, { fontFamily: '"Noto Serif SC", serif', fontSize: "18px", color: "#fff6dc", align: "center",
+      backgroundColor: "rgba(40,24,16,.82)", padding: { x: 6, y: 3 }, wordWrap: { width: 360 } }).setOrigin(.5, 1).setScale(.4).setResolution(2).setDepth(9e4 + 4);
+    scene.tweens.add({ targets: t, y: t.y - 6, delay: 2600, alpha: 0, duration: 700, onComplete: () => t.destroy() });
   },
   bubble(scene, spr, text) {
     const t = scene.add.text(spr.x, spr.y - spr.height - 4, text, { fontFamily: "sans-serif", fontSize: "10px", color: "#c0392b", fontStyle: "bold" }).setOrigin(.5, 1).setDepth(9e4 + 3);
