@@ -604,7 +604,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 
 ## X20 · White Gate Tower (白門樓)
-*Xiapi* · room `white-gate` · boards: **Cao Cao**: “Keep Chen Gong.” / **Cao Cao**: “Weigh Lü Bu's offer.” / **Cao Cao**: “Zhang Liao.” · **BOSS**
+*Xiapi* · room `white-gate` · boards: **Cao Cao**: “Keep Chen Gong.” / **Cao Cao**: “Weigh Lü Bu's offer.” / **Cao Cao**: “Kill Zhang Liao with your own sword.” · **BOSS**
 
 *Cao Cao has the floodwater drawn off, and sits with Liu Bei on the White Gate Tower. The prisoners are brought up. Lü Bu, huge as he is, is roped into a ball.*  
 曹操入城，即傳令退了所決之水，與玄德同坐白門樓上，關、張侍立於側，提過擒獲一干人來。呂布雖然長大，卻被繩索綑作一團。
@@ -701,8 +701,6 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 *Lü Bu is strangled, and his head is hung up.*  
 操令將呂布縊死，然後梟首。
 
-**▶ GO PROBLEM**
-
 **Cao Cao:** I know this face.  
 這人好生面善。
 
@@ -714,6 +712,8 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 
 **Zhang Liao:** Only a pity the fire wasn't bigger. It didn't burn you to death, traitor!  
 只是可惜！可惜當日火不大，不曾燒死你這國賊！
+
+**▶ GO PROBLEM**
 
 *Cao Cao draws his sword to kill Zhang Liao himself. Zhang Liao stretches out his neck without fear. Then someone behind Cao Cao catches his arm, and someone else kneels in front of him: Do not strike, Chancellor!*  
 操拔劍在手，親自來殺張遼。遼全無懼色，引頸待殺。曹操背後一人攀住臂膊，一人跪於面前，說道：「丞相且莫動手！」

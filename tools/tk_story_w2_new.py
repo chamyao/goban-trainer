@@ -2752,12 +2752,12 @@ def _scenes_lvbu():
             ["spawn", "zl", "zhangliao", "x20", 18, 8],
             S("zhangliao", "Lü Bu, you coward! If you die, you die. What is there to be afraid of?", "呂布匹夫！死則死耳，何懼之有！"),
             N("Lü Bu is strangled, and his head is hung up.", "操令將呂布縊死，然後梟首。"),
-            ["problem"],  # 3 — Zhang Liao
             S("caocao", "I know this face.", "這人好生面善。"),
             S("zhangliao", "We met in Puyang. How could you forget?", "濮陽城中曾相遇，如何忘卻？"),
             S("caocao", "So you remember it too!", "你原來也記得！"),
             S("zhangliao", "Only a pity the fire wasn't bigger. It didn't burn you to death, traitor!", "只是可惜！可惜當日火不大，不曾燒死你這國賊！"),
             ["emote", "caocao", "anger"],
+            ["problem"],  # 3 — cut Zhang Liao down (stopped, as written)
             ["pose", "caocao", "strike", "zl"],
             N("Cao Cao draws his sword to kill Zhang Liao himself. Zhang Liao stretches out his neck without fear. Then someone behind Cao Cao catches his arm, "
               "and someone else kneels in front of him: Do not strike, Chancellor!",
@@ -2867,8 +2867,8 @@ def _multi_dilemmas_lb():
               "The best fighter alive, offering to serve. Ask the man beside me.", "天下第一的猛將，願為我用。問問身邊這個人。",
               "Ding Yuan and Dong Zhuo.", "丁建陽、董卓。",
               "Not yet. Think.", "還不行，再想。"),
-            D("caocao", "Zhang Liao.", "張遼。",
-              "He wished the fire at Puyang had burned me. He doesn't flinch.", "他恨濮陽的火沒燒死我。他面不改色。",
+            D("caocao", "Kill Zhang Liao with your own sword.", "親手殺了張遼。",
+              "He wished the fire at Puyang had burned me, and calls me traitor to my face. He doesn't flinch.", "他恨濮陽的火沒燒死我，當面罵我國賊。他面不改色。",
               "Someone holds my arm.", "有人攀住我的臂膊。",
               "Too hot. Again.", "太急。再來。"),
         ],
