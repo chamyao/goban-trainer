@@ -45,36 +45,36 @@
    "cccccccccccccccccccccccccccccccccccccccccccccccccddccccccccccccccccccccccccccccc",
    "cccccccccccccccccccccccccccccccccccccccccccccccccddccccccccccccccccccccccccccccc",
    "cccccccccccccccccccccccccccccccccccccccccccccccccddccccccccccccccccccccccccccccc",
-   "cccccccccccccccccccWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWddWWWWWWWWWWccccccccccccccccccc",
-   "cccccccccccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaddaaaaaaaaaWccccccccccccccccccc",
-   "cccccccccccccccccccWabbbbbbaaaaaaaaaaaaaaaaaaaaaaddaabbbbbbaWccccccccccccccccccc",
-   "cccccccccccccccccccWabbbbbbaaaaaaaaaaaaaaaaaaaaaaddaabbbbbbaWccccccccccccccccccc",
-   "cccccccccccccccccccWabbaaWWaaaaaaaaaaaaaaaaaaaaaaddaaWWaabbaWccccccccccccccccccc",
-   "cccccccccccccccccccWabbaaWWaaaaaaaaaaaaaaaaaaaaaaddaaWWaabbaWccccccccccccccccccc",
-   "cccccccccccccccccccWabbaaWWaaaaaaaaaaaaaaaaaaaaaaddaaWWaabbaWccccccccccccccccccc",
-   "cccccccccccccccccccWabbaaWWaaaaaaaaaaaaaaaaaaaaaaddaaWWaabbaWccccccccccccccccccc",
-   "cccccccccccccccccccWabbaaWWaaaaaaaaaaaaaaaaaaaaaaaaaaWWaabbaWccccccccccccccccccc",
-   "cccccccccccccccccccWabbaaWWaaaaaaaaaaaaaaaaaaaaaaaaaaWWaabbaWccccccccccccccccccc",
-   "cccccccccccccccccccWabbaaWWaaaaaaaaaaaaaaaaaaaaaaaaaaWWaabbaWccccccccccccccccccc",
-   "cccccccccccccccccccWabbaaWWaaaaaaaaaaaaaaaaaaaaaaaaaaWWaabbaWccccccccccccccccccc",
-   "cccccccccccccccccccWabbaaWWaaaaaaaaaaaaaaaaaaaaaaaaaaWWaabbaWccccccccccccccccccc",
-   "cccccccccccccccccccWabbaaWWaaaaaaaaaaaaaaaaaaaaaaaaaaWWaabbaWccccccccccccccccccc",
-   "cccccccccccccccccWWWWbbWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWbbWWWWccccccccccccccccc",
-   "cccccccccccccccccWWWWbbWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWbbWWWWccccccccccccccccc",
-   "cccccccccccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccccccccccc",
-   "cccccccccccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccccccccccc",
-   "cccccccccccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccccccccccc",
-   "cccccccccccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccccccccccc",
-   "cccccccccccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccccccccccc",
-   "cccccccccccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccccccccccc",
-   "cccccccccccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccccccccccc",
-   "cccccccccccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccccccccccc",
-   "cccccccccccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccccccccccc",
-   "cccccccccccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccccccccccc",
-   "cccccccccccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccccccccccc",
-   "cccccccccccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccccccccccc",
-   "cccccccccccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccccccccccc",
-   "cccccccccccccccccccWWWWWWWWWWWWWWWWWWWWWWddWWWWWWWWWWWWWWWWWWccccccccccccccccccc",
+   "cccccccccccWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWddWWWWWWWWWWWWWWWWWWccccccccccc",
+   "cccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaWccccccccccc",
+   "cccccccccccWaaaaaaaaabbbbbbaaaaaaaaaaaaaaaaaaaaaaddaabbbbbbaaaaaaaaaWccccccccccc",
+   "cccccccccccWaaaaaaaaabbbbbbaaaaaaaaaaaaaaaaaaaaaaddaabbbbbbaaaaaaaaaWccccccccccc",
+   "cccccccccccWaaaaaaaaabbaaWWaaaaaaaaaaaaaaaaaaaaaaddaaWWaabbaaaaaaaaaWccccccccccc",
+   "cccccccccccWaaaaaaaaabbaaWWaaaaaaaaaaaaaaaaaaaaaaddaaWWaabbaaaaaaaaaWccccccccccc",
+   "cccccccccccWaaaaaaaaabbaaWWaaaaaaaaaaaaaaaaaaaaaaddaaWWaabbaaaaaaaaaWccccccccccc",
+   "cccccccccccWaaaaaaaaabbaaWWaaaaaaaaaaaaaaaaaaaaaaddaaWWaabbaaaaaaaaaWccccccccccc",
+   "cccccccccccWaaaaaaaaabbaaWWaaaaaaaaaaaaaaaaaaaaaaaaaaWWaabbaaaaaaaaaWccccccccccc",
+   "cccccccccccWaaaaaaaaabbaaWWaaaaaaaaaaaaaaaaaaaaaaaaaaWWaabbaaaaaaaaaWccccccccccc",
+   "cccccccccccWaaaaaaaaabbaaWWaaaaaaaaaaaaaaaaaaaaaaaaaaWWaabbaaaaaaaaaWccccccccccc",
+   "cccccccccccWaaaaaaaaabbaaWWaaaaaaaaaaaaaaaaaaaaaaaaaaWWaabbaaaaaaaaaWccccccccccc",
+   "cccccccccccWaaaaaaaaabbaaWWaaaaaaaaaaaaaaaaaaaaaaaaaaWWaabbaaaaaaaaaWccccccccccc",
+   "cccccccccccWaaaaaaaaabbaaWWaaaaaaaaaaaaaaaaaaaaaaaaaaWWaabbaaaaaaaaaWccccccccccc",
+   "cccccccccWWWWWWWWWWWWbbWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWbbWWWWWWWWWWWWccccccccc",
+   "cccccccccWWWWWWWWWWWWbbWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWbbWWWWWWWWWWWWccccccccc",
+   "cccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccc",
+   "cccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccc",
+   "cccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccc",
+   "cccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccc",
+   "cccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccc",
+   "cccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccc",
+   "cccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccc",
+   "cccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccc",
+   "cccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccc",
+   "cccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccc",
+   "cccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccc",
+   "cccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccc",
+   "cccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccc",
+   "cccccccccccWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWddWWWWWWWWWWWWWWWWWWWWWWWWWWccccccccccc",
    "ccccccccccccccccccccccccccccccccccccfffffddfffffcccccccccccccccccccccccccccccccc",
    "ccccccccccccccccccccccccccccccccccccfffffddfffffcccccccccccccccccccccccccccccccc",
    "ccccccccccccccccccccccccccccccccccccfffffddfffffcccccccccccccccccccccccccccccccc",
@@ -103,9 +103,9 @@
    "id": "wall",
    "kind": "wall",
    "outline": [
-    4,
+    2,
     5,
-    12,
+    16,
     9
    ],
    "width": 1,
@@ -119,18 +119,18 @@
      5
     ]
    },
-   "tiles": 140
+   "tiles": 172
   },
   {
    "id": "inner",
    "kind": "wall",
    "path": [
     [
-     4,
+     2,
      9
     ],
     [
-     15,
+     17,
      9
     ]
    ],
@@ -145,7 +145,7 @@
      9
     ]
    },
-   "tiles": 92
+   "tiles": 124
   },
   {
    "id": "part-w",
@@ -383,6 +383,84 @@
    "blocks_sight": true
   },
   {
+   "kind": "building.house",
+   "x": 16,
+   "y": 25,
+   "w": 4,
+   "h": 2,
+   "id": "side-w1",
+   "door": "E",
+   "faces": "E",
+   "label": "A side room",
+   "map": "side-w1",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.house",
+   "x": 16,
+   "y": 29,
+   "w": 4,
+   "h": 2,
+   "id": "side-w2",
+   "door": "E",
+   "faces": "E",
+   "label": "A side room",
+   "map": "side-w2",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.house",
+   "x": 16,
+   "y": 33,
+   "w": 4,
+   "h": 2,
+   "id": "side-w3",
+   "door": "E",
+   "faces": "E",
+   "label": "A side room",
+   "map": "side-w3",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.house",
+   "x": 60,
+   "y": 25,
+   "w": 4,
+   "h": 2,
+   "id": "side-e1",
+   "door": "W",
+   "faces": "W",
+   "label": "A side room",
+   "map": "side-e1",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.house",
+   "x": 60,
+   "y": 29,
+   "w": 4,
+   "h": 2,
+   "id": "side-e2",
+   "door": "W",
+   "faces": "W",
+   "label": "A side room",
+   "map": "side-e2",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.house",
+   "x": 60,
+   "y": 33,
+   "w": 4,
+   "h": 2,
+   "id": "side-e3",
+   "door": "W",
+   "faces": "W",
+   "label": "A side room",
+   "map": "side-e3",
+   "blocks_sight": true
+  },
+  {
    "kind": "tree.pine",
    "x": 25,
    "y": 12,
@@ -501,23 +579,20 @@
  "npcs": [
   {
    "id": "npc-1",
-   "kind": "folk.soldier",
-   "x": 21.5,
-   "y": 29.9,
+   "kind": "folk.villager",
+   "x": 45.5,
+   "y": 49.9,
    "say": [
-    "The man in the doorway holds an axe behind his back. “Nothing here. Move along.”"
-   ],
-   "in": [
-    "feast"
+    "A monk sweeps the courtyard. “The Dowager is in the abbot's hall. Go round by the side corridors.”"
    ]
   },
   {
    "id": "npc-2",
    "kind": "folk.soldier",
-   "x": 57.5,
-   "y": 29.9,
+   "x": 21.5,
+   "y": 41.9,
    "say": [
-    "Two men crouch in the side room with axes across their knees. They look away."
+    "A guard leans by the corridor's mouth, too heavy in the shoulders for a monk. “Only monks' rooms down there.”"
    ],
    "in": [
     "feast"
@@ -525,11 +600,14 @@
   },
   {
    "id": "npc-3",
-   "kind": "folk.villager",
-   "x": 45.5,
-   "y": 49.9,
+   "kind": "folk.soldier",
+   "x": 57.5,
+   "y": 41.9,
    "say": [
-    "A monk sweeps the courtyard. “The Dowager is in the abbot's hall. Go round by the side corridors.”"
+    "A guard watches you from the corridor's mouth, one hand inside his sleeve. He doesn't say a word."
+   ],
+   "in": [
+    "feast"
    ]
   }
  ],
@@ -541,6 +619,60 @@
    "y": 30.85,
    "w": 0.8,
    "h": 0.75,
+   "door": true
+  },
+  {
+   "to": "sweet-dew-temple--side-w1",
+   "side": "W",
+   "x": 19.85,
+   "y": 25.6,
+   "w": 0.75,
+   "h": 0.8,
+   "door": true
+  },
+  {
+   "to": "sweet-dew-temple--side-w2",
+   "side": "W",
+   "x": 19.85,
+   "y": 29.6,
+   "w": 0.75,
+   "h": 0.8,
+   "door": true
+  },
+  {
+   "to": "sweet-dew-temple--side-w3",
+   "side": "W",
+   "x": 19.85,
+   "y": 33.6,
+   "w": 0.75,
+   "h": 0.8,
+   "door": true
+  },
+  {
+   "to": "sweet-dew-temple--side-e1",
+   "side": "E",
+   "x": 59.4,
+   "y": 25.6,
+   "w": 0.75,
+   "h": 0.8,
+   "door": true
+  },
+  {
+   "to": "sweet-dew-temple--side-e2",
+   "side": "E",
+   "x": 59.4,
+   "y": 29.6,
+   "w": 0.75,
+   "h": 0.8,
+   "door": true
+  },
+  {
+   "to": "sweet-dew-temple--side-e3",
+   "side": "E",
+   "x": 59.4,
+   "y": 33.6,
+   "w": 0.75,
+   "h": 0.8,
    "door": true
   },
   {
@@ -556,6 +688,30 @@
   "sweet-dew-temple--gl-abbot": [
    40,
    31
+  ],
+  "sweet-dew-temple--side-w1": [
+   20,
+   26
+  ],
+  "sweet-dew-temple--side-w2": [
+   20,
+   30
+  ],
+  "sweet-dew-temple--side-w3": [
+   20,
+   34
+  ],
+  "sweet-dew-temple--side-e1": [
+   59,
+   26
+  ],
+  "sweet-dew-temple--side-e2": [
+   59,
+   30
+  ],
+  "sweet-dew-temple--side-e3": [
+   59,
+   34
   ],
   "nanxu": [
    41,
@@ -658,6 +814,12 @@
  },
  "links": [
   "nanxu",
-  "sweet-dew-temple--gl-abbot"
+  "sweet-dew-temple--gl-abbot",
+  "sweet-dew-temple--side-e1",
+  "sweet-dew-temple--side-e2",
+  "sweet-dew-temple--side-e3",
+  "sweet-dew-temple--side-w1",
+  "sweet-dew-temple--side-w2",
+  "sweet-dew-temple--side-w3"
  ]
 }

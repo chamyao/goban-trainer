@@ -352,6 +352,18 @@
    "blocks_sight": true
   },
   {
+   "kind": "building.hall",
+   "x": 52,
+   "y": 17,
+   "w": 4,
+   "h": 2,
+   "id": "lsfu",
+   "door": "S",
+   "faces": "S",
+   "label": "Lady Sun's rooms",
+   "blocks_sight": true
+  },
+  {
    "kind": "building.palace",
    "x": 61,
    "y": 41,
@@ -725,13 +737,6 @@
   },
   {
    "kind": "lamp.post",
-   "x": 53,
-   "y": 19,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "lamp.post",
    "x": 56,
    "y": 28,
    "w": 1,
@@ -1018,12 +1023,11 @@
    "label": "Lady Wu's gate"
   },
   {
-   "id": "s9",
-   "x": 97.5,
-   "y": 53.7,
-   "node": "15-s9",
-   "label": "The riding ground",
-   "trigger": "near"
+   "id": "ls-rooms",
+   "x": 54.5,
+   "y": 20.7,
+   "node": "",
+   "label": "Lady Sun's rooms"
   }
  ],
  "npcs": [
@@ -1537,19 +1541,19 @@
   {
    "id": "wedding",
    "when": "node:s4",
-   "until": "node:s8",
+   "until": "node:s7",
    "light": "day"
   },
   {
    "id": "winter",
-   "when": "node:s8",
-   "until": "node:s11",
+   "when": "node:s7",
+   "until": "node:s9",
    "light": "day",
    "weather": "snow"
   },
   {
    "id": "newyear",
-   "when": "node:s11",
+   "when": "node:s9",
    "light": "morning"
   }
  ],

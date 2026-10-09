@@ -88,17 +88,10 @@
  ],
  "spots": [
   {
-   "id": "s8",
-   "x": 12.5,
-   "y": 10.7,
-   "node": "15-s8",
-   "label": "Sun Quan's hall"
-  },
-  {
-   "id": "s12",
+   "id": "s10",
    "x": 12.5,
    "y": 8.7,
-   "node": "15-s12",
+   "node": "15-s10",
    "label": "Sun Quan's hall"
   }
  ],

@@ -1,0 +1,123 @@
+{
+ "format": "tk-map/1",
+ "id": "sweet-dew-temple--side-w2",
+ "world": 15,
+ "name": "A side room",
+ "archetype": "interior",
+ "size": [
+  16,
+  12
+ ],
+ "seed": 2393,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "%": "stone",
+   " ": "void",
+   "W": "wall"
+  },
+  "rows": [
+   "                ",
+   " WWWWWWWWWWWWWW ",
+   " W%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%% ",
+   " W%%%%%%%%%%%%% ",
+   " W%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%W ",
+   " WWWWWWWWWWWWWW ",
+   "                "
+  ],
+  "walk": {
+   "stone": true,
+   "void": false,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    8,
+    6
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     7,
+     3
+    ]
+   },
+   "tiles": 44
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.curtain",
+   "x": 12,
+   "y": 6,
+   "w": 1,
+   "h": 1,
+   "id": "curtain"
+  },
+  {
+   "kind": "furn.jar",
+   "x": 2,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "jar"
+  },
+  {
+   "kind": "furn.table",
+   "x": 7,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "table"
+  }
+ ],
+ "spots": [],
+ "npcs": [
+  {
+   "id": "npc-1",
+   "kind": "folk.elder",
+   "x": 8.5,
+   "y": 4.9,
+   "say": [
+    "A monk copies sutras by lamplight. “Boots went past an hour ago. Heavy ones. Not ours.”"
+   ],
+   "face": "S"
+  }
+ ],
+ "exits": [
+  {
+   "to": "sweet-dew-temple",
+   "side": "E",
+   "x": 14,
+   "y": 6,
+   "w": 1,
+   "h": 2
+  }
+ ],
+ "entries": {
+  "sweet-dew-temple": [
+   13,
+   6
+  ],
+  "": [
+   13,
+   6
+  ]
+ },
+ "parent": "sweet-dew-temple",
+ "building": "side-w2",
+ "links": [
+  "sweet-dew-temple"
+ ]
+}

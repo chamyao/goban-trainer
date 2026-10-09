@@ -1,9 +1,9 @@
 # Lady Sun's marriage (Book 15): the map proofs that the book's beats lean on, on the plans' own walk grid.
-#   1. Sweet Dew Temple: the abbot's hall can't be reached without passing the axemen (within 3 tiles of one), since
-#      Zhao Yun has to have walked the corridors (「雲於廊下巡視，見房內有刀斧手埋伏」).
-#   2. The road to Chaisang: from where the road block stood to s14, every way comes within 1.4 tiles of a man of each
-#      rank (tk-feats.js: moving that close to one who hasn't yielded is a catch), so each rank must be faced down; and
-#      each man's place to step aside into is off the road.
+#   1. Sweet Dew Temple: the axemen (「伏於兩廊」) are in three of six side rooms that look alike from outside, and
+#      each group delivers the mark s5's gate needs; every side room can be walked into.
+#   2. The road to Chaisang, both face-downs: from where each block began to the beat past it, every way comes within
+#      1.4 tiles of a man of each rank (tk-feats.js: moving that close to one who hasn't yielded is a catch), so each
+#      rank must be faced down; and each man's place to step aside into is off the road.
 #   3. Nanxu, the loud town: the player tells at most three; the rest are relays a chain reaches; the news reaches Lady
 #      Wu's gatekeeper (on whom s4 and her palace door wait) only by the chain from Qiao Guolao's gate, quickly; every
 #      red hanging lights.
@@ -46,23 +46,30 @@ def tile(p):
 
 ok = True
 
-# 1. the temple's corridors
+# 1. the temple's side rooms: s5's gate needs axemen_1-3 (Plot). Each is delivered by a spot in a side room, where the
+#    axemen are; all six side rooms look alike from outside (searching, not knowing); every one can be walked into.
 mb = builder("Sweet Dew Temple")
+P_t = P["Sweet Dew Temple"]
 start = mb.near_cell((10, 14), want_visible=False)
-door = mb.anchor["abbot"]
-axemen = [tile(n) for n in mb.npcs if n["kind"] == "folk.soldier"]
 free = walk(mb, start)
-past = walk(mb, start, frozenset(near(axemen, 3)))
-r1 = door in free and door not in past
-print(f"temple: the abbot's door is reachable: {door in free}; without passing the axemen ({len(axemen)}): {door in past} -> {'ok' if r1 else 'FAIL'}")
+sides = [t for t in P_t["plan"]["things"] if str(t.get("map", "")).startswith("side-")]
+marks = {sp["delivers"]: m for m, sub in P_t["maps"].items() for sp in sub.get("spots", []) if sp.get("delivers")}
+axemen = {m: sum(1 for n in P_t["npcs"] if n.get("place") == m and n["kind"] == "folk.soldier") for m in marks.values()}
+doors = {t["id"]: mb.anchor.get(t["id"]) for t in sides}
+open_doors = {k: d is not None and any((d[0] + i, d[1] + j) in free for i in (-1, 0, 1) for j in (-1, 0, 1)) for k, d in doors.items()}
+alike = len({t["label"] for t in sides}) == 1 and len({P_t["maps"][t["map"]].get("label") for t in sides}) == 1
+r1 = (sorted(marks) == ["axemen_1", "axemen_2", "axemen_3"] and all(v >= 3 for v in axemen.values())
+      and len(sides) - len(marks) >= 3 and alike and all(open_doors.values()) and mb.anchor["abbot"] in free)
+print(f"temple: {len(sides)} side rooms, alike from outside: {alike}; axemen in {sorted(marks.values())} ({axemen}), "
+      f"delivering {sorted(marks)}; {len(sides) - len(marks)} with monks; every door walkable to: {all(open_doors.values())} "
+      f"-> {'ok' if r1 else 'FAIL'}")
 ok &= r1
 
-# 2. the face-down on the road: a tile is closed if her feet there are within 1.4 tiles of a man's feet
+# 2. the face-downs on the road: for each rank, from where its block began to the beat past it, every way comes within
+#    1.4 tiles of a man of it (her feet to his), so each rank must be faced down; and each man steps aside off the road.
 mb = builder("The road to Chaisang")
 spots = {s["id"]: tile(s) for s in mb.spots}
 men = [n for n in mb.npcs if n.get("yield")]
-s14 = spots["s14"]
-goal = {(s14[0] + i, s14[1] + j) for i in (-1, 0, 1) for j in (-1, 0, 1)}
 
 
 def closed(group):
@@ -71,17 +78,19 @@ def closed(group):
             if any((x + .5 - fx) ** 2 + (y + .9 - fy) ** 2 < 1.4 ** 2 for fx, fy in feet)}
 
 
-reach = walk(mb, spots["block-start"])
-r2 = bool(goal & set(reach))
-print(f"road: s14 reachable from where the block stood: {r2}")
-road = set(mb.lines_tiles("road")) if hasattr(mb, "lines_tiles") else set()
-for group in sorted({n["yield"]["group"] for n in men}):
-    held = not (goal & set(walk(mb, spots["block-start"], frozenset(closed(group)))))
-    asides = [(int(n["x"] + n["yield"]["aside"][0]), int(n["y"] + n["yield"]["aside"][1] - .9)) for n in men if n["yield"]["group"] == group]
-    off_road = all(mb.walkable(a) and abs(a[1] - spots["block-start"][1]) >= 2 for a in asides)
-    print(f"  {group}: {sum(n['yield']['group'] == group for n in men)} men; no way past without coming within 1.4 tiles: {held}; "
-          f"each steps aside onto open ground off the road: {off_road} {asides}")
-    r2 &= held and off_road
+r2 = True
+for group in sorted({n["yield"]["group"] for n in men}, key=lambda g: min(n["x"] for n in men if n["yield"]["group"] == g)):
+    ms = [n for n in men if n["yield"]["group"] == group]
+    back, past = spots[ms[0]["yield"]["back_to"]], spots[ms[0]["until"].split("-")[-1]]
+    goal = {(past[0] + i, past[1] + j) for i in (-1, 0, 1) for j in (-1, 0, 1)}
+    way = bool(goal & set(walk(mb, back)))
+    held = not (goal & set(walk(mb, back, frozenset(closed(group)))))
+    asides = [(int(n["x"] + n["yield"]["aside"][0]), int(n["y"] + n["yield"]["aside"][1] - .9)) for n in ms]
+    off_road = all(mb.walkable(a) and abs(a[1] - back[1]) >= 2 for a in asides)
+    behind = all(n["x"] > back[0] and n["x"] < past[0] for n in ms)
+    print(f"road: {group}: {len(ms)} men between {ms[0]['yield']['back_to']} and {ms[0]['until']}: {behind}; the way is open: {way}; "
+          f"no way past without coming within 1.4 tiles: {held}; each steps aside onto open ground off the road: {off_road}")
+    r2 &= way and held and off_road and behind
 ok &= r2
 
 # 3. the loud town: the player tells at most three people; every relay is reached by a chain from one of them; only
