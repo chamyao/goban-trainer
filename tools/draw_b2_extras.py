@@ -465,6 +465,80 @@ def smoke_column():   # a column of black smoke, about 1x3 tiles, to stand over 
     im = Image.new("RGBA", (16, 48)); _plume(im, 6, 46, 2, random.Random(3), 6)
     return im
 
+def redhang():   # wedding hangings for a house front (红绸/喜字): a red silk swag across with a big rosette, its tails
+    # hanging down each side, and a red paper 囍 under it (the loud town, Lady Sun's book)
+    g = Grid(48, 26)
+    red, redD, redL, gold = "#d0242c", "#8e1420", "#f05a5a", "#f2cc5a"
+    import math
+    for x in range(48):                                                    # the swag: two loops drooping between three knots
+        y = 2 + round(4 * math.sin(math.pi * (x % 24) / 24))
+        g.rect(x, y, 1, 3, red); g.set(x, y, redL); g.set(x, y + 2, redD)
+    for x in (0, 47):
+        g.rect(x - (x > 0), 4, 2, 16, red); g.rect(x, 4, 1, 16, redD)          # the tails at the ends
+        g.rect(x - (x > 0), 19, 2, 2, gold)
+    g.ellipse(24, 5, 5, 4, red); g.ellipse(24, 5, 3, 2.5, redL); g.ellipse(24, 5, 1.2, 1.2, gold)   # the rosette
+    g.rect(22, 9, 1, 5, red); g.rect(26, 9, 1, 5, red)                       # its ribbons
+    g.rect(18, 13, 12, 12, red); g.rect(18, 13, 12, 1, redL); g.rect(18, 24, 12, 1, redD)   # the 囍 paper
+    for x0 in (19, 24):                                                      # 囍: two 喜 side by side, in gold
+        g.rect(x0 + 1, 15, 3, 1, gold); g.rect(x0 + 2, 14, 1, 1, gold)
+        g.rect(x0, 17, 5, 1, gold); g.rect(x0 + 1, 18, 3, 2, gold); g.set(x0 + 2, 19, red)
+        g.rect(x0, 21, 5, 1, gold); g.rect(x0 + 1, 22, 3, 1, gold)
+    return g.outline().image()
+
+
+def riverboat():   # a Han river boat moored at a timber jetty: planked hull, a curved mat cabin roof, oars shipped,
+    # water lapping round it (Nanxu's dock)
+    g = Grid(64, 40)
+    g.rect(0, 22, 64, 18, "#3a6a8a"); g.rect(0, 22, 64, 1, "#5a8aaa")      # the water
+    for x, y in ((4, 30), (20, 35), (44, 31), (56, 37), (30, 27)):
+        g.rect(x, y, 5, 1, "#7aaacc")
+    g.rect(44, 14, 20, 6, "#8a6a42"); g.rect(44, 14, 20, 1, "#a8885a")      # the jetty planks
+    for x in range(46, 64, 4):
+        g.rect(x, 14, 1, 6, "#6a4a2a")
+    for x in (46, 60):
+        g.rect(x, 20, 2, 12, "#5a3a1e")                                      # its piles
+    g.ellipse(26, 26, 24, 6, "#6a3e1e"); g.rect(4, 20, 44, 6, "#7a4a24")     # the hull
+    g.rect(4, 20, 44, 1, "#a06a3a"); g.rect(2, 19, 4, 2, "#7a4a24"); g.rect(46, 18, 5, 3, "#7a4a24")   # bow, stern
+    g.ellipse(24, 15, 11, 6, "#c8b078"); g.rect(13, 15, 23, 5, "#c8b078")   # the mat cabin roof
+    for x in range(14, 36, 3):
+        g.rect(x, 10, 1, 10, "#a08a58")                                      # its mat ribs
+    g.rect(13, 19, 23, 1, "#8a7448")
+    for x0 in (8, 40):
+        d = -1 if x0 < 20 else 1
+        for t in range(10):
+            g.set(x0 + d * (t * 7 // 9), 21 + t, "#9a7a4a")                  # oars shipped, blades in the water
+    return g.outline().image()
+
+
+def target():   # an archery butt: red and white rings on a straw boss, on a wooden stand
+    g = Grid(16, 24)
+    g.rect(3, 14, 2, 10, "#6a4a2a"); g.rect(11, 14, 2, 10, "#6a4a2a"); g.rect(2, 22, 12, 2, "#5a3a1e")
+    for r, c in ((7, "#d8c890"), (6, "#c8283c"), (4.5, "#f4f0e8"), (3, "#c8283c"), (1.5, "#f4f0e8")):
+        g.ellipse(8, 9, r, r, c)
+    g.set(8, 9, "#c8283c")
+    return g.outline().image()
+
+
+def incense():   # a temple's bronze incense burner (香炉) on three legs, two handles, smoke curling up
+    g = Grid(32, 36)
+    bronze, bronzeD, bronzeL = "#8a6a2a", "#5a4218", "#b8923e"
+    for x in (6, 15, 24):
+        g.rect(x, 30, 3, 6, bronzeD)                                         # the three legs
+    g.ellipse(16, 26, 13, 7, bronze); g.ellipse(14, 24, 8, 3, bronzeL)       # the bowl
+    g.rect(3, 19, 26, 3, bronzeD); g.rect(3, 19, 26, 1, bronzeL)             # its rim
+    for x in (2, 27):
+        g.rect(x, 14, 3, 6, bronze); g.rect(x, 14, 3, 1, bronzeL)            # the upright handles
+    for x in (11, 15, 19):
+        g.rect(x, 12, 1, 7, "#c8392c"); g.set(x, 11, "#ffb23a")              # incense sticks, glowing tips
+    im = g.outline().image(); px = im.load()                                 # the smoke, curling, over the outline (soft)
+    import math
+    for x0 in (11, 15, 19):
+        for i in range(11):
+            x, y = x0 + round(1.6 * math.sin(i / 2.2 + x0)), 10 - i
+            px[x, y] = (210, 210, 220, 200 - i * 14)
+    return im
+
+
 PIECES = {
     "banner.black": banner_black, "banner.white": banner_white, "milestone": milestone, "plant.peony": peony, "water.lotus": lotus,
     "prop.lanterns": lantern_stand, "prop.body_lamp": body_lamp, "tree.poplar": poplar, "tree.willow": willow,
@@ -472,7 +546,8 @@ PIECES = {
     "furn.swordwall": swordwall, "furn.seat": seat, "furn.lamp": lamp, "furn.dais": dais, "corral": corral,
     "landmark.hitchingpost": hitchingpost, "garden.rockery": rockery, "landmark.ridge": ridge,
     "furn.jailcell": jailcell, "landmark.torch": torch, "wall.stairs": wallstairs, "prop.halberd": halberd,
-    "prop.carriage": bridal_carriage, "prop.gateshut": gateshut, "prop.gateshut_ns": gateshut_ns, "ruin.burning": burning_house, "fx.smoke": smoke_column,
+    "prop.carriage": bridal_carriage, "prop.gateshut": gateshut, "prop.gateshut_ns": gateshut_ns, "ruin.burning": burning_house, "fx.smoke": smoke_column, "deco.redhang": redhang, "prop.boat": riverboat, "prop.target": target,
+    "landmark.incense": incense,
 }
 
 

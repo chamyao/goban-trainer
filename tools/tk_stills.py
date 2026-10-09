@@ -709,6 +709,32 @@ FACE_LOOKS = {
     "caiyong": ("Cai Yong", "a sorrowful old scholar with a grey beard, in a plain scholar's robe and cap"),
     "chengpu": ("Cheng Pu", "a veteran general with a grizzled beard, in red armour, holding a long spear"),
     "handang": ("Han Dang", "a tough general with a square jaw and short beard, in red armour, holding a broadsword"),
+    # Lady Sun's marriage (ch. 54-55)
+    "ladysun": ("Lady Sun", "Sun Quan's spirited younger sister, about twenty, bold and fearless, in a red silk robe "
+                            "with gold trim, hair up with a red pin, a sword at her side"),
+    "ladywu": ("Lady Wu", "Sun Quan's formidable, dignified mother of about sixty, grey hair in a high bun with gold pins, "
+                          "in a deep purple robe"),
+    "zhaoyun": ("Zhao Yun", "a handsome, steadfast general in his thirties, clean-shaven, in silver-white armour with a "
+                            "blue cloak, holding a spear"),
+    "sunquan": ("Sun Quan", "the young lord of Wu in his late twenties, square-jawed, with a short reddish-brown beard and "
+                            "green-tinged eyes, in a dark red court robe and black cap"),
+    "zhouyu": ("Zhou Yu", "Wu's brilliant, handsome commander in his thirties, clean-shaven, proud, in a red robe over "
+                          "light armour, a white feather fan-like scarf, a sword at his side"),
+    "zhugeliang": ("Zhuge Liang", "a serene, wise strategist in his late twenties with a thin beard, in a white Taoist "
+                                  "robe and a black scholar's cap, holding a white feather fan"),
+    "qiaoguolao": ("Qiao Guolao", "the Elder Qiao, a kindly, venerable gentleman of seventy with a long white beard, in a "
+                                  "brown silk robe with gold trim"),
+    "lufan": ("Lü Fan", "a smooth, polite envoy of Wu in his forties with a goatee, in a dark blue court robe and black cap"),
+    "zhangzhao": ("Zhang Zhao", "Wu's stern old chief minister with white hair and a long white beard, in a grey court "
+                                "robe and black cap"),
+    "xusheng": ("Xu Sheng", "a tough Wu general in his thirties with a short beard, in red-trimmed iron armour and a "
+                            "helmet, holding a spear"),
+    "matron": ("the matron", "a plain-spoken household matron in her fifties, greying hair in a bun, in a muted plum robe"),
+    "lusu": ("Lu Su", "a kindly, earnest Wu adviser in his thirties with a short beard, in a blue robe and black cap"),
+    "dingfeng": ("Ding Feng", "a lean Wu general in his twenties with a thin beard, in dark iron armour and a helmet, "
+                              "holding a spear"),
+    "chenwu": ("Chen Wu", "a burly Wu general with a bristling beard and a fierce face, in gold-trimmed brown armour, "
+                          "a sword at his side"),
     # Lü Bu's fall (book 14)
     "yanshi": ("Lady Yan", "Lü Bu's elegant, anxious wife in her thirties, in a deep red silk robe with gold hairpins and "
                            "a pearl ornament, hair in a high bun"),

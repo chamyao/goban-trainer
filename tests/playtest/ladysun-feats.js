@@ -51,13 +51,13 @@ check(g.hang.length&&g.hang.every(Boolean),`the red hangings go up where it's kn
 // 4. the carriage
 const clear=async()=>{for(let i=0;i<12&&await p.evaluate(()=>window.__w.ui.busy());i++){await p.evaluate(()=>window.__w.ui.advance());await p.waitForTimeout(250);}};
 await clear();
-const c0=await p.evaluate(()=>{const s=window.__w;return {car:!!s.carriageImg,alpha:s.player.alpha};});
-check(c0.car&&c0.alpha===0,`she rides in the carriage, curtain down, unseen (${JSON.stringify(c0)})`);
+const c0=await p.evaluate(()=>{const s=window.__w;return {car:!!s.carriageImg,alpha:s.player.alpha,frame:s.carriageImg&&s.carriageImg.frame&&s.carriageImg.frame.name};});
+check(c0.car&&c0.alpha===0&&/^carriage\.\w+\.shut$/.test(c0.frame),`she rides in the carriage, curtain down, unseen (${JSON.stringify(c0)})`);
 // 5. face them down: curtain down, nothing happens
 await p.evaluate(()=>{const s=window.__w;for(const n of s.npcs)if(n.yield){n.stoodAside=false;n.spr.body.enable=true;n.spr.setPosition(n.home.x,n.home.y);}s.st.yielded=[];s.st.curtain=false;s.player.facing='right';s.player.setVelocity(0);});await p.waitForTimeout(3000);
 let y=await p.evaluate(()=>window.__w.npcs.filter(n=>n.yield&&n.stoodAside).length);check(y===0,`curtain down: they don't yield (${y})`);
 await clear();await p.keyboard.press('c');await p.waitForTimeout(300);
-const c1=await p.evaluate(()=>({up:window.__w.st.curtain,alpha:window.__w.player.alpha}));check(c1.up&&c1.alpha===1,`C raises the curtain; her face shows (${JSON.stringify(c1)})`);
+const c1=await p.evaluate(()=>({up:window.__w.st.curtain,frame:window.__w.carriageImg.frame.name}));check(c1.up&&/^carriage\.\w+\.open$/.test(c1.frame),`C raises the curtain; she shows at the window (the open frame) (${JSON.stringify(c1)})`);
 await p.evaluate(()=>{const s=window.__w;s.player.facing='right';});
 for(let i=0;i<14;i++){await p.evaluate(()=>window.__w.ui.busy()&&window.__w.ui.advance());await p.waitForTimeout(400);}
 y=await p.evaluate(()=>({n:window.__w.npcs.filter(n=>n.yield&&n.stoodAside).length,saved:window.__w.st.yielded}));

@@ -240,6 +240,72 @@
    0,
    32,
    16
+  ],
+  "carriage.left.shut": [
+   798,
+   0,
+   34,
+   28
+  ],
+  "carriage.right.shut": [
+   833,
+   0,
+   34,
+   28
+  ],
+  "carriage.down.shut": [
+   868,
+   0,
+   28,
+   30
+  ],
+  "carriage.up.shut": [
+   897,
+   0,
+   28,
+   30
+  ],
+  "carriage.left.open": [
+   926,
+   0,
+   34,
+   28
+  ],
+  "carriage.right.open": [
+   961,
+   0,
+   34,
+   28
+  ],
+  "carriage.down.open": [
+   996,
+   0,
+   28,
+   30
+  ],
+  "carriage.up.open": [
+   1025,
+   0,
+   28,
+   30
+  ],
+  "item.pouch1": [
+   1054,
+   0,
+   14,
+   16
+  ],
+  "item.pouch2": [
+   1069,
+   0,
+   14,
+   16
+  ],
+  "item.pouch3": [
+   1084,
+   0,
+   14,
+   16
   ]
  },
  "kinds": {

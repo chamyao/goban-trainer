@@ -84,6 +84,7 @@ const WorldFeats = {
     scene.st.told = scene.st.told || [];
     scene.st.yielded = scene.st.yielded || [];
     scene.gossipWalks = [];
+    scene.carriageImg = scene.curtainImg = null; scene.propsAsked = false;   // (the scene object outlives a change of place; its images do not)
     this.applyTold(scene);
     for (const n of scene.npcs) if (n.yield && scene.st.yielded.includes(n.id)) this.asideNow(scene, n);
     const key = () => { if (!scene.ui.busy() && !scene.cine && !scene.leaving) this.curtain(scene); };
@@ -241,18 +242,31 @@ const WorldFeats = {
       if (scene.carriageImg) { scene.carriageImg.destroy(); scene.carriageImg = null; scene.curtainImg && scene.curtainImg.destroy(); scene.curtainImg = null; if (P.alpha === 0 || P.carriageHidden) { P.setAlpha(1); P.carriageHidden = false; } }
       return;
     }
-    if (!scene.carriageImg) {
-      const has = scene.textures.exists("tk-props") && scene.textures.get("tk-props").has("carriage");
-      scene.carriageImg = has ? scene.add.image(P.x, P.y, "tk-props", "carriage").setOrigin(.5, 1) : scene.add.rectangle(P.x, P.y, 30, 22, 0x8a2a1a).setOrigin(.5, 1);
-      scene.curtainImg = scene.add.rectangle(P.x, P.y, 10, 8, 0xb03a2e).setOrigin(.5, 1).setStrokeStyle(1, 0x5a1a12);
+    const up = this.curtainUp(scene), dir = { left: "left", right: "right", up: "up", down: "down" }[P.facing] || "down";
+    const props = scene.textures.exists("tk-props") && scene.textures.get("tk-props");
+    const frame = props && props.has(`carriage.${dir}.shut`) ? `carriage.${dir}.${up ? "open" : "shut"}` : null;   // Graphics' four views, curtain shut or rolled up with her at the window
+    if (!props && !scene.propsAsked && typeof WorldCutscene !== "undefined") { scene.propsAsked = true; WorldCutscene.load(scene); }   // the props sheet (else first loaded by a scene)
+    if (frame && scene.carriageImg && scene.carriageImg.type !== "Image") {   // drawn as a stand-in until the sheet came
+      scene.carriageImg.destroy(); scene.carriageImg = null; if (scene.curtainImg) { scene.curtainImg.destroy(); scene.curtainImg = null; }
     }
-    const C = scene.carriageImg, h = C.displayHeight || 22, up = this.curtainUp(scene);
+    if (!scene.carriageImg) {
+      scene.carriageImg = frame ? scene.add.image(P.x, P.y, "tk-props", frame).setOrigin(.5, 1)
+        : props && props.has("carriage") ? scene.add.image(P.x, P.y, "tk-props", "carriage").setOrigin(.5, 1) : scene.add.rectangle(P.x, P.y, 30, 22, 0x8a2a1a).setOrigin(.5, 1);
+      if (!frame) scene.curtainImg = scene.add.rectangle(P.x, P.y, 10, 8, 0xb03a2e).setOrigin(.5, 1).setStrokeStyle(1, 0x5a1a12);
+    }
+    const C = scene.carriageImg, h = C.displayHeight || 22;
     C.setPosition(Math.round(P.x), Math.round(P.y) + 2).setDepth(P.y + .2);
-    if (C.setFlipX) C.setFlipX(P.facing === "left");
-    // she sits at the window: curtain up, her head and shoulders show; down, the curtain hangs over it
-    P.setAlpha(up ? 1 : 0); P.carriageHidden = !up;
-    P.setDepth(P.y + .4);
-    scene.curtainImg.setPosition(Math.round(P.x), Math.round(P.y) - h * .35).setDepth(P.y + .5).setVisible(!up);
+    P.carriageHidden = !up;
+    if (frame) {   // she's drawn in the carriage itself: the walker is never shown
+      if (C.frame && C.frame.name !== frame) C.setFrame(frame);
+      P.setAlpha(0);
+    } else {
+      if (C.setFlipX) C.setFlipX(P.facing === "left");
+      // she sits at the window: curtain up, her head and shoulders show; down, the curtain hangs over it
+      P.setAlpha(up ? 1 : 0);
+      P.setDepth(P.y + .4);
+      scene.curtainImg.setPosition(Math.round(P.x), Math.round(P.y) - h * .35).setDepth(P.y + .5).setVisible(!up);
+    }
     // a carriage goes at a walk
     if (P.body && scene.mounts && !scene.mounts.length) P.body.velocity.scale(.9);
   },

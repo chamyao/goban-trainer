@@ -1,1094 +1,1094 @@
 {
-  "tree_a": {
-    "book": 1,
-    "category": "everyday",
-    "beat": "The great mulberry tree whose crown looks like a carriage canopy, over a poor village.",
-    "scene": "A poor village of mud-walled thatched houses on a bright morning, a dirt lane running through it. Beyond the last house stands one enormous mulberry tree, taller than any roof, its crown spreading round and flat like the canopy of a carriage. Two villagers in the lane have stopped walking and are looking up at it. Wide shot.",
-    "notes": ""
-  },
-  "tree_b": {
-    "book": 1,
-    "category": "everyday",
-    "beat": "The boy boasts he will ride a carriage like that tree's canopy; his uncle is startled.",
-    "scene": "Under a huge mulberry tree a small boy of six in a plain hemp tunic and straw sandals points up at the round crown, chin raised, announcing that he will ride in a carriage like that one day. Beside him his uncle, a middle-aged farmer in a hemp robe, has caught the boy's sleeve and half turns to hush him, startled. Overcast afternoon, a dirt yard. Only these two.",
-    "notes": ""
-  },
-  "notice_a": {
-    "book": 1,
-    "category": "everyday",
-    "beat": "A crowd reading the governor's notice calling for volunteers.",
-    "scene": "A crowded dusty market square in a county town at midday under a pale overcast sky. Townsfolk in plain hemp clothes press toward a whitewashed wall where a large paper notice has been pasted, columns of black brushed characters and red seals clear to see; one man reads aloud while others strain on tiptoe over shoulders. Wide shot.",
-    "notes": ""
-  },
-  "notice_b": {
-    "book": 1,
-    "category": "everyday",
-    "beat": "Liu Bei, reading the notice, sighs; Zhang Fei behind him is about to speak.",
-    "scene": "Medium shot at the edge of the crowd before the notice on the wall. Liu Bei stands a little apart with his arms hanging at his sides, head lowered, letting out a long sigh. A step behind him Zhang Fei has noticed it and leans in over his shoulder, brow furrowed, about to speak. Afternoon light, dust in the air. Only these two.",
-    "notes": ""
-  },
-  "inn_a": {
-    "book": 1,
-    "category": "everyday",
-    "beat": "Guan Yu comes into the inn pushing his cart; Liu Bei and Zhang Fei look up.",
-    "scene": "Evening in a small village inn: plank walls, paper lattice windows, clay wine jars on a shelf, plain paper lanterns glowing. Guan Yu has just shoved the door open, stooping under the lintel and pulling a wooden handcart in behind him; every head in the room has turned. At a table by the wall Liu Bei and Zhang Fei look up at him with cups halfway to their mouths.",
-    "notes": ""
-  },
-  "inn_b": {
-    "book": 1,
-    "category": "everyday",
-    "beat": "The three at one table, Guan Yu telling his story, a quiet bond forming.",
-    "scene": "Close shot of three men at a small inn table at night, heads bent together over clay wine bowls, one small oil lamp between them. Guan Yu, in the middle, is speaking quietly, hands flat on the table, while Liu Bei and Zhang Fei listen, leaning in. Everything past the lamp falls into soft shadow. A calm, intimate conversation. Exactly three men.",
-    "notes": ""
-  },
-  "oath_a": {
-    "book": 1,
-    "category": "bond",
-    "beat": "The peach orchard ready for the oath: altar, incense, the ox and the white horse.",
-    "scene": "A peach orchard in full pink blossom on a quiet, overcast early morning. A low stone altar stands between the trees with a thread of incense rising from a bronze burner, a black ox and a white horse tethered beside it, petals drifting to the ground. The orchard is empty. Wide shot.",
-    "notes": ""
-  },
-  "oath_b": {
-    "book": 1,
-    "category": "bond",
-    "beat": "The three brothers kneel at the altar and swear the oath.",
-    "scene": "Three men kneel side by side before a low stone altar in a peach orchard, seen from behind and slightly to one side: Liu Bei in the middle, Guan Yu on his left, Zhang Fei on his right, hands clasped and heads bowed, mid-vow. Incense rises from a bronze burner on the altar. Overcast morning light, blossom on the ground. Exactly three men.",
-    "notes": ""
-  },
-  "oath_c": {
-    "book": 1,
-    "category": "bond",
-    "beat": "The brothers' cups touch in the quiet toast after the oath.",
-    "scene": "Close shot of three hands holding small bronze wine cups out over a plain wooden table in the peach orchard, the cups touching in a quiet toast; a few pink petals have dropped into the wine. One hand comes from a white sleeve, one from a green sleeve and one from a black sleeve. Soft late-afternoon light. Hands and cups only.",
-    "notes": ""
-  },
-  "tent_b": {
-    "book": 1,
-    "category": "bond",
-    "beat": "Liu Bei bows to his old teacher Lu Zhi, who greets him warmly.",
-    "scene": "Inside a large army tent lit by a bronze oil lamp, Liu Bei steps in and bows to his old teacher Lu Zhi, who has risen from his camp desk and reaches out both hands to take his, smiling warmly. Scrolls and a map lie on the desk behind them. Medium shot, both men in profile. Only these two.",
-    "notes": ""
-  },
-  "tent_c": {
-    "book": 1,
-    "category": "intrigue",
-    "beat": "Lu Zhi's desk: the map and the briefing for the Yingchuan errand.",
-    "scene": "A general's camp desk inside a tent at night: rolled bamboo scrolls, a brush resting on an inkstone, and a plain map of hills and rivers pinned with small coloured flags, lit by one bronze oil lamp that throws a warm pool of light and long shadows across the tent wall. Close shot of the desk, an empty chair pushed back.",
-    "notes": ""
-  },
-  "cart_a": {
-    "book": 1,
-    "category": "everyday",
-    "beat": "A prisoner's cage cart on the road, guarded; the three brothers rein in beside it.",
-    "scene": "A dusty country road on a grey afternoon, seen close from beside the wheels. A wooden cage cart fills the middle of the frame, an old man in plain grey clothes inside it, gripping the bars; imperial soldiers with spears walk at its wheels. Three riders, Liu Bei, Guan Yu and Zhang Fei, have just reined in on the other side of the cart, close enough to see their faces, staring at the prisoner. Medium shot, dust hanging low.",
-    "notes": ""
-  },
-  "cart_b": {
-    "book": 1,
-    "category": "intrigue",
-    "beat": "Lu Zhi in the cage speaks to Liu Bei; Zhang Fei, furious, grips his spear.",
-    "scene": "Close shot through the bars of a wooden cage cart: old Lu Zhi, in the cage, speaks quietly to Liu Bei, who stands outside holding two of the bars. Behind Liu Bei's shoulder Zhang Fei glares at the guards, both hands white-knuckled on his spear. Overcast afternoon on a dirt road.",
-    "notes": ""
-  },
-  "cart_c": {
-    "book": 1,
-    "category": "intrigue",
-    "beat": "Lu Zhi's hands on the bars as the cart rolls off along the empty road.",
-    "scene": "Close shot from just behind an old man sitting inside a cage cart: the back of his grey head and his thin shoulders in the near corner of the frame, his arms in grey sleeves reaching forward so his hands rest on the rough wooden bars. Beyond the bars an empty, rutted dirt road runs away between bare fields toward distant hills under a flat grey sky, a few wisps of straw dropped in front.",
-    "notes": ""
-  },
-  "office_b": {
-    "book": 1,
-    "category": "intrigue",
-    "beat": "Dong Zhuo sneers at Liu Bei's lack of office; Zhang Fei is held back by his brothers.",
-    "scene": "In an open army camp among tents and banners on a hazy afternoon, Dong Zhuo sits at ease on a camp stool, sneering. Facing him, Zhang Fei lunges forward with his hand on his sword hilt, roaring; Liu Bei and Guan Yu each grab one of his arms and haul him back. Dong Zhuo's guards shift in the background.",
-    "notes": ""
-  },
-  "office_c": {
-    "book": 1,
-    "category": "intrigue",
-    "beat": "The tipped cup and the fist's shadow: Zhang Fei's rage, seen only as objects.",
-    "scene": "Close shot of a bronze wine cup tipped over on a plain wooden camp table, the last of the wine spilling across the boards and dripping off the edge. On the tent canvas behind it the dark shadow of a clenched fist is raised high, cast by a lamp outside. Only the cup, the table and the shadow.",
-    "notes": ""
-  },
-  "blackwind_a": {
-    "book": 1,
-    "category": "omen",
-    "beat": "Zhang Bao's sorcery: the black wind and paper riders break the Han line.",
-    "scene": "A rocky hilltop under a darkening sky. Zhang Bao stands on the crest with his long hair streaming loose, sword raised in one hand, shouting a spell; a black whirlwind of storm cloud, sand and stones pours down the slope onto a line of Han spearmen, who throw down their shields and run. Pale paper riders gallop inside the cloud.",
-    "notes": ""
-  },
-  "blackwind_c": {
-    "book": 1,
-    "category": "battle",
-    "beat": "The paper soldiers and horses in the black wind, the sorcery itself.",
-    "scene": "Riders and horses cut from white paper whirl through a howling black wind under a dark stormy sky, tumbling like leaves, some torn in half. Close shot, low angle, of the flurry of paper against the black cloud. Only paper figures, no living people anywhere in the frame.",
-    "notes": ""
-  },
-  "bosswin_a": {
-    "book": 1,
-    "category": "battle",
-    "beat": "The blood-and-filth jars thrown from the ridge break the black wind.",
-    "scene": "A hillside ridge in daylight: Han soldiers crouching behind rocks heave clay jars of filth down the slope. The jars burst on the ground below; where the black whirlwind meets them it shreds apart into flying scraps of paper, and Zhang Bao's rebels stumble back from the stink and spatter. Mid-action, dust and flying clay.",
-    "notes": ""
-  },
-  "bosswin_c": {
-    "book": 1,
-    "category": "aftermath",
-    "beat": "After the storm: torn paper soldiers drifting down, the spell broken.",
-    "scene": "Close shot, looking up into a grey sky after a storm: torn scraps of paper, pieces of paper soldiers and paper horses, a head, an arm, a half-horse, tumble and flutter down through the air like fallen leaves, caught mid-fall at different heights with the dark clouds thinning behind them. A strip of green hillside at the bottom of the frame. Nothing stands upright; only falling paper, and no living people.",
-    "notes": ""
-  },
-  "bosswin_d": {
-    "book": 1,
-    "category": "aftermath",
-    "beat": "Yan Zheng stabs Zhang Bao from behind inside Yangcheng.",
-    "scene": "Night inside the walls of Yangcheng, torches on the stone walls. Zhang Bao, in a yellow robe, turns away toward the gate while his own officer, a lean man in dark armour, steps up close behind him and drives a short sword into his back. A few guards at the edges stand frozen. Only these two in the middle of the frame.",
-    "notes": ""
-  },
-  "peace2_b": {
-    "book": 1,
-    "category": "omen",
-    "beat": "Zhang Jiao preaches 'the Blue Heaven is dead' to his followers.",
-    "scene": "Evening in a plague-stricken town: white-haired Zhang Jiao stands on a wooden platform in a yellow robe, one arm out pointing across the crowd, mid-sermon, mouth open. Hundreds of followers in yellow headscarves fill the square below, faces turned up, many holding bowls of charm water. Overcast grey light, torches being lit at the edges.",
-    "notes": ""
-  },
-  "caocao2_b": {
-    "book": 1,
-    "category": "intrigue",
-    "beat": "Cao Cao laughs with delight at Xu Shao's verdict.",
-    "scene": "Afternoon in a scholar's quiet study: shelves of bamboo scrolls, a low table with a teapot and cups, light through a paper window. Cao Cao, a young man, sits cross-legged leaning back, laughing out loud with delight; opposite him Xu Shao sits upright and grave, watching him closely. Only these two.",
-    "notes": ""
-  },
-  "caocao3_b": {
-    "book": 1,
-    "category": "battle",
-    "beat": "Cao Cao's cavalry under red banners cut off the fleeing rebels.",
-    "scene": "Grey early morning over a smoking plain: Cao Cao gallops toward us on a dark horse with his sword drawn and raised, mouth open mid-shout, a column of cavalry behind him under bright red banners. Fleeing rebels in yellow headscarves scatter ahead of them. Dust and trampled grass.",
-    "notes": ""
-  },
-  "post_a": {
-    "book": 1,
-    "category": "everyday",
-    "beat": "Old villagers weep at the hostel gate; Zhang Fei rides up and finds them.",
-    "scene": "Morning outside a county hostel: fifty or sixty old villagers in patched hemp clothes crowd at the gate, weeping and gripping the bars, begging to be let in. Zhang Fei rides up from the side on a horse, reins in hard and frowns down at them, a wine gourd at his saddle. Overcast, dusty ground.",
-    "notes": ""
-  },
-  "post_b": {
-    "book": 1,
-    "category": "intrigue",
-    "beat": "Zhang Fei whips the bound inspector at the hitching post; Liu Bei rushes up to stop him.",
-    "scene": "In front of a county office gate, a plump official, the inspector, is tied against a thick wooden hitching post with ropes wound across his chest, howling. Zhang Fei, red-faced and furious, lashes a bundle of thin green willow switches across the inspector's legs; broken switches litter the ground. Liu Bei runs in from the left with one arm out to stop him. Afternoon.",
-    "notes": ""
-  },
-  "horses_a": {
-    "book": 1,
-    "category": "everyday",
-    "beat": "The two merchants bring fifty horses to the brothers.",
-    "scene": "A country road on an overcast afternoon, flat soft light, no low sun: two travelling merchants on foot drive a long string of fine northern horses toward three men waiting at the roadside, Liu Bei, Guan Yu and Zhang Fei. The horses toss their heads and dust rises around them. Medium-wide shot, the horses filling the frame.",
-    "notes": ""
-  },
-  "horses_b": {
-    "book": 1,
-    "category": "everyday",
-    "beat": "The smith hands each brother his weapon.",
-    "scene": "Inside a smithy at night, sparks flying around the anvil: a broad-shouldered smith hands over new weapons, twin swords to Liu Bei, a long halberd with a crescent blade to Guan Yu, and a long spear with a wavy serpent blade to Zhang Fei. Each man reaches out to take his own, eyes on the steel. Orange forge glow.",
-    "notes": ""
-  },
-  "alliance_b": {
-    "book": 2,
-    "category": "bond",
-    "beat": "Liu Bei sits at the lowest seat among the lords; his brothers stand behind, cold.",
-    "scene": "A long banquet table in a great lords' tent, lamps burning. Yuan Shao sits at the head in rich robes among the other lords; at the far end, at the lowest place, sits Liu Bei, hands on his knees, looking at no one. Behind him Guan Yu and Zhang Fei stand with arms folded, faces cool. The lords talk among themselves and ignore him.",
-    "notes": ""
-  },
-  "wine_a": {
-    "book": 2,
-    "category": "battle",
-    "beat": "Cao Cao's steaming cup, untouched, as Guan Yu rides out toward Hua Xiong.",
-    "scene": "Outside the lords' camp, beside a low table, Cao Cao holds out a bronze cup of steaming hot wine. Guan Yu, already in the saddle with his long crescent-bladed halberd, does not take it; he looks toward the gate and the sound of drums beyond, turning his horse. Steam rises from the cup. Overcast grey afternoon.",
-    "notes": ""
-  },
-  "wine_b": {
-    "book": 2,
-    "category": "intrigue",
-    "beat": "Hua Xiong's head at Guan Yu's feet, and the wine is still warm.",
-    "scene": "Before the lords' table, Guan Yu stands calm and tall with his crescent-bladed halberd grounded beside him; on the ground at his feet lies the helmeted head of an enemy general, and on the table the same bronze cup is still steaming. Cao Cao, seated, looks at the cup. The other lords stare in stunned silence.",
-    "notes": ""
-  },
-  "hulao_a": {
-    "book": 2,
-    "category": "battle",
-    "beat": "Lü Bu chases Gongsun Zan; Zhang Fei charges in to save him.",
-    "scene": "A wide dusty field before a fortress pass on an overcast afternoon. Lü Bu, on a tall red horse, thunders after Gongsun Zan on a white horse, halberd drawn back to thrust at his back. From the side Zhang Fei charges in on horseback, serpent spear levelled, roaring. Dust and flying clods. Only these three riders.",
-    "notes": ""
-  },
-  "hulao_b": {
-    "book": 2,
-    "category": "battle",
-    "beat": "Three brothers against Lü Bu: Zhang Fei, Guan Yu and Liu Bei ring him.",
-    "scene": "Dust-choked mid-battle: Lü Bu on his tall red horse swings his halberd in the centre of the field, ringed by three riders, Zhang Fei in front with his serpent spear, Guan Yu at his side with the crescent halberd, Liu Bei at the flank with twin swords, all three striking at once. Far behind, the allied lords watch from a hill. Exactly four fighters.",
-    "notes": ""
-  },
-  "ruins_a": {
-    "book": 2,
-    "category": "aftermath",
-    "beat": "The three brothers look at burned Luoyang.",
-    "scene": "The burned palace city of Luoyang under a flat grey sky: charred black columns, collapsed roofs, thin smoke rising from the rubble, an empty gate hall. In the foreground, small against the ruin, Liu Bei, Guan Yu and Zhang Fei stand side by side looking at it, their horses behind them. Wide shot, ash on the ground.",
-    "notes": ""
-  },
-  "fireflies_a": {
-    "book": 2,
-    "category": "everyday",
-    "beat": "The two boy princes follow the fireflies out of the reeds.",
-    "scene": "At night in tall river reeds, two boys in torn silk robes, one about fourteen and one about nine, hold hands, scratched and tired. In front of them a line of fireflies hangs over the water, leading off between the reeds, and the younger boy points after it. Only the two boys, seen from behind and slightly to the side.",
-    "notes": ""
-  },
-  "dingyuan_a": {
-    "book": 2,
-    "category": "intrigue",
-    "beat": "Lü Bu stands over Ding Yuan in his tent, sword drawn, before the killing.",
-    "scene": "Inside a tent at night, Ding Yuan, a grey-haired governor, sits at a desk reading by a candle and looks up in mild surprise. Lü Bu, in armour, stands over him with a drawn sword held low at his side. Close two-shot, candle flame between them, shadows large on the tent wall. Only these two.",
-    "notes": ""
-  },
-  "lvboshe_a": {
-    "book": 2,
-    "category": "everyday",
-    "beat": "Cao Cao, sword out, turns on the old farmer Lü Boshe returning with wine.",
-    "scene": "A dirt road at dusk: old Lü Boshe rides a donkey toward us with two clay wine jars hanging from the saddle, raising one hand in a friendly greeting. Ahead of him two riders, Cao Cao and Chen Gong, have stopped; Cao Cao has turned his horse back and his sword is already out. Wide shot, long shadows.",
-    "notes": ""
-  },
-  "lvboshe_b": {
-    "book": 2,
-    "category": "intrigue",
-    "beat": "After the killing: Cao Cao hard-faced, Chen Gong appalled, the dead man behind them.",
-    "scene": "A road in grey dusk, flat cold light with no sunset glow and no warm colour in the sky: Cao Cao sits his horse with his sword lowered, jaw tight, staring straight ahead. Beside him Chen Gong looks at him in appalled silence, hand loose on the reins. Far behind them on the road lie a fallen donkey and a figure that does not move, two wine jars rolled in the dust. Heavy, still, grim.",
-    "notes": ""
-  },
-  "xingyang_a": {
-    "book": 2,
-    "category": "battle",
-    "beat": "Cao Hong, on foot, leads the wounded Cao Cao's horse across the river.",
-    "scene": "Wading a river at dusk: Cao Cao rides a strong horse with an arrow in his shoulder, swaying, while Cao Hong, on foot in the water beside it, strips off his armour and leads the horse by the bridle, glancing back at the far bank. Splashing water, reeds, a few pursuers' torches behind them.",
-    "notes": ""
-  },
-  "zumao_a": {
-    "book": 2,
-    "category": "battle",
-    "beat": "The red cap hung on a stump as a decoy; Zu Mao waits in the trees.",
-    "scene": "A dark wood at night. A burnt tree stump stands in a clearing with a red cap hung on top of it; enemy cavalry with torches ring it, edging forward warily. Half hidden among the trees behind them, Zu Mao crouches low with a sword in each hand, ready to charge. Smoke and torchlight.",
-    "notes": ""
-  },
-  "seal_a": {
-    "book": 2,
-    "category": "omen",
-    "beat": "Sun Jian's men find the glowing well in the ruined palace.",
-    "scene": "Night in the ruins of a palace: a round stone well glows with pale five-coloured light rising from its mouth. Sun Jian and a few soldiers with torches lean over the rim, faces lit from below, one soldier pointing down into the well. Broken columns around them. Wide shot, ash on the ground.",
-    "notes": ""
-  },
-  "seal_b": {
-    "book": 2,
-    "category": "bond",
-    "beat": "Sun Jian swears his oath before Yuan Shao, who waits for the seal.",
-    "scene": "A torchlit camp at night: Sun Jian in armour stands with one hand raised, swearing, jaw set. Before him Yuan Shao sits at a low table with his hand held out as if waiting to receive something. Behind them other lords look on. Neither man holds anything.",
-    "notes": ""
-  },
-  "xianshan_a": {
-    "book": 2,
-    "category": "battle",
-    "beat": "Sun Jian caught alone under stones and arrows on Mount Xian.",
-    "scene": "A steep wooded ridge at night: Sun Jian on horseback among the trees looks up as stones and arrows rain down on him from the slope above, his horse rearing, branches snapping. His thirty riders scatter behind him, shouting. Dark, torch-lit from the side, dust and falling rock.",
-    "notes": ""
-  },
-  "garden_a": {
-    "book": 2,
-    "category": "bond",
-    "beat": "Diaochan kneels to Wang Yun in the moonlit peony garden and accepts the task.",
-    "scene": "A peony garden at night under the moon: Diaochan kneels with her forehead near the ground; before her Wang Yun bows low; behind them a small pavilion with a stone weiqi board on its table and two stones on it, no one at it. Only these two.",
-    "notes": ""
-  },
-  "pavilion_a": {
-    "book": 2,
-    "category": "bond",
-    "beat": "Diaochan weeps in Lü Bu's arms at the Fengyi Pavilion.",
-    "scene": "Evening beside a lotus pond at a garden pavilion: Diaochan rests against Lü Bu's chest, her face turned up to his, wet with tears; he holds her with both arms. His tall halberd leans against the pavilion railing beside them. Grey light on the water, lanterns not yet lit. Only these two.",
-    "notes": ""
-  },
-  "fall_a": {
-    "book": 2,
-    "category": "aftermath",
-    "beat": "Lü Bu's halberd at Dong Zhuo's throat at the Beiye Gate.",
-    "scene": "At a palace gate in the early morning, Dong Zhuo, huge and heavy in armour, has fallen from a carriage with a broken wheel and lies on the ground looking up in terror; Lü Bu stands over him and drives his halberd down at his throat. Li Su rushes in beside him with a sword; guards freeze in the background.",
-    "notes": ""
-  },
-  "tower_a": {
-    "book": 2,
-    "category": "aftermath",
-    "beat": "Wang Yun on the burning gate tower beside the Emperor, facing the rebel army.",
-    "scene": "A city gate tower on fire at dusk: Wang Yun, an old man in court robes, stands at the parapet with a small boy in an emperor's robe at his side, both looking down at a rebel army pouring through the streets below, smoke drifting past them. Wide shot from below, flames at the corners of the tower.",
-    "notes": ""
-  },
-  "zhangbao_a": {
-    "book": 1,
-    "category": "omen",
-    "beat": "Who Zhang Bao is: the General of Earth on his hill before the battle.",
-    "scene": "Wide panoramic composition at dusk. On the left, Zhu Jun's Han camp with cooking fires and a line of spearmen below a ridge. In the middle, a long grassy valley. On the right, on a rocky hilltop, Zhang Bao stands before a small altar with a sword and paper charms, his long hair loose, yellow banners behind him, a thin dark cloud gathering over his head.",
-    "notes": "transition beat"
-  },
-  "tree_c": {
-    "book": 1,
-    "category": "peace",
-    "beat": "Liu Bei's mother and his boyhood: studying, friends, devotion.",
-    "scene": "Inside a poor country house in the afternoon: Liu Bei's mother sits at a loom by the door, weaving straw mats; on the right Liu Bei as a young man sits at a low table reading a bamboo scroll, and Gongsun Zan, a young man of his own age, sits across from him sharing the book. Through the open door on the left, the mulberry tree stands in the yard. Calm, plain overcast light.",
-    "notes": "transition beat"
-  },
-  "yingchuan_a": {
-    "book": 1,
-    "category": "aftermath",
-    "beat": "Changshe after the fire: Huangfu Song's army among the burnt grass.",
-    "scene": "Wide panoramic composition on an overcast morning. On the left, trampled burnt grass with smoke still rising and Yellow Turban banners lying flat. In the middle, Huangfu Song and Zhu Jun on horseback, looking over the field, with Han spearmen around them. On the right, Liu Bei, Guan Yu and Zhang Fei arriving at the head of their column on the road.",
-    "notes": "transition beat"
-  },
-  "bloodplan_a": {
-    "book": 1,
-    "category": "plan",
-    "beat": "The brothers plan the blood and the ridges, with the village pens below.",
-    "scene": "A hillside at the roadside shrine in grey afternoon light: on the left Liu Bei points down the hill toward a village of pens and huts; in the middle Guan Yu and Zhang Fei stand listening, Guan Yu pointing at one ridge and Zhang Fei at the other; on the right, the two ridges rise above the road. Only these three men.",
-    "notes": "transition beat"
-  },
-  "peace1_a": {
-    "book": 1,
-    "category": "omen",
-    "beat": "Zhang Jiao, a poor scholar gathering herbs, meets the green-eyed old man at a cave in the hills.",
-    "scene": "A wooded mountainside in thin morning mist. At the mouth of a cave stands an old man with a child's smooth face and bright green eyes, leaning on a tall staff and beckoning. Before him, a thin scholar in a worn grey robe with an herb basket on his back has stopped on the path, startled. Only these two.",
-    "notes": "transition beat"
-  },
-  "daxing_a": {
-    "book": 1,
-    "category": "battle",
-    "beat": "Before the first battle: Cheng Yuanzhi's fifty thousand against Liu Bei's five hundred at Daxing Mountain.",
-    "scene": "Wide panoramic composition under a pale sky at the foot of a rocky mountain. On the right, a vast Yellow Turban host fills the slope, yellow scarves and yellow banners as far as the eye can see, with Cheng Yuanzhi, a heavy rebel general, riding out in front. On the left, a small band of village volunteers holds the road, and at their head Liu Bei, Guan Yu and Zhang Fei sit on their horses, weapons ready.",
-    "notes": "transition beat"
-  },
-  "qingzhou_a": {
-    "book": 1,
-    "category": "battle",
-    "beat": "Qingzhou under siege: the Yellow Turbans ring the city walls, and the relief force is too small.",
-    "scene": "Wide panoramic composition on a grey afternoon. In the middle, the walls and gate tower of Qingzhou, with Han soldiers and red banners along the battlements. Yellow Turban rebels surround the walls on every side with ladders and yellow banners. In the left foreground, on a low hill, Liu Bei, Guan Yu and Zhang Fei look down on the siege from horseback with a few hundred men behind them.",
-    "notes": "transition beat"
-  },
-  "office_a": {
-    "book": 1,
-    "category": "battle",
-    "beat": "Dong Zhuo's beaten army in rout, Zhang Jiao's banners behind it, as the three brothers come over the hill.",
-    "scene": "Wide panoramic composition among low hills under a dusty afternoon sky. On the right, a Yellow Turban host pours down a valley under great yellow banners, Zhang Jiao in a yellow robe riding among them. In the middle, Han soldiers in red run before them, dropping spears, their commander Dong Zhuo, heavy and bearded, fleeing on horseback. On the left, on the crest of a hill, Liu Bei, Guan Yu and Zhang Fei rein in and look down at the rout.",
-    "notes": "transition beat"
-  },
-  "anxi_a": {
-    "book": 1,
-    "category": "peace",
-    "beat": "Liu Bei as the sheriff of Anxi, a quiet month: the three brothers at one table.",
-    "scene": "Inside a plain county office in a small town, evening lamplight. Liu Bei in a simple official robe and cap sits at a low table with bowls of rice and greens, Guan Yu and Zhang Fei sharing the table with him, the three eating together and talking. Through the open door, townsfolk pass in a quiet street. Warm, calm light. Exactly three men at the table.",
-    "notes": "transition beat"
-  },
-  "pingyuan_a": {
-    "book": 2,
-    "category": "everyday",
-    "beat": "Book 2 begins: Gongsun Zan's army passes Pingyuan, and he meets Liu Bei at the gate.",
-    "scene": "Wide panoramic composition outside the gate of a small walled town on a clear autumn morning. On the right, a long column of cavalry under Gongsun Zan's banners rides along the road, with Gongsun Zan in silver armour on a white horse at its head, reining in. On the left, at the open town gate, Liu Bei in a magistrate's plain robe steps out to greet him, with Guan Yu and Zhang Fei standing behind him.",
-    "notes": "transition beat"
-  },
-  "sishui_a": {
-    "book": 2,
-    "category": "battle",
-    "beat": "Before Sishui Gate: Hua Xiong's men carry Sun Jian's red cap on a pole to the lords' camp, jeering.",
-    "scene": "Wide panoramic composition on a grey day before a mountain pass. On the right, the stone walls and gate of Sishui Pass. In the middle, a band of Dong Zhuo's horsemen rides forward, one holding up a long pole with a red head-cloth hung at its tip, the others shouting. On the left, the palisade and tents of the lords' camp, where soldiers and officers watch from the gate in silence.",
-    "notes": "transition beat"
-  },
-  "hulao1_a": {
-    "book": 2,
-    "category": "battle",
-    "beat": "Before Hulao Pass: Lü Bu on Red Hare before Dong Zhuo's gate, the lords' army facing him.",
-    "scene": "Wide panoramic composition under a heavy sky. On the right, the towering walls of Hulao Pass with Dong Zhuo's black banners. Before the gate, alone, Lü Bu sits on a huge red horse, a crested helmet on his head and a long halberd in his hand. On the left, the lords' armies are drawn up in long lines under many coloured banners, their champions in front, holding back.",
-    "notes": "transition beat"
-  },
-  "beihai3_a": {
-    "book": 3,
-    "category": "battle",
-    "beat": "Taishi Ci fights his way out of besieged Beihai alone, shooting the riders who chase him.",
-    "scene": "Wide panoramic composition at dawn outside a walled city ringed with Yellow Turban camps. In the middle, a single rider, Taishi Ci, gallops away from the city gate at full stretch, turned in the saddle and drawing his bow back at the pursuers. Behind him, several Yellow Turban horsemen tumble from their saddles with arrows in them. On the walls behind, Han soldiers watch.",
-    "notes": "transition beat"
-  },
-  "xuzhou3_a": {
-    "book": 3,
-    "category": "battle",
-    "beat": "Before the charge: Cao Cao's army lies around Xuzhou in white mourning banners.",
-    "scene": "Wide panoramic composition on a cold grey day. In the middle, the walls of Xuzhou. Around them on every side, Cao Cao's army in white mourning cloth, with white banners that look like frost and snow on the plain. In the left foreground, on a rise, Liu Bei, Guan Yu, Zhang Fei and a young officer in white armour, Zhao Yun, look down on the siege with a small force behind them and one red banner.",
-    "notes": "transition beat"
-  },
-  "zilong3_a": {
-    "book": 3,
-    "category": "bond",
-    "beat": "Liu Bei holds Zhao Yun's hand as they part outside Xuzhou.",
-    "scene": "Medium shot on a road outside a city gate in soft morning light. Liu Bei holds both hands of a young officer in white armour, Zhao Yun, who is about to mount his white horse. Both have tears in their eyes. Guan Yu and Zhang Fei stand a few steps behind. Willow trees by the road. Calm, sincere.",
-    "notes": "transition beat"
-  },
-  "deathbed3_a": {
-    "book": 3,
-    "category": "intrigue",
-    "beat": "The dying Tao Qian holds out the seal of Xuzhou to Liu Bei.",
-    "scene": "Inside a dim bedchamber lit by one oil lamp. An old man, Tao Qian, lies propped on pillows in a plain bed, thin and grey, holding out a square seal on a cord with a shaking hand. Liu Bei kneels at the bedside, hands raised, half refusing. Two officers stand in the shadows behind. Quiet and heavy.",
-    "notes": "transition beat"
-  },
-  "handsfeet3_a": {
-    "book": 3,
-    "category": "bond",
-    "beat": "Liu Bei catches Zhang Fei's sword arm as he tries to kill himself.",
-    "scene": "Close shot inside an army tent by lamplight. Zhang Fei, face twisted with shame, has drawn his sword to his own throat. Liu Bei has thrown his arms around him from the front and grips his wrist, pulling the blade away. Guan Yu, a step behind, reaches toward them. Strong emotion, tears on Zhang Fei's face.",
-    "notes": "transition beat"
-  },
-  "halberd3_a": {
-    "book": 3,
-    "category": "battle",
-    "beat": "The halberd planted 150 paces off at the camp gate, and Lü Bu drawing his bow.",
-    "scene": "Wide shot from behind Lü Bu inside an open army tent. Lü Bu, in a crested helmet, draws a great bow to full stretch. Far off across the open ground, at the camp gate, a tall halberd stands planted upright, its small side blade catching the light. At the table on either side, Liu Bei holds his breath with eyes half closed, and Ji Ling watches with a sceptical frown.",
-    "notes": "transition beat"
-  },
-  "flood3_a": {
-    "book": 3,
-    "category": "aftermath",
-    "beat": "Cao Cao floods Xiapi: water all around the city, only the east gate dry.",
-    "scene": "Wide panoramic composition under a dull sky. A walled city, Xiapi, stands in a broad sheet of brown floodwater that reaches halfway up its walls, roofs and treetops showing above the water around it. Only the road to the east gate is still dry. On the hills in the foreground, Cao Cao's banners and soldiers watch.",
-    "notes": "transition beat"
-  },
-  "whitegate3_a": {
-    "book": 3,
-    "category": "intrigue",
-    "beat": "The White Gate Tower: Lü Bu bound before Cao Cao and Liu Bei.",
-    "scene": "Inside the top floor of a city gate tower, grey daylight. Cao Cao and Liu Bei sit side by side behind a low table. Guan Yu and Zhang Fei stand beside them. On the floor before them, Lü Bu kneels, tied with heavy ropes, still in his armour, his crested helmet gone, looking up at Liu Bei.",
-    "notes": "transition beat"
-  },
-  "whitegate3_b": {
-    "book": 3,
-    "category": "intrigue",
-    "beat": "Chen Gong walks down the tower stairs alone, and does not look back.",
-    "scene": "A steep wooden stair inside a gate tower. A thin scholar in a plain blue robe, Chen Gong, walks down it alone, back straight, hands bound before him. At the top of the stairs Cao Cao has half risen, one hand reaching after him, his face wet with tears. Guards stand aside and do not hold him.",
-    "notes": "transition beat"
-  },
-  "dz_roadside": {
-    "book": 2,
-    "category": "intrigue",
-    "beat": "Dong Zhuo's roadside banquet: the ministers frozen with terror while he eats and laughs.",
-    "scene": "A long banquet tent pitched beside a dusty road outside a city gate of Chang'an, afternoon. Rows of Han ministers in dark court robes and black caps kneel at low tables; their faces are pale, eyes lowered, and several have dropped their chopsticks onto the tables. At the head table a huge, fat warlord in rich brocade and a jewelled cap holds up a wine cup, laughing with his mouth open. Whatever they are watching is off the edge of the picture, to the right; nothing of it is shown. Medium-wide shot from behind the ministers' shoulders toward the laughing man.",
-    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
-  },
-  "dz_redtray": {
-    "book": 2,
-    "category": "intrigue",
-    "beat": "A covered red tray carried down a line of pale officials (Zhang Wen's head; never shown).",
-    "scene": "Inside a lamp-lit government hall, two rows of officials in court robes sit at low tables facing each other. Down the aisle between them a servant walks carrying a lacquered red tray covered with a cloth. Every official has turned rigid, staring at the tray, faces grey with fear; one has half risen. At the far end of the hall the fat warlord Dong Zhuo sits smiling. The tray stays covered. Low angle down the aisle.",
-    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
-  },
-  "dc_garden": {
-    "book": 2,
-    "category": "intrigue",
-    "beat": "Diaochan sits on a stone bench by the peony pavilion at night, sighing; Wang Yun has come upon her.",
-    "scene": "A moonlit rear garden at night. Beside a small peony pavilion, Diaochan sits alone on a stone bench, her hands resting in her lap, looking up at the full moon and sighing. Peonies in bloom around the pavilion, a willow trailing over a still pond, soft blue moonlight.",
-    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
-  },
-  "dc_wangkneels": {
-    "book": 2,
-    "category": "intrigue",
-    "beat": "In the painted pavilion the old minister kneels and bows his head to the floor before the girl.",
-    "scene": "Inside a small painted pavilion lit by one lamp, at night. The elderly minister Wang Yun, grey-bearded, in a dark robe, kneels and touches his forehead to the floor. Before him, seated on the only chair where he has placed her, the young singer Diaochan in pale silk shrinks back with her hands raised, shocked that her master is bowing to her. Painted beams and screens, no one else present.",
-    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
-  },
-  "dc_wine": {
-    "book": 2,
-    "category": "intrigue",
-    "beat": "Diaochan pours Lü Bu's wine; their eyes meet; Wang Yun plays drunk beside them.",
-    "scene": "A warm rear hall at evening, low tables laden with dishes. Diaochan, dressed in her finest silks and hair ornaments, kneels to offer a cup of wine with both hands to a towering young general, Lü Bu, in a crimson robe with a gold crown on his head; they are looking straight into each other's eyes. Beside them the grey-bearded host Wang Yun slumps with a flushed face, pretending to be drunk, watching from the corner of his eye. Two maids in blue stand by the door.",
-    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
-  },
-  "dc_dance": {
-    "book": 2,
-    "category": "intrigue",
-    "beat": "Diaochan dances on the far side of a bead curtain while Dong Zhuo watches.",
-    "scene": "A hall lit by painted candles at night. A bead curtain hangs across the room. On the far side of it a slender young woman in flowing silk sleeves dances, turning, her sleeves in the air, seen half-hidden through the strands of beads. On the near side, a huge fat warlord in brocade sits at a table with a wine cup, leaning forward, watching her hungrily. An old minister sits a little behind him. Musicians with reed pipes at the edge of the light.",
-    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
-  },
-  "dc_lanterns": {
-    "book": 2,
-    "category": "intrigue",
-    "beat": "Lü Bu on horseback in two rows of red lanterns, gripping Wang Yun's collar.",
-    "scene": "A night street in Chang'an lit by two long rows of red lanterns carried by soldiers on either side. A huge young general in armour on a great red horse leans down from the saddle and grips an old minister in court robes by the collar; the minister, on a smaller horse, holds up a hand to calm him. A halberd rests across the general's saddle. Deep shadows, red light on their faces.",
-    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
-  },
-  "dc_window": {
-    "book": 2,
-    "category": "intrigue",
-    "beat": "Diaochan combing her hair at the window sees Lü Bu's reflection in the pond.",
-    "scene": "Morning in an inner bedroom of a great mansion. A young woman in a loose silk robe sits at an open lattice window combing her long black hair. Below the window is a small garden pond, and on its still surface is the reflection of a very tall man in a hair-binding cap, peering from behind a rock out of sight. She has seen the reflection; her eyes slide toward it while her brows knit in feigned sorrow, a perfumed handkerchief at her eye.",
-    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
-  },
-  "dc_sickbed": {
-    "book": 2,
-    "category": "intrigue",
-    "beat": "Behind the sleeping Dong Zhuo, Diaochan points to her heart, then to him, weeping.",
-    "scene": "A dim bedchamber with a large curtained bed. On it a huge fat man lies asleep under brocade covers. Behind the bed, half leaning out from the bed-curtains, a young woman points with one hand at her own heart and with the other at the sleeping man, tears on her cheeks, looking across the room. At the room's entrance stands a tall young general in armour, frozen, staring back at her. Only these three.",
-    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
-  },
-  "dc_pavilion": {
-    "book": 2,
-    "category": "intrigue",
-    "beat": "At the Phoenix Pavilion, Lü Bu catches Diaochan as she makes to leap into the lotus pond.",
-    "scene": "A garden pavilion with a curved red rail above a pond full of lotus flowers, afternoon. A young woman in pale silk has one hand on the rail and is leaning out over the water as if to jump; a towering young general in armour has caught her round the waist with both arms and pulled her back against him. His painted halberd leans against the pavilion pillar. Willows and flowering branches all round.",
-    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
-  },
-  "dc_halberd": {
-    "book": 2,
-    "category": "intrigue",
-    "beat": "Dong Zhuo hurls the halberd across the garden; Lü Bu knocks it aside.",
-    "scene": "A mansion garden with winding paths. In the foreground a huge, fat man in brocade, red-faced with rage, has just thrown a long painted halberd with all his strength. In the background a tall young general in armour, running away, twists round and strikes the flying halberd aside with his arm. The Phoenix Pavilion and lotus pond behind. A young woman watches from the pavilion, hand to her mouth.",
-    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
-  },
-  "dc_sword": {
-    "book": 2,
-    "category": "intrigue",
-    "beat": "Diaochan snatches the sword from the wall and puts it to her own throat; Dong Zhuo lunges for it.",
-    "scene": "A rear hall in a great mansion, a rack on the wall with one sword missing. A young woman in silk has drawn that sword and holds the blade to her own neck, eyes shut, face set. A huge fat man in brocade lunges toward her with both hands out to grab the sword, his face full of alarm. No blood. Only these two.",
-    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
-  },
-  "dc_carriage": {
-    "book": 2,
-    "category": "intrigue",
-    "beat": "From the carriage on the way to Meiwu, Diaochan covers her face toward Lü Bu in the crowd.",
-    "scene": "A great curtained carriage drawn by horses moves out through a city gate, surrounded by guards and a crowd of officials bowing by the roadside. From the carriage window, the curtain lifted, a young woman looks back and covers her face with her sleeve as if weeping. Far back in the crowd, a head taller than everyone, a young general in armour stares at the carriage.",
-    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
-  },
-  "lb_ridge": {
-    "book": 2,
-    "category": "intrigue",
-    "beat": "Lü Bu alone on an earthen ridge, watching the dust of the carriage.",
-    "scene": "A bare earthen ridge outside the walls of Chang'an, late afternoon. A lone huge warrior in armour and a pheasant-plumed helmet sits on a great red horse, reins slack, gazing after a column whose dust hangs on the road far away. Behind him, small, an old minister in court robes is walking up the slope toward him. Wide shot, long shadows.",
-    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
-  },
-  "lb_blood": {
-    "book": 2,
-    "category": "intrigue",
-    "beat": "In the secret room, Lü Bu cuts his arm and swears in blood; Wang Yun kneels.",
-    "scene": "A small windowless room lit by one lamp, wine cups on a low table. A towering young general has drawn a short knife from his belt and drawn it across his forearm, holding the arm out over the table, face fierce with resolve; a thin line of red on the arm. Opposite him an old grey-bearded minister has gone down on his knees with his hands clasped. Only these two.",
-    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
-  },
-  "ls_arrow": {
-    "book": 2,
-    "category": "plan",
-    "beat": "Li Su snaps an arrow as his oath before Lü Bu and Wang Yun.",
-    "scene": "The same lamp-lit secret room. A wiry officer in a cavalry commander's robe, a sly, hungry face, snaps an arrow in two between his fists. Watching him, the huge general Lü Bu stands with a hand on his sword, and the old minister Wang Yun sits with an imperial edict scroll tucked in his sleeve. Two other officials sit at the table's edge.",
-    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
-  },
-  "dz_mother": {
-    "book": 2,
-    "category": "omen",
-    "beat": "Dong Zhuo's ninety-year-old mother clutches his sleeve: her flesh trembles, it is not a good sign.",
-    "scene": "Inside a richly furnished hall of a fortress, a tiny, very old woman of over ninety, white hair thin, sits on a couch and clutches the brocade sleeve of her enormous fat son, who stands over her laughing, ready to leave. Her face is creased with dread; his is full of greed and joy. Through a doorway behind him, a waiting procession and banners. Only these two in the room.",
-    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
-  },
-  "omen_wheel": {
-    "book": 2,
-    "category": "omen",
-    "beat": "On the road from Meiwu, the wheel of Dong Zhuo's great carriage snaps.",
-    "scene": "A wide dirt road across yellow loess hills. A great ornate carriage with a canopy has lurched to one side, one big wheel splintered and broken off its axle. Guards in armour have stopped around it, staring. A huge fat man in brocade is being helped down from it, scowling, while a groom leads up a horse. A wiry officer walks beside him, smoothing his face into a smile.",
-    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
-  },
-  "omen_fog": {
-    "book": 2,
-    "category": "omen",
-    "beat": "A wild wind springs up and dark fog swallows the procession.",
-    "scene": "A long procession of guards, banners and a mounted lord on a road, swallowed by a sudden storm of wind: banners whip sideways, dust and dark fog blot out the sky, riders bend their heads. In the middle, the fat lord on horseback looks up at the darkened sky, uneasy; an officer rides close beside him, talking.",
-    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
-  },
-  "omen_song": {
-    "book": 2,
-    "category": "omen",
-    "beat": "Children sing in the moonlit fields outside Chang'an; the wind carries the song into Dong Zhuo's tent.",
-    "scene": "Night outside the walls of Chang'an, a full moon over the fields. A ring of small children in plain clothes stand in the grass, singing, their faces solemn. In the near distance, the glowing tent of a great lord, its flap stirred by the wind, a guard at its entrance turning his head toward the song. The city wall dark behind.",
-    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
-  },
-  "omen_taoist": {
-    "book": 2,
-    "category": "omen",
-    "beat": "A Taoist with a cloth on a pole, marked with the character 口 at each end, by the roadside.",
-    "scene": "Early morning on a broad street leading to a palace gate. By the roadside stands a thin Taoist in a blue robe and white headcloth, holding up a long pole from which hangs a long strip of white cloth; at each end of the cloth is written a single large black character 口. A grand procession is passing; from his horse a fat lord in brocade has turned to stare at the cloth. Soldiers are moving to drive the Taoist off.",
-    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
-  },
-  "dz_gate": {
-    "book": 2,
-    "category": "battle",
-    "beat": "At the North Side Gate, Lü Bu raises the edict over the fallen Dong Zhuo.",
-    "scene": "Inside a palace gate, morning. An overturned carriage, soldiers with halberds in a ring. In the centre the towering general Lü Bu holds his halberd in his left hand and with his right raises an unrolled yellow imperial edict high above his head, shouting. At his feet, a huge fat body in brocade lies face down beside the carriage, the face not shown. Officials in court robes holding swords stand at the hall gate behind, and officers are raising their arms in a cheer. No blood shown.",
-    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
-  },
-  "dz_lamp": {
-    "book": 2,
-    "category": "aftermath",
-    "beat": "Night in the market: a lamp burns on the dark mound of Dong Zhuo's body.",
-    "scene": "A city market street at night, deserted stalls. In the middle of the street lies a great dark mound under a rough cloth, only its outline seen; on top of it a small flame burns like a lamp, and dark grease has spread across the paving stones around it. Two soldiers stand guard with spears, their faces lit by the flame. In the shadows at the edge of the street, townspeople look on. Nothing of the body is shown but the covered shape.",
-    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
-  },
-  "dc_meiwu": {
-    "book": 2,
-    "category": "aftermath",
-    "beat": "At Meiwu, the first thing Lü Bu does is take Diaochan.",
-    "scene": "The courtyard of a high-walled fortress, soldiers pouring in through the gate behind. In the foreground the towering general Lü Bu, still in armour, has taken the hand of a young woman in pale silk and is leading her away from a doorway. Her face is calm and unreadable, her eyes lowered. Around them, soldiers carry out chests of gold and bolts of silk, and a line of young women is being let out through another gate.",
-    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
-  },
-  "cy_weeps": {
-    "book": 2,
-    "category": "aftermath",
-    "beat": "Cai Yong, the scholar, kneels weeping and is brought before Wang Yun's feast.",
-    "scene": "A great hall during a victory feast, officials in court robes at low tables. Two guards have brought in and forced to kneel an elderly scholar with a long grey beard and a scholar's cap, his face wet with tears, hands raised in supplication. At the head of the hall the old minister Wang Yun sits rigid and cold. The officials stare, shocked; one has half risen as if to plead.",
-    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
-  },
-  "ren_valley": {
-    "book": 2,
-    "category": "battle",
-    "beat": "At the mouth of Ren Valley, Lü Bu's army is caught between gongs and drums.",
-    "scene": "A narrow valley mouth between steep hills. Stones and arrows rain down from a hillside held by an enemy army; behind Lü Bu's army, another enemy column is pulling back as drums roll. In the middle, the great general on his red horse wheels around in fury, halberd raised, not knowing which way to charge. Gongs and drums on stands on both hillsides.",
-    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
-  },
-  "wy_tower": {
-    "book": 2,
-    "category": "aftermath",
-    "beat": "Wang Yun on the Xuanping Gate tower above the rebel army, the boy Emperor behind him.",
-    "scene": "The top of a high city gate tower at dusk, smoke and flames rising from the city behind. A frail grey-bearded minister in court robes stands at the very edge of the parapet, looking down. Behind him under a yellow canopy, a pale boy Emperor of about twelve reaches out a hand as if to stop him. Far below, a vast rebel army fills the square, and two generals on horseback look up with swords drawn.",
-    "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
-  },
-  "cy_study": {
-    "book": 2,
-    "category": "everyday",
-    "beat": "Cai Yong at his go board in a study piled with the unfinished history of the Han; Wang Yun across from him.",
-    "scene": "A scholar's study in the afternoon, lattice light. Bundles of bamboo-slip books are stacked everywhere, and on a stand rests a qin zither whose tail end is scorched black. At a low go board, mid-game, sits an elderly scholar with a long grey beard and a gentle, tired face, holding a stone between two fingers. Across from him, the grey-bearded minister Wang Yun studies him rather than the board. Only these two.",
-    "notes": "Book 2 rewrite. Not in the novel: added on the user's call (docs/book2/diaochan-arc.md, A12y). The scorched-tail qin is Cai Yong's legendary 焦尾琴."
-  },
-  "cc_council": {
-    "book": 2,
-    "category": "intrigue",
-    "beat": "Cao Cao walks out of He Jin's council, having warned him in vain.",
-    "scene": "Inside a general's lamp-lit hall, officials in court robes sit stiffly at low tables. In the foreground, walking away from them toward the open doors, is Cao Cao: a compact man in his thirties in an officer's dark robe, thin moustache, sharp narrowed eyes, his jaw set. Behind him, at the head of the hall, the heavy-set general He Jin in rich armour-robes glowers after him. Cool daylight beyond the doors.",
-    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
-  },
-  "hj_head": {
-    "book": 2,
-    "category": "intrigue",
-    "beat": "He Jin's head is thrown over the palace wall (never shown directly).",
-    "scene": "Seen from below, outside a closed red palace gate in a high wall: a small dark object arcs over the top of the wall against a grey sky, too small and far to make out. Below, two officers in armour (Yuan Shao, tall and proud; Cao Cao, shorter) stand frozen, looking up. Soldiers behind them recoil. The gate stays shut.",
-    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
-  },
-  "palace_fire": {
-    "book": 2,
-    "category": "battle",
-    "beat": "The Luoyang palace burns at night after the eunuchs are slaughtered.",
-    "scene": "Night. Rows of palace halls with sweeping tiled roofs burn against a black sky, flames and sparks pouring upward, a red glow on the smoke. In the courtyard below, small figures of soldiers run with buckets and spears. In the foreground Cao Cao, lit orange from the side, points and shouts orders.",
-    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
-  },
-  "fireflies": {
-    "book": 2,
-    "category": "omen",
-    "beat": "The young Emperor and the Prince of Chenliu, their robes knotted together, follow a river of fireflies through the dark.",
-    "scene": "Night on a thorny hillside above a dark river. Two small boys in torn, mud-stained imperial robes, the hems knotted together so they cannot lose each other, climb hand in hand. The younger one, about nine, leads, looking up in wonder. Around them hundreds of fireflies stream in a glowing ribbon that curves ahead up the slope, lighting a path through the thorns. Deep blue darkness everywhere else.",
-    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
-  },
-  "prince_dz": {
-    "book": 2,
-    "category": "intrigue",
-    "beat": "The nine-year-old Prince of Chenliu faces Dong Zhuo's army on the road; Dong Zhuo dismounts.",
-    "scene": "A country road under a sky darkened by dust. A wall of embroidered banners and armoured cavalry fills the background. In front of them, the huge, fat warlord Dong Zhuo in heavy armour is climbing down from his horse in haste. Facing him, small and straight-backed on a horse beside a trembling older boy, the nine-year-old Prince of Chenliu in dusty imperial robes looks him in the eye. Ministers in court robes watch from the side, astonished.",
-    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
-  },
-  "wm_lubu": {
-    "book": 2,
-    "category": "intrigue",
-    "beat": "At the Wenming Garden banquet, a young warrior with a painted halberd glares from behind Ding Yuan.",
-    "scene": "An outdoor banquet in a palace garden: officials at low tables under blossoming trees. In the centre the governor Ding Yuan, older, grey-bearded, has pushed back his table and stands defiantly. Directly behind him towers Lü Bu: young, tall and splendid, in a gold hair-crown with long pheasant plumes, holding a crescent-bladed painted halberd upright, glaring across the garden with furious eyes. The viewpoint is from across the garden, from Dong Zhuo's side.",
-    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
-  },
-  "lb_charge": {
-    "book": 2,
-    "category": "battle",
-    "beat": "Lü Bu charges straight at Dong Zhuo on the field outside Luoyang.",
-    "scene": "A dusty battlefield outside a city wall. Lü Bu gallops straight toward the viewer, in a gold hair-crown with pheasant plumes, a robe embroidered with a hundred flowers over lion-headed armour, his painted halberd levelled. Behind him Ding Yuan's army surges forward. Dust and fluttering banners; a sense of overwhelming speed.",
-    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
-  },
-  "red_hare": {
-    "book": 2,
-    "category": "everyday",
-    "beat": "Red Hare, the horse that goes a thousand li a day, is led into Lü Bu's camp.",
-    "scene": "Inside a military camp at dusk. A magnificent horse, red as burning charcoal from nose to tail without one hair of another colour, rears up against the sky, mane flying, held on a halter by a groom. Lü Bu, young and tall in armour, stares at it, delighted. Li Su, a smiling courtier-officer, stands beside him with an open hand, presenting it.",
-    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
-  },
-  "lb_gold": {
-    "book": 2,
-    "category": "intrigue",
-    "beat": "Li Su lays out gold, pearls and a jade belt before Lü Bu.",
-    "scene": "A lamp-lit camp tent. On a low table: stacked gold ingots, a heap of bright pearls spilling from a silk pouch, and a white jade belt. Lü Bu, young and powerful, sits behind the table, staring at the treasure with wine forgotten in his hand. Across from him Li Su leans in, smiling, speaking low. Warm, conspiratorial light.",
-    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
-  },
-  "lb_candle": {
-    "book": 2,
-    "category": "intrigue",
-    "beat": "At the second watch, Lü Bu enters Ding Yuan's tent while Ding Yuan reads by candlelight.",
-    "scene": "Night, inside a plain command tent. The old governor Ding Yuan sits at a desk reading a bamboo-slip book by a single candle, looking up kindly. In the tent's open flap stands the dark shape of Lü Bu, a blade in his hand, his face half in shadow. Only the candle lights the scene.",
-    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
-  },
-  "lb_kneels": {
-    "book": 2,
-    "category": "intrigue",
-    "beat": "Lü Bu kneels to Dong Zhuo as his adopted son.",
-    "scene": "Inside a warlord's tent hung with banners. The huge, fat Dong Zhuo, in rich robes, stands with arms open, beaming. Before him Lü Bu kneels on one knee in golden armour, head bowed, offering himself. Li Su watches from the side, pleased. Officers line the walls.",
-    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
-  },
-  "ys_sword": {
-    "book": 2,
-    "category": "intrigue",
-    "beat": "Yuan Shao draws his sword on Dong Zhuo at the Secretariat banquet.",
-    "scene": "A crowded banquet hall lined with armoured guards. In the centre two men face each other with drawn swords across a low table: the huge warlord Dong Zhuo, flushed and furious, and Yuan Shao, tall, handsome and proud in an officer's robe, his sword raised level. The seated officials shrink back. Among them, at one table, Cao Cao watches closely.",
-    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
-  },
-  "deposition": {
-    "book": 2,
-    "category": "intrigue",
-    "beat": "The young Emperor is deposed in the Jiade Hall, kneeling facing north.",
-    "scene": "A vast throne hall. At the foot of the empty throne a boy of about fourteen in imperial robes kneels facing away from the throne, his seal ribbons being untied by an attendant. Above him on the dais the fat warlord Dong Zhuo stands with a drawn sword. Rows of ministers in court robes bow their heads, some weeping. A small boy of nine, in new imperial yellow, is being led toward the throne.",
-    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
-  },
-  "swallows": {
-    "book": 2,
-    "category": "aftermath",
-    "beat": "The deposed Emperor watches two swallows from a tower window in the Yong'an Palace.",
-    "scene": "A spring afternoon. A boy of about fourteen in plain, worn robes leans at a high lattice window of a shut-up palace tower, looking out at two swallows flying over a courtyard of new green grass. Far off, beyond the walls, the roofs of the great palace. His face is thin and sad. Quiet, soft, and very still.",
-    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
-  },
-  "heads_gate": {
-    "book": 2,
-    "category": "aftermath",
-    "beat": "Dong Zhuo's carts return to Luoyang from the Yangcheng festival massacre (the heads never shown clearly).",
-    "scene": "A city gate in late afternoon. A line of ox carts rolls in under the gate tower, loaded with sacks and bundles of looted goods, their undersides draped and in shadow. Soldiers march beside them, cheering. In front of the gate, a bonfire sends up thick black smoke. Townspeople along the road turn away, covering their faces. The cargo stays indistinct.",
-    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
-  },
-  "wy_birthday": {
-    "book": 2,
-    "category": "intrigue",
-    "beat": "At Wang Yun's false birthday banquet, the ministers weep, and Cao Cao laughs.",
-    "scene": "Evening in a minister's rear hall, lamps lit. Old ministers in court robes sit at low tables, weeping into their sleeves. At the head, the grey-bearded minister Wang Yun covers his face. At one table Cao Cao leans back, clapping his hands and laughing, the only dry-eyed man in the room. Several of the weeping men stare at him, shocked.",
-    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
-  },
-  "seven_star": {
-    "book": 2,
-    "category": "everyday",
-    "beat": "The Seven-Star Sword.",
-    "scene": "Close-up on a short sword a little over a foot long, half drawn from a lacquered sheath on a dark table. The hilt and scabbard are inlaid with seven jewels in a line like the Big Dipper. The exposed blade is very bright and keen. Warm lamplight; a hand rests near it.",
-    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
-  },
-  "the_mirror": {
-    "book": 2,
-    "category": "intrigue",
-    "beat": "Dong Zhuo, lying down, sees Cao Cao in the dressing mirror with a drawn sword.",
-    "scene": "A small, richly furnished pavilion room. On a couch, the huge, fat Dong Zhuo lies on his side facing the wall. Above him on a stand is a bronze dressing mirror, and in the mirror is reflected Cao Cao standing behind him with a short jewelled sword drawn, about to strike. Dong Zhuo's eyes have just opened, looking up into the mirror. The reflection is the focus.",
-    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
-  },
-  "east_gate": {
-    "book": 2,
-    "category": "battle",
-    "beat": "Cao Cao gallops out through Luoyang's East Gate.",
-    "scene": "A great city gate at midday. A lone rider, Cao Cao, bursts through the gate passage at a full gallop on a fine horse, cloak streaming, whip raised. A gate guard turns to watch him go. Beyond the gate, an open road runs east across the plain.",
-    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
-  },
-  "wanted": {
-    "book": 2,
-    "category": "aftermath",
-    "beat": "Cao Cao's wanted portrait on a post-station wall.",
-    "scene": "A plastered wall at a roadside post station. Pasted on it is an official notice with a painted portrait of Cao Cao, his sharp eyes and thin moustache, and red seal stamps. A few travellers and a soldier stand reading it. Dusty light.",
-    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
-  },
-  "cg_unties": {
-    "book": 2,
-    "category": "bond",
-    "beat": "At midnight in the jail's back courtyard, Chen Gong unties Cao Cao.",
-    "scene": "Night, a small courtyard behind a county office, lit by one lantern. Cao Cao, his robe dishevelled, sits bound on a stool. A lean, earnest county magistrate in his thirties, Chen Gong, kneels before him, untying the ropes with his own hands, looking up at him with admiration. No one else.",
-    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
-  },
-  "boshe_pig": {
-    "book": 2,
-    "category": "aftermath",
-    "beat": "In Lü Boshe's kitchen, a pig tied up for the slaughter.",
-    "scene": "A dim farmhouse kitchen at dusk, lit by the last light through a doorway. On the straw-covered floor a fat pig lies trussed with rope, alive and wide-eyed; a cleaver rests on a wooden chopping block beside a basket of vegetables and a wine jar. In the doorway Cao Cao and Chen Gong stand still, swords lowered, staring at the pig as they realise their mistake.",
-    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md). Graphics: reworded (the first wording was flagged by the model's filter)."
-  },
-  "boshe_road": {
-    "book": 2,
-    "category": "aftermath",
-    "beat": "Lü Boshe, returning with wine, turns to look back on the road.",
-    "scene": "A country road through a wood at dusk. An old, kindly man on a donkey, two jars of wine hanging from his saddle and a bundle of fruit and greens in his hand, has twisted round to look back down the road. Behind him, a little way off, a rider has turned his horse back toward him with a drawn sword. The old man's face shows only mild puzzlement.",
-    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
-  },
-  "cg_inn": {
-    "book": 2,
-    "category": "intrigue",
-    "beat": "Chen Gong stands over the sleeping Cao Cao with a drawn sword.",
-    "scene": "A plain room in a roadside inn, moonlight through the window. Cao Cao lies asleep on a low bed. Standing over him, Chen Gong holds a drawn sword, his face torn with doubt. The moonlight falls across the blade and the sleeping man's face.",
-    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
-  },
-  "white_banner": {
-    "book": 2,
-    "category": "plan",
-    "beat": "Cao Cao raises the white banner of 'Loyalty and Right' at Chenliu.",
-    "scene": "A village drilling ground on a bright morning. A tall white banner flies from a pole, two large black characters on it: 忠义. Beneath it Cao Cao stands on a low platform. Before him volunteers stream in from every direction, farmers and young men with spears, and a few armoured officers arrive on horseback with men behind them. Hopeful, rising energy.",
-    "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
-  },
-  "lb_seal": {
-    "book": 3,
-    "category": "intrigue",
-    "beat": "Liu Bei offers Lü Bu the seal of Xuzhou; Guan Yu and Zhang Fei glare.",
-    "scene": "A prefecture hall. Liu Bei, gentle-faced with long ear lobes, holds out a seal of office with both hands. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, half reaches for it. Behind Liu Bei, red-faced long-bearded Guan Yu and fierce black-bearded Zhang Fei glare at him. Chen Gong stands at Lü Bu's shoulder.",
-    "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
-  },
-  "lb_wifebow": {
-    "book": 3,
-    "category": "bond",
-    "beat": "Lü Bu's wife and daughter bow to Liu Bei in Lü Bu's rear hall.",
-    "scene": "A warmly lit rear hall after a banquet. A dignified woman in her thirties in rich robes (Lady Yan) and a girl of about fifteen bow to Liu Bei, who raises his hands to decline. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, beams beside them. Zhang Fei, in the doorway, glowers.",
-    "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
-  },
-  "lb_letter": {
-    "book": 3,
-    "category": "intrigue",
-    "beat": "Liu Bei shows Lü Bu Cao Cao's secret letter.",
-    "scene": "A private rear hall. Liu Bei holds out an unrolled letter. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, reads it, his face shifting from shock to tears. A single lamp.",
-    "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
-  },
-  "lb_nightgate": {
-    "book": 3,
-    "category": "battle",
-    "beat": "A city gate opens at the fourth watch under a clear moon.",
-    "scene": "Night under a bright full moon. A city gate swings open from inside. Outside, a column of horsemen waits in shadow; at its head Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, on a fiery red horse. On the wall above, a single officer with a lantern.",
-    "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
-  },
-  "lb_halberd": {
-    "book": 3,
-    "category": "battle",
-    "beat": "Lü Bu's arrow strikes the small blade of a halberd at a hundred and fifty paces.",
-    "scene": "A military camp at the camp gate. In the foreground Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, has just loosed an arrow, bow still drawn wide like an autumn moon. Far off, a painted halberd planted upright at the gate; the arrow is striking its small side-blade. Behind Lü Bu, Liu Bei and the general Ji Ling stare, and soldiers throw up their arms.",
-    "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
-  },
-  "ly_decides": {
-    "book": 3,
-    "category": "intrigue",
-    "beat": "Lady Yan advises Lü Bu to accept Yuan Shu's match for their daughter.",
-    "scene": "Lady Yan's private rooms, silk hangings. Lady Yan, a dignified woman in her thirties, speaks earnestly to Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, who listens. Through a doorway, their daughter, about fifteen, is glimpsed at an embroidery frame.",
-    "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
-  },
-  "bride_drums": {
-    "book": 3,
-    "category": "everyday",
-    "beat": "The bride is sent out of Xuzhou with drums and music.",
-    "scene": "A city gate by torchlight. A curtained bridal carriage decorated with red silk rolls out, surrounded by musicians beating drums and blowing horns, and an escort of riders. Townspeople watch.",
-    "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
-  },
-  "cg_condolence": {
-    "book": 3,
-    "category": "intrigue",
-    "beat": "Old Chen Gui pays a mock condolence call on the living Lü Bu.",
-    "scene": "A hall. A frail old minister in white mourning clothes, helped by a servant, bows in condolence before Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, who stands astonished.",
-    "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
-  },
-  "zl_bride": {
-    "book": 3,
-    "category": "battle",
-    "beat": "Zhang Liao catches the bridal party thirty li out and turns it back.",
-    "scene": "A country road at dawn. A bearded cavalry general, Zhang Liao, reins in his horse across the road in front of a red bridal carriage. His riders surround it. The envoy Han Yin raises his hands. The carriage curtain is drawn.",
-    "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
-  },
-  "cd_hawk": {
-    "book": 3,
-    "category": "intrigue",
-    "beat": "Chen Deng laughs at Lü Bu's sword and tells him of the hawk.",
-    "scene": "A hall. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, has a sword half raised. Before him a sharp-eyed young official, Chen Deng, laughs openly, one hand raised as if telling a story; a hawk on a perch stands in the corner of the room.",
-    "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
-  },
-  "cg_courier": {
-    "book": 3,
-    "category": "battle",
-    "beat": "Chen Gong, out hunting, rides a courier down by a side path.",
-    "scene": "Open hunting country, autumn. A lean, earnest strategist on horseback, Chen Gong, cuts across from a side path and blocks a post rider on the main road. His hunting companions close in. A hunting hawk circles above.",
-    "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
-  },
-  "xiao_letters": {
-    "book": 3,
-    "category": "intrigue",
-    "beat": "Chen Deng shoots letters down from Xiao Pass at night.",
-    "scene": "Night on a mountain pass fort. A young official, Chen Deng, leans over the battlements and looses an arrow with a rolled letter tied to it toward the camp fires far below. Two more letter-arrows lie beside him. The sentries' backs are turned.",
-    "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
-  },
-  "xiao_dark": {
-    "book": 3,
-    "category": "battle",
-    "beat": "Lü Bu's men and Chen Gong's kill each other in the dark.",
-    "scene": "A mountain pass at night, lit only by a fire on the gate tower. Two forces of the same army clash in confusion in the dark, unable to see each other's banners.",
-    "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
-  },
-  "mz_wall": {
-    "book": 3,
-    "category": "intrigue",
-    "beat": "Mi Zhu shouts down from Xuzhou's wall: the city is not Lü Bu's.",
-    "scene": "Dawn under a city wall. Arrows fly down. On the wall a calm official, Mi Zhu, points down. Below, Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, on a red horse, looks up furious; Chen Gong beside him.",
-    "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
-  },
-  "ly_weeps": {
-    "book": 3,
-    "category": "bond",
-    "beat": "Lady Yan weeps and pleads with Lü Bu not to leave the city.",
-    "scene": "A residence room in winter, a half-packed chest of padded clothes. Lady Yan, in her thirties, weeps, holding Lü Bu's sleeve. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, stands torn, a travelling cloak over one arm.",
-    "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
-  },
-  "dc_word": {
-    "book": 3,
-    "category": "bond",
-    "beat": "Diaochan asks Lü Bu not to ride out alone.",
-    "scene": "An inner room with lanterns. Diaochan, a graceful woman in silk, lays her hand on Lü Bu's arm and speaks softly. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, looks down at her, his resolve fading.",
-    "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
-  },
-  "lb_daughter": {
-    "book": 3,
-    "category": "battle",
-    "beat": "Lü Bu rides out at night with his daughter tied to his back.",
-    "scene": "Night at a city gate. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, on a fiery red horse, rides out; on his back, a girl wrapped in silk floss and armour is bound to him. Torches of the besiegers' camp ahead.",
-    "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
-  },
-  "flood_xiapi": {
-    "book": 3,
-    "category": "aftermath",
-    "beat": "Xiapi under water; only the east gate is dry.",
-    "scene": "A walled city seen from high ground, its streets and gates drowned under brown floodwater from two broken river dykes. Only a raised causeway to the east gate stands clear. On the hills around, the besieging army's tents.",
-    "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
-  },
-  "lb_mirror": {
-    "book": 3,
-    "category": "aftermath",
-    "beat": "Lü Bu looks at himself in a mirror, worn by wine.",
-    "scene": "A dim room, wine jars everywhere. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, now hollow-cheeked and haggard, stares into a bronze mirror held up in front of him, shocked.",
-    "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
-  },
-  "hc_redhare": {
-    "book": 3,
-    "category": "intrigue",
-    "beat": "Hou Cheng steals Red Hare from the flooded stables at night.",
-    "scene": "Night, a stable yard half under water. An officer, Hou Cheng, leads a magnificent fire-red horse out through the water by its bridle, glancing back. Lantern light on the water.",
-    "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
-  },
-  "lb_bound": {
-    "book": 3,
-    "category": "aftermath",
-    "beat": "Lü Bu, asleep in his chair on the gate tower, is bound by his own officers.",
-    "scene": "A gate tower at noon. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, slumped asleep in a chair, wakes as two of his own officers wind ropes around him. One holds his painted halberd away. A white flag is being raised on the wall.",
-    "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
-  },
-  "wgt_cg": {
-    "book": 3,
-    "category": "aftermath",
-    "beat": "Chen Gong walks down the tower stairs to his death without looking back; Cao Cao rises weeping.",
-    "scene": "The top of a gate tower. Chen Gong, lean and calm, walks down the stone stairs alone, guards unable to hold him. Behind him, Cao Cao has risen from his seat, weeping. Liu Bei sits beside the empty seat.",
-    "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
-  },
-  "wgt_lb": {
-    "book": 3,
-    "category": "aftermath",
-    "beat": "Liu Bei speaks the line that seals Lü Bu's fate.",
-    "scene": "The top of a gate tower. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, bound in a ball of ropes, kneels, glaring up. Cao Cao, seated, turns to Liu Bei, who speaks calmly. Guan Yu and Zhang Fei stand behind.",
-    "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
-  },
-  "yan_left": {
-    "book": 3,
-    "category": "aftermath",
-    "beat": "Lady Yan, holding her daughter, watches Lü Bu ride out of burning Chang'an without them.",
-    "scene": "Dusk, Chang'an burning, flames above the gate towers. In a courtyard doorway, Lady Yan, in her thirties, a lady of a great house, holds a small girl close and looks out. Far down the street, Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, on a fiery red horse, rides away with a band of horsemen, not looking back.",
-    "notes": "Book 3 (Lü Bu's fall), prologue x0a, docs/book2/lvbu-arc.md. Chapter 9: 呂布只得棄卻家小."
-  },
-  "yan_hidden": {
-    "book": 3,
-    "category": "intrigue",
-    "beat": "Lady Yan and her daughter hidden in Pang Shu's house while the city is plundered.",
-    "scene": "Night, a dim back room of a modest official's house, one shaded lamp. Lady Yan, in her thirties, sits very still against the wall, her arm round a small girl, listening. Through a lattice, the red glow of fires and the shadows of soldiers passing in the lane. A middle-aged officer, Pang Shu, stands by the door, listening too.",
-    "notes": "Book 3 (Lü Bu's fall), prologue x0b, docs/book2/lvbu-arc.md. Chapter 11: 龐舒在長安城中，私藏呂布妻小."
-  },
-  "zy_pouches": {
-    "book": 4,
-    "category": "intrigue",
-    "beat": "Zhuge Liang hands Zhao Yun three sealed silk pouches.",
-    "scene": "A Jingzhou hall, a folding screen behind. Zhuge Liang: a calm scholar in a silk turban and Daoist robe, holding a feather fan, leans close and presses three small embroidered silk pouches into the hands of Zhao Yun: a handsome young general in silver-white armour, who listens gravely. Liu Bei: a man near fifty with long ears and a kindly face, greying beard, in a brocade robe, looks on, uneasy.",
-    "notes": "Book 4 (Lady Sun's marriage), docs/book2/ladysun-arc.md."
-  },
-  "nx_red": {
-    "book": 4,
-    "category": "bond",
-    "beat": "Nanxu decked in red as Liu Bei's men spread news of the wedding.",
-    "scene": "A busy riverside city street in winter sun. Soldiers wearing red sashes buy sheep, pigs and baskets of fruit at the stalls, laughing and talking with townsfolk; red cloth and lanterns going up on the shopfronts.",
-    "notes": "Book 4 (Lady Sun's marriage), docs/book2/ladysun-arc.md."
-  },
-  "wu_rage": {
-    "book": 4,
-    "category": "bond",
-    "beat": "Lady Wu beats her breast and scolds Sun Quan.",
-    "scene": "An inner hall in a Wu palace. Lady Wu: an elderly dowager of Wu in rich dark robes, grey hair dressed high, beats her breast and weeps in fury, pointing at Sun Quan: a young lord with a purple-tinged beard and green eyes, in a lord's robe, who stands abashed. An old gentleman, Qiao Guolao, looks on.",
-    "notes": "Book 4 (Lady Sun's marriage), docs/book2/ladysun-arc.md."
-  },
-  "gl_wu": {
-    "book": 4,
-    "category": "bond",
-    "beat": "Lady Wu sees Liu Bei at Sweet Dew Temple and is delighted.",
-    "scene": "The abbot's hall of a hilltop temple above a great river. Lady Wu: an elderly dowager of Wu in rich dark robes, grey hair dressed high, seated, smiles broadly at Liu Bei: a man near fifty with long ears and a kindly face, greying beard, in a brocade robe, who bows before her. Zhao Yun: a handsome young general in silver-white armour, stands behind him with a sword.",
-    "notes": "Book 4 (Lady Sun's marriage), docs/book2/ladysun-arc.md."
-  },
-  "gl_stone": {
-    "book": 4,
-    "category": "intrigue",
-    "beat": "Liu Bei and Sun Quan each cut the same stone, praying in secret.",
-    "scene": "A temple courtyard. A great boulder split crosswise by two sword strokes, sparks still flying. Liu Bei: a man near fifty with long ears and a kindly face, greying beard, in a brocade robe, and Sun Quan: a young lord with a purple-tinged beard and green eyes, in a lord's robe, stand on either side with drawn swords, each glancing sidelong at the other.",
-    "notes": "Book 4 (Lady Sun's marriage), docs/book2/ladysun-arc.md."
-  },
-  "gl_horses": {
-    "book": 4,
-    "category": "bond",
-    "beat": "Liu Bei and Sun Quan rein in their horses on the slope and laugh.",
-    "scene": "A green hill slope above a wide river with white waves. Liu Bei: a man near fifty with long ears and a kindly face, greying beard, in a brocade robe, and Sun Quan: a young lord with a purple-tinged beard and green eyes, in a lord's robe, rein in their horses side by side, whips raised, laughing.",
-    "notes": "Book 4 (Lady Sun's marriage), docs/book2/ladysun-arc.md."
-  },
-  "ls_blades": {
-    "book": 4,
-    "category": "bond",
-    "beat": "The bridal room hung with blades, the maids armed.",
-    "scene": "A bridal chamber lit by rows of red candles, its walls hung with spears and swords. Maids in silk stand on either side with swords at their hips. Liu Bei: a man near fifty with long ears and a kindly face, greying beard, in a brocade robe, stops in the doorway, startled. Lady Sun: a young noblewoman of Wu, proud and spirited, in red silk, a short sword at her waist, sits at the far end, amused.",
-    "notes": "Book 4 (Lady Sun's marriage), docs/book2/ladysun-arc.md."
-  },
-  "ls_curtain": {
-    "book": 4,
-    "category": "battle",
-    "beat": "Lady Sun raises the carriage curtain and faces down Wu's generals.",
-    "scene": "A road below a hill. A covered carriage pushed forward by attendants; Lady Sun: a young noblewoman of Wu, proud and spirited, in red silk, a short sword at her waist, has flung up its curtain and stands in it, commanding. Before her, two armoured Wu generals have leapt from their horses and thrown down their weapons. Zhao Yun: a handsome young general in silver-white armour, glowers on horseback beside the carriage.",
-    "notes": "Book 4 (Lady Sun's marriage), docs/book2/ladysun-arc.md."
-  },
-  "llp_boats": {
-    "book": 4,
-    "category": "aftermath",
-    "beat": "Zhuge Liang laughs from the boats waiting at Liulangpu.",
-    "scene": "A misty riverbank, twenty covered boats in a line. From the nearest, Zhuge Liang: a calm scholar in a silk turban and Daoist robe, holding a feather fan, steps out laughing, fan raised. On the bank, Liu Bei: a man near fifty with long ears and a kindly face, greying beard, in a brocade robe, and Lady Sun: a young noblewoman of Wu, proud and spirited, in red silk, a short sword at her waist, beside her carriage, look on in relief; dust of pursuers in the distance.",
-    "notes": "Book 4 (Lady Sun's marriage), docs/book2/ladysun-arc.md."
-  },
-  "zy_chant": {
-    "book": 4,
-    "category": "aftermath",
-    "beat": "Zhou Yu in his boat, mocked by the soldiers' chant from the shore.",
-    "scene": "A river shore in the evening. Soldiers on the bank shout and jeer toward the water. In a warship, Zhou Yu: a handsome commander of Wu in his thirties, in armour and a red cloak, clutches his side, a wound reopening, held back by his officers.",
-    "notes": "Book 4 (Lady Sun's marriage), docs/book2/ladysun-arc.md."
-  }
+ "tree_a": {
+  "book": 1,
+  "category": "everyday",
+  "beat": "The great mulberry tree whose crown looks like a carriage canopy, over a poor village.",
+  "scene": "A poor village of mud-walled thatched houses on a bright morning, a dirt lane running through it. Beyond the last house stands one enormous mulberry tree, taller than any roof, its crown spreading round and flat like the canopy of a carriage. Two villagers in the lane have stopped walking and are looking up at it. Wide shot.",
+  "notes": ""
+ },
+ "tree_b": {
+  "book": 1,
+  "category": "everyday",
+  "beat": "The boy boasts he will ride a carriage like that tree's canopy; his uncle is startled.",
+  "scene": "Under a huge mulberry tree a small boy of six in a plain hemp tunic and straw sandals points up at the round crown, chin raised, announcing that he will ride in a carriage like that one day. Beside him his uncle, a middle-aged farmer in a hemp robe, has caught the boy's sleeve and half turns to hush him, startled. Overcast afternoon, a dirt yard. Only these two.",
+  "notes": ""
+ },
+ "notice_a": {
+  "book": 1,
+  "category": "everyday",
+  "beat": "A crowd reading the governor's notice calling for volunteers.",
+  "scene": "A crowded dusty market square in a county town at midday under a pale overcast sky. Townsfolk in plain hemp clothes press toward a whitewashed wall where a large paper notice has been pasted, columns of black brushed characters and red seals clear to see; one man reads aloud while others strain on tiptoe over shoulders. Wide shot.",
+  "notes": ""
+ },
+ "notice_b": {
+  "book": 1,
+  "category": "everyday",
+  "beat": "Liu Bei, reading the notice, sighs; Zhang Fei behind him is about to speak.",
+  "scene": "Medium shot at the edge of the crowd before the notice on the wall. Liu Bei stands a little apart with his arms hanging at his sides, head lowered, letting out a long sigh. A step behind him Zhang Fei has noticed it and leans in over his shoulder, brow furrowed, about to speak. Afternoon light, dust in the air. Only these two.",
+  "notes": ""
+ },
+ "inn_a": {
+  "book": 1,
+  "category": "everyday",
+  "beat": "Guan Yu comes into the inn pushing his cart; Liu Bei and Zhang Fei look up.",
+  "scene": "Evening in a small village inn: plank walls, paper lattice windows, clay wine jars on a shelf, plain paper lanterns glowing. Guan Yu has just shoved the door open, stooping under the lintel and pulling a wooden handcart in behind him; every head in the room has turned. At a table by the wall Liu Bei and Zhang Fei look up at him with cups halfway to their mouths.",
+  "notes": ""
+ },
+ "inn_b": {
+  "book": 1,
+  "category": "everyday",
+  "beat": "The three at one table, Guan Yu telling his story, a quiet bond forming.",
+  "scene": "Close shot of three men at a small inn table at night, heads bent together over clay wine bowls, one small oil lamp between them. Guan Yu, in the middle, is speaking quietly, hands flat on the table, while Liu Bei and Zhang Fei listen, leaning in. Everything past the lamp falls into soft shadow. A calm, intimate conversation. Exactly three men.",
+  "notes": ""
+ },
+ "oath_a": {
+  "book": 1,
+  "category": "bond",
+  "beat": "The peach orchard ready for the oath: altar, incense, the ox and the white horse.",
+  "scene": "A peach orchard in full pink blossom on a quiet, overcast early morning. A low stone altar stands between the trees with a thread of incense rising from a bronze burner, a black ox and a white horse tethered beside it, petals drifting to the ground. The orchard is empty. Wide shot.",
+  "notes": ""
+ },
+ "oath_b": {
+  "book": 1,
+  "category": "bond",
+  "beat": "The three brothers kneel at the altar and swear the oath.",
+  "scene": "Three men kneel side by side before a low stone altar in a peach orchard, seen from behind and slightly to one side: Liu Bei in the middle, Guan Yu on his left, Zhang Fei on his right, hands clasped and heads bowed, mid-vow. Incense rises from a bronze burner on the altar. Overcast morning light, blossom on the ground. Exactly three men.",
+  "notes": ""
+ },
+ "oath_c": {
+  "book": 1,
+  "category": "bond",
+  "beat": "The brothers' cups touch in the quiet toast after the oath.",
+  "scene": "Close shot of three hands holding small bronze wine cups out over a plain wooden table in the peach orchard, the cups touching in a quiet toast; a few pink petals have dropped into the wine. One hand comes from a white sleeve, one from a green sleeve and one from a black sleeve. Soft late-afternoon light. Hands and cups only.",
+  "notes": ""
+ },
+ "tent_b": {
+  "book": 1,
+  "category": "bond",
+  "beat": "Liu Bei bows to his old teacher Lu Zhi, who greets him warmly.",
+  "scene": "Inside a large army tent lit by a bronze oil lamp, Liu Bei steps in and bows to his old teacher Lu Zhi, who has risen from his camp desk and reaches out both hands to take his, smiling warmly. Scrolls and a map lie on the desk behind them. Medium shot, both men in profile. Only these two.",
+  "notes": ""
+ },
+ "tent_c": {
+  "book": 1,
+  "category": "intrigue",
+  "beat": "Lu Zhi's desk: the map and the briefing for the Yingchuan errand.",
+  "scene": "A general's camp desk inside a tent at night: rolled bamboo scrolls, a brush resting on an inkstone, and a plain map of hills and rivers pinned with small coloured flags, lit by one bronze oil lamp that throws a warm pool of light and long shadows across the tent wall. Close shot of the desk, an empty chair pushed back.",
+  "notes": ""
+ },
+ "cart_a": {
+  "book": 1,
+  "category": "everyday",
+  "beat": "A prisoner's cage cart on the road, guarded; the three brothers rein in beside it.",
+  "scene": "A dusty country road on a grey afternoon, seen close from beside the wheels. A wooden cage cart fills the middle of the frame, an old man in plain grey clothes inside it, gripping the bars; imperial soldiers with spears walk at its wheels. Three riders, Liu Bei, Guan Yu and Zhang Fei, have just reined in on the other side of the cart, close enough to see their faces, staring at the prisoner. Medium shot, dust hanging low.",
+  "notes": ""
+ },
+ "cart_b": {
+  "book": 1,
+  "category": "intrigue",
+  "beat": "Lu Zhi in the cage speaks to Liu Bei; Zhang Fei, furious, grips his spear.",
+  "scene": "Close shot through the bars of a wooden cage cart: old Lu Zhi, in the cage, speaks quietly to Liu Bei, who stands outside holding two of the bars. Behind Liu Bei's shoulder Zhang Fei glares at the guards, both hands white-knuckled on his spear. Overcast afternoon on a dirt road.",
+  "notes": ""
+ },
+ "cart_c": {
+  "book": 1,
+  "category": "intrigue",
+  "beat": "Lu Zhi's hands on the bars as the cart rolls off along the empty road.",
+  "scene": "Close shot from just behind an old man sitting inside a cage cart: the back of his grey head and his thin shoulders in the near corner of the frame, his arms in grey sleeves reaching forward so his hands rest on the rough wooden bars. Beyond the bars an empty, rutted dirt road runs away between bare fields toward distant hills under a flat grey sky, a few wisps of straw dropped in front.",
+  "notes": ""
+ },
+ "office_b": {
+  "book": 1,
+  "category": "intrigue",
+  "beat": "Dong Zhuo sneers at Liu Bei's lack of office; Zhang Fei is held back by his brothers.",
+  "scene": "In an open army camp among tents and banners on a hazy afternoon, Dong Zhuo sits at ease on a camp stool, sneering. Facing him, Zhang Fei lunges forward with his hand on his sword hilt, roaring; Liu Bei and Guan Yu each grab one of his arms and haul him back. Dong Zhuo's guards shift in the background.",
+  "notes": ""
+ },
+ "office_c": {
+  "book": 1,
+  "category": "intrigue",
+  "beat": "The tipped cup and the fist's shadow: Zhang Fei's rage, seen only as objects.",
+  "scene": "Close shot of a bronze wine cup tipped over on a plain wooden camp table, the last of the wine spilling across the boards and dripping off the edge. On the tent canvas behind it the dark shadow of a clenched fist is raised high, cast by a lamp outside. Only the cup, the table and the shadow.",
+  "notes": ""
+ },
+ "blackwind_a": {
+  "book": 1,
+  "category": "omen",
+  "beat": "Zhang Bao's sorcery: the black wind and paper riders break the Han line.",
+  "scene": "A rocky hilltop under a darkening sky. Zhang Bao stands on the crest with his long hair streaming loose, sword raised in one hand, shouting a spell; a black whirlwind of storm cloud, sand and stones pours down the slope onto a line of Han spearmen, who throw down their shields and run. Pale paper riders gallop inside the cloud.",
+  "notes": ""
+ },
+ "blackwind_c": {
+  "book": 1,
+  "category": "battle",
+  "beat": "The paper soldiers and horses in the black wind, the sorcery itself.",
+  "scene": "Riders and horses cut from white paper whirl through a howling black wind under a dark stormy sky, tumbling like leaves, some torn in half. Close shot, low angle, of the flurry of paper against the black cloud. Only paper figures, no living people anywhere in the frame.",
+  "notes": ""
+ },
+ "bosswin_a": {
+  "book": 1,
+  "category": "battle",
+  "beat": "The blood-and-filth jars thrown from the ridge break the black wind.",
+  "scene": "A hillside ridge in daylight: Han soldiers crouching behind rocks heave clay jars of filth down the slope. The jars burst on the ground below; where the black whirlwind meets them it shreds apart into flying scraps of paper, and Zhang Bao's rebels stumble back from the stink and spatter. Mid-action, dust and flying clay.",
+  "notes": ""
+ },
+ "bosswin_c": {
+  "book": 1,
+  "category": "aftermath",
+  "beat": "After the storm: torn paper soldiers drifting down, the spell broken.",
+  "scene": "Close shot, looking up into a grey sky after a storm: torn scraps of paper, pieces of paper soldiers and paper horses, a head, an arm, a half-horse, tumble and flutter down through the air like fallen leaves, caught mid-fall at different heights with the dark clouds thinning behind them. A strip of green hillside at the bottom of the frame. Nothing stands upright; only falling paper, and no living people.",
+  "notes": ""
+ },
+ "bosswin_d": {
+  "book": 1,
+  "category": "aftermath",
+  "beat": "Yan Zheng stabs Zhang Bao from behind inside Yangcheng.",
+  "scene": "Night inside the walls of Yangcheng, torches on the stone walls. Zhang Bao, in a yellow robe, turns away toward the gate while his own officer, a lean man in dark armour, steps up close behind him and drives a short sword into his back. A few guards at the edges stand frozen. Only these two in the middle of the frame.",
+  "notes": ""
+ },
+ "peace2_b": {
+  "book": 1,
+  "category": "omen",
+  "beat": "Zhang Jiao preaches 'the Blue Heaven is dead' to his followers.",
+  "scene": "Evening in a plague-stricken town: white-haired Zhang Jiao stands on a wooden platform in a yellow robe, one arm out pointing across the crowd, mid-sermon, mouth open. Hundreds of followers in yellow headscarves fill the square below, faces turned up, many holding bowls of charm water. Overcast grey light, torches being lit at the edges.",
+  "notes": ""
+ },
+ "caocao2_b": {
+  "book": 1,
+  "category": "intrigue",
+  "beat": "Cao Cao laughs with delight at Xu Shao's verdict.",
+  "scene": "Afternoon in a scholar's quiet study: shelves of bamboo scrolls, a low table with a teapot and cups, light through a paper window. Cao Cao, a young man, sits cross-legged leaning back, laughing out loud with delight; opposite him Xu Shao sits upright and grave, watching him closely. Only these two.",
+  "notes": ""
+ },
+ "caocao3_b": {
+  "book": 1,
+  "category": "battle",
+  "beat": "Cao Cao's cavalry under red banners cut off the fleeing rebels.",
+  "scene": "Grey early morning over a smoking plain: Cao Cao gallops toward us on a dark horse with his sword drawn and raised, mouth open mid-shout, a column of cavalry behind him under bright red banners. Fleeing rebels in yellow headscarves scatter ahead of them. Dust and trampled grass.",
+  "notes": ""
+ },
+ "post_a": {
+  "book": 1,
+  "category": "everyday",
+  "beat": "Old villagers weep at the hostel gate; Zhang Fei rides up and finds them.",
+  "scene": "Morning outside a county hostel: fifty or sixty old villagers in patched hemp clothes crowd at the gate, weeping and gripping the bars, begging to be let in. Zhang Fei rides up from the side on a horse, reins in hard and frowns down at them, a wine gourd at his saddle. Overcast, dusty ground.",
+  "notes": ""
+ },
+ "post_b": {
+  "book": 1,
+  "category": "intrigue",
+  "beat": "Zhang Fei whips the bound inspector at the hitching post; Liu Bei rushes up to stop him.",
+  "scene": "In front of a county office gate, a plump official, the inspector, is tied against a thick wooden hitching post with ropes wound across his chest, howling. Zhang Fei, red-faced and furious, lashes a bundle of thin green willow switches across the inspector's legs; broken switches litter the ground. Liu Bei runs in from the left with one arm out to stop him. Afternoon.",
+  "notes": ""
+ },
+ "horses_a": {
+  "book": 1,
+  "category": "everyday",
+  "beat": "The two merchants bring fifty horses to the brothers.",
+  "scene": "A country road on an overcast afternoon, flat soft light, no low sun: two travelling merchants on foot drive a long string of fine northern horses toward three men waiting at the roadside, Liu Bei, Guan Yu and Zhang Fei. The horses toss their heads and dust rises around them. Medium-wide shot, the horses filling the frame.",
+  "notes": ""
+ },
+ "horses_b": {
+  "book": 1,
+  "category": "everyday",
+  "beat": "The smith hands each brother his weapon.",
+  "scene": "Inside a smithy at night, sparks flying around the anvil: a broad-shouldered smith hands over new weapons, twin swords to Liu Bei, a long halberd with a crescent blade to Guan Yu, and a long spear with a wavy serpent blade to Zhang Fei. Each man reaches out to take his own, eyes on the steel. Orange forge glow.",
+  "notes": ""
+ },
+ "alliance_b": {
+  "book": 2,
+  "category": "bond",
+  "beat": "Liu Bei sits at the lowest seat among the lords; his brothers stand behind, cold.",
+  "scene": "A long banquet table in a great lords' tent, lamps burning. Yuan Shao sits at the head in rich robes among the other lords; at the far end, at the lowest place, sits Liu Bei, hands on his knees, looking at no one. Behind him Guan Yu and Zhang Fei stand with arms folded, faces cool. The lords talk among themselves and ignore him.",
+  "notes": ""
+ },
+ "wine_a": {
+  "book": 2,
+  "category": "battle",
+  "beat": "Cao Cao's steaming cup, untouched, as Guan Yu rides out toward Hua Xiong.",
+  "scene": "Outside the lords' camp, beside a low table, Cao Cao holds out a bronze cup of steaming hot wine. Guan Yu, already in the saddle with his long crescent-bladed halberd, does not take it; he looks toward the gate and the sound of drums beyond, turning his horse. Steam rises from the cup. Overcast grey afternoon.",
+  "notes": ""
+ },
+ "wine_b": {
+  "book": 2,
+  "category": "intrigue",
+  "beat": "Hua Xiong's head at Guan Yu's feet, and the wine is still warm.",
+  "scene": "Before the lords' table, Guan Yu stands calm and tall with his crescent-bladed halberd grounded beside him; on the ground at his feet lies the helmeted head of an enemy general, and on the table the same bronze cup is still steaming. Cao Cao, seated, looks at the cup. The other lords stare in stunned silence.",
+  "notes": ""
+ },
+ "hulao_a": {
+  "book": 2,
+  "category": "battle",
+  "beat": "Lü Bu chases Gongsun Zan; Zhang Fei charges in to save him.",
+  "scene": "A wide dusty field before a fortress pass on an overcast afternoon. Lü Bu, on a tall red horse, thunders after Gongsun Zan on a white horse, halberd drawn back to thrust at his back. From the side Zhang Fei charges in on horseback, serpent spear levelled, roaring. Dust and flying clods. Only these three riders.",
+  "notes": ""
+ },
+ "hulao_b": {
+  "book": 2,
+  "category": "battle",
+  "beat": "Three brothers against Lü Bu: Zhang Fei, Guan Yu and Liu Bei ring him.",
+  "scene": "Dust-choked mid-battle: Lü Bu on his tall red horse swings his halberd in the centre of the field, ringed by three riders, Zhang Fei in front with his serpent spear, Guan Yu at his side with the crescent halberd, Liu Bei at the flank with twin swords, all three striking at once. Far behind, the allied lords watch from a hill. Exactly four fighters.",
+  "notes": ""
+ },
+ "ruins_a": {
+  "book": 2,
+  "category": "aftermath",
+  "beat": "The three brothers look at burned Luoyang.",
+  "scene": "The burned palace city of Luoyang under a flat grey sky: charred black columns, collapsed roofs, thin smoke rising from the rubble, an empty gate hall. In the foreground, small against the ruin, Liu Bei, Guan Yu and Zhang Fei stand side by side looking at it, their horses behind them. Wide shot, ash on the ground.",
+  "notes": ""
+ },
+ "fireflies_a": {
+  "book": 2,
+  "category": "everyday",
+  "beat": "The two boy princes follow the fireflies out of the reeds.",
+  "scene": "At night in tall river reeds, two boys in torn silk robes, one about fourteen and one about nine, hold hands, scratched and tired. In front of them a line of fireflies hangs over the water, leading off between the reeds, and the younger boy points after it. Only the two boys, seen from behind and slightly to the side.",
+  "notes": ""
+ },
+ "dingyuan_a": {
+  "book": 2,
+  "category": "intrigue",
+  "beat": "Lü Bu stands over Ding Yuan in his tent, sword drawn, before the killing.",
+  "scene": "Inside a tent at night, Ding Yuan, a grey-haired governor, sits at a desk reading by a candle and looks up in mild surprise. Lü Bu, in armour, stands over him with a drawn sword held low at his side. Close two-shot, candle flame between them, shadows large on the tent wall. Only these two.",
+  "notes": ""
+ },
+ "lvboshe_a": {
+  "book": 2,
+  "category": "everyday",
+  "beat": "Cao Cao, sword out, turns on the old farmer Lü Boshe returning with wine.",
+  "scene": "A dirt road at dusk: old Lü Boshe rides a donkey toward us with two clay wine jars hanging from the saddle, raising one hand in a friendly greeting. Ahead of him two riders, Cao Cao and Chen Gong, have stopped; Cao Cao has turned his horse back and his sword is already out. Wide shot, long shadows.",
+  "notes": ""
+ },
+ "lvboshe_b": {
+  "book": 2,
+  "category": "intrigue",
+  "beat": "After the killing: Cao Cao hard-faced, Chen Gong appalled, the dead man behind them.",
+  "scene": "A road in grey dusk, flat cold light with no sunset glow and no warm colour in the sky: Cao Cao sits his horse with his sword lowered, jaw tight, staring straight ahead. Beside him Chen Gong looks at him in appalled silence, hand loose on the reins. Far behind them on the road lie a fallen donkey and a figure that does not move, two wine jars rolled in the dust. Heavy, still, grim.",
+  "notes": ""
+ },
+ "xingyang_a": {
+  "book": 2,
+  "category": "battle",
+  "beat": "Cao Hong, on foot, leads the wounded Cao Cao's horse across the river.",
+  "scene": "Wading a river at dusk: Cao Cao rides a strong horse with an arrow in his shoulder, swaying, while Cao Hong, on foot in the water beside it, strips off his armour and leads the horse by the bridle, glancing back at the far bank. Splashing water, reeds, a few pursuers' torches behind them.",
+  "notes": ""
+ },
+ "zumao_a": {
+  "book": 2,
+  "category": "battle",
+  "beat": "The red cap hung on a stump as a decoy; Zu Mao waits in the trees.",
+  "scene": "A dark wood at night. A burnt tree stump stands in a clearing with a red cap hung on top of it; enemy cavalry with torches ring it, edging forward warily. Half hidden among the trees behind them, Zu Mao crouches low with a sword in each hand, ready to charge. Smoke and torchlight.",
+  "notes": ""
+ },
+ "seal_a": {
+  "book": 2,
+  "category": "omen",
+  "beat": "Sun Jian's men find the glowing well in the ruined palace.",
+  "scene": "Night in the ruins of a palace: a round stone well glows with pale five-coloured light rising from its mouth. Sun Jian and a few soldiers with torches lean over the rim, faces lit from below, one soldier pointing down into the well. Broken columns around them. Wide shot, ash on the ground.",
+  "notes": ""
+ },
+ "seal_b": {
+  "book": 2,
+  "category": "bond",
+  "beat": "Sun Jian swears his oath before Yuan Shao, who waits for the seal.",
+  "scene": "A torchlit camp at night: Sun Jian in armour stands with one hand raised, swearing, jaw set. Before him Yuan Shao sits at a low table with his hand held out as if waiting to receive something. Behind them other lords look on. Neither man holds anything.",
+  "notes": ""
+ },
+ "xianshan_a": {
+  "book": 2,
+  "category": "battle",
+  "beat": "Sun Jian caught alone under stones and arrows on Mount Xian.",
+  "scene": "A steep wooded ridge at night: Sun Jian on horseback among the trees looks up as stones and arrows rain down on him from the slope above, his horse rearing, branches snapping. His thirty riders scatter behind him, shouting. Dark, torch-lit from the side, dust and falling rock.",
+  "notes": ""
+ },
+ "garden_a": {
+  "book": 2,
+  "category": "bond",
+  "beat": "Diaochan kneels to Wang Yun in the moonlit peony garden and accepts the task.",
+  "scene": "A peony garden at night under the moon: Diaochan kneels with her forehead near the ground; before her Wang Yun bows low; behind them a small pavilion with a stone weiqi board on its table and two stones on it, no one at it. Only these two.",
+  "notes": ""
+ },
+ "pavilion_a": {
+  "book": 2,
+  "category": "bond",
+  "beat": "Diaochan weeps in Lü Bu's arms at the Fengyi Pavilion.",
+  "scene": "Evening beside a lotus pond at a garden pavilion: Diaochan rests against Lü Bu's chest, her face turned up to his, wet with tears; he holds her with both arms. His tall halberd leans against the pavilion railing beside them. Grey light on the water, lanterns not yet lit. Only these two.",
+  "notes": ""
+ },
+ "fall_a": {
+  "book": 2,
+  "category": "aftermath",
+  "beat": "Lü Bu's halberd at Dong Zhuo's throat at the Beiye Gate.",
+  "scene": "At a palace gate in the early morning, Dong Zhuo, huge and heavy in armour, has fallen from a carriage with a broken wheel and lies on the ground looking up in terror; Lü Bu stands over him and drives his halberd down at his throat. Li Su rushes in beside him with a sword; guards freeze in the background.",
+  "notes": ""
+ },
+ "tower_a": {
+  "book": 2,
+  "category": "aftermath",
+  "beat": "Wang Yun on the burning gate tower beside the Emperor, facing the rebel army.",
+  "scene": "A city gate tower on fire at dusk: Wang Yun, an old man in court robes, stands at the parapet with a small boy in an emperor's robe at his side, both looking down at a rebel army pouring through the streets below, smoke drifting past them. Wide shot from below, flames at the corners of the tower.",
+  "notes": ""
+ },
+ "zhangbao_a": {
+  "book": 1,
+  "category": "omen",
+  "beat": "Who Zhang Bao is: the General of Earth on his hill before the battle.",
+  "scene": "Wide panoramic composition at dusk. On the left, Zhu Jun's Han camp with cooking fires and a line of spearmen below a ridge. In the middle, a long grassy valley. On the right, on a rocky hilltop, Zhang Bao stands before a small altar with a sword and paper charms, his long hair loose, yellow banners behind him, a thin dark cloud gathering over his head.",
+  "notes": "transition beat"
+ },
+ "tree_c": {
+  "book": 1,
+  "category": "peace",
+  "beat": "Liu Bei's mother and his boyhood: studying, friends, devotion.",
+  "scene": "Inside a poor country house in the afternoon: Liu Bei's mother sits at a loom by the door, weaving straw mats; on the right Liu Bei as a young man sits at a low table reading a bamboo scroll, and Gongsun Zan, a young man of his own age, sits across from him sharing the book. Through the open door on the left, the mulberry tree stands in the yard. Calm, plain overcast light.",
+  "notes": "transition beat"
+ },
+ "yingchuan_a": {
+  "book": 1,
+  "category": "aftermath",
+  "beat": "Changshe after the fire: Huangfu Song's army among the burnt grass.",
+  "scene": "Wide panoramic composition on an overcast morning. On the left, trampled burnt grass with smoke still rising and Yellow Turban banners lying flat. In the middle, Huangfu Song and Zhu Jun on horseback, looking over the field, with Han spearmen around them. On the right, Liu Bei, Guan Yu and Zhang Fei arriving at the head of their column on the road.",
+  "notes": "transition beat"
+ },
+ "bloodplan_a": {
+  "book": 1,
+  "category": "plan",
+  "beat": "The brothers plan the blood and the ridges, with the village pens below.",
+  "scene": "A hillside at the roadside shrine in grey afternoon light: on the left Liu Bei points down the hill toward a village of pens and huts; in the middle Guan Yu and Zhang Fei stand listening, Guan Yu pointing at one ridge and Zhang Fei at the other; on the right, the two ridges rise above the road. Only these three men.",
+  "notes": "transition beat"
+ },
+ "peace1_a": {
+  "book": 1,
+  "category": "omen",
+  "beat": "Zhang Jiao, a poor scholar gathering herbs, meets the green-eyed old man at a cave in the hills.",
+  "scene": "A wooded mountainside in thin morning mist. At the mouth of a cave stands an old man with a child's smooth face and bright green eyes, leaning on a tall staff and beckoning. Before him, a thin scholar in a worn grey robe with an herb basket on his back has stopped on the path, startled. Only these two.",
+  "notes": "transition beat"
+ },
+ "daxing_a": {
+  "book": 1,
+  "category": "battle",
+  "beat": "Before the first battle: Cheng Yuanzhi's fifty thousand against Liu Bei's five hundred at Daxing Mountain.",
+  "scene": "Wide panoramic composition under a pale sky at the foot of a rocky mountain. On the right, a vast Yellow Turban host fills the slope, yellow scarves and yellow banners as far as the eye can see, with Cheng Yuanzhi, a heavy rebel general, riding out in front. On the left, a small band of village volunteers holds the road, and at their head Liu Bei, Guan Yu and Zhang Fei sit on their horses, weapons ready.",
+  "notes": "transition beat"
+ },
+ "qingzhou_a": {
+  "book": 1,
+  "category": "battle",
+  "beat": "Qingzhou under siege: the Yellow Turbans ring the city walls, and the relief force is too small.",
+  "scene": "Wide panoramic composition on a grey afternoon. In the middle, the walls and gate tower of Qingzhou, with Han soldiers and red banners along the battlements. Yellow Turban rebels surround the walls on every side with ladders and yellow banners. In the left foreground, on a low hill, Liu Bei, Guan Yu and Zhang Fei look down on the siege from horseback with a few hundred men behind them.",
+  "notes": "transition beat"
+ },
+ "office_a": {
+  "book": 1,
+  "category": "battle",
+  "beat": "Dong Zhuo's beaten army in rout, Zhang Jiao's banners behind it, as the three brothers come over the hill.",
+  "scene": "Wide panoramic composition among low hills under a dusty afternoon sky. On the right, a Yellow Turban host pours down a valley under great yellow banners, Zhang Jiao in a yellow robe riding among them. In the middle, Han soldiers in red run before them, dropping spears, their commander Dong Zhuo, heavy and bearded, fleeing on horseback. On the left, on the crest of a hill, Liu Bei, Guan Yu and Zhang Fei rein in and look down at the rout.",
+  "notes": "transition beat"
+ },
+ "anxi_a": {
+  "book": 1,
+  "category": "peace",
+  "beat": "Liu Bei as the sheriff of Anxi, a quiet month: the three brothers at one table.",
+  "scene": "Inside a plain county office in a small town, evening lamplight. Liu Bei in a simple official robe and cap sits at a low table with bowls of rice and greens, Guan Yu and Zhang Fei sharing the table with him, the three eating together and talking. Through the open door, townsfolk pass in a quiet street. Warm, calm light. Exactly three men at the table.",
+  "notes": "transition beat"
+ },
+ "pingyuan_a": {
+  "book": 2,
+  "category": "everyday",
+  "beat": "Book 2 begins: Gongsun Zan's army passes Pingyuan, and he meets Liu Bei at the gate.",
+  "scene": "Wide panoramic composition outside the gate of a small walled town on a clear autumn morning. On the right, a long column of cavalry under Gongsun Zan's banners rides along the road, with Gongsun Zan in silver armour on a white horse at its head, reining in. On the left, at the open town gate, Liu Bei in a magistrate's plain robe steps out to greet him, with Guan Yu and Zhang Fei standing behind him.",
+  "notes": "transition beat"
+ },
+ "sishui_a": {
+  "book": 2,
+  "category": "battle",
+  "beat": "Before Sishui Gate: Hua Xiong's men carry Sun Jian's red cap on a pole to the lords' camp, jeering.",
+  "scene": "Wide panoramic composition on a grey day before a mountain pass. On the right, the stone walls and gate of Sishui Pass. In the middle, a band of Dong Zhuo's horsemen rides forward, one holding up a long pole with a red head-cloth hung at its tip, the others shouting. On the left, the palisade and tents of the lords' camp, where soldiers and officers watch from the gate in silence.",
+  "notes": "transition beat"
+ },
+ "hulao1_a": {
+  "book": 2,
+  "category": "battle",
+  "beat": "Before Hulao Pass: Lü Bu on Red Hare before Dong Zhuo's gate, the lords' army facing him.",
+  "scene": "Wide panoramic composition under a heavy sky. On the right, the towering walls of Hulao Pass with Dong Zhuo's black banners. Before the gate, alone, Lü Bu sits on a huge red horse, a crested helmet on his head and a long halberd in his hand. On the left, the lords' armies are drawn up in long lines under many coloured banners, their champions in front, holding back.",
+  "notes": "transition beat"
+ },
+ "beihai3_a": {
+  "book": 3,
+  "category": "battle",
+  "beat": "Taishi Ci fights his way out of besieged Beihai alone, shooting the riders who chase him.",
+  "scene": "Wide panoramic composition at dawn outside a walled city ringed with Yellow Turban camps. In the middle, a single rider, Taishi Ci, gallops away from the city gate at full stretch, turned in the saddle and drawing his bow back at the pursuers. Behind him, several Yellow Turban horsemen tumble from their saddles with arrows in them. On the walls behind, Han soldiers watch.",
+  "notes": "transition beat"
+ },
+ "xuzhou3_a": {
+  "book": 3,
+  "category": "battle",
+  "beat": "Before the charge: Cao Cao's army lies around Xuzhou in white mourning banners.",
+  "scene": "Wide panoramic composition on a cold grey day. In the middle, the walls of Xuzhou. Around them on every side, Cao Cao's army in white mourning cloth, with white banners that look like frost and snow on the plain. In the left foreground, on a rise, Liu Bei, Guan Yu, Zhang Fei and a young officer in white armour, Zhao Yun, look down on the siege with a small force behind them and one red banner.",
+  "notes": "transition beat"
+ },
+ "zilong3_a": {
+  "book": 3,
+  "category": "bond",
+  "beat": "Liu Bei holds Zhao Yun's hand as they part outside Xuzhou.",
+  "scene": "Medium shot on a road outside a city gate in soft morning light. Liu Bei holds both hands of a young officer in white armour, Zhao Yun, who is about to mount his white horse. Both have tears in their eyes. Guan Yu and Zhang Fei stand a few steps behind. Willow trees by the road. Calm, sincere.",
+  "notes": "transition beat"
+ },
+ "deathbed3_a": {
+  "book": 3,
+  "category": "intrigue",
+  "beat": "The dying Tao Qian holds out the seal of Xuzhou to Liu Bei.",
+  "scene": "Inside a dim bedchamber lit by one oil lamp. An old man, Tao Qian, lies propped on pillows in a plain bed, thin and grey, holding out a square seal on a cord with a shaking hand. Liu Bei kneels at the bedside, hands raised, half refusing. Two officers stand in the shadows behind. Quiet and heavy.",
+  "notes": "transition beat"
+ },
+ "handsfeet3_a": {
+  "book": 3,
+  "category": "bond",
+  "beat": "Liu Bei catches Zhang Fei's sword arm as he tries to kill himself.",
+  "scene": "Close shot inside an army tent by lamplight. Zhang Fei, face twisted with shame, has drawn his sword to his own throat. Liu Bei has thrown his arms around him from the front and grips his wrist, pulling the blade away. Guan Yu, a step behind, reaches toward them. Strong emotion, tears on Zhang Fei's face.",
+  "notes": "transition beat"
+ },
+ "halberd3_a": {
+  "book": 3,
+  "category": "battle",
+  "beat": "The halberd planted 150 paces off at the camp gate, and Lü Bu drawing his bow.",
+  "scene": "Wide shot from behind Lü Bu inside an open army tent. Lü Bu, in a crested helmet, draws a great bow to full stretch. Far off across the open ground, at the camp gate, a tall halberd stands planted upright, its small side blade catching the light. At the table on either side, Liu Bei holds his breath with eyes half closed, and Ji Ling watches with a sceptical frown.",
+  "notes": "transition beat"
+ },
+ "flood3_a": {
+  "book": 3,
+  "category": "aftermath",
+  "beat": "Cao Cao floods Xiapi: water all around the city, only the east gate dry.",
+  "scene": "Wide panoramic composition under a dull sky. A walled city, Xiapi, stands in a broad sheet of brown floodwater that reaches halfway up its walls, roofs and treetops showing above the water around it. Only the road to the east gate is still dry. On the hills in the foreground, Cao Cao's banners and soldiers watch.",
+  "notes": "transition beat"
+ },
+ "whitegate3_a": {
+  "book": 3,
+  "category": "intrigue",
+  "beat": "The White Gate Tower: Lü Bu bound before Cao Cao and Liu Bei.",
+  "scene": "Inside the top floor of a city gate tower, grey daylight. Cao Cao and Liu Bei sit side by side behind a low table. Guan Yu and Zhang Fei stand beside them. On the floor before them, Lü Bu kneels, tied with heavy ropes, still in his armour, his crested helmet gone, looking up at Liu Bei.",
+  "notes": "transition beat"
+ },
+ "whitegate3_b": {
+  "book": 3,
+  "category": "intrigue",
+  "beat": "Chen Gong walks down the tower stairs alone, and does not look back.",
+  "scene": "A steep wooden stair inside a gate tower. A thin scholar in a plain blue robe, Chen Gong, walks down it alone, back straight, hands bound before him. At the top of the stairs Cao Cao has half risen, one hand reaching after him, his face wet with tears. Guards stand aside and do not hold him.",
+  "notes": "transition beat"
+ },
+ "dz_roadside": {
+  "book": 2,
+  "category": "intrigue",
+  "beat": "Dong Zhuo's roadside banquet: the ministers frozen with terror while he eats and laughs.",
+  "scene": "A long banquet tent pitched beside a dusty road outside a city gate of Chang'an, afternoon. Rows of Han ministers in dark court robes and black caps kneel at low tables; their faces are pale, eyes lowered, and several have dropped their chopsticks onto the tables. At the head table a huge, fat warlord in rich brocade and a jewelled cap holds up a wine cup, laughing with his mouth open. Whatever they are watching is off the edge of the picture, to the right; nothing of it is shown. Medium-wide shot from behind the ministers' shoulders toward the laughing man.",
+  "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+ },
+ "dz_redtray": {
+  "book": 2,
+  "category": "intrigue",
+  "beat": "A covered red tray carried down a line of pale officials (Zhang Wen's head; never shown).",
+  "scene": "Inside a lamp-lit government hall, two rows of officials in court robes sit at low tables facing each other. Down the aisle between them a servant walks carrying a lacquered red tray covered with a cloth. Every official has turned rigid, staring at the tray, faces grey with fear; one has half risen. At the far end of the hall the fat warlord Dong Zhuo sits smiling. The tray stays covered. Low angle down the aisle.",
+  "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+ },
+ "dc_garden": {
+  "book": 2,
+  "category": "intrigue",
+  "beat": "Diaochan sits on a stone bench by the peony pavilion at night, sighing; Wang Yun has come upon her.",
+  "scene": "A moonlit rear garden at night. Beside a small peony pavilion, Diaochan sits alone on a stone bench, her hands resting in her lap, looking up at the full moon and sighing. Peonies in bloom around the pavilion, a willow trailing over a still pond, soft blue moonlight.",
+  "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+ },
+ "dc_wangkneels": {
+  "book": 2,
+  "category": "intrigue",
+  "beat": "In the painted pavilion the old minister kneels and bows his head to the floor before the girl.",
+  "scene": "Inside a small painted pavilion lit by one lamp, at night. The elderly minister Wang Yun, grey-bearded, in a dark robe, kneels and touches his forehead to the floor. Before him, seated on the only chair where he has placed her, the young singer Diaochan in pale silk shrinks back with her hands raised, shocked that her master is bowing to her. Painted beams and screens, no one else present.",
+  "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+ },
+ "dc_wine": {
+  "book": 2,
+  "category": "intrigue",
+  "beat": "Diaochan pours Lü Bu's wine; their eyes meet; Wang Yun plays drunk beside them.",
+  "scene": "A warm rear hall at evening, low tables laden with dishes. Diaochan, dressed in her finest silks and hair ornaments, kneels to offer a cup of wine with both hands to a towering young general, Lü Bu, in a crimson robe with a gold crown on his head; they are looking straight into each other's eyes. Beside them the grey-bearded host Wang Yun slumps with a flushed face, pretending to be drunk, watching from the corner of his eye. Two maids in blue stand by the door.",
+  "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+ },
+ "dc_dance": {
+  "book": 2,
+  "category": "intrigue",
+  "beat": "Diaochan dances on the far side of a bead curtain while Dong Zhuo watches.",
+  "scene": "A hall lit by painted candles at night. A bead curtain hangs across the room. On the far side of it a slender young woman in flowing silk sleeves dances, turning, her sleeves in the air, seen half-hidden through the strands of beads. On the near side, a huge fat warlord in brocade sits at a table with a wine cup, leaning forward, watching her hungrily. An old minister sits a little behind him. Musicians with reed pipes at the edge of the light.",
+  "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+ },
+ "dc_lanterns": {
+  "book": 2,
+  "category": "intrigue",
+  "beat": "Lü Bu on horseback in two rows of red lanterns, gripping Wang Yun's collar.",
+  "scene": "A night street in Chang'an lit by two long rows of red lanterns carried by soldiers on either side. A huge young general in armour on a great red horse leans down from the saddle and grips an old minister in court robes by the collar; the minister, on a smaller horse, holds up a hand to calm him. A halberd rests across the general's saddle. Deep shadows, red light on their faces.",
+  "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+ },
+ "dc_window": {
+  "book": 2,
+  "category": "intrigue",
+  "beat": "Diaochan combing her hair at the window sees Lü Bu's reflection in the pond.",
+  "scene": "Morning in an inner bedroom of a great mansion. A young woman in a loose silk robe sits at an open lattice window combing her long black hair. Below the window is a small garden pond, and on its still surface is the reflection of a very tall man in a hair-binding cap, peering from behind a rock out of sight. She has seen the reflection; her eyes slide toward it while her brows knit in feigned sorrow, a perfumed handkerchief at her eye.",
+  "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+ },
+ "dc_sickbed": {
+  "book": 2,
+  "category": "intrigue",
+  "beat": "Behind the sleeping Dong Zhuo, Diaochan points to her heart, then to him, weeping.",
+  "scene": "A dim bedchamber with a large curtained bed. On it a huge fat man lies asleep under brocade covers. Behind the bed, half leaning out from the bed-curtains, a young woman points with one hand at her own heart and with the other at the sleeping man, tears on her cheeks, looking across the room. At the room's entrance stands a tall young general in armour, frozen, staring back at her. Only these three.",
+  "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+ },
+ "dc_pavilion": {
+  "book": 2,
+  "category": "intrigue",
+  "beat": "At the Phoenix Pavilion, Lü Bu catches Diaochan as she makes to leap into the lotus pond.",
+  "scene": "A garden pavilion with a curved red rail above a pond full of lotus flowers, afternoon. A young woman in pale silk has one hand on the rail and is leaning out over the water as if to jump; a towering young general in armour has caught her round the waist with both arms and pulled her back against him. His painted halberd leans against the pavilion pillar. Willows and flowering branches all round.",
+  "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+ },
+ "dc_halberd": {
+  "book": 2,
+  "category": "intrigue",
+  "beat": "Dong Zhuo hurls the halberd across the garden; Lü Bu knocks it aside.",
+  "scene": "A mansion garden with winding paths. In the foreground a huge, fat man in brocade, red-faced with rage, has just thrown a long painted halberd with all his strength. In the background a tall young general in armour, running away, twists round and strikes the flying halberd aside with his arm. The Phoenix Pavilion and lotus pond behind. A young woman watches from the pavilion, hand to her mouth.",
+  "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+ },
+ "dc_sword": {
+  "book": 2,
+  "category": "intrigue",
+  "beat": "Diaochan snatches the sword from the wall and puts it to her own throat; Dong Zhuo lunges for it.",
+  "scene": "A rear hall in a great mansion, a rack on the wall with one sword missing. A young woman in silk has drawn that sword and holds the blade to her own neck, eyes shut, face set. A huge fat man in brocade lunges toward her with both hands out to grab the sword, his face full of alarm. No blood. Only these two.",
+  "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+ },
+ "dc_carriage": {
+  "book": 2,
+  "category": "intrigue",
+  "beat": "From the carriage on the way to Meiwu, Diaochan covers her face toward Lü Bu in the crowd.",
+  "scene": "A great curtained carriage drawn by horses moves out through a city gate, surrounded by guards and a crowd of officials bowing by the roadside. From the carriage window, the curtain lifted, a young woman looks back and covers her face with her sleeve as if weeping. Far back in the crowd, a head taller than everyone, a young general in armour stares at the carriage.",
+  "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+ },
+ "lb_ridge": {
+  "book": 2,
+  "category": "intrigue",
+  "beat": "Lü Bu alone on an earthen ridge, watching the dust of the carriage.",
+  "scene": "A bare earthen ridge outside the walls of Chang'an, late afternoon. A lone huge warrior in armour and a pheasant-plumed helmet sits on a great red horse, reins slack, gazing after a column whose dust hangs on the road far away. Behind him, small, an old minister in court robes is walking up the slope toward him. Wide shot, long shadows.",
+  "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+ },
+ "lb_blood": {
+  "book": 2,
+  "category": "intrigue",
+  "beat": "In the secret room, Lü Bu cuts his arm and swears in blood; Wang Yun kneels.",
+  "scene": "A small windowless room lit by one lamp, wine cups on a low table. A towering young general has drawn a short knife from his belt and drawn it across his forearm, holding the arm out over the table, face fierce with resolve; a thin line of red on the arm. Opposite him an old grey-bearded minister has gone down on his knees with his hands clasped. Only these two.",
+  "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+ },
+ "ls_arrow": {
+  "book": 2,
+  "category": "plan",
+  "beat": "Li Su snaps an arrow as his oath before Lü Bu and Wang Yun.",
+  "scene": "The same lamp-lit secret room. A wiry officer in a cavalry commander's robe, a sly, hungry face, snaps an arrow in two between his fists. Watching him, the huge general Lü Bu stands with a hand on his sword, and the old minister Wang Yun sits with an imperial edict scroll tucked in his sleeve. Two other officials sit at the table's edge.",
+  "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+ },
+ "dz_mother": {
+  "book": 2,
+  "category": "omen",
+  "beat": "Dong Zhuo's ninety-year-old mother clutches his sleeve: her flesh trembles, it is not a good sign.",
+  "scene": "Inside a richly furnished hall of a fortress, a tiny, very old woman of over ninety, white hair thin, sits on a couch and clutches the brocade sleeve of her enormous fat son, who stands over her laughing, ready to leave. Her face is creased with dread; his is full of greed and joy. Through a doorway behind him, a waiting procession and banners. Only these two in the room.",
+  "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+ },
+ "omen_wheel": {
+  "book": 2,
+  "category": "omen",
+  "beat": "On the road from Meiwu, the wheel of Dong Zhuo's great carriage snaps.",
+  "scene": "A wide dirt road across yellow loess hills. A great ornate carriage with a canopy has lurched to one side, one big wheel splintered and broken off its axle. Guards in armour have stopped around it, staring. A huge fat man in brocade is being helped down from it, scowling, while a groom leads up a horse. A wiry officer walks beside him, smoothing his face into a smile.",
+  "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+ },
+ "omen_fog": {
+  "book": 2,
+  "category": "omen",
+  "beat": "A wild wind springs up and dark fog swallows the procession.",
+  "scene": "A long procession of guards, banners and a mounted lord on a road, swallowed by a sudden storm of wind: banners whip sideways, dust and dark fog blot out the sky, riders bend their heads. In the middle, the fat lord on horseback looks up at the darkened sky, uneasy; an officer rides close beside him, talking.",
+  "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+ },
+ "omen_song": {
+  "book": 2,
+  "category": "omen",
+  "beat": "Children sing in the moonlit fields outside Chang'an; the wind carries the song into Dong Zhuo's tent.",
+  "scene": "Night outside the walls of Chang'an, a full moon over the fields. A ring of small children in plain clothes stand in the grass, singing, their faces solemn. In the near distance, the glowing tent of a great lord, its flap stirred by the wind, a guard at its entrance turning his head toward the song. The city wall dark behind.",
+  "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+ },
+ "omen_taoist": {
+  "book": 2,
+  "category": "omen",
+  "beat": "A Taoist with a cloth on a pole, marked with the character 口 at each end, by the roadside.",
+  "scene": "Early morning on a broad street leading to a palace gate. By the roadside stands a thin Taoist in a blue robe and white headcloth, holding up a long pole from which hangs a long strip of white cloth; at each end of the cloth is written a single large black character 口. A grand procession is passing; from his horse a fat lord in brocade has turned to stare at the cloth. Soldiers are moving to drive the Taoist off.",
+  "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+ },
+ "dz_gate": {
+  "book": 2,
+  "category": "battle",
+  "beat": "At the North Side Gate, Lü Bu raises the edict over the fallen Dong Zhuo.",
+  "scene": "Inside a palace gate, morning. An overturned carriage, soldiers with halberds in a ring. In the centre the towering general Lü Bu holds his halberd in his left hand and with his right raises an unrolled yellow imperial edict high above his head, shouting. At his feet, a huge fat body in brocade lies face down beside the carriage, the face not shown. Officials in court robes holding swords stand at the hall gate behind, and officers are raising their arms in a cheer. No blood shown.",
+  "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+ },
+ "dz_lamp": {
+  "book": 2,
+  "category": "aftermath",
+  "beat": "Night in the market: a lamp burns on the dark mound of Dong Zhuo's body.",
+  "scene": "A city market street at night, deserted stalls. In the middle of the street lies a great dark mound under a rough cloth, only its outline seen; on top of it a small flame burns like a lamp, and dark grease has spread across the paving stones around it. Two soldiers stand guard with spears, their faces lit by the flame. In the shadows at the edge of the street, townspeople look on. Nothing of the body is shown but the covered shape.",
+  "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+ },
+ "dc_meiwu": {
+  "book": 2,
+  "category": "aftermath",
+  "beat": "At Meiwu, the first thing Lü Bu does is take Diaochan.",
+  "scene": "The courtyard of a high-walled fortress, soldiers pouring in through the gate behind. In the foreground the towering general Lü Bu, still in armour, has taken the hand of a young woman in pale silk and is leading her away from a doorway. Her face is calm and unreadable, her eyes lowered. Around them, soldiers carry out chests of gold and bolts of silk, and a line of young women is being let out through another gate.",
+  "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+ },
+ "cy_weeps": {
+  "book": 2,
+  "category": "aftermath",
+  "beat": "Cai Yong, the scholar, kneels weeping and is brought before Wang Yun's feast.",
+  "scene": "A great hall during a victory feast, officials in court robes at low tables. Two guards have brought in and forced to kneel an elderly scholar with a long grey beard and a scholar's cap, his face wet with tears, hands raised in supplication. At the head of the hall the old minister Wang Yun sits rigid and cold. The officials stare, shocked; one has half risen as if to plead.",
+  "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+ },
+ "ren_valley": {
+  "book": 2,
+  "category": "battle",
+  "beat": "At the mouth of Ren Valley, Lü Bu's army is caught between gongs and drums.",
+  "scene": "A narrow valley mouth between steep hills. Stones and arrows rain down from a hillside held by an enemy army; behind Lü Bu's army, another enemy column is pulling back as drums roll. In the middle, the great general on his red horse wheels around in fury, halberd raised, not knowing which way to charge. Gongs and drums on stands on both hillsides.",
+  "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+ },
+ "wy_tower": {
+  "book": 2,
+  "category": "aftermath",
+  "beat": "Wang Yun on the Xuanping Gate tower above the rebel army, the boy Emperor behind him.",
+  "scene": "The top of a high city gate tower at dusk, smoke and flames rising from the city behind. A frail grey-bearded minister in court robes stands at the very edge of the parapet, looking down. Behind him under a yellow canopy, a pale boy Emperor of about twelve reaches out a hand as if to stop him. Far below, a vast rebel army fills the square, and two generals on horseback look up with swords drawn.",
+  "notes": "Book 2 rewrite (docs/book2/diaochan-arc.md)."
+ },
+ "cy_study": {
+  "book": 2,
+  "category": "everyday",
+  "beat": "Cai Yong at his go board in a study piled with the unfinished history of the Han; Wang Yun across from him.",
+  "scene": "A scholar's study in the afternoon, lattice light. Bundles of bamboo-slip books are stacked everywhere, and on a stand rests a qin zither whose tail end is scorched black. At a low go board, mid-game, sits an elderly scholar with a long grey beard and a gentle, tired face, holding a stone between two fingers. Across from him, the grey-bearded minister Wang Yun studies him rather than the board. Only these two.",
+  "notes": "Book 2 rewrite. Not in the novel: added on the user's call (docs/book2/diaochan-arc.md, A12y). The scorched-tail qin is Cai Yong's legendary 焦尾琴."
+ },
+ "cc_council": {
+  "book": 2,
+  "category": "intrigue",
+  "beat": "Cao Cao walks out of He Jin's council, having warned him in vain.",
+  "scene": "Inside a general's lamp-lit hall, officials in court robes sit stiffly at low tables. In the foreground, walking away from them toward the open doors, is Cao Cao: a compact man in his thirties in an officer's dark robe, thin moustache, sharp narrowed eyes, his jaw set. Behind him, at the head of the hall, the heavy-set general He Jin in rich armour-robes glowers after him. Cool daylight beyond the doors.",
+  "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+ },
+ "hj_head": {
+  "book": 2,
+  "category": "intrigue",
+  "beat": "He Jin's head is thrown over the palace wall (never shown directly).",
+  "scene": "Seen from below, outside a closed red palace gate in a high wall: a small dark object arcs over the top of the wall against a grey sky, too small and far to make out. Below, two officers in armour (Yuan Shao, tall and proud; Cao Cao, shorter) stand frozen, looking up. Soldiers behind them recoil. The gate stays shut.",
+  "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+ },
+ "palace_fire": {
+  "book": 2,
+  "category": "battle",
+  "beat": "The Luoyang palace burns at night after the eunuchs are slaughtered.",
+  "scene": "Night. Rows of palace halls with sweeping tiled roofs burn against a black sky, flames and sparks pouring upward, a red glow on the smoke. In the courtyard below, small figures of soldiers run with buckets and spears. In the foreground Cao Cao, lit orange from the side, points and shouts orders.",
+  "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+ },
+ "fireflies": {
+  "book": 2,
+  "category": "omen",
+  "beat": "The young Emperor and the Prince of Chenliu, their robes knotted together, follow a river of fireflies through the dark.",
+  "scene": "Night on a thorny hillside above a dark river. Two small boys in torn, mud-stained imperial robes, the hems knotted together so they cannot lose each other, climb hand in hand. The younger one, about nine, leads, looking up in wonder. Around them hundreds of fireflies stream in a glowing ribbon that curves ahead up the slope, lighting a path through the thorns. Deep blue darkness everywhere else.",
+  "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+ },
+ "prince_dz": {
+  "book": 2,
+  "category": "intrigue",
+  "beat": "The nine-year-old Prince of Chenliu faces Dong Zhuo's army on the road; Dong Zhuo dismounts.",
+  "scene": "A country road under a sky darkened by dust. A wall of embroidered banners and armoured cavalry fills the background. In front of them, the huge, fat warlord Dong Zhuo in heavy armour is climbing down from his horse in haste. Facing him, small and straight-backed on a horse beside a trembling older boy, the nine-year-old Prince of Chenliu in dusty imperial robes looks him in the eye. Ministers in court robes watch from the side, astonished.",
+  "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+ },
+ "wm_lubu": {
+  "book": 2,
+  "category": "intrigue",
+  "beat": "At the Wenming Garden banquet, a young warrior with a painted halberd glares from behind Ding Yuan.",
+  "scene": "An outdoor banquet in a palace garden: officials at low tables under blossoming trees. In the centre the governor Ding Yuan, older, grey-bearded, has pushed back his table and stands defiantly. Directly behind him towers Lü Bu: young, tall and splendid, in a gold hair-crown with long pheasant plumes, holding a crescent-bladed painted halberd upright, glaring across the garden with furious eyes. The viewpoint is from across the garden, from Dong Zhuo's side.",
+  "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+ },
+ "lb_charge": {
+  "book": 2,
+  "category": "battle",
+  "beat": "Lü Bu charges straight at Dong Zhuo on the field outside Luoyang.",
+  "scene": "A dusty battlefield outside a city wall. Lü Bu gallops straight toward the viewer, in a gold hair-crown with pheasant plumes, a robe embroidered with a hundred flowers over lion-headed armour, his painted halberd levelled. Behind him Ding Yuan's army surges forward. Dust and fluttering banners; a sense of overwhelming speed.",
+  "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+ },
+ "red_hare": {
+  "book": 2,
+  "category": "everyday",
+  "beat": "Red Hare, the horse that goes a thousand li a day, is led into Lü Bu's camp.",
+  "scene": "Inside a military camp at dusk. A magnificent horse, red as burning charcoal from nose to tail without one hair of another colour, rears up against the sky, mane flying, held on a halter by a groom. Lü Bu, young and tall in armour, stares at it, delighted. Li Su, a smiling courtier-officer, stands beside him with an open hand, presenting it.",
+  "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+ },
+ "lb_gold": {
+  "book": 2,
+  "category": "intrigue",
+  "beat": "Li Su lays out gold, pearls and a jade belt before Lü Bu.",
+  "scene": "A lamp-lit camp tent. On a low table: stacked gold ingots, a heap of bright pearls spilling from a silk pouch, and a white jade belt. Lü Bu, young and powerful, sits behind the table, staring at the treasure with wine forgotten in his hand. Across from him Li Su leans in, smiling, speaking low. Warm, conspiratorial light.",
+  "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+ },
+ "lb_candle": {
+  "book": 2,
+  "category": "intrigue",
+  "beat": "At the second watch, Lü Bu enters Ding Yuan's tent while Ding Yuan reads by candlelight.",
+  "scene": "Night, inside a plain command tent. The old governor Ding Yuan sits at a desk reading a bamboo-slip book by a single candle, looking up kindly. In the tent's open flap stands the dark shape of Lü Bu, a blade in his hand, his face half in shadow. Only the candle lights the scene.",
+  "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+ },
+ "lb_kneels": {
+  "book": 2,
+  "category": "intrigue",
+  "beat": "Lü Bu kneels to Dong Zhuo as his adopted son.",
+  "scene": "Inside a warlord's tent hung with banners. The huge, fat Dong Zhuo, in rich robes, stands with arms open, beaming. Before him Lü Bu kneels on one knee in golden armour, head bowed, offering himself. Li Su watches from the side, pleased. Officers line the walls.",
+  "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+ },
+ "ys_sword": {
+  "book": 2,
+  "category": "intrigue",
+  "beat": "Yuan Shao draws his sword on Dong Zhuo at the Secretariat banquet.",
+  "scene": "A crowded banquet hall lined with armoured guards. In the centre two men face each other with drawn swords across a low table: the huge warlord Dong Zhuo, flushed and furious, and Yuan Shao, tall, handsome and proud in an officer's robe, his sword raised level. The seated officials shrink back. Among them, at one table, Cao Cao watches closely.",
+  "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+ },
+ "deposition": {
+  "book": 2,
+  "category": "intrigue",
+  "beat": "The young Emperor is deposed in the Jiade Hall, kneeling facing north.",
+  "scene": "A vast throne hall. At the foot of the empty throne a boy of about fourteen in imperial robes kneels facing away from the throne, his seal ribbons being untied by an attendant. Above him on the dais the fat warlord Dong Zhuo stands with a drawn sword. Rows of ministers in court robes bow their heads, some weeping. A small boy of nine, in new imperial yellow, is being led toward the throne.",
+  "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+ },
+ "swallows": {
+  "book": 2,
+  "category": "aftermath",
+  "beat": "The deposed Emperor watches two swallows from a tower window in the Yong'an Palace.",
+  "scene": "A spring afternoon. A boy of about fourteen in plain, worn robes leans at a high lattice window of a shut-up palace tower, looking out at two swallows flying over a courtyard of new green grass. Far off, beyond the walls, the roofs of the great palace. His face is thin and sad. Quiet, soft, and very still.",
+  "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+ },
+ "heads_gate": {
+  "book": 2,
+  "category": "aftermath",
+  "beat": "Dong Zhuo's carts return to Luoyang from the Yangcheng festival massacre (the heads never shown clearly).",
+  "scene": "A city gate in late afternoon. A line of ox carts rolls in under the gate tower, loaded with sacks and bundles of looted goods, their undersides draped and in shadow. Soldiers march beside them, cheering. In front of the gate, a bonfire sends up thick black smoke. Townspeople along the road turn away, covering their faces. The cargo stays indistinct.",
+  "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+ },
+ "wy_birthday": {
+  "book": 2,
+  "category": "intrigue",
+  "beat": "At Wang Yun's false birthday banquet, the ministers weep, and Cao Cao laughs.",
+  "scene": "Evening in a minister's rear hall, lamps lit. Old ministers in court robes sit at low tables, weeping into their sleeves. At the head, the grey-bearded minister Wang Yun covers his face. At one table Cao Cao leans back, clapping his hands and laughing, the only dry-eyed man in the room. Several of the weeping men stare at him, shocked.",
+  "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+ },
+ "seven_star": {
+  "book": 2,
+  "category": "everyday",
+  "beat": "The Seven-Star Sword.",
+  "scene": "Close-up on a short sword a little over a foot long, half drawn from a lacquered sheath on a dark table. The hilt and scabbard are inlaid with seven jewels in a line like the Big Dipper. The exposed blade is very bright and keen. Warm lamplight; a hand rests near it.",
+  "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+ },
+ "the_mirror": {
+  "book": 2,
+  "category": "intrigue",
+  "beat": "Dong Zhuo, lying down, sees Cao Cao in the dressing mirror with a drawn sword.",
+  "scene": "A small, richly furnished pavilion room. On a couch, the huge, fat Dong Zhuo lies on his side facing the wall. Above him on a stand is a bronze dressing mirror, and in the mirror is reflected Cao Cao standing behind him with a short jewelled sword drawn, about to strike. Dong Zhuo's eyes have just opened, looking up into the mirror. The reflection is the focus.",
+  "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+ },
+ "east_gate": {
+  "book": 2,
+  "category": "battle",
+  "beat": "Cao Cao gallops out through Luoyang's East Gate.",
+  "scene": "A great city gate at midday. A lone rider, Cao Cao, bursts through the gate passage at a full gallop on a fine horse, cloak streaming, whip raised. A gate guard turns to watch him go. Beyond the gate, an open road runs east across the plain.",
+  "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+ },
+ "wanted": {
+  "book": 2,
+  "category": "aftermath",
+  "beat": "Cao Cao's wanted portrait on a post-station wall.",
+  "scene": "A plastered wall at a roadside post station. Pasted on it is an official notice with a painted portrait of Cao Cao, his sharp eyes and thin moustache, and red seal stamps. A few travellers and a soldier stand reading it. Dusty light.",
+  "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+ },
+ "cg_unties": {
+  "book": 2,
+  "category": "bond",
+  "beat": "At midnight in the jail's back courtyard, Chen Gong unties Cao Cao.",
+  "scene": "Night, a small courtyard behind a county office, lit by one lantern. Cao Cao, his robe dishevelled, sits bound on a stool. A lean, earnest county magistrate in his thirties, Chen Gong, kneels before him, untying the ropes with his own hands, looking up at him with admiration. No one else.",
+  "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+ },
+ "boshe_pig": {
+  "book": 2,
+  "category": "aftermath",
+  "beat": "In Lü Boshe's kitchen, a pig tied up for the slaughter.",
+  "scene": "A dim farmhouse kitchen at dusk, lit by the last light through a doorway. On the straw-covered floor a fat pig lies trussed with rope, alive and wide-eyed; a cleaver rests on a wooden chopping block beside a basket of vegetables and a wine jar. In the doorway Cao Cao and Chen Gong stand still, swords lowered, staring at the pig as they realise their mistake.",
+  "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md). Graphics: reworded (the first wording was flagged by the model's filter)."
+ },
+ "boshe_road": {
+  "book": 2,
+  "category": "aftermath",
+  "beat": "Lü Boshe, returning with wine, turns to look back on the road.",
+  "scene": "A country road through a wood at dusk. An old, kindly man on a donkey, two jars of wine hanging from his saddle and a bundle of fruit and greens in his hand, has twisted round to look back down the road. Behind him, a little way off, a rider has turned his horse back toward him with a drawn sword. The old man's face shows only mild puzzlement.",
+  "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+ },
+ "cg_inn": {
+  "book": 2,
+  "category": "intrigue",
+  "beat": "Chen Gong stands over the sleeping Cao Cao with a drawn sword.",
+  "scene": "A plain room in a roadside inn, moonlight through the window. Cao Cao lies asleep on a low bed. Standing over him, Chen Gong holds a drawn sword, his face torn with doubt. The moonlight falls across the blade and the sleeping man's face.",
+  "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+ },
+ "white_banner": {
+  "book": 2,
+  "category": "plan",
+  "beat": "Cao Cao raises the white banner of 'Loyalty and Right' at Chenliu.",
+  "scene": "A village drilling ground on a bright morning. A tall white banner flies from a pole, two large black characters on it: 忠义. Beneath it Cao Cao stands on a low platform. Before him volunteers stream in from every direction, farmers and young men with spears, and a few armoured officers arrive on horseback with men behind them. Hopeful, rising energy.",
+  "notes": "Book 2 rewrite, Cao Cao arc (docs/book2/caocao-arc.md)."
+ },
+ "lb_seal": {
+  "book": 3,
+  "category": "intrigue",
+  "beat": "Liu Bei offers Lü Bu the seal of Xuzhou; Guan Yu and Zhang Fei glare.",
+  "scene": "A prefecture hall. Liu Bei, gentle-faced with long ear lobes, holds out a seal of office with both hands. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, half reaches for it. Behind Liu Bei, red-faced long-bearded Guan Yu and fierce black-bearded Zhang Fei glare at him. Chen Gong stands at Lü Bu's shoulder.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "lb_wifebow": {
+  "book": 3,
+  "category": "bond",
+  "beat": "Lü Bu's wife and daughter bow to Liu Bei in Lü Bu's rear hall.",
+  "scene": "A warmly lit rear hall after a banquet. A dignified woman in her thirties in rich robes (Lady Yan) and a girl of about fifteen bow to Liu Bei, who raises his hands to decline. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, beams beside them. Zhang Fei, in the doorway, glowers.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "lb_letter": {
+  "book": 3,
+  "category": "intrigue",
+  "beat": "Liu Bei shows Lü Bu Cao Cao's secret letter.",
+  "scene": "A private rear hall. Liu Bei holds out an unrolled letter. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, reads it, his face shifting from shock to tears. A single lamp.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "lb_nightgate": {
+  "book": 3,
+  "category": "battle",
+  "beat": "A city gate opens at the fourth watch under a clear moon.",
+  "scene": "Night under a bright full moon. A city gate swings open from inside. Outside, a column of horsemen waits in shadow; at its head Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, on a fiery red horse. On the wall above, a single officer with a lantern.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "lb_halberd": {
+  "book": 3,
+  "category": "battle",
+  "beat": "Lü Bu's arrow strikes the small blade of a halberd at a hundred and fifty paces.",
+  "scene": "A military camp at the camp gate. In the foreground Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, has just loosed an arrow, bow still drawn wide like an autumn moon. Far off, a painted halberd planted upright at the gate; the arrow is striking its small side-blade. Behind Lü Bu, Liu Bei and the general Ji Ling stare, and soldiers throw up their arms.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "ly_decides": {
+  "book": 3,
+  "category": "intrigue",
+  "beat": "Lady Yan advises Lü Bu to accept Yuan Shu's match for their daughter.",
+  "scene": "Lady Yan's private rooms, silk hangings. Lady Yan, a dignified woman in her thirties, speaks earnestly to Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, who listens. Through a doorway, their daughter, about fifteen, is glimpsed at an embroidery frame.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "bride_drums": {
+  "book": 3,
+  "category": "everyday",
+  "beat": "The bride is sent out of Xuzhou with drums and music.",
+  "scene": "A city gate by torchlight. A curtained bridal carriage decorated with red silk rolls out, surrounded by musicians beating drums and blowing horns, and an escort of riders. Townspeople watch.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "cg_condolence": {
+  "book": 3,
+  "category": "intrigue",
+  "beat": "Old Chen Gui pays a mock condolence call on the living Lü Bu.",
+  "scene": "A hall. A frail old minister in white mourning clothes, helped by a servant, bows in condolence before Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, who stands astonished.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "zl_bride": {
+  "book": 3,
+  "category": "battle",
+  "beat": "Zhang Liao catches the bridal party thirty li out and turns it back.",
+  "scene": "A country road at dawn. A bearded cavalry general, Zhang Liao, reins in his horse across the road in front of a red bridal carriage. His riders surround it. The envoy Han Yin raises his hands. The carriage curtain is drawn.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "cd_hawk": {
+  "book": 3,
+  "category": "intrigue",
+  "beat": "Chen Deng laughs at Lü Bu's sword and tells him of the hawk.",
+  "scene": "A hall. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, has a sword half raised. Before him a sharp-eyed young official, Chen Deng, laughs openly, one hand raised as if telling a story; a hawk on a perch stands in the corner of the room.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "cg_courier": {
+  "book": 3,
+  "category": "battle",
+  "beat": "Chen Gong, out hunting, rides a courier down by a side path.",
+  "scene": "Open hunting country, autumn. A lean, earnest strategist on horseback, Chen Gong, cuts across from a side path and blocks a post rider on the main road. His hunting companions close in. A hunting hawk circles above.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "xiao_letters": {
+  "book": 3,
+  "category": "intrigue",
+  "beat": "Chen Deng shoots letters down from Xiao Pass at night.",
+  "scene": "Night on a mountain pass fort. A young official, Chen Deng, leans over the battlements and looses an arrow with a rolled letter tied to it toward the camp fires far below. Two more letter-arrows lie beside him. The sentries' backs are turned.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "xiao_dark": {
+  "book": 3,
+  "category": "battle",
+  "beat": "Lü Bu's men and Chen Gong's kill each other in the dark.",
+  "scene": "A mountain pass at night, lit only by a fire on the gate tower. Two forces of the same army clash in confusion in the dark, unable to see each other's banners.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "mz_wall": {
+  "book": 3,
+  "category": "intrigue",
+  "beat": "Mi Zhu shouts down from Xuzhou's wall: the city is not Lü Bu's.",
+  "scene": "Dawn under a city wall. Arrows fly down. On the wall a calm official, Mi Zhu, points down. Below, Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, on a red horse, looks up furious; Chen Gong beside him.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "ly_weeps": {
+  "book": 3,
+  "category": "bond",
+  "beat": "Lady Yan weeps and pleads with Lü Bu not to leave the city.",
+  "scene": "A residence room in winter, a half-packed chest of padded clothes. Lady Yan, in her thirties, weeps, holding Lü Bu's sleeve. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, stands torn, a travelling cloak over one arm.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "dc_word": {
+  "book": 3,
+  "category": "bond",
+  "beat": "Diaochan asks Lü Bu not to ride out alone.",
+  "scene": "An inner room with lanterns. Diaochan, a graceful woman in silk, lays her hand on Lü Bu's arm and speaks softly. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, looks down at her, his resolve fading.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "lb_daughter": {
+  "book": 3,
+  "category": "battle",
+  "beat": "Lü Bu rides out at night with his daughter tied to his back.",
+  "scene": "Night at a city gate. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, on a fiery red horse, rides out; on his back, a girl wrapped in silk floss and armour is bound to him. Torches of the besiegers' camp ahead.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "flood_xiapi": {
+  "book": 3,
+  "category": "aftermath",
+  "beat": "Xiapi under water; only the east gate is dry.",
+  "scene": "A walled city seen from high ground, its streets and gates drowned under brown floodwater from two broken river dykes. Only a raised causeway to the east gate stands clear. On the hills around, the besieging army's tents.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "lb_mirror": {
+  "book": 3,
+  "category": "aftermath",
+  "beat": "Lü Bu looks at himself in a mirror, worn by wine.",
+  "scene": "A dim room, wine jars everywhere. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, now hollow-cheeked and haggard, stares into a bronze mirror held up in front of him, shocked.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "hc_redhare": {
+  "book": 3,
+  "category": "intrigue",
+  "beat": "Hou Cheng steals Red Hare from the flooded stables at night.",
+  "scene": "Night, a stable yard half under water. An officer, Hou Cheng, leads a magnificent fire-red horse out through the water by its bridle, glancing back. Lantern light on the water.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "lb_bound": {
+  "book": 3,
+  "category": "aftermath",
+  "beat": "Lü Bu, asleep in his chair on the gate tower, is bound by his own officers.",
+  "scene": "A gate tower at noon. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, slumped asleep in a chair, wakes as two of his own officers wind ropes around him. One holds his painted halberd away. A white flag is being raised on the wall.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "wgt_cg": {
+  "book": 3,
+  "category": "aftermath",
+  "beat": "Chen Gong walks down the tower stairs to his death without looking back; Cao Cao rises weeping.",
+  "scene": "The top of a gate tower. Chen Gong, lean and calm, walks down the stone stairs alone, guards unable to hold him. Behind him, Cao Cao has risen from his seat, weeping. Liu Bei sits beside the empty seat.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "wgt_lb": {
+  "book": 3,
+  "category": "aftermath",
+  "beat": "Liu Bei speaks the line that seals Lü Bu's fate.",
+  "scene": "The top of a gate tower. Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, bound in a ball of ropes, kneels, glaring up. Cao Cao, seated, turns to Liu Bei, who speaks calmly. Guan Yu and Zhang Fei stand behind.",
+  "notes": "Book 3 (Lü Bu's fall), docs/book2/lvbu-arc.md."
+ },
+ "yan_left": {
+  "book": 3,
+  "category": "aftermath",
+  "beat": "Lady Yan, holding her daughter, watches Lü Bu ride out of burning Chang'an without them.",
+  "scene": "Dusk, Chang'an burning, flames above the gate towers. In a courtyard doorway, Lady Yan, in her thirties, a lady of a great house, holds a small girl close and looks out. Far down the street, Lü Bu: tall, powerful, in his thirties, gold hair-crown with two long pheasant plumes, ornate armour, a crescent-bladed painted halberd, on a fiery red horse, rides away with a band of horsemen, not looking back.",
+  "notes": "Book 3 (Lü Bu's fall), prologue x0a, docs/book2/lvbu-arc.md. Chapter 9: 呂布只得棄卻家小."
+ },
+ "yan_hidden": {
+  "book": 3,
+  "category": "intrigue",
+  "beat": "Lady Yan and her daughter hidden in Pang Shu's house while the city is plundered.",
+  "scene": "Night, a dim back room of a modest official's house, one shaded lamp. Lady Yan, in her thirties, sits very still against the wall, her arm round a small girl, listening. Through a lattice, the red glow of fires and the shadows of soldiers passing in the lane. A middle-aged officer, Pang Shu, stands by the door, listening too.",
+  "notes": "Book 3 (Lü Bu's fall), prologue x0b, docs/book2/lvbu-arc.md. Chapter 11: 龐舒在長安城中，私藏呂布妻小."
+ },
+ "zy_pouches": {
+  "book": 4,
+  "category": "intrigue",
+  "beat": "Zhuge Liang hands Zhao Yun three sealed silk pouches.",
+  "scene": "A Jingzhou hall, a folding screen behind. Zhuge Liang: a calm scholar in a silk turban and Daoist robe, holding a feather fan, leans close and presses three small embroidered silk pouches into the hands of Zhao Yun: a handsome young general in silver-white armour, who listens gravely. Liu Bei: a man near fifty with long ears and a kindly face, greying beard, in a brocade robe, looks on, uneasy.",
+  "notes": "Book 4 (Lady Sun's marriage), docs/book2/ladysun-arc.md."
+ },
+ "nx_red": {
+  "book": 4,
+  "category": "bond",
+  "beat": "Nanxu decked in red as Liu Bei's men spread news of the wedding.",
+  "scene": "A busy riverside city street in winter sun. Soldiers wearing red sashes buy sheep, pigs and baskets of fruit at the stalls, laughing and talking with townsfolk; red cloth and lanterns going up on the shopfronts.",
+  "notes": "Book 4 (Lady Sun's marriage), docs/book2/ladysun-arc.md."
+ },
+ "wu_rage": {
+  "book": 4,
+  "category": "bond",
+  "beat": "Lady Wu beats her breast and scolds Sun Quan.",
+  "scene": "An inner hall in a Wu palace. Lady Wu: an elderly dowager of Wu in rich dark robes, grey hair dressed high, beats her breast and weeps in fury, pointing at Sun Quan: a young lord with a purple-tinged beard and green eyes, in a lord's robe, who stands abashed. An old gentleman, Qiao Guolao, looks on.",
+  "notes": "Book 4 (Lady Sun's marriage), docs/book2/ladysun-arc.md."
+ },
+ "gl_wu": {
+  "book": 4,
+  "category": "bond",
+  "beat": "Lady Wu sees Liu Bei at Sweet Dew Temple and is delighted.",
+  "scene": "The abbot's hall of a hilltop temple above a great river. Lady Wu: an elderly dowager of Wu in rich dark robes, grey hair dressed high, seated, smiles broadly at Liu Bei: a man near fifty with long ears and a kindly face, greying beard, in a brocade robe, who bows before her. Zhao Yun: a handsome young general in silver-white armour, stands behind him with a sword.",
+  "notes": "Book 4 (Lady Sun's marriage), docs/book2/ladysun-arc.md."
+ },
+ "gl_stone": {
+  "book": 4,
+  "category": "intrigue",
+  "beat": "Liu Bei and Sun Quan each cut the same stone, praying in secret.",
+  "scene": "A temple courtyard. A great boulder split crosswise by two sword strokes, sparks still flying. Liu Bei: a man near fifty with long ears and a kindly face, greying beard, in a brocade robe, and Sun Quan: a young lord with a purple-tinged beard and green eyes, in a lord's robe, stand on either side with drawn swords, each glancing sidelong at the other.",
+  "notes": "Book 4 (Lady Sun's marriage), docs/book2/ladysun-arc.md."
+ },
+ "gl_horses": {
+  "book": 4,
+  "category": "bond",
+  "beat": "Liu Bei and Sun Quan rein in their horses on the slope and laugh.",
+  "scene": "A green hill slope above a wide river with white waves. Liu Bei: a man near fifty with long ears and a kindly face, greying beard, in a brocade robe, and Sun Quan: a young lord with a purple-tinged beard and green eyes, in a lord's robe, rein in their horses side by side, whips raised, laughing.",
+  "notes": "Book 4 (Lady Sun's marriage), docs/book2/ladysun-arc.md."
+ },
+ "ls_blades": {
+  "book": 4,
+  "category": "bond",
+  "beat": "The bridal room hung with blades, the maids armed.",
+  "scene": "A bridal chamber lit by rows of red candles, its walls hung with spears and swords. Maids in silk stand on either side with swords at their hips. Liu Bei: a man near fifty with long ears and a kindly face, greying beard, in a brocade robe, stops in the doorway, startled. Lady Sun: a young noblewoman of Wu, proud and spirited, in red silk, a short sword at her waist, sits at the far end, amused.",
+  "notes": "Book 4 (Lady Sun's marriage), docs/book2/ladysun-arc.md."
+ },
+ "ls_curtain": {
+  "book": 4,
+  "category": "battle",
+  "beat": "Lady Sun raises the carriage curtain and faces down Wu's generals.",
+  "scene": "A road below a hill. A covered carriage pushed forward by attendants; Lady Sun: a young noblewoman of Wu, proud and spirited, in red silk, a short sword at her waist, has flung up its curtain and stands in it, commanding. Before her, two armoured Wu generals have leapt from their horses and thrown down their weapons. Zhao Yun: a handsome young general in silver-white armour, glowers on horseback beside the carriage.",
+  "notes": "Book 4 (Lady Sun's marriage), docs/book2/ladysun-arc.md."
+ },
+ "llp_boats": {
+  "book": 4,
+  "category": "aftermath",
+  "beat": "Zhuge Liang laughs from the boats waiting at Liulangpu.",
+  "scene": "A misty riverbank, twenty covered boats in a line. From the nearest, Zhuge Liang: a calm scholar in a silk turban and Daoist robe, holding a feather fan, steps out laughing, fan raised. On the bank, Liu Bei: a man near fifty with long ears and a kindly face, greying beard, in a brocade robe, and Lady Sun: a young noblewoman of Wu, proud and spirited, in red silk, a short sword at her waist, beside her carriage, look on in relief; dust of pursuers in the distance.",
+  "notes": "Book 4 (Lady Sun's marriage), docs/book2/ladysun-arc.md."
+ },
+ "zy_chant": {
+  "book": 4,
+  "category": "aftermath",
+  "beat": "Zhou Yu in his boat, mocked by the soldiers' chant from the shore.",
+  "scene": "A river shore in the evening. Soldiers on the bank shout and jeer toward the water. In a warship, Zhou Yu: a handsome commander of Wu in his thirties, in armour and a red cloak, clutches his side, a wound reopening, held back by his officers.",
+  "notes": "Book 4 (Lady Sun's marriage), docs/book2/ladysun-arc.md."
+ }
 }
