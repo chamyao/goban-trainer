@@ -40,7 +40,7 @@ const WorldData = {
     }
     return this.regions[n];
   },
-  has(n) { return (n >= 1 && n <= 3) || n === 12 || n === 13 || n === 14 || n === 90; },  // worlds whose places have been built (12: Book 2; 13: the Cao Cao arc, a test book; 90: the study where you talk with Claude)
+  has(n) { return (n >= 1 && n <= 3) || (n >= 12 && n <= 15) || n === 90; },  // worlds whose places have been built (12: Book 2; 13: the Cao Cao arc, a test book; 90: the study where you talk with Claude)
   // "1-zhuo-county-c-elder": a challenger in a place, drawing from the world's problems.
   node(w, key) {
     const region = this.regions[w.n];
@@ -179,6 +179,7 @@ const WorldFX = {
     add("@petal", 3, 2, g => { g.fillStyle = "#f6a8bc"; g.fillRect(0, 0, 3, 2); g.fillStyle = "#fbd6e0"; g.fillRect(0, 0, 1, 1); });
     add("@leaf", 3, 2, g => { g.fillStyle = "#8aa83a"; g.fillRect(0, 0, 3, 2); g.fillStyle = "#c8b04a"; g.fillRect(2, 1, 1, 1); });
     add("@ember", 2, 2, g => { g.fillStyle = "#ffb03a"; g.fillRect(0, 0, 2, 2); g.fillStyle = "#fff0a0"; g.fillRect(0, 0, 1, 1); });
+    add("@snow", 2, 2, g => { g.fillStyle = "rgba(255,255,255,.75)"; g.fillRect(0, 0, 2, 2); g.fillStyle = "#ffffff"; g.fillRect(0, 0, 1, 1); });
     add("@mote", 1, 1, g => { g.fillStyle = "#fff4d8"; g.fillRect(0, 0, 1, 1); });
     add("@glint", 5, 5, g => { g.fillStyle = "#ffffff"; g.fillRect(2, 0, 1, 5); g.fillRect(0, 2, 5, 1); g.fillStyle = "#d8f0ff"; g.fillRect(1, 1, 3, 3); g.fillStyle = "#ffffff"; g.fillRect(2, 2, 1, 1); });
     // lamplight for rooms: warm in the middle, falling off to the corners
@@ -554,8 +555,10 @@ function worldScenes() {
     }
     // A cutaway (a node with "cutaway": true, the Lady Sun book): the other side's scene plays by itself as soon
     // as it's open, at its own place with the party off stage, then the player is put back where the lead stood.
+    // ("cutaway": "<cond>", e.g. "told:wu-gatekeeper": it waits for that as well, Lady Wu hearing the news in her hall)
     cutawayNode(key) { const nd = (this.w.nodes || []).find(n => n.key === key); return !!(nd && nd.cutaway); }
-    nextCutaway() { return this.region.quests.find(q => this.cutawayNode(q.node) && !this.done(q.node) && this.available(q)) || null; }
+    cutawayReady(key) { const c = ((this.w.nodes || []).find(n => n.key === key) || {}).cutaway; return typeof c !== "string" || this.cond(c); }
+    nextCutaway() { return this.region.quests.find(q => this.cutawayNode(q.node) && !this.done(q.node) && this.available(q) && this.cutawayReady(q.node)) || null; }
     cutawayCheck() {
       const q = this.nextCutaway();
       if (!q || this.leaving || this.cine) return false;
@@ -582,19 +585,30 @@ function worldScenes() {
       if (this.cutawayCheck()) return true;   // another cutaway follows
       const r = this.st.cutReturn;
       this.st.cutReturn = null;
-      if (!r) { this.player.setVisible(true); for (const F of this.followers || []) F.spr.setVisible(true); this.save(); return false; }
+      if (!r) {   // nowhere he stood (the book opened on a cutaway): to the place of the next beat, coming in as if arriving
+        const nx = this.nextMain(), top = nx && this.region.places.find(p => p.id === nx.place), dest = top && (top.parent || top.id);
+        if (dest && dest !== this.placeId && !this.placeIn(nx.place, this.placeId)) {
+          this.leaving = true; this.st.pos = null; this.save();
+          this.cameras.main.fadeOut(400);
+          this.cameras.main.once("camerafadeoutcomplete", () => this.scene.restart({ place: dest, from: null }));
+          return true;
+        }
+        this.player.setVisible(true); for (const F of this.followers || []) F.spr.setVisible(true); this.save(); return false;
+      }
       this.leaving = true; this.st.pos = r.pos; this.save();
       this.cameras.main.fadeOut(400);
       this.cameras.main.once("camerafadeoutcomplete", () => this.scene.restart({ place: r.place, from: null, resume: true }));
       return true;
     }
-    // after the place is built: a cutaway that's open plays, once no opening scroll or line is up
+    // while in the place: a cutaway that's open (and its condition met) plays, once no opening scroll, line or scene is up
     cutawayWatch() {
       if (!(this.w.nodes || []).some(n => n.cutaway)) return;
-      const ev = this.time.addEvent({ delay: 400, loop: true, callback: () => {
-        if (this.leaving || this.cine || this.ui.busy() || document.querySelector(".tk-scroll-go, .tk-scroll")) return;
-        ev.remove();
-        this.cutawayCheck();
+      if (this.nextCutaway()) {   // one is about to play: the party isn't seen here meanwhile (behind the opening scroll, or arriving for it)
+        this.player.setVisible(false); for (const F of this.followers || []) F.spr.setVisible(false); if (this.carrySpr) this.carrySpr.setVisible(false);
+      }
+      this.time.addEvent({ delay: 400, loop: true, callback: () => {
+        if (this.cutawayMode || this.leaving || this.cine || this.approaching || this.engaged || this.ui.busy() || document.querySelector(".tk-scroll-go, .tk-scroll, .tk-duel")) return;
+        if (this.nextCutaway()) this.cutawayCheck();
       } });
     }
     // Walking into a story spot's area starts its scene; it re-arms once you walk away.
@@ -918,7 +932,7 @@ function worldScenes() {
         if (o.zone && o.zone.body) o.zone.body.enable = on;
       }
       // a state's own air: "fx": "embers" (a city burning), rising over the whole map while the state holds
-      const sfx = st && st.fx;
+      const sfx = st && (st.fx || (st.weather === "snow" ? "snow" : null));   // weather "snow" (Nanxu's winter): flakes falling, the air a little whiter
       if ((this.stateFxKind || null) !== (sfx || null)) {
         if (this.stateFx) { this.stateFx.destroy(); this.stateFx = null; }
         this.stateFxKind = sfx || null;
@@ -928,6 +942,15 @@ function worldScenes() {
             speedY: { min: -26, max: -12 }, speedX: { min: -8, max: 8 }, lifespan: 9000, alpha: { start: 1, end: 0 }, rotate: { min: 0, max: 360 } })
             .setScrollFactor(0).setDepth(1e5);
           this.stateFx.fastForward && this.stateFx.fastForward(6000);
+        }
+        if (sfx === "snow" && this.add.particles) {
+          const W = this.scale.width, H = this.scale.height;
+          const flakes = this.add.particles(0, 0, "@snow", { x: { min: -40, max: W + 40 }, y: -6, quantity: 1, frequency: 70,
+            speedY: { min: 14, max: 30 }, speedX: { min: -10, max: 6 }, lifespan: H / 14 * 1000, scale: { min: .6, max: 1.4 }, alpha: { min: .6, max: 1 } })
+            .setScrollFactor(0).setDepth(1e5);
+          flakes.fastForward && flakes.fastForward(H / 14 * 1000);   // already falling when you arrive
+          const veil = this.add.rectangle(0, 0, W, H, 0xe8f0ff, .12).setOrigin(0).setScrollFactor(0).setDepth(1e5 - 1);
+          this.stateFx = { destroy: () => { flakes.destroy(); veil.destroy(); } };
         }
       }
       if (st && "light" in st) {   // the state's light (day clears a scene's night)
@@ -1542,6 +1565,7 @@ function worldScenes() {
       const toQ = typeof to === "string" && this.region.quests.find(x => x.node === `${this.w.n}-${to}` && !TK.cleared(x.node));   // (not a beat already done: Book 2's last, a18, hands on to itself)
       const toP = to && typeof to === "object" && placeOf(to.place);
       if (toQ || toP) {
+        if (this.cutawayNode(q.node)) { this.cutawayMode = false; this.st.cutReturn = null; }   // a cutaway that hands off (s4 → the temple): on from there, not back
         this.leaving = true; this.st.pos = null; this.save();
         this.cameras.main.fadeOut(500);
         this.cameras.main.once("camerafadeoutcomplete", () => this.scene.restart(toQ ? { place: toQ.place, from: null, toNode: toQ.node }
@@ -2605,9 +2629,10 @@ function worldScenes() {
         const T6 = (this.tw || 16), lane = e => { const r = e.rect, c = { x: r.centerX, y: r.centerY }, side = e.side;
           if (r.width >= 3 * T6 && r.height >= 3 * T6) return false;   // the map's edge: no lane
           const w = 1.5 * T6, L = 6 * T6;
-          return side === "N" ? Math.abs(n.spr.x - c.x) < w && n.spr.y < r.y && n.spr.y > r.y - L
-            : side === "E" ? Math.abs(n.spr.y - c.y) < w && n.spr.x > r.right && n.spr.x < r.right + L
-            : side === "W" ? Math.abs(n.spr.y - c.y) < w && n.spr.x < r.x && n.spr.x > r.x - L
+          // (a door's side is the wall it's in: its open side faces away, as the doorstep's { N: [0, 1], … } has it)
+          return side === "S" ? Math.abs(n.spr.x - c.x) < w && n.spr.y < r.y && n.spr.y > r.y - L
+            : side === "W" ? Math.abs(n.spr.y - c.y) < w && n.spr.x > r.right && n.spr.x < r.right + L
+            : side === "E" ? Math.abs(n.spr.y - c.y) < w && n.spr.x < r.x && n.spr.x > r.x - L
             : Math.abs(n.spr.x - c.x) < w && n.spr.y > r.bottom && n.spr.y < r.bottom + L; };
         const door = this.exits.find(e => n.spr.x > e.rect.x - 28 && n.spr.x < e.rect.right + 28 && n.spr.y > e.rect.y - 24 && n.spr.y < e.rect.bottom + 30 || lane(e));
         const P = this.player, close = this.walk && Math.hypot(n.spr.x - P.x, n.spr.y - P.y) < 28;

@@ -127,6 +127,12 @@ def place_lines():
                 said += [(l, n["kind"]) for l in ([v] if isinstance(v, str) else v or [])]
             seen = (n.get("watch") or {}).get("seen")
             said += [(l, n["kind"]) for l in (seen if isinstance(seen, list) else [])]
+            for k in ("line", "caught"):   # a blocker stepping aside, or catching you (tk-feats.js "yield")
+                v = (n.get("yield") if isinstance(n.get("yield"), dict) else {}).get(k)
+                said += [(l, n["kind"]) for l in ([v] if isinstance(v, str) else v or [])]
+            for k in ("say", "told"):      # a townsperson passing the news on (tk-feats.js "gossip")
+                v = (n.get("gossip") if isinstance(n.get("gossip"), dict) else {}).get(k)
+                said += [(l, n["kind"]) for l in ([v] if isinstance(v, str) else v or [])]
         for l, kind in said:
             if not isinstance(l, str):
                 continue

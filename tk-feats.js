@@ -127,7 +127,7 @@ const WorldFeats = {
     for (const s of Object.values(scene.spots)) {
       if (!s.fires || s.fired || !scene.cond(s.fires)) continue;
       const q = scene.region.quests.find(x => x.node === s.node);
-      if (!q || !scene.available(q) || scene.ui.busy() || scene.cine) continue;
+      if (!q || !scene.available(q) || scene.ui.busy() || scene.cine || scene.cutawayNode(q.node)) continue;   // (a cutaway waits on its own "cutaway" condition)
       s.fired = true;
       scene.approach(q, s);
     }
