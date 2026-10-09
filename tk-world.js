@@ -25,7 +25,8 @@ const WorldState = {
   load(n, region) {
     let s = {};
     try { s = JSON.parse(localStorage.getItem(this.key(n)) || "{}"); } catch { s = {}; }
-    return { visited: (s.visited || [region.start]).map(worldRenamed), party: s.party || TK.party(TK.world(n)) || region.party, place: s.place, pos: s.pos || null, light: s.light || null, crowd: s.crowd || 0, routes: s.routes || [] };   // routes: destinations already shown the way to   // light: a scene's last light, kept onto the next map
+    return { visited: (s.visited || [region.start]).map(worldRenamed), party: s.party || TK.party(TK.world(n)) || region.party, place: s.place, pos: s.pos || null, light: s.light || null, crowd: s.crowd || 0, routes: s.routes || [],
+      carry: s.carry || null, told: s.told || [], yielded: s.yielded || [], featAt: s.featAt || {}, curtain: !!s.curtain, cutReturn: s.cutReturn || null };   // carried on his back; the loud town, the blockers, the carriage's curtain (tk-feats.js); where to come back to after a cutaway   // routes: destinations already shown the way to   // light: a scene's last light, kept onto the next map
   },
   save(n, st) { try { localStorage.setItem(this.key(n), JSON.stringify(st)); } catch { /* private mode */ } if (typeof Sync !== "undefined") Sync.scheduleSave(); },   // follows you to another device (app.js Sync)
 };
