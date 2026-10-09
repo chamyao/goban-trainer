@@ -266,7 +266,7 @@ function worldScenes() {
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
       for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=119`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=120`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -656,6 +656,7 @@ function worldScenes() {
         }
         if (this.iso && (this.kit.isoFlip || []).includes(o.name)) img.setFlipX(true);   // its entrance on the door's face
         if (p.flip) img.setFlipX(!img.flipX);   // a side view facing W (the map compiler mirrors an E-facing sprite)
+        if (p.lift) img.y -= +p.lift;   // drawn higher than it stands (a red hanging over a house's door), its depth still its foot's
         if (p.plaque) {   // a name board over the gate: gold characters on dark lacquer, a gold rim
           const t = this.add.text(Math.round(o.x), Math.round(o.y - Math.min(30, img.height * .42)), p.plaque, {
             fontFamily: '"Noto Serif SC", "Songti SC", "SimSun", serif', fontSize: "20px", fontStyle: "bold", color: "#f2cc5a",
