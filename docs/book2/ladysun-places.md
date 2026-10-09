@@ -43,6 +43,9 @@ ground and the road up to Sweet Dew Temple.
   - Each of the 12 houses has red hangings over its door (Graphics' `deco.redhang`, placed by `"over": "h<n>"` at the
     house's front edge, `"told": "g-h<n>"`, `"lift": 6`), shown once its resident knows. `lift` is in px: the image is
     drawn that much higher, and its depth stays at its foot. The engine supports it (main ba88bcae).
+  - The goal box has a "传开消息 Spread the news" button while s4 waits (main 62f91bf1, the user's request). It walks
+    these chains from their heads to the `told:` target, puts the hangings up house by house and plays s4. So keep the
+    chains as `tells` lists with the three tellable heads, and the target as the palace door's `told:`.
   - Proved (`tools/proofs/ladysun_ls.py`): the player tells at most three; every relay is reached by one of their
     chains; only the steward's reaches the gatekeeper, in about 13 s (a teller walking the way at 80 px/s, waiting up
     to 1.5 s; at most 25 s allowed); every hanging lights.
