@@ -21,7 +21,7 @@ check(s.test!=='1','not in test mode');
 check(!(await dlg()),'a new player opening #/tk is not stopped by the username prompt');
 await fresh();await p.goto(BASE+'#/');await p.reload();await p.waitForTimeout(1500);check(await dlg(),'a new player opening the library (#/) is asked for a username');
 check(s.n===13,`a fresh player's #/tk opens the Cao Cao book (world ${s.n}, ${s.hash})`);
-check(s.books.length===3&&/Cao Cao|曹操/.test(s.books[0])&&/^1\b/.test(s.books[0])&&/Diaochan|貂蝉/.test(s.books[1])&&/^2\b/.test(s.books[1])&&/White Gate|白门楼/.test(s.books[2])&&/^3\b/.test(s.books[2]),`the book list has the three, Cao Cao as Book 1, Diaochan as Book 2, White Gate Tower as Book 3 (${JSON.stringify(s.books)})`);
+check(s.books.length===4&&/Silk Pouches|锦囊妙计/.test(s.books[3])&&/^4\b/.test(s.books[3])&&/Cao Cao|曹操/.test(s.books[0])&&/^1\b/.test(s.books[0])&&/Diaochan|貂蝉/.test(s.books[1])&&/^2\b/.test(s.books[1])&&/White Gate|白门楼/.test(s.books[2])&&/^3\b/.test(s.books[2]),`the book list has the four, Cao Cao as Book 1, Diaochan as Book 2, White Gate Tower as Book 3, Three Silk Pouches as Book 4 (${JSON.stringify(s.books)})`);
 check(/Book 1\b/.test(s.sub)&&!/draft|草稿/i.test(s.sub),`its title line says Book 1 and not draft ("${s.sub.slice(0,80)}")`);
 for(const h of ['#/tk/1','#/tk/2','#/tk/3','#/tk/1/1-n1']){await fresh();s=await at(h);check(s.n===13&&s.hash==='#/tk/13',`${h} (a book taken down) falls back to the Cao Cao book, the address rewritten to it (world ${s.n}, now ${s.hash})`);}
 await fresh();s=await at('#/tk/12');check(s.n===12&&s.hash==='#/tk/12',`#/tk/12 opens the Diaochan book (world ${s.n}, ${s.hash})`);
