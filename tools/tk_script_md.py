@@ -27,7 +27,7 @@ NAMES = {
     "yanshi": ("Lady Yan", "嚴氏"), "chendeng": ("Chen Deng", "陳登"), "chengui": ("Chen Gui", "陳珪"), "hanyin": ("Han Yin", "韓胤"),
     "jiling": ("Ji Ling", "紀靈"), "houcheng": ("Hou Cheng", "侯成"), "songxian": ("Song Xian", "宋憲"), "weixu": ("Wei Xu", "魏續"),
     "zhangliao": ("Zhang Liao", "張遼"), "mizhu": ("Mi Zhu", "糜竺"), "liubei": ("Liu Bei", "劉備"), "guanyu": ("Guan Yu", "關羽"),
-    "zhangfei": ("Zhang Fei", "張飛"), "lvnv": ("Lü Bu's daughter", "呂布之女"), "pangshu": ("Pang Shu", "龐舒"),
+    "zhangfei": ("Zhang Fei", "張飛"), "lvnv": ("Lü Bu's daughter", "呂布之女"), "pangshu": ("Pang Shu", "龐舒"), "zhugeliang": ("Zhuge Liang", "諸葛亮"), "zhouyu": ("Zhou Yu", "周瑜"), "lusu": ("Lu Su", "魯肅"), "sunquan": ("Sun Quan", "孫權"), "lufan": ("Lü Fan", "呂範"), "jiahua": ("Jia Hua", "賈華"), "qiaoguolao": ("Qiao Guolao", "喬國老"), "zhangzhao": ("Zhang Zhao", "張昭"), "xusheng": ("Xu Sheng", "徐盛"), "dingfeng": ("Ding Feng", "丁奉"), "chenwu": ("Chen Wu", "陳武"), "panzhang": ("Pan Zhang", "潘璋"), "ladysun": ("Lady Sun", "孫夫人"), "ladywu": ("Lady Wu", "吳國太"), "matron": ("the matron", "管家婆"), "zhaoyun": ("Zhao Yun", "趙雲"), "sunqian": ("Sun Qian", "孫乾"), "chengpu": ("Cheng Pu", "程普"),
 }
 
 
