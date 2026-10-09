@@ -266,7 +266,7 @@ function worldScenes() {
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
       for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=120`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=121`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -2644,6 +2644,11 @@ function worldScenes() {
         if (n.rider || n.ambush) continue;   // chase riders and ambushers move themselves (chaseStep)
         if (!n.wander || this.ui.busy()) { n.spr.setVelocity(0); continue; }
         n.t -= dt;
+        // past the leash mid-leg (a leg can run ~87 px): turn for home now, not at the leg's end (Places: off building faces)
+        if (n.moving && n.t > 0 && Math.hypot(n.spr.x - n.home.x, n.spr.y - n.home.y) > 48) {
+          const v = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }[n.dir] || [0, 0];
+          if (v[0] * (n.spr.x - n.home.x) + v[1] * (n.spr.y - n.home.y) > 0) n.t = 0;   // heading further out
+        }
         if (n.t <= 0) {
           n.t = 900 + Math.random() * 2200;
           const away = Math.hypot(n.spr.x - n.home.x, n.spr.y - n.home.y) > 40;
