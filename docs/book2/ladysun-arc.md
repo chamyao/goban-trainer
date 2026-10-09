@@ -85,6 +85,7 @@ Its register is new for us too: it is a comedy, a scheme that keeps backfiring.
 | s12 | **Liulangpu** (劉郎浦). No boats; the pursuers come; the boats with Zhuge Liang in them. Zhou Yu's fleet; Guan Yu, Huang Zhong, Wei Yan; the chant. Zhou Yu's wound bursts. | Lady Sun | Liulangpu, the north shore | — |
 
 ## Decisions (Plot's recommendations; the user can overrule any of them)
+0. **Modern Chinese.** The user: "can you write this books language in modern chinese thats easier to undrestand?" Every Chinese line the player sees or hears (narration, speech, goals, captions, board lines) is written in modern Mandarin, in simplified characters, translated from the original for meaning, not quoted from it. The classical text stays in this design doc only, as the source each line is checked against. The novel's chapter titles and couplets stay as they are, since they are titles.
 1. **Span:** chapters 54–55. Lady Sun's later recall to Wu and the river at chapter 61 is another story, not this one.
 2. **The bride is introduced by her enemy first.** The player hears Zhou Yu describe her (s1) before meeting her (s7).
 3. **Liu Bei's confession** (s11) is the third pouch's plan. From her side, it is the moment she learns what the player
