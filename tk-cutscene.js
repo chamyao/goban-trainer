@@ -630,6 +630,7 @@ const WorldCutscene = {
         case "wait": await wait(b.ms); break;
         case "party": break;                       // applied by the world when the scene ends
         case "lose": if (Items) { Items.lose(scene, b.item); Object.values(actors).forEach(mount); } break;   // Red Hare stolen: everyone afoot
+        case "open": if (typeof WorldFeats !== "undefined" && !skip) await WorldFeats.openCard(scene.w, b.item); break;   // a sealed pouch opened: its card
         case "carry": carry(b); break;
         case "gain":                                  // a gift: saved now, and a mount seats the party at once
           if (Items) { Items.gain(scene, b.item); Object.values(actors).forEach(mount); }
@@ -723,7 +724,7 @@ const WorldCutscene = {
   // the prop atlas (props, emote bubbles, gift icons), loaded once per game
   // the stills that exist (tools/gen_stills.py writes assets/tk/stills/stills.json), fetched once
   stillIndex() {
-    if (!this._stills) this._stills = fetch("assets/tk/stills/stills.json?v=27").then(r => r.ok ? r.json() : {}).catch(() => ({}));
+    if (!this._stills) this._stills = fetch("assets/tk/stills/stills.json?v=28").then(r => r.ok ? r.json() : {}).catch(() => ({}));
     return this._stills;
   },
   stillSrc(m) { return `assets/tk/stills/${m.file}?v=${m.made || ""}${m.look || ""}`; },   // a redone still is fetched anew
@@ -742,8 +743,8 @@ const WorldCutscene = {
   load(scene) {
     if (scene.textures.exists("tk-props")) return Promise.resolve();
     return new Promise(res => {
-      scene.load.json("tk-props-json", "assets/tk/props.json?v=7");
-      scene.load.image("tk-props", "assets/tk/props.png?v=7");
+      scene.load.json("tk-props-json", "assets/tk/props.json?v=8");
+      scene.load.image("tk-props", "assets/tk/props.png?v=8");
       scene.load.once("complete", () => {
         const t = scene.textures.get("tk-props"), j = scene.cache.json.get("tk-props-json");
         if (t && j) for (const [n, [x, y, w, h]] of Object.entries(j.frames)) t.add(n, 0, x, y, w, h);

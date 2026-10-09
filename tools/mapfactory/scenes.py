@@ -565,6 +565,8 @@ def stage_scene(scene, m, spot, party, chars, boss=None):
             st.beats.append({"do": "party", "list": s[1]})
         elif op == "gain":
             st.beats.append({"do": "gain", "item": s[1]})
+        elif op == "open":    # ["open", item]: a sealed pouch opened, its card read (tk-feats.js)
+            st.beats.append({"do": "open", "item": s[1]})
         elif op == "lose":    # ["lose", item]: taken from the party (Red Hare stolen in the night)
             st.beats.append({"do": "lose", "item": s[1]})
         elif op == "carry":   # ["carry", who, whom]: whom rides on who's back; ["carry", who] sets them down

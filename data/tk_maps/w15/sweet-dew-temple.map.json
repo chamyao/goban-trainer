@@ -1,0 +1,663 @@
+{
+ "format": "tk-map/1",
+ "id": "sweet-dew-temple",
+ "world": 15,
+ "name": "Sweet Dew Temple",
+ "archetype": "hills",
+ "size": [
+  80,
+  64
+ ],
+ "seed": 1758,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "court",
+   "b": "gallery",
+   "c": "hills",
+   "d": "path",
+   "f": "plain",
+   ":": "sand",
+   "W": "wall",
+   "~": "water"
+  },
+  "rows": [
+   ":~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+   ":~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~:",
+   "ccccccccccccccccccccffffffffffffffffffffffffffffffffffffffffcccccccccccccccccccc",
+   "ccccccccccccccccccccffffffffffffffffffffffffffffffffffffffffcccccccccccccccccccc",
+   "ccccccccccccccccccccffffffffffffffffffffffffffffffffffffffffcccccccccccccccccccc",
+   "ccccccccccccccccccccffffffffffffffffffffffffffffffffffffffffcccccccccccccccccccc",
+   "ccccccccccccccccccccffffffffffffffffffffffffffffffffffffffffcccccccccccccccccccc",
+   "ccccccccccccccccccccfffffffffffffffffffffffffffffddfffffffffcccccccccccccccccccc",
+   "ccccccccccccccccccccfffffffffffffffffffffffffffffddfffffffffcccccccccccccccccccc",
+   "ccccccccccccccccccccfffffffffffffffffffffffffffffddfffffffffcccccccccccccccccccc",
+   "ccccccccccccccccccccfffffffffffffffffffffffffffffddfffffffffcccccccccccccccccccc",
+   "ccccccccccccccccccccfffffffffffffffffffffffffffffddfffffffffcccccccccccccccccccc",
+   "ccccccccccccccccccccfffffffffffffffffffffffffffffddfffffffffcccccccccccccccccccc",
+   "ccccccccccccccccccccfffffffffffffffffffffffffffffddfffffffffcccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccddccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccddccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccddccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWddWWWWWWWWWWccccccccccccccccccc",
+   "cccccccccccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaddaaaaaaaaaWccccccccccccccccccc",
+   "cccccccccccccccccccWabbbbbbaaaaaaaaaaaaaaaaaaaaaaddaabbbbbbaWccccccccccccccccccc",
+   "cccccccccccccccccccWabbbbbbaaaaaaaaaaaaaaaaaaaaaaddaabbbbbbaWccccccccccccccccccc",
+   "cccccccccccccccccccWabbaaWWaaaaaaaaaaaaaaaaaaaaaaddaaWWaabbaWccccccccccccccccccc",
+   "cccccccccccccccccccWabbaaWWaaaaaaaaaaaaaaaaaaaaaaddaaWWaabbaWccccccccccccccccccc",
+   "cccccccccccccccccccWabbaaWWaaaaaaaaaaaaaaaaaaaaaaddaaWWaabbaWccccccccccccccccccc",
+   "cccccccccccccccccccWabbaaWWaaaaaaaaaaaaaaaaaaaaaaddaaWWaabbaWccccccccccccccccccc",
+   "cccccccccccccccccccWabbaaWWaaaaaaaaaaaaaaaaaaaaaaaaaaWWaabbaWccccccccccccccccccc",
+   "cccccccccccccccccccWabbaaWWaaaaaaaaaaaaaaaaaaaaaaaaaaWWaabbaWccccccccccccccccccc",
+   "cccccccccccccccccccWabbaaWWaaaaaaaaaaaaaaaaaaaaaaaaaaWWaabbaWccccccccccccccccccc",
+   "cccccccccccccccccccWabbaaWWaaaaaaaaaaaaaaaaaaaaaaaaaaWWaabbaWccccccccccccccccccc",
+   "cccccccccccccccccccWabbaaWWaaaaaaaaaaaaaaaaaaaaaaaaaaWWaabbaWccccccccccccccccccc",
+   "cccccccccccccccccccWabbaaWWaaaaaaaaaaaaaaaaaaaaaaaaaaWWaabbaWccccccccccccccccccc",
+   "cccccccccccccccccWWWWbbWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWbbWWWWccccccccccccccccc",
+   "cccccccccccccccccWWWWbbWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWbbWWWWccccccccccccccccc",
+   "cccccccccccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccccccccccc",
+   "cccccccccccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccccccccccc",
+   "cccccccccccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccccccccccc",
+   "cccccccccccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccccccccccc",
+   "cccccccccccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccccccccccc",
+   "cccccccccccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccccccccccc",
+   "cccccccccccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccccccccccc",
+   "cccccccccccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccccccccccc",
+   "cccccccccccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccccccccccc",
+   "cccccccccccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccccccccccc",
+   "cccccccccccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccccccccccc",
+   "cccccccccccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccccccccccc",
+   "cccccccccccccccccccWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWccccccccccccccccccc",
+   "cccccccccccccccccccWWWWWWWWWWWWWWWWWWWWWWddWWWWWWWWWWWWWWWWWWccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccfffffddfffffcccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccfffffddfffffcccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccfffffddfffffcccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccfffffddfffffcccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccfffffddfffffcccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccfffffddfffffcccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccfffffddfffffcccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccfffffddfffffcccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccfffffddfffffcccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccfffffddfffffcccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccffffffffffffcccccccccccccccccccccccccccccccc"
+  ],
+  "walk": {
+   "court": true,
+   "gallery": true,
+   "hills": false,
+   "path": true,
+   "plain": true,
+   "sand": true,
+   "wall": false,
+   "water": false
+  }
+ },
+ "lines": [
+  {
+   "id": "wall",
+   "kind": "wall",
+   "outline": [
+    4,
+    5,
+    12,
+    9
+   ],
+   "width": 1,
+   "gates": {
+    "south-gate": [
+     10,
+     13
+    ],
+    "north-gate": [
+     12,
+     5
+    ]
+   },
+   "tiles": 140
+  },
+  {
+   "id": "inner",
+   "kind": "wall",
+   "path": [
+    [
+     4,
+     9
+    ],
+    [
+     15,
+     9
+    ]
+   ],
+   "width": 1,
+   "gates": {
+    "west-way": [
+     5,
+     9
+    ],
+    "east-way": [
+     14,
+     9
+    ]
+   },
+   "tiles": 92
+  },
+  {
+   "id": "part-w",
+   "kind": "wall",
+   "path": [
+    [
+     6,
+     6
+    ],
+    [
+     6,
+     9
+    ]
+   ],
+   "width": 1,
+   "gates": {
+    "w-in": [
+     6,
+     6
+    ]
+   },
+   "tiles": 28
+  },
+  {
+   "id": "part-e",
+   "kind": "wall",
+   "path": [
+    [
+     13,
+     6
+    ],
+    [
+     13,
+     9
+    ]
+   ],
+   "width": 1,
+   "gates": {
+    "e-in": [
+     13,
+     6
+    ]
+   },
+   "tiles": 28
+  },
+  {
+   "id": "corridor-w",
+   "kind": "gallery",
+   "path": [
+    [
+     5,
+     9
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     6,
+     6
+    ]
+   ],
+   "width": 2,
+   "tiles": 36
+  },
+  {
+   "id": "corridor-e",
+   "kind": "gallery",
+   "path": [
+    [
+     14,
+     9
+    ],
+    [
+     14,
+     6
+    ],
+    [
+     13,
+     6
+    ]
+   ],
+   "width": 2,
+   "tiles": 36
+  },
+  {
+   "id": "court-n",
+   "kind": "path",
+   "path": [
+    [
+     12,
+     7
+    ],
+    [
+     12,
+     5
+    ]
+   ],
+   "width": 2,
+   "tiles": 20
+  },
+  {
+   "id": "up",
+   "kind": "path",
+   "path": [
+    [
+     10,
+     15
+    ],
+    [
+     10,
+     13
+    ]
+   ],
+   "width": 2,
+   "tiles": 20
+  },
+  {
+   "id": "down",
+   "kind": "path",
+   "path": [
+    [
+     12,
+     5
+    ],
+    [
+     12,
+     3
+    ]
+   ],
+   "width": 2,
+   "tiles": 20
+  }
+ ],
+ "objects": [
+  {
+   "kind": "building.gatehouse",
+   "x": 41,
+   "y": 52,
+   "w": 2,
+   "h": 1,
+   "id": "south-gate",
+   "width": 2,
+   "wall": "wall",
+   "door": "S"
+  },
+  {
+   "kind": "building.gatehouse",
+   "x": 49,
+   "y": 23,
+   "w": 2,
+   "h": 1,
+   "id": "north-gate",
+   "width": 2,
+   "wall": "wall",
+   "door": "S"
+  },
+  {
+   "kind": "building.gatehouse",
+   "x": 21,
+   "y": 37,
+   "w": 2,
+   "h": 2,
+   "id": "west-way",
+   "width": 2,
+   "wall": "inner",
+   "door": "S"
+  },
+  {
+   "kind": "building.gatehouse",
+   "x": 57,
+   "y": 37,
+   "w": 2,
+   "h": 2,
+   "id": "east-way",
+   "width": 2,
+   "wall": "inner",
+   "door": "S"
+  },
+  {
+   "kind": "building.gatehouse",
+   "x": 25,
+   "y": 25,
+   "w": 2,
+   "h": 2,
+   "id": "w-in",
+   "width": 2,
+   "wall": "part-w",
+   "door": "W"
+  },
+  {
+   "kind": "building.gatehouse",
+   "x": 53,
+   "y": 25,
+   "w": 2,
+   "h": 2,
+   "id": "e-in",
+   "width": 2,
+   "wall": "part-e",
+   "door": "E"
+  },
+  {
+   "kind": "building.hall",
+   "x": 38,
+   "y": 29,
+   "w": 4,
+   "h": 2,
+   "id": "abbot",
+   "door": "S",
+   "faces": "S",
+   "label": "The abbot's hall",
+   "map": "gl-abbot",
+   "plaque": "方丈",
+   "blocks_sight": true
+  },
+  {
+   "kind": "landmark.incense",
+   "x": 29,
+   "y": 41,
+   "w": 2,
+   "h": 1,
+   "id": "incense",
+   "label": "An incense burner"
+  },
+  {
+   "kind": "building.house",
+   "x": 54,
+   "y": 49,
+   "w": 4,
+   "h": 2,
+   "id": "bell",
+   "door": null,
+   "faces": "S",
+   "label": "The bell house",
+   "blocks_sight": true
+  },
+  {
+   "kind": "tree.pine",
+   "x": 25,
+   "y": 12,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 51,
+   "y": 18,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 28,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 55,
+   "y": 11,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 38,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 40,
+   "y": 60,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 39,
+   "y": 58,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 57,
+   "y": 11,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 27,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 34,
+   "y": 16,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 53,
+   "y": 16,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 51,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 46,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 37,
+   "y": 10,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "spots": [
+  {
+   "id": "s6",
+   "x": 37.5,
+   "y": 45.7,
+   "node": "15-s6",
+   "label": "The great rock in the courtyard"
+  },
+  {
+   "id": "slope-top",
+   "x": 49.5,
+   "y": 17.7,
+   "node": "",
+   "label": "Rein-In Slope",
+   "note": "s6: the two ride down to the river and back"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "npc-1",
+   "kind": "folk.soldier",
+   "x": 21.5,
+   "y": 29.9,
+   "say": [
+    "The man in the doorway holds an axe behind his back. “Nothing here. Move along.”"
+   ],
+   "in": [
+    "feast"
+   ]
+  },
+  {
+   "id": "npc-2",
+   "kind": "folk.soldier",
+   "x": 57.5,
+   "y": 29.9,
+   "say": [
+    "Two men crouch in the side room with axes across their knees. They look away."
+   ],
+   "in": [
+    "feast"
+   ]
+  },
+  {
+   "id": "npc-3",
+   "kind": "folk.villager",
+   "x": 45.5,
+   "y": 49.9,
+   "say": [
+    "A monk sweeps the courtyard. “The Dowager is in the abbot's hall. Go round by the side corridors.”"
+   ]
+  }
+ ],
+ "exits": [
+  {
+   "to": "sweet-dew-temple--gl-abbot",
+   "side": "N",
+   "x": 39.6,
+   "y": 30.85,
+   "w": 0.8,
+   "h": 0.75,
+   "door": true
+  },
+  {
+   "to": "nanxu",
+   "side": "S",
+   "x": 40,
+   "y": 63,
+   "w": 4,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "sweet-dew-temple--gl-abbot": [
+   40,
+   31
+  ],
+  "nanxu": [
+   41,
+   57
+  ],
+  "": [
+   41,
+   57
+  ]
+ },
+ "states": [
+  {
+   "id": "feast",
+   "until": "node:s5",
+   "light": "day"
+  },
+  {
+   "id": "after",
+   "when": "node:s5",
+   "light": "day"
+  }
+ ],
+ "ways": {
+  "nodes": [
+   [
+    22.0,
+    38.0
+   ],
+   [
+    22.0,
+    26.0
+   ],
+   [
+    26.0,
+    26.0
+   ],
+   [
+    58.0,
+    38.0
+   ],
+   [
+    58.0,
+    26.0
+   ],
+   [
+    54.0,
+    26.0
+   ],
+   [
+    50.0,
+    30.0
+   ],
+   [
+    50.0,
+    22.0
+   ],
+   [
+    42.0,
+    62.0
+   ],
+   [
+    42.0,
+    54.0
+   ],
+   [
+    50.0,
+    14.0
+   ]
+  ],
+  "edges": [
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    4,
+    5
+   ],
+   [
+    6,
+    7
+   ],
+   [
+    7,
+    10
+   ],
+   [
+    8,
+    9
+   ]
+  ]
+ },
+ "links": [
+  "nanxu",
+  "sweet-dew-temple--gl-abbot"
+ ]
+}

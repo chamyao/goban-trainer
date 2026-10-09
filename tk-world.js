@@ -25,7 +25,8 @@ const WorldState = {
   load(n, region) {
     let s = {};
     try { s = JSON.parse(localStorage.getItem(this.key(n)) || "{}"); } catch { s = {}; }
-    return { visited: (s.visited || [region.start]).map(worldRenamed), party: s.party || TK.party(TK.world(n)) || region.party, place: s.place, pos: s.pos || null, light: s.light || null, crowd: s.crowd || 0, routes: s.routes || [] };   // routes: destinations already shown the way to   // light: a scene's last light, kept onto the next map
+    return { visited: (s.visited || [region.start]).map(worldRenamed), party: s.party || TK.party(TK.world(n)) || region.party, place: s.place, pos: s.pos || null, light: s.light || null, crowd: s.crowd || 0, routes: s.routes || [],
+      carry: s.carry || null, told: s.told || [], yielded: s.yielded || [], featAt: s.featAt || {}, curtain: !!s.curtain, cutReturn: s.cutReturn || null };   // carried on his back; the loud town, the blockers, the carriage's curtain (tk-feats.js); where to come back to after a cutaway   // routes: destinations already shown the way to   // light: a scene's last light, kept onto the next map
   },
   save(n, st) { try { localStorage.setItem(this.key(n), JSON.stringify(st)); } catch { /* private mode */ } if (typeof Sync !== "undefined") Sync.scheduleSave(); },   // follows you to another device (app.js Sync)
 };
@@ -35,12 +36,12 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=104`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=105`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
   },
-  has(n) { return (n >= 1 && n <= 3) || n === 12 || n === 13 || n === 14 || n === 90; },  // worlds whose places have been built (12: Book 2; 13: the Cao Cao arc, a test book; 90: the study where you talk with Claude)
+  has(n) { return (n >= 1 && n <= 3) || (n >= 12 && n <= 15) || n === 90; },  // worlds whose places have been built (12: Book 2; 13: the Cao Cao arc, a test book; 90: the study where you talk with Claude)
   // "1-zhuo-county-c-elder": a challenger in a place, drawing from the world's problems.
   node(w, key) {
     const region = this.regions[w.n];
@@ -179,6 +180,7 @@ const WorldFX = {
     add("@petal", 3, 2, g => { g.fillStyle = "#f6a8bc"; g.fillRect(0, 0, 3, 2); g.fillStyle = "#fbd6e0"; g.fillRect(0, 0, 1, 1); });
     add("@leaf", 3, 2, g => { g.fillStyle = "#8aa83a"; g.fillRect(0, 0, 3, 2); g.fillStyle = "#c8b04a"; g.fillRect(2, 1, 1, 1); });
     add("@ember", 2, 2, g => { g.fillStyle = "#ffb03a"; g.fillRect(0, 0, 2, 2); g.fillStyle = "#fff0a0"; g.fillRect(0, 0, 1, 1); });
+    add("@snow", 2, 2, g => { g.fillStyle = "rgba(255,255,255,.75)"; g.fillRect(0, 0, 2, 2); g.fillStyle = "#ffffff"; g.fillRect(0, 0, 1, 1); });
     add("@mote", 1, 1, g => { g.fillStyle = "#fff4d8"; g.fillRect(0, 0, 1, 1); });
     add("@glint", 5, 5, g => { g.fillStyle = "#ffffff"; g.fillRect(2, 0, 1, 5); g.fillRect(0, 2, 5, 1); g.fillStyle = "#d8f0ff"; g.fillRect(1, 1, 3, 3); g.fillStyle = "#ffffff"; g.fillRect(2, 2, 1, 1); });
     // lamplight for rooms: warm in the middle, falling off to the corners
@@ -253,18 +255,18 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=104`);
-      this.load.json("kit", `assets/tk/kits/${kit}.json?v=46`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=106`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=105`);
+      this.load.json("kit", `assets/tk/kits/${kit}.json?v=48`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=107`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
-      for (const [s, path] of Object.entries(kit.sheets)) this.load.image(`kit-${s}`, `${path}?v=46`);   // the sheets change with the kits: same key
+      for (const [s, path] of Object.entries(kit.sheets)) this.load.image(`kit-${s}`, `${path}?v=48`);   // the sheets change with the kits: same key
       const [fw, fh] = kit.folk.frame;
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
       for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=117`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=119`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -342,7 +344,7 @@ function worldScenes() {
 
       const P = o => Object.fromEntries((o.properties || []).map(p => [p.name, p.value]));
       const J = v => { try { return JSON.parse(v || "[]"); } catch { return []; } };
-      this.covers = []; this.lastCover = null; this.hidden = false; this.hideTold = false;
+      this.covers = []; this.lastCover = null; this.hidden = false; this.hideTold = false; this.toldProps = [];
       this.spots = {}; this.npcs = []; this.actMarks = new Map(); this.exits = []; this.propBoxes = []; this.entries = {}; this.shrine = null;
       for (const o of map.getObjectLayer("objects").objects) {
         const p = P(o);
@@ -351,7 +353,7 @@ function worldScenes() {
           // a place to deliver to (a ridge): mark, condition, what it needs, and its lines
           ...(p.needs ? { needs: J(p.needs), delivers: p.delivers || o.name, when: p.when || "", empty: J(p.empty), waiting: J(p.waiting), call: J(p.call),
                           deliver: J(p.deliver), delivered: J(p.delivered) } : {}),
-          sight: p.sight ? JSON.parse(p.sight) : null };   // a sight puzzle: it plays once one watcher sees you and another doesn't
+          sight: p.sight ? JSON.parse(p.sight) : null, fires: p.fires || "" };   // a sight puzzle: it plays once one watcher sees you and another doesn't
         else if (o.type === "npc") this.addNpc(o, p, J);
         else if (o.type === "exit") this.exits.push({ to: p.to, side: p.side, rect: new Phaser.Geom.Rectangle(o.x, o.y, o.width, o.height),
           openTo: p.open_to ? JSON.parse(p.open_to) : null, refuse: J(p.refuse) });
@@ -466,6 +468,8 @@ function worldScenes() {
       this.leaving = false;
       if (typeof WorldItems !== "undefined") WorldItems.attach(this);   // mounts (tk-items.js)
       WorldFX.ambient(this, this.place.archetype);   // petals, leaves, embers, dust
+      if (typeof WorldFeats !== "undefined") WorldFeats.init(this);   // pouches, gossip, blockers who yield, the carriage
+      this.cutawayWatch();
       this.worldShade = null; this.applyWorldLight();   // night, dusk or dawn left by the last scene
       // the window changed shape (full window, a phone turned): the screen-sized effects follow
       const onResize = () => { WorldFX.ambient(this, this.place.archetype); this.fitCamera(); };
@@ -550,6 +554,64 @@ function worldScenes() {
       P.anims.stop(); P.setTexture(`h-${this.lead}-${P.facing}-0`);
       this.time.delayedCall(320, () => { this.approaching = false; if (!this.ui.busy() && !this.leaving && !this.cine) this.playQuest(q, s); });
     }
+    // A cutaway (a node with "cutaway": true, the Lady Sun book): the other side's scene plays by itself as soon
+    // as it's open, at its own place with the party off stage, then the player is put back where the lead stood.
+    // ("cutaway": "<cond>", e.g. "told:wu-gatekeeper": it waits for that as well, Lady Wu hearing the news in her hall)
+    cutawayNode(key) { const nd = (this.w.nodes || []).find(n => n.key === key); return !!(nd && nd.cutaway); }
+    cutawayReady(key) { const c = ((this.w.nodes || []).find(n => n.key === key) || {}).cutaway; return typeof c !== "string" || this.cond(c); }
+    nextCutaway() { return this.region.quests.find(q => this.cutawayNode(q.node) && !this.done(q.node) && this.available(q) && this.cutawayReady(q.node)) || null; }
+    cutawayCheck() {
+      const q = this.nextCutaway();
+      if (!q || this.leaving || this.cine) return false;
+      const P = this.player;
+      if (q.place === this.placeId) {
+        const sp = Object.values(this.spots).find(x => x.node === q.node);
+        if (!sp) return false;
+        this.cutawayMode = true;
+        P.setVisible(false); P.setVelocity(0); this.walk = null;
+        for (const F of this.followers || []) F.spr.setVisible(false);
+        if (this.carrySpr) this.carrySpr.setVisible(false);
+        this.time.delayedCall(450, () => this.playQuest(q, sp));
+        return true;
+      }
+      if (!this.st.cutReturn) this.st.cutReturn = { place: this.placeId, pos: { place: this.placeId, x: P.x, y: P.y, f: P.facing } };
+      this.leaving = true; this.st.pos = null; this.save();
+      this.cameras.main.fadeOut(400);
+      this.cameras.main.once("camerafadeoutcomplete", () => this.scene.restart({ place: q.place, from: null, toNode: q.node }));
+      return true;
+    }
+    cutawayAfter(q) {
+      if (!this.cutawayNode(q.node)) return false;
+      this.cutawayMode = false;
+      if (this.cutawayCheck()) return true;   // another cutaway follows
+      const r = this.st.cutReturn;
+      this.st.cutReturn = null;
+      if (!r) {   // nowhere he stood (the book opened on a cutaway): to the place of the next beat, coming in as if arriving
+        const nx = this.nextMain(), top = nx && this.region.places.find(p => p.id === nx.place), dest = top && (top.parent || top.id);
+        if (dest && dest !== this.placeId && !this.placeIn(nx.place, this.placeId)) {
+          this.leaving = true; this.st.pos = null; this.save();
+          this.cameras.main.fadeOut(400);
+          this.cameras.main.once("camerafadeoutcomplete", () => this.scene.restart({ place: dest, from: null }));
+          return true;
+        }
+        this.player.setVisible(true); for (const F of this.followers || []) F.spr.setVisible(true); this.save(); return false;
+      }
+      this.leaving = true; this.st.pos = r.pos; this.save();
+      this.cameras.main.fadeOut(400);
+      this.cameras.main.once("camerafadeoutcomplete", () => this.scene.restart({ place: r.place, from: null, resume: true }));
+      return true;
+    }
+    // while in the place: a cutaway that's open (and its condition met) plays, once no opening scroll, line or scene is up
+    cutawayWatch() {
+      if (!(this.w.nodes || []).some(n => n.cutaway)) return;
+      if (this.nextCutaway()) {   // one is about to play: the party isn't seen here meanwhile (behind the opening scroll, or arriving for it)
+        this.player.setVisible(false); for (const F of this.followers || []) F.spr.setVisible(false); if (this.carrySpr) this.carrySpr.setVisible(false);
+      }
+      this.time.addEvent({ delay: 400, loop: true, callback: () => {
+        if (this.cutawayMode || this.leaving || this.cine || this.approaching || this.engaged || this.ui.busy() || document.querySelector(".tk-scroll-go, .tk-scroll, .tk-duel")) return;
+        if (this.nextCutaway()) this.cutawayCheck();
+      } });
+    }
     // Walking into a story spot's area starts its scene; it re-arms once you walk away.
     nearSpots() {
       if (this.ui.busy() || this.leaving || this.cine || this.approaching) return;
@@ -617,6 +679,7 @@ function worldScenes() {
       if (zone) this.solids.add(zone);
       if (zone && p.kind !== "wall.lattice") (this.sightZones = this.sightZones || []).push(zone);   // what blocks a watcher's sight (a lattice doesn't)
       if (p.in) this.stated.push({ img, zone, in: JSON.parse(p.in) });
+      if (p.told && img) (this.toldProps = this.toldProps || []).push({ img, id: p.told });   // red hangings: once that person has the news
       if (p.ref) (this.refs = this.refs || {})[p.ref] = { x: o.x, y: o.y - (p.fh || 0) / 2 };
       if (/^(lamp\.|prop\.lantern|camp\.(firepit|cookfire)|landmark\.(torch|brazier)|ruin\.burning|furn\.(lamp|hearth))/.test(p.kind || "")) (this.lights = this.lights || []).push({ x: o.x, y: o.y - (p.fh || 16) / 2, kind: p.kind, img });   // shown only in some of the map's states
     }
@@ -675,6 +738,9 @@ function worldScenes() {
         n.guard = p.guard_x != null ? { x: p.guard_x, y: p.guard_y } : null;
         n.mark = this.add.image(o.x, o.y - spr.height - 2, "@bang").setOrigin(.5, 1).setDepth(9999).setVisible(!TK.cleared(n.challenge) && (!n.when || this.cond(n.when)));
       }
+      // the Lady Sun book (tk-feats.js): news to pass on; a blocker who steps aside when faced
+      try { if (p.gossip) n.gossip = JSON.parse(p.gossip); } catch { n.gossip = null; }
+      try { if (p.yield) { n.yield = JSON.parse(p.yield); n.yield.line = own(n.yield.line || []); n.wander = false; } } catch { n.yield = null; }
       if (p.rider) {   // a chase rider (Places: {"chase": "c17", "beat": [[x,y]..], "cone": 5, "dir": "E"}): about only while that chase is on
         try {
           const r = JSON.parse(p.rider), T = this.tw || 16, D = { N: "up", S: "down", W: "left", E: "right" };
@@ -839,6 +905,7 @@ function worldScenes() {
       if (kind === "node") return this.done(/^\d+-/.test(v) ? v : `${this.w.n}-${v}`);
       if (kind === "item") return WorldItems.has(this.w, v);
       if (kind === "mark") return WorldMarks.has(this.w, v);
+      if (kind === "told") return !!(this.st.told || []).includes(v);   // the news has reached them (tk-feats.js)
       return false;
     }
     // A gated battle's first unmet condition: its defeat scene plays instead of the board.
@@ -866,7 +933,7 @@ function worldScenes() {
         if (o.zone && o.zone.body) o.zone.body.enable = on;
       }
       // a state's own air: "fx": "embers" (a city burning), rising over the whole map while the state holds
-      const sfx = st && st.fx;
+      const sfx = st && (st.fx || (st.weather === "snow" ? "snow" : null));   // weather "snow" (Nanxu's winter): flakes falling, the air a little whiter
       if ((this.stateFxKind || null) !== (sfx || null)) {
         if (this.stateFx) { this.stateFx.destroy(); this.stateFx = null; }
         this.stateFxKind = sfx || null;
@@ -876,6 +943,15 @@ function worldScenes() {
             speedY: { min: -26, max: -12 }, speedX: { min: -8, max: 8 }, lifespan: 9000, alpha: { start: 1, end: 0 }, rotate: { min: 0, max: 360 } })
             .setScrollFactor(0).setDepth(1e5);
           this.stateFx.fastForward && this.stateFx.fastForward(6000);
+        }
+        if (sfx === "snow" && this.add.particles) {
+          const W = this.scale.width, H = this.scale.height;
+          const flakes = this.add.particles(0, 0, "@snow", { x: { min: -40, max: W + 40 }, y: -6, quantity: 1, frequency: 70,
+            speedY: { min: 14, max: 30 }, speedX: { min: -10, max: 6 }, lifespan: H / 14 * 1000, scale: { min: .6, max: 1.4 }, alpha: { min: .6, max: 1 } })
+            .setScrollFactor(0).setDepth(1e5);
+          flakes.fastForward && flakes.fastForward(H / 14 * 1000);   // already falling when you arrive
+          const veil = this.add.rectangle(0, 0, W, H, 0xe8f0ff, .12).setOrigin(0).setScrollFactor(0).setDepth(1e5 - 1);
+          this.stateFx = { destroy: () => { flakes.destroy(); veil.destroy(); } };
         }
       }
       if (st && "light" in st) {   // the state's light (day clears a scene's night)
@@ -1490,12 +1566,14 @@ function worldScenes() {
       const toQ = typeof to === "string" && this.region.quests.find(x => x.node === `${this.w.n}-${to}` && !TK.cleared(x.node));   // (not a beat already done: Book 2's last, a18, hands on to itself)
       const toP = to && typeof to === "object" && placeOf(to.place);
       if (toQ || toP) {
+        if (this.cutawayNode(q.node)) { this.cutawayMode = false; this.st.cutReturn = null; }   // a cutaway that hands off (s4 → the temple): on from there, not back
         this.leaving = true; this.st.pos = null; this.save();
         this.cameras.main.fadeOut(500);
         this.cameras.main.once("camerafadeoutcomplete", () => this.scene.restart(toQ ? { place: toQ.place, from: null, toNode: toQ.node }
           : { place: toP.id, from: (placeOf(to.from) || {}).id || null, toSpot: to.spot || null }));
         return;
       }
+      if (this.cutawayAfter(q)) return;   // a cutaway done: back to where the lead stood (or on to the next cutaway)
       if (q.role === "boss" && this.opts.onBoss) await this.opts.onBoss();
       // the book's main story is over: on into the next book (a moment, a fade). But if side stories are
       // still open here (Book 2's Diaochan chain opens with its last beat), stay: say so once, and go on
@@ -1863,6 +1941,7 @@ function worldScenes() {
         // someone standing at a place to deliver to (Guan Yu at his ridge) takes the delivery
         const at = Object.values(this.spots).find(s => s.needs && Math.hypot(s.x - n.spr.x, s.y - n.spr.y) < 64);
         if (at) return this.deliverAt(at);
+        if (n.gossip && typeof WorldFeats !== "undefined" && WorldFeats.tell(this, n)) return;
         if (n.challenge) return this.done(n.challenge) ? this.talk(worldLines(n.done)) : this.talk(worldLines(n.intro), () => this.puzzle(n.challenge, { id: n.challenge.split("-c-")[1], who: n.who, face: this.faceOf(n) }));
         this.talk(n.say.length ? worldLines(n.say) : [["n", "…"]]);
         return;
@@ -2456,6 +2535,7 @@ function worldScenes() {
       this.watchRoute();
       if (this.carried && this.carried.active) this.carried.setPosition(this.player.x, this.player.y - 8);
       this.watchStep(dt);
+      if (typeof WorldFeats !== "undefined") WorldFeats.step(this, dt);
       this.procession_();
       this.processionStep(dt);
       this.atmosphere();
@@ -2550,9 +2630,10 @@ function worldScenes() {
         const T6 = (this.tw || 16), lane = e => { const r = e.rect, c = { x: r.centerX, y: r.centerY }, side = e.side;
           if (r.width >= 3 * T6 && r.height >= 3 * T6) return false;   // the map's edge: no lane
           const w = 1.5 * T6, L = 6 * T6;
-          return side === "N" ? Math.abs(n.spr.x - c.x) < w && n.spr.y < r.y && n.spr.y > r.y - L
-            : side === "E" ? Math.abs(n.spr.y - c.y) < w && n.spr.x > r.right && n.spr.x < r.right + L
-            : side === "W" ? Math.abs(n.spr.y - c.y) < w && n.spr.x < r.x && n.spr.x > r.x - L
+          // (a door's side is the wall it's in: its open side faces away, as the doorstep's { N: [0, 1], … } has it)
+          return side === "S" ? Math.abs(n.spr.x - c.x) < w && n.spr.y < r.y && n.spr.y > r.y - L
+            : side === "W" ? Math.abs(n.spr.y - c.y) < w && n.spr.x > r.right && n.spr.x < r.right + L
+            : side === "E" ? Math.abs(n.spr.y - c.y) < w && n.spr.x < r.x && n.spr.x > r.x - L
             : Math.abs(n.spr.x - c.x) < w && n.spr.y > r.bottom && n.spr.y < r.bottom + L; };
         const door = this.exits.find(e => n.spr.x > e.rect.x - 28 && n.spr.x < e.rect.right + 28 && n.spr.y > e.rect.y - 24 && n.spr.y < e.rect.bottom + 30 || lane(e));
         const P = this.player, close = this.walk && Math.hypot(n.spr.x - P.x, n.spr.y - P.y) < 28;

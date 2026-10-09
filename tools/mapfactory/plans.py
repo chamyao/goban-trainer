@@ -48,7 +48,8 @@ DOOR_AT_FOOT = {"building.gatetower"}   # drawn front-on in a wall: an E/W door 
 SIDE_DRAWN = {"building.wing"}   # drawn in side view when it faces E or W, its doorway on the front
 TALL = ("building", "tree", "rock", "ruin", "garden", "landmark")   # what a roof or crown rises above
 NPC_KEYS = ("challenge", "intro", "win", "done", "until", "face", "when", "gives", "gives_when", "give", "given", "call",
-            "in", "in_beats", "inside", "follower", "blocks", "view", "label", "note")
+            "in", "in_beats", "inside", "follower", "blocks", "view", "label", "note",
+            "gossip", "yield")   # the loud town and the face-down (Lady Sun's marriage; tk-feats.js)
 
 
 def slug(name):
@@ -435,8 +436,16 @@ class MapBuilder:
                     if self.put(kind, t):
                         n -= 1
         for pr in self.p.get("props", []):
-            extra = {k: pr[k] for k in ("in", "when", "until", "label", "note") if pr.get(k)}
-            if pr.get("along"):
+            extra = {k: pr[k] for k in ("in", "when", "until", "label", "note", "told") if pr.get(k)}
+            if pr.get("at_door") in self.anchor:   # beside a building's door, along its face (red hangings at a house)
+                o_ = next((x for x in self.objects if x.get("id") == pr["at_door"]), {})
+                face = o_.get("enter") or o_.get("door") or "S"
+                ax, ay = self.anchor[pr["at_door"]]
+                px, py = (1, 0) if face in ("N", "S") else (0, 1)
+                for k in (2, -2, 3, -3):
+                    if self.put(pr["kind"], (ax + px * k, ay + py * k), **extra):
+                        break
+            elif pr.get("along"):
                 line = next((l for l in self.p.get("lines", []) if l["id"] == pr["along"]), None)
                 edge = sorted({(tx + dx, ty) for tx, ty in (line["_tiles"] if line else ()) for dx in (-1, 1)} - (line["_tiles"] if line else set()))
                 for t in edge[::2]:
@@ -499,7 +508,7 @@ class MapBuilder:
             else:
                 t = self.near_cell(c, want_visible=False)
             spot = {"id": s["id"], "x": t[0] + .5, "y": t[1] + .7, "node": s.get("node", ""), "label": s.get("label", "")}
-            for k in ("trigger", "note", "on", "sight", "cover"):   # cover: a place to hide (hide and wait)
+            for k in ("trigger", "note", "on", "sight", "cover", "fires"):   # cover: a place to hide; fires: starts itself
                 if s.get(k):
                     spot[k] = s[k]
             self.spots.append(spot)
@@ -1358,12 +1367,12 @@ def assets(maps, tables, kits_dir=None):
     return rows
 
 
-ARCS = {13: "cc", 14: "lb"}   # books whose plans are an arc's: Book 13 is the Cao Cao arc, Book 14 Lü Bu's fall
+ARCS = {13: "cc", 14: "lb", 15: "ls"}   # books whose plans are an arc's: Book 13 is the Cao Cao arc, Book 14 Lü Bu's fall, Book 15 Lady Sun's marriage
 
 
 def key_prefix(plans_world):
     """The book number the plans' beat keys carry ("2-c1" for the Cao Cao arc's plans)."""
-    return {"cc": "2", "lb": "3"}.get(ARCS.get(plans_world, plans_world), str(plans_world))
+    return {"cc": "2", "lb": "3", "ls": "4"}.get(ARCS.get(plans_world, plans_world), str(plans_world))
 
 
 def plans_arg(v):
@@ -1387,6 +1396,10 @@ def load(plans_world):
         import tk_plans_lb as mod
         from tk_places_w2_zh import ZH_PLACES2
         return mod.PLANS_LB, mod.TABLES, ZH_PLACES2
+    if plans_world == "ls":   # Lady Sun's marriage (chapters 54-55): beat keys "4-s…"
+        import tk_plans_ls as mod
+        from tk_places_w2_zh import ZH_PLACES2
+        return mod.PLANS_LS, mod.TABLES, ZH_PLACES2
     if plans_world == 90:   # Talk with Claude: the study, no story
         import tk_plans_w90 as mod
         return mod.PLANS90, mod.TABLES, mod.ZH_PLACES90
@@ -1407,6 +1420,11 @@ def story_world(n, plans_world):
             from tk_story_w2_new import WORLD2_LB as W
         except ImportError:
             raise SystemExit("no story yet for Lü Bu's fall (Plot's WORLD2_LB in tools/tk_story_w2_new.py)")
+    elif plans_world == "ls":
+        try:
+            from tk_story_w2_new import WORLD2_LS as W
+        except ImportError:
+            raise SystemExit("no story yet for Lady Sun's marriage (Plot's WORLD2_LS in tools/tk_story_w2_new.py)")
     else:
         raise SystemExit(f"no story for book {plans_world}")
     return {**W, "nodes": [{**nd, "key": f"{n}-{nd['key']}"} for nd in W["nodes"]],
@@ -1493,7 +1511,7 @@ def main():
             if a.png:
                 draw_png(m, d / f"{mid}.png")
         out = {"format": "tk-region/1", "world": a.world, "name": world["name"], "zh": world.get("zh", ""),
-               "start": slug(world.get("start") or world["nodes"][0]["place"]), "party": world.get("party", []), "places": places, "quests": quests}
+               "start": slug(world.get("start") or next((nd for nd in world["nodes"] if not nd.get("cutaway")), world["nodes"][0])["place"]), "party": world.get("party", []), "places": places, "quests": quests}
         (d / "region.json").write_text(json.dumps(out, ensure_ascii=False, indent=1))
         print("wrote", d)
 

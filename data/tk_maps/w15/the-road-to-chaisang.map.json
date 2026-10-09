@@ -1,0 +1,567 @@
+{
+ "format": "tk-map/1",
+ "id": "the-road-to-chaisang",
+ "world": 15,
+ "name": "The road to Chaisang",
+ "archetype": "road",
+ "size": [
+  160,
+  44
+ ],
+ "seed": 2084,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "field.wheat",
+   ".": "grass",
+   "b": "hills",
+   "c": "plain",
+   "d": "road"
+  },
+  "rows": [
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "....................................................................bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb............................................",
+   "....................................................................bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb............................................",
+   "....................................................................bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb............................................",
+   "....................................................................bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb............................................",
+   "....................................................................bbbbbbbbbbbbbbbbbbbbccccbbbbbbbbbbbbbbbbccccbbbb............................................",
+   "....................................................................bbbbbbbbbbbbbbbbbbbbccccbbbbbbbbbbbbbbbbccccbbbb............................................",
+   "....................................................................bbbbbbbbbbbbbbbbbbbbccccbbbbbbbbbbbbbbbbccccbbbb............................................",
+   "....................................................................bbbbbbbbbbbbbbbbbbbbccccbbbbbbbbbbbbbbbbccccbbbb............................................",
+   "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+   "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+   "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+   "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+   "........aaaaaaaaaaaaaaaaaaaaaaaa....................................bbbbbbbbbbbbbbbbbbbbccccbbbbbbbbbbbbbbbbccccbbbb............................................",
+   "........aaaaaaaaaaaaaaaaaaaaaaaa....................................bbbbbbbbbbbbbbbbbbbbccccbbbbbbbbbbbbbbbbccccbbbb............................................",
+   "........aaaaaaaaaaaaaaaaaaaaaaaa....................................bbbbbbbbbbbbbbbbbbbbccccbbbbbbbbbbbbbbbbccccbbbb............................................",
+   "........aaaaaaaaaaaaaaaaaaaaaaaa....................................bbbbbbbbbbbbbbbbbbbbccccbbbbbbbbbbbbbbbbccccbbbb............................................",
+   "........aaaaaaaaaaaaaaaaaaaaaaaa....................................bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb............................................",
+   "........aaaaaaaaaaaaaaaaaaaaaaaa....................................bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb............................................",
+   "........aaaaaaaaaaaaaaaaaaaaaaaa....................................bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb............................................",
+   "........aaaaaaaaaaaaaaaaaaaaaaaa....................................bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb............................................",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+  ],
+  "walk": {
+   "field.wheat": true,
+   "grass": true,
+   "hills": false,
+   "plain": true,
+   "road": true
+  }
+ },
+ "lines": [
+  {
+   "id": "road",
+   "kind": "road",
+   "path": [
+    [
+     0,
+     5
+    ],
+    [
+     39,
+     5
+    ]
+   ],
+   "width": 3,
+   "tiles": 640
+  }
+ ],
+ "objects": [
+  {
+   "kind": "milestone",
+   "x": 0,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 5,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 8,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 13,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 16,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 21,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 24,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 29,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 32,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 37,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 40,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 45,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 48,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 53,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 56,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 61,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 64,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 88,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 109,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 117,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 120,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 125,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 128,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 133,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 136,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 141,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 144,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 149,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 152,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "milestone",
+   "x": 157,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 18,
+   "y": 25,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 12,
+   "y": 28,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 15,
+   "y": 25,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.poplar",
+   "x": 10,
+   "y": 30,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "spots": [
+  {
+   "id": "s13",
+   "x": 41.5,
+   "y": 21.7,
+   "node": "15-s13",
+   "label": "The road under the hill",
+   "trigger": "near"
+  },
+  {
+   "id": "block-start",
+   "x": 53.5,
+   "y": 21.7,
+   "node": "",
+   "label": "Where the road block stood",
+   "note": "the face-down: pushing past a man without stopping sends her back here"
+  },
+  {
+   "id": "s14",
+   "x": 141.5,
+   "y": 21.7,
+   "node": "15-s14",
+   "label": "The open road",
+   "trigger": "near"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "npc-1",
+   "kind": "folk.official",
+   "x": 85.5,
+   "y": 21.9,
+   "say": [],
+   "until": "15-s14",
+   "when": "node:s13",
+   "label": "Chen Wu",
+   "yield": {
+    "group": "chenwu",
+    "reach": 4,
+    "aside": [
+     4,
+     -4
+    ],
+    "line": [
+     "Chen Wu sees who is in the carriage, swings down from his horse, and stands aside with his hands clasped."
+    ],
+    "caught": [
+     "“Halt! On the Marquis's orders, no one passes!” You fall back."
+    ],
+    "back_to": "block-start"
+   }
+  },
+  {
+   "id": "npc-2",
+   "kind": "folk.soldier",
+   "x": 86.5,
+   "y": 21.9,
+   "say": [],
+   "until": "15-s14",
+   "when": "node:s13",
+   "yield": {
+    "group": "chenwu",
+    "reach": 4,
+    "aside": [
+     4,
+     4
+    ],
+    "line": [
+     "“It's the Lady herself!” He backs his horse off the road."
+    ],
+    "caught": [
+     "“Halt! On the Marquis's orders, no one passes!” You fall back."
+    ],
+    "back_to": "block-start"
+   }
+  },
+  {
+   "id": "npc-3",
+   "kind": "folk.soldier",
+   "x": 85.5,
+   "y": 22.9,
+   "say": [],
+   "until": "15-s14",
+   "when": "node:s13",
+   "yield": {
+    "group": "chenwu",
+    "reach": 4,
+    "aside": [
+     6,
+     -4
+    ],
+    "line": [
+     "“Not our quarrel, madam.” He leads his horse aside."
+    ],
+    "caught": [
+     "“Halt! On the Marquis's orders, no one passes!” You fall back."
+    ],
+    "back_to": "block-start"
+   }
+  },
+  {
+   "id": "npc-4",
+   "kind": "folk.official",
+   "x": 105.5,
+   "y": 21.9,
+   "say": [],
+   "until": "15-s14",
+   "when": "node:s13",
+   "label": "Pan Zhang",
+   "yield": {
+    "group": "panzhang",
+    "reach": 4,
+    "aside": [
+     4,
+     -4
+    ],
+    "line": [
+     "Pan Zhang looks at Zhao Yun, then at the Lady, and dismounts. “Madam.”"
+    ],
+    "caught": [
+     "“Stop the carriage!” The spears come down, and you fall back."
+    ],
+    "back_to": "block-start"
+   }
+  },
+  {
+   "id": "npc-5",
+   "kind": "folk.soldier",
+   "x": 106.5,
+   "y": 21.9,
+   "say": [],
+   "until": "15-s14",
+   "when": "node:s13",
+   "yield": {
+    "group": "panzhang",
+    "reach": 4,
+    "aside": [
+     4,
+     4
+    ],
+    "line": [
+     "“Pan Zhang can argue with her himself.” He reins his horse off the road."
+    ],
+    "caught": [
+     "“Stop the carriage!” The spears come down, and you fall back."
+    ],
+    "back_to": "block-start"
+   }
+  },
+  {
+   "id": "npc-6",
+   "kind": "folk.soldier",
+   "x": 105.5,
+   "y": 22.9,
+   "say": [],
+   "until": "15-s14",
+   "when": "node:s13",
+   "yield": {
+    "group": "panzhang",
+    "reach": 4,
+    "aside": [
+     6,
+     4
+    ],
+    "line": [
+     "He lowers his spear and gets out of the way."
+    ],
+    "caught": [
+     "“Stop the carriage!” The spears come down, and you fall back."
+    ],
+    "back_to": "block-start"
+   }
+  }
+ ],
+ "exits": [
+  {
+   "to": "nanxu",
+   "side": "W",
+   "x": 0,
+   "y": 20,
+   "w": 1,
+   "h": 4
+  },
+  {
+   "to": "liulangpu",
+   "side": "E",
+   "x": 159,
+   "y": 20,
+   "w": 1,
+   "h": 4
+  }
+ ],
+ "entries": {
+  "nanxu": [
+   5,
+   21
+  ],
+  "liulangpu": [
+   153,
+   21
+  ],
+  "": [
+   5,
+   21
+  ]
+ },
+ "states": [
+  {
+   "id": "flight",
+   "light": "day"
+  }
+ ],
+ "ways": {
+  "nodes": [
+   [
+    2.0,
+    22.0
+   ],
+   [
+    158.0,
+    22.0
+   ]
+  ],
+  "edges": [
+   [
+    0,
+    1
+   ]
+  ]
+ },
+ "links": [
+  "liulangpu",
+  "nanxu"
+ ]
+}

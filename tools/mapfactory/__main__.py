@@ -54,7 +54,9 @@ def build(n, plans_of=None):
     if plans_of:
         places, quests, _ = build_from_plans(n, plans_of, world)
         from plans import slug
-        return finish(n, world, places, {"quests": quests, "start": slug(world["nodes"][0]["place"])})
+        # a cutaway is played off stage, so a new game starts at the first beat one plays (Lady Sun's: Jingzhou, not Chaisang)
+        first = next((nd for nd in world["nodes"] if not nd.get("cutaway")), world["nodes"][0])
+        return finish(n, world, places, {"quests": quests, "start": slug(world.get("start") or first["place"])})
     region = build_region(world, PLACES.get(n, {}))
     d = out_dir(n)
     d.mkdir(parents=True, exist_ok=True)

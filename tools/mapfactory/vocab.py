@@ -60,6 +60,9 @@ KINDS = {
     "ruin.rubble": (1, 1, False),        # stones and burnt timber you walk over
     "ruin.burning": (4, 2, True),        # a house alight, flames from its roof (Book 14's Chang'an sacked); glows at night
     "fx.smoke": (1, 1, False),           # a column of smoke rising, drawn three tiles tall; you walk through it
+    "prop.boat": (4, 2, True),           # a river boat moored at a jetty (Lady Sun's marriage: Nanxu's dock)
+    "prop.target": (1, 1, True),         # an archery butt on a stand (the riding ground outside Nanxu)
+    "landmark.incense": (2, 1, True),    # a temple's bronze incense burner (Sweet Dew Temple)
     "landmark.shrine": (2, 1, True),     # the Star Lords' weiqi shrine: one per town (looks: dark, lit, settled)
     # trees and plants
     "tree.small": (1, 1, True),
@@ -215,6 +218,9 @@ FALLBACK = {
     "landmark.torch": ["furn.lamp", "lamp.post"],
     "ruin.burning": ["ruin.hall", "building.house"],
     "fx.smoke": ["ruin.rubble"],
+    "prop.boat": ["camp.logs", "prop.carriage"],
+    "prop.target": ["landmark.notice", "furn.rack"],
+    "landmark.incense": ["furn.jar", "lamp.post"],
     "prop.halberd": ["furn.rack", "lamp.post"],
     "prop.carriage": ["camp.table", "furn.table"],
     "prop.gateshut": ["camp.logs", "furn.rack"],

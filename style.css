@@ -870,3 +870,20 @@ html.tk-fullwin-on, html.tk-fullwin-on body { overflow: hidden; overscroll-behav
 .tk-replay-sel { width: 100%; font: inherit; padding: 6px; }
 .tk-replay-btns { display: flex; gap: 8px; justify-content: flex-end; margin-top: 12px; }
 .tk-test-badge { color: #b4402a; font-weight: bold; }
+
+/* the bag and a sealed pouch's card (tk-feats.js, the Lady Sun book) */
+.tk-bag, .tk-pouch { position: fixed; inset: 0; z-index: 9000; display: flex; align-items: center; justify-content: center; background: rgba(20, 14, 8, .45); }
+.tk-bag-box, .tk-pouch-card { background: #f6ecd6; color: #2a1d12; border: 2px solid #8a5a2a; border-radius: 10px; padding: 14px 16px; max-width: min(92vw, 460px); box-shadow: 0 8px 30px rgba(0,0,0,.35); }
+.tk-bag-box h3 { margin: 0 0 8px; font-size: 17px; }
+.tk-bag-box ul { list-style: none; margin: 0 0 10px; padding: 0; }
+.tk-bag-box li { padding: 7px 4px; border-top: 1px solid #e0cfa8; cursor: default; }
+.tk-bag-box li.sealed { cursor: pointer; }
+.tk-bag-box li b { color: #8a2a1a; }
+.tk-bag-note { font-size: 13px; color: #5a4632; margin-top: 3px; }
+.tk-bag-note.flash { animation: tk-bag-flash .6s; }
+@keyframes tk-bag-flash { 0%, 100% { background: transparent; } 40% { background: #f3c98a; } }
+.tk-pouch-card { background: #fbf4e2; border-color: #a33a2a; text-align: left; }
+.tk-pouch-card .t { font-size: 15px; margin-bottom: 8px; color: #8a2a1a; }
+.tk-pouch-card .zh { font-size: 17px; line-height: 1.6; margin: 0 0 6px; }
+.tk-pouch-card .en { font-size: 14px; line-height: 1.45; margin: 0 0 10px; color: #4a3a28; }
+.tk-pouch-card button, .tk-bag-box button { font: inherit; padding: 4px 14px; border-radius: 6px; border: 1px solid #8a5a2a; background: #fff8e6; cursor: pointer; }

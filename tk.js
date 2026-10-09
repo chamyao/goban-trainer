@@ -114,6 +114,23 @@ const TK_CHARS = {
   houcheng: { name: "Hou Cheng", skin: "#e8b88c", hair: "#2a2024", hat: "helmet", hatC: "#858a94", robe: "#5a3a6a", trim: "#c8c8c8", beard: "short", eyes: "round", weapon: "sword" },
   yanshi: { name: "Lady Yan", skin: "#fbefe8", hair: "#1a1418", hat: "lady", pin: "#e6c14a", pin2: "#c8283c", flower: "#c8283c", robe: "#7a2a3a", trim: "#e6c14a", beard: "none", eyes: "narrow", makeup: true },
   zhangkai: { name: "Zhang Kai", skin: "#d8a47c", hair: "#2a2024", hat: "yellowband", hatC: "#e8bc2a", robe: "#6a5a3a", trim: "#e8bc2a", beard: "bristle", eyes: "narrow", weapon: "sword" },
+  // Lady Sun's marriage (ch. 54-55)
+  ladysun: { name: "Lady Sun", skin: "#f8dcc4", hair: "#1a1418", hat: "lady", pin: "#e6c14a", pin2: "#c8283c", flower: "#c8283c", robe: "#c8392c", trim: "#e6c14a", beard: "none", eyes: "phoenix", makeup: true, weapon: "sword" },
+  ladywu: { name: "Lady Wu", skin: "#efd8c0", hair: "#9a9a9a", hat: "bun", hatC: "#9a9a9a", pin: "#e6c14a", robe: "#5a2a4a", trim: "#e6c14a", beard: "none", eyes: "narrow", makeup: true },
+  sunquan: { name: "Sun Quan", skin: "#efc59d", hair: "#5a3a2a", hat: "guan", hatC: "#1e1e24", robe: "#7a2a2a", trim: "#e6c14a", beard: "short", beardC: "#7a4a2a", eyes: "phoenix" },
+  zhouyu: { name: "Zhou Yu", skin: "#f5dcc4", hair: "#1a1418", hat: "scholar", hatC: "#3a2a4a", robe: "#c8392c", trim: "#f4f0e8", beard: "none", eyes: "phoenix", weapon: "sword" },
+  zhugeliang: { name: "Zhuge Liang", skin: "#f5dcc4", hair: "#1a1418", hat: "scholar", hatC: "#2a2a34", robe: "#f0ece0", trim: "#3a4a6a", beard: "thin", eyes: "kind" },
+  lusu: { name: "Lu Su", skin: "#efc59d", hair: "#2a2024", hat: "guan", hatC: "#1e1e24", robe: "#3a5a7a", trim: "#d6d2c4", beard: "short", eyes: "kind" },
+  zhangzhao: { name: "Zhang Zhao", skin: "#eec7a0", hair: "#d8d2c8", hat: "guan", hatC: "#1e1e24", robe: "#4a4a5a", trim: "#d6d2c4", beard: "long", beardC: "#e0dcd4", eyes: "narrow" },
+  qiaoguolao: { name: "Qiao Guolao", skin: "#efd8c0", hair: "#d8d2c8", hat: "scholar", hatC: "#3a3236", robe: "#8a6a3a", trim: "#e6c14a", beard: "long", beardC: "#f0ece4", eyes: "kind" },
+  lufan: { name: "Lü Fan", skin: "#f0cfac", hair: "#2a2024", hat: "guan", hatC: "#1e1e24", robe: "#2e4a6a", trim: "#d6d2c4", beard: "goatee", eyes: "narrow" },
+  jiahua: { name: "Jia Hua", skin: "#e2b089", hair: "#2a2024", hat: "helmet", hatC: "#5a5a64", robe: "#6a3a2a", trim: "#c8c8c8", beard: "bristle", eyes: "wild", weapon: "sword" },
+  xusheng: { name: "Xu Sheng", skin: "#e8b88c", hair: "#2a2024", hat: "helmet", hatC: "#858a94", robe: "#8a2a2a", trim: "#c8c8c8", beard: "short", eyes: "round", weapon: "spear" },
+  dingfeng: { name: "Ding Feng", skin: "#e2b089", hair: "#1a1416", hat: "helmet", hatC: "#4a4a5c", robe: "#5a3a2a", trim: "#c8c8c8", beard: "thin", eyes: "narrow", weapon: "spear" },
+  chenwu: { name: "Chen Wu", skin: "#d8a47c", hair: "#1a1416", hat: "helmet", hatC: "#6a5a4a", robe: "#6a4a2a", trim: "#e6c14a", beard: "bristle", eyes: "round", weapon: "sword" },
+  panzhang: { name: "Pan Zhang", skin: "#e2b089", hair: "#2a2024", hat: "helmet", hatC: "#5a5a64", robe: "#3a4a3a", trim: "#c8c8c8", beard: "short", eyes: "wild", weapon: "glaive" },
+  f_maid: { name: "Maid", skin: "#f8dcc4", hair: "#2a2024", hat: "twinloops", pin: "#c8392c", robe: "#d86a7a", trim: "#f4f0e8", beard: "none", eyes: "kind", makeup: true },
+  matron: { name: "Matron", skin: "#efd8c0", hair: "#5a5256", hat: "bun", hatC: "#5a5256", pin: "#c8a03a", robe: "#7a5a6a", trim: "#d6d2c4", beard: "none", eyes: "kind" },
   // Lü Bu's fall (book 14)
   pangshu: { name: "Pang Shu", skin: "#e8b88c", hair: "#2a2024", hat: "guan", hatC: "#1e1e24", robe: "#4a5a6a", trim: "#c8c8c8", beard: "short", eyes: "kind", weapon: "sword" },
   lvnv: { name: "Lü Bu's daughter", skin: "#f8dcc4", hair: "#1a1418", hat: "twinloops", pin: "#e6c14a", robe: "#c8392c", trim: "#e6c14a", beard: "none", eyes: "phoenix", makeup: true },
@@ -609,7 +626,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) this.data = await (await fetch("data/tk.json?v=96")).json();
+    if (!this.data) this.data = await (await fetch("data/tk.json?v=99")).json();
     return this.data;
   },
   ls(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } },
