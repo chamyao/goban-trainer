@@ -1103,6 +1103,12 @@ function worldScenes() {
       this.walkTo(g.x, g.y + (k ? 12 : 8), k ? { then: "up", aim: { kind: "spot", k } } : {});
       return "there";
     }
+    // the beat waits on news reaching someone ("cutaway": "told:<id>", Book 15 s4): the goal box offers to spread it
+    newsTarget() {
+      const q = this.nextMain(), c = q && ((this.w.nodes || []).find(n => n.key === q.node) || {}).cutaway;
+      return q && this.available(q) && typeof c === "string" && /^told:/.test(c) && !this.cond(c) && this.npcs.some(n => n.gossip) ? c.slice(5) : null;
+    }
+    spreadNews() { const t = this.newsTarget(); if (t && this.canMove() && typeof WorldFeats !== "undefined") { this.game.registry.set("autoGo", false); this.walk = null; WorldFeats.spreadAll(this, t); } }
     // "Take me there" (the goal box's button; apo110): walk to the goal, place after place, until it's reached.
     // Any tap on the map or a key takes back control.
     takeMeThere() {
