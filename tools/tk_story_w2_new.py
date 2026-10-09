@@ -3348,8 +3348,8 @@ def _scenes_ladysun():
 
         # S14 · The rearguard. After she has faced them down on the road: four generals, and her words.
         "s14": {"title": T("The Rearguard", "断后"), "kind": "main", "steps": [
-            ["spawn", "cw", "chenwu", "s14", 12, -2], ["spawn", "pz", "panzhang", "s14", 12, 4],
-            ["spawn", "xs", "xusheng", "s14", 18, -4], ["spawn", "df", "dingfeng", "s14", 18, 6],
+            ["spawn", "cw", "chenwu", "s14", -12, -2], ["spawn", "pz", "panzhang", "s14", -12, 4],   # they came up from behind (west)
+            ["spawn", "xs", "xusheng", "s14", -18, -4], ["spawn", "df", "dingfeng", "s14", -18, 6],
             N("Chen Wu and Pan Zhang have joined Xu Sheng and Ding Feng. When the four generals see Lady Sun, they have to dismount, and stand with their hands clasped.",
               "陈武、潘璋已经和徐盛、丁奉合兵一处。四员将领见了孙夫人，只得下马，拱手站着。"),
             S("ladysun", "Chen Wu, Pan Zhang. What are you doing here?", "陈武、潘璋，你们来干什么？"),
