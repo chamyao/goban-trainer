@@ -278,6 +278,97 @@ def bench():   # a stone garden bench: a long seat slab on two carved legs
     return g.outline().image()
 
 
+# Lady Sun's carriage on the map (tk-feats.js): four views, each with its curtain down (shut) or rolled up (open,
+# her head at the window). carriage.<dir>.<shut|open>; left is the side view, right its mirror; up shows the back.
+_CW = dict(wood="#8a5a2a", woodD="#5a3a1a", felt="#b8423a", feltD="#8a2e28", canopy="#3e4350", canopyD="#2a2e38",
+           gold="#e6c14a", skin="#f8dcc4", skinD="#e0b896", hair="#1a1418", dark="#24161a")
+
+
+def _rider(g, x, y):   # Lady Sun's head and shoulders in a window: black hair up with a red pin, pale face
+    c = _CW
+    g.rect(x, y + 1, 4, 4, c["skin"]); g.rect(x + 3, y + 1, 1, 4, c["skinD"])
+    g.rect(x, y, 4, 1, c["hair"]); g.rect(x + 1, y - 2, 2, 2, c["hair"]); g.set(x + 3, y - 1, "#c8283c")
+    g.set(x + 1, y + 2, c["hair"]); g.set(x + 3, y + 2, c["hair"])
+    g.rect(x - 1, y + 5, 6, 1, "#c8392c")
+
+
+def carriage_side(open_):   # facing left: the shafts forward on the left, the window in the box's side
+    c = _CW
+    g = _grid(34, 28)
+    g.rect(0, 17, 10, 1, c["wood"]); g.set(0, 16, c["wood"])
+    g.rect(8, 9, 20, 9, c["felt"]); g.rect(8, 16, 20, 2, c["feltD"])
+    for x in (9, 26):
+        g.rect(x, 9, 1, 7, c["feltD"])
+    if open_:   # the window open: the curtain rolled up, gold-tied, the rider looking out
+        g.rect(11, 9, 12, 8, c["gold"]); g.rect(12, 10, 10, 6, c["dark"]); _rider(g, 15, 12)
+        g.rect(11, 9, 12, 2, c["feltD"]); g.set(13, 10, c["gold"]); g.set(20, 10, c["gold"])
+    else:       # the window shut: a darker curtain inside a gold frame, its folds
+        g.rect(11, 9, 12, 8, c["gold"]); g.rect(12, 10, 10, 6, "#9a2a2a")
+        for x in (14, 17, 20):
+            g.rect(x, 10, 1, 6, c["feltD"])
+    g.rect(7, 17, 22, 2, c["wood"])
+    g.ellipse(18, 5.5, 13, 3.5, c["canopy"]); g.ellipse(18, 6.5, 12, 2.2, c["canopyD"])
+    g.rect(17, 0, 2, 3, c["wood"]); g.rect(17, 3, 2, 6, c["wood"])
+    for x in (6, 30):
+        g.rect(x, 7, 1, 2, c["gold"])
+    g.ellipse(22, 21, 6, 6, c["woodD"]); g.ellipse(22, 21, 4.6, 4.6, c["wood"]); g.ellipse(22, 21, 1.5, 1.5, c["woodD"])
+    for dx, dy in ((0, -4), (0, 4), (-4, 0), (4, 0), (-3, -3), (3, 3), (-3, 3), (3, -3)):
+        g.set(22 + dx, 21 + dy, c["woodD"])
+    return g.outline().image()
+
+
+def carriage_front(open_, back=False):   # facing us (down), or away (up: its back, no window): wheels edge-on
+    c = _CW
+    g = _grid(28, 30)
+    g.ellipse(14, 6, 13, 4, c["canopy"]); g.ellipse(14, 7, 12, 2.5, c["canopyD"])
+    g.rect(13, 0, 2, 3, c["wood"])
+    for x in (2, 25):
+        g.rect(x, 8, 1, 2, c["gold"])
+    g.rect(5, 10, 18, 11, c["felt"]); g.rect(5, 19, 18, 2, c["feltD"])
+    if back:
+        for x in (9, 14, 19):
+            g.rect(x, 11, 1, 8, c["feltD"])
+    elif open_:
+        g.rect(7, 10, 14, 10, c["gold"]); g.rect(8, 11, 12, 8, c["dark"]); _rider(g, 12, 14)
+        g.rect(7, 11, 14, 2, c["feltD"]); g.set(9, 12, c["gold"]); g.set(18, 12, c["gold"])
+    else:
+        g.rect(7, 10, 14, 10, c["gold"]); g.rect(8, 11, 12, 8, "#9a2a2a")
+        for x in (10, 14, 18):
+            g.rect(x, 11, 1, 8, c["feltD"])
+    g.rect(4, 21, 20, 2, c["wood"])
+    for x in (1, 25):
+        g.rect(x, 17, 2, 11, c["woodD"]); g.rect(x, 18, 1, 9, c["wood"])
+    if not back:
+        for x in (9, 18):
+            g.rect(x, 23, 1, 7, c["wood"])                                         # the shafts toward us
+    return g.outline().image()
+
+
+def _carriage_frames():
+    out = {}
+    for st in ("shut", "open"):
+        side = carriage_side(st == "open")
+        out[f"carriage.left.{st}"] = side
+        out[f"carriage.right.{st}"] = side.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
+        out[f"carriage.down.{st}"] = carriage_front(st == "open")
+        out[f"carriage.up.{st}"] = carriage_front(False, back=True)
+    return out
+
+
+def pouch(n):   # a sealed brocade silk pouch (锦囊) tied with a gold cord; a paper seal tag with its number in strokes
+    a = (("#c8283c", "#8a1a28"), ("#2a5a9a", "#1a3a6a"), ("#2a7a4a", "#1a5a34"))[n - 1]
+    g = _grid(14, 16)
+    g.ellipse(7, 10, 5.5, 5, a[0]); g.ellipse(8.5, 11, 3.5, 3.5, a[1])
+    g.rect(4, 3, 6, 3, a[0]); g.rect(3, 2, 2, 2, a[0]); g.rect(9, 2, 2, 2, a[0])
+    g.rect(3, 6, 8, 1, "#e6c14a"); g.rect(10, 6, 3, 1, "#e6c14a"); g.rect(11, 7, 1, 2, "#e6c14a")
+    for x, y in ((6, 9), (9, 9), (8, 12), (6, 13), (10, 13)):
+        g.set(x, y, "#e6c14a")
+    g.rect(1, 8, 4, 6, "#f4ead2")
+    for i in range(n):
+        g.rect(2, 9 + i * 2, 2, 1, "#2a2024")                                     # 一 二 三
+    return g.outline().image()
+
+
 # the registry of props: kind -> footprint (w, h tiles) and how to draw it
 PROPS = {
     "cagecart": {"size": [3, 1], "atlas": "cagecart"},
@@ -367,6 +458,8 @@ def main():
         "item.crown": crown(),
         "item.edict": edict(),
         "bench": bench(),
+        **_carriage_frames(),
+        "item.pouch1": pouch(1), "item.pouch2": pouch(2), "item.pouch3": pouch(3),
     }
     # one row, 1px apart
     W = sum(f.width + 1 for f in frames.values())

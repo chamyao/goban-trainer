@@ -465,6 +465,27 @@ def smoke_column():   # a column of black smoke, about 1x3 tiles, to stand over 
     im = Image.new("RGBA", (16, 48)); _plume(im, 6, 46, 2, random.Random(3), 6)
     return im
 
+def redhang():   # wedding hangings for a house front (红绸/喜字): a red silk swag across with a big rosette, its tails
+    # hanging down each side, and a red paper 囍 under it (the loud town, Lady Sun's book)
+    g = Grid(48, 26)
+    red, redD, redL, gold = "#d0242c", "#8e1420", "#f05a5a", "#f2cc5a"
+    import math
+    for x in range(48):                                                    # the swag: two loops drooping between three knots
+        y = 2 + round(4 * math.sin(math.pi * (x % 24) / 24))
+        g.rect(x, y, 1, 3, red); g.set(x, y, redL); g.set(x, y + 2, redD)
+    for x in (0, 47):
+        g.rect(x - (x > 0), 4, 2, 16, red); g.rect(x, 4, 1, 16, redD)          # the tails at the ends
+        g.rect(x - (x > 0), 19, 2, 2, gold)
+    g.ellipse(24, 5, 5, 4, red); g.ellipse(24, 5, 3, 2.5, redL); g.ellipse(24, 5, 1.2, 1.2, gold)   # the rosette
+    g.rect(22, 9, 1, 5, red); g.rect(26, 9, 1, 5, red)                       # its ribbons
+    g.rect(18, 13, 12, 12, red); g.rect(18, 13, 12, 1, redL); g.rect(18, 24, 12, 1, redD)   # the 囍 paper
+    for x0 in (19, 24):                                                      # 囍: two 喜 side by side, in gold
+        g.rect(x0 + 1, 15, 3, 1, gold); g.rect(x0 + 2, 14, 1, 1, gold)
+        g.rect(x0, 17, 5, 1, gold); g.rect(x0 + 1, 18, 3, 2, gold); g.set(x0 + 2, 19, red)
+        g.rect(x0, 21, 5, 1, gold); g.rect(x0 + 1, 22, 3, 1, gold)
+    return g.outline().image()
+
+
 PIECES = {
     "banner.black": banner_black, "banner.white": banner_white, "milestone": milestone, "plant.peony": peony, "water.lotus": lotus,
     "prop.lanterns": lantern_stand, "prop.body_lamp": body_lamp, "tree.poplar": poplar, "tree.willow": willow,
@@ -472,7 +493,7 @@ PIECES = {
     "furn.swordwall": swordwall, "furn.seat": seat, "furn.lamp": lamp, "furn.dais": dais, "corral": corral,
     "landmark.hitchingpost": hitchingpost, "garden.rockery": rockery, "landmark.ridge": ridge,
     "furn.jailcell": jailcell, "landmark.torch": torch, "wall.stairs": wallstairs, "prop.halberd": halberd,
-    "prop.carriage": bridal_carriage, "prop.gateshut": gateshut, "prop.gateshut_ns": gateshut_ns, "ruin.burning": burning_house, "fx.smoke": smoke_column,
+    "prop.carriage": bridal_carriage, "prop.gateshut": gateshut, "prop.gateshut_ns": gateshut_ns, "ruin.burning": burning_house, "fx.smoke": smoke_column, "deco.redhang": redhang,
 }
 
 

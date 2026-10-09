@@ -1395,5 +1395,95 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-08"
+ },
+ "zy_pouches": {
+  "file": "zy_pouches.jpg",
+  "scene": "zy",
+  "prompt": "A Jingzhou hall, a folding screen behind. Zhuge Liang: a calm scholar in a silk turban and Daoist robe, holding a feather fan, leans close and presses three small embroidered silk pouches into the hands of Zhao Yun: a handsome young general in silver-white armour, who listens gravely. Liu Bei: a man near fifty with long ears and a kindly face, greying beard, in a brocade robe, looks on, uneasy. Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-09"
+ },
+ "nx_red": {
+  "file": "nx_red.jpg",
+  "scene": "nx",
+  "prompt": "A busy riverside city street in winter sun. Soldiers wearing red sashes buy sheep, pigs and baskets of fruit at the stalls, laughing and talking with townsfolk; red cloth and lanterns going up on the shopfronts. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-09"
+ },
+ "wu_rage": {
+  "file": "wu_rage.jpg",
+  "scene": "wu",
+  "prompt": "An inner hall in a Wu palace. Lady Wu: an elderly dowager of Wu in rich dark robes, grey hair dressed high, beats her breast and weeps in fury, pointing at Sun Quan: a young lord with a purple-tinged beard and green eyes, in a lord's robe, who stands abashed. An old gentleman, Qiao Guolao, looks on. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-09"
+ },
+ "gl_wu": {
+  "file": "gl_wu.jpg",
+  "scene": "gl",
+  "prompt": "The abbot's hall of a hilltop temple above a great river. Lady Wu: an elderly dowager of Wu in rich dark robes, grey hair dressed high, seated, smiles broadly at Liu Bei: a man near fifty with long ears and a kindly face, greying beard, in a brocade robe, who bows before her. Zhao Yun: a handsome young general in silver-white armour, stands behind him with a sword. Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-09"
+ },
+ "gl_stone": {
+  "file": "gl_stone.jpg",
+  "scene": "gl",
+  "prompt": "A temple courtyard. A great boulder split crosswise by two sword strokes, sparks still flying. Liu Bei: a man near fifty with long ears and a kindly face, greying beard, in a brocade robe, and Sun Quan: a young lord with a purple-tinged beard and green eyes, in a lord's robe, stand on either side with drawn swords, each glancing sidelong at the other. Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-09"
+ },
+ "gl_horses": {
+  "file": "gl_horses.jpg",
+  "scene": "gl",
+  "prompt": "A green hill slope above a wide river with white waves. Liu Bei: a man near fifty with long ears and a kindly face, greying beard, in a brocade robe, and Sun Quan: a young lord with a purple-tinged beard and green eyes, in a lord's robe, rein in their horses side by side, whips raised, laughing. Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-09"
+ },
+ "ls_blades": {
+  "file": "ls_blades.jpg",
+  "scene": "ls",
+  "prompt": "A bridal chamber lit by rows of red candles, its walls hung with spears and swords. Maids in silk stand on either side with swords at their hips. Liu Bei: a man near fifty with long ears and a kindly face, greying beard, in a brocade robe, stops in the doorway, startled. Lady Sun: a young noblewoman of Wu, proud and spirited, in red silk, a short sword at her waist, sits at the far end, amused. Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-09"
+ },
+ "ls_curtain": {
+  "file": "ls_curtain.jpg",
+  "scene": "ls",
+  "prompt": "A road below a hill. A covered carriage pushed forward by attendants; Lady Sun: a young noblewoman of Wu, proud and spirited, in red silk, a short sword at her waist, has flung up its curtain and stands in it, commanding. Before her, two armoured Wu generals have leapt from their horses and thrown down their weapons. Zhao Yun: a handsome young general in silver-white armour, glowers on horseback beside the carriage. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-09"
+ },
+ "llp_boats": {
+  "file": "llp_boats.jpg",
+  "scene": "llp",
+  "prompt": "A misty riverbank, twenty covered boats in a line. From the nearest, Zhuge Liang: a calm scholar in a silk turban and Daoist robe, holding a feather fan, steps out laughing, fan raised. On the bank, Liu Bei: a man near fifty with long ears and a kindly face, greying beard, in a brocade robe, and Lady Sun: a young noblewoman of Wu, proud and spirited, in red silk, a short sword at her waist, beside her carriage, look on in relief; dust of pursuers in the distance. Liu Bei is a gentle man of twenty-eight with a short neat black beard, long earlobes and kind eyes, hair in a topknot, in a white robe trimmed with gold. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-09"
+ },
+ "zy_chant": {
+  "file": "zy_chant.jpg",
+  "scene": "zy",
+  "prompt": "A river shore in the evening. Soldiers on the bank shout and jeer toward the water. In a warship, Zhou Yu: a handsome commander of Wu in his thirties, in armour and a red cloak, clutches his side, a wound reopening, held back by his officers. Style: 2D donghua, hard cel shading. Han dynasty China, about 184 AD.",
+  "provider": "replicate",
+  "model": "bytedance/seedream-5-pro",
+  "look": "final",
+  "made": "2026-10-09"
  }
 }
