@@ -254,17 +254,17 @@ function worldScenes() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
       this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=104`);
-      this.load.json("kit", `assets/tk/kits/${kit}.json?v=46`);
+      this.load.json("kit", `assets/tk/kits/${kit}.json?v=47`);
       this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=106`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
-      for (const [s, path] of Object.entries(kit.sheets)) this.load.image(`kit-${s}`, `${path}?v=46`);   // the sheets change with the kits: same key
+      for (const [s, path] of Object.entries(kit.sheets)) this.load.image(`kit-${s}`, `${path}?v=47`);   // the sheets change with the kits: same key
       const [fw, fh] = kit.folk.frame;
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
       for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=117`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=118`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -342,7 +342,7 @@ function worldScenes() {
 
       const P = o => Object.fromEntries((o.properties || []).map(p => [p.name, p.value]));
       const J = v => { try { return JSON.parse(v || "[]"); } catch { return []; } };
-      this.covers = []; this.lastCover = null; this.hidden = false; this.hideTold = false;
+      this.covers = []; this.lastCover = null; this.hidden = false; this.hideTold = false; this.toldProps = [];
       this.spots = {}; this.npcs = []; this.actMarks = new Map(); this.exits = []; this.propBoxes = []; this.entries = {}; this.shrine = null;
       for (const o of map.getObjectLayer("objects").objects) {
         const p = P(o);
@@ -351,7 +351,7 @@ function worldScenes() {
           // a place to deliver to (a ridge): mark, condition, what it needs, and its lines
           ...(p.needs ? { needs: J(p.needs), delivers: p.delivers || o.name, when: p.when || "", empty: J(p.empty), waiting: J(p.waiting), call: J(p.call),
                           deliver: J(p.deliver), delivered: J(p.delivered) } : {}),
-          sight: p.sight ? JSON.parse(p.sight) : null };   // a sight puzzle: it plays once one watcher sees you and another doesn't
+          sight: p.sight ? JSON.parse(p.sight) : null, fires: p.fires || "" };   // a sight puzzle: it plays once one watcher sees you and another doesn't
         else if (o.type === "npc") this.addNpc(o, p, J);
         else if (o.type === "exit") this.exits.push({ to: p.to, side: p.side, rect: new Phaser.Geom.Rectangle(o.x, o.y, o.width, o.height),
           openTo: p.open_to ? JSON.parse(p.open_to) : null, refuse: J(p.refuse) });
@@ -466,6 +466,7 @@ function worldScenes() {
       this.leaving = false;
       if (typeof WorldItems !== "undefined") WorldItems.attach(this);   // mounts (tk-items.js)
       WorldFX.ambient(this, this.place.archetype);   // petals, leaves, embers, dust
+      if (typeof WorldFeats !== "undefined") WorldFeats.init(this);   // pouches, gossip, blockers who yield, the carriage
       this.worldShade = null; this.applyWorldLight();   // night, dusk or dawn left by the last scene
       // the window changed shape (full window, a phone turned): the screen-sized effects follow
       const onResize = () => { WorldFX.ambient(this, this.place.archetype); this.fitCamera(); };
@@ -617,6 +618,7 @@ function worldScenes() {
       if (zone) this.solids.add(zone);
       if (zone && p.kind !== "wall.lattice") (this.sightZones = this.sightZones || []).push(zone);   // what blocks a watcher's sight (a lattice doesn't)
       if (p.in) this.stated.push({ img, zone, in: JSON.parse(p.in) });
+      if (p.told && img) (this.toldProps = this.toldProps || []).push({ img, id: p.told });   // red hangings: once that person has the news
       if (p.ref) (this.refs = this.refs || {})[p.ref] = { x: o.x, y: o.y - (p.fh || 0) / 2 };
       if (/^(lamp\.|prop\.lantern|camp\.(firepit|cookfire)|landmark\.(torch|brazier)|ruin\.burning|furn\.(lamp|hearth))/.test(p.kind || "")) (this.lights = this.lights || []).push({ x: o.x, y: o.y - (p.fh || 16) / 2, kind: p.kind, img });   // shown only in some of the map's states
     }
@@ -675,6 +677,9 @@ function worldScenes() {
         n.guard = p.guard_x != null ? { x: p.guard_x, y: p.guard_y } : null;
         n.mark = this.add.image(o.x, o.y - spr.height - 2, "@bang").setOrigin(.5, 1).setDepth(9999).setVisible(!TK.cleared(n.challenge) && (!n.when || this.cond(n.when)));
       }
+      // the Lady Sun book (tk-feats.js): news to pass on; a blocker who steps aside when faced
+      try { if (p.gossip) n.gossip = JSON.parse(p.gossip); } catch { n.gossip = null; }
+      try { if (p.yield) { n.yield = JSON.parse(p.yield); n.yield.line = own(n.yield.line || []); n.wander = false; } } catch { n.yield = null; }
       if (p.rider) {   // a chase rider (Places: {"chase": "c17", "beat": [[x,y]..], "cone": 5, "dir": "E"}): about only while that chase is on
         try {
           const r = JSON.parse(p.rider), T = this.tw || 16, D = { N: "up", S: "down", W: "left", E: "right" };
@@ -839,6 +844,7 @@ function worldScenes() {
       if (kind === "node") return this.done(/^\d+-/.test(v) ? v : `${this.w.n}-${v}`);
       if (kind === "item") return WorldItems.has(this.w, v);
       if (kind === "mark") return WorldMarks.has(this.w, v);
+      if (kind === "told") return !!(this.st.told || []).includes(v);   // the news has reached them (tk-feats.js)
       return false;
     }
     // A gated battle's first unmet condition: its defeat scene plays instead of the board.
@@ -1863,6 +1869,7 @@ function worldScenes() {
         // someone standing at a place to deliver to (Guan Yu at his ridge) takes the delivery
         const at = Object.values(this.spots).find(s => s.needs && Math.hypot(s.x - n.spr.x, s.y - n.spr.y) < 64);
         if (at) return this.deliverAt(at);
+        if (n.gossip && typeof WorldFeats !== "undefined" && WorldFeats.tell(this, n)) return;
         if (n.challenge) return this.done(n.challenge) ? this.talk(worldLines(n.done)) : this.talk(worldLines(n.intro), () => this.puzzle(n.challenge, { id: n.challenge.split("-c-")[1], who: n.who, face: this.faceOf(n) }));
         this.talk(n.say.length ? worldLines(n.say) : [["n", "…"]]);
         return;
@@ -2456,6 +2463,7 @@ function worldScenes() {
       this.watchRoute();
       if (this.carried && this.carried.active) this.carried.setPosition(this.player.x, this.player.y - 8);
       this.watchStep(dt);
+      if (typeof WorldFeats !== "undefined") WorldFeats.step(this, dt);
       this.procession_();
       this.processionStep(dt);
       this.atmosphere();

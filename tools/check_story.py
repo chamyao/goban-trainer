@@ -44,7 +44,7 @@ TOOLS = ROOT / "tools"
 # Every step the story (and docs/cutscene-format.md) knows. Unknown steps are
 # an error: the generator ignores them silently, which hides typos.
 STEPS = {
-    "n", "say", "spawn", "army", "move", "run", "pose", "fx", "remove", "party", "gain", "lose", "carry", "wait", "scroll",
+    "n", "say", "spawn", "army", "move", "run", "pose", "fx", "remove", "party", "gain", "lose", "carry", "open", "wait", "scroll",
     "problem", "prop", "board", "unboard", "emote", "give", "surround", "close", "camera", "mood", "light",
     "music", "boss", "victory", "vanish", "still", "crowd",
 }
