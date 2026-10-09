@@ -3,7 +3,7 @@
  "world": 15,
  "name": "Three Silk Pouches",
  "zh": "锦囊妙计",
- "start": "chaisang",
+ "start": "jingzhou",
  "party": [
   "zhaoyun"
  ],
@@ -727,7 +727,7 @@
   {
    "node": "15-s4",
    "role": "main",
-   "place": "nanxu",
+   "place": "nanxu--wu-hall",
    "spot": "s4",
    "scene": "s4",
    "title": "Whose Daughter?",

@@ -207,8 +207,8 @@ PLANS_LS = {
                 {"id": "lamb", "at": [9, 7], "label": "A mutton seller", "note": "the lamb for Qiao Guolao"},
                 {"id": "wine", "at": [11, 8], "at_door": "wineshop", "label": "The wine shop", "note": "the wine for Qiao Guolao"},
                 {"id": "qiao-gate", "at": [4, 9], "at_door": "qiao", "label": "Qiao Guolao's gate"},
-                # s4 starts by itself once the news reaches her gatekeeper (the loud town); Plot took the gate off the node
-                {"id": "s4", "at": [17, 9], "at_door": "wufu", "node": "4-s4", "label": "Lady Wu's gate", "fires": "told:wu-gatekeeper"},
+                # where the news has to arrive: her gatekeeper (s4, a cutaway in her hall, plays once he's told)
+                {"id": "wu-gate", "at": [17, 9], "at_door": "wufu", "label": "Lady Wu's gate"},
                 {"id": "s9", "at": [24, 13], "node": "4-s9", "label": "The riding ground", "trigger": "near"},
             ],
             # red hangings at each house's door, shown once its resident has the news
@@ -277,7 +277,8 @@ PLANS_LS = {
                                     {"id": "screen", "kind": "furn.screen", "rect": [6, 1, 2, 1]},
                                     {"id": "table-1", "kind": "furn.table", "rect": [10, 3, 1, 1]},
                                     {"id": "rack", "kind": "furn.jar", "rect": [14, 1, 1, 1]}],
-                            spots=[{"id": "s11", "at": [5, 5], "node": "4-s11", "label": "Lady Wu's hall"}])
+                            spots=[{"id": "s4", "at": [4, 4], "node": "4-s4", "label": "Lady Wu's hall"},   # a cutaway: told:wu-gatekeeper
+                                   {"id": "s11", "at": [5, 5], "node": "4-s11", "label": "Lady Wu's hall"}])
             | {"label": "Lady Wu's hall"},
             # Sun Quan's hall: the cutaways s8 (Sun Quan 0,-4, Zhang Zhao 8,0) and s12 (Cheng Pu at -8,0)
             "sq-hall": room([14, 7], [7, 6],

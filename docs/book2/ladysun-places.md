@@ -34,15 +34,15 @@ ground and the road up to Sweet Dew Temple.
       takes the news to her, as in the novel.
   - Plain townsfolk stand in between and don't pass it on.
   - The gatekeeper (`wu-gatekeeper`) has no gossip of his own, so he can't be told directly; he hears it from h12.
-  - s4's spot is at Lady Wu's gate, with `"fires": "told:wu-gatekeeper"`. Her palace door is
-    `open_to: told:wu-gatekeeper`, and before that it refuses with Plot's line.
+  - s4 is a cutaway in Lady Wu's hall (`wu-hall`) that plays once the gatekeeper is told (`"cutaway":
+    "told:wu-gatekeeper"`, Plot's). Her palace door is `open_to: told:wu-gatekeeper`, and before that it refuses with
+    Plot's line. The spot `wu-gate` marks her gate.
   - Each of the 12 houses has red hangings at its door (`banner.red`, `"told": "g-h<n>"`), shown once its resident knows.
   - Proved: every gossip can be walked to from the dock, and every telling that reaches the gatekeeper is on the chain
     from Qiao Guolao's gate.
   - Spots for the errand: `lamb` (the mutton seller), `wine` (the wine shop's door), `qiao-gate`.
 - **Rooms:**
-  - Lady Wu's hall (`wu-hall`: s11). s4's spot is at her gate in Nanxu (it fires there), so s4 is staged in front of
-    the gate unless the engine takes it inside.
+  - Lady Wu's hall (`wu-hall`: s4, a cutaway, and s11). Sun Quan comes in from the door 20 tiles east of s4.
   - Sun Quan's hall (`sq-hall`: s8, s12).
   - The east palace (`east-palace`: s10), a walled court with the bridal room (`bridal-room`: s7) on its west side and
     the maids' quarters on its east.

@@ -5,7 +5,7 @@
 #      rank (tk-feats.js: moving that close to one who hasn't yielded is a catch), so each rank must be faced down; and
 #      each man's place to step aside into is off the road.
 #   3. Nanxu, the loud town: the gossips' "tells" chains. Every gossip can be walked to; the news reaches Lady Wu's
-#      gatekeeper (who fires s4) only by the chain from Qiao Guolao's gate; every red hanging names a gossip.
+#      gatekeeper (on whom s4 and her palace door wait) only by the chain from Qiao Guolao's gate; every red hanging names a gossip.
 import sys
 from collections import deque
 sys.path[:0] = ["tools", "tools/mapfactory"]
@@ -87,8 +87,8 @@ ok &= r2
 mb = builder("Nanxu")
 people = {n["id"]: n for n in mb.npcs}
 gossips = {k: n for k, n in people.items() if n.get("gossip")}
-fires = next(s for s in mb.spots if s.get("fires"))
-target = fires["fires"].split(":", 1)[1]
+door = next(o for o in mb.objects if o.get("id") == "wufu")   # her palace door opens, and s4 plays, once he's told
+target = next(c for c in door["open_to"] if c.startswith("told:")).split(":", 1)[1]
 dock = tile(next(s for s in mb.spots if s["id"] == "dock"))
 reach = walk(mb, dock)
 unwalked = [k for k, n in gossips.items() if not any((tile(n)[0] + i, tile(n)[1] + j) in reach for i in (-1, 0, 1) for j in (-1, 0, 1))]
@@ -111,7 +111,7 @@ bad_hangings = [o["told"] for o in hangings if o["told"] not in gossips]
 r3 = (not unwalked and target in people and not people[target].get("gossip") and starts
       and all(k in spread("g-qiao") for k in starts) and not bad_hangings and len(hangings) == 12)
 print(f"town: {len(gossips)} gossips in {len(heads)} chains (heads {sorted(heads)}); all walkable from the dock: {not unwalked}")
-print(f"  s4 fires on {target} (told, not tellable: {target in people and not people[target].get('gossip')}); "
+print(f"  s4 and her door wait on {target} (told, not tellable: {target in people and not people[target].get('gossip')}); "
       f"tellings that reach him: {starts}, all on the chain from Qiao Guolao's gate: {all(k in spread('g-qiao') for k in starts)}")
 print(f"  red hangings: {len(hangings)}, each naming a gossip: {not bad_hangings}")
 ok &= bool(r3)
