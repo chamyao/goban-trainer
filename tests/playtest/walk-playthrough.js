@@ -184,7 +184,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   let beatLead = '';
   const close = (status, why, s) => { if (!beat) return; if (leadFor[beat] && beatLead && leadFor[beat] !== beatLead) console.log(`     note ${beat}: played by ${beatLead}, but the story's last handoff gave ${leadFor[beat]}`); const r = { beat, status, secs: Math.max(0, Math.round((Date.now() - beatT) / 1000)), place: s && s.place, at: s && s.P, lead: s && s.lead, why: why || '', line: lastLine.slice(0, 120) };
     report.push(r); console.log(`${status === 'pass' ? 'ok  ' : 'FAIL'} ${beat}  ${r.secs}s  ${r.lead || ''} in ${r.place || '?'}${status === 'pass' ? '' : `  at ${r.at}: ${why}${r.line ? ` ("${r.line}")` : ''}`}`); };
-  const cutWait = {}, pouches = [];
+  const cutWait = {}, pouches = [], told = [];
   let noWaySince = 0, plannedSteps = null, planT = 0, pace = 3, stealthTries = 0, lastTap = 0, skipped = false, reloads = 0, catches = 0, wasCaught = false; const held = [], recovered = [];
   const featureFails = [], facts = {}, banners = [], chipBad = new Set(), chipSeen = [], shotWho = new Set(), shots = []; let lastPlace = '', arrivedAt = null; const OPTIONAL = !!process.env.OPTIONAL, visited = new Set(), errands = []; let errand = null;
   for (;;) {
@@ -384,6 +384,14 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     }
     if (s.walking) { await p.waitForTimeout(250); continue; }
     if (Date.now() - lastTap < 1200) { await p.waitForTimeout(200); continue; }
+    // the loud town (Book 15): the next beat waits on news reaching someone ("cutaway": "told:<id>"); as a player would,
+    // talk to the townsfolk who haven't heard yet, the nearest first, until it holds (the news then walks on by itself)
+    const gossip = await p.evaluate(k => { const w = window.__w, nd = k && (w.w.nodes || []).find(n => n.key === k), c = nd && typeof nd.cutaway === 'string' ? nd.cutaway : '';
+      if (!/^told:/.test(c) || w.cond(c) || typeof WorldFeats === 'undefined') return null; const P = w.player;
+      const n = w.npcs.filter(n => n.gossip && n.spr.visible && WorldFeats.gossipActive(w, n) && !WorldFeats.told(w, n.id)).sort((a, b) => Math.hypot(a.spr.x - P.x, a.spr.y - P.y) - Math.hypot(b.spr.x - P.x, b.spr.y - P.y))[0];
+      return n ? { id: n.id, x: n.spr.x, y: n.spr.y, cond: c } : { wait: c }; }, s.next).catch(() => null);
+    if (gossip && gossip.id) { if (!told.includes(gossip.id)) { told.push(gossip.id); console.log(`     ${s.next} waits on ${gossip.cond}: telling ${gossip.id}`); } lastTap = Date.now(); await tapWorld(gossip.x, gossip.y); await p.waitForTimeout(600); continue; }
+    if (gossip && gossip.wait) { await p.waitForTimeout(500); continue; }   // everyone told: the news on its way
     lastTap = Date.now(); await tapWorld(s.goal[0], s.goal[1]); await p.waitForTimeout(500);
   }
   // handoffs: a beat whose lead differs from the beat before's starts him at least 6 tiles from the beat's spot (another place
