@@ -36,27 +36,36 @@ taels. Between them stands Wang Xifeng, who reads everyone, and who lies as easi
 
 ## The new mechanic: read the room (察言观色)
 
-This book has **no go boards**. The house is the game. (A departure from the Three Kingdoms books, on the user's "you
-are free to take this somewhere new". Boards could be added at the decision moments later if wanted.)
+**This is a go trainer, and go stays at the centre** (the user: "this should be a go trainer as well"). Every moment
+the novel makes a social test is posed as a **go board**: the caption names the choice, and a wrong move is the
+smile behind a sleeve. Reading the room is reading the board. The novel's standard for Daiyu (never laughed at) is the
+game's own: solve it without a slip. **18 boards** across 15 beats.
+
+The story file is in the engine's own format (`story.py`: nodes, scenes of steps, dilemmas), so the existing engine
+can play it once Integration registers it. Below is how the mechanic plays on boards today, then the watching layer
+that would sit on top of the boards with a little engine and map work.
 
 **Daiyu: watch, then act.**
 - A **moment** is a social choice the novel gives her: where to sit, what to call someone, whether to stay for dinner,
-  when to drink the tea, what to say she has read.
-- Before she acts, the player can **watch**: look at the people in the room, one at a time. Each one who has something
+  when to drink the tea, what to say she has read. Each is a board, its dilemma caption the choice (「看清座次」 "Read
+  the seats"), its slip line the smile (「端茶的丫头停住了，笑了一笑」).
+- **The watching layer (for Places and Integration, not yet built):** before she steps to the board's spot, the player
+  can **watch**: look at the people in the room, one at a time (room people with a line each, as Places already
+  places them). Each one who has something
   to show gives a **cue**. The cues stand for what the text says she noticed or knew; where the text gives the cue
   itself, it is used as written. The sisters whisper 「这是琏嫂子」. Two brocade cushions face
   each other on the kang. Lady Wang moves to the east side to make room. The others rinse their mouths before the tea.
   Grandmother Jia scoffs at girls' reading.
 - Some cues come only if she waits (Lady Wang moves east only after Daiyu comes in).
-- Act on the cue and the moment passes, unremarked, which is the point. Act without it, or against it, and someone
-  **smiles behind a sleeve** (耻笑). The moment resets to where she came in. The day keeps a tally of smiles: the novel's
-  Daiyu ends the day with none.
+- Solve the board and the moment passes, unremarked, which is the point. A wrong move is someone **smiling behind a
+  sleeve** (耻笑), with the usual wait before trying again. **Engine ask (optional):** a tally of smiles shown at the
+  day's end (d8): the novel's Daiyu ends the day with none.
 - **The cues teach.** At dinner Grandmother Jia scoffs that the girls only "know a few characters". When Baoyu asks the
   same question an hour later, the right answer has changed, and only a player who watched dinner knows it: 「不曾读，只上了
   一年学，些须认得几个字。」
 - **The mechanic fails on purpose, once.** Baoyu asks if she has a jade. No one in the room understands the question
   (「众人不解其语」), so there is no cue to watch. She can only reason (「黛玉便忖度着」) and answer as well as anyone could.
-  She answers rightly, and he smashes the jade anyway. The one person in the house who can't be read is the one who
+  The board is solved, and he smashes the jade anyway (solved, but the story fails, as in the Three Kingdoms books). The one person in the house who can't be read is the one who
   matters. The tally takes no smile for it; that night she weeps for it.
 - **Her inner voice.** The novel gives Daiyu's private thoughts, and they are sharp: 「这来者系谁，这样放诞无礼？」,
   「倒不见那蠢物也罢了」. The player hears them as asides, then watches her act perfectly. The gap between what she thinks
@@ -69,7 +78,7 @@ are free to take this somewhere new". Boards could be added at the decision mome
   street, and she bows and asks again.
 - What costs her is **being sent away**. Her moments are about nerve: whom to ask, asking again, waiting for the gap
   after the meal, and saying the shameful thing out loud (「未语先飞红的脸，欲待不说，今日又所为何来？只得忍耻说道」).
-  A fail sends her back to the last person who helped her.
+  Her boards are about nerve, not manners, and their slip lines are laughter that costs her only the retry.
 - **Ban'er** (五六岁, her grandson) is a small weight: he won't bow, hides behind her, and grabs at the meat on the
   passing table. She has to keep him in hand (one slap, as in the text).
 - Her slips are the novel's, and they play as comedy, not failure: "your nephew" (「开口就是『你侄儿』」), the hair and
@@ -89,9 +98,9 @@ the scroll says so plainly.
 
 ## The beats
 
-Keys `d1`–`d8` (Daiyu) and `g1`–`g7` (Granny Liu). Moments are marked ◆.
+Keys `d1`–`d8` (Daiyu) and `g1`–`g7` (Granny Liu). Each ◆ is a go board, in order within the scene.
 
-| Key | Beat | Place · room | Moments |
+| Key | Beat | Place · room | Boards |
 |---|---|---|---|
 | d1 | **The Side Gate** (角门): the sedan chair; the Ning mansion's gate, then the Rong mansion's west side gate; the bearers change at a bowshot | Rong mansion · the west side gate → the festooned gate (垂花门) | — (the tone: watch through the gauze window) |
 | d2 | **Grandmother** (外祖母): the embrace; the introductions; the three sisters; her medicine and the monk's prophecy | Grandmother Jia's rooms | ◆ whom to bow to first |
@@ -99,20 +108,32 @@ Keys `d1`–`d8` (Daiyu) and `g1`–`g7` (Granny Liu). Moments are marked ◆.
 | d4 | **The Elder Uncle's House** (大舅): by covered carriage to Lady Xing's compound; Jia She won't see her; Lady Xing presses her to stay to dinner | Lady Xing's compound | ◆ stay to dinner? |
 | d5 | **The Kang** (度其位次): Rongxi Hall; the two cushions; Lady Wang's side room; Jia Zheng's seat; the warning about the "demon king" | Rongxi Hall · Lady Wang's rooms | ◆ where to sit (twice) · ◆ answer the warning |
 | d6 | **After the Meal** (饭后茶): Lady Wang shows her Xifeng's door; dinner at Grandmother Jia's, not a cough heard; the tea that isn't for drinking; "what have you read?" | the passage → Grandmother Jia's rooms | ◆ which chair · ◆ the first tea · ◆ what have you read |
-| d7 | **The Jade** (摔玉): Baoyu comes, twice; "I've seen this sister before"; "have you read?"; the name 颦颦; "have you a jade?" | Grandmother Jia's rooms | ◆ have you read (again) · ◆ have you a jade (no cue) |
+| d7 | **The Jade** (摔玉): Baoyu comes; "I've seen this sister before"; "have you read?"; the name 颦颦; "have you a jade?" | Grandmother Jia's rooms | ◆ have you read (again) · ◆ have you a jade (no cue; solved, and he smashes it anyway) |
 | d8 | **The First Tears** (还泪): the green gauze closet; Xiren at the bedside | the green gauze closet (碧纱橱) | — |
 | (scroll) | Chapters 4–5: the Xue family; Baochai; the dream, in two lines | | |
 | g1 | **A Hair Thicker than a Waist** (拔一根寒毛): the village; Gou'er's sulk; Granny's plan; "the noble gate is deep as the sea" | the village · Gou'er's house | — |
-| g2 | **The Stone Lions** (石狮子): the main gate's sedan chairs; the side gate's bench of servants; "wait by the wall corner"; the old man | Ning-Rong Street · the Rong mansion's side gate | ◆ whom to ask · ◆ wait, or ask again |
+| g2 | **The Stone Lions** (石狮子): the main gate's sedan chairs; the side gate's bench of servants; "wait by the wall corner"; the old man | Ning-Rong Street · the Rong mansion's side gate | ◆ get past the men on the bench |
 | g3 | **Three Zhou Da-niangs** (三个周大娘): the back street; the children | the back gate | ◆ which Zhou Da-niang |
 | g4 | **A Real Buddha** (真佛): Zhou Rui's wife; Xifeng runs the house now; the gap after the meal | Zhou Rui's house | ◆ say why you came |
-| g5 | **The Clock** (自鸣钟): the perfume; Ping'er taken for the mistress; the clock; the silence; the meal going past | Xifeng's courtyard · the east room | ◆ how to greet Ping'er · ◆ keep Ban'er in hand |
-| g6 | **"Your Nephew"** (你侄儿): Xifeng at the hand-warmer; Jia Rong and the glass screen; the ask; the twenty taels | Xifeng's rooms | ◆ say it · ◆ nowhere to hide |
+| g5 | **The Clock** (自鸣钟): the perfume; Ping'er taken for the mistress; the clock; the silence; the meal going past (Ban'er slapped quiet, in narration) | Xifeng's courtyard · the east room | ◆ how to greet Ping'er |
+| g6 | **"Your Nephew"** (你侄儿) · **boss, Wang Xifeng** ("Pepper Feng"): Xifeng at the hand-warmer; Jia Rong and the glass screen; the ask; the twenty taels | Xifeng's rooms | ◆ say it · ◆ nowhere to hide · ◆ ask her (solved; the words still come out as "your nephew") |
 | g7 | **The Back Gate** (后门): Zhou Rui's wife scolds her; the silver she tries to leave; home | Zhou Rui's house · the back gate | — |
 
-**Fourteen moments** in fifteen beats; d1, d8, g1 and g7 have none. Danger where the novel has it (R17): for Daiyu, being
+**18 boards** in fifteen beats; d1, d8, g1 and g7 have none. The boss is Wang Xifeng at g6, the thread figure, with
+three boards, the last the hardest. Danger where the novel has it (R17): for Daiyu, being
 laughed at, which the novel names as her fear on her first line; for Granny Liu, going home empty-handed to a winter
 with nothing stored (「冬事未办」).
+
+## Road challengers (exact, for Places): 5, of which 0 blocking
+
+| Walk | Lead | Total | Blocking | Who |
+|---|---|---|---|---|
+| Grandmother Jia's courtyard (d1–d3) | Daiyu | 1 | 0 | a maid on the steps, in red and green, who wants to see what the new cousin can do |
+| The covered walks and the passage (d5–d6) | Daiyu | 1 | 0 | an old nurse at a go board in the covered walk |
+| Ning-Rong Street (g2) | Granny Liu | 1 | 0 | a groom by the sedan chairs at the main gate |
+| The back street (g3) | Granny Liu | 2 | 0 | a hawker with a toy load; one of the back-street children |
+
+The gate bench is not a challenger: it is g2's own board. Lady Xing's court and the village have none.
 
 ## Plants and payoffs (C6)
 
@@ -173,7 +194,7 @@ the back-street children; Zhou Rui's wife (周瑞家的); Ping'er (平儿); Wang
 
 | There | Here |
 |---|---|
-| Go boards at every turn | No go. The room is the puzzle. |
+| Boards at contests of war and nerve | Boards at tests of manners: a wrong move is a smile behind a sleeve |
 | Many leads, many handoffs | Two leads, one switch |
 | Danger is death | Danger is a smile behind a sleeve, and an empty winter |
 | Narration tells you what people think | The lead's private thoughts, as asides, against her perfect manners |
@@ -188,9 +209,24 @@ the back-street children; Zhou Rui's wife (周瑞家的); Ping'er (平儿); Wang
 4. **Lady Xing's dinner** (d4) is a moment: the text gives Daiyu a careful refusal (「舅母爱惜赐饭，原不应辞……」).
 5. **Jia Rong's scene** (g6) stays whole, including Xifeng calling him back and then sending him off with nothing said.
    It is a gap the novel leaves (C1); the game leaves it too.
-6. **No fail screen** in Part 1: a smile resets the moment, and the tally is shown at the day's end.
+6. **Go at the centre** (the user's word). A slip is the usual retry; the tally of smiles is an optional engine ask.
+7. **The boss is Wang Xifeng** (g6), not Baoyu: she is the thread figure, and g6 is the book's climax. Baoyu's jade
+   (d7) is the turn of Part 1, played as a board that is solved and still goes wrong.
+8. **Inner voice** is narration ("She thinks: …"), so nothing she thinks is ever said aloud in the room.
+
+## For the other sessions (not sent; the user decides when)
+
+- **Integration:** register `WORLD_HLM1` (`redchamber/book1/story.py`) as a world. It has its own `ZH` and `CAST` (voices
+  are ids already in the repo) and `NAMES`. New places: `The Rong Mansion`, `Lady Xing's Court`, `The Village`,
+  `Ning-Rong Street`. Optional asks: the tally of smiles at d8; watching people in a room before a board.
+- **Places:** the four places above, with rooms `jm-rooms`, `wf-rooms` (Rongxi Hall's east side rooms and the east
+  corridor), `gauze-closet`, `zhou-house`, `xf-eastroom`, `xf-rooms`, `xing-hall`, `gouer-house`; spots for the beats;
+  the road challengers above. Xifeng's gate on the passage (d6) is the same gate Granny Liu goes through (g5).
+- **Graphics:** the stills in the table above; characters for the whole cast.
+
+Checked with `python3 redchamber/book1/check.py` (the Three Kingdoms checker's per-world rules). The script is generated:
+`python3 redchamber/tools/script_md.py`.
 
 ## Open
 
-- Where this lives and what runs it: a new engine, or a mode of the existing one. Plot only writes the book.
-- Whether Ban'er's tugging is worth building, or stays in the narration.
+- Ban'er stays in narration for now (one slap in g5).
