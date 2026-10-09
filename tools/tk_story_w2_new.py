@@ -3413,7 +3413,9 @@ def _nodes_ladysun():
         node("s4", 80, 180, "s4", room="wu-hall", board=False, cutaway="told:wu-gatekeeper"),   # plays in her hall once the news reaches her gate
         # the axemen must be found in the side rooms first (Places: three hidden groups that deliver these marks)
         node("s5", 100, 170, "s5", place="Sweet Dew Temple", room="gl-abbot",
-             gate=[{"needs": ["mark:axemen_1", "mark:axemen_2", "mark:axemen_3"], "else": "s5_wait"}], dilemma=D(
+             gate=[{"needs": ["mark:axemen_1", "mark:axemen_2", "mark:axemen_3"], "else": "s5_wait",
+                    "objective": T("Search the side rooms along the temple's corridors for hidden axemen.", "沿着寺里的走廊搜查两边的厢房，找出埋伏的刀斧手。"),
+                    "at": "Sweet Dew Temple"}], dilemma=D(
             "ladywu", "Look at the groom.", "看看这个女婿。",
             "My son calls it a trick. I'll see the man with my own eyes.", "儿子说这是计策。我要亲眼看看这个人。",
             "He's truly my son-in-law!", "这真是我的好女婿！",
