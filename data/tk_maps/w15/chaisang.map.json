@@ -1,0 +1,212 @@
+{
+ "format": "tk-map/1",
+ "id": "chaisang",
+ "world": 15,
+ "name": "Chaisang",
+ "archetype": "city",
+ "size": [
+  56,
+  40
+ ],
+ "seed": 979,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "city",
+   ".": "grass",
+   "b": "road",
+   "c": "wall.city",
+   "~": "water"
+  },
+  "rows": [
+   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+   "........................bbbb............................",
+   "........................bbbb............................",
+   "........................bbbb............................",
+   "........................bbbb............................",
+   "........................bbbb............................",
+   "........................bbbb............................",
+   "......ccccccccccccccccccbbbbcccccccccccccccccccccc......",
+   "......ccccccccccccccccccbbbbcccccccccccccccccccccc......",
+   "......ccaaaaaaaaaaaaaaaabbbbaaaaaaaaaaaaaaaaaaaacc......",
+   "......ccaaaaaaaaaaaaaaaabbbbaaaaaaaaaaaaaaaaaaaacc......",
+   "......ccaaaaaaaaaaaaaaaabbbbaaaaaaaaaaaaaaaaaaaacc......",
+   "......ccaaaaaaaaaaaaaaaabbbbaaaaaaaaaaaaaaaaaaaacc......",
+   "......ccaaaaaaaaaaaaaaaabbbbaaaaaaaaaaaaaaaaaaaacc......",
+   "......ccaaaaaaaaaaaaaaaabbbbaaaaaaaaaaaaaaaaaaaacc......",
+   "......ccaaaaaaaaaaaaaaaabbbbaaaaaaaaaaaaaaaaaaaacc......",
+   "......ccaaaaaaaaaaaaaaaabbbbaaaaaaaaaaaaaaaaaaaacc......",
+   "......ccaaaaaaaaaaaaaaaabbbbaaaaaaaaaaaaaaaaaaaacc......",
+   "......ccaaaaaaaaaaaaaaaabbbbaaaaaaaaaaaaaaaaaaaacc......",
+   "......ccaaaaaaaaaaaaaaaabbbbaaaaaaaaaaaaaaaaaaaacc......",
+   "......ccaaaaaaaaaaaaaaaabbbbaaaaaaaaaaaaaaaaaaaacc......",
+   "......ccaaaaaaaaaaaaaaaabbbbaaaaaaaaaaaaaaaaaaaacc......",
+   "......ccaaaaaaaaaaaaaaaabbbbaaaaaaaaaaaaaaaaaaaacc......",
+   "......ccaaaaaaaaaaaaaaaabbbbaaaaaaaaaaaaaaaaaaaacc......",
+   "......ccaaaaaaaaaaaaaaaabbbbaaaaaaaaaaaaaaaaaaaacc......",
+   "......ccaaaaaaaaaaaaaaaabbbbaaaaaaaaaaaaaaaaaaaacc......",
+   "......ccaaaaaaaaaaaaaaaabbbbaaaaaaaaaaaaaaaaaaaacc......",
+   "......ccaaaaaaaaaaaaaaaabbbbaaaaaaaaaaaaaaaaaaaacc......",
+   "......ccaaaaaaaaaaaaaaaabbbbaaaaaaaaaaaaaaaaaaaacc......",
+   "......ccaaaaaaaaaaaaaaaabbbbaaaaaaaaaaaaaaaaaaaacc......",
+   "......ccaaaaaaaaaaaaaaaabbbbaaaaaaaaaaaaaaaaaaaacc......",
+   "......ccaaaaaaaaaaaaaaaabbbbaaaaaaaaaaaaaaaaaaaacc......",
+   "......ccaaaaaaaaaaaaaaaabbbbaaaaaaaaaaaaaaaaaaaacc......",
+   "......cccccccccccccccccccccccccccccccccccccccccccc......",
+   "......cccccccccccccccccccccccccccccccccccccccccccc......",
+   "........................................................",
+   "........................................................"
+  ],
+  "walk": {
+   "city": true,
+   "grass": true,
+   "road": true,
+   "wall.city": false,
+   "water": false
+  }
+ },
+ "lines": [
+  {
+   "id": "river",
+   "kind": "river",
+   "path": [
+    [
+     0,
+     0
+    ],
+    [
+     13,
+     0
+    ]
+   ],
+   "width": 4,
+   "tiles": 224
+  },
+  {
+   "id": "wall",
+   "kind": "wall.city",
+   "outline": [
+    1,
+    2,
+    12,
+    8
+   ],
+   "width": 2,
+   "gates": {
+    "river-gate": [
+     6,
+     2
+    ]
+   },
+   "tiles": 272
+  },
+  {
+   "id": "street",
+   "kind": "road",
+   "path": [
+    [
+     6,
+     1
+    ],
+    [
+     6,
+     8
+    ]
+   ],
+   "width": 3,
+   "tiles": 128
+  }
+ ],
+ "objects": [
+  {
+   "kind": "building.gate",
+   "x": 24,
+   "y": 10,
+   "w": 4,
+   "h": 2,
+   "id": "river-gate",
+   "width": 4,
+   "wall": "wall",
+   "door": "S"
+  },
+  {
+   "kind": "building.hall_grand",
+   "x": 13,
+   "y": 17,
+   "w": 10,
+   "h": 5,
+   "id": "zhoufu",
+   "door": "E",
+   "faces": "E",
+   "label": "Zhou Yu's hall",
+   "map": "zy-hall",
+   "plaque": "都督府",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.storehouse",
+   "x": 35,
+   "y": 25,
+   "w": 6,
+   "h": 2,
+   "id": "store",
+   "door": null,
+   "faces": "S",
+   "blocks_sight": true
+  }
+ ],
+ "spots": [],
+ "npcs": [],
+ "exits": [
+  {
+   "to": "chaisang--zy-hall",
+   "side": "W",
+   "x": 22.85,
+   "y": 19.1,
+   "w": 0.75,
+   "h": 0.8,
+   "door": true
+  }
+ ],
+ "entries": {
+  "chaisang--zy-hall": [
+   24,
+   19
+  ],
+  "": [
+   25,
+   29
+  ]
+ },
+ "states": [
+  {
+   "id": "day",
+   "light": "day"
+  }
+ ],
+ "ways": {
+  "nodes": [
+   [
+    26.0,
+    6.0
+   ],
+   [
+    26.0,
+    34.0
+   ]
+  ],
+  "edges": [
+   [
+    0,
+    1
+   ]
+  ]
+ },
+ "banners": "red",
+ "links": [
+  "chaisang--zy-hall"
+ ]
+}

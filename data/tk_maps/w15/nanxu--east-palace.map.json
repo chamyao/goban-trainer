@@ -1,0 +1,230 @@
+{
+ "format": "tk-map/1",
+ "id": "nanxu--east-palace",
+ "world": 15,
+ "name": "The east palace",
+ "archetype": "compound",
+ "size": [
+  44,
+  28
+ ],
+ "seed": 1791,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "court",
+   "b": "garden",
+   ".": "grass",
+   "W": "wall"
+  },
+  "rows": [
+   "............................................",
+   ".WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW.",
+   ".W........................................W.",
+   ".W........................................W.",
+   ".W........................................W.",
+   ".W........................................W.",
+   ".W........................................W.",
+   ".W........................................W.",
+   ".W........................................W.",
+   ".W........................................W.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW.",
+   ".WWWWWWWWWWWWWWWWWWWWWaaWWWWWWWWWWWWWWWWWWW.",
+   "............................................"
+  ],
+  "walk": {
+   "court": true,
+   "garden": true,
+   "grass": true,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    22,
+    14
+   ],
+   "width": 1,
+   "gates": {
+    "gate": [
+     11,
+     13
+    ]
+   },
+   "tiles": 132
+  }
+ ],
+ "objects": [
+  {
+   "kind": "building.gatehouse",
+   "x": 22,
+   "y": 26,
+   "w": 2,
+   "h": 1,
+   "id": "gate",
+   "width": 2,
+   "wall": "walls",
+   "door": "S"
+  },
+  {
+   "kind": "building.hall_grand",
+   "x": 17,
+   "y": 5,
+   "w": 10,
+   "h": 5,
+   "id": "hall",
+   "door": "S",
+   "faces": "S",
+   "label": "The east palace's hall",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.wing",
+   "x": 6,
+   "y": 4,
+   "w": 6,
+   "h": 4,
+   "id": "bridal",
+   "enter": "S",
+   "door": "E",
+   "faces": "E",
+   "label": "The bridal room",
+   "map": "bridal-room",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.wing",
+   "x": 32,
+   "y": 4,
+   "w": 6,
+   "h": 4,
+   "id": "maids",
+   "enter": "S",
+   "door": "W",
+   "faces": "W",
+   "label": "The maids' quarters",
+   "blocks_sight": true
+  },
+  {
+   "kind": "furn.rack",
+   "x": 12,
+   "y": 12,
+   "w": 2,
+   "h": 1,
+   "id": "rack-1",
+   "label": "A rack of spears"
+  },
+  {
+   "kind": "furn.rack",
+   "x": 30,
+   "y": 12,
+   "w": 2,
+   "h": 1,
+   "id": "rack-2",
+   "label": "A rack of swords"
+  },
+  {
+   "kind": "plant.peony",
+   "x": 30,
+   "y": 18,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.peony",
+   "x": 33,
+   "y": 22,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.peony",
+   "x": 33,
+   "y": 21,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.peony",
+   "x": 39,
+   "y": 20,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "spots": [
+  {
+   "id": "s10",
+   "x": 22.5,
+   "y": 16.7,
+   "node": "15-s10",
+   "label": "The east palace"
+  }
+ ],
+ "npcs": [],
+ "exits": [
+  {
+   "to": "nanxu--bridal-room",
+   "side": "N",
+   "x": 8.6,
+   "y": 7.85,
+   "w": 0.8,
+   "h": 0.75,
+   "door": true
+  },
+  {
+   "to": "nanxu",
+   "side": "S",
+   "x": 22,
+   "y": 26,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "nanxu--bridal-room": [
+   9,
+   8
+  ],
+  "nanxu": [
+   22,
+   25
+  ],
+  "": [
+   22,
+   22
+  ]
+ },
+ "states": [
+  {
+   "id": "wedding",
+   "light": "day"
+  }
+ ],
+ "parent": "nanxu",
+ "building": "east-palace",
+ "links": [
+  "nanxu",
+  "nanxu--bridal-room"
+ ]
+}

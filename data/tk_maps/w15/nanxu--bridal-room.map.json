@@ -1,0 +1,152 @@
+{
+ "format": "tk-map/1",
+ "id": "nanxu--bridal-room",
+ "world": 15,
+ "name": "The bridal room",
+ "archetype": "interior",
+ "size": [
+  24,
+  16
+ ],
+ "seed": 1815,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "%": "stone",
+   " ": "void",
+   "W": "wall"
+  },
+  "rows": [
+   "                        ",
+   " WWWWWWWWWWWWWWWWWWWWWW ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%W ",
+   " WWWWWWWWWWW%%WWWWWWWWW ",
+   "                        "
+  ],
+  "walk": {
+   "stone": true,
+   "void": false,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    12,
+    8
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     6,
+     7
+    ]
+   },
+   "tiles": 68
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.bed",
+   "x": 3,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "bed",
+   "label": "The bridal bed"
+  },
+  {
+   "kind": "furn.rack",
+   "x": 8,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "rack-1",
+   "label": "Swords on the wall"
+  },
+  {
+   "kind": "furn.rack",
+   "x": 12,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "rack-2",
+   "label": "Spears on the wall"
+  },
+  {
+   "kind": "furn.rack",
+   "x": 16,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "rack-3",
+   "label": "Halberds on the wall"
+  },
+  {
+   "kind": "furn.rack",
+   "x": 20,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "rack-4"
+  },
+  {
+   "kind": "prop.lanterns",
+   "x": 2,
+   "y": 12,
+   "w": 1,
+   "h": 1,
+   "id": "lamps"
+  }
+ ],
+ "spots": [
+  {
+   "id": "s7",
+   "x": 8.5,
+   "y": 8.7,
+   "node": "15-s7",
+   "label": "The bridal room"
+  }
+ ],
+ "npcs": [],
+ "exits": [
+  {
+   "to": "nanxu--east-palace",
+   "side": "S",
+   "x": 12,
+   "y": 14,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "nanxu--east-palace": [
+   12,
+   13
+  ],
+  "": [
+   12,
+   13
+  ]
+ },
+ "parent": "nanxu",
+ "building": "bridal-room",
+ "links": [
+  "nanxu--east-palace"
+ ]
+}

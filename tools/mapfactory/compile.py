@@ -411,13 +411,15 @@ def compile_map(m, kit, out_dir):
             obj(key, "prop", (fx + fw / 2) * T, (fy + fh) * T, kind=o["kind"], fw=fw * T, fh=fh * T, solid=solid,
                 **({"ref": o["id"]} if o.get("id") else {}),
                 **({"in": json.dumps([o["in"]] if isinstance(o["in"], str) else o["in"])} if o.get("in") else {}),
-                **({"plaque": o["plaque"]} if o.get("plaque") else {}))
+                **({"plaque": o["plaque"]} if o.get("plaque") else {}),
+                **({"news": True} if o.get("news") else {}))
             continue
         obj(key or "", "prop", (o["x"] + o["w"] / 2) * T, (o["y"] + o["h"]) * T,
             kind=o["kind"], fw=o["w"] * T, fh=o["h"] * T, solid=solid, **({"ref": o["id"]} if o.get("id") else {}),
             **({"in": json.dumps([o["in"]] if isinstance(o["in"], str) else o["in"])} if o.get("in") else {}),
             **({"flip": True} if draw_kind == side and faces == "W" else {}),
             **({"plaque": o["plaque"]} if o.get("plaque") else {}),   # a name board over its gate (tk-world draws it)
+            **({"news": True} if o.get("news") else {}),   # the loud town: a house the news can reach (red hangings once it knows)
             **walls.get(id(o), {}))
     runs = []
     for y in range(H):
@@ -467,6 +469,11 @@ def compile_map(m, kit, out_dir):
                                                             (SEEN.get(n["watch"]["seen"], []) if isinstance(n["watch"].get("seen"), str) else n["watch"].get("seen") or [])]},
                                     ensure_ascii=False)} if n.get("watch") else {}),
             **({"rider": json.dumps(n["rider"])} if n.get("rider") else {}),   # a chase rider (tk-world chaseStep)
+            # the loud town (a townsperson who can be told, and their house) and the face-down (one who gives way)
+            **{k: True for k in ("tell", "yield") if n.get(k)},
+            **{k: n[k] for k in ("home", "back_to") if n.get(k)},
+            **{k: json.dumps([place_step(l, n["kind"])[0] for l in ([n[k]] if isinstance(n[k], str) else n[k])], ensure_ascii=False)
+               for k in ("told", "yield_say") if n.get(k)},
             **({"in": json.dumps([n["in"]] if isinstance(n["in"], str) else n["in"])} if n.get("in") else {}),
             **({"guard_x": n["guard"][0] * T, "guard_y": n["guard"][1] * T} if n.get("guard") else {}),
             **{k: json.dumps([place_step(l, n["kind"])[0] for l in ([n[k]] if isinstance(n[k], str) else n[k])], ensure_ascii=False)
