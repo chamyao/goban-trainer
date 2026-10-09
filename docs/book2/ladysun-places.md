@@ -39,8 +39,8 @@ ground and the road up to Sweet Dew Temple.
     Plot's line. The spot `wu-gate` marks her gate.
   - Each of the 12 houses has red hangings over its door (Graphics' `deco.redhang`, placed by `"over": "h<n>"` at the
     house's front edge, `"told": "g-h<n>"`, `"lift": 6`), shown once its resident knows. `lift` is in px: the image is
-    drawn that much higher, and its depth stays at its foot. The engine needs to support it; without it the hangings sit
-    6 px low.
+    drawn that much higher, and its depth stays at its foot. The engine supports it
+    (main ba88bcae).
   - Proved: every gossip can be walked to from the dock, and every telling that reaches the gatekeeper is on the chain
     from Qiao Guolao's gate.
   - Spots for the errand: `lamb` (the mutton seller), `wine` (the wine shop's door), `qiao-gate`.
