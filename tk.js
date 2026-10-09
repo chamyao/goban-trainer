@@ -129,6 +129,7 @@ const TK_CHARS = {
   dingfeng: { name: "Ding Feng", skin: "#e2b089", hair: "#1a1416", hat: "helmet", hatC: "#4a4a5c", robe: "#5a3a2a", trim: "#c8c8c8", beard: "thin", eyes: "narrow", weapon: "spear" },
   chenwu: { name: "Chen Wu", skin: "#d8a47c", hair: "#1a1416", hat: "helmet", hatC: "#6a5a4a", robe: "#6a4a2a", trim: "#e6c14a", beard: "bristle", eyes: "round", weapon: "sword" },
   panzhang: { name: "Pan Zhang", skin: "#e2b089", hair: "#2a2024", hat: "helmet", hatC: "#5a5a64", robe: "#3a4a3a", trim: "#c8c8c8", beard: "short", eyes: "wild", weapon: "glaive" },
+  f_maid: { name: "Maid", skin: "#f8dcc4", hair: "#2a2024", hat: "twinloops", pin: "#c8392c", robe: "#d86a7a", trim: "#f4f0e8", beard: "none", eyes: "kind", makeup: true },
   matron: { name: "Matron", skin: "#efd8c0", hair: "#5a5256", hat: "bun", hatC: "#5a5256", pin: "#c8a03a", robe: "#7a5a6a", trim: "#d6d2c4", beard: "none", eyes: "kind" },
   // Lü Bu's fall (book 14)
   pangshu: { name: "Pang Shu", skin: "#e8b88c", hair: "#2a2024", hat: "guan", hatC: "#1e1e24", robe: "#4a5a6a", trim: "#c8c8c8", beard: "short", eyes: "kind", weapon: "sword" },
