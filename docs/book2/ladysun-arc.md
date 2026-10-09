@@ -70,33 +70,42 @@ Its register is new for us too: it is a comedy, a scheme that keeps backfiring.
 | The wedding night, the east palace | **Zhao Yun** | Outside, all winter, shooting and riding (「終日無事，只去城外射箭走馬」); opens pouch two |
 | "Don't lie to me" to the river | **Lady Sun** | From 「你休瞞我。我已聽知了也」 on, every move is hers: the plan, her mother, the road |
 
-## The beats (keys `s1` … `s15`, as built)
+## The beats (keys `s1` … `s14`), reworked
 
-Cutaways (`"cutaway": True` on the node) play on their own the moment the beat before them is done, staged in their own
-room, with the player's party off stage; then play returns to the lead where they were.
+**Why reworked.** The user, on the first cut: "the plot for this one wasnt that entertaining". Plot's reading (playbook
+R17): Zhao Yun led two-thirds as an escort on errands, the pouches made the player a courier, there was too much watching,
+and the best mechanic came once, at the end. The user: "rework". The changes:
+- **Lady Sun leads from the wedding night** (s7) to the end: 8 of 14 beats, with three of her own boards. Her first scene
+  is the bridal room, from her side; she decides about the blades (「命盡撤去」 is her order).
+- **Danger where the novel has it.** At Sweet Dew Temple the meeting won't start until Zhao Yun has searched the side
+  rooms and found the hidden axemen (三百刀斧手, 「伏於兩廊」): three hidden groups on the map.
+- **The face-down twice.** Xu Sheng and Ding Feng's block ahead (s11 → s12), then Chen Wu and Pan Zhang's men behind
+  (s12 → s13).
+- **Less watching.** The gilded cage and pouch two are told at the start of s8 instead of two beats of their own;
+  cutaways are down to three (s1, s4, s10). Boards: six.
 
 | Key | Beat | Lead | Place · room | Board |
 |---|---|---|---|---|
-| s1 | **The Bait** (香饵): Zhou Yu lays the trap; the bride described by her enemy | cutaway | Chaisang · `zy-hall` | — |
-| s2 | **Three Silk Pouches**: Lü Fan the matchmaker; Zhuge Liang behind the screen; the pouches. Ends landing at Nanxu (spot `dock`) | Zhao Yun | Jingzhou · `jz-hall` | — |
-| s3 | **The First Pouch**: opened at the dock; the men in red. Then the loud town (map) | Zhao Yun | Nanxu, by the dock | — |
-| s4 | **Whose Daughter?** A cutaway that waits for the news (`"cutaway": "told:wu-gatekeeper"`), then plays inside her hall, Lady Wu and Sun Quan | Zhao Yun (scene inside) | Nanxu · `wu-hall` | — |
-| s5 | **Sweet Dew Temple**: 「真吾婿也」; the axemen; Liu Bei kneels | Zhao Yun | Sweet Dew Temple · `gl-abbot` | Lady Wu: "Look at the groom." |
-| s6 | **The Stone**: two prayers aloud, two in secret; the horses on the slope | Zhao Yun | Sweet Dew Temple (courtyard, the slope) | Liu Bei: "Cut the stone in two." |
-| s7 | **Blades in the Bridal Room**: Lady Sun's first appearance | cutaway | Nanxu · `bridal-room` | — |
-| s8 | **The Gilded Cage**: Zhou Yu's letter read in Sun Quan's hall; the east palace | cutaway | Nanxu · `sq-hall` | — |
-| s9 | **Year's End**: Zhao Yun opens pouch two | Zhao Yun | Nanxu, the riding ground outside the walls | — |
-| s10 | **Don't Lie to Me**: the false alarm; her plan. **The lead passes to Lady Sun** (no handoff place: she starts where she stands) | Zhao Yun → Lady Sun | Nanxu · `east-palace` | — |
-| s11 | **New Year's Day**: she asks her mother; the carriage | Lady Sun | Nanxu · `wu-hall` | Lady Sun: "Ask your mother for leave." |
-| s12 | **The Jade Inkstone**: Sun Quan wakes, sends the pursuit, then the sword | cutaway | Nanxu · `sq-hall` | — |
-| s13 | **The Road Block** (boss): the third pouch; the truth; Xu Sheng and Ding Feng faced down; "Zilong and I will hold the rear" | Lady Sun | The road to Chaisang | **boss**, Lady Sun: "Clear the road." |
-| (map) | **Face them down**: Chen Wu and Pan Zhang's men on the road; they yield when she stands and is seen (「四員將見了孫夫人，只得下馬」) | Lady Sun | The road to Chaisang | — |
-| s14 | **The Rearguard**: her words to the four generals; they back away | Lady Sun | The road to Chaisang | — |
-| s15 | **Liulangpu**: no boats; Zhuge Liang in the boats; Guan Yu; the chant | Lady Sun | Liulangpu | — |
+| s1 | **The Bait**: Zhou Yu lays the trap | cutaway | Chaisang · `zy-hall` | — |
+| s2 | **Three Silk Pouches**. Ends landing at Nanxu (spot `dock`) | Zhao Yun | Jingzhou · `jz-hall` | — |
+| s3 | **The First Pouch**; then the loud town (map) | Zhao Yun | Nanxu, by the dock | — |
+| s4 | **Whose Daughter?** `"cutaway": "told:wu-gatekeeper"` | cutaway | Nanxu · `wu-hall` | — |
+| (map) | **The axemen**: search the temple's side rooms; three hidden groups deliver `axemen_1`–`axemen_3` | Zhao Yun | Sweet Dew Temple | — |
+| s5 | **Sweet Dew Temple**: gated on the three marks (else `s5_wait`); 「真吾婿也」; Liu Bei kneels | Zhao Yun | Sweet Dew Temple · `gl-abbot` | Lady Wu |
+| s6 | **The Stone**; the horses. Ends: the lead passes to Lady Sun at Nanxu spot `ls-rooms` | Zhao Yun | Sweet Dew Temple | Liu Bei |
+| s7 | **Blades in the Bridal Room**, from her side | Lady Sun | Nanxu · `bridal-room` | Lady Sun: "Have the blades taken away." |
+| s8 | **Don't Lie to Me**: the gilded cage and pouch two told; Zhao Yun's false alarm; her plan | Lady Sun | Nanxu · `east-palace` | Lady Sun: "Find a way out of Wu." |
+| s9 | **New Year's Day**: she asks her mother; the carriage | Lady Sun | Nanxu · `wu-hall` | Lady Sun: "Ask your mother for leave." |
+| s10 | **The Jade Inkstone** | cutaway | Nanxu · `sq-hall` | — |
+| s11 | **The Road Block**: the third pouch; the truth; "I'll settle this myself" | Lady Sun | The road to Chaisang | — |
+| (map) | **Face-down 1**: Xu Sheng and Ding Feng's block, ahead | Lady Sun | The road | — |
+| s12 | **Are You in Revolt?** (boss): her words; they open the road; "Zilong and I will hold the rear" | Lady Sun | The road | **boss**, Lady Sun: "Clear the road." |
+| (map) | **Face-down 2**: Chen Wu and Pan Zhang's men, from behind | Lady Sun | The road | — |
+| s13 | **The Rearguard**: her words to the four | Lady Sun | The road | — |
+| s14 | **Liulangpu**: Zhuge Liang in the boats; the chant | Lady Sun | Liulangpu | — |
 
-Handoffs: s2 → Nanxu spot `dock` (a river crossing); s4 → Sweet Dew Temple from Nanxu; s6 → Nanxu from Sweet Dew Temple (a cutaway carries no handoff);
-s10 → none; s11 → The road to Chaisang from Nanxu; s13 → none (Liu Bei goes ahead); s14 → Liulangpu from The road to
-Chaisang.
+Old → new keys: s1–s7 same; s10 → s8; s11 → s9; s12 → s10; s13 → s11 + s12; s14 → s13; s15 → s14; old s8 and s9 are
+gone (told inside s8).
 
 ## Decisions (Plot's recommendations; the user can overrule any of them)
 0. **Modern Chinese.** The user: "can you write this books language in modern chinese thats easier to undrestand?" Every Chinese line the player sees or hears (narration, speech, goals, captions, board lines) is written in modern Mandarin, in simplified characters, translated from the original for meaning, not quoted from it. The classical text stays in this design doc only, as the source each line is checked against. The novel's chapter titles and couplets stay as they are, since they are titles.

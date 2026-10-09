@@ -3103,7 +3103,12 @@ def _scenes_ladysun():
             ["party", ["zhaoyun", "liubei", "sunqian"], {"to": {"place": "Sweet Dew Temple", "from": "Nanxu"}}],
         ]},
 
-        # S5 · Sweet Dew Temple. Lady Wu sees the groom; Zhao Yun has found the axemen in the corridors.
+        # before the axemen are found: the meeting won't start while Zhao Yun hasn't searched the side rooms
+        "s5_wait": {"title": T("Sweet Dew Temple", "甘露寺"), "kind": "main", "steps": [
+            S("zhaoyun", "Not yet. Something's wrong in those side rooms. I'll search every corridor before my lord sits down.", "还不行。两边厢房不对劲。主公入座之前，我要把每条走廊都查一遍。"),
+        ]},
+
+        # S5 · Sweet Dew Temple. Zhao Yun has searched the corridors and found the axemen (the map task); Lady Wu sees the groom.
         "s5": {"title": T("Sweet Dew Temple", "甘露寺"), "kind": "main", "steps": [
             ["spawn", "wu", "ladywu", "s5", 0, -6], ["spawn", "qgl", "qiaoguolao", "s5", 6, -6], ["spawn", "sq", "sunquan", "s5", -6, -4],
             N("Lady Wu and Qiao Guolao are already seated in the abbot's hall. Liu Bei wears fine armour under his brocade robe. Zhao Yun, in full armour, has brought the five hundred.",
@@ -3170,66 +3175,47 @@ def _scenes_ladysun():
             N("Liu Bei lifts his robe, leaps onto a horse, gallops down and back up. The two rein in side by side on the slope and laugh. It is still called Rein-In Slope.",
               "刘备撩起衣襟，一跃上马，飞驰下山，又跑了上来。两人并马站在山坡上，扬鞭大笑。这地方到今天还叫“驻马坡”。"),
             ["remove", "sq"],
-            ["party", ["zhaoyun", "liubei", "sunqian"], {"to": {"place": "Nanxu", "from": "Sweet Dew Temple"}}],   # back down to Nanxu; then the s7 cutaway
+            ["party", ["ladysun"], {"to": {"place": "Nanxu", "spot": "ls-rooms"}}],   # the lead passes to Lady Sun, in her own rooms
         ]},
 
-        # S7 · Blades in the bridal room. Cutaway inside: Lady Sun's first appearance.
+        # S7 · Blades in the bridal room. Lady Sun's first scene, and from here the lead is hers.
         "s7": {"title": T("Blades in the Bridal Room", "洞房刀枪"), "kind": "main", "steps": [
-            ["spawn", "lb", "liubei", "s7", 6, 4], ["spawn", "ls", "ladysun", "s7", 0, -6],
             ["army", "maids", "f_maid", 6, "s7", -4, -4],
             N("Liu Bei tells Qiao Guolao that many in Wu want him dead. Lady Wu is furious. My son-in-law: who dares harm him? She moves him into her own household, "
               "Zhao Yun and the men with him. Within days there is a great feast, and Lady Sun and Liu Bei are married.",
               "刘备对乔国老说，江东有很多人想害他。国太大怒：“我的女婿，谁敢害他！”当即叫他搬进府里住，赵云和军士也一起搬进来。没过几天，大摆筵席，孙夫人和刘备成亲。"),
-            N("When the guests have gone, two rows of red candles lead Liu Bei to the bridal room.", "到了晚上客人散去，两行红烛把刘备引进洞房。"),
+            N("You are Lady Sun, the Marquis's sister. You keep hundreds of maids, and every one of them wears a blade; your rooms are hung with weapons. Tonight you are married.",
+              "你是孙夫人，吴侯的妹妹。你身边有几百个侍女，个个带刀；你的房里挂满了兵器。今晚是你成亲的日子。"),
+            N("When the guests have gone, two rows of red candles lead Liu Bei to the bridal room.", "客人散去以后，两行红烛把刘备引到洞房门口。"),
+            ["spawn", "lb", "liubei", "s7", 8, 4],
             ["still", "ls_blades", "slow zoom in"],
-            N("In the lamplight: spears and blades everywhere, and the maids standing on either side with swords at their hips. Liu Bei's soul nearly leaves his body.",
-              "灯光下，只见满屋刀枪，侍女们个个佩剑挂刀，站在两边。刘备吓得魂不附体。"),
+            N("He stops in the doorway: spears and blades everywhere in the lamplight, and the maids on either side with swords at their hips. His soul nearly leaves his body.",
+              "他在门口站住了：灯光下满屋刀枪，侍女们个个佩剑挂刀，站在两边。他吓得魂不附体。"),
             ["spawn", "mt", "matron", "s7", 10, 0],
             S("matron", "Don't be afraid, sir. My lady has loved martial things since she was small. She has her maids fence for fun. That's all this is.",
               "贵人不要害怕。夫人从小喜欢看武艺，平时常叫侍女们击剑取乐，所以才这样。"),
             S("liubei", "That's no sight for a bride. It chills me. Have them take it away, for now.", "这不是夫人该看的东西，我心里发冷，叫她们暂时撤了吧。"),
-            N("The matron tells Lady Sun. Lady Sun laughs.", "管家婆去禀告孙夫人。孙夫人笑了。"),
+            N("The matron comes to tell you.", "管家婆来禀告夫人。"),
+            ["problem"],   # Lady Sun: the blades
             S("ladysun", "Half a lifetime at war, and he's afraid of weapons?", "打了半辈子仗，还怕兵器吗？"),
             ["remove", "maids"],
-            N("She has every weapon taken out, and the maids unbuckle their swords. That night they are married, and both are glad of it. "
+            N("She laughs, has every weapon taken out, and the maids unbuckle their swords. That night they are married, and both are glad of it. "
               "Liu Bei gives the maids gold and silk, to win them over, and sends Sun Qian home to Jingzhou with the good news.",
-              "她叫人把兵器全部撤走，侍女们也解下剑来伺候。当晚两人成亲，十分和美。刘备又拿金银绸缎赏给侍女们，收买她们的心，先让孙乾回荆州报喜。"),
-            ["remove", "mt"], ["remove", "lb"], ["remove", "ls"],
-            ["party", ["zhaoyun"]],   # Liu Bei stays with his bride, Sun Qian goes home; a cutaway carries no handoff
+              "她笑着叫人把兵器全部撤走，侍女们也解下剑来伺候。当晚两人成亲，十分和美。刘备又拿金银绸缎赏给侍女们，收买她们的心，先让孙乾回荆州报喜。"),
+            ["remove", "mt"], ["remove", "lb"],
+            ["party", ["ladysun", "liubei"]],
         ]},
 
-        # S8 · The gilded cage. Cutaway: Zhou Yu's letter, read out in Sun Quan's hall.
-        "s8": {"title": T("The Gilded Cage", "软困"), "kind": "main", "steps": [
-            ["spawn", "sq", "sunquan", "s8", 0, -4], ["spawn", "zz", "zhangzhao", "s8", 8, 0],
-            ["prop", "paper", "letter", "s8", 4, -2],
-            N("Sun Quan has written to Zhou Yu: Mother has married my sister to Liu Bei in earnest. The fake has come true. What now? Zhou Yu's answer comes back sealed.",
-              "孙权派人到柴桑告诉周瑜：母亲做主，已经把妹妹嫁给刘备了，没想到弄假成真，现在怎么办？周瑜回了一封密信。"),
-            S("sunquan", "He writes: better to hold him softly in Wu. Build him palaces to sap his will. Send him beauties and treasures to fill his eyes and ears. "
-              "Part him from Guan Yu and Zhang Fei, keep him far from Zhuge Liang, then strike. Let him go now, and the dragon finds its clouds and rain. He'll never stay in a pond.",
-              "他说：不如把他软困在吴中，给他大修宫室，消磨他的志气；多送美女和珍玩，让他耳目享乐。使他和关羽、张飞疏远，和诸葛亮隔开，然后再出兵，大事可定。现在要是放了他，就像蛟龙得了云雨，终究不是池中之物。"),
-            S("zhangzhao", "Gongjin's plan is just what I think. Liu Bei has never known wealth. Give him halls and gold and women, and he'll drift away from Zhuge Liang, Guan and Zhang. Then Jingzhou can be had.",
-              "公瑾的计策正合我意。刘备出身低微，四处奔走，从没享受过富贵。现在给他华堂大厦、美女金帛，他自然会疏远孔明、关羽、张飞。到那时，荆州就可以拿下了。"),
-            N("Sun Quan has the east palace done up, planted with flowers and trees, filled with fine things and dozens of women musicians, and invites Liu Bei and his sister to live there. "
-              "Lady Wu thinks her son means well. And Liu Bei, dazzled, forgets Jingzhou altogether.",
-              "孙权当天就整修东府，广栽花木，摆满器用，又添了几十个女乐和许多金玉锦缎，请刘备和妹妹搬进去住。国太只当孙权是好意，高兴得不得了。刘备果然被声色迷住，一点也不想回荆州了。"),
-            ["remove", "sq"], ["remove", "zz"],
-        ]},
-
-        # S9 · Year's end. Zhao Yun, outside all winter, opens the second pouch.
-        "s9": {"title": T("Year's End", "岁末"), "kind": "main", "steps": [
-            ["light", "dusk"],
-            N("Zhao Yun and the five hundred are quartered outside the east palace. Day after day there's nothing to do but ride and shoot outside the walls. The year is nearly over.",
-              "赵云和五百军士住在东府前面，整天无事，只到城外射箭跑马。眼看一年快过完了。"),
-            S("zhaoyun", "The Directing General said: open the first on reaching Nanxu, the second at the year's end, the third when we're in danger with no way out. "
-              "The year is ending, and my lord, lost in pleasure, won't even see me. Time for the second.",
-              "军师给我三个锦囊，吩咐我：一到南徐，开第一个；住到年底，开第二个；遇到危急、走投无路的时候，开第三个。现在年快过完了，主公贪恋女色，连面都不见，为什么不拆开第二个锦囊，照计行事？"),
+        # S8 · "Don't lie to me." Winter in the gilded cage; pouch two; the false alarm; Lady Sun sees through it and makes the plan.
+        "s8": {"title": T("Don't Lie to Me", "你别瞒我"), "kind": "main", "steps": [
+            N("Winter in the east palace. On Zhou Yu's advice, Sun Quan has filled it with flowers, musicians, gold and silk, to soften Liu Bei and part him from his brothers and Zhuge Liang. "
+              "Lady Wu thinks her son means well. And Liu Bei, dazzled, has forgotten Jingzhou.",
+              "东府的冬天。孙权听了周瑜的计策，把东府布置得花木满园，又送来女乐和金玉锦缎，想消磨刘备的志气，让他和兄弟们、和诸葛亮疏远。国太只当儿子是好意。刘备果然被迷住，一点也不想回荆州了。"),
+            N("Outside, Zhao Yun has waited all winter, riding and shooting beyond the walls. As the year ends, he opens the second pouch.",
+              "赵云在外面等了整整一个冬天，只在城外射箭跑马。到了年底，他拆开了第二个锦囊。"),
             ["open", "pouch2"],
-            N("So that is the plan: go to Liu Bei in alarm, with news that Cao Cao is marching on Jingzhou.", "原来是这样的妙计：装作大惊，去报主公，说曹操大军杀向荆州。"),
-        ]},
-
-        # S10 · "Don't lie to me." The false alarm; Lady Sun sees through it and makes the plan. The lead passes to her.
-        "s10": {"title": T("Don't Lie to Me", "你别瞒我"), "kind": "main", "steps": [
-            ["spawn", "lb", "liubei", "s10", 0, -4],
+            N("The second plan: go to Liu Bei in alarm, with news that Cao Cao is marching on Jingzhou.", "第二条妙计：装作大惊，去报主公，说曹操大军杀向荆州。"),
+            ["spawn", "zy", "zhaoyun", "s8", 16, 4], ["move", "zy", "s8", 6, 0],
             N("A maid announces: Zhao Zilong has urgent news.", "侍女通报：赵子龙有紧急的事来报。"),
             S("zhaoyun", "My lord, shut away in your painted halls, have you forgotten Jingzhou?", "主公深居画堂，难道不想荆州了吗？"),
             S("liubei", "What's all this alarm?", "有什么事这样大惊小怪？"),
@@ -3238,9 +3224,8 @@ def _scenes_ladysun():
             S("liubei", "I must talk it over with my wife.", "这事必须和夫人商量。"),
             S("zhaoyun", "If you ask her, she won't let you go. Better not tell her. Leave tonight. Wait, and it's too late.", "要是和夫人商量，她一定不肯放主公回去。不如不说，今晚就动身。晚了就误事了。"),
             S("liubei", "Go for now. I'll see to it.", "你先退下，我自有道理。"),
-            ["move", "zhaoyun", "s10", 16, 4],
-            ["spawn", "ls", "ladysun", "s10", -8, -6],
-            N("Liu Bei goes in to Lady Sun, quietly weeping.", "刘备进去见孙夫人，暗暗流泪。"),
+            ["move", "zy", "s8", 18, 4], ["remove", "zy"],
+            N("Liu Bei comes in to you, quietly weeping.", "刘备进来见你，暗暗流泪。"),
             S("ladysun", "Husband, why so sad?", "夫君为什么烦恼？"),
             S("liubei", "I've drifted far from home. I can't serve my parents or sacrifice to my ancestors. That's a great failing in a son. The New Year is close, and it weighs on me.",
               "我一个人漂泊在外乡，活着不能侍奉父母，又不能祭祀祖宗，实在是大不孝。眼看新年就要到了，心里闷闷不乐。"),
@@ -3254,19 +3239,18 @@ def _scenes_ladysun():
             N("His tears fall like rain.", "说完，泪如雨下。"),
             S("ladysun", "Don't grieve, husband. I'll plead with my mother. She'll let me go with you.", "夫君别难过。我去苦求母亲，她一定会放我和你一起走。"),
             S("liubei", "Even if the Dowager agrees, the Marquis will stop us.", "就算国太答应，吴侯也一定会阻拦。"),
-            N("Lady Sun thinks for a long time.", "孙夫人沉吟了很久，说："),
+            N("Lady Sun thinks for a long time.", "孙夫人沉吟了很久。"),
+            ["problem"],   # Lady Sun: a way out
             S("ladysun", "On New Year's Day, when we go to pay our respects, we'll say we're going to the riverbank to make offerings to your ancestors. And we go, without a word. What do you say?",
               "大年初一我和你去拜年的时候，就说要到江边祭祖，不辞而别。你看怎么样？"),
             S("liubei", "If you'll do that, I won't forget it, alive or dead. Don't let it slip.", "要是这样，我生死都不会忘记夫人。千万别泄露出去。"),
             N("Liu Bei sends for Zhao Yun in secret: on New Year's Day, take the men out of the city first, and wait on the high road.",
               "刘备暗中吩咐赵云：大年初一，你先带军士出城，在官道上等候。我借口祭祖，和夫人一起走。"),
-            ["remove", "lb"],
-            ["party", ["ladysun", "liubei"]],   # from here every move is hers; she starts where she stands
         ]},
 
-        # S11 · New Year's Day. Lady Sun asks her mother for leave; out by carriage.
-        "s11": {"title": T("New Year's Day", "正旦"), "kind": "main", "steps": [
-            ["spawn", "wu", "ladywu", "s11", 0, -6],
+        # S9 · New Year's Day. Lady Sun asks her mother for leave; out by carriage.
+        "s9": {"title": T("New Year's Day", "正旦"), "kind": "main", "steps": [
+            ["spawn", "wu", "ladywu", "s9", 0, -6],
             N("New Year's Day. The Marquis holds a great gathering of his officers in the hall. Lady Sun and Liu Bei go in to pay their respects to Lady Wu.",
               "建安十五年正月初一，吴侯在大堂上大会文武。孙夫人和刘备进去拜见国太。"),
             ["problem"],   # Lady Sun asks for leave
@@ -3282,9 +3266,9 @@ def _scenes_ladysun():
             ["party", ["ladysun", "liubei", "zhaoyun"], {"to": {"place": "The road to Chaisang", "from": "Nanxu"}}],
         ]},
 
-        # S12 · The jade inkstone. Cutaway: Sun Quan wakes and sends the pursuit, then the sword.
-        "s12": {"title": T("The Jade Inkstone", "玉砚"), "kind": "main", "steps": [
-            ["spawn", "sq", "sunquan", "s12", 0, -4], ["spawn", "zz", "zhangzhao", "s12", 8, 0], ["spawn", "cp", "chengpu", "s12", -8, 0],
+        # S10 · The jade inkstone. Cutaway: Sun Quan wakes and sends the pursuit, then the sword.
+        "s10": {"title": T("The Jade Inkstone", "玉砚"), "kind": "main", "steps": [
+            ["spawn", "sq", "sunquan", "s10", 0, -4], ["spawn", "zz", "zhangzhao", "s10", 8, 0], ["spawn", "cp", "chengpu", "s10", -8, 0],
             N("That day Sun Quan was dead drunk and carried to bed. When his officers learned of the flight it was already dark, and they couldn't wake him. He wakes at the fifth watch.",
               "那天孙权喝得大醉，被左右扶进后堂。等官员们打听到刘备夫妇逃走，天已经黑了，想报告孙权，他又醉得叫不醒，直到五更才醒。"),
             S("zhangzhao", "If this man gets away today, there'll be trouble sooner or later. Go after him at once.", "今天让这个人跑了，早晚必生祸乱。赶快去追！"),
@@ -3300,14 +3284,14 @@ def _scenes_ladysun():
             ["remove", "sq"], ["remove", "zz"], ["remove", "cp"],
         ]},
 
-        # S13 · The road block. The third pouch; the truth; she faces them down. The boss.
-        "s13": {"title": T("The Road Block", "山脚拦路"), "kind": "main", "steps": [
+        # S11 · The road block. The third pouch; the truth. Then she rolls forward to face the block (the face-down on the map).
+        "s11": {"title": T("The Road Block", "山脚拦路"), "kind": "main", "steps": [
             N("They ride day and night, rest two watches, and hurry on. Near the border of Chaisang, dust rises behind them. The pursuers!",
               "一行人日夜赶路，夜里只歇了两个更次，又慌忙上路。快到柴桑边界时，后面尘土大起，有人报：追兵来了！"),
             S("liubei", "The pursuers are here. What do we do?", "追兵到了，怎么办？"),
             S("zhaoyun", "Go ahead, my lord. I'll hold the rear.", "主公先走，我来断后。"),
-            ["spawn", "xs", "xusheng", "s13", 16, -2], ["spawn", "df", "dingfeng", "s13", 16, 4],
-            ["army", "block", "f_soldier", 8, "s13", 22, 0],
+            ["spawn", "xs", "xusheng", "s11", 16, -2], ["spawn", "df", "dingfeng", "s11", 16, 4],
+            ["army", "block", "f_soldier", 8, "s11", 22, 0],
             S("xusheng", "Liu Bei, get down and be bound! On Grand Commander Zhou's orders, we've been waiting for you!", "刘备快下马受缚！我们奉周都督将令，在这里等候多时了！"),
             N("Zhou Yu, afraid Liu Bei might slip away, had posted Xu Sheng and Ding Feng with three thousand men on this road long before.", "原来周瑜怕刘备逃走，早派徐盛、丁奉带三千兵马在要道扎营等候。"),
             S("liubei", "Blocked ahead, pursued behind. There's no way out!", "前面有拦截的兵，后面有追赶的兵，前后无路，怎么办？"),
@@ -3326,6 +3310,13 @@ def _scenes_ladysun():
               "现在吴侯派人在后面追，周瑜派人在前面拦，除了夫人，没人能解这场祸。夫人要是不答应，我就死在车前，报答夫人的恩情。"),
             ["emote", "ladysun", "anger"],
             S("ladysun", "If my brother won't count me his own flesh and blood, how can I ever face him again? Today's danger, I'll settle myself.", "我哥哥既然不把我当亲骨肉，我还有什么脸再见他！今天的危难，我自己来解决。"),
+            ["remove", "xs"], ["remove", "df"], ["remove", "block"],
+        ]},
+
+        # S12 · "Are you in revolt?" She has faced the block down; her words to Xu Sheng and Ding Feng. The boss.
+        "s12": {"title": T("Are You in Revolt?", "你们想造反吗"), "kind": "main", "steps": [
+            ["spawn", "xs", "xusheng", "s12", 10, -2], ["spawn", "df", "dingfeng", "s12", 10, 4],
+            ["army", "block", "f_soldier", 8, "s12", 18, 0],
             ["problem"],   # the boss: Lady Sun clears the road
             ["still", "ls_curtain", "slow zoom in"],
             N("She has the carriage pushed straight forward, rolls up the curtain, and calls out to Xu Sheng and Ding Feng herself.", "她喝令随从推车直往前走，卷起车帘，亲自喝问徐盛、丁奉："),
@@ -3347,10 +3338,10 @@ def _scenes_ladysun():
             ["party", ["ladysun", "zhaoyun"]],   # Liu Bei has gone ahead; she turns to meet the pursuit (the face-down on the road)
         ]},
 
-        # S14 · The rearguard. After she has faced them down on the road: four generals, and her words.
-        "s14": {"title": T("The Rearguard", "断后"), "kind": "main", "steps": [
-            ["spawn", "cw", "chenwu", "s14", -12, -2], ["spawn", "pz", "panzhang", "s14", -12, 4],   # they came up from behind (west)
-            ["spawn", "xs", "xusheng", "s14", -18, -4], ["spawn", "df", "dingfeng", "s14", -18, 6],
+        # S13 · The rearguard. After she has faced them down on the road: four generals, and her words.
+        "s13": {"title": T("The Rearguard", "断后"), "kind": "main", "steps": [
+            ["spawn", "cw", "chenwu", "s13", -12, -2], ["spawn", "pz", "panzhang", "s13", -12, 4],   # they came up from behind (west)
+            ["spawn", "xs", "xusheng", "s13", -18, -4], ["spawn", "df", "dingfeng", "s13", -18, 6],
             N("Chen Wu and Pan Zhang have joined Xu Sheng and Ding Feng. When the four generals see Lady Sun, they have to dismount, and stand with their hands clasped.",
               "陈武、潘璋已经和徐盛、丁奉合兵一处。四员将领见了孙夫人，只得下马，拱手站着。"),
             S("ladysun", "Chen Wu, Pan Zhang. What are you doing here?", "陈武、潘璋，你们来干什么？"),
@@ -3368,30 +3359,30 @@ def _scenes_ladysun():
             ["party", ["ladysun", "zhaoyun"], {"to": {"place": "Liulangpu", "from": "The road to Chaisang"}}],
         ]},
 
-        # S15 · Liulangpu. No boats; then Zhuge Liang in the boats; Zhou Yu's second humiliation and the chant.
-        "s15": {"title": T("Liulangpu", "刘郎浦"), "kind": "main", "steps": [
-            ["spawn", "lb", "liubei", "s15", 4, -2],
+        # S14 · Liulangpu. No boats; then Zhuge Liang in the boats; Zhou Yu's second humiliation and the chant.
+        "s14": {"title": T("Liulangpu", "刘郎浦"), "kind": "main", "steps": [
+            ["spawn", "lb", "liubei", "s14", 4, -2],
             N("At Liulangpu, far from Chaisang now, Liu Bei breathes easier. He looks along the bank for a ferry: wide water, and not one boat.",
               "刘备一行离柴桑渐渐远了，来到刘郎浦，心里才稍稍放宽。沿着江岸找渡口，只见一片江水茫茫，没有一只船。"),
             S("zhaoyun", "My lord, you've come out of the tiger's mouth, and we're nearly home. The Directing General must have arranged something. Why worry?", "主公从虎口里逃出来，现在已经快到自己的地界了。我料军师一定早有安排，何必担忧？"),
             N("Liu Bei suddenly remembers the splendours of Wu, and tears come to his eyes.", "刘备听了，忽然想起在东吴的繁华日子，不由得伤心落泪。"),
             N("Dust rises behind them again. Liu Bei climbs a rise to look: the pursuers cover the ground.", "忽然报后面尘土冲天。刘备登高一看，只见追兵铺天盖地而来。"),
             S("liubei", "Day after day running, men and horses worn out, and the pursuers come again. There's nowhere left even to die!", "连日奔走，人困马乏，追兵又到，这下死无葬身之地了！"),
-            ["prop", "boats", "boat", "s15", -10, 6],
+            ["prop", "boats", "boat", "s14", -10, 6],
             N("Then they see, lying along the bank, twenty-odd covered boats.", "正在慌急的时候，忽然看见江岸边一字排开二十多只篷船。"),
             S("zhaoyun", "Heaven sends us boats! Row across, and then we'll see.", "老天保佑，这里有船！快划到对岸，再作打算！"),
-            ["spawn", "zgl", "zhugeliang", "s15", -10, 4],
+            ["spawn", "zgl", "zhugeliang", "s14", -10, 4],
             ["still", "llp_boats", "slow zoom in"],
             S("zhugeliang", "Congratulations, my lord! Zhuge Liang has been waiting here a long time.", "主公大喜！诸葛亮在这里等候多时了。"),
             N("The men dressed as merchants in the boats are all Jingzhou marines. Soon the four generals ride up to the bank.", "船里扮作客商的，都是荆州水军。不一会儿，四员将领赶到岸边。"),
             S("zhugeliang", "I worked all this out long ago. Go back and tell Zhou Yu: no more beauty traps.", "我早就算定了。你们回去告诉周郎，叫他别再使美人计了。"),
             N("Arrows fly from the bank, but the boats are already far out.", "岸上乱箭射来，船已经开远了。"),
-            ["spawn", "zy", "zhouyu", "s15", 20, 6],
+            ["spawn", "zy", "zhouyu", "s14", 20, 6],
             N("A roar on the river: warships beyond counting, Zhou Yu himself under the commander's banner. Zhuge Liang runs the boats to the north shore; "
               "they land and go on by cart and horse. Zhou Yu lands and chases them on foot.",
               "忽然江上喊声大震，只见战船无数，帅字旗下，周瑜亲自领着水军追来。诸葛亮叫船靠北岸，大家弃船上岸，坐车骑马继续走。周瑜也带兵上岸追赶。"),
-            ["fx", "flash", "s15", 10, -6],
-            ["spawn", "gy", "guanyu", "s15", 14, -6],
+            ["fx", "flash", "s14", 10, -6],
+            ["spawn", "gy", "guanyu", "s14", 14, -6],
             N("A drum, and out of the valley comes a band of swordsmen, Guan Yu at their head. Zhou Yu turns and runs. Huang Zhong on the left and Wei Yan on the right cut in, and Wu's army breaks.",
               "一声鼓响，山谷里冲出一队刀手，领头的正是关云长。周瑜手忙脚乱，拨马就逃。左边黄忠，右边魏延，两路兵马杀出，吴兵大败。"),
             ["still", "zy_chant", "slow pull back"],
@@ -3420,7 +3411,9 @@ def _nodes_ladysun():
         node("s2", 40, 200, "s2", place="Jingzhou", room="jz-hall", board=False),
         node("s3", 60, 190, "s3", board=False),   # by the dock, where the boats land
         node("s4", 80, 180, "s4", room="wu-hall", board=False, cutaway="told:wu-gatekeeper"),   # plays in her hall once the news reaches her gate
-        node("s5", 100, 170, "s5", place="Sweet Dew Temple", room="gl-abbot", dilemma=D(
+        # the axemen must be found in the side rooms first (Places: three hidden groups that deliver these marks)
+        node("s5", 100, 170, "s5", place="Sweet Dew Temple", room="gl-abbot",
+             gate=[{"needs": ["mark:axemen_1", "mark:axemen_2", "mark:axemen_3"], "else": "s5_wait"}], dilemma=D(
             "ladywu", "Look at the groom.", "看看这个女婿。",
             "My son calls it a trick. I'll see the man with my own eyes.", "儿子说这是计策。我要亲眼看看这个人。",
             "He's truly my son-in-law!", "这真是我的好女婿！",
@@ -3430,27 +3423,34 @@ def _nodes_ladysun():
             "If I'm to get home to Jingzhou, let one stroke split it.", "如果我能回到荆州，就让这一剑把它劈开。",
             "It splits!", "石头裂开了！",
             "Steady the hand.", "手要稳。")),
-        node("s7", 140, 150, "s7", room="bridal-room", board=False, cutaway=True),
-        node("s8", 150, 145, "s8", room="sq-hall", board=False, cutaway=True),
-        node("s9", 160, 140, "s9", board=False),
-        node("s10", 180, 130, "s10", room="east-palace", board=False),
-        node("s11", 200, 120, "s11", room="wu-hall", dilemma=D(
+        node("s7", 140, 150, "s7", room="bridal-room", dilemma=D(
+            "ladysun", "Have the blades taken away.", "把兵器撤下去。",
+            "Half a lifetime at war, and he's frightened of a few spears. Let him have his way, tonight.", "打了半辈子仗，还怕几把刀枪。今晚就依了他吧。",
+            "Take them all away.", "全部撤走。",
+            "Not like that. Again.", "不是这样。再来。")),
+        node("s8", 160, 140, "s8", room="east-palace", dilemma=D(
+            "ladysun", "Find a way out of Wu.", "想办法离开东吴。",
+            "Mother may say yes; my brother never will. We need a day when no one asks where we're going.", "母亲也许会答应，哥哥绝不会。得找一天，没人会问我们去哪儿。",
+            "New Year's Day, by the river.", "大年初一，去江边。",
+            "Think again.", "再想想。")),
+        node("s9", 180, 130, "s9", room="wu-hall", dilemma=D(
             "ladysun", "Ask your mother for leave.", "向母亲辞行。",
             "Say only what's true: his ancestors' graves are far away in the north. Leave out the rest.", "只说真话：他的祖坟远在北方。别的一句也不提。",
             "She says yes.", "母亲答应了。",
             "She's watching me. Again.", "母亲在看着我。再来。")),
-        node("s12", 210, 115, "s12", room="sq-hall", board=False, cutaway=True),
-        node("s13", 230, 105, "s13", place="The road to Chaisang", role="boss", dilemma=D(
+        node("s10", 190, 125, "s10", room="sq-hall", board=False, cutaway=True),
+        node("s11", 210, 115, "s11", place="The road to Chaisang", board=False),
+        node("s12", 225, 108, "s12", place="The road to Chaisang", role="boss", dilemma=D(
             "ladysun", "Clear the road.", "叫他们让开大路。",
             "If my brother won't count me his own flesh and blood, I'll settle this myself.", "哥哥不把我当亲骨肉，今天的危难，我自己来解决。",
             "They dismount.", "他们下马了。",
             "Louder.", "再大声些。")),
-        node("s14", 250, 95, "s14", place="The road to Chaisang", board=False),
-        node("s15", 270, 85, "s15", place="Liulangpu", board=False),
+        node("s13", 245, 98, "s13", place="The road to Chaisang", board=False),
+        node("s14", 265, 88, "s14", place="Liulangpu", board=False),
     ]
 
 
-_EDGES_LADYSUN = [[f"s{i}", f"s{i + 1}"] for i in range(1, 15)]
+_EDGES_LADYSUN = [[f"s{i}", f"s{i + 1}"] for i in range(1, 14)]
 
 _ITEMS_LADYSUN = {
     # Zhuge Liang's three sealed pouches: carried from s2, each opened at its moment (["open", key]) and never before.

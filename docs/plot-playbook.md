@@ -407,6 +407,21 @@ Draft one arc, get it playable in a test book, and fix what the playtest shows b
   novel's own order, and the later book's **opening scroll** still stands alone for a player who starts there. Example:
   the Cao Cao arc closes on chapters 5–7 in four lines; the Diaochan arc opens on Chang'an under Dong Zhuo.
 
+### R17. Novelty serves the fun, not a checklist
+
+> "the plot for this one wasnt that entertaining was that because of the arc in the novel" (Lady Sun's book, first cut)
+
+Plot's own reading of why: partly the arc (no one on our side is ever in danger; Zhuge Liang has foreseen it all; Liu Bei
+is passive), mostly the design. Lessons:
+- **Lead the person with the most to do.** Zhao Yun led two-thirds of it as an escort on errands; Lady Sun, who has the
+  initiative, led only the last third.
+- **A device must not take away agency.** The sealed pouches handed the player each plan to carry out: new, but it made
+  the player a courier. Novel devices should give the player something to do, not read.
+- **Watching is not playing.** Count cutaways and board-less beats; keep only the ones that carry the story.
+- **Where the novel has danger, make the player feel it** (the axemen in the corridors; the road block), and use the
+  best mechanic more than once.
+- **"Novelty from itself"** (the user) means finding new fun, not ticking off devices the earlier books didn't use.
+
 ### R15. Relay only what the user said
 
 When messaging other sessions, quote the user's actual words and mark Plot's own suggestions as Plot's. Plot once told
