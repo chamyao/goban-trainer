@@ -76,11 +76,13 @@ const path = require('path');
             w.auto = null; const went = w.leaving || w.placeId !== pl;
             return { in: went, from: at, stop: [Math.round(P.x), Math.round(P.y)], line }; }, [sx, sy, key, pl]).then(r => ({ ...r, key }));
         const back = async () => { if (await p.evaluate(pl => window.__w.placeId !== pl || window.__w.leaving, pl)) { for (let i = 0; i < 30 && await p.evaluate(() => !window.__w.player || window.__w.leaving); i++) await p.waitForTimeout(150); await goTo(pl); } else if (await p.evaluate(() => window.__w.ui.busy())) await ready(); };
+        // a story scene that starts where she stands (a beat's spot by the door), before she has moved: played out, then the same walk again
+        const walkTwice = async st => { let r = await walkIn(st); if (!r.in && r.line && r.stop[0] === r.from[0] && r.stop[1] === r.from[1]) { await back(); await ready(); r = await walkIn(st); } return r; };
         // first from the face its building is drawn on (the arch, the doorway a player walks up to): that one must go in
         let faceRes = null;
-        if (face) { faceRes = face.start ? await walkIn(face.start) : { in: false, why: `no open ground before its ${face.faces} face she can walk to` }; await back(); }
+        if (face) { faceRes = face.start ? await walkTwice(face.start) : { in: false, why: `no open ground before its ${face.faces} face she can walk to` }; await back(); }
         let res = faceRes && faceRes.in ? faceRes : (starts.length ? null : { in: false, why: 'no open ground before it on any side that she can walk to from where she comes in' });
-        if (!res || !res.in) for (const st of starts) { const r = await walkIn(st); await back(); res = r; if (r.in) break; }
+        if (!res || !res.in) for (const st of starts) { const r = await walkTwice(st); await back(); res = r; if (r.in) break; }
         const wet = !res.in && /walk to from where/.test(res.why || '') && await p.evaluate(() => (window.__w.waters || []).some(x => x.on));
         if (wet) { console.log(`note book ${book} ${pl}${ids ? ` (${ids})` : ''}, ${how}: the door to ${d.to} is cut off by the water in this state (as the story has it: the flood)`); continue; }
         if (faceRes && !faceRes.in && faceRes.line && res.in) console.log(`note book ${book} ${pl}${ids ? ` (${ids})` : ''}, ${how}: from the ${face.faces} face of ${face.id}, someone stands in the way of the door to ${d.to} ("${faceRes.line.replace(/^主线 · Story/, '').slice(0, 40)}…", at ${faceRes.stop}); it goes in walking ${res.key} a little to the side`);
