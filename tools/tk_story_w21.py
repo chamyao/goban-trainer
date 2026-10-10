@@ -39,7 +39,7 @@ def D(who, q, open_, win, slip, **kw):
 # Cast id (Graphics' TK_CHARS keys) -> Kokoro English voice (ids already used in the repo).
 CAST21 = {
     "ms_jang": "am_liam", "ms_jang_young": "am_liam", "ms_jang_child": "af_sky", "ms_mother": "bf_emma",
-    "ms_oh": "am_onyx", "ms_kimds": "am_eric", "ms_ahn": "af_bella", "ms_han": "am_michael", "ms_kimsh": "am_adam",
+    "ms_oh": "am_onyx", "ms_oh_hike": "am_onyx", "ms_kimds": "am_eric", "ms_ahn": "af_bella", "ms_han": "am_michael", "ms_kimsh": "am_adam",
     "ms_kimbr": "bm_george", "ms_director": "bm_fable", "ms_hr": "am_michael", "ms_trainee": "af_sky",
     "ms_stevehan": "am_echo", "ms_go": "am_fenrir", "ms_buyer": "bm_lewis", "ms_sponsor": "bm_daniel", "ms_exec": "bm_lewis",
     # new in this book (Graphics: to draw)
@@ -128,7 +128,7 @@ def _scenes():
             ]],
             N("A message from upstairs: don't come to the office. Go straight to a café in Jongno. A buyer is waiting, and nobody else can meet him."),
             ["gain", "cafe_address"],
-            ["party", ["ms_oh"], {"to": {"place": "Mountain", "spot": "summit"}}],   # a cut: Oh, on a mountain, the same morning
+            ["party", ["ms_oh_hike"], {"to": {"place": "Mountain", "spot": "summit"}}],   # a cut: Oh, on a mountain, the same morning
         ]},
 
         # M7 · 3수. Oh leads. The weekday hike; the forgotten 11 a.m. meeting; the department head's call on the summit.
@@ -139,18 +139,18 @@ def _scenes():
             S("ms_ohson", "Dad! You said the mountain!"),
             N("He forgot the eleven o'clock meeting with an overseas buyer. On the summit, his phone rings."),
             S("ms_bujang", "Where are you? The buyer's waiting. If he walks, we both die."),
-            S("ms_oh", "Anyone can go, sir. The director. The executives. The president himself."),
+            S("ms_oh_hike", "Anyone can go, sir. The director. The executives. The president himself."),
             S("ms_bujang", "I'm sending today's new hire straight there. Are we in a position to be picky?"),
-            S("ms_oh", "A rookie? On his first day?"),
+            S("ms_oh_hike", "A rookie? On his first day?"),
             ["remove", "sn"],
         ]},
 
         # M7b · 3수. The car; the jam; "fear is rational". A cut to the café.
         "m7b": {"title": T("Fear Is Rational"), "kind": "main", "steps": [
             N("Into the car. The road in moves five hundred metres in thirty minutes."),
-            S("ms_oh", "There was a paper at the workshop. Fear is mostly irrational..."),
+            S("ms_oh_hike", "There was a paper at the workshop. Fear is mostly irrational..."),
             S("ms_bujang", "Shall I tell you about dismissal-notice pay?"),
-            S("ms_oh", "Mangwon-dong crossroads. Twelve kilometres an hour. Eight to go. Thirty minutes late. Fear is rational."),
+            S("ms_oh_hike", "Mangwon-dong crossroads. Twelve kilometres an hour. Eight to go. Thirty minutes late. Fear is rational."),
             ["party", ["ms_jang"], {"to": {"place": "jongno--cafe", "spot": "cafe"}}],   # a cut: the café, where the rookie is
         ]},
 
@@ -276,6 +276,7 @@ def _scenes():
             ["spawn", "ahn", "ms_ahn", "m16", 4, -2],
             S("ms_ahn", "Whoever your partner is, trust them. The one inside the board can't see his own scheming. Everyone watching can."),
             ["still", "ms_ringed", "slow zoom in"],
+            N("A trainee at a board, ringed by onlookers. Everyone outside already knows."),
             ["problem"],   # Jang: see what the watchers see
             S("ms_ahn", "Do your part, and trust the rest."),
             ["remove", "ahn"],
@@ -529,7 +530,7 @@ def _nodes():
         node("m4", 56, 222, "m4", place="Susaek-dong", room="home", move=2, board=False),
         node("m5", 68, 216, "m5", place="Jongno", room="sponsor-office", move=2, board=False),
         node("m7", 82, 209, "m7", place="Mountain", move=3, board=False),
-        node("m7b", 90, 205, "m7b", place="Mountain", move=3, board=False),
+        node("m7b", 90, 205, "m7b", place="Mountain", move=3, board=False, clock={"start": "11:00", "tiles": 3}),
         node("m8", 96, 202, "m8", place="Jongno", room="cafe", move=4, dilemma=D(
             "ms_jang", "Give the buyer a puzzle: the move that gives one stone to take more.",
             "I can't talk trade. I can talk this.",
@@ -1049,4 +1050,16 @@ KO21 = {
     "And I'm sorry I lost my temper. Thank you for coming yourself.": '저도 화낸 건 죄송합니다. 직접 와 주셔서 고맙습니다.',
     "I'm sorry. ...So will the approvals go faster now?": '죄송합니다. ...그럼 이제 결재는 빨리 나는 겁니까?',
     'Often the obvious move is the hardest. Some things you must do however hard, and some you must not do however easy.': '당연한 수가 가장 어려울 때가 많다. 아무리 어려워도 해야 할 일이 있고, 아무리 쉬워도 하지 말아야 할 일이 있다.',
+    # Places (Misaeng), the Mountain (bf15b83)
+    'An old man in full hiking kit, poles and all, steps aside. “Running down? On a weekday? Young people.”': '등산 장비를 다 갖춘 노인이 스틱을 들고 비켜선다. “뛰어 내려가? 평일에? 젊은 사람이.”',
+    'A woman with a thermos and a visor. “Careful going down. The steps are wet.”': '보온병에 선캡을 쓴 아주머니. “내려갈 때 조심해요. 계단이 젖었어요.”',
+    "A man in a suit jacket and trainers, phone to his ear, by his car. “…No, I'm at my desk. Yes. My desk.”": '정장 재킷에 운동화 차림의 남자가 차 옆에서 전화를 받는다. “…아뇨, 자리에 있습니다. 네. 자리에요.”',
+    'The summit': '정상',
+    "Oh's car": '오 과장의 차',
+    'The summit rocks': '정상의 바위',
+    'A bench, and Seoul below': '벤치, 그리고 아래로 서울',
+    'The trail map': '등산로 안내도',
+    'The summit.': '정상.',
+    "Run down the trail to the car. The deal won't wait.": '등산로를 뛰어 내려가 차로. 거래는 기다려 주지 않는다.',
+    'A trainee at a board, ringed by onlookers. Everyone outside already knows.': '바둑판 앞의 연구생, 그를 둘러싼 구경꾼들. 밖에 있는 사람들은 이미 다 안다.',
 }
