@@ -180,8 +180,10 @@ These were each learned from a real complaint, and each is a rule, not a one-off
   (`ZH_PLACES_MS = {}`).
 - **Misaeng draws only in its own kit, `seoul`** (Graphics (Misaeng), `assets/tk/kits/seoul.json`; the world says
   `"kit": "seoul"`): build it with `python3 -m tools.mapfactory all --world 21 --plans ms --kit seoul --preview`, not the
-  three Chinese kits. Misaeng is becoming five books (Plot alt2, misaeng-arc.md): the shared places (the tower, Jongno,
-  Susaek-dong …) carry over; each book's beat spots come with its design.
+  three Chinese kits. Misaeng is becoming five books, worlds 21–25 (Plot alt2, misaeng-arc.md; maps per book in
+  data/tk_maps/w21…w25): the shared places (the tower, Jongno, Susaek-dong …) carry over; each book's beat spots come
+  with its design. claude/places-misaeng sits on claude/integration-alt2 and carries only Misaeng's changes (Integration
+  alt2 can't take main's Book 15 work through it): build on their head, never on claude/plot-places.
 - **A lift** (Integration alt2's `"use": "lift"`, `"floors": [{label, to}]`): a spot that opens a floor menu. The tower
   has one in the lobby and one on each floor (`_with_lift`), each floor's arrivals from every other floor at its lift.
   The floors hang off the lobby by `"owns"` (a plan key: rooms reached another way, whose doors lead back to it), and
