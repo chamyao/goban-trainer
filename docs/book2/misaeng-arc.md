@@ -94,10 +94,10 @@ door (R3).
 
 | Key | Beat | Lead | Place · room | Move | Board |
 |---|---|---|---|---|---|
-| m1 | **Not Hard Enough** (착수): the last trainee exam game; the monologue (「열심히 안 해서인 걸로 생각하겠다」); home to his mother | Jang | Korea Baduk Association · `kba-trainees`; Susaek-dong · `home` | 0 | Contest, **fails**: Jang, "Win the game that decides your career." |
+| m1 | **Not Hard Enough** (착수): the last trainee exam game; the monologue (「열심히 안 해서인 걸로 생각하겠다」); home to his mother | Jang | KBA · `kba-trainees`; Susaek-dong · `home` | 0 | Contest, **fails**: Jang, "Win the game that decides your career." |
 | m2 | **The Light I'm Allowed** (2수): the sponsor's parachute; first day; Sales Team 3: Oh and Kim Dong-sik | Jang | One International · `lobby`, `sales3` | 2 | Legwork: Jang, "Get through the front desk." (no pass yet) |
 | m3 | **The Waybill** (13수): Kim Seok-ho's glue stick; the waybill on the lobby floor; the director explodes; Jang blamed. Oh searches the lobby bins and finds the scrap | Jang → Oh | `lobby`, `sales3` | 13 | — |
-| m4 | **Everyone Has Their Own Game** (17–20수): Park Jong-gi on the roof; the client; the note 「무책임해지세요」; he confesses instead | Jang | `roof`; client office | 20 | Contest: Park Jong-gi, "Stand up to the client." |
+| m4 | **Everyone Has Their Own Game** (17–20수): Park Jong-gi on the roof; the client; the note 「무책임해지세요」; he confesses instead | Jang | `roof`; Jongno · `client`; `meeting` | 20 | Contest: Park Jong-gi, "Stand up to the client." |
 | m5 | **Daycare** (21–22수): Sun Ji-young asks; Jang and Ahn collect Somi | Jang | daycare | 22 | — |
 | m6 | **The Pair** (23–30수): Jang's materials, Han Seok-yul's delivery; Han chokes; Ahn's flawless PT | Jang | `pt-room` | 28 | **Record board: Black 29**; then contest, Han Seok-yul: "Finish the presentation." |
 | m7 | **Office Slippers** (31–33수): the individual test (「사지 않겠습니다」); the results: Ahn first, Baek-gi and Han regular, Jang a 2-year contract | Jang | `pt-room`; `hr` | 33 | Contest: Jang, "Sell to someone who won't buy." |
@@ -138,17 +138,25 @@ Ahn leads 2 beats, Sun 1 and a cutaway, Oh 4 (with m3 and m23 shared). Boards: 5
    Jang's last trainee exam game in m1 (the webtoon tells his failure, not one game); the room setup's exact layout
    (from the vol 6 blurb's list).
 
-## Places (shared keys for Places)
+## Places (shared keys for Places; agreed with Places (Misaeng) on `claude/places-misaeng`)
 
-- **One International** (Jongno): `lobby` (front desk, gates, bins), `sales3` (Sales Team 3's island of desks, Oh's
-  desk at its head), `sun-desk`, `finance`, `hr`, `audit` (meeting room), `board-room`, `exec-floor`, `pt-room`, `roof`
-  (smokers' corner; Jang doesn't smoke).
-- **Korea Baduk Association**: `kba-trainees` (rows of boards), the front office.
-- **Susaek-dong**: Jang's home (his mother's room), the relatives' flat.
-- **Jongno street**: the corner shop, the market, Tapgol Park (old men playing baduk).
-- **Baekjin Trading**: a small office.
-- **The pizza shop**, the daycare, a pojangmacha (street tent bar), HQ meeting room.
-- **The new company**: a small office. **Amman**: one street (epilogue).
+World 16, arc `ms`, beat keys `16-m1` … `16-m24` (pending Integration's confirmation of the number). The story is its own
+module, `tools/tk_story_misaeng.py` (`WORLD_MS`).
+
+1. **Susaek-dong**: a hillside alley of low villas; rooms `home` (his mother's room), `relatives` (the Chuseok flat); the
+   subway entrance at the bottom.
+2. **The subway**: Line 6 to Jongno, a road map (platform, carriage). m2's commuter with a pocket board blocks here.
+3. **Jongno**: the tower's door and forecourt (m23), the corner shop (m18), market stalls, **Tapgol Park** (stone go
+   tables, old men), a pojangmacha that is up only at night (m19), the `client` office (a door into one room, m4's 19수
+   half) and the group `hq` building (a door into one meeting room, m19).
+4. **One International** (the tower; floors linked only by the lift): `lobby` (front desk, ID gates, bins, lift bank),
+   `sales3` (the team's island, Oh's desk at its head, spot `sun-desk`, a copier, a pantry), `finance`, `hr`, `audit`,
+   `meeting` (m4's 20수 half), `board-room`, `exec-floor`, `pt-room`, `roof`.
+5. **The Korea Baduk Association** (Hongik-dong, its own place): `kba-front` (m18's rebuke), `kba-trainees` (m1).
+6. **Baekjin Trading**: a lane of small industrial offices; room `baekjin`.
+7. **Sun's neighbourhood**: the daycare (m5) and Sun's flat (m20). **The pizza shop** (m16) on its own small street.
+8. **The new office** (m24): a narrow street, the office upstairs.
+9. **Amman** (m24): one street.
 
 ## Road challengers (exact, for Places): 10, of which 3 blocking
 
