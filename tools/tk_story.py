@@ -740,4 +740,9 @@ for _en, _z in _HLM1.PLACE_NAMES.items():
     _tkzh.ZH.setdefault(_en, _z)
 _HLM = _copy.deepcopy(_HLM1.WORLD_HLM1)
 _HLM.update(n=31, book=1, hidden=True)   # not a Three Kingdoms book: out of the library until the user says how to show it
+# the new mechanics (tk-world.js watchRoom, tk.js TKTally), from the story's own data
+_HLM["watch"] = {k: dict(cues=[dict(line=["say", c["who"], c["say"]], **({"wait": True} if c.get("wait") else {})) for c in cs],
+                         **({"dazzled": list(_HLM1.DAZZLED[k])} if k in getattr(_HLM1, "DAZZLED", {}) else {}))
+                 for k, cs in _HLM1.ROOM_CUES.items()}
+_HLM["tally"] = _HLM1.TALLY
 WORLDS.append(_HLM)

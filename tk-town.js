@@ -272,6 +272,12 @@ const TownUI = {
           sp.onclick = e => { e.stopPropagation(); scene.spreadNews(); };
           g.append(sp);
         }
+        let watch = null; try { watch = scene.watchCues && scene.player && scene.watchCues(); } catch { watch = null; }
+        if (watch) {   // look at the people in the room before stepping up (a world's "watch": Red Chamber)
+          const wb = Object.assign(document.createElement("button"), { type: "button", className: "town-goal-go town-goal-watch", textContent: "察看 Watch the room" });
+          wb.onclick = e => { e.stopPropagation(); scene.watchRoom(); };
+          g.append(wb);
+        }
         if (there) {   // "Take me there" (apo110): walks you all the way, place after place
           const go = Object.assign(document.createElement("button"), { type: "button", className: "town-goal-go", textContent: "带我去 Take me there" });
           go.onclick = e => { e.stopPropagation(); scene.takeMeThere(); };

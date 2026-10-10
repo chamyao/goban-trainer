@@ -29,6 +29,8 @@ starts from a fresh save.
 | playthrough | fresh save, phone: all 15 main story beats by taps (scene, mid-scene problem, scene after), the book completes |
 | ending | the last stretch: boss, the "Yellow Turbans Fall" scroll, Anxi hostel (ax1), the post (ax2), book complete |
 | book15-places | Book 15's maps in the engine: the loud town spreads by itself from Qiao Guolao's steward to Lady Wu's gate and s4 plays; the three axemen rooms each deliver their mark and open s5's gate (a monk's room doesn't); both face-downs yield when faced and catch back to their own start (Places) |
+| hlm-library | Red Chamber (world 31) has its own Library card in test mode (none outside it); the card opens its book list, Red Chamber books only; the Three Kingdoms card and list never show or open a Red Chamber book |
+| hlm-tally | Red Chamber's tally of smiles: a wrong move on a counted Part 1 board adds one (not the jade board, Part 2, or another book); the d8 scroll says none, or the count; the Three Kingdoms books have none |
 | tap-move-talk | tap the ground → walks there; tap a person → walks up and talks; taps advance and end the dialogue |
 | tap-duel | phone: tap a challenger, the duel opens full-screen; tap to preview where points are under 28 px apart (first tap a ghost and no move, a tap elsewhere moves it, a second tap plays), else one tap plays; ghosts on wrong points are never a slip; the menu's Confirm taps: Never plays on one tap; Leave by tap. PLAYTEST_DEVICE picks the device |
 | doors-and-exits | walk out of Lousang by taps; tap a building to go in; tap the doorway to leave; tap the road off the map edge |
