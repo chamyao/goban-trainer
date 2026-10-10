@@ -548,6 +548,7 @@ class Goban {
     if (!interactive) return;
     for (let r = r0; r <= r1; r++)
       for (let c = c0; c <= c1; c++) {
+        if (this.only && !this.only.has(String.fromCharCode(97 + c) + String.fromCharCode(97 + r))) continue;   // a multiple-choice board: only its letters take a tap
         const t = this.el("circle", { cx: this.px(c), cy: this.py(r), r: this.cell * .48,
                                       fill: "transparent", cursor: "pointer" });
         t.addEventListener("mouseenter", () => {
@@ -568,7 +569,7 @@ class Goban {
     return w > 0 && w / this.W * this.cell < 28;
   }
   tap(c, r, grid) {
-    if (grid[r][c] !== EMPTY || !this.needsConfirm()) { this.clearGhost(); return this.onClick(c, r); }
+    if (grid[r][c] !== EMPTY || !this.needsConfirm() || this.only) { this.clearGhost(); return this.onClick(c, r); }   // (four big letters: one tap plays)
     if (this.ghost && this.ghost.c === c && this.ghost.r === r) { this.clearGhost(); return this.onClick(c, r); }
     this.clearGhost();
     const g = this.el("circle", { cx: this.px(c), cy: this.py(r), r: this.cell * .47, "pointer-events": "none",

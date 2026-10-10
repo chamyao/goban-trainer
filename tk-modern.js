@@ -86,9 +86,10 @@ const WorldModern = {
         el.append(ci, t); svg.append(el);
       });
     };
+    g.only = new Set(pts);   // the board takes taps on these four only (app.js Goban): no ghost stone off the letters
     const render = trainer.render.bind(trainer);
     trainer.render = (...a) => { const r = render(...a); draw(); return r; };
-    draw();
+    trainer.render();   // redrawn with only the four points taking taps, and the letters
     return draw;
   },
   boardSvg(w, n, px = 92) {
