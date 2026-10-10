@@ -198,6 +198,10 @@ These were each learned from a real complaint, and each is a rule, not a one-off
 - **Walk a book against its own story.** The engine reads data/tk.json: if the story there is older than the maps
   (items it doesn't define, beats renamed), a giver gives nothing and the walk fails for no fault of the maps. Rebuild
   tk.json locally (`python3 tools/build_tk.py`) before the walk, and put it back after (Integration commits it).
+- **A delivery is a handoff to a person.** The engine delivers when someone standing within 64 px of the spot is
+  talked to; with no one there she hands things to a ring on the floor (apo110, Misaeng's errands). The book stands
+  the recipient beside each delivery while it's open, and the build (plans.py verify) fails a delivery spot with no one
+  within 64 px, unless it's `"set_down"` (a place to put something: the board room's seats). Books 12-15 pass.
 - **Walk-up spots keep 76 px apart.** A beat, a thing that gives, or a place to deliver to sets off within 36 px of
   her. Two closer than 76 px both go off as she walks by: in Misaeng's Sales 3, five spots 32 px apart in a row set
   each other off and m4's waiting scene kept firing between deliveries (Testing). The checker fails a pair closer than

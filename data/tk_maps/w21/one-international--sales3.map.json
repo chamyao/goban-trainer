@@ -513,6 +513,45 @@
    ]
   },
   {
+   "id": "kim-errand",
+   "kind": "hero.ms_kimds",
+   "x": 20.5,
+   "y": 12.9,
+   "say": [
+    "Kim Dong-sik doesn't look up from his screen."
+   ],
+   "until": "21-21-m4",
+   "face": "W",
+   "when": "node:21-m3",
+   "label": "Kim Dong-sik"
+  },
+  {
+   "id": "oh-errand",
+   "kind": "hero.ms_oh",
+   "x": 24.5,
+   "y": 8.9,
+   "say": [
+    "Section head Oh is on the phone, and holds up one finger."
+   ],
+   "until": "21-21-m4",
+   "face": "W",
+   "when": "node:21-m3",
+   "label": "Section head Oh"
+  },
+  {
+   "id": "deputy-errand",
+   "kind": "folk.salaryman",
+   "x": 12.5,
+   "y": 8.9,
+   "say": [
+    "The deputy turns his empty cup round and round."
+   ],
+   "until": "21-21-m4",
+   "face": "E",
+   "when": "node:21-m3",
+   "label": "The deputy"
+  },
+  {
    "id": "oh-slippers",
    "kind": "hero.ms_oh",
    "x": 21.0,
