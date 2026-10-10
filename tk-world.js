@@ -617,7 +617,7 @@ function worldScenes() {
     }
     // Walking into a story spot's area starts its scene; it re-arms once you walk away.
     nearSpots() {
-      if (this.ui.busy() || this.leaving || this.cine || this.approaching) return;
+      if (this.ui.busy() || this.leaving || this.cine || this.approaching || this.engaged || document.querySelector(".tk-duel")) return;   // (not while a challenger has you: his board, his last word)
       const P = this.player;
       for (const s of Object.values(this.spots)) {
         if (s.trigger === "talk") continue;
