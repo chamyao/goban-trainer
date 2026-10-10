@@ -626,26 +626,32 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) { this.data = await (await fetch("data/tk.json?v=103")).json(); this.migrate(); }
+    if (!this.data) { this.data = await (await fetch("data/tk.json?v=104")).json(); this.migrate(); }
     return this.data;
   },
-  // A book whose beats were renumbered after players began it: their cleared beats moved to the new keys, once
-  // (Book 4, Three Silk Pouches, reworked: old s10-s15 are s8-s14 now, old s13 split in two; old s8 and s9 are gone)
+  // A book whose beats were renumbered after players began it: their cleared beats moved to the new keys, once per
+  // renumbering (Book 4, Three Silk Pouches). v2, the rework: old s10-s15 became s8-s14 (old s13 split in two; old s8
+  // and s9 gone). v3, the rebuild around Zhou Yu's schemes: s1-s7 kept, s8-s14 became s10-s16, and new s8 (the gilded
+  // cage) and s9 (year's end) came in between; a save already past them counts them played (Replay from… plays them).
   migrate() {
     const p = loadProgress(), m = p.tkMig || (p.tkMig = {});
-    if ((m[15] || 0) >= 2) return;
-    const old = new Set(Object.keys(p.tk || {}).filter(k => /^15-s\d+$/.test(k) && this.cleared(k)).map(k => k.slice(3)));
-    if (old.size) {
-      const map = { s10: ["s8"], s11: ["s9"], s12: ["s10"], s13: ["s11", "s12"], s14: ["s13"], s15: ["s14"] };
-      const now = new Set([...old].filter(k => /^s[1-7]$/.test(k)));
+    if ((m[15] || 0) >= 3) return;
+    const move = (map, keep, fill) => {
+      const old = new Set(Object.keys(p.tk || {}).filter(k => /^15-s\d+$/.test(k) && this.cleared(k)).map(k => k.slice(3)));
+      if (!old.size) return;
+      const now = new Set([...old].filter(k => keep.test(k)));
       for (const [o, ns] of Object.entries(map)) if (old.has(o)) ns.forEach(n => now.add(n));
+      for (const [when, ns] of fill) if (now.has(when)) ns.forEach(n => now.add(n));
       const t = Date.now();
       for (const k of old) if (!now.has(k)) this.undoCleared(p, `15-${k}`);
       for (const k of now) { (p.tk || (p.tk = {}))[`15-${k}`] = 1; (p.tkAt || (p.tkAt = {}))[`15-${k}`] = t + 1; }
-    }
-    m[15] = 2;
+    };
+    if ((m[15] || 0) < 2) move({ s10: ["s8"], s11: ["s9"], s12: ["s10"], s13: ["s11", "s12"], s14: ["s13"], s15: ["s14"] }, /^s[1-7]$/, []);
+    move({ s8: ["s10"], s9: ["s11"], s10: ["s12"], s11: ["s13"], s12: ["s14"], s13: ["s15"], s14: ["s16"] }, /^s[1-7]$/, [["s10", ["s8", "s9"]]]);
+    m[15] = 3;
     this.saveProg(p);
   },
+
   ls(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } },
   lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} if (typeof Sync !== "undefined" && Sync.tkKey(k)) Sync.scheduleSave(); },
   saveProg(p) { localStorage.setItem(PROGRESS_KEY, JSON.stringify(p)); if (typeof Sync !== "undefined") Sync.scheduleSave(); },
