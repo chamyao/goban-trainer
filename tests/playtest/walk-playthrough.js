@@ -250,6 +250,9 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       if (!errand && /isn't open yet|还没有开通|barred|不为你开|not open|turns you away|No one goes|receives no one/i.test(s.line)) refused = `refused: "${s.line.slice(0, 90)}"`; }
     if (s.cancel) { await p.getByText('Cancel', { exact: true }).first()[TAPM]().catch(() => {}); continue; }
     if (s.scroll) { await tapEl('.tk-scroll-go'); await p.waitForTimeout(300); continue; }
+    // a lift's floor menu (Misaeng, tk-modern.js): the floor the goal is on is marked ◆; take it, as a player following the goal does
+    const lift = await p.evaluate(() => { const m = document.querySelector('.tk-lift'); if (!m || !m.getClientRects().length) return null; const b = [...m.querySelectorAll('button')].find(x => /^\s*◆/.test(x.textContent)); return { floor: b ? b.textContent.trim() : null }; });
+    if (lift) { if (lift.floor) { console.log(`     ${beat}: the lift, to ${lift.floor}`); await p.locator('.tk-lift button', { hasText: '◆' }).first()[TAPM]().catch(() => {}); } else { console.log(`FAIL ${beat}: the lift's menu has no floor marked ◆`); await tapEl('.tk-lift-close'); } await p.waitForTimeout(600); continue; }
     if (s.pouch) { pouches.push(s.pouch); await tapEl('.tk-pouch button'); await p.waitForTimeout(300); continue; }   // a sealed pouch opened (Book 15): its card read, then on
     if (!s.duel) await hook();   // (again after a reload)
     if (SYNC && Date.now() - lastVis > 45000) {   // the tab hidden and shown again (a phone app switch): the game pulls, and reroutes only if something changed
