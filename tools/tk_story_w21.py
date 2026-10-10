@@ -1049,4 +1049,15 @@ KO21 = {
     "And I'm sorry I lost my temper. Thank you for coming yourself.": '저도 화낸 건 죄송합니다. 직접 와 주셔서 고맙습니다.',
     "I'm sorry. ...So will the approvals go faster now?": '죄송합니다. ...그럼 이제 결재는 빨리 나는 겁니까?',
     'Often the obvious move is the hardest. Some things you must do however hard, and some you must not do however easy.': '당연한 수가 가장 어려울 때가 많다. 아무리 어려워도 해야 할 일이 있고, 아무리 쉬워도 하지 말아야 할 일이 있다.',
+    # Places (Misaeng), the Mountain (bf15b83)
+    'An old man in full hiking kit, poles and all, steps aside. “Running down? On a weekday? Young people.”': '등산 장비를 다 갖춘 노인이 스틱을 들고 비켜선다. “뛰어 내려가? 평일에? 젊은 사람이.”',
+    'A woman with a thermos and a visor. “Careful going down. The steps are wet.”': '보온병에 선캡을 쓴 아주머니. “내려갈 때 조심해요. 계단이 젖었어요.”',
+    "A man in a suit jacket and trainers, phone to his ear, by his car. “…No, I'm at my desk. Yes. My desk.”": '정장 재킷에 운동화 차림의 남자가 차 옆에서 전화를 받는다. “…아뇨, 자리에 있습니다. 네. 자리에요.”',
+    'The summit': '정상',
+    "Oh's car": '오 과장의 차',
+    'The summit rocks': '정상의 바위',
+    'A bench, and Seoul below': '벤치, 그리고 아래로 서울',
+    'The trail map': '등산로 안내도',
+    'The summit.': '정상.',
+    "Run down the trail to the car. The deal won't wait.": '등산로를 뛰어 내려가 차로. 거래는 기다려 주지 않는다.',
 }
