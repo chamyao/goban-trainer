@@ -527,6 +527,7 @@ def _nodes():
             "Both live.",
             "One of them dies. Again.")),
         node("m14", 166, 167, "m14", room="sales3", move=6, record=7,
+             choices={7: [['dj', 0.08], ['ep', 0.11], ['cj', 0.14], ['qk', 0.26], ['do', 0.29], ['cm', 0.31], ['bp', 0.51], ['co', 1.05], ['qn', 3.87]]},
              gate=[{"needs": ["mark:errand_bl", "mark:errand_copy", "mark:errand_floor"], "else": "m14_wait",
                     "objective": T("Work from every side on Sales 3's floor: the forwarder call about the B/L at the team phone, Kim's copies at the copier, and the floor."),
                     "at": "One International"}],
@@ -566,7 +567,7 @@ def _nodes():
         node("m21", 246, 127, "m21", room="lobby", move=14, board=False,
              gate=[{"needs": ["item:waybill_scrap"], "else": "m21_wait",
                     "objective": T("Search the recycling bins by the lobby's ID gates for the rest of the waybill."), "at": "One International"}]),
-        node("m22", 258, 121, "m22", room="textile", move=14, record=[15, None], dilemma=[
+        node("m22", 258, 121, "m22", room="textile", move=14, record=[15, None], choices={15: [['cf', 0.05], ['gc', 0.1], ['ic', 0.26], ['fd', 0.34], ['ed', 0.57], ['dm', 0.78], ['dj', 0.95], ['cj', 0.95], ['dl', 1.1], ['ec', 1.51]]}, dilemma=[
             D("ms_kimbr", "Which move did Cho Hunhyun play?",
               "A new part of the board. A new story.",
               "Black 15.",
