@@ -68,15 +68,22 @@ def _specks(g, cols, seed, n=14):
             g.set(r.randrange(16), r.randrange(16), c)
 
 
-def pavement(v):   # Seoul's pavement: grey-beige block paving, staggered
+def pavement(v):   # Seoul's pavement: grey square blocks, each a shade apart; v 2 a drain grate, v 3 a yellow tactile block
+    r = random.Random(100 + v)
     g = Grid(T, T)
-    g.rect(0, 0, T, T, "#b8b2a6")
-    for y in (0, 8):
-        g.rect(0, y, T, 1, "#a09a8e")
-        off = 0 if (y // 8 + v) % 2 == 0 else 4
-        for x in range(off, T, 8):
-            g.rect(x, y, 1, 8, "#a09a8e")
-    _specks(g, ["#c4beb2", "#aca698"], 10 + v, 8)
+    for by in (0, 8):
+        for bx in (0, 8):
+            c = r.choice(["#b4b4b0", "#aeaeaa", "#bababa", "#a8a8a4", "#b8b4ac"])
+            g.rect(bx, by, 8, 8, c); g.rect(bx, by, 8, 1, shade(c, .12)); g.rect(bx, by, 1, 8, shade(c, -.1))
+    _specks(g, ["#9c9c98", "#c4c4c0"], 10 + v, 6)
+    if v == 2:
+        g.rect(3, 5, 10, 6, "#4a4c50")
+        for x in range(4, 13, 2):
+            g.rect(x, 6, 1, 4, "#2a2c30")
+    if v == 3:
+        g.rect(0, 0, 8, 8, "#e8c030")
+        for x, y in ((2, 2), (5, 2), (2, 5), (5, 5)):
+            g.set(x, y, "#c89a20")
     return g.image()
 
 
@@ -136,10 +143,11 @@ def parapet(v):   # a roof's low concrete parapet with a steel rail
     return g.image()
 
 
-def roof(v):   # a flat roof: green waterproofing paint, worn
+def roof(v):   # a roof deck: grey concrete slabs with tarred seams
     g = Grid(T, T)
-    g.rect(0, 0, T, T, "#6a9a7a")
-    _specks(g, ["#5a8a6a", "#7aaa8a", "#8a9a8a"], 40 + v, 10)
+    g.rect(0, 0, T, T, "#a2a3a0")
+    g.rect(0, 0, T, 1, "#6a6b68"); g.rect(0, 0, 1, T, "#6a6b68")
+    _specks(g, ["#969794", "#b0b1ae", "#8a8b88"], 40 + v, 12)
     return g.image()
 
 
@@ -248,11 +256,11 @@ def office_tower():   # One International: a glass-and-steel tower on a granite 
 
 
 def office_block(seed=1, front="#c8bca8", trim="#8a7a66", sign="#2e4a8a"):   # a small 4-5 storey office building
-    W, H = 6 * T, 92
+    W, H = 6 * T, 128
     g = Grid(W, H)
     box(g, 2, 0, W - 4, 8, 0, "#9a9a96")
     g.rect(2, 8, W - 4, H - 8, front)
-    windows(g, 4, 10, W - 8, H - 34, 4, 4, trim, "#7a9ab8", "#f0d890", seed)
+    windows(g, 4, 10, W - 8, H - 34, 4, 6, trim, "#7a9ab8", "#f0d890", seed)
     g.rect(2, H - 24, W - 4, 2, trim)
     g.rect(W // 2 - 20, H - 22, 40, 7, sign); g.rect(W // 2 - 16, H - 20, 32, 3, "#f4f2ec")       # the signboard
     g.rect(W // 2 - 8, H - 14, 16, 14, "#2a3440"); g.rect(W // 2 - 7, H - 13, 14, 13, "#8ab0c8")
@@ -299,23 +307,29 @@ def apartment():   # a slab of flats: white and pale grey, a big block number, g
     return img(g)
 
 
-def storefront(seed=3):   # a street-level shop: a bright signboard, a glass front with posters, a floor of flats above
-    W, H = 4 * T, 58
+def storefront(seed=3):   # a street-level shop: a bright signboard, a glass front with posters, two floors of flats above
+    W, H = 4 * T, 96
     r = random.Random(seed)
     sign = r.choice(["#e84a3a", "#2e8a5a", "#e8a020", "#3a6ad8"])
+    face = r.choice(["#c8b8a0", "#d8d4cc", "#b8a48a", "#c4a890"])
     g = Grid(W, H)
     box(g, 1, 0, W - 2, 6, 0, "#8a8884")
-    g.rect(1, 6, W - 2, 20, "#c8b8a0")
-    for x in (6, 24, 42):
-        g.rect(x, 9, 14, 12, "#d8d4cc"); g.rect(x + 1, 10, 12, 10, "#7a9ab8")
-    g.rect(1, 26, W - 2, 10, sign); g.rect(1, 26, W - 2, 1, shade(sign, .3))                           # the signboard
+    g.rect(1, 6, W - 2, 58, face)
+    for y in (10, 36):                                                                                  # the flats' windows
+        for x in (5, 23, 41):
+            g.rect(x, y, 16, 16, shade(face, -.15)); g.rect(x + 1, y + 1, 14, 13, "#7a9ab8")
+            g.rect(x + 1, y + 1, 14, 1, "#a8c0d8"); g.rect(x, y + 14, 16, 2, "#8a8e96")               # a sill, a rail
+        if r.random() < .6:
+            g.rect(23, y + 10, 4, 4, "#e86a6a")                                                         # laundry, a pot
+    g.rect(W - 9, 12, 6, 4, "#e8e8e4")                                                                  # an AC unit
+    g.rect(1, 64, W - 2, 10, sign); g.rect(1, 64, W - 2, 1, shade(sign, .3))                           # the signboard
     for x in range(6, W - 8, 5):
-        g.rect(x, 29, 3, 4, "#f8f4ec")                                                                  # hangul, as blocks
-    g.rect(1, 36, W - 2, H - 36, "#3a3e46")
-    g.rect(3, 38, W - 6, H - 40, "#a8c8dc")
-    g.rect(8, 41, 8, 10, "#f4c84a"); g.rect(40, 41, 10, 8, "#e86a8a")                                   # posters
-    g.rect(W // 2 - 6, 38, 12, H - 38, "#3a3e46"); g.rect(W // 2 - 5, 39, 10, H - 39, "#c8dce8")
-    g.rect(1, 36, W - 2, 2, "#8a8e96")                                                                  # the rolled shutter
+        g.rect(x, 67, 3, 4, "#f8f4ec")                                                                  # hangul, as blocks
+    g.rect(1, 74, W - 2, H - 74, "#3a3e46")
+    g.rect(3, 76, W - 6, H - 78, "#a8c8dc")
+    g.rect(8, 79, 8, 10, "#f4c84a"); g.rect(40, 79, 10, 8, "#e86a8a")                                   # posters
+    g.rect(W // 2 - 6, 76, 12, H - 76, "#3a3e46"); g.rect(W // 2 - 5, 77, 10, H - 77, "#c8dce8")
+    g.rect(1, 74, W - 2, 2, "#8a8e96")                                                                  # the rolled shutter
     return img(g)
 
 
@@ -891,6 +905,25 @@ def coffee_cup():   # a coffee cup on its saucer
     return img(g)
 
 
+def stalls():   # a row of street-market stalls: blue and orange tarps on poles over trestles, crates of fruit and veg
+    W, H = 6 * T, 46
+    g = Grid(W, H)
+    r = random.Random(17)
+    for i, x in enumerate((2, 34, 66)):
+        tarp = ("#3a6ad8", "#e8742a", "#3a6ad8")[i]
+        g.rect(x + 1, 10, 1, 30, "#8a9098"); g.rect(x + 27, 10, 1, 30, "#8a9098")                        # poles
+        g.rect(x, 2, 29, 10, tarp); g.rect(x, 2, 29, 1, shade(tarp, .35)); g.rect(x, 11, 29, 1, shade(tarp, -.3))
+        for k in range(x + 4, x + 28, 6):
+            g.rect(k, 2, 1, 10, shade(tarp, -.15))
+        box(g, x + 2, 26, 26, 6, 8, "#c8a070", "#8a6a4a")                                                 # the trestle
+        for k in range(x + 3, x + 26, 6):                                                                  # crates of produce
+            g.rect(k, 22, 5, 5, "#b8885a")
+            fr = r.choice(["#d8382a", "#f4c020", "#5aa83a", "#e8742a", "#8a3a8a"])
+            g.rect(k + 1, 21, 3, 2, fr)
+        g.rect(x + 4, 40, 6, 5, "#5a8ac8"); g.rect(x + 18, 40, 6, 5, "#d8b070")                         # crates below
+    return img(g)
+
+
 def mat():   # a rug
     g = Grid(2 * T, 2 * T)
     g.rect(1, 6, 30, 20, "#8a5a5a"); g.rect(3, 8, 26, 16, "#a87070"); g.rect(5, 10, 22, 12, "#8a5a5a")
@@ -919,13 +952,13 @@ PIECES = {
     "furn.kid_mat": kid_mat, "furn.subway_seat": subway_seat,
     # old kinds the Misaeng plans use, redrawn modern for this kit
     "lamp.post": streetlight, "furn.plant": plant, "furn.window": window, "furn.counter": counter, "furn.table": table,
-    "furn.stool": stool, "furn.shelf": shelf, "furn.desk": desk, "furn.mat": mat, "furniture.gotable": gotable,
+    "furn.stool": stool, "furn.shelf": shelf, "furn.desk": desk, "furn.mat": mat, "furniture.gotable": gotable, "market.stalls": stalls,
     # m17's drinks, small on a table top
     "prop.glass_water": glass_water, "prop.teacup": teacup, "prop.coffee_cup": coffee_cup,
 }
 
 TILES = {
-    "city": [pavement(0), pavement(1)], "road": [pavers(0), pavers(1)],
+    "city": [(pavement(0), 12), (pavement(1), 12), (pavement(4), 12), (pavement(2), 1)], "road": [pavers(0), pavers(1)],
     "traffic": [asphalt(0), asphalt(1)], "crosswalk": [crosswalk(0), crosswalk(1)],
     "barrier": [barrier(0), barrier(1)], "parapet": [parapet(0), parapet(1)], "roof": [roof(0), roof(1)],
     "stone": [office_tile(0), office_tile(1)], "mat": [carpet(0), carpet(1)], "wood": [laminate(0), laminate(1)],
@@ -975,12 +1008,13 @@ def main():
     sheet, pos = pack(ims)
     sheet.save(OUT / "pieces.png")
     # ground tiles: two per row, then the walls' 3x3 block below
-    tsheet = Image.new("RGBA", (3 * T, T * len(TILES) + 3 * T))
+    tsheet = Image.new("RGBA", (max(3, max(len(v) for v in TILES.values())) * T, T * len(TILES) + 3 * T))
     tpos = {}
     for row, (mat, tl) in enumerate(TILES.items()):
-        for col, im in enumerate(tl):
+        tl = [t if isinstance(t, tuple) else (t, 1) for t in tl]   # (tile, weight): a rare variant has a low weight
+        for col, (im, _) in enumerate(tl):
             tsheet.alpha_composite(im, (col * T, row * T))
-        tpos[mat] = [["seoul_tiles", col, row, 1] for col in range(len(tl))]
+        tpos[mat] = [["seoul_tiles", col, row, w] for col, (_, w) in enumerate(tl)]
     wy = len(TILES)
     tsheet.alpha_composite(wall_tiles(), (0, wy * T))
     tsheet.save(OUT / "tiles.png")

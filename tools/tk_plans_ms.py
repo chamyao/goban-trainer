@@ -30,8 +30,8 @@ Rules this book adds to the factory's:
     parked and passing cars stand in it as things.
   - entered buildings face S, E or W. A north door would get the factory's gatehouse (the old books' rule for a door
     the camera can't see), which a Seoul street doesn't have.
-  - a lift: every floor of the tower is a room whose door leads back to the lobby, and the lobby's back wall has one
-    lift per floor (an exit each, labelled by the floor). Between floors you go down to the lobby and up again.
+  - a lift (Integration alt2's "use": "lift"): one in the lobby and one on every floor, each with the whole menu. The
+    floors hang off the lobby ("owns"), and each floor's own door is the stairs down to it.
 """
 from tk_plans_w2 import ART as ART2, LINE_KINDS as LINE_KINDS2, NEW_KINDS as NEW_KINDS2, ZONE_KINDS as ZONE_KINDS2, _ch, room
 
@@ -196,10 +196,28 @@ ART = {**ART2,
        "folk.jordanian": "a man in Amman: a red-and-white keffiyeh or bare-headed, a shirt and trousers, a moustache",
        }
 
-# the tower's floors, a lift each in the lobby's back wall (west to east); each floor's label names its lift
-FLOORS = [("pt-room", "The PT room"), ("hr", "HR"), ("finance", "Finance"), ("resources", "The resources team"),
-          ("sales3", "Sales Team 3"), ("audit", "The audit room"), ("meeting", "A meeting room"), ("board-room", "The board room"),
-          ("exec-floor", "The executive's office"), ("roof", "The roof")]
+# the tower's floors, in the lift's order (the lift's menu: tk-modern.js "use": "lift"); each floor's own label names it
+FLOORS = [("pt-room", "3F", "The PT room"), ("hr", "5F", "HR"), ("finance", "6F", "Finance"), ("resources", "9F", "The resources team"),
+          ("sales3", "14F", "Sales Team 3"), ("meeting", "15F", "A meeting room"), ("audit", "16F", "The audit room"),
+          ("board-room", "20F", "The board room"), ("exec-floor", "21F", "The executive's office"), ("roof", "R", "The roof")]
+LOBBY = "one-international"
+
+
+def _lift_floors():
+    return [{"label": "1F · The lobby", "to": LOBBY}, *[{"label": f"{n} · {label}", "to": f"{LOBBY}--{mid}"} for mid, n, label in FLOORS]]
+
+
+def _with_lift(mid, plan, at=None, doors_at=None):
+    """A floor with its lift: the lift's doors by the floor's own door (which is the stairs down to the lobby), the
+    spot that opens its menu, and arrivals by lift (from the lobby or any floor) at it."""
+    w, h = plan["grid"]
+    door = plan["entries"][""]
+    at = at or [door[0] - 2, h - 2]
+    doors_at = doors_at or [at[0] - 1, at[1]]
+    plan = {**plan, "things": [*plan["things"], {"id": "lift-doors", "kind": "furn.lift_door", "rect": [*doors_at, 1, 1], "label": "The lift"}],
+            "spots": [*plan.get("spots", []), {"id": "lift", "at": at, "label": "The lift", "use": "lift", "floors": _lift_floors()}],
+            "entries": {**plan["entries"], "One International": at, **{m: at for m, _, _ in FLOORS if m != mid}}}
+    return plan
 
 
 def _talk(kind, at, say, **kw):
@@ -422,11 +440,9 @@ def _roof():
 
 def _lobby():
     """The lobby: the door from Jongno in the south; the front desk and the recycling bins on the visitors' side; the
-    ID gates across the middle; behind them, a lift per floor in the back wall."""
-    w = 2 * len(FLOORS) + 2
-    return room([w, 10], [w // 2, 9], floor="office_tile",
-                exits=[{"to": "Jongno", "at": [w // 2, 9], "side": "S"},
-                       *[{"to": mid, "at": [2 + 2 * i, 0], "side": "N"} for i, (mid, _) in enumerate(FLOORS)]],
+    ID gates across the middle; behind them, the lift (its menu goes to every floor)."""
+    w = 18
+    plan = room([w, 10], [w // 2, 9], floor="office_tile", exits=[{"to": "Jongno", "at": [w // 2, 9], "side": "S"}],
                 lines=[{"id": "id-gates", "kind": "barrier", "path": [[1, 4], [w - 2, 4]], "width": 1,
                         "gates": {"gates-w": [5, 4], "gates-e": [w - 6, 4]}}],
                 things=[{"id": "plant-w", "kind": "furn.plant", "rect": [1, 3, 1, 1]},
@@ -444,7 +460,12 @@ def _lobby():
                                  "waybill, and a name on it in someone else's hand. Kim Seok-ho."],
                         "given": ["The recycling bins. You've found what you were looking for."]},
                        {"id": "m3b", "at": [4, 8], "node": k("3b"), "label": "The lobby"},
-                       {"id": "lobby-lift", "at": [w // 2, 2], "label": "The lifts", "note": "the handoff to Oh lands here"}])
+                       {"id": "lobby-lift", "at": [w // 2, 3], "label": "The lifts", "note": "the handoff to Oh lands here"},
+                       {"id": "lift", "at": [w // 2, 1], "label": "The lift", "use": "lift", "floors": _lift_floors()}])
+    plan["things"] += [{"id": "lift-w", "kind": "furn.lift_door", "rect": [w // 2 - 1, 1, 1, 1], "label": "The lift"},
+                       {"id": "lift-e", "kind": "furn.lift_door", "rect": [w // 2 + 1, 1, 1, 1], "label": "The lift"}]
+    # the floors hang off the lobby (their doors, the stairs, come back down here); arrivals from them at the lift
+    return plan | {"owns": [m for m, _, _ in FLOORS], "entries": {**plan["entries"], **{m: [w // 2, 2] for m, _, _ in FLOORS}}}
 
 
 PLANS_MS = {
@@ -564,6 +585,7 @@ PLANS_MS = {
                 {"id": "lane-link", "kind": "road", "path": [[19, 4], [19, 7]], "width": 2},
                 {"id": "pimatgol", "kind": "road", "path": [[13, 10], [13, 15]], "width": 3},
                 {"id": "market-alley", "kind": "road", "path": [[21, 10], [21, 15]], "width": 3},
+                {"id": "back-lane", "kind": "road", "path": [[0, 15], [27, 15]], "width": 2},   # behind the south shops
             ],
             "things": [
                 # Tapgol Park
@@ -597,6 +619,12 @@ PLANS_MS = {
                 {"id": "pojangmacha", "kind": "building.pojangmacha", "rect": [14, 13, 2, 1], "door": "W", "label": "A pojangmacha",
                  "map": "pojangmacha"},
                 {"id": "eatery", "kind": "building.storefront", "rect": [11, 13, 2, 1], "door": "E", "label": "A soup house"},
+                # the blocks behind: offices and flats along the back lane
+                {"id": "block-s1", "kind": "building.office_block", "rect": [1, 13, 2, 2], "door": "S"},
+                {"id": "block-s2", "kind": "building.office_block", "rect": [4, 13, 2, 2], "door": "S"},
+                {"id": "block-s3", "kind": "building.villa", "rect": [7, 13, 2, 2], "door": "S"},
+                {"id": "block-s4", "kind": "building.office_block", "rect": [16, 13, 2, 2], "door": "S"},
+                {"id": "block-s5", "kind": "building.villa", "rect": [25, 13, 2, 2], "door": "S"},
                 {"id": "stalls-1", "kind": "market.stalls", "rect": [19, 12, 2, 1], "label": "Market stalls"},
                 {"id": "stalls-2", "kind": "market.stalls", "rect": [22, 12, 2, 1], "label": "Market stalls"},
                 {"id": "stalls-3", "kind": "market.stalls", "rect": [19, 14, 2, 1], "label": "A dried-goods stall"},
@@ -616,11 +644,13 @@ PLANS_MS = {
                 {"id": "pojangmacha-door", "at": [13, 13], "at_door": "pojangmacha", "label": "The pojangmacha",
                  "note": "m19's handoff (to the spot 'pojangmacha' in the tent itself)"},
             ],
-            "dress": [{"kind": "tree.ginkgo", "along": "pave-n", "every": 4, "both_sides": False},
-                      {"kind": "tree.ginkgo", "along": "pave-s", "every": 4, "both_sides": False},
+            "dress": [{"kind": "tree.ginkgo", "along": "pave-n", "every": 3},
+                      {"kind": "tree.ginkgo", "along": "pave-s", "every": 3},
+                      {"kind": "lamp.post", "along": "pimatgol", "every": 3}, {"kind": "lamp.post", "along": "back-lane", "every": 4},
+                      {"kind": "tree.ginkgo", "along": "office-lane", "every": 4},
                       {"kind": "tree.pine", "in": "park", "count": 6}, {"kind": "prop.bench", "in": "park", "count": 3},
                       {"kind": "lamp.post", "along": "forecourt", "every": 3}, {"kind": "prop.vending", "at_door": "corner-shop"},
-                      {"kind": "prop.bus_stop", "along": "pave-s", "every": 12, "both_sides": False}],
+                      {"kind": "prop.bus_stop", "along": "pave-s", "every": 16}],
             "exits": [{"to": "Korea Baduk Association", "at": [0, 7], "side": "W"},
                       {"to": "Baekjin Trading", "at": [0, 10], "side": "W"},
                       {"to": "Sun's neighbourhood", "at": [27, 10], "side": "E"},
@@ -733,8 +763,9 @@ PLANS_MS = {
             _in("pt-room", "folk.salaryman", [4, 6], "An intern, rehearsing under his breath. “In conclusion. In conclusion…”"),
             _in("pt-room", "folk.officewoman", [11, 6], "An intern with a stack of cue cards, very pale. “Is it my turn? It's not my turn.”"),
         ],
-        "maps": {"sales3": _sales3(), "resources": _resources(), "meeting": _meeting(), "finance": _finance(), "hr": _hr(),
-                 "audit": _audit(), "board-room": _board_room(), "exec-floor": _exec_floor(), "pt-room": _pt_room(), "roof": _roof()},
+        "maps": {mid: _with_lift(mid, plan, *({"roof": ([6, 2], [5, 2])}.get(mid, ()))) for mid, plan in (
+            ("sales3", _sales3()), ("resources", _resources()), ("meeting", _meeting()), ("finance", _finance()), ("hr", _hr()),
+            ("audit", _audit()), ("board-room", _board_room()), ("exec-floor", _exec_floor()), ("pt-room", _pt_room()), ("roof", _roof()))},
         "objectives": {
             k(2): "Your first day at One International. Get through the front desk.",
             k(3): "Take the lift up to Sales Team 3.",

@@ -136,17 +136,7 @@
    "archetype": "interior",
    "map": "one-international.map.json",
    "links": [
-    "jongno",
-    "one-international--audit",
-    "one-international--board-room",
-    "one-international--exec-floor",
-    "one-international--finance",
-    "one-international--hr",
-    "one-international--meeting",
-    "one-international--pt-room",
-    "one-international--resources",
-    "one-international--roof",
-    "one-international--sales3"
+    "jongno"
    ]
   },
   {
@@ -3764,7 +3754,7 @@
    "spot": "m16",
    "scene": "m16",
    "title": "Outside Is Hell",
-   "objective": "Go to the pizza shop.",
+   "objective": "Kim Dong-su has asked you to come by his shop.",
    "after": [
     "21-m15"
    ],
@@ -5665,7 +5655,7 @@
    "spot": "m24",
    "scene": "m24",
    "title": "Move 145",
-   "objective": "Go to the new office.",
+   "objective": "Three weeks later. Go to the new office.",
    "after": [
     "21-m23b"
    ],

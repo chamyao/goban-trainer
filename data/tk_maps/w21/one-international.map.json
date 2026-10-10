@@ -5,7 +5,7 @@
  "name": "One International",
  "archetype": "interior",
  "size": [
-  44,
+  36,
   20
  ],
  "seed": 1913,
@@ -18,26 +18,26 @@
    "W": "wall"
   },
   "rows": [
-   "                                            ",
-   " WWWbbWWbbWWbbWWbbWWbbWWbbWWbbWWbbWWbbWWbbW ",
-   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
-   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
-   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
-   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
-   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
-   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
-   " WaaaaaaaabbaaaaaaaaaaaaaaaaaaaabbaaaaaaaaW ",
-   " WaaaaaaaabbaaaaaaaaaaaaaaaaaaaabbaaaaaaaaW ",
-   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
-   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
-   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
-   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
-   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
-   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
-   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
-   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
-   " WWWWWWWWWWWWWWWWWWWWWbbWWWWWWWWWWWWWWWWWWW ",
-   "                                            "
+   "                                    ",
+   " WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WaaaaaaaabbaaaaaaaaaaaabbaaaaaaaaW ",
+   " WaaaaaaaabbaaaaaaaaaaaabbaaaaaaaaW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WWWWWWWWWWWWWWWWWbbWWWWWWWWWWWWWWW ",
+   "                                    "
   ],
   "walk": {
    "barrier": false,
@@ -53,61 +53,21 @@
    "outline": [
     0,
     0,
-    22,
+    18,
     10
    ],
    "width": 1,
    "gates": {
     "door": [
-     11,
+     9,
      9
     ],
     "to-Jongno": [
-     11,
+     9,
      9
-    ],
-    "to-pt-room": [
-     2,
-     0
-    ],
-    "to-hr": [
-     4,
-     0
-    ],
-    "to-finance": [
-     6,
-     0
-    ],
-    "to-resources": [
-     8,
-     0
-    ],
-    "to-sales3": [
-     10,
-     0
-    ],
-    "to-audit": [
-     12,
-     0
-    ],
-    "to-meeting": [
-     14,
-     0
-    ],
-    "to-board-room": [
-     16,
-     0
-    ],
-    "to-exec-floor": [
-     18,
-     0
-    ],
-    "to-roof": [
-     20,
-     0
     ]
    },
-   "tiles": 116
+   "tiles": 100
   },
   {
    "id": "id-gates",
@@ -118,7 +78,7 @@
      4
     ],
     [
-     20,
+     16,
      4
     ]
    ],
@@ -129,11 +89,11 @@
      4
     ],
     "gates-e": [
-     16,
+     12,
      4
     ]
    },
-   "tiles": 80
+   "tiles": 64
   }
  ],
  "objects": [
@@ -148,7 +108,7 @@
   },
   {
    "kind": "furn.plant",
-   "x": 40,
+   "x": 32,
    "y": 6,
    "w": 1,
    "h": 1,
@@ -166,7 +126,7 @@
   },
   {
    "kind": "furn.reception",
-   "x": 32,
+   "x": 24,
    "y": 12,
    "w": 4,
    "h": 1,
@@ -192,7 +152,7 @@
   },
   {
    "kind": "furn.sofa",
-   "x": 38,
+   "x": 30,
    "y": 16,
    "w": 2,
    "h": 1,
@@ -200,17 +160,35 @@
   },
   {
    "kind": "furn.sofa",
-   "x": 40,
+   "x": 32,
    "y": 16,
    "w": 2,
    "h": 1,
    "id": "sofa-2"
+  },
+  {
+   "kind": "furn.lift_door",
+   "x": 16,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "lift-w",
+   "label": "The lift"
+  },
+  {
+   "kind": "furn.lift_door",
+   "x": 20,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "lift-e",
+   "label": "The lift"
   }
  ],
  "spots": [
   {
    "id": "m2",
-   "x": 32.5,
+   "x": 24.5,
    "y": 14.7,
    "node": "21-m2",
    "label": "The front desk"
@@ -239,18 +217,72 @@
   },
   {
    "id": "lobby-lift",
-   "x": 22.5,
-   "y": 4.7,
+   "x": 18.5,
+   "y": 6.7,
    "node": "",
    "label": "The lifts",
    "note": "the handoff to Oh lands here"
+  },
+  {
+   "id": "lift",
+   "x": 18.5,
+   "y": 2.7,
+   "node": "",
+   "label": "The lift",
+   "floors": [
+    {
+     "label": "1F · The lobby",
+     "to": "one-international"
+    },
+    {
+     "label": "3F · The PT room",
+     "to": "one-international--pt-room"
+    },
+    {
+     "label": "5F · HR",
+     "to": "one-international--hr"
+    },
+    {
+     "label": "6F · Finance",
+     "to": "one-international--finance"
+    },
+    {
+     "label": "9F · The resources team",
+     "to": "one-international--resources"
+    },
+    {
+     "label": "14F · Sales Team 3",
+     "to": "one-international--sales3"
+    },
+    {
+     "label": "15F · A meeting room",
+     "to": "one-international--meeting"
+    },
+    {
+     "label": "16F · The audit room",
+     "to": "one-international--audit"
+    },
+    {
+     "label": "20F · The board room",
+     "to": "one-international--board-room"
+    },
+    {
+     "label": "21F · The executive's office",
+     "to": "one-international--exec-floor"
+    },
+    {
+     "label": "R · The roof",
+     "to": "one-international--roof"
+    }
+   ],
+   "use": "lift"
   }
  ],
  "npcs": [
   {
    "id": "receptionist",
    "kind": "folk.officewoman",
-   "x": 34.0,
+   "x": 26.0,
    "y": 12.35,
    "say": [
     "“Visitor passes are issued here. Who are you here to see?”"
@@ -282,140 +314,60 @@
   {
    "to": "jongno",
    "side": "S",
-   "x": 22,
+   "x": 18,
    "y": 18,
-   "w": 2,
-   "h": 1
-  },
-  {
-   "to": "one-international--pt-room",
-   "side": "N",
-   "x": 4,
-   "y": 1,
-   "w": 2,
-   "h": 1
-  },
-  {
-   "to": "one-international--hr",
-   "side": "N",
-   "x": 8,
-   "y": 1,
-   "w": 2,
-   "h": 1
-  },
-  {
-   "to": "one-international--finance",
-   "side": "N",
-   "x": 12,
-   "y": 1,
-   "w": 2,
-   "h": 1
-  },
-  {
-   "to": "one-international--resources",
-   "side": "N",
-   "x": 16,
-   "y": 1,
-   "w": 2,
-   "h": 1
-  },
-  {
-   "to": "one-international--sales3",
-   "side": "N",
-   "x": 20,
-   "y": 1,
-   "w": 2,
-   "h": 1
-  },
-  {
-   "to": "one-international--audit",
-   "side": "N",
-   "x": 24,
-   "y": 1,
-   "w": 2,
-   "h": 1
-  },
-  {
-   "to": "one-international--meeting",
-   "side": "N",
-   "x": 28,
-   "y": 1,
-   "w": 2,
-   "h": 1
-  },
-  {
-   "to": "one-international--board-room",
-   "side": "N",
-   "x": 32,
-   "y": 1,
-   "w": 2,
-   "h": 1
-  },
-  {
-   "to": "one-international--exec-floor",
-   "side": "N",
-   "x": 36,
-   "y": 1,
-   "w": 2,
-   "h": 1
-  },
-  {
-   "to": "one-international--roof",
-   "side": "N",
-   "x": 40,
-   "y": 1,
    "w": 2,
    "h": 1
   }
  ],
  "entries": {
   "jongno": [
-   22,
+   18,
+   17
+  ],
+  "": [
+   18,
    17
   ],
   "one-international--pt-room": [
-   4,
-   2
+   18,
+   4
   ],
   "one-international--hr": [
-   8,
-   2
+   18,
+   4
   ],
   "one-international--finance": [
-   12,
-   2
+   18,
+   4
   ],
   "one-international--resources": [
-   16,
-   2
+   18,
+   4
   ],
   "one-international--sales3": [
-   20,
-   2
-  ],
-  "one-international--audit": [
-   24,
-   2
+   18,
+   4
   ],
   "one-international--meeting": [
-   28,
-   2
+   18,
+   4
+  ],
+  "one-international--audit": [
+   18,
+   4
   ],
   "one-international--board-room": [
-   32,
-   2
+   18,
+   4
   ],
   "one-international--exec-floor": [
-   36,
-   2
+   18,
+   4
   ],
   "one-international--roof": [
-   40,
-   2
-  ],
-  "": [
-   22,
-   17
+   18,
+   4
   ]
  },
  "states": [
@@ -425,16 +377,6 @@
   }
  ],
  "links": [
-  "jongno",
-  "one-international--audit",
-  "one-international--board-room",
-  "one-international--exec-floor",
-  "one-international--finance",
-  "one-international--hr",
-  "one-international--meeting",
-  "one-international--pt-room",
-  "one-international--resources",
-  "one-international--roof",
-  "one-international--sales3"
+  "jongno"
  ]
 }
