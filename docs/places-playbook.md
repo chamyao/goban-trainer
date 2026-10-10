@@ -205,7 +205,9 @@ These were each learned from a real complaint, and each is a rule, not a one-off
 - **A handoff leaves the new lead a walk: 6 tiles or more** to the next beat's spot (Testing's house rule). A named
   landing spot (`{"to": {"place", "spot"}}`) puts the lead 26 px below it; with none, the lead stays where the scene
   played. `python3 tools/proofs/handoffs.py <world>` measures every handoff in a built book (tk.json rebuilt from the
-  book's story) and fails one under 6. Beats a handoff passes between in one room: 8+ tiles apart.
+  book's story) and fails one under 6. In a room every scene is staged in the middle of the floor, so a handoff
+  with no landing spot leaves the new lead there, not at the beat's spot: the next beat in that room keeps 6+ tiles
+  from the room's middle (the proof reads the lead's last place in the staged cutscene).
 - **No dressing on a crosswalk** (`free()` treats it as paving).
 - **Floors are any walkable material** in vocab (`room(..., floor="carpet")`): Misaeng's carpet, office_tile, lino.
 - **A thing that gives an item when searched** is a spot with `gives`, `gives_when`, `give`, `given` (as a person has
