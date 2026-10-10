@@ -1138,7 +1138,9 @@ const TKVoice = {
   get lang() { let v; try { v = localStorage.getItem("tk-voice"); } catch {} return v === "off" || v === "en" ? v : "zh"; },
   set lang(v) { try { localStorage.setItem("tk-voice", v); } catch {} if (v === "off") this.stop(); },
   get on() { return this.lang !== "off"; },
-  has(vid) { return !!vid && !!TK.data && (this.lang === "en" ? TK.data.voices_en || [] : TK.data.voices).includes(vid); },
+  enOnly: false,   // an English-only book (Misaeng) is open: its clips are English whatever the setting (viewTK sets it)
+  get speaks() { return this.enOnly ? "en" : this.lang; },
+  has(vid) { return !!vid && !!TK.data && (this.speaks === "en" ? TK.data.voices_en || [] : TK.data.voices).includes(vid); },
   // Plays clips one after another; resolves when the last ends or is stopped.
   play(vids) {
     this.stop();
@@ -1148,7 +1150,7 @@ const TKVoice = {
       const next = () => {
         const v = this.queue.shift();
         if (!v) { this.audio = null; res(); return; }
-        const a = new Audio(`assets/tk/voice/${this.lang === "en" ? "en/" : ""}${v}.mp3?v=2`);  // bump when clips are re-rendered
+        const a = new Audio(`assets/tk/voice/${this.speaks === "en" ? "en/" : ""}${v}.mp3?v=2`);  // bump when clips are re-rendered
         this.audio = a; a.onended = next; a.onerror = next; a.onpause = () => { if (this.audio === a && !a.ended) res(); };
         a.play().catch(next);
       };
@@ -1277,15 +1279,19 @@ async function viewTK(worldN) {
   const levels = w.nodes.filter(x => !TK.isStart(x.key)), done = levels.filter(x => TK.cleared(x.key)).length;
   const chron = h("button", { class: "tk-chron-btn", type: "button" }, "史册 Chronicle");
   const voiceBtn = h("button", { class: "tk-chron-btn", type: "button", "aria-pressed": String(TKVoice.on), title: "配音：中文 → English → 关 Voice: Chinese → English → off" });
+  TKVoice.enOnly = w.lang === "en";   // an English-only book: its voice is English, on or off
   const voiceLabel = () => {
-    voiceBtn.textContent = { zh: "配音：中文 Chinese voice", en: "配音：英文 English voice", off: "静音 Voice off" }[TKVoice.lang];
+    voiceBtn.textContent = TKVoice.enOnly ? (TKVoice.on ? "Voice on" : "Voice off")
+      : { zh: "配音：中文 Chinese voice", en: "配音：英文 English voice", off: "静音 Voice off" }[TKVoice.lang];
     voiceBtn.setAttribute("aria-pressed", String(TKVoice.on));
   };
   voiceLabel();
-  voiceBtn.onclick = () => { TKVoice.lang = { zh: "en", en: "off", off: "zh" }[TKVoice.lang]; voiceLabel(); };
+  voiceBtn.onclick = () => { TKVoice.lang = TKVoice.enOnly ? (TKVoice.on ? "off" : "zh") : { zh: "en", en: "off", off: "zh" }[TKVoice.lang]; voiceLabel(); };
   root.append(h("div", { class: "tk-head" }, [
     h("div", {}, [h("h2", {}, [h("span", { class: "zh" }, native), " ", title]),
-      h("div", { class: "sub" }, `第${w.book || w.n}卷 Book ${w.book || w.n} · ${w.name} ${w.zh} · chapters ${w.chapters.join("–")} · ${w.grades} · ${done}/${levels.length} cleared`)]),
+      h("div", { class: "sub" }, w.lang === "en"   // an English-only book (Misaeng): no Chinese, no novel chapters
+        ? `Book ${w.book || 1} · ${w.name} · ${w.grades} · ${done}/${levels.length} cleared`
+        : `第${w.book || w.n}卷 Book ${w.book || w.n} · ${w.name} ${w.zh} · chapters ${w.chapters.join("–")} · ${w.grades} · ${done}/${levels.length} cleared`)]),
     h("div", { class: "tk-head-btns" }, [voiceBtn, chron]),
   ]));
   root.append(h("div", { class: "tk-worlds" }, [
@@ -1636,7 +1642,8 @@ TK_SETTER_LINES.starred = TK_SETTER_LINES.stargrey;
 const TK_REST = 30000;
 // Books from other novels (a world's "novel"): each novel has its own library card and its own book list, apart
 // from the Three Kingdoms books (which have no "novel"). live: the card shows outside test mode.
-const TK_NOVELS = { hongloumeng: { title: "Dream of the Red Chamber", native: "红楼梦", first: 31, live: false } };
+const TK_NOVELS = { hongloumeng: { title: "Dream of the Red Chamber", native: "红楼梦", first: 31, live: false },
+  misaeng: { title: "Misaeng", native: "미생", first: 21, live: false } };
 // A touch screen (a phone or tablet): tap to move and tap to talk.
 // Test mode, for trying the story without solving: open the page with ?test=1 (?test=0 ends it).
 // Problems then get a Skip key that counts as a flawless solve. It lasts the browser tab (sessionStorage):
