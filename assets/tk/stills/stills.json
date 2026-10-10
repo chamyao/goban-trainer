@@ -1650,5 +1650,14 @@
   "model": "final-1",
   "look": "final",
   "made": "2026-10-10"
+ },
+ "ms_ringed": {
+  "file": "ms_ringed.jpg",
+  "scene": "ms",
+  "prompt": "A memory in dark tones: a thin sixteen-year-old Korean trainee with a black fringe, in a grey hoodie, sits alone at a go board in the Korea Baduk Association's trainee room, frowning at the stones; around him a tight ring of onlookers, other trainees and adults, lean in, all of them seeing something he can't. Low light on the board, the faces around it in shadow. Style: 2D Korean webtoon, hard cel shading. Modern-day Seoul, South Korea.",
+  "provider": "replicate",
+  "model": "final-1",
+  "look": "final",
+  "made": "2026-10-10"
  }
 }
