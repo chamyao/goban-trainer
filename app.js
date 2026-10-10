@@ -2034,6 +2034,7 @@ async function viewLibrary() {
   for (const [id, nv] of Object.entries(typeof TK_NOVELS !== "undefined" ? TK_NOVELS : {})) {
     if (!nv.live && !(typeof TK_TEST !== "undefined" && TK_TEST)) continue;
     root.append(h("a", { class: "tk-card tk-card-" + id, href: `#/tk/${nv.first}` }, [
+      ...(nv.icon ? [h("img", { class: "tk-card-icon", src: nv.icon, alt: "" })] : []),
       h("span", {}, [h("b", {}, `${nv.native} · ${nv.title}`), h("small", {}, nv.live ? "A story campaign through the novel" : "测试模式 Test mode only")]),
       h("span", { class: "tk-card-go" }, "→"),
     ]));

@@ -146,7 +146,8 @@ def all_lines(worlds):
     The English voice-over reuses the id (assets/tk/voice/en/<id>.mp3)."""
     lines = {}
     for w in worlds:
-        for steps in [w["opening"], w["closing"], *(v["steps"] for v in w["scenes"].values())]:
+        watch = [[c["line"] for c in v["cues"]] + ([v["dazzled"]] if "dazzled" in v else []) for v in (w.get("watch") or {}).values()]
+        for steps in [w["opening"], w["closing"], *(v["steps"] for v in w["scenes"].values()), *watch]:
             for s in steps:
                 if s[0] == "n":
                     lines[s[3]] = (s[2], NARRATOR, s[1])
@@ -304,6 +305,10 @@ def main():
         out["opening"] = voiced(fix(w["opening"]))
         out["closing"] = voiced(fix(w["closing"]))
         out["scenes"] = {k: dict(v, zh=zh(v["title"]), steps=voiced(fix(v["steps"]))) for k, v in w["scenes"].items()}
+        if "watch" in w:   # the room's cues before a board (tk-world.js watchRoom), voiced like scene lines
+            out["watch"] = {key(k): dict(v, cues=[dict(c, line=voiced([c["line"]])[0]) for c in v["cues"]],
+                                         **({"dazzled": voiced([v["dazzled"]])[0]} if "dazzled" in v else {}))
+                            for k, v in w["watch"].items()}
         for n in out["nodes"]:
             if "boss" in n:
                 n["boss"] = dict(n["boss"], taunt_zh=zh(n["boss"]["taunt"]), taunt_vid=voice_id(zh(n["boss"]["taunt"]), voice_of(n["boss"]["who"])))

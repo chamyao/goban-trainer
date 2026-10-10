@@ -45,15 +45,21 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 **an old nurse:** This way, miss. The old lady's rooms are through the courtyard, past the screen.  
 姑娘这边走。转过插屏，就是老太太的正房大院了。
 
-
-## D2 · Grandmother (外祖母)
-*The Rong Mansion* · room `jm-rooms` · boards: **Lin Daiyu**: “Find your grandmother among them.”
+*On the steps of the main rooms sit maids in red and green. They jump up laughing.*  
+台矶之上，坐着几个穿红着绿的丫头，一见他们来了，便忙都笑迎上来。
 
 **a maid:** The old lady was just asking for you, and here you are!  
 刚才老太太还念呢，可巧就来了。
 
 *Three or four of them race to lift the door curtain. Someone inside calls: Miss Lin is here.*  
 于是三四人争着打起帘笼，一面听得人回话：「林姑娘到了。」
+
+
+## D2 · Grandmother (外祖母)
+*The Rong Mansion* · room `jm-rooms` · boards: **Lin Daiyu**: “Find your grandmother among them.”
+
+*Daiyu comes in through the curtain.*  
+黛玉方进入房时。
 
 *A room full of women. Two of them are supporting an old lady with silver hair, and everyone else stands back from her.*  
 满屋子的人。只见两个人搀着一位鬓发如银的老母迎上来，余人都垂手侍立。
@@ -210,11 +216,21 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 黛玉一一的都答应着。只见一个丫鬟来回：「老太太那里传晚饭了。」
 
 
-## D6 · After the Meal (饭后茶)
-*The Rong Mansion* · room `jm-rooms` · boards: **Lin Daiyu**: “The seat of honour?” / **Lin Daiyu**: “When to drink the tea.” / **Lin Daiyu**: “Tell her what you've read.”
+## D6A · Sister Feng's Door (凤姐姐的屋子)
+*The Rong Mansion* · no board
+
+*Lady Wang takes her by the back way: a wide passage. To the north, a whitewashed screen wall, and behind it a half-size gate to a small courtyard. Four or five little boys stand at the gate with their hands at their sides.*  
+王夫人忙携黛玉从后房门由后廊往西，出了角门，是一条南北宽夹道。南边是倒座三间小小的抱厦厅，北边立着一个粉油大影壁，后有一半大门，小小一所房室……这院门上也有四五个才总角的小厮，都垂手侍立。
 
 **Lady Wang:** That's your sister Feng's rooms. Come and find her there. If there's anything you need, just tell her.  
 这是你凤姐姐的屋子，回来你好往这里找他来，少什么东西，你只管和他说就是了。
+
+**Lady Wang:** Come. The old lady's waiting dinner.  
+走罢，老太太那里传晚饭了。
+
+
+## D6 · After the Meal (饭后茶)
+*The Rong Mansion* · room `jm-rooms` · boards: **Lin Daiyu**: “The seat of honour?” / **Lin Daiyu**: “When to drink the tea.” / **Lin Daiyu**: “Tell her what you've read.”
 
 *Li Wan brings the rice, Xifeng lays the chopsticks, Lady Wang serves the soup. Her grandmother sits alone on the couch. Four empty chairs. Xifeng pulls Daiyu to the first chair on the left.*  
 贾珠之妻李氏捧饭，熙凤安箸，王夫人进羹。贾母正面榻上独坐，两边四张空椅，熙凤忙拉了黛玉在左边第一张椅上坐了。

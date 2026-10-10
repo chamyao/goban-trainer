@@ -3,7 +3,8 @@
 // English) is the one the design gives, the decider's own opening line plays (Daiyu for d2-d7, Granny Liu for g2-g6),
 // g6 is the boss board, and its taunt doesn't take Granny Liu's own lines; solving by tapping the key's moves gives the decider's win line and a Continue.
 // d7's second board (the jade) is solvable like any other: the story goes wrong after it, not on it. One slip (d3)
-// gives its slip line, the smile behind a sleeve, and the 30 s rest. d1, d8, g1, g7 have no board.
+// gives its slip line, the smile behind a sleeve, and the 30 s rest, and the tally of smiles counts it; a slip on the
+// jade board (d7~2) or in Part 2 (g2) is not counted. d1, d6a, d8, g1, g7 have no board.
 // Runs without the world's maps (data/tk_maps/w31): the boards open from the book page.
 const { chromium, devices } = require(require('child_process').execSync('npm root -g', { env: { ...process.env, NODE_OPTIONS: '' } }).toString().trim() + '/playwright');
 const path = require('path');
@@ -27,7 +28,7 @@ const CAPTIONS = [
   const URL = (process.env.PLAYTEST_URL || 'http://localhost:8765') + '/index.html';
   // a plain page of the site (the Library), so nothing of the book's own page is in the way
   await p.goto(URL + '#/'); await p.waitForTimeout(1500);
-  await p.evaluate(async () => { await TK.load(); localStorage.setItem('tk-guide', 'off'); });
+  await p.evaluate(async () => { await TK.load(); localStorage.setItem('tk-guide', 'off'); localStorage.removeItem('tk-tally'); });
   // the boards the story data has: one per ["problem"] step
   const data = await p.evaluate(() => {
     const w = TK.world(31); if (!w) return null;
@@ -42,7 +43,7 @@ const CAPTIONS = [
   for (const n of data) for (let i = 1; i <= n.boards; i++) boards.push({ key: i === 1 ? n.key : `${n.key}~${i}`, base: n.key, role: n.role, dil: n.dils[Math.min(i - 1, n.dils.length - 1)] });
   check(boards.length === 18, `18 boards in the story (${boards.length}: ${boards.map(x => x.key.replace('31-', '')).join(' ')})`);
   const none = data.filter(n => !n.boards).map(n => n.key.replace('31-', ''));
-  check(JSON.stringify(none) === JSON.stringify(['d1', 'd8', 'g1', 'g7']), `d1, d8, g1, g7 have no board (${none.join(' ')})`);
+  check(JSON.stringify(none) === JSON.stringify(['d1', 'd6a', 'd8', 'g1', 'g7']), `d1, d6a, d8, g1, g7 have no board (${none.join(' ')})`);
   check(JSON.stringify(boards.map(x => x.key)) === JSON.stringify(CAPTIONS.map(c => c[0])), 'the boards are where the design puts them');
   for (const x of boards) check(x.dil && x.dil.q_zh && x.dil.open && x.dil.win && x.dil.slip, `${x.key}: a caption in both languages and the decider's open, win and slip lines`);
 
@@ -92,7 +93,8 @@ const CAPTIONS = [
       // (the speaker's name comes from the world's foe, which the world passes and this test doesn't)
       check(/首领|Boss/.test(tab), `${name}: the boss board (${tab})`);
     }
-    if (name === 'd3') {   // one slip: the smile behind a sleeve, and the rest
+    if (['d3', 'd7~2', 'g2'].includes(name)) {   // one slip: the smile behind a sleeve, and the rest
+      const t0 = await p.evaluate(() => TKTally.count(TK.world(31)));
       const w = await wrongMove();
       if (check(!!w, `${name}: a wrong point to tap`)) {
         await tapAt(w); await p.waitForTimeout(1200);
@@ -101,6 +103,8 @@ const CAPTIONS = [
         await p.waitForTimeout(2500);
         const rest = await p.evaluate(k => TK.restLeft(k), x.key);
         check(rest > 20000, `${name}: then the 30 s rest (${Math.round(rest / 1000)} s left)`);
+        const t1 = await p.evaluate(() => TKTally.count(TK.world(31))), counted = name === 'd3';
+        check(t1 - t0 === (counted ? 1 : 0), `${name}: the tally of smiles ${counted ? 'counts the slip' : 'does not count it'} (${t0} → ${t1})`);
         await p.evaluate(() => { const d = TK.ls('tk-rest'); for (const k in d) d[k] = Date.now() - 1; TK.lsSet('tk-rest', d); });
         await p.keyboard.press('Escape'); await p.waitForTimeout(600);
         p.evaluate(k => { window.__ov = TKOverlay.open(31, k).then(w => (window.__ovWon = w)); window.__ovWon = undefined; }, x.key);

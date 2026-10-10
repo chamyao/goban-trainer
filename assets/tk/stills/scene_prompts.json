@@ -1090,5 +1090,89 @@
   "beat": "Zhou Yu in his boat, mocked by the soldiers' chant from the shore.",
   "scene": "A river shore in the evening. Soldiers on the bank shout and jeer toward the water. In a warship, Zhou Yu: a handsome commander of Wu in his thirties, in armour and a red cloak, clutches his side, a wound reopening, held back by his officers.",
   "notes": "Book 4 (Lady Sun's marriage), docs/book2/ladysun-arc.md."
+ },
+ "hl_sedan": {
+  "book": 31,
+  "category": "everyday",
+  "beat": "d1: The great gate seen through a sedan chair's gauze window, stone lions, the main door shut.",
+  "scene": "Seen from inside a sedan chair through its gauze side window: a wide street, two great stone lions, and a mansion's three great gates under a plaque reading 敕造宁国府, the middle door shut, a dozen richly dressed men sitting before it. Afternoon light. Only the window frame and the gauze in the foreground.",
+  "notes": "Book 31 (Red Chamber Book 1), redchamber/book1/design.md Stills table. Brief drafted by Graphics from the table; Plot may rewrite."
+ },
+ "hl_embrace": {
+  "book": 31,
+  "category": "bond",
+  "beat": "d2: Grandmother Jia, silver-haired, pulling the girl into her arms; the room in tears.",
+  "scene": "In a grand, richly furnished room, Grandmother Jia pulls Lin Daiyu into her arms, both weeping; around them ladies and maids in silk dab their eyes with handkerchiefs.",
+  "notes": "Book 31 (Red Chamber Book 1), redchamber/book1/design.md Stills table. Brief drafted by Graphics from the table; Plot may rewrite."
+ },
+ "hl_xifeng": {
+  "book": 31,
+  "category": "intrigue",
+  "beat": "d3: Xifeng sweeping in from the back door among maids, gold and red, laughing.",
+  "scene": "Wang Xifeng sweeps in through a back door of a grand room, laughing aloud, maids and serving women crowding around her; everyone else in the room stands hushed; Lin Daiyu, small at the side, turns to look at her.",
+  "notes": "Book 31 (Red Chamber Book 1), redchamber/book1/design.md Stills table. Brief drafted by Graphics from the table; Plot may rewrite."
+ },
+ "hl_kang": {
+  "book": 31,
+  "category": "intrigue",
+  "beat": "d5: Two brocade cushions facing on an empty kang; the girl on a chair to the side.",
+  "scene": "In a stately hall, a broad heated brick kang under the window, a red rug on it and two brocade cushions facing each other across a low lacquered kang table, both empty; to one side Lin Daiyu sits on a chair against the wall, hands folded, looking at the cushions.",
+  "notes": "Book 31 (Red Chamber Book 1), redchamber/book1/design.md Stills table. Brief drafted by Graphics from the table; Plot may rewrite."
+ },
+ "hl_tea": {
+  "book": 31,
+  "category": "everyday",
+  "beat": "d6: A silent table; maids with spittoons and towels; the girl watching before she lifts her cup.",
+  "scene": "A long dinner table in a lamplit room, utterly silent; maids stand behind the ladies holding small spittoons, fly-whisks and towels; serving women bring tea in covered cups; Lin Daiyu sits holding her cup still, watching the others rinse their mouths before she drinks.",
+  "notes": "Book 31 (Red Chamber Book 1), redchamber/book1/design.md Stills table. Brief drafted by Graphics from the table; Plot may rewrite."
+ },
+ "hl_baoyu": {
+  "book": 31,
+  "category": "bond",
+  "beat": "d7: The boy in red with the jade at his neck, looking at her as if he knows her.",
+  "scene": "Jia Baoyu has stepped into a lamplit room and stopped, staring at Lin Daiyu as if he has seen her before; she looks back at him, startled.",
+  "notes": "Book 31 (Red Chamber Book 1), redchamber/book1/design.md Stills table. Brief drafted by Graphics from the table; Plot may rewrite."
+ },
+ "hl_jade": {
+  "book": 31,
+  "category": "aftermath",
+  "beat": "d7: The jade on the floor, everyone diving for it, the girl still in her chair.",
+  "scene": "Jia Baoyu has thrown the jade from his neck onto the floor; maids and old women dive and scramble for it, Grandmother Jia reaching out in alarm; Lin Daiyu sits frozen in her chair.",
+  "notes": "Book 31 (Red Chamber Book 1), redchamber/book1/design.md Stills table. Brief drafted by Graphics from the table; Plot may rewrite."
+ },
+ "hl_gauze": {
+  "book": 31,
+  "category": "aftermath",
+  "beat": "d8: Night in the green gauze closet; Xiren on the bed's edge; the girl's tears.",
+  "scene": "Night, in a small sleeping alcove screened with green gauze, lit by one lamp: Lin Daiyu sits on the bed in tears, and Xiren sits on the bed's edge beside her, comforting her softly.",
+  "notes": "Book 31 (Red Chamber Book 1), redchamber/book1/design.md Stills table. Brief drafted by Graphics from the table; Plot may rewrite."
+ },
+ "hl_lions": {
+  "book": 31,
+  "category": "everyday",
+  "beat": "g2: An old woman and a small boy at the foot of the stone lions, sedan chairs crowding past.",
+  "scene": "Morning before a great mansion gate with two huge stone lions: Granny Liu stands small at the foot of a lion holding the hand of Ban'er; fine sedan chairs and horses crowd past; richly dressed gatemen lounge on a bench, ignoring her.",
+  "notes": "Book 31 (Red Chamber Book 1), redchamber/book1/design.md Stills table. Brief drafted by Graphics from the table; Plot may rewrite."
+ },
+ "hl_clock": {
+  "book": 31,
+  "category": "omen",
+  "beat": "g5: The wall clock's swinging weight, the old woman staring up at it, startled.",
+  "scene": "In a richly furnished room, a tall Western wall clock in a carved case, its brass pendulum swinging as it strikes; Granny Liu, startled, stares up at it from below.",
+  "notes": "Book 31 (Red Chamber Book 1), redchamber/book1/design.md Stills table. Brief drafted by Graphics from the table; Plot may rewrite."
+ },
+ "hl_ash": {
+  "book": 31,
+  "category": "intrigue",
+  "beat": "g6: Xifeng in sable, not looking up, stirring the ashes in her hand-warmer.",
+  "scene": "Wang Xifeng sits on a kang in a sable hood and a fur-lined cloak, head bowed, not looking up, slowly stirring the ashes in a small brass hand-warmer with tiny tongs; Ping'er stands beside her with a tea tray; at the edge Granny Liu bows low.",
+  "notes": "Book 31 (Red Chamber Book 1), redchamber/book1/design.md Stills table. Brief drafted by Graphics from the table; Plot may rewrite."
+ },
+ "hl_silver": {
+  "book": 31,
+  "category": "bond",
+  "beat": "g6: The packet of silver and a string of cash set before the old woman.",
+  "scene": "On a low table, an open cloth packet of silver ingots and a string of copper cash set before Granny Liu, who stares at it with her hands half raised; Ban'er peeks beside her.",
+  "notes": "Book 31 (Red Chamber Book 1), redchamber/book1/design.md Stills table. Brief drafted by Graphics from the table; Plot may rewrite."
  }
 }
