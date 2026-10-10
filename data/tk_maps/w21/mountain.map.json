@@ -1,0 +1,383 @@
+{
+ "format": "tk-map/1",
+ "id": "mountain",
+ "world": 21,
+ "name": "Mountain",
+ "archetype": "city",
+ "size": [
+  48,
+  64
+ ],
+ "seed": 1021,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "asphalt",
+   "b": "city",
+   "c": "hills",
+   "d": "path",
+   "f": "plateau"
+  },
+  "rows": [
+   "ccccccccffffffffffffffffffffffffffffffffcccccccc",
+   "ccccccccffffffffffffffffffffffffffffffffcccccccc",
+   "ccccccccffffffffffffffffffffffffffffffffcccccccc",
+   "ccccccccffffffffffffffffffffffffffffffffcccccccc",
+   "ccccccccffffffffffffffffffffffffffffffffcccccccc",
+   "ccccccccffffffffffffffffffffffffffffffffcccccccc",
+   "ccccccccffffffffffffffffffffffffffffffffcccccccc",
+   "ccccccccffffffffffffffffffffffffffffffffcccccccc",
+   "ccccccccffffffffffffffffffffffffffffffffcccccccc",
+   "ccccccccfffffffffffffffffddfffffffffffffcccccccc",
+   "ccccccccfffffffffffffffffddfffffffffffffcccccccc",
+   "ccccccccfffffffffffffffffddfffffffffffffcccccccc",
+   "cccccccccccccccccccccccccddccccccccccccccccccccc",
+   "cccccccccccccccccccccccccddccccccccccccccccccccc",
+   "cccccccccccccccccccccccccddccccccccccccccccccccc",
+   "cccccccccccccccccccccccccddccccccccccccccccccccc",
+   "cccccccccccccccccccccccccddccccccccccccccccccccc",
+   "cccccccccddddddddddddddddddccccccccccccccccccccc",
+   "cccccccccddddddddddddddddddccccccccccccccccccccc",
+   "cccccccccddccccccccccccccccccccccccccccccccccccc",
+   "cccccccccddccccccccccccccccccccccccccccccccccccc",
+   "cccccccccddccccccccccccccccccccccccccccccccccccc",
+   "cccccccccddccccccccccccccccccccccccccccccccccccc",
+   "cccccccccddccccccccccccccccccccccccccccccccccccc",
+   "cccccccccddcccccccccccccccccccccccccffffffffffff",
+   "cccccccccddcccccccccccccccccccccccccffffffffffff",
+   "cccccccccddcccccccccccccccccccccccccffffffffffff",
+   "cccccccccddcccccccccccccccccccccccccffffffffffff",
+   "cccccccccddcccccccccccccccccccccccccffffffffffff",
+   "cccccccccddddddddddddddddddddddddddddddfffffffff",
+   "cccccccccddddddddddddddddddddddddddddddfffffffff",
+   "ccccccccccccccccccccccccccccccccccccfddfffffffff",
+   "cccccccccccccccccccccccccccccccccccccddccccccccc",
+   "cccccccccccccccccccccccccccccccccccccddccccccccc",
+   "cccccccccccccccccccccccccccccccccccccddccccccccc",
+   "cccccccccccccccccccccccccccccccccccccddccccccccc",
+   "cccccccccccccccccccccccccccccccccccccddccccccccc",
+   "cccccccccccccccccccccccccccccccccccccddccccccccc",
+   "cccccccccccccccccccccccccccccccccccccddccccccccc",
+   "cccccccccccccccccccccccccccccccccccccddccccccccc",
+   "cccccccccccccccccccccccccccccccccccccddccccccccc",
+   "cccccccccccccddddddddddddddddddddddddddccccccccc",
+   "cccccccccccccddddddddddddddddddddddddddccccccccc",
+   "cccccccccccccddccccccccccccccccccccccccccccccccc",
+   "cccccccccccccddccccccccccccccccccccccccccccccccc",
+   "cccccccccccccddccccccccccccccccccccccccccccccccc",
+   "cccccccccccccddccccccccccccccccccccccccccccccccc",
+   "cccccccccccccddccccccccccccccccccccccccccccccccc",
+   "cccccccccccccddccccccccccccccccccccccccccccccccc",
+   "cccccccccccccddccccccccccccccccccccccccccccccccc",
+   "cccccccccccccddccccccccccccccccccccccccccccccccc",
+   "cccccccccccccddccccccccccccccccccccccccccccccccc",
+   "bbbbbbbbbbbbbddbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbddbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbddbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  ],
+  "walk": {
+   "asphalt": false,
+   "city": true,
+   "hills": false,
+   "path": true,
+   "plateau": true
+  }
+ },
+ "lines": [
+  {
+   "id": "trail",
+   "kind": "path",
+   "path": [
+    [
+     6,
+     2
+    ],
+    [
+     6,
+     4
+    ],
+    [
+     2,
+     4
+    ],
+    [
+     2,
+     7
+    ],
+    [
+     9,
+     7
+    ],
+    [
+     9,
+     10
+    ],
+    [
+     3,
+     10
+    ],
+    [
+     3,
+     13
+    ]
+   ],
+   "width": 2,
+   "tiles": 228
+  }
+ ],
+ "objects": [
+  {
+   "kind": "rock.crag",
+   "x": 30,
+   "y": 1,
+   "w": 3,
+   "h": 2,
+   "id": "crag",
+   "label": "The summit rocks"
+  },
+  {
+   "kind": "rock.big",
+   "x": 10,
+   "y": 5,
+   "w": 3,
+   "h": 2,
+   "id": "rock-w"
+  },
+  {
+   "kind": "tree.pine",
+   "x": 37,
+   "y": 9,
+   "w": 1,
+   "h": 1,
+   "id": "pine-s1",
+   "blocks_sight": true
+  },
+  {
+   "kind": "prop.bench",
+   "x": 17,
+   "y": 1,
+   "w": 2,
+   "h": 1,
+   "id": "bench",
+   "label": "A bench, and Seoul below"
+  },
+  {
+   "kind": "landmark.notice",
+   "x": 17,
+   "y": 53,
+   "w": 2,
+   "h": 1,
+   "id": "trail-sign",
+   "label": "The trail map"
+  },
+  {
+   "kind": "prop.car",
+   "x": 26,
+   "y": 53,
+   "w": 4,
+   "h": 2,
+   "id": "oh-car",
+   "label": "Oh's car"
+  },
+  {
+   "kind": "prop.car",
+   "x": 38,
+   "y": 53,
+   "w": 4,
+   "h": 2,
+   "id": "car-a"
+  },
+  {
+   "kind": "prop.car",
+   "x": 2,
+   "y": 61,
+   "w": 4,
+   "h": 2,
+   "id": "jam-0"
+  },
+  {
+   "kind": "prop.car",
+   "x": 14,
+   "y": 61,
+   "w": 4,
+   "h": 2,
+   "id": "jam-3"
+  },
+  {
+   "kind": "prop.car",
+   "x": 26,
+   "y": 61,
+   "w": 4,
+   "h": 2,
+   "id": "jam-6"
+  },
+  {
+   "kind": "prop.car",
+   "x": 38,
+   "y": 61,
+   "w": 4,
+   "h": 2,
+   "id": "jam-9"
+  },
+  {
+   "kind": "tree.pine",
+   "x": 1,
+   "y": 53,
+   "w": 1,
+   "h": 1,
+   "id": "pine-c1",
+   "blocks_sight": true
+  },
+  {
+   "kind": "tree.pine",
+   "x": 45,
+   "y": 53,
+   "w": 1,
+   "h": 1,
+   "id": "pine-c2",
+   "blocks_sight": true
+  }
+ ],
+ "spots": [
+  {
+   "id": "summit",
+   "x": 17.5,
+   "y": 9.7,
+   "node": "",
+   "label": "The summit",
+   "note": "the cut to Oh lands here (6+ tiles from m7)"
+  },
+  {
+   "id": "m7",
+   "x": 33.5,
+   "y": 9.7,
+   "node": "21-m7",
+   "label": "The summit"
+  },
+  {
+   "id": "m7b",
+   "x": 29.5,
+   "y": 57.7,
+   "node": "21-m7b",
+   "label": "Oh's car"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "npc-1",
+   "kind": "folk.grandpa",
+   "x": 21.5,
+   "y": 5.9,
+   "say": [
+    "An old man in full hiking kit, poles and all, steps aside. “Running down? On a weekday? Young people.”"
+   ]
+  },
+  {
+   "id": "npc-2",
+   "kind": "folk.ajumma",
+   "x": 45.5,
+   "y": 29.9,
+   "say": [
+    "A woman with a thermos and a visor. “Careful going down. The steps are wet.”"
+   ]
+  },
+  {
+   "id": "npc-3",
+   "kind": "folk.salaryman",
+   "x": 41.5,
+   "y": 57.9,
+   "say": [
+    "A man in a suit jacket and trainers, phone to his ear, by his car. “…No, I'm at my desk. Yes. My desk.”"
+   ]
+  }
+ ],
+ "exits": [],
+ "entries": {
+  "": [
+   21,
+   5
+  ]
+ },
+ "states": [
+  {
+   "id": "morning",
+   "light": "morning"
+  }
+ ],
+ "ways": {
+  "nodes": [
+   [
+    26.0,
+    10.0
+   ],
+   [
+    26.0,
+    18.0
+   ],
+   [
+    10.0,
+    18.0
+   ],
+   [
+    10.0,
+    30.0
+   ],
+   [
+    38.0,
+    30.0
+   ],
+   [
+    38.0,
+    42.0
+   ],
+   [
+    14.0,
+    42.0
+   ],
+   [
+    14.0,
+    54.0
+   ]
+  ],
+  "edges": [
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    4,
+    5
+   ],
+   [
+    5,
+    6
+   ],
+   [
+    6,
+    7
+   ]
+  ]
+ },
+ "links": []
+}

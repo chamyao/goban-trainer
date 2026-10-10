@@ -1,6 +1,7 @@
 // Misaeng Book 1 (world 21, "The First Move", episodes 0-16): what Places built, walked in the engine.
-//   1. The commute (m8): from home in Susaek-dong, the subway and Jongno are open (open_ways), and the subway's
-//      commuter (a blocking challenger) stands on the way while m8 is open.
+//   1. The commute (m5): from home in Susaek-dong, the subway and Jongno are open (open_ways), and the subway's
+//      commuter (a blocking challenger) stands on the way while m5 is open.
+//      Oh's run (m7b): the trail down the mountain is the way; the wood either side holds.
 //   2. Jongno's carriageway is solid: walking south off the pavement stops at the kerb; at a crosswalk she crosses.
 //      Doors into other places ("to"): the tower's door into the lobby; the lift's menu up to General Affairs (2F),
 //      Sales Team 3 (14F) and the textile team (8F), whose door (the stairs) comes back down; out onto Jongno, down the
@@ -96,11 +97,26 @@ const shown = (p, id) => p.evaluate(id => { const n = window.__w.npcs.find(n => 
 
 // m8, the first commute: home in Susaek-dong, and the way to Jongno (the subway) must be open
 async function commute(b) {
-  const p = await open(b, '21-m8', 'susaek-dong', [], ['susaek-dong']);
+  const p = await open(b, '21-m5', 'susaek-dong', [], ['susaek-dong']);
   const open_ = await p.evaluate(() => ['the-subway', 'jongno'].map(x => [x, window.__w.placeOpen(x)]));
-  for (const [x, o] of open_) check(o, `m8: from home, ${x} is open (the way to the café)`);
-  check(await through(p, 'the-subway'), 'm8: Susaek-dong\'s station stairs go down into the subway');
-  check(await shown(p, 'commuter'), 'm8: the commuter stands in the subway on the way to Jongno');
+  for (const [x, o] of open_) check(o, `m5: from home, ${x} is open (the way to the sponsor's office)`);
+  check(await through(p, 'the-subway'), 'm5: Susaek-dong\'s station stairs go down into the subway');
+  check(await shown(p, 'commuter'), 'm5: the commuter stands in the subway on the way to Jongno');
+  await p.context().close();
+}
+
+// m7b, Oh's run: from the summit down the trail to his car; the wooded slope either side of the trail holds
+async function run(b) {
+  const p = await open(b, '21-m7b', 'mountain', [], ['mountain']);
+  const T = 16;
+  check(await p.evaluate(() => !!window.__w.spots.m7b), 'm7b: Oh\'s car waits in the car park at the foot of the trail');
+  // the trail's second leg runs west along plan row 4 (tile y 18), x 2-6 (tiles 10-26): from its middle, north is wood
+  await p.evaluate(T => window.__w.player.body.reset(18 * T, 18 * T), T);
+  const up = await walk(p, 0, -50, 3000);
+  check(up.y > 15 * T, `m7b: off the trail, the wooded slope holds (y ${(up.y / T).toFixed(1)} tiles)`);
+  await p.evaluate(T => window.__w.player.body.reset(18 * T, 18 * T), T);
+  const along = await walk(p, -50, 0, 3000);
+  check(along.x < 13 * T, `m7b: along the trail he runs (x ${(along.x / T).toFixed(1)} tiles)`);
   await p.context().close();
 }
 
@@ -195,7 +211,7 @@ async function evening(b) {
 
 (async () => {
   const b = await chromium.launch({ args: ['--use-gl=swiftshader', '--enable-webgl'] });
-  for (const t of [commute, street, requisition, errands, walks, evening]) {
+  for (const t of [commute, run, street, requisition, errands, walks, evening]) {
     try { await t(b); } catch (e) { fails++; console.log('FAIL', t.name, e.message); }
   }
   await b.close();

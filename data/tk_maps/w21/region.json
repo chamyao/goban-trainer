@@ -308,14 +308,13 @@
    "parent": "one-international"
   },
   {
-   "id": "ohs-home",
-   "name": "Oh's home",
+   "id": "mountain",
+   "name": "Mountain",
    "zh": "",
-   "archetype": "interior",
-   "map": "ohs-home.map.json",
+   "archetype": "city",
+   "map": "mountain.map.json",
    "links": [
-    "jongno",
-    "susaek-dong"
+    "jongno"
    ]
   },
   {
@@ -1275,13 +1274,13 @@
    "title_zh": ""
   },
   {
-   "node": "21-m6",
+   "node": "21-m7",
    "role": "main",
-   "place": "susaek-dong--home",
-   "spot": "m6",
-   "scene": "m6",
-   "title": "A Weak Group from the Start",
-   "objective": "Go home.",
+   "place": "mountain",
+   "spot": "m7",
+   "scene": "m7",
+   "title": "The Summit",
+   "objective": "The summit.",
    "after": [
     "21-m5"
    ],
@@ -1463,15 +1462,15 @@
    "title_zh": ""
   },
   {
-   "node": "21-m7",
+   "node": "21-m7b",
    "role": "main",
-   "place": "ohs-home",
-   "spot": "m7",
-   "scene": "m7",
-   "title": "The Weight of Life",
-   "objective": "Go to Oh's home.",
+   "place": "mountain",
+   "spot": "m7b",
+   "scene": "m7b",
+   "title": "Fear Is Rational",
+   "objective": "Run down the trail to the car. The deal won't wait.",
    "after": [
-    "21-m6"
+    "21-m7"
    ],
    "grade": "11K",
    "pool": [
@@ -1659,7 +1658,7 @@
    "title": "Baduk, Not Go",
    "objective": "The buyer is waiting at a café on Jongno.",
    "after": [
-    "21-m7"
+    "21-m7b"
    ],
    "grade": "11K",
    "pool": [
@@ -5046,6 +5045,7 @@
      11216
     ]
    ],
+   "board": false,
    "objective_zh": "",
    "title_zh": ""
   },
@@ -5234,6 +5234,18 @@
     ]
    ],
    "board": false,
+   "gate": [
+    {
+     "needs": [
+      "mark:audit"
+     ],
+     "else": "m21b_wait",
+     "objective": "Work out how the waybill got out of Sales 3: open Oh's desk from the bag and link the clues. Then meet Kim and Jang on Jongno.",
+     "at": "Jongno",
+     "place": "jongno",
+     "objective_zh": ""
+    }
+   ],
    "objective_zh": "",
    "title_zh": ""
   },
