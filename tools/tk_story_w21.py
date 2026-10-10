@@ -6,6 +6,10 @@ docs/book2/misaeng-research-ep0-33.md; engine syntax: docs/book2/misaeng-engine.
 The webtoon's events, people and order are kept; the dialogue is a close paraphrase, with only short key lines quoted.
 Beats marked (staging) or (invented) in comments are not in the webtoon.
 
+The record boards are multiple choice (the user): Cho's move and three of the "choices", picked by the player's rank;
+each choice carries its points lost against Cho's move (KataGo, the repo's small net, 300 visits on the position after
+the move; scratchpad analysis, noise about 0.3). Every candidate scores below Cho's move.
+
 The frame: every beat opens on the 1st Ing Cup final, game 5 (1989), Nie Weiping (White) against Cho Hunhyun (Black),
 played to the beat's "move" (the episode number). At five beats the player finds Cho's actual move ("record").
 """
@@ -426,8 +430,9 @@ def _nodes():
             "Twenty-five of them, and me. Find two eyes.",
             "Alive. Barely.",
             "Dead. Again.")),
-        node("m6", 95, 205, "m6", room="pt-room", move=10, record=[11, None], dilemma=[
-            D("ms_jang", "Find Cho Hunhyun's move.",
+        node("m6", 95, 205, "m6", room="pt-room", move=10, record=[11, None], choices={11: [['dl', 3.1], ['dr', 3.55], ['dc', 3.97], ['bp', 4.04], ['cc', 4.58], ['ed', 4.84], ['ip', 6.15]]},
+             dilemma=[
+            D("ms_jang", "Which move did Cho Hunhyun play?",
               "Link up, and keep attacking.",
               "Black 11.",
               "Not there. Look again."),
@@ -446,8 +451,9 @@ def _nodes():
             "Steve takes it.",
             "Not like that. Again.")),
         node("m10", 150, 180, "m10", room="roof", move=17, board=False),
-        node("m11", 165, 172, "m11", place="Jongno", room="client", move=18, record=[19, None], dilemma=[
-            D("ms_jang", "Find Cho Hunhyun's move.",
+        node("m11", 165, 172, "m11", place="Jongno", room="client", move=18, record=[19, None], choices={19: [['ch', 0.03], ['oc', 0.04], ['kq', 0.16], ['lp', 0.91], ['dm', 1.07], ['dl', 1.72]]},
+             dilemma=[
+            D("ms_jang", "Which move did Cho Hunhyun play?",
               "He's shown me a weakness on purpose. Go straight in.",
               "Black 19.",
               "Not there. Look again."),
@@ -469,8 +475,9 @@ def _nodes():
             "He has the questions. I have the paper.",
             "It holds together.",
             "Again.")),
-        node("m16", 240, 134, "m16", room="pt-room", move=28, record=[29, None, None], dilemma=[
-            D("ms_jang", "Find Cho Hunhyun's move.",
+        node("m16", 240, 134, "m16", room="pt-room", move=28, record=[29, None, None], choices={29: [['oq', 0.19], ['or', 1.33], ['dm', 2.27], ['dl', 2.42], ['ck', 2.45], ['pr', 3.16], ['dg', 3.17], ['qf', 4.03]]},
+             dilemma=[
+            D("ms_jang", "Which move did Cho Hunhyun play?",
               "Eight points of komi. He can't play safe.",
               "Black 29.",
               "Not there. Look again."),
@@ -492,12 +499,13 @@ def _nodes():
              gate=[{"needs": ["item:slippers"], "else": "m18_wait",
                     "objective": T("Borrow section head Oh's office slippers at his desk in Sales 3, then come back to the PT room."),
                     "at": "One International"}],
+             choices={31: [['ms', 0.43], ['mr', 0.56], ['dm', 2.43], ['dl', 2.96], ['ck', 3.01], ['gq', 3.45], ['hr', 4.16], ['ns', 5.02]]},
              dilemma=[
                  D("ms_jang", "Buy what's worth buying.",
                    "Notebooks and a bolt of cloth. What's he really selling?",
                    "The notebooks.",
                    "Look again."),
-                 D("ms_jang", "Find Cho Hunhyun's move.",
+                 D("ms_jang", "Which move did Cho Hunhyun play?",
                    "Atari. Break the whole side.",
                    "Black 31.",
                    "Not there. Look again."),
@@ -506,8 +514,9 @@ def _nodes():
                    "He buys.",
                    "He won't buy that. Again."),
              ]),
-        node("m19", 275, 112, "m19", room="hr", move=32, record=33, dilemma=D(
-            "ms_jang", "Find Cho Hunhyun's move.",
+        node("m19", 275, 112, "m19", room="hr", move=32, record=33, choices={33: [['gr', 2.16], ['dn', 2.3], ['ck', 4.18], ['dm', 4.64], ['ql', 4.69], ['dl', 4.87], ['hp', 8.34]]},
+             dilemma=D(
+            "ms_jang", "Which move did Cho Hunhyun play?",
             "Take the territory. Settle.",
             "Black 33.",
             "Not there. Look again.")),
