@@ -302,6 +302,10 @@ problem picks as committed. Then `git status`: only what the change touched shou
 - One map per pair of places has one way between them that works: the engine lands an arrival at the entry kept for
   the map she came from, not at the gate she used. Two open gates from the street into one house land at the same
   spot, so shut all but one in each state (Red Chamber: the back gate in Part 2, none in Part 1).
+- A room's `floor="wood"` draws as pale brick in all three kits and reads as a wall; `"stone"` draws as floorboards
+  (Book 15's rooms, and Red Chamber's). Render a room (`compile.render`) in each kit before choosing.
+- A room beat that waits for a tap keeps its objective while she's inside: write it to read right both on the way
+  there and in the room ("…to Grandmother Jia's rooms. Look about you, then go up to her.").
 - A proof must fail when it should: break the thing it proves (open the shut gates in a copy of the map) and run it.
 
 ## Walking it in the engine

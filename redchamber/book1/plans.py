@@ -146,6 +146,9 @@ def _cues():
         said = [c["say"] for c in rc.get(k, []) if c["who"] == who]
         if said:
             out.append((k, who, at, face, said[0]))
+    stale = [kw for kw in CUE_AT if not any(c["who"] == kw[1] for c in rc.get(kw[0], []))]
+    if stale:   # a cue Plot has moved or dropped: its stand must go (or move) with it
+        raise SystemExit(f"redchamber/book1/plans.py: CUE_AT places cue-givers ROOM_CUES no longer has: {stale}")
     missing = [(k, c["who"]) for k, cs in rc.items() for c in cs if (k, c["who"]) not in CUE_AT]
     if missing:
         raise SystemExit(f"redchamber/book1/plans.py: no place in CUE_AT for the cue-givers {missing}")
@@ -286,7 +289,7 @@ RONG = {
     "maps": {
         # Grandmother Jia's rooms: d2 (the embrace), d3 (Xifeng sweeps in from the back door), d6 (dinner, tea), d7 (the
         # jade). Her couch at the back; the girls' chairs; the green gauze closet through the east doorway.
-        "jm-rooms": _room([20, 10], [10, 9], "Grandmother Jia's rooms", floor="wood",
+        "jm-rooms": _room([20, 10], [10, 9], "Grandmother Jia's rooms", floor="stone",
                           things=[{"id": "couch", "kind": "furn.kang", "rect": [9, 1, 2, 1], "label": "Grandmother Jia's couch"},
                                   {"id": "screen", "kind": "furn.screen", "rect": [12, 1, 2, 1]},
                                   {"id": "back-door", "kind": "furn.curtain", "rect": [16, 1, 1, 1], "label": "The back door"},
@@ -302,7 +305,7 @@ RONG = {
                                  {"id": "d7", "at": [8, 7], "node": K("d7"), "trigger": "talk", "label": "Grandmother Jia's rooms"}],
                           exits=[{"to": "gauze-closet", "at": [19, 4]}]),
         # the green gauze closet, off her rooms: d8, at night (Yingge 3,0; Xiren walks in from 10,2 to 4,1)
-        "gauze-closet": _room([10, 6], [0, 3], "The green gauze closet", floor="wood",
+        "gauze-closet": _room([10, 6], [0, 3], "The green gauze closet", floor="stone",
                               things=[{"id": "bed", "kind": "furn.bed", "rect": [6, 1, 2, 1], "label": "The bed"},
                                       {"id": "gauze", "kind": "furn.gauze", "rect": [3, 1, 2, 1], "label": "The green gauze partition"},
                                       {"id": "lamp", "kind": "furn.lamp", "rect": [8, 4, 1, 1]}],
@@ -325,7 +328,7 @@ RONG = {
                                   {"id": "shelf", "kind": "furn.shelf", "rect": [19, 1, 2, 1]}],
                           spots=[{"id": "d5", "at": [13, 8], "node": K("d5"), "trigger": "talk", "label": "Lady Wang's rooms"}]),
         # Xifeng's main room (g5): the clock on its pillar, Ping'er by the kang in the east room; her own room to the west
-        "xf-eastroom": _room([16, 8], [8, 7], "The east room", floor="wood",
+        "xf-eastroom": _room([16, 8], [8, 7], "The east room", floor="stone",
                              things=[{"id": "clock", "kind": "furn.clock", "rect": [7, 2, 1, 1], "label": "A box on a pillar, a weight swinging under it"},
                                      {"id": "kang", "kind": "furn.kang", "rect": [12, 2, 2, 1], "label": "The kang in the east room"},
                                      {"id": "curtain", "kind": "furn.curtain", "rect": [11, 4, 1, 1], "label": "A scarlet felt curtain"},
@@ -335,7 +338,7 @@ RONG = {
                              exits=[{"to": "xf-rooms", "at": [0, 3]}]),
         # Xifeng's own room (g6): she sits on the kang at the hand-warmer (0,-6), Ping'er beside her; Jia Rong comes in by
         # the door from the main room (14,4)
-        "xf-rooms": _room([14, 8], [13, 4], "Xifeng's rooms", floor="wood",
+        "xf-rooms": _room([14, 8], [13, 4], "Xifeng's rooms", floor="stone",
                           things=[{"id": "kang", "kind": "furn.kang", "rect": [5, 1, 2, 1], "label": "Xifeng's kang"},
                                   {"id": "warmer", "kind": "furn.handwarmer", "rect": [7, 1, 1, 1], "label": "A brass hand-warmer"},
                                   {"id": "screen", "kind": "furn.screen", "rect": [9, 1, 2, 1], "label": "A painted screen"},
@@ -343,7 +346,7 @@ RONG = {
                                   {"id": "drawers", "kind": "furn.drawers", "rect": [2, 6, 1, 1]}],
                           spots=[{"id": "g6", "at": [6, 5], "node": K("g6"), "trigger": "talk", "label": "Xifeng's rooms"}]),
         # Zhou Rui's house, inside the back gate (g4)
-        "zhou-house": _room([10, 6], [5, 5], "Zhou Rui's house", floor="wood",
+        "zhou-house": _room([10, 6], [5, 5], "Zhou Rui's house", floor="stone",
                             things=[{"id": "kang", "kind": "furn.kang", "rect": [5, 1, 2, 1]},
                                     {"id": "table", "kind": "furn.table", "rect": [2, 2, 1, 1]},
                                     {"id": "jar", "kind": "furn.jar", "rect": [8, 1, 1, 1]}],
@@ -351,16 +354,16 @@ RONG = {
     },
     "objectives": {
         K("d1"): "Get down from the sedan chair at the festooned gate.",
-        K("d2"): "Go through the festooned gate and the covered walks, into Grandmother Jia's rooms.",
-        K("d4"): "Go back into Grandmother Jia's rooms.",
-        K("d5"): "Go east through the cross-hall and the ceremonial gate to Rongxi Hall, where Lady Wang waits.",
+        K("d2"): "Into Grandmother Jia's rooms, through the festooned gate and the covered walks. Look about you, then go up to her.",
+        K("d3"): "Someone is laughing in the back courtyard. Look about the room, then step up to meet her.",
+        K("d5"): "East through the cross-hall and the ceremonial gate to Rongxi Hall and Lady Wang's rooms. Look about you before you sit.",
         K("d6a"): "Go with Lady Wang by the back way: out by the corner gate of the great court, into the passage.",
-        K("d6"): "Go through the cross-hall off the passage, to Grandmother Jia's rooms for dinner.",
-        K("d7"): "Stay in Grandmother Jia's rooms.",
+        K("d6"): "Through the cross-hall off the passage, to Grandmother Jia's rooms for dinner. Look about you before you take a seat.",
+        K("d7"): "Stay in Grandmother Jia's rooms. Look about you, then go back to your seat.",
         K("d8"): "Go to bed in the green gauze closet, through the east doorway of Grandmother Jia's rooms.",
-        K("g4"): "The back gate is open. Zhou Rui's house is just inside it.",
-        K("g5"): "Follow Zhou Rui's wife down the passage, round the screen wall and through Sister Feng's gate.",
-        K("g6"): "Go through to Sister Feng's own room.",
+        K("g4"): "In by the back gate, to Zhou Rui's house just inside it. Look about you, then speak up.",
+        K("g5"): "Follow Zhou Rui's wife down the passage, round the screen wall and through Sister Feng's gate. Inside, look about you before you greet anyone.",
+        K("g6"): "Through to Sister Feng's own room. Look about you, then go up to her.",
     },
 }
 
@@ -426,14 +429,14 @@ XING = {
     ],
     "maps": {
         # d4: Lady Xing on her seat (4,-4); the servant back from the study (10,2)
-        "xing-hall": _room([12, 8], [6, 7], "Lady Xing's hall", floor="wood",
+        "xing-hall": _room([12, 8], [6, 7], "Lady Xing's hall", floor="stone",
                            things=[{"id": "kang", "kind": "furn.kang", "rect": [5, 1, 2, 1], "label": "Lady Xing's kang"},
                                    {"id": "screen", "kind": "furn.screen", "rect": [8, 1, 2, 1]},
                                    {"id": "table", "kind": "furn.table", "rect": [2, 3, 1, 1]},
                                    {"id": "jar", "kind": "furn.jar", "rect": [10, 6, 1, 1]}],
                            spots=[{"id": "d4", "at": [4, 5], "node": K("d4"), "trigger": "talk", "label": "Lady Xing's hall"}]),
     },
-    "objectives": {K("d4"): "Go through the three inner gates to Lady Xing's rooms."},
+    "objectives": {K("d4"): "Through the three inner gates to Lady Xing's hall. Look about you, then go up to her."},
 }
 
 
@@ -606,6 +609,16 @@ TABLES = {"NEW_KINDS": NEW_KINDS, "LINE_KINDS": LINE_KINDS, "ZONE_KINDS": ZONE_K
 # The Chinese for every place name, label, objective and line above (Plot checks them): the novel's vernacular, in
 # simplified characters. build_tk.py needs a line's Chinese; the game shows a label's and an objective's.
 ZH_PLACES_HLM1 = {
+    # the objectives of the beats that wait for a tap: they read the same on the way there and once she's in
+    "Into Grandmother Jia's rooms, through the festooned gate and the covered walks. Look about you, then go up to her.": "进垂花门，走抄手游廊，到贾母房中。先看一看，再上前去见外祖母。",
+    "Someone is laughing in the back courtyard. Look about the room, then step up to meet her.": "后院里有人笑。先看看屋里的人，再上前去见。",
+    "East through the cross-hall and the ceremonial gate to Rongxi Hall and Lady Wang's rooms. Look about you before you sit.": "往东穿过穿堂，进仪门，到荣禧堂王夫人房中。先看一看，再落座。",
+    "Through the cross-hall off the passage, to Grandmother Jia's rooms for dinner. Look about you before you take a seat.": "从夹道穿过穿堂，到贾母房中吃晚饭。先看一看，再入座。",
+    "Stay in Grandmother Jia's rooms. Look about you, then go back to your seat.": "留在贾母房中。先看一看，再回到座上。",
+    "In by the back gate, to Zhou Rui's house just inside it. Look about you, then speak up.": "进后门，周瑞家就在门里。先看一看，再开口。",
+    "Follow Zhou Rui's wife down the passage, round the screen wall and through Sister Feng's gate. Inside, look about you before you greet anyone.": "跟着周瑞家的走夹道，转过影壁，进凤姐儿的院门。进了屋，先看一看，再见礼。",
+    "Through to Sister Feng's own room. Look about you, then go up to her.": "到凤姐儿自己屋里去。先看一看，再上前去。",
+    "Through the three inner gates to Lady Xing's hall. Look about you, then go up to her.": "进了三层仪门，到邢夫人正室。先看一看，再上前去见。",
     # places and rooms
     # (the place and room names are Plot's PLACE_NAMES and ROOM_NAMES, story.py 216a5cf)
     "The Rong Mansion": "荣国府", "Lady Xing's Court": "邢夫人院", "The Village": "城外村庄", "Ning-Rong Street": "宁荣街",
@@ -642,22 +655,13 @@ ZH_PLACES_HLM1 = {
     "An old nurse at a go board in the covered walk looks up. “Miss Lin? Sit a moment, miss. Lady Wang's maids are still laying out the tea.”": "游廊下一个老嬷嬷守着棋盘，抬起头来。“林姑娘？坐一坐罢。二太太那边丫头们还在摆茶呢。”",
     "The old nurse is setting out the stones again, for herself.": "老嬷嬷又自己摆起棋子来了。",
     "Get down from the sedan chair at the festooned gate.": "在垂花门前下轿。",
-    "Go through the festooned gate and the covered walks, into Grandmother Jia's rooms.": "进垂花门，走抄手游廊，到贾母房中去。",
-    "Go back into Grandmother Jia's rooms.": "回贾母房中去。",
-    "Go east through the cross-hall and the ceremonial gate to Rongxi Hall, where Lady Wang waits.": "往东穿过穿堂，进仪门，到荣禧堂去，王夫人在那里等着。",
     "Go with Lady Wang by the back way: out by the corner gate of the great court, into the passage.": "跟着王夫人从后头走：出了大院的角门，到夹道里去。",
-    "Go through the cross-hall off the passage, to Grandmother Jia's rooms for dinner.": "从夹道穿过穿堂，到贾母房中吃晚饭。",
-    "Stay in Grandmother Jia's rooms.": "留在贾母房中。",
     "Go to bed in the green gauze closet, through the east doorway of Grandmother Jia's rooms.": "从贾母房中东边的门进去，到碧纱橱里安歇。",
-    "The back gate is open. Zhou Rui's house is just inside it.": "后门开着。周瑞家就在门里。",
-    "Follow Zhou Rui's wife down the passage, round the screen wall and through Sister Feng's gate.": "跟着周瑞家的走夹道，转过影壁，进凤姐儿的院门。",
-    "Go through to Sister Feng's own room.": "到凤姐儿自己屋里去。",
     # Lady Xing's
     "The covered carriage, waiting": "等着的翠幄青绸车", "The black-lacquered gate": "黑油大门", "Lady Xing's kang": "邢夫人的炕",
     "The carriage waits at the gate. Your grandmother's order was to call on both uncles.": "车在门外等着。外祖母吩咐的，两个母舅都要拜见。",
     "A serving woman bows you through the next gate. “The mistress is inside, miss.”": "一个媳妇引你进了下一道门。“太太在里头呢，姑娘。”",
     "Maids in bright clothes peep at you from the rockery, and giggle, and are hushed.": "几个妆饰艳丽的丫头从山石后头偷看你，嘻嘻一笑，又被人喝住了。",
-    "Go through the three inner gates to Lady Xing's rooms.": "进了三层仪门，到邢夫人正房去。",
     # the village
     "The kang": "炕", "Empty sacks": "空口袋",
     "The city is a long walk, and the house has nothing put by for winter. Go home first.": "进城路远，家里冬事未办。先回家去。",
