@@ -127,12 +127,11 @@ async function boardRoom(b) {
     s = await p.evaluate(([seat, item]) => ({ mark: WorldMarks.has(window.__w.w, seat), held: WorldItems.has(window.__w.w, item) }), [seat, item]);
     check(s.mark && !s.held, `board room: ${seat} takes the ${item} out of the bag and sets its mark`);
   }
-  // the drinks on the table, once set: they show after the room is entered again
-  await p.evaluate(() => window.__w.scene.restart({ place: 'one-international--board-room' })); await settle(p, 'one-international--board-room');
-  const shown = await p.evaluate(() => (window.__w.children.list || []).filter(o => o.texture && /^prop\.(glass_water|teacup|coffee_cup)$/.test(o.tkKind || '') && o.visible).length);
+  // the drinks on the table, once set (tk-world's whenProps: a prop shown once its "when" holds)
+  const shown = await p.evaluate(() => (window.__w.whenProps || []).filter(o => o.img && o.img.visible).length);
   const conds = await p.evaluate(() => window.__w.cond('mark:seat_president') && window.__w.cond('mark:seat_exec') && window.__w.cond('mark:seat_division'));
   check(conds, 'board room: m17\'s gate (all three seats) is met');
-  console.log(`info board room: ${shown} drink props drawn (the engine draws a prop's "when" once Integration adds it)`);
+  check(shown === 3, `board room: the three drinks show on the table once set down (${shown})`);
   await p.context().close();
 }
 
