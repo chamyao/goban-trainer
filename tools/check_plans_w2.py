@@ -37,7 +37,7 @@ from vocab import FOLK, KINDS  # noqa: E402
 SIDES = {"N": (0, -1), "S": (0, 1), "W": (-1, 0), "E": (1, 0)}
 OPEN_GROUND = {"court", "passage", "garden", "field", "field.wheat", "market", "camp", "plain", "loess", "stage", "floor", "ward",
                "city", "plateau"}
-PASSABLE_THINGS = {"furn.seat", "furn.curtain", "furn.rug", "landmark.ridge", "building.gatehouse", "building.gate", "building.moongate", "building.palace_gate"}
+PASSABLE_THINGS = {"furn.seat", "furn.curtain", "furn.rug", "prop.spill", "landmark.ridge", "building.gatehouse", "building.gate", "building.moongate", "building.palace_gate"}
 IN_WALL = {"building.gate", "building.gatehouse", "building.gatetower", "building.moongate", "wall.stairs", "building.palace_gate"}   # stand in a wall: no margin
 EXTRA_KINDS = {"prop.lanterns", "prop.body_lamp", "milestone", "banner", "plant.peony", "water.lotus", "tree.poplar", "tree.willow",
                "camp.gong", "camp.drum"}

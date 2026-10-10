@@ -299,6 +299,24 @@
    "h": 1,
    "id": "team-phone",
    "label": "The team phone"
+  },
+  {
+   "kind": "furn.cleaning_cupboard",
+   "x": 22,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "mop-cupboard",
+   "label": "The cleaning cupboard"
+  },
+  {
+   "kind": "prop.spill",
+   "x": 28,
+   "y": 20,
+   "w": 1,
+   "h": 1,
+   "id": "spill",
+   "label": "A spill"
   }
  ],
  "spots": [
@@ -450,25 +468,41 @@
    "set_down": true
   },
   {
+   "id": "mop-cupboard",
+   "x": 22.5,
+   "y": 4.7,
+   "node": "",
+   "label": "The cleaning cupboard",
+   "gives": "mop",
+   "gives_when": "node:21-m13",
+   "give": [
+    "A mop and a bucket, behind the cupboard door. You take them."
+   ],
+   "given": [
+    "The cleaning cupboard. The mop's back on its hook."
+   ]
+  },
+  {
    "id": "errand-floor",
    "x": 28.5,
    "y": 20.7,
    "node": "",
-   "label": "The floor",
+   "label": "A spill on the floor",
    "needs": [
-    "node:21-m13"
+    "item:mop"
    ],
    "delivers": "errand_floor",
    "when": "node:21-m13",
    "waiting": [
-    "The floor."
+    "Coffee, trodden into the carpet. Someone said: wipe this floor."
    ],
    "deliver": [
-    "The floor: boxes stacked, the printer fed, yesterday's papers off every chair. Nobody notices. Everybody would have."
+    "Coffee, trodden into the carpet all morning. You mop it, wring it, mop it again. Nobody looks up."
    ],
    "delivered": [
-    "The floor is straight."
+    "The floor's clean. Nobody noticed."
    ],
+   "takes": true,
    "set_down": true
   }
  ],

@@ -102,6 +102,8 @@ NEW_KINDS = {**NEW_KINDS2,
              "furn.subway_seat": (4, 1, True),         # a subway carriage's long bench seat
              "prop.memorial_tent": (4, 2, True),       # a white memorial tent: portraits, chrysanthemums (Daehanmun, Book 1's end)
              "prop.machine": (4, 2, True),             # a plant's machine on the floor (Ulsan)
+             "furn.cleaning_cupboard": (1, 1, True),   # a narrow steel cupboard: mop, bucket (Sales 3, m14)
+             "prop.spill": (1, 1, False),              # a coffee spill trodden into the carpet, walked over (Sales 3, m14)
              "building.palace_gate": (6, 3, False),    # Daehanmun: the gate in Deoksugung's wall, walked through under its roof
              "furn.cloth_bolts": (2, 1, True),         # bolts of cloth on a rack, sample books below (the textile floor)
              # the board room's drinks (m17), each shown on the table once set down
@@ -182,6 +184,8 @@ ART = {**ART2,
                                "name board, on a stone base with steps; stands in the palace wall's gap, walked through",
        "furn.cloth_bolts": "bolts of coloured cloth on a steel rack, sample books on the bottom shelf",
        "wall.palace": "Deoksugung's wall: a stone base, plastered wall, a tiled coping on top",
+       "furn.cleaning_cupboard": "a narrow grey steel cleaning cupboard against an office wall, its door ajar on a mop and a yellow bucket",
+       "prop.spill": "a brown coffee stain trodden across grey office carpet, a paper cup on its side; a floor decal, walked over",
        "prop.machine": "an industrial machine on a plant floor in Ulsan: a steel press or a lathe in safety yellow and grey, "
                        "pipes and a control panel; four tiles long, two deep",
        "prop.memorial_tent": "a white Korean memorial tent (분향소) on a plaza: a white canopy on poles, a long table in white cloth "
@@ -962,7 +966,7 @@ def _places(floors):
         "Ulsan": {
             "archetype": "interior",
             "plan": room([18, 10], [9, 9], floor="earth", things=[
-                *[{"id": f"machine-{x}", "kind": "prop.machine", "rect": [x, 2, 2, 1], **({"label": "The line"} if x == 6 else {})} for x in (2, 6, 10, 14)],
+                *[{"id": f"machine-{x}", "kind": "prop.machine", "rect": [x, 2, 4, 2], **({"label": "The line"} if x == 7 else {})} for x in (1, 7, 13)],
                 *[{"id": f"crates-{x}", "kind": "furn.boxes", "rect": [x, 6, 1, 1]} for x in (2, 3, 14, 15)],
                 {"id": "office", "kind": "furn.desk", "rect": [8, 6, 1, 1], "label": "The site office's desk"},
             ]) | {"label": "The plant at Ulsan"},
@@ -1140,10 +1144,13 @@ def _b1():
                  "set_down": True,
                  "deliver": ["You ring the forwarder about the B/L. On hold. Then a voice: the bill of lading went out this morning. You write it down."],
                  "waiting": ["The team phone."], "delivered": ["The team phone. The forwarder's call is done."]},
-                {"id": "errand-floor", "at": [14, 10], "label": "The floor", "needs": [n(13)], "when": n(13), "delivers": "errand_floor",
-                 "set_down": True,
-                 "deliver": ["The floor: boxes stacked, the printer fed, yesterday's papers off every chair. Nobody notices. Everybody would have."],
-                 "waiting": ["The floor."], "delivered": ["The floor is straight."]},
+                # "wipe this floor" (episode 7): the mop from the cleaning cupboard, to the spill by the east desks
+                _give("mop-cupboard", [11, 2], "The cleaning cupboard", "mop", n(13), "A mop and a bucket, behind the cupboard door. You take them.",
+                      "The cleaning cupboard. The mop's back on its hook."),
+                _deliver("errand-floor", [14, 10], "A spill on the floor", "mop", "errand_floor", n(13),
+                         "Coffee, trodden into the carpet all morning. You mop it, wring it, mop it again. Nobody looks up.",
+                         "Coffee, trodden into the carpet. Someone said: wipe this floor.",
+                         "The floor's clean. Nobody noticed.", set_down=True),
             ],
             "One International/meeting": [{"id": "m15", "at": [6, 5], "node": k(15), "label": "A meeting room"}],
             "One International/roof": [{"id": "m17", "at": [11, 5], "node": k(17), "label": "The smokers' corner"},
@@ -1161,7 +1168,9 @@ def _b1():
                 {"id": "m22", "at": [10, 5], "node": k(22), "label": "Steve Han's desk"},
                 {"id": "textile", "at": [3, 6], "label": "The textile team", "note": "the handoff to Kim Bu-ryeon lands here (6+ tiles from m22)"}],
         },
-        "things": {sales3: [{"id": "team-phone", "kind": "furn.phone", "rect": [6, 4, 1, 1], "label": "The team phone"}]},
+        "things": {sales3: [{"id": "team-phone", "kind": "furn.phone", "rect": [6, 4, 1, 1], "label": "The team phone"},
+                            {"id": "mop-cupboard", "kind": "furn.cleaning_cupboard", "rect": [11, 1, 1, 1], "label": "The cleaning cupboard"},
+                            {"id": "spill", "kind": "prop.spill", "rect": [14, 10, 1, 1], "label": "A spill"}]},
         "npcs": {
             "One International": [
                 # the clerk at General Affairs takes the requisition (a delivery is a handoff to a person)
