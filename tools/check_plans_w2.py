@@ -53,7 +53,7 @@ EXTRA_KINDS = {"prop.lanterns", "prop.body_lamp", "milestone", "banner", "plant.
 def shared_keys():
     if ARC == "lb":   # the design's beat table (x1 ... x20), as the plans module lists it
         return set(KEYS_LB)
-    if ARC == "ls":   # the design's beat table (s1 ... s14)
+    if ARC == "ls":   # the design's beat table (s1 ... s16)
         return set(KEYS_LS)
     if ARC == "hlm1":   # the story's nodes (d1 ... d8, g1 ... g7)
         return set(KEYS_HLM1)

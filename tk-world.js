@@ -36,7 +36,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=106`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=107`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
@@ -255,18 +255,18 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=106`);
-      this.load.json("kit", `assets/tk/kits/${kit}.json?v=49`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=109`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=107`);
+      this.load.json("kit", `assets/tk/kits/${kit}.json?v=50`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=110`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
-      for (const [s, path] of Object.entries(kit.sheets)) this.load.image(`kit-${s}`, `${path}?v=49`);   // the sheets change with the kits: same key
+      for (const [s, path] of Object.entries(kit.sheets)) this.load.image(`kit-${s}`, `${path}?v=50`);   // the sheets change with the kits: same key
       const [fw, fh] = kit.folk.frame;
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
       for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=123`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=124`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });

@@ -4,13 +4,13 @@ These are the maps for `docs/book2/ladysun-arc.md` (novel chapters 54–55). The
 `tools/tk_plans_ls.py`, in the format of `docs/book2/plan-grid.md`. Previews are in `docs/book2/plans-ls/`. Every Chinese
 line (labels, goals, townsfolk) is plain modern Mandarin in simplified characters, as the user asked for this book.
 
-    python3 tools/check_plans_w2.py --arc ls --png        # 19 plans, 0 errors; every beat s1–s14 has its spot
+    python3 tools/check_plans_w2.py --arc ls --png        # 19 plans, 0 errors; every beat s1–s16 has its spot
     python3 tools/mapfactory build --world 15 --plans ls  # with Plot's WORLD2_LS (claude/plot ddbfd87c)
     python3 tools/proofs/ladysun_ls.py                    # the temple's side rooms, both face-downs, the loud town
 
-The arc is Book 15 (`ARCS[15] = "ls"`, beat keys `4-s1` … `4-s14`), as Plot reworked it (claude/plot d5a81533: the user
-found the first cut not entertaining). Built with that story, all 20 maps compile in all three kits and pass the door
-checks, and all 14 scenes (and s5_wait) are staged.
+The arc is Book 15 (`ARCS[15] = "ls"`, beat keys `4-s1` … `4-s16`), as Plot rebuilt it around Zhou Yu's three schemes
+(claude/plot 485607f4: the user, "did liu bei end up getting jailed? that was the whole premise"). Built with that story,
+all 20 maps compile in all three kits and pass the door checks, and all 16 scenes (and s5_wait) are staged.
 
 ## Chaisang (s1)
 Zhou Yu's seat on the river. Only the cutaway s1 is played here, in his hall (`zy-hall`). The town isn't walked.
@@ -20,7 +20,7 @@ Liu Bei's walled city. Zhao Yun starts on the steps of the government hall (spot
 hall (`jz-hall`) there is room for the scene: Zhuge Liang behind the folding screen (13 tiles east, 7 north of the spot),
 and Lü Fan coming in from the door (24 east).
 
-## Nanxu (s3; rooms for s4, s7, s8, s9, s10)
+## Nanxu (s3, s9; rooms for s4, s7, s8, s10, s11, s12)
 Sun Quan's walled city on the south bank. Its west gate opens onto the road to Chaisang, and its east gate onto the riding
 ground and the road up to Sweet Dew Temple.
 - **The dock** (spot `dock`, where s2's handoff lands) is outside the river gate, with a jetty and two boats from
@@ -52,21 +52,24 @@ ground and the road up to Sweet Dew Temple.
     to 1.5 s; at most 25 s allowed); every hanging lights.
   - Spots for the errand: `lamb` (the mutton seller), `wine` (the wine shop's door), `qiao-gate`.
   - Townsfolk who aren't gossips stand in between, for flavour; nothing depends on them.
-- **Lady Sun's rooms** (`lsfu`, spot `ls-rooms` at its door) stand between Sun Quan's hall and the east palace. s6 hands
-  the lead to her there, and she walks to the east palace and into the bridal room (s7).
+- **Lady Sun's rooms** (`lsfu`) stand between Sun Quan's hall and the east palace (scenery now: no beat uses them).
+- s6 hands back to Zhao Yun, arriving from Sweet Dew Temple by the east road.
+- **The riding ground** (s9, the year's end: Zhao Yun rides and shoots, and opens the second pouch) is outside the east
+  gate, with archery targets.
 - **Rooms:**
-  - Lady Wu's hall (`wu-hall`: s4, a cutaway, and s9, New Year's Day). Sun Quan comes in from the door 20 tiles east of s4.
-  - Sun Quan's hall (`sq-hall`: s10, the cutaway).
-  - The east palace (`east-palace`: s8), a walled court with the bridal room (`bridal-room`: s7, played as Lady Sun) on
-    its west side and the maids' quarters on its east.
-- **The riding ground** is outside the east gate, with archery targets. No beat is played there now; Liu Bei's men drill
-  there.
+  - Lady Wu's hall (`wu-hall`: s4, a cutaway, and s11, New Year's Day). Sun Quan comes in from the door 20 tiles east of s4.
+  - Sun Quan's hall (`sq-hall`: the cutaways s8, the gilded cage, and s12, the jade inkstone).
+  - The bridal room (`bridal-room`: s7, a cutaway), in the east palace's west wing.
+  - The east palace (`east-palace`: s10), a walled court, **dressed as the gilded cage** (Zhou Yu's second scheme,
+    軟困): musicians at two zithers, a dancer in silk, a steward setting out the Marquis's gold cups and silk, silk
+    carpets on the way in, red silk over the hall door, peonies and lanterns. Zhao Yun walks through it to Liu Bei, and
+    Lady Sun takes the lead at the end of s10.
 - **States:**
   - `arrival` (until s3);
   - `news` (s3 → s4), when the townsfolk who can be told are out;
-  - `wedding` (s4 → s7);
-  - `winter` (s7 → s9): weather `snow`;
-  - `newyear` (from s9, morning).
+  - `wedding` (s4 → s8);
+  - `winter` (s8 → s10): weather `snow`;
+  - `newyear` (from s10's end, morning: s11).
 
 ## Sweet Dew Temple (s5, s6)
 A walled temple on a hill above the river.
@@ -84,21 +87,21 @@ A walled temple on a hill above the river.
   - Walked in the engine: each axemen room delivers its mark, the monks' rooms don't, and the gate opens with all three.
 - **Rein-In Slope:** the north gate opens onto the slope down to the river (spot `slope-top`), where the horses are.
 
-## The road to Chaisang (s11, s12, s13)
+## The road to Chaisang (s13, s14, s15)
 The road under the hills from Nanxu (west) toward the border (east), with two narrows, each one cell wide between the hills.
-- **s11:** Xu Sheng and Ding Feng block the road ahead (east) of s11's spot: the generals 16 tiles on, their men 22.
-- **Face-down 1 (s11 → s12):** Xu Sheng's men, then Ding Feng's, three to a rank across the first narrows, with
+- **s13:** Xu Sheng and Ding Feng block the road ahead (east) of s13's spot: the generals 16 tiles on, their men 22.
+- **Face-down 1 (s13 → s14):** Xu Sheng's men, then Ding Feng's, three to a rank across the first narrows, with
   `"yield": {"group", "reach": 4, "aside", "line", "caught", "back_to": "block1-start"}`.
-- **s12** (the boss) is on open road past it, with room for the generals 10 tiles ahead and their men 18.
-- **Face-down 2 (s12 → s13):** Chen Wu's men, then Pan Zhang's, across the second narrows (`back_to`: `block2-start`).
-- **s13** is on the open road beyond. Chen Wu and Pan Zhang come up behind her (12 and 18 tiles west), on open road.
+- **s14** (the boss) is on open road past it, with room for the generals 10 tiles ahead and their men 18.
+- **Face-down 2 (s14 → s15):** Chen Wu's men, then Pan Zhang's, across the second narrows (`back_to`: `block2-start`).
+- **s15** is on the open road beyond. Chen Wu and Pan Zhang come up behind her (12 and 18 tiles west), on open road.
 - Each man steps aside into a pocket just beyond his rank, which can only be reached past the rank.
 - Proved for all four ranks, at the engine's catch (moving within 1.4 tiles of a man who hasn't yielded): no way past
   without coming that close, and every man's step aside lands on open ground off the road.
 - Walked in the engine (face-down 1): facing Xu Sheng's rank, his men step aside into the pockets; running at Ding
   Feng's is a catch, back to `block1-start`.
 
-## Liulangpu (s14)
+## Liulangpu (s16)
 A riverbank with no ferry. The river starts 6 tiles below the spot, so the scene's boats (−10, +6) are on the water,
 and Zhuge Liang (−10, +4) is on the bank's edge. Zhou Yu's fleet comes along the river (+20, +6). Guan Yu comes out of
 a valley in the hills to the north-east (+14, −6).

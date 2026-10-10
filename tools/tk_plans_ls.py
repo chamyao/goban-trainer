@@ -1,14 +1,15 @@
 """Lady Sun's marriage (novel chapters 54–55), as plan grids (docs/book2/plan-grid.md).
 
-Design: docs/book2/ladysun-arc.md (Plot). Beat keys are its keys, 4-s1 ... 4-s14 (reworked: docs/book2/ladysun-arc.md). Every Chinese line here is modern
+Design: docs/book2/ladysun-arc.md (Plot). Beat keys are its keys, 4-s1 ... 4-s16 (rebuilt around Zhou Yu's schemes: docs/book2/ladysun-arc.md). Every Chinese line here is modern
 Mandarin in simplified characters (the user: "write this book's language in modern Chinese that's easier to understand").
 
     python3 tools/check_plans_w2.py --arc ls [--png]       # check (and draw into docs/book2/plans-ls/)
     python3 tools/mapfactory build --world 15 --plans ls   # with Plot's WORLD2_LS
 
 The places, in the story's order: Chaisang (a cutaway only) -> Jingzhou -> Nanxu (the loud town) -> Sweet Dew Temple
-(the axemen searched for) -> Nanxu again, as Lady Sun (the bridal room, the winter, New Year's Day) -> the road to
-Chaisang (the road block and the pursuit, two face-downs) -> Liulangpu.
+(the axemen searched for) -> Nanxu again (the bridal room and the gilded cage, cutaways; the riding ground at the year's
+end; the east palace, where Lady Sun takes the lead; New Year's Day) -> the road to Chaisang (the road block and the
+pursuit, two face-downs) -> Liulangpu.
 
 The book's map mechanics, in the engine's syntax (tk-feats.js, Integration):
   the loud town (Nanxu, while s4 is open):
@@ -16,7 +17,7 @@ The book's map mechanics, in the engine's syntax (tk-feats.js, Integration):
                  + "relay": true                       told only by a neighbour, never by the player
     prop "told": id                                        red hangings at a house door, shown once that person knows
     spot "fires": "told:<id>"                              its beat starts by itself once the news reaches them
-  the face-downs (the road to Chaisang: Xu Sheng and Ding Feng's men after s11, Chen Wu and Pan Zhang's after s12):
+  the face-downs (the road to Chaisang: Xu Sheng and Ding Feng's men after s13, Chen Wu and Pan Zhang's after s14):
     npc "yield": {"group", "reach" (tiles), "aside" [dx, dy] (tiles), "line", "caught", "back_to": spot}
         standing still and facing them within reach, they step aside one by one; moving within 1.4 tiles of one who
         hasn't is a catch, back to back_to
@@ -25,8 +26,8 @@ The book's map mechanics, in the engine's syntax (tk-feats.js, Integration):
 """
 from tk_plans_w2 import ART as ART2, LINE_KINDS, NEW_KINDS as NEW_KINDS2, ZONE_KINDS, room
 
-# the beats this arc's plans place (the design's table: s1 ... s14)
-KEYS_LS = {f"s{i}" for i in range(1, 15)}
+# the beats this arc's plans place (the design's table: s1 ... s16)
+KEYS_LS = {f"s{i}" for i in range(1, 17)}
 
 # Kinds this arc adds: footprint in tiles (w, h, solid)
 NEW_KINDS = {**NEW_KINDS2,
@@ -200,8 +201,9 @@ PLANS_LS = {
     # Nanxu: Sun Quan's city on the south bank. The boats land at the dock outside the river gate (s3). Then the loud
     # town: the five hundred in red buy for the wedding and tell everyone, and the news goes house to house until it
     # reaches Lady Wu's gate, the one person who doesn't know (s4). Liu Bei goes to Qiao Guolao with a lamb and wine.
-    # Later the wedding (red): Lady Sun leads from her own rooms (ls-rooms) to the bridal room (s7); the winter (snow),
-    # the east palace (s8) and Lady Wu's hall again (s9, New Year's Day), and out by the west gate onto the road.
+    # Later the wedding (red; the bridal room s7 and the gilded cage s8 are cutaways), the winter (snow: Zhao Yun at the
+    # riding ground outside the east gate, s9; then into the east palace, the cage, where Lady Sun takes the lead, s10),
+    # Lady Wu's hall again (s11, New Year's Day), and out by the west gate onto the road.
     "Nanxu": {
         "archetype": "city",
         "banners": "red",
@@ -234,7 +236,7 @@ PLANS_LS = {
                  "map": "sq-hall", "plaque": "吴侯府"},
                 {"id": "dongfu", "kind": "building.compound", "rect": [15, 3, 5, 2], "door": "S", "label": "The east palace",
                  "map": "east-palace", "plaque": "东府"},
-                # Lady Sun's own rooms, beside the east palace: the lead passes to her here (s6 -> s7)
+                # Lady Sun's own rooms, beside the east palace
                 {"id": "lsfu", "kind": "building.hall", "rect": [12, 3, 3, 2], "door": "S", "label": "Lady Sun's rooms"},
                 # Lady Wu's palace, south of the main street: shut to the news until it arrives (s4), open after
                 {"id": "wufu", "kind": "building.palace", "rect": [15, 10, 5, 3], "door": "N", "label": "Lady Wu's palace",
@@ -269,8 +271,8 @@ PLANS_LS = {
                 {"id": "qiao-gate", "at": [4, 9], "at_door": "qiao", "label": "Qiao Guolao's gate"},
                 # where the news has to arrive: her gatekeeper (s4, a cutaway in her hall, plays once he's told)
                 {"id": "wu-gate", "at": [17, 9], "at_door": "wufu", "label": "Lady Wu's gate"},
-                # the lead passes to Lady Sun at her own door (s6's handoff); she goes on to the bridal room (s7)
-                {"id": "ls-rooms", "at": [13, 5], "at_door": "lsfu", "label": "Lady Sun's rooms"},
+                # the year's end: Zhao Yun rides and shoots outside the east gate, and opens the second pouch (s9)
+                {"id": "s9", "at": [24, 13], "node": "4-s9", "label": "The riding ground", "trigger": "near"},
             ],
             # red hangings over each house front (Graphics' deco.redhang), shown once its resident has the news
             "props": [{"kind": "deco.redhang", "over": f"h{i}", "told": f"g-h{i}", "lift": 6} for i in range(1, 13)],
@@ -290,9 +292,9 @@ PLANS_LS = {
         "states": [
             {"id": "arrival", "until": "node:s3", "light": "day"},
             {"id": "news", "when": "node:s3", "until": "node:s4", "light": "day"},       # the loud town
-            {"id": "wedding", "when": "node:s4", "until": "node:s7", "light": "day"},
-            {"id": "winter", "when": "node:s7", "until": "node:s9", "light": "day", "weather": "snow"},   # 「住到年终」
-            {"id": "newyear", "when": "node:s9", "light": "morning"},                    # New Year's Day: she leaves
+            {"id": "wedding", "when": "node:s4", "until": "node:s8", "light": "day"},
+            {"id": "winter", "when": "node:s8", "until": "node:s10", "light": "day", "weather": "snow"},   # 「住到年终」
+            {"id": "newyear", "when": "node:s10", "light": "morning"},                    # New Year's Day: she leaves
         ],
         "npcs": [
             # the loud town (s3 -> s4). The player tells three people, all on Liu Bei's errand: the mutton seller and
@@ -324,6 +326,13 @@ PLANS_LS = {
             _talk("folk.porter", [7, 1], "“Boats from upriver, flying red? What's all that about?”", **{"in": ["arrival", "news"]}),
             _talk("folk.villager", [12, 5], "“My wife says the butchers have sold out by noon.”", **{"in": ["news"]}),
             _talk("folk.woman", [19, 9], "“I serve in the Dowager's kitchens. Nothing's been said there.”", **{"in": ["news"]}),
+            # the gilded cage (in the east palace): they play and dance for him, and the gifts keep coming
+            {"kind": "folk.lady", "place": "east-palace", "at": [4, 9], "face": "N",
+             "say": "A musician plays the zither. “His lordship hasn't set foot outside the palace since the wedding. Why would he?”"},
+            {"kind": "folk.maiden", "place": "east-palace", "at": [6, 10], "face": "E",
+             "say": "A dancer in silk turns and turns, smiling, and looks at no one."},
+            {"kind": "folk.elder", "place": "east-palace", "at": [8, 8], "face": "N",
+             "say": "A steward sets out gold cups on the table. “Gifts from the Marquis. More come every day.”"},
             # the wedding and the winter
             _talk("folk.villager", [12, 9], "“Red lanterns on every street. The Marquis's sister is married, and the whole city's had a feast.”",
                   **{"in": ["wedding"]}),
@@ -334,24 +343,28 @@ PLANS_LS = {
         ],
         "maps": {
             # Lady Wu's hall: the news arrives (s4: Lady Wu at 0,-4, Qiao Guolao 8,0, Sun Quan in from the door at 20,2)
-            # and Lady Sun asks her mother's leave (s9: Lady Wu at 0,-6)
+            # and Lady Sun asks her mother's leave (s11: Lady Wu at 0,-6)
             "wu-hall": room([16, 8], [13, 7],
                             things=[{"id": "seat", "kind": "furn.dais", "rect": [3, 1, 2, 1], "label": "Lady Wu's seat"},
                                     {"id": "screen", "kind": "furn.screen", "rect": [6, 1, 2, 1]},
                                     {"id": "table-1", "kind": "furn.table", "rect": [10, 3, 1, 1]},
                                     {"id": "rack", "kind": "furn.jar", "rect": [14, 1, 1, 1]}],
                             spots=[{"id": "s4", "at": [4, 4], "node": "4-s4", "label": "Lady Wu's hall"},   # a cutaway: told:wu-gatekeeper
-                                   {"id": "s9", "at": [5, 5], "node": "4-s9", "label": "Lady Wu's hall"}])
+                                   {"id": "s11", "at": [5, 5], "node": "4-s11", "label": "Lady Wu's hall"}])
             | {"label": "Lady Wu's hall"},
-            # Sun Quan's hall: the cutaway s10 (Sun Quan 0,-4, Zhang Zhao 8,0, Cheng Pu -8,0)
+            # Sun Quan's hall: the cutaways s8, the gilded cage (Sun Quan 0,-4, Zhang Zhao 8,0), and s12, the jade inkstone
+            # (Cheng Pu at -8,0 as well)
             "sq-hall": room([14, 7], [7, 6],
                             things=[{"id": "seat", "kind": "furn.dais", "rect": [5, 1, 2, 1], "label": "The Marquis's seat"},
                                     {"id": "desk", "kind": "furn.table", "rect": [8, 1, 1, 1], "label": "A desk with a jade inkstone"},
                                     {"id": "rack", "kind": "furn.rack", "rect": [1, 1, 1, 1]}],
-                            spots=[{"id": "s10", "at": [6, 4], "node": "4-s10", "label": "Sun Quan's hall"}])
+                            spots=[{"id": "s8", "at": [6, 5], "node": "4-s8", "label": "Sun Quan's hall"},
+                                   {"id": "s12", "at": [6, 4], "node": "4-s12", "label": "Sun Quan's hall"}])
             | {"label": "Sun Quan's hall"},
             # the east palace: a court before the main hall; the bridal room on the west, Lady Sun's maids on the east.
-            # s8: Liu Bei at 0,-4, Zhao Yun runs in from 16,4 to 6,0
+            # Dressed as the gilded cage (Zhou Yu's second scheme, 軟困): musicians at their zithers, a dancer in silk, a
+            # table of the Marquis's gold and silk, silk carpets on the way in, red silk over the hall door, peonies.
+            # s10: Liu Bei at 2,-2, Zhao Yun walks in to 18,4, Lady Sun comes from her rooms at -8,-6
             "east-palace": {
                 "grid": [22, 14], "cell": 2, "margin": 0, "label": "The east palace",
                 "ground": [{"id": "court", "kind": "court", "rect": [1, 5, 20, 8]},
@@ -364,14 +377,21 @@ PLANS_LS = {
                     {"id": "maids", "kind": "building.wing", "rect": [16, 1, 5, 4], "door": "W", "label": "The maids' quarters"},
                     {"id": "rack-1", "kind": "furn.rack", "rect": [6, 6, 1, 1], "label": "A rack of spears"},
                     {"id": "rack-2", "kind": "furn.rack", "rect": [15, 6, 1, 1], "label": "A rack of swords"},
+                    # the cage: what the Marquis keeps him with
+                    {"id": "qin-1", "kind": "furn.qin", "rect": [3, 8, 1, 1], "label": "A zither"},
+                    {"id": "qin-2", "kind": "furn.qin", "rect": [5, 8, 1, 1], "label": "A zither"},
+                    {"id": "gifts", "kind": "furn.table", "rect": [8, 7, 1, 1], "label": "Gold cups and rolls of silk"},
+                    *[{"id": f"rug-{y}", "kind": "furn.rug", "rect": [10, y, 2, 1]} for y in (9, 10, 12)],
                 ],
-                "spots": [{"id": "s8", "at": [11, 8], "node": "4-s8", "label": "The east palace"}],
-                "dress": [{"kind": "plant.peony", "in": "garden", "count": 4}, {"kind": "prop.lanterns", "at_door": "hall", "pair": True}],
+                "props": [{"kind": "deco.redhang", "over": "hall", "lift": 6}],
+                "spots": [{"id": "s10", "at": [11, 8], "node": "4-s10", "label": "The east palace"}],
+                "dress": [{"kind": "plant.peony", "in": "garden", "count": 6}, {"kind": "prop.lanterns", "at_door": "hall", "pair": True},
+                          {"kind": "prop.lanterns", "at_door": "bridal", "pair": True}],
                 "exits": [{"to": "Nanxu", "at": [11, 13], "side": "S"}],
                 "entries": {"": [11, 11]},
                 "states": [{"id": "wedding", "light": "day"}],
             },
-            # the bridal room hung with blades, the maids armed (s7, played as Lady Sun: Liu Bei at 8,4, the matron 10,0)
+            # the bridal room hung with blades, the maids armed (s7, a cutaway: Liu Bei at 8,4, Lady Sun 0,-6, the matron 10,0)
             "bridal-room": room([12, 8], [6, 7],
                                 things=[{"id": "bed", "kind": "furn.bed", "rect": [1, 1, 2, 1], "label": "The bridal bed"},
                                         {"id": "rack-1", "kind": "furn.rack", "rect": [4, 1, 1, 1], "label": "Swords on the wall"},
@@ -385,9 +405,9 @@ PLANS_LS = {
         "objectives": {
             "4-s3": "Land at Nanxu, and open the first silk pouch at the dock.",
             "4-s4": "Take Liu Bei to Qiao Guolao's gate with a lamb and wine. His household will carry the news to Lady Wu.",
-            "4-s7": "Go into the east palace, to the bridal room. It is your wedding night.",
-            "4-s8": "The year is ending. Go to the east palace's courtyard, to your husband.",
-            "4-s9": "It is New Year's Day. Go to Lady Wu's palace, and ask your mother's leave.",
+            "4-s9": "The year is ending. Ride out by the east gate to the riding ground.",
+            "4-s10": "Go into the east palace, to Liu Bei.",
+            "4-s11": "It is New Year's Day. Go to Lady Wu's palace, and ask your mother's leave.",
         },
     },
 
@@ -494,9 +514,9 @@ PLANS_LS = {
     # The road to Chaisang: the road under the hills from Nanxu toward the border, west to east. Two face-downs, each in
     # a narrows one cell wide between the hills, where she stops before each rank, facing it, and it gives way
     # (「四員將見了孫夫人，只得下馬」); pushing past a man who hasn't sends her back to where that block began.
-    #   s11 (the road block: Xu Sheng 16 tiles ahead of its spot, their men 22) -> face-down 1, Xu Sheng's and Ding
-    #   Feng's men -> s12 just past it (the boss: the generals 10 ahead, their men 18) -> face-down 2, Chen Wu's and Pan
-    #   Zhang's men -> s13 beyond (they came up from behind: the generals 12 and 18 tiles west of it) -> Liulangpu.
+    #   s13 (the road block: Xu Sheng 16 tiles ahead of its spot, their men 22) -> face-down 1, Xu Sheng's and Ding
+    #   Feng's men -> s14 just past it (the boss: the generals 10 ahead, their men 18) -> face-down 2, Chen Wu's and Pan
+    #   Zhang's men -> s15 beyond (they came up from behind: the generals 12 and 18 tiles west of it) -> Liulangpu.
     "The road to Chaisang": {
         "archetype": "road",
         "plan": {
@@ -510,13 +530,13 @@ PLANS_LS = {
             ],
             "lines": [{"id": "road", "kind": "road", "path": [[0, 5], [51, 5]], "width": 3}],
             "spots": [
-                {"id": "s11", "at": [5, 5], "node": "4-s11", "label": "The road under the hill", "trigger": "near"},
+                {"id": "s13", "at": [5, 5], "node": "4-s13", "label": "The road under the hill", "trigger": "near"},
                 {"id": "block1-start", "at": [8, 5], "label": "Before the road block",
                  "note": "face-down 1: pushing past a man without stopping sends her back here"},
-                {"id": "s12", "at": [22, 5], "node": "4-s12", "label": "Past the road block", "trigger": "near"},
+                {"id": "s14", "at": [22, 5], "node": "4-s14", "label": "Past the road block", "trigger": "near"},
                 {"id": "block2-start", "at": [27, 5], "label": "Where the pursuit caught up",
                  "note": "face-down 2: pushing past a man without stopping sends her back here"},
-                {"id": "s13", "at": [46, 5], "node": "4-s13", "label": "The open road", "trigger": "near"},
+                {"id": "s15", "at": [46, 5], "node": "4-s15", "label": "The open road", "trigger": "near"},
             ],
             "dress": [{"kind": "milestone", "along": "road", "every": 4}, {"kind": "tree.poplar", "in": "fields", "count": 3}],
             "exits": [{"to": "Nanxu", "at": [0, 5], "side": "W"}, {"to": "Liulangpu", "at": [51, 5], "side": "E"}],
@@ -524,34 +544,34 @@ PLANS_LS = {
         },
         "states": [{"id": "flight", "light": "day"}],
         "npcs": [
-            # face-down 1 (s11 -> s12): the block Zhou Yu set, Xu Sheng's men, then Ding Feng's, across the first narrows
-            *_rank(14, "xusheng", "s11", "s12", "block1-start", "“Halt! On Grand Commander Zhou's orders, no one passes!” You fall back.", [
+            # face-down 1 (s13 -> s14): the block Zhou Yu set, Xu Sheng's men, then Ding Feng's, across the first narrows
+            *_rank(14, "xusheng", "s13", "s14", "block1-start", "“Halt! On Grand Commander Zhou's orders, no one passes!” You fall back.", [
                 ("folk.official", "Xu Sheng's captain sees who is in the carriage, and his hand comes off his sword. “Make way!”", "Xu Sheng's captain"),
                 ("folk.soldier", "“The Marquis's own sister…” He lowers his spear and backs off the road.", None),
                 ("folk.soldier", "He looks at his captain, then at her, and leads his horse aside.", None)]),
-            *_rank(17, "dingfeng", "s11", "s12", "block1-start", "“Stop the carriage! Those are our orders!” The spears come down, and you fall back.", [
+            *_rank(17, "dingfeng", "s13", "s14", "block1-start", "“Stop the carriage! Those are our orders!” The spears come down, and you fall back.", [
                 ("folk.official", "Ding Feng's captain swallows. “We were told it was Liu Bei. No one said anything about the Lady.” He stands aside.", "Ding Feng's captain"),
                 ("folk.soldier", "“Not my quarrel, madam.” He steps out of the way.", None),
                 ("folk.soldier", "He drops his eyes, and his spear with them.", None)]),
-            # face-down 2 (s12 -> s13): Chen Wu and two of his men across the second narrows, then Pan Zhang and two of his
-            *_rank(33, "chenwu", "s12", "s13", "block2-start", "“Halt! On the Marquis's orders, no one passes!” You fall back.", [
+            # face-down 2 (s14 -> s15): Chen Wu and two of his men across the second narrows, then Pan Zhang and two of his
+            *_rank(33, "chenwu", "s14", "s15", "block2-start", "“Halt! On the Marquis's orders, no one passes!” You fall back.", [
                 ("folk.official", "Chen Wu sees who is in the carriage, swings down from his horse, and stands aside with his hands clasped.", "Chen Wu"),
                 ("folk.soldier", "“It's the Lady herself!” He backs his horse off the road.", None),
                 ("folk.soldier", "“Not our quarrel, madam.” He leads his horse aside.", None)]),
-            *_rank(38, "panzhang", "s12", "s13", "block2-start", "“Stop the carriage!” The spears come down, and you fall back.", [
+            *_rank(38, "panzhang", "s14", "s15", "block2-start", "“Stop the carriage!” The spears come down, and you fall back.", [
                 ("folk.official", "Pan Zhang looks at Zhao Yun, then at the Lady, and dismounts. “Madam.”", "Pan Zhang"),
                 ("folk.soldier", "“Pan Zhang can argue with her himself.” He reins his horse off the road.", None),
                 ("folk.soldier", "He lowers his spear and gets out of the way.", None)]),
         ],
         "objectives": {
-            "4-s11": "Push on along the road toward the border, ahead of the pursuit.",
-            "4-s12": "Xu Sheng and Ding Feng's men block the road. Stop in front of each rank, facing it, and let them see who is in the carriage.",
-            "4-s13": "Chen Wu and Pan Zhang's men are on the road. Stop in front of each rank, facing it, and let them see you.",
+            "4-s13": "Push on along the road toward the border, ahead of the pursuit.",
+            "4-s14": "Xu Sheng and Ding Feng's men block the road. Stop in front of each rank, facing it, and let them see who is in the carriage.",
+            "4-s15": "Chen Wu and Pan Zhang's men are on the road. Stop in front of each rank, facing it, and let them see you.",
         },
     },
 
     # =========================================================================================
-    # Liulangpu: a bank of the river with no ferry. The river is 6 tiles below the s14 spot (the boats; Zhuge Liang in
+    # Liulangpu: a bank of the river with no ferry. The river is 6 tiles below the s16 spot (the boats; Zhuge Liang in
     # them at -10,4), Zhou Yu's fleet comes along the water (20,6), and Guan Yu out of a valley to the north-east (14,-6).
     "Liulangpu": {
         "archetype": "road",
@@ -566,13 +586,13 @@ PLANS_LS = {
             ],
             "lines": [{"id": "road", "kind": "road", "path": [[0, 5], [12, 5]], "width": 3},
                       {"id": "valley-path", "kind": "path", "path": [[12, 5], [16, 5], [16, 0]], "width": 2}],
-            "spots": [{"id": "s14", "at": [12, 6], "node": "4-s14", "label": "Liulangpu", "trigger": "near"}],
+            "spots": [{"id": "s16", "at": [12, 6], "node": "4-s16", "label": "Liulangpu", "trigger": "near"}],
             "dress": [{"kind": "tree.willow", "in": "bank", "count": 6}, {"kind": "tree.pine", "in": "hills-w", "count": 5}],
             "exits": [{"to": "The road to Chaisang", "at": [0, 5], "side": "W"}],
             "entries": {"": [1, 5], "The road to Chaisang": [1, 5]},
         },
         "states": [{"id": "river", "light": "day"}],
-        "objectives": {"4-s14": "Go on to the river at Liulangpu."},
+        "objectives": {"4-s16": "Go on to the river at Liulangpu."},
     },
 }
 
