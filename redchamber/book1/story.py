@@ -85,13 +85,15 @@ def _scenes_daiyu():
               "那轿夫抬进去，走了一射之地，将转弯时，便歇下退出去了。另换了三四个衣帽周全十七八岁的小厮上来，复抬起轿子。众婆子步下围随至一垂花门前落下。众小厮退出，众婆子上来打起轿帘，扶黛玉下轿。"),
             ["spawn", "mm", "laomama", "d1", 4, 0],
             S("laomama", "This way, miss. The old lady's rooms are through the courtyard, past the screen.", "姑娘这边走。转过插屏，就是老太太的正房大院了。"),
+            N("On the steps of the main rooms sit maids in red and green. They jump up laughing.", "台矶之上，坐着几个穿红着绿的丫头，一见他们来了，便忙都笑迎上来。"),
+            ["spawn", "mi", "jmmaid", "d1", 8, -2],
+            S("jmmaid", "The old lady was just asking for you, and here you are!", "刚才老太太还念呢，可巧就来了。"),
+            N("Three or four of them race to lift the door curtain. Someone inside calls: Miss Lin is here.", "于是三四人争着打起帘笼，一面听得人回话：「林姑娘到了。」"),
         ]},
 
         # D2 · Grandmother. One board: whom to bow to first.
         "d2": {"title": T("Grandmother", "外祖母"), "kind": "main", "steps": [
-            ["spawn", "mm", "jmmaid", "d2", 6, 2],
-            S("jmmaid", "The old lady was just asking for you, and here you are!", "刚才老太太还念呢，可巧就来了。"),
-            N("Three or four of them race to lift the door curtain. Someone inside calls: Miss Lin is here.", "于是三四人争着打起帘笼，一面听得人回话：「林姑娘到了。」"),
+            N("Daiyu comes in through the curtain.", "黛玉方进入房时。"),
             ["spawn", "jm", "jiamu", "d2", 0, -6], ["spawn", "xfr", "xingfuren", "d2", -6, -4], ["spawn", "wfr", "wangfuren", "d2", 6, -4],
             ["spawn", "lw", "liwan", "d2", 10, -2],
             N("A room full of women. Two of them are supporting an old lady with silver hair, and everyone else stands back from her.",

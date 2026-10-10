@@ -45,15 +45,21 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 **an old nurse:** This way, miss. The old lady's rooms are through the courtyard, past the screen.  
 姑娘这边走。转过插屏，就是老太太的正房大院了。
 
-
-## D2 · Grandmother (外祖母)
-*The Rong Mansion* · room `jm-rooms` · boards: **Lin Daiyu**: “Find your grandmother among them.”
+*On the steps of the main rooms sit maids in red and green. They jump up laughing.*  
+台矶之上，坐着几个穿红着绿的丫头，一见他们来了，便忙都笑迎上来。
 
 **a maid:** The old lady was just asking for you, and here you are!  
 刚才老太太还念呢，可巧就来了。
 
 *Three or four of them race to lift the door curtain. Someone inside calls: Miss Lin is here.*  
 于是三四人争着打起帘笼，一面听得人回话：「林姑娘到了。」
+
+
+## D2 · Grandmother (外祖母)
+*The Rong Mansion* · room `jm-rooms` · boards: **Lin Daiyu**: “Find your grandmother among them.”
+
+*Daiyu comes in through the curtain.*  
+黛玉方进入房时。
 
 *A room full of women. Two of them are supporting an old lady with silver hair, and everyone else stands back from her.*  
 满屋子的人。只见两个人搀着一位鬓发如银的老母迎上来，余人都垂手侍立。
