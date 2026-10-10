@@ -48,6 +48,8 @@ await p.route('**/the-east-road.tmj*',async r=>{const res=await r.fetch();const 
   {name:'needs',type:'string',value:'["item:tray"]'},{name:'delivers',type:'string',value:'seat_a'},{name:'takes',type:'bool',value:true},
   {name:'deliver',type:'string',value:JSON.stringify([['n','You set the tray down on his left.','']])},
   {name:'waiting',type:'string',value:JSON.stringify([['n','The notes say the tray goes here.','']])}]});
+ L.objects.push({id:99903,name:'lift',type:'spot',x:at.x+6*T,y:at.y+5*T,width:0,height:0,properties:[{name:'use',type:'string',value:'lift'},{name:'label',type:'string',value:'The lift'},
+  {name:'floors',type:'string',value:JSON.stringify([{label:'Here',to:'the-east-road'},{label:'Somewhere',to:'luoyang'}])}]});
  L.objects.push({id:99902,name:'audit-table',type:'spot',x:at.x+3*T,y:at.y+5*T,width:0,height:0,properties:[{name:'opens',type:'string',value:'audit'}]});
  const prop=L.objects.find(o=>o.type==='prop'&&/#\d+$/.test(o.name||''));
  if(prop)L.objects.push({...prop,id:99990,x:at.x-3*T,y:at.y+6*T,properties:[...(prop.properties||[]).filter(q=>q.name!=='when'),{name:'when',type:'string',value:'mark:seat_a'}]});
@@ -143,10 +145,24 @@ await p.evaluate(()=>{WorldItems.add(TK.world(13),'tray');const s=window.__w;s.a
 const set=await p.evaluate(()=>({mark:window.__w.cond('mark:seat_a'),held:WorldItems.has(TK.world(13),'tray')}));
 check(set.mark&&!set.held,`set down: the seat is marked and the tray is out of the bag (${JSON.stringify(set)})`);
 
+// 5b. a lift: a menu of floors; this one is marked, a place not open yet can't be chosen
+await p.evaluate(()=>{const s=window.__w;s.act({kind:'spot',k:'lift'});});await p.waitForTimeout(300);
+const lift=await p.evaluate(()=>[...document.querySelectorAll('.tk-lift li button')].map(b=>({t:b.textContent,off:b.disabled})));
+check(lift.length===2&&lift[0].off&&/you're here/.test(lift[0].t),`the lift lists its floors, this one marked (${JSON.stringify(lift)})`);
+await p.keyboard.press('Escape');await p.waitForTimeout(200);
+check(!(await p.locator('.tk-lift').count()),'Escape closes the lift');
+
 // 6. English only: no Chinese on a board
 const en=await p.evaluate(async()=>{const w=TK.world(13);w.lang='en';localStorage.removeItem('tk-rest');TK.undoCleared(loadProgress(),'13-c19');
  const pr=loadProgress();delete pr.tk['13-c19'];localStorage.setItem('gt-progress',JSON.stringify(pr));
  TKOverlay.open(13,'13-c19',{host:document.querySelector('.tk-map')});await new Promise(r=>setTimeout(r,800));
  const z=(document.querySelector('.tk-duel .town-zh')||{}).textContent,e=(document.querySelector('.tk-duel .town-en')||{}).textContent;w.lang=undefined;return {z,e};});
 check(en.z===''&&!!en.e,`an English-only world shows no Chinese on the board (${JSON.stringify(en)})`);
+const chrome=await p.evaluate(async()=>{TKEnglish.set(true);await new Promise(r=>setTimeout(r,300));
+ const vis=e=>e&&e.offsetParent!==null;const cjk=/[\u3400-\u9fff]/;
+ const bad=[...document.querySelectorAll('.tk-duel *, .town-ui *, .tk-map *')].filter(e=>vis(e)&&[...e.childNodes].some(n=>n.nodeType===3&&cjk.test(n.nodeValue))).map(e=>e.textContent.slice(0,30));
+ const keys=[...document.querySelectorAll('.tk-duel-key')].map(e=>e.textContent).join(',');
+ location.hash='#/';await new Promise(r=>setTimeout(r,800));return {bad,keys,after:document.body.classList.contains('tk-en')};});
+check(!chrome.bad.length&&/Undo/.test(chrome.keys),`an English-only book's screen shows no Chinese: keys "${chrome.keys}" (${JSON.stringify(chrome.bad)})`);
+check(!chrome.after,'leaving the book takes the English-only screen off');
 await b.close();console.log(fails?`misaeng-mechanics: ${fails} failed`:'misaeng-mechanics: all ok');})();

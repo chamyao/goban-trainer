@@ -2030,6 +2030,14 @@ async function viewLibrary() {
       h("small", {}, tkDone ? `${tkDone} levels cleared` : "A story campaign through the novel, 12K to 7D")]),
     h("span", { class: "tk-card-go" }, "→"),
   ]));
+  // Other novels' books (tk.js TK_NOVELS), each its own card; one not live yet shows in test mode only
+  for (const [id, nv] of Object.entries(typeof TK_NOVELS !== "undefined" ? TK_NOVELS : {})) {
+    if (!nv.live && !(typeof TK_TEST !== "undefined" && TK_TEST)) continue;
+    root.append(h("a", { class: "tk-card tk-card-" + id, href: `#/tk/${nv.first}` }, [
+      h("span", {}, [h("b", {}, `${nv.native} · ${nv.title}`), h("small", {}, nv.live ? "A story campaign through the novel" : "测试模式 Test mode only")]),
+      h("span", { class: "tk-card-go" }, "→"),
+    ]));
+  }
   // Favorited books from every category come first; they stay in their category too.
   const sections = [["Favorites", index.filter(b => favs.has(b.id))],
                     ...Object.entries(cats).map(([cat, title]) => [title, index.filter(b => b.category === cat)])];
@@ -3468,6 +3476,8 @@ let routeSeq = 0;
 
 async function route() {
   routeSeq++;
+  if (typeof TKEnglish !== "undefined") TKEnglish.set(false);   // an English-only book's page sets it again (tk-modern.js)
+  if (typeof TKVoice !== "undefined") TKVoice.enOnly = false;
   if (trainer) trainer.alive = false;
   trainer = null;
   Review.els = null;
