@@ -59,6 +59,15 @@ async function run(b, dev) {
     check(L1.length === 4 && L1.map(l => l.L).join('') === 'ABCD' && new Set(L1.map(l => l.pt)).size === 4 && L1.every(l => l.empty),
       `${name}: four letters A-D on four empty points (${L1.map(l => l.L + '=' + l.pt).join(' ')})`);
     check(L1.filter(l => l.pt === right).length === 1 && col === 'B', `${name}: exactly one letter is Cho's move ${right}`);
+    // a letter's tap target reaches past its own point: does a tap on the point next to a letter play that letter?
+    const nb = await p.evaluate(L => { const g = window.__trainer.goban, m = g.svg.getScreenCTM(), t = window.__trainer;
+      for (const l of L) { const x = l.pt.charCodeAt(0) - 97, y = l.pt.charCodeAt(1) - 97;
+        for (const [dx, dy] of [[0, 1], [0, -1], [1, 0], [-1, 0]]) { const X = x + dx, Y = y + dy; if (X < 0 || Y < 0 || X > 18 || Y > 18 || t.grid[Y][X]) continue;
+          const pt = String.fromCharCode(97 + X) + String.fromCharCode(97 + Y); if (L.some(o => o.pt === pt)) continue;
+          const q = g.svg.createSVGPoint(); q.x = g.px(X); q.y = g.py(Y); const sp = q.matrixTransform(m); const e = document.elementFromPoint(sp.x, sp.y);
+          const hit = e && e.closest && e.closest('svg') && e.getAttribute && e.getAttribute('fill') === 'transparent';
+          return { letter: l.L, next: pt, hit }; } } return null; }, L1);
+    if (nb && nb.hit) note(`${name}: a tap on ${nb.next}, next to letter ${nb.letter}, lands on ${nb.letter}'s target (a guess)`);
     const minFont = Math.min(...L1.map(l => l.fh)), minDisc = Math.min(...L1.map(l => l.d));
     if (minFont < 8) note(`${name}: letters are ${minFont.toFixed(1)} px tall on screen`); else check(true, `${name}: letters readable (${minFont.toFixed(1)} px, discs ${minDisc.toFixed(0)} px)`);
     // the portrait behind the full board: what's on top at a letter is the board, not a portrait
@@ -67,7 +76,8 @@ async function run(b, dev) {
     // a tap off the letters plays nothing
     const off = await p.evaluate(L => { const t = window.__trainer, g = t.goban, used = new Set(L.map(l => l.pt)), m = g.svg.getScreenCTM();
       for (let y = 3; y < 16; y++) for (let x = 3; x < 16; x++) { const pt = String.fromCharCode(97 + x) + String.fromCharCode(97 + y);
-        if (!used.has(pt) && !t.grid[y][x] && x >= g.crop.c0 && x <= g.crop.c1 && y >= g.crop.r0 && y <= g.crop.r1) { const q = g.svg.createSVGPoint(); q.x = g.px(x); q.y = g.py(y); const s = q.matrixTransform(m);
+        const far = L.every(l => Math.max(Math.abs(l.pt.charCodeAt(0) - 97 - x), Math.abs(l.pt.charCodeAt(1) - 97 - y)) >= 2);   // two points or more from every letter (a letter's target is bigger than a point)
+        if (far && !used.has(pt) && !t.grid[y][x] && x >= g.crop.c0 && x <= g.crop.c1 && y >= g.crop.r0 && y <= g.crop.r1) { const q = g.svg.createSVGPoint(); q.x = g.px(x); q.y = g.py(y); const s = q.matrixTransform(m);
           const targets = [...g.svg.querySelectorAll('circle[fill="transparent"]')].length; return { x: s.x, y: s.y, pt, targets }; } } return null; }, L1);
     if (off) check(off.targets <= 4, `${name}: only the letters take a tap (${off.targets} tap targets on the board)`);
     if (off && process.env.DBG) await p.evaluate(() => { window.__downs = []; document.addEventListener('pointerdown', e => window.__downs.push((e.target.tagName || '') + '.' + ((e.target.className && e.target.className.baseVal !== undefined ? e.target.className.baseVal : e.target.className) || '')), { capture: true, once: false }); });
