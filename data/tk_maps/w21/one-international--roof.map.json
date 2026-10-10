@@ -1,0 +1,161 @@
+{
+ "format": "tk-map/1",
+ "id": "one-international--roof",
+ "world": 21,
+ "name": "The roof",
+ "archetype": "compound",
+ "size": [
+  32,
+  20
+ ],
+ "seed": 2351,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "court",
+   "b": "parapet"
+  },
+  "rows": [
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "abbbbbbbbbbbbbbbaabbbbbbbbbbbbba",
+   "abaaaaaaaaaaaaaaaaaaaaaaaaaaaaba",
+   "abaaaaaaaaaaaaaaaaaaaaaaaaaaaaba",
+   "abaaaaaaaaaaaaaaaaaaaaaaaaaaaaba",
+   "abaaaaaaaaaaaaaaaaaaaaaaaaaaaaba",
+   "abaaaaaaaaaaaaaaaaaaaaaaaaaaaaba",
+   "abaaaaaaaaaaaaaaaaaaaaaaaaaaaaba",
+   "abaaaaaaaaaaaaaaaaaaaaaaaaaaaaba",
+   "abaaaaaaaaaaaaaaaaaaaaaaaaaaaaba",
+   "abaaaaaaaaaaaaaaaaaaaaaaaaaaaaba",
+   "abaaaaaaaaaaaaaaaaaaaaaaaaaaaaba",
+   "abaaaaaaaaaaaaaaaaaaaaaaaaaaaaba",
+   "abaaaaaaaaaaaaaaaaaaaaaaaaaaaaba",
+   "abaaaaaaaaaaaaaaaaaaaaaaaaaaaaba",
+   "abaaaaaaaaaaaaaaaaaaaaaaaaaaaaba",
+   "abaaaaaaaaaaaaaaaaaaaaaaaaaaaaba",
+   "abaaaaaaaaaaaaaaaaaaaaaaaaaaaaba",
+   "abbbbbbbbbbbbbbbbbbbbbbbbbbbbbba",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  ],
+  "walk": {
+   "court": true,
+   "parapet": false
+  }
+ },
+ "lines": [
+  {
+   "id": "parapet",
+   "kind": "parapet",
+   "outline": [
+    0,
+    0,
+    16,
+    10
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     8,
+     0
+    ]
+   },
+   "tiles": 92
+  }
+ ],
+ "objects": [
+  {
+   "kind": "building.rooftop_box",
+   "x": 4,
+   "y": 4,
+   "w": 3,
+   "h": 2,
+   "id": "stairhouse",
+   "door": null,
+   "faces": "S",
+   "label": "The lift motor room",
+   "blocks_sight": true
+  },
+  {
+   "kind": "prop.water_tank",
+   "x": 24,
+   "y": 2,
+   "w": 2,
+   "h": 2,
+   "id": "tank"
+  },
+  {
+   "kind": "furn.ashtray",
+   "x": 24,
+   "y": 12,
+   "w": 1,
+   "h": 1,
+   "id": "ashtray",
+   "label": "The smokers' corner"
+  },
+  {
+   "kind": "prop.bench",
+   "x": 26,
+   "y": 12,
+   "w": 2,
+   "h": 1,
+   "id": "bench-1"
+  },
+  {
+   "kind": "prop.bench",
+   "x": 8,
+   "y": 14,
+   "w": 2,
+   "h": 1,
+   "id": "bench-2"
+  }
+ ],
+ "spots": [
+  {
+   "id": "m19",
+   "x": 12.5,
+   "y": 10.7,
+   "node": "21-m19",
+   "label": "The roof"
+  },
+  {
+   "id": "roof",
+   "x": 18.5,
+   "y": 8.7,
+   "node": "",
+   "label": "The roof",
+   "note": "the handoff to Ahn lands here"
+  }
+ ],
+ "npcs": [],
+ "exits": [
+  {
+   "to": "one-international",
+   "side": "N",
+   "x": 16,
+   "y": 1,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "one-international": [
+   16,
+   2
+  ],
+  "": [
+   16,
+   2
+  ]
+ },
+ "states": [
+  {
+   "id": "day",
+   "light": "day"
+  }
+ ],
+ "parent": "one-international",
+ "building": "roof",
+ "links": [
+  "one-international"
+ ]
+}

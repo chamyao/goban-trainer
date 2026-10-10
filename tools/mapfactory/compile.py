@@ -15,30 +15,11 @@ from pathlib import Path
 from PIL import Image, ImageDraw
 
 from vocab import FALLBACK, FOLK_FALLBACK, KINDS, MATERIAL_FALLBACK, MATERIALS
-from build_tk import FOLK_VOICE, NARRATOR, place_step as place_step_zh, voice_id, voice_of  # lines get their Chinese and voice clip here
+from build_tk import place_step  # lines get their Chinese and voice clip here
 import wander
 from tk_story_zh import ZH
 
 ROOT = Path(__file__).resolve().parent.parent.parent
-LANG = {"en": False}   # an English-only world (region.json "lang": "en"; Misaeng): no Chinese is looked up
-
-
-def place_step(line, kind=None):
-    """A place's line as a voiced step (build_tk.place_step). In an English-only world the step keeps its shape, with
-    the English where the Chinese would be, and a voice clip id taken from the English (prefixed, so it can't be a
-    Chinese clip's)."""
-    if not LANG["en"]:
-        return place_step_zh(line, kind)
-    if isinstance(line, (list, tuple)):
-        who, en = line
-        return ["say", who, en, en, voice_id(f"en|{en}", voice_of(who))], voice_of(who)
-    if kind and kind.startswith("hero.") and line.startswith("“"):
-        who, en = kind[5:], line.strip("“”")
-        return ["say", who, en, en, voice_id(f"en|{en}", voice_of(who))], voice_of(who)
-    if kind and kind.startswith("folk."):
-        v = FOLK_VOICE.get(kind, FOLK_VOICE["folk.villager"])
-        return ["n", line, line, voice_id(f"en|{line}", v)], v
-    return ["n", line, line, voice_id(f"en|{line}")], NARRATOR
 DIRS = {"N": (0, -1), "E": (1, 0), "S": (0, 1), "W": (-1, 0), "NE": (1, -1), "SE": (1, 1), "SW": (-1, 1), "NW": (-1, -1)}
 ORDER = ["N", "E", "S", "W", "NE", "SE", "SW", "NW"]
 CORNERS = {"NE": ("N", "E"), "SE": ("S", "E"), "SW": ("S", "W"), "NW": ("N", "W")}
@@ -441,6 +422,7 @@ def compile_map(m, kit, out_dir):
             **({"flip": True} if draw_kind == side and faces == "W" else {}),
             **({"plaque": o["plaque"]} if o.get("plaque") else {}),   # a name board over its gate (tk-world draws it)
             **({"told": o["told"]} if o.get("told") else {}),   # the loud town: shown once that person has the news (red hangings)
+            **({"when": o["when"]} if o.get("when") and o["kind"].startswith("prop.") else {}),   # shown once its condition holds (Misaeng's drinks: "mark:seat_president")
             **({"lift": o["lift"]} if o.get("lift") else {}),   # px to draw it higher than its foot (which sets its depth)
             **walls.get(id(o), {}))
     runs = []
@@ -478,7 +460,8 @@ def compile_map(m, kit, out_dir):
             **({"needs": json.dumps(s["needs"] if isinstance(s["needs"], list) else [s["needs"]])} if s.get("needs") else {}),
             **({"sight": json.dumps(s["sight"])} if s.get("sight") else {}),
             **({"floors": json.dumps(s["floors"])} if s.get("floors") else {}),   # a lift's floors: [{label, to}] (tk-modern.js)
-            **{k: s[k] for k in ("delivers", "when", "fires", "takes", "opens") if s.get(k)},
+            **{k: s[k] for k in ("delivers", "when", "fires", "takes", "opens", "gives", "gives_when") if s.get(k)},
+            **{k: json.dumps([place_step(l)[0] for l in s[k]], ensure_ascii=False) for k in ("give", "given") if s.get(k)},
             **{k: json.dumps([place_step(l)[0] for l in s[k]], ensure_ascii=False) for k in ("empty", "waiting", "deliver", "delivered", "call") if s.get(k)},
             **{k: json.dumps([place_step(l)[0] for l in s[k]], ensure_ascii=False) for k in ("intro", "outro") if s.get(k)})
     for n in m["npcs"]:
@@ -626,7 +609,6 @@ def compile_world_(n, kit_name, preview=False):
     out.mkdir(parents=True, exist_ok=True)
     kit = Kit(kit_name)
     region = json.loads((src / "region.json").read_text())
-    LANG["en"] = region.get("lang") == "en"
     shots = []
     maps = {p["id"]: json.loads((src / p["map"]).read_text()) for p in region["places"]}
     SEEN.clear()   # a watcher's "seen" may name lines kept on another map of the world (the city's seen_lines)

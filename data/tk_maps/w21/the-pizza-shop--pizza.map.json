@@ -1,0 +1,139 @@
+{
+ "format": "tk-map/1",
+ "id": "the-pizza-shop--pizza",
+ "world": 21,
+ "name": "Kim Dong-su's pizza shop",
+ "archetype": "interior",
+ "size": [
+  24,
+  14
+ ],
+ "seed": 2115,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "office_tile",
+   " ": "void",
+   "W": "wall"
+  },
+  "rows": [
+   "                        ",
+   " WWWWWWWWWWWWWWWWWWWWWW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WWWWWWWWWWWaaWWWWWWWWW ",
+   "                        "
+  ],
+  "walk": {
+   "office_tile": true,
+   "void": false,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    12,
+    7
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     6,
+     6
+    ]
+   },
+   "tiles": 64
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.pizza_oven",
+   "x": 4,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "oven"
+  },
+  {
+   "kind": "furn.counter",
+   "x": 8,
+   "y": 4,
+   "w": 3,
+   "h": 1,
+   "id": "counter",
+   "label": "The counter"
+  },
+  {
+   "kind": "furn.table",
+   "x": 18,
+   "y": 4,
+   "w": 2,
+   "h": 1,
+   "id": "table-1"
+  },
+  {
+   "kind": "furn.table",
+   "x": 18,
+   "y": 8,
+   "w": 2,
+   "h": 1,
+   "id": "table-2"
+  },
+  {
+   "kind": "furn.stool",
+   "x": 20,
+   "y": 4,
+   "w": 1,
+   "h": 1,
+   "id": "stool-1"
+  }
+ ],
+ "spots": [
+  {
+   "id": "m16",
+   "x": 12.5,
+   "y": 8.7,
+   "node": "21-m16",
+   "label": "The pizza shop"
+  }
+ ],
+ "npcs": [],
+ "exits": [
+  {
+   "to": "the-pizza-shop",
+   "side": "S",
+   "x": 12,
+   "y": 12,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "the-pizza-shop": [
+   12,
+   11
+  ],
+  "": [
+   12,
+   11
+  ]
+ },
+ "parent": "the-pizza-shop",
+ "building": "pizza",
+ "links": [
+  "the-pizza-shop"
+ ]
+}

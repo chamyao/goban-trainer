@@ -1,0 +1,239 @@
+{
+ "format": "tk-map/1",
+ "id": "the-subway",
+ "world": 21,
+ "name": "The subway",
+ "archetype": "interior",
+ "size": [
+  48,
+  12
+ ],
+ "seed": 1179,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "%": "stone",
+   " ": "void",
+   "W": "wall"
+  },
+  "rows": [
+   "                                                ",
+   " WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW ",
+   " W%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%W ",
+   " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ",
+   " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ",
+   " W%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%W ",
+   " WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW ",
+   "                                                "
+  ],
+  "walk": {
+   "stone": true,
+   "void": false,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    24,
+    6
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     0,
+     3
+    ],
+    "to-Susaek-dong": [
+     0,
+     3
+    ],
+    "to-Jongno": [
+     23,
+     3
+    ]
+   },
+   "tiles": 108
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.subway_seat",
+   "x": 4,
+   "y": 2,
+   "w": 4,
+   "h": 1,
+   "id": "seat-n0"
+  },
+  {
+   "kind": "furn.subway_seat",
+   "x": 12,
+   "y": 2,
+   "w": 4,
+   "h": 1,
+   "id": "seat-n1"
+  },
+  {
+   "kind": "furn.subway_seat",
+   "x": 20,
+   "y": 2,
+   "w": 4,
+   "h": 1,
+   "id": "seat-n2"
+  },
+  {
+   "kind": "furn.subway_seat",
+   "x": 28,
+   "y": 2,
+   "w": 4,
+   "h": 1,
+   "id": "seat-n3"
+  },
+  {
+   "kind": "furn.subway_seat",
+   "x": 36,
+   "y": 2,
+   "w": 4,
+   "h": 1,
+   "id": "seat-n4"
+  },
+  {
+   "kind": "furn.subway_seat",
+   "x": 4,
+   "y": 8,
+   "w": 4,
+   "h": 1,
+   "id": "seat-s0"
+  },
+  {
+   "kind": "furn.subway_seat",
+   "x": 12,
+   "y": 8,
+   "w": 4,
+   "h": 1,
+   "id": "seat-s1"
+  },
+  {
+   "kind": "furn.subway_seat",
+   "x": 20,
+   "y": 8,
+   "w": 4,
+   "h": 1,
+   "id": "seat-s2"
+  },
+  {
+   "kind": "furn.subway_seat",
+   "x": 28,
+   "y": 8,
+   "w": 4,
+   "h": 1,
+   "id": "seat-s3"
+  },
+  {
+   "kind": "furn.subway_seat",
+   "x": 36,
+   "y": 8,
+   "w": 4,
+   "h": 1,
+   "id": "seat-s4"
+  }
+ ],
+ "spots": [],
+ "npcs": [
+  {
+   "id": "npc-1",
+   "kind": "folk.salaryman",
+   "x": 10.5,
+   "y": 4.9,
+   "say": [
+    "A man asleep on his feet, swaying with the train."
+   ]
+  },
+  {
+   "id": "npc-2",
+   "kind": "folk.officewoman",
+   "x": 24.5,
+   "y": 6.9,
+   "say": [
+    "A woman in a suit reads the same page of her phone for three stops."
+   ]
+  },
+  {
+   "id": "commuter",
+   "kind": "folk.salaryman",
+   "x": 42.5,
+   "y": 6.9,
+   "say": [],
+   "intro": [
+    "A man in a grey suit stands in the doorway with a magnetic pocket board, a problem half-solved. “Excuse me. Do you play? I've been stuck on this since Hapjeong.”"
+   ],
+   "win": [
+    "“…Oh. Of course. Thank you. This is my stop too.”"
+   ],
+   "done": [
+    "The man with the pocket board is on the next problem."
+   ],
+   "until": "21-21-m2",
+   "when": "node:21-m1",
+   "blocks": {
+    "exit": "Jongno"
+   },
+   "view": 2,
+   "challenge": "commuter",
+   "guard": [
+    46.5,
+    7.0
+   ]
+  }
+ ],
+ "exits": [
+  {
+   "to": "susaek-dong",
+   "side": "W",
+   "x": 1,
+   "y": 6,
+   "w": 1,
+   "h": 2
+  },
+  {
+   "to": "jongno",
+   "side": "E",
+   "x": 46,
+   "y": 6,
+   "w": 1,
+   "h": 2
+  }
+ ],
+ "entries": {
+  "susaek-dong": [
+   2,
+   6
+  ],
+  "jongno": [
+   45,
+   6
+  ],
+  "": [
+   2,
+   6
+  ]
+ },
+ "states": [
+  {
+   "id": "rush",
+   "light": "morning"
+  }
+ ],
+ "links": [
+  "jongno",
+  "susaek-dong"
+ ]
+}

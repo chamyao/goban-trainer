@@ -1,0 +1,419 @@
+{
+ "format": "tk-map/1",
+ "id": "one-international--sales3",
+ "world": 21,
+ "name": "Sales Team 3",
+ "archetype": "interior",
+ "size": [
+  36,
+  24
+ ],
+ "seed": 2500,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "carpet",
+   " ": "void",
+   "W": "wall"
+  },
+  "rows": [
+   "                                    ",
+   " WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WWWWWWWWWWWWWWWWWaaWWWWWWWWWWWWWWW ",
+   "                                    "
+  ],
+  "walk": {
+   "carpet": true,
+   "void": false,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    18,
+    12
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     9,
+     11
+    ]
+   },
+   "tiles": 108
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.copier",
+   "x": 4,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "copier",
+   "label": "The copier"
+  },
+  {
+   "kind": "furn.water_cooler",
+   "x": 8,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "cooler"
+  },
+  {
+   "kind": "furn.whiteboard",
+   "x": 14,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "board-1",
+   "label": "Sales Team 3's whiteboard"
+  },
+  {
+   "kind": "furn.filing",
+   "x": 22,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "filing-1"
+  },
+  {
+   "kind": "furn.filing",
+   "x": 24,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "filing-2"
+  },
+  {
+   "kind": "furn.plant",
+   "x": 30,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "plant-n",
+   "blocks_sight": true
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 4,
+   "y": 8,
+   "w": 2,
+   "h": 1,
+   "id": "desk-2-4"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 6,
+   "y": 8,
+   "w": 2,
+   "h": 1,
+   "id": "desk-3-4"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 4,
+   "y": 10,
+   "w": 2,
+   "h": 1,
+   "id": "desk-2-5"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 6,
+   "y": 10,
+   "w": 2,
+   "h": 1,
+   "id": "desk-3-5"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 8,
+   "y": 9,
+   "w": 2,
+   "h": 1,
+   "id": "sun-desk",
+   "label": "Sun Ji-young's desk"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 16,
+   "y": 8,
+   "w": 2,
+   "h": 1,
+   "id": "desk-park",
+   "label": "Park's desk"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 18,
+   "y": 8,
+   "w": 2,
+   "h": 1,
+   "id": "desk-kim",
+   "label": "Kim Dong-sik's desk"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 18,
+   "y": 10,
+   "w": 2,
+   "h": 1,
+   "id": "desk-spare"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 16,
+   "y": 10,
+   "w": 2,
+   "h": 1,
+   "id": "desk-jang",
+   "label": "Jang's desk"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 20,
+   "y": 9,
+   "w": 2,
+   "h": 1,
+   "id": "oh-desk",
+   "label": "Oh's desk"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 26,
+   "y": 8,
+   "w": 2,
+   "h": 1,
+   "id": "desk-13-4"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 28,
+   "y": 8,
+   "w": 2,
+   "h": 1,
+   "id": "desk-14-4"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 26,
+   "y": 10,
+   "w": 2,
+   "h": 1,
+   "id": "desk-13-5"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 28,
+   "y": 10,
+   "w": 2,
+   "h": 1,
+   "id": "desk-14-5"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 30,
+   "y": 9,
+   "w": 2,
+   "h": 1,
+   "id": "head-e"
+  },
+  {
+   "kind": "furn.meeting_table",
+   "x": 4,
+   "y": 16,
+   "w": 4,
+   "h": 2,
+   "id": "meet-w",
+   "label": "A meeting table"
+  },
+  {
+   "kind": "furn.meeting_table",
+   "x": 26,
+   "y": 16,
+   "w": 4,
+   "h": 2,
+   "id": "meet-e"
+  },
+  {
+   "kind": "furn.plant",
+   "x": 2,
+   "y": 20,
+   "w": 1,
+   "h": 1,
+   "id": "plant-sw",
+   "blocks_sight": true
+  },
+  {
+   "kind": "furn.plant",
+   "x": 32,
+   "y": 20,
+   "w": 1,
+   "h": 1,
+   "id": "plant-se",
+   "blocks_sight": true
+  }
+ ],
+ "spots": [
+  {
+   "id": "m3",
+   "x": 14.5,
+   "y": 6.7,
+   "node": "21-m3",
+   "label": "Sales Team 3"
+  },
+  {
+   "id": "m5",
+   "x": 8.5,
+   "y": 12.7,
+   "node": "21-m5",
+   "label": "Sun Ji-young's desk"
+  },
+  {
+   "id": "m9",
+   "x": 16.5,
+   "y": 12.7,
+   "node": "21-m9",
+   "label": "Jang's desk"
+  },
+  {
+   "id": "m10",
+   "x": 18.5,
+   "y": 6.7,
+   "node": "21-m10",
+   "label": "Kim Dong-sik's desk"
+  },
+  {
+   "id": "m11",
+   "x": 10.5,
+   "y": 10.7,
+   "node": "21-m11",
+   "label": "Sun Ji-young's desk"
+  },
+  {
+   "id": "m21",
+   "x": 14.5,
+   "y": 8.7,
+   "node": "21-m21",
+   "label": "The team's phone"
+  },
+  {
+   "id": "m23",
+   "x": 22.5,
+   "y": 10.7,
+   "node": "21-m23",
+   "label": "Oh's desk"
+  },
+  {
+   "id": "sales3",
+   "x": 18.5,
+   "y": 12.7,
+   "node": "",
+   "label": "Jang's desk",
+   "note": "handoffs to Jang land here"
+  },
+  {
+   "id": "sun-desk-hand",
+   "x": 10.5,
+   "y": 8.7,
+   "node": "",
+   "label": "Sun Ji-young's desk",
+   "note": "the handoff to Sun lands here"
+  },
+  {
+   "id": "call-notes",
+   "x": 14.5,
+   "y": 10.7,
+   "node": "",
+   "label": "Jang's desk",
+   "gives": "icb_call",
+   "gives_when": "node:21-m12",
+   "give": [
+    "Your notes from the call to ICB, in your own hand. In the margin you've written: Korean? In the room behind?"
+   ],
+   "given": [
+    "Your desk. The call notes are in your bag."
+   ]
+  },
+  {
+   "id": "whiteboard",
+   "x": 14.5,
+   "y": 4.7,
+   "node": "",
+   "label": "Sales Team 3's whiteboard",
+   "opens": "audit"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "npc-1",
+   "kind": "folk.officewoman",
+   "x": 28.5,
+   "y": 12.9,
+   "say": [
+    "A woman from the next team. “Sales Team 3? They're the ones who work through lunch.”"
+   ]
+  },
+  {
+   "id": "npc-2",
+   "kind": "folk.salaryman",
+   "x": 6.5,
+   "y": 14.9,
+   "say": [
+    "A deputy from Sales Team 1, reading a fax. “Another intern? We used to get six a year.”"
+   ]
+  }
+ ],
+ "exits": [
+  {
+   "to": "one-international",
+   "side": "S",
+   "x": 18,
+   "y": 22,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "one-international": [
+   18,
+   21
+  ],
+  "": [
+   18,
+   21
+  ]
+ },
+ "parent": "one-international",
+ "building": "sales3",
+ "links": [
+  "one-international"
+ ]
+}

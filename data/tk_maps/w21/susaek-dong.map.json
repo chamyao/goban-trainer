@@ -1,0 +1,660 @@
+{
+ "format": "tk-map/1",
+ "id": "susaek-dong",
+ "world": 21,
+ "name": "Susaek-dong",
+ "archetype": "city",
+ "size": [
+  64,
+  48
+ ],
+ "seed": 1267,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "city",
+   "b": "garden",
+   "c": "hills",
+   "d": "road"
+  },
+  "rows": [
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaddddddddddddddddddddddddddaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaddddddddddddddddddddddddddaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaaaddaaaaaaaaabbbbbbbbbbbb",
+   "aaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaaaddaaaaaaaaabbbbbbbbbbbb",
+   "aaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaaaddaaaaaaaaabbbbbbbbbbbb",
+   "aaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaaaddaaaaaaaaabbbbbbbbbbbb",
+   "aaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaaaddaaaaaaaaabbbbbbbbbbbb",
+   "aaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaaaddaaaaaaaaabbbbbbbbbbbb",
+   "aaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaaaddaaaaaaaaabbbbbbbbbbbb",
+   "aaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaaaddaaaaaaaaabbbbbbbbbbbb",
+   "aaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaaaddaaaaaaaaabbbbbbbbbbbb",
+   "aaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaaaddaaaaaaaaabbbbbbbbbbbb",
+   "aaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaaaddaaaaaaaaabbbbbbbbbbbb",
+   "aaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaaaddaaaaaaaaabbbbbbbbbbbb",
+   "aaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaaaddaaaaaaaaabbbbbbbbbbbb",
+   "aaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaaaddaaaaaaaaabbbbbbbbbbbb",
+   "aaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaaaddaaaaaaaaabbbbbbbbbbbb",
+   "aaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaaaddaaaaaaaaabbbbbbbbbbbb",
+   "aaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaaaddaaaaaaaaabbbbbbbbbbbb",
+   "aaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaaaddaaaaaaaaabbbbbbbbbbbb",
+   "aaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaaaddaaaaaaaaabbbbbbbbbbbb",
+   "aaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaaaddaaaaaaaaabbbbbbbbbbbb",
+   "aaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaa",
+   "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+   "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+   "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+   "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  ],
+  "walk": {
+   "city": true,
+   "garden": true,
+   "hills": false,
+   "road": true
+  }
+ },
+ "lines": [
+  {
+   "id": "main-road",
+   "kind": "road",
+   "path": [
+    [
+     0,
+     9
+    ],
+    [
+     15,
+     9
+    ]
+   ],
+   "width": 3,
+   "tiles": 256
+  },
+  {
+   "id": "lane-w",
+   "kind": "road",
+   "path": [
+    [
+     4,
+     9
+    ],
+    [
+     4,
+     2
+    ]
+   ],
+   "width": 2,
+   "tiles": 60
+  },
+  {
+   "id": "lane-e",
+   "kind": "road",
+   "path": [
+    [
+     10,
+     9
+    ],
+    [
+     10,
+     2
+    ]
+   ],
+   "width": 2,
+   "tiles": 60
+  },
+  {
+   "id": "lane-top",
+   "kind": "road",
+   "path": [
+    [
+     4,
+     2
+    ],
+    [
+     10,
+     2
+    ]
+   ],
+   "width": 2,
+   "tiles": 52
+  }
+ ],
+ "objects": [
+  {
+   "kind": "building.villa",
+   "x": 21,
+   "y": 14,
+   "w": 5,
+   "h": 3,
+   "id": "home",
+   "door": "W",
+   "faces": "W",
+   "label": "Jang's home",
+   "map": "home",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.villa",
+   "x": 45,
+   "y": 14,
+   "w": 5,
+   "h": 3,
+   "id": "relatives",
+   "door": "W",
+   "faces": "W",
+   "label": "The relatives' flat",
+   "map": "relatives",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.villa",
+   "x": 10,
+   "y": 14,
+   "w": 5,
+   "h": 3,
+   "id": "villa-1",
+   "door": "E",
+   "faces": "E",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.villa",
+   "x": 34,
+   "y": 14,
+   "w": 5,
+   "h": 3,
+   "id": "villa-2",
+   "door": "E",
+   "faces": "E",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.villa",
+   "x": 10,
+   "y": 26,
+   "w": 5,
+   "h": 3,
+   "id": "villa-3",
+   "door": "E",
+   "faces": "E",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.villa",
+   "x": 21,
+   "y": 26,
+   "w": 5,
+   "h": 3,
+   "id": "villa-4",
+   "door": "W",
+   "faces": "W",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.villa",
+   "x": 34,
+   "y": 26,
+   "w": 5,
+   "h": 3,
+   "id": "villa-5",
+   "door": "E",
+   "faces": "E",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.villa",
+   "x": 45,
+   "y": 26,
+   "w": 5,
+   "h": 3,
+   "id": "villa-6",
+   "door": "W",
+   "faces": "W",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.storefront",
+   "x": 10,
+   "y": 41,
+   "w": 4,
+   "h": 2,
+   "id": "store",
+   "door": "N",
+   "faces": "N",
+   "label": "A corner store",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.storefront",
+   "x": 26,
+   "y": 41,
+   "w": 4,
+   "h": 2,
+   "id": "shop-2",
+   "door": "N",
+   "faces": "N",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.subway_entrance",
+   "x": 50,
+   "y": 41,
+   "w": 3,
+   "h": 2,
+   "id": "station",
+   "door": "N",
+   "faces": "N",
+   "label": "Susaek Station",
+   "to": "The subway",
+   "blocks_sight": true
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 1,
+   "y": 35,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 2,
+   "y": 40,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 7,
+   "y": 35,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 8,
+   "y": 40,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 13,
+   "y": 35,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 14,
+   "y": 40,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 19,
+   "y": 35,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 20,
+   "y": 40,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 25,
+   "y": 35,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 26,
+   "y": 40,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 31,
+   "y": 35,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 32,
+   "y": 40,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 37,
+   "y": 35,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 38,
+   "y": 40,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 43,
+   "y": 35,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 44,
+   "y": 40,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 49,
+   "y": 35,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 55,
+   "y": 35,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 56,
+   "y": 40,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 61,
+   "y": 35,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 62,
+   "y": 40,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 16,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 16,
+   "y": 32,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 19,
+   "y": 13,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 19,
+   "y": 21,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 19,
+   "y": 29,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 53,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 58,
+   "y": 27,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 60,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 58,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.bush",
+   "x": 55,
+   "y": 13,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.small",
+   "x": 63,
+   "y": 16,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.small",
+   "x": 59,
+   "y": 26,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.small",
+   "x": 53,
+   "y": 16,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "prop.vending",
+   "x": 10,
+   "y": 40,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "spots": [
+  {
+   "id": "home",
+   "x": 19.5,
+   "y": 15.7,
+   "node": "",
+   "label": "Jang's home",
+   "note": "m1's handoff lands here"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "npc-1",
+   "kind": "folk.ajumma",
+   "x": 29.5,
+   "y": 37.9,
+   "say": [
+    "An ajumma with a shopping trolley. “The Jang boy? Up before dawn every day of his life, that one.”"
+   ]
+  },
+  {
+   "id": "npc-2",
+   "kind": "folk.grandpa",
+   "x": 41.5,
+   "y": 21.9,
+   "say": [
+    "An old man on a plastic stool by the lane. “Seven years at those stones. Now what?”"
+   ]
+  }
+ ],
+ "exits": [
+  {
+   "to": "susaek-dong--home",
+   "side": "E",
+   "x": 20.4,
+   "y": 15.1,
+   "w": 0.75,
+   "h": 0.8,
+   "door": true
+  },
+  {
+   "to": "susaek-dong--relatives",
+   "side": "E",
+   "x": 44.4,
+   "y": 15.1,
+   "w": 0.75,
+   "h": 0.8,
+   "door": true
+  },
+  {
+   "to": "the-subway",
+   "side": "S",
+   "x": 51.1,
+   "y": 40.4,
+   "w": 0.8,
+   "h": 0.75,
+   "door": true
+  }
+ ],
+ "entries": {
+  "susaek-dong--home": [
+   19,
+   15
+  ],
+  "susaek-dong--relatives": [
+   43,
+   15
+  ],
+  "the-subway": [
+   51,
+   39
+  ],
+  "": [
+   17,
+   21
+  ]
+ },
+ "states": [
+  {
+   "id": "day",
+   "light": "day"
+  }
+ ],
+ "ways": {
+  "nodes": [
+   [
+    2.0,
+    38.0
+   ],
+   [
+    18.0,
+    38.0
+   ],
+   [
+    42.0,
+    38.0
+   ],
+   [
+    62.0,
+    38.0
+   ],
+   [
+    18.0,
+    10.0
+   ],
+   [
+    42.0,
+    10.0
+   ]
+  ],
+  "edges": [
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    2,
+    5
+   ],
+   [
+    4,
+    5
+   ]
+  ]
+ },
+ "links": [
+  "susaek-dong--home",
+  "susaek-dong--relatives",
+  "the-subway"
+ ]
+}

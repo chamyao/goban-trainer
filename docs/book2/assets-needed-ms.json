@@ -1,5 +1,20 @@
 [
  {
+  "kind": "asphalt",
+  "status": {
+   "genshin": "stand-in: stone",
+   "jade": "stand-in: stone",
+   "xianxia": "stand-in: stone"
+  },
+  "size": null,
+  "ground": true,
+  "maps": [
+   "jongno"
+  ],
+  "count": 0,
+  "brief": "a Seoul carriageway: dark asphalt, white lane lines and dashes, a yellow centre line; tiles that join into a road four or more tiles wide"
+ },
+ {
   "kind": "barrier",
   "status": {
    "genshin": "stand-in: wall",
@@ -260,6 +275,33 @@
   "brief": "a red-brick multi-family villa (빌라) of a Seoul hillside neighbourhood: 3-4 storeys, small balconies with laundry, a door at the foot with a number plate, a satellite dish"
  },
  {
+  "kind": "carpet",
+  "status": {
+   "genshin": "stand-in: stone",
+   "jade": "stand-in: stone",
+   "xianxia": "stand-in: stone"
+  },
+  "size": null,
+  "ground": true,
+  "maps": [
+   "baekjin-trading--baekjin",
+   "jongno--client",
+   "jongno--hq",
+   "one-international--audit",
+   "one-international--board-room",
+   "one-international--exec-floor",
+   "one-international--finance",
+   "one-international--hr",
+   "one-international--meeting",
+   "one-international--pt-room",
+   "one-international--resources",
+   "one-international--sales3",
+   "the-new-office--new-office"
+  ],
+  "count": 0,
+  "brief": "an office floor of grey-blue carpet tiles, a faint grid"
+ },
+ {
   "kind": "crosswalk",
   "status": {
    "genshin": "stand-in: road",
@@ -336,6 +378,7 @@
   "size": null,
   "ground": false,
   "maps": [
+   "jongno",
    "korea-baduk-association",
    "korea-baduk-association--kba-trainees",
    "suns-neighbourhood--daycare"
@@ -460,9 +503,10 @@
   "ground": false,
   "maps": [
    "one-international--audit",
-   "one-international--board-room"
+   "one-international--board-room",
+   "one-international--meeting"
   ],
-  "count": 15,
+  "count": 19,
   "brief": "a black office chair on castors"
  },
  {
@@ -497,11 +541,13 @@
   "ground": false,
   "maps": [
    "baekjin-trading--baekjin",
+   "jongno--client",
    "one-international--exec-floor",
    "one-international--finance",
-   "one-international--hr"
+   "one-international--hr",
+   "one-international--resources"
   ],
-  "count": 4,
+  "count": 6,
   "brief": "a department head's or executive's desk: big, dark wood, a leather chair behind, a name plate"
  },
  {
@@ -521,9 +567,10 @@
    "one-international--audit",
    "one-international--finance",
    "one-international--hr",
+   "one-international--resources",
    "one-international--sales3"
   ],
-  "count": 10,
+  "count": 12,
   "brief": "a grey steel filing cabinet"
  },
  {
@@ -613,12 +660,13 @@
   ],
   "ground": false,
   "maps": [
+   "jongno--client",
    "one-international--exec-floor",
    "suns-neighbourhood--daycare",
    "susaek-dong--home",
    "susaek-dong--relatives"
   ],
-  "count": 7,
+  "count": 8,
   "brief": "a low wooden table you sit at on the floor (상), set with dishes"
  },
  {
@@ -634,12 +682,14 @@
   ],
   "ground": false,
   "maps": [
+   "jongno--hq",
    "one-international--audit",
    "one-international--board-room",
+   "one-international--meeting",
    "one-international--pt-room",
    "one-international--sales3"
   ],
-  "count": 7,
+  "count": 11,
   "brief": "a long meeting table with chairs round it, a jug of water, notepads"
  },
  {
@@ -676,12 +726,14 @@
   "ground": false,
   "maps": [
    "baekjin-trading--baekjin",
+   "jongno--client",
    "one-international--finance",
    "one-international--hr",
+   "one-international--resources",
    "one-international--sales3",
    "the-new-office--new-office"
   ],
-  "count": 36,
+  "count": 48,
   "brief": "an office desk: a grey top, a monitor and keyboard, papers, a mug, a black office chair pulled up; seen at the same 3/4 angle as furn.desk"
  },
  {
@@ -751,10 +803,11 @@
   ],
   "ground": false,
   "maps": [
+   "jongno--hq",
    "one-international--board-room",
    "one-international--pt-room"
   ],
-  "count": 2,
+  "count": 3,
   "brief": "a pull-down projector screen, a slide lit on it"
  },
  {
@@ -789,13 +842,14 @@
   ],
   "ground": false,
   "maps": [
+   "jongno--client",
    "korea-baduk-association--kba-front",
    "one-international",
    "one-international--exec-floor",
    "suns-neighbourhood--sun-flat",
    "susaek-dong--relatives"
   ],
-  "count": 7,
+  "count": 8,
   "brief": "a two-seat sofa in dark leather or grey cloth"
  },
  {
@@ -943,10 +997,11 @@
   "ground": false,
   "maps": [
    "one-international--audit",
+   "one-international--meeting",
    "one-international--sales3",
    "the-new-office--new-office"
   ],
-  "count": 3,
+  "count": 4,
   "brief": "a whiteboard on a stand, scribbled with arrows and figures"
  },
  {
@@ -968,6 +1023,25 @@
   "brief": "Tapgol Park's ten-storey marble pagoda (원각사지 십층석탑) inside its glass protective case"
  },
  {
+  "kind": "lino",
+  "status": {
+   "genshin": "stand-in: wood",
+   "jade": "stand-in: wood",
+   "xianxia": "stand-in: wood"
+  },
+  "size": null,
+  "ground": true,
+  "maps": [
+   "suns-neighbourhood--daycare",
+   "suns-neighbourhood--sun-flat",
+   "susaek-dong--home",
+   "susaek-dong--relatives",
+   "susaek-dong--relatives-kitchen"
+  ],
+  "count": 0,
+  "brief": "a Korean home's floor: glossy yellow-brown vinyl (장판) over the heated ondol, a faint wood grain"
+ },
+ {
   "kind": "market.stalls",
   "status": {
    "genshin": "stand-in: building.shop",
@@ -984,6 +1058,24 @@
   ],
   "count": 4,
   "brief": "a row of market stalls with cloth awnings, baskets and goods"
+ },
+ {
+  "kind": "office_tile",
+  "status": {
+   "genshin": "stand-in: stone",
+   "jade": "stand-in: stone",
+   "xianxia": "stand-in: stone"
+  },
+  "size": null,
+  "ground": true,
+  "maps": [
+   "jongno--corner-shop",
+   "korea-baduk-association--kba-front",
+   "one-international",
+   "the-pizza-shop--pizza"
+  ],
+  "count": 0,
+  "brief": "a tower lobby's floor: large polished pale stone tiles with a soft reflection"
  },
  {
   "kind": "parapet",
@@ -1057,6 +1149,42 @@
   "brief": "a parked or passing car seen from above at the same 3/4 angle (a white or grey sedan, a black taxi with a roof light), four tiles long, two deep"
  },
  {
+  "kind": "prop.coffee_cup",
+  "status": {
+   "genshin": "stand-in: furn.jar",
+   "jade": "stand-in: furn.jar",
+   "xianxia": "stand-in: furn.jar"
+  },
+  "size": [
+   1,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "one-international--board-room"
+  ],
+  "count": 1,
+  "brief": "a white cup of black coffee on a saucer, drawn small on a table top"
+ },
+ {
+  "kind": "prop.glass_water",
+  "status": {
+   "genshin": "stand-in: furn.jar",
+   "jade": "stand-in: furn.jar",
+   "xianxia": "stand-in: furn.jar"
+  },
+  "size": [
+   1,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "one-international--board-room"
+  ],
+  "count": 1,
+  "brief": "a glass of still water on a coaster, drawn small on a table top (no ice)"
+ },
+ {
   "kind": "prop.scooter",
   "status": {
    "genshin": "stand-in: furn.barrel",
@@ -1074,6 +1202,24 @@
   ],
   "count": 10,
   "brief": "a delivery scooter with an insulated box on the back"
+ },
+ {
+  "kind": "prop.teacup",
+  "status": {
+   "genshin": "stand-in: furn.jar",
+   "jade": "stand-in: furn.jar",
+   "xianxia": "stand-in: furn.jar"
+  },
+  "size": [
+   1,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "one-international--board-room"
+  ],
+  "count": 1,
+  "brief": "a white cup of green tea on a saucer, drawn small on a table top"
  },
  {
   "kind": "prop.vending",
@@ -1111,21 +1257,6 @@
   ],
   "count": 1,
   "brief": "a rooftop water tank: a squat cylinder on a frame"
- },
- {
-  "kind": "traffic",
-  "status": {
-   "genshin": "stand-in: stone",
-   "jade": "stand-in: stone",
-   "xianxia": "stand-in: stone"
-  },
-  "size": null,
-  "ground": true,
-  "maps": [
-   "jongno"
-  ],
-  "count": 0,
-  "brief": "a Seoul carriageway: dark asphalt, white lane lines and dashes, a yellow centre line; tiles that join into a road four or more tiles wide"
  },
  {
   "kind": "tree.ginkgo",

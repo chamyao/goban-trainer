@@ -1,0 +1,167 @@
+{
+ "format": "tk-map/1",
+ "id": "the-new-office--new-office",
+ "world": 21,
+ "name": "The new office",
+ "archetype": "interior",
+ "size": [
+  24,
+  16
+ ],
+ "seed": 2502,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "carpet",
+   " ": "void",
+   "W": "wall"
+  },
+  "rows": [
+   "                        ",
+   " WWWWWWWWWWWWWWWWWWWWWW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WWWWWWWWWWWaaWWWWWWWWW ",
+   "                        "
+  ],
+  "walk": {
+   "carpet": true,
+   "void": false,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    12,
+    8
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     6,
+     7
+    ]
+   },
+   "tiles": 68
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.whiteboard",
+   "x": 4,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "board",
+   "label": "A whiteboard: JORDAN"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 10,
+   "y": 4,
+   "w": 2,
+   "h": 1,
+   "id": "oh-desk",
+   "label": "Oh's desk"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 4,
+   "y": 6,
+   "w": 2,
+   "h": 1,
+   "id": "desk-2-3"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 6,
+   "y": 6,
+   "w": 2,
+   "h": 1,
+   "id": "desk-3-3"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 16,
+   "y": 6,
+   "w": 2,
+   "h": 1,
+   "id": "desk-8-3"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 18,
+   "y": 6,
+   "w": 2,
+   "h": 1,
+   "id": "desk-9-3"
+  },
+  {
+   "kind": "furn.boxes",
+   "x": 18,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "boxes-1",
+   "label": "Boxes not yet unpacked"
+  },
+  {
+   "kind": "furn.boxes",
+   "x": 20,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "boxes-2"
+  }
+ ],
+ "spots": [
+  {
+   "id": "m24",
+   "x": 12.5,
+   "y": 8.7,
+   "node": "21-m24",
+   "label": "The new office"
+  }
+ ],
+ "npcs": [],
+ "exits": [
+  {
+   "to": "the-new-office",
+   "side": "S",
+   "x": 12,
+   "y": 14,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "the-new-office": [
+   12,
+   13
+  ],
+  "": [
+   12,
+   13
+  ]
+ },
+ "parent": "the-new-office",
+ "building": "new-office",
+ "links": [
+  "the-new-office"
+ ]
+}

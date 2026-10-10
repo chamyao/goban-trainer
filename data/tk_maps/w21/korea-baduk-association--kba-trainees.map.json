@@ -1,0 +1,285 @@
+{
+ "format": "tk-map/1",
+ "id": "korea-baduk-association--kba-trainees",
+ "world": 21,
+ "name": "The trainees' room",
+ "archetype": "interior",
+ "size": [
+  32,
+  20
+ ],
+ "seed": 3672,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   " ": "void",
+   "W": "wall",
+   "#": "wood"
+  },
+  "rows": [
+   "                                ",
+   " WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW ",
+   " W############################W ",
+   " W############################W ",
+   " W############################W ",
+   " W############################W ",
+   " W############################W ",
+   " W############################W ",
+   " W############################W ",
+   " W############################W ",
+   " W############################W ",
+   " W############################W ",
+   " W############################W ",
+   " W############################W ",
+   " W############################W ",
+   " W############################W ",
+   " W############################W ",
+   " W############################W ",
+   " WWWWWWWWWWWWWWW##WWWWWWWWWWWWW ",
+   "                                "
+  ],
+  "walk": {
+   "void": false,
+   "wall": false,
+   "wood": true
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    16,
+    10
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     8,
+     9
+    ]
+   },
+   "tiles": 92
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.go_board",
+   "x": 4,
+   "y": 4,
+   "w": 1,
+   "h": 1,
+   "id": "board-2-2"
+  },
+  {
+   "kind": "furn.go_board",
+   "x": 8,
+   "y": 4,
+   "w": 1,
+   "h": 1,
+   "id": "board-4-2"
+  },
+  {
+   "kind": "furn.go_board",
+   "x": 12,
+   "y": 4,
+   "w": 1,
+   "h": 1,
+   "id": "board-6-2"
+  },
+  {
+   "kind": "furn.go_board",
+   "x": 20,
+   "y": 4,
+   "w": 1,
+   "h": 1,
+   "id": "board-10-2"
+  },
+  {
+   "kind": "furn.go_board",
+   "x": 24,
+   "y": 4,
+   "w": 1,
+   "h": 1,
+   "id": "board-12-2"
+  },
+  {
+   "kind": "furn.go_board",
+   "x": 28,
+   "y": 4,
+   "w": 1,
+   "h": 1,
+   "id": "board-14-2"
+  },
+  {
+   "kind": "furn.go_board",
+   "x": 4,
+   "y": 8,
+   "w": 1,
+   "h": 1,
+   "id": "board-2-4"
+  },
+  {
+   "kind": "furn.go_board",
+   "x": 8,
+   "y": 8,
+   "w": 1,
+   "h": 1,
+   "id": "board-4-4"
+  },
+  {
+   "kind": "furn.go_board",
+   "x": 12,
+   "y": 8,
+   "w": 1,
+   "h": 1,
+   "id": "board-6-4"
+  },
+  {
+   "kind": "furn.go_board",
+   "x": 20,
+   "y": 8,
+   "w": 1,
+   "h": 1,
+   "id": "board-10-4"
+  },
+  {
+   "kind": "furn.go_board",
+   "x": 24,
+   "y": 8,
+   "w": 1,
+   "h": 1,
+   "id": "board-12-4"
+  },
+  {
+   "kind": "furn.go_board",
+   "x": 28,
+   "y": 8,
+   "w": 1,
+   "h": 1,
+   "id": "board-14-4"
+  },
+  {
+   "kind": "furn.go_board",
+   "x": 4,
+   "y": 12,
+   "w": 1,
+   "h": 1,
+   "id": "board-2-6"
+  },
+  {
+   "kind": "furn.go_board",
+   "x": 8,
+   "y": 12,
+   "w": 1,
+   "h": 1,
+   "id": "board-4-6"
+  },
+  {
+   "kind": "furn.go_board",
+   "x": 12,
+   "y": 12,
+   "w": 1,
+   "h": 1,
+   "id": "board-6-6"
+  },
+  {
+   "kind": "furn.go_board",
+   "x": 20,
+   "y": 12,
+   "w": 1,
+   "h": 1,
+   "id": "board-10-6"
+  },
+  {
+   "kind": "furn.go_board",
+   "x": 24,
+   "y": 12,
+   "w": 1,
+   "h": 1,
+   "id": "board-12-6"
+  },
+  {
+   "kind": "furn.go_board",
+   "x": 28,
+   "y": 12,
+   "w": 1,
+   "h": 1,
+   "id": "board-14-6"
+  }
+ ],
+ "spots": [
+  {
+   "id": "m1",
+   "x": 14.5,
+   "y": 12.7,
+   "node": "21-m1",
+   "label": "The trainees' room"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "npc-1",
+   "kind": "folk.kid",
+   "x": 4.5,
+   "y": 6.9,
+   "say": [
+    "A trainee, eleven or twelve, replaying a game from a book, stone by stone."
+   ]
+  },
+  {
+   "id": "npc-2",
+   "kind": "folk.kid",
+   "x": 20.5,
+   "y": 6.9,
+   "say": [
+    "Two trainees bent over a board. Neither has spoken for an hour."
+   ]
+  },
+  {
+   "id": "npc-3",
+   "kind": "folk.kid",
+   "x": 24.5,
+   "y": 10.9,
+   "say": [
+    "A girl in a school uniform counts the score twice."
+   ]
+  },
+  {
+   "id": "npc-4",
+   "kind": "folk.kid",
+   "x": 8.5,
+   "y": 14.9,
+   "say": [
+    "A trainee packs his stones away. “Next month. There's always next month.”"
+   ]
+  }
+ ],
+ "exits": [
+  {
+   "to": "korea-baduk-association--kba-front",
+   "side": "S",
+   "x": 16,
+   "y": 18,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "korea-baduk-association--kba-front": [
+   16,
+   17
+  ],
+  "": [
+   16,
+   17
+  ]
+ },
+ "parent": "korea-baduk-association",
+ "building": "kba-trainees",
+ "links": [
+  "korea-baduk-association--kba-front"
+ ]
+}

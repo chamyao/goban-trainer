@@ -142,7 +142,8 @@ class MapBuilder:
     # ---------- 1. ground and lines ----------
     def lay_ground(self):
         if self.room:   # inside a room: its floor
-            floor = {"wood": "wood", "stone": "stone", "mat": "mat", "earth": "earth"}.get(self.p.get("floor", "stone"), "stone")
+            from vocab import MATERIALS   # any walkable floor the vocabulary knows (Misaeng's carpet, office tile, lino)
+            floor = self.p.get("floor", "stone") if MATERIALS.get(self.p.get("floor", "stone")) else "stone"
         for z in self.p.get("ground", []):
             kind = z["kind"]
             m = floor if (self.room and kind == "floor") else kind
@@ -519,7 +520,8 @@ class MapBuilder:
             spot = {"id": s["id"], "x": t[0] + .5, "y": t[1] + .7, "node": s.get("node", ""), "label": s.get("label", "")}
             for k in ("trigger", "note", "on", "sight", "cover", "fires",   # cover: a place to hide; fires: starts itself
                       "needs", "delivers", "when", "empty", "waiting", "deliver", "delivered", "call",   # a place that delivers a mark
-                      "takes", "opens", "floors", "use"):   # Misaeng (tk-modern.js): delivering takes the thing; the audit board; a lift and its floors
+                      "takes", "opens", "floors", "use",   # Misaeng (tk-modern.js): delivering takes the thing; the audit board; a lift and its floors
+                      "gives", "gives_when", "give", "given"):   # a thing that gives an item when searched (the bins, a table)
                 if s.get(k):
                     spot[k] = s[k]
             self.spots.append(spot)
@@ -1383,12 +1385,12 @@ def assets(maps, tables, kits_dir=None):
     return rows
 
 
-ARCS = {13: "cc", 14: "lb", 15: "ls", 16: "ms"}   # books whose plans are an arc's: Book 13 is the Cao Cao arc, Book 14 Lü Bu's fall, Book 15 Lady Sun's marriage, Book 16 Misaeng
+ARCS = {13: "cc", 14: "lb", 15: "ls", 21: "ms"}   # books whose plans are an arc's: Book 13 is the Cao Cao arc, Book 14 Lü Bu's fall, Book 15 Lady Sun's marriage, Book 21 Misaeng
 
 
 def key_prefix(plans_world):
     """The book number the plans' beat keys carry ("2-c1" for the Cao Cao arc's plans)."""
-    return {"cc": "2", "lb": "3", "ls": "4", "ms": "16"}.get(ARCS.get(plans_world, plans_world), str(plans_world))
+    return {"cc": "2", "lb": "3", "ls": "4", "ms": "21"}.get(ARCS.get(plans_world, plans_world), str(plans_world))
 
 
 def plans_arg(v):
@@ -1416,7 +1418,7 @@ def load(plans_world):
         import tk_plans_ls as mod
         from tk_places_w2_zh import ZH_PLACES2
         return mod.PLANS_LS, mod.TABLES, ZH_PLACES2
-    if plans_world == "ms":   # Misaeng (Season 1): beat keys "16-m…", English only (no Chinese table)
+    if plans_world == "ms":   # Misaeng (Season 1): beat keys "21-m…", English only (no Chinese table)
         import tk_plans_ms as mod
         return mod.PLANS_MS, mod.TABLES, mod.ZH_PLACES_MS
     if plans_world == 90:   # Talk with Claude: the study, no story
@@ -1446,9 +1448,9 @@ def story_world(n, plans_world):
             raise SystemExit("no story yet for Lady Sun's marriage (Plot's WORLD2_LS in tools/tk_story_w2_new.py)")
     elif plans_world == "ms":
         try:
-            from tk_story_w2_new import WORLD2_MS as W
+            from tk_story_w21 import WORLD21 as W   # Misaeng: its own module, English only
         except ImportError:
-            raise SystemExit("no story yet for Misaeng (Plot's WORLD2_MS in tools/tk_story_w2_new.py)")
+            raise SystemExit("no story yet for Misaeng (Plot alt2's WORLD21 in tools/tk_story_w21.py)")
     else:
         raise SystemExit(f"no story for book {plans_world}")
     return {**W, "nodes": [{**nd, "key": f"{n}-{nd['key']}"} for nd in W["nodes"]],
@@ -1535,8 +1537,7 @@ def main():
             if a.png:
                 draw_png(m, d / f"{mid}.png")
         out = {"format": "tk-region/1", "world": a.world, "name": world["name"], "zh": world.get("zh", ""),
-               "start": slug(world.get("start") or next((nd for nd in world["nodes"] if not nd.get("cutaway")), world["nodes"][0])["place"]), "party": world.get("party", []), "places": places, "quests": quests,
-               **({"lang": world["lang"]} if world.get("lang") else {})}
+               "start": slug(world.get("start") or next((nd for nd in world["nodes"] if not nd.get("cutaway")), world["nodes"][0])["place"]), "party": world.get("party", []), "places": places, "quests": quests}
         (d / "region.json").write_text(json.dumps(out, ensure_ascii=False, indent=1))
         print("wrote", d)
 

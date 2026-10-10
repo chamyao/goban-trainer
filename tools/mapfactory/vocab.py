@@ -276,7 +276,7 @@ FALLBACK = {
     "prop.body_lamp": ["rock.small"],
 }
 
-# Misaeng (Book 16, tools/tk_plans_ms.py): modern Seoul in 2012, and a street in Amman. New art for all of it; until
+# Misaeng (Book 21, tools/tk_plans_ms.py): modern Seoul in 2012, and a street in Amman. New art for all of it; until
 # Graphics draws a kind, its stand-in is the nearest old one.
 KINDS.update({
     "building.office_tower": (12, 5, True),    # One International's glass tower in Jongno (drawn tall)
@@ -291,7 +291,7 @@ KINDS.update({
     "building.stone_shop": (4, 2, True),       # Amman: a café
     "building.rooftop_box": (3, 2, True),      # a roof's stairhouse and lift motor room
     "landmark.pagoda": (3, 3, True),           # Tapgol Park's pagoda in its glass case
-    "prop.car": (4, 2, True),                  # a car in the carriageway (a thing on "traffic" ground)
+    "prop.car": (4, 2, True),                  # a car in the carriageway (a thing on "asphalt" ground)
     "prop.water_tank": (2, 2, True),
     "prop.bus_stop": (3, 1, True),
     "prop.vending": (1, 1, True),
@@ -329,6 +329,9 @@ KINDS.update({
     "furn.toy_shelf": (2, 1, True),
     "furn.kid_mat": (2, 1, False),
     "furn.subway_seat": (4, 1, True),
+    "prop.glass_water": (1, 1, False),   # the board room's drinks (m17)
+    "prop.teacup": (1, 1, False),
+    "prop.coffee_cup": (1, 1, False),
 })
 FALLBACK.update({
     "building.office_tower": ["building.tower", "building.hall_grand", "building.hall"],
@@ -381,13 +384,19 @@ FALLBACK.update({
     "furn.toy_shelf": ["furn.shelf"],
     "furn.kid_mat": ["furn.rug", "furn.mat"],
     "furn.subway_seat": ["furn.bed", "furn.table"],
+    "prop.glass_water": ["furn.jar"],
+    "prop.teacup": ["furn.jar"],
+    "prop.coffee_cup": ["furn.jar"],
 })
-MATERIALS.update({"traffic": False,     # a carriageway: crossed only at a crosswalk
+MATERIALS.update({"asphalt": False,     # a carriageway: crossed only at a crosswalk
                   "crosswalk": True,
                   "barrier": False,     # the lobby's ID gates
-                  "parapet": False})    # a roof's low wall
-MATERIAL_FALLBACK.update({"traffic": ["stone", "dirt"], "crosswalk": ["road", "dirt"], "barrier": ["wall.lattice", "wall"],
-                          "parapet": ["wall"]})
+                  "parapet": False,     # a roof's low wall
+                  "carpet": True,       # an office floor: grey carpet tiles
+                  "office_tile": True,  # a lobby's polished stone tiles
+                  "lino": True})        # a Korean home's yellow vinyl floor over the ondol
+MATERIAL_FALLBACK.update({"asphalt": ["stone", "dirt"], "crosswalk": ["road", "dirt"], "barrier": ["wall.lattice", "wall"],
+                          "parapet": ["wall"], "carpet": ["stone"], "office_tile": ["stone"], "lino": ["wood"]})
 
 # people: folk.* are townsfolk drawn by the kit; hero.<id> are story
 # characters drawn by the game itself (TKArt), so every kit shows them the same.
