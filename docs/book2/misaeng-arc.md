@@ -53,7 +53,7 @@ internship (Ahn, Kim, Han) and the office learning it can't blame the parachute 
 
 **Leads.** The child Jang (m1); Jang at eighteen (m2); Jang (most); **Ahn Young-yi** (m13: she brings the glasses
 intern back to apologise and makes both schemes live, 상생, her own stretch in the comic); **Oh** (m21–m21b: the scrap,
-Go's bragging, "a secret"). Jang leads m22–m22c: the comic narrates eps 15–16 through him, and the apology is his idea. Oh's establishing episode (3) and Han's scolding at Ulsan (10) are cutaways.
+Go's bragging, "a secret"). Jang leads m22–m22c: the comic narrates eps 15–16 through him, and the apology is his idea. Oh leads his establishing episode (3, m7–m7b). Han's scolding at Ulsan (10) is a cutaway.
 
 | Key | Beat | Ep. | Lead | Place · room | Move | Board |
 |---|---|---|---|---|---|---|
@@ -62,8 +62,9 @@ Go's bragging, "a secret"). Jang leads m22–m22c: the comic narrates eps 15–1
 | m3 | **Really Quitting?**: 강호룡 and 안상기; the board put out | 2 | Jang (18) | KBA · kba-cafe | 2 | — |
 | m4 | **Washing Her Back**: the decline; GED; the sponsor's company; the army; "go and thank him" | 2 | Jang | Susaek-dong · home | 2 | — |
 | m5 | **A Light Allowed Me**: the sponsor, the 낙하산 warning; the evening city (ep 1's montage as townsfolk); the vow; the lights | 1–2 | Jang | Jongno · sponsor-office | 2 | — |
-| m6 | **A Weak Group from the Start**: oversleeping; go straight to the café | 2 | Jang | Susaek-dong · home | 2 | — |
-| m7 | **The Weight of Life** (cutaway): Oh's sons, the apology in his sleep, the hike, the 부장, "fear is rational", "are we in a position to be picky?" | 3 | — | Oh's home | 3 | — |
+| m6 | (folded into m5: the first morning is a scroll card, "The First Day") | 2 | — | — | 2 | — |
+| m7 | **The Summit**: Oh leads; the weekday hike, the forgotten 11 a.m. meeting, the department head's call; the player runs him down the trail | 3 | **Oh** | Mountain · summit | 3 | — |
+| m7b | **Fear Is Rational**: the car, the jam, "fear is rational"; a cut to the café | 3 | Oh → Jang | Mountain · car park | 3 | — |
 | m8 | **Baduk, Not Go**: the café; the buyer's quiz; Oh bursts in | 4 | Jang | Jongno · cafe | 4 | "The move that gives one stone to take more." (the snapback, as printed) |
 | m9 | **His Style**: Oh's car; the Malaysian claim (FOB); a lost trainee game; vitamins | 4 | Jang | Jongno · forecourt | 4 | "Read the man from his game." |
 | m10 | **Mentor and Buddy**: the lobby; HR: intern, PT in two months; Kim; the requisition; "special case" | 4–5 | Jang | hr | 5 | — |
@@ -81,13 +82,13 @@ Go's bragging, "a secret"). Jang leads m22–m22c: the comic narrates eps 15–1
 | m19c | **The Eye of the Storm**: asleep in a meeting room; Oh and Kim size up the pair; the heroes fade (the dream); Ahn's tornado, "insight" | 12 | Jang | meeting | 12 | — (walk to the dinner) |
 | m19d | **Not an Outsider**: three penalty glasses; part of the team; "I end today's baduk" | 12 | Jang | Jongno · hof (staging: a pork-rind place in the comic) | 12 | — |
 | m20 | **The Waybill**: Kim's rule on paper; the shredding put off; Seok-ho's glue at Jang's desk; the lobby desk; the director's kick; the roof; Oh finds the scrap glued to the waybill | 13 | Jang → Oh | sales3 | 13 | — |
-| m21 | **A Secret**: Go brags; the cabinet key; Jang takes the blame; "let's drink" | 14 | **Oh** | sales3 | 14 | Oh: "Read what Go's bragging gives away." |
+| m21 | **A Secret**: Go brags; the cabinet key. Oh links the clues on **Oh's desk** (the audit board: scrap, glue, key); m21b is gated on it | 14 | **Oh** | sales3 | 14 | the clue board (no tsumego) |
 | m21b | **His Own Glue**: "a secret"; Go's team in the street; "get your intern his own glue"; Seok-ho's sorry; his homecoming; Jang at the board | 14 | Oh → Jang | Jongno (street) | 14 | — |
 | m22 | **Their Own Baduk**: Incheon at dawn; Steve vs Kim Bu-ryeon, the thick report; Oh presses Go: dog meat | 15 | Jang | sales3 | 14 | **Record: Black 15** ("everyone plays their own baduk") |
 | m22b | **Dead Stones**: how it happened; "checkmate"; Jang scolded for laughing; give up the dead stone; Oh: humble with class; Kim Bu-ryeon has gone | 16 | Jang | sales3 | 16 | Jang: "Give up the dead stone." |
 | m22c | **The Obvious Move**: Kim Bu-ryeon got there first; "so the approvals will go faster?"; the dry sauna: "Don't touch me!" | 16 | Jang | textile | 16 | — |
 
-29 beats for 17 episodes; 17 boards (3 record boards), 12 beats without a board. Episodes 11–16 are read from the comic (`misaeng-read-ep11.md`, `misaeng-read-ep11-16.md`).
+29 beats for 17 episodes; 15 boards (3 record boards) and one clue board (m21). **Second cut (the user: "redo book 1 yourself, don't hesitate to change things")**: reading halved (323 lines, 4,947 words → 191 lines, 2,527 words); m6 folded into m5; Oh leads m7–m7b (the run down the mountain, then a cut to the café); Oh's deduction is played on the clue board; ep 0's missing ending ("he was thrown away"), the laundromat, the mother's reason and "the others changed" restored. Episodes 11–16 are read from the comic (`misaeng-read-ep11.md`, `misaeng-read-ep11-16.md`).
 
 **Reordered (staging):** episode 1 (the sponsor's evening walk, the comic's present-day frame) plays after episode 2's
 flashback, inside m5, so the story runs in time order. **Invented:** the board in m2 (the comic never shows a deciding
