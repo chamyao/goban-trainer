@@ -10,6 +10,8 @@ webtoons that we could use as a skeleton". Plot offered Misaeng, Ya Boy Kongming
 Reader's Viewpoint and court-intrigue webtoons. The user: "lets go with misaeng". On how close to stay: "faithful, this is
 for personal use". On publishing: "Im fine with pushing it to the public".
 
+**Sources (the user, later):** "It's ok to use drama as material our focus is a good experience to strictly abiding to one adaptation over another." The 2014 drama is fair material; each beat notes webtoon / drama / both.
+
 **How faithful (Plot's line, told to the user).** The webtoon's plot, characters, order and each scene's meaning are kept.
 The dialogue is Plot's own close paraphrase. Only the famous short lines are quoted (미생이네요, 모두에겐 자신만의 바둑이 있다,
 밖은 지옥이다 …), each with its Korean in this doc. No scene's dialogue is copied out whole.
@@ -53,41 +55,32 @@ internship (Ahn, Kim, Han) and the office learning it can't blame the parachute 
 
 **Leads.** The child Jang (m1); Jang at eighteen (m2); Jang (most); **Ahn Young-yi** (m13: she brings the glasses
 intern back to apologise and makes both schemes live, 상생, her own stretch in the comic); **Oh** (m21–m21b: the scrap,
-Go's bragging, "a secret"). Jang leads m22–m22c: the comic narrates eps 15–16 through him, and the apology is his idea. Oh's establishing episode (3) and Han's scolding at Ulsan (10) are cutaways.
+Go's bragging, "a secret"). Jang leads m22–m22c: the comic narrates eps 15–16 through him, and the apology is his idea. Oh leads his establishing episode (3, m7–m7b). Han's scolding at Ulsan (10) is a cutaway.
 
-| Key | Beat | Ep. | Lead | Place · room | Move | Board |
-|---|---|---|---|---|---|---|
-| m1 | **Atari**: the uncle's stones; "단수"; the class, the academy, the dojang | 0 | Jang (child) | Susaek-dong · baduk-class | 0 | "Find the atari." |
-| m2 | **Seven Years**: trainee; fails; his parents' faces; the excuses; the stones | 0 | Jang (18) | KBA · kba-trainees | 0 | Contest, **fails** (staging): one more half-point game |
-| m3 | **Really Quitting?**: 강호룡 and 안상기; the board put out | 2 | Jang (18) | KBA · kba-cafe | 2 | — |
-| m4 | **Washing Her Back**: the decline; GED; the sponsor's company; the army; "go and thank him" | 2 | Jang | Susaek-dong · home | 2 | — |
-| m5 | **A Light Allowed Me**: the sponsor, the 낙하산 warning; the evening city (ep 1's montage as townsfolk); the vow; the lights | 1–2 | Jang | Jongno · sponsor-office | 2 | — |
-| m6 | **A Weak Group from the Start**: oversleeping; go straight to the café | 2 | Jang | Susaek-dong · home | 2 | — |
-| m7 | **The Weight of Life** (cutaway): Oh's sons, the apology in his sleep, the hike, the 부장, "fear is rational", "are we in a position to be picky?" | 3 | — | Oh's home | 3 | — |
-| m8 | **Baduk, Not Go**: the café; the buyer's quiz; Oh bursts in | 4 | Jang | Jongno · cafe | 4 | "The move that gives one stone to take more." (the snapback, as printed) |
-| m9 | **His Style**: Oh's car; the Malaysian claim (FOB); a lost trainee game; vitamins | 4 | Jang | Jongno · forecourt | 4 | "Read the man from his game." |
-| m10 | **Mentor and Buddy**: the lobby; HR: intern, PT in two months; Kim; the requisition; "special case" | 4–5 | Jang | hr | 5 | — |
-| m11 | **Who Do You Think You Are?**: the folders, the mind map; "find the dud"; together, not alone | 5 | Jang | sales3 (gate: `mark:requisition`, General Affairs) | 5 | — |
-| m12 | **Secure Yourself First**: the interns' study; Ahn; 아생연후살타 | 6 | Jang → Ahn | Jongno · hof | 6 | "Secure your own stones first." |
-| m13 | **Both Live**: Ahn's apology run, her review, her pitch to Oh and Kim; 상생; the dream of white stones | 6 | **Ahn** | sales3 | 6 | Ahn: "Make both live." |
-| m14 | **The World Is Faster**: the commute; the Americas head; work from every side | 7 | Jang | sales3 (gate: three errands) | 6 | **Record: Black 7** |
-| m15 | **Whoever Comes First**: Ahn announces the PT; Kim's warning | 7 | Jang | meeting | 7 | — |
-| m16 | **Inside the Board**: Ahn's trust speech; Kim's "who reads settlement files"; "have you picked a partner?" | 8 | Jang | Jongno · forecourt (the plaza) | 8 | "See what the watchers see." |
-| m17 | **Sente**: the roof; Han picks Jang; the gossip | 9 | Jang | roof | 9 | Contest, **fails**: "Take sente." |
-| m18 | **Again!**: kinder and warmer; the text; "nuclear bomb"; "find it yourself" | 10 | Jang | sales3 | 10 | Contest, **fails**: "Hold your ground." |
-| m18b | **One More Chance** (cutaway): Han at Ulsan; "colder, more heartless" | 10 | — | Ulsan | 10 | — |
-| m19 | **Shrink the Boxes**: Han at Ulsan; the all-nighter; Oh on the messy document; Kim covers | 11 | Jang | sales3 | 10 | "Fix the document." |
-| m19b | **How Old Are You?**: the call from an empty meeting room; "Again?"; Jang takes the PT back; the age question | 11 | Jang | sales3 | 10 | **Record: Black 11**; "Take the PT back." |
-| m19c | **The Eye of the Storm**: asleep in a meeting room; Oh and Kim size up the pair; the heroes fade (the dream); Ahn's tornado, "insight" | 12 | Jang | meeting | 12 | — (walk to the dinner) |
-| m19d | **Not an Outsider**: three penalty glasses; part of the team; "I end today's baduk" | 12 | Jang | Jongno · hof (staging: a pork-rind place in the comic) | 12 | — |
-| m20 | **The Waybill**: Kim's rule on paper; the shredding put off; Seok-ho's glue at Jang's desk; the lobby desk; the director's kick; the roof; Oh finds the scrap glued to the waybill | 13 | Jang → Oh | sales3 | 13 | — |
-| m21 | **A Secret**: Go brags; the cabinet key; Jang takes the blame; "let's drink" | 14 | **Oh** | sales3 | 14 | Oh: "Read what Go's bragging gives away." |
-| m21b | **His Own Glue**: "a secret"; Go's team in the street; "get your intern his own glue"; Seok-ho's sorry; his homecoming; Jang at the board | 14 | Oh → Jang | Jongno (street) | 14 | — |
-| m22 | **Their Own Baduk**: Incheon at dawn; Steve vs Kim Bu-ryeon, the thick report; Oh presses Go: dog meat | 15 | Jang | sales3 | 14 | **Record: Black 15** ("everyone plays their own baduk") |
-| m22b | **Dead Stones**: how it happened; "checkmate"; Jang scolded for laughing; give up the dead stone; Oh: humble with class; Kim Bu-ryeon has gone | 16 | Jang | sales3 | 16 | Jang: "Give up the dead stone." |
-| m22c | **The Obvious Move**: Kim Bu-ryeon got there first; "so the approvals will go faster?"; the dry sauna: "Don't touch me!" | 16 | Jang | textile | 16 | — |
+**Third cut (the user: "roughly one beat per episode is fitting"; "Keep [Ahn] for pacing and continuity as well, input transitions that provide context when needed. Assume the player is a stranger to the story").** Built from Korean readers' discussion first (`scratchpad` notes, summarised in the playbook's R18–R19), the comic last. 20 beats for 17 episodes; 151 lines, 2,194 words. W = webtoon, D = drama.
 
-29 beats for 17 episodes; 17 boards (3 record boards), 12 beats without a board. Episodes 11–16 are read from the comic (`misaeng-read-ep11.md`, `misaeng-read-ep11-16.md`).
+| Key | Ep. | Beat | Lead | Place · room | Board |
+|---|---|---|---|---|---|
+| m1 | 0 | **Atari**: the uncle's stones, the class, the laundromat bets, the academy, the dojang | Jang (child) | Susaek-dong · baduk-class | fixed: an atari |
+| m2 | 0 | **Thrown Away**: card "Seven Years Later"; the half-point loss; the faces; the stones dropped; "thrown away" | Jang (18) | KBA · kba-trainees | endgame (fails) |
+| m4 | 2 | **Washing Her Back**: card "Years Later"; the friends, the decline, the army; "go and thank him" | Jang | Susaek-dong · home | — |
+| m5 | 1–2 | **A Light Allowed Me**: the sponsor names One International; the lights; card "The First Day" (his mother ties his tie, D); card "Meanwhile" (Oh); the call | Jang → Oh | Jongno · sponsor-office | — |
+| m7 | 3 | **Fear Is Rational**: Oh runs the trail (the clock) to the jam | **Oh** | Mountain (summit → car park) | — |
+| m8 | 4 | **Baduk, Not Go**: the café snapback; Oh bursts in; reading Oh in the car; card "Human Resources"; Kim, the requisition | Jang | Jongno · cafe | fixed: a snapback; tesuji |
+| m10 | 5 | **Who Do You Think You Are?**: the folders, the mind map, Kim's anger; "find the dud" | Jang | sales3 (gate: requisition) | — |
+| m12 | 6 | **Secure Yourself First**: the interns' bar; 아생연후살타 | Jang → Ahn | Jongno · hof | life and death |
+| m13 | 6 | **Both Live**: Ahn's apology run and her review; 상생 | **Ahn** | sales3 | life and death |
+| m14 | 7 | **The World Is Faster**: three errands; Black 7; the PT announced; Kim's warning | Jang | sales3 (gate: errands) | **Record B7** |
+| m16 | 8 | **Inside the Board**: Ahn's warning; Han's approach | Jang | Jongno · forecourt | tesuji |
+| m17 | 9 | **Sente**: the roof; Han picks Jang; the gossip | Jang | roof | endgame (fails) |
+| m18 | 10 | **Again!**: the text; the nuclear bomb; "find it yourself"; Ulsan told | Jang | sales3 | race (fails) |
+| m19 | 11 | **How Old Are You?**: Oh on the layout; the call; Black 11; the PT taken back | Jang | sales3 | **Record B11**; race |
+| m19c | 12 | **The Eye of the Storm**: the heroes fade; Ahn's tornado; card "The Team Dinner" | Jang | meeting | — |
+| m20 | 13 | **The Waybill**: the glue, the lobby, the kick; Oh finds the scrap | Jang → Oh | sales3 | — |
+| m21 | 14 | **A Secret**: Go brags; the cabinet key; Oh's clue board | **Oh** | sales3 | clue board |
+| m21b | 14 | **Our Kid**: "a secret"; "our kid took the blame" (D); Seok-ho's sorry; the baby's finger | Oh → Jang | Jongno (street) (gate: clue board) | — |
+| m22 | 15 | **Their Own Baduk**: Incheon; Steve against Kim Bu-ryeon; Black 15; dog meat | Jang | sales3 | **Record B15** |
+| m22b | 16 | **Dead Stones**: "checkmate"; give up the dead stone; Kim Bu-ryeon got there first; the sauna | Jang | sales3 | sacrifice tesuji |
 
 **Reordered (staging):** episode 1 (the sponsor's evening walk, the comic's present-day frame) plays after episode 2's
 flashback, inside m5, so the story runs in time order. **Invented:** the board in m2 (the comic never shows a deciding

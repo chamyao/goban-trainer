@@ -967,6 +967,46 @@ def _places(floors):
             "states": [{"id": "night", "light": "night"}],
         },
 
+        # Mountain (episode 3, Oh's run): a wooded hill north of Seoul on a weekday morning. The summit's rocks and its
+        # view over the city at the top; a trail switching back down the slope (the wood itself can't be walked: the
+        # run is the trail's); the car park at the bottom, Oh's car, and the road in, jammed.
+        "Mountain": {
+            "archetype": "city",
+            "plan": {
+                "grid": [12, 16], "cell": 4, "margin": 1,
+                "ground": [{"id": "slope", "kind": "hills", "rect": [0, 0, 12, 16]},
+                           {"id": "summit", "kind": "plateau", "rect": [2, 0, 8, 3]},
+                           {"id": "lookout", "kind": "plateau", "rect": [9, 6, 3, 2]},   # a lookout off the trail's bend
+                           {"id": "car-park", "kind": "city", "rect": [0, 13, 12, 2]},
+                           {"id": "road-in", "kind": "asphalt", "rect": [0, 15, 12, 1]}],
+                "lines": [
+                    # the trail: down off the summit, then four switchbacks to the car park (about 110 tiles: a run)
+                    {"id": "trail", "kind": "path", "path": [[6, 2], [6, 4], [2, 4], [2, 7], [9, 7], [9, 10], [3, 10], [3, 13]],
+                     "width": 2},
+                ],
+                "things": [
+                    {"id": "crag", "kind": "rock.crag", "rect": [7, 0, 2, 1], "label": "The summit rocks"},
+                    {"id": "rock-w", "kind": "rock.big", "rect": [2, 1, 2, 1]},
+                    {"id": "pine-s1", "kind": "tree.pine", "rect": [9, 2, 1, 1]},
+                    {"id": "bench", "kind": "prop.bench", "rect": [4, 0, 1, 1], "label": "A bench, and Seoul below"},
+                    {"id": "trail-sign", "kind": "landmark.notice", "rect": [4, 13, 1, 1], "label": "The trail map"},
+                    {"id": "oh-car", "kind": "prop.car", "rect": [6, 13, 2, 1], "label": "Oh's car"},
+                    {"id": "car-a", "kind": "prop.car", "rect": [9, 13, 2, 1]},
+                    *[{"id": f"jam-{x}", "kind": "prop.car", "rect": [x, 15, 2, 1]} for x in (0, 3, 6, 9)],
+                    {"id": "pine-c1", "kind": "tree.pine", "rect": [0, 13, 1, 1]},
+                    {"id": "pine-c2", "kind": "tree.pine", "rect": [11, 13, 1, 1]},
+                ],
+                "spots": [], "exits": [], "entries": {"": [5, 1]},
+            },
+            "states": [{"id": "morning", "light": "morning"}],
+            "npcs": [
+                # hikers, off the trail itself (on a two-tile trail they'd stand in the run's way; no challengers either)
+                _talk("folk.grandpa", [5, 1], "An old man in full hiking kit, poles and all, steps aside. “Running down? On a weekday? Young people.”"),
+                _talk("folk.ajumma", [11, 7], "A woman with a thermos and a visor. “Careful going down. The steps are wet.”"),
+                _talk("folk.salaryman", [10, 14], "A man in a suit jacket and trainers, phone to his ear, by his car. “…No, I'm at my desk. Yes. My desk.”"),
+            ],
+        },
+
         # Ulsan: a plant floor in the industrial south (a cutaway: the site department head on the phone to Seoul)
         "Ulsan": {
             "archetype": "interior",
@@ -1105,41 +1145,38 @@ def _b1():
     n = lambda key: f"node:{k(key)}"   # noqa: E731
     sales3 = "One International/sales3"
     return {
-        "keys": {f"m{i}" for i in range(1, 23)} | {"m18b", "m19b", "m19c", "m19d", "m21b", "m22b", "m22c"},
-        "places": ["Susaek-dong", "The subway", "Korea Baduk Association", "Jongno", "One International", "Oh's home", "Ulsan"],
-        "floors": ["general-affairs", "hr", "textile", "sales3", "meeting", "roof"],
+        "keys": {f"m{i}" for i in (1, 2, 4, 5, 7, 8, 10, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22)} | {"m19c", "m21b", "m22b"},
+        "places": ["Susaek-dong", "The subway", "Korea Baduk Association", "Jongno", "One International", "Mountain"],
+        "floors": ["general-affairs", "sales3", "meeting", "roof"],
         "spots": {
             "Susaek-dong/baduk-class": [{"id": "m1", "at": [6, 5], "node": k(1), "label": "The baduk class"}],
             "Korea Baduk Association/kba-trainees": [
                 {"id": "m2", "at": [3, 6], "node": k(2), "label": "The trainees' room"},
                 {"id": "kba-trainees", "at": [13, 8], "label": "The trainees' room", "note": "the handoff to Jang at eleven lands here"}],
-            "Korea Baduk Association/kba-cafe": [{"id": "m3", "at": [6, 6], "node": k(3), "label": "The café across the street"}],
-            "Susaek-dong/home": [{"id": "m4", "at": [3, 4], "node": k(4), "label": "Jang's home"},
-                                 {"id": "m6", "at": [7, 5], "node": k(6), "label": "Jang's home"}],
+            "Susaek-dong/home": [{"id": "m4", "at": [3, 4], "node": k(4), "label": "Jang's home"}],
             "Jongno/sponsor-office": [{"id": "m5", "at": [6, 5], "node": k(5), "label": "The sponsor's office"}],
-            "Oh's home": [{"id": "m7", "at": [6, 5], "node": k(7), "label": "Oh's home"}],
-            "Jongno/cafe": [{"id": "m8", "at": [5, 6], "node": k(8), "label": "A café on Jongno"}],
-            "Jongno": [{"id": "m9", "at": [13, 6], "node": k(9), "label": "The tower's forecourt"},
-                       {"id": "m16", "at": [15, 6], "node": k(16), "label": "The plaza"},
+            # m7, Oh's run (episode 3): cut to the summit, run the trail down to the car (the clock is on m7)
+            "Mountain": [{"id": "summit", "at": [4, 2], "label": "The summit", "note": "the cut to Oh lands here; the run is to m7"},
+                         {"id": "m7", "at": [7, 14], "node": k(7), "label": "Oh's car"}],
+            "Jongno/cafe": [{"id": "m8", "at": [5, 6], "node": k(8), "label": "A café on Jongno"},
+                            {"id": "cafe", "at": [10, 2], "label": "A café on Jongno", "note": "the cut to the café lands here"}],
+            "Jongno": [{"id": "m16", "at": [15, 6], "node": k(16), "label": "The plaza"},
                        # m21b: out of the hof after drinks, on the street by its door; Go's team comes up the street
                        {"id": "m21b", "at": [13, 13], "node": k("21b"), "label": "Outside the hof"}],
-            "One International/hr": [{"id": "m10", "at": [6, 4], "node": k(10), "label": "HR"}],
-            # m11's gate: Kim's requisition, handed to the clerk at General Affairs' counter
+            # m10's gate: Kim's requisition (given in m8's scene), handed to the clerk at General Affairs' counter
             "One International/general-affairs": [
-                _deliver("ga-counter", [6, 4], "General Affairs' counter", "requisition", "requisition", n(10),
+                _deliver("ga-counter", [6, 4], "General Affairs' counter", "requisition", "requisition", n(8),
                          "The clerk stamps Kim Dong-sik's requisition without reading it. “Supplies are by the lift. Sign here.”",
                          "The clerk looks up. “Requisition? You need the form. Signed.”",
                          "General Affairs has the requisition.")],
-            "Jongno/hof": [{"id": "m12", "at": [7, 6], "node": k(12), "label": "The hof"},
-                           {"id": "m19d", "at": [7, 4], "node": k("19d"), "label": "The team dinner"}],
+            "Jongno/hof": [{"id": "m12", "at": [7, 6], "node": k(12), "label": "The hof"}],
             sales3: [
                 # (every spot you walk up to here at least 76 px from every giver and delivery)
-                {"id": "m11", "at": [6, 8], "node": k(11), "label": "Jang's desk"},
+                {"id": "m10", "at": [6, 8], "node": k(10), "label": "Jang's desk"},
                 {"id": "m13", "at": [3, 9], "node": k(13), "label": "Jang's desk, at night"},
                 {"id": "m14", "at": [12, 7], "node": k(14), "label": "Sales Team 3"},
                 {"id": "m18", "at": [15, 7], "node": k(18), "label": "Sales Team 3"},
                 {"id": "m19", "at": [9, 10], "node": k(19), "label": "Sales Team 3"},
-                {"id": "m19b", "at": [11, 10], "node": k("19b"), "label": "Sales Team 3"},
                 {"id": "m20", "at": [3, 7], "node": k(20), "label": "Sales Team 3"},
                 {"id": "m21", "at": [12, 5], "node": k(21), "label": "Oh's desk"},   # Go comes over from Sales Team 1
                 {"id": "m22", "at": [8, 9], "node": k(22), "label": "Sales Team 3"},   # the 13th-floor clash (staged on 14)
@@ -1164,14 +1201,9 @@ def _b1():
                          "Coffee, trodden into the carpet. Someone said: wipe this floor.",
                          "The floor's clean. Nobody noticed.", set_down=True),
             ],
-            "One International/meeting": [{"id": "m15", "at": [6, 5], "node": k(15), "label": "A meeting room"},
-                                          {"id": "m19c", "at": [4, 4], "node": k("19c"), "label": "Asleep in a meeting room"}],
+            "One International/meeting": [{"id": "m19c", "at": [4, 4], "node": k("19c"), "label": "Asleep in a meeting room"}],
             "One International/roof": [{"id": "m17", "at": [11, 5], "node": k(17), "label": "The smokers' corner"},
                                        {"id": "roof", "at": [3, 5], "label": "The roof", "note": "handoffs to the roof land here"}],
-            "Ulsan": [{"id": "m18b", "at": [9, 7], "node": k("18b"), "label": "The plant at Ulsan"}],
-            "One International/textile": [
-                {"id": "m22c", "at": [10, 5], "node": k("22c"), "label": "Behind the partition"},   # Steve Han, Kim Bu-ryeon, Go
-                {"id": "textile", "at": [3, 6], "label": "The textile team", "note": "handoffs to the textile floor land here (6+ tiles from m22c)"}],
         },
         "things": {sales3: [{"id": "team-phone", "kind": "furn.phone", "rect": [6, 4, 1, 1], "label": "The team phone"},
                             {"id": "mop-cupboard", "kind": "furn.cleaning_cupboard", "rect": [11, 1, 1, 1], "label": "The cleaning cupboard"},
@@ -1200,11 +1232,10 @@ def _b1():
         "states": {
             "Jongno": [{"id": "day", "until": n(4), "light": "day"},
                        {"id": "evening", "when": n(4), "until": n(5), "light": "dusk"},   # m5: the evening, the sponsor's office
-                       {"id": "day2", "when": n(5), "until": n(11), "light": "day"},
-                       {"id": "night", "when": n(11), "until": n(13), "light": "night"},   # m12: the hof
+                       {"id": "day2", "when": n(5), "until": n(10), "light": "day"},
+                       {"id": "night", "when": n(10), "until": n(13), "light": "night"},   # m12 at the hof, and back to the tower
                        {"id": "day3", "when": n(13), "light": "day"},
-                       # (the last state that holds wins) the team dinner (m19d) and the street after drinks (m21b)
-                       {"id": "dinner", "when": n("19c"), "until": n("19d"), "light": "night"},
+                       # (the last state that holds wins) the street after drinks (m21b)
                        {"id": "drinks", "when": n(21), "until": n("21b"), "light": "night"}],
             "Jongno/sponsor-office": [{"id": "evening", "light": "dusk"}],
             "Jongno/hof": [{"id": "night", "light": "night"}],
@@ -1213,10 +1244,10 @@ def _b1():
                                          {"id": "dawn", "when": n(13), "until": n(14), "light": "morning"},   # m14 at dawn
                                          {"id": "day2", "when": n(14), "light": "day"}],
         },
-        # Road challengers: 8, 2 blocking, along the walks
+        # Road challengers: 7, 2 blocking, along the walks
         "challengers": {
             "The subway": [
-                _ch("commuter", "folk.salaryman", [21, 3], n(6), n(8),
+                _ch("commuter", "folk.salaryman", [21, 3], n(4), n(5),
                     "A man in a grey suit stands in the doorway with a magnetic pocket board, a problem half-solved. “Excuse me. Do you play? "
                     "I've been stuck on this since Hapjeong.”",
                     "“…Oh. Of course. Thank you. This is my stop too.”", "The man with the pocket board is on the next problem.",
@@ -1225,29 +1256,24 @@ def _b1():
                     "Crushed against the door at dawn, a woman holds a pocket board over everyone's heads. “Black to live. You look like you'd know.”",
                     "“…Of course. Thank you. I'll be thinking about that all day.”", "The woman with the pocket board is asleep on her feet."),
             ],
-            "Korea Baduk Association": [
-                _ch("cafe-trainee", "folk.kid", [9, 6], n(2), n(3),
-                    "A trainee from the room, still in his school uniform, with a pocket board. “One more? Before you go home and they ask how it went?”",
-                    "“…You'll make it next year. Probably.”", "The trainee is replaying your game, move by move.", map="kba-cafe", entry=[6, 7]),
-            ],
             "Jongno": [
                 _ch("regular-1", "folk.grandpa", [3, 5], n(4), n(5),
                     "An old man at the stone table, in the evening, waves you over without looking up. “You. You've got a player's hands. Sit.”",
                     "“Hm. Where did you learn that? Go on, then.”", "The old man is playing someone else now."),
-                _ch("regular-2", "folk.grandpa", [8, 5], n(8), n(9),
+                _ch("regular-2", "folk.grandpa", [8, 5], n(8), n(10),
                     "An old man in a flat cap sets out the stones. “A young man in a tie, at Tapgol? Sit down, it's free.”",
                     "“…Again tomorrow. Same time.”", "The old man in the flat cap is asleep on the bench."),
-                _ch("courier", "folk.salaryman", [24, 4], n(15), n(16),
+                _ch("courier", "folk.salaryman", [24, 4], n(14), n(16),
                     "A courier with a trolley of boxes parks it across the lane. “Fourteenth floor? Every one of them's the fourteenth floor. "
                     "Sit a minute. One game while the lift comes.”",
                     "“Ha! I'll take the stairs, then.”", "The courier's trolley rattles off down the lane."),
                 # the interns' study night (m12): one of them keeps the hof's door (blocking)
-                _ch("hof-door", "folk.salaryman", [11, 12], n(11), n(12),
+                _ch("hof-door", "folk.salaryman", [11, 12], n(10), n(12),
                     "An intern from the other teams leans in the hof's doorway. “The parachute. The rest of us got in on paper. "
                     "Beat me, and you can sit with us.”",
                     "“…Huh. Sit down, then. You're buying.”", "The intern at the door has gone in to his table.",
                     blocks="hof", view=1, guard="door") | {"label": "An intern at the hof's door"},
-                _ch("hof-drunk", "folk.salaryman", [11, 4], n(11), n(12),
+                _ch("hof-drunk", "folk.salaryman", [11, 4], n(10), n(12),
                     "A salaryman at the next table, his tie round his head. “Students! Interns! Play me, the loser pays!”",
                     "“…Bah. Barman! Their table's on me.”", "The salaryman is asleep on his arms.", map="hof", entry=[7, 6]),
             ],
@@ -1255,31 +1281,24 @@ def _b1():
         "objectives": {
             k(1): ("Susaek-dong", "The baduk class down the road."),
             k(2): ("Korea Baduk Association", "The trainees' room. This game decides everything."),
-            k(3): ("Korea Baduk Association", "The café across the street."),
             k(4): ("Susaek-dong", "Go home."),
             k(5): ("Jongno", "Go to the sponsor's office, on the lane behind Jongno's shops."),
-            k(6): ("Susaek-dong", "Go home."),
+            k(7): ("Mountain", "Run down the trail to the car. The deal won't wait."),
             k(8): ("Jongno", "The buyer is waiting at a café on Jongno."),
-            k(9): ("Jongno", "The forecourt of One International."),
-            k(10): ("One International", "HR, on the fifth floor. Take the lift."),
-            k(11): ("One International", "Back to your desk in Sales Team 3."),
+            k(10): ("One International", "Your desk in Sales Team 3, fourteenth floor. Take the lift."),
             k(12): ("Jongno", "The interns' study night, at the hof in Pimatgol."),
             k(13): ("One International", "Your desk, Sales Team 3."),
             k(14): ("One International", "Sales Team 3."),
-            k(15): ("One International", "The meeting room, fifteenth floor."),
             k(16): ("Jongno", "Out on the plaza in front of the tower."),
             k(17): ("One International", "Go up to the roof."),
             k(18): ("One International", "Back to Sales Team 3."),
             k(19): ("One International", "Sales Team 3."),
-            k("19b"): ("One International", "Sales Team 3."),
             k("19c"): ("One International", "The meeting room, fifteenth floor."),
-            k("19d"): ("Jongno", "The team dinner, at the hof."),
             k(20): ("One International", "Back to Sales Team 3."),
             k(21): ("One International", "Oh's desk, Sales Team 3."),
             k("21b"): ("Jongno", "Out on the street by the hof."),
             k(22): ("One International", "Back to Sales Team 3."),
             k("22b"): ("One International", "Sales Team 3's table."),
-            k("22c"): ("One International", "The textile team's floor, eighth. Kim Bu-ryeon has gone to Steve Han."),
         },
     }
 

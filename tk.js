@@ -161,6 +161,7 @@ const TK_CHARS = {
   ms_jang_young: { name: "Jang Geu-rae", skin: "#f2d2b0", hair: "#1e1a1e", hat: "fringe", robe: "#8a8e96", trim: "#7a7e86", legs: "#3a4a6a", beard: "none", eyes: "normal" },   // m1, a trainee at eighteen: a grey hoodie and jeans
   ms_mother: { name: "Jang Geu-rae's mother", skin: "#ecc8a4", hair: "#4a4448", hat: "perm", robe: "#8a6a7a", trim: "#e8dcc8", legs: "#4a4a5a", beard: "none", eyes: "kind" },
   ms_oh: { name: "Oh Sang-sik", skin: "#e8c09a", hair: "#241e22", hat: "messy", robe: "#e4e6ea", trim: "#2a2228", tie: "#8a2a2a", legs: "#3a3e4a", beard: "stubble", eyes: "wild" },   // red-eyed, shirtsleeves, tie loosened
+  ms_oh_hike: { name: "Oh Sang-sik", skin: "#e8c09a", hair: "#241e22", hat: "messy", robe: "#c8502a", trim: "#3a3e46", legs: "#4a4e56", beard: "stubble", eyes: "wild" },   // m7: hiking jacket and trousers on the mountain
   ms_kimds: { name: "Kim Dong-sik", skin: "#f0cfac", hair: "#2e2426", hat: "curly", robe: "#c8d8ea", trim: "#3a3236", tie: "#2e3a5a", legs: "#4a4e5a", beard: "none", eyes: "kind" },
   ms_cheon: { name: "Cheon Gwan-ung", skin: "#e2b089", hair: "#2a2024", hat: "short", robe: "#5a5e66", trim: "#5a5e66", shirt: "#eef0f2", tie: "#6a5a3a", legs: "#44474e", beard: "none", eyes: "narrow", fat: true },
   ms_park: { name: "Park Jong-sik", skin: "#efc59d", hair: "#1a1416", hat: "slick", robe: "#6a6a74", trim: "#6a6a74", shirt: "#f0d8dc", tie: "#8a2a5a", legs: "#55555e", beard: "none", eyes: "narrow" },
@@ -769,7 +770,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) { this.data = await (await fetch("data/tk.json?v=109")).json(); this.migrate(); }
+    if (!this.data) { this.data = await (await fetch("data/tk.json?v=110")).json(); this.migrate(); }
     return this.data;
   },
   // A book whose beats were renumbered after players began it: their cleared beats moved to the new keys, once per
@@ -798,11 +799,12 @@ const TK = {
 
   // Misaeng Book 1 rewritten from the comic: m1-m22 are different scenes now, so an old save starts the book over, once
   // (as Start over does: beats, scenes seen, place and things in world 21). v3: episodes 12-16 read too (m19c-m22c),
-  // m20-m22 different scenes again, the user taking that second start-over to have the book live sooner
+  // m20-m22 different scenes again, the user taking that second start-over to have the book live sooner. v4: Plot's
+  // second cut (m6 folded into m5, m7 Oh's own run). v5: one beat an episode (the user), 20 beats, m3 m9 m11 m15 … gone
   migrate21() {
     const p = loadProgress(), m = p.tkMig || (p.tkMig = {});
-    if ((m[21] || 0) >= 3) return;
-    m[21] = 3;
+    if ((m[21] || 0) >= 5) return;
+    m[21] = 5;
     if (Object.keys(p.tk || {}).some(k => k.startsWith("21-"))) {
       for (const k of Object.keys(p.tk)) if (k.startsWith("21-")) this.undoCleared(p, k);
       for (const k of Object.keys(p.tkSeen || {})) if (k.startsWith("21:")) delete p.tkSeen[k];

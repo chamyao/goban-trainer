@@ -336,14 +336,6 @@
      "to": "one-international--general-affairs"
     },
     {
-     "label": "5F · HR",
-     "to": "one-international--hr"
-    },
-    {
-     "label": "8F · The textile team",
-     "to": "one-international--textile"
-    },
-    {
      "label": "14F · Sales Team 3",
      "to": "one-international--sales3"
     },
@@ -359,10 +351,10 @@
    "use": "lift"
   },
   {
-   "id": "m11",
+   "id": "m10",
    "x": 12.5,
    "y": 16.7,
-   "node": "21-m11",
+   "node": "21-m10",
    "label": "Jang's desk"
   },
   {
@@ -391,13 +383,6 @@
    "x": 18.5,
    "y": 20.7,
    "node": "21-m19",
-   "label": "Sales Team 3"
-  },
-  {
-   "id": "m19b",
-   "x": 22.5,
-   "y": 20.7,
-   "node": "21-m19b",
    "label": "Sales Team 3"
   },
   {
@@ -587,14 +572,6 @@
    21
   ],
   "one-international--general-affairs": [
-   14,
-   20
-  ],
-  "one-international--hr": [
-   14,
-   20
-  ],
-  "one-international--textile": [
    14,
    20
   ],
