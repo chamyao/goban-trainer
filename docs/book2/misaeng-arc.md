@@ -127,8 +127,9 @@ Ahn leads 2 beats, Sun 1 and a cutaway, Oh 4 (with m3 and m23 shared). Boards: 5
 
 1. **Span:** all of Season 1, one book, because the frame only lands at move 145. If it runs too long, split after m14
    (Park's fall, Oh promoted): Book A "Not Yet Alive" (m1–m14), Book B "Move 145" (m15–m24).
-2. **Language:** English, with modern simplified Chinese as the second language like Book 4, since the engine shows
-   en+zh. The source's Korean stays in this doc, and the title word **미생 / 未生** is shown in both scripts at m9.
+2. **Language: English only.** The user: "we dont need chinese lines for this". No Chinese lines, titles, goals or item
+   names. The source's Korean stays in this doc. The game's checker and engine expect Chinese for every line today, so
+   this needs an engine change (engine request 5), not a workaround in data.
 3. **What's left out:** Steve Han and the dog-meat lunch (15–16수), Baek-gi's steel-team stretch (35–36, 75–76),
    Han's 시말서 (100–102), Park Jong-gi's second turn (124–126). Each is a side story with its own lead; each can come
    back as a townsperson's line (C2).
@@ -191,5 +192,7 @@ room at Chuseok), `ms_hell` (Kim Dong-su's empty pizza shop), `ms_roof_ahn` (Ahn
 2. **The audit board** (mechanic 2): clue items that link in pairs on a board, with a beat gated on all links.
 3. **The trade loop** (mechanic 3): money, stock, buying from a shop, offering to townsfolk; a scripted rival seller.
 4. **Room setup** (mechanic 4): place props on marked spots from notes; a beat gated on all placed correctly.
-5. **A modern world**: a new world (n to be set by Integration), its scroll titles in the webtoon's volume names (착수,
+5. **An English-only world** (decision 2): a world flag (e.g. `"lang": "en"`) under which `check_story` doesn't ask for
+   Chinese, items need no `zh`, the game shows the English in either language setting, and voices are the English ones.
+6. **A modern world**: a new world (n to be set by Integration), its scroll titles in the webtoon's volume names (착수,
    도전, 기풍, 정수, 요석, 봉수, 난국, 사활, 종국).
