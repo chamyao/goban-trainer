@@ -98,69 +98,62 @@ def _room(grid, door, label, **kw):
     return room(grid, door, **kw) | {"label": label}
 
 
-# The watching layer (design.md, "Read the room"): before a board, the people in the room each give a cue. Plot's
-# ROOM_CUES (redchamber/book1/story.py, 216a5cf), placed: (beat, who, the cell in the beat's room or place, facing,
-# the line). Each stands there while the beat is the open one (from the beat before it until it is won), so a room's
-# board spots wait for a tap ("trigger": "talk"): she can look about her first. The cutscene hides them, and they go
-# when the beat is won.
+# The watching layer (design.md, "Read the room"): before a board, the people in the room each give a cue, and the
+# Watch button (tk-world.js watchRoom) pans to each by its cast id. The cues are Plot's ROOM_CUES (redchamber/book1/
+# story.py), read from there; what is ours is where each one stands: (beat, who, the n-th of that who in the beat) ->
+# (cell in the beat's room or place, facing). Each stands there while the beat is the open one (from the beat before
+# it until it is won), so a room's board spots wait for a tap ("trigger": "talk"): she can look about her first. The
+# cutscene hides them, and they go when the beat is won. In g4-g6 the scenes bring Zhou Rui's wife on themselves, so
+# she has no stand-in there (Integration, Plot).
 PREV = {"d2": "d1", "d3": "d2", "d4": "d3", "d5": "d4", "d6a": "d5", "d6": "d6a", "d7": "d6", "d8": "d7",
         "g1": "d8", "g2": "g1", "g3": "g2", "g4": "g3", "g5": "g4", "g6": "g5", "g7": "g6"}
-# Where each cue-giver stands: (beat, who) -> (the cell in the beat's room or place, facing). Their lines are Plot's own
-# ROOM_CUES, read from the story (a cue-giver with several cues says the first when talked to; the Watch button,
-# tk-world.js watchRoom, gives them all).
-CUE_AT = {
-    ("d2", "jmmaid"): ([3, 7], "E"),
-    ("d2", "laomama"): ([13, 7], "W"),
-    ("d3", "tanchun"): ([14, 5], "W"),
-    ("d3", "jmmaid"): ([3, 4], "E"),
-    ("d4", "laomama"): ([8, 5], "W"),
-    ("d5", "laomama"): ([9, 7], "E"),
-    ("d5", "jmmaid"): ([15, 6], "W"),
-    ("d6", "liwan"): ([14, 4], "W"),
-    ("d6", "jmmaid"): ([6, 3], "E"),
-    ("d7", "tanchun"): ([15, 7], "W"),
-    ("d7", "jmmaid"): ([4, 8], "E"),
-    ("g2", "oldservant"): ([9, 11], "W"),
-    ("g3", "backchild"): ([13, 1], "W"),
-    ("g4", "zhouruijia"): ([7, 2], "W"),
-    ("g5", "zhouruijia"): ([4, 5], "E"),
-    ("g6", "zhouruijia"): ([10, 5], "W"),
+STANDS = {
+    ("d2", "jmmaid", 0): ([3, 7], "E"), ("d2", "laomama", 0): ([13, 7], "W"),
+    ("d3", "tanchun", 0): ([14, 5], "W"), ("d3", "jmmaid", 0): ([3, 4], "E"),
+    ("d4", "laomama", 0): ([8, 5], "W"),
+    ("d5", "laomama", 0): ([9, 7], "E"), ("d5", "jmmaid", 0): ([15, 6], "W"), ("d5", "jmmaid", 1): ([19, 5], "W"),
+    ("d5", "laomama", 1): ([16, 3], "E"),          # (wait) in the east-corridor room, by Lady Wang's kang
+    ("d6", "liwan", 0): ([14, 4], "W"), ("d6", "jmmaid", 0): ([6, 3], "E"),
+    ("d7", "tanchun", 0): ([15, 7], "W"), ("d7", "jmmaid", 0): ([4, 8], "E"),
+    ("g2", "oldservant", 0): ([9, 11], "W"), ("g3", "backchild", 0): ([13, 1], "W"),
 }
+USED, STOOD = set(), set()   # the stands looked at, and the cues that took one: a stand no cue takes is stale
+SCENE_CAST = {("g4", "zhouruijia"), ("g5", "zhouruijia"), ("g6", "zhouruijia")}   # the scene's own copy serves
+ROOM_OF = {"d2": "jm-rooms", "d3": "jm-rooms", "d6": "jm-rooms", "d7": "jm-rooms", "d4": "xing-hall", "d5": "wf-rooms",
+           "g4": "zhou-house", "g5": "xf-eastroom", "g6": "xf-rooms", "g2": None, "g3": None}
 
 
 def _story():
     import importlib.util
     name = "redchamber_book1_story"
     if name not in sys.modules:
-        spec = importlib.util.spec_from_file_location(name, Path(__file__).with_name("story.py"))
-        mod = importlib.util.module_from_spec(spec)
-        sys.modules[name] = mod
-        spec.loader.exec_module(mod)
+        spec = importlib.util.spec_from_file_location(name, Path(__file__).resolve().parent / "story.py")
+        sys.modules[name] = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(sys.modules[name])
     return sys.modules[name]
 
 
-def _cues():
-    rc = _story().ROOM_CUES
-    out = []
-    for (k, who), (at, face) in CUE_AT.items():
-        said = [c["say"] for c in rc.get(k, []) if c["who"] == who]
-        if said:
-            out.append((k, who, at, face, said[0]))
-    missing = [(k, c["who"]) for k, cs in rc.items() for c in cs if (k, c["who"]) not in CUE_AT]
-    if missing:
-        raise SystemExit(f"redchamber/book1/plans.py: no place in CUE_AT for the cue-givers {missing}")
-    return out
-
-
-ROOM_OF = {"d2": "jm-rooms", "d3": "jm-rooms", "d6": "jm-rooms", "d7": "jm-rooms", "d4": "xing-hall", "d5": "wf-rooms",
-           "g4": "zhou-house", "g5": "xf-eastroom", "g6": "xf-rooms", "g2": None, "g3": None}
-
-
 def cues(place_keys):
-    """The cue-givers of the beats in place_keys, as plan npcs: a cast member saying their line, while the beat is open."""
-    return [{"kind": f"hero.{who}", **({"place": ROOM_OF[k]} if ROOM_OF[k] else {}), "at": at, "face": face,
-             "say": [[who, line]], "when": f"node:{PREV[k]}", "until": f"node:{k}"}
-            for k, who, at, face, line in _cues() if k in place_keys]
+    """The cue-givers of the beats in place_keys, as plan npcs: a cast member (kind hero.<who>) with their line, while
+    the beat is open. Every cue in ROOM_CUES must have a place to stand, or be the scene's own."""
+    out = []
+    USED.update((k, w, i) for k, w, i in STANDS if k in place_keys)
+    for k, cs in _story().ROOM_CUES.items():
+        if k not in place_keys:
+            continue
+        seen = {}
+        for c in cs:
+            who = c["who"]
+            i = seen[who] = seen.get(who, -1) + 1
+            if (k, who) in SCENE_CAST:
+                continue
+            STOOD.add((k, who, i))
+            if (k, who, i) not in STANDS:
+                raise SystemExit(f"plans: ROOM_CUES {k} has {who} (#{i + 1}) with nowhere to stand: add them to STANDS")
+            at, face = STANDS[(k, who, i)]
+            out.append({"kind": f"hero.{who}", **({"place": ROOM_OF[k]} if ROOM_OF[k] else {}), "at": at, "face": face,
+                        "say": [[who, c["say"]]], "when": f"node:{PREV[k]}", "until": f"node:{k}"})
+    return out
 
 
 # =========================================================================================================== the house
@@ -591,8 +584,11 @@ STREET["challengers"] = [
 ]
 
 RONG["npcs"] += cues({"d2", "d3", "d5", "d6", "d7", "g4", "g5", "g6"})
+
 XING["npcs"] += cues({"d4"})
 STREET["npcs"] += cues({"g2", "g3"})
+if set(STANDS) - STOOD:
+    raise SystemExit(f"plans: STANDS for cues ROOM_CUES no longer has: {sorted(set(STANDS) - STOOD)}")
 
 PLANS_HLM1 = {
     "The Rong Mansion": RONG,

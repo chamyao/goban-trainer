@@ -47,7 +47,7 @@ Where each book's places are:
 | 14 (Lü Bu) | `tools/tk_plans_lb.py` | `--world 14 --plans lb` | `tools/proofs/hide_ward_lb.py` | the burning ward, Xiapi |
 | 15 (Lady Sun) | `tools/tk_plans_ls.py` | `--world 15 --plans 15` | `tools/proofs/ladysun_ls.py` | design: `docs/book2/ladysun-places.md`; engine walk: `tests/playtest/book15-places.js` |
 | 90 (Claude's study) | `tools/tk_plans_w90.py` | `plans.py --world 90 --out data/tk_maps/w90` | — | one room |
-| 20 (Red Chamber 1) | `redchamber/book1/plans.py` | `redchamber/tools/build_places.sh` (`--world 20 --plans hlm1`) | `redchamber/book1/proofs.py` | Dream of the Red Chamber, kept apart from the tk books; story `redchamber/book1/story.py` (Plot alt); engine walk `tests/playtest/redchamber-places.js`; world number pending Integration |
+| 31 (Red Chamber 1) | `redchamber/book1/plans.py` | `redchamber/tools/build_places.sh` (`--world 31 --plans hlm1`) | `redchamber/book1/proofs.py` | Dream of the Red Chamber, kept apart from the tk books. Its own family of sessions: Plot alt (story `redchamber/book1/story.py`), Integration (daughter) session_01PBpYgcfzV9sDVfFRALhiCb on `claude/integration-redchamber` (registers the world; base the branch on it), Graphics (daughter) session_018yKP3XDohUzg77y3MHJW73. Cues: `ROOM_CUES` read from the story, stands in the plans. Engine walk `tests/playtest/redchamber-places.js` |
 
 A new arc is registered in `plans.py`: `ARCS` (book → arc name), `key_prefix` (the beat keys' book number: Book 15's
 keys are `4-s1`…), `load()` (its module), and in `check_plans_w2.py` (`--arc`).
@@ -278,11 +278,10 @@ both branches together.
 If you replace a line, its old Chinese must stay until the maps carrying it are rebuilt: `build_tk.py` checks every
 line in the built maps. (Or patch the line in `data/tk_maps/w<n>` first.)
 
-Red Chamber's story is on Plot alt's branch (`claude/plot-alt`), in `redchamber/`, and isn't registered in
-`tools/tk_story.py` yet. `redchamber/tools/build_places.sh [world]` registers it for the build only (appends WORLD_HLM1 to
-`tk_story.py`, its ZH, CAST and the plans' `ZH_PLACES_HLM1` to `tk_story_zh.py`), builds, compiles and stages, undoes
-drift and puts both files and `tk.json` back; `--playtest` registers it and runs `tests/playtest/redchamber-places.js`
-instead. It borrows `redchamber/book1/story.py` from `origin/claude/plot-alt` when it isn't in the tree.
+Red Chamber's world (31) is registered by its own Integration on `claude/integration-redchamber`; base
+`claude/places-redchamber` on that branch, not on `claude/plot-places`. `redchamber/tools/build_places.sh` builds,
+compiles, stages and undoes drift; until registration merges the plans' Chinese (`ZH_PLACES_HLM1`) it merges it for the
+run and puts `tools/tk_story.py` back. `--playtest` walks `tests/playtest/redchamber-places.js`.
 
 ## Drift
 

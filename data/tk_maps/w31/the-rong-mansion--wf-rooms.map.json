@@ -211,6 +211,36 @@
    "until": "31-d5",
    "face": "W",
    "when": "node:d4"
+  },
+  {
+   "id": "npc-3",
+   "kind": "hero.jmmaid",
+   "x": 38.5,
+   "y": 10.9,
+   "say": [
+    [
+     "jmmaid",
+     "The mistress smiles when she talks about him. Everyone does."
+    ]
+   ],
+   "until": "31-d5",
+   "face": "W",
+   "when": "node:d4"
+  },
+  {
+   "id": "npc-4",
+   "kind": "hero.laomama",
+   "x": 32.5,
+   "y": 6.9,
+   "say": [
+    [
+     "laomama",
+     "Look: the mistress is waving you over to the east side, where the back-rest is."
+    ]
+   ],
+   "until": "31-d5",
+   "face": "E",
+   "when": "node:d4"
   }
  ],
  "exits": [

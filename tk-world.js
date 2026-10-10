@@ -1127,7 +1127,10 @@ function worldScenes() {
       cam.stopFollow();
       const next = i => {
         if (i >= looks.length) { cam.pan(this.player.x, this.player.y, 250); this.time.delayedCall(260, () => cam.startFollow(this.player, true, .15, .15)); return; }
-        const L = looks[i], who = L.line[0] === "say" && L.line[1], npc = who && this.npcs.find(x => x.who === who && x.spr.visible);
+        const L = looks[i], who = L.line[0] === "say" && L.line[1];
+        // the k-th cue of a who is given by the k-th of them standing here (two maids, each with her line), else the first
+        const k = looks.slice(0, i).filter(x => x.line[0] === "say" && x.line[1] === who).length, them = who ? this.npcs.filter(x => x.who === who && x.spr.visible) : [];
+        const npc = them[k] || them[0];
         if (npc) { const v = this.view(npc.spr.x, npc.spr.y); cam.pan(v.x, v.y, 300); }
         this.time.delayedCall(npc ? 320 : 0, () => this.ui.dialog([L.line], () => next(i + 1), "chat"));
       };
