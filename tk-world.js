@@ -41,7 +41,7 @@ const WorldData = {
     }
     return this.regions[n];
   },
-  has(n) { return (n >= 1 && n <= 3) || (n >= 12 && n <= 15) || n === 90; },   // (21, Misaeng, joins once its maps are built; till then it plays on the node map)  // worlds whose places have been built (12: Book 2; 13: the Cao Cao arc, a test book; 90: the study where you talk with Claude)
+  has(n) { return (n >= 1 && n <= 3) || (n >= 12 && n <= 15) || n === 21 || n === 90; },   // 21: Misaeng  // worlds whose places have been built (12: Book 2; 13: the Cao Cao arc, a test book; 90: the study where you talk with Claude)
   // "1-zhuo-county-c-elder": a challenger in a place, drawing from the world's problems.
   node(w, key) {
     const region = this.regions[w.n];
@@ -344,7 +344,7 @@ function worldScenes() {
 
       const P = o => Object.fromEntries((o.properties || []).map(p => [p.name, p.value]));
       const J = v => { try { return JSON.parse(v || "[]"); } catch { return []; } };
-      this.covers = []; this.lastCover = null; this.hidden = false; this.hideTold = false; this.toldProps = [];
+      this.covers = []; this.lastCover = null; this.hidden = false; this.hideTold = false; this.toldProps = []; this.whenProps = [];
       this.spots = {}; this.npcs = []; this.actMarks = new Map(); this.exits = []; this.propBoxes = []; this.entries = {}; this.shrine = null;
       for (const o of map.getObjectLayer("objects").objects) {
         const p = P(o);
@@ -354,7 +354,8 @@ function worldScenes() {
           ...(p.needs ? { needs: J(p.needs), delivers: p.delivers || o.name, when: p.when || "", empty: J(p.empty), waiting: J(p.waiting), call: J(p.call),
                           deliver: J(p.deliver), delivered: J(p.delivered) } : {}),
           sight: p.sight ? JSON.parse(p.sight) : null, fires: p.fires || "",
-          opens: p.opens || "", takes: !!p.takes, floors: p.floors ? JSON.parse(p.floors) : null };   // Misaeng (tk-modern.js): a spot that opens the audit board; a delivery that takes the thing   // a sight puzzle: it plays once one watcher sees you and another doesn't
+          opens: p.opens || "", takes: !!p.takes, floors: p.floors ? JSON.parse(p.floors) : null,
+          ...(p.gives ? { gives: p.gives, givesWhen: p.gives_when || "", give: J(p.give), given: J(p.given) } : {}) };   // a thing that gives an item when searched (Misaeng: the lobby's bins)   // Misaeng (tk-modern.js): a spot that opens the audit board; a delivery that takes the thing   // a sight puzzle: it plays once one watcher sees you and another doesn't
         else if (o.type === "npc") this.addNpc(o, p, J);
         else if (o.type === "exit") this.exits.push({ to: p.to, side: p.side, rect: new Phaser.Geom.Rectangle(o.x, o.y, o.width, o.height),
           openTo: p.open_to ? JSON.parse(p.open_to) : null, refuse: J(p.refuse) });
@@ -683,6 +684,7 @@ function worldScenes() {
       if (zone && p.kind !== "wall.lattice") (this.sightZones = this.sightZones || []).push(zone);   // what blocks a watcher's sight (a lattice doesn't)
       if (p.in) this.stated.push({ img, zone, in: JSON.parse(p.in) });
       if (p.told && img) (this.toldProps = this.toldProps || []).push({ img, id: p.told });   // red hangings: once that person has the news
+      if (p.when && img) { (this.whenProps = this.whenProps || []).push({ img, when: p.when }); img.setVisible(this.cond(p.when)); }   // shown once the story's condition holds (Misaeng: a drink set at its seat)
       if (p.ref) (this.refs = this.refs || {})[p.ref] = { x: o.x, y: o.y - (p.fh || 0) / 2 };
       if (/^(lamp\.|prop\.lantern|camp\.(firepit|cookfire)|landmark\.(torch|brazier)|ruin\.burning|furn\.(lamp|hearth))/.test(p.kind || "")) (this.lights = this.lights || []).push({ x: o.x, y: o.y - (p.fh || 16) / 2, kind: p.kind, img });   // shown only in some of the map's states
     }
@@ -934,6 +936,7 @@ function worldScenes() {
         if (n.mark) n.mark.setVisible(on && !TK.cleared(n.challenge));   // a challenger not here yet has no "!" either
       }
       for (const g of this.shutGates || []) { const on = !!(st && st.ids.includes(g.state)); g.zone.body.enable = on; g.on = on; }
+      for (const o of this.whenProps || []) o.img.setVisible(this.cond(o.when));
       for (const w of this.waters || []) if (w.ids) { w.on = !!(st && w.ids.some(i => st.ids.includes(i))); if (!this.iso) w.layer.setVisible(w.on); }
       for (const o of this.stated || []) {
         const on = !!(st && o.in.some(i => st.ids.includes(i)));
@@ -984,7 +987,30 @@ function worldScenes() {
       // a road is open once two of the places it joins are: the Meiwu Road, with nothing of its own until A13a,
       // still carries Li Su from Chang'an to Meiwu for A13
       const p = this.region.places.find(x => x.id === id);
-      return !!(p && p.archetype === "road" && (p.links || []).filter(l => direct(l)).length >= 2);
+      if (p && p.archetype === "road" && (p.links || []).filter(l => direct(l)).length >= 2) return true;
+      return this.onTheWay(id);
+    }
+    // A world with "open_ways" (Misaeng: home to the subway to Jongno to the tower): a place on the way from here to the
+    // next beat's place is open, though nothing happens there, so the lead can get to work
+    onTheWay(id) {
+      if (!this.w.open_ways) return false;
+      const P = this.region.places, top = x => { const r = P.find(q => q.id === x); return r && r.parent ? top(r.parent) : x; };
+      const q = this.nextMain(), goal = q && this.available(q) ? top(q.place) : null, from = top(this.placeId);
+      if (!goal || goal === from) return false;
+      const key = `${from}>${goal}`;
+      if (!this.ways || this.ways.key !== key) {   // breadth-first over the places' links (top level), every shortest way
+        const tops = new Set(P.filter(x => !x.parent).map(x => x.id)), dist = { [from]: 0 }, order = [from];
+        for (let i = 0; i < order.length; i++) for (const l of (P.find(x => x.id === order[i]) || {}).links || [])
+          if (tops.has(l) && !(l in dist)) { dist[l] = dist[order[i]] + 1; order.push(l); }
+        const on = new Set();
+        if (goal in dist) {
+          const back = [goal];
+          while (back.length) { const x = back.pop(); if (on.has(x)) continue; on.add(x);
+            for (const l of (P.find(y => y.id === x) || {}).links || []) if (dist[l] === dist[x] - 1) back.push(l); }
+        }
+        this.ways = { key, on };
+      }
+      return this.ways.on.has(id);
     }
     // a place, or a building in it (the county office is in Zhuo County)
     placeIn(place, id) {
@@ -1062,6 +1088,8 @@ function worldScenes() {
         if (n.gives && n.spr.visible && this.cond(n.givesWhen) && !WorldItems.has(this.w, n.gives)) want.set(n.spr, n.spr), n.spr.tkCall = n.call;
       for (const s of Object.values(this.spots || {}))
         if (s.needs && this.cond(s.when) && this.cond(s.needs) && !WorldMarks.has(this.w, s.delivers)) want.set(s, s), s.tkCall = s.call;
+      for (const s of Object.values(this.spots || {}))   // a thing with something in it to find, once there's a reason to look
+        if (s.gives && this.cond(s.givesWhen) && !WorldItems.has(this.w, s.gives)) want.set(s, s);
       for (const [k, m] of this.actMarks) if (!want.has(k)) { m.ev.remove(); this.actMarks.delete(k); }
       for (const [k, t] of want) {
         if (this.actMarks.has(k)) continue;
@@ -1986,6 +2014,9 @@ function worldScenes() {
       const spot = this.spots[t.k];
       if (t.k === "claude" && this.opts.onTalkTo) return this.opts.onTalkTo(this, null);   // the rug before Claude's desk
       if (spot.use === "ogs") return TKTable.sit(this, t.k);   // the travellers' go table (tk-table.js)
+      // a thing that gives an item (the lobby's bins, the audit room's table): found first, then whatever else it does
+      if (spot.gives && this.cond(spot.givesWhen) && !WorldItems.has(this.w, spot.gives) && this.w.items && this.w.items[spot.gives])
+        return this.talk(worldLines(spot.give.length ? spot.give : [["n", `${spot.label || "Here"}.`]]), () => { WorldItems.gain(this, spot.gives); this.refreshStory(); this.setGoal(); });
       if (spot.opens === "audit" && typeof WorldModern !== "undefined" && WorldModern.audit(this)) return;   // Misaeng's audit board
       if (spot.use === "lift" && typeof WorldModern !== "undefined" && WorldModern.lift(this, spot)) return;   // a lift: pick a floor (Misaeng's tower)
       if (spot.needs) return this.deliverAt(spot);
