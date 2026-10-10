@@ -259,6 +259,14 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       if (!errand && /isn't open yet|还没有开通|barred|不为你开|not open|turns you away|No one goes|receives no one/i.test(s.line)) refused = `refused: "${s.line.slice(0, 90)}"`; }
     if (s.cancel) { await p.getByText('Cancel', { exact: true }).first()[TAPM]().catch(() => {}); continue; }
     if (s.scroll) { await tapEl('.tk-scroll-go'); await p.waitForTimeout(300); continue; }
+    // a beat waiting on the audit board's mark (Misaeng): open it from the bag, as its objective says ("open Oh's desk from the bag")
+    const auditWait = await p.evaluate(() => { const S = window.__w, w = S && S.w; if (!w || !w.audit || !S.player || S.ui.busy() || S.cine || document.querySelector('.tk-audit, .tk-bag')) return false;
+      const q = S.nextMain(), g = q && S.gateFor && S.gateFor(q); if (!g || ![].concat(g.needs || []).includes('mark:' + w.audit.done) || S.cond('mark:' + w.audit.done)) return false;
+      return typeof WorldModern !== 'undefined' && WorldModern.auditOpen(w); });
+    if (auditWait) { console.log(`     ${beat}: gated on the audit board; opening it from the bag`);
+      const bag = p.locator('button', { hasText: /Bag/ }).filter({ hasNot: p.locator('.tk-bag') }).first(); await bag[TAPM]({ timeout: 2000 }).catch(() => {}); await p.waitForTimeout(400);
+      if (await p.locator('.tk-bag-audit').count()) await tapEl('.tk-bag-audit'); else { console.log(`FAIL ${beat}: the bag offers no audit board`); await p.keyboard.press('Escape'); }
+      await p.waitForTimeout(500); continue; }
     // the audit board (Misaeng, tk-modern.js): tap the two clues that answer the question showing, as a player who reads them does;
     // when every link is made (or the board has nothing to link yet), close it
     const audit = await p.evaluate(() => { const el = document.querySelector('.tk-audit'); if (!el || !el.getClientRects().length) return null;
