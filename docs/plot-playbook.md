@@ -44,7 +44,7 @@ takes one compelling story inside the novel and builds itself around it. A good 
 The Diaochan arc brought stealth (Diaochan moving unseen through Dong Zhuo's residence). The Cao Cao arc brought no new
 mechanic: only cosmetic touches (fireflies on the route light, a led horse, a crouch pose). That was a miss. Every arc
 should introduce at least one new way to play, and it should come out of the narrative itself, the way stealth came out
-of a spy who must not be seen. Design it with the arc, not after, and send it to Integration and Places with the design.
+of Diaochan having to stay unseen. Design it with the arc, not after, and send it to Integration and Places with the design.
 
 A new mechanic does not have to involve go:
 
@@ -342,7 +342,7 @@ Plot does **not** choose problems, record voices, paint, or build maps.
 - An errand with several steps gets one objective per step, each gated on its own item. A single gate on the last item
   made Wukong point at the wrong person.
 - A character's motive must be in their own words in the scene (Diaochan's debt to Wang Yun). Otherwise the player only
-  sees things happen to them.
+  sees her being handed between men.
 
 ### R12. Research the genre, then check fit against the text
 
@@ -390,9 +390,8 @@ Draft one arc, get it playable in a test book, and fix what the playtest shows b
 
 Plot's own reading of why: partly the arc (no one on our side is ever in danger; Zhuge Liang has foreseen it all; Liu Bei
 is passive), mostly the design. Lessons:
-- **Keep the arc's spine on screen.** In the Lady Sun book the spine is Zhou Yu's trap and how each pouch defeats it
-  (the jail, the gilded cage, the road block). When the lead was moved to suit a theme, the trap went off screen and the
-  book went flat. Choose leads by who acts on the spine.
+- **Lead the person with the most to do.** Zhao Yun led two-thirds of it as an escort on errands; Lady Sun, who has the
+  initiative, led only the last third.
 - **A device must not take away agency.** The sealed pouches handed the player each plan to carry out, and made the
   player a courier. A device should give the player something to do, not something to read.
 - **Watching is not playing.** Count cutaways and board-less beats; keep only the ones that carry the story.

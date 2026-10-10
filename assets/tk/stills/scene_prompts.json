@@ -1171,16 +1171,16 @@
  "ms_babyfinger": {
   "book": 21,
   "category": "interlude",
-  "beat": "Kim Seok-ho comes home late; his baby grabs his finger.",
-  "scene": "Night, a tiny one-room flat in Seoul: a single mattress on the floor, a rice cooker, baby clothes on a rack. Kim Seok-ho, still in his office shirt, kneels by his sleeping wife and baby; the baby's small hand has closed round his finger. A street lamp through the one window.",
-  "notes": "Book 21 (Misaeng Book 1, Not Yet Alive), docs/book2/misaeng-arc.md. Modern Seoul, 2012. Graphics: the people's looks are left to CAST. Beat m8."
+  "beat": "Kim Seok-ho comes home late; his baby daughter, awake, grabs his finger.",
+  "scene": "Night, a tiny one-room flat in Seoul: bedding on the floor, a rice cooker, baby clothes on a rack. Kim Seok-ho, still in his office suit, lies down beside his wife, who has only just fallen asleep; their baby daughter is awake and has closed her small hand round his finger. A street lamp through the one window.",
+  "notes": "Book 21 (Misaeng Book 1), docs/book2/misaeng-arc.md. Modern Seoul, 2012. Graphics: the people's looks are left to CAST. Beat m21b (episode 14: the baby is awake, a girl)."
  },
  "ms_sauna": {
   "book": 21,
   "category": "interlude",
-  "beat": "The sauna: Steve Han, Kim Bu-ryeon and Go Gwa-jang, up to their chins; 'Don't touch me.'",
-  "scene": "A Korean public sauna, steam rising from a hot pool tiled in blue. Steve Han, Kim Bu-ryeon and Go Gwa-jang sit in the water up to their chins, towels on their heads; Go Gwa-jang has thrown a friendly arm toward Steve Han, who leans away, deadpan. Comic, warm.",
-  "notes": "Book 21 (Misaeng Book 1, Not Yet Alive), docs/book2/misaeng-arc.md. Modern Seoul, 2012. Graphics: the people's looks are left to CAST. Beat m9."
+  "beat": "A dry sauna: Go invites Steve Han to scoot over; 'Don't touch me!'",
+  "scene": "A Korean dry sauna room: pale wooden benches in tiers, towels laid on them, warm light. Four office men in towels sit in a row on one bench; Go Gwa-jang, round glasses, leans toward Steve Han, who sits alone on the far bench and recoils, hand up. Comic, warm.",
+  "notes": "Book 21 (Misaeng Book 1), docs/book2/misaeng-arc.md. Modern Seoul, 2012. Graphics: the people's looks are left to CAST. Beat m22c (episode 16: a dry sauna, no pool)."
  },
  "ms_doorbell": {
   "book": 21,
