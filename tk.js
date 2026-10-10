@@ -1280,6 +1280,7 @@ async function viewTK(worldN) {
   const chron = h("button", { class: "tk-chron-btn", type: "button" }, "史册 Chronicle");
   const voiceBtn = h("button", { class: "tk-chron-btn", type: "button", "aria-pressed": String(TKVoice.on), title: "配音：中文 → English → 关 Voice: Chinese → English → off" });
   TKVoice.enOnly = w.lang === "en";   // an English-only book: its voice is English, on or off
+  if (typeof TKEnglish !== "undefined") TKEnglish.set(w.lang === "en");   // and no Chinese on screen
   const voiceLabel = () => {
     voiceBtn.textContent = TKVoice.enOnly ? (TKVoice.on ? "Voice on" : "Voice off")
       : { zh: "配音：中文 Chinese voice", en: "配音：英文 English voice", off: "静音 Voice off" }[TKVoice.lang];
@@ -1504,7 +1505,7 @@ async function viewTK(worldN) {
   if (!TK.seen(`${w.n}:opening`)) {
     await run(w.opening); TK.markSeen(`${w.n}:opening`);
   }
-  const here = TK.at(w.n);
+  const here = map.N[TK.at(w.n)] ? TK.at(w.n) : w.nodes[0].key;   // a book with no start node (Misaeng on the node map): its first beat
   if (TK.cleared(`${w.n}-boss`)) { showDone(); return; }
   if (TK.isStart(here) || TK.cleared(here)) await advance(here);
   else showInfo(here);
@@ -1622,6 +1623,7 @@ async function viewTKLevel(worldN, key) {
   if (nav !== routeSeq) return;
   if (!d) { location.hash = `#/tk/${worldN || 1}`; return; }
   if (!d.node.town) TK.setAt(worldN, key);
+  TKVoice.enOnly = d.w.lang === "en"; if (typeof TKEnglish !== "undefined") TKEnglish.set(d.w.lang === "en");   // an English-only book's level page
   crumbs.innerHTML = "";
   crumbs.append(h("a", { href: "#/" }, "Library"), " / ", h("a", { href: `#/tk/${worldN}` }, (w => { const nv = w && TK_NOVELS[w.novel]; return `${nv ? nv.title : "Three Kingdoms"} · Book ${(w && w.book) || worldN}`; })(TK.world(worldN))), ` / ${d.node.place}`);
   root.innerHTML = "";

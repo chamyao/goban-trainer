@@ -149,4 +149,11 @@ const en=await p.evaluate(async()=>{const w=TK.world(13);w.lang='en';localStorag
  TKOverlay.open(13,'13-c19',{host:document.querySelector('.tk-map')});await new Promise(r=>setTimeout(r,800));
  const z=(document.querySelector('.tk-duel .town-zh')||{}).textContent,e=(document.querySelector('.tk-duel .town-en')||{}).textContent;w.lang=undefined;return {z,e};});
 check(en.z===''&&!!en.e,`an English-only world shows no Chinese on the board (${JSON.stringify(en)})`);
+const chrome=await p.evaluate(async()=>{TKEnglish.set(true);await new Promise(r=>setTimeout(r,300));
+ const vis=e=>e&&e.offsetParent!==null;const cjk=/[\u3400-\u9fff]/;
+ const bad=[...document.querySelectorAll('.tk-duel *, .town-ui *, .tk-map *')].filter(e=>vis(e)&&[...e.childNodes].some(n=>n.nodeType===3&&cjk.test(n.nodeValue))).map(e=>e.textContent.slice(0,30));
+ const keys=[...document.querySelectorAll('.tk-duel-key')].map(e=>e.textContent).join(',');
+ location.hash='#/';await new Promise(r=>setTimeout(r,800));return {bad,keys,after:document.body.classList.contains('tk-en')};});
+check(!chrome.bad.length&&/Undo/.test(chrome.keys),`an English-only book's screen shows no Chinese: keys "${chrome.keys}" (${JSON.stringify(chrome.bad)})`);
+check(!chrome.after,'leaving the book takes the English-only screen off');
 await b.close();console.log(fails?`misaeng-mechanics: ${fails} failed`:'misaeng-mechanics: all ok');})();

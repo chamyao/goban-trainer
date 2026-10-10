@@ -80,7 +80,9 @@ const WorldModern = {
     el.innerHTML = `<div class="tk-bag-box"><h3></h3>${this.boardSvg(w, n, 300)}<p class="tk-record-sub"></p><button type="button">Close</button></div>`;
     el.querySelector("h3").textContent = R.title || "The record";
     el.querySelector(".tk-record-sub").textContent = `${R.black || "Black"} (Black) · ${R.white || "White"} (White) · ${n ? `after move ${n}` : "before the first move"}`;
-    const close = () => el.remove();
+    const close = () => { el.remove(); removeEventListener("keydown", key, true); };
+    const key = e => { if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); close(); } };
+    addEventListener("keydown", key, true);
     el.querySelector("button").onclick = close;
     el.onclick = e => { if (e.target === el) close(); };
     document.body.append(el);
@@ -240,5 +242,56 @@ const WorldModern = {
     if (!w || !(w.record || w.trade)) return;
     if (w.record) this.strip(scene);
     if (w.trade) this.chip(scene);
+    this.place();
+    if (!this.onResize) addEventListener("resize", this.onResize = () => this.place());
+  },
+  // the strip and the chip stack down the right, below whatever of the HUD is above them there (the menu button;
+  // the goal box when it runs that wide, as on a phone)
+  place() {
+    const ui = document.querySelector(".town-ui");
+    if (!ui) return;
+    const R = ui.getBoundingClientRect(), col = R.right - 110;
+    let y = 10;
+    for (const el of document.querySelectorAll(".tk-map .town-goal, .tk-map .tk-menu-btn, .tk-map .town-skip")) {
+      const b = el.getBoundingClientRect();
+      if (b.height && b.right > col && b.top < R.top + R.height / 2) y = Math.max(y, b.bottom - R.top + 6);
+    }
+    for (const el of [ui.querySelector(".tk-strip"), ui.querySelector(".tk-trade-chip")]) {
+      if (!el) continue;
+      el.style.top = `${Math.round(y)}px`;
+      y += el.getBoundingClientRect().height + 6;
+    }
+  },
+};
+
+/* ---------- an English-only book's screen: no Chinese anywhere ----------
+   The game's own labels are bilingual ("菜单 Menu", "主线 · Story", "悔棋 Undo", "得到 · …"). While an English-only
+   book ("lang": "en") is open, the page carries body.tk-en: Chinese-only elements are hidden (style.css), and the
+   Chinese part of any mixed label in the game's boxes is taken out as it's drawn. Korean (the book's own 미생) stays. */
+const TKEnglish = {
+  CJK: /[⺀-⿿　-〿㐀-鿿豈-﫿＀-￯]+[\s·:：]*/g,
+  ROOTS: ".tk-map, .tk-duel, .tk-bag, .tk-pouch, .town-ui, .tk-head, .tk-info",
+  obs: null,
+  set(on) {
+    document.body.classList.toggle("tk-en", !!on);
+    if (!on) { if (this.obs) { this.obs.disconnect(); this.obs = null; } return; }
+    if (this.obs) return;
+    this.obs = new MutationObserver(ms => { for (const m of ms) this.clean(m.type === "characterData" ? m.target : m.target); });
+    this.obs.observe(document.body, { subtree: true, childList: true, characterData: true });
+    this.clean(document.body);
+  },
+  clean(node) {
+    if (!node) return;
+    const el = node.nodeType === 3 ? node.parentElement : node;
+    if (!el || !(el.closest && (el.closest(this.ROOTS) || el.querySelector && el.querySelector(this.ROOTS)))) return;
+    const fix = t => {
+      if (!this.CJK.test(t.nodeValue)) return;
+      this.CJK.lastIndex = 0;
+      const v = t.nodeValue.replace(this.CJK, "").replace(/(\s*·\s*)+/g, " · ").replace(/^\s*·\s*|\s*·\s*$/g, "");
+      if (v !== t.nodeValue) t.nodeValue = v;
+    };
+    if (node.nodeType === 3) return fix(node);
+    const w = document.createTreeWalker(node, NodeFilter.SHOW_TEXT);
+    for (let t; (t = w.nextNode());) if (t.parentElement && t.parentElement.closest(this.ROOTS)) { this.CJK.lastIndex = 0; fix(t); }
   },
 };
