@@ -138,14 +138,6 @@
      "to": "one-international--general-affairs"
     },
     {
-     "label": "5F · HR",
-     "to": "one-international--hr"
-    },
-    {
-     "label": "8F · The textile team",
-     "to": "one-international--textile"
-    },
-    {
      "label": "14F · Sales Team 3",
      "to": "one-international--sales3"
     },
@@ -170,7 +162,7 @@
     "item:requisition"
    ],
    "delivers": "requisition",
-   "when": "node:21-m10",
+   "when": "node:21-m8",
    "waiting": [
     "The clerk looks up. “Requisition? You need the form. Signed.”"
    ],
@@ -214,14 +206,6 @@
   "": [
    12,
    13
-  ],
-  "one-international--hr": [
-   8,
-   12
-  ],
-  "one-international--textile": [
-   8,
-   12
   ],
   "one-international--sales3": [
    8,

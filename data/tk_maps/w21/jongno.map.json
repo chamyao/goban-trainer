@@ -1230,13 +1230,6 @@
    "note": "handoffs to the tower's forecourt land here"
   },
   {
-   "id": "m9",
-   "x": 53.5,
-   "y": 25.7,
-   "node": "21-m9",
-   "label": "The tower's forecourt"
-  },
-  {
    "id": "m16",
    "x": 61.5,
    "y": 25.7,
@@ -1392,7 +1385,7 @@
    "done": [
     "The old man in the flat cap is asleep on the bench."
    ],
-   "until": "21-m9",
+   "until": "21-m10",
    "when": "node:21-m8",
    "view": 4,
    "challenge": "regular-2"
@@ -1413,7 +1406,7 @@
     "The courier's trolley rattles off down the lane."
    ],
    "until": "21-m16",
-   "when": "node:21-m15",
+   "when": "node:21-m14",
    "view": 4,
    "challenge": "courier"
   },
@@ -1433,7 +1426,7 @@
     "The intern at the door has gone in to his table."
    ],
    "until": "21-m12",
-   "when": "node:21-m11",
+   "when": "node:21-m10",
    "blocks": "hof",
    "view": 4,
    "label": "An intern at the hof's door",
@@ -1600,12 +1593,12 @@
   {
    "id": "day2",
    "when": "node:21-m5",
-   "until": "node:21-m11",
+   "until": "node:21-m10",
    "light": "day"
   },
   {
    "id": "night",
-   "when": "node:21-m11",
+   "when": "node:21-m10",
    "until": "node:21-m13",
    "light": "night"
   },
@@ -1613,12 +1606,6 @@
    "id": "day3",
    "when": "node:21-m13",
    "light": "day"
-  },
-  {
-   "id": "dinner",
-   "when": "node:21-m19c",
-   "until": "node:21-m19d",
-   "light": "night"
   },
   {
    "id": "drinks",

@@ -1,17 +1,16 @@
-// Misaeng Book 1 (world 21, "The First Move", episodes 0-16): what Places built, walked in the engine.
+// Misaeng Book 1 (world 21, "The First Move", episodes 0-16, 20 beats): what Places built, walked in the engine.
 //   1. The commute (m5): from home in Susaek-dong, the subway and Jongno are open (open_ways), and the subway's
 //      commuter (a blocking challenger) stands on the way while m5 is open.
-//      Oh's run (m7b): the trail down the mountain is the way; the wood either side holds.
+//      Oh's run (m7): the trail down the mountain to his car is the way; the wood either side holds.
 //   2. Jongno's carriageway is solid: walking south off the pavement stops at the kerb; at a crosswalk she crosses.
 //      Doors into other places ("to"): the tower's door into the lobby; the lift's menu up to General Affairs (2F),
-//      Sales Team 3 (14F) and the textile team (8F), whose door (the stairs) comes back down; out onto Jongno, down the
-//      subway stairs, up in Susaek-dong.
-//   3. m11's gate: Kim's requisition, handed to the clerk at General Affairs' counter.
+//      Sales Team 3 (14F) and the meeting room (15F), whose door (the stairs) comes back down; out onto Jongno, down
+//      the subway stairs, up in Susaek-dong.
+//   3. m10's gate: Kim's requisition, handed to the clerk at General Affairs' counter.
 //   4. m14's three errands: the copier gives the copies, handed to Kim Dong-sik at his desk; the forwarder call at the
 //      team phone; the cleaning cupboard's mop taken to the spill ("wipe this floor"); with all three, m14's gate is met.
 //   5. Storefronts are entered at their drawn (south) doors: the baduk class, the KBA café, the hof.
-//      m19c-m22c's walks: the meeting room down to Jongno at night (the team dinner, m19d, in the hof); the street by
-//      the hof at night after drinks (m21b); Sales 3 down to the lobby and up the lift to the textile floor (m22c).
+//      m12: Jongno at night, the intern keeping the hof's door; m21b: the street by the hof at night, after drinks.
 //   6. m5: episode 1's evening on Jongno: its townsfolk are out in the evening, gone by day.
 // Run with the site served on :8765 (tests/playtest/run.sh misaeng-places).
 const { chromium } = require(require('child_process').execSync('npm root -g').toString().trim() + '/playwright');
@@ -105,25 +104,25 @@ async function commute(b) {
   await p.context().close();
 }
 
-// m7b, Oh's run: from the summit down the trail to his car; the wooded slope either side of the trail holds
+// m7, Oh's run: from the summit down the trail to his car; the wooded slope either side of the trail holds
 async function run(b) {
-  const p = await open(b, '21-m7b', 'mountain', [], ['mountain']);
+  const p = await open(b, '21-m7', 'mountain', [], ['mountain']);
   const T = 16;
-  check(await p.evaluate(() => !!window.__w.spots.m7b), 'm7b: Oh\'s car waits in the car park at the foot of the trail');
+  check(await p.evaluate(() => !!window.__w.spots.m7), 'm7: Oh\'s car waits in the car park at the foot of the trail');
   // the trail's second leg runs west along plan row 4 (tile y 18), x 2-6 (tiles 10-26): from its middle, north is wood
   await p.evaluate(T => window.__w.player.body.reset(18 * T, 18 * T), T);
   const up = await walk(p, 0, -50, 3000);
-  check(up.y > 15 * T, `m7b: off the trail, the wooded slope holds (y ${(up.y / T).toFixed(1)} tiles)`);
+  check(up.y > 15 * T, `m7: off the trail, the wooded slope holds (y ${(up.y / T).toFixed(1)} tiles)`);
   await p.evaluate(T => window.__w.player.body.reset(18 * T, 18 * T), T);
   const along = await walk(p, -50, 0, 3000);
-  check(along.x < 13 * T, `m7b: along the trail he runs (x ${(along.x / T).toFixed(1)} tiles)`);
+  check(along.x < 13 * T, `m7: along the trail he runs (x ${(along.x / T).toFixed(1)} tiles)`);
   await p.context().close();
 }
 
 async function street(b) {
   // (every place on the way visited, so the doors are tested on their own; the commute checks what's open)
-  const p = await open(b, '21-m11', 'jongno', [], ['susaek-dong', 'the-subway', 'jongno', 'one-international', 'one-international--general-affairs',
-    'one-international--sales3', 'one-international--textile']);
+  const p = await open(b, '21-m10', 'jongno', [], ['susaek-dong', 'the-subway', 'jongno', 'one-international', 'one-international--general-affairs',
+    'one-international--sales3', 'one-international--meeting']);
   const T = 16;
   // the carriageway: tile rows 32-39; the north pavement is rows 28-31; a crosswalk at tiles 20-23 (cross-w) and 72-75
   await p.evaluate(T => window.__w.player.body.reset(10.5 * T, 30 * T), T);
@@ -135,8 +134,8 @@ async function street(b) {
   check(await through(p, 'one-international'), 'the tower\'s door goes into One International (the lobby)');
   check(await lift(p, '2F · General Affairs', 'one-international--general-affairs'), 'the lobby\'s lift goes up to General Affairs (its floor menu)');
   check(await lift(p, '14F · Sales Team 3', 'one-international--sales3'), 'and from there to Sales Team 3');
-  check(await lift(p, '8F · The textile team', 'one-international--textile'), 'and to the textile team\'s floor');
-  check(await through(p, 'one-international'), 'the textile floor\'s door (the stairs) comes back down to the lobby');
+  check(await lift(p, '15F · A meeting room', 'one-international--meeting'), 'and to the meeting room\'s floor');
+  check(await through(p, 'one-international'), 'the meeting floor\'s door (the stairs) comes back down to the lobby');
   check(await through(p, 'jongno'), 'the lobby\'s doors go out onto Jongno');
   check(await through(p, 'the-subway'), 'Jongno 3-ga Station\'s stairs go down into the subway');
   check(await through(p, 'susaek-dong'), 'the subway\'s far end comes up in Susaek-dong');
@@ -144,11 +143,11 @@ async function street(b) {
 }
 
 async function requisition(b) {
-  const p = await open(b, '21-m11', 'one-international--general-affairs', ['requisition']);
-  check(await to(p, 'ga-clerk'), 'm11: the clerk stands at General Affairs\' counter');
+  const p = await open(b, '21-m10', 'one-international--general-affairs', ['requisition']);
+  check(await to(p, 'ga-clerk'), 'm10: the clerk stands at General Affairs\' counter');
   const s = await st(p);
-  check(s.marks.includes('requisition') && !s.items.includes('requisition'), 'm11: the clerk takes Kim\'s requisition from you, by hand');
-  check(await p.evaluate(() => window.__w.cond('mark:requisition')), 'm11: its gate (the requisition) is met');
+  check(s.marks.includes('requisition') && !s.items.includes('requisition'), 'm10: the clerk takes Kim\'s requisition from you, by hand');
+  check(await p.evaluate(() => window.__w.cond('mark:requisition')), 'm10: its gate (the requisition) is met');
   await p.context().close();
 }
 
@@ -173,30 +172,20 @@ async function errands(b) {
 
 async function walks(b) {
   // a storefront's door is drawn on its south face, and it's entered there (the baduk class, m1; the KBA café, m3)
-  for (const [upto, place, door] of [['21-m1', 'susaek-dong', 'baduk-class'], ['21-m3', 'korea-baduk-association', 'kba-cafe']]) {
+  for (const [upto, place, door] of [['21-m1', 'susaek-dong', 'baduk-class'], ['21-m2', 'korea-baduk-association', 'kba-cafe']]) {
     const q = await open(b, upto, place, [], [place]);
     check(await through(q, door), `${upto.slice(3)}: into ${door} by its drawn door`);
     await q.context().close();
   }
   const light = p => p.evaluate(() => { const st = window.__w.mapState(); return st ? st.light : 'day'; });
-  // m19d: from the meeting room (m19c) to the team dinner: the tower, Jongno and the hof are open, Jongno at night
-  let p = await open(b, '21-m19d', 'one-international--meeting', [], ['one-international', 'one-international--meeting', 'jongno']);
-  check(await p.evaluate(() => ['one-international', 'jongno'].every(x => window.__w.placeOpen(x))), 'm19d: from the meeting room, the lobby and Jongno are open');
-  check(await through(p, 'one-international'), 'm19d: the meeting room\'s stairs go down to the lobby');
-  check(await through(p, 'jongno'), 'm19d: out onto Jongno');
-  check(await light(p) === 'night', `m19d: Jongno at night for the team dinner (${await light(p)})`);
-  check(!await shown(p, 'hof-door'), 'm19d: no one keeps the hof\'s door now');
-  check(await through(p, 'hof'), 'm19d: into the hof');
-  check(await p.evaluate(() => !!window.__w.spots.m19d), 'm19d: the team dinner\'s spot is in the hof');
+  // m12: the interns' study night: Jongno at night, and an intern keeps the hof's door
+  let p = await open(b, '21-m12', 'jongno', [], ['one-international', 'jongno']);
+  check(await light(p) === 'night', `m12: Jongno at night for the study night (${await light(p)})`);
+  check(await shown(p, 'hof-door'), 'm12: an intern keeps the hof\'s door');
   await p.context().close();
   // m21b: from Oh's desk (m21) out to the street by the hof, at night
   p = await open(b, '21-m21b', 'jongno', [], ['jongno']);
   check(await light(p) === 'night' && await p.evaluate(() => !!window.__w.spots.m21b), 'm21b: the street by the hof, at night');
-  await p.context().close();
-  // m22c: after Sales 3's table (m22b), down to the lobby and up to the textile floor
-  p = await open(b, '21-m22c', 'one-international', [], ['one-international', 'one-international--sales3', 'one-international--textile']);
-  check(await lift(p, '8F · The textile team', 'one-international--textile'), 'm22c: the lobby\'s lift goes up to the textile floor');
-  check(await p.evaluate(() => !!window.__w.spots.m22c), 'm22c: behind the partition, on the textile floor');
   await p.context().close();
 }
 
@@ -204,9 +193,9 @@ async function evening(b) {
   const count = async (upto) => { const p = await open(b, upto, 'jongno', [], ['jongno']);
     const c = await p.evaluate(() => ['npc-6', 'npc-7', 'npc-8', 'npc-9', 'npc-10'].filter(id => { const n = window.__w.npcs.find(n => n.id === id); return n && n.spr.visible; }).length);
     await p.context().close(); return c; };
-  const eve = await count('21-m5'), day = await count('21-m9');
+  const eve = await count('21-m5'), day = await count('21-m8');
   check(eve === 5, `m5: Jongno's evening townsfolk are out (${eve} of 5)`);
-  check(day === 0, `m9: by day they're gone (${day})`);
+  check(day === 0, `m8: by day they're gone (${day})`);
 }
 
 (async () => {
