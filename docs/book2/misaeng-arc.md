@@ -199,13 +199,13 @@ Jordanian ambassador; the corner-shop owner; the KBA staff member; trainee child
 
 All modern dress. **New art for everyone** (Graphics): office wear, the KBA trainee room, Jongno.
 
-## Stills (proposed)
+## Stills (briefs in `assets/tk/stills/scene_prompts.json`, book 21)
 
-`ms_trainee` (Jang at eighteen alone at a board at dawn), `ms_onelight` (Jang at the lobby gates, first day),
-`ms_oneeye` (four stones on a desk, one eye: 미생이네요), `ms_phone` (Korean voice on the ICB line,
-the auditors listening), `ms_jamespark` (the board list, one name circled), `ms_mother` (his mother crying in the next
-room at Chuseok), `ms_hell` (Kim Dong-su's empty pizza shop), `ms_roof_ahn` (Ahn alone on the roof after withdrawing),
-`ms_infra` (the tower in grey, the people in colour), `ms_145` (the last move on the board; Nie's hand resigning).
+Ten: `ms_lastgame` (m1, Jang at eighteen alone at the board), `ms_onelight` (m2, the ID gates), `ms_oneeye` (m9, four
+stones, one eye), `ms_phone` (m13, the Korean voice on the ICB line), `ms_jamespark` (m13, the board list, one name
+circled), `ms_chuseok` (m15, his mother in tears behind the kitchen door), `ms_hell` (m16, Kim Dong-su's empty pizza
+shop), `ms_roof_ahn` (m19, Ahn alone on the roof), `ms_infra` (m23b, the tower in grey, the people in colour), `ms_145`
+(m24, the last move; Nie's hand resigning). Cast ids are Graphics' `ms_*` walker keys.
 
 ## Engine requests (to Integration)
 
