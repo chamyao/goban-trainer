@@ -36,6 +36,7 @@ async function run(b, dev) {
   await p.route('**/*.mp3', r => r.fulfill({ status: 404, body: '' }));
   await p.goto(BASE + '/index.html#/tk/13'); await p.waitForTimeout(800);
   const setup = () => p.evaluate(async () => { await TK.load();
+    if (typeof TKEnglish !== 'undefined') TKEnglish.set(true); TKVoice.enOnly = true;   // as viewTK does for a lang "en" book
     const sgf = await (await fetch('docs/book2/misaeng-ing-cup-g5.sgf')).text();
     const moves = [...sgf.matchAll(/;\s*([BW])\[([a-s]{2})\]/g)].map(m => [m[1], m[2]]);
     for (const w of [TK.world(13), window.__w && window.__w.w].filter(Boolean)) {
