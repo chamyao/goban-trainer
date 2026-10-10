@@ -27,6 +27,14 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     if (SYNC && req.method() === 'POST') { let j = {}; try { j = JSON.parse(req.postData() || '{}'); } catch {} if (j.kind === 'progress') { store[j.username] = j.data; syncPosts++; } return r.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' }); }
     if (SYNC && (u.searchParams.get('kind') || 'progress') === 'progress') return r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ data: store[u.searchParams.get('username')] || {} }) });
     return r.fulfill({ status: 200, contentType: 'application/json', body: '{"data":null}' }); });
+  // which cutscene step is running (window.__csAt), for the stuck report: a scene that hangs names the step it waits on
+  await p.addInitScript(() => { const hook = () => { if (typeof WorldCutscene === 'undefined' || WorldCutscene.__hooked) return !!(typeof WorldCutscene !== 'undefined');
+      const play = WorldCutscene.play.bind(WorldCutscene); WorldCutscene.__hooked = true;
+      WorldCutscene.play = (scene, cs, ...a) => { const beats = cs.beats; let n = 0;
+        cs.beats = new Proxy(beats, { get(t, k) { if (typeof k === 'string' && /^\d+$/.test(k)) window.__csAt = { id: cs.id || cs.key || cs.title || '?', i: +k, of: t.length, beat: JSON.stringify(t[k]).slice(0, 160), at: Date.now() }; return t[k]; } });
+        window.__csStarted = (window.__csStarted || []).concat([{ id: cs.id || cs.key || cs.title || '?', beats: beats.length, at: Date.now() }]).slice(-6);
+        return play(scene, cs, ...a); }; return true; };
+    const iv = setInterval(() => { if (hook()) clearInterval(iv); }, 200); });
   const errs = []; p.on('pageerror', e => { errs.push(e.message); console.log('ERR', e.message); });
   await p.route('**/phaser.min.js', r => r.fulfill({ path: path.join(__dirname, 'vendor/phaser.min.js'), contentType: 'application/javascript' }));
   await p.route('**/*.mp3', r => r.fulfill({ status: 404, body: '' }));
@@ -238,7 +246,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       const why = await p.evaluate(() => { const w = window.__w, P = w.player, g = w.goalAt, path = g && w.findPath(P.x, P.y - 3, g.x, g.y - 3);
         return `canMove ${w.canMove()}, seated ${!!w.seated}, approaching ${!!w.approaching}, walk ${w.walk ? w.walk.path.length : 'none'}, a way ${path ? path.length + ' points' : 'none'}, near: ${w.npcs.filter(n => n.spr.visible && Math.hypot(n.spr.x - P.x, n.spr.y - P.y) < 40).map(n => n.id).join(' ') || 'nobody'}`; }).catch(e => String(e));
       await p.screenshot({ path: path.join(__dirname, 'out', `walk-stuck-${beat}.png`) }).catch(() => {});
-      const ui = await p.evaluate(() => ({ lead: window.__w.lead, party: window.__w.st.party, line: (document.querySelector('.town-ui .town-dlg')||{}).textContent, dlgHidden: (document.querySelector('.town-ui .town-dlg')||{}).hidden, busy: window.__w.ui.busy(), cine: !!window.__w.cine, leaving: !!window.__w.leaving, html: [...document.querySelectorAll('.town-ui button, .town-ui .town-dlg')].filter(e => e.offsetParent).map(e => e.className + ':' + e.textContent.trim().slice(0, 40)).slice(0, 6) })).catch(() => ({}));
+      const ui = await p.evaluate(() => ({ csAt: window.__csAt && { ...window.__csAt, ago: Date.now() - window.__csAt.at }, csStarted: window.__csStarted, engaged: !!window.__w.engaged, lead: window.__w.lead, party: window.__w.st.party, line: (document.querySelector('.town-ui .town-dlg')||{}).textContent, dlgHidden: (document.querySelector('.town-ui .town-dlg')||{}).hidden, busy: window.__w.ui.busy(), cine: !!window.__w.cine, leaving: !!window.__w.leaving, html: [...document.querySelectorAll('.town-ui button, .town-ui .town-dlg')].filter(e => e.offsetParent).map(e => e.className + ':' + e.textContent.trim().slice(0, 40)).slice(0, 6) })).catch(() => ({}));
       console.log('     ui:', JSON.stringify(ui));
       const msg = refused || (overBeat ? `over ${BEATMAX}s on this beat (caught ${catches} times; goal ${s.goal || 'none'})` : '') || `stuck: no progress for ${STUCK}s (goal ${s.goal || 'none'}; ${why})`;
       if (reloads < 1 && !refused) {   // what a player would do: reload, and go on from the save
