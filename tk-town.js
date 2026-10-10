@@ -223,7 +223,7 @@ const TownUI = {
       if (!st) { $(".town-dlg").hidden = true; $(".town-dim").hidden = true; $(".town-portrait").hidden = true; open = false; TKVoice.stop(); const d = done; done = null; d && d(); return; }
       const said = st[0] === "say", who = said ? st[1] : null;
       const [en, zh, vid] = said ? [st[2], st[3], st[4]] : [st[1], st[2], st[3]];
-      $(".town-who").textContent = who ? tkName(who) : "";
+      $(".town-who").textContent = who ? (said && Array.isArray(st[5]) ? `${st[5][1]} ${st[5][0]}` : tkName(who)) : "";   // a name the map gave him (tk-world.js addNpc "speaker")
       // the words type themselves out; Enter shows the rest at once
       const Z = typeof zh === "string" ? zh : "", E = en || "", dur = Math.min(2600, Math.max(Z.length / 32, E.length / 75) * 1000), t0 = performance.now();
       clearInterval(typing);

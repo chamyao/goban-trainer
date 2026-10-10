@@ -728,7 +728,10 @@ function worldScenes() {
       spr.setOrigin(.5, 1).setDepth(o.y).setImmovable(true);
       spr.body.setSize(10, 6).setOffset((spr.width - 10) / 2, spr.height - 6);
       // townsfolk drawn like the heroes speak with their own portrait and name
-      const own = p.drawn ? L => L.map(l => l[0] === "n" ? ["say", who, ...l.slice(1)] : l) : L => L;
+      // a map can name a townsperson itself ("speaker": [en, zh]: Red Chamber's toy hawker, drawn as a porter): his lines carry it
+      const named = p.speaker ? JSON.parse(p.speaker) : null;
+      const own = p.drawn ? L => L.map(l => { const x = l[0] === "n" ? ["say", who, ...l.slice(1)] : l;
+        return named && x[0] === "say" ? [x[0], x[1], x[2], x[3], x[4], named] : x; }) : L => L;
       const n = { id: o.name, spr, who, folk, sprite: p.sprite, say: own(J(p.say)), wander: p.wander, home: { x: o.x, y: o.y }, t: 0, dir: face, until: p.until,
         when: p.when || "", in: p.in ? JSON.parse(p.in) : null };   // only here once the story's condition holds (Guan Yu on his ridge)
       if (p.gives) Object.assign(n, { gives: p.gives, givesWhen: p.gives_when || "", give: own(J(p.give)), given: own(J(p.given)) });

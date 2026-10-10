@@ -236,6 +236,10 @@ gate kind is walked through: add it to `IN_WALL` and `PASSABLE` (plans.py and th
 **A new kind goes into `vocab.KINDS` too**, not only the plans' `NEW_KINDS`: `verify` and compile read `vocab.KINDS`, and
 a kind missing there is taken as solid (Xifeng's half-size gate shut her courtyard until it was added).
 
+**A townsperson's `speaker`** (`[English, Chinese]`): the name in the dialogue box, over the one their sprite
+brings (`f_porter` reads 脚夫 Porter). The kits have folk sprites for few trades, so name a hawker (货郎) this way; the
+engine has to read it.
+
 **People** (plan `npcs`): `kind`, `at` (cell) or `near` (a thing), `place` (a room's map id), `say`, `face`, `in`
 (states), `when` / `until` (`"node:s5"`; renamed to the book's keys), `label`, `id`. Townsfolk with no `at`/`near`
 wander. Extra engine keys pass through `NPC_KEYS`: `gossip`, `yield`, `watch`, `challenge`, `blocks`, `gives`.

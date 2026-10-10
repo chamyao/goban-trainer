@@ -52,7 +52,8 @@ SIDE_DRAWN = {"building.wing"}   # drawn in side view when it faces E or W, its 
 TALL = ("building", "tree", "rock", "ruin", "garden", "landmark")   # what a roof or crown rises above
 NPC_KEYS = ("challenge", "intro", "win", "done", "until", "face", "when", "gives", "gives_when", "give", "given", "call",
             "in", "in_beats", "inside", "follower", "blocks", "view", "label", "note",
-            "gossip", "yield")   # the loud town and the face-down (Lady Sun's marriage; tk-feats.js)
+            "gossip", "yield",   # the loud town and the face-down (Lady Sun's marriage; tk-feats.js)
+            "speaker")   # a townsperson's own name in the dialogue box, [English, Chinese] (Red Chamber's hawker), over the sprite's
 
 
 def slug(name):
