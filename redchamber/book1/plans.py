@@ -362,8 +362,8 @@ RONG = {
         K("d7"): "Stay in Grandmother Jia's rooms. Look about you, then go back to your seat.",
         K("d8"): "Go to bed in the green gauze closet, through the east doorway of Grandmother Jia's rooms.",
         K("g4"): "In by the back gate, to Zhou Rui's house just inside it. Look about you, then speak up.",
-        K("g5"): "Follow Zhou Rui's wife down the passage, round the screen wall and through Sister Feng's gate. Inside, look about you before you greet anyone.",
-        K("g6"): "Through to Sister Feng's own room. Look about you, then go up to her.",
+        K("g5"): "Follow Zhou Rui's wife down the passage, round the screen wall and through Sister Feng's gate. Inside, everything glitters: steady yourself before you greet anyone.",
+        K("g6"): "Through to Sister Feng's own room. Steady yourself, then go up to her.",
     },
 }
 
@@ -616,8 +616,8 @@ ZH_PLACES_HLM1 = {
     "Through the cross-hall off the passage, to Grandmother Jia's rooms for dinner. Look about you before you take a seat.": "从夹道穿过穿堂，到贾母房中吃晚饭。先看一看，再入座。",
     "Stay in Grandmother Jia's rooms. Look about you, then go back to your seat.": "留在贾母房中。先看一看，再回到座上。",
     "In by the back gate, to Zhou Rui's house just inside it. Look about you, then speak up.": "进后门，周瑞家就在门里。先看一看，再开口。",
-    "Follow Zhou Rui's wife down the passage, round the screen wall and through Sister Feng's gate. Inside, look about you before you greet anyone.": "跟着周瑞家的走夹道，转过影壁，进凤姐儿的院门。进了屋，先看一看，再见礼。",
-    "Through to Sister Feng's own room. Look about you, then go up to her.": "到凤姐儿自己屋里去。先看一看，再上前去。",
+    "Follow Zhou Rui's wife down the passage, round the screen wall and through Sister Feng's gate. Inside, everything glitters: steady yourself before you greet anyone.": "跟着周瑞家的走夹道，转过影壁，进凤姐儿的院门。进了屋，满眼耀眼争光的，先定一定神，再见礼。",
+    "Through to Sister Feng's own room. Steady yourself, then go up to her.": "到凤姐儿自己屋里去。先定定神，再上前去。",
     "Through the three inner gates to Lady Xing's hall. Look about you, then go up to her.": "进了三层仪门，到邢夫人正室。先看一看，再上前去见。",
     # places and rooms
     # (the place and room names are Plot's PLACE_NAMES and ROOM_NAMES, story.py 216a5cf)

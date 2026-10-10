@@ -1946,7 +1946,7 @@
    "spot": "g5",
    "scene": "g5",
    "title": "The Clock",
-   "objective": "Follow Zhou Rui's wife down the passage, round the screen wall and through Sister Feng's gate. Inside, look about you before you greet anyone.",
+   "objective": "Follow Zhou Rui's wife down the passage, round the screen wall and through Sister Feng's gate. Inside, everything glitters: steady yourself before you greet anyone.",
    "after": [
     "31-g4"
    ],
@@ -2073,7 +2073,7 @@
      135796
     ]
    ],
-   "objective_zh": "跟着周瑞家的走夹道，转过影壁，进凤姐儿的院门。进了屋，先看一看，再见礼。",
+   "objective_zh": "跟着周瑞家的走夹道，转过影壁，进凤姐儿的院门。进了屋，满眼耀眼争光的，先定一定神，再见礼。",
    "title_zh": "自鸣钟"
   },
   {
@@ -2083,7 +2083,7 @@
    "spot": "g6",
    "scene": "g6",
    "title": "Your Nephew",
-   "objective": "Through to Sister Feng's own room. Look about you, then go up to her.",
+   "objective": "Through to Sister Feng's own room. Steady yourself, then go up to her.",
    "after": [
     "31-g5"
    ],
@@ -2218,7 +2218,7 @@
     "taunt_zh": "怎么还不请进来？",
     "taunt_vid": "651fc8d8aaa2"
    },
-   "objective_zh": "到凤姐儿自己屋里去。先看一看，再上前去。",
+   "objective_zh": "到凤姐儿自己屋里去。先定定神，再上前去。",
    "title_zh": "你侄儿"
   },
   {
