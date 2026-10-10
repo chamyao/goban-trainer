@@ -299,7 +299,7 @@
    "spot": "d2",
    "scene": "d2",
    "title": "Grandmother",
-   "objective": "Go through the festooned gate and the covered walks, into Grandmother Jia's rooms.",
+   "objective": "Into Grandmother Jia's rooms, through the festooned gate and the covered walks. Look about you, then go up to her.",
    "after": [
     "31-d1"
    ],
@@ -426,7 +426,7 @@
      143587
     ]
    ],
-   "objective_zh": "进垂花门，走抄手游廊，到贾母房中去。",
+   "objective_zh": "进垂花门，走抄手游廊，到贾母房中。先看一看，再上前去见外祖母。",
    "title_zh": "外祖母"
   },
   {
@@ -436,7 +436,7 @@
    "spot": "d3",
    "scene": "d3",
    "title": "I'm Late",
-   "objective": "Go to The Rong Mansion.",
+   "objective": "Someone is laughing in the back courtyard. Look about the room, then step up to meet her.",
    "after": [
     "31-d2"
    ],
@@ -563,7 +563,7 @@
      1425
     ]
    ],
-   "objective_zh": "",
+   "objective_zh": "后院里有人笑。先看看屋里的人，再上前去见。",
    "title_zh": "我来迟了"
   },
   {
@@ -573,7 +573,7 @@
    "spot": "d4",
    "scene": "d4",
    "title": "The Elder Uncle's House",
-   "objective": "Go through the three inner gates to Lady Xing's rooms.",
+   "objective": "Through the three inner gates to Lady Xing's hall. Look about you, then go up to her.",
    "after": [
     "31-d3"
    ],
@@ -700,7 +700,7 @@
      63400
     ]
    ],
-   "objective_zh": "进了三层仪门，到邢夫人正房去。",
+   "objective_zh": "进了三层仪门，到邢夫人正室。先看一看，再上前去见。",
    "title_zh": "大舅"
   },
   {
@@ -710,7 +710,7 @@
    "spot": "d5",
    "scene": "d5",
    "title": "The Kang",
-   "objective": "Go east through the cross-hall and the ceremonial gate to Rongxi Hall, where Lady Wang waits.",
+   "objective": "East through the cross-hall and the ceremonial gate to Rongxi Hall and Lady Wang's rooms. Look about you before you sit.",
    "after": [
     "31-d4"
    ],
@@ -837,7 +837,7 @@
      1909
     ]
    ],
-   "objective_zh": "往东穿过穿堂，进仪门，到荣禧堂去，王夫人在那里等着。",
+   "objective_zh": "往东穿过穿堂，进仪门，到荣禧堂王夫人房中。先看一看，再落座。",
    "title_zh": "度其位次"
   },
   {
@@ -985,7 +985,7 @@
    "spot": "d6",
    "scene": "d6",
    "title": "After the Meal",
-   "objective": "Go through the cross-hall off the passage, to Grandmother Jia's rooms for dinner.",
+   "objective": "Through the cross-hall off the passage, to Grandmother Jia's rooms for dinner. Look about you before you take a seat.",
    "after": [
     "31-d6a"
    ],
@@ -1112,7 +1112,7 @@
      878
     ]
    ],
-   "objective_zh": "从夹道穿过穿堂，到贾母房中吃晚饭。",
+   "objective_zh": "从夹道穿过穿堂，到贾母房中吃晚饭。先看一看，再入座。",
    "title_zh": "饭后茶"
   },
   {
@@ -1122,7 +1122,7 @@
    "spot": "d7",
    "scene": "d7",
    "title": "The Jade",
-   "objective": "Stay in Grandmother Jia's rooms.",
+   "objective": "Stay in Grandmother Jia's rooms. Look about you, then go back to your seat.",
    "after": [
     "31-d6"
    ],
@@ -1249,7 +1249,7 @@
      775
     ]
    ],
-   "objective_zh": "留在贾母房中。",
+   "objective_zh": "留在贾母房中。先看一看，再回到座上。",
    "title_zh": "摔玉"
   },
   {
@@ -1809,7 +1809,7 @@
    "spot": "g4",
    "scene": "g4",
    "title": "A Real Buddha",
-   "objective": "The back gate is open. Zhou Rui's house is just inside it.",
+   "objective": "In by the back gate, to Zhou Rui's house just inside it. Look about you, then speak up.",
    "after": [
     "31-g3"
    ],
@@ -1936,7 +1936,7 @@
      28129
     ]
    ],
-   "objective_zh": "后门开着。周瑞家就在门里。",
+   "objective_zh": "进后门，周瑞家就在门里。先看一看，再开口。",
    "title_zh": "真佛"
   },
   {
@@ -1946,7 +1946,7 @@
    "spot": "g5",
    "scene": "g5",
    "title": "The Clock",
-   "objective": "Follow Zhou Rui's wife down the passage, round the screen wall and through Sister Feng's gate.",
+   "objective": "Follow Zhou Rui's wife down the passage, round the screen wall and through Sister Feng's gate. Inside, look about you before you greet anyone.",
    "after": [
     "31-g4"
    ],
@@ -2073,7 +2073,7 @@
      135796
     ]
    ],
-   "objective_zh": "跟着周瑞家的走夹道，转过影壁，进凤姐儿的院门。",
+   "objective_zh": "跟着周瑞家的走夹道，转过影壁，进凤姐儿的院门。进了屋，先看一看，再见礼。",
    "title_zh": "自鸣钟"
   },
   {
@@ -2083,7 +2083,7 @@
    "spot": "g6",
    "scene": "g6",
    "title": "Your Nephew",
-   "objective": "Go through to Sister Feng's own room.",
+   "objective": "Through to Sister Feng's own room. Look about you, then go up to her.",
    "after": [
     "31-g5"
    ],
@@ -2218,7 +2218,7 @@
     "taunt_zh": "怎么还不请进来？",
     "taunt_vid": "651fc8d8aaa2"
    },
-   "objective_zh": "到凤姐儿自己屋里去。",
+   "objective_zh": "到凤姐儿自己屋里去。先看一看，再上前去。",
    "title_zh": "你侄儿"
   },
   {

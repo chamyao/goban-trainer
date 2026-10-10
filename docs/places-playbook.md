@@ -47,7 +47,7 @@ Where each book's places are:
 | 14 (Lü Bu) | `tools/tk_plans_lb.py` | `--world 14 --plans lb` | `tools/proofs/hide_ward_lb.py` | the burning ward, Xiapi |
 | 15 (Lady Sun) | `tools/tk_plans_ls.py` | `--world 15 --plans 15` | `tools/proofs/ladysun_ls.py` | design: `docs/book2/ladysun-places.md`; engine walk: `tests/playtest/book15-places.js` |
 | 90 (Claude's study) | `tools/tk_plans_w90.py` | `plans.py --world 90 --out data/tk_maps/w90` | — | one room |
-| 31 (Red Chamber 1) | `redchamber/book1/plans.py` | `redchamber/tools/build_places.sh` (`--world 31 --plans hlm1`) | `redchamber/book1/proofs.py` | Dream of the Red Chamber, kept apart from the tk books. Its own family of sessions: Plot alt (story `redchamber/book1/story.py`), Integration (daughter) session_01PBpYgcfzV9sDVfFRALhiCb on `claude/integration-redchamber` (registers the world; base `claude/places-redchamber` on it), Graphics (daughter) session_018yKP3XDohUzg77y3MHJW73. Cues: lines from the story's `ROOM_CUES`, stands in the plans' `STANDS` ((beat, who, n-th) -> cell, facing; the build fails on a cue with nowhere to stand or a stand no cue takes). Engine walks `tests/playtest/redchamber-places.js`, `hlm-watch.js` |
+| 31 (Red Chamber 1) | `redchamber/book1/plans.py` | `redchamber/tools/build_places.sh` (`--world 31 --plans hlm1`) | `redchamber/book1/proofs.py` | Dream of the Red Chamber, kept apart from the tk books. Its own family of sessions: Plot alt (story `redchamber/book1/story.py`), Integration (daughter) session_01PBpYgcfzV9sDVfFRALhiCb on `claude/integration-redchamber` (registers the world; base `claude/places-redchamber` on it), Graphics (daughter) session_018yKP3XDohUzg77y3MHJW73. Cues: lines from the story's `ROOM_CUES`, stands in the plans' `CUE_AT`. Engine walks `tests/playtest/redchamber-places.js`, `hlm-watch.js` |
 
 A new arc is registered in `plans.py`: `ARCS` (book → arc name), `key_prefix` (the beat keys' book number: Book 15's
 keys are `4-s1`…), `load()` (its module), and in `check_plans_w2.py` (`--arc`).
@@ -302,6 +302,10 @@ problem picks as committed. Then `git status`: only what the change touched shou
 - One map per pair of places has one way between them that works: the engine lands an arrival at the entry kept for
   the map she came from, not at the gate she used. Two open gates from the street into one house land at the same
   spot, so shut all but one in each state (Red Chamber: the back gate in Part 2, none in Part 1).
+- A room's `floor="wood"` draws as pale brick in all three kits and reads as a wall; `"stone"` draws as floorboards
+  (Book 15's rooms, and Red Chamber's). Render a room (`compile.render`) in each kit before choosing.
+- A room beat that waits for a tap keeps its objective while she's inside: write it to read right both on the way
+  there and in the room ("…to Grandmother Jia's rooms. Look about you, then go up to her.").
 - A proof must fail when it should: break the thing it proves (open the shut gates in a copy of the map) and run it.
 
 ## Walking it in the engine
