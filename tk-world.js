@@ -632,8 +632,16 @@ function worldScenes() {
         if (d > WORLD_NEAR + 16) s.armed = true;
         else if (s.armAt && Math.hypot(P.x - s.armAt.x, P.y - s.armAt.y) > 28) { s.armed = true; s.armAt = null; }
         else if (d < WORLD_NEAR && s.armed) {
-          s.armed = false;
+          // a thing with something to find in it (the lobby's bins): walking up to it is searching it
+          if (s.gives && this.cond(s.givesWhen) && !WorldItems.has(this.w, s.gives) && this.w.items && this.w.items[s.gives]) {
+            s.armed = false; this.walk = null; this.player.setVelocity(0);
+            return this.act({ kind: "spot", k: Object.keys(this.spots).find(k => this.spots[k] === s) });
+          }
           const q = this.openQuest(s);
+          // a beat still gated on an item that a nearer thing gives (m3b's spot beside the bins): the giver goes first
+          const g = q && this.available(q) && this.gateFor(q), need = g ? [].concat(g.needs || []).filter(c => /^item:/.test(c) && !this.cond(c)).map(c => c.slice(5)) : [];
+          if (need.length && Object.values(this.spots).some(o => o !== s && o.gives && need.includes(o.gives) && Math.hypot(P.x - o.x, P.y - o.y) < d + 24)) continue;
+          s.armed = false;
           if (q) return this.approach(q, s);   // a tap on the spot ends its walk here
         }
       }
@@ -1175,6 +1183,7 @@ function worldScenes() {
           // a delivery place that can take it now first (Hulao: Zhang Fei's post before Liu Bei's flank, which says "Not yet")
           const posts = Object.values(this.spots).filter(s => s.needs && marks.includes(s.delivers)), ready = posts.filter(s => this.cond(s.when) && this.cond(s.needs));
           const ts = [...this.npcs.filter(n => n.gives && items.includes(n.gives) && n.spr.visible).map(n => ({ x: n.spr.x, y: n.spr.y - 8 })),
+                      ...Object.values(this.spots).filter(s => s.gives && items.includes(s.gives) && this.cond(s.givesWhen)).map(s => ({ x: s.x, y: s.y - 4 })),   // a thing that gives it (the bins)
                       ...(ready.length ? ready : posts).map(s => ({ x: s.x, y: s.y - 4 }))];
           this.goalHops = 0;
           if (ts.length) return ts.sort((a, b) => d(a) - d(b))[0];
