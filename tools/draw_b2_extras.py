@@ -298,6 +298,31 @@ def planks(v, pillar=False):   # gallery or bridge boards; a gallery has red pil
 SAME = {"court": "stone", "ward": "stone", "passage": "stone", "road": "dirt", "path": "sand", "camp": "dirt",
         "city": "dirt", "field": "grass", "plain": "grass", "garden": "grass", "stage": "wood", "curtain": "wood"}
 
+def floorboards(v):   # an indoor wooden floor: warm boards running across, a dark seam between rows, staggered butt
+    # joints and a little grain (the Ninja pack's indoor sheet has no boards: its "wood" was brick)
+    g = Grid(16, 16)
+    tones = ("#9a6a3a", "#a8784a", "#8e6034", "#a27040")
+    for i, y in enumerate(range(0, 16, 4)):
+        g.rect(0, y, 16, 3, tones[(i + v) % 4]); g.rect(0, y, 16, 1, "#b8885a")
+        g.rect(0, y + 3, 16, 1, "#5a3a1e")                                   # the seam
+        j = (3 + 7 * i + 5 * v) % 16
+        g.rect(j, y, 1, 3, "#5a3a1e")                                        # a butt joint
+        g.set((j + 8) % 16, y + 1, "#7a5228"); g.set((j + 9) % 16, y + 1, "#7a5228")   # grain
+    return g.image()
+
+
+def stoneflags(v):   # an indoor stone floor: square grey flags, lit on their upper-left edges, dark joints
+    g = Grid(16, 16)
+    g.rect(0, 0, 16, 16, "#4a4a50")                                          # the joints
+    for x0, y0 in ((0, 0), (8, 0), (0, 8), (8, 8)):
+        tone = ("#9a9a96", "#8e8e8a", "#a4a29c", "#929088")[(x0 // 8 + y0 // 8 * 2 + v) % 4]
+        g.rect(x0, y0, 7, 7, tone); g.rect(x0, y0, 7, 1, "#b8b6b0"); g.rect(x0, y0, 1, 7, "#b0aea8")
+        g.rect(x0 + 6, y0 + 1, 1, 6, "#76746e"); g.rect(x0 + 1, y0 + 6, 6, 1, "#76746e")
+    if v:
+        g.set(3, 11, "#76746e"); g.set(12, 3, "#76746e")                     # a worn chip or two
+    return g.image()
+
+
 TILES = {
     "field.wheat": [wheat(0), wheat(1)],
     "cliff": [cliff(0), cliff(1)],
@@ -311,6 +336,9 @@ TILES = {
               _tile("#d8b878", (("#c8a060", 20), ("#e8cc90", 12)), 4)],
     "market": [_tile("#c8a878", (("#b08a58", 18), ("#e0c890", 8), ("#d8c050", 4)), 5),
                _tile("#c8a878", (("#b08a58", 18), ("#e0c890", 8), ("#d8c050", 4)), 6)],
+    # new rows go last: compiled maps point at tiles by their place on this sheet
+    "wood": [floorboards(0), floorboards(1)],
+    "stone": [stoneflags(0), stoneflags(1)],
 }
 
 
@@ -551,6 +579,10 @@ PIECES = {
 }
 
 
+# the kits' indoor floors drawn here win over the pack's tiles (the pack's "wood" was brick, its "stone" cobbles)
+OWN_FLOORS = ("wood", "stone")
+
+
 def main():
     ims = {k: f() for k, f in PIECES.items()}
     # one row per height band, 1 px apart
@@ -583,8 +615,12 @@ def main():
         kit["sheets"]["drawn_b2"] = str(out.relative_to(ROOT))
         kit["sheets"]["drawn_b2_tiles"] = str(tiles_out.relative_to(ROOT))
         for mat, tiles in tpos.items():
-            if mat not in kit["materials"] or "drawn_b2_tiles" in str(kit["materials"][mat]):
+            if mat not in kit["materials"] or "drawn_b2_tiles" in str(kit["materials"][mat]) or mat in OWN_FLOORS:
                 kit["materials"][mat] = {"tiles": tiles}
+        for style in kit.get("room_styles", {}).values():   # a room's own floor: wood is boards, stone is flags
+            for mat in OWN_FLOORS:
+                if mat in style:
+                    style[mat] = {"tiles": tpos[mat]}
         # grounds that are the kit's own tiles under another name: the courtyard is its flagstones, and so on
         for mat, base in SAME.items():
             if mat not in kit["materials"] and base in kit["materials"]:

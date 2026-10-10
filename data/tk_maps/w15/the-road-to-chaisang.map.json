@@ -374,10 +374,10 @@
  ],
  "spots": [
   {
-   "id": "s11",
+   "id": "s13",
    "x": 21.5,
    "y": 21.7,
-   "node": "15-s11",
+   "node": "15-s13",
    "label": "The road under the hill",
    "trigger": "near"
   },
@@ -390,10 +390,10 @@
    "note": "face-down 1: pushing past a man without stopping sends her back here"
   },
   {
-   "id": "s12",
+   "id": "s14",
    "x": 89.5,
    "y": 21.7,
-   "node": "15-s12",
+   "node": "15-s14",
    "label": "Past the road block",
    "trigger": "near"
   },
@@ -406,10 +406,10 @@
    "note": "face-down 2: pushing past a man without stopping sends her back here"
   },
   {
-   "id": "s13",
+   "id": "s15",
    "x": 185.5,
    "y": 21.7,
-   "node": "15-s13",
+   "node": "15-s15",
    "label": "The open road",
    "trigger": "near"
   }
@@ -421,8 +421,8 @@
    "x": 57.5,
    "y": 21.9,
    "say": [],
-   "until": "15-s12",
-   "when": "node:s11",
+   "until": "15-s14",
+   "when": "node:s13",
    "label": "Xu Sheng's captain",
    "yield": {
     "group": "xusheng",
@@ -446,8 +446,8 @@
    "x": 58.5,
    "y": 21.9,
    "say": [],
-   "until": "15-s12",
-   "when": "node:s11",
+   "until": "15-s14",
+   "when": "node:s13",
    "yield": {
     "group": "xusheng",
     "reach": 4,
@@ -470,8 +470,8 @@
    "x": 57.5,
    "y": 22.9,
    "say": [],
-   "until": "15-s12",
-   "when": "node:s11",
+   "until": "15-s14",
+   "when": "node:s13",
    "yield": {
     "group": "xusheng",
     "reach": 4,
@@ -494,8 +494,8 @@
    "x": 69.5,
    "y": 21.9,
    "say": [],
-   "until": "15-s12",
-   "when": "node:s11",
+   "until": "15-s14",
+   "when": "node:s13",
    "label": "Ding Feng's captain",
    "yield": {
     "group": "dingfeng",
@@ -519,8 +519,8 @@
    "x": 70.5,
    "y": 21.9,
    "say": [],
-   "until": "15-s12",
-   "when": "node:s11",
+   "until": "15-s14",
+   "when": "node:s13",
    "yield": {
     "group": "dingfeng",
     "reach": 4,
@@ -543,8 +543,8 @@
    "x": 69.5,
    "y": 22.9,
    "say": [],
-   "until": "15-s12",
-   "when": "node:s11",
+   "until": "15-s14",
+   "when": "node:s13",
    "yield": {
     "group": "dingfeng",
     "reach": 4,
@@ -567,8 +567,8 @@
    "x": 133.5,
    "y": 21.9,
    "say": [],
-   "until": "15-s13",
-   "when": "node:s12",
+   "until": "15-s15",
+   "when": "node:s14",
    "label": "Chen Wu",
    "yield": {
     "group": "chenwu",
@@ -592,8 +592,8 @@
    "x": 134.5,
    "y": 21.9,
    "say": [],
-   "until": "15-s13",
-   "when": "node:s12",
+   "until": "15-s15",
+   "when": "node:s14",
    "yield": {
     "group": "chenwu",
     "reach": 4,
@@ -616,8 +616,8 @@
    "x": 133.5,
    "y": 22.9,
    "say": [],
-   "until": "15-s13",
-   "when": "node:s12",
+   "until": "15-s15",
+   "when": "node:s14",
    "yield": {
     "group": "chenwu",
     "reach": 4,
@@ -640,8 +640,8 @@
    "x": 153.5,
    "y": 21.9,
    "say": [],
-   "until": "15-s13",
-   "when": "node:s12",
+   "until": "15-s15",
+   "when": "node:s14",
    "label": "Pan Zhang",
    "yield": {
     "group": "panzhang",
@@ -665,8 +665,8 @@
    "x": 154.5,
    "y": 21.9,
    "say": [],
-   "until": "15-s13",
-   "when": "node:s12",
+   "until": "15-s15",
+   "when": "node:s14",
    "yield": {
     "group": "panzhang",
     "reach": 4,
@@ -689,8 +689,8 @@
    "x": 153.5,
    "y": 22.9,
    "say": [],
-   "until": "15-s13",
-   "when": "node:s12",
+   "until": "15-s15",
+   "when": "node:s14",
    "yield": {
     "group": "panzhang",
     "reach": 4,

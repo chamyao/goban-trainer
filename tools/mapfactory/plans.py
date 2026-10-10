@@ -524,6 +524,9 @@ class MapBuilder:
                       "needs", "delivers", "when", "empty", "waiting", "deliver", "delivered", "call"):   # a place that delivers a mark
                 if s.get(k):
                     spot[k] = s[k]
+            if s.get("via"):   # where the goal marker points first (cells -> tiles), in order, until she gets there: the
+                # way round a wall the marker would point straight through (Red Chamber's back gate, from the side gate)
+                spot["via"] = [[v[0] + .5, v[1] + .5] for v in (self.near_cell(tuple(c), want_visible=False) for c in s["via"])]
             self.spots.append(spot)
             self.keep.add(t)
             if s.get("cover") and s.get("with"):

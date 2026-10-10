@@ -771,7 +771,17 @@
    "y": 5.7,
    "node": "31-g3",
    "label": "The back gate",
-   "trigger": "near"
+   "trigger": "near",
+   "via": [
+    [
+     9.5,
+     45.5
+    ],
+    [
+     9.5,
+     9.5
+    ]
+   ]
   },
   {
    "id": "g7",
@@ -873,8 +883,8 @@
   {
    "id": "npc-8",
    "kind": "hero.backchild",
-   "x": 53.5,
-   "y": 5.9,
+   "x": 37.5,
+   "y": 1.9,
    "say": [
     [
      "backchild",
@@ -882,7 +892,7 @@
     ]
    ],
    "until": "31-g3",
-   "face": "W",
+   "face": "S",
    "when": "node:g2"
   },
   {
@@ -928,8 +938,8 @@
   {
    "id": "back-child",
    "kind": "folk.child",
-   "x": 61.5,
-   "y": 5.9,
+   "x": 69.5,
+   "y": 1.9,
    "say": [],
    "intro": [
     "Granny! Granny! Play me! I always win!"

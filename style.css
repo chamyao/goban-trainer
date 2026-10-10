@@ -893,3 +893,6 @@ html.tk-fullwin-on, html.tk-fullwin-on body { overflow: hidden; overscroll-behav
 .town-goal-go::before { content: "➜ "; }
 .town-goal-go:hover, .town-goal-go:focus-visible { color: #fff0b8; text-decoration: underline; outline: none; }
 .town-goal-news::before { content: "📣 "; }
+/* Watch the room (a world's "watch": Red Chamber) shares its row with Take me there, so the goal box stays short on a phone */
+.town-goal-watch { display: inline-block; width: auto; padding-right: 1em; }
+.town-goal-watch + .town-goal-go { display: inline-block; width: auto; }
