@@ -189,6 +189,17 @@ class Plan:
                     self.doors.append((f"door {t['id']}", ok[len(ok) // 2]))
         # spots, exits, people, watchers: on the grid and walkable
         need = list(self.doors)
+        # spots you walk up to (a beat, a thing that gives, a place to deliver to) set off within 36 px of her: two
+        # closer than 76 px both go off as she walks past them (Misaeng's Sales 3, Testing round 3). Two beats are never
+        # open at once, so a pair counts when one of them is a giver or a delivery (open for a stretch of the story)
+        walkup = [s for s in p.get("spots", []) if (s.get("node") or s.get("gives") or s.get("needs")) and s.get("trigger") != "talk"]
+        for i, a_ in enumerate(walkup):
+            for b_ in walkup[i + 1:]:
+                if not any(x.get("gives") or x.get("needs") for x in (a_, b_)):
+                    continue
+                d = math.dist(a_["at"], b_["at"]) * self.C * 16
+                if d < 76:
+                    self.err(f"spots {a_['id']} and {b_['id']} are {d:.0f} px apart: walking up to one sets off the other (keep 76)")
         for s in p.get("spots", []):
             c = tuple(s["at"])
             if s.get("node") and s["node"].split("-", 1)[-1] not in keys:

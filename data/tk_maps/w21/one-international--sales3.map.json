@@ -80,7 +80,7 @@
   },
   {
    "kind": "furn.water_cooler",
-   "x": 8,
+   "x": 10,
    "y": 2,
    "w": 1,
    "h": 1,
@@ -98,7 +98,7 @@
   },
   {
    "kind": "furn.filing",
-   "x": 22,
+   "x": 26,
    "y": 2,
    "w": 1,
    "h": 1,
@@ -107,7 +107,7 @@
   },
   {
    "kind": "furn.filing",
-   "x": 24,
+   "x": 28,
    "y": 2,
    "w": 1,
    "h": 1,
@@ -115,7 +115,7 @@
   },
   {
    "kind": "furn.plant",
-   "x": 30,
+   "x": 32,
    "y": 2,
    "w": 1,
    "h": 1,
@@ -178,8 +178,7 @@
    "y": 8,
    "w": 2,
    "h": 1,
-   "id": "desk-kim",
-   "label": "Kim Dong-sik's desk"
+   "id": "desk-spare"
   },
   {
    "kind": "furn.office_desk",
@@ -187,7 +186,8 @@
    "y": 10,
    "w": 2,
    "h": 1,
-   "id": "desk-spare"
+   "id": "desk-kim",
+   "label": "Kim Dong-sik's desk"
   },
   {
    "kind": "furn.office_desk",
@@ -333,29 +333,29 @@
   },
   {
    "id": "m3",
-   "x": 16.5,
-   "y": 12.7,
+   "x": 12.5,
+   "y": 16.7,
    "node": "21-m3",
    "label": "Jang's desk"
   },
   {
    "id": "m4",
-   "x": 20.5,
-   "y": 6.7,
+   "x": 6.5,
+   "y": 18.7,
    "node": "21-m4",
-   "label": "Kim Dong-sik's desk"
+   "label": "The team's meeting table"
   },
   {
    "id": "m5",
-   "x": 14.5,
-   "y": 8.7,
+   "x": 24.5,
+   "y": 16.7,
    "node": "21-m5",
    "label": "Sales Team 3"
   },
   {
    "id": "m7",
-   "x": 14.5,
-   "y": 6.7,
+   "x": 30.5,
+   "y": 14.7,
    "node": "21-m7",
    "label": "Sales Team 3"
   },
@@ -369,7 +369,7 @@
   {
    "id": "m15",
    "x": 18.5,
-   "y": 12.7,
+   "y": 20.7,
    "node": "21-m15",
    "label": "Sales Team 3"
   },
@@ -398,7 +398,7 @@
   },
   {
    "id": "filing",
-   "x": 22.5,
+   "x": 26.5,
    "y": 4.7,
    "node": "",
    "label": "The filing cabinets",
@@ -413,7 +413,7 @@
   },
   {
    "id": "pantry",
-   "x": 8.5,
+   "x": 10.5,
    "y": 4.7,
    "node": "",
    "label": "The pantry",
@@ -429,7 +429,7 @@
   {
    "id": "errand-copy",
    "x": 18.5,
-   "y": 6.7,
+   "y": 12.7,
    "node": "",
    "label": "Kim Dong-sik's desk",
    "needs": [
@@ -472,8 +472,8 @@
   },
   {
    "id": "errand-coffee",
-   "x": 16.5,
-   "y": 6.7,
+   "x": 14.5,
+   "y": 8.7,
    "node": "",
    "label": "The deputy's desk",
    "needs": [
