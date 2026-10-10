@@ -832,8 +832,15 @@ const TK = {
     (p.tkReplay || (p.tkReplay = {}))[n] = t;
     const seen = this.ls("tk-seen"); seen[n] = t; this.lsSet("tk-seen", seen);
   },
-  seen(id) { return !!(loadProgress().tkSeen || {})[id]; },
-  markSeen(id) { const p = loadProgress(); (p.tkSeen || (p.tkSeen = {}))[id] = 1; this.saveProg(p); },
+  // a scene seen counts only if it was seen after the world's last replay or start over (dated, so a synced copy
+  // from before the rollback can't bring it back: a replayed scene plays in full again, stills and all)
+  seen(id) {
+    const p = loadProgress(), v = (p.tkSeen || {})[id];
+    if (!v) return false;
+    const rb = (p.tkReplay || {})[parseInt(id, 10)] || 0;
+    return v === 1 ? !rb : v > rb;   // 1: marked before marks were dated; it stands only if the world was never rolled back
+  },
+  markSeen(id) { const p = loadProgress(); (p.tkSeen || (p.tkSeen = {}))[id] = Date.now(); this.saveProg(p); },
   world(n) { return this.data.worlds.find(w => w.n === n); },
   node(w, key) { return w.nodes.find(x => x.key === key); },
   preds(w, key) { return w.edges.filter(e => e[1] === key).map(e => e[0]); },
