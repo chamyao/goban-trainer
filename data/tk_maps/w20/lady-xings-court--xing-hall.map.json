@@ -118,9 +118,9 @@
      "The old lady said both uncles, miss, and the light's going."
     ]
    ],
-   "until": "20-hl1-d4",
+   "until": "20-d4",
    "face": "W",
-   "when": "node:hl1-d3"
+   "when": "node:d3"
   }
  ],
  "exits": [

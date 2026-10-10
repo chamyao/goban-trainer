@@ -30,6 +30,8 @@ _TOOLS = Path(__file__).resolve().parents[2] / "tools"
 sys.path[:0] = [str(_TOOLS), str(_TOOLS / "mapfactory")]
 from tk_plans_w2 import ART as ART2, LINE_KINDS, NEW_KINDS as NEW_KINDS2, ZONE_KINDS, _ch, room  # noqa: E402
 
+# The beat keys. A spot's "node" carries the plans' prefix (K("d1") is "hl1-d1"; the factory renames it to the world's);
+# a condition ("when", "until": "node:d4") names the bare key, which the engine reads as this world's.
 KEYS_HLM1 = {f"d{i}" for i in range(1, 9)} | {"d6a"} | {f"g{i}" for i in range(1, 8)}
 P = "hl1"   # the plans' key prefix: "hl1-d1"
 
@@ -129,7 +131,7 @@ ROOM_OF = {"d2": "jm-rooms", "d3": "jm-rooms", "d6": "jm-rooms", "d7": "jm-rooms
 def cues(place_keys):
     """The cue-givers of the beats in place_keys, as plan npcs: a cast member saying their line, while the beat is open."""
     return [{"kind": f"hero.{who}", **({"place": ROOM_OF[k]} if ROOM_OF[k] else {}), "at": at, "face": face,
-             "say": [[who, line]], "when": f"node:{K(PREV[k])}", "until": f"node:{K(k)}"}
+             "say": [[who, line]], "when": f"node:{PREV[k]}", "until": f"node:{k}"}
             for k, who, at, face, line in CUES if k in place_keys]
 
 
@@ -226,31 +228,31 @@ RONG = {
             {"kind": "furn.jar", "in": "back-yard", "count": 3},
         ],
         "exits": [{"to": "Ning-Rong Street", "at": [25, 0], "side": "N"}],
-        "entries": {"": [7, 26], "Lady Xing's Court": [5, 25], "Ning-Rong Street": [25, 2]},
+        "entries": {"": [7, 26], "Lady Xing's Court": [5, 25], "Ning-Rong Street": [25, 1]},
     },
     "states": [
         # Part 1: every gate to the street is shut; afternoon into evening, then night
-        {"id": "afternoon", "until": f"node:{K('d4')}", "light": "day", "shut": "_part1"},
-        {"id": "evening", "when": f"node:{K('d4')}", "until": f"node:{K('d7')}", "light": "dusk", "shut": "_part1"},
-        {"id": "night", "when": f"node:{K('d7')}", "until": f"node:{K('d8')}", "light": "night", "shut": "_part1"},
+        {"id": "afternoon", "until": "node:d4", "light": "day", "shut": "_part1"},
+        {"id": "evening", "when": "node:d4", "until": "node:d7", "light": "dusk", "shut": "_part1"},
+        {"id": "night", "when": "node:d7", "until": "node:d8", "light": "night", "shut": "_part1"},
         # Part 2: one morning; the back gate is the way in and out
-        {"id": "morning", "when": f"node:{K('d8')}", "until": f"node:{K('g6')}", "light": "morning", "shut": "_part2"},
-        {"id": "dusk", "when": f"node:{K('g6')}", "light": "dusk", "shut": "_part2"},
+        {"id": "morning", "when": "node:d8", "until": "node:g6", "light": "morning", "shut": "_part2"},
+        {"id": "dusk", "when": "node:g6", "light": "dusk", "shut": "_part2"},
     ],
     "npcs": [
         # the house at work (Part 1): maids and nurses who keep their eyes down
-        {"kind": "folk.maiden", "at": [9, 12], "face": "S", "until": f"node:{K('d7')}",
+        {"kind": "folk.maiden", "at": [9, 12], "face": "S", "until": "node:d7",
          "say": "A maid with a feather duster stops, steps aside and lowers her eyes until you have passed."},
-        {"kind": "folk.woman", "at": [23, 24], "face": "N", "until": f"node:{K('d7')}",
+        {"kind": "folk.woman", "at": [23, 24], "face": "N", "until": "node:d7",
          "say": "An old serving woman bows low. “Welcome, Miss Lin. The whole house has been waiting for you.”"},
-        {"kind": "folk.maiden", "at": [17, 16], "face": "N", "when": f"node:{K('d4')}", "until": f"node:{K('d7')}",
+        {"kind": "folk.maiden", "at": [17, 16], "face": "N", "when": "node:d4", "until": "node:d7",
          "say": "A maid hurries down the passage with a covered dish, and not a sound from her feet."},
         # the back yard (Part 2)
-        {"kind": "folk.woman", "at": [23, 8], "face": "S", "when": f"node:{K('d8')}",
+        {"kind": "folk.woman", "at": [23, 8], "face": "S", "when": "node:d8",
          "say": "A woman scrubbing a pot looks you up and down. “Looking for Zhou Rui's? Just there, by the gate.”"},
-        {"kind": "folk.child", "when": f"node:{K('d8')}",
+        {"kind": "folk.child", "when": "node:d8",
          "say": "A small boy in a padded jacket stares at Ban'er, and Ban'er stares back."},
-        {"kind": "folk.maiden", "at": [17, 14], "face": "W", "when": f"node:{K('g3')}", "until": f"node:{K('g6')}",
+        {"kind": "folk.maiden", "at": [17, 14], "face": "W", "when": "node:g3", "until": "node:g6",
          "say": "A little maid with a tray stops dead. “The second mistress is coming down to eat. Hush!”"},
     ],
     "maps": {
@@ -346,10 +348,10 @@ for _st in RONG["states"]:
 
 # Road challengers: Grandmother Jia's court (d1-d3) and the great court's covered walk (d5-d6), none blocking
 RONG["challengers"] = [
-    _ch("steps-maid", "folk.maiden", [10, 10], f"node:{K('d1')}", f"node:{K('d3')}",
+    _ch("steps-maid", "folk.maiden", [10, 10], "node:d1", "node:d3",
         "So you're the new cousin from Yangzhou. They say the south plays a careful game. Show me.",
         "Careful, and quick too. I'll tell the others.", "The old lady's waiting, miss."),
-    _ch("walk-nurse", "folk.woman", [29, 16], f"node:{K('d4')}", f"node:{K('d6a')}",
+    _ch("walk-nurse", "folk.woman", [29, 16], "node:d4", "node:d6a",
         "I play a game here while the mistresses talk. Sit a moment, miss. Nobody will see.",
         "Your mother played like that. She never let a stone go to waste.", "Go on, miss. Don't keep them waiting."),
 ]
@@ -517,29 +519,29 @@ STREET = {
         "entries": {"": [1, 12], "The Village": [1, 12], "The Rong Mansion": [11, 1]},
     },
     "states": [
-        {"id": "morning", "when": f"node:{K('g1')}", "until": f"node:{K('g3')}", "light": "morning",
+        {"id": "morning", "when": "node:g1", "until": "node:g3", "light": "morning",
          "shut": {"rong-back-gate": ["The back gate is shut. Children are playing in front of it, and nobody answers your knock."],
                   "rong-side-gate": ["“Wait by the corner of the wall, granny.” The men on the bench don't even look up."],
                   "rong-main-gate": ["Sedan chairs and horses crowd the great gate. You don't dare go near it."],
                   "xing-gate": ["A black-lacquered gate, shut. Not the one Gou'er told you about."],
                   "ning-gate": ["The Ning mansion's gate. That isn't where Zhou Rui's wife lives."]}},
-        {"id": "day", "when": f"node:{K('g3')}", "until": f"node:{K('g6')}", "light": "morning",
+        {"id": "day", "when": "node:g3", "until": "node:g6", "light": "morning",
          "shut": {"rong-side-gate": ["The men on the bench are laughing at someone else now."],
                   "rong-main-gate": ["Sedan chairs and horses crowd the great gate. You don't dare go near it."],
                   "xing-gate": ["A black-lacquered gate, shut."], "ning-gate": ["The Ning mansion's gate, shut."]}},
-        {"id": "dusk", "when": f"node:{K('g6')}", "light": "dusk",
+        {"id": "dusk", "when": "node:g6", "light": "dusk",
          "shut": {"rong-side-gate": ["The side gate is shut for the night."], "rong-main-gate": ["The great gate is shut."],
                   "xing-gate": ["A black-lacquered gate, shut."], "ning-gate": ["The Ning mansion's gate, shut."]}},
     ],
     "npcs": [
         # the bench (g2 stages the gate servant and the old man; these sit with them)
-        {"kind": "folk.official", "at": [6, 11], "face": "N", "until": f"node:{K('g2')}",
+        {"kind": "folk.official", "at": [6, 11], "face": "N", "until": "node:g2",
          "say": "A man on the bench with his chest out and his belly forward. “Where are you from, granny? Ha!”"},
-        {"kind": "folk.official", "at": [4, 10], "face": "E", "until": f"node:{K('g2')}",
+        {"kind": "folk.official", "at": [4, 10], "face": "E", "until": "node:g2",
          "say": "“Go on, wait by the wall. Somebody'll be out.” He laughs, and the others laugh with him."},
         {"kind": "folk.villager", "at": [19, 11], "face": "W", "say": "A water-carrier sets down his buckets. “The Rong mansion? That's the one with the lions, granny. Don't go near the front.”"},
         {"kind": "folk.woman", "at": [3, 6], "face": "E", "say": "A woman with a basket of washing. “The back street? Keep on round the corner.”"},
-        {"kind": "folk.child", "when": f"node:{K('g2')}", "until": f"node:{K('g3')}",
+        {"kind": "folk.child", "when": "node:g2", "until": "node:g3",
          "say": "Children race past shrieking, a paper windmill held high."},
         {"kind": "folk.elder", "at": [17, 1], "face": "W", "say": "An old peddler with a tray of sugar figures. “Buy one for the boy, granny? No? Then mind your feet.”"},
     ],
@@ -550,13 +552,13 @@ STREET = {
     },
 }
 STREET["challengers"] = [
-    _ch("lion-groom", "folk.villager", [17, 10], f"node:{K('g1')}", f"node:{K('g2')}",
+    _ch("lion-groom", "folk.villager", [17, 10], "node:g1", "node:g2",
         "Hey, granny, this gate's for sedan chairs. Beat me at a game and I'll tell you which door's for you.",
         "Not bad for a country granny! The side gate, to the west. Mind the men on the bench.", "West, granny. The side gate."),
-    _ch("toy-hawker", "folk.villager", [7, 1], f"node:{K('g2')}", f"node:{K('g3')}",
+    _ch("toy-hawker", "folk.villager", [7, 1], "node:g2", "node:g3",
         "A toy for the little one? Win a game and he can have one for nothing.",
         "A deal's a deal. Here, little one.", "The back gate's just there."),
-    _ch("back-child", "folk.child", [15, 1], f"node:{K('g2')}", f"node:{K('g3')}",
+    _ch("back-child", "folk.child", [15, 1], "node:g2", "node:g3",
         "Granny! Granny! Play me! I always win!", "You cheated! No you didn't. Again tomorrow!", "Which Zhou Da-niang do you want?"),
 ]
 

@@ -193,9 +193,9 @@
      "Everyone stands back for the old lady. The two holding her up never let go."
     ]
    ],
-   "until": "20-hl1-d2",
+   "until": "20-d2",
    "face": "E",
-   "when": "node:hl1-d1"
+   "when": "node:d1"
   },
   {
    "id": "npc-2",
@@ -208,9 +208,9 @@
      "The silver-haired one is the old lady herself, miss."
     ]
    ],
-   "until": "20-hl1-d2",
+   "until": "20-d2",
    "face": "W",
-   "when": "node:hl1-d1"
+   "when": "node:d1"
   },
   {
    "id": "npc-3",
@@ -223,9 +223,9 @@
      "This is Cousin Lian's wife."
     ]
    ],
-   "until": "20-hl1-d3",
+   "until": "20-d3",
    "face": "W",
-   "when": "node:hl1-d2"
+   "when": "node:d2"
   },
   {
    "id": "npc-4",
@@ -238,9 +238,9 @@
      "Nobody calls her Pepper Feng but the old lady."
     ]
    ],
-   "until": "20-hl1-d3",
+   "until": "20-d3",
    "face": "E",
-   "when": "node:hl1-d2"
+   "when": "node:d2"
   },
   {
    "id": "npc-5",
@@ -253,9 +253,9 @@
      "We don't sit. We serve the old lady."
     ]
    ],
-   "until": "20-hl1-d6",
+   "until": "20-d6",
    "face": "W",
-   "when": "node:hl1-d6a"
+   "when": "node:d6a"
   },
   {
    "id": "npc-6",
@@ -268,9 +268,9 @@
      "The spittoon comes before the tea you drink."
     ]
    ],
-   "until": "20-hl1-d6",
+   "until": "20-d6",
    "face": "E",
-   "when": "node:hl1-d6a"
+   "when": "node:d6a"
   },
   {
    "id": "npc-7",
@@ -283,9 +283,9 @@
      "Grandmother thinks girls only need a few characters."
     ]
    ],
-   "until": "20-hl1-d6",
+   "until": "20-d6",
    "face": "W",
-   "when": "node:hl1-d6a"
+   "when": "node:d6a"
   },
   {
    "id": "npc-8",
@@ -298,9 +298,9 @@
      "A jade? What does he mean? Nobody knows."
     ]
    ],
-   "until": "20-hl1-d7",
+   "until": "20-d7",
    "face": "E",
-   "when": "node:hl1-d6"
+   "when": "node:d6"
   }
  ],
  "exits": [

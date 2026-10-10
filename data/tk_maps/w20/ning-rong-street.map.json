@@ -799,7 +799,7 @@
    "say": [
     "A man on the bench with his chest out and his belly forward. “Where are you from, granny? Ha!”"
    ],
-   "until": "20-hl1-g2",
+   "until": "20-g2",
    "face": "N"
   },
   {
@@ -810,7 +810,7 @@
    "say": [
     "“Go on, wait by the wall. Somebody'll be out.” He laughs, and the others laugh with him."
    ],
-   "until": "20-hl1-g2",
+   "until": "20-g2",
    "face": "E"
   },
   {
@@ -841,8 +841,8 @@
    "say": [
     "Children race past shrieking, a paper windmill held high."
    ],
-   "until": "20-hl1-g3",
-   "when": "node:hl1-g2",
+   "until": "20-g3",
+   "when": "node:g2",
    "wander": true
   },
   {
@@ -866,9 +866,9 @@
      "Those idlers are having their fun. Don't wait by that wall."
     ]
    ],
-   "until": "20-hl1-g2",
+   "until": "20-g2",
    "face": "W",
-   "when": "node:hl1-g1"
+   "when": "node:g1"
   },
   {
    "id": "npc-8",
@@ -881,9 +881,9 @@
      "There are three Zhou Da-niangs here. Which one?"
     ]
    ],
-   "until": "20-hl1-g3",
+   "until": "20-g3",
    "face": "W",
-   "when": "node:hl1-g2"
+   "when": "node:g2"
   },
   {
    "id": "lion-groom",
@@ -900,8 +900,8 @@
    "done": [
     "West, granny. The side gate."
    ],
-   "until": "20-hl1-g2",
-   "when": "node:hl1-g1",
+   "until": "20-g2",
+   "when": "node:g1",
    "view": 4,
    "challenge": "lion-groom"
   },
@@ -920,8 +920,8 @@
    "done": [
     "The back gate's just there."
    ],
-   "until": "20-hl1-g3",
-   "when": "node:hl1-g2",
+   "until": "20-g3",
+   "when": "node:g2",
    "view": 4,
    "challenge": "toy-hawker"
   },
@@ -940,8 +940,8 @@
    "done": [
     "Which Zhou Da-niang do you want?"
    ],
-   "until": "20-hl1-g3",
-   "when": "node:hl1-g2",
+   "until": "20-g3",
+   "when": "node:g2",
    "view": 4,
    "challenge": "back-child"
   }
@@ -993,8 +993,8 @@
  "states": [
   {
    "id": "morning",
-   "when": "node:hl1-g1",
-   "until": "node:hl1-g3",
+   "when": "node:g1",
+   "until": "node:g3",
    "light": "morning",
    "shut": [
     {
@@ -1061,8 +1061,8 @@
   },
   {
    "id": "day",
-   "when": "node:hl1-g3",
-   "until": "node:hl1-g6",
+   "when": "node:g3",
+   "until": "node:g6",
    "light": "morning",
    "shut": [
     {
@@ -1117,7 +1117,7 @@
   },
   {
    "id": "dusk",
-   "when": "node:hl1-g6",
+   "when": "node:g6",
    "light": "dusk",
    "shut": [
     {

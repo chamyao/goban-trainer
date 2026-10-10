@@ -841,7 +841,7 @@
    "say": [
     "A maid with a feather duster stops, steps aside and lowers her eyes until you have passed."
    ],
-   "until": "20-hl1-d7",
+   "until": "20-d7",
    "face": "S"
   },
   {
@@ -852,7 +852,7 @@
    "say": [
     "An old serving woman bows low. “Welcome, Miss Lin. The whole house has been waiting for you.”"
    ],
-   "until": "20-hl1-d7",
+   "until": "20-d7",
    "face": "N"
   },
   {
@@ -863,9 +863,9 @@
    "say": [
     "A maid hurries down the passage with a covered dish, and not a sound from her feet."
    ],
-   "until": "20-hl1-d7",
+   "until": "20-d7",
    "face": "N",
-   "when": "node:hl1-d4"
+   "when": "node:d4"
   },
   {
    "id": "npc-4",
@@ -876,7 +876,7 @@
     "A woman scrubbing a pot looks you up and down. “Looking for Zhou Rui's? Just there, by the gate.”"
    ],
    "face": "S",
-   "when": "node:hl1-d8"
+   "when": "node:d8"
   },
   {
    "id": "npc-5",
@@ -886,7 +886,7 @@
    "say": [
     "A small boy in a padded jacket stares at Ban'er, and Ban'er stares back."
    ],
-   "when": "node:hl1-d8",
+   "when": "node:d8",
    "wander": true
   },
   {
@@ -897,9 +897,9 @@
    "say": [
     "A little maid with a tray stops dead. “The second mistress is coming down to eat. Hush!”"
    ],
-   "until": "20-hl1-g6",
+   "until": "20-g6",
    "face": "W",
-   "when": "node:hl1-g3"
+   "when": "node:g3"
   },
   {
    "id": "steps-maid",
@@ -916,8 +916,8 @@
    "done": [
     "The old lady's waiting, miss."
    ],
-   "until": "20-hl1-d3",
-   "when": "node:hl1-d1",
+   "until": "20-d3",
+   "when": "node:d1",
    "view": 2,
    "challenge": "steps-maid"
   },
@@ -936,8 +936,8 @@
    "done": [
     "Go on, miss. Don't keep them waiting."
    ],
-   "until": "20-hl1-d6a",
-   "when": "node:hl1-d4",
+   "until": "20-d6a",
+   "when": "node:d4",
    "view": 2,
    "challenge": "walk-nurse"
   }
@@ -1007,7 +1007,7 @@
   ],
   "ning-rong-street": [
    50,
-   4
+   2
   ],
   "": [
    14,
@@ -1021,7 +1021,7 @@
  "states": [
   {
    "id": "afternoon",
-   "until": "node:hl1-d4",
+   "until": "node:d4",
    "light": "day",
    "shut": [
     {
@@ -1064,8 +1064,8 @@
   },
   {
    "id": "evening",
-   "when": "node:hl1-d4",
-   "until": "node:hl1-d7",
+   "when": "node:d4",
+   "until": "node:d7",
    "light": "dusk",
    "shut": [
     {
@@ -1108,8 +1108,8 @@
   },
   {
    "id": "night",
-   "when": "node:hl1-d7",
-   "until": "node:hl1-d8",
+   "when": "node:d7",
+   "until": "node:d8",
    "light": "night",
    "shut": [
     {
@@ -1152,8 +1152,8 @@
   },
   {
    "id": "morning",
-   "when": "node:hl1-d8",
-   "until": "node:hl1-g6",
+   "when": "node:d8",
+   "until": "node:g6",
    "light": "morning",
    "shut": [
     {
@@ -1184,7 +1184,7 @@
   },
   {
    "id": "dusk",
-   "when": "node:hl1-g6",
+   "when": "node:g6",
    "light": "dusk",
    "shut": [
     {
