@@ -1,6 +1,6 @@
 """Red Chamber, Book 1: what a player could get wrong in its places, proved on the built maps, state by state.
 
-    python3 redchamber/book1/proofs.py [--world 20]
+    python3 redchamber/book1/proofs.py [--world 31]
 
 Walked on tiles as plans.verify walks them (the terrain's walkability, every solid object), with each state's shut
 gates as walls. It proves:
@@ -94,7 +94,7 @@ class Map:
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--world", type=int, default=20)
+    ap.add_argument("--world", type=int, default=31)
     a = ap.parse_args()
     d = ROOT / f"data/tk_maps/w{a.world}"
     n = a.world

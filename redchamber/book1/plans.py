@@ -98,41 +98,62 @@ def _room(grid, door, label, **kw):
     return room(grid, door, **kw) | {"label": label}
 
 
-# The watching layer (design.md, "Read the room"): before a board, the people in the room each give a cue. Plot's
-# ROOM_CUES (redchamber/book1/story.py, 216a5cf), placed: (beat, who, the cell in the beat's room or place, facing,
-# the line). Each stands there while the beat is the open one (from the beat before it until it is won), so a room's
-# board spots wait for a tap ("trigger": "talk"): she can look about her first. The cutscene hides them, and they go
-# when the beat is won.
+# The watching layer (design.md, "Read the room"): before a board, the people in the room each give a cue, and the
+# Watch button (tk-world.js watchRoom) pans to each by its cast id. The cues are Plot's ROOM_CUES (redchamber/book1/
+# story.py), read from there; what is ours is where each one stands: (beat, who, the n-th of that who in the beat) ->
+# (cell in the beat's room or place, facing). Each stands there while the beat is the open one (from the beat before
+# it until it is won), so a room's board spots wait for a tap ("trigger": "talk"): she can look about her first. The
+# cutscene hides them, and they go when the beat is won. In g4-g6 the scenes bring Zhou Rui's wife on themselves, so
+# she has no stand-in there (Integration, Plot).
 PREV = {"d2": "d1", "d3": "d2", "d4": "d3", "d5": "d4", "d6a": "d5", "d6": "d6a", "d7": "d6", "d8": "d7",
         "g1": "d8", "g2": "g1", "g3": "g2", "g4": "g3", "g5": "g4", "g6": "g5", "g7": "g6"}
-CUES = [
-    ("d2", "jmmaid", [3, 7], "E", "Everyone stands back for the old lady. The two holding her up never let go."),
-    ("d2", "laomama", [13, 7], "W", "The silver-haired one is the old lady herself, miss."),
-    ("d3", "tanchun", [14, 5], "W", "This is Cousin Lian's wife."),
-    ("d3", "jmmaid", [3, 4], "E", "Nobody calls her Pepper Feng but the old lady."),
-    ("d4", "laomama", [8, 5], "W", "The old lady said both uncles, miss, and the light's going."),
-    ("d5", "laomama", [9, 7], "E", "Two cushions on the kang, facing each other. Somebody's places."),
-    ("d5", "jmmaid", [15, 6], "W", "The mistress always sits on the lower side. The east place is the master's."),
-    ("d5", "jmmaid", [19, 5], "W", "The mistress smiles when she talks about him. Everyone does."),
-    ("d6", "liwan", [14, 4], "W", "We don't sit. We serve the old lady."),
-    ("d6", "jmmaid", [6, 3], "E", "The spittoon comes before the tea you drink."),
-    ("d6", "tanchun", [15, 7], "W", "Grandmother thinks girls only need a few characters."),
-    ("d7", "jmmaid", [4, 8], "E", "A jade? What does he mean? Nobody knows."),
-    ("g2", "oldservant", [9, 11], "W", "Those idlers are having their fun. Don't wait by that wall."),
-    ("g3", "backchild", [13, 1], "W", "There are three Zhou Da-niangs here. Which one?"),
-    ("g4", "zhouruijia", [7, 2], "W", "I do like to be asked. It's not my job, mind, but I know everyone."),
-    ("g5", "zhouruijia", [4, 5], "E", "Miss Ping, this is the granny I told you of."),
-    ("g6", "zhouruijia", [10, 5], "W", "Go on. Say it now, while there's no one else here."),
-]
+STANDS = {
+    ("d2", "jmmaid", 0): ([3, 7], "E"), ("d2", "laomama", 0): ([13, 7], "W"),
+    ("d3", "tanchun", 0): ([14, 5], "W"), ("d3", "jmmaid", 0): ([3, 4], "E"),
+    ("d4", "laomama", 0): ([8, 5], "W"),
+    ("d5", "laomama", 0): ([9, 7], "E"), ("d5", "jmmaid", 0): ([15, 6], "W"), ("d5", "jmmaid", 1): ([19, 5], "W"),
+    ("d5", "laomama", 1): ([16, 3], "E"),          # (wait) in the east-corridor room, by Lady Wang's kang
+    ("d6", "liwan", 0): ([14, 4], "W"), ("d6", "jmmaid", 0): ([6, 3], "E"),
+    ("d7", "tanchun", 0): ([15, 7], "W"), ("d7", "jmmaid", 0): ([4, 8], "E"),
+    ("g2", "oldservant", 0): ([9, 11], "W"), ("g3", "backchild", 0): ([13, 1], "W"),
+}
+USED, STOOD = set(), set()   # the stands looked at, and the cues that took one: a stand no cue takes is stale
+SCENE_CAST = {("g4", "zhouruijia"), ("g5", "zhouruijia"), ("g6", "zhouruijia")}   # the scene's own copy serves
 ROOM_OF = {"d2": "jm-rooms", "d3": "jm-rooms", "d6": "jm-rooms", "d7": "jm-rooms", "d4": "xing-hall", "d5": "wf-rooms",
            "g4": "zhou-house", "g5": "xf-eastroom", "g6": "xf-rooms", "g2": None, "g3": None}
 
 
+def _story():
+    import importlib.util
+    name = "redchamber_book1_story"
+    if name not in sys.modules:
+        spec = importlib.util.spec_from_file_location(name, Path(__file__).resolve().parent / "story.py")
+        sys.modules[name] = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(sys.modules[name])
+    return sys.modules[name]
+
+
 def cues(place_keys):
-    """The cue-givers of the beats in place_keys, as plan npcs: a cast member saying their line, while the beat is open."""
-    return [{"kind": f"hero.{who}", **({"place": ROOM_OF[k]} if ROOM_OF[k] else {}), "at": at, "face": face,
-             "say": [[who, line]], "when": f"node:{PREV[k]}", "until": f"node:{k}"}
-            for k, who, at, face, line in CUES if k in place_keys]
+    """The cue-givers of the beats in place_keys, as plan npcs: a cast member (kind hero.<who>) with their line, while
+    the beat is open. Every cue in ROOM_CUES must have a place to stand, or be the scene's own."""
+    out = []
+    USED.update((k, w, i) for k, w, i in STANDS if k in place_keys)
+    for k, cs in _story().ROOM_CUES.items():
+        if k not in place_keys:
+            continue
+        seen = {}
+        for c in cs:
+            who = c["who"]
+            i = seen[who] = seen.get(who, -1) + 1
+            if (k, who) in SCENE_CAST:
+                continue
+            STOOD.add((k, who, i))
+            if (k, who, i) not in STANDS:
+                raise SystemExit(f"plans: ROOM_CUES {k} has {who} (#{i + 1}) with nowhere to stand: add them to STANDS")
+            at, face = STANDS[(k, who, i)]
+            out.append({"kind": f"hero.{who}", **({"place": ROOM_OF[k]} if ROOM_OF[k] else {}), "at": at, "face": face,
+                        "say": [[who, c["say"]]], "when": f"node:{PREV[k]}", "until": f"node:{k}"})
+    return out
 
 
 # =========================================================================================================== the house
@@ -563,8 +584,11 @@ STREET["challengers"] = [
 ]
 
 RONG["npcs"] += cues({"d2", "d3", "d5", "d6", "d7", "g4", "g5", "g6"})
+
 XING["npcs"] += cues({"d4"})
 STREET["npcs"] += cues({"g2", "g3"})
+if set(STANDS) - STOOD:
+    raise SystemExit(f"plans: STANDS for cues ROOM_CUES no longer has: {sorted(set(STANDS) - STOOD)}")
 
 PLANS_HLM1 = {
     "The Rong Mansion": RONG,
