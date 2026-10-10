@@ -170,6 +170,22 @@ KINDS.update({
     "banner.black": (1, 1, True),           # the Chancellor's
     "prop.lanterns": (1, 1, True),          # a red paper lantern on a stand
     "prop.body_lamp": (1, 1, False),        # a covered body in the street, a lamp flame on it
+    # Red Chamber, Book 1 (redchamber/book1/plans.py NEW_KINDS, its art briefs in ART)
+    "building.festoongate": (2, 1, False),  # 垂花门: a court gate under a little roof hung with carved pendants; walked through
+    "building.halfgate": (2, 1, False),     # 半大门: a gate half the size of a court gate (Xifeng's); walked through
+    "building.blackgate": (2, 1, False),    # 黑油大门: a black-lacquered mansion gate (Lady Xing's); walked through
+    "landmark.stonelion": (2, 2, True),     # 石狮子: a stone lion on a plinth, one each side of a mansion gate
+    "prop.sedan": (2, 2, True),             # 轿子: a sedan chair set down
+    "prop.greencart": (3, 2, True),         # 翠幄青绸车: a covered carriage hung with green silk
+    "prop.bench": (4, 1, True),             # 大板凳: a long bench by a gate
+    "prop.birdcage": (1, 1, True),          # a bird cage under the eaves of a covered walk
+    "prop.toyload": (2, 1, True),           # a hawker's pole and two baskets of toys, set down
+    "furn.kang": (3, 2, True),              # 炕: a heated brick bed-seat, a low table on it
+    "furn.cushion": (1, 1, False),          # 锦褥: a brocade cushion on a kang
+    "furn.clock": (1, 1, True),             # 自鸣钟: a striking clock in a box on a pillar
+    "furn.plaque": (3, 1, True),            # 匾: a great gilt plaque on the back wall
+    "furn.handwarmer": (1, 1, False),       # 手炉: a brass hand-warmer on a kang table
+    "furn.gauze": (3, 1, False),            # 碧纱橱: a green gauze partition in a carved frame
 })
 # line kinds -> (walkable, blocks sight); zone kinds -> walkable (the plan grids' lines and zones)
 LINE_KINDS = {"road": (True, False), "path": (True, False), "bridge": (True, False), "gallery": (True, False),
@@ -274,6 +290,22 @@ FALLBACK = {
     "banner.black": ["banner.purple", "banner.red"],
     "prop.lanterns": ["lamp.post"],
     "prop.body_lamp": ["rock.small"],
+    # Red Chamber, Book 1
+    "building.festoongate": ["building.gatehouse", "building.gate"],
+    "building.halfgate": ["building.gatehouse", "building.gate"],
+    "building.blackgate": ["building.gatehouse", "building.gate"],
+    "landmark.stonelion": ["rock.big", "rock.crag"],
+    "prop.sedan": ["prop.carriage", "camp.table"],
+    "prop.greencart": ["prop.carriage", "camp.table"],
+    "prop.bench": ["furn.counter", "camp.logs"],
+    "prop.birdcage": ["prop.lanterns", "lamp.post"],
+    "prop.toyload": ["furn.sacks", "camp.hay"],
+    "furn.kang": ["furn.bed", "furn.dais"],
+    "furn.cushion": ["furn.seat", "furn.rug"],
+    "furn.clock": ["furn.drawers", "furn.shelf"],
+    "furn.plaque": ["furn.screen", "furn.shelf"],
+    "furn.handwarmer": ["furn.jar"],
+    "furn.gauze": ["furn.screen", "furn.curtain"],
 }
 
 # people: folk.* are townsfolk drawn by the kit; hero.<id> are story
