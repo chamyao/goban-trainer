@@ -1,0 +1,5 @@
+     mode: test (the game's test mode on)
+FAIL 21-m14  1s  ms_jang in one-international  at 296,78: no goal to go to
+ok   after the book: playing as ms_jang in one-international; the chip says "Jang Geu-rae"; "Now playing" banners: none
+walk-playthrough Book 21 (default): 0/1 beats walked and played in 0 min (0 needed a reload, 0 held by a scene); 0 boards (0 from the rated pool)
+the goal box's chip followed the party: Jang Geu-rae
