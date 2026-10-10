@@ -2736,8 +2736,10 @@ const WorldHeroes = {
 /* ---------- mounting a world in the campaign page ---------- */
 const WorldView = {
   game: null,
-  kit() {
+  // a world with its own kit ("kit": "seoul", Misaeng's modern Seoul) is always drawn in it (a ?kit= link still wins)
+  kit(w) {
     let k = new URLSearchParams(location.search).get("kit");
+    if (w && w.kit) return k || w.kit;
     try {
       // once: everyone starts on the main look (Jade); switching afterwards is kept
       if (localStorage.getItem("tk-kit-main") !== WORLD_KIT) { localStorage.setItem("tk-kit", WORLD_KIT); localStorage.setItem("tk-kit-main", WORLD_KIT); }
@@ -2766,7 +2768,7 @@ const WorldView = {
       input: { keyboard: { target: host } },
       scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
       scene: worldScenes(),
-      callbacks: { preBoot: g => { g.worldOpts = { ...opts, kit: this.kit() }; } },
+      callbacks: { preBoot: g => { g.worldOpts = { ...opts, kit: this.kit(opts.w) }; } },
     });
     // keep the view's shape matched to its box as that changes
     let t = 0;

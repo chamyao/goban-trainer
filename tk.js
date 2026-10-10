@@ -1318,7 +1318,8 @@ async function viewTK(worldN) {
   if (world) {
     // Art style: the same maps drawn with either free pack (tk-world.js WORLD_KITS).
     const kit = WorldView.kit(), kits = Object.keys(WORLD_KITS), next = kits[(kits.indexOf(kit) + 1) % kits.length];
-    root.querySelector(".tk-head-btns").prepend(h("button", { class: "tk-chron-btn", type: "button", title: `Switch to ${WORLD_KITS[next].en}`,
+    // a world drawn in its own kit (Misaeng: seoul) has no art switch
+    if (!w.kit) root.querySelector(".tk-head-btns").prepend(h("button", { class: "tk-chron-btn", type: "button", title: `Switch to ${WORLD_KITS[next].en}`,
       onclick: () => { WorldView.setKit(next); viewTK(w.n); } }, `画风：${WORLD_KITS[kit].zh} ${WORLD_KITS[kit].en}`));
     if (typeof WorldTravel !== "undefined") WorldTravel.addButtons(root.querySelector(".tk-head-btns"), w);   // map and start over (tk-travel.js)
     // test mode is remembered (a ?test=1 link); say so, and offer the way out (the user didn't know they were in it)
