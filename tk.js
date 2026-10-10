@@ -154,6 +154,32 @@ const TK_CHARS = {
   // Red Hare, led by Li Su: a horse, not a person (horse: the coat in assets/tk/horses/); the look fields are a fallback
   redhare: { name: "Red Hare", horse: "red", skin: "#b83a22", robe: "#b83a22", trim: "#2a2024", hair: "#2a2024", beard: "none" },
   caosong: { name: "Cao Song", skin: "#efd8c0", hair: "#d8d2c8", hat: "guan", hatC: "#1e1e24", robe: "#7b4a2a", trim: "#d4ad42", beard: "long", beardC: "#e0dcd4", eyes: "kind" },
+  // Dream of the Red Chamber, Book 1 (world 31). jade: a stone worn at the neck (Baoyu's 通灵宝玉); no one else uses it.
+  daiyu: { name: "Lin Daiyu", skin: "#fbefe8", hair: "#1a1418", hat: "twinloops", pin: "#f4f4f4", robe: "#c8d8e8", trim: "#f4f0e8", beard: "none", eyes: "kind" },
+  jiamu: { name: "Grandmother Jia", skin: "#f2d8c0", hair: "#d8d2c8", hat: "bun", hatC: "#d8d2c8", pin: "#3f9a5a", robe: "#7a3a2a", trim: "#e6c14a", beard: "none", eyes: "kind" },
+  xingfuren: { name: "Lady Xing", skin: "#f2d2b4", hair: "#2a2024", hat: "bun", hatC: "#2a2024", pin: "#e6c14a", robe: "#8a6a8a", trim: "#5a3a5a", beard: "none", eyes: "narrow", makeup: true },
+  wangfuren: { name: "Lady Wang", skin: "#f2d6bc", hair: "#2a2024", hat: "bun", hatC: "#2a2024", pin: "#d8d8e0", robe: "#5a6a8a", trim: "#d6d2c4", beard: "none", eyes: "kind" },
+  liwan: { name: "Li Wan", skin: "#f4dcc6", hair: "#2a2024", hat: "bun", hatC: "#2a2024", pin: "#d8d8e0", robe: "#b8b4ac", trim: "#f4f0e8", beard: "none", eyes: "kind" },
+  xifeng: { name: "Wang Xifeng", skin: "#fbefe8", hair: "#1a1418", hat: "lady", pin: "#e6c14a", pin2: "#f4f0e8", flower: "#c8283c", robe: "#c8283c", trim: "#e6c14a", beard: "none", eyes: "phoenix", makeup: true },
+  yingchun: { name: "Yingchun", skin: "#f8e0cc", hair: "#1a1418", hat: "sidebuns", pin: "#5a9a6a", robe: "#f0b8c4", trim: "#5a9a6a", beard: "none", eyes: "kind", makeup: true },
+  tanchun: { name: "Tanchun", skin: "#f8e0cc", hair: "#1a1418", hat: "twinloops", pin: "#5a9a6a", robe: "#f0b8c4", trim: "#5a9a6a", beard: "none", eyes: "phoenix", makeup: true },
+  xichun: { name: "Xichun", skin: "#f8e0cc", hair: "#1a1418", hat: "sidebuns", pin: "#5a9a6a", robe: "#f0b8c4", trim: "#5a9a6a", beard: "none", eyes: "round" },
+  baoyu: { name: "Jia Baoyu", skin: "#f8e0c8", hair: "#1a1418", hat: "guan", hatC: "#e6c14a", robe: "#c8283c", trim: "#e6c14a", beard: "none", eyes: "kind", jade: "#8ad0a0" },
+  xiren: { name: "Xiren", skin: "#f6dcc4", hair: "#2a2024", hat: "bun", hatC: "#2a2024", pin: "#e6c14a", robe: "#f0c0a8", trim: "#5a9a6a", beard: "none", eyes: "kind", makeup: true },
+  yingge: { name: "Yingge", skin: "#f8dcc4", hair: "#2a2024", hat: "twinloops", pin: "#c8392c", robe: "#6aaa7a", trim: "#f4f0e8", beard: "none", eyes: "round", makeup: true },
+  jmmaid: { name: "Maid", skin: "#f8dcc4", hair: "#2a2024", hat: "twinloops", pin: "#5a9a6a", robe: "#c8392c", trim: "#5a9a6a", beard: "none", eyes: "kind", makeup: true },
+  laomama: { name: "Old nurse", skin: "#e8c4a0", hair: "#9a9a9a", hat: "bun", hatC: "#9a9a9a", pin: "#6a6a6a", robe: "#7a5a3a", trim: "#4a3a2a", beard: "none", eyes: "narrow" },
+  xingservant: { name: "Servant", skin: "#ecc29a", hair: "#2a2024", hat: "scholar", hatC: "#1e1e24", robe: "#3e4f7a", trim: "#d6d2c4", beard: "none", eyes: "normal" },
+  grannyliu: { name: "Granny Liu", skin: "#d8a078", hair: "#a8a4a0", hat: "bun", hatC: "#a8a4a0", pin: "#3a3a4a", robe: "#3e4f6a", trim: "#8a7a5a", beard: "none", eyes: "kind" },
+  baner: { name: "Ban'er", skin: "#e8b88c", hair: "#2a2024", hat: "topknot", hatC: "#2a2024", pin: "#c8392c", robe: "#8a6a4a", trim: "#5a3a22", beard: "none", eyes: "round" },
+  gouer: { name: "Gou'er", skin: "#d8a47a", hair: "#2a2024", hat: "band", hatC: "#5a4a3a", robe: "#7a5a3a", trim: "#4a3a2a", beard: "none", eyes: "narrow" },
+  liushi: { name: "Liu-shi", skin: "#e8b890", hair: "#2a2024", hat: "scarf", hatC: "#4a6a8a", robe: "#4a6a8a", trim: "#2a3a4a", beard: "none", eyes: "kind" },
+  zhouruijia: { name: "Zhou Rui's wife", skin: "#f0cca8", hair: "#2a2024", hat: "bun", hatC: "#2a2024", pin: "#d8d8e0", robe: "#3f6a4c", trim: "#d6d2c4", beard: "none", eyes: "narrow", fat: true },
+  pinger: { name: "Ping'er", skin: "#fbefe8", hair: "#1a1418", hat: "lady", pin: "#d8d8e0", pin2: "#e6c14a", flower: "#f08ab0", robe: "#e890a8", trim: "#f4f0e8", beard: "none", eyes: "kind", makeup: true },
+  jiarong: { name: "Jia Rong", skin: "#f6dcc4", hair: "#1a1418", hat: "guan", hatC: "#2a2228", robe: "#4a6a9a", trim: "#e6e0d0", beard: "none", eyes: "narrow" },
+  gateman: { name: "Gate servant", skin: "#ecc29a", hair: "#2a2024", hat: "scholar", hatC: "#1e1e24", robe: "#4a3a5a", trim: "#e6c14a", beard: "none", eyes: "narrow" },
+  oldservant: { name: "Old servant", skin: "#e2b089", hair: "#9a9a9a", hat: "scholar", hatC: "#1e1e24", robe: "#7a7a7a", trim: "#4a4a4a", beard: "thin", beardC: "#b0b0b0", eyes: "kind" },
+  backchild: { name: "Child", skin: "#e8b88c", hair: "#2a2024", hat: "sidebuns", pin: "#5a8a5a", robe: "#8a7a5a", trim: "#5a4a3a", beard: "none", eyes: "round" },
   // the Talk with Claude book: Clawd, the Claude Code mascot, drawn by TKArt.clawd instead of as a person
   claude: { name: "Claude", clawd: true, skin: "#d97757", robe: "#d97757", trim: "#d97757", hair: "#d97757", beard: "none" },
 };
@@ -258,6 +284,7 @@ const TKArt = {
     else if (d.hat === "helmet") { R(1, 0 + dy, 8, 3, H); R(2, -1 + dy, 6, 1, H); R(4, -2 + dy, 2, 1, "#c8392c"); s(0, 3 + dy, H); s(9, 3 + dy, H); }
     else if (d.hat === "scholar") { R(1, 0 + dy, 8, 3, H); R(3, -1 + dy, 4, 1, H); s(9, 1 + dy, H); s(10, 2 + dy, H); }
     else if (d.hat === "straw") { R(-1, 2 + dy, 12, 1, H); R(2, 0 + dy, 6, 2, H); R(3, -1 + dy, 4, 1, H); }
+    if (d.jade) { s(4, 10 + dy, d.jade); s(5, 11 + dy, d.jade); }  // a jade on a cord at the neck
     // weapons in front
     if (d.weapon === "swords") { R(-1, 11 + dy, 1, 3, "#d0d4d8"); R(10, 11 + dy, 1, 3, "#d0d4d8"); }
     if (d.weapon === "sword") { R(10, 9 + dy, 1, 4, "#d0d4d8"); s(10, 13 + dy, "#7a5a3a"); }
@@ -279,6 +306,7 @@ const TKArt = {
     E(16, 33, 15, 8, d.robe); R(3, 27, 26, 5, d.robe); R(3, 30, 26, 2, robeS);
     Ln(11, 25, 18, 31, d.trim); Ln(12, 25, 19, 31, d.trim); Ln(21, 25, 17, 29, d.trim); Ln(20, 25, 16, 29, d.trim);
     Ln(4, 28, 9, 26, robeL);
+    if (d.jade) { Ln(13, 25, 16, 29, "#c8392c"); Ln(19, 25, 16, 29, "#c8392c"); E(16, 30.5, 1.8, 2.2, d.jade); s(15, 29, "#e8fff0"); }  // the jade on its cord
     R(13, 21, 6, 5, skinS);  // neck
     // head
     const rx = d.fat ? 10 : 8;
