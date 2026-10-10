@@ -1,4 +1,4 @@
-// Red Chamber, Book 1 (world RC_WORLD, default 20): the places' mechanics, walked in the engine.
+// Red Chamber, Book 1 (world RC_WORLD, default 31): the places' mechanics, walked in the engine.
 //   1. Part 1 keeps Daiyu inside: walking into the back gate or the west side gate, she stays in the house.
 //   2. Rooms wait to be read: in Grandmother Jia's rooms with d2 open, coming in doesn't start the scene; the cue people
 //      are there and say their lines; a tap on the spot starts d2.
@@ -11,7 +11,7 @@
 // world registered (redchamber/tools/build_places.sh --playtest does that, then puts everything back).
 const { chromium } = require(require('child_process').execSync('npm root -g').toString().trim() + '/playwright');
 const URL = process.env.PLAYTEST_URL || 'http://localhost:8765';
-const N = process.env.RC_WORLD || '20';
+const N = process.env.RC_WORLD || '31';
 let fails = 0;
 const check = (ok, what) => { fails += !ok; console.log(`${ok ? 'ok  ' : 'FAIL'} ${what}`); };
 

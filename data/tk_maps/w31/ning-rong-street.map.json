@@ -1,0 +1,1221 @@
+{
+ "format": "tk-map/1",
+ "id": "ning-rong-street",
+ "world": 31,
+ "name": "Ning-Rong Street",
+ "archetype": "city",
+ "size": [
+  120,
+  64
+ ],
+ "seed": 1766,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "city",
+   "b": "court",
+   ".": "grass",
+   "c": "road",
+   "W": "wall"
+  },
+  "rows": [
+   "....aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa........................................",
+   "....aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa........................................",
+   "....aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa........................................",
+   "....aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa........................................",
+   "....aaaaccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccaaaa........................................",
+   "....aaaaccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccaaaa........................................",
+   "....aaaaccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccaaaa........................................",
+   "....aaaaccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccaaaa........................................",
+   "....aaaaccccaaaa........................................................................................................",
+   "....aaaaccccaaaa........................................................................................................",
+   "....aaaaccccaaaa........................................................................................................",
+   "....aaaaccccaaaa...WWWWWWWWWWWWWWWWWWWWWWWWWWbbWWWWWWWWWWWWWWWWWWWWWWWWWW......................WWWWWWWWWWWWWWWWWWWWWW...",
+   "....aaaaccccaaaa...WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW......................WbbbbbbbbbbbbbbbbbbbbW...",
+   "....aaaaccccaaaa...WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW......................WbbbbbbbbbbbbbbbbbbbbW...",
+   "....aaaaccccaaaa...WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW......................WbbbbbbbbbbbbbbbbbbbbW...",
+   "....aaaaccccaaaa...WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW......WWWWWWWWWW......WbbbbbbbbbbbbbbbbbbbbW...",
+   "....aaaaccccaaaa...WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW......WbbbbbbbbW......WbbbbbbbbbbbbbbbbbbbbW...",
+   "....aaaaccccaaaa...WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW......WbbbbbbbbW......WbbbbbbbbbbbbbbbbbbbbW...",
+   "....aaaaccccaaaa...WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW......WbbbbbbbbW......WbbbbbbbbbbbbbbbbbbbbW...",
+   "....aaaaccccaaaa...WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW......WbbbbbbbbW......WbbbbbbbbbbbbbbbbbbbbW...",
+   "....aaaaccccaaaa...WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW......WbbbbbbbbW......WbbbbbbbbbbbbbbbbbbbbW...",
+   "....aaaaccccaaaa...WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW......WbbbbbbbbW......WbbbbbbbbbbbbbbbbbbbbW...",
+   "....aaaaccccaaaa...WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW......WbbbbbbbbW......WbbbbbbbbbbbbbbbbbbbbW...",
+   "....aaaaccccaaaa...WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW......WbbbbbbbbW......WbbbbbbbbbbbbbbbbbbbbW...",
+   "....aaaaccccaaaa...WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW......WbbbbbbbbW......WbbbbbbbbbbbbbbbbbbbbW...",
+   "....aaaaccccaaaa...WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW......WbbbbbbbbW......WbbbbbbbbbbbbbbbbbbbbW...",
+   "....aaaaccccaaaa...WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW......WbbbbbbbbW......WbbbbbbbbbbbbbbbbbbbbW...",
+   "....aaaaccccaaaa...WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW......WbbbbbbbbW......WbbbbbbbbbbbbbbbbbbbbW...",
+   "....aaaaccccaaaa...WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW......WbbbbbbbbW......WbbbbbbbbbbbbbbbbbbbbW...",
+   "....aaaaccccaaaa...WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW......WbbbbbbbbW......WbbbbbbbbbbbbbbbbbbbbW...",
+   "....aaaaccccaaaa...WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW......WbbbbbbbbW......WbbbbbbbbbbbbbbbbbbbbW...",
+   "....aaaaccccaaaa...WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW......WbbbbbbbbW......WbbbbbbbbbbbbbbbbbbbbW...",
+   "....aaaaccccaaaa...WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW......WbbbbbbbbW......WbbbbbbbbbbbbbbbbbbbbW...",
+   "....aaaaccccaaaa...WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW......WbbbbbbbbW......WbbbbbbbbbbbbbbbbbbbbW...",
+   "....aaaaccccaaaa...WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW......WbbbbbbbbW......WbbbbbbbbbbbbbbbbbbbbW...",
+   "....aaaaccccaaaa...WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW......WbbbbbbbbW......WbbbbbbbbbbbbbbbbbbbbW...",
+   "....aaaaccccaaaa...WWWWWWWWWWbbWWWWWWWWWWWWWWWWWWbbWWWWWWWWWWWWWWWWWWWWWW......WWbbWWWWWW......WWWWWWWWWWbbWWWWWWWWWW...",
+   "....aaaaccccaaaa........................................................................................................",
+   "....aaaaccccaaaa........................................................................................................",
+   "....aaaaccccaaaa........................................................................................................",
+   "aaaaaaaaccccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaccccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaccccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaccccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaccccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaccccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaccccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaccccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  ],
+  "walk": {
+   "city": true,
+   "court": true,
+   "grass": true,
+   "road": true,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "rong-wall",
+   "kind": "wall",
+   "outline": [
+    4,
+    2,
+    15,
+    8
+   ],
+   "width": 1,
+   "gates": {
+    "rong-back-gate": [
+     11,
+     2
+    ],
+    "rong-side-gate": [
+     7,
+     9
+    ],
+    "rong-main-gate": [
+     12,
+     9
+    ]
+   },
+   "gate_labels": {
+    "rong-back-gate": "The Rong mansion's back gate",
+    "rong-side-gate": "The Rong mansion's west side gate",
+    "rong-main-gate": "The Rong mansion's great gate"
+   },
+   "tiles": 156
+  },
+  {
+   "id": "xing-wall",
+   "kind": "wall",
+   "outline": [
+    19,
+    3,
+    4,
+    7
+   ],
+   "width": 1,
+   "gates": {
+    "xing-gate": [
+     20,
+     9
+    ]
+   },
+   "gate_kinds": {
+    "xing-gate": "building.blackgate"
+   },
+   "gate_labels": {
+    "xing-gate": "A black-lacquered gate"
+   },
+   "tiles": 60
+  },
+  {
+   "id": "ning-wall",
+   "kind": "wall",
+   "outline": [
+    23,
+    2,
+    7,
+    8
+   ],
+   "width": 1,
+   "gates": {
+    "ning-gate": [
+     26,
+     9
+    ]
+   },
+   "gate_labels": {
+    "ning-gate": "The Ning mansion's great gate"
+   },
+   "tiles": 92
+  },
+  {
+   "id": "front-street",
+   "kind": "road",
+   "path": [
+    [
+     0,
+     12
+    ],
+    [
+     29,
+     12
+    ]
+   ],
+   "width": 4,
+   "tiles": 480
+  },
+  {
+   "id": "lane",
+   "kind": "road",
+   "path": [
+    [
+     2,
+     12
+    ],
+    [
+     2,
+     1
+    ],
+    [
+     18,
+     1
+    ]
+   ],
+   "width": 3,
+   "tiles": 448
+  }
+ ],
+ "objects": [
+  {
+   "kind": "building.gatehouse",
+   "x": 45,
+   "y": 11,
+   "w": 2,
+   "h": 1,
+   "id": "rong-back-gate",
+   "width": 2,
+   "wall": "rong-wall",
+   "door": "S",
+   "label": "The Rong mansion's back gate"
+  },
+  {
+   "kind": "building.gatehouse",
+   "x": 29,
+   "y": 36,
+   "w": 2,
+   "h": 1,
+   "id": "rong-side-gate",
+   "width": 2,
+   "wall": "rong-wall",
+   "door": "S",
+   "label": "The Rong mansion's west side gate"
+  },
+  {
+   "kind": "building.gatehouse",
+   "x": 49,
+   "y": 36,
+   "w": 2,
+   "h": 1,
+   "id": "rong-main-gate",
+   "width": 2,
+   "wall": "rong-wall",
+   "door": "S",
+   "label": "The Rong mansion's great gate"
+  },
+  {
+   "kind": "building.blackgate",
+   "x": 81,
+   "y": 36,
+   "w": 2,
+   "h": 1,
+   "id": "xing-gate",
+   "width": 2,
+   "wall": "xing-wall",
+   "door": "S",
+   "label": "A black-lacquered gate"
+  },
+  {
+   "kind": "building.gatehouse",
+   "x": 105,
+   "y": 36,
+   "w": 2,
+   "h": 1,
+   "id": "ning-gate",
+   "width": 2,
+   "wall": "ning-wall",
+   "door": "S",
+   "label": "The Ning mansion's great gate"
+  },
+  {
+   "kind": "building.hall_grand",
+   "x": 25,
+   "y": 18,
+   "w": 10,
+   "h": 5,
+   "id": "roof-0",
+   "door": null,
+   "faces": "S",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.hall_grand",
+   "x": 45,
+   "y": 18,
+   "w": 10,
+   "h": 5,
+   "id": "roof-1",
+   "door": null,
+   "faces": "S",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.hall",
+   "x": 62,
+   "y": 21,
+   "w": 4,
+   "h": 2,
+   "id": "roof-2",
+   "door": null,
+   "faces": "S",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.hall",
+   "x": 26,
+   "y": 29,
+   "w": 4,
+   "h": 2,
+   "id": "roof-3",
+   "door": null,
+   "faces": "S",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.hall",
+   "x": 62,
+   "y": 29,
+   "w": 4,
+   "h": 2,
+   "id": "roof-4",
+   "door": null,
+   "faces": "S",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.hall_grand",
+   "x": 97,
+   "y": 18,
+   "w": 10,
+   "h": 5,
+   "id": "roof-5",
+   "door": null,
+   "faces": "S",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.hall",
+   "x": 82,
+   "y": 21,
+   "w": 4,
+   "h": 2,
+   "id": "roof-6",
+   "door": null,
+   "faces": "S",
+   "blocks_sight": true
+  },
+  {
+   "kind": "landmark.stonelion",
+   "x": 41,
+   "y": 41,
+   "w": 2,
+   "h": 2,
+   "id": "lion-w",
+   "label": "A stone lion"
+  },
+  {
+   "kind": "landmark.stonelion",
+   "x": 57,
+   "y": 41,
+   "w": 2,
+   "h": 2,
+   "id": "lion-e",
+   "label": "A stone lion"
+  },
+  {
+   "kind": "landmark.stonelion",
+   "x": 97,
+   "y": 41,
+   "w": 2,
+   "h": 2,
+   "id": "ning-lion-w",
+   "label": "A stone lion"
+  },
+  {
+   "kind": "landmark.stonelion",
+   "x": 113,
+   "y": 41,
+   "w": 2,
+   "h": 2,
+   "id": "ning-lion-e",
+   "label": "A stone lion"
+  },
+  {
+   "kind": "prop.bench",
+   "x": 22,
+   "y": 41,
+   "w": 4,
+   "h": 1,
+   "id": "bench",
+   "label": "A long bench of men by the side gate"
+  },
+  {
+   "kind": "prop.sedan",
+   "x": 61,
+   "y": 41,
+   "w": 2,
+   "h": 2,
+   "id": "sedan-1",
+   "label": "Sedan chairs crowd the great gate"
+  },
+  {
+   "kind": "prop.sedan",
+   "x": 65,
+   "y": 41,
+   "w": 2,
+   "h": 2,
+   "id": "sedan-2"
+  },
+  {
+   "kind": "prop.sedan",
+   "x": 37,
+   "y": 41,
+   "w": 2,
+   "h": 2,
+   "id": "sedan-3"
+  },
+  {
+   "kind": "prop.toyload",
+   "x": 33,
+   "y": 1,
+   "w": 2,
+   "h": 1,
+   "id": "toys",
+   "label": "A hawker's load of toys"
+  },
+  {
+   "kind": "prop.toyload",
+   "x": 57,
+   "y": 1,
+   "w": 2,
+   "h": 1,
+   "id": "food",
+   "label": "A hawker's load of sweets"
+  },
+  {
+   "kind": "building.house",
+   "x": 6,
+   "y": 53,
+   "w": 4,
+   "h": 2,
+   "id": "house-0",
+   "door": "N",
+   "faces": "N",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.house",
+   "x": 22,
+   "y": 53,
+   "w": 4,
+   "h": 2,
+   "id": "house-1",
+   "door": "N",
+   "faces": "N",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.house",
+   "x": 38,
+   "y": 53,
+   "w": 4,
+   "h": 2,
+   "id": "house-2",
+   "door": "N",
+   "faces": "N",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.house",
+   "x": 74,
+   "y": 53,
+   "w": 4,
+   "h": 2,
+   "id": "house-3",
+   "door": "N",
+   "faces": "N",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.house",
+   "x": 90,
+   "y": 53,
+   "w": 4,
+   "h": 2,
+   "id": "house-4",
+   "door": "N",
+   "faces": "N",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.house",
+   "x": 106,
+   "y": 53,
+   "w": 4,
+   "h": 2,
+   "id": "house-5",
+   "door": "N",
+   "faces": "N",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.shop",
+   "x": 56,
+   "y": 53,
+   "w": 3,
+   "h": 2,
+   "id": "shop",
+   "door": "N",
+   "faces": "N",
+   "label": "A teahouse",
+   "blocks_sight": true
+  },
+  {
+   "kind": "tree.willow",
+   "x": 3,
+   "y": 47,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 13,
+   "y": 47,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 18,
+   "y": 52,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 23,
+   "y": 47,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 28,
+   "y": 52,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 33,
+   "y": 47,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 38,
+   "y": 52,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 43,
+   "y": 47,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 48,
+   "y": 52,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 53,
+   "y": 47,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 63,
+   "y": 47,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 68,
+   "y": 52,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 73,
+   "y": 47,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 78,
+   "y": 52,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 83,
+   "y": 47,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 88,
+   "y": 52,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 93,
+   "y": 47,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 98,
+   "y": 52,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 103,
+   "y": 47,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 113,
+   "y": 47,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.willow",
+   "x": 118,
+   "y": 52,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 55,
+   "y": 52,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 59,
+   "y": 52,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.small",
+   "x": 27,
+   "y": 57,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.small",
+   "x": 28,
+   "y": 54,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.small",
+   "x": 32,
+   "y": 58,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "prop.gateshut_ns",
+   "x": 45,
+   "y": 11,
+   "w": 2,
+   "h": 1,
+   "id": "rong-back-gate-shut",
+   "in": [
+    "morning"
+   ]
+  },
+  {
+   "kind": "prop.gateshut_ns",
+   "x": 29,
+   "y": 36,
+   "w": 2,
+   "h": 1,
+   "id": "rong-side-gate-shut",
+   "in": [
+    "morning",
+    "day",
+    "dusk"
+   ]
+  },
+  {
+   "kind": "prop.gateshut_ns",
+   "x": 49,
+   "y": 36,
+   "w": 2,
+   "h": 1,
+   "id": "rong-main-gate-shut",
+   "in": [
+    "morning",
+    "day",
+    "dusk"
+   ]
+  },
+  {
+   "kind": "prop.gateshut_ns",
+   "x": 81,
+   "y": 36,
+   "w": 2,
+   "h": 1,
+   "id": "xing-gate-shut",
+   "in": [
+    "morning",
+    "day",
+    "dusk"
+   ]
+  },
+  {
+   "kind": "prop.gateshut_ns",
+   "x": 105,
+   "y": 36,
+   "w": 2,
+   "h": 1,
+   "id": "ning-gate-shut",
+   "in": [
+    "morning",
+    "day",
+    "dusk"
+   ]
+  }
+ ],
+ "spots": [
+  {
+   "id": "g2",
+   "x": 29.5,
+   "y": 41.7,
+   "node": "31-g2",
+   "label": "The side gate",
+   "trigger": "near"
+  },
+  {
+   "id": "g3",
+   "x": 45.5,
+   "y": 5.7,
+   "node": "31-g3",
+   "label": "The back gate",
+   "trigger": "near"
+  },
+  {
+   "id": "g7",
+   "x": 41.5,
+   "y": 5.7,
+   "node": "31-g7",
+   "label": "The back gate",
+   "trigger": "near"
+  },
+  {
+   "id": "wall-corner",
+   "x": 13.5,
+   "y": 41.7,
+   "node": "",
+   "label": "The corner of the wall",
+   "note": "g2: where the gatemen tell her to wait"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "npc-1",
+   "kind": "folk.official",
+   "x": 25.5,
+   "y": 45.9,
+   "say": [
+    "A man on the bench with his chest out and his belly forward. “Where are you from, granny? Ha!”"
+   ],
+   "until": "31-g2",
+   "face": "N"
+  },
+  {
+   "id": "npc-2",
+   "kind": "folk.official",
+   "x": 17.5,
+   "y": 41.9,
+   "say": [
+    "“Go on, wait by the wall. Somebody'll be out.” He laughs, and the others laugh with him."
+   ],
+   "until": "31-g2",
+   "face": "E"
+  },
+  {
+   "id": "npc-3",
+   "kind": "folk.villager",
+   "x": 77.5,
+   "y": 45.9,
+   "say": [
+    "A water-carrier sets down his buckets. “The Rong mansion? That's the one with the lions, granny. Don't go near the front.”"
+   ],
+   "face": "W"
+  },
+  {
+   "id": "npc-4",
+   "kind": "folk.woman",
+   "x": 13.5,
+   "y": 25.9,
+   "say": [
+    "A woman with a basket of washing. “The back street? Keep on round the corner.”"
+   ],
+   "face": "E"
+  },
+  {
+   "id": "npc-5",
+   "kind": "folk.child",
+   "x": 61.5,
+   "y": 34.9,
+   "say": [
+    "Children race past shrieking, a paper windmill held high."
+   ],
+   "until": "31-g3",
+   "when": "node:g2",
+   "wander": true
+  },
+  {
+   "id": "npc-6",
+   "kind": "folk.elder",
+   "x": 69.5,
+   "y": 5.9,
+   "say": [
+    "An old peddler with a tray of sugar figures. “Buy one for the boy, granny? No? Then mind your feet.”"
+   ],
+   "face": "W"
+  },
+  {
+   "id": "npc-7",
+   "kind": "hero.oldservant",
+   "x": 37.5,
+   "y": 45.9,
+   "say": [
+    [
+     "oldservant",
+     "Those idlers are having their fun. Don't wait by that wall."
+    ]
+   ],
+   "until": "31-g2",
+   "face": "W",
+   "when": "node:g1"
+  },
+  {
+   "id": "npc-8",
+   "kind": "hero.backchild",
+   "x": 53.5,
+   "y": 5.9,
+   "say": [
+    [
+     "backchild",
+     "There are three Zhou Da-niangs here. Which one?"
+    ]
+   ],
+   "until": "31-g3",
+   "face": "W",
+   "when": "node:g2"
+  },
+  {
+   "id": "lion-groom",
+   "kind": "folk.villager",
+   "x": 69.5,
+   "y": 41.9,
+   "say": [],
+   "intro": [
+    "Hey, granny, this gate's for sedan chairs. Beat me at a game and I'll tell you which door's for you."
+   ],
+   "win": [
+    "Not bad for a country granny! The side gate, to the west. Mind the men on the bench."
+   ],
+   "done": [
+    "West, granny. The side gate."
+   ],
+   "until": "31-g2",
+   "when": "node:g1",
+   "view": 4,
+   "challenge": "lion-groom"
+  },
+  {
+   "id": "toy-hawker",
+   "kind": "folk.villager",
+   "x": 29.5,
+   "y": 5.9,
+   "say": [],
+   "intro": [
+    "A toy for the little one? Win a game and he can have one for nothing."
+   ],
+   "win": [
+    "A deal's a deal. Here, little one."
+   ],
+   "done": [
+    "The back gate's just there."
+   ],
+   "until": "31-g3",
+   "when": "node:g2",
+   "view": 4,
+   "challenge": "toy-hawker"
+  },
+  {
+   "id": "back-child",
+   "kind": "folk.child",
+   "x": 61.5,
+   "y": 5.9,
+   "say": [],
+   "intro": [
+    "Granny! Granny! Play me! I always win!"
+   ],
+   "win": [
+    "You cheated! No you didn't. Again tomorrow!"
+   ],
+   "done": [
+    "Which Zhou Da-niang do you want?"
+   ],
+   "until": "31-g3",
+   "when": "node:g2",
+   "view": 4,
+   "challenge": "back-child"
+  }
+ ],
+ "exits": [
+  {
+   "to": "the-village",
+   "side": "W",
+   "x": 0,
+   "y": 48,
+   "w": 1,
+   "h": 4
+  },
+  {
+   "to": "the-rong-mansion",
+   "side": "S",
+   "x": 45,
+   "y": 11,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "to": "lady-xings-court",
+   "side": "N",
+   "x": 81,
+   "y": 36,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "the-village": [
+   5,
+   49
+  ],
+  "the-rong-mansion": [
+   45,
+   5
+  ],
+  "lady-xings-court": [
+   81,
+   37
+  ],
+  "": [
+   5,
+   49
+  ]
+ },
+ "states": [
+  {
+   "id": "morning",
+   "when": "node:g1",
+   "until": "node:g3",
+   "light": "morning",
+   "shut": [
+    {
+     "gate": "rong-back-gate",
+     "rect": [
+      45,
+      11,
+      2,
+      1
+     ],
+     "say": [
+      "The back gate is shut. Children are playing in front of it, and nobody answers your knock."
+     ]
+    },
+    {
+     "gate": "rong-side-gate",
+     "rect": [
+      29,
+      36,
+      2,
+      1
+     ],
+     "say": [
+      "“Wait by the corner of the wall, granny.” The men on the bench don't even look up."
+     ]
+    },
+    {
+     "gate": "rong-main-gate",
+     "rect": [
+      49,
+      36,
+      2,
+      1
+     ],
+     "say": [
+      "Sedan chairs and horses crowd the great gate. You don't dare go near it."
+     ]
+    },
+    {
+     "gate": "xing-gate",
+     "rect": [
+      81,
+      36,
+      2,
+      1
+     ],
+     "say": [
+      "A black-lacquered gate, shut. Not the one Gou'er told you about."
+     ]
+    },
+    {
+     "gate": "ning-gate",
+     "rect": [
+      105,
+      36,
+      2,
+      1
+     ],
+     "say": [
+      "The Ning mansion's gate. That isn't where Zhou Rui's wife lives."
+     ]
+    }
+   ]
+  },
+  {
+   "id": "day",
+   "when": "node:g3",
+   "until": "node:g6",
+   "light": "morning",
+   "shut": [
+    {
+     "gate": "rong-side-gate",
+     "rect": [
+      29,
+      36,
+      2,
+      1
+     ],
+     "say": [
+      "The men on the bench are laughing at someone else now."
+     ]
+    },
+    {
+     "gate": "rong-main-gate",
+     "rect": [
+      49,
+      36,
+      2,
+      1
+     ],
+     "say": [
+      "Sedan chairs and horses crowd the great gate. You don't dare go near it."
+     ]
+    },
+    {
+     "gate": "xing-gate",
+     "rect": [
+      81,
+      36,
+      2,
+      1
+     ],
+     "say": [
+      "A black-lacquered gate, shut."
+     ]
+    },
+    {
+     "gate": "ning-gate",
+     "rect": [
+      105,
+      36,
+      2,
+      1
+     ],
+     "say": [
+      "The Ning mansion's gate, shut."
+     ]
+    }
+   ]
+  },
+  {
+   "id": "dusk",
+   "when": "node:g6",
+   "light": "dusk",
+   "shut": [
+    {
+     "gate": "rong-side-gate",
+     "rect": [
+      29,
+      36,
+      2,
+      1
+     ],
+     "say": [
+      "The side gate is shut for the night."
+     ]
+    },
+    {
+     "gate": "rong-main-gate",
+     "rect": [
+      49,
+      36,
+      2,
+      1
+     ],
+     "say": [
+      "The great gate is shut."
+     ]
+    },
+    {
+     "gate": "xing-gate",
+     "rect": [
+      81,
+      36,
+      2,
+      1
+     ],
+     "say": [
+      "A black-lacquered gate, shut."
+     ]
+    },
+    {
+     "gate": "ning-gate",
+     "rect": [
+      105,
+      36,
+      2,
+      1
+     ],
+     "say": [
+      "The Ning mansion's gate, shut."
+     ]
+    }
+   ]
+  }
+ ],
+ "ways": {
+  "nodes": [
+   [
+    2.0,
+    50.0
+   ],
+   [
+    10.0,
+    50.0
+   ],
+   [
+    118.0,
+    50.0
+   ],
+   [
+    10.0,
+    6.0
+   ],
+   [
+    74.0,
+    6.0
+   ]
+  ],
+  "edges": [
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    3,
+    4
+   ]
+  ]
+ },
+ "links": [
+  "lady-xings-court",
+  "the-rong-mansion",
+  "the-village"
+ ]
+}
