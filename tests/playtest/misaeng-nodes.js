@@ -31,14 +31,14 @@ const ASKED = { '21-m6': 29, '21-m9': 47, '21-m17': 85, '21-m22': 137, '21-m24':
       const s = await p.evaluate(() => { const q = x => document.querySelector(x);
         const sc = q('.tk-scroll-wrap'), d = q('.tk-dlg');
         return { scroll: sc ? sc.innerText.replace(/\s+/g, ' ').trim() : null, dlg: d ? { who: (q('.tk-dlg-name') || {}).textContent || '', zh: (q('.tk-dlg-zh') || {}).textContent || '', t: (q('.tk-dlg-text') || {}).textContent || '', ready: d.classList.contains('ready') } : null }; });
-      if (s.scroll) { lines.push('[scroll] ' + s.scroll); await p.locator('.tk-scroll-go').first().click().catch(() => {}); await p.waitForTimeout(500); idle = 0; continue; }
-      if (s.dlg) { if (!s.dlg.ready) { await p.locator('.tk-dlg').click({ position: { x: 20, y: 20 } }).catch(() => {}); await p.waitForTimeout(150); continue; }
+      if (s.scroll) { lines.push('[scroll] ' + s.scroll); await p.locator('.tk-scroll-go').first().click({ timeout: 3000 }).catch(() => {}); await p.waitForTimeout(500); idle = 0; continue; }
+      if (s.dlg) { if (!s.dlg.ready) { await p.locator('.tk-dlg').click({ position: { x: 20, y: 20 }, timeout: 3000 }).catch(() => {}); await p.waitForTimeout(150); continue; }
         lines.push(`${s.dlg.who ? s.dlg.who + ': ' : ''}${s.dlg.t}${s.dlg.zh ? '  [zh: ' + s.dlg.zh + ']' : ''}`);
-        await p.locator('.tk-dlg').click({ position: { x: 20, y: 20 } }).catch(() => {}); await p.waitForTimeout(250); idle = 0; continue; }
+        await p.locator('.tk-dlg').click({ position: { x: 20, y: 20 }, timeout: 3000 }).catch(() => {}); await p.waitForTimeout(250); idle = 0; continue; }
       idle++; await p.waitForTimeout(400);
     } };
   await p.goto(BASE + '/index.html#/tk/21'); await p.waitForTimeout(2500);
-  await tell(); await p.waitForTimeout(800);
+  console.log('opening'); await tell(); await p.waitForTimeout(800);
   const startOk = !errs.length && await p.evaluate(() => !!document.querySelector('.tk-play'));
   check(startOk, `fresh save: after the opening, the node map offers the first beat (page errors: ${errs.join(' | ') || 'none'})`);
   if (!startOk) {   // engine: no 21-start node (reported); carry on from m1
@@ -47,6 +47,7 @@ const ASKED = { '21-m6': 29, '21-m9': 47, '21-m17': 85, '21-m22': 137, '21-m24':
   const keys = await p.evaluate(() => TK.world(21).nodes.map(n => n.key));
   for (const key of keys) {
     const at = await p.evaluate(() => ({ at: TK.at(21), info: (document.querySelector('.tk-info') || {}).innerText || '' }));
+    console.log(`---- ${key}`);
     lines.push(`\n=== ${key}  (map offers: ${at.info.replace(/\s+/g, ' ').slice(0, 90)})`);
     const play = p.locator('.tk-play');
     if (!(await play.count()) || await play.isDisabled()) { check(false, `${key}: the map offers Play (at ${at.at})`); break; }
