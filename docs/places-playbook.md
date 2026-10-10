@@ -183,7 +183,9 @@ These were each learned from a real complaint, and each is a rule, not a one-off
   three Chinese kits. Misaeng is becoming five books, worlds 21–25 (Plot alt2, misaeng-arc.md; maps per book in
   data/tk_maps/w21…w25): the shared places (the tower, Jongno, Susaek-dong …) carry over; each book's beat spots come
   with its design. claude/places-misaeng sits on claude/integration-alt2 and carries only Misaeng's changes (Integration
-  alt2 can't take main's Book 15 work through it): build on their head, never on claude/plot-places.
+  alt2 can't take main's Book 15 work through it): build on their head, never on claude/plot-places. They cherry-pick: keep to plain commits (no merges); after they
+  take a batch, reset the branch onto their head before the next. After a seoul kit change, recompile w21 (`--kit seoul`) on
+  their head before pushing maps: the tile ids move with Graphics' sheets.
 - **A lift** (Integration alt2's `"use": "lift"`, `"floors": [{label, to}]`): a spot that opens a floor menu. The tower
   has one in the lobby and one on each floor (`_with_lift`), each floor's arrivals from every other floor at its lift.
   The floors hang off the lobby by `"owns"` (a plan key: rooms reached another way, whose doors lead back to it), and
