@@ -76,7 +76,8 @@ Bu-ryeon** (m22). Oh's establishing episode (3) and Han's scolding at Ulsan (10)
 | m17 | **Sente**: the roof; Han picks Jang; the gossip | 9 | Jang | roof | 9 | Contest, **fails**: "Take sente." |
 | m18 | **Again!**: kinder and warmer; the text; "nuclear bomb"; "find it yourself" | 10 | Jang | sales3 | 10 | Contest, **fails**: "Hold your ground." |
 | m18b | **One More Chance** (cutaway): Han at Ulsan; "colder, more heartless" | 10 | — | Ulsan | 10 | — |
-| m19 | **How Old Are You?** (fan sources) | 11–12 | Jang | sales3 | 10 | **Record: Black 11**; "Take the PT back." |
+| m19 | **Shrink the Boxes**: Han at Ulsan; the all-nighter; Oh on the messy document; Kim covers | 11 | Jang | sales3 | 10 | "Fix the document." |
+| m19b | **How Old Are You?**: the call from an empty meeting room; "Again?"; Jang takes the PT back; the age question | 11 | Jang | sales3 | 10 | **Record: Black 11**; "Take the PT back." |
 | m20 | **The Waybill** (fan sources) | 13 | Jang → Oh | sales3 | 13 | — |
 | m21 | **The Scrap** (fan sources) | 14 | Oh | lobby (gate: `item:waybill_scrap`) | 14 | — |
 | m22 | **Dog Meat** (fan sources) | 15–16 | Kim Bu-ryeon | textile | 14 | **Record: Black 15**; "Apologise before it grows." |

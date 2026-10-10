@@ -2,8 +2,8 @@
 
 English on screen, Korean voice-over (KO21). Season 1 is nine books, one per printed volume (worlds 21-29; the user:
 "lets have some variance, allow between 1-2 beats per episode depending on what fits best"). This is volume 1.
-Episodes 0-10 are written from the comic itself (read on Kakao Webtoon: docs/book2/misaeng-read-ep0-10.md);
-episodes 11-16 from fan sources (docs/book2/misaeng-research-ep0-33.md) until they can be read. Design:
+Episodes 0-11 are written from the comic itself (read on Kakao Webtoon: docs/book2/misaeng-read-ep0-10.md and
+misaeng-read-ep11.md); episodes 12-16 from fan sources (docs/book2/misaeng-research-ep0-33.md) until they can be read. Design:
 docs/book2/misaeng-arc.md ("Book 1"); engine syntax: docs/book2/misaeng-engine.md (claude/integration-alt2).
 The comic's events, people and order are kept; dialogue is a close paraphrase with only short key lines quoted.
 Beats marked (staging) or (invented) in comments are not in the comic. One reordering: episode 1 (the sponsor's walk,
@@ -403,20 +403,57 @@ def _scenes():
             N("Night, in Seoul. Stones spilled on the floor by an abandoned board, and Jang at his screen. The world is far colder, and more heartless."),
         ]},
 
-        # M19 · 11-12수 (fan sources, not yet read in the comic). Oh: "all over the place"; Jang takes the lead back from Han.
-        "m19": {"title": T("How Old Are You?"), "kind": "main", "steps": [
-            ["spawn", "han", "ms_han", "m19", 6, -2], ["spawn", "oh", "ms_oh", "m19", 14, -6],
-            S("ms_oh", "Jang. You're all over the place. Pick one thing and do it."),
-            S("ms_han", "Again. No. Again."),
-            N("On the frame strip, Black links up with the stone it played at move 7, looking for a way to live by attacking."),
+        # M19 · 11수 (read in the comic). Han at Ulsan; the all-nighter; Oh on the messy document; Kim covers; "Shrink the boxes."
+        "m19": {"title": T("Shrink the Boxes"), "kind": "main", "steps": [
+            N("Ulsan. In a fibre warehouse, the site's department head shows Han the bolts: strength, carbonisation, density. "
+              "Leave that to the buyer's experts, he says. Your job is the samples and the papers, on the day, with no mistakes."),
+            N("Han asks for help anyway. The old man softens. Buy me a soju when it's done."),
+            N("Han rings Jang from outside the plant, cigarette in hand."),
+            S("ms_han", "You call this a plan? An after-school hobby? Where I interned, I spent four days on one item. Twenty pages, packed tight."),
+            S("ms_jang", "Please check it. If it's short, I'll redo it."),
+            N("Night, the lounge. He types alone. Forty-two pages. Forty. Fifty-three. More pages don't make it better; an item plan isn't a book report. He keeps going."),
+            ["spawn", "oh", "ms_oh", "m19", 10, -6], ["spawn", "kim", "ms_kimds", "m19", 6, -4],
+            N("Morning. Oh, red-eyed, holds up a document Jang made for the team."),
+            ["emote", "oh", "anger"],
+            S("ms_oh", "You should have followed the seniors' materials. Fixing it now won't help, I have to take this in and report! "
+                       "Colours that don't match, boxes all over the place, no order to any of it. What did you do yesterday?"),
+            S("ms_jang", "Sorry."),
+            S("ms_kimds", "The interns had the PT exam. They were short of time."),
+            S("ms_oh", "Kim. Playing house? Really?"),
+            S("ms_kimds", "Sorry. Jang, can you fix it now?"),
+            S("ms_jang", "Yes. Yes, yes."),
+            N("Kim, under his breath: answer that fast and he gets angrier. He never got the time to be angry."),
+            S("ms_oh", "Shrink the boxes."),
+            N("He yawns, eyes watering, and goes back to his desk."),
+            ["problem"],   # Jang: fix the document
+            ["remove", "oh"], ["remove", "kim"],
+        ]},
+
+        # M19b · 11수 (read in the comic). The second call from an empty meeting room: "Again?"; Jang takes the PT back; the age question.
+        "m19b": {"title": T("How Old Are You?"), "kind": "main", "steps": [
+            N("He slips into an empty meeting room and calls Ulsan."),
+            S("ms_han", "Interns are staff too, you know. Is this company work, or your own? Look at the size of it..."),
+            S("ms_jang", "How is it?"),
+            S("ms_han", "Well..."),
+            S("ms_jang", "Again?"),
+            S("ms_han", "...The second item is good."),
+            S("ms_jang", "You're sure?"),
+            S("ms_han", "Yes. Decided."),
+            N("On the frame strip, Black's stones sit in the lower-left corner beside White's. Cho makes them solid first, then turns to fight."),
             ["problem"],   # the record: Black 11
-            N("Cho linked his stones, and kept attacking."),
+            N("Baduk is a fight at bottom, a war. You give way when pressed, sometimes you look to share the board, but the winner and the loser are plain. "
+              "He lived in that world for over ten years. A beaten soldier, but raised to compete."),
+            N("A player who doesn't hand over sente."),
             ["problem"],   # Jang: take the PT back
-            S("ms_jang", "And. How old are you?"),
-            S("ms_han", "..."),
+            S("ms_jang", "Then it's settled. We chose the item together, and you agreed to it. From here I write the PT, my way. "
+                         "I'll share the progress, but I don't take instructions. That's what we agreed, isn't it?"),
+            S("ms_han", "What?"),
+            S("ms_jang", "And."),
+            N("He drops the honorifics."),
+            S("ms_jang", "How old are you, anyway?"),
+            S("ms_han", "Huh...?"),
+            S("ms_han", "This little runt..."),
             S("ms_jang", "Not going to say?"),
-            ["remove", "han"], ["remove", "oh"],
-            N("Alone, later, he thinks of the players he used to cut out of the paper with his mother. My heroes are disappearing."),
         ]},
 
         # M20 · 13수 (fan sources). The waybill. Kim Seok-ho, the glue stick, the lobby floor; the director; the punishment.
@@ -553,14 +590,19 @@ def _nodes():
             "Find it yourself.",
             "Again.")),
         node("m18b", 218, 141, "m18b", place="Ulsan", move=10, board=False, cutaway=True),
-        node("m19", 226, 137, "m19", room="sales3", move=10, record=[11, None], choices={11: [['dl', 3.1], ['dr', 3.55], ['dc', 3.97], ['bp', 4.04], ['cc', 4.58], ['ed', 4.84], ['ip', 6.15]]}, dilemma=[
+        node("m19", 226, 137, "m19", room="sales3", move=10, dilemma=D(
+            "ms_jang", "Fix the document.",
+            "Same colours. Big groups over small ones. Smaller boxes.",
+            "Shrink the boxes.",
+            "Still a mess. Again.")),
+        node("m19b", 232, 134, "m19b", room="sales3", move=10, record=[11, None], choices={11: [['dl', 3.1], ['dr', 3.55], ['dc', 3.97], ['bp', 4.04], ['cc', 4.58], ['ed', 4.84], ['ip', 6.15]]}, dilemma=[
             D("ms_jang", "Which move did Cho Hunhyun play?",
-              "Link up, and keep attacking.",
+              "Make the corner solid, then fight.",
               "Black 11.",
               "Not that one. Look again."),
             D("ms_jang", "Take the PT back.",
-              "He's been giving orders for days. Enough.",
-              "He stops talking.",
+              "We chose it together. He agreed. Hold him to it.",
+              "That's what we agreed.",
               "Again."),
         ]),
         node("m20", 238, 131, "m20", room="sales3", move=13, board=False),
@@ -581,7 +623,7 @@ def _nodes():
 
 
 _ORDER = ["m1", "m2", "m3", "m4", "m5", "m6", "m7", "m8", "m9", "m10", "m11", "m12", "m13", "m14", "m15", "m16", "m17",
-          "m18", "m18b", "m19", "m20", "m21", "m22"]
+          "m18", "m18b", "m19", "m19b", "m20", "m21", "m22"]
 _EDGES = [[a, b] for a, b in zip(_ORDER, _ORDER[1:])]
 
 _ITEMS = {
@@ -809,14 +851,7 @@ KO21 = {
     'I can do it!': '할 수 있습니다!',
     'The department head mutters something as he goes. Han stands there, shaking.': '부장이 지나가며 뭐라고 중얼거린다. 한석율은 그 자리에서 떨고 있다.',
     'Night, in Seoul. Stones spilled on the floor by an abandoned board, and Jang at his screen. The world is far colder, and more heartless.': '서울의 밤. 버려진 바둑판 옆 바닥에 흩어진 돌, 모니터 앞의 장그래. 세상은 훨씬 더 차갑고, 비정하다.',
-    "Jang. You're all over the place. Pick one thing and do it.": '장그래. 너 중구난방이야. 하나만 골라서 해.',
-    'Again. No. Again.': '다시. 아니요. 다시.',
-    'On the frame strip, Black links up with the stone it played at move 7, looking for a way to live by attacking.': '흑은 7수의 돌과 길을 이으며, 공격으로 살길을 찾는다.',
-    'Cho linked his stones, and kept attacking.': '조훈현은 돌을 이었고, 공격을 이어갔다.',
-    'And. How old are you?': '그리고... 너 몇 살이냐?',
-    '...': '...',
     'Not going to say?': '말 안 할래?',
-    'Alone, later, he thinks of the players he used to cut out of the paper with his mother. My heroes are disappearing.': '나중에 혼자, 그는 어머니와 함께 신문에서 오려 내던 기사들을 떠올린다. 나의 영웅들이 사라져 간다.',
     "Kim Seok-ho, an intern on Go's team: married young, the eldest grandson, a baby at home, the best translator in the intake. Nobody on his team teaches him anything; he borrows what he needs.": '김석호. 고 과장 팀의 인턴. 장손이라 일찍 결혼했고, 집에 아기가 있고, 동기 중 번역을 제일 잘한다. 그의 팀에선 아무도 그에게 뭘 가르쳐 주지 않는다. 필요한 건 빌려 쓴다.',
     'Can I borrow your glue stick? Thanks.': '딱풀 좀 빌려도 돼요? 고마워요.',
     "A page of Sales 3's comes away stuck to the back of his: a waybill, with the team's approval stamps on it. Jang was meant to shred it.": '영업 3팀의 서류 한 장이 그의 서류 뒤에 붙어 딸려 간다. 팀의 결재 도장이 찍힌 운송장. 장그래가 파쇄해야 했던 것이다.',
@@ -873,10 +908,7 @@ KO21 = {
     'He takes it back with both hands.': '그가 두 손으로 다시 가져간다.',
     'Again.': '다시.',
     'He said build it my way. Hold him to it.': '마음대로 만들라고 했잖아. 그 말을 붙잡아.',
-    'Link up, and keep attacking.': '길을 잇고, 계속 공격해.',
     'Black 11.': '흑 11.',
-    "He's been giving orders for days. Enough.": '며칠째 지시만 했어. 이제 그만.',
-    'He stops talking.': '말이 멈춘다.',
     'A new part of the board. A new story.': '판의 새로운 곳. 새로운 이야기.',
     'Black 15.': '흑 15.',
     'I could pull rank. It would only get worse. The obvious move.': '직급으로 누를 수도 있지. 더 나빠질 뿐이야. 뻔한 수.',
@@ -998,4 +1030,43 @@ KO21 = {
     'Coffee, trodden into the carpet all morning. You mop it, wring it, mop it again. Nobody looks up.': '아침 내내 밟혀 카펫에 스민 커피. 닦고, 짜고, 다시 닦는다. 아무도 고개를 들지 않는다.',
     'Coffee, trodden into the carpet. Someone said: wipe this floor.': '카펫에 밟힌 커피 자국. 누군가 말했다. 여기 바닥 좀 닦아.',
     "The floor's clean. Nobody noticed.": '바닥이 깨끗해졌다. 아무도 몰랐다.',
+    '...The second item is good.': '...두 번째 아이템은 괜찮네.',
+    "A player who doesn't hand over sente.": '선수를 넘기지 않는 선수다.',
+    'Again?': '다시?',
+    'And.': '그리고.',
+    'Baduk is a fight at bottom, a war. You give way when pressed, sometimes you look to share the board, but the winner and the loser are plain. He lived in that world for over ten years. A beaten soldier, but raised to compete.': '바둑은 결국 싸움이고 전쟁이다. 밀리면 물러서고 때로는 공존을 찾지만, 승자와 패자는 분명하다. 그는 그 세계에서 십 년 넘게 살았다. 패잔병이지만, 승부사로 길러진 사람.',
+    "Han asks for help anyway. The old man softens. Buy me a soju when it's done.": '그래도 한석율은 도와 달라고 한다. 노인이 누그러진다. 끝나면 소주나 한잔 사.',
+    'Han rings Jang from outside the plant, cigarette in hand.': '한석율이 공장 밖에서 담배를 든 채 장그래에게 전화한다.',
+    'He drops the honorifics.': '그가 존댓말을 내려놓는다.',
+    'He slips into an empty meeting room and calls Ulsan.': '그는 빈 회의실로 들어가 울산에 전화를 건다.',
+    'He yawns, eyes watering, and goes back to his desk.': '그는 눈물이 맺히도록 하품을 하고 자리로 돌아간다.',
+    'How is it?': '어때요?',
+    'How old are you, anyway?': '너 몇 살이냐?',
+    'Huh...?': '어...?',
+    'Interns are staff too, you know. Is this company work, or your own? Look at the size of it...': '인턴도 직원이에요. 이게 회사 일이에요, 개인 일이에요? 이 분량 좀 봐...',
+    'Kim, under his breath: answer that fast and he gets angrier. He never got the time to be angry.': '김대리가 작게 말한다. 그렇게 빨리 대답하면 더 화내. 화낼 시간을 못 받았으니까.',
+    'Kim. Playing house? Really?': '김대리, 소꿉장난해? 진짜?',
+    'Make the corner solid, then fight.': '귀를 단단히 하고, 그다음에 싸운다.',
+    'Morning. Oh, red-eyed, holds up a document Jang made for the team.': '아침. 눈이 충혈된 오과장이 장그래가 팀을 위해 만든 문서를 들어 보인다.',
+    "Night, the lounge. He types alone. Forty-two pages. Forty. Fifty-three. More pages don't make it better; an item plan isn't a book report. He keeps going.": '밤, 휴게실. 그는 혼자 타자를 친다. 42쪽. 40쪽. 53쪽. 쪽수가 많다고 좋은 게 아니다. 아이템 기획서는 독후감이 아니다. 그래도 그는 계속한다.',
+    "On the frame strip, Black's stones sit in the lower-left corner beside White's. Cho makes them solid first, then turns to fight.": '기보 띠 위, 흑돌이 좌하귀에 백돌과 붙어 있다. 조훈현은 먼저 그 돌들을 단단히 하고, 그다음 싸움으로 돌아선다.',
+    "Please check it. If it's short, I'll redo it.": '확인해 주세요. 부족하면 다시 하겠습니다.',
+    'Same colours. Big groups over small ones. Smaller boxes.': '색은 통일하고. 큰 묶음 아래 작은 묶음. 박스는 작게.',
+    'Shrink the boxes.': '박스 줄여.',
+    'Sorry.': '죄송합니다.',
+    'Sorry. Jang, can you fix it now?': '죄송합니다. 장그래 씨, 지금 고칠 수 있지?',
+    'Still a mess. Again.': '아직 엉망이야. 다시.',
+    "That's what we agreed.": '그렇게 하기로 했잖아요.',
+    'The interns had the PT exam. They were short of time.': '인턴들이 PT 시험 때문에 시간이 없었을 겁니다.',
+    "Then it's settled. We chose the item together, and you agreed to it. From here I write the PT, my way. I'll share the progress, but I don't take instructions. That's what we agreed, isn't it?": '그럼 정해졌네요. 아이템은 같이 골랐고, 동의하셨죠. 이제부터 PT는 제 방식대로 씁니다. 진행 상황은 공유하지만, 지시는 받지 않습니다. 그렇게 하기로 했잖아요?',
+    'This little runt...': '이 자식이...',
+    "Ulsan. In a fibre warehouse, the site's department head shows Han the bolts: strength, carbonisation, density. Leave that to the buyer's experts, he says. Your job is the samples and the papers, on the day, with no mistakes.": '울산. 섬유 창고에서 현장 부장이 한석율에게 원단을 보여 준다. 강도, 탄화, 밀도. 그건 바이어 쪽 전문가에게 맡기라고 한다. 네 일은 샘플과 서류를 약속한 날에, 실수 없이 전하는 거라고.',
+    'We chose it together. He agreed. Hold him to it.': '같이 골랐어. 그도 동의했어. 그 약속을 지키게 해.',
+    'Well...': '글쎄...',
+    'What?': '뭐?',
+    'Yes. Decided.': '응. 정했어.',
+    'Yes. Yes, yes.': '네. 네, 네.',
+    'You call this a plan? An after-school hobby? Where I interned, I spent four days on one item. Twenty pages, packed tight.': '이게 기획서예요? 방과후 취미 계획이에요? 내가 인턴 했던 회사에선 아이템 하나에 나흘, 빽빽하게 스무 장씩 썼어요.',
+    "You should have followed the seniors' materials. Fixing it now won't help, I have to take this in and report! Colours that don't match, boxes all over the place, no order to any of it. What did you do yesterday?": '선배들이 만든 자료를 따라 했어야지. 지금 고친다고 해결돼? 이거 들고 가서 보고해야 된다고! 색깔은 제각각, 박스는 여기저기, 체계도 하나 없고. 어제 뭐 했어?',
+    "You're sure?": '확실해요?',
 }
