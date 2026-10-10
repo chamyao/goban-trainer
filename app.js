@@ -125,7 +125,7 @@ const Sync = {
   // solved sticks (1 beats anything); the adaptive rating keeps whichever has played more boards
   mergeInto(local, remote) {
     for (const bookId in remote) {
-      if (bookId === "tkAt" || bookId === "tkUndo" || bookId === "tkReplay") {   // dated: the later date wins (TK.cleared)
+      if (bookId === "tkAt" || bookId === "tkUndo" || bookId === "tkReplay" || bookId === "tkSeen") {   // dated: the later date wins (TK.cleared, TK.seen)
         const b = local[bookId] || (local[bookId] = {});
         for (const k in remote[bookId]) b[k] = Math.max(b[k] || 0, remote[bookId][k] || 0);
         continue;
