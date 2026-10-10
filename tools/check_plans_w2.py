@@ -37,8 +37,8 @@ from vocab import FOLK, KINDS  # noqa: E402
 SIDES = {"N": (0, -1), "S": (0, 1), "W": (-1, 0), "E": (1, 0)}
 OPEN_GROUND = {"court", "passage", "garden", "field", "field.wheat", "market", "camp", "plain", "loess", "stage", "floor", "ward",
                "city", "plateau"}
-PASSABLE_THINGS = {"furn.seat", "furn.curtain", "furn.rug", "landmark.ridge", "building.gatehouse", "building.gate", "building.moongate"}
-IN_WALL = {"building.gate", "building.gatehouse", "building.gatetower", "building.moongate", "wall.stairs"}   # stand in a wall: no margin
+PASSABLE_THINGS = {"furn.seat", "furn.curtain", "furn.rug", "landmark.ridge", "building.gatehouse", "building.gate", "building.moongate", "building.palace_gate"}
+IN_WALL = {"building.gate", "building.gatehouse", "building.gatetower", "building.moongate", "wall.stairs", "building.palace_gate"}   # stand in a wall: no margin
 EXTRA_KINDS = {"prop.lanterns", "prop.body_lamp", "milestone", "banner", "plant.peony", "water.lotus", "tree.poplar", "tree.willow",
                "camp.gong", "camp.drum"}
 
@@ -479,7 +479,8 @@ def draw(name, P, out):
         d.rectangle([c[0] * T, c[1] * T, (c[0] + 1) * T - 1, (c[1] + 1) * T - 1], fill=col.get(k, (150, 150, 150)))
     lc = {"road": (225, 205, 160), "path": (230, 215, 175), "bridge": (160, 110, 70), "gallery": (180, 60, 50), "river": (60, 115, 180),
           "stream": (80, 140, 200), "wall": (90, 80, 75), "wall.city": (80, 70, 65), "wall.lattice": (150, 90, 60), "curtain": (190, 60, 90),
-          "crosswalk": (240, 240, 240), "barrier": (120, 160, 190), "parapet": (130, 130, 135)}
+          "crosswalk": (240, 240, 240), "barrier": (120, 160, 190), "parapet": (130, 130, 135),
+          "wall.palace": (150, 60, 50)}
     for l in P.p.get("lines", []):
         if "outline" in l:
             x, y, w, h = l["outline"]

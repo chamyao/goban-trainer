@@ -333,6 +333,8 @@ KINDS.update({
     "prop.teacup": (1, 1, False),
     "prop.coffee_cup": (1, 1, False),
     "prop.memorial_tent": (4, 2, True),   # a white memorial tent with portraits (Daehanmun)
+    "building.palace_gate": (6, 3, False),   # Daehanmun: a palace gate standing in its wall's gap, walked through
+    "furn.cloth_bolts": (2, 1, True),        # bolts of cloth on a rack (the textile floor)
 })
 FALLBACK.update({
     "building.office_tower": ["building.tower", "building.hall_grand", "building.hall"],
@@ -389,6 +391,8 @@ FALLBACK.update({
     "prop.teacup": ["furn.jar"],
     "prop.coffee_cup": ["furn.jar"],
     "prop.memorial_tent": ["building.tent", "camp.table"],
+    "building.palace_gate": ["building.gatehouse", "building.gate"],
+    "furn.cloth_bolts": ["furn.shelf"],
 })
 MATERIALS.update({"asphalt": False,     # a carriageway: crossed only at a crosswalk
                   "crosswalk": True,
@@ -396,9 +400,11 @@ MATERIALS.update({"asphalt": False,     # a carriageway: crossed only at a cross
                   "parapet": False,     # a roof's low wall
                   "carpet": True,       # an office floor: grey carpet tiles
                   "office_tile": True,  # a lobby's polished stone tiles
-                  "lino": True})        # a Korean home's yellow vinyl floor over the ondol
+                  "lino": True,         # a Korean home's yellow vinyl floor over the ondol
+                  "wall.palace": False})  # a palace's wall: stone base, plaster, tiled coping (Deoksugung)
 MATERIAL_FALLBACK.update({"asphalt": ["stone", "dirt"], "crosswalk": ["road", "dirt"], "barrier": ["wall.lattice", "wall"],
-                          "parapet": ["wall"], "carpet": ["stone"], "office_tile": ["stone"], "lino": ["wood"]})
+                          "parapet": ["wall"], "carpet": ["stone"], "office_tile": ["stone"], "lino": ["wood"],
+                          "wall.palace": ["wall"]})
 
 # people: folk.* are townsfolk drawn by the kit; hero.<id> are story
 # characters drawn by the game itself (TKArt), so every kit shows them the same.

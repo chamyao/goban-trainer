@@ -101,12 +101,15 @@ NEW_KINDS = {**NEW_KINDS2,
              "furn.kid_mat": (2, 1, False),            # a padded play mat
              "furn.subway_seat": (4, 1, True),         # a subway carriage's long bench seat
              "prop.memorial_tent": (4, 2, True),       # a white memorial tent: portraits, chrysanthemums (Daehanmun, Book 1's end)
+             "building.palace_gate": (6, 3, False),    # Daehanmun: the gate in Deoksugung's wall, walked through under its roof
+             "furn.cloth_bolts": (2, 1, True),         # bolts of cloth on a rack, sample books below (the textile floor)
              # the board room's drinks (m17), each shown on the table once set down
              "prop.glass_water": (1, 1, False),
              "prop.teacup": (1, 1, False),
              "prop.coffee_cup": (1, 1, False),
              }
 LINE_KINDS = {**LINE_KINDS2,
+              "wall.palace": (False, True),   # Deoksugung's wall (Daehanmun)
               "crosswalk": (True, False),   # zebra stripes across the carriageway
               "barrier": (False, False),    # the lobby's ID gates: glass flaps, seen through
               "parapet": (False, False)}    # a roof's low wall: seen over
@@ -174,6 +177,10 @@ ART = {**ART2,
        "furn.toy_shelf": "a low shelf of toys and picture books",
        "furn.kid_mat": "a padded play mat in bright colours",
        "furn.subway_seat": "a Seoul subway carriage's long bench seat along the wall, grab rails above",
+       "building.palace_gate": "Daehanmun, Deoksugung's main gate: three red bays, a tiled hipped roof with painted eaves and a "
+                               "name board, on a stone base with steps; stands in the palace wall's gap, walked through",
+       "furn.cloth_bolts": "bolts of coloured cloth on a steel rack, sample books on the bottom shelf",
+       "wall.palace": "Deoksugung's wall: a stone base, plastered wall, a tiled coping on top",
        "prop.memorial_tent": "a white Korean memorial tent (분향소) on a plaza: a white canopy on poles, a long table in white cloth "
                              "with framed black-and-white portraits, white chrysanthemums laid in rows, incense; four tiles wide",
        "prop.glass_water": "a glass of still water on a coaster, drawn small on a table top (no ice)",
@@ -309,8 +316,8 @@ def _textile():
         *_desks([(2, 3), (3, 3), (2, 4), (3, 4), (9, 3), (10, 3), (9, 4)]),
         {"id": "steve-desk", "kind": "furn.office_desk", "rect": [10, 4, 1, 1], "label": "Steve Han's desk"},
         {"id": "head", "kind": "furn.exec_desk", "rect": [6, 1, 2, 1], "label": "The team head's desk"},
-        {"id": "samples-1", "kind": "furn.shelf", "rect": [1, 1, 1, 1], "label": "Bolts of cloth and sample books"},
-        {"id": "samples-2", "kind": "furn.shelf", "rect": [2, 1, 1, 1]},
+        {"id": "samples-1", "kind": "furn.cloth_bolts", "rect": [1, 1, 1, 1], "label": "Bolts of cloth and sample books"},
+        {"id": "samples-2", "kind": "furn.cloth_bolts", "rect": [2, 1, 1, 1]},
         {"id": "window", "kind": "furn.window", "rect": [11, 1, 1, 1]},
         {"id": "plant", "kind": "furn.plant", "rect": [12, 7, 1, 1]},
     ]) | {"label": "The textile team"}
@@ -820,10 +827,10 @@ def _places(floors):
                            {"id": "palace", "kind": "garden", "rect": [0, 0, 16, 3]},     # inside the palace wall
                            {"id": "plaza", "kind": "court", "rect": [2, 4, 12, 3]},
                            {"id": "carriageway", "kind": "asphalt", "rect": [0, 8, 16, 2]}],
-                "lines": [{"id": "palace-wall", "kind": "wall", "path": [[0, 3], [15, 3]], "width": 1, "gates": {"daehanmun": [8, 3]}},
+                "lines": [{"id": "palace-wall", "kind": "wall.palace", "path": [[0, 3], [15, 3]], "width": 1, "gates": {"daehanmun": [8, 3]}},
                           {"id": "pave", "kind": "road", "path": [[0, 7], [15, 7]], "width": 4},
-                          {"id": "palace-path", "kind": "path", "path": [[8, 3], [8, 1]], "width": 2}],
-                "things": [{"id": "tent", "kind": "prop.memorial_tent", "rect": [10, 4, 2, 1], "label": "A memorial tent: portraits and chrysanthemums"},
+                          {"id": "palace-path", "kind": "path", "path": [[8, 3], [8, 1]], "width": 4}],   # (as wide as the gate's middle bay)
+                "things": [{"id": "daehanmun", "kind": "building.palace_gate", "rect": [7, 3, 3, 1], "label": "Daehanmun", "plaque": "大漢門"},{"id": "tent", "kind": "prop.memorial_tent", "rect": [10, 4, 2, 1], "label": "A memorial tent: portraits and chrysanthemums"},
                            {"id": "car-1", "kind": "prop.car", "rect": [3, 8, 2, 1]},
                            {"id": "car-2", "kind": "prop.car", "rect": [11, 9, 2, 1]}],
                 "spots": [],

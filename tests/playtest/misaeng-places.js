@@ -7,7 +7,7 @@
 //      each senior's desk takes its own (and only its own) and sets its mark; with all three, m4's gate is met.
 //   4. m8: the lobby's recycling bins give the waybill scrap (a spot with "gives").
 //   5. m18: section head Oh, at his desk in Sales 3 in his socks, lends his slippers (m18's gate).
-//   6. m20: west along Jongno to Daehanmun.
+//   6. m20: west along Jongno to Daehanmun, and through its gate (the wall either side holds).
 // (Book 4's board room and ₩100,000 mission get their own checks when Book 4's maps are built.)
 // Run with the site served on :8765 (tests/playtest/run.sh misaeng-places).
 const { chromium } = require(require('child_process').execSync('npm root -g').toString().trim() + '/playwright');
@@ -54,7 +54,8 @@ async function settle(p, place) {   // wait until the scene has restarted in `pl
   }
   return false;
 }
-// walk her (by velocity, through the engine's physics) for ms, and say where she ended up
+// walk her (by velocity, through the engine's physics) for ms, and say where she ended up. Into a wall, keep it slow
+// (50 px/s): under the software renderer a long frame at 80 px/s can carry her through a 16-px wall (a flake, once)
 const walk = (p, vx, vy, ms) => p.evaluate(([vx, vy, ms]) => new Promise(res => {
   const w = window.__w, t0 = performance.now();
   const step = () => { w.player.setVelocity(vx, vy); if (performance.now() - t0 < ms) requestAnimationFrame(step); else { w.player.setVelocity(0, 0); res({ x: w.player.x, y: w.player.y }); } };
@@ -97,10 +98,10 @@ async function street(b) {
   const T = 16;
   // the carriageway: tile rows 32-39; the north pavement is rows 28-31; a crosswalk at tiles 20-23 (cross-w) and 72-75
   await p.evaluate(T => window.__w.player.body.reset(10.5 * T, 30 * T), T);
-  const kerb = await walk(p, 0, 80, 2500);
+  const kerb = await walk(p, 0, 50, 4000);
   check(kerb.y < 32.5 * T, `Jongno: walking south off the pavement stops at the carriageway (y ${(kerb.y / T).toFixed(1)} tiles)`);
   await p.evaluate(T => window.__w.player.body.reset(21.5 * T, 30 * T), T);
-  const crossed = await walk(p, 0, 80, 2500);
+  const crossed = await walk(p, 0, 50, 4000);
   check(crossed.y > 40 * T, `Jongno: at the crosswalk she crosses to the south pavement (y ${(crossed.y / T).toFixed(1)} tiles)`);
   // the tower's door: into One International's lobby; the lift to Sales Team 3, and back down
   check(await through(p, 'one-international'), 'the tower\'s door goes into One International (the lobby)');
@@ -152,6 +153,14 @@ async function daehanmun(b) {
   const p = await open(b, '21-m20', 'jongno');
   check(await p.evaluate(() => window.__w.placeOpen('daehanmun')), 'm20: Daehanmun is open from Jongno');
   check(await through(p, 'daehanmun'), 'm20: west along Jongno\'s back lane to Daehanmun');
+  // through the gate (building.palace_gate stands in the wall's gap, walked through) into the palace grounds, and the wall
+  // either side of it holds
+  await p.evaluate(() => window.__w.player.body.reset(34 * 16, 17 * 16));
+  const inside = await walk(p, 0, -50, 4000);
+  check(inside.y < 12 * 16, `m20: through Daehanmun's gate into the palace grounds (y ${(inside.y / 16).toFixed(1)} tiles)`);
+  await p.evaluate(() => window.__w.player.body.reset(24 * 16, 17 * 16));
+  const wall = await walk(p, 0, -50, 4000);
+  check(wall.y > 14 * 16, `m20: the palace wall beside the gate holds (y ${(wall.y / 16).toFixed(1)} tiles)`);
   await p.context().close();
 }
 
