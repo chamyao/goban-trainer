@@ -1090,5 +1090,75 @@
   "beat": "Zhou Yu in his boat, mocked by the soldiers' chant from the shore.",
   "scene": "A river shore in the evening. Soldiers on the bank shout and jeer toward the water. In a warship, Zhou Yu: a handsome commander of Wu in his thirties, in armour and a red cloak, clutches his side, a wound reopening, held back by his officers.",
   "notes": "Book 4 (Lady Sun's marriage), docs/book2/ladysun-arc.md."
+ },
+ "ms_lastgame": {
+  "book": 21,
+  "category": "prologue",
+  "beat": "Jang at eighteen loses his last trainee exam game by half a point.",
+  "scene": "A long bright room at the Korea Baduk Association, rows of go boards on low tables. At the nearest, Jang Geu-rae at eighteen: a thin boy in a grey hoodie, alone now, his opponent gone, staring at the finished game. The other trainees, children and teenagers, keep playing behind him. Morning light through tall windows; a clock on the wall.",
+  "notes": "Book 21 (Misaeng, after Yoon Tae-ho's webtoon), docs/book2/misaeng-arc.md. Modern Seoul, 2012. Beat m1."
+ },
+ "ms_onelight": {
+  "book": 21,
+  "category": "arrival",
+  "beat": "Jang's first day: through the ID gates of One International.",
+  "scene": "Jang Geu-rae: a slight young Korean man in his mid-twenties, neat black hair, a plain dark suit a little too big, a quiet watchful face, holds a temporary intern's pass at the glass ID gates of a Jongno office tower lobby. Around him interns in new suits with lanyards stream through. Polished stone floor, a front desk, lift doors beyond. He hesitates one step behind the others.",
+  "notes": "Book 21 (Misaeng, after Yoon Tae-ho's webtoon), docs/book2/misaeng-arc.md. Modern Seoul, 2012. Beat m2."
+ },
+ "ms_oneeye": {
+  "book": 21,
+  "category": "turn",
+  "beat": "Four stones on a desk make one eye: 'It's still not alive.'",
+  "scene": "Close on an office desk at night: four black go stones set in a small ring around one empty point, beside a keyboard, coffee cups and trade documents. Kim Dong-sik: a friendly Korean man in his early thirties, shirt sleeves rolled, round glasses, leans in smiling. Jang Geu-rae: a slight young Korean man in his mid-twenties, neat black hair, a plain dark suit a little too big, a quiet watchful face, looks down at the stones, unsmiling.",
+  "notes": "Book 21 (Misaeng, after Yoon Tae-ho's webtoon), docs/book2/misaeng-arc.md. Modern Seoul, 2012. Beat m9."
+ },
+ "ms_phone": {
+  "book": 21,
+  "category": "turn",
+  "beat": "The auditor's call to Amman is answered in Korean.",
+  "scene": "A glass-walled meeting room in an office tower. A stern Korean auditor in his fifties holds a desk phone to his ear, eyes widening. Around the table, papers half packed into boxes. Oh Sang-sik: a tired Korean man in his early forties, bloodshot eyes, loosened tie, leans forward. Jang Geu-rae: a slight young Korean man in his mid-twenties, neat black hair, a plain dark suit a little too big, a quiet watchful face, stands at the window, very still.",
+  "notes": "Book 21 (Misaeng, after Yoon Tae-ho's webtoon), docs/book2/misaeng-arc.md. Modern Seoul, 2012. Beat m13."
+ },
+ "ms_jamespark": {
+  "book": 21,
+  "category": "turn",
+  "beat": "The board list: one name circled, James Park.",
+  "scene": "Close on a printed company board list on a meeting-room table: a column of names, many of them Park, and one, 'James Park', circled in red pen. A hand holds the pen. Behind, out of focus, the auditors and Oh Sang-sik looking down at it. Fluorescent light, late evening.",
+  "notes": "Book 21 (Misaeng, after Yoon Tae-ho's webtoon), docs/book2/misaeng-arc.md. Modern Seoul, 2012. Beat m13."
+ },
+ "ms_chuseok": {
+  "book": 21,
+  "category": "interlude",
+  "beat": "Chuseok: his mother defends him in tears.",
+  "scene": "A crowded family flat at Chuseok, low tables of holiday food, relatives in good clothes. Through a half-open kitchen door: Jang's mother, a small worn Korean woman in her fifties in a cardigan, wiping her eyes as she speaks to her sisters. On the dim landing outside, Jang Geu-rae: a slight young Korean man in his mid-twenties, neat black hair, a plain dark suit a little too big, a quiet watchful face, listens, his back against the wall.",
+  "notes": "Book 21 (Misaeng, after Yoon Tae-ho's webtoon), docs/book2/misaeng-arc.md. Modern Seoul, 2012. Beat m15."
+ },
+ "ms_hell": {
+  "book": 21,
+  "category": "interlude",
+  "beat": "Kim Dong-su's empty pizza shop.",
+  "scene": "A small pizza shop on a Seoul side street at night, empty tables, a menu board, a single oven glowing. Kim Dong-su: a Korean man in his late forties in an apron, tired and proud, sits at a table across from Oh Sang-sik, who pushes an envelope back across it. Across the road, the bright sign of a big supermarket.",
+  "notes": "Book 21 (Misaeng, after Yoon Tae-ho's webtoon), docs/book2/misaeng-arc.md. Modern Seoul, 2012. Beat m16."
+ },
+ "ms_roof_ahn": {
+  "book": 21,
+  "category": "turn",
+  "beat": "Ahn alone on the roof after withdrawing her proposal.",
+  "scene": "The roof of a Jongno office tower at midday, railings, air-conditioning units, the city below. Ahn Young-yi: a young Korean woman in her twenties, sharp-featured and composed, hair tied back, in a grey office suit and heels, stands alone at the railing, her arms folded tight, looking out. A dropped folder at her feet.",
+  "notes": "Book 21 (Misaeng, after Yoon Tae-ho's webtoon), docs/book2/misaeng-arc.md. Modern Seoul, 2012. Beat m19."
+ },
+ "ms_infra": {
+  "book": 21,
+  "category": "ending",
+  "beat": "The tower in grey, the people in colour.",
+  "scene": "Street level in Jongno: an office tower drawn entirely in cold grey, as if drained. Office workers on the forecourt in full warm colour. Jang Geu-rae: a slight young Korean man in his mid-twenties, neat black hair, a plain dark suit a little too big, a quiet watchful face, in colour, carrying a small cardboard box, has just stepped out of the doors and looks back up at the building.",
+  "notes": "Book 21 (Misaeng, after Yoon Tae-ho's webtoon), docs/book2/misaeng-arc.md. Modern Seoul, 2012. Beat m23b."
+ },
+ "ms_145": {
+  "book": 21,
+  "category": "ending",
+  "beat": "Black 145: the last move; Nie Weiping resigns.",
+  "scene": "A go board seen from above near the end of a professional game, the centre crowded with black and white stones; a hand places a black stone in the middle, and five white stones beside it are being lifted away. At the edge of the frame, the other player's hand rests flat on the table: he resigns. 1989; a hushed tournament hall.",
+  "notes": "Book 21 (Misaeng, after Yoon Tae-ho's webtoon), docs/book2/misaeng-arc.md. Modern Seoul, 2012. Beat m24."
  }
 }

@@ -123,6 +123,20 @@ door (R3).
 Ahn leads 2 beats, Sun 1 and a cutaway, Oh 4 (with m3 and m23 shared). Boards: 5 record boards, 11 contests or legwork,
 1 boss with 3 boards, 1 mission, 1 room setup. Five beats have no board.
 
+
+**Written** (`tools/tk_story_w21.py`, `WORLD21`). Five beats are split in two where the scene moves place, so the
+story has 29 nodes: `m3b` (Oh's search, lobby, gated on `item:waybill_scrap`), `m4b` (the client's president at One
+International, `meeting`), `m5b` (the daycare), `m19b` (the pojangmacha, her father), `m23b` (the forecourt, the
+contract ends). The record boards are on m6 (B29), m9 (B47), m17 (B85), m22 (B137) and m24 (B145). The audit board
+holds four clues (`statements`, `coached`, `icb_listing`, `icb_call`) and two links; m13's boss plays the call, the
+board list and James Park as its three boards.
+
+Spots and people the scenes ask Places for: the lobby bins (give `waybill_scrap`), `lobby-lift`, a `resources` spot or
+room (Ahn's team), the audit room's table (gives `icb_listing`, opens the audit board), Jang's desk in `sales3` (gives
+`icb_call`), the board room's three seats (`seat_president` water, `seat_exec` green tea, `seat_division` coffee, each
+`takes`), m18's shop (socks), buyers, the corner-shop rival and the KBA staff member as a buyer who always refuses
+(his refusal is the rebuke), `client`, `meeting`, `daycare`, `sun-flat`, `pojangmacha`, `forecourt`.
+
 ## Decisions (Plot's recommendations; the user can overrule any of them)
 
 1. **Span:** all of Season 1, one book, because the frame only lands at move 145. If it runs too long, split after m14
@@ -185,13 +199,13 @@ Jordanian ambassador; the corner-shop owner; the KBA staff member; trainee child
 
 All modern dress. **New art for everyone** (Graphics): office wear, the KBA trainee room, Jongno.
 
-## Stills (proposed)
+## Stills (briefs in `assets/tk/stills/scene_prompts.json`, book 21)
 
-`ms_trainee` (Jang at eighteen alone at a board at dawn), `ms_onelight` (Jang at the lobby gates, first day),
-`ms_oneeye` (four stones on a desk, one eye: 미생이네요), `ms_phone` (Korean voice on the ICB line,
-the auditors listening), `ms_jamespark` (the board list, one name circled), `ms_mother` (his mother crying in the next
-room at Chuseok), `ms_hell` (Kim Dong-su's empty pizza shop), `ms_roof_ahn` (Ahn alone on the roof after withdrawing),
-`ms_infra` (the tower in grey, the people in colour), `ms_145` (the last move on the board; Nie's hand resigning).
+Ten: `ms_lastgame` (m1, Jang at eighteen alone at the board), `ms_onelight` (m2, the ID gates), `ms_oneeye` (m9, four
+stones, one eye), `ms_phone` (m13, the Korean voice on the ICB line), `ms_jamespark` (m13, the board list, one name
+circled), `ms_chuseok` (m15, his mother in tears behind the kitchen door), `ms_hell` (m16, Kim Dong-su's empty pizza
+shop), `ms_roof_ahn` (m19, Ahn alone on the roof), `ms_infra` (m23b, the tower in grey, the people in colour), `ms_145`
+(m24, the last move; Nie's hand resigning). Cast ids are Graphics' `ms_*` walker keys.
 
 ## Engine requests (to Integration)
 
