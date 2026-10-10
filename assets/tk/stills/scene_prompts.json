@@ -1160,5 +1160,61 @@
   "beat": "Black 145: the last move; Nie Weiping resigns.",
   "scene": "A go board seen from above near the end of a professional game, the centre crowded with black and white stones; a hand places a black stone in the middle, sealing in a group of five white stones that can no longer escape. At the edge of the frame, the other player's hand rests flat on the table: he resigns. 1989; a hushed tournament hall.",
   "notes": "Book 21 (Misaeng, after Yoon Tae-ho's webtoon), docs/book2/misaeng-arc.md. Modern Seoul, 2012. Beat m24. Graphics: the people's looks are left to CAST (tools/tk_stills.py), so the stills match the portraits."
+ },
+ "ms_25stones": {
+  "book": 21,
+  "category": "turn",
+  "beat": "One black stone in a sea of white: the new intern, surrounded.",
+  "scene": "A go board seen from above, almost filled with twenty-five white stones; one black stone sits alone near the centre with no room around it. Behind the board, out of focus, the open-plan office of Sales Team 3: desks, monitors, people on the phone, none of them looking at the board.",
+  "notes": "Book 21 (Misaeng Book 1, Not Yet Alive), docs/book2/misaeng-arc.md. Modern Seoul, 2012. Graphics: the people's looks are left to CAST. Beat m5."
+ },
+ "ms_babyfinger": {
+  "book": 21,
+  "category": "interlude",
+  "beat": "Kim Seok-ho comes home late; his baby grabs his finger.",
+  "scene": "Night, a tiny one-room flat in Seoul: a single mattress on the floor, a rice cooker, baby clothes on a rack. Kim Seok-ho, still in his office shirt, kneels by his sleeping wife and baby; the baby's small hand has closed round his finger. A street lamp through the one window.",
+  "notes": "Book 21 (Misaeng Book 1, Not Yet Alive), docs/book2/misaeng-arc.md. Modern Seoul, 2012. Graphics: the people's looks are left to CAST. Beat m8."
+ },
+ "ms_sauna": {
+  "book": 21,
+  "category": "interlude",
+  "beat": "The sauna: Steve Han, Kim Bu-ryeon and Go Gwa-jang, up to their chins; 'Don't touch me.'",
+  "scene": "A Korean public sauna, steam rising from a hot pool tiled in blue. Steve Han, Kim Bu-ryeon and Go Gwa-jang sit in the water up to their chins, towels on their heads; Go Gwa-jang has thrown a friendly arm toward Steve Han, who leans away, deadpan. Comic, warm.",
+  "notes": "Book 21 (Misaeng Book 1, Not Yet Alive), docs/book2/misaeng-arc.md. Modern Seoul, 2012. Graphics: the people's looks are left to CAST. Beat m9."
+ },
+ "ms_doorbell": {
+  "book": 21,
+  "category": "interlude",
+  "beat": "Every time the bell rings, the daycare children run to the door.",
+  "scene": "Evening in a small Seoul daycare: toy shelves, padded mats, coats on hooks. Five small children have all run to the front door at once at the sound of the bell, faces lit with hope; behind them a tired young teacher. Through the glass of the door, it's somebody else's parent.",
+  "notes": "Book 21 (Misaeng Book 1, Not Yet Alive), docs/book2/misaeng-arc.md. Modern Seoul, 2012. Graphics: the people's looks are left to CAST. Beat m13b."
+ },
+ "ms_drawing": {
+  "book": 21,
+  "category": "turn",
+  "beat": "Somi's drawing of her mother: from behind, walking away, a phone at her ear.",
+  "scene": "Close on a child's crayon drawing on a low table: a woman in an office suit seen from behind, walking away, a phone held to her ear, and a small figure waving. The word 'MUMMY' in wobbly letters. A small sleeping hand still holds a crayon at the edge of the frame. Lamplight.",
+  "notes": "Book 21 (Misaeng Book 1, Not Yet Alive), docs/book2/misaeng-arc.md. Modern Seoul, 2012. Graphics: the people's looks are left to CAST. Beat m14."
+ },
+ "ms_blacknails": {
+  "book": 21,
+  "category": "turn",
+  "beat": "Han Seok-yul remembers his father's hands: 'Dad, your nails are black.'",
+  "scene": "A memory in warm, faded light: Han Seok-yul's father, in grease-stained overalls, sits on a step outside a workshop, his rough hands open on his knees, the nails black with ground-in grease. His small son, a boy of six, looks at the hands, and up at his father's face. Machinery and sparks behind.",
+  "notes": "Book 21 (Misaeng Book 1, Not Yet Alive), docs/book2/misaeng-arc.md. Modern Seoul, 2012. Graphics: the people's looks are left to CAST. Beat m16. Graphics: the boy left unnamed, so CAST doesn't dress him as the adult Han."
+ },
+ "ms_barefoot": {
+  "book": 21,
+  "category": "turn",
+  "beat": "The individual task: section head Oh sits on the panel in his socks.",
+  "scene": "A training room set for a test: a long panel table with evaluators in suits and name cards. Oh Sang-sik sits among them in his socks, his feet bare of shoes under the table, arms folded, eyes red. In front of the panel, Jang Geu-rae holds out a pair of office slippers to Han Seok-yul, who stands stiff with his chin up.",
+  "notes": "Book 21 (Misaeng Book 1, Not Yet Alive), docs/book2/misaeng-arc.md. Modern Seoul, 2012. Graphics: the people's looks are left to CAST. Beat m18."
+ },
+ "ms_daehanmun": {
+  "book": 21,
+  "category": "ending",
+  "beat": "The first morning: Oh takes the new hires to the memorial altar at Daehanmun.",
+  "scene": "Early morning at Daehanmun, the old palace gate of Deoksugung in central Seoul: in front of it a small white memorial tent with rows of framed portraits, flowers and incense. Oh Sang-sik stands bowing, and behind him four new hires in new suits bow too: Jang Geu-rae, Ahn Young-yi, Han Seok-yul, Jang Baek-gi. Commuters pass behind.",
+  "notes": "Book 21 (Misaeng Book 1, Not Yet Alive), docs/book2/misaeng-arc.md. Modern Seoul, 2012. Graphics: the people's looks are left to CAST. Beat m20."
  }
 }
