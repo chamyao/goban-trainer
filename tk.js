@@ -1202,7 +1202,7 @@ const TKVoice = {
       const next = () => {
         const v = this.queue.shift();
         if (!v) { this.audio = null; res(); return; }
-        const a = new Audio(`assets/tk/voice/${this.speaks === "en" ? "en/" : this.speaks === "ko" ? "ko/" : ""}${v}.mp3?v=2`);  // bump when clips are re-rendered
+        const a = new Audio(`assets/tk/voice/${this.speaks === "en" ? "en/" : this.speaks === "ko" ? "ko/" : ""}${v}.mp3?v=${this.speaks === "ko" ? 3 : 2}`);  // bump when clips are re-rendered (ko 3: the cleaned voices)
         this.audio = a; a.onended = next; a.onerror = next; a.onpause = () => { if (this.audio === a && !a.ended) res(); };
         a.play().catch(next);
       };
