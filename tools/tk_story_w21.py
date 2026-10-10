@@ -621,7 +621,7 @@ def _nodes():
              ),
         node("m17", 280, 112, "m17", room="board-room", move=84, record=[85, None],
              gate=[{"needs": ["mark:seat_president", "mark:seat_exec", "mark:seat_division"], "else": "m17_wait",
-                    "objective": T("Set the board room from the seating notes: each drink at its seat, on the 7th-floor board room's table."),
+                    "objective": T("Set the board room from the seating notes: each drink at its seat, on the board room's table (take the lift)."),
                     "at": "One International"}],
              dilemma=[
                  D("ms_jang", "Find Cho Hunhyun's move.",
