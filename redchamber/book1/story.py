@@ -535,7 +535,7 @@ def _nodes():
         node("g5", 225, 112, rong, room="xf-eastroom"),               # Xifeng's courtyard: the east room with the clock
         node("g6", 240, 105, rong, room="xf-rooms", role="boss",
              boss={"who": "xifeng", "title": T("Wang Xifeng", "王熙凤") + ", " + T("Pepper Feng", "凤辣子"),
-                   "taunt": T("Why haven't you brought them in?", "怎么还不请进来？")}),
+                   "taunt": T("Why haven't you brought them in?", "怎么还不请进来？"), "dilemma_lines": True}),
         node("g7", 255, 100, "Ning-Rong Street", board=False),        # out by the back gate, at dusk
     ]
 
@@ -568,7 +568,7 @@ def _world():
         "name": T("Deep as the Sea", "侯门深似海"),
         "zh": "侯门深似海",
         "novel": "hongloumeng",
-        "chapters": [1, 2, 3, 4, 5, 6],
+        "chapters": [1, 6],
         "couplets": [
             ["金陵城起复贾雨村　荣国府收养林黛玉", "Jia Yucun is restored in Jinling; the Rong mansion takes in Lin Daiyu"],
             ["贾宝玉初试云雨情　刘姥姥一进荣国府", "Jia Baoyu first learns of love; Granny Liu enters the Rong mansion for the first time"],
