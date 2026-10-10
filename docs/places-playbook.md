@@ -180,16 +180,17 @@ These were each learned from a real complaint, and each is a rule, not a one-off
   (`ZH_PLACES_MS = {}`).
 - **Misaeng draws only in its own kit, `seoul`** (Graphics (Misaeng), `assets/tk/kits/seoul.json`; the world says
   `"kit": "seoul"`): build it with `python3 -m tools.mapfactory all --world 21 --plans ms --kit seoul --preview`, not the
-  three Chinese kits. Misaeng is becoming five books, worlds 21–25 (Plot alt2, misaeng-arc.md; maps per book in
-  data/tk_maps/w21…w25): the shared places (the tower, Jongno, Susaek-dong …) carry over; each book's beat spots come
+  three Chinese kits. Misaeng is nine books, one per volume, worlds 21–29, 1–2 beats an episode (Plot alt2, misaeng-arc.md;
+  Book 1 is episodes 0–16; maps per book in data/tk_maps/w21…w29): the shared places (the tower, Jongno, Susaek-dong …) carry over; each book's beat spots come
   with its design. claude/places-misaeng sits on claude/integration-alt2 and carries only Misaeng's changes (Integration
   alt2 can't take main's Book 15 work through it): build on their head, never on claude/plot-places. They cherry-pick: keep to plain commits (no merges); after they
   take a batch, reset the branch onto their head before the next. After a seoul kit change, recompile w21 (`--kit seoul`) on
   their head before pushing maps: the tile ids move with Graphics' sheets.
-- **A book is a config over shared places** (Misaeng's five books, `tools/tk_plans_ms.py`): the places are builders
+- **A book is a config over shared places** (Misaeng's nine books, `tools/tk_plans_ms.py`): the places are builders
   with no beats in them (`_places(floors)`); each book (`_b1()` …) names the places and tower floors it uses and adds
   its own beat spots, givers and deliveries, people, challengers, lights and objectives; `book(cfg)` assembles them and
-  drops exits to places the book doesn't use. Mechanics a later book reuses are functions (`audit_spots`,
+  drops exits to places the book doesn't use. When a book stops using a place, delete its stale
+  maps (`.map.json`, `.tmj`, preview) from that world: the build writes maps, it doesn't remove them. Mechanics a later book reuses are functions (`audit_spots`,
   `seat_spots`, `trade_people`, `RIVAL`). A new book is a new config and an arc entry (world → its plans).
 - **A lift** (Integration alt2's `"use": "lift"`, `"floors": [{label, to}]`): a spot that opens a floor menu. The tower
   has one in the lobby and one on each floor (`_with_lift`), each floor's arrivals from every other floor at its lift.
@@ -198,6 +199,10 @@ These were each learned from a real complaint, and each is a rule, not a one-off
 - **Walk a book against its own story.** The engine reads data/tk.json: if the story there is older than the maps
   (items it doesn't define, beats renamed), a giver gives nothing and the walk fails for no fault of the maps. Rebuild
   tk.json locally (`python3 tools/build_tk.py`) before the walk, and put it back after (Integration commits it).
+- **A delivery is a handoff to a person.** The engine delivers when someone standing within 64 px of the spot is
+  talked to; with no one there she hands things to a ring on the floor (apo110, Misaeng's errands). The book stands
+  the recipient beside each delivery while it's open, and the build (plans.py verify) fails a delivery spot with no one
+  within 64 px, unless it's `"set_down"` (a place to put something: the board room's seats). Books 12-15 pass.
 - **Walk-up spots keep 76 px apart.** A beat, a thing that gives, or a place to deliver to sets off within 36 px of
   her. Two closer than 76 px both go off as she walks by: in Misaeng's Sales 3, five spots 32 px apart in a row set
   each other off and m4's waiting scene kept firing between deliveries (Testing). The checker fails a pair closer than
@@ -209,6 +214,10 @@ These were each learned from a real complaint, and each is a rule, not a one-off
   with no landing spot leaves the new lead there, not at the beat's spot: the next beat in that room keeps 6+ tiles
   from the room's middle (the proof reads the lead's last place in the staged cutscene).
 - **No dressing on a crosswalk** (`free()` treats it as paving).
+- **A giver's item must be in the story's items** (Plot's `ITEMS` in the story file): the engine gives nothing it
+  doesn't know, silently. A new item for a map chore (Misaeng's mop) goes to Plot with its name.
+- **A person's `until` is a node key, with or without its world**: `"until": "node:m5"` and `"node:21-m5"` both
+  compile to `21-m5` (once; before, a key already carrying its world came out `21-21-m5`, and the person never left).
 - **Floors are any walkable material** in vocab (`room(..., floor="carpet")`): Misaeng's carpet, office_tile, lino.
 - **A thing that gives an item when searched** is a spot with `gives`, `gives_when`, `give`, `given` (as a person has
   them): the lobby's bins (the waybill scrap). The factory and compile carry them; the engine's side is Integration's.
@@ -381,7 +390,7 @@ python3 tools/mapfactory/settle_maps.py             # settle wanderers in built 
 tests/playtest/run.sh book15-places                 # Book 15's mechanics, walked in the engine
 python3 tools/proofs/handoffs.py 21                 # every handoff leaves the new lead 6+ tiles to walk
 tests/playtest/run.sh misaeng-places                # Misaeng: kerb and crosswalks, doors to other places, the lift's menu,
-                                                    # the board room's seats, the ₩100,000 mission, the commute
+                                                    # General Affairs' requisition, m14's errands, the bins, the evening townsfolk, the commute
 python3 tools/mapfactory build --world 12 --plans 2
 python3 tools/mapfactory build --world 13 --plans cc          # CHASE_VERBOSE=1 prints the chase proof
 for k in xianxia jade genshin; do python3 tools/mapfactory compile --world 13 --kit $k; done

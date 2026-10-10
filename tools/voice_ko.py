@@ -31,9 +31,14 @@ AGE = {
     "ms_exec": "old", "ms_president": "old", "ms_director": "old", "ms_hanfather": "old", "ms_sponsor": "old",
     "ms_senior": "old", "ms_examiner": "old", "ms_kimbr": "old", "ms_mother": "old", "ms_ahnfather": "old",
     "ms_kimsj": "old", "ms_cheon": "mid", "ms_kimdsu": "mid", "ms_parkjg": "mid", "ms_park": "mid",
+    # Book 1 as rewritten from the comic (Plot 8556e24)
+    "ms_jang_child": "young", "ms_ohson": "young", "ms_hoyong": "young", "ms_sanggi": "young", "ms_glasses": "young",
+    "ms_ohwife": "mid", "ms_kangsil": "mid",
+    "ms_uncle": "old", "ms_bujang": "old", "ms_amhead": "old", "ms_ulsan": "old", "ms_teacher": "old",
 }
 # fixed casting: the lead the youngest man; Oh the older middle; the child the highest young voice
-FIXED = {"ms_jang": "z149", "ms_jang_young": "z149", "ms_oh": "z207", "ms_somi": "z214", "ms_mother": "z147"}
+FIXED = {"ms_jang": "z149", "ms_jang_young": "z149", "ms_oh": "z207", "ms_somi": "z214", "ms_mother": "z147",
+         "ms_jang_child": "z214", "ms_ohson": "z201"}   # the boys: the highest young voices (no child speakers in the corpus)
 FOLK = {"folk.woman": "z130", "folk.lady": "z168", "folk.maiden": "z166", "folk.girl": "z214", "folk.child": "z214",
         "folk.elder": "z187", "folk": "z104"}
 

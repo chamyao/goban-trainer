@@ -128,15 +128,7 @@
    "blocks_sight": true
   }
  ],
- "spots": [
-  {
-   "id": "m11",
-   "x": 12.5,
-   "y": 8.7,
-   "node": "21-m11",
-   "label": "The client's office"
-  }
- ],
+ "spots": [],
  "npcs": [
   {
    "id": "npc-1",

@@ -142,8 +142,8 @@
      "to": "one-international"
     },
     {
-     "label": "3F · The PT room",
-     "to": "one-international--pt-room"
+     "label": "2F · General Affairs",
+     "to": "one-international--general-affairs"
     },
     {
      "label": "5F · HR",
@@ -169,10 +169,10 @@
    "use": "lift"
   },
   {
-   "id": "m12",
+   "id": "m15",
    "x": 12.5,
    "y": 10.7,
-   "node": "21-m12",
+   "node": "21-m15",
    "label": "A meeting room"
   }
  ],
@@ -196,7 +196,7 @@
    12,
    13
   ],
-  "one-international--pt-room": [
+  "one-international--general-affairs": [
    8,
    12
   ],

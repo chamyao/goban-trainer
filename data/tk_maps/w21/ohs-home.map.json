@@ -1,0 +1,131 @@
+{
+ "format": "tk-map/1",
+ "id": "ohs-home",
+ "world": 21,
+ "name": "Oh's home",
+ "archetype": "interior",
+ "size": [
+  24,
+  16
+ ],
+ "seed": 946,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "lino",
+   " ": "void",
+   "W": "wall"
+  },
+  "rows": [
+   "                        ",
+   " WWWWWWWWWWWWWWWWWWWWWW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WWWWWWWWWWWaaWWWWWWWWW ",
+   "                        "
+  ],
+  "walk": {
+   "lino": true,
+   "void": false,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    12,
+    8
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     6,
+     7
+    ]
+   },
+   "tiles": 68
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.sofa",
+   "x": 4,
+   "y": 4,
+   "w": 2,
+   "h": 1,
+   "id": "sofa"
+  },
+  {
+   "kind": "furn.tv",
+   "x": 4,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "tv"
+  },
+  {
+   "kind": "furn.table",
+   "x": 16,
+   "y": 6,
+   "w": 2,
+   "h": 1,
+   "id": "table",
+   "label": "The kitchen table"
+  },
+  {
+   "kind": "furn.toy_shelf",
+   "x": 20,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "toys"
+  },
+  {
+   "kind": "furn.boxes",
+   "x": 20,
+   "y": 10,
+   "w": 1,
+   "h": 1,
+   "id": "golf",
+   "label": "A golf bag, never used"
+  }
+ ],
+ "spots": [
+  {
+   "id": "m7",
+   "x": 12.5,
+   "y": 10.7,
+   "node": "21-m7",
+   "label": "Oh's home"
+  }
+ ],
+ "npcs": [],
+ "exits": [],
+ "entries": {
+  "": [
+   12,
+   14
+  ]
+ },
+ "states": [
+  {
+   "id": "night",
+   "light": "night"
+  }
+ ],
+ "links": []
+}

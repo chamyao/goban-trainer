@@ -991,6 +991,42 @@ def palace_wall(v):   # Deoksugung's wall seen from above: a tiled coping on pla
     return g.image()
 
 
+def machine():   # Ulsan's plant: a steel press in safety yellow and grey, pipes, a control panel, hazard stripes at its foot
+    W, H = 4 * T, 46
+    g = Grid(W, H)
+    yel, yelD, steel = "#e8b820", "#b88a10", "#8a9098"
+    g.rect(18, 0, 28, 6, yelD); g.rect(18, 0, 28, 1, "#f4d050")                                         # the press's crown
+    g.rect(20, 6, 4, 26, steel); g.rect(40, 6, 4, 26, steel)                                              # its columns
+    g.rect(24, 10, 16, 8, "#5a5e66"); g.rect(28, 18, 8, 4, "#3a3e46")                                     # the ram
+    box(g, 4, 22, W - 8, 8, 14, yel, yelD)                                                                # the bed
+    g.rect(24, 24, 16, 4, "#c8ccd2")
+    for x in range(4, W - 4, 6):                                                                           # hazard stripes
+        g.rect(x, 40, 3, 4, "#1c1c20")
+    g.rect(4, 40, W - 8, 1, "#1c1c20")
+    g.rect(2, 8, 3, 30, "#6a7078"); g.rect(2, 8, 14, 3, "#6a7078")                                       # a pipe
+    g.rect(W - 14, 12, 10, 12, "#4a4e56"); g.rect(W - 12, 14, 6, 3, "#3ac86a")                             # the control panel
+    g.set(W - 12, 19, "#d8382a"); g.set(W - 9, 19, "#f4c020"); g.set(W - 7, 21, "#3a6ad8")
+    return img(g)
+
+
+def cleaning_cupboard():   # a narrow grey steel cupboard, its door ajar on a mop and a yellow bucket
+    g = Grid(T, 28)
+    box(g, 2, 0, 12, 3, 25, "#a8acb2", "#8a9098")
+    g.rect(3, 4, 7, 22, "#3a3c42")                                                   # the dark inside
+    g.rect(5, 5, 1, 16, "#8a6a4a"); g.rect(4, 19, 3, 4, "#e8e4dc")                   # the mop
+    g.rect(6, 21, 4, 4, "#e8c020"); g.rect(6, 21, 4, 1, "#f4dc60")                   # the bucket
+    g.rect(10, 4, 4, 22, "#b8bcc4"); g.rect(10, 4, 1, 22, "#d8dce4"); g.set(11, 14, "#5a5e66")   # the door, ajar
+    return img(g)
+
+
+def spill():   # a floor decal: a coffee stain trodden into the carpet, a paper cup on its side
+    g = Grid(T, T)
+    g.ellipse(7, 9, 6, 4, "#5a4a3e"); g.ellipse(5, 10, 3, 2, "#4a3a2e"); g.set(13, 6, "#5a4a3e"); g.set(2, 12, "#5a4a3e")
+    g.set(10, 12, "#6a5a4c"); g.set(11, 13, "#6a5a4c")                                # a footprint smear
+    g.rect(8, 4, 6, 3, "#f4f2ec"); g.rect(13, 4, 1, 3, "#c8a070"); g.rect(8, 4, 1, 3, "#d8d4cc")   # the cup on its side
+    return g.image()
+
+
 def mat():   # a rug
     g = Grid(2 * T, 2 * T)
     g.rect(1, 6, 30, 20, "#8a5a5a"); g.rect(3, 8, 26, 16, "#a87070"); g.rect(5, 10, 22, 12, "#8a5a5a")
@@ -1021,7 +1057,7 @@ PIECES = {
     "lamp.post": streetlight, "furn.plant": plant, "furn.window": window, "furn.counter": counter, "furn.table": table,
     "furn.stool": stool, "furn.shelf": shelf, "furn.desk": desk, "furn.mat": mat, "furniture.gotable": gotable, "market.stalls": stalls,
     # Book 1: the memorial at Daehanmun, Daehanmun itself, the textile floor
-    "prop.memorial_tent": memorial_tent, "building.palace_gate": palace_gate, "furn.cloth_bolts": cloth_bolts,
+    "prop.memorial_tent": memorial_tent, "prop.machine": machine, "furn.cleaning_cupboard": cleaning_cupboard, "prop.spill": spill, "building.palace_gate": palace_gate, "furn.cloth_bolts": cloth_bolts,
     # m17's drinks, small on a table top
     "prop.glass_water": glass_water, "prop.teacup": teacup, "prop.coffee_cup": coffee_cup,
 }

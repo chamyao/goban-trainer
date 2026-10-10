@@ -1,0 +1,182 @@
+{
+ "format": "tk-map/1",
+ "id": "susaek-dong--baduk-class",
+ "world": 21,
+ "name": "The baduk class",
+ "archetype": "interior",
+ "size": [
+  24,
+  16
+ ],
+ "seed": 2365,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   " ": "void",
+   "W": "wall",
+   "#": "wood"
+  },
+  "rows": [
+   "                        ",
+   " WWWWWWWWWWWWWWWWWWWWWW ",
+   " W####################W ",
+   " W####################W ",
+   " W####################W ",
+   " W####################W ",
+   " W####################W ",
+   " W####################W ",
+   " W####################W ",
+   " W####################W ",
+   " W####################W ",
+   " W####################W ",
+   " W####################W ",
+   " W####################W ",
+   " WWWWWWWWWWW##WWWWWWWWW ",
+   "                        "
+  ],
+  "walk": {
+   "void": false,
+   "wall": false,
+   "wood": true
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    12,
+    8
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     6,
+     7
+    ]
+   },
+   "tiles": 68
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.go_board",
+   "x": 4,
+   "y": 4,
+   "w": 1,
+   "h": 1,
+   "id": "board-2-2"
+  },
+  {
+   "kind": "furn.go_board",
+   "x": 8,
+   "y": 4,
+   "w": 1,
+   "h": 1,
+   "id": "board-4-2"
+  },
+  {
+   "kind": "furn.go_board",
+   "x": 16,
+   "y": 4,
+   "w": 1,
+   "h": 1,
+   "id": "board-8-2"
+  },
+  {
+   "kind": "furn.go_board",
+   "x": 20,
+   "y": 4,
+   "w": 1,
+   "h": 1,
+   "id": "board-10-2"
+  },
+  {
+   "kind": "furn.go_board",
+   "x": 4,
+   "y": 8,
+   "w": 1,
+   "h": 1,
+   "id": "board-2-4"
+  },
+  {
+   "kind": "furn.go_board",
+   "x": 8,
+   "y": 8,
+   "w": 1,
+   "h": 1,
+   "id": "board-4-4"
+  },
+  {
+   "kind": "furn.go_board",
+   "x": 16,
+   "y": 8,
+   "w": 1,
+   "h": 1,
+   "id": "board-8-4"
+  },
+  {
+   "kind": "furn.go_board",
+   "x": 20,
+   "y": 8,
+   "w": 1,
+   "h": 1,
+   "id": "board-10-4"
+  },
+  {
+   "kind": "furn.desk",
+   "x": 12,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "teacher-desk",
+   "label": "The teacher's desk"
+  },
+  {
+   "kind": "furn.trophy_case",
+   "x": 2,
+   "y": 12,
+   "w": 2,
+   "h": 1,
+   "id": "prizes",
+   "label": "Certificates and small trophies"
+  }
+ ],
+ "spots": [
+  {
+   "id": "m1",
+   "x": 12.5,
+   "y": 10.7,
+   "node": "21-m1",
+   "label": "The baduk class"
+  }
+ ],
+ "npcs": [],
+ "exits": [
+  {
+   "to": "susaek-dong",
+   "side": "S",
+   "x": 12,
+   "y": 14,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "susaek-dong": [
+   12,
+   13
+  ],
+  "": [
+   12,
+   13
+  ]
+ },
+ "parent": "susaek-dong",
+ "building": "baduk-class",
+ "links": [
+  "susaek-dong"
+ ]
+}

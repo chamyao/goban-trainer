@@ -11,7 +11,7 @@
    campaign save (TK.cleared / TK.seen); this file only remembers where you
    are. Hero sprites and the dialogue box come from tk-town.js. */
 
-const WORLD_CLUTTER = /^(plant\.|rock\.small|furn\.rug|furn\.mat)/;  // drawn underfoot (a rug is a floor, not a sheet hung in front of people)
+const WORLD_CLUTTER = /^(plant\.|rock\.small|furn\.rug|furn\.mat|prop\.spill)/;  // drawn underfoot (a rug is a floor, not a sheet hung in front of people)
 const WORLD_KIT = "jade";  // the default look (the user: Jade is the main look for now); the campaign page's art button switches (localStorage tk-kit)
 const WORLD_KITS = { jade: { zh: "玉", en: "Jade" }, xianxia: { zh: "仙侠", en: "Xianxia (generated)" },
   genshin: { zh: "原神", en: "Genshin (isometric)", iso: true } };   // iso: drawn for the isometric view (tk-iso.js)
@@ -256,12 +256,12 @@ function worldScenes() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
       this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=108`);
-      this.load.json("kit", `assets/tk/kits/${kit}.json?v=51`);
+      this.load.json("kit", `assets/tk/kits/${kit}.json?v=52`);
       this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=111`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
-      for (const [s, path] of Object.entries(kit.sheets)) this.load.image(`kit-${s}`, `${path}?v=51`);   // the sheets change with the kits: same key
+      for (const [s, path] of Object.entries(kit.sheets)) this.load.image(`kit-${s}`, `${path}?v=52`);   // the sheets change with the kits: same key
       const [fw, fh] = kit.folk.frame;
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)

@@ -38,6 +38,11 @@ def dilemma_vids(n):
     return dict(n, dilemma=[one(d) for d in dl] if isinstance(dl, list) else one(dl))
 
 
+def cap(text):
+    """The longest a line's clip should run: about 0.3 s a syllable at a slow pace, and a second to breathe."""
+    return 0.3 * len(text.replace(" ", "")) + 1.2
+
+
 def voiced_world(w):
     """A story world's lines with their clip ids, as build_tk.py makes them (inside build_tk.english(w))."""
     return dict({k: w[k] for k in ("lang", "cast", "voice", "ko", "cast_ko") if k in w},
@@ -61,7 +66,17 @@ def main():
     OUT.mkdir(parents=True, exist_ok=True)
     index_file = OUT / "index.json"
     index = json.loads(index_file.read_text()) if index_file.exists() else {}
-    todo = {k: v for k, v in lines.items() if not (OUT / f"{k}.mp3").exists() or index.get(k) != f"{v[1]}|{v[0]}"}
+    import re
+    spoken = lambda t: bool(re.search(r"[가-힣]", t))   # "..." and the like: nothing to say, no clip
+    for k, (text, _, _) in list(lines.items()):
+        if not spoken(text):
+            del lines[k]
+            (OUT / f"{k}.mp3").unlink(missing_ok=True); index.pop(k, None)
+    # XTTS rambles after a short line ("살았다. 겨우." came back 11 s long): a clip much longer than its text is redone
+    def too_long(k, text):
+        f = OUT / f"{k}.mp3"
+        return f.exists() and f.stat().st_size / 6000 > cap(text) + 0.3
+    todo = {k: v for k, v in lines.items() if not (OUT / f"{k}.mp3").exists() or index.get(k) != f"{v[1]}|{v[0]}" or too_long(k, v[0])}
     print(f"{len(todo)} of {len(lines)} Korean lines to render")
     if not todo:
         return
@@ -69,7 +84,16 @@ def main():
     tts = TTS("tts_models/multilingual/multi-dataset/xtts_v2")
     for i, (k, (text, ref, _en)) in enumerate(list(todo.items())[:limit], 1):
         say = text.replace("“", "").replace("”", "").replace("…", "...").strip()
-        wav = np.asarray(tts.tts(text=say, speaker_wav=str(REFS / f"{ref}.flac"), language="ko"), dtype=np.float32)
+        # a short line: the best of a few takes (the shortest), then cut to what the words need, with a short fade
+        takes = []
+        for _ in range(4 if len(say.replace(" ", "")) < 16 else 1):
+            takes.append(np.asarray(tts.tts(text=say, speaker_wav=str(REFS / f"{ref}.flac"), language="ko"), dtype=np.float32))
+            if len(takes[-1]) / 24000 <= cap(text):
+                break
+        wav = min(takes, key=len)
+        n = int(cap(text) * 24000)
+        if len(wav) > n:
+            wav = wav[:n].copy(); fade = min(len(wav), 2400); wav[-fade:] *= np.linspace(1, 0, fade)
         pcm = (np.clip(wav, -1, 1) * 32767).astype(np.int16)
         enc = lameenc.Encoder()
         enc.set_bit_rate(48); enc.set_in_sample_rate(24000); enc.set_channels(1); enc.set_quality(2)

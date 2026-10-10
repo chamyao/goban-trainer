@@ -131,8 +131,8 @@
      "to": "one-international"
     },
     {
-     "label": "3F · The PT room",
-     "to": "one-international--pt-room"
+     "label": "2F · General Affairs",
+     "to": "one-international--general-affairs"
     },
     {
      "label": "5F · HR",
@@ -158,10 +158,10 @@
    "use": "lift"
   },
   {
-   "id": "m10",
+   "id": "m17",
    "x": 22.5,
    "y": 10.7,
-   "node": "21-m10",
+   "node": "21-m17",
    "label": "The smokers' corner"
   },
   {
@@ -170,7 +170,7 @@
    "y": 10.7,
    "node": "",
    "label": "The roof",
-   "note": "the handoff to Jang lands here (6+ tiles from m10)"
+   "note": "handoffs to the roof land here"
   }
  ],
  "npcs": [],
@@ -193,7 +193,7 @@
    16,
    2
   ],
-  "one-international--pt-room": [
+  "one-international--general-affairs": [
    12,
    4
   ],

@@ -43,7 +43,7 @@ LIGHT = {("lantern", None): "night", ("day", "clear"): "morning", ("dusk", "stor
 WALK = {"grass": True, "dirt": True, "sand": True, "water": False, "void": False, "wall": False,
         "wood": True, "stone": True, "mat": True, "earth": True}
 IN_WALL = {"building.gate", "building.gatehouse", "building.gatetower", "building.moongate", "wall.stairs", "building.palace_gate"}
-PASSABLE = {"furn.seat", "furn.curtain", "furn.rug", "landmark.ridge", "building.gatehouse", "building.gate", "building.moongate", "building.palace_gate",
+PASSABLE = {"furn.seat", "furn.curtain", "furn.rug", "prop.spill", "landmark.ridge", "building.gatehouse", "building.gate", "building.moongate", "building.palace_gate",
             "plant.flower", "plant.bush", "plant.grass", "plant.peony", "rock.small", "water.lotus"}
 DOOR_AT_FOOT = {"building.gatetower"}   # drawn front-on in a wall: an E/W door is at the foot of that face, by the drawn arch
 SIDE_DRAWN = {"building.wing"}   # drawn in side view when it faces E or W, its doorway on the front
@@ -521,7 +521,8 @@ class MapBuilder:
             for k in ("trigger", "note", "on", "sight", "cover", "fires",   # cover: a place to hide; fires: starts itself
                       "needs", "delivers", "when", "empty", "waiting", "deliver", "delivered", "call",   # a place that delivers a mark
                       "takes", "opens", "floors", "use",   # Misaeng (tk-modern.js): delivering takes the thing; the audit board; a lift and its floors
-                      "gives", "gives_when", "give", "given"):   # a thing that gives an item when searched (the bins, a table)
+                      "gives", "gives_when", "give", "given",   # a thing that gives an item when searched (the bins, a table)
+                      "set_down"):   # a delivery set down at a place (a seat), not handed to a person
                 if s.get(k):
                     spot[k] = s[k]
             self.spots.append(spot)
@@ -545,7 +546,8 @@ class MapBuilder:
             n["id"] = p["id"]
         u = n.get("until")
         if isinstance(u, str) and u.startswith("node:"):   # the game's "until" names a node key
-            n["until"] = f"{self.n}-{u[5:]}"
+            k = u[5:]
+            n["until"] = f"{self.n}-{k.split('-', 1)[1] if re.match(r'^\d+-', k) else k}"   # (once, if it's already "21-m5")
         elif isinstance(u, str) and re.match(r"^\d+-", u):
             n["until"] = f"{self.n}-{u.split('-', 1)[1]}"
         if p["kind"].startswith("folk.") and not p.get("near") and not p.get("at") and not p.get("challenge"):
@@ -1335,6 +1337,13 @@ def verify(maps):
         for e in m["exits"]:
             if not any(near((int(e["x"]) + i, int(e["y"]) + j)) for i in range(max(1, int(e["w"]))) for j in range(max(1, int(e["h"])))):
                 out.append(f"{mid}: exit to {e['to']} can't be reached")
+        # a place to deliver to is a handoff to someone: the engine delivers when a person standing within 64 px of
+        # the spot is talked to. With no one there she hands things to a ring on the floor (apo110: "I was handing off
+        # things to circles not people"). Unless it's a place to set something down ("set_down": the board room's seats)
+        for s in m["spots"]:
+            if s.get("needs") and not s.get("set_down") and not any(
+                    math.dist((s["x"], s["y"]), (n["x"], n["y"])) * 16 <= 64 for n in m["npcs"]):
+                out.append(f"{mid}: delivery spot {s['id']} has no one within 64 px to hand it to (name its \"to\", or \"set_down\")")
         for n in m["npcs"]:
             t = (int(n["x"]), int(n["y"]))
             if not near(t):
