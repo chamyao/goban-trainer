@@ -313,11 +313,40 @@ const WorldModern = {
   /* ---------- the world's HUD: called whenever the goal is set ---------- */
   hud(scene) {
     const w = scene.w;
-    if (!w || !(w.record || w.trade)) return;
+    if (!w) return;
+    this.clock(scene);
+    if (!(w.record || w.trade)) return;
     if (w.record) this.strip(scene);
     if (w.trade) this.chip(scene);
     this.place();
     if (!this.onResize) addEventListener("resize", this.onResize = () => this.place());
+  },
+  // A clock on a run (Plot: Oh late for the department head, m7 → m7b): a beat with "clock": {"start": "11:00",
+  // "tiles": 3} shows the time while it is the next main beat, a minute more for every few tiles the lead walks
+  // ("tiles", default 3), and how late that makes him. It starts again with the scene (a reload, a replay).
+  clock(scene) {
+    const q = scene.nextMain && scene.nextMain(), node = q && scene.w.nodes.find(n => n.key === q.node), c = node && node.clock;
+    const ui = document.querySelector(".town-ui");
+    if (!c || !ui) { if (this.clockOf) { clearInterval(this.clockTimer); this.clockOf = null; } ui && ui.querySelector(".tk-clock") && ui.querySelector(".tk-clock").remove(); return; }
+    if (this.clockOf === q.node && ui.querySelector(".tk-clock")) return;
+    clearInterval(this.clockTimer);
+    this.clockOf = q.node;
+    const el = ui.querySelector(".tk-clock") || ui.appendChild(Object.assign(document.createElement("div"), { className: "tk-clock" }));
+    const [h0, m0] = String(c.start || "9:00").split(":").map(Number), per = (c.tiles || 3) * (scene.tw || 16);
+    let walked = 0, last = null;
+    const draw = () => {
+      const late = Math.floor(walked / per), t = h0 * 60 + m0 + late;
+      el.innerHTML = `<b>${Math.floor(t / 60) % 24}:${String(t % 60).padStart(2, "0")}</b><span>${late ? `${late} min late` : "on time"}</span>`;
+    };
+    draw();
+    this.clockTimer = setInterval(() => {
+      const s = window.__w, P = s && s.player;
+      if (!P || s !== scene || this.clockOf !== q.node) return;
+      if (last && !s.cine && !(s.ui && s.ui.busy())) walked += Math.hypot(P.x - last.x, P.y - last.y);
+      last = { x: P.x, y: P.y };
+      draw();
+    }, 250);
+    this.place();
   },
   // the strip and the chip stack down the right, below whatever of the HUD is above them there (the menu button;
   // the goal box when it runs that wide, as on a phone)
@@ -343,7 +372,9 @@ const WorldModern = {
         y += strip.getBoundingClientRect().height + 6;
       }
     }
-    if (chip) chip.style.top = `${Math.round(y)}px`;
+    if (chip) { chip.style.top = `${Math.round(y)}px`; y += chip.getBoundingClientRect().height + 6; }
+    const clock = ui.querySelector(".tk-clock");
+    if (clock) clock.style.top = `${Math.round(y)}px`;
     if (window.__w && window.__w.fitCamera && window.__w.mapW && !window.__w.cine) window.__w.fitCamera();   // (never under a scene's camera)   // the camera keeps the room clear of them (hudTop)
   },
 };

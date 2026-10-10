@@ -910,6 +910,9 @@ html.tk-fullwin-on, html.tk-fullwin-on body { overflow: hidden; overscroll-behav
 .tk-trade-chip { position: absolute; right: 10px; top: 152px; transition: top .15s; z-index: 3; max-width: 40%; pointer-events: none; padding: 5px 9px; border-radius: 6px;
   background: rgba(20, 22, 26, .8); color: #f3efe6; font: 12px/1.3 system-ui, sans-serif; }
 .tk-trade-chip b { display: block; font-size: 14px; color: #ffd76a; }
+.tk-clock { position: absolute; right: 10px; top: 152px; transition: top .15s; z-index: 3; pointer-events: none; padding: 5px 9px; border-radius: 6px;
+  background: rgba(20, 22, 26, .8); color: #f3efe6; font: 12px/1.3 system-ui, sans-serif; text-align: right; }
+.tk-clock b { display: block; font: 700 18px/1.1 ui-monospace, monospace; color: #ff8a6a; }
 .tk-audit .tk-bag-box { max-width: min(94vw, 620px); }
 .tk-audit-q { font-weight: 700; margin: 0 0 8px; }
 .tk-audit-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; margin-bottom: 10px; }

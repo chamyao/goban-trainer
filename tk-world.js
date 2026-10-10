@@ -539,7 +539,7 @@ function worldScenes() {
       if (!host || !cv.clientWidth) return 0;
       const r = cv.getBoundingClientRect(), k = cv.clientWidth / this.scale.width * this.cameras.main.zoom;
       let low = r.top;
-      for (const el of host.querySelectorAll(".town-goal, .tk-menu-row, .tk-strip, .tk-trade-chip")) {   // (Misaeng's strip and cash chip, tk-modern.js)
+      for (const el of host.querySelectorAll(".town-goal, .tk-menu-row, .tk-strip, .tk-trade-chip, .tk-clock")) {   // (Misaeng's strip and cash chip, tk-modern.js)
         const b = el.getBoundingClientRect();
         if (b.height && b.top < r.top + r.height / 3) low = Math.max(low, b.bottom);
       }
