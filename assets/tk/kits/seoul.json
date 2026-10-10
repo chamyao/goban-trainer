@@ -1,0 +1,2374 @@
+{
+ "kit": "seoul",
+ "name": "Seoul",
+ "credit": "Jade Tileset Pack by Willibab, https://willibab.itch.io/free-jade-tileset-pack, CC-BY Notice board, go table, moon gate, gateway, fire pit and water drawn for the game (tools/draw_tk_extras.py). Seoul (modern Misaeng) drawn for the game (tools/draw_seoul.py).",
+ "tile": 16,
+ "sheets": {
+  "tiles": "assets/tk/jade/tiles.png",
+  "buildings": "assets/tk/jade/buildings.png",
+  "town": "assets/tk/jade/town.png",
+  "nature": "assets/tk/jade/nature.png",
+  "drawn": "assets/tk/drawn.png",
+  "n_element": "assets/tk/ninja/element.png",
+  "n_camp": "assets/tk/ninja/camp.png",
+  "edges": "assets/tk/jade/edges.png",
+  "n_floor_in": "assets/tk/ninja/floor_in.png",
+  "n_wall_in": "assets/tk/ninja/wall_in.png",
+  "extras": "assets/tk/jade/extras.png",
+  "n_nature": "assets/tk/ninja/nature.png",
+  "pinerock": "assets/tk/jade/pinerock.png",
+  "drawn_b2": "assets/tk/drawn_b2.png",
+  "drawn_b2_tiles": "assets/tk/drawn_b2_tiles.png",
+  "b2_buildings": "assets/tk/jade/b2_buildings.png",
+  "seoul": "assets/tk/seoul/pieces.png",
+  "seoul_tiles": "assets/tk/seoul/tiles.png"
+ },
+ "materials": {
+  "grass": {
+   "tiles": [
+    [
+     "tiles",
+     0,
+     0,
+     1
+    ]
+   ]
+  },
+  "dirt": {
+   "same": "city"
+  },
+  "sand": {
+   "same": "city"
+  },
+  "water": {
+   "blob": [
+    "edges",
+    20,
+    0,
+    10,
+    10
+   ],
+   "inside": [
+    22,
+    9
+   ],
+   "outside": [
+    "tiles",
+    0,
+    0
+   ]
+  },
+  "wood": {
+   "tiles": [
+    [
+     "seoul_tiles",
+     0,
+     9,
+     1
+    ],
+    [
+     "seoul_tiles",
+     1,
+     9,
+     1
+    ]
+   ]
+  },
+  "stone": {
+   "tiles": [
+    [
+     "seoul_tiles",
+     0,
+     7,
+     1
+    ],
+    [
+     "seoul_tiles",
+     1,
+     7,
+     1
+    ]
+   ]
+  },
+  "mat": {
+   "tiles": [
+    [
+     "seoul_tiles",
+     0,
+     8,
+     1
+    ],
+    [
+     "seoul_tiles",
+     1,
+     8,
+     1
+    ]
+   ]
+  },
+  "earth": {
+   "tiles": [
+    [
+     "seoul_tiles",
+     0,
+     10,
+     1
+    ],
+    [
+     "seoul_tiles",
+     1,
+     10,
+     1
+    ]
+   ]
+  },
+  "wall": {
+   "edge": {
+    "sheet": "seoul_tiles",
+    "tl": [
+     0,
+     14
+    ],
+    "t": [
+     1,
+     14
+    ],
+    "tr": [
+     2,
+     14
+    ],
+    "l": [
+     0,
+     15
+    ],
+    "r": [
+     2,
+     15
+    ],
+    "bl": [
+     0,
+     16
+    ],
+    "b": [
+     1,
+     16
+    ],
+    "br": [
+     2,
+     16
+    ]
+   },
+   "under": "void"
+  },
+  "void": {
+   "color": "#120c0a"
+  },
+  "field.wheat": {
+   "tiles": [
+    [
+     "drawn_b2_tiles",
+     0,
+     0,
+     1
+    ],
+    [
+     "drawn_b2_tiles",
+     1,
+     0,
+     1
+    ]
+   ]
+  },
+  "cliff": {
+   "tiles": [
+    [
+     "drawn_b2_tiles",
+     0,
+     1,
+     1
+    ],
+    [
+     "drawn_b2_tiles",
+     1,
+     1,
+     1
+    ]
+   ]
+  },
+  "plateau": {
+   "tiles": [
+    [
+     "drawn_b2_tiles",
+     0,
+     2,
+     1
+    ],
+    [
+     "drawn_b2_tiles",
+     1,
+     2,
+     1
+    ]
+   ]
+  },
+  "wall.city": {
+   "tiles": [
+    [
+     "drawn_b2_tiles",
+     0,
+     3,
+     1
+    ],
+    [
+     "drawn_b2_tiles",
+     1,
+     3,
+     1
+    ]
+   ]
+  },
+  "gallery": {
+   "tiles": [
+    [
+     "drawn_b2_tiles",
+     0,
+     4,
+     1
+    ],
+    [
+     "drawn_b2_tiles",
+     1,
+     4,
+     1
+    ]
+   ]
+  },
+  "bridge": {
+   "tiles": [
+    [
+     "drawn_b2_tiles",
+     0,
+     5,
+     1
+    ],
+    [
+     "drawn_b2_tiles",
+     1,
+     5,
+     1
+    ]
+   ]
+  },
+  "hills": {
+   "tiles": [
+    [
+     "drawn_b2_tiles",
+     0,
+     6,
+     1
+    ],
+    [
+     "drawn_b2_tiles",
+     1,
+     6,
+     1
+    ]
+   ]
+  },
+  "loess": {
+   "tiles": [
+    [
+     "drawn_b2_tiles",
+     0,
+     7,
+     1
+    ],
+    [
+     "drawn_b2_tiles",
+     1,
+     7,
+     1
+    ]
+   ]
+  },
+  "market": {
+   "same": "city"
+  },
+  "court": {
+   "same": "roof"
+  },
+  "ward": {
+   "same": "city"
+  },
+  "passage": {
+   "same": "city"
+  },
+  "road": {
+   "tiles": [
+    [
+     "seoul_tiles",
+     0,
+     1,
+     1
+    ],
+    [
+     "seoul_tiles",
+     1,
+     1,
+     1
+    ]
+   ]
+  },
+  "path": {
+   "same": "city"
+  },
+  "camp": {
+   "same": "city"
+  },
+  "city": {
+   "tiles": [
+    [
+     "seoul_tiles",
+     0,
+     0,
+     1
+    ],
+    [
+     "seoul_tiles",
+     1,
+     0,
+     1
+    ]
+   ]
+  },
+  "field": {
+   "same": "grass"
+  },
+  "plain": {
+   "same": "grass"
+  },
+  "garden": {
+   "same": "grass"
+  },
+  "stage": {
+   "same": "wood"
+  },
+  "curtain": {
+   "same": "wood"
+  },
+  "traffic": {
+   "tiles": [
+    [
+     "seoul_tiles",
+     0,
+     2,
+     1
+    ],
+    [
+     "seoul_tiles",
+     1,
+     2,
+     1
+    ]
+   ]
+  },
+  "crosswalk": {
+   "tiles": [
+    [
+     "seoul_tiles",
+     0,
+     3,
+     1
+    ],
+    [
+     "seoul_tiles",
+     1,
+     3,
+     1
+    ]
+   ]
+  },
+  "barrier": {
+   "tiles": [
+    [
+     "seoul_tiles",
+     0,
+     4,
+     1
+    ],
+    [
+     "seoul_tiles",
+     1,
+     4,
+     1
+    ]
+   ]
+  },
+  "parapet": {
+   "tiles": [
+    [
+     "seoul_tiles",
+     0,
+     5,
+     1
+    ],
+    [
+     "seoul_tiles",
+     1,
+     5,
+     1
+    ]
+   ]
+  },
+  "roof": {
+   "tiles": [
+    [
+     "seoul_tiles",
+     0,
+     6,
+     1
+    ],
+    [
+     "seoul_tiles",
+     1,
+     6,
+     1
+    ]
+   ]
+  },
+  "lobby": {
+   "tiles": [
+    [
+     "seoul_tiles",
+     0,
+     11,
+     1
+    ],
+    [
+     "seoul_tiles",
+     1,
+     11,
+     1
+    ]
+   ]
+  },
+  "platform": {
+   "tiles": [
+    [
+     "seoul_tiles",
+     0,
+     12,
+     1
+    ],
+    [
+     "seoul_tiles",
+     1,
+     12,
+     1
+    ]
+   ]
+  },
+  "limestone": {
+   "tiles": [
+    [
+     "seoul_tiles",
+     0,
+     13,
+     1
+    ],
+    [
+     "seoul_tiles",
+     1,
+     13,
+     1
+    ]
+   ]
+  },
+  "asphalt": {
+   "same": "traffic"
+  },
+  "carpet": {
+   "same": "mat"
+  },
+  "office_tile": {
+   "same": "lobby"
+  },
+  "lino": {
+   "same": "wood"
+  },
+  "floor": {
+   "same": "stone"
+  }
+ },
+ "kinds": {
+  "building.inn": [
+   [
+    "buildings",
+    160,
+    3,
+    96,
+    71
+   ]
+  ],
+  "building.shop": [
+   [
+    "buildings",
+    0,
+    80,
+    96,
+    64
+   ]
+  ],
+  "building.house": [
+   [
+    "buildings",
+    16,
+    19,
+    48,
+    45
+   ]
+  ],
+  "building.lodge": [
+   [
+    "buildings",
+    0,
+    144,
+    83,
+    48
+   ]
+  ],
+  "building.hall": [
+   [
+    "buildings",
+    173,
+    89,
+    70,
+    87
+   ]
+  ],
+  "tree.peach": [
+   [
+    "nature",
+    172,
+    3,
+    36,
+    40
+   ],
+   [
+    "nature",
+    224,
+    3,
+    32,
+    40
+   ]
+  ],
+  "tree.small": [
+   [
+    "nature",
+    172,
+    51,
+    36,
+    41
+   ],
+   [
+    "nature",
+    224,
+    51,
+    32,
+    41
+   ]
+  ],
+  "tree.pine": [
+   [
+    "nature",
+    192,
+    144,
+    32,
+    32
+   ],
+   [
+    "nature",
+    224,
+    144,
+    32,
+    32
+   ]
+  ],
+  "tree.bamboo": [
+   [
+    "nature",
+    64,
+    0,
+    16,
+    32
+   ]
+  ],
+  "plant.bush": [
+   [
+    "nature",
+    0,
+    128,
+    32,
+    16
+   ]
+  ],
+  "plant.flower": [
+   [
+    "nature",
+    0,
+    208,
+    16,
+    16
+   ]
+  ],
+  "plant.grass": [
+   [
+    "nature",
+    96,
+    192,
+    16,
+    16
+   ]
+  ],
+  "rock.small": [
+   [
+    "nature",
+    145,
+    130,
+    15,
+    12
+   ],
+   [
+    "nature",
+    145,
+    178,
+    15,
+    12
+   ]
+  ],
+  "lamp.post": [
+   [
+    "seoul",
+    78,
+    387,
+    16,
+    40
+   ]
+  ],
+  "camp.logs": [
+   [
+    "buildings",
+    192,
+    184,
+    48,
+    24
+   ]
+  ],
+  "landmark.notice": [
+   [
+    "drawn",
+    0,
+    0,
+    40,
+    34
+   ]
+  ],
+  "furniture.gotable": [
+   [
+    "seoul",
+    496,
+    457,
+    16,
+    18
+   ]
+  ],
+  "building.moongate": [
+   [
+    "drawn",
+    64,
+    0,
+    48,
+    40
+   ]
+  ],
+  "building.gate": [
+   [
+    "drawn",
+    64,
+    48,
+    32,
+    32
+   ]
+  ],
+  "camp.firepit": [
+   [
+    "drawn",
+    32,
+    48,
+    32,
+    16
+   ]
+  ],
+  "camp.cookfire": [
+   [
+    "drawn",
+    32,
+    48,
+    32,
+    16
+   ]
+  ],
+  "banner.red": [
+   [
+    "town",
+    208,
+    176,
+    16,
+    28
+   ]
+  ],
+  "banner.yellow": [
+   [
+    "town",
+    176,
+    176,
+    16,
+    28
+   ]
+  ],
+  "banner.blue": [
+   [
+    "town",
+    192,
+    176,
+    16,
+    28
+   ]
+  ],
+  "banner.purple": [
+   [
+    "town",
+    224,
+    176,
+    16,
+    28
+   ]
+  ],
+  "banner.green": [
+   [
+    "town",
+    240,
+    176,
+    16,
+    28
+   ]
+  ],
+  "tree.peach_big": [
+   [
+    "nature",
+    172,
+    3,
+    36,
+    40
+   ]
+  ],
+  "tree.big": [
+   [
+    "nature",
+    172,
+    51,
+    36,
+    41
+   ],
+   [
+    "nature",
+    224,
+    51,
+    32,
+    41
+   ]
+  ],
+  "rock.crag": [
+   [
+    "n_nature",
+    272,
+    162,
+    48,
+    46
+   ],
+   [
+    "n_nature",
+    272,
+    226,
+    48,
+    46
+   ]
+  ],
+  "rock.big": [
+   [
+    "n_nature",
+    193,
+    83,
+    61,
+    44
+   ],
+   [
+    "n_nature",
+    257,
+    83,
+    61,
+    44
+   ]
+  ],
+  "furn.jar": [
+   [
+    "n_element",
+    17,
+    0,
+    14,
+    16
+   ],
+   [
+    "n_element",
+    51,
+    2,
+    10,
+    13
+   ]
+  ],
+  "furn.chest": [
+   [
+    "n_element",
+    97,
+    4,
+    14,
+    12
+   ]
+  ],
+  "furn.drawers": [
+   [
+    "n_element",
+    16,
+    121,
+    16,
+    23
+   ],
+   [
+    "n_element",
+    113,
+    0,
+    14,
+    16
+   ]
+  ],
+  "furn.shelf": [
+   [
+    "seoul",
+    116,
+    428,
+    32,
+    28
+   ]
+  ],
+  "furn.bed": [
+   [
+    "n_element",
+    224,
+    1,
+    24,
+    15
+   ]
+  ],
+  "furn.table": [
+   [
+    "seoul",
+    68,
+    484,
+    32,
+    16
+   ]
+  ],
+  "furn.desk": [
+   [
+    "seoul",
+    101,
+    484,
+    32,
+    16
+   ]
+  ],
+  "furn.counter": [
+   [
+    "seoul",
+    296,
+    457,
+    48,
+    22
+   ]
+  ],
+  "furn.stool": [
+   [
+    "seoul",
+    284,
+    484,
+    16,
+    12
+   ]
+  ],
+  "furn.rack": [
+   [
+    "n_element",
+    224,
+    41,
+    32,
+    21
+   ]
+  ],
+  "furn.rug": [
+   [
+    "n_element",
+    208,
+    64,
+    47,
+    48
+   ]
+  ],
+  "furn.mat": [
+   [
+    "seoul",
+    258,
+    387,
+    32,
+    32
+   ]
+  ],
+  "furn.plant": [
+   [
+    "seoul",
+    164,
+    457,
+    16,
+    24
+   ]
+  ],
+  "furn.screen": [
+   [
+    "n_element",
+    160,
+    113,
+    32,
+    29
+   ]
+  ],
+  "furn.barrel": [
+   [
+    "n_camp",
+    64,
+    80,
+    16,
+    32
+   ]
+  ],
+  "furn.sacks": [
+   [
+    "n_camp",
+    2,
+    82,
+    12,
+    27
+   ]
+  ],
+  "tree.grove": [
+   [
+    "extras",
+    0,
+    0,
+    70,
+    53
+   ],
+   [
+    "extras",
+    71,
+    0,
+    70,
+    51
+   ]
+  ],
+  "tree.dead": [
+   [
+    "n_nature",
+    64,
+    0,
+    32,
+    31
+   ]
+  ],
+  "building.tent": [
+   [
+    "n_camp",
+    64,
+    3,
+    48,
+    45
+   ],
+   [
+    "n_camp",
+    112,
+    3,
+    48,
+    45
+   ]
+  ],
+  "camp.hay": [
+   [
+    "n_camp",
+    0,
+    49,
+    32,
+    31
+   ]
+  ],
+  "camp.table": [
+   [
+    "n_camp",
+    18,
+    82,
+    28,
+    28
+   ]
+  ],
+  "landmark.shrine": [
+   [
+    "pinerock",
+    0,
+    0,
+    32,
+    44
+   ]
+  ],
+  "landmark.shrine.lit": [
+   [
+    "pinerock",
+    32,
+    0,
+    32,
+    44
+   ]
+  ],
+  "landmark.shrine.settled": [
+   [
+    "pinerock",
+    64,
+    0,
+    32,
+    44
+   ]
+  ],
+  "ruin.hall": [
+   [
+    "drawn",
+    0,
+    112,
+    64,
+    44
+   ]
+  ],
+  "ruin.columns": [
+   [
+    "drawn",
+    64,
+    112,
+    32,
+    40
+   ]
+  ],
+  "ruin.rubble": [
+   [
+    "drawn",
+    96,
+    112,
+    16,
+    12
+   ]
+  ],
+  "corral": [
+   [
+    "drawn_b2",
+    0,
+    0,
+    128,
+    96
+   ]
+  ],
+  "tree.poplar": [
+   [
+    "drawn_b2",
+    151,
+    97,
+    14,
+    42
+   ]
+  ],
+  "tree.willow": [
+   [
+    "drawn_b2",
+    65,
+    154,
+    34,
+    38
+   ]
+  ],
+  "furn.dais": [
+   [
+    "drawn_b2",
+    150,
+    154,
+    48,
+    34
+   ]
+  ],
+  "prop.lanterns": [
+   [
+    "drawn_b2",
+    227,
+    195,
+    14,
+    30
+   ]
+  ],
+  "garden.trellis": [
+   [
+    "drawn_b2",
+    0,
+    230,
+    64,
+    30
+   ]
+  ],
+  "garden.screenwall": [
+   [
+    "drawn_b2",
+    65,
+    230,
+    64,
+    30
+   ]
+  ],
+  "banner.black": [
+   [
+    "drawn_b2",
+    141,
+    230,
+    16,
+    28
+   ]
+  ],
+  "furn.lamp": [
+   [
+    "drawn_b2",
+    175,
+    230,
+    12,
+    26
+   ]
+  ],
+  "furn.swordwall": [
+   [
+    "drawn_b2",
+    237,
+    230,
+    16,
+    24
+   ]
+  ],
+  "landmark.hitchingpost": [
+   [
+    "drawn_b2",
+    0,
+    261,
+    12,
+    24
+   ]
+  ],
+  "furn.window": [
+   [
+    "seoul",
+    479,
+    457,
+    16,
+    18
+   ]
+  ],
+  "milestone": [
+   [
+    "drawn_b2",
+    47,
+    261,
+    12,
+    16
+   ]
+  ],
+  "water.lotus": [
+   [
+    "drawn_b2",
+    60,
+    261,
+    16,
+    16
+   ]
+  ],
+  "plant.peony": [
+   [
+    "drawn_b2",
+    77,
+    261,
+    16,
+    14
+   ]
+  ],
+  "prop.body_lamp": [
+   [
+    "drawn_b2",
+    94,
+    261,
+    22,
+    14
+   ]
+  ],
+  "furn.qin": [
+   [
+    "drawn_b2",
+    117,
+    261,
+    34,
+    12
+   ]
+  ],
+  "furn.seat": [
+   [
+    "drawn_b2",
+    152,
+    261,
+    16,
+    12
+   ]
+  ],
+  "building.palace": [
+   [
+    "b2_buildings",
+    0,
+    0,
+    188,
+    155
+   ]
+  ],
+  "building.hall_grand": [
+   [
+    "b2_buildings",
+    0,
+    156,
+    118,
+    117
+   ],
+   [
+    "b2_buildings",
+    267,
+    156,
+    124,
+    106
+   ]
+  ],
+  "building.gatetower": [
+   [
+    "b2_buildings",
+    392,
+    156,
+    45,
+    96
+   ]
+  ],
+  "building.pavilion_painted": [
+   [
+    "b2_buildings",
+    84,
+    274,
+    58,
+    79
+   ]
+  ],
+  "building.posthouse": [
+   [
+    "b2_buildings",
+    143,
+    274,
+    67,
+    74
+   ]
+  ],
+  "building.wing": [
+   [
+    "b2_buildings",
+    211,
+    274,
+    96,
+    63
+   ],
+   [
+    "b2_buildings",
+    88,
+    426,
+    94,
+    45
+   ]
+  ],
+  "building.gatehouse": [
+   [
+    "b2_buildings",
+    408,
+    274,
+    64,
+    59
+   ]
+  ],
+  "building.pavilion": [
+   [
+    "b2_buildings",
+    50,
+    366,
+    64,
+    57
+   ]
+  ],
+  "building.storehouse": [
+   [
+    "b2_buildings",
+    115,
+    366,
+    47,
+    57
+   ]
+  ],
+  "camp.banquet": [
+   [
+    "b2_buildings",
+    208,
+    366,
+    160,
+    53
+   ]
+  ],
+  "market.stalls": [
+   [
+    "b2_buildings",
+    369,
+    366,
+    96,
+    51
+   ]
+  ],
+  "building.granary": [
+   [
+    "b2_buildings",
+    0,
+    426,
+    87,
+    49
+   ]
+  ],
+  "garden.rockery": [
+   [
+    "drawn_b2",
+    166,
+    97,
+    32,
+    40
+   ]
+  ],
+  "landmark.ridge": [
+   [
+    "drawn_b2",
+    0,
+    195,
+    96,
+    34
+   ]
+  ],
+  "building.compound": [
+   [
+    "b2_buildings",
+    189,
+    0,
+    157,
+    138
+   ],
+   [
+    "b2_buildings",
+    347,
+    0,
+    142,
+    136
+   ]
+  ],
+  "landmark.heights": [
+   [
+    "b2_buildings",
+    181,
+    156,
+    85,
+    107
+   ],
+   [
+    "b2_buildings",
+    0,
+    274,
+    83,
+    91
+   ]
+  ],
+  "building.wing_side": [
+   [
+    "b2_buildings",
+    438,
+    156,
+    59,
+    94
+   ]
+  ],
+  "building.hut": [
+   [
+    "b2_buildings",
+    308,
+    274,
+    50,
+    61
+   ],
+   [
+    "b2_buildings",
+    163,
+    366,
+    44,
+    57
+   ]
+  ],
+  "building.tent_small": [
+   [
+    "b2_buildings",
+    359,
+    274,
+    48,
+    60
+   ],
+   [
+    "b2_buildings",
+    0,
+    366,
+    49,
+    59
+   ]
+  ],
+  "building.markettower": [
+   [
+    "b2_buildings",
+    119,
+    156,
+    61,
+    113
+   ]
+  ],
+  "banner.white": [
+   [
+    "drawn_b2",
+    158,
+    230,
+    16,
+    28
+   ]
+  ],
+  "prop.carriage": [
+   [
+    "drawn_b2",
+    0,
+    97,
+    68,
+    56
+   ]
+  ],
+  "furn.jailcell": [
+   [
+    "drawn_b2",
+    86,
+    97,
+    64,
+    44
+   ]
+  ],
+  "prop.halberd": [
+   [
+    "drawn_b2",
+    100,
+    154,
+    16,
+    36
+   ]
+  ],
+  "wall.stairs": [
+   [
+    "drawn_b2",
+    97,
+    195,
+    64,
+    34
+   ]
+  ],
+  "landmark.torch": [
+   [
+    "drawn_b2",
+    130,
+    230,
+    10,
+    30
+   ]
+  ],
+  "prop.gateshut": [
+   [
+    "drawn_b2",
+    186,
+    0,
+    32,
+    64
+   ]
+  ],
+  "prop.gateshut_ns": [
+   [
+    "drawn_b2",
+    162,
+    195,
+    64,
+    32
+   ]
+  ],
+  "ruin.burning": [
+   [
+    "drawn_b2",
+    129,
+    0,
+    56,
+    67
+   ]
+  ],
+  "fx.smoke": [
+   [
+    "drawn_b2",
+    69,
+    97,
+    16,
+    48
+   ]
+  ],
+  "deco.redhang": [
+   [
+    "drawn_b2",
+    188,
+    230,
+    48,
+    26
+   ]
+  ],
+  "prop.boat": [
+   [
+    "drawn_b2",
+    0,
+    154,
+    64,
+    40
+   ]
+  ],
+  "landmark.incense": [
+   [
+    "drawn_b2",
+    117,
+    154,
+    32,
+    36
+   ]
+  ],
+  "prop.target": [
+   [
+    "drawn_b2",
+    13,
+    261,
+    16,
+    24
+   ]
+  ],
+  "building.apartment": [
+   [
+    "seoul",
+    193,
+    0,
+    128,
+    130
+   ]
+  ],
+  "building.mart": [
+   [
+    "seoul",
+    324,
+    231,
+    128,
+    70
+   ]
+  ],
+  "building.office_block": [
+   [
+    "seoul",
+    322,
+    0,
+    96,
+    92
+   ],
+   [
+    "seoul",
+    0,
+    231,
+    96,
+    92
+   ],
+   [
+    "seoul",
+    97,
+    231,
+    96,
+    92
+   ]
+  ],
+  "building.office_tower": [
+   [
+    "seoul",
+    0,
+    0,
+    192,
+    230
+   ]
+  ],
+  "building.pojangmacha": [
+   [
+    "seoul",
+    464,
+    324,
+    48,
+    40
+   ]
+  ],
+  "building.rooftop_box": [
+   [
+    "seoul",
+    95,
+    387,
+    48,
+    38
+   ]
+  ],
+  "building.stone_house": [
+   [
+    "seoul",
+    0,
+    324,
+    80,
+    62
+   ]
+  ],
+  "building.stone_shop": [
+   [
+    "seoul",
+    341,
+    324,
+    64,
+    48
+   ]
+  ],
+  "building.storefront": [
+   [
+    "seoul",
+    81,
+    324,
+    64,
+    58
+   ],
+   [
+    "seoul",
+    146,
+    324,
+    64,
+    58
+   ],
+   [
+    "seoul",
+    211,
+    324,
+    64,
+    58
+   ],
+   [
+    "seoul",
+    276,
+    324,
+    64,
+    58
+   ]
+  ],
+  "building.subway_entrance": [
+   [
+    "seoul",
+    0,
+    387,
+    48,
+    40
+   ]
+  ],
+  "building.villa": [
+   [
+    "seoul",
+    194,
+    231,
+    80,
+    82
+   ]
+  ],
+  "furn.ashtray": [
+   [
+    "seoul",
+    362,
+    457,
+    16,
+    20
+   ]
+  ],
+  "furn.bin": [
+   [
+    "seoul",
+    429,
+    457,
+    16,
+    18
+   ]
+  ],
+  "furn.boxes": [
+   [
+    "seoul",
+    246,
+    457,
+    16,
+    22
+   ]
+  ],
+  "furn.chair": [
+   [
+    "seoul",
+    0,
+    484,
+    16,
+    16
+   ]
+  ],
+  "furn.copier": [
+   [
+    "seoul",
+    442,
+    428,
+    32,
+    26
+   ]
+  ],
+  "furn.exec_desk": [
+   [
+    "seoul",
+    456,
+    387,
+    48,
+    28
+   ]
+  ],
+  "furn.filing": [
+   [
+    "seoul",
+    492,
+    428,
+    16,
+    26
+   ]
+  ],
+  "furn.fridge_case": [
+   [
+    "seoul",
+    83,
+    428,
+    32,
+    28
+   ]
+  ],
+  "furn.go_board": [
+   [
+    "seoul",
+    17,
+    484,
+    16,
+    16
+   ]
+  ],
+  "furn.kid_mat": [
+   [
+    "seoul",
+    251,
+    484,
+    32,
+    14
+   ]
+  ],
+  "furn.lectern": [
+   [
+    "seoul",
+    475,
+    428,
+    16,
+    26
+   ]
+  ],
+  "furn.lift_door": [
+   [
+    "seoul",
+    340,
+    387,
+    32,
+    30
+   ]
+  ],
+  "furn.low_table": [
+   [
+    "seoul",
+    218,
+    484,
+    32,
+    14
+   ]
+  ],
+  "furn.meeting_table": [
+   [
+    "seoul",
+    144,
+    387,
+    64,
+    38
+   ]
+  ],
+  "furn.noticeboard": [
+   [
+    "seoul",
+    263,
+    457,
+    32,
+    22
+   ]
+  ],
+  "furn.office_desk": [
+   [
+    "seoul",
+    409,
+    428,
+    32,
+    26
+   ]
+  ],
+  "furn.phone": [
+   [
+    "seoul",
+    345,
+    457,
+    16,
+    20
+   ]
+  ],
+  "furn.pizza_oven": [
+   [
+    "seoul",
+    33,
+    457,
+    32,
+    26
+   ]
+  ],
+  "furn.plastic_table": [
+   [
+    "seoul",
+    34,
+    484,
+    16,
+    16
+   ],
+   [
+    "seoul",
+    51,
+    484,
+    16,
+    16
+   ]
+  ],
+  "furn.projector_screen": [
+   [
+    "seoul",
+    291,
+    387,
+    48,
+    30
+   ]
+  ],
+  "furn.reception": [
+   [
+    "seoul",
+    181,
+    457,
+    64,
+    22
+   ]
+  ],
+  "furn.sofa": [
+   [
+    "seoul",
+    446,
+    457,
+    32,
+    18
+   ]
+  ],
+  "furn.store_shelf": [
+   [
+    "seoul",
+    0,
+    457,
+    32,
+    26
+   ]
+  ],
+  "furn.subway_seat": [
+   [
+    "seoul",
+    66,
+    457,
+    64,
+    26
+   ]
+  ],
+  "furn.toy_shelf": [
+   [
+    "seoul",
+    379,
+    457,
+    32,
+    20
+   ]
+  ],
+  "furn.trophy_case": [
+   [
+    "seoul",
+    50,
+    428,
+    32,
+    28
+   ]
+  ],
+  "furn.tv": [
+   [
+    "seoul",
+    131,
+    457,
+    32,
+    24
+   ]
+  ],
+  "furn.wardrobe": [
+   [
+    "seoul",
+    373,
+    387,
+    32,
+    30
+   ]
+  ],
+  "furn.water_cooler": [
+   [
+    "seoul",
+    0,
+    428,
+    16,
+    28
+   ]
+  ],
+  "furn.whiteboard": [
+   [
+    "seoul",
+    17,
+    428,
+    32,
+    28
+   ]
+  ],
+  "landmark.pagoda": [
+   [
+    "seoul",
+    275,
+    231,
+    48,
+    76
+   ]
+  ],
+  "prop.bench": [
+   [
+    "seoul",
+    185,
+    484,
+    32,
+    14
+   ]
+  ],
+  "prop.bus_stop": [
+   [
+    "seoul",
+    209,
+    387,
+    48,
+    34
+   ]
+  ],
+  "prop.car": [
+   [
+    "seoul",
+    149,
+    428,
+    64,
+    26
+   ],
+   [
+    "seoul",
+    214,
+    428,
+    64,
+    26
+   ],
+   [
+    "seoul",
+    279,
+    428,
+    64,
+    26
+   ],
+   [
+    "seoul",
+    344,
+    428,
+    64,
+    26
+   ]
+  ],
+  "prop.coffee_cup": [
+   [
+    "seoul",
+    168,
+    484,
+    16,
+    16
+   ]
+  ],
+  "prop.glass_water": [
+   [
+    "seoul",
+    134,
+    484,
+    16,
+    16
+   ]
+  ],
+  "prop.scooter": [
+   [
+    "seoul",
+    412,
+    457,
+    16,
+    18
+   ]
+  ],
+  "prop.teacup": [
+   [
+    "seoul",
+    151,
+    484,
+    16,
+    16
+   ]
+  ],
+  "prop.vending": [
+   [
+    "seoul",
+    439,
+    387,
+    16,
+    28
+   ]
+  ],
+  "prop.water_tank": [
+   [
+    "seoul",
+    406,
+    387,
+    32,
+    28
+   ]
+  ],
+  "tree.ginkgo": [
+   [
+    "seoul",
+    406,
+    324,
+    28,
+    44
+   ],
+   [
+    "seoul",
+    435,
+    324,
+    28,
+    44
+   ]
+  ],
+  "tree.olive": [
+   [
+    "seoul",
+    49,
+    387,
+    28,
+    40
+   ]
+  ]
+ },
+ "folk": {
+  "frame": [
+   16,
+   21
+  ],
+  "dirs": {
+   "down": [
+    0,
+    0
+   ],
+   "left": [
+    0,
+    1
+   ],
+   "right": [
+    0,
+    2
+   ],
+   "up": [
+    0,
+    3
+   ]
+  },
+  "step": [
+   1,
+   0
+  ],
+  "walk": [
+   0,
+   1,
+   2,
+   1
+  ],
+  "still": 1,
+  "sheets": {
+   "folk1": "assets/tk/jade/folk1.png",
+   "folk2": "assets/tk/jade/folk2.png"
+  },
+  "kinds": {
+   "folk.woman": [
+    {
+     "sheet": "folk1",
+     "origin": [
+      0,
+      0
+     ]
+    },
+    {
+     "sheet": "folk1",
+     "origin": [
+      3,
+      0
+     ]
+    },
+    {
+     "sheet": "folk1",
+     "origin": [
+      6,
+      0
+     ]
+    },
+    {
+     "sheet": "folk1",
+     "origin": [
+      9,
+      0
+     ]
+    },
+    {
+     "sheet": "folk1",
+     "origin": [
+      0,
+      4
+     ]
+    },
+    {
+     "sheet": "folk1",
+     "origin": [
+      3,
+      4
+     ]
+    },
+    {
+     "sheet": "folk1",
+     "origin": [
+      6,
+      4
+     ]
+    },
+    {
+     "sheet": "folk1",
+     "origin": [
+      9,
+      4
+     ]
+    }
+   ],
+   "folk.villager": [
+    {
+     "sheet": "folk1",
+     "origin": [
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  "drawn": {
+   "folk.salaryman": [
+    "ms_worker",
+    "ms_worker3",
+    "ms_commuter"
+   ],
+   "folk.officewoman": [
+    "ms_worker2",
+    "ms_officewoman2"
+   ],
+   "folk.grandpa": [
+    "ms_oldman",
+    "ms_oldman2"
+   ],
+   "folk.ajumma": [
+    "ms_ajumma",
+    "ms_ajumma2"
+   ],
+   "folk.kid": [
+    "ms_kid",
+    "ms_kid2"
+   ],
+   "folk.jordanian": [
+    "ms_cafe",
+    "ms_jordanian"
+   ],
+   "folk.villager": [
+    "ms_passerby",
+    "ms_passerby2",
+    "ms_worker"
+   ],
+   "folk.woman": [
+    "ms_passerby",
+    "ms_officewoman2"
+   ],
+   "folk.elder": [
+    "ms_oldman",
+    "ms_oldman2"
+   ],
+   "folk.child": [
+    "ms_kid",
+    "ms_kid2"
+   ],
+   "folk.official": [
+    "ms_worker3"
+   ],
+   "folk.noble": [
+    "ms_worker"
+   ],
+   "folk.soldier": [
+    "ms_passerby2"
+   ],
+   "folk.rebel": [
+    "ms_passerby2"
+   ],
+   "folk.hunter": [
+    "ms_passerby2"
+   ],
+   "folk.monk": [
+    "ms_oldman"
+   ],
+   "folk.lady": [
+    "ms_worker2"
+   ],
+   "folk.maiden": [
+    "ms_officewoman2"
+   ],
+   "folk.girl": [
+    "ms_kid2"
+   ]
+  }
+ },
+ "detail": {
+  "tiles": [
+   [
+    "nature",
+    6,
+    12,
+    3
+   ],
+   [
+    "nature",
+    7,
+    12,
+    3
+   ],
+   [
+    "nature",
+    6,
+    13,
+    3
+   ],
+   [
+    "nature",
+    7,
+    13,
+    3
+   ],
+   [
+    "nature",
+    2,
+    10,
+    1
+   ],
+   [
+    "nature",
+    3,
+    10,
+    1
+   ]
+  ],
+  "density": 0.12
+ },
+ "room_styles": {},
+ "portraits": true
+}

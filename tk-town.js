@@ -223,7 +223,7 @@ const TownArt = {
 /* ---------- DOM overlay: goal, dialogue with portraits and voice ---------- */
 const TownUI = {
   // who -> portrait file (assets/tk/portraits/portraits.json, tools/build_portraits.py), fetched once
-  portraits: {}, PORTRAIT_V: 10,
+  portraits: {}, PORTRAIT_V: 11,
   loadPortraits() {
     if (!this._pp) this._pp = fetch(`assets/tk/portraits/portraits.json?v=${this.PORTRAIT_V}`).then(r => r.ok ? r.json() : {})
       .catch(() => ({})).then(m => { this.portraits = m; for (const f of Object.values(m)) new Image().src = `assets/tk/portraits/${f}?v=${this.PORTRAIT_V}`; });

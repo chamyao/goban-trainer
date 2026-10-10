@@ -1486,5 +1486,95 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-09"
+ },
+ "ms_lastgame": {
+  "file": "ms_lastgame.jpg",
+  "scene": "ms",
+  "prompt": "A long bright room at the Korea Baduk Association, rows of go boards on low tables. At the nearest, a thin eighteen-year-old Korean boy with short black hair and a fringe, in a grey hoodie, sits alone now, his opponent gone, staring at the finished game. The other trainees, children and teenagers, keep playing behind him. Morning light through tall windows; a clock on the wall. Style: 2D Korean webtoon, hard cel shading. Modern-day Seoul, South Korea.",
+  "provider": "replicate",
+  "model": "final-1",
+  "look": "final",
+  "made": "2026-10-10"
+ },
+ "ms_onelight": {
+  "file": "ms_onelight.jpg",
+  "scene": "ms",
+  "prompt": "Jang Geu-rae holds a temporary intern's pass at the glass ID gates of a Jongno office tower lobby. Around him interns in new suits with lanyards stream through. Polished stone floor, a front desk, lift doors beyond. He hesitates one step behind the others. Jang Geu-rae is a thin, quiet Korean man of twenty-six with a plain, watchful face, short black hair with a fringe over his forehead, in a cheap dark navy suit, white shirt and plain blue tie. Style: 2D Korean webtoon, hard cel shading. Modern-day Seoul, South Korea.",
+  "provider": "replicate",
+  "model": "final-1",
+  "look": "final",
+  "made": "2026-10-10"
+ },
+ "ms_oneeye": {
+  "file": "ms_oneeye.jpg",
+  "scene": "ms",
+  "prompt": "Close on an office desk at night: four black go stones set in a small ring around one empty point, beside a keyboard, coffee cups and trade documents. Kim Dong-sik leans in smiling. Jang Geu-rae looks down at the stones, unsmiling. Kim Dong-sik is a kind, round-faced Korean office worker in his early thirties with curly permed black hair, in a light blue shirt and a navy tie, no jacket. Jang Geu-rae is a thin, quiet Korean man of twenty-six with a plain, watchful face, short black hair with a fringe over his forehead, in a cheap dark navy suit, white shirt and plain blue tie. Style: 2D Korean webtoon, hard cel shading. Modern-day Seoul, South Korea.",
+  "provider": "replicate",
+  "model": "final-1",
+  "look": "final",
+  "made": "2026-10-10"
+ },
+ "ms_phone": {
+  "file": "ms_phone.jpg",
+  "scene": "ms",
+  "prompt": "A glass-walled meeting room in an office tower. A stern Korean auditor in his fifties holds a desk phone to his ear, eyes widening. Around the table, papers half packed into boxes. Oh Sang-sik leans forward. Jang Geu-rae stands at the window, very still. Oh Sang-sik is a tired, intense Korean team leader of about forty with bloodshot red eyes, messy black hair and stubble, in a white shirt with the sleeves rolled up and a loosened dark red tie. Jang Geu-rae is a thin, quiet Korean man of twenty-six with a plain, watchful face, short black hair with a fringe over his forehead, in a cheap dark navy suit, white shirt and plain blue tie. Style: 2D Korean webtoon, hard cel shading. Modern-day Seoul, South Korea.",
+  "provider": "replicate",
+  "model": "final-1",
+  "look": "final",
+  "made": "2026-10-10"
+ },
+ "ms_jamespark": {
+  "file": "ms_jamespark.jpg",
+  "scene": "ms",
+  "prompt": "Close on a printed company board list on a meeting-room table: a column of names, many of them Park, and one, 'James Park', circled in red pen. A hand holds the pen. Behind, out of focus, the auditors and Oh Sang-sik looking down at it. Fluorescent light, late evening. Oh Sang-sik is a tired, intense Korean team leader of about forty with bloodshot red eyes, messy black hair and stubble, in a white shirt with the sleeves rolled up and a loosened dark red tie. Style: 2D Korean webtoon, hard cel shading. Modern-day Seoul, South Korea.",
+  "provider": "replicate",
+  "model": "final-1",
+  "look": "final",
+  "made": "2026-10-10"
+ },
+ "ms_chuseok": {
+  "file": "ms_chuseok.jpg",
+  "scene": "ms",
+  "prompt": "A crowded family flat at Chuseok, low tables of holiday food, relatives in good clothes. Through a half-open kitchen door, Jang's mother wipes her eyes as she speaks to her sisters. On the dim landing outside, Jang Geu-rae listens, his back against the wall. Jang's mother is a small, gentle Korean woman in her fifties with short permed greying hair, in a mauve cardigan over a cream blouse. Jang Geu-rae is a thin, quiet Korean man of twenty-six with a plain, watchful face, short black hair with a fringe over his forehead, in a cheap dark navy suit, white shirt and plain blue tie. Style: 2D Korean webtoon, hard cel shading. Modern-day Seoul, South Korea.",
+  "provider": "replicate",
+  "model": "final-1",
+  "look": "final",
+  "made": "2026-10-10"
+ },
+ "ms_hell": {
+  "file": "ms_hell.jpg",
+  "scene": "ms",
+  "prompt": "A small pizza shop on a Seoul side street at night, empty tables, a menu board, a single oven glowing. Kim Dong-su, tired and proud, sits at a table across from Oh Sang-sik, who pushes a white envelope back across it. Across the road, the bright sign of a big supermarket. Kim Dong-su is a worn Korean man in his late forties with short hair and stubble, in a red polo shirt with a pizza shop's logo. Oh Sang-sik is a tired, intense Korean team leader of about forty with bloodshot red eyes, messy black hair and stubble, in a white shirt with the sleeves rolled up and a loosened dark red tie. Style: 2D Korean webtoon, hard cel shading. Modern-day Seoul, South Korea.",
+  "provider": "replicate",
+  "model": "final-1",
+  "look": "final",
+  "made": "2026-10-10"
+ },
+ "ms_roof_ahn": {
+  "file": "ms_roof_ahn.jpg",
+  "scene": "ms_roof",
+  "prompt": "The roof of a Jongno office tower at midday, railings, air-conditioning units, the city below. Ahn Young-yi stands alone at the railing, her arms folded tight, looking out. A dropped folder at her feet. Ahn Young-yi is a composed, sharp-eyed Korean woman of twenty-five with a chin-length black bob, in a charcoal skirt suit and a white blouse. Style: 2D Korean webtoon, hard cel shading. Modern-day Seoul, South Korea.",
+  "provider": "replicate",
+  "model": "final-1",
+  "look": "final",
+  "made": "2026-10-10"
+ },
+ "ms_infra": {
+  "file": "ms_infra.jpg",
+  "scene": "ms",
+  "prompt": "Street level in Jongno: an office tower drawn entirely in cold grey, as if drained. Office workers on the forecourt in full warm colour. Jang Geu-rae in colour, carrying a small cardboard box, has just stepped out of the doors and looks back up at the building. Jang Geu-rae is a thin, quiet Korean man of twenty-six with a plain, watchful face, short black hair with a fringe over his forehead, in a cheap dark navy suit, white shirt and plain blue tie. Style: 2D Korean webtoon, hard cel shading. Modern-day Seoul, South Korea.",
+  "provider": "replicate",
+  "model": "final-1",
+  "look": "final",
+  "made": "2026-10-10"
+ },
+ "ms_145": {
+  "file": "ms_145.jpg",
+  "scene": "ms",
+  "prompt": "A go board seen from above near the end of a professional game, the centre crowded with black and white stones; a hand places a black stone in the middle, sealing in a group of five white stones that can no longer escape. At the edge of the frame, the other player's hand rests flat on the table: he resigns. 1989; a hushed tournament hall. Style: 2D Korean webtoon, hard cel shading. Modern-day Seoul, South Korea.",
+  "provider": "replicate",
+  "model": "final-1",
+  "look": "final",
+  "made": "2026-10-10"
  }
 }
