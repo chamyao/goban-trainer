@@ -98,7 +98,7 @@ the scroll says so plainly.
 
 ## The beats
 
-Keys `d1`–`d8` (Daiyu) and `g1`–`g7` (Granny Liu). Each ◆ is a go board, in order within the scene.
+Keys `d1`–`d8` and `d6a` (Daiyu) and `g1`–`g7` (Granny Liu). Each ◆ is a go board, in order within the scene.
 
 | Key | Beat | Place · room | Boards |
 |---|---|---|---|
@@ -107,7 +107,8 @@ Keys `d1`–`d8` (Daiyu) and `g1`–`g7` (Granny Liu). Each ◆ is a go board, i
 | d3 | **"I'm Late"** (我来迟了): Xifeng's entrance; what to call her; her tears and laughter on cue; the silk she "foresaw" | Grandmother Jia's rooms | ◆ what to call her |
 | d4 | **The Elder Uncle's House** (大舅): by covered carriage to Lady Xing's compound; Jia She won't see her; Lady Xing presses her to stay to dinner | Lady Xing's compound | ◆ stay to dinner? |
 | d5 | **The Kang** (度其位次): Rongxi Hall; the two cushions; Lady Wang's side room; Jia Zheng's seat; the warning about the "demon king" | Rongxi Hall · Lady Wang's rooms | ◆ where to sit (twice) · ◆ answer the warning |
-| d6 | **After the Meal** (饭后茶): Lady Wang shows her Xifeng's door; dinner at Grandmother Jia's, not a cough heard; the tea that isn't for drinking; "what have you read?" | the passage → Grandmother Jia's rooms | ◆ which chair · ◆ the first tea · ◆ what have you read |
+| d6a | **Sister Feng's Door** (凤姐姐的屋子): on the passage, at the screen wall, Lady Wang points out Xifeng's gate (the gate Granny Liu uses in g5) | Rong mansion · the N-S passage | — |
+| d6 | **After the Meal** (饭后茶): dinner at Grandmother Jia's, not a cough heard; the tea that isn't for drinking; "what have you read?" | Grandmother Jia's rooms | ◆ which chair · ◆ the first tea · ◆ what have you read |
 | d7 | **The Jade** (摔玉): Baoyu comes; "I've seen this sister before"; "have you read?"; the name 颦颦; "have you a jade?" | Grandmother Jia's rooms | ◆ have you read (again) · ◆ have you a jade (no cue; solved, and he smashes it anyway) |
 | d8 | **The First Tears** (还泪): the green gauze closet; Xiren at the bedside | the green gauze closet (碧纱橱) | — |
 | (scroll) | Chapters 4–5: the Xue family; Baochai; the dream, in two lines | | |

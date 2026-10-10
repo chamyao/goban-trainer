@@ -210,11 +210,21 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 黛玉一一的都答应着。只见一个丫鬟来回：「老太太那里传晚饭了。」
 
 
-## D6 · After the Meal (饭后茶)
-*The Rong Mansion* · room `jm-rooms` · boards: **Lin Daiyu**: “The seat of honour?” / **Lin Daiyu**: “When to drink the tea.” / **Lin Daiyu**: “Tell her what you've read.”
+## D6A · Sister Feng's Door (凤姐姐的屋子)
+*The Rong Mansion* · no board
+
+*Lady Wang takes her by the back way: a wide passage. To the north, a whitewashed screen wall, and behind it a half-size gate to a small courtyard. Four or five little boys stand at the gate with their hands at their sides.*  
+王夫人忙携黛玉从后房门由后廊往西，出了角门，是一条南北宽夹道。南边是倒座三间小小的抱厦厅，北边立着一个粉油大影壁，后有一半大门，小小一所房室……这院门上也有四五个才总角的小厮，都垂手侍立。
 
 **Lady Wang:** That's your sister Feng's rooms. Come and find her there. If there's anything you need, just tell her.  
 这是你凤姐姐的屋子，回来你好往这里找他来，少什么东西，你只管和他说就是了。
+
+**Lady Wang:** Come. The old lady's waiting dinner.  
+走罢，老太太那里传晚饭了。
+
+
+## D6 · After the Meal (饭后茶)
+*The Rong Mansion* · room `jm-rooms` · boards: **Lin Daiyu**: “The seat of honour?” / **Lin Daiyu**: “When to drink the tea.” / **Lin Daiyu**: “Tell her what you've read.”
 
 *Li Wan brings the rice, Xifeng lays the chopsticks, Lady Wang serves the soup. Her grandmother sits alone on the couch. Four empty chairs. Xifeng pulls Daiyu to the first chair on the left.*  
 贾珠之妻李氏捧饭，熙凤安箸，王夫人进羹。贾母正面榻上独坐，两边四张空椅，熙凤忙拉了黛玉在左边第一张椅上坐了。
