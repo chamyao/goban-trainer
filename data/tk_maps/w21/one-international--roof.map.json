@@ -166,11 +166,11 @@
   },
   {
    "id": "roof",
-   "x": 18.5,
-   "y": 8.7,
+   "x": 6.5,
+   "y": 10.7,
    "node": "",
    "label": "The roof",
-   "note": "the handoff to Jang lands here"
+   "note": "the handoff to Jang lands here (6+ tiles from m10)"
   }
  ],
  "npcs": [],

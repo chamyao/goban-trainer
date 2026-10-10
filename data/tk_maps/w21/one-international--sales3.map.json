@@ -375,11 +375,11 @@
   },
   {
    "id": "sales3",
-   "x": 16.5,
-   "y": 14.7,
+   "x": 30.5,
+   "y": 18.7,
    "node": "",
-   "label": "Jang's desk",
-   "note": "handoffs to Jang land here"
+   "label": "Sales Team 3",
+   "note": "handoffs to Jang land here (6+ tiles from the next beat)"
   },
   {
    "id": "copier",

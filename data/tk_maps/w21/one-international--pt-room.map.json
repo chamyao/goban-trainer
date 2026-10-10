@@ -358,22 +358,22 @@
   },
   {
    "id": "m16",
-   "x": 14.5,
+   "x": 6.5,
    "y": 6.7,
    "node": "21-m16",
    "label": "The PT room"
   },
   {
    "id": "m17",
-   "x": 20.5,
+   "x": 18.5,
    "y": 6.7,
    "node": "21-m17",
    "label": "The lectern"
   },
   {
    "id": "m18",
-   "x": 12.5,
-   "y": 6.7,
+   "x": 26.5,
+   "y": 8.7,
    "node": "21-m18",
    "label": "The interviewers' table"
   },

@@ -1041,7 +1041,7 @@ def _b1():
                 {"id": "m7", "at": [15, 7], "node": k(7), "label": "Sales Team 3"},
                 {"id": "m13", "at": [4, 6], "node": k(13), "label": "Sun Ji-young's desk"},
                 {"id": "m15", "at": [9, 10], "node": k(15), "label": "Sales Team 3"},
-                {"id": "sales3", "at": [8, 7], "label": "Jang's desk", "note": "handoffs to Jang land here"},
+                {"id": "sales3", "at": [15, 9], "label": "Sales Team 3", "note": "handoffs to Jang land here (6+ tiles from the next beat)"},
                 # m4's three errands, all at once: three things to fetch, each to its senior's desk
                 _give("copier", [2, 2], "The copier", "copy", n(3), "The copier groans out Kim Dong-sik's thirty pages, warm.",
                       "The copier. You've done Kim's copies."),
@@ -1064,16 +1064,17 @@ def _b1():
             ],
             "One International/pt-room": [
                 {"id": "m6", "at": [8, 3], "node": k(6), "label": "The lectern"},
-                {"id": "m16", "at": [7, 3], "node": k(16), "label": "The PT room"},
-                {"id": "m17", "at": [10, 3], "node": k(17), "label": "The lectern"},
-                {"id": "m18", "at": [6, 3], "node": k(18), "label": "The interviewers' table"},
+                # (beats a handoff passes between, m16 -> m17 -> m18, 8+ tiles apart: the new lead has a walk)
+                {"id": "m16", "at": [3, 3], "node": k(16), "label": "The PT room"},
+                {"id": "m17", "at": [9, 3], "node": k(17), "label": "The lectern"},
+                {"id": "m18", "at": [13, 4], "node": k(18), "label": "The interviewers' table"},
                 {"id": "pt-door", "at": [7, 8], "label": "The PT room's door", "note": "the costumed team's intern stands here before m16"}],
             "One International/textile": [
                 {"id": "m9", "at": [10, 5], "node": k(9), "label": "Steve Han's desk"},
-                {"id": "textile", "at": [7, 5], "label": "The textile team", "note": "the handoff to Kim Bu-ryeon lands here"}],
+                {"id": "textile", "at": [3, 6], "label": "The textile team", "note": "the handoff to Kim Bu-ryeon lands here (6+ tiles from m9)"}],
             "One International/roof": [
                 {"id": "m10", "at": [11, 5], "node": k(10), "label": "The smokers' corner"},
-                {"id": "roof", "at": [9, 4], "label": "The roof", "note": "the handoff to Jang lands here"}],
+                {"id": "roof", "at": [3, 5], "label": "The roof", "note": "the handoff to Jang lands here (6+ tiles from m10)"}],
             "One International/meeting": [{"id": "m12", "at": [6, 5], "node": k(12), "label": "A meeting room"}],
             "One International/hr": [{"id": "m19", "at": [2, 4], "node": k(19), "label": "The noticeboard"}],
             "Jongno/client": [{"id": "m11", "at": [6, 4], "node": k(11), "label": "The client's office"}],
