@@ -256,12 +256,12 @@ function worldScenes() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
       this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=106`);
-      this.load.json("kit", `assets/tk/kits/${kit}.json?v=48`);
+      this.load.json("kit", `assets/tk/kits/${kit}.json?v=49`);
       this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=109`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
-      for (const [s, path] of Object.entries(kit.sheets)) this.load.image(`kit-${s}`, `${path}?v=48`);   // the sheets change with the kits: same key
+      for (const [s, path] of Object.entries(kit.sheets)) this.load.image(`kit-${s}`, `${path}?v=49`);   // the sheets change with the kits: same key
       const [fw, fh] = kit.folk.frame;
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
@@ -1127,7 +1127,10 @@ function worldScenes() {
       cam.stopFollow();
       const next = i => {
         if (i >= looks.length) { cam.pan(this.player.x, this.player.y, 250); this.time.delayedCall(260, () => cam.startFollow(this.player, true, .15, .15)); return; }
-        const L = looks[i], who = L.line[0] === "say" && L.line[1], npc = who && this.npcs.find(x => x.who === who && x.spr.visible);
+        const L = looks[i], who = L.line[0] === "say" && L.line[1];
+        // the k-th cue of a who is given by the k-th of them standing here (two maids, each with her line), else the first
+        const k = looks.slice(0, i).filter(x => x.line[0] === "say" && x.line[1] === who).length, them = who ? this.npcs.filter(x => x.who === who && x.spr.visible) : [];
+        const npc = them[k] || them[0];
         if (npc) { const v = this.view(npc.spr.x, npc.spr.y); cam.pan(v.x, v.y, 300); }
         this.time.delayedCall(npc ? 320 : 0, () => this.ui.dialog([L.line], () => next(i + 1), "chat"));
       };
