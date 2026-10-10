@@ -833,7 +833,10 @@ def _places(floors):
             },
             "states": [{"id": "morning", "light": "morning"}],
             "npcs": [_talk("folk.salaryman", [5, 7], "A man in a black suit with a white ribbon on his lapel. He bows to the tent, and walks on."),
-                     _talk("folk.ajumma", [12, 6], "A woman sets white chrysanthemums along the table, one by one.")],
+                     _talk("folk.ajumma", [12, 6], "A woman sets white chrysanthemums along the table, one by one."),
+                     # the early commuters, on their way past to City Hall
+                     _talk("folk.officewoman", [3, 7], "A commuter hurrying past with a coffee. “Every morning there's a tent here for someone.”"),
+                     _talk("folk.salaryman", [13, 7], "A commuter checks his watch, slows at the tent, and goes on.")],
         },
 
         # The pizza shop: Kim Dong-su's, across from a big mart.

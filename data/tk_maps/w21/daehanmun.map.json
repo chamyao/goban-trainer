@@ -251,6 +251,24 @@
    ]
   },
   {
+   "id": "npc-3",
+   "kind": "folk.officewoman",
+   "x": 13.5,
+   "y": 29.9,
+   "say": [
+    "A commuter hurrying past with a coffee. “Every morning there's a tent here for someone.”"
+   ]
+  },
+  {
+   "id": "npc-4",
+   "kind": "folk.salaryman",
+   "x": 53.5,
+   "y": 29.9,
+   "say": [
+    "A commuter checks his watch, slows at the tent, and goes on."
+   ]
+  },
+  {
    "id": "tourist",
    "kind": "folk.salaryman",
    "x": 33.5,
