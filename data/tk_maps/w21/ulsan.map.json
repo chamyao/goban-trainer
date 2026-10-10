@@ -68,35 +68,27 @@
   {
    "kind": "prop.machine",
    "x": 4,
-   "y": 4,
+   "y": 5,
    "w": 4,
    "h": 2,
-   "id": "machine-2"
+   "id": "machine-1"
   },
   {
    "kind": "prop.machine",
-   "x": 12,
-   "y": 4,
+   "x": 16,
+   "y": 5,
    "w": 4,
    "h": 2,
-   "id": "machine-6",
+   "id": "machine-7",
    "label": "The line"
   },
   {
    "kind": "prop.machine",
-   "x": 20,
-   "y": 4,
-   "w": 4,
-   "h": 2,
-   "id": "machine-10"
-  },
-  {
-   "kind": "prop.machine",
    "x": 28,
-   "y": 4,
+   "y": 5,
    "w": 4,
    "h": 2,
-   "id": "machine-14"
+   "id": "machine-13"
   },
   {
    "kind": "furn.boxes",

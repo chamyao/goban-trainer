@@ -966,7 +966,7 @@ def _places(floors):
         "Ulsan": {
             "archetype": "interior",
             "plan": room([18, 10], [9, 9], floor="earth", things=[
-                *[{"id": f"machine-{x}", "kind": "prop.machine", "rect": [x, 2, 2, 1], **({"label": "The line"} if x == 6 else {})} for x in (2, 6, 10, 14)],
+                *[{"id": f"machine-{x}", "kind": "prop.machine", "rect": [x, 2, 4, 2], **({"label": "The line"} if x == 7 else {})} for x in (1, 7, 13)],
                 *[{"id": f"crates-{x}", "kind": "furn.boxes", "rect": [x, 6, 1, 1]} for x in (2, 3, 14, 15)],
                 {"id": "office", "kind": "furn.desk", "rect": [8, 6, 1, 1], "label": "The site office's desk"},
             ]) | {"label": "The plant at Ulsan"},

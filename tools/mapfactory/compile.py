@@ -248,6 +248,7 @@ def compile_map(m, kit, out_dir):
     W, H = m["size"]
     legend = m["terrain"]["legend"]
     grid = [[legend[c] for c in row] for row in m["terrain"]["rows"]]
+    planned = grid   # the plan's own materials (walkable or not), before a kit's stand-ins rename them
     # a ground this kit has no tiles of is drawn as its stand-in (vocab MATERIAL_FALLBACK), edges and all
     sub = {mat: kit.material(mat)[0] for mat in {c for row in grid for c in row}
            if (mat not in kit.k["materials"] or "same" in kit.k["materials"][mat])
@@ -363,7 +364,8 @@ def compile_map(m, kit, out_dir):
     if walls:
         _, d = material("wall")
         data = [0] * (W * H)
-        floor = lambda x, y: 0 <= x < W and 0 <= y < H and MATERIALS.get(grid[y][x]) and grid[y][x] != "void"
+        # (by the plan's material: a stand-in's name, e.g. seoul's office_tile drawn as "lobby", isn't in MATERIALS)
+        floor = lambda x, y: 0 <= x < W and 0 <= y < H and MATERIALS.get(planned[y][x]) and planned[y][x] != "void"
         for x, y in walls:
             n, s_, e, w_ = floor(x, y - 1), floor(x, y + 1), floor(x + 1, y), floor(x - 1, y)
             piece = ("t" if s_ else "b" if n else "l" if e else "r" if w_ else
