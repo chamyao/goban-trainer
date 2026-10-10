@@ -161,6 +161,7 @@ const TK_CHARS = {
   ms_jang_young: { name: "Jang Geu-rae", skin: "#f2d2b0", hair: "#1e1a1e", hat: "fringe", robe: "#8a8e96", trim: "#7a7e86", legs: "#3a4a6a", beard: "none", eyes: "normal" },   // m1, a trainee at eighteen: a grey hoodie and jeans
   ms_mother: { name: "Jang Geu-rae's mother", skin: "#ecc8a4", hair: "#4a4448", hat: "perm", robe: "#8a6a7a", trim: "#e8dcc8", legs: "#4a4a5a", beard: "none", eyes: "kind" },
   ms_oh: { name: "Oh Sang-sik", skin: "#e8c09a", hair: "#241e22", hat: "messy", robe: "#e4e6ea", trim: "#2a2228", tie: "#8a2a2a", legs: "#3a3e4a", beard: "stubble", eyes: "wild" },   // red-eyed, shirtsleeves, tie loosened
+  ms_oh_hike: { name: "Oh Sang-sik", skin: "#e8c09a", hair: "#241e22", hat: "messy", robe: "#c8502a", trim: "#3a3e46", legs: "#4a4e56", beard: "stubble", eyes: "wild" },   // m7: hiking jacket and trousers on the mountain
   ms_kimds: { name: "Kim Dong-sik", skin: "#f0cfac", hair: "#2e2426", hat: "curly", robe: "#c8d8ea", trim: "#3a3236", tie: "#2e3a5a", legs: "#4a4e5a", beard: "none", eyes: "kind" },
   ms_cheon: { name: "Cheon Gwan-ung", skin: "#e2b089", hair: "#2a2024", hat: "short", robe: "#5a5e66", trim: "#5a5e66", shirt: "#eef0f2", tie: "#6a5a3a", legs: "#44474e", beard: "none", eyes: "narrow", fat: true },
   ms_park: { name: "Park Jong-sik", skin: "#efc59d", hair: "#1a1416", hat: "slick", robe: "#6a6a74", trim: "#6a6a74", shirt: "#f0d8dc", tie: "#8a2a5a", legs: "#55555e", beard: "none", eyes: "narrow" },
