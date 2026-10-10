@@ -181,8 +181,8 @@
    "done": [
     "The man with the pocket board is on the next problem."
    ],
-   "until": "21-m8",
-   "when": "node:21-m6",
+   "until": "21-m5",
+   "when": "node:21-m4",
    "blocks": {
     "exit": "Jongno"
    },

@@ -119,6 +119,14 @@
    "y": 12.7,
    "node": "21-m8",
    "label": "A café on Jongno"
+  },
+  {
+   "id": "cafe",
+   "x": 20.5,
+   "y": 4.7,
+   "node": "",
+   "label": "A café on Jongno",
+   "note": "the cut to the café lands here"
   }
  ],
  "npcs": [],

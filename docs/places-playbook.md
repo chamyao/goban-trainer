@@ -217,6 +217,10 @@ These were each learned from a real complaint, and each is a rule, not a one-off
   with no landing spot leaves the new lead there, not at the beat's spot: the next beat in that room keeps 6+ tiles
   from the room's middle (the proof reads the lead's last place in the staged cutscene).
 - **No dressing on a crosswalk** (`free()` treats it as paving).
+- **A trail through unwalkable ground is the way, so keep people off it** (Misaeng's Mountain: `hills` with a 2-tile
+  `path` cut down it). A townsperson standing on a 2-tile trail blocks it: put them on a widened landing (a `plateau`
+  zone joined to the trail) or at either end. And read the build's last line, not a grep of it: `plans.py verify`
+  stops on "can't be reached", which has no "error" in it.
 - **A giver's item must be in the story's items** (Plot's `ITEMS` in the story file): the engine gives nothing it
   doesn't know, silently. A new item for a map chore (Misaeng's mop) goes to Plot with its name.
 - **A person's `until` is a node key, with or without its world**: `"until": "node:m5"` and `"node:21-m5"` both
