@@ -1196,7 +1196,7 @@ function worldScenes() {
           }
           const ts = [...this.npcs.filter(n => n.gives && items.includes(n.gives) && n.spr.visible).map(n => ({ x: n.spr.x, y: n.spr.y - 8 })),
                       ...Object.values(this.spots).filter(s => s.gives && items.includes(s.gives) && this.cond(s.givesWhen)).map(s => ({ x: s.x, y: s.y - 4 })),   // a thing that gives it (the bins)
-                      ...(ready.length ? ready : posts).map(s => ({ x: s.x, y: s.y - 4 }))];
+                      ...(ready.length ? ready : posts.filter(s => !s.needs.some(c => /^item:/.test(c) && !this.cond(c) && this.giverOf(c.slice(5))))).map(s => ({ x: s.x, y: s.y - 4 }))];   // a delivery not yet possible only if nothing here gives what it needs
           this.goalHops = 0;
           if (ts.length) return ts.sort((a, b) => d(a) - d(b))[0];
           // a giver seated indoors: the door of their room, or out of this room first
@@ -1207,6 +1207,7 @@ function worldScenes() {
       }
       return this.routeTo(this.available(q) ? [q] : this.leadsTo(q));
     }
+    giverOf(item) { return this.npcs.some(n => n.gives === item && n.spr.visible) || Object.values(this.spots).some(s => s.gives === item && this.cond(s.givesWhen)); }
     routeTo(quests) {
       const here = quests.find(x => x.place === this.placeId);
       this.goalHops = 0;
