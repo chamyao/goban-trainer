@@ -91,7 +91,7 @@ def _side_room(c, rid, mark=None):
         things.append({"id": "axes", "kind": "furn.rack", "rect": [3, 1, 1, 1], "label": "A rack of axes"})
     else:
         things.append({"id": "table", "kind": "furn.table", "rect": [3, 1, 2, 1]})
-    return room([8, 6], door, things=things, spots=spots) | {"label": "A side room"}
+    return room([8, 6], door, things=things, spots=spots, floor="wood") | {"label": "A side room"}   # boards, like the bridal room; halls are stone
 
 
 def _narrows(n, x, w, ranks):
@@ -399,7 +399,7 @@ PLANS_LS = {
                                         {"id": "rack-3", "kind": "furn.rack", "rect": [8, 1, 1, 1], "label": "Halberds on the wall"},
                                         {"id": "rack-4", "kind": "furn.rack", "rect": [10, 1, 1, 1]},
                                         {"id": "lamps", "kind": "prop.lanterns", "rect": [1, 6, 1, 1]}],
-                                spots=[{"id": "s7", "at": [4, 4], "node": "4-s7", "label": "The bridal room"}])
+                                spots=[{"id": "s7", "at": [4, 4], "node": "4-s7", "label": "The bridal room"}], floor="wood")
             | {"label": "The bridal room"},
         },
         "objectives": {

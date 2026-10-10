@@ -41,7 +41,7 @@ Where each book's places are:
 
 | Book (world) | Plans | Built by | Proofs | Notes |
 |---|---|---|---|---|
-| 1–3 | `tools/tk_places.py` (briefs) | `layout.py` (random layout) | — | **Frozen**: the generator has moved on, so a rebuild changes their layout. Don't rebuild; patch the built maps (`settle_maps.py` is the pattern). |
+| 1–3 | `tools/tk_places.py` (briefs) | `layout.py` (random layout) | — | **Frozen**: the generator has moved on, so a rebuild changes their layout, and even a recompile changes a few tiles. Don't rebuild; patch the built maps: `settle_maps.py` (people), `carry_kit_change.py` (an art-kit change: only the cells the kit change itself alters). |
 | 12 (Diaochan) | `tools/tk_plans_w2.py` | `--world 12 --plans 2` | checker | Book 2's plans; Chinese in `tk_places_w2_zh.py` |
 | 13 (Cao Cao) | `tools/tk_plans_cc.py` | `--world 13 --plans cc` | chase, guard, watchers | |
 | 14 (Lü Bu) | `tools/tk_plans_lb.py` | `--world 14 --plans lb` | `tools/proofs/hide_ward_lb.py` | the burning ward, Xiapi |
@@ -260,6 +260,11 @@ line in the built maps. (Or patch the line in `data/tk_maps/w<n>` first.)
 
 ## Drift
 
+An art-kit change (new floors, say) reaches Books 12+ by recompiling them (`tools/mapfactory compile --world <n> --kit <k>`); check first that a
+recompile at the commit before the change is a no-op, so the diff is the kit's alone. Books 1–3 take it through
+`carry_kit_change.py --before <that commit>`.
+
+
 After any build: `python3 tools/mapfactory/keep_drift.py --world <n>` puts back the overworld and every existing beat's
 problem picks as committed. Then `git status`: only what the change touched should be left.
 
@@ -319,6 +324,7 @@ python3 -m tools.mapfactory all --world 15 --plans 15 --kit xianxia --kit jade -
 python3 tools/mapfactory/keep_drift.py --world 15   # then undo the drift
 tools/mapfactory/build_with_story.sh 15 15 origin/claude/plot   # against Plot's story before it's on main
 python3 tools/mapfactory/settle_maps.py             # settle wanderers in built (frozen) maps
+python3 tools/mapfactory/carry_kit_change.py --before <rev> --world 1 --world 2 --world 3   # a kit change into frozen maps
 tests/playtest/run.sh book15-places                 # Book 15's mechanics, walked in the engine
 python3 tools/mapfactory build --world 12 --plans 2
 python3 tools/mapfactory build --world 13 --plans cc          # CHASE_VERBOSE=1 prints the chase proof
