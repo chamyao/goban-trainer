@@ -31,6 +31,7 @@ const ASKED = { '21-m6': 29, '21-m9': 47, '21-m17': 85, '21-m22': 137, '21-m24':
       const s = await p.evaluate(() => { const q = x => document.querySelector(x);
         const sc = q('.tk-scroll-wrap'), d = q('.tk-dlg');
         return { scroll: sc ? sc.innerText.replace(/\s+/g, ' ').trim() : null, dlg: d ? { who: (q('.tk-dlg-name') || {}).textContent || '', zh: (q('.tk-dlg-zh') || {}).textContent || '', t: (q('.tk-dlg-text') || {}).textContent || '', ready: d.classList.contains('ready') } : null }; });
+      if (await p.evaluate(() => [...document.querySelectorAll('button')].some(b => b.textContent.trim() === 'Cancel' && b.offsetParent))) { await p.getByText('Cancel', { exact: true }).first().click({ timeout: 3000 }).catch(() => {}); await p.waitForTimeout(300); continue; }   // the site's username prompt on a fresh save
       if (s.scroll) { lines.push('[scroll] ' + s.scroll); await p.locator('.tk-scroll-go').first().click({ timeout: 3000 }).catch(() => {}); await p.waitForTimeout(500); idle = 0; continue; }
       if (s.dlg) { if (!s.dlg.ready) { await p.locator('.tk-dlg').click({ position: { x: 20, y: 20 }, timeout: 3000 }).catch(() => {}); await p.waitForTimeout(150); continue; }
         lines.push(`${s.dlg.who ? s.dlg.who + ': ' : ''}${s.dlg.t}${s.dlg.zh ? '  [zh: ' + s.dlg.zh + ']' : ''}`);
