@@ -1530,7 +1530,8 @@
   "provider": "replicate",
   "model": "final-1",
   "look": "final",
-  "made": "2026-10-10"
+  "made": "2026-10-10",
+  "edit": "Plot: the 红楼梦 calligraphy replaced by a plum-blossom painting"
  },
  "hl_baoyu": {
   "file": "hl_baoyu.jpg",
@@ -1539,7 +1540,8 @@
   "provider": "replicate",
   "model": "final-1",
   "look": "final",
-  "made": "2026-10-10"
+  "made": "2026-10-10",
+  "edit": "Plot: the author's verse (满纸荒唐言) replaced by an orchid painting"
  },
  "hl_jade": {
   "file": "hl_jade.jpg",
@@ -1575,7 +1577,8 @@
   "provider": "replicate",
   "model": "final-1",
   "look": "final",
-  "made": "2026-10-10"
+  "made": "2026-10-10",
+  "edit": "Plot: the clock is a small box clock hung on a pillar, its weight swinging below (the novel's 匣子 and 秤砣)"
  },
  "hl_ash": {
   "file": "hl_ash.jpg",
@@ -1593,6 +1596,7 @@
   "provider": "replicate",
   "model": "final-1",
   "look": "final",
-  "made": "2026-10-10"
+  "made": "2026-10-10",
+  "edit": "Plot: the author's verse (满纸荒唐言) replaced by a bamboo painting"
  }
 }
