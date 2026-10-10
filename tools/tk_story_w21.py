@@ -763,7 +763,7 @@ def _nodes():
             "Same colours. Big groups over small ones. Smaller boxes.",
             "Shrink the boxes.",
             "Still a mess. Again.")),
-        node("m19b", 232, 134, "m19b", room="sales3", move=10, record=[11, None], choices={11: [['dl', 3.1], ['dr', 3.55], ['dc', 3.97], ['bp', 4.04], ['cc', 4.58], ['ed', 4.84], ['ip', 6.15]]}, dilemma=[
+        node("m19b", 232, 134, "m19b", room="sales3", move=10, record=[11, None], choices={11: [['br', 1.86], ['dl', 2.72], ['bq', 3.07], ['dr', 3.1], ['ck', 3.11], ['dk', 4.11], ['bp', 4.98]]}, dilemma=[
             D("ms_jang", "Which move did Cho Hunhyun play?",
               "Make the corner solid, then fight.",
               "Black 11.",
