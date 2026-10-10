@@ -138,7 +138,7 @@
    "label": "The team head's desk"
   },
   {
-   "kind": "furn.shelf",
+   "kind": "furn.cloth_bolts",
    "x": 2,
    "y": 2,
    "w": 2,
@@ -147,7 +147,7 @@
    "label": "Bolts of cloth and sample books"
   },
   {
-   "kind": "furn.shelf",
+   "kind": "furn.cloth_bolts",
    "x": 4,
    "y": 2,
    "w": 2,

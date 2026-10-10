@@ -18,25 +18,25 @@
    "d": "garden",
    "f": "path",
    "g": "road",
-   "W": "wall"
+   "h": "wall.palace"
   },
   "rows": [
    "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
    "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
    "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
    "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
-   "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
-   "dddddddddddddddddddddddddddddddddffddddddddddddddddddddddddddddd",
-   "dddddddddddddddddddddddddddddddddffddddddddddddddddddddddddddddd",
-   "dddddddddddddddddddddddddddddddddffddddddddddddddddddddddddddddd",
-   "dddddddddddddddddddddddddddddddddffddddddddddddddddddddddddddddd",
-   "dddddddddddddddddddddddddddddddddffddddddddddddddddddddddddddddd",
-   "dddddddddddddddddddddddddddddddddffddddddddddddddddddddddddddddd",
-   "dddddddddddddddddddddddddddddddddffddddddddddddddddddddddddddddd",
-   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbffbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-   "bWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWffWWWWWWWWWWWWWWWWWWWWWWWWWWWWb",
-   "bWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWffWWWWWWWWWWWWWWWWWWWWWWWWWWWWb",
-   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "ddddddddddddddddddddddddddddddddffffdddddddddddddddddddddddddddd",
+   "ddddddddddddddddddddddddddddddddffffdddddddddddddddddddddddddddd",
+   "ddddddddddddddddddddddddddddddddffffdddddddddddddddddddddddddddd",
+   "ddddddddddddddddddddddddddddddddffffdddddddddddddddddddddddddddd",
+   "ddddddddddddddddddddddddddddddddffffdddddddddddddddddddddddddddd",
+   "ddddddddddddddddddddddddddddddddffffdddddddddddddddddddddddddddd",
+   "ddddddddddddddddddddddddddddddddffffdddddddddddddddddddddddddddd",
+   "ddddddddddddddddddddddddddddddddffffdddddddddddddddddddddddddddd",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbffffbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhffffhhhhhhhhhhhhhhhhhhhhhhhhhhhb",
+   "bhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhffffhhhhhhhhhhhhhhhhhhhhhhhhhhhb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbffffbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
    "bbbbbbbbccccccccccccccccccccccccccccccccccccccccccccccccbbbbbbbb",
    "bbbbbbbbccccccccccccccccccccccccccccccccccccccccccccccccbbbbbbbb",
    "bbbbbbbbccccccccccccccccccccccccccccccccccccccccccccccccbbbbbbbb",
@@ -69,13 +69,13 @@
    "garden": true,
    "path": true,
    "road": true,
-   "wall": false
+   "wall.palace": false
   }
  },
  "lines": [
   {
    "id": "palace-wall",
-   "kind": "wall",
+   "kind": "wall.palace",
    "path": [
     [
      0,
@@ -124,21 +124,23 @@
      1
     ]
    ],
-   "width": 2,
-   "tiles": 20
+   "width": 4,
+   "tiles": 48
   }
  ],
  "objects": [
   {
-   "kind": "building.gatehouse",
-   "x": 33,
+   "kind": "building.palace_gate",
+   "x": 31,
    "y": 13,
-   "w": 2,
-   "h": 2,
+   "w": 6,
+   "h": 3,
    "id": "daehanmun",
-   "width": 2,
-   "wall": "palace-wall",
-   "door": "S"
+   "door": null,
+   "faces": "S",
+   "label": "Daehanmun",
+   "plaque": "大漢門",
+   "blocks_sight": true
   },
   {
    "kind": "prop.memorial_tent",
