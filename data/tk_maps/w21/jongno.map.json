@@ -1192,26 +1192,12 @@
  ],
  "spots": [
   {
-   "id": "m18",
-   "x": 84.5,
-   "y": 28.7,
-   "node": "21-m18",
-   "label": "The corner shop"
-  },
-  {
    "id": "park-tables",
    "x": 21.5,
    "y": 17.7,
    "node": "",
    "label": "Tapgol Park's go tables",
-   "note": "the regulars play here (m2, m4)"
-  },
-  {
-   "id": "m23b",
-   "x": 57.5,
-   "y": 25.7,
-   "node": "21-m23b",
-   "label": "The forecourt"
+   "note": "the regulars play here"
   },
   {
    "id": "forecourt",
@@ -1219,15 +1205,7 @@
    "y": 25.7,
    "node": "",
    "label": "The forecourt",
-   "note": "m23's handoff lands here"
-  },
-  {
-   "id": "pojangmacha-door",
-   "x": 55.5,
-   "y": 54.7,
-   "node": "",
-   "label": "The pojangmacha",
-   "note": "m19's handoff (to the spot 'pojangmacha' in the tent itself)"
+   "note": "handoffs to the tower's forecourt land here"
   }
  ],
  "npcs": [
@@ -1260,15 +1238,6 @@
   },
   {
    "id": "npc-4",
-   "kind": "folk.salaryman",
-   "x": 98.5,
-   "y": 17.9,
-   "say": [
-    "A courier with a trolley of boxes. “Fourteenth floor? Every one of them's the fourteenth floor.”"
-   ]
-  },
-  {
-   "id": "npc-5",
    "kind": "folk.ajumma",
    "x": 85.5,
    "y": 57.9,
@@ -1277,113 +1246,7 @@
    ]
   },
   {
-   "id": "sock-stall",
-   "kind": "folk.ajumma",
-   "x": 85.5,
-   "y": 49.9,
-   "say": [
-    "A stall of socks, gloves and towels. “Ten pairs for twenty thousand. Wholesale price, for you.”"
-   ],
-   "label": "The sock stall",
-   "shop": [
-    "socks"
-   ]
-  },
-  {
-   "id": "buyer-bus",
-   "kind": "folk.salaryman",
-   "x": 33.5,
-   "y": 41.9,
-   "say": [
-    "A man waiting for the bus, checking his watch."
-   ],
-   "until": "21-21-m18",
-   "when": "node:21-m17",
-   "label": "A man waiting for the bus",
-   "buyer": {
-    "wants": [
-     "socks"
-    ],
-    "pays": 30000,
-    "yes": [
-     "“Socks? My wife's been on at me about socks for a week. Fine. Thirty thousand.”"
-    ],
-    "no": [
-     "“No, thanks. Not today.”"
-    ]
-   }
-  },
-  {
-   "id": "buyer-lunch",
-   "kind": "folk.officewoman",
-   "x": 65.5,
-   "y": 29.9,
-   "say": [
-    "An office worker on her way back from lunch."
-   ],
-   "until": "21-21-m18",
-   "when": "node:21-m17",
-   "label": "An office worker",
-   "buyer": {
-    "wants": [
-     "socks"
-    ],
-    "pays": 25000,
-    "yes": [
-     "“For my father, maybe. He never buys his own. Here.”"
-    ],
-    "no": [
-     "“I'm sorry, I'm in a hurry.”"
-    ]
-   }
-  },
-  {
-   "id": "buyer-student",
-   "kind": "folk.kid",
-   "x": 13.5,
-   "y": 41.9,
-   "say": [
-    "A student in a school blazer, waiting at the station stairs."
-   ],
-   "until": "21-21-m18",
-   "when": "node:21-m17",
-   "label": "A student",
-   "buyer": {
-    "wants": [
-     "socks"
-    ],
-    "pays": 20000,
-    "yes": [
-     "“For PE? Mum keeps saying I need more. Twenty thousand, that's all I've got.”"
-    ],
-    "no": [
-     "“I've got no money, sorry.”"
-    ]
-   }
-  },
-  {
-   "id": "buyer-oldman",
-   "kind": "folk.grandpa",
-   "x": 97.5,
-   "y": 41.9,
-   "say": [
-    "An old man with a newspaper under his arm."
-   ],
-   "until": "21-21-m18",
-   "when": "node:21-m17",
-   "label": "An old man",
-   "buyer": {
-    "wants": [
-     "socks"
-    ],
-    "pays": 0,
-    "no": [
-     "“From a young man in a suit, on the pavement? No. Go and sell to someone who needs them.”"
-    ]
-   }
-  },
-  {
-   "id": "npc-11",
+   "id": "npc-5",
    "kind": "folk.ajumma",
    "x": 53.5,
    "y": 57.9,
@@ -1426,101 +1289,30 @@
    "done": [
     "The old man in the flat cap is asleep on the bench."
    ],
-   "until": "21-21-m4",
-   "when": "node:21-m3",
+   "until": "21-21-m11",
+   "when": "node:21-m10",
    "view": 4,
    "challenge": "regular-2"
   },
   {
-   "id": "regular-3",
-   "kind": "folk.grandpa",
-   "x": 21.5,
-   "y": 21.9,
-   "say": [],
-   "intro": [
-    "The man who keeps the score for everyone. “Nobody's beaten him all week. Want to try?”"
-   ],
-   "win": [
-    "“Huh. Wait till I tell him.”"
-   ],
-   "done": [
-    "The scorekeeper is telling everyone about your game."
-   ],
-   "until": "21-21-m4",
-   "when": "node:21-m3",
-   "view": 4,
-   "challenge": "regular-3"
-  },
-  {
-   "id": "shop-owner",
+   "id": "courier",
    "kind": "folk.salaryman",
-   "x": 81.5,
-   "y": 29.9,
+   "x": 97.5,
+   "y": 17.9,
    "say": [],
    "intro": [
-    "The corner-shop owner leans in his doorway. “Selling on my pavement, are you? Let's see if you can sell to me.”"
+    "A courier with a trolley of boxes parks it across the lane. “Fourteenth floor? Every one of them's the fourteenth floor. Sit a minute. One game while the lift comes.”"
    ],
    "win": [
-    "“…Not bad. Not good enough, but not bad.”"
+    "“Ha! I'll take the stairs, then.”"
    ],
    "done": [
-    "The corner-shop owner is selling dried squid, faster than you."
+    "The courier's trolley rattles off down the lane."
    ],
-   "until": "21-21-m18",
-   "when": "node:21-m17",
-   "blocks": "m18",
+   "until": "21-21-m11",
+   "when": "node:21-m2",
    "view": 4,
-   "rival": {
-    "say": [
-     "The corner-shop owner calls out to the same people you were about to ask. “Dried squid! Grilled while you wait!” They go to him.",
-     "“Look at you. Holding them out like you're apologising. Selling's not begging, son.”"
-    ]
-   },
-   "challenge": "shop-owner",
-   "guard": [
-    86.0,
-    30.0
-   ]
-  },
-  {
-   "id": "passer-1",
-   "kind": "folk.salaryman",
-   "x": 41.5,
-   "y": 41.9,
-   "say": [],
-   "intro": [
-    "An office worker on his lunch break stops at your box. “What are you selling? Tell you what: a game first.”"
-   ],
-   "win": [
-    "“Fine. I'll take one. Don't tell my wife.”"
-   ],
-   "done": [
-    "The office worker has gone back in."
-   ],
-   "until": "21-21-m18",
-   "when": "node:21-m17",
-   "view": 4,
-   "challenge": "passer-1"
-  },
-  {
-   "id": "passer-2",
-   "kind": "folk.officewoman",
-   "x": 98.5,
-   "y": 41.9,
-   "say": [],
-   "intro": [
-    "A woman with a go app open on her phone. “You're the one from the Baduk Association, aren't you? I've seen your face.”"
-   ],
-   "win": [
-    "“…I must have been wrong. Good luck.”"
-   ],
-   "done": [
-    "The woman is back on her phone."
-   ],
-   "until": "21-21-m18",
-   "when": "node:21-m17",
-   "view": 4,
-   "challenge": "passer-2"
+   "challenge": "courier"
   }
  ],
  "exits": [
@@ -1587,10 +1379,10 @@
    "h": 4
   },
   {
-   "to": "baekjin-trading",
+   "to": "daehanmun",
    "side": "W",
    "x": 0,
-   "y": 40,
+   "y": 60,
    "w": 1,
    "h": 4
   },
@@ -1599,22 +1391,6 @@
    "side": "E",
    "x": 111,
    "y": 40,
-   "w": 1,
-   "h": 4
-  },
-  {
-   "to": "the-pizza-shop",
-   "side": "E",
-   "x": 111,
-   "y": 28,
-   "w": 1,
-   "h": 4
-  },
-  {
-   "to": "the-new-office",
-   "side": "E",
-   "x": 111,
-   "y": 16,
    "w": 1,
    "h": 4
   }
@@ -1648,21 +1424,13 @@
    5,
    29
   ],
-  "baekjin-trading": [
+  "daehanmun": [
    5,
-   41
+   61
   ],
   "suns-neighbourhood": [
    105,
    41
-  ],
-  "the-pizza-shop": [
-   105,
-   29
-  ],
-  "the-new-office": [
-   105,
-   17
   ],
   "": [
    57,
@@ -1672,18 +1440,6 @@
  "states": [
   {
    "id": "day",
-   "until": "node:21-m19",
-   "light": "day"
-  },
-  {
-   "id": "night",
-   "when": "node:21-m19",
-   "until": "node:21-m19b",
-   "light": "night"
-  },
-  {
-   "id": "after",
-   "when": "node:21-m19b",
    "light": "day"
   }
  ],
@@ -1818,7 +1574,7 @@
   ]
  },
  "links": [
-  "baekjin-trading",
+  "daehanmun",
   "jongno--client",
   "jongno--corner-shop",
   "jongno--hq",
@@ -1826,8 +1582,6 @@
   "korea-baduk-association",
   "one-international",
   "suns-neighbourhood",
-  "the-new-office",
-  "the-pizza-shop",
   "the-subway"
  ]
 }

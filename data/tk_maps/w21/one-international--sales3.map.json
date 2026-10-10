@@ -84,7 +84,8 @@
    "y": 2,
    "w": 1,
    "h": 1,
-   "id": "cooler"
+   "id": "cooler",
+   "label": "The pantry: coffee and water"
   },
   {
    "kind": "furn.whiteboard",
@@ -101,7 +102,8 @@
    "y": 2,
    "w": 1,
    "h": 1,
-   "id": "filing-1"
+   "id": "filing-1",
+   "label": "The filing cabinets"
   },
   {
    "kind": "furn.filing",
@@ -167,8 +169,8 @@
    "y": 8,
    "w": 2,
    "h": 1,
-   "id": "desk-park",
-   "label": "Park's desk"
+   "id": "desk-deputy",
+   "label": "The deputy's desk"
   },
   {
    "kind": "furn.office_desk",
@@ -292,94 +294,6 @@
  ],
  "spots": [
   {
-   "id": "m3",
-   "x": 14.5,
-   "y": 6.7,
-   "node": "21-m3",
-   "label": "Sales Team 3"
-  },
-  {
-   "id": "m5",
-   "x": 8.5,
-   "y": 12.7,
-   "node": "21-m5",
-   "label": "Sun Ji-young's desk"
-  },
-  {
-   "id": "m9",
-   "x": 16.5,
-   "y": 12.7,
-   "node": "21-m9",
-   "label": "Jang's desk"
-  },
-  {
-   "id": "m10",
-   "x": 18.5,
-   "y": 6.7,
-   "node": "21-m10",
-   "label": "Kim Dong-sik's desk"
-  },
-  {
-   "id": "m11",
-   "x": 10.5,
-   "y": 10.7,
-   "node": "21-m11",
-   "label": "Sun Ji-young's desk"
-  },
-  {
-   "id": "m21",
-   "x": 14.5,
-   "y": 8.7,
-   "node": "21-m21",
-   "label": "The team's phone"
-  },
-  {
-   "id": "m23",
-   "x": 22.5,
-   "y": 10.7,
-   "node": "21-m23",
-   "label": "Oh's desk"
-  },
-  {
-   "id": "sales3",
-   "x": 18.5,
-   "y": 12.7,
-   "node": "",
-   "label": "Jang's desk",
-   "note": "handoffs to Jang land here"
-  },
-  {
-   "id": "sun-desk-hand",
-   "x": 10.5,
-   "y": 8.7,
-   "node": "",
-   "label": "Sun Ji-young's desk",
-   "note": "the handoff to Sun lands here"
-  },
-  {
-   "id": "call-notes",
-   "x": 14.5,
-   "y": 10.7,
-   "node": "",
-   "label": "Jang's desk",
-   "gives": "icb_call",
-   "gives_when": "node:21-m12",
-   "give": [
-    "Your notes from the call to ICB, in your own hand. In the margin you've written: Korean? In the room behind?"
-   ],
-   "given": [
-    "Your desk. The call notes are in your bag."
-   ]
-  },
-  {
-   "id": "whiteboard",
-   "x": 14.5,
-   "y": 4.7,
-   "node": "",
-   "label": "Sales Team 3's whiteboard",
-   "opens": "audit"
-  },
-  {
    "id": "lift",
    "x": 14.5,
    "y": 20.7,
@@ -399,12 +313,8 @@
      "to": "one-international--hr"
     },
     {
-     "label": "6F · Finance",
-     "to": "one-international--finance"
-    },
-    {
-     "label": "9F · The resources team",
-     "to": "one-international--resources"
+     "label": "8F · The textile team",
+     "to": "one-international--textile"
     },
     {
      "label": "14F · Sales Team 3",
@@ -415,23 +325,172 @@
      "to": "one-international--meeting"
     },
     {
-     "label": "16F · The audit room",
-     "to": "one-international--audit"
-    },
-    {
-     "label": "20F · The board room",
-     "to": "one-international--board-room"
-    },
-    {
-     "label": "21F · The executive's office",
-     "to": "one-international--exec-floor"
-    },
-    {
      "label": "R · The roof",
      "to": "one-international--roof"
     }
    ],
    "use": "lift"
+  },
+  {
+   "id": "m3",
+   "x": 16.5,
+   "y": 12.7,
+   "node": "21-m3",
+   "label": "Jang's desk"
+  },
+  {
+   "id": "m4",
+   "x": 20.5,
+   "y": 6.7,
+   "node": "21-m4",
+   "label": "Kim Dong-sik's desk"
+  },
+  {
+   "id": "m5",
+   "x": 14.5,
+   "y": 8.7,
+   "node": "21-m5",
+   "label": "Sales Team 3"
+  },
+  {
+   "id": "m7",
+   "x": 14.5,
+   "y": 6.7,
+   "node": "21-m7",
+   "label": "Sales Team 3"
+  },
+  {
+   "id": "m13",
+   "x": 8.5,
+   "y": 12.7,
+   "node": "21-m13",
+   "label": "Sun Ji-young's desk"
+  },
+  {
+   "id": "m15",
+   "x": 18.5,
+   "y": 12.7,
+   "node": "21-m15",
+   "label": "Sales Team 3"
+  },
+  {
+   "id": "sales3",
+   "x": 16.5,
+   "y": 14.7,
+   "node": "",
+   "label": "Jang's desk",
+   "note": "handoffs to Jang land here"
+  },
+  {
+   "id": "copier",
+   "x": 4.5,
+   "y": 4.7,
+   "node": "",
+   "label": "The copier",
+   "gives": "copy",
+   "gives_when": "node:21-m3",
+   "give": [
+    "The copier groans out Kim Dong-sik's thirty pages, warm."
+   ],
+   "given": [
+    "The copier. You've done Kim's copies."
+   ]
+  },
+  {
+   "id": "filing",
+   "x": 22.5,
+   "y": 4.7,
+   "node": "",
+   "label": "The filing cabinets",
+   "gives": "file",
+   "gives_when": "node:21-m3",
+   "give": [
+    "Third drawer down, under O: section head Oh's file."
+   ],
+   "given": [
+    "The filing cabinets. You have Oh's file."
+   ]
+  },
+  {
+   "id": "pantry",
+   "x": 8.5,
+   "y": 4.7,
+   "node": "",
+   "label": "The pantry",
+   "gives": "coffee",
+   "gives_when": "node:21-m3",
+   "give": [
+    "One coffee from the machine, black, for the deputy."
+   ],
+   "given": [
+    "The pantry. You have the deputy's coffee."
+   ]
+  },
+  {
+   "id": "errand-copy",
+   "x": 18.5,
+   "y": 6.7,
+   "node": "",
+   "label": "Kim Dong-sik's desk",
+   "needs": [
+    "item:copy"
+   ],
+   "delivers": "errand_copy",
+   "when": "node:21-m3",
+   "waiting": [
+    "Kim Dong-sik taps the desk. “The copies, Jang. Today, if you can.”"
+   ],
+   "deliver": [
+    "Kim Dong-sik takes the copies without looking up. “Thirty? I said thirty-two. …No, thirty. Fine.”"
+   ],
+   "delivered": [
+    "Kim Dong-sik is reading the copies."
+   ],
+   "takes": true
+  },
+  {
+   "id": "errand-file",
+   "x": 22.5,
+   "y": 8.7,
+   "node": "",
+   "label": "Oh's desk",
+   "needs": [
+    "item:file"
+   ],
+   "delivers": "errand_file",
+   "when": "node:21-m3",
+   "waiting": [
+    "Section head Oh doesn't look up. “The file. I asked for it ten minutes ago.”"
+   ],
+   "deliver": [
+    "Section head Oh holds out his hand for the file, and keeps reading the one in front of him."
+   ],
+   "delivered": [
+    "Oh has his file."
+   ],
+   "takes": true
+  },
+  {
+   "id": "errand-coffee",
+   "x": 16.5,
+   "y": 6.7,
+   "node": "",
+   "label": "The deputy's desk",
+   "needs": [
+    "item:coffee"
+   ],
+   "delivers": "errand_coffee",
+   "when": "node:21-m3",
+   "waiting": [
+    "The deputy waves an empty cup at you. “Coffee? Sometime this morning?”"
+   ],
+   "deliver": [
+    "The deputy takes the coffee, sips, and winces. “Black. Right. Thanks.”"
+   ],
+   "delivered": [
+    "The deputy is drinking his coffee."
+   ],
+   "takes": true
   }
  ],
  "npcs": [
@@ -452,6 +511,27 @@
    "say": [
     "A deputy from Sales Team 1, reading a fax. “Another intern? We used to get six a year.”"
    ]
+  },
+  {
+   "id": "oh-slippers",
+   "kind": "hero.ms_oh",
+   "x": 21.0,
+   "y": 9.35,
+   "say": [
+    "Section head Oh is reading, in his socks."
+   ],
+   "until": "21-21-m18",
+   "face": "W",
+   "when": "node:21-m17",
+   "gives": "slippers",
+   "gives_when": "node:21-m17",
+   "give": [
+    "“My slippers? …Fine. Bring them back.” He pushes them across the floor with his foot."
+   ],
+   "given": [
+    "“You have them. Go on, sell them.”"
+   ],
+   "label": "Section head Oh"
   }
  ],
  "exits": [
@@ -481,27 +561,11 @@
    14,
    20
   ],
-  "one-international--finance": [
-   14,
-   20
-  ],
-  "one-international--resources": [
+  "one-international--textile": [
    14,
    20
   ],
   "one-international--meeting": [
-   14,
-   20
-  ],
-  "one-international--audit": [
-   14,
-   20
-  ],
-  "one-international--board-room": [
-   14,
-   20
-  ],
-  "one-international--exec-floor": [
    14,
    20
   ],

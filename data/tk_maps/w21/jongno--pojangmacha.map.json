@@ -109,19 +109,12 @@
  ],
  "spots": [
   {
-   "id": "m19b",
-   "x": 6.5,
-   "y": 8.7,
-   "node": "21-m19b",
-   "label": "The pojangmacha"
-  },
-  {
    "id": "pojangmacha",
    "x": 12.5,
    "y": 8.7,
    "node": "",
    "label": "The pojangmacha",
-   "note": "m19's handoff to Ahn lands here"
+   "note": "handoffs into the tent land here"
   }
  ],
  "npcs": [

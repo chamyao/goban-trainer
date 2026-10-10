@@ -105,10 +105,10 @@
  ],
  "spots": [
   {
-   "id": "m20",
+   "id": "m14",
    "x": 12.5,
    "y": 10.7,
-   "node": "21-m20",
+   "node": "21-m14",
    "label": "Sun Ji-young's flat"
   }
  ],
@@ -133,6 +133,12 @@
    13
   ]
  },
+ "states": [
+  {
+   "id": "night",
+   "light": "night"
+  }
+ ],
  "parent": "suns-neighbourhood",
  "building": "sun-flat",
  "links": [
