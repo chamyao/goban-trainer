@@ -1182,6 +1182,18 @@ function worldScenes() {
           const items = need.filter(c => c.startsWith("item:")).map(c => c.slice(5)), marks = need.filter(c => c.startsWith("mark:")).map(c => c.slice(5));
           // a delivery place that can take it now first (Hulao: Zhang Fei's post before Liu Bei's flank, which says "Not yet")
           const posts = Object.values(this.spots).filter(s => s.needs && marks.includes(s.delivers)), ready = posts.filter(s => this.cond(s.when) && this.cond(s.needs));
+          // nothing to deliver yet: whoever gives what the deliveries need (Misaeng m4: the copier before Kim's desk)
+          if (!ready.length) for (const s of posts) for (const c of s.needs) if (/^item:/.test(c) && !this.cond(c) && !items.includes(c.slice(5))) items.push(c.slice(5));
+          // the audit board's mark (Misaeng): the clues not yet found, then the board itself once two can be linked
+          const A = this.w.audit;
+          if (A && marks.includes(A.done)) {
+            for (const c of A.clues) if (!WorldItems.has(this.w, c) && !items.includes(c)) items.push(c);
+            const L = typeof WorldModern !== "undefined" && A.links[WorldModern.auditLinked(this.w).indexOf(false)];
+            if (L && L.pair.every(c => WorldItems.has(this.w, c))) {   // the question on the board now can be answered
+              const t = Object.values(this.spots).find(s => s.opens === "audit");
+              if (t) { this.goalHops = 0; return { x: t.x, y: t.y - 4 }; }
+            }
+          }
           const ts = [...this.npcs.filter(n => n.gives && items.includes(n.gives) && n.spr.visible).map(n => ({ x: n.spr.x, y: n.spr.y - 8 })),
                       ...Object.values(this.spots).filter(s => s.gives && items.includes(s.gives) && this.cond(s.givesWhen)).map(s => ({ x: s.x, y: s.y - 4 })),   // a thing that gives it (the bins)
                       ...(ready.length ? ready : posts).map(s => ({ x: s.x, y: s.y - 4 }))];
