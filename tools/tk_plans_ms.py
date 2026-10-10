@@ -271,10 +271,12 @@ def _give(sid, at, label, item, when, give, given):
     return {"id": sid, "at": at, "label": label, "gives": item, "gives_when": when, "give": [give], "given": [given]}
 
 
-def _deliver(sid, at, label, item, mark, when, deliver, waiting, delivered=None):
-    """A place to set something down (a desk, a seat): it takes the item from the bag and sets its mark."""
+def _deliver(sid, at, label, item, mark, when, deliver, waiting, delivered=None, set_down=False):
+    """A handoff: it takes the item from the bag and sets its mark. It's made to whoever stands within 64 px of it (the
+    engine's rule), so the book stands its recipient beside it while it's open (the build fails a delivery with no one
+    there: apo110 handed things "to circles not people"), unless it's set down at a place ("set_down": a seat)."""
     return {"id": sid, "at": at, "label": label, "needs": [f"item:{item}"], "when": when, "delivers": mark, "takes": True,
-            "deliver": [deliver], "waiting": [waiting], "delivered": [delivered or deliver]}
+            "deliver": [deliver], "waiting": [waiting], "delivered": [delivered or deliver], **({"set_down": True} if set_down else {})}
 
 
 # =========================================================================================
@@ -977,7 +979,7 @@ SETTINGS = [   # setting the board room: the place, the drink, the spot by its c
 
 
 def seat_spots(when="item:seating_notes"):
-    return ({"One International/board-room": [_deliver(mark, at, label, item, mark, when, line, wait)
+    return ({"One International/board-room": [_deliver(mark, at, label, item, mark, when, line, wait, set_down=True)
                                               for mark, item, at, _, _, label, line, wait in SETTINGS]},
             {"One International/board-room": [{"kind": kind, "over": on, "when": f"mark:{mark}", "lift": 6}
                                               for mark, _, _, on, kind, *_ in SETTINGS]})
@@ -1086,6 +1088,13 @@ def _b1():
         "npcs": {
             # m18's gate: section head Oh lends his office slippers, at his desk (Oh's walker is Graphics' ms_oh)
             "One International": [
+                # m4's errands are handed to people: each senior stands by his own desk, beside his delivery, until m4
+                {"id": "kim-errand", "kind": "hero.ms_kimds", "place": "sales3", "at": [10, 6], "face": "W", "label": "Kim Dong-sik",
+                 "when": n(3), "until": n(4), "say": "Kim Dong-sik doesn't look up from his screen."},
+                {"id": "oh-errand", "kind": "hero.ms_oh", "place": "sales3", "at": [12, 4], "face": "W", "label": "Section head Oh",
+                 "when": n(3), "until": n(4), "say": "Section head Oh is on the phone, and holds up one finger."},
+                {"id": "deputy-errand", "kind": "folk.salaryman", "place": "sales3", "at": [6, 4], "face": "E", "label": "The deputy",
+                 "when": n(3), "until": n(4), "say": "The deputy turns his empty cup round and round."},
                 {"id": "oh-slippers", "kind": "hero.ms_oh", "place": "sales3", "at": [11, 5], "behind": "oh-desk", "face": "W",
                  "label": "Section head Oh", "when": n(17), "until": n(18), "gives": "slippers", "gives_when": n(17),
                  "say": "Section head Oh is reading, in his socks.",

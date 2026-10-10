@@ -4,7 +4,8 @@
 //      Doors into other places ("to"): the tower's door into the lobby; the lift's menu up to Sales Team 3 and on to the
 //      textile floor, whose door (the stairs) comes back down; out onto Jongno, down the subway stairs, up in Susaek-dong.
 //   3. m4's three errands: the copier, the filing cabinets and the pantry give the copies, Oh's file and the coffee;
-//      each senior's desk takes its own (and only its own) and sets its mark; with all three, m4's gate is met.
+//      each is handed to the senior who asked for it, standing by his desk (only his own), which sets its mark; with all
+//      three, m4's gate is met.
 //   4. m8: the lobby's recycling bins give the waybill scrap (a spot with "gives").
 //   5. m18: section head Oh, at his desk in Sales 3 in his socks, lends his slippers (m18's gate).
 //   6. m20: west along Jongno to Daehanmun, and through its gate (the wall either side holds).
@@ -118,16 +119,22 @@ async function errands(b) {
   const p = await open(b, '21-m4', 'one-international--sales3');
   const at = async (id) => { await p.evaluate(id => { const w = window.__w, s = w.spots[id]; w.player.body.reset(s.x, s.y + 10); w.act({ kind: 'spot', k: id }); }, id); await advance(p); };
   const st = () => p.evaluate(() => ({ items: WorldItems.owned(window.__w.w), marks: WorldMarks.all(window.__w.w) }));
+  // each errand is handed to a person (apo110: "I was handing off things to circles not people"): talk to whoever
+  // asked for it, standing by his own desk
+  const to = async (id) => { const ok = await p.evaluate(id => { const w = window.__w, n = w.npcs.find(n => n.id === id);
+    if (!n || !n.spr.visible) return false; w.player.body.reset(n.spr.x, n.spr.y + 14); w.act({ kind: 'npc', n }); return true; }, id); await advance(p); return ok; };
+  check(await p.evaluate(() => ['kim-errand', 'oh-errand', 'deputy-errand'].every(id => { const n = window.__w.npcs.find(n => n.id === id); return n && n.spr.visible; })),
+        'm4: Kim, Oh and the deputy stand by their desks while the errands are open');
   await at('copier'); await at('filing');
   let s = await st();
   check(s.items.includes('copy') && s.items.includes('file'), 'm4: the copier gives the copies, the filing cabinets Oh\'s file');
-  await at('errand-coffee');   // the deputy's desk, with no coffee yet: it waits, and takes nothing
+  await to('deputy-errand');   // the deputy, with no coffee yet: he waits, and takes nothing
   s = await st();
-  check(!s.marks.includes('errand_coffee') && s.items.includes('copy') && s.items.includes('file'), 'm4: the deputy\'s desk waits for its coffee and takes nothing else');
-  await at('pantry'); await at('errand-copy'); await at('errand-file'); await at('errand-coffee');
+  check(!s.marks.includes('errand_coffee') && s.items.includes('copy') && s.items.includes('file'), 'm4: the deputy waits for his coffee and takes nothing else');
+  await at('pantry'); await to('kim-errand'); await to('oh-errand'); await to('deputy-errand');
   s = await st();
   check(['errand_copy', 'errand_file', 'errand_coffee'].every(m => s.marks.includes(m)) && !['copy', 'file', 'coffee'].some(i => s.items.includes(i)),
-        `m4: each senior's desk takes its own errand and sets its mark (${s.marks.join(', ')})`);
+        `m4: each senior takes his own errand from you, by hand, and its mark is set (${s.marks.join(', ')})`);
   check(await p.evaluate(() => ['errand_copy', 'errand_file', 'errand_coffee'].every(m => window.__w.cond('mark:' + m))), 'm4: its gate (the three errands) is met');
   await p.context().close();
 }
