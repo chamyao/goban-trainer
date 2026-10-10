@@ -97,8 +97,8 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 **Zhao Yun:** The Directing General said: three plans, in order. We're here. Time to open the first.  
 军师吩咐三条妙计，依次而行。现在已经到了，该先打开第一个锦囊。
 
-*The first plan: go to Qiao Guolao. Dress the men in red, buy for a wedding, and let the whole city know.*  
-第一条妙计：先拜见乔国老；军士披红挂彩，采办婚礼用品，让全城都知道。
+*The first plan: go to Qiao Guolao. Dress the men in red, buy for a wedding, and let the whole city know. Zhou Yu wants a prisoner nobody hears of. Give him a wedding everybody hears of.*  
+第一条妙计：先拜见乔国老；军士披红挂彩，采办婚礼用品，让全城都知道。周瑜想要一个没人知道的囚犯，那就给他一场人人都知道的婚事。
 
 *Zhao Yun calls the five hundred together and gives each man his orders.*  
 赵云把五百随行军士叫来，一一吩咐。
@@ -301,25 +301,22 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 *Liu Bei lifts his robe, leaps onto a horse, gallops down and back up. The two rein in side by side on the slope and laugh. It is still called Rein-In Slope.*  
 刘备撩起衣襟，一跃上马，飞驰下山，又跑了上来。两人并马站在山坡上，扬鞭大笑。这地方到今天还叫“驻马坡”。
 
-*(the player is now: Lady Sun)*
+*(the player is now: Zhao Yun and Liu Bei and Sun Qian)*
 
 
 ## S7 · Blades in the Bridal Room (洞房刀枪)
-*Nanxu* · room `bridal-room` · boards: **Lady Sun**: “Have the blades taken away.”
+*Nanxu* · room `bridal-room` · no board
 
 *Liu Bei tells Qiao Guolao that many in Wu want him dead. Lady Wu is furious. My son-in-law: who dares harm him? She moves him into her own household, Zhao Yun and the men with him. Within days there is a great feast, and Lady Sun and Liu Bei are married.*  
 刘备对乔国老说，江东有很多人想害他。国太大怒：“我的女婿，谁敢害他！”当即叫他搬进府里住，赵云和军士也一起搬进来。没过几天，大摆筵席，孙夫人和刘备成亲。
-
-*You are Lady Sun, the Marquis's sister. You keep hundreds of maids, and every one of them wears a blade; your rooms are hung with weapons. Tonight you are married.*  
-你是孙夫人，吴侯的妹妹。你身边有几百个侍女，个个带刀；你的房里挂满了兵器。今晚是你成亲的日子。
 
 *When the guests have gone, two rows of red candles lead Liu Bei to the bridal room.*  
 客人散去以后，两行红烛把刘备引到洞房门口。
 
 [still: `ls_blades`]
 
-*He stops in the doorway: spears and blades everywhere in the lamplight, and the maids on either side with swords at their hips. His soul nearly leaves his body.*  
-他在门口站住了：灯光下满屋刀枪，侍女们个个佩剑挂刀，站在两边。他吓得魂不附体。
+*Spears and blades everywhere in the lamplight, and the maids on either side with swords at their hips. Liu Bei's soul nearly leaves his body.*  
+灯光下满屋刀枪，侍女们个个佩剑挂刀，站在两边。刘备吓得魂不附体。
 
 **the matron:** Don't be afraid, sir. My lady has loved martial things since she was small. She has her maids fence for fun. That's all this is.  
 贵人不要害怕。夫人从小喜欢看武艺，平时常叫侍女们击剑取乐，所以才这样。
@@ -327,31 +324,49 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 **Liu Bei:** That's no sight for a bride. It chills me. Have them take it away, for now.  
 这不是夫人该看的东西，我心里发冷，叫她们暂时撤了吧。
 
-*The matron comes to tell you.*  
-管家婆来禀告夫人。
-
-**▶ GO PROBLEM**
+*The matron tells Lady Sun. Lady Sun laughs.*  
+管家婆去禀告孙夫人。孙夫人笑了。
 
 **Lady Sun:** Half a lifetime at war, and he's afraid of weapons?  
 打了半辈子仗，还怕兵器吗？
 
-*She laughs, has every weapon taken out, and the maids unbuckle their swords. That night they are married, and both are glad of it. Liu Bei gives the maids gold and silk, to win them over, and sends Sun Qian home to Jingzhou with the good news.*  
-她笑着叫人把兵器全部撤走，侍女们也解下剑来伺候。当晚两人成亲，十分和美。刘备又拿金银绸缎赏给侍女们，收买她们的心，先让孙乾回荆州报喜。
+*She has every weapon taken out, and the maids unbuckle their swords. That night they are married, and both are glad of it. Liu Bei sends Sun Qian home to Jingzhou with the good news. The trap has become a marriage.*  
+她叫人把兵器全部撤走，侍女们也解下剑来伺候。当晚两人成亲，十分和美。刘备先让孙乾回荆州报喜。圈套，变成了一门真亲事。
 
-*(the player is now: Lady Sun)*
+*(the player is now: Zhao Yun)*
 
 
-## S8 · Don't Lie to Me (你别瞒我)
+## S8 · The Gilded Cage (软困)
+*Nanxu* · room `sq-hall` · no board
+
+*Sun Quan has written to Zhou Yu: Mother has married my sister to Liu Bei in earnest. The fake has come true. What now? Zhou Yu's answer comes back sealed.*  
+孙权派人到柴桑告诉周瑜：母亲做主，已经把妹妹嫁给刘备了，没想到弄假成真，现在怎么办？周瑜回了一封密信。
+
+**Sun Quan:** He writes: then hold him softly in Wu. Build him palaces to sap his will. Send him beauties and treasures to fill his eyes and ears. Part him from Guan Yu and Zhang Fei, keep him far from Zhuge Liang, then strike. Let him go now, and the dragon finds its clouds and rain. He'll never stay in a pond.  
+他说：那就把他软困在吴中，给他大修宫室，消磨他的志气；多送美女和珍玩，让他耳目享乐。使他和关羽、张飞疏远，和诸葛亮隔开，然后再出兵，大事可定。现在要是放了他，就像蛟龙得了云雨，终究不是池中之物。
+
+**Zhang Zhao:** Gongjin's plan is just what I think. Liu Bei has never known wealth. Give him halls and gold and women, and he'll drift away from Zhuge Liang, Guan and Zhang. Then Jingzhou can be had.  
+公瑾的计策正合我意。刘备出身低微，四处奔走，从没享受过富贵。现在给他华堂大厦、美女金帛，他自然会疏远孔明、关羽、张飞。到那时，荆州就可以拿下了。
+
+*Sun Quan has the east palace done up, planted with flowers and trees, filled with fine things and dozens of women musicians, and invites Liu Bei and his sister to live there. Lady Wu thinks her son means well. And Liu Bei, dazzled, forgets Jingzhou altogether.*  
+孙权当天就整修东府，广栽花木，摆满器用，又添了几十个女乐和许多金玉锦缎，请刘备和妹妹搬进去住。国太只当孙权是好意，高兴得不得了。刘备果然被声色迷住，一点也不想回荆州了。
+
+
+## S9 · Year's End (岁末)
+*Nanxu* · no board
+
+*Zhao Yun and the five hundred are quartered outside the east palace. Day after day there's nothing to do but ride and shoot outside the walls. The year is nearly over.*  
+赵云和五百军士住在东府前面，整天无事，只到城外射箭跑马。眼看一年快过完了。
+
+**Zhao Yun:** The Directing General said: open the first on reaching Nanxu, the second at the year's end, the third when we're in danger with no way out. The year is ending, and my lord, lost in pleasure, won't even see me. Time for the second.  
+军师给我三个锦囊，吩咐我：一到南徐，开第一个；住到年底，开第二个；遇到危急、走投无路的时候，开第三个。现在年快过完了，主公贪恋女色，连面都不见，为什么不拆开第二个锦囊，照计行事？
+
+*The second plan: go to Liu Bei in alarm, with news that Cao Cao is marching on Jingzhou. Zhou Yu wants him to forget Jingzhou. Make him remember it.*  
+第二条妙计：装作大惊，去报主公，说曹操大军杀向荆州。周瑜想让他忘了荆州，那就让他想起来。
+
+
+## S10 · Don't Lie to Me (你别瞒我)
 *Nanxu* · room `east-palace` · boards: **Lady Sun**: “Find a way out of Wu.”
-
-*Winter in the east palace. On Zhou Yu's advice, Sun Quan has filled it with flowers, musicians, gold and silk, to soften Liu Bei and part him from his brothers and Zhuge Liang. Lady Wu thinks her son means well. And Liu Bei, dazzled, has forgotten Jingzhou.*  
-东府的冬天。孙权听了周瑜的计策，把东府布置得花木满园，又送来女乐和金玉锦缎，想消磨刘备的志气，让他和兄弟们、和诸葛亮疏远。国太只当儿子是好意。刘备果然被迷住，一点也不想回荆州了。
-
-*Outside, Zhao Yun has waited all winter, riding and shooting beyond the walls. As the year ends, he opens the second pouch.*  
-赵云在外面等了整整一个冬天，只在城外射箭跑马。到了年底，他拆开了第二个锦囊。
-
-*The second plan: go to Liu Bei in alarm, with news that Cao Cao is marching on Jingzhou.*  
-第二条妙计：装作大惊，去报主公，说曹操大军杀向荆州。
 
 *A maid announces: Zhao Zilong has urgent news.*  
 侍女通报：赵子龙有紧急的事来报。
@@ -374,8 +389,8 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 **Liu Bei:** Go for now. I'll see to it.  
 你先退下，我自有道理。
 
-*Liu Bei comes in to you, quietly weeping.*  
-刘备进来见你，暗暗流泪。
+*Liu Bei goes in to Lady Sun, quietly weeping.*  
+刘备进去见孙夫人，暗暗流泪。
 
 **Lady Sun:** Husband, why so sad?  
 夫君为什么烦恼？
@@ -424,7 +439,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 *(the player is now: Lady Sun and Liu Bei)*
 
 
-## S9 · New Year's Day (正旦)
+## S11 · New Year's Day (正旦)
 *Nanxu* · room `wu-hall` · boards: **Lady Sun**: “Ask your mother for leave.”
 
 *New Year's Day. The Marquis holds a great gathering of his officers in the hall. Lady Sun and Liu Bei go in to pay their respects to Lady Wu.*  
@@ -446,7 +461,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 *(the player is now: Lady Sun and Liu Bei and Zhao Yun)*
 
 
-## S10 · The Jade Inkstone (玉砚)
+## S12 · The Jade Inkstone (玉砚)
 *Nanxu* · room `sq-hall` · no board
 
 *That day Sun Quan was dead drunk and carried to bed. When his officers learned of the flight it was already dark, and they couldn't wake him. He wakes at the fifth watch.*  
@@ -474,7 +489,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 蒋钦、周泰领命，带三千兵马随后追来。
 
 
-## S11 · The Road Block (山脚拦路)
+## S13 · The Road Block (山脚拦路)
 *The road to Chaisang* · no board
 
 *They ride day and night, rest two watches, and hurry on. Near the border of Chaisang, dust rises behind them. The pursuers!*  
@@ -498,8 +513,8 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 **Zhao Yun:** Don't panic, my lord. Two of the Directing General's pouches are opened, and both came true. The third is for when we're in danger. Now's the time.  
 主公别慌。军师的妙计都在锦囊里，已经拆了两个，都应验了。还有第三个，吩咐遇到危难时才能拆看。今天情况危急，该拆开了。
 
-*The third plan: tell Lady Sun everything, and ask her to save them.*  
-第三条妙计：把实情全部告诉孙夫人，求她解围。
+*The third plan: tell Lady Sun everything, and ask her to save them. Zhou Yu's soldiers hold the road. Only the Marquis's sister can open it.*  
+第三条妙计：把实情全部告诉孙夫人，求她解围。周瑜的兵把住了大路，只有吴侯的妹妹才能让他们让开。
 
 *Liu Bei reads it, and goes straight to Lady Sun's carriage, weeping.*  
 刘备看了，急忙来到车前，哭着对孙夫人说：
@@ -517,7 +532,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 我哥哥既然不把我当亲骨肉，我还有什么脸再见他！今天的危难，我自己来解决。
 
 
-## S12 · Are You in Revolt? (你们想造反吗)
+## S14 · Are You in Revolt? (你们想造反吗)
 *The road to Chaisang* · boards: **Lady Sun**: “Clear the road.” · **BOSS**
 
 **▶ GO PROBLEM**
@@ -563,7 +578,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 *(the player is now: Lady Sun and Zhao Yun)*
 
 
-## S13 · The Rearguard (断后)
+## S15 · The Rearguard (断后)
 *The road to Chaisang* · no board
 
 *Chen Wu and Pan Zhang have joined Xu Sheng and Ding Feng. When the four generals see Lady Sun, they have to dismount, and stand with their hands clasped.*  
@@ -590,7 +605,7 @@ Narration in italics. **▶ GO PROBLEM** marks where a board is posed. Stills in
 *(the player is now: Lady Sun and Zhao Yun)*
 
 
-## S14 · Liulangpu (刘郎浦)
+## S16 · Liulangpu (刘郎浦)
 *Liulangpu* · no board
 
 *At Liulangpu, far from Chaisang now, Liu Bei breathes easier. He looks along the bank for a ferry: wide water, and not one boat.*  

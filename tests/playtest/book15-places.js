@@ -3,7 +3,7 @@
 //      hanging out red) to Lady Wu's gatekeeper within 25 s; then s4 plays in her hall.
 //   2. the axemen (Sweet Dew Temple, before s5): each of the three axemen's side rooms delivers its mark when the man by
 //      the door is talked to; a monk's room delivers nothing; with all three, s5's gate is open.
-//   3. the face-downs (the road to Chaisang, s11 -> s12 and s12 -> s13): standing still before the first rank, facing it,
+//   3. the face-downs (the road to Chaisang, s13 -> s14 and s14 -> s15): standing still before the first rank, facing it,
 //      its men step aside; running at the next rank is a catch, back to where that block began.
 // Run with the site served on :8765 (tests/playtest/run.sh book15-places). The layouts are proved in
 // tools/proofs/ladysun_ls.py; this checks the engine plays them that way.
@@ -98,8 +98,8 @@ async function faceDown(b, upto, first, second, backTo) {
   const b = await chromium.launch({ args: ['--use-gl=swiftshader', '--enable-webgl'] });
   await loudTown(b);
   await axemen(b);
-  await faceDown(b, '15-s12', 'xusheng', 'dingfeng', 'block1-start');
-  await faceDown(b, '15-s13', 'chenwu', 'panzhang', 'block2-start');
+  await faceDown(b, '15-s14', 'xusheng', 'dingfeng', 'block1-start');
+  await faceDown(b, '15-s15', 'chenwu', 'panzhang', 'block2-start');
   await b.close();
   console.log(fails ? `FAIL ${fails}` : 'all ok');
   process.exit(fails ? 1 : 0);
