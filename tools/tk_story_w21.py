@@ -77,10 +77,13 @@ def _scenes():
             ]],
             ["spawn", "tr", "ms_trainee", "m2", 6, -2],
             N("At home his parents cut Lee Chang-ho and Lee Sedol out of the papers: rankings, prize money."),
+            N("A baduk game is scored in points, and a draw is impossible: the smallest margin is half a point. "
+              "For seven years he has lost that way, over and over. This is his last chance to turn pro."),
             ["problem"],   # Jang: another half-point game; lost
             ["remove", "tr"],
             N("He failed to turn pro."),
             N("Only now does he see his father's wrinkles, and how dull his mother's eyes have gone."),
+            N("Not long after, his father died, and his mother took to her bed."),
             N("The day he leaves is an ordinary day. Tomorrow, it feels, he'll be back here, losing to younger kids. He hasn't changed. "
               "Everyone else has, and the colour has gone out of the world."),
             N("Not talent. Not luck, or the half-point losses. Not the part-time jobs, or his father's death, or his mother in bed. "
@@ -447,8 +450,8 @@ def _nodes():
             "Look again.", problem="specialized-training-in-tesuji-1/81759")),
         node("m2", 34, 233, "m2", place="Korea Baduk Association", room="kba-trainees", move=0, dilemma=D(
             "ms_jang_young", "Win by half a point.",
-            "Seven years. Again, half a point. Win this one.",
-            "Half a point short. Again.",
+            "Seven years of losing by half a point. Not this time.",
+            "Half a point short. It's over.",
             "Read it again.", pool="endgame")),
         node("m4", 48, 226, "m4", place="Susaek-dong", room="home", move=2, board=False),
         node("m5", 62, 219, "m5", place="Jongno", room="sponsor-office", move=2, board=False),
@@ -647,8 +650,6 @@ KO21 = {
     'Next: a man with a resignation letter in his jacket, a child at a daycare door, and the test.': '다음: 재킷 안에 사직서를 넣고 다니는 남자, 어린이집 문 앞의 아이, 그리고 시험.',
     'Two liberties. If I put one here...': '활로가 둘. 여기에 하나 놓으면...',
     'Look again.': '다시 봐.',
-    'Seven years. Again, half a point. Win this one.': '7년. 또 반집. 이번 판은 이기자.',
-    'Half a point short. Again.': '반집 모자라. 또.',
     'Read it again.': '다시 읽어.',
     "I can't talk trade. I can talk this.": '무역 얘기는 못 해. 이건 할 수 있어.',
     'Snapback.': '환격.',
@@ -937,4 +938,8 @@ KO21 = {
     "Go had taken a buyer, and Steve, to a dog-meat restaurant, and never said sorry. Steve sat on Sales Team 1's approvals.": '고 과장은 바이어와 스티브를 보신탕집에 데려갔고, 끝내 사과하지 않았다. 스티브는 영업 1팀의 결재를 묶어 두었다.',
     'They go to find Kim Bu-ryeon. He is already on the textile floor, with Go, saying sorry to Steve. Go asks if the approvals will go faster now. Everyone laughs.': '김부련 부장을 찾으러 간다. 그는 이미 섬유팀 층에서 고 과장과 함께 스티브에게 사과하고 있다. 고 과장이 이제 결재가 빨리 나느냐고 묻는다. 모두가 웃는다.',
     'Your desk in Sales Team 3, fourteenth floor. Take the lift.': '14층 영업 3팀의 네 자리. 엘리베이터를 타라.',
+    'A baduk game is scored in points, and a draw is impossible: the smallest margin is half a point. For seven years he has lost that way, over and over. This is his last chance to turn pro.': '바둑은 집으로 승부를 가리고, 비기는 일은 없다. 가장 작은 차이가 반집이다. 칠 년 동안 그는 그렇게, 번번이 졌다. 입단할 마지막 기회다.',
+    'Not long after, his father died, and his mother took to her bed.': '얼마 뒤 아버지가 돌아가셨고, 어머니는 자리에 누우셨다.',
+    'Seven years of losing by half a point. Not this time.': '칠 년 동안 반집으로 졌다. 이번엔 아니다.',
+    "Half a point short. It's over.": '반집이 모자란다. 끝났다.',
 }
