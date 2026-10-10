@@ -193,6 +193,7 @@ const TK_CHARS = {
   ms_trainee2: { name: "Trainee", skin: "#f8dcc4", hair: "#1a1418", hat: "fringe", robe: "#c8d0d8", trim: "#b8c0c8", legs: "#2e3a4a", beard: "none", eyes: "normal", glasses: "#2a2228" },
   ms_trainee3: { name: "Trainee", skin: "#f8dcc4", hair: "#2a2024", hat: "ponytail", pin: "#c8392c", robe: "#e88a6a", trim: "#e88a6a", legs: "#3a4a6a", beard: "none", eyes: "kind" },
   ms_daycare: { name: "Daycare teacher", skin: "#f8dcc4", hair: "#3a2a26", hat: "ponytail", robe: "#8ab88a", trim: "#f4f0e8", legs: "#4a4a5a", beard: "none", eyes: "kind" },
+  ms_examiner: { name: "Examiner", skin: "#e8c4a0", hair: "#5a5256", hat: "parted", robe: "#2a2e38", trim: "#2a2e38", shirt: "#f4f4f4", tie: "#3a3a4a", legs: "#24272f", beard: "none", eyes: "narrow", glasses: "#2a2228" },   // the PT panelist (m6, m7) and the KBA proctor (m1)
   ms_clerk: { name: "Baekjin clerk", skin: "#ecc29a", hair: "#2a2024", hat: "short", robe: "#5a6a7a", trim: "#2a2228", tie: "#3a3a4a", legs: "#3a3e48", beard: "none", eyes: "narrow" },
   ms_worker: { name: "Office worker", skin: "#f0cfac", hair: "#2a2024", hat: "parted", robe: "#3a3e4a", trim: "#3a3e4a", shirt: "#eef0f2", tie: "#6a4a3a", legs: "#30333c", beard: "none", eyes: "normal" },
   ms_worker2: { name: "Office worker", skin: "#f8dcc4", hair: "#3a2a26", hat: "long", robe: "#d8d0c4", trim: "#d8d0c4", shirt: "#f8f6f2", legs: "#4a4a5a", skirt: true, beard: "none", eyes: "kind" },
