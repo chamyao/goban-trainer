@@ -384,6 +384,13 @@ Draft one arc, get it playable in a test book, and fix what the playtest shows b
   novel's own order, and the later book's **opening scroll** still stands alone for a player who starts there. Example:
   the Cao Cao arc closes on chapters 5–7 in four lines; the Diaochan arc opens on Chang'an under Dong Zhuo.
 
+### R18. Pace: about one beat per episode (Misaeng)
+
+> "I think roughly one beat per epsisode is fitting"
+
+For a serialized source, aim for about one beat per episode. Merge an episode's scenes into its one beat, and give a
+second beat only to an episode readers rank as a peak. Use cards and short narration for the rest.
+
 ### R17. Make it entertaining
 
 > "the plot for this one wasnt that entertaining was that because of the arc in the novel" (Lady Sun's book, first cut)
@@ -409,8 +416,17 @@ Places that the user had "changed priorities". That was Plot's inference, and Pl
 
 0. **Meet the user first.** Say what you understand the job to be, ask how they want it to go, and wait. Bring open
    questions with a recommendation for each, so the user can just confirm.
-1. **Read the chapters in full in Chinese** (Wikisource), with Brewitt-Taylor beside them for meaning. Keep the raw text
-   in the scratchpad.
+1. **Build the understanding from readers first, the source last** (the user, Misaeng: "you should look at Korean forum
+   discussions to build your understanding of the plot rather than the source material, source material should be the
+   last step in building reference, as I feel that is more effective in tracking climax impact etc rather than getting
+   bogged by the raw material from the start"). In order:
+   - **Readers' discussion** in the source's own language (for a webtoon: 나무위키, best comments, DC Inside, Naver
+     blogs and cafés, theqoo, review essays). Find the volume's shape, the moments readers felt as peaks, the famous
+     lines, and the characters they care about. Rate each episode's impact (high / medium / low) with evidence.
+   - **Design the beats from that**: the peaks become the playable moments; low-impact stretches become a line or a card.
+   - **Then the source itself**, last, to check every event, speaker and line of the chosen beats (for the novel: the
+     Chinese on Wikisource with Brewitt-Taylor; for a webtoon: the comic, with the original-language edition trusted
+     over a translation). Keep raw text in the scratchpad.
 2. **Survey the tasks.** List every task in the chapters: actor, goal, obstacle, outcome, whether the text **shows** it or
    **summarises** it, a quote, and how well it fits play. Subagents can split this by chapter. The survey decides the rest.
 3. **Choose the thread figure, leads and handoffs** from the survey. Name the figure who ties the cast together (C4),
