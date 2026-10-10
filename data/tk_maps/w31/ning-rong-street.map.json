@@ -933,6 +933,10 @@
    "until": "31-g3",
    "when": "node:g2",
    "view": 4,
+   "speaker": [
+    "Hawker",
+    "货郎"
+   ],
    "challenge": "toy-hawker"
   },
   {

@@ -593,6 +593,9 @@ STREET["challengers"] = [
     _ch("back-child", "folk.child", [17, 0], "node:g2", "node:g3",   # past the gate, out of the way to it (Testing)
         "Granny! Granny! Play me! I always win!", "You cheated! No you didn't. Again tomorrow!", "Which Zhou Da-niang do you want?"),
 ]
+for _c in STREET["challengers"]:   # the townsfolk sprites have no hawker: he says who he is (Testing: he read as 脚夫 Porter)
+    if _c["id"] == "toy-hawker":
+        _c["speaker"] = ["Hawker", "货郎"]
 
 RONG["npcs"] += cues({"d2", "d3", "d5", "d6", "d7", "g4", "g5", "g6"})
 XING["npcs"] += cues({"d4"})

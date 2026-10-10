@@ -473,6 +473,7 @@ def compile_map(m, kit, out_dir):
                                                             (SEEN.get(n["watch"]["seen"], []) if isinstance(n["watch"].get("seen"), str) else n["watch"].get("seen") or [])]},
                                     ensure_ascii=False)} if n.get("watch") else {}),
             **({"rider": json.dumps(n["rider"])} if n.get("rider") else {}),   # a chase rider (tk-world chaseStep)
+            **({"speaker": json.dumps(n["speaker"], ensure_ascii=False)} if n.get("speaker") else {}),   # [English, Chinese], over the sprite's name
             # the loud town (tk-feats.js): news to pass on to the neighbours named; and a blocker who gives way when faced
             **({"gossip": json.dumps(n["gossip"])} if n.get("gossip") else {}),
             **({"yield": json.dumps({**n["yield"], **{k: [place_step(l, n["kind"])[0] for l in n["yield"].get(k, [])] for k in ("line", "caught")}},
