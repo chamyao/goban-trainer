@@ -80,9 +80,9 @@ const WorldModern = {
         const [c, r] = cIdx(p);
         if (trainer.grid[r][c]) return;
         const el = document.createElementNS(NS, "g"); el.setAttribute("class", "tk-choice"); el.setAttribute("pointer-events", "none");
-        const ci = document.createElementNS(NS, "circle"); ci.setAttribute("cx", g.px(c)); ci.setAttribute("cy", g.py(r)); ci.setAttribute("r", g.cell * .42);
+        const ci = document.createElementNS(NS, "circle"); ci.setAttribute("cx", g.px(c)); ci.setAttribute("cy", g.py(r)); ci.setAttribute("r", g.cell * .5);
         const t = document.createElementNS(NS, "text"); t.setAttribute("x", g.px(c)); t.setAttribute("y", g.py(r)); t.textContent = "ABCD"[i];
-        t.setAttribute("text-anchor", "middle"); t.setAttribute("dominant-baseline", "central"); t.setAttribute("font-size", g.cell * .55);
+        t.setAttribute("text-anchor", "middle"); t.setAttribute("dominant-baseline", "central"); t.setAttribute("font-size", g.cell * .72);
         el.append(ci, t); svg.append(el);
       });
     };

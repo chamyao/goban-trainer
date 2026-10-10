@@ -1289,7 +1289,9 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
         if m.get("parent"):
             places.append({"id": mid_, "name": m["name"], "zh": zh.get(m["name"], ""), "archetype": m["archetype"],
                            "map": f"{mid_}.map.json", "links": m["links"], "parent": m["parent"],
-                           **({"gives": g} if (g := [x["gives"] for x in m["npcs"] if x.get("gives")]) else {})})
+                           **({"gives": g} if (g := [x["gives"] for x in m["npcs"] + m["spots"] if x.get("gives")]) else {}),
+                           # the marks delivered in this room (Misaeng m11: the requisition at General Affairs), so the goal can lead there
+                           **({"delivers": dv} if (dv := [x["delivers"] for x in m["spots"] if x.get("needs") and x.get("delivers")]) else {})})
         else:
             # the roads that really leave this map (its exits), so the lit route and the travel map follow them;
             # a story edge with no road (Chang'an to Meiwu, with the Meiwu Road between) is only a fallback
