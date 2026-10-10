@@ -176,6 +176,15 @@
    "h": 1,
    "id": "plant",
    "blocks_sight": true
+  },
+  {
+   "kind": "furn.lift_door",
+   "x": 8,
+   "y": 14,
+   "w": 2,
+   "h": 1,
+   "id": "lift-doors",
+   "label": "The lift"
   }
  ],
  "spots": [
@@ -185,6 +194,60 @@
    "y": 8.7,
    "node": "21-m8",
    "label": "Kim Seon-ju's desk"
+  },
+  {
+   "id": "lift",
+   "x": 10.5,
+   "y": 14.7,
+   "node": "",
+   "label": "The lift",
+   "floors": [
+    {
+     "label": "1F · The lobby",
+     "to": "one-international"
+    },
+    {
+     "label": "3F · The PT room",
+     "to": "one-international--pt-room"
+    },
+    {
+     "label": "5F · HR",
+     "to": "one-international--hr"
+    },
+    {
+     "label": "6F · Finance",
+     "to": "one-international--finance"
+    },
+    {
+     "label": "9F · The resources team",
+     "to": "one-international--resources"
+    },
+    {
+     "label": "14F · Sales Team 3",
+     "to": "one-international--sales3"
+    },
+    {
+     "label": "15F · A meeting room",
+     "to": "one-international--meeting"
+    },
+    {
+     "label": "16F · The audit room",
+     "to": "one-international--audit"
+    },
+    {
+     "label": "20F · The board room",
+     "to": "one-international--board-room"
+    },
+    {
+     "label": "21F · The executive's office",
+     "to": "one-international--exec-floor"
+    },
+    {
+     "label": "R · The roof",
+     "to": "one-international--roof"
+    }
+   ],
+   "use": "lift"
   }
  ],
  "npcs": [
@@ -210,12 +273,48 @@
  ],
  "entries": {
   "one-international": [
-   14,
-   15
+   10,
+   14
   ],
   "": [
    14,
    15
+  ],
+  "one-international--pt-room": [
+   10,
+   14
+  ],
+  "one-international--hr": [
+   10,
+   14
+  ],
+  "one-international--resources": [
+   10,
+   14
+  ],
+  "one-international--sales3": [
+   10,
+   14
+  ],
+  "one-international--meeting": [
+   10,
+   14
+  ],
+  "one-international--audit": [
+   10,
+   14
+  ],
+  "one-international--board-room": [
+   10,
+   14
+  ],
+  "one-international--exec-floor": [
+   10,
+   14
+  ],
+  "one-international--roof": [
+   10,
+   14
   ]
  },
  "parent": "one-international",

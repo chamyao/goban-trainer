@@ -118,6 +118,15 @@
    "h": 1,
    "id": "plant",
    "blocks_sight": true
+  },
+  {
+   "kind": "furn.lift_door",
+   "x": 6,
+   "y": 12,
+   "w": 2,
+   "h": 1,
+   "id": "lift-doors",
+   "label": "The lift"
   }
  ],
  "spots": [
@@ -127,6 +136,60 @@
    "y": 10.7,
    "node": "21-m4b",
    "label": "A meeting room"
+  },
+  {
+   "id": "lift",
+   "x": 8.5,
+   "y": 12.7,
+   "node": "",
+   "label": "The lift",
+   "floors": [
+    {
+     "label": "1F · The lobby",
+     "to": "one-international"
+    },
+    {
+     "label": "3F · The PT room",
+     "to": "one-international--pt-room"
+    },
+    {
+     "label": "5F · HR",
+     "to": "one-international--hr"
+    },
+    {
+     "label": "6F · Finance",
+     "to": "one-international--finance"
+    },
+    {
+     "label": "9F · The resources team",
+     "to": "one-international--resources"
+    },
+    {
+     "label": "14F · Sales Team 3",
+     "to": "one-international--sales3"
+    },
+    {
+     "label": "15F · A meeting room",
+     "to": "one-international--meeting"
+    },
+    {
+     "label": "16F · The audit room",
+     "to": "one-international--audit"
+    },
+    {
+     "label": "20F · The board room",
+     "to": "one-international--board-room"
+    },
+    {
+     "label": "21F · The executive's office",
+     "to": "one-international--exec-floor"
+    },
+    {
+     "label": "R · The roof",
+     "to": "one-international--roof"
+    }
+   ],
+   "use": "lift"
   }
  ],
  "npcs": [],
@@ -142,12 +205,48 @@
  ],
  "entries": {
   "one-international": [
-   12,
-   13
+   8,
+   12
   ],
   "": [
    12,
    13
+  ],
+  "one-international--pt-room": [
+   8,
+   12
+  ],
+  "one-international--hr": [
+   8,
+   12
+  ],
+  "one-international--finance": [
+   8,
+   12
+  ],
+  "one-international--resources": [
+   8,
+   12
+  ],
+  "one-international--sales3": [
+   8,
+   12
+  ],
+  "one-international--audit": [
+   8,
+   12
+  ],
+  "one-international--board-room": [
+   8,
+   12
+  ],
+  "one-international--exec-floor": [
+   8,
+   12
+  ],
+  "one-international--roof": [
+   8,
+   12
   ]
  },
  "parent": "one-international",

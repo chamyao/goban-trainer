@@ -1,7 +1,8 @@
 // Misaeng (world 21): what Places built, walked in the engine.
 //   1. Jongno's carriageway is solid: walking south off the pavement stops at the kerb; at a crosswalk she crosses.
 //   2. Doors into other places ("to"): the tower's door goes into One International (the lobby); the subway stairs go
-//      down into the subway; a lift goes up to Sales Team 3, and its door comes back down to the lobby.
+//      down into the subway; the lift's menu goes up to Sales Team 3 and on to the board room, whose door (the stairs)
+//      comes back down to the lobby.
 //   3. Setting the board room (m17): with the drinks in the bag, each seat takes its drink (the item leaves the bag),
 //      sets its mark, and shows the drink on the table; the wrong seat says so and keeps it.
 //   4. The ₩100,000 mission (m18): the stall sells socks, a passer-by buys, the rival out-sells you, the old man and the
@@ -80,9 +81,19 @@ async function commute(b) {
   await p.context().close();
 }
 
+// the lift (tk-modern.js "use": "lift"): its spot opens the floor menu; pick a floor, and arrive by that floor's lift
+async function lift(p, label, to) {
+  await p.evaluate(() => { const w = window.__w, s = w.spots.lift; w.player.body.reset(s.x, s.y + 10); w.act({ kind: 'spot', k: 'lift' }); });
+  const b = p.locator('.tk-lift button', { hasText: label });
+  if (!await b.count()) return false;
+  await b.first().click();
+  if (!await settle(p, to)) return false;
+  return p.evaluate(() => { const w = window.__w, s = w.spots.lift; return !!s && Math.hypot(w.player.x - s.x, w.player.y - s.y) < 48; });   // she steps out by the lift
+}
+
 async function street(b) {
   // (every place on the way visited, so the doors are tested on their own; the commute checks what's open)
-  const p = await open(b, '21-m4', 'jongno', [], ['susaek-dong', 'the-subway', 'jongno', 'one-international']);
+  const p = await open(b, '21-m4', 'jongno', [], ['susaek-dong', 'the-subway', 'jongno', 'one-international', 'one-international--sales3', 'one-international--board-room']);
   const T = 16;
   // the carriageway: tile rows 32-39; the north pavement is rows 28-31; a crosswalk at tiles 20-23 (cross-w) and 72-75
   await p.evaluate(T => window.__w.player.body.reset(10.5 * T, 30 * T), T);
@@ -93,8 +104,9 @@ async function street(b) {
   check(crossed.y > 40 * T, `Jongno: at the crosswalk she crosses to the south pavement (y ${(crossed.y / T).toFixed(1)} tiles)`);
   // the tower's door: into One International's lobby; the lift to Sales Team 3, and back down
   check(await through(p, 'one-international'), 'the tower\'s door goes into One International (the lobby)');
-  check(await through(p, 'one-international--sales3'), 'a lift in the lobby goes up to Sales Team 3');
-  check(await through(p, 'one-international'), 'Sales Team 3\'s door comes back down to the lobby');
+  check(await lift(p, '14F · Sales Team 3', 'one-international--sales3'), 'the lobby\'s lift goes up to Sales Team 3 (its floor menu)');
+  check(await lift(p, '20F · The board room', 'one-international--board-room'), 'and from there up to the board room');
+  check(await through(p, 'one-international'), 'the board room\'s door (the stairs) comes back down to the lobby');
   check(await through(p, 'jongno'), 'the lobby\'s doors go out onto Jongno');
   check(await through(p, 'the-subway'), 'Jongno 3-ga Station\'s stairs go down into the subway');
   check(await through(p, 'susaek-dong'), 'the subway\'s far end comes up in Susaek-dong');
@@ -115,12 +127,11 @@ async function boardRoom(b) {
     s = await p.evaluate(([seat, item]) => ({ mark: WorldMarks.has(window.__w.w, seat), held: WorldItems.has(window.__w.w, item) }), [seat, item]);
     check(s.mark && !s.held, `board room: ${seat} takes the ${item} out of the bag and sets its mark`);
   }
-  // the drinks on the table, once set: they show after the room is entered again
-  await p.evaluate(() => window.__w.scene.restart({ place: 'one-international--board-room' })); await settle(p, 'one-international--board-room');
-  const shown = await p.evaluate(() => (window.__w.children.list || []).filter(o => o.texture && /^prop\.(glass_water|teacup|coffee_cup)$/.test(o.tkKind || '') && o.visible).length);
+  // the drinks on the table, once set (tk-world's whenProps: a prop shown once its "when" holds)
+  const shown = await p.evaluate(() => (window.__w.whenProps || []).filter(o => o.img && o.img.visible).length);
   const conds = await p.evaluate(() => window.__w.cond('mark:seat_president') && window.__w.cond('mark:seat_exec') && window.__w.cond('mark:seat_division'));
   check(conds, 'board room: m17\'s gate (all three seats) is met');
-  console.log(`info board room: ${shown} drink props drawn (the engine draws a prop's "when" once Integration adds it)`);
+  check(shown === 3, `board room: the three drinks show on the table once set down (${shown})`);
   await p.context().close();
 }
 
