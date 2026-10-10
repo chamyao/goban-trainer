@@ -724,6 +724,12 @@ _LS = _copy.deepcopy(_LS)
 _LS.update(n=15, name="Three Silk Pouches", zh="锦囊妙计", open=True, book=4, easy_grades=["14K", "14K+"])   # published (Testing's player walk 15/15, 2026-10-09)
 _LB["next"] = 15   # White Gate Tower goes on into it
 WORLDS.append(_LS)
+# ---- Misaeng (Season 1, the webtoon), world 21: a modern book, English only (tk_story_w21.py; Integration alt2) ----
+# hidden (test mode only) until its maps are built and the user publishes it
+from tk_story_w21 import WORLD21 as _MS, CAST21 as _MS_CAST  # noqa: E402
+_MS = _copy.deepcopy(_MS)
+_MS.update(cast=_MS_CAST, hidden=True, easy_grades=["14K", "14K+"])
+WORLDS.append(_MS)
 # Books 1-3 are taken down for now (the user, 2026-10-07): kept, and still open in test mode (?test=1)
 for _w in WORLDS:
     if _w["n"] in (1, 2, 3):

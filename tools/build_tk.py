@@ -391,12 +391,13 @@ def main():
                 assert n["scene"] in out["scenes"], n["scene"]
         if w.get("record"):   # the game the book is framed on (Misaeng): its moves, for the strip and the record boards
             out["record"] = read_record(w["record"])
-        out.pop("cast", None)   # the English cast is for the voices, not the game
         lang.__exit__()
         worlds.append(out)
     have = {p.stem for p in VOICE_DIR.glob("*.mp3")} if VOICE_DIR.exists() else set()
     have_en = {p.stem for p in (VOICE_DIR / "en").glob("*.mp3")} if (VOICE_DIR / "en").exists() else set()
     lines = all_lines(worlds)
+    for w in worlds:
+        w.pop("cast", None)   # an English-only world's cast is for the voices, not the game
     missing = [k for k in lines if k not in have]
     data = {"id": "tk", "title": "Romance of the Three Kingdoms", "native": "三国演义", "worlds": worlds,
             "voices": sorted(k for k in lines if k in have),

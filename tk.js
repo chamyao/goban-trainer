@@ -154,6 +154,56 @@ const TK_CHARS = {
   // Red Hare, led by Li Su: a horse, not a person (horse: the coat in assets/tk/horses/); the look fields are a fallback
   redhare: { name: "Red Hare", horse: "red", skin: "#b83a22", robe: "#b83a22", trim: "#2a2024", hair: "#2a2024", beard: "none" },
   caosong: { name: "Cao Song", skin: "#efd8c0", hair: "#d8d2c8", hat: "guan", hatC: "#1e1e24", robe: "#7b4a2a", trim: "#d4ad42", beard: "long", beardC: "#e0dcd4", eyes: "kind" },
+  // Misaeng (the modern book, docs/book2/misaeng-arc.md): present-day Seoul office wear. Modern fields: shirt (a jacket's
+  // shirt; without it, shirtsleeves and a belt in trim), tie, legs (trousers or skirt), skirt, glasses (frame colour);
+  // hair: short, fringe, parted, slick, messy, curly, perm, balding, buzz, bob, long, ponytail, cap; beard: stubble.
+  ms_jang: { name: "Jang Geu-rae", skin: "#f0cfac", hair: "#1e1a1e", hat: "fringe", robe: "#30364a", trim: "#30364a", shirt: "#eef0f2", tie: "#4a5a7a", legs: "#262a38", beard: "none", eyes: "normal" },
+  ms_jang_young: { name: "Jang Geu-rae", skin: "#f2d2b0", hair: "#1e1a1e", hat: "fringe", robe: "#8a8e96", trim: "#7a7e86", legs: "#3a4a6a", beard: "none", eyes: "normal" },   // m1, a trainee at eighteen: a grey hoodie and jeans
+  ms_mother: { name: "Jang Geu-rae's mother", skin: "#ecc8a4", hair: "#4a4448", hat: "perm", robe: "#8a6a7a", trim: "#e8dcc8", legs: "#4a4a5a", beard: "none", eyes: "kind" },
+  ms_oh: { name: "Oh Sang-sik", skin: "#e8c09a", hair: "#241e22", hat: "messy", robe: "#e4e6ea", trim: "#2a2228", tie: "#8a2a2a", legs: "#3a3e4a", beard: "stubble", eyes: "wild" },   // red-eyed, shirtsleeves, tie loosened
+  ms_kimds: { name: "Kim Dong-sik", skin: "#f0cfac", hair: "#2e2426", hat: "curly", robe: "#c8d8ea", trim: "#3a3236", tie: "#2e3a5a", legs: "#4a4e5a", beard: "none", eyes: "kind" },
+  ms_cheon: { name: "Cheon Gwan-ung", skin: "#e2b089", hair: "#2a2024", hat: "short", robe: "#5a5e66", trim: "#5a5e66", shirt: "#eef0f2", tie: "#6a5a3a", legs: "#44474e", beard: "none", eyes: "narrow", fat: true },
+  ms_park: { name: "Park Jong-sik", skin: "#efc59d", hair: "#1a1416", hat: "slick", robe: "#6a6a74", trim: "#6a6a74", shirt: "#f0d8dc", tie: "#8a2a5a", legs: "#55555e", beard: "none", eyes: "narrow" },
+  ms_ahn: { name: "Ahn Young-yi", skin: "#f8dcc4", hair: "#1a1418", hat: "bob", robe: "#3a3a46", trim: "#3a3a46", shirt: "#f4f4f6", legs: "#3a3a46", skirt: true, beard: "none", eyes: "phoenix" },
+  ms_baekgi: { name: "Jang Baek-gi", skin: "#f2d2b0", hair: "#1e1a1e", hat: "parted", robe: "#26304a", trim: "#26304a", shirt: "#f4f6f8", tie: "#3a6a9a", legs: "#202838", beard: "none", eyes: "narrow" },
+  ms_han: { name: "Han Seok-yul", skin: "#e8b88c", hair: "#2a2024", hat: "slick", robe: "#5a4a3a", trim: "#5a4a3a", shirt: "#eeeae2", tie: "#c8a03a", legs: "#4a3e32", beard: "none", eyes: "round" },
+  ms_kimsh: { name: "Kim Seok-ho", skin: "#f0cfac", hair: "#2a2024", hat: "short", robe: "#4a4e56", trim: "#4a4e56", shirt: "#eef0f2", tie: "#4a6a4a", legs: "#3e4148", beard: "none", eyes: "normal", glasses: "#2a2228" },
+  ms_sun: { name: "Sun Ji-young", skin: "#f2d2b0", hair: "#241a1e", hat: "bob", robe: "#8a7058", trim: "#8a7058", shirt: "#f2ead8", legs: "#7a624c", beard: "none", eyes: "narrow" },
+  ms_somi: { name: "Somi", skin: "#f8dcc4", hair: "#2a2024", hat: "sidebuns", pin: "#e86a8a", robe: "#f0c04a", trim: "#f8f4ec", legs: "#f0c04a", skirt: true, beard: "none", eyes: "kind" },
+  ms_sunhusband: { name: "Sun Ji-young's husband", skin: "#ecc29a", hair: "#2a2024", hat: "short", robe: "#6a7a5a", trim: "#e8e0d0", legs: "#4a4a5a", beard: "none", eyes: "normal" },
+  ms_kimsj: { name: "Kim Seon-ju", skin: "#efd0b0", hair: "#3a3438", hat: "bob", robe: "#2a2a34", trim: "#2a2a34", shirt: "#e8e4ee", legs: "#2a2a34", beard: "none", eyes: "narrow", glasses: "#6a5a4a" },
+  ms_shin: { name: "Shin Da-in", skin: "#f8dcc4", hair: "#2a2024", hat: "long", robe: "#e8b8c0", trim: "#f8f0ee", legs: "#4a4a5a", skirt: true, beard: "none", eyes: "kind" },
+  ms_kimbr: { name: "Kim Bu-ryeon", skin: "#e8c09a", hair: "#6a6466", hat: "balding", robe: "#4a4a52", trim: "#4a4a52", shirt: "#eef0f2", tie: "#6a2a2a", legs: "#3e3e46", beard: "none", eyes: "narrow", glasses: "#2a2228", fat: true },
+  ms_exec: { name: "The Executive", skin: "#ecc29a", hair: "#8a8a8e", hat: "slick", robe: "#1e2028", trim: "#1e2028", shirt: "#f4f4f4", tie: "#7a2a2a", legs: "#1a1c22", beard: "none", eyes: "narrow" },
+  ms_president: { name: "The President", skin: "#efd0b0", hair: "#d8d8d8", hat: "parted", robe: "#2a2a34", trim: "#2a2a34", shirt: "#f4f4f4", tie: "#2e4a6a", legs: "#24242c", beard: "none", eyes: "kind" },
+  ms_director: { name: "The Director", skin: "#e2b089", hair: "#5a5a5a", hat: "short", robe: "#3a3a42", trim: "#3a3a42", shirt: "#eeeeee", tie: "#5a3a2a", legs: "#303038", beard: "none", eyes: "round", glasses: "#2a2228" },
+  ms_parkjg: { name: "Park Jong-gi", skin: "#f0cfac", hair: "#2a2024", hat: "parted", robe: "#5a6a5a", trim: "#5a6a5a", shirt: "#eef0f2", tie: "#3a4a6a", legs: "#4a524a", beard: "none", eyes: "kind", glasses: "#4a4448" },
+  ms_client: { name: "The Client", skin: "#e2b089", hair: "#4a4448", hat: "balding", robe: "#5a4a3a", trim: "#5a4a3a", shirt: "#f0ece0", tie: "#8a6a2a", legs: "#4a3e30", beard: "none", eyes: "narrow", fat: true },
+  ms_ma: { name: "Department Head Ma", skin: "#e8c09a", hair: "#2a2024", hat: "slick", robe: "#3a3a44", trim: "#3a3a44", shirt: "#eeeeee", tie: "#4a2a4a", legs: "#30303a", beard: "none", eyes: "narrow" },
+  ms_ahnboss: { name: "Section Chief", skin: "#f0cfac", hair: "#2a2024", hat: "short", robe: "#e8eaee", trim: "#2a2228", tie: "#5a5a3a", legs: "#4a4a54", beard: "none", eyes: "normal", glasses: "#2a2228" },
+  ms_ahnfather: { name: "Ahn Young-yi's father", skin: "#e2b089", hair: "#2a2024", hat: "cap", hatC: "#4a5a3a", robe: "#4a5a3a", trim: "#4a5a3a", shirt: "#d8d0b0", tie: "#2a3424", legs: "#44523a", beard: "none", eyes: "narrow" },   // an army officer, in uniform
+  ms_kimdsu: { name: "Kim Dong-su", skin: "#e8b88c", hair: "#2a2024", hat: "short", robe: "#b8392c", trim: "#f0e8d8", legs: "#4a4a5a", beard: "stubble", eyes: "kind" },   // the pizza shop's polo shirt
+  ms_auditor: { name: "Auditor", skin: "#efc59d", hair: "#1e1a1e", hat: "parted", robe: "#2a2e3a", trim: "#2a2e3a", shirt: "#f4f4f4", tie: "#2a2e3a", legs: "#24272f", beard: "none", eyes: "narrow", glasses: "#2a2228" },
+  ms_hr: { name: "HR", skin: "#f8dcc4", hair: "#241a1e", hat: "ponytail", robe: "#2e3a5a", trim: "#2e3a5a", shirt: "#f4f4f6", legs: "#2e3a5a", skirt: true, beard: "none", eyes: "normal" },
+  ms_chinarep: { name: "The China office", skin: "#efc59d", hair: "#2a2024", hat: "short", robe: "#3a3a42", trim: "#3a3a42", shirt: "#eeeeee", tie: "#6a3a2a", legs: "#30303a", beard: "none", eyes: "normal" },
+  ms_ambassador: { name: "The Jordanian Ambassador", skin: "#c89a72", hair: "#3a3236", hat: "short", robe: "#26304a", trim: "#26304a", shirt: "#f4f4f4", tie: "#7a2a2a", legs: "#202838", beard: "short", beardC: "#6a6266", eyes: "kind" },
+  ms_shopowner: { name: "Corner-shop owner", skin: "#e8c09a", hair: "#3a3236", hat: "perm", robe: "#7a3a3a", trim: "#e8dcc8", legs: "#4a4a5a", beard: "none", eyes: "narrow" },
+  ms_kbastaff: { name: "KBA staff", skin: "#eec7a0", hair: "#3a3236", hat: "short", robe: "#6a6a5a", trim: "#6a6a5a", shirt: "#eeeeee", legs: "#4a4a4a", beard: "none", eyes: "normal", glasses: "#4a4448" },   // a cardigan over a shirt
+  ms_trainee: { name: "Trainee", skin: "#f5d2ae", hair: "#2a2024", hat: "buzz", robe: "#3a6a9a", trim: "#3a6a9a", legs: "#3a4a6a", beard: "none", eyes: "round" },
+  ms_trainee2: { name: "Trainee", skin: "#f8dcc4", hair: "#1a1418", hat: "fringe", robe: "#c8d0d8", trim: "#b8c0c8", legs: "#2e3a4a", beard: "none", eyes: "normal", glasses: "#2a2228" },
+  ms_trainee3: { name: "Trainee", skin: "#f8dcc4", hair: "#2a2024", hat: "ponytail", pin: "#c8392c", robe: "#e88a6a", trim: "#e88a6a", legs: "#3a4a6a", beard: "none", eyes: "kind" },
+  ms_daycare: { name: "Daycare teacher", skin: "#f8dcc4", hair: "#3a2a26", hat: "ponytail", robe: "#8ab88a", trim: "#f4f0e8", legs: "#4a4a5a", beard: "none", eyes: "kind" },
+  ms_clerk: { name: "Baekjin clerk", skin: "#ecc29a", hair: "#2a2024", hat: "short", robe: "#5a6a7a", trim: "#2a2228", tie: "#3a3a4a", legs: "#3a3e48", beard: "none", eyes: "narrow" },
+  ms_worker: { name: "Office worker", skin: "#f0cfac", hair: "#2a2024", hat: "parted", robe: "#3a3e4a", trim: "#3a3e4a", shirt: "#eef0f2", tie: "#6a4a3a", legs: "#30333c", beard: "none", eyes: "normal" },
+  ms_worker2: { name: "Office worker", skin: "#f8dcc4", hair: "#3a2a26", hat: "long", robe: "#d8d0c4", trim: "#d8d0c4", shirt: "#f8f6f2", legs: "#4a4a5a", skirt: true, beard: "none", eyes: "kind" },
+  ms_worker3: { name: "Office worker", skin: "#ecc29a", hair: "#1e1a1e", hat: "short", robe: "#dfe6ee", trim: "#2a2228", tie: "#2e4a6a", legs: "#3a3e4a", beard: "none", eyes: "normal", glasses: "#2a2228" },
+  ms_commuter: { name: "Commuter", skin: "#e8c09a", hair: "#4a4448", hat: "short", robe: "#5a5048", trim: "#5a5048", shirt: "#e8e4dc", legs: "#3e3a36", beard: "none", eyes: "narrow" },
+  ms_courier: { name: "Courier", skin: "#e2b089", hair: "#2a2024", hat: "cap", hatC: "#c8392c", pin: "#f4f0e8", robe: "#c8392c", trim: "#2a2228", legs: "#3a3e4a", beard: "none", eyes: "round" },
+  ms_oldman: { name: "Tapgol Park regular", skin: "#e2b089", hair: "#b8b8b8", hat: "balding", robe: "#6a5a48", trim: "#e0d8c8", legs: "#4a4a44", beard: "none", eyes: "kind" },
+  ms_oldman2: { name: "Tapgol Park regular", skin: "#e8c4a0", hair: "#d8d8d8", hat: "short", robe: "#4a5a6a", trim: "#d8d0c0", legs: "#3e3e40", beard: "thin", beardC: "#d8d8d8", eyes: "narrow", glasses: "#6a5a4a" },
+  ms_passerby: { name: "Passer-by", skin: "#f0cfac", hair: "#5a3a2a", hat: "bob", robe: "#c87a5a", trim: "#c87a5a", legs: "#3a4a6a", beard: "none", eyes: "kind" },
+  ms_passerby2: { name: "Passer-by", skin: "#ecc29a", hair: "#2a2024", hat: "messy", robe: "#3a5a4a", trim: "#3a5a4a", legs: "#3a4a6a", beard: "none", eyes: "normal" },
+  ms_cafe: { name: "Café player", skin: "#c89a72", hair: "#2a2024", hat: "scarf", hatC: "#c8392c", robe: "#e8e4d8", trim: "#b8b0a0", legs: "#5a5048", beard: "short", eyes: "kind" },   // Amman: a red keffiyeh
   // the Talk with Claude book: Clawd, the Claude Code mascot, drawn by TKArt.clawd instead of as a person
   claude: { name: "Claude", clawd: true, skin: "#d97757", robe: "#d97757", trim: "#d97757", hair: "#d97757", beard: "none" },
 };
@@ -206,13 +256,24 @@ const TKArt = {
     if (d.weapon === "glaive" && pose !== "strike") { for (let y = 3; y < 17; y++) s(10, y + dy, "#6a4a2a"); R(10, -1 + dy, 2, 4, "#d0d4d8"); s(12, 0 + dy, "#d0d4d8"); s(10, 3 + dy, "#3f9a5a"); }
     // body
     R(2, 9 + dy, 6, 1, d.robe); R(1, 10 + dy, 8, kneel ? 3 : 3, d.robe); R(1, 12 + dy, 8, 1, robeS);
-    s(4, 9 + dy, d.trim); s(5, 10 + dy, d.trim); R(1, 11 + dy, 8, 1, d.trim);  // collar and belt
+    if (d.shirt || d.tie) {  // modern dress: a jacket over a shirt (shirt), or shirtsleeves with a belt; a tie down the front
+      if (d.shirt) { R(4, 9 + dy, 2, 1, d.shirt); if (!d.tie) R(4, 10 + dy, 2, 1, d.shirt); }
+      else R(1, 11 + dy, 8, 1, d.trim);
+      if (d.tie) { R(4, 10 + dy, 2, 1, d.tie); s(4, 11 + dy, d.tie); s(5, 11 + dy, d.tie); if (!d.shirt) R(4, 9 + dy, 2, 1, d.trim); }
+    } else if (d.legs) R(3, 9 + dy, 4, 1, d.trim);   // modern casual: a plain neckline, no belt
+    else { s(4, 9 + dy, d.trim); s(5, 10 + dy, d.trim); R(1, 11 + dy, 8, 1, d.trim); }  // collar and belt
     s(0, 10 + dy, d.robe); s(9, 10 + dy, d.robe); s(0, 11 + dy, d.skin); s(9, 11 + dy, d.skin);  // sleeves, hands
-    if (kneel) R(0, 13 + dy, 10, 1, robeS);
+    const legC = d.legs || robeS;   // trousers (modern dress) or the robe's shadow
+    if (kneel) R(0, 13 + dy, 10, 1, d.skirt ? legC : robeS);
+    else if (d.skirt) {  // a skirt to the knee, bare shins, dark shoes
+      R(1, 13, 8, 1, legC);
+      if (frame) { R(1, 14, 2, 1, d.skin); R(7, 14, 2, 1, d.skin); R(0, 15, 2, 1, dark); R(7, 15, 2, 1, dark); }
+      else { R(2, 14, 2, 1, d.skin); R(6, 14, 2, 1, d.skin); R(2, 15, 2, 1, dark); R(6, 15, 2, 1, dark); }
+    }
     else {
       const L = frame ? [[2, 13], [6, 14], [1, 14]] : [[2, 13], [6, 13]];
-      if (frame) { R(1, 13, 3, 2, robeS); R(6, 13, 3, 2, robeS); s(0, 15, dark); s(1, 15, dark); s(7, 15, dark); s(8, 15, dark); }
-      else { R(2, 13, 2, 2, robeS); R(6, 13, 2, 2, robeS); R(2, 15, 2, 1, dark); R(6, 15, 2, 1, dark); }
+      if (frame) { R(1, 13, 3, 2, legC); R(6, 13, 3, 2, legC); s(0, 15, dark); s(1, 15, dark); s(7, 15, dark); s(8, 15, dark); }
+      else { R(2, 13, 2, 2, legC); R(6, 13, 2, 2, legC); R(2, 15, 2, 1, dark); R(6, 15, 2, 1, dark); }
       void L;
     }
     // head
@@ -228,6 +289,7 @@ const TKArt = {
     else { s(3, ey, dark); s(6, ey, dark); }
     if (d.patch) { R(1, ey - 1, 8, 1, "#141014"); R(2, ey, 2, 1, "#141014"); }   // an eyepatch (Xiahou Dun)
     if (d.makeup) { s(4, 7 + dy, "#c8283c"); s(5, 7 + dy, "#c8283c"); s(2, 6 + dy, "#f4a0aa"); s(7, 6 + dy, "#f4a0aa"); }  // red lips, blush
+    if (d.glasses) { R(2, ey, 6, 1, d.glasses); s(3, ey, "#a8c0d8"); s(6, ey, "#a8c0d8"); }  // frames, a glint in each lens
     // beard
     const bc = d.beardC || d.hair || dark;
     if (d.beard === "long") { R(3, 7 + dy, 4, 1, bc); R(3, 8 + dy, 4, 3, bc); R(4, 11 + dy, 2, 1, bc); }
@@ -235,8 +297,27 @@ const TKArt = {
     else if (d.beard === "short") { R(3, 8 + dy, 4, 2, bc); }
     else if (d.beard === "goatee") { s(3, 7 + dy, bc); s(6, 7 + dy, bc); R(4, 8 + dy, 2, 2, bc); }
     else if (d.beard === "thin") { R(4, 8 + dy, 2, 1, bc); }
+    else if (d.beard === "stubble") { const st = this.shade(d.skin, -.3); s(3, 8 + dy, st); s(5, 8 + dy, st); s(2, 7 + dy, st); s(7, 7 + dy, st); s(6, 8 + dy, st); }
     // hair and hats
-    const H = d.hatC, hr = d.hair || dark;
+    const H = d.hatC, hr = d.hair || dark, hl = this.shade(hr, .3);
+    // modern hair (the Misaeng book)
+    if (d.hat === "short") { R(1, 1 + dy, 8, 2, hr); s(1, 3 + dy, hr); s(8, 3 + dy, hr); }
+    else if (d.hat === "fringe") { R(1, 1 + dy, 8, 2, hr); R(1, 3 + dy, 5, 1, hr); s(1, 4 + dy, hr); s(8, 3 + dy, hr); s(8, 4 + dy, hr); }
+    else if (d.hat === "parted") { R(1, 1 + dy, 8, 2, hr); R(5, 3 + dy, 4, 1, hr); s(1, 3 + dy, hr); s(1, 4 + dy, hr); s(3, 1 + dy, hl); }
+    else if (d.hat === "slick") { R(1, 1 + dy, 8, 2, hr); R(3, 1 + dy, 3, 1, hl); s(1, 3 + dy, hr); s(8, 3 + dy, hr); }
+    else if (d.hat === "messy") { R(1, 0 + dy, 8, 3, hr); s(1, -1 + dy, hr); s(4, -1 + dy, hr); s(7, -1 + dy, hr); s(9, 0 + dy, hr); s(0, 1 + dy, hr); R(1, 3 + dy, 1, 2, hr); R(8, 3 + dy, 1, 2, hr); s(3, 3 + dy, hr); }
+    else if (d.hat === "curly" || d.hat === "perm") {
+      const lo = d.hat === "perm" ? 6 : 4;
+      R(1, 0 + dy, 8, 3, hr); s(0, 1 + dy, hr); s(9, 1 + dy, hr); s(2, -1 + dy, hr); s(5, -1 + dy, hr); s(7, -1 + dy, hr);
+      R(0, 2 + dy, 1, lo - 1, hr); R(9, 2 + dy, 1, lo - 1, hr); R(1, 3 + dy, 1, lo - 2, hr); R(8, 3 + dy, 1, lo - 2, hr);
+      s(2, 0 + dy, hl); s(5, 0 + dy, hl); s(7, 1 + dy, hl);
+    }
+    else if (d.hat === "balding") { R(1, 3 + dy, 1, 3, hr); R(8, 3 + dy, 1, 3, hr); s(1, 2 + dy, hr); s(8, 2 + dy, hr); s(4, 2 + dy, this.shade(d.skin, .35)); }
+    else if (d.hat === "buzz") { R(1, 1 + dy, 8, 2, hr); R(2, 1 + dy, 6, 1, hl); }
+    else if (d.hat === "bob") { R(1, 1 + dy, 8, 2, hr); R(0, 2 + dy, 1, 6, hr); R(9, 2 + dy, 1, 6, hr); R(1, 3 + dy, 1, 5, hr); R(8, 3 + dy, 1, 5, hr); R(2, 3 + dy, 3, 1, hr); }
+    else if (d.hat === "long") { R(1, 1 + dy, 8, 2, hr); R(0, 2 + dy, 1, 9, hr); R(9, 2 + dy, 1, 9, hr); R(1, 3 + dy, 1, 3, hr); R(8, 3 + dy, 1, 3, hr); s(5, 3 + dy, hr); s(6, 3 + dy, hr); }
+    else if (d.hat === "ponytail") { R(1, 1 + dy, 8, 2, hr); s(1, 3 + dy, hr); s(8, 3 + dy, hr); R(9, 1 + dy, 1, 4, hr); s(9, 0 + dy, d.pin || hr); }
+    else if (d.hat === "cap") { R(1, 0 + dy, 8, 2, H); R(0, 2 + dy, 10, 1, this.shade(H, -.3)); s(4, 0 + dy, d.pin || "#e6c14a"); s(5, 0 + dy, d.pin || "#e6c14a"); s(1, 3 + dy, hr); s(8, 3 + dy, hr); }
     if (d.hat === "topknot") { R(1, 1 + dy, 8, 2, hr); R(4, -1 + dy, 2, 2, hr); R(3, 0 + dy, 4, 1, d.pin || "#e6c14a"); s(1, 3 + dy, hr); s(8, 3 + dy, hr); }
     if (d.hat === "bun") { R(1, 1 + dy, 8, 2, hr); R(3, -2 + dy, 4, 3, hr); s(7, -1 + dy, d.pin || "#c8392c"); s(8, -2 + dy, d.pin || "#c8392c"); R(1, 3 + dy, 1, 3, hr); R(8, 3 + dy, 1, 3, hr); }  // a woman's hair, pinned up
     else if (d.hat === "lady") {  // a court lady's high chignon: puffed wings, a comb, hairpins and a flower
@@ -275,9 +356,18 @@ const TKArt = {
     const s = (x, y, c) => this.set(g, x + O, y + Oy, c), R = (x, y, w, h, c) => this.rect(g, x + O, y + Oy, w, h, c);
     const E = (cx, cy, rx, ry, c) => this.ellipse(g, cx + O, cy + Oy, rx, ry, c), Ln = (a, b, c2, e, col) => this.line(g, a + O, b + Oy, c2 + O, e + Oy, col);
     const skinS = this.shade(d.skin, -.16), robeS = this.shade(d.robe, -.2), robeL = this.shade(d.robe, .15), dark = "#2a2228", hr = d.hair || dark, H = d.hatC;
-    // shoulders, cross collar
+    // shoulders, cross collar (or, in modern dress, a jacket's lapels or a shirt's collar, and a tie)
     E(16, 33, 15, 8, d.robe); R(3, 27, 26, 5, d.robe); R(3, 30, 26, 2, robeS);
-    Ln(11, 25, 18, 31, d.trim); Ln(12, 25, 19, 31, d.trim); Ln(21, 25, 17, 29, d.trim); Ln(20, 25, 16, 29, d.trim);
+    if (d.shirt || d.tie) {
+      const sh = d.shirt || d.robe;
+      for (let y = 25; y <= 33; y++) { const hw = Math.max(0, 5 - (y - 25) * .6); R(Math.round(16 - hw), y, Math.round(hw * 2), 1, sh); }  // the V of the shirt
+      if (d.shirt) { Ln(10, 25, 15, 32, robeS); Ln(22, 25, 17, 32, robeS); Ln(11, 25, 15, 31, robeL); Ln(21, 25, 17, 31, robeL); }  // lapels
+      else { Ln(11, 25, 15, 28, d.trim); Ln(21, 25, 17, 28, d.trim); }   // collar points
+      if (d.tie) { R(15, 26, 2, 2, d.tie); R(15, 28, 3, 6, d.tie); s(16, 28, this.shade(d.tie, .25)); }
+    } else if (d.legs) { Ln(11, 25, 13, 27, d.trim); R(13, 27, 6, 1, d.trim); Ln(21, 25, 19, 27, d.trim); }   // modern casual: a round neckline
+    else {
+      Ln(11, 25, 18, 31, d.trim); Ln(12, 25, 19, 31, d.trim); Ln(21, 25, 17, 29, d.trim); Ln(20, 25, 16, 29, d.trim);
+    }
     Ln(4, 28, 9, 26, robeL);
     R(13, 21, 6, 5, skinS);  // neck
     // head
@@ -294,6 +384,11 @@ const TKArt = {
     else if (d.eyes === "wild") { E(12, ey, 1.6, 1.6, "#fff"); E(20, ey, 1.6, 1.6, "#fff"); s(12, ey, "#a02020"); s(20, ey, "#a02020"); Ln(9, ey - 2, 14, ey - 4, dark); Ln(18, ey - 4, 23, ey - 2, dark); }
     else { R(11, ey, 2, 2, dark); R(19, ey, 2, 2, dark); R(10, ey - 3, 4, 1, hr); R(18, ey - 3, 4, 1, hr); }
     if (d.patch) { Ln(7, ey - 3, 25, ey - 6, "#141014"); E(12, ey, 2.8, 2.4, "#141014"); }   // an eyepatch (Xiahou Dun)
+    if (d.glasses) {  // thin rectangular frames
+      const G = d.glasses;
+      for (const cx of [12, 20]) { R(cx - 3, ey - 2, 6, 1, G); R(cx - 3, ey + 2, 6, 1, G); R(cx - 3, ey - 2, 1, 5, G); R(cx + 2, ey - 2, 1, 5, G); s(cx + 1, ey - 1, "#e8f0f8"); }
+      R(15, ey - 1, 2, 1, G); R(7, ey - 1, 2, 1, G); R(23, ey - 1, 2, 1, G);
+    }
     s(16, 17, skinS); s(15, 18, skinS);  // nose
     R(14, 20, 4, 1, this.shade(d.skin, -.4));  // mouth
     if (d.makeup) { E(9.5, 18, 2, 1, "#f4a0aa"); E(22.5, 18, 2, 1, "#f4a0aa"); R(14, 20, 4, 1, "#c8283c"); R(15, 21, 2, 1, "#a81c30"); }  // blush, red lips
@@ -307,7 +402,27 @@ const TKArt = {
     else if (d.beard === "short") { E(16, 22, 6, 3, bc); Ln(12, 19, 15, 18, bc); Ln(20, 19, 17, 18, bc); R(14, 20, 4, 1, this.shade(d.skin, -.4)); }
     else if (d.beard === "goatee") { Ln(10, 21, 14, 18, bc); Ln(22, 21, 18, 18, bc); R(15, 22, 2, 5, bc); }
     else if (d.beard === "thin") { Ln(12, 19, 14, 18, bc); Ln(20, 19, 18, 18, bc); R(15, 22, 2, 2, bc); }
+    else if (d.beard === "stubble") { const st = this.shade(d.skin, -.28); for (const [x, y] of [[10, 19], [12, 21], [14, 22], [17, 22], [19, 21], [21, 19], [11, 17], [22, 17], [15, 23], [13, 19], [19, 19]]) s(x, y, st); }
     // hair and hats
+    const hl = this.shade(hr, .3);
+    // modern hair (the Misaeng book)
+    if (d.hat === "short") { E(16, 7, 8.6, 4, hr); R(8, 7, 2, 5, hr); R(23, 7, 2, 5, hr); }
+    else if (d.hat === "fringe") { E(16, 7, 8.8, 4.2, hr); R(8, 7, 2, 6, hr); R(23, 7, 2, 6, hr); E(14, 8.5, 6.5, 2.4, hr); Ln(10, 10, 12, 8, hl); }
+    else if (d.hat === "parted") { E(16, 7, 8.8, 4.2, hr); R(8, 7, 2, 5, hr); R(23, 7, 2, 5, hr); E(19, 8, 5.5, 2, hr); Ln(12, 3, 11, 8, hl); Ln(14, 5, 22, 6, hl); }
+    else if (d.hat === "slick") { E(16, 6.5, 8.8, 4.2, hr); R(8, 7, 2, 4, hr); R(23, 7, 2, 4, hr); Ln(12, 5, 20, 4, hl); }
+    else if (d.hat === "messy") { E(16, 7, 9, 4.5, hr); for (const [x, y] of [[7, 3], [10, 0], [14, -1], [18, 0], [22, 0], [26, 4], [11, 10], [15, 10]]) Ln(x, y, 16, 7, hr); R(8, 7, 2, 6, hr); R(23, 7, 2, 6, hr); }
+    else if (d.hat === "curly" || d.hat === "perm") {
+      const lo = d.hat === "perm" ? 17 : 12;
+      for (const [x, y] of [[8, 7], [10, 4], [13, 3], [16, 2.5], [19, 3], [22, 4], [24, 7], [12, 8], [16, 7], [20, 8]]) E(x, y, 3, 2.8, hr);
+      for (let y = 9; y <= lo; y += 3) { E(7.5, y, 2.2, 2, hr); E(24.5, y, 2.2, 2, hr); }
+      for (const [x, y] of [[9, 4], [13, 2], [17, 1], [21, 3], [11, 7], [15, 6], [19, 7]]) s(x, y, hl);
+    }
+    else if (d.hat === "balding") { R(7, 10, 3, 7, hr); R(23, 10, 3, 7, hr); E(8, 9, 1.5, 1.5, hr); E(24, 9, 1.5, 1.5, hr); Ln(11, 7, 21, 6, hr); E(14, 7, 2, 1, this.shade(d.skin, .35)); }
+    else if (d.hat === "buzz") { E(16, 7, 8.4, 3.7, hr); for (let x = 10; x <= 22; x += 2) s(x, 5, hl); R(8, 7, 2, 4, hr); R(23, 7, 2, 4, hr); }
+    else if (d.hat === "bob") { E(16, 7, 9.2, 4.6, hr); R(6, 8, 4, 12, hr); R(23, 8, 4, 12, hr); E(8, 20, 2.5, 1.5, hr); E(24.5, 20, 2.5, 1.5, hr); E(14, 9, 6, 2.2, hr); Ln(9, 5, 14, 3, hl); }
+    else if (d.hat === "long") { E(16, 7, 9.2, 4.6, hr); R(5, 8, 5, 24, hr); R(23, 8, 5, 24, hr); E(11.5, 9, 4.5, 2, hr); E(21, 8.5, 3.5, 1.6, hr); Ln(9, 5, 14, 3, hl); Ln(6, 14, 6, 28, hl); }
+    else if (d.hat === "ponytail") { E(16, 7, 8.8, 4.2, hr); R(8, 7, 2, 5, hr); R(23, 7, 2, 5, hr); E(27, 6, 2.8, 2.4, hr); Ln(27, 7, 29, 17, hr); Ln(28, 7, 30, 16, hr); R(24, 5, 2, 2, d.pin || "#2a2228"); Ln(11, 4, 20, 3, hl); }
+    else if (d.hat === "cap") { E(16, 6, 9.5, 4.5, H); R(6, 7, 20, 3, H); E(16, 10, 10.5, 1.4, this.shade(H, -.35)); E(16, 4.5, 1.6, 1.6, d.pin || "#e6c14a"); R(8, 11, 2, 3, hr); R(23, 11, 2, 3, hr); }
     if (d.hat === "topknot") { E(16, 7, 8.5, 4, hr); R(8, 7, 2, 6, hr); R(23, 7, 2, 6, hr); E(16, 2, 3, 2.5, hr); R(12, 3, 8, 1, d.pin || "#e6c14a"); }
     if (d.hat === "bun") { E(16, 7, 8.5, 4, hr); R(8, 7, 2, 9, hr); R(23, 7, 2, 9, hr); E(16, 1.5, 5, 3, hr); R(20, 0, 5, 1, d.pin || "#c8392c"); }
     else if (d.hat === "lady") {  // a court lady's high chignon
@@ -626,7 +741,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) { this.data = await (await fetch("data/tk.json?v=103")).json(); this.migrate(); }
+    if (!this.data) { this.data = await (await fetch("data/tk.json?v=104")).json(); this.migrate(); }
     return this.data;
   },
   // A book whose beats were renumbered after players began it: their cleared beats moved to the new keys, once

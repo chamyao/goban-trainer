@@ -83,6 +83,9 @@ python3 tools/bump_cache.py stills
   line to its `notes` saying Graphics reworded it, and tell Plot.
 - **Text is allowed.** The user said there is no "no text" rule, so banners and plaques with characters are fine. Keep
   prompts plain and short; the user doesn't want them over-engineered.
+- **The modern book (Misaeng).** Ids that start `ms_` (and `face_ms_*`) get `STYLE_MODERN` ("2D Korean webtoon, hard
+  cel shading" and modern-day Seoul) and `FACE_STYLE_MODERN` instead of the Han lines; the cast's wording is in the
+  `CAST.update` block under `ms_*` keys. Nothing else changes for the Han books.
 - **No face references.** `REF_LENSES` is empty because the user found that reference images throw off the feel.
   Consistency comes from the `CAST` wording.
 
@@ -130,6 +133,10 @@ anyone without one.
   - `eyes`: kind, round, narrow, phoenix, wild or normal.
   - `weapon`: sword, swords, spear or glaive.
   - flags: `fat`, `patch`, `makeup`, `ears`.
+  - modern dress (Misaeng): `shirt` (a jacket's shirt; without it, shirtsleeves with a belt in `trim`), `tie`, `legs`
+    (trousers, or the skirt with `skirt: true`), `glasses` (the frame colour). With `legs` and no shirt or tie, the
+    collar is a plain neckline. Modern hair in `hat`: short, fringe, parted, slick, messy, curly, perm, balding, buzz,
+    bob, long, ponytail, cap. `beard: "stubble"`.
 - **Fit the person to the story.** Old characters get grey or white hair and a long beard, officers a helmet and a
   spear, and Lady Sun a sword. A user once caught an old man's bust reused for a young man; it was a look copied
   without care.

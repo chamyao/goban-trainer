@@ -68,7 +68,8 @@ const TownArt = {
     const same = (i, col) => p[i] === col[0] && p[i + 1] === col[1] && p[i + 2] === col[2];
     const put = (i, col) => { p[i] = col[0]; p[i + 1] = col[1]; p[i + 2] = col[2]; };
     const hair = hex(d.hair || "#2a2228"), robe = hex(d.robe), beard = hex(d.beardC || d.hair || "#2a2228");
-    const face = [d.skin, TKArt.shade(d.skin, -.18), "#2a2228", "#ffffff", "#c8283c", "#f4a0aa"].map(hex).concat([beard]);  // makeup too
+    const face = [d.skin, TKArt.shade(d.skin, -.18), "#2a2228", "#ffffff", "#c8283c", "#f4a0aa", "#a8c0d8", TKArt.shade(d.skin, -.3)].map(hex).concat([beard]);  // makeup, glasses, stubble too
+    if (d.glasses) face.push(hex(d.glasses));
     for (let y = 3; y <= 9; y++) for (let x = 3; x <= 10; x++) {
       const i = (y * cv.width + x) * 4;
       if (p[i + 3] && face.some(f => same(i, f))) put(i, hair);
@@ -76,6 +77,11 @@ const TownArt = {
     for (let y = 10; y <= 14; y++) for (let x = 4; x <= 9; x++) {
       const i = (y * cv.width + x) * 4;
       if (p[i + 3] && same(i, beard) && !same(i, hair)) put(i, robe);
+    }
+    const front = [d.shirt, d.tie].filter(Boolean).map(hex);   // a shirt and tie are on the front only
+    for (let y = 9; y <= 13; y++) for (let x = 4; x <= 9; x++) {
+      const i = (y * cv.width + x) * 4;
+      if (p[i + 3] && front.some(f => same(i, f))) put(i, robe);
     }
     c.putImageData(img, 0, 0);
     return cv;
@@ -94,13 +100,19 @@ const TownArt = {
       if (d.weapon === "spear") { s(9, 0, "#d0d4d8"); s(9, -1, "#d0d4d8"); s(10, 0, "#d0d4d8"); }
       else { R(9, -2, 2, 3, "#d0d4d8"); s(11, -1, "#d0d4d8"); s(9, 1, "#3f9a5a"); }
     }
-    // legs
-    if (stride) { R(6, 13, 2, 2, robeS); R(1, 13, 2, 2, robeS); R(6, 15, 3, 1, dark); R(0, 15, 2, 1, dark); }
-    else { R(3, 13, 2, 2, robeS); R(5, 13, 2, 2, robeS); R(3, 15, 2, 1, dark); R(5, 15, 3, 1, dark); }
+    // legs (trousers in modern dress; a skirt shows the shins)
+    const legC = d.legs || robeS, shin = d.skirt ? d.skin : legC;
+    if (stride) { R(6, 13, 2, 2, shin); R(1, 13, 2, 2, shin); R(6, 15, 3, 1, dark); R(0, 15, 2, 1, dark); }
+    else { R(3, 13, 2, 2, shin); R(5, 13, 2, 2, shin); R(3, 15, 2, 1, dark); R(5, 15, 3, 1, dark); }
+    if (d.skirt) R(1, 13, 7, 1, legC);
     // body
     const w = d.fat ? 8 : 7, x0 = d.fat ? 0 : 1;
-    R(2, 9, 6, 1, d.robe); R(x0, 10, w, 3, d.robe); R(x0, 12, w, 1, robeS); R(x0, 11, w, 1, d.trim);
-    s(6, 9, d.trim); s(7, 10, d.trim);
+    R(2, 9, 6, 1, d.robe); R(x0, 10, w, 3, d.robe); R(x0, 12, w, 1, robeS);
+    if (d.shirt || d.tie) {   // a jacket over a shirt, or shirtsleeves and a belt; the tie down the front
+      if (!d.shirt) R(x0, 11, w, 1, d.trim);
+      s(7, 9, d.shirt || d.trim); s(7, 10, d.tie || d.shirt); if (d.tie) s(7, 11, d.tie);
+    } else if (d.legs) s(7, 9, d.trim);   // modern casual: a plain neckline
+    else { R(x0, 11, w, 1, d.trim); s(6, 9, d.trim); s(7, 10, d.trim); }
     if (d.weapon === "swords" || d.weapon === "sword") R(0, 11, 2, 1, "#d0d4d8");  // scabbard at the hip, pointing back
     // the near arm swings opposite the front leg
     if (pole) { R(5, 10, 3, 1, arm); s(8, 10, d.skin); }
@@ -110,7 +122,8 @@ const TownArt = {
     // head in profile, facing right
     R(2, 2, 7, 7, d.skin); R(2, 8, 7, 1, skinS); s(9, 5, d.skin); s(9, 6, skinS);  // nose
     if (d.fat) { R(2, 7, 8, 2, d.skin); }
-    R(2, 2, 2, 5, hr); s(4, 2, hr); R(2, 1, 6, 1, hr);                              // hair at the back of the head
+    if (d.hat === "balding") R(2, 3, 2, 3, hr);                                       // a fringe of hair round the back
+    else { R(2, 2, 2, 5, hr); s(4, 2, hr); R(2, 1, 6, 1, hr); }                       // hair at the back of the head
     if (d.ears) R(4, 4, 2, 4, skinS); else R(4, 4, 1, 2, skinS);
     const ey = 5;
     if (d.eyes === "round") { s(6, ey, "#fff"); s(7, ey, dark); R(6, ey - 2, 2, 1, dark); }
@@ -127,6 +140,20 @@ const TownArt = {
     else if (d.beard === "short") { R(5, 7, 4, 2, bc); }
     else if (d.beard === "goatee") { R(7, 8, 2, 2, bc); }
     else if (d.beard === "thin") { s(8, 8, bc); }
+    else if (d.beard === "stubble") { const st = A.shade(d.skin, -.3); s(6, 8, st); s(8, 8, st); s(5, 7, st); }
+    if (d.glasses) { R(5, ey, 3, 1, d.glasses); s(7, ey, "#a8c0d8"); }
+    // modern hair, in profile (the Misaeng book)
+    const hl = A.shade(hr, .3);
+    if (d.hat === "short" || d.hat === "buzz") { R(2, 1, 6, 2, hr); }
+    else if (d.hat === "fringe") { R(2, 1, 6, 2, hr); R(6, 3, 3, 1, hr); }
+    else if (d.hat === "parted") { R(2, 1, 7, 2, hr); s(8, 3, hr); s(4, 1, hl); }
+    else if (d.hat === "slick") { R(2, 1, 6, 2, hr); R(3, 1, 4, 1, hl); }
+    else if (d.hat === "messy") { R(2, 0, 7, 3, hr); s(3, -1, hr); s(6, -1, hr); s(9, 0, hr); s(1, 1, hr); }
+    else if (d.hat === "curly" || d.hat === "perm") { R(1, 0, 8, 3, hr); s(2, -1, hr); s(5, -1, hr); s(8, 0, hr); R(1, 3, 2, d.hat === "perm" ? 5 : 3, hr); s(3, 0, hl); s(6, 1, hl); }
+    else if (d.hat === "bob") { R(2, 1, 6, 2, hr); R(1, 2, 3, 6, hr); s(7, 3, hr); }
+    else if (d.hat === "long") { R(2, 1, 6, 2, hr); R(1, 2, 3, 9, hr); s(7, 3, hr); }
+    else if (d.hat === "ponytail") { R(2, 1, 6, 2, hr); R(0, 2, 2, 1, hr); R(0, 3, 1, 4, hr); s(1, 2, d.pin || hr); }
+    else if (d.hat === "cap") { R(2, 0, 6, 2, H); R(7, 2, 3, 1, A.shade(H, -.3)); s(6, 0, d.pin || "#e6c14a"); }
     // hats, in profile
     if (d.hat === "topknot") { R(2, 1, 6, 2, hr); R(4, -1, 2, 2, hr); s(3, 0, d.pin || "#e6c14a"); s(6, 0, d.pin || "#e6c14a"); }
     else if (d.hat === "bun") { R(2, 1, 6, 2, hr); R(1, -1, 4, 3, hr); s(5, -1, d.pin || "#c8392c"); R(2, 3, 2, 4, hr); }
