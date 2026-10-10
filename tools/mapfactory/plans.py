@@ -327,7 +327,7 @@ class MapBuilder:
             for i in range(x - margin, x + margin + 1):
                 if (i, j) in self.covered or (i, j) in self.keep or not self.walkable((i, j)):
                     return False
-        return self.mat[y][x] not in ("road", "path", "bridge", "gallery", "court", "market", "stage")
+        return self.mat[y][x] not in ("road", "path", "bridge", "gallery", "court", "market", "stage", "crosswalk")   # (no tree on a zebra crossing)
 
     def cliff_rims(self):
         """A cliff reads as a drop only with a lip and a rocky face. The cliff tile alone draws like paving, and Xiao Pass's "cliff's
@@ -1078,9 +1078,11 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
         for t in P.get("things", []):
             if t.get("map"):
                 owner[f"{pid}--{t['map']}"] = pid
-        for e in P.get("exits", []):   # a place that is itself a room may open into its own rooms (the tower's lifts)
+        for e in P.get("exits", []):   # a place that is itself a room may open into its own rooms
             if e["to"] in (b.get("maps") or {}) and f"{pid}--{e['to']}" not in owner:
                 owner[f"{pid}--{e['to']}"] = pid
+        for r in P.get("owns", []):   # or have rooms reached another way (by a lift: Misaeng's tower), whose doors lead back to it
+            owner.setdefault(f"{pid}--{r}", pid)
         for mid, m in (b.get("maps") or {}).items():
             for t in m.get("things", []):
                 if t.get("map"):
