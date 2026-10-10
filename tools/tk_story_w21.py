@@ -109,7 +109,7 @@ def _scenes():
             N("Torn from the waybill's back: a strip with glue on it, and a name in an intern's careful hand. Kim Seok-ho."),
             S("ms_oh", "Not the parachute, then."),
             N("Oh goes up and has a word with the director, and Kim Seok-ho is called in. Nobody says sorry to Jang. Oh doesn't either."),
-            ["party", ["ms_jang"], {"to": {"place": "One International", "spot": "sales3"}}],   # back to Jang, at his desk upstairs
+            ["party", ["ms_jang"], {"to": {"place": "one-international--sales3", "spot": "sales3"}}],   # back to Jang, at his desk upstairs
         ]},
 
         # M4 · 17-19수. Park Jong-gi, IT sales: the roof, the client.
@@ -197,7 +197,7 @@ def _scenes():
             N("Jang Geu-rae, hired. On a two-year contract."),
             ["lose", "pass"], ["gain", "id_card"],
             N("On the first morning Oh takes his new people to a memorial for laid-off workers before he takes them to their desks. He doesn't explain why."),
-            ["party", ["ms_ahn"], {"to": {"place": "One International", "spot": "resources"}}],   # the lead passes to Ahn, at her new team's desks
+            ["party", ["ms_ahn"], {"to": {"place": "one-international--resources", "spot": "resources"}}],   # the lead passes to Ahn, at her new team's desks
         ]},
 
         # M8 · 39-43수. Ahn takes her team's rejected plan to finance head Kim Seon-ju herself. It fails (R7).
@@ -212,7 +212,7 @@ def _scenes():
             S("ms_kimsj", "The reason is that you're a first-year who thinks a good plan is enough. Go back to your team."),
             N("Ahn goes back to her team with the plan, and the lesson."),
             ["remove", "ksj"],
-            ["party", ["ms_jang"], {"to": {"place": "One International", "spot": "sales3"}}],   # back to Jang, a floor away
+            ["party", ["ms_jang"], {"to": {"place": "one-international--sales3", "spot": "sales3"}}],   # back to Jang, a floor away
         ]},
 
         # M9 · 45-55수. 미생이네요. Kim Dong-sik knows his past. Four stones, one eye. Then Oh's collapse (told).
@@ -250,7 +250,7 @@ def _scenes():
             N("Oh reads it, corrects it in red, and hands it back. The next morning it is pinned up by the copier, laminated."),
             S("ms_oh", "Not bad."),
             ["remove", "kd"],
-            ["party", ["ms_sun"], {"to": {"place": "One International", "spot": "sun-desk"}}],   # the lead passes to Sun Ji-young, on the same floor
+            ["party", ["ms_sun"], {"to": {"place": "one-international--sales3", "spot": "sun-desk-hand"}}],   # the lead passes to Sun Ji-young, on the same floor
         ]},
 
         # M11 · 60-61수. Park Jong-sik arrives. He harasses Shin Da-in; Sun Ji-young goes to Oh.
@@ -277,7 +277,7 @@ def _scenes():
             S("ms_kimbr", "Follow procedure."),
             N("An audit is approved."),
             ["remove", "oh"],
-            ["party", ["ms_jang"], {"to": {"place": "One International", "spot": "sales3"}}],
+            ["party", ["ms_jang"], {"to": {"place": "one-international--sales3", "spot": "sales3"}}],
         ]},
 
         # M12 · 62-63수. Baekjin Trading: Park is already there, coaching the staff.
@@ -345,7 +345,7 @@ def _scenes():
             ["still", "ms_chuseok", "slow zoom in"],
             S("ms_jang", "Don't forget it. I'm my mother's pride. Not a son who falls short."),
             ["remove", "mo"],
-            ["party", ["ms_oh"], {"to": {"place": "the pizza shop", "from": "Jongno"}}],   # (staging) the lead passes to Oh; his own errand, after the holiday
+            ["party", ["ms_oh"], {"to": {"place": "The pizza shop", "from": "Jongno"}}],   # (staging) the lead passes to Oh; his own errand, after the holiday
         ]},
 
         # M16 · 71-83수. Cheon Gwan-ung arrives (told). Kim Dong-su's pizza shop; the envelope.
@@ -365,7 +365,7 @@ def _scenes():
             ["remove", "kds"],
             N("Back at the office, the team has a briefing to give the president. Oh hands Jang the seating notes."),
             ["gain", "seating_notes"], ["gain", "water"], ["gain", "green_tea"], ["gain", "coffee"],
-            ["party", ["ms_jang"], {"to": {"place": "One International", "spot": "board-room"}}],   # back to Jang, getting the board room ready
+            ["party", ["ms_jang"], {"to": {"place": "one-international--board-room", "spot": "board-room"}}],   # back to Jang, getting the board room ready
         ]},
         "m17_wait": {"title": T("The Board Room"), "kind": "main", "steps": [
             S("ms_jang", "Every seat as it's written on the notes: the president's water, the executive's tea, the division head's coffee. Then we rehearse."),
@@ -404,7 +404,7 @@ def _scenes():
             ["gain", "dried_squid"],
             S("ms_oh", "You can't climb stairs that have no first step. And you can't sell like you're running away."),
             ["remove", "oh"],
-            ["party", ["ms_ahn"], {"to": {"place": "One International", "spot": "roof"}}],   # the lead passes to Ahn, on the roof
+            ["party", ["ms_ahn"], {"to": {"place": "one-international--roof", "spot": "roof"}}],   # the lead passes to Ahn, on the roof
         ]},
 
         # M19 · 114수. Her proposal is adopted at HQ; her department head chews her out on the roof; she withdraws (R7).
@@ -419,7 +419,7 @@ def _scenes():
             ["remove", "ma"], ["remove", "ab"],
             ["still", "ms_roof_ahn", "slow zoom out"],
             N("She stays up there until the lunch hour is over."),
-            ["party", ["ms_ahn"], {"to": {"place": "Jongno", "spot": "pojangmacha"}}],   # night; the tent bar
+            ["party", ["ms_ahn"], {"to": {"place": "jongno--pojangmacha", "spot": "pojangmacha"}}],   # night; the tent bar
         ]},
         # M19b · 114-116수. Drinks with Jang. Her father. The necklace.
         "m19b": {"title": T("Her Father"), "kind": "main", "steps": [
@@ -613,7 +613,7 @@ def _nodes():
              ]),
         node("m14", 235, 135, "m14", room="exec-floor", move=68, board=False),
         node("m15", 250, 128, "m15", place="Susaek-dong", room="relatives", move=70, board=False),
-        node("m16", 265, 120, "m16", place="the pizza shop", move=83, dilemma=D(
+        node("m16", 265, 120, "m16", place="The pizza shop", move=83, dilemma=D(
             "ms_oh", "Turn down an old friend.",
             "He was my senior. He taught me this job. And he's holding out an envelope.",
             "I hand it back.",
@@ -663,7 +663,7 @@ def _nodes():
         ]),
         node("m23", 375, 68, "m23", room="sales3", move=143, board=False),
         node("m23b", 382, 64, "m23b", place="Jongno", room="forecourt", move=144, board=False),
-        node("m24", 395, 58, "m24", place="the new office", move=144, record=145, dilemma=D(
+        node("m24", 395, 58, "m24", place="The new office", move=144, record=145, dilemma=D(
             "ms_jang", "Find Cho Hunhyun's move.",
             "One more move. The centre.",
             "Black 145. Nie Weiping resigns.",
