@@ -85,13 +85,15 @@ def _scenes_daiyu():
               "那轿夫抬进去，走了一射之地，将转弯时，便歇下退出去了。另换了三四个衣帽周全十七八岁的小厮上来，复抬起轿子。众婆子步下围随至一垂花门前落下。众小厮退出，众婆子上来打起轿帘，扶黛玉下轿。"),
             ["spawn", "mm", "laomama", "d1", 4, 0],
             S("laomama", "This way, miss. The old lady's rooms are through the courtyard, past the screen.", "姑娘这边走。转过插屏，就是老太太的正房大院了。"),
+            N("On the steps of the main rooms sit maids in red and green. They jump up laughing.", "台矶之上，坐着几个穿红着绿的丫头，一见他们来了，便忙都笑迎上来。"),
+            ["spawn", "mi", "jmmaid", "d1", 8, -2],
+            S("jmmaid", "The old lady was just asking for you, and here you are!", "刚才老太太还念呢，可巧就来了。"),
+            N("Three or four of them race to lift the door curtain. Someone inside calls: Miss Lin is here.", "于是三四人争着打起帘笼，一面听得人回话：「林姑娘到了。」"),
         ]},
 
         # D2 · Grandmother. One board: whom to bow to first.
         "d2": {"title": T("Grandmother", "外祖母"), "kind": "main", "steps": [
-            ["spawn", "mm", "jmmaid", "d2", 6, 2],
-            S("jmmaid", "The old lady was just asking for you, and here you are!", "刚才老太太还念呢，可巧就来了。"),
-            N("Three or four of them race to lift the door curtain. Someone inside calls: Miss Lin is here.", "于是三四人争着打起帘笼，一面听得人回话：「林姑娘到了。」"),
+            N("Daiyu comes in through the curtain.", "黛玉方进入房时。"),
             ["spawn", "jm", "jiamu", "d2", 0, -6], ["spawn", "xfr", "xingfuren", "d2", -6, -4], ["spawn", "wfr", "wangfuren", "d2", 6, -4],
             ["spawn", "lw", "liwan", "d2", 10, -2],
             N("A room full of women. Two of them are supporting an old lady with silver hair, and everyone else stands back from her.",
@@ -639,14 +641,15 @@ ROOM_CUES = {
         {"who": "laomama", "say": T("Two cushions on the kang, facing each other. Somebody's places.", "炕沿上两个锦褥对设着，是有人的位子。")},
         {"who": "jmmaid", "say": T("The mistress always sits on the lower side. The east place is the master's.", "太太总坐在下首。东边那是老爷的位子。")},
         {"who": "jmmaid", "say": T("The mistress smiles when she talks about him. Everyone does.", "太太说起他来是笑着的。人人都这样。")},
+        {"who": "laomama", "say": T("Look: the mistress is waving you over to the east side, where the back-rest is.", "瞧，太太往东让你呢，那边有靠背。"), "wait": True},
     ],
     "d6": [   # the spittoon is the novel's: 早见人又捧过漱盂来
         {"who": "liwan", "say": T("We don't sit. We serve the old lady.", "我们不坐，伺候老太太。")},
         {"who": "jmmaid", "say": T("The spittoon comes before the tea you drink.", "先捧漱盂，后面那盅才是吃的茶。")},
-        {"who": "tanchun", "say": T("Grandmother thinks girls only need a few characters.", "老太太说，姑娘们认得几个字就够了。")},
     ],
-    "d7": [   # the blank faces are the novel's: 众人不解其语
-        {"who": "jmmaid", "say": T("A jade? What does he mean? Nobody knows.", "玉？他问这个做什么？谁也不明白。")},
+    "d7": [   # the blank faces are the novel's: 众人不解其语; Tanchun repeats Grandmother Jia's scoff from d6 (「不过是认得两个字」)
+        {"who": "tanchun", "say": T("Grandmother says girls only need to know a few characters.", "老太太说，姑娘们认得两个字就够了。")},
+        {"who": "jmmaid", "say": T("A jade? What does he mean? Nobody knows.", "玉？他问这个做什么？谁也不明白。"), "wait": True},
     ],
     "g2": [
         {"who": "oldservant", "say": T("Those idlers are having their fun. Don't wait by that wall.", "那几个闲人拿你取笑呢。别去墙角下傻等。")},
@@ -679,7 +682,7 @@ TALLY = {
     "boards": ["d2", "d3", "d4", "d5~1", "d5~2", "d5~3", "d6~1", "d6~2", "d6~3", "d7~1"],
     "at": "d8",
     "title": ["The Day's End", "一日已尽"],
-    "none": ["All day long, no one smiled behind a sleeve at her.", "这一日，竟没有一个人掩口笑她。"],
+    "none": ["All day long, not one person smiled behind a sleeve at her.", "这一日，竟没有一个人掩口笑她。"],
     "some": ["{n} times today, someone smiled behind a sleeve.", "这一日，有{n}回，有人掩口笑她。"],
 }
 
