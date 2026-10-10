@@ -991,6 +991,24 @@ def palace_wall(v):   # Deoksugung's wall seen from above: a tiled coping on pla
     return g.image()
 
 
+def machine():   # Ulsan's plant: a steel press in safety yellow and grey, pipes, a control panel, hazard stripes at its foot
+    W, H = 4 * T, 46
+    g = Grid(W, H)
+    yel, yelD, steel = "#e8b820", "#b88a10", "#8a9098"
+    g.rect(18, 0, 28, 6, yelD); g.rect(18, 0, 28, 1, "#f4d050")                                         # the press's crown
+    g.rect(20, 6, 4, 26, steel); g.rect(40, 6, 4, 26, steel)                                              # its columns
+    g.rect(24, 10, 16, 8, "#5a5e66"); g.rect(28, 18, 8, 4, "#3a3e46")                                     # the ram
+    box(g, 4, 22, W - 8, 8, 14, yel, yelD)                                                                # the bed
+    g.rect(24, 24, 16, 4, "#c8ccd2")
+    for x in range(4, W - 4, 6):                                                                           # hazard stripes
+        g.rect(x, 40, 3, 4, "#1c1c20")
+    g.rect(4, 40, W - 8, 1, "#1c1c20")
+    g.rect(2, 8, 3, 30, "#6a7078"); g.rect(2, 8, 14, 3, "#6a7078")                                       # a pipe
+    g.rect(W - 14, 12, 10, 12, "#4a4e56"); g.rect(W - 12, 14, 6, 3, "#3ac86a")                             # the control panel
+    g.set(W - 12, 19, "#d8382a"); g.set(W - 9, 19, "#f4c020"); g.set(W - 7, 21, "#3a6ad8")
+    return img(g)
+
+
 def mat():   # a rug
     g = Grid(2 * T, 2 * T)
     g.rect(1, 6, 30, 20, "#8a5a5a"); g.rect(3, 8, 26, 16, "#a87070"); g.rect(5, 10, 22, 12, "#8a5a5a")
@@ -1021,7 +1039,7 @@ PIECES = {
     "lamp.post": streetlight, "furn.plant": plant, "furn.window": window, "furn.counter": counter, "furn.table": table,
     "furn.stool": stool, "furn.shelf": shelf, "furn.desk": desk, "furn.mat": mat, "furniture.gotable": gotable, "market.stalls": stalls,
     # Book 1: the memorial at Daehanmun, Daehanmun itself, the textile floor
-    "prop.memorial_tent": memorial_tent, "building.palace_gate": palace_gate, "furn.cloth_bolts": cloth_bolts,
+    "prop.memorial_tent": memorial_tent, "prop.machine": machine, "building.palace_gate": palace_gate, "furn.cloth_bolts": cloth_bolts,
     # m17's drinks, small on a table top
     "prop.glass_water": glass_water, "prop.teacup": teacup, "prop.coffee_cup": coffee_cup,
 }
