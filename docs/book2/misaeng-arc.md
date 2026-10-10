@@ -197,8 +197,6 @@ can no longer escape and Nie resigns, and Cho becomes the first Korean world cha
   title scene (four stones, one eye: 「미생이네요」) are all baduk. Nothing has to be grafted on.
 - **Danger where the source has it:** the audit about to close on a fraud it can't see; the phone call that blows up an
   executive's business; HR's 「아마 어려울 것 같습니다」.
-- **Women who act:** Ahn Young-yi (top of the intern class, fighting her own department and her father) and Sun
-  Ji-young (a working mother who confronts a harasser and refuses to quit) have their own stretches in the text.
 
 **Thread figure (C4): the contract.** Not a villain: the two-year contract Jang signs at m7 and loses at m23. Every lead's
 stretch bears on it. Oh's choices (Park's audit, the China business, resigning) are all, in part, about getting Jang made
