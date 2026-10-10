@@ -1576,5 +1576,79 @@
   "model": "final-1",
   "look": "final",
   "made": "2026-10-10"
+ },
+ "ms_25stones": {
+  "file": "ms_25stones.jpg",
+  "scene": "ms",
+  "prompt": "A go board seen from above, almost filled with twenty-five white stones; one black stone sits alone near the centre with no room around it. Behind the board, out of focus, the open-plan office of Sales Team 3: desks, monitors, people on the phone, none of them looking at the board. Style: 2D Korean webtoon, hard cel shading. Modern-day Seoul, South Korea.",
+  "provider": "replicate",
+  "model": "final-1",
+  "look": "final",
+  "made": "2026-10-10"
+ },
+ "ms_babyfinger": {
+  "file": "ms_babyfinger.jpg",
+  "scene": "ms",
+  "prompt": "Night, a tiny one-room flat in Seoul: a single mattress on the floor, a rice cooker, baby clothes on a rack. Kim Seok-ho, still in his office shirt, kneels by his sleeping wife and baby; the baby's small hand has closed round his finger. A street lamp through the one window. Kim Seok-ho is an earnest young Korean man with short hair and glasses, in a grey suit and a green tie. Style: 2D Korean webtoon, hard cel shading. Modern-day Seoul, South Korea.",
+  "provider": "replicate",
+  "model": "final-1",
+  "look": "final",
+  "made": "2026-10-10"
+ },
+ "ms_sauna": {
+  "file": "ms_sauna.jpg",
+  "scene": "ms",
+  "prompt": "A Korean public sauna, steam rising from a hot pool tiled in blue. Steve Han, Kim Bu-ryeon and Go Gwa-jang sit in the water up to their chins, towels on their heads; Go Gwa-jang has thrown a friendly arm toward Steve Han, who leans away, deadpan. Comic, warm. Steve Han is a sleek, cold Korean-American department head in his forties, raised in the US, with slicked-back black hair, in a sharp tailored black suit and a steel-blue tie. Kim Bu-ryeon is a heavy-set, balding Korean department head in his fifties with grey hair at the sides and glasses, in a grey suit and a dark red tie. Go Gwa-jang is a round, sulky Korean section head in his forties with short hair and heavy cheeks, in a rumpled brown suit and a mustard-brown tie. Style: 2D Korean webtoon, hard cel shading. Modern-day Seoul, South Korea.",
+  "provider": "replicate",
+  "model": "final-1",
+  "look": "final",
+  "made": "2026-10-10",
+  "edit": "bath towels instead of the suits (CAST had dressed them)"
+ },
+ "ms_doorbell": {
+  "file": "ms_doorbell.jpg",
+  "scene": "ms",
+  "prompt": "Evening in a small Seoul daycare: toy shelves, padded mats, coats on hooks. Five small children have all run to the front door at once at the sound of the bell, faces lit with hope; behind them a tired young teacher. Through the glass of the door, it's somebody else's parent. Style: 2D Korean webtoon, hard cel shading. Modern-day Seoul, South Korea.",
+  "provider": "replicate",
+  "model": "final-1",
+  "look": "final",
+  "made": "2026-10-10"
+ },
+ "ms_drawing": {
+  "file": "ms_drawing.jpg",
+  "scene": "ms",
+  "prompt": "Close on a child's crayon drawing on a low table: a woman in an office suit seen from behind, walking away, a phone held to her ear, and a small figure waving. The word 'MUMMY' in wobbly letters. A small sleeping hand still holds a crayon at the edge of the frame. Lamplight. Style: 2D Korean webtoon, hard cel shading. Modern-day Seoul, South Korea.",
+  "provider": "replicate",
+  "model": "final-1",
+  "look": "final",
+  "made": "2026-10-10"
+ },
+ "ms_blacknails": {
+  "file": "ms_blacknails.jpg",
+  "scene": "ms",
+  "prompt": "A memory in warm, faded light: Han Seok-yul's father, in grease-stained overalls, sits on a step outside a workshop, his rough hands open on his knees, the nails black with ground-in grease. His small son, a boy of six, looks at the hands, and up at his father's face. Machinery and sparks behind. Han Seok-yul's father is a weathered Korean factory worker in his fifties with short greying hair and stubble, in blue work overalls, his hands black with grease. Style: 2D Korean webtoon, hard cel shading. Modern-day Seoul, South Korea.",
+  "provider": "replicate",
+  "model": "final-1",
+  "look": "final",
+  "made": "2026-10-10"
+ },
+ "ms_barefoot": {
+  "file": "ms_barefoot.jpg",
+  "scene": "ms",
+  "prompt": "A training room set for a test: a long panel table with evaluators in suits and name cards. Oh Sang-sik sits among them in his socks, his feet bare of shoes under the table, arms folded, eyes red. In front of the panel, Jang Geu-rae holds out a pair of office slippers to Han Seok-yul, who stands stiff with his chin up. Oh Sang-sik is a tired, intense Korean team leader of about forty with bloodshot red eyes, messy black hair and stubble, in a white shirt with the sleeves rolled up and a loosened dark red tie. Jang Geu-rae is a thin, quiet Korean man of twenty-six with a plain, watchful face, short black hair with a fringe over his forehead, in a cheap dark navy suit, white shirt and plain blue tie. Han Seok-yul is a brash, grinning Korean man of twenty-seven with slicked-back hair, in a brown suit and a mustard tie. Style: 2D Korean webtoon, hard cel shading. Modern-day Seoul, South Korea.",
+  "provider": "replicate",
+  "model": "final-1",
+  "look": "final",
+  "made": "2026-10-10",
+  "edit": "speech bubbles and header removed; Oh's socked feet shown under the table"
+ },
+ "ms_daehanmun": {
+  "file": "ms_daehanmun.jpg",
+  "scene": "ms",
+  "prompt": "Early morning at Daehanmun, the old palace gate of Deoksugung in central Seoul: in front of it a small white memorial tent with rows of framed portraits, flowers and incense. Oh Sang-sik stands bowing, and behind him four new hires in new suits bow too: Jang Geu-rae, Ahn Young-yi, Han Seok-yul, Jang Baek-gi. Commuters pass behind. Oh Sang-sik is a tired, intense Korean team leader of about forty with bloodshot red eyes, messy black hair and stubble, in a white shirt with the sleeves rolled up and a loosened dark red tie. Jang Geu-rae is a thin, quiet Korean man of twenty-six with a plain, watchful face, short black hair with a fringe over his forehead, in a cheap dark navy suit, white shirt and plain blue tie. Ahn Young-yi is a composed, sharp-eyed Korean woman of twenty-five with a chin-length black bob, in a charcoal skirt suit and a white blouse. Han Seok-yul is a brash, grinning Korean man of twenty-seven with slicked-back hair, in a brown suit and a mustard tie. Jang Baek-gi is a neat, proud Korean man of twenty-six with side-parted black hair, in a sharp navy suit and a blue tie. Style: 2D Korean webtoon, hard cel shading. Modern-day Seoul, South Korea.",
+  "provider": "replicate",
+  "model": "final-1",
+  "look": "final",
+  "made": "2026-10-10"
  }
 }

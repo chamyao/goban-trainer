@@ -349,8 +349,10 @@ STILLS = {
 def cast_in(sid):
     """The CAST keys a still's scene names, in the order they appear."""
     scene = STILLS[sid]["prompt"]
-    found = [(scene.find(name), key) for key, (name, _) in CAST.items() if re.search(rf"\b{name}\b", scene)]
-    return [key for _, key in sorted(found)]
+    spans = [(m.start(), m.end(), key) for key, (name, _) in CAST.items() for m in re.finditer(rf"\b{re.escape(name)}\b", scene)]
+    # a name inside a longer one ("Han Seok-yul" in "Han Seok-yul's father") is that longer person, not a second one
+    spans = [sp for sp in spans if not any(o[0] <= sp[0] and sp[1] <= o[1] and (o[1] - o[0]) > (sp[1] - sp[0]) for o in spans)]
+    return list(dict.fromkeys(key for _, _, key in sorted(spans)))
 
 
 def prompt(sid, n_style=0, cast_refs=()):
