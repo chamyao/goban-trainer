@@ -39,7 +39,7 @@ def D(who, q, open_, win, slip, **kw):
 # Cast id (Graphics' TK_CHARS keys) -> Kokoro English voice (ids already used in the repo).
 CAST21 = {
     "ms_jang": "am_liam", "ms_jang_young": "am_liam", "ms_jang_child": "af_sky", "ms_mother": "bf_emma",
-    "ms_oh": "am_onyx", "ms_kimds": "am_eric", "ms_ahn": "af_bella", "ms_han": "am_michael", "ms_kimsh": "am_adam",
+    "ms_oh": "am_onyx", "ms_oh_hike": "am_onyx", "ms_kimds": "am_eric", "ms_ahn": "af_bella", "ms_han": "am_michael", "ms_kimsh": "am_adam",
     "ms_kimbr": "bm_george", "ms_director": "bm_fable", "ms_hr": "am_michael", "ms_trainee": "af_sky",
     "ms_stevehan": "am_echo", "ms_go": "am_fenrir", "ms_buyer": "bm_lewis", "ms_sponsor": "bm_daniel", "ms_exec": "bm_lewis",
     # new in this book (Graphics: to draw)
@@ -128,7 +128,7 @@ def _scenes():
             ]],
             N("A message from upstairs: don't come to the office. Go straight to a café in Jongno. A buyer is waiting, and nobody else can meet him."),
             ["gain", "cafe_address"],
-            ["party", ["ms_oh"], {"to": {"place": "Mountain", "spot": "summit"}}],   # a cut: Oh, on a mountain, the same morning
+            ["party", ["ms_oh_hike"], {"to": {"place": "Mountain", "spot": "summit"}}],   # a cut: Oh, on a mountain, the same morning
         ]},
 
         # M7 · 3수. Oh leads. The weekday hike; the forgotten 11 a.m. meeting; the department head's call on the summit.
@@ -139,18 +139,18 @@ def _scenes():
             S("ms_ohson", "Dad! You said the mountain!"),
             N("He forgot the eleven o'clock meeting with an overseas buyer. On the summit, his phone rings."),
             S("ms_bujang", "Where are you? The buyer's waiting. If he walks, we both die."),
-            S("ms_oh", "Anyone can go, sir. The director. The executives. The president himself."),
+            S("ms_oh_hike", "Anyone can go, sir. The director. The executives. The president himself."),
             S("ms_bujang", "I'm sending today's new hire straight there. Are we in a position to be picky?"),
-            S("ms_oh", "A rookie? On his first day?"),
+            S("ms_oh_hike", "A rookie? On his first day?"),
             ["remove", "sn"],
         ]},
 
         # M7b · 3수. The car; the jam; "fear is rational". A cut to the café.
         "m7b": {"title": T("Fear Is Rational"), "kind": "main", "steps": [
             N("Into the car. The road in moves five hundred metres in thirty minutes."),
-            S("ms_oh", "There was a paper at the workshop. Fear is mostly irrational..."),
+            S("ms_oh_hike", "There was a paper at the workshop. Fear is mostly irrational..."),
             S("ms_bujang", "Shall I tell you about dismissal-notice pay?"),
-            S("ms_oh", "Mangwon-dong crossroads. Twelve kilometres an hour. Eight to go. Thirty minutes late. Fear is rational."),
+            S("ms_oh_hike", "Mangwon-dong crossroads. Twelve kilometres an hour. Eight to go. Thirty minutes late. Fear is rational."),
             ["party", ["ms_jang"], {"to": {"place": "jongno--cafe", "spot": "cafe"}}],   # a cut: the café, where the rookie is
         ]},
 
