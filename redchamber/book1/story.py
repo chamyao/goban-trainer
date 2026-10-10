@@ -573,4 +573,62 @@ def _world():
     }
 
 
+# Place and room labels (English, Chinese), for Places.
+PLACE_NAMES = {
+    "The Rong Mansion": "荣国府", "Lady Xing's Court": "邢夫人院", "The Village": "城外村庄", "Ning-Rong Street": "宁荣街",
+}
+ROOM_NAMES = {
+    "jm-rooms": ("Grandmother Jia's rooms", "贾母正房"), "wf-rooms": ("Lady Wang's rooms", "王夫人房"),
+    "gauze-closet": ("The green gauze closet", "碧纱橱"), "zhou-house": ("Zhou Rui's house", "周瑞家"),
+    "xf-eastroom": ("The east room", "东边屋内"), "xf-rooms": ("Xifeng's rooms", "凤姐屋里"),
+    "xing-hall": ("Lady Xing's hall", "邢夫人正室"), "gouer-house": ("Gou'er's house", "狗儿家"),
+}
+
+
+# Room people who give a cue before a board (for Places: room NPCs standing near the node's spot, one `say` each).
+# Keyed by node. "who" is a cast id (or a folk kind as f_*). A cue quoting the novel says so in its comment;
+# the rest are staging that shows what the text says she noticed or knew.
+ROOM_CUES = {
+    "d2": [
+        {"who": "jmmaid", "say": T("Everyone stands back for the old lady. The two holding her up never let go.", "众人都给老太太让着。搀着她的两个人一直不撒手。")},
+        {"who": "laomama", "say": T("The silver-haired one is the old lady herself, miss.", "那位银发的，就是老太太。")},
+    ],
+    "d3": [   # the sisters' whisper is the novel's: 众姊妹都忙告诉他道「这是琏嫂子」
+        {"who": "tanchun", "say": T("This is Cousin Lian's wife.", "这是琏嫂子。")},
+        {"who": "jmmaid", "say": T("Nobody calls her Pepper Feng but the old lady.", "除了老太太，谁敢叫她凤辣子。")},
+    ],
+    "d4": [
+        {"who": "laomama", "say": T("The old lady said both uncles, miss, and the light's going.", "老太太吩咐两个舅舅都要见的，姑娘，天也晚了。")},
+    ],
+    "d5": [   # the cushions are the novel's: 炕沿上却有两个锦褥对设; Lady Wang moving east too: 便往东让
+        {"who": "laomama", "say": T("Two cushions on the kang, facing each other. Somebody's places.", "炕沿上两个锦褥对设着，是有人的位子。")},
+        {"who": "jmmaid", "say": T("The mistress always sits on the lower side. The east place is the master's.", "太太总坐在下首。东边那是老爷的位子。")},
+        {"who": "jmmaid", "say": T("The mistress smiles when she talks about him. Everyone does.", "太太说起他来是笑着的。人人都这样。")},
+    ],
+    "d6": [   # the spittoon is the novel's: 早见人又捧过漱盂来
+        {"who": "liwan", "say": T("We don't sit. We serve the old lady.", "我们不坐，伺候老太太。")},
+        {"who": "jmmaid", "say": T("The spittoon comes before the tea you drink.", "先捧漱盂，后面那盅才是吃的茶。")},
+        {"who": "tanchun", "say": T("Grandmother thinks girls only need a few characters.", "老太太说，姑娘们认得几个字就够了。")},
+    ],
+    "d7": [   # the blank faces are the novel's: 众人不解其语
+        {"who": "jmmaid", "say": T("A jade? What does he mean? Nobody knows.", "玉？他问这个做什么？谁也不明白。")},
+    ],
+    "g2": [
+        {"who": "oldservant", "say": T("Those idlers are having their fun. Don't wait by that wall.", "那几个闲人拿你取笑呢。别去墙角下傻等。")},
+    ],
+    "g3": [   # the novel's: 我们这里周大娘有三个呢
+        {"who": "backchild", "say": T("There are three Zhou Da-niangs here. Which one?", "我们这里周大娘有三个呢。你找哪一个？")},
+    ],
+    "g4": [
+        {"who": "zhouruijia", "say": T("I do like to be asked. It's not my job, mind, but I know everyone.", "回话原不与我相干，可这府里，谁我不认得。")},
+    ],
+    "g5": [   # the novel's: 周瑞家的称他是平姑娘
+        {"who": "zhouruijia", "say": T("Miss Ping, this is the granny I told you of.", "平姑娘，这就是我才说的那姥姥。")},
+    ],
+    "g6": [   # the wink is the novel's: 递眼色与刘姥姥
+        {"who": "zhouruijia", "say": T("Go on. Say it now, while there's no one else here.", "快说。趁这会子没别人。")},
+    ],
+}
+
+
 WORLD_HLM1 = _world()
