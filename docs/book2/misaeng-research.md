@@ -63,7 +63,7 @@ Main sources:
 - The game is **145 moves**; the SGF has exactly 145 moves and RE[B+R].
 - namu 시즌1: "조훈현 VS 녜웨이핑의 제1회 응씨배 대국이 145수로 끝나서 시즌 1도 145화로 마무리되었다."
 - A reader pointed this out as early as 5수.
-- The last move, Black 145, is a placement ("붙임") that captures five white stones in the centre. Nie resigned. (허허허, 145수 [V-cmt])
+- The last move, Black 145, is a placement ("붙임") that leaves five white stones in the centre unable to escape; it takes no stones (checked by replaying the SGF). Nie resigned. (허허허, 145수 [V-cmt])
 
 **Episode titles [V].** Taken from Daum's own episode list (niceaji episodes.js):
 
@@ -106,7 +106,7 @@ Reader 허허허's per-move notes, linked to the story [V-cmt; S2 and S3]:
 | W118 | Later judged a problem move; Nie seems to have misread from here | — |
 | W124 | An invasion (치중) "like a bomb"; Nie commits to killing the big group, which was not his usual style | — |
 | B137 | Cho's way to live with the group | The audit of the 전무 |
-| B145 | Placement; five centre stones captured; Nie resigns | Season 1 ends |
+| B145 | Placement; five centre stones can't escape (none taken); Nie resigns | Season 1 ends |
 
 Other commenters made similar links. At 22수: White connects two weak stones into a wall, matching the episode about family. At 47수: "살면 이길 수 있다" is Cho's resolve, read as Jang's wish to settle into the company. At 55수: Black mends its weakness, read as 오과장's health crisis.
 

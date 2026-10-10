@@ -25,8 +25,8 @@ ends, his team head Oh Sang-sik has already left to start a small company of his
 
 **The frame is the shape.** Every episode opens on one move of a real game: the 1st Ing Cup final, game 5 (1989-09-05; the venue
 is unverified), Nie Weiping (White) against Cho Hunhyun (Black). The game is 145 moves, so Season 1 is 145
-episodes. Cho's group in the centre is 미생 (not yet alive) for most of the game. At move 145 Black captures five white
-stones and Nie resigns, and Cho becomes the first Korean world champion. Jang's season ends on the same move.
+episodes. Cho's group in the centre is 미생 (not yet alive) for most of the game. At move 145 White's five centre stones
+can no longer escape and Nie resigns, and Cho becomes the first Korean world champion. Jang's season ends on the same move.
 
 **Why it plays:**
 - **Stakes in a centre:** an outsider who must survive a place built for people with degrees. Every scene asks whether

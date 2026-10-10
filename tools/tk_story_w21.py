@@ -292,7 +292,7 @@ def _scenes():
             ["remove", "kd"],
         ]},
         "m13_wait": {"title": T("The Audit"), "kind": "main", "steps": [
-            S("ms_jang", "Not yet. There's something I haven't put together. The audit board."),
+            S("ms_jang", "Not yet. I haven't put it together. ICB's registration is on the audit room's table; my notes from the call to ICB are on my desk in Sales 3. Then link them on the audit board, from the bag or the audit room's table."),
         ]},
 
         # M13 · 64-65수 (boss). The audit is packing up. One more move. The phone. James Park.
@@ -368,7 +368,7 @@ def _scenes():
             ["party", ["ms_jang"], {"to": {"place": "One International", "spot": "board-room"}}],   # back to Jang, getting the board room ready
         ]},
         "m17_wait": {"title": T("The Board Room"), "kind": "main", "steps": [
-            S("ms_jang", "Every seat as it's written on the notes. The president's water, the executive's tea. Then we rehearse."),
+            S("ms_jang", "Every seat as it's written on the notes: the president's water, the executive's tea, the division head's coffee. Then we rehearse."),
         ]},
 
         # M17 · 84-88수. Setting the room; the rehearsal; "shake the board"; the president.
@@ -392,7 +392,7 @@ def _scenes():
             ["remove", "oh"],
         ]},
         "m18_wait": {"title": T("A Hundred Thousand Won"), "kind": "main", "steps": [
-            S("ms_jang", "Not yet. I still have stock, and a street full of people."),
+            S("ms_jang", "Not yet. The market stalls on Jongno sell stock; the street's full of people to sell it to."),
         ]},
 
         # M18 · 103-106수. The mission fails, as written: the Baduk Association's rebuke, the corner shop.
@@ -514,7 +514,7 @@ def _scenes():
             N("On the frame strip, 144 moves. Nie Weiping's stones press on Cho's centre."),
             ["problem"],   # the record: Black 145
             ["still", "ms_145", "slow zoom in"],
-            N("Black 145. Five white stones in the centre are taken. Nie Weiping resigns. Cho Hunhyun is the first world champion in Korean baduk."),
+            N("Black 145. White's five stones in the centre can't escape now. Nie Weiping resigns. Cho Hunhyun is the first world champion in Korean baduk."),
             S("ms_oh", "Next applicant."),
             ["spawn", "kd", "ms_kimds", "m24", 10, 2], ["move", "kd", "m24", 6, -2],
             S("ms_kimds", "Kim Dong-sik. I've quit too. Is the post still open?"),
@@ -595,7 +595,7 @@ def _nodes():
         node("m12", 205, 150, "m12", place="Baekjin Trading", room="baekjin", move=63, board=False),
         node("m13", 220, 142, "m13", room="audit", move=65, role="boss",
              gate=[{"needs": ["mark:audit"], "else": "m13_wait",
-                    "objective": T("Link the clues on the audit board: Baekjin's statements, its staff, ICB's papers and the call."),
+                    "objective": T("Pick up ICB's registration from the audit room's table and your call notes from your desk in Sales 3, then link the clues on the audit board (in the bag, or at the audit room's table)."),
                     "at": "One International"}],
              dilemma=[
                  D("ms_jang", "Keep the audit open.",
@@ -621,7 +621,7 @@ def _nodes():
              ),
         node("m17", 280, 112, "m17", room="board-room", move=84, record=[85, None],
              gate=[{"needs": ["mark:seat_president", "mark:seat_exec", "mark:seat_division"], "else": "m17_wait",
-                    "objective": T("Set the board room from the seating notes: each drink, tray and pen at its seat."),
+                    "objective": T("Set the board room from the seating notes: each drink at its seat, on the 7th-floor board room's table."),
                     "at": "One International"}],
              dilemma=[
                  D("ms_jang", "Find Cho Hunhyun's move.",
@@ -635,7 +635,7 @@ def _nodes():
              ]),
         node("m18", 295, 105, "m18", place="Jongno", move=106, board=False,
              gate=[{"needs": ["mark:trade"], "else": "m18_wait",
-                    "objective": T("Buy goods with the hundred thousand won, and sell them to passers-by on Jongno."),
+                    "objective": T("Buy stock at the market stalls on Jongno with the hundred thousand won, then sell it to passers-by on the street."),
                     "at": "Jongno"}]),
         node("m19", 310, 98, "m19", room="roof", move=114, dilemma=D(
             "ms_ahn", "Keep your proposal.",
@@ -684,7 +684,7 @@ _ITEMS = {
     "homework": {"name": "Kim Dong-sik's homework", "kind": "key", "text": "Three questions a day, in his handwriting."},
     "report": {"name": "The shipping report (laminated)", "kind": "key"},
     "envelope": {"name": "An envelope", "kind": "key"},
-    "cash_100k": {"name": "₩100,000", "kind": "key"},
+    "cash_100k": {"name": "The mission's envelope", "kind": "key", "text": "₩100,000 to turn into more."},
     "dried_squid": {"name": "Dried squid", "kind": "key"},
     "necklace": {"name": "A necklace", "kind": "key"},
     "contract": {"name": "The contract, ended", "kind": "key"},
@@ -701,7 +701,7 @@ _ITEMS = {
     "james_park": {"name": "James Park", "kind": "clue", "text": "James Park, director of ICB, is Park Jong-sik."},
     # setting the board room (m17); the notes say which seat gets what
     "seating_notes": {"name": "Seating notes", "kind": "key",
-                      "text": "President: still water, no ice. Executive vice president: green tea. Division head: coffee, black. A tray and two pens at every seat."},
+                      "text": "President: still water, no ice. Executive vice president: green tea. Division head: coffee, black."},
     "water": {"name": "Still water", "kind": "prop"},
     "green_tea": {"name": "Green tea", "kind": "prop"},
     "coffee": {"name": "Black coffee", "kind": "prop"},
