@@ -306,6 +306,150 @@
    0,
    14,
    16
+  ],
+  "item.pass": [
+   1099,
+   0,
+   14,
+   16
+  ],
+  "item.id_card": [
+   1114,
+   0,
+   16,
+   12
+  ],
+  "item.glue_stick": [
+   1131,
+   0,
+   8,
+   16
+  ],
+  "item.waybill_scrap": [
+   1140,
+   0,
+   16,
+   12
+  ],
+  "item.note": [
+   1157,
+   0,
+   14,
+   12
+  ],
+  "item.slippers": [
+   1172,
+   0,
+   16,
+   14
+  ],
+  "item.hand_mirror": [
+   1189,
+   0,
+   12,
+   16
+  ],
+  "item.homework": [
+   1202,
+   0,
+   16,
+   16
+  ],
+  "item.report": [
+   1219,
+   0,
+   14,
+   16
+  ],
+  "item.statements": [
+   1234,
+   0,
+   14,
+   16
+  ],
+  "item.icb_number": [
+   1249,
+   0,
+   16,
+   10
+  ],
+  "item.board_list": [
+   1266,
+   0,
+   14,
+   16
+  ],
+  "item.envelope": [
+   1281,
+   0,
+   16,
+   10
+  ],
+  "item.seating_notes": [
+   1298,
+   0,
+   14,
+   16
+  ],
+  "item.cash_100k": [
+   1313,
+   0,
+   16,
+   12
+  ],
+  "item.dried_squid": [
+   1330,
+   0,
+   10,
+   16
+  ],
+  "item.necklace": [
+   1341,
+   0,
+   14,
+   14
+  ],
+  "item.resignation": [
+   1356,
+   0,
+   16,
+   12
+  ],
+  "item.contract": [
+   1373,
+   0,
+   14,
+   16
+  ],
+  "ms_tray": [
+   1388,
+   0,
+   16,
+   10
+  ],
+  "ms_pens": [
+   1405,
+   0,
+   14,
+   12
+  ],
+  "ms_cup": [
+   1420,
+   0,
+   10,
+   10
+  ],
+  "ms_water": [
+   1431,
+   0,
+   8,
+   16
+  ],
+  "ms_pocketboard": [
+   1440,
+   0,
+   16,
+   14
   ]
  },
  "kinds": {
@@ -614,6 +758,41 @@
     1
    ],
    "atlas": "bench"
+  },
+  "ms_tray": {
+   "size": [
+    1,
+    1
+   ],
+   "atlas": "ms_tray"
+  },
+  "ms_pens": {
+   "size": [
+    1,
+    1
+   ],
+   "atlas": "ms_pens"
+  },
+  "ms_cup": {
+   "size": [
+    1,
+    1
+   ],
+   "atlas": "ms_cup"
+  },
+  "ms_water": {
+   "size": [
+    1,
+    1
+   ],
+   "atlas": "ms_water"
+  },
+  "ms_pocketboard": {
+   "size": [
+    1,
+    1
+   ],
+   "atlas": "ms_pocketboard"
   }
  }
 }
