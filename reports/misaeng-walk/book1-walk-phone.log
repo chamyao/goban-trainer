@@ -1,0 +1,8 @@
+     mode: test (the game's test mode on)
+ok   21-m1  12s  ms_jang_young in korea-baduk-association--kba-trainees
+ok   21-m2  48s  ms_jang in one-international
+     21-m3: the lift, to ◆ 14F · Sales Team 3
+ok   21-m3  10s  ms_jang in one-international--sales3
+     21-m4 is gated on mark:errand_copy: to one-international--sales3 (errand-copy)
+     ui: {"lead":"ms_jang","party":["ms_jang"],"line":"StoryKim Dong-sik taps the desk. “The copies, Jang. Today▼","dlgHidden":false,"busy":true,"cine":false,"leaving":false,"html":["town-goal-go:Take me there","town-dlg chat:StoryKim Dong-sik taps the desk. “The co","tk-strip compact:Move 5Move 5"]}
+FAIL 21-m4  at 301,119 in one-international--sales3: over 300s on this beat (caught 0 times; goal 360,135) ("Kim Dong-sik taps the desk. “The copies, Jang. Today, if you can.”"); reloading, as a player would, and playing on
