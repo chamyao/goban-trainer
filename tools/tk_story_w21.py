@@ -771,9 +771,6 @@ KO21 = {
     "An intern from the other teams leans in the hof's doorway. “The parachute. The rest of us got in on paper. Beat me, and you can sit with us.”": '다른 팀 인턴이 호프집 문간에 기대어 있다. "낙하산이네. 우린 다 서류로 들어왔는데. 나 이기면, 우리랑 앉아도 돼."',
     "“…Huh. Sit down, then. You're buying.”": '"…허. 그럼 앉아. 네가 사."',
     'The intern at the door has gone in to his table.': '문간의 인턴은 자기 테이블로 들어갔다.',
-    'A trainee from the room, still in his school uniform, with a pocket board. “One more? Before you go home and they ask how it went?”': '아직 교복을 입은 연구생 하나가 포켓 바둑판을 들고 있다. "한 판 더? 집에 가서 어땠냐고 물어보기 전에?"',
-    "“…You'll make it next year. Probably.”": '"…내년엔 될 거야. 아마."',
-    'The trainee is replaying your game, move by move.': '연구생이 당신의 대국을 한 수씩 복기하고 있다.',
     'The clerk looks up. “Requisition? You need the form. Signed.”': '직원이 고개를 든다. "신청서요? 양식이 있어야 해요. 서명된 걸로."',
     "The clerk stamps Kim Dong-sik's requisition without reading it. “Supplies are by the lift. Sign here.”": '직원이 김동식 대리의 신청서를 읽지도 않고 도장을 찍는다. "비품은 엘리베이터 옆이에요. 여기 서명하세요."',
     'General Affairs has the requisition.': '총무팀이 신청서를 받았다.',
@@ -939,4 +936,5 @@ KO21 = {
     'Our kid. He said our kid.': '우리 애. 우리 애라고 했다.',
     "Go had taken a buyer, and Steve, to a dog-meat restaurant, and never said sorry. Steve sat on Sales Team 1's approvals.": '고 과장은 바이어와 스티브를 보신탕집에 데려갔고, 끝내 사과하지 않았다. 스티브는 영업 1팀의 결재를 묶어 두었다.',
     'They go to find Kim Bu-ryeon. He is already on the textile floor, with Go, saying sorry to Steve. Go asks if the approvals will go faster now. Everyone laughs.': '김부련 부장을 찾으러 간다. 그는 이미 섬유팀 층에서 고 과장과 함께 스티브에게 사과하고 있다. 고 과장이 이제 결재가 빨리 나느냐고 묻는다. 모두가 웃는다.',
+    'Your desk in Sales Team 3, fourteenth floor. Take the lift.': '14층 영업 3팀의 네 자리. 엘리베이터를 타라.',
 }
