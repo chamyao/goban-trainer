@@ -1,6 +1,7 @@
 // Red Chamber's street (world 31), two engine pieces Places asked for:
 //   1. a spot reached the long way round (g3's "via": the west lane's mouth, then its top): the goal marker leads to
 //      each via point in turn, moving on as she reaches it, and then to the spot itself.
+//   1b. the toy hawker, drawn as a porter, speaks under the name the map gives him ("speaker").
 //   2. people here only until a beat (the groom by the sedan chairs, until g2) are gone once it's won, and stay gone
 //      when the story moves on (tk-world.js refreshStory).
 const { chromium } = require(require('child_process').execSync('npm root -g', { env: { ...process.env, NODE_OPTIONS: '' } }).toString().trim() + '/playwright');
@@ -45,6 +46,11 @@ async function open(b, upto, place, party) {
   await p.evaluate(v => window.__w.player.body.reset(v.x, v.y + 10), s.via[1]); await p.waitForTimeout(400);
   g = await goal();
   check(g && !g.via && Math.abs(g.x - s.spot.x) < 2, `then the spot itself (${JSON.stringify(g)})`);
+  // 1b. the toy hawker (drawn as a porter) speaks under his own name ("speaker": Hawker 货郎)
+  const who = await p.evaluate(async () => { const w = window.__w, n = w.npcs.find(n => n.challenge && /toy/.test(n.challenge));
+    if (!n) return null; w.talk(worldLines(n.intro)); await new Promise(r => setTimeout(r, 300));
+    const t = document.querySelector('.town-who').textContent; while (w.ui.busy()) w.ui.advance(); return t; });
+  check(who === '货郎 Hawker', `the toy hawker speaks as 货郎 Hawker, not his sprite's name (${who})`);
   await p.context().close();
   // 2. the groom, until g2
   p = await open(b, 'g2', 'ning-rong-street', ['grannyliu', 'baner']);
