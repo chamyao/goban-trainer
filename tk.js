@@ -777,6 +777,7 @@ const TK = {
   // and s9 gone). v3, the rebuild around Zhou Yu's schemes: s1-s7 kept, s8-s14 became s10-s16, and new s8 (the gilded
   // cage) and s9 (year's end) came in between; a save already past them counts them played (Replay from… plays them).
   migrate() {
+    this.migrate21();
     const p = loadProgress(), m = p.tkMig || (p.tkMig = {});
     if ((m[15] || 0) >= 3) return;
     const move = (map, keep, fill) => {
@@ -792,6 +793,22 @@ const TK = {
     if ((m[15] || 0) < 2) move({ s10: ["s8"], s11: ["s9"], s12: ["s10"], s13: ["s11", "s12"], s14: ["s13"], s15: ["s14"] }, /^s[1-7]$/, []);
     move({ s8: ["s10"], s9: ["s11"], s10: ["s12"], s11: ["s13"], s12: ["s14"], s13: ["s15"], s14: ["s16"] }, /^s[1-7]$/, [["s10", ["s8", "s9"]]]);
     m[15] = 3;
+    this.saveProg(p);
+  },
+
+  // Misaeng Book 1 rewritten from the comic: m1-m22 are different scenes now, so an old save starts the book over, once
+  // (as Start over does: beats, scenes seen, place and things in world 21)
+  migrate21() {
+    const p = loadProgress(), m = p.tkMig || (p.tkMig = {});
+    if ((m[21] || 0) >= 2) return;
+    m[21] = 2;
+    if (Object.keys(p.tk || {}).some(k => k.startsWith("21-"))) {
+      for (const k of Object.keys(p.tk)) if (k.startsWith("21-")) this.undoCleared(p, k);
+      for (const k of Object.keys(p.tkSeen || {})) if (k.startsWith("21:")) delete p.tkSeen[k];
+      this.rolledBack(p, 21);
+      for (const key of ["tk-party", "tk-items", "tk-at", "tk-ride", "tk-marks"]) { const a = this.ls(key); if (21 in a) { delete a[21]; this.lsSet(key, a); } }
+      try { localStorage.removeItem("tk-world-21"); localStorage.removeItem("tk-choices"); } catch {}
+    }
     this.saveProg(p);
   },
 

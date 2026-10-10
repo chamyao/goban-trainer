@@ -25,6 +25,7 @@ async function run(b, dev) {
   const recs = await p.evaluate(async n => { await TK.load(); const w = TK.world(n), out = [];
     for (const nd of w.nodes) [].concat(nd.record == null ? [] : nd.record).forEach((r, i) => { if (Number.isInteger(r)) out.push({ node: nd.key, idx: i, move: r, choices: !!(nd.choices && (nd.choices[r] || nd.choices[String(r)])) }); });
     for (const k of Object.keys(localStorage)) if (/^tk-|gt-progress/.test(k) && k !== 'tk-test' && k !== 'tk-harness') localStorage.removeItem(k);
+    TK.migrate21();   // a fresh save: Book 1's one-time start-over (tk.js) is already behind it
     localStorage.setItem('tk-guide', 'off'); localStorage.setItem('gt-username', 'playtest-choices'); TK.markSeen(n + ':opening');
     for (const nd of w.nodes) TK.markCleared(nd.key);   // every board open (a board is opened directly below)
     localStorage.setItem(`tk-world-${n}`, JSON.stringify({ place: 'one-international', party: ['ms_jang'] }));

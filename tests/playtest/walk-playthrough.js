@@ -46,6 +46,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   await p.goto(BASE + '#/');
   await p.evaluate(([B, D, K]) => {
     for (const k of Object.keys(localStorage)) if (/^tk-|gt-progress/.test(k) && k !== 'tk-test') localStorage.removeItem(k);
+    TK.migrate21();   // a fresh save: Book 1's one-time start-over (tk.js) is already behind it
     localStorage.setItem('tk-guide', 'off'); localStorage.setItem('tk-book', String(B)); if (D) localStorage.setItem('tk-diff', D);
     if (K) { localStorage.setItem('tk-kit', K); localStorage.setItem('tk-kit-main', 'jade'); } localStorage.setItem('gt-username', 'playtest-walk');
   }, [BOOK, DIFF, KIT]);
