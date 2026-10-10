@@ -770,7 +770,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) { this.data = await (await fetch("data/tk.json?v=109")).json(); this.migrate(); }
+    if (!this.data) { this.data = await (await fetch("data/tk.json?v=110")).json(); this.migrate(); }
     return this.data;
   },
   // A book whose beats were renumbered after players began it: their cleared beats moved to the new keys, once per
@@ -800,11 +800,11 @@ const TK = {
   // Misaeng Book 1 rewritten from the comic: m1-m22 are different scenes now, so an old save starts the book over, once
   // (as Start over does: beats, scenes seen, place and things in world 21). v3: episodes 12-16 read too (m19c-m22c),
   // m20-m22 different scenes again, the user taking that second start-over to have the book live sooner. v4: Plot's
-  // second cut (m6 folded into m5, m7 Oh's own run)
+  // second cut (m6 folded into m5, m7 Oh's own run). v5: one beat an episode (the user), 20 beats, m3 m9 m11 m15 … gone
   migrate21() {
     const p = loadProgress(), m = p.tkMig || (p.tkMig = {});
-    if ((m[21] || 0) >= 4) return;
-    m[21] = 4;
+    if ((m[21] || 0) >= 5) return;
+    m[21] = 5;
     if (Object.keys(p.tk || {}).some(k => k.startsWith("21-"))) {
       for (const k of Object.keys(p.tk)) if (k.startsWith("21-")) this.undoCleared(p, k);
       for (const k of Object.keys(p.tkSeen || {})) if (k.startsWith("21:")) delete p.tkSeen[k];

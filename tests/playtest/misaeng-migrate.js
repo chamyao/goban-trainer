@@ -16,7 +16,7 @@ let r=await p.evaluate(async()=>{await TK.load();const pr=loadProgress();return 
 check(!r.m1&&!r.m2,'an old save of Book 1 starts it over');
 check(r.c1&&r.seen13&&r.at[13]==='13-c1','other books are untouched');
 check(!r.seen21&&!r.at[21]&&!r.world&&!r.ch,"Book 1's scenes seen, place and A-D picks are forgotten");
-check(r.mig[21]===4&&r.mig[15]===3,'done once');
+check(r.mig[21]===5&&r.mig[15]===3,'done once');
 await p.evaluate(()=>TK.markCleared('21-m1'));await p.reload();await p.waitForTimeout(500);
 r=await p.evaluate(async()=>{await TK.load();return TK.cleared('21-m1')});
 check(r,'a beat cleared after it is kept');
