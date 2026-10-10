@@ -1,0 +1,43 @@
+--- rating 400 (boards aimed at 15K)
+ok   21-m1: the named problem specialized-training-in-tesuji-1/81759
+ok   21-m2: "endgame" deals go-endgame-techniques/166114 (endgame, rank 1)
+ok   21-m8: the named problem lee-chang-hos-selected-tesuji-part-2/222
+ok   21-m9: "tesuji" deals specialized-training-in-tesuji-1/81690 (tesuji, rank 1)
+ok   21-m12: "ld live" deals specialized-training-in-tsumego-1/107941 (ld live, rank 1)
+ok   21-m13: "ld live" deals weiqi-rapid-drill-800-part-3/3430 (ld live, rank 0)
+ok   21-m16: "tesuji" deals specialized-training-in-tesuji-6/81727 (tesuji, rank 1)
+ok   21-m17: "endgame" deals specialized-training-in-tsumego-2/169242 (endgame, rank 0)
+ok   21-m18: "race" deals weiqi-rapid-drill-800-part-1/3109 (race, rank 1)
+ok   21-m19: "tesuji" deals weiqi-small-leisure-collection/25440 (sacrifice tesuji, rank 2)
+ok   21-m19b board 2: "race" deals specialized-training-in-tesuji-2/80882 (race, rank 1)
+ok   21-m21: "tesuji" deals specialized-training-in-tesuji-2/81979 (sacrifice tesuji, rank 2)
+ok   21-m22b: "tesuji sacrifice" deals lee-chang-hos-selected-tesuji-part-1/11969 (sacrifice tesuji, rank 3)
+--- rating 1100 (boards aimed at 12K)
+ok   21-m1: the named problem specialized-training-in-tesuji-1/81759
+ok   21-m2: "endgame" deals new-korean-endgame-dictionary/100252 (endgame sacrifice, rank 7)
+ok   21-m8: the named problem lee-chang-hos-selected-tesuji-part-2/222
+ok   21-m9: "tesuji" deals seedling-project/27525 (sacrifice tesuji, rank 6)
+ok   21-m12: "ld live" deals weiqi-life-and-death-1000-problems-part-1/1168 (ld live, rank 6)
+ok   21-m13: "ld live" deals specialized-training-in-tsumego-2/104304 (ld live, rank 6)
+ok   21-m16: "tesuji" deals specialized-training-in-tesuji-2/82015 (sacrifice tesuji, rank 6)
+ok   21-m17: "endgame" deals seedling-project/27337 (endgame, rank 8)
+ok   21-m18: "race" deals specialized-training-in-tesuji-2/81993 (race sacrifice, rank 6)
+ok   21-m19: "tesuji" deals lee-chang-hos-selected-tesuji-part-2/232 (sacrifice snapback tesuji, rank 6)
+ok   21-m19b board 2: "race" deals specialized-training-in-tesuji-2/80940 (race, rank 6)
+ok   21-m21: "tesuji" deals specialized-training-in-tesuji-1/81711 (tesuji, rank 6)
+ok   21-m22b: "tesuji sacrifice" deals seedling-project/27410 (sacrifice tesuji, rank 6)
+--- rating 1900 (boards aimed at 4K)
+ok   21-m1: the named problem specialized-training-in-tesuji-1/81759
+ok   21-m2: "endgame" deals lee-chang-hos-endgame-techniques/151481 (endgame, rank 22)
+ok   21-m8: the named problem lee-chang-hos-selected-tesuji-part-2/222
+ok   21-m9: "tesuji" deals weiqi-life-and-death-drills-intermediate-part-1/39913 (sacrifice tesuji, rank 22)
+ok   21-m12: "ld live" deals maeda-tsumego-part-2/33416 (ld live, rank 22)
+ok   21-m13: "ld live" deals ishida-yoshio-tesuji/45738 (ld live, rank 22)
+ok   21-m16: "tesuji" deals segoe-tesuji-dictionary-part-2/17701 (sacrifice tesuji, rank 22)
+ok   21-m17: "endgame" deals the-great-tesuji-encyclopedia-5/47286 (endgame, rank 22)
+ok   21-m18: "race" deals lee-chang-hos-selected-tesuji-part-2/14695 (race, rank 22)
+ok   21-m19: "tesuji" deals weiqi-life-and-death-drills-beginner-part-4/63557 (sacrifice tesuji, rank 22)
+ok   21-m19b board 2: "race" deals weiqi-life-and-death-drills-beginner-part-2/63084 (race, rank 22)
+ok   21-m21: "tesuji" deals lee-chang-hos-selected-tesuji-part-2/14724 (sacrifice tesuji, rank 22)
+ok   21-m22b: "tesuji sacrifice" deals segoe-tesuji-dictionary-part-1/17282 (sacrifice tesuji, rank 22)
+misaeng-pools: all ok
