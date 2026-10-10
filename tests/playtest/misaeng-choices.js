@@ -27,19 +27,20 @@ async function run(b, dev) {
     for (const k of Object.keys(localStorage)) if (/^tk-|gt-progress/.test(k) && k !== 'tk-test' && k !== 'tk-harness') localStorage.removeItem(k);
     localStorage.setItem('tk-guide', 'off'); localStorage.setItem('gt-username', 'playtest-choices'); TK.markSeen(n + ':opening');
     for (const nd of w.nodes) TK.markCleared(nd.key);   // every board open (a board is opened directly below)
-    localStorage.setItem(`tk-world-${n}`, JSON.stringify({ place: 'one-international', party: ['ms_jang'] }));
+    localStorage.setItem(`tk-world-${n}`, JSON.stringify({ place: 'one-international', party: ['ms_jang'], pos: { place: 'one-international', x: 296, y: 200, f: 'down' } }));   // inside the lobby, not on its door (a bare place puts him on the doorway, and he walks out)
     return out; }, BOOK);
   await p.reload();
   for (let i = 0; i < 60 && !(await p.evaluate(() => !!(window.__w && window.__w.player))); i++) { const g = p.locator('.tk-scroll-go'); if (await g.count()) await g.first().click({ timeout: 1500 }).catch(() => {}); await p.waitForTimeout(250); }
   for (let i = 0; i < 20 && await p.evaluate(() => window.__w.ui.busy()); i++) { await p.evaluate(() => window.__w.ui.advance()); await p.waitForTimeout(200); }
-  // a desktop page asks for a first click on the map ("Click the map to play"): give it, as a player does
-  if (!touch) { const r = await p.evaluate(() => { const c = document.querySelector('.tk-map canvas').getBoundingClientRect(); return [c.left + c.width / 2, c.top + c.height - 40]; }); await p.mouse.click(r[0], r[1]); await p.waitForTimeout(400); }
+  // the player standing still before a board opens (a board that opens while he walks closes when he arrives)
+  const still = async () => { for (let i = 0; i < 40; i++) { if (await p.evaluate(() => { const w = window.__w; return !w.walk && !w.ui.busy() && !w.leaving && !w.cine && w.placeId === 'one-international' && Math.hypot(w.player.body.velocity.x, w.player.body.velocity.y) < 1; })) return; await p.waitForTimeout(150); } };
+  if (!process.env.NOSETTLE) await p.waitForTimeout(4000);   // the world settled after loading before the first board (one opened in its first seconds can close: see the report)
   const vw = await p.evaluate(() => innerWidth), vh = await p.evaluate(() => innerHeight);
   console.log(`--- ${dev} (${vw}x${vh}${touch ? ', touch' : ''}): ${recs.length} record boards`);
   for (const r of recs) {
     const key = r.idx ? `${r.node}~${r.idx + 1}` : r.node, [col, right] = MOVES[r.move - 1], name = `${r.node}${r.idx ? ' board ' + (r.idx + 1) : ''} (Black ${r.move})`;
     if (!r.choices) { note(`${name}: no candidates, an open board`); continue; }
-    const open = async () => { await p.evaluate(k => { const pr = loadProgress(); TK.undoCleared(pr, k); TK.saveProg(pr); localStorage.removeItem('tk-rest'); }, key);   // not cleared, no rest: as a player meets it
+    const open = async () => { await still(); await p.evaluate(k => { const pr = loadProgress(); TK.undoCleared(pr, k); TK.saveProg(pr); localStorage.removeItem('tk-rest'); }, key);   // not cleared, no rest: as a player meets it
       await p.evaluate(([n, k]) => { TKOverlay.open(n, k, { host: document.querySelector('.tk-map') }); }, [BOOK, key]);   // (not awaited: it settles when the board closes)
       for (let i = 0; i < 40 && !(await p.evaluate(() => !!(window.__trainer && window.__trainer.alive && document.querySelector('.tk-choice')))); i++) await p.waitForTimeout(150);
       await p.waitForTimeout(400); };
@@ -48,8 +49,8 @@ async function run(b, dev) {
         const cx = +c.getAttribute('cx'), cy = +c.getAttribute('cy'); let pt = null;
         for (let x = 0; x < 19 && !pt; x++) for (let y = 0; y < 19 && !pt; y++) if (g.px(x) === cx && g.py(y) === cy) pt = String.fromCharCode(97 + x) + String.fromCharCode(97 + y);
         return { L: tx.textContent, pt, x: R.left + R.width / 2, y: R.top + R.height / 2, d: R.width, fh: T.height, empty: pt ? !t.grid[pt.charCodeAt(1) - 97][pt.charCodeAt(0) - 97] : false }; }).sort((a, b) => a.L.localeCompare(b.L)); });
-    const dbg = async tag => { if (process.env.DBG) console.log('   dbg', tag, JSON.stringify(await p.evaluate(() => { const t = window.__trainer; return t && { played: t.played, ghost: t.goban.ghost, done: t.done, alive: t.alive, only: t.p.only, rest: !!document.querySelector('.tk-rest'), verdict: (document.querySelector('.tk-duel-dlg .town-en') || {}).textContent }; }))); };
-    const tapAt = async (x, y) => { if (touch) await p.touchscreen.tap(x, y); else await p.mouse.click(x, y); await p.waitForTimeout(250); await dbg('after 1st click at ' + Math.round(x) + ',' + Math.round(y)); if (process.env.DBG) await p.screenshot({ path: path.join(__dirname, `out/dbg-${tag}-${key.replace("~","_")}-${Math.round(y)}.png`) });
+    const dbg = async tag => { if (process.env.DBG) console.log('   dbg', tag, JSON.stringify(await p.evaluate(() => { const t = window.__trainer, w = window.__w; return t && { walk: !!(w && w.walk), P: w && [w.player.x | 0, w.player.y | 0], played: t.played, ghost: t.goban.ghost, done: t.done, alive: t.alive, only: t.p.only, rest: !!document.querySelector('.tk-rest'), verdict: (document.querySelector('.tk-duel-dlg .town-en') || {}).textContent }; }))); };
+    const tapAt = async (x, y) => { if (touch) await p.touchscreen.tap(x, y); else await p.mouse.click(x, y); await p.waitForTimeout(250); const ghostAfter1 = await p.evaluate(() => !!(window.__trainer && window.__trainer.goban.ghost)); if (ghostAfter1) console.log('NOTE a ghost (fingertip confirm) after one tap at ' + Math.round(x) + ',' + Math.round(y)); await dbg('after 1st click at ' + Math.round(x) + ',' + Math.round(y)); if (process.env.DBG) await p.screenshot({ path: path.join(__dirname, `out/dbg-${tag}-${key.replace("~","_")}-${Math.round(y)}.png`) });
       if (await p.evaluate(() => !!(window.__trainer && window.__trainer.goban.ghost))) { if (touch) await p.touchscreen.tap(x, y); else await p.mouse.click(x, y); } await p.waitForTimeout(700); };
     const state = () => p.evaluate(k => ({ cleared: TK.cleared(k), rest: TK.restLeft(k) > 0, played: window.__trainer ? window.__trainer.played.length : -1 }), key);
     await open();
@@ -64,10 +65,13 @@ async function run(b, dev) {
     const top = await p.evaluate(L => L.map(l => { const e = document.elementFromPoint(l.x, l.y); return e ? (e.closest('svg') ? 'board' : (e.className && e.className.baseVal !== undefined ? e.className.baseVal : e.className) || e.tagName) : 'none'; }), L1);
     check(top.every(t => t === 'board'), `${name}: every letter can be tapped, nothing over the board (${top.join(', ')})`);
     // a tap off the letters plays nothing
-    const off = await p.evaluate(L => { const t = window.__trainer, g = t.goban, used = new Set(L.map(l => l.pt));
-      for (let y = 3; y < 16; y++) for (let x = 3; x < 16; x++) { const pt = String.fromCharCode(97 + x) + String.fromCharCode(97 + y); if (!used.has(pt) && !t.grid[y][x]) {
-        const el = [...g.svg.querySelectorAll('circle[fill="transparent"]')].find(e => +e.getAttribute('cx') === g.px(x) && +e.getAttribute('cy') === g.py(y)); if (el) { const R = el.getBoundingClientRect(); return { x: R.left + R.width / 2, y: R.top + R.height / 2, pt }; } } } return null; }, L1);
-    if (off && !process.env.SKIPOFF) { await tapAt(off.x, off.y); const s = await state(); check(s.played === 0 && !s.cleared && !s.rest, `${name}: a tap off the letters (${off.pt}) plays nothing`); }
+    const off = await p.evaluate(L => { const t = window.__trainer, g = t.goban, used = new Set(L.map(l => l.pt)), m = g.svg.getScreenCTM();
+      for (let y = 3; y < 16; y++) for (let x = 3; x < 16; x++) { const pt = String.fromCharCode(97 + x) + String.fromCharCode(97 + y);
+        if (!used.has(pt) && !t.grid[y][x] && x >= g.crop.c0 && x <= g.crop.c1 && y >= g.crop.r0 && y <= g.crop.r1) { const q = g.svg.createSVGPoint(); q.x = g.px(x); q.y = g.py(y); const s = q.matrixTransform(m);
+          const targets = [...g.svg.querySelectorAll('circle[fill="transparent"]')].length; return { x: s.x, y: s.y, pt, targets }; } } return null; }, L1);
+    if (off) check(off.targets <= 4, `${name}: only the letters take a tap (${off.targets} tap targets on the board)`);
+    if (off && process.env.DBG) await p.evaluate(() => { window.__downs = []; document.addEventListener('pointerdown', e => window.__downs.push((e.target.tagName || '') + '.' + ((e.target.className && e.target.className.baseVal !== undefined ? e.target.className.baseVal : e.target.className) || '')), { capture: true, once: false }); });
+    if (off && !process.env.SKIPOFF) { await tapAt(off.x, off.y); if (process.env.DBG) console.log('   dbg pointerdown targets of the off-letter click:', JSON.stringify(await p.evaluate(() => window.__downs)), 'world under it:', JSON.stringify(await p.evaluate(([x, y]) => { const w = window.__w, cam = w.cameras.main, r = w.game.canvas.getBoundingClientRect(), k = r.width / w.scale.width; const wx = cam.worldView.x + (x - r.left) / k / cam.zoom, wy = cam.worldView.y + (y - r.top) / k / cam.zoom; const near = Object.entries(w.spots).filter(([, v]) => Math.hypot(v.x - wx, v.y - wy) < 24).map(([n]) => n); return { wx: wx | 0, wy: wy | 0, spotsNear: near, lift: !!document.querySelector('.tk-lift') }; }, [off.x, off.y]))); const s = await state(); check(s.played === 0 && !s.cleared && !s.rest, `${name}: a tap off the letters (${off.pt}) plays nothing`); }
     // a wrong letter: a slip; then the same four, under the same letters
     const wrong = L1.find(l => l.pt !== right);
     await tapAt(wrong.x, wrong.y);
