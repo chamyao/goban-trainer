@@ -40,13 +40,13 @@
    "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
    "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
    "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaabbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaabbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaabbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaabbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaabbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaabbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaabbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
   ],
   "walk": {
@@ -70,6 +70,26 @@
    ],
    "width": 3,
    "tiles": 192
+  },
+  {
+   "id": "cafe-alley",
+   "kind": "road",
+   "path": [
+    [
+     1,
+     5
+    ],
+    [
+     1,
+     7
+    ],
+    [
+     3,
+     7
+    ]
+   ],
+   "width": 2,
+   "tiles": 36
   }
  ],
  "objects": [
@@ -116,20 +136,11 @@
    "w": 4,
    "h": 2,
    "id": "kba-cafe",
-   "door": "N",
-   "faces": "N",
+   "door": "S",
+   "faces": "S",
    "label": "A café across the street",
    "map": "kba-cafe",
    "blocks_sight": true
-  },
-  {
-   "kind": "building.gatehouse",
-   "x": 10,
-   "y": 25,
-   "w": 4,
-   "h": 1,
-   "id": "kba-cafe-gate",
-   "faces": "S"
   },
   {
    "kind": "building.storefront",
@@ -230,9 +241,9 @@
   },
   {
    "to": "korea-baduk-association--kba-cafe",
-   "side": "S",
+   "side": "N",
    "x": 11.6,
-   "y": 24.4,
+   "y": 26.85,
    "w": 0.8,
    "h": 0.75,
    "door": true
@@ -253,7 +264,7 @@
   ],
   "korea-baduk-association--kba-cafe": [
    12,
-   24
+   27
   ],
   "jongno": [
    41,
@@ -277,14 +288,38 @@
     22.0
    ],
    [
+    6.0,
+    22.0
+   ],
+   [
     46.0,
     22.0
+   ],
+   [
+    6.0,
+    30.0
+   ],
+   [
+    14.0,
+    30.0
    ]
   ],
   "edges": [
    [
     0,
     1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    3,
+    4
    ]
   ]
  },
