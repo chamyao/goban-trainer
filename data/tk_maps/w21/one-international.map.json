@@ -223,36 +223,6 @@
     }
    ],
    "use": "lift"
-  },
-  {
-   "id": "bins",
-   "x": 4.5,
-   "y": 16.7,
-   "node": "",
-   "label": "The recycling bins",
-   "gives": "waybill_scrap",
-   "gives_when": "node:21-m20",
-   "give": [
-    "You go through the bins by the gates, sheet by sheet. Stuck to the back of a torn page: the rest of the waybill, glue on the back, and a name on it in someone else's hand. Kim Seok-ho."
-   ],
-   "given": [
-    "The recycling bins. You've found what you were looking for."
-   ]
-  },
-  {
-   "id": "m21",
-   "x": 12.5,
-   "y": 16.7,
-   "node": "21-m21",
-   "label": "The lobby"
-  },
-  {
-   "id": "lobby-lift",
-   "x": 18.5,
-   "y": 6.7,
-   "node": "",
-   "label": "The lifts",
-   "note": "the handoff to Oh lands here"
   }
  ],
  "npcs": [

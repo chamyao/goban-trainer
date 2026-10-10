@@ -221,11 +221,11 @@
    "use": "lift"
   },
   {
-   "id": "m22",
+   "id": "m22c",
    "x": 20.5,
    "y": 10.7,
-   "node": "21-m22",
-   "label": "Steve Han's desk"
+   "node": "21-m22c",
+   "label": "Behind the partition"
   },
   {
    "id": "textile",
@@ -233,7 +233,7 @@
    "y": 12.7,
    "node": "",
    "label": "The textile team",
-   "note": "the handoff to Kim Bu-ryeon lands here (6+ tiles from m22)"
+   "note": "handoffs to the textile floor land here (6+ tiles from m22c)"
   }
  ],
  "npcs": [

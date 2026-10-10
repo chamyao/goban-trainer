@@ -176,7 +176,7 @@ const TK_CHARS = {
   ms_kimbr: { name: "Kim Bu-ryeon", skin: "#e8c09a", hair: "#6a6466", hat: "balding", robe: "#4a4a52", trim: "#4a4a52", shirt: "#eef0f2", tie: "#6a2a2a", legs: "#3e3e46", beard: "none", eyes: "narrow", glasses: "#2a2228", fat: true },
   ms_exec: { name: "The Executive", skin: "#ecc29a", hair: "#8a8a8e", hat: "slick", robe: "#1e2028", trim: "#1e2028", shirt: "#f4f4f4", tie: "#7a2a2a", legs: "#1a1c22", beard: "none", eyes: "narrow" },
   ms_president: { name: "The President", skin: "#efd0b0", hair: "#d8d8d8", hat: "parted", robe: "#2a2a34", trim: "#2a2a34", shirt: "#f4f4f4", tie: "#2e4a6a", legs: "#24242c", beard: "none", eyes: "kind" },
-  ms_director: { name: "The Director", skin: "#e2b089", hair: "#5a5a5a", hat: "short", robe: "#3a3a42", trim: "#3a3a42", shirt: "#eeeeee", tie: "#5a3a2a", legs: "#303038", beard: "none", eyes: "round", glasses: "#2a2228" },
+  ms_director: { name: "The Director", skin: "#e2b089", hair: "#a8a8a8", hat: "short", robe: "#c8b48e", trim: "#c8b48e", shirt: "#eeeeee", tie: "#5a3a2a", legs: "#b0a07c", beard: "none", eyes: "round", glasses: "#2a2228" },
   ms_parkjg: { name: "Park Jong-gi", skin: "#f0cfac", hair: "#2a2024", hat: "parted", robe: "#5a6a5a", trim: "#5a6a5a", shirt: "#eef0f2", tie: "#3a4a6a", legs: "#4a524a", beard: "none", eyes: "kind", glasses: "#4a4448" },
   ms_client: { name: "The Client", skin: "#e2b089", hair: "#4a4448", hat: "balding", robe: "#5a4a3a", trim: "#5a4a3a", shirt: "#f0ece0", tie: "#8a6a2a", legs: "#4a3e30", beard: "none", eyes: "narrow", fat: true },
   ms_ma: { name: "Department Head Ma", skin: "#e8c09a", hair: "#2a2024", hat: "slick", robe: "#3a3a44", trim: "#3a3a44", shirt: "#eeeeee", tie: "#4a2a4a", legs: "#30303a", beard: "none", eyes: "narrow" },
@@ -195,7 +195,7 @@ const TK_CHARS = {
   ms_daycare: { name: "Daycare teacher", skin: "#f8dcc4", hair: "#3a2a26", hat: "ponytail", robe: "#8ab88a", trim: "#f4f0e8", legs: "#4a4a5a", beard: "none", eyes: "kind" },
   // Book 1 (Not Yet Alive)
   ms_stevehan: { name: "Steve Han", skin: "#efc59d", hair: "#1a1416", hat: "slick", robe: "#1e2230", trim: "#1e2230", shirt: "#f4f6fa", tie: "#5a6a8a", legs: "#1a1e2a", beard: "none", eyes: "narrow" },   // US-raised textile head, a sharp suit
-  ms_go: { name: "Go Gwa-jang", skin: "#e8b88c", hair: "#2a2024", hat: "short", robe: "#5a5048", trim: "#5a5048", shirt: "#e8e4dc", tie: "#7a5a2a", legs: "#4a4238", beard: "none", eyes: "narrow", fat: true },   // round, sulky
+  ms_go: { name: "Go Gwa-jang", skin: "#e8b88c", hair: "#2a2024", hat: "short", robe: "#5a5048", trim: "#5a5048", shirt: "#e8e4dc", tie: "#7a5a2a", legs: "#4a4238", beard: "none", eyes: "narrow", fat: true, glasses: "#2a2228" },   // round, sulky
   ms_buyer: { name: "American buyer", skin: "#f4d8c8", hair: "#a87a4a", hat: "parted", robe: "#7a7a84", trim: "#7a7a84", shirt: "#c8d8ea", tie: "#8a2a2a", legs: "#5a5a64", beard: "none", eyes: "round" },
   ms_leesh: { name: "Lee Sang-hyun", skin: "#f2d2b0", hair: "#2a2024", hat: "short", robe: "#3a4256", trim: "#3a4256", shirt: "#eef0f2", tie: "#6a3a5a", legs: "#2e3444", beard: "none", eyes: "normal", glasses: "#2a2228" },
   ms_hanfather: { name: "Han Seok-yul's father", skin: "#d8a47c", hair: "#3a3236", hat: "short", robe: "#3a5a7a", trim: "#2a3a4a", legs: "#3a5a7a", beard: "stubble", eyes: "kind" },   // factory overalls
@@ -769,7 +769,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) { this.data = await (await fetch("data/tk.json?v=108")).json(); this.migrate(); }
+    if (!this.data) { this.data = await (await fetch("data/tk.json?v=109")).json(); this.migrate(); }
     return this.data;
   },
   // A book whose beats were renumbered after players began it: their cleared beats moved to the new keys, once per
@@ -797,11 +797,12 @@ const TK = {
   },
 
   // Misaeng Book 1 rewritten from the comic: m1-m22 are different scenes now, so an old save starts the book over, once
-  // (as Start over does: beats, scenes seen, place and things in world 21)
+  // (as Start over does: beats, scenes seen, place and things in world 21). v3: episodes 12-16 read too (m19c-m22c),
+  // m20-m22 different scenes again, the user taking that second start-over to have the book live sooner
   migrate21() {
     const p = loadProgress(), m = p.tkMig || (p.tkMig = {});
-    if ((m[21] || 0) >= 2) return;
-    m[21] = 2;
+    if ((m[21] || 0) >= 3) return;
+    m[21] = 3;
     if (Object.keys(p.tk || {}).some(k => k.startsWith("21-"))) {
       for (const k of Object.keys(p.tk)) if (k.startsWith("21-")) this.undoCleared(p, k);
       for (const k of Object.keys(p.tkSeen || {})) if (k.startsWith("21:")) delete p.tkSeen[k];
@@ -1202,7 +1203,7 @@ const TKVoice = {
       const next = () => {
         const v = this.queue.shift();
         if (!v) { this.audio = null; res(); return; }
-        const a = new Audio(`assets/tk/voice/${this.speaks === "en" ? "en/" : this.speaks === "ko" ? "ko/" : ""}${v}.mp3?v=2`);  // bump when clips are re-rendered
+        const a = new Audio(`assets/tk/voice/${this.speaks === "en" ? "en/" : this.speaks === "ko" ? "ko/" : ""}${v}.mp3?v=${this.speaks === "ko" ? 3 : 2}`);  // bump when clips are re-rendered (ko 3: the cleaned voices)
         this.audio = a; a.onended = next; a.onerror = next; a.onpause = () => { if (this.audio === a && !a.ended) res(); };
         a.play().catch(next);
       };
