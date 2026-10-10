@@ -25,6 +25,8 @@ const ASKED = { '21-m6': 29, '21-m9': 47, '21-m17': 85, '21-m22': 137, '21-m24':
   await p.goto(BASE + '/index.html#/play'); await p.waitForTimeout(1200);
   await p.evaluate(() => { const t = localStorage.getItem('tk-test'), h = localStorage.getItem('tk-harness'); localStorage.clear(); localStorage.setItem('tk-test', t || '1'); localStorage.setItem('tk-harness', h || '1'); localStorage.setItem('tk-guide', 'off'); });
   const lines = [];
+  // the site's username prompt (opened on a page load outside #/tk, as this setup does): Cancel, as a player would
+  const dismiss = () => p.evaluate(() => { const m = document.getElementById('authModal'); if (m && m.offsetParent) [...m.querySelectorAll('button')].find(b => /Cancel/.test(b.textContent))?.click(); });
   // tap through whatever the node map is telling (scrolls, dialogue), keeping every line
   const tell = async () => { let idle = 0;
     for (let i = 0; i < 400 && idle < 6; i++) {
@@ -38,7 +40,7 @@ const ASKED = { '21-m6': 29, '21-m9': 47, '21-m17': 85, '21-m22': 137, '21-m24':
         await p.locator('.tk-dlg').click({ position: { x: 20, y: 20 }, timeout: 3000 }).catch(() => {}); await p.waitForTimeout(250); idle = 0; continue; }
       idle++; await p.waitForTimeout(400);
     } };
-  await p.goto(BASE + '/index.html#/tk/21'); await p.waitForTimeout(2500);
+  await p.goto(BASE + '/index.html#/tk/21'); await p.waitForTimeout(2500); await dismiss();
   console.log('opening'); await tell(); await p.waitForTimeout(800);
   const startOk = !errs.length && await p.evaluate(() => !!document.querySelector('.tk-play'));
   check(startOk, `fresh save: after the opening, the node map offers the first beat (page errors: ${errs.join(' | ') || 'none'})`);
@@ -66,6 +68,7 @@ const ASKED = { '21-m6': 29, '21-m9': 47, '21-m17': 85, '21-m22': 137, '21-m24':
     } else if (bd.rec) check(false, `${key}: a record board the arc doesn't ask for (Black ${bd.rec})`);
     else lines.push(`[board] ${bd.src.replace(/\s+/g, ' ').slice(0, 80)}`);
     // solve: the key's line, tapped on the board
+    await dismiss();
     for (let i = 0; i < 40; i++) {
       const s = await p.evaluate(() => { const t = window.__trainer, v = document.querySelector('.tk-verdict');
         if (v && /win/.test(v.className)) return { win: true };
@@ -89,7 +92,7 @@ const ASKED = { '21-m6': 29, '21-m9': 47, '21-m17': 85, '21-m22': 137, '21-m24':
     const after = await p.evaluate(k => ({ cleared: TK.cleared(k), at: TK.at(21) }), key);
     check(after.cleared, `${key}: cleared, and the map moves on (now at ${after.at})`);
   }
-  const zh = lines.filter(l => CJK.test(l));
+  const zh = lines.filter(l => CJK.test(l) && !l.startsWith('[board]'));   // the node map's level page chrome is reported apart (a placeholder)
   check(!zh.length, `no Chinese in any line said (${zh.length}: ${zh.slice(0, 3).join(' | ')})`);
   check(await p.evaluate(() => TK.world(21).nodes.every(n => TK.cleared(n.key))), 'every beat cleared, m1 to m24');
   fs.mkdirSync(path.join(__dirname, 'out'), { recursive: true });
