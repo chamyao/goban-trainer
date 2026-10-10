@@ -172,7 +172,10 @@ These were each learned from a real complaint, and each is a rule, not a one-off
 - **A place that is a room opens into its own rooms** by exits in its plan (`"to": <map id>`): those rooms' doors lead
   back to it. The tower's lobby has one lift per floor this way (the floors are its `maps`).
 - **No north doors on modern buildings.** An entered building with a north door gets the gatehouse drawn at that door
-  (the rule above). On a Seoul street that's wrong, so Misaeng's entered buildings face S, E or W.
+  (the rule above). On a Seoul street that's wrong, so Misaeng's entered buildings face S, E or W. A storefront, office
+  block or tower draws its door on the south face, so the checker fails an entered one with a north door
+  (`FRONT_DOOR`): Book 1's hof, baduk class and KBA café had one, and their way in was on the roofline (the walk
+  slid off it). A shop on the street's south side gets a lane behind it to front onto (Jongno's `hof-lane`).
 - **A carriageway is `asphalt` ground**: never walked, solid in the game, crossed only by a `crosswalk` line; cars are
   things on it (dressing can't go on unwalkable ground, since `free()` needs walkable tiles).
 - **English-only worlds** (`"lang": "en"` on the story's world): compile and build_tk look the world up by number and
@@ -390,7 +393,7 @@ python3 tools/mapfactory/settle_maps.py             # settle wanderers in built 
 tests/playtest/run.sh book15-places                 # Book 15's mechanics, walked in the engine
 python3 tools/proofs/handoffs.py 21                 # every handoff leaves the new lead 6+ tiles to walk
 tests/playtest/run.sh misaeng-places                # Misaeng: kerb and crosswalks, doors to other places, the lift's menu,
-                                                    # General Affairs' requisition, m14's errands, the bins, the evening townsfolk, the commute
+                                                    # General Affairs' requisition, m14's errands, storefront doors, m19c-m22c's walks, the evening
 python3 tools/mapfactory build --world 12 --plans 2
 python3 tools/mapfactory build --world 13 --plans cc          # CHASE_VERBOSE=1 prints the chase proof
 for k in xianxia jade genshin; do python3 tools/mapfactory compile --world 13 --kit $k; done

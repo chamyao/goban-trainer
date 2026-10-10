@@ -58,13 +58,13 @@
    "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
    "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
    "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
-   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaddddddddddddddaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaddddddddddddddaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
   ],
   "walk": {
@@ -138,6 +138,26 @@
    ],
    "width": 2,
    "tiles": 52
+  },
+  {
+   "id": "class-alley",
+   "kind": "road",
+   "path": [
+    [
+     4,
+     9
+    ],
+    [
+     4,
+     11
+    ],
+    [
+     7,
+     11
+    ]
+   ],
+   "width": 2,
+   "tiles": 44
   }
  ],
  "objects": [
@@ -252,21 +272,12 @@
    "w": 4,
    "h": 2,
    "id": "baduk-class",
-   "door": "N",
-   "faces": "N",
+   "door": "S",
+   "faces": "S",
    "label": "The neighbourhood baduk class",
    "map": "baduk-class",
    "plaque": "바둑교실",
    "blocks_sight": true
-  },
-  {
-   "kind": "building.gatehouse",
-   "x": 26,
-   "y": 41,
-   "w": 4,
-   "h": 1,
-   "id": "baduk-class-gate",
-   "faces": "S"
   },
   {
    "kind": "building.subway_entrance",
@@ -341,6 +352,13 @@
    "kind": "tree.ginkgo",
    "x": 25,
    "y": 35,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 26,
+   "y": 40,
    "w": 1,
    "h": 1
   },
@@ -534,7 +552,7 @@
   {
    "id": "npc-1",
    "kind": "folk.ajumma",
-   "x": 30.5,
+   "x": 29.5,
    "y": 37.9,
    "say": [
     "An ajumma with a shopping trolley. “The Jang boy? Up before dawn every day of his life, that one.”"
@@ -571,9 +589,9 @@
   },
   {
    "to": "susaek-dong--baduk-class",
-   "side": "S",
+   "side": "N",
    "x": 27.6,
-   "y": 40.4,
+   "y": 42.85,
    "w": 0.8,
    "h": 0.75,
    "door": true
@@ -599,7 +617,7 @@
   ],
   "susaek-dong--baduk-class": [
    28,
-   40
+   43
   ],
   "the-subway": [
    51,
@@ -641,6 +659,14 @@
    [
     42.0,
     10.0
+   ],
+   [
+    18.0,
+    46.0
+   ],
+   [
+    30.0,
+    46.0
    ]
   ],
   "edges": [
@@ -657,6 +683,10 @@
     4
    ],
    [
+    1,
+    6
+   ],
+   [
     2,
     3
    ],
@@ -667,6 +697,10 @@
    [
     4,
     5
+   ],
+   [
+    6,
+    7
    ]
   ]
  },

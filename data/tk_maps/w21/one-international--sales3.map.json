@@ -394,11 +394,39 @@
    "label": "Sales Team 3"
   },
   {
+   "id": "m19b",
+   "x": 22.5,
+   "y": 20.7,
+   "node": "21-m19b",
+   "label": "Sales Team 3"
+  },
+  {
    "id": "m20",
    "x": 6.5,
    "y": 14.7,
    "node": "21-m20",
    "label": "Sales Team 3"
+  },
+  {
+   "id": "m21",
+   "x": 24.5,
+   "y": 10.7,
+   "node": "21-m21",
+   "label": "Oh's desk"
+  },
+  {
+   "id": "m22",
+   "x": 16.5,
+   "y": 18.7,
+   "node": "21-m22",
+   "label": "Sales Team 3"
+  },
+  {
+   "id": "m22b",
+   "x": 8.5,
+   "y": 18.7,
+   "node": "21-m22b",
+   "label": "The team's table"
   },
   {
    "id": "sales3",
