@@ -353,7 +353,8 @@ function worldScenes() {
           // a place to deliver to (a ridge): mark, condition, what it needs, and its lines
           ...(p.needs ? { needs: J(p.needs), delivers: p.delivers || o.name, when: p.when || "", empty: J(p.empty), waiting: J(p.waiting), call: J(p.call),
                           deliver: J(p.deliver), delivered: J(p.delivered) } : {}),
-          sight: p.sight ? JSON.parse(p.sight) : null, fires: p.fires || "" };   // a sight puzzle: it plays once one watcher sees you and another doesn't
+          sight: p.sight ? JSON.parse(p.sight) : null, fires: p.fires || "",
+          via: p.via ? JSON.parse(p.via).map(([x, y]) => ({ x: x * this.tw, y: y * this.tw })) : null };   // tiles the goal leads through first (Red Chamber g3: round by the west lane)   // a sight puzzle: it plays once one watcher sees you and another doesn't
         else if (o.type === "npc") this.addNpc(o, p, J);
         else if (o.type === "exit") this.exits.push({ to: p.to, side: p.side, rect: new Phaser.Geom.Rectangle(o.x, o.y, o.width, o.height),
           openTo: p.open_to ? JSON.parse(p.open_to) : null, refuse: J(p.refuse) });
@@ -923,7 +924,8 @@ function worldScenes() {
       this.grid = null; this.sgrid = null;   // what's in the way may have changed
       const st = this.mapState();
       for (const n of this.npcs) if (n.when || n.in) {
-        const on = this.cond(n.when) && (!n.in || !!(st && n.in.some(i => st.ids.includes(i))));
+        const on = this.cond(n.when) && (!n.in || !!(st && n.in.some(i => st.ids.includes(i))))
+          && !(this.w.novel && n.until && TK.cleared(n.until));   // gone once their beat is won (another novel's books for now; Places found it)
         n.spr.setVisible(on); n.spr.body.enable = on;
         if (n.mark) n.mark.setVisible(on && !TK.cleared(n.challenge));   // a challenger not here yet has no "!" either
       }
@@ -1187,7 +1189,15 @@ function worldScenes() {
         for (const q of quests) { const e = this.exits.find(e => e.to === top(q.place)); if (e) { this.goalHops = 1; return { x: e.rect.centerX, y: e.rect.centerY }; } }
         return null;
       }
-      if (here) { const s = Object.values(this.spots).find(s => s.node === here.node); return s ? { x: s.x, y: s.y - 4 } : null; }
+      if (here) {
+        const s = Object.values(this.spots).find(s => s.node === here.node);
+        if (s && s.via) {   // a spot reached the long way round: its via points first, one at a time (counted from arriving here)
+          if (this.viaPlace !== this.placeId) { this.viaPlace = this.placeId; this.viaAt = {}; }
+          const k = this.viaAt[s.node] || 0;
+          if (k < s.via.length) return { x: s.via[k].x, y: s.via[k].y, via: s.node };
+        }
+        return s ? { x: s.x, y: s.y - 4 } : null;
+      }
       const goals = new Set(quests.map(x => x.place)), near = {};
       for (const p of this.region.places) for (const l of p.links || []) { (near[p.id] ||= new Set()).add(l); (near[l] ||= new Set()).add(p.id); }
       const prev = { [this.placeId]: null }, queue = [this.placeId];
@@ -2589,7 +2599,15 @@ function worldScenes() {
       }
     }
 
+    // the goal on a via point: reached (within about 24 px), it moves on to the next, then the spot
+    viaStep() {
+      const g = this.goalAt, P = this.player;
+      if (!g || !g.via || !P || Math.hypot(P.x - g.x, P.y - g.y) > 24) return;
+      this.viaAt[g.via] = (this.viaAt[g.via] || 0) + 1;
+      this.setGoal();
+    }
     update(time, dt) {
+      this.viaStep();
       this.watchRoute();
       if (this.carried && this.carried.active) this.carried.setPosition(this.player.x, this.player.y - 8);
       this.watchStep(dt);
