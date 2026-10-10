@@ -20,8 +20,14 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build_tk  # noqa: E402
 
-REFS = Path(__file__).resolve().parent / "voice_refs" / "ko"
+REFS = Path(__file__).resolve().parent / "voice_refs" / "ko" / "clean"
 OUT = build_tk.VOICE_DIR / "ko"
+# The Zeroth clips were recorded on everyday mics, and XTTS copies their hiss into the voice (the user: "the korean voices
+# have static in the back"). So the references are cleaned once with DeepFilterNet3 (tools/voice_refs/ko/clean, from
+# ../z*.flac), each clip gets the same pass after it's rendered, and the MP3s are 64 kbps. CLEAN tags the index entries
+# made this way, so clips from before are rendered again.
+CLEAN = "c1"
+DF_DIR = None   # DeepFilterNet3 weights (config.ini, checkpoints/): --df DIR, e.g. from huggingface.co/fal/DeepFilterNet3
 
 
 def dilemma_vids(n):
@@ -55,6 +61,7 @@ def voiced_world(w):
 
 def main():
     limit = int(sys.argv[sys.argv.index("--limit") + 1]) if "--limit" in sys.argv else None
+    df_dir = sys.argv[sys.argv.index("--df") + 1] if "--df" in sys.argv else DF_DIR
     worlds = []
     for w in build_tk.WORLDS:
         if w.get("voice") == "ko":
@@ -75,13 +82,20 @@ def main():
     # XTTS rambles after a short line ("살았다. 겨우." came back 11 s long): a clip much longer than its text is redone
     def too_long(k, text):
         f = OUT / f"{k}.mp3"
-        return f.exists() and f.stat().st_size / 6000 > cap(text) + 0.3
-    todo = {k: v for k, v in lines.items() if not (OUT / f"{k}.mp3").exists() or index.get(k) != f"{v[1]}|{v[0]}" or too_long(k, v[0])}
+        return f.exists() and f.stat().st_size / 8000 > cap(text) + 0.3
+    todo = {k: v for k, v in lines.items() if not (OUT / f"{k}.mp3").exists() or index.get(k) != f"{v[1]}~{CLEAN}|{v[0]}" or too_long(k, v[0])}
     print(f"{len(todo)} of {len(lines)} Korean lines to render")
     if not todo:
         return
     from TTS.api import TTS
     tts = TTS("tts_models/multilingual/multi-dataset/xtts_v2")
+    from df.enhance import enhance, init_df
+    import torch, librosa
+    dfm, dfs, _ = init_df(model_base_dir=df_dir)
+    def clean(wav):   # DeepFilterNet runs at 48 kHz
+        hi = librosa.resample(wav, orig_sr=24000, target_sr=dfs.sr())
+        out = enhance(dfm, dfs, torch.from_numpy(hi[None].astype(np.float32)))[0].numpy()
+        return librosa.resample(out, orig_sr=dfs.sr(), target_sr=24000).astype(np.float32)
     for i, (k, (text, ref, _en)) in enumerate(list(todo.items())[:limit], 1):
         say = text.replace("“", "").replace("”", "").replace("…", "...").strip()
         # a short line: the best of a few takes (the shortest), then cut to what the words need, with a short fade
@@ -90,15 +104,15 @@ def main():
             takes.append(np.asarray(tts.tts(text=say, speaker_wav=str(REFS / f"{ref}.flac"), language="ko"), dtype=np.float32))
             if len(takes[-1]) / 24000 <= cap(text):
                 break
-        wav = min(takes, key=len)
+        wav = clean(min(takes, key=len))
         n = int(cap(text) * 24000)
         if len(wav) > n:
             wav = wav[:n].copy(); fade = min(len(wav), 2400); wav[-fade:] *= np.linspace(1, 0, fade)
         pcm = (np.clip(wav, -1, 1) * 32767).astype(np.int16)
         enc = lameenc.Encoder()
-        enc.set_bit_rate(48); enc.set_in_sample_rate(24000); enc.set_channels(1); enc.set_quality(2)
+        enc.set_bit_rate(64); enc.set_in_sample_rate(24000); enc.set_channels(1); enc.set_quality(2)
         (OUT / f"{k}.mp3").write_bytes(enc.encode(pcm.tobytes()) + enc.flush())
-        index[k] = f"{ref}|{text}"
+        index[k] = f"{ref}~{CLEAN}|{text}"
         if i % 10 == 0 or i == len(todo):
             index_file.write_text(json.dumps(dict(sorted(index.items())), ensure_ascii=False, indent=0))
         print(f"{i}/{len(todo)} {ref} {text[:30]}", flush=True)
