@@ -5,6 +5,10 @@
 //   3. g5 (the east room): Granny Liu's first look is her dazzle alone; the second gives the cue.
 //   4. Not offered where the open beat isn't (d2 open, standing in the courtyard), nor in a Three Kingdoms book.
 //   5. d8: playing the gauze-closet scene brings the day's-end scroll with the smiles counted (2 set beforehand).
+//   6. Every beat with cues (d2 … g6), in its own room: the first look gives the cues that don't wait, in order, each
+//      giver on screen for their line (a dazzled lead: her dazzle alone); the next look adds the waiting ones. d3 has the
+//      sisters' whisper 「这是琏嫂子」; at d7 the jade cue says nobody knows (the look gives nothing to read).
+//   7. In the world, a wrong move on d3's board (opened by its scene) adds one smile to the tally; the jade board's doesn't.
 const { chromium } = require(require('child_process').execSync('npm root -g', { env: { ...process.env, NODE_OPTIONS: '' } }).toString().trim() + '/playwright');
 const path = require('path');
 const URL = process.env.PLAYTEST_URL || 'http://localhost:8765';
@@ -110,6 +114,60 @@ const giver = (p, who) => p.evaluate(who => { const w = window.__w, n = w.npcs.f
   }
   check(/有2回/.test(txt) && /2 times today/.test(txt), `d8: the day's-end scroll counts the smiles (${JSON.stringify(txt.slice(0, 80))})`);
   await p.context().close();
+
+  // 6. every beat with cues, in its room
+  const placeOf = async k => { const q = await (async () => { const p = await b.newPage(); await p.goto(`${URL}/data/tk_maps/w31/region.json`); const r = JSON.parse(await p.evaluate(() => document.body.innerText)); await p.close(); return r; })(); return q.quests.find(x => x.node === `31-${k}`).place; };
+  for (const k of Object.keys(data.watch).map(x => x.replace('31-', '')).filter(k => !process.env.ONLY || process.env.ONLY.split(',').includes(k))) {
+    const place = await placeOf(k), party = k[0] === 'd' ? ['daiyu'] : ['grannyliu', 'baner'];
+    const W = data.watch[`31-${k}`], now = W.cues.filter(c => !c.wait), later = W.cues.filter(c => c.wait);
+    p = await open(b, 31, k, place, party);
+    if (!check(await watchBtn(p).count() === 1, `${k} (${place}): Watch is offered`)) { await p.context().close(); continue; }
+    if (W.dazzled) { seen = await look(p); check(seen.length === 1 && seen[0].en.includes(W.dazzled[1]), `${k}: the first look is her dazzle alone`); }
+    seen = await look(p);
+    const want = now.map(c => c.line[2]);
+    check(want.every((t, i) => seen[i] && seen[i].en.includes(t)), `${k}: a look gives ${want.length} cue${want.length > 1 ? 's' : ''} in order: ${JSON.stringify(seen.map(x => x.en))}`);
+    for (let i = 0; i < now.length; i++) {
+      const g = await p.evaluate(([who, t]) => { const w = window.__w; const ns = w.npcs.filter(n => n.who === who && n.spr.visible); return ns.map(n => { const v = w.view(n.spr.x, n.spr.y); return [Math.round(v.x), Math.round(v.y)]; }); }, [now[i].line[1], now[i].line[2]]);
+      check(g.length && seen[i] && g.some(([x, y]) => onScreen(seen[i], { x, y })), `${k}: ${now[i].line[1]} is on screen for "${now[i].line[2].slice(0, 40)}"`);
+    }
+    if (later.length) { seen = await look(p); check(later.every(c => seen.some(x => x.en.includes(c.line[2]))), `${k}: the next look adds the waiting cue${later.length > 1 ? 's' : ''}: ${later.map(c => c.line[2]).join(' / ')}`); }
+    if (k === 'd3') check(W.cues.some(c => /这是琏嫂子/.test(c.line[3] || c.line.join(''))), 'd3: the sisters\' whisper, 「这是琏嫂子」');
+    if (k === 'd7') check(W.cues.some(c => /Nobody knows/.test(c.line[2])), 'd7: the jade cue tells her nothing (nobody knows)');
+    check(!(await p.evaluate(k => TK.cleared('31-' + k), k)), `${k}: watching doesn't clear the beat`);
+    await p.context().close();
+  }
+
+  // 7. a slip on a real board in the world
+  for (const [k, counts] of [['d3', true], ['d7', false]]) {
+    p = await open(b, 31, k, await placeOf(k), ['daiyu']);
+    await p.evaluate(() => localStorage.removeItem('tk-tally'));
+    await p.evaluate(k => { const w = window.__w, q = w.region.quests.find(q => q.node === '31-' + k), s = Object.values(w.spots).find(s => s.node === '31-' + k); w.playQuest(q, s || { intro: [] }); }, k);
+    const nth = k === 'd7' ? 2 : 1; let boards = 0, slipped = false;
+    for (let i = 0; i < 400 && !slipped; i++) {
+      const st = await p.evaluate(() => ({ board: !!(document.querySelector('.tk-duel svg') && window.__trainer && window.__trainer.goban), go: !!document.querySelector('.tk-duel-go') }));
+      if (st.board && !st.go) {
+        boards++;
+        if (boards >= nth) {
+          await p.waitForTimeout(500);
+          const pt = await p.evaluate(() => { const t = window.__trainer, firsts = new Set(t.p.lines.map(L => L[1]));
+            for (const el of t.goban.svg.querySelectorAll('circle[fill="transparent"]')) { const c = Math.round((+el.getAttribute('cx') - t.goban.px(0)) / (t.goban.px(1) - t.goban.px(0))), r = Math.round((+el.getAttribute('cy') - t.goban.py(0)) / (t.goban.py(1) - t.goban.py(0)));
+              const m = String.fromCharCode(97 + c) + String.fromCharCode(97 + r); if (firsts.has(m)) continue; const R = el.getBoundingClientRect(); if (R.width) return [R.left + R.width / 2, R.top + R.height / 2]; } return null; });
+          if (pt) { await p.mouse.click(...pt); if (await p.evaluate(() => !!(window.__trainer && window.__trainer.goban.ghost))) await p.mouse.click(...pt); }
+          await p.waitForTimeout(1500); slipped = true; break;
+        }
+        await p.evaluate(() => dispatchEvent(new CustomEvent('tczw:result', { detail: 'ok' }))); await p.waitForTimeout(800);
+        const g = p.locator('.tk-duel-go'); if (await g.count()) await g.first().click().catch(() => {});
+        continue;
+      }
+      if (st.go) { await p.locator('.tk-duel-go').first().click().catch(() => {}); continue; }
+      await p.evaluate(() => { const w = window.__w; if (w.ui.busy()) w.ui.advance(); });
+      const g = p.locator('.tk-scroll-go'); if (await g.count()) await g.first().click().catch(() => {});
+      await p.waitForTimeout(150);
+    }
+    const n = await p.evaluate(() => TKTally.count(TK.world(31)));
+    check(slipped && n === (counts ? 1 : 0), `${k}${k === 'd7' ? ' (the jade board)' : ''}, in the world: a wrong move ${counts ? 'adds a smile' : 'adds none'} (tally ${n}${slipped ? '' : ', no board reached'})`);
+    await p.context().close();
+  }
 
   console.log(fails ? `${fails} FAIL` : 'all ok'); await b.close(); process.exit(fails ? 1 : 0);
 })();
