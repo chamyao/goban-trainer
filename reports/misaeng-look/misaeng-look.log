@@ -33,9 +33,10 @@ ok   Enter take the buyer's talk to its end
 ok   sold: the chip shows the cash (₩90,000Stock: 1 × Socks (10 pairs))
 ok   the seat says what goes there (The notes say the president's water goes here.)
 --- iPhone 13 (390x664, touch)
-ok   strip on screen ({"x":294,"y":142,"w":86,"h":99.1875,"r":380,"b":241.1875})
-ok   strip clear of the goal box (strip {"x":294,"y":142,"w":86,"h":99.1875,"r":380,"b":241.1875}, goal {"x":10,"y":46,"w":370,"h":89.546875,"r":380,"b":135.546875})
+ok   strip on screen ({"x":146.9375,"y":8,"w":90.0625,"h":36,"r":237,"b":44})
+ok   strip clear of the goal box (strip {"x":146.9375,"y":8,"w":90.0625,"h":36,"r":237,"b":44}, goal {"x":10,"y":46,"w":370,"h":89.546875,"r":380,"b":135.546875})
 ok   strip clear of the menu row (menu {"x":243.296875,"y":8,"w":138.703125,"h":40,"r":382,"b":48})
+NOTE strip is 90.0625x36, under 44 px to tap
 ok   no Chinese on screen in an English world: HUD ()
 ok   the record opened large fits the screen ({"x":15.59375,"y":104.5,"w":358.796875,"h":455,"r":374.390625,"b":559.5})
 ok   a tap outside the record opened large closes it
@@ -52,9 +53,9 @@ ok   every audit card on screen without scrolling (bottoms 376, 376; screen 664)
 ok   tapping the right two links them (Someone taught Baekjin what to say. The margin is the money.)
 ok   no Chinese on screen in an English world: audit ()
 ok   Escape closes the audit board
-ok   cash chip on screen ({"x":280.359375,"y":247,"w":99.640625,"h":43.78125,"r":380,"b":290.78125})
+ok   cash chip on screen ({"x":280.359375,"y":142,"w":99.640625,"h":43.78125,"r":380,"b":185.78125})
 ok   cash chip clear of the goal box (goal {"x":10,"y":46,"w":370,"h":89.546875,"r":380,"b":135.546875})
-ok   cash chip clear of the strip (strip {"x":294,"y":142,"w":86,"h":99.1875,"r":380,"b":241.1875})
+ok   cash chip clear of the strip (strip {"x":146.9375,"y":8,"w":90.0625,"h":36,"r":237,"b":44})
 ok   tapping the shopkeeper walks up and opens the shop
 ok   shop fits the screen ({"x":46.234375,"y":224.5,"w":297.53125,"h":214.984375,"r":343.765625,"b":439.484375})
 ok   "Buy one" is big enough to tap ({"x":241.34375,"y":309.296875,"w":80.421875,"h":40,"r":321.765625,"b":349.296875})
@@ -62,16 +63,17 @@ ok   two bought by taps (Cash: ₩60,000 · Stock: 2 × Socks (10 pairs))
 ok   no Chinese on screen in an English world: shop ()
 ok   Escape closes the shop
 ok   tapping a buyer walks up and makes the offer
-ok   the dialogue box doesn't cover the chip (dlg {"x":12,"y":616.96875,"w":366,"h":37.03125,"r":378,"b":654}, chip {"x":224,"y":247,"w":156,"h":59.375,"r":380,"b":306.375})
-ok   the dialogue box doesn't cover the strip (strip {"x":294,"y":142,"w":86,"h":99.1875,"r":380,"b":241.1875})
+ok   the dialogue box doesn't cover the chip (dlg {"x":12,"y":616.96875,"w":366,"h":37.03125,"r":378,"b":654}, chip {"x":224,"y":142,"w":156,"h":59.375,"r":380,"b":201.375})
+ok   the dialogue box doesn't cover the strip (strip {"x":146.9375,"y":8,"w":90.0625,"h":36,"r":237,"b":44})
 ok   no Chinese on screen in an English world: dialogue ()
 ok   taps take the buyer's talk to its end
 ok   sold: the chip shows the cash (₩90,000Stock: 1 × Socks (10 pairs))
 ok   the seat says what goes there (The notes say the president's water goes here.)
 --- iPhone SE (320x568, touch)
-ok   strip on screen ({"x":224,"y":142,"w":86,"h":99.1875,"r":310,"b":241.1875})
-ok   strip clear of the goal box (strip {"x":224,"y":142,"w":86,"h":99.1875,"r":310,"b":241.1875}, goal {"x":10,"y":46,"w":300,"h":89.546875,"r":310,"b":135.546875})
+ok   strip on screen ({"x":76.9375,"y":8,"w":90.0625,"h":36,"r":167,"b":44})
+ok   strip clear of the goal box (strip {"x":76.9375,"y":8,"w":90.0625,"h":36,"r":167,"b":44}, goal {"x":10,"y":46,"w":300,"h":89.546875,"r":310,"b":135.546875})
 ok   strip clear of the menu row (menu {"x":173.296875,"y":8,"w":138.703125,"h":40,"r":312,"b":48})
+NOTE strip is 90.0625x36, under 44 px to tap
 ok   no Chinese on screen in an English world: HUD ()
 ok   the record opened large fits the screen ({"x":12.796875,"y":78.5,"w":294.390625,"h":411,"r":307.1875,"b":489.5})
 ok   a tap outside the record opened large closes it
@@ -88,9 +90,9 @@ ok   every audit card on screen without scrolling (bottoms 234, 318; screen 568)
 ok   tapping the right two links them (Someone taught Baekjin what to say. The margin is the money.)
 ok   no Chinese on screen in an English world: audit ()
 ok   Escape closes the audit board
-ok   cash chip on screen ({"x":210.359375,"y":247,"w":99.640625,"h":43.78125,"r":310,"b":290.78125})
+ok   cash chip on screen ({"x":210.359375,"y":142,"w":99.640625,"h":43.78125,"r":310,"b":185.78125})
 ok   cash chip clear of the goal box (goal {"x":10,"y":46,"w":300,"h":89.546875,"r":310,"b":135.546875})
-ok   cash chip clear of the strip (strip {"x":224,"y":142,"w":86,"h":99.1875,"r":310,"b":241.1875})
+ok   cash chip clear of the strip (strip {"x":76.9375,"y":8,"w":90.0625,"h":36,"r":167,"b":44})
 ok   tapping the shopkeeper walks up and opens the shop
 ok   shop fits the screen ({"x":12.796875,"y":170.5,"w":294.390625,"h":226.984375,"r":307.1875,"b":397.484375})
 ok   "Buy one" is big enough to tap ({"x":205.8125,"y":255.296875,"w":79.375,"h":52,"r":285.1875,"b":307.296875})
@@ -98,10 +100,10 @@ ok   two bought by taps (Cash: ₩60,000 · Stock: 2 × Socks (10 pairs))
 ok   no Chinese on screen in an English world: shop ()
 ok   Escape closes the shop
 ok   tapping a buyer walks up and makes the offer
-ok   the dialogue box doesn't cover the chip (dlg {"x":12,"y":520.96875,"w":296,"h":37.03125,"r":308,"b":558}, chip {"x":182,"y":247,"w":128,"h":59.375,"r":310,"b":306.375})
-ok   the dialogue box doesn't cover the strip (strip {"x":224,"y":142,"w":86,"h":99.1875,"r":310,"b":241.1875})
+ok   the dialogue box doesn't cover the chip (dlg {"x":12,"y":520.96875,"w":296,"h":37.03125,"r":308,"b":558}, chip {"x":182,"y":142,"w":128,"h":59.375,"r":310,"b":201.375})
+ok   the dialogue box doesn't cover the strip (strip {"x":76.9375,"y":8,"w":90.0625,"h":36,"r":167,"b":44})
 ok   no Chinese on screen in an English world: dialogue ()
 ok   taps take the buyer's talk to its end
 ok   sold: the chip shows the cash (₩90,000Stock: 1 × Socks (10 pairs))
 ok   the seat says what goes there (The notes say the president's water goes here.)
-misaeng-look: all ok, 3 notes
+misaeng-look: all ok, 5 notes

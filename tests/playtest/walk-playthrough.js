@@ -27,6 +27,14 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     if (SYNC && req.method() === 'POST') { let j = {}; try { j = JSON.parse(req.postData() || '{}'); } catch {} if (j.kind === 'progress') { store[j.username] = j.data; syncPosts++; } return r.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' }); }
     if (SYNC && (u.searchParams.get('kind') || 'progress') === 'progress') return r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ data: store[u.searchParams.get('username')] || {} }) });
     return r.fulfill({ status: 200, contentType: 'application/json', body: '{"data":null}' }); });
+  // which cutscene step is running (window.__csAt), for the stuck report: a scene that hangs names the step it waits on
+  await p.addInitScript(() => { const hook = () => { if (typeof WorldCutscene === 'undefined' || WorldCutscene.__hooked) return !!(typeof WorldCutscene !== 'undefined');
+      const play = WorldCutscene.play.bind(WorldCutscene); WorldCutscene.__hooked = true;
+      WorldCutscene.play = (scene, cs, ...a) => { const beats = cs.beats; let n = 0;
+        cs.beats = new Proxy(beats, { get(t, k) { if (typeof k === 'string' && /^\d+$/.test(k)) window.__csAt = { id: cs.id || cs.key || cs.title || '?', i: +k, of: t.length, beat: JSON.stringify(t[k]).slice(0, 160), at: Date.now() }; return t[k]; } });
+        window.__csStarted = (window.__csStarted || []).concat([{ id: cs.id || cs.key || cs.title || '?', beats: beats.length, at: Date.now() }]).slice(-6);
+        return play(scene, cs, ...a); }; return true; };
+    const iv = setInterval(() => { if (hook()) clearInterval(iv); }, 200); });
   const errs = []; p.on('pageerror', e => { errs.push(e.message); console.log('ERR', e.message); });
   await p.route('**/phaser.min.js', r => r.fulfill({ path: path.join(__dirname, 'vendor/phaser.min.js'), contentType: 'application/javascript' }));
   await p.route('**/*.mp3', r => r.fulfill({ status: 404, body: '' }));
@@ -238,7 +246,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       const why = await p.evaluate(() => { const w = window.__w, P = w.player, g = w.goalAt, path = g && w.findPath(P.x, P.y - 3, g.x, g.y - 3);
         return `canMove ${w.canMove()}, seated ${!!w.seated}, approaching ${!!w.approaching}, walk ${w.walk ? w.walk.path.length : 'none'}, a way ${path ? path.length + ' points' : 'none'}, near: ${w.npcs.filter(n => n.spr.visible && Math.hypot(n.spr.x - P.x, n.spr.y - P.y) < 40).map(n => n.id).join(' ') || 'nobody'}`; }).catch(e => String(e));
       await p.screenshot({ path: path.join(__dirname, 'out', `walk-stuck-${beat}.png`) }).catch(() => {});
-      const ui = await p.evaluate(() => ({ lead: window.__w.lead, party: window.__w.st.party, line: (document.querySelector('.town-ui .town-dlg')||{}).textContent, dlgHidden: (document.querySelector('.town-ui .town-dlg')||{}).hidden, busy: window.__w.ui.busy(), cine: !!window.__w.cine, leaving: !!window.__w.leaving, html: [...document.querySelectorAll('.town-ui button, .town-ui .town-dlg')].filter(e => e.offsetParent).map(e => e.className + ':' + e.textContent.trim().slice(0, 40)).slice(0, 6) })).catch(() => ({}));
+      const ui = await p.evaluate(() => ({ csAt: window.__csAt && { ...window.__csAt, ago: Date.now() - window.__csAt.at }, csStarted: window.__csStarted, engaged: !!window.__w.engaged, lead: window.__w.lead, party: window.__w.st.party, line: (document.querySelector('.town-ui .town-dlg')||{}).textContent, dlgHidden: (document.querySelector('.town-ui .town-dlg')||{}).hidden, busy: window.__w.ui.busy(), cine: !!window.__w.cine, leaving: !!window.__w.leaving, html: [...document.querySelectorAll('.town-ui button, .town-ui .town-dlg')].filter(e => e.offsetParent).map(e => e.className + ':' + e.textContent.trim().slice(0, 40)).slice(0, 6) })).catch(() => ({}));
       console.log('     ui:', JSON.stringify(ui));
       const msg = refused || (overBeat ? `over ${BEATMAX}s on this beat (caught ${catches} times; goal ${s.goal || 'none'})` : '') || `stuck: no progress for ${STUCK}s (goal ${s.goal || 'none'}; ${why})`;
       if (reloads < 1 && !refused) {   // what a player would do: reload, and go on from the save
@@ -250,6 +258,9 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       if (!errand && /isn't open yet|还没有开通|barred|不为你开|not open|turns you away|No one goes|receives no one/i.test(s.line)) refused = `refused: "${s.line.slice(0, 90)}"`; }
     if (s.cancel) { await p.getByText('Cancel', { exact: true }).first()[TAPM]().catch(() => {}); continue; }
     if (s.scroll) { await tapEl('.tk-scroll-go'); await p.waitForTimeout(300); continue; }
+    // a lift's floor menu (Misaeng, tk-modern.js): the floor the goal is on is marked ◆; take it, as a player following the goal does
+    const lift = await p.evaluate(() => { const m = document.querySelector('.tk-lift'); if (!m || !m.getClientRects().length) return null; const b = [...m.querySelectorAll('button')].find(x => /^\s*◆/.test(x.textContent)); return { floor: b ? b.textContent.trim() : null }; });
+    if (lift) { if (lift.floor) { console.log(`     ${beat}: the lift, to ${lift.floor}`); await p.locator('.tk-lift button', { hasText: '◆' }).first()[TAPM]().catch(() => {}); } else { console.log(`FAIL ${beat}: the lift's menu has no floor marked ◆`); await tapEl('.tk-lift-close'); } await p.waitForTimeout(600); continue; }
     if (s.pouch) { pouches.push(s.pouch); await tapEl('.tk-pouch button'); await p.waitForTimeout(300); continue; }   // a sealed pouch opened (Book 15): its card read, then on
     if (!s.duel) await hook();   // (again after a reload)
     if (SYNC && Date.now() - lastVis > 45000) {   // the tab hidden and shown again (a phone app switch): the game pulls, and reroutes only if something changed
@@ -408,8 +419,10 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       if (!g) return null; const need = [].concat(g.needs || []).find(c => /^mark:/.test(c) && !w.cond(c)); if (!need) return null;
       return { mark: need.slice(5), place: w.placeId, parent: (w.region.places.find(x => x.id === w.placeId) || {}).parent || null, exits: w.exits.map(e => ({ to: e.to, x: e.rect.centerX, y: e.rect.centerY })), T: w.tw || 16 }; }).catch(() => null);
     if (gm) {
-      if (!markSpots[BOOK]) { markSpots[BOOK] = []; const dir = path.join(__dirname, `../../data/tk_maps/w${BOOK}`); for (const f of require('fs').readdirSync(dir).filter(f => f.endsWith('.map.json'))) { try { const d = JSON.parse(require('fs').readFileSync(path.join(dir, f), 'utf8')); for (const sp of d.spots || []) if (sp.delivers) markSpots[BOOK].push({ place: d.id || f.replace('.map.json', ''), id: sp.id, delivers: sp.delivers, x: sp.x, y: sp.y }); } catch (e) {} } }
-      const sp = markSpots[BOOK].find(x => x.delivers === gm.mark);
+      if (!markSpots[BOOK]) { markSpots[BOOK] = []; const dir = path.join(__dirname, `../../data/tk_maps/w${BOOK}`); for (const f of require('fs').readdirSync(dir).filter(f => f.endsWith('.map.json'))) { try { const d = JSON.parse(require('fs').readFileSync(path.join(dir, f), 'utf8')); for (const sp of d.spots || []) if (sp.delivers) markSpots[BOOK].push({ place: d.id || f.replace('.map.json', ''), id: sp.id, delivers: sp.delivers, needs: [].concat(sp.needs || []), x: sp.x, y: sp.y }); } catch (e) {} } }
+      const sp0 = markSpots[BOOK].find(x => x.delivers === gm.mark);
+      // a delivery that takes something not yet held (Misaeng m4's errands: fetch the copies first): not there yet; the game's own goal leads to the giver
+      const sp = sp0 && (await p.evaluate(n => n.every(c => !/^item:/.test(c) || window.__w.cond(c)), sp0.needs || []).catch(() => true)) ? sp0 : null;
       if (sp) {
         if (!gated.includes(gm.mark)) { gated.push(gm.mark); console.log(`     ${s.next} is gated on mark:${gm.mark}: to ${sp.place} (${sp.id})`); }
         if (!s.walking && Date.now() - lastTap > 1200 && !s.busy) { lastTap = Date.now();

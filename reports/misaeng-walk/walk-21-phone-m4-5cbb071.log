@@ -1,0 +1,6 @@
+     mode: test (the game's test mode on)
+ok   21-m4  6s  ms_jang in jongno--client
+FAIL 21-m4b  4s  ms_jang in one-international  at 296,286: no goal to go to ("The client's president stares at him. So does Jang.")
+ok   after the book: playing as ms_jang in one-international; the chip says "Jang Geu-rae"; "Now playing" banners: none
+walk-playthrough Book 21 (default): 1/2 beats walked and played in 0.2 min (0 needed a reload, 0 held by a scene); 1 boards (1 from the rated pool)
+the goal box's chip followed the party: Jang Geu-rae
