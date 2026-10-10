@@ -47,9 +47,13 @@ Where each book's places are:
 | 14 (Lü Bu) | `tools/tk_plans_lb.py` | `--world 14 --plans lb` | `tools/proofs/hide_ward_lb.py` | the burning ward, Xiapi |
 | 15 (Lady Sun) | `tools/tk_plans_ls.py` | `--world 15 --plans 15` | `tools/proofs/ladysun_ls.py` | design: `docs/book2/ladysun-places.md`; engine walk: `tests/playtest/book15-places.js` |
 | 90 (Claude's study) | `tools/tk_plans_w90.py` | `plans.py --world 90 --out data/tk_maps/w90` | — | one room |
+| 20 (Red Chamber 1) | `redchamber/book1/plans.py` | `redchamber/tools/build_places.sh` (`--world 20 --plans hlm1`) | `redchamber/book1/proofs.py` | Dream of the Red Chamber, kept apart from the tk books; story `redchamber/book1/story.py` (Plot alt); engine walk `tests/playtest/redchamber-places.js`; world number pending Integration |
 
 A new arc is registered in `plans.py`: `ARCS` (book → arc name), `key_prefix` (the beat keys' book number: Book 15's
 keys are `4-s1`…), `load()` (its module), and in `check_plans_w2.py` (`--arc`).
+
+A plans module outside `tools/` (the Red Chamber books in `redchamber/`) is loaded by path (`plans.load_redchamber`),
+and so is its story (`story_world`). Its keys carry their own prefix (`hl1-d1`), renamed to the world's at build.
 
 ## The pipeline
 
@@ -213,6 +217,22 @@ knows). A spot that delivers a mark: `needs`, `when`, `delivers`, `deliver` (lin
 `tk_places_w2_zh.py` (or `tk_story_zh.ZH`), or `build_tk.py` stops. Lines a player can meet in any order must not say
 "another" or "the third".
 
+**Conditions name the bare key.** A spot's or thing's `node` carries the plans' prefix (`"4-s3"`, `"hl1-d1"`) and is
+renamed at build. A condition (`when`, `until`, a state's `when`/`until`: `"node:d4"`) is not renamed: the engine reads a
+short key as this world's, and a prefixed one (`"node:hl1-d4"`) never comes true. The checker fails any condition that
+isn't one of the book's keys.
+
+**Rooms start on arrival.** Indoors (an interior, or any map with a parent that isn't a `compound`) a beat's scene starts
+the moment she comes in, unless its spot is `"trigger": "talk"`: then it waits for a tap on the spot. Use `talk` where
+she should look about the room first (Red Chamber's cues before a board).
+
+**Gates in a wall** (`lines[].gates`) get a gatehouse drawn in them (`building.gate` in a city wall). A wall may name
+the kind and label of each: `"gate_kinds": {"festooned-gate": "building.festoongate"}`, `"gate_labels": {...}`. A
+gate kind is walked through: add it to `IN_WALL` and `PASSABLE` (plans.py and the checker) and to `vocab.KINDS`.
+
+**A new kind goes into `vocab.KINDS` too**, not only the plans' `NEW_KINDS`: `verify` and compile read `vocab.KINDS`, and
+a kind missing there is taken as solid (Xifeng's half-size gate shut her courtyard until it was added).
+
 **People** (plan `npcs`): `kind`, `at` (cell) or `near` (a thing), `place` (a room's map id), `say`, `face`, `in`
 (states), `when` / `until` (`"node:s5"`; renamed to the book's keys), `label`, `id`. Townsfolk with no `at`/`near`
 wander. Extra engine keys pass through `NPC_KEYS`: `gossip`, `yield`, `watch`, `challenge`, `blocks`, `gives`.
@@ -258,6 +278,12 @@ both branches together.
 If you replace a line, its old Chinese must stay until the maps carrying it are rebuilt: `build_tk.py` checks every
 line in the built maps. (Or patch the line in `data/tk_maps/w<n>` first.)
 
+Red Chamber's story is on Plot alt's branch (`claude/plot-alt`), in `redchamber/`, and isn't registered in
+`tools/tk_story.py` yet. `redchamber/tools/build_places.sh [world]` registers it for the build only (appends WORLD_HLM1 to
+`tk_story.py`, its ZH, CAST and the plans' `ZH_PLACES_HLM1` to `tk_story_zh.py`), builds, compiles and stages, undoes
+drift and puts both files and `tk.json` back; `--playtest` registers it and runs `tests/playtest/redchamber-places.js`
+instead. It borrows `redchamber/book1/story.py` from `origin/claude/plot-alt` when it isn't in the tree.
+
 ## Drift
 
 After any build: `python3 tools/mapfactory/keep_drift.py --world <n>` puts back the overworld and every existing beat's
@@ -274,6 +300,10 @@ problem picks as committed. Then `git status`: only what the change touched shou
 - A rebuilt map must be walked in the engine once: a proof uses our reading of the engine, a walk uses the engine.
 - Messages cross: before reworking what another session built on, check what main actually uses.
 - Delete `tools/**/__pycache__` if an edit doesn't seem to take.
+- One map per pair of places has one way between them that works: the engine lands an arrival at the entry kept for
+  the map she came from, not at the gate she used. Two open gates from the street into one house land at the same
+  spot, so shut all but one in each state (Red Chamber: the back gate in Part 2, none in Part 1).
+- A proof must fail when it should: break the thing it proves (open the shut gates in a copy of the map) and run it.
 
 ## Walking it in the engine
 

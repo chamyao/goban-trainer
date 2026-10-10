@@ -128,9 +128,9 @@
      "Go on. Say it now, while there's no one else here."
     ]
    ],
-   "until": "20-hl1-g6",
+   "until": "20-g6",
    "face": "W",
-   "when": "node:hl1-g5"
+   "when": "node:g5"
   }
  ],
  "exits": [

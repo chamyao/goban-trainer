@@ -597,6 +597,19 @@ def main():
                             errors.append(f"{place} / {n['place']}: npc {i + 1} ({n['kind']}) behind {n['behind']}: no one can walk up to it")
                 elif not P.walkable(c) or c not in getattr(P, "reach", set()):
                     errors.append(f"{place} / {n['place']}: npc {i + 1} ({n['kind']}) at {c} stands where no one can walk to")
+    # every condition names one of the book's keys, bare ("node:d4"): the engine reads a short key as this world's, so a
+    # plans' prefix in a condition ("node:hl1-d4") never comes true
+    def conds(b):
+        for st in b.get("states", []) + [st for m in (b.get("maps") or {}).values() for st in m.get("states", [])]:
+            yield f"state {st.get('id')}", st
+        for n in b.get("npcs", []) + b.get("challengers", []):
+            yield f"{n.get('id') or n['kind']}", n
+    for place, b in PLANS2.items():
+        for who, x in conds(b):
+            for k in ("when", "until"):
+                for c in (x.get(k) if isinstance(x.get(k), list) else [x.get(k)]):
+                    if isinstance(c, str) and c.startswith("node:") and c[5:] not in keys:
+                        errors.append(f"{place}: {who} {k} {c!r}: not one of the book's keys (a condition names the bare key)")
     # every Shared key that names a Places spot should have one
     placed = {s["node"].split("-", 1)[-1] for _, p, _ in plans() for s in p.get("spots", []) if s.get("node")}
     placed |= {t["node"].split("-", 1)[-1] for _, p, _ in plans() for t in p.get("things", []) if t.get("node")}

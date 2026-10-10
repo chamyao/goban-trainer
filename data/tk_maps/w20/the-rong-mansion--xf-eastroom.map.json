@@ -132,9 +132,9 @@
      "Miss Ping, this is the granny I told you of."
     ]
    ],
-   "until": "20-hl1-g5",
+   "until": "20-g5",
    "face": "E",
-   "when": "node:hl1-g4"
+   "when": "node:g4"
   }
  ],
  "exits": [

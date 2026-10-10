@@ -2,6 +2,9 @@
 # Build Red Chamber Book 1's places (redchamber/book1/plans.py) against its story, before Integration has registered the
 # world (places-playbook.md, "Building ahead of the story").
 #   redchamber/tools/build_places.sh [world] [story ref]
+#   redchamber/tools/build_places.sh --playtest [world]     # no rebuild: register, walk tests/playtest/redchamber-places.js, put back
+#   redchamber/tools/build_places.sh --register [world]     # register and leave it so, to look about in the game; undo with
+#                                                            #   git checkout -- tools/tk_story.py tools/tk_story_zh.py data/tk.json
 #     world: the world number (default 20, until Integration settles it); story ref: where Plot's
 #     redchamber/book1/story.py comes from when it isn't in this tree (default origin/claude/plot-alt)
 # It registers WORLD_HLM1 for the build only: appends it to tools/tk_story.py and its Chinese (the story's ZH, CAST and
@@ -10,6 +13,9 @@
 # changed. Integration's registration replaces the appended block.
 set -euo pipefail
 cd "$(dirname "$0")/../.."
+playtest= register=
+if [ "${1:-}" = "--playtest" ]; then playtest=1; shift; fi
+if [ "${1:-}" = "--register" ]; then register=1; shift; fi
 world=${1:-20} ref=${2:-origin/claude/plot-alt}
 borrowed=
 if [ ! -f redchamber/book1/story.py ]; then   # not in this tree: borrow it for the build
@@ -47,5 +53,10 @@ _HL.update(n=$world, open=True)
 WORLDS.append(_HL)
 PY
 python3 tools/build_tk.py > /dev/null
+if [ -n "$register" ]; then trap - EXIT; echo "registered world $world"; exit 0; fi
+if [ -n "$playtest" ]; then
+  RC_WORLD=$world tests/playtest/run.sh redchamber-places
+  exit $?
+fi
 python3 -m tools.mapfactory all --world "$world" --plans hlm1 --kit xianxia --kit jade --kit genshin | tail -4
 python3 tools/mapfactory/keep_drift.py --world "$world"

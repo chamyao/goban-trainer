@@ -104,9 +104,9 @@
      "I do like to be asked. It's not my job, mind, but I know everyone."
     ]
    ],
-   "until": "20-hl1-g4",
+   "until": "20-g4",
    "face": "W",
-   "when": "node:hl1-g3"
+   "when": "node:g3"
   }
  ],
  "exits": [
