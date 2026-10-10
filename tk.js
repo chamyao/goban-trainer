@@ -1799,6 +1799,9 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
 
   trainer = new Trainer(Object.assign({}, src, { problems: [p] }), 0, { svg, boardCard, status, treePanel, ...hidden, noEngine: true });
   if (p.last) { trainer.lastMove = cIdx(p.last); trainer.render(); }   // a record board: White's move before it, marked
+  // a full 19x19 board (a record board): the lead's portrait goes behind it, or it hides the stones (the user: "on the full
+  // board the portrait needs to go behind the board, 19x19 is too big and I cant see"); smaller boards keep it in front
+  { const c = trainer.goban.crop; box.classList.toggle("tk-duel-big", c.c1 - c.c0 >= 18 && c.r1 - c.r0 >= 18); }
   // Size the board to the window it sits in, keeping its shape (it's cropped to the corner in play).
   const fit = () => {
     if (box.parentNode && box.parentNode.classList.contains("tk-duel-full")) {

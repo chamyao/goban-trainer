@@ -588,6 +588,7 @@ body:has(.tk-scroll-wrap) .wukong-toggle, body:has(.tk-scroll-wrap) #wukong { vi
 .tk-duel-lead { position: absolute; left: 0; bottom: 0; height: 94%; max-width: 32%; object-fit: contain; object-position: bottom left;
   z-index: 2; filter: drop-shadow(0 6px 16px rgba(0, 0, 0, .45)); pointer-events: none; animation: tkPortraitIn .35s ease-out; }
 .has-lead > .tk-duel-board, .has-lead > .tk-duel-side { position: relative; z-index: 1; }
+.tk-duel-big .tk-duel-lead { z-index: 0; }   /* a full 19x19 board: the portrait behind it (the user) */
 .tk-duel-lead-sm { display: none; }
 .tk-duel-full .tk-duel-leadcol { display: none; }
 .tk-duel-full .tk-duel-lead-sm { display: block; flex: none; width: 76px; max-height: 120px; object-fit: contain; object-position: bottom;
