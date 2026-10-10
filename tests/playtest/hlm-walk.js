@@ -59,7 +59,15 @@ const MAXMIN = +(process.env.MAXMIN || 35);
     if (s.cancel) { await p.getByText('Cancel', { exact: true }).first().tap(); await p.waitForTimeout(400); continue; }
     if (s.scroll) {
       if (s.scrollT !== last.scrollT) { log('[scroll]', (s.scrollT || '').replace(/\s+/g, ' ')); scrolls.push({ t: s.scrollT || '', body: s.scrollBody || '', at: [...clearedOrder], party: s.party }); await shot('scroll'); }
-      await p.locator('.tk-scroll-go').first().tap(); await p.waitForTimeout(600); last = s; continue;
+      // a long scroll on a phone: swipe to its end, where the button is, then tap it
+      const sc = await p.evaluate(() => { const e = document.querySelector('.tk-scroll'); if (!e) return null; const r = e.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height * .7, r.top + r.height * .2, e.scrollHeight - e.clientHeight]; });
+      for (let i = 0; sc && sc[3] > 4 && i < 12 && !(await p.evaluate(() => { const g = document.querySelector('.tk-scroll-go'); if (!g) return true; const r = g.getBoundingClientRect(); return r.bottom <= innerHeight && r.top >= 0; })); i++) {
+        const cdp = await p.context().newCDPSession(p);
+        await cdp.send('Input.synthesizeScrollGesture', { x: Math.round(sc[0]), y: Math.round(sc[1]), yDistance: -Math.round(sc[1] - sc[2]), gestureSourceType: 'touch', speed: 1600 }).catch(() => {});
+        await cdp.detach().catch(() => {}); await p.waitForTimeout(250);
+      }
+      await p.locator('.tk-scroll-go').first().tap({ timeout: 8000 }).catch(e => fail('the scroll\'s Continue cannot be tapped after swiping to its end: ' + String(e.message).split('\n')[0]));
+      await p.waitForTimeout(600); last = s; continue;
     }
     if (s.duel) {
       if (!last.duel) { log('[board]', (s.cap || '(no caption)').replace(/\s+/g, ' '), '|', (s.duelLine || '').slice(0, 70)); boards.push({ cap: s.cap || '', tab: s.tab || '', open: s.duelLine || '', next: last.next, at: [...clearedOrder] }); await p.waitForTimeout(600); }
