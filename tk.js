@@ -756,7 +756,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) { this.data = await (await fetch("data/tk.json?v=105")).json(); this.migrate(); }
+    if (!this.data) { this.data = await (await fetch("data/tk.json?v=106")).json(); this.migrate(); }
     return this.data;
   },
   // A book whose beats were renumbered after players began it: their cleared beats moved to the new keys, once per
@@ -1302,7 +1302,7 @@ async function viewTK(worldN) {
   const chron = h("button", { class: "tk-chron-btn", type: "button" }, "史册 Chronicle");
   const voiceBtn = h("button", { class: "tk-chron-btn", type: "button", "aria-pressed": String(TKVoice.on), title: "配音：中文 → English → 关 Voice: Chinese → English → off" });
   TKVoice.enOnly = w.lang === "en";   // an English-only book: its voice is English (or its own language, "voice"), on or off
-  TKVoice.native = w.lang === "en" && w.voice ? w.voice : null;
+  TKVoice.native = w.lang === "en" && w.voice && (D.voices_ko || []).length ? w.voice : null;   // (until its clips are in, English)
   if (typeof TKEnglish !== "undefined") TKEnglish.set(w.lang === "en");   // and no Chinese on screen
   const voiceLabel = () => {
     voiceBtn.textContent = TKVoice.native ? { zh: "Voice: Korean", en: "Voice: English", off: "Voice off" }[TKVoice.lang]
@@ -1648,7 +1648,7 @@ async function viewTKLevel(worldN, key) {
   if (nav !== routeSeq) return;
   if (!d) { location.hash = `#/tk/${worldN || 1}`; return; }
   if (!d.node.town) TK.setAt(worldN, key);
-  TKVoice.enOnly = d.w.lang === "en"; TKVoice.native = d.w.lang === "en" && d.w.voice ? d.w.voice : null; if (typeof TKEnglish !== "undefined") TKEnglish.set(d.w.lang === "en");   // an English-only book's level page
+  TKVoice.enOnly = d.w.lang === "en"; TKVoice.native = d.w.lang === "en" && d.w.voice && (TK.data.voices_ko || []).length ? d.w.voice : null; if (typeof TKEnglish !== "undefined") TKEnglish.set(d.w.lang === "en");   // an English-only book's level page
   crumbs.innerHTML = "";
   crumbs.append(h("a", { href: "#/" }, "Library"), " / ", h("a", { href: `#/tk/${worldN}` }, (w => { const nv = w && TK_NOVELS[w.novel]; return `${nv ? nv.title : "Three Kingdoms"} · Book ${(w && w.book) || worldN}`; })(TK.world(worldN))), ` / ${d.node.place}`);
   root.innerHTML = "";
@@ -1670,7 +1670,7 @@ const TK_REST = 30000;
 // Books from other novels (a world's "novel"): each novel has its own library card and its own book list, apart
 // from the Three Kingdoms books (which have no "novel"). live: the card shows outside test mode.
 const TK_NOVELS = { hongloumeng: { title: "Dream of the Red Chamber", native: "红楼梦", first: 31, live: false },
-  misaeng: { title: "Misaeng", native: "미생", first: 21, live: false } };
+  misaeng: { title: "Misaeng", native: "미생", first: 21, live: true } };   // published (the user, 2026-10-10)
 // A touch screen (a phone or tablet): tap to move and tap to talk.
 // Test mode, for trying the story without solving: open the page with ?test=1 (?test=0 ends it).
 // Problems then get a Skip key that counts as a flawless solve. It lasts the browser tab (sessionStorage):
