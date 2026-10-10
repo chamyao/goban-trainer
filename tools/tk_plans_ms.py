@@ -1,9 +1,9 @@
 """Misaeng (미생), Season 1, as plan grids (docs/book2/plan-grid.md). English only (the user: "we dont need chinese lines
 for this").
 
-Design: docs/book2/misaeng-arc.md (Plot alt2); the story is tools/tk_story_w21.py (WORLD21). Beat keys are its keys,
-m1 ... m24 and m3b, m4b, m5b, m19b, m23b, written here as "21-m1" ... (world 21; the prefix is the world, so nothing is
-renamed). Research: docs/book2/misaeng-research.md. The engine's keys: docs/book2/misaeng-engine.md (Integration alt2).
+Design: docs/book2/misaeng-arc.md (Plot alt2); Misaeng is five books on worlds 21-25. World 21 is Book 1, "Not Yet
+Alive" (episodes 0-33; the story is tools/tk_story_w21.py, WORLD21): beat keys m1 ... m20 and m13b, written here as
+"21-m1" ... (the prefix is the world, so nothing is renamed). Each book is a config over the same places (see book()). Research: docs/book2/misaeng-research.md. The engine's keys: docs/book2/misaeng-engine.md (Integration alt2).
 
     python3 tools/check_plans_w2.py --arc ms [--png]       # check (and draw into docs/book2/plans-ms/)
     python3 -m tools.mapfactory all --world 21 --plans ms --kit xianxia --kit jade --kit genshin
@@ -21,6 +21,7 @@ vocab.FALLBACK and a brief in ART for Graphics). The places, and how they join:
       ├─ E ── Sun's neighbourhood (the daycare; Sun's flat)
       ├─ E ── the pizza shop (Kim Dong-su's, beside a big mart)
       └─ E ── the new office (m24)
+    Daehanmun (Deoksugung's gate on the main road: the memorial tent, Book 1's last morning)
     Amman (one street; reached only by the epilogue's handoff)
 
 Rules this book adds to the factory's:
@@ -99,6 +100,7 @@ NEW_KINDS = {**NEW_KINDS2,
              "furn.toy_shelf": (2, 1, True),
              "furn.kid_mat": (2, 1, False),            # a padded play mat
              "furn.subway_seat": (4, 1, True),         # a subway carriage's long bench seat
+             "prop.memorial_tent": (4, 2, True),       # a white memorial tent: portraits, chrysanthemums (Daehanmun, Book 1's end)
              # the board room's drinks (m17), each shown on the table once set down
              "prop.glass_water": (1, 1, False),
              "prop.teacup": (1, 1, False),
@@ -172,6 +174,8 @@ ART = {**ART2,
        "furn.toy_shelf": "a low shelf of toys and picture books",
        "furn.kid_mat": "a padded play mat in bright colours",
        "furn.subway_seat": "a Seoul subway carriage's long bench seat along the wall, grab rails above",
+       "prop.memorial_tent": "a white Korean memorial tent (분향소) on a plaza: a white canopy on poles, a long table in white cloth "
+                             "with framed black-and-white portraits, white chrysanthemums laid in rows, incense; four tiles wide",
        "prop.glass_water": "a glass of still water on a coaster, drawn small on a table top (no ice)",
        "prop.teacup": "a white cup of green tea on a saucer, drawn small on a table top",
        "prop.coffee_cup": "a white cup of black coffee on a saucer, drawn small on a table top",
@@ -195,29 +199,42 @@ ART = {**ART2,
        "folk.kid": "a Korean child of 6-12: a backpack, trainers, a school uniform or play clothes",
        "folk.jordanian": "a man in Amman: a red-and-white keffiyeh or bare-headed, a shirt and trousers, a moustache",
        }
+# =========================================================================================
+# How this file is built. Misaeng is five books (worlds 21-25, Plot alt2's misaeng-arc.md), all on the same places. So
+# the places are written once, with no beats in them (the builders below), and each book is a config (BOOK1 ...) that
+# says which places and tower floors it uses, and adds its own beat spots, mechanics, people, challengers, lights and
+# objectives. book(cfg) puts them together; an exit to a place the book doesn't use is left out.
+#   cfg["spots"]:   {"Place" or "Place/map": [spots]}        cfg["npcs"]: {"Place": [people]} (rooms by "place")
+#   cfg["challengers"]: {"Place": [...]}  cfg["states"]: {"Place" or "Place/map": [states]}  cfg["objectives"]: {key: text}
+# Fragments a later book reuses (the audit board's clues, the board room's seats, the trade loop) are functions below.
 
-# the tower's floors, in the lift's order (the lift's menu: tk-modern.js "use": "lift"); each floor's own label names it
-FLOORS = [("pt-room", "3F", "The PT room"), ("hr", "5F", "HR"), ("finance", "6F", "Finance"), ("resources", "9F", "The resources team"),
-          ("sales3", "14F", "Sales Team 3"), ("meeting", "15F", "A meeting room"), ("audit", "16F", "The audit room"),
-          ("board-room", "20F", "The board room"), ("exec-floor", "21F", "The executive's office"), ("roof", "R", "The roof")]
+# the tower's floors: id -> (storey, label, builder); a book's lift lists only the floors it uses
+def _floors():
+    return {"pt-room": ("3F", "The PT room", _pt_room), "hr": ("5F", "HR", _hr), "finance": ("6F", "Finance", _finance),
+            "textile": ("8F", "The textile team", _textile), "resources": ("9F", "The resources team", _resources),
+            "sales3": ("14F", "Sales Team 3", _sales3), "meeting": ("15F", "A meeting room", _meeting),
+            "audit": ("16F", "The audit room", _audit), "board-room": ("20F", "The board room", _board_room),
+            "exec-floor": ("21F", "The executive's office", _exec_floor), "roof": ("R", "The roof", _roof)}
+
+
 LOBBY = "one-international"
 
 
-def _lift_floors():
-    return [{"label": "1F · The lobby", "to": LOBBY}, *[{"label": f"{n} · {label}", "to": f"{LOBBY}--{mid}"} for mid, n, label in FLOORS]]
+def _lift_floors(floors):
+    F = _floors()
+    return [{"label": "1F · The lobby", "to": LOBBY}, *[{"label": f"{F[m][0]} · {F[m][1]}", "to": f"{LOBBY}--{m}"} for m in floors]]
 
 
-def _with_lift(mid, plan, at=None, doors_at=None):
+def _with_lift(mid, plan, floors, at=None, doors_at=None):
     """A floor with its lift: the lift's doors by the floor's own door (which is the stairs down to the lobby), the
     spot that opens its menu, and arrivals by lift (from the lobby or any floor) at it."""
     w, h = plan["grid"]
     door = plan["entries"][""]
     at = at or [door[0] - 2, h - 2]
     doors_at = doors_at or [at[0] - 1, at[1]]
-    plan = {**plan, "things": [*plan["things"], {"id": "lift-doors", "kind": "furn.lift_door", "rect": [*doors_at, 1, 1], "label": "The lift"}],
-            "spots": [*plan.get("spots", []), {"id": "lift", "at": at, "label": "The lift", "use": "lift", "floors": _lift_floors()}],
-            "entries": {**plan["entries"], "One International": at, **{m: at for m, _, _ in FLOORS if m != mid}}}
-    return plan
+    return {**plan, "things": [*plan["things"], {"id": "lift-doors", "kind": "furn.lift_door", "rect": [*doors_at, 1, 1], "label": "The lift"}],
+            "spots": [*plan.get("spots", []), {"id": "lift", "at": at, "label": "The lift", "use": "lift", "floors": _lift_floors(floors)}],
+            "entries": {**plan["entries"], "One International": at, **{m: at for m in floors if m != mid}}}
 
 
 def _talk(kind, at, say, **kw):
@@ -242,24 +259,35 @@ def _street(grid, road_y, things, exits, entries, dress=(), ground=(), lines=(),
             "things": list(things), "spots": list(spots), "exits": list(exits), "entries": entries, "dress": list(dress)}
 
 
+def _give(sid, at, label, item, when, give, given):
+    """A thing that gives an item when searched (the bins, a table, the copier): a spot with "gives"."""
+    return {"id": sid, "at": at, "label": label, "gives": item, "gives_when": when, "give": [give], "given": [given]}
+
+
+def _deliver(sid, at, label, item, mark, when, deliver, waiting, delivered=None):
+    """A place to set something down (a desk, a seat): it takes the item from the bag and sets its mark."""
+    return {"id": sid, "at": at, "label": label, "needs": [f"item:{item}"], "when": when, "delivers": mark, "takes": True,
+            "deliver": [deliver], "waiting": [waiting], "delivered": [delivered or deliver]}
+
+
 # =========================================================================================
-# The tower's floors (One International): each a room whose door leads back to the lobby
+# The tower's floors (One International): each a room whose door (the stairs) leads back to the lobby
 def _sales3():
     """Sales Team 3's floor: three islands of desks, each with its head's desk at the end. Sales Team 1 (Sun's) on
-    the west, Sales Team 3 in the middle (Oh's desk at its head, Jang's the last at the foot), another team east.
-    Jang's call notes (icb_call, m12-m13) are at his desk; the whiteboard opens the audit board."""
+    the west, Sales Team 3 in the middle (Oh's desk at its head, Jang's the last at the foot), another team east; the
+    copier and the pantry's coffee machine on the north wall, the filing cabinets."""
     return room([18, 12], [9, 11], floor="carpet", things=[
         {"id": "copier", "kind": "furn.copier", "rect": [2, 1, 1, 1], "label": "The copier"},
-        {"id": "cooler", "kind": "furn.water_cooler", "rect": [4, 1, 1, 1]},
+        {"id": "cooler", "kind": "furn.water_cooler", "rect": [4, 1, 1, 1], "label": "The pantry: coffee and water"},
         {"id": "board-1", "kind": "furn.whiteboard", "rect": [7, 1, 1, 1], "label": "Sales Team 3's whiteboard"},
-        {"id": "filing-1", "kind": "furn.filing", "rect": [11, 1, 1, 1]},
+        {"id": "filing-1", "kind": "furn.filing", "rect": [11, 1, 1, 1], "label": "The filing cabinets"},
         {"id": "filing-2", "kind": "furn.filing", "rect": [12, 1, 1, 1]},
         {"id": "plant-n", "kind": "furn.plant", "rect": [15, 1, 1, 1]},
         # Sales Team 1: Sun Ji-young's island
         *_desks([(2, 4), (3, 4), (2, 5), (3, 5)]),
         {"id": "sun-desk", "kind": "furn.office_desk", "rect": [4, 4, 1, 2], "label": "Sun Ji-young's desk"},
         # Sales Team 3
-        {"id": "desk-park", "kind": "furn.office_desk", "rect": [8, 4, 1, 1], "label": "Park's desk"},
+        {"id": "desk-deputy", "kind": "furn.office_desk", "rect": [8, 4, 1, 1], "label": "The deputy's desk"},
         {"id": "desk-kim", "kind": "furn.office_desk", "rect": [9, 4, 1, 1], "label": "Kim Dong-sik's desk"},
         {"id": "desk-spare", "kind": "furn.office_desk", "rect": [9, 5, 1, 1]},
         {"id": "desk-jang", "kind": "furn.office_desk", "rect": [8, 5, 1, 1], "label": "Jang's desk"},
@@ -272,23 +300,20 @@ def _sales3():
         {"id": "meet-e", "kind": "furn.meeting_table", "rect": [13, 8, 2, 1]},
         {"id": "plant-sw", "kind": "furn.plant", "rect": [1, 10, 1, 1]},
         {"id": "plant-se", "kind": "furn.plant", "rect": [16, 10, 1, 1]},
-    ], spots=[
-        {"id": "m3", "at": [7, 3], "node": k(3), "label": "Sales Team 3"},
-        {"id": "m5", "at": [4, 6], "node": k(5), "label": "Sun Ji-young's desk"},
-        {"id": "m9", "at": [8, 6], "node": k(9), "label": "Jang's desk"},
-        {"id": "m10", "at": [9, 3], "node": k(10), "label": "Kim Dong-sik's desk"},
-        {"id": "m11", "at": [5, 5], "node": k(11), "label": "Sun Ji-young's desk"},
-        {"id": "m21", "at": [7, 4], "node": k(21), "label": "The team's phone"},
-        {"id": "m23", "at": [11, 5], "node": k(23), "label": "Oh's desk"},
-        # handoffs (Plot): back to Jang at his desk; to Sun Ji-young at hers
-        {"id": "sales3", "at": [9, 6], "label": "Jang's desk", "note": "handoffs to Jang land here"},
-        {"id": "sun-desk-hand", "at": [5, 4], "label": "Sun Ji-young's desk", "note": "the handoff to Sun lands here"},
-        # the audit board (m12-m13): Jang's own notes of his call to ICB, and the whiteboard that opens the board
-        {"id": "call-notes", "at": [7, 5], "label": "Jang's desk", "gives": "icb_call", "gives_when": f"node:{k(12)}",
-         "give": ["Your notes from the call to ICB, in your own hand. In the margin you've written: Korean? In the room behind?"],
-         "given": ["Your desk. The call notes are in your bag."]},
-        {"id": "whiteboard", "at": [7, 2], "label": "Sales Team 3's whiteboard", "opens": "audit"},
     ]) | {"label": "Sales Team 3"}
+
+
+def _textile():
+    """The textile team's floor: two islands, bolts of cloth and sample books on shelves, Steve Han's desk by the window."""
+    return room([14, 9], [7, 8], floor="carpet", things=[
+        *_desks([(2, 3), (3, 3), (2, 4), (3, 4), (9, 3), (10, 3), (9, 4)]),
+        {"id": "steve-desk", "kind": "furn.office_desk", "rect": [10, 4, 1, 1], "label": "Steve Han's desk"},
+        {"id": "head", "kind": "furn.exec_desk", "rect": [6, 1, 2, 1], "label": "The team head's desk"},
+        {"id": "samples-1", "kind": "furn.shelf", "rect": [1, 1, 1, 1], "label": "Bolts of cloth and sample books"},
+        {"id": "samples-2", "kind": "furn.shelf", "rect": [2, 1, 1, 1]},
+        {"id": "window", "kind": "furn.window", "rect": [11, 1, 1, 1]},
+        {"id": "plant", "kind": "furn.plant", "rect": [12, 7, 1, 1]},
+    ]) | {"label": "The textile team"}
 
 
 def _resources():
@@ -301,18 +326,16 @@ def _resources():
         {"id": "filing-1", "kind": "furn.filing", "rect": [1, 1, 1, 1]},
         {"id": "filing-2", "kind": "furn.filing", "rect": [12, 1, 1, 1]},
         {"id": "plant", "kind": "furn.plant", "rect": [12, 7, 1, 1]},
-    ], spots=[{"id": "resources", "at": [4, 5], "label": "The resources team", "note": "the handoff to Ahn lands here"}]) \
-        | {"label": "The resources team"}
+    ]) | {"label": "The resources team"}
 
 
 def _meeting():
-    """A meeting room (m4b: the client's president comes to One International)."""
     return room([12, 8], [6, 7], floor="carpet", things=[
         {"id": "table", "kind": "furn.meeting_table", "rect": [5, 3, 2, 1], "label": "The meeting table"},
         *[{"id": f"chair-{x}-{y}", "kind": "furn.chair", "rect": [x, y, 1, 1]} for x, y in ((4, 3), (7, 3), (5, 2), (6, 2))],
         {"id": "board", "kind": "furn.whiteboard", "rect": [2, 1, 1, 1]},
         {"id": "plant", "kind": "furn.plant", "rect": [10, 1, 1, 1]},
-    ], spots=[{"id": "m4b", "at": [6, 5], "node": k("4b"), "label": "A meeting room"}]) | {"label": "A meeting room"}
+    ]) | {"label": "A meeting room"}
 
 
 def _finance():
@@ -324,7 +347,7 @@ def _finance():
         {"id": "filing-4", "kind": "furn.filing", "rect": [12, 1, 1, 1]},
         *_desks([(2, 4), (3, 4), (2, 5), (3, 5), (10, 4), (11, 4), (10, 5), (11, 5)]),
         {"id": "plant", "kind": "furn.plant", "rect": [12, 7, 1, 1]},
-    ], spots=[{"id": "m8", "at": [7, 4], "node": k(8), "label": "Kim Seon-ju's desk"}]) | {"label": "Finance"}
+    ]) | {"label": "Finance"}
 
 
 def _hr():
@@ -338,8 +361,6 @@ def _hr():
 
 
 def _audit():
-    """The audit room: the auditors packing up (m13). ICB's registration is on their table, which also opens the
-    audit board (m12-m13)."""
     return room([14, 9], [7, 8], floor="carpet", things=[
         {"id": "boxes-1", "kind": "furn.boxes", "rect": [1, 1, 1, 1], "label": "Archive boxes, packed"},
         {"id": "boxes-2", "kind": "furn.boxes", "rect": [2, 1, 1, 1]},
@@ -350,26 +371,10 @@ def _audit():
         {"id": "chair-e", "kind": "furn.chair", "rect": [7, 3, 1, 1]},
         {"id": "phone", "kind": "furn.phone", "rect": [11, 2, 1, 1], "label": "The phone"},
         {"id": "filing", "kind": "furn.filing", "rect": [12, 1, 1, 1]},
-    ], spots=[
-        {"id": "m13", "at": [6, 5], "node": k(13), "label": "The audit room"},
-        {"id": "audit-table", "at": [5, 4], "label": "The auditors' table", "opens": "audit",
-         "gives": "icb_listing", "gives_when": f"node:{k(12)}",
-         "give": ["On the auditors' table, among the papers they're packing: ICB's registration. You take a copy."],
-         "given": ["The auditors' table. You have ICB's registration already."]},
     ]) | {"label": "The audit room"}
 
 
 SEATS = [(x, 3) for x in range(5, 11)] + [(x, 5) for x in range(5, 11)]   # the board room's places, north row then south
-# Setting the room (m17): the three places the notes name, each a spot by its chair that takes the drink from the bag
-# ("takes"), and the drink on the table once set down (a prop over its stretch of table, on its mark)
-SETTINGS = [
-    ("seat_president", "water", [12, 4], "table-2", "prop.glass_water", "The president's place",
-     "Still water, no ice, at the head of the table.", "The notes say the president's water goes here."),
-    ("seat_exec", "green_tea", [6, 2], "table-0", "prop.teacup", "The executive vice president's place",
-     "Green tea, at the executive vice president's place.", "The notes say the executive vice president's tea goes here."),
-    ("seat_division", "coffee", [6, 6], "table-1", "prop.coffee_cup", "The division head's place",
-     "Black coffee, at the division head's place.", "The notes say the division head's coffee goes here."),
-]
 
 
 def _board_room():
@@ -385,13 +390,7 @@ def _board_room():
         {"id": "sideboard", "kind": "furn.counter", "rect": [1, 7, 2, 1], "label": "The side table"},
         {"id": "plant-1", "kind": "furn.plant", "rect": [14, 1, 1, 1]},
         {"id": "plant-2", "kind": "furn.plant", "rect": [14, 8, 1, 1]},
-    ], spots=[{"id": "m17", "at": [8, 7], "node": k(17), "label": "The board room"},
-              {"id": "board-room", "at": [10, 7], "label": "The board room", "note": "the handoff to Jang lands here"},
-              *[{"id": mark, "at": at, "label": label, "needs": [f"item:{item}"], "when": "item:seating_notes", "delivers": mark,
-                 "takes": True, "deliver": [line], "waiting": [wait], "delivered": [line]}
-                for mark, item, at, _, _, label, line, wait in SETTINGS]]) \
-        | {"label": "The board room",
-           "props": [{"kind": kind, "over": on, "when": f"mark:{mark}", "lift": 6} for mark, _, _, on, kind, *_ in SETTINGS]}
+    ]) | {"label": "The board room"}
 
 
 def _exec_floor():
@@ -405,25 +404,23 @@ def _exec_floor():
         {"id": "sofa-1", "kind": "furn.sofa", "rect": [2, 5, 1, 1]},
         {"id": "sofa-2", "kind": "furn.sofa", "rect": [3, 5, 1, 1]},
         {"id": "low-table", "kind": "furn.low_table", "rect": [2, 6, 1, 1]},
-    ], spots=[{"id": "m14", "at": [6, 4], "node": k(14), "label": "The executive's office"},
-              {"id": "m22", "at": [8, 4], "node": k(22), "label": "The executive's office"}]) | {"label": "The executive's office"}
+    ]) | {"label": "The executive's office"}
 
 
 def _pt_room():
-    """The training floor: a lectern and screen at the front, the interviewers' table to one side, the interns' rows."""
-    rows = [(x, y) for y in (5, 7) for x in (2, 3, 4, 5, 10, 11, 12, 13)]
+    """The training floor: the lectern and screen at the front, the interviewers' table to one side, and two rows of the
+    interns' desks right across the room, with one aisle up the middle (x 7): the only way from the door to the front."""
+    rows = [(x, y) for y in (5, 7) for x in (*range(1, 7), *range(8, 15))]
     return room([16, 10], [8, 9], floor="carpet", things=[
-        {"id": "screen", "kind": "furn.projector_screen", "rect": [6, 1, 2, 1], "label": "The screen"},
+        {"id": "screen", "kind": "furn.projector_screen", "rect": [5, 1, 2, 1], "label": "The screen"},
         {"id": "lectern", "kind": "furn.lectern", "rect": [9, 2, 1, 1], "label": "The lectern"},
         {"id": "panel", "kind": "furn.meeting_table", "rect": [12, 2, 2, 1], "label": "The interviewers' table"},
         *[{"id": f"row-{x}-{y}", "kind": "furn.desk", "rect": [x, y, 1, 1]} for x, y in rows],
-    ], spots=[{"id": "m6", "at": [8, 3], "node": k(6), "label": "The lectern"},
-              {"id": "m7", "at": [7, 3], "node": k(7), "label": "The PT room"}]) | {"label": "The PT room"}
+    ]) | {"label": "The PT room"}
 
 
 def _roof():
-    """The roof: a parapet round it, the door back down in its north side, the smokers' corner, and where Ahn is told
-    to drop her proposal (m19)."""
+    """The roof: a parapet round it, the door back down in its north side, the smokers' corner."""
     return {"grid": [16, 10], "cell": 2, "margin": 0, "label": "The roof",
             "ground": [{"id": "deck", "kind": "court", "rect": [0, 0, 16, 10]}],
             "lines": [{"id": "parapet", "kind": "parapet", "outline": [0, 0, 16, 10], "width": 1, "gates": {"door": [8, 0]}}],
@@ -432,16 +429,18 @@ def _roof():
                        {"id": "ashtray", "kind": "furn.ashtray", "rect": [12, 6, 1, 1], "label": "The smokers' corner"},
                        {"id": "bench-1", "kind": "prop.bench", "rect": [13, 6, 1, 1]},
                        {"id": "bench-2", "kind": "prop.bench", "rect": [4, 7, 1, 1]}],
-            "spots": [{"id": "m19", "at": [6, 5], "node": k(19), "label": "The roof"},
-                      {"id": "roof", "at": [9, 4], "label": "The roof", "note": "the handoff to Ahn lands here"}],
-            "exits": [], "entries": {"": [8, 1]},
+            "spots": [], "exits": [], "entries": {"": [8, 1]},
             "states": [{"id": "day", "light": "day"}]}
 
 
-def _lobby():
+LIFT_AT = {"roof": ([6, 2], [5, 2])}   # where a floor's lift isn't the default (beside its door)
+LOBBY_W = 18
+
+
+def _lobby(floors):
     """The lobby: the door from Jongno in the south; the front desk and the recycling bins on the visitors' side; the
     ID gates across the middle; behind them, the lift (its menu goes to every floor)."""
-    w = 18
+    w = LOBBY_W
     plan = room([w, 10], [w // 2, 9], floor="office_tile", exits=[{"to": "Jongno", "at": [w // 2, 9], "side": "S"}],
                 lines=[{"id": "id-gates", "kind": "barrier", "path": [[1, 4], [w - 2, 4]], "width": 1,
                         "gates": {"gates-w": [5, 4], "gates-e": [w - 6, 4]}}],
@@ -452,580 +451,720 @@ def _lobby():
                         {"id": "bin-1", "kind": "furn.bin", "rect": [2, 7, 1, 1], "label": "The recycling bins"},
                         {"id": "bin-2", "kind": "furn.bin", "rect": [3, 7, 1, 1]},
                         {"id": "sofa-1", "kind": "furn.sofa", "rect": [w - 3, 8, 1, 1]},
-                        {"id": "sofa-2", "kind": "furn.sofa", "rect": [w - 2, 8, 1, 1]}],
-                spots=[{"id": "m2", "at": [w - 6, 7], "node": k(2), "label": "The front desk"},
-                       # m3b (Oh): the waybill's other half is in the bins by the gates (the gate needs the scrap)
-                       {"id": "bins", "at": [2, 8], "label": "The recycling bins", "gives": "waybill_scrap", "gives_when": f"node:{k(3)}",
-                        "give": ["You go through the bins by the gates, sheet by sheet. Stuck to the back of a torn page: the rest of the "
-                                 "waybill, and a name on it in someone else's hand. Kim Seok-ho."],
-                        "given": ["The recycling bins. You've found what you were looking for."]},
-                       {"id": "m3b", "at": [4, 8], "node": k("3b"), "label": "The lobby"},
-                       {"id": "lobby-lift", "at": [w // 2, 3], "label": "The lifts", "note": "the handoff to Oh lands here"},
-                       {"id": "lift", "at": [w // 2, 1], "label": "The lift", "use": "lift", "floors": _lift_floors()}])
-    plan["things"] += [{"id": "lift-w", "kind": "furn.lift_door", "rect": [w // 2 - 1, 1, 1, 1], "label": "The lift"},
-                       {"id": "lift-e", "kind": "furn.lift_door", "rect": [w // 2 + 1, 1, 1, 1], "label": "The lift"}]
+                        {"id": "sofa-2", "kind": "furn.sofa", "rect": [w - 2, 8, 1, 1]},
+                        {"id": "lift-w", "kind": "furn.lift_door", "rect": [w // 2 - 1, 1, 1, 1], "label": "The lift"},
+                        {"id": "lift-e", "kind": "furn.lift_door", "rect": [w // 2 + 1, 1, 1, 1], "label": "The lift"}],
+                spots=[{"id": "lift", "at": [w // 2, 1], "label": "The lift", "use": "lift", "floors": _lift_floors(floors)}])
     # the floors hang off the lobby (their doors, the stairs, come back down here); arrivals from them at the lift
-    return plan | {"owns": [m for m, _, _ in FLOORS], "entries": {**plan["entries"], **{m: [w // 2, 2] for m, _, _ in FLOORS}}}
+    return plan | {"owns": list(floors), "entries": {**plan["entries"], **{m: [w // 2, 2] for m in floors}}}
 
 
-PLANS_MS = {
-    # =========================================================================================
-    # Susaek-dong: a hillside of red-brick villas above the main road. Jang's home (his mother's room) and, at
-    # Chuseok, the relatives' flat, up the lanes; Susaek Station's stairs on the main road.
-    "Susaek-dong": {
-        "archetype": "city",
-        "plan": {
-            "grid": [16, 12], "cell": 4, "margin": 1,
-            "ground": [{"id": "town", "kind": "city", "rect": [0, 0, 16, 12]},
-                       {"id": "hill", "kind": "hills", "rect": [0, 0, 16, 2]},
-                       {"id": "yard", "kind": "garden", "rect": [13, 3, 3, 5]}],
-            "lines": [
-                {"id": "main-road", "kind": "road", "path": [[0, 9], [15, 9]], "width": 3},
-                {"id": "lane-w", "kind": "road", "path": [[4, 9], [4, 2]], "width": 2},
-                {"id": "lane-e", "kind": "road", "path": [[10, 9], [10, 2]], "width": 2},
-                {"id": "lane-top", "kind": "road", "path": [[4, 2], [10, 2]], "width": 2},
+# =========================================================================================
+# The places, with no beats in them
+def _places(floors):
+    return {
+        # Susaek-dong: a hillside of red-brick villas above the main road. Jang's home (his mother's room) and the
+        # relatives' flat up the lanes; Susaek Station's stairs on the main road.
+        "Susaek-dong": {
+            "archetype": "city",
+            "plan": {
+                "grid": [16, 12], "cell": 4, "margin": 1,
+                "ground": [{"id": "town", "kind": "city", "rect": [0, 0, 16, 12]},
+                           {"id": "hill", "kind": "hills", "rect": [0, 0, 16, 2]},
+                           {"id": "yard", "kind": "garden", "rect": [13, 3, 3, 5]}],
+                "lines": [
+                    {"id": "main-road", "kind": "road", "path": [[0, 9], [15, 9]], "width": 3},
+                    {"id": "lane-w", "kind": "road", "path": [[4, 9], [4, 2]], "width": 2},
+                    {"id": "lane-e", "kind": "road", "path": [[10, 9], [10, 2]], "width": 2},
+                    {"id": "lane-top", "kind": "road", "path": [[4, 2], [10, 2]], "width": 2},
+                ],
+                "things": [
+                    {"id": "home", "kind": "building.villa", "rect": [5, 3, 2, 2], "door": "W", "label": "Jang's home", "map": "home"},
+                    {"id": "relatives", "kind": "building.villa", "rect": [11, 3, 2, 2], "door": "W", "label": "The relatives' flat",
+                     "map": "relatives"},
+                    {"id": "villa-1", "kind": "building.villa", "rect": [2, 3, 2, 2], "door": "E"},
+                    {"id": "villa-2", "kind": "building.villa", "rect": [8, 3, 2, 2], "door": "E"},
+                    {"id": "villa-3", "kind": "building.villa", "rect": [2, 6, 2, 2], "door": "E"},
+                    {"id": "villa-4", "kind": "building.villa", "rect": [5, 6, 2, 2], "door": "W"},
+                    {"id": "villa-5", "kind": "building.villa", "rect": [8, 6, 2, 2], "door": "E"},
+                    {"id": "villa-6", "kind": "building.villa", "rect": [11, 6, 2, 2], "door": "W"},
+                    {"id": "store", "kind": "building.storefront", "rect": [2, 10, 2, 1], "door": "N", "label": "A corner store"},
+                    {"id": "shop-2", "kind": "building.storefront", "rect": [6, 10, 2, 1], "door": "N"},
+                    {"id": "station", "kind": "building.subway_entrance", "rect": [12, 10, 2, 1], "door": "N",
+                     "label": "Susaek Station", "to": "The subway"},
+                ],
+                "spots": [{"id": "home", "at": [4, 4], "at_door": "home", "label": "Jang's home", "note": "handoffs to Jang at home land here"}],
+                "dress": [{"kind": "tree.ginkgo", "along": "main-road", "every": 3}, {"kind": "lamp.post", "along": "lane-w", "every": 4},
+                          {"kind": "plant.bush", "in": "yard", "count": 5}, {"kind": "tree.small", "in": "yard", "count": 3},
+                          {"kind": "prop.vending", "at_door": "store"}],
+                "exits": [],
+                "entries": {"": [4, 5]},
+            },
+            "states": [{"id": "day", "light": "day"}],
+            "npcs": [
+                _talk("folk.ajumma", [7, 9], "An ajumma with a shopping trolley. “The Jang boy? Up before dawn every day of his life, that one.”"),
+                _talk("folk.grandpa", [10, 5], "An old man on a plastic stool by the lane. “Seven years at those stones. Now what?”"),
+                _in("home", "folk.ajumma", [6, 3], "His mother looks up from the ironing. “Eat something before you go.”", label="His mother"),
+                _in("relatives", "folk.salaryman", [8, 4], "An uncle, red in the face. “So what is it you do now, exactly? An intern? At your age?”"),
+                _in("relatives", "folk.ajumma", [3, 5], "An aunt. “Our boy got into a big company. Regular, of course.”"),
             ],
-            "things": [
-                {"id": "home", "kind": "building.villa", "rect": [5, 3, 2, 2], "door": "W", "label": "Jang's home", "map": "home"},
-                {"id": "relatives", "kind": "building.villa", "rect": [11, 3, 2, 2], "door": "W", "label": "The relatives' flat",
-                 "map": "relatives"},
-                {"id": "villa-1", "kind": "building.villa", "rect": [2, 3, 2, 2], "door": "E"},
-                {"id": "villa-2", "kind": "building.villa", "rect": [8, 3, 2, 2], "door": "E"},
-                {"id": "villa-3", "kind": "building.villa", "rect": [2, 6, 2, 2], "door": "E"},
-                {"id": "villa-4", "kind": "building.villa", "rect": [5, 6, 2, 2], "door": "W"},
-                {"id": "villa-5", "kind": "building.villa", "rect": [8, 6, 2, 2], "door": "E"},
-                {"id": "villa-6", "kind": "building.villa", "rect": [11, 6, 2, 2], "door": "W"},
-                {"id": "store", "kind": "building.storefront", "rect": [2, 10, 2, 1], "door": "N", "label": "A corner store"},
-                {"id": "shop-2", "kind": "building.storefront", "rect": [6, 10, 2, 1], "door": "N"},
-                {"id": "station", "kind": "building.subway_entrance", "rect": [12, 10, 2, 1], "door": "N",
-                 "label": "Susaek Station", "to": "The subway"},
-            ],
-            # the end of m1: grown up, home (Plot's handoff)
-            "spots": [{"id": "home", "at": [4, 4], "at_door": "home", "label": "Jang's home", "note": "m1's handoff lands here"}],
-            "dress": [{"kind": "tree.ginkgo", "along": "main-road", "every": 3}, {"kind": "lamp.post", "along": "lane-w", "every": 4},
-                      {"kind": "plant.bush", "in": "yard", "count": 5}, {"kind": "tree.small", "in": "yard", "count": 3},
-                      {"kind": "prop.vending", "at_door": "store"}],
-            "exits": [],
-            "entries": {"": [4, 5]},
+            "maps": {
+                "home": room([10, 7], [5, 6], floor="lino", things=[
+                    {"id": "wardrobe", "kind": "furn.wardrobe", "rect": [1, 1, 1, 1]},
+                    {"id": "mat", "kind": "furn.mat", "rect": [2, 1, 1, 1]},
+                    {"id": "tv", "kind": "furn.tv", "rect": [7, 1, 1, 1]},
+                    {"id": "table", "kind": "furn.low_table", "rect": [5, 3, 1, 1], "label": "The low table"},
+                    {"id": "goban", "kind": "furn.go_board", "rect": [8, 4, 1, 1], "label": "His old go board"},
+                ]) | {"label": "Jang's home"},
+                "relatives": room([12, 8], [6, 7], floor="lino", exits=[{"to": "relatives-kitchen", "at": [11, 3], "side": "E"}], things=[
+                    *[{"id": f"feast-{x}", "kind": "furn.low_table", "rect": [x, 3, 1, 1], **({"label": "The Chuseok table"} if x == 5 else {})}
+                      for x in (4, 5, 6, 7)],
+                    {"id": "tv", "kind": "furn.tv", "rect": [9, 1, 1, 1]},
+                    {"id": "sofa", "kind": "furn.sofa", "rect": [1, 5, 1, 1]},
+                ]) | {"label": "The relatives' flat"},
+                "relatives-kitchen": room([6, 6], [0, 3], floor="lino", things=[
+                    {"id": "counter", "kind": "furn.counter", "rect": [1, 1, 2, 1], "label": "The sink"},
+                    {"id": "fridge", "kind": "furn.fridge_case", "rect": [4, 1, 1, 1]},
+                ]) | {"label": "The kitchen"},
+            },
         },
-        "states": [{"id": "day", "light": "day"}],
-        "npcs": [
-            _talk("folk.ajumma", [7, 9], "An ajumma with a shopping trolley. “The Jang boy? Up before dawn every day of his life, that one.”"),
-            _talk("folk.grandpa", [10, 5], "An old man on a plastic stool by the lane. “Seven years at those stones. Now what?”"),
-            # his mother, at home
-            _in("home", "folk.ajumma", [6, 3], "His mother looks up from the ironing. “Eat something before you go.”", label="His mother"),
-            _in("relatives", "folk.salaryman", [8, 4], "An uncle, red in the face. “So what is it you do now, exactly? An intern? At your age?”"),
-            _in("relatives", "folk.ajumma", [3, 5], "An aunt. “Our boy got into a big company. Regular, of course.”"),
-        ],
-        "maps": {
-            # his mother's room: the futon rolled away, a low table, the television; his old go board on the shelf
-            "home": room([10, 7], [5, 6], floor="lino", things=[
-                {"id": "wardrobe", "kind": "furn.wardrobe", "rect": [1, 1, 1, 1]},
-                {"id": "mat", "kind": "furn.mat", "rect": [2, 1, 1, 1]},
-                {"id": "tv", "kind": "furn.tv", "rect": [7, 1, 1, 1]},
-                {"id": "table", "kind": "furn.low_table", "rect": [5, 3, 1, 1], "label": "The low table"},
-                {"id": "goban", "kind": "furn.go_board", "rect": [8, 4, 1, 1], "label": "His old go board"},
-            ]) | {"label": "Jang's home"},
-            # Chuseok (m15): the relatives round the low table; the kitchen next door, where his mother goes
-            "relatives": room([12, 8], [6, 7], floor="lino", exits=[{"to": "relatives-kitchen", "at": [11, 3], "side": "E"}], things=[
-                *[{"id": f"feast-{x}", "kind": "furn.low_table", "rect": [x, 3, 1, 1], **({"label": "The Chuseok table"} if x == 5 else {})}
-                  for x in (4, 5, 6, 7)],
-                {"id": "tv", "kind": "furn.tv", "rect": [9, 1, 1, 1]},
-                {"id": "sofa", "kind": "furn.sofa", "rect": [1, 5, 1, 1]},
-            ], spots=[{"id": "m15", "at": [6, 5], "node": k(15), "label": "The relatives' flat"}]) | {"label": "The relatives' flat"},
-            "relatives-kitchen": room([6, 6], [0, 3], floor="lino", things=[
-                {"id": "counter", "kind": "furn.counter", "rect": [1, 1, 2, 1], "label": "The sink"},
-                {"id": "fridge", "kind": "furn.fridge_case", "rect": [4, 1, 1, 1]},
-            ]) | {"label": "The kitchen"},
-        },
-        "objectives": {k(15): "It's Chuseok. Go to the relatives' flat with your mother."},
-    },
 
-    # =========================================================================================
-    # The subway: one carriage, Susaek-dong's end to Jongno's. A commuter studying a pocket board stands in the aisle
-    # at the Jongno doors (m2, blocking).
-    "The subway": {
-        "archetype": "interior",
-        "plan": room([24, 6], [0, 3], exits=[{"to": "Susaek-dong", "at": [0, 3], "side": "W"},
-                                             {"to": "Jongno", "at": [23, 3], "side": "E"}], things=[
-            *[{"id": f"seat-n{i}", "kind": "furn.subway_seat", "rect": [x, 1, 2, 1]} for i, x in enumerate((2, 6, 10, 14, 18))],
-            *[{"id": f"seat-s{i}", "kind": "furn.subway_seat", "rect": [x, 4, 2, 1]} for i, x in enumerate((2, 6, 10, 14, 18))],
-        ]) | {"label": "The subway"},
-        "states": [{"id": "rush", "light": "morning"}],
-        "npcs": [
-            _talk("folk.salaryman", [5, 2], "A man asleep on his feet, swaying with the train."),
-            _talk("folk.officewoman", [12, 3], "A woman in a suit reads the same page of her phone for three stops."),
-        ],
-    },
-
-    # =========================================================================================
-    # Jongno: the avenue east-west, its carriageway crossed at two crosswalks. North: Tapgol Park (old men at stone go
-    # tables; the Palgakjeong pavilion; the pagoda in its glass case), the One International tower on its forecourt,
-    # the corner shop (m18), a lane of offices. South: Jongno 3-ga Station's stairs, shopfronts, Pimatgol's alley with
-    # the pojangmacha, the market.
-    "Jongno": {
-        "archetype": "city",
-        "plan": {
-            "grid": [28, 16], "cell": 4, "margin": 1,
-            "ground": [
-                {"id": "town", "kind": "city", "rect": [0, 0, 28, 16]},
-                {"id": "park", "kind": "garden", "rect": [2, 1, 8, 5]},
-                {"id": "carriageway", "kind": "asphalt", "rect": [0, 8, 28, 2]},
-                {"id": "market", "kind": "market", "rect": [19, 11, 6, 5]},
+        # The subway: one carriage, Susaek-dong's end to Jongno's.
+        "The subway": {
+            "archetype": "interior",
+            "plan": room([24, 6], [0, 3], exits=[{"to": "Susaek-dong", "at": [0, 3], "side": "W"},
+                                                 {"to": "Jongno", "at": [23, 3], "side": "E"}], things=[
+                *[{"id": f"seat-n{i}", "kind": "furn.subway_seat", "rect": [x, 1, 2, 1]} for i, x in enumerate((2, 6, 10, 14, 18))],
+                *[{"id": f"seat-s{i}", "kind": "furn.subway_seat", "rect": [x, 4, 2, 1]} for i, x in enumerate((2, 6, 10, 14, 18))],
+            ]) | {"label": "The subway"},
+            "states": [{"id": "rush", "light": "morning"}],
+            "npcs": [
+                _talk("folk.salaryman", [5, 2], "A man asleep on his feet, swaying with the train."),
+                _talk("folk.officewoman", [12, 3], "A woman in a suit reads the same page of her phone for three stops."),
             ],
-            "lines": [
-                {"id": "park-wall", "kind": "wall", "outline": [1, 0, 10, 7], "width": 1, "gates": {"park-gate": [6, 6]}},
-                {"id": "park-path", "kind": "path", "path": [[6, 6], [6, 1]], "width": 2},
-                {"id": "pave-n", "kind": "road", "path": [[0, 7], [27, 7]], "width": 4},
-                {"id": "pave-s", "kind": "road", "path": [[0, 10], [27, 10]], "width": 4},
-                {"id": "cross-w", "kind": "crosswalk", "path": [[5, 7], [5, 10]], "width": 3},
-                {"id": "cross-e", "kind": "crosswalk", "path": [[18, 7], [18, 10]], "width": 3},
-                {"id": "forecourt", "kind": "road", "path": [[12, 6], [16, 6]], "width": 4},
-                {"id": "office-lane", "kind": "road", "path": [[19, 4], [27, 4]], "width": 2},
-                {"id": "lane-link", "kind": "road", "path": [[19, 4], [19, 7]], "width": 2},
-                {"id": "pimatgol", "kind": "road", "path": [[13, 10], [13, 15]], "width": 3},
-                {"id": "market-alley", "kind": "road", "path": [[21, 10], [21, 15]], "width": 3},
-                {"id": "back-lane", "kind": "road", "path": [[0, 15], [27, 15]], "width": 2},   # behind the south shops
-            ],
-            "things": [
-                # Tapgol Park
-                {"id": "pavilion", "kind": "building.pavilion", "rect": [2, 1, 2, 2], "label": "Palgakjeong"},
-                {"id": "pagoda", "kind": "landmark.pagoda", "rect": [8, 1, 2, 2], "label": "The ten-storey pagoda"},
-                {"id": "gotable-1", "kind": "furniture.gotable", "rect": [3, 4, 1, 1], "label": "A stone go table"},
-                {"id": "gotable-2", "kind": "furniture.gotable", "rect": [8, 4, 1, 1], "label": "A stone go table"},
-                {"id": "gotable-3", "kind": "furniture.gotable", "rect": [4, 5, 1, 1], "label": "A stone go table"},
-                # the tower, on its forecourt
-                {"id": "tower", "kind": "building.office_tower", "rect": [12, 1, 5, 5], "door": "S", "label": "One International",
-                 "to": "One International", "plaque": "ONE INTERNATIONAL"},
-                # the lane of offices behind the shops: the client's (m4) and the group's headquarters (m19's meeting)
-                {"id": "client", "kind": "building.office_block", "rect": [20, 2, 2, 2], "door": "S", "label": "The client's office",
-                 "map": "client"},
-                {"id": "hq", "kind": "building.office_block", "rect": [23, 2, 2, 2], "door": "S", "label": "Group headquarters",
-                 "map": "hq"},
-                {"id": "office-3", "kind": "building.office_block", "rect": [25, 0, 2, 2]},
-                # the north shops
-                {"id": "corner-shop", "kind": "building.storefront", "rect": [20, 6, 2, 1], "door": "S", "label": "The corner shop",
-                 "map": "corner-shop"},
-                {"id": "phone-shop", "kind": "building.storefront", "rect": [23, 6, 2, 1], "door": "S", "label": "A phone shop"},
-                {"id": "cafe", "kind": "building.storefront", "rect": [25, 6, 2, 1], "door": "S", "label": "A café"},
-                # the south side
-                {"id": "station", "kind": "building.subway_entrance", "rect": [1, 11, 2, 1], "door": "N",
-                 "label": "Jongno 3-ga Station", "to": "The subway"},
-                {"id": "shop-s1", "kind": "building.storefront", "rect": [4, 11, 2, 1], "door": "N"},
-                {"id": "shop-s2", "kind": "building.storefront", "rect": [7, 11, 2, 1], "door": "N"},
-                {"id": "shop-s3", "kind": "building.storefront", "rect": [10, 11, 2, 1], "door": "N"},
-                {"id": "shop-s4", "kind": "building.storefront", "rect": [15, 11, 2, 1], "door": "N"},
-                {"id": "shop-s5", "kind": "building.storefront", "rect": [25, 11, 2, 1], "door": "N"},
-                {"id": "pojangmacha", "kind": "building.pojangmacha", "rect": [14, 13, 2, 1], "door": "W", "label": "A pojangmacha",
-                 "map": "pojangmacha"},
-                {"id": "eatery", "kind": "building.storefront", "rect": [11, 13, 2, 1], "door": "E", "label": "A soup house"},
-                # the blocks behind: offices and flats along the back lane
-                {"id": "block-s1", "kind": "building.office_block", "rect": [1, 13, 2, 2], "door": "S"},
-                {"id": "block-s2", "kind": "building.office_block", "rect": [4, 13, 2, 2], "door": "S"},
-                {"id": "block-s3", "kind": "building.villa", "rect": [7, 13, 2, 2], "door": "S"},
-                {"id": "block-s4", "kind": "building.office_block", "rect": [16, 13, 2, 2], "door": "S"},
-                {"id": "block-s5", "kind": "building.villa", "rect": [25, 13, 2, 2], "door": "S"},
-                {"id": "stalls-1", "kind": "market.stalls", "rect": [19, 12, 2, 1], "label": "Market stalls"},
-                {"id": "stalls-2", "kind": "market.stalls", "rect": [22, 12, 2, 1], "label": "Market stalls"},
-                {"id": "stalls-3", "kind": "market.stalls", "rect": [19, 14, 2, 1], "label": "A dried-goods stall"},
-                {"id": "stalls-4", "kind": "market.stalls", "rect": [22, 14, 2, 1]},
-                # the traffic
-                {"id": "car-1", "kind": "prop.car", "rect": [2, 8, 2, 1]},
-                {"id": "car-2", "kind": "prop.car", "rect": [9, 9, 2, 1]},
-                {"id": "car-3", "kind": "prop.car", "rect": [14, 8, 2, 1]},
-                {"id": "car-4", "kind": "prop.car", "rect": [23, 9, 2, 1]},
-            ],
-            "spots": [
-                {"id": "m18", "at": [21, 7], "at_door": "corner-shop", "node": k(18), "label": "The corner shop"},
-                {"id": "park-tables", "at": [5, 4], "label": "Tapgol Park's go tables", "note": "the regulars play here (m2, m4)"},
-                # Jang's last day (m23b): out on the tower's forecourt; and the handoffs Plot lands here
-                {"id": "m23b", "at": [14, 6], "node": k("23b"), "label": "The forecourt"},
-                {"id": "forecourt", "at": [16, 6], "label": "The forecourt", "note": "m23's handoff lands here"},
-                {"id": "pojangmacha-door", "at": [13, 13], "at_door": "pojangmacha", "label": "The pojangmacha",
-                 "note": "m19's handoff (to the spot 'pojangmacha' in the tent itself)"},
-            ],
-            "dress": [{"kind": "tree.ginkgo", "along": "pave-n", "every": 3},
-                      {"kind": "tree.ginkgo", "along": "pave-s", "every": 3},
-                      {"kind": "lamp.post", "along": "pimatgol", "every": 3}, {"kind": "lamp.post", "along": "back-lane", "every": 4},
-                      {"kind": "tree.ginkgo", "along": "office-lane", "every": 4},
-                      {"kind": "tree.pine", "in": "park", "count": 6}, {"kind": "prop.bench", "in": "park", "count": 3},
-                      {"kind": "lamp.post", "along": "forecourt", "every": 3}, {"kind": "prop.vending", "at_door": "corner-shop"},
-                      {"kind": "prop.bus_stop", "along": "pave-s", "every": 16}],
-            "exits": [{"to": "Korea Baduk Association", "at": [0, 7], "side": "W"},
-                      {"to": "Baekjin Trading", "at": [0, 10], "side": "W"},
-                      {"to": "Sun's neighbourhood", "at": [27, 10], "side": "E"},
-                      {"to": "The pizza shop", "at": [27, 7], "side": "E"},
-                      {"to": "The new office", "at": [27, 4], "side": "E"}],
-            "entries": {"": [14, 7], "Korea Baduk Association": [1, 7], "Baekjin Trading": [1, 10],
-                        "Sun's neighbourhood": [26, 10], "The pizza shop": [26, 7], "The new office": [26, 4]},
         },
-        "states": [{"id": "day", "until": f"node:{k(19)}", "light": "day"},
-                   {"id": "night", "when": f"node:{k(19)}", "until": f"node:{k('19b')}", "light": "night"},   # the tent bar (m19b)
-                   {"id": "after", "when": f"node:{k('19b')}", "light": "day"}],
-        "npcs": [
-            _talk("folk.grandpa", [7, 3], "An old man by the pagoda. “Sixty years I've come here. The stones don't change. We do.”"),
-            _talk("folk.salaryman", [9, 7], "A man in a suit, on his phone, walking fast. “No, the shipment, the shipment—”"),
-            _talk("folk.officewoman", [16, 10], "An office worker with a coffee in each hand. “Lunch is an hour. It's never an hour.”"),
-            _talk("folk.salaryman", [24, 4], "A courier with a trolley of boxes. “Fourteenth floor? Every one of them's the fourteenth floor.”"),
-            _talk("folk.ajumma", [21, 14], "A stallholder. “Dried squid, dried filefish. Cheaper than the shops, and better.”"),
-            # the ₩100,000 mission (m18, tk-modern.js): the stall that sells the stock, and the passers-by he offers it to
-            {"id": "sock-stall", "kind": "folk.ajumma", "at": [21, 12], "label": "The sock stall", "shop": ["socks"],
-             "say": "A stall of socks, gloves and towels. “Ten pairs for twenty thousand. Wholesale price, for you.”"},
-            {"id": "buyer-bus", "kind": "folk.salaryman", "at": [8, 10], "when": f"node:{k(17)}", "until": f"node:{k(18)}", "label": "A man waiting for the bus",
-             "say": "A man waiting for the bus, checking his watch.",
-             "buyer": {"wants": ["socks"], "pays": 30000,
-                       "yes": ["“Socks? My wife's been on at me about socks for a week. Fine. Thirty thousand.”"],
-                       "no": ["“No, thanks. Not today.”"]}},
-            {"id": "buyer-lunch", "kind": "folk.officewoman", "at": [16, 7], "when": f"node:{k(17)}", "until": f"node:{k(18)}", "label": "An office worker",
-             "say": "An office worker on her way back from lunch.",
-             "buyer": {"wants": ["socks"], "pays": 25000,
-                       "yes": ["“For my father, maybe. He never buys his own. Here.”"],
-                       "no": ["“I'm sorry, I'm in a hurry.”"]}},
-            {"id": "buyer-student", "kind": "folk.kid", "at": [3, 10], "when": f"node:{k(17)}", "until": f"node:{k(18)}", "label": "A student",
-             "say": "A student in a school blazer, waiting at the station stairs.",
-             "buyer": {"wants": ["socks"], "pays": 20000,
-                       "yes": ["“For PE? Mum keeps saying I need more. Twenty thousand, that's all I've got.”"],
-                       "no": ["“I've got no money, sorry.”"]}},
-            {"id": "buyer-oldman", "kind": "folk.grandpa", "at": [24, 10], "when": f"node:{k(17)}", "until": f"node:{k(18)}", "label": "An old man",
-             "say": "An old man with a newspaper under his arm.",
-             "buyer": {"wants": ["socks"], "pays": 0,
-                       "no": ["“From a young man in a suit, on the pavement? No. Go and sell to someone who needs them.”"]}},
-            _talk("folk.ajumma", [13, 14], "An old woman setting out plastic stools. “Come back after dark, young man. That's when we're open.”"),
-            # in the corner shop and the pojangmacha
-            _in("corner-shop", "folk.salaryman", [2, 3], "The owner, behind the till, doesn't look up from his paper.", behind="counter",
-                label="The corner-shop owner"),
-            _in("pojangmacha", "folk.ajumma", [4, 2], "The woman at the cart. “Soju? Eomuk? Sit, sit.”", behind="cart"),
-        ],
-        "maps": {
-            # the corner shop (m18): the owner behind the till; the drinks fridges, the shelves; the dried squid
-            "corner-shop": room([10, 7], [5, 6], floor="office_tile", things=[
-                {"id": "fridge-1", "kind": "furn.fridge_case", "rect": [6, 1, 1, 1], "label": "The drinks fridge"},
-                {"id": "fridge-2", "kind": "furn.fridge_case", "rect": [7, 1, 1, 1]},
-                {"id": "fridge-3", "kind": "furn.fridge_case", "rect": [8, 1, 1, 1]},
-                {"id": "shelf-1", "kind": "furn.store_shelf", "rect": [4, 3, 1, 1]},
-                {"id": "shelf-2", "kind": "furn.store_shelf", "rect": [5, 3, 1, 1]},
-                {"id": "shelf-3", "kind": "furn.store_shelf", "rect": [7, 3, 1, 1]},
-                {"id": "shelf-4", "kind": "furn.store_shelf", "rect": [8, 3, 1, 1]},
-                {"id": "counter", "kind": "furn.counter", "rect": [1, 4, 2, 1], "label": "The till, and the dried squid"},
-            ]) | {"label": "The corner shop"},
-            # the client's office (m4): Park Jong-gi's client, whose staff laugh at him
-            "client": room([12, 8], [6, 7], floor="carpet", things=[
-                *_desks([(2, 2), (3, 2), (8, 2), (9, 2)]),
-                {"id": "boss", "kind": "furn.exec_desk", "rect": [5, 1, 2, 1], "label": "The client's president's desk"},
-                {"id": "sofa", "kind": "furn.sofa", "rect": [2, 5, 1, 1]},
-                {"id": "table", "kind": "furn.low_table", "rect": [3, 5, 1, 1]},
-                {"id": "plant", "kind": "furn.plant", "rect": [10, 6, 1, 1]},
-            ], spots=[{"id": "m4", "at": [6, 4], "node": k(4), "label": "The client's office"}]) | {"label": "The client's office"},
-            # the group's headquarters: the resources meeting where Ahn's proposal is chosen (told in m19)
-            "hq": room([14, 8], [7, 7], floor="carpet", things=[
-                *[{"id": f"table-{i}", "kind": "furn.meeting_table", "rect": [4 + 2 * i, 3, 2, 1], **({"label": "The group's meeting table"} if i == 1 else {})}
-                  for i in range(3)],
-                {"id": "screen", "kind": "furn.projector_screen", "rect": [6, 1, 2, 1], "label": "The screen"},
-                {"id": "plant", "kind": "furn.plant", "rect": [12, 1, 1, 1]},
-            ]) | {"label": "Group headquarters"},
-            # Pimatgol's pojangmacha (m19b, at night): the cart at the back, three tables
-            "pojangmacha": room([10, 6], [5, 5], floor="earth", spots=[
-                {"id": "m19b", "at": [3, 4], "node": k("19b"), "label": "The pojangmacha"},
-                {"id": "pojangmacha", "at": [6, 4], "label": "The pojangmacha", "note": "m19's handoff to Ahn lands here"},
-            ], things=[
-                {"id": "cart", "kind": "furn.counter", "rect": [3, 1, 2, 1], "label": "The cart: eomuk, soju"},
-                {"id": "table-1", "kind": "furn.plastic_table", "rect": [2, 3, 1, 1]},
-                {"id": "table-2", "kind": "furn.plastic_table", "rect": [7, 3, 1, 1]},
-                {"id": "table-3", "kind": "furn.plastic_table", "rect": [7, 1, 1, 1]},
-                {"id": "stool-1", "kind": "furn.stool", "rect": [3, 3, 1, 1]},
-                {"id": "stool-2", "kind": "furn.stool", "rect": [6, 3, 1, 1]},
-            ]) | {"label": "The pojangmacha", "states": [{"id": "night", "light": "night"}]},
-        },
-        "objectives": {k(4): "Go with Park Jong-gi to the client's office, along the lane behind the shops.",
-                       k(18): "You have ₩100,000. Buy stock at the market stalls, and sell it on the street.",
-                       k("19b"): "Go to the pojangmacha in Pimatgol, off Jongno.",
-                       k("23b"): "Go out to the forecourt."},
-    },
 
-    # =========================================================================================
-    # One International: inside the tower. Its plan is the lobby; the floors are its rooms, each reached by its own
-    # lift from the lobby's back wall.
-    "One International": {
-        "id": "one-international",
-        "archetype": "interior",
-        "plan": _lobby() | {"label": "One International"},
-        "states": [{"id": "day", "light": "day"}],
-        "npcs": [
-            {"id": "receptionist", "kind": "folk.officewoman", "at": [13, 5], "behind": "reception", "face": "S", "label": "The receptionist",
-             "say": "“Visitor passes are issued here. Who are you here to see?”"},
-            _talk("folk.salaryman", [6, 5], "A security guard by the ID gates. “Card on the reader, please. One at a time.”", label="Security"),
-            _talk("folk.salaryman", [8, 2], "Someone waiting for a lift taps his card against his leg. “Come on, come on.”"),
-            # the floors' people (the cast come with the scenes; these are the office around them)
-            _in("sales3", "folk.officewoman", [14, 6], "A woman from the next team. “Sales Team 3? They're the ones who work through lunch.”"),
-            _in("sales3", "folk.salaryman", [3, 7], "A deputy from Sales Team 1, reading a fax. “Another intern? We used to get six a year.”"),
-            _in("finance", "folk.salaryman", [10, 6], "A finance clerk. “If it isn't on the form, it doesn't exist.”"),
-            _in("hr", "folk.officewoman", [8, 4], "Someone from HR, stacking contracts. “Two-year contracts are on the left. Regulars on the right.”"),
-            _in("pt-room", "folk.salaryman", [4, 6], "An intern, rehearsing under his breath. “In conclusion. In conclusion…”"),
-            _in("pt-room", "folk.officewoman", [11, 6], "An intern with a stack of cue cards, very pale. “Is it my turn? It's not my turn.”"),
+        # Jongno: the avenue east-west, its carriageway crossed at two crosswalks. North: Tapgol Park, the One
+        # International tower on its forecourt, a lane of offices (the client's, group HQ), the corner shop. South: Jongno
+        # 3-ga Station's stairs, shopfronts, Pimatgol's alley with the pojangmacha, the market, a back lane.
+        "Jongno": {
+            "archetype": "city",
+            "plan": {
+                "grid": [28, 16], "cell": 4, "margin": 1,
+                "ground": [
+                    {"id": "town", "kind": "city", "rect": [0, 0, 28, 16]},
+                    {"id": "park", "kind": "garden", "rect": [2, 1, 8, 5]},
+                    {"id": "carriageway", "kind": "asphalt", "rect": [0, 8, 28, 2]},
+                    {"id": "market", "kind": "market", "rect": [19, 11, 6, 5]},
+                ],
+                "lines": [
+                    {"id": "park-wall", "kind": "wall", "outline": [1, 0, 10, 7], "width": 1, "gates": {"park-gate": [6, 6]}},
+                    {"id": "park-path", "kind": "path", "path": [[6, 6], [6, 1]], "width": 2},
+                    {"id": "pave-n", "kind": "road", "path": [[0, 7], [27, 7]], "width": 4},
+                    {"id": "pave-s", "kind": "road", "path": [[0, 10], [27, 10]], "width": 4},
+                    {"id": "cross-w", "kind": "crosswalk", "path": [[5, 7], [5, 10]], "width": 3},
+                    {"id": "cross-e", "kind": "crosswalk", "path": [[18, 7], [18, 10]], "width": 3},
+                    {"id": "forecourt", "kind": "road", "path": [[12, 6], [16, 6]], "width": 4},
+                    {"id": "office-lane", "kind": "road", "path": [[19, 4], [27, 4]], "width": 2},
+                    {"id": "lane-link", "kind": "road", "path": [[19, 4], [19, 7]], "width": 2},
+                    {"id": "pimatgol", "kind": "road", "path": [[13, 10], [13, 15]], "width": 3},
+                    {"id": "market-alley", "kind": "road", "path": [[21, 10], [21, 15]], "width": 3},
+                    {"id": "back-lane", "kind": "road", "path": [[0, 15], [27, 15]], "width": 2},
+                ],
+                "things": [
+                    {"id": "pavilion", "kind": "building.pavilion", "rect": [2, 1, 2, 2], "label": "Palgakjeong"},
+                    {"id": "pagoda", "kind": "landmark.pagoda", "rect": [8, 1, 2, 2], "label": "The ten-storey pagoda"},
+                    {"id": "gotable-1", "kind": "furniture.gotable", "rect": [3, 4, 1, 1], "label": "A stone go table"},
+                    {"id": "gotable-2", "kind": "furniture.gotable", "rect": [8, 4, 1, 1], "label": "A stone go table"},
+                    {"id": "gotable-3", "kind": "furniture.gotable", "rect": [4, 5, 1, 1], "label": "A stone go table"},
+                    {"id": "tower", "kind": "building.office_tower", "rect": [12, 1, 5, 5], "door": "S", "label": "One International",
+                     "to": "One International", "plaque": "ONE INTERNATIONAL"},
+                    {"id": "client", "kind": "building.office_block", "rect": [20, 2, 2, 2], "door": "S", "label": "The client's office",
+                     "map": "client"},
+                    {"id": "hq", "kind": "building.office_block", "rect": [23, 2, 2, 2], "door": "S", "label": "Group headquarters",
+                     "map": "hq"},
+                    {"id": "office-3", "kind": "building.office_block", "rect": [25, 0, 2, 2]},
+                    {"id": "corner-shop", "kind": "building.storefront", "rect": [20, 6, 2, 1], "door": "S", "label": "The corner shop",
+                     "map": "corner-shop"},
+                    {"id": "phone-shop", "kind": "building.storefront", "rect": [23, 6, 2, 1], "door": "S", "label": "A phone shop"},
+                    {"id": "cafe", "kind": "building.storefront", "rect": [25, 6, 2, 1], "door": "S", "label": "A café"},
+                    {"id": "station", "kind": "building.subway_entrance", "rect": [1, 11, 2, 1], "door": "N",
+                     "label": "Jongno 3-ga Station", "to": "The subway"},
+                    {"id": "shop-s1", "kind": "building.storefront", "rect": [4, 11, 2, 1], "door": "N"},
+                    {"id": "shop-s2", "kind": "building.storefront", "rect": [7, 11, 2, 1], "door": "N"},
+                    {"id": "shop-s3", "kind": "building.storefront", "rect": [10, 11, 2, 1], "door": "N"},
+                    {"id": "shop-s4", "kind": "building.storefront", "rect": [15, 11, 2, 1], "door": "N"},
+                    {"id": "shop-s5", "kind": "building.storefront", "rect": [25, 11, 2, 1], "door": "N"},
+                    {"id": "pojangmacha", "kind": "building.pojangmacha", "rect": [14, 13, 2, 1], "door": "W", "label": "A pojangmacha",
+                     "map": "pojangmacha"},
+                    {"id": "eatery", "kind": "building.storefront", "rect": [11, 13, 2, 1], "door": "E", "label": "A soup house"},
+                    {"id": "block-s1", "kind": "building.office_block", "rect": [1, 13, 2, 2], "door": "S"},
+                    {"id": "block-s2", "kind": "building.office_block", "rect": [4, 13, 2, 2], "door": "S"},
+                    {"id": "block-s3", "kind": "building.villa", "rect": [7, 13, 2, 2], "door": "S"},
+                    {"id": "block-s4", "kind": "building.office_block", "rect": [16, 13, 2, 2], "door": "S"},
+                    {"id": "block-s5", "kind": "building.villa", "rect": [25, 13, 2, 2], "door": "S"},
+                    {"id": "stalls-1", "kind": "market.stalls", "rect": [19, 12, 2, 1], "label": "Market stalls"},
+                    {"id": "stalls-2", "kind": "market.stalls", "rect": [22, 12, 2, 1], "label": "Market stalls"},
+                    {"id": "stalls-3", "kind": "market.stalls", "rect": [19, 14, 2, 1], "label": "A dried-goods stall"},
+                    {"id": "stalls-4", "kind": "market.stalls", "rect": [22, 14, 2, 1]},
+                    {"id": "car-1", "kind": "prop.car", "rect": [2, 8, 2, 1]},
+                    {"id": "car-2", "kind": "prop.car", "rect": [9, 9, 2, 1]},
+                    {"id": "car-3", "kind": "prop.car", "rect": [14, 8, 2, 1]},
+                    {"id": "car-4", "kind": "prop.car", "rect": [23, 9, 2, 1]},
+                ],
+                "spots": [
+                    {"id": "park-tables", "at": [5, 4], "label": "Tapgol Park's go tables", "note": "the regulars play here"},
+                    {"id": "forecourt", "at": [16, 6], "label": "The forecourt", "note": "handoffs to the tower's forecourt land here"},
+                ],
+                "dress": [{"kind": "tree.ginkgo", "along": "pave-n", "every": 3},
+                          {"kind": "tree.ginkgo", "along": "pave-s", "every": 3},
+                          {"kind": "lamp.post", "along": "pimatgol", "every": 3}, {"kind": "lamp.post", "along": "back-lane", "every": 4},
+                          {"kind": "tree.ginkgo", "along": "office-lane", "every": 4},
+                          {"kind": "tree.pine", "in": "park", "count": 6}, {"kind": "prop.bench", "in": "park", "count": 3},
+                          {"kind": "lamp.post", "along": "forecourt", "every": 3}, {"kind": "prop.vending", "at_door": "corner-shop"},
+                          {"kind": "prop.bus_stop", "along": "pave-s", "every": 16}],
+                # west to the KBA and Baekjin, east to Sun's neighbourhood, the pizza shop, the new office, and (by the
+                # top lane) Daehanmun; a book keeps only the exits to places it uses
+                "exits": [{"to": "Korea Baduk Association", "at": [0, 7], "side": "W"},
+                          {"to": "Baekjin Trading", "at": [0, 10], "side": "W"},
+                          {"to": "Daehanmun", "at": [0, 15], "side": "W"},
+                          {"to": "Sun's neighbourhood", "at": [27, 10], "side": "E"},
+                          {"to": "The pizza shop", "at": [27, 7], "side": "E"},
+                          {"to": "The new office", "at": [27, 4], "side": "E"}],
+                "entries": {"": [14, 7], "Korea Baduk Association": [1, 7], "Baekjin Trading": [1, 10], "Daehanmun": [1, 15],
+                            "Sun's neighbourhood": [26, 10], "The pizza shop": [26, 7], "The new office": [26, 4]},
+            },
+            "states": [{"id": "day", "light": "day"}],
+            "npcs": [
+                _talk("folk.grandpa", [7, 3], "An old man by the pagoda. “Sixty years I've come here. The stones don't change. We do.”"),
+                _talk("folk.salaryman", [9, 7], "A man in a suit, on his phone, walking fast. “No, the shipment, the shipment—”"),
+                _talk("folk.officewoman", [16, 10], "An office worker with a coffee in each hand. “Lunch is an hour. It's never an hour.”"),
+                _talk("folk.ajumma", [21, 14], "A stallholder. “Dried squid, dried filefish. Cheaper than the shops, and better.”"),
+                _talk("folk.ajumma", [13, 14], "An old woman setting out plastic stools. “Come back after dark, young man. That's when we're open.”"),
+                _in("corner-shop", "folk.salaryman", [2, 3], "The owner, behind the till, doesn't look up from his paper.", behind="counter",
+                    label="The corner-shop owner"),
+                _in("pojangmacha", "folk.ajumma", [4, 2], "The woman at the cart. “Soju? Eomuk? Sit, sit.”", behind="cart"),
+                _in("client", "folk.salaryman", [3, 4], "A clerk at the client's, smirking at his screen. He doesn't get up."),
+                _in("client", "folk.officewoman", [9, 4], "A woman at the client's answers the phone. “He's in a meeting. He's always in a meeting.”"),
+            ],
+            "maps": {
+                "corner-shop": room([10, 7], [5, 6], floor="office_tile", things=[
+                    {"id": "fridge-1", "kind": "furn.fridge_case", "rect": [6, 1, 1, 1], "label": "The drinks fridge"},
+                    {"id": "fridge-2", "kind": "furn.fridge_case", "rect": [7, 1, 1, 1]},
+                    {"id": "fridge-3", "kind": "furn.fridge_case", "rect": [8, 1, 1, 1]},
+                    {"id": "shelf-1", "kind": "furn.store_shelf", "rect": [4, 3, 1, 1]},
+                    {"id": "shelf-2", "kind": "furn.store_shelf", "rect": [5, 3, 1, 1]},
+                    {"id": "shelf-3", "kind": "furn.store_shelf", "rect": [7, 3, 1, 1]},
+                    {"id": "shelf-4", "kind": "furn.store_shelf", "rect": [8, 3, 1, 1]},
+                    {"id": "counter", "kind": "furn.counter", "rect": [1, 4, 2, 1], "label": "The till, and the dried squid"},
+                ]) | {"label": "The corner shop"},
+                "client": room([12, 8], [6, 7], floor="carpet", things=[
+                    *_desks([(2, 2), (3, 2), (8, 2), (9, 2)]),
+                    {"id": "boss", "kind": "furn.exec_desk", "rect": [5, 1, 2, 1], "label": "The client's president's desk"},
+                    {"id": "sofa", "kind": "furn.sofa", "rect": [2, 5, 1, 1]},
+                    {"id": "table", "kind": "furn.low_table", "rect": [3, 5, 1, 1]},
+                    {"id": "plant", "kind": "furn.plant", "rect": [10, 6, 1, 1]},
+                ]) | {"label": "The client's office"},
+                "hq": room([14, 8], [7, 7], floor="carpet", things=[
+                    *[{"id": f"table-{i}", "kind": "furn.meeting_table", "rect": [4 + 2 * i, 3, 2, 1], **({"label": "The group's meeting table"} if i == 1 else {})}
+                      for i in range(3)],
+                    {"id": "screen", "kind": "furn.projector_screen", "rect": [6, 1, 2, 1], "label": "The screen"},
+                    {"id": "plant", "kind": "furn.plant", "rect": [12, 1, 1, 1]},
+                ]) | {"label": "Group headquarters"},
+                "pojangmacha": room([10, 6], [5, 5], floor="earth", spots=[
+                    {"id": "pojangmacha", "at": [6, 4], "label": "The pojangmacha", "note": "handoffs into the tent land here"},
+                ], things=[
+                    {"id": "cart", "kind": "furn.counter", "rect": [3, 1, 2, 1], "label": "The cart: eomuk, soju"},
+                    {"id": "table-1", "kind": "furn.plastic_table", "rect": [2, 3, 1, 1]},
+                    {"id": "table-2", "kind": "furn.plastic_table", "rect": [7, 3, 1, 1]},
+                    {"id": "table-3", "kind": "furn.plastic_table", "rect": [7, 1, 1, 1]},
+                    {"id": "stool-1", "kind": "furn.stool", "rect": [3, 3, 1, 1]},
+                    {"id": "stool-2", "kind": "furn.stool", "rect": [6, 3, 1, 1]},
+                ]) | {"label": "The pojangmacha", "states": [{"id": "night", "light": "night"}]},
+            },
+        },
+
+        # One International: inside the tower. Its plan is the lobby; the floors are its rooms, reached by the lift.
+        "One International": {
+            "id": "one-international",
+            "archetype": "interior",
+            "plan": _lobby(floors) | {"label": "One International"},
+            "states": [{"id": "day", "light": "day"}],
+            "npcs": [
+                {"id": "receptionist", "kind": "folk.officewoman", "at": [13, 5], "behind": "reception", "face": "S", "label": "The receptionist",
+                 "say": "“Visitor passes are issued here. Who are you here to see?”"},
+                _talk("folk.salaryman", [6, 5], "A security guard by the ID gates. “Card on the reader, please. One at a time.”", label="Security"),
+                _talk("folk.salaryman", [8, 2], "Someone waiting for a lift taps his card against his leg. “Come on, come on.”"),
+                *[p for p in (
+                    _in("sales3", "folk.officewoman", [14, 6], "A woman from the next team. “Sales Team 3? They're the ones who work through lunch.”"),
+                    _in("sales3", "folk.salaryman", [3, 7], "A deputy from Sales Team 1, reading a fax. “Another intern? We used to get six a year.”"),
+                    _in("finance", "folk.salaryman", [10, 6], "A finance clerk. “If it isn't on the form, it doesn't exist.”"),
+                    _in("hr", "folk.officewoman", [8, 4], "Someone from HR, stacking contracts. “Two-year contracts are on the left. Regulars on the right.”"),
+                    _in("textile", "folk.salaryman", [4, 6], "Someone from the textile team, a swatch in each hand. “Navy, or midnight? The buyer says they're different.”"),
+                ) if p["place"] in floors],
+            ],
+            "maps": {m: _with_lift(m, _floors()[m][2](), floors, *LIFT_AT.get(m, ())) for m in floors},
+        },
+
+        # The Korea Baduk Association (Hongik-dong): the front office, and through it the trainees' room.
+        "Korea Baduk Association": {
+            "archetype": "city",
+            "plan": _street([12, 8], 5, things=[
+                {"id": "kba", "kind": "building.office_block", "rect": [4, 3, 3, 2], "door": "S", "label": "The Korea Baduk Association",
+                 "map": "kba-front", "plaque": "한국기원"},
+                {"id": "block-w", "kind": "building.office_block", "rect": [1, 3, 2, 2], "door": "S"},
+                {"id": "block-e", "kind": "building.office_block", "rect": [8, 3, 2, 2], "door": "S"},
+                {"id": "shop-1", "kind": "building.storefront", "rect": [2, 6, 2, 1], "door": "N"},
+                {"id": "shop-2", "kind": "building.storefront", "rect": [7, 6, 2, 1], "door": "N"},
+            ], exits=[{"to": "Jongno", "at": [11, 5], "side": "E"}], entries={"": [5, 5], "Jongno": [10, 5]},
+                dress=[{"kind": "tree.ginkgo", "along": "street", "every": 4}]),
+            "states": [{"id": "dawn", "light": "morning"}],
+            "npcs": [
+                _talk("folk.kid", [6, 5], "A boy of ten with a go book under his arm, running late."),
+                *[_in("kba-trainees", "folk.kid", at, say) for at, say in (
+                    ([2, 3], "A trainee, eleven or twelve, replaying a game from a book, stone by stone."),
+                    ([10, 3], "Two trainees bent over a board. Neither has spoken for an hour."),
+                    ([12, 5], "A girl in a school uniform counts the score twice."),
+                    ([4, 7], "A trainee packs his stones away. “Next month. There's always next month.”"))],
+            ],
+            "maps": {
+                "kba-front": room([12, 8], [6, 7], exits=[{"to": "kba-trainees", "at": [9, 0], "side": "N"}], things=[
+                    {"id": "trophies-1", "kind": "furn.trophy_case", "rect": [1, 1, 1, 1], "label": "Trophies and photographs of the pros"},
+                    {"id": "trophies-2", "kind": "furn.trophy_case", "rect": [2, 1, 1, 1]},
+                    {"id": "desk", "kind": "furn.reception", "rect": [5, 3, 2, 1], "label": "The front desk"},
+                    {"id": "notices", "kind": "furn.noticeboard", "rect": [10, 3, 1, 1], "label": "The trainees' rankings"},
+                    {"id": "sofa", "kind": "furn.sofa", "rect": [1, 5, 1, 1]},
+                ], floor="office_tile") | {"label": "The Korea Baduk Association"},
+                "kba-trainees": room([16, 10], [8, 9], floor="wood", things=[
+                    *[{"id": f"board-{x}-{y}", "kind": "furn.go_board", "rect": [x, y, 1, 1]}
+                      for y in (2, 4, 6) for x in (2, 4, 6, 10, 12, 14)],
+                ]) | {"label": "The trainees' room"},
+            },
+        },
+
+        # Baekjin Trading: a lane of small offices.
+        "Baekjin Trading": {
+            "archetype": "city",
+            "plan": _street([16, 8], 5, things=[
+                {"id": "baekjin", "kind": "building.office_block", "rect": [9, 3, 2, 2], "door": "S", "label": "Baekjin Trading",
+                 "map": "baekjin", "plaque": "백진무역"},
+                {"id": "block-1", "kind": "building.office_block", "rect": [2, 3, 2, 2], "door": "S"},
+                {"id": "block-2", "kind": "building.office_block", "rect": [5, 3, 2, 2], "door": "S"},
+                {"id": "block-3", "kind": "building.office_block", "rect": [12, 3, 2, 2], "door": "S"},
+                {"id": "shop-1", "kind": "building.storefront", "rect": [3, 6, 2, 1], "door": "N"},
+                {"id": "shop-2", "kind": "building.storefront", "rect": [10, 6, 2, 1], "door": "N"},
+            ], exits=[{"to": "Jongno", "at": [0, 5], "side": "W"}], entries={"": [1, 5], "Jongno": [1, 5]},
+                dress=[{"kind": "prop.scooter", "along": "street", "every": 6}, {"kind": "lamp.post", "along": "street", "every": 4}]),
+            "states": [{"id": "day", "light": "day"}],
+            "npcs": [
+                _in("baekjin", "folk.officewoman", [3, 4], "A clerk who won't meet your eye. “The figures are all in order. Mr Park went through them with us.”"),
+                _in("baekjin", "folk.salaryman", [8, 4], "A man at the window, on the phone. He turns his back."),
+            ],
+            "maps": {
+                "baekjin": room([12, 8], [6, 7], floor="carpet", things=[
+                    *_desks([(2, 2), (3, 2), (8, 2), (9, 2)]),
+                    {"id": "boss-desk", "kind": "furn.exec_desk", "rect": [5, 1, 2, 1], "label": "The manager's desk"},
+                    {"id": "filing-1", "kind": "furn.filing", "rect": [1, 4, 1, 1]},
+                    {"id": "filing-2", "kind": "furn.filing", "rect": [1, 5, 1, 1]},
+                    {"id": "boxes", "kind": "furn.boxes", "rect": [10, 5, 1, 1]},
+                ]) | {"label": "Baekjin Trading"},
+            },
+        },
+
+        # Sun's neighbourhood: her block of flats and the daycare down the street.
+        "Sun's neighbourhood": {
+            "archetype": "city",
+            "plan": _street([14, 8], 5, things=[
+                {"id": "flats", "kind": "building.apartment", "rect": [2, 3, 3, 2], "door": "S", "label": "Sun Ji-young's block",
+                 "map": "sun-flat", "plaque": "103동"},
+                {"id": "daycare", "kind": "building.storefront", "rect": [7, 4, 2, 1], "door": "S", "label": "The daycare", "map": "daycare"},
+                {"id": "villa", "kind": "building.villa", "rect": [10, 3, 2, 2], "door": "S"},
+                {"id": "shop-1", "kind": "building.storefront", "rect": [3, 6, 2, 1], "door": "N"},
+                {"id": "shop-2", "kind": "building.storefront", "rect": [9, 6, 2, 1], "door": "N"},
+            ], ground=[{"id": "playground", "kind": "garden", "rect": [12, 1, 2, 3]}],
+                spots=[{"id": "sun-flat-door", "at": [3, 5], "at_door": "flats", "label": "Sun Ji-young's door",
+                        "note": "handoffs to Sun at home land here"}],
+                exits=[{"to": "Jongno", "at": [0, 5], "side": "W"}], entries={"": [8, 5], "Jongno": [1, 5]},
+                dress=[{"kind": "tree.ginkgo", "along": "street", "every": 4}, {"kind": "prop.bench", "in": "playground", "count": 2}]),
+            "states": [{"id": "day", "light": "day"}],
+            "npcs": [_talk("folk.ajumma", [6, 5], "A mother with a pushchair. “The daycare closes at seven. On the dot.”"),
+                     _in("daycare", "folk.officewoman", [5, 2], "The teacher. “You're here for Somi? Her mother rang. You must be from her office.”",
+                         label="The teacher"),
+                     _in("daycare", "folk.kid", [3, 4], "A small boy with a toy car. “Are you somebody's dad?”")],
+            "maps": {
+                "daycare": room([12, 8], [6, 7], floor="lino", things=[
+                    {"id": "toys-1", "kind": "furn.toy_shelf", "rect": [1, 1, 1, 1]},
+                    {"id": "toys-2", "kind": "furn.toy_shelf", "rect": [2, 1, 1, 1]},
+                    {"id": "toys-3", "kind": "furn.toy_shelf", "rect": [9, 1, 1, 1]},
+                    {"id": "mat-1", "kind": "furn.kid_mat", "rect": [2, 3, 1, 1]},
+                    {"id": "mat-2", "kind": "furn.kid_mat", "rect": [3, 3, 1, 1]},
+                    {"id": "table", "kind": "furn.low_table", "rect": [8, 4, 1, 1]},
+                ]) | {"label": "The daycare"},
+                "sun-flat": room([12, 8], [6, 7], floor="lino", things=[
+                    {"id": "tv", "kind": "furn.tv", "rect": [2, 1, 1, 1]},
+                    {"id": "sofa", "kind": "furn.sofa", "rect": [2, 3, 1, 1]},
+                    {"id": "table", "kind": "furn.table", "rect": [8, 3, 1, 1], "label": "The kitchen table"},
+                    {"id": "wardrobe", "kind": "furn.wardrobe", "rect": [10, 1, 1, 1]},
+                    {"id": "toys", "kind": "furn.toy_shelf", "rect": [5, 1, 1, 1]},
+                ]) | {"label": "Sun Ji-young's flat"},
+            },
+        },
+
+        # Daehanmun: the old gate of Deoksugung on the main road, the palace wall either side of it, and the plaza in
+        # front where the company sets up a memorial tent with portraits (Book 1's last morning).
+        "Daehanmun": {
+            "archetype": "city",
+            "plan": {
+                "grid": [16, 10], "cell": 4, "margin": 1,
+                "ground": [{"id": "town", "kind": "city", "rect": [0, 0, 16, 10]},
+                           {"id": "palace", "kind": "garden", "rect": [0, 0, 16, 3]},     # inside the palace wall
+                           {"id": "plaza", "kind": "court", "rect": [2, 4, 12, 3]},
+                           {"id": "carriageway", "kind": "asphalt", "rect": [0, 8, 16, 2]}],
+                "lines": [{"id": "palace-wall", "kind": "wall", "path": [[0, 3], [15, 3]], "width": 1, "gates": {"daehanmun": [8, 3]}},
+                          {"id": "pave", "kind": "road", "path": [[0, 7], [15, 7]], "width": 4},
+                          {"id": "palace-path", "kind": "path", "path": [[8, 3], [8, 1]], "width": 2}],
+                "things": [{"id": "tent", "kind": "prop.memorial_tent", "rect": [10, 4, 2, 1], "label": "A memorial tent: portraits and chrysanthemums"},
+                           {"id": "car-1", "kind": "prop.car", "rect": [3, 8, 2, 1]},
+                           {"id": "car-2", "kind": "prop.car", "rect": [11, 9, 2, 1]}],
+                "spots": [],
+                "dress": [{"kind": "tree.pine", "in": "palace", "count": 6}, {"kind": "tree.ginkgo", "along": "pave", "every": 4}],
+                "exits": [{"to": "Jongno", "at": [15, 7], "side": "E"}],
+                "entries": {"": [14, 7], "Jongno": [14, 7]},
+            },
+            "states": [{"id": "morning", "light": "morning"}],
+            "npcs": [_talk("folk.salaryman", [5, 7], "A man in a black suit with a white ribbon on his lapel. He bows to the tent, and walks on."),
+                     _talk("folk.ajumma", [12, 6], "A woman sets white chrysanthemums along the table, one by one."),
+                     # the early commuters, on their way past to City Hall
+                     _talk("folk.officewoman", [3, 7], "A commuter hurrying past with a coffee. “Every morning there's a tent here for someone.”"),
+                     _talk("folk.salaryman", [13, 7], "A commuter checks his watch, slows at the tent, and goes on.")],
+        },
+
+        # The pizza shop: Kim Dong-su's, across from a big mart.
+        "The pizza shop": {
+            "archetype": "city",
+            "plan": _street([12, 8], 5, things=[
+                {"id": "pizza", "kind": "building.storefront", "rect": [3, 4, 2, 1], "door": "S", "label": "Kim Dong-su's pizza shop",
+                 "map": "pizza"},
+                {"id": "mart", "kind": "building.mart", "rect": [7, 3, 3, 2], "door": "S", "label": "A big mart"},
+                {"id": "shop-1", "kind": "building.storefront", "rect": [2, 6, 2, 1], "door": "N"},
+                {"id": "shop-2", "kind": "building.storefront", "rect": [6, 6, 2, 1], "door": "N"},
+            ], exits=[{"to": "Jongno", "at": [0, 5], "side": "W"}], entries={"": [4, 5], "Jongno": [1, 5]},
+                dress=[{"kind": "prop.scooter", "at_door": "pizza"}, {"kind": "tree.ginkgo", "along": "street", "every": 4}]),
+            "states": [{"id": "evening", "light": "dusk"}],
+            "npcs": [_talk("folk.ajumma", [9, 5], "A woman pushing a trolley out of the mart. “Two pizzas for the price of one, in there.”")],
+            "maps": {
+                "pizza": room([12, 7], [6, 6], floor="office_tile", things=[
+                    {"id": "oven", "kind": "furn.pizza_oven", "rect": [2, 1, 1, 1]},
+                    {"id": "counter", "kind": "furn.counter", "rect": [4, 2, 2, 1], "label": "The counter"},
+                    {"id": "table-1", "kind": "furn.table", "rect": [9, 2, 1, 1]},
+                    {"id": "table-2", "kind": "furn.table", "rect": [9, 4, 1, 1]},
+                    {"id": "stool-1", "kind": "furn.stool", "rect": [10, 2, 1, 1]},
+                ]) | {"label": "Kim Dong-su's pizza shop"},
+            },
+        },
+
+        # The new office: Oh's new company, upstairs on a narrow street.
+        "The new office": {
+            "archetype": "city",
+            "plan": _street([10, 7], 4, things=[
+                {"id": "office", "kind": "building.office_block", "rect": [4, 2, 2, 2], "door": "S", "label": "The new office", "map": "new-office"},
+                {"id": "block-w", "kind": "building.office_block", "rect": [1, 2, 2, 2], "door": "S"},
+                {"id": "block-e", "kind": "building.office_block", "rect": [7, 2, 2, 2], "door": "S"},
+                {"id": "shop", "kind": "building.storefront", "rect": [3, 5, 2, 1], "door": "N"},
+            ], exits=[{"to": "Jongno", "at": [0, 4], "side": "W"}], entries={"": [5, 4], "Jongno": [1, 4]},
+                dress=[{"kind": "lamp.post", "along": "street", "every": 4}]),
+            "states": [{"id": "day", "light": "day"}],
+            "maps": {
+                "new-office": room([12, 8], [6, 7], floor="carpet", things=[
+                    {"id": "board", "kind": "furn.whiteboard", "rect": [2, 1, 1, 1], "label": "A whiteboard: JORDAN"},
+                    {"id": "oh-desk", "kind": "furn.office_desk", "rect": [5, 2, 1, 1], "label": "Oh's desk"},
+                    *_desks([(2, 3), (3, 3), (8, 3), (9, 3)]),
+                    {"id": "boxes-1", "kind": "furn.boxes", "rect": [9, 1, 1, 1], "label": "Boxes not yet unpacked"},
+                    {"id": "boxes-2", "kind": "furn.boxes", "rect": [10, 1, 1, 1]},
+                ]) | {"label": "The new office"},
+            },
+        },
+
+        # Amman: one street of pale stone (Book 5's last beat hands off to it).
+        "Amman": {
+            "archetype": "city",
+            "plan": _street([16, 8], 4, things=[
+                *[{"id": f"house-n{i}", "kind": "building.stone_house", "rect": [x, 2, 2, 2], "door": "S"} for i, x in enumerate((1, 4, 10, 13))],
+                {"id": "cafe", "kind": "building.stone_shop", "rect": [7, 3, 2, 1], "door": "S", "label": "A café"},
+                *[{"id": f"house-s{i}", "kind": "building.stone_house", "rect": [x, 5, 2, 2], "door": "N"} for i, x in enumerate((2, 6, 12))],
+            ], exits=[], entries={"": [1, 4]},
+                spots=[{"id": "amman", "at": [8, 4], "label": "A street in Amman", "note": "the epilogue's handoff lands here"}],
+                dress=[{"kind": "tree.olive", "along": "street", "every": 5}, {"kind": "lamp.post", "along": "street", "every": 6}]),
+            "states": [{"id": "sun", "light": "day", "weather": "clear"}],
+            "npcs": [_talk("folk.jordanian", [5, 4], "A man selling coffee from a brass pot. “Korean? The traders from Seoul come every month now.”")],
+        },
+    }
+
+
+def book(cfg):
+    """A book's plans: the places it uses, with its own beats, mechanics, people, challengers, lights and objectives."""
+    import copy
+    floors = cfg["floors"]
+    allp = _places(floors)
+    keep = cfg["places"]
+    out = {}
+    for name in keep:
+        b = copy.deepcopy(allp[name])
+        P = b["plan"]
+        # exits (and their arrivals) only to places in the book
+        P["exits"] = [e for e in P.get("exits", []) if e["to"] in keep or e["to"] in (b.get("maps") or {})]
+        P["entries"] = {k_: v for k_, v in P.get("entries", {}).items() if not k_ or k_ in keep or k_ in (b.get("maps") or {})
+                        or (name == "One International" and k_ in floors)}
+        for where, spots in cfg.get("spots", {}).items():
+            pl, _, mid = where.partition("/")
+            if pl == name:
+                tgt = b["maps"][mid] if mid else P
+                tgt["spots"] = [*tgt.get("spots", []), *spots]
+        for where, things in cfg.get("things", {}).items():
+            pl, _, mid = where.partition("/")
+            if pl == name:
+                tgt = b["maps"][mid] if mid else P
+                tgt["things"] = [*tgt.get("things", []), *things]
+        for where, props in cfg.get("props", {}).items():
+            pl, _, mid = where.partition("/")
+            if pl == name:
+                tgt = b["maps"][mid] if mid else P
+                tgt["props"] = [*tgt.get("props", []), *props]
+        for where, states in cfg.get("states", {}).items():
+            pl, _, mid = where.partition("/")
+            if pl == name:
+                if mid:
+                    b["maps"][mid]["states"] = states
+                else:
+                    b["states"] = states
+        b["npcs"] = [*b.get("npcs", []), *cfg.get("npcs", {}).get(name, [])]
+        if cfg.get("challengers", {}).get(name):
+            b["challengers"] = cfg["challengers"][name]
+        b["objectives"] = {key: text for key, (pl, text) in cfg.get("objectives", {}).items() if pl == name}
+        out[name] = b
+    return out
+
+
+# =========================================================================================
+# Fragments the later books reuse (Season 1's single-book design; each book passes its own beat keys)
+def audit_spots(when):
+    """The audit board (tk-modern.js "audit"): ICB's registration on the auditors' table, which also opens the board;
+    Jang's call notes at his desk; Sales 3's whiteboard opens the board too."""
+    return {"One International/audit": [{**_give("audit-table", [5, 4], "The auditors' table", "icb_listing", when,
+                                                  "On the auditors' table, among the papers they're packing: ICB's registration. You take a copy.",
+                                                  "The auditors' table. You have ICB's registration already."), "opens": "audit"}],
+            "One International/sales3": [_give("call-notes", [7, 5], "Jang's desk", "icb_call", when,
+                                               "Your notes from the call to ICB, in your own hand. In the margin you've written: Korean? In the room behind?",
+                                               "Your desk. The call notes are in your bag."),
+                                         {"id": "whiteboard", "at": [7, 2], "label": "Sales Team 3's whiteboard", "opens": "audit"}]}
+
+
+SETTINGS = [   # setting the board room: the place, the drink, the spot by its chair, the stretch of table the drink shows on
+    ("seat_president", "water", [12, 4], "table-2", "prop.glass_water", "The president's place",
+     "Still water, no ice, at the head of the table.", "The notes say the president's water goes here."),
+    ("seat_exec", "green_tea", [6, 2], "table-0", "prop.teacup", "The executive vice president's place",
+     "Green tea, at the executive vice president's place.", "The notes say the executive vice president's tea goes here."),
+    ("seat_division", "coffee", [6, 6], "table-1", "prop.coffee_cup", "The division head's place",
+     "Black coffee, at the division head's place.", "The notes say the division head's coffee goes here."),
+]
+
+
+def seat_spots(when="item:seating_notes"):
+    return ({"One International/board-room": [_deliver(mark, at, label, item, mark, when, line, wait)
+                                              for mark, item, at, _, _, label, line, wait in SETTINGS]},
+            {"One International/board-room": [{"kind": kind, "over": on, "when": f"mark:{mark}", "lift": 6}
+                                              for mark, _, _, on, kind, *_ in SETTINGS]})
+
+
+def trade_people(when, until):
+    """The ₩100,000 mission (tk-modern.js "trade"): the sock stall, four passers-by, and the KBA staff member whose
+    refusal is the rebuke. (The corner-shop owner is the rival: a challenger with "rival", in the book's challengers.)"""
+    w = {"when": when, "until": until}
+    return {"Jongno": [
+        {"id": "sock-stall", "kind": "folk.ajumma", "at": [21, 12], "label": "The sock stall", "shop": ["socks"],
+         "say": "A stall of socks, gloves and towels. “Ten pairs for twenty thousand. Wholesale price, for you.”"},
+        {"id": "buyer-bus", "kind": "folk.salaryman", "at": [8, 10], **w, "label": "A man waiting for the bus", "say": "A man waiting for the bus, checking his watch.",
+         "buyer": {"wants": ["socks"], "pays": 30000, "yes": ["“Socks? My wife's been on at me about socks for a week. Fine. Thirty thousand.”"],
+                   "no": ["“No, thanks. Not today.”"]}},
+        {"id": "buyer-lunch", "kind": "folk.officewoman", "at": [16, 7], **w, "label": "An office worker", "say": "An office worker on her way back from lunch.",
+         "buyer": {"wants": ["socks"], "pays": 25000, "yes": ["“For my father, maybe. He never buys his own. Here.”"], "no": ["“I'm sorry, I'm in a hurry.”"]}},
+        {"id": "buyer-student", "kind": "folk.kid", "at": [3, 10], **w, "label": "A student", "say": "A student in a school blazer, waiting at the station stairs.",
+         "buyer": {"wants": ["socks"], "pays": 20000, "yes": ["“For PE? Mum keeps saying I need more. Twenty thousand, that's all I've got.”"],
+                   "no": ["“I've got no money, sorry.”"]}},
+        {"id": "buyer-oldman", "kind": "folk.grandpa", "at": [24, 10], **w, "label": "An old man", "say": "An old man with a newspaper under his arm.",
+         "buyer": {"wants": ["socks"], "pays": 0, "no": ["“From a young man in a suit, on the pavement? No. Go and sell to someone who needs them.”"]}}],
+        "Korea Baduk Association": [
+        _in("kba-front", "folk.salaryman", [6, 2], "The man at the front desk looks up, and knows you.", behind="desk",
+            label="A KBA staff member", id="kba-staff", **w,
+            buyer={"wants": ["socks"], "pays": 0,
+                   "no": ["“Geu-rae? You've come here to sell? I'd buy whatever you brought. Out of pity, to encourage you, to cheer "
+                          "you on, any of it. Could you call that doing your job?”"]})]}
+
+
+RIVAL = {"say": ["The corner-shop owner calls out to the same people you were about to ask. “Dried squid! Grilled while you wait!” They go to him.",
+                 "“Look at you. Holding them out like you're apologising. Selling's not begging, son.”"]}
+
+
+# =========================================================================================
+# Book 1, "Not Yet Alive" (episodes 0-33, world 21): Plot alt2's design (misaeng-arc.md "Book 1"; tools/tk_story_w21.py)
+def _b1():
+    n = lambda key: f"node:{k(key)}"   # noqa: E731
+    sales3 = "One International/sales3"
+    return {
+        "keys": {f"m{i}" for i in range(1, 21)} | {"m13b"},
+        "places": ["Korea Baduk Association", "Susaek-dong", "The subway", "Jongno", "One International", "Sun's neighbourhood", "Daehanmun"],
+        "floors": ["pt-room", "hr", "textile", "sales3", "meeting", "roof"],
+        "spots": {
+            "Korea Baduk Association/kba-trainees": [{"id": "m1", "at": [7, 6], "node": k(1), "label": "The trainees' room"}],
+            "One International": [
+                {"id": "m2", "at": [LOBBY_W - 6, 7], "node": k(2), "label": "The front desk"},
+                # m8 (Oh): the waybill's other half is in the bins by the gates (the gate needs the scrap)
+                _give("bins", [2, 8], "The recycling bins", "waybill_scrap", n(7),
+                      "You go through the bins by the gates, sheet by sheet. Stuck to the back of a torn page: the rest of the "
+                      "waybill, glue on the back, and a name on it in someone else's hand. Kim Seok-ho.",
+                      "The recycling bins. You've found what you were looking for."),
+                {"id": "m8", "at": [4, 8], "node": k(8), "label": "The recycling bins"},
+                {"id": "lobby-lift", "at": [LOBBY_W // 2, 3], "label": "The lifts", "note": "the handoff to Oh lands here"}],
+            sales3: [
+                {"id": "m3", "at": [8, 6], "node": k(3), "label": "Jang's desk"},
+                {"id": "m4", "at": [10, 3], "node": k(4), "label": "Kim Dong-sik's desk"},
+                {"id": "m5", "at": [7, 4], "node": k(5), "label": "Sales Team 3"},
+                {"id": "m7", "at": [7, 3], "node": k(7), "label": "Sales Team 3"},
+                {"id": "m13", "at": [4, 6], "node": k(13), "label": "Sun Ji-young's desk"},
+                {"id": "m15", "at": [9, 6], "node": k(15), "label": "Sales Team 3"},
+                {"id": "sales3", "at": [8, 7], "label": "Jang's desk", "note": "handoffs to Jang land here"},
+                # m4's three errands, all at once: three things to fetch, each to its senior's desk
+                _give("copier", [2, 2], "The copier", "copy", n(3), "The copier groans out Kim Dong-sik's thirty pages, warm.",
+                      "The copier. You've done Kim's copies."),
+                _give("filing", [11, 2], "The filing cabinets", "file", n(3), "Third drawer down, under O: section head Oh's file.",
+                      "The filing cabinets. You have Oh's file."),
+                _give("pantry", [4, 2], "The pantry", "coffee", n(3), "One coffee from the machine, black, for the deputy.",
+                      "The pantry. You have the deputy's coffee."),
+                _deliver("errand-copy", [9, 3], "Kim Dong-sik's desk", "copy", "errand_copy", n(3),
+                         "Kim Dong-sik takes the copies without looking up. “Thirty? I said thirty-two. …No, thirty. Fine.”",
+                         "Kim Dong-sik taps the desk. “The copies, Jang. Today, if you can.”",
+                         "Kim Dong-sik is reading the copies."),
+                _deliver("errand-file", [11, 4], "Oh's desk", "file", "errand_file", n(3),
+                         "Section head Oh holds out his hand for the file, and keeps reading the one in front of him.",
+                         "Section head Oh doesn't look up. “The file. I asked for it ten minutes ago.”",
+                         "Oh has his file."),
+                _deliver("errand-coffee", [8, 3], "The deputy's desk", "coffee", "errand_coffee", n(3),
+                         "The deputy takes the coffee, sips, and winces. “Black. Right. Thanks.”",
+                         "The deputy waves an empty cup at you. “Coffee? Sometime this morning?”",
+                         "The deputy is drinking his coffee."),
+            ],
+            "One International/pt-room": [
+                {"id": "m6", "at": [8, 3], "node": k(6), "label": "The lectern"},
+                {"id": "m16", "at": [7, 3], "node": k(16), "label": "The PT room"},
+                {"id": "m17", "at": [10, 3], "node": k(17), "label": "The lectern"},
+                {"id": "m18", "at": [6, 3], "node": k(18), "label": "The interviewers' table"},
+                {"id": "pt-door", "at": [7, 8], "label": "The PT room's door", "note": "the costumed team's intern stands here before m16"}],
+            "One International/textile": [
+                {"id": "m9", "at": [10, 5], "node": k(9), "label": "Steve Han's desk"},
+                {"id": "textile", "at": [7, 5], "label": "The textile team", "note": "the handoff to Kim Bu-ryeon lands here"}],
+            "One International/roof": [
+                {"id": "m10", "at": [11, 5], "node": k(10), "label": "The smokers' corner"},
+                {"id": "roof", "at": [9, 4], "label": "The roof", "note": "the handoff to Jang lands here"}],
+            "One International/meeting": [{"id": "m12", "at": [6, 5], "node": k(12), "label": "A meeting room"}],
+            "One International/hr": [{"id": "m19", "at": [2, 4], "node": k(19), "label": "The noticeboard"}],
+            "Jongno/client": [{"id": "m11", "at": [6, 4], "node": k(11), "label": "The client's office"}],
+            "Sun's neighbourhood/daycare": [{"id": "m13b", "at": [6, 4], "node": k("13b"), "label": "The daycare"}],
+            "Sun's neighbourhood/sun-flat": [{"id": "m14", "at": [6, 5], "node": k(14), "label": "Sun Ji-young's flat"}],
+            "Daehanmun": [{"id": "m20", "at": [9, 5], "node": k(20), "label": "The memorial tent"}],
+        },
+        "npcs": {
+            # m18's gate: section head Oh lends his office slippers, at his desk (Oh's walker is Graphics' ms_oh)
+            "One International": [
+                {"id": "oh-slippers", "kind": "hero.ms_oh", "place": "sales3", "at": [11, 5], "behind": "oh-desk", "face": "W",
+                 "label": "Section head Oh", "when": n(17), "until": n(18), "gives": "slippers", "gives_when": n(17),
+                 "say": "Section head Oh is reading, in his socks.",
+                 "give": ["“My slippers? …Fine. Bring them back.” He pushes them across the floor with his foot."],
+                 "given": ["“You have them. Go on, sell them.”"]},
+            ],
+        },
+        "states": {
+            "Sun's neighbourhood": [{"id": "day", "until": n(13), "light": "day"},
+                                    {"id": "dusk", "when": n(13), "until": n("13b"), "light": "dusk"},   # the daycare closes at seven
+                                    {"id": "night", "when": n("13b"), "light": "night"}],
+            "Sun's neighbourhood/sun-flat": [{"id": "night", "light": "night"}],
+            "Daehanmun": [{"id": "early", "light": "morning"}],
+        },
+        # Road challengers: 8, 2 blocking (Book 1's design)
+        "challengers": {
+            "The subway": [
+                _ch("commuter", "folk.salaryman", [21, 3], n(1), n(2),
+                    "A man in a grey suit stands in the doorway with a magnetic pocket board, a problem half-solved. “Excuse me. Do you play? "
+                    "I've been stuck on this since Hapjeong.”",
+                    "“…Oh. Of course. Thank you. This is my stop too.”", "The man with the pocket board is on the next problem.",
+                    blocks={"exit": "Jongno"}, view=1, guard="to-Jongno")],
+            "Jongno": [
+                _ch("regular-1", "folk.grandpa", [3, 5], n(1), n(2),
+                    "An old man at the stone table waves you over without looking up. “You. You've got a player's hands. Sit.”",
+                    "“Hm. Where did you learn that? Go on, go to work.”", "The old man is playing someone else now."),
+                _ch("regular-2", "folk.grandpa", [8, 5], n(10), n(11),
+                    "An old man in a flat cap sets out the stones. “A young man in a tie, at Tapgol? Sit down, it's free.”",
+                    "“…Again tomorrow. Same time.”", "The old man in the flat cap is asleep on the bench."),
+                _ch("courier", "folk.salaryman", [24, 4], n(2), n(11),
+                    "A courier with a trolley of boxes parks it across the lane. “Fourteenth floor? Every one of them's the fourteenth floor. "
+                    "Sit a minute. One game while the lift comes.”",
+                    "“Ha! I'll take the stairs, then.”", "The courier's trolley rattles off down the lane.")],
+            "One International": [],
+            "Daehanmun": [
+                _ch("tourist", "folk.salaryman", [8, 4], n(19), n(20),
+                    "A tourist with a camera and a travel go set stops you by the gate. “Excuse me! Is this the palace? …You play? "
+                    "One game, while the guards change?”",
+                    "“Wonderful. Thank you! Good luck in your new job.”", "The tourist is photographing the gate.")],
+        },
+        # the PT room's: two nervous interns outside it (m15-m16), and the costumed team's intern at its door (blocking)
+        "pt_challengers": [
+            _ch("nervous-1", "folk.salaryman", [10, 8], n(14), n(16),
+                "An intern rehearsing by the door grabs your sleeve. “Quiz me. No, play me. Anything. I can't think about the PT any more.”",
+                "“…Thanks. I can breathe again.”", "The intern is rehearsing under his breath.", map="pt-room", entry=[8, 8]),
+            _ch("nervous-2", "folk.officewoman", [12, 8], n(14), n(16),
+                "An intern with cue cards fanned like a hand of cards. “One quick game? My hands won't stop shaking.”",
+                "“Steadier. Good. Good luck in there.”", "The intern is reading her cue cards again.", map="pt-room", entry=[8, 8]),
+            _ch("costumed", "folk.salaryman", [7, 6], n(15), n(16),
+                "An intern in a hard hat and overalls — his team's costume for their PT — stands square in the aisle. “Our turn first. "
+                "Unless you can get past me.”",
+                "“…Fine. Go on. Break a leg.”", "The intern in the hard hat is adjusting his costume.",
+                blocks="m16", view=1, map="pt-room", entry=[8, 8], guard=[7, 6]),
         ],
-        "maps": {mid: _with_lift(mid, plan, *({"roof": ([6, 2], [5, 2])}.get(mid, ()))) for mid, plan in (
-            ("sales3", _sales3()), ("resources", _resources()), ("meeting", _meeting()), ("finance", _finance()), ("hr", _hr()),
-            ("audit", _audit()), ("board-room", _board_room()), ("exec-floor", _exec_floor()), ("pt-room", _pt_room()), ("roof", _roof()))},
         "objectives": {
-            k(2): "Your first day at One International. Get through the front desk.",
-            k(3): "Take the lift up to Sales Team 3.",
-            k("3b"): "Search the lobby for the rest of the waybill.",
-            k("4b"): "The client's president has come to One International. Go to the meeting room.",
-            k(5): "Go to Sun Ji-young's desk.",
-            k(6): "Go to the PT room. It's your pair's turn to present.",
-            k(7): "Go back to the PT room for the individual test.",
-            k(8): "Take the plan to finance yourself.",
-            k(9): "Go back to your desk.",
-            k(10): "Go to Kim Dong-sik's desk. There's homework.",
-            k(11): "Go to Sun Ji-young's desk.",
-            k(13): "Go to the audit room before the auditors pack up.",
-            k(14): "Go up to the executive's office.",
-            k(17): "Set the board room for the Jordan briefing.",
-            k(19): "Go up to the roof.",
-            k(21): "The team's phone is ringing.",
-            k(22): "Go up to the executive's office.",
-            k(23): "Go to Oh's desk.",
+            k(1): ("Korea Baduk Association", "Go to the trainees' room. This game decides everything."),
+            k(2): ("One International", "Your first day at One International. Go to the front desk."),
+            k(3): ("One International", "Take the lift up to Sales Team 3, to your desk."),
+            k(4): ("One International", "Kim Dong-sik's desk, Sales Team 3."),
+            k(5): ("One International", "Back to Sales Team 3."),
+            k(6): ("One International", "Go to the PT room. It's your turn to present."),
+            k(7): ("One International", "Back to Sales Team 3."),
+            k(8): ("One International", "Search the lobby for the rest of the waybill."),
+            k(9): ("One International", "Go to the textile team's floor, to Steve Han's desk."),
+            k(10): ("One International", "Go up to the roof."),
+            k(11): ("Jongno", "Go with Park Jong-gi to the client's office, along the lane behind the shops."),
+            k(12): ("One International", "The client's president has come to One International. Go to the meeting room."),
+            k(13): ("One International", "Go to Sun Ji-young's desk."),
+            k("13b"): ("Sun's neighbourhood", "Collect Somi from the daycare before it closes at seven."),
+            k(14): ("Sun's neighbourhood", "Go home."),
+            k(15): ("One International", "Back to Sales Team 3: the PT with Han."),
+            k(16): ("One International", "Go to the PT room. Your pair is next."),
+            k(17): ("One International", "Go back to the PT room."),
+            k(18): ("One International", "Go back to the PT room for the individual task."),
+            k(19): ("One International", "The results are up on HR's noticeboard."),
+            k(20): ("Daehanmun", "Go to Daehanmun, to the tent in front of the gate."),
         },
-    },
+    }
 
-    # =========================================================================================
-    # The Korea Baduk Association (Hongik-dong): the front office, and through it the trainees' room, rows of boards.
-    "Korea Baduk Association": {
-        "archetype": "city",
-        "plan": _street([12, 8], 5, things=[
-            {"id": "kba", "kind": "building.office_block", "rect": [4, 3, 3, 2], "door": "S", "label": "The Korea Baduk Association",
-             "map": "kba-front", "plaque": "한국기원"},
-            {"id": "block-w", "kind": "building.office_block", "rect": [1, 3, 2, 2], "door": "S"},
-            {"id": "block-e", "kind": "building.office_block", "rect": [8, 3, 2, 2], "door": "S"},
-            {"id": "shop-1", "kind": "building.storefront", "rect": [2, 6, 2, 1], "door": "N"},
-            {"id": "shop-2", "kind": "building.storefront", "rect": [7, 6, 2, 1], "door": "N"},
-        ], exits=[{"to": "Jongno", "at": [11, 5], "side": "E"}], entries={"": [5, 5], "Jongno": [10, 5]},
-            dress=[{"kind": "tree.ginkgo", "along": "street", "every": 4}]),
-        "states": [{"id": "dawn", "light": "morning"}],
-        "npcs": [
-            _talk("folk.kid", [6, 5], "A boy of ten with a go book under his arm, running late."),
-            _in("kba-front", "folk.salaryman", [6, 2], "A man at the front desk. “Trainees go straight through. You know the way.”",
-                behind="desk", label="The KBA's front desk", until=f"node:{k(17)}"),
-            # the ₩100,000 mission (m18): the staff member who knew him as a trainee. Any offer is refused: the rebuke
-            _in("kba-front", "folk.salaryman", [6, 2], "The man at the front desk looks up, and knows you.", behind="desk",
-                label="A KBA staff member", id="kba-staff", when=f"node:{k(17)}", until=f"node:{k(18)}",
-                buyer={"wants": ["socks"], "pays": 0,
-                       "no": ["“Geu-rae? You've come here to sell? I'd buy whatever you brought. Out of pity, to encourage you, to cheer "
-                              "you on, any of it. Could you call that doing your job?”"]}),
-            *[_in("kba-trainees", "folk.kid", at, say) for at, say in (
-                ([2, 3], "A trainee, eleven or twelve, replaying a game from a book, stone by stone."),
-                ([10, 3], "Two trainees bent over a board. Neither has spoken for an hour."),
-                ([12, 5], "A girl in a school uniform counts the score twice."),
-                ([4, 7], "A trainee packs his stones away. “Next month. There's always next month.”"))],
-        ],
-        "maps": {
-            "kba-front": room([12, 8], [6, 7], exits=[{"to": "kba-trainees", "at": [9, 0], "side": "N"}], things=[
-                {"id": "trophies-1", "kind": "furn.trophy_case", "rect": [1, 1, 1, 1], "label": "Trophies and photographs of the pros"},
-                {"id": "trophies-2", "kind": "furn.trophy_case", "rect": [2, 1, 1, 1]},
-                {"id": "desk", "kind": "furn.reception", "rect": [5, 3, 2, 1], "label": "The front desk"},
-                {"id": "notices", "kind": "furn.noticeboard", "rect": [10, 3, 1, 1], "label": "The trainees' rankings"},
-                {"id": "sofa", "kind": "furn.sofa", "rect": [1, 5, 1, 1]},
-            ], floor="office_tile") | {"label": "The Korea Baduk Association"},
-            # the trainees' room (m1): three rows of boards on the floor, a clock on the wall
-            "kba-trainees": room([16, 10], [8, 9], floor="wood", things=[
-                *[{"id": f"board-{x}-{y}", "kind": "furn.go_board", "rect": [x, y, 1, 1]}
-                  for y in (2, 4, 6) for x in (2, 4, 6, 10, 12, 14)],
-            ], spots=[{"id": "m1", "at": [7, 6], "node": k(1), "label": "The trainees' room"}]) | {"label": "The trainees' room"},
-        },
-        "objectives": {k(1): "Go to the trainees' room. This game decides everything."},
-    },
 
-    # =========================================================================================
-    # Baekjin Trading: a lane of small offices. Park's coached clerk keeps the door (m12, blocking); a courier goes by.
-    "Baekjin Trading": {
-        "archetype": "city",
-        "plan": _street([16, 8], 5, things=[
-            {"id": "baekjin", "kind": "building.office_block", "rect": [9, 3, 2, 2], "door": "S", "label": "Baekjin Trading",
-             "map": "baekjin", "plaque": "백진무역"},
-            {"id": "block-1", "kind": "building.office_block", "rect": [2, 3, 2, 2], "door": "S"},
-            {"id": "block-2", "kind": "building.office_block", "rect": [5, 3, 2, 2], "door": "S"},
-            {"id": "block-3", "kind": "building.office_block", "rect": [12, 3, 2, 2], "door": "S"},
-            {"id": "shop-1", "kind": "building.storefront", "rect": [3, 6, 2, 1], "door": "N"},
-            {"id": "shop-2", "kind": "building.storefront", "rect": [10, 6, 2, 1], "door": "N"},
-        ], exits=[{"to": "Jongno", "at": [0, 5], "side": "W"}], entries={"": [1, 5], "Jongno": [1, 5]},
-            dress=[{"kind": "prop.scooter", "along": "street", "every": 6}, {"kind": "lamp.post", "along": "street", "every": 4}]),
-        "states": [{"id": "day", "light": "day"}],
-        "npcs": [
-            _in("baekjin", "folk.officewoman", [3, 4], "A clerk who won't meet your eye. “The figures are all in order. Mr Park went through them with us.”"),
-            _in("baekjin", "folk.salaryman", [8, 4], "A man at the window, on the phone. He turns his back."),
-        ],
-        "maps": {
-            "baekjin": room([12, 8], [6, 7], floor="carpet", things=[
-                *_desks([(2, 2), (3, 2), (8, 2), (9, 2)]),
-                {"id": "boss-desk", "kind": "furn.exec_desk", "rect": [5, 1, 2, 1], "label": "The manager's desk"},
-                {"id": "filing-1", "kind": "furn.filing", "rect": [1, 4, 1, 1]},
-                {"id": "filing-2", "kind": "furn.filing", "rect": [1, 5, 1, 1]},
-                {"id": "boxes", "kind": "furn.boxes", "rect": [10, 5, 1, 1]},
-            ], spots=[{"id": "m12", "at": [6, 4], "node": k(12), "label": "Baekjin Trading"},
-                      {"id": "clue-coached", "at": [3, 5], "label": "Baekjin's clerk", "note": "the audit board: the staff Park coached"}])
-            | {"label": "Baekjin Trading"},
-        },
-        "objectives": {k(12): "Go to Baekjin Trading with Kim Dong-sik."},
-    },
+def _book1():
+    cfg = _b1()
+    p = book(cfg)
+    p["One International"]["challengers"] = cfg["pt_challengers"]
+    return p
 
-    # =========================================================================================
-    # Sun's neighbourhood: her block of flats (m20, a cutaway) and the daycare down the street (m5).
-    "Sun's neighbourhood": {
-        "archetype": "city",
-        "plan": _street([14, 8], 5, things=[
-            {"id": "flats", "kind": "building.apartment", "rect": [2, 3, 3, 2], "door": "S", "label": "Sun Ji-young's block",
-             "map": "sun-flat", "plaque": "103동"},
-            {"id": "daycare", "kind": "building.storefront", "rect": [7, 4, 2, 1], "door": "S", "label": "The daycare", "map": "daycare"},
-            {"id": "villa", "kind": "building.villa", "rect": [10, 3, 2, 2], "door": "S"},
-            {"id": "shop-1", "kind": "building.storefront", "rect": [3, 6, 2, 1], "door": "N"},
-            {"id": "shop-2", "kind": "building.storefront", "rect": [9, 6, 2, 1], "door": "N"},
-        ], ground=[{"id": "playground", "kind": "garden", "rect": [12, 1, 2, 3]}],
-            exits=[{"to": "Jongno", "at": [0, 5], "side": "W"}], entries={"": [8, 5], "Jongno": [1, 5]},
-            dress=[{"kind": "tree.ginkgo", "along": "street", "every": 4}, {"kind": "prop.bench", "in": "playground", "count": 2}]),
-        "states": [{"id": "evening", "light": "dusk"}],
-        "npcs": [_talk("folk.ajumma", [6, 5], "A mother with a pushchair. “The daycare closes at seven. On the dot.”"),
-                 _in("daycare", "folk.officewoman", [5, 2], "The teacher. “You're here for Somi? Her mother rang. You must be from her office.”",
-                     label="The teacher"),
-                 _in("daycare", "folk.kid", [3, 4], "A small boy with a toy car. “Are you somebody's dad?”")],
-        "maps": {
-            "daycare": room([12, 8], [6, 7], floor="lino", things=[
-                {"id": "toys-1", "kind": "furn.toy_shelf", "rect": [1, 1, 1, 1]},
-                {"id": "toys-2", "kind": "furn.toy_shelf", "rect": [2, 1, 1, 1]},
-                {"id": "toys-3", "kind": "furn.toy_shelf", "rect": [9, 1, 1, 1]},
-                {"id": "mat-1", "kind": "furn.kid_mat", "rect": [2, 3, 1, 1]},
-                {"id": "mat-2", "kind": "furn.kid_mat", "rect": [3, 3, 1, 1]},
-                {"id": "table", "kind": "furn.low_table", "rect": [8, 4, 1, 1]},
-            ], spots=[{"id": "m5b", "at": [6, 4], "node": k("5b"), "label": "The daycare"}]) | {"label": "The daycare"},
-            "sun-flat": room([12, 8], [6, 7], floor="lino", things=[
-                {"id": "tv", "kind": "furn.tv", "rect": [2, 1, 1, 1]},
-                {"id": "sofa", "kind": "furn.sofa", "rect": [2, 3, 1, 1]},
-                {"id": "table", "kind": "furn.table", "rect": [8, 3, 1, 1], "label": "The kitchen table"},
-                {"id": "wardrobe", "kind": "furn.wardrobe", "rect": [10, 1, 1, 1]},
-                {"id": "toys", "kind": "furn.toy_shelf", "rect": [5, 1, 1, 1]},
-            ], spots=[{"id": "m20", "at": [6, 5], "node": k(20), "label": "Sun Ji-young's flat"}]) | {"label": "Sun Ji-young's flat"},
-        },
-        "objectives": {k("5b"): "Collect Somi from the daycare before it closes."},
-    },
 
-    # =========================================================================================
-    # The pizza shop: Kim Dong-su's, empty, across from a big mart (m16).
-    "The pizza shop": {
-        "archetype": "city",
-        "plan": _street([12, 8], 5, things=[
-            {"id": "pizza", "kind": "building.storefront", "rect": [3, 4, 2, 1], "door": "S", "label": "Kim Dong-su's pizza shop",
-             "map": "pizza"},
-            {"id": "mart", "kind": "building.mart", "rect": [7, 3, 3, 2], "door": "S", "label": "A big mart"},
-            {"id": "shop-1", "kind": "building.storefront", "rect": [2, 6, 2, 1], "door": "N"},
-            {"id": "shop-2", "kind": "building.storefront", "rect": [6, 6, 2, 1], "door": "N"},
-        ], exits=[{"to": "Jongno", "at": [0, 5], "side": "W"}], entries={"": [4, 5], "Jongno": [1, 5]},
-            dress=[{"kind": "prop.scooter", "at_door": "pizza"}, {"kind": "tree.ginkgo", "along": "street", "every": 4}]),
-        "states": [{"id": "evening", "light": "dusk"}],
-        "npcs": [_talk("folk.ajumma", [9, 5], "A woman pushing a trolley out of the mart. “Two pizzas for the price of one, in there.”")],
-        "maps": {
-            "pizza": room([12, 7], [6, 6], floor="office_tile", things=[
-                {"id": "oven", "kind": "furn.pizza_oven", "rect": [2, 1, 1, 1]},
-                {"id": "counter", "kind": "furn.counter", "rect": [4, 2, 2, 1], "label": "The counter"},
-                {"id": "table-1", "kind": "furn.table", "rect": [9, 2, 1, 1]},
-                {"id": "table-2", "kind": "furn.table", "rect": [9, 4, 1, 1]},
-                {"id": "stool-1", "kind": "furn.stool", "rect": [10, 2, 1, 1]},
-            ], spots=[{"id": "m16", "at": [6, 4], "node": k(16), "label": "The pizza shop"}]) | {"label": "Kim Dong-su's pizza shop"},
-        },
-        "objectives": {k(16): "Kim Dong-su has asked you to come by his shop."},
-    },
-
-    # =========================================================================================
-    # The new office (m24): Oh's new company, three weeks old, upstairs on a narrow street.
-    "The new office": {
-        "archetype": "city",
-        "plan": _street([10, 7], 4, things=[
-            {"id": "office", "kind": "building.office_block", "rect": [4, 2, 2, 2], "door": "S", "label": "The new office", "map": "new-office"},
-            {"id": "block-w", "kind": "building.office_block", "rect": [1, 2, 2, 2], "door": "S"},
-            {"id": "block-e", "kind": "building.office_block", "rect": [7, 2, 2, 2], "door": "S"},
-            {"id": "shop", "kind": "building.storefront", "rect": [3, 5, 2, 1], "door": "N"},
-        ], exits=[{"to": "Jongno", "at": [0, 4], "side": "W"}], entries={"": [5, 4], "Jongno": [1, 4]},
-            dress=[{"kind": "lamp.post", "along": "street", "every": 4}]),
-        "states": [{"id": "day", "light": "day"}],
-        "maps": {
-            "new-office": room([12, 8], [6, 7], floor="carpet", things=[
-                {"id": "board", "kind": "furn.whiteboard", "rect": [2, 1, 1, 1], "label": "A whiteboard: JORDAN"},
-                {"id": "oh-desk", "kind": "furn.office_desk", "rect": [5, 2, 1, 1], "label": "Oh's desk"},
-                *_desks([(2, 3), (3, 3), (8, 3), (9, 3)]),
-                {"id": "boxes-1", "kind": "furn.boxes", "rect": [9, 1, 1, 1], "label": "Boxes not yet unpacked"},
-                {"id": "boxes-2", "kind": "furn.boxes", "rect": [10, 1, 1, 1]},
-            ], spots=[{"id": "m24", "at": [6, 4], "node": k(24), "label": "The new office"}]) | {"label": "The new office"},
-        },
-        "objectives": {k(24): "Three weeks later. Go to the new office."},
-    },
-
-    # =========================================================================================
-    # Amman: one street of pale stone, reached only by the epilogue's handoff (m24). A café player at his board.
-    "Amman": {
-        "archetype": "city",
-        "plan": _street([16, 8], 4, things=[
-            *[{"id": f"house-n{i}", "kind": "building.stone_house", "rect": [x, 2, 2, 2], "door": "S"} for i, x in enumerate((1, 4, 10, 13))],
-            {"id": "cafe", "kind": "building.stone_shop", "rect": [7, 3, 2, 1], "door": "S", "label": "A café"},
-            *[{"id": f"house-s{i}", "kind": "building.stone_house", "rect": [x, 5, 2, 2], "door": "N"} for i, x in enumerate((2, 6, 12))],
-        ], exits=[], entries={"": [1, 4]},
-            spots=[{"id": "amman", "at": [8, 4], "label": "A street in Amman", "note": "m24's handoff lands here"}],
-            dress=[{"kind": "tree.olive", "along": "street", "every": 5}, {"kind": "lamp.post", "along": "street", "every": 6}]),
-        "states": [{"id": "sun", "light": "day", "weather": "clear"}],
-        "npcs": [_talk("folk.jordanian", [5, 4], "A man selling coffee from a brass pot. “Korean? The traders from Seoul come every month now.”")],
-    },
-}
-
-# Road challengers: 10, 3 blocking (misaeng-arc.md, "Road challengers")
-PLANS_MS["The subway"]["challengers"] = [
-    # Susaek-dong to Jongno (m2): a commuter with a pocket board in the aisle at the Jongno doors (blocking)
-    _ch("commuter", "folk.salaryman", [21, 3], f"node:{k(1)}", f"node:{k(2)}",
-        "A man in a grey suit stands in the doorway with a magnetic pocket board, a problem half-solved. “Excuse me. Do you play? "
-        "I've been stuck on this since Hapjeong.”",
-        "“…Oh. Of course. Thank you. This is my stop too.”", "The man with the pocket board is on the next problem.",
-        blocks={"exit": "Jongno"}, view=1, guard="to-Jongno"),
-]
-PLANS_MS["Jongno"]["challengers"] = [
-    # Tapgol Park's regulars: one on the first morning (m2), two when Jang goes out with Park Jong-gi (m4)
-    _ch("regular-1", "folk.grandpa", [3, 5], f"node:{k(1)}", f"node:{k(2)}",
-        "An old man at the stone table waves you over without looking up. “You. You've got a player's hands. Sit.”",
-        "“Hm. Where did you learn that? Go on, go to work.”", "The old man is playing someone else now."),
-    _ch("regular-2", "folk.grandpa", [8, 5], f"node:{k(3)}", f"node:{k(4)}",
-        "An old man in a flat cap sets out the stones. “A young man in a tie, at Tapgol? Sit down, it's free.”",
-        "“…Again tomorrow. Same time.”", "The old man in the flat cap is asleep on the bench."),
-    _ch("regular-3", "folk.grandpa", [5, 5], f"node:{k(3)}", f"node:{k(4)}",
-        "The man who keeps the score for everyone. “Nobody's beaten him all week. Want to try?”",
-        "“Huh. Wait till I tell him.”", "The scorekeeper is telling everyone about your game."),
-    # the ₩100,000 mission (m18): the corner-shop owner at his door (blocking); two passers-by who play
-    _ch("shop-owner", "folk.salaryman", [20, 7], f"node:{k(17)}", f"node:{k(18)}",
-        "The corner-shop owner leans in his doorway. “Selling on my pavement, are you? Let's see if you can sell to me.”",
-        "“…Not bad. Not good enough, but not bad.”", "The corner-shop owner is selling dried squid, faster than you.",
-        blocks="m18", view=1, guard=[21, 7]),
-    # (the same man is the mission's rival seller: talked to while it's on, he out-sells you; tk-modern.js "rival")
-    _ch("passer-1", "folk.salaryman", [10, 10], f"node:{k(17)}", f"node:{k(18)}",
-        "An office worker on his lunch break stops at your box. “What are you selling? Tell you what: a game first.”",
-        "“Fine. I'll take one. Don't tell my wife.”", "The office worker has gone back in."),
-    _ch("passer-2", "folk.officewoman", [24, 10], f"node:{k(17)}", f"node:{k(18)}",
-        "A woman with a go app open on her phone. “You're the one from the Baduk Association, aren't you? I've seen your face.”",
-        "“…I must have been wrong. Good luck.”", "The woman is back on her phone."),
-]
-PLANS_MS["Baekjin Trading"]["challengers"] = [
-    # to Baekjin Trading (m12): Park's coached clerk at the door (blocking); a courier
-    _ch("clerk", "folk.salaryman", [9, 5], f"node:{k(11)}", f"node:{k(12)}",
-        "A clerk steps out of Baekjin's door as you come up. “Sales Team 3? Mr Park said you might come. Everything's in order. "
-        "There's nothing to see.”",
-        "“…Go in, then. It's not my business.”", "The clerk has gone back to his desk.", blocks="baekjin", view=1, guard="door"),
-    _ch("courier", "folk.salaryman", [4, 5], f"node:{k(11)}", f"node:{k(12)}",
-        "A courier sits on his scooter, a board balanced on the box. “Ten minutes till my next drop. One game?”",
-        "“Ha! Good one.”", "The courier has gone."),
-]
-PLANS_MS["Amman"]["challengers"] = [
-    # m24: a café player
-    _ch("cafe-player", "folk.jordanian", [9, 5], f"node:{k(23)}", None,
-        "A man at the café table has a go board out among the coffee cups. “A Korean! Sit. My cousin taught me in Seoul.”",
-        "“Next time you come, I'll be better.”", "The man at the café is teaching his nephew."),
-]
-del PLANS_MS["Amman"]["challengers"][0]["until"]   # the epilogue: he stays
-PLANS_MS["Jongno"]["challengers"][3]["rival"] = {"say": [
-    "The corner-shop owner calls out to the same people you were about to ask. “Dried squid! Grilled while you wait!” They go to him.",
-    "“Look at you. Holding them out like you're apologising. Selling's not begging, son.”"]}
+BOOK1 = _b1()
+KEYS_MS = BOOK1["keys"]
+PLANS_MS = _book1()
 
 TABLES = {"NEW_KINDS": NEW_KINDS, "LINE_KINDS": LINE_KINDS, "ZONE_KINDS": ZONE_KINDS, "ART": ART}
 ZH_PLACES_MS = {}   # English only (the user: "we dont need chinese lines for this")

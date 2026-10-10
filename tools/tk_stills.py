@@ -244,6 +244,20 @@ CAST.update({
     "ms_kimsh": ("Kim Seok-ho", "an earnest young Korean man with short hair and glasses, in a grey suit and a green "
                  "tie"),
     "ms_somi": ("Somi", "a little Korean girl of five with two small buns tied with pink ribbons, in a yellow dress"),
+    "ms_stevehan": ("Steve Han", "a sleek, cold Korean-American department head in his forties, raised in the US, with "
+                    "slicked-back black hair, in a sharp tailored black suit and a steel-blue tie"),
+    "ms_go": ("Go Gwa-jang", "a round, sulky Korean section head in his forties with short hair and heavy cheeks, in a "
+              "rumpled brown suit and a mustard-brown tie"),
+    "ms_buyer": ("the American buyer", "a white American businessman in his fifties with brown side-parted hair, in a "
+                 "grey suit, light blue shirt and a red tie"),
+    "ms_leesh": ("Lee Sang-hyun", "an earnest young Korean intern with short hair and glasses, in a navy suit and a plum "
+                 "tie"),
+    "ms_hanfather": ("Han Seok-yul's father", "a weathered Korean factory worker in his fifties with short greying hair "
+                     "and stubble, in blue work overalls, his hands black with grease"),
+    "ms_sponsor": ("Jang's sponsor", "a kindly older Korean businessman in his sixties with grey side-parted hair and "
+                   "glasses, in a dark suit and a wine-red tie"),
+    "ms_senior": ("the deputy", "an impatient Korean office worker in his late thirties with untidy hair, in a white "
+                  "shirt with rolled sleeves and a dark green tie"),
     "ms_examiner": ("the examiner", "a reserved Korean man in his fifties with greying side-parted hair and glasses, in "
                     "a dark suit and a plain grey tie, holding a clipboard"),
     "ms_ahnfather": ("Ahn's father", "a cold, stern Korean army officer in his fifties with short black hair, in an "
@@ -335,8 +349,10 @@ STILLS = {
 def cast_in(sid):
     """The CAST keys a still's scene names, in the order they appear."""
     scene = STILLS[sid]["prompt"]
-    found = [(scene.find(name), key) for key, (name, _) in CAST.items() if re.search(rf"\b{name}\b", scene)]
-    return [key for _, key in sorted(found)]
+    spans = [(m.start(), m.end(), key) for key, (name, _) in CAST.items() for m in re.finditer(rf"\b{re.escape(name)}\b", scene)]
+    # a name inside a longer one ("Han Seok-yul" in "Han Seok-yul's father") is that longer person, not a second one
+    spans = [sp for sp in spans if not any(o[0] <= sp[0] and sp[1] <= o[1] and (o[1] - o[0]) > (sp[1] - sp[0]) for o in spans)]
+    return list(dict.fromkeys(key for _, _, key in sorted(spans)))
 
 
 def prompt(sid, n_style=0, cast_refs=()):

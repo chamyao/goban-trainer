@@ -71,7 +71,7 @@ const WorldModern = {
     if (!el) { el = document.createElement("button"); el.type = "button"; el.className = "tk-strip"; host.append(el); }
     el.dataset.move = n;
     el.title = `${w.record.title || "The record"}: the game after move ${n}`;
-    el.innerHTML = `${this.boardSvg(w, n, 76)}<span>${n ? `Move ${n}` : "The empty board"}</span>`;
+    el.innerHTML = `${this.boardSvg(w, n, 76)}<span>${n ? `Move ${n}` : "The empty board"}</span><span class="tk-strip-short">${n ? `Move ${n}` : "Move 0"}</span>`;
     el.onclick = e => { e.stopPropagation(); this.showBoard(w, n); };
   },
   showBoard(w, n) {
@@ -253,6 +253,7 @@ const WorldModern = {
       b.type = "button"; b.textContent = f.label || scene.placeName(f.to);
       const here = f.to === scene.placeId, open = here || scene.placeOpen(f.to);
       b.disabled = here || !open;
+      if (!here && f.to === scene.goalFloor && scene.goalPoint && scene.goalPoint()) b.textContent = `◆ ${b.textContent}`;   // where the story goes next
       if (here) b.textContent += " (you're here)";
       else if (!open) b.textContent += " (no reason to go yet)";
       b.onclick = () => { close(); scene.go(f.to); };
@@ -285,11 +286,21 @@ const WorldModern = {
       const b = el.getBoundingClientRect();
       if (b.height && b.right > col && b.top < R.top + R.height / 2) y = Math.max(y, b.bottom - R.top + 6);
     }
-    for (const el of [ui.querySelector(".tk-strip"), ui.querySelector(".tk-trade-chip")]) {
-      if (!el) continue;
-      el.style.top = `${Math.round(y)}px`;
-      y += el.getBoundingClientRect().height + 6;
+    const strip = ui.querySelector(".tk-strip"), chip = ui.querySelector(".tk-trade-chip");
+    // a narrow screen (a phone): the strip is a small chip in the menu button's row, so the map below it takes taps
+    const narrow = R.width < 560, menu = document.querySelector(".tk-map .tk-menu-btn, .tk-map .town-skip");
+    if (strip) {
+      strip.classList.toggle("compact", narrow);
+      const mb = menu && menu.getBoundingClientRect();
+      if (narrow && mb && mb.height) {
+        strip.style.top = `${Math.round(mb.top - R.top)}px`; strip.style.right = `${Math.round(R.right - mb.left + 6)}px`;
+      } else {
+        strip.style.right = ""; strip.style.top = `${Math.round(y)}px`;
+        y += strip.getBoundingClientRect().height + 6;
+      }
     }
+    if (chip) chip.style.top = `${Math.round(y)}px`;
+    if (window.__w && window.__w.fitCamera && window.__w.mapW) window.__w.fitCamera();   // the camera keeps the room clear of them (hudTop)
   },
 };
 

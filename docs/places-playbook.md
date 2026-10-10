@@ -183,11 +183,21 @@ These were each learned from a real complaint, and each is a rule, not a one-off
   three Chinese kits. Misaeng is becoming five books, worlds 21–25 (Plot alt2, misaeng-arc.md; maps per book in
   data/tk_maps/w21…w25): the shared places (the tower, Jongno, Susaek-dong …) carry over; each book's beat spots come
   with its design. claude/places-misaeng sits on claude/integration-alt2 and carries only Misaeng's changes (Integration
-  alt2 can't take main's Book 15 work through it): build on their head, never on claude/plot-places.
+  alt2 can't take main's Book 15 work through it): build on their head, never on claude/plot-places. They cherry-pick: keep to plain commits (no merges); after they
+  take a batch, reset the branch onto their head before the next. After a seoul kit change, recompile w21 (`--kit seoul`) on
+  their head before pushing maps: the tile ids move with Graphics' sheets.
+- **A book is a config over shared places** (Misaeng's five books, `tools/tk_plans_ms.py`): the places are builders
+  with no beats in them (`_places(floors)`); each book (`_b1()` …) names the places and tower floors it uses and adds
+  its own beat spots, givers and deliveries, people, challengers, lights and objectives; `book(cfg)` assembles them and
+  drops exits to places the book doesn't use. Mechanics a later book reuses are functions (`audit_spots`,
+  `seat_spots`, `trade_people`, `RIVAL`). A new book is a new config and an arc entry (world → its plans).
 - **A lift** (Integration alt2's `"use": "lift"`, `"floors": [{label, to}]`): a spot that opens a floor menu. The tower
   has one in the lobby and one on each floor (`_with_lift`), each floor's arrivals from every other floor at its lift.
   The floors hang off the lobby by `"owns"` (a plan key: rooms reached another way, whose doors lead back to it), and
   each floor's own door is the stairs down.
+- **Walk a book against its own story.** The engine reads data/tk.json: if the story there is older than the maps
+  (items it doesn't define, beats renamed), a giver gives nothing and the walk fails for no fault of the maps. Rebuild
+  tk.json locally (`python3 tools/build_tk.py`) before the walk, and put it back after (Integration commits it).
 - **No dressing on a crosswalk** (`free()` treats it as paving).
 - **Floors are any walkable material** in vocab (`room(..., floor="carpet")`): Misaeng's carpet, office_tile, lino.
 - **A thing that gives an item when searched** is a spot with `gives`, `gives_when`, `give`, `given` (as a person has

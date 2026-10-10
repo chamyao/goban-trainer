@@ -227,7 +227,16 @@
    "h": 1
   }
  ],
- "spots": [],
+ "spots": [
+  {
+   "id": "sun-flat-door",
+   "x": 14.5,
+   "y": 20.7,
+   "node": "",
+   "label": "Sun Ji-young's door",
+   "note": "handoffs to Sun at home land here"
+  }
+ ],
  "npcs": [
   {
    "id": "npc-1",
@@ -287,8 +296,20 @@
  },
  "states": [
   {
-   "id": "evening",
+   "id": "day",
+   "until": "node:21-m13",
+   "light": "day"
+  },
+  {
+   "id": "dusk",
+   "when": "node:21-m13",
+   "until": "node:21-m13b",
    "light": "dusk"
+  },
+  {
+   "id": "night",
+   "when": "node:21-m13b",
+   "light": "night"
   }
  ],
  "ways": {

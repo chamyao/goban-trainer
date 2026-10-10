@@ -332,6 +332,7 @@ KINDS.update({
     "prop.glass_water": (1, 1, False),   # the board room's drinks (m17)
     "prop.teacup": (1, 1, False),
     "prop.coffee_cup": (1, 1, False),
+    "prop.memorial_tent": (4, 2, True),   # a white memorial tent with portraits (Daehanmun)
 })
 FALLBACK.update({
     "building.office_tower": ["building.tower", "building.hall_grand", "building.hall"],
@@ -387,6 +388,7 @@ FALLBACK.update({
     "prop.glass_water": ["furn.jar"],
     "prop.teacup": ["furn.jar"],
     "prop.coffee_cup": ["furn.jar"],
+    "prop.memorial_tent": ["building.tent", "camp.table"],
 })
 MATERIALS.update({"asphalt": False,     # a carriageway: crossed only at a crosswalk
                   "crosswalk": True,

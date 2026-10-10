@@ -187,43 +187,6 @@
  ],
  "spots": [
   {
-   "id": "m2",
-   "x": 24.5,
-   "y": 14.7,
-   "node": "21-m2",
-   "label": "The front desk"
-  },
-  {
-   "id": "bins",
-   "x": 4.5,
-   "y": 16.7,
-   "node": "",
-   "label": "The recycling bins",
-   "gives": "waybill_scrap",
-   "gives_when": "node:21-m3",
-   "give": [
-    "You go through the bins by the gates, sheet by sheet. Stuck to the back of a torn page: the rest of the waybill, and a name on it in someone else's hand. Kim Seok-ho."
-   ],
-   "given": [
-    "The recycling bins. You've found what you were looking for."
-   ]
-  },
-  {
-   "id": "m3b",
-   "x": 8.5,
-   "y": 16.7,
-   "node": "21-m3b",
-   "label": "The lobby"
-  },
-  {
-   "id": "lobby-lift",
-   "x": 18.5,
-   "y": 6.7,
-   "node": "",
-   "label": "The lifts",
-   "note": "the handoff to Oh lands here"
-  },
-  {
    "id": "lift",
    "x": 18.5,
    "y": 2.7,
@@ -243,12 +206,8 @@
      "to": "one-international--hr"
     },
     {
-     "label": "6F · Finance",
-     "to": "one-international--finance"
-    },
-    {
-     "label": "9F · The resources team",
-     "to": "one-international--resources"
+     "label": "8F · The textile team",
+     "to": "one-international--textile"
     },
     {
      "label": "14F · Sales Team 3",
@@ -259,23 +218,48 @@
      "to": "one-international--meeting"
     },
     {
-     "label": "16F · The audit room",
-     "to": "one-international--audit"
-    },
-    {
-     "label": "20F · The board room",
-     "to": "one-international--board-room"
-    },
-    {
-     "label": "21F · The executive's office",
-     "to": "one-international--exec-floor"
-    },
-    {
      "label": "R · The roof",
      "to": "one-international--roof"
     }
    ],
    "use": "lift"
+  },
+  {
+   "id": "m2",
+   "x": 24.5,
+   "y": 14.7,
+   "node": "21-m2",
+   "label": "The front desk"
+  },
+  {
+   "id": "bins",
+   "x": 4.5,
+   "y": 16.7,
+   "node": "",
+   "label": "The recycling bins",
+   "gives": "waybill_scrap",
+   "gives_when": "node:21-m7",
+   "give": [
+    "You go through the bins by the gates, sheet by sheet. Stuck to the back of a torn page: the rest of the waybill, glue on the back, and a name on it in someone else's hand. Kim Seok-ho."
+   ],
+   "given": [
+    "The recycling bins. You've found what you were looking for."
+   ]
+  },
+  {
+   "id": "m8",
+   "x": 8.5,
+   "y": 16.7,
+   "node": "21-m8",
+   "label": "The recycling bins"
+  },
+  {
+   "id": "lobby-lift",
+   "x": 18.5,
+   "y": 6.7,
+   "node": "",
+   "label": "The lifts",
+   "note": "the handoff to Oh lands here"
   }
  ],
  "npcs": [
@@ -337,11 +321,7 @@
    18,
    4
   ],
-  "one-international--finance": [
-   18,
-   4
-  ],
-  "one-international--resources": [
+  "one-international--textile": [
    18,
    4
   ],
@@ -350,18 +330,6 @@
    4
   ],
   "one-international--meeting": [
-   18,
-   4
-  ],
-  "one-international--audit": [
-   18,
-   4
-  ],
-  "one-international--board-room": [
-   18,
-   4
-  ],
-  "one-international--exec-floor": [
    18,
    4
   ],

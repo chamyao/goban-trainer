@@ -1379,7 +1379,7 @@
    "spot": "s7",
    "scene": "s7",
    "title": "Blades in the Bridal Room",
-   "objective": "Go into the east palace, to the bridal room. It is your wedding night.",
+   "objective": "Go to Nanxu.",
    "after": [
     "15-s6"
    ],
@@ -1556,17 +1556,18 @@
      196297
     ]
    ],
-   "objective_zh": "进东府，去洞房。今晚是你的新婚之夜。",
+   "board": false,
+   "objective_zh": "",
    "title_zh": "洞房刀枪"
   },
   {
    "node": "15-s8",
    "role": "main",
-   "place": "nanxu--east-palace",
+   "place": "nanxu--sq-hall",
    "spot": "s8",
    "scene": "s8",
-   "title": "Don't Lie to Me",
-   "objective": "The year is ending. Go to the east palace's courtyard, to your husband.",
+   "title": "The Gilded Cage",
+   "objective": "Go to Nanxu.",
    "after": [
     "15-s7"
    ],
@@ -1743,17 +1744,18 @@
      103150
     ]
    ],
-   "objective_zh": "快到年底了。去东府的院子里，找你的丈夫。",
-   "title_zh": "你别瞒我"
+   "board": false,
+   "objective_zh": "",
+   "title_zh": "软困"
   },
   {
    "node": "15-s9",
    "role": "main",
-   "place": "nanxu--wu-hall",
+   "place": "nanxu",
    "spot": "s9",
    "scene": "s9",
-   "title": "New Year's Day",
-   "objective": "It is New Year's Day. Go to Lady Wu's palace, and ask your mother's leave.",
+   "title": "Year's End",
+   "objective": "The year is ending. Ride out by the east gate to the riding ground.",
    "after": [
     "15-s8"
    ],
@@ -1930,17 +1932,18 @@
      160642
     ]
    ],
-   "objective_zh": "今天是大年初一。去国太府，向母亲辞行。",
-   "title_zh": "正旦"
+   "board": false,
+   "objective_zh": "快到年底了。出东门，到校场去。",
+   "title_zh": "岁末"
   },
   {
    "node": "15-s10",
    "role": "main",
-   "place": "nanxu--sq-hall",
+   "place": "nanxu--east-palace",
    "spot": "s10",
    "scene": "s10",
-   "title": "The Jade Inkstone",
-   "objective": "Go to Nanxu.",
+   "title": "Don't Lie to Me",
+   "objective": "Go into the east palace, to Liu Bei.",
    "after": [
     "15-s9"
    ],
@@ -2117,18 +2120,17 @@
      63807
     ]
    ],
-   "board": false,
-   "objective_zh": "",
-   "title_zh": "玉砚"
+   "objective_zh": "进东府，去见刘备。",
+   "title_zh": "你别瞒我"
   },
   {
    "node": "15-s11",
    "role": "main",
-   "place": "the-road-to-chaisang",
+   "place": "nanxu--wu-hall",
    "spot": "s11",
    "scene": "s11",
-   "title": "The Road Block",
-   "objective": "Push on along the road toward the border, ahead of the pursuit.",
+   "title": "New Year's Day",
+   "objective": "It is New Year's Day. Go to Lady Wu's palace, and ask your mother's leave.",
    "after": [
     "15-s10"
    ],
@@ -2305,22 +2307,21 @@
      62338
     ]
    ],
-   "board": false,
-   "objective_zh": "沿着大路往边界赶，别让追兵追上。",
-   "title_zh": "山脚拦路"
+   "objective_zh": "今天是大年初一。去国太府，向母亲辞行。",
+   "title_zh": "正旦"
   },
   {
    "node": "15-s12",
-   "role": "boss",
-   "place": "the-road-to-chaisang",
+   "role": "main",
+   "place": "nanxu--sq-hall",
    "spot": "s12",
    "scene": "s12",
-   "title": "Are You in Revolt?",
-   "objective": "Xu Sheng and Ding Feng's men block the road. Stop in front of each rank, facing it, and let them see who is in the carriage.",
+   "title": "The Jade Inkstone",
+   "objective": "Go to Nanxu.",
    "after": [
     "15-s11"
    ],
-   "grade": null,
+   "grade": "11K",
    "pool": [
     [
      "segoe-tsumego-dictionary-part-2",
@@ -2443,8 +2444,59 @@
      3714
     ]
    ],
-   "objective_zh": "徐盛、丁奉的兵马拦住了大路。在每一排人面前停下，面对他们，让他们看清车里坐的是谁。",
-   "title_zh": "你们想造反吗"
+   "pool_easy": [
+    [
+     "specialized-training-in-tesuji-1",
+     210494
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63781
+    ],
+    [
+     "specialized-training-in-tesuji-4",
+     81205
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     50705
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62338
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     160646
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63776
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     103412
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63801
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     167172
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63830
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     108058
+    ]
+   ],
+   "board": false,
+   "objective_zh": "",
+   "title_zh": "玉砚"
   },
   {
    "node": "15-s13",
@@ -2452,8 +2504,8 @@
    "place": "the-road-to-chaisang",
    "spot": "s13",
    "scene": "s13",
-   "title": "The Rearguard",
-   "objective": "Chen Wu and Pan Zhang's men are on the road. Stop in front of each rank, facing it, and let them see you.",
+   "title": "The Road Block",
+   "objective": "Push on along the road toward the border, ahead of the pursuit.",
    "after": [
     "15-s12"
    ],
@@ -2631,21 +2683,21 @@
     ]
    ],
    "board": false,
-   "objective_zh": "陈武、潘璋的兵马挡在路上。在每一排人面前停下，面对他们，让他们看见你。",
-   "title_zh": "断后"
+   "objective_zh": "沿着大路往边界赶，别让追兵追上。",
+   "title_zh": "山脚拦路"
   },
   {
    "node": "15-s14",
-   "role": "main",
-   "place": "liulangpu",
+   "role": "boss",
+   "place": "the-road-to-chaisang",
    "spot": "s14",
    "scene": "s14",
-   "title": "Liulangpu",
-   "objective": "Go on to the river at Liulangpu.",
+   "title": "Are You in Revolt?",
+   "objective": "Xu Sheng and Ding Feng's men block the road. Stop in front of each rank, facing it, and let them see who is in the carriage.",
    "after": [
     "15-s13"
    ],
-   "grade": "11K",
+   "grade": null,
    "pool": [
     [
      "the-unexpected-tesuji",
@@ -2768,35 +2820,144 @@
      3145
     ]
    ],
+   "objective_zh": "徐盛、丁奉的兵马拦住了大路。在每一排人面前停下，面对他们，让他们看清车里坐的是谁。",
+   "title_zh": "你们想造反吗"
+  },
+  {
+   "node": "15-s15",
+   "role": "main",
+   "place": "the-road-to-chaisang",
+   "spot": "s15",
+   "scene": "s15",
+   "title": "The Rearguard",
+   "objective": "Chen Wu and Pan Zhang's men are on the road. Stop in front of each rank, facing it, and let them see you.",
+   "after": [
+    "15-s14"
+   ],
+   "grade": "11K",
+   "pool": [
+    [
+     "the-great-tesuji-encyclopedia-6",
+     47683
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-2",
+     144370
+    ],
+    [
+     "common-life-and-death-problems",
+     25591
+    ],
+    [
+     "fighting-and-escaping-part-2",
+     5264
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     62723
+    ],
+    [
+     "specialized-training-in-tesuji-4",
+     81263
+    ],
+    [
+     "the-unexpected-tesuji",
+     107304
+    ],
+    [
+     "common-life-and-death-problems",
+     26026
+    ],
+    [
+     "200-basic-go-problems",
+     176600
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147465
+    ],
+    [
+     "fighting-and-escaping-part-1",
+     7334
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-4",
+     2026
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-2",
+     712
+    ],
+    [
+     "nie-weipings-tsumego-encyclopedia",
+     52999
+    ],
+    [
+     "go-puzzles-at-a-glance",
+     28687
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-2",
+     715
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3466
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3685
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     40506
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     531
+    ],
+    [
+     "go-seigen-tsumego-collection-part-3",
+     31176
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     65954
+    ],
+    [
+     "segoe-tsumego-dictionary-part-3",
+     16192
+    ],
+    [
+     "segoe-tsumego-dictionary-part-2",
+     865
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-1",
+     143429
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147914
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-3",
+     865
+    ],
+    [
+     "the-unexpected-tesuji",
+     111493
+    ],
+    [
+     "the-unexpected-tesuji",
+     25612
+    ],
+    [
+     "weiqi-life-and-death-drills-beginner-part-1",
+     14236
+    ]
+   ],
    "pool_easy": [
-    [
-     "specialized-training-in-tsumego-2",
-     103412
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     63801
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     167172
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     63830
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     108058
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     166753
-    ],
-    [
-     "specialized-training-in-tsumego-1",
-     63802
-    ],
     [
      "specialized-training-in-tsumego-4",
      50644
@@ -2816,6 +2977,222 @@
     [
      "specialized-training-in-tsumego-2",
      103153
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63811
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     103426
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     103427
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     103417
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     21214
+    ],
+    [
+     "common-life-and-death-problems",
+     12612
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62335
+    ]
+   ],
+   "board": false,
+   "objective_zh": "陈武、潘璋的兵马挡在路上。在每一排人面前停下，面对他们，让他们看见你。",
+   "title_zh": "断后"
+  },
+  {
+   "node": "15-s16",
+   "role": "main",
+   "place": "liulangpu",
+   "spot": "s16",
+   "scene": "s16",
+   "title": "Liulangpu",
+   "objective": "Go on to the river at Liulangpu.",
+   "after": [
+    "15-s15"
+   ],
+   "grade": "11K",
+   "pool": [
+    [
+     "weiqi-life-and-death-drills-beginner-part-4",
+     63709
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3529
+    ],
+    [
+     "go-seigen-tsumego-collection-part-5",
+     31176
+    ],
+    [
+     "beautiful-dan-level-tsumego-100",
+     139088
+    ],
+    [
+     "the-unexpected-tesuji",
+     1364
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-2",
+     133311
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3773
+    ],
+    [
+     "200-selected-problems-for-repetitive-practice",
+     162795
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     43907
+    ],
+    [
+     "beautiful-dan-level-tsumego-100",
+     121672
+    ],
+    [
+     "hitomi-tsumego",
+     160831
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-2",
+     1554
+    ],
+    [
+     "bedtime-tsumego-part-2",
+     138286
+    ],
+    [
+     "nie-weipings-tsumego-encyclopedia",
+     52771
+    ],
+    [
+     "weiqi-small-leisure-collection",
+     25612
+    ],
+    [
+     "hashimoto-masterpiece-collection",
+     30513
+    ],
+    [
+     "segoe-tesuji-dictionary-part-3",
+     17779
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     127047
+    ],
+    [
+     "segoe-tsumego-dictionary-part-1",
+     15830
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-2",
+     132155
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     580
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-1",
+     1333
+    ],
+    [
+     "xuanxuan-qijing",
+     18433
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-2",
+     144179
+    ],
+    [
+     "the-great-tesuji-encyclopedia-5",
+     47614
+    ],
+    [
+     "ishida-yoshio-tsumego-challenge",
+     37756
+    ],
+    [
+     "weiqi-rapid-drill-800-part-2",
+     3316
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     148870
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-2",
+     1387
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-1",
+     143587
+    ]
+   ],
+   "pool_easy": [
+    [
+     "specialized-training-in-tsumego-2",
+     103427
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     103417
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     21214
+    ],
+    [
+     "common-life-and-death-problems",
+     12612
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62335
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     108054
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     50692
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     167174
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     7407
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     84636
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62345
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63774
     ]
    ],
    "board": false,

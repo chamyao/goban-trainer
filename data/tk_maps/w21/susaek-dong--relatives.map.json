@@ -115,15 +115,7 @@
    "id": "sofa"
   }
  ],
- "spots": [
-  {
-   "id": "m15",
-   "x": 12.5,
-   "y": 10.7,
-   "node": "21-m15",
-   "label": "The relatives' flat"
-  }
- ],
+ "spots": [],
  "npcs": [
   {
    "id": "npc-1",

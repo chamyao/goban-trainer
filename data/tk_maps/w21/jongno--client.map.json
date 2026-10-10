@@ -130,14 +130,33 @@
  ],
  "spots": [
   {
-   "id": "m4",
+   "id": "m11",
    "x": 12.5,
    "y": 8.7,
-   "node": "21-m4",
+   "node": "21-m11",
    "label": "The client's office"
   }
  ],
- "npcs": [],
+ "npcs": [
+  {
+   "id": "npc-1",
+   "kind": "folk.salaryman",
+   "x": 6.5,
+   "y": 8.9,
+   "say": [
+    "A clerk at the client's, smirking at his screen. He doesn't get up."
+   ]
+  },
+  {
+   "id": "npc-2",
+   "kind": "folk.officewoman",
+   "x": 18.5,
+   "y": 8.9,
+   "say": [
+    "A woman at the client's answers the phone. “He's in a meeting. He's always in a meeting.”"
+   ]
+  }
+ ],
  "exits": [
   {
    "to": "jongno",

@@ -36,7 +36,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=106`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=108`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
@@ -255,18 +255,18 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=106`);
-      this.load.json("kit", `assets/tk/kits/${kit}.json?v=49`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=109`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=108`);
+      this.load.json("kit", `assets/tk/kits/${kit}.json?v=51`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=111`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
-      for (const [s, path] of Object.entries(kit.sheets)) this.load.image(`kit-${s}`, `${path}?v=49`);   // the sheets change with the kits: same key
+      for (const [s, path] of Object.entries(kit.sheets)) this.load.image(`kit-${s}`, `${path}?v=51`);   // the sheets change with the kits: same key
       const [fw, fh] = kit.folk.frame;
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
       for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=123`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=125`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -537,7 +537,7 @@ function worldScenes() {
       if (!host || !cv.clientWidth) return 0;
       const r = cv.getBoundingClientRect(), k = cv.clientWidth / this.scale.width * this.cameras.main.zoom;
       let low = r.top;
-      for (const el of host.querySelectorAll(".town-goal, .tk-menu-row")) {
+      for (const el of host.querySelectorAll(".town-goal, .tk-menu-row, .tk-strip, .tk-trade-chip")) {   // (Misaeng's strip and cash chip, tk-modern.js)
         const b = el.getBoundingClientRect();
         if (b.height && b.top < r.top + r.height / 3) low = Math.max(low, b.bottom);
       }
@@ -632,8 +632,16 @@ function worldScenes() {
         if (d > WORLD_NEAR + 16) s.armed = true;
         else if (s.armAt && Math.hypot(P.x - s.armAt.x, P.y - s.armAt.y) > 28) { s.armed = true; s.armAt = null; }
         else if (d < WORLD_NEAR && s.armed) {
-          s.armed = false;
+          // a thing with something to find in it (the lobby's bins): walking up to it is searching it
+          if (s.gives && this.cond(s.givesWhen) && !WorldItems.has(this.w, s.gives) && this.w.items && this.w.items[s.gives]) {
+            s.armed = false; this.walk = null; this.player.setVelocity(0);
+            return this.act({ kind: "spot", k: Object.keys(this.spots).find(k => this.spots[k] === s) });
+          }
           const q = this.openQuest(s);
+          // a beat still gated on an item that a nearer thing gives (m3b's spot beside the bins): the giver goes first
+          const g = q && this.available(q) && this.gateFor(q), need = g ? [].concat(g.needs || []).filter(c => /^item:/.test(c) && !this.cond(c)).map(c => c.slice(5)) : [];
+          if (need.length && Object.values(this.spots).some(o => o !== s && o.gives && need.includes(o.gives) && Math.hypot(P.x - o.x, P.y - o.y) < d + 24)) continue;
+          s.armed = false;
           if (q) return this.approach(q, s);   // a tap on the spot ends its walk here
         }
       }
@@ -1174,7 +1182,20 @@ function worldScenes() {
           const items = need.filter(c => c.startsWith("item:")).map(c => c.slice(5)), marks = need.filter(c => c.startsWith("mark:")).map(c => c.slice(5));
           // a delivery place that can take it now first (Hulao: Zhang Fei's post before Liu Bei's flank, which says "Not yet")
           const posts = Object.values(this.spots).filter(s => s.needs && marks.includes(s.delivers)), ready = posts.filter(s => this.cond(s.when) && this.cond(s.needs));
+          // nothing to deliver yet: whoever gives what the deliveries need (Misaeng m4: the copier before Kim's desk)
+          if (!ready.length) for (const s of posts) for (const c of s.needs) if (/^item:/.test(c) && !this.cond(c) && !items.includes(c.slice(5))) items.push(c.slice(5));
+          // the audit board's mark (Misaeng): the clues not yet found, then the board itself once two can be linked
+          const A = this.w.audit;
+          if (A && marks.includes(A.done)) {
+            for (const c of A.clues) if (!WorldItems.has(this.w, c) && !items.includes(c)) items.push(c);
+            const L = typeof WorldModern !== "undefined" && A.links[WorldModern.auditLinked(this.w).indexOf(false)];
+            if (L && L.pair.every(c => WorldItems.has(this.w, c))) {   // the question on the board now can be answered
+              const t = Object.values(this.spots).find(s => s.opens === "audit");
+              if (t) { this.goalHops = 0; return { x: t.x, y: t.y - 4 }; }
+            }
+          }
           const ts = [...this.npcs.filter(n => n.gives && items.includes(n.gives) && n.spr.visible).map(n => ({ x: n.spr.x, y: n.spr.y - 8 })),
+                      ...Object.values(this.spots).filter(s => s.gives && items.includes(s.gives) && this.cond(s.givesWhen)).map(s => ({ x: s.x, y: s.y - 4 })),   // a thing that gives it (the bins)
                       ...(ready.length ? ready : posts).map(s => ({ x: s.x, y: s.y - 4 }))];
           this.goalHops = 0;
           if (ts.length) return ts.sort((a, b) => d(a) - d(b))[0];
@@ -1205,7 +1226,11 @@ function worldScenes() {
           for (let n = id; n !== this.placeId; n = prev[n]) this.goalHops++;
           while (prev[hop] !== this.placeId) hop = prev[hop];
           const e = this.exits.find(e => e.to === hop);
-          return e ? { x: e.rect.centerX, y: e.rect.centerY } : null;
+          if (e) return { x: e.rect.centerX, y: e.rect.centerY };
+          // a floor reached by a lift (Misaeng's tower, tk-modern.js): the lift that stops there, its floor marked in the menu
+          const lift = Object.values(this.spots).find(s => s.use === "lift" && (s.floors || []).some(f => f.to === hop));
+          this.goalFloor = lift ? hop : null;
+          return lift ? { x: lift.x, y: lift.y - 4 } : null;
         }
         for (const n of near[id] || []) if (!(n in prev)) { prev[n] = id; queue.push(n); }
       }

@@ -193,6 +193,14 @@ const TK_CHARS = {
   ms_trainee2: { name: "Trainee", skin: "#f8dcc4", hair: "#1a1418", hat: "fringe", robe: "#c8d0d8", trim: "#b8c0c8", legs: "#2e3a4a", beard: "none", eyes: "normal", glasses: "#2a2228" },
   ms_trainee3: { name: "Trainee", skin: "#f8dcc4", hair: "#2a2024", hat: "ponytail", pin: "#c8392c", robe: "#e88a6a", trim: "#e88a6a", legs: "#3a4a6a", beard: "none", eyes: "kind" },
   ms_daycare: { name: "Daycare teacher", skin: "#f8dcc4", hair: "#3a2a26", hat: "ponytail", robe: "#8ab88a", trim: "#f4f0e8", legs: "#4a4a5a", beard: "none", eyes: "kind" },
+  // Book 1 (Not Yet Alive)
+  ms_stevehan: { name: "Steve Han", skin: "#efc59d", hair: "#1a1416", hat: "slick", robe: "#1e2230", trim: "#1e2230", shirt: "#f4f6fa", tie: "#5a6a8a", legs: "#1a1e2a", beard: "none", eyes: "narrow" },   // US-raised textile head, a sharp suit
+  ms_go: { name: "Go Gwa-jang", skin: "#e8b88c", hair: "#2a2024", hat: "short", robe: "#5a5048", trim: "#5a5048", shirt: "#e8e4dc", tie: "#7a5a2a", legs: "#4a4238", beard: "none", eyes: "narrow", fat: true },   // round, sulky
+  ms_buyer: { name: "American buyer", skin: "#f4d8c8", hair: "#a87a4a", hat: "parted", robe: "#7a7a84", trim: "#7a7a84", shirt: "#c8d8ea", tie: "#8a2a2a", legs: "#5a5a64", beard: "none", eyes: "round" },
+  ms_leesh: { name: "Lee Sang-hyun", skin: "#f2d2b0", hair: "#2a2024", hat: "short", robe: "#3a4256", trim: "#3a4256", shirt: "#eef0f2", tie: "#6a3a5a", legs: "#2e3444", beard: "none", eyes: "normal", glasses: "#2a2228" },
+  ms_hanfather: { name: "Han Seok-yul's father", skin: "#d8a47c", hair: "#3a3236", hat: "short", robe: "#3a5a7a", trim: "#2a3a4a", legs: "#3a5a7a", beard: "stubble", eyes: "kind" },   // factory overalls
+  ms_sponsor: { name: "Jang Geu-rae's sponsor", skin: "#eec7a0", hair: "#9a9a9a", hat: "parted", robe: "#3a3236", trim: "#3a3236", shirt: "#f0ece4", tie: "#6a2a3a", legs: "#2e282c", beard: "none", eyes: "kind", glasses: "#6a5a4a" },
+  ms_senior: { name: "The Deputy", skin: "#ecc29a", hair: "#2a2024", hat: "messy", robe: "#dfe4ea", trim: "#2a2228", tie: "#3a4a3a", legs: "#3a3e48", beard: "none", eyes: "narrow" },   // an impatient senior, shirtsleeves
   ms_examiner: { name: "Examiner", skin: "#e8c4a0", hair: "#5a5256", hat: "parted", robe: "#2a2e38", trim: "#2a2e38", shirt: "#f4f4f4", tie: "#3a3a4a", legs: "#24272f", beard: "none", eyes: "narrow", glasses: "#2a2228" },   // the PT panelist (m6, m7) and the KBA proctor (m1)
   ms_clerk: { name: "Baekjin clerk", skin: "#ecc29a", hair: "#2a2024", hat: "short", robe: "#5a6a7a", trim: "#2a2228", tie: "#3a3a4a", legs: "#3a3e48", beard: "none", eyes: "narrow" },
   ms_worker: { name: "Office worker", skin: "#f0cfac", hair: "#2a2024", hat: "parted", robe: "#3a3e4a", trim: "#3a3e4a", shirt: "#eef0f2", tie: "#6a4a3a", legs: "#30333c", beard: "none", eyes: "normal" },
@@ -748,26 +756,32 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) { this.data = await (await fetch("data/tk.json?v=104")).json(); this.migrate(); }
+    if (!this.data) { this.data = await (await fetch("data/tk.json?v=105")).json(); this.migrate(); }
     return this.data;
   },
-  // A book whose beats were renumbered after players began it: their cleared beats moved to the new keys, once
-  // (Book 4, Three Silk Pouches, reworked: old s10-s15 are s8-s14 now, old s13 split in two; old s8 and s9 are gone)
+  // A book whose beats were renumbered after players began it: their cleared beats moved to the new keys, once per
+  // renumbering (Book 4, Three Silk Pouches). v2, the rework: old s10-s15 became s8-s14 (old s13 split in two; old s8
+  // and s9 gone). v3, the rebuild around Zhou Yu's schemes: s1-s7 kept, s8-s14 became s10-s16, and new s8 (the gilded
+  // cage) and s9 (year's end) came in between; a save already past them counts them played (Replay from… plays them).
   migrate() {
     const p = loadProgress(), m = p.tkMig || (p.tkMig = {});
-    if ((m[15] || 0) >= 2) return;
-    const old = new Set(Object.keys(p.tk || {}).filter(k => /^15-s\d+$/.test(k) && this.cleared(k)).map(k => k.slice(3)));
-    if (old.size) {
-      const map = { s10: ["s8"], s11: ["s9"], s12: ["s10"], s13: ["s11", "s12"], s14: ["s13"], s15: ["s14"] };
-      const now = new Set([...old].filter(k => /^s[1-7]$/.test(k)));
+    if ((m[15] || 0) >= 3) return;
+    const move = (map, keep, fill) => {
+      const old = new Set(Object.keys(p.tk || {}).filter(k => /^15-s\d+$/.test(k) && this.cleared(k)).map(k => k.slice(3)));
+      if (!old.size) return;
+      const now = new Set([...old].filter(k => keep.test(k)));
       for (const [o, ns] of Object.entries(map)) if (old.has(o)) ns.forEach(n => now.add(n));
+      for (const [when, ns] of fill) if (now.has(when)) ns.forEach(n => now.add(n));
       const t = Date.now();
       for (const k of old) if (!now.has(k)) this.undoCleared(p, `15-${k}`);
       for (const k of now) { (p.tk || (p.tk = {}))[`15-${k}`] = 1; (p.tkAt || (p.tkAt = {}))[`15-${k}`] = t + 1; }
-    }
-    m[15] = 2;
+    };
+    if ((m[15] || 0) < 2) move({ s10: ["s8"], s11: ["s9"], s12: ["s10"], s13: ["s11", "s12"], s14: ["s13"], s15: ["s14"] }, /^s[1-7]$/, []);
+    move({ s8: ["s10"], s9: ["s11"], s10: ["s12"], s11: ["s13"], s12: ["s14"], s13: ["s15"], s14: ["s16"] }, /^s[1-7]$/, [["s10", ["s8", "s9"]]]);
+    m[15] = 3;
     this.saveProg(p);
   },
+
   ls(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } },
   lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} if (typeof Sync !== "undefined" && Sync.tkKey(k)) Sync.scheduleSave(); },
   saveProg(p) { localStorage.setItem(PROGRESS_KEY, JSON.stringify(p)); if (typeof Sync !== "undefined") Sync.scheduleSave(); },

@@ -144,6 +144,57 @@
    "label": "A rack of swords"
   },
   {
+   "kind": "furn.qin",
+   "x": 6,
+   "y": 16,
+   "w": 2,
+   "h": 1,
+   "id": "qin-1",
+   "label": "A zither"
+  },
+  {
+   "kind": "furn.qin",
+   "x": 10,
+   "y": 16,
+   "w": 2,
+   "h": 1,
+   "id": "qin-2",
+   "label": "A zither"
+  },
+  {
+   "kind": "furn.table",
+   "x": 16,
+   "y": 14,
+   "w": 2,
+   "h": 1,
+   "id": "gifts",
+   "label": "Gold cups and rolls of silk"
+  },
+  {
+   "kind": "furn.rug",
+   "x": 20,
+   "y": 18,
+   "w": 3,
+   "h": 2,
+   "id": "rug-9"
+  },
+  {
+   "kind": "furn.rug",
+   "x": 20,
+   "y": 20,
+   "w": 3,
+   "h": 2,
+   "id": "rug-10"
+  },
+  {
+   "kind": "furn.rug",
+   "x": 20,
+   "y": 24,
+   "w": 3,
+   "h": 2,
+   "id": "rug-12"
+  },
+  {
    "kind": "plant.peony",
    "x": 30,
    "y": 18,
@@ -170,18 +221,86 @@
    "y": 20,
    "w": 1,
    "h": 1
+  },
+  {
+   "kind": "plant.peony",
+   "x": 35,
+   "y": 21,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "plant.peony",
+   "x": 37,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "prop.lanterns",
+   "x": 7,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "prop.lanterns",
+   "x": 11,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "deco.redhang",
+   "x": 20.5,
+   "y": 9.0625,
+   "w": 3,
+   "h": 1,
+   "solid": false,
+   "lift": 6
   }
  ],
  "spots": [
   {
-   "id": "s8",
+   "id": "s10",
    "x": 22.5,
    "y": 16.7,
-   "node": "15-s8",
+   "node": "15-s10",
    "label": "The east palace"
   }
  ],
- "npcs": [],
+ "npcs": [
+  {
+   "id": "npc-1",
+   "kind": "folk.lady",
+   "x": 8.5,
+   "y": 18.9,
+   "say": [
+    "A musician plays the zither. “His lordship hasn't set foot outside the palace since the wedding. Why would he?”"
+   ],
+   "face": "N"
+  },
+  {
+   "id": "npc-2",
+   "kind": "folk.maiden",
+   "x": 12.5,
+   "y": 20.9,
+   "say": [
+    "A dancer in silk turns and turns, smiling, and looks at no one."
+   ],
+   "face": "E"
+  },
+  {
+   "id": "npc-3",
+   "kind": "folk.elder",
+   "x": 16.5,
+   "y": 16.9,
+   "say": [
+    "A steward sets out gold cups on the table. “Gifts from the Marquis. More come every day.”"
+   ],
+   "face": "N"
+  }
+ ],
  "exits": [
   {
    "to": "nanxu--bridal-room",

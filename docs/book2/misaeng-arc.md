@@ -30,8 +30,80 @@ chained with `next`. World numbers are Integration's to assign; the story files 
 | **5. Life and Death** (사활) | 114–145 (8–9) | Ahn's crisis and her father; Sun's marriage; Park Jong-gi again; the China business; the contract ends; move 145 | 114–145 | to design with the user for the China stretch |
 
 **Order of work (R14, play before scaling):** Book 1 is designed and written in full first, and played. The other
-books follow one at a time. The single-book draft below (29 beats, `tools/tk_story_w21.py` at 0c7036f) is the spine
+books follow one at a time. The single-book draft below (29 beats, now `tools/tk_story_ms_spine.py`, not imported) is the spine
 the five books grow from: its beats are spread across them, and each book adds the episodes the single book cut or told.
+
+## Book 1: Not Yet Alive (착수), episodes 0–33, world 21
+
+Written from `docs/book2/misaeng-research-ep0-33.md` (episode by episode). Story: `tools/tk_story_w21.py` (`WORLD21`).
+Every beat is in the webtoon unless marked **(staging)** or **(invented)**.
+
+**The shape.** A failed baduk prodigy enters a trading company with nothing but a phone call behind him, and has two
+months to stop being a 낙하산 (parachute). It opens on the half-point loss that ends his childhood (C8: this is a world
+where trying is not enough) and closes on the word *contract* on his ID card, and the morning his team head takes the
+new hires to a memorial for laid-off workers before he takes them to their desks.
+
+**Thread figure (C4): the PT test.** Announced at m6, it hangs over every beat after: Han Seok-yul is his partner, the
+interns size each other up, and the result decides who stays.
+
+**Mechanic: the record.** Each beat opens on the game played to its episode's move; at five beats the player finds
+Cho Hunhyun's actual move, where readers tied the move to the scene: Black 11 (Jang takes the PT back from Han, "seeking
+life while attacking"), Black 19 ("answer a trick with the proper move", at the client), Black 29 (Cho's "ruthless"
+komi move, at the pair PT), Black 31 (the atari that breaks the lower side, at the individual PT), Black 33 (Black
+settles its territory: the results). **Small touch:** the "Angry Birdie" floor (m4): three seniors give the new intern
+three errands at once, and the player runs them (delivery spots).
+
+**Leads.** Jang (most beats); **Oh Sang-sik** (m8, he finds the scrap); **Kim Bu-ryeon** (m9, the apology: 허허허 on
+move 16, "a master never misses the natural move; Kim's natural move is the apology"); **Sun Ji-young** (m14, her
+daughter's drawing); **Ahn Young-yi** (m17, her flawless PT and her verdict on her partner). Ahn also walks the daycare
+errand with Jang (m13).
+
+| Key | Beat | Ep. | Lead | Place · spot | Move | Board |
+|---|---|---|---|---|---|---|
+| m1 | **Half a Point**: the last trainee game; the monologue; the stones thrown away a few at a time; the first job, the mockery, the army (told) | 0–1 | Jang (18) | KBA · trainees | 0 | Contest, **fails**: "Win the game that decides your career." |
+| m2 | **A Light Allowed Me**: eight months after the army; the city's lights; the commute; the front desk; Sales 3, Oh on the phone to a buyer at 11 at night | 2–3 | Jang | Susaek-dong → One International · lobby, sales3 | 3 | — (the subway commuter blocks) |
+| m3 | **FOB**: jargon thrown at him; Oh's red eyes; a snapback on the board in his head | 4 | Jang | sales3 | 4 | Legwork: "Find the move that sacrifices to capture." (a 환격 problem, as in the episode) |
+| m4 | **Together, or Alone**: the mind map is a solo exercise; three seniors, three errands at once ("Angry Birdie"); Ahn in a pink coat, already looking ten years in | 5 | Jang | sales3 floor (copier, Oh's desk, pantry) | 5 | — (three errands, gate) |
+| m5 | **Twenty-Five Stones**: one black stone in a sea of white; the parachute rumour; Kim Dong-sik's warning about flatterers; the commute: "The world is faster than me" | 6–7 | Jang | sales3; the subway | 7 | Contest: "Live inside their wall." |
+| m6 | **Partners**: the PT announced; Han Seok-yul; "Again!"; "find the item yourself"; Oh: you're all over the place; "How old are you?" | 8–11 | Jang | pt-room; sales3 | 10 | **Record: Black 11**; contest: "Take the PT back." |
+| m7 | **The Waybill**: Kim Seok-ho borrows the glue stick; the waybill on the lobby floor; the director: "Hey. Do better."; the interns punished; Oh: "Let's clean it up." | 13 | Jang → Oh | sales3; lobby | 13 | — |
+| m8 | **The Scrap**: Oh finds Kim Seok-ho's name on the scrap; (cutaway) Kim Seok-ho comes home to one room, his baby grabs his finger | 14 | Oh | lobby bins (gate: `item:waybill_scrap`) | 14 | — |
+| m9 | **Dog Meat**: Go 과장 fed the American buyers dog; Steve Han holds every approval; Kim Bu-ryeon and Go apologise together; the sauna; "Don't touch me" | 15–16 | Kim Bu-ryeon | textile floor; a sauna on Jongno | 16 | Contest: Kim Bu-ryeon, "Apologise before it grows." |
+| m10 | **Bread on the Street**: Park Jong-gi throws up his lunch; the roof; Jang's praise; Park puffs up | 17 | Jang | roof | 17 | — |
+| m11 | **The Proper Move**: the client mocks Park through a door; "Shall we proceed by procedure?"; the president's staged scolding; Jang pins him to his word | 18–19 | Jang | Jongno · client | 18 | **Record: Black 19**; contest: Jang, "Answer the trick with the proper move." |
+| m12 | **Be Irresponsible**: the president at One International; the note; "The one who deceived was me"; not punished; "Everyone has their own baduk" | 20 | Jang | meeting | 20 | Contest: Park Jong-gi, "Tell them the truth." |
+| m13 | **The Doorbell**: Sun asks; Jang and Ahn at the daycare; every bell, the children run to the door | 21 | Jang (with Ahn) | sun-desk → Sun's neighbourhood · daycare | 21 | — |
+| m14 | **Her Back**: Sun at home; Somi's drawing of her mother, from behind; "I won't put you off for a living" | 22 | **Sun** | Sun's neighbourhood · sun-flat | 22 | — |
+| m15 | **Questions, Not Answers**: Han is a year older; his field days at the port and airport; the individual task: sell to the one you least want to; "It's through others that I'm revealed" | 23–26 | Jang | sales3; pt-room | 26 | Legwork: "Build the PT with Han." |
+| m16 | **Black Nails**: PT day; the costumed team cut off; Han's mother keeps calling; Han chokes; Jang stammers; Han's father's hands | 27–29 | Jang | pt-room | 28 | **Record: Black 29**; contest Jang, "Keep it going."; contest Han, "Say why the floor matters." |
+| m17 | **The President's Daughter?**: Han's team marked down for a sum; Ahn's flawless PT; her partner Lee Sang-hyun | 30 | **Ahn** | pt-room | 30 | Contest: Ahn, "Give the PT." |
+| m18 | **Combat Boots** (boss): Oh barefoot; Han sells notebooks and fabric; Jang buys only the notebooks; Jang sells Oh's slippers; "I won't buy them"; "There are no meaningless stones" | 31–32 | Jang | pt-room (gate: `item:slippers`, borrowed from Oh) | 30 | **Boss**: Jang, "Buy what's worth buying."; **Record: Black 31**; Jang, "Sell to someone who won't buy." |
+| m19 | **Contract**: the results; Baek-gi's hand mirror in a huge box; Ahn first; Jang on a two-year contract | 33 | Jang | hr | 32 | **Record: Black 33** |
+| m20 | **Daehanmun**: the first morning; Oh takes the new hires to the memorial altar before their desks | 33 | Jang | Daehanmun | 33 | — |
+
+Boards: 5 record, 13 contests or legwork (m18's boss has three), plus road challengers. Six beats have no board.
+
+**Road challengers (exact, for Places): 8, of which 2 blocking.** The subway commuter with a pocket board (m2, blocking);
+two Tapgol Park regulars (optional); a courier on Jongno (optional); two nervous interns outside the PT room (m15–m16,
+optional); the costumed team's intern at the PT room door (m16, blocking); a tourist at Daehanmun's gate (m20, optional).
+
+**Items.** `pass`, `id_card` (contract), `glue_stick`, `waybill_scrap`, `copy`, `file`, `coffee` (m4's errands),
+`note` (m12), `slippers` (Oh's, m18), `notebook` (Han's field notes, m18), `somi_drawing` (m14).
+
+**New places and rooms (for Places).** Daehanmun at Deoksugung (the memorial tent); a sauna and a restaurant on Jongno
+(m9); the textile team's floor in the tower (m9); Kim Seok-ho's one-room flat (m8's cutaway). The rest exist.
+
+**New cast (for Graphics).** Steve Han (US-raised textile head), Go 과장, the American buyers, Kim Seok-ho's wife and
+baby, Lee Sang-hyun (Ahn's partner), the costumed team, Han's father (flashback, a factory worker's grease-black hands),
+Jang's sponsor (a voice, m1), the daycare teacher, the client's president and staff.
+
+**New stills (proposed):** `ms_25stones` (one black stone in a sea of white), `ms_babyfinger` (Kim Seok-ho's baby
+grabbing his finger, the family asleep in one room), `ms_sauna` (Steve Han, Kim Bu-ryeon, Go 과장: "Don't touch me"),
+`ms_doorbell` (the daycare children all running to the door), `ms_drawing` (Somi's drawing: her mother, from behind),
+`ms_blacknails` (a factory worker's grease-black hands, a small boy looking at them), `ms_barefoot` (Oh at the panel
+table in his socks), `ms_daehanmun` (the memorial tent, the portraits, the new hires in suits). Kept from the spine:
+`ms_lastgame`, `ms_onelight`.
+
 
 ---
 

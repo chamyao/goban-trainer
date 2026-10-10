@@ -170,10 +170,10 @@
  ],
  "spots": [
   {
-   "id": "s14",
+   "id": "s16",
    "x": 49.5,
    "y": 25.7,
-   "node": "15-s14",
+   "node": "15-s16",
    "label": "Liulangpu",
    "trigger": "near"
   }

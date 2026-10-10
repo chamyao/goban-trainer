@@ -1,12 +1,13 @@
-"""World 21: Misaeng (미생), Season 1, after Yoon Tae-ho's webtoon (Daum, 2012-2013).
+"""World 21: Misaeng, Book 1, "Not Yet Alive" (착수): episodes 0-33 of Yoon Tae-ho's webtoon 『미생』 (Daum, 2012).
 
-English only ("lang": "en"; the user: "we dont need chinese lines for this"). The design is docs/book2/misaeng-arc.md,
-the research docs/book2/misaeng-research.md, the engine syntax docs/book2/misaeng-engine.md (claude/integration-alt2).
-The webtoon's plot, people and order are kept; the dialogue is a close paraphrase, with only its famous short lines
-quoted (the Korean is in the design doc). Beats marked (staging) or (invented) in comments are not in the webtoon.
+English only ("lang": "en"; the user: "we dont need chinese lines for this"). Season 1 is five books (worlds 21-25,
+the user: "yeah lets go"); this is the first. Design: docs/book2/misaeng-arc.md ("Book 1"); research:
+docs/book2/misaeng-research-ep0-33.md; engine syntax: docs/book2/misaeng-engine.md (claude/integration-alt2).
+The webtoon's events, people and order are kept; the dialogue is a close paraphrase, with only short key lines quoted.
+Beats marked (staging) or (invented) in comments are not in the webtoon.
 
 The frame: every beat opens on the 1st Ing Cup final, game 5 (1989), Nie Weiping (White) against Cho Hunhyun (Black),
-played up to the beat's "move". At five beats the player finds Cho's actual move ("record").
+played to the beat's "move" (the episode number). At five beats the player finds Cho's actual move ("record").
 """
 
 
@@ -30,498 +31,368 @@ def D(who, q, open_, win, slip):
     return {"q": q, "who": who, "open": open_, "win": win, "slip": slip}
 
 
-# Cast id -> Kokoro English voice (ids already used in the repo).
+# Cast id (Graphics' TK_CHARS keys) -> Kokoro English voice (ids already used in the repo).
 CAST21 = {
-    "ms_jang": "am_liam", "ms_jang_young": "am_liam", "ms_mother": "bf_emma", "ms_oh": "am_onyx", "ms_kimds": "am_eric", "ms_cheon": "am_echo",
-    "ms_park": "am_fenrir", "ms_ahn": "af_bella", "ms_baekgi": "am_puck", "ms_han": "am_michael", "ms_kimsh": "am_adam",
-    "ms_sun": "af_sarah", "ms_somi": "af_sky", "ms_sunhusband": "am_eric", "ms_kimsj": "bf_isabella", "ms_shin": "af_sky",
-    "ms_kimbr": "bm_george", "ms_exec": "bm_lewis", "ms_president": "bm_daniel", "ms_director": "bm_fable",
-    "ms_parkjg": "am_adam", "ms_client": "am_fenrir", "ms_ma": "bm_george", "ms_ahnboss": "am_echo", "ms_ahnfather": "bm_george",
-    "ms_kimdsu": "am_echo", "ms_auditor": "bm_fable", "ms_hr": "am_michael", "ms_chinarep": "am_puck",
-    "ms_kbastaff": "bm_lewis", "ms_shopowner": "bf_emma", "ms_examiner": "bm_daniel", "ms_trainee": "af_sky",
+    "ms_jang": "am_liam", "ms_jang_young": "am_liam", "ms_mother": "bf_emma", "ms_oh": "am_onyx", "ms_kimds": "am_eric",
+    "ms_ahn": "af_bella", "ms_baekgi": "am_puck", "ms_han": "am_michael", "ms_kimsh": "am_adam", "ms_sun": "af_sarah",
+    "ms_somi": "af_sky", "ms_kimbr": "bm_george", "ms_director": "bm_fable", "ms_parkjg": "am_adam", "ms_client": "am_fenrir",
+    "ms_hr": "am_michael", "ms_examiner": "bm_daniel", "ms_trainee": "af_sky", "ms_daycare": "bf_isabella",
+    # new in Book 1 (Graphics: to draw)
+    "ms_stevehan": "am_echo", "ms_go": "am_fenrir", "ms_buyer": "bm_lewis", "ms_leesh": "am_puck",
+    "ms_hanfather": "bm_george", "ms_sponsor": "bm_daniel", "ms_senior": "bm_fable",
 }
 
 
 def _scenes():
     return {
-        # M1 · 착수 0-1. The last trainee exam game; it is lost (R7). Then the cut: years, his mother, the monologue.
-        # (staging) The webtoon tells his failure; it doesn't play one game. The board is that failure, played.
-        "m1": {"title": T("Not Hard Enough"), "kind": "main", "steps": [
+        # M1 · 착수0-1. The last trainee game, lost by half a point (R7). The monologue. The first job; the army (told).
+        # (staging) The webtoon tells the failure; it doesn't play one game. The board is that failure, played.
+        "m1": {"title": T("Half a Point"), "kind": "main", "steps": [
             ["spawn", "ex", "ms_examiner", "m1", 0, -4], ["spawn", "tr", "ms_trainee", "m1", 6, -2],
             N("The Korea Baduk Association. Rows of boards, and children who have given their whole lives to them."),
-            N("Jang Geu-rae came here at eleven. He is eighteen now. This is his last chance to turn professional."),
-            S("ms_examiner", "Last round. Win, and you're in. Lose, and you've aged out."),
-            ["problem"],   # Jang: the game that decides his career; it is lost by half a point
+            N("Jang Geu-rae came here at eleven. His father lost his company and put everything he had left into his son. "
+              "His mother cut the rankings and prize money of the great players out of the newspaper."),
+            N("He is eighteen. This is the last chance to turn professional. After this, he is too old."),
+            S("ms_examiner", "Last round. Begin."),
+            ["problem"],   # Jang: the game that decides his career; lost by half a point
             ["still", "ms_lastgame", "slow zoom in"],
-            N("Half a point."),
+            N("Half a point. The others in his year pass. He doesn't."),
             ["remove", "ex"], ["remove", "tr"],
-            N("It wasn't talent, he tells himself. It wasn't the half-points, or the part-time jobs, or that there was never pocket money."),
-            N("It wasn't that his father died, or that his mother took to her bed."),
-            N("Those reasons hurt too much. So he'll say it was this: I didn't try hard enough."),
-            N("He leaves baduk. A sponsor finds him a job; when his colleagues learn where he came from, they mock it, and he quits. "
-              "He does his military service. Eight months after he comes out, the same sponsor calls the president of a trading company."),
-            ["party", ["ms_jang"], {"to": {"place": "Susaek-dong", "spot": "home"}}],   # grown up now (ms_jang); a deliberate cut: years pass
+            N("It wasn't talent, he tells himself. It wasn't losing by half a point, again and again. It wasn't playing between "
+              "part-time jobs, or that there was never pocket money. It wasn't that his father died and his mother took to her bed."),
+            N("Those would hurt too much. So he'll tell himself this: it's not that I didn't try. But I'll say it's because I didn't try hard enough."),
+            N("The sky and the leaves are the same colour they were. Only the world in his eyes has gone grey. "
+              "He doesn't throw his stones away all at once. A few at a time."),
+            ["spawn", "sp", "ms_sponsor", "m1", 10, 2],
+            S("ms_sponsor", "There's a job at my company. Come in on Monday."),
+            ["remove", "sp"],
+            N("At first his colleagues ask about baduk. Later it becomes the joke: slow at everything, the way baduk people are. "
+              "He packs his desk without a word, and goes into the army almost as if he were running."),
+            ["party", ["ms_jang"], {"to": {"place": "Susaek-dong", "spot": "home"}}],   # grown up (ms_jang); a deliberate cut: years pass
         ]},
 
-        # M2 · 2수. The first day. The parachute intern; Sales Team 3.
-        "m2": {"title": T("The Light I'm Allowed"), "kind": "main", "steps": [
+        # M2 · 2-3수. Eight months after the army. The lights. The first day; Sales Team 3; Oh on the phone at eleven at night.
+        "m2": {"title": T("A Light Allowed Me"), "kind": "main", "steps": [
             ["spawn", "desk", "ms_hr", "m2", 4, -4],
-            N("One International, a general trading company in Jongno. Interns in new suits wait for passes that have their names on them."),
-            S("ms_hr", "Jang Geu-rae? You're not on my list. Oh, here: the president's office sent your name down separately."),
-            N("Everyone else got in with a degree and a test. He got in with a phone call. He knows how that looks."),
-            ["problem"],   # legwork: through the front desk with no pass yet
+            N("Eight months after his discharge, the same sponsor calls an old friend: the president of One International, a general trading company."),
+            N("The night before, Jang looked at the lights of the city from the hill in Susaek-dong. If there's a light I must keep burning, "
+              "I'll answer for it. If a light is allowed me. Is there one, for me?"),
+            S("ms_hr", "Jang Geu-rae? You're not on my list. Oh, here: your name came down separately. From upstairs."),
+            N("Everyone else got in with a degree and a test. He got in with a phone call. Everyone can see it."),
             ["gain", "pass"],
             ["still", "ms_onelight", "slow zoom in"],
-            N("The gates open for him like for anyone else."),
-            S("ms_hr", "Sales Team 3. Seventh floor. Section head Oh Sang-sik."),
+            S("ms_hr", "Sales Team 3. Section head Oh Sang-sik."),
             ["remove", "desk"],
             ["spawn", "oh", "ms_oh", "m2", 14, -6], ["spawn", "kd", "ms_kimds", "m2", 18, -4],
-            S("ms_oh", "You're mine? Kim, he's yours. Show him where things are and don't let him touch anything that ships."),
-            S("ms_kimds", "Assistant manager Kim Dong-sik. Welcome. You'll sit by me."),
-            S("ms_jang", "If there's a light I'm meant to keep lit here, I'll answer for it. Whatever light I'm given."),
-            N("Oh's eyes are red. He hasn't slept, by the look of them. He doesn't look up again."),
+            N("Sales Team 3's section head is on the phone to a buyer who wants an answer by eleven tonight. His eyes are red. "
+              "He hasn't slept, by the look of them."),
+            S("ms_oh", "Eleven. Yes. You'll have it. ...The intern? Kim, he's yours. We're in no position to be picky."),
+            S("ms_kimds", "Kim Dong-sik, assistant manager. You'll sit by me."),
+            S("ms_jang", "I won't fail again. Not the way I failed at baduk."),
+            N("He says it to himself. Nobody's listening."),
             ["remove", "oh"], ["remove", "kd"],
         ]},
 
-        # M3 · 13수. The waybill. Kim Seok-ho borrows his glue stick; Sales 3's waybill ends up on the lobby floor.
-        "m3": {"title": T("The Waybill"), "kind": "main", "steps": [
-            ["spawn", "sh", "ms_kimsh", "m3", 4, -2], ["spawn", "oh", "ms_oh", "m3", 12, -6],
-            S("ms_kimsh", "Can I borrow your glue stick? Mine's dry."),
-            N("Kim Seok-ho, an intern from another firm's programme: married young, a child at home, the best translator of them all. "
-              "He works fast. A page of Sales 3's comes away stuck to the back of his."),
-            N("An hour later the director comes up from the lobby holding a waybill. It was on the floor by the gates, where anyone could read it."),
-            ["spawn", "dir", "ms_director", "m3", 8, 2],
+        # M3 · 4수. FOB. The jargon. A snapback on the board in his head (the episode prints one).
+        "m3": {"title": T("FOB"), "kind": "main", "steps": [
+            ["spawn", "kd", "ms_kimds", "m3", 2, -2], ["spawn", "oh", "ms_oh", "m3", 10, -6],
+            S("ms_oh", "FOB or CIF? Who's paying the freight? Kim, ask the buyer. Intern, find me the L/C. Now."),
+            N("FOB. L/C. B/L. Every sentence in the room has a word in it Jang has never heard. Oh's red eyes don't wait for him to look them up."),
+            N("He shuts his eyes, and the only thing he knows how to read comes up on its own: a board, white stones in a triangle, one point inside."),
+            ["problem"],   # Jang: a snapback (환격), the problem the episode prints
+            N("Play inside. Let them take it. Take back more. White dies whatever it does."),
+            S("ms_kimds", "Free On Board. The seller's done once the goods are on the ship. Write it down. Here, you'll need these."),
+            ["gain", "glue_stick"],
+            ["remove", "kd"], ["remove", "oh"],
+        ]},
+
+        # M4 · 5수. Together, or alone. The mind map; the "Angry Birdie": three seniors, three errands; Ahn's first appearance.
+        "m4_wait": {"title": T("Three Errands"), "kind": "main", "steps": [
+            S("ms_jang", "Copies for Kim, the file for Oh, coffee for the deputy. All at once. Go."),
+        ]},
+        "m4": {"title": T("Together, or Alone"), "kind": "main", "steps": [
+            ["spawn", "kd", "ms_kimds", "m4", 2, -2], ["spawn", "ahn", "ms_ahn", "m4", 12, 0],
+            N("He made a mind map of the team's work. It took him two nights."),
+            S("ms_kimds", "This is something you did alone. Work here is something you do together. There's a manual for a reason."),
+            N("Everyone on the floor has wanted something from him this morning, all at once, and none of it the same."),
+            N("In the corridor a woman intern in a pink coat goes by with a stack of files and a face that has done this for ten years. "
+              "Ahn Young-yi, from the same intake. She doesn't look at him."),
+            ["remove", "ahn"], ["remove", "kd"],
+        ]},
+
+        # M5 · 6-7수. Twenty-five stones. The rumour; Kim Dong-sik's warning; the commute.
+        "m5": {"title": T("Twenty-Five Stones"), "kind": "main", "steps": [
+            ["still", "ms_25stones", "slow zoom out"],
+            N("Twenty-five white stones, and one black. Wherever he puts himself, he's already surrounded."),
+            N("Then the rumour gets round that the parachute was picked from the very top. Interns who never spoke to him start to."),
+            ["spawn", "kd", "ms_kimds", "m5", 2, -2],
+            S("ms_kimds", "Careful with the ones who praise you, who make your work sound bigger than it is, who do you favours. They'll collect."),
+            ["problem"],   # Jang: live inside their wall
+            S("ms_kimds", "I'm telling you because nobody told me."),
+            ["remove", "kd"],
+            N("On the train home, everyone is reading something, answering something, going somewhere."),
+            S("ms_jang", "Am I the only one still dreaming? The world is faster than me."),
+        ]},
+
+        # M6 · 8-11수. The PT announced; Han Seok-yul; "Again!"; Oh: scattered; "How old are you?"
+        "m6": {"title": T("Partners"), "kind": "main", "steps": [
+            ["spawn", "han", "ms_han", "m6", 6, -2], ["spawn", "oh", "ms_oh", "m6", 14, -6],
+            N("The internship ends with a test: a presentation, in pairs. The pairs are drawn. The others look at Jang's partner and wince."),
+            N("Han Seok-yul: the intern who asked for the factory floor on day one, who tells everyone he has eaten with the president."),
+            S("ms_han", "Field first. You do the paper. ...No. Again!"),
+            S("ms_han", "The item? Find it yourself."),
+            N("The other interns have a name for the pair: the nuclear bomb. A dud holding a dud."),
+            S("ms_oh", "Jang. You're all over the place. Pick one thing and do it."),
+            N("On the frame strip, Black links up with a stone it played earlier, looking for a way to live by attacking."),
+            ["problem"],   # the record: Black 11
+            N("Cho linked his stones, and kept attacking."),
+            ["problem"],   # Jang: take the PT back
+            S("ms_jang", "And. How old are you?"),
+            S("ms_han", "..."),
+            S("ms_jang", "Not going to say?"),
+            ["remove", "han"], ["remove", "oh"],
+            N("That night, alone, he thinks of the players he used to cut out of the paper with his mother. My heroes are disappearing."),
+        ]},
+
+        # M7 · 13수. The waybill. Kim Seok-ho, the glue stick, the lobby floor; the director; the punishment.
+        "m7": {"title": T("The Waybill"), "kind": "main", "steps": [
+            ["spawn", "sh", "ms_kimsh", "m7", 4, -2],
+            N("Kim Seok-ho, an intern on Go's team: married young, the eldest grandson, a baby at home, the best translator in the intake. "
+              "Nobody on his team teaches him anything; he borrows what he needs."),
+            S("ms_kimsh", "Can I borrow your glue stick? Thanks."),
+            ["lose", "glue_stick"],
+            N("A page of Sales 3's comes away stuck to the back of his: a waybill, with the team's approval stamps on it. Jang was meant to shred it."),
+            S("ms_kimsh", "Someone throw this away for me?"),
+            N("He drops it on a desk and runs. An hour later it's on the floor of the lobby, by the gates, where any visitor could read it."),
+            ["remove", "sh"],
+            ["spawn", "dir", "ms_director", "m7", 8, 2], ["spawn", "oh", "ms_oh", "m7", 12, -6],
             ["emote", "dir", "anger"],
-            S("ms_director", "Whose is this? A customer's shipment, on the floor of my lobby! Who had it last?"),
-            N("Every intern is made to stand. Every eye goes to the parachute."),
-            S("ms_director", "The one nobody tested. Of course."),
-            ["remove", "dir"], ["remove", "sh"],
-            S("ms_oh", "Hm."),
-            N("Oh Sang-sik says nothing to Jang. He takes the lift down to the lobby."),
+            S("ms_director", "Whose is this? A customer's shipment, on my lobby floor. Hey. Do better."),
+            N("All the interns are made to stand in the corridor for an hour. Everyone knows whose desk the waybill came from."),
+            ["remove", "dir"],
+            S("ms_oh", "Let's clean it up."),
+            N("That's all he says. He takes the lift down to the lobby."),
             ["party", ["ms_oh"], {"to": {"place": "One International", "spot": "lobby-lift"}}],   # the lead passes to Oh, at the lift doors below
         ]},
 
-        # M3b · Oh searches the lobby. (invented: how he finds the scrap; the webtoon has him find it.)
-        "m3b_wait": {"title": T("The Lobby"), "kind": "main", "steps": [
-            S("ms_oh", "If it fell here, there's more of it. Bins first."),
+        # M8 · 14수. Oh finds the scrap (invented: how; the webtoon has him find it). Cutaway: Kim Seok-ho comes home.
+        "m8_wait": {"title": T("The Lobby"), "kind": "main", "steps": [
+            S("ms_oh", "If it fell here, there's more of it. The bins by the gates."),
         ]},
-        "m3b": {"title": T("The Scrap"), "kind": "main", "steps": [
+        "m8": {"title": T("The Scrap"), "kind": "main", "steps": [
             N("Torn from the waybill's back: a strip with glue on it, and a name in an intern's careful hand. Kim Seok-ho."),
             S("ms_oh", "Not the parachute, then."),
-            N("Oh goes up and has a word with the director, and Kim Seok-ho is called in. Nobody says sorry to Jang. Oh doesn't either."),
-            ["party", ["ms_jang"], {"to": {"place": "one-international--sales3", "spot": "sales3"}}],   # back to Jang, at his desk upstairs
+            N("At the team dinner Oh tells Go, Kim Seok-ho's section head, who is too drunk to hear it. Somebody else hears it, and Kim Seok-ho comes to say sorry."),
+            ["still", "ms_babyfinger", "slow zoom in"],
+            N("That night Kim Seok-ho comes home late to one room. His wife and the baby are asleep on the floor. The baby's hand closes round his finger."),
+            S("ms_oh", "Kim. Get the kid a new glue stick."),
+            ["gain", "glue_stick"],
+            ["party", ["ms_kimbr"], {"to": {"place": "one-international--textile", "spot": "textile"}}],   # the lead passes to Kim Bu-ryeon
         ]},
 
-        # M4 · 17-19수. Park Jong-gi, IT sales: the roof, the client.
-        "m4": {"title": T("A Farmer Among Hunters"), "kind": "main", "steps": [
-            ["spawn", "pj", "ms_parkjg", "m4", 0, -2],
-            N("Assistant manager Park Jong-gi from IT sales carries a resignation letter in his jacket. On the roof, Jang told him he admired his patience. "
-              "Park heard something else: that someone thought he could be a hunter."),
-            N("So he brought Jang along to a client."),
-            ["spawn", "c1", "ms_client", "m4", 14, -6],
-            N("Through the door they hear the client's staff. They're laughing about Park: how far they can push him, what he'll swallow next."),
-            S("ms_parkjg", "..."),
-            ["problem"],   # Park Jong-gi stands up to them
-            ["emote", "pj", "anger"],
-            S("ms_parkjg", "We'll be revising the terms. All of them. I'll send the paper tomorrow."),
-            N("The client's president stares at him. So does Jang."),
-            ["remove", "c1"], ["remove", "pj"],
+        # M9 · 15-16수. Dog meat. Steve Han; Go; Kim Bu-ryeon's apology; the sauna.
+        "m9": {"title": T("Dog Meat"), "kind": "main", "steps": [
+            ["spawn", "st", "ms_stevehan", "m9", 6, -4], ["spawn", "go", "ms_go", "m9", 2, 0],
+            N("Go, a section head on the floor below, took the textile team's American buyers to lunch with a challenging spirit. Dog meat."),
+            N("Steve Han, the textile team's head, raised in America, has held every one of Go's approvals since."),
+            S("ms_stevehan", "You fed them dog, and now they're sulking, and you won't say sorry. What you people do isn't business. It's playing at business. "
+              "One page. What matters. Not this paper going back and forth."),
+            S("ms_go", "I'm not apologising to him."),
+            N("Kim Bu-ryeon, division head, could pull rank. It would get worse."),
+            ["problem"],   # Kim Bu-ryeon: apologise before it grows
+            S("ms_kimbr", "We were wrong, Steve. Both of us. Go, bow."),
+            ["remove", "go"], ["remove", "st"],
+            ["still", "ms_sauna", "slow pan across"],
+            N("By evening they're all in a sauna on Jongno, up to their chins in hot water, We Are the World."),
+            S("ms_stevehan", "Don't touch me."),
+            N("Sometimes the obvious move is the hard one."),
+            ["party", ["ms_jang"], {"to": {"place": "one-international--roof", "spot": "roof"}}],   # back to Jang, on the roof
+        ]},
+
+        # M10 · 17수. Park Jong-gi: bread on the street; the roof.
+        "m10": {"title": T("Bread on the Street"), "kind": "main", "steps": [
+            ["spawn", "pj", "ms_parkjg", "m10", 4, -2],
+            N("Assistant manager Park Jong-gi, IT sales, carries a resignation letter in his jacket. He ate lunch standing up in the street, "
+              "and brought it back up in an alley. Home is hard too: more happiness than he can carry, and he can't face it."),
+            N("On the roof Jang tells him he admires his patience. Park hears something else."),
+            S("ms_parkjg", "Sales is a hunt, you know. Hunters and farmers. Me, I'm a hunter. Come with me tomorrow. I'll show you."),
+            N("No choice satisfies everyone. You answer for the one you make."),
+            ["remove", "pj"],
+            ["party", ["ms_jang"], {"to": {"place": "Jongno", "from": "One International"}}],
+        ]},
+
+        # M11 · 18-19수. The client. The mockery through a door; "by procedure"; the staged scolding; the proper move.
+        "m11": {"title": T("The Proper Move"), "kind": "main", "steps": [
+            ["spawn", "pj", "ms_parkjg", "m11", 0, -2], ["spawn", "cl", "ms_client", "m11", 12, -6],
+            N("Through the client's door: his own staff, laughing. Put One International's order at the back. Park won't say a word. He never does."),
+            N("Jang is looking at him. Waiting to see the hunter."),
+            S("ms_parkjg", "Shall we proceed by the procedure, then? By the contract. Claims and all."),
+            N("The client's president turns on one of his own men and shouts at him in front of the customer, so loud the office goes quiet. "
+              "It's staged. Feint east, strike west: Park will feel sorry for him, and back down."),
+            N("On the frame strip, White has shown a weakness on purpose. The natural answer is the hard one."),
+            ["problem"],   # the record: Black 19
+            N("Cho went straight into the weakness he was shown."),
+            ["problem"],   # Jang: answer the trick with the proper move
+            S("ms_jang", "Then you'll put that in writing, sir? What you just told your man. That it was his error, and you'll make it good."),
+            S("ms_client", "...I'll come and see your people myself."),
+            ["remove", "cl"], ["remove", "pj"],
             ["party", ["ms_jang"], {"to": {"place": "One International", "from": "Jongno"}}],
         ]},
-        # M4b · 20수. The client's president comes to One International. The note; the confession.
-        "m4b": {"title": T("Everyone Has Their Own Game"), "kind": "main", "steps": [
-            ["spawn", "cp", "ms_client", "m4b", 10, -4], ["spawn", "pj", "ms_parkjg", "m4b", 2, -2],
-            N("The client's president has come to One International in person, angry, and wants Park's head."),
-            N("Jang writes four words on a slip and passes it under the table: Be irresponsible, sir. Blame the junior."),
+
+        # M12 · 20수. The client's president at One International. The note; the confession; "everyone has their own baduk".
+        "m12": {"title": T("Be Irresponsible"), "kind": "main", "steps": [
+            ["spawn", "cl", "ms_client", "m12", 10, -4], ["spawn", "pj", "ms_parkjg", "m12", 2, -2],
+            N("A client's president, at One International in person. It doesn't happen. The executives are all in the room."),
+            N("Jang can see it now: Park is no hunter. He writes three words on a sheet made to look like a document, and slides it across. Be irresponsible, sir."),
             ["gain", "note"], ["lose", "note"],
-            S("ms_parkjg", "The deception was mine. Not his. I'm the one who misled you."),
-            N("Nobody punishes Park. The client goes home with nothing to say. Park comes up to the roof afterwards to thank Jang, and means it."),
-            S("ms_jang", "Everyone has their own game of baduk. He played his."),
-            ["remove", "cp"], ["remove", "pj"],
+            ["problem"],   # Park Jong-gi: tell them the truth
+            S("ms_parkjg", "The one who deceived you was me. Not them. Discipline me."),
+            N("Around the table, one by one, the executives' faces turn into his."),
+            ["remove", "cl"],
+            N("Nobody punishes him. You don't drop a partner of many years over this. On the roof afterwards Jang can't look at him."),
+            S("ms_jang", "I'm sorry. Me, who failed at baduk, telling you how to play."),
+            S("ms_parkjg", "Thank you."),
+            ["remove", "pj"],
+            S("ms_jang", "Everyone has their own baduk."),
         ]},
 
-        # M5 · 21수. Sun Ji-young asks; Jang and Ahn Young-yi go to the daycare.
-        "m5": {"title": T("Somebody Has to Go"), "kind": "main", "steps": [
-            ["spawn", "sun", "ms_sun", "m5", 0, -2], ["spawn", "ahn", "ms_ahn", "m5", 6, 0],
-            N("Deputy general manager Sun Ji-young keeps work and home in two sealed rooms. Tonight they've run into each other."),
-            S("ms_sun", "The daycare closes at seven. My meeting doesn't. I hate asking. I'm asking."),
-            S("ms_sun", "Somi. Five. She'll be the last one there. Tell her Mummy's sorry."),
+        # M13 · 21수. Sun Ji-young asks; Jang and Ahn at the daycare; the doorbell.
+        "m13": {"title": T("The Doorbell"), "kind": "main", "steps": [
+            ["spawn", "sun", "ms_sun", "m13", 0, -2], ["spawn", "ahn", "ms_ahn", "m13", 6, 0],
+            N("Deputy general manager Sun Ji-young never asks a junior for anything personal. Tonight her husband can't make the pickup either."),
+            S("ms_sun", "The daycare closes at seven. I can't get there. I'm sorry. I'm asking. Somi. She's five."),
             S("ms_ahn", "We'll go. Jang Geu-rae, you're coming."),
-            N("Ahn Young-yi: the intern everyone talks about. Political science, two companies behind her already, never a word out of place."),
             ["remove", "sun"], ["remove", "ahn"],
             ["party", ["ms_jang", "ms_ahn"], {"to": {"place": "Sun's neighbourhood", "from": "Jongno"}}],
         ]},
-        "m5b": {"title": T("The Last One There"), "kind": "main", "steps": [
-            ["spawn", "somi", "ms_somi", "m5b", 4, -2],
-            N("Seven o'clock. One by one the other children's parents come through the gate. Somi watches every one of them, and every one of them isn't hers."),
-            S("ms_ahn", "Somi? Your mum sent us. She's sorry she's late."),
-            S("ms_somi", "She's always sorry."),
-            N("They walk her home between them. Neither of them says much. It is the first time they've been anywhere together."),
-            ["remove", "somi"],
-            ["party", ["ms_jang"], {"to": {"place": "One International", "from": "Jongno"}}],
+        "m13b": {"title": T("The Doorbell"), "kind": "main", "steps": [
+            ["spawn", "dc", "ms_daycare", "m13b", 8, -2], ["spawn", "so", "ms_somi", "m13b", 4, -2],
+            ["still", "ms_doorbell", "slow zoom in"],
+            N("Every time the bell rings, the children still here run to the door at once. Mum's here. Then it isn't theirs, and they walk back."),
+            S("ms_ahn", "Somi? Your mum sent us. She's sorry."),
+            S("ms_daycare", "She's always last. Are you her mum's colleague? ...Do you drink?"),
+            N("Somi takes Ahn's hand, and then Jang's. They walk her home between them."),
+            ["remove", "dc"], ["remove", "so"],
+            ["party", ["ms_sun"], {"to": {"place": "Sun's neighbourhood", "spot": "sun-flat-door"}}],   # Sun comes home; the lead passes to her at her own door
         ]},
 
-        # M6 · 23-30수. The final PT: pairs. Jang does the materials; Han Seok-yul delivers, and chokes. Ahn is flawless.
-        "m6": {"title": T("The Pair"), "kind": "main", "steps": [
-            ["spawn", "han", "ms_han", "m6", 2, -2], ["spawn", "ahn", "ms_ahn", "m6", 12, -4], ["spawn", "bg", "ms_baekgi", "m6", 16, -2],
-            N("The internship ends with a test. The interns are paired; each pair presents a business plan to a panel."),
-            N("Jang draws Han Seok-yul: the loudest intern on the floor, who once ordered Jang around until Jang asked how old he was. "
-              "It turned out Han is a year older."),
-            S("ms_han", "Everything that matters happens on the shop floor. My father, my uncles: factory men. Paper doesn't make anything."),
-            S("ms_jang", "Then you talk. I'll make the paper."),
-            N("On the frame strip Cho Hunhyun, eight points of komi against him, considers the lower side."),
-            ["problem"],   # the record: Black 29
-            N("Cho broke White's lower side at the cost of his own shape, because eight points of komi left him no choice."),
-            ["problem"],   # Han Seok-yul: finish the presentation
-            S("ms_han", "...and that's why the site comes first. Thank you."),
-            N("Ahn Young-yi's pair goes next. It is so clean that a panelist laughs."),
-            S("ms_examiner", "Is she the president's daughter, or one of ours undercover?"),
-            N("Jang Baek-gi's pair presents safe numbers, neatly compiled, and is told it has no vision."),
-            ["remove", "ahn"], ["remove", "bg"],
-        ]},
-
-        # M7 · 31-33수. The individual task: sell to someone who won't buy. Then the results.
-        # (uncertain in our sources: the exact objects. Office slippers against Han's work boots is the best reading.)
-        "m7": {"title": T("Office Slippers"), "kind": "main", "steps": [
-            S("ms_examiner", "Last task. Sell your partner something. Partner, you may buy or refuse."),
-            ["gain", "slippers"],
-            S("ms_jang", "Office slippers. An office worker's combat boots: the shoes you fight in all day."),
-            S("ms_han", "I won't buy them."),
-            S("ms_jang", "Your boots are for a shop floor. This floor is a shop floor too. You've been fighting on it for two months."),
-            S("ms_han", "I won't buy them."),
-            ["problem"],   # Jang: sell to someone who won't buy
-            S("ms_han", "...I won't buy them. But I think I've been looking down on this floor."),
-            ["lose", "slippers"],
-            ["remove", "han"],
-            N("The results. Ahn Young-yi, first overall. Jang Baek-gi, hired: the steel team. Han Seok-yul, hired. Kim Seok-ho, hired, to the group's head office."),
-            N("Jang Geu-rae, hired. On a two-year contract."),
-            ["lose", "pass"], ["gain", "id_card"],
-            N("On the first morning Oh takes his new people to a memorial for laid-off workers before he takes them to their desks. He doesn't explain why."),
-            ["party", ["ms_ahn"], {"to": {"place": "one-international--resources", "spot": "resources"}}],   # the lead passes to Ahn, at her new team's desks
-        ]},
-
-        # M8 · 39-43수. Ahn takes her team's rejected plan to finance head Kim Seon-ju herself. It fails (R7).
-        "m8": {"title": T("Finance"), "kind": "main", "steps": [
-            ["spawn", "ksj", "ms_kimsj", "m8", 8, -4],
-            N("The resources team. Ahn's seniors have decided she is too sure of herself, and too good at it. Finance has sent their plan back."),
-            N("Nobody on the team will go and ask why. Ahn goes."),
-            S("ms_kimsj", "You're the new one. You walked in here without your section head."),
-            S("ms_ahn", "The plan was sent back without a reason, ma'am. I'd like the reason."),
-            N("Kim Seon-ju, head of finance: the only woman at her level in the building."),
-            ["problem"],   # Ahn: get the plan past finance
-            S("ms_kimsj", "The reason is that you're a first-year who thinks a good plan is enough. Go back to your team."),
-            N("Ahn goes back to her team with the plan, and the lesson."),
-            ["remove", "ksj"],
-            ["party", ["ms_jang"], {"to": {"place": "one-international--sales3", "spot": "sales3"}}],   # back to Jang, a floor away
-        ]},
-
-        # M9 · 45-55수. 미생이네요. Kim Dong-sik knows his past. Four stones, one eye. Then Oh's collapse (told).
-        "m9": {"title": T("Not Yet Alive"), "kind": "main", "steps": [
-            ["spawn", "kd", "ms_kimds", "m9", 2, -2],
-            N("Sales 3's item, crude from Iran to Turkey, dies on an EU embargo. The team's little good-luck rite didn't help."),
-            S("ms_kimds", "You were a trainee at the Baduk Association. Seven years. I looked it up."),
-            ["emote", "ms_jang", "anger"],
-            S("ms_jang", "You looked me up."),
-            S("ms_kimds", "Because a company's no different from a baduk board. Here."),
-            ["prop", "stones", "stones4", "m9", 4, -3],
-            N("He sets four stones on the desk in a ring around an empty point: Oh, himself, Jang, and the team."),
-            S("ms_kimds", "Us. If we hold together we win. Look, we've already made one."),
-            N("On the frame strip, Cho's group in the centre has no eyes yet."),
-            ["problem"],   # the record: Black 47
-            N("Cho played it slack on purpose: he chose to settle his group, because living meant winning."),
-            ["still", "ms_oneeye", "slow zoom in"],
-            S("ms_jang", "One eye. It's still not alive. Misaeng."),
-            ["remove", "stones"],
-            N("Later that month: division head Kim Bu-ryeon keeps his name off Sales 3's China report, then puts it back on once the report looks good. "
-              "Another team takes their rare-earth idea whole. Oh Sang-sik gets a nosebleed at his desk, an IV drip on his own, "
-              "and a box of dried eel from Kim Bu-ryeon, who tells him a father who wrecks his health is no use to anyone."),
-            ["remove", "kd"],
-        ]},
-
-        # M10 · 56-59수. The jargon; Kim Dong-sik's daily homework; the report that gets laminated.
-        "m10": {"title": T("Laminated"), "kind": "main", "steps": [
-            ["spawn", "kd", "ms_kimds", "m10", 2, -2],
-            N("TEU, surcharges, Ramadan schedules. Every sentence in the office has a word in it Jang doesn't know."),
-            N("Every morning there's a sheet on his desk: three questions, in Kim Dong-sik's handwriting. Nobody mentions it."),
-            ["gain", "homework"],
-            S("ms_kimds", "Middle East shipping. A report, by Friday. Don't pretend you know. Find out."),
-            ["problem"],   # legwork: the shipping report
-            ["gain", "report"],
-            N("Oh reads it, corrects it in red, and hands it back. The next morning it is pinned up by the copier, laminated."),
-            S("ms_oh", "Not bad."),
-            ["remove", "kd"],
-            ["party", ["ms_sun"], {"to": {"place": "one-international--sales3", "spot": "sun-desk-hand"}}],   # the lead passes to Sun Ji-young, on the same floor
-        ]},
-
-        # M11 · 60-61수. Park Jong-sik arrives. He harasses Shin Da-in; Sun Ji-young goes to Oh.
-        "m11": {"title": T("Park Jong-sik"), "kind": "main", "steps": [
-            ["spawn", "pk", "ms_park", "m11", 10, -2], ["spawn", "shin", "ms_shin", "m11", 14, 0],
-            N("Section head Park Jong-sik joins Sales 3: once the steel team's ace and its Middle East hand, now the man nobody else wanted. "
-              "Kim Bu-ryeon sent him, on the advice of Oh's old rival."),
-            N("He plays billiards in the afternoons. He calls Jang the high-school parachute to his face."),
-            N("And he stands too close to Shin Da-in, a young contract worker, every day, and says things to her that she pretends not to hear."),
-            S("ms_park", "Da-in, you should smile more. Doesn't cost anything."),
-            ["remove", "pk"],
-            S("ms_sun", "Da-in. Has he done this before? Every day?"),
-            S("ms_shin", "...Please don't. I'm on contract."),
-            ["spawn", "oh", "ms_oh", "m11", 20, -4],
-            ["problem"],   # Sun Ji-young: say it to Oh, plainly
-            S("ms_sun", "Your new section head is harassing a contract worker on my floor. I'm telling you because you're his team head. I'll tell the next person up if I have to."),
-            S("ms_oh", "I'll deal with it."),
-            N("He does. He tells Park, in front of the team, that he can't work with him."),
-            ["remove", "shin"],
-            N("Left to find his own business, Park comes back with one: used cars to Jordan, through a Korean supplier called Baekjin Trading."),
-            S("ms_oh", "Look at this margin. Nobody makes that on used cars. Somebody's taking a cut."),
-            ["gain", "statements"],
-            N("Oh takes it to Kim Bu-ryeon, who signed off on the deal himself. Kim Bu-ryeon reads it twice."),
-            S("ms_kimbr", "Follow procedure."),
-            N("An audit is approved."),
-            ["remove", "oh"],
+        # M14 · 22수. Sun at home: Somi's drawing of her mother, from behind.
+        "m14": {"title": T("Her Back"), "kind": "main", "steps": [
+            ["spawn", "so", "ms_somi", "m14", 4, 0],
+            N("Jang and Ahn have gone. Somi is asleep on the floor with her crayons."),
+            ["gain", "somi_drawing"],
+            ["still", "ms_drawing", "slow zoom in"],
+            N("A drawing: Mummy. A woman walking away, a phone at her ear. Somi has drawn her from behind, because that's how she sees her. "
+              "Every morning Somi bows at the door and says have a good day, and her mother is already gone."),
+            S("ms_sun", "I won't put you off for the sake of a living. Not any more."),
+            N("At eight the next morning a client calls. At nine she's at her desk."),
+            ["remove", "so"],
             ["party", ["ms_jang"], {"to": {"place": "one-international--sales3", "spot": "sales3"}}],
         ]},
 
-        # M12 · 62-63수. Baekjin Trading: Park is already there, coaching the staff.
-        "m12": {"title": T("Baekjin Trading"), "kind": "main", "steps": [
-            ["spawn", "kd", "ms_kimds", "m12", 2, -2], ["spawn", "pk", "ms_park", "m12", 12, -4],
-            N("Kim Dong-sik and Jang go to Baekjin Trading to see the supplier for themselves. Park Jong-sik is already there."),
-            S("ms_park", "Sales 3. Thorough. Go on, ask them anything."),
-            N("The staff answer every question the same way, in the same words, as if they'd learned them that morning."),
-            ["gain", "coached"],
-            ["remove", "pk"],
-            S("ms_kimds", "They were told what to say. We can't prove it."),
-            ["remove", "kd"],
-        ]},
-        "m13_wait": {"title": T("The Audit"), "kind": "main", "steps": [
-            S("ms_jang", "Not yet. I haven't put it together. ICB's registration is on the audit room's table; my notes from the call to ICB are on my desk in Sales 3. Then link them on the audit board, from the bag or the audit room's table."),
-        ]},
-
-        # M13 · 64-65수 (boss). The audit is packing up. One more move. The phone. James Park.
-        "m13": {"title": T("One More Move"), "kind": "main", "steps": [
-            ["spawn", "au", "ms_auditor", "m13", 8, -4], ["spawn", "oh", "ms_oh", "m13", 2, -4], ["spawn", "kd", "ms_kimds", "m13", 4, -2],
-            N("The audit team has been through everything and found nothing they can use. They're packing up."),
-            S("ms_auditor", "Without more, we close it."),
-            S("ms_jang", "Even in a game that's lost, there's a move you want to play. Let me play one."),
-            ["problem"],   # Jang: keep the audit open
-            S("ms_jang", "ICB, the Jordanian buyer, is all local staff on paper. When I called them, someone in the room was speaking Korean. Call them now."),
-            N("The auditor dials Amman. A man answers. In Korean, until he catches himself."),
-            ["still", "ms_phone", "slow zoom in"],
-            N("The signatory on every ICB document, Muhammad Indira, is a Korean called Park Sang-jun."),
-            S("ms_auditor", "Get us ICB's board list."),
-            ["gain", "board_list"],
-            ["problem"],   # Jang: read the board list
-            S("ms_jang", "Park, Park, Park. Half the board is called Park."),
-            ["spawn", "bg", "ms_baekgi", "m13", 14, 0],
-            S("ms_baekgi", "You wanted Park Jong-sik's family? The steel team keeps everything. Here."),
-            ["problem"],   # Jang: find James Park
-            ["still", "ms_jamespark", "slow pan across"],
-            S("ms_jang", "James Park, director of ICB, is Park Jong-sik. Park Sang-jun is the son of Baekjin's president. Baekjin's president is Park's uncle."),
-            S("ms_oh", "Both ends of the deal. All family."),
-            ["gain", "james_park"],
-            ["remove", "au"], ["remove", "bg"], ["remove", "kd"],
+        # M15 · 23-26수. Han is older; his method; the individual task; "through others I'm revealed".
+        "m15": {"title": T("Questions, Not Answers"), "kind": "main", "steps": [
+            ["spawn", "han", "ms_han", "m15", 4, -2],
+            N("It turns out Han is a year older than Jang. He's been polite to him the whole time. Jang is not."),
+            N("Han is in before anyone, out at the port and the airport before nine. An engineer, and a salesman."),
+            S("ms_han", "The panel knows more than we do. Don't bring them answers. Bring them good questions."),
+            ["problem"],   # Jang: build the PT with Han
+            ["spawn", "oh", "ms_oh", "m15", 12, -6],
+            S("ms_oh", "One more task, the day after the PT. Each of you sells something to the person you'd least like to sell to. Your partner. "
+              "Your partner decides whether to buy."),
+            N("Han won't take orders from anyone who has never stood on a factory floor. Jang has never stood on one."),
+            S("ms_jang", "It's through other people that you find out what you are."),
+            ["remove", "oh"], ["remove", "han"],
         ]},
 
-        # M14 · 66-68수. Park's grievance; he leaves; responsibility goes upward.
-        "m14": {"title": T("No Fun"), "kind": "main", "steps": [
-            ["spawn", "pk", "ms_park", "m14", 6, -2], ["spawn", "oh", "ms_oh", "m14", 2, -4],
-            S("ms_park", "This is no fun."),
-            S("ms_park", "In 2008 I brought in a hundred million dollars of steel to Jordan. Alone. And what did I get for it? A team dinner on the director's card."),
-            S("ms_park", "You lot eat the money, and I'm supposed to go home happy with my salary?"),
-            N("He leaves after a meeting with the executive vice president. The police come later."),
-            ["remove", "pk"],
-            N("Responsibility falls upward. Kim Bu-ryeon is moved to an affiliate, One Aluminium. A managing director resigns. "
-              "Before he goes, Kim Bu-ryeon finds Oh, who blames himself, and tells him he did right."),
-            S("ms_president", "Promote Oh. This half."),
-            N("Oh Sang-sik is made deputy general manager, and Sales 3 gets a bonus, and a name around the building: the team that informs on its own."),
-            S("ms_oh", "Nobody gets to say we didn't follow procedure."),
-            ["remove", "oh"],
+        # M16 · 27-29수. PT day. The costumed team; Han's nerves; the choke; Jang stammers; Han's father's hands.
+        "m16": {"title": T("Black Nails"), "kind": "main", "steps": [
+            ["spawn", "han", "ms_han", "m16", 2, -2], ["spawn", "ex", "ms_examiner", "m16", 12, -6], ["spawn", "oh", "ms_oh", "m16", 16, -6],
+            N("PT day. One team stretched the company logo and is finished before it starts. Another comes in costume. Next, says the panel."),
+            N("Han has watched every team with a grin. Now his phone won't stop: his mother, his contacts on the floor. He takes a herbal calmative and then another."),
+            N("On the frame strip, Cho has eight points of komi against him and can't afford to play safe."),
+            ["problem"],   # the record: Black 29
+            N("Cho broke White's side at the cost of his own shape. From here on, every move is one intent against another."),
+            N("Han stands, opens his mouth, takes a sip of water, and chokes. He can't go on."),
+            ["problem"],   # Jang: keep it going
+            S("ms_jang", "The, the market for... One International's share of..."),
+            N("He made every slide. He has never presented anything in his life."),
+            ["still", "ms_blacknails", "slow zoom in"],
+            N("A small boy and his father's hands. Dad, your nails are black. It's grease, it won't wash off. Why, are you ashamed?"),
+            ["problem"],   # Han: say why the floor matters
+            S("ms_han", "Father, I'm not ashamed of you. Or of the floor. Everything this company sells was made by somebody's hands."),
+            S("ms_oh", "So someone else is keeping an eye on Jang Geu-rae."),
+            ["remove", "han"], ["remove", "ex"], ["remove", "oh"],
+            ["party", ["ms_ahn"]],   # the lead passes to Ahn, next up in the same room
         ]},
 
-        # M15 · 69-70수. Chuseok. The relatives; his mother.
-        "m15": {"title": T("Mother's Pride"), "kind": "main", "steps": [
-            ["spawn", "mo", "ms_mother", "m15", 12, -4],
-            N("Chuseok. The relatives' flat is full of cousins with degrees and uncles with opinions."),
-            N("They ask about his job. Contract, he says. They stop asking, and start talking about him as if he'd left the room."),
-            N("He goes out on the landing. Through the kitchen door he hears his mother, defending him to her own sisters, in tears."),
-            ["still", "ms_chuseok", "slow zoom in"],
-            S("ms_jang", "Don't forget it. I'm my mother's pride. Not a son who falls short."),
-            ["remove", "mo"],
-            ["party", ["ms_oh"], {"to": {"place": "The pizza shop", "from": "Jongno"}}],   # (staging) the lead passes to Oh; his own errand, after the holiday
+        # M17 · 30수. Ahn's PT; "the president's daughter?"; Han's team marked down for a sum.
+        "m17": {"title": T("The President's Daughter?"), "kind": "main", "steps": [
+            ["spawn", "ls", "ms_leesh", "m17", 4, -2], ["spawn", "ex", "ms_examiner", "m17", 12, -6],
+            N("Han's team is marked down: a sum on one slide is wrong. The calculator does the sums. How do you get them wrong?"),
+            N("Ahn Young-yi's turn, with her partner, Lee Sang-hyun. Speech isn't writing: you have to hold the air of the room, or it goes thin."),
+            ["problem"],   # Ahn: give the PT
+            N("It's flawless. Lee Sang-hyun barely says a word, because there's no room left for one."),
+            S("ms_examiner", "You're not the president's daughter, are you? Or one of ours, undercover?"),
+            S("ms_ahn", "No, sir. I've been through this a few times."),
+            ["remove", "ls"], ["remove", "ex"],
+            ["party", ["ms_jang"]],   # back to Jang for the individual task; he has to borrow something first
+        ]},
+        "m18_wait": {"title": T("Combat Boots"), "kind": "main", "steps": [
+            S("ms_jang", "Not yet. I need the one thing I'm selling, and section head Oh is wearing it. Sales 3."),
         ]},
 
-        # M16 · 71-83수. Cheon Gwan-ung arrives (told). Kim Dong-su's pizza shop; the envelope.
-        "m16": {"title": T("Outside Is Hell"), "kind": "main", "steps": [
-            N("After the holiday Sales 3 gets Park's replacement, section head Cheon Gwan-ung: ordinary, a heavy drinker, wary of a team that informs. "
-              "When he needles Kim Dong-sik over it, Oh shuts him down: you came here to work, not to play games. Cheon apologises."),
-            N("And Jang proposes reviving the Jordan used-car deal that Park's fraud killed: clean, this time, to show the company can."),
-            ["spawn", "kds", "ms_kimdsu", "m16", 4, -2],
-            N("Kim Dong-su was Oh's senior once. He quit years ago. His pizza shop is being crushed by the big mart's pizza across the road."),
-            S("ms_kimdsu", "Your old clients, Sang-sik. A word from you. I'm not asking for nothing."),
-            ["gain", "envelope"],
-            ["problem"],   # Oh: turn down an old friend
-            ["lose", "envelope"],
-            S("ms_oh", "I can't take it. Go and see Kim Seok-man at Hangang Trading. He'll hear you out."),
-            ["still", "ms_hell", "slow pan across"],
-            S("ms_kimdsu", "They say the company's a battlefield? Outside, it's hell. Don't you quit. Not till they push you out."),
-            ["remove", "kds"],
-            N("Back at the office, the team has a briefing to give the president. Oh hands Jang the seating notes."),
-            ["gain", "seating_notes"], ["gain", "water"], ["gain", "green_tea"], ["gain", "coffee"],
-            ["party", ["ms_jang"], {"to": {"place": "one-international--board-room", "spot": "board-room"}}],   # back to Jang, getting the board room ready
-        ]},
-        "m17_wait": {"title": T("The Board Room"), "kind": "main", "steps": [
-            S("ms_jang", "Every seat as it's written on the notes: the president's water, the executive's tea, the division head's coffee. Then we rehearse."),
-        ]},
-
-        # M17 · 84-88수. Setting the room; the rehearsal; "shake the board"; the president.
-        "m17": {"title": T("Shake the Board"), "kind": "main", "steps": [
-            ["spawn", "oh", "ms_oh", "m17", 2, -4], ["spawn", "kd", "ms_kimds", "m17", 6, -2], ["spawn", "ch", "ms_cheon", "m17", 10, -2],
-            N("Every seat set, every pen squared. The last rehearsal goes perfectly, and Oh frowns all the way through it."),
-            S("ms_oh", "It's tidy. Tidy doesn't sell a deal the board already hates. We need to shake it."),
-            N("On the frame strip, the game turns."),
-            ["problem"],   # the record: Black 85
-            N("The move that turned the flow of the game."),
-            ["spawn", "pr", "ms_president", "m17", 16, -6], ["spawn", "ex", "ms_exec", "m17", 20, -6],
-            ["problem"],   # Oh: shake the board
-            S("ms_president", "Approved. Who did the legwork? The youngest. What did he do?"),
-            S("ms_oh", "It was his idea, sir. All of it started with him."),
-            ["remove", "pr"], ["remove", "ex"],
-            N("That evening Jang looks at his card. Contract. He reads the word twice."),
-            S("ms_jang", "If I just keep doing as I do... I'll become a regular, won't I?"),
-            ["remove", "kd"], ["remove", "ch"],
-            S("ms_oh", "Here. A hundred thousand won. Buy something and sell it. Come back and tell me what you learned."),
-            ["gain", "cash_100k"],
-            ["remove", "oh"],
-        ]},
-        "m18_wait": {"title": T("A Hundred Thousand Won"), "kind": "main", "steps": [
-            S("ms_jang", "Not yet. The market stalls on Jongno sell stock; the street's full of people to sell it to."),
+        # M18 · 31-32수 (boss). Oh barefoot; Han sells; Jang buys only the notebooks; Jang sells Oh's slippers; "I won't buy them".
+        "m18": {"title": T("Combat Boots"), "kind": "main", "steps": [
+            ["spawn", "han", "ms_han", "m18", 4, -2], ["spawn", "oh", "ms_oh", "m18", 14, -6], ["spawn", "ahn", "ms_ahn", "m18", 18, -2],
+            ["still", "ms_barefoot", "slow zoom in"],
+            N("The individual task. On the panel, section head Oh sits in his socks."),
+            S("ms_han", "My field notebooks. Every site I've been to. And this."),
+            N("He unrolls a bolt of fabric across the table with a flourish."),
+            ["problem"],   # Jang: buy what's worth buying
+            S("ms_jang", "I'll buy the notebooks. Not the cloth. I'm buying your time on the floor. And I'd like to sell cloth with you one day."),
+            ["gain", "notebook"],
+            N("Ahn, watching, looks surprised; then she smiles. So does Oh."),
+            N("On the frame strip, Black can put White's whole side in atari."),
+            ["problem"],   # the record: Black 31
+            N("Cho broke the lower side completely. Every move says: answer like this, or else."),
+            ["lose", "slippers"],
+            S("ms_jang", "Office slippers. The office worker's combat boots. You have yours on the floor. This floor is a floor too."),
+            S("ms_han", "I won't buy them."),
+            S("ms_jang", "You've been fighting on it for two months."),
+            S("ms_han", "I won't buy them."),
+            ["problem"],   # Jang: sell to someone who won't buy
+            S("ms_jang", "There are no meaningless stones on a board."),
+            S("ms_han", "...And nothing a company makes is made for no reason. I've been narrow."),
+            N("The next morning there are new slippers under every desk on the floor. Han bought them."),
+            ["remove", "han"], ["remove", "oh"], ["remove", "ahn"],
         ]},
 
-        # M18 · 103-106수. The mission fails, as written: the Baduk Association's rebuke, the corner shop.
-        "m18": {"title": T("A Hundred Thousand Won"), "kind": "main", "steps": [
-            ["spawn", "oh", "ms_oh", "m18", 4, -2],
-            S("ms_oh", "Well?"),
-            S("ms_jang", "I went to the Baduk Association first. They told me they'd buy anything I brought, out of pity or kindness, and asked if I'd call that doing my job."),
-            S("ms_jang", "Then the street. The old man at the corner shop sold more dried squid while I was talking than I sold all day."),
-            ["gain", "dried_squid"],
-            S("ms_oh", "You can't climb stairs that have no first step. And you can't sell like you're running away."),
-            ["remove", "oh"],
-            ["party", ["ms_ahn"], {"to": {"place": "one-international--roof", "spot": "roof"}}],   # the lead passes to Ahn, on the roof
+        # M19 · 33수. The results. Baek-gi's hand mirror; Ahn first; Jang on a two-year contract.
+        "m19": {"title": T("Contract"), "kind": "main", "steps": [
+            ["spawn", "bg", "ms_baekgi", "m19", 4, -2], ["spawn", "ahn", "ms_ahn", "m19", 8, -2], ["spawn", "han", "ms_han", "m19", 12, -2],
+            N("Jang Baek-gi sold his partner a small hand mirror, in a box far too big for it: manage your face before you manage business. His partner bought it, red to the ears."),
+            N("On the frame strip, Black can take its territory now."),
+            ["problem"],   # the record: Black 33
+            N("Cho settled his side. Territory against thickness."),
+            N("The list. Ahn Young-yi, first overall. Jang Baek-gi, hired, to the steel team. Han Seok-yul, hired. Kim Seok-ho, hired, to head office."),
+            N("Jang Geu-rae, hired. On a two-year contract."),
+            ["lose", "pass"], ["gain", "id_card"],
+            S("ms_jang", "A contract worker, with a real ID card round his neck."),
+            ["remove", "bg"], ["remove", "ahn"], ["remove", "han"],
+            ["party", ["ms_jang"], {"to": {"place": "Jongno", "from": "One International"}}],
         ]},
 
-        # M19 · 114수. Her proposal is adopted at HQ; her department head chews her out on the roof; she withdraws (R7).
-        "m19": {"title": T("Step on Me"), "kind": "main", "steps": [
-            ["spawn", "ma", "ms_ma", "m19", 6, -4], ["spawn", "ab", "ms_ahnboss", "m19", 10, -2],
-            N("At a group meeting at head office, Ahn's proposal was chosen over resources team 3's. Her department head had been backing team 3, to build his own camp."),
-            ["emote", "ma", "anger"],
-            S("ms_ma", "Who told you to embarrass this department in front of head office? Who do you think you are?"),
-            S("ms_ahnboss", "Young-yi. My promotion's this round. Please. Just drop it."),
-            ["problem"],   # Ahn: keep her proposal
-            S("ms_ahn", "...I'll withdraw it. Team 3's plan will go forward."),
-            ["remove", "ma"], ["remove", "ab"],
-            ["still", "ms_roof_ahn", "slow zoom out"],
-            N("She stays up there until the lunch hour is over."),
-            ["party", ["ms_ahn"], {"to": {"place": "jongno--pojangmacha", "spot": "pojangmacha"}}],   # night; the tent bar
-        ]},
-        # M19b · 114-116수. Drinks with Jang. Her father. The necklace.
-        "m19b": {"title": T("Her Father"), "kind": "main", "steps": [
-            ["spawn", "jg", "ms_jang", "m19b", 4, -2],
-            N("She drinks too fast, and Jang lets her. Then she puts her head down on the table and cries."),
-            N("Her father is an army officer. He wanted sons. Prizes, class president, head of the student council: he never looked."),
-            ["spawn", "dad", "ms_ahnfather", "m19b", 12, -6],
-            N("When he heard his daughter was on an executive track, he asked about her salary, and then about loans in her name. When she said no, he hit her."),
-            ["remove", "dad"],
-            S("ms_ahn", "So I cut him off. And left. And came here. And today I did what I was told."),
-            S("ms_jang", "You're allowed to like yourself a bit more. You don't have to earn it every day."),
-            N("A few days later the department head is dressed down himself, by head office, for blocking the plan they had liked. "
-              "Jang buys her a necklace. She wears it. He doesn't notice."),
-            ["gain", "necklace"],
-            ["remove", "jg"],
-            ["party", ["ms_jang"], {"to": {"place": "One International", "from": "Jongno"}}],
-        ]},
-
-        # M20 · 121-123수. Cutaway: Sun Ji-young's husband tells her to quit.
-        "m20": {"title": T("Somi's Mother"), "kind": "main", "steps": [
-            ["spawn", "sun", "ms_sun", "m20", 0, -2], ["spawn", "hb", "ms_sunhusband", "m20", 8, -2], ["spawn", "so", "ms_somi", "m20", 4, 2],
-            S("ms_sunhusband", "I've been promoted. We don't need two salaries. You can stop now. Stay home with her."),
-            S("ms_sun", "I'm not only Somi's mother. I'm a person who works. I want to be seen as one."),
-            N("They talk until late. In the end the housework is no longer something he helps with. It is something he has to do."),
-            N("At the office, the rumour that she's leaving is already going round. Somebody says: women."),
-            ["remove", "hb"], ["remove", "so"], ["remove", "sun"],
-        ]},
-
-        # M21 · 127-133수. The executive's China business. The call from the China office. Jang talks.
-        "m21": {"title": T("The Phone Call"), "kind": "main", "steps": [
-            ["spawn", "oh", "ms_oh", "m21", 2, -4],
-            N("After Jordan, the executive vice president takes Sales 3 into his own line, and gives them his long-running China business on handsome terms."),
-            N("Oh sees what that patronage could mean: a regular contract for Jang. He sees what else it could mean, too."),
-            S("ms_oh", "Nobody here thinks we've caught a golden rope. Nobody. And keep a copy of everything."),
-            ["remove", "oh"],
-            N("Oh and the others are out. The phone on the team's desk rings: the company's man in China."),
-            S("ms_chinarep", "Is this Sales 3? Our partner's asking about the arrangements. The usual gifts, the relationships. What do you want me to tell them?"),
-            ["problem"],   # Jang: answer the China office
-            S("ms_jang", "I'll lay it out. The gifts, the guanxi: we'll need to understand exactly what's been going to whom, and why."),
-            N("He means to help. In China, it lands as an alarm. Within days the Chinese partner tips off One International's audit department, and a nine-year business comes apart."),
-            ["spawn", "oh", "ms_oh", "m21", 2, -4],
-            S("ms_oh", "A fight between departments is the leader's game. Yours is your own. Play your own."),
-            ["remove", "oh"],
-            ["party", ["ms_oh"]],   # the lead passes to Oh, at the team's desks; he goes up to the executive
-        ]},
-
-        # M22 · 134-139수. Oh at the executive; the audit; the executive demoted; HR's answer.
-        "m22": {"title": T("Only Today"), "kind": "main", "steps": [
-            ["spawn", "ex", "ms_exec", "m22", 8, -4],
-            N("The division head has spent the evening pouring drinks for Oh. Oh goes straight from the table to the executive's office."),
-            N("On the frame strip, Cho's big group must find a way to live."),
-            ["problem"],   # the record: Black 137
-            N("Cho's way to live with the group."),
-            ["problem"],   # Oh: face the executive
-            S("ms_oh", "Were those gifts relationships, sir, or were they the company's money walking out the door?"),
-            N("It comes out in the audit: the Chinese partner had been using the executive's ambition, and skimming One International's real profit for years."),
-            S("ms_exec", "Thank you for ending it quietly."),
-            N("He is made president of One Global Service, an unlisted affiliate nobody visits."),
-            ["remove", "ex"],
-            ["spawn", "jg", "ms_jang", "m22", 2, 2],
-            N("Jang is crying. He did it out of love for the team, and it doesn't matter."),
-            S("ms_oh", "I understand. And that's the end of it. Regret it today. Only today."),
-            ["spawn", "hr", "ms_hr", "m22", 14, 0],
-            S("ms_oh", "A contract worker with a high-school certificate. Converting him to regular. Is there a way?"),
-            S("ms_hr", "There's no precedent. I'd say it'll probably be difficult."),
-            N("He didn't look it up."),
-            ["remove", "hr"], ["remove", "jg"],
-        ]},
-
-        # M23 · 140-144수. Kim Dong-su's offer; Oh resigns; the contract ends.
-        "m23": {"title": T("Infrastructure"), "kind": "main", "steps": [
-            ["spawn", "kd", "ms_kimds", "m23", 4, -2], ["spawn", "ch", "ms_cheon", "m23", 8, -2], ["spawn", "jg", "ms_jang", "m23", 12, -2],
-            N("Sales 3 is alone now. Kim Dong-su comes back with an offer: a small company of their own."),
-            N("Oh thinks about his four sons, about chicken versus eel. His wife tells him: buy everything at the staff discount, and stay till the bonus."),
-            S("ms_oh", "People are everything. That's all a company is."),
-            N("He resigns, and asks Kim Bu-ryeon to come in with them. Cheon Gwan-ung is left holding the team."),
-            ["remove", "ch"], ["remove", "kd"],
-            ["party", ["ms_jang"], {"to": {"place": "Jongno", "spot": "forecourt"}}],   # Jang's last day: out of the tower
-        ]},
-        "m23b": {"title": T("Two Years"), "kind": "main", "steps": [
-            ["lose", "id_card"], ["gain", "contract"],
-            N("Two years. The contract ends on a weekday. Jang hands in his card and walks out through the gates."),
-            ["still", "ms_infra", "slow zoom out"],
-            N("Looking back, the building is already cold, as though it had never been his."),
-            S("ms_jang", "The infrastructure was me."),
-        ]},
-
-        # M24 · 145수. Three weeks later: the new company. The next applicant. Jordan. Cheon's colour.
-        "m24": {"title": T("Move 145"), "kind": "main", "steps": [
-            ["spawn", "oh", "ms_oh", "m24", 2, -4],
-            N("Three weeks later. A narrow street, an office up a flight of stairs. Oh Sang-sik's new trading company has hired its first regular employee: Jang Geu-rae."),
-            N("On the frame strip, 144 moves. Nie Weiping's stones press on Cho's centre."),
-            ["problem"],   # the record: Black 145
-            ["still", "ms_145", "slow zoom in"],
-            N("Black 145. White's five stones in the centre can't escape now. Nie Weiping resigns. Cho Hunhyun is the first world champion in Korean baduk."),
-            S("ms_oh", "Next applicant."),
-            ["spawn", "kd", "ms_kimds", "m24", 10, 2], ["move", "kd", "m24", 6, -2],
-            S("ms_kimds", "Kim Dong-sik. I've quit too. Is the post still open?"),
-            S("ms_jang", "I got here first. So you're the junior."),
-            ["remove", "kd"],
-            N("Later, Jang is in Amman, on the phone to his boss in Seoul. Back at One International, under a new team head, Cheon Gwan-ung stays."),
-            S("ms_cheon", "As a breadwinner, as a father, I'm colourless. That's my colour."),
+        # M20 · 33수. The first morning: Oh takes the new hires to the memorial altar at Daehanmun.
+        "m20": {"title": T("Daehanmun"), "kind": "main", "steps": [
+            ["spawn", "oh", "ms_oh", "m20", 2, -4], ["spawn", "ahn", "ms_ahn", "m20", 6, 0], ["spawn", "han", "ms_han", "m20", 9, 0],
+            ["spawn", "bg", "ms_baekgi", "m20", 12, 0],
+            N("The first morning. Oh doesn't take his new people to their desks. He takes them to Daehanmun, the old palace gate, "
+              "where a tent stands with portraits in it: laid-off car workers who died after they lost their jobs."),
+            ["still", "ms_daehanmun", "slow pan across"],
+            N("He bows. They bow. He doesn't explain. Ahn looks as if she already knows what this is."),
+            S("ms_oh", "Right. Work."),
+            N("Twenty-five stones became twenty-four. On the board in Jang's head there's a little room now, and a long game left."),
             ["victory"],
         ]},
     }
@@ -536,203 +407,144 @@ def _nodes():
         return n
     return [
         node("m1", 20, 240, "m1", place="Korea Baduk Association", room="kba-trainees", move=0, dilemma=D(
-            "ms_jang", "Win the game that decides your career.",
+            "ms_jang_young", "Win the game that decides your career.",
             "Seven years at these boards. Win this, and I'm a professional.",
             "Half a point short.",
             "Read it again.")),
-        node("m2", 40, 232, "m2", room="lobby", move=2, dilemma=D(
-            "ms_jang", "Get through the front desk.",
-            "Everyone else has a pass with their name on it. I have a phone call.",
-            "Let in.",
+        node("m2", 40, 232, "m2", room="lobby", move=3, board=False),
+        node("m3", 55, 225, "m3", room="sales3", move=4, dilemma=D(
+            "ms_jang", "Find the move that gives a stone to take more.",
+            "I don't know what FOB is. I know what this is.",
+            "Snapback.",
+            "Read it again.")),
+        node("m4", 68, 218, "m4", room="sales3", move=5, board=False,
+             gate=[{"needs": ["mark:errand_copy", "mark:errand_file", "mark:errand_coffee"], "else": "m4_wait",
+                    "objective": T("Run the three errands on Sales 3's floor: Kim's copies from the copier, Oh's file to his desk, the deputy's coffee from the pantry."),
+                    "at": "One International"}]),
+        node("m5", 80, 212, "m5", room="sales3", move=7, dilemma=D(
+            "ms_jang", "Live inside their wall.",
+            "Twenty-five of them, and me. Find two eyes.",
+            "Alive. Barely.",
+            "Dead. Again.")),
+        node("m6", 95, 205, "m6", room="pt-room", move=10, record=[11, None], dilemma=[
+            D("ms_jang", "Find Cho Hunhyun's move.",
+              "Link up, and keep attacking.",
+              "Black 11.",
+              "Not there. Look again."),
+            D("ms_jang", "Take the PT back.",
+              "He's been giving orders for three days. Enough.",
+              "He stops talking.",
+              "Again."),
+        ]),
+        node("m7", 110, 198, "m7", room="sales3", move=13, board=False),
+        node("m8", 120, 194, "m8", room="lobby", move=14, board=False,
+             gate=[{"needs": ["item:waybill_scrap"], "else": "m8_wait",
+                    "objective": T("Search the recycling bins by the lobby's ID gates for the rest of the waybill."), "at": "One International"}]),
+        node("m9", 135, 186, "m9", room="textile", move=16, dilemma=D(
+            "ms_kimbr", "Apologise before it grows.",
+            "I could pull rank. It would only get worse. The obvious move.",
+            "Steve takes it.",
             "Not like that. Again.")),
-        node("m3", 55, 225, "m3", room="sales3", move=13, board=False),
-        node("m3b", 62, 222, "m3b", room="lobby", move=13, board=False,
-             gate=[{"needs": ["item:waybill_scrap"], "else": "m3b_wait",
-                    "objective": T("Search the lobby's bins by the gates for the rest of the waybill."), "at": "One International"}]),
-        node("m4", 75, 215, "m4", place="Jongno", room="client", move=19, dilemma=D(
-            "ms_parkjg", "Stand up to the client.",
-            "They've laughed at me for years. Somebody thinks I can be a hunter. Fine.",
-            "They stop laughing.",
-            "Steady. Again.")),
-        node("m4b", 85, 210, "m4b", room="meeting", move=20, board=False),
-        node("m5", 95, 205, "m5", room="sun-desk", move=21, board=False),
-        node("m5b", 105, 200, "m5b", place="Sun's neighbourhood", room="daycare", move=22, board=False),
-        node("m6", 120, 192, "m6", room="pt-room", move=28, record=[29, None], dilemma=[
+        node("m10", 150, 180, "m10", room="roof", move=17, board=False),
+        node("m11", 165, 172, "m11", place="Jongno", room="client", move=18, record=[19, None], dilemma=[
+            D("ms_jang", "Find Cho Hunhyun's move.",
+              "He's shown me a weakness on purpose. Go straight in.",
+              "Black 19.",
+              "Not there. Look again."),
+            D("ms_jang", "Answer the trick with the proper move.",
+              "It's staged. Hold him to what he said.",
+              "He'll come in person.",
+              "He's slipping away. Again."),
+        ]),
+        node("m12", 178, 166, "m12", room="meeting", move=20, dilemma=D(
+            "ms_parkjg", "Tell them the truth.",
+            "The kid says be irresponsible. I've been irresponsible for years.",
+            "I said it.",
+            "Again.")),
+        node("m13", 190, 160, "m13", room="sun-desk", move=21, board=False),
+        node("m13b", 198, 156, "m13b", place="Sun's neighbourhood", room="daycare", move=21, board=False),
+        node("m14", 210, 150, "m14", place="Sun's neighbourhood", room="sun-flat", move=22, board=False),
+        node("m15", 225, 142, "m15", room="sales3", move=26, dilemma=D(
+            "ms_jang", "Build the PT with Han.",
+            "He has the questions. I have the paper.",
+            "It holds together.",
+            "Again.")),
+        node("m16", 240, 134, "m16", room="pt-room", move=28, record=[29, None, None], dilemma=[
             D("ms_jang", "Find Cho Hunhyun's move.",
               "Eight points of komi. He can't play safe.",
               "Black 29.",
               "Not there. Look again."),
-            D("ms_han", "Finish the presentation.",
-              "My mouth's gone dry. The site comes first. Say it.",
-              "Thank you.",
+            D("ms_jang", "Keep it going.",
+              "He's choking. I made every slide. Say something.",
+              "Enough to get him back.",
               "Breathe. Again."),
-        ]),
-        node("m7", 135, 185, "m7", room="pt-room", move=33, dilemma=D(
-            "ms_jang", "Sell to someone who won't buy.",
-            "He'll say no whatever I do. Then don't sell him slippers. Sell him this floor.",
-            "He buys it.",
-            "He won't buy that. Again.")),
-        node("m8", 150, 178, "m8", room="finance", move=43, dilemma=D(
-            "ms_ahn", "Get the plan past finance.",
-            "Nobody on my team will ask. Then I'll ask.",
-            "She hears me out, and the answer is still no.",
-            "Again. Calmly.")),
-        node("m9", 165, 170, "m9", room="sales3", move=46, record=47, dilemma=D(
-            "ms_jang", "Find Cho Hunhyun's move.",
-            "His centre group has no eyes. If it lives, he wins.",
-            "Black 47.",
-            "Not there. Look again.")),
-        node("m10", 178, 164, "m10", room="sales3", move=59, dilemma=D(
-            "ms_jang", "Write the shipping report.",
-            "Don't pretend to know. Find out.",
-            "Corrected in red, and pinned up.",
-            "Again. From the start.")),
-        node("m11", 190, 158, "m11", room="sun-desk", move=61, dilemma=D(
-            "ms_sun", "Say it to Oh, plainly.",
-            "She asked me not to. I'm saying it anyway.",
-            "He'll deal with it.",
-            "Plainer. Again.")),
-        node("m12", 205, 150, "m12", place="Baekjin Trading", room="baekjin", move=63, board=False),
-        node("m13", 220, 142, "m13", room="audit", move=65, role="boss",
-             gate=[{"needs": ["mark:audit"], "else": "m13_wait",
-                    "objective": T("Pick up ICB's registration from the audit room's table and your call notes from your desk in Sales 3, then link the clues on the audit board (in the bag, or at the audit room's table)."),
-                    "at": "One International"}],
-             dilemma=[
-                 D("ms_jang", "Keep the audit open.",
-                   "Even in a lost game there's a move I want to play.",
-                   "They dial Amman.",
-                   "They're still packing. Again."),
-                 D("ms_jang", "Read the board list.",
-                   "Somebody in Amman speaks Korean. Who?",
-                   "Park, and Park, and Park.",
-                   "Read it again."),
-                 D("ms_jang", "Find James Park.",
-                   "Park's family is in the steel team's files.",
-                   "James Park is Park Jong-sik.",
-                   "Not yet. Again."),
-             ]),
-        node("m14", 235, 135, "m14", room="exec-floor", move=68, board=False),
-        node("m15", 250, 128, "m15", place="Susaek-dong", room="relatives", move=70, board=False),
-        node("m16", 265, 120, "m16", place="The pizza shop", move=83, dilemma=D(
-            "ms_oh", "Turn down an old friend.",
-            "He was my senior. He taught me this job. And he's holding out an envelope.",
-            "I hand it back.",
-            "Again. Kindly."),
-             ),
-        node("m17", 280, 112, "m17", room="board-room", move=84, record=[85, None],
-             gate=[{"needs": ["mark:seat_president", "mark:seat_exec", "mark:seat_division"], "else": "m17_wait",
-                    "objective": T("Set the board room from the seating notes: each drink at its seat, on the board room's table (take the lift)."),
-                    "at": "One International"}],
-             dilemma=[
-                 D("ms_jang", "Find Cho Hunhyun's move.",
-                   "The game's been even for too long. Something has to turn it.",
-                   "Black 85.",
-                   "Not there. Look again."),
-                 D("ms_oh", "Shake the board.",
-                   "They hate this deal already. Tidy won't move them. Shake it.",
-                   "Approved.",
-                   "They're not moving. Again."),
-             ]),
-        node("m18", 295, 105, "m18", place="Jongno", move=106, board=False,
-             gate=[{"needs": ["mark:trade"], "else": "m18_wait",
-                    "objective": T("Buy stock at the market stalls on Jongno with the hundred thousand won, then sell it to passers-by on the street."),
-                    "at": "Jongno"}]),
-        node("m19", 310, 98, "m19", room="roof", move=114, dilemma=D(
-            "ms_ahn", "Keep your proposal.",
-            "Head office chose it. It's the better plan. Say so.",
-            "It's the better plan. I withdraw it.",
-            "Again."),
-             ),
-        node("m19b", 320, 94, "m19b", place="Jongno", room="pojangmacha", move=116, board=False),
-        node("m20", 330, 90, "m20", place="Sun's neighbourhood", room="sun-flat", move=123, board=False, cutaway=True),
-        node("m21", 345, 82, "m21", room="sales3", move=133, dilemma=D(
-            "ms_jang", "Answer the China office.",
-            "Everyone's out. Somebody has to answer.",
-            "I lay it all out.",
-            "Again."),
-             ),
-        node("m22", 360, 75, "m22", room="exec-floor", move=136, record=[137, None], dilemma=[
-            D("ms_oh", "Find Cho Hunhyun's move.",
-              "His big group must live, or it's over.",
-              "Black 137.",
-              "Not there. Look again."),
-            D("ms_oh", "Face the executive.",
-              "Gifts, or the company's money? Ask him.",
-              "It comes out.",
+            D("ms_han", "Say why the floor matters.",
+              "My father's hands. Say it.",
+              "The room is listening.",
               "Again."),
         ]),
-        node("m23", 375, 68, "m23", room="sales3", move=143, board=False),
-        node("m23b", 382, 64, "m23b", place="Jongno", room="forecourt", move=144, board=False),
-        node("m24", 395, 58, "m24", place="The new office", move=144, record=145, dilemma=D(
+        node("m17", 250, 128, "m17", room="pt-room", move=30, dilemma=D(
+            "ms_ahn", "Give the PT.",
+            "Hold the room. Leave nothing thin.",
+            "Flawless.",
+            "Again. Cleaner.")),
+        node("m18", 262, 120, "m18", room="pt-room", move=30, role="boss", record=[None, 31, None],
+             gate=[{"needs": ["item:slippers"], "else": "m18_wait",
+                    "objective": T("Borrow section head Oh's office slippers at his desk in Sales 3, then come back to the PT room."),
+                    "at": "One International"}],
+             dilemma=[
+                 D("ms_jang", "Buy what's worth buying.",
+                   "Notebooks and a bolt of cloth. What's he really selling?",
+                   "The notebooks.",
+                   "Look again."),
+                 D("ms_jang", "Find Cho Hunhyun's move.",
+                   "Atari. Break the whole side.",
+                   "Black 31.",
+                   "Not there. Look again."),
+                 D("ms_jang", "Sell to someone who won't buy.",
+                   "He'll say no whatever I do. Don't sell him slippers. Sell him this floor.",
+                   "He buys.",
+                   "He won't buy that. Again."),
+             ]),
+        node("m19", 275, 112, "m19", room="hr", move=32, record=33, dilemma=D(
             "ms_jang", "Find Cho Hunhyun's move.",
-            "One more move. The centre.",
-            "Black 145. Nie Weiping resigns.",
+            "Take the territory. Settle.",
+            "Black 33.",
             "Not there. Look again.")),
+        node("m20", 290, 104, "m20", place="Daehanmun", move=33, board=False),
     ]
 
 
-_ORDER = ["m1", "m2", "m3", "m3b", "m4", "m4b", "m5", "m5b", "m6", "m7", "m8", "m9", "m10", "m11", "m12", "m13", "m14",
-          "m15", "m16", "m17", "m18", "m19", "m19b", "m20", "m21", "m22", "m23", "m23b", "m24"]
+_ORDER = ["m1", "m2", "m3", "m4", "m5", "m6", "m7", "m8", "m9", "m10", "m11", "m12", "m13", "m13b", "m14", "m15",
+          "m16", "m17", "m18", "m19", "m20"]
 _EDGES = [[a, b] for a, b in zip(_ORDER, _ORDER[1:])]
 
 _ITEMS = {
     "pass": {"name": "Intern's pass", "kind": "key"},
     "id_card": {"name": "ID card (contract)", "kind": "key", "text": "Jang Geu-rae. Sales Team 3. Contract: two years."},
+    "glue_stick": {"name": "Glue stick", "kind": "key"},
     "waybill_scrap": {"name": "Waybill scrap", "kind": "key", "text": "Glue on the back. A name: Kim Seok-ho."},
-    "note": {"name": "A note", "kind": "key", "text": "Be irresponsible, sir. Blame the junior."},
-    "slippers": {"name": "Office slippers", "kind": "key"},
-    "homework": {"name": "Kim Dong-sik's homework", "kind": "key", "text": "Three questions a day, in his handwriting."},
-    "report": {"name": "The shipping report (laminated)", "kind": "key"},
-    "envelope": {"name": "An envelope", "kind": "key"},
-    "cash_100k": {"name": "The mission's envelope", "kind": "key", "text": "₩100,000 to turn into more."},
-    "dried_squid": {"name": "Dried squid", "kind": "key"},
-    "necklace": {"name": "A necklace", "kind": "key"},
-    "contract": {"name": "The contract, ended", "kind": "key"},
-    # the audit board's clues (m11-m13)
-    "statements": {"name": "Baekjin's statements", "kind": "clue",
-                   "text": "Used cars to Jordan, through Baekjin Trading. The margin is far above anything in the trade."},
-    "coached": {"name": "Baekjin's staff", "kind": "clue",
-                "text": "Every answer the same, in the same words. Park Jong-sik was there before us."},
-    "icb_listing": {"name": "ICB's registration", "kind": "clue",
-                    "text": "ICB Company, Amman. Every officer listed is Jordanian. Signatory: Muhammad Indira."},
-    "icb_call": {"name": "My call to ICB", "kind": "clue",
-                 "text": "When I called ICB about the paperwork, someone in the room behind was speaking Korean."},   # (staging) the webtoon has Jang remember it; how he heard it is ours
-    "board_list": {"name": "ICB's board list", "kind": "clue", "text": "Park, Park, Park..."},
-    "james_park": {"name": "James Park", "kind": "clue", "text": "James Park, director of ICB, is Park Jong-sik."},
-    # setting the board room (m17); the notes say which seat gets what
-    "seating_notes": {"name": "Seating notes", "kind": "key",
-                      "text": "President: still water, no ice. Executive vice president: green tea. Division head: coffee, black."},
-    "water": {"name": "Still water", "kind": "prop"},
-    "green_tea": {"name": "Green tea", "kind": "prop"},
-    "coffee": {"name": "Black coffee", "kind": "prop"},
-}
-
-_AUDIT = {
-    "title": "The audit board",
-    "clues": ["statements", "coached", "icb_listing", "icb_call"],
-    "links": [
-        {"q": "Why is Baekjin's margin so high?", "pair": ["statements", "coached"],
-         "a": "Someone taught Baekjin what to say. The margin is the money."},
-        {"q": "Who is ICB, really?", "pair": ["icb_listing", "icb_call"],
-         "a": "Every officer is Jordanian on paper. So who was speaking Korean on their line?"},
-    ],
-    "done": "audit",
-}
-
-# (staging) What Jang buys isn't in our sources; the corner shop's dried squid is.
-_TRADE = {
-    "cash": 100000, "unit": "₩",
-    "goods": {"socks": {"name": "Socks (10 pairs)", "cost": 20000}},
-    "done": "trade",
-    "ends": {"offers": 5},
-    "when": "node:m17",
+    "copy": {"name": "Copies for Kim", "kind": "key"},
+    "file": {"name": "Oh's file", "kind": "key"},
+    "coffee": {"name": "The deputy's coffee", "kind": "key"},
+    "note": {"name": "A note", "kind": "key", "text": "Be irresponsible, sir."},
+    "slippers": {"name": "Section head Oh's slippers", "kind": "key"},
+    "notebook": {"name": "Han's field notebooks", "kind": "key", "text": "Every site he's stood on, in his handwriting."},
+    "somi_drawing": {"name": "Somi's drawing", "kind": "key", "text": "Mummy, walking away, a phone at her ear. Drawn from behind."},
 }
 
 _OPENING = [
     ["scroll", T("The First Move"), [
-        T("Every chapter of this book opens on one move of a real game: the 1st Ing Cup final, game 5, 1989. "
+        T("Every chapter of this story opens on one move of a real game: the 1st Ing Cup final, game 5, 1989. "
           "Nie Weiping has White. Cho Hunhyun has Black. It will last 145 moves."),
         T("You are Jang Geu-rae. You have given your childhood to baduk. In a few minutes you will find out whether it gives anything back."),
+    ]],
+]
+
+_CLOSING = [
+    ["scroll", T("Book 2: Style"), [
+        T("Thirty-three moves played. Jang has a desk, a team head who takes his people to memorials, and a contract that ends in two years."),
+        T("Next: four new hires, four teams, and the first time Sales 3 sees what Jang was before he came."),
     ]],
 ]
 
@@ -741,13 +553,11 @@ def _world():
     return {
         "n": 21,
         "lang": "en",
-        "name": T("Misaeng"),
+        "name": T("Not Yet Alive"),
         "zh": "",
         "chapters": [],
         "record": {"sgf": "docs/book2/misaeng-ing-cup-g5.sgf",
                    "title": "1st Ing Cup final, game 5", "black": "Cho Hunhyun", "white": "Nie Weiping"},
-        "audit": _AUDIT,
-        "trade": _TRADE,
         "grades": ["11K", "11K+"],
         "boss": "redmond",
         "party": ["ms_jang_young"],
@@ -757,7 +567,8 @@ def _world():
         "edges": _EDGES,
         "scenes": _scenes(),
         "opening": _OPENING,
-        "closing": [],
+        "closing": _CLOSING,
+        "next": 22,
     }
 
 
