@@ -1,0 +1,11 @@
+     mode: test (the game's test mode on)
+ok   21-m2  6s  ms_jang in one-international
+ok   21-m3  22s  ms_oh in one-international--sales3
+     ui: {"lead":"ms_oh","party":["ms_oh"],"line":"StoryOh Sang-sikIf it fell here, there's more of it. Bins first.▼","dlgHidden":false,"busy":true,"cine":true,"leaving":false,"html":["town-goal-go:Take me there","town-dlg story has-portrait:StoryOh Sang-sikIf it fell here, there's","tk-strip:Move 13","town-skip:Skip ▸▸"]}
+FAIL 21-m3b  at 140,280 in one-international: over 300s on this beat (caught 0 times; goal 136,263) ("If it fell here, there's more of it. Bins first."); reloading, as a player would, and playing on
+     ui: {"lead":"ms_oh","party":["ms_oh"],"line":"StoryOh Sang-sikIf it fell here, there's more of it. Bins first.▼","dlgHidden":false,"busy":true,"cine":true,"leaving":false,"html":["town-goal-go:Take me there","town-dlg story has-portrait:StoryOh Sang-sikIf it fell here, there's","tk-strip:Move 13","town-skip:Skip ▸▸"]}
+FAIL 21-m3b  600s  ms_oh in one-international  at 140,280: over 300s on this beat (caught 0 times) ("If it fell")
+ok   after each handoff the new lead starts 6+ tiles from the beat's spot (m3b ms_jang>ms_oh 17.4 tiles from m3b)
+ok   after the book: playing as ms_oh in one-international; the chip says "Oh Sang-sik"; "Now playing" banners: Oh Sang-sikNow playing: Sang-sik
+walk-playthrough Book 21 (default): 2/3 beats walked and played in 10.5 min (1 needed a reload, 0 held by a scene); 1 boards (1 from the rated pool)
+the goal box's chip followed the party: Jang Geu-rae → Oh Sang-sik

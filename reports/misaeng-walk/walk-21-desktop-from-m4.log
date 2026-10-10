@@ -1,0 +1,19 @@
+     mode: test (the game's test mode on)
+ok   21-m4  6s  ms_jang in jongno--client
+ok   21-m4b  15s  ms_jang in one-international--meeting
+ok   21-m5  11s  ms_jang in one-international--sales3
+ok   21-m5b  12s  ms_jang in suns-neighbourhood--daycare
+ok   21-m6  19s  ms_jang in one-international--pt-room
+ok   21-m7  7s  ms_jang in one-international--pt-room
+ok   21-m8  16s  ms_ahn in one-international--finance
+ok   21-m9  18s  ms_jang in one-international--sales3
+ok   21-m10  12s  ms_jang in one-international--sales3
+ok   21-m11  17s  ms_sun in one-international--sales3
+ok   21-m12  40s  ms_jang in baekjin-trading--baekjin
+     ui: {"lead":"ms_jang","party":["ms_jang"],"line":"StoryJang Geu-raeNot yet. I haven't put it together. ICB's registration is on the audit room's table; my notes from the call to ICB are on my desk in Sales 3. Then link them on the audit board, from the bag or the audit room's table.▼","dlgHidden":true,"busy":false,"cine":false,"leaving":true,"html":["town-goal-go:Take me there","tk-strip:Move 65"]}
+FAIL 21-m13  at 204,199 in one-international--audit: stuck: no progress for 60s (goal 240,264; canMove false, seated false, approaching false, walk none, a way 1 points, near: nobody) ("Not yet. I haven't put it together. ICB's registration is on the audit room's table; my no"); reloading, as a player would, and playing on
+     ui: {"lead":"ms_jang","party":["ms_jang"],"line":"StoryJang Geu-raeNot yet. I haven't put it together. ICB's registration is on the audit room's table; my notes from the call to ICB are on my desk in Sales 3. Then link them on the audit board, from the bag or the audit room's table.▼","dlgHidden":true,"busy":false,"cine":false,"leaving":true,"html":["town-goal-go:Take me there","tk-strip:Move 65"]}
+FAIL 21-m13  271s  ms_jang in one-international--audit  at 204,199: stuck: no progress for 60s (goal 240,264; canMove false, seated false, approaching false, walk none, a way 1 points, near: nobody) ("Not yet. I haven't put it together. ICB's registration is on the audit room's table; my notes from the call to ICB are o")
+ok   after each handoff the new lead starts 6+ tiles from the beat's spot (m8 ms_jang>ms_ahn in one-international, the spot in one-international--finance; m9 ms_ahn>ms_jang in one-international, the spot in one-international--sales3; m11 ms_jang>ms_sun in one-international, the spot in one-international--sales3; m12 ms_sun>ms_jang in one-international, the spot in baekjin-trading--baekjin)
+walk-playthrough Book 21 (default): 11/12 beats walked and played in 7.9 min (1 needed a reload, 0 held by a scene); 10 boards (6 from the rated pool)
+the goal box's chip followed the party: Jang Geu-rae → Ahn Young-yi → Jang Geu-rae → Sun Ji-young → Jang Geu-rae
