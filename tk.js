@@ -626,7 +626,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) { this.data = await (await fetch("data/tk.json?v=103")).json(); this.migrate(); }
+    if (!this.data) { this.data = await (await fetch("data/tk.json?v=104")).json(); this.migrate(); }
     return this.data;
   },
   // A book whose beats were renumbered after players began it: their cleared beats moved to the new keys, once
@@ -1513,6 +1513,21 @@ const TK_SETTER_LINES = {
 TK_SETTER_LINES.starred = TK_SETTER_LINES.stargrey;
 
 const TK_REST = 30000;
+// A book that counts its lead's slips (a world's "tally": Red Chamber, the smiles behind a sleeve on Daiyu's first
+// day): each slip on a counted board adds one, kept per book (Start over clears it); shown as a scroll at the "at" beat.
+const TKTally = {
+  KEY: "tk-tally",
+  slip(w, key) {
+    const T = w && w.tally, short = String(key).slice(String(w && w.n).length + 1);
+    if (!T || !(T.boards || []).includes(short)) return;
+    const a = TK.ls(this.KEY); a[w.n] = (a[w.n] || 0) + 1; TK.lsSet(this.KEY, a);
+  },
+  count(w) { return TK.ls(this.KEY)[w.n] || 0; },
+  show(w) {
+    const T = w.tally, n = this.count(w), [en, zh] = n ? T.some : T.none;
+    return TKStory.scroll(T.title[0], [en.replace("{n}", n)], T.title[1], [zh.replace("{n}", n)], []);
+  },
+};
 // Books from other novels (a world's "novel"): each novel has its own library card and its own book list, apart
 // from the Three Kingdoms books (which have no "novel"). live: the card shows outside test mode.
 const TK_NOVELS = { hongloumeng: { title: "Dream of the Red Chamber", native: "红楼梦", first: 31, live: false } };
@@ -1687,6 +1702,7 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
       say(...(e.detail === "ok" ? [`解出了，但不算完美（${t.flawed}）。被擒了！`, `Solved, but not flawless (${t.flawed}). You're taken!`] : ["被擒了！", "You're taken!"]), go("继续 Continue ▸", leave));
     } else {
       TK.rest(key);
+      if (e.detail !== "ok") TKTally.slip(TK.world(worldN), key);   // a wrong move: a smile behind a sleeve (Red Chamber)
       dlg.classList.add("slip");
       const how = e.detail === "ok" ? [`解出了，但不算完美（${t.flawed}）。`, `Solved, but not flawless (${t.flawed}).`]
         : lord ? lord.slip
