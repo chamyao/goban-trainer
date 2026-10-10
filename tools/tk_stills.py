@@ -246,7 +246,7 @@ CAST.update({
     "ms_somi": ("Somi", "a little Korean girl of five with two small buns tied with pink ribbons, in a yellow dress"),
     "ms_stevehan": ("Steve Han", "a sleek, cold Korean-American department head in his forties, raised in the US, with "
                     "slicked-back black hair, in a sharp tailored black suit and a steel-blue tie"),
-    "ms_go": ("Go Gwa-jang", "a round, sulky Korean section head in his forties with short hair and heavy cheeks, in a "
+    "ms_go": ("Go Gwa-jang", "a round, sulky Korean section head in his forties with short hair, round glasses and heavy cheeks, in a "
               "rumpled brown suit and a mustard-brown tie"),
     "ms_buyer": ("the American buyer", "a white American businessman in his fifties with brown side-parted hair, in a "
                  "grey suit, light blue shirt and a red tie"),
@@ -281,6 +281,8 @@ CAST.update({
                  "in a navy site jacket and a white hard hat"),
     "ms_teacher": ("Jang's teacher", "a calm old Korean go teacher in his sixties with grey hair and a short grey beard, "
                    "in a brown cardigan"),
+    "ms_director": ("the director", "a stern Korean company director in his late fifties with grey hair, in a beige "
+                    "suit and a brown tie"),
     "ms_examiner": ("the examiner", "a reserved Korean man in his fifties with greying side-parted hair and glasses, in "
                     "a dark suit and a plain grey tie, holding a clipboard"),
     "ms_ahnfather": ("Ahn's father", "a cold, stern Korean army officer in his fifties with short black hair, in an "

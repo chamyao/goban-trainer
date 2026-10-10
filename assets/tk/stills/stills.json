@@ -1593,7 +1593,8 @@
   "provider": "replicate",
   "model": "final-1",
   "look": "final",
-  "made": "2026-10-10"
+  "made": "2026-10-10",
+  "edit": "to Plot's new brief (f9c1324): the baby a girl, awake, holding his finger; Kim in his suit"
  },
  "ms_sauna": {
   "file": "ms_sauna.jpg",
@@ -1603,7 +1604,7 @@
   "model": "final-1",
   "look": "final",
   "made": "2026-10-10",
-  "edit": "bath towels instead of the suits (CAST had dressed them)"
+  "edit": "to Plot's new brief (f9c1324): a dry sauna, wooden benches, Go in round glasses leaning toward Steve Han"
  },
  "ms_doorbell": {
   "file": "ms_doorbell.jpg",
