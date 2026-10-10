@@ -34,17 +34,25 @@ EN_NARRATOR = "bf_emma"
 EN_FOLK = {"folk.woman": "af_sarah", "folk.lady": "bf_isabella", "folk.maiden": "af_bella", "folk.girl": "af_sky",
            "folk.child": "af_sky", "folk.elder": "bm_daniel", "folk.official": "bm_lewis"}
 EN_FOLK_DEFAULT = "am_adam"
-_EN = {"on": False, "cast": {}}
+_EN = {"on": False, "cast": {}, "ko": {}, "cast_ko": {}}
+# A Korean voice-over for an English-only world ("voice": "ko", Misaeng): the world's "ko" {English line: Korean} and
+# "cast_ko" {cast id or folk kind: reference voice} give each clip its Korean; the clip id is the English one's, so
+# assets/tk/voice/ko/<id>.mp3 sits beside en/<id>.mp3. KO_LINES: id -> (Korean, reference voice, English), filled as the
+# lines are listed (all_lines); tools/build_tk_voice_ko.py renders them.
+KO_LINES = {}
+KO_MISSING = {}   # id -> English: a line in a "voice": "ko" world with no Korean yet
 
 
 class english:
     """with english(w): build a world's lines English-only when it says so."""
     def __init__(self, w):
         self.on, self.cast = (w or {}).get("lang") == "en", dict((w or {}).get("cast") or {})
+        self.ko = dict((w or {}).get("ko") or {}) if (w or {}).get("voice") == "ko" else {}
+        self.cast_ko = dict((w or {}).get("cast_ko") or {})
 
     def __enter__(self):
         self.prev = dict(_EN)
-        _EN.update(on=self.on, cast=self.cast)
+        _EN.update(on=self.on, cast=self.cast, ko=self.ko, cast_ko=self.cast_ko)
 
     def __exit__(self, *a):
         _EN.clear(); _EN.update(self.prev)
@@ -111,7 +119,25 @@ def voiced(steps):
     return out
 
 
+def ko_add(vid_, en, who=None):
+    """Note a line's Korean (a "voice": "ko" world), read by who (a cast id or a folk kind; None: the narrator)."""
+    if not _EN["ko"]:
+        return
+    k = _EN["ko"].get(en) or _EN["ko"].get(str(en).strip("“”"))
+    if not k:
+        KO_MISSING[vid_] = en
+    if k:
+        C = _EN["cast_ko"]
+        KO_LINES[vid_] = (k, C.get(who) or (C.get("folk.woman") if who and "woman" in str(who) else None) or C.get(None if who is None else "folk") or C.get("narrator"), en)
+
+
 def place_step(line, kind=None):
+    step, voice = place_step_(line, kind)
+    ko_add(step[-1], step[1] if step[0] == "n" else step[2], step[1] if step[0] == "say" else kind)
+    return step, voice
+
+
+def place_step_(line, kind=None):
     """A line from tools/tk_places.py as a voiced dialogue step, and its voice.
     kind is the speaker's npc kind; None for a story spot's intro/outro.
     [who, text] is a character speaking; a hero's quoted line is his own speech;
@@ -214,11 +240,13 @@ def world_lines(w, lines):
     for steps in [w["opening"], w["closing"], *(v["steps"] for v in w["scenes"].values())]:
         for s in steps:
             if s[0] == "n":
-                lines[s[3]] = (s[2], voice_of(), s[1])
+                lines[s[3]] = (s[2], voice_of(), s[1]); ko_add(s[3], s[1])
             elif s[0] == "say":
-                lines[s[4]] = (s[3], voice_of(s[1]), s[2])
+                lines[s[4]] = (s[3], voice_of(s[1]), s[2]); ko_add(s[4], s[2], s[1])
             elif s[0] == "scroll":
                 lines.update((k, (t, voice_of(), e)) for k, t, e in zip(s[5], s[4], s[2]))
+                for k, e in zip(s[5], s[2]):
+                    ko_add(k, e)
     for n in w["nodes"]:
         ch_ = n.get("chase") or {}
         for k, ls in [*((k, ch_.get(k, [])) for k in ("spotted", "caught", "solved", "restart", "overrun")),
@@ -228,12 +256,14 @@ def world_lines(w, lines):
                 elif l[0] == "say": lines[l[4] if len(l) > 4 else voice_id(l[3], voice_of(l[1]))] = (l[3], voice_of(l[1]), l[2])
         if "boss" in n:
             lines[n["boss"]["taunt_vid"]] = (n["boss"]["taunt_zh"], voice_of(n["boss"]["who"]), n["boss"]["taunt"])
+            ko_add(n["boss"]["taunt_vid"], n["boss"]["taunt"], n["boss"]["who"])
         dl = n.get("dilemma") or {}
         for d in (dl if isinstance(dl, list) else [dl]):   # one per board, in a scene with several
             for k in ("open", "win", "slip"):
                 if k in d:
                     z = d.get(k + "_zh") or zh(d[k])
                     lines[d.get(k + "_vid") or voice_id(z, voice_of(d.get("who")))] = (z, voice_of(d.get("who")), d[k])
+                    ko_add(d.get(k + "_vid") or voice_id(z, voice_of(d.get("who"))), d[k], d.get("who"))
 
 
 # Life and death only, for now: tesuji, capturing races, capture and endgame
@@ -397,16 +427,21 @@ def main():
     have_en = {p.stem for p in (VOICE_DIR / "en").glob("*.mp3")} if (VOICE_DIR / "en").exists() else set()
     lines = all_lines(worlds)
     for w in worlds:
-        w.pop("cast", None)   # an English-only world's cast is for the voices, not the game
+        for k in ("cast", "ko", "cast_ko"):   # an English-only world's casts and Korean are for the voices, not the game
+            w.pop(k, None)
     missing = [k for k in lines if k not in have]
     data = {"id": "tk", "title": "Romance of the Three Kingdoms", "native": "三国演义", "worlds": worlds,
             "voices": sorted(k for k in lines if k in have),
-            "voices_en": sorted(k for k in lines if k in have_en)}
+            "voices_en": sorted(k for k in lines if k in have_en),
+            "voices_ko": sorted(k for k in KO_LINES if (VOICE_DIR / "ko" / f"{k}.mp3").exists())}
     (ROOT / "data" / "tk.json").write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")))
     if VETTED:
         print(f"KataGo vetting: {len(unvetted)} pooled problems not vetted yet"
               + (" — run tools/vet_tsumego.mjs --pools, then this again" if unvetted else ", every pool is clean"))
     print(f"English voice-over: {sum(k in have_en for k in lines)}/{len(lines)} lines")
+    if KO_LINES or KO_MISSING:
+        print(f"Korean voice-over: {len(data['voices_ko'])}/{len(KO_LINES)} lines have audio"
+              + (f"; {len(KO_MISSING)} lines have no Korean, e.g. {next(iter(KO_MISSING.values()))[:60]!r}" if KO_MISSING else ""))
     print(f"voice-over: {len(lines) - len(missing)}/{len(lines)} lines have audio"
           + (" — run tools/build_tk_voice.py, then this again" if missing else ""))
     for w in worlds:

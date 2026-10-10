@@ -3477,7 +3477,7 @@ let routeSeq = 0;
 async function route() {
   routeSeq++;
   if (typeof TKEnglish !== "undefined") TKEnglish.set(false);   // an English-only book's page sets it again (tk-modern.js)
-  if (typeof TKVoice !== "undefined") TKVoice.enOnly = false;
+  if (typeof TKVoice !== "undefined") { TKVoice.enOnly = false; TKVoice.native = null; }
   if (trainer) trainer.alive = false;
   trainer = null;
   Review.els = null;

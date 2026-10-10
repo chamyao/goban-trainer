@@ -61,6 +61,20 @@ VOICE_SPEED = {
 }
 
 
+def dilemma_vids(n):
+    """A board's lines with their clip ids, as build_tk.py gives them (from the Chinese, or an English-only book's English)."""
+    if "dilemma" not in n:
+        return n
+    def one(d0):
+        d = dict(d0)
+        for k in ("open", "win", "slip"):
+            if k in d:
+                d[k + "_zh"] = build_tk.zh(d[k]); d[k + "_vid"] = build_tk.vid(d[k], d.get("who"))
+        return d
+    dl = n["dilemma"]
+    return dict(n, dilemma=[one(d) for d in dl] if isinstance(dl, list) else one(dl))
+
+
 def voiced_world(w):
     """A story world's lines with their clip ids, as build_tk.py makes them (call inside build_tk.english(w))."""
     return dict({k: w[k] for k in ("lang", "cast") if k in w},
@@ -69,7 +83,7 @@ def voiced_world(w):
                 nodes=[dict(n, boss=dict(n["boss"], taunt_zh=build_tk.zh(n["boss"]["taunt"]),
                                          taunt_vid=build_tk.vid(n["boss"]["taunt"], n["boss"]["who"])))
                        if "boss" in n else n
-                       for n in w["nodes"]])
+                       for n in [dilemma_vids(n) for n in w["nodes"]]])
 
 
 def campaign_lines():

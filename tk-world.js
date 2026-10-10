@@ -2151,7 +2151,13 @@ function worldScenes() {
         // a blocker stands aside: off your way, and no longer in it
         n.spr.body.enable = false; this.grid = null;
         const side = Math.abs(dx) > Math.abs(dy) ? { x: 0, y: T } : { x: T, y: 0 };
-        this.tweens.add({ targets: n.spr, x: n.spr.x + side.x, y: n.spr.y + side.y, duration: 400, onUpdate: () => n.spr.setDepth(n.spr.y) });
+        // he's still "engaged" until he has stepped aside: a beat beside him (Misaeng m16) waits, or its cutscene takes
+        // hold of him mid-step and the phone froze (2 in 3 runs, Testing)
+        this.tweens.add({ targets: n.spr, x: n.spr.x + side.x, y: n.spr.y + side.y, duration: 400, onUpdate: () => n.spr.setDepth(n.spr.y),
+          onComplete: () => { if (this.engaged === n) this.engaged = null; } });
+        this.time.delayedCall(1500, () => { if (this.engaged === n) this.engaged = null; });   // (whatever becomes of the tween)
+        n.wander = wander;
+        return;
       } else {
         // walked back a step (from a blocker, back out of his reach, the way you came); he goes back to his post
         if (n.guard) {

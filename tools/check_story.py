@@ -450,6 +450,12 @@ def check_en_world(w, name, errors):
                 errors.append(f"{name}: audit link {i + 1} needs a question (q) and an answer (a)")
         if not a.get("done"):
             errors.append(f"{name}: audit has no done mark")
+    if w.get("voice") == "ko":   # a Korean voice-over: every spoken line has its Korean (KO21 …)
+        ko = w.get("ko") or {}
+        steps = [s for sc in w["scenes"].values() for s in sc["steps"]] + list(w.get("opening", [])) + list(w.get("closing", []))
+        for kind, t in text_lines(steps):
+            if kind in ("n", "say") and t not in ko and t.strip("“”") not in ko:
+                errors.append(f"{name}: no Korean for {kind}: {t[:70]!r}")
     t = w.get("trade")
     if t:
         if not t.get("goods") or not t.get("done"):

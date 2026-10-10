@@ -756,7 +756,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) { this.data = await (await fetch("data/tk.json?v=105")).json(); this.migrate(); }
+    if (!this.data) { this.data = await (await fetch("data/tk.json?v=106")).json(); this.migrate(); }
     return this.data;
   },
   // A book whose beats were renumbered after players began it: their cleared beats moved to the new keys, once per
@@ -1160,8 +1160,9 @@ const TKVoice = {
   set lang(v) { try { localStorage.setItem("tk-voice", v); } catch {} if (v === "off") this.stop(); },
   get on() { return this.lang !== "off"; },
   enOnly: false,   // an English-only book (Misaeng) is open: its clips are English whatever the setting (viewTK sets it)
-  get speaks() { return this.enOnly ? "en" : this.lang; },
-  has(vid) { return !!vid && !!TK.data && (this.speaks === "en" ? TK.data.voices_en || [] : TK.data.voices).includes(vid); },
+  native: null,    // an English-only book voiced in its own language too ("voice": "ko", Misaeng): the native setting speaks it
+  get speaks() { return this.enOnly ? (this.lang === "zh" && this.native ? this.native : "en") : this.lang; },
+  has(vid) { const s = this.speaks; return !!vid && !!TK.data && (s === "en" ? TK.data.voices_en || [] : s === "ko" ? TK.data.voices_ko || [] : TK.data.voices).includes(vid); },
   // Plays clips one after another; resolves when the last ends or is stopped.
   play(vids) {
     this.stop();
@@ -1171,7 +1172,7 @@ const TKVoice = {
       const next = () => {
         const v = this.queue.shift();
         if (!v) { this.audio = null; res(); return; }
-        const a = new Audio(`assets/tk/voice/${this.speaks === "en" ? "en/" : ""}${v}.mp3?v=2`);  // bump when clips are re-rendered
+        const a = new Audio(`assets/tk/voice/${this.speaks === "en" ? "en/" : this.speaks === "ko" ? "ko/" : ""}${v}.mp3?v=2`);  // bump when clips are re-rendered
         this.audio = a; a.onended = next; a.onerror = next; a.onpause = () => { if (this.audio === a && !a.ended) res(); };
         a.play().catch(next);
       };
@@ -1300,15 +1301,17 @@ async function viewTK(worldN) {
   const levels = w.nodes.filter(x => !TK.isStart(x.key)), done = levels.filter(x => TK.cleared(x.key)).length;
   const chron = h("button", { class: "tk-chron-btn", type: "button" }, "史册 Chronicle");
   const voiceBtn = h("button", { class: "tk-chron-btn", type: "button", "aria-pressed": String(TKVoice.on), title: "配音：中文 → English → 关 Voice: Chinese → English → off" });
-  TKVoice.enOnly = w.lang === "en";   // an English-only book: its voice is English, on or off
+  TKVoice.enOnly = w.lang === "en";   // an English-only book: its voice is English (or its own language, "voice"), on or off
+  TKVoice.native = w.lang === "en" && w.voice && (D.voices_ko || []).length ? w.voice : null;   // (until its clips are in, English)
   if (typeof TKEnglish !== "undefined") TKEnglish.set(w.lang === "en");   // and no Chinese on screen
   const voiceLabel = () => {
-    voiceBtn.textContent = TKVoice.enOnly ? (TKVoice.on ? "Voice on" : "Voice off")
+    voiceBtn.textContent = TKVoice.native ? { zh: "Voice: Korean", en: "Voice: English", off: "Voice off" }[TKVoice.lang]
+      : TKVoice.enOnly ? (TKVoice.on ? "Voice on" : "Voice off")
       : { zh: "配音：中文 Chinese voice", en: "配音：英文 English voice", off: "静音 Voice off" }[TKVoice.lang];
     voiceBtn.setAttribute("aria-pressed", String(TKVoice.on));
   };
   voiceLabel();
-  voiceBtn.onclick = () => { TKVoice.lang = TKVoice.enOnly ? (TKVoice.on ? "off" : "zh") : { zh: "en", en: "off", off: "zh" }[TKVoice.lang]; voiceLabel(); };
+  voiceBtn.onclick = () => { TKVoice.lang = TKVoice.enOnly && !TKVoice.native ? (TKVoice.on ? "off" : "zh") : { zh: "en", en: "off", off: "zh" }[TKVoice.lang]; voiceLabel(); };
   root.append(h("div", { class: "tk-head" }, [
     h("div", {}, [h("h2", {}, [h("span", { class: "zh" }, native), " ", title]),
       h("div", { class: "sub" }, w.lang === "en"   // an English-only book (Misaeng): no Chinese, no novel chapters
@@ -1645,7 +1648,7 @@ async function viewTKLevel(worldN, key) {
   if (nav !== routeSeq) return;
   if (!d) { location.hash = `#/tk/${worldN || 1}`; return; }
   if (!d.node.town) TK.setAt(worldN, key);
-  TKVoice.enOnly = d.w.lang === "en"; if (typeof TKEnglish !== "undefined") TKEnglish.set(d.w.lang === "en");   // an English-only book's level page
+  TKVoice.enOnly = d.w.lang === "en"; TKVoice.native = d.w.lang === "en" && d.w.voice && (TK.data.voices_ko || []).length ? d.w.voice : null; if (typeof TKEnglish !== "undefined") TKEnglish.set(d.w.lang === "en");   // an English-only book's level page
   crumbs.innerHTML = "";
   crumbs.append(h("a", { href: "#/" }, "Library"), " / ", h("a", { href: `#/tk/${worldN}` }, (w => { const nv = w && TK_NOVELS[w.novel]; return `${nv ? nv.title : "Three Kingdoms"} · Book ${(w && w.book) || worldN}`; })(TK.world(worldN))), ` / ${d.node.place}`);
   root.innerHTML = "";
@@ -1667,7 +1670,7 @@ const TK_REST = 30000;
 // Books from other novels (a world's "novel"): each novel has its own library card and its own book list, apart
 // from the Three Kingdoms books (which have no "novel"). live: the card shows outside test mode.
 const TK_NOVELS = { hongloumeng: { title: "Dream of the Red Chamber", native: "红楼梦", first: 31, live: false },
-  misaeng: { title: "Misaeng", native: "미생", first: 21, live: false } };
+  misaeng: { title: "Misaeng", native: "미생", first: 21, live: true } };   // published (the user, 2026-10-10)
 // A touch screen (a phone or tablet): tap to move and tap to talk.
 // Test mode, for trying the story without solving: open the page with ?test=1 (?test=0 ends it).
 // Problems then get a Skip key that counts as a flawless solve. It lasts the browser tab (sessionStorage):
