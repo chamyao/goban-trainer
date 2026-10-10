@@ -48,6 +48,8 @@ await p.route('**/the-east-road.tmj*',async r=>{const res=await r.fetch();const 
   {name:'needs',type:'string',value:'["item:tray"]'},{name:'delivers',type:'string',value:'seat_a'},{name:'takes',type:'bool',value:true},
   {name:'deliver',type:'string',value:JSON.stringify([['n','You set the tray down on his left.','']])},
   {name:'waiting',type:'string',value:JSON.stringify([['n','The notes say the tray goes here.','']])}]});
+ L.objects.push({id:99903,name:'lift',type:'spot',x:at.x+6*T,y:at.y+5*T,width:0,height:0,properties:[{name:'use',type:'string',value:'lift'},{name:'label',type:'string',value:'The lift'},
+  {name:'floors',type:'string',value:JSON.stringify([{label:'Here',to:'the-east-road'},{label:'Somewhere',to:'luoyang'}])}]});
  L.objects.push({id:99902,name:'audit-table',type:'spot',x:at.x+3*T,y:at.y+5*T,width:0,height:0,properties:[{name:'opens',type:'string',value:'audit'}]});
  const prop=L.objects.find(o=>o.type==='prop'&&/#\d+$/.test(o.name||''));
  if(prop)L.objects.push({...prop,id:99990,x:at.x-3*T,y:at.y+6*T,properties:[...(prop.properties||[]).filter(q=>q.name!=='when'),{name:'when',type:'string',value:'mark:seat_a'}]});
@@ -142,6 +144,13 @@ check(/tray goes here/.test(w1),`without the tray, the seat says what goes there
 await p.evaluate(()=>{WorldItems.add(TK.world(13),'tray');const s=window.__w;s.act({kind:'spot',k:'seat-a'});});await p.waitForTimeout(300);await clear();
 const set=await p.evaluate(()=>({mark:window.__w.cond('mark:seat_a'),held:WorldItems.has(TK.world(13),'tray')}));
 check(set.mark&&!set.held,`set down: the seat is marked and the tray is out of the bag (${JSON.stringify(set)})`);
+
+// 5b. a lift: a menu of floors; this one is marked, a place not open yet can't be chosen
+await p.evaluate(()=>{const s=window.__w;s.act({kind:'spot',k:'lift'});});await p.waitForTimeout(300);
+const lift=await p.evaluate(()=>[...document.querySelectorAll('.tk-lift li button')].map(b=>({t:b.textContent,off:b.disabled})));
+check(lift.length===2&&lift[0].off&&/you're here/.test(lift[0].t),`the lift lists its floors, this one marked (${JSON.stringify(lift)})`);
+await p.keyboard.press('Escape');await p.waitForTimeout(200);
+check(!(await p.locator('.tk-lift').count()),'Escape closes the lift');
 
 // 6. English only: no Chinese on a board
 const en=await p.evaluate(async()=>{const w=TK.world(13);w.lang='en';localStorage.removeItem('tk-rest');TK.undoCleared(loadProgress(),'13-c19');

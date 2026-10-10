@@ -236,6 +236,35 @@ const WorldModern = {
     this.chip(scene);
   },
 
+  /* ---------- a lift: a spot with "use": "lift" and "floors": [{label, to}] (to: a place id); pick a floor, go ---------- */
+  lift(scene, spot) {
+    const floors = (spot.floors || []).filter(f => f && f.to);
+    if (!floors.length) return false;
+    document.querySelector(".tk-lift")?.remove();
+    const el = document.createElement("div");
+    el.className = "tk-bag tk-lift";
+    el.innerHTML = `<div class="tk-bag-box"><h3></h3><ul></ul><button type="button" class="tk-lift-close">Stay here</button></div>`;
+    el.querySelector("h3").textContent = spot.label || "The lift";
+    const ul = el.querySelector("ul");
+    const close = () => { el.remove(); removeEventListener("keydown", key, true); };
+    const key = e => { if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); close(); } };
+    for (const f of floors) {
+      const li = document.createElement("li"), b = document.createElement("button");
+      b.type = "button"; b.textContent = f.label || scene.placeName(f.to);
+      const here = f.to === scene.placeId, open = here || scene.placeOpen(f.to);
+      b.disabled = here || !open;
+      if (here) b.textContent += " (you're here)";
+      else if (!open) b.textContent += " (no reason to go yet)";
+      b.onclick = () => { close(); scene.go(f.to); };
+      li.append(b); ul.append(li);
+    }
+    addEventListener("keydown", key, true);
+    el.querySelector(".tk-lift-close").onclick = close;
+    el.onclick = e => { if (e.target === el) close(); };
+    ((scene.game.worldOpts && scene.game.worldOpts.host) || document.body).append(el);
+    return true;
+  },
+
   /* ---------- the world's HUD: called whenever the goal is set ---------- */
   hud(scene) {
     const w = scene.w;

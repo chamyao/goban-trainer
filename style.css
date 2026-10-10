@@ -921,5 +921,6 @@ html.tk-fullwin-on, html.tk-fullwin-on body { overflow: hidden; overscroll-behav
 .tk-shop-say { font-style: italic; margin: 0 0 8px; }
 .tk-shop-cash { font-size: 13px; margin: 0 0 8px; }
 .tk-bag-audit { display: block; margin: 0 0 10px; }
+.tk-lift li button { width: 100%; min-height: 40px; text-align: left; }
 /* an English-only book (tk-modern.js TKEnglish): no Chinese lines or labels */
 body.tk-en [lang="zh-CN"], body.tk-en .town-zh, body.tk-en .tk-dlg-zh, body.tk-en .tk-scroll-zh { display: none !important; }

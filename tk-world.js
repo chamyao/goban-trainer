@@ -354,7 +354,7 @@ function worldScenes() {
           ...(p.needs ? { needs: J(p.needs), delivers: p.delivers || o.name, when: p.when || "", empty: J(p.empty), waiting: J(p.waiting), call: J(p.call),
                           deliver: J(p.deliver), delivered: J(p.delivered) } : {}),
           sight: p.sight ? JSON.parse(p.sight) : null, fires: p.fires || "",
-          opens: p.opens || "", takes: !!p.takes };   // Misaeng (tk-modern.js): a spot that opens the audit board; a delivery that takes the thing   // a sight puzzle: it plays once one watcher sees you and another doesn't
+          opens: p.opens || "", takes: !!p.takes, floors: p.floors ? JSON.parse(p.floors) : null };   // Misaeng (tk-modern.js): a spot that opens the audit board; a delivery that takes the thing   // a sight puzzle: it plays once one watcher sees you and another doesn't
         else if (o.type === "npc") this.addNpc(o, p, J);
         else if (o.type === "exit") this.exits.push({ to: p.to, side: p.side, rect: new Phaser.Geom.Rectangle(o.x, o.y, o.width, o.height),
           openTo: p.open_to ? JSON.parse(p.open_to) : null, refuse: J(p.refuse) });
@@ -1987,6 +1987,7 @@ function worldScenes() {
       if (t.k === "claude" && this.opts.onTalkTo) return this.opts.onTalkTo(this, null);   // the rug before Claude's desk
       if (spot.use === "ogs") return TKTable.sit(this, t.k);   // the travellers' go table (tk-table.js)
       if (spot.opens === "audit" && typeof WorldModern !== "undefined" && WorldModern.audit(this)) return;   // Misaeng's audit board
+      if (spot.use === "lift" && typeof WorldModern !== "undefined" && WorldModern.lift(this, spot)) return;   // a lift: pick a floor (Misaeng's tower)
       if (spot.needs) return this.deliverAt(spot);
       if (spot.use === "shrine") return this.shrineTalk();
       const q = this.region.quests.find(x => x.node === spot.node);
