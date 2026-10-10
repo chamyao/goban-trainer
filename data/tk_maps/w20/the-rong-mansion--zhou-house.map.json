@@ -1,0 +1,137 @@
+{
+ "format": "tk-map/1",
+ "id": "the-rong-mansion--zhou-house",
+ "world": 20,
+ "name": "Zhou Rui's house",
+ "archetype": "interior",
+ "size": [
+  20,
+  12
+ ],
+ "seed": 2798,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   " ": "void",
+   "W": "wall",
+   "#": "wood"
+  },
+  "rows": [
+   "                    ",
+   " WWWWWWWWWWWWWWWWWW ",
+   " W################W ",
+   " W################W ",
+   " W################W ",
+   " W################W ",
+   " W################W ",
+   " W################W ",
+   " W################W ",
+   " W################W ",
+   " WWWWWWWWW##WWWWWWW ",
+   "                    "
+  ],
+  "walk": {
+   "void": false,
+   "wall": false,
+   "wood": true
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    10,
+    6
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     5,
+     5
+    ]
+   },
+   "tiles": 52
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.kang",
+   "x": 10,
+   "y": 2,
+   "w": 3,
+   "h": 2,
+   "id": "kang"
+  },
+  {
+   "kind": "furn.table",
+   "x": 4,
+   "y": 4,
+   "w": 2,
+   "h": 1,
+   "id": "table"
+  },
+  {
+   "kind": "furn.jar",
+   "x": 16,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "jar"
+  }
+ ],
+ "spots": [
+  {
+   "id": "g4",
+   "x": 8.5,
+   "y": 6.7,
+   "node": "20-g4",
+   "label": "Zhou Rui's house",
+   "trigger": "talk"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "npc-1",
+   "kind": "hero.zhouruijia",
+   "x": 14.5,
+   "y": 4.9,
+   "say": [
+    [
+     "zhouruijia",
+     "I do like to be asked. It's not my job, mind, but I know everyone."
+    ]
+   ],
+   "until": "20-hl1-g4",
+   "face": "W",
+   "when": "node:hl1-g3"
+  }
+ ],
+ "exits": [
+  {
+   "to": "the-rong-mansion",
+   "side": "S",
+   "x": 10,
+   "y": 10,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "the-rong-mansion": [
+   10,
+   9
+  ],
+  "": [
+   10,
+   9
+  ]
+ },
+ "parent": "the-rong-mansion",
+ "building": "zhou-house",
+ "links": [
+  "the-rong-mansion"
+ ]
+}
