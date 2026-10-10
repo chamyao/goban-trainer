@@ -108,7 +108,8 @@ def finish(n, world, places, region):
             if g.get("objective"):
                 g["objective_zh"] = ZH.get(g["objective"], "")
     out = {"format": "tk-region/1", "world": n, "name": world["name"], "zh": world.get("zh", ""), "start": region["start"],
-           "party": world.get("party", []), "places": places, "quests": region["quests"]}
+           "party": world.get("party", []), "places": places, "quests": region["quests"],
+           **({"lang": world["lang"]} if world.get("lang") else {})}   # "en": an English-only world (Misaeng)
     (d / "region.json").write_text(json.dumps(out, ensure_ascii=False, indent=1))
     print(f"wrote {len(places)} maps ({sum(1 for p in places if p.get('parent'))} interiors) and region.json to {d.relative_to(ROOT)}")
 

@@ -47,9 +47,13 @@ Where each book's places are:
 | 14 (Lü Bu) | `tools/tk_plans_lb.py` | `--world 14 --plans lb` | `tools/proofs/hide_ward_lb.py` | the burning ward, Xiapi |
 | 15 (Lady Sun) | `tools/tk_plans_ls.py` | `--world 15 --plans 15` | `tools/proofs/ladysun_ls.py` | design: `docs/book2/ladysun-places.md`; engine walk: `tests/playtest/book15-places.js` |
 | 90 (Claude's study) | `tools/tk_plans_w90.py` | `plans.py --world 90 --out data/tk_maps/w90` | — | one room |
+| 16 (Misaeng) | `tools/tk_plans_ms.py` | `--world 16 --plans ms` | checker; build proofs | English only; modern Seoul. Daughter session, branch `claude/places-misaeng`; story is Plot alt2's (`claude/plot-alt2`, `docs/book2/misaeng-arc.md`) |
 
 A new arc is registered in `plans.py`: `ARCS` (book → arc name), `key_prefix` (the beat keys' book number: Book 15's
 keys are `4-s1`…), `load()` (its module), and in `check_plans_w2.py` (`--arc`).
+
+Beat keys may carry a prefix of any length: Misaeng's are `16-m1`…, the world itself, so `key_prefix` equals the world
+and nothing is renamed (the checker splits on the first `-`; it used to drop two characters).
 
 ## The pipeline
 
@@ -162,6 +166,18 @@ These were each learned from a real complaint, and each is a rule, not a one-off
   doesn't tell a player to hide there.
 - **Every way in is a cover** on a map whose watchers hunt by sight (`entry_covers`). A catch before the first hide
   sends her back to where she came in, so that place must be one she can wait in.
+- **A door into another place** (`"to": <place>` on a thing, instead of `"map"`). Its door is an exit to that place's
+  map, and coming back you land on its doorstep. Misaeng's subway stairs and the One International tower use it: the
+  tower is a place of its own (its plan is the lobby room), entered from Jongno's street.
+- **A place that is a room opens into its own rooms** by exits in its plan (`"to": <map id>`): those rooms' doors lead
+  back to it. The tower's lobby has one lift per floor this way (the floors are its `maps`).
+- **No north doors on modern buildings.** An entered building with a north door gets the gatehouse drawn at that door
+  (the rule above). On a Seoul street that's wrong, so Misaeng's entered buildings face S, E or W.
+- **A carriageway is `traffic` ground**: never walked, solid in the game, crossed only by a `crosswalk` line; cars are
+  things on it (dressing can't go on unwalkable ground, since `free()` needs walkable tiles).
+- **English-only worlds** (`"lang": "en"` on Plot's world, carried into region.json): compile writes each place line's
+  step in the usual shape with the English where the Chinese goes, and a voice id hashed from `en|<line>`. No Chinese
+  table is needed (`ZH_PLACES_MS = {}`). The engine's side is Integration's (Plot's engine request 5).
 - **Margins.** A thing sits inside its claim with a margin (1 tile in towns). In-wall kinds (gates, the wall stairs)
   have none, and a plan may set `margin` per thing.
 
@@ -315,6 +331,7 @@ python3 tools/check_plans_w2.py --arc cc --png      # the Cao Cao arc (Book 13),
 python3 tools/check_plans_w2.py --arc lb --png      # Lü Bu's fall (Book 14), previews in docs/book2/plans-lb/
 python3 tools/check_plans_w2.py --arc ls --png      # Lady Sun's marriage (Book 15), previews in docs/book2/plans-ls/
 python3 tools/proofs/ladysun_ls.py                  # Book 15: the temple's side rooms, both face-downs, the loud town
+python3 tools/check_plans_w2.py --arc ms --png      # Misaeng (Book 16), previews in docs/book2/plans-ms/
 python3 -m tools.mapfactory all --world 15 --plans 15 --kit xianxia --kit jade --kit genshin   # build, compile, stage in one
 python3 tools/mapfactory/keep_drift.py --world 15   # then undo the drift
 tools/mapfactory/build_with_story.sh 15 15 origin/claude/plot   # against Plot's story before it's on main

@@ -276,9 +276,124 @@ FALLBACK = {
     "prop.body_lamp": ["rock.small"],
 }
 
+# Misaeng (Book 16, tools/tk_plans_ms.py): modern Seoul in 2012, and a street in Amman. New art for all of it; until
+# Graphics draws a kind, its stand-in is the nearest old one.
+KINDS.update({
+    "building.office_tower": (12, 5, True),    # One International's glass tower in Jongno (drawn tall)
+    "building.office_block": (6, 3, True),     # a small office building: Baekjin, the KBA, the new office
+    "building.villa": (5, 3, True),            # a red-brick multi-family villa, Susaek-dong
+    "building.apartment": (8, 4, True),        # a slab of flats
+    "building.storefront": (4, 2, True),       # a street-level shop with flats above
+    "building.mart": (8, 3, True),             # a big supermarket
+    "building.pojangmacha": (3, 2, True),      # an orange-tarp street tent bar
+    "building.subway_entrance": (3, 2, True),  # stairs down under a glass canopy: a door to another place ("to")
+    "building.stone_house": (5, 3, True),      # Amman: a limestone house
+    "building.stone_shop": (4, 2, True),       # Amman: a café
+    "building.rooftop_box": (3, 2, True),      # a roof's stairhouse and lift motor room
+    "landmark.pagoda": (3, 3, True),           # Tapgol Park's pagoda in its glass case
+    "prop.car": (4, 2, True),                  # a car in the carriageway (a thing on "traffic" ground)
+    "prop.water_tank": (2, 2, True),
+    "prop.bus_stop": (3, 1, True),
+    "prop.vending": (1, 1, True),
+    "prop.bench": (2, 1, True),
+    "prop.scooter": (1, 1, True),
+    "tree.ginkgo": (1, 1, True),
+    "tree.olive": (1, 1, True),
+    "furn.office_desk": (2, 1, True),
+    "furn.exec_desk": (3, 1, True),
+    "furn.meeting_table": (4, 2, True),
+    "furn.reception": (4, 1, True),
+    "furn.chair": (1, 1, False),
+    "furn.copier": (2, 1, True),
+    "furn.water_cooler": (1, 1, True),
+    "furn.whiteboard": (2, 1, True),
+    "furn.projector_screen": (3, 1, True),
+    "furn.lectern": (1, 1, True),
+    "furn.bin": (1, 1, True),
+    "furn.sofa": (2, 1, True),
+    "furn.filing": (1, 1, True),
+    "furn.lift_door": (2, 1, True),
+    "furn.boxes": (1, 1, True),
+    "furn.phone": (1, 1, True),
+    "furn.noticeboard": (2, 1, True),
+    "furn.ashtray": (1, 1, True),
+    "furn.go_board": (1, 1, True),
+    "furn.trophy_case": (2, 1, True),
+    "furn.store_shelf": (2, 1, True),
+    "furn.fridge_case": (2, 1, True),
+    "furn.plastic_table": (1, 1, True),
+    "furn.pizza_oven": (2, 1, True),
+    "furn.low_table": (2, 1, True),
+    "furn.wardrobe": (2, 1, True),
+    "furn.tv": (2, 1, True),
+    "furn.toy_shelf": (2, 1, True),
+    "furn.kid_mat": (2, 1, False),
+    "furn.subway_seat": (4, 1, True),
+})
+FALLBACK.update({
+    "building.office_tower": ["building.tower", "building.hall_grand", "building.hall"],
+    "building.office_block": ["building.hall", "building.house"],
+    "building.villa": ["building.house"],
+    "building.apartment": ["building.hall", "building.house"],
+    "building.storefront": ["building.shop", "building.house"],
+    "building.mart": ["building.storehouse", "building.hall", "building.house"],
+    "building.pojangmacha": ["building.tent", "building.shop", "building.house"],
+    "building.subway_entrance": ["building.gate", "building.moongate"],
+    "building.stone_house": ["building.house"],
+    "building.stone_shop": ["building.shop", "building.house"],
+    "building.rooftop_box": ["building.hut", "building.house"],
+    "landmark.pagoda": ["landmark.incense", "building.pavilion", "rock.big"],
+    "prop.car": ["prop.carriage", "camp.table"],
+    "prop.water_tank": ["furn.barrel", "furn.jar"],
+    "prop.bus_stop": ["landmark.notice", "camp.table"],
+    "prop.vending": ["furn.drawers", "furn.shelf"],
+    "prop.bench": ["camp.logs"],
+    "prop.scooter": ["furn.barrel", "rock.small"],
+    "tree.ginkgo": ["tree.small"],
+    "tree.olive": ["tree.small"],
+    "furn.office_desk": ["furn.computer", "furn.desk", "furn.table"],
+    "furn.exec_desk": ["furn.desk", "furn.table"],
+    "furn.meeting_table": ["furn.table", "camp.table"],
+    "furn.reception": ["furn.counter", "furn.table"],
+    "furn.chair": ["furn.stool"],
+    "furn.copier": ["furn.drawers", "furn.chest"],
+    "furn.water_cooler": ["furn.jar"],
+    "furn.whiteboard": ["furn.screen", "landmark.notice"],
+    "furn.projector_screen": ["furn.screen"],
+    "furn.lectern": ["furn.stool", "furn.drawers"],
+    "furn.bin": ["furn.barrel", "furn.jar"],
+    "furn.sofa": ["furn.bed", "furn.mat"],
+    "furn.filing": ["furn.drawers", "furn.chest"],
+    "furn.lift_door": ["furn.screen", "furn.shelf"],
+    "furn.boxes": ["furn.chest", "furn.sacks"],
+    "furn.phone": ["furn.drawers", "furn.stool"],
+    "furn.noticeboard": ["landmark.notice", "furn.screen"],
+    "furn.ashtray": ["furn.jar", "lamp.post"],
+    "furn.go_board": ["furniture.gotable", "furn.table"],
+    "furn.trophy_case": ["furn.shelf", "furn.drawers"],
+    "furn.store_shelf": ["furn.shelf"],
+    "furn.fridge_case": ["furn.shelf", "furn.drawers"],
+    "furn.plastic_table": ["furn.table", "camp.table"],
+    "furn.pizza_oven": ["furn.hearth", "camp.cookfire"],
+    "furn.low_table": ["furn.table"],
+    "furn.wardrobe": ["furn.shelf", "furn.drawers"],
+    "furn.tv": ["furn.drawers", "furn.chest"],
+    "furn.toy_shelf": ["furn.shelf"],
+    "furn.kid_mat": ["furn.rug", "furn.mat"],
+    "furn.subway_seat": ["furn.bed", "furn.table"],
+})
+MATERIALS.update({"traffic": False,     # a carriageway: crossed only at a crosswalk
+                  "crosswalk": True,
+                  "barrier": False,     # the lobby's ID gates
+                  "parapet": False})    # a roof's low wall
+MATERIAL_FALLBACK.update({"traffic": ["stone", "dirt"], "crosswalk": ["road", "dirt"], "barrier": ["wall.lattice", "wall"],
+                          "parapet": ["wall"]})
+
 # people: folk.* are townsfolk drawn by the kit; hero.<id> are story
 # characters drawn by the game itself (TKArt), so every kit shows them the same.
 FOLK = ["folk.villager", "folk.woman", "folk.elder", "folk.child", "folk.monk",
         "folk.noble", "folk.soldier", "folk.rebel", "folk.hunter", "folk.official",
-        "folk.lady", "folk.maiden", "folk.girl"]  # court ladies (high chignons), maidens (looped buns) and girls: drawn by the game in every kit
+        "folk.lady", "folk.maiden", "folk.girl",
+        # Misaeng's Seoul (and Amman): modern dress, new art (drawn as villagers until Graphics draws them)
+        "folk.salaryman", "folk.officewoman", "folk.grandpa", "folk.ajumma", "folk.kid", "folk.jordanian"]  # court ladies (high chignons), maidens (looped buns) and girls: drawn by the game in every kit
 FOLK_FALLBACK = "folk.villager"
