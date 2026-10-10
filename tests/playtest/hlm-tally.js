@@ -30,6 +30,7 @@ const path = require('path');
   check(/一日已尽/.test(t2) && /有2回/.test(t2) && /2 times today/.test(t2), `the d8 scroll gives the count: ${JSON.stringify(t2)}`);
   await p.evaluate(() => localStorage.removeItem('tk-tally'));
   const t0 = await scroll();
-  check(/没有一个人掩口笑她/.test(t0) && /no one smiled/.test(t0), 'with none: the novel\'s Daiyu, never laughed at');
+  const none = await p.evaluate(() => TK.world(31).tally.none);
+  check(t0.includes(none[0]) && t0.includes(none[1]), "with none: the book's own line for it (the novel's Daiyu, never laughed at)");
   console.log(fails ? `${fails} FAIL` : 'all ok'); await b.close(); process.exit(fails ? 1 : 0);
 })();
