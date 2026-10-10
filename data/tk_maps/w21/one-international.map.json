@@ -248,10 +248,10 @@
   },
   {
    "id": "m8",
-   "x": 8.5,
+   "x": 12.5,
    "y": 16.7,
    "node": "21-m8",
-   "label": "The recycling bins"
+   "label": "The lobby"
   },
   {
    "id": "lobby-lift",

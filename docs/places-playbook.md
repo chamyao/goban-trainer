@@ -198,6 +198,10 @@ These were each learned from a real complaint, and each is a rule, not a one-off
 - **Walk a book against its own story.** The engine reads data/tk.json: if the story there is older than the maps
   (items it doesn't define, beats renamed), a giver gives nothing and the walk fails for no fault of the maps. Rebuild
   tk.json locally (`python3 tools/build_tk.py`) before the walk, and put it back after (Integration commits it).
+- **Walk-up spots keep 76 px apart.** A beat, a thing that gives, or a place to deliver to sets off within 36 px of
+  her. Two closer than 76 px both go off as she walks by: in Misaeng's Sales 3, five spots 32 px apart in a row set
+  each other off and m4's waiting scene kept firing between deliveries (Testing). The checker fails a pair closer than
+  76 px when one is a giver or a delivery (two beats are never open at once). Put each delivery at its own desk.
 - **No dressing on a crosswalk** (`free()` treats it as paving).
 - **Floors are any walkable material** in vocab (`room(..., floor="carpet")`): Misaeng's carpet, office_tile, lino.
 - **A thing that gives an item when searched** is a spot with `gives`, `gives_when`, `give`, `given` (as a person has
