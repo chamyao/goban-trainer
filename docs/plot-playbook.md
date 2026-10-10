@@ -384,6 +384,14 @@ Draft one arc, get it playable in a test book, and fix what the playtest shows b
   novel's own order, and the later book's **opening scroll** still stands alone for a player who starts there. Example:
   the Cao Cao arc closes on chapters 5–7 in four lines; the Diaochan arc opens on Chang'an under Dong Zhuo.
 
+### R19. Any adaptation is material; the experience comes first (Misaeng)
+
+> "It's ok to use drama as material our focus is a good experience to strictly abiding to one adaptation over another"
+
+When a story exists in several versions (Misaeng: the webtoon and the 2014 drama), any of them may supply a scene,
+a line or a staging, if it makes the game better. Tag each beat's source (webtoon / drama / both) in the comments, and
+keep the story's events coherent across the mix.
+
 ### R18. Pace: about one beat per episode (Misaeng)
 
 > "I think roughly one beat per epsisode is fitting"

@@ -10,6 +10,8 @@ webtoons that we could use as a skeleton". Plot offered Misaeng, Ya Boy Kongming
 Reader's Viewpoint and court-intrigue webtoons. The user: "lets go with misaeng". On how close to stay: "faithful, this is
 for personal use". On publishing: "Im fine with pushing it to the public".
 
+**Sources (the user, later):** "It's ok to use drama as material our focus is a good experience to strictly abiding to one adaptation over another." The 2014 drama is fair material; each beat notes webtoon / drama / both.
+
 **How faithful (Plot's line, told to the user).** The webtoon's plot, characters, order and each scene's meaning are kept.
 The dialogue is Plot's own close paraphrase. Only the famous short lines are quoted (미생이네요, 모두에겐 자신만의 바둑이 있다,
 밖은 지옥이다 …), each with its Korean in this doc. No scene's dialogue is copied out whole.
