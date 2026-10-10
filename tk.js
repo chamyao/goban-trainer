@@ -1524,7 +1524,7 @@ async function viewTKLevel(worldN, key) {
   if (!d) { location.hash = `#/tk/${worldN || 1}`; return; }
   if (!d.node.town) TK.setAt(worldN, key);
   crumbs.innerHTML = "";
-  crumbs.append(h("a", { href: "#/" }, "Library"), " / ", h("a", { href: `#/tk/${worldN}` }, `Three Kingdoms · Book ${worldN}`), ` / ${d.node.place}`);
+  crumbs.append(h("a", { href: "#/" }, "Library"), " / ", h("a", { href: `#/tk/${worldN}` }, (w => { const nv = w && TK_NOVELS[w.novel]; return `${nv ? nv.title : "Three Kingdoms"} · Book ${(w && w.book) || worldN}`; })(TK.world(worldN))), ` / ${d.node.place}`);
   root.innerHTML = "";
   tkLevelBuild(root, worldN, key, d, {
     back: () => { root.classList.add("tk-leave"); setTimeout(() => { root.classList.remove("tk-leave"); location.hash = `#/tk/${worldN}`; }, 320); },
@@ -1675,7 +1675,7 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
     win: dline("win") || (base ? base.win : ["★ 完美！", "Flawless!"]),
     slip: dline("slip") || (base ? base.slip : TK_SETTER_LINES.stargrey.slip) } : base;
   const opening = () => {
-    if (node.boss) say(node.boss.taunt_zh || "", node.boss.taunt);
+    if (node.boss && !(node.boss.dilemma_lines && lord)) say(node.boss.taunt_zh || "", node.boss.taunt);   // dilemma_lines: the lead's own lines on the board (Red Chamber g6: Xifeng wins that scene)
     else if (lord) { say(...lord.open); if (dil && dil.open_vid && TKVoice.has(dil.open_vid)) TKVoice.play(dil.open_vid); }
     else if (foe) say("请。你执黑先下。", "Your move. You play Black.");
     else say("黑先。", "Black to play.");
@@ -1721,7 +1721,7 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
       TK.markCleared(key);
       onWin();
       dlg.classList.add("win");
-      if (node.boss) say("……我竟败了！", "…Defeated? Me?", go("继续 Continue ▸", leave));
+      if (node.boss && !(node.boss.dilemma_lines && lord)) say("……我竟败了！", "…Defeated? Me?", go("继续 Continue ▸", leave));
       else if (lord) { say(...lord.win, go("继续 Continue ▸", leave)); if (dil && dil.win_vid && TKVoice.has(dil.win_vid)) TKVoice.play(dil.win_vid); }
       else if (foe) say("好棋！我认输。", "Well played. I resign.", go("继续 Continue ▸", leave));
       else say("★ 完美！", "Flawless!", go("继续 Continue ▸", leave));
