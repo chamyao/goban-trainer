@@ -201,6 +201,39 @@ def green_tea():   # a paper cup of green tea, the tag of the bag hanging over t
     return g.outline().image()
 
 
+def copies():   # a sheaf of photocopies, slightly fanned, still warm
+    g = Grid(14, 16)
+    _sheet(g, 3, 1, 10, 13, col="#e8e6e0")
+    _sheet(g, 2, 2, 10, 13, col="#eeece6")
+    _sheet(g, 1, 3, 10, 12)
+    return g.outline().image()
+
+
+def ring_file():   # a ring binder with a label on its spine
+    g = Grid(14, 16)
+    g.rect(2, 1, 10, 14, "#2e4a8a"); g.rect(2, 1, 3, 14, "#22386a"); g.rect(3, 4, 1, 4, "#f4f2ec")
+    g.rect(6, 4, 4, 3, "#f4f2ec"); g.rect(12, 2, 1, 12, "#e8e6e0")
+    return g.outline().image()
+
+
+def notebooks():   # worn field notebooks, a stack of three, dog-eared, a pen clipped on
+    g = Grid(16, 14)
+    for i, (c, hi) in enumerate((("#6a4a32", "#8a6a52"), ("#3a5a3a", "#5a7a5a"), ("#8a6a4a", "#a88a6a"))):
+        g.rect(2 + i, 9 - i * 3, 12, 4, c); g.rect(2 + i, 9 - i * 3, 12, 1, hi); g.rect(13 + i, 10 - i * 3, 1, 2, PAPER)
+    g.rect(11, 2, 1, 6, "#2a2a34")
+    return g.outline().image()
+
+
+def somi_drawing():   # Somi's crayon drawing: a woman seen from behind, a sun, wobbly crayon lines
+    g = Grid(16, 14)
+    g.rect(1, 1, 14, 12, PAPER); g.rect(1, 12, 14, 1, PAPER_D)
+    g.ellipse(12, 3.5, 1.6, 1.6, "#f4c020")
+    g.ellipse(7, 5, 2, 2, "#2a2024"); g.rect(5, 7, 5, 5, "#e8742a")      # dark hair from behind, an orange coat
+    g.set(5, 12, "#2a2024"); g.set(9, 12, "#2a2024")
+    g.rect(2, 11, 3, 1, "#5aa83a")
+    return g.outline().image()
+
+
 # the board room's setup (m17): placeable props
 def tray():   # a lacquer tray with two cups and a carafe
     g = Grid(16, 10)
@@ -249,6 +282,8 @@ ITEMS = {
     "seating_notes": seating_notes, "cash_100k": cash_100k, "dried_squid": dried_squid, "necklace": necklace,
     "contract": contract, "icb_listing": icb_listing, "icb_call": icb_call, "coached": coached,
     "james_park": james_park, "water": lambda: water(), "green_tea": green_tea, "coffee": lambda: cup(),
+    # Book 1
+    "copy": copies, "file": ring_file, "notebook": notebooks, "somi_drawing": somi_drawing,
 }
 KINDS = {"ms_tray": tray, "ms_pens": pens, "ms_cup": cup, "ms_water": water, "ms_pocketboard": pocket_board}
 
