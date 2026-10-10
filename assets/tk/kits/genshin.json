@@ -25,7 +25,9 @@
   "bg_ruins": "assets/tk/genshin/bg_ruins.png",
   "pinerock": "assets/tk/genshin/pinerock.png",
   "drawn_b2": "assets/tk/drawn_b2.png",
-  "drawn_b2_tiles": "assets/tk/drawn_b2_tiles.png"
+  "drawn_b2_tiles": "assets/tk/drawn_b2_tiles.png",
+  "drawn_hl": "assets/hl/drawn_hl.png",
+  "drawn_hl_tiles": "assets/hl/drawn_hl_tiles.png"
  },
  "materials": {
   "grass": {
@@ -370,6 +372,22 @@
   },
   "curtain": {
    "same": "wood"
+  },
+  "wall.lattice": {
+   "tiles": [
+    [
+     "drawn_hl_tiles",
+     0,
+     0,
+     1
+    ],
+    [
+     "drawn_hl_tiles",
+     1,
+     0,
+     1
+    ]
+   ]
   }
  },
  "kinds": {
@@ -1593,6 +1611,191 @@
     261,
     16,
     24
+   ]
+  ],
+  "building.blackgate": [
+   [
+    "drawn_hl",
+    162,
+    118,
+    56,
+    48
+   ]
+  ],
+  "building.festoongate": [
+   [
+    "drawn_hl",
+    0,
+    182,
+    44,
+    46
+   ]
+  ],
+  "building.gatehouse": [
+   [
+    "drawn_hl",
+    97,
+    118,
+    64,
+    59
+   ]
+  ],
+  "building.halfgate": [
+   [
+    "drawn_hl",
+    133,
+    229,
+    36,
+    30
+   ]
+  ],
+  "building.hall_grand": [
+   [
+    "drawn_hl",
+    0,
+    0,
+    118,
+    117
+   ],
+   [
+    "drawn_hl",
+    119,
+    0,
+    124,
+    106
+   ]
+  ],
+  "building.wing": [
+   [
+    "drawn_hl",
+    0,
+    118,
+    96,
+    63
+   ],
+   [
+    "drawn_hl",
+    45,
+    182,
+    94,
+    45
+   ]
+  ],
+  "furn.clock": [
+   [
+    "drawn_hl",
+    224,
+    182,
+    16,
+    36
+   ]
+  ],
+  "furn.curtain": [
+   [
+    "drawn_hl",
+    170,
+    229,
+    16,
+    26
+   ]
+  ],
+  "furn.cushion": [
+   [
+    "drawn_hl",
+    168,
+    266,
+    16,
+    10
+   ]
+  ],
+  "furn.gauze": [
+   [
+    "drawn_hl",
+    84,
+    229,
+    48,
+    32
+   ]
+  ],
+  "furn.handwarmer": [
+   [
+    "drawn_hl",
+    88,
+    266,
+    14,
+    12
+   ]
+  ],
+  "furn.kang": [
+   [
+    "drawn_hl",
+    0,
+    229,
+    48,
+    36
+   ]
+  ],
+  "furn.plaque": [
+   [
+    "drawn_hl",
+    39,
+    266,
+    48,
+    18
+   ]
+  ],
+  "landmark.stonelion": [
+   [
+    "drawn_hl",
+    140,
+    182,
+    32,
+    38
+   ]
+  ],
+  "prop.bench": [
+   [
+    "drawn_hl",
+    103,
+    266,
+    64,
+    12
+   ]
+  ],
+  "prop.birdcage": [
+   [
+    "drawn_hl",
+    220,
+    229,
+    16,
+    26
+   ]
+  ],
+  "prop.greencart": [
+   [
+    "drawn_hl",
+    173,
+    182,
+    50,
+    38
+   ]
+  ],
+  "prop.sedan": [
+   [
+    "drawn_hl",
+    49,
+    229,
+    34,
+    36
+   ]
+  ],
+  "prop.toyload": [
+   [
+    "drawn_hl",
+    0,
+    266,
+    38,
+    22
    ]
   ]
  },
