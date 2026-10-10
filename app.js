@@ -569,7 +569,9 @@ class Goban {
     return w > 0 && w / this.W * this.cell < 28;
   }
   tap(c, r, grid) {
-    if (grid[r][c] !== EMPTY || !this.needsConfirm() || this.only) { this.clearGhost(); return this.onClick(c, r); }   // (four big letters: one tap plays)
+    // (a multiple-choice board takes taps only on its letters; on a phone with tiny points they still confirm, so a near-miss
+    // shows the pick instead of costing a guess: Testing, m22 on an iPhone)
+    if (grid[r][c] !== EMPTY || !this.needsConfirm()) { this.clearGhost(); return this.onClick(c, r); }
     if (this.ghost && this.ghost.c === c && this.ghost.r === r) { this.clearGhost(); return this.onClick(c, r); }
     this.clearGhost();
     const g = this.el("circle", { cx: this.px(c), cy: this.py(r), r: this.cell * .47, "pointer-events": "none",

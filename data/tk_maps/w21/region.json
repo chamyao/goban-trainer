@@ -238,7 +238,10 @@
    "links": [
     "one-international"
    ],
-   "parent": "one-international"
+   "parent": "one-international",
+   "delivers": [
+    "requisition"
+   ]
   },
   {
    "id": "one-international--hr",
@@ -271,7 +274,16 @@
    "links": [
     "one-international"
    ],
-   "parent": "one-international"
+   "parent": "one-international",
+   "gives": [
+    "copy",
+    "mop"
+   ],
+   "delivers": [
+    "errand_copy",
+    "errand_bl",
+    "errand_floor"
+   ]
   },
   {
    "id": "one-international--meeting",
@@ -2966,7 +2978,7 @@
       "mark:errand_floor"
      ],
      "else": "m14_wait",
-     "objective": "Work from every side on Sales 3's floor: the forwarder call about the B/L at the team phone, Kim's copies at the copier, and the floor.",
+     "objective": "Work from every side on Sales 3's floor: the forwarder call about the B/L at the team phone, Kim's copies at the copier, and mop the floor.",
      "at": "One International",
      "place": "one-international",
      "objective_zh": ""

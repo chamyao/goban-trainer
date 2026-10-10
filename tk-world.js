@@ -36,7 +36,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=108`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=109`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
@@ -255,7 +255,7 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=108`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=109`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=52`);
       this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=111`);
     }
@@ -1170,6 +1170,7 @@ function worldScenes() {
     // Where the next objective is from here: its story spot on this map, or
     // the exit that starts the shortest way to its place (rooms included).
     goalPoint() {
+      this.goalFloor = null;   // the lift's ◆ (tk-modern.js) follows this goal only, never a stale one (Misaeng m11 looped on 14F)
       const q = this.nextMain();
       if (!q) return null;
       // a cutaway still waiting on the news (Book 15 s4, told:wu-gatekeeper): point at the nearest townsperson who hasn't heard it
@@ -1204,7 +1205,10 @@ function worldScenes() {
           this.goalHops = 0;
           if (ts.length) return ts.sort((a, b) => d(a) - d(b))[0];
           // a giver seated indoors: the door of their room, or out of this room first
-          const room = this.region.places.find(p => p.parent === g.place && (p.gives || []).some(x => items.includes(x)));
+          // a giver, or a delivery that can take it now, in a room of this place (region.json "gives", "delivers")
+          const room = this.region.places.find(p => p.parent === g.place && p.id !== this.placeId && (p.delivers || []).some(x => marks.includes(x))
+                         && !need.some(c => /^item:/.test(c)) && posts.length === 0)
+            || this.region.places.find(p => p.parent === g.place && (p.gives || []).some(x => items.includes(x)));
           if (room && room.id !== this.placeId) return this.routeTo([{ place: room.id }]);
           if (this.placeId !== g.place) return this.routeTo([{ place: g.place }]);
         } else return this.routeTo([{ place: g.place }]);
