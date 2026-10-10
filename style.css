@@ -930,3 +930,7 @@ html.tk-fullwin-on, html.tk-fullwin-on body { overflow: hidden; overscroll-behav
 .tk-lift li button { width: 100%; min-height: 40px; text-align: left; }
 /* an English-only book (tk-modern.js TKEnglish): no Chinese lines or labels */
 body.tk-en [lang="zh-CN"], body.tk-en .town-zh, body.tk-en .tk-dlg-zh, body.tk-en .tk-scroll-zh { display: none !important; }
+
+/* a record board as multiple choice (tk-modern.js WorldModern.labels): A-D on the points */
+.tk-choice circle { fill: rgba(255, 248, 225, .92); stroke: #8a2a1a; stroke-width: 2.5; }
+.tk-choice text { fill: #8a2a1a; font-weight: 700; font-family: system-ui, sans-serif; }

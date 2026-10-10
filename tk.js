@@ -1555,7 +1555,9 @@ async function tkLevelData(worldN, key) {
   // a record board (Misaeng, tk-modern.js): the frame game's position, one right move, not a drawn problem
   const rec = typeof WorldModern !== "undefined" ? WorldModern.move(w, node, idx) : null;
   if (rec) {
-    const src = WorldModern.book(w), p = src.problems.find(x => x.id === rec);
+    const src = WorldModern.book(w), p0 = src.problems.find(x => x.id === rec);
+    const only = WorldModern.choices(w, node, rec, key);   // multiple choice, A-D, when the node has candidates
+    const p = only ? Object.assign({}, p0, { only }) : p0;
     return { w, node, src, p, book: Object.assign({}, src, { problems: [p] }) };
   }
   const [bookId, pid] = TK.problemRef(node, idx);
@@ -1747,7 +1749,7 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
     key_("Esc", "离开 Leave", leave),
     TK_TEST ? key_("S", "跳过 Skip (test)", () => trainer && (trainer.flawed = null, dispatchEvent(new CustomEvent("tczw:result", { detail: "ok" })))) : "",
   ]);
-  const srcLine = p.record ? h("div", { class: "tk-duel-src" }, `${p.credit} · find the move that was played`)   // a record board: the game, not a problem book
+  const srcLine = p.record ? h("div", { class: "tk-duel-src" }, `${p.credit} · ${p.only ? "which was played: A, B, C or D?" : "find the move that was played"}`)   // a record board: the game, not a problem book
     : h("div", { class: "tk-duel-src" }, [
     `${p.lv || node.grade || ""} · 死活 · `, node.role === "boss" ? "" : `出自 ${src.title} · `,
     h("a", { href: p.url || `https://www.101weiqi.com/q/${p.id}/`, target: "_blank", rel: "noopener" }, "来源 source"),
@@ -1799,6 +1801,16 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
 
   trainer = new Trainer(Object.assign({}, src, { problems: [p] }), 0, { svg, boardCard, status, treePanel, ...hidden, noEngine: true });
   if (p.last) { trainer.lastMove = cIdx(p.last); trainer.render(); }   // a record board: White's move before it, marked
+  if (p.only && typeof WorldModern !== "undefined") {   // multiple choice: A-D on the board, and the keys A-D
+    WorldModern.labels(trainer, p.only);
+    const pick = e => {
+      if (!box.isConnected) return removeEventListener("keydown", pick);
+      const i = "abcd".indexOf((e.key || "").toLowerCase());
+      if (i < 0 || e.ctrlKey || e.metaKey || e.altKey || !trainer || trainer.p !== p) return;
+      const [c, r] = cIdx(p.only[i]); e.preventDefault(); trainer.click(c, r);
+    };
+    addEventListener("keydown", pick);
+  }
   // a full 19x19 board (a record board): the lead's portrait goes behind it, or it hides the stones (the user: "on the full
   // board the portrait needs to go behind the board, 19x19 is too big and I cant see"); smaller boards keep it in front
   { const c = trainer.goban.crop; box.classList.toggle("tk-duel-big", c.c1 - c.c0 >= 18 && c.r1 - c.r0 >= 18); }

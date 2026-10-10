@@ -47,7 +47,50 @@ const WorldModern = {
     });
     return (w.__recordBook = { id: `record-${w.n}`, title: R.title || "The record", problems });
   },
-  // a small board drawn as SVG: the position after n moves, the last one ringed
+  // A record board as multiple choice (the user: "change the move guessing game to be multiple choice between a couple of
+  // reasonable moves … label a, b, c, d on the board", the alternatives "all a little bit worse than cho's move", by how
+  // much "scale it by rank"): the node's "choices" {move: [[point, points lost], …]} give the candidates; three are
+  // drawn from the band for the player's rank (TKElo), shuffled in with Cho's move, and kept for that board (a slip
+  // brings back the same four). Without candidates the board is open, as before.
+  BANDS: [[15, 1.5, 3], [10, 0.7, 1.5], [5, 0.3, 0.8], [-99, 0, 0.5]],   // [weakest kyu in the band, least loss, most]
+  choices(w, node, move, key) {
+    const list = node && node.choices && (node.choices[move] || node.choices[String(move)]);
+    if (!list || list.length < 3) return null;
+    const all = TK.ls("tk-choices");
+    if (all[key]) return all[key];
+    const label = typeof TKElo !== "undefined" ? TKElo.label() : "15K", kyu = /K/.test(label) ? parseInt(label) : -parseInt(label);
+    const [, lo, hi] = this.BANDS.find(b => kyu >= b[0]);
+    const off = x => x < lo ? lo - x : x > hi ? x - hi : 0;
+    let seed = 0; for (const ch of key) seed = (seed * 31 + ch.charCodeAt(0)) >>> 0;
+    const rnd = () => ((seed = (seed * 1103515245 + 12345) >>> 0) / 4294967296);
+    const right = w.record.moves[move - 1][1];
+    const pool = list.filter(([p]) => p !== right).map(([p, l]) => ({ p, d: off(l) + rnd() * 0.05 })).sort((a, b) => a.d - b.d);
+    const pts = [right, ...pool.slice(0, 3).map(x => x.p)];
+    for (let i = pts.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [pts[i], pts[j]] = [pts[j], pts[i]]; }
+    all[key] = pts; TK.lsSet("tk-choices", all);
+    return pts;
+  },
+  // the letters on the board, redrawn with it; the four points the only ones that play (Trainer.click honours p.only)
+  labels(trainer, pts) {
+    const g = trainer.goban, svg = g.svg, NS = "http://www.w3.org/2000/svg";
+    const draw = () => {
+      svg.querySelectorAll(".tk-choice").forEach(e => e.remove());
+      if (trainer.done === "ok") return;
+      pts.forEach((p, i) => {
+        const [c, r] = cIdx(p);
+        if (trainer.grid[r][c]) return;
+        const el = document.createElementNS(NS, "g"); el.setAttribute("class", "tk-choice"); el.setAttribute("pointer-events", "none");
+        const ci = document.createElementNS(NS, "circle"); ci.setAttribute("cx", g.px(c)); ci.setAttribute("cy", g.py(r)); ci.setAttribute("r", g.cell * .42);
+        const t = document.createElementNS(NS, "text"); t.setAttribute("x", g.px(c)); t.setAttribute("y", g.py(r)); t.textContent = "ABCD"[i];
+        t.setAttribute("text-anchor", "middle"); t.setAttribute("dominant-baseline", "central"); t.setAttribute("font-size", g.cell * .55);
+        el.append(ci, t); svg.append(el);
+      });
+    };
+    const render = trainer.render.bind(trainer);
+    trainer.render = (...a) => { const r = render(...a); draw(); return r; };
+    draw();
+    return draw;
+  },
   boardSvg(w, n, px = 92) {
     const g = this.position(w, n), s = px / 20, at = i => (s * (i + 1)).toFixed(1);
     let o = `<svg viewBox="0 0 ${px} ${px}" width="${px}" height="${px}" aria-hidden="true"><rect width="${px}" height="${px}" rx="3" fill="#dcb46a"/>`;

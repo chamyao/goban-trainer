@@ -777,6 +777,7 @@ class Trainer {
     if (this.done || this.engineBusy || this.turnColor() !== BLACK) return;
     if (this.grid[r][c] !== EMPTY) return;
     const mv = String.fromCharCode(97 + c) + String.fromCharCode(97 + r);
+    if (this.p.only && !this.p.only.includes(mv)) return;   // a multiple-choice board (Misaeng's record boards): only its lettered points
 
     const treeMove = this.p.lines.some(L =>
       this.played.length < L.length - 1 &&
