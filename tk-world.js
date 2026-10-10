@@ -41,7 +41,7 @@ const WorldData = {
     }
     return this.regions[n];
   },
-  has(n) { return (n >= 1 && n <= 3) || (n >= 12 && n <= 15) || n === 90; },  // worlds whose places have been built (12: Book 2; 13: the Cao Cao arc, a test book; 90: the study where you talk with Claude)
+  has(n) { return (n >= 1 && n <= 3) || (n >= 12 && n <= 15) || n === 21 || n === 90; },   // 21: Misaeng  // worlds whose places have been built (12: Book 2; 13: the Cao Cao arc, a test book; 90: the study where you talk with Claude)
   // "1-zhuo-county-c-elder": a challenger in a place, drawing from the world's problems.
   node(w, key) {
     const region = this.regions[w.n];
@@ -353,7 +353,8 @@ function worldScenes() {
           // a place to deliver to (a ridge): mark, condition, what it needs, and its lines
           ...(p.needs ? { needs: J(p.needs), delivers: p.delivers || o.name, when: p.when || "", empty: J(p.empty), waiting: J(p.waiting), call: J(p.call),
                           deliver: J(p.deliver), delivered: J(p.delivered) } : {}),
-          sight: p.sight ? JSON.parse(p.sight) : null, fires: p.fires || "" };   // a sight puzzle: it plays once one watcher sees you and another doesn't
+          sight: p.sight ? JSON.parse(p.sight) : null, fires: p.fires || "",
+          opens: p.opens || "", takes: !!p.takes };   // Misaeng (tk-modern.js): a spot that opens the audit board; a delivery that takes the thing   // a sight puzzle: it plays once one watcher sees you and another doesn't
         else if (o.type === "npc") this.addNpc(o, p, J);
         else if (o.type === "exit") this.exits.push({ to: p.to, side: p.side, rect: new Phaser.Geom.Rectangle(o.x, o.y, o.width, o.height),
           openTo: p.open_to ? JSON.parse(p.open_to) : null, refuse: J(p.refuse) });
@@ -743,6 +744,11 @@ function worldScenes() {
       // the Lady Sun book (tk-feats.js): news to pass on; a blocker who steps aside when faced
       try { if (p.gossip) n.gossip = JSON.parse(p.gossip); } catch { n.gossip = null; }
       try { if (p.yield) { n.yield = JSON.parse(p.yield); n.yield.line = own(n.yield.line || []); n.wander = false; } } catch { n.yield = null; }
+      // Misaeng's trade loop (tk-modern.js): a seller, a passer-by to offer to, the rival seller
+      for (const k of ["shop", "buyer", "rival"]) try { if (p[k]) n[k] = JSON.parse(p[k]); } catch { n[k] = null; }
+      if (n.buyer) Object.assign(n.buyer, { yes: own(n.buyer.yes || []), no: own(n.buyer.no || []) });
+      if (n.rival) n.rival.say = own(n.rival.say || []);
+      if (n.shop) n.shopName = p.label || "";
       if (p.rider) {   // a chase rider (Places: {"chase": "c17", "beat": [[x,y]..], "cone": 5, "dir": "E"}): about only while that chase is on
         try {
           const r = JSON.parse(p.rider), T = this.tw || 16, D = { N: "up", S: "down", W: "left", E: "right" };
@@ -1031,6 +1037,7 @@ function worldScenes() {
       this.goalText = [en, zh];
       const h = this.activeHint();
       this.ui.goal(en, zh, h && [h.hint, h.hint_zh || ""]);
+      if (typeof WorldModern !== "undefined") WorldModern.hud(this);   // Misaeng: the record's strip, the trade's cash
       if (this.mapW) this.fitCamera();   // the goal line's height moves the HUD's edge
       this.markActors();
     }
@@ -1966,6 +1973,7 @@ function worldScenes() {
         n.dir = { up: "down", down: "up", left: "right", right: "left" }[this.player.facing];
         this.faceNpc(n);
         if (n.who === "claude" && this.opts.onTalkTo) return this.opts.onTalkTo(this, n);   // the chat with Claude (tk.js TKTalk)
+        if (typeof WorldModern !== "undefined" && WorldModern.talk(this, n)) return;   // Misaeng's trade loop: buying, offering
         if (n.gives) return this.giveFrom(n);
         // someone standing at a place to deliver to (Guan Yu at his ridge) takes the delivery
         const at = Object.values(this.spots).find(s => s.needs && Math.hypot(s.x - n.spr.x, s.y - n.spr.y) < 64);
@@ -1978,6 +1986,7 @@ function worldScenes() {
       const spot = this.spots[t.k];
       if (t.k === "claude" && this.opts.onTalkTo) return this.opts.onTalkTo(this, null);   // the rug before Claude's desk
       if (spot.use === "ogs") return TKTable.sit(this, t.k);   // the travellers' go table (tk-table.js)
+      if (spot.opens === "audit" && typeof WorldModern !== "undefined" && WorldModern.audit(this)) return;   // Misaeng's audit board
       if (spot.needs) return this.deliverAt(spot);
       if (spot.use === "shrine") return this.shrineTalk();
       const q = this.region.quests.find(x => x.node === spot.node);
@@ -2007,7 +2016,11 @@ function worldScenes() {
       if (!this.cond(s.when)) return this.talk(lines(s.empty, [["n", `${s.label || "Here"}. There's no one here.`, `${s.labelZh || "这里"}。这里没有人。`]]));
       if (WorldMarks.has(this.w, s.delivers)) return this.talk(lines(s.delivered, s.deliver));
       if (!this.cond(s.needs)) return this.talk(lines(s.waiting, [["n", "Not yet.", "还不到时候。"]]));
-      this.talk(lines(s.deliver, [["n", "Delivered.", "已送到。"]]), () => { WorldMarks.add(this.w, s.delivers); this.refreshStory(); this.setGoal(); });
+      this.talk(lines(s.deliver, [["n", "Delivered.", "已送到。"]]), () => {
+        WorldMarks.add(this.w, s.delivers);
+        if (s.takes) for (const c of s.needs) if (/^item:/.test(c)) WorldItems.remove(this.w, c.slice(5));   // set down, out of the bag (Misaeng's room)
+        this.refreshStory(); this.setGoal();
+      });
     }
     // Touching a shrine: dark, "the board is quiet"; settled, the Star Lords' hint again and where to go now.
     shrineTalk() {

@@ -31,7 +31,8 @@ const WorldFeats = {
     const d = WorldItems.defs(w), keys = WorldItems.owned(w);
     const el = document.createElement("div");
     el.className = "tk-bag";
-    el.innerHTML = `<div class="tk-bag-box"><h3><span lang="zh-CN">行囊</span> Bag</h3><ul></ul><button type="button">关闭 Close</button></div>`;
+    const en = w.lang === "en";   // an English-only book (Misaeng)
+    el.innerHTML = `<div class="tk-bag-box"><h3>${en ? "" : '<span lang="zh-CN">行囊</span> '}Bag</h3><ul></ul><button type="button">${en ? "" : "关闭 "}Close</button></div>`;
     const ul = el.querySelector("ul");
     for (const k of keys) {
       const it = d[k] || {}, li = document.createElement("li");
@@ -48,11 +49,18 @@ const WorldFeats = {
         note.textContent = `${it.plan_zh || ""} ${it.plan || ""}`;
         li.classList.add("opened");
       } else if (it.kind === "carriage") note.textContent = "按 C 卷帘/放帘 · C raises or lowers the curtain";
+      else if (it.text) note.textContent = it.text;   // a note to read (Misaeng: the seating notes, the audit's clues)
       ul.append(li);
     }
-    if (!keys.length) ul.innerHTML = `<li><span lang="zh-CN">空空如也</span> Nothing yet.</li>`;
+    if (!keys.length) ul.innerHTML = en ? "<li>Nothing yet.</li>" : `<li><span lang="zh-CN">空空如也</span> Nothing yet.</li>`;
     const back = this.focusBack(), shut = () => { el.remove(); back(); };
-    el.querySelector("button").onclick = shut;
+    if (typeof WorldModern !== "undefined" && WorldModern.auditOpen(w) && window.__w && window.__w.w === w) {   // Misaeng: the clues, linked on the audit board
+      const b = document.createElement("button");
+      b.type = "button"; b.className = "tk-bag-audit"; b.textContent = `${w.audit.title || "The audit board"} ▸`;
+      b.onclick = () => { shut(); WorldModern.audit(window.__w); };
+      el.querySelector("ul").after(b);
+    }
+    el.querySelector(".tk-bag-box > button:last-child").onclick = shut;
     el.onclick = e => { if (e.target === el) shut(); };
     document.body.append(el);
   },

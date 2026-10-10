@@ -1402,6 +1402,12 @@ async function tkLevelData(worldN, key) {
   // no board past the scene's last ("a9~9" when a9 poses three)
   const nProb = ((w.scenes && w.scenes[node.scene] && w.scenes[node.scene].steps) || []).filter(s => s[0] === "problem").length;
   if (nth && idx >= Math.max(1, nProb) && !(node.chase && idx >= 19)) return null;   // a chase's catches draw from slot 20 on (tk-world.js chaseCaught)
+  // a record board (Misaeng, tk-modern.js): the frame game's position, one right move, not a drawn problem
+  const rec = typeof WorldModern !== "undefined" ? WorldModern.move(w, node, idx) : null;
+  if (rec) {
+    const src = WorldModern.book(w), p = src.problems.find(x => x.id === rec);
+    return { w, node, src, p, book: Object.assign({}, src, { problems: [p] }) };
+  }
   const [bookId, pid] = TK.problemRef(node, idx);
   const src = await getBook(bookId);
   const p = src.problems.find(x => x.id === pid);
@@ -1465,7 +1471,7 @@ function tkLevelBuild(host, worldN, key, { w, node, src, p, book }, { back, agai
     if (!verdict.isConnected) return removeEventListener("tczw:result", onResult);
     if (trainer !== t || settled) return;
     settled = true;
-    TKElo.result(w, node, [src.id, p.id], e.detail === "ok" && !t.flawed);   // adaptive difficulty: first try only
+    if (!p.record) TKElo.result(w, node, [src.id, p.id], e.detail === "ok" && !t.flawed);   // adaptive difficulty: first try only (a record board isn't rated)
     verdict.innerHTML = "";
     if (e.detail === "ok" && !t.flawed) {
       TK.markCleared(key);
@@ -1567,7 +1573,8 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
   if (face) face.className = "town-face";
   const zh = h("div", { class: "town-zh", lang: "zh-CN" }), en = h("div", { class: "town-en" });
   const btns = h("div", { class: "tk-duel-next" });
-  const say = (z, e, ...next) => { zh.textContent = z; en.textContent = e; btns.replaceChildren(...next); };
+  const enOnly = (TK.world(worldN) || {}).lang === "en";   // an English-only book (Misaeng): no Chinese on the board either
+  const say = (z, e, ...next) => { zh.textContent = enOnly ? "" : z; en.textContent = e; btns.replaceChildren(...next); };
   const story = !foe || node.role === "boss" || !!TK_SETTER_LINES[foe.who];
   const dlg = h("div", { class: `town-dlg tk-duel-dlg ${story ? "story" : "chat"}` }, [
     h("div", { class: "town-tab" }, node.role === "boss" ? "首领 · Boss" : "主线 · Story"),
@@ -1585,7 +1592,8 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
     key_("Esc", "离开 Leave", leave),
     TK_TEST ? key_("S", "跳过 Skip (test)", () => trainer && (trainer.flawed = null, dispatchEvent(new CustomEvent("tczw:result", { detail: "ok" })))) : "",
   ]);
-  const srcLine = h("div", { class: "tk-duel-src" }, [
+  const srcLine = p.record ? h("div", { class: "tk-duel-src" }, `${p.credit} · find the move that was played`)   // a record board: the game, not a problem book
+    : h("div", { class: "tk-duel-src" }, [
     `${p.lv || node.grade || ""} · 死活 · `, node.role === "boss" ? "" : `出自 ${src.title} · `,
     h("a", { href: p.url || `https://www.101weiqi.com/q/${p.id}/`, target: "_blank", rel: "noopener" }, "来源 source"),
   ]);
@@ -1635,6 +1643,7 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
   if (TK.restLeft(key) > 0) { say("先看清这局，片刻之后再落子。", "Study the position; you can play again in a moment."); tkRestLock(boardCard, key, opening); }
 
   trainer = new Trainer(Object.assign({}, src, { problems: [p] }), 0, { svg, boardCard, status, treePanel, ...hidden, noEngine: true });
+  if (p.last) { trainer.lastMove = cIdx(p.last); trainer.render(); }   // a record board: White's move before it, marked
   // Size the board to the window it sits in, keeping its shape (it's cropped to the corner in play).
   const fit = () => {
     if (box.parentNode && box.parentNode.classList.contains("tk-duel-full")) {
@@ -1666,7 +1675,7 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
     if (!box.isConnected) return removeEventListener("tczw:result", onResult);
     if (trainer !== t || settled) return;
     settled = true;
-    TKElo.result(TK.world(worldN), node, [src.id, p.id], e.detail === "ok" && !t.flawed);   // adaptive difficulty: first try only
+    if (!p.record) TKElo.result(TK.world(worldN), node, [src.id, p.id], e.detail === "ok" && !t.flawed);   // adaptive difficulty: first try only (a record board isn't rated)
     const go = (label, fn) => h("button", { type: "button", class: "tk-duel-go", onclick: fn }, [label, h("b", {}, " ⏎")]);
     if (e.detail === "ok" && !t.flawed) {
       TK.markCleared(key);

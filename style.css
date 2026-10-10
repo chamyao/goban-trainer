@@ -893,3 +893,30 @@ html.tk-fullwin-on, html.tk-fullwin-on body { overflow: hidden; overscroll-behav
 .town-goal-go::before { content: "➜ "; }
 .town-goal-go:hover, .town-goal-go:focus-visible { color: #fff0b8; text-decoration: underline; outline: none; }
 .town-goal-news::before { content: "📣 "; }
+
+/* ---- Misaeng (world 21, tk-modern.js): the record's strip, the audit board, the trade loop ---- */
+.tk-strip { position: absolute; right: 10px; top: 44px; z-index: 3; pointer-events: auto; display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 4px 4px 2px; background: rgba(20, 22, 26, .78); border: 1px solid rgba(255,255,255,.25); border-radius: 6px; cursor: pointer; font: 600 11px/1.2 system-ui, sans-serif; color: #f3efe6; }
+.tk-strip svg { display: block; }
+.tk-record .tk-bag-box { text-align: center; }
+.tk-record .tk-bag-box svg { display: block; margin: 0 auto 8px; max-width: 80vw; height: auto; }
+.tk-record-sub { font-size: 13px; color: #5a4632; margin: 0 0 10px; }
+.tk-trade-chip { position: absolute; right: 10px; top: 152px; z-index: 3; max-width: 40%; pointer-events: none; padding: 5px 9px; border-radius: 6px;
+  background: rgba(20, 22, 26, .8); color: #f3efe6; font: 12px/1.3 system-ui, sans-serif; }
+.tk-trade-chip b { display: block; font-size: 14px; color: #ffd76a; }
+.tk-audit .tk-bag-box { max-width: min(94vw, 620px); }
+.tk-audit-q { font-weight: 700; margin: 0 0 8px; }
+.tk-audit-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; margin-bottom: 10px; }
+.tk-audit-card { text-align: left; font: inherit; padding: 8px; border-radius: 8px; border: 1px solid #b8986a; background: #fffaf0; cursor: pointer; }
+.tk-audit-card b { display: block; color: #2a3f6a; margin-bottom: 3px; }
+.tk-audit-card span { font-size: 12px; color: #5a4632; }
+.tk-audit-card.on { outline: 3px solid #d8a020; background: #fff1c8; }
+.tk-audit-card.missing { opacity: .45; cursor: default; }
+.tk-audit-done { margin: 0 0 8px; padding-left: 20px; font-size: 13px; }
+.tk-audit-done li { margin-bottom: 4px; }
+.tk-audit-say { min-height: 1.3em; font-style: italic; margin: 0 0 8px; }
+.tk-shop li { display: flex; align-items: center; gap: 8px; }
+.tk-shop li .n { margin-left: auto; }
+.tk-shop-say { font-style: italic; margin: 0 0 8px; }
+.tk-shop-cash { font-size: 13px; margin: 0 0 8px; }
+.tk-bag-audit { display: block; margin: 0 0 10px; }

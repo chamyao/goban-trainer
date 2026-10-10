@@ -50,7 +50,8 @@ SIDE_DRAWN = {"building.wing"}   # drawn in side view when it faces E or W, its 
 TALL = ("building", "tree", "rock", "ruin", "garden", "landmark")   # what a roof or crown rises above
 NPC_KEYS = ("challenge", "intro", "win", "done", "until", "face", "when", "gives", "gives_when", "give", "given", "call",
             "in", "in_beats", "inside", "follower", "blocks", "view", "label", "note",
-            "gossip", "yield")   # the loud town and the face-down (Lady Sun's marriage; tk-feats.js)
+            "gossip", "yield",   # the loud town and the face-down (Lady Sun's marriage; tk-feats.js)
+            "shop", "buyer", "rival")   # the trade loop (Misaeng; tk-modern.js)
 
 
 def slug(name):
@@ -517,7 +518,8 @@ class MapBuilder:
                 t = self.near_cell(c, want_visible=False)
             spot = {"id": s["id"], "x": t[0] + .5, "y": t[1] + .7, "node": s.get("node", ""), "label": s.get("label", "")}
             for k in ("trigger", "note", "on", "sight", "cover", "fires",   # cover: a place to hide; fires: starts itself
-                      "needs", "delivers", "when", "empty", "waiting", "deliver", "delivered", "call"):   # a place that delivers a mark
+                      "needs", "delivers", "when", "empty", "waiting", "deliver", "delivered", "call",   # a place that delivers a mark
+                      "takes", "opens"):   # Misaeng (tk-modern.js): delivering takes the thing; a spot that opens the audit board
                 if s.get(k):
                     spot[k] = s[k]
             self.spots.append(spot)
