@@ -120,7 +120,23 @@
    "trigger": "talk"
   }
  ],
- "npcs": [],
+ "npcs": [
+  {
+   "id": "npc-1",
+   "kind": "hero.zhouruijia",
+   "x": 8.5,
+   "y": 10.9,
+   "say": [
+    [
+     "zhouruijia",
+     "Miss Ping, this is the granny I told you of."
+    ]
+   ],
+   "until": "31-g5",
+   "face": "E",
+   "when": "node:g4"
+  }
+ ],
  "exits": [
   {
    "to": "the-rong-mansion--xf-rooms",

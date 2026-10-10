@@ -1382,7 +1382,7 @@ def assets(maps, tables, kits_dir=None):
 
 
 ARCS = {13: "cc", 14: "lb", 15: "ls", 31: "hlm1"}   # books whose plans are an arc's: Book 13 is the Cao Cao arc, Book 14 Lü Bu's fall,
-# Book 15 Lady Sun's marriage, Book 31 Red Chamber Book 1 (redchamber/book1/plans.py; world 31 is the Red Chamber Integration's)
+# Book 15 Lady Sun's marriage, Book 31 Red Chamber Book 1 (redchamber/book1/plans.py; the world number is Integration's)
 
 
 def key_prefix(plans_world):
