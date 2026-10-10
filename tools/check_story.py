@@ -397,7 +397,8 @@ def main():
     ap.add_argument("--world", type=int, help="check one world (default: all)")
     args = ap.parse_args()
 
-    story, zh = load("tk_story"), load("tk_story_zh")
+    story = load("tk_story")
+    zh = sys.modules["tk_story_zh"]   # the one tk_story imported: other areas' books (redchamber/) add their Chinese to it
     errors, warnings = [], []
     dup = duplicate_keys(TOOLS / "tk_story_zh.py")
     for k in dup:

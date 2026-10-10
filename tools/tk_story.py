@@ -728,3 +728,16 @@ WORLDS.append(_LS)
 for _w in WORLDS:
     if _w["n"] in (1, 2, 3):
         _w["hidden"] = True
+# ---- Dream of the Red Chamber, Book 1 (Deep as the Sea), world 31: its own area, redchamber/; test mode only for now ----
+import importlib.util as _ilu  # noqa: E402
+import tk_story_zh as _tkzh  # noqa: E402
+_spec = _ilu.spec_from_file_location("hlm_book1", _pl.Path(__file__).resolve().parent.parent / "redchamber" / "book1" / "story.py")
+_HLM1 = _ilu.module_from_spec(_spec)
+_spec.loader.exec_module(_HLM1)
+_tkzh.ZH.update(_HLM1.ZH)       # its Chinese lines and voices, next to the Three Kingdoms ones (no ids or lines clash)
+_tkzh.CAST.update(_HLM1.CAST)
+for _en, _z in _HLM1.PLACE_NAMES.items():
+    _tkzh.ZH.setdefault(_en, _z)
+_HLM = _copy.deepcopy(_HLM1.WORLD_HLM1)
+_HLM.update(n=31, book=1, hidden=True)   # not a Three Kingdoms book: out of the library until the user says how to show it
+WORLDS.append(_HLM)
