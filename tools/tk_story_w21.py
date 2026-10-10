@@ -276,6 +276,7 @@ def _scenes():
             ["spawn", "ahn", "ms_ahn", "m16", 4, -2],
             S("ms_ahn", "Whoever your partner is, trust them. The one inside the board can't see his own scheming. Everyone watching can."),
             ["still", "ms_ringed", "slow zoom in"],
+            N("A trainee at a board, ringed by onlookers. Everyone outside already knows."),
             ["problem"],   # Jang: see what the watchers see
             S("ms_ahn", "Do your part, and trust the rest."),
             ["remove", "ahn"],
@@ -529,7 +530,7 @@ def _nodes():
         node("m4", 56, 222, "m4", place="Susaek-dong", room="home", move=2, board=False),
         node("m5", 68, 216, "m5", place="Jongno", room="sponsor-office", move=2, board=False),
         node("m7", 82, 209, "m7", place="Mountain", move=3, board=False),
-        node("m7b", 90, 205, "m7b", place="Mountain", move=3, board=False),
+        node("m7b", 90, 205, "m7b", place="Mountain", move=3, board=False, clock={"start": "11:00", "tiles": 3}),
         node("m8", 96, 202, "m8", place="Jongno", room="cafe", move=4, dilemma=D(
             "ms_jang", "Give the buyer a puzzle: the move that gives one stone to take more.",
             "I can't talk trade. I can talk this.",
@@ -1060,4 +1061,5 @@ KO21 = {
     'The trail map': '등산로 안내도',
     'The summit.': '정상.',
     "Run down the trail to the car. The deal won't wait.": '등산로를 뛰어 내려가 차로. 거래는 기다려 주지 않는다.',
+    'A trainee at a board, ringed by onlookers. Everyone outside already knows.': '바둑판 앞의 연구생, 그를 둘러싼 구경꾼들. 밖에 있는 사람들은 이미 다 안다.',
 }
