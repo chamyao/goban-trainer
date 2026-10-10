@@ -14,7 +14,30 @@ for personal use". On publishing: "Im fine with pushing it to the public".
 The dialogue is Plot's own close paraphrase. Only the famous short lines are quoted (미생이네요, 모두에겐 자신만의 바둑이 있다,
 밖은 지옥이다 …), each with its Korean in this doc. No scene's dialogue is copied out whole.
 
-## The narrative (Part 0)
+## Five books (the user: "i was thinking that this is actually very light for a webtoon I was expecting multiple books"; Plot proposed five, the user: "yeah lets go")
+
+Season 1 is told in **five books**, split where the webtoon's own volumes and the frame game turn. The frame game runs
+across all five: each book plays its stretch of the 145 moves, and the series ends on Black 145. Each book stands on its
+own (R16: its opening scroll says who Jang is and where the game stands) and brings its own mechanic. The books are
+chained with `next`. World numbers are Integration's to assign; the story files are `tools/tk_story_w<n>.py`.
+
+| Book | Episodes (vols) | Story | Frame | New mechanic |
+|---|---|---|---|---|
+| **1. Not Yet Alive** (착수) | 0–33 (1–2) | The trainee years; the internship: Sales 3, the waybill, Han Seok-yul, Park Jong-gi, Steve Han and the dog-meat lunch, the daycare; the PT test; hired on contract | moves 0–33 | **Record boards** (find Cho's move) |
+| **2. Style** (기풍) | 34–59 (3–4) | The four new hires each against their own team: Baek-gi's idle steel desk, Han's lesson about his women seniors, Ahn at finance, the embargo, credit stolen, Oh's collapse, 미생이네요, the jargon | 34–59 | **Rotating leads**: each new hire leads a stretch |
+| **3. Keystone** (요석) | 60–83 (4–5) | Park Jong-sik's fraud, the audit, James Park; Chuseok; Cheon Gwan-ung; Kim Dong-su's pizza shop | 60–83 | **The audit board** |
+| **4. Sealed Move** (봉수) | 84–113 (6–7) | The Jordan revival and briefing; contract-worker life after it; Han's 시말서; the ₩100,000 mission; the rejected proposal | 84–113 | **Setting the room**, **the trade loop** |
+| **5. Life and Death** (사활) | 114–145 (8–9) | Ahn's crisis and her father; Sun's marriage; Park Jong-gi again; the China business; the contract ends; move 145 | 114–145 | to design with the user for the China stretch |
+
+**Order of work (R14, play before scaling):** Book 1 is designed and written in full first, and played. The other
+books follow one at a time. The single-book draft below (29 beats, `tools/tk_story_w21.py` at 0c7036f) is the spine
+the five books grow from: its beats are spread across them, and each book adds the episodes the single book cut or told.
+
+---
+
+## The single-book draft (superseded by the five books; kept as their spine)
+
+### The narrative (Part 0)
 
 **A group that is not yet alive.** Jang Geu-rae gave his childhood to baduk. He became a Korea Baduk Association
 trainee at eleven and failed to turn pro after seven years. He has a high-school equivalency certificate and nothing else.
