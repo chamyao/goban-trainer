@@ -94,7 +94,7 @@ def _scenes():
             ["party", ["ms_jang"], {"to": {"place": "Susaek-dong", "spot": "home"}}],   # a cut: the years after
         ]},
 
-        # M4 · 2수 (W). The friends who passed; the decline; the GED; the sponsor's company; the army; "go and thank him".
+        # M4 · 2수 (W, simplified on playtest). The friends who passed; the decline; the GED; the army; "go and see your old sponsor".
         "m4": {"title": T("Washing Her Back"), "kind": "main", "steps": [
             ["scroll", T("Years Later"), [
                 T("He quit baduk. He has no degree, no trade, and a mother to look after. He has just come out of the army."),
@@ -104,8 +104,7 @@ def _scenes():
               "He put his game records out with the board."),
             N("The family restaurant failed. His mother worked building sites until her body gave out. He studied for the equivalency exam "
               "between part-time jobs, and in the bathroom he washed her back."),
-            N("His old sponsor once gave him a job at his company. Baduk? What dan? Then: why did you quit? Then: no flexibility. He fled to the army."),
-            S("ms_mother", "Go and thank him. The president who gave you that job. You owe him that."),
+            S("ms_mother", "Your old sponsor asked after you. The man who paid for your baduk. Go and see him."),
             ["remove", "mo"],
             ["party", ["ms_jang"], {"to": {"place": "Jongno", "from": "Susaek-dong"}}],
         ]},
@@ -619,7 +618,6 @@ KO21 = {
     'He failed to turn pro.': '입단에 실패했다.',
     "Only now does he see his father's wrinkles, and how dull his mother's eyes have gone.": '이제야 아버지의 주름이, 흐려진 어머니의 눈이 보인다.',
     'He walks away dropping stones from his pocket, a few at a time.': '그는 주머니의 돌을 조금씩, 몇 개씩 떨어뜨리며 걸어간다.',
-    'Go and thank him. The president who gave you that job. You owe him that.': '가서 인사드려. 너한테 일자리 주셨던 사장님. 그 정도는 해야지.',
     'Thank you. Thank you, sir.': '감사합니다. 정말 감사합니다.',
     "If there's a light I must keep burning, I'll answer for it. If there's a light allowed me. Is there one, for me?": '제가 밝혀야 할 불빛이 있다면 책임질 겁니다. 내게 허락된 불빛이 있다면요. 그런 게 있을까, 내게.',
     'There was a paper at the workshop. Fear is mostly irrational...': '워크숍에서 그런 논문이 있었는데요. 공포는 대부분 비합리적이라고...',
@@ -911,7 +909,6 @@ KO21 = {
     'He quit baduk. He has no degree, no trade, and a mother to look after. He has just come out of the army.': '그는 바둑을 그만두었다. 학위도, 기술도 없고, 돌봐야 할 어머니가 있다. 막 군대에서 나왔다.',
     'His friends from the trainee room turned pro. When he packed up, they asked if he was really quitting. He had no answer. He put his game records out with the board.': '연구생실 친구들은 입단했다. 짐을 쌀 때 정말 그만두냐고 물었다. 그는 대답하지 못했다. 기보를 바둑판과 함께 내다 놓았다.',
     'The family restaurant failed. His mother worked building sites until her body gave out. He studied for the equivalency exam between part-time jobs, and in the bathroom he washed her back.': '집안의 식당은 망했다. 어머니는 몸이 버티지 못할 때까지 공사판에서 일했다. 그는 아르바이트 틈틈이 검정고시를 공부했고, 욕실에서 어머니의 등을 밀어 드렸다.',
-    'His old sponsor once gave him a job at his company. Baduk? What dan? Then: why did you quit? Then: no flexibility. He fled to the army.': '예전 후원자가 자기 회사에 일자리를 준 적이 있다. 바둑? 몇 단? 그다음엔, 왜 그만뒀어? 그다음엔, 융통성이 없어. 그는 군대로 도망쳤다.',
     "I've talked to a friend who runs a trading company: One International. Only he knows about the baduk. It'll be a simple interview.": '무역회사 하는 친구한테 얘기해 뒀다. 원 인터내셔널. 바둑 얘기는 그 친구만 안다. 간단한 면접일 거다.',
     "The city puts its make-up on: office workers toasting, flattering, going home. Start from the bottom, like everyone else. Don't fail the way you failed at baduk.": '도시가 화장을 한다. 직장인들이 건배하고, 아부하고, 집으로 간다. 남들처럼 바닥부터 시작하자. 바둑처럼 실패하지는 말자.',
     'The alarm. The alarm again. His mother ties his tie. A struggling group from the very first move.': '알람. 또 알람. 어머니가 넥타이를 매어 준다. 시작부터 곤마.',
@@ -942,4 +939,5 @@ KO21 = {
     'Not long after, his father died, and his mother took to her bed.': '얼마 뒤 아버지가 돌아가셨고, 어머니는 자리에 누우셨다.',
     'Seven years of losing by half a point. Not this time.': '칠 년 동안 반집으로 졌다. 이번엔 아니다.',
     "Half a point short. It's over.": '반집이 모자란다. 끝났다.',
+    'Your old sponsor asked after you. The man who paid for your baduk. Go and see him.': '예전 후원자분이 네 안부를 물으셨다. 네 바둑 뒷바라지해 주신 분. 가서 뵙고 와.',
 }
