@@ -202,6 +202,10 @@ These were each learned from a real complaint, and each is a rule, not a one-off
   her. Two closer than 76 px both go off as she walks by: in Misaeng's Sales 3, five spots 32 px apart in a row set
   each other off and m4's waiting scene kept firing between deliveries (Testing). The checker fails a pair closer than
   76 px when one is a giver or a delivery (two beats are never open at once). Put each delivery at its own desk.
+- **A handoff leaves the new lead a walk: 6 tiles or more** to the next beat's spot (Testing's house rule). A named
+  landing spot (`{"to": {"place", "spot"}}`) puts the lead 26 px below it; with none, the lead stays where the scene
+  played. `python3 tools/proofs/handoffs.py <world>` measures every handoff in a built book (tk.json rebuilt from the
+  book's story) and fails one under 6. Beats a handoff passes between in one room: 8+ tiles apart.
 - **No dressing on a crosswalk** (`free()` treats it as paving).
 - **Floors are any walkable material** in vocab (`room(..., floor="carpet")`): Misaeng's carpet, office_tile, lino.
 - **A thing that gives an item when searched** is a spot with `gives`, `gives_when`, `give`, `given` (as a person has
@@ -373,6 +377,7 @@ python3 tools/mapfactory/keep_drift.py --world 15   # then undo the drift
 tools/mapfactory/build_with_story.sh 15 15 origin/claude/plot   # against Plot's story before it's on main
 python3 tools/mapfactory/settle_maps.py             # settle wanderers in built (frozen) maps
 tests/playtest/run.sh book15-places                 # Book 15's mechanics, walked in the engine
+python3 tools/proofs/handoffs.py 21                 # every handoff leaves the new lead 6+ tiles to walk
 tests/playtest/run.sh misaeng-places                # Misaeng: kerb and crosswalks, doors to other places, the lift's menu,
                                                     # the board room's seats, the ₩100,000 mission, the commute
 python3 tools/mapfactory build --world 12 --plans 2
