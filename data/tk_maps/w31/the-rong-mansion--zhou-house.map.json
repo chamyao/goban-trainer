@@ -92,23 +92,7 @@
    "trigger": "talk"
   }
  ],
- "npcs": [
-  {
-   "id": "npc-1",
-   "kind": "hero.zhouruijia",
-   "x": 14.5,
-   "y": 4.9,
-   "say": [
-    [
-     "zhouruijia",
-     "I do like to be asked. It's not my job, mind, but I know everyone."
-    ]
-   ],
-   "until": "31-g4",
-   "face": "W",
-   "when": "node:g3"
-  }
- ],
+ "npcs": [],
  "exits": [
   {
    "to": "the-rong-mansion",

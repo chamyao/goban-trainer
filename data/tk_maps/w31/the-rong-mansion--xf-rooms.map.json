@@ -116,23 +116,7 @@
    "trigger": "talk"
   }
  ],
- "npcs": [
-  {
-   "id": "npc-1",
-   "kind": "hero.zhouruijia",
-   "x": 20.5,
-   "y": 10.9,
-   "say": [
-    [
-     "zhouruijia",
-     "Go on. Say it now, while there's no one else here."
-    ]
-   ],
-   "until": "31-g6",
-   "face": "W",
-   "when": "node:g5"
-  }
- ],
+ "npcs": [],
  "exits": [
   {
    "to": "the-rong-mansion--xf-eastroom",
