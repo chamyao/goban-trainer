@@ -898,6 +898,11 @@ html.tk-fullwin-on, html.tk-fullwin-on body { overflow: hidden; overscroll-behav
 .tk-strip { position: absolute; right: 10px; top: 44px; transition: top .15s; z-index: 3; pointer-events: auto; display: flex; flex-direction: column; align-items: center; gap: 2px;
   padding: 4px 4px 2px; background: rgba(20, 22, 26, .78); border: 1px solid rgba(255,255,255,.25); border-radius: 6px; cursor: pointer; font: 600 11px/1.2 system-ui, sans-serif; color: #f3efe6; }
 .tk-strip svg { display: block; }
+.tk-strip .tk-strip-short { display: none; }
+.tk-strip.compact { flex-direction: row; gap: 4px; padding: 2px 6px 2px 2px; }
+.tk-strip.compact svg { width: 30px; height: 30px; }
+.tk-strip.compact > span:not(.tk-strip-short) { display: none; }
+.tk-strip.compact .tk-strip-short { display: inline; }
 .tk-record .tk-bag-box { text-align: center; }
 .tk-record .tk-bag-box svg { display: block; margin: 0 auto 8px; max-width: 80vw; height: auto; }
 .tk-record-sub { font-size: 13px; color: #5a4632; margin: 0 0 10px; }

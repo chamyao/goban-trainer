@@ -537,7 +537,7 @@ function worldScenes() {
       if (!host || !cv.clientWidth) return 0;
       const r = cv.getBoundingClientRect(), k = cv.clientWidth / this.scale.width * this.cameras.main.zoom;
       let low = r.top;
-      for (const el of host.querySelectorAll(".town-goal, .tk-menu-row")) {
+      for (const el of host.querySelectorAll(".town-goal, .tk-menu-row, .tk-strip, .tk-trade-chip")) {   // (Misaeng's strip and cash chip, tk-modern.js)
         const b = el.getBoundingClientRect();
         if (b.height && b.top < r.top + r.height / 3) low = Math.max(low, b.bottom);
       }
@@ -1205,7 +1205,11 @@ function worldScenes() {
           for (let n = id; n !== this.placeId; n = prev[n]) this.goalHops++;
           while (prev[hop] !== this.placeId) hop = prev[hop];
           const e = this.exits.find(e => e.to === hop);
-          return e ? { x: e.rect.centerX, y: e.rect.centerY } : null;
+          if (e) return { x: e.rect.centerX, y: e.rect.centerY };
+          // a floor reached by a lift (Misaeng's tower, tk-modern.js): the lift that stops there, its floor marked in the menu
+          const lift = Object.values(this.spots).find(s => s.use === "lift" && (s.floors || []).some(f => f.to === hop));
+          this.goalFloor = lift ? hop : null;
+          return lift ? { x: lift.x, y: lift.y - 4 } : null;
         }
         for (const n of near[id] || []) if (!(n in prev)) { prev[n] = id; queue.push(n); }
       }
