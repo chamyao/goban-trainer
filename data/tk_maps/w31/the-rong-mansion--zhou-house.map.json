@@ -12,28 +12,28 @@
  "plan": true,
  "terrain": {
   "legend": {
+   "%": "stone",
    " ": "void",
-   "W": "wall",
-   "#": "wood"
+   "W": "wall"
   },
   "rows": [
    "                    ",
    " WWWWWWWWWWWWWWWWWW ",
-   " W################W ",
-   " W################W ",
-   " W################W ",
-   " W################W ",
-   " W################W ",
-   " W################W ",
-   " W################W ",
-   " W################W ",
-   " WWWWWWWWW##WWWWWWW ",
+   " W%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%W ",
+   " W%%%%%%%%%%%%%%%%W ",
+   " WWWWWWWWW%%WWWWWWW ",
    "                    "
   ],
   "walk": {
+   "stone": true,
    "void": false,
-   "wall": false,
-   "wood": true
+   "wall": false
   }
  },
  "lines": [
@@ -92,7 +92,23 @@
    "trigger": "talk"
   }
  ],
- "npcs": [],
+ "npcs": [
+  {
+   "id": "npc-1",
+   "kind": "hero.zhouruijia",
+   "x": 14.5,
+   "y": 4.9,
+   "say": [
+    [
+     "zhouruijia",
+     "I do like to be asked. It's not my job, mind, but I know everyone."
+    ]
+   ],
+   "until": "31-g4",
+   "face": "W",
+   "when": "node:g3"
+  }
+ ],
  "exits": [
   {
    "to": "the-rong-mansion",
