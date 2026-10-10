@@ -109,9 +109,15 @@
   "wood": {
    "tiles": [
     [
-     "n_floor_in",
+     "drawn_b2_tiles",
+     0,
+     9,
+     1
+    ],
+    [
+     "drawn_b2_tiles",
      1,
-     1,
+     9,
      1
     ]
    ]
@@ -119,9 +125,15 @@
   "stone": {
    "tiles": [
     [
-     "n_floor_in",
-     3,
-     13,
+     "drawn_b2_tiles",
+     0,
+     10,
+     1
+    ],
+    [
+     "drawn_b2_tiles",
+     1,
+     10,
      1
     ]
    ]
@@ -1724,9 +1736,15 @@
    "wood": {
     "tiles": [
      [
-      "n_floor_in",
+      "drawn_b2_tiles",
+      0,
+      9,
+      1
+     ],
+     [
+      "drawn_b2_tiles",
       1,
-      7,
+      9,
       1
      ]
     ]
@@ -1774,9 +1792,15 @@
    "wood": {
     "tiles": [
      [
-      "n_floor_in",
-      12,
+      "drawn_b2_tiles",
+      0,
+      9,
+      1
+     ],
+     [
+      "drawn_b2_tiles",
       1,
+      9,
       1
      ]
     ]
@@ -1824,9 +1848,15 @@
    "stone": {
     "tiles": [
      [
-      "n_floor_in",
-      14,
-      13,
+      "drawn_b2_tiles",
+      0,
+      10,
+      1
+     ],
+     [
+      "drawn_b2_tiles",
+      1,
+      10,
       1
      ]
     ]
