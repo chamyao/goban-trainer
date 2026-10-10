@@ -127,6 +127,11 @@ for _k, _c in _CATS["categories"].items():
 # descriptions carry the picture. Every still's default; --look gohs etc. still swap it out for comparisons.
 STYLES["final"] = "Style: 2D donghua, hard cel shading."
 STYLE = f"{STYLES['final']} Han dynasty China, about 184 AD."
+# Misaeng (the modern book, docs/book2/misaeng-arc.md): the same short line in its modern form, with its own era. Its
+# stills and portraits are the ids that start "ms_" (face_ms_*); every other id keeps STYLE, so the Han books don't move.
+STYLES["final_modern"] = "Style: 2D Korean webtoon, hard cel shading."
+STYLE_MODERN = f"{STYLES['final_modern']} Modern-day Seoul, South Korea."
+MODERN = "ms_"
 # short lines to add on top of every battle scene (the user: "battle scenes with some more oomph"), tested on
 # Black Wind; each must suit any battle, not one shot
 BATTLE_LINES = {
@@ -199,6 +204,49 @@ CAST = {
     "zumao": ("Zu Mao", "a wiry officer in red armour with two swords"),
     "xushao": ("Xu Shao", "a calm scholar with a thin beard and knowing eyes, scholar's hat, pale robe"),
 }
+# Misaeng's cast (modern Seoul, docs/book2/misaeng-arc.md "Cast"): keys are their TK_CHARS keys, so a portrait made
+# from face_<key> belongs to the same walker. Looks follow Yoon Tae-ho's webtoon and the walkers in tk.js.
+CAST.update({
+    "ms_jang": ("Jang Geu-rae", "a thin, quiet Korean man of twenty-six with a plain, watchful face, short black hair "
+                "with a fringe over his forehead, in a cheap dark navy suit, white shirt and plain blue tie"),
+    "ms_oh": ("Oh Sang-sik", "a tired, intense Korean team leader of about forty with bloodshot red eyes, messy black "
+              "hair and stubble, in a white shirt with the sleeves rolled up and a loosened dark red tie"),
+    "ms_kimds": ("Kim Dong-sik", "a kind, round-faced Korean office worker in his early thirties with curly permed black "
+                 "hair, in a light blue shirt and a navy tie, no jacket"),
+    "ms_ahn": ("Ahn Young-yi", "a composed, sharp-eyed Korean woman of twenty-five with a chin-length black bob, in a "
+               "charcoal skirt suit and a white blouse"),
+    "ms_sun": ("Sun Ji-young", "a calm, strict Korean woman manager of about forty with a short black bob, in a camel "
+               "trouser suit and a cream blouse"),
+    "ms_baekgi": ("Jang Baek-gi", "a neat, proud Korean man of twenty-six with side-parted black hair, in a sharp navy "
+                  "suit and a blue tie"),
+    "ms_han": ("Han Seok-yul", "a brash, grinning Korean man of twenty-seven with slicked-back hair, in a brown suit and a "
+               "mustard tie"),
+    "ms_park": ("Park Jong-sik", "a smooth, smug Korean manager in his forties with slicked-back black hair, in a "
+                "light grey suit, pink shirt and a plum tie"),
+    "ms_kimbr": ("Kim Bu-ryeon", "a heavy-set, balding Korean department head in his fifties with grey hair at the sides "
+                 "and glasses, in a grey suit and a dark red tie"),
+    "ms_cheon": ("Cheon Gwan-ung", "a heavy-set, weary Korean manager in his forties with short black hair, in a grey "
+                 "suit and a brown tie"),
+    "ms_mother": ("Jang's mother", "a small, gentle Korean woman in her fifties with short permed greying hair, in a "
+                  "mauve cardigan over a cream blouse"),
+    "ms_kimdsu": ("Kim Dong-su", "a worn Korean man in his late forties with short hair and stubble, in a red polo shirt "
+                  "with a pizza shop's logo"),
+    "ms_exec": ("the executive", "a cold, poised Korean executive in his late fifties with slicked-back grey hair, in a "
+                "black suit and a dark red tie"),
+    "ms_president": ("the company president", "a dignified Korean company president in his sixties with neat white "
+                     "hair, in a charcoal suit and a navy tie, kindly eyes"),
+    "ms_kimsj": ("Kim Seon-ju", "a formidable Korean woman finance director in her fifties with a dark bob and "
+                 "thin glasses, in a black trouser suit"),
+    "ms_shin": ("Shin Da-in", "a young Korean woman office worker in her twenties with long straight black hair, in a "
+                "pale pink cardigan and a grey skirt"),
+    "ms_parkjg": ("Park Jong-gi", "a timid Korean office worker in his thirties with side-parted hair and glasses, in a "
+                  "grey-green suit and a navy tie"),
+    "ms_kimsh": ("Kim Seok-ho", "an earnest young Korean man with short hair and glasses, in a grey suit and a green "
+                 "tie"),
+    "ms_somi": ("Somi", "a little Korean girl of five with two small buns tied with pink ribbons, in a yellow dress"),
+    "ms_ahnfather": ("Ahn's father", "a cold, stern Korean army officer in his fifties with short black hair, in an "
+                     "olive-green dress uniform and peaked cap"),
+})
 
 
 def style_note(n):
@@ -300,7 +348,7 @@ def prompt(sid, n_style=0, cast_refs=()):
         ref = (f" (reference image {n_style + list(cast_refs).index(key) + 1}: keep his face, hair and clothes)"
                if key in cast_refs else "")
         parts.append(f"{name} is {look}{ref}.")
-    return " ".join(parts) + " " + style_note(n_style) + STYLE
+    return " ".join(parts) + " " + style_note(n_style) + (STYLE_MODERN if sid.startswith(MODERN) else STYLE)
 
 
 # ---- the World 1 set: every scene seen three ways, for variety --------------------------------
@@ -784,10 +832,13 @@ FACE_LOOKS = {
 FACE_STYLE = ("In the style of Genshin Impact character art: polished anime cel shading, clean lineart, vibrant "
               "colours, soft rim light. Plain flat pure white background, nothing else behind the figure. Han dynasty "
               "China, about 184 AD: no text, no modern items.")
+FACE_STYLE_MODERN = ("In the style of Genshin Impact character art: polished anime cel shading, clean lineart, "
+                     "vibrant colours, soft rim light. Plain flat pure white background, nothing else behind the "
+                     "figure. Modern-day Seoul, South Korea, present-day clothes.")
 for _who, (_name, _look) in {**{k: v for k, v in CAST.items()}, **FACE_LOOKS}.items():
     STILLS[f"face_{_who}"] = {"scene": "face", "lens": _who, "raw": True, "aspect": "3:4", "prompt": (
         f"Character portrait of {_name}, {_look}. Half-body from the waist up, turned three-quarters toward the "
-        f"viewer, a characteristic expression. {FACE_STYLE}")}
+        f"viewer, a characteristic expression. {FACE_STYLE_MODERN if _who.startswith(MODERN) else FACE_STYLE}")}
 
 # the stills the game uses (Plot/Story's choice: the emotional peaks, the partings, the one death)
 CHOSEN = ["tree_b", "notice_b", "inn_b", "oath_b", "oath_c", "tent_b", "cart_b", "cart_c", "office_b", "blackwind_a",
