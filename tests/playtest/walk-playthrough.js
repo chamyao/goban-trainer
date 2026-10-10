@@ -259,6 +259,18 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       if (!errand && /isn't open yet|还没有开通|barred|不为你开|not open|turns you away|No one goes|receives no one/i.test(s.line)) refused = `refused: "${s.line.slice(0, 90)}"`; }
     if (s.cancel) { await p.getByText('Cancel', { exact: true }).first()[TAPM]().catch(() => {}); continue; }
     if (s.scroll) { await tapEl('.tk-scroll-go'); await p.waitForTimeout(300); continue; }
+    // the audit board (Misaeng, tk-modern.js): tap the two clues that answer the question showing, as a player who reads them does;
+    // when every link is made (or the board has nothing to link yet), close it
+    const audit = await p.evaluate(() => { const el = document.querySelector('.tk-audit'); if (!el || !el.getClientRects().length) return null;
+      const w = window.__w && window.__w.w, A = w && w.audit, q = (el.querySelector('.tk-audit-q') || {}).textContent || '';
+      const L = A && A.links.find(l => l.q === q); const d = (w && WorldItems.defs(w)) || {};
+      const cards = [...el.querySelectorAll('.tk-audit-card')].map((c, i) => ({ i, name: (c.querySelector('b') || {}).textContent || '', on: !c.disabled }));
+      const want = L ? L.pair.map(k => (d[k] || {}).name || k) : [];
+      return { q, done: /Every link is made/.test(q), pick: want.map(n => (cards.find(c => c.name === n && c.on) || {}).i).filter(i => i != null), want }; });
+    if (audit) { if (audit.done || audit.pick.length < 2) { if (!audit.done) console.log(`     ${beat}: the audit board asks "${audit.q}", but the clues ${audit.want.join(' + ')} aren't both held; closing it`); await tapEl('.tk-audit-close'); await p.waitForTimeout(500); continue; }
+      console.log(`     ${beat}: the audit board: "${audit.q}" -> ${audit.want.join(' + ')}`);
+      for (const i of audit.pick) { await p.locator('.tk-audit-card').nth(i)[TAPM]().catch(() => {}); await p.waitForTimeout(300); }
+      await p.waitForTimeout(600); continue; }
     // a lift's floor menu (Misaeng, tk-modern.js): the floor the goal is on is marked ◆; take it, as a player following the goal does
     const lift = await p.evaluate(() => { const m = document.querySelector('.tk-lift'); if (!m || !m.getClientRects().length) return null; const b = [...m.querySelectorAll('button')].find(x => /^\s*◆/.test(x.textContent)); return { floor: b ? b.textContent.trim() : null }; });
     if (lift) { if (lift.floor) { console.log(`     ${beat}: the lift, to ${lift.floor}`); await p.locator('.tk-lift button', { hasText: '◆' }).first()[TAPM]().catch(() => {}); } else { console.log(`FAIL ${beat}: the lift's menu has no floor marked ◆`); await tapEl('.tk-lift-close'); } await p.waitForTimeout(600); continue; }
