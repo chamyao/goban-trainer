@@ -1486,5 +1486,113 @@
   "model": "bytedance/seedream-5-pro",
   "look": "final",
   "made": "2026-10-09"
+ },
+ "hl_sedan": {
+  "file": "hl_sedan.jpg",
+  "scene": "hl",
+  "prompt": "Seen from inside a sedan chair through its gauze side window: a wide street, two great stone lions, and a mansion's three great gates under a plaque reading 敕造宁国府, the middle door shut, a dozen richly dressed men sitting before it. Afternoon light. Only the window frame and the gauze in the foreground. Style: 2D donghua, hard cel shading. Dream of the Red Chamber, 18th-century China: a great noble house, Ming-style silk robes, the women's hair in elaborate buns with jewelled pins.",
+  "provider": "replicate",
+  "model": "final-1",
+  "look": "final",
+  "made": "2026-10-10"
+ },
+ "hl_embrace": {
+  "file": "hl_embrace.jpg",
+  "scene": "hl",
+  "prompt": "In a grand, richly furnished room, Grandmother Jia pulls Lin Daiyu into her arms, both weeping; around them ladies and maids in silk dab their eyes with handkerchiefs. Grandmother Jia is the matriarch, a warm, commanding old lady of about seventy with silver hair, in a dark red-brown brocade jacket and a black velvet forehead band set with a jade. Lin Daiyu is a slight, frail girl of about eleven, newly in mourning for her mother, with a delicate pale face, faintly knitted brows like misty willow leaves and sorrowful, watchful eyes, in a plain pale blue-and-white silk robe, hair in two small buns with white silk flowers. Style: 2D donghua, hard cel shading. Dream of the Red Chamber, 18th-century China: a great noble house, Ming-style silk robes, the women's hair in elaborate buns with jewelled pins.",
+  "provider": "replicate",
+  "model": "final-1",
+  "look": "final",
+  "made": "2026-10-10"
+ },
+ "hl_xifeng": {
+  "file": "hl_xifeng.jpg",
+  "scene": "hl",
+  "prompt": "Wang Xifeng sweeps in through a back door of a grand room, laughing aloud, maids and serving women crowding around her; everyone else in the room stands hushed; Lin Daiyu, small at the side, turns to look at her. Wang Xifeng is a dazzling young married woman of about twenty, slim, with upswept phoenix eyes and willow-leaf brows slanting upward, a bold laughing mouth, hair piled high with gold pins and a five-phoenix pearl hairpin, in a crimson jacket embroidered with gold butterflies and a slate-blue cloak lined with grey fur. Lin Daiyu is a slight, frail girl of about eleven, newly in mourning for her mother, with a delicate pale face, faintly knitted brows like misty willow leaves and sorrowful, watchful eyes, in a plain pale blue-and-white silk robe, hair in two small buns with white silk flowers. Style: 2D donghua, hard cel shading. Dream of the Red Chamber, 18th-century China: a great noble house, Ming-style silk robes, the women's hair in elaborate buns with jewelled pins.",
+  "provider": "replicate",
+  "model": "final-1",
+  "look": "final",
+  "made": "2026-10-10"
+ },
+ "hl_kang": {
+  "file": "hl_kang.jpg",
+  "scene": "hl",
+  "prompt": "In a stately hall, a broad heated brick kang under the window, a red rug on it and two brocade cushions facing each other across a low lacquered kang table, both empty; to one side Lin Daiyu sits on a chair against the wall, hands folded, looking at the cushions. Lin Daiyu is a slight, frail girl of about eleven, newly in mourning for her mother, with a delicate pale face, faintly knitted brows like misty willow leaves and sorrowful, watchful eyes, in a plain pale blue-and-white silk robe, hair in two small buns with white silk flowers. Style: 2D donghua, hard cel shading. Dream of the Red Chamber, 18th-century China: a great noble house, Ming-style silk robes, the women's hair in elaborate buns with jewelled pins.",
+  "provider": "replicate",
+  "model": "final-1",
+  "look": "final",
+  "made": "2026-10-10"
+ },
+ "hl_tea": {
+  "file": "hl_tea.jpg",
+  "scene": "hl",
+  "prompt": "A long dinner table in a lamplit room, utterly silent; maids stand behind the ladies holding small spittoons, fly-whisks and towels; serving women bring tea in covered cups; Lin Daiyu sits holding her cup still, watching the others rinse their mouths before she drinks. Lin Daiyu is a slight, frail girl of about eleven, newly in mourning for her mother, with a delicate pale face, faintly knitted brows like misty willow leaves and sorrowful, watchful eyes, in a plain pale blue-and-white silk robe, hair in two small buns with white silk flowers. Style: 2D donghua, hard cel shading. Dream of the Red Chamber, 18th-century China: a great noble house, Ming-style silk robes, the women's hair in elaborate buns with jewelled pins.",
+  "provider": "replicate",
+  "model": "final-1",
+  "look": "final",
+  "made": "2026-10-10"
+ },
+ "hl_baoyu": {
+  "file": "hl_baoyu.jpg",
+  "scene": "hl",
+  "prompt": "Jia Baoyu has stepped into a lamplit room and stopped, staring at Lin Daiyu as if he has seen her before; she looks back at him, startled. Jia Baoyu is a boy of about twelve with a face like the mid-autumn moon, bright eyes and inky brows, his hair held by a small jewelled gold crown, in a crimson archery-sleeve robe embroidered with gold butterflies, a five-coloured silk cord at his neck holding a lustrous jade the size of a sparrow's egg. Lin Daiyu is a slight, frail girl of about eleven, newly in mourning for her mother, with a delicate pale face, faintly knitted brows like misty willow leaves and sorrowful, watchful eyes, in a plain pale blue-and-white silk robe, hair in two small buns with white silk flowers. Style: 2D donghua, hard cel shading. Dream of the Red Chamber, 18th-century China: a great noble house, Ming-style silk robes, the women's hair in elaborate buns with jewelled pins.",
+  "provider": "replicate",
+  "model": "final-1",
+  "look": "final",
+  "made": "2026-10-10"
+ },
+ "hl_jade": {
+  "file": "hl_jade.jpg",
+  "scene": "hl",
+  "prompt": "Jia Baoyu has thrown the jade from his neck onto the floor; maids and old women dive and scramble for it, Grandmother Jia reaching out in alarm; Lin Daiyu sits frozen in her chair. Jia Baoyu is a boy of about twelve with a face like the mid-autumn moon, bright eyes and inky brows, his hair held by a small jewelled gold crown, in a crimson archery-sleeve robe embroidered with gold butterflies, a five-coloured silk cord at his neck holding a lustrous jade the size of a sparrow's egg. Grandmother Jia is the matriarch, a warm, commanding old lady of about seventy with silver hair, in a dark red-brown brocade jacket and a black velvet forehead band set with a jade. Lin Daiyu is a slight, frail girl of about eleven, newly in mourning for her mother, with a delicate pale face, faintly knitted brows like misty willow leaves and sorrowful, watchful eyes, in a plain pale blue-and-white silk robe, hair in two small buns with white silk flowers. Style: 2D donghua, hard cel shading. Dream of the Red Chamber, 18th-century China: a great noble house, Ming-style silk robes, the women's hair in elaborate buns with jewelled pins.",
+  "provider": "replicate",
+  "model": "final-1",
+  "look": "final",
+  "made": "2026-10-10"
+ },
+ "hl_gauze": {
+  "file": "hl_gauze.jpg",
+  "scene": "hl",
+  "prompt": "Night, in a small sleeping alcove screened with green gauze, lit by one lamp: Lin Daiyu sits on the bed in tears, and Xiren sits on the bed's edge beside her, comforting her softly. Lin Daiyu is a slight, frail girl of about eleven, newly in mourning for her mother, with a delicate pale face, faintly knitted brows like misty willow leaves and sorrowful, watchful eyes, in a plain pale blue-and-white silk robe, hair in two small buns with white silk flowers. Xiren is a gentle, sensible maid of about fifteen, in a pale peach jacket and green skirt, hair in a simple bun. Style: 2D donghua, hard cel shading. Dream of the Red Chamber, 18th-century China: a great noble house, Ming-style silk robes, the women's hair in elaborate buns with jewelled pins.",
+  "provider": "replicate",
+  "model": "final-1",
+  "look": "final",
+  "made": "2026-10-10"
+ },
+ "hl_lions": {
+  "file": "hl_lions.jpg",
+  "scene": "hl",
+  "prompt": "Morning before a great mansion gate with two huge stone lions: Granny Liu stands small at the foot of a lion holding the hand of Ban'er; fine sedan chairs and horses crowd past; richly dressed gatemen lounge on a bench, ignoring her. Granny Liu is a weathered old peasant widow of about seventy-five, sun-browned and deeply wrinkled, with a broad, eager smile, grey hair in a small knot under a dark cloth band, in a patched dark-blue padded cotton jacket. Ban'er is a small peasant boy of five or six with a round face, in a padded brown cotton jacket, his hair in one tuft. Style: 2D donghua, hard cel shading. Dream of the Red Chamber, 18th-century China: a great noble house, Ming-style silk robes, the women's hair in elaborate buns with jewelled pins.",
+  "provider": "replicate",
+  "model": "final-1",
+  "look": "final",
+  "made": "2026-10-10"
+ },
+ "hl_clock": {
+  "file": "hl_clock.jpg",
+  "scene": "hl",
+  "prompt": "In a richly furnished room, a tall Western wall clock in a carved case, its brass pendulum swinging as it strikes; Granny Liu, startled, stares up at it from below. Granny Liu is a weathered old peasant widow of about seventy-five, sun-browned and deeply wrinkled, with a broad, eager smile, grey hair in a small knot under a dark cloth band, in a patched dark-blue padded cotton jacket. Style: 2D donghua, hard cel shading. Dream of the Red Chamber, 18th-century China: a great noble house, Ming-style silk robes, the women's hair in elaborate buns with jewelled pins.",
+  "provider": "replicate",
+  "model": "final-1",
+  "look": "final",
+  "made": "2026-10-10"
+ },
+ "hl_ash": {
+  "file": "hl_ash.jpg",
+  "scene": "hl",
+  "prompt": "Wang Xifeng sits on a kang in a sable hood and a fur-lined cloak, head bowed, not looking up, slowly stirring the ashes in a small brass hand-warmer with tiny tongs; Ping'er stands beside her with a tea tray; at the edge Granny Liu bows low. Wang Xifeng is a dazzling young married woman of about twenty, slim, with upswept phoenix eyes and willow-leaf brows slanting upward, a bold laughing mouth, hair piled high with gold pins and a five-phoenix pearl hairpin, in a crimson jacket embroidered with gold butterflies and a slate-blue cloak lined with grey fur. Ping'er is a pretty, gentle maid of about eighteen dressed nearly as finely as a lady, in a rose-pink silk jacket, gold and silver pins in her hair. Granny Liu is a weathered old peasant widow of about seventy-five, sun-browned and deeply wrinkled, with a broad, eager smile, grey hair in a small knot under a dark cloth band, in a patched dark-blue padded cotton jacket. Style: 2D donghua, hard cel shading. Dream of the Red Chamber, 18th-century China: a great noble house, Ming-style silk robes, the women's hair in elaborate buns with jewelled pins.",
+  "provider": "replicate",
+  "model": "final-1",
+  "look": "final",
+  "made": "2026-10-10"
+ },
+ "hl_silver": {
+  "file": "hl_silver.jpg",
+  "scene": "hl",
+  "prompt": "On a low table, an open cloth packet of silver ingots and a string of copper cash set before Granny Liu, who stares at it with her hands half raised; Ban'er peeks beside her. Granny Liu is a weathered old peasant widow of about seventy-five, sun-browned and deeply wrinkled, with a broad, eager smile, grey hair in a small knot under a dark cloth band, in a patched dark-blue padded cotton jacket. Ban'er is a small peasant boy of five or six with a round face, in a padded brown cotton jacket, his hair in one tuft. Style: 2D donghua, hard cel shading. Dream of the Red Chamber, 18th-century China: a great noble house, Ming-style silk robes, the women's hair in elaborate buns with jewelled pins.",
+  "provider": "replicate",
+  "model": "final-1",
+  "look": "final",
+  "made": "2026-10-10"
  }
 }

@@ -201,6 +201,60 @@ CAST = {
 }
 
 
+# Dream of the Red Chamber, Book 1 (world 31, still ids hl_*): its own era line and cast, used only for hl_ stills and
+# the hl faces below, so the Three Kingdoms prompts are unchanged.
+HL_ERA = ("Dream of the Red Chamber, 18th-century China: a great noble house, Ming-style silk robes, the women's hair "
+          "in elaborate buns with jewelled pins.")
+HL_STYLE = f"{STYLES['final']} {HL_ERA}"
+HL_CAST = {
+    "daiyu": ("Lin Daiyu", "a slight, frail girl of about eleven, newly in mourning for her mother, with a delicate pale "
+                           "face, faintly knitted brows like misty willow leaves and sorrowful, watchful eyes, in a "
+                           "plain pale blue-and-white silk robe, hair in two small buns with white silk flowers"),
+    "jiamu": ("Grandmother Jia", "the matriarch, a warm, commanding old lady of about seventy with silver hair, in a "
+                                 "dark red-brown brocade jacket and a black velvet forehead band set with a jade"),
+    "xingfuren": ("Lady Xing", "a reserved, rather plain lady in her forties, in a muted mauve silk robe"),
+    "wangfuren": ("Lady Wang", "a quiet, devout lady in her forties with a calm, kind face, in a half-worn slate-blue "
+                               "silk jacket, simple hairpins"),
+    "liwan": ("Li Wan", "a young widow in her twenties, calm and modest, in plain undyed grey and white, no jewellery"),
+    "xifeng": ("Wang Xifeng", "a dazzling young married woman of about twenty, slim, with upswept phoenix eyes and "
+                              "willow-leaf brows slanting upward, a bold laughing mouth, hair piled high with gold pins "
+                              "and a five-phoenix pearl hairpin, in a crimson jacket embroidered with gold butterflies "
+                              "and a slate-blue cloak lined with grey fur"),
+    "yingchun": ("Yingchun", "a plump, gentle, quiet girl of about thirteen, in a pale pink silk jacket and green skirt"),
+    "tanchun": ("Tanchun", "a tall, slim-shouldered, bright-eyed girl of about twelve with a spirited air, in a pale "
+                           "pink silk jacket and green skirt"),
+    "xichun": ("Xichun", "a small girl of about nine, in a pale pink silk jacket and green skirt"),
+    "baoyu": ("Jia Baoyu", "a boy of about twelve with a face like the mid-autumn moon, bright eyes and inky brows, "
+                           "his hair held by a small jewelled gold crown, in a crimson archery-sleeve robe embroidered "
+                           "with gold butterflies, a five-coloured silk cord at his neck holding a lustrous jade the "
+                           "size of a sparrow's egg"),
+    "xiren": ("Xiren", "a gentle, sensible maid of about fifteen, in a pale peach jacket and green skirt, hair in a "
+                       "simple bun"),
+    "yingge": ("Yingge", "a young maid of about twelve in a green jacket, hair in two loops"),
+    "grannyliu": ("Granny Liu", "a weathered old peasant widow of about seventy-five, sun-browned and deeply wrinkled, "
+                                "with a broad, eager smile, grey hair in a small knot under a dark cloth band, in a "
+                                "patched dark-blue padded cotton jacket"),
+    "baner": ("Ban'er", "a small peasant boy of five or six with a round face, in a padded brown cotton jacket, his "
+                        "hair in one tuft"),
+    "gouer": ("Gou'er", "a rough, sullen peasant man in his thirties with stubble, in a patched brown cotton jacket"),
+    "liushi": ("Liu-shi", "a hard-working peasant woman in her late twenties, in a plain blue cotton jacket and headscarf"),
+    "zhouruijia": ("Zhou Rui's wife", "a capable, plump serving matron in her forties with a knowing smile, in a neat "
+                                      "dark green jacket, hair in a tidy bun with a silver pin"),
+    "pinger": ("Ping'er", "a pretty, gentle maid of about eighteen dressed nearly as finely as a lady, in a rose-pink "
+                          "silk jacket, gold and silver pins in her hair"),
+    "jiarong": ("Jia Rong", "a slender, handsome youth of about seventeen with a fair face, in a light fur-trimmed blue "
+                            "robe, a jade-studded belt and a small fur cap"),
+    "jmmaid": ("the maid", "a lively young maid of about fifteen in a red jacket and green skirt"),
+    "laomama": ("the old nurse", "a serving woman of about sixty, grey hair in a bun, in a plain brown jacket"),
+    "xingservant": ("the servant", "a household manservant in his thirties in a plain dark-blue robe and black cap"),
+    "gateman": ("the gate servant", "a lounging, richly dressed manservant of about thirty, in a dark silk robe and a "
+                                    "black cap, a smirk on his face"),
+    "oldservant": ("the old servant", "a kindly old manservant of about sixty with a thin grey beard, in a plain grey "
+                                      "robe and black cap"),
+    "backchild": ("the child", "a cheeky back-street child of about eight in a patched cotton jacket, hair in two tufts"),
+}
+
+
 def style_note(n):
     """What to say about n style reference images sent first."""
     if not n:
@@ -283,10 +337,14 @@ STILLS = {
 
 
 def cast_in(sid):
-    """The CAST keys a still's scene names, in the order they appear."""
+    """The CAST keys a still's scene names, in the order they appear (HL_CAST's for a Red Chamber hl_ still)."""
     scene = STILLS[sid]["prompt"]
-    found = [(scene.find(name), key) for key, (name, _) in CAST.items() if re.search(rf"\b{name}\b", scene)]
+    found = [(scene.find(name), key) for key, (name, _) in _cast_for(sid).items() if re.search(rf"\b{name}\b", scene)]
     return [key for _, key in sorted(found)]
+
+
+def _cast_for(sid):
+    return HL_CAST if sid.startswith("hl_") else CAST
 
 
 def prompt(sid, n_style=0, cast_refs=()):
@@ -296,11 +354,11 @@ def prompt(sid, n_style=0, cast_refs=()):
         return STILLS[sid]["prompt"]
     parts = [STILLS[sid]["prompt"]]
     for key in cast_in(sid):
-        name, look = CAST[key]
+        name, look = _cast_for(sid)[key]
         ref = (f" (reference image {n_style + list(cast_refs).index(key) + 1}: keep his face, hair and clothes)"
                if key in cast_refs else "")
         parts.append(f"{name} is {look}{ref}.")
-    return " ".join(parts) + " " + style_note(n_style) + STYLE
+    return " ".join(parts) + " " + style_note(n_style) + (HL_STYLE if sid.startswith("hl_") else STYLE)
 
 
 # ---- the World 1 set: every scene seen three ways, for variety --------------------------------
@@ -788,6 +846,14 @@ for _who, (_name, _look) in {**{k: v for k, v in CAST.items()}, **FACE_LOOKS}.it
     STILLS[f"face_{_who}"] = {"scene": "face", "lens": _who, "raw": True, "aspect": "3:4", "prompt": (
         f"Character portrait of {_name}, {_look}. Half-body from the waist up, turned three-quarters toward the "
         f"viewer, a characteristic expression. {FACE_STYLE}")}
+# the Red Chamber cast's faces: the same framing, their own era line
+HL_FACE_STYLE = FACE_STYLE.replace("Han dynasty China, about 184 AD: no text, no modern items.",
+                                   f"{HL_ERA} No text, no modern items.")
+for _who, (_name, _look) in HL_CAST.items():
+    assert f"face_{_who}" not in STILLS, _who
+    STILLS[f"face_{_who}"] = {"scene": "face", "lens": _who, "raw": True, "aspect": "3:4", "prompt": (
+        f"Character portrait of {_name}, {_look}. Half-body from the waist up, turned three-quarters toward the "
+        f"viewer, a characteristic expression. {HL_FACE_STYLE}")}
 
 # the stills the game uses (Plot/Story's choice: the emotional peaks, the partings, the one death)
 CHOSEN = ["tree_b", "notice_b", "inn_b", "oath_b", "oath_c", "tent_b", "cart_b", "cart_c", "office_b", "blackwind_a",
