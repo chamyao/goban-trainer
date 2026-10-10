@@ -1,0 +1,171 @@
+{
+ "format": "tk-map/1",
+ "id": "korea-baduk-association--kba-cafe",
+ "world": 21,
+ "name": "The café across the street",
+ "archetype": "interior",
+ "size": [
+  24,
+  16
+ ],
+ "seed": 3212,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "office_tile",
+   " ": "void",
+   "W": "wall"
+  },
+  "rows": [
+   "                        ",
+   " WWWWWWWWWWWWWWWWWWWWWW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WWWWWWWWWWWaaWWWWWWWWW ",
+   "                        "
+  ],
+  "walk": {
+   "office_tile": true,
+   "void": false,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    12,
+    8
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     6,
+     7
+    ]
+   },
+   "tiles": 68
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.counter",
+   "x": 2,
+   "y": 2,
+   "w": 3,
+   "h": 1,
+   "id": "counter",
+   "label": "The counter"
+  },
+  {
+   "kind": "furn.plastic_table",
+   "x": 6,
+   "y": 8,
+   "w": 1,
+   "h": 1,
+   "id": "table-3-4"
+  },
+  {
+   "kind": "furn.plastic_table",
+   "x": 12,
+   "y": 8,
+   "w": 1,
+   "h": 1,
+   "id": "table-6-4"
+  },
+  {
+   "kind": "furn.plastic_table",
+   "x": 18,
+   "y": 8,
+   "w": 1,
+   "h": 1,
+   "id": "table-9-4"
+  },
+  {
+   "kind": "furn.plastic_table",
+   "x": 18,
+   "y": 4,
+   "w": 1,
+   "h": 1,
+   "id": "table-9-2"
+  },
+  {
+   "kind": "prop.vending",
+   "x": 20,
+   "y": 12,
+   "w": 1,
+   "h": 1,
+   "id": "game",
+   "label": "An arcade machine"
+  }
+ ],
+ "spots": [
+  {
+   "id": "m3",
+   "x": 12.5,
+   "y": 12.7,
+   "node": "21-m3",
+   "label": "The café across the street"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "cafe-trainee",
+   "kind": "folk.kid",
+   "x": 18.5,
+   "y": 12.9,
+   "say": [],
+   "intro": [
+    "A trainee from the room, still in his school uniform, with a pocket board. “One more? Before you go home and they ask how it went?”"
+   ],
+   "win": [
+    "“…You'll make it next year. Probably.”"
+   ],
+   "done": [
+    "The trainee is replaying your game, move by move."
+   ],
+   "until": "21-m3",
+   "when": "node:21-m2",
+   "view": 2,
+   "challenge": "cafe-trainee"
+  }
+ ],
+ "exits": [
+  {
+   "to": "korea-baduk-association",
+   "side": "S",
+   "x": 12,
+   "y": 14,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "korea-baduk-association": [
+   12,
+   13
+  ],
+  "": [
+   12,
+   13
+  ]
+ },
+ "parent": "korea-baduk-association",
+ "building": "kba-cafe",
+ "links": [
+  "korea-baduk-association"
+ ]
+}

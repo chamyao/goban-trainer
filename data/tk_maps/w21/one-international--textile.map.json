@@ -194,8 +194,8 @@
      "to": "one-international"
     },
     {
-     "label": "3F · The PT room",
-     "to": "one-international--pt-room"
+     "label": "2F · General Affairs",
+     "to": "one-international--general-affairs"
     },
     {
      "label": "5F · HR",
@@ -221,10 +221,10 @@
    "use": "lift"
   },
   {
-   "id": "m9",
+   "id": "m22",
    "x": 20.5,
    "y": 10.7,
-   "node": "21-m9",
+   "node": "21-m22",
    "label": "Steve Han's desk"
   },
   {
@@ -233,7 +233,7 @@
    "y": 12.7,
    "node": "",
    "label": "The textile team",
-   "note": "the handoff to Kim Bu-ryeon lands here (6+ tiles from m9)"
+   "note": "the handoff to Kim Bu-ryeon lands here (6+ tiles from m22)"
   }
  ],
  "npcs": [
@@ -266,7 +266,7 @@
    14,
    15
   ],
-  "one-international--pt-room": [
+  "one-international--general-affairs": [
    10,
    14
   ],

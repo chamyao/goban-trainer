@@ -1,15 +1,15 @@
-// Misaeng Book 1 (world 21, "Not Yet Alive"): what Places built, walked in the engine.
-//   1. The commute (m2): from home in Susaek-dong, the subway, Jongno and the tower are open (open_ways).
+// Misaeng Book 1 (world 21, "The First Move", episodes 0-16): what Places built, walked in the engine.
+//   1. The commute (m8): from home in Susaek-dong, the subway and Jongno are open (open_ways), and the subway's
+//      commuter (a blocking challenger) stands on the way while m8 is open.
 //   2. Jongno's carriageway is solid: walking south off the pavement stops at the kerb; at a crosswalk she crosses.
-//      Doors into other places ("to"): the tower's door into the lobby; the lift's menu up to Sales Team 3 and on to the
-//      textile floor, whose door (the stairs) comes back down; out onto Jongno, down the subway stairs, up in Susaek-dong.
-//   3. m4's three errands: the copier, the filing cabinets and the pantry give the copies, Oh's file and the coffee;
-//      each is handed to the senior who asked for it, standing by his desk (only his own), which sets its mark; with all
-//      three, m4's gate is met.
-//   4. m8: the lobby's recycling bins give the waybill scrap (a spot with "gives").
-//   5. m18: section head Oh, at his desk in Sales 3 in his socks, lends his slippers (m18's gate).
-//   6. m20: west along Jongno to Daehanmun, and through its gate (the wall either side holds).
-// (Book 4's board room and ₩100,000 mission get their own checks when Book 4's maps are built.)
+//      Doors into other places ("to"): the tower's door into the lobby; the lift's menu up to General Affairs (2F),
+//      Sales Team 3 (14F) and the textile team (8F), whose door (the stairs) comes back down; out onto Jongno, down the
+//      subway stairs, up in Susaek-dong.
+//   3. m11's gate: Kim's requisition, handed to the clerk at General Affairs' counter.
+//   4. m14's three errands: the copier gives the copies, handed to Kim Dong-sik at his desk; the team phone and the
+//      floor are done where they are (set down); with all three, m14's gate is met.
+//   5. m21: the lobby's recycling bins give the waybill scrap (a spot with "gives").
+//   6. m5: episode 1's evening on Jongno: its townsfolk are out in the evening, gone by day.
 // Run with the site served on :8765 (tests/playtest/run.sh misaeng-places).
 const { chromium } = require(require('child_process').execSync('npm root -g').toString().trim() + '/playwright');
 const URL = process.env.PLAYTEST_URL || 'http://localhost:8765';
@@ -75,14 +75,6 @@ async function through(p, to) {
   return settle(p, dir[2]);
 }
 
-// m2, the first morning: home in Susaek-dong, and the way to the tower (the subway, Jongno) must be open
-async function commute(b) {
-  const p = await open(b, '21-m2', 'susaek-dong', [], ['susaek-dong']);
-  const open_ = await p.evaluate(() => ['the-subway', 'jongno', 'one-international'].map(x => [x, window.__w.placeOpen(x)]));
-  for (const [x, o] of open_) check(o, `m2: from home, ${x} is open (the way to the front desk)`);
-  await p.context().close();
-}
-
 // the lift (tk-modern.js "use": "lift"): its spot opens the floor menu; pick a floor, and arrive by that floor's lift
 async function lift(p, label, to) {
   await p.evaluate(() => { const w = window.__w, s = w.spots.lift; w.player.body.reset(s.x, s.y + 10); w.act({ kind: 'spot', k: 'lift' }); });
@@ -93,9 +85,27 @@ async function lift(p, label, to) {
   return p.evaluate(() => { const w = window.__w, s = w.spots.lift; return !!s && Math.hypot(w.player.x - s.x, w.player.y - s.y) < 48; });   // she steps out by the lift
 }
 
+const at = async (p, id) => { await p.evaluate(id => { const w = window.__w, s = w.spots[id]; w.player.body.reset(s.x, s.y + 10); w.act({ kind: 'spot', k: id }); }, id); await advance(p); };
+const st = p => p.evaluate(() => ({ items: WorldItems.owned(window.__w.w), marks: WorldMarks.all(window.__w.w) }));
+// hand something to a person (apo110: "I was handing off things to circles not people"): talk to them
+const to = async (p, id) => { const ok = await p.evaluate(id => { const w = window.__w, n = w.npcs.find(n => n.id === id);
+  if (!n || !n.spr.visible) return false; w.player.body.reset(n.spr.x, n.spr.y + 14); w.act({ kind: 'npc', n }); return true; }, id); await advance(p); return ok; };
+const shown = (p, id) => p.evaluate(id => { const n = window.__w.npcs.find(n => n.id === id); return !!(n && n.spr.visible); }, id);
+
+// m8, the first commute: home in Susaek-dong, and the way to Jongno (the subway) must be open
+async function commute(b) {
+  const p = await open(b, '21-m8', 'susaek-dong', [], ['susaek-dong']);
+  const open_ = await p.evaluate(() => ['the-subway', 'jongno'].map(x => [x, window.__w.placeOpen(x)]));
+  for (const [x, o] of open_) check(o, `m8: from home, ${x} is open (the way to the café)`);
+  check(await through(p, 'the-subway'), 'm8: Susaek-dong\'s station stairs go down into the subway');
+  check(await shown(p, 'commuter'), 'm8: the commuter stands in the subway on the way to Jongno');
+  await p.context().close();
+}
+
 async function street(b) {
   // (every place on the way visited, so the doors are tested on their own; the commute checks what's open)
-  const p = await open(b, '21-m4', 'jongno', [], ['susaek-dong', 'the-subway', 'jongno', 'one-international', 'one-international--sales3', 'one-international--textile']);
+  const p = await open(b, '21-m11', 'jongno', [], ['susaek-dong', 'the-subway', 'jongno', 'one-international', 'one-international--general-affairs',
+    'one-international--sales3', 'one-international--textile']);
   const T = 16;
   // the carriageway: tile rows 32-39; the north pavement is rows 28-31; a crosswalk at tiles 20-23 (cross-w) and 72-75
   await p.evaluate(T => window.__w.player.body.reset(10.5 * T, 30 * T), T);
@@ -104,10 +114,10 @@ async function street(b) {
   await p.evaluate(T => window.__w.player.body.reset(21.5 * T, 30 * T), T);
   const crossed = await walk(p, 0, 50, 4000);
   check(crossed.y > 40 * T, `Jongno: at the crosswalk she crosses to the south pavement (y ${(crossed.y / T).toFixed(1)} tiles)`);
-  // the tower's door: into One International's lobby; the lift to Sales Team 3, and back down
   check(await through(p, 'one-international'), 'the tower\'s door goes into One International (the lobby)');
-  check(await lift(p, '14F · Sales Team 3', 'one-international--sales3'), 'the lobby\'s lift goes up to Sales Team 3 (its floor menu)');
-  check(await lift(p, '8F · The textile team', 'one-international--textile'), 'and from there to the textile team\'s floor');
+  check(await lift(p, '2F · General Affairs', 'one-international--general-affairs'), 'the lobby\'s lift goes up to General Affairs (its floor menu)');
+  check(await lift(p, '14F · Sales Team 3', 'one-international--sales3'), 'and from there to Sales Team 3');
+  check(await lift(p, '8F · The textile team', 'one-international--textile'), 'and to the textile team\'s floor');
   check(await through(p, 'one-international'), 'the textile floor\'s door (the stairs) comes back down to the lobby');
   check(await through(p, 'jongno'), 'the lobby\'s doors go out onto Jongno');
   check(await through(p, 'the-subway'), 'Jongno 3-ga Station\'s stairs go down into the subway');
@@ -115,65 +125,49 @@ async function street(b) {
   await p.context().close();
 }
 
+async function requisition(b) {
+  const p = await open(b, '21-m11', 'one-international--general-affairs', ['requisition']);
+  check(await to(p, 'ga-clerk'), 'm11: the clerk stands at General Affairs\' counter');
+  const s = await st(p);
+  check(s.marks.includes('requisition') && !s.items.includes('requisition'), 'm11: the clerk takes Kim\'s requisition from you, by hand');
+  check(await p.evaluate(() => window.__w.cond('mark:requisition')), 'm11: its gate (the requisition) is met');
+  await p.context().close();
+}
+
 async function errands(b) {
-  const p = await open(b, '21-m4', 'one-international--sales3');
-  const at = async (id) => { await p.evaluate(id => { const w = window.__w, s = w.spots[id]; w.player.body.reset(s.x, s.y + 10); w.act({ kind: 'spot', k: id }); }, id); await advance(p); };
-  const st = () => p.evaluate(() => ({ items: WorldItems.owned(window.__w.w), marks: WorldMarks.all(window.__w.w) }));
-  // each errand is handed to a person (apo110: "I was handing off things to circles not people"): talk to whoever
-  // asked for it, standing by his own desk
-  const to = async (id) => { const ok = await p.evaluate(id => { const w = window.__w, n = w.npcs.find(n => n.id === id);
-    if (!n || !n.spr.visible) return false; w.player.body.reset(n.spr.x, n.spr.y + 14); w.act({ kind: 'npc', n }); return true; }, id); await advance(p); return ok; };
-  check(await p.evaluate(() => ['kim-errand', 'oh-errand', 'deputy-errand'].every(id => { const n = window.__w.npcs.find(n => n.id === id); return n && n.spr.visible; })),
-        'm4: Kim, Oh and the deputy stand by their desks while the errands are open');
-  await at('copier'); await at('filing');
-  let s = await st();
-  check(s.items.includes('copy') && s.items.includes('file'), 'm4: the copier gives the copies, the filing cabinets Oh\'s file');
-  await to('deputy-errand');   // the deputy, with no coffee yet: he waits, and takes nothing
-  s = await st();
-  check(!s.marks.includes('errand_coffee') && s.items.includes('copy') && s.items.includes('file'), 'm4: the deputy waits for his coffee and takes nothing else');
-  await at('pantry'); await to('kim-errand'); await to('oh-errand'); await to('deputy-errand');
-  s = await st();
-  check(['errand_copy', 'errand_file', 'errand_coffee'].every(m => s.marks.includes(m)) && !['copy', 'file', 'coffee'].some(i => s.items.includes(i)),
-        `m4: each senior takes his own errand from you, by hand, and its mark is set (${s.marks.join(', ')})`);
-  check(await p.evaluate(() => ['errand_copy', 'errand_file', 'errand_coffee'].every(m => window.__w.cond('mark:' + m))), 'm4: its gate (the three errands) is met');
+  const p = await open(b, '21-m14', 'one-international--sales3');
+  check(await shown(p, 'kim-errand'), 'm14: Kim Dong-sik is at his desk while the errands are open');
+  await to(p, 'kim-errand');   // nothing to give him yet: he waits, and nothing is marked
+  check(!(await st(p)).marks.includes('errand_copy'), 'm14: Kim waits for the copies');
+  await at(p, 'copier');
+  check((await st(p)).items.includes('copy'), 'm14: the copier gives the copies');
+  await to(p, 'kim-errand'); await at(p, 'errand-bl'); await at(p, 'errand-floor');
+  const s = await st(p);
+  check(['errand_copy', 'errand_bl', 'errand_floor'].every(m => s.marks.includes(m)) && !s.items.includes('copy'),
+        `m14: the copies handed to Kim, the phone call and the floor done (${s.marks.join(', ')})`);
+  check(await p.evaluate(() => ['errand_copy', 'errand_bl', 'errand_floor'].every(m => window.__w.cond('mark:' + m))), 'm14: its gate (the three errands) is met');
   await p.context().close();
 }
 
 async function bins(b) {
-  const p = await open(b, '21-m8', 'one-international');
-  await p.evaluate(() => { const w = window.__w, s = w.spots.bins; w.player.body.reset(s.x, s.y + 10); w.act({ kind: 'spot', k: 'bins' }); });
-  await advance(p);
-  check(await p.evaluate(() => WorldItems.has(window.__w.w, 'waybill_scrap')), 'm8: the lobby\'s bins give the waybill scrap (m8\'s gate)');
+  const p = await open(b, '21-m21', 'one-international');
+  await at(p, 'bins');
+  check(await p.evaluate(() => WorldItems.has(window.__w.w, 'waybill_scrap')), 'm21: the lobby\'s bins give the waybill scrap (m21\'s gate)');
   await p.context().close();
 }
 
-async function slippers(b) {
-  const p = await open(b, '21-m18', 'one-international--sales3');
-  const ok = await p.evaluate(() => { const w = window.__w, n = w.npcs.find(n => n.id === 'oh-slippers'); if (!n || !n.spr.visible) return false;
-    w.player.body.reset(n.spr.x - 16, n.spr.y + 4); w.act({ kind: 'npc', n }); return true; });
-  await advance(p);
-  check(ok && await p.evaluate(() => WorldItems.has(window.__w.w, 'slippers')), 'm18: section head Oh, at his desk, lends his slippers (m18\'s gate)');
-  await p.context().close();
-}
-
-async function daehanmun(b) {
-  const p = await open(b, '21-m20', 'jongno');
-  check(await p.evaluate(() => window.__w.placeOpen('daehanmun')), 'm20: Daehanmun is open from Jongno');
-  check(await through(p, 'daehanmun'), 'm20: west along Jongno\'s back lane to Daehanmun');
-  // through the gate (building.palace_gate stands in the wall's gap, walked through) into the palace grounds, and the wall
-  // either side of it holds
-  await p.evaluate(() => window.__w.player.body.reset(34 * 16, 17 * 16));
-  const inside = await walk(p, 0, -50, 4000);
-  check(inside.y < 12 * 16, `m20: through Daehanmun's gate into the palace grounds (y ${(inside.y / 16).toFixed(1)} tiles)`);
-  await p.evaluate(() => window.__w.player.body.reset(24 * 16, 17 * 16));
-  const wall = await walk(p, 0, -50, 4000);
-  check(wall.y > 14 * 16, `m20: the palace wall beside the gate holds (y ${(wall.y / 16).toFixed(1)} tiles)`);
-  await p.context().close();
+async function evening(b) {
+  const count = async (upto) => { const p = await open(b, upto, 'jongno', [], ['jongno']);
+    const c = await p.evaluate(() => ['npc-6', 'npc-7', 'npc-8', 'npc-9', 'npc-10'].filter(id => { const n = window.__w.npcs.find(n => n.id === id); return n && n.spr.visible; }).length);
+    await p.context().close(); return c; };
+  const eve = await count('21-m5'), day = await count('21-m9');
+  check(eve === 5, `m5: Jongno's evening townsfolk are out (${eve} of 5)`);
+  check(day === 0, `m9: by day they're gone (${day})`);
 }
 
 (async () => {
   const b = await chromium.launch({ args: ['--use-gl=swiftshader', '--enable-webgl'] });
-  for (const t of [commute, street, errands, bins, slippers, daehanmun]) {
+  for (const t of [commute, street, requisition, errands, bins, evening]) {
     try { await t(b); } catch (e) { fails++; console.log('FAIL', t.name, e.message); }
   }
   await b.close();

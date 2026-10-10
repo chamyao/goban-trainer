@@ -102,7 +102,22 @@
    "label": "His old go board"
   }
  ],
- "spots": [],
+ "spots": [
+  {
+   "id": "m4",
+   "x": 6.5,
+   "y": 8.7,
+   "node": "21-m4",
+   "label": "Jang's home"
+  },
+  {
+   "id": "m6",
+   "x": 14.5,
+   "y": 10.7,
+   "node": "21-m6",
+   "label": "Jang's home"
+  }
+ ],
  "npcs": [
   {
    "id": "npc-1",

@@ -546,7 +546,8 @@ class MapBuilder:
             n["id"] = p["id"]
         u = n.get("until")
         if isinstance(u, str) and u.startswith("node:"):   # the game's "until" names a node key
-            n["until"] = f"{self.n}-{u[5:]}"
+            k = u[5:]
+            n["until"] = f"{self.n}-{k.split('-', 1)[1] if re.match(r'^\d+-', k) else k}"   # (once, if it's already "21-m5")
         elif isinstance(u, str) and re.match(r"^\d+-", u):
             n["until"] = f"{self.n}-{u.split('-', 1)[1]}"
         if p["kind"].startswith("folk.") and not p.get("near") and not p.get("at") and not p.get("challenge"):

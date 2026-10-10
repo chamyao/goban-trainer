@@ -1,47 +1,13 @@
 {
  "format": "tk-region/1",
  "world": 21,
- "name": "Not Yet Alive",
+ "name": "The First Move",
  "zh": "",
- "start": "korea-baduk-association",
+ "start": "susaek-dong",
  "party": [
-  "ms_jang_young"
+  "ms_jang_child"
  ],
  "places": [
-  {
-   "id": "korea-baduk-association",
-   "name": "Korea Baduk Association",
-   "zh": "",
-   "archetype": "city",
-   "map": "korea-baduk-association.map.json",
-   "links": [
-    "jongno",
-    "korea-baduk-association--kba-front"
-   ]
-  },
-  {
-   "id": "korea-baduk-association--kba-front",
-   "name": "The Korea Baduk Association",
-   "zh": "",
-   "archetype": "interior",
-   "map": "korea-baduk-association--kba-front.map.json",
-   "links": [
-    "korea-baduk-association",
-    "korea-baduk-association--kba-trainees"
-   ],
-   "parent": "korea-baduk-association"
-  },
-  {
-   "id": "korea-baduk-association--kba-trainees",
-   "name": "The trainees' room",
-   "zh": "",
-   "archetype": "interior",
-   "map": "korea-baduk-association--kba-trainees.map.json",
-   "links": [
-    "korea-baduk-association--kba-front"
-   ],
-   "parent": "korea-baduk-association"
-  },
   {
    "id": "susaek-dong",
    "name": "Susaek-dong",
@@ -49,6 +15,7 @@
    "archetype": "city",
    "map": "susaek-dong.map.json",
    "links": [
+    "susaek-dong--baduk-class",
     "susaek-dong--home",
     "susaek-dong--relatives",
     "the-subway"
@@ -89,6 +56,17 @@
    "parent": "susaek-dong"
   },
   {
+   "id": "susaek-dong--baduk-class",
+   "name": "The baduk class",
+   "zh": "",
+   "archetype": "interior",
+   "map": "susaek-dong--baduk-class.map.json",
+   "links": [
+    "susaek-dong"
+   ],
+   "parent": "susaek-dong"
+  },
+  {
    "id": "the-subway",
    "name": "The subway",
    "zh": "",
@@ -100,20 +78,67 @@
    ]
   },
   {
+   "id": "korea-baduk-association",
+   "name": "Korea Baduk Association",
+   "zh": "",
+   "archetype": "city",
+   "map": "korea-baduk-association.map.json",
+   "links": [
+    "jongno",
+    "korea-baduk-association--kba-cafe",
+    "korea-baduk-association--kba-front"
+   ]
+  },
+  {
+   "id": "korea-baduk-association--kba-front",
+   "name": "The Korea Baduk Association",
+   "zh": "",
+   "archetype": "interior",
+   "map": "korea-baduk-association--kba-front.map.json",
+   "links": [
+    "korea-baduk-association",
+    "korea-baduk-association--kba-trainees"
+   ],
+   "parent": "korea-baduk-association"
+  },
+  {
+   "id": "korea-baduk-association--kba-trainees",
+   "name": "The trainees' room",
+   "zh": "",
+   "archetype": "interior",
+   "map": "korea-baduk-association--kba-trainees.map.json",
+   "links": [
+    "korea-baduk-association--kba-front"
+   ],
+   "parent": "korea-baduk-association"
+  },
+  {
+   "id": "korea-baduk-association--kba-cafe",
+   "name": "The café across the street",
+   "zh": "",
+   "archetype": "interior",
+   "map": "korea-baduk-association--kba-cafe.map.json",
+   "links": [
+    "korea-baduk-association"
+   ],
+   "parent": "korea-baduk-association"
+  },
+  {
    "id": "jongno",
    "name": "Jongno",
    "zh": "",
    "archetype": "city",
    "map": "jongno.map.json",
    "links": [
-    "daehanmun",
+    "jongno--cafe",
     "jongno--client",
     "jongno--corner-shop",
+    "jongno--hof",
     "jongno--hq",
     "jongno--pojangmacha",
+    "jongno--sponsor-office",
     "korea-baduk-association",
     "one-international",
-    "suns-neighbourhood",
     "the-subway"
    ]
   },
@@ -134,6 +159,39 @@
    "zh": "",
    "archetype": "interior",
    "map": "jongno--client.map.json",
+   "links": [
+    "jongno"
+   ],
+   "parent": "jongno"
+  },
+  {
+   "id": "jongno--sponsor-office",
+   "name": "The sponsor's office",
+   "zh": "",
+   "archetype": "interior",
+   "map": "jongno--sponsor-office.map.json",
+   "links": [
+    "jongno"
+   ],
+   "parent": "jongno"
+  },
+  {
+   "id": "jongno--cafe",
+   "name": "A café on Jongno",
+   "zh": "",
+   "archetype": "interior",
+   "map": "jongno--cafe.map.json",
+   "links": [
+    "jongno"
+   ],
+   "parent": "jongno"
+  },
+  {
+   "id": "jongno--hof",
+   "name": "The hof",
+   "zh": "",
+   "archetype": "interior",
+   "map": "jongno--hof.map.json",
    "links": [
     "jongno"
    ],
@@ -172,11 +230,11 @@
    ]
   },
   {
-   "id": "one-international--pt-room",
-   "name": "The PT room",
+   "id": "one-international--general-affairs",
+   "name": "General Affairs",
    "zh": "",
    "archetype": "interior",
-   "map": "one-international--pt-room.map.json",
+   "map": "one-international--general-affairs.map.json",
    "links": [
     "one-international"
    ],
@@ -213,10 +271,7 @@
    "links": [
     "one-international"
    ],
-   "parent": "one-international",
-   "gives": [
-    "slippers"
-   ]
+   "parent": "one-international"
   },
   {
    "id": "one-international--meeting",
@@ -241,47 +296,24 @@
    "parent": "one-international"
   },
   {
-   "id": "suns-neighbourhood",
-   "name": "Sun's neighbourhood",
+   "id": "ohs-home",
+   "name": "Oh's home",
    "zh": "",
-   "archetype": "city",
-   "map": "suns-neighbourhood.map.json",
+   "archetype": "interior",
+   "map": "ohs-home.map.json",
    "links": [
     "jongno",
-    "suns-neighbourhood--daycare",
-    "suns-neighbourhood--sun-flat"
+    "susaek-dong"
    ]
   },
   {
-   "id": "suns-neighbourhood--daycare",
-   "name": "The daycare",
+   "id": "ulsan",
+   "name": "Ulsan",
    "zh": "",
    "archetype": "interior",
-   "map": "suns-neighbourhood--daycare.map.json",
+   "map": "ulsan.map.json",
    "links": [
-    "suns-neighbourhood"
-   ],
-   "parent": "suns-neighbourhood"
-  },
-  {
-   "id": "suns-neighbourhood--sun-flat",
-   "name": "Sun Ji-young's flat",
-   "zh": "",
-   "archetype": "interior",
-   "map": "suns-neighbourhood--sun-flat.map.json",
-   "links": [
-    "suns-neighbourhood"
-   ],
-   "parent": "suns-neighbourhood"
-  },
-  {
-   "id": "daehanmun",
-   "name": "Daehanmun",
-   "zh": "",
-   "archetype": "city",
-   "map": "daehanmun.map.json",
-   "links": [
-    "jongno"
+    "one-international"
    ]
   },
   {
@@ -297,11 +329,11 @@
   {
    "node": "21-m1",
    "role": "main",
-   "place": "korea-baduk-association--kba-trainees",
+   "place": "susaek-dong--baduk-class",
    "spot": "m1",
    "scene": "m1",
-   "title": "Half a Point",
-   "objective": "Go to the trainees' room. This game decides everything.",
+   "title": "Atari",
+   "objective": "The baduk class down the road.",
    "after": [],
    "grade": "11K",
    "pool": [
@@ -482,11 +514,11 @@
   {
    "node": "21-m2",
    "role": "main",
-   "place": "one-international",
+   "place": "korea-baduk-association--kba-trainees",
    "spot": "m2",
    "scene": "m2",
-   "title": "A Light Allowed Me",
-   "objective": "Your first day at One International. Go to the front desk.",
+   "title": "Seven Years",
+   "objective": "The trainees' room. This game decides everything.",
    "after": [
     "21-m1"
    ],
@@ -663,18 +695,17 @@
      1225
     ]
    ],
-   "board": false,
    "objective_zh": "",
    "title_zh": ""
   },
   {
    "node": "21-m3",
    "role": "main",
-   "place": "one-international--sales3",
+   "place": "korea-baduk-association--kba-cafe",
    "spot": "m3",
    "scene": "m3",
-   "title": "FOB",
-   "objective": "Take the lift up to Sales Team 3, to your desk.",
+   "title": "Really Quitting?",
+   "objective": "The café across the street.",
    "after": [
     "21-m2"
    ],
@@ -851,17 +882,18 @@
      62353
     ]
    ],
+   "board": false,
    "objective_zh": "",
    "title_zh": ""
   },
   {
    "node": "21-m4",
    "role": "main",
-   "place": "one-international--sales3",
+   "place": "susaek-dong--home",
    "spot": "m4",
    "scene": "m4",
-   "title": "Together, or Alone",
-   "objective": "Kim Dong-sik's desk, Sales Team 3.",
+   "title": "Washing Her Back",
+   "objective": "Go home.",
    "after": [
     "21-m3"
    ],
@@ -1039,31 +1071,17 @@
     ]
    ],
    "board": false,
-   "gate": [
-    {
-     "needs": [
-      "mark:errand_copy",
-      "mark:errand_file",
-      "mark:errand_coffee"
-     ],
-     "else": "m4_wait",
-     "objective": "Run the three errands on Sales 3's floor: Kim's copies from the copier, Oh's file to his desk, the deputy's coffee from the pantry.",
-     "at": "One International",
-     "place": "one-international",
-     "objective_zh": ""
-    }
-   ],
    "objective_zh": "",
    "title_zh": ""
   },
   {
    "node": "21-m5",
    "role": "main",
-   "place": "one-international--sales3",
+   "place": "jongno--sponsor-office",
    "spot": "m5",
    "scene": "m5",
-   "title": "Twenty-Five Stones",
-   "objective": "Back to Sales Team 3.",
+   "title": "A Light Allowed Me",
+   "objective": "Go to the sponsor's office, on the lane behind Jongno's shops.",
    "after": [
     "21-m4"
    ],
@@ -1240,17 +1258,18 @@
      169253
     ]
    ],
+   "board": false,
    "objective_zh": "",
    "title_zh": ""
   },
   {
    "node": "21-m6",
    "role": "main",
-   "place": "one-international--pt-room",
+   "place": "susaek-dong--home",
    "spot": "m6",
    "scene": "m6",
-   "title": "Partners",
-   "objective": "Go to the PT room. It's your turn to present.",
+   "title": "A Weak Group from the Start",
+   "objective": "Go home.",
    "after": [
     "21-m5"
    ],
@@ -1427,17 +1446,18 @@
      395507
     ]
    ],
+   "board": false,
    "objective_zh": "",
    "title_zh": ""
   },
   {
    "node": "21-m7",
    "role": "main",
-   "place": "one-international--sales3",
+   "place": "ohs-home",
    "spot": "m7",
    "scene": "m7",
-   "title": "The Waybill",
-   "objective": "Back to Sales Team 3.",
+   "title": "The Weight of Life",
+   "objective": "Go to Oh's home.",
    "after": [
     "21-m6"
    ],
@@ -1621,11 +1641,11 @@
   {
    "node": "21-m8",
    "role": "main",
-   "place": "one-international",
+   "place": "jongno--cafe",
    "spot": "m8",
    "scene": "m8",
-   "title": "The Scrap",
-   "objective": "Search the lobby for the rest of the waybill.",
+   "title": "Baduk, Not Go",
+   "objective": "The buyer is waiting at a café on Jongno.",
    "after": [
     "21-m7"
    ],
@@ -1802,30 +1822,17 @@
      103150
     ]
    ],
-   "board": false,
-   "gate": [
-    {
-     "needs": [
-      "item:waybill_scrap"
-     ],
-     "else": "m8_wait",
-     "objective": "Search the recycling bins by the lobby's ID gates for the rest of the waybill.",
-     "at": "One International",
-     "place": "one-international",
-     "objective_zh": ""
-    }
-   ],
    "objective_zh": "",
    "title_zh": ""
   },
   {
    "node": "21-m9",
    "role": "main",
-   "place": "one-international--textile",
+   "place": "jongno",
    "spot": "m9",
    "scene": "m9",
-   "title": "Dog Meat",
-   "objective": "Go to the textile team's floor, to Steve Han's desk.",
+   "title": "His Style",
+   "objective": "The forecourt of One International.",
    "after": [
     "21-m8"
    ],
@@ -2008,11 +2015,11 @@
   {
    "node": "21-m10",
    "role": "main",
-   "place": "one-international--roof",
+   "place": "one-international--hr",
    "spot": "m10",
    "scene": "m10",
-   "title": "Bread on the Street",
-   "objective": "Go up to the roof.",
+   "title": "Mentor and Buddy",
+   "objective": "HR, on the fifth floor. Take the lift.",
    "after": [
     "21-m9"
    ],
@@ -2196,11 +2203,11 @@
   {
    "node": "21-m11",
    "role": "main",
-   "place": "jongno--client",
+   "place": "one-international--sales3",
    "spot": "m11",
    "scene": "m11",
-   "title": "The Proper Move",
-   "objective": "Go with Park Jong-gi to the client's office, along the lane behind the shops.",
+   "title": "Who Do You Think You Are?",
+   "objective": "Back to your desk in Sales Team 3.",
    "after": [
     "21-m10"
    ],
@@ -2377,17 +2384,30 @@
      62338
     ]
    ],
+   "board": false,
+   "gate": [
+    {
+     "needs": [
+      "mark:requisition"
+     ],
+     "else": "m11_wait",
+     "objective": "Take Kim's requisition to General Affairs, then go back to your desk in Sales 3.",
+     "at": "One International",
+     "place": "one-international",
+     "objective_zh": ""
+    }
+   ],
    "objective_zh": "",
    "title_zh": ""
   },
   {
    "node": "21-m12",
    "role": "main",
-   "place": "one-international--meeting",
+   "place": "jongno--hof",
    "spot": "m12",
    "scene": "m12",
-   "title": "Be Irresponsible",
-   "objective": "The client's president has come to One International. Go to the meeting room.",
+   "title": "Secure Yourself First",
+   "objective": "The interns' study night, at the hof in Pimatgol.",
    "after": [
     "21-m11"
    ],
@@ -2573,8 +2593,8 @@
    "place": "one-international--sales3",
    "spot": "m13",
    "scene": "m13",
-   "title": "The Doorbell",
-   "objective": "Go to Sun Ji-young's desk.",
+   "title": "Both Live",
+   "objective": "Your desk, Sales Team 3.",
    "after": [
     "21-m12"
    ],
@@ -2751,18 +2771,17 @@
      103153
     ]
    ],
-   "board": false,
    "objective_zh": "",
    "title_zh": ""
   },
   {
-   "node": "21-m13b",
+   "node": "21-m14",
    "role": "main",
-   "place": "suns-neighbourhood--daycare",
-   "spot": "m13b",
-   "scene": "m13b",
-   "title": "The Doorbell",
-   "objective": "Collect Somi from the daycare before it closes at seven.",
+   "place": "one-international--sales3",
+   "spot": "m14",
+   "scene": "m14",
+   "title": "The World Is Faster",
+   "objective": "Sales Team 3.",
    "after": [
     "21-m13"
    ],
@@ -2939,20 +2958,33 @@
      62335
     ]
    ],
-   "board": false,
+   "gate": [
+    {
+     "needs": [
+      "mark:errand_bl",
+      "mark:errand_copy",
+      "mark:errand_floor"
+     ],
+     "else": "m14_wait",
+     "objective": "Work from every side on Sales 3's floor: the forwarder call about the B/L at the team phone, Kim's copies at the copier, and the floor.",
+     "at": "One International",
+     "place": "one-international",
+     "objective_zh": ""
+    }
+   ],
    "objective_zh": "",
    "title_zh": ""
   },
   {
-   "node": "21-m14",
+   "node": "21-m15",
    "role": "main",
-   "place": "suns-neighbourhood--sun-flat",
-   "spot": "m14",
-   "scene": "m14",
-   "title": "Her Back",
-   "objective": "Go home.",
+   "place": "one-international--meeting",
+   "spot": "m15",
+   "scene": "m15",
+   "title": "Whoever Comes First",
+   "objective": "The meeting room, fifteenth floor.",
    "after": [
-    "21-m13b"
+    "21-m14"
    ],
    "grade": "11K",
    "pool": [
@@ -3132,15 +3164,15 @@
    "title_zh": ""
   },
   {
-   "node": "21-m15",
+   "node": "21-m16",
    "role": "main",
-   "place": "one-international--sales3",
-   "spot": "m15",
-   "scene": "m15",
-   "title": "Questions, Not Answers",
-   "objective": "Back to Sales Team 3: the PT with Han.",
+   "place": "jongno",
+   "spot": "m16",
+   "scene": "m16",
+   "title": "Inside the Board",
+   "objective": "Out on the plaza in front of the tower.",
    "after": [
-    "21-m14"
+    "21-m15"
    ],
    "grade": "11K",
    "pool": [
@@ -3319,15 +3351,15 @@
    "title_zh": ""
   },
   {
-   "node": "21-m16",
+   "node": "21-m17",
    "role": "main",
-   "place": "one-international--pt-room",
-   "spot": "m16",
-   "scene": "m16",
-   "title": "Black Nails",
-   "objective": "Go to the PT room. Your pair is next.",
+   "place": "one-international--roof",
+   "spot": "m17",
+   "scene": "m17",
+   "title": "Sente",
+   "objective": "Go up to the roof.",
    "after": [
-    "21-m15"
+    "21-m16"
    ],
    "grade": "11K",
    "pool": [
@@ -3506,15 +3538,15 @@
    "title_zh": ""
   },
   {
-   "node": "21-m17",
+   "node": "21-m18",
    "role": "main",
-   "place": "one-international--pt-room",
-   "spot": "m17",
-   "scene": "m17",
-   "title": "The President's Daughter?",
-   "objective": "Go back to the PT room.",
+   "place": "one-international--sales3",
+   "spot": "m18",
+   "scene": "m18",
+   "title": "Again!",
+   "objective": "Back to Sales Team 3.",
    "after": [
-    "21-m16"
+    "21-m17"
    ],
    "grade": "11K",
    "pool": [
@@ -3693,162 +3725,13 @@
    "title_zh": ""
   },
   {
-   "node": "21-m18",
-   "role": "boss",
-   "place": "one-international--pt-room",
-   "spot": "m18",
-   "scene": "m18",
-   "title": "Combat Boots",
-   "objective": "Go back to the PT room for the individual task.",
-   "after": [
-    "21-m17"
-   ],
-   "grade": null,
-   "pool": [
-    [
-     "redmond-life-and-death",
-     44
-    ],
-    [
-     "redmond-life-and-death",
-     22
-    ],
-    [
-     "redmond-life-and-death",
-     9
-    ],
-    [
-     "redmond-life-and-death",
-     52
-    ],
-    [
-     "redmond-life-and-death",
-     17
-    ],
-    [
-     "redmond-life-and-death",
-     2
-    ],
-    [
-     "redmond-life-and-death",
-     40
-    ],
-    [
-     "redmond-life-and-death",
-     20
-    ],
-    [
-     "redmond-life-and-death",
-     57
-    ],
-    [
-     "redmond-life-and-death",
-     59
-    ],
-    [
-     "redmond-life-and-death",
-     36
-    ],
-    [
-     "redmond-life-and-death",
-     13
-    ],
-    [
-     "redmond-life-and-death",
-     25
-    ],
-    [
-     "redmond-life-and-death",
-     8
-    ],
-    [
-     "redmond-life-and-death",
-     7
-    ],
-    [
-     "redmond-life-and-death",
-     30
-    ],
-    [
-     "redmond-life-and-death",
-     6
-    ],
-    [
-     "redmond-life-and-death",
-     38
-    ],
-    [
-     "redmond-life-and-death",
-     51
-    ],
-    [
-     "redmond-life-and-death",
-     26
-    ],
-    [
-     "redmond-life-and-death",
-     32
-    ],
-    [
-     "redmond-life-and-death",
-     41
-    ],
-    [
-     "redmond-life-and-death",
-     45
-    ],
-    [
-     "redmond-life-and-death",
-     53
-    ],
-    [
-     "redmond-life-and-death",
-     21
-    ],
-    [
-     "redmond-life-and-death",
-     4
-    ],
-    [
-     "redmond-life-and-death",
-     23
-    ],
-    [
-     "redmond-life-and-death",
-     50
-    ],
-    [
-     "redmond-life-and-death",
-     18
-    ],
-    [
-     "redmond-life-and-death",
-     65
-    ]
-   ],
-   "gate": [
-    {
-     "needs": [
-      "item:slippers"
-     ],
-     "else": "m18_wait",
-     "objective": "Borrow section head Oh's office slippers at his desk in Sales 3, then come back to the PT room.",
-     "at": "One International",
-     "place": "one-international",
-     "objective_zh": ""
-    }
-   ],
-   "objective_zh": "",
-   "title_zh": ""
-  },
-  {
-   "node": "21-m19",
+   "node": "21-m18b",
    "role": "main",
-   "place": "one-international--hr",
-   "spot": "m19",
-   "scene": "m19",
-   "title": "Contract",
-   "objective": "The results are up on HR's noticeboard.",
+   "place": "ulsan",
+   "spot": "m18b",
+   "scene": "m18b",
+   "title": "One More Chance",
+   "objective": "Go to Ulsan.",
    "after": [
     "21-m18"
    ],
@@ -4025,19 +3908,20 @@
      63817
     ]
    ],
+   "board": false,
    "objective_zh": "",
    "title_zh": ""
   },
   {
-   "node": "21-m20",
+   "node": "21-m19",
    "role": "main",
-   "place": "daehanmun",
-   "spot": "m20",
-   "scene": "m20",
-   "title": "Daehanmun",
-   "objective": "Go to Daehanmun, to the tent in front of the gate.",
+   "place": "one-international--sales3",
+   "spot": "m19",
+   "scene": "m19",
+   "title": "How Old Are You?",
+   "objective": "Sales Team 3.",
    "after": [
-    "21-m19"
+    "21-m18b"
    ],
    "grade": "11K",
    "pool": [
@@ -4212,7 +4096,581 @@
      63809
     ]
    ],
+   "objective_zh": "",
+   "title_zh": ""
+  },
+  {
+   "node": "21-m20",
+   "role": "main",
+   "place": "one-international--sales3",
+   "spot": "m20",
+   "scene": "m20",
+   "title": "The Waybill",
+   "objective": "Sales Team 3.",
+   "after": [
+    "21-m19"
+   ],
+   "grade": "11K",
+   "pool": [
+    [
+     "specialized-training-in-tsumego-6",
+     525
+    ],
+    [
+     "bedtime-tsumego-part-1",
+     4230
+    ],
+    [
+     "weiqi-small-leisure-collection",
+     25638
+    ],
+    [
+     "weiqi-life-and-death-drills-beginner-part-2",
+     63266
+    ],
+    [
+     "weiqi-life-and-death-drills-beginner-part-1",
+     1317
+    ],
+    [
+     "bedtime-tsumego-part-2",
+     4886
+    ],
+    [
+     "fujisawa-shuko-classroom",
+     181391
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     605
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-2",
+     841
+    ],
+    [
+     "ishida-yoshio-tsumego-challenge",
+     37747
+    ],
+    [
+     "hashimoto-masterpiece-collection",
+     30532
+    ],
+    [
+     "200-basic-go-problems",
+     176628
+    ],
+    [
+     "the-great-tesuji-encyclopedia-2",
+     35031
+    ],
+    [
+     "go-seigen-tsumego-collection-part-1",
+     30967
+    ],
+    [
+     "go-seigen-tsumego-collection-part-1",
+     30929
+    ],
+    [
+     "weiqi-life-and-death-drills-beginner-part-3",
+     63425
+    ],
+    [
+     "rin-kaiho-tsumego-the-power-of-reversal",
+     75746
+    ],
+    [
+     "segoe-tsumego-dictionary-part-1",
+     834
+    ],
+    [
+     "common-life-and-death-problems",
+     4230
+    ],
+    [
+     "segoe-tsumego-dictionary-part-4",
+     16125
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-2",
+     730
+    ],
+    [
+     "segoe-tsumego-dictionary-part-1",
+     808
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-1",
+     1216
+    ],
+    [
+     "beautiful-dan-level-tsumego-100",
+     134635
+    ],
+    [
+     "fujisawa-shuko-classroom",
+     265356
+    ],
+    [
+     "the-great-tesuji-encyclopedia-2",
+     46221
+    ],
+    [
+     "weiqi-small-leisure-collection",
+     3156
+    ],
+    [
+     "the-great-tesuji-encyclopedia-1",
+     25145
+    ],
+    [
+     "lee-chang-hos-selected-tesuji-part-3",
+     14834
+    ],
+    [
+     "go-seigen-endgame-part-3",
+     19135
+    ]
+   ],
+   "pool_easy": [
+    [
+     "specialized-training-in-tsumego-1",
+     63783
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63804
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     84639
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62350
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63809
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62322
+    ],
+    [
+     "seedling-project",
+     27540
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3518
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63777
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3739
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     103425
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     166755
+    ]
+   ],
    "board": false,
+   "objective_zh": "",
+   "title_zh": ""
+  },
+  {
+   "node": "21-m21",
+   "role": "main",
+   "place": "one-international",
+   "spot": "m21",
+   "scene": "m21",
+   "title": "The Scrap",
+   "objective": "Search the lobby for the rest of the waybill.",
+   "after": [
+    "21-m20"
+   ],
+   "grade": "11K",
+   "pool": [
+    [
+     "weiqi-life-and-death-drills-beginner-part-1",
+     5915
+    ],
+    [
+     "hashimoto-masterpiece-collection",
+     29210
+    ],
+    [
+     "the-great-tesuji-encyclopedia-5",
+     15667
+    ],
+    [
+     "heavenly-dragons-part-3",
+     16986
+    ],
+    [
+     "go-seigen-tsumego-collection-part-1",
+     6197
+    ],
+    [
+     "segoe-tsumego-dictionary-part-4",
+     16036
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-2",
+     144189
+    ],
+    [
+     "weiqi-life-and-death-drills-beginner-part-4",
+     68915
+    ],
+    [
+     "200-selected-problems-for-repetitive-practice",
+     1405
+    ],
+    [
+     "weiqi-life-and-death-drills-intermediate-part-2",
+     42082
+    ],
+    [
+     "specialized-training-in-tesuji-6",
+     119720
+    ],
+    [
+     "the-great-tesuji-encyclopedia-1",
+     46058
+    ],
+    [
+     "segoe-tesuji-dictionary-part-4",
+     17995
+    ],
+    [
+     "common-life-and-death-problems",
+     37445
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     44054
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-1",
+     142430
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     44180
+    ],
+    [
+     "segoe-tesuji-dictionary-part-4",
+     14421
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     856
+    ],
+    [
+     "weiqi-life-and-death-drills-beginner-part-2",
+     63141
+    ],
+    [
+     "go-seigen-tsumego-collection-part-3",
+     31156
+    ],
+    [
+     "lee-chang-hos-selected-tesuji-part-3",
+     14791
+    ],
+    [
+     "segoe-tsumego-dictionary-part-4",
+     15914
+    ],
+    [
+     "segoe-tsumego-dictionary-part-4",
+     15987
+    ],
+    [
+     "segoe-tsumego-dictionary-part-2",
+     15933
+    ],
+    [
+     "hashimoto-masterpiece-collection",
+     30525
+    ],
+    [
+     "weiqi-life-and-death-drills-beginner-part-4",
+     63510
+    ],
+    [
+     "segoe-tsumego-dictionary-part-2",
+     16065
+    ],
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3555
+    ],
+    [
+     "the-great-tesuji-encyclopedia-4",
+     47188
+    ]
+   ],
+   "pool_easy": [
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3518
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63777
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3739
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     103425
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     166755
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62325
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63835
+    ],
+    [
+     "nie-weipings-tsumego-encyclopedia",
+     52775
+    ],
+    [
+     "weiqi-rapid-drill-800-part-1",
+     3105
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62351
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63806
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62328
+    ]
+   ],
+   "board": false,
+   "gate": [
+    {
+     "needs": [
+      "item:waybill_scrap"
+     ],
+     "else": "m21_wait",
+     "objective": "Search the recycling bins by the lobby's ID gates for the rest of the waybill.",
+     "at": "One International",
+     "place": "one-international",
+     "objective_zh": ""
+    }
+   ],
+   "objective_zh": "",
+   "title_zh": ""
+  },
+  {
+   "node": "21-m22",
+   "role": "main",
+   "place": "one-international--textile",
+   "spot": "m22",
+   "scene": "m22",
+   "title": "Dog Meat",
+   "objective": "The textile team's floor, to Steve Han's desk.",
+   "after": [
+    "21-m21"
+   ],
+   "grade": "11K",
+   "pool": [
+    [
+     "the-unexpected-tesuji",
+     25986
+    ],
+    [
+     "common-life-and-death-problems",
+     25959
+    ],
+    [
+     "200-basic-go-problems",
+     176532
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     5094
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-4",
+     1961
+    ],
+    [
+     "weiqi-life-and-death-drills-intermediate-part-2",
+     40800
+    ],
+    [
+     "showa-tsumego",
+     26389
+    ],
+    [
+     "200-selected-problems-for-repetitive-practice",
+     28083
+    ],
+    [
+     "segoe-tesuji-dictionary-part-4",
+     14494
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-2",
+     144439
+    ],
+    [
+     "weiqi-small-leisure-collection",
+     3548
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-3",
+     1793
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-1",
+     525
+    ],
+    [
+     "common-life-and-death-problems",
+     26053
+    ],
+    [
+     "bedtime-tsumego-part-2",
+     25986
+    ],
+    [
+     "bedtime-tsumego-part-1",
+     135685
+    ],
+    [
+     "beautiful-dan-level-tsumego-100",
+     139104
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-2",
+     684
+    ],
+    [
+     "weiqi-life-and-death-drills-beginner-part-1",
+     40663
+    ],
+    [
+     "hitomi-tsumego",
+     160816
+    ],
+    [
+     "bedtime-tsumego-part-3",
+     137035
+    ],
+    [
+     "common-life-and-death-problems",
+     26058
+    ],
+    [
+     "weiqi-small-leisure-collection",
+     25515
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-1",
+     1183
+    ],
+    [
+     "hitomi-tsumego",
+     160841
+    ],
+    [
+     "kada-katsuji-tsumego-part-1",
+     31836
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     127176
+    ],
+    [
+     "common-life-and-death-problems",
+     25117
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-2",
+     132704
+    ],
+    [
+     "weiqi-life-and-death-1000-problems-part-4",
+     1874
+    ]
+   ],
+   "pool_easy": [
+    [
+     "nie-weipings-tsumego-encyclopedia",
+     52775
+    ],
+    [
+     "weiqi-rapid-drill-800-part-1",
+     3105
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62351
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63806
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62328
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     79967
+    ],
+    [
+     "common-life-and-death-problems",
+     26107
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62337
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     54414
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     130333
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63819
+    ],
+    [
+     "specialized-training-in-tsumego-6",
+     44168
+    ]
+   ],
    "objective_zh": "",
    "title_zh": ""
   }

@@ -151,8 +151,8 @@
      "to": "one-international"
     },
     {
-     "label": "3F · The PT room",
-     "to": "one-international--pt-room"
+     "label": "2F · General Affairs",
+     "to": "one-international--general-affairs"
     },
     {
      "label": "5F · HR",
@@ -178,11 +178,11 @@
    "use": "lift"
   },
   {
-   "id": "m19",
-   "x": 4.5,
+   "id": "m10",
+   "x": 12.5,
    "y": 8.7,
-   "node": "21-m19",
-   "label": "The noticeboard"
+   "node": "21-m10",
+   "label": "HR"
   }
  ],
  "npcs": [
@@ -215,7 +215,7 @@
    12,
    13
   ],
-  "one-international--pt-room": [
+  "one-international--general-affairs": [
    8,
    12
   ],

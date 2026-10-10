@@ -115,10 +115,21 @@
    "y": 25,
    "w": 4,
    "h": 2,
-   "id": "shop-1",
+   "id": "kba-cafe",
    "door": "N",
    "faces": "N",
+   "label": "A café across the street",
+   "map": "kba-cafe",
    "blocks_sight": true
+  },
+  {
+   "kind": "building.gatehouse",
+   "x": 10,
+   "y": 25,
+   "w": 4,
+   "h": 1,
+   "id": "kba-cafe-gate",
+   "faces": "S"
   },
   {
    "kind": "building.storefront",
@@ -218,6 +229,15 @@
    "door": true
   },
   {
+   "to": "korea-baduk-association--kba-cafe",
+   "side": "S",
+   "x": 11.6,
+   "y": 24.4,
+   "w": 0.8,
+   "h": 0.75,
+   "door": true
+  },
+  {
    "to": "jongno",
    "side": "E",
    "x": 47,
@@ -230,6 +250,10 @@
   "korea-baduk-association--kba-front": [
    22,
    19
+  ],
+  "korea-baduk-association--kba-cafe": [
+   12,
+   24
   ],
   "jongno": [
    41,
@@ -266,6 +290,7 @@
  },
  "links": [
   "jongno",
+  "korea-baduk-association--kba-cafe",
   "korea-baduk-association--kba-front"
  ]
 }

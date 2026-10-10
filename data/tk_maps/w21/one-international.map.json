@@ -198,8 +198,8 @@
      "to": "one-international"
     },
     {
-     "label": "3F · The PT room",
-     "to": "one-international--pt-room"
+     "label": "2F · General Affairs",
+     "to": "one-international--general-affairs"
     },
     {
      "label": "5F · HR",
@@ -225,20 +225,13 @@
    "use": "lift"
   },
   {
-   "id": "m2",
-   "x": 24.5,
-   "y": 14.7,
-   "node": "21-m2",
-   "label": "The front desk"
-  },
-  {
    "id": "bins",
    "x": 4.5,
    "y": 16.7,
    "node": "",
    "label": "The recycling bins",
    "gives": "waybill_scrap",
-   "gives_when": "node:21-m7",
+   "gives_when": "node:21-m20",
    "give": [
     "You go through the bins by the gates, sheet by sheet. Stuck to the back of a torn page: the rest of the waybill, glue on the back, and a name on it in someone else's hand. Kim Seok-ho."
    ],
@@ -247,10 +240,10 @@
    ]
   },
   {
-   "id": "m8",
+   "id": "m21",
    "x": 12.5,
    "y": 16.7,
-   "node": "21-m8",
+   "node": "21-m21",
    "label": "The lobby"
   },
   {
@@ -313,7 +306,7 @@
    18,
    17
   ],
-  "one-international--pt-room": [
+  "one-international--general-affairs": [
    18,
    4
   ],

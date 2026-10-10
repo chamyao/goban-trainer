@@ -251,10 +251,22 @@
    "y": 41,
    "w": 4,
    "h": 2,
-   "id": "shop-2",
+   "id": "baduk-class",
    "door": "N",
    "faces": "N",
+   "label": "The neighbourhood baduk class",
+   "map": "baduk-class",
+   "plaque": "바둑교실",
    "blocks_sight": true
+  },
+  {
+   "kind": "building.gatehouse",
+   "x": 26,
+   "y": 41,
+   "w": 4,
+   "h": 1,
+   "id": "baduk-class-gate",
+   "faces": "S"
   },
   {
    "kind": "building.subway_entrance",
@@ -329,13 +341,6 @@
    "kind": "tree.ginkgo",
    "x": 25,
    "y": 35,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "tree.ginkgo",
-   "x": 26,
-   "y": 40,
    "w": 1,
    "h": 1
   },
@@ -529,7 +534,7 @@
   {
    "id": "npc-1",
    "kind": "folk.ajumma",
-   "x": 29.5,
+   "x": 30.5,
    "y": 37.9,
    "say": [
     "An ajumma with a shopping trolley. “The Jang boy? Up before dawn every day of his life, that one.”"
@@ -565,6 +570,15 @@
    "door": true
   },
   {
+   "to": "susaek-dong--baduk-class",
+   "side": "S",
+   "x": 27.6,
+   "y": 40.4,
+   "w": 0.8,
+   "h": 0.75,
+   "door": true
+  },
+  {
    "to": "the-subway",
    "side": "S",
    "x": 51.1,
@@ -582,6 +596,10 @@
   "susaek-dong--relatives": [
    43,
    15
+  ],
+  "susaek-dong--baduk-class": [
+   28,
+   40
   ],
   "the-subway": [
    51,
@@ -653,6 +671,7 @@
   ]
  },
  "links": [
+  "susaek-dong--baduk-class",
   "susaek-dong--home",
   "susaek-dong--relatives",
   "the-subway"

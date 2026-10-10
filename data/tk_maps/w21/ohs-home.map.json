@@ -1,14 +1,14 @@
 {
  "format": "tk-map/1",
- "id": "suns-neighbourhood--daycare",
+ "id": "ohs-home",
  "world": 21,
- "name": "The daycare",
+ "name": "Oh's home",
  "archetype": "interior",
  "size": [
   24,
   16
  ],
- "seed": 2766,
+ "seed": 946,
  "plan": true,
  "terrain": {
   "legend": {
@@ -62,107 +62,70 @@
  ],
  "objects": [
   {
-   "kind": "furn.toy_shelf",
-   "x": 2,
-   "y": 2,
+   "kind": "furn.sofa",
+   "x": 4,
+   "y": 4,
    "w": 2,
    "h": 1,
-   "id": "toys-1"
+   "id": "sofa"
   },
   {
-   "kind": "furn.toy_shelf",
+   "kind": "furn.tv",
    "x": 4,
    "y": 2,
    "w": 2,
    "h": 1,
-   "id": "toys-2"
+   "id": "tv"
   },
   {
-   "kind": "furn.toy_shelf",
-   "x": 18,
-   "y": 2,
-   "w": 2,
-   "h": 1,
-   "id": "toys-3"
-  },
-  {
-   "kind": "furn.kid_mat",
-   "x": 4,
-   "y": 6,
-   "w": 2,
-   "h": 1,
-   "id": "mat-1"
-  },
-  {
-   "kind": "furn.kid_mat",
-   "x": 6,
-   "y": 6,
-   "w": 2,
-   "h": 1,
-   "id": "mat-2"
-  },
-  {
-   "kind": "furn.low_table",
+   "kind": "furn.table",
    "x": 16,
-   "y": 8,
+   "y": 6,
    "w": 2,
    "h": 1,
-   "id": "table"
+   "id": "table",
+   "label": "The kitchen table"
+  },
+  {
+   "kind": "furn.toy_shelf",
+   "x": 20,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "toys"
+  },
+  {
+   "kind": "furn.boxes",
+   "x": 20,
+   "y": 10,
+   "w": 1,
+   "h": 1,
+   "id": "golf",
+   "label": "A golf bag, never used"
   }
  ],
  "spots": [
   {
-   "id": "m13b",
+   "id": "m7",
    "x": 12.5,
-   "y": 8.7,
-   "node": "21-m13b",
-   "label": "The daycare"
+   "y": 10.7,
+   "node": "21-m7",
+   "label": "Oh's home"
   }
  ],
- "npcs": [
-  {
-   "id": "npc-1",
-   "kind": "folk.officewoman",
-   "x": 10.5,
-   "y": 4.9,
-   "say": [
-    "The teacher. “You're here for Somi? Her mother rang. You must be from her office.”"
-   ],
-   "label": "The teacher"
-  },
-  {
-   "id": "npc-2",
-   "kind": "folk.kid",
-   "x": 6.5,
-   "y": 8.9,
-   "say": [
-    "A small boy with a toy car. “Are you somebody's dad?”"
-   ]
-  }
- ],
- "exits": [
-  {
-   "to": "suns-neighbourhood",
-   "side": "S",
-   "x": 12,
-   "y": 14,
-   "w": 2,
-   "h": 1
-  }
- ],
+ "npcs": [],
+ "exits": [],
  "entries": {
-  "suns-neighbourhood": [
-   12,
-   13
-  ],
   "": [
    12,
-   13
+   14
   ]
  },
- "parent": "suns-neighbourhood",
- "building": "daycare",
- "links": [
-  "suns-neighbourhood"
- ]
+ "states": [
+  {
+   "id": "night",
+   "light": "night"
+  }
+ ],
+ "links": []
 }

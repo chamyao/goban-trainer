@@ -181,8 +181,8 @@
    "done": [
     "The man with the pocket board is on the next problem."
    ],
-   "until": "21-21-m2",
-   "when": "node:21-m1",
+   "until": "21-m8",
+   "when": "node:21-m6",
    "blocks": {
     "exit": "Jongno"
    },
@@ -192,6 +192,26 @@
     46.5,
     7.0
    ]
+  },
+  {
+   "id": "dawn-commuter",
+   "kind": "folk.officewoman",
+   "x": 16.5,
+   "y": 4.9,
+   "say": [],
+   "intro": [
+    "Crushed against the door at dawn, a woman holds a pocket board over everyone's heads. “Black to live. You look like you'd know.”"
+   ],
+   "win": [
+    "“…Of course. Thank you. I'll be thinking about that all day.”"
+   ],
+   "done": [
+    "The woman with the pocket board is asleep on her feet."
+   ],
+   "until": "21-m14",
+   "when": "node:21-m13",
+   "view": 2,
+   "challenge": "dawn-commuter"
   }
  ],
  "exits": [
