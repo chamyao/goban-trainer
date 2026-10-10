@@ -529,7 +529,7 @@ def _nodes():
         node("m14", 166, 167, "m14", room="sales3", move=6, record=7,
              choices={7: [['dj', 0.08], ['ep', 0.11], ['cj', 0.14], ['qk', 0.26], ['do', 0.29], ['cm', 0.31], ['bp', 0.51], ['co', 1.05], ['qn', 3.87]]},
              gate=[{"needs": ["mark:errand_bl", "mark:errand_copy", "mark:errand_floor"], "else": "m14_wait",
-                    "objective": T("Work from every side on Sales 3's floor: the forwarder call about the B/L at the team phone, Kim's copies at the copier, and the floor."),
+                    "objective": T("Work from every side on Sales 3's floor: the forwarder call about the B/L at the team phone, Kim's copies at the copier, and mop the floor."),
                     "at": "One International"}],
              dilemma=D(
                  "ms_jang", "Which move did Cho Hunhyun play?",
@@ -589,6 +589,7 @@ _ITEMS = {
     "requisition": {"name": "Supplies requisition", "kind": "key", "text": "For General Affairs. Kim Dong-sik's signature."},
     "glue_stick": {"name": "Glue stick", "kind": "key"},
     "copy": {"name": "Kim's copies", "kind": "key"},
+    "mop": {"name": "A mop and bucket", "kind": "key"},
     "phone_text": {"name": "Han's text", "kind": "key", "text": "Again!"},
     "waybill_scrap": {"name": "Waybill scrap", "kind": "key", "text": "Glue on the back. A name: Kim Seok-ho."},
 }
@@ -989,10 +990,12 @@ KO21 = {
     'The team phone.': '팀 전화.',
     'You ring the forwarder about the B/L. On hold. Then a voice: the bill of lading went out this morning. You write it down.': '포워더에게 B/L 건으로 전화한다. 대기음. 그리고 목소리. 선하증권은 오늘 아침에 나갔습니다. 받아 적는다.',
     "The team phone. The forwarder's call is done.": '팀 전화. 포워더 통화는 끝났다.',
-    'The floor.': '바닥.',
-    "The floor: boxes stacked, the printer fed, yesterday's papers off every chair. Nobody notices. Everybody would have.": '바닥. 상자를 쌓고, 프린터에 용지를 넣고, 의자마다 어제 서류를 치운다. 아무도 알아채지 못한다. 안 했으면 다들 알아챘을 것이다.',
-    'The floor is straight.': '바닥이 정리됐다.',
     "Crushed against the door at dawn, a woman holds a pocket board over everyone's heads. “Black to live. You look like you'd know.”": '새벽, 문에 짓눌린 채 한 여자가 사람들 머리 위로 포켓 바둑판을 들고 있다. "흑 사는 수. 아실 것 같은데."',
     "“…Of course. Thank you. I'll be thinking about that all day.”": '"…역시. 고마워요. 하루 종일 그 생각 할 것 같아요."',
     'The woman with the pocket board is asleep on her feet.': '포켓 바둑판을 든 여자가 선 채로 졸고 있다.',
+    'A mop and a bucket, behind the cupboard door. You take them.': '청소 도구함 문 뒤에 대걸레와 양동이. 꺼내 든다.',
+    "The cleaning cupboard. The mop's back on its hook.": '청소 도구함. 대걸레는 다시 걸이에 걸려 있다.',
+    'Coffee, trodden into the carpet all morning. You mop it, wring it, mop it again. Nobody looks up.': '아침 내내 밟혀 카펫에 스민 커피. 닦고, 짜고, 다시 닦는다. 아무도 고개를 들지 않는다.',
+    'Coffee, trodden into the carpet. Someone said: wipe this floor.': '카펫에 밟힌 커피 자국. 누군가 말했다. 여기 바닥 좀 닦아.',
+    "The floor's clean. Nobody noticed.": '바닥이 깨끗해졌다. 아무도 몰랐다.',
 }
