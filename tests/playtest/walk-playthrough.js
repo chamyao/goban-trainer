@@ -193,7 +193,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   let beatLead = '';
   const close = (status, why, s) => { if (!beat) return; if (leadFor[beat] && beatLead && leadFor[beat] !== beatLead) console.log(`     note ${beat}: played by ${beatLead}, but the story's last handoff gave ${leadFor[beat]}`); const r = { beat, status, secs: Math.max(0, Math.round((Date.now() - beatT) / 1000)), place: s && s.place, at: s && s.P, lead: s && s.lead, why: why || '', line: lastLine.slice(0, 120) };
     report.push(r); console.log(`${status === 'pass' ? 'ok  ' : 'FAIL'} ${beat}  ${r.secs}s  ${r.lead || ''} in ${r.place || '?'}${status === 'pass' ? '' : `  at ${r.at}: ${why}${r.line ? ` ("${r.line}")` : ''}`}`); };
-  const cutWait = {}, pouches = [], told = [], faced = [], gated = [], markSpots = {}; let yErr = 0;
+  const auditTried = new Set(), cutWait = {}, pouches = [], told = [], faced = [], gated = [], markSpots = {}; let yErr = 0;
   let noWaySince = 0, plannedSteps = null, planT = 0, pace = 3, stealthTries = 0, lastTap = 0, skipped = false, reloads = 0, catches = 0, wasCaught = false; const held = [], recovered = [];
   const featureFails = [], facts = {}, banners = [], chipBad = new Set(), chipSeen = [], shotWho = new Set(), shots = []; let lastPlace = '', arrivedAt = null; const OPTIONAL = !!process.env.OPTIONAL, visited = new Set(), errands = []; let errand = null;
   for (;;) {
@@ -263,9 +263,9 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     const auditWait = await p.evaluate(() => { const S = window.__w, w = S && S.w; if (!w || !w.audit || !S.player || S.ui.busy() || S.cine || document.querySelector('.tk-audit, .tk-bag')) return false;
       const q = S.nextMain(), g = q && S.gateFor && S.gateFor(q); if (!g || ![].concat(g.needs || []).includes('mark:' + w.audit.done) || S.cond('mark:' + w.audit.done)) return false;
       return typeof WorldModern !== 'undefined' && WorldModern.auditOpen(w); });
-    if (auditWait) { console.log(`     ${beat}: gated on the audit board; opening it from the bag`);
+    if (auditWait && !auditTried.has(beat)) { auditTried.add(beat); console.log(`     ${beat}: gated on the audit board; opening it from the bag`);
       const bag = p.locator('button', { hasText: /Bag/ }).filter({ hasNot: p.locator('.tk-bag') }).first(); await bag[TAPM]({ timeout: 2000 }).catch(() => {}); await p.waitForTimeout(400);
-      if (await p.locator('.tk-bag-audit').count()) await tapEl('.tk-bag-audit'); else { console.log(`FAIL ${beat}: the bag offers no audit board`); await p.keyboard.press('Escape'); }
+      if (await p.locator('.tk-bag-audit').count()) await tapEl('.tk-bag-audit'); else { console.log(`note ${beat}: the bag showed no audit board; following the goal to the beat's spot (where the board opens)`); await p.keyboard.press('Escape'); }
       await p.waitForTimeout(500); continue; }
     // the audit board (Misaeng, tk-modern.js): tap the two clues that answer the question showing, as a player who reads them does;
     // when every link is made (or the board has nothing to link yet), close it
