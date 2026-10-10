@@ -47,7 +47,7 @@ Where each book's places are:
 | 14 (Lü Bu) | `tools/tk_plans_lb.py` | `--world 14 --plans lb` | `tools/proofs/hide_ward_lb.py` | the burning ward, Xiapi |
 | 15 (Lady Sun) | `tools/tk_plans_ls.py` | `--world 15 --plans 15` | `tools/proofs/ladysun_ls.py` | design: `docs/book2/ladysun-places.md`; engine walk: `tests/playtest/book15-places.js` |
 | 90 (Claude's study) | `tools/tk_plans_w90.py` | `plans.py --world 90 --out data/tk_maps/w90` | — | one room |
-| 31 (Red Chamber 1) | `redchamber/book1/plans.py` | `redchamber/tools/build_places.sh` (`--world 31 --plans hlm1`) | `redchamber/book1/proofs.py` | Dream of the Red Chamber, kept apart from the tk books. Its own family of sessions: Plot alt (story `redchamber/book1/story.py`), Integration (daughter) session_01PBpYgcfzV9sDVfFRALhiCb on `claude/integration-redchamber` (registers the world; base the branch on it), Graphics (daughter) session_018yKP3XDohUzg77y3MHJW73. Cues: `ROOM_CUES` read from the story, stands in the plans. Engine walk `tests/playtest/redchamber-places.js` |
+| 31 (Red Chamber 1) | `redchamber/book1/plans.py` | `redchamber/tools/build_places.sh` (`--world 31 --plans hlm1`) | `redchamber/book1/proofs.py` | Dream of the Red Chamber, kept apart from the tk books. Its own family of sessions: Plot alt (story `redchamber/book1/story.py`), Integration (daughter) session_01PBpYgcfzV9sDVfFRALhiCb on `claude/integration-redchamber` (registers the world; base `claude/places-redchamber` on it), Graphics (daughter) session_018yKP3XDohUzg77y3MHJW73. Cues: lines from the story's `ROOM_CUES`, stands in the plans' `STANDS` ((beat, who, n-th) -> cell, facing; the build fails on a cue with nowhere to stand or a stand no cue takes). Engine walks `tests/playtest/redchamber-places.js`, `hlm-watch.js` |
 
 A new arc is registered in `plans.py`: `ARCS` (book → arc name), `key_prefix` (the beat keys' book number: Book 15's
 keys are `4-s1`…), `load()` (its module), and in `check_plans_w2.py` (`--arc`).
@@ -278,10 +278,10 @@ both branches together.
 If you replace a line, its old Chinese must stay until the maps carrying it are rebuilt: `build_tk.py` checks every
 line in the built maps. (Or patch the line in `data/tk_maps/w<n>` first.)
 
-Red Chamber's world (31) is registered by its own Integration on `claude/integration-redchamber`; base
-`claude/places-redchamber` on that branch, not on `claude/plot-places`. `redchamber/tools/build_places.sh` builds,
-compiles, stages and undoes drift; until registration merges the plans' Chinese (`ZH_PLACES_HLM1`) it merges it for the
-run and puts `tools/tk_story.py` back. `--playtest` walks `tests/playtest/redchamber-places.js`.
+Red Chamber's world (31) is registered by its own Integration on `claude/integration-redchamber`, story and plans'
+Chinese included (`tools/tk_story_zh.py`). Build with `redchamber/tools/build_places.sh` (mapfactory all, keep_drift,
+and put back `data/tk_maps/w12/region.json`, which the build touches); `--playtest` walks its two engine tests. Don't
+append a registration of your own: it would register the world twice.
 
 ## Drift
 
