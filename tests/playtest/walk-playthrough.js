@@ -422,7 +422,10 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       if (!markSpots[BOOK]) { markSpots[BOOK] = []; const dir = path.join(__dirname, `../../data/tk_maps/w${BOOK}`); for (const f of require('fs').readdirSync(dir).filter(f => f.endsWith('.map.json'))) { try { const d = JSON.parse(require('fs').readFileSync(path.join(dir, f), 'utf8')); for (const sp of d.spots || []) if (sp.delivers) markSpots[BOOK].push({ place: d.id || f.replace('.map.json', ''), id: sp.id, delivers: sp.delivers, needs: [].concat(sp.needs || []), x: sp.x, y: sp.y }); } catch (e) {} } }
       const sp0 = markSpots[BOOK].find(x => x.delivers === gm.mark);
       // a delivery that takes something not yet held (Misaeng m4's errands: fetch the copies first): not there yet; the game's own goal leads to the giver
-      const sp = sp0 && (await p.evaluate(n => n.every(c => !/^item:/.test(c) || window.__w.cond(c)), sp0.needs || []).catch(() => true)) ? sp0 : null;
+      let sp = sp0 && (await p.evaluate(n => n.every(c => !/^item:/.test(c) || window.__w.cond(c)), sp0.needs || []).catch(() => true)) ? sp0 : null;
+      // a room no door here leads to (Misaeng's floors: only the lift goes there): the game's own goal leads, by the lift
+      const sib0 = sp && sp.place.replace(/--[^-]+(?:-[^-]+)*$/, '');
+      if (sp && gm.place !== sp.place && !gm.exits.some(e => e.to === sp.place || e.to === sib0) && !(gm.parent && gm.exits.some(e => e.to === gm.parent))) sp = null;
       if (sp) {
         if (!gated.includes(gm.mark)) { gated.push(gm.mark); console.log(`     ${s.next} is gated on mark:${gm.mark}: to ${sp.place} (${sp.id})`); }
         if (!s.walking && Date.now() - lastTap > 1200 && !s.busy) { lastTap = Date.now();
