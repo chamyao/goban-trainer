@@ -924,6 +924,73 @@ def stalls():   # a row of street-market stalls: blue and orange tarps on poles 
     return img(g)
 
 
+def memorial_tent():   # a white memorial tent (분향소): a white canopy on poles, a table in white cloth, framed portraits,
+    W, H = 4 * T, 44      # rows of white chrysanthemums, incense
+    g = Grid(W, H)
+    g.rect(2, 2, W - 4, 10, "#f4f4f2"); g.rect(2, 2, W - 4, 1, "#ffffff"); g.rect(2, 11, W - 4, 1, "#c8c8c4")
+    for x in range(8, W - 4, 12):
+        g.rect(x, 2, 1, 10, "#dcdcd8")
+    g.rect(3, 12, 1, 30, "#9aa0a8"); g.rect(W - 4, 12, 1, 30, "#9aa0a8")
+    g.rect(5, 13, W - 10, 14, "#e8e8e6")                                                                   # the back curtain
+    for x in range(10, W - 12, 9):                                                                          # framed portraits
+        g.rect(x, 15, 7, 9, "#1c1c20"); g.rect(x + 1, 16, 5, 7, "#c8c8c4"); g.ellipse(x + 3.5, 18.5, 1.5, 1.6, "#6a6a68")
+        g.rect(x + 1, 21, 5, 2, "#4a4a48")
+    box(g, 6, 26, W - 12, 4, 10, "#f8f8f6", "#e4e4e0")                                                      # the table in white cloth
+    for x in range(8, W - 8, 3):
+        g.set(x, 26, "#ffffff"); g.set(x + 1, 27, "#e8e8d8")                                               # white chrysanthemums
+    g.rect(W // 2 - 2, 25, 4, 2, "#8a6a2a"); g.rect(W // 2, 21, 1, 4, "#c8c8c4")                            # incense
+    return img(g)
+
+
+def palace_gate():   # Daehanmun, Deoksugung's main gate: three bays, a hipped tiled roof with painted eaves, a stone base
+    W, H = 6 * T, 78
+    g = Grid(W, H)
+    roof, roofD = "#4a4e52", "#33363a"
+    g.rect(6, 4, W - 12, 4, roofD); g.rect(2, 8, W - 4, 14, roof); g.rect(0, 20, W, 4, roofD)               # the hipped roof
+    for x in range(4, W - 4, 4):
+        g.rect(x, 9, 1, 11, shade(roof, .15))
+    g.rect(2, 4, 2, 4, roofD); g.rect(W - 4, 4, 2, 4, roofD)                                                # the ridge ends
+    g.rect(4, 24, W - 8, 6, "#3a7a5a")                                                                        # painted eaves (dancheong)
+    for x in range(6, W - 6, 6):
+        g.rect(x, 25, 3, 2, "#c8382a"); g.set(x + 1, 28, "#e8c040")
+    g.rect(8, 30, W - 16, 30, "#a83a2a")                                                                      # red columns and walls
+    for x in (8, W // 2 - 14, W // 2 + 12, W - 10):
+        g.rect(x, 30, 2, 30, "#7a2a20")
+    for x in (12, W // 2 - 10, W // 2 + 16):                                                                   # three doorways, open
+        g.rect(x, 38, 20 if x != W // 2 - 10 else 22, 22, "#2a1a14")
+    g.rect(W // 2 - 8, 31, 16, 6, "#2a2a30"); g.rect(W // 2 - 6, 32, 12, 4, "#e8c040")                       # the name board
+    g.rect(2, 60, W - 4, H - 60, "#b8b4a8"); g.rect(2, 60, W - 4, 2, "#d0ccc0")                               # the stone base and steps
+    for y in range(64, H, 4):
+        g.rect(4, y, W - 8, 1, "#9a968a")
+    return img(g)
+
+
+def cloth_bolts():   # rolls of fabric on a rack, sample books on the bottom shelf
+    g = Grid(2 * T, 28)
+    g.rect(1, 2, 1, 25, "#7a8088"); g.rect(30, 2, 1, 25, "#7a8088"); g.rect(1, 13, 30, 1, "#7a8088"); g.rect(1, 22, 30, 1, "#7a8088")
+    r = random.Random(23)
+    for row, y in enumerate((3, 14)):
+        for x in range(3, 28, 5):
+            c = r.choice(["#c8382a", "#3a6ad8", "#e8c040", "#2e8a5a", "#e8e4dc", "#8a5aa8", "#d87a5a"])
+            g.rect(x, y, 4, 9, c); g.rect(x, y, 1, 9, shade(c, .3)); g.rect(x + 3, y, 1, 9, shade(c, -.25))
+    for x in range(3, 28, 4):
+        g.rect(x, 23, 3, 4, r.choice(["#2e4a8a", "#6a4a32", "#3a3a42"]))
+    return img(g)
+
+
+def palace_wall(v):   # Deoksugung's wall seen from above: a tiled coping on plaster over a stone base
+    g = Grid(T, T)
+    g.rect(0, 0, T, 5, "#4a4e52"); g.rect(0, 0, T, 1, "#6a6e72")
+    for x in range(v * 2, T, 4):
+        g.rect(x, 1, 1, 4, "#33363a")
+    g.rect(0, 5, T, 6, "#e8e2d4"); g.rect(0, 10, T, 1, "#c8c2b4")
+    g.rect(0, 11, T, 5, "#a8a49a")
+    for x in range(v * 3, T, 6):
+        g.rect(x, 11, 1, 5, "#8a867c")
+    g.rect(0, 13, T, 1, "#8a867c")
+    return g.image()
+
+
 def mat():   # a rug
     g = Grid(2 * T, 2 * T)
     g.rect(1, 6, 30, 20, "#8a5a5a"); g.rect(3, 8, 26, 16, "#a87070"); g.rect(5, 10, 22, 12, "#8a5a5a")
@@ -953,6 +1020,8 @@ PIECES = {
     # old kinds the Misaeng plans use, redrawn modern for this kit
     "lamp.post": streetlight, "furn.plant": plant, "furn.window": window, "furn.counter": counter, "furn.table": table,
     "furn.stool": stool, "furn.shelf": shelf, "furn.desk": desk, "furn.mat": mat, "furniture.gotable": gotable, "market.stalls": stalls,
+    # Book 1: the memorial at Daehanmun, Daehanmun itself, the textile floor
+    "prop.memorial_tent": memorial_tent, "building.palace_gate": palace_gate, "furn.cloth_bolts": cloth_bolts,
     # m17's drinks, small on a table top
     "prop.glass_water": glass_water, "prop.teacup": teacup, "prop.coffee_cup": coffee_cup,
 }
@@ -963,7 +1032,7 @@ TILES = {
     "barrier": [barrier(0), barrier(1)], "parapet": [parapet(0), parapet(1)], "roof": [roof(0), roof(1)],
     "stone": [office_tile(0), office_tile(1)], "mat": [carpet(0), carpet(1)], "wood": [laminate(0), laminate(1)],
     "earth": [concrete(0), concrete(1)], "lobby": [lobby(0), lobby(1)], "platform": [platform(0), platform(1)],
-    "limestone": [limestone(0), limestone(1)],
+    "limestone": [limestone(0), limestone(1)], "wall.palace": [palace_wall(0), palace_wall(1)],
 }
 # grounds that are another's tiles here: the old names Places' plans use, in their modern form
 SAME = {"court": "roof", "asphalt": "traffic", "carpet": "mat", "office_tile": "lobby", "lino": "wood", "ward": "city", "passage": "city", "path": "city", "camp": "city", "market": "city",
