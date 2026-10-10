@@ -14,26 +14,93 @@ for personal use". On publishing: "Im fine with pushing it to the public".
 The dialogue is Plot's own close paraphrase. Only the famous short lines are quoted (미생이네요, 모두에겐 자신만의 바둑이 있다,
 밖은 지옥이다 …), each with its Korean in this doc. No scene's dialogue is copied out whole.
 
-## Five books (the user: "i was thinking that this is actually very light for a webtoon I was expecting multiple books"; Plot proposed five, the user: "yeah lets go")
+## Nine books, one per printed volume (the user: "lets have some variance, allow between 1-2 beats per episode depending on what fits best"; "the variance doesnt necessariily have to be 50 50 between 1 and 2 beats, go with what makes sense")
 
-Season 1 is told in **five books**, split where the webtoon's own volumes and the frame game turn. The frame game runs
-across all five: each book plays its stretch of the 145 moves, and the series ends on Black 145. Each book stands on its
-own (R16: its opening scroll says who Jang is and where the game stands) and brings its own mechanic. The books are
-chained with `next`. World numbers are Integration's to assign; the story files are `tools/tk_story_w<n>.py`.
+Earlier plans: one book (too light, the user: "I was expecting multiple books"), then five. Reading the comic itself
+(episodes 0–10, `docs/book2/misaeng-read-ep0-10.md`) showed each episode holds 50–70 captions and balloons, and that a
+beat for every two or three episodes carried only 3–45% of an episode's exchanges. So the pace is now **one or two
+beats per episode, as each episode needs**, and Season 1 is **nine books**, one per printed volume (the author's own act
+breaks), on Integration's worlds 21–29. The frame game runs through all nine; Book 9 ends on Black 145.
 
-| Book | Episodes (vols) | Story | Frame | New mechanic |
-|---|---|---|---|---|
-| **1. Not Yet Alive** (착수) | 0–33 (1–2) | The trainee years; the internship: Sales 3, the waybill, Han Seok-yul, Park Jong-gi, Steve Han and the dog-meat lunch, the daycare; the PT test; hired on contract | moves 0–33 | **Record boards** (find Cho's move) |
-| **2. Style** (기풍) | 34–59 (3–4) | The four new hires each against their own team: Baek-gi's idle steel desk, Han's lesson about his women seniors, Ahn at finance, the embargo, credit stolen, Oh's collapse, 미생이네요, the jargon | 34–59 | **Rotating leads**: each new hire leads a stretch |
-| **3. Keystone** (요석) | 60–83 (4–5) | Park Jong-sik's fraud, the audit, James Park; Chuseok; Cheon Gwan-ung; Kim Dong-su's pizza shop | 60–83 | **The audit board** |
-| **4. Sealed Move** (봉수) | 84–113 (6–7) | The Jordan revival and briefing; contract-worker life after it; Han's 시말서; the ₩100,000 mission; the rejected proposal | 84–113 | **Setting the room**, **the trade loop** |
-| **5. Life and Death** (사활) | 114–145 (8–9) | Ahn's crisis and her father; Sun's marriage; Park Jong-gi again; the China business; the contract ends; move 145 | 114–145 | to design with the user for the China stretch |
+| Book | Volume | Episodes | World |
+|---|---|---|---|
+| 1 | 착수 The First Move | 0–16 | 21 |
+| 2 | 도전 Challenge | 17–33 | 22 |
+| 3 | 기풍 Style | 34–49 | 23 |
+| 4 | 정수 The Proper Move | 50–67 | 24 |
+| 5 | 요석 Keystone | 68–83 | 25 |
+| 6 | 봉수 Sealed Move | 84–99 | 26 |
+| 7 | 난국 Impasse | 100–115 | 27 |
+| 8 | 사활 Life and Death | 116–130 | 28 |
+| 9 | 종국 The End of the Game | 131–145 | 29 |
 
-**Order of work (R14, play before scaling):** Book 1 is designed and written in full first, and played. The other
-books follow one at a time. The single-book draft below (29 beats, now `tools/tk_story_ms_spine.py`, not imported) is the spine
-the five books grow from: its beats are spread across them, and each book adds the episodes the single book cut or told.
+**Sources.** Episodes 0–10 are free on Kakao Webtoon and were read from the comic. From 11 on they need an account
+("wait for free"); until they're read (the user: "dont worry about the paywall either well figure out some way or ill
+buy it"), those beats rest on fan sources and are marked so in the story files' comments.
 
-## Book 1: Not Yet Alive (착수), episodes 0–33, world 21
+**Files.** Book 1: `tools/tk_story_w21.py`. Book 1 as first written (episodes 0–33, fan sources), the start of Book 2:
+`tools/tk_story_ms_v1.py`. The single-book draft, the start of Books 3–9: `tools/tk_story_ms_spine.py`. Neither is
+imported.
+
+---
+
+## Book 1: 착수 The First Move, episodes 0–16, world 21
+
+**The shape.** A small boy says "atari" and his family bets everything on him; at eighteen he fails, by half a point,
+again. Years later a sponsor's phone call puts him, with nothing on paper, in a café keeping a foreign buyer busy with a
+baduk puzzle while a red-eyed section head races down a mountain. It ends with the first friendships and enemies of the
+internship (Ahn, Kim, Han) and the office learning it can't blame the parachute for everything.
+
+**Leads.** The child Jang (m1); Jang at eighteen (m2); Jang (most); **Ahn Young-yi** (m13: she brings the glasses
+intern back to apologise and makes both schemes live, 상생, her own stretch in the comic); **Oh** (m21); **Kim
+Bu-ryeon** (m22). Oh's establishing episode (3) and Han's scolding at Ulsan (10) are cutaways.
+
+| Key | Beat | Ep. | Lead | Place · room | Move | Board |
+|---|---|---|---|---|---|---|
+| m1 | **Atari**: the uncle's stones; "단수"; the class, the academy, the dojang | 0 | Jang (child) | Susaek-dong · baduk-class | 0 | "Find the atari." |
+| m2 | **Seven Years**: trainee; fails; his parents' faces; the excuses; the stones | 0 | Jang (18) | KBA · kba-trainees | 0 | Contest, **fails** (staging): one more half-point game |
+| m3 | **Really Quitting?**: 강호룡 and 안상기; the board put out | 2 | Jang (18) | KBA · kba-cafe | 2 | — |
+| m4 | **Washing Her Back**: the decline; GED; the sponsor's company; the army; "go and thank him" | 2 | Jang | Susaek-dong · home | 2 | — |
+| m5 | **A Light Allowed Me**: the sponsor, the 낙하산 warning; the evening city (ep 1's montage as townsfolk); the vow; the lights | 1–2 | Jang | Jongno · sponsor-office | 2 | — |
+| m6 | **A Weak Group from the Start**: oversleeping; go straight to the café | 2 | Jang | Susaek-dong · home | 2 | — |
+| m7 | **The Weight of Life** (cutaway): Oh's sons, the apology in his sleep, the hike, the 부장, "fear is rational", "are we in a position to be picky?" | 3 | — | Oh's home | 3 | — |
+| m8 | **Baduk, Not Go**: the café; the buyer's quiz; Oh bursts in | 4 | Jang | Jongno · cafe | 4 | "The move that gives one stone to take more." (the snapback, as printed) |
+| m9 | **His Style**: Oh's car; the Malaysian claim (FOB); a lost trainee game; vitamins | 4 | Jang | Jongno · forecourt | 4 | "Read the man from his game." |
+| m10 | **Mentor and Buddy**: the lobby; HR: intern, PT in two months; Kim; the requisition; "special case" | 4–5 | Jang | hr | 5 | — |
+| m11 | **Who Do You Think You Are?**: the folders, the mind map; "find the dud"; together, not alone | 5 | Jang | sales3 (gate: `mark:requisition`, General Affairs) | 5 | — |
+| m12 | **Secure Yourself First**: the interns' study; Ahn; 아생연후살타 | 6 | Jang → Ahn | Jongno · hof | 6 | "Secure your own stones first." |
+| m13 | **Both Live**: Ahn's apology run, her review, her pitch to Oh and Kim; 상생; the dream of white stones | 6 | **Ahn** | sales3 | 6 | Ahn: "Make both live." |
+| m14 | **The World Is Faster**: the commute; the Americas head; work from every side | 7 | Jang | sales3 (gate: three errands) | 6 | **Record: Black 7** |
+| m15 | **Whoever Comes First**: Ahn announces the PT; Kim's warning | 7 | Jang | meeting | 7 | — |
+| m16 | **Inside the Board**: Ahn's trust speech; Kim's "who reads settlement files"; "have you picked a partner?" | 8 | Jang | Jongno · forecourt (the plaza) | 8 | "See what the watchers see." |
+| m17 | **Sente**: the roof; Han picks Jang; the gossip | 9 | Jang | roof | 9 | Contest, **fails**: "Take sente." |
+| m18 | **Again!**: kinder and warmer; the text; "nuclear bomb"; "find it yourself" | 10 | Jang | sales3 | 10 | Contest, **fails**: "Hold your ground." |
+| m18b | **One More Chance** (cutaway): Han at Ulsan; "colder, more heartless" | 10 | — | Ulsan | 10 | — |
+| m19 | **How Old Are You?** (fan sources) | 11–12 | Jang | sales3 | 10 | **Record: Black 11**; "Take the PT back." |
+| m20 | **The Waybill** (fan sources) | 13 | Jang → Oh | sales3 | 13 | — |
+| m21 | **The Scrap** (fan sources) | 14 | Oh | lobby (gate: `item:waybill_scrap`) | 14 | — |
+| m22 | **Dog Meat** (fan sources) | 15–16 | Kim Bu-ryeon | textile | 14 | **Record: Black 15**; "Apologise before it grows." |
+
+23 beats for 17 episodes; 14 boards (3 record boards), 9 beats without a board.
+
+**Reordered (staging):** episode 1 (the sponsor's evening walk, the comic's present-day frame) plays after episode 2's
+flashback, inside m5, so the story runs in time order. **Invented:** the board in m2 (the comic never shows a deciding
+game); Oh searching the bins (m21); m14's three errands are ep 7's real pile-up, made into delivery spots.
+
+**For Places:** new rooms: `baduk-class` (Susaek-dong, a childhood baduk class), `kba-cafe` (an arcade or café near
+the KBA), `sponsor-office` (Jongno), `cafe` (Jongno, the buyer meeting), `hof` (Jongno, the interns' bar); new places:
+"Oh's home" and "Ulsan" (cutaways); General Affairs as a delivery spot taking `requisition` (mark `requisition`);
+m14's errands `errand_bl` (the team phone), `errand_copy` (the copier, `copy` to Kim), `errand_floor` (the floor);
+ep 1's montage as townsfolk on Jongno for m5 (the beer hall, the team dinner, the two-faced smoker, the cogs and ants,
+the drunk bragging that the plane circles Seoul).
+
+**For Graphics:** `ms_jang_child`, `ms_uncle`, `ms_hoyong`, `ms_sanggi`, `ms_bujang` (Oh's department head, a golf bag),
+`ms_ohwife`, `ms_ohson`, `ms_kangsil` (the buyer's manager: glasses, camel coat), `ms_glasses` (the glasses intern,
+moustache), `ms_amhead` (the Americas team head), `ms_ulsan` (the Ulsan site department head), `ms_teacher`; a new
+still `ms_ringed` (a trainee at a board, ringed by onlookers).
+
+## Book 1 as first written (episodes 0–33, fan sources; superseded, now the start of Book 2)
+
 
 Written from `docs/book2/misaeng-research-ep0-33.md` (episode by episode). Story: `tools/tk_story_w21.py` (`WORLD21`).
 Every beat is in the webtoon unless marked **(staging)** or **(invented)**.
