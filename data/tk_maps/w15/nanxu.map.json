@@ -1023,11 +1023,12 @@
    "label": "Lady Wu's gate"
   },
   {
-   "id": "ls-rooms",
-   "x": 54.5,
-   "y": 20.7,
-   "node": "",
-   "label": "Lady Sun's rooms"
+   "id": "s9",
+   "x": 97.5,
+   "y": 53.7,
+   "node": "15-s9",
+   "label": "The riding ground",
+   "trigger": "near"
   }
  ],
  "npcs": [
@@ -1541,19 +1542,19 @@
   {
    "id": "wedding",
    "when": "node:s4",
-   "until": "node:s7",
+   "until": "node:s8",
    "light": "day"
   },
   {
    "id": "winter",
-   "when": "node:s7",
-   "until": "node:s9",
+   "when": "node:s8",
+   "until": "node:s10",
    "light": "day",
    "weather": "snow"
   },
   {
    "id": "newyear",
-   "when": "node:s9",
+   "when": "node:s10",
    "light": "morning"
   }
  ],
