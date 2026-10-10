@@ -65,7 +65,7 @@ def _scenes():
             N("Genius. To his parents the word was a sweet hypnosis. They sent him to a professional's dojang, and they burned for it all the hotter "
               "because his father's company had just gone under."),
             ["remove", "un"],
-            ["party", ["ms_jang_young"], {"to": {"place": "Korea Baduk Association", "spot": "kba-trainees"}}],   # a deliberate cut: years pass
+            ["party", ["ms_jang_young"], {"to": {"place": "korea-baduk-association--kba-trainees", "spot": "kba-trainees"}}],   # a deliberate cut: years pass
         ]},
 
         # M2 · 착수0 (second half). Seven years a trainee; he fails; the excuses; the stones dropped a few at a time.
@@ -529,7 +529,7 @@ def _nodes():
         node("m14", 166, 167, "m14", room="sales3", move=6, record=7,
              choices={7: [['dj', 0.08], ['ep', 0.11], ['cj', 0.14], ['qk', 0.26], ['do', 0.29], ['cm', 0.31], ['bp', 0.51], ['co', 1.05], ['qn', 3.87]]},
              gate=[{"needs": ["mark:errand_bl", "mark:errand_copy", "mark:errand_floor"], "else": "m14_wait",
-                    "objective": T("Work from every side on Sales 3's floor: the forwarder call about the B/L at the team phone, Kim's copies at the copier, and the floor."),
+                    "objective": T("Work from every side on Sales 3's floor: the forwarder call about the B/L at the team phone, Kim's copies at the copier, and mop the floor."),
                     "at": "One International"}],
              dilemma=D(
                  "ms_jang", "Which move did Cho Hunhyun play?",
@@ -589,6 +589,7 @@ _ITEMS = {
     "requisition": {"name": "Supplies requisition", "kind": "key", "text": "For General Affairs. Kim Dong-sik's signature."},
     "glue_stick": {"name": "Glue stick", "kind": "key"},
     "copy": {"name": "Kim's copies", "kind": "key"},
+    "mop": {"name": "A mop and bucket", "kind": "key"},
     "phone_text": {"name": "Han's text", "kind": "key", "text": "Again!"},
     "waybill_scrap": {"name": "Waybill scrap", "kind": "key", "text": "Glue on the back. A name: Kim Seok-ho."},
 }
@@ -964,4 +965,37 @@ KO21 = {
     "Kim Dong-sik doesn't look up from his screen.": '김동식 대리는 모니터에서 눈을 떼지 않는다.',
     'Section head Oh is on the phone, and holds up one finger.': '오 과장은 통화 중이다. 손가락 하나를 들어 보인다.',
     'The deputy turns his empty cup round and round.': '차장이 빈 컵을 빙글빙글 돌린다.',
+    # Places' map lines for the rewritten Book 1 (claude/places-misaeng bc9b524)
+    'A salaryman at the next table, his tie round his head. “Students! Interns! Play me, the loser pays!”': '넥타이를 머리에 두른 옆 테이블 직장인. "학생들! 인턴들! 나랑 한 판 두자. 지는 쪽이 계산!"',
+    "“…Bah. Barman! Their table's on me.”": '"…에잇. 사장님! 저 테이블 계산 제가 해요."',
+    'The salaryman is asleep on his arms.': '직장인이 팔을 베고 잠들어 있다.',
+    'A table of office workers outside a beer hall, ties loose, toasting nobody in particular.': '호프집 밖 테이블의 직장인들, 넥타이를 풀고 딱히 누구랄 것도 없이 건배한다.',
+    "A team dinner spills onto the pavement. “To the director's leadership!” The glasses go up. The director beams.": '회식이 인도까지 넘쳐 나온다. "부장님의 리더십을 위하여!" 잔들이 올라간다. 부장이 활짝 웃는다.',
+    "A man smoking by the kerb. “Our department head? Useless. Couldn't find his own—” His phone rings. “Yes, sir! Of course, sir. Right away, sir.”": '연석에서 담배를 피우는 남자. "우리 부장? 쓸모없어. 자기 거 하나도 못 찾—" 전화가 울린다. "네, 부장님! 물론이죠, 부장님. 바로 가겠습니다, 부장님."',
+    "Two juniors share a cigarette. “Cogs. That's all we are. Ants, carrying crumbs home.”": '담배 한 개비를 나눠 피우는 두 막내. "톱니바퀴야. 우린 그게 다야. 부스러기 나르는 개미들."',
+    "A drunk sways at the crossing and points at the sky. “See that plane? It's circling Seoul! For me! A genius, you know, one genius feeds thousands!”": '건널목에서 비틀거리던 취객이 하늘을 가리킨다. "저 비행기 봐! 서울을 한 바퀴 돈다! 나를 위해서! 천재 한 명이, 천재 한 명이 수천 명을 먹여 살린다고!"',
+    "An old man at the stone table, in the evening, waves you over without looking up. “You. You've got a player's hands. Sit.”": '저녁, 돌 탁자의 노인이 쳐다보지도 않고 손짓한다. "자네. 바둑 두는 손이구먼. 앉아."',
+    '“Hm. Where did you learn that? Go on, then.”': '"흠. 어디서 배웠나? 그럼 가 봐."',
+    "An intern from the other teams leans in the hof's doorway. “The parachute. The rest of us got in on paper. Beat me, and you can sit with us.”": '다른 팀 인턴이 호프집 문간에 기대어 있다. "낙하산이네. 우린 다 서류로 들어왔는데. 나 이기면, 우리랑 앉아도 돼."',
+    "“…Huh. Sit down, then. You're buying.”": '"…허. 그럼 앉아. 네가 사."',
+    'The intern at the door has gone in to his table.': '문간의 인턴은 자기 테이블로 들어갔다.',
+    'A trainee from the room, still in his school uniform, with a pocket board. “One more? Before you go home and they ask how it went?”': '아직 교복을 입은 연구생 하나가 포켓 바둑판을 들고 있다. "한 판 더? 집에 가서 어땠냐고 물어보기 전에?"',
+    "“…You'll make it next year. Probably.”": '"…내년엔 될 거야. 아마."',
+    'The trainee is replaying your game, move by move.': '연구생이 당신의 대국을 한 수씩 복기하고 있다.',
+    'The clerk looks up. “Requisition? You need the form. Signed.”': '직원이 고개를 든다. "신청서요? 양식이 있어야 해요. 서명된 걸로."',
+    "The clerk stamps Kim Dong-sik's requisition without reading it. “Supplies are by the lift. Sign here.”": '직원이 김동식 대리의 신청서를 읽지도 않고 도장을 찍는다. "비품은 엘리베이터 옆이에요. 여기 서명하세요."',
+    'General Affairs has the requisition.': '총무팀이 신청서를 받았다.',
+    "A clerk at General Affairs' counter, sorting forms into trays.": '총무팀 창구의 직원이 서류를 칸칸이 나눠 넣고 있다.',
+    "The copier groans out Kim Dong-sik's copies, warm.": '복사기가 신음하며 김동식 대리의 복사본을 따끈하게 뱉어 낸다.',
+    'The team phone.': '팀 전화.',
+    'You ring the forwarder about the B/L. On hold. Then a voice: the bill of lading went out this morning. You write it down.': '포워더에게 B/L 건으로 전화한다. 대기음. 그리고 목소리. 선하증권은 오늘 아침에 나갔습니다. 받아 적는다.',
+    "The team phone. The forwarder's call is done.": '팀 전화. 포워더 통화는 끝났다.',
+    "Crushed against the door at dawn, a woman holds a pocket board over everyone's heads. “Black to live. You look like you'd know.”": '새벽, 문에 짓눌린 채 한 여자가 사람들 머리 위로 포켓 바둑판을 들고 있다. "흑 사는 수. 아실 것 같은데."',
+    "“…Of course. Thank you. I'll be thinking about that all day.”": '"…역시. 고마워요. 하루 종일 그 생각 할 것 같아요."',
+    'The woman with the pocket board is asleep on her feet.': '포켓 바둑판을 든 여자가 선 채로 졸고 있다.',
+    'A mop and a bucket, behind the cupboard door. You take them.': '청소 도구함 문 뒤에 대걸레와 양동이. 꺼내 든다.',
+    "The cleaning cupboard. The mop's back on its hook.": '청소 도구함. 대걸레는 다시 걸이에 걸려 있다.',
+    'Coffee, trodden into the carpet all morning. You mop it, wring it, mop it again. Nobody looks up.': '아침 내내 밟혀 카펫에 스민 커피. 닦고, 짜고, 다시 닦는다. 아무도 고개를 들지 않는다.',
+    'Coffee, trodden into the carpet. Someone said: wipe this floor.': '카펫에 밟힌 커피 자국. 누군가 말했다. 여기 바닥 좀 닦아.',
+    "The floor's clean. Nobody noticed.": '바닥이 깨끗해졌다. 아무도 몰랐다.',
 }
