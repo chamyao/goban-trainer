@@ -274,7 +274,8 @@ const TownUI = {
         }
         let watch = null; try { watch = scene.watchCues && scene.player && scene.watchCues(); } catch { watch = null; }
         if (watch) {   // look at the people in the room before stepping up (a world's "watch": Red Chamber)
-          const wb = Object.assign(document.createElement("button"), { type: "button", className: "town-goal-go town-goal-watch", textContent: "察看 Watch the room" });
+          const inside = !!((scene.region.places.find(x => x.id === scene.placeId) || {}).parent);   // a room, or out in the street
+          const wb = Object.assign(document.createElement("button"), { type: "button", className: "town-goal-go town-goal-watch", textContent: inside ? "察看 Watch the room" : "察看 Look around" });
           wb.onclick = e => { e.stopPropagation(); scene.watchRoom(); };
           g.append(wb);
         }
