@@ -16,6 +16,30 @@ region = json.loads((ROOT / f"data/tk_maps/w{n}/region.json").read_text())
 maps = {p["id"]: json.loads((ROOT / f"data/tk_maps/w{n}/{p['map']}").read_text()) for p in region["places"] if p["id"] != "overworld"}
 q = {x["node"]: x for x in region["quests"]}
 order = [nd["key"].split("-", 1)[1] for nd in W["nodes"]]
+cuts = json.loads((ROOT / f"data/tk_maps/w{n}/cutscenes.json").read_text())["scenes"]
+
+
+def lead_end(scene):
+    """Where the scene's lead (its party's first) stands at its end: the last cut, appear or walk that moves them."""
+    sc = cuts.get(scene)
+    if not sc or not sc.get("party"):
+        return None
+    lead, at = sc["party"][0], None
+
+    def visit(beats):
+        nonlocal at
+        for b in beats:
+            for pl in b.get("place") or []:
+                if pl.get("actor") == lead:
+                    at = tuple(pl["at"])
+            if b.get("actor") == lead and b.get("path"):
+                at = tuple(b["path"][-1])
+            if b.get("beats"):
+                visit(b["beats"])
+    visit(sc["beats"])
+    return at
+
+
 def spot(mid, sid): return next((s for s in maps[mid]["spots"] if s["id"] == sid), None)
 def place_id(name): return next((p["id"] for p in region["places"] if p["id"] == name or p["name"] == name), None)
 bad = 0
@@ -33,7 +57,12 @@ for i, key in enumerate(order[:-1]):
         elif to:
             continue   # arriving by an entry ("from"): the walk from the edge
         else:
-            mid = here["place"]; s = spot(mid, here["spot"]); at, how = (s["x"], s["y"]), "where the scene played"
+            # no landing spot: the new lead is set down where the scene left the lead (in a room, scenes.py stages every
+            # scene in the middle of the floor, not at its spot): the lead's last place in the staged cutscene
+            mid = here["place"]
+            at, how = lead_end(nd["scene"]), "where the scene left the lead"
+            if at is None:
+                s = spot(mid, here["spot"]); at, how = (s["x"], s["y"]), "at the beat's spot (no cutscene)"
         if nxt["place"] != mid: continue
         t = spot(mid, nxt["spot"]); d = math.dist(at, (t["x"], t["y"]))
         flag = "  <-- under 6" if d < 6 else ""

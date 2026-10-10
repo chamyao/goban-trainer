@@ -1064,9 +1064,10 @@ def _b1():
             ],
             "One International/pt-room": [
                 {"id": "m6", "at": [8, 3], "node": k(6), "label": "The lectern"},
-                # (beats a handoff passes between, m16 -> m17 -> m18, 8+ tiles apart: the new lead has a walk)
-                {"id": "m16", "at": [3, 3], "node": k(16), "label": "The PT room"},
-                {"id": "m17", "at": [9, 3], "node": k(17), "label": "The lectern"},
+                # (a handoff with no landing spot leaves the new lead where the scene staged them, the middle of the room:
+                #  so m17 and m18, each reached that way, stand 6+ tiles from it, at the west front and by the panel)
+                {"id": "m16", "at": [6, 3], "node": k(16), "label": "The PT room"},
+                {"id": "m17", "at": [2, 3], "node": k(17), "label": "The front of the room"},
                 {"id": "m18", "at": [13, 4], "node": k(18), "label": "The interviewers' table"},
                 {"id": "pt-door", "at": [7, 8], "label": "The PT room's door", "note": "the costumed team's intern stands here before m16"}],
             "One International/textile": [
@@ -1137,7 +1138,7 @@ def _b1():
                 "An intern in a hard hat and overalls — his team's costume for their PT — stands square in the aisle. “Our turn first. "
                 "Unless you can get past me.”",
                 "“…Fine. Go on. Break a leg.”", "The intern in the hard hat is adjusting his costume.",
-                blocks="m16", view=1, map="pt-room", entry=[8, 8], guard=[7, 6]),
+                blocks="m16", view=1, map="pt-room", entry=[8, 8], guard=[7, 6]) | {"label": "An intern in a hard hat"},
         ],
         "objectives": {
             k(1): ("Korea Baduk Association", "Go to the trainees' room. This game decides everything."),

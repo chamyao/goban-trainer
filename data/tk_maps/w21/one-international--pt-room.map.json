@@ -358,17 +358,17 @@
   },
   {
    "id": "m16",
-   "x": 6.5,
+   "x": 12.5,
    "y": 6.7,
    "node": "21-m16",
    "label": "The PT room"
   },
   {
    "id": "m17",
-   "x": 18.5,
+   "x": 4.5,
    "y": 6.7,
    "node": "21-m17",
-   "label": "The lectern"
+   "label": "The front of the room"
   },
   {
    "id": "m18",
@@ -446,6 +446,7 @@
    "when": "node:21-m15",
    "blocks": "m16",
    "view": 2,
+   "label": "An intern in a hard hat",
    "challenge": "costumed",
    "guard": [
     15.0,
