@@ -54,7 +54,7 @@ def _scenes():
         # M1 · 착수0 (first half). The uncle's stones; "단수"; the neighbourhood class. The child plays the atari himself.
         "m1": {"title": T("Atari"), "kind": "main", "steps": [
             ["spawn", "un", "ms_uncle", "m1", 4, -2],
-            N("未生: not yet alive. A group on a go board that is neither alive nor dead."),
+            N("Misaeng: not yet alive. A group on a go board that is neither alive nor dead."),
             N("It started with a toy: his uncle's set of stones. The small boy couldn't leave them alone."),
             S("ms_uncle", "Go on, then. Where would you play?"),
             ["problem"],   # the child: find the atari
@@ -640,7 +640,7 @@ WORLD21 = _world()
 # Korean voice-over (the user: Korean voice, English screen). Every spoken line: N/S lines, scroll paragraphs, the
 # dilemmas' open/win/slip, and Places' map lines for w21. Close to the webtoon's own words for its key lines.
 KO21 = {
-    '未生: not yet alive. A group on a go board that is neither alive nor dead.': '미생. 아직 살아 있지 못한 자. 바둑판 위에서 살지도 죽지도 않은 돌.',
+    'Misaeng: not yet alive. A group on a go board that is neither alive nor dead.': '미생. 아직 살아 있지 못한 자. 바둑판 위에서 살지도 죽지도 않은 돌.',
     "It started with a toy: his uncle's set of stones. The small boy couldn't leave them alone.": '시작은 장난감이었다. 삼촌의 바둑돌. 꼬마는 그 돌에서 손을 떼지 못했다.',
     'Go on, then. Where would you play?': '자, 어디 둬 볼래?',
     'Atari!': '단수!',
