@@ -188,11 +188,20 @@ def _scenes_daiyu():
             N("Daiyu agrees to everything. A maid comes: dinner is served at the old lady's.", "黛玉一一的都答应着。只见一个丫鬟来回：「老太太那里传晚饭了。」"),
         ]},
 
+        # D6a · Sister Feng's door. On the passage, at the screen wall: the gate Granny Liu will go through in g5. No board.
+        "d6a": {"title": T("Sister Feng's Door", "凤姐姐的屋子"), "kind": "main", "steps": [
+            ["light", "dusk"],
+            ["spawn", "wfr", "wangfuren", "d6a", -2, 0],
+            N("Lady Wang takes her by the back way: a wide passage. To the north, a whitewashed screen wall, and behind it a half-size gate to a small courtyard. Four or five little boys stand at the gate with their hands at their sides.",
+              "王夫人忙携黛玉从后房门由后廊往西，出了角门，是一条南北宽夹道。南边是倒座三间小小的抱厦厅，北边立着一个粉油大影壁，后有一半大门，小小一所房室……这院门上也有四五个才总角的小厮，都垂手侍立。"),
+            S("wangfuren", "That's your sister Feng's rooms. Come and find her there. If there's anything you need, just tell her.",
+              "这是你凤姐姐的屋子，回来你好往这里找他来，少什么东西，你只管和他说就是了。"),
+            S("wangfuren", "Come. The old lady's waiting dinner.", "走罢，老太太那里传晚饭了。"),
+        ]},
+
         # D6 · After the meal. Three boards: the chair, the first tea, what she has read.
         "d6": {"title": T("After the Meal", "饭后茶"), "kind": "main", "steps": [
             ["spawn", "wfr", "wangfuren", "d6", -4, 0],
-            S("wangfuren", "That's your sister Feng's rooms. Come and find her there. If there's anything you need, just tell her.",
-              "这是你凤姐姐的屋子，回来你好往这里找他来，少什么东西，你只管和他说就是了。"),
             ["spawn", "jm", "jiamu", "d6", 0, -6], ["spawn", "xf", "xifeng", "d6", 4, -4], ["spawn", "lw", "liwan", "d6", 6, -4],
             N("Li Wan brings the rice, Xifeng lays the chopsticks, Lady Wang serves the soup. Her grandmother sits alone on the couch. Four empty chairs. Xifeng pulls Daiyu to the first chair on the left.",
               "贾珠之妻李氏捧饭，熙凤安箸，王夫人进羹。贾母正面榻上独坐，两边四张空椅，熙凤忙拉了黛玉在左边第一张椅上坐了。"),
@@ -513,7 +522,8 @@ def _nodes():
         node("d3", 55, 185, rong, room="jm-rooms"),
         node("d4", 75, 175, "Lady Xing's Court", room="xing-hall"),   # the black-lacquered gate, east of the main gate
         node("d5", 95, 170, rong, room="wf-rooms"),                   # Rongxi Hall's east side rooms, then the east corridor
-        node("d6", 110, 160, rong, room="jm-rooms"),                  # past Xifeng's gate to Grandmother Jia's rear rooms
+        node("d6a", 103, 165, rong, board=False),                      # on the N-S passage, before Xifeng's screen wall and gate
+        node("d6", 110, 160, rong, room="jm-rooms"),                  # Grandmother Jia's rear rooms, dinner
         node("d7", 125, 155, rong, room="jm-rooms"),
         node("d8", 140, 150, rong, room="gauze-closet", board=False),
         node("g1", 160, 140, "The Village", room="gouer-house", board=False),
@@ -528,7 +538,7 @@ def _nodes():
     ]
 
 
-_KEYS = ["d1", "d2", "d3", "d4", "d5", "d6", "d7", "d8", "g1", "g2", "g3", "g4", "g5", "g6", "g7"]
+_KEYS = ["d1", "d2", "d3", "d4", "d5", "d6a", "d6", "d7", "d8", "g1", "g2", "g3", "g4", "g5", "g6", "g7"]
 _EDGES = [[a, b] for a, b in zip(_KEYS, _KEYS[1:])]
 
 _ITEMS = {
@@ -571,6 +581,31 @@ def _world():
         "opening": _OPENING,
         "closing": [],
     }
+
+
+# Road challengers (5, none blocking), for Places: what they say when they stop you, after you beat them, and after that.
+CHALLENGERS = {
+    "steps-maid": {"walk": "d1-d3", "who": "f_maiden", "lead": "daiyu",
+        "intro": T("So you're the new cousin from Yangzhou. They say the south plays a careful game. Show me.", "你就是扬州来的林姑娘？听说南边的人下棋最仔细。下一局我瞧瞧。"),
+        "win": T("Careful, and quick too. I'll tell the others.", "又仔细，又快。我去告诉她们。"),
+        "done": T("The old lady's waiting, miss.", "老太太等着呢，姑娘。")},
+    "walk-nurse": {"walk": "d5-d6", "who": "laomama", "lead": "daiyu",
+        "intro": T("I play a game here while the mistresses talk. Sit a moment, miss. Nobody will see.", "太太们说话的工夫，我在这里摆一局。姑娘坐一坐，没人瞧见。"),
+        "win": T("Your mother played like that. She never let a stone go to waste.", "你母亲当年也是这样下的，一个子儿也不肯白丢。"),
+        "done": T("Go on, miss. Don't keep them waiting.", "去罢，姑娘，别叫她们等着。")},
+    "lion-groom": {"walk": "g2", "who": "f_villager", "lead": "grannyliu",
+        "intro": T("Hey, granny, this gate's for sedan chairs. Beat me at a game and I'll tell you which door's for you.", "老人家，这是走轿子的大门。赢我一局，我告诉你该走哪个门。"),
+        "win": T("Not bad for a country granny! The side gate, to the west. Mind the men on the bench.", "乡下老奶奶，倒有两下子！西边角门。小心板凳上那几位。"),
+        "done": T("West, granny. The side gate.", "往西，角门。")},
+    "toy-hawker": {"walk": "g3", "who": "f_villager", "lead": "grannyliu",
+        "intro": T("A toy for the little one? Win a game and he can have one for nothing.", "给小哥儿买个玩意儿？赢我一局，白送一个。"),
+        "win": T("A deal's a deal. Here, little one.", "说话算话。拿去罢，小哥儿。"),
+        "done": T("The back gate's just there.", "后门就在那儿。")},
+    "back-child": {"walk": "g3", "who": "f_child", "lead": "grannyliu",
+        "intro": T("Granny! Granny! Play me! I always win!", "老奶奶！老奶奶！跟我下！我回回赢！"),
+        "win": T("You cheated! No you didn't. Again tomorrow!", "你耍赖！……没有就没有。明儿再来！"),
+        "done": T("Which Zhou Da-niang do you want?", "你找哪个周大娘？")},
+}
 
 
 # Place and room labels (English, Chinese), for Places.
