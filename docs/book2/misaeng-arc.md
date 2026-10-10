@@ -140,7 +140,7 @@ Ahn leads 2 beats, Sun 1 and a cutaway, Oh 4 (with m3 and m23 shared). Boards: 5
 
 ## Places (shared keys for Places; agreed with Places (Misaeng) on `claude/places-misaeng`)
 
-World 16, arc `ms`, beat keys `16-m1` … `16-m24` (pending Integration's confirmation of the number). The story is its own
+World 21 (set by Integration; 16–20 stay free for Three Kingdoms), arc `ms`, beat keys `21-m1` … `21-m24`. The story is its own
 module, `tools/tk_story_misaeng.py` (`WORLD_MS`).
 
 1. **Susaek-dong**: a hillside alley of low villas; rooms `home` (his mother's room), `relatives` (the Chuseok flat); the
