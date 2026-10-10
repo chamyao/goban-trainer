@@ -1263,13 +1263,16 @@ async function viewTK(worldN) {
   if (nav !== routeSeq) return;
   // no book named (the library card): the book last played; a named one becomes the last played
   let last = 1; try { last = +localStorage.getItem("tk-book") || 1; } catch {}
-  const first = (D.worlds.find(x => TK.worldOpen(x.n)) || D.worlds[0]).n;   // the first book a player can open
+  if (TK.world(last) && TK.world(last).novel) last = 1;   // the Three Kingdoms card never opens another novel's book
+  const first = (D.worlds.find(x => !x.novel && TK.worldOpen(x.n)) || D.worlds[0]).n;   // the first book a player can open
   let n = worldN && TK.world(worldN) && TK.worldOpen(worldN) ? worldN : TK.world(last) && TK.worldOpen(last) ? last : first;
   if (worldN && worldN !== n && /^#\/tk\/\d+/.test(location.hash)) history.replaceState(null, "", `#/tk/${n}`);   // a closed book's address shows the book that opened
-  try { localStorage.setItem("tk-book", String(n)); } catch {}
   const w = TK.world(n);
+  if (!w.novel) try { localStorage.setItem("tk-book", String(n)); } catch {}
+  // another novel's book: its own title, and only its own novel's books listed beside it
+  const nv = TK_NOVELS[w.novel], title = nv ? nv.title : D.title, native = nv ? nv.native : D.native, kin = x => (x.novel || "") === (w.novel || "");
   crumbs.innerHTML = "";
-  crumbs.append(h("a", { href: "#/" }, "Library"), " / ", D.title);
+  crumbs.append(h("a", { href: "#/" }, "Library"), " / ", title);
   root.innerHTML = "";
   const levels = w.nodes.filter(x => !TK.isStart(x.key)), done = levels.filter(x => TK.cleared(x.key)).length;
   const chron = h("button", { class: "tk-chron-btn", type: "button" }, "史册 Chronicle");
@@ -1281,12 +1284,12 @@ async function viewTK(worldN) {
   voiceLabel();
   voiceBtn.onclick = () => { TKVoice.lang = { zh: "en", en: "off", off: "zh" }[TKVoice.lang]; voiceLabel(); };
   root.append(h("div", { class: "tk-head" }, [
-    h("div", {}, [h("h2", {}, [h("span", { class: "zh" }, D.native), " ", D.title]),
+    h("div", {}, [h("h2", {}, [h("span", { class: "zh" }, native), " ", title]),
       h("div", { class: "sub" }, `第${w.book || w.n}卷 Book ${w.book || w.n} · ${w.name} ${w.zh} · chapters ${w.chapters.join("–")} · ${w.grades} · ${done}/${levels.length} cleared`)]),
     h("div", { class: "tk-head-btns" }, [voiceBtn, chron]),
   ]));
   root.append(h("div", { class: "tk-worlds" }, [
-    ...D.worlds.filter(x => !x.chat && (!(x.draft || x.hidden) || TK_TEST)).map(x => TK.worldOpen(x.n)
+    ...D.worlds.filter(x => !x.chat && kin(x) && (!(x.draft || x.hidden) || TK_TEST)).map(x => TK.worldOpen(x.n)
       ? h("a", { class: "tk-world" + (x.n === n ? " on" : ""), href: `#/tk/${x.n}` }, `${x.book || x.n} · ${x.zh} ${x.name}${x.hidden ? " · 下架 off" : ""}`)
       : h("span", { class: "tk-world lock" }, `${x.n} · ${x.zh} ${x.name} — 先完成第${x.n - 1}卷 after Book ${x.n - 1}`)),
   ]));
@@ -1342,7 +1345,7 @@ async function viewTK(worldN) {
       root.querySelector(".tk-head-btns").append(h("div", { class: "tk-fb" }, [ta, h("div", { class: "tk-fb-row" }, [send, msg])]));
     }
     // the other books, once open (Book 2 after Book 1's boss)
-    for (const x of D.worlds) if (x.n !== w.n && !x.chat && TK.worldOpen(x.n))
+    for (const x of D.worlds) if (x.n !== w.n && !x.chat && kin(x) && TK.worldOpen(x.n))
       root.querySelector(".tk-head-btns").append(h("button", { class: "tk-chron-btn", type: "button", onclick: () => { location.hash = `#/tk/${x.n}`; } },
         `第${x.book || x.n}卷 Book ${x.book || x.n} · ${x.zh} ${x.name}${x.hidden ? " · 下架 off" : ""} ▸`));   // testers see which books players can't
     // The buttons live in a menu inside the game window, with the controls.
@@ -1614,7 +1617,7 @@ async function viewTKLevel(worldN, key) {
   if (!d) { location.hash = `#/tk/${worldN || 1}`; return; }
   if (!d.node.town) TK.setAt(worldN, key);
   crumbs.innerHTML = "";
-  crumbs.append(h("a", { href: "#/" }, "Library"), " / ", h("a", { href: `#/tk/${worldN}` }, `Three Kingdoms · Book ${worldN}`), ` / ${d.node.place}`);
+  crumbs.append(h("a", { href: "#/" }, "Library"), " / ", h("a", { href: `#/tk/${worldN}` }, (w => { const nv = w && TK_NOVELS[w.novel]; return `${nv ? nv.title : "Three Kingdoms"} · Book ${(w && w.book) || worldN}`; })(TK.world(worldN))), ` / ${d.node.place}`);
   root.innerHTML = "";
   tkLevelBuild(root, worldN, key, d, {
     back: () => { root.classList.add("tk-leave"); setTimeout(() => { root.classList.remove("tk-leave"); location.hash = `#/tk/${worldN}`; }, 320); },
@@ -1631,6 +1634,9 @@ const TK_SETTER_LINES = {
 TK_SETTER_LINES.starred = TK_SETTER_LINES.stargrey;
 
 const TK_REST = 30000;
+// Books from other novels (a world's "novel"): each novel has its own library card and its own book list, apart
+// from the Three Kingdoms books (which have no "novel"). live: the card shows outside test mode.
+const TK_NOVELS = { hongloumeng: { title: "Dream of the Red Chamber", native: "红楼梦", first: 31, live: false } };
 // A touch screen (a phone or tablet): tap to move and tap to talk.
 // Test mode, for trying the story without solving: open the page with ?test=1 (?test=0 ends it).
 // Problems then get a Skip key that counts as a flawless solve. It lasts the browser tab (sessionStorage):
@@ -1749,7 +1755,7 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
     win: dline("win") || (base ? base.win : ["★ 完美！", "Flawless!"]),
     slip: dline("slip") || (base ? base.slip : TK_SETTER_LINES.stargrey.slip) } : base;
   const opening = () => {
-    if (node.boss) say(node.boss.taunt_zh || "", node.boss.taunt);
+    if (node.boss && !(node.boss.dilemma_lines && lord)) say(node.boss.taunt_zh || "", node.boss.taunt);   // dilemma_lines: the lead's own lines on the board (Red Chamber g6: Xifeng wins that scene)
     else if (lord) { say(...lord.open); if (dil && dil.open_vid && TKVoice.has(dil.open_vid)) TKVoice.play(dil.open_vid); }
     else if (foe) say("请。你执黑先下。", "Your move. You play Black.");
     else say("黑先。", "Black to play.");
@@ -1796,7 +1802,7 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
       TK.markCleared(key);
       onWin();
       dlg.classList.add("win");
-      if (node.boss) say("……我竟败了！", "…Defeated? Me?", go("继续 Continue ▸", leave));
+      if (node.boss && !(node.boss.dilemma_lines && lord)) say("……我竟败了！", "…Defeated? Me?", go("继续 Continue ▸", leave));
       else if (lord) { say(...lord.win, go("继续 Continue ▸", leave)); if (dil && dil.win_vid && TKVoice.has(dil.win_vid)) TKVoice.play(dil.win_vid); }
       else if (foe) say("好棋！我认输。", "Well played. I resign.", go("继续 Continue ▸", leave));
       else say("★ 完美！", "Flawless!", go("继续 Continue ▸", leave));
