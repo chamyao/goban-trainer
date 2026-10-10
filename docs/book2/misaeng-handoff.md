@@ -47,8 +47,9 @@ Context that lives outside the briefing. Read it with `misaeng-arc.md` and Integ
 
 ## 4. Where Book 1 stands
 
-- m1–m19b are written from the comic (`misaeng-read-ep0-10.md`, `misaeng-read-ep11.md`).
-- m20–m22 (episodes 12–16) are still from fan summaries (`misaeng-research-ep0-33.md`) and need the comic.
-  The "My heroes are disappearing" memory with the newspaper clippings was cut from m19. It belongs in a later
-  episode; place it once it's found.
-- After m20–m22, tell Integration they're final.
+- m1–m22c are written from the comic: eps 0–10 (`misaeng-read-ep0-10.md`, Kakao), ep 11 (`misaeng-read-ep11.md`,
+  Kakao), eps 11–16 (`misaeng-read-ep11-16.md`, the Toomics English edition in the user's repo `chamyao/misaeng`).
+- "My heroes are fading away" is a dream in ep 12 (m19c), not a clippings memory.
+- There is no lobby-bin search: the scrap is glued to the waybill (ep 13). Places' bins spot and its line
+  ("You go through the bins by the gates…") are now unused.
+- Open: rescore B11's choices (above).

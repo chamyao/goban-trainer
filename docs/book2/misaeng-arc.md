@@ -52,8 +52,8 @@ baduk puzzle while a red-eyed section head races down a mountain. It ends with t
 internship (Ahn, Kim, Han) and the office learning it can't blame the parachute for everything.
 
 **Leads.** The child Jang (m1); Jang at eighteen (m2); Jang (most); **Ahn Young-yi** (m13: she brings the glasses
-intern back to apologise and makes both schemes live, 상생, her own stretch in the comic); **Oh** (m21); **Kim
-Bu-ryeon** (m22). Oh's establishing episode (3) and Han's scolding at Ulsan (10) are cutaways.
+intern back to apologise and makes both schemes live, 상생, her own stretch in the comic); **Oh** (m21–m21b: the scrap,
+Go's bragging, "a secret"). Jang leads m22–m22c: the comic narrates eps 15–16 through him, and the apology is his idea. Oh's establishing episode (3) and Han's scolding at Ulsan (10) are cutaways.
 
 | Key | Beat | Ep. | Lead | Place · room | Move | Board |
 |---|---|---|---|---|---|---|
@@ -78,15 +78,20 @@ Bu-ryeon** (m22). Oh's establishing episode (3) and Han's scolding at Ulsan (10)
 | m18b | **One More Chance** (cutaway): Han at Ulsan; "colder, more heartless" | 10 | — | Ulsan | 10 | — |
 | m19 | **Shrink the Boxes**: Han at Ulsan; the all-nighter; Oh on the messy document; Kim covers | 11 | Jang | sales3 | 10 | "Fix the document." |
 | m19b | **How Old Are You?**: the call from an empty meeting room; "Again?"; Jang takes the PT back; the age question | 11 | Jang | sales3 | 10 | **Record: Black 11**; "Take the PT back." |
-| m20 | **The Waybill** (fan sources) | 13 | Jang → Oh | sales3 | 13 | — |
-| m21 | **The Scrap** (fan sources) | 14 | Oh | lobby (gate: `item:waybill_scrap`) | 14 | — |
-| m22 | **Dog Meat** (fan sources) | 15–16 | Kim Bu-ryeon | textile | 14 | **Record: Black 15**; "Apologise before it grows." |
+| m19c | **The Eye of the Storm**: asleep in a meeting room; Oh and Kim size up the pair; the heroes fade (the dream); Ahn's tornado, "insight" | 12 | Jang | meeting | 12 | — (walk to the dinner) |
+| m19d | **Not an Outsider**: three penalty glasses; part of the team; "I end today's baduk" | 12 | Jang | Jongno · hof (staging: a pork-rind place in the comic) | 12 | — |
+| m20 | **The Waybill**: Kim's rule on paper; the shredding put off; Seok-ho's glue at Jang's desk; the lobby desk; the director's kick; the roof; Oh finds the scrap glued to the waybill | 13 | Jang → Oh | sales3 | 13 | — |
+| m21 | **A Secret**: Go brags; the cabinet key; Jang takes the blame; "let's drink" | 14 | **Oh** | sales3 | 14 | Oh: "Read what Go's bragging gives away." |
+| m21b | **His Own Glue**: "a secret"; Go's team in the street; "get your intern his own glue"; Seok-ho's sorry; his homecoming; Jang at the board | 14 | Oh → Jang | Jongno (street) | 14 | — |
+| m22 | **Their Own Baduk**: Incheon at dawn; Steve vs Kim Bu-ryeon, the thick report; Oh presses Go: dog meat | 15 | Jang | sales3 | 14 | **Record: Black 15** ("everyone plays their own baduk") |
+| m22b | **Dead Stones**: how it happened; "checkmate"; Jang scolded for laughing; give up the dead stone; Oh: humble with class; Kim Bu-ryeon has gone | 16 | Jang | sales3 | 16 | Jang: "Give up the dead stone." |
+| m22c | **The Obvious Move**: Kim Bu-ryeon got there first; "so the approvals will go faster?"; the dry sauna: "Don't touch me!" | 16 | Jang | textile | 16 | — |
 
-23 beats for 17 episodes; 14 boards (3 record boards), 9 beats without a board.
+29 beats for 17 episodes; 17 boards (3 record boards), 12 beats without a board. Episodes 11–16 are read from the comic (`misaeng-read-ep11.md`, `misaeng-read-ep11-16.md`).
 
 **Reordered (staging):** episode 1 (the sponsor's evening walk, the comic's present-day frame) plays after episode 2's
 flashback, inside m5, so the story runs in time order. **Invented:** the board in m2 (the comic never shows a deciding
-game); Oh searching the bins (m21); m14's three errands are ep 7's real pile-up, made into delivery spots.
+game); m14's three errands are ep 7's real pile-up, made into delivery spots.
 
 **For Places:** new rooms: `baduk-class` (Susaek-dong, a childhood baduk class), `kba-cafe` (an arcade or café near
 the KBA), `sponsor-office` (Jongno), `cafe` (Jongno, the buyer meeting), `hof` (Jongno, the interns' bar); new places:
