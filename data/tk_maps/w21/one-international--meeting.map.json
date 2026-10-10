@@ -131,13 +131,6 @@
  ],
  "spots": [
   {
-   "id": "m4b",
-   "x": 12.5,
-   "y": 10.7,
-   "node": "21-m4b",
-   "label": "A meeting room"
-  },
-  {
    "id": "lift",
    "x": 8.5,
    "y": 12.7,
@@ -157,12 +150,8 @@
      "to": "one-international--hr"
     },
     {
-     "label": "6F · Finance",
-     "to": "one-international--finance"
-    },
-    {
-     "label": "9F · The resources team",
-     "to": "one-international--resources"
+     "label": "8F · The textile team",
+     "to": "one-international--textile"
     },
     {
      "label": "14F · Sales Team 3",
@@ -173,23 +162,18 @@
      "to": "one-international--meeting"
     },
     {
-     "label": "16F · The audit room",
-     "to": "one-international--audit"
-    },
-    {
-     "label": "20F · The board room",
-     "to": "one-international--board-room"
-    },
-    {
-     "label": "21F · The executive's office",
-     "to": "one-international--exec-floor"
-    },
-    {
      "label": "R · The roof",
      "to": "one-international--roof"
     }
    ],
    "use": "lift"
+  },
+  {
+   "id": "m12",
+   "x": 12.5,
+   "y": 10.7,
+   "node": "21-m12",
+   "label": "A meeting room"
   }
  ],
  "npcs": [],
@@ -220,27 +204,11 @@
    8,
    12
   ],
-  "one-international--finance": [
-   8,
-   12
-  ],
-  "one-international--resources": [
+  "one-international--textile": [
    8,
    12
   ],
   "one-international--sales3": [
-   8,
-   12
-  ],
-  "one-international--audit": [
-   8,
-   12
-  ],
-  "one-international--board-room": [
-   8,
-   12
-  ],
-  "one-international--exec-floor": [
    8,
    12
   ],

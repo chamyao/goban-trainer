@@ -1,15 +1,15 @@
-// Misaeng (world 21): what Places built, walked in the engine.
-//   1. Jongno's carriageway is solid: walking south off the pavement stops at the kerb; at a crosswalk she crosses.
-//   2. Doors into other places ("to"): the tower's door goes into One International (the lobby); the subway stairs go
-//      down into the subway; the lift's menu goes up to Sales Team 3 and on to the board room, whose door (the stairs)
-//      comes back down to the lobby.
-//   3. Setting the board room (m17): with the drinks in the bag, each seat takes its drink (the item leaves the bag),
-//      sets its mark, and shows the drink on the table; the wrong seat says so and keeps it.
-//   4. The ₩100,000 mission (m18): the stall sells socks, a passer-by buys, the rival out-sells you, the old man and the
-//      KBA's staff member refuse; five offers end it (mark "trade").
-//   5. Things that give an item when searched (the lobby's bins: waybill_scrap, m3b's gate).
-// Run with the site served on :8765 (tests/playtest/run.sh misaeng-places). World 21 joins the on-foot list once its
-// maps are merged (WorldData.has); until then this test serves tk-world.js with 21 added.
+// Misaeng Book 1 (world 21, "Not Yet Alive"): what Places built, walked in the engine.
+//   1. The commute (m2): from home in Susaek-dong, the subway, Jongno and the tower are open (open_ways).
+//   2. Jongno's carriageway is solid: walking south off the pavement stops at the kerb; at a crosswalk she crosses.
+//      Doors into other places ("to"): the tower's door into the lobby; the lift's menu up to Sales Team 3 and on to the
+//      textile floor, whose door (the stairs) comes back down; out onto Jongno, down the subway stairs, up in Susaek-dong.
+//   3. m4's three errands: the copier, the filing cabinets and the pantry give the copies, Oh's file and the coffee;
+//      each senior's desk takes its own (and only its own) and sets its mark; with all three, m4's gate is met.
+//   4. m8: the lobby's recycling bins give the waybill scrap (a spot with "gives").
+//   5. m18: section head Oh, at his desk in Sales 3 in his socks, lends his slippers (m18's gate).
+//   6. m20: west along Jongno to Daehanmun.
+// (Book 4's board room and ₩100,000 mission get their own checks when Book 4's maps are built.)
+// Run with the site served on :8765 (tests/playtest/run.sh misaeng-places).
 const { chromium } = require(require('child_process').execSync('npm root -g').toString().trim() + '/playwright');
 const URL = process.env.PLAYTEST_URL || 'http://localhost:8765';
 let fails = 0;
@@ -93,7 +93,7 @@ async function lift(p, label, to) {
 
 async function street(b) {
   // (every place on the way visited, so the doors are tested on their own; the commute checks what's open)
-  const p = await open(b, '21-m4', 'jongno', [], ['susaek-dong', 'the-subway', 'jongno', 'one-international', 'one-international--sales3', 'one-international--board-room']);
+  const p = await open(b, '21-m4', 'jongno', [], ['susaek-dong', 'the-subway', 'jongno', 'one-international', 'one-international--sales3', 'one-international--textile']);
   const T = 16;
   // the carriageway: tile rows 32-39; the north pavement is rows 28-31; a crosswalk at tiles 20-23 (cross-w) and 72-75
   await p.evaluate(T => window.__w.player.body.reset(10.5 * T, 30 * T), T);
@@ -105,79 +105,59 @@ async function street(b) {
   // the tower's door: into One International's lobby; the lift to Sales Team 3, and back down
   check(await through(p, 'one-international'), 'the tower\'s door goes into One International (the lobby)');
   check(await lift(p, '14F · Sales Team 3', 'one-international--sales3'), 'the lobby\'s lift goes up to Sales Team 3 (its floor menu)');
-  check(await lift(p, '20F · The board room', 'one-international--board-room'), 'and from there up to the board room');
-  check(await through(p, 'one-international'), 'the board room\'s door (the stairs) comes back down to the lobby');
+  check(await lift(p, '8F · The textile team', 'one-international--textile'), 'and from there to the textile team\'s floor');
+  check(await through(p, 'one-international'), 'the textile floor\'s door (the stairs) comes back down to the lobby');
   check(await through(p, 'jongno'), 'the lobby\'s doors go out onto Jongno');
   check(await through(p, 'the-subway'), 'Jongno 3-ga Station\'s stairs go down into the subway');
   check(await through(p, 'susaek-dong'), 'the subway\'s far end comes up in Susaek-dong');
   await p.context().close();
 }
 
-async function boardRoom(b) {
-  const p = await open(b, '21-m17', 'one-international--board-room', ['seating_notes', 'water', 'green_tea', 'coffee']);
+async function errands(b) {
+  const p = await open(b, '21-m4', 'one-international--sales3');
   const at = async (id) => { await p.evaluate(id => { const w = window.__w, s = w.spots[id]; w.player.body.reset(s.x, s.y + 10); w.act({ kind: 'spot', k: id }); }, id); await advance(p); };
-  // the wrong drink first: the president's seat with only the tea in hand keeps it
-  await p.evaluate(() => TK.lsSet('tk-items', { 21: ['seating_notes', 'green_tea'] }));
-  await at('seat_president');
-  let s = await p.evaluate(() => ({ marks: WorldMarks.all(window.__w.w), items: WorldItems.owned(window.__w.w) }));
-  check(!s.marks.includes('seat_president') && s.items.includes('green_tea'), 'board room: the president\'s seat refuses the tea (still in the bag)');
-  await p.evaluate(() => TK.lsSet('tk-items', { 21: ['seating_notes', 'water', 'green_tea', 'coffee'] }));
-  for (const [seat, item] of [['seat_president', 'water'], ['seat_exec', 'green_tea'], ['seat_division', 'coffee']]) {
-    await at(seat);
-    s = await p.evaluate(([seat, item]) => ({ mark: WorldMarks.has(window.__w.w, seat), held: WorldItems.has(window.__w.w, item) }), [seat, item]);
-    check(s.mark && !s.held, `board room: ${seat} takes the ${item} out of the bag and sets its mark`);
-  }
-  // the drinks on the table, once set (tk-world's whenProps: a prop shown once its "when" holds)
-  const shown = await p.evaluate(() => (window.__w.whenProps || []).filter(o => o.img && o.img.visible).length);
-  const conds = await p.evaluate(() => window.__w.cond('mark:seat_president') && window.__w.cond('mark:seat_exec') && window.__w.cond('mark:seat_division'));
-  check(conds, 'board room: m17\'s gate (all three seats) is met');
-  check(shown === 3, `board room: the three drinks show on the table once set down (${shown})`);
-  await p.context().close();
-}
-
-async function mission(b) {
-  const p = await open(b, '21-m18', 'jongno');
-  const talk = async (label) => {
-    const ok = await p.evaluate(label => { const w = window.__w, n = w.npcs.find(n => n.id === label); if (!n) return false; w.player.body.reset(n.spr.x, n.spr.y + 14); w.act({ kind: 'npc', n }); return true; }, label);
-    await advance(p); return ok;
-  };
-  check(await p.evaluate(() => WorldModern.tradeOn(window.__w)), 'm18: the mission is on once m17 is cleared');
-  check(await talk('sock-stall') && await p.locator('.tk-shop').count() === 1, 'm18: the sock stall opens the shop');
-  for (let i = 0; i < 3; i++) await p.locator('.tk-shop button:has-text("Buy one")').first().click();
-  await p.locator('.tk-shop-close').click();
-  let s = await p.evaluate(() => WorldModern.tstate(window.__w.w));
-  check(s.cash === 40000 && s.stock.socks === 3, `m18: three lots of socks bought (cash ${s.cash}, stock ${s.stock.socks})`);
-  await talk('buyer-bus');
-  s = await p.evaluate(() => WorldModern.tstate(window.__w.w));
-  check(s.cash === 70000 && s.stock.socks === 2, `m18: the man at the bus stop buys (cash ${s.cash})`);
-  await talk('shop-owner');
-  s = await p.evaluate(() => WorldModern.tstate(window.__w.w));
-  check(s.offers === 2, `m18: the corner-shop owner out-sells you, and it counts as an offer (${s.offers})`);
-  await talk('buyer-oldman');
-  await talk('buyer-student');
-  s = await p.evaluate(() => WorldModern.tstate(window.__w.w));
-  check(s.offers === 4 && s.cash === 90000, `m18: the old man refuses, the student buys (offers ${s.offers}, cash ${s.cash})`);
-  // the fifth: the KBA's staff member, who knew him (his refusal is the rebuke)
-  check(await through(p, 'korea-baduk-association'), 'm18: west along Jongno to the Korea Baduk Association');
-  check(await through(p, 'korea-baduk-association--kba-front'), 'm18: into its front office');
-  await talk('kba-staff');
-  s = await p.evaluate(() => ({ t: WorldModern.tstate(window.__w.w), done: WorldMarks.has(window.__w.w, 'trade') }));
-  check(s.t.offers === 5 && s.done, `m18: the staff member refuses; five offers end the mission (mark "trade": ${s.done})`);
+  const st = () => p.evaluate(() => ({ items: WorldItems.owned(window.__w.w), marks: WorldMarks.all(window.__w.w) }));
+  await at('copier'); await at('filing');
+  let s = await st();
+  check(s.items.includes('copy') && s.items.includes('file'), 'm4: the copier gives the copies, the filing cabinets Oh\'s file');
+  await at('errand-coffee');   // the deputy's desk, with no coffee yet: it waits, and takes nothing
+  s = await st();
+  check(!s.marks.includes('errand_coffee') && s.items.includes('copy') && s.items.includes('file'), 'm4: the deputy\'s desk waits for its coffee and takes nothing else');
+  await at('pantry'); await at('errand-copy'); await at('errand-file'); await at('errand-coffee');
+  s = await st();
+  check(['errand_copy', 'errand_file', 'errand_coffee'].every(m => s.marks.includes(m)) && !['copy', 'file', 'coffee'].some(i => s.items.includes(i)),
+        `m4: each senior's desk takes its own errand and sets its mark (${s.marks.join(', ')})`);
+  check(await p.evaluate(() => ['errand_copy', 'errand_file', 'errand_coffee'].every(m => window.__w.cond('mark:' + m))), 'm4: its gate (the three errands) is met');
   await p.context().close();
 }
 
 async function bins(b) {
-  const p = await open(b, '21-m3b', 'one-international');
+  const p = await open(b, '21-m8', 'one-international');
   await p.evaluate(() => { const w = window.__w, s = w.spots.bins; w.player.body.reset(s.x, s.y + 10); w.act({ kind: 'spot', k: 'bins' }); });
   await advance(p);
-  const got = await p.evaluate(() => WorldItems.has(window.__w.w, 'waybill_scrap'));
-  check(got, 'the lobby\'s bins give the waybill scrap (a spot with "gives": Integration\'s engine request)');
+  check(await p.evaluate(() => WorldItems.has(window.__w.w, 'waybill_scrap')), 'm8: the lobby\'s bins give the waybill scrap (m8\'s gate)');
+  await p.context().close();
+}
+
+async function slippers(b) {
+  const p = await open(b, '21-m18', 'one-international--sales3');
+  const ok = await p.evaluate(() => { const w = window.__w, n = w.npcs.find(n => n.id === 'oh-slippers'); if (!n || !n.spr.visible) return false;
+    w.player.body.reset(n.spr.x - 16, n.spr.y + 4); w.act({ kind: 'npc', n }); return true; });
+  await advance(p);
+  check(ok && await p.evaluate(() => WorldItems.has(window.__w.w, 'slippers')), 'm18: section head Oh, at his desk, lends his slippers (m18\'s gate)');
+  await p.context().close();
+}
+
+async function daehanmun(b) {
+  const p = await open(b, '21-m20', 'jongno');
+  check(await p.evaluate(() => window.__w.placeOpen('daehanmun')), 'm20: Daehanmun is open from Jongno');
+  check(await through(p, 'daehanmun'), 'm20: west along Jongno\'s back lane to Daehanmun');
   await p.context().close();
 }
 
 (async () => {
   const b = await chromium.launch({ args: ['--use-gl=swiftshader', '--enable-webgl'] });
-  for (const t of [commute, street, boardRoom, mission, bins]) {
+  for (const t of [commute, street, errands, bins, slippers, daehanmun]) {
     try { await t(b); } catch (e) { fails++; console.log('FAIL', t.name, e.message); }
   }
   await b.close();

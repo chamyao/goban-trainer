@@ -186,6 +186,11 @@ These were each learned from a real complaint, and each is a rule, not a one-off
   alt2 can't take main's Book 15 work through it): build on their head, never on claude/plot-places. They cherry-pick: keep to plain commits (no merges); after they
   take a batch, reset the branch onto their head before the next. After a seoul kit change, recompile w21 (`--kit seoul`) on
   their head before pushing maps: the tile ids move with Graphics' sheets.
+- **A book is a config over shared places** (Misaeng's five books, `tools/tk_plans_ms.py`): the places are builders
+  with no beats in them (`_places(floors)`); each book (`_b1()` …) names the places and tower floors it uses and adds
+  its own beat spots, givers and deliveries, people, challengers, lights and objectives; `book(cfg)` assembles them and
+  drops exits to places the book doesn't use. Mechanics a later book reuses are functions (`audit_spots`,
+  `seat_spots`, `trade_people`, `RIVAL`). A new book is a new config and an arc entry (world → its plans).
 - **A lift** (Integration alt2's `"use": "lift"`, `"floors": [{label, to}]`): a spot that opens a floor menu. The tower
   has one in the lobby and one on each floor (`_with_lift`), each floor's arrivals from every other floor at its lift.
   The floors hang off the lobby by `"owns"` (a plan key: rooms reached another way, whose doors lead back to it), and

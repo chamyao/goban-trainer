@@ -120,21 +120,6 @@
  ],
  "spots": [
   {
-   "id": "m19",
-   "x": 12.5,
-   "y": 10.7,
-   "node": "21-m19",
-   "label": "The roof"
-  },
-  {
-   "id": "roof",
-   "x": 18.5,
-   "y": 8.7,
-   "node": "",
-   "label": "The roof",
-   "note": "the handoff to Ahn lands here"
-  },
-  {
    "id": "lift",
    "x": 12.5,
    "y": 4.7,
@@ -154,12 +139,8 @@
      "to": "one-international--hr"
     },
     {
-     "label": "6F · Finance",
-     "to": "one-international--finance"
-    },
-    {
-     "label": "9F · The resources team",
-     "to": "one-international--resources"
+     "label": "8F · The textile team",
+     "to": "one-international--textile"
     },
     {
      "label": "14F · Sales Team 3",
@@ -170,23 +151,26 @@
      "to": "one-international--meeting"
     },
     {
-     "label": "16F · The audit room",
-     "to": "one-international--audit"
-    },
-    {
-     "label": "20F · The board room",
-     "to": "one-international--board-room"
-    },
-    {
-     "label": "21F · The executive's office",
-     "to": "one-international--exec-floor"
-    },
-    {
      "label": "R · The roof",
      "to": "one-international--roof"
     }
    ],
    "use": "lift"
+  },
+  {
+   "id": "m10",
+   "x": 22.5,
+   "y": 10.7,
+   "node": "21-m10",
+   "label": "The smokers' corner"
+  },
+  {
+   "id": "roof",
+   "x": 18.5,
+   "y": 8.7,
+   "node": "",
+   "label": "The roof",
+   "note": "the handoff to Jang lands here"
   }
  ],
  "npcs": [],
@@ -217,11 +201,7 @@
    12,
    4
   ],
-  "one-international--finance": [
-   12,
-   4
-  ],
-  "one-international--resources": [
+  "one-international--textile": [
    12,
    4
   ],
@@ -230,18 +210,6 @@
    4
   ],
   "one-international--meeting": [
-   12,
-   4
-  ],
-  "one-international--audit": [
-   12,
-   4
-  ],
-  "one-international--board-room": [
-   12,
-   4
-  ],
-  "one-international--exec-floor": [
    12,
    4
   ]

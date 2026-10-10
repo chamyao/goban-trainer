@@ -110,40 +110,7 @@
   }
  ],
  "spots": [],
- "npcs": [
-  {
-   "id": "npc-1",
-   "kind": "folk.salaryman",
-   "x": 12.0,
-   "y": 6.35,
-   "say": [
-    "A man at the front desk. “Trainees go straight through. You know the way.”"
-   ],
-   "until": "21-21-m17",
-   "label": "The KBA's front desk"
-  },
-  {
-   "id": "kba-staff",
-   "kind": "folk.salaryman",
-   "x": 12.0,
-   "y": 6.35,
-   "say": [
-    "The man at the front desk looks up, and knows you."
-   ],
-   "until": "21-21-m18",
-   "when": "node:21-m17",
-   "label": "A KBA staff member",
-   "buyer": {
-    "wants": [
-     "socks"
-    ],
-    "pays": 0,
-    "no": [
-     "“Geu-rae? You've come here to sell? I'd buy whatever you brought. Out of pity, to encourage you, to cheer you on, any of it. Could you call that doing your job?”"
-    ]
-   }
-  }
- ],
+ "npcs": [],
  "exits": [
   {
    "to": "korea-baduk-association--kba-trainees",

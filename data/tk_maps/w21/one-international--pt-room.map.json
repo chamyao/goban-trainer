@@ -67,7 +67,7 @@
  "objects": [
   {
    "kind": "furn.projector_screen",
-   "x": 12,
+   "x": 10,
    "y": 2,
    "w": 3,
    "h": 1,
@@ -91,6 +91,14 @@
    "h": 2,
    "id": "panel",
    "label": "The interviewers' table"
+  },
+  {
+   "kind": "furn.desk",
+   "x": 2,
+   "y": 10,
+   "w": 2,
+   "h": 1,
+   "id": "row-1-5"
   },
   {
    "kind": "furn.desk",
@@ -126,6 +134,30 @@
   },
   {
    "kind": "furn.desk",
+   "x": 12,
+   "y": 10,
+   "w": 2,
+   "h": 1,
+   "id": "row-6-5"
+  },
+  {
+   "kind": "furn.desk",
+   "x": 16,
+   "y": 10,
+   "w": 2,
+   "h": 1,
+   "id": "row-8-5"
+  },
+  {
+   "kind": "furn.desk",
+   "x": 18,
+   "y": 10,
+   "w": 2,
+   "h": 1,
+   "id": "row-9-5"
+  },
+  {
+   "kind": "furn.desk",
    "x": 20,
    "y": 10,
    "w": 2,
@@ -155,6 +187,22 @@
    "w": 2,
    "h": 1,
    "id": "row-13-5"
+  },
+  {
+   "kind": "furn.desk",
+   "x": 28,
+   "y": 10,
+   "w": 2,
+   "h": 1,
+   "id": "row-14-5"
+  },
+  {
+   "kind": "furn.desk",
+   "x": 2,
+   "y": 14,
+   "w": 2,
+   "h": 1,
+   "id": "row-1-7"
   },
   {
    "kind": "furn.desk",
@@ -190,6 +238,30 @@
   },
   {
    "kind": "furn.desk",
+   "x": 12,
+   "y": 14,
+   "w": 2,
+   "h": 1,
+   "id": "row-6-7"
+  },
+  {
+   "kind": "furn.desk",
+   "x": 16,
+   "y": 14,
+   "w": 2,
+   "h": 1,
+   "id": "row-8-7"
+  },
+  {
+   "kind": "furn.desk",
+   "x": 18,
+   "y": 14,
+   "w": 2,
+   "h": 1,
+   "id": "row-9-7"
+  },
+  {
+   "kind": "furn.desk",
    "x": 20,
    "y": 14,
    "w": 2,
@@ -221,6 +293,14 @@
    "id": "row-13-7"
   },
   {
+   "kind": "furn.desk",
+   "x": 28,
+   "y": 14,
+   "w": 2,
+   "h": 1,
+   "id": "row-14-7"
+  },
+  {
    "kind": "furn.lift_door",
    "x": 10,
    "y": 16,
@@ -231,20 +311,6 @@
   }
  ],
  "spots": [
-  {
-   "id": "m6",
-   "x": 16.5,
-   "y": 6.7,
-   "node": "21-m6",
-   "label": "The lectern"
-  },
-  {
-   "id": "m7",
-   "x": 14.5,
-   "y": 6.7,
-   "node": "21-m7",
-   "label": "The PT room"
-  },
   {
    "id": "lift",
    "x": 12.5,
@@ -265,12 +331,8 @@
      "to": "one-international--hr"
     },
     {
-     "label": "6F · Finance",
-     "to": "one-international--finance"
-    },
-    {
-     "label": "9F · The resources team",
-     "to": "one-international--resources"
+     "label": "8F · The textile team",
+     "to": "one-international--textile"
     },
     {
      "label": "14F · Sales Team 3",
@@ -281,42 +343,113 @@
      "to": "one-international--meeting"
     },
     {
-     "label": "16F · The audit room",
-     "to": "one-international--audit"
-    },
-    {
-     "label": "20F · The board room",
-     "to": "one-international--board-room"
-    },
-    {
-     "label": "21F · The executive's office",
-     "to": "one-international--exec-floor"
-    },
-    {
      "label": "R · The roof",
      "to": "one-international--roof"
     }
    ],
    "use": "lift"
+  },
+  {
+   "id": "m6",
+   "x": 16.5,
+   "y": 6.7,
+   "node": "21-m6",
+   "label": "The lectern"
+  },
+  {
+   "id": "m16",
+   "x": 14.5,
+   "y": 6.7,
+   "node": "21-m16",
+   "label": "The PT room"
+  },
+  {
+   "id": "m17",
+   "x": 20.5,
+   "y": 6.7,
+   "node": "21-m17",
+   "label": "The lectern"
+  },
+  {
+   "id": "m18",
+   "x": 12.5,
+   "y": 6.7,
+   "node": "21-m18",
+   "label": "The interviewers' table"
+  },
+  {
+   "id": "pt-door",
+   "x": 14.5,
+   "y": 16.7,
+   "node": "",
+   "label": "The PT room's door",
+   "note": "the costumed team's intern stands here before m16"
   }
  ],
  "npcs": [
   {
-   "id": "npc-1",
+   "id": "nervous-1",
    "kind": "folk.salaryman",
-   "x": 8.5,
-   "y": 12.9,
-   "say": [
-    "An intern, rehearsing under his breath. “In conclusion. In conclusion…”"
-   ]
+   "x": 20.5,
+   "y": 16.9,
+   "say": [],
+   "intro": [
+    "An intern rehearsing by the door grabs your sleeve. “Quiz me. No, play me. Anything. I can't think about the PT any more.”"
+   ],
+   "win": [
+    "“…Thanks. I can breathe again.”"
+   ],
+   "done": [
+    "The intern is rehearsing under his breath."
+   ],
+   "until": "21-21-m16",
+   "when": "node:21-m14",
+   "view": 2,
+   "challenge": "nervous-1"
   },
   {
-   "id": "npc-2",
+   "id": "nervous-2",
    "kind": "folk.officewoman",
-   "x": 22.5,
+   "x": 24.5,
+   "y": 16.9,
+   "say": [],
+   "intro": [
+    "An intern with cue cards fanned like a hand of cards. “One quick game? My hands won't stop shaking.”"
+   ],
+   "win": [
+    "“Steadier. Good. Good luck in there.”"
+   ],
+   "done": [
+    "The intern is reading her cue cards again."
+   ],
+   "until": "21-21-m16",
+   "when": "node:21-m14",
+   "view": 2,
+   "challenge": "nervous-2"
+  },
+  {
+   "id": "costumed",
+   "kind": "folk.salaryman",
+   "x": 14.5,
    "y": 12.9,
-   "say": [
-    "An intern with a stack of cue cards, very pale. “Is it my turn? It's not my turn.”"
+   "say": [],
+   "intro": [
+    "An intern in a hard hat and overalls — his team's costume for their PT — stands square in the aisle. “Our turn first. Unless you can get past me.”"
+   ],
+   "win": [
+    "“…Fine. Go on. Break a leg.”"
+   ],
+   "done": [
+    "The intern in the hard hat is adjusting his costume."
+   ],
+   "until": "21-21-m16",
+   "when": "node:21-m15",
+   "blocks": "m16",
+   "view": 2,
+   "challenge": "costumed",
+   "guard": [
+    15.0,
+    13.0
    ]
   }
  ],
@@ -343,11 +476,7 @@
    12,
    16
   ],
-  "one-international--finance": [
-   12,
-   16
-  ],
-  "one-international--resources": [
+  "one-international--textile": [
    12,
    16
   ],
@@ -356,18 +485,6 @@
    16
   ],
   "one-international--meeting": [
-   12,
-   16
-  ],
-  "one-international--audit": [
-   12,
-   16
-  ],
-  "one-international--board-room": [
-   12,
-   16
-  ],
-  "one-international--exec-floor": [
    12,
    16
   ],
