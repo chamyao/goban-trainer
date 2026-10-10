@@ -866,4 +866,7 @@ KO21 = {
     "A man in a grey suit stands in the doorway with a magnetic pocket board, a problem half-solved. “Excuse me. Do you play? I've been stuck on this since Hapjeong.”": '회색 정장의 남자가 반쯤 푼 문제가 놓인 자석 포켓 바둑판을 들고 문가에 서 있다. "실례지만, 바둑 두세요? 합정부터 이것 때문에 막혀 있어서요."',
     '“…Oh. Of course. Thank you. This is my stop too.”': '"…아. 그렇구나. 고마워요. 저도 여기서 내려요."',
     'The man with the pocket board is on the next problem.': '포켓 바둑판을 든 남자는 다음 문제를 풀고 있다.',
+    "Kim Dong-sik doesn't look up from his screen.": "김동식 대리는 모니터에서 눈을 떼지 않는다.",
+    "Section head Oh is on the phone, and holds up one finger.": "오 과장은 통화 중이다. 손가락 하나를 들어 보인다.",
+    "The deputy turns his empty cup round and round.": "차장이 빈 컵을 빙글빙글 돌린다.",
 }
