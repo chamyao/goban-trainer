@@ -1,0 +1,390 @@
+[
+ {
+  "kind": "building.blackgate",
+  "status": {
+   "genshin": "stand-in: building.gate",
+   "jade": "stand-in: building.gatehouse",
+   "xianxia": "stand-in: building.gate"
+  },
+  "size": [
+   2,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "lady-xings-court",
+   "ning-rong-street"
+  ],
+  "count": 2,
+  "brief": "a mansion's gate with black-lacquered leaves (黑油大门) and brass studs under a grey tiled roof, set in a high wall; two tiles wide, the same view as the gatehouses"
+ },
+ {
+  "kind": "building.festoongate",
+  "status": {
+   "genshin": "stand-in: building.gate",
+   "jade": "stand-in: building.gatehouse",
+   "xianxia": "stand-in: building.gate"
+  },
+  "size": [
+   2,
+   2
+  ],
+  "ground": false,
+  "maps": [
+   "the-rong-mansion"
+  ],
+  "count": 1,
+  "brief": "a Chinese 'festooned gate' (垂花门) set in a whitewashed courtyard wall: a small gabled roof of grey tiles over a red-lacquered doorway, carved hanging pillars ending in painted lotus-bud pendants at the front corners, green and gold painted beams; two tiles wide, the same 3/4 view as the gatehouses, the opening walkable"
+ },
+ {
+  "kind": "building.gatehouse",
+  "status": {
+   "genshin": "stand-in: building.gate",
+   "jade": "drawn",
+   "xianxia": "stand-in: building.gate"
+  },
+  "size": [
+   2,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "lady-xings-court",
+   "ning-rong-street",
+   "the-rong-mansion"
+  ],
+  "count": 14,
+  "brief": "a compound's gatehouse: a roofed gateway in the compound wall, double doors"
+ },
+ {
+  "kind": "building.halfgate",
+  "status": {
+   "genshin": "stand-in: building.gate",
+   "jade": "stand-in: building.gatehouse",
+   "xianxia": "stand-in: building.gate"
+  },
+  "size": [
+   2,
+   2
+  ],
+  "ground": false,
+  "maps": [
+   "the-rong-mansion"
+  ],
+  "count": 1,
+  "brief": "a small plain gate in a whitewashed courtyard wall, half the height of a court gate (半大门), dark red leaves standing open, a little tiled roof; two tiles wide, walkable through"
+ },
+ {
+  "kind": "building.hall_grand",
+  "status": {
+   "genshin": "stand-in: building.hall",
+   "jade": "drawn",
+   "xianxia": "stand-in: building.hall"
+  },
+  "size": [
+   10,
+   5
+  ],
+  "ground": false,
+  "maps": [
+   "ning-rong-street",
+   "the-rong-mansion"
+  ],
+  "count": 5,
+  "brief": "a great hall of an official's residence: wide hip-and-gable roof of grey tiles, red lacquered pillars, latticed doors across the front, stone base"
+ },
+ {
+  "kind": "building.wing",
+  "status": {
+   "genshin": "stand-in: building.lodge",
+   "jade": "drawn",
+   "xianxia": "stand-in: building.lodge"
+  },
+  "size": [
+   6,
+   4
+  ],
+  "ground": false,
+  "maps": [
+   "lady-xings-court"
+  ],
+  "count": 2,
+  "brief": "a side wing of a courtyard house: long low gable roof, lattice windows, door facing the courtyard (drawn facing E, W or S as `faces` says)"
+ },
+ {
+  "kind": "furn.clock",
+  "status": {
+   "genshin": "stand-in: furn.drawers",
+   "jade": "stand-in: furn.drawers",
+   "xianxia": "stand-in: furn.drawers"
+  },
+  "size": [
+   1,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "the-rong-mansion--xf-eastroom"
+  ],
+  "count": 1,
+  "brief": "a western striking clock (自鸣钟) in a carved box hung on a red pillar, a brass pendulum weight below it; one tile wide, drawn two tiles tall, the pillar to the floor"
+ },
+ {
+  "kind": "furn.curtain",
+  "status": {
+   "genshin": "stand-in: furn.screen",
+   "jade": "stand-in: furn.screen",
+   "xianxia": "stand-in: furn.screen"
+  },
+  "size": [
+   1,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "the-rong-mansion--jm-rooms",
+   "the-rong-mansion--xf-eastroom"
+  ],
+  "count": 2,
+  "brief": "a hanging bead curtain across part of a room"
+ },
+ {
+  "kind": "furn.cushion",
+  "status": {
+   "genshin": "stand-in: furn.seat",
+   "jade": "stand-in: furn.seat",
+   "xianxia": "stand-in: furn.seat"
+  },
+  "size": [
+   1,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "the-rong-mansion--wf-rooms"
+  ],
+  "count": 1,
+  "brief": "a brocade seat cushion (锦褥), deep red with gold roundels, flat on the kang or floor; one tile"
+ },
+ {
+  "kind": "furn.gauze",
+  "status": {
+   "genshin": "stand-in: furn.screen",
+   "jade": "stand-in: furn.screen",
+   "xianxia": "stand-in: furn.screen"
+  },
+  "size": [
+   3,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "the-rong-mansion--gauze-closet"
+  ],
+  "count": 1,
+  "brief": "a partition of green gauze (碧纱橱) stretched in a carved red-lacquer frame, the bed glimpsed through it; three tiles wide, walked round, not through"
+ },
+ {
+  "kind": "furn.handwarmer",
+  "status": {
+   "genshin": "stand-in: furn.jar",
+   "jade": "stand-in: furn.jar",
+   "xianxia": "stand-in: furn.jar"
+  },
+  "size": [
+   1,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "the-rong-mansion--xf-rooms"
+  ],
+  "count": 1,
+  "brief": "a little round brass hand-warmer (手炉) with a pierced lid and a pair of tiny brass tongs on a kang table; one tile"
+ },
+ {
+  "kind": "furn.hearth",
+  "status": {
+   "genshin": "drawn",
+   "jade": "stand-in: camp.cookfire",
+   "xianxia": "drawn"
+  },
+  "size": [
+   2,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "the-village--gouer-house"
+  ],
+  "count": 1,
+  "brief": ""
+ },
+ {
+  "kind": "furn.kang",
+  "status": {
+   "genshin": "stand-in: furn.bed",
+   "jade": "stand-in: furn.bed",
+   "xianxia": "stand-in: furn.bed"
+  },
+  "size": [
+   3,
+   2
+  ],
+  "ground": false,
+  "maps": [
+   "lady-xings-court--xing-hall",
+   "the-rong-mansion--jm-rooms",
+   "the-rong-mansion--wf-rooms",
+   "the-rong-mansion--xf-eastroom",
+   "the-rong-mansion--xf-rooms",
+   "the-rong-mansion--zhou-house",
+   "the-village--gouer-house"
+  ],
+  "count": 8,
+  "brief": "a kang (炕) seen from the room: a raised platform of brick under a red felt rug, a low lacquered kang table on it with tea things, bolsters at the back; three tiles wide, two deep"
+ },
+ {
+  "kind": "furn.plaque",
+  "status": {
+   "genshin": "stand-in: furn.screen",
+   "jade": "stand-in: furn.screen",
+   "xianxia": "stand-in: furn.screen"
+  },
+  "size": [
+   3,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "the-rong-mansion--wf-rooms"
+  ],
+  "count": 1,
+  "brief": "a great horizontal plaque (匾) on the back wall: blue ground, a frame of gold dragons, three large gold characters; three tiles wide, hung high"
+ },
+ {
+  "kind": "landmark.stonelion",
+  "status": {
+   "genshin": "stand-in: rock.big",
+   "jade": "stand-in: rock.big",
+   "xianxia": "stand-in: rock.big"
+  },
+  "size": [
+   2,
+   2
+  ],
+  "ground": false,
+  "maps": [
+   "ning-rong-street"
+  ],
+  "count": 4,
+  "brief": "a great grey stone guardian lion (石狮子) crouching on a carved plinth, mouth open, one paw on a ball; two tiles square, as tall as a person and a half; a pair flanks a mansion gate"
+ },
+ {
+  "kind": "prop.bench",
+  "status": {
+   "genshin": "stand-in: furn.counter",
+   "jade": "stand-in: furn.counter",
+   "xianxia": "stand-in: furn.counter"
+  },
+  "size": [
+   4,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "ning-rong-street"
+  ],
+  "count": 1,
+  "brief": "a long plain wooden bench (大板凳) set against a wall by a gate, four tiles long"
+ },
+ {
+  "kind": "prop.birdcage",
+  "status": {
+   "genshin": "stand-in: prop.lanterns",
+   "jade": "stand-in: prop.lanterns",
+   "xianxia": "stand-in: prop.lanterns"
+  },
+  "size": [
+   1,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "the-rong-mansion"
+  ],
+  "count": 14,
+  "brief": "a round bamboo bird cage with a green parrot in it, hung from a hook; one tile, drawn at head height under the eaves of a covered walk"
+ },
+ {
+  "kind": "prop.greencart",
+  "status": {
+   "genshin": "stand-in: prop.carriage",
+   "jade": "stand-in: prop.carriage",
+   "xianxia": "stand-in: prop.carriage"
+  },
+  "size": [
+   3,
+   2
+  ],
+  "ground": false,
+  "maps": [
+   "lady-xings-court",
+   "the-rong-mansion"
+  ],
+  "count": 2,
+  "brief": "a covered carriage (翠幄青绸车): a two-wheeled cart with a green silk canopy and curtains, no horse (it is led off), shafts resting on the ground; three tiles long, two deep"
+ },
+ {
+  "kind": "prop.sedan",
+  "status": {
+   "genshin": "stand-in: prop.carriage",
+   "jade": "stand-in: prop.carriage",
+   "xianxia": "stand-in: prop.carriage"
+  },
+  "size": [
+   2,
+   2
+  ],
+  "ground": false,
+  "maps": [
+   "ning-rong-street",
+   "the-rong-mansion"
+  ],
+  "count": 5,
+  "brief": "a Qing sedan chair (轿子) set down: a box of dark wood with a curtained front and gauze side windows, a little domed roof, two long carrying poles resting on the ground; two tiles square"
+ },
+ {
+  "kind": "prop.toyload",
+  "status": {
+   "genshin": "stand-in: furn.sacks",
+   "jade": "stand-in: furn.sacks",
+   "xianxia": "stand-in: furn.sacks"
+  },
+  "size": [
+   2,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "ning-rong-street"
+  ],
+  "count": 2,
+  "brief": "a hawker's carrying pole set down with two flat baskets of toys: clay figures, little drums, paper windmills, sugar figures; two tiles wide"
+ },
+ {
+  "kind": "wall.lattice",
+  "status": {
+   "genshin": "stand-in: wall",
+   "jade": "stand-in: wall",
+   "xianxia": "stand-in: wall"
+  },
+  "size": null,
+  "ground": true,
+  "maps": [
+   "the-rong-mansion--wf-rooms"
+  ],
+  "count": 0,
+  "brief": "a lattice wall: wooden lattice panels you can see through but not walk through"
+ }
+]

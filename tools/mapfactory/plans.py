@@ -42,8 +42,10 @@ LIGHT = {("lantern", None): "night", ("day", "clear"): "morning", ("dusk", "stor
 # what a tile is made of, and whether you can walk on it (zones and lines become materials)
 WALK = {"grass": True, "dirt": True, "sand": True, "water": False, "void": False, "wall": False,
         "wood": True, "stone": True, "mat": True, "earth": True}
-IN_WALL = {"building.gate", "building.gatehouse", "building.gatetower", "building.moongate", "wall.stairs"}
+IN_WALL = {"building.gate", "building.gatehouse", "building.gatetower", "building.moongate", "wall.stairs",
+           "building.festoongate", "building.halfgate", "building.blackgate"}   # (the last three: Red Chamber's gates)
 PASSABLE = {"furn.seat", "furn.curtain", "furn.rug", "landmark.ridge", "building.gatehouse", "building.gate", "building.moongate",
+            "building.festoongate", "building.halfgate", "building.blackgate", "furn.cushion", "furn.handwarmer", "furn.gauze",
             "plant.flower", "plant.bush", "plant.grass", "plant.peony", "rock.small", "water.lotus"}
 DOOR_AT_FOOT = {"building.gatetower"}   # drawn front-on in a wall: an E/W door is at the foot of that face, by the drawn arch
 SIDE_DRAWN = {"building.wing"}   # drawn in side view when it faces E or W, its doorway on the front
@@ -205,9 +207,11 @@ class MapBuilder:
                         for t in self.p.get("things", [])):
                     gx0, gy0 = min(t[0] for t in gap), min(t[1] for t in gap)
                     gw, gh = max(t[0] for t in gap) - gx0 + 1, max(t[1] for t in gap) - gy0 + 1
-                    self.objects.append({"kind": "building.gate" if l["kind"] == "wall.city" else "building.gatehouse",
-                                         "x": gx0, "y": gy0, "w": gw, "h": gh, "id": gid, "width": max(gw, gh),
-                                         "wall": l["id"], "door": "S" if horiz else ("E" if gx >= self.cols // 2 else "W")})
+                    # a wall may name what stands in a gate (a festooned gate, a black-lacquered gate) and label it
+                    kind = (l.get("gate_kinds") or {}).get(gid) or ("building.gate" if l["kind"] == "wall.city" else "building.gatehouse")
+                    self.objects.append({"kind": kind, "x": gx0, "y": gy0, "w": gw, "h": gh, "id": gid, "width": max(gw, gh),
+                                         "wall": l["id"], "door": "S" if horiz else ("E" if gx >= self.cols // 2 else "W"),
+                                         **({"label": l["gate_labels"][gid]} if (l.get("gate_labels") or {}).get(gid) else {})})
 
     # ---------- 2. things: each footprint inside its claim, against its door ----------
     def lay_things(self):
@@ -1377,12 +1381,13 @@ def assets(maps, tables, kits_dir=None):
     return rows
 
 
-ARCS = {13: "cc", 14: "lb", 15: "ls"}   # books whose plans are an arc's: Book 13 is the Cao Cao arc, Book 14 Lü Bu's fall, Book 15 Lady Sun's marriage
+ARCS = {13: "cc", 14: "lb", 15: "ls", 31: "hlm1"}   # books whose plans are an arc's: Book 13 is the Cao Cao arc, Book 14 Lü Bu's fall,
+# Book 15 Lady Sun's marriage, Book 31 Red Chamber Book 1 (redchamber/book1/plans.py; the world number is Integration's)
 
 
 def key_prefix(plans_world):
     """The book number the plans' beat keys carry ("2-c1" for the Cao Cao arc's plans)."""
-    return {"cc": "2", "lb": "3", "ls": "4"}.get(ARCS.get(plans_world, plans_world), str(plans_world))
+    return {"cc": "2", "lb": "3", "ls": "4", "hlm1": "hl1"}.get(ARCS.get(plans_world, plans_world), str(plans_world))
 
 
 def plans_arg(v):
@@ -1410,10 +1415,27 @@ def load(plans_world):
         import tk_plans_ls as mod
         from tk_places_w2_zh import ZH_PLACES2
         return mod.PLANS_LS, mod.TABLES, ZH_PLACES2
+    if plans_world == "hlm1":   # Red Chamber, Book 1 (redchamber/book1/plans.py): beat keys "hl1-d…", "hl1-g…"
+        mod = load_redchamber("book1/plans.py")
+        return mod.PLANS_HLM1, mod.TABLES, mod.ZH_PLACES_HLM1
     if plans_world == 90:   # Talk with Claude: the study, no story
         import tk_plans_w90 as mod
         return mod.PLANS90, mod.TABLES, mod.ZH_PLACES90
     raise SystemExit(f"no plans for book {plans_world}")
+
+
+def load_redchamber(rel):
+    """A module from redchamber/ (the Red Chamber books live apart from the tk* files)."""
+    import importlib.util
+    path = ROOT / "redchamber" / rel
+    name = "redchamber_" + rel.replace("/", "_").removesuffix(".py")
+    if name in sys.modules:
+        return sys.modules[name]
+    spec = importlib.util.spec_from_file_location(name, path)
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules[name] = mod
+    spec.loader.exec_module(mod)
+    return mod
 
 
 def story_world(n, plans_world):
@@ -1430,6 +1452,8 @@ def story_world(n, plans_world):
             from tk_story_w2_new import WORLD2_LB as W
         except ImportError:
             raise SystemExit("no story yet for Lü Bu's fall (Plot's WORLD2_LB in tools/tk_story_w2_new.py)")
+    elif plans_world == "hlm1":
+        W = load_redchamber("book1/story.py").WORLD_HLM1
     elif plans_world == "ls":
         try:
             from tk_story_w2_new import WORLD2_LS as W

@@ -28,6 +28,13 @@ elif ARC == "lb":   # Lü Bu's fall (tools/tk_plans_lb.py, docs/book2/lvbu-arc.m
     from tk_plans_lb import KEYS_LB, LINE_KINDS, NEW_KINDS, PLANS_LB as PLANS2, ZONE_KINDS  # noqa: E402
 elif ARC == "ls":   # Lady Sun's marriage (tools/tk_plans_ls.py, docs/book2/ladysun-arc.md)
     from tk_plans_ls import KEYS_LS, LINE_KINDS, NEW_KINDS, PLANS_LS as PLANS2, ZONE_KINDS  # noqa: E402
+elif ARC == "hlm1":   # Red Chamber, Book 1 (redchamber/book1/plans.py, redchamber/book1/design.md)
+    import importlib.util as _ilu
+    _spec = _ilu.spec_from_file_location("redchamber_book1_plans", ROOT / "redchamber/book1/plans.py")
+    _mod = _ilu.module_from_spec(_spec)
+    sys.modules["redchamber_book1_plans"] = _mod
+    _spec.loader.exec_module(_mod)
+    KEYS_HLM1, LINE_KINDS, NEW_KINDS, PLANS2, ZONE_KINDS = _mod.KEYS_HLM1, _mod.LINE_KINDS, _mod.NEW_KINDS, _mod.PLANS_HLM1, _mod.ZONE_KINDS
 else:
     from tk_plans_w2 import LINE_KINDS, NEW_KINDS, PLANS2, ZONE_KINDS  # noqa: E402
 from vocab import FOLK, KINDS  # noqa: E402
@@ -35,8 +42,10 @@ from vocab import FOLK, KINDS  # noqa: E402
 SIDES = {"N": (0, -1), "S": (0, 1), "W": (-1, 0), "E": (1, 0)}
 OPEN_GROUND = {"court", "passage", "garden", "field", "field.wheat", "market", "camp", "plain", "loess", "stage", "floor", "ward",
                "city", "plateau"}
-PASSABLE_THINGS = {"furn.seat", "furn.curtain", "furn.rug", "landmark.ridge", "building.gatehouse", "building.gate", "building.moongate"}
-IN_WALL = {"building.gate", "building.gatehouse", "building.gatetower", "building.moongate", "wall.stairs"}   # stand in a wall: no margin
+PASSABLE_THINGS = {"furn.seat", "furn.curtain", "furn.rug", "landmark.ridge", "building.gatehouse", "building.gate", "building.moongate",
+                   "building.festoongate", "building.halfgate", "building.blackgate", "furn.cushion", "furn.handwarmer", "furn.gauze"}
+IN_WALL = {"building.gate", "building.gatehouse", "building.gatetower", "building.moongate", "wall.stairs",
+           "building.festoongate", "building.halfgate", "building.blackgate"}   # stand in a wall: no margin
 EXTRA_KINDS = {"prop.lanterns", "prop.body_lamp", "milestone", "banner", "plant.peony", "water.lotus", "tree.poplar", "tree.willow",
                "camp.gong", "camp.drum"}
 
@@ -46,6 +55,8 @@ def shared_keys():
         return set(KEYS_LB)
     if ARC == "ls":   # the design's beat table (s1 ... s14)
         return set(KEYS_LS)
+    if ARC == "hlm1":   # the story's nodes (d1 ... d8, g1 ... g7)
+        return set(KEYS_HLM1)
     if ARC == "cc":   # the "Shared keys" table: | c1 | Luoyang | ...
         text = (ROOT / "docs/book2/caocao-arc.md").read_text().split("## Shared keys")[1]
         return set(re.findall(r"^\| (c\d+) \|", text, re.M))
@@ -561,7 +572,7 @@ def main():
                                                                        for r, v in P.chase_routes.items()))
         errors += P.errors
         if "--png" in sys.argv:
-            drawn.append(draw(name, P, ROOT / ({"cc": "docs/book2/plans-cc", "lb": "docs/book2/plans-lb", "ls": "docs/book2/plans-ls"}.get(ARC, "docs/book2/plans"))))
+            drawn.append(draw(name, P, ROOT / ({"cc": "docs/book2/plans-cc", "lb": "docs/book2/plans-lb", "ls": "docs/book2/plans-ls", "hlm1": "redchamber/book1/plans-png"}.get(ARC, "docs/book2/plans"))))
     # people placed inside a compound or room map ("place": its id, "at": a cell there)
     for place, b in PLANS2.items():
         for i, n in enumerate(b.get("npcs", [])):
@@ -586,9 +597,22 @@ def main():
                             errors.append(f"{place} / {n['place']}: npc {i + 1} ({n['kind']}) behind {n['behind']}: no one can walk up to it")
                 elif not P.walkable(c) or c not in getattr(P, "reach", set()):
                     errors.append(f"{place} / {n['place']}: npc {i + 1} ({n['kind']}) at {c} stands where no one can walk to")
+    # every condition names one of the book's keys, bare ("node:d4"): the engine reads a short key as this world's, so a
+    # plans' prefix in a condition ("node:hl1-d4") never comes true
+    def conds(b):
+        for st in b.get("states", []) + [st for m in (b.get("maps") or {}).values() for st in m.get("states", [])]:
+            yield f"state {st.get('id')}", st
+        for n in b.get("npcs", []) + b.get("challengers", []):
+            yield f"{n.get('id') or n['kind']}", n
+    for place, b in PLANS2.items():
+        for who, x in conds(b):
+            for k in ("when", "until"):
+                for c in (x.get(k) if isinstance(x.get(k), list) else [x.get(k)]):
+                    if isinstance(c, str) and c.startswith("node:") and c[5:] not in keys:
+                        errors.append(f"{place}: {who} {k} {c!r}: not one of the book's keys (a condition names the bare key)")
     # every Shared key that names a Places spot should have one
-    placed = {s["node"][2:] for _, p, _ in plans() for s in p.get("spots", []) if s.get("node")}
-    placed |= {t["node"][2:] for _, p, _ in plans() for t in p.get("things", []) if t.get("node")}
+    placed = {s["node"].split("-", 1)[-1] for _, p, _ in plans() for s in p.get("spots", []) if s.get("node")}
+    placed |= {t["node"].split("-", 1)[-1] for _, p, _ in plans() for t in p.get("things", []) if t.get("node")}
     missing = sorted(keys - placed)
     for e in errors:
         print("ERROR", e)

@@ -23,6 +23,9 @@ def main():
     ap.add_argument("--rev", default="HEAD", help="what to keep (default: the last commit)")
     a = ap.parse_args()
     d = f"data/tk_maps/w{a.world}"
+    if subprocess.run(["git", "cat-file", "-e", f"{a.rev}:{d}/region.json"], cwd=ROOT, capture_output=True).returncode:
+        print(f"w{a.world}: nothing committed at {a.rev} yet; nothing to keep")   # a new world's first build
+        return
     ow = [f"{d}/overworld.map.json"] + [str(p.relative_to(ROOT)) for p in (ROOT / d).glob("*/overworld.tmj")]
     subprocess.run(["git", "checkout", a.rev, "--", *ow], cwd=ROOT, check=True)
     old = json.loads(subprocess.run(["git", "show", f"{a.rev}:{d}/region.json"], cwd=ROOT, capture_output=True, text=True, check=True).stdout)

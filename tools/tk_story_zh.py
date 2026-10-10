@@ -534,3 +534,23 @@ from tk_story_w3 import ZH3 as _ZH3, CAST3 as _CAST3  # noqa: E402
 for _k, _v in _ZH3.items():
     ZH.setdefault(_k, _v)
 CAST.update(_CAST3)
+# ---- Red Chamber Book 1 (redchamber/book1, world 31): its story's Chinese and voices, and its maps' (plans.py) ----
+import importlib.util as _ilu  # noqa: E402
+
+
+def _load_hl(rel, name):
+    if name in _sys.modules:
+        return _sys.modules[name]
+    s = _ilu.spec_from_file_location(name, _pl.Path(__file__).resolve().parent.parent / "redchamber" / rel)
+    m = _ilu.module_from_spec(s)
+    _sys.modules[name] = m
+    s.loader.exec_module(m)
+    return m
+
+
+_HLS = _load_hl("book1/story.py", "redchamber_book1_story")
+_HLP = _load_hl("book1/plans.py", "redchamber_book1_plans")
+for _k, _v in {**_HLS.ZH, **_HLS.PLACE_NAMES, **_HLP.ZH_PLACES_HLM1}.items():   # no line or id clashes with the Three Kingdoms ones
+    ZH.setdefault(_k, _v)
+for _k, _v in _HLS.CAST.items():
+    CAST.setdefault(_k, _v)
