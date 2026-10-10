@@ -285,18 +285,18 @@ def _sales3():
     copier and the pantry's coffee machine on the north wall, the filing cabinets."""
     return room([18, 12], [9, 11], floor="carpet", things=[
         {"id": "copier", "kind": "furn.copier", "rect": [2, 1, 1, 1], "label": "The copier"},
-        {"id": "cooler", "kind": "furn.water_cooler", "rect": [4, 1, 1, 1], "label": "The pantry: coffee and water"},
+        {"id": "cooler", "kind": "furn.water_cooler", "rect": [5, 1, 1, 1], "label": "The pantry: coffee and water"},
         {"id": "board-1", "kind": "furn.whiteboard", "rect": [7, 1, 1, 1], "label": "Sales Team 3's whiteboard"},
-        {"id": "filing-1", "kind": "furn.filing", "rect": [11, 1, 1, 1], "label": "The filing cabinets"},
-        {"id": "filing-2", "kind": "furn.filing", "rect": [12, 1, 1, 1]},
-        {"id": "plant-n", "kind": "furn.plant", "rect": [15, 1, 1, 1]},
+        {"id": "filing-1", "kind": "furn.filing", "rect": [13, 1, 1, 1], "label": "The filing cabinets"},
+        {"id": "filing-2", "kind": "furn.filing", "rect": [14, 1, 1, 1]},
+        {"id": "plant-n", "kind": "furn.plant", "rect": [16, 1, 1, 1]},
         # Sales Team 1: Sun Ji-young's island
         *_desks([(2, 4), (3, 4), (2, 5), (3, 5)]),
         {"id": "sun-desk", "kind": "furn.office_desk", "rect": [4, 4, 1, 2], "label": "Sun Ji-young's desk"},
         # Sales Team 3
         {"id": "desk-deputy", "kind": "furn.office_desk", "rect": [8, 4, 1, 1], "label": "The deputy's desk"},
-        {"id": "desk-kim", "kind": "furn.office_desk", "rect": [9, 4, 1, 1], "label": "Kim Dong-sik's desk"},
-        {"id": "desk-spare", "kind": "furn.office_desk", "rect": [9, 5, 1, 1]},
+        {"id": "desk-spare", "kind": "furn.office_desk", "rect": [9, 4, 1, 1]},
+        {"id": "desk-kim", "kind": "furn.office_desk", "rect": [9, 5, 1, 1], "label": "Kim Dong-sik's desk"},
         {"id": "desk-jang", "kind": "furn.office_desk", "rect": [8, 5, 1, 1], "label": "Jang's desk"},
         {"id": "oh-desk", "kind": "furn.office_desk", "rect": [10, 4, 1, 2], "label": "Oh's desk"},
         # the team east
@@ -1030,24 +1030,26 @@ def _b1():
                       "You go through the bins by the gates, sheet by sheet. Stuck to the back of a torn page: the rest of the "
                       "waybill, glue on the back, and a name on it in someone else's hand. Kim Seok-ho.",
                       "The recycling bins. You've found what you were looking for."),
-                {"id": "m8", "at": [4, 8], "node": k(8), "label": "The recycling bins"},
+                {"id": "m8", "at": [6, 8], "node": k(8), "label": "The lobby"},   # (clear of the bins it waits on)
                 {"id": "lobby-lift", "at": [LOBBY_W // 2, 3], "label": "The lifts", "note": "the handoff to Oh lands here"}],
             sales3: [
-                {"id": "m3", "at": [8, 6], "node": k(3), "label": "Jang's desk"},
-                {"id": "m4", "at": [10, 3], "node": k(4), "label": "Kim Dong-sik's desk"},
-                {"id": "m5", "at": [7, 4], "node": k(5), "label": "Sales Team 3"},
-                {"id": "m7", "at": [7, 3], "node": k(7), "label": "Sales Team 3"},
+                # (every spot you walk up to here, a beat, a giver, a delivery, at least 76 px from every other, so
+                #  that walking past one never sets off the next: Testing, round 3)
+                {"id": "m3", "at": [6, 8], "node": k(3), "label": "Jang's desk"},
+                {"id": "m4", "at": [3, 9], "node": k(4), "label": "The team's meeting table"},
+                {"id": "m5", "at": [12, 8], "node": k(5), "label": "Sales Team 3"},
+                {"id": "m7", "at": [15, 7], "node": k(7), "label": "Sales Team 3"},
                 {"id": "m13", "at": [4, 6], "node": k(13), "label": "Sun Ji-young's desk"},
-                {"id": "m15", "at": [9, 6], "node": k(15), "label": "Sales Team 3"},
+                {"id": "m15", "at": [9, 10], "node": k(15), "label": "Sales Team 3"},
                 {"id": "sales3", "at": [8, 7], "label": "Jang's desk", "note": "handoffs to Jang land here"},
                 # m4's three errands, all at once: three things to fetch, each to its senior's desk
                 _give("copier", [2, 2], "The copier", "copy", n(3), "The copier groans out Kim Dong-sik's thirty pages, warm.",
                       "The copier. You've done Kim's copies."),
-                _give("filing", [11, 2], "The filing cabinets", "file", n(3), "Third drawer down, under O: section head Oh's file.",
+                _give("filing", [13, 2], "The filing cabinets", "file", n(3), "Third drawer down, under O: section head Oh's file.",
                       "The filing cabinets. You have Oh's file."),
-                _give("pantry", [4, 2], "The pantry", "coffee", n(3), "One coffee from the machine, black, for the deputy.",
+                _give("pantry", [5, 2], "The pantry", "coffee", n(3), "One coffee from the machine, black, for the deputy.",
                       "The pantry. You have the deputy's coffee."),
-                _deliver("errand-copy", [9, 3], "Kim Dong-sik's desk", "copy", "errand_copy", n(3),
+                _deliver("errand-copy", [9, 6], "Kim Dong-sik's desk", "copy", "errand_copy", n(3),
                          "Kim Dong-sik takes the copies without looking up. “Thirty? I said thirty-two. …No, thirty. Fine.”",
                          "Kim Dong-sik taps the desk. “The copies, Jang. Today, if you can.”",
                          "Kim Dong-sik is reading the copies."),
@@ -1055,7 +1057,7 @@ def _b1():
                          "Section head Oh holds out his hand for the file, and keeps reading the one in front of him.",
                          "Section head Oh doesn't look up. “The file. I asked for it ten minutes ago.”",
                          "Oh has his file."),
-                _deliver("errand-coffee", [8, 3], "The deputy's desk", "coffee", "errand_coffee", n(3),
+                _deliver("errand-coffee", [7, 4], "The deputy's desk", "coffee", "errand_coffee", n(3),
                          "The deputy takes the coffee, sips, and winces. “Black. Right. Thanks.”",
                          "The deputy waves an empty cup at you. “Coffee? Sometime this morning?”",
                          "The deputy is drinking his coffee."),
