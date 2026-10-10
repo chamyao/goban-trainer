@@ -133,6 +133,15 @@ class _Any:
         return True
 
 
+def built_places(w):
+    """The ids and names of a world's built places (data/tk_maps/w<n>/region.json): a handoff may name a room's map,
+    as the engine finds a place by either (tk-world.js placeOf)."""
+    f = ROOT / "data" / "tk_maps" / f"w{w['n']}" / "region.json"
+    if not f.exists():
+        return set()
+    return {x for p in json.loads(f.read_text()).get("places", []) for x in (p.get("id"), p.get("name")) if x}
+
+
 def check_world(w, ZH, CAST, errors, warnings, needs=None, folk=None):
     name = f"World {w['n']}"
     en = w.get("lang") == "en"
@@ -230,7 +239,7 @@ def check_world(w, ZH, CAST, errors, warnings, needs=None, folk=None):
                     and (st[2] or {}).get("to") not in {n["key"] for n in w["nodes"]}:
                 errors.append(f"{name}: {where}: handoff to {(st[2] or {}).get('to')!r}, which is no node")
             if op == "party" and len(st) > 2 and isinstance((st[2] or {}).get("to"), dict) \
-                    and st[2]["to"].get("place") not in {n.get("place") for n in w["nodes"]}:
+                    and st[2]["to"].get("place") not in {n.get("place") for n in w["nodes"]} | built_places(w):
                 errors.append(f"{name}: {where}: handoff to place {st[2]['to'].get('place')!r}, which the story never visits")
             if op == "say" and st[1] not in CAST:
                 errors.append(f"{name}: {where}: speaker {st[1]!r} has no voice in CAST")
