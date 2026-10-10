@@ -195,6 +195,9 @@ These were each learned from a real complaint, and each is a rule, not a one-off
   has one in the lobby and one on each floor (`_with_lift`), each floor's arrivals from every other floor at its lift.
   The floors hang off the lobby by `"owns"` (a plan key: rooms reached another way, whose doors lead back to it), and
   each floor's own door is the stairs down.
+- **Walk a book against its own story.** The engine reads data/tk.json: if the story there is older than the maps
+  (items it doesn't define, beats renamed), a giver gives nothing and the walk fails for no fault of the maps. Rebuild
+  tk.json locally (`python3 tools/build_tk.py`) before the walk, and put it back after (Integration commits it).
 - **No dressing on a crosswalk** (`free()` treats it as paving).
 - **Floors are any walkable material** in vocab (`room(..., floor="carpet")`): Misaeng's carpet, office_tile, lino.
 - **A thing that gives an item when searched** is a spot with `gives`, `gives_when`, `give`, `given` (as a person has
