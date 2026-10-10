@@ -626,7 +626,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) { this.data = await (await fetch("data/tk.json?v=102")).json(); this.migrate(); }
+    if (!this.data) { this.data = await (await fetch("data/tk.json?v=104")).json(); this.migrate(); }
     return this.data;
   },
   // A book whose beats were renumbered after players began it: their cleared beats moved to the new keys, once
@@ -1148,13 +1148,16 @@ async function viewTK(worldN) {
   if (nav !== routeSeq) return;
   // no book named (the library card): the book last played; a named one becomes the last played
   let last = 1; try { last = +localStorage.getItem("tk-book") || 1; } catch {}
-  const first = (D.worlds.find(x => TK.worldOpen(x.n)) || D.worlds[0]).n;   // the first book a player can open
+  if (TK.world(last) && TK.world(last).novel) last = 1;   // the Three Kingdoms card never opens another novel's book
+  const first = (D.worlds.find(x => !x.novel && TK.worldOpen(x.n)) || D.worlds[0]).n;   // the first book a player can open
   let n = worldN && TK.world(worldN) && TK.worldOpen(worldN) ? worldN : TK.world(last) && TK.worldOpen(last) ? last : first;
   if (worldN && worldN !== n && /^#\/tk\/\d+/.test(location.hash)) history.replaceState(null, "", `#/tk/${n}`);   // a closed book's address shows the book that opened
-  try { localStorage.setItem("tk-book", String(n)); } catch {}
   const w = TK.world(n);
+  if (!w.novel) try { localStorage.setItem("tk-book", String(n)); } catch {}
+  // another novel's book: its own title, and only its own novel's books listed beside it
+  const nv = TK_NOVELS[w.novel], title = nv ? nv.title : D.title, native = nv ? nv.native : D.native, kin = x => (x.novel || "") === (w.novel || "");
   crumbs.innerHTML = "";
-  crumbs.append(h("a", { href: "#/" }, "Library"), " / ", D.title);
+  crumbs.append(h("a", { href: "#/" }, "Library"), " / ", title);
   root.innerHTML = "";
   const levels = w.nodes.filter(x => !TK.isStart(x.key)), done = levels.filter(x => TK.cleared(x.key)).length;
   const chron = h("button", { class: "tk-chron-btn", type: "button" }, "史册 Chronicle");
@@ -1166,12 +1169,12 @@ async function viewTK(worldN) {
   voiceLabel();
   voiceBtn.onclick = () => { TKVoice.lang = { zh: "en", en: "off", off: "zh" }[TKVoice.lang]; voiceLabel(); };
   root.append(h("div", { class: "tk-head" }, [
-    h("div", {}, [h("h2", {}, [h("span", { class: "zh" }, D.native), " ", D.title]),
+    h("div", {}, [h("h2", {}, [h("span", { class: "zh" }, native), " ", title]),
       h("div", { class: "sub" }, `第${w.book || w.n}卷 Book ${w.book || w.n} · ${w.name} ${w.zh} · chapters ${w.chapters.join("–")} · ${w.grades} · ${done}/${levels.length} cleared`)]),
     h("div", { class: "tk-head-btns" }, [voiceBtn, chron]),
   ]));
   root.append(h("div", { class: "tk-worlds" }, [
-    ...D.worlds.filter(x => !x.chat && (!(x.draft || x.hidden) || TK_TEST)).map(x => TK.worldOpen(x.n)
+    ...D.worlds.filter(x => !x.chat && kin(x) && (!(x.draft || x.hidden) || TK_TEST)).map(x => TK.worldOpen(x.n)
       ? h("a", { class: "tk-world" + (x.n === n ? " on" : ""), href: `#/tk/${x.n}` }, `${x.book || x.n} · ${x.zh} ${x.name}${x.hidden ? " · 下架 off" : ""}`)
       : h("span", { class: "tk-world lock" }, `${x.n} · ${x.zh} ${x.name} — 先完成第${x.n - 1}卷 after Book ${x.n - 1}`)),
   ]));
@@ -1227,7 +1230,7 @@ async function viewTK(worldN) {
       root.querySelector(".tk-head-btns").append(h("div", { class: "tk-fb" }, [ta, h("div", { class: "tk-fb-row" }, [send, msg])]));
     }
     // the other books, once open (Book 2 after Book 1's boss)
-    for (const x of D.worlds) if (x.n !== w.n && !x.chat && TK.worldOpen(x.n))
+    for (const x of D.worlds) if (x.n !== w.n && !x.chat && kin(x) && TK.worldOpen(x.n))
       root.querySelector(".tk-head-btns").append(h("button", { class: "tk-chron-btn", type: "button", onclick: () => { location.hash = `#/tk/${x.n}`; } },
         `第${x.book || x.n}卷 Book ${x.book || x.n} · ${x.zh} ${x.name}${x.hidden ? " · 下架 off" : ""} ▸`));   // testers see which books players can't
     // The buttons live in a menu inside the game window, with the controls.
@@ -1510,6 +1513,24 @@ const TK_SETTER_LINES = {
 TK_SETTER_LINES.starred = TK_SETTER_LINES.stargrey;
 
 const TK_REST = 30000;
+// A book that counts its lead's slips (a world's "tally": Red Chamber, the smiles behind a sleeve on Daiyu's first
+// day): each slip on a counted board adds one, kept per book (Start over clears it); shown as a scroll at the "at" beat.
+const TKTally = {
+  KEY: "tk-tally",
+  slip(w, key) {
+    const T = w && w.tally, short = String(key).slice(String(w && w.n).length + 1);
+    if (!T || !(T.boards || []).includes(short)) return;
+    const a = TK.ls(this.KEY); a[w.n] = (a[w.n] || 0) + 1; TK.lsSet(this.KEY, a);
+  },
+  count(w) { return TK.ls(this.KEY)[w.n] || 0; },
+  show(w) {
+    const T = w.tally, n = this.count(w), [en, zh] = n ? T.some : T.none;
+    return TKStory.scroll(T.title[0], [en.replace("{n}", n)], T.title[1], [zh.replace("{n}", n)], []);
+  },
+};
+// Books from other novels (a world's "novel"): each novel has its own library card and its own book list, apart
+// from the Three Kingdoms books (which have no "novel"). live: the card shows outside test mode.
+const TK_NOVELS = { hongloumeng: { title: "Dream of the Red Chamber", native: "红楼梦", first: 31, live: false } };
 // A touch screen (a phone or tablet): tap to move and tap to talk.
 // Test mode, for trying the story without solving: open the page with ?test=1 (?test=0 ends it).
 // Problems then get a Skip key that counts as a flawless solve. It lasts the browser tab (sessionStorage):
@@ -1681,6 +1702,7 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
       say(...(e.detail === "ok" ? [`解出了，但不算完美（${t.flawed}）。被擒了！`, `Solved, but not flawless (${t.flawed}). You're taken!`] : ["被擒了！", "You're taken!"]), go("继续 Continue ▸", leave));
     } else {
       TK.rest(key);
+      if (e.detail !== "ok") TKTally.slip(TK.world(worldN), key);   // a wrong move: a smile behind a sleeve (Red Chamber)
       dlg.classList.add("slip");
       const how = e.detail === "ok" ? [`解出了，但不算完美（${t.flawed}）。`, `Solved, but not flawless (${t.flawed}).`]
         : lord ? lord.slip

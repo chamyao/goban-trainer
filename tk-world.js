@@ -257,7 +257,7 @@ function worldScenes() {
       const { w, kit } = this.opts;
       this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=106`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=48`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=108`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=109`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
@@ -1108,6 +1108,31 @@ function worldScenes() {
       const q = this.nextMain(), c = q && ((this.w.nodes || []).find(n => n.key === q.node) || {}).cutaway;
       return q && this.available(q) && typeof c === "string" && /^told:/.test(c) && !this.cond(c) && this.npcs.some(n => n.gossip) ? c.slice(5) : null;
     }
+    // Watch the room before acting (a world's "watch": Red Chamber): while the open beat waits in this place, the goal
+    // box offers a look at the people here, one at a time, each giving the cue they have. A cue marked "wait" comes
+    // only from the second look on; a dazzled lead (Granny Liu) sees nothing on the first look but her dazzle.
+    watchCues() {
+      const q = this.nextMain(), c = q && this.w.watch && this.w.watch[q.node];
+      return c && this.available(q) && !this.gateFor(q) && this.placeIn(q.place, this.placeId) && q.place === this.placeId ? Object.assign({ node: q.node }, c) : null;
+    }
+    watchRoom() {
+      const c = this.watchCues();
+      if (!c || !this.canMove()) return;
+      this.watched = this.watched || {};
+      const n = this.watched[c.node] = (this.watched[c.node] || 0) + 1;
+      this.walk = null; this.player.setVelocity(0);
+      const looks = c.dazzled && n === 1 ? [{ line: c.dazzled }] : c.cues.filter(x => !x.wait || n > 1);
+      if (n === 1 && c.cues.some(x => x.wait) && !c.dazzled) looks.push({ line: c.more || ["n", "Nothing more, yet.", "暂时再看不出什么。", ""] });
+      const cam = this.cameras.main;
+      cam.stopFollow();
+      const next = i => {
+        if (i >= looks.length) { cam.pan(this.player.x, this.player.y, 250); this.time.delayedCall(260, () => cam.startFollow(this.player, true, .15, .15)); return; }
+        const L = looks[i], who = L.line[0] === "say" && L.line[1], npc = who && this.npcs.find(x => x.who === who && x.spr.visible);
+        if (npc) { const v = this.view(npc.spr.x, npc.spr.y); cam.pan(v.x, v.y, 300); }
+        this.time.delayedCall(npc ? 320 : 0, () => this.ui.dialog([L.line], () => next(i + 1), "chat"));
+      };
+      next(0);
+    }
     spreadNews() { const t = this.newsTarget(); if (t && this.canMove() && typeof WorldFeats !== "undefined") { this.game.registry.set("autoGo", false); this.walk = null; WorldFeats.spreadAll(this, t); } }
     // "Take me there" (the goal box's button; apo110): walk to the goal, place after place, until it's reached.
     // Any tap on the map or a key takes back control.
@@ -1572,6 +1597,7 @@ function worldScenes() {
 
     // What a won story beat leaves behind: who joined, what was given, the next goal.
     async finishQuest(q, steps) {
+      if (this.w.tally && q.node === `${this.w.n}-${this.w.tally.at}` && typeof TKTally !== "undefined") await TKTally.show(this.w);   // the day's slips counted (Red Chamber d8)
       for (const s of steps) if (s[0] === "crowd") this.st.crowd = Math.max(0, typeof s[1] === "string" ? (this.st.crowd || 0) + +s[1] : +s[1] || 0);
       for (const s of steps) if (s[0] === "party") { this.st.party = s[1]; TK.setParty(this.w, s[1]); this.ui.lead(); }
       for (const s of steps) if (s[0] === "carry") this.st.carry = s[2] ? { who: s[1], whom: s[2] } : null;   // she stays on his back after the scene (the walk to x16)

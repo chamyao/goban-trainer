@@ -666,4 +666,21 @@ ROOM_CUES = {
 }
 
 
+# Granny Liu indoors (design: her watching is dazzled): the first look at the room gives her only this; the cues come on
+# the second look. Keyed by node. The novel's: 满屋中之物都耀眼争光的，使人头悬目眩
+DAZZLED = {
+    k: N("Everything in the room glitters and shines. Her head swims.", "满屋中之物都耀眼争光的，使人头悬目眩。")
+    for k in ("g5", "g6")
+}
+
+# The tally of smiles (design: Daiyu ends the day with none). Every Part 1 board counts but the jade (d7's second, which
+# no one could read); a wrong move on one is a smile behind a sleeve. Shown at d8, the day's end. "{n}" is the count.
+TALLY = {
+    "boards": ["d2", "d3", "d4", "d5~1", "d5~2", "d5~3", "d6~1", "d6~2", "d6~3", "d7~1"],
+    "at": "d8",
+    "title": ["The Day's End", "一日已尽"],
+    "none": ["All day long, no one smiled behind a sleeve at her.", "这一日，竟没有一个人掩口笑她。"],
+    "some": ["{n} times today, someone smiled behind a sleeve.", "这一日，有{n}回，有人掩口笑她。"],
+}
+
 WORLD_HLM1 = _world()
