@@ -726,9 +726,11 @@ _LB["next"] = 15   # White Gate Tower goes on into it
 WORLDS.append(_LS)
 # ---- Misaeng (Season 1, the webtoon), world 21: a modern book, English only (tk_story_w21.py; Integration alt2) ----
 # hidden (test mode only) until its maps are built and the user publishes it
-from tk_story_w21 import WORLD21 as _MS, CAST21 as _MS_CAST  # noqa: E402
+from tk_story_w21 import WORLD21 as _MS, CAST21 as _MS_CAST, KO21 as _MS_KO  # noqa: E402
+import voice_ko as _voice_ko  # noqa: E402  (who reads the Korean voice-over: tools/voice_ko.py)
 _MS = _copy.deepcopy(_MS)
-_MS.update(cast=_MS_CAST, hidden=True, novel="misaeng", book=1, kit="seoul", open_ways=True, easy_grades=["14K", "14K+"])   # its own Library card (tk.js TK_NOVELS)
+_MS.update(cast=_MS_CAST, ko=_MS_KO, hidden=True, novel="misaeng", book=1, kit="seoul", open_ways=True, easy_grades=["14K", "14K+"])   # its own Library card (tk.js TK_NOVELS)
+_MS["cast_ko"] = _voice_ko.cast_for(_MS)   # Korean voices by scene and age (the build drops cast, ko, cast_ko from tk.json)
 WORLDS.append(_MS)
 # Books 1-3 are taken down for now (the user, 2026-10-07): kept, and still open in test mode (?test=1)
 for _w in WORLDS:
