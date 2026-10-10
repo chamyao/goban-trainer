@@ -201,6 +201,19 @@ const TK_CHARS = {
   ms_hanfather: { name: "Han Seok-yul's father", skin: "#d8a47c", hair: "#3a3236", hat: "short", robe: "#3a5a7a", trim: "#2a3a4a", legs: "#3a5a7a", beard: "stubble", eyes: "kind" },   // factory overalls
   ms_sponsor: { name: "Jang Geu-rae's sponsor", skin: "#eec7a0", hair: "#9a9a9a", hat: "parted", robe: "#3a3236", trim: "#3a3236", shirt: "#f0ece4", tie: "#6a2a3a", legs: "#2e282c", beard: "none", eyes: "kind", glasses: "#6a5a4a" },
   ms_senior: { name: "The Deputy", skin: "#ecc29a", hair: "#2a2024", hat: "messy", robe: "#dfe4ea", trim: "#2a2228", tie: "#3a4a3a", legs: "#3a3e48", beard: "none", eyes: "narrow" },   // an impatient senior, shirtsleeves
+  // Book 1 rewritten from the comic (episodes 0-16)
+  ms_jang_child: { name: "Jang Geu-rae", skin: "#f8dcc4", hair: "#1e1a1e", hat: "fringe", robe: "#d8b84a", trim: "#f4f2ec", legs: "#3a4a6a", beard: "none", eyes: "round" },   // about seven
+  ms_uncle: { name: "Jang Geu-rae's uncle", skin: "#e8c09a", hair: "#3a3236", hat: "short", robe: "#6a7a6a", trim: "#e8e0d0", legs: "#4a4a44", beard: "stubble", eyes: "kind" },
+  ms_hoyong: { name: "Kang Ho-ryong", skin: "#f2d2b0", hair: "#1a1418", hat: "messy", robe: "#2a2c34", trim: "#2a2c34", legs: "#3a4a6a", beard: "none", eyes: "narrow" },   // a young pro
+  ms_sanggi: { name: "Ahn Sang-gi", skin: "#f5d6b8", hair: "#2a2024", hat: "parted", robe: "#8aa0b8", trim: "#f4f2ec", legs: "#3a3e48", beard: "none", eyes: "kind", glasses: "#2a2228" },   // a young pro
+  ms_bujang: { name: "Department Head", skin: "#e8c09a", hair: "#7a7276", hat: "slick", robe: "#4a4238", trim: "#4a4238", shirt: "#f0ece4", tie: "#2e4a6a", legs: "#3a342c", beard: "none", eyes: "narrow", fat: true },
+  ms_ohwife: { name: "Oh Sang-sik's wife", skin: "#f2d2b0", hair: "#2a2024", hat: "ponytail", robe: "#c88a6a", trim: "#f4ece0", legs: "#4a4a5a", beard: "none", eyes: "kind" },
+  ms_ohson: { name: "Oh Sang-sik's son", skin: "#f8dcc4", hair: "#241e22", hat: "messy", robe: "#3a8ad8", trim: "#f4f2ec", legs: "#4a4a5a", beard: "none", eyes: "round" },
+  ms_kangsil: { name: "Manager Kang", skin: "#efc59d", hair: "#1a1416", hat: "parted", robe: "#b8956a", trim: "#b8956a", shirt: "#eef0f2", tie: "#3a3a42", legs: "#3a3a42", beard: "none", eyes: "narrow", glasses: "#2a2228" },   // a camel coat
+  ms_glasses: { name: "Glasses Intern", skin: "#f0cfac", hair: "#2a2024", hat: "parted", robe: "#2e3444", trim: "#2e3444", shirt: "#eef0f2", tie: "#8a6a2a", legs: "#262a36", beard: "thin", eyes: "narrow", glasses: "#2a2228" },   // a moustache
+  ms_amhead: { name: "Americas Team Head", skin: "#e2b089", hair: "#2a2024", hat: "short", robe: "#3a3e4a", trim: "#3a3e4a", shirt: "#f0f2f4", tie: "#c8382a", legs: "#2e323c", beard: "none", eyes: "round", fat: true },   // loud
+  ms_ulsan: { name: "Ulsan Department Head", skin: "#d8a47c", hair: "#5a5256", hat: "cap", hatC: "#f4f2ec", pin: "#f4f2ec", robe: "#3a5a7a", trim: "#2a2228", legs: "#3a4250", beard: "none", eyes: "narrow" },   // a site jacket and a white hard hat
+  ms_teacher: { name: "Jang Geu-rae's teacher", skin: "#eec7a0", hair: "#9a9a9a", hat: "short", robe: "#6a5a4a", trim: "#e8e0d0", legs: "#4a443c", beard: "short", beardC: "#9a9a9a", eyes: "kind" },   // the dojang teacher
   ms_examiner: { name: "Examiner", skin: "#e8c4a0", hair: "#5a5256", hat: "parted", robe: "#2a2e38", trim: "#2a2e38", shirt: "#f4f4f4", tie: "#3a3a4a", legs: "#24272f", beard: "none", eyes: "narrow", glasses: "#2a2228" },   // the PT panelist (m6, m7) and the KBA proctor (m1)
   ms_clerk: { name: "Baekjin clerk", skin: "#ecc29a", hair: "#2a2024", hat: "short", robe: "#5a6a7a", trim: "#2a2228", tie: "#3a3a4a", legs: "#3a3e48", beard: "none", eyes: "narrow" },
   ms_worker: { name: "Office worker", skin: "#f0cfac", hair: "#2a2024", hat: "parted", robe: "#3a3e4a", trim: "#3a3e4a", shirt: "#eef0f2", tie: "#6a4a3a", legs: "#30333c", beard: "none", eyes: "normal" },

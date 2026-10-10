@@ -234,6 +234,36 @@ def somi_drawing():   # Somi's crayon drawing: a woman seen from behind, a sun, 
     return g.outline().image()
 
 
+def _phone(g, x, y, screen):   # a smartphone, its screen in a colour
+    g.rect(x, y, 8, 14, "#1c1c20"); g.rect(x + 1, y + 1, 6, 11, screen); g.set(x + 3, y + 12, "#5a5e66")
+
+
+def cafe_address():   # a phone message: a phone showing a map pin and an address line
+    g = Grid(12, 16)
+    _phone(g, 2, 1, "#e8f0f8")
+    g.ellipse(6, 5, 1.6, 1.6, "#d8382a"); g.set(6, 7, "#d8382a")
+    g.rect(4, 9, 4, 1, INK); g.rect(4, 11, 3, 1, LINE)
+    return g.outline().image()
+
+
+def requisition():   # a requisition form: boxes, ticks, a signature line, a stamp
+    g = Grid(14, 16)
+    _sheet(g, 1, 1, 12, 14, lines=False)
+    g.rect(3, 2, 8, 1, "#2e4a6a")
+    for y in (5, 8):
+        g.rect(3, y, 2, 2, LINE); g.rect(6, y, 5, 1, LINE)
+    g.set(3, 5, "#2e8a5a"); g.set(4, 6, "#2e8a5a")
+    g.rect(3, 12, 5, 1, INK); g.ellipse(10, 12, 1.4, 1.4, RED)
+    return g.outline().image()
+
+
+def phone_text():   # a phone showing a text message: two chat bubbles
+    g = Grid(12, 16)
+    _phone(g, 2, 1, "#f4f2ec")
+    g.rect(3, 3, 4, 2, "#e8e4dc"); g.rect(5, 6, 4, 2, "#f4d84a"); g.rect(3, 9, 5, 2, "#e8e4dc")
+    return g.outline().image()
+
+
 # the board room's setup (m17): placeable props
 def tray():   # a lacquer tray with two cups and a carafe
     g = Grid(16, 10)
@@ -284,6 +314,7 @@ ITEMS = {
     "james_park": james_park, "water": lambda: water(), "green_tea": green_tea, "coffee": lambda: cup(),
     # Book 1
     "copy": copies, "file": ring_file, "notebook": notebooks, "somi_drawing": somi_drawing,
+    "cafe_address": cafe_address, "requisition": requisition, "phone_text": phone_text,
 }
 KINDS = {"ms_tray": tray, "ms_pens": pens, "ms_cup": cup, "ms_water": water, "ms_pocketboard": pocket_board}
 

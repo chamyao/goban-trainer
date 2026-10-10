@@ -258,6 +258,29 @@ CAST.update({
                    "glasses, in a dark suit and a wine-red tie"),
     "ms_senior": ("the deputy", "an impatient Korean office worker in his late thirties with untidy hair, in a white "
                   "shirt with rolled sleeves and a dark green tie"),
+    "ms_jang_child": ("young Jang Geu-rae", "a small, serious Korean boy of about seven with a black fringe, in a yellow "
+                      "T-shirt and shorts"),
+    "ms_uncle": ("Jang's uncle", "a warm, rough-mannered Korean man in his forties with short hair and stubble, in a "
+                 "faded green work jacket"),
+    "ms_hoyong": ("Kang Ho-ryong", "a cocky young Korean go professional of about twenty with messy black hair, in a "
+                  "black jacket"),
+    "ms_sanggi": ("Ahn Sang-gi", "a gentle young Korean go professional of about twenty with neat hair and glasses, in a "
+                  "pale blue sweater"),
+    "ms_bujang": ("the department head", "a heavy-set, self-satisfied Korean department head in his fifties with "
+                  "slicked-back greying hair, in a brown suit and a navy tie, a golf bag over his shoulder"),
+    "ms_ohwife": ("Oh's wife", "a tired, kind Korean woman in her late thirties with her hair tied back, in a terracotta "
+                  "cardigan"),
+    "ms_ohson": ("Oh's son", "a lively Korean boy of about six with messy black hair, in a blue T-shirt"),
+    "ms_kangsil": ("Manager Kang", "a sharp Korean manager in his forties with side-parted hair and glasses, in a camel "
+                   "overcoat over a dark suit"),
+    "ms_glasses": ("the glasses intern", "a smug young Korean intern with side-parted hair, glasses and a thin "
+                   "moustache, in a navy suit and a mustard tie"),
+    "ms_amhead": ("the Americas team head", "a loud, heavy-set Korean team head in his late forties with short hair, "
+                  "in a grey suit and a red tie, mid-shout"),
+    "ms_ulsan": ("the Ulsan department head", "a hard-faced Korean site manager in his fifties with greying short hair, "
+                 "in a navy site jacket and a white hard hat"),
+    "ms_teacher": ("Jang's teacher", "a calm old Korean go teacher in his sixties with grey hair and a short grey beard, "
+                   "in a brown cardigan"),
     "ms_examiner": ("the examiner", "a reserved Korean man in his fifties with greying side-parted hair and glasses, in "
                     "a dark suit and a plain grey tie, holding a clipboard"),
     "ms_ahnfather": ("Ahn's father", "a cold, stern Korean army officer in his fifties with short black hair, in an "
