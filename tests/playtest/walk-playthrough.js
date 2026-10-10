@@ -264,7 +264,9 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       const q = S.nextMain(), g = q && S.gateFor && S.gateFor(q); if (!g || ![].concat(g.needs || []).includes('mark:' + w.audit.done) || S.cond('mark:' + w.audit.done)) return false;
       return typeof WorldModern !== 'undefined' && WorldModern.auditOpen(w); });
     if (auditWait && !auditTried.has(beat)) { auditTried.add(beat); console.log(`     ${beat}: gated on the audit board; opening it from the bag`);
-      const bag = p.locator('button', { hasText: /Bag/ }).filter({ hasNot: p.locator('.tk-bag') }).first(); await bag[TAPM]({ timeout: 2000 }).catch(() => {}); await p.waitForTimeout(400);
+      // the Bag sits in the Menu's dropdown: open the Menu, then the Bag
+      if (!(await p.evaluate(() => [...document.querySelectorAll('button')].some(b => /Bag/.test(b.textContent) && b.offsetParent)))) { await p.locator('.tk-menu-btn', { hasText: 'Menu' }).first()[TAPM]({ timeout: 2000 }).catch(() => {}); await p.waitForTimeout(400); }
+      const bag = p.locator('button.tk-chron-btn', { hasText: /Bag/ }).first(); await bag[TAPM]({ timeout: 2000 }).catch(() => {}); await p.waitForTimeout(400);
       if (await p.locator('.tk-bag-audit').count()) await tapEl('.tk-bag-audit'); else { console.log(`note ${beat}: the bag showed no audit board; following the goal to the beat's spot (where the board opens)`); await p.keyboard.press('Escape'); }
       await p.waitForTimeout(500); continue; }
     // the audit board (Misaeng, tk-modern.js): tap the two clues that answer the question showing, as a player who reads them does;
