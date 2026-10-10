@@ -345,7 +345,7 @@ def _scenes():
             ["still", "ms_chuseok", "slow zoom in"],
             S("ms_jang", "Don't forget it. I'm my mother's pride. Not a son who falls short."),
             ["remove", "mo"],
-            ["party", ["ms_oh"], {"to": {"place": "the pizza shop", "from": "Jongno"}}],   # (staging) the lead passes to Oh; his own errand, after the holiday
+            ["party", ["ms_oh"], {"to": {"place": "The pizza shop", "from": "Jongno"}}],   # (staging) the lead passes to Oh; his own errand, after the holiday
         ]},
 
         # M16 · 71-83수. Cheon Gwan-ung arrives (told). Kim Dong-su's pizza shop; the envelope.
@@ -613,7 +613,7 @@ def _nodes():
              ]),
         node("m14", 235, 135, "m14", room="exec-floor", move=68, board=False),
         node("m15", 250, 128, "m15", place="Susaek-dong", room="relatives", move=70, board=False),
-        node("m16", 265, 120, "m16", place="the pizza shop", move=83, dilemma=D(
+        node("m16", 265, 120, "m16", place="The pizza shop", move=83, dilemma=D(
             "ms_oh", "Turn down an old friend.",
             "He was my senior. He taught me this job. And he's holding out an envelope.",
             "I hand it back.",
@@ -663,7 +663,7 @@ def _nodes():
         ]),
         node("m23", 375, 68, "m23", room="sales3", move=143, board=False),
         node("m23b", 382, 64, "m23b", place="Jongno", room="forecourt", move=144, board=False),
-        node("m24", 395, 58, "m24", place="the new office", move=144, record=145, dilemma=D(
+        node("m24", 395, 58, "m24", place="The new office", move=144, record=145, dilemma=D(
             "ms_jang", "Find Cho Hunhyun's move.",
             "One more move. The centre.",
             "Black 145. Nie Weiping resigns.",
