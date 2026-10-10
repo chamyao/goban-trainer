@@ -295,7 +295,7 @@
    "same": "city"
   },
   "court": {
-   "same": "city"
+   "same": "roof"
   },
   "ward": {
    "same": "city"
@@ -484,6 +484,18 @@
     ]
    ]
   },
+  "asphalt": {
+   "same": "traffic"
+  },
+  "carpet": {
+   "same": "mat"
+  },
+  "office_tile": {
+   "same": "lobby"
+  },
+  "lino": {
+   "same": "wood"
+  },
   "floor": {
    "same": "stone"
   }
@@ -663,11 +675,11 @@
   ],
   "furniture.gotable": [
    [
-    "drawn",
-    40,
-    0,
-    22,
-    14
+    "seoul",
+    496,
+    457,
+    16,
+    18
    ]
   ],
   "building.moongate": [
@@ -870,7 +882,7 @@
   "furn.table": [
    [
     "seoul",
-    51,
+    68,
     484,
     32,
     16
@@ -879,7 +891,7 @@
   "furn.desk": [
    [
     "seoul",
-    84,
+    101,
     484,
     32,
     16
@@ -897,7 +909,7 @@
   "furn.stool": [
    [
     "seoul",
-    216,
+    284,
     484,
     16,
     12
@@ -1753,8 +1765,8 @@
   "furn.chair": [
    [
     "seoul",
-    496,
-    457,
+    0,
+    484,
     16,
     16
    ]
@@ -1798,7 +1810,7 @@
   "furn.go_board": [
    [
     "seoul",
-    0,
+    17,
     484,
     16,
     16
@@ -1807,7 +1819,7 @@
   "furn.kid_mat": [
    [
     "seoul",
-    183,
+    251,
     484,
     32,
     14
@@ -1834,7 +1846,7 @@
   "furn.low_table": [
    [
     "seoul",
-    150,
+    218,
     484,
     32,
     14
@@ -1888,14 +1900,14 @@
   "furn.plastic_table": [
    [
     "seoul",
-    17,
+    34,
     484,
     16,
     16
    ],
    [
     "seoul",
-    34,
+    51,
     484,
     16,
     16
@@ -2012,7 +2024,7 @@
   "prop.bench": [
    [
     "seoul",
-    117,
+    185,
     484,
     32,
     14
@@ -2057,6 +2069,24 @@
     26
    ]
   ],
+  "prop.coffee_cup": [
+   [
+    "seoul",
+    168,
+    484,
+    16,
+    16
+   ]
+  ],
+  "prop.glass_water": [
+   [
+    "seoul",
+    134,
+    484,
+    16,
+    16
+   ]
+  ],
   "prop.scooter": [
    [
     "seoul",
@@ -2064,6 +2094,15 @@
     457,
     16,
     18
+   ]
+  ],
+  "prop.teacup": [
+   [
+    "seoul",
+    151,
+    484,
+    16,
+    16
    ]
   ],
   "prop.vending": [

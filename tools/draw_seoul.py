@@ -80,6 +80,18 @@ def pavement(v):   # Seoul's pavement: grey-beige block paving, staggered
     return g.image()
 
 
+def pavers(v):   # the walked street: red and grey brick pavers in a herringbone of rows
+    g = Grid(T, T)
+    g.rect(0, 0, T, T, "#a86a5a")
+    for y in range(0, T, 4):
+        g.rect(0, y, T, 1, "#8a5448")
+        off = 0 if (y // 4 + v) % 2 == 0 else 4
+        for x in range(off, T, 8):
+            g.rect(x, y, 1, 4, "#8a5448")
+    _specks(g, ["#b87a6a", "#9a8a84"], 15 + v, 8)
+    return g.image()
+
+
 def asphalt(v, base="#4a4c52"):
     g = Grid(T, T)
     g.rect(0, 0, T, T, base)
@@ -844,6 +856,41 @@ def desk():   # a plain desk (the old kind, modernised)
     return img(g)
 
 
+def gotable():   # Tapgol Park's stone go table: a granite slab on a pedestal, the grid cut into it, two stone stools
+    g = Grid(T, 18)
+    g.ellipse(2, 15, 2, 1.5, "#a8a8a4"); g.ellipse(14, 15, 2, 1.5, "#a8a8a4")
+    box(g, 2, 2, 12, 9, 3, "#c8c8c4", "#9a9a96")
+    for i in range(4, 13, 2):
+        g.rect(i, 3, 1, 7, "#8a8a86")
+    for j in range(4, 11, 2):
+        g.rect(3, j, 10, 1, "#8a8a86")
+    g.rect(6, 14, 4, 4, "#9a9a96")
+    g.set(5, 4, "#1c1418"); g.set(9, 6, "#f4f2ec"); g.set(7, 8, "#1c1418")
+    return img(g)
+
+
+def glass_water():   # a glass of water on a coaster (small: it stands on a table top)
+    g = Grid(T, T)
+    g.ellipse(8, 13, 4, 1.5, "#8a6a4a")
+    g.rect(6, 5, 5, 8, "#c8e4f4"); g.rect(6, 5, 5, 1, "#e8f4fc"); g.rect(7, 8, 3, 4, "#a8d0ec"); g.set(7, 6, "#ffffff")
+    return img(g)
+
+
+def teacup():   # a white teacup of green tea on its saucer
+    g = Grid(T, T)
+    g.ellipse(8, 13, 5, 1.6, "#f4f2ec")
+    g.rect(5, 8, 7, 5, "#f4f2ec"); g.rect(5, 8, 7, 1, "#8ab05a"); g.rect(12, 9, 2, 2, "#f4f2ec")
+    return img(g)
+
+
+def coffee_cup():   # a coffee cup on its saucer
+    g = Grid(T, T)
+    g.ellipse(8, 13, 5, 1.6, "#f4f2ec")
+    g.rect(5, 7, 7, 6, "#f4f2ec"); g.rect(5, 7, 7, 1, "#5a3a22"); g.rect(12, 8, 2, 3, "#f4f2ec")
+    g.set(7, 5, "#d8d4cc"); g.set(9, 4, "#d8d4cc")
+    return img(g)
+
+
 def mat():   # a rug
     g = Grid(2 * T, 2 * T)
     g.rect(1, 6, 30, 20, "#8a5a5a"); g.rect(3, 8, 26, 16, "#a87070"); g.rect(5, 10, 22, 12, "#8a5a5a")
@@ -872,11 +919,13 @@ PIECES = {
     "furn.kid_mat": kid_mat, "furn.subway_seat": subway_seat,
     # old kinds the Misaeng plans use, redrawn modern for this kit
     "lamp.post": streetlight, "furn.plant": plant, "furn.window": window, "furn.counter": counter, "furn.table": table,
-    "furn.stool": stool, "furn.shelf": shelf, "furn.desk": desk, "furn.mat": mat,
+    "furn.stool": stool, "furn.shelf": shelf, "furn.desk": desk, "furn.mat": mat, "furniture.gotable": gotable,
+    # m17's drinks, small on a table top
+    "prop.glass_water": glass_water, "prop.teacup": teacup, "prop.coffee_cup": coffee_cup,
 }
 
 TILES = {
-    "city": [pavement(0), pavement(1)], "road": [asphalt(0, "#5a5c62"), asphalt(1, "#5a5c62")],
+    "city": [pavement(0), pavement(1)], "road": [pavers(0), pavers(1)],
     "traffic": [asphalt(0), asphalt(1)], "crosswalk": [crosswalk(0), crosswalk(1)],
     "barrier": [barrier(0), barrier(1)], "parapet": [parapet(0), parapet(1)], "roof": [roof(0), roof(1)],
     "stone": [office_tile(0), office_tile(1)], "mat": [carpet(0), carpet(1)], "wood": [laminate(0), laminate(1)],
@@ -884,7 +933,7 @@ TILES = {
     "limestone": [limestone(0), limestone(1)],
 }
 # grounds that are another's tiles here: the old names Places' plans use, in their modern form
-SAME = {"court": "city", "ward": "city", "passage": "city", "path": "city", "camp": "city", "market": "city",
+SAME = {"court": "roof", "asphalt": "traffic", "carpet": "mat", "office_tile": "lobby", "lino": "wood", "ward": "city", "passage": "city", "path": "city", "camp": "city", "market": "city",
         "plain": "grass", "garden": "grass", "field": "grass", "stage": "wood", "curtain": "wood", "dirt": "city",
         "sand": "city", "floor": "stone"}
 
