@@ -493,7 +493,9 @@ function worldScenes() {
         // indoors a story starts as you come in (the room is the scene); outdoors only spots marked
         // "arrive" do, the rest wait for you to walk up. Not when you're put back where you were.
         // (a compound, a whole residence with courts and a garden, is walked like outdoors: to the pavilion past the maids)
-        const indoor = this.place.archetype !== "compound" && !!(this.place.parent || this.place.archetype === "interior");
+        // (a world with "walk_up", Misaeng: indoors too, a scene waits for you to walk up to it; the user: "sometimes the
+        // scene triggers before I get to walk to the destination")
+        const indoor = !this.w.walk_up && this.place.archetype !== "compound" && !!(this.place.parent || this.place.archetype === "interior");
         const s = Object.values(this.spots).find(s => (s.trigger === "arrive" || (indoor && !pos && s.trigger !== "talk")) && this.openQuest(s));
         if (s && !this.ui.busy() && !this.leaving && !this.cine) this.playQuest(this.openQuest(s), s);
         else if (typeof TKTable !== "undefined") TKTable.arrived(this);   // back from signing in at the go table
@@ -631,6 +633,8 @@ function worldScenes() {
         const d = Math.hypot(P.x - s.x, P.y - s.y);
         if (d > WORLD_NEAR + 16) s.armed = true;
         else if (s.armAt && Math.hypot(P.x - s.armAt.x, P.y - s.armAt.y) > 28) { s.armed = true; s.armAt = null; }
+        // a world with "walk_up" (Misaeng): while a tapped walk is under way, its scenes wait for the walk's end
+        else if (d < WORLD_NEAR && s.armed && this.walk && this.w.walk_up) continue;
         else if (d < WORLD_NEAR && s.armed) {
           // a thing with something to find in it (the lobby's bins): walking up to it is searching it
           if (s.gives && this.cond(s.givesWhen) && !WorldItems.has(this.w, s.gives) && this.w.items && this.w.items[s.gives]) {
