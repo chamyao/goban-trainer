@@ -6,8 +6,8 @@
 //      Sales Team 3 (14F) and the textile team (8F), whose door (the stairs) comes back down; out onto Jongno, down the
 //      subway stairs, up in Susaek-dong.
 //   3. m11's gate: Kim's requisition, handed to the clerk at General Affairs' counter.
-//   4. m14's three errands: the copier gives the copies, handed to Kim Dong-sik at his desk; the team phone and the
-//      floor are done where they are (set down); with all three, m14's gate is met.
+//   4. m14's three errands: the copier gives the copies, handed to Kim Dong-sik at his desk; the forwarder call at the
+//      team phone; the cleaning cupboard's mop taken to the spill ("wipe this floor"); with all three, m14's gate is met.
 //   5. m21: the lobby's recycling bins give the waybill scrap (a spot with "gives").
 //   6. m5: episode 1's evening on Jongno: its townsfolk are out in the evening, gone by day.
 // Run with the site served on :8765 (tests/playtest/run.sh misaeng-places).
@@ -141,10 +141,14 @@ async function errands(b) {
   check(!(await st(p)).marks.includes('errand_copy'), 'm14: Kim waits for the copies');
   await at(p, 'copier');
   check((await st(p)).items.includes('copy'), 'm14: the copier gives the copies');
+  await at(p, 'errand-floor');   // no mop yet: the spill waits
+  check(!(await st(p)).marks.includes('errand_floor'), 'm14: the spill needs the mop');
+  await at(p, 'mop-cupboard');
+  check((await st(p)).items.includes('mop'), 'm14: the cleaning cupboard gives the mop');
   await to(p, 'kim-errand'); await at(p, 'errand-bl'); await at(p, 'errand-floor');
   const s = await st(p);
-  check(['errand_copy', 'errand_bl', 'errand_floor'].every(m => s.marks.includes(m)) && !s.items.includes('copy'),
-        `m14: the copies handed to Kim, the phone call and the floor done (${s.marks.join(', ')})`);
+  check(['errand_copy', 'errand_bl', 'errand_floor'].every(m => s.marks.includes(m)) && !s.items.includes('copy') && !s.items.includes('mop'),
+        `m14: the copies handed to Kim, the phone call made, the floor mopped (${s.marks.join(', ')})`);
   check(await p.evaluate(() => ['errand_copy', 'errand_bl', 'errand_floor'].every(m => window.__w.cond('mark:' + m))), 'm14: its gate (the three errands) is met');
   await p.context().close();
 }

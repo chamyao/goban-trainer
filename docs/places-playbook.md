@@ -214,6 +214,8 @@ These were each learned from a real complaint, and each is a rule, not a one-off
   with no landing spot leaves the new lead there, not at the beat's spot: the next beat in that room keeps 6+ tiles
   from the room's middle (the proof reads the lead's last place in the staged cutscene).
 - **No dressing on a crosswalk** (`free()` treats it as paving).
+- **A giver's item must be in the story's items** (Plot's `ITEMS` in the story file): the engine gives nothing it
+  doesn't know, silently. A new item for a map chore (Misaeng's mop) goes to Plot with its name.
 - **A person's `until` is a node key, with or without its world**: `"until": "node:m5"` and `"node:21-m5"` both
   compile to `21-m5` (once; before, a key already carrying its world came out `21-21-m5`, and the person never left).
 - **Floors are any walkable material** in vocab (`room(..., floor="carpet")`): Misaeng's carpet, office_tile, lino.

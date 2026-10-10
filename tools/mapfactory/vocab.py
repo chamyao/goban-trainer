@@ -336,6 +336,8 @@ KINDS.update({
     "building.palace_gate": (6, 3, False),   # Daehanmun: a palace gate standing in its wall's gap, walked through
     "furn.cloth_bolts": (2, 1, True),        # bolts of cloth on a rack (the textile floor)
     "prop.machine": (4, 2, True),            # a plant's machine (Ulsan)
+    "furn.cleaning_cupboard": (1, 1, True),  # a cleaning cupboard: mop and bucket (Sales 3)
+    "prop.spill": (1, 1, False),             # a coffee spill on the carpet, walked over
 })
 FALLBACK.update({
     "building.office_tower": ["building.tower", "building.hall_grand", "building.hall"],
@@ -395,6 +397,8 @@ FALLBACK.update({
     "building.palace_gate": ["building.gatehouse", "building.gate"],
     "furn.cloth_bolts": ["furn.shelf"],
     "prop.machine": ["furn.copier", "camp.table"],
+    "furn.cleaning_cupboard": ["furn.filing", "furn.drawers"],
+    "prop.spill": ["ruin.rubble"],
 })
 MATERIALS.update({"asphalt": False,     # a carriageway: crossed only at a crosswalk
                   "crosswalk": True,
