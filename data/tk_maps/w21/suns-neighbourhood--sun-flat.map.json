@@ -1,0 +1,141 @@
+{
+ "format": "tk-map/1",
+ "id": "suns-neighbourhood--sun-flat",
+ "world": 21,
+ "name": "Sun Ji-young's flat",
+ "archetype": "interior",
+ "size": [
+  24,
+  16
+ ],
+ "seed": 2847,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "lino",
+   " ": "void",
+   "W": "wall"
+  },
+  "rows": [
+   "                        ",
+   " WWWWWWWWWWWWWWWWWWWWWW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WWWWWWWWWWWaaWWWWWWWWW ",
+   "                        "
+  ],
+  "walk": {
+   "lino": true,
+   "void": false,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    12,
+    8
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     6,
+     7
+    ]
+   },
+   "tiles": 68
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.tv",
+   "x": 4,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "tv"
+  },
+  {
+   "kind": "furn.sofa",
+   "x": 4,
+   "y": 6,
+   "w": 2,
+   "h": 1,
+   "id": "sofa"
+  },
+  {
+   "kind": "furn.table",
+   "x": 16,
+   "y": 6,
+   "w": 2,
+   "h": 1,
+   "id": "table",
+   "label": "The kitchen table"
+  },
+  {
+   "kind": "furn.wardrobe",
+   "x": 20,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "wardrobe"
+  },
+  {
+   "kind": "furn.toy_shelf",
+   "x": 10,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "toys"
+  }
+ ],
+ "spots": [
+  {
+   "id": "m20",
+   "x": 12.5,
+   "y": 10.7,
+   "node": "21-m20",
+   "label": "Sun Ji-young's flat"
+  }
+ ],
+ "npcs": [],
+ "exits": [
+  {
+   "to": "suns-neighbourhood",
+   "side": "S",
+   "x": 12,
+   "y": 14,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "suns-neighbourhood": [
+   12,
+   13
+  ],
+  "": [
+   12,
+   13
+  ]
+ },
+ "parent": "suns-neighbourhood",
+ "building": "sun-flat",
+ "links": [
+  "suns-neighbourhood"
+ ]
+}

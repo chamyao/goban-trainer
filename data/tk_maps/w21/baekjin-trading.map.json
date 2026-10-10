@@ -1,0 +1,374 @@
+{
+ "format": "tk-map/1",
+ "id": "baekjin-trading",
+ "world": 21,
+ "name": "Baekjin Trading",
+ "archetype": "city",
+ "size": [
+  64,
+  32
+ ],
+ "seed": 1660,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "city",
+   "b": "road"
+  },
+  "rows": [
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  ],
+  "walk": {
+   "city": true,
+   "road": true
+  }
+ },
+ "lines": [
+  {
+   "id": "street",
+   "kind": "road",
+   "path": [
+    [
+     0,
+     5
+    ],
+    [
+     15,
+     5
+    ]
+   ],
+   "width": 3,
+   "tiles": 256
+  }
+ ],
+ "objects": [
+  {
+   "kind": "building.office_block",
+   "x": 37,
+   "y": 16,
+   "w": 6,
+   "h": 3,
+   "id": "baekjin",
+   "door": "S",
+   "faces": "S",
+   "label": "Baekjin Trading",
+   "map": "baekjin",
+   "plaque": "백진무역",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.office_block",
+   "x": 9,
+   "y": 16,
+   "w": 6,
+   "h": 3,
+   "id": "block-1",
+   "door": "S",
+   "faces": "S",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.office_block",
+   "x": 21,
+   "y": 16,
+   "w": 6,
+   "h": 3,
+   "id": "block-2",
+   "door": "S",
+   "faces": "S",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.office_block",
+   "x": 49,
+   "y": 16,
+   "w": 6,
+   "h": 3,
+   "id": "block-3",
+   "door": "S",
+   "faces": "S",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.storefront",
+   "x": 14,
+   "y": 25,
+   "w": 4,
+   "h": 2,
+   "id": "shop-1",
+   "door": "N",
+   "faces": "N",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.storefront",
+   "x": 42,
+   "y": 25,
+   "w": 4,
+   "h": 2,
+   "id": "shop-2",
+   "door": "N",
+   "faces": "N",
+   "blocks_sight": true
+  },
+  {
+   "kind": "prop.scooter",
+   "x": 0,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "prop.scooter",
+   "x": 5,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "prop.scooter",
+   "x": 12,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "prop.scooter",
+   "x": 17,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "prop.scooter",
+   "x": 24,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "prop.scooter",
+   "x": 29,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "prop.scooter",
+   "x": 36,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "prop.scooter",
+   "x": 48,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "prop.scooter",
+   "x": 60,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 8,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 21,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 32,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 37,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 40,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 45,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 56,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 61,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "spots": [],
+ "npcs": [
+  {
+   "id": "clerk",
+   "kind": "folk.salaryman",
+   "x": 37.5,
+   "y": 21.9,
+   "say": [],
+   "intro": [
+    "A clerk steps out of Baekjin's door as you come up. “Sales Team 3? Mr Park said you might come. Everything's in order. There's nothing to see.”"
+   ],
+   "win": [
+    "“…Go in, then. It's not my business.”"
+   ],
+   "done": [
+    "The clerk has gone back to his desk."
+   ],
+   "until": "21-21-m12",
+   "when": "node:21-m11",
+   "blocks": "baekjin",
+   "view": 4,
+   "challenge": "clerk",
+   "guard": [
+    40.5,
+    19.5
+   ]
+  },
+  {
+   "id": "courier",
+   "kind": "folk.salaryman",
+   "x": 17.5,
+   "y": 21.9,
+   "say": [],
+   "intro": [
+    "A courier sits on his scooter, a board balanced on the box. “Ten minutes till my next drop. One game?”"
+   ],
+   "win": [
+    "“Ha! Good one.”"
+   ],
+   "done": [
+    "The courier has gone."
+   ],
+   "until": "21-21-m12",
+   "when": "node:21-m11",
+   "view": 4,
+   "challenge": "courier"
+  }
+ ],
+ "exits": [
+  {
+   "to": "baekjin-trading--baekjin",
+   "side": "N",
+   "x": 39.6,
+   "y": 18.85,
+   "w": 0.8,
+   "h": 0.75,
+   "door": true
+  },
+  {
+   "to": "jongno",
+   "side": "W",
+   "x": 0,
+   "y": 20,
+   "w": 1,
+   "h": 4
+  }
+ ],
+ "entries": {
+  "baekjin-trading--baekjin": [
+   40,
+   19
+  ],
+  "jongno": [
+   5,
+   21
+  ],
+  "": [
+   5,
+   21
+  ]
+ },
+ "states": [
+  {
+   "id": "day",
+   "light": "day"
+  }
+ ],
+ "ways": {
+  "nodes": [
+   [
+    2.0,
+    22.0
+   ],
+   [
+    62.0,
+    22.0
+   ]
+  ],
+  "edges": [
+   [
+    0,
+    1
+   ]
+  ]
+ },
+ "links": [
+  "baekjin-trading--baekjin",
+  "jongno"
+ ]
+}

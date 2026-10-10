@@ -142,7 +142,8 @@ class MapBuilder:
     # ---------- 1. ground and lines ----------
     def lay_ground(self):
         if self.room:   # inside a room: its floor
-            floor = {"wood": "wood", "stone": "stone", "mat": "mat", "earth": "earth"}.get(self.p.get("floor", "stone"), "stone")
+            from vocab import MATERIALS   # any walkable floor the vocabulary knows (Misaeng's carpet, office tile, lino)
+            floor = self.p.get("floor", "stone") if MATERIALS.get(self.p.get("floor", "stone")) else "stone"
         for z in self.p.get("ground", []):
             kind = z["kind"]
             m = floor if (self.room and kind == "floor") else kind
@@ -242,7 +243,7 @@ class MapBuilder:
             if kind.startswith("building."):
                 o["door"] = door
                 o["faces"] = t.get("faces") or (door if door in SIDES else "S")
-            for k in ("label", "note", "map", "open_to", "refuse", "gives", "when", "until", "window", "plaque"):
+            for k in ("label", "note", "map", "to", "open_to", "refuse", "gives", "when", "until", "window", "plaque"):
                 if t.get(k) is not None:
                     o[k] = t[k]
             if t.get("doors"):
@@ -519,7 +520,8 @@ class MapBuilder:
             spot = {"id": s["id"], "x": t[0] + .5, "y": t[1] + .7, "node": s.get("node", ""), "label": s.get("label", "")}
             for k in ("trigger", "note", "on", "sight", "cover", "fires",   # cover: a place to hide; fires: starts itself
                       "needs", "delivers", "when", "empty", "waiting", "deliver", "delivered", "call",   # a place that delivers a mark
-                      "takes", "opens", "floors", "use"):   # Misaeng (tk-modern.js): delivering takes the thing; the audit board; a lift and its floors
+                      "takes", "opens", "floors", "use",   # Misaeng (tk-modern.js): delivering takes the thing; the audit board; a lift and its floors
+                      "gives", "gives_when", "give", "given"):   # a thing that gives an item when searched (the bins, a table)
                 if s.get(k):
                     spot[k] = s[k]
             self.spots.append(spot)
@@ -1076,6 +1078,9 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
         for t in P.get("things", []):
             if t.get("map"):
                 owner[f"{pid}--{t['map']}"] = pid
+        for e in P.get("exits", []):   # a place that is itself a room may open into its own rooms (the tower's lifts)
+            if e["to"] in (b.get("maps") or {}) and f"{pid}--{e['to']}" not in owner:
+                owner[f"{pid}--{e['to']}"] = pid
         for mid, m in (b.get("maps") or {}).items():
             for t in m.get("things", []):
                 if t.get("map"):
@@ -1158,8 +1163,9 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
         pid = m.get("parent") or mid_
         # a door into a compound or room: press against it, as furnish_place does
         for o in m["objects"]:
-            if o.get("map"):
-                child = f"{pid}--{o['map']}"
+            if o.get("map") or o.get("to"):
+                # a door into a room of this place ("map"), or into another place ("to": the subway's stairs, a tower)
+                child = f"{pid}--{o['map']}" if o.get("map") else map_of(pid, o["to"])
                 if child not in maps:
                     continue
                 d = o.get("enter") or o.get("door") or "S"
@@ -1379,12 +1385,12 @@ def assets(maps, tables, kits_dir=None):
     return rows
 
 
-ARCS = {13: "cc", 14: "lb", 15: "ls"}   # books whose plans are an arc's: Book 13 is the Cao Cao arc, Book 14 Lü Bu's fall, Book 15 Lady Sun's marriage
+ARCS = {13: "cc", 14: "lb", 15: "ls", 21: "ms"}   # books whose plans are an arc's: Book 13 is the Cao Cao arc, Book 14 Lü Bu's fall, Book 15 Lady Sun's marriage, Book 21 Misaeng
 
 
 def key_prefix(plans_world):
     """The book number the plans' beat keys carry ("2-c1" for the Cao Cao arc's plans)."""
-    return {"cc": "2", "lb": "3", "ls": "4"}.get(ARCS.get(plans_world, plans_world), str(plans_world))
+    return {"cc": "2", "lb": "3", "ls": "4", "ms": "21"}.get(ARCS.get(plans_world, plans_world), str(plans_world))
 
 
 def plans_arg(v):
@@ -1412,6 +1418,9 @@ def load(plans_world):
         import tk_plans_ls as mod
         from tk_places_w2_zh import ZH_PLACES2
         return mod.PLANS_LS, mod.TABLES, ZH_PLACES2
+    if plans_world == "ms":   # Misaeng (Season 1): beat keys "21-m…", English only (no Chinese table)
+        import tk_plans_ms as mod
+        return mod.PLANS_MS, mod.TABLES, mod.ZH_PLACES_MS
     if plans_world == 90:   # Talk with Claude: the study, no story
         import tk_plans_w90 as mod
         return mod.PLANS90, mod.TABLES, mod.ZH_PLACES90
@@ -1437,6 +1446,11 @@ def story_world(n, plans_world):
             from tk_story_w2_new import WORLD2_LS as W
         except ImportError:
             raise SystemExit("no story yet for Lady Sun's marriage (Plot's WORLD2_LS in tools/tk_story_w2_new.py)")
+    elif plans_world == "ms":
+        try:
+            from tk_story_w21 import WORLD21 as W   # Misaeng: its own module, English only
+        except ImportError:
+            raise SystemExit("no story yet for Misaeng (Plot alt2's WORLD21 in tools/tk_story_w21.py)")
     else:
         raise SystemExit(f"no story for book {plans_world}")
     return {**W, "nodes": [{**nd, "key": f"{n}-{nd['key']}"} for nd in W["nodes"]],

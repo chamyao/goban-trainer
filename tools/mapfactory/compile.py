@@ -422,6 +422,7 @@ def compile_map(m, kit, out_dir):
             **({"flip": True} if draw_kind == side and faces == "W" else {}),
             **({"plaque": o["plaque"]} if o.get("plaque") else {}),   # a name board over its gate (tk-world draws it)
             **({"told": o["told"]} if o.get("told") else {}),   # the loud town: shown once that person has the news (red hangings)
+            **({"when": o["when"]} if o.get("when") and o["kind"].startswith("prop.") else {}),   # shown once its condition holds (Misaeng's drinks: "mark:seat_president")
             **({"lift": o["lift"]} if o.get("lift") else {}),   # px to draw it higher than its foot (which sets its depth)
             **walls.get(id(o), {}))
     runs = []
@@ -459,7 +460,8 @@ def compile_map(m, kit, out_dir):
             **({"needs": json.dumps(s["needs"] if isinstance(s["needs"], list) else [s["needs"]])} if s.get("needs") else {}),
             **({"sight": json.dumps(s["sight"])} if s.get("sight") else {}),
             **({"floors": json.dumps(s["floors"])} if s.get("floors") else {}),   # a lift's floors: [{label, to}] (tk-modern.js)
-            **{k: s[k] for k in ("delivers", "when", "fires", "takes", "opens") if s.get(k)},
+            **{k: s[k] for k in ("delivers", "when", "fires", "takes", "opens", "gives", "gives_when") if s.get(k)},
+            **{k: json.dumps([place_step(l)[0] for l in s[k]], ensure_ascii=False) for k in ("give", "given") if s.get(k)},
             **{k: json.dumps([place_step(l)[0] for l in s[k]], ensure_ascii=False) for k in ("empty", "waiting", "deliver", "delivered", "call") if s.get(k)},
             **{k: json.dumps([place_step(l)[0] for l in s[k]], ensure_ascii=False) for k in ("intro", "outro") if s.get(k)})
     for n in m["npcs"]:

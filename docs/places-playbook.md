@@ -47,9 +47,13 @@ Where each book's places are:
 | 14 (Lü Bu) | `tools/tk_plans_lb.py` | `--world 14 --plans lb` | `tools/proofs/hide_ward_lb.py` | the burning ward, Xiapi |
 | 15 (Lady Sun) | `tools/tk_plans_ls.py` | `--world 15 --plans 15` | `tools/proofs/ladysun_ls.py` | design: `docs/book2/ladysun-places.md`; engine walk: `tests/playtest/book15-places.js` |
 | 90 (Claude's study) | `tools/tk_plans_w90.py` | `plans.py --world 90 --out data/tk_maps/w90` | — | one room |
+| 21 (Misaeng) | `tools/tk_plans_ms.py` | `--world 21 --plans ms` | checker; build proofs; engine walk: `tests/playtest/misaeng-places.js` | English only; modern Seoul. Its own family of sessions: Places (Misaeng) on `claude/places-misaeng`, Plot alt2 (`claude/plot-alt2`, story `tools/tk_story_w21.py`), Integration alt2 (`claude/integration-alt2`, which merges it; engine keys `docs/book2/misaeng-engine.md`), Graphics (Misaeng). Talk to them, not to main Integration |
 
 A new arc is registered in `plans.py`: `ARCS` (book → arc name), `key_prefix` (the beat keys' book number: Book 15's
 keys are `4-s1`…), `load()` (its module), and in `check_plans_w2.py` (`--arc`).
+
+Beat keys may carry a prefix of any length: Misaeng's are `21-m1`…, the world itself, so `key_prefix` equals the world
+and nothing is renamed (the checker splits on the first `-`; it used to drop two characters).
 
 ## The pipeline
 
@@ -162,6 +166,29 @@ These were each learned from a real complaint, and each is a rule, not a one-off
   doesn't tell a player to hide there.
 - **Every way in is a cover** on a map whose watchers hunt by sight (`entry_covers`). A catch before the first hide
   sends her back to where she came in, so that place must be one she can wait in.
+- **A door into another place** (`"to": <place>` on a thing, instead of `"map"`). Its door is an exit to that place's
+  map, and coming back you land on its doorstep. Misaeng's subway stairs and the One International tower use it: the
+  tower is a place of its own (its plan is the lobby room), entered from Jongno's street.
+- **A place that is a room opens into its own rooms** by exits in its plan (`"to": <map id>`): those rooms' doors lead
+  back to it. The tower's lobby has one lift per floor this way (the floors are its `maps`).
+- **No north doors on modern buildings.** An entered building with a north door gets the gatehouse drawn at that door
+  (the rule above). On a Seoul street that's wrong, so Misaeng's entered buildings face S, E or W.
+- **A carriageway is `asphalt` ground**: never walked, solid in the game, crossed only by a `crosswalk` line; cars are
+  things on it (dressing can't go on unwalkable ground, since `free()` needs walkable tiles).
+- **English-only worlds** (`"lang": "en"` on the story's world): compile and build_tk look the world up by number and
+  give its lines no Chinese (`build_tk.english`, Integration alt2's). Write map lines in English only; no Chinese table
+  (`ZH_PLACES_MS = {}`).
+- **Floors are any walkable material** in vocab (`room(..., floor="carpet")`): Misaeng's carpet, office_tile, lino.
+- **A thing that gives an item when searched** is a spot with `gives`, `gives_when`, `give`, `given` (as a person has
+  them): the lobby's bins (the waybill scrap). The factory and compile carry them; the engine's side is Integration's.
+- **A prop shown on a condition**: `"when": "mark:…"` on a `prop.*` (the board room's drinks, set `over` their stretch of
+  table). Compile writes it; the engine draws it once the condition holds (Integration's side).
+- **A handoff lands only in the map it names** (`{"place", "spot"}` looks the spot up in that one map). To land a lead
+  in a room, Plot names the room's map id (`one-international--sales3`); the spot is in the room.
+- **A place is walked to only once it's open** (tk-world `placeOpen`: it holds an available or finished beat, was
+  visited, or is a road between two that are). A place with no beat of its own between home and the next beat (the
+  subway, Jongno at m2) stays shut unless it's a road or a room of a place that is open. Check the first walk of a
+  book in the engine (`misaeng-places.js` "commute"), not just its doors.
 - **Margins.** A thing sits inside its claim with a margin (1 tile in towns). In-wall kinds (gates, the wall stairs)
   have none, and a plan may set `margin` per thing.
 
@@ -315,11 +342,14 @@ python3 tools/check_plans_w2.py --arc cc --png      # the Cao Cao arc (Book 13),
 python3 tools/check_plans_w2.py --arc lb --png      # Lü Bu's fall (Book 14), previews in docs/book2/plans-lb/
 python3 tools/check_plans_w2.py --arc ls --png      # Lady Sun's marriage (Book 15), previews in docs/book2/plans-ls/
 python3 tools/proofs/ladysun_ls.py                  # Book 15: the temple's side rooms, both face-downs, the loud town
+python3 tools/check_plans_w2.py --arc ms --png      # Misaeng (Book 21), previews in docs/book2/plans-ms/
 python3 -m tools.mapfactory all --world 15 --plans 15 --kit xianxia --kit jade --kit genshin   # build, compile, stage in one
 python3 tools/mapfactory/keep_drift.py --world 15   # then undo the drift
 tools/mapfactory/build_with_story.sh 15 15 origin/claude/plot   # against Plot's story before it's on main
 python3 tools/mapfactory/settle_maps.py             # settle wanderers in built (frozen) maps
 tests/playtest/run.sh book15-places                 # Book 15's mechanics, walked in the engine
+tests/playtest/run.sh misaeng-places                # Misaeng: kerb and crosswalks, doors to other places, the lifts,
+                                                    # the board room's seats, the ₩100,000 mission, the commute
 python3 tools/mapfactory build --world 12 --plans 2
 python3 tools/mapfactory build --world 13 --plans cc          # CHASE_VERBOSE=1 prints the chase proof
 for k in xianxia jade genshin; do python3 tools/mapfactory compile --world 13 --kit $k; done

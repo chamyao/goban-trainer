@@ -183,6 +183,10 @@ python3 tools/art_sheet.py kinds /tmp/k.png jade KIND ...
   `building.house` set alight, and `banner.white` and `banner.black` are its red banner recoloured.
 - **Generated buildings:** `tools/gen_pixel.py --set <set>` (Retro Diffusion), then pick tries in
   `tools/build_b2_buildings.py` `PICKS`. Rockeries and ridges came back as whole scenes, so they were drawn in code.
+- **The Seoul kit** (Misaeng's modern book) is its own kit, `assets/tk/kits/seoul.json`, written by
+  `tools/draw_seoul.py`: a copy of jade with modern grounds, plaster walls, every Misaeng kind (Places' `KINDS.update`
+  in vocab.py; briefs in `tools/tk_plans_ms.py` ART) and folk drawn from `ms_*` looks. Add a piece to its `PIECES`
+  (a list gives variants) and rerun; the Han kits are untouched.
 - **The shrine** (`tools/pine_rock.py`) is a stone monkey statue in three states, in each kit's own rock colours.
 
 ## Handing work to Integration

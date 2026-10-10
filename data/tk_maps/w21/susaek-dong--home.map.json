@@ -1,0 +1,143 @@
+{
+ "format": "tk-map/1",
+ "id": "susaek-dong--home",
+ "world": 21,
+ "name": "Jang's home",
+ "archetype": "interior",
+ "size": [
+  20,
+  14
+ ],
+ "seed": 1692,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "lino",
+   " ": "void",
+   "W": "wall"
+  },
+  "rows": [
+   "                    ",
+   " WWWWWWWWWWWWWWWWWW ",
+   " WaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaW ",
+   " WWWWWWWWWaaWWWWWWW ",
+   "                    "
+  ],
+  "walk": {
+   "lino": true,
+   "void": false,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    10,
+    7
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     5,
+     6
+    ]
+   },
+   "tiles": 56
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.wardrobe",
+   "x": 2,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "wardrobe"
+  },
+  {
+   "kind": "furn.mat",
+   "x": 4,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "mat"
+  },
+  {
+   "kind": "furn.tv",
+   "x": 14,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "tv"
+  },
+  {
+   "kind": "furn.low_table",
+   "x": 10,
+   "y": 6,
+   "w": 2,
+   "h": 1,
+   "id": "table",
+   "label": "The low table"
+  },
+  {
+   "kind": "furn.go_board",
+   "x": 16,
+   "y": 8,
+   "w": 1,
+   "h": 1,
+   "id": "goban",
+   "label": "His old go board"
+  }
+ ],
+ "spots": [],
+ "npcs": [
+  {
+   "id": "npc-1",
+   "kind": "folk.ajumma",
+   "x": 12.5,
+   "y": 6.9,
+   "say": [
+    "His mother looks up from the ironing. “Eat something before you go.”"
+   ],
+   "label": "His mother"
+  }
+ ],
+ "exits": [
+  {
+   "to": "susaek-dong",
+   "side": "S",
+   "x": 10,
+   "y": 12,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "susaek-dong": [
+   10,
+   11
+  ],
+  "": [
+   10,
+   11
+  ]
+ },
+ "parent": "susaek-dong",
+ "building": "home",
+ "links": [
+  "susaek-dong"
+ ]
+}

@@ -1,0 +1,285 @@
+{
+ "format": "tk-map/1",
+ "id": "one-international--pt-room",
+ "world": 21,
+ "name": "The PT room",
+ "archetype": "interior",
+ "size": [
+  32,
+  20
+ ],
+ "seed": 2631,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "carpet",
+   " ": "void",
+   "W": "wall"
+  },
+  "rows": [
+   "                                ",
+   " WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WWWWWWWWWWWWWWWaaWWWWWWWWWWWWW ",
+   "                                "
+  ],
+  "walk": {
+   "carpet": true,
+   "void": false,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    16,
+    10
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     8,
+     9
+    ]
+   },
+   "tiles": 92
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.projector_screen",
+   "x": 12,
+   "y": 2,
+   "w": 3,
+   "h": 1,
+   "id": "screen",
+   "label": "The screen"
+  },
+  {
+   "kind": "furn.lectern",
+   "x": 18,
+   "y": 4,
+   "w": 1,
+   "h": 1,
+   "id": "lectern",
+   "label": "The lectern"
+  },
+  {
+   "kind": "furn.meeting_table",
+   "x": 24,
+   "y": 4,
+   "w": 4,
+   "h": 2,
+   "id": "panel",
+   "label": "The interviewers' table"
+  },
+  {
+   "kind": "furn.desk",
+   "x": 4,
+   "y": 10,
+   "w": 2,
+   "h": 1,
+   "id": "row-2-5"
+  },
+  {
+   "kind": "furn.desk",
+   "x": 6,
+   "y": 10,
+   "w": 2,
+   "h": 1,
+   "id": "row-3-5"
+  },
+  {
+   "kind": "furn.desk",
+   "x": 8,
+   "y": 10,
+   "w": 2,
+   "h": 1,
+   "id": "row-4-5"
+  },
+  {
+   "kind": "furn.desk",
+   "x": 10,
+   "y": 10,
+   "w": 2,
+   "h": 1,
+   "id": "row-5-5"
+  },
+  {
+   "kind": "furn.desk",
+   "x": 20,
+   "y": 10,
+   "w": 2,
+   "h": 1,
+   "id": "row-10-5"
+  },
+  {
+   "kind": "furn.desk",
+   "x": 22,
+   "y": 10,
+   "w": 2,
+   "h": 1,
+   "id": "row-11-5"
+  },
+  {
+   "kind": "furn.desk",
+   "x": 24,
+   "y": 10,
+   "w": 2,
+   "h": 1,
+   "id": "row-12-5"
+  },
+  {
+   "kind": "furn.desk",
+   "x": 26,
+   "y": 10,
+   "w": 2,
+   "h": 1,
+   "id": "row-13-5"
+  },
+  {
+   "kind": "furn.desk",
+   "x": 4,
+   "y": 14,
+   "w": 2,
+   "h": 1,
+   "id": "row-2-7"
+  },
+  {
+   "kind": "furn.desk",
+   "x": 6,
+   "y": 14,
+   "w": 2,
+   "h": 1,
+   "id": "row-3-7"
+  },
+  {
+   "kind": "furn.desk",
+   "x": 8,
+   "y": 14,
+   "w": 2,
+   "h": 1,
+   "id": "row-4-7"
+  },
+  {
+   "kind": "furn.desk",
+   "x": 10,
+   "y": 14,
+   "w": 2,
+   "h": 1,
+   "id": "row-5-7"
+  },
+  {
+   "kind": "furn.desk",
+   "x": 20,
+   "y": 14,
+   "w": 2,
+   "h": 1,
+   "id": "row-10-7"
+  },
+  {
+   "kind": "furn.desk",
+   "x": 22,
+   "y": 14,
+   "w": 2,
+   "h": 1,
+   "id": "row-11-7"
+  },
+  {
+   "kind": "furn.desk",
+   "x": 24,
+   "y": 14,
+   "w": 2,
+   "h": 1,
+   "id": "row-12-7"
+  },
+  {
+   "kind": "furn.desk",
+   "x": 26,
+   "y": 14,
+   "w": 2,
+   "h": 1,
+   "id": "row-13-7"
+  }
+ ],
+ "spots": [
+  {
+   "id": "m6",
+   "x": 16.5,
+   "y": 6.7,
+   "node": "21-m6",
+   "label": "The lectern"
+  },
+  {
+   "id": "m7",
+   "x": 14.5,
+   "y": 6.7,
+   "node": "21-m7",
+   "label": "The PT room"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "npc-1",
+   "kind": "folk.salaryman",
+   "x": 8.5,
+   "y": 12.9,
+   "say": [
+    "An intern, rehearsing under his breath. “In conclusion. In conclusion…”"
+   ]
+  },
+  {
+   "id": "npc-2",
+   "kind": "folk.officewoman",
+   "x": 22.5,
+   "y": 12.9,
+   "say": [
+    "An intern with a stack of cue cards, very pale. “Is it my turn? It's not my turn.”"
+   ]
+  }
+ ],
+ "exits": [
+  {
+   "to": "one-international",
+   "side": "S",
+   "x": 16,
+   "y": 18,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "one-international": [
+   16,
+   17
+  ],
+  "": [
+   16,
+   17
+  ]
+ },
+ "parent": "one-international",
+ "building": "pt-room",
+ "links": [
+  "one-international"
+ ]
+}

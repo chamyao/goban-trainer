@@ -175,7 +175,7 @@ def place_lines_of(m, lines):
     said += [(l, None) for st in m.get("states") or [] for g in st.get("shut") or []   # a shut gate's line (Xiapi at night)
              for l in ([g["say"]] if isinstance(g.get("say"), str) else g.get("say") or [])]
     for sp in m.get("spots", []):
-        said += [(l, None) for k in ("intro", "outro", "empty", "waiting", "deliver", "delivered", "call") for l in sp.get(k) or []]
+        said += [(l, None) for k in ("intro", "outro", "empty", "waiting", "deliver", "delivered", "call", "give", "given") for l in sp.get(k) or []]
     for n in m.get("npcs", []):
         for k in ("say", "intro", "win", "done", "give", "given", "call"):
             v = n.get(k)

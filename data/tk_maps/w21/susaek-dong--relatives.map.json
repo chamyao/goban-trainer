@@ -1,0 +1,185 @@
+{
+ "format": "tk-map/1",
+ "id": "susaek-dong--relatives",
+ "world": 21,
+ "name": "The relatives' flat",
+ "archetype": "interior",
+ "size": [
+  24,
+  16
+ ],
+ "seed": 2242,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "lino",
+   " ": "void",
+   "W": "wall"
+  },
+  "rows": [
+   "                        ",
+   " WWWWWWWWWWWWWWWWWWWWWW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " Waaaaaaaaaaaaaaaaaaaaa ",
+   " Waaaaaaaaaaaaaaaaaaaaa ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WWWWWWWWWWWaaWWWWWWWWW ",
+   "                        "
+  ],
+  "walk": {
+   "lino": true,
+   "void": false,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    12,
+    8
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     6,
+     7
+    ],
+    "to-relatives-kitchen": [
+     11,
+     3
+    ]
+   },
+   "tiles": 68
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.low_table",
+   "x": 8,
+   "y": 6,
+   "w": 2,
+   "h": 1,
+   "id": "feast-4"
+  },
+  {
+   "kind": "furn.low_table",
+   "x": 10,
+   "y": 6,
+   "w": 2,
+   "h": 1,
+   "id": "feast-5",
+   "label": "The Chuseok table"
+  },
+  {
+   "kind": "furn.low_table",
+   "x": 12,
+   "y": 6,
+   "w": 2,
+   "h": 1,
+   "id": "feast-6"
+  },
+  {
+   "kind": "furn.low_table",
+   "x": 14,
+   "y": 6,
+   "w": 2,
+   "h": 1,
+   "id": "feast-7"
+  },
+  {
+   "kind": "furn.tv",
+   "x": 18,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "tv"
+  },
+  {
+   "kind": "furn.sofa",
+   "x": 2,
+   "y": 10,
+   "w": 2,
+   "h": 1,
+   "id": "sofa"
+  }
+ ],
+ "spots": [
+  {
+   "id": "m15",
+   "x": 12.5,
+   "y": 10.7,
+   "node": "21-m15",
+   "label": "The relatives' flat"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "npc-1",
+   "kind": "folk.salaryman",
+   "x": 16.5,
+   "y": 8.9,
+   "say": [
+    "An uncle, red in the face. “So what is it you do now, exactly? An intern? At your age?”"
+   ]
+  },
+  {
+   "id": "npc-2",
+   "kind": "folk.ajumma",
+   "x": 6.5,
+   "y": 10.9,
+   "say": [
+    "An aunt. “Our boy got into a big company. Regular, of course.”"
+   ]
+  }
+ ],
+ "exits": [
+  {
+   "to": "susaek-dong--relatives-kitchen",
+   "side": "E",
+   "x": 22,
+   "y": 6,
+   "w": 1,
+   "h": 2
+  },
+  {
+   "to": "susaek-dong",
+   "side": "S",
+   "x": 12,
+   "y": 14,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "susaek-dong--relatives-kitchen": [
+   21,
+   6
+  ],
+  "susaek-dong": [
+   12,
+   13
+  ],
+  "": [
+   12,
+   13
+  ]
+ },
+ "parent": "susaek-dong",
+ "building": "relatives",
+ "links": [
+  "susaek-dong",
+  "susaek-dong--relatives-kitchen"
+ ]
+}

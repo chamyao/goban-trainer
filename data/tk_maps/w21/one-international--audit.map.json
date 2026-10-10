@@ -1,0 +1,194 @@
+{
+ "format": "tk-map/1",
+ "id": "one-international--audit",
+ "world": 21,
+ "name": "The audit room",
+ "archetype": "interior",
+ "size": [
+  28,
+  18
+ ],
+ "seed": 2448,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "carpet",
+   " ": "void",
+   "W": "wall"
+  },
+  "rows": [
+   "                            ",
+   " WWWWWWWWWWWWWWWWWWWWWWWWWW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WWWWWWWWWWWWWaaWWWWWWWWWWW ",
+   "                            "
+  ],
+  "walk": {
+   "carpet": true,
+   "void": false,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    14,
+    9
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     7,
+     8
+    ]
+   },
+   "tiles": 80
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.boxes",
+   "x": 2,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "boxes-1",
+   "label": "Archive boxes, packed"
+  },
+  {
+   "kind": "furn.boxes",
+   "x": 4,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "boxes-2"
+  },
+  {
+   "kind": "furn.boxes",
+   "x": 2,
+   "y": 4,
+   "w": 1,
+   "h": 1,
+   "id": "boxes-3"
+  },
+  {
+   "kind": "furn.whiteboard",
+   "x": 12,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "audit-board",
+   "label": "A whiteboard"
+  },
+  {
+   "kind": "furn.meeting_table",
+   "x": 10,
+   "y": 6,
+   "w": 4,
+   "h": 2,
+   "id": "table",
+   "label": "The auditors' table"
+  },
+  {
+   "kind": "furn.chair",
+   "x": 8,
+   "y": 6,
+   "w": 1,
+   "h": 1,
+   "id": "chair-w"
+  },
+  {
+   "kind": "furn.chair",
+   "x": 14,
+   "y": 6,
+   "w": 1,
+   "h": 1,
+   "id": "chair-e"
+  },
+  {
+   "kind": "furn.phone",
+   "x": 22,
+   "y": 4,
+   "w": 1,
+   "h": 1,
+   "id": "phone",
+   "label": "The phone"
+  },
+  {
+   "kind": "furn.filing",
+   "x": 24,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "filing"
+  }
+ ],
+ "spots": [
+  {
+   "id": "m13",
+   "x": 12.5,
+   "y": 10.7,
+   "node": "21-m13",
+   "label": "The audit room"
+  },
+  {
+   "id": "audit-table",
+   "x": 10.5,
+   "y": 8.7,
+   "node": "",
+   "label": "The auditors' table",
+   "opens": "audit",
+   "gives": "icb_listing",
+   "gives_when": "node:21-m12",
+   "give": [
+    "On the auditors' table, among the papers they're packing: ICB's registration. You take a copy."
+   ],
+   "given": [
+    "The auditors' table. You have ICB's registration already."
+   ]
+  }
+ ],
+ "npcs": [],
+ "exits": [
+  {
+   "to": "one-international",
+   "side": "S",
+   "x": 14,
+   "y": 16,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "one-international": [
+   14,
+   15
+  ],
+  "": [
+   14,
+   15
+  ]
+ },
+ "parent": "one-international",
+ "building": "audit",
+ "links": [
+  "one-international"
+ ]
+}

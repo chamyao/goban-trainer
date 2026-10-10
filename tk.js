@@ -193,6 +193,7 @@ const TK_CHARS = {
   ms_trainee2: { name: "Trainee", skin: "#f8dcc4", hair: "#1a1418", hat: "fringe", robe: "#c8d0d8", trim: "#b8c0c8", legs: "#2e3a4a", beard: "none", eyes: "normal", glasses: "#2a2228" },
   ms_trainee3: { name: "Trainee", skin: "#f8dcc4", hair: "#2a2024", hat: "ponytail", pin: "#c8392c", robe: "#e88a6a", trim: "#e88a6a", legs: "#3a4a6a", beard: "none", eyes: "kind" },
   ms_daycare: { name: "Daycare teacher", skin: "#f8dcc4", hair: "#3a2a26", hat: "ponytail", robe: "#8ab88a", trim: "#f4f0e8", legs: "#4a4a5a", beard: "none", eyes: "kind" },
+  ms_examiner: { name: "Examiner", skin: "#e8c4a0", hair: "#5a5256", hat: "parted", robe: "#2a2e38", trim: "#2a2e38", shirt: "#f4f4f4", tie: "#3a3a4a", legs: "#24272f", beard: "none", eyes: "narrow", glasses: "#2a2228" },   // the PT panelist (m6, m7) and the KBA proctor (m1)
   ms_clerk: { name: "Baekjin clerk", skin: "#ecc29a", hair: "#2a2024", hat: "short", robe: "#5a6a7a", trim: "#2a2228", tie: "#3a3a4a", legs: "#3a3e48", beard: "none", eyes: "narrow" },
   ms_worker: { name: "Office worker", skin: "#f0cfac", hair: "#2a2024", hat: "parted", robe: "#3a3e4a", trim: "#3a3e4a", shirt: "#eef0f2", tie: "#6a4a3a", legs: "#30333c", beard: "none", eyes: "normal" },
   ms_worker2: { name: "Office worker", skin: "#f8dcc4", hair: "#3a2a26", hat: "long", robe: "#d8d0c4", trim: "#d8d0c4", shirt: "#f8f6f2", legs: "#4a4a5a", skirt: true, beard: "none", eyes: "kind" },
@@ -203,6 +204,12 @@ const TK_CHARS = {
   ms_oldman2: { name: "Tapgol Park regular", skin: "#e8c4a0", hair: "#d8d8d8", hat: "short", robe: "#4a5a6a", trim: "#d8d0c0", legs: "#3e3e40", beard: "thin", beardC: "#d8d8d8", eyes: "narrow", glasses: "#6a5a4a" },
   ms_passerby: { name: "Passer-by", skin: "#f0cfac", hair: "#5a3a2a", hat: "bob", robe: "#c87a5a", trim: "#c87a5a", legs: "#3a4a6a", beard: "none", eyes: "kind" },
   ms_passerby2: { name: "Passer-by", skin: "#ecc29a", hair: "#2a2024", hat: "messy", robe: "#3a5a4a", trim: "#3a5a4a", legs: "#3a4a6a", beard: "none", eyes: "normal" },
+  ms_officewoman2: { name: "Office worker", skin: "#f2d2b0", hair: "#1a1418", hat: "ponytail", robe: "#4a4e5a", trim: "#4a4e5a", shirt: "#eef0f4", legs: "#3a3e48", beard: "none", eyes: "kind", glasses: "#4a4448" },
+  ms_ajumma: { name: "Passer-by", skin: "#e8c09a", hair: "#2a2024", hat: "perm", robe: "#6a4a7a", trim: "#d8c8b8", legs: "#4a4a5a", beard: "none", eyes: "kind" },   // a quilted vest
+  ms_ajumma2: { name: "Passer-by", skin: "#ecc29a", hair: "#4a3a36", hat: "perm", robe: "#3a6a5a", trim: "#e8dcc8", legs: "#5a4a4a", beard: "none", eyes: "narrow" },
+  ms_kid: { name: "Child", skin: "#f5d2ae", hair: "#2a2024", hat: "buzz", robe: "#3a8ad8", trim: "#f4f2ec", legs: "#3a4a6a", beard: "none", eyes: "round" },
+  ms_kid2: { name: "Child", skin: "#f8dcc4", hair: "#2a2024", hat: "sidebuns", pin: "#f4c020", robe: "#e86a8a", trim: "#f4f2ec", legs: "#e86a8a", skirt: true, beard: "none", eyes: "kind" },
+  ms_jordanian: { name: "Passer-by", skin: "#c89a72", hair: "#2a2024", hat: "short", robe: "#e8e4d8", trim: "#b8b0a0", legs: "#5a5048", beard: "short", eyes: "normal" },
   ms_cafe: { name: "Café player", skin: "#c89a72", hair: "#2a2024", hat: "scarf", hatC: "#c8392c", robe: "#e8e4d8", trim: "#b8b0a0", legs: "#5a5048", beard: "short", eyes: "kind" },   // Amman: a red keffiyeh
   // the Talk with Claude book: Clawd, the Claude Code mascot, drawn by TKArt.clawd instead of as a person
   claude: { name: "Claude", clawd: true, skin: "#d97757", robe: "#d97757", trim: "#d97757", hair: "#d97757", beard: "none" },
@@ -1311,7 +1318,8 @@ async function viewTK(worldN) {
   if (world) {
     // Art style: the same maps drawn with either free pack (tk-world.js WORLD_KITS).
     const kit = WorldView.kit(), kits = Object.keys(WORLD_KITS), next = kits[(kits.indexOf(kit) + 1) % kits.length];
-    root.querySelector(".tk-head-btns").prepend(h("button", { class: "tk-chron-btn", type: "button", title: `Switch to ${WORLD_KITS[next].en}`,
+    // a world drawn in its own kit (Misaeng: seoul) has no art switch
+    if (!w.kit) root.querySelector(".tk-head-btns").prepend(h("button", { class: "tk-chron-btn", type: "button", title: `Switch to ${WORLD_KITS[next].en}`,
       onclick: () => { WorldView.setKit(next); viewTK(w.n); } }, `画风：${WORLD_KITS[kit].zh} ${WORLD_KITS[kit].en}`));
     if (typeof WorldTravel !== "undefined") WorldTravel.addButtons(root.querySelector(".tk-head-btns"), w);   // map and start over (tk-travel.js)
     // test mode is remembered (a ?test=1 link); say so, and offer the way out (the user didn't know they were in it)

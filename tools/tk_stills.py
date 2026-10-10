@@ -244,6 +244,8 @@ CAST.update({
     "ms_kimsh": ("Kim Seok-ho", "an earnest young Korean man with short hair and glasses, in a grey suit and a green "
                  "tie"),
     "ms_somi": ("Somi", "a little Korean girl of five with two small buns tied with pink ribbons, in a yellow dress"),
+    "ms_examiner": ("the examiner", "a reserved Korean man in his fifties with greying side-parted hair and glasses, in "
+                    "a dark suit and a plain grey tie, holding a clipboard"),
     "ms_ahnfather": ("Ahn's father", "a cold, stern Korean army officer in his fifties with short black hair, in an "
                      "olive-green dress uniform and peaked cap"),
 })

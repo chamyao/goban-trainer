@@ -728,7 +728,7 @@ WORLDS.append(_LS)
 # hidden (test mode only) until its maps are built and the user publishes it
 from tk_story_w21 import WORLD21 as _MS, CAST21 as _MS_CAST  # noqa: E402
 _MS = _copy.deepcopy(_MS)
-_MS.update(cast=_MS_CAST, hidden=True, novel="misaeng", book=1, easy_grades=["14K", "14K+"])   # its own Library card (tk.js TK_NOVELS)
+_MS.update(cast=_MS_CAST, hidden=True, novel="misaeng", book=1, kit="seoul", open_ways=True, easy_grades=["14K", "14K+"])   # its own Library card (tk.js TK_NOVELS)
 WORLDS.append(_MS)
 # Books 1-3 are taken down for now (the user, 2026-10-07): kept, and still open in test mode (?test=1)
 for _w in WORLDS:

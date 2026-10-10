@@ -1,0 +1,202 @@
+{
+ "format": "tk-map/1",
+ "id": "one-international--resources",
+ "world": 21,
+ "name": "The resources team",
+ "archetype": "interior",
+ "size": [
+  28,
+  18
+ ],
+ "seed": 2900,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "carpet",
+   " ": "void",
+   "W": "wall"
+  },
+  "rows": [
+   "                            ",
+   " WWWWWWWWWWWWWWWWWWWWWWWWWW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WWWWWWWWWWWWWaaWWWWWWWWWWW ",
+   "                            "
+  ],
+  "walk": {
+   "carpet": true,
+   "void": false,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    14,
+    9
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     7,
+     8
+    ]
+   },
+   "tiles": 80
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.office_desk",
+   "x": 4,
+   "y": 6,
+   "w": 2,
+   "h": 1,
+   "id": "desk-2-3"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 6,
+   "y": 6,
+   "w": 2,
+   "h": 1,
+   "id": "desk-3-3"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 4,
+   "y": 8,
+   "w": 2,
+   "h": 1,
+   "id": "desk-2-4"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 6,
+   "y": 8,
+   "w": 2,
+   "h": 1,
+   "id": "ahn-desk",
+   "label": "Ahn Young-yi's desk"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 18,
+   "y": 6,
+   "w": 2,
+   "h": 1,
+   "id": "desk-9-3"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 20,
+   "y": 6,
+   "w": 2,
+   "h": 1,
+   "id": "desk-10-3"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 18,
+   "y": 8,
+   "w": 2,
+   "h": 1,
+   "id": "desk-9-4"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 20,
+   "y": 8,
+   "w": 2,
+   "h": 1,
+   "id": "desk-10-4"
+  },
+  {
+   "kind": "furn.exec_desk",
+   "x": 12,
+   "y": 2,
+   "w": 3,
+   "h": 1,
+   "id": "head",
+   "label": "The department head's desk"
+  },
+  {
+   "kind": "furn.filing",
+   "x": 2,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "filing-1"
+  },
+  {
+   "kind": "furn.filing",
+   "x": 24,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "filing-2"
+  },
+  {
+   "kind": "furn.plant",
+   "x": 24,
+   "y": 14,
+   "w": 1,
+   "h": 1,
+   "id": "plant",
+   "blocks_sight": true
+  }
+ ],
+ "spots": [
+  {
+   "id": "resources",
+   "x": 8.5,
+   "y": 10.7,
+   "node": "",
+   "label": "The resources team",
+   "note": "the handoff to Ahn lands here"
+  }
+ ],
+ "npcs": [],
+ "exits": [
+  {
+   "to": "one-international",
+   "side": "S",
+   "x": 14,
+   "y": 16,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "one-international": [
+   14,
+   15
+  ],
+  "": [
+   14,
+   15
+  ]
+ },
+ "parent": "one-international",
+ "building": "resources",
+ "links": [
+  "one-international"
+ ]
+}

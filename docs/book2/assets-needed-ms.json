@@ -1,0 +1,1301 @@
+[
+ {
+  "kind": "asphalt",
+  "status": {
+   "genshin": "stand-in: stone",
+   "jade": "stand-in: stone",
+   "xianxia": "stand-in: stone"
+  },
+  "size": null,
+  "ground": true,
+  "maps": [
+   "jongno"
+  ],
+  "count": 0,
+  "brief": "a Seoul carriageway: dark asphalt, white lane lines and dashes, a yellow centre line; tiles that join into a road four or more tiles wide"
+ },
+ {
+  "kind": "barrier",
+  "status": {
+   "genshin": "stand-in: wall",
+   "jade": "stand-in: wall",
+   "xianxia": "stand-in: wall"
+  },
+  "size": null,
+  "ground": true,
+  "maps": [
+   "one-international"
+  ],
+  "count": 0,
+  "brief": "an office lobby's ID speed gates: waist-high steel posts with glass flaps between them, a card reader on each post; a 1-tile gap is the way through"
+ },
+ {
+  "kind": "building.apartment",
+  "status": {
+   "genshin": "stand-in: building.hall",
+   "jade": "stand-in: building.hall",
+   "xianxia": "stand-in: building.hall"
+  },
+  "size": [
+   8,
+   4
+  ],
+  "ground": false,
+  "maps": [
+   "suns-neighbourhood"
+  ],
+  "count": 1,
+  "brief": "a slab of Korean flats (아파트): white and pale grey, a big block number painted on the side, balconies with glass, a lobby door at the foot"
+ },
+ {
+  "kind": "building.gatehouse",
+  "status": {
+   "genshin": "stand-in: building.gate",
+   "jade": "drawn",
+   "xianxia": "stand-in: building.gate"
+  },
+  "size": [
+   2,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "jongno"
+  ],
+  "count": 1,
+  "brief": "a compound's gatehouse: a roofed gateway in the compound wall, double doors"
+ },
+ {
+  "kind": "building.mart",
+  "status": {
+   "genshin": "stand-in: building.hall",
+   "jade": "stand-in: building.storehouse",
+   "xianxia": "stand-in: building.hall"
+  },
+  "size": [
+   8,
+   3
+  ],
+  "ground": false,
+  "maps": [
+   "the-pizza-shop"
+  ],
+  "count": 1,
+  "brief": "a big Korean supermarket (대형마트): a wide low box, a red and yellow sign, trolleys at the door"
+ },
+ {
+  "kind": "building.office_block",
+  "status": {
+   "genshin": "stand-in: building.hall",
+   "jade": "stand-in: building.hall",
+   "xianxia": "stand-in: building.hall"
+  },
+  "size": [
+   6,
+   3
+  ],
+  "ground": false,
+  "maps": [
+   "baekjin-trading",
+   "jongno",
+   "korea-baduk-association",
+   "the-new-office"
+  ],
+  "count": 13,
+  "brief": "a small 4-5 storey Seoul office building: tiled or concrete front, rows of windows, a glass door at the bottom centre with a signboard over it, an AC unit or two"
+ },
+ {
+  "kind": "building.office_tower",
+  "status": {
+   "genshin": "stand-in: building.hall",
+   "jade": "stand-in: building.hall_grand",
+   "xianxia": "stand-in: building.hall"
+  },
+  "size": [
+   12,
+   5
+  ],
+  "ground": false,
+  "maps": [
+   "jongno"
+  ],
+  "count": 1,
+  "brief": "a modern glass-and-steel office tower in central Seoul, 2012: blue-grey curtain wall, a granite base with revolving doors on the front, the company name in steel letters over the entrance (ONE INTERNATIONAL); drawn tall (it rises far above its footprint), same 3/4 view"
+ },
+ {
+  "kind": "building.pavilion",
+  "status": {
+   "genshin": "stand-in: building.moongate",
+   "jade": "drawn",
+   "xianxia": "stand-in: building.moongate"
+  },
+  "size": [
+   3,
+   3
+  ],
+  "ground": false,
+  "maps": [
+   "jongno"
+  ],
+  "count": 1,
+  "brief": "an open-sided garden pavilion: four or six red pillars, upturned eaves, no walls; may stand on piles in a lotus pond"
+ },
+ {
+  "kind": "building.pojangmacha",
+  "status": {
+   "genshin": "stand-in: building.tent",
+   "jade": "stand-in: building.tent",
+   "xianxia": "stand-in: building.tent"
+  },
+  "size": [
+   3,
+   2
+  ],
+  "ground": false,
+  "maps": [
+   "jongno"
+  ],
+  "count": 1,
+  "brief": "a pojangmacha: an orange tarp tent bar on the pavement, lit from inside, plastic stools, a steaming cart; the flap open at the front"
+ },
+ {
+  "kind": "building.rooftop_box",
+  "status": {
+   "genshin": "stand-in: building.hut",
+   "jade": "stand-in: building.hut",
+   "xianxia": "stand-in: building.hut"
+  },
+  "size": [
+   3,
+   2
+  ],
+  "ground": false,
+  "maps": [
+   "one-international--roof"
+  ],
+  "count": 1,
+  "brief": "a rooftop stairhouse and lift motor room: a concrete box, a steel door, vents"
+ },
+ {
+  "kind": "building.stone_house",
+  "status": {
+   "genshin": "stand-in: building.house",
+   "jade": "stand-in: building.house",
+   "xianxia": "stand-in: building.house"
+  },
+  "size": [
+   5,
+   3
+  ],
+  "ground": false,
+  "maps": [
+   "amman"
+  ],
+  "count": 7,
+  "brief": "an Amman house of pale limestone blocks, flat roof with a water tank, small windows with iron grilles, a door at the foot"
+ },
+ {
+  "kind": "building.stone_shop",
+  "status": {
+   "genshin": "stand-in: building.shop",
+   "jade": "stand-in: building.shop",
+   "xianxia": "stand-in: building.shop"
+  },
+  "size": [
+   4,
+   2
+  ],
+  "ground": false,
+  "maps": [
+   "amman"
+  ],
+  "count": 1,
+  "brief": "an Amman café in a limestone front: an awning, a few chairs outside, a hookah, Arabic sign"
+ },
+ {
+  "kind": "building.storefront",
+  "status": {
+   "genshin": "stand-in: building.shop",
+   "jade": "stand-in: building.shop",
+   "xianxia": "stand-in: building.shop"
+  },
+  "size": [
+   4,
+   2
+  ],
+  "ground": false,
+  "maps": [
+   "baekjin-trading",
+   "jongno",
+   "korea-baduk-association",
+   "suns-neighbourhood",
+   "susaek-dong",
+   "the-new-office",
+   "the-pizza-shop"
+  ],
+  "count": 22,
+  "brief": "a Seoul street-level shop: a big bright signboard (hangul), glass front with posters, a rolled-up shutter, a floor of flats above; one sprite that reads as any small shop"
+ },
+ {
+  "kind": "building.subway_entrance",
+  "status": {
+   "genshin": "stand-in: building.gate",
+   "jade": "stand-in: building.gate",
+   "xianxia": "stand-in: building.gate"
+  },
+  "size": [
+   3,
+   2
+  ],
+  "ground": false,
+  "maps": [
+   "jongno",
+   "susaek-dong"
+  ],
+  "count": 2,
+  "brief": "a Seoul subway entrance: stairs going down under a glass canopy, a blue sign with the line number and station name on a post beside it"
+ },
+ {
+  "kind": "building.villa",
+  "status": {
+   "genshin": "stand-in: building.house",
+   "jade": "stand-in: building.house",
+   "xianxia": "stand-in: building.house"
+  },
+  "size": [
+   5,
+   3
+  ],
+  "ground": false,
+  "maps": [
+   "suns-neighbourhood",
+   "susaek-dong"
+  ],
+  "count": 9,
+  "brief": "a red-brick multi-family villa (빌라) of a Seoul hillside neighbourhood: 3-4 storeys, small balconies with laundry, a door at the foot with a number plate, a satellite dish"
+ },
+ {
+  "kind": "carpet",
+  "status": {
+   "genshin": "stand-in: stone",
+   "jade": "stand-in: stone",
+   "xianxia": "stand-in: stone"
+  },
+  "size": null,
+  "ground": true,
+  "maps": [
+   "baekjin-trading--baekjin",
+   "jongno--client",
+   "jongno--hq",
+   "one-international--audit",
+   "one-international--board-room",
+   "one-international--exec-floor",
+   "one-international--finance",
+   "one-international--hr",
+   "one-international--meeting",
+   "one-international--pt-room",
+   "one-international--resources",
+   "one-international--sales3",
+   "the-new-office--new-office"
+  ],
+  "count": 0,
+  "brief": "an office floor of grey-blue carpet tiles, a faint grid"
+ },
+ {
+  "kind": "crosswalk",
+  "status": {
+   "genshin": "stand-in: road",
+   "jade": "stand-in: road",
+   "xianxia": "stand-in: road"
+  },
+  "size": null,
+  "ground": true,
+  "maps": [
+   "jongno"
+  ],
+  "count": 0,
+  "brief": "a zebra crossing: broad white stripes across dark asphalt, running the short way across the road"
+ },
+ {
+  "kind": "folk.ajumma",
+  "status": {
+   "genshin": "stand-in: folk.villager",
+   "jade": "stand-in: folk.villager",
+   "xianxia": "stand-in: folk.villager"
+  },
+  "size": null,
+  "ground": false,
+  "maps": [
+   "jongno",
+   "jongno--pojangmacha",
+   "suns-neighbourhood",
+   "susaek-dong",
+   "susaek-dong--home",
+   "susaek-dong--relatives",
+   "the-pizza-shop"
+  ],
+  "count": 0,
+  "brief": "a middle-aged Korean woman: permed short hair, a quilted vest or a cardigan, an apron or a shopping trolley"
+ },
+ {
+  "kind": "folk.grandpa",
+  "status": {
+   "genshin": "stand-in: folk.villager",
+   "jade": "stand-in: folk.villager",
+   "xianxia": "stand-in: folk.villager"
+  },
+  "size": null,
+  "ground": false,
+  "maps": [
+   "jongno",
+   "susaek-dong"
+  ],
+  "count": 0,
+  "brief": "an old Korean man of Tapgol Park: flat cap or bare grey head, a padded jacket or a cardigan, slacks"
+ },
+ {
+  "kind": "folk.jordanian",
+  "status": {
+   "genshin": "stand-in: folk.villager",
+   "jade": "stand-in: folk.villager",
+   "xianxia": "stand-in: folk.villager"
+  },
+  "size": null,
+  "ground": false,
+  "maps": [
+   "amman"
+  ],
+  "count": 0,
+  "brief": "a man in Amman: a red-and-white keffiyeh or bare-headed, a shirt and trousers, a moustache"
+ },
+ {
+  "kind": "folk.kid",
+  "status": {
+   "genshin": "stand-in: folk.villager",
+   "jade": "stand-in: folk.villager",
+   "xianxia": "stand-in: folk.villager"
+  },
+  "size": null,
+  "ground": false,
+  "maps": [
+   "jongno",
+   "korea-baduk-association",
+   "korea-baduk-association--kba-trainees",
+   "suns-neighbourhood--daycare"
+  ],
+  "count": 0,
+  "brief": "a Korean child of 6-12: a backpack, trainers, a school uniform or play clothes"
+ },
+ {
+  "kind": "folk.officewoman",
+  "status": {
+   "genshin": "stand-in: folk.villager",
+   "jade": "stand-in: folk.villager",
+   "xianxia": "stand-in: folk.villager"
+  },
+  "size": null,
+  "ground": false,
+  "maps": [
+   "baekjin-trading--baekjin",
+   "jongno",
+   "one-international",
+   "one-international--hr",
+   "one-international--pt-room",
+   "one-international--sales3",
+   "suns-neighbourhood--daycare",
+   "the-subway"
+  ],
+  "count": 0,
+  "brief": "a Korean office worker, 2012: a skirt or trouser suit, blouse, lanyard ID card, low heels; a few variants (hair up or down, a folder, a coffee)"
+ },
+ {
+  "kind": "folk.salaryman",
+  "status": {
+   "genshin": "stand-in: folk.villager",
+   "jade": "stand-in: folk.villager",
+   "xianxia": "stand-in: folk.villager"
+  },
+  "size": null,
+  "ground": false,
+  "maps": [
+   "baekjin-trading",
+   "baekjin-trading--baekjin",
+   "jongno",
+   "jongno--corner-shop",
+   "korea-baduk-association--kba-front",
+   "one-international",
+   "one-international--finance",
+   "one-international--pt-room",
+   "one-international--sales3",
+   "susaek-dong--relatives",
+   "the-subway"
+  ],
+  "count": 0,
+  "brief": "a Korean office worker, 2012: dark suit, white shirt, lanyard ID card, black shoes; a few variants (tie or none, glasses, a briefcase or a phone)"
+ },
+ {
+  "kind": "furn.ashtray",
+  "status": {
+   "genshin": "stand-in: furn.jar",
+   "jade": "stand-in: furn.jar",
+   "xianxia": "stand-in: furn.jar"
+  },
+  "size": [
+   1,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "one-international--roof"
+  ],
+  "count": 1,
+  "brief": "a standing steel ashtray, the smokers' corner"
+ },
+ {
+  "kind": "furn.bin",
+  "status": {
+   "genshin": "stand-in: furn.barrel",
+   "jade": "stand-in: furn.barrel",
+   "xianxia": "stand-in: furn.barrel"
+  },
+  "size": [
+   1,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "one-international"
+  ],
+  "count": 2,
+  "brief": "office recycling bins in a row: paper, cans, general (blue, yellow, grey)"
+ },
+ {
+  "kind": "furn.boxes",
+  "status": {
+   "genshin": "stand-in: furn.chest",
+   "jade": "stand-in: furn.chest",
+   "xianxia": "stand-in: furn.chest"
+  },
+  "size": [
+   1,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "baekjin-trading--baekjin",
+   "one-international--audit",
+   "the-new-office--new-office"
+  ],
+  "count": 6,
+  "brief": "archive boxes stacked and taped, ready to go"
+ },
+ {
+  "kind": "furn.chair",
+  "status": {
+   "genshin": "stand-in: furn.stool",
+   "jade": "stand-in: furn.stool",
+   "xianxia": "stand-in: furn.stool"
+  },
+  "size": [
+   1,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "one-international--audit",
+   "one-international--board-room",
+   "one-international--meeting"
+  ],
+  "count": 19,
+  "brief": "a black office chair on castors"
+ },
+ {
+  "kind": "furn.copier",
+  "status": {
+   "genshin": "stand-in: furn.drawers",
+   "jade": "stand-in: furn.drawers",
+   "xianxia": "stand-in: furn.drawers"
+  },
+  "size": [
+   2,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "one-international--sales3"
+  ],
+  "count": 1,
+  "brief": "an office copier, its lid up, paper stacked beside it"
+ },
+ {
+  "kind": "furn.exec_desk",
+  "status": {
+   "genshin": "stand-in: furn.desk",
+   "jade": "stand-in: furn.desk",
+   "xianxia": "stand-in: furn.desk"
+  },
+  "size": [
+   3,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "baekjin-trading--baekjin",
+   "jongno--client",
+   "one-international--exec-floor",
+   "one-international--finance",
+   "one-international--hr",
+   "one-international--resources"
+  ],
+  "count": 6,
+  "brief": "a department head's or executive's desk: big, dark wood, a leather chair behind, a name plate"
+ },
+ {
+  "kind": "furn.filing",
+  "status": {
+   "genshin": "stand-in: furn.drawers",
+   "jade": "stand-in: furn.drawers",
+   "xianxia": "stand-in: furn.drawers"
+  },
+  "size": [
+   1,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "baekjin-trading--baekjin",
+   "one-international--audit",
+   "one-international--finance",
+   "one-international--hr",
+   "one-international--resources",
+   "one-international--sales3"
+  ],
+  "count": 12,
+  "brief": "a grey steel filing cabinet"
+ },
+ {
+  "kind": "furn.fridge_case",
+  "status": {
+   "genshin": "stand-in: furn.shelf",
+   "jade": "stand-in: furn.shelf",
+   "xianxia": "stand-in: furn.shelf"
+  },
+  "size": [
+   2,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "jongno--corner-shop",
+   "susaek-dong--relatives-kitchen"
+  ],
+  "count": 4,
+  "brief": "a glass-door drinks fridge, lit"
+ },
+ {
+  "kind": "furn.go_board",
+  "status": {
+   "genshin": "stand-in: furniture.gotable",
+   "jade": "stand-in: furniture.gotable",
+   "xianxia": "stand-in: furniture.gotable"
+  },
+  "size": [
+   1,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "korea-baduk-association--kba-trainees",
+   "susaek-dong--home"
+  ],
+  "count": 19,
+  "brief": "a go board on the floor (a thick wooden board on legs), a cushion on either side, bowls of stones"
+ },
+ {
+  "kind": "furn.kid_mat",
+  "status": {
+   "genshin": "stand-in: furn.rug",
+   "jade": "stand-in: furn.rug",
+   "xianxia": "stand-in: furn.rug"
+  },
+  "size": [
+   2,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "suns-neighbourhood--daycare"
+  ],
+  "count": 2,
+  "brief": "a padded play mat in bright colours"
+ },
+ {
+  "kind": "furn.lectern",
+  "status": {
+   "genshin": "stand-in: furn.stool",
+   "jade": "stand-in: furn.stool",
+   "xianxia": "stand-in: furn.stool"
+  },
+  "size": [
+   1,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "one-international--pt-room"
+  ],
+  "count": 1,
+  "brief": "a lectern with a microphone"
+ },
+ {
+  "kind": "furn.low_table",
+  "status": {
+   "genshin": "stand-in: furn.table",
+   "jade": "stand-in: furn.table",
+   "xianxia": "stand-in: furn.table"
+  },
+  "size": [
+   2,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "jongno--client",
+   "one-international--exec-floor",
+   "suns-neighbourhood--daycare",
+   "susaek-dong--home",
+   "susaek-dong--relatives"
+  ],
+  "count": 8,
+  "brief": "a low wooden table you sit at on the floor (상), set with dishes"
+ },
+ {
+  "kind": "furn.meeting_table",
+  "status": {
+   "genshin": "stand-in: furn.table",
+   "jade": "stand-in: furn.table",
+   "xianxia": "stand-in: furn.table"
+  },
+  "size": [
+   4,
+   2
+  ],
+  "ground": false,
+  "maps": [
+   "jongno--hq",
+   "one-international--audit",
+   "one-international--board-room",
+   "one-international--meeting",
+   "one-international--pt-room",
+   "one-international--sales3"
+  ],
+  "count": 11,
+  "brief": "a long meeting table with chairs round it, a jug of water, notepads"
+ },
+ {
+  "kind": "furn.noticeboard",
+  "status": {
+   "genshin": "stand-in: landmark.notice",
+   "jade": "stand-in: landmark.notice",
+   "xianxia": "stand-in: landmark.notice"
+  },
+  "size": [
+   2,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "korea-baduk-association--kba-front",
+   "one-international",
+   "one-international--hr"
+  ],
+  "count": 3,
+  "brief": "a cork noticeboard with sheets pinned to it"
+ },
+ {
+  "kind": "furn.office_desk",
+  "status": {
+   "genshin": "stand-in: furn.desk",
+   "jade": "stand-in: furn.desk",
+   "xianxia": "stand-in: furn.desk"
+  },
+  "size": [
+   2,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "baekjin-trading--baekjin",
+   "jongno--client",
+   "one-international--finance",
+   "one-international--hr",
+   "one-international--resources",
+   "one-international--sales3",
+   "the-new-office--new-office"
+  ],
+  "count": 48,
+  "brief": "an office desk: a grey top, a monitor and keyboard, papers, a mug, a black office chair pulled up; seen at the same 3/4 angle as furn.desk"
+ },
+ {
+  "kind": "furn.phone",
+  "status": {
+   "genshin": "stand-in: furn.drawers",
+   "jade": "stand-in: furn.drawers",
+   "xianxia": "stand-in: furn.drawers"
+  },
+  "size": [
+   1,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "one-international--audit"
+  ],
+  "count": 1,
+  "brief": "an office desk phone on a small side table, a red light blinking"
+ },
+ {
+  "kind": "furn.pizza_oven",
+  "status": {
+   "genshin": "stand-in: furn.hearth",
+   "jade": "stand-in: camp.cookfire",
+   "xianxia": "stand-in: furn.hearth"
+  },
+  "size": [
+   2,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "the-pizza-shop--pizza"
+  ],
+  "count": 1,
+  "brief": "a pizza shop's steel oven"
+ },
+ {
+  "kind": "furn.plastic_table",
+  "status": {
+   "genshin": "stand-in: furn.table",
+   "jade": "stand-in: furn.table",
+   "xianxia": "stand-in: furn.table"
+  },
+  "size": [
+   1,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "jongno--pojangmacha"
+  ],
+  "count": 3,
+  "brief": "a round red or blue plastic table with soju bottles and a dish on it"
+ },
+ {
+  "kind": "furn.projector_screen",
+  "status": {
+   "genshin": "stand-in: furn.screen",
+   "jade": "stand-in: furn.screen",
+   "xianxia": "stand-in: furn.screen"
+  },
+  "size": [
+   3,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "jongno--hq",
+   "one-international--board-room",
+   "one-international--pt-room"
+  ],
+  "count": 3,
+  "brief": "a pull-down projector screen, a slide lit on it"
+ },
+ {
+  "kind": "furn.reception",
+  "status": {
+   "genshin": "stand-in: furn.counter",
+   "jade": "stand-in: furn.counter",
+   "xianxia": "stand-in: furn.counter"
+  },
+  "size": [
+   4,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "korea-baduk-association--kba-front",
+   "one-international"
+  ],
+  "count": 2,
+  "brief": "a lobby front desk: a long counter in pale stone with the company logo on its front"
+ },
+ {
+  "kind": "furn.sofa",
+  "status": {
+   "genshin": "stand-in: furn.bed",
+   "jade": "stand-in: furn.bed",
+   "xianxia": "stand-in: furn.bed"
+  },
+  "size": [
+   2,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "jongno--client",
+   "korea-baduk-association--kba-front",
+   "one-international",
+   "one-international--exec-floor",
+   "suns-neighbourhood--sun-flat",
+   "susaek-dong--relatives"
+  ],
+  "count": 8,
+  "brief": "a two-seat sofa in dark leather or grey cloth"
+ },
+ {
+  "kind": "furn.store_shelf",
+  "status": {
+   "genshin": "stand-in: furn.shelf",
+   "jade": "stand-in: furn.shelf",
+   "xianxia": "stand-in: furn.shelf"
+  },
+  "size": [
+   2,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "jongno--corner-shop"
+  ],
+  "count": 4,
+  "brief": "a convenience store's shelf of snacks and noodles"
+ },
+ {
+  "kind": "furn.subway_seat",
+  "status": {
+   "genshin": "stand-in: furn.bed",
+   "jade": "stand-in: furn.bed",
+   "xianxia": "stand-in: furn.bed"
+  },
+  "size": [
+   4,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "the-subway"
+  ],
+  "count": 10,
+  "brief": "a Seoul subway carriage's long bench seat along the wall, grab rails above"
+ },
+ {
+  "kind": "furn.toy_shelf",
+  "status": {
+   "genshin": "stand-in: furn.shelf",
+   "jade": "stand-in: furn.shelf",
+   "xianxia": "stand-in: furn.shelf"
+  },
+  "size": [
+   2,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "suns-neighbourhood--daycare",
+   "suns-neighbourhood--sun-flat"
+  ],
+  "count": 4,
+  "brief": "a low shelf of toys and picture books"
+ },
+ {
+  "kind": "furn.trophy_case",
+  "status": {
+   "genshin": "stand-in: furn.shelf",
+   "jade": "stand-in: furn.shelf",
+   "xianxia": "stand-in: furn.shelf"
+  },
+  "size": [
+   2,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "korea-baduk-association--kba-front"
+  ],
+  "count": 2,
+  "brief": "a glass case of trophies and framed photos"
+ },
+ {
+  "kind": "furn.tv",
+  "status": {
+   "genshin": "stand-in: furn.drawers",
+   "jade": "stand-in: furn.drawers",
+   "xianxia": "stand-in: furn.drawers"
+  },
+  "size": [
+   2,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "suns-neighbourhood--sun-flat",
+   "susaek-dong--home",
+   "susaek-dong--relatives"
+  ],
+  "count": 3,
+  "brief": "a television on a low cabinet"
+ },
+ {
+  "kind": "furn.wardrobe",
+  "status": {
+   "genshin": "stand-in: furn.shelf",
+   "jade": "stand-in: furn.shelf",
+   "xianxia": "stand-in: furn.shelf"
+  },
+  "size": [
+   2,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "suns-neighbourhood--sun-flat",
+   "susaek-dong--home"
+  ],
+  "count": 2,
+  "brief": "a wardrobe, plain wood"
+ },
+ {
+  "kind": "furn.water_cooler",
+  "status": {
+   "genshin": "stand-in: furn.jar",
+   "jade": "stand-in: furn.jar",
+   "xianxia": "stand-in: furn.jar"
+  },
+  "size": [
+   1,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "one-international--board-room",
+   "one-international--sales3"
+  ],
+  "count": 2,
+  "brief": "a water cooler with a stack of paper cups"
+ },
+ {
+  "kind": "furn.whiteboard",
+  "status": {
+   "genshin": "stand-in: furn.screen",
+   "jade": "stand-in: furn.screen",
+   "xianxia": "stand-in: furn.screen"
+  },
+  "size": [
+   2,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "one-international--audit",
+   "one-international--meeting",
+   "one-international--sales3",
+   "the-new-office--new-office"
+  ],
+  "count": 4,
+  "brief": "a whiteboard on a stand, scribbled with arrows and figures"
+ },
+ {
+  "kind": "landmark.pagoda",
+  "status": {
+   "genshin": "stand-in: landmark.incense",
+   "jade": "stand-in: landmark.incense",
+   "xianxia": "stand-in: landmark.incense"
+  },
+  "size": [
+   3,
+   3
+  ],
+  "ground": false,
+  "maps": [
+   "jongno"
+  ],
+  "count": 1,
+  "brief": "Tapgol Park's ten-storey marble pagoda (원각사지 십층석탑) inside its glass protective case"
+ },
+ {
+  "kind": "lino",
+  "status": {
+   "genshin": "stand-in: wood",
+   "jade": "stand-in: wood",
+   "xianxia": "stand-in: wood"
+  },
+  "size": null,
+  "ground": true,
+  "maps": [
+   "suns-neighbourhood--daycare",
+   "suns-neighbourhood--sun-flat",
+   "susaek-dong--home",
+   "susaek-dong--relatives",
+   "susaek-dong--relatives-kitchen"
+  ],
+  "count": 0,
+  "brief": "a Korean home's floor: glossy yellow-brown vinyl (장판) over the heated ondol, a faint wood grain"
+ },
+ {
+  "kind": "market.stalls",
+  "status": {
+   "genshin": "stand-in: building.shop",
+   "jade": "drawn",
+   "xianxia": "stand-in: building.shop"
+  },
+  "size": [
+   6,
+   2
+  ],
+  "ground": false,
+  "maps": [
+   "jongno"
+  ],
+  "count": 4,
+  "brief": "a row of market stalls with cloth awnings, baskets and goods"
+ },
+ {
+  "kind": "office_tile",
+  "status": {
+   "genshin": "stand-in: stone",
+   "jade": "stand-in: stone",
+   "xianxia": "stand-in: stone"
+  },
+  "size": null,
+  "ground": true,
+  "maps": [
+   "jongno--corner-shop",
+   "korea-baduk-association--kba-front",
+   "one-international",
+   "the-pizza-shop--pizza"
+  ],
+  "count": 0,
+  "brief": "a tower lobby's floor: large polished pale stone tiles with a soft reflection"
+ },
+ {
+  "kind": "parapet",
+  "status": {
+   "genshin": "stand-in: wall",
+   "jade": "stand-in: wall",
+   "xianxia": "stand-in: wall"
+  },
+  "size": null,
+  "ground": true,
+  "maps": [
+   "one-international--roof"
+  ],
+  "count": 0,
+  "brief": "a roof's low concrete parapet with a steel railing on top, the city's towers beyond"
+ },
+ {
+  "kind": "prop.bench",
+  "status": {
+   "genshin": "stand-in: camp.logs",
+   "jade": "stand-in: camp.logs",
+   "xianxia": "stand-in: camp.logs"
+  },
+  "size": [
+   2,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "jongno",
+   "one-international--roof",
+   "suns-neighbourhood"
+  ],
+  "count": 7,
+  "brief": "a park bench, slats and iron legs"
+ },
+ {
+  "kind": "prop.bus_stop",
+  "status": {
+   "genshin": "stand-in: landmark.notice",
+   "jade": "stand-in: landmark.notice",
+   "xianxia": "stand-in: landmark.notice"
+  },
+  "size": [
+   3,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "jongno"
+  ],
+  "count": 1,
+  "brief": "a Seoul bus stop: a glass shelter, a route map, a bench inside"
+ },
+ {
+  "kind": "prop.car",
+  "status": {
+   "genshin": "stand-in: prop.carriage",
+   "jade": "stand-in: prop.carriage",
+   "xianxia": "stand-in: prop.carriage"
+  },
+  "size": [
+   4,
+   2
+  ],
+  "ground": false,
+  "maps": [
+   "jongno"
+  ],
+  "count": 4,
+  "brief": "a parked or passing car seen from above at the same 3/4 angle (a white or grey sedan, a black taxi with a roof light), four tiles long, two deep"
+ },
+ {
+  "kind": "prop.coffee_cup",
+  "status": {
+   "genshin": "stand-in: furn.jar",
+   "jade": "stand-in: furn.jar",
+   "xianxia": "stand-in: furn.jar"
+  },
+  "size": [
+   1,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "one-international--board-room"
+  ],
+  "count": 1,
+  "brief": "a white cup of black coffee on a saucer, drawn small on a table top"
+ },
+ {
+  "kind": "prop.glass_water",
+  "status": {
+   "genshin": "stand-in: furn.jar",
+   "jade": "stand-in: furn.jar",
+   "xianxia": "stand-in: furn.jar"
+  },
+  "size": [
+   1,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "one-international--board-room"
+  ],
+  "count": 1,
+  "brief": "a glass of still water on a coaster, drawn small on a table top (no ice)"
+ },
+ {
+  "kind": "prop.scooter",
+  "status": {
+   "genshin": "stand-in: furn.barrel",
+   "jade": "stand-in: furn.barrel",
+   "xianxia": "stand-in: furn.barrel"
+  },
+  "size": [
+   1,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "baekjin-trading",
+   "the-pizza-shop"
+  ],
+  "count": 10,
+  "brief": "a delivery scooter with an insulated box on the back"
+ },
+ {
+  "kind": "prop.teacup",
+  "status": {
+   "genshin": "stand-in: furn.jar",
+   "jade": "stand-in: furn.jar",
+   "xianxia": "stand-in: furn.jar"
+  },
+  "size": [
+   1,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "one-international--board-room"
+  ],
+  "count": 1,
+  "brief": "a white cup of green tea on a saucer, drawn small on a table top"
+ },
+ {
+  "kind": "prop.vending",
+  "status": {
+   "genshin": "stand-in: furn.drawers",
+   "jade": "stand-in: furn.drawers",
+   "xianxia": "stand-in: furn.drawers"
+  },
+  "size": [
+   1,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "jongno",
+   "susaek-dong"
+  ],
+  "count": 2,
+  "brief": "a drinks vending machine, lit, cans in rows"
+ },
+ {
+  "kind": "prop.water_tank",
+  "status": {
+   "genshin": "stand-in: furn.barrel",
+   "jade": "stand-in: furn.barrel",
+   "xianxia": "stand-in: furn.barrel"
+  },
+  "size": [
+   2,
+   2
+  ],
+  "ground": false,
+  "maps": [
+   "one-international--roof"
+  ],
+  "count": 1,
+  "brief": "a rooftop water tank: a squat cylinder on a frame"
+ },
+ {
+  "kind": "tree.ginkgo",
+  "status": {
+   "genshin": "stand-in: tree.small",
+   "jade": "stand-in: tree.small",
+   "xianxia": "stand-in: tree.small"
+  },
+  "size": [
+   1,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "jongno",
+   "korea-baduk-association",
+   "suns-neighbourhood",
+   "susaek-dong",
+   "the-pizza-shop"
+  ],
+  "count": 55,
+  "brief": "a ginkgo street tree in a square of iron grating, fan-shaped leaves"
+ },
+ {
+  "kind": "tree.olive",
+  "status": {
+   "genshin": "stand-in: tree.small",
+   "jade": "stand-in: tree.small",
+   "xianxia": "stand-in: tree.small"
+  },
+  "size": [
+   1,
+   1
+  ],
+  "ground": false,
+  "maps": [
+   "amman"
+  ],
+  "count": 10,
+  "brief": "an olive tree, silver-green, a gnarled trunk"
+ }
+]

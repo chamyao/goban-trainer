@@ -1,0 +1,440 @@
+{
+ "format": "tk-map/1",
+ "id": "one-international",
+ "world": 21,
+ "name": "One International",
+ "archetype": "interior",
+ "size": [
+  44,
+  20
+ ],
+ "seed": 1913,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "barrier",
+   "b": "office_tile",
+   " ": "void",
+   "W": "wall"
+  },
+  "rows": [
+   "                                            ",
+   " WWWbbWWbbWWbbWWbbWWbbWWbbWWbbWWbbWWbbWWbbW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WaaaaaaaabbaaaaaaaaaaaaaaaaaaaabbaaaaaaaaW ",
+   " WaaaaaaaabbaaaaaaaaaaaaaaaaaaaabbaaaaaaaaW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WWWWWWWWWWWWWWWWWWWWWbbWWWWWWWWWWWWWWWWWWW ",
+   "                                            "
+  ],
+  "walk": {
+   "barrier": false,
+   "office_tile": true,
+   "void": false,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    22,
+    10
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     11,
+     9
+    ],
+    "to-Jongno": [
+     11,
+     9
+    ],
+    "to-pt-room": [
+     2,
+     0
+    ],
+    "to-hr": [
+     4,
+     0
+    ],
+    "to-finance": [
+     6,
+     0
+    ],
+    "to-resources": [
+     8,
+     0
+    ],
+    "to-sales3": [
+     10,
+     0
+    ],
+    "to-audit": [
+     12,
+     0
+    ],
+    "to-meeting": [
+     14,
+     0
+    ],
+    "to-board-room": [
+     16,
+     0
+    ],
+    "to-exec-floor": [
+     18,
+     0
+    ],
+    "to-roof": [
+     20,
+     0
+    ]
+   },
+   "tiles": 116
+  },
+  {
+   "id": "id-gates",
+   "kind": "barrier",
+   "path": [
+    [
+     1,
+     4
+    ],
+    [
+     20,
+     4
+    ]
+   ],
+   "width": 1,
+   "gates": {
+    "gates-w": [
+     5,
+     4
+    ],
+    "gates-e": [
+     16,
+     4
+    ]
+   },
+   "tiles": 80
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.plant",
+   "x": 2,
+   "y": 6,
+   "w": 1,
+   "h": 1,
+   "id": "plant-w",
+   "blocks_sight": true
+  },
+  {
+   "kind": "furn.plant",
+   "x": 40,
+   "y": 6,
+   "w": 1,
+   "h": 1,
+   "id": "plant-e",
+   "blocks_sight": true
+  },
+  {
+   "kind": "furn.noticeboard",
+   "x": 2,
+   "y": 10,
+   "w": 2,
+   "h": 1,
+   "id": "directory",
+   "label": "The floor directory"
+  },
+  {
+   "kind": "furn.reception",
+   "x": 32,
+   "y": 12,
+   "w": 4,
+   "h": 1,
+   "id": "reception",
+   "label": "The front desk"
+  },
+  {
+   "kind": "furn.bin",
+   "x": 4,
+   "y": 14,
+   "w": 1,
+   "h": 1,
+   "id": "bin-1",
+   "label": "The recycling bins"
+  },
+  {
+   "kind": "furn.bin",
+   "x": 6,
+   "y": 14,
+   "w": 1,
+   "h": 1,
+   "id": "bin-2"
+  },
+  {
+   "kind": "furn.sofa",
+   "x": 38,
+   "y": 16,
+   "w": 2,
+   "h": 1,
+   "id": "sofa-1"
+  },
+  {
+   "kind": "furn.sofa",
+   "x": 40,
+   "y": 16,
+   "w": 2,
+   "h": 1,
+   "id": "sofa-2"
+  }
+ ],
+ "spots": [
+  {
+   "id": "m2",
+   "x": 32.5,
+   "y": 14.7,
+   "node": "21-m2",
+   "label": "The front desk"
+  },
+  {
+   "id": "bins",
+   "x": 4.5,
+   "y": 16.7,
+   "node": "",
+   "label": "The recycling bins",
+   "gives": "waybill_scrap",
+   "gives_when": "node:21-m3",
+   "give": [
+    "You go through the bins by the gates, sheet by sheet. Stuck to the back of a torn page: the rest of the waybill, and a name on it in someone else's hand. Kim Seok-ho."
+   ],
+   "given": [
+    "The recycling bins. You've found what you were looking for."
+   ]
+  },
+  {
+   "id": "m3b",
+   "x": 8.5,
+   "y": 16.7,
+   "node": "21-m3b",
+   "label": "The lobby"
+  },
+  {
+   "id": "lobby-lift",
+   "x": 22.5,
+   "y": 4.7,
+   "node": "",
+   "label": "The lifts",
+   "note": "the handoff to Oh lands here"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "receptionist",
+   "kind": "folk.officewoman",
+   "x": 34.0,
+   "y": 12.35,
+   "say": [
+    "“Visitor passes are issued here. Who are you here to see?”"
+   ],
+   "face": "S",
+   "label": "The receptionist"
+  },
+  {
+   "id": "npc-2",
+   "kind": "folk.salaryman",
+   "x": 12.5,
+   "y": 10.9,
+   "say": [
+    "A security guard by the ID gates. “Card on the reader, please. One at a time.”"
+   ],
+   "label": "Security"
+  },
+  {
+   "id": "npc-3",
+   "kind": "folk.salaryman",
+   "x": 16.5,
+   "y": 4.9,
+   "say": [
+    "Someone waiting for a lift taps his card against his leg. “Come on, come on.”"
+   ]
+  }
+ ],
+ "exits": [
+  {
+   "to": "jongno",
+   "side": "S",
+   "x": 22,
+   "y": 18,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "to": "one-international--pt-room",
+   "side": "N",
+   "x": 4,
+   "y": 1,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "to": "one-international--hr",
+   "side": "N",
+   "x": 8,
+   "y": 1,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "to": "one-international--finance",
+   "side": "N",
+   "x": 12,
+   "y": 1,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "to": "one-international--resources",
+   "side": "N",
+   "x": 16,
+   "y": 1,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "to": "one-international--sales3",
+   "side": "N",
+   "x": 20,
+   "y": 1,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "to": "one-international--audit",
+   "side": "N",
+   "x": 24,
+   "y": 1,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "to": "one-international--meeting",
+   "side": "N",
+   "x": 28,
+   "y": 1,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "to": "one-international--board-room",
+   "side": "N",
+   "x": 32,
+   "y": 1,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "to": "one-international--exec-floor",
+   "side": "N",
+   "x": 36,
+   "y": 1,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "to": "one-international--roof",
+   "side": "N",
+   "x": 40,
+   "y": 1,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "jongno": [
+   22,
+   17
+  ],
+  "one-international--pt-room": [
+   4,
+   2
+  ],
+  "one-international--hr": [
+   8,
+   2
+  ],
+  "one-international--finance": [
+   12,
+   2
+  ],
+  "one-international--resources": [
+   16,
+   2
+  ],
+  "one-international--sales3": [
+   20,
+   2
+  ],
+  "one-international--audit": [
+   24,
+   2
+  ],
+  "one-international--meeting": [
+   28,
+   2
+  ],
+  "one-international--board-room": [
+   32,
+   2
+  ],
+  "one-international--exec-floor": [
+   36,
+   2
+  ],
+  "one-international--roof": [
+   40,
+   2
+  ],
+  "": [
+   22,
+   17
+  ]
+ },
+ "states": [
+  {
+   "id": "day",
+   "light": "day"
+  }
+ ],
+ "links": [
+  "jongno",
+  "one-international--audit",
+  "one-international--board-room",
+  "one-international--exec-floor",
+  "one-international--finance",
+  "one-international--hr",
+  "one-international--meeting",
+  "one-international--pt-room",
+  "one-international--resources",
+  "one-international--roof",
+  "one-international--sales3"
+ ]
+}

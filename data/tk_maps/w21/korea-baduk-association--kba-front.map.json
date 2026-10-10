@@ -1,0 +1,185 @@
+{
+ "format": "tk-map/1",
+ "id": "korea-baduk-association--kba-front",
+ "world": 21,
+ "name": "The Korea Baduk Association",
+ "archetype": "interior",
+ "size": [
+  24,
+  16
+ ],
+ "seed": 3366,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "office_tile",
+   " ": "void",
+   "W": "wall"
+  },
+  "rows": [
+   "                        ",
+   " WWWWWWWWWWWWWWWWWaaWWW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WWWWWWWWWWWaaWWWWWWWWW ",
+   "                        "
+  ],
+  "walk": {
+   "office_tile": true,
+   "void": false,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    12,
+    8
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     6,
+     7
+    ],
+    "to-kba-trainees": [
+     9,
+     0
+    ]
+   },
+   "tiles": 68
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.trophy_case",
+   "x": 2,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "trophies-1",
+   "label": "Trophies and photographs of the pros"
+  },
+  {
+   "kind": "furn.trophy_case",
+   "x": 4,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "trophies-2"
+  },
+  {
+   "kind": "furn.reception",
+   "x": 10,
+   "y": 6,
+   "w": 4,
+   "h": 1,
+   "id": "desk",
+   "label": "The front desk"
+  },
+  {
+   "kind": "furn.noticeboard",
+   "x": 20,
+   "y": 6,
+   "w": 2,
+   "h": 1,
+   "id": "notices",
+   "label": "The trainees' rankings"
+  },
+  {
+   "kind": "furn.sofa",
+   "x": 2,
+   "y": 10,
+   "w": 2,
+   "h": 1,
+   "id": "sofa"
+  }
+ ],
+ "spots": [],
+ "npcs": [
+  {
+   "id": "npc-1",
+   "kind": "folk.salaryman",
+   "x": 12.0,
+   "y": 6.35,
+   "say": [
+    "A man at the front desk. “Trainees go straight through. You know the way.”"
+   ],
+   "until": "21-21-m17",
+   "label": "The KBA's front desk"
+  },
+  {
+   "id": "kba-staff",
+   "kind": "folk.salaryman",
+   "x": 12.0,
+   "y": 6.35,
+   "say": [
+    "The man at the front desk looks up, and knows you."
+   ],
+   "until": "21-21-m18",
+   "when": "node:21-m17",
+   "label": "A KBA staff member",
+   "buyer": {
+    "wants": [
+     "socks"
+    ],
+    "pays": 0,
+    "no": [
+     "“Geu-rae? You've come here to sell? I'd buy whatever you brought. Out of pity, to encourage you, to cheer you on, any of it. Could you call that doing your job?”"
+    ]
+   }
+  }
+ ],
+ "exits": [
+  {
+   "to": "korea-baduk-association--kba-trainees",
+   "side": "N",
+   "x": 18,
+   "y": 1,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "to": "korea-baduk-association",
+   "side": "S",
+   "x": 12,
+   "y": 14,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "korea-baduk-association--kba-trainees": [
+   18,
+   2
+  ],
+  "korea-baduk-association": [
+   12,
+   13
+  ],
+  "": [
+   12,
+   13
+  ]
+ },
+ "parent": "korea-baduk-association",
+ "building": "kba-front",
+ "links": [
+  "korea-baduk-association",
+  "korea-baduk-association--kba-trainees"
+ ]
+}

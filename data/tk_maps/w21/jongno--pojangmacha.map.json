@@ -1,0 +1,169 @@
+{
+ "format": "tk-map/1",
+ "id": "jongno--pojangmacha",
+ "world": 21,
+ "name": "The pojangmacha",
+ "archetype": "interior",
+ "size": [
+  20,
+  12
+ ],
+ "seed": 1942,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "e": "earth",
+   " ": "void",
+   "W": "wall"
+  },
+  "rows": [
+   "                    ",
+   " WWWWWWWWWWWWWWWWWW ",
+   " WeeeeeeeeeeeeeeeeW ",
+   " WeeeeeeeeeeeeeeeeW ",
+   " WeeeeeeeeeeeeeeeeW ",
+   " WeeeeeeeeeeeeeeeeW ",
+   " WeeeeeeeeeeeeeeeeW ",
+   " WeeeeeeeeeeeeeeeeW ",
+   " WeeeeeeeeeeeeeeeeW ",
+   " WeeeeeeeeeeeeeeeeW ",
+   " WWWWWWWWWeeWWWWWWW ",
+   "                    "
+  ],
+  "walk": {
+   "earth": true,
+   "void": false,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    10,
+    6
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     5,
+     5
+    ]
+   },
+   "tiles": 52
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.counter",
+   "x": 6,
+   "y": 2,
+   "w": 3,
+   "h": 1,
+   "id": "cart",
+   "label": "The cart: eomuk, soju"
+  },
+  {
+   "kind": "furn.plastic_table",
+   "x": 4,
+   "y": 6,
+   "w": 1,
+   "h": 1,
+   "id": "table-1"
+  },
+  {
+   "kind": "furn.plastic_table",
+   "x": 14,
+   "y": 6,
+   "w": 1,
+   "h": 1,
+   "id": "table-2"
+  },
+  {
+   "kind": "furn.plastic_table",
+   "x": 14,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "table-3"
+  },
+  {
+   "kind": "furn.stool",
+   "x": 6,
+   "y": 6,
+   "w": 1,
+   "h": 1,
+   "id": "stool-1"
+  },
+  {
+   "kind": "furn.stool",
+   "x": 12,
+   "y": 6,
+   "w": 1,
+   "h": 1,
+   "id": "stool-2"
+  }
+ ],
+ "spots": [
+  {
+   "id": "m19b",
+   "x": 6.5,
+   "y": 8.7,
+   "node": "21-m19b",
+   "label": "The pojangmacha"
+  },
+  {
+   "id": "pojangmacha",
+   "x": 12.5,
+   "y": 8.7,
+   "node": "",
+   "label": "The pojangmacha",
+   "note": "m19's handoff to Ahn lands here"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "npc-1",
+   "kind": "folk.ajumma",
+   "x": 7.5,
+   "y": 2.35,
+   "say": [
+    "The woman at the cart. “Soju? Eomuk? Sit, sit.”"
+   ]
+  }
+ ],
+ "exits": [
+  {
+   "to": "jongno",
+   "side": "S",
+   "x": 10,
+   "y": 10,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "jongno": [
+   10,
+   9
+  ],
+  "": [
+   10,
+   9
+  ]
+ },
+ "states": [
+  {
+   "id": "night",
+   "light": "night"
+  }
+ ],
+ "parent": "jongno",
+ "building": "pojangmacha",
+ "links": [
+  "jongno"
+ ]
+}
