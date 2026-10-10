@@ -300,7 +300,7 @@ const WorldModern = {
       }
     }
     if (chip) chip.style.top = `${Math.round(y)}px`;
-    if (window.__w && window.__w.fitCamera && window.__w.mapW) window.__w.fitCamera();   // the camera keeps the room clear of them (hudTop)
+    if (window.__w && window.__w.fitCamera && window.__w.mapW && !window.__w.cine) window.__w.fitCamera();   // (never under a scene's camera)   // the camera keeps the room clear of them (hudTop)
   },
 };
 

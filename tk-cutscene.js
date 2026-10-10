@@ -44,7 +44,11 @@ const WorldCutscene = {
     // where the camera looks for a tile: the same, or where the isometric view draws it (tk-iso.js)
     const seen = at => { const [x, y] = px(at); if (!scene.view) return [x, y]; const v = scene.view(x, y); return [v.x, v.y]; };
     const wait = ms => new Promise(r => { if (skip) return r(); timers.push(scene.time.delayedCall(ms, r)); });
-    const tween = cfg => new Promise(r => { if (skip) return r(); scene.tweens.add({ ...cfg, onComplete: r }); });
+    // a tween that's stopped or killed (another took hold of the sprite) never completes: each has a deadline too, so a
+    // scene can't hang on one (Misaeng m16 on a phone froze with its box hidden, 1 run in 2)
+    const tween = cfg => new Promise(r => { if (skip) return r(); let done = false; const end = () => { if (!done) { done = true; r(); } };
+      scene.tweens.add({ ...cfg, onComplete: end, onStop: end });
+      setTimeout(end, ((cfg.duration || 0) + (cfg.delay || 0)) / ((scene.tweens && scene.tweens.timeScale) || 1) + 1500); });
 
     // hide the player, the followers and the townsfolk; the cast stands in for them
     // (opts.keep: townsfolk the scene needs as they are, e.g. who sets its problem; not when the
@@ -281,7 +285,9 @@ const WorldCutscene = {
     const pan = (to, ms = 350) => {
       if (!to) return Promise.resolve();
       const [x, y] = seen(to);
-      return new Promise(r => { if (skip) return r(); cam.pan(x, y - 8, ms, "Sine.easeInOut", true, (c, p) => { if (p === 1) r(); }); });
+      return new Promise(r => { if (skip) return r(); let done = false; const end = () => { if (!done) { done = true; r(); } };
+        cam.pan(x, y - 8, ms, "Sine.easeInOut", true, (c, p) => { if (p === 1) end(); });
+        setTimeout(end, ms + 1000); });   // a pan cut short (the camera refitted under it) never reaches 1
     };
 
     // ---- props, poses, emotes, gifts, mood ----
