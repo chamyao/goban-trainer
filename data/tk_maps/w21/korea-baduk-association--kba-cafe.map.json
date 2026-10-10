@@ -112,37 +112,8 @@
    "label": "An arcade machine"
   }
  ],
- "spots": [
-  {
-   "id": "m3",
-   "x": 12.5,
-   "y": 12.7,
-   "node": "21-m3",
-   "label": "The café across the street"
-  }
- ],
- "npcs": [
-  {
-   "id": "cafe-trainee",
-   "kind": "folk.kid",
-   "x": 18.5,
-   "y": 12.9,
-   "say": [],
-   "intro": [
-    "A trainee from the room, still in his school uniform, with a pocket board. “One more? Before you go home and they ask how it went?”"
-   ],
-   "win": [
-    "“…You'll make it next year. Probably.”"
-   ],
-   "done": [
-    "The trainee is replaying your game, move by move."
-   ],
-   "until": "21-m3",
-   "when": "node:21-m2",
-   "view": 2,
-   "challenge": "cafe-trainee"
-  }
- ],
+ "spots": [],
+ "npcs": [],
  "exits": [
   {
    "to": "korea-baduk-association",

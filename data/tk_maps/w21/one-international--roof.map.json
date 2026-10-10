@@ -135,14 +135,6 @@
      "to": "one-international--general-affairs"
     },
     {
-     "label": "5F · HR",
-     "to": "one-international--hr"
-    },
-    {
-     "label": "8F · The textile team",
-     "to": "one-international--textile"
-    },
-    {
      "label": "14F · Sales Team 3",
      "to": "one-international--sales3"
     },
@@ -194,14 +186,6 @@
    2
   ],
   "one-international--general-affairs": [
-   12,
-   4
-  ],
-  "one-international--hr": [
-   12,
-   4
-  ],
-  "one-international--textile": [
    12,
    4
   ],

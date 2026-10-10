@@ -254,20 +254,13 @@
    "y": 9.7,
    "node": "",
    "label": "The summit",
-   "note": "the cut to Oh lands here (6+ tiles from m7)"
+   "note": "the cut to Oh lands here; the run is to m7"
   },
   {
    "id": "m7",
-   "x": 33.5,
-   "y": 9.7,
-   "node": "21-m7",
-   "label": "The summit"
-  },
-  {
-   "id": "m7b",
    "x": 29.5,
    "y": 57.7,
-   "node": "21-m7b",
+   "node": "21-m7",
    "label": "Oh's car"
   }
  ],

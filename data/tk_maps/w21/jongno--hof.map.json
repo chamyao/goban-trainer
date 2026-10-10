@@ -127,13 +127,6 @@
    "y": 12.7,
    "node": "21-m12",
    "label": "The hof"
-  },
-  {
-   "id": "m19d",
-   "x": 14.5,
-   "y": 8.7,
-   "node": "21-m19d",
-   "label": "The team dinner"
   }
  ],
  "npcs": [
@@ -153,7 +146,7 @@
     "The salaryman is asleep on his arms."
    ],
    "until": "21-m12",
-   "when": "node:21-m11",
+   "when": "node:21-m10",
    "view": 2,
    "challenge": "hof-drunk"
   }
