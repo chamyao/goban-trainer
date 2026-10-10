@@ -19,6 +19,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from tk_story import WORLDS  # noqa: E402
 from tk_story_zh import CAST, FOLK_VOICE, NARRATOR, ZH, spoken  # noqa: E402
+import problem_kind  # noqa: E402
 
 BOOKS = ROOT / "data" / "books"
 GRADES = [f"{k}K{p}" for k in range(15, 0, -1) for p in ("", "+")] + [f"{d}D{p}" for d in range(1, 8) for p in ("", "+")]
@@ -282,6 +283,19 @@ def vet(ref):
     return None if r is None else r["ok"]
 
 
+# A board that asks for a kind of problem (Plot: "the puzzles don't always match the dialogue"): a decision board's
+# "pool" names it (words from tools/problem_kind.py: ld, live, kill, tesuji, sacrifice, snapback, race, endgame, capture;
+# all of them must hold), or "problem": "book/id" names one problem outright. A book with such boards gets a typed
+# rated pool (KIND_GROUPS, PER_GROUP a grade each), and every board in it draws by kind (no "pool": life and death).
+KIND_GROUPS = ("ld live", "ld kill", "ld", "tesuji sacrifice", "tesuji", "race", "endgame", "capture")
+PER_GROUP = 12
+PROBLEM_IDS = {}   # "book/id" -> [book, id] as the book writes the id
+
+
+def typed(p):
+    return p.get("qt") in problem_kind.TYPES and any(l[0] == 1 and len(l) > 1 for l in p.get("lines", []))
+
+
 def usable(p):
     # A real answer key: at least one correct line with a move in it.
     return p.get("qt") in TSUMEGO and any(l[0] == 1 and len(l) > 1 for l in p.get("lines", []))
@@ -290,10 +304,17 @@ def usable(p):
 def main():
     rng = random.Random(20261004)
     index = json.loads((ROOT / "data" / "index.json").read_text())
-    by_grade, maeda, redmond = {}, [], []
+    by_grade, maeda, redmond, typed_by_grade = {}, [], [], {}
     for b in index:
         book = json.loads((BOOKS / f"{b['id']}.json").read_text())
         for p in book["problems"]:
+            if typed(p) and p.get("lv") in RANK:
+                k = problem_kind.kinds(p)
+                for g in KIND_GROUPS:
+                    if set(g.split()) <= k:
+                        typed_by_grade.setdefault((p["lv"], g), []).append([b["id"], p["id"], " ".join(sorted(k))])
+                        break
+                PROBLEM_IDS[f"{b['id']}/{p['id']}"] = [b["id"], p["id"]]
             if not usable(p):
                 continue
             ref = [b["id"], p["id"]]
@@ -306,6 +327,9 @@ def main():
                 by_grade.setdefault(p["lv"], []).append(ref)
     for v in by_grade.values():
         rng.shuffle(v)
+    rng_typed = random.Random(20261010)   # its own, so the other books' draws stay as they were
+    for k in sorted(typed_by_grade):
+        rng_typed.shuffle(typed_by_grade[k])
     redmond.sort(key=lambda r: r[1])
 
     taken = set()  # no problem appears twice in the whole campaign
@@ -385,6 +409,10 @@ def main():
                 xs.sort(key=lambda x: vet(x) is not True)
                 rated += [[x[0], x[1], r] for x in xs[:30]]
             out["rated"] = rated
+        boards = [d for n in w["nodes"] for d in ([] if not n.get("dilemma") else n["dilemma"] if isinstance(n["dilemma"], list) else [n["dilemma"]])]
+        if any("pool" in d or "problem" in d for d in boards):
+            out["rated"] = [[x[0], x[1], r, x[2]] for r in range(0, RANK["3D"] + 1) for g in KIND_GROUPS
+                            for x in sorted(typed_by_grade.get((GRADES[r], g), []), key=lambda x: vet(x) is not True)[:PER_GROUP] if vet(x) is not False]
         out["nodes"] = nodes
         out["edges"] = [[key(a), key(b)] for a, b in w["edges"]]
         out["grades"] = f"{w['grades'][0]}–{w['grades'][-1]}"
@@ -410,6 +438,10 @@ def main():
             if "dilemma" in n:
                 def one(d0):
                     d = dict(d0, q_zh=zh(d0["q"]))
+                    if "problem" in d:   # "book/id": that problem, whatever the player's rating
+                        if d["problem"] not in PROBLEM_IDS:
+                            sys.exit(f"{out['name']}: no problem {d['problem']} (a board's \"problem\" is \"book/id\")")
+                        d["problem"] = PROBLEM_IDS[d["problem"]]
                     for k in ("open", "win", "slip"):
                         if k in d:
                             d[k + "_zh"] = zh(d[k])

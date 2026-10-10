@@ -806,6 +806,7 @@ const TK = {
     if (Object.keys(p.tk || {}).some(k => k.startsWith("21-"))) {
       for (const k of Object.keys(p.tk)) if (k.startsWith("21-")) this.undoCleared(p, k);
       for (const k of Object.keys(p.tkSeen || {})) if (k.startsWith("21:")) delete p.tkSeen[k];
+      if (p.tkElo && p.tkElo.slots) for (const k of Object.keys(p.tkElo.slots)) if (k.startsWith("21-")) delete p.tkElo.slots[k];   // boards dealt before (v3: drawn by kind now)
       this.rolledBack(p, 21);
       for (const key of ["tk-party", "tk-items", "tk-at", "tk-ride", "tk-marks"]) { const a = this.ls(key); if (21 in a) { delete a[21]; this.lsSet(key, a); } }
       try { localStorage.removeItem("tk-world-21"); localStorage.removeItem("tk-choices"); } catch {}
@@ -854,8 +855,12 @@ const TK = {
   set easy(v) {},
   problemRef(node, idx = 0) {
     const d = this.ls("tk-draw"), w = this.world(+String(node.key).split("-")[0]);
+    // a board that names its problem ("problem": [book, id]) or the kind it asks for ("pool": "tesuji", "ld live" …,
+    // tools/problem_kind.py; Plot: the puzzles should match the dialogue)
+    const dl = [].concat(node.dilemma || [])[idx] || {};
+    if (dl.problem) return dl.problem;
     if (this.mode === "adaptive" && w && w.rated && w.rated.length)   // once a beat's board is seen it stays (a retry, a revisit)
-      return TKElo.pick(w, `${node.key}~${idx}`, node.role === "boss" ? TKElo.BOSS : TKElo.BOARD);
+      return TKElo.pick(w, `${node.key}~${idx}`, node.role === "boss" ? TKElo.BOSS : TKElo.BOARD, dl.pool);
     const pool = this.easy && node.pool_easy && node.pool_easy.length ? node.pool_easy : node.pool;
     return pool[((d[node.key] || 0) + idx) % pool.length];
   },
@@ -2181,13 +2186,17 @@ const TKElo = {
     const i = Math.max(0, Math.round((r - 600) / 50));
     return i < 30 ? `${15 - Math.floor(i / 2)}K${i % 2 ? "+" : ""}` : `${1 + Math.floor((i - 30) / 2)}D${(i - 30) % 2 ? "+" : ""}`;
   },
-  pick(w, slot, offset = this.BOARD) {
+  pick(w, slot, offset = this.BOARD, pool) {
     const p = loadProgress(), s = this.state(p);
     s.slots = s.slots || {}; s.used = s.used || [];
     if (s.slots[slot]) return s.slots[slot];
-    const aim = s.r + offset, used = new Set(s.used), near = w.rated.filter(x => !used.has(`${x[0]}:${x[1]}`))
+    // a book whose pool is typed (each entry's kinds 4th): only the kind the board asks for, life and death if it names none
+    const want = w.rated[0] && w.rated[0][3] != null ? String(pool || "ld").split(/\s+/) : null;
+    const kind = want && w.rated.filter(x => want.every(k => x[3].split(" ").includes(k)));
+    const rated = kind && kind.length ? kind : w.rated;
+    const aim = s.r + offset, used = new Set(s.used), near = rated.filter(x => !used.has(`${x[0]}:${x[1]}`))
       .sort((a, b) => Math.abs(this.of(a[2]) - aim) - Math.abs(this.of(b[2]) - aim)).slice(0, 6);
-    const x = near[Math.floor(Math.random() * near.length)] || w.rated[0];
+    const x = near[Math.floor(Math.random() * near.length)] || rated[0];
     s.slots[slot] = [x[0], x[1]];
     s.used.push(`${x[0]}:${x[1]}`);
     if (s.used.length > 500) s.used = s.used.slice(-500);

@@ -31,9 +31,9 @@ def T(en):
     return en
 
 
-def D(who, q, open_, win, slip):
+def D(who, q, open_, win, slip, **kw):
     """A decision board: the caption over the problem, and the decider's own lines on it."""
-    return {"q": q, "who": who, "open": open_, "win": win, "slip": slip}
+    return {"q": q, "who": who, "open": open_, "win": win, "slip": slip, **kw}
 
 
 # Cast id (Graphics' TK_CHARS keys) -> Kokoro English voice (ids already used in the repo).
@@ -695,12 +695,12 @@ def _nodes():
             "ms_jang_child", "Find the atari.",
             "Two liberties. If I put one here...",
             "Atari!",
-            "Look again.")),
+            "Look again.", problem="specialized-training-in-tesuji-1/81759")),
         node("m2", 32, 234, "m2", place="Korea Baduk Association", room="kba-trainees", move=0, dilemma=D(
             "ms_jang_young", "Win by half a point.",
             "Seven years. Again, half a point. Win this one.",
             "Half a point short. Again.",
-            "Read it again.")),
+            "Read it again.", pool="endgame")),
         node("m3", 44, 228, "m3", place="Korea Baduk Association", room="kba-cafe", move=2, board=False),
         node("m4", 56, 222, "m4", place="Susaek-dong", room="home", move=2, board=False),
         node("m5", 68, 216, "m5", place="Jongno", room="sponsor-office", move=2, board=False),
@@ -710,12 +710,12 @@ def _nodes():
             "ms_jang", "Give the buyer a puzzle: the move that gives one stone to take more.",
             "I can't talk trade. I can talk this.",
             "Snapback.",
-            "Not that. Again.")),
+            "Not that. Again.", problem="lee-chang-hos-selected-tesuji-part-2/222")),
         node("m9", 108, 196, "m9", place="Jongno", room="forecourt", move=4, dilemma=D(
             "ms_jang", "Read the man from his game.",
             "Sloppy, red-eyed, bored. I read him wrong once. Not again.",
             "Obsessive. Responsible.",
-            "Read him again.")),
+            "Read him again.", pool="tesuji")),
         node("m10", 120, 190, "m10", room="hr", move=5, board=False),
         node("m11", 130, 185, "m11", room="sales3", move=5, board=False,
              gate=[{"needs": ["mark:requisition"], "else": "m11_wait",
@@ -725,12 +725,12 @@ def _nodes():
             "ms_jang", "Secure your own stones first.",
             "I lived by this my whole life. Make the group live, then attack.",
             "Alive.",
-            "It's dead. Again.")),
+            "It's dead. Again.", pool="ld live")),
         node("m13", 154, 173, "m13", room="sales3", move=6, dilemma=D(
             "ms_ahn", "Make both live.",
             "His scheme or Kim's? Neither has to die.",
             "Both live.",
-            "One of them dies. Again.")),
+            "One of them dies. Again.", pool="ld live")),
         node("m14", 166, 167, "m14", room="sales3", move=6, record=7,
              choices={7: [['dj', 0.08], ['ep', 0.11], ['cj', 0.14], ['qk', 0.26], ['do', 0.29], ['cm', 0.31], ['bp', 0.51], ['co', 1.05], ['qn', 3.87]]},
              gate=[{"needs": ["mark:errand_bl", "mark:errand_copy", "mark:errand_floor"], "else": "m14_wait",
@@ -746,23 +746,23 @@ def _nodes():
             "ms_jang", "See what the watchers see.",
             "The one inside the board can't see it. Step outside it.",
             "There.",
-            "Still inside. Again.")),
+            "Still inside. Again.", pool="tesuji")),
         node("m17", 200, 150, "m17", room="roof", move=9, dilemma=D(
             "ms_jang", "Take sente.",
             "Lead this time. Don't hand it over.",
             "He takes it back with both hands.",
-            "Again.")),
+            "Again.", pool="endgame")),
         node("m18", 212, 144, "m18", room="sales3", move=10, dilemma=D(
             "ms_jang", "Hold your ground on the phone.",
             "He said build it my way. Hold him to it.",
             "Find it yourself.",
-            "Again.")),
+            "Again.", pool="race")),
         node("m18b", 218, 141, "m18b", place="Ulsan", move=10, board=False, cutaway=True),
         node("m19", 226, 137, "m19", room="sales3", move=10, dilemma=D(
             "ms_jang", "Fix the document.",
             "Same colours. Big groups over small ones. Smaller boxes.",
             "Shrink the boxes.",
-            "Still a mess. Again.")),
+            "Still a mess. Again.", pool="tesuji")),
         node("m19b", 232, 134, "m19b", room="sales3", move=10, record=[11, None], choices={11: [['br', 1.86], ['dl', 2.72], ['bq', 3.07], ['dr', 3.1], ['ck', 3.11], ['dk', 4.11], ['bp', 4.98]]}, dilemma=[
             D("ms_jang", "Which move did Cho Hunhyun play?",
               "Make the corner solid, then fight.",
@@ -771,7 +771,7 @@ def _nodes():
             D("ms_jang", "Take the PT back.",
               "We chose it together. He agreed. Hold him to it.",
               "That's what we agreed.",
-              "Again."),
+              "Again.", pool="race"),
         ]),
         node("m19c", 236, 133, "m19c", room="meeting", move=12, board=False),
         node("m19d", 240, 131, "m19d", place="Jongno", room="hof", move=12, board=False),
@@ -780,7 +780,7 @@ def _nodes():
             "ms_oh", "Read what Go's bragging gives away.",
             "His intern lives on our supplies. Why?",
             "The cabinet key. The glue.",
-            "Read him again.")),
+            "Read him again.", pool="tesuji")),
         node("m21b", 256, 122, "m21b", place="Jongno", move=14, board=False),
         node("m22", 262, 119, "m22", room="sales3", move=14, record=15, choices={15: [['cf', 0.05], ['gc', 0.1], ['ic', 0.26], ['fd', 0.34], ['ed', 0.57], ['dm', 0.78], ['dj', 0.95], ['cj', 0.95], ['dl', 1.1], ['ec', 1.51]]}, dilemma=D(
             "ms_jang", "Which move did Cho Hunhyun play?",
@@ -791,7 +791,7 @@ def _nodes():
             "ms_jang", "Give up the dead stone.",
             "Checkmate. Don't cling to it. Don't leave it on the board.",
             "Give it up. Apologise.",
-            "It's still on the board. Again.")),
+            "It's still on the board. Again.", pool="tesuji sacrifice")),
         node("m22c", 274, 113, "m22c", room="textile", move=16, board=False),
     ]
 
