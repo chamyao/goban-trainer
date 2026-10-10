@@ -71,10 +71,12 @@ def _scenes():
         # M2 · 착수0 (second half). Seven years a trainee; he fails; the excuses; the stones dropped a few at a time.
         # (staging) The comic never shows a deciding game; it says the half-point losses kept coming. The board is one of them.
         "m2": {"title": T("Seven Years"), "kind": "main", "steps": [
+            ["scroll", T("Seven Years Later"), [
+                T("At eleven he entered the Korea Baduk Association as a trainee. He is eighteen now."),
+            ]],
             ["spawn", "tr", "ms_trainee", "m2", 6, -2],
-            N("At eleven he entered the Korea Baduk Association as a trainee. Around then his parents began clipping Lee Chang-ho's and Lee Sedol's "
-              "rankings and prize money out of the newspapers."),
-            N("Seven years passed."),
+            N("When he entered, his parents began clipping Lee Chang-ho's and Lee Sedol's rankings and prize money out of the newspapers. "
+              "Seven years of clippings."),
             ["problem"],   # Jang: another half-point game; lost
             ["remove", "tr"],
             N("He failed to turn pro."),
@@ -864,8 +866,9 @@ KO21 = {
     "He learned fast. Soon he held his own in his uncle's and his father's betting games, and won their money back from the man at the corner shop.": '그는 빨리 배웠다. 곧 삼촌과 아버지의 내기 바둑에서도 밀리지 않았고, 동네 가게 아저씨에게 잃은 돈을 되찾아 왔다.',
     "On the class director's advice he moved to an amateur six-dan's academy. Nobody could stop a nine-year-old who laid out book problems alone at dawn.": '원장님의 권유로 아마 6단의 학원으로 옮겼다. 새벽에 혼자 책의 문제를 늘어놓는 아홉 살을 아무도 말릴 수 없었다.',
     "Genius. To his parents the word was a sweet hypnosis. They sent him to a professional's dojang, and they burned for it all the hotter because his father's company had just gone under.": '영재. 부모님에겐 달콤한 최면제였다. 그들은 그를 프로기사의 도장에 보냈고, 마침 아버지의 회사가 부도를 맞았기에 그 응원은 더 뜨거웠다.',
-    "At eleven he entered the Korea Baduk Association as a trainee. Around then his parents began clipping Lee Chang-ho's and Lee Sedol's rankings and prize money out of the newspapers.": '열한 살에 한국기원 연구생으로 들어갔다. 부모님이 이창호, 이세돌의 순위와 상금을 신문에서 오려 모으기 시작한 것도 그 무렵이다.',
-    'Seven years passed.': '7년이 지났다.',
+    'Seven Years Later': '7년 후',
+    'At eleven he entered the Korea Baduk Association as a trainee. He is eighteen now.': '열한 살에 한국기원 연구생으로 들어갔다. 이제 그는 열여덟 살이다.',
+    "When he entered, his parents began clipping Lee Chang-ho's and Lee Sedol's rankings and prize money out of the newspapers. Seven years of clippings.": '그가 들어가자 부모님은 이창호, 이세돌의 순위와 상금을 신문에서 오려 모으기 시작했다. 7년 치 스크랩.',
     'He failed to turn pro.': '입단에 실패했다.',
     "Only now does he see his father's wrinkles, and how dull his mother's eyes have gone.": '이제야 아버지의 주름이, 흐려진 어머니의 눈이 보인다.',
     "The world sheds its skin. He hasn't changed, he tells himself: tomorrow he'd still be here, losing to younger kids with higher rankings. Only the world in his eyes has changed. Blue and green have gone grey.": '세상이 허물을 벗는다. 나는 변하지 않았다고 그는 생각한다. 내일도 여기서, 나이 어린 상위 랭커들에게 지고 있을 것이다. 변한 건 내 눈 속의 세상뿐. 파랑과 초록이 회색이 되었다.',
