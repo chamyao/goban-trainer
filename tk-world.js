@@ -1556,6 +1556,15 @@ function worldScenes() {
           spot.armed = false; spot.armAt = null;
         }
         this.setGoal();
+        // a beat waiting on the audit board's mark (Misaeng m21b) with the clues in hand: the board opens here
+        const A = this.w.audit;
+        if (A && typeof WorldModern !== "undefined" && [].concat(gate.needs || []).includes(`mark:${A.done}`) && WorldModern.auditOpen(this.w) && WorldModern.audit(this)) {
+          const t = setInterval(() => {   // closed with every link made: the beat it waited for plays on from here
+            if (document.querySelector(".tk-audit")) return;
+            clearInterval(t);
+            if (spot && WorldMarks.has(this.w, A.done)) { spot.armed = true; spot.armAt = null; }
+          }, 300);
+        }
       });
       const steps = (this.story[q.scene] || {}).steps || [], at = steps.findIndex(s => s[0] === "problem");
       if (q.board === false) {   // a scene with no board (a defeat): playing it is the beat

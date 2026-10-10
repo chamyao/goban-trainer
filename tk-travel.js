@@ -23,7 +23,8 @@ const WorldTravel = {
       const show = () => {
         ride.hidden = !WorldItems.hasMount(w); ride.textContent = WorldItems.riding(w) ? "下马 Dismount" : "上马 Ride";
         const sealed = WorldItems.owned(w).some(k => ["sealed", "carriage"].includes((WorldItems.defs(w)[k] || {}).kind));
-        bag.hidden = !(F && sealed);
+        const clues = typeof WorldModern !== "undefined" && WorldModern.auditOpen(w);   // Misaeng: the audit board opens from the bag
+        bag.hidden = !(F && (sealed || clues));
         const s = this.scene(), car = F && F.carriage(w);
         curtain.hidden = !car; curtain.textContent = s && s.st && s.st.curtain ? "放帘 Curtain down" : "卷帘 Curtain up";
       };
