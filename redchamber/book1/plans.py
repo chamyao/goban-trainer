@@ -121,7 +121,7 @@ CUE_AT = {
     ("d7", "tanchun"): ([15, 7], "W"),
     ("d7", "jmmaid"): ([4, 8], "E"),
     ("g2", "oldservant"): ([9, 11], "W"),
-    ("g3", "backchild"): ([13, 1], "W"),
+    ("g3", "backchild"): ([9, 0], "S"),      # on the north verge, off the line to the gate (Testing)
     ("g4", "zhouruijia"): ([7, 2], "W"),
     ("g5", "zhouruijia"): ([4, 5], "E"),
     ("g6", "zhouruijia"): ([10, 5], "W"),
@@ -289,7 +289,7 @@ RONG = {
     "maps": {
         # Grandmother Jia's rooms: d2 (the embrace), d3 (Xifeng sweeps in from the back door), d6 (dinner, tea), d7 (the
         # jade). Her couch at the back; the girls' chairs; the green gauze closet through the east doorway.
-        "jm-rooms": _room([20, 10], [10, 9], "Grandmother Jia's rooms", floor="stone",
+        "jm-rooms": _room([20, 10], [10, 9], "Grandmother Jia's rooms", floor="wood",
                           things=[{"id": "couch", "kind": "furn.kang", "rect": [9, 1, 2, 1], "label": "Grandmother Jia's couch"},
                                   {"id": "screen", "kind": "furn.screen", "rect": [12, 1, 2, 1]},
                                   {"id": "back-door", "kind": "furn.curtain", "rect": [16, 1, 1, 1], "label": "The back door"},
@@ -305,7 +305,7 @@ RONG = {
                                  {"id": "d7", "at": [8, 7], "node": K("d7"), "trigger": "talk", "label": "Grandmother Jia's rooms"}],
                           exits=[{"to": "gauze-closet", "at": [19, 4]}]),
         # the green gauze closet, off her rooms: d8, at night (Yingge 3,0; Xiren walks in from 10,2 to 4,1)
-        "gauze-closet": _room([10, 6], [0, 3], "The green gauze closet", floor="stone",
+        "gauze-closet": _room([10, 6], [0, 3], "The green gauze closet", floor="wood",
                               things=[{"id": "bed", "kind": "furn.bed", "rect": [6, 1, 2, 1], "label": "The bed"},
                                       {"id": "gauze", "kind": "furn.gauze", "rect": [3, 1, 2, 1], "label": "The green gauze partition"},
                                       {"id": "lamp", "kind": "furn.lamp", "rect": [8, 4, 1, 1]}],
@@ -313,7 +313,7 @@ RONG = {
         | {"states": [{"id": "night", "light": "night"}]},
         # Rongxi Hall: the hall under its plaque, then Lady Wang's side room east of it (the two cushions, d5's spot) and,
         # behind a lattice, the east-corridor room where she sits on the kang (10 east, 6 north of the spot)
-        "wf-rooms": _room([22, 10], [5, 9], "Lady Wang's rooms", floor="stone",
+        "wf-rooms": _room([22, 10], [5, 9], "Lady Wang's rooms", floor="stone",   # Rongxi Hall: flagstones
                           lines=[{"id": "lattice", "kind": "wall.lattice", "path": [[11, 1], [11, 6]], "width": 1}],
                           things=[{"id": "plaque", "kind": "furn.plaque", "rect": [4, 1, 3, 1], "label": "A gold plaque: Hall of Glorious Felicity",
                                    "plaque": "荣禧堂"},
@@ -328,7 +328,7 @@ RONG = {
                                   {"id": "shelf", "kind": "furn.shelf", "rect": [19, 1, 2, 1]}],
                           spots=[{"id": "d5", "at": [13, 8], "node": K("d5"), "trigger": "talk", "label": "Lady Wang's rooms"}]),
         # Xifeng's main room (g5): the clock on its pillar, Ping'er by the kang in the east room; her own room to the west
-        "xf-eastroom": _room([16, 8], [8, 7], "The east room", floor="stone",
+        "xf-eastroom": _room([16, 8], [8, 7], "The east room", floor="wood",
                              things=[{"id": "clock", "kind": "furn.clock", "rect": [7, 2, 1, 1], "label": "A box on a pillar, a weight swinging under it"},
                                      {"id": "kang", "kind": "furn.kang", "rect": [12, 2, 2, 1], "label": "The kang in the east room"},
                                      {"id": "curtain", "kind": "furn.curtain", "rect": [11, 4, 1, 1], "label": "A scarlet felt curtain"},
@@ -338,7 +338,7 @@ RONG = {
                              exits=[{"to": "xf-rooms", "at": [0, 3]}]),
         # Xifeng's own room (g6): she sits on the kang at the hand-warmer (0,-6), Ping'er beside her; Jia Rong comes in by
         # the door from the main room (14,4)
-        "xf-rooms": _room([14, 8], [13, 4], "Xifeng's rooms", floor="stone",
+        "xf-rooms": _room([14, 8], [13, 4], "Xifeng's rooms", floor="wood",
                           things=[{"id": "kang", "kind": "furn.kang", "rect": [5, 1, 2, 1], "label": "Xifeng's kang"},
                                   {"id": "warmer", "kind": "furn.handwarmer", "rect": [7, 1, 1, 1], "label": "A brass hand-warmer"},
                                   {"id": "screen", "kind": "furn.screen", "rect": [9, 1, 2, 1], "label": "A painted screen"},
@@ -346,7 +346,7 @@ RONG = {
                                   {"id": "drawers", "kind": "furn.drawers", "rect": [2, 6, 1, 1]}],
                           spots=[{"id": "g6", "at": [6, 5], "node": K("g6"), "trigger": "talk", "label": "Xifeng's rooms"}]),
         # Zhou Rui's house, inside the back gate (g4)
-        "zhou-house": _room([10, 6], [5, 5], "Zhou Rui's house", floor="stone",
+        "zhou-house": _room([10, 6], [5, 5], "Zhou Rui's house", floor="wood",
                             things=[{"id": "kang", "kind": "furn.kang", "rect": [5, 1, 2, 1]},
                                     {"id": "table", "kind": "furn.table", "rect": [2, 2, 1, 1]},
                                     {"id": "jar", "kind": "furn.jar", "rect": [8, 1, 1, 1]}],
@@ -429,7 +429,7 @@ XING = {
     ],
     "maps": {
         # d4: Lady Xing on her seat (4,-4); the servant back from the study (10,2)
-        "xing-hall": _room([12, 8], [6, 7], "Lady Xing's hall", floor="stone",
+        "xing-hall": _room([12, 8], [6, 7], "Lady Xing's hall", floor="wood",
                            things=[{"id": "kang", "kind": "furn.kang", "rect": [5, 1, 2, 1], "label": "Lady Xing's kang"},
                                    {"id": "screen", "kind": "furn.screen", "rect": [8, 1, 2, 1]},
                                    {"id": "table", "kind": "furn.table", "rect": [2, 3, 1, 1]},
@@ -538,7 +538,8 @@ STREET = {
         ],
         "spots": [
             {"id": "g2", "at": [7, 10], "node": K("g2"), "label": "The side gate", "trigger": "near"},
-            {"id": "g3", "at": [11, 1], "node": K("g3"), "label": "The back gate", "trigger": "near"},
+            {"id": "g3", "at": [11, 1], "node": K("g3"), "label": "The back gate", "trigger": "near",
+             "via": [[2, 11], [2, 2]]},   # the marker leads round by the west lane, not north through the wall (Testing)
             {"id": "g7", "at": [10, 1], "node": K("g7"), "label": "The back gate", "trigger": "near"},
             {"id": "wall-corner", "at": [3, 10], "label": "The corner of the wall", "note": "g2: where the gatemen tell her to wait"},
         ],
@@ -589,7 +590,7 @@ STREET["challengers"] = [
     _ch("toy-hawker", "folk.villager", [7, 1], "node:g2", "node:g3",
         "A toy for the little one? Win a game and he can have one for nothing.",
         "A deal's a deal. Here, little one.", "The back gate's just there."),
-    _ch("back-child", "folk.child", [15, 1], "node:g2", "node:g3",
+    _ch("back-child", "folk.child", [17, 0], "node:g2", "node:g3",   # past the gate, out of the way to it (Testing)
         "Granny! Granny! Play me! I always win!", "You cheated! No you didn't. Again tomorrow!", "Which Zhou Da-niang do you want?"),
 ]
 

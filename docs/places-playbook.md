@@ -212,6 +212,9 @@ past 48 px. Yielders catch at 1.4 tiles while she moves, and yield after she has
 knows). A spot that delivers a mark: `needs`, `when`, `delivers`, `deliver` (lines on delivering), `delivered`,
 `empty`, `waiting`, `call`. Someone standing within 64 px of such a spot delivers it when talked to.
 
+**A spot's `via`** (cells, in order): where the goal marker points first, until she gets there, so it leads round
+a wall instead of straight through it (Red Chamber's back gate from the side gate: the west lane). Stored in tiles.
+
 **Lines.** A narration line is a plain string. A spoken line is `[speaker, English]`, speaker a cast key
 (`"zhaoyun"`); `["n", …]` is not a speaker and fails the build. Every English line needs Chinese in
 `tk_places_w2_zh.py` (or `tk_story_zh.ZH`), or `build_tk.py` stops. Lines a player can meet in any order must not say
@@ -302,8 +305,8 @@ problem picks as committed. Then `git status`: only what the change touched shou
 - One map per pair of places has one way between them that works: the engine lands an arrival at the entry kept for
   the map she came from, not at the gate she used. Two open gates from the street into one house land at the same
   spot, so shut all but one in each state (Red Chamber: the back gate in Part 2, none in Part 1).
-- A room's `floor="wood"` draws as pale brick in all three kits and reads as a wall; `"stone"` draws as floorboards
-  (Book 15's rooms, and Red Chamber's). Render a room (`compile.render`) in each kit before choosing.
+- Floors: since kits v49 (main), `floor="wood"` draws as floorboards and `"stone"` as grey flagstones (before, wood drew
+  as pale brick). Render a room (`compile.render`) in each kit before choosing.
 - A room beat that waits for a tap keeps its objective while she's inside: write it to read right both on the way
   there and in the room ("…to Grandmother Jia's rooms. Look about you, then go up to her.").
 - A proof must fail when it should: break the thing it proves (open the shut gates in a copy of the map) and run it.
