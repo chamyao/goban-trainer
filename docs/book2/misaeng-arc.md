@@ -123,6 +123,20 @@ door (R3).
 Ahn leads 2 beats, Sun 1 and a cutaway, Oh 4 (with m3 and m23 shared). Boards: 5 record boards, 11 contests or legwork,
 1 boss with 3 boards, 1 mission, 1 room setup. Five beats have no board.
 
+
+**Written** (`tools/tk_story_w21.py`, `WORLD21`). Five beats are split in two where the scene moves place, so the
+story has 29 nodes: `m3b` (Oh's search, lobby, gated on `item:waybill_scrap`), `m4b` (the client's president at One
+International, `meeting`), `m5b` (the daycare), `m19b` (the pojangmacha, her father), `m23b` (the forecourt, the
+contract ends). The record boards are on m6 (B29), m9 (B47), m17 (B85), m22 (B137) and m24 (B145). The audit board
+holds four clues (`statements`, `coached`, `icb_listing`, `icb_call`) and two links; m13's boss plays the call, the
+board list and James Park as its three boards.
+
+Spots and people the scenes ask Places for: the lobby bins (give `waybill_scrap`), `lobby-lift`, a `resources` spot or
+room (Ahn's team), the audit room's table (gives `icb_listing`, opens the audit board), Jang's desk in `sales3` (gives
+`icb_call`), the board room's three seats (`seat_president` water, `seat_exec` green tea, `seat_division` coffee, each
+`takes`), m18's shop (socks), buyers, the corner-shop rival and the KBA staff member as a buyer who always refuses
+(his refusal is the rebuke), `client`, `meeting`, `daycare`, `sun-flat`, `pojangmacha`, `forecourt`.
+
 ## Decisions (Plot's recommendations; the user can overrule any of them)
 
 1. **Span:** all of Season 1, one book, because the frame only lands at move 145. If it runs too long, split after m14
