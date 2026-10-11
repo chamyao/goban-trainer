@@ -384,6 +384,20 @@ Draft one arc, get it playable in a test book, and fix what the playtest shows b
   novel's own order, and the later book's **opening scroll** still stands alone for a player who starts there. Example:
   the Cao Cao arc closes on chapters 5–7 in four lines; the Diaochan arc opens on Chang'an under Dong Zhuo.
 
+### R21. A decision board is the deliberation; the choice comes after (Misaeng)
+
+> "the own the mistake line kills the tension, his choice should be revealed after the puzzle, the puzzle should serve
+> to represent deliberation" (the user, relayed by the Editor; its principle 22)
+
+On a board where a character decides something:
+- The caption, the opening thought and the narration before the board **pose** the dilemma ("Whose stone is it?"),
+  and never name the answer ("Own the mistake.").
+- A still or line that shows the choice plays **after** the solve.
+- The win line is resolve ("He knows what he has to do."), not the decision itself; the decision is the first line
+  after the board.
+- Explanations that give away the choice (a baduk proverb that names it, a trait like "he doesn't hand over sente")
+  go after the board too, where they explain instead of spoil.
+
 ### R20. Work with the Editor (Misaeng)
 
 > "you and editor should be close collaborators in the future without needing me to facilitate explicitly"
@@ -397,6 +411,8 @@ and the Editor work directly, without routing through the user:
   plot or the user's rules), revises, and sends it back. The Editor's questions about the intended plot are Plot's to
   answer from the source.
 - Plot brings the user the outcome and anything that needs the user's call, not every exchange.
+- The Editor reads the raw scene steps too (spawns, removes, stills, maps), since staging problems never show in the md:
+  a line saying "out of earshot" or "on the roof" must match where the beat actually plays.
 
 ### R19. Any adaptation is material; the experience comes first (Misaeng)
 
