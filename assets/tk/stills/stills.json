@@ -1896,5 +1896,14 @@
   "model": "final-1",
   "look": "final",
   "made": "2026-10-11"
+ },
+ "ms_slide": {
+  "file": "ms_slide.jpg",
+  "scene": "ms",
+  "prompt": "A single full-frame illustration, no panels, no speech bubbles, no captions. The Korea Baduk Association trainees' room in the evening, rows of go boards on low tables. A thin sixteen-year-old Korean trainee with a black fringe, in a grey hoodie, sits alone at a board, staring at a finished game he has lost by half a point, his hand still near the bowl. In the background, out of focus by the door, other teenage trainees crowd round a friend, congratulating him on passing the pro exam. Dim, tired light; the mood of a winning streak gone cold. Style: 2D Korean webtoon, hard cel shading. Modern-day Seoul, South Korea.",
+  "provider": "replicate",
+  "model": "final-1",
+  "look": "final",
+  "made": "2026-10-11"
  }
 }
