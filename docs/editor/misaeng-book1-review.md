@@ -779,3 +779,15 @@ Checked in the raw steps with the E8 audits.
 5. **Nit, m16:** with "As the saying goes" gone, the onlooker line is a baduk saying from a non-player again. m12
    already established that baduk sayings are everyday speech, so this is fine, but "As they say," would keep her
    distance from baduk clear.
+
+### Round 5 applied (46012962): cleared
+
+All four items read right in the raw steps:
+- **m19:** "Not again" now pays off m17.
+- **m12:** Ahn is cool and on her way out. Keeping "Pull yourself together." (the user liked the scene) works.
+- **m13:** "Her report done" fixes the time order.
+- **m16:** one line, then she's gone before the board.
+
+**Optional nit (m12 staging):** "Jang slips outside for air… On the pavement" is carried by the ms_hof_aside still, but
+the lines after it play on the hof map with Ahn spawned inside at (4, -2). A `move` of Ahn toward the door, or
+spawning her by the door, would keep the map in step with the still.
