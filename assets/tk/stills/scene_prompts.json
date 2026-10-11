@@ -1304,9 +1304,9 @@
  "ms_hof_aside": {
   "book": 21,
   "category": "interlude",
-  "beat": "Ahn Young-yi pulls him aside at the interns' bar.",
-  "scene": "A noisy Korean hof (beer pub) full of young interns in office clothes around crowded tables of beer and fried chicken. In the foreground, near the door, Ahn Young-yi has hold of Jang Geu-rae's sleeve and has pulled him away from the table; she is speaking to him, firm and direct. Behind them an intern in glasses holds up a full glass.",
-  "notes": "Book 21 (Misaeng Book 1), docs/book2/misaeng-arc.md. Modern Seoul, 2012. An original illustration, not a recreation of the comic's panels. People named as CAST names them, so their looks come from CAST. Beat m12. The user asked for this moment ('the pull yourself together scene')."
+  "beat": "Outside the hof: Ahn Young-yi takes Jang aside, one to one.",
+  "scene": "Night, on the quiet side street just outside a Korean hof (beer pub). Through the pub's lit window behind them, a blurred crowd of interns drinking; out here it is calm, under a single street lamp. Ahn Young-yi faces Jang Geu-rae, close and level, her arms folded, talking to him frankly and privately; he listens, a little sheepish. Just the two of them, nobody else outside. Their faces and clothes exactly as in their CAST portraits.",
+  "notes": "Book 21 (Misaeng Book 1), docs/book2/misaeng-arc.md. Modern Seoul, 2012. An original illustration, not a recreation of the comic's panels. People named as CAST names them, so their looks come from CAST. Beat m12. The user asked for this moment ('the pull yourself together scene'). Redo (the user): it must read as a private one-to-one outside, away from the bustle, and Ahn must match her character design (CAST ms_ahn) exactly."
  },
  "ms_rush": {
   "book": 21,
@@ -1326,8 +1326,8 @@
   "book": 21,
   "category": "interlude",
   "beat": "One word back: 'Again!'",
-  "scene": "A close view of a mobile phone held in a young man's hand outside a lunch restaurant. On the screen, a message bubble with a single word and an exclamation mark. Blurred interns laughing in the background.",
-  "notes": "Book 21 (Misaeng Book 1), docs/book2/misaeng-arc.md. Modern Seoul, 2012. An original illustration, not a recreation of the comic's panels. People named as CAST names them, so their looks come from CAST. Beat m18."
+  "scene": "A mobile phone lying face-up on a restaurant table beside a bowl of soup and metal chopsticks, its screen showing a single message bubble with one word and an exclamation mark: Again! No hands in frame. Blurred lunch-crowd background.",
+  "notes": "Book 21 (Misaeng Book 1), docs/book2/misaeng-arc.md. Modern Seoul, 2012. An original illustration, not a recreation of the comic's panels. People named as CAST names them, so their looks come from CAST. Beat m18. Redo (the user): the previous version had a malformed hand; no hands at all."
  },
  "ms_call": {
   "book": 21,
