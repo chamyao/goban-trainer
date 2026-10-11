@@ -305,11 +305,18 @@ def _sales3():
         *_desks([(2, 4), (3, 4), (2, 5), (3, 5)]),
         {"id": "sun-desk", "kind": "furn.office_desk", "rect": [4, 4, 1, 2], "label": "Sun Ji-young's desk"},
         # Sales Team 3
-        {"id": "desk-deputy", "kind": "furn.office_desk", "rect": [8, 4, 1, 1], "label": "The deputy's desk"},
-        {"id": "desk-spare", "kind": "furn.office_desk", "rect": [9, 4, 1, 1]},
-        {"id": "desk-kim", "kind": "furn.office_desk", "rect": [9, 5, 1, 1], "label": "Kim Dong-sik's desk"},
+        # Sales Team 3: each member's own desk, and a chair at it (a beat "at your desk" stands on the chair, apo110:
+        # "going to your desk actually routes to a desk and not a circle on the floor")
+        {"id": "desk-kim", "kind": "furn.office_desk", "rect": [8, 4, 1, 1], "label": "Kim Dong-sik's desk"},
+        {"id": "desk-deputy", "kind": "furn.office_desk", "rect": [9, 4, 1, 1], "label": "The deputy's desk"},
         {"id": "desk-jang", "kind": "furn.office_desk", "rect": [8, 5, 1, 1], "label": "Jang's desk"},
-        {"id": "oh-desk", "kind": "furn.office_desk", "rect": [10, 4, 1, 2], "label": "Oh's desk"},
+        {"id": "desk-spare", "kind": "furn.office_desk", "rect": [9, 5, 1, 1], "label": "An empty desk"},
+        {"id": "oh-desk", "kind": "furn.office_desk", "rect": [10, 3, 1, 2], "label": "Oh's desk"},
+        {"id": "chair-kim", "kind": "furn.chair", "rect": [8, 3, 1, 1], "label": "Kim Dong-sik's chair"},
+        {"id": "chair-deputy", "kind": "furn.chair", "rect": [9, 3, 1, 1], "label": "The deputy's chair"},
+        {"id": "chair-jang", "kind": "furn.chair", "rect": [8, 6, 1, 1], "label": "Jang's chair"},
+        {"id": "chair-spare", "kind": "furn.chair", "rect": [9, 6, 1, 1]},
+        {"id": "chair-oh", "kind": "furn.chair", "rect": [11, 3, 1, 1], "label": "Oh's chair"},
         # the team east
         *_desks([(13, 4), (14, 4), (13, 5), (14, 5)]),
         {"id": "head-e", "kind": "furn.office_desk", "rect": [15, 4, 1, 2]},
@@ -1179,29 +1186,29 @@ def _b1():
             "Jongno/hof": [{"id": "m12", "at": [7, 6], "node": k(12), "label": "The hof"}],
             sales3: [
                 # (every spot you walk up to here at least 76 px from every giver and delivery)
-                {"id": "m10", "at": [6, 8], "node": k(10), "label": "Jang's desk"},
-                {"id": "m13", "at": [3, 9], "node": k(13), "label": "Jang's desk, at night"},
+                {"id": "m10", "at": [8, 6], "on": "chair-jang", "node": k(10), "label": "Your desk"},
+                {"id": "m13", "at": [8, 6], "on": "chair-jang", "node": k(13), "label": "Your desk, at night"},
                 {"id": "m14", "at": [12, 7], "node": k(14), "label": "Sales Team 3"},
                 {"id": "m18", "at": [15, 7], "node": k(18), "label": "Sales Team 3"},
                 {"id": "m19", "at": [9, 10], "node": k(19), "label": "Sales Team 3"},
-                {"id": "m20", "at": [3, 7], "node": k(20), "label": "Sales Team 3"},
-                {"id": "m21", "at": [12, 5], "node": k(21), "label": "Oh's desk"},   # Go comes over from Sales Team 1
+                {"id": "m20", "at": [3, 9], "node": k(20), "label": "Sales Team 3"},
+                {"id": "m21", "at": [11, 3], "on": "chair-oh", "node": k(21), "label": "Oh's desk"},   # Go comes over from Sales Team 1
                 {"id": "m22", "at": [8, 9], "node": k(22), "label": "Sales Team 3"},   # the 13th-floor clash (staged on 14)
                 {"id": "m22b", "at": [4, 9], "node": k("22b"), "label": "The team's table"},
                 {"id": "sales3", "at": [15, 9], "label": "Sales Team 3", "note": "handoffs to Jang land here (6+ tiles from the next beat)"},
                 # m14's pile-up, all at once (episode 7): the forwarder on the team phone, Kim's copies, the floor
                 _give("copier", [2, 2], "The copier", "copy", n(13), "The copier groans out Kim Dong-sik's copies, warm.",
                       "The copier. You've done Kim's copies."),
-                _deliver("errand-copy", [9, 6], "Give Kim Dong-sik his copies", "copy", "errand_copy", n(13),
+                _deliver("errand-copy", [8, 3], "Give Kim Dong-sik his copies", "copy", "errand_copy", n(13),
                          "Kim Dong-sik takes the copies without looking up. “Thirty? I said thirty-two. …No, thirty. Fine.”",
                          "Kim Dong-sik taps the desk. “The copies, Jang. Today, if you can.”",
                          "Kim Dong-sik is reading the copies.", to="kim-errand"),
-                {"id": "errand-bl", "at": [6, 5], "label": "The team phone", "needs": [n(13)], "when": n(13), "delivers": "errand_bl",
+                {"id": "errand-bl", "at": [5, 6], "label": "The team phone", "needs": [n(13)], "when": n(13), "delivers": "errand_bl",
                  "set_down": True,
                  "deliver": ["You ring the forwarder about the B/L. On hold. Then a voice: the bill of lading went out this morning. You write it down."],
                  "waiting": ["The team phone."], "delivered": ["The team phone. The forwarder's call is done."]},
                 # "wipe this floor" (episode 7): the mop from the cleaning cupboard, to the spill by the east desks
-                _give("mop-cupboard", [11, 2], "The cleaning cupboard", "mop", n(13), "A mop and a bucket, behind the cupboard door. You take them.",
+                _give("mop-cupboard", [15, 2], "The cleaning cupboard", "mop", n(13), "A mop and a bucket, behind the cupboard door. You take them.",
                       "The cleaning cupboard. The mop's back on its hook."),
                 _deliver("errand-floor", [14, 10], "A spill on the floor", "mop", "errand_floor", n(13),
                          "Coffee, trodden into the carpet all morning. You mop it, wring it, mop it again. Nobody looks up.",
@@ -1212,8 +1219,8 @@ def _b1():
             "One International/roof": [{"id": "m17", "at": [11, 5], "node": k(17), "label": "The smokers' corner"},
                                        {"id": "roof", "at": [3, 5], "label": "The roof", "note": "handoffs to the roof land here"}],
         },
-        "things": {sales3: [{"id": "team-phone", "kind": "furn.phone", "rect": [6, 4, 1, 1], "label": "The team phone"},
-                            {"id": "mop-cupboard", "kind": "furn.cleaning_cupboard", "rect": [11, 1, 1, 1], "label": "The cleaning cupboard"},
+        "things": {sales3: [{"id": "team-phone", "kind": "furn.phone", "rect": [5, 5, 1, 1], "label": "The team phone"},
+                            {"id": "mop-cupboard", "kind": "furn.cleaning_cupboard", "rect": [15, 1, 1, 1], "label": "The cleaning cupboard"},
                             {"id": "spill", "kind": "prop.spill", "rect": [14, 10, 1, 1], "label": "A spill"}]},
         "npcs": {
             "One International": [
@@ -1221,7 +1228,7 @@ def _b1():
                 {"id": "ga-clerk", "kind": "folk.officewoman", "place": "general-affairs", "at": [5, 3], "face": "S", "label": "General Affairs",
                  "say": "A clerk at General Affairs' counter, sorting forms into trays."},
                 # m14: Kim Dong-sik at his desk for his copies
-                {"id": "kim-errand", "kind": "hero.ms_kimds", "place": "sales3", "at": [9, 6], "face": "S", "label": "Kim Dong-sik",
+                {"id": "kim-errand", "kind": "hero.ms_kimds", "place": "sales3", "at": [8, 3], "face": "S", "label": "Kim Dong-sik",
                  "when": n(13), "until": n(14), "say": "Kim Dong-sik doesn't look up from his screen."},
             ],
             # episode 1's evening, as Jongno's townsfolk while m5 is open: the city's office workers after hours
