@@ -1363,5 +1363,12 @@
   "beat": "The thirteenth floor: two department heads face off.",
   "scene": "An open-plan office floor. In the middle aisle, Steve Han, sharp suit, arms folded, faces Kim Bu-ryeon, who holds a very thick bound report. Around them, staff peer over their partitions and pretend to work. Tense, silent, everyone watching.",
   "notes": "Book 21 (Misaeng Book 1), docs/book2/misaeng-arc.md. Modern Seoul, 2012. An original illustration, not a recreation of the comic's panels. People named as CAST names them, so their looks come from CAST. Beat m22."
+ },
+ "ms_intern": {
+  "book": 21,
+  "category": "interlude",
+  "beat": "Human Resources: he is only an intern, with two months to pass the PT.",
+  "scene": "A plain HR office at One International: a desk, a filing cabinet, a company logo on the wall. An HR staffer slides a temporary ID card on a lanyard, marked INTERN, across the desk to Jang Geu-rae, who stands in his new suit looking at it. Beside him, Oh Sang-sik, still in his hiking jacket, stares at the card in open disbelief: this is his reinforcement? A wall calendar shows a date circled two months ahead.",
+  "notes": "Book 21 (Misaeng Book 1), docs/book2/misaeng-arc.md. Modern Seoul, 2012. An original illustration, not a recreation of the comic's panels. People named as CAST names them. Beat m8 (the user: 'Perhaps the an intern scene should be a still')."
  }
 }
