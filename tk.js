@@ -776,7 +776,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) { this.data = await (await fetch("data/tk.json?v=136")).json(); this.migrate(); }
+    if (!this.data) { this.data = await (await fetch("data/tk.json?v=137")).json(); this.migrate(); }
     return this.data;
   },
   // A book whose beats were renumbered after players began it: their cleared beats moved to the new keys, once per
