@@ -384,6 +384,17 @@ Draft one arc, get it playable in a test book, and fix what the playtest shows b
   novel's own order, and the later book's **opening scroll** still stands alone for a player who starts there. Example:
   the Cao Cao arc closes on chapters 5–7 in four lines; the Diaochan arc opens on Chang'an under Dong Zhuo.
 
+### R22. Before sending a draft: setups, motives, jumps (Misaeng)
+
+The playtest notes on Book 1 nearly all had one root: the payoff came before its cause was on screen. Plot knows the
+source, so its gaps fill themselves; a stranger falls into them (the Editor's E8, docs/editor/editor-playbook.md on
+`claude/editor-misaeng`). Run these on every beat before it goes to the Editor:
+- **Setups:** for every payoff, name the earlier line or image that set it up ("last chance" needs the decline first).
+- **Motives:** every action and handoff has a motive the player can see (why the new hire is sent; why Oh searches).
+  Re-check after every cut: cutting m12's apology took away Ahn's reason to follow.
+- **Jumps:** every jump in time or place is said in the narration and matched by the staging (dinner → the next
+  morning; who is where).
+
 ### R21. A decision board is the deliberation; the choice comes after (Misaeng)
 
 > "the own the mistake line kills the tension, his choice should be revealed after the puzzle, the puzzle should serve
