@@ -152,14 +152,19 @@ def build_problem(book_dir: Path, chapter: int, pid: int):
     if not any(line[0] == 1 for line in lines):
         return None, "no-solution"
 
-    return {
+    out = {
         "id": pid,
         "b": black,
         "w": white,
         "lv": d.get("levelname", ""),
         "qt": d.get("qtypename", ""),
         "lines": lines,
-    }, None
+    }
+    # a smaller board (101weiqi's "lu": 13, 9 ...): its coordinates are already on it, from the top left; the app
+    # walls off the rest of the 19x19 so its far edges are edges (apo110: a 13x13 problem showed mid-board)
+    if d.get("lu", 19) != 19:
+        out["sz"] = d["lu"]
+    return out, None
 
 
 def level_sort_key(level: str):
