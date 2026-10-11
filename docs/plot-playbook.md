@@ -384,6 +384,20 @@ Draft one arc, get it playable in a test book, and fix what the playtest shows b
   novel's own order, and the later book's **opening scroll** still stands alone for a player who starts there. Example:
   the Cao Cao arc closes on chapters 5–7 in four lines; the Diaochan arc opens on Chang'an under Dong Zhuo.
 
+### R20. Work with the Editor (Misaeng)
+
+> "you and editor should be close collaborators in the future without needing me to facilitate explicitly"
+
+The Editor session reads each book's playable script as a stranger, with no knowledge of the source, and judges it
+against sourced storytelling principles (`docs/editor/storytelling-principles.md` on `claude/editor-misaeng`). Plot
+and the Editor work directly, without routing through the user:
+- After every substantial story change (a new book's draft, a restructure, a batch of playtest fixes), Plot regenerates
+  the readable script (`docs/book2/misaeng-book1-script.md` or its successor) and sends it to the Editor for review.
+- The Editor reports problems with fixes. Plot answers each (adopt, adapt, or decline with a reason, often the source's
+  plot or the user's rules), revises, and sends it back. The Editor's questions about the intended plot are Plot's to
+  answer from the source.
+- Plot brings the user the outcome and anything that needs the user's call, not every exchange.
+
 ### R19. Any adaptation is material; the experience comes first (Misaeng)
 
 > "It's ok to use drama as material our focus is a good experience to strictly abiding to one adaptation over another"
