@@ -929,4 +929,7 @@ KO21 = {
     "The one inside the game can't see it. Step outside.": '판 안에 있으면 안 보여. 밖으로 나와.',
     'Someone at a workshop said most fear is irrational...': '워크숍에서 누가 그러더라고요. 공포는 대부분 비합리적이라고...',
     "A smooth talker, and a kid who can't tell he's being used. Some team.": '말발 좋은 놈하고, 이용당하는 줄도 모르는 녀석이라. 팀 한번 좋네.',
+    # Places (Misaeng), relabelled handoff spots (d2b51e5)
+    "Hand Kim's requisition to the clerk": '김 대리의 비품 신청서를 직원에게 건네기',
+    'Give Kim Dong-sik his copies': '김동식 대리에게 복사본 건네기',
 }
