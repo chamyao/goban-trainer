@@ -385,6 +385,14 @@
    "label": "Sales Team 3"
   },
   {
+   "id": "b32b",
+   "x": 17.0,
+   "y": 10.7,
+   "node": "22-b32b",
+   "label": "Your desk",
+   "on": "chair-jang"
+  },
+  {
    "id": "b33b",
    "x": 17.0,
    "y": 10.7,
@@ -410,7 +418,7 @@
    "gives": "oh_slippers",
    "gives_when": "node:22-b26",
    "give": [
-    "Under Oh's desk, among cables and dust: a pair of brown office slippers, the massage spikes worn down to the shape of his foot. The office worker's combat boots."
+    "Under Oh's desk, among cables and dust: a pair of brown office slippers, the massage spikes worn down to the shape of his foot, and in a shoebox beside them, his good black dress shoes. The office worker's combat boots."
    ],
    "given": [
     "Oh's desk. You've already taken the slippers."
@@ -471,7 +479,7 @@
     "Kim Dong-sik doesn't look up from his screen."
    ],
    "face": "N",
-   "when": "node:22-b33",
+   "when": "node:22-b32",
    "label": "Kim Dong-sik"
   },
   {
@@ -509,7 +517,7 @@
     "The deputy is on the phone to a supplier, voice low and patient."
    ],
    "face": "N",
-   "when": "node:22-b33",
+   "when": "node:22-b32",
    "label": "The deputy"
   },
   {
@@ -547,7 +555,7 @@
     "Section head Oh reads a contract, red pen in hand, heels out of his office slippers under the desk."
    ],
    "face": "N",
-   "when": "node:22-b33",
+   "when": "node:22-b32",
    "label": "Oh Sang-sik"
   }
  ],

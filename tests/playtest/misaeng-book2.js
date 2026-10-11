@@ -144,6 +144,13 @@ async function team(b) {
   check(v.kim && v.deputy && v.oh, `b21: Kim, the deputy and Oh at their own desks (${JSON.stringify(v)})`);
   check(v.slippers, 'b21: Oh in his office slippers (planted for the PT)');
   await p.context().close();
+  // b32b: back upstairs after the PT, to Jang's own chair, Oh and Kim at their desks
+  const q = await open(b, '22-b32b', 'one-international--sales3', [], ['one-international--sales3']);
+  const w = await q.evaluate(() => { const w = window.__w, r = w.refs || {}, s = w.spots.b32b, d = r['desk-jang'];
+    const sat = id => w.npcs.some(n => n.id.startsWith(id) && n.spr.visible);
+    return { desk: !!s && !!d && Math.abs(s.x - d.x) < 4 && s.y > d.y && s.y - d.y < 16, oh: sat('oh-'), kim: sat('kim-') }; });
+  check(w.desk && w.oh && w.kim, `b32b: back at Jang's own desk, Oh and Kim at theirs (${JSON.stringify(w)})`);
+  await q.context().close();
 }
 
 (async () => {

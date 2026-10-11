@@ -725,6 +725,7 @@
      1225
     ]
    ],
+   "board": false,
    "objective_zh": "",
    "title_zh": ""
   },
@@ -3881,13 +3882,13 @@
    "title_zh": ""
   },
   {
-   "node": "22-b33",
+   "node": "22-b32b",
    "role": "main",
-   "place": "susaek-dong--home",
-   "spot": "b33",
-   "scene": "b33",
-   "title": "Contract",
-   "objective": "Home.",
+   "place": "one-international--sales3",
+   "spot": "b32b",
+   "scene": "b32b",
+   "title": "A Week",
+   "objective": "Back upstairs to Sales Team 3.",
    "after": [
     "22-b32"
    ],
@@ -4064,19 +4065,20 @@
      63817
     ]
    ],
+   "board": false,
    "objective_zh": "",
    "title_zh": ""
   },
   {
-   "node": "22-b33b",
+   "node": "22-b33",
    "role": "main",
-   "place": "one-international--sales3",
-   "spot": "b33b",
-   "scene": "b33b",
-   "title": "The First Day",
-   "objective": "Your desk, Sales Team 3.",
+   "place": "susaek-dong--home",
+   "spot": "b33",
+   "scene": "b33",
+   "title": "Contract",
+   "objective": "Home.",
    "after": [
-    "22-b33"
+    "22-b32b"
    ],
    "grade": "11K",
    "pool": [
@@ -4251,20 +4253,19 @@
      63809
     ]
    ],
-   "board": false,
    "objective_zh": "",
    "title_zh": ""
   },
   {
-   "node": "22-b33c",
+   "node": "22-b33b",
    "role": "main",
-   "place": "daehanmun",
-   "spot": "b33c",
-   "scene": "b33c",
-   "title": "The First Morning",
-   "objective": "Daehanmun, the tent by the wall.",
+   "place": "one-international--sales3",
+   "spot": "b33b",
+   "scene": "b33b",
+   "title": "The First Day",
+   "objective": "Your desk, Sales Team 3.",
    "after": [
-    "22-b33b"
+    "22-b33"
    ],
    "grade": "11K",
    "pool": [
@@ -4437,6 +4438,194 @@
     [
      "specialized-training-in-tsumego-1",
      166755
+    ]
+   ],
+   "board": false,
+   "objective_zh": "",
+   "title_zh": ""
+  },
+  {
+   "node": "22-b33c",
+   "role": "main",
+   "place": "daehanmun",
+   "spot": "b33c",
+   "scene": "b33c",
+   "title": "The First Morning",
+   "objective": "Daehanmun, the tent by the wall.",
+   "after": [
+    "22-b33b"
+   ],
+   "grade": "11K",
+   "pool": [
+    [
+     "segoe-tsumego-dictionary-part-1",
+     15732
+    ],
+    [
+     "weiqi-life-and-death-drills-intermediate-part-1",
+     40016
+    ],
+    [
+     "hitomi-tsumego",
+     160877
+    ],
+    [
+     "ishida-yoshio-tsumego-challenge",
+     37702
+    ],
+    [
+     "fujisawa-shuko-classroom",
+     18432
+    ],
+    [
+     "rin-kaiho-tsumego-the-power-of-reversal",
+     75740
+    ],
+    [
+     "specialized-training-in-tsumego-5",
+     44219
+    ],
+    [
+     "weiqi-life-and-death-drills-beginner-part-1",
+     30560
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-2",
+     144421
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3767
+    ],
+    [
+     "common-life-and-death-problems",
+     26092
+    ],
+    [
+     "xuanxuan-qijing",
+     18431
+    ],
+    [
+     "kada-katsuji-tsumego-part-2",
+     31893
+    ],
+    [
+     "go-seigen-tsumego-collection-part-4",
+     31415
+    ],
+    [
+     "the-unexpected-tesuji",
+     1416
+    ],
+    [
+     "segoe-tsumego-dictionary-part-2",
+     15972
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-2",
+     667
+    ],
+    [
+     "segoe-tsumego-dictionary-part-1",
+     777
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-2",
+     696
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-2",
+     777
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-1",
+     144128
+    ],
+    [
+     "segoe-tesuji-dictionary-part-4",
+     18040
+    ],
+    [
+     "compact-go-puzzles-to-learn-the-basics",
+     147921
+    ],
+    [
+     "segoe-tsumego-dictionary-part-3",
+     16247
+    ],
+    [
+     "lee-chang-hos-selected-tsumego-part-2",
+     808
+    ],
+    [
+     "go-seigen-tsumego-collection-part-4",
+     31308
+    ],
+    [
+     "go-seigen-tsumego-collection-part-1",
+     6213
+    ],
+    [
+     "ohashi-style-power-up-tsumego-part-1",
+     132090
+    ],
+    [
+     "beautiful-dan-level-tsumego-100",
+     139140
+    ],
+    [
+     "weiqi-life-and-death-drills-beginner-part-1",
+     32850
+    ]
+   ],
+   "pool_easy": [
+    [
+     "weiqi-rapid-drill-800-part-3",
+     3518
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63777
+    ],
+    [
+     "weiqi-rapid-drill-800-part-4",
+     3739
+    ],
+    [
+     "specialized-training-in-tsumego-2",
+     103425
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     166755
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62325
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63835
+    ],
+    [
+     "nie-weipings-tsumego-encyclopedia",
+     52775
+    ],
+    [
+     "weiqi-rapid-drill-800-part-1",
+     3105
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62351
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     63806
+    ],
+    [
+     "specialized-training-in-tsumego-1",
+     62328
     ]
    ],
    "board": false,

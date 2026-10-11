@@ -1625,7 +1625,7 @@ def _b2():
     n = lambda key: f"node:{kk(key)}"   # noqa: E731
     sales3 = "One International/sales3"
     desk = lambda key, label="Your desk": {"id": f"b{key}", "at": [8, 6], "on": "chair-jang", "node": kk(key), "label": label}   # noqa: E731
-    beats = ["17", "17b", *map(str, range(18, 21)), "21", "21b", "22", "22b", *map(str, range(23, 34)), "33b", "33c"]
+    beats = ["17", "17b", *map(str, range(18, 21)), "21", "21b", "22", "22b", *map(str, range(23, 34)), "32b", "33b", "33c"]
     return {
         "keys": {f"b{x}" for x in beats},
         "places": ["Jongno", "One International", "Supplier", "Daycare", "Sun's neighbourhood", "Susaek-dong", "Daehanmun"],
@@ -1651,14 +1651,15 @@ def _b2():
             "One International/meeting3": [{"id": "b20", "at": [8, 7], "node": kk(20), "label": "The executive meeting room"}],
             sales3: [
                 {"id": "b21", "at": [6, 6], "node": kk(21), "label": "Sales Team 3"},   # Sun comes over from her desk, beside it
-                {**desk("33b"), "label": "Your desk"},
+                desk("32b"),   # back upstairs from the PT hall, Oh and Kim at their desks
+                desk("33b"),
                 {"id": "sales3", "at": [15, 9], "label": "Sales Team 3", "note": "handoffs to Jang at the office land here"},
                 # b27's gate (night): Oh's slippers, from under his desk (the office worker's combat boots)
                 _give("oh-desk-search", [10, 5], "Oh's desk", "oh_slippers", n(26),
                       "Under Oh's desk, among cables and dust: a pair of brown office slippers, the massage spikes worn down to the "
-                      "shape of his foot. The office worker's combat boots.",
+                      "shape of his foot, and in a shoebox beside them, his good black dress shoes. The office worker's combat boots.",
                       "Oh's desk. You've already taken the slippers.")
-                | {"on": "chair-oh", "near_ok": ["b33b"]}],
+                | {"on": "chair-oh", "near_ok": ["b32b", "b33b"]}],
             "Daycare": [{"id": "b21b", "at": [6, 5], "node": kk("21b"), "label": "The daycare's glass door"},
                         {"id": "b22b", "at": [6, 5], "node": kk("22b"), "label": "The daycare's glass door"}],
             "Sun's neighbourhood/sun-flat": [{"id": "b22", "at": [6, 5], "node": kk(22), "label": "Sun Ji-young's flat"}],
@@ -1679,7 +1680,7 @@ def _b2():
             "One International": [
                 # Sales Team 3 at their desks while the story has them in the office: back from the supplier until the
                 # evening of the daycare (b19-b21), from the morning after until the night on the plaza (b22b-b24), and
-                # from the first day back (b33) on. Oh in his office slippers (they pay off in the PT).
+                # from the PT's end (b32: back upstairs to Sales 3) on. Oh in his office slippers (they pay off in the PT).
                 *[{"id": i, "kind": kind, "place": "sales3", "at": at, "on": "chair-" + i.split("-")[0], "face": "N", "label": label,
                    "say": say, "when": when, **({"until": until} if until else {})}
                   for who, kind, at, label, say in (
@@ -1687,7 +1688,7 @@ def _b2():
                       ("deputy", "folk.salaryman", [9, 3], "The deputy", "The deputy is on the phone to a supplier, voice low and patient."),
                       ("oh", "hero.ms_oh", [11, 3], "Oh Sang-sik",
                        "Section head Oh reads a contract, red pen in hand, heels out of his office slippers under the desk."))
-                  for i, when, until in ((f"{who}-a", n(19), n(21)), (f"{who}-b", n("22b"), n(24)), (f"{who}-c", n(33), None))],
+                  for i, when, until in ((f"{who}-a", n(19), n(21)), (f"{who}-b", n("22b"), n(24)), (f"{who}-c", n(32), None))],
             ],
         },
         "states": {
@@ -1718,6 +1719,7 @@ def _b2():
             kk(25): ("Jongno", "Out on the plaza in front of the tower."),
             kk(26): ("One International", "The lobby."),
             **{kk(x): ("One International", "The PT hall, fourth floor.") for x in range(27, 33)},
+            kk("32b"): ("One International", "Back upstairs to Sales Team 3."),
             kk(33): ("Susaek-dong", "Home."),
             kk("33b"): ("One International", "Your desk, Sales Team 3."),
             kk("33c"): ("Daehanmun", "Daehanmun, the tent by the wall."),
