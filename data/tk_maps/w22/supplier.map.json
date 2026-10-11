@@ -1,0 +1,285 @@
+{
+ "format": "tk-map/1",
+ "id": "supplier",
+ "world": 22,
+ "name": "Supplier",
+ "archetype": "city",
+ "size": [
+  48,
+  32
+ ],
+ "seed": 1031,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "city",
+   "b": "road"
+  },
+  "rows": [
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  ],
+  "walk": {
+   "city": true,
+   "road": true
+  }
+ },
+ "lines": [
+  {
+   "id": "street",
+   "kind": "road",
+   "path": [
+    [
+     0,
+     5
+    ],
+    [
+     11,
+     5
+    ]
+   ],
+   "width": 3,
+   "tiles": 192
+  }
+ ],
+ "objects": [
+  {
+   "kind": "building.office_block",
+   "x": 21,
+   "y": 16,
+   "w": 6,
+   "h": 3,
+   "id": "supplier",
+   "door": "S",
+   "faces": "S",
+   "label": "The supplier's building",
+   "map": "corridor",
+   "plaque": "(주)대성상사",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.office_block",
+   "x": 5,
+   "y": 16,
+   "w": 6,
+   "h": 3,
+   "id": "block-w",
+   "door": null,
+   "faces": "S",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.office_block",
+   "x": 37,
+   "y": 16,
+   "w": 6,
+   "h": 3,
+   "id": "block-e",
+   "door": null,
+   "faces": "S",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.storefront",
+   "x": 14,
+   "y": 25,
+   "w": 4,
+   "h": 2,
+   "id": "shop-s",
+   "door": "N",
+   "faces": "N",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.storefront",
+   "x": 34,
+   "y": 25,
+   "w": 4,
+   "h": 2,
+   "id": "shop-s2",
+   "door": "N",
+   "faces": "N",
+   "blocks_sight": true
+  },
+  {
+   "kind": "lamp.post",
+   "x": 0,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 5,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 8,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 13,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 21,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 24,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 29,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 32,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 37,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 40,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 45,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "spots": [],
+ "npcs": [
+  {
+   "id": "npc-1",
+   "kind": "folk.salaryman",
+   "x": 13.5,
+   "y": 21.9,
+   "say": [
+    "A delivery man stacks boxes by the door. “Second floor. Mind the stairs.”"
+   ]
+  }
+ ],
+ "exits": [
+  {
+   "to": "supplier--corridor",
+   "side": "N",
+   "x": 23.6,
+   "y": 18.85,
+   "w": 0.8,
+   "h": 0.75,
+   "door": true
+  },
+  {
+   "to": "jongno",
+   "side": "E",
+   "x": 47,
+   "y": 20,
+   "w": 1,
+   "h": 4
+  }
+ ],
+ "entries": {
+  "supplier--corridor": [
+   24,
+   19
+  ],
+  "jongno": [
+   41,
+   21
+  ],
+  "": [
+   25,
+   21
+  ]
+ },
+ "states": [
+  {
+   "id": "day",
+   "light": "day"
+  }
+ ],
+ "ways": {
+  "nodes": [
+   [
+    2.0,
+    22.0
+   ],
+   [
+    46.0,
+    22.0
+   ]
+  ],
+  "edges": [
+   [
+    0,
+    1
+   ]
+  ]
+ },
+ "links": [
+  "jongno",
+  "supplier--corridor"
+ ]
+}
