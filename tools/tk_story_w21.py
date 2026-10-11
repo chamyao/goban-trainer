@@ -385,7 +385,7 @@ def _scenes():
             ["remove", "ahn"], ["remove", "gl"], ["remove", "sh"],
             N("Back at his desk, Oh turns the waybill over. Glued to the back is a torn scrap of someone's weekly report, with a name on it: Kim Seok-ho."),
             ["gain", "waybill_scrap"],
-            ["party", ["ms_oh"]],   # the lead passes to Oh, at his own desk (his stretch, m21-m21b)
+            ["party", ["ms_oh"], {"to": "m21"}],   # the lead passes to Oh: he begins at his own desk, m21's spot on his chair (his stretch, m21-m21b)
         ]},
 
         # M21 · 14수 (W). Oh leads. Go brags; the cabinet key. Oh links it on the clue board (the comic: in his head).
