@@ -82,10 +82,10 @@ const wrong=await p.evaluate(async()=>{TKOverlay.open(13,'13-c19',{host:document
  for(let y=0;y<19&&!mv;y++)for(let x=0;x<19&&!mv;x++){const s=String.fromCharCode(97+x)+String.fromCharCode(97+y);if(s!==ans&&!t.grid[y][x])mv=[x,y];}
  t.click(mv[0],mv[1]);await new Promise(r=>setTimeout(r,300));
  return {cleared:TK.cleared('13-c19'),rest:TK.restLeft('13-c19')>0,src:(document.querySelector('.tk-duel-src')||{}).textContent||''};});
-check(!wrong.cleared&&wrong.rest,`a wrong point doesn't clear it, and rests the board (${JSON.stringify(wrong)})`);
+check(wrong.cleared&&!wrong.rest,`a wrong guess shows the move played and goes on: cleared, no rest (the user, via main c4e086be) (${JSON.stringify(wrong)})`);
 check(/Black 29/.test(wrong.src),`the board names the game and the move asked (${wrong.src})`);
 await p.keyboard.press('Escape');await p.waitForTimeout(500);
-const right=await p.evaluate(async()=>{localStorage.removeItem('tk-rest');TKOverlay.open(13,'13-c19',{host:document.querySelector('.tk-map')});
+const right=await p.evaluate(async()=>{localStorage.removeItem('tk-rest');{const pr=loadProgress();TK.undoCleared(pr,'13-c19');TK.saveProg(pr);}TKOverlay.open(13,'13-c19',{host:document.querySelector('.tk-map')});
  for(let i=0;i<40&&!(window.__trainer&&window.__trainer.alive);i++)await new Promise(r=>setTimeout(r,100));
  const t=window.__trainer,[x,y]=cIdx(t.p.lines[0][1]);t.click(x,y);await new Promise(r=>setTimeout(r,400));
  return {cleared:TK.cleared('13-c19'),elo:localStorage.getItem('tk-elo')};});
