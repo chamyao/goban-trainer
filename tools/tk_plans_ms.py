@@ -1149,11 +1149,12 @@ def _b1():
         "places": ["Susaek-dong", "The subway", "Korea Baduk Association", "Jongno", "One International", "Mountain"],
         "floors": ["general-affairs", "sales3", "meeting", "roof"],
         "spots": {
-            "Susaek-dong/baduk-class": [{"id": "m1", "at": [6, 5], "node": k(1), "label": "The baduk class"}],
             "Korea Baduk Association/kba-trainees": [
                 {"id": "m2", "at": [3, 6], "node": k(2), "label": "The trainees' room"},
                 {"id": "kba-trainees", "at": [13, 8], "label": "The trainees' room", "note": "the handoff to Jang at eleven lands here"}],
-            "Susaek-dong/home": [{"id": "m4", "at": [3, 4], "node": k(4), "label": "Jang's home"}],
+            # m1 (the uncle brings the stones, by the old go board) and m4 (years later), both in the family flat
+            "Susaek-dong/home": [{"id": "m1", "at": [7, 4], "node": k(1), "label": "Jang's home"},
+                                 {"id": "m4", "at": [3, 4], "node": k(4), "label": "Jang's home"}],
             "Jongno/sponsor-office": [{"id": "m5", "at": [6, 5], "node": k(5), "label": "The sponsor's office"}],
             # m7, Oh's run (episode 3): cut to the summit, run the trail down to the car (the clock is on m7)
             "Mountain": [{"id": "summit", "at": [4, 2], "label": "The summit", "note": "the cut to Oh lands here; the run is to m7"},
@@ -1279,7 +1280,7 @@ def _b1():
             ],
         },
         "objectives": {
-            k(1): ("Susaek-dong", "The baduk class down the road."),
+            k(1): ("Susaek-dong", "Home. Your uncle has brought something."),
             k(2): ("Korea Baduk Association", "The trainees' room. This game decides everything."),
             k(4): ("Susaek-dong", "Go home."),
             k(5): ("Jongno", "Go to the sponsor's office, on the lane behind Jongno's shops."),
