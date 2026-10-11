@@ -85,6 +85,8 @@ def _scenes():
             N("A baduk game is scored in points, and a draw is impossible: the smallest margin is half a point. "
               "For seven years he has lost that way, over and over. This is his last chance to turn pro."),
             ["problem"],   # Jang: another half-point game; lost
+            N("They count."),
+            N("Half a point short. It's over."),
             ["remove", "tr"],
             N("He failed to turn pro."),
             N("Only now does he see his father's wrinkles, and how dull his mother's eyes have gone."),
@@ -455,7 +457,7 @@ def _nodes():
         node("m2", 34, 233, "m2", place="Korea Baduk Association", room="kba-trainees", move=0, dilemma=D(
             "ms_jang_young", "Win by half a point.",
             "Seven years of losing by half a point. Not this time.",
-            "Half a point short. It's over.",
+            "The last stone.",
             "Read it again.", pool="endgame")),
         node("m4", 48, 226, "m4", place="Susaek-dong", room="home", move=2, board=False),
         node("m5", 62, 219, "m5", place="Jongno", room="sponsor-office", move=2, board=False),
@@ -947,4 +949,6 @@ KO21 = {
     "It started when his uncle brought a set of stones round to the flat. The boy nearly swallowed a few. It didn't spoil the fun.": '시작은 삼촌이 집에 들고 온 바둑돌이었다. 꼬마는 몇 개를 삼킬 뻔했다. 그래도 재미는 줄지 않았다.',
     'Home. Your uncle has brought something.': '집. 삼촌이 뭔가를 가져오셨다.',
     "At eleven, the trainees' room: rows of boards, and children who mean to be professionals.": '열한 살, 연구생실. 줄지은 바둑판, 그리고 프로가 되려는 아이들.',
+    'The last stone.': '마지막 한 수.',
+    'They count.': '계가를 한다.',
 }
