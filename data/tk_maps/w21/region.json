@@ -255,6 +255,7 @@
    "parent": "one-international",
    "gives": [
     "copy",
+    "waybill_scrap",
     "mop"
    ],
    "delivers": [
@@ -308,11 +309,11 @@
   {
    "node": "21-m1",
    "role": "main",
-   "place": "susaek-dong--baduk-class",
+   "place": "susaek-dong--home",
    "spot": "m1",
    "scene": "m1",
    "title": "Atari",
-   "objective": "The baduk class down the road.",
+   "objective": "Home. Your uncle has brought something.",
    "after": [],
    "grade": "11K",
    "pool": [
@@ -1822,7 +1823,7 @@
    "spot": "m13",
    "scene": "m13",
    "title": "Both Live",
-   "objective": "Your desk, Sales Team 3.",
+   "objective": "Jang's desk, Sales Team 3.",
    "after": [
     "21-m12"
    ],
@@ -2009,7 +2010,7 @@
    "spot": "m14",
    "scene": "m14",
    "title": "The World Is Faster",
-   "objective": "Sales Team 3.",
+   "objective": "Your desk, Sales Team 3.",
    "after": [
     "21-m13"
    ],
@@ -2194,7 +2195,7 @@
       "mark:errand_floor"
      ],
      "else": "m14_wait",
-     "objective": "Work from every side on Sales 3's floor: the forwarder call about the B/L at the team phone, Kim's copies at the copier, and mop the floor.",
+     "objective": "Work from every side on Sales 3's floor: the forwarder call about the shipping papers (the B/L) at the team phone, Kim's copies at the copier, and mop the floor.",
      "at": "One International",
      "place": "one-international",
      "objective_zh": ""
@@ -2584,7 +2585,7 @@
    "spot": "m18",
    "scene": "m18",
    "title": "Again!",
-   "objective": "Back to Sales Team 3.",
+   "objective": "Back to your desk, Sales Team 3.",
    "after": [
     "21-m17"
    ],
@@ -2771,7 +2772,7 @@
    "spot": "m19",
    "scene": "m19",
    "title": "How Old Are You?",
-   "objective": "Sales Team 3.",
+   "objective": "Your desk, Sales Team 3.",
    "after": [
     "21-m18"
    ],
@@ -3146,7 +3147,7 @@
    "spot": "m20",
    "scene": "m20",
    "title": "The Waybill",
-   "objective": "Back to Sales Team 3.",
+   "objective": "Back to your desk, Sales Team 3.",
    "after": [
     "21-m19c"
    ],
@@ -3323,7 +3324,6 @@
      62342
     ]
    ],
-   "board": false,
    "objective_zh": "",
    "title_zh": ""
   },
@@ -3334,7 +3334,7 @@
    "spot": "m21",
    "scene": "m21",
    "title": "A Secret",
-   "objective": "Oh's desk, Sales Team 3.",
+   "objective": "Your desk, Sales Team 3.",
    "after": [
     "21-m20"
    ],
@@ -3512,6 +3512,18 @@
     ]
    ],
    "board": false,
+   "gate": [
+    {
+     "needs": [
+      "item:waybill_scrap"
+     ],
+     "else": "m21_wait",
+     "objective": "The waybill came from Jang's desk. Go and look at it, then back to your desk.",
+     "at": "One International",
+     "place": "one-international",
+     "objective_zh": ""
+    }
+   ],
    "objective_zh": "",
    "title_zh": ""
   },
@@ -3700,18 +3712,6 @@
     ]
    ],
    "board": false,
-   "gate": [
-    {
-     "needs": [
-      "mark:audit"
-     ],
-     "else": "m21b_wait",
-     "objective": "Work out how the waybill got out of Sales 3: open Oh's desk from the bag and link the clues. Then meet Kim and Jang on Jongno.",
-     "at": "Jongno",
-     "place": "jongno",
-     "objective_zh": ""
-    }
-   ],
    "objective_zh": "",
    "title_zh": ""
   },
@@ -3722,7 +3722,7 @@
    "spot": "m22",
    "scene": "m22",
    "title": "Their Own Baduk",
-   "objective": "Back to Sales Team 3.",
+   "objective": "Back to your desk, Sales Team 3.",
    "after": [
     "21-m21b"
    ],

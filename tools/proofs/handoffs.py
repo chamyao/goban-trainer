@@ -50,6 +50,9 @@ for i, key in enumerate(order[:-1]):
         if st[0] != "party": continue
         to = st[2].get("to") if len(st) > 2 and isinstance(st[2], dict) else None
         here = q[f"{n}-{key}"]
+        if isinstance(to, str):   # {"to": "<beat>"}: the new lead starts at that beat, on purpose (Oh at his own desk)
+            print(f"{key} -> {order[i + 1]} ({st[1][0]}): starts at beat {to}'s spot, by design")
+            continue
         if to and to.get("spot"):
             mid = place_id(to["place"]); s = spot(mid, to["spot"]) if mid else None
             if not s: print(f"{key}: lands at {to} which doesn't exist"); bad += 1; continue

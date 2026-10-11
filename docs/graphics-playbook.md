@@ -87,6 +87,9 @@ python3 tools/bump_cache.py stills
   cel shading" and modern-day Seoul) and `FACE_STYLE_MODERN` instead of the Han lines; the cast's wording is in the
   `CAST.update` block under `ms_*` keys. Nothing else changes for the Han books.
 - **No face references.** `REF_LENSES` is empty because the user found that reference images throw off the feel.
+  Exception (Misaeng, the user's review of ms_hof_aside: "ahn doesnt look like our character design"): when a still
+  must match a speaker's portrait, send that portrait's white-background original as `image_input` with "reference
+  image N shows <name>: keep face, hair and clothes". It matched on the first try.
   Consistency comes from the `CAST` wording.
 
 ## Dialogue portraits

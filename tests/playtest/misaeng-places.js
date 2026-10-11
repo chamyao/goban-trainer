@@ -9,7 +9,8 @@
 //   3. m10's gate: Kim's requisition, handed to the clerk at General Affairs' counter.
 //   4. m14's three errands: the copier gives the copies, handed to Kim Dong-sik at his desk; the forwarder call at the
 //      team phone; the cleaning cupboard's mop taken to the spill ("wipe this floor"); with all three, m14's gate is met.
-//   5. Storefronts are entered at their drawn (south) doors: the baduk class, the KBA café, the hof.
+//   5. Buildings are entered at their drawn (south) doors: the baduk class, the KBA café, the relatives' villa, the
+//      pojangmacha, the sponsor's office (and Jang's home, m1; the hof).
 //      m12: Jongno at night, the intern keeping the hof's door; m21b: the street by the hof at night, after drinks.
 //   6. m5: episode 1's evening on Jongno: its townsfolk are out in the evening, gone by day.
 // Run with the site served on :8765 (tests/playtest/run.sh misaeng-places).
@@ -96,6 +97,9 @@ const shown = (p, id) => p.evaluate(id => { const n = window.__w.npcs.find(n => 
 
 // m8, the first commute: home in Susaek-dong, and the way to Jongno (the subway) must be open
 async function commute(b) {
+  const h = await open(b, '21-m1', 'susaek-dong', [], ['susaek-dong']);   // m1: the book opens in the street; home, where the uncle brings the stones
+  check(await through(h, 'susaek-dong--home') && await h.evaluate(() => !!window.__w.spots.m1), 'm1: into Jang\'s home, where m1 is');
+  await h.context().close();
   const p = await open(b, '21-m5', 'susaek-dong', [], ['susaek-dong']);
   const open_ = await p.evaluate(() => ['the-subway', 'jongno'].map(x => [x, window.__w.placeOpen(x)]));
   for (const [x, o] of open_) check(o, `m5: from home, ${x} is open (the way to the sponsor's office)`);
@@ -144,6 +148,10 @@ async function street(b) {
 
 async function requisition(b) {
   const p = await open(b, '21-m10', 'one-international--general-affairs', ['requisition']);
+  // the ring that marks the handoff is at the clerk's feet, not on the floor beside her (apo110: "fetched from a circle")
+  check(await p.evaluate(() => { const w = window.__w, s = w.spots['ga-counter'], n = w.npcs.find(n => n.id === 'ga-clerk');
+    w.markActors(); const m = w.actMarks && w.actMarks.get(s);
+    return !!m && Math.hypot(s.x - n.spr.x, s.y - n.spr.y) < 6; }), 'm10: the gold ring for the requisition is on the clerk');
   check(await to(p, 'ga-clerk'), 'm10: the clerk stands at General Affairs\' counter');
   const s = await st(p);
   check(s.marks.includes('requisition') && !s.items.includes('requisition'), 'm10: the clerk takes Kim\'s requisition from you, by hand');
@@ -158,6 +166,7 @@ async function errands(b) {
   check(!(await st(p)).marks.includes('errand_copy'), 'm14: Kim waits for the copies');
   await at(p, 'copier');
   check((await st(p)).items.includes('copy'), 'm14: the copier gives the copies');
+  check(await p.evaluate(() => { const o = (window.__w.whenProps || []).find(o => o.when === '!mark:errand_floor'); return !!o && o.img.visible; }), 'm14: the coffee spill is on the carpet');
   await at(p, 'errand-floor');   // no mop yet: the spill waits
   check(!(await st(p)).marks.includes('errand_floor'), 'm14: the spill needs the mop');
   await at(p, 'mop-cupboard');
@@ -167,12 +176,44 @@ async function errands(b) {
   check(['errand_copy', 'errand_bl', 'errand_floor'].every(m => s.marks.includes(m)) && !s.items.includes('copy') && !s.items.includes('mop'),
         `m14: the copies handed to Kim, the phone call made, the floor mopped (${s.marks.join(', ')})`);
   check(await p.evaluate(() => ['errand_copy', 'errand_bl', 'errand_floor'].every(m => window.__w.cond('mark:' + m))), 'm14: its gate (the three errands) is met');
+  // the spill is gone once it's mopped (apo110): the prop's "when" is "!mark:errand_floor"
+  check(await p.evaluate(() => { const w = window.__w; w.refreshStory && w.refreshStory(); const o = (w.whenProps || []).find(o => o.when === '!mark:errand_floor'); return !!o && !o.img.visible; }),
+        'm14: the spill is gone once mopped');
   await p.context().close();
+}
+
+// m10/m13 "your desk", m21 Oh's desk: the beat stands on the person's own chair, not a circle on the floor (apo110)
+async function desks(b) {
+  const p = await open(b, '21-m10', 'one-international--sales3', [], ['one-international--sales3']);
+  const on = await p.evaluate(() => { const w = window.__w, r = w.refs || {}, at = (s, c) => !!w.spots[s] && !!r[c] && Math.hypot(w.spots[s].x - r[c].x, w.spots[s].y - r[c].y) < 20;
+    return { jang: ['m10', 'm14', 'm18', 'm19', 'm20', 'm22'].every(k => at(k, 'desk-jang')), mine: at('m21', 'oh-desk'),
+             kim: !!r['desk-kim'], oh: !!r['oh-desk'] }; });
+  check(on.jang, 'm10-m22: every beat Jang plays at his desk (m10, m14, m18, m19, m20, m22) is on his own chair (m13, Ahn\'s, is in the aisle beside it)');
+  check(on.mine, 'm21: Oh\'s beat (he leads) is on his own chair');
+  check(on.kim && on.oh, 'Sales 3: Kim and Oh have their own desks and chairs');
+  await p.context().close();
+  // the team sits at their own desks while the story has them in the office (apo110)
+  const seated = async (upto) => { const q = await open(b, upto, 'one-international--sales3', [], ['one-international--sales3']);
+    const v = await q.evaluate(() => { const w = window.__w, r = w.refs || {}, vis = id => w.npcs.filter(n => n.id.startsWith(id) && n.spr.visible);
+      const on = (id, c) => vis(id).some(n => r[c] && Math.abs(n.spr.x - r[c].x) < 4 && n.spr.y > r[c].y && n.spr.y - r[c].y < 16);   // in the desk's own chair, at its front
+      return { kim: on('kim-', 'desk-kim'), deputy: on('deputy', 'desk-deputy'), oh: on('oh-', 'oh-desk'), any: ['kim-', 'deputy', 'oh-'].some(i => vis(i).length) }; });
+    await q.context().close(); return v; };
+  const day = await seated('21-m14'), night = await seated('21-m13'), ohLeads = await seated('21-m21');
+  check(day.kim && day.deputy && day.oh, `m14: Kim, the deputy and Oh sit at their own desks (${JSON.stringify(day)})`);
+  check(!night.any, 'm13: at night the team has gone home');
+  check(ohLeads.kim && !ohLeads.oh, 'm21: Oh leads, so his chair is his to walk to (Kim still at his desk)');
+  // m21's gate: Oh searches Jang's desk himself and finds the name glued to the waybill (apo110)
+  const q = await open(b, '21-m21', 'one-international--sales3', [], ['one-international--sales3']);
+  check(!await q.evaluate(() => window.__w.cond('item:waybill_scrap')), 'm21: Oh hasn\'t the scrap yet');
+  await at(q, 'jang-desk-search');
+  check(await q.evaluate(() => window.__w.cond('item:waybill_scrap')), 'm21: searching Jang\'s desk gives the waybill scrap (m21\'s gate)');
+  await q.context().close();
 }
 
 async function walks(b) {
   // a storefront's door is drawn on its south face, and it's entered there (the baduk class, m1; the KBA café, m3)
-  for (const [upto, place, door] of [['21-m1', 'susaek-dong', 'baduk-class'], ['21-m2', 'korea-baduk-association', 'kba-cafe']]) {
+  for (const [upto, place, door] of [['21-m1', 'susaek-dong', 'baduk-class'], ['21-m2', 'korea-baduk-association', 'kba-cafe'],
+                                      ['21-m4', 'susaek-dong', 'relatives'], ['21-m12', 'jongno', 'pojangmacha'], ['21-m5', 'jongno', 'sponsor-office']]) {
     const q = await open(b, upto, place, [], [place]);
     check(await through(q, door), `${upto.slice(3)}: into ${door} by its drawn door`);
     await q.context().close();
@@ -200,7 +241,7 @@ async function evening(b) {
 
 (async () => {
   const b = await chromium.launch({ args: ['--use-gl=swiftshader', '--enable-webgl'] });
-  for (const t of [commute, run, street, requisition, errands, walks, evening]) {
+  for (const t of [commute, run, street, requisition, errands, desks, walks, evening]) {
     try { await t(b); } catch (e) { fails++; console.log('FAIL', t.name, e.message); }
   }
   await b.close();

@@ -731,7 +731,22 @@ import voice_ko as _voice_ko  # noqa: E402  (who reads the Korean voice-over: to
 _MS = _copy.deepcopy(_MS)
 _MS.update(cast=_MS_CAST, ko=_MS_KO, open=True, novel="misaeng", book=1, kit="seoul", open_ways=True, walk_up=True, easy_grades=["14K", "14K+"])   # its own Library card (tk.js TK_NOVELS)
 _MS["cast_ko"] = _voice_ko.cast_for(_MS)   # Korean voices by scene and age (the build drops cast, ko, cast_ko from tk.json)
+_MS["voice_off"] = True   # no voice-over for now (the user, 2026-10-11, after the XTTS and CosyVoice samples): the Korean script
+                          # (KO21) and its clips are kept, tk.json lists none, and the book has no voice button
 WORLDS.append(_MS)
+# ---- Misaeng Book 2 (episodes 17-33), world 22 (tk_story_w22.py, Plot alt2; Integration alt2) ----
+# published (the user, 2026-10-11: "don't do test mode, we test in published"); begun the same day ("go ahead and begin book 2")
+try:
+    from tk_story_w22 import WORLD22 as _MS2  # noqa: E402
+except ImportError:
+    _MS2 = None
+if _MS2:
+    import tk_story_w22 as _ms2_mod  # noqa: E402
+    _MS2 = _copy.deepcopy(_MS2)
+    _MS2.update(cast=getattr(_ms2_mod, "CAST22", _MS_CAST), ko=getattr(_ms2_mod, "KO22", {}), open=True,
+                novel="misaeng", book=2, kit="seoul", open_ways=True, walk_up=True, easy_grades=["14K", "14K+"],
+                voice_off=True)   # no voice-over, as Book 1
+    WORLDS.append(_MS2)
 # Books 1-3 are taken down for now (the user, 2026-10-07): kept, and still open in test mode (?test=1)
 for _w in WORLDS:
     if _w["n"] in (1, 2, 3):

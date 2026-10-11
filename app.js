@@ -125,9 +125,15 @@ const Sync = {
   // solved sticks (1 beats anything); the adaptive rating keeps whichever has played more boards
   mergeInto(local, remote) {
     for (const bookId in remote) {
-      if (bookId === "tkAt" || bookId === "tkUndo" || bookId === "tkReplay") {   // dated: the later date wins (TK.cleared)
+      if (bookId === "tkAt" || bookId === "tkUndo" || bookId === "tkReplay" || bookId === "tkSeen") {   // dated: the later date wins (TK.cleared, TK.seen)
         const b = local[bookId] || (local[bookId] = {});
         for (const k in remote[bookId]) b[k] = Math.max(b[k] || 0, remote[bookId][k] || 0);
+        continue;
+      }
+      if (bookId === "tkMig") {   // a book's one-time migrations: the higher version is the one done (an older copy taking
+        // over set it back, and the next load ran that start-over again: apo110's Book 1, wiped)
+        const b = local.tkMig || (local.tkMig = {});
+        for (const k in remote.tkMig) b[k] = Math.max(+b[k] || 0, +remote.tkMig[k] || 0);
         continue;
       }
       if (bookId === "tkElo") { const r = remote.tkElo, l = local.tkElo; if (r && (!l || (r.n || 0) > (l.n || 0))) local.tkElo = r; continue; }

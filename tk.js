@@ -166,6 +166,7 @@ const TK_CHARS = {
   ms_cheon: { name: "Cheon Gwan-ung", skin: "#e2b089", hair: "#2a2024", hat: "short", robe: "#5a5e66", trim: "#5a5e66", shirt: "#eef0f2", tie: "#6a5a3a", legs: "#44474e", beard: "none", eyes: "narrow", fat: true },
   ms_park: { name: "Park Jong-sik", skin: "#efc59d", hair: "#1a1416", hat: "slick", robe: "#6a6a74", trim: "#6a6a74", shirt: "#f0d8dc", tie: "#8a2a5a", legs: "#55555e", beard: "none", eyes: "narrow" },
   ms_ahn: { name: "Ahn Young-yi", skin: "#f8dcc4", hair: "#1a1418", hat: "bob", robe: "#3a3a46", trim: "#3a3a46", shirt: "#f4f4f6", legs: "#3a3a46", skirt: true, beard: "none", eyes: "phoenix" },
+  // retired: Jang Baek-gi is ms_glasses (the comic: the glasses intern is Baek-gi); kept for old saves
   ms_baekgi: { name: "Jang Baek-gi", skin: "#f2d2b0", hair: "#1e1a1e", hat: "parted", robe: "#26304a", trim: "#26304a", shirt: "#f4f6f8", tie: "#3a6a9a", legs: "#202838", beard: "none", eyes: "narrow" },
   ms_han: { name: "Han Seok-yul", skin: "#e8b88c", hair: "#2a2024", hat: "slick", robe: "#5a4a3a", trim: "#5a4a3a", shirt: "#eeeae2", tie: "#c8a03a", legs: "#4a3e32", beard: "none", eyes: "round" },
   ms_kimsh: { name: "Kim Seok-ho", skin: "#f0cfac", hair: "#2a2024", hat: "short", robe: "#4a4e56", trim: "#4a4e56", shirt: "#eef0f2", tie: "#4a6a4a", legs: "#3e4148", beard: "none", eyes: "normal", glasses: "#2a2228" },
@@ -211,10 +212,15 @@ const TK_CHARS = {
   ms_ohwife: { name: "Oh Sang-sik's wife", skin: "#f2d2b0", hair: "#2a2024", hat: "ponytail", robe: "#c88a6a", trim: "#f4ece0", legs: "#4a4a5a", beard: "none", eyes: "kind" },
   ms_ohson: { name: "Oh Sang-sik's son", skin: "#f8dcc4", hair: "#241e22", hat: "messy", robe: "#3a8ad8", trim: "#f4f2ec", legs: "#4a4a5a", beard: "none", eyes: "round" },
   ms_kangsil: { name: "Manager Kang", skin: "#efc59d", hair: "#1a1416", hat: "parted", robe: "#b8956a", trim: "#b8956a", shirt: "#eef0f2", tie: "#3a3a42", legs: "#3a3a42", beard: "none", eyes: "narrow", glasses: "#2a2228" },   // a camel coat
-  ms_glasses: { name: "Glasses Intern", skin: "#f0cfac", hair: "#2a2024", hat: "parted", robe: "#2e3444", trim: "#2e3444", shirt: "#eef0f2", tie: "#8a6a2a", legs: "#262a36", beard: "thin", eyes: "narrow", glasses: "#2a2228" },   // a moustache
+  ms_glasses: { name: "Jang Baek-gi", skin: "#f0cfac", hair: "#2a2024", hat: "parted", robe: "#2e3444", trim: "#2e3444", shirt: "#eef0f2", tie: "#8a6a2a", legs: "#262a36", beard: "thin", eyes: "narrow", glasses: "#2a2228" },   // a moustache
   ms_amhead: { name: "Americas Team Head", skin: "#e2b089", hair: "#2a2024", hat: "short", robe: "#3a3e4a", trim: "#3a3e4a", shirt: "#f0f2f4", tie: "#c8382a", legs: "#2e323c", beard: "none", eyes: "round", fat: true },   // loud
   ms_ulsan: { name: "Ulsan Department Head", skin: "#d8a47c", hair: "#5a5256", hat: "cap", hatC: "#f4f2ec", pin: "#f4f2ec", robe: "#3a5a7a", trim: "#2a2228", legs: "#3a4250", beard: "none", eyes: "narrow" },   // a site jacket and a white hard hat
   ms_teacher: { name: "Jang Geu-rae's teacher", skin: "#eec7a0", hair: "#9a9a9a", hat: "short", robe: "#6a5a4a", trim: "#e8e0d0", legs: "#4a443c", beard: "short", beardC: "#9a9a9a", eyes: "kind" },   // the dojang teacher
+  // Book 2
+  ms_supceo: { name: "The supplier's president", skin: "#ecc29a", hair: "#a8a8a8", hat: "slick", robe: "#22242c", trim: "#22242c", shirt: "#f4f4f4", tie: "#5a2a3a", legs: "#1c1e24", beard: "none", eyes: "narrow" },   // a dark double-breasted suit
+  ms_kwon: { name: "Kwon", skin: "#f0cfac", hair: "#2a2024", hat: "short", robe: "#dfe8f2", trim: "#2a2228", tie: "#3a5a8a", legs: "#3a3e48", beard: "none", eyes: "kind", fat: true },   // short sleeves, a lanyard
+  ms_hateacher: { name: "Ms. Ha", skin: "#f8dcc4", hair: "#5a3a2a", hat: "ponytail", pin: "#e8a0b8", robe: "#f4c8d4", trim: "#e8e0d8", legs: "#4a4a5a", beard: "none", eyes: "kind" },   // a pastel apron over a sweater
+  ms_ithead: { name: "Head of IT", skin: "#ecc29a", hair: "#5a5256", hat: "balding", robe: "#3a3a42", trim: "#3a3a42", shirt: "#f0f0f0", tie: "#6a2a3a", legs: "#2e2e36", beard: "none", eyes: "narrow", glasses: "#9aa0a8" },   // rimless glasses, stiff
   ms_examiner: { name: "Examiner", skin: "#e8c4a0", hair: "#5a5256", hat: "parted", robe: "#2a2e38", trim: "#2a2e38", shirt: "#f4f4f4", tie: "#3a3a4a", legs: "#24272f", beard: "none", eyes: "narrow", glasses: "#2a2228" },   // the PT panelist (m6, m7) and the KBA proctor (m1)
   ms_clerk: { name: "Baekjin clerk", skin: "#ecc29a", hair: "#2a2024", hat: "short", robe: "#5a6a7a", trim: "#2a2228", tie: "#3a3a4a", legs: "#3a3e48", beard: "none", eyes: "narrow" },
   ms_worker: { name: "Office worker", skin: "#f0cfac", hair: "#2a2024", hat: "parted", robe: "#3a3e4a", trim: "#3a3e4a", shirt: "#eef0f2", tie: "#6a4a3a", legs: "#30333c", beard: "none", eyes: "normal" },
@@ -770,7 +776,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) { this.data = await (await fetch("data/tk.json?v=110")).json(); this.migrate(); }
+    if (!this.data) { this.data = await (await fetch("data/tk.json?v=135")).json(); this.migrate(); }
     return this.data;
   },
   // A book whose beats were renumbered after players began it: their cleared beats moved to the new keys, once per
@@ -832,8 +838,15 @@ const TK = {
     (p.tkReplay || (p.tkReplay = {}))[n] = t;
     const seen = this.ls("tk-seen"); seen[n] = t; this.lsSet("tk-seen", seen);
   },
-  seen(id) { return !!(loadProgress().tkSeen || {})[id]; },
-  markSeen(id) { const p = loadProgress(); (p.tkSeen || (p.tkSeen = {}))[id] = 1; this.saveProg(p); },
+  // a scene seen counts only if it was seen after the world's last replay or start over (dated, so a synced copy
+  // from before the rollback can't bring it back: a replayed scene plays in full again, stills and all)
+  seen(id) {
+    const p = loadProgress(), v = (p.tkSeen || {})[id];
+    if (!v) return false;
+    const rb = (p.tkReplay || {})[parseInt(id, 10)] || 0;
+    return v === 1 ? !rb : v > rb;   // 1: marked before marks were dated; it stands only if the world was never rolled back
+  },
+  markSeen(id) { const p = loadProgress(); (p.tkSeen || (p.tkSeen = {}))[id] = Date.now(); this.saveProg(p); },
   world(n) { return this.data.worlds.find(w => w.n === n); },
   node(w, key) { return w.nodes.find(x => x.key === key); },
   preds(w, key) { return w.edges.filter(e => e[1] === key).map(e => e[0]); },
@@ -1165,7 +1178,7 @@ class TKMap {
     });
   }
   actor(id) { return this.actors[id] || this.party.find(p => p.who === id); }
-  pos(at, dx = 0, dy = 0) { const n = this.N[at] || this.leader; return { x: n.x + dx, y: n.y + dy }; }
+  pos(at, dx = 0, dy = 0) { const n = this.N[at] || this.leader; return { x: n.x + (+dx || 0), y: n.y + (+dy || 0) }; }   // ("@chair-kim": a map thing, for the on-foot scenes; here, the node itself)
   moveActor(a, x, y) {
     return new Promise(res => { a.path = [{ x, y }]; a.speed = .05; a.done = res; });
   }
@@ -1349,6 +1362,7 @@ async function viewTK(worldN) {
     voiceBtn.setAttribute("aria-pressed", String(TKVoice.on));
   };
   voiceLabel();
+  voiceBtn.hidden = !!w.voice_off;   // a book with its voice-over switched off (Misaeng, for now): nothing to turn on
   voiceBtn.onclick = () => { TKVoice.lang = TKVoice.enOnly && !TKVoice.native ? (TKVoice.on ? "off" : "zh") : { zh: "en", en: "off", off: "zh" }[TKVoice.lang]; voiceLabel(); };
   root.append(h("div", { class: "tk-head" }, [
     h("div", {}, [h("h2", {}, [h("span", { class: "zh" }, native), " ", title]),
@@ -1668,6 +1682,12 @@ function tkLevelBuild(host, worldN, key, { w, node, src, p, book }, { back, agai
       onWin();
       verdict.className = "tk-verdict win";
       verdict.append(h("b", {}, node.role === "boss" ? "★ 击败首领！Boss defeated!" : "★ 完美！Flawless!"), h("button", { onclick: back }, "继续 Continue ▸"));
+    } else if (p.record) {   // a move-guessing board: show the move that was played and go on
+      TK.markCleared(key);
+      onWin();
+      tkShowRecordMove(t, p);
+      verdict.className = "tk-verdict win";
+      verdict.append(h("b", {}, "实战下的是这里。The move that was played is marked."), h("button", { onclick: back }, "继续 Continue ▸"));
     } else {
       TK.rest(key);
       verdict.className = "tk-verdict slip";
@@ -1765,6 +1785,8 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
   const [nameZh, name] = foe && foe.who ? [TK_BOSS_ZH[foe.who] || (typeof tkName === "function" ? tkName(foe.who) : foe.who), node.boss ? node.boss.title : ""]
     : foe ? (TK_FOES[foe.id] || ["对手", "Opponent"]) : [node.place_zh || node.place, node.place];
   const face = foe && foe.face ? foe.face : null;
+  // an English-only book's passers-by (Misaeng) ask for help with a problem; they aren't playing you, so nobody resigns
+  const asks = !!foe && (TK.world(worldN) || {}).lang === "en";
   if (face) face.className = "town-face";
   const zh = h("div", { class: "town-zh", lang: "zh-CN" }), en = h("div", { class: "town-en" });
   const btns = h("div", { class: "tk-duel-next" });
@@ -1831,7 +1853,7 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
   const opening = () => {
     if (node.boss && !(node.boss.dilemma_lines && lord)) say(node.boss.taunt_zh || "", node.boss.taunt);   // dilemma_lines: the lead's own lines on the board (Red Chamber g6: Xifeng wins that scene)
     else if (lord) { say(...lord.open); if (dil && dil.open_vid && TKVoice.has(dil.open_vid)) TKVoice.play(dil.open_vid); }
-    else if (foe) say("请。你执黑先下。", "Your move. You play Black.");
+    else if (foe) say(...(asks ? ["", "Black to play. What would you do?"] : ["请。你执黑先下。", "Your move. You play Black."]));
     else say("黑先。", "Black to play.");
   };
   opening();
@@ -1891,8 +1913,13 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
       dlg.classList.add("win");
       if (node.boss && !(node.boss.dilemma_lines && lord)) say("……我竟败了！", "…Defeated? Me?", go("继续 Continue ▸", leave));
       else if (lord) { say(...lord.win, go("继续 Continue ▸", leave)); if (dil && dil.win_vid && TKVoice.has(dil.win_vid)) TKVoice.play(dil.win_vid); }
-      else if (foe) say("好棋！我认输。", "Well played. I resign.", go("继续 Continue ▸", leave));
+      else if (foe) say(...(asks ? ["", "That's it! Thank you."] : ["好棋！我认输。", "Well played. I resign."]), go("继续 Continue ▸", leave));
       else say("★ 完美！", "Flawless!", go("继续 Continue ▸", leave));
+    } else if (p.record) {   // a move-guessing board (the user): a wrong guess shows the move that was played, and the story goes on (no rest)
+      TK.markCleared(key);
+      onWin();
+      tkShowRecordMove(t, p);
+      say("实战下的是这里。", "The move that was played is marked.", go("继续 Continue ▸", leave));
     } else if (once) {   // one try (a chase): no second go; back to the world, which decides what follows
       dlg.classList.add("slip");
       say(...(e.detail === "ok" ? [`解出了，但不算完美（${t.flawed}）。被擒了！`, `Solved, but not flawless (${t.flawed}). You're taken!`] : ["被擒了！", "You're taken!"]), go("继续 Continue ▸", leave));
@@ -1901,7 +1928,7 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
       dlg.classList.add("slip");
       const how = e.detail === "ok" ? [`解出了，但不算完美（${t.flawed}）。`, `Solved, but not flawless (${t.flawed}).`]
         : lord ? lord.slip
-        : foe ? ["哈！被我看穿了。换个思路吧。", "Ha! I saw through that. Try another way."] : ["敌人识破了！换个思路。", "The enemy saw through it! Try another way."];
+        : foe ? (asks ? ["", "Hm, I tried that one. Not that."] : ["哈！被我看穿了。换个思路吧。", "Ha! I saw through that. Try another way."]) : ["敌人识破了！换个思路。", "The enemy saw through it! Try another way."];
       say(how[0], how[1]);
       if (e.detail !== "ok" && dil && dil.slip_vid && TKVoice.has(dil.slip_vid)) TKVoice.play(dil.slip_vid);
       // a moment to see what went wrong, then the same problem from the start, to study until the rest is over
@@ -1909,6 +1936,23 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
     }
   };
   addEventListener("tczw:result", onResult);
+}
+
+// A record board answered wrong: a ring on the point that was played (kept over any redraw of the board)
+function tkShowRecordMove(t, p) {
+  const right = p.lines && p.lines[0] && p.lines[0][1];
+  if (!right || !t || !t.goban) return;
+  const g = t.goban, [c, r] = cIdx(right), NS = "http://www.w3.org/2000/svg";
+  const mark = () => {
+    g.svg.querySelectorAll(".tk-choice, .tk-record-answer").forEach(e => e.remove());
+    const ring = document.createElementNS(NS, "circle");
+    ring.setAttribute("class", "tk-record-answer"); ring.setAttribute("pointer-events", "none");
+    ring.setAttribute("cx", g.px(c)); ring.setAttribute("cy", g.py(r)); ring.setAttribute("r", g.cell * .42);
+    g.svg.append(ring);
+  };
+  const render = t.render.bind(t);
+  t.render = (...a) => { const out = render(...a); mark(); return out; };
+  mark();
 }
 
 // A level laid over the explorable world, inside its window (or the whole screen

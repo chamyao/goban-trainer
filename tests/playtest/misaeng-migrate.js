@@ -20,4 +20,6 @@ check(r.mig[21]===5&&r.mig[15]===3,'done once');
 await p.evaluate(()=>TK.markCleared('21-m1'));await p.reload();await p.waitForTimeout(500);
 r=await p.evaluate(async()=>{await TK.load();return TK.cleared('21-m1')});
 check(r,'a beat cleared after it is kept');
+r=await p.evaluate(()=>{const local={tkMig:{21:5,15:3}};Sync.mergeInto(local,{tkMig:{21:2,15:3,99:1}});return local.tkMig;});
+check(r[21]===5&&r[15]===3&&r[99]===1,`a synced copy with an older migration can't set it back (apo110's wipe): ${JSON.stringify(r)}`);
 console.log(fails?`misaeng-migrate: ${fails} FAILED`:'misaeng-migrate: all ok');await b.close();process.exit(fails?1:0);})();

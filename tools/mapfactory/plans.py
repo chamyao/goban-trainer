@@ -43,7 +43,7 @@ LIGHT = {("lantern", None): "night", ("day", "clear"): "morning", ("dusk", "stor
 WALK = {"grass": True, "dirt": True, "sand": True, "water": False, "void": False, "wall": False,
         "wood": True, "stone": True, "mat": True, "earth": True}
 IN_WALL = {"building.gate", "building.gatehouse", "building.gatetower", "building.moongate", "wall.stairs", "building.palace_gate"}
-PASSABLE = {"furn.seat", "furn.curtain", "furn.rug", "prop.spill", "landmark.ridge", "building.gatehouse", "building.gate", "building.moongate", "building.palace_gate",
+PASSABLE = {"furn.seat", "furn.chair", "furn.curtain", "furn.rug", "prop.spill", "landmark.ridge", "building.gatehouse", "building.gate", "building.moongate", "building.palace_gate",
             "plant.flower", "plant.bush", "plant.grass", "plant.peony", "rock.small", "water.lotus"}
 DOOR_AT_FOOT = {"building.gatetower"}   # drawn front-on in a wall: an E/W door is at the foot of that face, by the drawn arch
 SIDE_DRAWN = {"building.wing"}   # drawn in side view when it faces E or W, its doorway on the front
@@ -496,7 +496,22 @@ class MapBuilder:
                     return t
         return None
 
+    def lay_seats(self):
+        """A desk's seat: the chair its art draws at its front ("seats": [{"id": "chair-kim", "of": "desk-kim"}]), an
+        unseen marker at the middle of the desk's south edge. Spots and people "on" it are at the desk, facing it; a
+        scene's "@chair-kim" is there too (the user: "they are clearly not sitting at desks", on chairs of their own)."""
+        for st in self.p.get("seats", []):
+            if st["of"] not in self.foot:
+                raise RuntimeError(f"{self.mid}: seat {st['id']} is of {st['of']}, which isn't on the map")
+            dx, dy, dw, dh = self.foot[st["of"]]
+            o = {"kind": "marker.seat", "x": dx + dw / 2 - .5, "y": dy + dh - 1, "w": 1, "h": 1, "id": st["id"], "of": st["of"]}
+            if st.get("label"):
+                o["label"] = st["label"]
+            self.objects.append(o)
+            self.foot[st["id"]] = (o["x"], o["y"], 1, 1)
+
     def lay_spots(self):
+        self.lay_seats()
         for t in self.p.get("things", []):   # a building that hosts a beat: its spot is at its door
             if t.get("node") and t["id"] in self.anchor:   # a step out from the door, clear of the roof drawn over the doorstep
                 a = self.anchor[t["id"]]
@@ -522,7 +537,7 @@ class MapBuilder:
                       "needs", "delivers", "when", "empty", "waiting", "deliver", "delivered", "call",   # a place that delivers a mark
                       "takes", "opens", "floors", "use",   # Misaeng (tk-modern.js): delivering takes the thing; the audit board; a lift and its floors
                       "gives", "gives_when", "give", "given",   # a thing that gives an item when searched (the bins, a table)
-                      "set_down"):   # a delivery set down at a place (a seat), not handed to a person
+                      "set_down", "to"):   # set down at a place (a seat), not handed to a person; or handed to "to" (an npc id)
                 if s.get(k):
                     spot[k] = s[k]
             self.spots.append(spot)
@@ -586,6 +601,11 @@ class MapBuilder:
             if p.get("behind") in self.foot:   # seated at a desk: feet just inside its top edge, so it hides the legs
                 fx, fy, fw, fh = self.foot[p["behind"]]
                 n["x"], n["y"] = fx + fw / 2, fy + .35
+            if p.get("on") in self.foot:   # seated on a thing (Sales 3's team on their own chairs): exactly there, however
+                fx, fy, fw, fh = self.foot[p["on"]]   # many of them take turns on it (one per stretch of the story)
+                n["x"], n["y"] = fx + fw / 2, fy + fh / 2 + .4
+                if any(o.get("id") == p["on"] and o["kind"] == "marker.seat" for o in self.objects):
+                    n["y"] = fy + fh + .2   # a desk's seat: just past the desk's front edge, so drawn over the desk (in its chair)
             self.npcs.append(n)
         taken -= lanes - {(int(s_["x"]), int(s_["y"])) for s_ in self.spots}
         for i, c in enumerate(challengers):
@@ -1298,7 +1318,15 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
             links = sorted(set(m["links"]) or {b2 for a, b2 in edges if a == mid_})
             places.append({"id": mid_, "name": m["name"], "zh": zh.get(m["name"], ""), "archetype": m["archetype"],
                            "map": f"{mid_}.map.json", "links": links})
-    return {k: v[0] for k, v in maps.items()}, places, quests
+    out = {k: v[0] for k, v in maps.items()}
+    # a handoff names its taker ("to": an npc id): the spot stands at their feet, so the ring that marks it is on the
+    # person, not on the floor beside them (apo110: "fetched from a circle with nothing to mark the destination")
+    for m in out.values():
+        for s in m["spots"]:
+            n = s.get("to") and next((n for n in m["npcs"] if n.get("id") == s["to"]), None)
+            if n:
+                s["x"], s["y"] = n["x"], n["y"] - .2
+    return out, places, quests
 
 
 def verify(maps):
@@ -1367,6 +1395,8 @@ def assets(maps, tables, kits_dir=None):
     used = {}
     for mid, m in maps.items():
         for o in m["objects"]:
+            if o["kind"].startswith("marker."):   # a seat: nothing to draw
+                continue
             used.setdefault(o["kind"], {"maps": set(), "count": 0, "size": (o["w"], o["h"])})
             used[o["kind"]]["maps"].add(mid)
             used[o["kind"]]["count"] += 1
@@ -1398,12 +1428,12 @@ def assets(maps, tables, kits_dir=None):
     return rows
 
 
-ARCS = {13: "cc", 14: "lb", 15: "ls", 21: "ms"}   # books whose plans are an arc's: Book 13 is the Cao Cao arc, Book 14 Lü Bu's fall, Book 15 Lady Sun's marriage, Book 21 Misaeng
+ARCS = {13: "cc", 14: "lb", 15: "ls", 21: "ms", 22: "ms2"}   # books whose plans are an arc's: Book 13 is the Cao Cao arc, Book 14 Lü Bu's fall, Book 15 Lady Sun's marriage, Book 21 Misaeng
 
 
 def key_prefix(plans_world):
     """The book number the plans' beat keys carry ("2-c1" for the Cao Cao arc's plans)."""
-    return {"cc": "2", "lb": "3", "ls": "4", "ms": "21"}.get(ARCS.get(plans_world, plans_world), str(plans_world))
+    return {"cc": "2", "lb": "3", "ls": "4", "ms": "21", "ms2": "22"}.get(ARCS.get(plans_world, plans_world), str(plans_world))
 
 
 def plans_arg(v):
@@ -1434,6 +1464,9 @@ def load(plans_world):
     if plans_world == "ms":   # Misaeng (Season 1): beat keys "21-m…", English only (no Chinese table)
         import tk_plans_ms as mod
         return mod.PLANS_MS, mod.TABLES, mod.ZH_PLACES_MS
+    if plans_world == "ms2":   # Misaeng Book 2 (world 22): beat keys "22-b…", the same places as a new config
+        import tk_plans_ms as mod
+        return mod.PLANS_MS2, mod.TABLES, mod.ZH_PLACES_MS
     if plans_world == 90:   # Talk with Claude: the study, no story
         import tk_plans_w90 as mod
         return mod.PLANS90, mod.TABLES, mod.ZH_PLACES90
@@ -1464,6 +1497,11 @@ def story_world(n, plans_world):
             from tk_story_w21 import WORLD21 as W   # Misaeng: its own module, English only
         except ImportError:
             raise SystemExit("no story yet for Misaeng (Plot alt2's WORLD21 in tools/tk_story_w21.py)")
+    elif plans_world == "ms2":
+        try:
+            from tk_story_w22 import WORLD22 as W   # Misaeng Book 2
+        except ImportError:
+            raise SystemExit("no story yet for Misaeng Book 2 (Plot alt2's WORLD22 in tools/tk_story_w22.py)")
     else:
         raise SystemExit(f"no story for book {plans_world}")
     return {**W, "nodes": [{**nd, "key": f"{n}-{nd['key']}"} for nd in W["nodes"]],

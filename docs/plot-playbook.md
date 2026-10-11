@@ -384,6 +384,66 @@ Draft one arc, get it playable in a test book, and fix what the playtest shows b
   novel's own order, and the later book's **opening scroll** still stands alone for a player who starts there. Example:
   the Cao Cao arc closes on chapters 5–7 in four lines; the Diaochan arc opens on Chang'an under Dong Zhuo.
 
+### Stills briefs (Misaeng, from Graphics)
+
+Name people in a brief by their CAST name ("Park Jong-gi", "Jang Baek-gi", "Ms. Ha"), never by cast id ("ms_parkjg"):
+Graphics matches names to portraits, so an id gets no look and no reference. Write "a single full-frame illustration,
+no panels, no speech bubbles" for any scene with a crowd and one focus.
+
+### R23. Don't ask the user to approve plans (Misaeng)
+
+> "Yes don't ask for my approval next time" (on the Book 2 plan)
+
+Plan, then draft, without waiting for a go-ahead. Put the plan in the repo and tell the user what it is; where a call is
+genuinely the user's, make the recommended choice, say so, and carry on. The user steers by reacting to what's built.
+
+### R22. Before sending a draft: setups, motives, jumps (Misaeng)
+
+The playtest notes on Book 1 nearly all had one root: the payoff came before its cause was on screen. Plot knows the
+source, so its gaps fill themselves; a stranger falls into them (the Editor's E8, docs/editor/editor-playbook.md on
+`claude/editor-misaeng`). Run these on every beat before it goes to the Editor:
+- **Setups:** for every payoff, name the earlier line or image that set it up ("last chance" needs the decline first).
+- **Motives:** every action and handoff has a motive the player can see (why the new hire is sent; why Oh searches).
+  Re-check after every cut: cutting m12's apology took away Ahn's reason to follow.
+- **Jumps:** every jump in time or place is said in the narration and matched by the staging (dinner → the next
+  morning; who is where).
+
+### R21. A decision board is the deliberation; the choice comes after (Misaeng)
+
+> "the own the mistake line kills the tension, his choice should be revealed after the puzzle, the puzzle should serve
+> to represent deliberation" (the user, relayed by the Editor; its principle 22)
+
+On a board where a character decides something:
+- The caption, the opening thought and the narration before the board **pose** the dilemma ("Whose stone is it?"),
+  and never name the answer ("Own the mistake.").
+- A still or line that shows the choice plays **after** the solve.
+- The win line is resolve ("He knows what he has to do."), not the decision itself; the decision is the first line
+  after the board.
+- Explanations that give away the choice (a baduk proverb that names it, a trait like "he doesn't hand over sente")
+  go after the board too, where they explain instead of spoil.
+
+### R20. Work with the Editor (Misaeng)
+
+> "you and editor should be close collaborators in the future without needing me to facilitate explicitly"
+
+The Editor session reads each book's playable script as a stranger, with no knowledge of the source, and judges it
+against sourced storytelling principles (`docs/editor/storytelling-principles.md` on `claude/editor-misaeng`). Plot
+and the Editor work directly, without routing through the user:
+- After every substantial story change (a new book's draft, a restructure, a batch of playtest fixes), Plot regenerates
+  the readable script (`docs/book2/misaeng-book1-script.md` or its successor) and sends it to the Editor for review.
+- The Editor reports problems with fixes. Plot answers each (adopt, adapt, or decline with a reason, often the source's
+  plot or the user's rules), revises, and sends it back. The Editor's questions about the intended plot are Plot's to
+  answer from the source.
+- **Every story change goes to the Editor, playtest fixes included**, before or as it ships: new or changed lines,
+  moved or cut beats, handoffs, gates, boards. Staging-only changes go too, briefly. ("if there are story changes you
+  should always meet with editor", the user.)
+- **Send the Editor the raw material only**: what changed (commits, lines, beats) and where to read it. No risks to
+  look at, no review points, no questions steering its read ("you shouldnt flag risks, and review points to the editor
+  in future, just give it your raw", the user). The Editor decides what to look at.
+- Plot brings the user the outcome and anything that needs the user's call, not every exchange.
+- The Editor reads the raw scene steps too (spawns, removes, stills, maps), since staging problems never show in the md:
+  a line saying "out of earshot" or "on the roof" must match where the beat actually plays.
+
 ### R19. Any adaptation is material; the experience comes first (Misaeng)
 
 > "It's ok to use drama as material our focus is a good experience to strictly abiding to one adaptation over another"

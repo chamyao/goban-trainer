@@ -30,6 +30,8 @@ elif ARC == "ls":   # Lady Sun's marriage (tools/tk_plans_ls.py, docs/book2/lady
     from tk_plans_ls import KEYS_LS, LINE_KINDS, NEW_KINDS, PLANS_LS as PLANS2, ZONE_KINDS  # noqa: E402
 elif ARC == "ms":   # Misaeng (tools/tk_plans_ms.py, docs/book2/misaeng-arc.md on Plot alt2's branch)
     from tk_plans_ms import KEYS_MS, LINE_KINDS, NEW_KINDS, PLANS_MS as PLANS2, ZONE_KINDS  # noqa: E402
+elif ARC == "ms2":   # Misaeng Book 2 (world 22; tools/tk_plans_ms.py's _b2)
+    from tk_plans_ms import KEYS_MS2 as KEYS_MS, LINE_KINDS, NEW_KINDS, PLANS_MS2 as PLANS2, ZONE_KINDS  # noqa: E402
 else:
     from tk_plans_w2 import LINE_KINDS, NEW_KINDS, PLANS2, ZONE_KINDS  # noqa: E402
 from vocab import FOLK, KINDS  # noqa: E402
@@ -37,8 +39,8 @@ from vocab import FOLK, KINDS  # noqa: E402
 SIDES = {"N": (0, -1), "S": (0, 1), "W": (-1, 0), "E": (1, 0)}
 OPEN_GROUND = {"court", "passage", "garden", "field", "field.wheat", "market", "camp", "plain", "loess", "stage", "floor", "ward",
                "city", "plateau"}
-FRONT_DOOR = {"building.storefront", "building.office_block", "building.office_tower"}   # modern fronts: the door is drawn on the south face
-PASSABLE_THINGS = {"furn.seat", "furn.curtain", "furn.rug", "prop.spill", "landmark.ridge", "building.gatehouse", "building.gate", "building.moongate", "building.palace_gate"}
+FRONT_DOOR = {"building.storefront", "building.office_block", "building.office_tower", "building.villa", "building.pojangmacha"}   # modern fronts: the door is drawn on the south face
+PASSABLE_THINGS = {"furn.seat", "furn.chair", "furn.curtain", "furn.rug", "prop.spill", "landmark.ridge", "building.gatehouse", "building.gate", "building.moongate", "building.palace_gate"}
 IN_WALL = {"building.gate", "building.gatehouse", "building.gatetower", "building.moongate", "wall.stairs", "building.palace_gate"}   # stand in a wall: no margin
 EXTRA_KINDS = {"prop.lanterns", "prop.body_lamp", "milestone", "banner", "plant.peony", "water.lotus", "tree.poplar", "tree.willow",
                "camp.gong", "camp.drum"}
@@ -49,7 +51,7 @@ def shared_keys():
         return set(KEYS_LB)
     if ARC == "ls":   # the design's beat table (s1 ... s16)
         return set(KEYS_LS)
-    if ARC == "ms":   # the design's beat table (m1 ... m24)
+    if ARC in ("ms", "ms2"):   # the book's beat keys (Book 1's m…, Book 2's b…)
         return set(KEYS_MS)
     if ARC == "cc":   # the "Shared keys" table: | c1 | Luoyang | ...
         text = (ROOT / "docs/book2/caocao-arc.md").read_text().split("## Shared keys")[1]
@@ -179,9 +181,10 @@ class Plan:
             for d in t.get("doors") or ([t["door"]] if t.get("door") else []):
                 x, y, w, h = t["rect"]
                 dx, dy = SIDES[d]
-                if d == "N" and t["kind"] in FRONT_DOOR and (t.get("map") or t.get("to")):
-                    # its art draws the door on the south face: a north door's way in would be on the roofline
-                    self.err(f"door: {t['id']} ({t['kind']}) is entered but its door is drawn on the south face; face it S, E or W")
+                if d != "S" and t["kind"] in FRONT_DOOR and (t.get("map") or t.get("to")):
+                    # its art draws the door on the south face: a door on any other face puts the way in where none is
+                    # drawn (a north one on the roofline, an east or west one on a blank side wall)
+                    self.err(f"door: {t['id']} ({t['kind']}) is entered by its {d} face, but its door is drawn on the south face; face it S")
                 edge = {"N": [(i, y - 1) for i in range(x, x + w)], "S": [(i, y + h) for i in range(x, x + w)],
                         "W": [(x - 1, j) for j in range(y, y + h)], "E": [(x + w, j) for j in range(y, y + h)]}[d]
                 ok = [c for c in edge if self.walkable(c)]
@@ -201,6 +204,10 @@ class Plan:
             for b_ in walkup[i + 1:]:
                 if not any(x.get("gives") or x.get("needs") for x in (a_, b_)):
                     continue
+                # a spot may name the spots it never shares a stretch of the story with ("near_ok": Oh's search of
+                # Jang's desk, live only from m20 until he finds the scrap, beside Jang's chair's beats)
+                if b_["id"] in a_.get("near_ok", ()) or a_["id"] in b_.get("near_ok", ()):
+                    continue
                 d = math.dist(a_["at"], b_["at"]) * self.C * 16
                 if d < 76:
                     self.err(f"spots {a_['id']} and {b_['id']} are {d:.0f} px apart: walking up to one sets off the other (keep 76)")
@@ -208,7 +215,12 @@ class Plan:
             c = tuple(s["at"])
             if s.get("node") and s["node"].split("-", 1)[-1] not in keys:
                 self.err(f"spot {s['id']}: node {s['node']} is not a Shared key")
-            if s.get("on"):
+            seat = next((x for x in p.get("seats", []) if x["id"] == s.get("on")), None)
+            if seat:   # on a desk's seat (plans.lay_seats): stands at the desk's front; "at" is the cell before it
+                desk = next((t for t in p.get("things", []) if t["id"] == seat["of"]), None)
+                if not desk or tuple(c) != (desk["rect"][0], desk["rect"][1] + desk["rect"][3]):
+                    self.err(f"spot {s['id']}: on {s['on']}, so at the cell in front of {seat['of']}")
+            elif s.get("on"):
                 host = self.owner.get(c)
                 if not host or host["id"] != s["on"]:
                     self.err(f"spot {s['id']}: meant to be on {s['on']}")
@@ -582,7 +594,7 @@ def main():
                                                                        for r, v in P.chase_routes.items()))
         errors += P.errors
         if "--png" in sys.argv:
-            drawn.append(draw(name, P, ROOT / ({"cc": "docs/book2/plans-cc", "lb": "docs/book2/plans-lb", "ls": "docs/book2/plans-ls", "ms": "docs/book2/plans-ms"}.get(ARC, "docs/book2/plans"))))
+            drawn.append(draw(name, P, ROOT / ({"cc": "docs/book2/plans-cc", "lb": "docs/book2/plans-lb", "ls": "docs/book2/plans-ls", "ms": "docs/book2/plans-ms", "ms2": "docs/book2/plans-ms2"}.get(ARC, "docs/book2/plans"))))
     # people placed inside a compound or room map ("place": its id, "at": a cell there)
     for place, b in PLANS2.items():
         for i, n in enumerate(b.get("npcs", [])):

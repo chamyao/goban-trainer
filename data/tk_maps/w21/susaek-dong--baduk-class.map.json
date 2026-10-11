@@ -144,15 +144,7 @@
    "label": "Certificates and small trophies"
   }
  ],
- "spots": [
-  {
-   "id": "m1",
-   "x": 12.5,
-   "y": 10.7,
-   "node": "21-m1",
-   "label": "The baduk class"
-  }
- ],
+ "spots": [],
  "npcs": [],
  "exits": [
   {

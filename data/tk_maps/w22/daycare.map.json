@@ -1,0 +1,312 @@
+{
+ "format": "tk-map/1",
+ "id": "daycare",
+ "world": 22,
+ "name": "Daycare",
+ "archetype": "city",
+ "size": [
+  48,
+  32
+ ],
+ "seed": 876,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "city",
+   "b": "garden",
+   "c": "road"
+  },
+  "rows": [
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "cccccccccccccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccc",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  ],
+  "walk": {
+   "city": true,
+   "garden": true,
+   "road": true
+  }
+ },
+ "lines": [
+  {
+   "id": "street",
+   "kind": "road",
+   "path": [
+    [
+     0,
+     5
+    ],
+    [
+     11,
+     5
+    ]
+   ],
+   "width": 3,
+   "tiles": 192
+  }
+ ],
+ "objects": [
+  {
+   "kind": "building.storefront",
+   "x": 22,
+   "y": 17,
+   "w": 4,
+   "h": 2,
+   "id": "daycare",
+   "door": "S",
+   "faces": "S",
+   "label": "The daycare's glass door",
+   "map": "playroom",
+   "plaque": "우리어린이집",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.villa",
+   "x": 5,
+   "y": 12,
+   "w": 5,
+   "h": 3,
+   "id": "villa-w",
+   "door": null,
+   "faces": "S",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.storefront",
+   "x": 38,
+   "y": 25,
+   "w": 4,
+   "h": 2,
+   "id": "shop-e",
+   "door": "N",
+   "faces": "N",
+   "blocks_sight": true
+  },
+  {
+   "kind": "prop.bench",
+   "x": 43,
+   "y": 11,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "prop.bench",
+   "x": 38,
+   "y": 10,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 1,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 6,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 11,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 16,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 21,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 26,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 31,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 36,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 41,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 46,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "spots": [
+  {
+   "id": "b21b",
+   "x": 25.5,
+   "y": 21.7,
+   "node": "22-b21b",
+   "label": "The daycare's glass door"
+  },
+  {
+   "id": "b22b",
+   "x": 25.5,
+   "y": 21.7,
+   "node": "22-b22b",
+   "label": "The daycare's glass door"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "npc-1",
+   "kind": "folk.ajumma",
+   "x": 13.5,
+   "y": 21.9,
+   "say": [
+    "A grandmother with a pushchair. “They all run to the door when it opens. Every one of them.”"
+   ]
+  }
+ ],
+ "exits": [
+  {
+   "to": "daycare--playroom",
+   "side": "N",
+   "x": 23.6,
+   "y": 18.85,
+   "w": 0.8,
+   "h": 0.75,
+   "door": true
+  },
+  {
+   "to": "jongno",
+   "side": "W",
+   "x": 0,
+   "y": 20,
+   "w": 1,
+   "h": 4
+  },
+  {
+   "to": "suns-neighbourhood",
+   "side": "E",
+   "x": 47,
+   "y": 20,
+   "w": 1,
+   "h": 4
+  }
+ ],
+ "entries": {
+  "daycare--playroom": [
+   24,
+   19
+  ],
+  "jongno": [
+   5,
+   21
+  ],
+  "suns-neighbourhood": [
+   41,
+   21
+  ],
+  "": [
+   25,
+   21
+  ]
+ },
+ "states": [
+  {
+   "id": "day",
+   "light": "day"
+  },
+  {
+   "id": "evening",
+   "when": "node:22-b21",
+   "until": "node:22-b21b",
+   "light": "dusk"
+  },
+  {
+   "id": "morning",
+   "when": "node:22-b22",
+   "until": "node:22-b22b",
+   "light": "morning"
+  }
+ ],
+ "ways": {
+  "nodes": [
+   [
+    2.0,
+    22.0
+   ],
+   [
+    46.0,
+    22.0
+   ]
+  ],
+  "edges": [
+   [
+    0,
+    1
+   ]
+  ]
+ },
+ "links": [
+  "daycare--playroom",
+  "jongno",
+  "suns-neighbourhood"
+ ]
+}

@@ -1,0 +1,423 @@
+{
+ "format": "tk-map/1",
+ "id": "one-international--pt-hall",
+ "world": 22,
+ "name": "The PT hall",
+ "archetype": "interior",
+ "size": [
+  36,
+  24
+ ],
+ "seed": 2604,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "carpet",
+   " ": "void",
+   "W": "wall"
+  },
+  "rows": [
+   "                                    ",
+   " WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WWWWWWWWWWWWWWWWWaaWWWWWWWWWWWWWWW ",
+   "                                    "
+  ],
+  "walk": {
+   "carpet": true,
+   "void": false,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    18,
+    12
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     9,
+     11
+    ]
+   },
+   "tiles": 108
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.projector_screen",
+   "x": 11,
+   "y": 2,
+   "w": 3,
+   "h": 1,
+   "id": "screen",
+   "label": "The screen"
+  },
+  {
+   "kind": "furn.lectern",
+   "x": 18,
+   "y": 4,
+   "w": 1,
+   "h": 1,
+   "id": "podium",
+   "label": "The podium, and the laptop on it"
+  },
+  {
+   "kind": "furn.meeting_table",
+   "x": 30,
+   "y": 6,
+   "w": 4,
+   "h": 2,
+   "id": "panel-3"
+  },
+  {
+   "kind": "furn.meeting_table",
+   "x": 30,
+   "y": 8,
+   "w": 4,
+   "h": 2,
+   "id": "panel-4",
+   "label": "The evaluators' table"
+  },
+  {
+   "kind": "furn.meeting_table",
+   "x": 30,
+   "y": 10,
+   "w": 4,
+   "h": 2,
+   "id": "panel-5"
+  },
+  {
+   "kind": "furn.chair",
+   "x": 4,
+   "y": 12,
+   "w": 1,
+   "h": 1,
+   "id": "seat-2-6"
+  },
+  {
+   "kind": "furn.chair",
+   "x": 6,
+   "y": 12,
+   "w": 1,
+   "h": 1,
+   "id": "seat-3-6"
+  },
+  {
+   "kind": "furn.chair",
+   "x": 8,
+   "y": 12,
+   "w": 1,
+   "h": 1,
+   "id": "seat-4-6"
+  },
+  {
+   "kind": "furn.chair",
+   "x": 10,
+   "y": 12,
+   "w": 1,
+   "h": 1,
+   "id": "seat-5-6"
+  },
+  {
+   "kind": "furn.chair",
+   "x": 12,
+   "y": 12,
+   "w": 1,
+   "h": 1,
+   "id": "seat-6-6"
+  },
+  {
+   "kind": "furn.chair",
+   "x": 14,
+   "y": 12,
+   "w": 1,
+   "h": 1,
+   "id": "seat-7-6"
+  },
+  {
+   "kind": "furn.chair",
+   "x": 20,
+   "y": 12,
+   "w": 1,
+   "h": 1,
+   "id": "seat-10-6"
+  },
+  {
+   "kind": "furn.chair",
+   "x": 22,
+   "y": 12,
+   "w": 1,
+   "h": 1,
+   "id": "seat-11-6"
+  },
+  {
+   "kind": "furn.chair",
+   "x": 24,
+   "y": 12,
+   "w": 1,
+   "h": 1,
+   "id": "seat-12-6"
+  },
+  {
+   "kind": "furn.chair",
+   "x": 26,
+   "y": 12,
+   "w": 1,
+   "h": 1,
+   "id": "seat-13-6"
+  },
+  {
+   "kind": "furn.chair",
+   "x": 4,
+   "y": 16,
+   "w": 1,
+   "h": 1,
+   "id": "seat-2-8"
+  },
+  {
+   "kind": "furn.chair",
+   "x": 6,
+   "y": 16,
+   "w": 1,
+   "h": 1,
+   "id": "seat-3-8"
+  },
+  {
+   "kind": "furn.chair",
+   "x": 8,
+   "y": 16,
+   "w": 1,
+   "h": 1,
+   "id": "seat-4-8"
+  },
+  {
+   "kind": "furn.chair",
+   "x": 10,
+   "y": 16,
+   "w": 1,
+   "h": 1,
+   "id": "seat-5-8"
+  },
+  {
+   "kind": "furn.chair",
+   "x": 12,
+   "y": 16,
+   "w": 1,
+   "h": 1,
+   "id": "seat-6-8"
+  },
+  {
+   "kind": "furn.chair",
+   "x": 14,
+   "y": 16,
+   "w": 1,
+   "h": 1,
+   "id": "seat-7-8"
+  },
+  {
+   "kind": "furn.chair",
+   "x": 20,
+   "y": 16,
+   "w": 1,
+   "h": 1,
+   "id": "seat-10-8"
+  },
+  {
+   "kind": "furn.chair",
+   "x": 22,
+   "y": 16,
+   "w": 1,
+   "h": 1,
+   "id": "seat-11-8"
+  },
+  {
+   "kind": "furn.chair",
+   "x": 24,
+   "y": 16,
+   "w": 1,
+   "h": 1,
+   "id": "seat-12-8"
+  },
+  {
+   "kind": "furn.chair",
+   "x": 26,
+   "y": 16,
+   "w": 1,
+   "h": 1,
+   "id": "seat-13-8"
+  },
+  {
+   "kind": "furn.water_cooler",
+   "x": 2,
+   "y": 20,
+   "w": 1,
+   "h": 1,
+   "id": "cooler",
+   "label": "A water cooler"
+  },
+  {
+   "kind": "furn.plant",
+   "x": 32,
+   "y": 20,
+   "w": 1,
+   "h": 1,
+   "id": "plant",
+   "blocks_sight": true
+  },
+  {
+   "kind": "furn.lift_door",
+   "x": 12,
+   "y": 20,
+   "w": 2,
+   "h": 1,
+   "id": "lift-doors",
+   "label": "The lift"
+  }
+ ],
+ "spots": [
+  {
+   "id": "lift",
+   "x": 14.5,
+   "y": 20.7,
+   "node": "",
+   "label": "The lift",
+   "floors": [
+    {
+     "label": "1F · The lobby",
+     "to": "one-international"
+    },
+    {
+     "label": "14F · Sales Team 3",
+     "to": "one-international--sales3"
+    },
+    {
+     "label": "R · The roof",
+     "to": "one-international--roof"
+    },
+    {
+     "label": "17F · The executive meeting room",
+     "to": "one-international--meeting3"
+    },
+    {
+     "label": "12F · The reference room",
+     "to": "one-international--reference"
+    },
+    {
+     "label": "4F · The PT hall",
+     "to": "one-international--pt-hall"
+    }
+   ],
+   "use": "lift"
+  },
+  {
+   "id": "b27",
+   "x": 18.5,
+   "y": 18.7,
+   "node": "22-b27",
+   "label": "The PT hall"
+  },
+  {
+   "id": "b28",
+   "x": 22.5,
+   "y": 14.7,
+   "node": "22-b28",
+   "label": "The interns' seats"
+  },
+  {
+   "id": "b29",
+   "x": 18.5,
+   "y": 6.7,
+   "node": "22-b29",
+   "label": "The podium"
+  },
+  {
+   "id": "b30",
+   "x": 28.5,
+   "y": 8.7,
+   "node": "22-b30",
+   "label": "The evaluators' table"
+  },
+  {
+   "id": "b31",
+   "x": 8.5,
+   "y": 14.7,
+   "node": "22-b31",
+   "label": "The interns' seats"
+  },
+  {
+   "id": "b32",
+   "x": 24.5,
+   "y": 8.7,
+   "node": "22-b32",
+   "label": "The PT hall"
+  }
+ ],
+ "npcs": [],
+ "exits": [
+  {
+   "to": "one-international",
+   "side": "S",
+   "x": 18,
+   "y": 22,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "one-international": [
+   14,
+   20
+  ],
+  "": [
+   18,
+   21
+  ],
+  "one-international--sales3": [
+   14,
+   20
+  ],
+  "one-international--roof": [
+   14,
+   20
+  ],
+  "one-international--meeting3": [
+   14,
+   20
+  ],
+  "one-international--reference": [
+   14,
+   20
+  ]
+ },
+ "parent": "one-international",
+ "building": "pt-hall",
+ "links": [
+  "one-international"
+ ]
+}

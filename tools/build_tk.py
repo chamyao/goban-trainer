@@ -308,13 +308,14 @@ def main():
     for b in index:
         book = json.loads((BOOKS / f"{b['id']}.json").read_text())
         for p in book["problems"]:
+            if typed(p):
+                PROBLEM_IDS[f"{b['id']}/{p['id']}"] = [b["id"], p["id"]]   # any problem can be named, graded or not (Redmond's seki)
             if typed(p) and p.get("lv") in RANK:
                 k = problem_kind.kinds(p)
                 for g in KIND_GROUPS:
                     if set(g.split()) <= k:
                         typed_by_grade.setdefault((p["lv"], g), []).append([b["id"], p["id"], " ".join(sorted(k))])
                         break
-                PROBLEM_IDS[f"{b['id']}/{p['id']}"] = [b["id"], p["id"]]
             if not usable(p):
                 continue
             ref = [b["id"], p["id"]]
@@ -465,7 +466,8 @@ def main():
     data = {"id": "tk", "title": "Romance of the Three Kingdoms", "native": "三国演义", "worlds": worlds,
             "voices": sorted(k for k in lines if k in have),
             "voices_en": sorted(k for k in lines if k in have_en),
-            "voices_ko": sorted(k for k in KO_LINES if (VOICE_DIR / "ko" / f"{k}.mp3").exists())}
+            "voices_ko": [] if all(w.get("voice_off") for w in WORLDS if w.get("voice") == "ko")
+                          else sorted(k for k in KO_LINES if (VOICE_DIR / "ko" / f"{k}.mp3").exists())}
     (ROOT / "data" / "tk.json").write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")))
     if VETTED:
         print(f"KataGo vetting: {len(unvetted)} pooled problems not vetted yet"
