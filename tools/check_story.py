@@ -127,8 +127,27 @@ def known_props():
     return None
 
 
+class _Any:
+    """An English-only world ("lang": "en") asks for no Chinese: every line passes."""
+    def __contains__(self, k):
+        return True
+
+
+def built_places(w):
+    """The ids and names of a world's built places (data/tk_maps/w<n>/region.json): a handoff may name a room's map,
+    as the engine finds a place by either (tk-world.js placeOf)."""
+    f = ROOT / "data" / "tk_maps" / f"w{w['n']}" / "region.json"
+    if not f.exists():
+        return set()
+    return {x for p in json.loads(f.read_text()).get("places", []) for x in (p.get("id"), p.get("name")) if x}
+
+
 def check_world(w, ZH, CAST, errors, warnings, needs=None, folk=None):
     name = f"World {w['n']}"
+    en = w.get("lang") == "en"
+    if en:   # English only (Misaeng): no Chinese asked for; the cast is the world's own (English voices)
+        ZH, CAST = _Any(), dict(w.get("cast") or {})
+        check_en_world(w, name, errors)
     nodes = {n["key"]: n for n in w["nodes"]}
     if len(nodes) != len(w["nodes"]):
         errors.append(f"{name}: duplicate node keys")
@@ -220,7 +239,7 @@ def check_world(w, ZH, CAST, errors, warnings, needs=None, folk=None):
                     and (st[2] or {}).get("to") not in {n["key"] for n in w["nodes"]}:
                 errors.append(f"{name}: {where}: handoff to {(st[2] or {}).get('to')!r}, which is no node")
             if op == "party" and len(st) > 2 and isinstance((st[2] or {}).get("to"), dict) \
-                    and st[2]["to"].get("place") not in {n.get("place") for n in w["nodes"]}:
+                    and st[2]["to"].get("place") not in {n.get("place") for n in w["nodes"]} | built_places(w):
                 errors.append(f"{name}: {where}: handoff to place {st[2]['to'].get('place')!r}, which the story never visits")
             if op == "say" and st[1] not in CAST:
                 errors.append(f"{name}: {where}: speaker {st[1]!r} has no voice in CAST")
@@ -265,7 +284,7 @@ def check_world(w, ZH, CAST, errors, warnings, needs=None, folk=None):
                 if part not in ZH:
                     errors.append(f"{name}: boss {k!r}: no Chinese for name card part {part!r}")
     for key, it in w.get("items", {}).items():
-        if "zh" not in it:
+        if "zh" not in it and not en:
             errors.append(f"{name}: item {key!r} has no zh name")
     return nodes, used
 
@@ -387,6 +406,63 @@ def write_needs(needs, story):
         out.append("")
     (ROOT / "docs" / "graphics-needs.md").write_text("\n".join(out) + "\n")
     print(f"wrote docs/graphics-needs.md ({len(needs)} kinds)")
+
+
+def check_en_world(w, name, errors):
+    """The keys an English-only modern book (Misaeng, world 21) adds: the game record, the audit board, the trade loop."""
+    items = w.get("items") or {}
+    nodes = {n["key"]: n for n in w["nodes"]}
+    rec = w.get("record")
+    moves = []
+    if rec:
+        sys.path.insert(0, str(TOOLS))
+        from build_tk import read_record   # noqa: E402
+        try:
+            moves = read_record(rec)["moves"]
+        except Exception as e:   # noqa: BLE001
+            errors.append(f"{name}: record {rec.get('sgf')!r} can't be read: {e}")
+    for k, n in nodes.items():
+        if "move" in n and rec and not (isinstance(n["move"], int) and 0 <= n["move"] <= len(moves)):
+            errors.append(f"{name}: node {k!r} move {n['move']!r} is outside the record (0-{len(moves)})")
+        r = n.get("record")
+        for m in (r if isinstance(r, list) else [r] if r is not None else []):
+            if m is None:
+                continue
+            if not rec:
+                errors.append(f"{name}: node {k!r} asks for record move {m}, but the world has no record")
+            elif not (isinstance(m, int) and 1 <= m <= len(moves)):
+                errors.append(f"{name}: node {k!r} record move {m!r} is outside the record")
+            elif moves[m - 1][0] != "B":
+                errors.append(f"{name}: node {k!r} record move {m} is White's; the boards ask for Black's")
+        if isinstance(r, list):
+            nprob = sum(1 for s in w["scenes"].get(n.get("scene"), {}).get("steps", []) if s[0] == "problem")
+            if len(r) != nprob:
+                errors.append(f"{name}: node {k!r} record list has {len(r)} entries for {nprob} problems")
+    a = w.get("audit")
+    if a:
+        for c in a.get("clues", []):
+            if c not in items:
+                errors.append(f"{name}: audit clue {c!r} is not an item")
+        for i, L in enumerate(a.get("links", [])):
+            if len(L.get("pair", [])) != 2 or any(c not in a.get("clues", []) for c in L.get("pair", [])):
+                errors.append(f"{name}: audit link {i + 1} pair {L.get('pair')!r} isn't two of the clues")
+            if not L.get("q") or not L.get("a"):
+                errors.append(f"{name}: audit link {i + 1} needs a question (q) and an answer (a)")
+        if not a.get("done"):
+            errors.append(f"{name}: audit has no done mark")
+    if w.get("voice") == "ko":   # a Korean voice-over: every spoken line has its Korean (KO21 …)
+        ko = w.get("ko") or {}
+        steps = [s for sc in w["scenes"].values() for s in sc["steps"]] + list(w.get("opening", [])) + list(w.get("closing", []))
+        for kind, t in text_lines(steps):
+            if kind in ("n", "say") and t not in ko and t.strip("“”") not in ko:
+                errors.append(f"{name}: no Korean for {kind}: {t[:70]!r}")
+    t = w.get("trade")
+    if t:
+        if not t.get("goods") or not t.get("done"):
+            errors.append(f"{name}: trade needs goods and a done mark")
+        for g, d in (t.get("goods") or {}).items():
+            if not isinstance(d.get("cost"), int) or not d.get("name"):
+                errors.append(f"{name}: trade good {g!r} needs a name and an integer cost")
 
 
 def main():

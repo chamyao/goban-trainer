@@ -1,0 +1,123 @@
+#!/usr/bin/env python3
+"""Render the Korean voice-over of an English-only book with "voice": "ko" (Misaeng): one MP3 per line, cloned by
+XTTS-v2 from the reference clips in tools/voice_refs/ko (Zeroth-Korean speakers, CC BY 4.0; casting in
+tools/voice_ko.py). Clips go into assets/tk/voice/ko/<id>.mp3, the English clip's id; ko/index.json remembers each
+clip's Korean and voice, so a changed line (or recast speaker) is rendered again. Run build_tk.py afterwards so
+data/tk.json lists them (voices_ko).
+
+Needs a Python 3.11 environment with: torch==2.5.1 torchaudio==2.5.1 (CPU), "coqui-tts[ko]", "transformers>=4.57,<4.58",
+lameenc, soundfile. XTTS-v2's licence is the Coqui Public Model License (non-commercial); set COQUI_TOS_AGREED=1.
+
+  COQUI_TOS_AGREED=1 <venv>/bin/python tools/build_tk_voice_ko.py [--limit N]
+"""
+import json
+import sys
+from pathlib import Path
+
+import lameenc
+import numpy as np
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import build_tk  # noqa: E402
+
+REFS = Path(__file__).resolve().parent / "voice_refs" / "ko" / "clean"
+OUT = build_tk.VOICE_DIR / "ko"
+# The Zeroth clips were recorded on everyday mics, and XTTS copies their hiss into the voice (the user: "the korean voices
+# have static in the back"). So the references are cleaned once with DeepFilterNet3 (tools/voice_refs/ko/clean, from
+# ../z*.flac), each clip gets the same pass after it's rendered, and the MP3s are 64 kbps. CLEAN tags the index entries
+# made this way, so clips from before are rendered again.
+CLEAN = "c1"
+DF_DIR = None   # DeepFilterNet3 weights (config.ini, checkpoints/): --df DIR, e.g. from huggingface.co/fal/DeepFilterNet3
+
+
+def dilemma_vids(n):
+    """A board's lines with their clip ids, as build_tk.py gives them (from the Chinese, or an English-only book's English)."""
+    if "dilemma" not in n:
+        return n
+    def one(d0):
+        d = dict(d0)
+        for k in ("open", "win", "slip"):
+            if k in d:
+                d[k + "_zh"] = build_tk.zh(d[k]); d[k + "_vid"] = build_tk.vid(d[k], d.get("who"))
+        return d
+    dl = n["dilemma"]
+    return dict(n, dilemma=[one(d) for d in dl] if isinstance(dl, list) else one(dl))
+
+
+def cap(text):
+    """The longest a line's clip should run: about 0.3 s a syllable at a slow pace, and a second to breathe."""
+    return 0.3 * len(text.replace(" ", "")) + 1.2
+
+
+def voiced_world(w):
+    """A story world's lines with their clip ids, as build_tk.py makes them (inside build_tk.english(w))."""
+    return dict({k: w[k] for k in ("lang", "cast", "voice", "ko", "cast_ko") if k in w},
+                opening=build_tk.voiced(w["opening"]), closing=build_tk.voiced(w["closing"]),
+                scenes={k: {"steps": build_tk.voiced(v["steps"])} for k, v in w["scenes"].items()},
+                nodes=[dict(n, boss=dict(n["boss"], taunt_zh=build_tk.zh(n["boss"]["taunt"]),
+                                         taunt_vid=build_tk.vid(n["boss"]["taunt"], n["boss"]["who"])))
+                       if "boss" in n else n for n in [dilemma_vids(n) for n in w["nodes"]]])
+
+
+def main():
+    limit = int(sys.argv[sys.argv.index("--limit") + 1]) if "--limit" in sys.argv else None
+    df_dir = sys.argv[sys.argv.index("--df") + 1] if "--df" in sys.argv else DF_DIR
+    worlds = []
+    for w in build_tk.WORLDS:
+        if w.get("voice") == "ko":
+            with build_tk.english(w):
+                worlds.append(voiced_world(w))
+    build_tk.KO_LINES.clear()
+    build_tk.all_lines(worlds)
+    lines = build_tk.KO_LINES
+    OUT.mkdir(parents=True, exist_ok=True)
+    index_file = OUT / "index.json"
+    index = json.loads(index_file.read_text()) if index_file.exists() else {}
+    import re
+    spoken = lambda t: bool(re.search(r"[가-힣]", t))   # "..." and the like: nothing to say, no clip
+    for k, (text, _, _) in list(lines.items()):
+        if not spoken(text):
+            del lines[k]
+            (OUT / f"{k}.mp3").unlink(missing_ok=True); index.pop(k, None)
+    # XTTS rambles after a short line ("살았다. 겨우." came back 11 s long): a clip much longer than its text is redone
+    def too_long(k, text):
+        f = OUT / f"{k}.mp3"
+        return f.exists() and f.stat().st_size / 8000 > cap(text) + 0.3
+    todo = {k: v for k, v in lines.items() if not (OUT / f"{k}.mp3").exists() or index.get(k) != f"{v[1]}~{CLEAN}|{v[0]}" or too_long(k, v[0])}
+    print(f"{len(todo)} of {len(lines)} Korean lines to render")
+    if not todo:
+        return
+    from TTS.api import TTS
+    tts = TTS("tts_models/multilingual/multi-dataset/xtts_v2")
+    from df.enhance import enhance, init_df
+    import torch, librosa
+    dfm, dfs, _ = init_df(model_base_dir=df_dir)
+    def clean(wav):   # DeepFilterNet runs at 48 kHz
+        hi = librosa.resample(wav, orig_sr=24000, target_sr=dfs.sr())
+        out = enhance(dfm, dfs, torch.from_numpy(hi[None].astype(np.float32)))[0].numpy()
+        return librosa.resample(out, orig_sr=dfs.sr(), target_sr=24000).astype(np.float32)
+    for i, (k, (text, ref, _en)) in enumerate(list(todo.items())[:limit], 1):
+        say = text.replace("“", "").replace("”", "").replace("…", "...").strip()
+        # a short line: the best of a few takes (the shortest), then cut to what the words need, with a short fade
+        takes = []
+        for _ in range(4 if len(say.replace(" ", "")) < 16 else 1):
+            takes.append(np.asarray(tts.tts(text=say, speaker_wav=str(REFS / f"{ref}.flac"), language="ko"), dtype=np.float32))
+            if len(takes[-1]) / 24000 <= cap(text):
+                break
+        wav = clean(min(takes, key=len))
+        n = int(cap(text) * 24000)
+        if len(wav) > n:
+            wav = wav[:n].copy(); fade = min(len(wav), 2400); wav[-fade:] *= np.linspace(1, 0, fade)
+        pcm = (np.clip(wav, -1, 1) * 32767).astype(np.int16)
+        enc = lameenc.Encoder()
+        enc.set_bit_rate(64); enc.set_in_sample_rate(24000); enc.set_channels(1); enc.set_quality(2)
+        (OUT / f"{k}.mp3").write_bytes(enc.encode(pcm.tobytes()) + enc.flush())
+        index[k] = f"{ref}~{CLEAN}|{text}"
+        if i % 10 == 0 or i == len(todo):
+            index_file.write_text(json.dumps(dict(sorted(index.items())), ensure_ascii=False, indent=0))
+        print(f"{i}/{len(todo)} {ref} {text[:30]}", flush=True)
+    index_file.write_text(json.dumps(dict(sorted(index.items())), ensure_ascii=False, indent=0))
+
+
+if __name__ == "__main__":
+    main()

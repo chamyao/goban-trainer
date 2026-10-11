@@ -127,6 +127,11 @@ for _k, _c in _CATS["categories"].items():
 # descriptions carry the picture. Every still's default; --look gohs etc. still swap it out for comparisons.
 STYLES["final"] = "Style: 2D donghua, hard cel shading."
 STYLE = f"{STYLES['final']} Han dynasty China, about 184 AD."
+# Misaeng (the modern book, docs/book2/misaeng-arc.md): the same short line in its modern form, with its own era. Its
+# stills and portraits are the ids that start "ms_" (face_ms_*); every other id keeps STYLE, so the Han books don't move.
+STYLES["final_modern"] = "Style: 2D Korean webtoon, hard cel shading."
+STYLE_MODERN = f"{STYLES['final_modern']} Modern-day Seoul, South Korea."
+MODERN = "ms_"
 # short lines to add on top of every battle scene (the user: "battle scenes with some more oomph"), tested on
 # Black Wind; each must suit any battle, not one shot
 BATTLE_LINES = {
@@ -199,6 +204,90 @@ CAST = {
     "zumao": ("Zu Mao", "a wiry officer in red armour with two swords"),
     "xushao": ("Xu Shao", "a calm scholar with a thin beard and knowing eyes, scholar's hat, pale robe"),
 }
+# Misaeng's cast (modern Seoul, docs/book2/misaeng-arc.md "Cast"): keys are their TK_CHARS keys, so a portrait made
+# from face_<key> belongs to the same walker. Looks follow Yoon Tae-ho's webtoon and the walkers in tk.js.
+CAST.update({
+    "ms_jang": ("Jang Geu-rae", "a thin, quiet Korean man of twenty-six with a plain, watchful face, short black hair "
+                "with a fringe over his forehead, in a cheap dark navy suit, white shirt and plain blue tie"),
+    "ms_oh": ("Oh Sang-sik", "a tired, intense Korean team leader of about forty with bloodshot red eyes, messy black "
+              "hair and stubble, in a white shirt with the sleeves rolled up and a loosened dark red tie"),
+    "ms_kimds": ("Kim Dong-sik", "a kind, round-faced Korean office worker in his early thirties with curly permed black "
+                 "hair, in a light blue shirt and a navy tie, no jacket"),
+    "ms_ahn": ("Ahn Young-yi", "a composed, sharp-eyed Korean woman of twenty-five with a chin-length black bob, in a "
+               "charcoal skirt suit and a white blouse"),
+    "ms_sun": ("Sun Ji-young", "a calm, strict Korean woman manager of about forty with a short black bob, in a camel "
+               "trouser suit and a cream blouse"),
+    "ms_baekgi": ("Jang Baek-gi", "a neat, proud Korean man of twenty-six with side-parted black hair, in a sharp navy "
+                  "suit and a blue tie"),
+    "ms_han": ("Han Seok-yul", "a brash, grinning Korean man of twenty-seven with slicked-back hair, in a brown suit and a "
+               "mustard tie"),
+    "ms_park": ("Park Jong-sik", "a smooth, smug Korean manager in his forties with slicked-back black hair, in a "
+                "light grey suit, pink shirt and a plum tie"),
+    "ms_kimbr": ("Kim Bu-ryeon", "a heavy-set, balding Korean department head in his fifties with grey hair at the sides "
+                 "and glasses, in a grey suit and a dark red tie"),
+    "ms_cheon": ("Cheon Gwan-ung", "a heavy-set, weary Korean manager in his forties with short black hair, in a grey "
+                 "suit and a brown tie"),
+    "ms_mother": ("Jang's mother", "a small, gentle Korean woman in her fifties with short permed greying hair, in a "
+                  "mauve cardigan over a cream blouse"),
+    "ms_kimdsu": ("Kim Dong-su", "a worn Korean man in his late forties with short hair and stubble, in a red polo shirt "
+                  "with a pizza shop's logo"),
+    "ms_exec": ("the executive", "a cold, poised Korean executive in his late fifties with slicked-back grey hair, in a "
+                "black suit and a dark red tie"),
+    "ms_president": ("the company president", "a dignified Korean company president in his sixties with neat white "
+                     "hair, in a charcoal suit and a navy tie, kindly eyes"),
+    "ms_kimsj": ("Kim Seon-ju", "a formidable Korean woman finance director in her fifties with a dark bob and "
+                 "thin glasses, in a black trouser suit"),
+    "ms_shin": ("Shin Da-in", "a young Korean woman office worker in her twenties with long straight black hair, in a "
+                "pale pink cardigan and a grey skirt"),
+    "ms_parkjg": ("Park Jong-gi", "a timid Korean office worker in his thirties with side-parted hair and glasses, in a "
+                  "grey-green suit and a navy tie"),
+    "ms_kimsh": ("Kim Seok-ho", "an earnest young Korean man with short hair and glasses, in a grey suit and a green "
+                 "tie"),
+    "ms_somi": ("Somi", "a little Korean girl of five with two small buns tied with pink ribbons, in a yellow dress"),
+    "ms_stevehan": ("Steve Han", "a sleek, cold Korean-American department head in his forties, raised in the US, with "
+                    "slicked-back black hair, in a sharp tailored black suit and a steel-blue tie"),
+    "ms_go": ("Go Gwa-jang", "a round, sulky Korean section head in his forties with short hair, round glasses and heavy cheeks, in a "
+              "rumpled brown suit and a mustard-brown tie"),
+    "ms_buyer": ("the American buyer", "a white American businessman in his fifties with brown side-parted hair, in a "
+                 "grey suit, light blue shirt and a red tie"),
+    "ms_leesh": ("Lee Sang-hyun", "an earnest young Korean intern with short hair and glasses, in a navy suit and a plum "
+                 "tie"),
+    "ms_hanfather": ("Han Seok-yul's father", "a weathered Korean factory worker in his fifties with short greying hair "
+                     "and stubble, in blue work overalls, his hands black with grease"),
+    "ms_sponsor": ("Jang's sponsor", "a kindly older Korean businessman in his sixties with grey side-parted hair and "
+                   "glasses, in a dark suit and a wine-red tie"),
+    "ms_senior": ("the deputy", "an impatient Korean office worker in his late thirties with untidy hair, in a white "
+                  "shirt with rolled sleeves and a dark green tie"),
+    "ms_jang_child": ("young Jang Geu-rae", "a small, serious Korean boy of about seven with a black fringe, in a yellow "
+                      "T-shirt and shorts"),
+    "ms_uncle": ("Jang's uncle", "a warm, rough-mannered Korean man in his forties with short hair and stubble, in a "
+                 "faded green work jacket"),
+    "ms_hoyong": ("Kang Ho-ryong", "a cocky young Korean go professional of about twenty with messy black hair, in a "
+                  "black jacket"),
+    "ms_sanggi": ("Ahn Sang-gi", "a gentle young Korean go professional of about twenty with neat hair and glasses, in a "
+                  "pale blue sweater"),
+    "ms_bujang": ("the department head", "a heavy-set, self-satisfied Korean department head in his fifties with "
+                  "slicked-back greying hair, in a brown suit and a navy tie, a golf bag over his shoulder"),
+    "ms_ohwife": ("Oh's wife", "a tired, kind Korean woman in her late thirties with her hair tied back, in a terracotta "
+                  "cardigan"),
+    "ms_ohson": ("Oh's son", "a lively Korean boy of about six with messy black hair, in a blue T-shirt"),
+    "ms_kangsil": ("Manager Kang", "a sharp Korean manager in his forties with side-parted hair and glasses, in a camel "
+                   "overcoat over a dark suit"),
+    "ms_glasses": ("the glasses intern", "a smug young Korean intern with side-parted hair, glasses and a thin "
+                   "moustache, in a navy suit and a mustard tie"),
+    "ms_amhead": ("the Americas team head", "a loud, heavy-set Korean team head in his late forties with short hair, "
+                  "in a grey suit and a red tie, mid-shout"),
+    "ms_ulsan": ("the Ulsan department head", "a hard-faced Korean site manager in his fifties with greying short hair, "
+                 "in a navy site jacket and a white hard hat"),
+    "ms_teacher": ("Jang's teacher", "a calm old Korean go teacher in his sixties with grey hair and a short grey beard, "
+                   "in a brown cardigan"),
+    "ms_director": ("the director", "a stern Korean company director in his late fifties with grey hair, in a beige "
+                    "suit and a brown tie"),
+    "ms_examiner": ("the examiner", "a reserved Korean man in his fifties with greying side-parted hair and glasses, in "
+                    "a dark suit and a plain grey tie, holding a clipboard"),
+    "ms_ahnfather": ("Ahn's father", "a cold, stern Korean army officer in his fifties with short black hair, in an "
+                     "olive-green dress uniform and peaked cap"),
+})
 
 
 def style_note(n):
@@ -285,8 +374,10 @@ STILLS = {
 def cast_in(sid):
     """The CAST keys a still's scene names, in the order they appear."""
     scene = STILLS[sid]["prompt"]
-    found = [(scene.find(name), key) for key, (name, _) in CAST.items() if re.search(rf"\b{name}\b", scene)]
-    return [key for _, key in sorted(found)]
+    spans = [(m.start(), m.end(), key) for key, (name, _) in CAST.items() for m in re.finditer(rf"\b{re.escape(name)}\b", scene)]
+    # a name inside a longer one ("Han Seok-yul" in "Han Seok-yul's father") is that longer person, not a second one
+    spans = [sp for sp in spans if not any(o[0] <= sp[0] and sp[1] <= o[1] and (o[1] - o[0]) > (sp[1] - sp[0]) for o in spans)]
+    return list(dict.fromkeys(key for _, _, key in sorted(spans)))
 
 
 def prompt(sid, n_style=0, cast_refs=()):
@@ -300,7 +391,7 @@ def prompt(sid, n_style=0, cast_refs=()):
         ref = (f" (reference image {n_style + list(cast_refs).index(key) + 1}: keep his face, hair and clothes)"
                if key in cast_refs else "")
         parts.append(f"{name} is {look}{ref}.")
-    return " ".join(parts) + " " + style_note(n_style) + STYLE
+    return " ".join(parts) + " " + style_note(n_style) + (STYLE_MODERN if sid.startswith(MODERN) else STYLE)
 
 
 # ---- the World 1 set: every scene seen three ways, for variety --------------------------------
@@ -685,6 +776,9 @@ for _k, _look in _LOOKS.items():
 # Dialogue portraits in the Genshin look (the user's pick for the new style): one half-body cut-out per
 # speaker, on white for the background to be keyed out (tools/build_portraits.py). Looks beyond CAST here.
 FACE_LOOKS = {
+    # Oh on the mountain (Misaeng m7): a portrait only; his stills take CAST's ms_oh
+    "ms_oh_hike": ("Oh Sang-sik", "a tired, intense Korean team leader of about forty with bloodshot red eyes, messy "
+                   "spiky black hair and stubble, in an orange-red hiking jacket over a dark top and grey hiking trousers"),
     "starred": ("the Red Star Lord", "a cheerful immortal old man with a long white beard, rosy cheeks, in a flowing "
                                      "crimson robe embroidered with stars"),
     "stargrey": ("the Grey Star Lord", "a stern immortal old man with a long white beard and long eyebrows, in a "
@@ -784,10 +878,13 @@ FACE_LOOKS = {
 FACE_STYLE = ("In the style of Genshin Impact character art: polished anime cel shading, clean lineart, vibrant "
               "colours, soft rim light. Plain flat pure white background, nothing else behind the figure. Han dynasty "
               "China, about 184 AD: no text, no modern items.")
+FACE_STYLE_MODERN = ("In the style of Genshin Impact character art: polished anime cel shading, clean lineart, "
+                     "vibrant colours, soft rim light. Plain flat pure white background, nothing else behind the "
+                     "figure. Modern-day Seoul, South Korea, present-day clothes.")
 for _who, (_name, _look) in {**{k: v for k, v in CAST.items()}, **FACE_LOOKS}.items():
     STILLS[f"face_{_who}"] = {"scene": "face", "lens": _who, "raw": True, "aspect": "3:4", "prompt": (
         f"Character portrait of {_name}, {_look}. Half-body from the waist up, turned three-quarters toward the "
-        f"viewer, a characteristic expression. {FACE_STYLE}")}
+        f"viewer, a characteristic expression. {FACE_STYLE_MODERN if _who.startswith(MODERN) else FACE_STYLE}")}
 
 # the stills the game uses (Plot/Story's choice: the emotional peaks, the partings, the one death)
 CHOSEN = ["tree_b", "notice_b", "inn_b", "oath_b", "oath_c", "tent_b", "cart_b", "cart_c", "office_b", "blackwind_a",

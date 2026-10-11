@@ -1,0 +1,209 @@
+{
+ "format": "tk-map/1",
+ "id": "one-international--meeting",
+ "world": 21,
+ "name": "A meeting room",
+ "archetype": "interior",
+ "size": [
+  24,
+  16
+ ],
+ "seed": 2658,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "carpet",
+   " ": "void",
+   "W": "wall"
+  },
+  "rows": [
+   "                        ",
+   " WWWWWWWWWWWWWWWWWWWWWW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaW ",
+   " WWWWWWWWWWWaaWWWWWWWWW ",
+   "                        "
+  ],
+  "walk": {
+   "carpet": true,
+   "void": false,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    12,
+    8
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     6,
+     7
+    ]
+   },
+   "tiles": 68
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.meeting_table",
+   "x": 10,
+   "y": 6,
+   "w": 4,
+   "h": 2,
+   "id": "table",
+   "label": "The meeting table"
+  },
+  {
+   "kind": "furn.chair",
+   "x": 8,
+   "y": 6,
+   "w": 1,
+   "h": 1,
+   "id": "chair-4-3"
+  },
+  {
+   "kind": "furn.chair",
+   "x": 14,
+   "y": 6,
+   "w": 1,
+   "h": 1,
+   "id": "chair-7-3"
+  },
+  {
+   "kind": "furn.chair",
+   "x": 10,
+   "y": 4,
+   "w": 1,
+   "h": 1,
+   "id": "chair-5-2"
+  },
+  {
+   "kind": "furn.chair",
+   "x": 12,
+   "y": 4,
+   "w": 1,
+   "h": 1,
+   "id": "chair-6-2"
+  },
+  {
+   "kind": "furn.whiteboard",
+   "x": 4,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "board"
+  },
+  {
+   "kind": "furn.plant",
+   "x": 20,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "plant",
+   "blocks_sight": true
+  },
+  {
+   "kind": "furn.lift_door",
+   "x": 6,
+   "y": 12,
+   "w": 2,
+   "h": 1,
+   "id": "lift-doors",
+   "label": "The lift"
+  }
+ ],
+ "spots": [
+  {
+   "id": "lift",
+   "x": 8.5,
+   "y": 12.7,
+   "node": "",
+   "label": "The lift",
+   "floors": [
+    {
+     "label": "1F · The lobby",
+     "to": "one-international"
+    },
+    {
+     "label": "2F · General Affairs",
+     "to": "one-international--general-affairs"
+    },
+    {
+     "label": "14F · Sales Team 3",
+     "to": "one-international--sales3"
+    },
+    {
+     "label": "15F · A meeting room",
+     "to": "one-international--meeting"
+    },
+    {
+     "label": "R · The roof",
+     "to": "one-international--roof"
+    }
+   ],
+   "use": "lift"
+  },
+  {
+   "id": "m19c",
+   "x": 8.5,
+   "y": 8.7,
+   "node": "21-m19c",
+   "label": "Asleep in a meeting room"
+  }
+ ],
+ "npcs": [],
+ "exits": [
+  {
+   "to": "one-international",
+   "side": "S",
+   "x": 12,
+   "y": 14,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "one-international": [
+   8,
+   12
+  ],
+  "": [
+   12,
+   13
+  ],
+  "one-international--general-affairs": [
+   8,
+   12
+  ],
+  "one-international--sales3": [
+   8,
+   12
+  ],
+  "one-international--roof": [
+   8,
+   12
+  ]
+ },
+ "parent": "one-international",
+ "building": "meeting",
+ "links": [
+  "one-international"
+ ]
+}

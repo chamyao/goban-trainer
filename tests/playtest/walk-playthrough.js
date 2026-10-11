@@ -27,6 +27,14 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     if (SYNC && req.method() === 'POST') { let j = {}; try { j = JSON.parse(req.postData() || '{}'); } catch {} if (j.kind === 'progress') { store[j.username] = j.data; syncPosts++; } return r.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' }); }
     if (SYNC && (u.searchParams.get('kind') || 'progress') === 'progress') return r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ data: store[u.searchParams.get('username')] || {} }) });
     return r.fulfill({ status: 200, contentType: 'application/json', body: '{"data":null}' }); });
+  // which cutscene step is running (window.__csAt), for the stuck report: a scene that hangs names the step it waits on
+  await p.addInitScript(() => { const hook = () => { if (typeof WorldCutscene === 'undefined' || WorldCutscene.__hooked) return !!(typeof WorldCutscene !== 'undefined');
+      const play = WorldCutscene.play.bind(WorldCutscene); WorldCutscene.__hooked = true;
+      WorldCutscene.play = (scene, cs, ...a) => { const beats = cs.beats; let n = 0;
+        cs.beats = new Proxy(beats, { get(t, k) { if (typeof k === 'string' && /^\d+$/.test(k)) window.__csAt = { id: cs.id || cs.key || cs.title || '?', i: +k, of: t.length, beat: JSON.stringify(t[k]).slice(0, 160), at: Date.now() }; return t[k]; } });
+        window.__csStarted = (window.__csStarted || []).concat([{ id: cs.id || cs.key || cs.title || '?', beats: beats.length, at: Date.now() }]).slice(-6);
+        return play(scene, cs, ...a); }; return true; };
+    const iv = setInterval(() => { if (hook()) clearInterval(iv); }, 200); });
   const errs = []; p.on('pageerror', e => { errs.push(e.message); console.log('ERR', e.message); });
   await p.route('**/phaser.min.js', r => r.fulfill({ path: path.join(__dirname, 'vendor/phaser.min.js'), contentType: 'application/javascript' }));
   await p.route('**/*.mp3', r => r.fulfill({ status: 404, body: '' }));
@@ -38,6 +46,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   await p.goto(BASE + '#/');
   await p.evaluate(([B, D, K]) => {
     for (const k of Object.keys(localStorage)) if (/^tk-|gt-progress/.test(k) && k !== 'tk-test') localStorage.removeItem(k);
+    TK.migrate21();   // a fresh save: Book 1's one-time start-over (tk.js) is already behind it
     localStorage.setItem('tk-guide', 'off'); localStorage.setItem('tk-book', String(B)); if (D) localStorage.setItem('tk-diff', D);
     if (K) { localStorage.setItem('tk-kit', K); localStorage.setItem('tk-kit-main', 'jade'); } localStorage.setItem('gt-username', 'playtest-walk');
   }, [BOOK, DIFF, KIT]);
@@ -184,7 +193,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   let beatLead = '';
   const close = (status, why, s) => { if (!beat) return; if (leadFor[beat] && beatLead && leadFor[beat] !== beatLead) console.log(`     note ${beat}: played by ${beatLead}, but the story's last handoff gave ${leadFor[beat]}`); const r = { beat, status, secs: Math.max(0, Math.round((Date.now() - beatT) / 1000)), place: s && s.place, at: s && s.P, lead: s && s.lead, why: why || '', line: lastLine.slice(0, 120) };
     report.push(r); console.log(`${status === 'pass' ? 'ok  ' : 'FAIL'} ${beat}  ${r.secs}s  ${r.lead || ''} in ${r.place || '?'}${status === 'pass' ? '' : `  at ${r.at}: ${why}${r.line ? ` ("${r.line}")` : ''}`}`); };
-  const cutWait = {}, pouches = [], told = [], faced = [], gated = [], markSpots = {}; let yErr = 0;
+  const auditTried = new Set(), cutWait = {}, pouches = [], told = [], faced = [], gated = [], markSpots = {}; let yErr = 0;
   let noWaySince = 0, plannedSteps = null, planT = 0, pace = 3, stealthTries = 0, lastTap = 0, skipped = false, reloads = 0, catches = 0, wasCaught = false; const held = [], recovered = [];
   const featureFails = [], facts = {}, banners = [], chipBad = new Set(), chipSeen = [], shotWho = new Set(), shots = []; let lastPlace = '', arrivedAt = null; const OPTIONAL = !!process.env.OPTIONAL, visited = new Set(), errands = []; let errand = null;
   for (;;) {
@@ -238,7 +247,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       const why = await p.evaluate(() => { const w = window.__w, P = w.player, g = w.goalAt, path = g && w.findPath(P.x, P.y - 3, g.x, g.y - 3);
         return `canMove ${w.canMove()}, seated ${!!w.seated}, approaching ${!!w.approaching}, walk ${w.walk ? w.walk.path.length : 'none'}, a way ${path ? path.length + ' points' : 'none'}, near: ${w.npcs.filter(n => n.spr.visible && Math.hypot(n.spr.x - P.x, n.spr.y - P.y) < 40).map(n => n.id).join(' ') || 'nobody'}`; }).catch(e => String(e));
       await p.screenshot({ path: path.join(__dirname, 'out', `walk-stuck-${beat}.png`) }).catch(() => {});
-      const ui = await p.evaluate(() => ({ lead: window.__w.lead, party: window.__w.st.party, line: (document.querySelector('.town-ui .town-dlg')||{}).textContent, dlgHidden: (document.querySelector('.town-ui .town-dlg')||{}).hidden, busy: window.__w.ui.busy(), cine: !!window.__w.cine, leaving: !!window.__w.leaving, html: [...document.querySelectorAll('.town-ui button, .town-ui .town-dlg')].filter(e => e.offsetParent).map(e => e.className + ':' + e.textContent.trim().slice(0, 40)).slice(0, 6) })).catch(() => ({}));
+      const ui = await p.evaluate(() => ({ csAt: window.__csAt && { ...window.__csAt, ago: Date.now() - window.__csAt.at }, csStarted: window.__csStarted, engaged: !!window.__w.engaged, lead: window.__w.lead, party: window.__w.st.party, line: (document.querySelector('.town-ui .town-dlg')||{}).textContent, dlgHidden: (document.querySelector('.town-ui .town-dlg')||{}).hidden, busy: window.__w.ui.busy(), cine: !!window.__w.cine, leaving: !!window.__w.leaving, html: [...document.querySelectorAll('.town-ui button, .town-ui .town-dlg')].filter(e => e.offsetParent).map(e => e.className + ':' + e.textContent.trim().slice(0, 40)).slice(0, 6) })).catch(() => ({}));
       console.log('     ui:', JSON.stringify(ui));
       const msg = refused || (overBeat ? `over ${BEATMAX}s on this beat (caught ${catches} times; goal ${s.goal || 'none'})` : '') || `stuck: no progress for ${STUCK}s (goal ${s.goal || 'none'}; ${why})`;
       if (reloads < 1 && !refused) {   // what a player would do: reload, and go on from the save
@@ -250,6 +259,31 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       if (!errand && /isn't open yet|还没有开通|barred|不为你开|not open|turns you away|No one goes|receives no one/i.test(s.line)) refused = `refused: "${s.line.slice(0, 90)}"`; }
     if (s.cancel) { await p.getByText('Cancel', { exact: true }).first()[TAPM]().catch(() => {}); continue; }
     if (s.scroll) { await tapEl('.tk-scroll-go'); await p.waitForTimeout(300); continue; }
+    // a beat waiting on the audit board's mark (Misaeng): open it from the bag, as its objective says ("open Oh's desk from the bag")
+    const auditWait = await p.evaluate(() => { const S = window.__w, w = S && S.w; if (!w || !w.audit || !S.player || S.ui.busy() || S.cine || document.querySelector('.tk-audit, .tk-bag')) return false;
+      const q = S.nextMain(), g = q && S.gateFor && S.gateFor(q); if (!g || ![].concat(g.needs || []).includes('mark:' + w.audit.done) || S.cond('mark:' + w.audit.done)) return false;
+      return typeof WorldModern !== 'undefined' && WorldModern.auditOpen(w); });
+    if (auditWait && !auditTried.has(beat)) { auditTried.add(beat); console.log(`     ${beat}: gated on the audit board; opening it from the bag`);
+      // the Bag sits in the Menu's dropdown: open the Menu, then the Bag
+      if (!(await p.evaluate(() => [...document.querySelectorAll('button')].some(b => /Bag/.test(b.textContent) && b.offsetParent)))) { await p.locator('.tk-menu-btn', { hasText: 'Menu' }).first()[TAPM]({ timeout: 2000 }).catch(() => {}); await p.waitForTimeout(400); }
+      const bag = p.locator('button.tk-chron-btn', { hasText: /Bag/ }).first(); await bag[TAPM]({ timeout: 2000 }).catch(() => {}); await p.waitForTimeout(400);
+      if (await p.locator('.tk-bag-audit').count()) await tapEl('.tk-bag-audit'); else { console.log(`note ${beat}: the bag showed no audit board; following the goal to the beat's spot (where the board opens)`); await p.keyboard.press('Escape'); }
+      await p.waitForTimeout(500); continue; }
+    // the audit board (Misaeng, tk-modern.js): tap the two clues that answer the question showing, as a player who reads them does;
+    // when every link is made (or the board has nothing to link yet), close it
+    const audit = await p.evaluate(() => { const el = document.querySelector('.tk-audit'); if (!el || !el.getClientRects().length) return null;
+      const w = window.__w && window.__w.w, A = w && w.audit, q = (el.querySelector('.tk-audit-q') || {}).textContent || '';
+      const L = A && A.links.find(l => l.q === q); const d = (w && WorldItems.defs(w)) || {};
+      const cards = [...el.querySelectorAll('.tk-audit-card')].map((c, i) => ({ i, name: (c.querySelector('b') || {}).textContent || '', on: !c.disabled }));
+      const want = L ? L.pair.map(k => (d[k] || {}).name || k) : [];
+      return { q, done: /Every link is made/.test(q), pick: want.map(n => (cards.find(c => c.name === n && c.on) || {}).i).filter(i => i != null), want }; });
+    if (audit) { if (audit.done || audit.pick.length < 2) { if (!audit.done) console.log(`     ${beat}: the audit board asks "${audit.q}", but the clues ${audit.want.join(' + ')} aren't both held; closing it`); await tapEl('.tk-audit-close'); await p.waitForTimeout(500); continue; }
+      console.log(`     ${beat}: the audit board: "${audit.q}" -> ${audit.want.join(' + ')}`);
+      for (const i of audit.pick) { await p.locator('.tk-audit-card').nth(i)[TAPM]().catch(() => {}); await p.waitForTimeout(300); }
+      await p.waitForTimeout(600); continue; }
+    // a lift's floor menu (Misaeng, tk-modern.js): the floor the goal is on is marked ◆; take it, as a player following the goal does
+    const lift = await p.evaluate(() => { const m = document.querySelector('.tk-lift'); if (!m || !m.getClientRects().length) return null; const b = [...m.querySelectorAll('button')].find(x => /^\s*◆/.test(x.textContent)); return { floor: b ? b.textContent.trim() : null }; });
+    if (lift) { if (lift.floor) { console.log(`     ${beat}: the lift, to ${lift.floor}`); await p.locator('.tk-lift button', { hasText: '◆' }).first()[TAPM]().catch(() => {}); } else { console.log(`FAIL ${beat}: the lift's menu has no floor marked ◆`); await tapEl('.tk-lift-close'); } await p.waitForTimeout(600); continue; }
     if (s.pouch) { pouches.push(s.pouch); await tapEl('.tk-pouch button'); await p.waitForTimeout(300); continue; }   // a sealed pouch opened (Book 15): its card read, then on
     if (!s.duel) await hook();   // (again after a reload)
     if (SYNC && Date.now() - lastVis > 45000) {   // the tab hidden and shown again (a phone app switch): the game pulls, and reroutes only if something changed
@@ -408,8 +442,13 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
       if (!g) return null; const need = [].concat(g.needs || []).find(c => /^mark:/.test(c) && !w.cond(c)); if (!need) return null;
       return { mark: need.slice(5), place: w.placeId, parent: (w.region.places.find(x => x.id === w.placeId) || {}).parent || null, exits: w.exits.map(e => ({ to: e.to, x: e.rect.centerX, y: e.rect.centerY })), T: w.tw || 16 }; }).catch(() => null);
     if (gm) {
-      if (!markSpots[BOOK]) { markSpots[BOOK] = []; const dir = path.join(__dirname, `../../data/tk_maps/w${BOOK}`); for (const f of require('fs').readdirSync(dir).filter(f => f.endsWith('.map.json'))) { try { const d = JSON.parse(require('fs').readFileSync(path.join(dir, f), 'utf8')); for (const sp of d.spots || []) if (sp.delivers) markSpots[BOOK].push({ place: d.id || f.replace('.map.json', ''), id: sp.id, delivers: sp.delivers, x: sp.x, y: sp.y }); } catch (e) {} } }
-      const sp = markSpots[BOOK].find(x => x.delivers === gm.mark);
+      if (!markSpots[BOOK]) { markSpots[BOOK] = []; const dir = path.join(__dirname, `../../data/tk_maps/w${BOOK}`); for (const f of require('fs').readdirSync(dir).filter(f => f.endsWith('.map.json'))) { try { const d = JSON.parse(require('fs').readFileSync(path.join(dir, f), 'utf8')); for (const sp of d.spots || []) if (sp.delivers) markSpots[BOOK].push({ place: d.id || f.replace('.map.json', ''), id: sp.id, delivers: sp.delivers, needs: [].concat(sp.needs || []), x: sp.x, y: sp.y }); } catch (e) {} } }
+      const sp0 = markSpots[BOOK].find(x => x.delivers === gm.mark);
+      // a delivery that takes something not yet held (Misaeng m4's errands: fetch the copies first): not there yet; the game's own goal leads to the giver
+      let sp = sp0 && (await p.evaluate(n => n.every(c => !/^item:/.test(c) || window.__w.cond(c)), sp0.needs || []).catch(() => true)) ? sp0 : null;
+      // a room no door here leads to (Misaeng's floors: only the lift goes there): the game's own goal leads, by the lift
+      const sib0 = sp && sp.place.replace(/--[^-]+(?:-[^-]+)*$/, '');
+      if (sp && gm.place !== sp.place && !gm.exits.some(e => e.to === sp.place || e.to === sib0) && !(gm.parent && gm.exits.some(e => e.to === gm.parent))) sp = null;
       if (sp) {
         if (!gated.includes(gm.mark)) { gated.push(gm.mark); console.log(`     ${s.next} is gated on mark:${gm.mark}: to ${sp.place} (${sp.id})`); }
         if (!s.walking && Date.now() - lastTap > 1200 && !s.busy) { lastTap = Date.now();
@@ -487,7 +526,8 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
     if (!ok) featureFails.push('after the book: ' + after.lead); }
   // the boards' draws against the difficulty asked for
   const diffCheck = await p.evaluate(([bs, B]) => { const w = TK.world(B), easy = TK.easy, adaptive = TK.mode === 'adaptive' && w.rated && w.rated.length, rated = adaptive ? new Set(w.rated.map(x => +x[1])) : null; let ok = 0, off = [];
-    for (const { beat, key, id } of bs) { const base = String(key || beat).split('~')[0], n = TK.node(w, base) || (typeof WorldData !== 'undefined' && WorldData.node(w, base)); if (!n || id == null) continue; if (adaptive) { if (rated.has(+id)) ok++; else off.push(`${key || beat}:${id}`); continue; }   // Adaptive: every board from the rated pool
+    for (const { beat, key, id } of bs) { const base = String(key || beat).split('~')[0], n = TK.node(w, base) || (typeof WorldData !== 'undefined' && WorldData.node(w, base)); if (!n || id == null) continue; if ([].concat(n.dilemma || []).some(d => d && d.problem && String(Array.isArray(d.problem) ? d.problem[1] : String(d.problem).split('/').pop()) === String(id))) { ok++; continue; }   // a board its scene names ("problem": "book/id", Misaeng m1, m8): fixed, not drawn
+      if (adaptive) { if (rated.has(+id)) ok++; else off.push(`${key || beat}:${id}`); continue; }   // Adaptive: every board from the rated pool
       const pool = (easy && n.pool_easy && n.pool_easy.length ? n.pool_easy : n.pool).map(x => +x[1]);
       if (pool.includes(id)) ok++; else off.push(`${key || beat}:${id}`); } return { easy, adaptive: !!adaptive, ok, off }; }, [boards, BOOK]).catch(e => ({ err: String(e) }));
   const fails = report.filter(r => r.status !== 'pass').length;

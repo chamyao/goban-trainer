@@ -1,0 +1,331 @@
+{
+ "format": "tk-map/1",
+ "id": "korea-baduk-association",
+ "world": 21,
+ "name": "Korea Baduk Association",
+ "archetype": "city",
+ "size": [
+  48,
+  32
+ ],
+ "seed": 2466,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "city",
+   "b": "road"
+  },
+  "rows": [
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "aaaaabbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaabbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaabbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaabbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaabbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaabbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaabbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  ],
+  "walk": {
+   "city": true,
+   "road": true
+  }
+ },
+ "lines": [
+  {
+   "id": "street",
+   "kind": "road",
+   "path": [
+    [
+     0,
+     5
+    ],
+    [
+     11,
+     5
+    ]
+   ],
+   "width": 3,
+   "tiles": 192
+  },
+  {
+   "id": "cafe-alley",
+   "kind": "road",
+   "path": [
+    [
+     1,
+     5
+    ],
+    [
+     1,
+     7
+    ],
+    [
+     3,
+     7
+    ]
+   ],
+   "width": 2,
+   "tiles": 36
+  }
+ ],
+ "objects": [
+  {
+   "kind": "building.office_block",
+   "x": 19,
+   "y": 16,
+   "w": 6,
+   "h": 3,
+   "id": "kba",
+   "door": "S",
+   "faces": "S",
+   "label": "The Korea Baduk Association",
+   "map": "kba-front",
+   "plaque": "한국기원",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.office_block",
+   "x": 5,
+   "y": 16,
+   "w": 6,
+   "h": 3,
+   "id": "block-w",
+   "door": "S",
+   "faces": "S",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.office_block",
+   "x": 33,
+   "y": 16,
+   "w": 6,
+   "h": 3,
+   "id": "block-e",
+   "door": "S",
+   "faces": "S",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.storefront",
+   "x": 10,
+   "y": 25,
+   "w": 4,
+   "h": 2,
+   "id": "kba-cafe",
+   "door": "S",
+   "faces": "S",
+   "label": "A café across the street",
+   "map": "kba-cafe",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.storefront",
+   "x": 30,
+   "y": 25,
+   "w": 4,
+   "h": 2,
+   "id": "shop-2",
+   "door": "N",
+   "faces": "N",
+   "blocks_sight": true
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 0,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 5,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 8,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 13,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 16,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 24,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 29,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 40,
+   "y": 24,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 45,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "spots": [],
+ "npcs": [
+  {
+   "id": "npc-1",
+   "kind": "folk.kid",
+   "x": 25.5,
+   "y": 21.9,
+   "say": [
+    "A boy of ten with a go book under his arm, running late."
+   ]
+  }
+ ],
+ "exits": [
+  {
+   "to": "korea-baduk-association--kba-front",
+   "side": "N",
+   "x": 21.6,
+   "y": 18.85,
+   "w": 0.8,
+   "h": 0.75,
+   "door": true
+  },
+  {
+   "to": "korea-baduk-association--kba-cafe",
+   "side": "N",
+   "x": 11.6,
+   "y": 26.85,
+   "w": 0.8,
+   "h": 0.75,
+   "door": true
+  },
+  {
+   "to": "jongno",
+   "side": "E",
+   "x": 47,
+   "y": 20,
+   "w": 1,
+   "h": 4
+  }
+ ],
+ "entries": {
+  "korea-baduk-association--kba-front": [
+   22,
+   19
+  ],
+  "korea-baduk-association--kba-cafe": [
+   12,
+   27
+  ],
+  "jongno": [
+   41,
+   21
+  ],
+  "": [
+   21,
+   21
+  ]
+ },
+ "states": [
+  {
+   "id": "dawn",
+   "light": "morning"
+  }
+ ],
+ "ways": {
+  "nodes": [
+   [
+    2.0,
+    22.0
+   ],
+   [
+    6.0,
+    22.0
+   ],
+   [
+    46.0,
+    22.0
+   ],
+   [
+    6.0,
+    30.0
+   ],
+   [
+    14.0,
+    30.0
+   ]
+  ],
+  "edges": [
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    3,
+    4
+   ]
+  ]
+ },
+ "links": [
+  "jongno",
+  "korea-baduk-association--kba-cafe",
+  "korea-baduk-association--kba-front"
+ ]
+}

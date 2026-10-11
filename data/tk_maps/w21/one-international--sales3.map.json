@@ -1,0 +1,666 @@
+{
+ "format": "tk-map/1",
+ "id": "one-international--sales3",
+ "world": 21,
+ "name": "Sales Team 3",
+ "archetype": "interior",
+ "size": [
+  36,
+  24
+ ],
+ "seed": 2500,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "carpet",
+   " ": "void",
+   "W": "wall"
+  },
+  "rows": [
+   "                                    ",
+   " WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WWWWWWWWWWWWWWWWWaaWWWWWWWWWWWWWWW ",
+   "                                    "
+  ],
+  "walk": {
+   "carpet": true,
+   "void": false,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    18,
+    12
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     9,
+     11
+    ]
+   },
+   "tiles": 108
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.copier",
+   "x": 4,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "copier",
+   "label": "The copier"
+  },
+  {
+   "kind": "furn.water_cooler",
+   "x": 10,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "cooler",
+   "label": "The pantry: coffee and water"
+  },
+  {
+   "kind": "furn.whiteboard",
+   "x": 14,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "board-1",
+   "label": "Sales Team 3's whiteboard"
+  },
+  {
+   "kind": "furn.filing",
+   "x": 26,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "filing-1",
+   "label": "The filing cabinets"
+  },
+  {
+   "kind": "furn.filing",
+   "x": 28,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "filing-2"
+  },
+  {
+   "kind": "furn.plant",
+   "x": 32,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "plant-n",
+   "blocks_sight": true
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 4,
+   "y": 8,
+   "w": 2,
+   "h": 1,
+   "id": "desk-2-4"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 6,
+   "y": 8,
+   "w": 2,
+   "h": 1,
+   "id": "desk-3-4"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 4,
+   "y": 10,
+   "w": 2,
+   "h": 1,
+   "id": "desk-2-5"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 6,
+   "y": 10,
+   "w": 2,
+   "h": 1,
+   "id": "desk-3-5"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 8,
+   "y": 9,
+   "w": 2,
+   "h": 1,
+   "id": "sun-desk",
+   "label": "Sun Ji-young's desk"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 16,
+   "y": 8,
+   "w": 2,
+   "h": 1,
+   "id": "desk-kim",
+   "label": "Kim Dong-sik's desk"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 18,
+   "y": 8,
+   "w": 2,
+   "h": 1,
+   "id": "desk-deputy",
+   "label": "The deputy's desk"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 16,
+   "y": 10,
+   "w": 2,
+   "h": 1,
+   "id": "desk-jang",
+   "label": "Jang's desk"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 18,
+   "y": 10,
+   "w": 2,
+   "h": 1,
+   "id": "desk-spare",
+   "label": "An empty desk"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 20,
+   "y": 7,
+   "w": 2,
+   "h": 1,
+   "id": "oh-desk",
+   "label": "Oh's desk"
+  },
+  {
+   "kind": "furn.chair",
+   "x": 16,
+   "y": 6,
+   "w": 1,
+   "h": 1,
+   "id": "chair-kim",
+   "label": "Kim Dong-sik's chair"
+  },
+  {
+   "kind": "furn.chair",
+   "x": 18,
+   "y": 6,
+   "w": 1,
+   "h": 1,
+   "id": "chair-deputy",
+   "label": "The deputy's chair"
+  },
+  {
+   "kind": "furn.chair",
+   "x": 16,
+   "y": 12,
+   "w": 1,
+   "h": 1,
+   "id": "chair-jang",
+   "label": "Jang's chair"
+  },
+  {
+   "kind": "furn.chair",
+   "x": 18,
+   "y": 12,
+   "w": 1,
+   "h": 1,
+   "id": "chair-spare"
+  },
+  {
+   "kind": "furn.chair",
+   "x": 22,
+   "y": 6,
+   "w": 1,
+   "h": 1,
+   "id": "chair-oh",
+   "label": "Oh's chair"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 26,
+   "y": 8,
+   "w": 2,
+   "h": 1,
+   "id": "desk-13-4"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 28,
+   "y": 8,
+   "w": 2,
+   "h": 1,
+   "id": "desk-14-4"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 26,
+   "y": 10,
+   "w": 2,
+   "h": 1,
+   "id": "desk-13-5"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 28,
+   "y": 10,
+   "w": 2,
+   "h": 1,
+   "id": "desk-14-5"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 30,
+   "y": 9,
+   "w": 2,
+   "h": 1,
+   "id": "head-e"
+  },
+  {
+   "kind": "furn.meeting_table",
+   "x": 4,
+   "y": 16,
+   "w": 4,
+   "h": 2,
+   "id": "meet-w",
+   "label": "A meeting table"
+  },
+  {
+   "kind": "furn.meeting_table",
+   "x": 26,
+   "y": 16,
+   "w": 4,
+   "h": 2,
+   "id": "meet-e"
+  },
+  {
+   "kind": "furn.plant",
+   "x": 2,
+   "y": 20,
+   "w": 1,
+   "h": 1,
+   "id": "plant-sw",
+   "blocks_sight": true
+  },
+  {
+   "kind": "furn.plant",
+   "x": 32,
+   "y": 20,
+   "w": 1,
+   "h": 1,
+   "id": "plant-se",
+   "blocks_sight": true
+  },
+  {
+   "kind": "furn.lift_door",
+   "x": 12,
+   "y": 20,
+   "w": 2,
+   "h": 1,
+   "id": "lift-doors",
+   "label": "The lift"
+  },
+  {
+   "kind": "furn.phone",
+   "x": 10,
+   "y": 10,
+   "w": 1,
+   "h": 1,
+   "id": "team-phone",
+   "label": "The team phone"
+  },
+  {
+   "kind": "furn.cleaning_cupboard",
+   "x": 30,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "mop-cupboard",
+   "label": "The cleaning cupboard"
+  },
+  {
+   "kind": "prop.spill",
+   "x": 28,
+   "y": 20,
+   "w": 1,
+   "h": 1,
+   "id": "spill",
+   "label": "A spill",
+   "when": "!mark:errand_floor"
+  }
+ ],
+ "spots": [
+  {
+   "id": "lift",
+   "x": 14.5,
+   "y": 20.7,
+   "node": "",
+   "label": "The lift",
+   "floors": [
+    {
+     "label": "1F · The lobby",
+     "to": "one-international"
+    },
+    {
+     "label": "2F · General Affairs",
+     "to": "one-international--general-affairs"
+    },
+    {
+     "label": "14F · Sales Team 3",
+     "to": "one-international--sales3"
+    },
+    {
+     "label": "15F · A meeting room",
+     "to": "one-international--meeting"
+    },
+    {
+     "label": "R · The roof",
+     "to": "one-international--roof"
+    }
+   ],
+   "use": "lift"
+  },
+  {
+   "id": "m10",
+   "x": 16.5,
+   "y": 12.7,
+   "node": "21-m10",
+   "label": "Your desk",
+   "on": "chair-jang"
+  },
+  {
+   "id": "m13",
+   "x": 16.5,
+   "y": 12.7,
+   "node": "21-m13",
+   "label": "Your desk, at night",
+   "on": "chair-jang"
+  },
+  {
+   "id": "m14",
+   "x": 24.5,
+   "y": 14.7,
+   "node": "21-m14",
+   "label": "Sales Team 3"
+  },
+  {
+   "id": "m18",
+   "x": 30.5,
+   "y": 14.7,
+   "node": "21-m18",
+   "label": "Sales Team 3"
+  },
+  {
+   "id": "m19",
+   "x": 18.5,
+   "y": 20.7,
+   "node": "21-m19",
+   "label": "Sales Team 3"
+  },
+  {
+   "id": "m20",
+   "x": 6.5,
+   "y": 18.7,
+   "node": "21-m20",
+   "label": "Sales Team 3"
+  },
+  {
+   "id": "m21",
+   "x": 22.5,
+   "y": 6.7,
+   "node": "21-m21",
+   "label": "Oh's desk",
+   "on": "chair-oh"
+  },
+  {
+   "id": "m22",
+   "x": 16.5,
+   "y": 18.7,
+   "node": "21-m22",
+   "label": "Sales Team 3"
+  },
+  {
+   "id": "m22b",
+   "x": 8.5,
+   "y": 18.7,
+   "node": "21-m22b",
+   "label": "The team's table"
+  },
+  {
+   "id": "sales3",
+   "x": 30.5,
+   "y": 18.7,
+   "node": "",
+   "label": "Sales Team 3",
+   "note": "handoffs to Jang land here (6+ tiles from the next beat)"
+  },
+  {
+   "id": "copier",
+   "x": 4.5,
+   "y": 4.7,
+   "node": "",
+   "label": "The copier",
+   "gives": "copy",
+   "gives_when": "node:21-m13",
+   "give": [
+    "The copier groans out Kim Dong-sik's copies, warm."
+   ],
+   "given": [
+    "The copier. You've done Kim's copies."
+   ]
+  },
+  {
+   "id": "errand-copy",
+   "x": 17.5,
+   "y": 6.7,
+   "node": "",
+   "label": "Give Kim Dong-sik his copies",
+   "needs": [
+    "item:copy"
+   ],
+   "delivers": "errand_copy",
+   "when": "node:21-m13",
+   "waiting": [
+    "Kim Dong-sik taps the desk. “The copies, Jang. Today, if you can.”"
+   ],
+   "deliver": [
+    "Kim Dong-sik takes the copies without looking up. “Thirty? I said thirty-two. …No, thirty. Fine.”"
+   ],
+   "delivered": [
+    "Kim Dong-sik is reading the copies."
+   ],
+   "takes": true,
+   "to": "kim-errand"
+  },
+  {
+   "id": "errand-bl",
+   "x": 10.5,
+   "y": 12.7,
+   "node": "",
+   "label": "The team phone",
+   "needs": [
+    "node:21-m13"
+   ],
+   "delivers": "errand_bl",
+   "when": "node:21-m13",
+   "waiting": [
+    "The team phone."
+   ],
+   "deliver": [
+    "You ring the forwarder about the B/L. On hold. Then a voice: the bill of lading went out this morning. You write it down."
+   ],
+   "delivered": [
+    "The team phone. The forwarder's call is done."
+   ],
+   "set_down": true
+  },
+  {
+   "id": "mop-cupboard",
+   "x": 30.5,
+   "y": 4.7,
+   "node": "",
+   "label": "The cleaning cupboard",
+   "gives": "mop",
+   "gives_when": "node:21-m13",
+   "give": [
+    "A mop and a bucket, behind the cupboard door. You take them."
+   ],
+   "given": [
+    "The cleaning cupboard. The mop's back on its hook."
+   ]
+  },
+  {
+   "id": "errand-floor",
+   "x": 28.5,
+   "y": 20.7,
+   "node": "",
+   "label": "A spill on the floor",
+   "needs": [
+    "item:mop"
+   ],
+   "delivers": "errand_floor",
+   "when": "node:21-m13",
+   "waiting": [
+    "Coffee, trodden into the carpet. Someone said: wipe this floor."
+   ],
+   "deliver": [
+    "Coffee, trodden into the carpet all morning. You mop it, wring it, mop it again. Nobody looks up."
+   ],
+   "delivered": [
+    "The floor's clean. Nobody noticed."
+   ],
+   "takes": true,
+   "set_down": true
+  }
+ ],
+ "npcs": [
+  {
+   "id": "npc-1",
+   "kind": "folk.officewoman",
+   "x": 28.5,
+   "y": 12.9,
+   "say": [
+    "A woman from the next team. “Sales Team 3? They're the ones who work through lunch.”"
+   ]
+  },
+  {
+   "id": "npc-2",
+   "kind": "folk.salaryman",
+   "x": 6.5,
+   "y": 14.9,
+   "say": [
+    "A deputy from Sales Team 1, reading a fax. “Another intern? We used to get six a year.”"
+   ]
+  },
+  {
+   "id": "kim-errand",
+   "kind": "hero.ms_kimds",
+   "x": 17.5,
+   "y": 6.9,
+   "say": [
+    "Kim Dong-sik doesn't look up from his screen."
+   ],
+   "until": "21-m14",
+   "face": "S",
+   "when": "node:21-m13",
+   "label": "Kim Dong-sik"
+  }
+ ],
+ "exits": [
+  {
+   "to": "one-international",
+   "side": "S",
+   "x": 18,
+   "y": 22,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "one-international": [
+   14,
+   20
+  ],
+  "": [
+   18,
+   21
+  ],
+  "one-international--general-affairs": [
+   14,
+   20
+  ],
+  "one-international--meeting": [
+   14,
+   20
+  ],
+  "one-international--roof": [
+   14,
+   20
+  ]
+ },
+ "states": [
+  {
+   "id": "day",
+   "until": "node:21-m12",
+   "light": "day"
+  },
+  {
+   "id": "night",
+   "when": "node:21-m12",
+   "until": "node:21-m13",
+   "light": "night"
+  },
+  {
+   "id": "dawn",
+   "when": "node:21-m13",
+   "until": "node:21-m14",
+   "light": "morning"
+  },
+  {
+   "id": "day2",
+   "when": "node:21-m14",
+   "light": "day"
+  }
+ ],
+ "parent": "one-international",
+ "building": "sales3",
+ "links": [
+  "one-international"
+ ]
+}

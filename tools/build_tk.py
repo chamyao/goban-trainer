@@ -19,6 +19,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from tk_story import WORLDS  # noqa: E402
 from tk_story_zh import CAST, FOLK_VOICE, NARRATOR, ZH, spoken  # noqa: E402
+import problem_kind  # noqa: E402
 
 BOOKS = ROOT / "data" / "books"
 GRADES = [f"{k}K{p}" for k in range(15, 0, -1) for p in ("", "+")] + [f"{d}D{p}" for d in range(1, 8) for p in ("", "+")]
@@ -28,13 +29,63 @@ POOL = 30
 VOICE_DIR = ROOT / "assets" / "tk" / "voice"
 
 
+# An English-only world ("lang": "en", Misaeng): no Chinese, and every clip is read from the English by the
+# world's own English cast ("cast": {id: Kokoro English voice}); townsfolk by kind (EN_FOLK). Set per world.
+EN_NARRATOR = "bf_emma"
+EN_FOLK = {"folk.woman": "af_sarah", "folk.lady": "bf_isabella", "folk.maiden": "af_bella", "folk.girl": "af_sky",
+           "folk.child": "af_sky", "folk.elder": "bm_daniel", "folk.official": "bm_lewis"}
+EN_FOLK_DEFAULT = "am_adam"
+_EN = {"on": False, "cast": {}, "ko": {}, "cast_ko": {}}
+# A Korean voice-over for an English-only world ("voice": "ko", Misaeng): the world's "ko" {English line: Korean} and
+# "cast_ko" {cast id or folk kind: reference voice} give each clip its Korean; the clip id is the English one's, so
+# assets/tk/voice/ko/<id>.mp3 sits beside en/<id>.mp3. KO_LINES: id -> (Korean, reference voice, English), filled as the
+# lines are listed (all_lines); tools/build_tk_voice_ko.py renders them.
+KO_LINES = {}
+KO_MISSING = {}   # id -> English: a line in a "voice": "ko" world with no Korean yet
+
+
+class english:
+    """with english(w): build a world's lines English-only when it says so."""
+    def __init__(self, w):
+        self.on, self.cast = (w or {}).get("lang") == "en", dict((w or {}).get("cast") or {})
+        self.ko = dict((w or {}).get("ko") or {}) if (w or {}).get("voice") == "ko" else {}
+        self.cast_ko = dict((w or {}).get("cast_ko") or {})
+
+    def __enter__(self):
+        self.prev = dict(_EN)
+        _EN.update(on=self.on, cast=self.cast, ko=self.ko, cast_ko=self.cast_ko)
+
+    def __exit__(self, *a):
+        _EN.clear(); _EN.update(self.prev)
+
+
 def zh(en):
+    if _EN["on"]:
+        return ""
     if en not in ZH:
         sys.exit(f"tools/tk_story_zh.py has no Chinese for: {en!r}")
     return ZH[en]
 
 
+def read_record(rec):
+    """A world's game record ({"sgf": path, ...}) as the game reads it: {"moves": [["B", "pd"], ...], and the rest
+    of rec but the path}. Only the main line; setup stones (AB/AW) aren't used."""
+    import re
+    text = (ROOT / rec["sgf"]).read_text()
+    moves = [[c, m] for c, m in re.findall(r";\s*([BW])\[([a-s]{2})\]", text)]
+    if not moves:
+        raise ValueError("no moves")
+    for i, (c, _) in enumerate(moves):
+        if c != "BW"[i % 2]:
+            raise ValueError(f"move {i + 1} is {c}'s, out of turn")
+    return dict({k: v for k, v in rec.items() if k != "sgf"}, moves=moves)
+
+
 def voice_of(who=None):
+    if _EN["on"]:
+        if who and who not in _EN["cast"]:
+            sys.exit(f"the world's cast has no English voice for {who!r}")
+        return _EN["cast"][who] if who else EN_NARRATOR
     if who and who not in CAST:
         sys.exit(f"tools/tk_story_zh.py CAST has no voice for {who!r}")
     return CAST[who] if who else NARRATOR
@@ -46,6 +97,12 @@ def voice_id(text, voice=NARRATOR):
     return hashlib.sha1(key.encode()).hexdigest()[:12]
 
 
+def vid(en, who=None):
+    """The clip id for a line: from its Chinese, or in an English-only world from the English."""
+    z = zh(en)
+    return voice_id(z or en, voice_of(who))
+
+
 def voiced(steps):
     """Attach Chinese and voice clip ids: n -> [n, en, zh, vid], say -> [say, who, en, zh, vid],
     scroll -> [scroll, title, paras, zh title, zh paras, vids]."""
@@ -53,17 +110,35 @@ def voiced(steps):
     for s in steps:
         s = list(s)
         if s[0] == "n":
-            s += [zh(s[1]), voice_id(zh(s[1]))]
+            s += [zh(s[1]), vid(s[1])]
         elif s[0] == "say":
-            s += [zh(s[2]), voice_id(zh(s[2]), voice_of(s[1]))]
+            s += [zh(s[2]), vid(s[2], s[1])]
         elif s[0] == "scroll":
             zps = [zh(t) for t in s[2]]
-            s += [zh(s[1]), zps, [voice_id(t) for t in zps]]
+            s += [zh(s[1]), zps, [vid(t) for t in s[2]]]
         out.append(s)
     return out
 
 
+def ko_add(vid_, en, who=None):
+    """Note a line's Korean (a "voice": "ko" world), read by who (a cast id or a folk kind; None: the narrator)."""
+    if not _EN["ko"]:
+        return
+    k = _EN["ko"].get(en) or _EN["ko"].get(str(en).strip("“”"))
+    if not k:
+        KO_MISSING[vid_] = en
+    if k:
+        C = _EN["cast_ko"]
+        KO_LINES[vid_] = (k, C.get(who) or (C.get("folk.woman") if who and "woman" in str(who) else None) or C.get(None if who is None else "folk") or C.get("narrator"), en)
+
+
 def place_step(line, kind=None):
+    step, voice = place_step_(line, kind)
+    ko_add(step[-1], step[1] if step[0] == "n" else step[2], step[1] if step[0] == "say" else kind)
+    return step, voice
+
+
+def place_step_(line, kind=None):
     """A line from tools/tk_places.py as a voiced dialogue step, and its voice.
     kind is the speaker's npc kind; None for a story spot's intro/outro.
     [who, text] is a character speaking; a hero's quoted line is his own speech;
@@ -71,16 +146,16 @@ def place_step(line, kind=None):
     if isinstance(line, (list, tuple)):
         who, en = line
         z = zh(en)
-        return ["say", who, en, z, voice_id(z, voice_of(who))], voice_of(who)
+        return ["say", who, en, z, voice_id(z or en, voice_of(who))], voice_of(who)
     z = zh(line)
     if kind and kind.startswith("hero.") and line.startswith("“"):
         who = kind[5:]
         z = z.strip("“”")
-        return ["say", who, line.strip("“”"), z, voice_id(z, voice_of(who))], voice_of(who)
+        return ["say", who, line.strip("“”"), z, voice_id(z or line.strip("“”"), voice_of(who))], voice_of(who)
     if kind and kind.startswith("folk."):
-        v = FOLK_VOICE.get(kind, FOLK_VOICE["folk.villager"])
-        return ["n", line, z, voice_id(z, v)], v
-    return ["n", line, z, voice_id(z)], NARRATOR
+        v = (_EN["cast"].get(kind) or EN_FOLK.get(kind, EN_FOLK_DEFAULT)) if _EN["on"] else FOLK_VOICE.get(kind, FOLK_VOICE["folk.villager"])
+        return ["n", line, z, voice_id(z or line, v)], v
+    return ["n", line, z, voice_id(z or line, voice_of())], voice_of()
 
 
 def place_lines():
@@ -110,35 +185,44 @@ def place_lines():
                 lines[step[-1]] = (step[-2], voice, step[1] if step[0] == "n" else step[2])
     # and whatever the built maps say that isn't in a brief (a book built from plan grids, tools/mapfactory/plans.py)
     import json as _json
+    worlds = {f"w{w['n']}": w for w in WORLDS}
     for f in sorted((ROOT / "data" / "tk_maps").glob("w*/*.map.json")):
-        m = _json.loads(f.read_text())
-        said = [(l, None) for ls in (m.get("seen_lines") or {}).values() for l in ls]
-        said += [(l, None) for e in m.get("exits", []) for l in e.get("refuse") or []]
-        said += [(st["procession"]["leash_line"], None) for st in m.get("states") or [] if (st.get("procession") or {}).get("leash_line")]
-        said += [(l, None) for st in m.get("states") or [] for v in (st.get("exits_closed_say") or {}).values()
-                 for l in ([v] if isinstance(v, str) else v)]
-        said += [(l, None) for st in m.get("states") or [] for g in st.get("shut") or []   # a shut gate's line (Xiapi at night)
-                 for l in ([g["say"]] if isinstance(g.get("say"), str) else g.get("say") or [])]
-        for sp in m.get("spots", []):
-            said += [(l, None) for k in ("intro", "outro", "empty", "waiting", "deliver", "delivered", "call") for l in sp.get(k) or []]
-        for n in m.get("npcs", []):
-            for k in ("say", "intro", "win", "done", "give", "given", "call"):
-                v = n.get(k)
-                said += [(l, n["kind"]) for l in ([v] if isinstance(v, str) else v or [])]
-            seen = (n.get("watch") or {}).get("seen")
-            said += [(l, n["kind"]) for l in (seen if isinstance(seen, list) else [])]
-            for k in ("line", "caught"):   # a blocker stepping aside, or catching you (tk-feats.js "yield")
-                v = (n.get("yield") if isinstance(n.get("yield"), dict) else {}).get(k)
-                said += [(l, n["kind"]) for l in ([v] if isinstance(v, str) else v or [])]
-            for k in ("say", "told"):      # a townsperson passing the news on (tk-feats.js "gossip")
-                v = (n.get("gossip") if isinstance(n.get("gossip"), dict) else {}).get(k)
-                said += [(l, n["kind"]) for l in ([v] if isinstance(v, str) else v or [])]
-        for l, kind in said:
-            if not isinstance(l, str):
-                continue
-            step, voice = place_step(l, kind)
-            lines.setdefault(step[-1], (step[-2], voice, step[1] if step[0] == "n" else step[2]))
+        with english(worlds.get(f.parent.name)):
+            place_lines_of(_json.loads(f.read_text()), lines)
     return lines
+
+
+def place_lines_of(m, lines):
+    """The lines one built map says (a map in an English-only world: English only)."""
+    said = [(l, None) for ls in (m.get("seen_lines") or {}).values() for l in ls]
+    said += [(l, None) for e in m.get("exits", []) for l in e.get("refuse") or []]
+    said += [(st["procession"]["leash_line"], None) for st in m.get("states") or [] if (st.get("procession") or {}).get("leash_line")]
+    said += [(l, None) for st in m.get("states") or [] for v in (st.get("exits_closed_say") or {}).values()
+             for l in ([v] if isinstance(v, str) else v)]
+    said += [(l, None) for st in m.get("states") or [] for g in st.get("shut") or []   # a shut gate's line (Xiapi at night)
+             for l in ([g["say"]] if isinstance(g.get("say"), str) else g.get("say") or [])]
+    for sp in m.get("spots", []):
+        said += [(l, None) for k in ("intro", "outro", "empty", "waiting", "deliver", "delivered", "call", "give", "given") for l in sp.get(k) or []]
+    for n in m.get("npcs", []):
+        for k in ("say", "intro", "win", "done", "give", "given", "call"):
+            v = n.get(k)
+            said += [(l, n["kind"]) for l in ([v] if isinstance(v, str) else v or [])]
+        seen = (n.get("watch") or {}).get("seen")
+        said += [(l, n["kind"]) for l in (seen if isinstance(seen, list) else [])]
+        for k in ("line", "caught"):   # a blocker stepping aside, or catching you (tk-feats.js "yield")
+            v = (n.get("yield") if isinstance(n.get("yield"), dict) else {}).get(k)
+            said += [(l, n["kind"]) for l in ([v] if isinstance(v, str) else v or [])]
+        for k in ("say", "told"):      # a townsperson passing the news on (tk-feats.js "gossip")
+            v = (n.get("gossip") if isinstance(n.get("gossip"), dict) else {}).get(k)
+            said += [(l, n["kind"]) for l in ([v] if isinstance(v, str) else v or [])]
+        for f, k in (("buyer", "yes"), ("buyer", "no"), ("rival", "say")):   # the trade loop (Misaeng, tk-modern.js)
+            v = (n.get(f) if isinstance(n.get(f), dict) else {}).get(k)
+            said += [(l, n["kind"]) for l in ([v] if isinstance(v, str) else v or [])]
+    for l, kind in said:
+        if not isinstance(l, str):
+            continue
+        step, voice = place_step(l, kind)
+        lines.setdefault(step[-1], (step[-2], voice, step[1] if step[0] == "n" else step[2]))
 
 
 def all_lines(worlds):
@@ -146,31 +230,43 @@ def all_lines(worlds):
     The English voice-over reuses the id (assets/tk/voice/en/<id>.mp3)."""
     lines = {}
     for w in worlds:
-        for steps in [w["opening"], w["closing"], *(v["steps"] for v in w["scenes"].values())]:
-            for s in steps:
-                if s[0] == "n":
-                    lines[s[3]] = (s[2], NARRATOR, s[1])
-                elif s[0] == "say":
-                    lines[s[4]] = (s[3], voice_of(s[1]), s[2])
-                elif s[0] == "scroll":
-                    lines.update((k, (t, NARRATOR, e)) for k, t, e in zip(s[5], s[4], s[2]))
-        for n in w["nodes"]:
-            ch_ = n.get("chase") or {}
-            for k, ls in [*((k, ch_.get(k, [])) for k in ("spotted", "caught", "solved", "restart", "overrun")),
-                          *((None, v) for v in (ch_.get("caught_at") or {}).values())]:   # a chase's lines (tk-world.js chaseStep), voiced
-                for l in ls:
-                    if l[0] == "n": lines[l[3] if len(l) > 3 else voice_id(l[2])] = (l[2], NARRATOR, l[1])
-                    elif l[0] == "say": lines[l[4] if len(l) > 4 else voice_id(l[3], voice_of(l[1]))] = (l[3], voice_of(l[1]), l[2])
-            if "boss" in n:
-                lines[n["boss"]["taunt_vid"]] = (n["boss"]["taunt_zh"], voice_of(n["boss"]["who"]), n["boss"]["taunt"])
-            dl = n.get("dilemma") or {}
-            for d in (dl if isinstance(dl, list) else [dl]):   # one per board, in a scene with several
-                for k in ("open", "win", "slip"):
-                    if k in d:
-                        z = d.get(k + "_zh") or zh(d[k])
-                        lines[d.get(k + "_vid") or voice_id(z, voice_of(d.get("who")))] = (z, voice_of(d.get("who")), d[k])
+        with english(w):
+            world_lines(w, lines)
     lines.update(place_lines())
     return lines
+
+
+def world_lines(w, lines):
+    """The clips one built world's story voices."""
+    for steps in [w["opening"], w["closing"], *(v["steps"] for v in w["scenes"].values())]:
+        for s in steps:
+            if s[0] == "n":
+                lines[s[3]] = (s[2], voice_of(), s[1]); ko_add(s[3], s[1])
+            elif s[0] == "say":
+                lines[s[4]] = (s[3], voice_of(s[1]), s[2]); ko_add(s[4], s[2], s[1])
+            elif s[0] == "scroll":
+                lines.update((k, (t, voice_of(), e)) for k, t, e in zip(s[5], s[4], s[2]))
+                for k, e in zip(s[5], s[2]):
+                    ko_add(k, e)
+    for n in w["nodes"]:
+        ch_ = n.get("chase") or {}
+        for k, ls in [*((k, ch_.get(k, [])) for k in ("spotted", "caught", "solved", "restart", "overrun")),
+                      *((None, v) for v in (ch_.get("caught_at") or {}).values())]:   # a chase's lines (tk-world.js chaseStep), voiced
+            for l in ls:
+                if l[0] == "n": lines[l[3] if len(l) > 3 else voice_id(l[2])] = (l[2], NARRATOR, l[1])
+                elif l[0] == "say": lines[l[4] if len(l) > 4 else voice_id(l[3], voice_of(l[1]))] = (l[3], voice_of(l[1]), l[2])
+        if "boss" in n:
+            lines[n["boss"]["taunt_vid"]] = (n["boss"]["taunt_zh"], voice_of(n["boss"]["who"]), n["boss"]["taunt"])
+            ko_add(n["boss"]["taunt_vid"], n["boss"]["taunt"], n["boss"]["who"])
+        dl = n.get("dilemma") or {}
+        for d in (dl if isinstance(dl, list) else [dl]):   # one per board, in a scene with several
+            for k in ("open", "win", "slip"):
+                if k in d:
+                    z = d.get(k + "_zh") or zh(d[k])
+                    lines[d.get(k + "_vid") or voice_id(z, voice_of(d.get("who")))] = (z, voice_of(d.get("who")), d[k])
+                    ko_add(d.get(k + "_vid") or voice_id(z, voice_of(d.get("who"))), d[k], d.get("who"))
+
+
 # Life and death only, for now: tesuji, capturing races, capture and endgame
 # problems are less reliably vetted, so the campaign doesn't use them.
 TSUMEGO = {"死活题", "Life & Death"}
@@ -187,6 +283,19 @@ def vet(ref):
     return None if r is None else r["ok"]
 
 
+# A board that asks for a kind of problem (Plot: "the puzzles don't always match the dialogue"): a decision board's
+# "pool" names it (words from tools/problem_kind.py: ld, live, kill, tesuji, sacrifice, snapback, race, endgame, capture;
+# all of them must hold), or "problem": "book/id" names one problem outright. A book with such boards gets a typed
+# rated pool (KIND_GROUPS, PER_GROUP a grade each), and every board in it draws by kind (no "pool": life and death).
+KIND_GROUPS = ("ld live", "ld kill", "ld", "tesuji sacrifice", "tesuji", "race", "endgame", "capture")
+PER_GROUP = 12
+PROBLEM_IDS = {}   # "book/id" -> [book, id] as the book writes the id
+
+
+def typed(p):
+    return p.get("qt") in problem_kind.TYPES and any(l[0] == 1 and len(l) > 1 for l in p.get("lines", []))
+
+
 def usable(p):
     # A real answer key: at least one correct line with a move in it.
     return p.get("qt") in TSUMEGO and any(l[0] == 1 and len(l) > 1 for l in p.get("lines", []))
@@ -195,10 +304,17 @@ def usable(p):
 def main():
     rng = random.Random(20261004)
     index = json.loads((ROOT / "data" / "index.json").read_text())
-    by_grade, maeda, redmond = {}, [], []
+    by_grade, maeda, redmond, typed_by_grade = {}, [], [], {}
     for b in index:
         book = json.loads((BOOKS / f"{b['id']}.json").read_text())
         for p in book["problems"]:
+            if typed(p) and p.get("lv") in RANK:
+                k = problem_kind.kinds(p)
+                for g in KIND_GROUPS:
+                    if set(g.split()) <= k:
+                        typed_by_grade.setdefault((p["lv"], g), []).append([b["id"], p["id"], " ".join(sorted(k))])
+                        break
+                PROBLEM_IDS[f"{b['id']}/{p['id']}"] = [b["id"], p["id"]]
             if not usable(p):
                 continue
             ref = [b["id"], p["id"]]
@@ -211,6 +327,9 @@ def main():
                 by_grade.setdefault(p["lv"], []).append(ref)
     for v in by_grade.values():
         rng.shuffle(v)
+    rng_typed = random.Random(20261010)   # its own, so the other books' draws stay as they were
+    for k in sorted(typed_by_grade):
+        rng_typed.shuffle(typed_by_grade[k])
     redmond.sort(key=lambda r: r[1])
 
     taken = set()  # no problem appears twice in the whole campaign
@@ -232,6 +351,8 @@ def main():
 
     worlds = []
     for w in WORLDS:
+        lang = english(w)
+        lang.__enter__()   # an English-only world's lines: no Chinese, English clip ids (left at the loop's end)
         lo, hi = RANK[w["grades"][0]], RANK[w["grades"][-1]]
         nodes = []
         for src in w["nodes"]:
@@ -288,6 +409,10 @@ def main():
                 xs.sort(key=lambda x: vet(x) is not True)
                 rated += [[x[0], x[1], r] for x in xs[:30]]
             out["rated"] = rated
+        boards = [d for n in w["nodes"] for d in ([] if not n.get("dilemma") else n["dilemma"] if isinstance(n["dilemma"], list) else [n["dilemma"]])]
+        if any("pool" in d or "problem" in d for d in boards):
+            out["rated"] = [[x[0], x[1], r, x[2]] for r in range(0, RANK["3D"] + 1) for g in KIND_GROUPS
+                            for x in sorted(typed_by_grade.get((GRADES[r], g), []), key=lambda x: vet(x) is not True)[:PER_GROUP] if vet(x) is not False]
         out["nodes"] = nodes
         out["edges"] = [[key(a), key(b)] for a, b in w["edges"]]
         out["grades"] = f"{w['grades'][0]}–{w['grades'][-1]}"
@@ -306,35 +431,50 @@ def main():
         out["scenes"] = {k: dict(v, zh=zh(v["title"]), steps=voiced(fix(v["steps"]))) for k, v in w["scenes"].items()}
         for n in out["nodes"]:
             if "boss" in n:
-                n["boss"] = dict(n["boss"], taunt_zh=zh(n["boss"]["taunt"]), taunt_vid=voice_id(zh(n["boss"]["taunt"]), voice_of(n["boss"]["who"])))
+                n["boss"] = dict(n["boss"], taunt_zh=zh(n["boss"]["taunt"]), taunt_vid=vid(n["boss"]["taunt"], n["boss"]["who"]))
             # a decision board (Game Design): a caption naming the leader's dilemma, and optionally his
             # own lines on the board: {"q": en, "who": cast id, "open"/"win"/"slip": en}
             # (a list: one for each board of a scene that poses several)
             if "dilemma" in n:
                 def one(d0):
                     d = dict(d0, q_zh=zh(d0["q"]))
+                    if "problem" in d:   # "book/id": that problem, whatever the player's rating
+                        if d["problem"] not in PROBLEM_IDS:
+                            sys.exit(f"{out['name']}: no problem {d['problem']} (a board's \"problem\" is \"book/id\")")
+                        d["problem"] = PROBLEM_IDS[d["problem"]]
                     for k in ("open", "win", "slip"):
                         if k in d:
                             d[k + "_zh"] = zh(d[k])
-                            d[k + "_vid"] = voice_id(d[k + "_zh"], voice_of(d.get("who")))
+                            d[k + "_vid"] = vid(d[k], d.get("who"))
                     return d
                 n["dilemma"] = [one(d) for d in n["dilemma"]] if isinstance(n["dilemma"], list) else one(n["dilemma"])
         for n in out["nodes"]:
             if "scene" in n:
                 assert n["scene"] in out["scenes"], n["scene"]
+        if w.get("record"):   # the game the book is framed on (Misaeng): its moves, for the strip and the record boards
+            out["record"] = read_record(w["record"])
+        lang.__exit__()
         worlds.append(out)
     have = {p.stem for p in VOICE_DIR.glob("*.mp3")} if VOICE_DIR.exists() else set()
     have_en = {p.stem for p in (VOICE_DIR / "en").glob("*.mp3")} if (VOICE_DIR / "en").exists() else set()
     lines = all_lines(worlds)
+    for w in worlds:
+        for k in ("cast", "ko", "cast_ko"):   # an English-only world's casts and Korean are for the voices, not the game
+            w.pop(k, None)
     missing = [k for k in lines if k not in have]
     data = {"id": "tk", "title": "Romance of the Three Kingdoms", "native": "三国演义", "worlds": worlds,
             "voices": sorted(k for k in lines if k in have),
-            "voices_en": sorted(k for k in lines if k in have_en)}
+            "voices_en": sorted(k for k in lines if k in have_en),
+            "voices_ko": [] if all(w.get("voice_off") for w in WORLDS if w.get("voice") == "ko")
+                          else sorted(k for k in KO_LINES if (VOICE_DIR / "ko" / f"{k}.mp3").exists())}
     (ROOT / "data" / "tk.json").write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")))
     if VETTED:
         print(f"KataGo vetting: {len(unvetted)} pooled problems not vetted yet"
               + (" — run tools/vet_tsumego.mjs --pools, then this again" if unvetted else ", every pool is clean"))
     print(f"English voice-over: {sum(k in have_en for k in lines)}/{len(lines)} lines")
+    if KO_LINES or KO_MISSING:
+        print(f"Korean voice-over: {len(data['voices_ko'])}/{len(KO_LINES)} lines have audio"
+              + (f"; {len(KO_MISSING)} lines have no Korean, e.g. {next(iter(KO_MISSING.values()))[:60]!r}" if KO_MISSING else ""))
     print(f"voice-over: {len(lines) - len(missing)}/{len(lines)} lines have audio"
           + (" — run tools/build_tk_voice.py, then this again" if missing else ""))
     for w in worlds:

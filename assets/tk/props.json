@@ -306,6 +306,210 @@
    0,
    14,
    16
+  ],
+  "item.pass": [
+   1099,
+   0,
+   14,
+   16
+  ],
+  "item.id_card": [
+   1114,
+   0,
+   16,
+   12
+  ],
+  "item.waybill_scrap": [
+   1131,
+   0,
+   16,
+   12
+  ],
+  "item.note": [
+   1148,
+   0,
+   14,
+   12
+  ],
+  "item.slippers": [
+   1163,
+   0,
+   16,
+   14
+  ],
+  "item.homework": [
+   1180,
+   0,
+   16,
+   16
+  ],
+  "item.report": [
+   1197,
+   0,
+   14,
+   16
+  ],
+  "item.statements": [
+   1212,
+   0,
+   14,
+   16
+  ],
+  "item.board_list": [
+   1227,
+   0,
+   14,
+   16
+  ],
+  "item.envelope": [
+   1242,
+   0,
+   16,
+   10
+  ],
+  "item.seating_notes": [
+   1259,
+   0,
+   14,
+   16
+  ],
+  "item.cash_100k": [
+   1274,
+   0,
+   16,
+   12
+  ],
+  "item.dried_squid": [
+   1291,
+   0,
+   10,
+   16
+  ],
+  "item.necklace": [
+   1302,
+   0,
+   14,
+   14
+  ],
+  "item.contract": [
+   1317,
+   0,
+   14,
+   16
+  ],
+  "item.icb_listing": [
+   1332,
+   0,
+   14,
+   16
+  ],
+  "item.icb_call": [
+   1347,
+   0,
+   16,
+   12
+  ],
+  "item.coached": [
+   1364,
+   0,
+   14,
+   16
+  ],
+  "item.james_park": [
+   1379,
+   0,
+   16,
+   10
+  ],
+  "item.water": [
+   1396,
+   0,
+   8,
+   16
+  ],
+  "item.green_tea": [
+   1405,
+   0,
+   10,
+   12
+  ],
+  "item.coffee": [
+   1416,
+   0,
+   10,
+   10
+  ],
+  "item.copy": [
+   1427,
+   0,
+   14,
+   16
+  ],
+  "item.file": [
+   1442,
+   0,
+   14,
+   16
+  ],
+  "item.notebook": [
+   1457,
+   0,
+   16,
+   14
+  ],
+  "item.somi_drawing": [
+   1474,
+   0,
+   16,
+   14
+  ],
+  "item.cafe_address": [
+   1491,
+   0,
+   12,
+   16
+  ],
+  "item.requisition": [
+   1504,
+   0,
+   14,
+   16
+  ],
+  "item.phone_text": [
+   1519,
+   0,
+   12,
+   16
+  ],
+  "ms_tray": [
+   1532,
+   0,
+   16,
+   10
+  ],
+  "ms_pens": [
+   1549,
+   0,
+   14,
+   12
+  ],
+  "ms_cup": [
+   1564,
+   0,
+   10,
+   10
+  ],
+  "ms_water": [
+   1575,
+   0,
+   8,
+   16
+  ],
+  "ms_pocketboard": [
+   1584,
+   0,
+   16,
+   14
   ]
  },
  "kinds": {
@@ -614,6 +818,41 @@
     1
    ],
    "atlas": "bench"
+  },
+  "ms_tray": {
+   "size": [
+    1,
+    1
+   ],
+   "atlas": "ms_tray"
+  },
+  "ms_pens": {
+   "size": [
+    1,
+    1
+   ],
+   "atlas": "ms_pens"
+  },
+  "ms_cup": {
+   "size": [
+    1,
+    1
+   ],
+   "atlas": "ms_cup"
+  },
+  "ms_water": {
+   "size": [
+    1,
+    1
+   ],
+   "atlas": "ms_water"
+  },
+  "ms_pocketboard": {
+   "size": [
+    1,
+    1
+   ],
+   "atlas": "ms_pocketboard"
   }
  }
 }

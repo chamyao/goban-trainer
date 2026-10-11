@@ -1,0 +1,167 @@
+{
+ "format": "tk-map/1",
+ "id": "jongno--corner-shop",
+ "world": 21,
+ "name": "The corner shop",
+ "archetype": "interior",
+ "size": [
+  20,
+  14
+ ],
+ "seed": 1933,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "office_tile",
+   " ": "void",
+   "W": "wall"
+  },
+  "rows": [
+   "                    ",
+   " WWWWWWWWWWWWWWWWWW ",
+   " WaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaW ",
+   " WWWWWWWWWaaWWWWWWW ",
+   "                    "
+  ],
+  "walk": {
+   "office_tile": true,
+   "void": false,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    10,
+    7
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     5,
+     6
+    ]
+   },
+   "tiles": 56
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.fridge_case",
+   "x": 12,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "fridge-1",
+   "label": "The drinks fridge"
+  },
+  {
+   "kind": "furn.fridge_case",
+   "x": 14,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "fridge-2"
+  },
+  {
+   "kind": "furn.fridge_case",
+   "x": 16,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "fridge-3"
+  },
+  {
+   "kind": "furn.store_shelf",
+   "x": 8,
+   "y": 6,
+   "w": 2,
+   "h": 1,
+   "id": "shelf-1"
+  },
+  {
+   "kind": "furn.store_shelf",
+   "x": 10,
+   "y": 6,
+   "w": 2,
+   "h": 1,
+   "id": "shelf-2"
+  },
+  {
+   "kind": "furn.store_shelf",
+   "x": 14,
+   "y": 6,
+   "w": 2,
+   "h": 1,
+   "id": "shelf-3"
+  },
+  {
+   "kind": "furn.store_shelf",
+   "x": 16,
+   "y": 6,
+   "w": 2,
+   "h": 1,
+   "id": "shelf-4"
+  },
+  {
+   "kind": "furn.counter",
+   "x": 2,
+   "y": 8,
+   "w": 3,
+   "h": 1,
+   "id": "counter",
+   "label": "The till, and the dried squid"
+  }
+ ],
+ "spots": [],
+ "npcs": [
+  {
+   "id": "npc-1",
+   "kind": "folk.salaryman",
+   "x": 3.5,
+   "y": 8.35,
+   "say": [
+    "The owner, behind the till, doesn't look up from his paper."
+   ],
+   "label": "The corner-shop owner"
+  }
+ ],
+ "exits": [
+  {
+   "to": "jongno",
+   "side": "S",
+   "x": 10,
+   "y": 12,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "jongno": [
+   10,
+   11
+  ],
+  "": [
+   10,
+   11
+  ]
+ },
+ "parent": "jongno",
+ "building": "corner-shop",
+ "links": [
+  "jongno"
+ ]
+}

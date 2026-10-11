@@ -1,0 +1,40 @@
+     mode: player (the game's test mode off)
+ok   21-m1  11s  ms_jang_child in susaek-dong--baduk-class
+ok   21-m2  14s  ms_jang_young in korea-baduk-association--kba-trainees
+ok   21-m3  20s  ms_jang in korea-baduk-association--kba-cafe
+ok   21-m4  11s  ms_jang in susaek-dong--home
+ok   21-m5  16s  ms_jang in jongno--sponsor-office
+ok   21-m6  6s  ms_jang in susaek-dong--home
+ok   21-m7  16s  ms_jang in ohs-home
+ok   21-m8  42s  ms_jang in jongno--cafe
+ok   21-m9  23s  ms_jang in jongno
+     21-m10: the lift, to ◆ 5F · HR
+ok   21-m10  22s  ms_jang in one-international--hr
+     21-m11 is gated on mark:requisition: to one-international--general-affairs (ga-counter)
+     21-m11: the lift, to ◆ 2F · General Affairs
+     21-m11: the lift, to ◆ 14F · Sales Team 3
+ok   21-m11  18s  ms_jang in one-international--sales3
+ok   21-m12  22s  ms_jang in jongno--hof
+     21-m13: the lift, to ◆ 14F · Sales Team 3
+ok   21-m13  26s  ms_ahn in one-international--sales3
+     21-m14 is gated on mark:errand_bl: to one-international--sales3 (errand-bl)
+     21-m14: the lift, to ◆ 14F · Sales Team 3
+     21-m14 is gated on mark:errand_copy: to one-international--sales3 (errand-copy)
+     21-m14 is gated on mark:errand_floor: to one-international--sales3 (errand-floor)
+ok   21-m14  59s  ms_jang in one-international--sales3
+     21-m15: the lift, to ◆ 15F · A meeting room
+ok   21-m15  15s  ms_jang in one-international--meeting
+ok   21-m16  11s  ms_jang in jongno
+     21-m17: the lift, to ◆ R · The roof
+ok   21-m17  21s  ms_jang in one-international--roof
+     21-m18: the lift, to ◆ 14F · Sales Team 3
+ok   21-m18  24s  ms_jang in one-international--sales3
+ok   21-m18b  11s  ms_jang in ulsan
+ok   21-m19  14s  ms_jang in one-international--sales3
+ok   21-m20  14s  ms_oh in one-international--sales3
+ok   21-m21  11s  ms_kimbr in one-international
+ok   21-m22  21s  ms_kimbr in one-international--textile
+ok   after each handoff the new lead starts 6+ tiles from the beat's spot (m2 ms_jang_child>ms_jang_young 20.8 tiles from m2; m4 ms_jang_young>ms_jang in susaek-dong, the spot in susaek-dong--home; m13 ms_jang>ms_ahn in jongno--hof, the spot in one-international--sales3; m14 ms_ahn>ms_jang in susaek-dong, the spot in one-international--sales3; m21 ms_jang>ms_oh 10.3 tiles from m21; m22 ms_oh>ms_kimbr 14.5 tiles from m22)
+ok   after the book: playing as ms_kimbr in one-international--textile; the chip says "Kim Bu-ryeon"; "Now playing" banners: Jang Geu-raeNow playing: Geu-rae | Ahn Young-yiNow playing: Young-yi | Jang Geu-raeNow playing: Geu-rae | Oh Sang-sikNow playing: Sang-sik | Kim Bu-ryeonNow playing: Bu-ryeon
+walk-playthrough Book 21 (default): 23/23 beats walked and played in 7.5 min (0 needed a reload, 0 held by a scene); 17 boards (14 from the rated pool)
+the goal box's chip followed the party: Jang Geu-rae → Ahn Young-yi → Jang Geu-rae → Oh Sang-sik → Kim Bu-ryeon

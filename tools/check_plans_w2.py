@@ -28,6 +28,8 @@ elif ARC == "lb":   # Lü Bu's fall (tools/tk_plans_lb.py, docs/book2/lvbu-arc.m
     from tk_plans_lb import KEYS_LB, LINE_KINDS, NEW_KINDS, PLANS_LB as PLANS2, ZONE_KINDS  # noqa: E402
 elif ARC == "ls":   # Lady Sun's marriage (tools/tk_plans_ls.py, docs/book2/ladysun-arc.md)
     from tk_plans_ls import KEYS_LS, LINE_KINDS, NEW_KINDS, PLANS_LS as PLANS2, ZONE_KINDS  # noqa: E402
+elif ARC == "ms":   # Misaeng (tools/tk_plans_ms.py, docs/book2/misaeng-arc.md on Plot alt2's branch)
+    from tk_plans_ms import KEYS_MS, LINE_KINDS, NEW_KINDS, PLANS_MS as PLANS2, ZONE_KINDS  # noqa: E402
 else:
     from tk_plans_w2 import LINE_KINDS, NEW_KINDS, PLANS2, ZONE_KINDS  # noqa: E402
 from vocab import FOLK, KINDS  # noqa: E402
@@ -35,8 +37,9 @@ from vocab import FOLK, KINDS  # noqa: E402
 SIDES = {"N": (0, -1), "S": (0, 1), "W": (-1, 0), "E": (1, 0)}
 OPEN_GROUND = {"court", "passage", "garden", "field", "field.wheat", "market", "camp", "plain", "loess", "stage", "floor", "ward",
                "city", "plateau"}
-PASSABLE_THINGS = {"furn.seat", "furn.curtain", "furn.rug", "landmark.ridge", "building.gatehouse", "building.gate", "building.moongate"}
-IN_WALL = {"building.gate", "building.gatehouse", "building.gatetower", "building.moongate", "wall.stairs"}   # stand in a wall: no margin
+FRONT_DOOR = {"building.storefront", "building.office_block", "building.office_tower", "building.villa", "building.pojangmacha"}   # modern fronts: the door is drawn on the south face
+PASSABLE_THINGS = {"furn.seat", "furn.chair", "furn.curtain", "furn.rug", "prop.spill", "landmark.ridge", "building.gatehouse", "building.gate", "building.moongate", "building.palace_gate"}
+IN_WALL = {"building.gate", "building.gatehouse", "building.gatetower", "building.moongate", "wall.stairs", "building.palace_gate"}   # stand in a wall: no margin
 EXTRA_KINDS = {"prop.lanterns", "prop.body_lamp", "milestone", "banner", "plant.peony", "water.lotus", "tree.poplar", "tree.willow",
                "camp.gong", "camp.drum"}
 
@@ -44,8 +47,10 @@ EXTRA_KINDS = {"prop.lanterns", "prop.body_lamp", "milestone", "banner", "plant.
 def shared_keys():
     if ARC == "lb":   # the design's beat table (x1 ... x20), as the plans module lists it
         return set(KEYS_LB)
-    if ARC == "ls":   # the design's beat table (s1 ... s14)
+    if ARC == "ls":   # the design's beat table (s1 ... s16)
         return set(KEYS_LS)
+    if ARC == "ms":   # the design's beat table (m1 ... m24)
+        return set(KEYS_MS)
     if ARC == "cc":   # the "Shared keys" table: | c1 | Luoyang | ...
         text = (ROOT / "docs/book2/caocao-arc.md").read_text().split("## Shared keys")[1]
         return set(re.findall(r"^\| (c\d+) \|", text, re.M))
@@ -174,6 +179,10 @@ class Plan:
             for d in t.get("doors") or ([t["door"]] if t.get("door") else []):
                 x, y, w, h = t["rect"]
                 dx, dy = SIDES[d]
+                if d != "S" and t["kind"] in FRONT_DOOR and (t.get("map") or t.get("to")):
+                    # its art draws the door on the south face: a door on any other face puts the way in where none is
+                    # drawn (a north one on the roofline, an east or west one on a blank side wall)
+                    self.err(f"door: {t['id']} ({t['kind']}) is entered by its {d} face, but its door is drawn on the south face; face it S")
                 edge = {"N": [(i, y - 1) for i in range(x, x + w)], "S": [(i, y + h) for i in range(x, x + w)],
                         "W": [(x - 1, j) for j in range(y, y + h)], "E": [(x + w, j) for j in range(y, y + h)]}[d]
                 ok = [c for c in edge if self.walkable(c)]
@@ -185,6 +194,17 @@ class Plan:
                     self.doors.append((f"door {t['id']}", ok[len(ok) // 2]))
         # spots, exits, people, watchers: on the grid and walkable
         need = list(self.doors)
+        # spots you walk up to (a beat, a thing that gives, a place to deliver to) set off within 36 px of her: two
+        # closer than 76 px both go off as she walks past them (Misaeng's Sales 3, Testing round 3). Two beats are never
+        # open at once, so a pair counts when one of them is a giver or a delivery (open for a stretch of the story)
+        walkup = [s for s in p.get("spots", []) if (s.get("node") or s.get("gives") or s.get("needs")) and s.get("trigger") != "talk"]
+        for i, a_ in enumerate(walkup):
+            for b_ in walkup[i + 1:]:
+                if not any(x.get("gives") or x.get("needs") for x in (a_, b_)):
+                    continue
+                d = math.dist(a_["at"], b_["at"]) * self.C * 16
+                if d < 76:
+                    self.err(f"spots {a_['id']} and {b_['id']} are {d:.0f} px apart: walking up to one sets off the other (keep 76)")
         for s in p.get("spots", []):
             c = tuple(s["at"])
             if s.get("node") and s["node"].split("-", 1)[-1] not in keys:
@@ -470,11 +490,13 @@ def draw(name, P, out):
            "field.wheat": (214, 196, 110), "market": (200, 180, 140), "ward": (170, 175, 150), "city": (160, 165, 140),
            "plateau": (185, 175, 150), "court": (205, 200, 185), "passage": (190, 185, 170), "garden": (110, 170, 100),
            "camp": (175, 160, 120), "loess": (205, 180, 130), "plain": (180, 190, 120), "stage": (170, 120, 120),
-           "floor": (150, 120, 90)}
+           "floor": (150, 120, 90), "asphalt": (70, 70, 75)}
     for c, k in P.zone.items():
         d.rectangle([c[0] * T, c[1] * T, (c[0] + 1) * T - 1, (c[1] + 1) * T - 1], fill=col.get(k, (150, 150, 150)))
     lc = {"road": (225, 205, 160), "path": (230, 215, 175), "bridge": (160, 110, 70), "gallery": (180, 60, 50), "river": (60, 115, 180),
-          "stream": (80, 140, 200), "wall": (90, 80, 75), "wall.city": (80, 70, 65), "wall.lattice": (150, 90, 60), "curtain": (190, 60, 90)}
+          "stream": (80, 140, 200), "wall": (90, 80, 75), "wall.city": (80, 70, 65), "wall.lattice": (150, 90, 60), "curtain": (190, 60, 90),
+          "crosswalk": (240, 240, 240), "barrier": (120, 160, 190), "parapet": (130, 130, 135),
+          "wall.palace": (150, 60, 50)}
     for l in P.p.get("lines", []):
         if "outline" in l:
             x, y, w, h = l["outline"]
@@ -525,7 +547,7 @@ def draw(name, P, out):
         d.ellipse([x * T + T / 2 - r, y * T + T / 2 - r, x * T + T / 2 + r, y * T + T / 2 + r],
                   fill=(240, 40, 160) if s.get("node") else (240, 160, 220), outline=(0, 0, 0))
         if s.get("node"):
-            d.text((x * T + T / 2 + 7, y * T + T / 2 - 6), s["node"][2:], fill=(0, 0, 0), font=font)
+            d.text((x * T + T / 2 + 7, y * T + T / 2 - 6), s["node"].split("-", 1)[-1], fill=(0, 0, 0), font=font)
     for i in range(P.W + 1):
         d.line([(i * T, 0), (i * T, P.H * T)], fill=(0, 0, 0, 25))
     for j in range(P.H + 1):
@@ -561,7 +583,7 @@ def main():
                                                                        for r, v in P.chase_routes.items()))
         errors += P.errors
         if "--png" in sys.argv:
-            drawn.append(draw(name, P, ROOT / ({"cc": "docs/book2/plans-cc", "lb": "docs/book2/plans-lb", "ls": "docs/book2/plans-ls"}.get(ARC, "docs/book2/plans"))))
+            drawn.append(draw(name, P, ROOT / ({"cc": "docs/book2/plans-cc", "lb": "docs/book2/plans-lb", "ls": "docs/book2/plans-ls", "ms": "docs/book2/plans-ms"}.get(ARC, "docs/book2/plans"))))
     # people placed inside a compound or room map ("place": its id, "at": a cell there)
     for place, b in PLANS2.items():
         for i, n in enumerate(b.get("npcs", [])):
@@ -587,8 +609,8 @@ def main():
                 elif not P.walkable(c) or c not in getattr(P, "reach", set()):
                     errors.append(f"{place} / {n['place']}: npc {i + 1} ({n['kind']}) at {c} stands where no one can walk to")
     # every Shared key that names a Places spot should have one
-    placed = {s["node"][2:] for _, p, _ in plans() for s in p.get("spots", []) if s.get("node")}
-    placed |= {t["node"][2:] for _, p, _ in plans() for t in p.get("things", []) if t.get("node")}
+    placed = {s["node"].split("-", 1)[-1] for _, p, _ in plans() for s in p.get("spots", []) if s.get("node")}
+    placed |= {t["node"].split("-", 1)[-1] for _, p, _ in plans() for t in p.get("things", []) if t.get("node")}
     missing = sorted(keys - placed)
     for e in errors:
         print("ERROR", e)

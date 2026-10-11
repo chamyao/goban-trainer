@@ -1,0 +1,47 @@
+--- desktop (1280x800): 5 record boards
+ok   21-m6 (Black 11): four letters A-D on four empty points (A=cp B=dr C=dc D=dl)
+ok   21-m6 (Black 11): exactly one letter is Cho's move cp
+ok   21-m6 (Black 11): letters readable (15.2 px, discs 19 px)
+ok   21-m6 (Black 11): every letter can be tapped, nothing over the board (board, board, board, board)
+ok   21-m6 (Black 11): only the letters take a tap (4 tap targets on the board)
+ok   21-m6 (Black 11): a tap off the letters (ed) plays nothing
+ok   21-m6 (Black 11): the wrong letter B (dr) doesn't clear it ({"cleared":false,"rest":true,"played":1})
+ok   21-m6 (Black 11): after a slip the same four come back (A=cp B=dr C=dc D=dl)
+ok   21-m6 (Black 11): the right letter A (its key) clears the board
+ok   21-m11 (Black 19): four letters A-D on four empty points (A=dl B=lq C=dm D=lp)
+ok   21-m11 (Black 19): exactly one letter is Cho's move lq
+ok   21-m11 (Black 19): letters readable (15.2 px, discs 19 px)
+ok   21-m11 (Black 19): every letter can be tapped, nothing over the board (board, board, board, board)
+ok   21-m11 (Black 19): only the letters take a tap (4 tap targets on the board)
+ok   21-m11 (Black 19): a tap off the letters (ed) plays nothing
+ok   21-m11 (Black 19): the wrong letter A (dl) doesn't clear it ({"cleared":false,"rest":true,"played":1})
+ok   21-m11 (Black 19): after a slip the same four come back (A=dl B=lq C=dm D=lp)
+ok   21-m11 (Black 19): the right letter B (its key) clears the board
+ok   21-m16 (Black 29): four letters A-D on four empty points (A=oq B=dm C=or D=ir)
+ok   21-m16 (Black 29): exactly one letter is Cho's move ir
+ok   21-m16 (Black 29): letters readable (15.3 px, discs 19 px)
+ok   21-m16 (Black 29): every letter can be tapped, nothing over the board (board, board, board, board)
+ok   21-m16 (Black 29): only the letters take a tap (4 tap targets on the board)
+ok   21-m16 (Black 29): a tap off the letters (ed) plays nothing
+ok   21-m16 (Black 29): the wrong letter A (oq) doesn't clear it ({"cleared":false,"rest":true,"played":1})
+ok   21-m16 (Black 29): after a slip the same four come back (A=oq B=dm C=or D=ir)
+ok   21-m16 (Black 29): the right letter D (its key) clears the board
+ok   21-m18 board 2 (Black 31): four letters A-D on four empty points (A=ms B=hq C=mr D=dm)
+ok   21-m18 board 2 (Black 31): exactly one letter is Cho's move hq
+ok   21-m18 board 2 (Black 31): letters readable (15.5 px, discs 19 px)
+ok   21-m18 board 2 (Black 31): every letter can be tapped, nothing over the board (board, board, board, board)
+ok   21-m18 board 2 (Black 31): only the letters take a tap (4 tap targets on the board)
+ok   21-m18 board 2 (Black 31): a tap off the letters (ed) plays nothing
+ok   21-m18 board 2 (Black 31): the wrong letter A (ms) doesn't clear it ({"cleared":false,"rest":true,"played":1})
+ok   21-m18 board 2 (Black 31): after a slip the same four come back (A=ms B=hq C=mr D=dm)
+ok   21-m18 board 2 (Black 31): the right letter B (its key) clears the board
+ok   21-m19 (Black 33): four letters A-D on four empty points (A=ms B=dn C=ck D=gr)
+ok   21-m19 (Black 33): exactly one letter is Cho's move ms
+ok   21-m19 (Black 33): letters readable (15.3 px, discs 19 px)
+ok   21-m19 (Black 33): every letter can be tapped, nothing over the board (board, board, board, board)
+ok   21-m19 (Black 33): only the letters take a tap (3 tap targets on the board)
+ok   21-m19 (Black 33): a tap off the letters (ed) plays nothing
+ok   21-m19 (Black 33): the wrong letter B (dn) doesn't clear it ({"cleared":false,"rest":true,"played":1})
+ok   21-m19 (Black 33): after a slip the same four come back (A=ms B=dn C=ck D=gr)
+ok   21-m19 (Black 33): the right letter A (its key) clears the board
+misaeng-choices: all ok, 0 notes

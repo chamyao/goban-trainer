@@ -125,9 +125,15 @@ const Sync = {
   // solved sticks (1 beats anything); the adaptive rating keeps whichever has played more boards
   mergeInto(local, remote) {
     for (const bookId in remote) {
-      if (bookId === "tkAt" || bookId === "tkUndo" || bookId === "tkReplay") {   // dated: the later date wins (TK.cleared)
+      if (bookId === "tkAt" || bookId === "tkUndo" || bookId === "tkReplay" || bookId === "tkSeen") {   // dated: the later date wins (TK.cleared, TK.seen)
         const b = local[bookId] || (local[bookId] = {});
         for (const k in remote[bookId]) b[k] = Math.max(b[k] || 0, remote[bookId][k] || 0);
+        continue;
+      }
+      if (bookId === "tkMig") {   // a book's one-time migrations: the higher version is the one done (an older copy taking
+        // over set it back, and the next load ran that start-over again: apo110's Book 1, wiped)
+        const b = local.tkMig || (local.tkMig = {});
+        for (const k in remote.tkMig) b[k] = Math.max(+b[k] || 0, +remote.tkMig[k] || 0);
         continue;
       }
       if (bookId === "tkElo") { const r = remote.tkElo, l = local.tkElo; if (r && (!l || (r.n || 0) > (l.n || 0))) local.tkElo = r; continue; }
@@ -548,6 +554,7 @@ class Goban {
     if (!interactive) return;
     for (let r = r0; r <= r1; r++)
       for (let c = c0; c <= c1; c++) {
+        if (this.only && !this.only.has(String.fromCharCode(97 + c) + String.fromCharCode(97 + r))) continue;   // a multiple-choice board: only its letters take a tap
         const t = this.el("circle", { cx: this.px(c), cy: this.py(r), r: this.cell * .48,
                                       fill: "transparent", cursor: "pointer" });
         t.addEventListener("mouseenter", () => {
@@ -568,6 +575,8 @@ class Goban {
     return w > 0 && w / this.W * this.cell < 28;
   }
   tap(c, r, grid) {
+    // (a multiple-choice board takes taps only on its letters; on a phone with tiny points they still confirm, so a near-miss
+    // shows the pick instead of costing a guess: Testing, m22 on an iPhone)
     if (grid[r][c] !== EMPTY || !this.needsConfirm()) { this.clearGhost(); return this.onClick(c, r); }
     if (this.ghost && this.ghost.c === c && this.ghost.r === r) { this.clearGhost(); return this.onClick(c, r); }
     this.clearGhost();
@@ -777,6 +786,7 @@ class Trainer {
     if (this.done || this.engineBusy || this.turnColor() !== BLACK) return;
     if (this.grid[r][c] !== EMPTY) return;
     const mv = String.fromCharCode(97 + c) + String.fromCharCode(97 + r);
+    if (this.p.only && !this.p.only.includes(mv)) return;   // a multiple-choice board (Misaeng's record boards): only its lettered points
 
     const treeMove = this.p.lines.some(L =>
       this.played.length < L.length - 1 &&
@@ -2030,6 +2040,14 @@ async function viewLibrary() {
       h("small", {}, tkDone ? `${tkDone} levels cleared` : "A story campaign through the novel, 12K to 7D")]),
     h("span", { class: "tk-card-go" }, "→"),
   ]));
+  // Other novels' books (tk.js TK_NOVELS), each its own card; one not live yet shows in test mode only
+  for (const [id, nv] of Object.entries(typeof TK_NOVELS !== "undefined" ? TK_NOVELS : {})) {
+    if (!nv.live && !(typeof TK_TEST !== "undefined" && TK_TEST)) continue;
+    root.append(h("a", { class: "tk-card tk-card-" + id, href: `#/tk/${nv.first}` }, [
+      h("span", {}, [h("b", {}, `${nv.native} · ${nv.title}`), h("small", {}, nv.live ? "A story campaign through the novel" : "测试模式 Test mode only")]),
+      h("span", { class: "tk-card-go" }, "→"),
+    ]));
+  }
   // Favorited books from every category come first; they stay in their category too.
   const sections = [["Favorites", index.filter(b => favs.has(b.id))],
                     ...Object.entries(cats).map(([cat, title]) => [title, index.filter(b => b.category === cat)])];
@@ -3468,6 +3486,8 @@ let routeSeq = 0;
 
 async function route() {
   routeSeq++;
+  if (typeof TKEnglish !== "undefined") TKEnglish.set(false);   // an English-only book's page sets it again (tk-modern.js)
+  if (typeof TKVoice !== "undefined") { TKVoice.enOnly = false; TKVoice.native = null; }
   if (trainer) trainer.alive = false;
   trainer = null;
   Review.els = null;

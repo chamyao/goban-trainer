@@ -44,7 +44,11 @@ const WorldCutscene = {
     // where the camera looks for a tile: the same, or where the isometric view draws it (tk-iso.js)
     const seen = at => { const [x, y] = px(at); if (!scene.view) return [x, y]; const v = scene.view(x, y); return [v.x, v.y]; };
     const wait = ms => new Promise(r => { if (skip) return r(); timers.push(scene.time.delayedCall(ms, r)); });
-    const tween = cfg => new Promise(r => { if (skip) return r(); scene.tweens.add({ ...cfg, onComplete: r }); });
+    // a tween that's stopped or killed (another took hold of the sprite) never completes: each has a deadline too, so a
+    // scene can't hang on one (Misaeng m16 on a phone froze with its box hidden, 1 run in 2)
+    const tween = cfg => new Promise(r => { if (skip) return r(); let done = false; const end = () => { if (!done) { done = true; r(); } };
+      scene.tweens.add({ ...cfg, onComplete: end, onStop: end });
+      setTimeout(end, ((cfg.duration || 0) + (cfg.delay || 0)) / ((scene.tweens && scene.tweens.timeScale) || 1) + 1500); });
 
     // hide the player, the followers and the townsfolk; the cast stands in for them
     // (opts.keep: townsfolk the scene needs as they are, e.g. who sets its problem; not when the
@@ -281,7 +285,9 @@ const WorldCutscene = {
     const pan = (to, ms = 350) => {
       if (!to) return Promise.resolve();
       const [x, y] = seen(to);
-      return new Promise(r => { if (skip) return r(); cam.pan(x, y - 8, ms, "Sine.easeInOut", true, (c, p) => { if (p === 1) r(); }); });
+      return new Promise(r => { if (skip) return r(); let done = false; const end = () => { if (!done) { done = true; r(); } };
+        cam.pan(x, y - 8, ms, "Sine.easeInOut", true, (c, p) => { if (p === 1) end(); });
+        setTimeout(end, ms + 1000); });   // a pan cut short (the camera refitted under it) never reaches 1
     };
 
     // ---- props, poses, emotes, gifts, mood ----
@@ -724,7 +730,7 @@ const WorldCutscene = {
   // the prop atlas (props, emote bubbles, gift icons), loaded once per game
   // the stills that exist (tools/gen_stills.py writes assets/tk/stills/stills.json), fetched once
   stillIndex() {
-    if (!this._stills) this._stills = fetch("assets/tk/stills/stills.json?v=29").then(r => r.ok ? r.json() : {}).catch(() => ({}));
+    if (!this._stills) this._stills = fetch("assets/tk/stills/stills.json?v=39").then(r => r.ok ? r.json() : {}).catch(() => ({}));
     return this._stills;
   },
   stillSrc(m) { return `assets/tk/stills/${m.file}?v=${m.made || ""}${m.look || ""}`; },   // a redone still is fetched anew
@@ -743,8 +749,8 @@ const WorldCutscene = {
   load(scene) {
     if (scene.textures.exists("tk-props")) return Promise.resolve();
     return new Promise(res => {
-      scene.load.json("tk-props-json", "assets/tk/props.json?v=8");
-      scene.load.image("tk-props", "assets/tk/props.png?v=8");
+      scene.load.json("tk-props-json", "assets/tk/props.json?v=12");
+      scene.load.image("tk-props", "assets/tk/props.png?v=12");
       scene.load.once("complete", () => {
         const t = scene.textures.get("tk-props"), j = scene.cache.json.get("tk-props-json");
         if (t && j) for (const [n, [x, y, w, h]] of Object.entries(j.frames)) t.add(n, 0, x, y, w, h);
