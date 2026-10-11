@@ -270,3 +270,33 @@ Han's feet pay everything off.
 7. Book 1 said a week at the training centre; is Book 1's line or Book 2's staging the one to change?
 8. Is Ms. Ha's interest a Book 3 thread?
 9. Is "contract worker" a lesser hire than the others'? Will that drive Book 3?
+
+---
+
+## Round 2 (e780ba42)
+
+All of the top ten and the extras are taken, and they read well. The first half now has a clock and a reason ("never
+seen anyone in this company actually sell"). Park's letter goes into the shredder. "In twelve days Jang will have to
+play his own" turns the Park arc toward the spine. The Thursday lunch (Mummy has a face), "The parachute is in, but
+only on a lease", Oh's socks and "Han bows longest" are all good payoffs.
+
+**Remaining, ranked:**
+1. **b20, wrong speaker.** "Four years, sir." is spoken by `ms_examiner`, so the md labels it "Evaluator", the PT
+   judge, who then appears in a meeting he has nothing to do with. Give the line to the department head who's now
+   spawned in b20 (11, C).
+2. **b29, the player controls the wrong person for Jang's decision.** With the hand-off moved to the end, the player
+   is still Han when Jang's board ("Your partner can't speak") comes up, and through Jang's speech. Then control
+   passes to Jang when nothing is left to do (10).
+   - **Fix:** put the hand-off straight after "Seven minutes left." and spawn Han as an actor at the podium in the
+     same step (`["party", ["ms_jang"]]`, then `["spawn", "han", "ms_han", "b29", …]`). That keeps him on the map
+     for "Well done, Mr. Jang".
+3. **b17 and b17b now both have no board.** The book opens with two beats of a stranger and nothing to play (19). A
+   natural decision board is already in b17b: "That was all Oh said. But Park's eyes are shining, so Jang adds a
+   little more."
+   - **Fix:** caption *"Park's eyes are shining. Say more than Oh did?"*; opening thought *"It's only a little
+     more. He looks like he needs it."*; win line *"He adds a little more."*
+   - This makes Jang's meddling his own choice, which is exactly what he regrets in b20 ("he tried to play Park's
+     game for him") (22, A).
+4. **b27, a missing noun:** "Oh's slippers are poking out of Jang's." Jang's what? "…out of Jang's box."
+5. **b30, an unnamed thinker:** "Did she help them, or herself? Would she ever do that for Jang? What are they to
+   her?" Whose thoughts are these? If Lee's (her partner, whom she didn't help), say "Lee watches her: …".
