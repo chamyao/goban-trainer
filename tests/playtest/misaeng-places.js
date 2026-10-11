@@ -186,8 +186,8 @@ async function errands(b) {
 async function desks(b) {
   const p = await open(b, '21-m10', 'one-international--sales3', [], ['one-international--sales3']);
   const on = await p.evaluate(() => { const w = window.__w, r = w.refs || {}, at = (s, c) => !!w.spots[s] && !!r[c] && Math.hypot(w.spots[s].x - r[c].x, w.spots[s].y - r[c].y) < 20;
-    return { jang: ['m10', 'm14', 'm18', 'm19', 'm20', 'm22'].every(k => at(k, 'chair-jang')), mine: at('m21', 'chair-oh'),
-             kim: !!r['desk-kim'] && !!r['chair-kim'], oh: !!r['chair-oh'] }; });
+    return { jang: ['m10', 'm14', 'm18', 'm19', 'm20', 'm22'].every(k => at(k, 'desk-jang')), mine: at('m21', 'oh-desk'),
+             kim: !!r['desk-kim'], oh: !!r['oh-desk'] }; });
   check(on.jang, 'm10-m22: every beat Jang plays at his desk (m10, m14, m18, m19, m20, m22) is on his own chair (m13, Ahn\'s, is in the aisle beside it)');
   check(on.mine, 'm21: Oh\'s beat (he leads) is on his own chair');
   check(on.kim && on.oh, 'Sales 3: Kim and Oh have their own desks and chairs');
@@ -195,8 +195,8 @@ async function desks(b) {
   // the team sits at their own desks while the story has them in the office (apo110)
   const seated = async (upto) => { const q = await open(b, upto, 'one-international--sales3', [], ['one-international--sales3']);
     const v = await q.evaluate(() => { const w = window.__w, r = w.refs || {}, vis = id => w.npcs.filter(n => n.id.startsWith(id) && n.spr.visible);
-      const on = (id, c) => vis(id).some(n => r[c] && Math.hypot(n.spr.x - r[c].x, n.spr.y - r[c].y) < 20);
-      return { kim: on('kim-', 'chair-kim'), deputy: on('deputy', 'chair-deputy'), oh: on('oh-', 'chair-oh'), any: ['kim-', 'deputy', 'oh-'].some(i => vis(i).length) }; });
+      const on = (id, c) => vis(id).some(n => r[c] && Math.abs(n.spr.x - r[c].x) < 4 && n.spr.y > r[c].y && n.spr.y - r[c].y < 16);   // in the desk's own chair, at its front
+      return { kim: on('kim-', 'desk-kim'), deputy: on('deputy', 'desk-deputy'), oh: on('oh-', 'oh-desk'), any: ['kim-', 'deputy', 'oh-'].some(i => vis(i).length) }; });
     await q.context().close(); return v; };
   const day = await seated('21-m14'), night = await seated('21-m13'), ohLeads = await seated('21-m21');
   check(day.kim && day.deputy && day.oh, `m14: Kim, the deputy and Oh sit at their own desks (${JSON.stringify(day)})`);

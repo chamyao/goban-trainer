@@ -218,9 +218,12 @@ These were each learned from a real complaint, and each is a rule, not a one-off
 - **Spots that never share a stretch of the story may stand closer than 76 px**, if one names the others
   (`"near_ok": [ids]`): Oh's search of Jang's desk is live only from m20 until he has the scrap, when none of the
   beats on Jang's chair is open, and a giver that has given no longer goes off. Name them one by one, with the reason.
-- **A beat "at your desk" is on the desk's chair** (apo110: "each member should have their own desk as a destination
-  on the team floor"). Misaeng's Sales 3 gives each member a desk and a chair (`furn.chair`, walked over), and a beat
-  at someone's desk stands `"on"` their chair: the ring is at the chair, not on open floor.
+- **A beat "at your desk" is on the desk's own chair** (apo110: "each member should have their own desk"; the user:
+  "they are clearly not sitting at desks"). The desk's art draws its chair at its front, so a seat is a room's
+  `"seats": [{"id": "chair-kim", "of": "desk-kim"}]`: an unseen marker (`marker.seat`, plans.lay_seats) at the middle of
+  the desk's south edge, not a chair of its own. A spot or person `"on"` it is there (a person just past the edge,
+  facing N, so drawn in the chair, back to us); a scene's `"@chair-kim"` stages on the tile in front. No standalone
+  chairs beside desks.
 - **Walk-up spots keep 76 px apart.** A beat, a thing that gives, or a place to deliver to sets off within 36 px of
   her. Two closer than 76 px both go off as she walks by: in Misaeng's Sales 3, five spots 32 px apart in a row set
   each other off and m4's waiting scene kept firing between deliveries (Testing). The checker fails a pair closer than

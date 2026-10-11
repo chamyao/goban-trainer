@@ -209,50 +209,6 @@
    "label": "Oh's desk"
   },
   {
-   "kind": "furn.chair",
-   "x": 16,
-   "y": 6,
-   "w": 1,
-   "h": 1,
-   "id": "chair-kim",
-   "label": "Kim Dong-sik's chair"
-  },
-  {
-   "kind": "furn.chair",
-   "x": 18,
-   "y": 6,
-   "w": 1,
-   "h": 1,
-   "id": "chair-deputy",
-   "label": "The deputy's chair"
-  },
-  {
-   "kind": "furn.chair",
-   "x": 16,
-   "y": 12,
-   "w": 1,
-   "h": 1,
-   "id": "chair-jang",
-   "label": "Jang's chair"
-  },
-  {
-   "kind": "furn.chair",
-   "x": 18,
-   "y": 12,
-   "w": 1,
-   "h": 1,
-   "id": "chair-spare"
-  },
-  {
-   "kind": "furn.chair",
-   "x": 22,
-   "y": 6,
-   "w": 1,
-   "h": 1,
-   "id": "chair-oh",
-   "label": "Oh's chair"
-  },
-  {
    "kind": "furn.office_desk",
    "x": 26,
    "y": 8,
@@ -363,6 +319,55 @@
    "id": "spill",
    "label": "A spill",
    "when": "!mark:errand_floor"
+  },
+  {
+   "kind": "marker.seat",
+   "x": 16.5,
+   "y": 8,
+   "w": 1,
+   "h": 1,
+   "id": "chair-kim",
+   "of": "desk-kim",
+   "label": "Kim Dong-sik's chair"
+  },
+  {
+   "kind": "marker.seat",
+   "x": 18.5,
+   "y": 8,
+   "w": 1,
+   "h": 1,
+   "id": "chair-deputy",
+   "of": "desk-deputy",
+   "label": "The deputy's chair"
+  },
+  {
+   "kind": "marker.seat",
+   "x": 16.5,
+   "y": 10,
+   "w": 1,
+   "h": 1,
+   "id": "chair-jang",
+   "of": "desk-jang",
+   "label": "Jang's chair"
+  },
+  {
+   "kind": "marker.seat",
+   "x": 18.5,
+   "y": 10,
+   "w": 1,
+   "h": 1,
+   "id": "chair-spare",
+   "of": "desk-spare"
+  },
+  {
+   "kind": "marker.seat",
+   "x": 20.5,
+   "y": 7,
+   "w": 1,
+   "h": 1,
+   "id": "chair-oh",
+   "of": "oh-desk",
+   "label": "Oh's chair"
   }
  ],
  "spots": [
@@ -398,8 +403,8 @@
   },
   {
    "id": "m10",
-   "x": 16.5,
-   "y": 12.7,
+   "x": 17.0,
+   "y": 10.7,
    "node": "21-m10",
    "label": "Your desk",
    "on": "chair-jang"
@@ -413,48 +418,48 @@
   },
   {
    "id": "m14",
-   "x": 16.5,
-   "y": 12.7,
+   "x": 17.0,
+   "y": 10.7,
    "node": "21-m14",
    "label": "Your desk",
    "on": "chair-jang"
   },
   {
    "id": "m18",
-   "x": 16.5,
-   "y": 12.7,
+   "x": 17.0,
+   "y": 10.7,
    "node": "21-m18",
    "label": "Your desk",
    "on": "chair-jang"
   },
   {
    "id": "m19",
-   "x": 16.5,
-   "y": 12.7,
+   "x": 17.0,
+   "y": 10.7,
    "node": "21-m19",
    "label": "Your desk",
    "on": "chair-jang"
   },
   {
    "id": "m20",
-   "x": 16.5,
-   "y": 12.7,
+   "x": 17.0,
+   "y": 10.7,
    "node": "21-m20",
    "label": "Your desk",
    "on": "chair-jang"
   },
   {
    "id": "m21",
-   "x": 22.5,
-   "y": 6.7,
+   "x": 21.0,
+   "y": 7.7,
    "node": "21-m21",
    "label": "Your desk",
    "on": "chair-oh"
   },
   {
    "id": "m22",
-   "x": 16.5,
-   "y": 12.7,
+   "x": 17.0,
+   "y": 10.7,
    "node": "21-m22",
    "label": "Your desk",
    "on": "chair-jang"
@@ -491,8 +496,8 @@
   },
   {
    "id": "errand-copy",
-   "x": 16.5,
-   "y": 6.7,
+   "x": 17.0,
+   "y": 9.0,
    "node": "",
    "label": "Give Kim Dong-sik his copies",
    "needs": [
@@ -610,88 +615,88 @@
   {
    "id": "kim-day1",
    "kind": "hero.ms_kimds",
-   "x": 16.5,
-   "y": 6.9,
+   "x": 17.0,
+   "y": 9.2,
    "say": [
     "Kim Dong-sik types with two fingers, fast. “Busy, Jang. Later.”"
    ],
    "until": "21-m10",
-   "face": "S",
+   "face": "N",
    "when": "node:21-m8",
    "label": "Kim Dong-sik"
   },
   {
    "id": "kim-errand",
    "kind": "hero.ms_kimds",
-   "x": 16.5,
-   "y": 6.9,
+   "x": 17.0,
+   "y": 9.2,
    "say": [
     "Kim Dong-sik doesn't look up from his screen."
    ],
-   "face": "S",
+   "face": "N",
    "when": "node:21-m13",
    "label": "Kim Dong-sik"
   },
   {
    "id": "deputy-day1",
    "kind": "folk.salaryman",
-   "x": 18.5,
-   "y": 6.9,
+   "x": 19.0,
+   "y": 9.2,
    "say": [
     "The deputy is on the phone to a supplier, voice low and patient."
    ],
    "until": "21-m10",
-   "face": "S",
+   "face": "N",
    "when": "node:21-m8",
    "label": "The deputy"
   },
   {
    "id": "deputy",
    "kind": "folk.salaryman",
-   "x": 18.5,
-   "y": 6.9,
+   "x": 19.0,
+   "y": 9.2,
    "say": [
     "The deputy is on the phone to a supplier, voice low and patient."
    ],
-   "face": "S",
+   "face": "N",
    "when": "node:21-m13",
    "label": "The deputy"
   },
   {
    "id": "oh-day1",
    "kind": "hero.ms_oh",
-   "x": 22.5,
-   "y": 6.9,
+   "x": 21.0,
+   "y": 8.2,
    "say": [
     "Section head Oh reads a contract, red pen in hand. He doesn't look up."
    ],
    "until": "21-m10",
-   "face": "S",
+   "face": "N",
    "when": "node:21-m8",
    "label": "Oh Sang-sik"
   },
   {
    "id": "oh-day2",
    "kind": "hero.ms_oh",
-   "x": 22.5,
-   "y": 6.9,
+   "x": 21.0,
+   "y": 8.2,
    "say": [
     "Section head Oh reads a contract, red pen in hand. He doesn't look up."
    ],
    "until": "21-m20",
-   "face": "S",
+   "face": "N",
    "when": "node:21-m13",
    "label": "Oh Sang-sik"
   },
   {
    "id": "oh-day3",
    "kind": "hero.ms_oh",
-   "x": 22.5,
-   "y": 6.9,
+   "x": 21.0,
+   "y": 8.2,
    "say": [
     "Section head Oh reads a contract, red pen in hand. He doesn't look up."
    ],
-   "face": "S",
+   "face": "N",
    "when": "node:21-m21b",
    "label": "Oh Sang-sik"
   }

@@ -312,11 +312,7 @@ def _sales3():
         {"id": "desk-jang", "kind": "furn.office_desk", "rect": [8, 5, 1, 1], "label": "Jang's desk"},
         {"id": "desk-spare", "kind": "furn.office_desk", "rect": [9, 5, 1, 1], "label": "An empty desk"},
         {"id": "oh-desk", "kind": "furn.office_desk", "rect": [10, 3, 1, 2], "label": "Oh's desk"},
-        {"id": "chair-kim", "kind": "furn.chair", "rect": [8, 3, 1, 1], "label": "Kim Dong-sik's chair"},
-        {"id": "chair-deputy", "kind": "furn.chair", "rect": [9, 3, 1, 1], "label": "The deputy's chair"},
-        {"id": "chair-jang", "kind": "furn.chair", "rect": [8, 6, 1, 1], "label": "Jang's chair"},
-        {"id": "chair-spare", "kind": "furn.chair", "rect": [9, 6, 1, 1]},
-        {"id": "chair-oh", "kind": "furn.chair", "rect": [11, 3, 1, 1], "label": "Oh's chair"},
+
         # the team east
         *_desks([(13, 4), (14, 4), (13, 5), (14, 5)]),
         {"id": "head-e", "kind": "furn.office_desk", "rect": [15, 4, 1, 2]},
@@ -325,7 +321,14 @@ def _sales3():
         {"id": "meet-e", "kind": "furn.meeting_table", "rect": [13, 8, 2, 1]},
         {"id": "plant-sw", "kind": "furn.plant", "rect": [1, 10, 1, 1]},
         {"id": "plant-se", "kind": "furn.plant", "rect": [16, 10, 1, 1]},
-    ]) | {"label": "Sales Team 3"}
+    ]) | {"label": "Sales Team 3",
+          # each desk's own chair, the one its art draws at its front: where its owner sits, facing the desk (the user:
+          # "they are clearly not sitting at desks"), and where a beat "at your desk" stands (plans.lay_seats)
+          "seats": [{"id": "chair-kim", "of": "desk-kim", "label": "Kim Dong-sik's chair"},
+                    {"id": "chair-deputy", "of": "desk-deputy", "label": "The deputy's chair"},
+                    {"id": "chair-jang", "of": "desk-jang", "label": "Jang's chair"},
+                    {"id": "chair-spare", "of": "desk-spare"},
+                    {"id": "chair-oh", "of": "oh-desk", "label": "Oh's chair"}]}
 
 
 def _textile():
@@ -1192,7 +1195,7 @@ def _b1():
                 {"id": "m18", "at": [8, 6], "on": "chair-jang", "node": k(18), "label": "Your desk"},
                 {"id": "m19", "at": [8, 6], "on": "chair-jang", "node": k(19), "label": "Your desk"},
                 {"id": "m20", "at": [8, 6], "on": "chair-jang", "node": k(20), "label": "Your desk"},
-                {"id": "m21", "at": [11, 3], "on": "chair-oh", "node": k(21), "label": "Your desk"},   # Oh leads: his own desk   # Go comes over from Sales Team 1
+                {"id": "m21", "at": [10, 5], "on": "chair-oh", "node": k(21), "label": "Your desk"},   # Oh leads: his own desk   # Go comes over from Sales Team 1
                 {"id": "m22", "at": [8, 6], "on": "chair-jang", "node": k(22), "label": "Your desk"},   # back from Incheon
                 {"id": "m22b", "at": [4, 9], "node": k("22b"), "label": "The team's table"},
                 {"id": "sales3", "at": [15, 9], "label": "Sales Team 3", "note": "handoffs to Jang land here (6+ tiles from the next beat)"},
@@ -1242,7 +1245,7 @@ def _b1():
                 # first day (m8's hiring) to that evening (m10, then the hof and Jang's night alone); from the next
                 # dawn (m13) on. Oh is away while he leads (m20 -> m21b: his own desk, then Jongno). Jang's chair stays
                 # free for the player. Kim (kim-errand) is who takes the copies in m14.
-                *[{"id": i, "kind": kind, "place": "sales3", "at": at, "on": "chair-" + i.split("-")[0], "face": "S", "label": label, "say": say,
+                *[{"id": i, "kind": kind, "place": "sales3", "at": at, "on": "chair-" + i.split("-")[0], "face": "N", "label": label, "say": say,
                    "when": when, **({"until": until} if until else {})}
                   for i, kind, at, label, say, when, until in (
                       ("kim-day1", "hero.ms_kimds", [8, 3], "Kim Dong-sik", "Kim Dong-sik types with two fingers, fast. “Busy, Jang. Later.”", n(8), n(10)),

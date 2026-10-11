@@ -338,6 +338,7 @@ KINDS.update({
     "prop.machine": (4, 2, True),            # a plant's machine (Ulsan)
     "furn.cleaning_cupboard": (1, 1, True),  # a cleaning cupboard: mop and bucket (Sales 3)
     "prop.spill": (1, 1, False),             # a coffee spill on the carpet, walked over
+    "marker.seat": (1, 1, False),            # a desk's seat (plans.lay_seats): unseen, a place for people and spots
 })
 FALLBACK.update({
     "building.office_tower": ["building.tower", "building.hall_grand", "building.hall"],

@@ -112,6 +112,8 @@ class Stage:
                         self.block.add((x, y))
         # the map's named things, by id: a scene can put someone on one ("@chair-kim": Misaeng's desks, each to its owner)
         self.things = {o["id"]: (o["x"] + o["w"] // 2, o["y"] + o["h"] // 2) for o in m["objects"] if o.get("id")}
+        # a desk's seat (plans.lay_seats, half a tile in): the tile in front of the desk, its right half under the middle
+        self.things.update({o["id"]: (int(o["x"] + .5), int(o["y"]) + 1) for o in m["objects"] if o["kind"] == "marker.seat"})
         self.spot = (int(spot["x"]), int(spot["y"]))
         if spot.get("on") in self.things:   # a spot "on" a thing (Jang's chair): the party is there, not mid-floor
             self.spot = self.things[spot["on"]]
