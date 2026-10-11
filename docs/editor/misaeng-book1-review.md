@@ -741,3 +741,41 @@ Checked in the raw steps, with the E8 audits.
   the emote and the second line only.
 - **m21:** "Oh means to find out how it got there." sits a walk away from the find, so "it" is loose. Try "how Kim
   Seok-ho's scrap got there".
+
+---
+
+## Round 5: playtest fixes on Ahn, m16 and m17 (claude/plot-alt2 5daa953d)
+
+Checked in the raw steps with the E8 audits.
+
+**Works:**
+- **m17 now agrees with itself.** The neutral definition of sente, the board "Han plays first. Answer him.", the win
+  line "Answered. But Han still leads." and the close "He has a partner now. Han has sente." all say the same thing
+  (14).
+- **m16's new order.** Being left alone now comes first, so Han's offer lands on it.
+- **m19c's Ahn.** She was sent, says it briefly and leaves. "Get to his centre, or get blown away" is cooler and
+  better.
+- **m12 → m13.** Her own report as the reason she goes back to the office is the right kind of cold motive.
+
+**Problems, ranked:**
+1. **m19 still pays off the old m17** (audit A: re-check payoffs when a setup changes). "He was raised to compete,
+   and he doesn't hand over sente" now contradicts m17, where he just did hand it over.
+   - **Fix:** "…but he was raised to compete. He handed over sente once. Not again." This also makes m19 the turn the
+     playtester wanted after m17's passivity.
+2. **m12's opening still has Ahn warmly "watching out for him"**, which is the exact thing the playtester flagged:
+   "has been watching. She catches Jang's sleeve and steers him out…", "Hey, new kid. Pull yourself together.", "You
+   haven't said a word all night. You won't learn just by listening."
+   - **Fix:** "Ahn Young-yi, top of their intake and the only woman there, gets up to leave. At the door she stops
+     beside Jang without looking at him." Cut the "won't learn just by listening" line, and keep her two curt ones:
+     "You've got filing due tomorrow, and you're sitting here?" and the proverb.
+3. **m13: "On her way out" contradicts m12.** She went to the office to finish her report, so the player sees her
+   arriving, not leaving (audit C).
+   - **Fix:** "Her report done, Ahn passes Jang's desk on her way out and stops."
+4. **m16 staging: "Ahn passes him on the forecourt without slowing down"**, but in the raw steps she stays on the map
+   through a still and a whole board before her last line.
+   - **Fix:** either `move` her a few steps on before the board and have her say the last line over her shoulder
+     ("She calls back, without turning round:"), or put "Then stop waiting to be picked." straight after her first
+     line and remove her before the ringed still.
+5. **Nit, m16:** with "As the saying goes" gone, the onlooker line is a baduk saying from a non-player again. m12
+   already established that baduk sayings are everyday speech, so this is fine, but "As they say," would keep her
+   distance from baduk clear.
