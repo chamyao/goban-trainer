@@ -254,7 +254,7 @@ def _scenes():
             ["problem"],   # the record: Black 7
             N("Better plain and on time than perfect and late."),
             ["spawn", "ahn", "ms_ahn", "m14", 16, 8],
-            S("ms_ahn", "The PT dates are set: the first week of next month, a whole week at the training centre. There's an individual task and a team task, so start thinking about partners."),
+            S("ms_ahn", "The PT dates are set: the first week of next month, two days of presentations. There's an individual task and a team task, so start thinking about partners."),
             ["remove", "ahn"],
             ["spawn", "kd", "ms_kimds", "m14", "@chair-kim"],
             S("ms_kimds", "Everyone's going to want you. You've got no confidence and no skills, and if you pair with a sure dud, you shine."),
@@ -886,7 +886,7 @@ KO21 = {
     "Can I borrow your glue? Our supply cabinet's locked and nobody will give me the key.": '풀 좀 빌릴 수 있을까요? 우리 비품함은 잠겨 있는데 아무도 열쇠를 안 줘요.',
     'Our kid. He called him our kid.': '우리 애. 그를 우리 애라고 불렀다.',
     "Go had taken a buyer, and Steve, to a dog-meat restaurant and never apologised. Ever since, Steve has been sitting on Sales Team 1's approvals.": '고 과장은 바이어와 스티브를 보신탕집에 데려갔고, 끝내 사과하지 않았다. 그 뒤로 스티브는 영업 1팀의 결재를 묶어 두고 있다.',
-    "The PT dates are set: the first week of next month, a whole week at the training centre. There's an individual task and a team task, so start thinking about partners.": 'PT 날짜 나왔어요. 다음 달 첫 주, 연수원에서 일주일 내내요. 개인 과제랑 팀 과제가 있으니까 파트너 생각해 둬요.',
+    "The PT dates are set: the first week of next month, two days of presentations. There's an individual task and a team task, so start thinking about partners.": 'PT 날짜 나왔어요. 다음 달 첫 주, 이틀 동안 발표해요. 개인 과제랑 팀 과제가 있으니까 파트너 생각해 둬요.',
     'Two groups locked together. Does one of them have to die?': '맞물린 두 무리. 둘 중 하나는 꼭 죽어야 하나?',
     'Your old sponsor was asking after you, the man who paid for all your baduk. Go and see him.': '네 바둑 뒷바라지해 주신 예전 후원자분이 네 안부를 물으셨다. 가서 뵙고 와.',
     'Again, he decides and I obey?': '또 그가 정하고 나는 따르고?',
