@@ -775,6 +775,11 @@ KO21 = {
     '“…Oh. Of course. Thank you. This is my stop too.”': '"…아. 그렇구나. 고마워요. 저도 여기서 내려요."',
     'The man with the pocket board is on the next problem.': '포켓 바둑판을 든 남자는 다음 문제를 풀고 있다.',
     "Kim Dong-sik doesn't look up from his screen.": '김동식 대리는 모니터에서 눈을 떼지 않는다.',
+    'Kim Dong-sik types with two fingers, fast. “Busy, Jang. Later.”': '김동식 대리는 독수리 타법으로, 빠르게 친다. “바빠, 장그래. 나중에.”',
+    'The deputy is on the phone to a supplier, voice low and patient.': '차장은 거래처와 통화 중이다. 낮고 차분한 목소리.',
+    'Section head Oh reads a contract, red pen in hand. He doesn\'t look up.': '오 과장은 빨간 펜을 들고 계약서를 읽는다. 고개도 들지 않는다.',
+    'The deputy': '차장',
+    'Oh Sang-sik': '오상식',
     'Section head Oh is on the phone, and holds up one finger.': '오 과장은 통화 중이다. 손가락 하나를 들어 보인다.',
     'The deputy turns his empty cup round and round.': '차장이 빈 컵을 빙글빙글 돌린다.',
     # Places' map lines for the rewritten Book 1 (claude/places-misaeng bc9b524)
