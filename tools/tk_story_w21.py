@@ -292,6 +292,7 @@ def _scenes():
 
         # M18 · 10수 (W). Kinder and warmer; "Again!"; the interns' gossip and Ahn's "nuclear bomb"; "Find it yourself."; Han scolded at Ulsan.
         "m18": {"title": T("Again!"), "kind": "main", "steps": [
+            ["offstage", "ms_han"],   # Han is on the phone: heard, never brought on
             N("Five weeks to the PT. Han said Jang could build it his way."),
             N("After years of fighting alone at a board, the office feels kinder and warmer. He emails Han three ideas for the PT."),
             ["gain", "phone_text"],
@@ -315,6 +316,7 @@ def _scenes():
 
         # M19 · 11수 (W). Oh on the layout; the second call: "Again?"; Black 11; Jang takes the PT back; the age question.
         "m19": {"title": T("How Old Are You?"), "kind": "main", "steps": [
+            ["offstage", "ms_han"],   # Han is on the phone: heard, never brought on
             N("Four weeks to the PT, and his partner keeps sending his work back."),
             ["problem"],   # the record: Black 11
             N("He works all night on three new ideas, forty pages each. In the morning, Oh tears into a team document he made."),
