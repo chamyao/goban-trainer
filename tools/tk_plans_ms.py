@@ -279,12 +279,13 @@ def _give(sid, at, label, item, when, give, given):
     return {"id": sid, "at": at, "label": label, "gives": item, "gives_when": when, "give": [give], "given": [given]}
 
 
-def _deliver(sid, at, label, item, mark, when, deliver, waiting, delivered=None, set_down=False):
+def _deliver(sid, at, label, item, mark, when, deliver, waiting, delivered=None, set_down=False, to=None):
     """A handoff: it takes the item from the bag and sets its mark. It's made to whoever stands within 64 px of it (the
     engine's rule), so the book stands its recipient beside it while it's open (the build fails a delivery with no one
     there: apo110 handed things "to circles not people"), unless it's set down at a place ("set_down": a seat)."""
     return {"id": sid, "at": at, "label": label, "needs": [f"item:{item}"], "when": when, "delivers": mark, "takes": True,
-            "deliver": [deliver], "waiting": [waiting], "delivered": [delivered or deliver], **({"set_down": True} if set_down else {})}
+            "deliver": [deliver], "waiting": [waiting], "delivered": [delivered or deliver], **({"set_down": True} if set_down else {}),
+            **({"to": to} if to else {})}   # to: the npc who takes it (the spot moves to their feet)
 
 
 # =========================================================================================
@@ -1168,12 +1169,13 @@ def _b1():
             "Jongno": [{"id": "m16", "at": [15, 6], "node": k(16), "label": "The plaza"},
                        # m21b: out of the hof after drinks, on the street by its door; Go's team comes up the street
                        {"id": "m21b", "at": [13, 13], "node": k("21b"), "label": "Outside the hof"}],
-            # m10's gate: Kim's requisition (given in m8's scene), handed to the clerk at General Affairs' counter
+            # m10's gate: Kim's requisition (given in m8's scene), handed to the clerk at General Affairs' counter. A handoff
+            # spot stands at its taker's feet, so the ring that marks it is on the person (apo110: "fetched from a circle")
             "One International/general-affairs": [
-                _deliver("ga-counter", [6, 4], "General Affairs' counter", "requisition", "requisition", n(8),
+                _deliver("ga-counter", [5, 3], "Hand Kim's requisition to the clerk", "requisition", "requisition", n(8),
                          "The clerk stamps Kim Dong-sik's requisition without reading it. “Supplies are by the lift. Sign here.”",
                          "The clerk looks up. “Requisition? You need the form. Signed.”",
-                         "General Affairs has the requisition.")],
+                         "General Affairs has the requisition.", to="ga-clerk")],
             "Jongno/hof": [{"id": "m12", "at": [7, 6], "node": k(12), "label": "The hof"}],
             sales3: [
                 # (every spot you walk up to here at least 76 px from every giver and delivery)
@@ -1190,10 +1192,10 @@ def _b1():
                 # m14's pile-up, all at once (episode 7): the forwarder on the team phone, Kim's copies, the floor
                 _give("copier", [2, 2], "The copier", "copy", n(13), "The copier groans out Kim Dong-sik's copies, warm.",
                       "The copier. You've done Kim's copies."),
-                _deliver("errand-copy", [9, 6], "Kim Dong-sik's desk", "copy", "errand_copy", n(13),
+                _deliver("errand-copy", [9, 6], "Give Kim Dong-sik his copies", "copy", "errand_copy", n(13),
                          "Kim Dong-sik takes the copies without looking up. “Thirty? I said thirty-two. …No, thirty. Fine.”",
                          "Kim Dong-sik taps the desk. “The copies, Jang. Today, if you can.”",
-                         "Kim Dong-sik is reading the copies."),
+                         "Kim Dong-sik is reading the copies.", to="kim-errand"),
                 {"id": "errand-bl", "at": [6, 5], "label": "The team phone", "needs": [n(13)], "when": n(13), "delivers": "errand_bl",
                  "set_down": True,
                  "deliver": ["You ring the forwarder about the B/L. On hold. Then a voice: the bill of lading went out this morning. You write it down."],
@@ -1219,7 +1221,7 @@ def _b1():
                 {"id": "ga-clerk", "kind": "folk.officewoman", "place": "general-affairs", "at": [5, 3], "face": "S", "label": "General Affairs",
                  "say": "A clerk at General Affairs' counter, sorting forms into trays."},
                 # m14: Kim Dong-sik at his desk for his copies
-                {"id": "kim-errand", "kind": "hero.ms_kimds", "place": "sales3", "at": [10, 6], "face": "W", "label": "Kim Dong-sik",
+                {"id": "kim-errand", "kind": "hero.ms_kimds", "place": "sales3", "at": [9, 6], "face": "S", "label": "Kim Dong-sik",
                  "when": n(13), "until": n(14), "say": "Kim Dong-sik doesn't look up from his screen."},
             ],
             # episode 1's evening, as Jongno's townsfolk while m5 is open: the city's office workers after hours

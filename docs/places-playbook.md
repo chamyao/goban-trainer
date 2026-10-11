@@ -211,6 +211,10 @@ These were each learned from a real complaint, and each is a rule, not a one-off
   talked to; with no one there she hands things to a ring on the floor (apo110, Misaeng's errands). The book stands
   the recipient beside each delivery while it's open, and the build (plans.py verify) fails a delivery spot with no one
   within 64 px, unless it's `"set_down"` (a place to put something: the board room's seats). Books 12-15 pass.
+  Beside isn't enough: the gold ring that marks a delivery is drawn at the spot, so a spot a tile from its taker still
+  reads as a circle on the floor (apo110 again, at General Affairs: "fetched from a circle with nothing to mark the
+  destination"). Name the taker (`"to": <npc id>`, `_deliver(..., to=...)`): the build moves the spot to their feet,
+  so the ring and the diamond are on the person. Label it with the act ("Hand Kim's requisition to the clerk").
 - **Walk-up spots keep 76 px apart.** A beat, a thing that gives, or a place to deliver to sets off within 36 px of
   her. Two closer than 76 px both go off as she walks by: in Misaeng's Sales 3, five spots 32 px apart in a row set
   each other off and m4's waiting scene kept firing between deliveries (Testing). The checker fails a pair closer than
