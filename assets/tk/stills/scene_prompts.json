@@ -1306,7 +1306,7 @@
   "category": "interlude",
   "beat": "Ahn Young-yi pulls him aside at the interns' bar.",
   "scene": "A noisy Korean hof (beer pub) full of young interns in office clothes around crowded tables of beer and fried chicken. In the foreground, near the door, Ahn Young-yi has hold of Jang Geu-rae's sleeve and has pulled him away from the table; she is speaking to him, firm and direct. Behind them an intern in glasses holds up a full glass.",
-  "notes": "Book 21 (Misaeng Book 1), docs/book2/misaeng-arc.md. Modern Seoul, 2012. An original illustration, not a recreation of the comic's panels. People named as CAST names them, so their looks come from CAST. Beat m12."
+  "notes": "Book 21 (Misaeng Book 1), docs/book2/misaeng-arc.md. Modern Seoul, 2012. An original illustration, not a recreation of the comic's panels. People named as CAST names them, so their looks come from CAST. Beat m12. The user asked for this moment ('the pull yourself together scene')."
  },
  "ms_rush": {
   "book": 21,
@@ -1363,12 +1363,5 @@
   "beat": "The thirteenth floor: two department heads face off.",
   "scene": "An open-plan office floor. In the middle aisle, Steve Han, sharp suit, arms folded, faces Kim Bu-ryeon, who holds a very thick bound report. Around them, staff peer over their partitions and pretend to work. Tense, silent, everyone watching.",
   "notes": "Book 21 (Misaeng Book 1), docs/book2/misaeng-arc.md. Modern Seoul, 2012. An original illustration, not a recreation of the comic's panels. People named as CAST names them, so their looks come from CAST. Beat m22."
- },
- "ms_intern": {
-  "book": 21,
-  "category": "interlude",
-  "beat": "Human Resources: he is only an intern, with two months to pass the PT.",
-  "scene": "A plain HR office at One International: a desk, a filing cabinet, a company logo on the wall. An HR staffer slides a temporary ID card on a lanyard, marked INTERN, across the desk to Jang Geu-rae, who stands in his new suit looking at it. Beside him, Oh Sang-sik, still in his hiking jacket, stares at the card in open disbelief: this is his reinforcement? A wall calendar shows a date circled two months ahead.",
-  "notes": "Book 21 (Misaeng Book 1), docs/book2/misaeng-arc.md. Modern Seoul, 2012. An original illustration, not a recreation of the comic's panels. People named as CAST names them. Beat m8 (the user: 'Perhaps the an intern scene should be a still')."
  }
 }
