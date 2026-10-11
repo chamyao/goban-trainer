@@ -921,6 +921,8 @@ KO21 = {
     "The waybill came off Jang's desk. Let's have a look at that desk first.": '선하증권은 장그래 책상에서 나왔어. 그 책상부터 좀 보자.',
     "The waybill came from Jang's desk. Go and look at it, then back to your desk.": '선하증권은 장그래 책상에서 나왔다. 가서 살펴보고, 자기 자리로 돌아가라.',
     'Jang never does get round to the shredding that day.': '장그래는 그날 끝내 파쇄를 하지 못한다.',
+    'Jang\'s desk. The glue stick lies uncapped among paper trimmings. You turn the waybill over: glued to the back is a torn scrap of someone\'s weekly report. Internship. A name: Kim Seok-ho.': '장그래의 책상. 뚜껑 열린 풀이 종이 부스러기 사이에 놓여 있다. 선하증권을 뒤집어 본다. 뒷면에 누군가의 주간 보고서 조각이 붙어 있다. 인턴. 이름은 김석호.',
+    "Jang's desk. You've already found what it had to tell you.": '장그래의 책상. 알아낼 건 이미 다 알아냈다.',
     "Oh keeps the waybill. Jang owned up, but something about it doesn't sit right.": '오 과장은 선하증권을 챙겨 둔다. 장그래가 자기 잘못이라 했지만, 어딘가 석연치 않다.',
     "I said you'd share it with me. I never said I'd keep my mouth shut.": '공유하라고 했지, 내가 입 다물고 있겠다고는 안 했어요.',
     "That's a secret.": '그건 비밀.',
