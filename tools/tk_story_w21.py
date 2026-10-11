@@ -974,6 +974,10 @@ KO21 = {
     # Places (Misaeng), Sales 3 desks and chairs (ea9df77)
     'Your desk': '네 자리',
     'Your desk, at night': '밤의 네 자리',
+    "Jang's desk, at night": '밤의 장그래 자리',
+    'Your desk, Sales Team 3.': '영업 3팀, 네 자리.',
+    'Back to your desk, Sales Team 3.': '영업 3팀, 네 자리로 돌아가라.',
+    "Jang's desk, Sales Team 3.": '영업 3팀, 장그래의 자리.',
     "Kim Dong-sik's chair": '김동식 대리의 의자',
     "The deputy's chair": '차장의 의자',
     "Jang's chair": '장그래의 의자',
