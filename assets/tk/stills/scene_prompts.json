@@ -1223,5 +1223,33 @@
   "beat": "Only the one inside the board doesn't see it; everyone watching does.",
   "scene": "A memory in dark tones: a thin sixteen-year-old Korean trainee with a black fringe, in a grey hoodie, sits alone at a go board in the Korea Baduk Association's trainee room, frowning at the stones; around him a tight ring of onlookers, other trainees and adults, lean in, all of them seeing something he can't. Low light on the board, the faces around it in shadow.",
   "notes": "Book 21 (Misaeng Book 1, The First Move), docs/book2/misaeng-arc.md. Beat m16 (episode 8). Graphics: the people's looks are left to CAST. Graphics: the boy described, not named, so CAST doesn't put the adult Jang's suit on him."
+ },
+ "ms_class": {
+  "book": 21,
+  "category": "prologue",
+  "beat": "The neighbourhood baduk class; the small boy already beating the grown-ups' bets.",
+  "scene": "A small second-floor baduk class above a row of shops in a 1990s Seoul neighbourhood: low tables, worn wooden boards, plastic bowls of stones, a hand-written ranking chart on the wall. A boy of about seven, in a striped T-shirt, leans over a board, chin almost on the stones, while two grown men behind him (an uncle in a sweater, a father in shirtsleeves) watch with cash folded in their hands. Afternoon light through a dusty window.",
+  "notes": "Book 21 (Misaeng Book 1), docs/book2/misaeng-arc.md. Modern Seoul, 1990s flashback. Beat m1, the childhood montage (playtest: a still per step). The boy differs from CAST's adult Jang: describe him, don't name him."
+ },
+ "ms_academy_dawn": {
+  "book": 21,
+  "category": "prologue",
+  "beat": "A nine-year-old alone at dawn with a problem book.",
+  "scene": "Before dawn in a cramped family room in 1990s Seoul. A boy of about nine sits cross-legged on the floor at a folding go board, a thick dog-eared problem book open beside him, laying out stones by the light of a single desk lamp. Everyone else is asleep: a rolled-up futon, a parent's slippers by the door. Blue light just starting at the window.",
+  "notes": "Book 21 (Misaeng Book 1), docs/book2/misaeng-arc.md. Modern Seoul, 1990s flashback. Beat m1, the childhood montage (playtest: a still per step). The boy differs from CAST's adult Jang: describe him, don't name him."
+ },
+ "ms_dojang": {
+  "book": 21,
+  "category": "prologue",
+  "beat": "A professional's dojang; 'prodigy' to his parents; the father's company going under.",
+  "scene": "A professional player's baduk dojang in Seoul: a quiet room of serious children at boards, a teacher's framed certificate on the wall. In the doorway, a boy of about ten in a school uniform turns back to look at his parents waiting in the corridor: a father in a creased suit holding a folder of bills, a mother smiling too brightly. Split mood: the bright room, the dim corridor.",
+  "notes": "Book 21 (Misaeng Book 1), docs/book2/misaeng-arc.md. Modern Seoul, 1990s flashback. Beat m1, the childhood montage (playtest: a still per step). The boy differs from CAST's adult Jang: describe him, don't name him."
+ },
+ "ms_trainees11": {
+  "book": 21,
+  "category": "prologue",
+  "beat": "At eleven, the Korea Baduk Association trainees' room.",
+  "scene": "A long bright room at the Korea Baduk Association: rows of go boards on low tables, dozens of children and young teenagers playing in silence, game clocks ticking. Among them, at a middle table, a boy of eleven with a fringe sits very straight, hands in his lap, facing an older opponent. Newspaper clippings of famous players are pinned on a corkboard by the door.",
+  "notes": "Book 21 (Misaeng Book 1), docs/book2/misaeng-arc.md. Modern Seoul, 1990s flashback. Beat m1, the childhood montage (playtest: a still per step). The boy differs from CAST's adult Jang: describe him, don't name him."
  }
 }
