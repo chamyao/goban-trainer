@@ -219,16 +219,15 @@ def _scenes():
             S("ms_ahn", "And you've got filing due tomorrow, but you're sitting here? Make your own stones safe before you attack."),
             ["problem"],   # Jang: secure your own group first
             N("It's an old baduk proverb that even people who've never played use. He's lived by it his whole life, and he had to hear it from someone else. He runs back to the office."),
-            S("ms_ahn", "You kept him here when you knew he had filing due tomorrow. Come on. You're going to go and apologise."),
+            N("Ahn watches him go, then heads back to the office herself."),
             ["remove", "ahn"], ["remove", "gl"],
-            ["party", ["ms_ahn"]],   # the lead passes to Ahn: she takes the glasses intern back to the office (her stretch, m13)
+            ["party", ["ms_ahn"]],   # the lead passes to Ahn: she heads back to the office (her stretch, m13)
         ]},
 
-        # M13 · 6수 (W). Ahn leads: the apology; her review; both schemes live (상생). The dream of the stones.
+        # M13 · 6수 (W). Ahn leads: her review (the apology cut on playtest); both schemes live (상생). The dream of the stones.
         "m13": {"title": T("Both Live"), "kind": "main", "steps": [
-            ["spawn", "jg", "ms_jang", "m13", "@chair-jang"], ["spawn", "gl", "ms_glasses", "m13", 16, 8],
+            ["spawn", "jg", "ms_jang", "m13", "@chair-jang"],
             ["spawn", "oh", "ms_oh", "m13", "@chair-oh"], ["spawn", "kd", "ms_kimds", "m13", "@chair-kim"],
-            S("ms_glasses", "Sorry. I shouldn't have kept you out."),
             N("On Jang's desk are two ways of filing the same papers: Kim's, which the whole team knows, and Jang's new one, which is better but only he understands. "
               "Kim wants his own back. One of them, it seems, has to go."),
             S("ms_ahn", "His system makes sense. The trouble is, everyone on staff already knows the old one."),
@@ -237,7 +236,7 @@ def _scenes():
             S("ms_ahn", "Keep Mr. Kim's order for the executives' file, but use Jang's cross-index from the planning stage. Then the departments could actually line up."),
             S("ms_kimds", "...Good idea."),
             N("She kept her own group alive, and his too. Both live."),
-            ["remove", "jg"], ["remove", "gl"], ["remove", "oh"], ["remove", "kd"],
+            ["remove", "jg"], ["remove", "oh"], ["remove", "kd"],
             ["still", "ms_25stones", "slow zoom out"],
             N("That night he dreams of a board: rows of white stones, and one black."),
             ["party", ["ms_jang"], {"to": {"place": "Susaek-dong", "spot": "home"}}],   # a cut: the next dawn; the commute
@@ -978,8 +977,7 @@ KO21 = {
     'He has a whole cabinet to re-sort by morning. The glasses intern steers him out of the door anyway.': '아침까지 캐비닛 하나를 다시 정리해야 한다. 그래도 안경 쓴 인턴은 그를 문밖으로 끌고 나간다.',
     'The bar is full of interns pitching PT topics. Every time Jang reaches for his bag to leave, the glasses intern refills his glass and pulls him back down.': '술집은 PT 주제를 쏟아 내는 인턴들로 가득하다. 장그래가 가방을 집어 들 때마다 안경 쓴 인턴이 잔을 채우고 그를 다시 앉힌다.',
     "Sit, sit. You can't leave before we've picked the dud. Well, we all know who it is.": '앉아, 앉아. 폭탄 고르기 전엔 못 가. 뭐, 누군지 다 알지만.',
-    "You kept him here when you knew he had filing due tomorrow. Come on. You're going to go and apologise.": '내일까지 정리할 서류가 있는 거 알면서 붙잡아 뒀잖아요. 가요. 가서 사과해요.',
-    "Sorry. I shouldn't have kept you out.": '미안해요. 붙잡아 두지 말았어야 했는데.',
+    'Ahn watches him go, then heads back to the office herself.': '안영이는 그가 가는 걸 지켜보다가, 자신도 사무실로 돌아간다.',
     "On Jang's desk are two ways of filing the same papers: Kim's, which the whole team knows, and Jang's new one, which is better but only he understands. Kim wants his own back. One of them, it seems, has to go.": '장그래의 책상에는 같은 서류를 정리하는 두 가지 방식이 있다. 팀 모두가 아는 김 대리의 방식, 그리고 더 낫지만 장그래만 아는 새 방식. 김 대리는 자기 방식을 되돌려 놓으라 한다. 둘 중 하나는 사라져야 할 것 같다.',
     'In baduk, two groups locked together can sometimes both live, if neither side forces the issue. Ahn has found the way.': '바둑에서는 맞물린 두 무리가, 어느 쪽도 무리하지 않으면 둘 다 살 때가 있다. 안영이는 그 길을 찾았다.',
     'Hey, new kid. Pull yourself together.': '이봐요, 신입. 정신 좀 차려요.',
