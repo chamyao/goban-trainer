@@ -1666,6 +1666,7 @@ function tkLevelBuild(host, worldN, key, { w, node, src, p, book }, { back, agai
       ...(TKVoice.has(node.boss.taunt_vid) ? [h("button", { class: "tk-say", type: "button", onclick: () => TKVoice.play(node.boss.taunt_vid) }, "播放 Play")] : [])]),
   ]) : null;
   if (node.boss) TKVoice.play(node.boss.taunt_vid);
+  const stakes = p.record ? null : TKElo.stakesEl(w, [src.id, p.id]) || null;
   const aside = h("aside", {}, [
     ...(bossPanel ? [bossPanel] : []),
     h("div", { class: "panel" }, [
@@ -1675,6 +1676,7 @@ function tkLevelBuild(host, worldN, key, { w, node, src, p, book }, { back, agai
       h("div", { class: "meta-sub" }, [node.role === "boss" ? "" : `出自 from ${src.title} · `, p.url ? h("a", { href: p.url, target: "_blank" }, "来源 source")
                                                                  : h("a", { href: `https://www.101weiqi.com/q/${p.id}/`, target: "_blank" }, "来源 source")]),
       h("div", { class: "badges" }, [...(p.lv || node.grade ? [h("span", { class: "badge" }, p.lv || node.grade)] : []), ...(p.qt ? [h("span", { class: "badge" }, p.qt)] : []), turnBadge]),
+      stakes || "",
     ]),
     h("div", { class: "panel" }, [h("h2", {}, "状态 Status"), status, note, verdict]),
     treePanel,
@@ -1703,7 +1705,7 @@ function tkLevelBuild(host, worldN, key, { w, node, src, p, book }, { back, agai
     if (!verdict.isConnected) return removeEventListener("tczw:result", onResult);
     if (trainer !== t || settled) return;
     settled = true;
-    if (!p.record) TKElo.result(w, node, [src.id, p.id], e.detail === "ok" && !t.flawed);   // adaptive difficulty: first try only (a record board isn't rated)
+    if (!p.record) { const d = TKElo.result(w, node, [src.id, p.id], e.detail === "ok" && !t.flawed); if (stakes) stakes.settle(d); }   // adaptive difficulty: first try only (a record board isn't rated)
     verdict.innerHTML = "";
     if (e.detail === "ok" && !t.flawed) {
       TK.markCleared(key);
@@ -1857,6 +1859,8 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
     `${p.lv || node.grade || ""} · 死活 · `, node.role === "boss" ? "" : `出自 ${src.title} · `,
     h("a", { href: p.url || `https://www.101weiqi.com/q/${p.id}/`, target: "_blank", rel: "noopener" }, "来源 source"),
   ]);
+  const stakes = p.record ? null : TKElo.stakesEl(TK.world(worldN), [src.id, p.id]) || null;
+  if (stakes) srcLine.append(" · ", stakes);
   // a decision board: the leader's choice named in the side column, over what's said
   const nth = Math.max(0, (+String(key).split("~")[1] || 1) - 1);   // which board of the scene
   const dil = Array.isArray(node.dilemma) ? node.dilemma[Math.min(nth, node.dilemma.length - 1)] : node.dilemma;
@@ -1948,7 +1952,7 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
     if (!box.isConnected) return removeEventListener("tczw:result", onResult);
     if (trainer !== t || settled) return;
     settled = true;
-    if (!p.record) TKElo.result(TK.world(worldN), node, [src.id, p.id], e.detail === "ok" && !t.flawed);   // adaptive difficulty: first try only (a record board isn't rated)
+    if (!p.record) { const d = TKElo.result(TK.world(worldN), node, [src.id, p.id], e.detail === "ok" && !t.flawed); if (stakes) stakes.settle(d); }   // adaptive difficulty: first try only (a record board isn't rated)
     const go = (label, fn) => h("button", { type: "button", class: "tk-duel-go", onclick: fn }, [label, h("b", {}, " ⏎")]);
     if (e.detail === "ok" && !t.flawed) {
       TK.markCleared(key);
@@ -2300,10 +2304,37 @@ const TKElo = {
     if (TK.mode !== "adaptive" || !w || !w.rated || !node) return;
     const x = w.rated.find(y => y[0] === ref[0] && y[1] === ref[1]);
     if (!x) return;
-    const p = loadProgress(), s = this.state(p), E = 1 / (1 + Math.pow(10, (this.of(x[2]) - s.r) / 400));
-    s.r = Math.round(Math.max(300, Math.min(2800, s.r + (s.n < 10 ? 96 : s.n < 30 ? 64 : 32) * ((win ? 1 : 0) - E))));
+    const p = loadProgress(), s = this.state(p), r0 = s.r;
+    s.r = this.after(s, x[2], win);
     s.n = (s.n || 0) + 1;
     TK.saveProg(p);
+    return s.r - r0;
+  },
+  // the rating after a first answer to a problem of this rank (faster for the first ten boards)
+  after(s, rank, win) {
+    const E = 1 / (1 + Math.pow(10, (this.of(rank) - s.r) / 400));
+    return Math.round(Math.max(300, Math.min(2800, s.r + (s.n < 10 ? 96 : s.n < 30 ? 64 : 32) * ((win ? 1 : 0) - E))));
+  },
+  // what a problem is worth before it's answered (the user: "+x / -x" on the board): null if it isn't rated
+  stakes(w, ref) {
+    const x = TK.mode === "adaptive" && w && w.rated && w.rated.find(y => y[0] === ref[0] && String(y[1]) === String(ref[1]));
+    if (!x) return null;
+    const s = this.state();
+    return { win: this.after(s, x[2], true) - s.r, loss: this.after(s, x[2], false) - s.r };
+  },
+  // the line under a rated board: "+8 / −24" before, the change and the new rating after
+  stakesEl(w, ref, zh = true) {
+    const k = this.stakes(w, ref), lead = zh ? "等级分 rating" : "Rating";
+    if (!k) return "";
+    const el = document.createElement("span");
+    el.className = "tk-stakes";
+    el.title = "How a first-try answer moves your rating: right / wrong (a hint, an undo or a wrong move counts as wrong)";
+    el.innerHTML = `${lead} <b class="up">+${k.win}</b> / <b class="down">−${-k.loss}</b>`;
+    el.settle = d => {
+      if (d == null) return;
+      el.innerHTML = `${lead} <b class="${d >= 0 ? "up" : "down"}">${d >= 0 ? "+" : "−"}${Math.abs(d)}</b> → ${this.rating} (${this.label()})`;
+    };
+    return el;
   },
 };
 
