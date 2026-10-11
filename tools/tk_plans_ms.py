@@ -1211,8 +1211,9 @@ def _b1():
                 # Live only from m20 until he has the scrap, when none of the beats at Jang's chair (or m13's, beside
                 # it) is open, and a giver that has given no longer goes off: so it stands at the desk, near them
                 _give("jang-desk-search", [7, 5], "Jang's desk", "waybill_scrap", n(20),
-                      "Jang's desk. The glue stick lies uncapped among paper trimmings. You turn the waybill over: glued to the back "
-                      "is a torn scrap of someone's weekly report. Internship. A name: Kim Seok-ho.",
+                      "Jang's desk. The glue stick lies uncapped among paper trimmings, and there's a dried smear of glue where the "
+                      "waybill must have lain. You turn the waybill over: glued to the back is a torn scrap of someone's weekly report. "
+                      "Internship. A name: Kim Seok-ho.",
                       "Jang's desk. You've already found what it had to tell you.")
                 | {"near_ok": ["m10", "m13", "m14", "m18", "m19", "m20", "m22", "errand-bl", "errand-copy"]},
                 # "wipe this floor" (episode 7): the mop from the cleaning cupboard, to the spill by the east desks
