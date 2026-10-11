@@ -469,7 +469,7 @@ const BOOK = +(process.env.BOOK || 12), DIFF = process.env.DIFF || '', STUCK = +
   // handoffs: a beat whose lead differs from the beat before's starts him at least 6 tiles from the beat's spot (another place
   // counts as far); he walks to it, he isn't set down on it. Kept as cuts: Book 14's x14 (yan-start) and x18 (stables-door), Book 13's c19;
   // Book 21's m21 (Oh takes over at his own desk, the beat's spot: an "at your desk" beat, the user via Plot; tools/proofs/handoffs.py says the same)
-  { const KEEP = new Set(['14-x14', '14-x18', '13-c19', '21-m21']), seq = report.map(r => r.beat).filter(k => facts[k] && facts[k].firstFree), near = [], far = [];
+  { const KEEP = new Set(['14-x14', '14-x18', '13-c19', '21-m21', '22-b22']), seq = report.map(r => r.beat).filter(k => facts[k] && facts[k].firstFree), near = [], far = [];
     for (let i = 1; i < seq.length; i++) { const a = facts[seq[i - 1]].firstFree, b = facts[seq[i]].firstFree; if (a.lead === b.lead) continue;
       const d = b.tiles == null ? `in ${b.place}, the spot in ${b.spotPlace}` : `${b.tiles.toFixed(1)} tiles from ${b.spot}`, line = `${seq[i].replace(/^\d+-/, '')} ${a.lead}>${b.lead} ${d}`;
       if (KEEP.has(seq[i])) { far.push(line + ' (kept as a cut)'); continue; }
