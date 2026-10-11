@@ -409,9 +409,11 @@ function gridToBoardState(grid, frameStones) {
 /* ================= board model ================= */
 
 const N = 19, EMPTY = 0, BLACK = 1, WHITE = 2;
+// past a smaller board's edge (a 13x13 problem on our 19x19 grid): no liberty, never a group, never taken; an edge
+const WALL = 3;
 const cIdx = s => [s.charCodeAt(0) - 97, s.charCodeAt(1) - 97];
 const COLS = "ABCDEFGHJKLMNOPQRST";
-const coordLabel = m => { const [c, r] = cIdx(m); return COLS[c] + (N - r); };
+const coordLabel = (m, sz = N) => { const [c, r] = cIdx(m); return COLS[c] + (sz - r); };
 
 function neighbors(c, r) {
   const out = [];
@@ -454,6 +456,7 @@ function applyMove(g, c, r, color) {
 const SVGNS = "http://www.w3.org/2000/svg";
 
 function cropFor(problem) {
+  const E = (problem.sz || 19) - 1;   // the last line: a smaller board's far edge
   const pts = [...problem.b, ...problem.w];
   for (const line of problem.lines) for (const m of line.slice(1)) pts.push(m);
   let c0 = 18, c1 = 0, r0 = 18, r1 = 0;
@@ -466,10 +469,10 @@ function cropFor(problem) {
   while (c1 - c0 < 8) { c0--; c1++; }
   while (r1 - r0 < 8) { r0--; r1++; }
   if (c0 <= 1) c0 = 0;
-  if (c1 >= 17) c1 = 18;
+  if (c1 >= E - 1) c1 = E;
   if (r0 <= 1) r0 = 0;
-  if (r1 >= 17) r1 = 18;
-  return { c0: Math.max(0, c0), c1: Math.min(18, c1), r0: Math.max(0, r0), r1: Math.min(18, r1) };
+  if (r1 >= E - 1) r1 = E;
+  return { c0: Math.max(0, c0), c1: Math.min(E, c1), r0: Math.max(0, r0), r1: Math.min(E, r1), sz: E + 1 };
 }
 
 class Goban {
@@ -494,7 +497,7 @@ class Goban {
   }
 
   render(grid, lastMove, interactive) {
-    const { c0, c1, r0, r1 } = this.crop;
+    const { c0, c1, r0, r1 } = this.crop, E = (this.crop.sz || 19) - 1;   // E: the board's last line
     this.svg.innerHTML = ""; this.ghost = null;
     const defs = this.el("defs", {});
     defs.innerHTML = `
@@ -509,24 +512,25 @@ class Goban {
     for (let r = r0; r <= r1; r++)
       this.el("line", {
         x1: this.px(c0) - (c0 > 0 ? ext : 0), y1: this.py(r),
-        x2: this.px(c1) + (c1 < 18 ? ext : 0), y2: this.py(r),
-        stroke: "var(--line)", "stroke-width": (r === 0 || r === 18) ? 2.2 : 1.1,
+        x2: this.px(c1) + (c1 < E ? ext : 0), y2: this.py(r),
+        stroke: "var(--line)", "stroke-width": (r === 0 || r === E) ? 2.2 : 1.1,
       });
     for (let c = c0; c <= c1; c++)
       this.el("line", {
         x1: this.px(c), y1: this.py(r0) - (r0 > 0 ? ext : 0),
-        x2: this.px(c), y2: this.py(r1) + (r1 < 18 ? ext : 0),
-        stroke: "var(--line)", "stroke-width": (c === 0 || c === 18) ? 2.2 : 1.1,
+        x2: this.px(c), y2: this.py(r1) + (r1 < E ? ext : 0),
+        stroke: "var(--line)", "stroke-width": (c === 0 || c === E) ? 2.2 : 1.1,
       });
 
     // fade the cut edges so the board reads as continuing
     const f = this.pad * 0.8;
     if (c0 > 0) this.el("rect", { x: 0, y: 0, width: f, height: this.H, fill: "url(#wood)", opacity: .75 });
-    if (c1 < 18) this.el("rect", { x: this.W - f, y: 0, width: f, height: this.H, fill: "url(#wood)", opacity: .75 });
+    if (c1 < E) this.el("rect", { x: this.W - f, y: 0, width: f, height: this.H, fill: "url(#wood)", opacity: .75 });
     if (r0 > 0) this.el("rect", { x: 0, y: 0, width: this.W, height: f, fill: "url(#wood)", opacity: .75 });
-    if (r1 < 18) this.el("rect", { x: 0, y: this.H - f, width: this.W, height: f, fill: "url(#wood)", opacity: .75 });
+    if (r1 < E) this.el("rect", { x: 0, y: this.H - f, width: this.W, height: f, fill: "url(#wood)", opacity: .75 });
 
-    for (const c of [3, 9, 15]) for (const r of [3, 9, 15])
+    const stars = { 19: [3, 9, 15], 13: [3, 6, 9], 9: [2, 4, 6] }[E + 1] || [];
+    for (const c of stars) for (const r of stars)
       if (c >= c0 && c <= c1 && r >= r0 && r <= r1)
         this.el("circle", { cx: this.px(c), cy: this.py(r), r: 4, fill: "var(--line)" });
 
@@ -535,14 +539,14 @@ class Goban {
     for (let c = c0; c <= c1; c++)
       this.el("text", { x: this.px(c), y: labelRow.y, "text-anchor": "middle", "font-size": 12.5,
                         fill: "#7a6535", "font-weight": 600 }).textContent = COLS[c];
-    const labelCol = c1 === 18 ? this.px(c1) + 29 : this.px(c0) - 29;
+    const labelCol = c1 === E ? this.px(c1) + 29 : this.px(c0) - 29;
     for (let r = r0; r <= r1; r++)
       this.el("text", { x: labelCol, y: this.py(r) + 4.5, "text-anchor": "middle", "font-size": 12.5,
-                        fill: "#7a6535", "font-weight": 600 }).textContent = N - r;
+                        fill: "#7a6535", "font-weight": 600 }).textContent = E + 1 - r;
 
     for (let r = r0; r <= r1; r++)
       for (let c = c0; c <= c1; c++)
-        if (grid[r][c] !== EMPTY) {
+        if (grid[r][c] === BLACK || grid[r][c] === WHITE) {
           this.el("circle", { cx: this.px(c), cy: this.py(r), r: this.cell * .47,
                               fill: grid[r][c] === BLACK ? "url(#bs)" : "url(#ws)",
                               stroke: "rgba(0,0,0,.35)", "stroke-width": .8 });
@@ -655,6 +659,7 @@ class Trainer {
   serialize(g) { let s = ""; for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) s += g[r][c]; return s; }
 
   frame() {
+    if (this.p.sz) return null;   // a smaller board: KataGo plays 19x19 only
     if (this.frameStones === undefined) {
       const utils = globalThis.GTEngineUtils;
       this.frameStones = utils
@@ -665,7 +670,7 @@ class Trainer {
   }
 
   freshGrid() {
-    const g = Array.from({ length: N }, () => new Array(N).fill(EMPTY));
+    const S = this.p.sz || N, g = Array.from({ length: N }, (_, r) => Array.from({ length: N }, (_, c) => r < S && c < S ? EMPTY : WALL));
     for (const s of this.p.b) { const [c, r] = cIdx(s); g[r][c] = BLACK; }
     for (const s of this.p.w) { const [c, r] = cIdx(s); g[r][c] = WHITE; }
     return g;
@@ -793,11 +798,16 @@ class Trainer {
       this.played.every((m, i) => m === L[i + 1]) &&
       L[this.played.length + 1] === mv);
 
-    if (!treeMove && this.els.noEngine) {
-      // Strict problems (the Three Kingdoms campaign): a move off the answer
+    // an illegal move isn't played at all, on the answer tree or off it, and costs nothing: suicide, or retaking a
+    // ko at once (apo110: the puzzles let an illegal ko retake through, then called it wrong)
+    const legal = applyMove(this.grid, c, r, BLACK);
+    if (!legal) return;
+    if (this.koViolation(legal)) return this.setStatus("off", "◌", this.els.noEngine ? "劫：不能马上提回 Ko: you can't retake yet" : "Ko: you can't retake yet");
+
+    if (!treeMove && (this.els.noEngine || this.els.strict || this.p.sz)) {   // (KataGo plays 19x19 only)
+      // Strict problems (the Three Kingdoms campaign, the Stream): a move off the answer
       // tree is simply wrong; there is no engine play to fall back on.
-      const g2 = applyMove(this.grid, c, r, BLACK);
-      if (!g2) return;
+      const g2 = legal;
       this.push();
       this.grid = g2;
       this.played = [...this.played, mv];
@@ -833,7 +843,7 @@ class Trainer {
     }
 
     this.push();
-    this.grid = applyMove(this.grid, c, r, BLACK);
+    this.grid = legal;
     this.played = [...this.played, mv];
     this.lastMove = [c, r];
     this.posHistory.push(this.serialize(this.grid));
@@ -1178,7 +1188,7 @@ class Trainer {
       }
       const tip = document.createElementNS(SVGNS, "title");
       const note = n.move ? this.noteFor(this.pathMoves(n)) : "";
-      tip.textContent = n.move ? `${n.ply}. ${coordLabel(n.move)}${n.ok ? "" : " (fails)"}${note ? " — " + note : ""}` : "Start";
+      tip.textContent = n.move ? `${n.ply}. ${coordLabel(n.move, this.p.sz)}${n.ok ? "" : " (fails)"}${note ? " — " + note : ""}` : "Start";
       c.appendChild(tip);
       c.addEventListener("click", () => this.showNode(n));
       n.children.forEach(nodes);
@@ -2188,6 +2198,90 @@ async function viewPlayer(id, num) {
   window.__trainer = trainer;
   window.__engine = Engine;
 }
+
+/* ---- Stream: problems dealt one after another by the game's rating (tk.js TKElo, the same rating and the
+   same seen list as the campaign's adaptive boards; data/stream.json, tools/build_stream.py) ---- */
+let streamPool = null;
+async function viewStream() {
+  const nav = routeSeq;
+  root.innerHTML = `<div class="loading">Loading…</div>`;
+  if (!streamPool) streamPool = { rated: await (await fetch("data/stream.json?v=1")).json() };
+  const [bookId, pid] = TKElo.pick(streamPool, `stream~${TKElo.state().stream || 0}`);
+  const book = await getBook(bookId);
+  if (nav !== routeSeq) return;
+  const idx = Math.max(0, book.problems.findIndex(x => String(x.id) === String(pid)));
+  const p = book.problems[idx], x = streamPool.rated.find(y => y[0] === bookId && String(y[1]) === String(pid));
+  crumbs.innerHTML = "";
+  root.innerHTML = "";
+
+  const svg = document.createElementNS(SVGNS, "svg");
+  const boardCard = h("div", { class: "board-card" }, [svg]);
+  const status = h("div", { id: "status" });
+  const turnBadge = h("span", { class: "badge turn" }, "Black to play");
+  const btnExplore = h("button", {}, "Explore");
+  const treeBox = h("div", { class: "movetree", style: "height:auto; max-height:320px" });
+  const note = h("div", { class: "source-note", style: "display:none" });
+  const treePanel = h("div", { class: "panel", style: "display:none" }, [
+    h("h2", {}, "Solution tree"),
+    h("div", { class: "meta-sub" }, "Tap a move to see the position. Green: correct lines · red: failures · dot: his comment."),
+    treeBox,
+  ]);
+  const rating = h("div", { class: "stream-rating" }), stakes = (TKElo.state().streamRated !== `${bookId}:${pid}` && TKElo.stakesEl(streamPool, [bookId, pid], false)) || "";
+  const showRating = () => { const t = TKElo.state(); rating.textContent = `${TKElo.label(t.r)} · ${t.r}`; };
+  showRating();
+  // the problem's source and grade wait until it's answered, so they don't hint at it
+  const source = h("div", { class: "meta-sub", style: "visibility:hidden" }, [
+    p.url ? h("a", { href: p.url, target: "_blank" }, p.credit || "source")
+          : h("a", { href: `https://www.101weiqi.com/q/${p.id}/`, target: "_blank" }, `${book.title} · 101weiqi #${p.id}`),
+    x ? ` · ${GRADE_NAMES[x[2]]}` : "", x && x[4] ? " · KataGo-checked" : "",
+  ]);
+  const next = () => { const q = loadProgress(), st = TKElo.state(q); st.stream = (st.stream || 0) + 1; TK.saveProg(q); viewStream(); };
+
+  const aside = h("aside", {}, [
+    h("div", { class: "panel" }, [
+      h("h2", {}, "Stream"),
+      h("div", { class: "meta-sub" }, "Problems at your level, one after another. The rating is the one the story mode keeps: a first-try solve (no wrong move, hint or undo) raises it."),
+      rating, h("div", {}, [stakes]), source,
+      h("div", { class: "badges" }, [turnBadge]),
+    ]),
+    h("div", { class: "panel" }, [h("h2", {}, "Status"), status, note]),
+    treePanel,
+    h("div", { class: "panel" }, [
+      h("h2", {}, "Controls"),
+      h("div", { class: "controls" }, [
+        h("button", { onclick: () => trainer.undo() }, "Undo"),
+        h("button", { onclick: () => trainer.hint() }, "Hint"),
+        h("button", { onclick: () => trainer.reset() }, "Reset"),
+        btnExplore,
+        h("button", { class: "wide primary", onclick: next }, "Next problem →"),
+      ]),
+    ]),
+    h("div", { class: "panel keys" },
+      [["N / →", "next problem"], ["U", "undo"], ["R", "reset"], ["H", "hint"], ["E", "explore"]]
+        .map(([k, v]) => h("div", {}, [h("b", {}, k), v]))),
+  ]);
+  root.append(h("div", { class: "player" }, [boardCard, aside]));
+
+  // strict, as the story mode's boards: a move off the answer key is a miss (else KataGo took over and it was never rated)
+  const t = trainer = new Trainer(book, idx, { svg, boardCard, status, turnBadge, btnExplore, treePanel, treeBox, note, strict: true });
+  btnExplore.addEventListener("click", () => trainer.toggleExplore());
+  t.streamNext = next;
+  window.__trainer = trainer;
+  // the first answer rates it (a problem shown again after a reload has had its say already)
+  const key = `${bookId}:${pid}`;
+  const onResult = e => {
+    if (trainer !== t) return window.removeEventListener("tczw:result", onResult);
+    window.removeEventListener("tczw:result", onResult);
+    source.style.visibility = "";
+    const q = loadProgress(), st = TKElo.state(q);
+    if (st.streamRated === key) return;
+    st.streamRated = key; TK.saveProg(q);
+    if (t.flawed !== "claimed") { const d = TKElo.result(streamPool, {}, [bookId, pid], e.detail === "ok" && !t.flawed); if (stakes) stakes.settle(d); }
+    showRating();
+  };
+  window.addEventListener("tczw:result", onResult);
+}
+const GRADE_NAMES = Array.from({ length: 44 }, (_, i) => i < 30 ? `${15 - Math.floor(i / 2)}K${i % 2 ? "+" : ""}` : `${1 + Math.floor((i - 30) / 2)}D${(i - 30) % 2 ? "+" : ""}`);
 
 /* ---- Spotify: a small player in the header ---- */
 // PKCE login (public client, no secret) and the Web API's playback control:
@@ -3493,11 +3587,12 @@ async function route() {
   Review.els = null;
   const parts = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
   clearInterval(playTicker);
-  const tab = ["review", "play", "feedback"].includes(parts[0]) ? parts[0] : "library";
+  const tab = ["stream", "review", "play", "feedback"].includes(parts[0]) ? parts[0] : "library";
   if (window.Wukong && Wukong.suspend) Wukong.suspend(parts[0] === "tk" && !parts[2]);  // the map has its own party
   for (const a of document.querySelectorAll("#tabs a"))
     a.classList.toggle("active", a.dataset.tab === tab);
-  if (parts[0] === "review") viewReview();
+  if (parts[0] === "stream") await viewStream();
+  else if (parts[0] === "review") viewReview();
   else if (parts[0] === "play") viewPlay(parts[1]);
   else if (parts[0] === "feedback") viewFeedback();
   else if (parts[0] === "tk" && parts[1] === "chat") await viewTKChat(true);   // the plain chat window (Claude himself now sits in the Chang'an teahouse)
@@ -3526,6 +3621,7 @@ document.addEventListener("keydown", e => {
   }
   if (!trainer) return;
   const parts = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
+  if (parts[0] === "stream" && (e.key === "n" || e.key === "ArrowRight")) return trainer.streamNext && trainer.streamNext();
   const book = parts[0] === "book";  // campaign levels have no next or previous problem
   if (e.key === "ArrowLeft" && book && parts[2] > 1) location.hash = `#/book/${parts[1]}/${+parts[2] - 1}`;
   else if (e.key === "ArrowRight" && book) location.hash = `#/book/${parts[1]}/${+parts[2] + 1}`;
