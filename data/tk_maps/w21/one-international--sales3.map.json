@@ -407,10 +407,9 @@
   {
    "id": "m13",
    "x": 16.5,
-   "y": 12.7,
+   "y": 14.7,
    "node": "21-m13",
-   "label": "Jang's desk, at night",
-   "on": "chair-jang"
+   "label": "Jang's desk, at night"
   },
   {
    "id": "m14",
