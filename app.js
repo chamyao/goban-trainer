@@ -2226,7 +2226,7 @@ async function viewStream() {
     h("div", { class: "meta-sub" }, "Tap a move to see the position. Green: correct lines · red: failures · dot: his comment."),
     treeBox,
   ]);
-  const rating = h("div", { class: "stream-rating" });
+  const rating = h("div", { class: "stream-rating" }), stakes = (TKElo.state().streamRated !== `${bookId}:${pid}` && TKElo.stakesEl(streamPool, [bookId, pid], false)) || "";
   const showRating = () => { const t = TKElo.state(); rating.textContent = `${TKElo.label(t.r)} · ${t.r}`; };
   showRating();
   // the problem's source and grade wait until it's answered, so they don't hint at it
@@ -2241,7 +2241,7 @@ async function viewStream() {
     h("div", { class: "panel" }, [
       h("h2", {}, "Stream"),
       h("div", { class: "meta-sub" }, "Problems at your level, one after another. The rating is the one the story mode keeps: a first-try solve (no wrong move, hint or undo) raises it."),
-      rating, source,
+      rating, h("div", {}, [stakes]), source,
       h("div", { class: "badges" }, [turnBadge]),
     ]),
     h("div", { class: "panel" }, [h("h2", {}, "Status"), status, note]),
@@ -2276,7 +2276,7 @@ async function viewStream() {
     const q = loadProgress(), st = TKElo.state(q);
     if (st.streamRated === key) return;
     st.streamRated = key; TK.saveProg(q);
-    if (t.flawed !== "claimed") TKElo.result(streamPool, {}, [bookId, pid], e.detail === "ok" && !t.flawed);
+    if (t.flawed !== "claimed") { const d = TKElo.result(streamPool, {}, [bookId, pid], e.detail === "ok" && !t.flawed); if (stakes) stakes.settle(d); }
     showRating();
   };
   window.addEventListener("tczw:result", onResult);

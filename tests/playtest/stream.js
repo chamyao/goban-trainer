@@ -14,11 +14,15 @@ await p.waitForFunction(()=>window.__trainer&&document.querySelector('.stream-ra
 const st=()=>p.evaluate(()=>{const t=window.__trainer,e=JSON.parse(localStorage.getItem('gt-progress')).tkElo,x=STREAM();return {id:`${t.book.id}:${t.p.id}`,r:e.r,n:e.n,used:e.used,label:document.querySelector('.stream-rating').textContent,tab:(document.querySelector('#tabs a.active')||{}).textContent,grade:x&&x[2]};});
 await p.evaluate(()=>{window.STREAM=()=>{const t=window.__trainer;return streamPool.rated.find(y=>y[0]===t.book.id&&String(y[1])===String(t.p.id));};});
 const a=await st();
+const stk=await p.evaluate(()=>{const e=document.querySelector('.tk-stakes');return e&&e.textContent;});
+check(/\+\d+ \/ −\d+/.test(stk||''),`the problem's stakes show before answering: "${stk}"`);
 check(a.tab==='Stream','the Stream tab is lit');
 check(a.grade!=null&&Math.abs(TKof(a.grade)-(1100-191))<=150,`a problem near the rating comes up (${a.id}, grade rank ${a.grade}, rating 1100 aims at ~909)`);
 check(a.label.startsWith('10K'),`the rating shows as the game names it: ${a.label}`);
 await p.evaluate(()=>window.__trainer.finish('ok'));
 const b1=await st();
+const stk2=await p.evaluate(()=>document.querySelector('.tk-stakes').textContent);
+check(stk2.includes(`+${b1.r-1100}`)&&stk2.includes(`→ ${b1.r}`),`after the answer, the change and the new rating: "${stk2}"`);
 check(b1.r>1100&&b1.n===13,`a first-try solve raises the shared rating: 1100 → ${b1.r}`);
 await p.evaluate(()=>{window.__trainer.reset();window.__trainer.finish('bad');});
 const b2=await st();

@@ -941,3 +941,6 @@ body.tk-en [lang="zh-CN"], body.tk-en .town-zh, body.tk-en .tk-dlg-zh, body.tk-e
 .tk-record-answer { fill: none; stroke: #c0392b; stroke-width: 3; }
 /* stream mode (app.js viewStream): the shared rating, big */
 .stream-rating { font-size: 22px; font-weight: 700; margin: 8px 0 4px; }
+/* what a rated board is worth (tk.js TKElo.stakesEl): "+8 / −24" before, the change after */
+.tk-stakes { font-size: 13px; color: var(--muted, #7a7466); white-space: nowrap; }
+.tk-stakes b.up { color: #2e7d4f; } .tk-stakes b.down { color: #b0413e; }
