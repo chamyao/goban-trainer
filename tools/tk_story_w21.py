@@ -463,7 +463,7 @@ def _scenes():
             S("ms_oh", "Then let's play politics with some class. Knowing when to bow your head: that's class. Let's go."),
             ["remove", "kd"], ["remove", "oh"],
             N("They go looking for Kim Bu-ryeon, only to find him already on the textile floor with Go, apologising to Steve. Then Go asks whether the approvals will go faster now, and everyone laughs."),
-            N("Jang grins. The obvious move had been obvious to Department Head Kim too."),
+            N("Jang smiles to himself. The obvious move had been obvious to Department Head Kim too."),
             N("Often the obvious move is the hardest one to play. Some things you have to do however hard they are, and some you mustn't do however easy."),
             ["still", "ms_sauna", "slow pan across"],
             S("ms_go", "Steve! Come on, scoot over."),
@@ -1029,4 +1029,5 @@ KO21 = {
     "He says it as if it were his to decide, and Jang's to obey.": '마치 결정은 자기 몫이고, 따르는 건 장그래 몫이라는 듯이.',
     'In Korea, age decides who may talk down to whom. Han is older, and has talked down to him from the start. Now Jang drops the polite forms.': '한국에서는 나이가 누가 누구에게 말을 낮출 수 있는지를 정한다. 한석율은 나이가 많고, 처음부터 그에게 말을 낮춰 왔다. 이제 장그래가 존댓말을 버린다.',
     'At the next table, Sales Team 1 is celebrating its deal, Go and his intern Kim Seok-ho among them.': '옆 테이블에서는 영업 1팀이 계약 성사를 축하하고 있다. 고 과장과 그의 인턴 김석호도 있다.',
+    'Jang smiles to himself. The obvious move had been obvious to Department Head Kim too.': '장그래는 혼자 미소 짓는다. 당연한 수는 김부련 부장에게도 당연했던 것이다.',
 }
