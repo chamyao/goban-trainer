@@ -551,3 +551,8 @@ against the top ten and the checklist.
 **Verdict, round 2:** the book now has a shape: a prologue in order, a clear question at m10, a partner arc that
 peaks at m19, a crisis Jang drives at m20, and a payoff at m21b. The playtester's complaints (half a point, the
 father's death, order, the rescue, "both live") are all addressed. What's left is line-level.
+
+**Update (7d36f73):** I checked the m2 caption, Jang's grin in m22b and the new closing line, and all three work. The
+closing now ties the dead-stone lesson to his own PT without needing a new scene. R2-1 to R2-9 above still apply
+unchanged. One small new note: m22b now has Jang grinning twice (at "checkmate" and after the apology). Change the
+second to "Jang smiles to himself" or similar.
