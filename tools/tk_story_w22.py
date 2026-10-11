@@ -40,7 +40,7 @@ CAST22 = {
     "ms_parkjg": "am_adam", "ms_sun": "af_sarah", "ms_somi": "af_sky", "ms_leesh": "am_puck",
     "ms_hanfather": "bm_george", "ms_examiner": "bm_lewis",
     # new (Graphics: to draw)
-    "ms_supceo": "bm_daniel", "ms_kwon": "am_echo", "ms_hateacher": "af_bella",
+    "ms_supceo": "bm_daniel", "ms_ithead": "bm_george", "ms_kwon": "am_echo", "ms_hateacher": "af_bella",
 }
 
 
@@ -71,7 +71,9 @@ def _scenes():
             N("Park slips the envelope into his jacket."),
             S("ms_jang", "Mr. Park from IT Sales? I'm Jang Geu-rae, an intern. Mr. Oh says you're an exemplary salesman, the kind who builds relationships with compassion."),
             S("ms_parkjg", "M-me?"),
-            N("That was all Oh said. But Park's eyes are shining, so Jang adds a little more."),
+            N("That was all Oh said. But Park's eyes are shining."),
+            ["problem"],   # Jang: say more than Oh did? (the deliberation; the choice comes after)
+            N("So Jang adds a little more: Oh says he knows how to keep both sides happy."),
             S("ms_parkjg", "Sales is a war of nerves. Let the other side see you're soft, and they'll walk all over you."),
             S("ms_parkjg", "A supplier missed a deadline once. Their director came to beg. I told him: we'll hold you to the terms of the contract."),
             N("It never happened. But saying it, he feels lighter."),
@@ -124,7 +126,7 @@ def _scenes():
         # B20 · 20수 (W). Meeting Room 3: the reports; "BE IRRESPONSIBLE!"; the confession; every face his own; the
         # director keeps the partner; "everyone plays their own game of baduk"; "I'm sorry" / "Thank you".
         "b20": {"title": T("Be Irresponsible"), "kind": "main", "steps": [
-            ["spawn", "dir", "ms_director", "b20", 16, -8], ["spawn", "hd", "ms_examiner", "b20", 24, -8],
+            ["spawn", "dir", "ms_director", "b20", 16, -8], ["spawn", "hd", "ms_ithead", "b20", 24, -8],
             N("Meeting Room 3. Director Choi of IT, the department head, and the risk, evaluation and legal teams. The supplier's president waits in another room."),
             N("Evaluation: small losses. Risk: low. Legal: this is the seventh late shipment, so the contract must be looked at again."),
             S("ms_director", "How did it come to this?"),
@@ -138,7 +140,7 @@ def _scenes():
             ["still", "ms_faces", "slow pan across"],
             N("Every face around the table becomes his own. Shipping costs went up with oil, he says, and One International still cut what it paid, and he never argued for them. Hold him responsible, not them."),
             S("ms_director", "How long have you been with us?"),
-            S("ms_examiner", "Four years, sir."),
+            S("ms_ithead", "Four years, sir."),
             S("ms_director", "You're a sentimental man. Nobody drops a ten-year partner over this. Bring me their president."),
             ["remove", "dir"], ["remove", "hd"],
             N("Afterwards Jang sits with his head down. He has never felt so wretched, not even after losing a game."),
@@ -309,7 +311,7 @@ def _scenes():
         # B27 · 27수 (W). PT day: the judges; the proud executive; the rules; the "Jangku" team; Ahn and Lee's
         # "Avatar"; "because we're being interviewed for the job"; the logo; "Next!"
         "b27": {"title": T("Next!"), "kind": "main", "steps": [
-            N("PT day. The interns file in carrying boxes. Oh's slippers are poking out of Jang's. Han sees them and mutters: is he out of his mind?"),
+            N("PT day. The interns file in carrying boxes. Oh's slippers are poking out of Jang's box. Han sees them and mutters: is he out of his mind?"),
             ["problem"],   # the record: Black 27 (a hane underneath, to connect)
             ["spawn", "han", "ms_han", "b27", 8, 0], ["spawn", "ex", "ms_examiner", "b27", 16, -16], ["spawn", "oh", "ms_oh", "b27", 24, -16],
             N("Executives in the front row, department heads behind, Oh among them. One executive smiles at the company video; Jang guesses he's remembering a mine contract and his years in the field. He hopes Han gets a middle age with moments like that."),
@@ -352,6 +354,7 @@ def _scenes():
             ["still", "ms_choke", "slow zoom in"],
             N("He gulps it, and sprays it out coughing. He can't speak."),
             S("ms_examiner", "Seven minutes left."),
+            ["party", ["ms_jang"]],   # the lead passes back to Jang (applied when the scene ends; Han stays at the podium)
             ["problem"],   # Jang: your partner can't speak (the deliberation; the choice comes after)
             S("ms_jang", "My partner choked on his drink. I'll continue."),
             N("His old baduk teacher's voice: there's no such thing as a stone played for no reason. Chance is a gift to those already prepared. So shall we get ready?"),
@@ -366,7 +369,6 @@ def _scenes():
             S("ms_han", "Well done, Mr. Jang. I'm sorry for the trouble. I'll pick up where he left off."),
             N("Dad. I'm not ashamed of you. Or of the field."),
             ["remove", "ex"],
-            ["party", ["ms_jang"]],   # the lead passes back to Jang
         ]},
 
         # B30 · 30수 (W). Han in the language of the field; the bait: work it out here; "look it up yourself, sir"; Ahn
@@ -384,7 +386,7 @@ def _scenes():
             S("ms_ahn", "No, sir. Air freight rose sixteen point six per cent. Sea and land didn't. And on a CNF contract the exporter pays cost and freight."),
             S("ms_han", "Th-that's what I meant."),
             S("ms_examiner", "Don't tell me you're the president's daughter. Or staff pretending to be an intern."),
-            N('Did she help them, or herself? Would she ever do that for Jang? What are they to her?'),
+            N('Jang wonders: did she help them, or herself? Would she ever do that for him? What are the two of them to her?'),
             ["remove", "ahn"], ["remove", "ex"], ["remove", "han"],
             ["spawn", "oh", "ms_oh", "b30", 8, -8], ["spawn", "sun", "ms_sun", "b30", 16, -8],
             S("ms_sun", "Jang didn't stand out today."),
@@ -497,7 +499,11 @@ def _nodes():
         return n
     return [
         node("b17", 20, 240, "b17", place="Jongno", room="bakery", move=17, board=False),
-        node("b17b", 34, 233, "b17b", room="roof", move=17, board=False),
+        node("b17b", 34, 233, "b17b", room="roof", move=17, dilemma=D(
+            "ms_jang", "Park's eyes are shining. Say more than Oh did?",
+            "It's only a little more. He looks like he needs it.",
+            "He adds a little more.",
+            "Again.", pool="tesuji")),
         node("b18", 48, 226, "b18", place="Supplier", room="corridor", move=18, dilemma=D(
             "ms_parkjg", "They're laughing at you behind the door. Keep the peace?",
             "Ten years, and I've never once pushed. Jang is watching.",
@@ -650,7 +656,6 @@ KO22 = {
     'Park slips the envelope into his jacket.': '박 대리는 봉투를 재킷 안으로 밀어 넣는다.',
     "Mr. Park from IT Sales? I'm Jang Geu-rae, an intern. Mr. Oh says you're an exemplary salesman, the kind who builds relationships with compassion.": 'IT영업팀 박 대리님이시죠? 인턴 장그래입니다. 오 과장님이 그러시던데요, 대리님은 연민으로 관계를 쌓는 모범적인 영업맨이시라고요.',
     'M-me?': '저, 저요?',
-    "That was all Oh said. But Park's eyes are shining, so Jang adds a little more.": '오 과장이 한 말은 그게 다였다. 하지만 박 대리의 눈이 반짝이니, 장그래는 조금 더 보탠다.',
     "Sales is a war of nerves. Let the other side see you're soft, and they'll walk all over you.": '영업은 신경전이야. 물렁하게 보이면 상대가 밟고 들어와.',
     "A supplier missed a deadline once. Their director came to beg. I told him: we'll hold you to the terms of the contract.": '언젠가 협력업체가 납기를 못 맞췄지. 거기 이사가 빌러 왔더라고. 내가 그랬어. 계약 조건대로 하겠습니다.',
     'It never happened. But saying it, he feels lighter.': '그런 일은 없었다. 그래도 말하고 나니 마음이 가볍다.',
@@ -967,13 +972,11 @@ KO22 = {
     "But he's my boss.": '그래도 제 상사잖아요.',
     "Your boss? We're both interns, punk.": '상사? 우리 둘 다 인턴이야, 인마.',
     'The files go in on a CD. Then the stopwatch: Han runs fourteen minutes, then seventeen, and his hands shake on the script. The limit is ten, and five for questions. He has memorised every sentence, and they shout at each other over which ones to cut.': '파일은 CD로 제출한다. 그리고 스톱워치. 한석율은 14분, 다시 17분을 쓴다. 대본을 쥔 손이 떨린다. 제한은 발표 10분, 질의응답 5분. 그는 문장 하나하나를 다 외웠고, 둘은 어느 문장을 뺄지를 두고 고함을 지른다.',
-    "PT day. The interns file in carrying boxes. Oh's slippers are poking out of Jang's. Han sees them and mutters: is he out of his mind?": 'PT 당일. 인턴들이 상자를 들고 줄지어 들어온다. 장그래의 상자 밖으로 오 과장의 슬리퍼가 삐져나와 있다. 그걸 본 한석율이 중얼거린다. 미친 거 아냐?',
     "The first pair, Jang Ki-seok and Ku Hyun-woo, flap up the aisle in onesies and swimming flippers: they're the Jang-Ku Team, here to leave their footprints on the world.": '첫 번째 팀, 장기석과 구현우가 우주복 같은 옷에 오리발을 신고 통로를 철퍽철퍽 걸어 나온다. 세상에 발자국을 남기러 온 장구 팀이란다.',
     'Nobody in the room is laughing now.': '이제 웃는 사람은 아무도 없다.',
     'The Jang-Ku Team come back in suits. A judge spots the company logo on their slide, screen-captured off the website.': '장구 팀이 정장으로 갈아입고 돌아온다. 심사위원 하나가 슬라이드의 회사 로고를 알아본다. 홈페이지에서 화면 캡처한 것이다.',
     "His old baduk teacher's voice: there's no such thing as a stone played for no reason. Chance is a gift to those already prepared. So shall we get ready?": '옛 바둑 스승의 목소리. 이유 없이 놓는 돌은 없다. 우연은 준비가 끝난 사람에게 오는 선물이다. 그럼 준비해 볼까?',
     'Han hears Jang\'s "No, sir", plain and unashamed, and remembers.': '한석율은 장그래의 "아닙니다"를 듣는다. 담담하고, 부끄러움 없는 대답. 그리고 기억한다.',
-    'Did she help them, or herself? Would she ever do that for Jang? What are they to her?': '그녀는 두 사람을 도운 걸까, 자기 자신을 도운 걸까? 장그래를 위해서도 그렇게 해 줄까? 그녀에게 두 사람은 무엇일까?',
     'Wallets, a belt, a brag about shoes. Baek-gi sells his partner a hand mirror: learn to manage your face before you do business. The partner, red to the ears, buys it.': '지갑, 벨트, 구두 자랑. 장백기는 파트너에게 손거울을 판다. 장사하기 전에 표정 관리부터 하라고. 귀까지 빨개진 파트너는 그것을 산다.',
     "In the second row, Oh looks down at his socks. So that's where they went.": '둘째 줄에서 오 과장이 양말 신은 자기 발을 내려다본다. 어디 갔나 했더니.',
     "That's the end of the PT. Results by email and text, in a week.": '이로써 PT는 끝이다. 결과는 일주일 뒤 이메일과 문자로.',
@@ -984,4 +987,10 @@ KO22 = {
     'Before you start working for a living, come and see the people who lost theirs. Go on. Pay your respects.': '밥벌이를 시작하기 전에, 그걸 잃은 사람들부터 보고 가라. 가. 인사드려.',
     'They bow, in their black ties. Han bows longest.': '그들은 검은 넥타이를 매고 고개를 숙인다. 한석율이 가장 오래 숙이고 있다.',
     "Brown office slippers with massage spikes, worn down to the shape of Oh's foot, and his good black dress shoes from the box under his desk.": '지압 돌기가 오 과장 발 모양대로 닳은 갈색 사무실 슬리퍼, 그리고 책상 밑 상자에 든 그의 좋은 검은 구두.',
+    "That was all Oh said. But Park's eyes are shining.": '오 과장이 한 말은 그게 다였다. 하지만 박 대리의 눈이 반짝인다.',
+    'So Jang adds a little more: Oh says he knows how to keep both sides happy.': '그래서 장그래는 조금 보탠다. 양쪽 입장을 다 맞출 줄 아는 분이라고 오 과장님이 그러셨다고.',
+    "It's only a little more. He looks like he needs it.": '조금 더 보태는 것뿐이야. 저 사람한테 필요해 보여.',
+    'He adds a little more.': '그는 조금 더 보탠다.',
+    "PT day. The interns file in carrying boxes. Oh's slippers are poking out of Jang's box. Han sees them and mutters: is he out of his mind?": 'PT 당일. 인턴들이 상자를 들고 줄지어 들어온다. 장그래의 상자 밖으로 오 과장의 슬리퍼가 삐져나와 있다. 그걸 본 한석율이 중얼거린다. 미친 거 아냐?',
+    'Jang wonders: did she help them, or herself? Would she ever do that for him? What are the two of them to her?': '장그래는 생각한다. 그녀는 우리를 도운 걸까, 자기 자신을 도운 걸까? 나를 위해서도 그렇게 해 줄까? 그녀에게 우리 둘은 무엇일까?',
 }
