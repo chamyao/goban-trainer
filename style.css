@@ -937,3 +937,5 @@ body.tk-en [lang="zh-CN"], body.tk-en .town-zh, body.tk-en .tk-dlg-zh, body.tk-e
 /* a record board as multiple choice (tk-modern.js WorldModern.labels): A-D on the points */
 .tk-choice circle { fill: #dcb35c; stroke: none; }   /* the board's own wood: only the grid lines under the letter go */
 .tk-choice text { fill: #1a1a1a; font-weight: 400; font-family: Georgia, "Times New Roman", serif; }
+/* a move-guessing board answered wrong: the move that was played, ringed (tk.js tkShowRecordMove) */
+.tk-record-answer { fill: none; stroke: #c0392b; stroke-width: 3; }
