@@ -217,8 +217,6 @@ CAST.update({
                "charcoal skirt suit and a white blouse"),
     "ms_sun": ("Sun Ji-young", "a calm, strict Korean woman manager of about forty with a short black bob, in a camel "
                "trouser suit and a cream blouse"),
-    "ms_baekgi": ("Jang Baek-gi", "a neat, proud Korean man of twenty-six with side-parted black hair, in a sharp navy "
-                  "suit and a blue tie"),
     "ms_han": ("Han Seok-yul", "a brash, grinning Korean man of twenty-seven with slicked-back hair, in a brown suit and a "
                "mustard tie"),
     "ms_park": ("Park Jong-sik", "a smooth, smug Korean manager in his forties with slicked-back black hair, in a "
@@ -273,7 +271,7 @@ CAST.update({
     "ms_ohson": ("Oh's son", "a lively Korean boy of about six with messy black hair, in a blue T-shirt"),
     "ms_kangsil": ("Manager Kang", "a sharp Korean manager in his forties with side-parted hair and glasses, in a camel "
                    "overcoat over a dark suit"),
-    "ms_glasses": ("the glasses intern", "a smug young Korean intern with side-parted hair, glasses and a thin "
+    "ms_glasses": ("Jang Baek-gi", "a smug young Korean intern with side-parted hair, glasses and a thin "
                    "moustache, in a navy suit and a mustard tie"),
     "ms_amhead": ("the Americas team head", "a loud, heavy-set Korean team head in his late forties with short hair, "
                   "in a grey suit and a red tie, mid-shout"),
@@ -283,6 +281,12 @@ CAST.update({
                    "in a brown cardigan"),
     "ms_director": ("the director", "a stern Korean company director in his late fifties with grey hair, in a beige "
                     "suit and a brown tie"),
+    "ms_supceo": ("the supplier's president", "a calm, polished Korean company president in his late fifties with grey "
+                  "hair combed back, in a dark double-breasted suit and a burgundy tie"),
+    "ms_kwon": ("Kwon", "a cheerful, slightly round Korean office worker in his early thirties with short hair, in a "
+                "short-sleeved white shirt, a blue tie and a lanyard ID card"),
+    "ms_hateacher": ("Ms. Ha", "a gentle Korean daycare teacher in her mid-twenties with freckles and a brown ponytail, "
+                     "in a pastel pink apron over a cream sweater"),
     "ms_examiner": ("the examiner", "a reserved Korean man in his fifties with greying side-parted hair and glasses, in "
                     "a dark suit and a plain grey tie, holding a clipboard"),
     "ms_ahnfather": ("Ahn's father", "a cold, stern Korean army officer in his fifties with short black hair, in an "
