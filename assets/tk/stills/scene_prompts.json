@@ -1405,5 +1405,12 @@
   "beat": "'Our kid.'",
   "scene": "A narrow Jongno street at night outside a bar. Oh Sang-sik, tipsy and red-faced, shouts at Go Gwa-jang, pointing back at Jang Geu-rae, who stands behind him, startled and moved. Kim Dong-sik holds Oh's arm. Neon signs, a drunk group of office workers looking on.",
   "notes": "Book 21 (Misaeng Book 1), docs/book2/misaeng-arc.md. Modern Seoul, 2012. An original illustration, not a recreation of the comic's panels. People named as CAST names them; others described. Beat m21b (the Editor's review: a still at the peak). Graphics: Go named, so his CAST look and portrait apply."
+ },
+ "ms_slide": {
+  "book": 21,
+  "category": "interlude",
+  "beat": "m1: the slide, before 'Seven Years Later'",
+  "scene": "The Korea Baduk Association trainees' room in the evening, rows of go boards on low tables. A teenage boy, Jang Geu-rae at about sixteen, sits alone at a board, staring at a finished game he has lost by half a point, his hand still near the bowl. In the background, out of focus by the door, other teenage trainees crowd round a friend, congratulating him on passing the pro exam. Dim, tired light; the mood of a winning streak gone cold.",
+  "notes": "Book 21 (Misaeng Book 1), docs/book2/misaeng-arc.md. Modern Seoul, 2000s. An original illustration, not a recreation of the comic's panels. Jang as a teenager (ms_jang_young). Beat m1 (playtest, apo110: show the momentum fading before 'last chance')."
  }
 }
