@@ -1412,5 +1412,96 @@
   "beat": "m1: the slide, before 'Seven Years Later'",
   "scene": "A single full-frame illustration, no panels, no speech bubbles, no captions. The Korea Baduk Association trainees' room in the evening, rows of go boards on low tables. A thin sixteen-year-old Korean trainee with a black fringe, in a grey hoodie, sits alone at a board, staring at a finished game he has lost by half a point, his hand still near the bowl. In the background, out of focus by the door, other teenage trainees crowd round a friend, congratulating him on passing the pro exam. Dim, tired light; the mood of a winning streak gone cold.",
   "notes": "Book 21 (Misaeng Book 1), docs/book2/misaeng-arc.md. Modern Seoul, 2000s. An original illustration, not a recreation of the comic's panels. Jang as a teenager (ms_jang_young). Beat m1 (playtest, apo110: show the momentum fading before 'last chance'). Graphics: the boy described as in ms_ringed and ms_lastgame, not named, so CAST doesn't suit him."
+ },
+ "ms_bread": {
+  "book": 22,
+  "category": "interlude",
+  "beat": "b17: Park eats on the street",
+  "scene": "Daytime Seoul, a small triangle of grass beside a busy crosswalk. A tired office worker in his late thirties (ms_parkjg: glasses, grey-green suit) stands alone eating a bread bun and a small carton of milk, earphones in, traffic streaming past, looking hollow.",
+  "notes": "Book 22 (Misaeng Book 2), docs/book2/misaeng-book2-plan.md. Modern Seoul, 2012. A single full-frame illustration, no panels, no speech bubbles. An original illustration, not a recreation of the comic's panels. People named as CAST names them; others described."
+ },
+ "ms_alley": {
+  "book": 22,
+  "category": "interlude",
+  "beat": "b17: Park outside his own gate",
+  "scene": "Night, a narrow residential alley of brick low-rise flats. The same office worker (ms_parkjg), tie loosened, sits slumped on the step outside his own front gate, not going in; a warm light in a window above him.",
+  "notes": "Book 22 (Misaeng Book 2), docs/book2/misaeng-book2-plan.md. Modern Seoul, 2012. A single full-frame illustration, no panels, no speech bubbles. An original illustration, not a recreation of the comic's panels. People named as CAST names them; others described."
+ },
+ "ms_wings": {
+  "book": 22,
+  "category": "interlude",
+  "beat": "b18: If he doesn't change now",
+  "scene": "A plain office corridor at a small company. A mild salaryman (ms_parkjg) stands straighter than ever before, facing a startled employee; behind his back a pair of great white wings is unfolding, half real, half a feeling. A young intern (ms_jang) watches from behind, eyes shining.",
+  "notes": "Book 22 (Misaeng Book 2), docs/book2/misaeng-book2-plan.md. Modern Seoul, 2012. A single full-frame illustration, no panels, no speech bubbles. An original illustration, not a recreation of the comic's panels. People named as CAST names them; others described."
+ },
+ "ms_note": {
+  "book": 22,
+  "category": "interlude",
+  "beat": "b20: The note",
+  "scene": "Close-up on a conference table: a sheet of office paper with large hand-written words BE IRRESPONSIBLE! in pen, slid across beside a stack of reports, a hand still resting on it. Tense, cool office light.",
+  "notes": "Book 22 (Misaeng Book 2), docs/book2/misaeng-book2-plan.md. Modern Seoul, 2012. A single full-frame illustration, no panels, no speech bubbles. An original illustration, not a recreation of the comic's panels. People named as CAST names them; others described."
+ },
+ "ms_faces": {
+  "book": 22,
+  "category": "interlude",
+  "beat": "b20: Every face his own",
+  "scene": "A long boardroom table of executives in dark suits, seen from the end; a nervous salaryman (ms_parkjg) stands speaking at the far side, and every face around the table, surreally, is his own face looking back at him.",
+  "notes": "Book 22 (Misaeng Book 2), docs/book2/misaeng-book2-plan.md. Modern Seoul, 2012. A single full-frame illustration, no panels, no speech bubbles. An original illustration, not a recreation of the comic's panels. People named as CAST names them; others described."
+ },
+ "ms_bow": {
+  "book": 22,
+  "category": "interlude",
+  "beat": "b22b: The bow",
+  "scene": "Morning at a daycare's glass door. A working mother in a camel trouser suit (ms_sun), phone in one hand lowered, kneels on the step and bows to her small daughter (ms_somi), who giggles; the young teacher stands just inside.",
+  "notes": "Book 22 (Misaeng Book 2), docs/book2/misaeng-book2-plan.md. Modern Seoul, 2012. A single full-frame illustration, no panels, no speech bubbles. An original illustration, not a recreation of the comic's panels. People named as CAST names them; others described."
+ },
+ "ms_8pm": {
+  "book": 22,
+  "category": "interlude",
+  "beat": "b25: Eight o'clock",
+  "scene": "Night, the plaza outside a glass office tower in Seoul. A dozen young interns in suits stand scattered and waiting; at the same instant every one of their phones lights up, faces lit blue from below.",
+  "notes": "Book 22 (Misaeng Book 2), docs/book2/misaeng-book2-plan.md. Modern Seoul, 2012. A single full-frame illustration, no panels, no speech bubbles. An original illustration, not a recreation of the comic's panels. People named as CAST names them; others described."
+ },
+ "ms_choke": {
+  "book": 22,
+  "category": "interlude",
+  "beat": "b29: The choke",
+  "scene": "A presentation hall with an evaluators' table. At the podium a young man (ms_han) doubles over coughing, a small brown tonic bottle in his hand, the drink spraying; beside him at the laptop another intern (ms_jang) half-rises in alarm.",
+  "notes": "Book 22 (Misaeng Book 2), docs/book2/misaeng-book2-plan.md. Modern Seoul, 2012. A single full-frame illustration, no panels, no speech bubbles. An original illustration, not a recreation of the comic's panels. People named as CAST names them; others described."
+ },
+ "ms_swatches": {
+  "book": 22,
+  "category": "interlude",
+  "beat": "b31: The voice of the field",
+  "scene": "A presentation hall. Two interns (ms_han and ms_jang) stretch a long line of different synthetic fabric swatches between them like a banner, colours and weaves side by side; evaluators watch from a long table.",
+  "notes": "Book 22 (Misaeng Book 2), docs/book2/misaeng-book2-plan.md. Modern Seoul, 2012. A single full-frame illustration, no panels, no speech bubbles. An original illustration, not a recreation of the comic's panels. People named as CAST names them; others described."
+ },
+ "ms_slippers_on": {
+  "book": 22,
+  "category": "interlude",
+  "beat": "b32: He steps into them",
+  "scene": "Close on the floor of a presentation hall: a pair of black leather dress shoes stepped out of, and a young man's feet in socks standing in worn brown office slippers with massage spikes; his head bowed, a small smile.",
+  "notes": "Book 22 (Misaeng Book 2), docs/book2/misaeng-book2-plan.md. Modern Seoul, 2012. A single full-frame illustration, no panels, no speech bubbles. An original illustration, not a recreation of the comic's panels. People named as CAST names them; others described."
+ },
+ "ms_underdesks": {
+  "book": 22,
+  "category": "interlude",
+  "beat": "b32: Slippers under every desk",
+  "scene": "Night, an empty open-plan office, monitors off. A young man in shirt-sleeves (ms_han) walks the rows carrying two plastic bags, setting a new pair of office slippers under each desk.",
+  "notes": "Book 22 (Misaeng Book 2), docs/book2/misaeng-book2-plan.md. Modern Seoul, 2012. A single full-frame illustration, no panels, no speech bubbles. An original illustration, not a recreation of the comic's panels. People named as CAST names them; others described."
+ },
+ "ms_contract": {
+  "book": 22,
+  "category": "interlude",
+  "beat": "b33: Hired, for two years",
+  "scene": "A small, plain bedroom at night lit by a computer screen. A young man (ms_jang) holds his phone, staring at a message; his face is caught between relief and something harder to name.",
+  "notes": "Book 22 (Misaeng Book 2), docs/book2/misaeng-book2-plan.md. Modern Seoul, 2012. A single full-frame illustration, no panels, no speech bubbles. An original illustration, not a recreation of the comic's panels. People named as CAST names them; others described."
+ },
+ "ms_memorial": {
+  "book": 22,
+  "category": "interlude",
+  "beat": "b33c: The first morning",
+  "scene": "Morning, a city pavement beside an old stone palace wall. A tarpaulin memorial tent with a framed black-and-white portrait wrapped in a black ribbon, rows of small name cards, candles and flowers, protest banners on the wall asking for the fired workers to be rehired. Four new office workers in black ties and a black scarf stand before it with an older section head (ms_oh), heads bowed. Respectful, quiet.",
+  "notes": "Book 22 (Misaeng Book 2), docs/book2/misaeng-book2-plan.md. Modern Seoul, 2012. A single full-frame illustration, no panels, no speech bubbles. An original illustration, not a recreation of the comic's panels. People named as CAST names them; others described."
  }
 }
