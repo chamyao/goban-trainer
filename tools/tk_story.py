@@ -735,7 +735,7 @@ _MS["voice_off"] = True   # no voice-over for now (the user, 2026-10-11, after t
                           # (KO21) and its clips are kept, tk.json lists none, and the book has no voice button
 WORLDS.append(_MS)
 # ---- Misaeng Book 2 (episodes 17-33), world 22 (tk_story_w22.py, Plot alt2; Integration alt2) ----
-# in the works (the user, 2026-10-11: "go ahead and begin book 2"): hidden, so only test mode (?test=1) shows it until published
+# published (the user, 2026-10-11: "don't do test mode, we test in published"); begun the same day ("go ahead and begin book 2")
 try:
     from tk_story_w22 import WORLD22 as _MS2  # noqa: E402
 except ImportError:
@@ -743,7 +743,7 @@ except ImportError:
 if _MS2:
     import tk_story_w22 as _ms2_mod  # noqa: E402
     _MS2 = _copy.deepcopy(_MS2)
-    _MS2.update(cast=getattr(_ms2_mod, "CAST22", _MS_CAST), ko=getattr(_ms2_mod, "KO22", {}), open=True, hidden=True,
+    _MS2.update(cast=getattr(_ms2_mod, "CAST22", _MS_CAST), ko=getattr(_ms2_mod, "KO22", {}), open=True,
                 novel="misaeng", book=2, kit="seoul", open_ways=True, walk_up=True, easy_grades=["14K", "14K+"],
                 voice_off=True)   # no voice-over, as Book 1
     WORLDS.append(_MS2)
