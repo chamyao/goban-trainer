@@ -162,7 +162,6 @@ def _scenes():
             N("He's obsessive, and responsible: a man who carries everything himself."),
             ["remove", "oh"],
             ["spawn", "hr", "ms_hr", "m8", 4, -2],
-            ["still", "ms_intern", "slow zoom in"],
             S("ms_hr", "Jang Geu-rae, you'll be an intern with Sales Team 3. In two months the interns sit a PT, a presentation test. Pass it, and you stay on."),
             N("Two months, then. No degree, no experience, one phone call from a sponsor. If he fails the PT, he's out, and everyone will know he was only ever a parachute."),
             ["remove", "hr"],
