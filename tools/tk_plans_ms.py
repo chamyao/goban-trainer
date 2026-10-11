@@ -1228,9 +1228,21 @@ def _b1():
                 # the clerk at General Affairs takes the requisition (a delivery is a handoff to a person)
                 {"id": "ga-clerk", "kind": "folk.officewoman", "place": "general-affairs", "at": [5, 3], "face": "S", "label": "General Affairs",
                  "say": "A clerk at General Affairs' counter, sorting forms into trays."},
-                # m14: Kim Dong-sik at his desk for his copies
-                {"id": "kim-errand", "kind": "hero.ms_kimds", "place": "sales3", "at": [8, 3], "face": "S", "label": "Kim Dong-sik",
-                 "when": n(13), "until": n(14), "say": "Kim Dong-sik doesn't look up from his screen."},
+                # Sales Team 3 at their own desks, seated on their chairs, while the story has them in the office (apo110:
+                # "put the npcs from the sales team and have them sitting in their chairs at their desks"): from the
+                # first day (m8's hiring) to that evening (m10, then the hof and Jang's night alone); from the next
+                # dawn (m13) on. Oh is away while he leads (m20 -> m21b: his own desk, then Jongno). Jang's chair stays
+                # free for the player. Kim (kim-errand) is who takes the copies in m14.
+                *[{"id": i, "kind": kind, "place": "sales3", "at": at, "on": "chair-" + i.split("-")[0], "face": "S", "label": label, "say": say,
+                   "when": when, **({"until": until} if until else {})}
+                  for i, kind, at, label, say, when, until in (
+                      ("kim-day1", "hero.ms_kimds", [8, 3], "Kim Dong-sik", "Kim Dong-sik types with two fingers, fast. “Busy, Jang. Later.”", n(8), n(10)),
+                      ("kim-errand", "hero.ms_kimds", [8, 3], "Kim Dong-sik", "Kim Dong-sik doesn't look up from his screen.", n(13), None),
+                      ("deputy-day1", "folk.salaryman", [9, 3], "The deputy", "The deputy is on the phone to a supplier, voice low and patient.", n(8), n(10)),
+                      ("deputy", "folk.salaryman", [9, 3], "The deputy", "The deputy is on the phone to a supplier, voice low and patient.", n(13), None),
+                      ("oh-day1", "hero.ms_oh", [11, 3], "Oh Sang-sik", "Section head Oh reads a contract, red pen in hand. He doesn't look up.", n(8), n(10)),
+                      ("oh-day2", "hero.ms_oh", [11, 3], "Oh Sang-sik", "Section head Oh reads a contract, red pen in hand. He doesn't look up.", n(13), n(20)),
+                      ("oh-day3", "hero.ms_oh", [11, 3], "Oh Sang-sik", "Section head Oh reads a contract, red pen in hand. He doesn't look up.", n("21b"), None))],
             ],
             # episode 1's evening, as Jongno's townsfolk while m5 is open: the city's office workers after hours
             "Jongno": [

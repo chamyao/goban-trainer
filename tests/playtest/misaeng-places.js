@@ -192,6 +192,16 @@ async function desks(b) {
   check(on.mine, 'm21: Oh\'s beat (he leads) is on his own chair');
   check(on.kim && on.oh, 'Sales 3: Kim and Oh have their own desks and chairs');
   await p.context().close();
+  // the team sits at their own desks while the story has them in the office (apo110)
+  const seated = async (upto) => { const q = await open(b, upto, 'one-international--sales3', [], ['one-international--sales3']);
+    const v = await q.evaluate(() => { const w = window.__w, r = w.refs || {}, vis = id => w.npcs.filter(n => n.id.startsWith(id) && n.spr.visible);
+      const on = (id, c) => vis(id).some(n => r[c] && Math.hypot(n.spr.x - r[c].x, n.spr.y - r[c].y) < 20);
+      return { kim: on('kim-', 'chair-kim'), deputy: on('deputy', 'chair-deputy'), oh: on('oh-', 'chair-oh'), any: ['kim-', 'deputy', 'oh-'].some(i => vis(i).length) }; });
+    await q.context().close(); return v; };
+  const day = await seated('21-m14'), night = await seated('21-m13'), ohLeads = await seated('21-m21');
+  check(day.kim && day.deputy && day.oh, `m14: Kim, the deputy and Oh sit at their own desks (${JSON.stringify(day)})`);
+  check(!night.any, 'm13: at night the team has gone home');
+  check(ohLeads.kim && !ohLeads.oh, 'm21: Oh leads, so his chair is his to walk to (Kim still at his desk)');
 }
 
 async function walks(b) {

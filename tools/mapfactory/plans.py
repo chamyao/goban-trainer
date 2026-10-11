@@ -586,6 +586,9 @@ class MapBuilder:
             if p.get("behind") in self.foot:   # seated at a desk: feet just inside its top edge, so it hides the legs
                 fx, fy, fw, fh = self.foot[p["behind"]]
                 n["x"], n["y"] = fx + fw / 2, fy + .35
+            if p.get("on") in self.foot:   # seated on a thing (Sales 3's team on their own chairs): exactly there, however
+                fx, fy, fw, fh = self.foot[p["on"]]   # many of them take turns on it (one per stretch of the story)
+                n["x"], n["y"] = fx + fw / 2, fy + fh / 2 + .4
             self.npcs.append(n)
         taken -= lanes - {(int(s_["x"]), int(s_["y"])) for s_ in self.spots}
         for i, c in enumerate(challengers):
