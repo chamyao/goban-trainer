@@ -374,8 +374,8 @@ def _scenes():
             S("ms_director", "Let's all do our jobs properly, shall we?"),
             ["remove", "dir"],
             S("ms_oh", "Get all the interns together!"),
-            N("On the roof, a senior lines the interns up. Whose desk did that waybill come from?"),
             ["still", "ms_ownup", "slow zoom in"],
+            N("On the roof, a senior lines the interns up. Whose desk did that waybill come from?"),
             ["problem"],   # Jang: own the mistake (a sacrifice)
             S("ms_jang", "It was mine. I left it on my desk."),
             N("Every intern turns to look at him. Three weeks before the PT, it goes on his record."),
