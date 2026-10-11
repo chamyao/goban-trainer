@@ -73,7 +73,7 @@ def _scenes():
             S("ms_parkjg", "M-me?"),
             N("That was all Oh said. But Park's eyes are shining."),
             ["problem"],   # Jang: say more than Oh did? (the deliberation; the choice comes after)
-            N("So Jang adds a little more: Oh says he knows how to keep both sides happy."),
+            N('Oh also says, Jang tells him, that he knows how to keep both sides happy.'),
             S("ms_parkjg", "Sales is a war of nerves. Let the other side see you're soft, and they'll walk all over you."),
             S("ms_parkjg", "A supplier missed a deadline once. Their director came to beg. I told him: we'll hold you to the terms of the contract."),
             N("It never happened. But saying it, he feels lighter."),
@@ -988,11 +988,11 @@ KO22 = {
     'They bow, in their black ties. Han bows longest.': '그들은 검은 넥타이를 매고 고개를 숙인다. 한석율이 가장 오래 숙이고 있다.',
     "Brown office slippers with massage spikes, worn down to the shape of Oh's foot, and his good black dress shoes from the box under his desk.": '지압 돌기가 오 과장 발 모양대로 닳은 갈색 사무실 슬리퍼, 그리고 책상 밑 상자에 든 그의 좋은 검은 구두.',
     "That was all Oh said. But Park's eyes are shining.": '오 과장이 한 말은 그게 다였다. 하지만 박 대리의 눈이 반짝인다.',
-    'So Jang adds a little more: Oh says he knows how to keep both sides happy.': '그래서 장그래는 조금 보탠다. 양쪽 입장을 다 맞출 줄 아는 분이라고 오 과장님이 그러셨다고.',
     "It's only a little more. He looks like he needs it.": '조금 더 보태는 것뿐이야. 저 사람한테 필요해 보여.',
     'He adds a little more.': '그는 조금 더 보탠다.',
     "PT day. The interns file in carrying boxes. Oh's slippers are poking out of Jang's box. Han sees them and mutters: is he out of his mind?": 'PT 당일. 인턴들이 상자를 들고 줄지어 들어온다. 장그래의 상자 밖으로 오 과장의 슬리퍼가 삐져나와 있다. 그걸 본 한석율이 중얼거린다. 미친 거 아냐?',
     'Jang wonders: did she help them, or herself? Would she ever do that for him? What are the two of them to her?': '장그래는 생각한다. 그녀는 우리를 도운 걸까, 자기 자신을 도운 걸까? 나를 위해서도 그렇게 해 줄까? 그녀에게 우리 둘은 무엇일까?',
     "Under Oh's desk, among cables and dust: a pair of brown office slippers, the massage spikes worn down to the shape of his foot, and in a shoebox beside them, his good black dress shoes. The office worker's combat boots.": '오 과장 책상 밑, 전선과 먼지 사이에 갈색 사무실 슬리퍼 한 켤레. 지압 돌기가 그의 발 모양대로 닳아 있다. 그 옆 구두 상자에는 그의 좋은 검은 구두. 사무직의 전투화.',
     'Back upstairs to Sales Team 3.': '위층 영업 3팀으로.',
+    'Oh also says, Jang tells him, that he knows how to keep both sides happy.': '오 과장님이, 장그래가 덧붙인다, 양쪽 입장을 다 맞출 줄 아는 분이라고도 하셨다고.',
 }
