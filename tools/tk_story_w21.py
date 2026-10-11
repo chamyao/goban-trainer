@@ -358,13 +358,15 @@ def _scenes():
             ["remove", "ahn"],
             ["still", "ms_dinner", "slow pan across"],
             N("He's late to the team dinner, so he has to down three penalty drinks. He laughs along with everyone, and still feels like a guest at someone else's table."),
+            N("It's past midnight when they spill out onto Jongno. Tomorrow is another working day."),
+            ["party", ["ms_jang"], {"to": {"place": "Jongno", "from": "jongno--hof"}}],   # a cut: out of the hof's door after the dinner; the walk back to the tower is the next morning
         ]},
 
         # M20 · 13수 (W). Kim's rule on paper; the shredding put off; Seok-ho's glue at Jang's desk; the lobby; the director's kick;
         # the roof; Oh finds the scrap glued to the waybill. The lead passes to Oh.
         "m20": {"title": T("The Waybill"), "kind": "main", "steps": [
             ["spawn", "kd", "ms_kimds", "m20", "@chair-kim"], ["spawn", "oh", "ms_oh", "m20", "@chair-oh"],
-            N("Three weeks to the PT. The interns are graded on everything, and one careless moment can sink any of them."),
+            N("The next morning. Three weeks to the PT. The interns are graded on everything, and one careless moment can sink any of them."),
             S("ms_kimds", "Anything with figures on it goes in the shredder. Not one of our papers should ever turn up outside this team."),
             N("He decides to shred the waybill later with the next batch, and leaves it on his desk: Sales Team 3, DH-14."),
             ["spawn", "sh", "ms_kimsh", "m20", 16, 8],
@@ -1000,7 +1002,8 @@ KO21 = {
     'That night, the intern who asked about partners is waiting for him on the roof.': '그날 밤, 파트너를 물었던 인턴이 옥상에서 그를 기다리고 있다.',
     'Five weeks to the PT. Han said Jang could build it his way.': 'PT까지 5주. 한석율은 장그래 마음대로 짜도 된다고 했다.',
     'Four weeks to the PT, and his partner keeps sending his work back.': 'PT까지 4주, 파트너는 계속 그의 작업을 돌려보낸다.',
-    'Three weeks to the PT. The interns are graded on everything, and one careless moment can sink any of them.': 'PT까지 3주. 인턴은 모든 걸 평가받고, 한 번의 실수로 누구든 무너질 수 있다.',
+    'The next morning. Three weeks to the PT. The interns are graded on everything, and one careless moment can sink any of them.': '다음 날 아침. PT까지 3주. 인턴은 모든 걸 평가받고, 한 번의 실수로 누구든 무너질 수 있다.',
+    "It's past midnight when they spill out onto Jongno. Tomorrow is another working day.": '자정이 넘어서야 다들 종로 거리로 쏟아져 나온다. 내일도 출근이다.',
     'Two weeks to the PT. Every day is a lesson in what the job really is.': 'PT까지 2주. 하루하루가 이 일이 진짜 무엇인지 배우는 수업이다.',
     "Two months, then. No degree, no experience, one phone call from a sponsor. If he fails the PT, he's out, and everyone will know he was only ever a parachute.": '두 달. 학위도 경력도 없이, 후원자의 전화 한 통으로 들어왔다. PT에 떨어지면 끝이고, 다들 그가 낙하산이었을 뿐이라고 알게 될 것이다.',
     "Ahn Young-yi, top of their intake and the only woman there, has been watching. She catches Jang's sleeve and steers him out of the door, away from the noise.": '동기 중 수석이자 그 자리의 유일한 여자, 안영이가 지켜보고 있었다. 그녀는 장그래의 소매를 잡아 소란에서 벗어나 문밖으로 데리고 나간다.',
