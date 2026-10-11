@@ -1428,12 +1428,12 @@ def assets(maps, tables, kits_dir=None):
     return rows
 
 
-ARCS = {13: "cc", 14: "lb", 15: "ls", 21: "ms"}   # books whose plans are an arc's: Book 13 is the Cao Cao arc, Book 14 Lü Bu's fall, Book 15 Lady Sun's marriage, Book 21 Misaeng
+ARCS = {13: "cc", 14: "lb", 15: "ls", 21: "ms", 22: "ms2"}   # books whose plans are an arc's: Book 13 is the Cao Cao arc, Book 14 Lü Bu's fall, Book 15 Lady Sun's marriage, Book 21 Misaeng
 
 
 def key_prefix(plans_world):
     """The book number the plans' beat keys carry ("2-c1" for the Cao Cao arc's plans)."""
-    return {"cc": "2", "lb": "3", "ls": "4", "ms": "21"}.get(ARCS.get(plans_world, plans_world), str(plans_world))
+    return {"cc": "2", "lb": "3", "ls": "4", "ms": "21", "ms2": "22"}.get(ARCS.get(plans_world, plans_world), str(plans_world))
 
 
 def plans_arg(v):
@@ -1464,6 +1464,9 @@ def load(plans_world):
     if plans_world == "ms":   # Misaeng (Season 1): beat keys "21-m…", English only (no Chinese table)
         import tk_plans_ms as mod
         return mod.PLANS_MS, mod.TABLES, mod.ZH_PLACES_MS
+    if plans_world == "ms2":   # Misaeng Book 2 (world 22): beat keys "22-b…", the same places as a new config
+        import tk_plans_ms as mod
+        return mod.PLANS_MS2, mod.TABLES, mod.ZH_PLACES_MS
     if plans_world == 90:   # Talk with Claude: the study, no story
         import tk_plans_w90 as mod
         return mod.PLANS90, mod.TABLES, mod.ZH_PLACES90
@@ -1494,6 +1497,11 @@ def story_world(n, plans_world):
             from tk_story_w21 import WORLD21 as W   # Misaeng: its own module, English only
         except ImportError:
             raise SystemExit("no story yet for Misaeng (Plot alt2's WORLD21 in tools/tk_story_w21.py)")
+    elif plans_world == "ms2":
+        try:
+            from tk_story_w22 import WORLD22 as W   # Misaeng Book 2
+        except ImportError:
+            raise SystemExit("no story yet for Misaeng Book 2 (Plot alt2's WORLD22 in tools/tk_story_w22.py)")
     else:
         raise SystemExit(f"no story for book {plans_world}")
     return {**W, "nodes": [{**nd, "key": f"{n}-{nd['key']}"} for nd in W["nodes"]],

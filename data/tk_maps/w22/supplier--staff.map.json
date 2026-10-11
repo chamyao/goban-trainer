@@ -1,0 +1,121 @@
+{
+ "format": "tk-map/1",
+ "id": "supplier--staff",
+ "world": 22,
+ "name": "The staff room",
+ "archetype": "interior",
+ "size": [
+  20,
+  12
+ ],
+ "seed": 1563,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "lino",
+   " ": "void",
+   "W": "wall"
+  },
+  "rows": [
+   "                    ",
+   " WWWWWWWWWWWWWWWWWW ",
+   " WaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaW ",
+   " WWWWWWWWWaaWWWWWWW ",
+   "                    "
+  ],
+  "walk": {
+   "lino": true,
+   "void": false,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    10,
+    6
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     5,
+     5
+    ]
+   },
+   "tiles": 52
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.office_desk",
+   "x": 4,
+   "y": 4,
+   "w": 2,
+   "h": 1,
+   "id": "desk-2"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 8,
+   "y": 4,
+   "w": 2,
+   "h": 1,
+   "id": "desk-4"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 12,
+   "y": 4,
+   "w": 2,
+   "h": 1,
+   "id": "desk-6"
+  },
+  {
+   "kind": "furn.counter",
+   "x": 14,
+   "y": 2,
+   "w": 3,
+   "h": 1,
+   "id": "kettle",
+   "label": "A kettle and paper cups"
+  }
+ ],
+ "spots": [],
+ "npcs": [],
+ "exits": [
+  {
+   "to": "supplier--corridor",
+   "side": "S",
+   "x": 10,
+   "y": 10,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "supplier--corridor": [
+   10,
+   9
+  ],
+  "": [
+   10,
+   9
+  ]
+ },
+ "parent": "supplier",
+ "building": "staff",
+ "links": [
+  "supplier--corridor"
+ ]
+}

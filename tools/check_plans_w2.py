@@ -30,6 +30,8 @@ elif ARC == "ls":   # Lady Sun's marriage (tools/tk_plans_ls.py, docs/book2/lady
     from tk_plans_ls import KEYS_LS, LINE_KINDS, NEW_KINDS, PLANS_LS as PLANS2, ZONE_KINDS  # noqa: E402
 elif ARC == "ms":   # Misaeng (tools/tk_plans_ms.py, docs/book2/misaeng-arc.md on Plot alt2's branch)
     from tk_plans_ms import KEYS_MS, LINE_KINDS, NEW_KINDS, PLANS_MS as PLANS2, ZONE_KINDS  # noqa: E402
+elif ARC == "ms2":   # Misaeng Book 2 (world 22; tools/tk_plans_ms.py's _b2)
+    from tk_plans_ms import KEYS_MS2 as KEYS_MS, LINE_KINDS, NEW_KINDS, PLANS_MS2 as PLANS2, ZONE_KINDS  # noqa: E402
 else:
     from tk_plans_w2 import LINE_KINDS, NEW_KINDS, PLANS2, ZONE_KINDS  # noqa: E402
 from vocab import FOLK, KINDS  # noqa: E402
@@ -49,7 +51,7 @@ def shared_keys():
         return set(KEYS_LB)
     if ARC == "ls":   # the design's beat table (s1 ... s16)
         return set(KEYS_LS)
-    if ARC == "ms":   # the design's beat table (m1 ... m24)
+    if ARC in ("ms", "ms2"):   # the book's beat keys (Book 1's m…, Book 2's b…)
         return set(KEYS_MS)
     if ARC == "cc":   # the "Shared keys" table: | c1 | Luoyang | ...
         text = (ROOT / "docs/book2/caocao-arc.md").read_text().split("## Shared keys")[1]
@@ -592,7 +594,7 @@ def main():
                                                                        for r, v in P.chase_routes.items()))
         errors += P.errors
         if "--png" in sys.argv:
-            drawn.append(draw(name, P, ROOT / ({"cc": "docs/book2/plans-cc", "lb": "docs/book2/plans-lb", "ls": "docs/book2/plans-ls", "ms": "docs/book2/plans-ms"}.get(ARC, "docs/book2/plans"))))
+            drawn.append(draw(name, P, ROOT / ({"cc": "docs/book2/plans-cc", "lb": "docs/book2/plans-lb", "ls": "docs/book2/plans-ls", "ms": "docs/book2/plans-ms", "ms2": "docs/book2/plans-ms2"}.get(ARC, "docs/book2/plans"))))
     # people placed inside a compound or room map ("place": its id, "at": a cell there)
     for place, b in PLANS2.items():
         for i, n in enumerate(b.get("npcs", [])):

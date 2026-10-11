@@ -48,6 +48,7 @@ Where each book's places are:
 | 15 (Lady Sun) | `tools/tk_plans_ls.py` | `--world 15 --plans 15` | `tools/proofs/ladysun_ls.py` | design: `docs/book2/ladysun-places.md`; engine walk: `tests/playtest/book15-places.js` |
 | 90 (Claude's study) | `tools/tk_plans_w90.py` | `plans.py --world 90 --out data/tk_maps/w90` | — | one room |
 | 21 (Misaeng) | `tools/tk_plans_ms.py` | `--world 21 --plans ms` | checker; build proofs; engine walk: `tests/playtest/misaeng-places.js` | English only; modern Seoul. Its own family of sessions: Places (Misaeng) on `claude/places-misaeng`, Plot alt2 (`claude/plot-alt2`, story `tools/tk_story_w21.py`), Integration alt2 (`claude/integration-alt2`, which merges it; engine keys `docs/book2/misaeng-engine.md`), Graphics (Misaeng). Talk to them, not to main Integration |
+| 22 (Misaeng Book 2) | `tools/tk_plans_ms.py` (`_b2`) | `--world 22 --plans ms2` | checker `--arc ms2`; `handoffs.py 22`, `doors.py 22`; engine walk: `tests/playtest/misaeng-book2.js` | The same shared places as Book 1, a new config: beat keys `22-b…`; adds the Supplier and the Daycare (places), the PT hall, reference room and executive meeting room (tower floors), and its own bakery on Jongno (a book's own room: cfg `rooms`). Story `tools/tk_story_w22.py` (Plot alt2) |
 
 A new arc is registered in `plans.py`: `ARCS` (book → arc name), `key_prefix` (the beat keys' book number: Book 15's
 keys are `4-s1`…), `load()` (its module), and in `check_plans_w2.py` (`--arc`).
@@ -194,6 +195,10 @@ These were each learned from a real complaint, and each is a rule, not a one-off
   alt2 can't take main's Book 15 work through it): build on their head, never on claude/plot-places. They cherry-pick: keep to plain commits (no merges); after they
   take a batch, reset the branch onto their head before the next. After a seoul kit change, recompile w21 (`--kit seoul`) on
   their head before pushing maps: the tile ids move with Graphics' sheets.
+- **A book can add a room of its own to a shared place** (cfg `"rooms": {"Jongno": {"bakery": room(...)}}`, with the
+  building that leads to it in cfg `"things"`): Book 2's bakery is on Jongno only in Book 2. A place every later book may
+  use (the Supplier, the Daycare, a tower floor) goes in `_places` / `_floors` instead; an earlier book doesn't see it
+  (exits to places a book doesn't use are dropped), so Book 1's maps come out the same.
 - **A book is a config over shared places** (Misaeng's nine books, `tools/tk_plans_ms.py`): the places are builders
   with no beats in them (`_places(floors)`); each book (`_b1()` …) names the places and tower floors it uses and adds
   its own beat spots, givers and deliveries, people, challengers, lights and objectives; `book(cfg)` assembles them and
@@ -415,6 +420,7 @@ python3 tools/mapfactory/settle_maps.py             # settle wanderers in built 
 tests/playtest/run.sh book15-places                 # Book 15's mechanics, walked in the engine
 python3 tools/proofs/handoffs.py 21                 # every handoff leaves the new lead 6+ tiles to walk
 python3 tools/proofs/doors.py 21                    # every building entered at its drawn door
+tests/playtest/run.sh misaeng-book2                 # Misaeng Book 2: the bakery, the supplier, the daycare, the new floors, the slippers
 tests/playtest/run.sh misaeng-places                # Misaeng: kerb and crosswalks, doors to other places, the lift's menu,
                                                     # General Affairs' requisition, m14's errands, storefront doors, m19c-m22c's walks, the evening
 python3 tools/mapfactory build --world 12 --plans 2

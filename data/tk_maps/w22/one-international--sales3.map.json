@@ -1,0 +1,607 @@
+{
+ "format": "tk-map/1",
+ "id": "one-international--sales3",
+ "world": 22,
+ "name": "Sales Team 3",
+ "archetype": "interior",
+ "size": [
+  36,
+  24
+ ],
+ "seed": 2501,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "carpet",
+   " ": "void",
+   "W": "wall"
+  },
+  "rows": [
+   "                                    ",
+   " WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WWWWWWWWWWWWWWWWWaaWWWWWWWWWWWWWWW ",
+   "                                    "
+  ],
+  "walk": {
+   "carpet": true,
+   "void": false,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    18,
+    12
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     9,
+     11
+    ]
+   },
+   "tiles": 108
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.copier",
+   "x": 4,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "copier",
+   "label": "The copier"
+  },
+  {
+   "kind": "furn.water_cooler",
+   "x": 10,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "cooler",
+   "label": "The pantry: coffee and water"
+  },
+  {
+   "kind": "furn.whiteboard",
+   "x": 14,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "board-1",
+   "label": "Sales Team 3's whiteboard"
+  },
+  {
+   "kind": "furn.filing",
+   "x": 26,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "filing-1",
+   "label": "The filing cabinets"
+  },
+  {
+   "kind": "furn.filing",
+   "x": 28,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "filing-2"
+  },
+  {
+   "kind": "furn.plant",
+   "x": 32,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "plant-n",
+   "blocks_sight": true
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 4,
+   "y": 8,
+   "w": 2,
+   "h": 1,
+   "id": "desk-2-4"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 6,
+   "y": 8,
+   "w": 2,
+   "h": 1,
+   "id": "desk-3-4"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 4,
+   "y": 10,
+   "w": 2,
+   "h": 1,
+   "id": "desk-2-5"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 6,
+   "y": 10,
+   "w": 2,
+   "h": 1,
+   "id": "desk-3-5"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 8,
+   "y": 9,
+   "w": 2,
+   "h": 1,
+   "id": "sun-desk",
+   "label": "Sun Ji-young's desk"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 16,
+   "y": 8,
+   "w": 2,
+   "h": 1,
+   "id": "desk-kim",
+   "label": "Kim Dong-sik's desk"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 18,
+   "y": 8,
+   "w": 2,
+   "h": 1,
+   "id": "desk-deputy",
+   "label": "The deputy's desk"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 16,
+   "y": 10,
+   "w": 2,
+   "h": 1,
+   "id": "desk-jang",
+   "label": "Jang's desk"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 18,
+   "y": 10,
+   "w": 2,
+   "h": 1,
+   "id": "desk-spare",
+   "label": "An empty desk"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 20,
+   "y": 7,
+   "w": 2,
+   "h": 1,
+   "id": "oh-desk",
+   "label": "Oh's desk"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 26,
+   "y": 8,
+   "w": 2,
+   "h": 1,
+   "id": "desk-13-4"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 28,
+   "y": 8,
+   "w": 2,
+   "h": 1,
+   "id": "desk-14-4"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 26,
+   "y": 10,
+   "w": 2,
+   "h": 1,
+   "id": "desk-13-5"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 28,
+   "y": 10,
+   "w": 2,
+   "h": 1,
+   "id": "desk-14-5"
+  },
+  {
+   "kind": "furn.office_desk",
+   "x": 30,
+   "y": 9,
+   "w": 2,
+   "h": 1,
+   "id": "head-e"
+  },
+  {
+   "kind": "furn.meeting_table",
+   "x": 4,
+   "y": 16,
+   "w": 4,
+   "h": 2,
+   "id": "meet-w",
+   "label": "A meeting table"
+  },
+  {
+   "kind": "furn.meeting_table",
+   "x": 26,
+   "y": 16,
+   "w": 4,
+   "h": 2,
+   "id": "meet-e"
+  },
+  {
+   "kind": "furn.plant",
+   "x": 2,
+   "y": 20,
+   "w": 1,
+   "h": 1,
+   "id": "plant-sw",
+   "blocks_sight": true
+  },
+  {
+   "kind": "furn.plant",
+   "x": 32,
+   "y": 20,
+   "w": 1,
+   "h": 1,
+   "id": "plant-se",
+   "blocks_sight": true
+  },
+  {
+   "kind": "furn.lift_door",
+   "x": 12,
+   "y": 20,
+   "w": 2,
+   "h": 1,
+   "id": "lift-doors",
+   "label": "The lift"
+  },
+  {
+   "kind": "marker.seat",
+   "x": 16.5,
+   "y": 8,
+   "w": 1,
+   "h": 1,
+   "id": "chair-kim",
+   "of": "desk-kim",
+   "label": "Kim Dong-sik's chair"
+  },
+  {
+   "kind": "marker.seat",
+   "x": 18.5,
+   "y": 8,
+   "w": 1,
+   "h": 1,
+   "id": "chair-deputy",
+   "of": "desk-deputy",
+   "label": "The deputy's chair"
+  },
+  {
+   "kind": "marker.seat",
+   "x": 16.5,
+   "y": 10,
+   "w": 1,
+   "h": 1,
+   "id": "chair-jang",
+   "of": "desk-jang",
+   "label": "Jang's chair"
+  },
+  {
+   "kind": "marker.seat",
+   "x": 18.5,
+   "y": 10,
+   "w": 1,
+   "h": 1,
+   "id": "chair-spare",
+   "of": "desk-spare"
+  },
+  {
+   "kind": "marker.seat",
+   "x": 20.5,
+   "y": 7,
+   "w": 1,
+   "h": 1,
+   "id": "chair-oh",
+   "of": "oh-desk",
+   "label": "Oh's chair"
+  }
+ ],
+ "spots": [
+  {
+   "id": "lift",
+   "x": 14.5,
+   "y": 20.7,
+   "node": "",
+   "label": "The lift",
+   "floors": [
+    {
+     "label": "1F · The lobby",
+     "to": "one-international"
+    },
+    {
+     "label": "14F · Sales Team 3",
+     "to": "one-international--sales3"
+    },
+    {
+     "label": "R · The roof",
+     "to": "one-international--roof"
+    },
+    {
+     "label": "17F · The executive meeting room",
+     "to": "one-international--meeting3"
+    },
+    {
+     "label": "12F · The reference room",
+     "to": "one-international--reference"
+    },
+    {
+     "label": "4F · The PT hall",
+     "to": "one-international--pt-hall"
+    }
+   ],
+   "use": "lift"
+  },
+  {
+   "id": "b21",
+   "x": 12.5,
+   "y": 12.7,
+   "node": "22-b21",
+   "label": "Sales Team 3"
+  },
+  {
+   "id": "b33b",
+   "x": 17.0,
+   "y": 10.7,
+   "node": "22-b33b",
+   "label": "Your desk",
+   "on": "chair-jang"
+  },
+  {
+   "id": "sales3",
+   "x": 30.5,
+   "y": 18.7,
+   "node": "",
+   "label": "Sales Team 3",
+   "note": "handoffs to Jang at the office land here"
+  },
+  {
+   "id": "oh-desk-search",
+   "x": 21.0,
+   "y": 7.7,
+   "node": "",
+   "label": "Oh's desk",
+   "on": "chair-oh",
+   "gives": "oh_slippers",
+   "gives_when": "node:22-b26",
+   "give": [
+    "Under Oh's desk, among cables and dust: a pair of brown office slippers, the massage spikes worn down to the shape of his foot. The office worker's combat boots."
+   ],
+   "given": [
+    "Oh's desk. You've already taken the slippers."
+   ]
+  }
+ ],
+ "npcs": [
+  {
+   "id": "npc-1",
+   "kind": "folk.officewoman",
+   "x": 28.5,
+   "y": 12.9,
+   "say": [
+    "A woman from the next team. “Sales Team 3? They're the ones who work through lunch.”"
+   ]
+  },
+  {
+   "id": "npc-2",
+   "kind": "folk.salaryman",
+   "x": 6.5,
+   "y": 14.9,
+   "say": [
+    "A deputy from Sales Team 1, reading a fax. “Another intern? We used to get six a year.”"
+   ]
+  },
+  {
+   "id": "kim-a",
+   "kind": "hero.ms_kimds",
+   "x": 17.0,
+   "y": 9.2,
+   "say": [
+    "Kim Dong-sik doesn't look up from his screen."
+   ],
+   "until": "22-b21",
+   "face": "N",
+   "when": "node:22-b19",
+   "label": "Kim Dong-sik"
+  },
+  {
+   "id": "kim-b",
+   "kind": "hero.ms_kimds",
+   "x": 17.0,
+   "y": 9.2,
+   "say": [
+    "Kim Dong-sik doesn't look up from his screen."
+   ],
+   "until": "22-b24",
+   "face": "N",
+   "when": "node:22-b22b",
+   "label": "Kim Dong-sik"
+  },
+  {
+   "id": "kim-c",
+   "kind": "hero.ms_kimds",
+   "x": 17.0,
+   "y": 9.2,
+   "say": [
+    "Kim Dong-sik doesn't look up from his screen."
+   ],
+   "face": "N",
+   "when": "node:22-b33",
+   "label": "Kim Dong-sik"
+  },
+  {
+   "id": "deputy-a",
+   "kind": "folk.salaryman",
+   "x": 19.0,
+   "y": 9.2,
+   "say": [
+    "The deputy is on the phone to a supplier, voice low and patient."
+   ],
+   "until": "22-b21",
+   "face": "N",
+   "when": "node:22-b19",
+   "label": "The deputy"
+  },
+  {
+   "id": "deputy-b",
+   "kind": "folk.salaryman",
+   "x": 19.0,
+   "y": 9.2,
+   "say": [
+    "The deputy is on the phone to a supplier, voice low and patient."
+   ],
+   "until": "22-b24",
+   "face": "N",
+   "when": "node:22-b22b",
+   "label": "The deputy"
+  },
+  {
+   "id": "deputy-c",
+   "kind": "folk.salaryman",
+   "x": 19.0,
+   "y": 9.2,
+   "say": [
+    "The deputy is on the phone to a supplier, voice low and patient."
+   ],
+   "face": "N",
+   "when": "node:22-b33",
+   "label": "The deputy"
+  },
+  {
+   "id": "oh-a",
+   "kind": "hero.ms_oh",
+   "x": 21.0,
+   "y": 8.2,
+   "say": [
+    "Section head Oh reads a contract, red pen in hand, heels out of his office slippers under the desk."
+   ],
+   "until": "22-b21",
+   "face": "N",
+   "when": "node:22-b19",
+   "label": "Oh Sang-sik"
+  },
+  {
+   "id": "oh-b",
+   "kind": "hero.ms_oh",
+   "x": 21.0,
+   "y": 8.2,
+   "say": [
+    "Section head Oh reads a contract, red pen in hand, heels out of his office slippers under the desk."
+   ],
+   "until": "22-b24",
+   "face": "N",
+   "when": "node:22-b22b",
+   "label": "Oh Sang-sik"
+  },
+  {
+   "id": "oh-c",
+   "kind": "hero.ms_oh",
+   "x": 21.0,
+   "y": 8.2,
+   "say": [
+    "Section head Oh reads a contract, red pen in hand, heels out of his office slippers under the desk."
+   ],
+   "face": "N",
+   "when": "node:22-b33",
+   "label": "Oh Sang-sik"
+  }
+ ],
+ "exits": [
+  {
+   "to": "one-international",
+   "side": "S",
+   "x": 18,
+   "y": 22,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "one-international": [
+   14,
+   20
+  ],
+  "": [
+   18,
+   21
+  ],
+  "one-international--roof": [
+   14,
+   20
+  ],
+  "one-international--meeting3": [
+   14,
+   20
+  ],
+  "one-international--reference": [
+   14,
+   20
+  ],
+  "one-international--pt-hall": [
+   14,
+   20
+  ]
+ },
+ "states": [
+  {
+   "id": "day",
+   "light": "day"
+  },
+  {
+   "id": "night",
+   "when": "node:22-b26",
+   "until": "node:22-b27",
+   "light": "night"
+  }
+ ],
+ "parent": "one-international",
+ "building": "sales3",
+ "links": [
+  "one-international"
+ ]
+}
