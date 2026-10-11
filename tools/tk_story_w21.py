@@ -103,14 +103,15 @@ def _scenes():
 
         # M4 · 2수 (W, simplified on playtest). The friends who passed; the decline; the GED; the army; "go and see your old sponsor".
         "m4": {"title": T("Washing Her Back"), "kind": "main", "steps": [
-            ["scroll", T("Years Later"), [
-                T("He quit baduk. He has no degree, no trade, and a mother to look after. He has just come out of the army."),
-            ]],
-            ["spawn", "mo", "ms_mother", "m4", 4, -2],
             N("His friends from the trainee room turned pro. When he packed up, they asked if he was really quitting. He had no answer. "
               "He put his game records out with the board."),
             N("The family restaurant failed. His mother worked building sites until her body gave out. He studied for the equivalency exam "
               "between part-time jobs, and in the bathroom he washed her back."),
+            N("Then the army."),
+            ["scroll", T("Years Later"), [
+                T("He is home from the army: no degree, no trade, and a mother to look after."),
+            ]],
+            ["spawn", "mo", "ms_mother", "m4", 4, -2],
             S("ms_mother", "Your old sponsor asked after you. The man who paid for your baduk. Go and see him."),
             ["remove", "mo"],
             ["party", ["ms_jang"], {"to": {"place": "Jongno", "from": "Susaek-dong"}}],
@@ -912,7 +913,6 @@ KO21 = {
     'A trainee at a board, ringed by onlookers. Everyone outside already knows.': '바둑판 앞의 연구생, 그를 둘러싼 구경꾼들. 밖에 있는 사람들은 이미 다 안다.',
     'At eleven he entered the Korea Baduk Association as a trainee: a child studying to turn professional. The age limit comes at eighteen. He is eighteen now.': '열한 살에 한국기원 연구생이 되었다. 프로 입단을 준비하는 아이들이다. 나이 제한은 열여덟. 이제 그는 열여덟 살이다.',
     'Years Later': '몇 년 후',
-    'He quit baduk. He has no degree, no trade, and a mother to look after. He has just come out of the army.': '그는 바둑을 그만두었다. 학위도, 기술도 없고, 돌봐야 할 어머니가 있다. 막 군대에서 나왔다.',
     'His friends from the trainee room turned pro. When he packed up, they asked if he was really quitting. He had no answer. He put his game records out with the board.': '연구생실 친구들은 입단했다. 짐을 쌀 때 정말 그만두냐고 물었다. 그는 대답하지 못했다. 기보를 바둑판과 함께 내다 놓았다.',
     'The family restaurant failed. His mother worked building sites until her body gave out. He studied for the equivalency exam between part-time jobs, and in the bathroom he washed her back.': '집안의 식당은 망했다. 어머니는 몸이 버티지 못할 때까지 공사판에서 일했다. 그는 아르바이트 틈틈이 검정고시를 공부했고, 욕실에서 어머니의 등을 밀어 드렸다.',
     "I've talked to a friend who runs a trading company: One International. Only he knows about the baduk. It'll be a simple interview.": '무역회사 하는 친구한테 얘기해 뒀다. 원 인터내셔널. 바둑 얘기는 그 친구만 안다. 간단한 면접일 거다.',
@@ -951,4 +951,6 @@ KO21 = {
     "At eleven, the trainees' room: rows of boards, and children who mean to be professionals.": '열한 살, 연구생실. 줄지은 바둑판, 그리고 프로가 되려는 아이들.',
     'The last stone.': '마지막 한 수.',
     'They count.': '계가를 한다.',
+    'Then the army.': '그리고 군대.',
+    'He is home from the army: no degree, no trade, and a mother to look after.': '군대에서 돌아왔다. 학위도, 기술도 없고, 돌봐야 할 어머니가 있다.',
 }
