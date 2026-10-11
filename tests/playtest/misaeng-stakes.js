@@ -43,13 +43,17 @@ async function run(b, dev) {
     const before = await p.evaluate(() => { const e = document.querySelector('.tk-duel .tk-stakes'), t = window.__trainer;
       let vis = false, R = null;
       if (e) { R = e.getBoundingClientRect(); const top = document.elementFromPoint(R.left + Math.min(R.width / 2, 20), R.top + R.height / 2); vis = R.width > 0 && R.bottom <= innerHeight && R.right <= innerWidth && R.top >= 0 && !!top && (top === e || e.contains(top)); }
-      return { text: e ? e.textContent : null, vis, R: R && [R.left | 0, R.top | 0, R.width | 0, R.height | 0], rec: !!(t && t.p.record), id: t && t.p.id, r: TKElo.state().r, src: (document.querySelector('.tk-duel-src') || {}).textContent || '' }; });
+      return { text: e ? e.textContent : null, vis, R: R && [R.left | 0, R.top | 0, R.width | 0, R.height | 0], rec: !!(t && t.p.record), id: t && t.p.id, r: TKElo.state().r, src: (document.querySelector('.tk-duel-src') || {}).textContent || '',
+        fs: e && [getComputedStyle(e).fontSize, getComputedStyle(document.querySelector('.tk-duel-src')).fontSize] }; });
     await p.screenshot({ path: path.join(__dirname, `out/misaeng-stakes-${tag}-${B.key}.png`) });
     if (!B.rated) {
       check(before.rec && before.text === null, `${B.what}: a record board, no stakes line (src "${before.src.slice(0, 70)}")`);
     } else {
       const m = before.text && before.text.match(/^Rating \+(\d+) \/ −(\d+)$/);
       check(!!m && !CJK.test(before.text), `${B.what} (#${before.id}): "${before.text}", in English`);
+      const srcText = before.src.replace(/\s*·\s*Rating.*$/, '');
+      check(/^\d+[kd]\+? · \S.* · source$/i.test(srcText) && !/[a-z0-9]source$|\d[A-Z][a-z]/.test(srcText.replace(/ · source$/, '')) && !CJK.test(before.src), `${B.what}: the source line reads in English with its separators ("${before.src}")`);
+      check(before.fs && before.fs[0] === before.fs[1], `${B.what}: the stakes text is the source line's size (${before.fs})`);
       check(before.vis, `${B.what}: the line is on screen, nothing over it (${before.R})`);
       // answer: first try (the line's moves), or after a hint (counted wrong)
       if (!B.win) { const hk = p.locator('.tk-duel-key', { hasText: 'Hint' }); if (await hk.count()) await hk.first().click(); else await p.evaluate(() => window.__trainer.hint()); await p.waitForTimeout(800); }
