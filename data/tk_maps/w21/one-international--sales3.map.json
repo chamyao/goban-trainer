@@ -361,7 +361,8 @@
    "w": 1,
    "h": 1,
    "id": "spill",
-   "label": "A spill"
+   "label": "A spill",
+   "when": "!mark:errand_floor"
   }
  ],
  "spots": [

@@ -166,6 +166,7 @@ async function errands(b) {
   check(!(await st(p)).marks.includes('errand_copy'), 'm14: Kim waits for the copies');
   await at(p, 'copier');
   check((await st(p)).items.includes('copy'), 'm14: the copier gives the copies');
+  check(await p.evaluate(() => { const o = (window.__w.whenProps || []).find(o => o.when === '!mark:errand_floor'); return !!o && o.img.visible; }), 'm14: the coffee spill is on the carpet');
   await at(p, 'errand-floor');   // no mop yet: the spill waits
   check(!(await st(p)).marks.includes('errand_floor'), 'm14: the spill needs the mop');
   await at(p, 'mop-cupboard');
@@ -175,6 +176,9 @@ async function errands(b) {
   check(['errand_copy', 'errand_bl', 'errand_floor'].every(m => s.marks.includes(m)) && !s.items.includes('copy') && !s.items.includes('mop'),
         `m14: the copies handed to Kim, the phone call made, the floor mopped (${s.marks.join(', ')})`);
   check(await p.evaluate(() => ['errand_copy', 'errand_bl', 'errand_floor'].every(m => window.__w.cond('mark:' + m))), 'm14: its gate (the three errands) is met');
+  // the spill is gone once it's mopped (apo110): the prop's "when" is "!mark:errand_floor"
+  check(await p.evaluate(() => { const w = window.__w; w.refreshStory && w.refreshStory(); const o = (w.whenProps || []).find(o => o.when === '!mark:errand_floor'); return !!o && !o.img.visible; }),
+        'm14: the spill is gone once mopped');
   await p.context().close();
 }
 

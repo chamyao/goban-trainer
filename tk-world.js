@@ -919,10 +919,11 @@ function worldScenes() {
       return this.region.quests.some(q => q.after.includes(key) && this.done(q.node, seen));
     }
     // A story condition: "node:<key>" cleared (a short key is this world's), "item:<key>" held,
-    // "mark:<id>" done; a list holds when all of it does.
+    // "mark:<id>" done; a list holds when all of it does; a leading "!" holds when the rest doesn't.
     cond(c) {
       if (!c) return true;
       if (Array.isArray(c)) return c.every(x => this.cond(x));
+      if (String(c)[0] === "!") return !this.cond(String(c).slice(1));   // "!mark:errand_floor": until then (Misaeng's spill, gone once mopped)
       const i = String(c).indexOf(":"), kind = String(c).slice(0, i), v = String(c).slice(i + 1);
       if (kind === "node") return this.done(/^\d+-/.test(v) ? v : `${this.w.n}-${v}`);
       if (kind === "item") return WorldItems.has(this.w, v);
