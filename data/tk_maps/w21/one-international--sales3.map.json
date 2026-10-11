@@ -169,8 +169,8 @@
    "y": 8,
    "w": 2,
    "h": 1,
-   "id": "desk-deputy",
-   "label": "The deputy's desk"
+   "id": "desk-kim",
+   "label": "Kim Dong-sik's desk"
   },
   {
    "kind": "furn.office_desk",
@@ -178,16 +178,8 @@
    "y": 8,
    "w": 2,
    "h": 1,
-   "id": "desk-spare"
-  },
-  {
-   "kind": "furn.office_desk",
-   "x": 18,
-   "y": 10,
-   "w": 2,
-   "h": 1,
-   "id": "desk-kim",
-   "label": "Kim Dong-sik's desk"
+   "id": "desk-deputy",
+   "label": "The deputy's desk"
   },
   {
    "kind": "furn.office_desk",
@@ -200,12 +192,65 @@
   },
   {
    "kind": "furn.office_desk",
+   "x": 18,
+   "y": 10,
+   "w": 2,
+   "h": 1,
+   "id": "desk-spare",
+   "label": "An empty desk"
+  },
+  {
+   "kind": "furn.office_desk",
    "x": 20,
-   "y": 9,
+   "y": 7,
    "w": 2,
    "h": 1,
    "id": "oh-desk",
    "label": "Oh's desk"
+  },
+  {
+   "kind": "furn.chair",
+   "x": 16,
+   "y": 6,
+   "w": 1,
+   "h": 1,
+   "id": "chair-kim",
+   "label": "Kim Dong-sik's chair"
+  },
+  {
+   "kind": "furn.chair",
+   "x": 18,
+   "y": 6,
+   "w": 1,
+   "h": 1,
+   "id": "chair-deputy",
+   "label": "The deputy's chair"
+  },
+  {
+   "kind": "furn.chair",
+   "x": 16,
+   "y": 12,
+   "w": 1,
+   "h": 1,
+   "id": "chair-jang",
+   "label": "Jang's chair"
+  },
+  {
+   "kind": "furn.chair",
+   "x": 18,
+   "y": 12,
+   "w": 1,
+   "h": 1,
+   "id": "chair-spare"
+  },
+  {
+   "kind": "furn.chair",
+   "x": 22,
+   "y": 6,
+   "w": 1,
+   "h": 1,
+   "id": "chair-oh",
+   "label": "Oh's chair"
   },
   {
    "kind": "furn.office_desk",
@@ -293,8 +338,8 @@
   },
   {
    "kind": "furn.phone",
-   "x": 12,
-   "y": 8,
+   "x": 10,
+   "y": 10,
    "w": 1,
    "h": 1,
    "id": "team-phone",
@@ -302,7 +347,7 @@
   },
   {
    "kind": "furn.cleaning_cupboard",
-   "x": 22,
+   "x": 30,
    "y": 2,
    "w": 1,
    "h": 1,
@@ -352,17 +397,19 @@
   },
   {
    "id": "m10",
-   "x": 12.5,
-   "y": 16.7,
+   "x": 16.5,
+   "y": 12.7,
    "node": "21-m10",
-   "label": "Jang's desk"
+   "label": "Your desk",
+   "on": "chair-jang"
   },
   {
    "id": "m13",
-   "x": 6.5,
-   "y": 18.7,
+   "x": 16.5,
+   "y": 12.7,
    "node": "21-m13",
-   "label": "Jang's desk, at night"
+   "label": "Your desk, at night",
+   "on": "chair-jang"
   },
   {
    "id": "m14",
@@ -388,16 +435,17 @@
   {
    "id": "m20",
    "x": 6.5,
-   "y": 14.7,
+   "y": 18.7,
    "node": "21-m20",
    "label": "Sales Team 3"
   },
   {
    "id": "m21",
-   "x": 24.5,
-   "y": 10.7,
+   "x": 22.5,
+   "y": 6.7,
    "node": "21-m21",
-   "label": "Oh's desk"
+   "label": "Oh's desk",
+   "on": "chair-oh"
   },
   {
    "id": "m22",
@@ -438,8 +486,8 @@
   },
   {
    "id": "errand-copy",
-   "x": 19.5,
-   "y": 12.700000000000001,
+   "x": 17.5,
+   "y": 6.7,
    "node": "",
    "label": "Give Kim Dong-sik his copies",
    "needs": [
@@ -461,8 +509,8 @@
   },
   {
    "id": "errand-bl",
-   "x": 12.5,
-   "y": 10.7,
+   "x": 10.5,
+   "y": 12.7,
    "node": "",
    "label": "The team phone",
    "needs": [
@@ -483,7 +531,7 @@
   },
   {
    "id": "mop-cupboard",
-   "x": 22.5,
+   "x": 30.5,
    "y": 4.7,
    "node": "",
    "label": "The cleaning cupboard",
@@ -533,7 +581,7 @@
   {
    "id": "npc-2",
    "kind": "folk.salaryman",
-   "x": 7.5,
+   "x": 6.5,
    "y": 14.9,
    "say": [
     "A deputy from Sales Team 1, reading a fax. “Another intern? We used to get six a year.”"
@@ -542,8 +590,8 @@
   {
    "id": "kim-errand",
    "kind": "hero.ms_kimds",
-   "x": 19.5,
-   "y": 12.9,
+   "x": 17.5,
+   "y": 6.9,
    "say": [
     "Kim Dong-sik doesn't look up from his screen."
    ],

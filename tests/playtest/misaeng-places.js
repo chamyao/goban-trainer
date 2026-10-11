@@ -178,6 +178,16 @@ async function errands(b) {
   await p.context().close();
 }
 
+// m10/m13 "your desk", m21 Oh's desk: the beat stands on the person's own chair, not a circle on the floor (apo110)
+async function desks(b) {
+  const p = await open(b, '21-m10', 'one-international--sales3', [], ['one-international--sales3']);
+  const on = await p.evaluate(() => { const w = window.__w, r = w.refs || {}, at = (s, c) => !!w.spots[s] && !!r[c] && Math.hypot(w.spots[s].x - r[c].x, w.spots[s].y - r[c].y) < 20;
+    return { jang: at('m10', 'chair-jang'), kim: !!r['desk-kim'] && !!r['chair-kim'], oh: !!r['chair-oh'] }; });
+  check(on.jang, 'm10: "your desk" is Jang\'s own chair at his desk');
+  check(on.kim && on.oh, 'Sales 3: Kim and Oh have their own desks and chairs');
+  await p.context().close();
+}
+
 async function walks(b) {
   // a storefront's door is drawn on its south face, and it's entered there (the baduk class, m1; the KBA café, m3)
   for (const [upto, place, door] of [['21-m1', 'susaek-dong', 'baduk-class'], ['21-m2', 'korea-baduk-association', 'kba-cafe'],
@@ -209,7 +219,7 @@ async function evening(b) {
 
 (async () => {
   const b = await chromium.launch({ args: ['--use-gl=swiftshader', '--enable-webgl'] });
-  for (const t of [commute, run, street, requisition, errands, walks, evening]) {
+  for (const t of [commute, run, street, requisition, errands, desks, walks, evening]) {
     try { await t(b); } catch (e) { fails++; console.log('FAIL', t.name, e.message); }
   }
   await b.close();

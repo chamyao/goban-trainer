@@ -215,6 +215,9 @@ These were each learned from a real complaint, and each is a rule, not a one-off
   reads as a circle on the floor (apo110 again, at General Affairs: "fetched from a circle with nothing to mark the
   destination"). Name the taker (`"to": <npc id>`, `_deliver(..., to=...)`): the build moves the spot to their feet,
   so the ring and the diamond are on the person. Label it with the act ("Hand Kim's requisition to the clerk").
+- **A beat "at your desk" is on the desk's chair** (apo110: "each member should have their own desk as a destination
+  on the team floor"). Misaeng's Sales 3 gives each member a desk and a chair (`furn.chair`, walked over), and a beat
+  at someone's desk stands `"on"` their chair: the ring is at the chair, not on open floor.
 - **Walk-up spots keep 76 px apart.** A beat, a thing that gives, or a place to deliver to sets off within 36 px of
   her. Two closer than 76 px both go off as she walks by: in Misaeng's Sales 3, five spots 32 px apart in a row set
   each other off and m4's waiting scene kept firing between deliveries (Testing). The checker fails a pair closer than
