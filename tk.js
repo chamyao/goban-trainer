@@ -1367,8 +1367,8 @@ async function viewTK(worldN) {
   root.append(h("div", { class: "tk-head" }, [
     h("div", {}, [h("h2", {}, [h("span", { class: "zh" }, native), " ", title]),
       h("div", { class: "sub" }, w.lang === "en"   // an English-only book (Misaeng): no Chinese, no novel chapters
-        ? `Book ${w.book || 1} · ${w.name} · ${w.grades} · ${done}/${levels.length} cleared`
-        : `第${w.book || w.n}卷 Book ${w.book || w.n} · ${w.name} ${w.zh} · chapters ${w.chapters.join("–")} · ${w.grades} · ${done}/${levels.length} cleared`)]),
+        ? `Book ${w.book || 1} · ${w.name} · ${plainGrade(w.grades)} · ${done}/${levels.length} cleared`
+        : `第${w.book || w.n}卷 Book ${w.book || w.n} · ${w.name} ${w.zh} · chapters ${w.chapters.join("–")} · ${plainGrade(w.grades)} · ${done}/${levels.length} cleared`)]),
     h("div", { class: "tk-head-btns" }, [voiceBtn, chron]),
   ]));
   root.append(h("div", { class: "tk-worlds" }, [
@@ -1506,7 +1506,7 @@ async function viewTK(worldN) {
       : (clr && scene ? `Side story: ${scene.title}` : "Side story: ???");
     info.append(h("div", { class: "tk-info-text" }, [
       h("b", {}, node.place),
-      h("div", { class: "meta" }, [TK.roleLabel(node), node.grade, clr ? "cleared ★" : open ? "" : "locked"].filter(Boolean).join(" · ")),
+      h("div", { class: "meta" }, [TK.roleLabel(node), plainGrade(node.grade), clr ? "cleared ★" : open ? "" : "locked"].filter(Boolean).join(" · ")),
       h("div", { class: "meta" }, story),
     ]));
     const play = h("button", { class: "tk-play", type: "button" }, clr ? "Play again ▶" : "Play ▶");
@@ -1525,7 +1525,7 @@ async function viewTK(worldN) {
       while (cur && map.N[cur].role === node.role) { len++; cur = TK.succs(w, cur)[0]; }
       const b = h("button", { type: "button", class: long ? "" : "short" }, [
         h("b", {}, long ? "Long road" : "Mountain trail"),
-        h("span", {}, `${len} level${len > 1 ? "s" : ""} · ${node.grade}`),
+        h("span", {}, `${len} level${len > 1 ? "s" : ""} · ${plainGrade(node.grade)}`),
       ]);
       b.onclick = async () => { info.innerHTML = ""; await map.walkTo(k); showInfo(k); };
       opts.append(b);
@@ -1646,7 +1646,7 @@ function tkLevelBuild(host, worldN, key, { w, node, src, p, book }, { back, agai
         h("span", { class: "tk-en" }, ` ${node.place} · ${TK.roleLabel(node)}`)]),
       h("div", { class: "meta-sub" }, [node.role === "boss" ? "" : `出自 from ${src.title} · `, p.url ? h("a", { href: p.url, target: "_blank" }, "来源 source")
                                                                  : h("a", { href: `https://www.101weiqi.com/q/${p.id}/`, target: "_blank" }, "来源 source")]),
-      h("div", { class: "badges" }, [...(p.lv || node.grade ? [h("span", { class: "badge" }, p.lv || node.grade)] : []), ...(p.qt ? [h("span", { class: "badge" }, p.qt)] : []), turnBadge]),
+      h("div", { class: "badges" }, [...(p.lv || node.grade ? [h("span", { class: "badge" }, plainGrade(p.lv || node.grade))] : []), ...(p.qt ? [h("span", { class: "badge" }, p.qt)] : []), turnBadge]),
     ]),
     h("div", { class: "panel" }, [h("h2", {}, "状态 Status"), status, note, verdict]),
     treePanel,
@@ -1811,7 +1811,7 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
   ]);
   const srcLine = p.record ? h("div", { class: "tk-duel-src" }, `${p.credit} · ${p.only ? "which was played: A, B, C or D?" : "find the move that was played"}`)   // a record board: the game, not a problem book
     : h("div", { class: "tk-duel-src" }, [
-    `${p.lv || node.grade || ""} · 死活 · `, node.role === "boss" ? "" : `出自 ${src.title} · `,
+    `${plainGrade(p.lv || node.grade)} · 死活 · `, node.role === "boss" ? "" : `出自 ${src.title} · `,
     h("a", { href: p.url || `https://www.101weiqi.com/q/${p.id}/`, target: "_blank", rel: "noopener" }, "来源 source"),
   ]);
   // a decision board: the leader's choice named in the side column, over what's said
@@ -2216,21 +2216,28 @@ const TKTalk = {
   },
 };
 
+// Grades without the half step (the user, 2026-10-11): 101weiqi's "11K+" reads as 11K everywhere; a range
+// "12K–12K+" as "12K"
+function plainGrade(g) {
+  const s = String(g == null ? "" : g).replace(/(\d+\s*[KkDd])\+/g, "$1"), m = s.split("–");
+  return m.length === 2 && m[0] === m[1] ? m[0] : s;
+}
+
 // Adaptive difficulty (the user, apo110): an Elo rating kept in the synced progress. A board solved on the first
 // try (no slip, no hint) is a win, anything else a loss, against the problem's own grade; the next board is the
 // unused problem nearest the rating (one of the nearest few, so it isn't predictable). 15K = 600, 100 a grade,
-// 1K = 2000, 1D = 2100. Starts at 14K, the old Easy.
+// 1K = 2000, 1D = 2100 (no half grades). Starts at 14K, the old Easy.
 const TKElo = {
   START: 700,
   // the problem's rating against the player's: a board is aimed at a 3-in-4 first-try solve, a boss at 1-in-2
   // (the user). Elo's expectation 1/(1+10^(d/400)) is 3/4 at d = -400·log10(3) ≈ -191, 1/2 at d = 0.
   BOARD: -Math.round(400 * Math.log10(3)), BOSS: 0,
-  of(rank) { return 600 + rank * 50; },
+  of(rank) { return 600 + Math.floor(rank / 2) * 100; },   // the pools' rank counts half grades (11K, 11K+): a "+" rates as its grade
   state(p = loadProgress()) { return p.tkElo || (p.tkElo = { r: this.START, n: 0, used: [], slots: {} }); },
   get rating() { return this.state().r; },
   label(r = this.rating) {
-    const i = Math.max(0, Math.round((r - 600) / 50));
-    return i < 30 ? `${15 - Math.floor(i / 2)}K${i % 2 ? "+" : ""}` : `${1 + Math.floor((i - 30) / 2)}D${(i - 30) % 2 ? "+" : ""}`;
+    const i = Math.max(0, Math.round((r - 600) / 100));
+    return i < 15 ? `${15 - i}K` : `${i - 14}D`;
   },
   pick(w, slot, offset = this.BOARD, pool) {
     const p = loadProgress(), s = this.state(p);
