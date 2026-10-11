@@ -181,7 +181,8 @@ def _scenes():
             N("At fifteen he filed his game records his own way, in a system only he ever had to read."),
             ["remove", "kd"],
             ["spawn", "gl", "ms_glasses", "m10", 10, 0],
-            S("ms_glasses", "Interns' study group tonight. We're going to work out who the dud is."),
+            S("ms_glasses", "Interns' study group tonight. You're coming. Filing? It'll keep. We're going to work out who the dud is."),
+            N("He has a whole cabinet to re-sort by morning. The glasses intern steers him out of the door anyway."),
             ["remove", "gl"],
             ["party", ["ms_jang"], {"to": {"place": "Jongno", "from": "One International"}}],
         ]},
@@ -189,12 +190,14 @@ def _scenes():
         # M12 · 6수 (W). The interns' bar; Ahn: 아생연후살타.
         "m12": {"title": T("Secure Yourself First"), "kind": "main", "steps": [
             ["spawn", "ahn", "ms_ahn", "m12", 4, -2], ["spawn", "gl", "ms_glasses", "m12", 8, -2],
-            N("The bar is full of interns pitching PT topics. Ahn Young-yi, top of their intake and the only woman there, is watching him."),
+            N("The bar is full of interns pitching PT topics. Every time Jang reaches for his bag to leave, the glasses intern refills his glass and pulls him back down."),
+            S("ms_glasses", "Sit, sit. You can't leave before we've picked the dud. Well, we all know who it is."),
+            N("Ahn Young-yi, top of their intake and the only woman there, has been watching."),
             S("ms_ahn", "You haven't said a word all night. You won't learn just by listening."),
             S("ms_ahn", "And you've got filing due tomorrow, but you're sitting here? Make your own stones safe before you attack."),
             ["problem"],   # Jang: secure your own group first
             N("He's lived by that proverb his whole life, and he had to hear it from someone else. He runs back to the office."),
-            S("ms_ahn", "He really does have filing due. Come on, you're going to go and apologise."),
+            S("ms_ahn", "You kept him here when you knew he had filing due tomorrow. Come on. You're going to go and apologise."),
             ["remove", "ahn"], ["remove", "gl"],
             ["party", ["ms_ahn"]],   # the lead passes to Ahn: she takes the glasses intern back to the office (her stretch, m13)
         ]},
@@ -203,8 +206,11 @@ def _scenes():
         "m13": {"title": T("Both Live"), "kind": "main", "steps": [
             ["spawn", "jg", "ms_jang", "m13", 4, -2], ["spawn", "gl", "ms_glasses", "m13", 8, 0],
             ["spawn", "oh", "ms_oh", "m13", 14, -4], ["spawn", "kd", "ms_kimds", "m13", 16, -2],
-            S("ms_glasses", "Sorry. I didn't know you had urgent work."),
+            S("ms_glasses", "Sorry. I shouldn't have kept you out."),
+            N("On Jang's desk are two ways of filing the same papers: Kim's, which the whole team knows, and Jang's new one, which is better but only he understands. "
+              "Kim wants his own back. One of them, it seems, has to go."),
             S("ms_ahn", "His system makes sense. The trouble is, everyone on staff already knows the old one."),
+            N("In baduk, two groups locked together can sometimes both live, if neither side forces the issue. Ahn looks for that."),
             ["problem"],   # Ahn: make both live
             S("ms_ahn", "Keep Mr. Kim's order for the executives' file, but use Jang's cross-index from the planning stage. Then the departments could actually line up."),
             S("ms_kimds", "...Good idea."),
@@ -775,7 +781,6 @@ KO21 = {
     'Oh bursts in, thirty minutes late, hiking clothes under his jacket.': '오 과장이 30분 늦게 뛰어든다. 재킷 안엔 등산복 차림이다.',
     'General Affairs hands over a box of supplies, a glue stick among them.': '총무팀이 비품 상자를 건넨다. 그 안에 딱풀도 하나.',
     'Sort these files into my folders.': '이 파일들 내 폴더에 정리해.',
-    "Sorry. I didn't know you had urgent work.": '미안해요. 급한 일이 있는 줄 몰랐어요.',
     'That night he dreams of a board: rows of white stones, and one black.': '그날 밤 그는 바둑판 꿈을 꾼다. 줄지은 흰 돌, 그리고 검은 돌 하나.',
     'Do your part, and trust the rest.': '자기 몫을 하고, 나머지는 믿는 거예요.',
     'They say he made a big mistake in front of a buyer at Ulsan.': '울산에서 바이어 앞에서 큰 실수를 했대요.',
@@ -849,7 +854,6 @@ KO21 = {
     "He dreams of his heroes, the great players: Cho Nam-chul, Cho Hunhyun, Lee Chang-ho, Lee Sedol. One by one they fade away. Hasn't he let go of baduk yet?": '그는 영웅들, 위대한 기사들의 꿈을 꾼다. 조남철, 조훈현, 이창호, 이세돌. 하나씩 희미해진다. 그는 아직 바둑을 놓지 못한 걸까.',
     'Late that night, Kim Seok-ho gets home to his one-room flat. The baby is still awake and knows him at once. Her tiny hand closes round his finger.': '그날 밤 늦게, 김석호가 단칸방으로 돌아온다. 아기는 아직 깨어 있고, 아빠를 단번에 알아본다. 작은 손이 그의 손가락을 꼭 쥔다.',
     'He decides to shred the waybill later with the next batch, and leaves it on his desk: Sales Team 3, DH-14.': '그는 선하증권을 다음에 한꺼번에 파쇄하기로 하고 책상 위에 둔다. 영업 3팀, DH-14.',
-    "He really does have filing due. Come on, you're going to go and apologise.": '정말 정리할 서류가 있대요. 가요, 가서 사과해요.',
     "Ha! That's my fault. The supply cabinet key's on my key ring.": '하! 그건 내 탓이야. 비품함 열쇠가 내 열쇠고리에 있거든.',
     "That filing system belongs to the company. This isn't work you do alone; it's work we do together.": '그 체계는 회사 거야. 이건 혼자 하는 일이 아니야. 같이 하는 일이야.',
     'They go looking for Kim Bu-ryeon, only to find him already on the textile floor with Go, apologising to Steve. Then Go asks whether the approvals will go faster now, and everyone laughs.': '김부련 부장을 찾으러 가 보니, 그는 이미 섬유팀 층에서 고 과장과 함께 스티브에게 사과하고 있다. 그러다 고 과장이 이제 결재가 빨리 나느냐고 묻고, 모두가 웃는다.',
@@ -890,7 +894,6 @@ KO21 = {
     "Jang has told everyone the waybill was his fault. Oh takes him and Kim out for a drink, and it isn't even nine before he's tipsy.": '장그래는 선하증권이 자기 잘못이라고 다들에게 말했다. 오 과장은 그와 김 대리를 데리고 술을 마시러 가고, 아홉 시도 안 돼 벌써 취한다.',
     "...The second one's good. Let's go with that.": '...두 번째 거 괜찮네요. 그걸로 하죠.',
     'He comes over to our team a lot, to borrow supplies.': '그 친구, 비품 빌리러 우리 팀에 자주 오던데.',
-    'The bar is full of interns pitching PT topics. Ahn Young-yi, top of their intake and the only woman there, is watching him.': '술집은 PT 주제를 쏟아 내는 인턴들로 가득하다. 동기 중 수석이자 유일한 여자인 안영이가 그를 지켜보고 있다.',
     "Lead this time. Don't hand it over.": '이번엔 이끌자. 내주지 말자.',
     'He draws a mind map and designs a better filing system. It takes him all afternoon.': '그는 마인드맵을 그리고 더 나은 정리 체계를 만든다. 오후 내내 걸린다.',
     "Kim Seok-ho, an intern on another team, glues his report together at Jang's desk, right on top of the waybill, and hurries off.": '다른 팀 인턴 김석호가 장그래의 책상에서, 선하증권 바로 위에서 보고서를 풀로 붙이고 서둘러 나간다.',
@@ -905,7 +908,6 @@ KO21 = {
     "If it's checkmate, don't cling to it. Don't leave it on the board.": '외통수라면 매달리지 마. 판 위에 남겨 두지 마.',
     "He's lived by that proverb his whole life, and he had to hear it from someone else. He runs back to the office.": '평생 그 격언대로 살아 왔는데, 남에게서 들어야 했다. 그는 회사로 뛰어간다.',
     'Black approaches, and the hard fight starts here.': '흑이 다가간다. 치열한 싸움은 여기서 시작된다.',
-    "Interns' study group tonight. We're going to work out who the dud is.": '오늘 밤 인턴 스터디 있어. 누가 폭탄인지 알아보자고.',
     'Han snatches it back with both hands.': '한석율이 두 손으로 다시 빼앗아 간다.',
     "A friend of mine runs a trading company, One International. I've spoken to him. He's the only one there who knows about your baduk, and it'll be a simple interview.": '내 친구가 원 인터내셔널이라는 무역회사를 하는데, 얘기해 뒀다. 거기서 네 바둑 얘기를 아는 건 그 친구뿐이고, 간단한 면접일 거다.',
     "Jang Geu-rae, you'll be an intern with Sales Team 3. In two months the interns sit a PT, a presentation test. Pass it, and you stay on.": '장그래 씨는 영업 3팀 인턴입니다. 두 달 뒤 인턴들은 PT, 발표 시험을 봅니다. 통과하면 계속 남는 겁니다.',
@@ -932,4 +934,13 @@ KO21 = {
     # Places (Misaeng), relabelled handoff spots (d2b51e5)
     "Hand Kim's requisition to the clerk": '김 대리의 비품 신청서를 직원에게 건네기',
     'Give Kim Dong-sik his copies': '김동식 대리에게 복사본 건네기',
+    "Interns' study group tonight. You're coming. Filing? It'll keep. We're going to work out who the dud is.": '오늘 밤 인턴 스터디. 너도 와. 서류 정리? 내일 해도 돼. 누가 폭탄인지 알아보자고.',
+    'He has a whole cabinet to re-sort by morning. The glasses intern steers him out of the door anyway.': '아침까지 캐비닛 하나를 다시 정리해야 한다. 그래도 안경 쓴 인턴은 그를 문밖으로 끌고 나간다.',
+    'The bar is full of interns pitching PT topics. Every time Jang reaches for his bag to leave, the glasses intern refills his glass and pulls him back down.': '술집은 PT 주제를 쏟아 내는 인턴들로 가득하다. 장그래가 가방을 집어 들 때마다 안경 쓴 인턴이 잔을 채우고 그를 다시 앉힌다.',
+    "Sit, sit. You can't leave before we've picked the dud. Well, we all know who it is.": '앉아, 앉아. 폭탄 고르기 전엔 못 가. 뭐, 누군지 다 알지만.',
+    'Ahn Young-yi, top of their intake and the only woman there, has been watching.': '동기 중 수석이자 그 자리의 유일한 여자, 안영이가 지켜보고 있었다.',
+    "You kept him here when you knew he had filing due tomorrow. Come on. You're going to go and apologise.": '내일까지 정리할 서류가 있는 거 알면서 붙잡아 뒀잖아요. 가요. 가서 사과해요.',
+    "Sorry. I shouldn't have kept you out.": '미안해요. 붙잡아 두지 말았어야 했는데.',
+    "On Jang's desk are two ways of filing the same papers: Kim's, which the whole team knows, and Jang's new one, which is better but only he understands. Kim wants his own back. One of them, it seems, has to go.": '장그래의 책상에는 같은 서류를 정리하는 두 가지 방식이 있다. 팀 모두가 아는 김 대리의 방식, 그리고 더 낫지만 장그래만 아는 새 방식. 김 대리는 자기 방식을 되돌려 놓으라 한다. 둘 중 하나는 사라져야 할 것 같다.',
+    'In baduk, two groups locked together can sometimes both live, if neither side forces the issue. Ahn looks for that.': '바둑에서는 맞물린 두 무리가, 어느 쪽도 무리하지 않으면 둘 다 살 때가 있다. 안영이는 그 수를 찾는다.',
 }
