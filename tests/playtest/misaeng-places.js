@@ -96,6 +96,9 @@ const shown = (p, id) => p.evaluate(id => { const n = window.__w.npcs.find(n => 
 
 // m8, the first commute: home in Susaek-dong, and the way to Jongno (the subway) must be open
 async function commute(b) {
+  const h = await open(b, '21-m1', 'susaek-dong', [], ['susaek-dong']);   // m1: the book opens in the street; home, where the uncle brings the stones
+  check(await through(h, 'susaek-dong--home') && await h.evaluate(() => !!window.__w.spots.m1), 'm1: into Jang\'s home, where m1 is');
+  await h.context().close();
   const p = await open(b, '21-m5', 'susaek-dong', [], ['susaek-dong']);
   const open_ = await p.evaluate(() => ['the-subway', 'jongno'].map(x => [x, window.__w.placeOpen(x)]));
   for (const [x, o] of open_) check(o, `m5: from home, ${x} is open (the way to the sponsor's office)`);

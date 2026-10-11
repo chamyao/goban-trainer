@@ -308,11 +308,11 @@
   {
    "node": "21-m1",
    "role": "main",
-   "place": "susaek-dong--baduk-class",
+   "place": "susaek-dong--home",
    "spot": "m1",
    "scene": "m1",
    "title": "Atari",
-   "objective": "The baduk class down the road.",
+   "objective": "Home. Your uncle has brought something.",
    "after": [],
    "grade": "11K",
    "pool": [
