@@ -287,6 +287,8 @@ CAST.update({
                 "short-sleeved white shirt, a blue tie and a lanyard ID card"),
     "ms_hateacher": ("Ms. Ha", "a gentle Korean daycare teacher in her mid-twenties with freckles and a brown ponytail, "
                      "in a pastel pink apron over a cream sweater"),
+    "ms_ithead": ("the head of IT", "a stiff, careful Korean department head in his fifties with thinning hair and "
+                  "rimless glasses, in a charcoal suit and a burgundy tie"),
     "ms_examiner": ("the examiner", "a reserved Korean man in his fifties with greying side-parted hair and glasses, in "
                     "a dark suit and a plain grey tie, holding a clipboard"),
     "ms_ahnfather": ("Ahn's father", "a cold, stern Korean army officer in his fifties with short black hair, in an "
