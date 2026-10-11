@@ -660,3 +660,62 @@ the choice revealed afterwards.
 - **Optional, m20:** one beat for Kim Seok-ho after "Every intern turns to look at him", e.g. `["emote", "sh", ...]`
   plus "Kim Seok-ho stares at the floor." It would plant his "...I'm sorry" in m21b.
 - **Dependency:** the `ms_ownup` still has to be repainted for the new staging (Plot has asked Graphics).
+
+---
+
+## Round 4: playtest fixes after clearance (claude/plot-alt2 1e98892f)
+
+Read cold, in both the regenerated script and the raw steps. Plot's first message pointed at three places to check;
+at the user's direction I've judged the changes on my own terms instead. I'd read that message before the
+correction arrived, so I can't claim to be unprimed on m19, m20 and m21. Those findings rest on the reasons given
+below.
+
+**Works:**
+- **m1's decline** ("At first he climbed fast…", ms_slide) makes "last chance" earned.
+- **m5's "to buy time until you get there"** gives the errand its reason.
+- **The m19c → m20 time cut** ("past midnight… The next morning") is clear.
+- **The seki board in m13.**
+- **Staging:**
+  - Team members now sit at their own chairs.
+  - Han, the department head and the sauna voices are offstage.
+- **Waybill timing:** spacing the waybill's setup a beat away from its payoff makes the lobby sheet a moment of
+  recognition for the player (4, 9).
+
+**Problems, ranked:**
+
+1. **m20 → m21: Oh searches a desk for something already in his hand.**
+   - m20 ends "Oh keeps the waybill", so he's holding it. The desk find then says "You turn the waybill over: glued
+     to the back is a torn scrap…". The desk visit adds nothing he couldn't have seen at his own desk, and the reason
+     he goes to Jang's desk at all ("something about it doesn't sit right") isn't attached to anything the player
+     saw Oh notice (1, 3).
+   - **Fix:** give Oh something he sees. In m20, after "Kim Seok-ho stares at the floor.", add "Oh's eyes go from
+     Jang to Kim Seok-ho, who won't look up." Then make the desk the reason he turns the waybill over: "Jang's desk.
+     The glue stick lies uncapped among paper trimmings, and there's a dried smear of glue where the waybill must
+     have lain. You turn the waybill over…".
+2. **m12 → m13: with the apology cut, Ahn has no reason to go back to the office.** "Ahn watches him go, then heads
+   back to the office herself" hands the player a lead with no goal (6, 15).
+   - **Fix:** one clause of motive, e.g. "A whole cabinet, alone, by morning. Ahn sighs and follows him."
+   - **Also check:** in m13, Oh and Kim are spawned at their chairs, and Kim says "...Good idea." It's the night of
+     the hof, so are they working late? One line ("Kim is still at his desk, working late") or dropping Oh's spawn
+     would settle it.
+3. **m19: the waybill setup interrupts the Han thread.** The beat builds pressure: his work keeps coming back, he
+   works all night, Oh tears in, then he calls Han. The shredder rule, the glue and the waybill still now sit between
+   Oh's tear-in and the call. Two threads plus two boards and two stills make the beat crowded, and Kim's "And
+   anything with figures…" hangs off Oh's critique (C2, 19).
+   - **Fix:** move the waybill block to the end of m19, after "This little runt…". Close on "He means to shred it
+     later. He sits down in the empty meeting room, just for a minute." m19c then opens on his sleep, and that sleep
+     ("you slept the whole day") becomes the reason he never shreds it (1). Kim's line stands alone: "Anything with
+     figures on it goes in the shredder."
+4. **m1 → m2 repetition.** m1's new decline now says three things that m2 says again:
+   - m1's half-point losses vs. m2's "for seven years he has lost that way";
+   - m1's friends passing ahead of him vs. m2's "His friends from the trainees' room turned pro";
+   - m1's part-time jobs vs. m2's "or playing between part-time jobs".
+
+   **Fix:** in m2, cut "His friends from the trainees' room turned pro." (keep "They ask if he's really quitting…")
+   and "or playing between part-time jobs".
+5. **m21's opener now repeats the find.** "Someone else's scrap, glued to Jang's waybill." comes straight after the
+   player read the same thing at the desk.
+   - **Fix:** cut it to "Oh means to find out how it got there." The closing "a locked cabinet, a borrowed glue
+     stick, and a scrap with a name on it" is Oh putting the pieces together, not a repeat. Keep it.
+6. **Tool nit:** the md prints "⇒ player now controls Ahn Young-yi, going to None" at the end of m12. That's a
+   party step with no `to`.
