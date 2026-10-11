@@ -604,3 +604,11 @@ move positions, stills, problems), not only the generated script md. Staging pro
 - **Housekeeping:** the code comments still say "take sente (fails, as written)" (m17) and "hold your ground on the
   phone (fails, as written)" (m18). These are stale since the boards were re-captioned. Players don't see them, but
   they mislead the next writer.
+
+**402503c, checked against the raw steps: cleared.**
+- m17 now ends on the roof with Han leaving, and no one appears from nowhere.
+- m18's single lunch exchange reads cleanly. It goes from "Not Jang, surely" to "Jang's with Han", then Han's Ulsan
+  mistake, then "bomb squad", then Ahn's "Maybe Jang's a big dud". The Ulsan mistake now reaches the player just
+  before the cut to Han being warned at Ulsan, which is a better order than before.
+- One trivial leftover: the m18 `["problem"]` comment still names the old caption ("hold your ground on the phone"),
+  not "Find what Han wants".
