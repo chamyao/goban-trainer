@@ -719,3 +719,25 @@ below.
      stick, and a scrap with a name on it" is Oh putting the pieces together, not a repeat. Keep it.
 6. **Tool nit:** the md prints "⇒ player now controls Ahn Young-yi, going to None" at the end of m12. That's a
    party step with no `to`.
+
+### Round 4 applied (c8897212): cleared, with the desk text pending
+
+Checked in the raw steps, with the E8 audits.
+
+**What works:**
+- **Ahn's motive (m12)**, and the walk back to the office enacts "follows him".
+- **m13's lamps.** "Kim is still at his desk, working late" settles who is there.
+- **The m19 waybill block**, now after the Han peak. "Just for a minute" leads into m19c's "you slept the whole
+  day", which is now the cause of the waybill never being shredded.
+- **m20's motive.** Oh is shown noticing Kim Seok-ho.
+- **The trims to m2 and m21.**
+
+**Pending:** Places' desk text with the "dried smear of glue" (the reason Oh turns the waybill over).
+
+**Nits (optional):**
+- **m19, audit A:** "the waybill" arrives with a definite article and no introduction. Try "a shipping waybill with
+  the team's figures on it: Sales Team 3, DH-14."
+- **m20:** "Kim Seok-ho stares at the floor." and "…Kim Seok-ho, who won't look up." say the same thing twice. Keep
+  the emote and the second line only.
+- **m21:** "Oh means to find out how it got there." sits a walk away from the find, so "it" is loose. Try "how Kim
+  Seok-ho's scrap got there".
