@@ -1221,7 +1221,8 @@ def _b1():
         },
         "things": {sales3: [{"id": "team-phone", "kind": "furn.phone", "rect": [5, 5, 1, 1], "label": "The team phone"},
                             {"id": "mop-cupboard", "kind": "furn.cleaning_cupboard", "rect": [15, 1, 1, 1], "label": "The cleaning cupboard"},
-                            {"id": "spill", "kind": "prop.spill", "rect": [14, 10, 1, 1], "label": "A spill"}]},
+                            {"id": "spill", "kind": "prop.spill", "rect": [14, 10, 1, 1], "label": "A spill",
+                             "when": "!mark:errand_floor"}]},
         "npcs": {
             "One International": [
                 # the clerk at General Affairs takes the requisition (a delivery is a handoff to a person)

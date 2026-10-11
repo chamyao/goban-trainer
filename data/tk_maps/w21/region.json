@@ -2194,7 +2194,7 @@
       "mark:errand_floor"
      ],
      "else": "m14_wait",
-     "objective": "Work from every side on Sales 3's floor: the forwarder call about the B/L at the team phone, Kim's copies at the copier, and mop the floor.",
+     "objective": "Work from every side on Sales 3's floor: the forwarder call about the shipping papers (the B/L) at the team phone, Kim's copies at the copier, and mop the floor.",
      "at": "One International",
      "place": "one-international",
      "objective_zh": ""
@@ -3323,7 +3323,6 @@
      62342
     ]
    ],
-   "board": false,
    "objective_zh": "",
    "title_zh": ""
   },
