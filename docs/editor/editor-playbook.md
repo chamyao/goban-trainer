@@ -55,7 +55,8 @@ The md reads as plain dialogue and hides staging. For every beat, read the steps
 
 - **spawn / remove / move positions:** who is physically present, near whom, and when?
 - **offstage voices:** is a phone or still-only speaker really absent from the map?
-- **party hand-offs:** where does the new lead start, and is the `to` set?
+- **party hand-offs:** where does the new lead start, and is the `to` set? (A mid-scene `party` takes effect when
+  the scene ends; within the scene, a board's decider is set by the board, not by the party.)
 - **stills:** what does each image show, and when? (A still placed before a decision board gives the decision away.)
 - **gates and objectives:** what must the player do, and is the reason clear?
 - **give texts and items:** what does the player find, and does it make sense given what they already hold?

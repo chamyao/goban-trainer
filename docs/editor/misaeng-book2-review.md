@@ -300,3 +300,17 @@ only on a lease", Oh's socks and "Han bows longest" are all good payoffs.
 4. **b27, a missing noun:** "Oh's slippers are poking out of Jang's." Jang's what? "…out of Jang's box."
 5. **b30, an unnamed thinker:** "Did she help them, or herself? Would she ever do that for Jang? What are they to
    her?" Whose thoughts are these? If Lee's (her partner, whom she didn't help), say "Lee watches her: …".
+
+### Round 2 applied (1d0190d8): cleared
+
+All five items read right.
+
+**Correction to my round-2 item 2:** a mid-scene `party` step takes effect when the scene ends (Plot), so the player
+was never "playing Han" through Jang's board. The board's decider is Jang either way. The change is harmless, and
+Han now stays at the podium.
+
+**Optional nit (b17b):** the win line "He adds a little more." is followed by "So Jang adds a little more: …". Make
+the narration "Oh also says he knows how to keep both sides happy." The irony is good: Park's flaw, offered as
+praise.
+
+**Book 2 is cleared from the Editor's side.**
