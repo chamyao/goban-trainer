@@ -101,6 +101,7 @@ def _scenes():
         # M4 · 2수 (W, simplified on playtest). The friends who passed; the decline; the GED; the army; "go and see your old sponsor".
         "m4": {"title": T("Washing Her Back"), "kind": "main", "steps": [
             N("His friends from the trainees' room turned pro. When he packed up, they asked if he was really quitting, and he had no answer. He put his game records out with the rubbish, along with his board."),
+            ["still", "ms_backwash", "slow zoom in"],
             N("The family restaurant failed. His mother worked building sites until her body gave out. He studied for the equivalency exam "
               "between part-time jobs, and in the bathroom he washed her back."),
             N("Then he did his military service."),
@@ -121,9 +122,12 @@ def _scenes():
             S("ms_sponsor", "But your résumé is thin, and you'll be going in with nothing. Some people will call you a parachute: someone who only got in through connections."),
             S("ms_jang", "Thank you. Thank you, sir."),
             ["remove", "sp"],
+            ["still", "ms_citylights", "slow pan across"],
             N("As the city lights come on, office workers spill out to drink, flatter and head home. He'll start from the bottom like everyone else, and this time he won't fail the way he failed at baduk."),
             N("If there's a light I'm meant to keep burning, I'll take responsibility for it. But is there a light allowed for someone like me?"),
+            ["still", "ms_tie", "slow zoom in"],
             N("On the morning of his first day, he sleeps through the alarm twice. His mother ties his tie for him."),
+            ["still", "ms_summit", "slow zoom out"],
             N("Across the city that same Wednesday, Oh Sang-sik, a section head at One International, is hiking up a mountain with his three sons. "
               "He has forgotten an eleven o'clock meeting with a buyer from overseas. On the summit, his phone rings."),
             S("ms_bujang", "Where are you? The buyer's waiting, and if he walks out, we're both finished. I'm sending today's new hire. We're in no position to be picky."),
@@ -132,6 +136,7 @@ def _scenes():
 
         # M7 · 3수 (W). Oh leads: the run down the trail (the clock), the car, the jam; "fear is rational". A cut to the café.
         "m7": {"title": T("Fear Is Rational"), "kind": "main", "steps": [
+            ["still", "ms_jam", "slow pan across"],
             N("He makes it to the car, but the road into the city is crawling: five hundred metres in half an hour."),
             S("ms_oh_hike", "Someone at a workshop said most fear is irrational..."),
             S("ms_bujang", "Shall I tell you about dismissal-notice pay?"),
@@ -143,6 +148,7 @@ def _scenes():
         "m8": {"title": T("Baduk, Not Go"), "kind": "main", "steps": [
             ["spawn", "by", "ms_buyer", "m8", 6, -4], ["spawn", "ks", "ms_kangsil", "m8", 10, -4],
             N("Jang's first-day message told him to skip the office and go straight to a café in Jongno. The overseas buyer and his manager, Kang, have been waiting there for an hour. Jang can't talk trade, but he can talk about one thing."),
+            ["still", "ms_cafe_quiz", "slow zoom in"],
             S("ms_buyer", "A puzzle? All right. I'm Black, and it's my move?"),
             ["problem"],   # Jang: the buyer's quiz, a snapback (a fixed problem)
             ["spawn", "oh", "ms_oh_hike", "m8", 16, 0], ["move", "oh", "m8", 12, -2],
@@ -176,6 +182,7 @@ def _scenes():
             ["gain", "glue_stick"],
             ["spawn", "kd", "ms_kimds", "m10", 2, -2],
             S("ms_kimds", "Sort these files into my folders."),
+            ["still", "ms_mindmap", "slow pan across"],
             N("He draws a mind map and designs a better filing system. It takes him all afternoon."),
             ["emote", "kd", "anger"],
             S("ms_kimds", "Where are my folders? Who do you think you are?"),
@@ -196,6 +203,7 @@ def _scenes():
             N("The bar is full of interns pitching PT topics. Every time Jang reaches for his bag to leave, the glasses intern refills his glass and pulls him back down."),
             S("ms_glasses", "Sit, sit. You can't leave before we've picked the dud. Well, we all know who it is."),
             N("Ahn Young-yi, top of their intake and the only woman there, has been watching. She catches Jang's sleeve and pulls him aside, away from the table."),
+            ["still", "ms_hof_aside", "slow zoom in"],
             S("ms_ahn", "Hey, new kid. Pull yourself together."),
             S("ms_ahn", "You haven't said a word all night. You won't learn just by listening."),
             S("ms_ahn", "And you've got filing due tomorrow, but you're sitting here? Make your own stones safe before you attack."),
@@ -231,6 +239,7 @@ def _scenes():
         ]},
         "m14": {"title": T("The World Is Faster"), "kind": "main", "steps": [
             N("Seven weeks to the PT."),
+            ["still", "ms_rush", "slow pan across"],
             N("He's up before the alarm and crushed on the train. The world moves faster than he does."),
             ["problem"],   # the record: Black 7
             N("Better plain and on time than perfect and late."),
@@ -265,6 +274,7 @@ def _scenes():
             ["spawn", "han", "ms_han", "m17", 4, -2],
             N("That night, the intern who asked about partners is waiting for him on the roof."),
             S("ms_han", "I'm Han Seok-yul. I came back from the Ulsan plant for the PT."),
+            ["still", "ms_roof", "slow zoom out"],
             N("Sente is the initiative: the right to lead the game. He's always handed it over. This time he means to keep it."),
             S("ms_jang", "Why did you choose me?"),
             ["problem"],   # Jang: take sente (fails, as written)
@@ -283,6 +293,7 @@ def _scenes():
             N("Five weeks to the PT. Han said Jang could build it his way."),
             N("After a board where you fight alone, the world seems kinder and warmer. He emails Han three ideas for the PT."),
             ["gain", "phone_text"],
+            ["still", "ms_text", "slow zoom in"],
             N("Han texts back one word: Again!"),
             ["spawn", "ahn", "ms_ahn", "m18", 6, -2], ["spawn", "gl", "ms_glasses", "m18", 10, -2],
             S("ms_glasses", "Picked your partner yet? Not Jang, surely."),
@@ -304,6 +315,7 @@ def _scenes():
             ["emote", "oh", "anger"],
             S("ms_oh", "The colours don't match and the boxes are all over the place. What were you doing yesterday? Shrink the boxes."),
             ["remove", "oh"], ["remove", "kim"],
+            ["still", "ms_call", "slow zoom in"],
             N("He slips into an empty meeting room and calls Han."),
             S("ms_jang", "Well? Should I do it again?"),
             S("ms_han", "...The second one's good. Let's go with that."),
@@ -329,6 +341,7 @@ def _scenes():
             S("ms_ahn", "An ambitious man is like a tornado. But the eye of a tornado is calm. If you can get to his centre, you two could make it work."),
             S("ms_ahn", "Wait, that's why I came! The seniors want all the interns out tonight. It's evening already; you slept the whole day."),
             ["remove", "ahn"],
+            ["still", "ms_dinner", "slow pan across"],
             N("He's late to the team dinner, so he has to down three penalty drinks. The people who use him, help him, get angry with him and scold him are all on his side. Here, he's not an outsider."),
         ]},
 
@@ -345,6 +358,7 @@ def _scenes():
             S("ms_jang", "Sure, it's on my desk."),
             N("Kim Seok-ho, an intern on another team, glues his report together at Jang's desk, right on top of the waybill, and hurries off."),
             ["remove", "sh"],
+            ["still", "ms_waybill", "slow zoom in"],
             N("Jang hums as he feeds the shredder. Down in the lobby, a yellow sheet slides off the security desk onto the floor, and a passing director taps it with his shoe."),
             ["spawn", "dir", "ms_director", "m20", 8, 2], ["spawn", "oh", "ms_oh", "m20", 14, -6],
             S("ms_oh", "Director! Is this about a team dinner?"),
@@ -367,6 +381,7 @@ def _scenes():
             S("ms_go", "Ha! That's my fault. The supply cabinet key's on my key ring."),
             ["gain", "cabinet_key"],
             ["remove", "go"],
+            ["still", "ms_ohdesk", "slow zoom in"],
             N("Oh looks at the waybill in his hands: a locked cabinet, a borrowed glue stick, and a scrap with a name on it."),
             ["gain", "borrowed_glue"],
             ["party", ["ms_oh"], {"to": {"place": "Jongno", "from": "One International"}}],
@@ -402,6 +417,7 @@ def _scenes():
             N("Two weeks to the PT. Every day is a lesson in what the job really is."),
             N("At first light he's at Incheon harbour, where cargo meant for Gunsan was unloaded by mistake, some of it damaged. He came to see it for himself; paperwork alone drifts away from what's really happening on site."),
             ["spawn", "st", "ms_stevehan", "m22", 6, -4], ["spawn", "br", "ms_kimbr", "m22", 10, -4], ["spawn", "oh", "ms_oh", "m22", 14, -6],
+            ["still", "ms_13floor", "slow pan across"],
             N("Back on the thirteenth floor, Steve Han, head of the Americas textile team, has come to pick a fight with Kim Bu-ryeon, who runs Sales Teams 1 to 3. They're the same rank, and everyone is watching."),
             S("ms_stevehan", "I don't have time for a report this thick. A fat report is just a way for nobody to take responsibility."),
             S("ms_kimbr", "My team was up all night on it."),
