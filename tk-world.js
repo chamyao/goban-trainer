@@ -257,7 +257,7 @@ function worldScenes() {
       const { w, kit } = this.opts;
       this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=119`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=52`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=114`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=115`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
@@ -487,7 +487,7 @@ function worldScenes() {
       // you must step clear of it first.
       for (const s of Object.values(this.spots)) {
         s.armed = Math.hypot(this.player.x - s.x, this.player.y - s.y) > WORLD_NEAR;
-        s.armAt = !s.armed && !pos ? { x: this.player.x, y: this.player.y } : null;
+        s.armAt = !s.armed && (!pos || this.w.walk_up) ? { x: this.player.x, y: this.player.y } : null;   // (walk_up: put back on it, a step re-arms it)
       }
       this.time.delayedCall(900, () => {
         // indoors a story starts as you come in (the room is the scene); outdoors only spots marked
@@ -645,6 +645,9 @@ function worldScenes() {
           // a beat still gated on an item that a nearer thing gives (m3b's spot beside the bins): the giver goes first
           const g = q && this.available(q) && this.gateFor(q), need = g ? [].concat(g.needs || []).filter(c => /^item:/.test(c) && !this.cond(c)).map(c => c.slice(5)) : [];
           if (need.length && Object.values(this.spots).some(o => o !== s && o.gives && need.includes(o.gives) && Math.hypot(P.x - o.x, P.y - o.y) < d + 24)) continue;
+          // a beat that isn't open yet doesn't disarm its spot in a "walk_up" world (Misaeng's desk: m18 and m19 on one
+          // chair, the next plays as the last ends, where you stand)
+          if (!q && this.w.walk_up) continue;
           s.armed = false;
           if (q) return this.approach(q, s);   // a tap on the spot ends its walk here
         }
