@@ -1187,7 +1187,7 @@ def _b1():
             sales3: [
                 # (every spot you walk up to here at least 76 px from every giver and delivery)
                 {"id": "m10", "at": [8, 6], "on": "chair-jang", "node": k(10), "label": "Your desk"},
-                {"id": "m13", "at": [8, 6], "on": "chair-jang", "node": k(13), "label": "Jang's desk, at night"},   # Ahn leads here
+                {"id": "m13", "at": [8, 7], "node": k(13), "label": "Jang's desk, at night"},   # Ahn leads here: up to Jang, sitting at his desk
                 {"id": "m14", "at": [8, 6], "on": "chair-jang", "node": k(14), "label": "Your desk"},
                 {"id": "m18", "at": [8, 6], "on": "chair-jang", "node": k(18), "label": "Your desk"},
                 {"id": "m19", "at": [8, 6], "on": "chair-jang", "node": k(19), "label": "Your desk"},

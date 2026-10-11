@@ -186,9 +186,9 @@ async function errands(b) {
 async function desks(b) {
   const p = await open(b, '21-m10', 'one-international--sales3', [], ['one-international--sales3']);
   const on = await p.evaluate(() => { const w = window.__w, r = w.refs || {}, at = (s, c) => !!w.spots[s] && !!r[c] && Math.hypot(w.spots[s].x - r[c].x, w.spots[s].y - r[c].y) < 20;
-    return { jang: ['m10', 'm13', 'm14', 'm18', 'm19', 'm20', 'm22'].every(k => at(k, 'chair-jang')), mine: at('m21', 'chair-oh'),
+    return { jang: ['m10', 'm14', 'm18', 'm19', 'm20', 'm22'].every(k => at(k, 'chair-jang')), mine: at('m21', 'chair-oh'),
              kim: !!r['desk-kim'] && !!r['chair-kim'], oh: !!r['chair-oh'] }; });
-  check(on.jang, 'm10-m22: every beat at Jang\'s desk (m10, m13, m14, m18, m19, m20, m22) is on his own chair');
+  check(on.jang, 'm10-m22: every beat Jang plays at his desk (m10, m14, m18, m19, m20, m22) is on his own chair (m13, Ahn\'s, is in the aisle beside it)');
   check(on.mine, 'm21: Oh\'s beat (he leads) is on his own chair');
   check(on.kim && on.oh, 'Sales 3: Kim and Oh have their own desks and chairs');
   await p.context().close();
