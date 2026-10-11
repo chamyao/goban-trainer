@@ -1116,7 +1116,7 @@ def _places(floors):
             "archetype": "city",
             "plan": _street([12, 8], 5, things=[
                 {"id": "daycare", "kind": "building.storefront", "rect": [5, 4, 2, 1], "door": "S", "label": "The daycare's glass door",
-                 "map": "playroom", "plaque": "해님어린이집"},
+                 "map": "playroom", "plaque": "우리어린이집"},
                 {"id": "villa-w", "kind": "building.villa", "rect": [1, 2, 2, 2]},
                 {"id": "shop-e", "kind": "building.storefront", "rect": [9, 6, 2, 1], "door": "N"},
             ], ground=[{"id": "playground", "kind": "garden", "rect": [8, 1, 3, 3]}],
