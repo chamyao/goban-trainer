@@ -241,6 +241,16 @@ making up their mind, and the line that follows lands as the payoff.
 **Source:** the user's playtest direction on m20 (2026-10-11); consistent with Hitchcock on suspense (9) and with
 aligning the player's goal with the character's (15).
 
+### 23. [G] The ending keeps the story's tone, including the game's own fanfare (the user)
+A game's own end-of-chapter feedback (a victory banner, a fanfare, a score) speaks as part of the story. If the story
+closes on a quiet, unresolved note, a "victory" celebration contradicts it, in the same way a board that contradicts
+its scene does (14). Match the closing presentation to the closing feeling. A book about someone who is "not yet
+alive" ends on a held breath, not a win.
+**Why it matters here:** the engine adds celebration by default. Each book's last beat should check whether the
+story has earned it.
+**Source:** the user's direction on Misaeng Book 1's ending ("too loud for this story", 2026-10-11); see also 14 and
+19 (the interest curve's resolution).
+
 ---
 
 ## Phase 2 checklist
@@ -259,3 +269,5 @@ For each beat:
 8. **Order:** can a stranger tell when this happens relative to the last beat? (13)
 9. **Spine:** does the beat move the book's central question forward, or is it a detour? (5, 12)
 10. **Curve:** is the beat's weight (boards, stills, length) in proportion to its importance? (19)
+11. **Ending tone:** does the book's last beat (including engine fanfare such as `["victory"]`) match the story's
+    closing feeling? (23)
