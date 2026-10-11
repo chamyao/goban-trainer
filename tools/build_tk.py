@@ -308,13 +308,14 @@ def main():
     for b in index:
         book = json.loads((BOOKS / f"{b['id']}.json").read_text())
         for p in book["problems"]:
+            if typed(p):
+                PROBLEM_IDS[f"{b['id']}/{p['id']}"] = [b["id"], p["id"]]   # any problem can be named, graded or not (Redmond's seki)
             if typed(p) and p.get("lv") in RANK:
                 k = problem_kind.kinds(p)
                 for g in KIND_GROUPS:
                     if set(g.split()) <= k:
                         typed_by_grade.setdefault((p["lv"], g), []).append([b["id"], p["id"], " ".join(sorted(k))])
                         break
-                PROBLEM_IDS[f"{b['id']}/{p['id']}"] = [b["id"], p["id"]]
             if not usable(p):
                 continue
             ref = [b["id"], p["id"]]
