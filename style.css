@@ -939,3 +939,5 @@ body.tk-en [lang="zh-CN"], body.tk-en .town-zh, body.tk-en .tk-dlg-zh, body.tk-e
 .tk-choice text { fill: #1a1a1a; font-weight: 400; font-family: Georgia, "Times New Roman", serif; }
 /* a move-guessing board answered wrong: the move that was played, ringed (tk.js tkShowRecordMove) */
 .tk-record-answer { fill: none; stroke: #c0392b; stroke-width: 3; }
+/* stream mode (app.js viewStream): the shared rating, big */
+.stream-rating { font-size: 22px; font-weight: 700; margin: 8px 0 4px; }
