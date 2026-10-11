@@ -62,7 +62,7 @@ def main(out_path):
             elif st[0] == "party":
                 to = st[2]["to"] if len(st) > 2 else {}
                 who = ", ".join(NAMES.get(x, x) for x in st[1])
-                out.append(f"⇒ *player now controls {who}*" + (f", going to {to.get('place')}" if to else ", in place") + "  ")
+                out.append(f"⇒ *player now controls {who}*" + (f", going to {to.get('place')}" if isinstance(to, dict) else f", starting at {to}'s spot" if to else ", in place") + "  ")
             elif st[0] == "victory":
                 out.append("**[END OF BOOK 1]**")
         if k == "m21" and W.get("audit"):
