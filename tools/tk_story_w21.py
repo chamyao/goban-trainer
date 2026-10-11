@@ -117,8 +117,8 @@ def _scenes():
             ["party", ["ms_jang"], {"to": {"place": "Jongno", "from": "Susaek-dong"}}],
         ]},
 
-        # M5 · 착수1 + 2수 (W; the tie, D). The sponsor; the parachute; the evening city; the lights; the first morning.
-        # It ends on the other side of the city: a section head on a mountain, and a phone ringing.
+        # M5 · 착수1 + 2수 (W; the tie, D). The sponsor; the parachute; the lights; the first morning; then Oh's set-up (the hike,
+        # the forgotten meeting, the call), so the run plays before we return to Jang at the café (playtest).
         "m5": {"title": T("A Light Allowed Me"), "kind": "main", "steps": [
             ["spawn", "sp", "ms_sponsor", "m5", 4, -2],
             S("ms_sponsor", "I've talked to a friend who runs a trading company: One International. Only he knows about the baduk. It'll be a simple interview."),
@@ -128,16 +128,10 @@ def _scenes():
             N("The city puts its make-up on: office workers toasting, flattering, going home. Start from the bottom, like everyone else. "
               "Don't fail the way you failed at baduk."),
             N("If there's a light I must keep burning, I'll answer for it. If there's a light allowed me. Is there one, for me?"),
-            ["scroll", T("The First Day"), [
-                T("The alarm. The alarm again. His mother ties his tie. A struggling group from the very first move."),
-            ]],
-            N("A message from upstairs: don't come to the office. Go straight to a café in Jongno. A buyer from overseas is waiting, and nobody else can meet him."),
-            ["gain", "cafe_address"],
-            ["scroll", T("Meanwhile"), [
-                T("Oh Sang-sik, section head of Sales Team 3 at One International. Red eyes, three sons, too much work. "
-                  "Today he promised the boys a mountain, and forgot the eleven o'clock meeting with that buyer."),
-            ]],
-            S("ms_bujang", "Where are you? The buyer's waiting. I'm sending today's new hire. Are we in a position to be picky?"),
+            N("The morning of his first day. The alarm. The alarm again. His mother ties his tie."),
+            N("Across the city that same Wednesday, Oh Sang-sik, a section head at One International, is hiking up a mountain with his three sons. "
+              "He has forgotten an eleven o'clock meeting with a buyer from overseas. On the summit, his phone rings."),
+            S("ms_bujang", "Where are you? The buyer's waiting. If he walks, we both die. I'm sending today's new hire. Are we in a position to be picky?"),
             ["party", ["ms_oh_hike"], {"to": {"place": "Mountain", "spot": "summit"}}],   # a cut: Oh, on the summit
         ]},
 
@@ -153,7 +147,8 @@ def _scenes():
         # M8 · 4수 (W). The café: the buyer's quiz (the snapback); Oh bursts in; "Baduk." Oh's car: reading Oh; HR; the requisition.
         "m8": {"title": T("Baduk, Not Go"), "kind": "main", "steps": [
             ["spawn", "by", "ms_buyer", "m8", 6, -4], ["spawn", "ks", "ms_kangsil", "m8", 10, -4],
-            N("A buyer from overseas and his manager, Kang. From One International, only a new hire with no papers. He can't talk trade. He can talk one thing."),
+            N("Jang's first-day message had said: don't come to the office, go straight to a café in Jongno. A buyer from overseas and his manager, Kang, "
+              "have been waiting for an hour. He can't talk trade. He can talk one thing."),
             S("ms_buyer", "A puzzle? All right. Black to play?"),
             ["problem"],   # Jang: the buyer's quiz, a snapback (a fixed problem)
             ["spawn", "oh", "ms_oh_hike", "m8", 16, 0], ["move", "oh", "m8", 12, -2],
@@ -167,9 +162,9 @@ def _scenes():
             ["problem"],   # Jang: read the man from his game
             N("Obsessive. Responsible. A man who carries everything."),
             ["remove", "oh"],
-            ["scroll", T("Human Resources"), [
-                T("He is an intern, attached to Sales Team 3. In two months the interns sit a PT, a presentation test. Pass it, and you stay."),
-            ]],
+            ["spawn", "hr", "ms_hr", "m8", 4, -2],
+            S("ms_hr", "Jang Geu-rae: an intern, with Sales Team 3. In two months the interns sit a PT, a presentation test. Pass it, and you stay."),
+            ["remove", "hr"],
             ["spawn", "kd", "ms_kimds", "m8", 8, -2],
             S("ms_kimds", "Kim Dong-sik, assistant manager. I'm your buddy; Oh's your mentor. First: this requisition, to General Affairs."),
             ["gain", "requisition"],
@@ -328,10 +323,8 @@ def _scenes():
             S("ms_ahn", "An ambitious man is a tornado. But the eye of a tornado is calm. Get into his centre, and you two could really work."),
             S("ms_ahn", "Wait, that's why I came! The seniors have called all the interns out. It's evening. You slept the whole day."),
             ["remove", "ahn"],
-            ["scroll", T("The Team Dinner"), [
-                T("Late, so three penalty glasses. The ones who use him, help him, get angry with him and scold him: all of them are on his side. "
-                  "Here, he is not an outsider."),
-            ]],
+            N("At the team dinner he's late, so three penalty glasses. The ones who use him, help him, get angry with him and scold him: "
+              "all of them are on his side. Here, he is not an outsider."),
         ]},
 
         # M20 · 13수 (W). Kim's rule on paper; the shredding put off; Seok-ho's glue at Jang's desk; the lobby; the director's kick;
@@ -834,9 +827,7 @@ KO21 = {
     "Not talent. Not luck, or the half-point losses. Not the part-time jobs, or his father's death, or his mother in bed. Those would hurt too much. So: he didn't try hard enough.": '재능 탓이 아니다. 운이나 반집 패배 탓도 아니다. 아르바이트도, 아버지의 죽음도, 누워 계신 어머니도 아니다. 그러면 너무 아프니까. 그러니까, 열심히 하지 않아서다.',
     "Because he didn't try hard enough, he had to come out into the world. Because he didn't try hard enough, he was thrown away.": '열심히 하지 않아서, 세상에 나와야 했다. 열심히 하지 않아서, 버려진 것이다.',
     "But your papers are thin. You'll go in with nothing. Some will call you a parachute.": '하지만 네 이력은 얇아. 아무것도 없이 들어가는 거다. 낙하산이라고 하는 사람도 있을 거다.',
-    'The First Day': '첫날',
     'Into the car. The road in moves five hundred metres in thirty minutes.': '차에 탄다. 들어가는 길은 30분에 500미터.',
-    "A buyer from overseas and his manager, Kang. From One International, only a new hire with no papers. He can't talk trade. He can talk one thing.": '해외 바이어와 그의 실장 강씨. 원 인터내셔널에선 이력도 없는 신입 하나뿐. 무역 얘기는 못 한다. 할 수 있는 얘기는 하나뿐이다.',
     'Oh bursts in, thirty minutes late, hiking clothes under his jacket.': '오 과장이 30분 늦게 뛰어든다. 재킷 안엔 등산복 차림이다.',
     'General Affairs hands over a box of supplies, a glue stick among them.': '총무팀이 비품 상자를 건넨다. 그 안에 딱풀도 하나.',
     'Sort these files into my folders.': '이 파일들 내 폴더에 정리해.',
@@ -917,14 +908,7 @@ KO21 = {
     'The family restaurant failed. His mother worked building sites until her body gave out. He studied for the equivalency exam between part-time jobs, and in the bathroom he washed her back.': '집안의 식당은 망했다. 어머니는 몸이 버티지 못할 때까지 공사판에서 일했다. 그는 아르바이트 틈틈이 검정고시를 공부했고, 욕실에서 어머니의 등을 밀어 드렸다.',
     "I've talked to a friend who runs a trading company: One International. Only he knows about the baduk. It'll be a simple interview.": '무역회사 하는 친구한테 얘기해 뒀다. 원 인터내셔널. 바둑 얘기는 그 친구만 안다. 간단한 면접일 거다.',
     "The city puts its make-up on: office workers toasting, flattering, going home. Start from the bottom, like everyone else. Don't fail the way you failed at baduk.": '도시가 화장을 한다. 직장인들이 건배하고, 아부하고, 집으로 간다. 남들처럼 바닥부터 시작하자. 바둑처럼 실패하지는 말자.',
-    'The alarm. The alarm again. His mother ties his tie. A struggling group from the very first move.': '알람. 또 알람. 어머니가 넥타이를 매어 준다. 시작부터 곤마.',
-    "A message from upstairs: don't come to the office. Go straight to a café in Jongno. A buyer from overseas is waiting, and nobody else can meet him.": '위에서 온 메시지. 회사로 오지 말고 종로의 카페로 바로 가라. 해외 바이어가 기다리는데, 만날 사람이 아무도 없다.',
-    'Meanwhile': '한편',
-    "Oh Sang-sik, section head of Sales Team 3 at One International. Red eyes, three sons, too much work. Today he promised the boys a mountain, and forgot the eleven o'clock meeting with that buyer.": '원 인터내셔널 영업 3팀 오상식 과장. 빨간 눈, 아들 셋, 넘치는 일. 오늘 아이들과 산에 가기로 약속했고, 그 바이어와의 열한 시 미팅을 잊었다.',
-    "Where are you? The buyer's waiting. I'm sending today's new hire. Are we in a position to be picky?": '어디야? 바이어가 기다려. 오늘 들어온 신입을 보낸다. 지금 가릴 처지야?',
     "In Oh's car: paper cups, red eyes, a claim argued down the phone. Jang once lost to a trainee just like this: sloppy, red-eyed, bored. He read him as careless, and was wrong.": '오 과장의 차. 종이컵, 빨간 눈, 전화로 다투는 클레임. 장그래는 이런 연구생에게 진 적이 있다. 엉성하고, 눈이 빨갛고, 지루해 보이던. 대충 하는 사람이라 읽었다가 틀렸다.',
-    'Human Resources': '인사팀',
-    'He is an intern, attached to Sales Team 3. In two months the interns sit a PT, a presentation test. Pass it, and you stay.': '그는 영업 3팀 소속 인턴이다. 두 달 뒤 인턴들은 PT, 발표 시험을 본다. 통과하면 남는다.',
     "Kim Dong-sik, assistant manager. I'm your buddy; Oh's your mentor. First: this requisition, to General Affairs.": '김동식 대리다. 내가 버디, 오 과장님이 멘토야. 우선 이 비품 신청서, 총무팀에 갖다줘.',
     'A bar full of interns pitching PT topics. Ahn Young-yi, top of the intake and the only woman among them, watches him.': 'PT 주제를 쏟아 내는 인턴들로 가득한 술집. 동기 중 수석이자 유일한 여자인 안영이가 그를 지켜본다.',
     'Up before the alarm, crushed on the train. The world is faster than me.': '알람보다 먼저 일어나, 전철에 끼인다. 세상은 나보다 빠르다.',
@@ -934,8 +918,6 @@ KO21 = {
     'He works all night: three items, forty pages each. In the morning Oh tears into the team document he made.': '그는 밤새 일한다. 아이템 세 개, 각 마흔 장. 아침에 오 과장이 그가 만든 팀 문서를 혼낸다.',
     "Colours that don't match, boxes all over the place. What did you do yesterday? Shrink the boxes.": '색은 안 맞고, 박스는 중구난방이고. 어제 뭐 했어? 박스 줄여.',
     'He slips into an empty meeting room and calls Han.': '그는 빈 회의실에 들어가 한석율에게 전화한다.',
-    'The Team Dinner': '회식',
-    'Late, so three penalty glasses. The ones who use him, help him, get angry with him and scold him: all of them are on his side. Here, he is not an outsider.': '늦었으니 벌주 석 잔. 그를 이용하고, 돕고, 화내고, 꾸짖는 사람들. 모두 그의 편이다. 여기서 그는 이방인이 아니다.',
     'Get your intern his own glue! Our kid took the blame because yours got glue on a document and dropped it!': '니 인턴한테 풀이나 사 줘! 니 인턴이 서류에 풀 묻혀서 떨어뜨리는 바람에 우리 애가 덤터기 썼어!',
     'Our kid. He said our kid.': '우리 애. 우리 애라고 했다.',
     "Go had taken a buyer, and Steve, to a dog-meat restaurant, and never said sorry. Steve sat on Sales Team 1's approvals.": '고 과장은 바이어와 스티브를 보신탕집에 데려갔고, 끝내 사과하지 않았다. 스티브는 영업 1팀의 결재를 묶어 두었다.',
@@ -953,4 +935,10 @@ KO21 = {
     'They count.': '계가를 한다.',
     'Then the army.': '그리고 군대.',
     'He is home from the army: no degree, no trade, and a mother to look after.': '군대에서 돌아왔다. 학위도, 기술도 없고, 돌봐야 할 어머니가 있다.',
+    'The morning of his first day. The alarm. The alarm again. His mother ties his tie.': '출근 첫날 아침. 알람. 또 알람. 어머니가 넥타이를 매어 준다.',
+    "Across the city that same Wednesday, Oh Sang-sik, a section head at One International, is hiking up a mountain with his three sons. He has forgotten an eleven o'clock meeting with a buyer from overseas. On the summit, his phone rings.": '같은 수요일, 도시 건너편. 원 인터내셔널의 오상식 과장은 세 아들과 산을 오르고 있다. 해외 바이어와의 열한 시 미팅을 잊었다. 정상에서, 전화가 울린다.',
+    "Where are you? The buyer's waiting. If he walks, we both die. I'm sending today's new hire. Are we in a position to be picky?": '어디야? 바이어가 기다려. 놓치면 우리 둘 다 죽어. 오늘 들어온 신입을 보낸다. 지금 가릴 처지야?',
+    "Jang's first-day message had said: don't come to the office, go straight to a café in Jongno. A buyer from overseas and his manager, Kang, have been waiting for an hour. He can't talk trade. He can talk one thing.": '첫날 받은 메시지는 이랬다. 회사로 오지 말고 종로의 카페로 바로 가라. 해외 바이어와 강 실장이 한 시간째 기다리고 있다. 무역 얘기는 못 한다. 할 수 있는 얘기는 하나뿐이다.',
+    'Jang Geu-rae: an intern, with Sales Team 3. In two months the interns sit a PT, a presentation test. Pass it, and you stay.': '장그래 씨, 영업 3팀 인턴입니다. 두 달 뒤 인턴들은 PT, 발표 시험을 봅니다. 통과하면 남는 겁니다.',
+    "At the team dinner he's late, so three penalty glasses. The ones who use him, help him, get angry with him and scold him: all of them are on his side. Here, he is not an outsider.": '회식에 늦어 벌주 석 잔. 그를 이용하고, 돕고, 화내고, 꾸짖는 사람들. 모두 그의 편이다. 여기서 그는 이방인이 아니다.',
 }
