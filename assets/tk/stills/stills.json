@@ -1763,7 +1763,7 @@
  "ms_hof_aside": {
   "file": "ms_hof_aside.jpg",
   "scene": "ms_hof",
-  "prompt": "A noisy Korean hof (beer pub) full of young interns in office clothes around crowded tables of beer and fried chicken. In the foreground, near the door, Ahn Young-yi has hold of Jang Geu-rae's sleeve and has pulled him away from the table; she is speaking to him, firm and direct. Behind them an intern in glasses holds up a full glass. Ahn Young-yi is a composed, sharp-eyed Korean woman of twenty-five with a chin-length black bob, in a charcoal skirt suit and a white blouse. Jang Geu-rae is a thin, quiet Korean man of twenty-six with a plain, watchful face, short black hair with a fringe over his forehead, in a cheap dark navy suit, white shirt and plain blue tie. Style: 2D Korean webtoon, hard cel shading. Modern-day Seoul, South Korea.",
+  "prompt": "Reference image 1 shows Ahn Young-yi and reference image 2 shows Jang Geu-rae: keep each one's face, hair and clothes exactly as in the reference, drawn into this scene (not the white background or the pose). Night, on the quiet side street just outside a Korean hof (beer pub). Through the pub's lit window behind them, a blurred crowd of interns drinking; out here it is calm, under a single street lamp. Ahn Young-yi faces Jang Geu-rae, close and level, her arms folded, talking to him frankly and privately; he listens, a little sheepish. Just the two of them, nobody else outside. Ahn Young-yi is a composed, sharp-eyed Korean woman of twenty-five with a chin-length black bob, in a charcoal skirt suit and a white blouse. Jang Geu-rae is a thin, quiet Korean man of twenty-six with a plain, watchful face, short black hair with a fringe over his forehead, in a cheap dark navy suit, white shirt and plain blue tie. Style: 2D Korean webtoon, hard cel shading. Modern-day Seoul, South Korea.",
   "provider": "replicate",
   "model": "final-1",
   "look": "final",
@@ -1790,12 +1790,11 @@
  "ms_text": {
   "file": "ms_text.jpg",
   "scene": "ms",
-  "prompt": "A close view of a mobile phone held in a young man's hand outside a lunch restaurant. On the screen, a message bubble with a single word and an exclamation mark. Blurred interns laughing in the background. Style: 2D Korean webtoon, hard cel shading. Modern-day Seoul, South Korea.",
+  "prompt": "A mobile phone lying face-up on a restaurant table beside a bowl of soup and metal chopsticks, its screen showing a single message bubble with one word and an exclamation mark: Again! No hands in frame. Blurred lunch-crowd background. Style: 2D Korean webtoon, hard cel shading. Modern-day Seoul, South Korea.",
   "provider": "replicate",
   "model": "final-1",
   "look": "final",
-  "made": "2026-10-11",
-  "edit": "the text reads 'Again!' (Han's reply), not 'Lunch!'"
+  "made": "2026-10-11"
  },
  "ms_call": {
   "file": "ms_call.jpg",
