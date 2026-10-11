@@ -328,6 +328,16 @@ def _scenes():
             ["spawn", "oh", "ms_oh", "m19", "@chair-oh"], ["spawn", "kim", "ms_kimds", "m19", "@chair-kim"],
             ["emote", "oh", "anger"],
             S("ms_oh", "The colours don't match and the boxes are all over the place. What were you doing yesterday? Shrink the boxes."),
+            S("ms_kimds", "And anything with figures on it goes in the shredder. Not one of our papers should ever turn up outside this team."),
+            N("He decides to shred the waybill later with the next batch, and leaves it on his desk: Sales Team 3, DH-14."),
+            ["spawn", "sh", "ms_kimsh", "m19", 16, 8],
+            S("ms_kimsh", "Can I borrow your glue? Our supply cabinet's locked and nobody will give me the key."),
+            S("ms_jang", "Sure, it's on my desk."),
+            N("Kim Seok-ho, an intern on another team, glues his report together at Jang's desk, right on top of the waybill, and hurries off."),
+            ["move", "sh", "m19", "@chair-spare"],
+            ["remove", "sh"],
+            ["still", "ms_waybill", "slow zoom in"],
+            N("Jang never does get round to the shredding that day."),
             ["remove", "oh"], ["remove", "kim"],
             ["still", "ms_call", "slow zoom in"],
             N("He slips into an empty meeting room and calls Han."),
@@ -367,15 +377,6 @@ def _scenes():
         "m20": {"title": T("The Waybill"), "kind": "main", "steps": [
             ["spawn", "kd", "ms_kimds", "m20", "@chair-kim"], ["spawn", "oh", "ms_oh", "m20", "@chair-oh"],
             N("The next morning. Three weeks to the PT. The interns are graded on everything, and one careless moment can sink any of them."),
-            S("ms_kimds", "Anything with figures on it goes in the shredder. Not one of our papers should ever turn up outside this team."),
-            N("He decides to shred the waybill later with the next batch, and leaves it on his desk: Sales Team 3, DH-14."),
-            ["spawn", "sh", "ms_kimsh", "m20", 16, 8],
-            S("ms_kimsh", "Can I borrow your glue? Our supply cabinet's locked and nobody will give me the key."),
-            S("ms_jang", "Sure, it's on my desk."),
-            N("Kim Seok-ho, an intern on another team, glues his report together at Jang's desk, right on top of the waybill, and hurries off."),
-            ["move", "sh", "m20", "@chair-spare"],
-            ["remove", "sh"],
-            ["still", "ms_waybill", "slow zoom in"],
             N("Jang hums as he feeds the shredder. Down in the lobby, a yellow sheet slides off the security desk onto the floor, and a passing director taps it with his shoe."),
             ["spawn", "dir", "ms_director", "m20", 24, 16],
             S("ms_oh", "Director! Is this about a team dinner?"),
@@ -392,12 +393,11 @@ def _scenes():
             ["emote", "sh", "sweat"],
             N("Kim Seok-ho stares at the floor."),
             ["remove", "ahn"], ["remove", "gl"], ["remove", "sh"], ["remove", "kd"],
-            N("Back at his desk, Oh turns the waybill over. Glued to the back is a torn scrap of someone's weekly report, with a name on it: Kim Seok-ho."),
-            ["gain", "waybill_scrap"],
-            ["party", ["ms_oh"], {"to": "m21"}],   # the lead passes to Oh: he begins at his own desk, m21's spot on his chair (his stretch, m21-m21b)
+            N("Oh keeps the waybill. Jang owned up, but something about it doesn't sit right."),
+            ["party", ["ms_oh"], {"to": "m21"}],   # the lead passes to Oh at his own desk; he finds the scrap himself at Jang's desk (a "gives" spot), then m21
         ]},
 
-        # M21 · 14수 (W). Oh leads. Go brags; the cabinet key. Oh links it on the clue board (the comic: in his head).
+        # M21 · 14수 (W). Oh leads. Found by the player at Jang's desk: the scrap glued to the waybill. Then Go brags; the cabinet key; Oh puts it together.
         "m21": {"title": T("A Secret"), "kind": "main", "steps": [
             ["spawn", "go", "ms_go", "m21", 16, 16],
             N("Someone else's scrap, glued to Jang's waybill. Oh means to find out how it got there."),
@@ -405,15 +405,13 @@ def _scenes():
             S("ms_go", "My baby intern, Kim Seok-ho! He pulls all-nighters with us, he's newly married, he's the eldest son of an eldest son, and we've just landed the deal."),
             S("ms_oh", "He comes over to our team a lot, to borrow supplies."),
             S("ms_go", "Ha! That's my fault. The supply cabinet key's on my key ring."),
-            ["gain", "cabinet_key"],
             ["remove", "go"],
             ["still", "ms_ohdesk", "slow zoom in"],
             N("Oh looks at the waybill in his hands: a locked cabinet, a borrowed glue stick, and a scrap with a name on it."),
-            ["gain", "borrowed_glue"],
             ["party", ["ms_oh"], {"to": {"place": "Jongno", "from": "One International"}}],
         ]},
-        "m21b_wait": {"title": T("Oh's Desk"), "kind": "main", "steps": [
-            S("ms_oh", "Not yet. The scrap, the glue, the key... I need to put it together first."),
+        "m21_wait": {"title": T("The Waybill"), "kind": "main", "steps": [
+            S("ms_oh", "The waybill came off Jang's desk. Let's have a look at that desk first."),
         ]},
 
         # M21b · 14수 (W; "우리 애", D). Drinks; "a secret"; Go's team in the street; Oh defends Jang; Seok-ho's sorry; the homecoming.
@@ -574,11 +572,11 @@ def _nodes():
             "Shred it later, I said. If I keep quiet, they grill every intern. If I speak, it goes on my record, three weeks out.",
             "He knows what he has to do.",
             "Again.", pool="tesuji sacrifice")),
-        node("m21", 242, 129, "m21", room="sales3", move=14, board=False),
-        node("m21b", 254, 123, "m21b", place="Jongno", move=14, board=False,
-             gate=[{"needs": ["mark:audit"], "else": "m21b_wait",
-                    "objective": T("Work out how the waybill got out of Sales 3: open Oh's desk from the bag and link the clues. Then meet Kim and Jang on Jongno."),
-                    "at": "Jongno"}]),
+        node("m21", 242, 129, "m21", room="sales3", move=14, board=False,
+             gate=[{"needs": ["item:waybill_scrap"], "else": "m21_wait",
+                    "objective": T("The waybill came from Jang's desk. Go and look at it, then back to your desk."),
+                    "at": "One International"}]),
+        node("m21b", 254, 123, "m21b", place="Jongno", move=14, board=False),
         node("m22", 266, 117, "m22", room="sales3", move=14, record=15, choices={15: [['cf', 0.05], ['gc', 0.1], ['ic', 0.26], ['fd', 0.34], ['ed', 0.57], ['dm', 0.78], ['dj', 0.95], ['cj', 0.95], ['dl', 1.1], ['ec', 1.51]]}, dilemma=D(
             "ms_jang", "Cho prepared for this game. Which move?",
             "Everyone plays their own baduk. Whoever prepared better comes out happier.",
@@ -603,24 +601,10 @@ _ITEMS = {
     "copy": {"name": "Kim's copies", "kind": "key"},
     "mop": {"name": "A mop and bucket", "kind": "key"},
     "phone_text": {"name": "Han's text", "kind": "key", "text": "Again!"},
-    # Oh's desk (the audit board, m21): the clues
-    "waybill_scrap": {"name": "Waybill scrap", "kind": "clue", "text": "Glued to the waybill: a torn scrap of a weekly report. Internship. Kim Seok-ho."},
-    "borrowed_glue": {"name": "The borrowed glue", "kind": "clue", "text": "Go's intern keeps borrowing Sales 3's supplies. Jang's glue stick was on Jang's desk, next to the waybill."},
-    "cabinet_key": {"name": "Go's key ring", "kind": "clue", "text": "Sales Team 1's supply cabinet key is on Go's key ring. His intern can't get at the glue."},
+    # found by Oh at Jang's desk (a "gives" spot, Places), m21's gate
+    "waybill_scrap": {"name": "Waybill scrap", "kind": "key", "text": "Glued to the back of the waybill: a torn scrap of a weekly report. Internship. Kim Seok-ho."},
 }
 
-# Oh's deduction in 14수 (the comic plays it in his head; here the player links it on the audit board).
-_AUDIT = {
-    "title": "Oh's desk",
-    "clues": ["waybill_scrap", "borrowed_glue", "cabinet_key"],
-    "links": [
-        {"q": "Why does Go's intern keep borrowing our supplies?", "pair": ["cabinet_key", "borrowed_glue"],
-         "a": "Go walked off with the cabinet key. The kid has to beg for glue."},
-        {"q": "How did a Sales 3 waybill get down to the lobby?", "pair": ["borrowed_glue", "waybill_scrap"],
-         "a": "He glued his report at Jang's desk, on top of the waybill. It went with him."},
-    ],
-    "done": "audit",
-}
 
 _OPENING = [
     ["scroll", T("The First Move"), [
@@ -653,7 +637,6 @@ def _world():
         "party": ["ms_jang_child"],
         "lead_portrait": True,
         "items": _ITEMS,
-        "audit": _AUDIT,
         "nodes": _nodes(),
         "edges": _EDGES,
         "scenes": _scenes(),
@@ -892,7 +875,7 @@ KO21 = {
     "At the Ulsan plant, Han is told he has one last chance and should go back to a desk if he isn't up to it. In Seoul, Jang sits at his screen beside an abandoned board. The world is far colder and more heartless than he thought.": '울산 공장에서 한석율은 마지막 기회라는 말, 자신 없으면 책상으로 돌아가라는 말을 듣는다. 서울에서 장그래는 버려진 바둑판 옆 모니터 앞에 앉아 있다. 세상은 생각보다 훨씬 차갑고 비정하다.',
     'At home, his parents cut out newspaper stories about Lee Chang-ho and Lee Sedol, their rankings and their prize money.': '집에서 부모님은 이창호와 이세돌의 순위와 상금을 다룬 신문 기사를 오려 모았다.',
     'An ambitious man is like a tornado. But the eye of a tornado is calm. If you can get to his centre, you two could make it work.': '야심가는 토네이도 같아요. 그런데 토네이도의 눈은 고요하죠. 그 사람 중심에 들어가면 두 사람 잘 해낼 수 있어요.',
-    'Anything with figures on it goes in the shredder. Not one of our papers should ever turn up outside this team.': '숫자 있는 건 전부 파쇄기로. 우리 서류가 팀 밖에서 발견되는 일은 절대 없어야 해.',
+    'And anything with figures on it goes in the shredder. Not one of our papers should ever turn up outside this team.': '그리고 숫자 있는 건 전부 파쇄기로. 우리 서류가 팀 밖에서 발견되는 일은 절대 없어야 해.',
     "Can I borrow your glue? Our supply cabinet's locked and nobody will give me the key.": '풀 좀 빌릴 수 있을까요? 우리 비품함은 잠겨 있는데 아무도 열쇠를 안 줘요.',
     'Our kid. He called him our kid.': '우리 애. 그를 우리 애라고 불렀다.',
     "Go had taken a buyer, and Steve, to a dog-meat restaurant and never apologised. Ever since, Steve has been sitting on Sales Team 1's approvals.": '고 과장은 바이어와 스티브를 보신탕집에 데려갔고, 끝내 사과하지 않았다. 그 뒤로 스티브는 영업 1팀의 결재를 묶어 두고 있다.',
@@ -930,7 +913,10 @@ KO21 = {
     "If there's a light I'm meant to keep burning, I'll take responsibility for it. But is there a light allowed for someone like me?": '내가 지켜야 할 불빛이 있다면 책임지겠다. 하지만 나 같은 사람에게도 허락된 불빛이 있을까.',
     "It doesn't sink in for Go, but it does for Kim Seok-ho.": '고 과장은 알아듣지 못하지만, 김석호는 알아듣는다.',
     "Where are you? The buyer's waiting, and if he walks out, we're both finished. I'm sending today's new hire to buy time until you get there. We're in no position to be picky.": '어디야? 바이어가 기다리고 있어. 그냥 가 버리면 우리 둘 다 끝이야. 네가 올 때까지 시간 벌게 오늘 들어온 신입을 보낸다. 지금 가릴 처지가 아니잖아.',
-    'Not yet. The scrap, the glue, the key... I need to put it together first.': '아직이야. 종잇조각, 풀, 열쇠... 먼저 맞춰 봐야 해.',
+    "The waybill came off Jang's desk. Let's have a look at that desk first.": '선하증권은 장그래 책상에서 나왔어. 그 책상부터 좀 보자.',
+    "The waybill came from Jang's desk. Go and look at it, then back to your desk.": '선하증권은 장그래 책상에서 나왔다. 가서 살펴보고, 자기 자리로 돌아가라.',
+    'Jang never does get round to the shredding that day.': '장그래는 그날 끝내 파쇄를 하지 못한다.',
+    "Oh keeps the waybill. Jang owned up, but something about it doesn't sit right.": '오 과장은 선하증권을 챙겨 둔다. 장그래가 자기 잘못이라 했지만, 어딘가 석연치 않다.',
     "I said you'd share it with me. I never said I'd keep my mouth shut.": '공유하라고 했지, 내가 입 다물고 있겠다고는 안 했어요.',
     "That's a secret.": '그건 비밀.',
     "I'm at the Mangwon-dong crossroads, doing twelve kilometres an hour, with eight to go. I'll be thirty minutes late. This fear is completely rational.": '망원동 사거리입니다. 시속 12킬로, 8킬로 남았습니다. 30분 늦습니다. 이 공포는 지극히 합리적이네요.',
@@ -1034,7 +1020,6 @@ KO21 = {
     'Shred it later, I said. If I keep quiet, they grill every intern. If I speak, it goes on my record, three weeks out.': '나중에 파쇄하자고 했지. 가만있으면 인턴 전원이 추궁당해. 말하면 내 기록에 남아. PT 3주 전에.',
     'He knows what he has to do.': '무엇을 해야 할지 그는 안다.',
     'Kim Seok-ho stares at the floor.': '김석호는 바닥만 내려다본다.',
-    "Back at his desk, Oh turns the waybill over. Glued to the back is a torn scrap of someone's weekly report, with a name on it: Kim Seok-ho.": '자리로 돌아온 오 과장이 선하증권을 뒤집는다. 뒷면에 누군가의 주간 보고서 조각이 붙어 있고, 이름이 적혀 있다. 김석호.',
     'Play the endgame perfectly.': '끝내기를 완벽하게 두어라.',
     'Jang grins. The obvious move had been obvious to Department Head Kim too.': '장그래가 웃는다. 당연한 수는 김부련 부장에게도 당연했던 것이다.',
     "Two weeks to the PT. There will be dead stones in his own work too, and he'll have to give them up. He still isn't alive on this board, but for the first time he can see how a group like his might live.": 'PT까지 2주. 그의 일에도 사석이 있을 테고, 그는 그것을 버려야 할 것이다. 아직 이 판 위에서 살아 있지 못하지만, 처음으로 그런 돌이 어떻게 살 수 있을지 보이기 시작한다.',
