@@ -384,6 +384,13 @@ Draft one arc, get it playable in a test book, and fix what the playtest shows b
   novel's own order, and the later book's **opening scroll** still stands alone for a player who starts there. Example:
   the Cao Cao arc closes on chapters 5–7 in four lines; the Diaochan arc opens on Chang'an under Dong Zhuo.
 
+### R23. Don't ask the user to approve plans (Misaeng)
+
+> "Yes don't ask for my approval next time" (on the Book 2 plan)
+
+Plan, then draft, without waiting for a go-ahead. Put the plan in the repo and tell the user what it is; where a call is
+genuinely the user's, make the recommended choice, say so, and carry on. The user steers by reacting to what's built.
+
 ### R22. Before sending a draft: setups, motives, jumps (Misaeng)
 
 The playtest notes on Book 1 nearly all had one root: the payoff came before its cause was on screen. Plot knows the

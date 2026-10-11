@@ -1,6 +1,6 @@
 # Misaeng Book 2: 도전 Challenge (episodes 17–33, world 22): the plan
 
-Status: **plan for the user's approval.** Nothing is drafted yet. Built from readers first
+Status: **approved** (the user: "Yes"; both calls below as recommended). Drafting in `tools/tk_story_w22.py`. Built from readers first
 (`misaeng-research-ep0-33.md`: the Daum best comments for every episode, namu.wiki, the Yes24 reader reviews), the
 drama where it helps (R19), and the comic (chamyao/misaeng) last, read while drafting. W = webtoon, D = drama,
 (staging) / (invented) as in Book 1.
