@@ -124,6 +124,7 @@ def _scenes():
         # M5 · 착수1 + 2수 (W; the tie, D). The sponsor; the parachute; the lights; the first morning; then Oh's set-up (the hike,
         # the forgotten meeting, the call), so the run plays before we return to Jang at the café (playtest).
         "m5": {"title": T("A Light Allowed Me"), "kind": "main", "steps": [
+            ["offstage", "ms_bujang"],   # the department head is on the phone: heard over the still, never brought on
             ["spawn", "sp", "ms_sponsor", "m5", 4, -2],
             S("ms_sponsor", "A friend of mine runs a trading company, One International. I've spoken to him. He's the only one there who knows about your baduk, and it'll be a simple interview."),
             S("ms_sponsor", "But your résumé is thin, and you'll be going in with nothing. Some people will call you a parachute: someone who only got in through connections."),
@@ -143,6 +144,7 @@ def _scenes():
 
         # M7 · 3수 (W). Oh leads: the run down the trail (the clock), the car, the jam; "fear is rational". A cut to the café.
         "m7": {"title": T("Fear Is Rational"), "kind": "main", "steps": [
+            ["offstage", "ms_bujang"],   # the department head is on the phone: heard over the still, never brought on
             ["still", "ms_jam", "slow pan across"],
             N("He makes it to the car, but the road into the city is crawling: five hundred metres in half an hour."),
             S("ms_oh_hike", "Someone at a workshop said most fear is irrational..."),
@@ -462,6 +464,7 @@ def _scenes():
         # M22b · 16수 (W). "Checkmate"; Jang scolded for laughing; don't leave dead stones; Oh: humble with class;
         # Kim Bu-ryeon got there first; the obvious move; the dry sauna.
         "m22b": {"title": T("Dead Stones"), "kind": "main", "steps": [
+            ["offstage", "ms_go", "ms_stevehan"],   # Go and Steve are only in the sauna still: heard over the still, never brought on
             N("Go had taken a buyer, and Steve, to a dog-meat restaurant and never apologised. Ever since, Steve has been sitting on Sales Team 1's approvals."),
             ["spawn", "oh", "ms_oh", "m22b", 12, -4], ["spawn", "kd", "ms_kimds", "m22b", 8, -2],
             S("ms_oh", "And our department head is too sore to apologise. In a way, it's checkmate."),
