@@ -945,4 +945,12 @@ KO21 = {
     'In baduk, two groups locked together can sometimes both live, if neither side forces the issue. Ahn looks for that.': '바둑에서는 맞물린 두 무리가, 어느 쪽도 무리하지 않으면 둘 다 살 때가 있다. 안영이는 그 수를 찾는다.',
     "Ahn Young-yi, top of their intake and the only woman there, has been watching. She catches Jang's sleeve and pulls him aside, away from the table.": '동기 중 수석이자 그 자리의 유일한 여자, 안영이가 지켜보고 있었다. 그녀는 장그래의 소매를 잡아 테이블에서 떨어진 곳으로 끌고 간다.',
     'Hey, new kid. Pull yourself together.': '이봐요, 신입. 정신 좀 차려요.',
+    # Places (Misaeng), Sales 3 desks and chairs (ea9df77)
+    'Your desk': '네 자리',
+    'Your desk, at night': '밤의 네 자리',
+    "Kim Dong-sik's chair": '김동식 대리의 의자',
+    "The deputy's chair": '차장의 의자',
+    "Jang's chair": '장그래의 의자',
+    "Oh's chair": '오 과장의 의자',
+    'An empty desk': '빈 책상',
 }
