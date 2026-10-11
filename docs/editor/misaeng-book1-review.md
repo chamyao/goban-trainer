@@ -612,3 +612,42 @@ move positions, stills, problems), not only the generated script md. Staging pro
   before the cut to Han being warned at Ulsan, which is a better order than before.
 - One trivial leftover: the m18 `["problem"]` comment still names the old caption ("hold your ground on the phone"),
   not "Find what Han wants".
+
+### Decision boards give away the decision (raised by the user; principle 22)
+
+**m20, "Own the mistake", kills the tension.** Checked against the raw steps, the choice is given away three times
+before the player solves anything:
+1. the `ms_ownup` still, which shows him owning up, plays *before* the board;
+2. the caption is "Own the mistake.";
+3. the opening thought is "I left it on my desk. Give up the stone, save the group."
+
+On top of that, the win line is the confession itself ("It was mine."). The board should be his deliberation, with
+the choice revealed afterwards.
+
+**Fix for m20, in step order:**
+- **Narration:** "On the roof, a senior lines the interns up. Whose desk did that waybill come from?"
+- **Board:** caption *"Whose stone is it?"*; opening thought *"Shred it later, I said. If I keep quiet, they grill every
+  intern. If I speak, it goes on my record, three weeks out."*; win line *"He knows what he has to do."*
+- **Then the still `ms_ownup`**, then "It was mine. I left it on my desk." and the existing narration.
+- **Staging (raw):** the narration says "on the roof", but the beat stays on the Sales 3 map and no interns are
+  spawned, so Jang confesses to an empty room. Either spawn the senior and a line of interns (and say "by the windows"
+  instead of "on the roof"), or move the lineup into the room the map shows.
+
+**The same flaw, milder, in three other decision boards:**
+- **m19 "Take the PT back".** The narration right before the board says "he doesn't hand over sente", and the
+  opening thought is "Hold him to that."
+  - **Fix:** move the "raised to compete" narration after the board. Caption *"Han has decided for both of you.
+    Answer?"*; opening thought *"Again, he decides and I obey?"*; win line *"Not this time."* Then the speech.
+- **m22b "Give up the dead stone".** The caption and the opening thought ("don't cling to it") state Jang's advice
+  before he gives it.
+  - **Fix:** caption *"What do you do with a group that can't live?"*; opening thought *"Checkmate, he says. On a
+    board, what happens to a dead group?"*; win line *"He knows the answer."* Then Jang's line.
+- **m13 "Make both live"** (Ahn). The caption names her solution, but the narration has already framed it as her
+  search, so it reads as a goal rather than a giveaway. This one is optional. If changed, caption *"His system or
+  Mr. Kim's?"*, and keep "Both live." as the win line.
+
+**Not affected:**
+- m12: it's advice he's been given, and the board is him recognising it.
+- m17 and m18: the boards are framed as questions.
+- m8: it's a puzzle he sets.
+- m2: it's not a choice.

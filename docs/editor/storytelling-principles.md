@@ -229,6 +229,18 @@ player where the story thinks its peaks are.
 **Sources:** derived from 16 and 17 above, and from McCloud's point (13) that images and the gaps between them carry
 the reader's emotion.
 
+### 22. [G] A decision board is the deliberation; reveal the choice after it (the user)
+When a board stands for a character making a choice, the board *is* the moment of deciding. The caption, the opening
+thought and any still shown before it should pose the dilemma (what's at stake, what each option costs) without naming
+the answer. The choice is revealed only after the solve, in what the character then says or does. If the caption
+already says "Own the mistake", the player solves a puzzle whose outcome they've been told, and the suspense the board
+could have held is gone (9, 14). The win line should be a beat of resolve ("He knows what he has to do"), not the
+decision itself.
+**Why it matters here:** this is the game's strongest tool for agency. The player's solve becomes the character
+making up their mind, and the line that follows lands as the payoff.
+**Source:** the user's playtest direction on m20 (2026-10-11); consistent with Hitchcock on suspense (9) and with
+aligning the player's goal with the character's (15).
+
 ---
 
 ## Phase 2 checklist
@@ -239,7 +251,8 @@ For each beat:
 2. **Turn:** what does the lead want, what changes, and is the change felt? (2, 6)
 3. **Agency:** does the lead drive the turn, and is the player controlling the one who decides? (10, 17)
 4. **Board fit:** do the caption and the win line say what the scene says happened, and can the player see how the
-   stones map to the moment? (14, 15, 20)
+   stones map to the moment? For a decision board, do the caption, the opening thought and any still before it keep
+   the choice open until after the solve? (14, 15, 20, 22)
 5. **Setup / payoff:** is every payoff set up earlier, and every prominent setup paid (or clearly held for later)? (4)
 6. **Shown or told:** is the emotional peak dramatised, with an illustration where it counts? (8, 17, 21)
 7. **Stranger test:** is every person, term and time jump introduced before it's needed, one at a time? (11, 13, 18)
