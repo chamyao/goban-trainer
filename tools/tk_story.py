@@ -755,7 +755,7 @@ for _w in WORLDS:
 import tk_story_zh as _tkzh  # noqa: E402   (it adds the book's Chinese and voices: redchamber/book1)
 _HLM1 = _sys.modules["redchamber_book1_story"]
 _HLM = _copy.deepcopy(_HLM1.WORLD_HLM1)
-_HLM.update(n=31, book=1, hidden=True)   # not a Three Kingdoms book: out of the library until the user says how to show it
+_HLM.update(n=31, book=1, open=True)   # published (the user, 2026-10-11: "publish"); its own Library card, not the Three Kingdoms list
 # the new mechanics (tk-world.js watchRoom, tk.js TKTally), from the story's own data
 _HLM["watch"] = {k: dict(cues=[dict(line=["say", c["who"], c["say"]], **({"wait": True} if c.get("wait") else {})) for c in cs],
                          **({"dazzled": list(_HLM1.DAZZLED[k])} if k in getattr(_HLM1, "DAZZLED", {}) else {}))

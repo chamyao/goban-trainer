@@ -804,7 +804,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) { this.data = await (await fetch("data/tk.json?v=138")).json(); this.migrate(); }
+    if (!this.data) { this.data = await (await fetch("data/tk.json?v=139")).json(); this.migrate(); }
     return this.data;
   },
   // A book whose beats were renumbered after players began it: their cleared beats moved to the new keys, once per
@@ -1666,15 +1666,15 @@ function tkLevelBuild(host, worldN, key, { w, node, src, p, book }, { back, agai
       ...(TKVoice.has(node.boss.taunt_vid) ? [h("button", { class: "tk-say", type: "button", onclick: () => TKVoice.play(node.boss.taunt_vid) }, "播放 Play")] : [])]),
   ]) : null;
   if (node.boss) TKVoice.play(node.boss.taunt_vid);
-  const stakes = p.record ? null : TKElo.stakesEl(w, [src.id, p.id]) || null;
+  const stakes = p.record ? null : TKElo.stakesEl(w, [src.id, p.id], w.lang !== "en") || null;
   const aside = h("aside", {}, [
     ...(bossPanel ? [bossPanel] : []),
     h("div", { class: "panel" }, [
       h("h2", {}, `第${worldN}卷 ${w.zh} · Book ${worldN} · ${w.name}`),
       h("div", { class: "meta-title" }, [`${node.place_zh || node.place} · ${TK_ROLE_ZH[node.role] || ""}`,
         h("span", { class: "tk-en" }, ` ${node.place} · ${TK.roleLabel(node)}`)]),
-      h("div", { class: "meta-sub" }, [node.role === "boss" ? "" : `出自 from ${src.title} · `, p.url ? h("a", { href: p.url, target: "_blank" }, "来源 source")
-                                                                 : h("a", { href: `https://www.101weiqi.com/q/${p.id}/`, target: "_blank" }, "来源 source")]),
+      h("div", { class: "meta-sub" }, [node.role === "boss" ? "" : `${w.lang === "en" ? "from" : "出自 from"} ${src.title} · `,   // English-only: no Chinese to strip
+        h("a", { href: p.url || `https://www.101weiqi.com/q/${p.id}/`, target: "_blank" }, w.lang === "en" ? "source" : "来源 source")]),
       h("div", { class: "badges" }, [...(p.lv || node.grade ? [h("span", { class: "badge" }, p.lv || node.grade)] : []), ...(p.qt ? [h("span", { class: "badge" }, p.qt)] : []), turnBadge]),
       stakes || "",
     ]),
@@ -1774,7 +1774,7 @@ const TKTally = {
 };
 // Books from other novels (a world's "novel"): each novel has its own library card and its own book list, apart
 // from the Three Kingdoms books (which have no "novel"). live: the card shows outside test mode.
-const TK_NOVELS = { hongloumeng: { title: "Dream of the Red Chamber", native: "红楼梦", first: 31, icon: "assets/hl/jade.png", live: false },
+const TK_NOVELS = { hongloumeng: { title: "Dream of the Red Chamber", native: "红楼梦", first: 31, icon: "assets/hl/jade.png", live: true }   /* published (the user, 2026-10-11) */,
   misaeng: { title: "Misaeng", native: "미생", first: 21, live: true } };   // published (the user, 2026-10-10)
 // A touch screen (a phone or tablet): tap to move and tap to talk.
 // Test mode, for trying the story without solving: open the page with ?test=1 (?test=0 ends it).
@@ -1856,10 +1856,12 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
   ]);
   const srcLine = p.record ? h("div", { class: "tk-duel-src" }, `${p.credit} · ${p.only ? "which was played: A, B, C or D?" : "find the move that was played"}`)   // a record board: the game, not a problem book
     : h("div", { class: "tk-duel-src" }, [
-    `${p.lv || node.grade || ""} · 死活 · `, node.role === "boss" ? "" : `出自 ${src.title} · `,
-    h("a", { href: p.url || `https://www.101weiqi.com/q/${p.id}/`, target: "_blank", rel: "noopener" }, "来源 source"),
+    ...(enOnly   // an English-only book: its own words, so stripping the Chinese leaves no run-together text
+      ? [`${p.lv || node.grade || ""} · `, node.role === "boss" ? "" : `${src.title} · `]
+      : [`${p.lv || node.grade || ""} · 死活 · `, node.role === "boss" ? "" : `出自 ${src.title} · `]),
+    h("a", { href: p.url || `https://www.101weiqi.com/q/${p.id}/`, target: "_blank", rel: "noopener" }, enOnly ? "source" : "来源 source"),
   ]);
-  const stakes = p.record ? null : TKElo.stakesEl(TK.world(worldN), [src.id, p.id]) || null;
+  const stakes = p.record ? null : TKElo.stakesEl(TK.world(worldN), [src.id, p.id], !enOnly) || null;
   if (stakes) srcLine.append(" · ", stakes);
   // a decision board: the leader's choice named in the side column, over what's said
   const nth = Math.max(0, (+String(key).split("~")[1] || 1) - 1);   // which board of the scene

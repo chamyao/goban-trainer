@@ -1,6 +1,6 @@
 // Red Chamber's own library entry: in test mode the Library has a 红楼梦 card (and the Three Kingdoms card); it opens
 // world 31, whose page lists only Red Chamber books and no Three Kingdoms ones; the Three Kingdoms card never opens a
-// Red Chamber book (even when it was the last played), and its list has no Red Chamber book. Outside test mode: no card.
+// Red Chamber book (even when it was the last played), and its list has no Red Chamber book. Published: outside test mode the card is there and opens the book.
 const { chromium } = require(require('child_process').execSync('npm root -g', { env: { ...process.env, NODE_OPTIONS: '' } }).toString().trim() + '/playwright');
 const path = require('path');
 (async () => {
@@ -28,6 +28,9 @@ const path = require('path');
   check(tk.length > 1 && !tk.some(t => /侯门深似海/.test(t)), 'the Three Kingdoms list has no Red Chamber book');
   check(await p.evaluate(() => localStorage.getItem('tk-book')) !== '31', 'playing Red Chamber does not become the Three Kingdoms last book');
   await p.goto(URL + '?test=0#/'); await p.reload(); await p.waitForSelector('.tk-card');
-  check(await p.locator('a.tk-card-hongloumeng').count() === 0, 'outside test mode: no 红楼梦 card');
+  check(await p.locator('a.tk-card-hongloumeng').count() === 1, 'published: outside test mode the 红楼梦 card is there too');
+  await p.click('a.tk-card-hongloumeng'); await p.waitForSelector('.tk-worlds', { timeout: 20000 });
+  const pub = await p.locator('.tk-worlds .tk-world').allInnerTexts();
+  check(/#\/tk\/31/.test(await p.evaluate(() => location.hash)) && pub.some(t => /侯门深似海/.test(t)) && !pub.some(t => /下架/.test(t)), `a player opens Red Chamber Book 1, not marked off: ${JSON.stringify(pub)}`);
   console.log(fails ? `${fails} FAIL` : 'all ok'); await b.close(); process.exit(fails ? 1 : 0);
 })();
