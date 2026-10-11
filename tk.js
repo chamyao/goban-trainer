@@ -1675,6 +1675,12 @@ function tkLevelBuild(host, worldN, key, { w, node, src, p, book }, { back, agai
       onWin();
       verdict.className = "tk-verdict win";
       verdict.append(h("b", {}, node.role === "boss" ? "★ 击败首领！Boss defeated!" : "★ 完美！Flawless!"), h("button", { onclick: back }, "继续 Continue ▸"));
+    } else if (p.record) {   // a move-guessing board: show the move that was played and go on
+      TK.markCleared(key);
+      onWin();
+      tkShowRecordMove(t, p);
+      verdict.className = "tk-verdict win";
+      verdict.append(h("b", {}, "实战下的是这里。The move that was played is marked."), h("button", { onclick: back }, "继续 Continue ▸"));
     } else {
       TK.rest(key);
       verdict.className = "tk-verdict slip";
@@ -1900,6 +1906,11 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
       else if (lord) { say(...lord.win, go("继续 Continue ▸", leave)); if (dil && dil.win_vid && TKVoice.has(dil.win_vid)) TKVoice.play(dil.win_vid); }
       else if (foe) say("好棋！我认输。", "Well played. I resign.", go("继续 Continue ▸", leave));
       else say("★ 完美！", "Flawless!", go("继续 Continue ▸", leave));
+    } else if (p.record) {   // a move-guessing board (the user): a wrong guess shows the move that was played, and the story goes on (no rest)
+      TK.markCleared(key);
+      onWin();
+      tkShowRecordMove(t, p);
+      say("实战下的是这里。", "The move that was played is marked.", go("继续 Continue ▸", leave));
     } else if (once) {   // one try (a chase): no second go; back to the world, which decides what follows
       dlg.classList.add("slip");
       say(...(e.detail === "ok" ? [`解出了，但不算完美（${t.flawed}）。被擒了！`, `Solved, but not flawless (${t.flawed}). You're taken!`] : ["被擒了！", "You're taken!"]), go("继续 Continue ▸", leave));
@@ -1916,6 +1927,23 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
     }
   };
   addEventListener("tczw:result", onResult);
+}
+
+// A record board answered wrong: a ring on the point that was played (kept over any redraw of the board)
+function tkShowRecordMove(t, p) {
+  const right = p.lines && p.lines[0] && p.lines[0][1];
+  if (!right || !t || !t.goban) return;
+  const g = t.goban, [c, r] = cIdx(right), NS = "http://www.w3.org/2000/svg";
+  const mark = () => {
+    g.svg.querySelectorAll(".tk-choice, .tk-record-answer").forEach(e => e.remove());
+    const ring = document.createElementNS(NS, "circle");
+    ring.setAttribute("class", "tk-record-answer"); ring.setAttribute("pointer-events", "none");
+    ring.setAttribute("cx", g.px(c)); ring.setAttribute("cy", g.py(r)); ring.setAttribute("r", g.cell * .42);
+    g.svg.append(ring);
+  };
+  const render = t.render.bind(t);
+  t.render = (...a) => { const out = render(...a); mark(); return out; };
+  mark();
 }
 
 // A level laid over the explorable world, inside its window (or the whole screen

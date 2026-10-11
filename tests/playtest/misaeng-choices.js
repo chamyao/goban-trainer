@@ -1,7 +1,7 @@
 // Misaeng's record boards as multiple choice (tk-modern.js choices/labels), as a player meets them, on desktop and phones:
 // for every record board in the book (TK.world(BOOK).nodes, read from the game): four letters A-D on four empty points,
 // exactly one of them Cho Hunhyun's move (the SGF, read here); the letters big enough to read; a tap off the letters plays
-// nothing; a wrong letter is a slip, and after the rest the same four points come back under the same letters; the right
+// nothing; a wrong letter shows the move played and goes on (no rest); played again, the same four points come back under the same letters; the right
 // letter (a tap, or its key on a desktop) clears the board; the lead's portrait sits behind a full 19x19 board.
 // Screenshots: out/misaeng-choices-<device>-<key>.png. PLAYTEST_DEVICES picks devices (default desktop, iPhone 13, iPhone SE).
 const { chromium, devices } = require(require('child_process').execSync('npm root -g').toString().trim() + '/playwright');
@@ -86,7 +86,10 @@ async function run(b, dev) {
     // a wrong letter: a slip; then the same four, under the same letters
     const wrong = L1.find(l => l.pt !== right);
     await tapAt(wrong.x, wrong.y);
-    let s = await state(); check(!s.cleared && (s.rest || s.played > 0), `${name}: the wrong letter ${wrong.L} (${wrong.pt}) doesn't clear it (${JSON.stringify(s)})`);
+    // (the user: a wrong guess shows the move that was played and goes on; no rest)
+    await p.waitForTimeout(400);
+    let s = await state(); const ring = await p.evaluate(() => { const c = document.querySelector('.tk-record-answer'); return !!c; });
+    check(s.cleared && !s.rest && ring, `${name}: the wrong letter ${wrong.L} (${wrong.pt}) shows the move played and goes on, no rest (${JSON.stringify({ ...s, ring })})`);
     await p.keyboard.press('Escape'); await p.waitForTimeout(500);
     await open();
     const L2 = await letters();
