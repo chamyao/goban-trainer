@@ -39,8 +39,8 @@
    "aaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaaaddaaaaaaaaabbbbbbbbbbbb",
    "aaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaaaddaaaaaaaaabbbbbbbbbbbb",
    "aaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaaaddaaaaaaaaabbbbbbbbbbbb",
-   "aaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaaaddaaaaaaaaabbbbbbbbbbbb",
-   "aaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaaaddaaaaaaaaabbbbbbbbbbbb",
+   "aaaaaaaaaaaaaaaaaddddddddddddddddddddddddddddddddddabbbbbbbbbbbb",
+   "aaaaaaaaaaaaaaaaaddddddddddddddddddddddddddddddddddabbbbbbbbbbbb",
    "aaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaaaddaaaaaaaaabbbbbbbbbbbb",
    "aaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaaaddaaaaaaaaabbbbbbbbbbbb",
    "aaaaaaaaaaaaaaaaaddaaaaaaaaaaaaaaaaaaaaaaddaaaaaaaaabbbbbbbbbbbb",
@@ -140,6 +140,22 @@
    "tiles": 52
   },
   {
+   "id": "lane-mid",
+   "kind": "road",
+   "path": [
+    [
+     4,
+     5
+    ],
+    [
+     12,
+     5
+    ]
+   ],
+   "width": 2,
+   "tiles": 68
+  },
+  {
    "id": "class-alley",
    "kind": "road",
    "path": [
@@ -164,12 +180,12 @@
   {
    "kind": "building.villa",
    "x": 21,
-   "y": 14,
+   "y": 16,
    "w": 5,
    "h": 3,
    "id": "home",
-   "door": "W",
-   "faces": "W",
+   "door": "S",
+   "faces": "S",
    "label": "Jang's home",
    "map": "home",
    "blocks_sight": true
@@ -177,12 +193,12 @@
   {
    "kind": "building.villa",
    "x": 45,
-   "y": 14,
+   "y": 16,
    "w": 5,
    "h": 3,
    "id": "relatives",
-   "door": "W",
-   "faces": "W",
+   "door": "S",
+   "faces": "S",
    "label": "The relatives' flat",
    "map": "relatives",
    "blocks_sight": true
@@ -463,13 +479,6 @@
   {
    "kind": "lamp.post",
    "x": 19,
-   "y": 21,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "kind": "lamp.post",
-   "x": 19,
    "y": 29,
    "w": 1,
    "h": 1
@@ -541,8 +550,8 @@
  "spots": [
   {
    "id": "home",
-   "x": 19.5,
-   "y": 15.7,
+   "x": 23.5,
+   "y": 20.7,
    "node": "",
    "label": "Jang's home",
    "note": "handoffs to Jang at home land here"
@@ -571,20 +580,20 @@
  "exits": [
   {
    "to": "susaek-dong--home",
-   "side": "E",
-   "x": 20.4,
-   "y": 15.1,
-   "w": 0.75,
-   "h": 0.8,
+   "side": "N",
+   "x": 23.1,
+   "y": 18.85,
+   "w": 0.8,
+   "h": 0.75,
    "door": true
   },
   {
    "to": "susaek-dong--relatives",
-   "side": "E",
-   "x": 44.4,
-   "y": 15.1,
-   "w": 0.75,
-   "h": 0.8,
+   "side": "N",
+   "x": 47.1,
+   "y": 18.85,
+   "w": 0.8,
+   "h": 0.75,
    "door": true
   },
   {
@@ -608,12 +617,12 @@
  ],
  "entries": {
   "susaek-dong--home": [
-   19,
-   15
+   23,
+   19
   ],
   "susaek-dong--relatives": [
-   43,
-   15
+   47,
+   19
   ],
   "susaek-dong--baduk-class": [
    28,
@@ -654,11 +663,23 @@
    ],
    [
     18.0,
+    22.0
+   ],
+   [
+    18.0,
     10.0
    ],
    [
     42.0,
+    22.0
+   ],
+   [
+    42.0,
     10.0
+   ],
+   [
+    50.0,
+    22.0
    ],
    [
     18.0,
@@ -684,7 +705,7 @@
    ],
    [
     1,
-    6
+    9
    ],
    [
     2,
@@ -692,15 +713,31 @@
    ],
    [
     2,
-    5
+    6
    ],
    [
     4,
     5
    ],
    [
+    4,
+    6
+   ],
+   [
+    5,
+    7
+   ],
+   [
     6,
     7
+   ],
+   [
+    6,
+    8
+   ],
+   [
+    9,
+    10
    ]
   ]
  },
