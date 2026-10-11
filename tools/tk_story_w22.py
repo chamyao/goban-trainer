@@ -531,7 +531,7 @@ def _nodes():
             "Work, or the girl who watches my back every morning?",
             "She turns round.",
             "Again.", pool="ld live")),
-        node("b23", 146, 177, "b23", room="reference", move=23, record=23, dilemma=D(
+        node("b23", 146, 177, "b23", room="reference", move=23, record=23, choices={23: [['iq', 0.5], ['mq', 0.94], ['ir', 1.28], ['dm', 1.62], ['dl', 1.64], ['hr', 1.93], ['pf', 2.23], ['nr', 2.62], ['ck', 2.9], ['mp', 3.09]]}, dilemma=D(
             "ms_jang", "Cho digs in under White's wall. Where?",
             "Take territory underneath while White builds in the centre.",
             "Black 23.",
@@ -541,7 +541,7 @@ def _nodes():
             "Fast players have the temperament and the speed of reading. Both.",
             "There.",
             "He's further ahead. Again.", pool="tesuji")),
-        node("b25", 174, 163, "b25", place="Jongno", room="forecourt", move=25, record=25, dilemma=D(
+        node("b25", 174, 163, "b25", place="Jongno", room="forecourt", move=25, record=25, choices={25: [['dm', 1.11], ['dl', 1.34], ['nr', 1.36], ['dg', 2.15], ['ch', 2.33], ['cg', 2.45], ['pg', 2.47], ['mp', 7.29]]}, dilemma=D(
             "ms_jang", "A butting move: Cho meets White head-on. Where?",
             "No compromise. Straight into him.",
             "Black 25.",
@@ -551,7 +551,7 @@ def _nodes():
             "The field is finished in the office. Then what does the office stand in?",
             "He knows where to look.",
             "Not that. Again.", pool="tesuji")),
-        node("b27", 202, 149, "b27", room="pt-hall", move=27, record=27,
+        node("b27", 202, 149, "b27", room="pt-hall", move=27, record=27, choices={27: [['ir', 1.05], ['np', 1.94], ['oq', 2.14], ['dl', 2.52], ['dm', 2.63], ['dc', 2.69], ['el', 3.71], ['qi', 4.83]]},
              gate=[{"needs": ["item:oh_slippers"], "else": "b27_wait",
                     "objective": T("Sales 3, at night: find what you'll sell Han. Then the PT."),
                     "at": "One International"}],
@@ -580,7 +580,7 @@ def _nodes():
             "who": "ms_han", "name": "Han Seok-yul", "title": "The Field",
             "taunt": "I won't buy your product!"}),
         node("b32b", 272, 114, "b32b", room="sales3", move=32, board=False),
-        node("b33", 278, 111, "b33", place="Susaek-dong", room="home", move=33, record=33, dilemma=D(
+        node("b33", 278, 111, "b33", place="Susaek-dong", room="home", move=33, record=33, choices={33: [['gr', 2.15], ['dn', 2.32], ['dg', 3.86], ['qe', 4.61], ['cc', 4.62], ['dl', 4.9], ['dm', 4.93], ['bl', 5.32], ['hp', 8.1]]}, dilemma=D(
             "ms_jang", "Cho makes the lower side his. Where?",
             "Territory, and the real game begins.",
             "Black 33.",

@@ -166,6 +166,7 @@ const TK_CHARS = {
   ms_cheon: { name: "Cheon Gwan-ung", skin: "#e2b089", hair: "#2a2024", hat: "short", robe: "#5a5e66", trim: "#5a5e66", shirt: "#eef0f2", tie: "#6a5a3a", legs: "#44474e", beard: "none", eyes: "narrow", fat: true },
   ms_park: { name: "Park Jong-sik", skin: "#efc59d", hair: "#1a1416", hat: "slick", robe: "#6a6a74", trim: "#6a6a74", shirt: "#f0d8dc", tie: "#8a2a5a", legs: "#55555e", beard: "none", eyes: "narrow" },
   ms_ahn: { name: "Ahn Young-yi", skin: "#f8dcc4", hair: "#1a1418", hat: "bob", robe: "#3a3a46", trim: "#3a3a46", shirt: "#f4f4f6", legs: "#3a3a46", skirt: true, beard: "none", eyes: "phoenix" },
+  // retired: Jang Baek-gi is ms_glasses (the comic: the glasses intern is Baek-gi); kept for old saves
   ms_baekgi: { name: "Jang Baek-gi", skin: "#f2d2b0", hair: "#1e1a1e", hat: "parted", robe: "#26304a", trim: "#26304a", shirt: "#f4f6f8", tie: "#3a6a9a", legs: "#202838", beard: "none", eyes: "narrow" },
   ms_han: { name: "Han Seok-yul", skin: "#e8b88c", hair: "#2a2024", hat: "slick", robe: "#5a4a3a", trim: "#5a4a3a", shirt: "#eeeae2", tie: "#c8a03a", legs: "#4a3e32", beard: "none", eyes: "round" },
   ms_kimsh: { name: "Kim Seok-ho", skin: "#f0cfac", hair: "#2a2024", hat: "short", robe: "#4a4e56", trim: "#4a4e56", shirt: "#eef0f2", tie: "#4a6a4a", legs: "#3e4148", beard: "none", eyes: "normal", glasses: "#2a2228" },
@@ -211,10 +212,15 @@ const TK_CHARS = {
   ms_ohwife: { name: "Oh Sang-sik's wife", skin: "#f2d2b0", hair: "#2a2024", hat: "ponytail", robe: "#c88a6a", trim: "#f4ece0", legs: "#4a4a5a", beard: "none", eyes: "kind" },
   ms_ohson: { name: "Oh Sang-sik's son", skin: "#f8dcc4", hair: "#241e22", hat: "messy", robe: "#3a8ad8", trim: "#f4f2ec", legs: "#4a4a5a", beard: "none", eyes: "round" },
   ms_kangsil: { name: "Manager Kang", skin: "#efc59d", hair: "#1a1416", hat: "parted", robe: "#b8956a", trim: "#b8956a", shirt: "#eef0f2", tie: "#3a3a42", legs: "#3a3a42", beard: "none", eyes: "narrow", glasses: "#2a2228" },   // a camel coat
-  ms_glasses: { name: "Glasses Intern", skin: "#f0cfac", hair: "#2a2024", hat: "parted", robe: "#2e3444", trim: "#2e3444", shirt: "#eef0f2", tie: "#8a6a2a", legs: "#262a36", beard: "thin", eyes: "narrow", glasses: "#2a2228" },   // a moustache
+  ms_glasses: { name: "Jang Baek-gi", skin: "#f0cfac", hair: "#2a2024", hat: "parted", robe: "#2e3444", trim: "#2e3444", shirt: "#eef0f2", tie: "#8a6a2a", legs: "#262a36", beard: "thin", eyes: "narrow", glasses: "#2a2228" },   // a moustache
   ms_amhead: { name: "Americas Team Head", skin: "#e2b089", hair: "#2a2024", hat: "short", robe: "#3a3e4a", trim: "#3a3e4a", shirt: "#f0f2f4", tie: "#c8382a", legs: "#2e323c", beard: "none", eyes: "round", fat: true },   // loud
   ms_ulsan: { name: "Ulsan Department Head", skin: "#d8a47c", hair: "#5a5256", hat: "cap", hatC: "#f4f2ec", pin: "#f4f2ec", robe: "#3a5a7a", trim: "#2a2228", legs: "#3a4250", beard: "none", eyes: "narrow" },   // a site jacket and a white hard hat
   ms_teacher: { name: "Jang Geu-rae's teacher", skin: "#eec7a0", hair: "#9a9a9a", hat: "short", robe: "#6a5a4a", trim: "#e8e0d0", legs: "#4a443c", beard: "short", beardC: "#9a9a9a", eyes: "kind" },   // the dojang teacher
+  // Book 2
+  ms_supceo: { name: "The supplier's president", skin: "#ecc29a", hair: "#a8a8a8", hat: "slick", robe: "#22242c", trim: "#22242c", shirt: "#f4f4f4", tie: "#5a2a3a", legs: "#1c1e24", beard: "none", eyes: "narrow" },   // a dark double-breasted suit
+  ms_kwon: { name: "Kwon", skin: "#f0cfac", hair: "#2a2024", hat: "short", robe: "#dfe8f2", trim: "#2a2228", tie: "#3a5a8a", legs: "#3a3e48", beard: "none", eyes: "kind", fat: true },   // short sleeves, a lanyard
+  ms_hateacher: { name: "Ms. Ha", skin: "#f8dcc4", hair: "#5a3a2a", hat: "ponytail", pin: "#e8a0b8", robe: "#f4c8d4", trim: "#e8e0d8", legs: "#4a4a5a", beard: "none", eyes: "kind" },   // a pastel apron over a sweater
+  ms_ithead: { name: "Head of IT", skin: "#ecc29a", hair: "#5a5256", hat: "balding", robe: "#3a3a42", trim: "#3a3a42", shirt: "#f0f0f0", tie: "#6a2a3a", legs: "#2e2e36", beard: "none", eyes: "narrow", glasses: "#9aa0a8" },   // rimless glasses, stiff
   ms_examiner: { name: "Examiner", skin: "#e8c4a0", hair: "#5a5256", hat: "parted", robe: "#2a2e38", trim: "#2a2e38", shirt: "#f4f4f4", tie: "#3a3a4a", legs: "#24272f", beard: "none", eyes: "narrow", glasses: "#2a2228" },   // the PT panelist (m6, m7) and the KBA proctor (m1)
   ms_clerk: { name: "Baekjin clerk", skin: "#ecc29a", hair: "#2a2024", hat: "short", robe: "#5a6a7a", trim: "#2a2228", tie: "#3a3a4a", legs: "#3a3e48", beard: "none", eyes: "narrow" },
   ms_worker: { name: "Office worker", skin: "#f0cfac", hair: "#2a2024", hat: "parted", robe: "#3a3e4a", trim: "#3a3e4a", shirt: "#eef0f2", tie: "#6a4a3a", legs: "#30333c", beard: "none", eyes: "normal" },
@@ -770,7 +776,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) { this.data = await (await fetch("data/tk.json?v=133")).json(); this.migrate(); }
+    if (!this.data) { this.data = await (await fetch("data/tk.json?v=134")).json(); this.migrate(); }
     return this.data;
   },
   // A book whose beats were renumbered after players began it: their cleared beats moved to the new keys, once per

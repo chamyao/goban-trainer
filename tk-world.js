@@ -41,7 +41,7 @@ const WorldData = {
     }
     return this.regions[n];
   },
-  has(n) { return (n >= 1 && n <= 3) || (n >= 12 && n <= 15) || n === 21 || n === 90; },   // 21: Misaeng  // worlds whose places have been built (12: Book 2; 13: the Cao Cao arc, a test book; 90: the study where you talk with Claude)
+  has(n) { return (n >= 1 && n <= 3) || (n >= 12 && n <= 15) || n === 21 || n === 22 || n === 90; },   // 21, 22: Misaeng Books 1 and 2  // worlds whose places have been built (12: Book 2; 13: the Cao Cao arc, a test book; 90: the study where you talk with Claude)
   // "1-zhuo-county-c-elder": a challenger in a place, drawing from the world's problems.
   node(w, key) {
     const region = this.regions[w.n];
@@ -257,7 +257,7 @@ function worldScenes() {
       const { w, kit } = this.opts;
       this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=122`);
       this.load.json("kit", `assets/tk/kits/${kit}.json?v=53`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=124`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=125`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
