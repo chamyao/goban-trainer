@@ -793,8 +793,8 @@ class Trainer {
       this.played.every((m, i) => m === L[i + 1]) &&
       L[this.played.length + 1] === mv);
 
-    if (!treeMove && this.els.noEngine) {
-      // Strict problems (the Three Kingdoms campaign): a move off the answer
+    if (!treeMove && (this.els.noEngine || this.els.strict)) {
+      // Strict problems (the Three Kingdoms campaign, the Stream): a move off the answer
       // tree is simply wrong; there is no engine play to fall back on.
       const g2 = applyMove(this.grid, c, r, BLACK);
       if (!g2) return;
@@ -2252,7 +2252,8 @@ async function viewStream() {
   ]);
   root.append(h("div", { class: "player" }, [boardCard, aside]));
 
-  const t = trainer = new Trainer(book, idx, { svg, boardCard, status, turnBadge, btnExplore, treePanel, treeBox, note });
+  // strict, as the story mode's boards: a move off the answer key is a miss (else KataGo took over and it was never rated)
+  const t = trainer = new Trainer(book, idx, { svg, boardCard, status, turnBadge, btnExplore, treePanel, treeBox, note, strict: true });
   btnExplore.addEventListener("click", () => trainer.toggleExplore());
   t.streamNext = next;
   window.__trainer = trainer;

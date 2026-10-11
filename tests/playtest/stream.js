@@ -36,6 +36,13 @@ check(d.id!==a.id&&!a.used.includes(d.id),`N deals a new, unseen problem (${d.id
 await p.evaluate(()=>{window.__trainer.flawed='used a hint';window.__trainer.finish('ok');});
 const e=await st();
 check(e.r<b1.r,`a solve with a hint counts as a miss: ${b1.r} → ${e.r}`);
+// a real wrong move, off the answer key: a miss (before, KataGo took over and it was never rated)
+await p.keyboard.press('n');await p.waitForTimeout(800);
+const r0=(await st()).r;
+const off=await p.evaluate(()=>{const t=window.__trainer,first=new Set(t.p.lines.filter(L=>L.length>1).map(L=>L[1]));
+  for(let r=0;r<19;r++)for(let c=0;c<19;c++){const mv=String.fromCharCode(97+c)+String.fromCharCode(97+r);if(t.grid[r][c]===0&&!first.has(mv)){t.click(c,r);return {mv,done:t.done};}}});
+const r1=(await st()).r;
+check(off&&off.done==='bad'&&r1<r0,`a move off the answer key (${off&&off.mv}) is a miss and lowers the rating: ${r0} → ${r1}`);
 console.log(fails?`stream: ${fails} failed`:'stream: all ok');await b.close();process.exit(fails?1:0);
 })();
 function TKof(rank){return 600+rank*50;}
