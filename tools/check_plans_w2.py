@@ -202,6 +202,10 @@ class Plan:
             for b_ in walkup[i + 1:]:
                 if not any(x.get("gives") or x.get("needs") for x in (a_, b_)):
                     continue
+                # a spot may name the spots it never shares a stretch of the story with ("near_ok": Oh's search of
+                # Jang's desk, live only from m20 until he finds the scrap, beside Jang's chair's beats)
+                if b_["id"] in a_.get("near_ok", ()) or a_["id"] in b_.get("near_ok", ()):
+                    continue
                 d = math.dist(a_["at"], b_["at"]) * self.C * 16
                 if d < 76:
                     self.err(f"spots {a_['id']} and {b_['id']} are {d:.0f} px apart: walking up to one sets off the other (keep 76)")

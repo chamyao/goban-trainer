@@ -535,6 +535,21 @@
    "set_down": true
   },
   {
+   "id": "jang-desk-search",
+   "x": 14.5,
+   "y": 10.7,
+   "node": "",
+   "label": "Jang's desk",
+   "gives": "waybill_scrap",
+   "gives_when": "node:21-m20",
+   "give": [
+    "Jang's desk. The glue stick lies uncapped among paper trimmings. You turn the waybill over: glued to the back is a torn scrap of someone's weekly report. Internship. A name: Kim Seok-ho."
+   ],
+   "given": [
+    "Jang's desk. You've already found what it had to tell you."
+   ]
+  },
+  {
    "id": "mop-cupboard",
    "x": 30.5,
    "y": 4.7,

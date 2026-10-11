@@ -215,6 +215,9 @@ These were each learned from a real complaint, and each is a rule, not a one-off
   reads as a circle on the floor (apo110 again, at General Affairs: "fetched from a circle with nothing to mark the
   destination"). Name the taker (`"to": <npc id>`, `_deliver(..., to=...)`): the build moves the spot to their feet,
   so the ring and the diamond are on the person. Label it with the act ("Hand Kim's requisition to the clerk").
+- **Spots that never share a stretch of the story may stand closer than 76 px**, if one names the others
+  (`"near_ok": [ids]`): Oh's search of Jang's desk is live only from m20 until he has the scrap, when none of the
+  beats on Jang's chair is open, and a giver that has given no longer goes off. Name them one by one, with the reason.
 - **A beat "at your desk" is on the desk's chair** (apo110: "each member should have their own desk as a destination
   on the team floor"). Misaeng's Sales 3 gives each member a desk and a chair (`furn.chair`, walked over), and a beat
   at someone's desk stands `"on"` their chair: the ring is at the chair, not on open floor.
