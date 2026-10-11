@@ -137,7 +137,7 @@ def _scenes():
             ["still", "ms_summit", "slow zoom out"],
             N("Across the city that same Wednesday, Oh Sang-sik, a section head at One International, is hiking up a mountain with his three sons. "
               "He has forgotten an eleven o'clock meeting with a buyer from overseas. On the summit, his phone rings: it's his own boss, the department head."),
-            S("ms_bujang", "Where are you? The buyer's waiting, and if he walks out, we're both finished. I'm sending today's new hire. We're in no position to be picky."),
+            S("ms_bujang", "Where are you? The buyer's waiting, and if he walks out, we're both finished. I'm sending today's new hire to buy time until you get there. We're in no position to be picky."),
             ["party", ["ms_oh_hike"], {"to": {"place": "Mountain", "spot": "summit"}}],   # a cut: Oh, on the summit
         ]},
 
@@ -925,7 +925,7 @@ KO21 = {
     'Everyone plays their own baduk. Whoever prepared better comes out happier.': '모두 자신만의 바둑을 둔다. 더 잘 준비한 쪽이 웃는다.',
     "If there's a light I'm meant to keep burning, I'll take responsibility for it. But is there a light allowed for someone like me?": '내가 지켜야 할 불빛이 있다면 책임지겠다. 하지만 나 같은 사람에게도 허락된 불빛이 있을까.',
     "It doesn't sink in for Go, but it does for Kim Seok-ho.": '고 과장은 알아듣지 못하지만, 김석호는 알아듣는다.',
-    "Where are you? The buyer's waiting, and if he walks out, we're both finished. I'm sending today's new hire. We're in no position to be picky.": '어디야? 바이어가 기다리고 있어. 그냥 가 버리면 우리 둘 다 끝이야. 오늘 들어온 신입을 보낸다. 지금 가릴 처지가 아니잖아.',
+    "Where are you? The buyer's waiting, and if he walks out, we're both finished. I'm sending today's new hire to buy time until you get there. We're in no position to be picky.": '어디야? 바이어가 기다리고 있어. 그냥 가 버리면 우리 둘 다 끝이야. 네가 올 때까지 시간 벌게 오늘 들어온 신입을 보낸다. 지금 가릴 처지가 아니잖아.',
     'Not yet. The scrap, the glue, the key... I need to put it together first.': '아직이야. 종잇조각, 풀, 열쇠... 먼저 맞춰 봐야 해.',
     "I said you'd share it with me. I never said I'd keep my mouth shut.": '공유하라고 했지, 내가 입 다물고 있겠다고는 안 했어요.',
     "That's a secret.": '그건 비밀.',
