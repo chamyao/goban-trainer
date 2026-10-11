@@ -177,14 +177,14 @@ def _scenes():
 
         # M10 · 5수 (W). The folders; the mind map; "Who do you think you are?"; the interns' "find the dud".
         "m10": {"title": T("Who Do You Think You Are?"), "kind": "main", "steps": [
-            ["spawn", "hr", "ms_hr", "m10", 4, -2],
+            ["spawn", "hr", "ms_hr", "m10", 16, 8],
             S("ms_hr", "Jang Geu-rae, you'll be an intern with Sales Team 3. In two months the interns sit a PT, a presentation test. Pass it, and you stay on."),
             N("Two months, then. No degree, no experience, one phone call from a sponsor. If he fails the PT, he's out, and everyone will know he was only ever a parachute."),
             ["remove", "hr"],
             N("Eight weeks to the PT. His first real job is filing, and he means to do it better than anyone."),
             N("General Affairs hands over a box of supplies, a glue stick among them."),
             ["gain", "glue_stick"],
-            ["spawn", "kd", "ms_kimds", "m10", 2, -2],
+            ["spawn", "kd", "ms_kimds", "m10", "@chair-kim"],
             S("ms_kimds", "Sort these files into my folders."),
             ["still", "ms_mindmap", "slow pan across"],
             N("He draws a mind map and designs a better filing system. It takes him all afternoon."),
@@ -193,7 +193,7 @@ def _scenes():
             S("ms_kimds", "That filing system belongs to the company. This isn't work you do alone; it's work we do together."),
             N("At fifteen he filed his game records his own way, in a system only he ever had to read."),
             ["remove", "kd"],
-            ["spawn", "gl", "ms_glasses", "m10", 10, 0],
+            ["spawn", "gl", "ms_glasses", "m10", 16, 8],
             S("ms_glasses", "Interns' study group tonight. You're coming. Filing? It'll keep. We're going to work out who the dud is."),
             N("He has a whole cabinet to re-sort by morning. The glasses intern steers him out of the door anyway."),
             ["remove", "gl"],
@@ -220,8 +220,8 @@ def _scenes():
 
         # M13 · 6수 (W). Ahn leads: the apology; her review; both schemes live (상생). The dream of the stones.
         "m13": {"title": T("Both Live"), "kind": "main", "steps": [
-            ["spawn", "jg", "ms_jang", "m13", 4, -2], ["spawn", "gl", "ms_glasses", "m13", 8, 0],
-            ["spawn", "oh", "ms_oh", "m13", 14, -4], ["spawn", "kd", "ms_kimds", "m13", 16, -2],
+            ["spawn", "jg", "ms_jang", "m13", "@chair-jang"], ["spawn", "gl", "ms_glasses", "m13", 16, 8],
+            ["spawn", "oh", "ms_oh", "m13", "@chair-oh"], ["spawn", "kd", "ms_kimds", "m13", "@chair-kim"],
             S("ms_glasses", "Sorry. I shouldn't have kept you out."),
             N("On Jang's desk are two ways of filing the same papers: Kim's, which the whole team knows, and Jang's new one, which is better but only he understands. "
               "Kim wants his own back. One of them, it seems, has to go."),
@@ -247,10 +247,10 @@ def _scenes():
             N("He's up before the alarm and crushed on the train. The world moves faster than he does."),
             ["problem"],   # the record: Black 7
             N("Better plain and on time than perfect and late."),
-            ["spawn", "ahn", "ms_ahn", "m14", 4, -2],
+            ["spawn", "ahn", "ms_ahn", "m14", 16, 8],
             S("ms_ahn", "The PT dates are set: the first week of next month, a whole week at the training centre. There's an individual task and a team task, so start thinking about partners."),
             ["remove", "ahn"],
-            ["spawn", "kd", "ms_kimds", "m14", 2, -2],
+            ["spawn", "kd", "ms_kimds", "m14", "@chair-kim"],
             S("ms_kimds", "Everyone's going to want you. You've got no confidence and no skills, and if you pair with a sure dud, you shine."),
             S("ms_kimds", "Be careful of whoever comes to you first."),
             ["remove", "kd"],
@@ -298,7 +298,7 @@ def _scenes():
             ["still", "ms_text", "slow zoom in"],
             N("Han texts back one word: Again!"),
             N("At lunch, away from Jang, the glasses intern sidles up to Ahn."),
-            ["spawn", "ahn", "ms_ahn", "m18", 9, 4], ["spawn", "gl", "ms_glasses", "m18", 12, 4],
+            ["spawn", "ahn", "ms_ahn", "m18", 56, 24], ["spawn", "gl", "ms_glasses", "m18", 64, 24],
             S("ms_glasses", "Picked your partner yet? Not Jang, surely."),
             S("ms_ahn", "Jang's with Han. And they say Han made a big mistake in front of a buyer at Ulsan."),
             S("ms_glasses", "A total dud. Who's going to volunteer for the bomb squad?"),
@@ -318,7 +318,7 @@ def _scenes():
             N("Four weeks to the PT, and his partner keeps sending his work back."),
             ["problem"],   # the record: Black 11
             N("He works all night on three new ideas, forty pages each. In the morning, Oh tears into a team document he made."),
-            ["spawn", "oh", "ms_oh", "m19", 10, -6], ["spawn", "kim", "ms_kimds", "m19", 6, -4],
+            ["spawn", "oh", "ms_oh", "m19", "@chair-oh"], ["spawn", "kim", "ms_kimds", "m19", "@chair-kim"],
             ["emote", "oh", "anger"],
             S("ms_oh", "The colours don't match and the boxes are all over the place. What were you doing yesterday? Shrink the boxes."),
             ["remove", "oh"], ["remove", "kim"],
@@ -356,25 +356,25 @@ def _scenes():
         # M20 · 13수 (W). Kim's rule on paper; the shredding put off; Seok-ho's glue at Jang's desk; the lobby; the director's kick;
         # the roof; Oh finds the scrap glued to the waybill. The lead passes to Oh.
         "m20": {"title": T("The Waybill"), "kind": "main", "steps": [
-            ["spawn", "kd", "ms_kimds", "m20", 4, -2],
+            ["spawn", "kd", "ms_kimds", "m20", "@chair-kim"], ["spawn", "oh", "ms_oh", "m20", "@chair-oh"],
             N("Three weeks to the PT. The interns are graded on everything, and one careless moment can sink any of them."),
             S("ms_kimds", "Anything with figures on it goes in the shredder. Not one of our papers should ever turn up outside this team."),
             N("He decides to shred the waybill later with the next batch, and leaves it on his desk: Sales Team 3, DH-14."),
-            ["remove", "kd"],
-            ["spawn", "sh", "ms_kimsh", "m20", 10, 0],
+            ["spawn", "sh", "ms_kimsh", "m20", 16, 8],
             S("ms_kimsh", "Can I borrow your glue? Our supply cabinet's locked and nobody will give me the key."),
             S("ms_jang", "Sure, it's on my desk."),
             N("Kim Seok-ho, an intern on another team, glues his report together at Jang's desk, right on top of the waybill, and hurries off."),
+            ["move", "sh", "m20", "@chair-spare"],
             ["remove", "sh"],
             ["still", "ms_waybill", "slow zoom in"],
             N("Jang hums as he feeds the shredder. Down in the lobby, a yellow sheet slides off the security desk onto the floor, and a passing director taps it with his shoe."),
-            ["spawn", "dir", "ms_director", "m20", 8, 2], ["spawn", "oh", "ms_oh", "m20", 14, -6],
+            ["spawn", "dir", "ms_director", "m20", 24, 16],
             S("ms_oh", "Director! Is this about a team dinner?"),
             N("Without a word, the director kicks the team's paper box over. His aide hands Oh the waybill: they found it on the lobby floor."),
             S("ms_director", "Let's all do our jobs properly, shall we?"),
             ["remove", "dir"],
             S("ms_oh", "Get all the interns together!"),
-            ["spawn", "ahn", "ms_ahn", "m20", 6, -4], ["spawn", "gl", "ms_glasses", "m20", 8, -4], ["spawn", "sh", "ms_kimsh", "m20", 10, -4],
+            ["spawn", "ahn", "ms_ahn", "m20", 8, 24], ["spawn", "gl", "ms_glasses", "m20", 16, 24], ["spawn", "sh", "ms_kimsh", "m20", 24, 24],
             N("By the windows, Oh lines the interns up. Whose desk did that waybill come from?"),
             ["problem"],   # Jang: whose stone is it? (the deliberation; the choice comes after)
             ["still", "ms_ownup", "slow zoom in"],
@@ -382,7 +382,7 @@ def _scenes():
             N("Every intern turns to look at him. Three weeks before the PT, it goes on his record."),
             ["emote", "sh", "sweat"],
             N("Kim Seok-ho stares at the floor."),
-            ["remove", "ahn"], ["remove", "gl"], ["remove", "sh"],
+            ["remove", "ahn"], ["remove", "gl"], ["remove", "sh"], ["remove", "kd"],
             N("Back at his desk, Oh turns the waybill over. Glued to the back is a torn scrap of someone's weekly report, with a name on it: Kim Seok-ho."),
             ["gain", "waybill_scrap"],
             ["party", ["ms_oh"], {"to": "m21"}],   # the lead passes to Oh: he begins at his own desk, m21's spot on his chair (his stretch, m21-m21b)
@@ -390,7 +390,7 @@ def _scenes():
 
         # M21 · 14수 (W). Oh leads. Go brags; the cabinet key. Oh links it on the clue board (the comic: in his head).
         "m21": {"title": T("A Secret"), "kind": "main", "steps": [
-            ["spawn", "go", "ms_go", "m21", 8, 0],
+            ["spawn", "go", "ms_go", "m21", 16, 16],
             N("Someone else's scrap, glued to Jang's waybill. Oh means to find out how it got there."),
             N("Applause from across the floor. Go, a section head on Sales Team 1, comes over pumping his fists."),
             S("ms_go", "My baby intern, Kim Seok-ho! He pulls all-nighters with us, he's newly married, he's the eldest son of an eldest son, and we've just landed the deal."),
@@ -436,7 +436,7 @@ def _scenes():
             N("Two weeks to the PT. Every day is a lesson in what the job really is."),
             ["problem"],   # the record: Black 15
             N("At first light he's at Incheon harbour, where cargo meant for Gunsan was unloaded by mistake, some of it damaged. He came to see it for himself; paperwork alone drifts away from what's really happening on site."),
-            ["spawn", "st", "ms_stevehan", "m22", 6, -4], ["spawn", "br", "ms_kimbr", "m22", 10, -4], ["spawn", "oh", "ms_oh", "m22", 14, -6],
+            ["spawn", "oh", "ms_oh", "m22", "@chair-oh"], ["spawn", "st", "ms_stevehan", "m22", 32, 24], ["spawn", "br", "ms_kimbr", "m22", 48, 24],
             ["still", "ms_13floor", "slow pan across"],
             N("Back on the thirteenth floor, Steve Han, head of the Americas textile team, has come to pick a fight with Department Head Kim Bu-ryeon, who runs Sales Teams 1 to 3. They're the same rank, and everyone is watching."),
             S("ms_stevehan", "I don't have time for a report this thick. A fat report is just a way for nobody to take responsibility."),
@@ -445,7 +445,7 @@ def _scenes():
             S("ms_kimbr", "...We'll revise it."),
             ["remove", "st"], ["remove", "br"],
             N("Everyone is playing their own game of baduk. Whoever prepared better ends up happier with the result, and whoever rushed just to keep up has no excuse."),
-            ["spawn", "go", "ms_go", "m22", 2, 0],
+            ["spawn", "go", "ms_go", "m22", 24, 8],
             S("ms_oh", "Why would Steve come down on our department head? Out with it."),
             S("ms_go", "Steve suggested dinner with the buyers, and I picked the place. I'd had a few drinks."),
             S("ms_oh", "What did you feed them?"),
