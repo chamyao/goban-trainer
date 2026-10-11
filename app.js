@@ -130,6 +130,12 @@ const Sync = {
         for (const k in remote[bookId]) b[k] = Math.max(b[k] || 0, remote[bookId][k] || 0);
         continue;
       }
+      if (bookId === "tkMig") {   // a book's one-time migrations: the higher version is the one done (an older copy taking
+        // over set it back, and the next load ran that start-over again: apo110's Book 1, wiped)
+        const b = local.tkMig || (local.tkMig = {});
+        for (const k in remote.tkMig) b[k] = Math.max(+b[k] || 0, +remote.tkMig[k] || 0);
+        continue;
+      }
       if (bookId === "tkElo") { const r = remote.tkElo, l = local.tkElo; if (r && (!l || (r.n || 0) > (l.n || 0))) local.tkElo = r; continue; }
       const b = local[bookId] || (local[bookId] = {});
       for (const pid in remote[bookId]) if (b[pid] !== 1) b[pid] = remote[bookId][pid];
