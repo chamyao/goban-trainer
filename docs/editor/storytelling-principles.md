@@ -271,3 +271,6 @@ For each beat:
 10. **Curve:** is the beat's weight (boards, stills, length) in proportion to its importance? (19)
 11. **Ending tone:** does the book's last beat (including engine fanfare such as `["victory"]`) match the story's
     closing feeling? (23)
+12. **Cause on screen first:** can I name the line or image that set up each payoff? (Editor playbook E8, audit A)
+13. **Motive:** does every action and hand-off have a reason the player can see? (E8, audit B)
+14. **Time and place:** is every jump marked in the narration and matched by the raw staging? (E8, audit C)
