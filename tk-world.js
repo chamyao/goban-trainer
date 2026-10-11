@@ -36,7 +36,7 @@ const WorldData = {
   regions: {},
   async region(n) {
     if (!(n in this.regions)) {
-      const r = await fetch(`data/tk_maps/w${n}/region.json?v=119`);
+      const r = await fetch(`data/tk_maps/w${n}/region.json?v=122`);
       this.regions[n] = r.ok ? await r.json() : null;
     }
     return this.regions[n];
@@ -255,18 +255,18 @@ function worldScenes() {
     preload() {
       this.opts = this.game.worldOpts;
       const { w, kit } = this.opts;
-      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=119`);
-      this.load.json("kit", `assets/tk/kits/${kit}.json?v=52`);
-      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=118`);
+      this.load.json("region", `data/tk_maps/w${w.n}/region.json?v=122`);
+      this.load.json("kit", `assets/tk/kits/${kit}.json?v=53`);
+      this.load.json("cutscenes", `data/tk_maps/w${w.n}/cutscenes.json?v=124`);
     }
     create() {
       const { w, kit: kitName } = this.opts, region = this.cache.json.get("region"), kit = this.cache.json.get("kit");
-      for (const [s, path] of Object.entries(kit.sheets)) this.load.image(`kit-${s}`, `${path}?v=52`);   // the sheets change with the kits: same key
+      for (const [s, path] of Object.entries(kit.sheets)) this.load.image(`kit-${s}`, `${path}?v=53`);   // the sheets change with the kits: same key
       const [fw, fh] = kit.folk.frame;
       for (const [s, path] of Object.entries(kit.folk.sheets)) this.load.spritesheet(`folk-${s}`, path, { frameWidth: fw, frameHeight: fh });
       // story people the kit draws itself (generated walking sheets: rows down, up, left, right x 4 steps)
       for (const [who, h] of Object.entries(kit.heroes || {})) this.load.image(`hx-${who}`, h.sheet);
-      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=135`);
+      for (const p of region.places) this.load.tilemapTiledJSON(`map-${p.id}`, `data/tk_maps/w${w.n}/${kitName}/${p.id}.tmj?v=139`);
       this.load.image("kit-_swatch", `data/tk_maps/w${w.n}/${kitName}/swatch.png`);
       if (typeof WorldItems !== "undefined") WorldItems.preload(this);   // horses (tk-items.js)
       this.load.on("loaderror", f => { if (f.key !== "kit-_swatch") console.warn("missing", f.src); });
@@ -1869,7 +1869,7 @@ function worldScenes() {
       const who = this.npcs.filter(n => n.spr.visible && !(typeof WorldFeats !== "undefined" && WorldFeats.silent(this, n))).map(n => { const t = at(n.spr.x, n.spr.y);
         return { n, d: toBox({ x0: n.spr.x - n.spr.width / 2 + 2, x1: n.spr.x + n.spr.width / 2 - 2, y0: n.spr.y - n.spr.height, y1: n.spr.y + 3 }, t.x, t.y) }; })
         .filter(o => o.d <= r).sort((a, b) => a.d - b.d)[0];
-      const spot = Object.entries(this.spots).map(([key, s]) => {
+      const spot = Object.entries(this.spots).filter(([, s]) => !this.spent(s)).map(([key, s]) => {
         const t = at(s.x, s.y);
         const own = Math.hypot(s.x - t.x, s.y - t.y);
         let d = own;
@@ -2022,6 +2022,12 @@ function worldScenes() {
     }
 
     /* ---------- talking and walking ---------- */
+    // A story spot whose scene is over and that does nothing else: not tappable, nothing to say
+    spent(s) {
+      if (s.use || s.needs || s.opens || s.gives || !s.node) return false;
+      const q = this.region.quests.find(x => x.node === s.node);
+      return !!q && !q.shrine && this.done(q.node) && !this.available(q);
+    }
     target() {
       const P = this.player, v = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }[P.facing];
       const fx = P.x + v[0] * 12, fy = P.y - 3 + v[1] * 12;
@@ -2032,6 +2038,7 @@ function worldScenes() {
         if (d < bd) { bd = d; best = { kind: "npc", n }; }
       }
       for (const [k, s] of Object.entries(this.spots)) {
+        if (this.spent(s)) continue;
         const d = Math.hypot(s.x - fx, s.y - fy);
         if (d < 22 && d < bd) { bd = d; best = { kind: "spot", k }; }
       }
@@ -2071,8 +2078,7 @@ function worldScenes() {
       const q = this.region.quests.find(x => x.node === spot.node);
       if (q && q.shrine && !this.available(q)) return this.shrineTalk();
       if (q && this.available(q)) this.approach(q, spot);   // the same face-and-beat start as walking in
-      else if (q && this.done(q.node)) this.talk([["n", `${spot.label || q.title}. (${q.title}: done.)`,
-        q.title_zh ? `${spot.labelZh || q.title_zh}。（${q.title_zh}：已完成）` : ""]]);
+      else if (q && this.done(q.node)) return;   // a played scene's spot is just ground now (apo110: no "done." pop-ups)
       else {   // not yet: say where the story is now, so a locked place points the way
         const lines = [["n", `${spot.label || "Nothing here"}. Nothing to do here yet.`, `${spot.labelZh || "这里"}。这里还没有要做的事。`]];
         if (this.goalText) lines.push(["n", `For now: ${this.goalText[0]}`, this.goalText[1] ? `眼下：${this.goalText[1]}` : ""]);

@@ -395,6 +395,8 @@ def compile_map(m, kit, out_dir):
                 label_zh=ZH.get(s.get("label", ""), ""))
     walls = building_walls(m, kit, T)
     for o in m["objects"]:
+        if o["kind"].startswith("marker."):   # a desk's seat (plans.lay_seats): a place, not a thing; nothing drawn
+            continue
         # a building whose front faces E or W (a siheyuan wing): its side view, if the kit has one; the side
         # sprite's door faces E, so a W-facing one is drawn mirrored
         faces = o.get("faces") or o.get("door")

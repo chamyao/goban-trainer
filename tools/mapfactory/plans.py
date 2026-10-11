@@ -496,7 +496,22 @@ class MapBuilder:
                     return t
         return None
 
+    def lay_seats(self):
+        """A desk's seat: the chair its art draws at its front ("seats": [{"id": "chair-kim", "of": "desk-kim"}]), an
+        unseen marker at the middle of the desk's south edge. Spots and people "on" it are at the desk, facing it; a
+        scene's "@chair-kim" is there too (the user: "they are clearly not sitting at desks", on chairs of their own)."""
+        for st in self.p.get("seats", []):
+            if st["of"] not in self.foot:
+                raise RuntimeError(f"{self.mid}: seat {st['id']} is of {st['of']}, which isn't on the map")
+            dx, dy, dw, dh = self.foot[st["of"]]
+            o = {"kind": "marker.seat", "x": dx + dw / 2 - .5, "y": dy + dh - 1, "w": 1, "h": 1, "id": st["id"], "of": st["of"]}
+            if st.get("label"):
+                o["label"] = st["label"]
+            self.objects.append(o)
+            self.foot[st["id"]] = (o["x"], o["y"], 1, 1)
+
     def lay_spots(self):
+        self.lay_seats()
         for t in self.p.get("things", []):   # a building that hosts a beat: its spot is at its door
             if t.get("node") and t["id"] in self.anchor:   # a step out from the door, clear of the roof drawn over the doorstep
                 a = self.anchor[t["id"]]
@@ -586,6 +601,11 @@ class MapBuilder:
             if p.get("behind") in self.foot:   # seated at a desk: feet just inside its top edge, so it hides the legs
                 fx, fy, fw, fh = self.foot[p["behind"]]
                 n["x"], n["y"] = fx + fw / 2, fy + .35
+            if p.get("on") in self.foot:   # seated on a thing (Sales 3's team on their own chairs): exactly there, however
+                fx, fy, fw, fh = self.foot[p["on"]]   # many of them take turns on it (one per stretch of the story)
+                n["x"], n["y"] = fx + fw / 2, fy + fh / 2 + .4
+                if any(o.get("id") == p["on"] and o["kind"] == "marker.seat" for o in self.objects):
+                    n["y"] = fy + fh + .2   # a desk's seat: just past the desk's front edge, so drawn over the desk (in its chair)
             self.npcs.append(n)
         taken -= lanes - {(int(s_["x"]), int(s_["y"])) for s_ in self.spots}
         for i, c in enumerate(challengers):
@@ -1375,6 +1395,8 @@ def assets(maps, tables, kits_dir=None):
     used = {}
     for mid, m in maps.items():
         for o in m["objects"]:
+            if o["kind"].startswith("marker."):   # a seat: nothing to draw
+                continue
             used.setdefault(o["kind"], {"maps": set(), "count": 0, "size": (o["w"], o["h"])})
             used[o["kind"]]["maps"].add(mid)
             used[o["kind"]]["count"] += 1

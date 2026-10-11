@@ -202,6 +202,10 @@ class Plan:
             for b_ in walkup[i + 1:]:
                 if not any(x.get("gives") or x.get("needs") for x in (a_, b_)):
                     continue
+                # a spot may name the spots it never shares a stretch of the story with ("near_ok": Oh's search of
+                # Jang's desk, live only from m20 until he finds the scrap, beside Jang's chair's beats)
+                if b_["id"] in a_.get("near_ok", ()) or a_["id"] in b_.get("near_ok", ()):
+                    continue
                 d = math.dist(a_["at"], b_["at"]) * self.C * 16
                 if d < 76:
                     self.err(f"spots {a_['id']} and {b_['id']} are {d:.0f} px apart: walking up to one sets off the other (keep 76)")
@@ -209,7 +213,12 @@ class Plan:
             c = tuple(s["at"])
             if s.get("node") and s["node"].split("-", 1)[-1] not in keys:
                 self.err(f"spot {s['id']}: node {s['node']} is not a Shared key")
-            if s.get("on"):
+            seat = next((x for x in p.get("seats", []) if x["id"] == s.get("on")), None)
+            if seat:   # on a desk's seat (plans.lay_seats): stands at the desk's front; "at" is the cell before it
+                desk = next((t for t in p.get("things", []) if t["id"] == seat["of"]), None)
+                if not desk or tuple(c) != (desk["rect"][0], desk["rect"][1] + desk["rect"][3]):
+                    self.err(f"spot {s['id']}: on {s['on']}, so at the cell in front of {seat['of']}")
+            elif s.get("on"):
                 host = self.owner.get(c)
                 if not host or host["id"] != s["on"]:
                     self.err(f"spot {s['id']}: meant to be on {s['on']}")

@@ -312,11 +312,7 @@ def _sales3():
         {"id": "desk-jang", "kind": "furn.office_desk", "rect": [8, 5, 1, 1], "label": "Jang's desk"},
         {"id": "desk-spare", "kind": "furn.office_desk", "rect": [9, 5, 1, 1], "label": "An empty desk"},
         {"id": "oh-desk", "kind": "furn.office_desk", "rect": [10, 3, 1, 2], "label": "Oh's desk"},
-        {"id": "chair-kim", "kind": "furn.chair", "rect": [8, 3, 1, 1], "label": "Kim Dong-sik's chair"},
-        {"id": "chair-deputy", "kind": "furn.chair", "rect": [9, 3, 1, 1], "label": "The deputy's chair"},
-        {"id": "chair-jang", "kind": "furn.chair", "rect": [8, 6, 1, 1], "label": "Jang's chair"},
-        {"id": "chair-spare", "kind": "furn.chair", "rect": [9, 6, 1, 1]},
-        {"id": "chair-oh", "kind": "furn.chair", "rect": [11, 3, 1, 1], "label": "Oh's chair"},
+
         # the team east
         *_desks([(13, 4), (14, 4), (13, 5), (14, 5)]),
         {"id": "head-e", "kind": "furn.office_desk", "rect": [15, 4, 1, 2]},
@@ -325,7 +321,14 @@ def _sales3():
         {"id": "meet-e", "kind": "furn.meeting_table", "rect": [13, 8, 2, 1]},
         {"id": "plant-sw", "kind": "furn.plant", "rect": [1, 10, 1, 1]},
         {"id": "plant-se", "kind": "furn.plant", "rect": [16, 10, 1, 1]},
-    ]) | {"label": "Sales Team 3"}
+    ]) | {"label": "Sales Team 3",
+          # each desk's own chair, the one its art draws at its front: where its owner sits, facing the desk (the user:
+          # "they are clearly not sitting at desks"), and where a beat "at your desk" stands (plans.lay_seats)
+          "seats": [{"id": "chair-kim", "of": "desk-kim", "label": "Kim Dong-sik's chair"},
+                    {"id": "chair-deputy", "of": "desk-deputy", "label": "The deputy's chair"},
+                    {"id": "chair-jang", "of": "desk-jang", "label": "Jang's chair"},
+                    {"id": "chair-spare", "of": "desk-spare"},
+                    {"id": "chair-oh", "of": "oh-desk", "label": "Oh's chair"}]}
 
 
 def _textile():
@@ -1192,7 +1195,7 @@ def _b1():
                 {"id": "m18", "at": [8, 6], "on": "chair-jang", "node": k(18), "label": "Your desk"},
                 {"id": "m19", "at": [8, 6], "on": "chair-jang", "node": k(19), "label": "Your desk"},
                 {"id": "m20", "at": [8, 6], "on": "chair-jang", "node": k(20), "label": "Your desk"},
-                {"id": "m21", "at": [11, 3], "on": "chair-oh", "node": k(21), "label": "Your desk"},   # Oh leads: his own desk   # Go comes over from Sales Team 1
+                {"id": "m21", "at": [10, 5], "on": "chair-oh", "node": k(21), "label": "Your desk"},   # Oh leads: his own desk   # Go comes over from Sales Team 1
                 {"id": "m22", "at": [8, 6], "on": "chair-jang", "node": k(22), "label": "Your desk"},   # back from Incheon
                 {"id": "m22b", "at": [4, 9], "node": k("22b"), "label": "The team's table"},
                 {"id": "sales3", "at": [15, 9], "label": "Sales Team 3", "note": "handoffs to Jang land here (6+ tiles from the next beat)"},
@@ -1207,6 +1210,15 @@ def _b1():
                  "set_down": True,
                  "deliver": ["You ring the forwarder about the B/L. On hold. Then a voice: the bill of lading went out this morning. You write it down."],
                  "waiting": ["The team phone."], "delivered": ["The team phone. The forwarder's call is done."]},
+                # m21's gate (Oh leads, apo110): Oh searches Jang's desk himself and finds the name glued to the waybill.
+                # Live only from m20 until he has the scrap, when none of the beats at Jang's chair (or m13's, beside
+                # it) is open, and a giver that has given no longer goes off: so it stands at the desk, near them
+                _give("jang-desk-search", [7, 5], "Jang's desk", "waybill_scrap", n(20),
+                      "Jang's desk. The glue stick lies uncapped among paper trimmings, and there's a dried smear of glue where the "
+                      "waybill must have lain. You turn the waybill over: glued to the back is a torn scrap of someone's weekly report. "
+                      "Internship. A name: Kim Seok-ho.",
+                      "Jang's desk. You've already found what it had to tell you.")
+                | {"near_ok": ["m10", "m13", "m14", "m18", "m19", "m20", "m22", "errand-bl", "errand-copy"]},
                 # "wipe this floor" (episode 7): the mop from the cleaning cupboard, to the spill by the east desks
                 _give("mop-cupboard", [15, 2], "The cleaning cupboard", "mop", n(13), "A mop and a bucket, behind the cupboard door. You take them.",
                       "The cleaning cupboard. The mop's back on its hook."),
@@ -1228,9 +1240,21 @@ def _b1():
                 # the clerk at General Affairs takes the requisition (a delivery is a handoff to a person)
                 {"id": "ga-clerk", "kind": "folk.officewoman", "place": "general-affairs", "at": [5, 3], "face": "S", "label": "General Affairs",
                  "say": "A clerk at General Affairs' counter, sorting forms into trays."},
-                # m14: Kim Dong-sik at his desk for his copies
-                {"id": "kim-errand", "kind": "hero.ms_kimds", "place": "sales3", "at": [8, 3], "face": "S", "label": "Kim Dong-sik",
-                 "when": n(13), "until": n(14), "say": "Kim Dong-sik doesn't look up from his screen."},
+                # Sales Team 3 at their own desks, seated on their chairs, while the story has them in the office (apo110:
+                # "put the npcs from the sales team and have them sitting in their chairs at their desks"): from the
+                # first day (m8's hiring) to that evening (m10, then the hof and Jang's night alone); from the next
+                # dawn (m13) on. Oh is away while he leads (m20 -> m21b: his own desk, then Jongno). Jang's chair stays
+                # free for the player. Kim (kim-errand) is who takes the copies in m14.
+                *[{"id": i, "kind": kind, "place": "sales3", "at": at, "on": "chair-" + i.split("-")[0], "face": "N", "label": label, "say": say,
+                   "when": when, **({"until": until} if until else {})}
+                  for i, kind, at, label, say, when, until in (
+                      ("kim-day1", "hero.ms_kimds", [8, 3], "Kim Dong-sik", "Kim Dong-sik types with two fingers, fast. “Busy, Jang. Later.”", n(8), n(10)),
+                      ("kim-errand", "hero.ms_kimds", [8, 3], "Kim Dong-sik", "Kim Dong-sik doesn't look up from his screen.", n(13), None),
+                      ("deputy-day1", "folk.salaryman", [9, 3], "The deputy", "The deputy is on the phone to a supplier, voice low and patient.", n(8), n(10)),
+                      ("deputy", "folk.salaryman", [9, 3], "The deputy", "The deputy is on the phone to a supplier, voice low and patient.", n(13), None),
+                      ("oh-day1", "hero.ms_oh", [11, 3], "Oh Sang-sik", "Section head Oh reads a contract, red pen in hand. He doesn't look up.", n(8), n(10)),
+                      ("oh-day2", "hero.ms_oh", [11, 3], "Oh Sang-sik", "Section head Oh reads a contract, red pen in hand. He doesn't look up.", n(13), n(20)),
+                      ("oh-day3", "hero.ms_oh", [11, 3], "Oh Sang-sik", "Section head Oh reads a contract, red pen in hand. He doesn't look up.", n("21b"), None))],
             ],
             # episode 1's evening, as Jongno's townsfolk while m5 is open: the city's office workers after hours
             "Jongno": [
