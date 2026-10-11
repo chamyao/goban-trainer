@@ -409,51 +409,56 @@
    "x": 16.5,
    "y": 12.7,
    "node": "21-m13",
-   "label": "Your desk, at night",
+   "label": "Jang's desk, at night",
    "on": "chair-jang"
   },
   {
    "id": "m14",
-   "x": 24.5,
-   "y": 14.7,
+   "x": 16.5,
+   "y": 12.7,
    "node": "21-m14",
-   "label": "Sales Team 3"
+   "label": "Your desk",
+   "on": "chair-jang"
   },
   {
    "id": "m18",
-   "x": 30.5,
-   "y": 14.7,
+   "x": 16.5,
+   "y": 12.7,
    "node": "21-m18",
-   "label": "Sales Team 3"
+   "label": "Your desk",
+   "on": "chair-jang"
   },
   {
    "id": "m19",
-   "x": 18.5,
-   "y": 20.7,
+   "x": 16.5,
+   "y": 12.7,
    "node": "21-m19",
-   "label": "Sales Team 3"
+   "label": "Your desk",
+   "on": "chair-jang"
   },
   {
    "id": "m20",
-   "x": 6.5,
-   "y": 18.7,
+   "x": 16.5,
+   "y": 12.7,
    "node": "21-m20",
-   "label": "Sales Team 3"
+   "label": "Your desk",
+   "on": "chair-jang"
   },
   {
    "id": "m21",
    "x": 22.5,
    "y": 6.7,
    "node": "21-m21",
-   "label": "Oh's desk",
+   "label": "Your desk",
    "on": "chair-oh"
   },
   {
    "id": "m22",
    "x": 16.5,
-   "y": 18.7,
+   "y": 12.7,
    "node": "21-m22",
-   "label": "Sales Team 3"
+   "label": "Your desk",
+   "on": "chair-jang"
   },
   {
    "id": "m22b",

@@ -1822,7 +1822,7 @@
    "spot": "m13",
    "scene": "m13",
    "title": "Both Live",
-   "objective": "Your desk, Sales Team 3.",
+   "objective": "Jang's desk, Sales Team 3.",
    "after": [
     "21-m12"
    ],
@@ -2009,7 +2009,7 @@
    "spot": "m14",
    "scene": "m14",
    "title": "The World Is Faster",
-   "objective": "Sales Team 3.",
+   "objective": "Your desk, Sales Team 3.",
    "after": [
     "21-m13"
    ],
@@ -2584,7 +2584,7 @@
    "spot": "m18",
    "scene": "m18",
    "title": "Again!",
-   "objective": "Back to Sales Team 3.",
+   "objective": "Back to your desk, Sales Team 3.",
    "after": [
     "21-m17"
    ],
@@ -2771,7 +2771,7 @@
    "spot": "m19",
    "scene": "m19",
    "title": "How Old Are You?",
-   "objective": "Sales Team 3.",
+   "objective": "Your desk, Sales Team 3.",
    "after": [
     "21-m18"
    ],
@@ -3146,7 +3146,7 @@
    "spot": "m20",
    "scene": "m20",
    "title": "The Waybill",
-   "objective": "Back to Sales Team 3.",
+   "objective": "Back to your desk, Sales Team 3.",
    "after": [
     "21-m19c"
    ],
@@ -3333,7 +3333,7 @@
    "spot": "m21",
    "scene": "m21",
    "title": "A Secret",
-   "objective": "Oh's desk, Sales Team 3.",
+   "objective": "Your desk, Sales Team 3.",
    "after": [
     "21-m20"
    ],
@@ -3721,7 +3721,7 @@
    "spot": "m22",
    "scene": "m22",
    "title": "Their Own Baduk",
-   "objective": "Back to Sales Team 3.",
+   "objective": "Back to your desk, Sales Team 3.",
    "after": [
     "21-m21b"
    ],
