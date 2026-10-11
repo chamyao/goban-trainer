@@ -1187,13 +1187,13 @@ def _b1():
             sales3: [
                 # (every spot you walk up to here at least 76 px from every giver and delivery)
                 {"id": "m10", "at": [8, 6], "on": "chair-jang", "node": k(10), "label": "Your desk"},
-                {"id": "m13", "at": [8, 6], "on": "chair-jang", "node": k(13), "label": "Your desk, at night"},
-                {"id": "m14", "at": [12, 7], "node": k(14), "label": "Sales Team 3"},
-                {"id": "m18", "at": [15, 7], "node": k(18), "label": "Sales Team 3"},
-                {"id": "m19", "at": [9, 10], "node": k(19), "label": "Sales Team 3"},
-                {"id": "m20", "at": [3, 9], "node": k(20), "label": "Sales Team 3"},
-                {"id": "m21", "at": [11, 3], "on": "chair-oh", "node": k(21), "label": "Oh's desk"},   # Go comes over from Sales Team 1
-                {"id": "m22", "at": [8, 9], "node": k(22), "label": "Sales Team 3"},   # the 13th-floor clash (staged on 14)
+                {"id": "m13", "at": [8, 6], "on": "chair-jang", "node": k(13), "label": "Jang's desk, at night"},   # Ahn leads here
+                {"id": "m14", "at": [8, 6], "on": "chair-jang", "node": k(14), "label": "Your desk"},
+                {"id": "m18", "at": [8, 6], "on": "chair-jang", "node": k(18), "label": "Your desk"},
+                {"id": "m19", "at": [8, 6], "on": "chair-jang", "node": k(19), "label": "Your desk"},
+                {"id": "m20", "at": [8, 6], "on": "chair-jang", "node": k(20), "label": "Your desk"},
+                {"id": "m21", "at": [11, 3], "on": "chair-oh", "node": k(21), "label": "Your desk"},   # Oh leads: his own desk   # Go comes over from Sales Team 1
+                {"id": "m22", "at": [8, 6], "on": "chair-jang", "node": k(22), "label": "Your desk"},   # back from Incheon
                 {"id": "m22b", "at": [4, 9], "node": k("22b"), "label": "The team's table"},
                 {"id": "sales3", "at": [15, 9], "label": "Sales Team 3", "note": "handoffs to Jang land here (6+ tiles from the next beat)"},
                 # m14's pile-up, all at once (episode 7): the forwarder on the team phone, Kim's copies, the floor
@@ -1302,17 +1302,17 @@ def _b1():
             k(8): ("Jongno", "The buyer is waiting at a café on Jongno."),
             k(10): ("One International", "Your desk in Sales Team 3, fourteenth floor. Take the lift."),
             k(12): ("Jongno", "The interns' study night, at the hof in Pimatgol."),
-            k(13): ("One International", "Your desk, Sales Team 3."),
-            k(14): ("One International", "Sales Team 3."),
+            k(13): ("One International", "Jang's desk, Sales Team 3."),
+            k(14): ("One International", "Your desk, Sales Team 3."),
             k(16): ("Jongno", "Out on the plaza in front of the tower."),
             k(17): ("One International", "Go up to the roof."),
-            k(18): ("One International", "Back to Sales Team 3."),
-            k(19): ("One International", "Sales Team 3."),
+            k(18): ("One International", "Back to your desk, Sales Team 3."),
+            k(19): ("One International", "Your desk, Sales Team 3."),
             k("19c"): ("One International", "The meeting room, fifteenth floor."),
-            k(20): ("One International", "Back to Sales Team 3."),
-            k(21): ("One International", "Oh's desk, Sales Team 3."),
+            k(20): ("One International", "Back to your desk, Sales Team 3."),
+            k(21): ("One International", "Your desk, Sales Team 3."),
             k("21b"): ("Jongno", "Out on the street by the hof."),
-            k(22): ("One International", "Back to Sales Team 3."),
+            k(22): ("One International", "Back to your desk, Sales Team 3."),
             k("22b"): ("One International", "Sales Team 3's table."),
         },
     }
