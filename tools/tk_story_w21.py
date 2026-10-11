@@ -192,7 +192,8 @@ def _scenes():
             ["spawn", "ahn", "ms_ahn", "m12", 4, -2], ["spawn", "gl", "ms_glasses", "m12", 8, -2],
             N("The bar is full of interns pitching PT topics. Every time Jang reaches for his bag to leave, the glasses intern refills his glass and pulls him back down."),
             S("ms_glasses", "Sit, sit. You can't leave before we've picked the dud. Well, we all know who it is."),
-            N("Ahn Young-yi, top of their intake and the only woman there, has been watching."),
+            N("Ahn Young-yi, top of their intake and the only woman there, has been watching. She catches Jang's sleeve and pulls him aside, away from the table."),
+            S("ms_ahn", "Hey, new kid. Pull yourself together."),
             S("ms_ahn", "You haven't said a word all night. You won't learn just by listening."),
             S("ms_ahn", "And you've got filing due tomorrow, but you're sitting here? Make your own stones safe before you attack."),
             ["problem"],   # Jang: secure your own group first
@@ -938,9 +939,10 @@ KO21 = {
     'He has a whole cabinet to re-sort by morning. The glasses intern steers him out of the door anyway.': '아침까지 캐비닛 하나를 다시 정리해야 한다. 그래도 안경 쓴 인턴은 그를 문밖으로 끌고 나간다.',
     'The bar is full of interns pitching PT topics. Every time Jang reaches for his bag to leave, the glasses intern refills his glass and pulls him back down.': '술집은 PT 주제를 쏟아 내는 인턴들로 가득하다. 장그래가 가방을 집어 들 때마다 안경 쓴 인턴이 잔을 채우고 그를 다시 앉힌다.',
     "Sit, sit. You can't leave before we've picked the dud. Well, we all know who it is.": '앉아, 앉아. 폭탄 고르기 전엔 못 가. 뭐, 누군지 다 알지만.',
-    'Ahn Young-yi, top of their intake and the only woman there, has been watching.': '동기 중 수석이자 그 자리의 유일한 여자, 안영이가 지켜보고 있었다.',
     "You kept him here when you knew he had filing due tomorrow. Come on. You're going to go and apologise.": '내일까지 정리할 서류가 있는 거 알면서 붙잡아 뒀잖아요. 가요. 가서 사과해요.',
     "Sorry. I shouldn't have kept you out.": '미안해요. 붙잡아 두지 말았어야 했는데.',
     "On Jang's desk are two ways of filing the same papers: Kim's, which the whole team knows, and Jang's new one, which is better but only he understands. Kim wants his own back. One of them, it seems, has to go.": '장그래의 책상에는 같은 서류를 정리하는 두 가지 방식이 있다. 팀 모두가 아는 김 대리의 방식, 그리고 더 낫지만 장그래만 아는 새 방식. 김 대리는 자기 방식을 되돌려 놓으라 한다. 둘 중 하나는 사라져야 할 것 같다.',
     'In baduk, two groups locked together can sometimes both live, if neither side forces the issue. Ahn looks for that.': '바둑에서는 맞물린 두 무리가, 어느 쪽도 무리하지 않으면 둘 다 살 때가 있다. 안영이는 그 수를 찾는다.',
+    "Ahn Young-yi, top of their intake and the only woman there, has been watching. She catches Jang's sleeve and pulls him aside, away from the table.": '동기 중 수석이자 그 자리의 유일한 여자, 안영이가 지켜보고 있었다. 그녀는 장그래의 소매를 잡아 테이블에서 떨어진 곳으로 끌고 간다.',
+    'Hey, new kid. Pull yourself together.': '이봐요, 신입. 정신 좀 차려요.',
 }
