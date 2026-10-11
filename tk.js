@@ -1638,7 +1638,7 @@ function tkLevelBuild(host, worldN, key, { w, node, src, p, book }, { back, agai
       ...(TKVoice.has(node.boss.taunt_vid) ? [h("button", { class: "tk-say", type: "button", onclick: () => TKVoice.play(node.boss.taunt_vid) }, "播放 Play")] : [])]),
   ]) : null;
   if (node.boss) TKVoice.play(node.boss.taunt_vid);
-  const stakes = p.record ? null : TKElo.stakesEl(w, [src.id, p.id]) || null;
+  const stakes = p.record ? null : TKElo.stakesEl(w, [src.id, p.id], w.lang !== "en") || null;
   const aside = h("aside", {}, [
     ...(bossPanel ? [bossPanel] : []),
     h("div", { class: "panel" }, [
@@ -1816,7 +1816,7 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
     `${p.lv || node.grade || ""} · 死活 · `, node.role === "boss" ? "" : `出自 ${src.title} · `,
     h("a", { href: p.url || `https://www.101weiqi.com/q/${p.id}/`, target: "_blank", rel: "noopener" }, "来源 source"),
   ]);
-  const stakes = p.record ? null : TKElo.stakesEl(TK.world(worldN), [src.id, p.id]) || null;
+  const stakes = p.record ? null : TKElo.stakesEl(TK.world(worldN), [src.id, p.id], !enOnly) || null;
   if (stakes) srcLine.append(" · ", stakes);
   // a decision board: the leader's choice named in the side column, over what's said
   const nth = Math.max(0, (+String(key).split("~")[1] || 1) - 1);   // which board of the scene
