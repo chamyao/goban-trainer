@@ -134,6 +134,7 @@ class Stage:
         self.gone = set()
         self.fallen = set()
         self.props = {}     # prop id -> kind
+        self.offstage = set()   # ["offstage", who, …]: speakers only heard (Misaeng's phone calls)
         self.aboard = {}    # rider id -> prop id
         self.party = list(party)
         # the party lines up on the spot, facing the far side
@@ -353,6 +354,9 @@ class Stage:
     def say(self, step, chars):
         who = step[1]
         speaker = self.find(who)
+        if speaker is None and who in self.offstage:   # heard, not seen (a voice on the phone): the line with no one brought on
+            self.beats.append({"do": "line", "line": step})
+            return
         if speaker is None and (who in chars or re.fullmatch(r"[a-z][a-z0-9_]*", who)):   # unknown ids get a stand-in
             # someone speaks who isn't on stage: bring them on, facing the party
             far = self.offset(28, -6 if len([a for a in self.live() if self.cast[a]["side"] == "them"]) else 0)
@@ -520,6 +524,9 @@ def stage_scene(scene, m, spot, party, chars, boss=None):
             if arrivals:
                 st.beats.append({"do": "camera", "to": st.frame(list(st.pos)), "ms": 600})
                 st.beats += st.arrive(arrivals)
+        if op == "offstage":
+            st.offstage |= set(s[1:])
+            continue
         if op == "spawn":
             cell = st.at(s, 4)
             st.spawn(s[1], s[2], cell, st.side_of(s[2], cell), opening=opening)

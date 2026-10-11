@@ -770,7 +770,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) { this.data = await (await fetch("data/tk.json?v=120")).json(); this.migrate(); }
+    if (!this.data) { this.data = await (await fetch("data/tk.json?v=121")).json(); this.migrate(); }
     return this.data;
   },
   // A book whose beats were renumbered after players began it: their cleared beats moved to the new keys, once per
@@ -1172,7 +1172,7 @@ class TKMap {
     });
   }
   actor(id) { return this.actors[id] || this.party.find(p => p.who === id); }
-  pos(at, dx = 0, dy = 0) { const n = this.N[at] || this.leader; return { x: n.x + dx, y: n.y + dy }; }
+  pos(at, dx = 0, dy = 0) { const n = this.N[at] || this.leader; return { x: n.x + (+dx || 0), y: n.y + (+dy || 0) }; }   // ("@chair-kim": a map thing, for the on-foot scenes; here, the node itself)
   moveActor(a, x, y) {
     return new Promise(res => { a.path = [{ x, y }]; a.speed = .05; a.done = res; });
   }
