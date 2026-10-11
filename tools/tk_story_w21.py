@@ -275,7 +275,7 @@ def _scenes():
             ["party", ["ms_jang"], {"to": {"place": "One International", "from": "Jongno"}}],
         ]},
 
-        # M17 · 9수 (W). The roof: Jang tries to take sente; Han slams down stone after stone and picks him. The gossip.
+        # M17 · 9수 (W). The roof: Jang tries to take sente; Han slams down stone after stone and picks him.
         "m17": {"title": T("Sente"), "kind": "main", "steps": [
             ["spawn", "han", "ms_han", "m17", 4, -2],
             N("That night, the intern who asked about partners is waiting for him on the roof."),
@@ -283,19 +283,14 @@ def _scenes():
             ["still", "ms_roof", "slow zoom out"],
             N("Sente is the initiative: the right to lead the game. He's always handed it over. This time he means to keep it."),
             S("ms_jang", "Why did you choose me?"),
-            ["problem"],   # Jang: take sente (fails, as written)
+            ["problem"],   # Jang: take sente
             N("Han reels it off: mechanical engineering, contest prizes, plant tours, foreign buyers, even a meal with the president. It's like stones slammed down by the handful."),
             S("ms_han", "Team up with me. You can build the PT however you like; just email me your progress."),
             S("ms_jang", "...Thanks."),
             ["remove", "han"],
-            N("Next morning, word has got round the interns. Out of Jang's earshot:"),
-            ["spawn", "gl", "ms_glasses", "m17", 9, 4], ["spawn", "ahn", "ms_ahn", "m17", 12, 4],
-            S("ms_ahn", "They say he made a big mistake in front of a buyer at Ulsan."),
-            S("ms_glasses", "A total dud. Who's going to volunteer for the bomb squad?"),
-            ["remove", "gl"], ["remove", "ahn"],
         ]},
 
-        # M18 · 10수 (W). Kinder and warmer; "Again!"; Ahn's "nuclear bomb"; "Find it yourself."; Han scolded at Ulsan.
+        # M18 · 10수 (W). Kinder and warmer; "Again!"; the interns' gossip and Ahn's "nuclear bomb"; "Find it yourself."; Han scolded at Ulsan.
         "m18": {"title": T("Again!"), "kind": "main", "steps": [
             N("Five weeks to the PT. Han said Jang could build it his way."),
             N("After years of fighting alone at a board, the office feels kinder and warmer. He emails Han three ideas for the PT."),
@@ -305,12 +300,14 @@ def _scenes():
             N("At lunch, away from Jang, the glasses intern sidles up to Ahn."),
             ["spawn", "ahn", "ms_ahn", "m18", 9, 4], ["spawn", "gl", "ms_glasses", "m18", 12, 4],
             S("ms_glasses", "Picked your partner yet? Not Jang, surely."),
+            S("ms_ahn", "Jang's with Han. And they say Han made a big mistake in front of a buyer at Ulsan."),
+            S("ms_glasses", "A total dud. Who's going to volunteer for the bomb squad?"),
             S("ms_ahn", "Who knows? Maybe Jang's a big dud. A nuclear bomb."),
             ["remove", "ahn"], ["remove", "gl"],
             N("Jang slips into the restroom and calls Han."),
             S("ms_jang", "You said I could build it my way."),
             S("ms_han", "I said you'd share it with me. I never said I'd keep my mouth shut."),
-            ["problem"],   # Jang: hold your ground on the phone (fails, as written)
+            ["problem"],   # Jang: hold your ground on the phone
             S("ms_jang", "Then what kind of idea do you want?"),
             S("ms_han", "Find it yourself."),
             N("At the Ulsan plant, Han is told he has one last chance and should go back to a desk if he isn't up to it. In Seoul, Jang sits at his screen beside an abandoned board. The world is far colder and more heartless than he thought."),
@@ -676,7 +673,6 @@ KO21 = {
     'Why did you choose me?': '왜 저를 고르셨어요?',
     '...Thanks.': '...고맙습니다.',
     'You said I could build it my way.': '마음대로 만들라고 하셨잖아요.',
-    "Next morning, word has got round the interns. Out of Jang's earshot:": '다음 날 아침, 소문은 인턴들 사이에 다 퍼졌다. 장그래에게 들리지 않는 곳에서:',
     'At lunch, away from Jang, the glasses intern sidles up to Ahn.': '점심시간, 장그래가 없는 자리에서 안경 인턴이 안영이에게 슬쩍 다가간다.',
     'Jang slips into the restroom and calls Han.': '장그래는 화장실로 들어가 한석율에게 전화를 건다.',
     'Find it yourself.': '본인이 찾으세요.',
@@ -836,7 +832,7 @@ KO21 = {
     'Sort these files into my folders.': '이 파일들 내 폴더에 정리해.',
     'That night he dreams of a board: rows of white stones, and one black.': '그날 밤 그는 바둑판 꿈을 꾼다. 줄지은 흰 돌, 그리고 검은 돌 하나.',
     'Do your part, and trust the rest.': '자기 몫을 하고, 나머지는 믿는 거예요.',
-    'They say he made a big mistake in front of a buyer at Ulsan.': '울산에서 바이어 앞에서 큰 실수를 했대요.',
+    "Jang's with Han. And they say Han made a big mistake in front of a buyer at Ulsan.": '장그래 씨는 한석율 씨랑 해요. 근데 한석율 씨, 울산에서 바이어 앞에서 큰 실수를 했대요.',
     'And how old are you, anyway?': '그리고 너 몇 살이냐?',
     'My team was up all night on it.': '우리 팀이 밤새워 만든 겁니다.',
     'Why would Steve come down on our department head? Out with it.': '스티브가 왜 우리 부장님을 잡겠어? 털어놔.',
