@@ -202,6 +202,12 @@ async function desks(b) {
   check(day.kim && day.deputy && day.oh, `m14: Kim, the deputy and Oh sit at their own desks (${JSON.stringify(day)})`);
   check(!night.any, 'm13: at night the team has gone home');
   check(ohLeads.kim && !ohLeads.oh, 'm21: Oh leads, so his chair is his to walk to (Kim still at his desk)');
+  // m21's gate: Oh searches Jang's desk himself and finds the name glued to the waybill (apo110)
+  const q = await open(b, '21-m21', 'one-international--sales3', [], ['one-international--sales3']);
+  check(!await q.evaluate(() => window.__w.cond('item:waybill_scrap')), 'm21: Oh hasn\'t the scrap yet');
+  await at(q, 'jang-desk-search');
+  check(await q.evaluate(() => window.__w.cond('item:waybill_scrap')), 'm21: searching Jang\'s desk gives the waybill scrap (m21\'s gate)');
+  await q.context().close();
 }
 
 async function walks(b) {

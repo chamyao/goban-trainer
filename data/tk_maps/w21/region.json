@@ -255,6 +255,7 @@
    "parent": "one-international",
    "gives": [
     "copy",
+    "waybill_scrap",
     "mop"
    ],
    "delivers": [
@@ -3511,6 +3512,18 @@
     ]
    ],
    "board": false,
+   "gate": [
+    {
+     "needs": [
+      "item:waybill_scrap"
+     ],
+     "else": "m21_wait",
+     "objective": "The waybill came from Jang's desk. Go and look at it, then back to your desk.",
+     "at": "One International",
+     "place": "one-international",
+     "objective_zh": ""
+    }
+   ],
    "objective_zh": "",
    "title_zh": ""
   },
@@ -3699,18 +3712,6 @@
     ]
    ],
    "board": false,
-   "gate": [
-    {
-     "needs": [
-      "mark:audit"
-     ],
-     "else": "m21b_wait",
-     "objective": "Work out how the waybill got out of Sales 3: open Oh's desk from the bag and link the clues. Then meet Kim and Jang on Jongno.",
-     "at": "Jongno",
-     "place": "jongno",
-     "objective_zh": ""
-    }
-   ],
    "objective_zh": "",
    "title_zh": ""
   },
