@@ -535,7 +535,7 @@ def _nodes():
             "ms_ahn", "His system or Mr. Kim's?",
             "Two groups locked together. Does one of them have to die?",
             "Both live.",
-            "One of them dies. Again.", problem="redmond-life-and-death/61")),   # a seki, hand-picked (apo110: "both live" should be a seki)
+            "One of them dies. Again.", problem="basic-seki/1")),   # a basic seki, goproblems.com #10867 (the user: Redmond 61 was too hard)
         node("m14", 146, 177, "m14", room="sales3", move=6, record=7,
              choices={7: [['dj', 0.08], ['ep', 0.11], ['cj', 0.14], ['qk', 0.26], ['do', 0.29], ['cm', 0.31], ['bp', 0.51], ['co', 1.05], ['qn', 3.87]]},
              gate=[{"needs": ["mark:errand_bl", "mark:errand_copy", "mark:errand_floor"], "else": "m14_wait",
