@@ -57,7 +57,7 @@ async function run(b, dev) {
     await open();
     const L1 = await letters();
     await p.screenshot({ path: path.join(__dirname, `out/misaeng-choices-${tag}-${key.replace('~', '_')}.png`) });
-    check(L1.length === 4 && L1.map(l => l.L).join('') === 'ABCD' && new Set(L1.map(l => l.pt)).size === 4 && L1.every(l => l.empty),
+    check(L1.length === 4 && L1.map(l => l.L).join('') === 'abcd' && new Set(L1.map(l => l.pt)).size === 4 && L1.every(l => l.empty),
       `${name}: four letters A-D on four empty points (${L1.map(l => l.L + '=' + l.pt).join(' ')})`);
     check(L1.filter(l => l.pt === right).length === 1 && col === 'B', `${name}: exactly one letter is Cho's move ${right}`);
     // a letter's tap target reaches past its own point: does a tap on the point next to a letter play that letter?
