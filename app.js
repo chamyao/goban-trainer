@@ -798,11 +798,16 @@ class Trainer {
       this.played.every((m, i) => m === L[i + 1]) &&
       L[this.played.length + 1] === mv);
 
+    // an illegal move isn't played at all, on the answer tree or off it, and costs nothing: suicide, or retaking a
+    // ko at once (apo110: the puzzles let an illegal ko retake through, then called it wrong)
+    const legal = applyMove(this.grid, c, r, BLACK);
+    if (!legal) return;
+    if (this.koViolation(legal)) return this.setStatus("off", "◌", this.els.noEngine ? "劫：不能马上提回 Ko: you can't retake yet" : "Ko: you can't retake yet");
+
     if (!treeMove && (this.els.noEngine || this.els.strict || this.p.sz)) {   // (KataGo plays 19x19 only)
       // Strict problems (the Three Kingdoms campaign, the Stream): a move off the answer
       // tree is simply wrong; there is no engine play to fall back on.
-      const g2 = applyMove(this.grid, c, r, BLACK);
-      if (!g2) return;
+      const g2 = legal;
       this.push();
       this.grid = g2;
       this.played = [...this.played, mv];
@@ -838,7 +843,7 @@ class Trainer {
     }
 
     this.push();
-    this.grid = applyMove(this.grid, c, r, BLACK);
+    this.grid = legal;
     this.played = [...this.played, mv];
     this.lastMove = [c, r];
     this.posHistory.push(this.serialize(this.grid));
