@@ -534,12 +534,18 @@ def streetlight():   # a modern street light: a grey pole, an arm, a lamp
 # =====================================================================================================================
 # office and home furniture (2 px of "top" per tile of depth: the old kits' furniture is low and wide)
 def office_desk():   # a grey desk, a monitor and keyboard, papers, a mug, a black chair pulled up
-    g = Grid(2 * T, 26)
+    g = Grid(2 * T, 28)
     box(g, 1, 6, 30, 8, 6, "#c8ccd2", "#8a9098")
     g.rect(10, 0, 12, 9, "#2a2c32"); g.rect(11, 1, 10, 6, "#6a9ac8"); g.rect(15, 9, 2, 2, "#2a2c32")   # monitor
     g.rect(11, 11, 10, 2, "#3a3c42")                                                                     # keyboard
     g.rect(2, 7, 6, 4, "#f4f2ec"); g.rect(25, 8, 3, 3, "#f4f2ec")                                        # papers, a mug
-    g.rect(12, 20, 8, 3, "#2a2c32"); g.rect(13, 16, 6, 4, "#3a3c42"); g.rect(15, 23, 2, 2, "#2a2c32")   # the chair
+    # the chair pulled up, seen from behind: a wide padded back, armrests, a five-castor base wider than the seat
+    g.rect(10, 15, 12, 8, "#2a2c32"); g.rect(11, 16, 10, 6, "#3e4048"); g.rect(12, 16, 8, 1, "#565a64")
+    g.rect(8, 19, 2, 3, "#2a2c32"); g.rect(22, 19, 2, 3, "#2a2c32")
+    g.rect(15, 23, 2, 2, "#6a6e78")
+    g.rect(9, 25, 14, 1, "#3a3c42")
+    for x in (8, 12, 19, 23):
+        g.rect(x, 26, 2, 1, "#1c1c20")
     return img(g)
 
 
