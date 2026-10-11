@@ -492,3 +492,62 @@ before they're explained (18); the "25 stones" dream and the "eye of the storm" 
 13. **Was the bosses' apology in m22b meant to make Jang's advice moot** (irony), or to confirm it?
 14. **The mother:** does she return in Book 2? If so, a line in Book 1's last beats would keep her present.
 15. **The "glasses intern":** does he get a name later? He drives two beats (m10, m12) and the "dud" thread.
+
+---
+
+## Round 2: re-review of the revision (claude/plot-alt2 c5d0832)
+
+Plot answered the questions above from the source (a summary is in the Plot thread). Judged again as a stranger
+against the top ten and the checklist.
+
+### Status of the top ten
+
+| # | Problem | Status |
+|---|---|---|
+| 1 | Hero's peaks off-screen | **Fixed** for m20/m21b: owning up is now played, with a board and a still. m13 stays Ahn's (it's hers in the source). That's acceptable now that m19 and m20 give Jang his own peaks. |
+| 2 | Boards contradict the story | **Mostly fixed.** m2 and m17 now agree with the story. Two small leftovers are in R2-2 and R2-3. |
+| 3 | Prologue out of order | **Fixed.** m1, m2 and m4 are now in time order, and the father's death opens m4 with a still. |
+| 4 | No spine after m19 | **Fixed enough.** The record, "The PT's coming" and the mother's closing line tie it back. m22 is still a detour about other people, but it's short and its board fits. |
+| 5 | Frame and quizzes | **Fixed.** Cho is now named as the hero, the quizzes open their beats and the captions are tied to the moment. |
+| 6 | Names | **Fixed.** |
+| 7 | Belonging told early | **Fixed.** "A guest at someone else's table" makes "our kid" land. |
+| 8 | Ahn and baduk; "checkmate" | **Fixed.** |
+| 9 | Overloaded and empty beats | **Fixed** in m8 and m16. One ordering leftover is in R2-5. |
+| 10 | Stills | **Fixed** at the peaks. |
+
+### Remaining problems, ranked, with fixes
+
+1. **R2-1. New contradiction in m20: "Two months before the PT."** The beat opens "Three weeks to the PT."
+   **Fix:** "Three weeks before the PT, it goes on his record."
+2. **R2-2. m17's win line has an ambiguous pronoun.** "He keeps sente anyway" follows Jang's "This time he means to
+   keep it", so a stranger reads "he" as Jang, which is the old contradiction back again.
+   **Fix:** "Han keeps sente anyway." (14)
+3. **R2-3. m18's opening thought doesn't match its new caption.** The caption is "Find what Han wants", but Jang
+   thinks "Hold him to that."
+   **Fix:** "What does he actually want from me?" (15)
+4. **R2-4. m19's turn still lacks its reason.** Han approves, and then Jang rebels. Plot's answer (Han treated him as
+   a subordinate) isn't on screen.
+   **Fix:** one line after "Let's go with that": *"Let's go with that", as if it were his to decide, and Jang's to obey.*
+   Also explain the age joke in a line: *In Korea, age sets who may talk down to whom. Han is older, and has been
+   talking down to him all along.* (1, 18)
+5. **R2-5. Kim introduces himself as Jang's buddy (end of m8) before HR assigns Jang to Sales 3 (start of m10).**
+   **Fix:** let Kim say "HR will brief you when you're back", or move the HR line into the car with Oh at the end of m8.
+6. **R2-6. m21 still gives away its own deduction.** "An intern from another team let Jang take the blame…" spends the
+   answer before the clue board.
+   **Fix:** "Someone else's scrap, glued to Jang's waybill. Oh means to find out how." (9, 20)
+7. **R2-7. Go and Kim Seok-ho turn up at the m21b bar unannounced.**
+   **Fix:** "At the next table, Sales Team 1 is celebrating its deal."
+8. **R2-8. Two metaphor boards are still opaque:** m8 "Read the man from his game" and m16 "See what the watchers
+   see". The player can't see how the stones map to Oh, or to the onlookers.
+   **Fix:** the opening thought can name the mapping. m8: "A sloppy-looking shape that's actually solid. Find why it
+   holds." m16: "The onlookers can see the killing move. Find it." (20)
+9. **R2-9. Small clarity leftovers.**
+   - m18: "After a board where you fight alone, the world seems kinder and warmer" is hard to parse.
+   - m18: Ahn's "Maybe he's a big dud. A nuclear bomb." It's unclear who she means: Jang or Han?
+   - m14: "the B/L" in an objective; say "the shipping papers (B/L)".
+   - m16: Ahn's onlooker line is another baduk-shaped saying from a non-player. One phrase ("as the saying goes")
+     would cover it, as it does in m12.
+
+**Verdict, round 2:** the book now has a shape: a prologue in order, a clear question at m10, a partner arc that
+peaks at m19, a crisis Jang drives at m20, and a payoff at m21b. The playtester's complaints (half a point, the
+father's death, order, the rescue, "both live") are all addressed. What's left is line-level.
