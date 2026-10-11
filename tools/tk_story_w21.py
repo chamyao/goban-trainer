@@ -157,6 +157,7 @@ def _scenes():
             ["remove", "oh"],
             ["spawn", "hr", "ms_hr", "m8", 4, -2],
             S("ms_hr", "Jang Geu-rae, you'll be an intern with Sales Team 3. In two months the interns sit a PT, a presentation test. Pass it, and you stay on."),
+            N("Two months, then. No degree, no experience, one phone call from a sponsor. If he fails the PT, he's out, and everyone will know he was only ever a parachute."),
             ["remove", "hr"],
             ["spawn", "kd", "ms_kimds", "m8", 8, -2],
             S("ms_kimds", "I'm Kim Dong-sik, assistant manager. I'm your buddy, and Section Head Oh is your mentor. First job: take this requisition to General Affairs."),
@@ -170,6 +171,7 @@ def _scenes():
 
         # M10 · 5수 (W). The folders; the mind map; "Who do you think you are?"; the interns' "find the dud".
         "m10": {"title": T("Who Do You Think You Are?"), "kind": "main", "steps": [
+            N("Eight weeks to the PT. His first real job is filing, and he means to do it better than anyone."),
             N("General Affairs hands over a box of supplies, a glue stick among them."),
             ["gain", "glue_stick"],
             ["spawn", "kd", "ms_kimds", "m10", 2, -2],
@@ -190,6 +192,7 @@ def _scenes():
         # M12 · 6수 (W). The interns' bar; Ahn: 아생연후살타.
         "m12": {"title": T("Secure Yourself First"), "kind": "main", "steps": [
             ["spawn", "ahn", "ms_ahn", "m12", 4, -2], ["spawn", "gl", "ms_glasses", "m12", 8, -2],
+            N("The other interns are already sizing each other up. Everyone wants a partner who'll make them look good."),
             N("The bar is full of interns pitching PT topics. Every time Jang reaches for his bag to leave, the glasses intern refills his glass and pulls him back down."),
             S("ms_glasses", "Sit, sit. You can't leave before we've picked the dud. Well, we all know who it is."),
             N("Ahn Young-yi, top of their intake and the only woman there, has been watching. She catches Jang's sleeve and pulls him aside, away from the table."),
@@ -227,6 +230,7 @@ def _scenes():
             S("ms_jang", "Kim's call to the forwarder about the B/L, the copies, the floor. All at once."),
         ]},
         "m14": {"title": T("The World Is Faster"), "kind": "main", "steps": [
+            N("Seven weeks to the PT."),
             N("He's up before the alarm and crushed on the train. The world moves faster than he does."),
             ["problem"],   # the record: Black 7
             N("Better plain and on time than perfect and late."),
@@ -243,6 +247,7 @@ def _scenes():
         # M16 · 8수 (W). Ahn on the plaza: only the one inside the board can't see; Han: "Have you picked a partner?"
         "m16": {"title": T("Inside the Board"), "kind": "main", "steps": [
             ["spawn", "ahn", "ms_ahn", "m16", 4, -2],
+            N("Six weeks to the PT, and he still has no partner."),
             S("ms_ahn", "Whoever your partner is, trust them. The player inside the game can't see his own scheming, but everyone watching can."),
             ["still", "ms_ringed", "slow zoom in"],
             N("A trainee sits at a board, ringed by onlookers. Everyone watching already knows how it ends."),
@@ -258,6 +263,7 @@ def _scenes():
         # M17 · 9수 (W). The roof: Jang tries to take sente; Han slams down stone after stone and picks him. The gossip.
         "m17": {"title": T("Sente"), "kind": "main", "steps": [
             ["spawn", "han", "ms_han", "m17", 4, -2],
+            N("That night, the intern who asked about partners is waiting for him on the roof."),
             S("ms_han", "I'm Han Seok-yul. I came back from the Ulsan plant for the PT."),
             N("Sente is the initiative: the right to lead the game. He's always handed it over. This time he means to keep it."),
             S("ms_jang", "Why did you choose me?"),
@@ -274,6 +280,7 @@ def _scenes():
 
         # M18 · 10수 (W). Kinder and warmer; "Again!"; Ahn's "nuclear bomb"; "Find it yourself."; Han scolded at Ulsan.
         "m18": {"title": T("Again!"), "kind": "main", "steps": [
+            N("Five weeks to the PT. Han said Jang could build it his way."),
             N("After a board where you fight alone, the world seems kinder and warmer. He emails Han three ideas for the PT."),
             ["gain", "phone_text"],
             N("Han texts back one word: Again!"),
@@ -291,6 +298,7 @@ def _scenes():
 
         # M19 · 11수 (W). Oh on the layout; the second call: "Again?"; Black 11; Jang takes the PT back; the age question.
         "m19": {"title": T("How Old Are You?"), "kind": "main", "steps": [
+            N("Four weeks to the PT, and his partner keeps sending his work back."),
             N("He works all night on three new ideas, forty pages each. In the morning, Oh tears into a team document he made."),
             ["spawn", "oh", "ms_oh", "m19", 10, -6], ["spawn", "kim", "ms_kimds", "m19", 6, -4],
             ["emote", "oh", "anger"],
@@ -328,6 +336,7 @@ def _scenes():
         # the roof; Oh finds the scrap glued to the waybill. The lead passes to Oh.
         "m20": {"title": T("The Waybill"), "kind": "main", "steps": [
             ["spawn", "kd", "ms_kimds", "m20", 4, -2],
+            N("Three weeks to the PT. The interns are graded on everything, and one careless moment can sink any of them."),
             S("ms_kimds", "Anything with figures on it goes in the shredder. Not one of our papers should ever turn up outside this team."),
             N("He decides to shred the waybill later with the next batch, and leaves it on his desk: Sales Team 3, DH-14."),
             ["remove", "kd"],
@@ -351,6 +360,7 @@ def _scenes():
         # M21 · 14수 (W). Oh leads. Go brags; the cabinet key. Oh links it on the clue board (the comic: in his head).
         "m21": {"title": T("A Secret"), "kind": "main", "steps": [
             ["spawn", "go", "ms_go", "m21", 8, 0],
+            N("An intern from another team let Jang take the blame for the waybill. Oh means to find out how."),
             N("Applause from across the floor. Go, a section head on Sales Team 1, comes over pumping his fists."),
             S("ms_go", "My baby intern, Kim Seok-ho! He pulls all-nighters with us, he's newly married, he's the eldest son of an eldest son, and we've just landed the deal."),
             S("ms_oh", "He comes over to our team a lot, to borrow supplies."),
@@ -389,6 +399,7 @@ def _scenes():
 
         # M22 · 15수 (W). Incheon at dawn; Steve Han against Kim Bu-ryeon over the thick report; Black 15; Oh gets the truth from Go.
         "m22": {"title": T("Their Own Baduk"), "kind": "main", "steps": [
+            N("Two weeks to the PT. Every day is a lesson in what the job really is."),
             N("At first light he's at Incheon harbour, where cargo meant for Gunsan was unloaded by mistake, some of it damaged. He came to see it for himself; paperwork alone drifts away from what's really happening on site."),
             ["spawn", "st", "ms_stevehan", "m22", 6, -4], ["spawn", "br", "ms_kimbr", "m22", 10, -4], ["spawn", "oh", "ms_oh", "m22", 14, -6],
             N("Back on the thirteenth floor, Steve Han, head of the Americas textile team, has come to pick a fight with Kim Bu-ryeon, who runs Sales Teams 1 to 3. They're the same rank, and everyone is watching."),
@@ -425,6 +436,7 @@ def _scenes():
             ["still", "ms_sauna", "slow pan across"],
             S("ms_go", "Steve! Come on, scoot over."),
             S("ms_stevehan", "Don't touch me!"),
+            N("Two weeks to the PT. He still isn't alive on this board. But for the first time, he can see how a group like his might live."),
             ["victory"],
         ]},
     }
@@ -953,4 +965,16 @@ KO21 = {
     "Jang's chair": '장그래의 의자',
     "Oh's chair": '오 과장의 의자',
     'An empty desk': '빈 책상',
+    'Eight weeks to the PT. His first real job is filing, and he means to do it better than anyone.': 'PT까지 8주. 그의 첫 번째 진짜 일은 서류 정리이고, 그는 누구보다 잘해 낼 생각이다.',
+    "The other interns are already sizing each other up. Everyone wants a partner who'll make them look good.": '다른 인턴들은 벌써 서로를 재고 있다. 다들 자기를 돋보이게 해 줄 파트너를 원한다.',
+    'Seven weeks to the PT.': 'PT까지 7주.',
+    'Six weeks to the PT, and he still has no partner.': 'PT까지 6주, 그에겐 아직 파트너가 없다.',
+    'That night, the intern who asked about partners is waiting for him on the roof.': '그날 밤, 파트너를 물었던 인턴이 옥상에서 그를 기다리고 있다.',
+    'Five weeks to the PT. Han said Jang could build it his way.': 'PT까지 5주. 한석율은 장그래 마음대로 짜도 된다고 했다.',
+    'Four weeks to the PT, and his partner keeps sending his work back.': 'PT까지 4주, 파트너는 계속 그의 작업을 돌려보낸다.',
+    'Three weeks to the PT. The interns are graded on everything, and one careless moment can sink any of them.': 'PT까지 3주. 인턴은 모든 걸 평가받고, 한 번의 실수로 누구든 무너질 수 있다.',
+    'An intern from another team let Jang take the blame for the waybill. Oh means to find out how.': '다른 팀 인턴 때문에 장그래가 선하증권 일로 덤터기를 썼다. 오 과장은 어떻게 된 일인지 밝혀낼 생각이다.',
+    'Two weeks to the PT. Every day is a lesson in what the job really is.': 'PT까지 2주. 하루하루가 이 일이 진짜 무엇인지 배우는 수업이다.',
+    "Two months, then. No degree, no experience, one phone call from a sponsor. If he fails the PT, he's out, and everyone will know he was only ever a parachute.": '두 달. 학위도 경력도 없이, 후원자의 전화 한 통으로 들어왔다. PT에 떨어지면 끝이고, 다들 그가 낙하산이었을 뿐이라고 알게 될 것이다.',
+    "Two weeks to the PT. He still isn't alive on this board. But for the first time, he can see how a group like his might live.": 'PT까지 2주. 그는 아직 이 판 위에서 살아 있지 않다. 하지만 처음으로, 그런 돌이 어떻게 살 수 있을지 보이기 시작한다.',
 }
