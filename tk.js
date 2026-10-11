@@ -1772,6 +1772,8 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
   const [nameZh, name] = foe && foe.who ? [TK_BOSS_ZH[foe.who] || (typeof tkName === "function" ? tkName(foe.who) : foe.who), node.boss ? node.boss.title : ""]
     : foe ? (TK_FOES[foe.id] || ["对手", "Opponent"]) : [node.place_zh || node.place, node.place];
   const face = foe && foe.face ? foe.face : null;
+  // an English-only book's passers-by (Misaeng) ask for help with a problem; they aren't playing you, so nobody resigns
+  const asks = !!foe && (TK.world(worldN) || {}).lang === "en";
   if (face) face.className = "town-face";
   const zh = h("div", { class: "town-zh", lang: "zh-CN" }), en = h("div", { class: "town-en" });
   const btns = h("div", { class: "tk-duel-next" });
@@ -1838,7 +1840,7 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
   const opening = () => {
     if (node.boss && !(node.boss.dilemma_lines && lord)) say(node.boss.taunt_zh || "", node.boss.taunt);   // dilemma_lines: the lead's own lines on the board (Red Chamber g6: Xifeng wins that scene)
     else if (lord) { say(...lord.open); if (dil && dil.open_vid && TKVoice.has(dil.open_vid)) TKVoice.play(dil.open_vid); }
-    else if (foe) say("请。你执黑先下。", "Your move. You play Black.");
+    else if (foe) say(...(asks ? ["", "Black to play. What would you do?"] : ["请。你执黑先下。", "Your move. You play Black."]));
     else say("黑先。", "Black to play.");
   };
   opening();
@@ -1898,7 +1900,7 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
       dlg.classList.add("win");
       if (node.boss && !(node.boss.dilemma_lines && lord)) say("……我竟败了！", "…Defeated? Me?", go("继续 Continue ▸", leave));
       else if (lord) { say(...lord.win, go("继续 Continue ▸", leave)); if (dil && dil.win_vid && TKVoice.has(dil.win_vid)) TKVoice.play(dil.win_vid); }
-      else if (foe) say("好棋！我认输。", "Well played. I resign.", go("继续 Continue ▸", leave));
+      else if (foe) say(...(asks ? ["", "That's it! Thank you."] : ["好棋！我认输。", "Well played. I resign."]), go("继续 Continue ▸", leave));
       else say("★ 完美！", "Flawless!", go("继续 Continue ▸", leave));
     } else if (once) {   // one try (a chase): no second go; back to the world, which decides what follows
       dlg.classList.add("slip");
@@ -1908,7 +1910,7 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
       dlg.classList.add("slip");
       const how = e.detail === "ok" ? [`解出了，但不算完美（${t.flawed}）。`, `Solved, but not flawless (${t.flawed}).`]
         : lord ? lord.slip
-        : foe ? ["哈！被我看穿了。换个思路吧。", "Ha! I saw through that. Try another way."] : ["敌人识破了！换个思路。", "The enemy saw through it! Try another way."];
+        : foe ? (asks ? ["", "Hm, I tried that one. Not that."] : ["哈！被我看穿了。换个思路吧。", "Ha! I saw through that. Try another way."]) : ["敌人识破了！换个思路。", "The enemy saw through it! Try another way."];
       say(how[0], how[1]);
       if (e.detail !== "ok" && dil && dil.slip_vid && TKVoice.has(dil.slip_vid)) TKVoice.play(dil.slip_vid);
       // a moment to see what went wrong, then the same problem from the start, to study until the rest is over
