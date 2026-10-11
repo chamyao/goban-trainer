@@ -585,3 +585,22 @@ change of place.
     The glasses intern asks Han; Ahn answers about Jang, out of Jang's earshot.
   - Or cut the exchange. It only repeats m17's "dud" thread.
   - Then add "He calls Han." before "You said I could build it my way."
+
+### Re-read of m17/m18 (7c981ad), against the raw steps
+
+**Process change (the user):** from now on I review the raw scene steps in `tools/tk_story_w21.py` (spawn, remove and
+move positions, stills, problems), not only the generated script md. Staging problems don't show up in the md.
+
+- **m18: works.** "At lunch, away from Jang, the glasses intern sidles up to Ahn" and "Jang slips into the restroom and
+  calls Han" both read clearly. The pair spawn at (9, 4) and (12, 4) off the beat's anchor, which puts them a little
+  apart on the Sales 3 map. That's acceptable. Optional: a `move` of the pair to the far side of the floor, or of Jang
+  toward the door before the call, would let the staging show the distance as well as the narration.
+- **m17: the text works but the staging contradicts it.** The narration says "Next morning… out of Jang's earshot",
+  but the beat never leaves the roof map. Jang is still standing on the night roof, and the pair spawn a few tiles
+  from him there. The player sees them on the roof at night, beside Jang.
+  - **Fix (preferred):** move the two m17 aside lines to the top of m18. m18 is already in Sales 3, in the daytime,
+    and is the same gossip thread, so the "dud" exchange becomes one moment instead of two.
+  - **Fix (alternative):** keep the lines in m17 but don't spawn the pair, and have Jang leave by the roof door first.
+- **Housekeeping:** the code comments still say "take sente (fails, as written)" (m17) and "hold your ground on the
+  phone (fails, as written)" (m18). These are stale since the boards were re-captioned. Players don't see them, but
+  they mislead the next writer.
