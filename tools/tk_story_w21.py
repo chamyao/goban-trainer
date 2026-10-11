@@ -59,12 +59,17 @@ def _scenes():
             S("ms_uncle", "Go on, then. Where would you play?"),
             ["problem"],   # the child: find the atari (a fixed problem)
             S("ms_jang_child", "Atari!"),
+            ["still", "ms_class", "slow zoom in"],
             N("Baduk is good for concentration, his uncle said, and his mother gladly paid for the neighbourhood class. "
               "Soon he was winning his uncle's and his father's bets back from Mr. Kim at the laundromat."),
+            ["still", "ms_academy_dawn", "slow pan across"],
             N("Then an amateur six-dan's academy. His mother objected; nobody thought he'd conquer the baduk world. "
               "Nobody could stop a nine-year-old with a problem book at dawn, either."),
+            ["still", "ms_dojang", "slow zoom out"],
             N("Then a professional's dojang. Prodigy: to his parents the word was a sedative. And his father's company had just gone under."),
             ["remove", "un"],
+            ["still", "ms_trainees11", "slow pan across"],
+            N("At eleven, the trainees' room: rows of boards, and children who mean to be professionals."),
             ["scroll", T("Seven Years Later"), [
                 T("At eleven he entered the Korea Baduk Association as a trainee: a child studying to turn professional. "
                   "The age limit comes at eighteen. He is eighteen now."),
@@ -941,4 +946,5 @@ KO21 = {
     'Your old sponsor asked after you. The man who paid for your baduk. Go and see him.': '예전 후원자분이 네 안부를 물으셨다. 네 바둑 뒷바라지해 주신 분. 가서 뵙고 와.',
     "It started when his uncle brought a set of stones round to the flat. The boy nearly swallowed a few. It didn't spoil the fun.": '시작은 삼촌이 집에 들고 온 바둑돌이었다. 꼬마는 몇 개를 삼킬 뻔했다. 그래도 재미는 줄지 않았다.',
     'Home. Your uncle has brought something.': '집. 삼촌이 뭔가를 가져오셨다.',
+    "At eleven, the trainees' room: rows of boards, and children who mean to be professionals.": '열한 살, 연구생실. 줄지은 바둑판, 그리고 프로가 되려는 아이들.',
 }
