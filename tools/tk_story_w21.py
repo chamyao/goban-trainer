@@ -51,11 +51,11 @@ CAST21 = {
 
 def _scenes():
     return {
-        # M1 · 착수0 (W). The uncle's stones; "단수"; the class, the bets, the academy, the dojang.
+        # M1 · 착수0 (W; at the family flat, on playtest). The uncle's stones; "단수"; the class, the bets, the academy, the dojang.
         "m1": {"title": T("Atari"), "kind": "main", "steps": [
             ["spawn", "un", "ms_uncle", "m1", 4, -2],
             N("Misaeng: not yet alive. A group on a go board that is neither alive nor dead."),
-            N("It started with his uncle's stones. He nearly swallowed a few. It didn't spoil the fun."),
+            N("It started when his uncle brought a set of stones round to the flat. The boy nearly swallowed a few. It didn't spoil the fun."),
             S("ms_uncle", "Go on, then. Where would you play?"),
             ["problem"],   # the child: find the atari (a fixed problem)
             S("ms_jang_child", "Atari!"),
@@ -65,16 +65,16 @@ def _scenes():
               "Nobody could stop a nine-year-old with a problem book at dawn, either."),
             N("Then a professional's dojang. Prodigy: to his parents the word was a sedative. And his father's company had just gone under."),
             ["remove", "un"],
+            ["scroll", T("Seven Years Later"), [
+                T("At eleven he entered the Korea Baduk Association as a trainee: a child studying to turn professional. "
+                  "The age limit comes at eighteen. He is eighteen now."),
+            ]],
             ["party", ["ms_jang_young"], {"to": {"place": "korea-baduk-association--kba-trainees", "spot": "kba-trainees"}}],   # a deliberate cut: years pass
         ]},
 
         # M2 · 착수0 (W). Seven years; the failure; the faces; "the others changed"; the excuses; thrown away.
         # (staging) The comic never shows a deciding game; the half-point losses kept coming. The board is one of them.
         "m2": {"title": T("Thrown Away"), "kind": "main", "steps": [
-            ["scroll", T("Seven Years Later"), [
-                T("At eleven he entered the Korea Baduk Association as a trainee: a child studying to turn professional. "
-                  "The age limit comes at eighteen. He is eighteen now."),
-            ]],
             ["spawn", "tr", "ms_trainee", "m2", 6, -2],
             N("At home his parents cut Lee Chang-ho and Lee Sedol out of the papers: rankings, prize money."),
             N("A baduk game is scored in points, and a draw is impossible: the smallest margin is half a point. "
@@ -442,7 +442,7 @@ def _nodes():
         n.update(extra)
         return n
     return [
-        node("m1", 20, 240, "m1", place="Susaek-dong", room="baduk-class", move=0, dilemma=D(
+        node("m1", 20, 240, "m1", place="Susaek-dong", room="home", move=0, dilemma=D(
             "ms_jang_child", "Find the atari.",
             "Two liberties. If I put one here...",
             "Atari!",
@@ -818,7 +818,6 @@ KO21 = {
     "It's still on the board. Again.": '아직 판 위에 있다. 다시.',
     'Steve! Come on, scoot over.': '스티브! 이리 좀 붙어 앉아요.',
     "Don't touch me!": '건드리지 마!',
-    "It started with his uncle's stones. He nearly swallowed a few. It didn't spoil the fun.": '시작은 삼촌의 바둑돌이었다. 몇 개는 삼킬 뻔했다. 그래도 재미는 줄지 않았다.',
     "Baduk is good for concentration, his uncle said, and his mother gladly paid for the neighbourhood class. Soon he was winning his uncle's and his father's bets back from Mr. Kim at the laundromat.": '바둑이 집중력에 좋다는 삼촌 말에 어머니는 기꺼이 동네 바둑교실 돈을 냈다. 곧 그는 세탁소 김 사장에게서 삼촌과 아버지의 내기 돈을 되찾아 오고 있었다.',
     "Then an amateur six-dan's academy. His mother objected; nobody thought he'd conquer the baduk world. Nobody could stop a nine-year-old with a problem book at dawn, either.": '다음은 아마 6단의 학원. 어머니는 반대했고, 그가 바둑계를 제패하리라 생각한 사람도 없었다. 하지만 새벽에 문제집을 펴는 아홉 살을 말릴 수 있는 사람도 없었다.',
     "Then a professional's dojang. Prodigy: to his parents the word was a sedative. And his father's company had just gone under.": '그다음은 프로기사의 도장. 영재라는 말은 부모님에게 수면제 같았다. 그리고 마침 아버지의 회사가 부도를 맞았다.',
@@ -940,4 +939,5 @@ KO21 = {
     'Seven years of losing by half a point. Not this time.': '칠 년 동안 반집으로 졌다. 이번엔 아니다.',
     "Half a point short. It's over.": '반집이 모자란다. 끝났다.',
     'Your old sponsor asked after you. The man who paid for your baduk. Go and see him.': '예전 후원자분이 네 안부를 물으셨다. 네 바둑 뒷바라지해 주신 분. 가서 뵙고 와.',
+    "It started when his uncle brought a set of stones round to the flat. The boy nearly swallowed a few. It didn't spoil the fun.": '시작은 삼촌이 집에 들고 온 바둑돌이었다. 꼬마는 몇 개를 삼킬 뻔했다. 그래도 재미는 줄지 않았다.',
 }
