@@ -993,4 +993,6 @@ KO22 = {
     'He adds a little more.': '그는 조금 더 보탠다.',
     "PT day. The interns file in carrying boxes. Oh's slippers are poking out of Jang's box. Han sees them and mutters: is he out of his mind?": 'PT 당일. 인턴들이 상자를 들고 줄지어 들어온다. 장그래의 상자 밖으로 오 과장의 슬리퍼가 삐져나와 있다. 그걸 본 한석율이 중얼거린다. 미친 거 아냐?',
     'Jang wonders: did she help them, or herself? Would she ever do that for him? What are the two of them to her?': '장그래는 생각한다. 그녀는 우리를 도운 걸까, 자기 자신을 도운 걸까? 나를 위해서도 그렇게 해 줄까? 그녀에게 우리 둘은 무엇일까?',
+    "Under Oh's desk, among cables and dust: a pair of brown office slippers, the massage spikes worn down to the shape of his foot, and in a shoebox beside them, his good black dress shoes. The office worker's combat boots.": '오 과장 책상 밑, 전선과 먼지 사이에 갈색 사무실 슬리퍼 한 켤레. 지압 돌기가 그의 발 모양대로 닳아 있다. 그 옆 구두 상자에는 그의 좋은 검은 구두. 사무직의 전투화.',
+    'Back upstairs to Sales Team 3.': '위층 영업 3팀으로.',
 }
