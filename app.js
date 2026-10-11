@@ -409,9 +409,11 @@ function gridToBoardState(grid, frameStones) {
 /* ================= board model ================= */
 
 const N = 19, EMPTY = 0, BLACK = 1, WHITE = 2;
+// past a smaller board's edge (a 13x13 problem on our 19x19 grid): no liberty, never a group, never taken; an edge
+const WALL = 3;
 const cIdx = s => [s.charCodeAt(0) - 97, s.charCodeAt(1) - 97];
 const COLS = "ABCDEFGHJKLMNOPQRST";
-const coordLabel = m => { const [c, r] = cIdx(m); return COLS[c] + (N - r); };
+const coordLabel = (m, sz = N) => { const [c, r] = cIdx(m); return COLS[c] + (sz - r); };
 
 function neighbors(c, r) {
   const out = [];
@@ -454,6 +456,7 @@ function applyMove(g, c, r, color) {
 const SVGNS = "http://www.w3.org/2000/svg";
 
 function cropFor(problem) {
+  const E = (problem.sz || 19) - 1;   // the last line: a smaller board's far edge
   const pts = [...problem.b, ...problem.w];
   for (const line of problem.lines) for (const m of line.slice(1)) pts.push(m);
   let c0 = 18, c1 = 0, r0 = 18, r1 = 0;
@@ -466,10 +469,10 @@ function cropFor(problem) {
   while (c1 - c0 < 8) { c0--; c1++; }
   while (r1 - r0 < 8) { r0--; r1++; }
   if (c0 <= 1) c0 = 0;
-  if (c1 >= 17) c1 = 18;
+  if (c1 >= E - 1) c1 = E;
   if (r0 <= 1) r0 = 0;
-  if (r1 >= 17) r1 = 18;
-  return { c0: Math.max(0, c0), c1: Math.min(18, c1), r0: Math.max(0, r0), r1: Math.min(18, r1) };
+  if (r1 >= E - 1) r1 = E;
+  return { c0: Math.max(0, c0), c1: Math.min(E, c1), r0: Math.max(0, r0), r1: Math.min(E, r1), sz: E + 1 };
 }
 
 class Goban {
@@ -494,7 +497,7 @@ class Goban {
   }
 
   render(grid, lastMove, interactive) {
-    const { c0, c1, r0, r1 } = this.crop;
+    const { c0, c1, r0, r1 } = this.crop, E = (this.crop.sz || 19) - 1;   // E: the board's last line
     this.svg.innerHTML = ""; this.ghost = null;
     const defs = this.el("defs", {});
     defs.innerHTML = `
@@ -509,24 +512,25 @@ class Goban {
     for (let r = r0; r <= r1; r++)
       this.el("line", {
         x1: this.px(c0) - (c0 > 0 ? ext : 0), y1: this.py(r),
-        x2: this.px(c1) + (c1 < 18 ? ext : 0), y2: this.py(r),
-        stroke: "var(--line)", "stroke-width": (r === 0 || r === 18) ? 2.2 : 1.1,
+        x2: this.px(c1) + (c1 < E ? ext : 0), y2: this.py(r),
+        stroke: "var(--line)", "stroke-width": (r === 0 || r === E) ? 2.2 : 1.1,
       });
     for (let c = c0; c <= c1; c++)
       this.el("line", {
         x1: this.px(c), y1: this.py(r0) - (r0 > 0 ? ext : 0),
-        x2: this.px(c), y2: this.py(r1) + (r1 < 18 ? ext : 0),
-        stroke: "var(--line)", "stroke-width": (c === 0 || c === 18) ? 2.2 : 1.1,
+        x2: this.px(c), y2: this.py(r1) + (r1 < E ? ext : 0),
+        stroke: "var(--line)", "stroke-width": (c === 0 || c === E) ? 2.2 : 1.1,
       });
 
     // fade the cut edges so the board reads as continuing
     const f = this.pad * 0.8;
     if (c0 > 0) this.el("rect", { x: 0, y: 0, width: f, height: this.H, fill: "url(#wood)", opacity: .75 });
-    if (c1 < 18) this.el("rect", { x: this.W - f, y: 0, width: f, height: this.H, fill: "url(#wood)", opacity: .75 });
+    if (c1 < E) this.el("rect", { x: this.W - f, y: 0, width: f, height: this.H, fill: "url(#wood)", opacity: .75 });
     if (r0 > 0) this.el("rect", { x: 0, y: 0, width: this.W, height: f, fill: "url(#wood)", opacity: .75 });
-    if (r1 < 18) this.el("rect", { x: 0, y: this.H - f, width: this.W, height: f, fill: "url(#wood)", opacity: .75 });
+    if (r1 < E) this.el("rect", { x: 0, y: this.H - f, width: this.W, height: f, fill: "url(#wood)", opacity: .75 });
 
-    for (const c of [3, 9, 15]) for (const r of [3, 9, 15])
+    const stars = { 19: [3, 9, 15], 13: [3, 6, 9], 9: [2, 4, 6] }[E + 1] || [];
+    for (const c of stars) for (const r of stars)
       if (c >= c0 && c <= c1 && r >= r0 && r <= r1)
         this.el("circle", { cx: this.px(c), cy: this.py(r), r: 4, fill: "var(--line)" });
 
@@ -535,14 +539,14 @@ class Goban {
     for (let c = c0; c <= c1; c++)
       this.el("text", { x: this.px(c), y: labelRow.y, "text-anchor": "middle", "font-size": 12.5,
                         fill: "#7a6535", "font-weight": 600 }).textContent = COLS[c];
-    const labelCol = c1 === 18 ? this.px(c1) + 29 : this.px(c0) - 29;
+    const labelCol = c1 === E ? this.px(c1) + 29 : this.px(c0) - 29;
     for (let r = r0; r <= r1; r++)
       this.el("text", { x: labelCol, y: this.py(r) + 4.5, "text-anchor": "middle", "font-size": 12.5,
-                        fill: "#7a6535", "font-weight": 600 }).textContent = N - r;
+                        fill: "#7a6535", "font-weight": 600 }).textContent = E + 1 - r;
 
     for (let r = r0; r <= r1; r++)
       for (let c = c0; c <= c1; c++)
-        if (grid[r][c] !== EMPTY) {
+        if (grid[r][c] === BLACK || grid[r][c] === WHITE) {
           this.el("circle", { cx: this.px(c), cy: this.py(r), r: this.cell * .47,
                               fill: grid[r][c] === BLACK ? "url(#bs)" : "url(#ws)",
                               stroke: "rgba(0,0,0,.35)", "stroke-width": .8 });
@@ -655,6 +659,7 @@ class Trainer {
   serialize(g) { let s = ""; for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) s += g[r][c]; return s; }
 
   frame() {
+    if (this.p.sz) return null;   // a smaller board: KataGo plays 19x19 only
     if (this.frameStones === undefined) {
       const utils = globalThis.GTEngineUtils;
       this.frameStones = utils
@@ -665,7 +670,7 @@ class Trainer {
   }
 
   freshGrid() {
-    const g = Array.from({ length: N }, () => new Array(N).fill(EMPTY));
+    const S = this.p.sz || N, g = Array.from({ length: N }, (_, r) => Array.from({ length: N }, (_, c) => r < S && c < S ? EMPTY : WALL));
     for (const s of this.p.b) { const [c, r] = cIdx(s); g[r][c] = BLACK; }
     for (const s of this.p.w) { const [c, r] = cIdx(s); g[r][c] = WHITE; }
     return g;
@@ -793,7 +798,7 @@ class Trainer {
       this.played.every((m, i) => m === L[i + 1]) &&
       L[this.played.length + 1] === mv);
 
-    if (!treeMove && (this.els.noEngine || this.els.strict)) {
+    if (!treeMove && (this.els.noEngine || this.els.strict || this.p.sz)) {   // (KataGo plays 19x19 only)
       // Strict problems (the Three Kingdoms campaign, the Stream): a move off the answer
       // tree is simply wrong; there is no engine play to fall back on.
       const g2 = applyMove(this.grid, c, r, BLACK);
@@ -1178,7 +1183,7 @@ class Trainer {
       }
       const tip = document.createElementNS(SVGNS, "title");
       const note = n.move ? this.noteFor(this.pathMoves(n)) : "";
-      tip.textContent = n.move ? `${n.ply}. ${coordLabel(n.move)}${n.ok ? "" : " (fails)"}${note ? " — " + note : ""}` : "Start";
+      tip.textContent = n.move ? `${n.ply}. ${coordLabel(n.move, this.p.sz)}${n.ok ? "" : " (fails)"}${note ? " — " + note : ""}` : "Start";
       c.appendChild(tip);
       c.addEventListener("click", () => this.showNode(n));
       n.children.forEach(nodes);
