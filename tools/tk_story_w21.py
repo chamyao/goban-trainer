@@ -70,6 +70,10 @@ def _scenes():
             ["remove", "un"],
             ["still", "ms_trainees11", "slow pan across"],
             N("At eleven he joined the trainees' room: rows of boards, and children who all meant to turn professional."),
+            N("At first he climbed fast. By fourteen he was near the top of the room."),
+            N("Then the money ran out, and he played between part-time jobs. The younger ones kept getting stronger; he got stronger more slowly."),
+            ["still", "ms_slide", "slow zoom in"],
+            N("The half-point losses began to pile up. One by one, the friends he'd grown up with passed the pro exam ahead of him."),
             ["scroll", T("Seven Years Later"), [
                 T("Trainees have until eighteen to turn professional. He is eighteen now, and this is his last chance."),
             ]],
@@ -698,6 +702,9 @@ KO21 = {
     'There.': '거기.',
     'Still inside. Again.': '아직 안이야. 다시.',
     'Again.': '다시.',
+    'At first he climbed fast. By fourteen he was near the top of the room.': '처음엔 빠르게 올라갔다. 열네 살에는 연구생실 상위권이었다.',
+    'Then the money ran out, and he played between part-time jobs. The younger ones kept getting stronger; he got stronger more slowly.': '그러다 돈이 떨어졌고, 아르바이트 틈틈이 바둑을 뒀다. 어린 아이들은 계속 강해졌고, 그는 더디게 강해졌다.',
+    "The half-point losses began to pile up. One by one, the friends he'd grown up with passed the pro exam ahead of him.": '반집 패가 쌓이기 시작했다. 함께 자란 친구들이 하나둘 그보다 먼저 입단했다.',
     'Black 11.': '흑 11.',
     'Black 15.': '흑 15.',
     # Places' map lines (claude/places-misaeng, w21); kept from the first Book 1 until Places rebuilds for this one
