@@ -944,3 +944,4 @@ body.tk-en [lang="zh-CN"], body.tk-en .town-zh, body.tk-en .tk-dlg-zh, body.tk-e
 /* what a rated board is worth (tk.js TKElo.stakesEl): "+8 / −24" before, the change after */
 .tk-stakes { font-size: 13px; color: var(--muted, #7a7466); white-space: nowrap; }
 .tk-stakes b.up { color: #2e7d4f; } .tk-stakes b.down { color: #b0413e; }
+.tk-duel-src .tk-stakes { font-size: inherit; color: inherit; }   /* in a board's source line: its size (Testing: bigger than the line on a phone) */
