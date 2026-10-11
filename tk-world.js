@@ -1869,7 +1869,7 @@ function worldScenes() {
       const who = this.npcs.filter(n => n.spr.visible && !(typeof WorldFeats !== "undefined" && WorldFeats.silent(this, n))).map(n => { const t = at(n.spr.x, n.spr.y);
         return { n, d: toBox({ x0: n.spr.x - n.spr.width / 2 + 2, x1: n.spr.x + n.spr.width / 2 - 2, y0: n.spr.y - n.spr.height, y1: n.spr.y + 3 }, t.x, t.y) }; })
         .filter(o => o.d <= r).sort((a, b) => a.d - b.d)[0];
-      const spot = Object.entries(this.spots).map(([key, s]) => {
+      const spot = Object.entries(this.spots).filter(([, s]) => !this.spent(s)).map(([key, s]) => {
         const t = at(s.x, s.y);
         const own = Math.hypot(s.x - t.x, s.y - t.y);
         let d = own;
@@ -2022,6 +2022,12 @@ function worldScenes() {
     }
 
     /* ---------- talking and walking ---------- */
+    // A story spot whose scene is over and that does nothing else: not tappable, nothing to say
+    spent(s) {
+      if (s.use || s.needs || s.opens || s.gives || !s.node) return false;
+      const q = this.region.quests.find(x => x.node === s.node);
+      return !!q && !q.shrine && this.done(q.node) && !this.available(q);
+    }
     target() {
       const P = this.player, v = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }[P.facing];
       const fx = P.x + v[0] * 12, fy = P.y - 3 + v[1] * 12;
@@ -2032,6 +2038,7 @@ function worldScenes() {
         if (d < bd) { bd = d; best = { kind: "npc", n }; }
       }
       for (const [k, s] of Object.entries(this.spots)) {
+        if (this.spent(s)) continue;
         const d = Math.hypot(s.x - fx, s.y - fy);
         if (d < 22 && d < bd) { bd = d; best = { kind: "spot", k }; }
       }
@@ -2071,8 +2078,7 @@ function worldScenes() {
       const q = this.region.quests.find(x => x.node === spot.node);
       if (q && q.shrine && !this.available(q)) return this.shrineTalk();
       if (q && this.available(q)) this.approach(q, spot);   // the same face-and-beat start as walking in
-      else if (q && this.done(q.node)) this.talk([["n", `${spot.label || q.title}. (${q.title}: done.)`,
-        q.title_zh ? `${spot.labelZh || q.title_zh}。（${q.title_zh}：已完成）` : ""]]);
+      else if (q && this.done(q.node)) return;   // a played scene's spot is just ground now (apo110: no "done." pop-ups)
       else {   // not yet: say where the story is now, so a locked place points the way
         const lines = [["n", `${spot.label || "Nothing here"}. Nothing to do here yet.`, `${spot.labelZh || "这里"}。这里还没有要做的事。`]];
         if (this.goalText) lines.push(["n", `For now: ${this.goalText[0]}`, this.goalText[1] ? `眼下：${this.goalText[1]}` : ""]);
