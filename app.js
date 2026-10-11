@@ -2151,7 +2151,7 @@ async function viewPlayer(id, num) {
                else d.append(h("a", { href: `https://www.101weiqi.com/q/${p.id}/`, target: "_blank" }, `101weiqi #${p.id}`));
                return d; })(),
       h("div", { class: "badges" }, [
-        (p.lv || book.level) ? h("span", { class: "badge" }, plainGrade(p.lv || book.level)) : "",
+        (p.lv || book.level) ? h("span", { class: "badge" }, p.lv || book.level) : "",
         ...(p.qt ? [h("span", { class: "badge" }, p.qt)] : []),
         turnBadge,
       ]),
@@ -2223,7 +2223,7 @@ async function viewStream() {
   const source = h("div", { class: "meta-sub", style: "visibility:hidden" }, [
     p.url ? h("a", { href: p.url, target: "_blank" }, p.credit || "source")
           : h("a", { href: `https://www.101weiqi.com/q/${p.id}/`, target: "_blank" }, `${book.title} · 101weiqi #${p.id}`),
-    x ? ` · ${TKElo.label(TKElo.of(x[2]))}` : "", x && x[4] ? " · KataGo-checked" : "",
+    x ? ` · ${GRADE_NAMES[x[2]]}` : "", x && x[4] ? " · KataGo-checked" : "",
   ]);
   const next = () => { const q = loadProgress(), st = TKElo.state(q); st.stream = (st.stream || 0) + 1; TK.saveProg(q); viewStream(); };
 
@@ -2270,6 +2270,7 @@ async function viewStream() {
   };
   window.addEventListener("tczw:result", onResult);
 }
+const GRADE_NAMES = Array.from({ length: 44 }, (_, i) => i < 30 ? `${15 - Math.floor(i / 2)}K${i % 2 ? "+" : ""}` : `${1 + Math.floor((i - 30) / 2)}D${(i - 30) % 2 ? "+" : ""}`);
 
 /* ---- Spotify: a small player in the header ---- */
 // PKCE login (public client, no secret) and the Web API's playback control:
