@@ -1,0 +1,8 @@
+     mode: test (the game's test mode on)
+     ui: {"lead":"ms_jang_young","party":["ms_jang_young"],"line":"Story▼","dlgHidden":true,"busy":false,"cine":false,"leaving":false,"html":["town-goal-go:Take me there","tk-strip:The empty board"]}
+FAIL 21-m1  at 200,222 in korea-baduk-association--kba-front: stuck: no progress for 60s (goal 304,24; canMove true, seated false, approaching false, walk none, a way 2 points, near: nobody); reloading, as a player would, and playing on
+     ui: {"lead":"ms_jang_young","party":["ms_jang_young"],"line":"Story▼","dlgHidden":true,"busy":false,"cine":false,"leaving":false,"html":["town-goal-go:Take me there","tk-strip:The empty board"]}
+FAIL 21-m1  122s  ms_jang_young in korea-baduk-association--kba-front  at 200,222: stuck: no progress for 60s (goal 304,24; canMove true, seated false, approaching false, walk none, a way 2 points, near: nobody)
+ok   after the book: playing as ms_jang_young in korea-baduk-association--kba-front; the chip says "Jang Geu-rae"; "Now playing" banners: none
+walk-playthrough Book 21 (default): 0/1 beats walked and played in 2.1 min (1 needed a reload, 0 held by a scene); 0 boards (0 from the rated pool)
+the goal box's chip followed the party: Jang Geu-rae

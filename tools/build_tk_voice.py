@@ -61,20 +61,43 @@ VOICE_SPEED = {
 }
 
 
+def dilemma_vids(n):
+    """A board's lines with their clip ids, as build_tk.py gives them (from the Chinese, or an English-only book's English)."""
+    if "dilemma" not in n:
+        return n
+    def one(d0):
+        d = dict(d0)
+        for k in ("open", "win", "slip"):
+            if k in d:
+                d[k + "_zh"] = build_tk.zh(d[k]); d[k + "_vid"] = build_tk.vid(d[k], d.get("who"))
+        return d
+    dl = n["dilemma"]
+    return dict(n, dilemma=[one(d) for d in dl] if isinstance(dl, list) else one(dl))
+
+
+def voiced_world(w):
+    """A story world's lines with their clip ids, as build_tk.py makes them (call inside build_tk.english(w))."""
+    return dict({k: w[k] for k in ("lang", "cast") if k in w},
+                opening=build_tk.voiced(w["opening"]), closing=build_tk.voiced(w["closing"]),
+                scenes={k: {"steps": build_tk.voiced(v["steps"])} for k, v in w["scenes"].items()},
+                nodes=[dict(n, boss=dict(n["boss"], taunt_zh=build_tk.zh(n["boss"]["taunt"]),
+                                         taunt_vid=build_tk.vid(n["boss"]["taunt"], n["boss"]["who"])))
+                       if "boss" in n else n
+                       for n in [dilemma_vids(n) for n in w["nodes"]]])
+
+
+def campaign_lines():
+    worlds = []
+    for w in build_tk.WORLDS:
+        with build_tk.english(w):
+            worlds.append(voiced_world(w))
+    return build_tk.all_lines(worlds)
+
+
 def main():
     if "--en" in sys.argv:
         return main_en()
-    worlds = []
-    for w in build_tk.WORLDS:
-        worlds.append({
-            "opening": build_tk.voiced(w["opening"]), "closing": build_tk.voiced(w["closing"]),
-            "scenes": {k: {"steps": build_tk.voiced(v["steps"])} for k, v in w["scenes"].items()},
-            "nodes": [dict(n, boss=dict(n["boss"], taunt_zh=build_tk.zh(n["boss"]["taunt"]),
-                                        taunt_vid=build_tk.voice_id(build_tk.zh(n["boss"]["taunt"]), build_tk.voice_of(n["boss"]["who"]))))
-                      if "boss" in n else n
-                      for n in w["nodes"]],
-        })
-    lines = {k: (t, v) for k, (t, v, _) in build_tk.all_lines(worlds).items()}
+    lines = {k: (t, v) for k, (t, v, _) in campaign_lines().items() if t}   # an English-only world has no Chinese to read
     build_tk.VOICE_DIR.mkdir(parents=True, exist_ok=True)
     todo = {k: tv for k, tv in lines.items() if not (build_tk.VOICE_DIR / f"{k}.mp3").exists()}
     print(f"{len(todo)} of {len(lines)} lines to render")
@@ -90,18 +113,9 @@ def main():
         print(f"{i}/{len(todo)} {voice} {text[:24]}", flush=True)
 
 
-def campaign_lines():
-    worlds = []
-    for w in build_tk.WORLDS:
-        worlds.append({
-            "opening": build_tk.voiced(w["opening"]), "closing": build_tk.voiced(w["closing"]),
-            "scenes": {k: {"steps": build_tk.voiced(v["steps"])} for k, v in w["scenes"].items()},
-            "nodes": [dict(n, boss=dict(n["boss"], taunt_zh=build_tk.zh(n["boss"]["taunt"]),
-                                        taunt_vid=build_tk.voice_id(build_tk.zh(n["boss"]["taunt"]), build_tk.voice_of(n["boss"]["who"]))))
-                      if "boss" in n else n
-                      for n in w["nodes"]],
-        })
-    return build_tk.all_lines(worlds)
+def en_voice(v):
+    """The English voice for a clip: a Mandarin voice's counterpart, or an English-only world's own (am_adam, bf_emma …)."""
+    return EN_VOICE.get(v) or (v if v and v[:3] in ("af_", "am_", "bf_", "bm_") else None)
 
 
 def main_en():
@@ -111,8 +125,8 @@ def main_en():
     index_file = out / "index.json"
     index = json.loads(index_file.read_text()) if index_file.exists() else {}
     say = lambda en: en.replace("“", "").replace("”", "").replace("—", ", ").replace("…", "...").strip()
-    lines = {k: (say(en), EN_VOICE.get(v)) for k, (_, v, en) in campaign_lines().items()}
-    unknown = sorted({v for k, (_, v, _) in campaign_lines().items() if v not in EN_VOICE})
+    lines = {k: (say(en), en_voice(v)) for k, (_, v, en) in campaign_lines().items()}
+    unknown = sorted({v for k, (_, v, _) in campaign_lines().items() if not en_voice(v)})
     if unknown:
         sys.exit(f"EN_VOICE has no English voice for {unknown}")
     todo = {k: tv for k, tv in lines.items() if not (out / f"{k}.mp3").exists() or index.get(k) != tv[0]}

@@ -125,9 +125,15 @@ const Sync = {
   // solved sticks (1 beats anything); the adaptive rating keeps whichever has played more boards
   mergeInto(local, remote) {
     for (const bookId in remote) {
-      if (bookId === "tkAt" || bookId === "tkUndo" || bookId === "tkReplay") {   // dated: the later date wins (TK.cleared)
+      if (bookId === "tkAt" || bookId === "tkUndo" || bookId === "tkReplay" || bookId === "tkSeen") {   // dated: the later date wins (TK.cleared, TK.seen)
         const b = local[bookId] || (local[bookId] = {});
         for (const k in remote[bookId]) b[k] = Math.max(b[k] || 0, remote[bookId][k] || 0);
+        continue;
+      }
+      if (bookId === "tkMig") {   // a book's one-time migrations: the higher version is the one done (an older copy taking
+        // over set it back, and the next load ran that start-over again: apo110's Book 1, wiped)
+        const b = local.tkMig || (local.tkMig = {});
+        for (const k in remote.tkMig) b[k] = Math.max(+b[k] || 0, +remote.tkMig[k] || 0);
         continue;
       }
       if (bookId === "tkElo") { const r = remote.tkElo, l = local.tkElo; if (r && (!l || (r.n || 0) > (l.n || 0))) local.tkElo = r; continue; }
@@ -548,6 +554,7 @@ class Goban {
     if (!interactive) return;
     for (let r = r0; r <= r1; r++)
       for (let c = c0; c <= c1; c++) {
+        if (this.only && !this.only.has(String.fromCharCode(97 + c) + String.fromCharCode(97 + r))) continue;   // a multiple-choice board: only its letters take a tap
         const t = this.el("circle", { cx: this.px(c), cy: this.py(r), r: this.cell * .48,
                                       fill: "transparent", cursor: "pointer" });
         t.addEventListener("mouseenter", () => {
@@ -568,6 +575,8 @@ class Goban {
     return w > 0 && w / this.W * this.cell < 28;
   }
   tap(c, r, grid) {
+    // (a multiple-choice board takes taps only on its letters; on a phone with tiny points they still confirm, so a near-miss
+    // shows the pick instead of costing a guess: Testing, m22 on an iPhone)
     if (grid[r][c] !== EMPTY || !this.needsConfirm()) { this.clearGhost(); return this.onClick(c, r); }
     if (this.ghost && this.ghost.c === c && this.ghost.r === r) { this.clearGhost(); return this.onClick(c, r); }
     this.clearGhost();
@@ -777,6 +786,7 @@ class Trainer {
     if (this.done || this.engineBusy || this.turnColor() !== BLACK) return;
     if (this.grid[r][c] !== EMPTY) return;
     const mv = String.fromCharCode(97 + c) + String.fromCharCode(97 + r);
+    if (this.p.only && !this.p.only.includes(mv)) return;   // a multiple-choice board (Misaeng's record boards): only its lettered points
 
     const treeMove = this.p.lines.some(L =>
       this.played.length < L.length - 1 &&
@@ -2180,6 +2190,89 @@ async function viewPlayer(id, num) {
   window.__engine = Engine;
 }
 
+/* ---- Stream: problems dealt one after another by the game's rating (tk.js TKElo, the same rating and the
+   same seen list as the campaign's adaptive boards; data/stream.json, tools/build_stream.py) ---- */
+let streamPool = null;
+async function viewStream() {
+  const nav = routeSeq;
+  root.innerHTML = `<div class="loading">Loading…</div>`;
+  if (!streamPool) streamPool = { rated: await (await fetch("data/stream.json?v=1")).json() };
+  const [bookId, pid] = TKElo.pick(streamPool, `stream~${TKElo.state().stream || 0}`);
+  const book = await getBook(bookId);
+  if (nav !== routeSeq) return;
+  const idx = Math.max(0, book.problems.findIndex(x => String(x.id) === String(pid)));
+  const p = book.problems[idx], x = streamPool.rated.find(y => y[0] === bookId && String(y[1]) === String(pid));
+  crumbs.innerHTML = "";
+  root.innerHTML = "";
+
+  const svg = document.createElementNS(SVGNS, "svg");
+  const boardCard = h("div", { class: "board-card" }, [svg]);
+  const status = h("div", { id: "status" });
+  const turnBadge = h("span", { class: "badge turn" }, "Black to play");
+  const btnExplore = h("button", {}, "Explore");
+  const treeBox = h("div", { class: "movetree", style: "height:auto; max-height:320px" });
+  const note = h("div", { class: "source-note", style: "display:none" });
+  const treePanel = h("div", { class: "panel", style: "display:none" }, [
+    h("h2", {}, "Solution tree"),
+    h("div", { class: "meta-sub" }, "Tap a move to see the position. Green: correct lines · red: failures · dot: his comment."),
+    treeBox,
+  ]);
+  const rating = h("div", { class: "stream-rating" });
+  const showRating = () => { const t = TKElo.state(); rating.textContent = `${TKElo.label(t.r)} · ${t.r}`; };
+  showRating();
+  // the problem's source and grade wait until it's answered, so they don't hint at it
+  const source = h("div", { class: "meta-sub", style: "visibility:hidden" }, [
+    p.url ? h("a", { href: p.url, target: "_blank" }, p.credit || "source")
+          : h("a", { href: `https://www.101weiqi.com/q/${p.id}/`, target: "_blank" }, `${book.title} · 101weiqi #${p.id}`),
+    x ? ` · ${GRADE_NAMES[x[2]]}` : "", x && x[4] ? " · KataGo-checked" : "",
+  ]);
+  const next = () => { const q = loadProgress(), st = TKElo.state(q); st.stream = (st.stream || 0) + 1; TK.saveProg(q); viewStream(); };
+
+  const aside = h("aside", {}, [
+    h("div", { class: "panel" }, [
+      h("h2", {}, "Stream"),
+      h("div", { class: "meta-sub" }, "Problems at your level, one after another. The rating is the one the story mode keeps: a first-try solve (no wrong move, hint or undo) raises it."),
+      rating, source,
+      h("div", { class: "badges" }, [turnBadge]),
+    ]),
+    h("div", { class: "panel" }, [h("h2", {}, "Status"), status, note]),
+    treePanel,
+    h("div", { class: "panel" }, [
+      h("h2", {}, "Controls"),
+      h("div", { class: "controls" }, [
+        h("button", { onclick: () => trainer.undo() }, "Undo"),
+        h("button", { onclick: () => trainer.hint() }, "Hint"),
+        h("button", { onclick: () => trainer.reset() }, "Reset"),
+        btnExplore,
+        h("button", { class: "wide primary", onclick: next }, "Next problem →"),
+      ]),
+    ]),
+    h("div", { class: "panel keys" },
+      [["N / →", "next problem"], ["U", "undo"], ["R", "reset"], ["H", "hint"], ["E", "explore"]]
+        .map(([k, v]) => h("div", {}, [h("b", {}, k), v]))),
+  ]);
+  root.append(h("div", { class: "player" }, [boardCard, aside]));
+
+  const t = trainer = new Trainer(book, idx, { svg, boardCard, status, turnBadge, btnExplore, treePanel, treeBox, note });
+  btnExplore.addEventListener("click", () => trainer.toggleExplore());
+  t.streamNext = next;
+  window.__trainer = trainer;
+  // the first answer rates it (a problem shown again after a reload has had its say already)
+  const key = `${bookId}:${pid}`;
+  const onResult = e => {
+    if (trainer !== t) return window.removeEventListener("tczw:result", onResult);
+    window.removeEventListener("tczw:result", onResult);
+    source.style.visibility = "";
+    const q = loadProgress(), st = TKElo.state(q);
+    if (st.streamRated === key) return;
+    st.streamRated = key; TK.saveProg(q);
+    if (t.flawed !== "claimed") TKElo.result(streamPool, {}, [bookId, pid], e.detail === "ok" && !t.flawed);
+    showRating();
+  };
+  window.addEventListener("tczw:result", onResult);
+}
+const GRADE_NAMES = Array.from({ length: 44 }, (_, i) => i < 30 ? `${15 - Math.floor(i / 2)}K${i % 2 ? "+" : ""}` : `${1 + Math.floor((i - 30) / 2)}D${(i - 30) % 2 ? "+" : ""}`);
+
 /* ---- Spotify: a small player in the header ---- */
 // PKCE login (public client, no secret) and the Web API's playback control:
 // the music plays in the Spotify app on a phone or computer (Premium), and
@@ -3477,16 +3570,19 @@ let routeSeq = 0;
 
 async function route() {
   routeSeq++;
+  if (typeof TKEnglish !== "undefined") TKEnglish.set(false);   // an English-only book's page sets it again (tk-modern.js)
+  if (typeof TKVoice !== "undefined") { TKVoice.enOnly = false; TKVoice.native = null; }
   if (trainer) trainer.alive = false;
   trainer = null;
   Review.els = null;
   const parts = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
   clearInterval(playTicker);
-  const tab = ["review", "play", "feedback"].includes(parts[0]) ? parts[0] : "library";
+  const tab = ["stream", "review", "play", "feedback"].includes(parts[0]) ? parts[0] : "library";
   if (window.Wukong && Wukong.suspend) Wukong.suspend(parts[0] === "tk" && !parts[2]);  // the map has its own party
   for (const a of document.querySelectorAll("#tabs a"))
     a.classList.toggle("active", a.dataset.tab === tab);
-  if (parts[0] === "review") viewReview();
+  if (parts[0] === "stream") await viewStream();
+  else if (parts[0] === "review") viewReview();
   else if (parts[0] === "play") viewPlay(parts[1]);
   else if (parts[0] === "feedback") viewFeedback();
   else if (parts[0] === "tk" && parts[1] === "chat") await viewTKChat(true);   // the plain chat window (Claude himself now sits in the Chang'an teahouse)
@@ -3515,6 +3611,7 @@ document.addEventListener("keydown", e => {
   }
   if (!trainer) return;
   const parts = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
+  if (parts[0] === "stream" && (e.key === "n" || e.key === "ArrowRight")) return trainer.streamNext && trainer.streamNext();
   const book = parts[0] === "book";  // campaign levels have no next or previous problem
   if (e.key === "ArrowLeft" && book && parts[2] > 1) location.hash = `#/book/${parts[1]}/${+parts[2] - 1}`;
   else if (e.key === "ArrowRight" && book) location.hash = `#/book/${parts[1]}/${+parts[2] + 1}`;

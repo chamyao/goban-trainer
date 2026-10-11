@@ -83,7 +83,13 @@ python3 tools/bump_cache.py stills
   line to its `notes` saying Graphics reworded it, and tell Plot.
 - **Text is allowed.** The user said there is no "no text" rule, so banners and plaques with characters are fine. Keep
   prompts plain and short; the user doesn't want them over-engineered.
+- **The modern book (Misaeng).** Ids that start `ms_` (and `face_ms_*`) get `STYLE_MODERN` ("2D Korean webtoon, hard
+  cel shading" and modern-day Seoul) and `FACE_STYLE_MODERN` instead of the Han lines; the cast's wording is in the
+  `CAST.update` block under `ms_*` keys. Nothing else changes for the Han books.
 - **No face references.** `REF_LENSES` is empty because the user found that reference images throw off the feel.
+  Exception (Misaeng, the user's review of ms_hof_aside: "ahn doesnt look like our character design"): when a still
+  must match a speaker's portrait, send that portrait's white-background original as `image_input` with "reference
+  image N shows <name>: keep face, hair and clothes". It matched on the first try.
   Consistency comes from the `CAST` wording.
 
 ## Dialogue portraits
@@ -130,6 +136,10 @@ anyone without one.
   - `eyes`: kind, round, narrow, phoenix, wild or normal.
   - `weapon`: sword, swords, spear or glaive.
   - flags: `fat`, `patch`, `makeup`, `ears`.
+  - modern dress (Misaeng): `shirt` (a jacket's shirt; without it, shirtsleeves with a belt in `trim`), `tie`, `legs`
+    (trousers, or the skirt with `skirt: true`), `glasses` (the frame colour). With `legs` and no shirt or tie, the
+    collar is a plain neckline. Modern hair in `hat`: short, fringe, parted, slick, messy, curly, perm, balding, buzz,
+    bob, long, ponytail, cap. `beard: "stubble"`.
 - **Fit the person to the story.** Old characters get grey or white hair and a long beard, officers a helmet and a
   spear, and Lady Sun a sword. A user once caught an old man's bust reused for a young man; it was a look copied
   without care.
@@ -176,6 +186,10 @@ python3 tools/art_sheet.py kinds /tmp/k.png jade KIND ...
   `building.house` set alight, and `banner.white` and `banner.black` are its red banner recoloured.
 - **Generated buildings:** `tools/gen_pixel.py --set <set>` (Retro Diffusion), then pick tries in
   `tools/build_b2_buildings.py` `PICKS`. Rockeries and ridges came back as whole scenes, so they were drawn in code.
+- **The Seoul kit** (Misaeng's modern book) is its own kit, `assets/tk/kits/seoul.json`, written by
+  `tools/draw_seoul.py`: a copy of jade with modern grounds, plaster walls, every Misaeng kind (Places' `KINDS.update`
+  in vocab.py; briefs in `tools/tk_plans_ms.py` ART) and folk drawn from `ms_*` looks. Add a piece to its `PIECES`
+  (a list gives variants) and rerun; the Han kits are untouched.
 - **The shrine** (`tools/pine_rock.py`) is a stone monkey statue in three states, in each kit's own rock colours.
 
 ## Handing work to Integration

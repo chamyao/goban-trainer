@@ -42,9 +42,9 @@ LIGHT = {("lantern", None): "night", ("day", "clear"): "morning", ("dusk", "stor
 # what a tile is made of, and whether you can walk on it (zones and lines become materials)
 WALK = {"grass": True, "dirt": True, "sand": True, "water": False, "void": False, "wall": False,
         "wood": True, "stone": True, "mat": True, "earth": True}
-IN_WALL = {"building.gate", "building.gatehouse", "building.gatetower", "building.moongate", "wall.stairs",
+IN_WALL = {"building.gate", "building.gatehouse", "building.gatetower", "building.moongate", "wall.stairs", "building.palace_gate",
            "building.festoongate", "building.halfgate", "building.blackgate"}   # (the last three: Red Chamber's gates)
-PASSABLE = {"furn.seat", "furn.curtain", "furn.rug", "landmark.ridge", "building.gatehouse", "building.gate", "building.moongate",
+PASSABLE = {"furn.seat", "furn.chair", "furn.curtain", "furn.rug", "prop.spill", "landmark.ridge", "building.gatehouse", "building.gate", "building.moongate", "building.palace_gate",
             "building.festoongate", "building.halfgate", "building.blackgate", "furn.cushion", "furn.handwarmer", "furn.gauze",
             "plant.flower", "plant.bush", "plant.grass", "plant.peony", "rock.small", "water.lotus"}
 DOOR_AT_FOOT = {"building.gatetower"}   # drawn front-on in a wall: an E/W door is at the foot of that face, by the drawn arch
@@ -53,6 +53,7 @@ TALL = ("building", "tree", "rock", "ruin", "garden", "landmark")   # what a roo
 NPC_KEYS = ("challenge", "intro", "win", "done", "until", "face", "when", "gives", "gives_when", "give", "given", "call",
             "in", "in_beats", "inside", "follower", "blocks", "view", "label", "note",
             "gossip", "yield",   # the loud town and the face-down (Lady Sun's marriage; tk-feats.js)
+            "shop", "buyer", "rival",   # the trade loop (Misaeng; tk-modern.js)
             "speaker")   # a townsperson's own name in the dialogue box, [English, Chinese] (Red Chamber's hawker), over the sprite's
 
 
@@ -144,7 +145,8 @@ class MapBuilder:
     # ---------- 1. ground and lines ----------
     def lay_ground(self):
         if self.room:   # inside a room: its floor
-            floor = {"wood": "wood", "stone": "stone", "mat": "mat", "earth": "earth"}.get(self.p.get("floor", "stone"), "stone")
+            from vocab import MATERIALS   # any walkable floor the vocabulary knows (Misaeng's carpet, office tile, lino)
+            floor = self.p.get("floor", "stone") if MATERIALS.get(self.p.get("floor", "stone")) else "stone"
         for z in self.p.get("ground", []):
             kind = z["kind"]
             m = floor if (self.room and kind == "floor") else kind
@@ -246,7 +248,7 @@ class MapBuilder:
             if kind.startswith("building."):
                 o["door"] = door
                 o["faces"] = t.get("faces") or (door if door in SIDES else "S")
-            for k in ("label", "note", "map", "open_to", "refuse", "gives", "when", "until", "window", "plaque"):
+            for k in ("label", "note", "map", "to", "open_to", "refuse", "gives", "when", "until", "window", "plaque"):
                 if t.get(k) is not None:
                     o[k] = t[k]
             if t.get("doors"):
@@ -330,7 +332,7 @@ class MapBuilder:
             for i in range(x - margin, x + margin + 1):
                 if (i, j) in self.covered or (i, j) in self.keep or not self.walkable((i, j)):
                     return False
-        return self.mat[y][x] not in ("road", "path", "bridge", "gallery", "court", "market", "stage")
+        return self.mat[y][x] not in ("road", "path", "bridge", "gallery", "court", "market", "stage", "crosswalk")   # (no tree on a zebra crossing)
 
     def cliff_rims(self):
         """A cliff reads as a drop only with a lip and a rocky face. The cliff tile alone draws like paving, and Xiao Pass's "cliff's
@@ -499,7 +501,22 @@ class MapBuilder:
                     return t
         return None
 
+    def lay_seats(self):
+        """A desk's seat: the chair its art draws at its front ("seats": [{"id": "chair-kim", "of": "desk-kim"}]), an
+        unseen marker at the middle of the desk's south edge. Spots and people "on" it are at the desk, facing it; a
+        scene's "@chair-kim" is there too (the user: "they are clearly not sitting at desks", on chairs of their own)."""
+        for st in self.p.get("seats", []):
+            if st["of"] not in self.foot:
+                raise RuntimeError(f"{self.mid}: seat {st['id']} is of {st['of']}, which isn't on the map")
+            dx, dy, dw, dh = self.foot[st["of"]]
+            o = {"kind": "marker.seat", "x": dx + dw / 2 - .5, "y": dy + dh - 1, "w": 1, "h": 1, "id": st["id"], "of": st["of"]}
+            if st.get("label"):
+                o["label"] = st["label"]
+            self.objects.append(o)
+            self.foot[st["id"]] = (o["x"], o["y"], 1, 1)
+
     def lay_spots(self):
+        self.lay_seats()
         for t in self.p.get("things", []):   # a building that hosts a beat: its spot is at its door
             if t.get("node") and t["id"] in self.anchor:   # a step out from the door, clear of the roof drawn over the doorstep
                 a = self.anchor[t["id"]]
@@ -522,7 +539,10 @@ class MapBuilder:
                 t = self.near_cell(c, want_visible=False)
             spot = {"id": s["id"], "x": t[0] + .5, "y": t[1] + .7, "node": s.get("node", ""), "label": s.get("label", "")}
             for k in ("trigger", "note", "on", "sight", "cover", "fires",   # cover: a place to hide; fires: starts itself
-                      "needs", "delivers", "when", "empty", "waiting", "deliver", "delivered", "call"):   # a place that delivers a mark
+                      "needs", "delivers", "when", "empty", "waiting", "deliver", "delivered", "call",   # a place that delivers a mark
+                      "takes", "opens", "floors", "use",   # Misaeng (tk-modern.js): delivering takes the thing; the audit board; a lift and its floors
+                      "gives", "gives_when", "give", "given",   # a thing that gives an item when searched (the bins, a table)
+                      "set_down", "to"):   # set down at a place (a seat), not handed to a person; or handed to "to" (an npc id)
                 if s.get(k):
                     spot[k] = s[k]
             if s.get("via"):   # where the goal marker points first (cells -> tiles), in order, until she gets there: the
@@ -549,7 +569,8 @@ class MapBuilder:
             n["id"] = p["id"]
         u = n.get("until")
         if isinstance(u, str) and u.startswith("node:"):   # the game's "until" names a node key
-            n["until"] = f"{self.n}-{u[5:]}"
+            k = u[5:]
+            n["until"] = f"{self.n}-{k.split('-', 1)[1] if re.match(r'^\d+-', k) else k}"   # (once, if it's already "21-m5")
         elif isinstance(u, str) and re.match(r"^\d+-", u):
             n["until"] = f"{self.n}-{u.split('-', 1)[1]}"
         if p["kind"].startswith("folk.") and not p.get("near") and not p.get("at") and not p.get("challenge"):
@@ -588,6 +609,11 @@ class MapBuilder:
             if p.get("behind") in self.foot:   # seated at a desk: feet just inside its top edge, so it hides the legs
                 fx, fy, fw, fh = self.foot[p["behind"]]
                 n["x"], n["y"] = fx + fw / 2, fy + .35
+            if p.get("on") in self.foot:   # seated on a thing (Sales 3's team on their own chairs): exactly there, however
+                fx, fy, fw, fh = self.foot[p["on"]]   # many of them take turns on it (one per stretch of the story)
+                n["x"], n["y"] = fx + fw / 2, fy + fh / 2 + .4
+                if any(o.get("id") == p["on"] and o["kind"] == "marker.seat" for o in self.objects):
+                    n["y"] = fy + fh + .2   # a desk's seat: just past the desk's front edge, so drawn over the desk (in its chair)
             self.npcs.append(n)
         taken -= lanes - {(int(s_["x"]), int(s_["y"])) for s_ in self.spots}
         for i, c in enumerate(challengers):
@@ -1082,6 +1108,11 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
         for t in P.get("things", []):
             if t.get("map"):
                 owner[f"{pid}--{t['map']}"] = pid
+        for e in P.get("exits", []):   # a place that is itself a room may open into its own rooms
+            if e["to"] in (b.get("maps") or {}) and f"{pid}--{e['to']}" not in owner:
+                owner[f"{pid}--{e['to']}"] = pid
+        for r in P.get("owns", []):   # or have rooms reached another way (by a lift: Misaeng's tower), whose doors lead back to it
+            owner.setdefault(f"{pid}--{r}", pid)
         for mid, m in (b.get("maps") or {}).items():
             for t in m.get("things", []):
                 if t.get("map"):
@@ -1164,8 +1195,9 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
         pid = m.get("parent") or mid_
         # a door into a compound or room: press against it, as furnish_place does
         for o in m["objects"]:
-            if o.get("map"):
-                child = f"{pid}--{o['map']}"
+            if o.get("map") or o.get("to"):
+                # a door into a room of this place ("map"), or into another place ("to": the subway's stairs, a tower)
+                child = f"{pid}--{o['map']}" if o.get("map") else map_of(pid, o["to"])
                 if child not in maps:
                     continue
                 d = o.get("enter") or o.get("door") or "S"
@@ -1285,14 +1317,24 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
         if m.get("parent"):
             places.append({"id": mid_, "name": m["name"], "zh": zh.get(m["name"], ""), "archetype": m["archetype"],
                            "map": f"{mid_}.map.json", "links": m["links"], "parent": m["parent"],
-                           **({"gives": g} if (g := [x["gives"] for x in m["npcs"] if x.get("gives")]) else {})})
+                           **({"gives": g} if (g := [x["gives"] for x in m["npcs"] + m["spots"] if x.get("gives")]) else {}),
+                           # the marks delivered in this room (Misaeng m11: the requisition at General Affairs), so the goal can lead there
+                           **({"delivers": dv} if (dv := [x["delivers"] for x in m["spots"] if x.get("needs") and x.get("delivers")]) else {})})
         else:
             # the roads that really leave this map (its exits), so the lit route and the travel map follow them;
             # a story edge with no road (Chang'an to Meiwu, with the Meiwu Road between) is only a fallback
             links = sorted(set(m["links"]) or {b2 for a, b2 in edges if a == mid_})
             places.append({"id": mid_, "name": m["name"], "zh": zh.get(m["name"], ""), "archetype": m["archetype"],
                            "map": f"{mid_}.map.json", "links": links})
-    return {k: v[0] for k, v in maps.items()}, places, quests
+    out = {k: v[0] for k, v in maps.items()}
+    # a handoff names its taker ("to": an npc id): the spot stands at their feet, so the ring that marks it is on the
+    # person, not on the floor beside them (apo110: "fetched from a circle with nothing to mark the destination")
+    for m in out.values():
+        for s in m["spots"]:
+            n = s.get("to") and next((n for n in m["npcs"] if n.get("id") == s["to"]), None)
+            if n:
+                s["x"], s["y"] = n["x"], n["y"] - .2
+    return out, places, quests
 
 
 def verify(maps):
@@ -1333,6 +1375,13 @@ def verify(maps):
         for e in m["exits"]:
             if not any(near((int(e["x"]) + i, int(e["y"]) + j)) for i in range(max(1, int(e["w"]))) for j in range(max(1, int(e["h"])))):
                 out.append(f"{mid}: exit to {e['to']} can't be reached")
+        # a place to deliver to is a handoff to someone: the engine delivers when a person standing within 64 px of
+        # the spot is talked to. With no one there she hands things to a ring on the floor (apo110: "I was handing off
+        # things to circles not people"). Unless it's a place to set something down ("set_down": the board room's seats)
+        for s in m["spots"]:
+            if s.get("needs") and not s.get("set_down") and not any(
+                    math.dist((s["x"], s["y"]), (n["x"], n["y"])) * 16 <= 64 for n in m["npcs"]):
+                out.append(f"{mid}: delivery spot {s['id']} has no one within 64 px to hand it to (name its \"to\", or \"set_down\")")
         for n in m["npcs"]:
             t = (int(n["x"]), int(n["y"]))
             if not near(t):
@@ -1354,6 +1403,8 @@ def assets(maps, tables, kits_dir=None):
     used = {}
     for mid, m in maps.items():
         for o in m["objects"]:
+            if o["kind"].startswith("marker."):   # a seat: nothing to draw
+                continue
             used.setdefault(o["kind"], {"maps": set(), "count": 0, "size": (o["w"], o["h"])})
             used[o["kind"]]["maps"].add(mid)
             used[o["kind"]]["count"] += 1
@@ -1385,13 +1436,12 @@ def assets(maps, tables, kits_dir=None):
     return rows
 
 
-ARCS = {13: "cc", 14: "lb", 15: "ls", 31: "hlm1"}   # books whose plans are an arc's: Book 13 is the Cao Cao arc, Book 14 Lü Bu's fall,
-# Book 15 Lady Sun's marriage, Book 31 Red Chamber Book 1 (redchamber/book1/plans.py; the world number is Integration's)
+ARCS = {13: "cc", 14: "lb", 15: "ls", 21: "ms", 22: "ms2", 31: "hlm1"}   # books whose plans are an arc's: Book 13 is the Cao Cao arc, Book 14 Lü Bu's fall, Book 15 Lady Sun's marriage, Book 21 Misaeng   # Book 31: Red Chamber Book 1 (redchamber/book1/plans.py)
 
 
 def key_prefix(plans_world):
     """The book number the plans' beat keys carry ("2-c1" for the Cao Cao arc's plans)."""
-    return {"cc": "2", "lb": "3", "ls": "4", "hlm1": "hl1"}.get(ARCS.get(plans_world, plans_world), str(plans_world))
+    return {"cc": "2", "lb": "3", "ls": "4", "ms": "21", "ms2": "22", "hlm1": "hl1"}.get(ARCS.get(plans_world, plans_world), str(plans_world))
 
 
 def plans_arg(v):
@@ -1422,6 +1472,12 @@ def load(plans_world):
     if plans_world == "hlm1":   # Red Chamber, Book 1 (redchamber/book1/plans.py): beat keys "hl1-d…", "hl1-g…"
         mod = load_redchamber("book1/plans.py")
         return mod.PLANS_HLM1, mod.TABLES, mod.ZH_PLACES_HLM1
+    if plans_world == "ms":   # Misaeng (Season 1): beat keys "21-m…", English only (no Chinese table)
+        import tk_plans_ms as mod
+        return mod.PLANS_MS, mod.TABLES, mod.ZH_PLACES_MS
+    if plans_world == "ms2":   # Misaeng Book 2 (world 22): beat keys "22-b…", the same places as a new config
+        import tk_plans_ms as mod
+        return mod.PLANS_MS2, mod.TABLES, mod.ZH_PLACES_MS
     if plans_world == 90:   # Talk with Claude: the study, no story
         import tk_plans_w90 as mod
         return mod.PLANS90, mod.TABLES, mod.ZH_PLACES90
@@ -1463,6 +1519,16 @@ def story_world(n, plans_world):
             from tk_story_w2_new import WORLD2_LS as W
         except ImportError:
             raise SystemExit("no story yet for Lady Sun's marriage (Plot's WORLD2_LS in tools/tk_story_w2_new.py)")
+    elif plans_world == "ms":
+        try:
+            from tk_story_w21 import WORLD21 as W   # Misaeng: its own module, English only
+        except ImportError:
+            raise SystemExit("no story yet for Misaeng (Plot alt2's WORLD21 in tools/tk_story_w21.py)")
+    elif plans_world == "ms2":
+        try:
+            from tk_story_w22 import WORLD22 as W   # Misaeng Book 2
+        except ImportError:
+            raise SystemExit("no story yet for Misaeng Book 2 (Plot alt2's WORLD22 in tools/tk_story_w22.py)")
     else:
         raise SystemExit(f"no story for book {plans_world}")
     return {**W, "nodes": [{**nd, "key": f"{n}-{nd['key']}"} for nd in W["nodes"]],

@@ -1,0 +1,109 @@
+--- desktop (1280x800)
+ok   strip on screen ({"x":1060,"y":261.25,"w":86,"h":99.1875,"r":1146,"b":360.4375})
+ok   strip clear of the goal box (strip {"x":1060,"y":261.25,"w":86,"h":99.1875,"r":1146,"b":360.4375}, goal {"x":134,"y":229.25,"w":332.453125,"h":104.6875,"r":466.453125,"b":333.9375})
+ok   strip clear of the menu row (menu {"x":1031.8125,"y":227.25,"w":116.1875,"h":28,"r":1148,"b":255.25})
+ok   no Chinese on screen in an English world: HUD ()
+ok   the record opened large fits the screen ({"x":442.0625,"y":182.25,"w":395.875,"h":435.5,"r":837.9375,"b":617.75})
+ok   Escape closes the record opened large (still open: 0)
+ok   record board names the move asked (1st Ing Cup final, game 5 · Black 29, Cho Hunhyun's move · find the move that was played)
+ok   record board's board on screen ({"x":384.046875,"y":280.5,"w":458,"h":458,"r":842.046875,"b":738.5})
+NOTE record board: points about 23.5 px apart (whole 19x19 shown); taps rely on the preview tap
+ok   no Chinese on screen in an English world: record board ()
+ok   Escape leaves the record board
+ok   no Chinese on screen in an English world: bag ()
+ok   bag fits the screen ({"x":410,"y":205.5,"w":460,"h":389,"r":870,"b":594.5})
+ok   audit board fits the screen ({"x":385.265625,"y":228.84375,"w":509.46875,"h":342.296875,"r":894.734375,"b":571.140625})
+ok   every audit card on screen without scrolling (bottoms 444, 444; screen 800)
+ok   tapping the right two links them (Someone taught Baekjin what to say. The margin is the money.)
+ok   no Chinese on screen in an English world: audit ()
+ok   Escape closes the audit board
+ok   cash chip on screen ({"x":1046.359375,"y":366.25,"w":99.640625,"h":43.78125,"r":1146,"b":410.03125})
+ok   cash chip clear of the goal box (goal {"x":134,"y":229.25,"w":332.453125,"h":104.6875,"r":466.453125,"b":333.9375})
+ok   cash chip clear of the strip (strip {"x":1060,"y":261.25,"w":86,"h":99.1875,"r":1146,"b":360.4375})
+ok   tapping the shopkeeper walks up and opens the shop
+ok   shop fits the screen ({"x":491.234375,"y":292.5,"w":297.53125,"h":214.984375,"r":788.765625,"b":507.484375})
+ok   two bought by taps (Cash: ₩60,000 · Stock: 2 × Socks (10 pairs))
+ok   no Chinese on screen in an English world: shop ()
+ok   Escape closes the shop
+ok   tapping a buyer walks up and makes the offer
+ok   the dialogue box doesn't cover the chip (dlg {"x":350,"y":747.96875,"w":580,"h":41.78125,"r":930,"b":789.75}, chip {"x":976.421875,"y":366.25,"w":169.578125,"h":43.78125,"r":1146,"b":410.03125})
+ok   the dialogue box doesn't cover the strip (strip {"x":1060,"y":261.25,"w":86,"h":99.1875,"r":1146,"b":360.4375})
+ok   no Chinese on screen in an English world: dialogue ()
+ok   Enter take the buyer's talk to its end
+ok   sold: the chip shows the cash (₩90,000Stock: 1 × Socks (10 pairs))
+ok   the seat says what goes there (The notes say the president's water goes here.)
+--- iPhone 13 (390x664, touch)
+ok   strip on screen ({"x":146.9375,"y":8,"w":90.0625,"h":36,"r":237,"b":44})
+ok   strip clear of the goal box (strip {"x":146.9375,"y":8,"w":90.0625,"h":36,"r":237,"b":44}, goal {"x":10,"y":46,"w":370,"h":89.546875,"r":380,"b":135.546875})
+ok   strip clear of the menu row (menu {"x":243.296875,"y":8,"w":138.703125,"h":40,"r":382,"b":48})
+NOTE strip is 90.0625x36, under 44 px to tap
+ok   no Chinese on screen in an English world: HUD ()
+ok   the record opened large fits the screen ({"x":15.59375,"y":104.5,"w":358.796875,"h":455,"r":374.390625,"b":559.5})
+ok   a tap outside the record opened large closes it
+ok   record board names the move asked (1st Ing Cup final, game 5 · Black 29, Cho Hunhyun's move · find the move that was played)
+ok   record board's board on screen ({"x":30.5,"y":59.109375,"w":329,"h":329,"r":359.5,"b":388.109375})
+NOTE record board: points about 16.9 px apart (whole 19x19 shown); taps rely on the preview tap
+ok   no Chinese on screen in an English world: record board ()
+ok   Escape leaves the record board
+ok   no Chinese on screen in an English world: bag ()
+ok   bag fits the screen ({"x":15.59375,"y":137.5,"w":358.796875,"h":389,"r":374.390625,"b":526.5})
+ok   audit board fits the screen ({"x":11.703125,"y":160.84375,"w":366.59375,"h":342.296875,"r":378.296875,"b":503.140625})
+ok   audit cards big enough to tap (161x139, 161x139)
+ok   every audit card on screen without scrolling (bottoms 376, 376; screen 664)
+ok   tapping the right two links them (Someone taught Baekjin what to say. The margin is the money.)
+ok   no Chinese on screen in an English world: audit ()
+ok   Escape closes the audit board
+ok   cash chip on screen ({"x":280.359375,"y":142,"w":99.640625,"h":43.78125,"r":380,"b":185.78125})
+ok   cash chip clear of the goal box (goal {"x":10,"y":46,"w":370,"h":89.546875,"r":380,"b":135.546875})
+ok   cash chip clear of the strip (strip {"x":146.9375,"y":8,"w":90.0625,"h":36,"r":237,"b":44})
+ok   tapping the shopkeeper walks up and opens the shop
+ok   shop fits the screen ({"x":46.234375,"y":224.5,"w":297.53125,"h":214.984375,"r":343.765625,"b":439.484375})
+ok   "Buy one" is big enough to tap ({"x":241.34375,"y":309.296875,"w":80.421875,"h":40,"r":321.765625,"b":349.296875})
+ok   two bought by taps (Cash: ₩60,000 · Stock: 2 × Socks (10 pairs))
+ok   no Chinese on screen in an English world: shop ()
+ok   Escape closes the shop
+ok   tapping a buyer walks up and makes the offer
+ok   the dialogue box doesn't cover the chip (dlg {"x":12,"y":616.96875,"w":366,"h":37.03125,"r":378,"b":654}, chip {"x":224,"y":142,"w":156,"h":59.375,"r":380,"b":201.375})
+ok   the dialogue box doesn't cover the strip (strip {"x":146.9375,"y":8,"w":90.0625,"h":36,"r":237,"b":44})
+ok   no Chinese on screen in an English world: dialogue ()
+ok   taps take the buyer's talk to its end
+ok   sold: the chip shows the cash (₩90,000Stock: 1 × Socks (10 pairs))
+ok   the seat says what goes there (The notes say the president's water goes here.)
+--- iPhone SE (320x568, touch)
+ok   strip on screen ({"x":76.9375,"y":8,"w":90.0625,"h":36,"r":167,"b":44})
+ok   strip clear of the goal box (strip {"x":76.9375,"y":8,"w":90.0625,"h":36,"r":167,"b":44}, goal {"x":10,"y":46,"w":300,"h":89.546875,"r":310,"b":135.546875})
+ok   strip clear of the menu row (menu {"x":173.296875,"y":8,"w":138.703125,"h":40,"r":312,"b":48})
+NOTE strip is 90.0625x36, under 44 px to tap
+ok   no Chinese on screen in an English world: HUD ()
+ok   the record opened large fits the screen ({"x":12.796875,"y":78.5,"w":294.390625,"h":411,"r":307.1875,"b":489.5})
+ok   a tap outside the record opened large closes it
+ok   record board names the move asked (1st Ing Cup final, game 5 · Black 29, Cho Hunhyun's move · find the move that was played)
+ok   record board's board on screen ({"x":24,"y":24,"w":272,"h":272,"r":296,"b":296})
+NOTE record board: points about 13.9 px apart (whole 19x19 shown); taps rely on the preview tap
+ok   no Chinese on screen in an English world: record board ()
+ok   Escape leaves the record board
+ok   no Chinese on screen in an English world: bag ()
+ok   bag fits the screen ({"x":12.796875,"y":60.25,"w":294.390625,"h":447.5,"r":307.1875,"b":507.75})
+ok   audit board fits the screen ({"x":9.59375,"y":81.34375,"w":300.796875,"h":405.296875,"r":310.390625,"b":486.640625})
+ok   audit cards big enough to tap (264x76, 264x76)
+ok   every audit card on screen without scrolling (bottoms 234, 318; screen 568)
+ok   tapping the right two links them (Someone taught Baekjin what to say. The margin is the money.)
+ok   no Chinese on screen in an English world: audit ()
+ok   Escape closes the audit board
+ok   cash chip on screen ({"x":210.359375,"y":142,"w":99.640625,"h":43.78125,"r":310,"b":185.78125})
+ok   cash chip clear of the goal box (goal {"x":10,"y":46,"w":300,"h":89.546875,"r":310,"b":135.546875})
+ok   cash chip clear of the strip (strip {"x":76.9375,"y":8,"w":90.0625,"h":36,"r":167,"b":44})
+ok   tapping the shopkeeper walks up and opens the shop
+ok   shop fits the screen ({"x":12.796875,"y":170.5,"w":294.390625,"h":226.984375,"r":307.1875,"b":397.484375})
+ok   "Buy one" is big enough to tap ({"x":205.8125,"y":255.296875,"w":79.375,"h":52,"r":285.1875,"b":307.296875})
+ok   two bought by taps (Cash: ₩60,000 · Stock: 2 × Socks (10 pairs))
+ok   no Chinese on screen in an English world: shop ()
+ok   Escape closes the shop
+ok   tapping a buyer walks up and makes the offer
+ok   the dialogue box doesn't cover the chip (dlg {"x":12,"y":520.96875,"w":296,"h":37.03125,"r":308,"b":558}, chip {"x":182,"y":142,"w":128,"h":59.375,"r":310,"b":201.375})
+ok   the dialogue box doesn't cover the strip (strip {"x":76.9375,"y":8,"w":90.0625,"h":36,"r":167,"b":44})
+ok   no Chinese on screen in an English world: dialogue ()
+ok   taps take the buyer's talk to its end
+ok   sold: the chip shows the cash (₩90,000Stock: 1 × Socks (10 pairs))
+ok   the seat says what goes there (The notes say the president's water goes here.)
+misaeng-look: all ok, 5 notes

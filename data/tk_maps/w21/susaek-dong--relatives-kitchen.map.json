@@ -1,0 +1,105 @@
+{
+ "format": "tk-map/1",
+ "id": "susaek-dong--relatives-kitchen",
+ "world": 21,
+ "name": "The kitchen",
+ "archetype": "interior",
+ "size": [
+  12,
+  12
+ ],
+ "seed": 3029,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "lino",
+   " ": "void",
+   "W": "wall"
+  },
+  "rows": [
+   "            ",
+   " WWWWWWWWWW ",
+   " WaaaaaaaaW ",
+   " WaaaaaaaaW ",
+   " WaaaaaaaaW ",
+   " WaaaaaaaaW ",
+   " aaaaaaaaaW ",
+   " aaaaaaaaaW ",
+   " WaaaaaaaaW ",
+   " WaaaaaaaaW ",
+   " WWWWWWWWWW ",
+   "            "
+  ],
+  "walk": {
+   "lino": true,
+   "void": false,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    6,
+    6
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     0,
+     3
+    ]
+   },
+   "tiles": 36
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.counter",
+   "x": 2,
+   "y": 2,
+   "w": 3,
+   "h": 1,
+   "id": "counter",
+   "label": "The sink"
+  },
+  {
+   "kind": "furn.fridge_case",
+   "x": 8,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "fridge"
+  }
+ ],
+ "spots": [],
+ "npcs": [],
+ "exits": [
+  {
+   "to": "susaek-dong--relatives",
+   "side": "W",
+   "x": 1,
+   "y": 6,
+   "w": 1,
+   "h": 2
+  }
+ ],
+ "entries": {
+  "susaek-dong--relatives": [
+   2,
+   6
+  ],
+  "": [
+   2,
+   6
+  ]
+ },
+ "parent": "susaek-dong",
+ "building": "relatives-kitchen",
+ "links": [
+  "susaek-dong--relatives"
+ ]
+}

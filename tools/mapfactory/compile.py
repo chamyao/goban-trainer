@@ -248,6 +248,7 @@ def compile_map(m, kit, out_dir):
     W, H = m["size"]
     legend = m["terrain"]["legend"]
     grid = [[legend[c] for c in row] for row in m["terrain"]["rows"]]
+    planned = grid   # the plan's own materials (walkable or not), before a kit's stand-ins rename them
     # a ground this kit has no tiles of is drawn as its stand-in (vocab MATERIAL_FALLBACK), edges and all
     sub = {mat: kit.material(mat)[0] for mat in {c for row in grid for c in row}
            if (mat not in kit.k["materials"] or "same" in kit.k["materials"][mat])
@@ -363,7 +364,8 @@ def compile_map(m, kit, out_dir):
     if walls:
         _, d = material("wall")
         data = [0] * (W * H)
-        floor = lambda x, y: 0 <= x < W and 0 <= y < H and MATERIALS.get(grid[y][x]) and grid[y][x] != "void"
+        # (by the plan's material: a stand-in's name, e.g. seoul's office_tile drawn as "lobby", isn't in MATERIALS)
+        floor = lambda x, y: 0 <= x < W and 0 <= y < H and MATERIALS.get(planned[y][x]) and planned[y][x] != "void"
         for x, y in walls:
             n, s_, e, w_ = floor(x, y - 1), floor(x, y + 1), floor(x + 1, y), floor(x - 1, y)
             piece = ("t" if s_ else "b" if n else "l" if e else "r" if w_ else
@@ -393,6 +395,8 @@ def compile_map(m, kit, out_dir):
                 label_zh=ZH.get(s.get("label", ""), ""))
     walls = building_walls(m, kit, T)
     for o in m["objects"]:
+        if o["kind"].startswith("marker."):   # a desk's seat (plans.lay_seats): a place, not a thing; nothing drawn
+            continue
         # a building whose front faces E or W (a siheyuan wing): its side view, if the kit has one; the side
         # sprite's door faces E, so a W-facing one is drawn mirrored
         faces = o.get("faces") or o.get("door")
@@ -422,6 +426,7 @@ def compile_map(m, kit, out_dir):
             **({"flip": True} if draw_kind == side and faces == "W" else {}),
             **({"plaque": o["plaque"]} if o.get("plaque") else {}),   # a name board over its gate (tk-world draws it)
             **({"told": o["told"]} if o.get("told") else {}),   # the loud town: shown once that person has the news (red hangings)
+            **({"when": o["when"]} if o.get("when") and o["kind"].startswith("prop.") else {}),   # shown once its condition holds (Misaeng's drinks: "mark:seat_president")
             **({"lift": o["lift"]} if o.get("lift") else {}),   # px to draw it higher than its foot (which sets its depth)
             **walls.get(id(o), {}))
     runs = []
@@ -459,7 +464,9 @@ def compile_map(m, kit, out_dir):
             **({"needs": json.dumps(s["needs"] if isinstance(s["needs"], list) else [s["needs"]])} if s.get("needs") else {}),
             **({"sight": json.dumps(s["sight"])} if s.get("sight") else {}),
             **({"via": json.dumps(s["via"])} if s.get("via") else {}),   # the goal marker's way round (tiles)
-            **{k: s[k] for k in ("delivers", "when", "fires") if s.get(k)},
+            **({"floors": json.dumps(s["floors"])} if s.get("floors") else {}),   # a lift's floors: [{label, to}] (tk-modern.js)
+            **{k: s[k] for k in ("delivers", "when", "fires", "takes", "opens", "gives", "gives_when") if s.get(k)},
+            **{k: json.dumps([place_step(l)[0] for l in s[k]], ensure_ascii=False) for k in ("give", "given") if s.get(k)},
             **{k: json.dumps([place_step(l)[0] for l in s[k]], ensure_ascii=False) for k in ("empty", "waiting", "deliver", "delivered", "call") if s.get(k)},
             **{k: json.dumps([place_step(l)[0] for l in s[k]], ensure_ascii=False) for k in ("intro", "outro") if s.get(k)})
     for n in m["npcs"]:
@@ -476,6 +483,12 @@ def compile_map(m, kit, out_dir):
             **({"speaker": json.dumps(n["speaker"], ensure_ascii=False)} if n.get("speaker") else {}),   # [English, Chinese], over the sprite's name
             # the loud town (tk-feats.js): news to pass on to the neighbours named; and a blocker who gives way when faced
             **({"gossip": json.dumps(n["gossip"])} if n.get("gossip") else {}),
+            # the trade loop (Misaeng, tk-modern.js): a seller, a passer-by to offer to, the rival seller
+            **({"shop": json.dumps(n["shop"])} if n.get("shop") else {}),
+            **({"buyer": json.dumps({**n["buyer"], **{k: [place_step(l, n["kind"])[0] for l in n["buyer"].get(k, [])] for k in ("yes", "no")}},
+                                    ensure_ascii=False)} if n.get("buyer") else {}),
+            **({"rival": json.dumps({**n["rival"], "say": [place_step(l, n["kind"])[0] for l in n["rival"].get("say", [])]},
+                                    ensure_ascii=False)} if n.get("rival") else {}),
             **({"yield": json.dumps({**n["yield"], **{k: [place_step(l, n["kind"])[0] for l in n["yield"].get(k, [])] for k in ("line", "caught")}},
                                     ensure_ascii=False)} if n.get("yield") else {}),
             **({"in": json.dumps([n["in"]] if isinstance(n["in"], str) else n["in"])} if n.get("in") else {}),
@@ -591,6 +604,12 @@ def render(tmj, kit, out_dir):
 
 
 def compile_world(n, kit_name, preview=False):
+    import build_tk
+    with build_tk.english(next((w for w in build_tk.WORLDS if w["n"] == n), None)):   # an English-only world's lines: no Chinese
+        compile_world_(n, kit_name, preview)
+
+
+def compile_world_(n, kit_name, preview=False):
     src = ROOT / f"data/tk_maps/w{n}"
     out = src / kit_name
     out.mkdir(parents=True, exist_ok=True)

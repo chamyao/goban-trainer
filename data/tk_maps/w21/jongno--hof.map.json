@@ -1,0 +1,185 @@
+{
+ "format": "tk-map/1",
+ "id": "jongno--hof",
+ "world": 21,
+ "name": "The hof",
+ "archetype": "interior",
+ "size": [
+  28,
+  16
+ ],
+ "seed": 1114,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   " ": "void",
+   "W": "wall",
+   "#": "wood"
+  },
+  "rows": [
+   "                            ",
+   " WWWWWWWWWWWWWWWWWWWWWWWWWW ",
+   " W########################W ",
+   " W########################W ",
+   " W########################W ",
+   " W########################W ",
+   " W########################W ",
+   " W########################W ",
+   " W########################W ",
+   " W########################W ",
+   " W########################W ",
+   " W########################W ",
+   " W########################W ",
+   " W########################W ",
+   " WWWWWWWWWWWWW##WWWWWWWWWWW ",
+   "                            "
+  ],
+  "walk": {
+   "void": false,
+   "wall": false,
+   "wood": true
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    14,
+    8
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     7,
+     7
+    ]
+   },
+   "tiles": 76
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.counter",
+   "x": 2,
+   "y": 2,
+   "w": 3,
+   "h": 1,
+   "id": "bar",
+   "label": "The bar"
+  },
+  {
+   "kind": "furn.table",
+   "x": 8,
+   "y": 6,
+   "w": 2,
+   "h": 1,
+   "id": "table-4-3"
+  },
+  {
+   "kind": "furn.table",
+   "x": 12,
+   "y": 6,
+   "w": 2,
+   "h": 1,
+   "id": "table-6-3"
+  },
+  {
+   "kind": "furn.table",
+   "x": 20,
+   "y": 6,
+   "w": 2,
+   "h": 1,
+   "id": "table-10-3"
+  },
+  {
+   "kind": "furn.table",
+   "x": 8,
+   "y": 10,
+   "w": 2,
+   "h": 1,
+   "id": "table-4-5"
+  },
+  {
+   "kind": "furn.table",
+   "x": 20,
+   "y": 10,
+   "w": 2,
+   "h": 1,
+   "id": "table-10-5"
+  },
+  {
+   "kind": "furn.fridge_case",
+   "x": 24,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "fridge",
+   "label": "Beer"
+  }
+ ],
+ "spots": [
+  {
+   "id": "m12",
+   "x": 14.5,
+   "y": 12.7,
+   "node": "21-m12",
+   "label": "The hof"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "hof-drunk",
+   "kind": "folk.salaryman",
+   "x": 22.5,
+   "y": 8.9,
+   "say": [],
+   "intro": [
+    "A salaryman at the next table, his tie round his head. “Students! Interns! Play me, the loser pays!”"
+   ],
+   "win": [
+    "“…Bah. Barman! Their table's on me.”"
+   ],
+   "done": [
+    "The salaryman is asleep on his arms."
+   ],
+   "until": "21-m12",
+   "when": "node:21-m10",
+   "view": 2,
+   "challenge": "hof-drunk"
+  }
+ ],
+ "exits": [
+  {
+   "to": "jongno",
+   "side": "S",
+   "x": 14,
+   "y": 14,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "jongno": [
+   14,
+   13
+  ],
+  "": [
+   14,
+   13
+  ]
+ },
+ "states": [
+  {
+   "id": "night",
+   "light": "night"
+  }
+ ],
+ "parent": "jongno",
+ "building": "hof",
+ "links": [
+  "jongno"
+ ]
+}

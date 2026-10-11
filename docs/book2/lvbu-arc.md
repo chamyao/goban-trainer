@@ -12,10 +12,6 @@ Diaochan's pleas and by his own boast 「吾有畫戟、赤兔馬，誰敢近我
 own officers binding him in his sleep. The novel's verdict is in its closing poem, 「戀妻不納陳宮諫」. The arc ends at White
 Gate Tower, where Chen Gong chooses death over Cao Cao, and Liu Bei asks Cao Cao: 「公不見丁建陽、董卓之事乎？」
 
-(Reframed twice after the user's notes: "emphasize if theres opportunity … not force", and "do not push the women thing
-too far … drawing out opportunities would be a nice to have". The women appear where the novel puts them: Lady Yan
-deciding the marriage and pleading at Xiapi, Diaochan's word, the daughter on Lü Bu's back.)
-
 **Why it's a good arc:**
 - **Stakes in a centre:** a warrior who can't be beaten and can't be trusted, losing everything to his own choices.
 - **It pays off both arcs already built:**
@@ -130,7 +126,7 @@ at a time, I dont want it rushing or getting ahead of itself ... and I approve a
 1. **Mechanic:** the flood and Red Hare's water crossing, as a map mechanic with no go tie-in. Carrying the daughter is a
    small one: a visual carry with a scripted turn-back. The reversed chase is **not used**, because the user put the
    chase on hold. Zhang Liao's ride is a ride with a board.
-2. **Playing as a woman:** Lady Yan leads x15, where the novel gives her the initiative (「布妻嚴氏聞之，出問曰：『君欲何往？』」). The user agreed: "im cool with this". On the balance: "it would be nice to have an opportunity to play as a woman again", but "do not push the women thing too far".
+2. **x15:** Lady Yan leads it, where the novel gives her the initiative (「布妻嚴氏聞之，出問曰：『君欲何往？』」). The user agreed: "im cool with this".
 3. **Prologue:** first cut (the walk-out past patrols was invented: in the text she does nothing, she is hidden and sent).
    **Restored without invention** at the user's word: "I think we should bring it back just dont invent", and "cant we have
    her show up as hid and wait actions". Played as Lady Yan, whose actions are the ones the text gives her: hiding and

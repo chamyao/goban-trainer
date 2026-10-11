@@ -1,0 +1,1800 @@
+{
+ "format": "tk-map/1",
+ "id": "jongno",
+ "world": 21,
+ "name": "Jongno",
+ "archetype": "city",
+ "size": [
+  112,
+  64
+ ],
+ "seed": 797,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "asphalt",
+   "b": "city",
+   "c": "crosswalk",
+   "d": "garden",
+   "f": "market",
+   "g": "path",
+   "h": "road",
+   "W": "wall"
+  },
+  "rows": [
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbWddddddddddddddddddddddddddddddddWbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbWdddddddddddddddddggdddddddddddddWbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbWdddddddddddddddddggdddddddddddddWbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbWdddddddddddddddddggdddddddddddddWbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbWdddddddddddddddddggdddddddddddddWbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbWdddddddddddddddddggdddddddddddddWbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbWdddddddddddddddddggdddddddddddddWbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbWdddddddddddddddddggdddddddddddddWbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbWdddddddddddddddddggdddddddddddddWbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbWdddddddddddddddddggdddddddddddddWbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbWdddddddddddddddddggdddddddddddddWbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbWdddddddddddddddddggdddddddddddddWbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbWdddddddddddddddddggdddddddddddddWbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbWdddddddddddddddddggdddddddddddddWbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhb",
+   "bbbbbbbWdddddddddddddddddggdddddddddddddWbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhb",
+   "bbbbbbbWdddddddddddddddddggdddddddddddddWbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbhhbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbWdddddddddddddddddggdddddddddddddWbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbhhbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbWdddddddddddddddddggdddddddddddddWbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbhhbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbWdddddddddddddddddggdddddddddddddWbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbhhbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbWdddddddddddddddddggdddddddddddddWbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbhhbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbWWWWWWWWWWWWWWWWWWggWWWWWWWWWWWWWWbbbbbbbhhhhhhhhhhhhhhhhhhhhbbbbbbbbbhhbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbggbbbbbbbbbbbbbbbbbbbbbhhhhhhhhhhhhhhhhhhhhbbbbbbbbbhhbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbggbbbbbbbbbbbbbbbbbbbbbhhhhhhhhhhhhhhhhhhhhbbbbbbbbbhhbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbhhhhhhhhhhhhhhhhhhhhbbbbbbbbbhhbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",
+   "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",
+   "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",
+   "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",
+   "aaaaaaaaaaaaaaaaaaaaccccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaccccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaccccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaccccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaccccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaccccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaccccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaccccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaccccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaccccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaccccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaccccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaccccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaccccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaccccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaccccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",
+   "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",
+   "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",
+   "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbhhhhbbbbbbbbbbbbbbbbbbbbffffffffhhhhffffffffffffbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbhhhhbbbbbbbbbbbbbbbbbbbbffffffffhhhhffffffffffffbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbhhhhbbbbbbbbbbbbbbbbbbbbffffffffhhhhffffffffffffbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbhhhhbbbbbbbbbbbbbbbbbbbbffffffffhhhhffffffffffffbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbhhhhbbbbbbbbbbbbbbbbbbbbffffffffhhhhffffffffffffbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbhhhhhhhhhhhhhhhbbbbbbbbbbbbbbbbbbbbffffffffhhhhffffffffffffbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbhhhhhhhhhhhhhhhbbbbbbbbbbbbbbbbbbbbffffffffhhhhffffffffffffbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbhhhhbbbbbbbbbbbbbbbbbbbbffffffffhhhhffffffffffffbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbhhhhbbbbbbbbbbbbbbbbbbbbffffffffhhhhffffffffffffbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbhhhhbbbbbbbbbbbbbbbbbbbbffffffffhhhhffffffffffffbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbhhhhbbbbbbbbbbbbbbbbbbbbffffffffhhhhffffffffffffbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbhhhhbbbbbbbbbbbbbbbbbbbbffffffffhhhhffffffffffffbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbhhhhbbbbbbbbbbbbbbbbbbbbffffffffhhhhffffffffffffbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbhhhhhhhhhhhbbbbbbbbbbbbbffffffffhhhhffffffffffffbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbhhhhhhhhhhhbbbbbbbbbbbbbffffffffhhhhffffffffffffbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbhhhhbbbbbbbbbbbbbbbbbbbbffffffffhhhhffffffffffffbbbbbbbbbbbb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbhhhhbbbbbbbbbbbbbbbbbbbbffffffffhhhhffffffffffffbbbbbbbbbbbb",
+   "bhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhb",
+   "bhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhb",
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbhhhhbbbbbbbbbbbbbbbbbbbbffffffffhhhhffffffffffffbbbbbbbbbbbb"
+  ],
+  "walk": {
+   "asphalt": false,
+   "city": true,
+   "crosswalk": true,
+   "garden": true,
+   "market": true,
+   "path": true,
+   "road": true,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "park-wall",
+   "kind": "wall",
+   "outline": [
+    1,
+    0,
+    10,
+    7
+   ],
+   "width": 1,
+   "gates": {
+    "park-gate": [
+     6,
+     6
+    ]
+   },
+   "tiles": 108
+  },
+  {
+   "id": "park-path",
+   "kind": "path",
+   "path": [
+    [
+     6,
+     6
+    ],
+    [
+     6,
+     1
+    ]
+   ],
+   "width": 2,
+   "tiles": 44
+  },
+  {
+   "id": "pave-n",
+   "kind": "road",
+   "path": [
+    [
+     0,
+     7
+    ],
+    [
+     27,
+     7
+    ]
+   ],
+   "width": 4,
+   "tiles": 448
+  },
+  {
+   "id": "pave-s",
+   "kind": "road",
+   "path": [
+    [
+     0,
+     10
+    ],
+    [
+     27,
+     10
+    ]
+   ],
+   "width": 4,
+   "tiles": 448
+  },
+  {
+   "id": "cross-w",
+   "kind": "crosswalk",
+   "path": [
+    [
+     5,
+     7
+    ],
+    [
+     5,
+     10
+    ]
+   ],
+   "width": 3,
+   "tiles": 64
+  },
+  {
+   "id": "cross-e",
+   "kind": "crosswalk",
+   "path": [
+    [
+     18,
+     7
+    ],
+    [
+     18,
+     10
+    ]
+   ],
+   "width": 3,
+   "tiles": 64
+  },
+  {
+   "id": "forecourt",
+   "kind": "road",
+   "path": [
+    [
+     12,
+     6
+    ],
+    [
+     16,
+     6
+    ]
+   ],
+   "width": 4,
+   "tiles": 80
+  },
+  {
+   "id": "office-lane",
+   "kind": "road",
+   "path": [
+    [
+     19,
+     4
+    ],
+    [
+     27,
+     4
+    ]
+   ],
+   "width": 2,
+   "tiles": 68
+  },
+  {
+   "id": "lane-link",
+   "kind": "road",
+   "path": [
+    [
+     19,
+     4
+    ],
+    [
+     19,
+     7
+    ]
+   ],
+   "width": 2,
+   "tiles": 28
+  },
+  {
+   "id": "pimatgol",
+   "kind": "road",
+   "path": [
+    [
+     13,
+     10
+    ],
+    [
+     13,
+     15
+    ]
+   ],
+   "width": 3,
+   "tiles": 96
+  },
+  {
+   "id": "hof-lane",
+   "kind": "road",
+   "path": [
+    [
+     10,
+     12
+    ],
+    [
+     13,
+     12
+    ]
+   ],
+   "width": 2,
+   "tiles": 28
+  },
+  {
+   "id": "pojang-lane",
+   "kind": "road",
+   "path": [
+    [
+     13,
+     14
+    ],
+    [
+     15,
+     14
+    ]
+   ],
+   "width": 2,
+   "tiles": 20
+  },
+  {
+   "id": "market-alley",
+   "kind": "road",
+   "path": [
+    [
+     21,
+     10
+    ],
+    [
+     21,
+     15
+    ]
+   ],
+   "width": 3,
+   "tiles": 96
+  },
+  {
+   "id": "back-lane",
+   "kind": "road",
+   "path": [
+    [
+     0,
+     15
+    ],
+    [
+     27,
+     15
+    ]
+   ],
+   "width": 2,
+   "tiles": 220
+  }
+ ],
+ "objects": [
+  {
+   "kind": "building.gatehouse",
+   "x": 25,
+   "y": 24,
+   "w": 2,
+   "h": 1,
+   "id": "park-gate",
+   "width": 2,
+   "wall": "park-wall",
+   "door": "S"
+  },
+  {
+   "kind": "building.pavilion",
+   "x": 10,
+   "y": 8,
+   "w": 3,
+   "h": 3,
+   "id": "pavilion",
+   "door": null,
+   "faces": "S",
+   "label": "Palgakjeong",
+   "blocks_sight": true
+  },
+  {
+   "kind": "landmark.pagoda",
+   "x": 34,
+   "y": 6,
+   "w": 3,
+   "h": 3,
+   "id": "pagoda",
+   "label": "The ten-storey pagoda"
+  },
+  {
+   "kind": "furniture.gotable",
+   "x": 13,
+   "y": 17,
+   "w": 1,
+   "h": 1,
+   "id": "gotable-1",
+   "label": "A stone go table"
+  },
+  {
+   "kind": "furniture.gotable",
+   "x": 33,
+   "y": 17,
+   "w": 1,
+   "h": 1,
+   "id": "gotable-2",
+   "label": "A stone go table"
+  },
+  {
+   "kind": "furniture.gotable",
+   "x": 17,
+   "y": 21,
+   "w": 1,
+   "h": 1,
+   "id": "gotable-3",
+   "label": "A stone go table"
+  },
+  {
+   "kind": "building.office_tower",
+   "x": 52,
+   "y": 18,
+   "w": 12,
+   "h": 5,
+   "id": "tower",
+   "door": "S",
+   "faces": "S",
+   "label": "One International",
+   "to": "One International",
+   "plaque": "ONE INTERNATIONAL",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.office_block",
+   "x": 81,
+   "y": 12,
+   "w": 6,
+   "h": 3,
+   "id": "client",
+   "door": "S",
+   "faces": "S",
+   "label": "The client's office",
+   "map": "client",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.office_block",
+   "x": 93,
+   "y": 12,
+   "w": 6,
+   "h": 3,
+   "id": "hq",
+   "door": "S",
+   "faces": "S",
+   "label": "Group headquarters",
+   "map": "hq",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.office_block",
+   "x": 101,
+   "y": 4,
+   "w": 6,
+   "h": 3,
+   "id": "office-3",
+   "door": null,
+   "faces": "S",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.storefront",
+   "x": 82,
+   "y": 25,
+   "w": 4,
+   "h": 2,
+   "id": "corner-shop",
+   "door": "S",
+   "faces": "S",
+   "label": "The corner shop",
+   "map": "corner-shop",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.storefront",
+   "x": 94,
+   "y": 25,
+   "w": 4,
+   "h": 2,
+   "id": "phone-shop",
+   "door": "S",
+   "faces": "S",
+   "label": "A phone shop",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.storefront",
+   "x": 102,
+   "y": 25,
+   "w": 4,
+   "h": 2,
+   "id": "cafe",
+   "door": "S",
+   "faces": "S",
+   "label": "A café",
+   "map": "cafe",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.subway_entrance",
+   "x": 6,
+   "y": 45,
+   "w": 3,
+   "h": 2,
+   "id": "station",
+   "door": "N",
+   "faces": "N",
+   "label": "Jongno 3-ga Station",
+   "to": "The subway",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.storefront",
+   "x": 18,
+   "y": 45,
+   "w": 4,
+   "h": 2,
+   "id": "shop-s1",
+   "door": "N",
+   "faces": "N",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.storefront",
+   "x": 30,
+   "y": 45,
+   "w": 4,
+   "h": 2,
+   "id": "shop-s2",
+   "door": "N",
+   "faces": "N",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.storefront",
+   "x": 42,
+   "y": 45,
+   "w": 4,
+   "h": 2,
+   "id": "hof",
+   "door": "S",
+   "faces": "S",
+   "label": "A hof",
+   "map": "hof",
+   "plaque": "호프",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.storefront",
+   "x": 62,
+   "y": 45,
+   "w": 4,
+   "h": 2,
+   "id": "shop-s4",
+   "door": "N",
+   "faces": "N",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.storefront",
+   "x": 102,
+   "y": 45,
+   "w": 4,
+   "h": 2,
+   "id": "shop-s5",
+   "door": "N",
+   "faces": "N",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.pojangmacha",
+   "x": 58,
+   "y": 53,
+   "w": 3,
+   "h": 2,
+   "id": "pojangmacha",
+   "door": "S",
+   "faces": "S",
+   "label": "A pojangmacha",
+   "map": "pojangmacha",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.storefront",
+   "x": 47,
+   "y": 53,
+   "w": 4,
+   "h": 2,
+   "id": "eatery",
+   "door": "E",
+   "faces": "E",
+   "label": "A soup house",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.office_block",
+   "x": 5,
+   "y": 56,
+   "w": 6,
+   "h": 3,
+   "id": "block-s1",
+   "door": "S",
+   "faces": "S",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.office_block",
+   "x": 17,
+   "y": 56,
+   "w": 6,
+   "h": 3,
+   "id": "sponsor",
+   "door": "S",
+   "faces": "S",
+   "label": "The sponsor's office building",
+   "map": "sponsor-office",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.villa",
+   "x": 29,
+   "y": 56,
+   "w": 5,
+   "h": 3,
+   "id": "block-s3",
+   "door": "S",
+   "faces": "S",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.office_block",
+   "x": 65,
+   "y": 56,
+   "w": 6,
+   "h": 3,
+   "id": "block-s4",
+   "door": "S",
+   "faces": "S",
+   "blocks_sight": true
+  },
+  {
+   "kind": "building.villa",
+   "x": 101,
+   "y": 56,
+   "w": 5,
+   "h": 3,
+   "id": "block-s5",
+   "door": "S",
+   "faces": "S",
+   "blocks_sight": true
+  },
+  {
+   "kind": "market.stalls",
+   "x": 77,
+   "y": 49,
+   "w": 6,
+   "h": 2,
+   "id": "stalls-1",
+   "label": "Market stalls"
+  },
+  {
+   "kind": "market.stalls",
+   "x": 89,
+   "y": 49,
+   "w": 6,
+   "h": 2,
+   "id": "stalls-2",
+   "label": "Market stalls"
+  },
+  {
+   "kind": "market.stalls",
+   "x": 77,
+   "y": 57,
+   "w": 6,
+   "h": 2,
+   "id": "stalls-3",
+   "label": "A dried-goods stall"
+  },
+  {
+   "kind": "market.stalls",
+   "x": 89,
+   "y": 57,
+   "w": 6,
+   "h": 2,
+   "id": "stalls-4"
+  },
+  {
+   "kind": "prop.car",
+   "x": 10,
+   "y": 33,
+   "w": 4,
+   "h": 2,
+   "id": "car-1"
+  },
+  {
+   "kind": "prop.car",
+   "x": 38,
+   "y": 37,
+   "w": 4,
+   "h": 2,
+   "id": "car-2"
+  },
+  {
+   "kind": "prop.car",
+   "x": 58,
+   "y": 33,
+   "w": 4,
+   "h": 2,
+   "id": "car-3"
+  },
+  {
+   "kind": "prop.car",
+   "x": 94,
+   "y": 37,
+   "w": 4,
+   "h": 2,
+   "id": "car-4"
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 3,
+   "y": 27,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 9,
+   "y": 27,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 15,
+   "y": 27,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 21,
+   "y": 27,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 27,
+   "y": 27,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 33,
+   "y": 27,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 39,
+   "y": 27,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 45,
+   "y": 27,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 69,
+   "y": 27,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 75,
+   "y": 27,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 81,
+   "y": 27,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 87,
+   "y": 27,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 93,
+   "y": 27,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 99,
+   "y": 27,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 111,
+   "y": 27,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 4,
+   "y": 44,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 10,
+   "y": 44,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 16,
+   "y": 44,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 22,
+   "y": 44,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 28,
+   "y": 44,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 34,
+   "y": 44,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 40,
+   "y": 44,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 46,
+   "y": 44,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 58,
+   "y": 44,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 70,
+   "y": 44,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 100,
+   "y": 44,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 106,
+   "y": 44,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 51,
+   "y": 45,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 51,
+   "y": 51,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 51,
+   "y": 57,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 51,
+   "y": 63,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 56,
+   "y": 46,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 56,
+   "y": 52,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 1,
+   "y": 63,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 4,
+   "y": 60,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 9,
+   "y": 63,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 12,
+   "y": 60,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 17,
+   "y": 63,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 25,
+   "y": 63,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 28,
+   "y": 60,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 33,
+   "y": 63,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 36,
+   "y": 60,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 41,
+   "y": 63,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 44,
+   "y": 60,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 49,
+   "y": 63,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 57,
+   "y": 63,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 60,
+   "y": 60,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 65,
+   "y": 63,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 73,
+   "y": 63,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 100,
+   "y": 60,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 105,
+   "y": 63,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 108,
+   "y": 60,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 80,
+   "y": 16,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 85,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 88,
+   "y": 16,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 93,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 101,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 104,
+   "y": 16,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 109,
+   "y": 19,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.ginkgo",
+   "x": 111,
+   "y": 17,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 24,
+   "y": 6,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 38,
+   "y": 14,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 36,
+   "y": 11,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 20,
+   "y": 18,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 30,
+   "y": 10,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "tree.pine",
+   "x": 35,
+   "y": 15,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "prop.bench",
+   "x": 15,
+   "y": 18,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "prop.bench",
+   "x": 30,
+   "y": 7,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "prop.bench",
+   "x": 32,
+   "y": 10,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 47,
+   "y": 25,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 49,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 55,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 61,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "lamp.post",
+   "x": 67,
+   "y": 23,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "kind": "prop.vending",
+   "x": 82,
+   "y": 27,
+   "w": 1,
+   "h": 1
+  }
+ ],
+ "spots": [
+  {
+   "id": "park-tables",
+   "x": 21.5,
+   "y": 17.7,
+   "node": "",
+   "label": "Tapgol Park's go tables",
+   "note": "the regulars play here"
+  },
+  {
+   "id": "forecourt",
+   "x": 65.5,
+   "y": 25.7,
+   "node": "",
+   "label": "The forecourt",
+   "note": "handoffs to the tower's forecourt land here"
+  },
+  {
+   "id": "m16",
+   "x": 61.5,
+   "y": 25.7,
+   "node": "21-m16",
+   "label": "The plaza"
+  },
+  {
+   "id": "m21b",
+   "x": 53.5,
+   "y": 53.7,
+   "node": "21-m21b",
+   "label": "Outside the hof"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "npc-1",
+   "kind": "folk.grandpa",
+   "x": 29.5,
+   "y": 13.9,
+   "say": [
+    "An old man by the pagoda. “Sixty years I've come here. The stones don't change. We do.”"
+   ]
+  },
+  {
+   "id": "npc-2",
+   "kind": "folk.salaryman",
+   "x": 37.5,
+   "y": 29.9,
+   "say": [
+    "A man in a suit, on his phone, walking fast. “No, the shipment, the shipment—”"
+   ]
+  },
+  {
+   "id": "npc-3",
+   "kind": "folk.officewoman",
+   "x": 65.5,
+   "y": 41.9,
+   "say": [
+    "An office worker with a coffee in each hand. “Lunch is an hour. It's never an hour.”"
+   ]
+  },
+  {
+   "id": "npc-4",
+   "kind": "folk.ajumma",
+   "x": 85.5,
+   "y": 57.9,
+   "say": [
+    "A stallholder. “Dried squid, dried filefish. Cheaper than the shops, and better.”"
+   ]
+  },
+  {
+   "id": "npc-5",
+   "kind": "folk.ajumma",
+   "x": 53.5,
+   "y": 57.9,
+   "say": [
+    "An old woman setting out plastic stools. “Come back after dark, young man. That's when we're open.”"
+   ]
+  },
+  {
+   "id": "npc-6",
+   "kind": "folk.salaryman",
+   "x": 66.5,
+   "y": 41.9,
+   "say": [
+    "A table of office workers outside a beer hall, ties loose, toasting nobody in particular."
+   ],
+   "in": [
+    "evening"
+   ]
+  },
+  {
+   "id": "npc-7",
+   "kind": "folk.salaryman",
+   "x": 49.5,
+   "y": 41.9,
+   "say": [
+    "A team dinner spills onto the pavement. “To the director's leadership!” The glasses go up. The director beams."
+   ],
+   "in": [
+    "evening"
+   ]
+  },
+  {
+   "id": "npc-8",
+   "kind": "folk.salaryman",
+   "x": 29.5,
+   "y": 29.9,
+   "say": [
+    "A man smoking by the kerb. “Our department head? Useless. Couldn't find his own—” His phone rings. “Yes, sir! Of course, sir. Right away, sir.”"
+   ],
+   "in": [
+    "evening"
+   ]
+  },
+  {
+   "id": "npc-9",
+   "kind": "folk.officewoman",
+   "x": 89.5,
+   "y": 29.9,
+   "say": [
+    "Two juniors share a cigarette. “Cogs. That's all we are. Ants, carrying crumbs home.”"
+   ],
+   "in": [
+    "evening"
+   ]
+  },
+  {
+   "id": "npc-10",
+   "kind": "folk.salaryman",
+   "x": 17.5,
+   "y": 41.9,
+   "say": [
+    "A drunk sways at the crossing and points at the sky. “See that plane? It's circling Seoul! For me! A genius, you know, one genius feeds thousands!”"
+   ],
+   "in": [
+    "evening"
+   ]
+  },
+  {
+   "id": "regular-1",
+   "kind": "folk.grandpa",
+   "x": 13.5,
+   "y": 21.9,
+   "say": [],
+   "intro": [
+    "An old man at the stone table, in the evening, waves you over without looking up. “You. You've got a player's hands. Sit.”"
+   ],
+   "win": [
+    "“Hm. Where did you learn that? Go on, then.”"
+   ],
+   "done": [
+    "The old man is playing someone else now."
+   ],
+   "until": "21-m5",
+   "when": "node:21-m4",
+   "view": 4,
+   "challenge": "regular-1"
+  },
+  {
+   "id": "regular-2",
+   "kind": "folk.grandpa",
+   "x": 33.5,
+   "y": 21.9,
+   "say": [],
+   "intro": [
+    "An old man in a flat cap sets out the stones. “A young man in a tie, at Tapgol? Sit down, it's free.”"
+   ],
+   "win": [
+    "“…Again tomorrow. Same time.”"
+   ],
+   "done": [
+    "The old man in the flat cap is asleep on the bench."
+   ],
+   "until": "21-m10",
+   "when": "node:21-m8",
+   "view": 4,
+   "challenge": "regular-2"
+  },
+  {
+   "id": "courier",
+   "kind": "folk.salaryman",
+   "x": 97.5,
+   "y": 17.9,
+   "say": [],
+   "intro": [
+    "A courier with a trolley of boxes parks it across the lane. “Fourteenth floor? Every one of them's the fourteenth floor. Sit a minute. One game while the lift comes.”"
+   ],
+   "win": [
+    "“Ha! I'll take the stairs, then.”"
+   ],
+   "done": [
+    "The courier's trolley rattles off down the lane."
+   ],
+   "until": "21-m16",
+   "when": "node:21-m14",
+   "view": 4,
+   "challenge": "courier"
+  },
+  {
+   "id": "hof-door",
+   "kind": "folk.salaryman",
+   "x": 45.5,
+   "y": 49.9,
+   "say": [],
+   "intro": [
+    "An intern from the other teams leans in the hof's doorway. “The parachute. The rest of us got in on paper. Beat me, and you can sit with us.”"
+   ],
+   "win": [
+    "“…Huh. Sit down, then. You're buying.”"
+   ],
+   "done": [
+    "The intern at the door has gone in to his table."
+   ],
+   "until": "21-m12",
+   "when": "node:21-m10",
+   "blocks": "hof",
+   "view": 4,
+   "label": "An intern at the hof's door",
+   "challenge": "hof-door",
+   "guard": [
+    44.5,
+    47.5
+   ]
+  }
+ ],
+ "exits": [
+  {
+   "to": "one-international",
+   "side": "N",
+   "x": 57.6,
+   "y": 22.85,
+   "w": 0.8,
+   "h": 0.75,
+   "door": true
+  },
+  {
+   "to": "jongno--client",
+   "side": "N",
+   "x": 83.6,
+   "y": 14.85,
+   "w": 0.8,
+   "h": 0.75,
+   "door": true
+  },
+  {
+   "to": "jongno--hq",
+   "side": "N",
+   "x": 95.6,
+   "y": 14.85,
+   "w": 0.8,
+   "h": 0.75,
+   "door": true
+  },
+  {
+   "to": "jongno--corner-shop",
+   "side": "N",
+   "x": 83.6,
+   "y": 26.85,
+   "w": 0.8,
+   "h": 0.75,
+   "door": true
+  },
+  {
+   "to": "jongno--cafe",
+   "side": "N",
+   "x": 103.6,
+   "y": 26.85,
+   "w": 0.8,
+   "h": 0.75,
+   "door": true
+  },
+  {
+   "to": "the-subway",
+   "side": "S",
+   "x": 7.1,
+   "y": 44.4,
+   "w": 0.8,
+   "h": 0.75,
+   "door": true
+  },
+  {
+   "to": "jongno--hof",
+   "side": "N",
+   "x": 43.6,
+   "y": 46.85,
+   "w": 0.8,
+   "h": 0.75,
+   "door": true
+  },
+  {
+   "to": "jongno--pojangmacha",
+   "side": "N",
+   "x": 59.1,
+   "y": 54.85,
+   "w": 0.8,
+   "h": 0.75,
+   "door": true
+  },
+  {
+   "to": "jongno--sponsor-office",
+   "side": "N",
+   "x": 19.6,
+   "y": 58.85,
+   "w": 0.8,
+   "h": 0.75,
+   "door": true
+  },
+  {
+   "to": "korea-baduk-association",
+   "side": "W",
+   "x": 0,
+   "y": 28,
+   "w": 1,
+   "h": 4
+  }
+ ],
+ "entries": {
+  "one-international": [
+   58,
+   23
+  ],
+  "jongno--client": [
+   84,
+   15
+  ],
+  "jongno--hq": [
+   96,
+   15
+  ],
+  "jongno--corner-shop": [
+   84,
+   27
+  ],
+  "jongno--cafe": [
+   104,
+   27
+  ],
+  "the-subway": [
+   7,
+   43
+  ],
+  "jongno--hof": [
+   44,
+   47
+  ],
+  "jongno--pojangmacha": [
+   59,
+   55
+  ],
+  "jongno--sponsor-office": [
+   20,
+   59
+  ],
+  "korea-baduk-association": [
+   5,
+   29
+  ],
+  "": [
+   57,
+   29
+  ],
+  "susaek-dong": [
+   9,
+   41
+  ]
+ },
+ "states": [
+  {
+   "id": "day",
+   "until": "node:21-m4",
+   "light": "day"
+  },
+  {
+   "id": "evening",
+   "when": "node:21-m4",
+   "until": "node:21-m5",
+   "light": "dusk"
+  },
+  {
+   "id": "day2",
+   "when": "node:21-m5",
+   "until": "node:21-m10",
+   "light": "day"
+  },
+  {
+   "id": "night",
+   "when": "node:21-m10",
+   "until": "node:21-m13",
+   "light": "night"
+  },
+  {
+   "id": "day3",
+   "when": "node:21-m13",
+   "light": "day"
+  },
+  {
+   "id": "drinks",
+   "when": "node:21-m21",
+   "until": "node:21-m21b",
+   "light": "night"
+  }
+ ],
+ "ways": {
+  "nodes": [
+   [
+    26.0,
+    26.0
+   ],
+   [
+    26.0,
+    6.0
+   ],
+   [
+    2.0,
+    30.0
+   ],
+   [
+    78.0,
+    30.0
+   ],
+   [
+    110.0,
+    30.0
+   ],
+   [
+    2.0,
+    42.0
+   ],
+   [
+    54.0,
+    42.0
+   ],
+   [
+    86.0,
+    42.0
+   ],
+   [
+    110.0,
+    42.0
+   ],
+   [
+    50.0,
+    26.0
+   ],
+   [
+    66.0,
+    26.0
+   ],
+   [
+    78.0,
+    18.0
+   ],
+   [
+    110.0,
+    18.0
+   ],
+   [
+    54.0,
+    50.0
+   ],
+   [
+    54.0,
+    58.0
+   ],
+   [
+    54.0,
+    62.0
+   ],
+   [
+    42.0,
+    50.0
+   ],
+   [
+    62.0,
+    58.0
+   ],
+   [
+    86.0,
+    62.0
+   ],
+   [
+    2.0,
+    62.0
+   ],
+   [
+    110.0,
+    62.0
+   ]
+  ],
+  "edges": [
+   [
+    0,
+    1
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    3,
+    11
+   ],
+   [
+    5,
+    6
+   ],
+   [
+    6,
+    7
+   ],
+   [
+    6,
+    13
+   ],
+   [
+    7,
+    8
+   ],
+   [
+    7,
+    18
+   ],
+   [
+    9,
+    10
+   ],
+   [
+    11,
+    12
+   ],
+   [
+    13,
+    14
+   ],
+   [
+    13,
+    16
+   ],
+   [
+    14,
+    15
+   ],
+   [
+    14,
+    17
+   ],
+   [
+    15,
+    18
+   ],
+   [
+    15,
+    19
+   ],
+   [
+    18,
+    20
+   ]
+  ]
+ },
+ "links": [
+  "jongno--cafe",
+  "jongno--client",
+  "jongno--corner-shop",
+  "jongno--hof",
+  "jongno--hq",
+  "jongno--pojangmacha",
+  "jongno--sponsor-office",
+  "korea-baduk-association",
+  "one-international",
+  "the-subway"
+ ]
+}
