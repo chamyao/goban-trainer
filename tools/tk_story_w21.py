@@ -523,7 +523,7 @@ def _nodes():
         node("m14", 146, 177, "m14", room="sales3", move=6, record=7,
              choices={7: [['dj', 0.08], ['ep', 0.11], ['cj', 0.14], ['qk', 0.26], ['do', 0.29], ['cm', 0.31], ['bp', 0.51], ['co', 1.05], ['qn', 3.87]]},
              gate=[{"needs": ["mark:errand_bl", "mark:errand_copy", "mark:errand_floor"], "else": "m14_wait",
-                    "objective": T("Work from every side on Sales 3's floor: the forwarder call about the B/L at the team phone, Kim's copies at the copier, and mop the floor."),
+                    "objective": T("Work from every side on Sales 3's floor: the forwarder call about the shipping papers (the B/L) at the team phone, Kim's copies at the copier, and mop the floor."),
                     "at": "One International"}],
              dilemma=D(
                  "ms_jang", "Cho approaches early. Which move?",
