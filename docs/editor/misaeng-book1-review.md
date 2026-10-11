@@ -564,3 +564,24 @@ Editor's side.** Two optional nits remain:
 - m22b still has Jang grinning twice (at "checkmate", then after the apology). Change the second to "smiles to himself".
 - m14's on-screen objective still says only "the B/L". Jang's line and the call explain it ("shipping papers", "bill of
   lading"), so this is fine; the objective could use "the shipping papers (B/L)" for consistency.
+
+## Post-clearance note: the m17/m18 asides (raised by the user)
+
+**Problem:** in both beats, Ahn and the glasses intern appear out of nowhere next to Jang, with no narration and no
+change of place.
+- **m17:** Han leaves the roof at night, and the two of them spawn beside Jang and gossip about Han. A stranger can't
+  tell whether they were on the roof all along, overheard the offer, or whether this is a different time and place.
+- **m18:** the same pair spawn at Jang's desk. The glasses intern asks "Picked your partner yet? Not Jang, surely." From
+  the wording this seems to be asked of Han, but Han isn't there. Then Ahn says "Maybe Jang's a big dud" while
+  standing in front of Jang. Straight after, Jang speaks to Han ("You said I could build it my way") with no call set
+  up. That makes three spaces in six lines and no cue for any of them (13, 11). I missed this in rounds 1–3 because
+  the script reads as plain dialogue; the staging only shows up in the spawns.
+
+**Fix:**
+- **m17:** move the gossip to the next morning with one line: "Next morning, word has got round the interns." Spawn
+  the pair at their own desks, away from Jang, so he overhears it.
+- **m18:**
+  - Make the exchange a cut-away with Han present, for example: "Across the floor, the glasses intern corners Han."
+    The glasses intern asks Han; Ahn answers about Jang, out of Jang's earshot.
+  - Or cut the exchange. It only repeats m17's "dud" thread.
+  - Then add "He calls Han." before "You said I could build it my way."
