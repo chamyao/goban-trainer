@@ -770,7 +770,7 @@ const TKPaint = {
 const TK = {
   data: null,
   async load() {
-    if (!this.data) { this.data = await (await fetch("data/tk.json?v=113")).json(); this.migrate(); }
+    if (!this.data) { this.data = await (await fetch("data/tk.json?v=114")).json(); this.migrate(); }
     return this.data;
   },
   // A book whose beats were renumbered after players began it: their cleared beats moved to the new keys, once per
@@ -1356,6 +1356,7 @@ async function viewTK(worldN) {
     voiceBtn.setAttribute("aria-pressed", String(TKVoice.on));
   };
   voiceLabel();
+  voiceBtn.hidden = !!w.voice_off;   // a book with its voice-over switched off (Misaeng, for now): nothing to turn on
   voiceBtn.onclick = () => { TKVoice.lang = TKVoice.enOnly && !TKVoice.native ? (TKVoice.on ? "off" : "zh") : { zh: "en", en: "off", off: "zh" }[TKVoice.lang]; voiceLabel(); };
   root.append(h("div", { class: "tk-head" }, [
     h("div", {}, [h("h2", {}, [h("span", { class: "zh" }, native), " ", title]),

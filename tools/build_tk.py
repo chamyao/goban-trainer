@@ -465,7 +465,8 @@ def main():
     data = {"id": "tk", "title": "Romance of the Three Kingdoms", "native": "三国演义", "worlds": worlds,
             "voices": sorted(k for k in lines if k in have),
             "voices_en": sorted(k for k in lines if k in have_en),
-            "voices_ko": sorted(k for k in KO_LINES if (VOICE_DIR / "ko" / f"{k}.mp3").exists())}
+            "voices_ko": [] if all(w.get("voice_off") for w in WORLDS if w.get("voice") == "ko")
+                          else sorted(k for k in KO_LINES if (VOICE_DIR / "ko" / f"{k}.mp3").exists())}
     (ROOT / "data" / "tk.json").write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")))
     if VETTED:
         print(f"KataGo vetting: {len(unvetted)} pooled problems not vetted yet"
