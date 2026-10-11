@@ -474,7 +474,6 @@ def _scenes():
             S("ms_stevehan", "Don't touch me!"),
             N("That night his mother asks how work was. Fine, he says, and for once it's true."),
             N("Two weeks to the PT. There will be dead stones in his own work too, and he'll have to give them up. He still isn't alive on this board, but for the first time he can see how a group like his might live."),
-            ["victory"],
         ]},
     }
 
