@@ -556,3 +556,11 @@ father's death, order, the rescue, "both live") are all addressed. What's left i
 closing now ties the dead-stone lesson to his own PT without needing a new scene. R2-1 to R2-9 above still apply
 unchanged. One small new note: m22b now has Jang grinning twice (at "checkmate" and after the apology). Change the
 second to "Jang smiles to himself" or similar.
+
+## Round 3 (8ed7ef2): cleared
+
+I checked all nine round-2 fixes in the regenerated script, and all of them work. **Book 1 is cleared from the
+Editor's side.** Two optional nits remain:
+- m22b still has Jang grinning twice (at "checkmate", then after the apology). Change the second to "smiles to himself".
+- m14's on-screen objective still says only "the B/L". Jang's line and the call explain it ("shipping papers", "bill of
+  lading"), so this is fine; the objective could use "the shipping papers (B/L)" for consistency.
