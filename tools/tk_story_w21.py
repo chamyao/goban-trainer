@@ -940,4 +940,5 @@ KO21 = {
     "Half a point short. It's over.": '반집이 모자란다. 끝났다.',
     'Your old sponsor asked after you. The man who paid for your baduk. Go and see him.': '예전 후원자분이 네 안부를 물으셨다. 네 바둑 뒷바라지해 주신 분. 가서 뵙고 와.',
     "It started when his uncle brought a set of stones round to the flat. The boy nearly swallowed a few. It didn't spoil the fun.": '시작은 삼촌이 집에 들고 온 바둑돌이었다. 꼬마는 몇 개를 삼킬 뻔했다. 그래도 재미는 줄지 않았다.',
+    'Home. Your uncle has brought something.': '집. 삼촌이 뭔가를 가져오셨다.',
 }
