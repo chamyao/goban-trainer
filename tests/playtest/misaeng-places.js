@@ -148,6 +148,10 @@ async function street(b) {
 
 async function requisition(b) {
   const p = await open(b, '21-m10', 'one-international--general-affairs', ['requisition']);
+  // the ring that marks the handoff is at the clerk's feet, not on the floor beside her (apo110: "fetched from a circle")
+  check(await p.evaluate(() => { const w = window.__w, s = w.spots['ga-counter'], n = w.npcs.find(n => n.id === 'ga-clerk');
+    w.markActors(); const m = w.actMarks && w.actMarks.get(s);
+    return !!m && Math.hypot(s.x - n.spr.x, s.y - n.spr.y) < 6; }), 'm10: the gold ring for the requisition is on the clerk');
   check(await to(p, 'ga-clerk'), 'm10: the clerk stands at General Affairs\' counter');
   const s = await st(p);
   check(s.marks.includes('requisition') && !s.items.includes('requisition'), 'm10: the clerk takes Kim\'s requisition from you, by hand');

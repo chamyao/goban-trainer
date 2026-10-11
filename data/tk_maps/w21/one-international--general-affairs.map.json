@@ -154,10 +154,10 @@
   },
   {
    "id": "ga-counter",
-   "x": 12.5,
-   "y": 8.7,
+   "x": 11.5,
+   "y": 6.7,
    "node": "",
-   "label": "General Affairs' counter",
+   "label": "Hand Kim's requisition to the clerk",
    "needs": [
     "item:requisition"
    ],
@@ -172,14 +172,15 @@
    "delivered": [
     "General Affairs has the requisition."
    ],
-   "takes": true
+   "takes": true,
+   "to": "ga-clerk"
   }
  ],
  "npcs": [
   {
    "id": "ga-clerk",
    "kind": "folk.officewoman",
-   "x": 10.5,
+   "x": 11.5,
    "y": 6.9,
    "say": [
     "A clerk at General Affairs' counter, sorting forms into trays."

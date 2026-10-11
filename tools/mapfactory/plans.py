@@ -522,7 +522,7 @@ class MapBuilder:
                       "needs", "delivers", "when", "empty", "waiting", "deliver", "delivered", "call",   # a place that delivers a mark
                       "takes", "opens", "floors", "use",   # Misaeng (tk-modern.js): delivering takes the thing; the audit board; a lift and its floors
                       "gives", "gives_when", "give", "given",   # a thing that gives an item when searched (the bins, a table)
-                      "set_down"):   # a delivery set down at a place (a seat), not handed to a person
+                      "set_down", "to"):   # set down at a place (a seat), not handed to a person; or handed to "to" (an npc id)
                 if s.get(k):
                     spot[k] = s[k]
             self.spots.append(spot)
@@ -1298,7 +1298,15 @@ def build_world(n, world, plans, tables, zh=None, prefix=None):
             links = sorted(set(m["links"]) or {b2 for a, b2 in edges if a == mid_})
             places.append({"id": mid_, "name": m["name"], "zh": zh.get(m["name"], ""), "archetype": m["archetype"],
                            "map": f"{mid_}.map.json", "links": links})
-    return {k: v[0] for k, v in maps.items()}, places, quests
+    out = {k: v[0] for k, v in maps.items()}
+    # a handoff names its taker ("to": an npc id): the spot stands at their feet, so the ring that marks it is on the
+    # person, not on the floor beside them (apo110: "fetched from a circle with nothing to mark the destination")
+    for m in out.values():
+        for s in m["spots"]:
+            n = s.get("to") and next((n for n in m["npcs"] if n.get("id") == s["to"]), None)
+            if n:
+                s["x"], s["y"] = n["x"], n["y"] - .2
+    return out, places, quests
 
 
 def verify(maps):
