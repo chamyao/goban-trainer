@@ -410,6 +410,12 @@ and the Editor work directly, without routing through the user:
 - The Editor reports problems with fixes. Plot answers each (adopt, adapt, or decline with a reason, often the source's
   plot or the user's rules), revises, and sends it back. The Editor's questions about the intended plot are Plot's to
   answer from the source.
+- **Every story change goes to the Editor, playtest fixes included**, before or as it ships: new or changed lines,
+  moved or cut beats, handoffs, gates, boards. Staging-only changes go too, briefly. ("if there are story changes you
+  should always meet with editor", the user.)
+- **Send the Editor the raw material only**: what changed (commits, lines, beats) and where to read it. No risks to
+  look at, no review points, no questions steering its read ("you shouldnt flag risks, and review points to the editor
+  in future, just give it your raw", the user). The Editor decides what to look at.
 - Plot brings the user the outcome and anything that needs the user's call, not every exchange.
 - The Editor reads the raw scene steps too (spawns, removes, stills, maps), since staging problems never show in the md:
   a line saying "out of earshot" or "on the roof" must match where the beat actually plays.

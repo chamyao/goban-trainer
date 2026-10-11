@@ -95,8 +95,8 @@ def _scenes():
             N("He failed to turn pro."),
             N("Only now does he see his father's wrinkles, and how dull his mother's eyes have gone."),
             N("The day he leaves is an ordinary day. It feels as if he'll be back tomorrow, losing to younger kids again. He hasn't changed; everyone else has, and the colour has drained out of the world."),
-            N("His friends from the trainees' room turned pro. They ask if he's really quitting, and he has no answer."),
-            N("It wasn't talent, or luck, or all those half-point losses, or playing between part-time jobs. Those reasons would hurt too much. So he tells himself he just didn't try hard enough."),
+            N("His old friends ask if he's really quitting, and he has no answer."),
+            N("It wasn't talent, or luck, or all those half-point losses. Those reasons would hurt too much. So he tells himself he just didn't try hard enough."),
             ["still", "ms_lastgame", "slow zoom out"],
             N("He walks away dropping stones from his pocket, a few at a time."),
             N("Because he didn't try hard enough, he had to come out into the world. Because he didn't try hard enough, he was thrown away."),
@@ -219,7 +219,7 @@ def _scenes():
             S("ms_ahn", "And you've got filing due tomorrow, but you're sitting here? Make your own stones safe before you attack."),
             ["problem"],   # Jang: secure your own group first
             N("It's an old baduk proverb that even people who've never played use. He's lived by it his whole life, and he had to hear it from someone else. He runs back to the office."),
-            N("Ahn watches him go, then heads back to the office herself."),
+            N("A whole cabinet, alone, by morning. Ahn sighs and follows him."),
             ["remove", "ahn"], ["remove", "gl"],
             ["party", ["ms_ahn"]],   # the lead passes to Ahn: she heads back to the office (her stretch, m13)
         ]},
@@ -227,7 +227,8 @@ def _scenes():
         # M13 · 6수 (W). Ahn leads: her review (the apology cut on playtest); both schemes live (상생). The dream of the stones.
         "m13": {"title": T("Both Live"), "kind": "main", "steps": [
             ["spawn", "jg", "ms_jang", "m13", "@chair-jang"],
-            ["spawn", "oh", "ms_oh", "m13", "@chair-oh"], ["spawn", "kd", "ms_kimds", "m13", "@chair-kim"],
+            ["spawn", "kd", "ms_kimds", "m13", "@chair-kim"],
+            N("The office is dark but for two lamps. Kim is still at his desk, working late."),
             N("On Jang's desk are two ways of filing the same papers: Kim's, which the whole team knows, and Jang's new one, which is better but only he understands. "
               "Kim wants his own back. One of them, it seems, has to go."),
             S("ms_ahn", "His system makes sense. The trouble is, everyone on staff already knows the old one."),
@@ -236,7 +237,7 @@ def _scenes():
             S("ms_ahn", "Keep Mr. Kim's order for the executives' file, but use Jang's cross-index from the planning stage. Then the departments could actually line up."),
             S("ms_kimds", "...Good idea."),
             N("She kept her own group alive, and his too. Both live."),
-            ["remove", "jg"], ["remove", "oh"], ["remove", "kd"],
+            ["remove", "jg"], ["remove", "kd"],
             ["still", "ms_25stones", "slow zoom out"],
             N("That night he dreams of a board: rows of white stones, and one black."),
             ["party", ["ms_jang"], {"to": {"place": "Susaek-dong", "spot": "home"}}],   # a cut: the next dawn; the commute
@@ -341,6 +342,19 @@ def _scenes():
             N("In Korea, age decides who may talk down to whom. Han is older, and has talked down to him from the start. Now Jang drops the polite forms."),
             S("ms_jang", "And how old are you, anyway?"),
             S("ms_han", "This little runt..."),
+            ["spawn", "kim", "ms_kimds", "m19", "@chair-kim"],
+            N("Back at his desk, Kim has a rule for him."),
+            S("ms_kimds", "Anything with figures on it goes in the shredder. Not one of our papers should ever turn up outside this team."),
+            N("He decides to shred the waybill later with the next batch, and leaves it on his desk: Sales Team 3, DH-14."),
+            ["spawn", "sh", "ms_kimsh", "m19", 16, 8],
+            S("ms_kimsh", "Can I borrow your glue? Our supply cabinet's locked and nobody will give me the key."),
+            S("ms_jang", "Sure, it's on my desk."),
+            N("Kim Seok-ho, an intern on another team, glues his report together at Jang's desk, right on top of the waybill, and hurries off."),
+            ["move", "sh", "m19", "@chair-spare"],
+            ["remove", "sh"],
+            ["still", "ms_waybill", "slow zoom in"],
+            N("He'll shred it later. First he sits down in the empty meeting room, just for a minute."),
+            ["remove", "kim"],
         ]},
 
         # M19c · 12수 (W). Asleep in a meeting room; Oh and Kim size up the pair; the heroes fade; Ahn: the eye of the storm; the dinner.
@@ -367,15 +381,6 @@ def _scenes():
         "m20": {"title": T("The Waybill"), "kind": "main", "steps": [
             ["spawn", "kd", "ms_kimds", "m20", "@chair-kim"], ["spawn", "oh", "ms_oh", "m20", "@chair-oh"],
             N("The next morning. Three weeks to the PT. The interns are graded on everything, and one careless moment can sink any of them."),
-            S("ms_kimds", "Anything with figures on it goes in the shredder. Not one of our papers should ever turn up outside this team."),
-            N("He decides to shred the waybill later with the next batch, and leaves it on his desk: Sales Team 3, DH-14."),
-            ["spawn", "sh", "ms_kimsh", "m20", 16, 8],
-            S("ms_kimsh", "Can I borrow your glue? Our supply cabinet's locked and nobody will give me the key."),
-            S("ms_jang", "Sure, it's on my desk."),
-            N("Kim Seok-ho, an intern on another team, glues his report together at Jang's desk, right on top of the waybill, and hurries off."),
-            ["move", "sh", "m20", "@chair-spare"],
-            ["remove", "sh"],
-            ["still", "ms_waybill", "slow zoom in"],
             N("Jang hums as he feeds the shredder. Down in the lobby, a yellow sheet slides off the security desk onto the floor, and a passing director taps it with his shoe."),
             ["spawn", "dir", "ms_director", "m20", 24, 16],
             S("ms_oh", "Director! Is this about a team dinner?"),
@@ -391,29 +396,27 @@ def _scenes():
             N("Every intern turns to look at him. Three weeks before the PT, it goes on his record."),
             ["emote", "sh", "sweat"],
             N("Kim Seok-ho stares at the floor."),
+            N("Oh's eyes go from Jang to Kim Seok-ho, who won't look up."),
             ["remove", "ahn"], ["remove", "gl"], ["remove", "sh"], ["remove", "kd"],
-            N("Back at his desk, Oh turns the waybill over. Glued to the back is a torn scrap of someone's weekly report, with a name on it: Kim Seok-ho."),
-            ["gain", "waybill_scrap"],
-            ["party", ["ms_oh"], {"to": "m21"}],   # the lead passes to Oh: he begins at his own desk, m21's spot on his chair (his stretch, m21-m21b)
+            N("Oh keeps the waybill. Jang owned up, but something about it doesn't sit right."),
+            ["party", ["ms_oh"], {"to": "m21"}],   # the lead passes to Oh at his own desk; he finds the scrap himself at Jang's desk (a "gives" spot), then m21
         ]},
 
-        # M21 · 14수 (W). Oh leads. Go brags; the cabinet key. Oh links it on the clue board (the comic: in his head).
+        # M21 · 14수 (W). Oh leads. Found by the player at Jang's desk: the scrap glued to the waybill. Then Go brags; the cabinet key; Oh puts it together.
         "m21": {"title": T("A Secret"), "kind": "main", "steps": [
             ["spawn", "go", "ms_go", "m21", 16, 16],
-            N("Someone else's scrap, glued to Jang's waybill. Oh means to find out how it got there."),
+            N("Oh means to find out how it got there."),
             N("Applause from across the floor. Go, a section head on Sales Team 1, comes over pumping his fists."),
             S("ms_go", "My baby intern, Kim Seok-ho! He pulls all-nighters with us, he's newly married, he's the eldest son of an eldest son, and we've just landed the deal."),
             S("ms_oh", "He comes over to our team a lot, to borrow supplies."),
             S("ms_go", "Ha! That's my fault. The supply cabinet key's on my key ring."),
-            ["gain", "cabinet_key"],
             ["remove", "go"],
             ["still", "ms_ohdesk", "slow zoom in"],
             N("Oh looks at the waybill in his hands: a locked cabinet, a borrowed glue stick, and a scrap with a name on it."),
-            ["gain", "borrowed_glue"],
             ["party", ["ms_oh"], {"to": {"place": "Jongno", "from": "One International"}}],
         ]},
-        "m21b_wait": {"title": T("Oh's Desk"), "kind": "main", "steps": [
-            S("ms_oh", "Not yet. The scrap, the glue, the key... I need to put it together first."),
+        "m21_wait": {"title": T("The Waybill"), "kind": "main", "steps": [
+            S("ms_oh", "The waybill came off Jang's desk. Let's have a look at that desk first."),
         ]},
 
         # M21b · 14수 (W; "우리 애", D). Drinks; "a secret"; Go's team in the street; Oh defends Jang; Seok-ho's sorry; the homecoming.
@@ -574,11 +577,11 @@ def _nodes():
             "Shred it later, I said. If I keep quiet, they grill every intern. If I speak, it goes on my record, three weeks out.",
             "He knows what he has to do.",
             "Again.", pool="tesuji sacrifice")),
-        node("m21", 242, 129, "m21", room="sales3", move=14, board=False),
-        node("m21b", 254, 123, "m21b", place="Jongno", move=14, board=False,
-             gate=[{"needs": ["mark:audit"], "else": "m21b_wait",
-                    "objective": T("Work out how the waybill got out of Sales 3: open Oh's desk from the bag and link the clues. Then meet Kim and Jang on Jongno."),
-                    "at": "Jongno"}]),
+        node("m21", 242, 129, "m21", room="sales3", move=14, board=False,
+             gate=[{"needs": ["item:waybill_scrap"], "else": "m21_wait",
+                    "objective": T("The waybill came from Jang's desk. Go and look at it, then back to your desk."),
+                    "at": "One International"}]),
+        node("m21b", 254, 123, "m21b", place="Jongno", move=14, board=False),
         node("m22", 266, 117, "m22", room="sales3", move=14, record=15, choices={15: [['cf', 0.05], ['gc', 0.1], ['ic', 0.26], ['fd', 0.34], ['ed', 0.57], ['dm', 0.78], ['dj', 0.95], ['cj', 0.95], ['dl', 1.1], ['ec', 1.51]]}, dilemma=D(
             "ms_jang", "Cho prepared for this game. Which move?",
             "Everyone plays their own baduk. Whoever prepared better comes out happier.",
@@ -603,24 +606,10 @@ _ITEMS = {
     "copy": {"name": "Kim's copies", "kind": "key"},
     "mop": {"name": "A mop and bucket", "kind": "key"},
     "phone_text": {"name": "Han's text", "kind": "key", "text": "Again!"},
-    # Oh's desk (the audit board, m21): the clues
-    "waybill_scrap": {"name": "Waybill scrap", "kind": "clue", "text": "Glued to the waybill: a torn scrap of a weekly report. Internship. Kim Seok-ho."},
-    "borrowed_glue": {"name": "The borrowed glue", "kind": "clue", "text": "Go's intern keeps borrowing Sales 3's supplies. Jang's glue stick was on Jang's desk, next to the waybill."},
-    "cabinet_key": {"name": "Go's key ring", "kind": "clue", "text": "Sales Team 1's supply cabinet key is on Go's key ring. His intern can't get at the glue."},
+    # found by Oh at Jang's desk (a "gives" spot, Places), m21's gate
+    "waybill_scrap": {"name": "Waybill scrap", "kind": "key", "text": "Glued to the back of the waybill: a torn scrap of a weekly report. Internship. Kim Seok-ho."},
 }
 
-# Oh's deduction in 14수 (the comic plays it in his head; here the player links it on the audit board).
-_AUDIT = {
-    "title": "Oh's desk",
-    "clues": ["waybill_scrap", "borrowed_glue", "cabinet_key"],
-    "links": [
-        {"q": "Why does Go's intern keep borrowing our supplies?", "pair": ["cabinet_key", "borrowed_glue"],
-         "a": "Go walked off with the cabinet key. The kid has to beg for glue."},
-        {"q": "How did a Sales 3 waybill get down to the lobby?", "pair": ["borrowed_glue", "waybill_scrap"],
-         "a": "He glued his report at Jang's desk, on top of the waybill. It went with him."},
-    ],
-    "done": "audit",
-}
 
 _OPENING = [
     ["scroll", T("The First Move"), [
@@ -653,7 +642,6 @@ def _world():
         "party": ["ms_jang_child"],
         "lead_portrait": True,
         "items": _ITEMS,
-        "audit": _AUDIT,
         "nodes": _nodes(),
         "edges": _EDGES,
         "scenes": _scenes(),
@@ -792,6 +780,11 @@ KO21 = {
     '“…Oh. Of course. Thank you. This is my stop too.”': '"…아. 그렇구나. 고마워요. 저도 여기서 내려요."',
     'The man with the pocket board is on the next problem.': '포켓 바둑판을 든 남자는 다음 문제를 풀고 있다.',
     "Kim Dong-sik doesn't look up from his screen.": '김동식 대리는 모니터에서 눈을 떼지 않는다.',
+    'Kim Dong-sik types with two fingers, fast. “Busy, Jang. Later.”': '김동식 대리는 독수리 타법으로, 빠르게 친다. “바빠, 장그래. 나중에.”',
+    'The deputy is on the phone to a supplier, voice low and patient.': '차장은 거래처와 통화 중이다. 낮고 차분한 목소리.',
+    'Section head Oh reads a contract, red pen in hand. He doesn\'t look up.': '오 과장은 빨간 펜을 들고 계약서를 읽는다. 고개도 들지 않는다.',
+    'The deputy': '차장',
+    'Oh Sang-sik': '오상식',
     'Section head Oh is on the phone, and holds up one finger.': '오 과장은 통화 중이다. 손가락 하나를 들어 보인다.',
     'The deputy turns his empty cup round and round.': '차장이 빈 컵을 빙글빙글 돌린다.',
     # Places' map lines for the rewritten Book 1 (claude/places-misaeng bc9b524)
@@ -930,7 +923,11 @@ KO21 = {
     "If there's a light I'm meant to keep burning, I'll take responsibility for it. But is there a light allowed for someone like me?": '내가 지켜야 할 불빛이 있다면 책임지겠다. 하지만 나 같은 사람에게도 허락된 불빛이 있을까.',
     "It doesn't sink in for Go, but it does for Kim Seok-ho.": '고 과장은 알아듣지 못하지만, 김석호는 알아듣는다.',
     "Where are you? The buyer's waiting, and if he walks out, we're both finished. I'm sending today's new hire to buy time until you get there. We're in no position to be picky.": '어디야? 바이어가 기다리고 있어. 그냥 가 버리면 우리 둘 다 끝이야. 네가 올 때까지 시간 벌게 오늘 들어온 신입을 보낸다. 지금 가릴 처지가 아니잖아.',
-    'Not yet. The scrap, the glue, the key... I need to put it together first.': '아직이야. 종잇조각, 풀, 열쇠... 먼저 맞춰 봐야 해.',
+    "The waybill came off Jang's desk. Let's have a look at that desk first.": '선하증권은 장그래 책상에서 나왔어. 그 책상부터 좀 보자.',
+    "The waybill came from Jang's desk. Go and look at it, then back to your desk.": '선하증권은 장그래 책상에서 나왔다. 가서 살펴보고, 자기 자리로 돌아가라.',
+    'Jang\'s desk. The glue stick lies uncapped among paper trimmings. You turn the waybill over: glued to the back is a torn scrap of someone\'s weekly report. Internship. A name: Kim Seok-ho.': '장그래의 책상. 뚜껑 열린 풀이 종이 부스러기 사이에 놓여 있다. 선하증권을 뒤집어 본다. 뒷면에 누군가의 주간 보고서 조각이 붙어 있다. 인턴. 이름은 김석호.',
+    "Jang's desk. You've already found what it had to tell you.": '장그래의 책상. 알아낼 건 이미 다 알아냈다.',
+    "Oh keeps the waybill. Jang owned up, but something about it doesn't sit right.": '오 과장은 선하증권을 챙겨 둔다. 장그래가 자기 잘못이라 했지만, 어딘가 석연치 않다.',
     "I said you'd share it with me. I never said I'd keep my mouth shut.": '공유하라고 했지, 내가 입 다물고 있겠다고는 안 했어요.',
     "That's a secret.": '그건 비밀.',
     "I'm at the Mangwon-dong crossroads, doing twelve kilometres an hour, with eight to go. I'll be thirty minutes late. This fear is completely rational.": '망원동 사거리입니다. 시속 12킬로, 8킬로 남았습니다. 30분 늦습니다. 이 공포는 지극히 합리적이네요.',
@@ -979,7 +976,13 @@ KO21 = {
     'He has a whole cabinet to re-sort by morning. The glasses intern steers him out of the door anyway.': '아침까지 캐비닛 하나를 다시 정리해야 한다. 그래도 안경 쓴 인턴은 그를 문밖으로 끌고 나간다.',
     'The bar is full of interns pitching PT topics. Every time Jang reaches for his bag to leave, the glasses intern refills his glass and pulls him back down.': '술집은 PT 주제를 쏟아 내는 인턴들로 가득하다. 장그래가 가방을 집어 들 때마다 안경 쓴 인턴이 잔을 채우고 그를 다시 앉힌다.',
     "Sit, sit. You can't leave before we've picked the dud. Well, we all know who it is.": '앉아, 앉아. 폭탄 고르기 전엔 못 가. 뭐, 누군지 다 알지만.',
-    'Ahn watches him go, then heads back to the office herself.': '안영이는 그가 가는 걸 지켜보다가, 자신도 사무실로 돌아간다.',
+    'A whole cabinet, alone, by morning. Ahn sighs and follows him.': '캐비닛 하나를 혼자서, 아침까지. 안영이는 한숨을 쉬고 그를 따라간다.',
+    'The office is dark but for two lamps. Kim is still at his desk, working late.': '사무실엔 스탠드 두 개만 켜져 있다. 김 대리는 아직 자리에서 야근 중이다.',
+    "Oh's eyes go from Jang to Kim Seok-ho, who won't look up.": '오 과장의 시선이 장그래에게서 김석호에게로 옮겨 간다. 김석호는 고개를 들지 못한다.',
+    'Back at his desk, Kim has a rule for him.': '자리로 돌아오자, 김 대리가 규칙 하나를 일러 준다.',
+    "He'll shred it later. First he sits down in the empty meeting room, just for a minute.": '파쇄는 나중에 하자. 그 전에 빈 회의실에 잠깐만 앉아 있기로 한다.',
+    "His old friends ask if he's really quitting, and he has no answer.": '옛 친구들이 정말 그만두냐고 묻지만, 그는 대답하지 못한다.',
+    'Oh means to find out how it got there.': '오 과장은 어떻게 된 일인지 밝혀낼 생각이다.',
     "On Jang's desk are two ways of filing the same papers: Kim's, which the whole team knows, and Jang's new one, which is better but only he understands. Kim wants his own back. One of them, it seems, has to go.": '장그래의 책상에는 같은 서류를 정리하는 두 가지 방식이 있다. 팀 모두가 아는 김 대리의 방식, 그리고 더 낫지만 장그래만 아는 새 방식. 김 대리는 자기 방식을 되돌려 놓으라 한다. 둘 중 하나는 사라져야 할 것 같다.',
     'In baduk, two groups locked together can sometimes both live, if neither side forces the issue. Ahn has found the way.': '바둑에서는 맞물린 두 무리가, 어느 쪽도 무리하지 않으면 둘 다 살 때가 있다. 안영이는 그 길을 찾았다.',
     'Hey, new kid. Pull yourself together.': '이봐요, 신입. 정신 좀 차려요.',
@@ -1014,8 +1017,7 @@ KO21 = {
     'Trainees have until eighteen to turn professional. He is eighteen now, and this is his last chance.': '연구생은 열여덟 살까지 입단해야 한다. 이제 그는 열여덟, 이번이 마지막 기회다.',
     'A baduk game is scored in points, and a draw is impossible: the smallest margin is half a point. For seven years he has lost that way, over and over.': '바둑은 집으로 승부를 가리고, 비기는 일은 없다. 가장 작은 차이가 반집이다. 칠 년 동안 그는 그렇게, 번번이 졌다.',
     "He played it perfectly, and he's still half a point short. It's over.": '완벽하게 두었는데도 반집이 모자란다. 끝났다.',
-    "His friends from the trainees' room turned pro. They ask if he's really quitting, and he has no answer.": '연구생실 친구들은 입단했다. 정말 그만두냐고 묻지만, 그는 대답하지 못한다.',
-    "It wasn't talent, or luck, or all those half-point losses, or playing between part-time jobs. Those reasons would hurt too much. So he tells himself he just didn't try hard enough.": '재능 탓도, 운 탓도, 그 많은 반집 패배 탓도, 아르바이트 사이에 둔 바둑 탓도 아니다. 그런 이유는 너무 아프니까. 그래서 그는 그저 열심히 하지 않았을 뿐이라고 스스로에게 말한다.',
+    "It wasn't talent, or luck, or all those half-point losses. Those reasons would hurt too much. So he tells himself he just didn't try hard enough.": '재능 탓도, 운 탓도, 그 많은 반집 패배 탓도 아니다. 그런 이유는 너무 아프니까. 그래서 그는 그저 열심히 하지 않았을 뿐이라고 스스로에게 말한다.',
     'At home he puts his game records out with the rubbish, along with his board.': '집에서 그는 기보와 바둑판을 쓰레기와 함께 내다 놓는다.',
     'Not long after he quit, his father died.': '그가 바둑을 그만둔 지 얼마 안 되어, 아버지가 돌아가셨다.',
     'The family opened a small restaurant to get by, and it failed. His mother worked on building sites until her body gave out, and then she could barely get out of bed.': '생계를 위해 작은 식당을 열었지만 망했다. 어머니는 몸이 버티지 못할 때까지 공사판에서 일했고, 그 뒤로는 자리에서 일어나기도 힘들어졌다.',
@@ -1034,7 +1036,6 @@ KO21 = {
     'Shred it later, I said. If I keep quiet, they grill every intern. If I speak, it goes on my record, three weeks out.': '나중에 파쇄하자고 했지. 가만있으면 인턴 전원이 추궁당해. 말하면 내 기록에 남아. PT 3주 전에.',
     'He knows what he has to do.': '무엇을 해야 할지 그는 안다.',
     'Kim Seok-ho stares at the floor.': '김석호는 바닥만 내려다본다.',
-    "Back at his desk, Oh turns the waybill over. Glued to the back is a torn scrap of someone's weekly report, with a name on it: Kim Seok-ho.": '자리로 돌아온 오 과장이 선하증권을 뒤집는다. 뒷면에 누군가의 주간 보고서 조각이 붙어 있고, 이름이 적혀 있다. 김석호.',
     'Play the endgame perfectly.': '끝내기를 완벽하게 두어라.',
     'Jang grins. The obvious move had been obvious to Department Head Kim too.': '장그래가 웃는다. 당연한 수는 김부련 부장에게도 당연했던 것이다.',
     "Two weeks to the PT. There will be dead stones in his own work too, and he'll have to give them up. He still isn't alive on this board, but for the first time he can see how a group like his might live.": 'PT까지 2주. 그의 일에도 사석이 있을 테고, 그는 그것을 버려야 할 것이다. 아직 이 판 위에서 살아 있지 못하지만, 처음으로 그런 돌이 어떻게 살 수 있을지 보이기 시작한다.',
@@ -1043,7 +1044,6 @@ KO21 = {
     "Whoever your partner is, trust them. As the saying goes, the player inside the game can't see his own moves, but everyone watching can.": '파트너가 누구든 믿어요. 판 안에 있는 사람은 자기 수가 안 보여도, 보는 사람들은 다 본다고 하잖아요.',
     'After years of fighting alone at a board, the office feels kinder and warmer. He emails Han three ideas for the PT.': '바둑판 앞에서 혼자 싸우던 세월에 비하면, 회사는 더 친절하고 따뜻하게 느껴진다. 그는 한석율에게 PT 아이템 세 개를 메일로 보낸다.',
     "Who knows? Maybe Jang's a big dud. A nuclear bomb.": '누가 알아요? 장그래 씨가 엄청 큰 폭탄일지도. 핵폭탄.',
-    "Someone else's scrap, glued to Jang's waybill. Oh means to find out how it got there.": '장그래의 선하증권에 붙은 남의 종잇조각. 오 과장은 어떻게 된 일인지 밝혀낼 생각이다.',
     'Every intern turns to look at him. Three weeks before the PT, it goes on his record.': '인턴들이 모두 그를 돌아본다. PT를 3주 앞두고, 그의 기록에 남는다.',
     'Han keeps sente anyway.': '그래도 선수는 한석율이 쥐고 있다.',
     'What does he actually want from me?': '그가 나한테 진짜 원하는 게 뭘까?',
