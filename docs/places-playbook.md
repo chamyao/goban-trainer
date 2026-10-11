@@ -176,6 +176,11 @@ These were each learned from a real complaint, and each is a rule, not a one-off
   block or tower draws its door on the south face, so the checker fails an entered one with a north door
   (`FRONT_DOOR`): Book 1's hof, baduk class and KBA café had one, and their way in was on the roofline (the walk
   slid off it). A shop on the street's south side gets a lane behind it to front onto (Jongno's `hof-lane`).
+  The same holds for every modern kind entered (villas and the pojangmacha too): the art draws the door in the middle
+  of the south face, so an entered one faces S, not E or W either (apo110: "the entries to the rooms are not always
+  where the door is drawn": Jang's home and the relatives' villa were entered by their west walls, the pojangmacha by
+  its side). The checker fails one (`FRONT_DOOR`); `python3 tools/proofs/doors.py <world>` proves it on the built maps
+  (every door exit of such a building at the middle of its footprint's bottom edge, walked into northward).
 - **A carriageway is `asphalt` ground**: never walked, solid in the game, crossed only by a `crosswalk` line; cars are
   things on it (dressing can't go on unwalkable ground, since `free()` needs walkable tiles).
 - **English-only worlds** (`"lang": "en"` on the story's world): compile and build_tk look the world up by number and
@@ -396,6 +401,7 @@ tools/mapfactory/build_with_story.sh 15 15 origin/claude/plot   # against Plot's
 python3 tools/mapfactory/settle_maps.py             # settle wanderers in built (frozen) maps
 tests/playtest/run.sh book15-places                 # Book 15's mechanics, walked in the engine
 python3 tools/proofs/handoffs.py 21                 # every handoff leaves the new lead 6+ tiles to walk
+python3 tools/proofs/doors.py 21                    # every building entered at its drawn door
 tests/playtest/run.sh misaeng-places                # Misaeng: kerb and crosswalks, doors to other places, the lift's menu,
                                                     # General Affairs' requisition, m14's errands, storefront doors, m19c-m22c's walks, the evening
 python3 tools/mapfactory build --world 12 --plans 2

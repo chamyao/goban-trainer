@@ -9,7 +9,8 @@
 //   3. m10's gate: Kim's requisition, handed to the clerk at General Affairs' counter.
 //   4. m14's three errands: the copier gives the copies, handed to Kim Dong-sik at his desk; the forwarder call at the
 //      team phone; the cleaning cupboard's mop taken to the spill ("wipe this floor"); with all three, m14's gate is met.
-//   5. Storefronts are entered at their drawn (south) doors: the baduk class, the KBA café, the hof.
+//   5. Buildings are entered at their drawn (south) doors: the baduk class, the KBA café, the relatives' villa, the
+//      pojangmacha, the sponsor's office (and Jang's home, m1; the hof).
 //      m12: Jongno at night, the intern keeping the hof's door; m21b: the street by the hof at night, after drinks.
 //   6. m5: episode 1's evening on Jongno: its townsfolk are out in the evening, gone by day.
 // Run with the site served on :8765 (tests/playtest/run.sh misaeng-places).
@@ -175,7 +176,8 @@ async function errands(b) {
 
 async function walks(b) {
   // a storefront's door is drawn on its south face, and it's entered there (the baduk class, m1; the KBA café, m3)
-  for (const [upto, place, door] of [['21-m1', 'susaek-dong', 'baduk-class'], ['21-m2', 'korea-baduk-association', 'kba-cafe']]) {
+  for (const [upto, place, door] of [['21-m1', 'susaek-dong', 'baduk-class'], ['21-m2', 'korea-baduk-association', 'kba-cafe'],
+                                      ['21-m4', 'susaek-dong', 'relatives'], ['21-m12', 'jongno', 'pojangmacha'], ['21-m5', 'jongno', 'sponsor-office']]) {
     const q = await open(b, upto, place, [], [place]);
     check(await through(q, door), `${upto.slice(3)}: into ${door} by its drawn door`);
     await q.context().close();

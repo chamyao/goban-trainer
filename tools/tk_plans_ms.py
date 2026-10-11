@@ -505,12 +505,15 @@ def _places(floors):
                     {"id": "lane-w", "kind": "road", "path": [[4, 9], [4, 2]], "width": 2},
                     {"id": "lane-e", "kind": "road", "path": [[10, 9], [10, 2]], "width": 2},
                     {"id": "lane-top", "kind": "road", "path": [[4, 2], [10, 2]], "width": 2},
+                    # between the rows of villas: Jang's home and the relatives' flat open onto it (a villa's door is drawn
+                    # on its south face)
+                    {"id": "lane-mid", "kind": "road", "path": [[4, 5], [12, 5]], "width": 2},
                     # behind the shops, the baduk class's front (a storefront's door is drawn on its south face)
                     {"id": "class-alley", "kind": "road", "path": [[4, 9], [4, 11], [7, 11]], "width": 2},
                 ],
                 "things": [
-                    {"id": "home", "kind": "building.villa", "rect": [5, 3, 2, 2], "door": "W", "label": "Jang's home", "map": "home"},
-                    {"id": "relatives", "kind": "building.villa", "rect": [11, 3, 2, 2], "door": "W", "label": "The relatives' flat",
+                    {"id": "home", "kind": "building.villa", "rect": [5, 3, 2, 2], "door": "S", "label": "Jang's home", "map": "home"},
+                    {"id": "relatives", "kind": "building.villa", "rect": [11, 3, 2, 2], "door": "S", "label": "The relatives' flat",
                      "map": "relatives"},
                     {"id": "villa-1", "kind": "building.villa", "rect": [2, 3, 2, 2], "door": "E"},
                     {"id": "villa-2", "kind": "building.villa", "rect": [8, 3, 2, 2], "door": "E"},
@@ -606,6 +609,7 @@ def _places(floors):
                     {"id": "lane-link", "kind": "road", "path": [[19, 4], [19, 7]], "width": 2},
                     {"id": "pimatgol", "kind": "road", "path": [[13, 10], [13, 15]], "width": 3},
                     {"id": "hof-lane", "kind": "road", "path": [[10, 12], [13, 12]], "width": 2},   # the hof's front, off Pimatgol
+                    {"id": "pojang-lane", "kind": "road", "path": [[13, 14], [15, 14]], "width": 2},   # the pojangmacha's front
                     {"id": "market-alley", "kind": "road", "path": [[21, 10], [21, 15]], "width": 3},
                     {"id": "back-lane", "kind": "road", "path": [[0, 15], [27, 15]], "width": 2},
                 ],
@@ -633,7 +637,7 @@ def _places(floors):
                     {"id": "hof", "kind": "building.storefront", "rect": [10, 11, 2, 1], "door": "S", "label": "A hof", "map": "hof", "plaque": "호프"},
                     {"id": "shop-s4", "kind": "building.storefront", "rect": [15, 11, 2, 1], "door": "N"},
                     {"id": "shop-s5", "kind": "building.storefront", "rect": [25, 11, 2, 1], "door": "N"},
-                    {"id": "pojangmacha", "kind": "building.pojangmacha", "rect": [14, 13, 2, 1], "door": "W", "label": "A pojangmacha",
+                    {"id": "pojangmacha", "kind": "building.pojangmacha", "rect": [14, 13, 2, 1], "door": "S", "label": "A pojangmacha",
                      "map": "pojangmacha"},
                     {"id": "eatery", "kind": "building.storefront", "rect": [11, 13, 2, 1], "door": "E", "label": "A soup house"},
                     {"id": "block-s1", "kind": "building.office_block", "rect": [1, 13, 2, 2], "door": "S"},

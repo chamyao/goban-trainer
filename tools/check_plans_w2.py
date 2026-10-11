@@ -37,7 +37,7 @@ from vocab import FOLK, KINDS  # noqa: E402
 SIDES = {"N": (0, -1), "S": (0, 1), "W": (-1, 0), "E": (1, 0)}
 OPEN_GROUND = {"court", "passage", "garden", "field", "field.wheat", "market", "camp", "plain", "loess", "stage", "floor", "ward",
                "city", "plateau"}
-FRONT_DOOR = {"building.storefront", "building.office_block", "building.office_tower"}   # modern fronts: the door is drawn on the south face
+FRONT_DOOR = {"building.storefront", "building.office_block", "building.office_tower", "building.villa", "building.pojangmacha"}   # modern fronts: the door is drawn on the south face
 PASSABLE_THINGS = {"furn.seat", "furn.curtain", "furn.rug", "prop.spill", "landmark.ridge", "building.gatehouse", "building.gate", "building.moongate", "building.palace_gate"}
 IN_WALL = {"building.gate", "building.gatehouse", "building.gatetower", "building.moongate", "wall.stairs", "building.palace_gate"}   # stand in a wall: no margin
 EXTRA_KINDS = {"prop.lanterns", "prop.body_lamp", "milestone", "banner", "plant.peony", "water.lotus", "tree.poplar", "tree.willow",
@@ -179,9 +179,10 @@ class Plan:
             for d in t.get("doors") or ([t["door"]] if t.get("door") else []):
                 x, y, w, h = t["rect"]
                 dx, dy = SIDES[d]
-                if d == "N" and t["kind"] in FRONT_DOOR and (t.get("map") or t.get("to")):
-                    # its art draws the door on the south face: a north door's way in would be on the roofline
-                    self.err(f"door: {t['id']} ({t['kind']}) is entered but its door is drawn on the south face; face it S, E or W")
+                if d != "S" and t["kind"] in FRONT_DOOR and (t.get("map") or t.get("to")):
+                    # its art draws the door on the south face: a door on any other face puts the way in where none is
+                    # drawn (a north one on the roofline, an east or west one on a blank side wall)
+                    self.err(f"door: {t['id']} ({t['kind']}) is entered by its {d} face, but its door is drawn on the south face; face it S")
                 edge = {"N": [(i, y - 1) for i in range(x, x + w)], "S": [(i, y + h) for i in range(x, x + w)],
                         "W": [(x - 1, j) for j in range(y, y + h)], "E": [(x + w, j) for j in range(y, y + h)]}[d]
                 ok = [c for c in edge if self.walkable(c)]
