@@ -16,6 +16,7 @@ tried in order), or a horse of a coat ("horse"). A kind the story uses that
 isn't here still plays: 1x1, drawn as a crate (see docs/graphics-needs.md).
 """
 import json
+import sys
 from pathlib import Path
 
 from PIL import Image, ImageDraw
@@ -414,6 +415,10 @@ PROPS = {
 }
 PROPS["forge"]["fire"] = True
 
+sys.path.insert(0, str(ROOT / "tools"))
+import props_misaeng  # noqa: E402
+PROPS.update(props_misaeng.PROPS_MS)   # Misaeng (m17's room setup; the subway commuter's pocket board)
+
 
 def main():
     el = img("element.png")
@@ -460,6 +465,7 @@ def main():
         "bench": bench(),
         **_carriage_frames(),
         "item.pouch1": pouch(1), "item.pouch2": pouch(2), "item.pouch3": pouch(3),
+        **props_misaeng.frames(),   # Misaeng: item.<id> icons and the board room's setup props, last so others keep their place
     }
     # one row, 1px apart
     W = sum(f.width + 1 for f in frames.values())

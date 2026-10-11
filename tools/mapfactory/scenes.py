@@ -96,7 +96,7 @@ class Stage:
         walls = {(x, y) for y, row in enumerate(m["terrain"]["rows"]) for x, ch in enumerate(row) if legend[ch] == "wall"}
         for o in m["objects"]:
             # in a room nobody stands on the furniture either (a stool, a jar), only round it
-            if KINDS[o["kind"]][2] or (walls and o["kind"].startswith("furn.") and o["kind"] not in ("furn.rug", "furn.mat")):
+            if KINDS[o["kind"]][2] or (walls and o["kind"].startswith("furn.") and o["kind"] not in ("furn.rug", "furn.mat", "furn.chair")):
                 for yy in range(o["y"], o["y"] + o["h"]):
                     for xx in range(o["x"], o["x"] + o["w"]):
                         self.block.add((xx, yy))
@@ -110,11 +110,17 @@ class Stage:
                 for x, y in floor:
                     if any((x + dx, y + dy) in walls for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1))) and (x, y) not in doors:
                         self.block.add((x, y))
+        # the map's named things, by id: a scene can put someone on one ("@chair-kim": Misaeng's desks, each to its owner)
+        self.things = {o["id"]: (o["x"] + o["w"] // 2, o["y"] + o["h"] // 2) for o in m["objects"] if o.get("id")}
+        # a desk's seat (plans.lay_seats, half a tile in): the tile in front of the desk, its right half under the middle
+        self.things.update({o["id"]: (int(o["x"] + .5), int(o["y"]) + 1) for o in m["objects"] if o["kind"] == "marker.seat"})
         self.spot = (int(spot["x"]), int(spot["y"]))
+        if spot.get("on") in self.things:   # a spot "on" a thing (Jang's chair): the party is there, not mid-floor
+            self.spot = self.things[spot["on"]]
         self.reach = self.flood(self.spot)
         # in a room the scene is the room: stage it in the middle of the floor, not against
         # the back wall where the story spot may sit (on a phone that's off the top of the view)
-        if "wall" in legend.values():
+        if "wall" in legend.values() and not spot.get("on"):
             mx = sum(c[0] for c in self.reach) / len(self.reach)
             my = sum(c[1] for c in self.reach) / len(self.reach)
             self.spot = min(self.reach, key=lambda c: (c[0] - mx) ** 2 + (c[1] - my) ** 2)
@@ -130,6 +136,7 @@ class Stage:
         self.gone = set()
         self.fallen = set()
         self.props = {}     # prop id -> kind
+        self.offstage = set()   # ["offstage", who, …]: speakers only heard (Misaeng's phone calls)
         self.aboard = {}    # rider id -> prop id
         self.party = list(party)
         # the party lines up on the spot, facing the far side
@@ -222,6 +229,16 @@ class Stage:
 
     def face_dir(self, sign):
         return "right" if sign * self.dir > 0 else "left"
+
+    def at(self, s, i):
+        """Where a step puts someone: s[i] "@<thing>" is that map thing's tile, as it stands (no mirroring, no recentring);
+        otherwise s[i], s[i + 1] are an offset from the spot."""
+        if isinstance(s[i], str) and s[i].startswith("@"):
+            if s[i][1:] not in self.things:
+                print(f"    ! no map thing {s[i][1:]!r} for {s[:2]}; at the spot instead")
+                return self.spot
+            return self.things[s[i][1:]]
+        return self.offset(s[i], s[i + 1])
 
     def offset(self, dx, dy):
         return (self.spot[0] + round(dx / PX) * self.dir, self.spot[1] + round(dy / PX))
@@ -339,6 +356,9 @@ class Stage:
     def say(self, step, chars):
         who = step[1]
         speaker = self.find(who)
+        if speaker is None and who in self.offstage:   # heard, not seen (a voice on the phone): the line with no one brought on
+            self.beats.append({"do": "line", "line": step})
+            return
         if speaker is None and (who in chars or re.fullmatch(r"[a-z][a-z0-9_]*", who)):   # unknown ids get a stand-in
             # someone speaks who isn't on stage: bring them on, facing the party
             far = self.offset(28, -6 if len([a for a in self.live() if self.cast[a]["side"] == "them"]) else 0)
@@ -506,10 +526,15 @@ def stage_scene(scene, m, spot, party, chars, boss=None):
             if arrivals:
                 st.beats.append({"do": "camera", "to": st.frame(list(st.pos)), "ms": 600})
                 st.beats += st.arrive(arrivals)
+        if op == "offstage":
+            st.offstage |= set(s[1:])
+            continue
         if op == "spawn":
-            cell = st.offset(s[4], s[5])
+            cell = st.at(s, 4)
             st.spawn(s[1], s[2], cell, st.side_of(s[2], cell), opening=opening)
-            if opening:
+            if opening and isinstance(s[4], str) and s[4].startswith("@"):   # at their own place (a desk): there as it opens
+                st.beats[0]["place"].append({"actor": s[1], "at": st.xy(st.pos[s[1]]), "face": st.face_dir(-1)})
+            elif opening:
                 arrivals.append(s[1])
         elif op == "army":
             centre = st.offset(s[5], s[6])
@@ -517,7 +542,7 @@ def stage_scene(scene, m, spot, party, chars, boss=None):
             if opening:
                 arrivals += st.groups[s[1]]
         elif op in ("move", "run"):
-            st.move(s[1], st.offset(s[3], s[4]), RUN if op == "run" else WALK)
+            st.move(s[1], st.at(s, 3), RUN if op == "run" else WALK)
         elif op == "pose":
             if s[2] == "strike":
                 st.strike(s[1], s[3] if len(s) > 3 else None)
@@ -528,12 +553,12 @@ def stage_scene(scene, m, spot, party, chars, boss=None):
                 if ids:
                     st.beats.append({"do": "pose", "actors": ids, "pose": s[2]})
         elif op == "fx":
-            c = st.offset(s[3], s[4])
+            c = st.at(s, 3)
             st.beats.append({"do": "fx", "name": s[1], "at": st.xy(c)})
         elif op in ("remove", "vanish"):
             st.remove(s[1], "fade" if op == "remove" else "vanish")
         elif op == "prop":
-            st.prop(s[1], s[2], st.offset(s[4], s[5]))
+            st.prop(s[1], s[2], st.at(s, 4))
         elif op == "board":
             if s[1] in arrivals:   # already inside when the scene opens
                 arrivals.remove(s[1])

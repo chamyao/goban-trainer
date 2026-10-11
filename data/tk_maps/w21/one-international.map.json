@@ -1,0 +1,297 @@
+{
+ "format": "tk-map/1",
+ "id": "one-international",
+ "world": 21,
+ "name": "One International",
+ "archetype": "interior",
+ "size": [
+  36,
+  20
+ ],
+ "seed": 1913,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "barrier",
+   "b": "office_tile",
+   " ": "void",
+   "W": "wall"
+  },
+  "rows": [
+   "                                    ",
+   " WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WaaaaaaaabbaaaaaaaaaaaabbaaaaaaaaW ",
+   " WaaaaaaaabbaaaaaaaaaaaabbaaaaaaaaW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbW ",
+   " WWWWWWWWWWWWWWWWWbbWWWWWWWWWWWWWWW ",
+   "                                    "
+  ],
+  "walk": {
+   "barrier": false,
+   "office_tile": true,
+   "void": false,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    18,
+    10
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     9,
+     9
+    ],
+    "to-Jongno": [
+     9,
+     9
+    ]
+   },
+   "tiles": 100
+  },
+  {
+   "id": "id-gates",
+   "kind": "barrier",
+   "path": [
+    [
+     1,
+     4
+    ],
+    [
+     16,
+     4
+    ]
+   ],
+   "width": 1,
+   "gates": {
+    "gates-w": [
+     5,
+     4
+    ],
+    "gates-e": [
+     12,
+     4
+    ]
+   },
+   "tiles": 64
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.plant",
+   "x": 2,
+   "y": 6,
+   "w": 1,
+   "h": 1,
+   "id": "plant-w",
+   "blocks_sight": true
+  },
+  {
+   "kind": "furn.plant",
+   "x": 32,
+   "y": 6,
+   "w": 1,
+   "h": 1,
+   "id": "plant-e",
+   "blocks_sight": true
+  },
+  {
+   "kind": "furn.noticeboard",
+   "x": 2,
+   "y": 10,
+   "w": 2,
+   "h": 1,
+   "id": "directory",
+   "label": "The floor directory"
+  },
+  {
+   "kind": "furn.reception",
+   "x": 24,
+   "y": 12,
+   "w": 4,
+   "h": 1,
+   "id": "reception",
+   "label": "The front desk"
+  },
+  {
+   "kind": "furn.bin",
+   "x": 4,
+   "y": 14,
+   "w": 1,
+   "h": 1,
+   "id": "bin-1",
+   "label": "The recycling bins"
+  },
+  {
+   "kind": "furn.bin",
+   "x": 6,
+   "y": 14,
+   "w": 1,
+   "h": 1,
+   "id": "bin-2"
+  },
+  {
+   "kind": "furn.sofa",
+   "x": 30,
+   "y": 16,
+   "w": 2,
+   "h": 1,
+   "id": "sofa-1"
+  },
+  {
+   "kind": "furn.sofa",
+   "x": 32,
+   "y": 16,
+   "w": 2,
+   "h": 1,
+   "id": "sofa-2"
+  },
+  {
+   "kind": "furn.lift_door",
+   "x": 16,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "lift-w",
+   "label": "The lift"
+  },
+  {
+   "kind": "furn.lift_door",
+   "x": 20,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "lift-e",
+   "label": "The lift"
+  }
+ ],
+ "spots": [
+  {
+   "id": "lift",
+   "x": 18.5,
+   "y": 2.7,
+   "node": "",
+   "label": "The lift",
+   "floors": [
+    {
+     "label": "1F · The lobby",
+     "to": "one-international"
+    },
+    {
+     "label": "2F · General Affairs",
+     "to": "one-international--general-affairs"
+    },
+    {
+     "label": "14F · Sales Team 3",
+     "to": "one-international--sales3"
+    },
+    {
+     "label": "15F · A meeting room",
+     "to": "one-international--meeting"
+    },
+    {
+     "label": "R · The roof",
+     "to": "one-international--roof"
+    }
+   ],
+   "use": "lift"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "receptionist",
+   "kind": "folk.officewoman",
+   "x": 26.0,
+   "y": 12.35,
+   "say": [
+    "“Visitor passes are issued here. Who are you here to see?”"
+   ],
+   "face": "S",
+   "label": "The receptionist"
+  },
+  {
+   "id": "npc-2",
+   "kind": "folk.salaryman",
+   "x": 12.5,
+   "y": 10.9,
+   "say": [
+    "A security guard by the ID gates. “Card on the reader, please. One at a time.”"
+   ],
+   "label": "Security"
+  },
+  {
+   "id": "npc-3",
+   "kind": "folk.salaryman",
+   "x": 16.5,
+   "y": 4.9,
+   "say": [
+    "Someone waiting for a lift taps his card against his leg. “Come on, come on.”"
+   ]
+  }
+ ],
+ "exits": [
+  {
+   "to": "jongno",
+   "side": "S",
+   "x": 18,
+   "y": 18,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "jongno": [
+   18,
+   17
+  ],
+  "": [
+   18,
+   17
+  ],
+  "one-international--general-affairs": [
+   18,
+   4
+  ],
+  "one-international--sales3": [
+   18,
+   4
+  ],
+  "one-international--meeting": [
+   18,
+   4
+  ],
+  "one-international--roof": [
+   18,
+   4
+  ]
+ },
+ "states": [
+  {
+   "id": "day",
+   "light": "day"
+  }
+ ],
+ "links": [
+  "jongno"
+ ]
+}

@@ -1,0 +1,166 @@
+{
+ "format": "tk-map/1",
+ "id": "supplier--corridor",
+ "world": 22,
+ "name": "The supplier's corridor",
+ "archetype": "interior",
+ "size": [
+  32,
+  12
+ ],
+ "seed": 1899,
+ "plan": true,
+ "terrain": {
+  "legend": {
+   "a": "lino",
+   " ": "void",
+   "W": "wall"
+  },
+  "rows": [
+   "                                ",
+   " WWWWWWWWWWWWWaaWWWWWWWWWWWWWWW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " Waaaaaaaaaaaaaaaaaaaaaaaaaaaaa ",
+   " Waaaaaaaaaaaaaaaaaaaaaaaaaaaaa ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WaaaaaaaaaaaaaaaaaaaaaaaaaaaaW ",
+   " WWWWWaaWWWWWWWWWWWWWWWWWWWWWWW ",
+   "                                "
+  ],
+  "walk": {
+   "lino": true,
+   "void": false,
+   "wall": false
+  }
+ },
+ "lines": [
+  {
+   "id": "walls",
+   "kind": "wall",
+   "outline": [
+    0,
+    0,
+    16,
+    6
+   ],
+   "width": 1,
+   "gates": {
+    "door": [
+     3,
+     5
+    ],
+    "to-president": [
+     15,
+     2
+    ],
+    "to-staff": [
+     7,
+     0
+    ]
+   },
+   "tiles": 76
+  }
+ ],
+ "objects": [
+  {
+   "kind": "furn.noticeboard",
+   "x": 4,
+   "y": 2,
+   "w": 2,
+   "h": 1,
+   "id": "notices",
+   "label": "A noticeboard: the month's orders"
+  },
+  {
+   "kind": "furn.boxes",
+   "x": 22,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "id": "boxes",
+   "label": "Samples in boxes"
+  },
+  {
+   "kind": "furn.plant",
+   "x": 26,
+   "y": 8,
+   "w": 1,
+   "h": 1,
+   "id": "plant",
+   "blocks_sight": true
+  },
+  {
+   "kind": "furn.sofa",
+   "x": 8,
+   "y": 8,
+   "w": 2,
+   "h": 1,
+   "id": "bench",
+   "label": "A bench for visitors"
+  }
+ ],
+ "spots": [
+  {
+   "id": "b18",
+   "x": 16.5,
+   "y": 4.7,
+   "node": "22-b18",
+   "label": "The corridor, by the staff room"
+  }
+ ],
+ "npcs": [],
+ "exits": [
+  {
+   "to": "supplier--president",
+   "side": "E",
+   "x": 30,
+   "y": 4,
+   "w": 1,
+   "h": 2
+  },
+  {
+   "to": "supplier--staff",
+   "side": "N",
+   "x": 14,
+   "y": 1,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "to": "supplier",
+   "side": "S",
+   "x": 6,
+   "y": 10,
+   "w": 2,
+   "h": 1
+  }
+ ],
+ "entries": {
+  "supplier--president": [
+   29,
+   4
+  ],
+  "supplier--staff": [
+   14,
+   2
+  ],
+  "supplier": [
+   6,
+   9
+  ],
+  "": [
+   6,
+   9
+  ]
+ },
+ "parent": "supplier",
+ "building": "corridor",
+ "links": [
+  "supplier",
+  "supplier--president",
+  "supplier--staff"
+ ]
+}

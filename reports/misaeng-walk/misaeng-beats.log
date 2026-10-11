@@ -1,0 +1,90 @@
+book 21: The First Move, 29 beats, lang en
+ok   the book is English-only
+ok   21-m14: asks Black 7; its one answer is Cho Hunhyun's cn (got [[1,"cn"]])
+ok   21-m14: the board is the game after 6 moves (3+3 stones; the record has 3+3)
+ok   21-m19b: asks Black 11; its one answer is Cho Hunhyun's cp (got [[1,"cp"]])
+ok   21-m19b: the board is the game after 10 moves (5+5 stones; the record has 5+5)
+ok   21-m22: asks Black 15; its one answer is Cho Hunhyun's fc (got [[1,"fc"]])
+ok   21-m22: the board is the game after 14 moves (7+7 stones; the record has 7+7)
+ok   21-m1: the strip shows move 0 (after -1)
+ok   21-m2: the strip shows move 0 (after 0)
+ok   21-m3: the strip shows move 2 (after 0)
+ok   21-m4: the strip shows move 2 (after 2)
+ok   21-m5: the strip shows move 2 (after 2)
+ok   21-m6: the strip shows move 2 (after 2)
+ok   21-m7: the strip shows move 3 (after 2)
+ok   21-m8: the strip shows move 4 (after 3)
+ok   21-m9: the strip shows move 4 (after 4)
+ok   21-m10: the strip shows move 5 (after 4)
+ok   21-m11: the strip shows move 5 (after 5)
+ok   21-m12: the strip shows move 6 (after 5)
+ok   21-m13: the strip shows move 6 (after 6)
+ok   21-m14: the strip shows move 6 (after 6)
+ok   21-m14: the record board asks Black 7, after the strip's move 6
+ok   21-m15: the strip shows move 7 (after 6)
+ok   21-m16: the strip shows move 8 (after 7)
+ok   21-m17: the strip shows move 9 (after 8)
+ok   21-m18: the strip shows move 10 (after 9)
+ok   21-m18b: the strip shows move 10 (after 10)
+ok   21-m19: the strip shows move 10 (after 10)
+ok   21-m19b: the strip shows move 10 (after 10)
+ok   21-m19b: the record board asks Black 11, after the strip's move 10
+ok   21-m19c: the strip shows move 12 (after 10)
+ok   21-m19d: the strip shows move 12 (after 12)
+ok   21-m20: the strip shows move 13 (after 12)
+ok   21-m21: the strip shows move 14 (after 13)
+ok   21-m21b: the strip shows move 14 (after 14)
+ok   21-m22: the strip shows move 14 (after 14)
+ok   21-m22: the record board asks Black 15, after the strip's move 14
+ok   21-m22b: the strip shows move 16 (after 14)
+ok   21-m22c: the strip shows move 16 (after 16)
+ok   21-m11: the gate's objective says where ("Take Kim's requisition to General Affairs, then go back to your desk in Sales 3.")
+ok   21-m11: walking in too early plays "m11_wait", which says why ("The requisition first. General Affairs.")
+ok   21-m14: the gate's objective says where ("Work from every side on Sales 3's floor: the forwarder call about the B/L at the team phone, Kim's copies at the copier, and mop the floor.")
+ok   21-m14: walking in too early plays "m14_wait", which says why ("Kim's B/L call to the forwarder. The copies. The floor. All at once.")
+ok   no Chinese in the book's text (0: )
+ok   21-m1: its scene "m1" exists
+ok   21-m1: 1 board(s), 1 caption(s)
+ok   21-m2: its scene "m2" exists
+ok   21-m2: 1 board(s), 1 caption(s)
+ok   21-m3: its scene "m3" exists
+ok   21-m4: its scene "m4" exists
+ok   21-m5: its scene "m5" exists
+ok   21-m6: its scene "m6" exists
+ok   21-m7: its scene "m7" exists
+ok   21-m8: its scene "m8" exists
+ok   21-m8: 1 board(s), 1 caption(s)
+ok   21-m9: its scene "m9" exists
+ok   21-m9: 1 board(s), 1 caption(s)
+ok   21-m10: its scene "m10" exists
+ok   21-m11: its scene "m11" exists
+ok   21-m12: its scene "m12" exists
+ok   21-m12: 1 board(s), 1 caption(s)
+ok   21-m13: its scene "m13" exists
+ok   21-m13: 1 board(s), 1 caption(s)
+ok   21-m14: its scene "m14" exists
+ok   21-m14: 1 board(s), 1 caption(s)
+ok   21-m15: its scene "m15" exists
+ok   21-m16: its scene "m16" exists
+ok   21-m16: 1 board(s), 1 caption(s)
+ok   21-m17: its scene "m17" exists
+ok   21-m17: 1 board(s), 1 caption(s)
+ok   21-m18: its scene "m18" exists
+ok   21-m18: 1 board(s), 1 caption(s)
+ok   21-m18b: its scene "m18b" exists
+ok   21-m19: its scene "m19" exists
+ok   21-m19: 1 board(s), 1 caption(s)
+ok   21-m19b: its scene "m19b" exists
+ok   21-m19b: 2 board(s), 2 caption(s)
+ok   21-m19c: its scene "m19c" exists
+ok   21-m19d: its scene "m19d" exists
+ok   21-m20: its scene "m20" exists
+ok   21-m21: its scene "m21" exists
+ok   21-m21: 1 board(s), 1 caption(s)
+ok   21-m21b: its scene "m21b" exists
+ok   21-m22: its scene "m22" exists
+ok   21-m22: 1 board(s), 1 caption(s)
+ok   21-m22b: its scene "m22b" exists
+ok   21-m22b: 1 board(s), 1 caption(s)
+ok   21-m22c: its scene "m22c" exists
+misaeng-beats: all ok

@@ -1,0 +1,38 @@
+     mode: player (the game's test mode off)
+ok   21-m1  12s  ms_jang_child in susaek-dong--baduk-class
+ok   21-m2  11s  ms_jang_young in korea-baduk-association--kba-trainees
+ok   21-m4  14s  ms_jang in susaek-dong--home
+ok   21-m5  15s  ms_oh_hike in jongno--sponsor-office
+ok   21-m7  24s  ms_jang in mountain
+ok   21-m8  17s  ms_jang in jongno--cafe
+     21-m10: the lift, to ◆ 2F · General Affairs
+     21-m10 is gated on mark:requisition: to one-international--general-affairs (ga-counter)
+     21-m10: the lift, to ◆ 14F · Sales Team 3
+ok   21-m10  17s  ms_jang in one-international--sales3
+ok   21-m12  20s  ms_jang in jongno--hof
+     21-m13: the lift, to ◆ 14F · Sales Team 3
+ok   21-m13  23s  ms_ahn in one-international--sales3
+     21-m14 is gated on mark:errand_bl: to one-international--sales3 (errand-bl)
+     21-m14: the lift, to ◆ 14F · Sales Team 3
+     21-m14 is gated on mark:errand_copy: to one-international--sales3 (errand-copy)
+     21-m14 is gated on mark:errand_floor: to one-international--sales3 (errand-floor)
+ok   21-m14  53s  ms_jang in one-international--sales3
+ok   21-m16  12s  ms_jang in jongno
+     21-m17: the lift, to ◆ R · The roof
+ok   21-m17  15s  ms_jang in one-international--roof
+     21-m18: the lift, to ◆ 14F · Sales Team 3
+ok   21-m18  18s  ms_jang in one-international--sales3
+ok   21-m19  18s  ms_jang in one-international--sales3
+     21-m19c: the lift, to ◆ 15F · A meeting room
+ok   21-m19c  12s  ms_jang in one-international--meeting
+     21-m20: the lift, to ◆ 14F · Sales Team 3
+ok   21-m20  17s  ms_oh in one-international--sales3
+ok   21-m21  8s  ms_oh in one-international--sales3
+     ui: {"csAt":{"id":"?","i":1,"of":2,"beat":"{\"do\":\"line\",\"line\":[\"say\",\"ms_oh\",\"Not yet. The scrap, the glue, the key. Put it together first.\",\"\",\"dd29f8f7f3bd\"],\"speaker\":\"ms_oh\",\"face\":[],\"camera\":[60.5","at":1791660950762,"ago":163},"csStarted":[{"id":"?","beats":2,"at":1791660672224},{"id":"?","beats":2,"at":1791660678074},{"id":"?","beats":2,"at":1791660687557},{"id":"?","beats":2,"at":1791660705839},{"id":"?","beats":2,"at":1791660741355},{"id":"?","beats":2,"at":1791660812485}],"engaged":false,"lead":"ms_oh","party":["ms_oh"],"line":"StoryOh Sang-sikNot yet. T▼","dlgHidden":false,"busy":true,"cine":true,"leaving":false,"html":["town-goal-go:Take me there","town-dlg story has-portrait:StoryOh Sang-sikNot yet. T▼","tk-strip:Move 14Move 14","town-skip:Skip ▸▸"]}
+FAIL 21-m21b  at 860,872 in jongno: over 300s on this beat (caught 0 times; goal 856,855) ("Not yet. The scrap, the glue, the key. Put it together first."); reloading, as a player would, and playing on
+     ui: {"csAt":{"id":"?","i":0,"of":2,"beat":"{\"do\":\"cut\",\"place\":[{\"actor\":\"ms_oh\",\"at\":[60.5,31.85],\"face\":\"right\"}]}","at":1791661256613,"ago":198},"csStarted":[{"id":"?","beats":2,"at":1791661000928},{"id":"?","beats":2,"at":1791661006861},{"id":"?","beats":2,"at":1791661017577},{"id":"?","beats":2,"at":1791661036288},{"id":"?","beats":2,"at":1791661071658},{"id":"?","beats":2,"at":1791661142605}],"engaged":false,"lead":"ms_oh","party":["ms_oh"],"line":"StoryOh Sang-sikNot yet. The scrap, the glue, the key. Put it together first.▼","dlgHidden":true,"busy":true,"cine":true,"leaving":false,"html":["town-goal-go:Take me there","tk-strip:Move 14Move 14","town-skip:Skip ▸▸"]}
+FAIL 21-m21b  632s  ms_oh in jongno  at 860,872: over 300s on this beat (caught 0 times) ("Not yet. The scrap, the glue, the key. Put it together first.")
+ok   after each handoff the new lead starts 6+ tiles from the beat's spot (m2 ms_jang_child>ms_jang_young 20.8 tiles from m2; m4 ms_jang_young>ms_jang in susaek-dong, the spot in susaek-dong--home; m7 ms_jang>ms_oh_hike 47.9 tiles from m7; m8 ms_oh_hike>ms_jang 11.9 tiles from m8; m13 ms_jang>ms_ahn in jongno--hof, the spot in one-international--sales3; m14 ms_ahn>ms_jang in susaek-dong, the spot in one-international--sales3; m21 ms_jang>ms_oh 6.1 tiles from m21)
+ok   after the book: playing as ms_oh in jongno; the chip says "Oh Sang-sik"; "Now playing" banners: Jang Geu-raeNow playing: Geu-rae | Oh Sang-sikNow playing: Sang-sik | Jang Geu-raeNow playing: Geu-rae | Ahn Young-yiNow playing: Young-yi | Jang Geu-raeNow playing: Geu-rae | Oh Sang-sikNow playing: Sang-sik
+walk-playthrough Book 21 (default): 17/18 beats walked and played in 16.1 min (1 needed a reload, 0 held by a scene); 14 boards (10 from the rated pool)
+the goal box's chip followed the party: Jang Geu-rae → Oh Sang-sik → Jang Geu-rae → Ahn Young-yi → Jang Geu-rae → Oh Sang-sik

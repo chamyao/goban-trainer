@@ -24,3 +24,10 @@ Three Kingdoms campaign art
     (cut from https://freesound.org/people/jobro/sounds/112248/), CC BY 3.0: the boss-fight music.
   gong.mp3: "gong_01" from "100 CC0 SFX" by rubberduck, https://opengameart.org/content/100-cc0-sfx, CC0,
     with an added echo tail.
+
+Misaeng's Korean voice-over (assets/tk/voice/ko): spoken by Coqui XTTS-v2 (Coqui Public Model License, non-commercial),
+cloned from reference clips of speakers in the Zeroth-Korean corpus by Lucas Jo (Atlas Guide) and Wonkyum Lee
+(Gridspace), CC BY 4.0 (openslr.org SLR40; via huggingface.co/datasets/kresnik/zeroth_korean). The clips, trimmed, are in
+tools/voice_refs/ko; tools/voice_ko.py casts them. Ages for casting estimated with audEERING's
+wav2vec2-large-robust-24-ft-age-gender. The clips and every rendered line are denoised with DeepFilterNet3 by Hendrik
+Schröter et al. (MIT / Apache-2.0); the cleaned clips are in tools/voice_refs/ko/clean.

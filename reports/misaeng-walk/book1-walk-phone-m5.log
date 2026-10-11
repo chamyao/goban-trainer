@@ -1,0 +1,32 @@
+     mode: test (the game's test mode on)
+ok   21-m5  5s  ms_jang in one-international--sales3
+     21-m6: the lift, to ◆ 3F · The PT room
+ok   21-m6  22s  ms_jang in one-international--pt-room
+     21-m7: the lift, to ◆ 14F · Sales Team 3
+ok   21-m7  16s  ms_oh in one-international--sales3
+ok   21-m8  10s  ms_kimbr in one-international
+ok   21-m9  9s  ms_kimbr in one-international--textile
+ok   21-m10  13s  ms_jang in one-international--roof
+ok   21-m11  18s  ms_jang in jongno--client
+     21-m12: the lift, to ◆ 15F · A meeting room
+ok   21-m12  10s  ms_jang in one-international--meeting
+     21-m13: the lift, to ◆ 14F · Sales Team 3
+ok   21-m13  14s  ms_jang in one-international--sales3
+ok   21-m13b  13s  ms_sun in suns-neighbourhood--daycare
+ok   21-m14  9s  ms_jang in suns-neighbourhood--sun-flat
+ok   21-m15  7s  ms_jang in one-international--sales3
+     21-m16: the lift, to ◆ 3F · The PT room
+     ui: {"lead":"ms_jang","party":["ms_jang"],"line":"StoryOffice worker“…Fine. Go on. Break a leg.”▼","dlgHidden":true,"busy":true,"cine":true,"leaving":false,"html":["town-goal-go:Take me there","tk-strip compact:Move 28Move 28","town-skip:Skip ▸▸"]}
+FAIL 21-m16  at 236,246 in one-international--pt-room: stuck: no progress for 60s (goal 232,103; canMove false, seated false, approaching false, walk none, a way 1 points, near: nobody) ("“…Fine. Go on. Break a leg.”"); reloading, as a player would, and playing on
+ok   21-m16  91s  ms_ahn in one-international--pt-room
+ok   21-m17  6s  ms_ahn in one-international--pt-room
+     21-m18: the lift, to ◆ 14F · Sales Team 3
+     21-m18: the lift, to ◆ 3F · The PT room
+ok   21-m18  31s  ms_jang in one-international--pt-room
+     21-m19: the lift, to ◆ 5F · HR
+ok   21-m19  11s  ms_jang in one-international--hr
+ok   21-m20  29s  ms_jang in daehanmun
+FAIL after each handoff the new lead starts 6+ tiles from the beat's spot (too near: m10 ms_kimbr>ms_jang 4.0 tiles from m10; m15 ms_sun>ms_jang 4.1 tiles from m15; m17 ms_jang>ms_ahn 5.9 tiles from m17; m18 ms_ahn>ms_jang 4.3 tiles from m18 | m8 ms_jang>ms_oh 13.0 tiles from m8; m9 ms_oh>ms_kimbr 6.2 tiles from m9; m14 ms_jang>ms_sun in suns-neighbourhood, the spot in suns-neighbourhood--sun-flat)
+ok   after the book: playing as ms_jang in daehanmun; the chip says "Jang Geu-rae"; "Now playing" banners: Oh Sang-sikNow playing: Sang-sik | Kim Bu-ryeonNow playing: Bu-ryeon | Jang Geu-raeNow playing: Geu-rae | Sun Ji-youngNow playing: Ji-young | Jang Geu-raeNow playing: Geu-rae | Ahn Young-yiNow playing: Young-yi | Jang Geu-raeNow playing: Geu-rae
+walk-playthrough Book 21 (default): 17/17 beats walked and played in 5.2 min (1 needed a reload, 0 held by a scene); 17 boards (12 from the rated pool)
+the goal box's chip followed the party: Jang Geu-rae → Oh Sang-sik → Kim Bu-ryeon → Jang Geu-rae → Sun Ji-young → Jang Geu-rae → Ahn Young-yi → Jang Geu-rae

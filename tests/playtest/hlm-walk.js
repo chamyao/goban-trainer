@@ -6,6 +6,8 @@
 // g6 poses its three boards with Wang Xifeng and Granny Liu's own captions; the book completes. Fails on a page
 // error, a slip (a board the key solves shouldn't see one), being stuck, a goal line with a count, or not finishing.
 // Prints each beat's time and the places walked through; NOTE lines are feel notes, not failures.
+// PLAYTEST_LIVE=1: as a player (no test mode): starts on the Library page, taps the 红楼梦 card and the book, and checks
+// no board offers the test-mode Skip key.
 const { chromium, devices } = require(require('child_process').execSync('npm root -g', { env: { ...process.env, NODE_OPTIONS: '' } }).toString().trim() + '/playwright');
 const path = require('path'); const SP = path.join(__dirname, 'out'); require('fs').mkdirSync(SP, { recursive: true });
 const MAXMIN = +(process.env.MAXMIN || 35);
@@ -22,7 +24,17 @@ const MAXMIN = +(process.env.MAXMIN || 35);
   const URL = (process.env.PLAYTEST_URL || 'http://localhost:8765') + '/index.html' + (process.env.PLAYTEST_KIT ? '?kit=' + process.env.PLAYTEST_KIT : '') + '#/tk/31';
   await p.goto(URL); await p.waitForTimeout(1000);
   await p.evaluate(() => { for (const k of Object.keys(localStorage)) if (/^tk-|gt-progress/.test(k) && k !== 'tk-test' && k !== 'tk-harness') localStorage.removeItem(k); localStorage.setItem('tk-guide', 'off'); localStorage.setItem('gt-username', 'hlm'); });
-  await p.reload(); await p.waitForTimeout(2000);
+  const LIVE = !!process.env.PLAYTEST_LIVE;
+  if (LIVE) {
+    await p.goto(URL.replace(/#.*$/, '#/')); await p.reload(); await p.waitForSelector('.tk-card', { timeout: 20000 });
+    const card = p.locator('a.tk-card-hongloumeng');
+    check(await card.count() === 1, 'as a player: the Library has the 红楼梦 card');
+    await card.tap(); await p.waitForSelector('.tk-worlds', { timeout: 20000 });
+    const book = p.locator('.tk-worlds .tk-world').filter({ hasText: '侯门深似海' });
+    check(await book.count() === 1 && !/下架|off/.test(await book.first().innerText()), `as a player: the card lists Deep as the Sea, open (${await book.first().innerText().catch(() => 'none')})`);
+    await p.waitForTimeout(1500);
+    if (!(await p.evaluate(() => !!document.querySelector('.tk-scroll-go') || !!(window.__w && window.__w.player)))) { await book.first().tap(); await p.waitForTimeout(2000); }
+  } else { await p.reload(); await p.waitForTimeout(2000); }
   let shotN = 0; const shot = async n => p.screenshot({ path: `${SP}/hlm-walk-${String(++shotN).padStart(3, '0')}-${n.replace(/[^a-z0-9-]+/gi, '_').slice(0, 40)}.png` });
   const st = () => p.evaluate(() => {
     const w = window.__w; const q = s => document.querySelector(s); const r = {};
@@ -70,6 +82,7 @@ const MAXMIN = +(process.env.MAXMIN || 35);
       await p.waitForTimeout(600); last = s; continue;
     }
     if (s.duel) {
+      if (!last.duel && LIVE && await p.evaluate(() => [...document.querySelectorAll('.tk-duel-key')].some(k => /Skip/.test(k.textContent)))) fail('as a player, a board offers the test-mode Skip key');
       if (!last.duel) { log('[board]', (s.cap || '(no caption)').replace(/\s+/g, ' '), '|', (s.duelLine || '').slice(0, 70)); boards.push({ cap: s.cap || '', tab: s.tab || '', open: s.duelLine || '', next: last.next, at: [...clearedOrder] }); await p.waitForTimeout(600); }
       if (s.duelGo) {
         if (!last.duelGo) log('   won:', (s.duelLine || '').slice(0, 80));
