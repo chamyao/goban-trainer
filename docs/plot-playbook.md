@@ -384,6 +384,12 @@ Draft one arc, get it playable in a test book, and fix what the playtest shows b
   novel's own order, and the later book's **opening scroll** still stands alone for a player who starts there. Example:
   the Cao Cao arc closes on chapters 5–7 in four lines; the Diaochan arc opens on Chang'an under Dong Zhuo.
 
+### Stills briefs (Misaeng, from Graphics)
+
+Name people in a brief by their CAST name ("Park Jong-gi", "Jang Baek-gi", "Ms. Ha"), never by cast id ("ms_parkjg"):
+Graphics matches names to portraits, so an id gets no look and no reference. Write "a single full-frame illustration,
+no panels, no speech bubbles" for any scene with a crowd and one focus.
+
 ### R23. Don't ask the user to approve plans (Misaeng)
 
 > "Yes don't ask for my approval next time" (on the Book 2 plan)
