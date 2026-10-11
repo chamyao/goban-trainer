@@ -380,6 +380,8 @@ def _scenes():
             ["still", "ms_ownup", "slow zoom in"],
             S("ms_jang", "It was mine. I left it on my desk."),
             N("Every intern turns to look at him. Three weeks before the PT, it goes on his record."),
+            ["emote", "sh", "sweat"],
+            N("Kim Seok-ho stares at the floor."),
             ["remove", "ahn"], ["remove", "gl"], ["remove", "sh"],
             N("Back at his desk, Oh turns the waybill over. Glued to the back is a torn scrap of someone's weekly report, with a name on it: Kim Seok-ho."),
             ["gain", "waybill_scrap"],
@@ -472,7 +474,6 @@ def _scenes():
             S("ms_stevehan", "Don't touch me!"),
             N("That night his mother asks how work was. Fine, he says, and for once it's true."),
             N("Two weeks to the PT. There will be dead stones in his own work too, and he'll have to give them up. He still isn't alive on this board, but for the first time he can see how a group like his might live."),
-            ["victory"],
         ]},
     }
 
@@ -1015,6 +1016,7 @@ KO21 = {
     "That night his mother asks how work was. Fine, he says, and for once it's true.": '그날 밤 어머니가 회사는 어땠냐고 묻는다. 괜찮았어요, 그가 말한다. 이번만은 진심이다.',
     'Shred it later, I said. If I keep quiet, they grill every intern. If I speak, it goes on my record, three weeks out.': '나중에 파쇄하자고 했지. 가만있으면 인턴 전원이 추궁당해. 말하면 내 기록에 남아. PT 3주 전에.',
     'He knows what he has to do.': '무엇을 해야 할지 그는 안다.',
+    'Kim Seok-ho stares at the floor.': '김석호는 바닥만 내려다본다.',
     "Back at his desk, Oh turns the waybill over. Glued to the back is a torn scrap of someone's weekly report, with a name on it: Kim Seok-ho.": '자리로 돌아온 오 과장이 선하증권을 뒤집는다. 뒷면에 누군가의 주간 보고서 조각이 붙어 있고, 이름이 적혀 있다. 김석호.',
     'Play the endgame perfectly.': '끝내기를 완벽하게 두어라.',
     'Jang grins. The obvious move had been obvious to Department Head Kim too.': '장그래가 웃는다. 당연한 수는 김부련 부장에게도 당연했던 것이다.',
