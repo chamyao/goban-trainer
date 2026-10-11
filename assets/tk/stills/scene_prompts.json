@@ -1256,8 +1256,8 @@
   "book": 21,
   "category": "interlude",
   "beat": "Years of hardship: he washes his mother's back.",
-  "scene": "A tiny tiled bathroom in a cheap Seoul flat. A worn-out middle-aged woman sits on a low plastic stool, a towel wrapped around her, her shoulders bowed. Her son, a quiet young man in a T-shirt (Jang Geu-rae), kneels behind her and scrubs her back with a washcloth. Steam, a plastic basin, a single bare bulb. Tender, tired, nothing said.",
-  "notes": "Book 21 (Misaeng Book 1), docs/book2/misaeng-arc.md. Modern Seoul, 2012. An original illustration, not a recreation of the comic's panels. People named as CAST names them, so their looks come from CAST. Beat m4."
+  "scene": "A tiny tiled bathroom in a cheap Seoul flat. A worn-out middle-aged woman sits on a low plastic stool, a towel wrapped around her, her shoulders bowed. Her son, a thin, quiet Korean man of twenty-six with a black fringe, in a plain T-shirt, kneels behind her and scrubs her back with a washcloth. Steam, a plastic basin, a single bare bulb. Tender, tired, nothing said.",
+  "notes": "Book 21 (Misaeng Book 1), docs/book2/misaeng-arc.md. Modern Seoul, 2012. An original illustration, not a recreation of the comic's panels. People named as CAST names them, so their looks come from CAST. Beat m4. Graphics: described, not named, so CAST's office look doesn't apply here."
  },
  "ms_citylights": {
   "book": 21,
@@ -1277,15 +1277,15 @@
   "book": 21,
   "category": "interlude",
   "beat": "Oh Sang-sik on a weekday summit, and the phone ringing.",
-  "scene": "A rocky mountain summit above Seoul on a bright weekday morning. Oh Sang-sik, in a red hiking jacket, freezes with his phone to his ear, eyes wide. Behind him three small boys in hiking gear wave from the rocks; the city sprawls far below in haze.",
-  "notes": "Book 21 (Misaeng Book 1), docs/book2/misaeng-arc.md. Modern Seoul, 2012. An original illustration, not a recreation of the comic's panels. People named as CAST names them, so their looks come from CAST. Beat m5."
+  "scene": "A rocky mountain summit above Seoul on a bright weekday morning. A man, a tired, intense Korean man of about forty with bloodshot red eyes, messy spiky black hair and stubble, in an orange-red hiking jacket, freezes with his phone to his ear, eyes wide. Behind him three small boys in hiking gear wave from the rocks; the city sprawls far below in haze.",
+  "notes": "Book 21 (Misaeng Book 1), docs/book2/misaeng-arc.md. Modern Seoul, 2012. An original illustration, not a recreation of the comic's panels. People named as CAST names them, so their looks come from CAST. Beat m5. Graphics: described, not named, so CAST's office look doesn't apply here."
  },
  "ms_jam": {
   "book": 21,
   "category": "interlude",
   "beat": "Stuck in traffic, thirty minutes late.",
-  "scene": "Inside a car at a jammed Seoul crossroads: brake lights in every lane ahead. Oh Sang-sik, sweaty, in a hiking jacket, grips the wheel with one hand and holds a phone with the other, staring at the dashboard clock. Paper cups on the passenger seat.",
-  "notes": "Book 21 (Misaeng Book 1), docs/book2/misaeng-arc.md. Modern Seoul, 2012. An original illustration, not a recreation of the comic's panels. People named as CAST names them, so their looks come from CAST. Beat m7."
+  "scene": "Inside a car at a jammed Seoul crossroads: brake lights in every lane ahead. A man, a tired, intense Korean man of about forty with bloodshot red eyes, messy spiky black hair and stubble, sweaty, in an orange-red hiking jacket, grips the wheel with one hand and holds a phone with the other, staring at the dashboard clock. Paper cups on the passenger seat.",
+  "notes": "Book 21 (Misaeng Book 1), docs/book2/misaeng-arc.md. Modern Seoul, 2012. An original illustration, not a recreation of the comic's panels. People named as CAST names them, so their looks come from CAST. Beat m7. Graphics: described, not named, so CAST's office look doesn't apply here."
  },
  "ms_cafe_quiz": {
   "book": 21,
@@ -1363,47 +1363,5 @@
   "beat": "The thirteenth floor: two department heads face off.",
   "scene": "An open-plan office floor. In the middle aisle, Steve Han, sharp suit, arms folded, faces Kim Bu-ryeon, who holds a very thick bound report. Around them, staff peer over their partitions and pretend to work. Tense, silent, everyone watching.",
   "notes": "Book 21 (Misaeng Book 1), docs/book2/misaeng-arc.md. Modern Seoul, 2012. An original illustration, not a recreation of the comic's panels. People named as CAST names them, so their looks come from CAST. Beat m22."
- },
- "ms_count": {
-  "book": 21,
-  "category": "interlude",
-  "beat": "The count: half a point.",
-  "scene": "A go board after the last move of a long game, seen from just above: two young players' hands rest beside it, and a referee's pencil hovers over a scoring sheet that shows a margin of half a point. Bright, quiet trainee hall, other boards blurred.",
-  "notes": "Book 21 (Misaeng Book 1), docs/book2/misaeng-arc.md. Modern Seoul, 2012. An original illustration, not a recreation of the comic's panels. People named as CAST names them; others described. Beat m2 (the Editor's review: a still at the peak)."
- },
- "ms_father": {
-  "book": 21,
-  "category": "interlude",
-  "beat": "His father's death.",
-  "scene": "A small family memorial at home: a framed black-and-white photograph of a middle-aged man in a suit on a low table, a white chrysanthemum and an incense stick beside it. A young man in a black suit kneels in front of it, seen from behind, alone.",
-  "notes": "Book 21 (Misaeng Book 1), docs/book2/misaeng-arc.md. Modern Seoul, 2012. An original illustration, not a recreation of the comic's panels. People named as CAST names them; others described. Beat m4 (the Editor's review: a still at the peak)."
- },
- "ms_oh_cafe": {
-  "book": 21,
-  "category": "interlude",
-  "beat": "Oh bursts into the café, thirty minutes late.",
-  "scene": "The door of a quiet Jongno café flung open: a red-eyed, stubbled man in his forties, an orange-red hiking jacket under a suit jacket, breathless in the doorway. At a table inside, a foreign buyer and his manager look up from a go diagram on paper, amused; Jang Geu-rae, in a new suit, turns round.",
-  "notes": "Book 21 (Misaeng Book 1), docs/book2/misaeng-arc.md. Modern Seoul, 2012. An original illustration, not a recreation of the comic's panels. People named as CAST names them; others described. Beat m8 (the Editor's review: a still at the peak)."
- },
- "ms_alone": {
-  "book": 21,
-  "category": "interlude",
-  "beat": "The other interns pair off; nobody asks him.",
-  "scene": "A busy plaza outside an office tower at lunchtime. Pairs and threes of young interns in suits chat and laugh together in the foreground. Jang Geu-rae stands alone at the edge of the frame, holding his lunch, watching them.",
-  "notes": "Book 21 (Misaeng Book 1), docs/book2/misaeng-arc.md. Modern Seoul, 2012. An original illustration, not a recreation of the comic's panels. People named as CAST names them; others described. Beat m16 (the Editor's review: a still at the peak)."
- },
- "ms_ownup": {
-  "book": 21,
-  "category": "interlude",
-  "beat": "On the roof: 'It was mine.'",
-  "scene": "An office rooftop by day. A line of interns in shirts and ties stands before an angry senior. One of them, Jang Geu-rae, has stepped forward out of the line, chin up; the others turn their heads to look at him.",
-  "notes": "Book 21 (Misaeng Book 1), docs/book2/misaeng-arc.md. Modern Seoul, 2012. An original illustration, not a recreation of the comic's panels. People named as CAST names them; others described. Beat m20 (the Editor's review: a still at the peak)."
- },
- "ms_ourkid": {
-  "book": 21,
-  "category": "interlude",
-  "beat": "'Our kid.'",
-  "scene": "A narrow Jongno street at night outside a bar. Oh Sang-sik, tipsy and red-faced, shouts at another section head in round glasses, pointing back at Jang Geu-rae, who stands behind him, startled and moved. Kim Dong-sik holds Oh's arm. Neon signs, a drunk group of office workers looking on.",
-  "notes": "Book 21 (Misaeng Book 1), docs/book2/misaeng-arc.md. Modern Seoul, 2012. An original illustration, not a recreation of the comic's panels. People named as CAST names them; others described. Beat m21b (the Editor's review: a still at the peak)."
  }
 }
