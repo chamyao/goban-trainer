@@ -22,7 +22,7 @@ NAMES = {"ms_jang": "Jang", "ms_jang_young": "Jang (18)", "ms_jang_child": "Jang
          "ms_stevehan": "Steve Han", "ms_kimbr": "Kim Bu-ryeon", "ms_trainee": "Trainee",
          "ms_parkjg": "Park Jong-gi", "ms_sun": "Sun Ji-young", "ms_somi": "Somi", "ms_leesh": "Lee Sang-hyun",
          "ms_hanfather": "Han's father", "ms_examiner": "Evaluator", "ms_supceo": "The supplier's president",
-         "ms_kwon": "Kwon", "ms_hateacher": "Ms. Ha"}
+         "ms_kwon": "Kwon", "ms_hateacher": "Ms. Ha", "ms_ithead": "IT department head"}
 
 
 def main(out_path):
