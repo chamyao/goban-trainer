@@ -1,0 +1,37 @@
+     mode: player (the game's test mode off)
+ok   22-b17  12s  ms_parkjg in jongno--bakery
+     22-b17b: the lift, to ◆ R · The roof
+ok   22-b17b  17s  ms_jang in one-international--roof
+ok   22-b18  13s  ms_jang in supplier--corridor
+ok   22-b19  17s  ms_jang in supplier--president
+     22-b20: the lift, to ◆ 17F · The executive meeting room
+ok   22-b20  19s  ms_jang in one-international--meeting3
+     22-b21: the lift, to ◆ 14F · Sales Team 3
+ok   22-b21  27s  ms_jang in one-international--sales3
+ok   22-b21b  10s  ms_jang in daycare
+ok   22-b22  11s  ms_sun in suns-neighbourhood--sun-flat
+ok   22-b22b  7s  ms_sun in daycare
+     22-b23: the lift, to ◆ 12F · The reference room
+ok   22-b23  15s  ms_jang in one-international--reference
+     22-b24: the lift, to ◆ R · The roof
+ok   22-b24  23s  ms_jang in one-international--roof
+ok   22-b25  12s  ms_jang in jongno
+ok   22-b26  24s  ms_jang in one-international
+     22-b27: the lift, to ◆ 14F · Sales Team 3
+     22-b27: the lift, to ◆ 4F · The PT hall
+ok   22-b27  16s  ms_jang in one-international--pt-hall
+ok   22-b28  17s  ms_han in one-international--pt-hall
+ok   22-b29  10s  ms_han in one-international--pt-hall
+ok   22-b30  19s  ms_jang in one-international--pt-hall
+ok   22-b31  19s  ms_jang in one-international--pt-hall
+ok   22-b32  17s  ms_jang in one-international--pt-hall
+     22-b32b: the lift, to ◆ 14F · Sales Team 3
+ok   22-b32b  20s  ms_jang in one-international--sales3
+ok   22-b33  7s  ms_jang in susaek-dong--home
+     22-b33b: the lift, to ◆ 14F · Sales Team 3
+ok   22-b33b  18s  ms_jang in one-international--sales3
+ok   22-b33c  10s  ms_jang in daehanmun
+ok   after each handoff the new lead starts 6+ tiles from the beat's spot (b18 ms_parkjg>ms_jang in supplier, the spot in supplier--corridor; b22 ms_jang>ms_sun 1.6 tiles from b22 (kept as a cut); b23 ms_sun>ms_jang in one-international--sales3, the spot in one-international--reference; b29 ms_jang>ms_han 6.2 tiles from b29; b30 ms_han>ms_jang 11.8 tiles from b30)
+ok   after the book: playing as ms_jang in daehanmun; the chip says "Jang Geu-rae"; "Now playing" banners: Jang Geu-raeNow playing: Geu-rae | Sun Ji-youngNow playing: Ji-young | Jang Geu-raeNow playing: Geu-rae | Han Seok-yulNow playing: Seok-yul | Jang Geu-raeNow playing: Geu-rae
+walk-playthrough Book 22 (default): 23/23 beats walked and played in 6.1 min (0 needed a reload, 0 held by a scene); 15 boards (11 from the rated pool)
+the goal box's chip followed the party: Park Jong-gi → Jang Geu-rae → Sun Ji-young → Jang Geu-rae → Han Seok-yul → Jang Geu-rae

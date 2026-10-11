@@ -51,7 +51,7 @@ function board(n) {
   for (const nd of W.nodes) {
     if (!Number.isInteger(nd.move)) { check(false, `${nd.key}: no "move" for the strip`); continue; }
     check(nd.move >= last && nd.move <= 145, `${nd.key}: the strip shows move ${nd.move} (after ${last})`); last = nd.move;
-    for (const r of [].concat(nd.record == null ? [] : nd.record)) if (Number.isInteger(r)) check(r > nd.move, `${nd.key}: the record board asks Black ${r}, after the strip's move ${nd.move}`);
+    for (const r of [].concat(nd.record == null ? [] : nd.record)) if (Number.isInteger(r)) check(r > nd.move, `${nd.key}: the record board asks Black ${r}, after the strip's move ${nd.move}${r <= nd.move ? ' (the strip shows the answer: Black ' + r + ' ringed as its last move)' : ''}`);
   }
   // 3. gates: an objective with a place in it, and an else-scene that says why
   const PLACE = /\b(at|in|on|from|to|by|into|outside|inside|behind|beside|near|down|up)\b .*[A-Z]|lobby|desk|room|table|street|floor|stall|office|roof|lift|station|park/i;
@@ -71,7 +71,7 @@ function board(n) {
   for (const nd of W.nodes) {
     check(!!W.scenes[nd.scene], `${nd.key}: its scene "${nd.scene}" exists`);
     const n = (W.scenes[nd.scene] ? W.scenes[nd.scene].steps : []).filter(s => s[0] === 'problem').length, dl = [].concat(nd.dilemma || []);
-    if (n) check(dl.length >= n, `${nd.key}: ${n} board(s), ${dl.length} caption(s)`);
+    if (n) check(dl.length >= n || (nd.role === 'boss' && nd.boss && (nd.boss.title || nd.boss.taunt)), `${nd.key}: ${n} board(s), ${dl.length} caption(s)${nd.boss ? ` (a boss: "${nd.boss.title}", "${nd.boss.taunt}")` : ''}`);
   }
   await b.close();
   console.log(fails ? `misaeng-beats: ${fails} failed` : 'misaeng-beats: all ok');

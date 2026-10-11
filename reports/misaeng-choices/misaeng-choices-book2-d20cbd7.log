@@ -1,0 +1,128 @@
+--- desktop (1280x800): 4 record boards
+ok   22-b23 (Black 23): four letters A-D on four empty points (a=mq b=dm c=ir d=jq)
+ok   22-b23 (Black 23): exactly one letter is Cho's move jq
+ok   22-b23 (Black 23): letters readable (15.2 px, discs 14 px)
+ok   22-b23 (Black 23): every letter can be tapped, nothing over the board (board, board, board, board)
+ok   22-b23 (Black 23): only the letters take a tap (4 tap targets on the board)
+ok   22-b23 (Black 23): a tap off the letters (ed) plays nothing
+ok   22-b23 (Black 23): the wrong letter a (mq) shows the move played and goes on, no rest ({"cleared":true,"rest":false,"played":1,"ring":true})
+ok   22-b23 (Black 23): after a slip the same four come back (a=mq b=dm c=ir d=jq)
+ok   22-b23 (Black 23): the right letter d (its key) clears the board
+ok   22-b25 (Black 25): four letters A-D on four empty points (a=nr b=mq c=dl d=dm)
+ok   22-b25 (Black 25): exactly one letter is Cho's move mq
+ok   22-b25 (Black 25): letters readable (15.3 px, discs 14 px)
+ok   22-b25 (Black 25): every letter can be tapped, nothing over the board (board, board, board, board)
+ok   22-b25 (Black 25): only the letters take a tap (3 tap targets on the board)
+ok   22-b25 (Black 25): a tap off the letters (ed) plays nothing
+ok   22-b25 (Black 25): the wrong letter a (nr) shows the move played and goes on, no rest ({"cleared":true,"rest":false,"played":1,"ring":true})
+ok   22-b25 (Black 25): after a slip the same four come back (a=nr b=mq c=dl d=dm)
+ok   22-b25 (Black 25): the right letter b (its key) clears the board
+ok   22-b27 (Black 27): four letters A-D on four empty points (a=ir b=oq c=np d=nr)
+ok   22-b27 (Black 27): exactly one letter is Cho's move nr
+ok   22-b27 (Black 27): letters readable (15.2 px, discs 14 px)
+ok   22-b27 (Black 27): every letter can be tapped, nothing over the board (board, board, board, board)
+ok   22-b27 (Black 27): only the letters take a tap (3 tap targets on the board)
+ok   22-b27 (Black 27): a tap off the letters (ed) plays nothing
+ok   22-b27 (Black 27): the wrong letter a (ir) shows the move played and goes on, no rest ({"cleared":true,"rest":false,"played":1,"ring":true})
+ok   22-b27 (Black 27): after a slip the same four come back (a=ir b=oq c=np d=nr)
+ok   22-b27 (Black 27): the right letter d (its key) clears the board
+ok   22-b33 (Black 33): four letters A-D on four empty points (a=ms b=gr c=dn d=dg)
+ok   22-b33 (Black 33): exactly one letter is Cho's move ms
+ok   22-b33 (Black 33): letters readable (15.2 px, discs 14 px)
+ok   22-b33 (Black 33): every letter can be tapped, nothing over the board (board, board, board, board)
+ok   22-b33 (Black 33): only the letters take a tap (4 tap targets on the board)
+ok   22-b33 (Black 33): a tap off the letters (ed) plays nothing
+ok   22-b33 (Black 33): the wrong letter b (gr) shows the move played and goes on, no rest ({"cleared":true,"rest":false,"played":1,"ring":true})
+ok   22-b33 (Black 33): after a slip the same four come back (a=ms b=gr c=dn d=dg)
+ok   22-b33 (Black 33): the right letter a (its key) clears the board
+--- iPhone 13 (390x664, touch): 4 record boards
+ok   22-b23 (Black 23): four letters A-D on four empty points (a=mq b=dm c=ir d=jq)
+ok   22-b23 (Black 23): exactly one letter is Cho's move jq
+ok   22-b23 (Black 23): letters readable (11.2 px, discs 10 px)
+ok   22-b23 (Black 23): every letter can be tapped, nothing over the board (board, board, board, board)
+ok   22-b23 (Black 23): only the letters take a tap (4 tap targets on the board)
+ok   22-b23 (Black 23): a tap off the letters (ed) plays nothing
+NOTE a ghost (fingertip confirm) after one tap at 244,332
+ok   22-b23 (Black 23): the wrong letter a (mq) shows the move played and goes on, no rest ({"cleared":true,"rest":false,"played":1,"ring":true})
+ok   22-b23 (Black 23): after a slip the same four come back (a=mq b=dm c=ir d=jq)
+NOTE a ghost (fingertip confirm) after one tap at 195,332
+ok   22-b23 (Black 23): the right letter d (a tap) clears the board
+ok   22-b25 (Black 25): four letters A-D on four empty points (a=nr b=mq c=dl d=dm)
+ok   22-b25 (Black 25): exactly one letter is Cho's move mq
+ok   22-b25 (Black 25): letters readable (11.2 px, discs 10 px)
+ok   22-b25 (Black 25): every letter can be tapped, nothing over the board (board, board, board, board)
+ok   22-b25 (Black 25): only the letters take a tap (4 tap targets on the board)
+ok   22-b25 (Black 25): a tap off the letters (ed) plays nothing
+NOTE a ghost (fingertip confirm) after one tap at 260,349
+ok   22-b25 (Black 25): the wrong letter a (nr) shows the move played and goes on, no rest ({"cleared":true,"rest":false,"played":1,"ring":true})
+ok   22-b25 (Black 25): after a slip the same four come back (a=nr b=mq c=dl d=dm)
+NOTE a ghost (fingertip confirm) after one tap at 244,332
+ok   22-b25 (Black 25): the right letter b (a tap) clears the board
+ok   22-b27 (Black 27): four letters A-D on four empty points (a=ir b=oq c=np d=nr)
+ok   22-b27 (Black 27): exactly one letter is Cho's move nr
+ok   22-b27 (Black 27): letters readable (11.2 px, discs 10 px)
+ok   22-b27 (Black 27): every letter can be tapped, nothing over the board (board, board, board, board)
+ok   22-b27 (Black 27): only the letters take a tap (4 tap targets on the board)
+ok   22-b27 (Black 27): a tap off the letters (ed) plays nothing
+NOTE a ghost (fingertip confirm) after one tap at 179,349
+ok   22-b27 (Black 27): the wrong letter a (ir) shows the move played and goes on, no rest ({"cleared":true,"rest":false,"played":1,"ring":true})
+ok   22-b27 (Black 27): after a slip the same four come back (a=ir b=oq c=np d=nr)
+NOTE a ghost (fingertip confirm) after one tap at 260,349
+ok   22-b27 (Black 27): the right letter d (a tap) clears the board
+ok   22-b33 (Black 33): four letters A-D on four empty points (a=ms b=gr c=dn d=dg)
+ok   22-b33 (Black 33): exactly one letter is Cho's move ms
+ok   22-b33 (Black 33): letters readable (11.2 px, discs 10 px)
+ok   22-b33 (Black 33): every letter can be tapped, nothing over the board (board, board, board, board)
+ok   22-b33 (Black 33): only the letters take a tap (4 tap targets on the board)
+ok   22-b33 (Black 33): a tap off the letters (ed) plays nothing
+NOTE a ghost (fingertip confirm) after one tap at 146,349
+ok   22-b33 (Black 33): the wrong letter b (gr) shows the move played and goes on, no rest ({"cleared":true,"rest":false,"played":1,"ring":true})
+ok   22-b33 (Black 33): after a slip the same four come back (a=ms b=gr c=dn d=dg)
+NOTE a ghost (fingertip confirm) after one tap at 244,365
+ok   22-b33 (Black 33): the right letter a (a tap) clears the board
+--- iPhone SE (320x568, touch): 4 record boards
+ok   22-b23 (Black 23): four letters A-D on four empty points (a=mq b=dm c=ir d=jq)
+ok   22-b23 (Black 23): exactly one letter is Cho's move jq
+ok   22-b23 (Black 23): letters readable (9.2 px, discs 8 px)
+ok   22-b23 (Black 23): every letter can be tapped, nothing over the board (board, board, board, board)
+ok   22-b23 (Black 23): only the letters take a tap (4 tap targets on the board)
+ok   22-b23 (Black 23): a tap off the letters (ed) plays nothing
+NOTE a ghost (fingertip confirm) after one tap at 200,257
+ok   22-b23 (Black 23): the wrong letter a (mq) shows the move played and goes on, no rest ({"cleared":true,"rest":false,"played":1,"ring":true})
+ok   22-b23 (Black 23): after a slip the same four come back (a=mq b=dm c=ir d=jq)
+NOTE a ghost (fingertip confirm) after one tap at 160,257
+ok   22-b23 (Black 23): the right letter d (a tap) clears the board
+ok   22-b25 (Black 25): four letters A-D on four empty points (a=nr b=mq c=dl d=dm)
+ok   22-b25 (Black 25): exactly one letter is Cho's move mq
+ok   22-b25 (Black 25): letters readable (9.2 px, discs 8 px)
+ok   22-b25 (Black 25): every letter can be tapped, nothing over the board (board, board, board, board)
+ok   22-b25 (Black 25): only the letters take a tap (4 tap targets on the board)
+ok   22-b25 (Black 25): a tap off the letters (ed) plays nothing
+NOTE a ghost (fingertip confirm) after one tap at 214,271
+ok   22-b25 (Black 25): the wrong letter a (nr) shows the move played and goes on, no rest ({"cleared":true,"rest":false,"played":1,"ring":true})
+ok   22-b25 (Black 25): after a slip the same four come back (a=nr b=mq c=dl d=dm)
+NOTE a ghost (fingertip confirm) after one tap at 200,258
+ok   22-b25 (Black 25): the right letter b (a tap) clears the board
+ok   22-b27 (Black 27): four letters A-D on four empty points (a=ir b=oq c=np d=nr)
+ok   22-b27 (Black 27): exactly one letter is Cho's move nr
+ok   22-b27 (Black 27): letters readable (9.2 px, discs 8 px)
+ok   22-b27 (Black 27): every letter can be tapped, nothing over the board (board, board, board, board)
+ok   22-b27 (Black 27): only the letters take a tap (4 tap targets on the board)
+ok   22-b27 (Black 27): a tap off the letters (ed) plays nothing
+NOTE a ghost (fingertip confirm) after one tap at 147,271
+ok   22-b27 (Black 27): the wrong letter a (ir) shows the move played and goes on, no rest ({"cleared":true,"rest":false,"played":1,"ring":true})
+ok   22-b27 (Black 27): after a slip the same four come back (a=ir b=oq c=np d=nr)
+NOTE a ghost (fingertip confirm) after one tap at 214,271
+ok   22-b27 (Black 27): the right letter d (a tap) clears the board
+ok   22-b33 (Black 33): four letters A-D on four empty points (a=ms b=gr c=dn d=dg)
+ok   22-b33 (Black 33): exactly one letter is Cho's move ms
+ok   22-b33 (Black 33): letters readable (9.2 px, discs 8 px)
+ok   22-b33 (Black 33): every letter can be tapped, nothing over the board (board, board, board, board)
+ok   22-b33 (Black 33): only the letters take a tap (4 tap targets on the board)
+ok   22-b33 (Black 33): a tap off the letters (ed) plays nothing
+NOTE a ghost (fingertip confirm) after one tap at 120,271
+ok   22-b33 (Black 33): the wrong letter b (gr) shows the move played and goes on, no rest ({"cleared":true,"rest":false,"played":1,"ring":true})
+ok   22-b33 (Black 33): after a slip the same four come back (a=ms b=gr c=dn d=dg)
+NOTE a ghost (fingertip confirm) after one tap at 200,284
+ok   22-b33 (Black 33): the right letter a (a tap) clears the board
+misaeng-choices: all ok, 0 notes
