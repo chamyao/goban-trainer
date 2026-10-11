@@ -651,3 +651,12 @@ the choice revealed afterwards.
 - m17 and m18: the boards are framed as questions.
 - m8: it's a puzzle he sets.
 - m2: it's not a choice.
+
+**b89cf38, checked against the raw steps: cleared.**
+- **m13, m19, m20 and m22b** now pose the dilemma and reveal the choice after the solve. Moving m13's "both live"
+  narration after the board was a good catch by Plot.
+- **m20:** the lineup by the windows now matches the map. Putting Kim Seok-ho in the row is good dramatic irony,
+  because the player watched him glue the report onto the waybill (9).
+- **Optional, m20:** one beat for Kim Seok-ho after "Every intern turns to look at him", e.g. `["emote", "sh", ...]`
+  plus "Kim Seok-ho stares at the floor." It would plant his "...I'm sorry" in m21b.
+- **Dependency:** the `ms_ownup` still has to be repainted for the new staging (Plot has asked Graphics).
