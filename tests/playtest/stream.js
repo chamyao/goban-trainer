@@ -51,6 +51,19 @@ const off=await p.evaluate(()=>{const t=window.__trainer,first=new Set(t.p.lines
   for(let r=0;r<19;r++)for(let c=0;c<19;c++){const mv=String.fromCharCode(97+c)+String.fromCharCode(97+r);if(t.grid[r][c]===0&&!first.has(mv)){t.click(c,r);return {mv,done:t.done};}}});
 const r1=(await st()).r;
 check(off&&off.done==='bad'&&r1<r0,`a move off the answer key (${off&&off.mv}) is a miss and lowers the rating: ${r0} → ${r1}`);
+// the high roller: the next problem's stakes ×5, kept across a reload, and the one after is back to ×1
+const plain=await p.evaluate(()=>TKElo.stakes(streamPool,[window.__trainer.book.id,window.__trainer.p.id]));
+await p.click('button.high-roller');await p.waitForTimeout(800);
+const hr=await p.evaluate(()=>{const t=window.__trainer,k=TKElo.stakes(streamPool,[t.book.id,t.p.id]),k5=TKElo.stakes(streamPool,[t.book.id,t.p.id],5);return {k,k5,line:document.querySelector('.tk-stakes').textContent,r:TKElo.state().r};});
+check(hr.line.includes('×5')&&hr.line.includes(`+${hr.k5.win}`)&&hr.line.includes(`−${-hr.k5.loss}`)&&Math.abs(hr.k5.loss-5*hr.k.loss)<=3,`the high roller deals a problem at ×5 stakes: "${hr.line}" (×1 would be +${hr.k.win} / −${-hr.k.loss})`);
+await p.reload();await p.evaluate(()=>{const m=document.getElementById('authModalBackdrop');if(m)m.hidden=true;});
+await p.waitForFunction(()=>window.__trainer&&document.querySelector('.tk-stakes'),null,{timeout:20000});
+check((await p.textContent('.tk-stakes')).includes('×5'),'a reload keeps the ×5');
+await p.evaluate(()=>window.__trainer.finish('bad'));
+const after=await p.evaluate(()=>TKElo.state().r);
+check(after-hr.r===hr.k5.loss,`a miss costs the ×5 loss: ${hr.r} → ${after} (${hr.k5.loss})`);
+await p.click('button.primary');await p.waitForTimeout(800);
+check(!(await p.textContent('.tk-stakes')).includes('×5'),'Next problem after it is back to ×1');
 console.log(fails?`stream: ${fails} failed`:'stream: all ok');await b.close();process.exit(fails?1:0);
 })();
 function TKof(rank){return 600+rank*50;}

@@ -2302,31 +2302,31 @@ const TKElo = {
   },
   // a board's first result, in Adaptive: the rating moves (faster for the first ten boards); it shapes the boards
   // still unseen, never one already dealt
-  result(w, node, ref, win) {
+  result(w, node, ref, win, mult = 1) {   // mult: the Stream's high roller (×5 the stakes, the user)
     if (TK.mode !== "adaptive" || !w || !w.rated || !node) return;
     const x = w.rated.find(y => y[0] === ref[0] && y[1] === ref[1]);
     if (!x) return;
     const p = loadProgress(), s = this.state(p), r0 = s.r;
-    s.r = this.after(s, x[2], win);
+    s.r = this.after(s, x[2], win, mult);
     s.n = (s.n || 0) + 1;
     TK.saveProg(p);
     return s.r - r0;
   },
   // the rating after a first answer to a problem of this rank (faster for the first ten boards)
-  after(s, rank, win) {
+  after(s, rank, win, mult = 1) {
     const E = 1 / (1 + Math.pow(10, (this.of(rank) - s.r) / 400));
-    return Math.round(Math.max(300, Math.min(2800, s.r + (s.n < 10 ? 96 : s.n < 30 ? 64 : 32) * ((win ? 1 : 0) - E))));
+    return Math.round(Math.max(300, Math.min(2800, s.r + mult * (s.n < 10 ? 96 : s.n < 30 ? 64 : 32) * ((win ? 1 : 0) - E))));
   },
   // what a problem is worth before it's answered (the user: "+x / -x" on the board): null if it isn't rated
-  stakes(w, ref) {
+  stakes(w, ref, mult = 1) {
     const x = TK.mode === "adaptive" && w && w.rated && w.rated.find(y => y[0] === ref[0] && String(y[1]) === String(ref[1]));
     if (!x) return null;
     const s = this.state();
-    return { win: this.after(s, x[2], true) - s.r, loss: this.after(s, x[2], false) - s.r };
+    return { win: this.after(s, x[2], true, mult) - s.r, loss: this.after(s, x[2], false, mult) - s.r };
   },
   // the line under a rated board: "+8 / −24" before, the change and the new rating after
-  stakesEl(w, ref, zh = true, own = true) {   // own: show the account's rating after the answer (not in an English-only book, Misaeng: the user)
-    const k = this.stakes(w, ref), lead = zh ? "等级分 rating" : "Rating";
+  stakesEl(w, ref, zh = true, own = true, mult = 1) {   // own: show the account's rating after the answer (not in an English-only book, Misaeng: the user)
+    const k = this.stakes(w, ref, mult), lead = (zh ? "等级分 rating" : "Rating") + (mult > 1 ? ` ×${mult}` : "");
     if (!k) return "";
     const el = document.createElement("span");
     el.className = "tk-stakes";

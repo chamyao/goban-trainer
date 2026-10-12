@@ -5,6 +5,12 @@ white rank, result, event, moves]. Text only is read from the files; they're ser
     python3 -I tools/build_games.py go-seigen "Go Seigen" 吴清源 <folder of .sgf> ["Go Seigen"]
 
 The optional last argument keeps only the games that player played in (the collection holds a few others').
+--numbered: the collection's own order and numbers ("No. 12") in place of dates, for one whose dates can't be
+trusted (Huang Longshi's: few dated, some before he was born).
+
+    python3 -I tools/build_games.py huang-longshi "Huang Longshi" 黄龙士 <folder> "Huang Longshi" --numbered
+
+Huang Longshi's 121 games: GoMagic's "Huang Longshi SGF Pack" (gomagic.org/download/huang-longshi-sgf-pack-121-games/).
 
 The Go Seigen collection: Andries Brouwer's database, homepages.cwi.nl/~aeb/go/games/ (go_seigen.tgz, public
 domain by its compiler's note; much of it from GoGoD).
@@ -23,9 +29,31 @@ def prop(text, key):
     return m.group(1).replace("\\]", "]").strip() if m else ""
 
 
+def nested(text):
+    """A value whose text holds its own [ ] (Huang Longshi's No. 118: "modern interpolations in [ ]", notes in [..]
+    inside comments) ends early for any SGF reader: escape a ] that closes a [ opened inside the value."""
+    out, i, inval, depth = [], 0, False, 0
+    while i < len(text):
+        ch = text[i]
+        if inval and ch == "\\":
+            out.append(text[i:i + 2]); i += 2; continue
+        if not inval and ch == "[":
+            inval, depth = True, 0
+        elif inval and ch == "[":
+            depth += 1
+        elif inval and ch == "]":
+            if depth:
+                depth -= 1; out.append("\\]"); i += 1; continue
+            inval = False
+        out.append(ch); i += 1
+    return "".join(out)
+
+
 def main():
-    gid, title, native, src = sys.argv[1], sys.argv[2], sys.argv[3], Path(sys.argv[4])
-    player = sys.argv[5] if len(sys.argv) > 5 else None
+    numbered = "--numbered" in sys.argv
+    args = [a for a in sys.argv[1:] if a != "--numbered"]
+    gid, title, native, src = args[0], args[1], args[2], Path(args[3])
+    player = args[4] if len(args) > 4 else None
     out = ROOT / "data" / "games" / gid
     out.mkdir(parents=True, exist_ok=True)
     rows = []
@@ -41,6 +69,11 @@ def main():
             continue
         if not moves or (player and player not in prop(text, "PB").split(" & ") + prop(text, "PW").split(" & ")):
             continue
+        # an empty first node, the game's info in the second (8 of Huang Longshi's): one root node, so the Review
+        # tab finds the players and the komi where it looks
+        text = nested(text)
+        text = re.sub(r"^\s*\(\s*;((?:\s*[A-Z]+(?:\[(?:\\.|[^\]])*\])+)*)\s*;(\s*(?:PB|PW|HA|KM|RE|DT|BR|WR|EV)\[)", r"(;\1\2", text, count=1)
+        text = text.replace("Xi Xingyou", "Xu Xingyou")   # a misspelling in one game (No. 46): the search finds him
         # no KM: these old records leave it out for a game without komi (before komi was standard, or a handicap
         # game); say so, or the Review tab would take a modern 6.5 (the user: "was it really komi 6.5?")
         if not prop(text, "KM"):
@@ -48,10 +81,10 @@ def main():
         name = re.sub(r"[^A-Za-z0-9._-]", "_", str(f.relative_to(src)))   # a subfolder's games: "Yomiuri_1953-03-31.sgf"
         (out / name).write_text(text, encoding="utf-8")
         # no DT (only the date it was published, DTX): the file's own name is its date
-        date = prop(text, "DT") or (re.match(r"\d{4}-\d\d-\d\d", f.stem) or [""])[0]
+        date = f"No. {int(f.stem)}" if numbered and f.stem.isdigit() else prop(text, "DT") or (re.match(r"\d{4}-\d\d-\d\d", f.stem) or [""])[0]
         rows.append([name, date, prop(text, "PB"), prop(text, "BR"), prop(text, "PW"), prop(text, "WR"),
                      prop(text, "RE"), " · ".join(x for x in (prop(text, "EV"), prop(text, "RO")) if x), moves])
-    rows.sort(key=lambda r: (r[1], r[0]))
+    rows.sort(key=lambda r: r[0] if numbered else (r[1], r[0]))
     (ROOT / "data" / "games" / f"{gid}.json").write_text(json.dumps(
         {"id": gid, "title": title, "native": native, "games": rows}, ensure_ascii=False, separators=(",", ":")))
     print(f"{gid}: {len(rows)} games")

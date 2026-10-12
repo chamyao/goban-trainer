@@ -2060,11 +2060,12 @@ async function viewLibrary() {
     ]));
   }
   // game records (data/games, tools/build_games.py): a shelf of their own; a game opens in the Review tab
-  const GAME_SHELVES = [["go-seigen", "Go Seigen", "吴清源", 883, "1926–1992"]];
+  const GAME_SHELVES = [["go-seigen", "Go Seigen", "吴清源", 883, "his games, 1926–1992"],
+                        ["huang-longshi", "Huang Longshi", "黄龙士", 121, "his games, the Qing dynasty's 17th century"]];
   const gameShelf = h("div", { class: "book-list" });
   for (const [id, title, native, count, years] of GAME_SHELVES)
     gameShelf.append(h("div", { class: "book book-games", onclick: () => location.hash = `#/games/${id}` }, [
-      h("div", { class: "t" }, title), h("div", { class: "n" }, `${native} · his games, ${years}`),
+      h("div", { class: "t" }, title), h("div", { class: "n" }, `${native} · ${years}`),
       h("div", { class: "row" }, [h("span", { class: "badge dan" }, "pro"), h("span", { class: "cnt" }, `${count} games`)]),
     ]));
   // Favorited books from every category come first; they stay in their category too.
@@ -2285,7 +2286,10 @@ async function viewStream() {
     h("div", { class: "meta-sub" }, "Tap a move to see the position. Green: correct lines · red: failures · dot: his comment."),
     treeBox,
   ]);
-  const rating = h("div", { class: "stream-rating" }), stakes = (TKElo.state().streamRated !== `${bookId}:${pid}` && TKElo.stakesEl(streamPool, [bookId, pid], false)) || "";
+  // the high roller (the user): this problem's stakes ×5, chosen with the button that dealt it; kept with the
+  // progress so a reload can't shed it
+  const st0 = TKElo.state(), mult = st0.streamX && st0.streamX.n === (st0.stream || 0) ? st0.streamX.x : 1;
+  const rating = h("div", { class: "stream-rating" }), stakes = (st0.streamRated !== `${bookId}:${pid}` && TKElo.stakesEl(streamPool, [bookId, pid], false, true, mult)) || "";
   const showRating = () => { const t = TKElo.state(); rating.textContent = `${TKElo.label(t.r)} · ${t.r}`; };
   showRating();
   // the problem's source and grade wait until it's answered, so they don't hint at it
@@ -2294,7 +2298,8 @@ async function viewStream() {
           : h("a", { href: `https://www.101weiqi.com/q/${p.id}/`, target: "_blank" }, `${book.title} · 101weiqi #${p.id}`),
     x ? ` · ${GRADE_NAMES[x[2]]}` : "", x && x[4] ? " · KataGo-checked" : "",
   ]);
-  const next = () => { const q = loadProgress(), st = TKElo.state(q); st.stream = (st.stream || 0) + 1; TK.saveProg(q); viewStream(); };
+  const next = (x = 1) => { const q = loadProgress(), st = TKElo.state(q); st.stream = (st.stream || 0) + 1;
+    st.streamX = x > 1 ? { n: st.stream, x } : null; TK.saveProg(q); viewStream(); };
 
   const aside = h("aside", {}, [
     h("div", { class: "panel" }, [
@@ -2311,7 +2316,9 @@ async function viewStream() {
         h("button", { onclick: () => trainer.hint() }, "Hint"),
         h("button", { onclick: () => trainer.reset() }, "Reset"),
         btnExplore,
-        h("button", { class: "wide primary", onclick: next }, "Next problem →"),
+        h("button", { class: "primary", onclick: () => next() }, "Next problem →"),
+        h("button", { class: "high-roller", title: "The next problem counts five times over: five times the gain if you solve it first try, five times the loss if not",
+                      onclick: () => next(5) }, "High roller ×5 →"),
       ]),
     ]),
     h("div", { class: "panel keys" },
@@ -2334,7 +2341,7 @@ async function viewStream() {
     const q = loadProgress(), st = TKElo.state(q);
     if (st.streamRated === key) return;
     st.streamRated = key; TK.saveProg(q);
-    if (t.flawed !== "claimed") { const d = TKElo.result(streamPool, {}, [bookId, pid], e.detail === "ok" && !t.flawed); if (stakes) stakes.settle(d); }
+    if (t.flawed !== "claimed") { const d = TKElo.result(streamPool, {}, [bookId, pid], e.detail === "ok" && !t.flawed, mult); if (stakes) stakes.settle(d); }
     showRating();
   };
   window.addEventListener("tczw:result", onResult);

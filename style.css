@@ -969,3 +969,6 @@ svg.pl-counting .last-move { display: none; }
   .games-row { grid-template-columns: 78px minmax(0, 1fr) max-content; gap: 10px; }
   .games-event { grid-column: 1 / -1; white-space: normal; }
 }
+/* the Stream's high roller (app.js viewStream): the next problem's stakes ×5 */
+.controls button.high-roller { background: #8a5a12; border-color: #8a5a12; color: #fff; }
+.controls button.high-roller:hover { background: #6f480e; }
