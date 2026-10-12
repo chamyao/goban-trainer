@@ -1638,7 +1638,7 @@ function tkLevelBuild(host, worldN, key, { w, node, src, p, book }, { back, agai
       ...(TKVoice.has(node.boss.taunt_vid) ? [h("button", { class: "tk-say", type: "button", onclick: () => TKVoice.play(node.boss.taunt_vid) }, "播放 Play")] : [])]),
   ]) : null;
   if (node.boss) TKVoice.play(node.boss.taunt_vid);
-  const stakes = p.record ? null : TKElo.stakesEl(w, [src.id, p.id], w.lang !== "en") || null;
+  const stakes = p.record ? null : TKElo.stakesEl(w, [src.id, p.id], w.lang !== "en", w.lang !== "en") || null;
   const aside = h("aside", {}, [
     ...(bossPanel ? [bossPanel] : []),
     h("div", { class: "panel" }, [
@@ -1818,7 +1818,7 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
       : [`${p.lv || node.grade || ""} · 死活 · `, node.role === "boss" ? "" : `出自 ${src.title} · `]),
     h("a", { href: p.url || `https://www.101weiqi.com/q/${p.id}/`, target: "_blank", rel: "noopener" }, enOnly ? "source" : "来源 source"),
   ]);
-  const stakes = p.record ? null : TKElo.stakesEl(TK.world(worldN), [src.id, p.id], !enOnly) || null;
+  const stakes = p.record ? null : TKElo.stakesEl(TK.world(worldN), [src.id, p.id], !enOnly, !enOnly) || null;
   if (stakes) srcLine.append(" · ", stakes);
   // a decision board: the leader's choice named in the side column, over what's said
   const nth = Math.max(0, (+String(key).split("~")[1] || 1) - 1);   // which board of the scene
@@ -2281,7 +2281,7 @@ const TKElo = {
     return { win: this.after(s, x[2], true) - s.r, loss: this.after(s, x[2], false) - s.r };
   },
   // the line under a rated board: "+8 / −24" before, the change and the new rating after
-  stakesEl(w, ref, zh = true) {
+  stakesEl(w, ref, zh = true, own = true) {   // own: show the account's rating after the answer (not in an English-only book, Misaeng: the user)
     const k = this.stakes(w, ref), lead = zh ? "等级分 rating" : "Rating";
     if (!k) return "";
     const el = document.createElement("span");
@@ -2290,7 +2290,7 @@ const TKElo = {
     el.innerHTML = `${lead} <b class="up">+${k.win}</b> / <b class="down">−${-k.loss}</b>`;
     el.settle = d => {
       if (d == null) return;
-      el.innerHTML = `${lead} <b class="${d >= 0 ? "up" : "down"}">${d >= 0 ? "+" : "−"}${Math.abs(d)}</b> → ${this.rating} (${this.label()})`;
+      el.innerHTML = `${lead} <b class="${d >= 0 ? "up" : "down"}">${d >= 0 ? "+" : "−"}${Math.abs(d)}</b>${own ? ` → ${this.rating} (${this.label()})` : ""}`;
     };
     return el;
   },
