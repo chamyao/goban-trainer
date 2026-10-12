@@ -41,6 +41,10 @@ def main():
             continue
         if not moves or (player and player not in prop(text, "PB").split(" & ") + prop(text, "PW").split(" & ")):
             continue
+        # no KM: these old records leave it out for a game without komi (before komi was standard, or a handicap
+        # game); say so, or the Review tab would take a modern 6.5 (the user: "was it really komi 6.5?")
+        if not prop(text, "KM"):
+            text = re.sub(r"\(\s*;", lambda m: m.group(0) + "KM[0]", text, count=1)
         name = re.sub(r"[^A-Za-z0-9._-]", "_", str(f.relative_to(src)))   # a subfolder's games: "Yomiuri_1953-03-31.sgf"
         (out / name).write_text(text, encoding="utf-8")
         # no DT (only the date it was published, DTX): the file's own name is its date
