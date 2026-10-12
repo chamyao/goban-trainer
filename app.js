@@ -551,7 +551,7 @@ class Goban {
                               fill: grid[r][c] === BLACK ? "url(#bs)" : "url(#ws)",
                               stroke: "rgba(0,0,0,.35)", "stroke-width": .8 });
           if (lastMove && lastMove[0] === c && lastMove[1] === r)
-            this.el("circle", { cx: this.px(c), cy: this.py(r), r: this.cell * .2, fill: "none",
+            this.el("circle", { class: "last-move", cx: this.px(c), cy: this.py(r), r: this.cell * .2, fill: "none",
                                 stroke: grid[r][c] === BLACK ? "#fff" : "#333", "stroke-width": 2 });
         }
 
@@ -3447,6 +3447,18 @@ function playGame(g) {
                        stroke: "var(--danger)", "stroke-width": 3, "pointer-events": "none" });
   }
 
+  // your turn in byoyomi, the period's last 10 seconds: they count down on the opponent's last stone (as OGS does)
+  const countdown = last && g.phase === "play" && g.myColor
+    ? goban.el("text", { x: goban.px(last[0]), y: goban.py(last[1]) + goban.cell * .17, "text-anchor": "middle",
+                         "font-size": goban.cell * .5, "font-weight": 700, "pointer-events": "none", class: "pl-countdown",
+                         fill: grid[last[1]][last[0]] === BLACK ? "#fff" : "#111" }) : null;
+  const showCountdown = () => {
+    if (!countdown) return;
+    const t = g.myTurn && g.timeLeft(g.myColor), n = t && t.byo && t.periods && t.period <= 10 ? Math.ceil(t.period) : 0;
+    countdown.textContent = n ? String(n) : "";
+    countdown.parentNode.classList.toggle("pl-counting", !!n);
+  };
+  showCountdown();
   const clockEl = color => h("div", { class: "pl-clock" }, fmtClock(g.timeLeft(color)));
   const playerRow = color => {
     const p = g.player(color), toMove = g.phase === "play" && g.toMove() === color;
@@ -3468,6 +3480,7 @@ function playGame(g) {
       el.textContent = fmtClock(t);
       el.classList.toggle("low", !!t && t.byo && t.period < 10);
     }
+    showCountdown();
   }, 250);
 
   const status = h("div", { class: "meta-sub" },

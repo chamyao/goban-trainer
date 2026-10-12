@@ -949,3 +949,6 @@ body.tk-en [lang="zh-CN"], body.tk-en .town-zh, body.tk-en .tk-dlg-zh, body.tk-e
 .tk-stakes b.up { color: #2e7d4f; } .tk-stakes b.down { color: #b0413e; }
 .tk-duel-src .tk-stakes { font-size: inherit; color: inherit; }
 .tk-duel-src .tk-stakes b.up { color: #7fd6a0; } .tk-duel-src .tk-stakes b.down { color: #f08a84; }   /* lighter on the board's dark band (Testing: the red was faint) */   /* in a board's source line: its size (Testing: bigger than the line on a phone) */
+/* the Play tab: your byoyomi's last 10 seconds, counted on the opponent's last stone (app.js playGame); the
+   last-move ring steps aside for the number */
+svg.pl-counting .last-move { display: none; }
