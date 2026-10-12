@@ -1,6 +1,6 @@
 // Misaeng's rating stakes line (tk.js TKElo.stakesEl), as a player meets it, on desktop and a phone: a rated board (a
 // decision beat, a passer-by on the street) shows "Rating +x / −y" in English (no 等级分), on screen; answered first try
-// it turns into "Rating +x → r (label)", the change it promised and the rating the save now holds; answered after a hint
+// it turns into "Rating +x", the change alone (Misaeng shows no account rating: the user), and the save moves by it; answered after a hint
 // it shows the −y it promised; a record board (Cho Hunhyun's game) shows no stakes at all.
 // PLAYTEST_URL for the live site; PLAYTEST_DEVICES (default desktop, iPhone 13). Screenshots: out/misaeng-stakes-*.png.
 const { chromium, devices } = require(require('child_process').execSync('npm root -g').toString().trim() + '/playwright');
@@ -74,10 +74,12 @@ async function run(b, dev) {
         if (await p.evaluate(t0 => { const e = document.querySelector('.tk-duel .tk-stakes'); return e && e.textContent !== t0; }, before.text)) break;
       }
       await p.waitForTimeout(500);
-      const after = await p.evaluate(() => ({ text: (document.querySelector('.tk-duel .tk-stakes') || {}).textContent || null, r: TKElo.state().r, label: TKElo.label() }));
+      const after = await p.evaluate(() => { const r = TKElo.state().r, label = TKElo.label(), txt = (document.querySelector('.tk-duel') || {}).innerText || '';
+        return { text: (document.querySelector('.tk-duel .tk-stakes') || {}).textContent || null, r, label, shown: new RegExp(`(^|\\D)${r}(\\D|$)`).test(txt) ? `${r} on the board` : txt.includes(`(${label})`) ? `"(${label})" on the board` : '' }; });
       const want = B.win ? `+${m && m[1]}` : `−${m && m[2]}`;
-      check(after.text === `Rating ${want} → ${after.r} (${after.label})` && after.r - before.r === (B.win ? +m[1] : -m[2]) && !CJK.test(after.text),
-        `${B.what}: answered ${B.win ? 'first try' : 'after a hint'}, "${after.text}" (rating ${before.r} → ${after.r})`);
+      check(after.text === `Rating ${want}` && after.r - before.r === (B.win ? +m[1] : -m[2]) && !CJK.test(after.text),
+        `${B.what}: answered ${B.win ? 'first try' : 'after a hint'}, "${after.text}", the change alone (the save: ${before.r} → ${after.r})`);
+      check(!after.shown, `${B.what}: the account's rating isn't on the board (${after.shown || 'not shown'})`);
       await p.screenshot({ path: path.join(__dirname, `out/misaeng-stakes-${tag}-${B.key}-after.png`) });
     }
     await p.keyboard.press('Escape'); await p.waitForTimeout(800);
