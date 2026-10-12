@@ -2059,6 +2059,14 @@ async function viewLibrary() {
       h("span", { class: "tk-card-go" }, "→"),
     ]));
   }
+  // game records (data/games, tools/build_games.py): a shelf of their own; a game opens in the Review tab
+  const GAME_SHELVES = [["go-seigen", "Go Seigen", "吴清源", 883, "1926–1992"]];
+  const gameShelf = h("div", { class: "book-list" });
+  for (const [id, title, native, count, years] of GAME_SHELVES)
+    gameShelf.append(h("div", { class: "book book-games", onclick: () => location.hash = `#/games/${id}` }, [
+      h("div", { class: "t" }, title), h("div", { class: "n" }, `${native} · his games, ${years}`),
+      h("div", { class: "row" }, [h("span", { class: "badge dan" }, "pro"), h("span", { class: "cnt" }, `${count} games`)]),
+    ]));
   // Favorited books from every category come first; they stay in their category too.
   const sections = [["Favorites", index.filter(b => favs.has(b.id))],
                     ...Object.entries(cats).map(([cat, title]) => [title, index.filter(b => b.category === cat)])];
@@ -2092,6 +2100,49 @@ async function viewLibrary() {
     }
     root.append(list);
   }
+  root.append(h("div", { class: "cat-title" }, "Game records"), gameShelf);
+}
+
+// A shelf of game records (data/games/<id>.json): the games by date, a search, and each opens in the Review tab
+// (replay, the move list, KataGo) as a pasted SGF would.
+async function viewGames(id) {
+  const nav = routeSeq;
+  root.innerHTML = `<div class="loading">Loading…</div>`;
+  const d = await (await fetch(`data/games/${id}.json`)).json();
+  if (nav !== routeSeq) return;
+  crumbs.innerHTML = "";
+  crumbs.append(h("a", { href: "#/" }, "Library"), ` / ${d.title}`);
+  root.innerHTML = "";
+  const err = h("div", { class: "err" });
+  const open = async g => {
+    try {
+      const text = await (await fetch(`data/games/${id}/${encodeURIComponent(g[0])}`)).text();
+      Review.load(text);
+      Review.currentId = Review.newId();
+      Review.saveState();
+      location.hash = "#/review";
+    } catch (e) { err.textContent = `Couldn't open that game: ${e.message}`; }
+  };
+  const side = (name, rank) => name + (rank ? ` ${rank}` : "");
+  const list = h("div", { class: "games-list" });
+  const show = q => {
+    const words = q.trim().toLowerCase().split(/\s+/).filter(Boolean);   // every word must match: "Kitani 1939"
+    list.innerHTML = "";
+    const rows = d.games.filter(g => { const t = [g[1], g[2], g[4], g[6], g[7]].join(" ").toLowerCase(); return words.every(w => t.includes(w)); });
+    for (const g of rows.slice(0, 400))
+      list.append(h("div", { class: "games-row", onclick: () => open(g) }, [
+        h("span", { class: "games-date" }, g[1]),
+        h("span", { class: "games-players" }, [h("b", {}, "● "), side(g[2], g[3]), "  vs  ", h("b", { class: "w" }, "○ "), side(g[4], g[5])]),
+        h("span", { class: "games-result" }, g[6]),
+        h("span", { class: "games-event" }, g[7]),
+      ]));
+    count.textContent = rows.length > 400 ? `${rows.length} games (the first 400 shown: search to narrow)` : `${rows.length} games`;
+  };
+  const count = h("div", { class: "meta-sub" });
+  const search = h("input", { type: "search", class: "games-search", placeholder: "Search: an opponent, a year, an event…" });
+  search.addEventListener("input", () => show(search.value));
+  root.append(h("div", { class: "games-head" }, [h("h2", {}, `${d.title} ${d.native}`), search, count, err]), list);
+  show("");
 }
 
 async function viewBook(id) {
@@ -3618,6 +3669,7 @@ async function route() {
   else if (parts[0] === "tk" && parts[1] === "chat") await viewTKChat(true);   // the plain chat window (Claude himself now sits in the Chang'an teahouse)
   else if (parts[0] === "tk" && parts[1] && parts[2]) await viewTKLevel(parseInt(parts[1], 10), parts[2]);
   else if (parts[0] === "tk") await viewTK(parseInt(parts[1], 10) || 0);
+  else if (parts[0] === "games" && parts[1]) await viewGames(parts[1]);
   else if (parts[0] === "book" && parts[1] && parts[2]) await viewPlayer(parts[1], parseInt(parts[2], 10) || 1);
   else if (parts[0] === "book" && parts[1]) await viewBook(parts[1]);
   else await viewLibrary();

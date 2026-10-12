@@ -952,3 +952,20 @@ body.tk-en [lang="zh-CN"], body.tk-en .town-zh, body.tk-en .tk-dlg-zh, body.tk-e
 /* the Play tab: your byoyomi's last 10 seconds, counted on the opponent's last stone (app.js playGame); the
    last-move ring steps aside for the number */
 svg.pl-counting .last-move { display: none; }
+/* game records (app.js viewGames): a searchable list, a game a row, opening in the Review tab */
+.games-head { max-width: 980px; margin: 0 auto 12px; }
+.games-head h2 { margin: 0 0 10px; font-size: 20px; }
+.games-search { width: 100%; max-width: 420px; padding: 9px 12px; font-size: 15px; border: 1px solid #d8d0bd; border-radius: 8px; background: #fff; }
+.games-list { max-width: 980px; margin: 0 auto; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+.games-row { display: grid; grid-template-columns: 96px minmax(0, 1.6fr) minmax(52px, max-content) minmax(0, 1.4fr); gap: 12px; padding: 10px 16px;
+  border-top: 1px solid #efe9dc; cursor: pointer; font-size: 14px; align-items: baseline; }
+.games-row:first-child { border-top: 0; }
+.games-row:hover { background: #faf6ec; }
+.games-date { color: #7a7466; font-variant-numeric: tabular-nums; }
+.games-players b { color: #111; font-weight: 400; } .games-players b.w { color: #888; }
+.games-result { font-weight: 600; }
+.games-event { color: #7a7466; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+@media (max-width: 640px) {
+  .games-row { grid-template-columns: 78px minmax(0, 1fr) max-content; gap: 10px; }
+  .games-event { grid-column: 1 / -1; white-space: normal; }
+}
