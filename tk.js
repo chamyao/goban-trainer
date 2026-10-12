@@ -1638,15 +1638,15 @@ function tkLevelBuild(host, worldN, key, { w, node, src, p, book }, { back, agai
       ...(TKVoice.has(node.boss.taunt_vid) ? [h("button", { class: "tk-say", type: "button", onclick: () => TKVoice.play(node.boss.taunt_vid) }, "播放 Play")] : [])]),
   ]) : null;
   if (node.boss) TKVoice.play(node.boss.taunt_vid);
-  const stakes = p.record ? null : TKElo.stakesEl(w, [src.id, p.id], w.lang !== "en") || null;
+  const stakes = null;   // the rating is a hidden feature (the user, 2026-10-12): no stakes line in the game; TKElo still rates every board
   const aside = h("aside", {}, [
     ...(bossPanel ? [bossPanel] : []),
     h("div", { class: "panel" }, [
       h("h2", {}, `第${worldN}卷 ${w.zh} · Book ${worldN} · ${w.name}`),
       h("div", { class: "meta-title" }, [`${node.place_zh || node.place} · ${TK_ROLE_ZH[node.role] || ""}`,
         h("span", { class: "tk-en" }, ` ${node.place} · ${TK.roleLabel(node)}`)]),
-      h("div", { class: "meta-sub" }, [node.role === "boss" ? "" : `出自 from ${src.title} · `, p.url ? h("a", { href: p.url, target: "_blank" }, "来源 source")
-                                                                 : h("a", { href: `https://www.101weiqi.com/q/${p.id}/`, target: "_blank" }, "来源 source")]),
+      h("div", { class: "meta-sub" }, [node.role === "boss" ? "" : `${w.lang === "en" ? "from" : "出自 from"} ${src.title} · `,   // English-only: no Chinese to strip
+        h("a", { href: p.url || `https://www.101weiqi.com/q/${p.id}/`, target: "_blank" }, w.lang === "en" ? "source" : "来源 source")]),
       h("div", { class: "badges" }, [...(p.lv || node.grade ? [h("span", { class: "badge" }, p.lv || node.grade)] : []), ...(p.qt ? [h("span", { class: "badge" }, p.qt)] : []), turnBadge]),
       stakes || "",
     ]),
@@ -1813,10 +1813,12 @@ function tkDuelBuild(box, worldN, key, { node, src, p }, foe, { leave, again, on
   ]);
   const srcLine = p.record ? h("div", { class: "tk-duel-src" }, `${p.credit} · ${p.only ? "which was played: A, B, C or D?" : "find the move that was played"}`)   // a record board: the game, not a problem book
     : h("div", { class: "tk-duel-src" }, [
-    `${p.lv || node.grade || ""} · 死活 · `, node.role === "boss" ? "" : `出自 ${src.title} · `,
-    h("a", { href: p.url || `https://www.101weiqi.com/q/${p.id}/`, target: "_blank", rel: "noopener" }, "来源 source"),
+    ...(enOnly   // an English-only book: its own words, so stripping the Chinese leaves no run-together text
+      ? [`${p.lv || node.grade || ""} · `, node.role === "boss" ? "" : `${src.title} · `]
+      : [`${p.lv || node.grade || ""} · 死活 · `, node.role === "boss" ? "" : `出自 ${src.title} · `]),
+    h("a", { href: p.url || `https://www.101weiqi.com/q/${p.id}/`, target: "_blank", rel: "noopener" }, enOnly ? "source" : "来源 source"),
   ]);
-  const stakes = p.record ? null : TKElo.stakesEl(TK.world(worldN), [src.id, p.id], !enOnly) || null;
+  const stakes = null;   // the rating is a hidden feature (the user, 2026-10-12): no stakes line in the game; TKElo still rates every board
   if (stakes) srcLine.append(" · ", stakes);
   // a decision board: the leader's choice named in the side column, over what's said
   const nth = Math.max(0, (+String(key).split("~")[1] || 1) - 1);   // which board of the scene
@@ -2279,7 +2281,7 @@ const TKElo = {
     return { win: this.after(s, x[2], true) - s.r, loss: this.after(s, x[2], false) - s.r };
   },
   // the line under a rated board: "+8 / −24" before, the change and the new rating after
-  stakesEl(w, ref, zh = true) {
+  stakesEl(w, ref, zh = true, own = true) {   // own: show the account's rating after the answer (not in an English-only book, Misaeng: the user)
     const k = this.stakes(w, ref), lead = zh ? "等级分 rating" : "Rating";
     if (!k) return "";
     const el = document.createElement("span");
@@ -2288,7 +2290,7 @@ const TKElo = {
     el.innerHTML = `${lead} <b class="up">+${k.win}</b> / <b class="down">−${-k.loss}</b>`;
     el.settle = d => {
       if (d == null) return;
-      el.innerHTML = `${lead} <b class="${d >= 0 ? "up" : "down"}">${d >= 0 ? "+" : "−"}${Math.abs(d)}</b> → ${this.rating} (${this.label()})`;
+      el.innerHTML = `${lead} <b class="${d >= 0 ? "up" : "down"}">${d >= 0 ? "+" : "−"}${Math.abs(d)}</b>${own ? ` → ${this.rating} (${this.label()})` : ""}`;
     };
     return el;
   },

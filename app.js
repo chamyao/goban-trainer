@@ -2240,7 +2240,6 @@ async function viewStream() {
   const aside = h("aside", {}, [
     h("div", { class: "panel" }, [
       h("h2", {}, "Stream"),
-      h("div", { class: "meta-sub" }, "Problems at your level, one after another. The rating is the one the story mode keeps: a first-try solve (no wrong move, hint or undo) raises it."),
       rating, h("div", {}, [stakes]), source,
       h("div", { class: "badges" }, [turnBadge]),
     ]),
