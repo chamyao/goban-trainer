@@ -115,7 +115,7 @@ const CAPTIONS = [
     }
     // solve by taps
     let won = false;
-    for (let i = 0; i < 40 && !won; i++) {
+    for (let i = 0; i < 150 && !won; i++) {   // a problem with many variations plays each in turn (Trainer.finish → nextBranch), with a rewind between
       won = await p.evaluate(() => !!document.querySelector('.tk-duel-go'));
       if (won) break;
       const m = await bestMove();
