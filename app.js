@@ -2066,6 +2066,12 @@ async function viewLibrary() {
     if (!books.length) continue;
     root.append(h("div", { class: "cat-title" }, title));
     const list = h("div", { class: "book-list" });
+    // the Stream heads the Tsumego shelf: a book with no end, dealt by the story mode's own rating (viewStream)
+    if (title === "Tsumego") list.append(h("div", { class: "book book-stream", onclick: () => location.hash = "#/stream" }, [
+      h("div", { class: "t" }, "Stream"),
+      h("div", { class: "n" }, "练习 · problems at your level, one after another"),
+      h("div", { class: "row" }, [h("span", { class: "badge" }, "15k–3d"), h("span", { class: "cnt" }, "∞")]),
+    ]));
     for (const b of books) {
       const solved = Object.values(prog[b.id] || {}).filter(v => v === 1).length;
       const isFav = favs.has(b.id);
@@ -2213,6 +2219,7 @@ async function viewStream() {
   const idx = Math.max(0, book.problems.findIndex(x => String(x.id) === String(pid)));
   const p = book.problems[idx], x = streamPool.rated.find(y => y[0] === bookId && String(y[1]) === String(pid));
   crumbs.innerHTML = "";
+  crumbs.append(h("a", { href: "#/" }, "Library"), " / Stream");
   root.innerHTML = "";
 
   const svg = document.createElementNS(SVGNS, "svg");
@@ -2241,7 +2248,6 @@ async function viewStream() {
   const aside = h("aside", {}, [
     h("div", { class: "panel" }, [
       h("h2", {}, "Stream"),
-      h("div", { class: "meta-sub" }, "Problems at your level, one after another. The rating is the one the story mode keeps: a first-try solve (no wrong move, hint or undo) raises it."),
       rating, h("div", {}, [stakes]), source,
       h("div", { class: "badges" }, [turnBadge]),
     ]),
@@ -3588,7 +3594,7 @@ async function route() {
   Review.els = null;
   const parts = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
   clearInterval(playTicker);
-  const tab = ["stream", "review", "play", "feedback"].includes(parts[0]) ? parts[0] : "library";
+  const tab = ["review", "play", "feedback"].includes(parts[0]) ? parts[0] : "library";   // (the Stream is a card in the Library)
   if (window.Wukong && Wukong.suspend) Wukong.suspend(parts[0] === "tk" && !parts[2]);  // the map has its own party
   for (const a of document.querySelectorAll("#tabs a"))
     a.classList.toggle("active", a.dataset.tab === tab);
