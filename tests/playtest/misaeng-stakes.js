@@ -1,7 +1,7 @@
-// Misaeng's rating stakes line (tk.js TKElo.stakesEl), as a player meets it, on desktop and a phone: a rated board (a
-// decision beat, a passer-by on the street) shows "Rating +x / −y" in English (no 等级分), on screen; answered first try
-// it turns into "Rating +x", the change alone (Misaeng shows no account rating: the user), and the save moves by it; answered after a hint
-// it shows the −y it promised; a record board (Cho Hunhyun's game) shows no stakes at all.
+// Misaeng's boards keep the rating hidden (the user: the rating is a hidden feature of the story game), as a player meets
+// them, on desktop and a phone: a rated board (a decision beat, a passer-by on the street) and a record board carry no
+// stakes line, no "Rating"/等级分 text, no account rating or its label, before or after the answer; the save still rates:
+// a first-try solve moves it by what TKElo.stakes says the board is worth, a solve after a hint by its loss.
 // PLAYTEST_URL for the live site; PLAYTEST_DEVICES (default desktop, iPhone 13). Screenshots: out/misaeng-stakes-*.png.
 const { chromium, devices } = require(require('child_process').execSync('npm root -g').toString().trim() + '/playwright');
 const path = require('path'), fs = require('fs');
@@ -40,21 +40,21 @@ async function run(b, dev) {
     await p.evaluate(([k, foe]) => { TKOverlay.open(21, k, { host: document.querySelector('.tk-map'), ...(foe ? { foe } : {}) }); }, [B.key, B.foe || null]);   // not awaited: it settles when the board closes
     for (let i = 0; i < 40 && !(await p.evaluate(() => !!(window.__trainer && window.__trainer.alive && document.querySelector('.tk-duel')))); i++) await p.waitForTimeout(150);
     await p.waitForTimeout(600);
-    const before = await p.evaluate(() => { const e = document.querySelector('.tk-duel .tk-stakes'), t = window.__trainer;
-      let vis = false, R = null;
-      if (e) { R = e.getBoundingClientRect(); const top = document.elementFromPoint(R.left + Math.min(R.width / 2, 20), R.top + R.height / 2); vis = R.width > 0 && R.bottom <= innerHeight && R.right <= innerWidth && R.top >= 0 && !!top && (top === e || e.contains(top)); }
-      return { text: e ? e.textContent : null, vis, R: R && [R.left | 0, R.top | 0, R.width | 0, R.height | 0], rec: !!(t && t.p.record), id: t && t.p.id, r: TKElo.state().r, src: (document.querySelector('.tk-duel-src') || {}).textContent || '',
-        fs: e && [getComputedStyle(e).fontSize, getComputedStyle(document.querySelector('.tk-duel-src')).fontSize] }; });
+    // what's on the board: a stakes line, any "Rating"/等级分 text, the account's rating or its label; and what the save
+    // says the board is worth (TKElo.stakes, the same arithmetic the game rates by)
+    const look = () => p.evaluate(() => { const t = window.__trainer, d = document.querySelector('.tk-duel'), txt = d ? d.innerText : '', r = TKElo.state().r, label = TKElo.label();
+      const src = (document.querySelector('.tk-duel-src') || {}).textContent || '';
+      const shown = document.querySelector('.tk-stakes') ? 'a .tk-stakes line' : /rating|等级分/i.test(txt) ? `"${(txt.match(/.{0,20}(rating|等级分).{0,20}/i) || [''])[0]}"`
+        : new RegExp(`(^|\\D)${r}(\\D|$)`).test(txt) ? `the rating ${r}` : txt.includes(`(${label})`) ? `"(${label})"` : '';
+      const w = TK.world(21), k = t && !t.p.record ? TKElo.stakes(w, [t.p.src || (w.rated.find(y => String(y[1]) === String(t.p.id)) || [])[0], t.p.id]) : null;
+      return { rec: !!(t && t.p.record), id: t && t.p.id, r, src, shown, k }; });
+    const before = await look();
     await p.screenshot({ path: path.join(__dirname, `out/misaeng-stakes-${tag}-${B.key}.png`) });
-    if (!B.rated) {
-      check(before.rec && before.text === null, `${B.what}: a record board, no stakes line (src "${before.src.slice(0, 70)}")`);
-    } else {
-      const m = before.text && before.text.match(/^Rating \+(\d+) \/ −(\d+)$/);
-      check(!!m && !CJK.test(before.text), `${B.what} (#${before.id}): "${before.text}", in English`);
-      const srcText = before.src.replace(/\s*·\s*Rating.*$/, '');
-      check(/^\d+[kd]\+? · \S.* · source$/i.test(srcText) && !/[a-z0-9]source$|\d[A-Z][a-z]/.test(srcText.replace(/ · source$/, '')) && !CJK.test(before.src), `${B.what}: the source line reads in English with its separators ("${before.src}")`);
-      check(before.fs && before.fs[0] === before.fs[1], `${B.what}: the stakes text is the source line's size (${before.fs})`);
-      check(before.vis, `${B.what}: the line is on screen, nothing over it (${before.R})`);
+    check(!before.shown, `${B.what}${before.id ? ' (#' + before.id + ')' : ''}: no rating on the board (${before.shown || 'none'}; src "${before.src.slice(0, 60)}")`);
+    if (!B.rated) check(before.rec, `${B.what}: a record board`);
+    else {
+      check(!!before.k, `${B.what}: the save still rates it (worth +${before.k && before.k.win} / ${before.k && before.k.loss})`);
+      check(/^\d+[kd]\+? · \S.* · source$/i.test(before.src) && !CJK.test(before.src), `${B.what}: the source line reads in English with its separators ("${before.src}")`);
       // answer: first try (the line's moves), or after a hint (counted wrong)
       if (!B.win) { const hk = p.locator('.tk-duel-key', { hasText: 'Hint' }); if (await hk.count()) await hk.first().click(); else await p.evaluate(() => window.__trainer.hint()); await p.waitForTimeout(800); }
       for (let i = 0; i < 40; i++) {
@@ -63,7 +63,8 @@ async function run(b, dev) {
           if (t.engineBusy) return {};
           const n = t.played.length; if (n % 2) return {};
           const open = L => L.length - 1 > n && t.played.every((m, k) => m === L[k + 1]);
-          const mv = (t.p.lines.find(L => L[0] === 1 && open(L)) || t.p.lines.find(L => L[0] === 2 && open(L)) || [])[n + 1];   // a main line, or a correct variation White's reply has gone into if (!mv) return {};
+          const mv = (t.p.lines.find(L => L[0] === 1 && open(L)) || t.p.lines.find(L => L[0] === 2 && open(L)) || [])[n + 1];   // a main line, or a correct variation White's reply has gone into
+          if (!mv) return {};
           const c = mv.charCodeAt(0) - 97, r = mv.charCodeAt(1) - 97;
           const el = [...t.goban.svg.querySelectorAll('circle[fill="transparent"]')].find(e => +e.getAttribute('cx') === t.goban.px(c) && +e.getAttribute('cy') === t.goban.py(r));
           if (!el) return { miss: mv }; const R = el.getBoundingClientRect(); return { x: R.left + R.width / 2, y: R.top + R.height / 2 }; });
@@ -71,15 +72,13 @@ async function run(b, dev) {
         if (s.x) { if (touch) await p.touchscreen.tap(s.x, s.y); else await p.mouse.click(s.x, s.y); await p.waitForTimeout(250);
           if (await p.evaluate(() => !!(window.__trainer && window.__trainer.goban.ghost))) { if (touch) await p.touchscreen.tap(s.x, s.y); else await p.mouse.click(s.x, s.y); } }
         await p.waitForTimeout(700);
-        if (await p.evaluate(t0 => { const e = document.querySelector('.tk-duel .tk-stakes'); return e && e.textContent !== t0; }, before.text)) break;
+        if (await p.evaluate(r0 => TKElo.state().r !== r0, before.r)) break;
       }
       await p.waitForTimeout(500);
-      const after = await p.evaluate(() => { const r = TKElo.state().r, label = TKElo.label(), txt = (document.querySelector('.tk-duel') || {}).innerText || '';
-        return { text: (document.querySelector('.tk-duel .tk-stakes') || {}).textContent || null, r, label, shown: new RegExp(`(^|\\D)${r}(\\D|$)`).test(txt) ? `${r} on the board` : txt.includes(`(${label})`) ? `"(${label})" on the board` : '' }; });
-      const want = B.win ? `+${m && m[1]}` : `−${m && m[2]}`;
-      check(after.text === `Rating ${want}` && after.r - before.r === (B.win ? +m[1] : -m[2]) && !CJK.test(after.text),
-        `${B.what}: answered ${B.win ? 'first try' : 'after a hint'}, "${after.text}", the change alone (the save: ${before.r} → ${after.r})`);
-      check(!after.shown, `${B.what}: the account's rating isn't on the board (${after.shown || 'not shown'})`);
+      const after = await look();
+      const want = before.k ? (B.win ? before.k.win : before.k.loss) : NaN;
+      check(after.r - before.r === want, `${B.what}: answered ${B.win ? 'first try' : 'after a hint'}, the save's rating moves ${before.r} → ${after.r} (${want >= 0 ? '+' : ''}${want} expected)`);
+      check(!after.shown, `${B.what}: after the answer, still no rating on the board (${after.shown || 'none'})`);
       await p.screenshot({ path: path.join(__dirname, `out/misaeng-stakes-${tag}-${B.key}-after.png`) });
     }
     await p.keyboard.press('Escape'); await p.waitForTimeout(800);
