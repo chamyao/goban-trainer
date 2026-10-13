@@ -1,0 +1,129 @@
+{
+ "tavern-wall": {
+  "file": "tavern-wall.webp",
+  "size": [
+   512,
+   512
+  ]
+ },
+ "parchment": {
+  "file": "parchment.webp",
+  "size": [
+   512,
+   512
+  ]
+ },
+ "hearth-hero": {
+  "file": "hearth-hero.webp",
+  "size": [
+   1600,
+   420
+  ]
+ },
+ "frame-wood": {
+  "file": "frame-wood.png",
+  "size": [
+   512,
+   512
+  ],
+  "slice": 100
+ },
+ "panel-trim": {
+  "file": "panel-trim.png",
+  "size": [
+   256,
+   256
+  ],
+  "slice": 24
+ },
+ "btn-gold": {
+  "file": "btn-gold.png",
+  "size": [
+   211,
+   64
+  ],
+  "slice": [
+   0,
+   48
+  ]
+ },
+ "btn-gold-hover": {
+  "file": "btn-gold-hover.png",
+  "size": [
+   211,
+   64
+  ],
+  "slice": [
+   0,
+   48
+  ]
+ },
+ "btn-gold-pressed": {
+  "file": "btn-gold-pressed.png",
+  "size": [
+   211,
+   64
+  ],
+  "slice": [
+   0,
+   48
+  ]
+ },
+ "btn-jade": {
+  "file": "btn-jade.png",
+  "size": [
+   191,
+   64
+  ],
+  "slice": [
+   0,
+   48
+  ]
+ },
+ "btn-jade-hover": {
+  "file": "btn-jade-hover.png",
+  "size": [
+   191,
+   64
+  ],
+  "slice": [
+   0,
+   48
+  ]
+ },
+ "btn-jade-pressed": {
+  "file": "btn-jade-pressed.png",
+  "size": [
+   191,
+   64
+  ],
+  "slice": [
+   0,
+   48
+  ]
+ },
+ "banner-ribbon": {
+  "file": "banner-ribbon.png",
+  "size": [
+   259,
+   72
+  ],
+  "slice": [
+   0,
+   72
+  ]
+ },
+ "card-frame": {
+  "file": "card-frame.png",
+  "size": [
+   300,
+   420
+  ],
+  "slice": [
+   73,
+   52,
+   114,
+   52
+  ]
+ }
+}

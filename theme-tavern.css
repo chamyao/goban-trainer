@@ -148,3 +148,47 @@ body.theme-tavern .tavern-hero small { font: italic 500 18px/1.2 "Cormorant Gara
 @media (max-width: 640px) { body.theme-tavern .tavern-hero { height: 160px; padding: 16px 18px; }
   body.theme-tavern .tavern-hero b { font-size: 34px; } body.theme-tavern .tavern-hero div span { font-size: 21px; margin-left: 8px; } }
 @media (prefers-reduced-motion: reduce) { body.theme-tavern .tavern-hero::after { animation: none; } }
+
+/* ===== Graphics' art (assets/ui, tools/gen_ui.py; slices in assets/ui/ui.json): it takes over from the gradients ===== */
+body.theme-tavern {
+  background-color: #2a180c;
+  background-image: radial-gradient(ellipse 70% 40% at 50% 0%, rgba(255, 170, 80, .20), transparent 70%), url("assets/ui/tavern-wall.webp");
+  background-repeat: no-repeat, repeat; background-size: auto, 512px 512px;
+}
+/* parchment under every card and panel, the gold filigree trim around them */
+body.theme-tavern :is(.book, .panel, .modal, .games-list, .history-item) {
+  background: url("assets/ui/parchment.webp") center / 512px 512px repeat;
+  border: 10px solid transparent; border-image: url("assets/ui/panel-trim.png") 24 / 10px round;
+  box-shadow: inset 0 0 26px rgba(120, 70, 20, .28), 0 8px 18px rgba(0, 0, 0, .5); }
+body.theme-tavern .book:hover { box-shadow: inset 0 0 22px rgba(120, 70, 20, .22), 0 0 22px rgba(255, 200, 90, .55), 0 10px 18px rgba(0, 0, 0, .55); }
+/* the hearth: the painting itself (the gradient's flame goes) */
+body.theme-tavern .tavern-hero { background: linear-gradient(90deg, rgba(20, 10, 4, .70), rgba(20, 10, 4, .15) 55%, transparent),
+  url("assets/ui/hearth-hero.webp") center / cover no-repeat; height: 240px; }
+body.theme-tavern .tavern-hero::after { display: none; }
+/* section titles on the red silk ribbon (its jade tassels hang in the caps) */
+body.theme-tavern .cat-title { clip-path: none; filter: drop-shadow(0 3px 2px rgba(0, 0, 0, .5)); background: none; padding: 0 6px;
+  border: 0 34px solid transparent; border-image: url("assets/ui/banner-ribbon.png") 0 72 fill / 0 34px stretch; line-height: 40px; height: 40px; }
+/* the board in the carved frame: gold corners, a jade boss mid-side (stretch keeps each boss single) */
+body.theme-tavern .board-card { padding: 0; border-radius: 0; background: #3a2412 padding-box; box-shadow: 0 18px 36px rgba(0, 0, 0, .6);
+  border: 40px solid transparent; border-image: url("assets/ui/frame-wood.png") 100 / 40px stretch; }
+body.theme-tavern .board-card::before, body.theme-tavern .board-card::after { display: none; }
+/* buttons: the painted plates (caps 48 of 64; the middle stretches), hover and pressed states */
+body.theme-tavern :is(.controls, .nav-row, .rv-nav, .rv-actions, .sgf-loader, .modal) button,
+body.theme-tavern .sgf-loader label.file, body.theme-tavern .book-head .reset-book {
+  background: none; box-shadow: none; padding: 9px 2px 11px; min-height: 42px;
+  border: 0 22px solid transparent; border-image: url("assets/ui/btn-jade.png") 0 48 fill / 0 22px stretch; }
+body.theme-tavern :is(.controls, .nav-row, .rv-nav, .rv-actions, .sgf-loader, .modal) button:hover:not(:disabled) { filter: none; border-image-source: url("assets/ui/btn-jade-hover.png"); }
+body.theme-tavern :is(.controls, .nav-row, .rv-nav, .rv-actions, .sgf-loader, .modal) button:active:not(:disabled) { transform: none; border-image-source: url("assets/ui/btn-jade-pressed.png"); }
+body.theme-tavern :is(.controls, .rv-actions, .sgf-loader) button.primary { background: none; box-shadow: 0 0 18px rgba(255, 200, 80, .45);
+  border-image: url("assets/ui/btn-gold.png") 0 48 fill / 0 22px stretch; }
+body.theme-tavern :is(.controls, .rv-actions, .sgf-loader) button.primary:hover:not(:disabled) { border-image-source: url("assets/ui/btn-gold-hover.png"); }
+body.theme-tavern :is(.controls, .rv-actions, .sgf-loader) button.primary:active:not(:disabled) { border-image-source: url("assets/ui/btn-gold-pressed.png"); }
+body.theme-tavern .controls button.high-roller { background: none; filter: hue-rotate(-140deg) saturate(1.3); }
+body.theme-tavern :is(.controls, .rv-actions) button.active { background: none; filter: hue-rotate(-100deg) saturate(1.4) brightness(1.1); }
+/* fixes once the art was in: room inside the caps for a short label; light text on the gold plate's lacquer centre;
+   the frame's shadow follows the frame; ribbon text clear of the tassel */
+body.theme-tavern :is(.controls, .nav-row, .rv-nav, .rv-actions, .sgf-loader, .modal) button,
+body.theme-tavern .sgf-loader label.file, body.theme-tavern .book-head .reset-book { padding: 9px 12px 11px; white-space: nowrap; }
+body.theme-tavern :is(.controls, .rv-actions, .sgf-loader) button.primary { color: #fff1c8; text-shadow: 0 1px 0 #3a0e06, 0 0 6px rgba(0, 0, 0, .6); }
+body.theme-tavern .board-card { box-shadow: none; filter: drop-shadow(0 16px 22px rgba(0, 0, 0, .6)); }
+body.theme-tavern .cat-title { padding: 0 18px; }
