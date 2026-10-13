@@ -986,7 +986,7 @@ svg.pl-counting .last-move { display: none; }
     radial-gradient(ellipse 80% 60% at 50% 110%, rgba(120, 60, 30, .35), transparent 70%),
     linear-gradient(180deg, #0b0a18 0%, #120d22 38%, #1a1020 70%, #120a10 100%);
   font-family: "Cormorant Garamond", Georgia, serif; }
-.shelf-room::after { content: ""; position: absolute; inset: 0; z-index: 5; pointer-events: none;
+.shelf-room::after { content: ""; position: absolute; inset: 0; z-index: 5; pointer-events: none; will-change: transform;
   background: radial-gradient(ellipse 75% 70% at 50% 45%, transparent 55%, rgba(0, 0, 0, .55) 100%); }   /* vignette */
 
 /* the arched window on the far wall: a night sky, a crescent moon, two go stones circling like moons */
@@ -1002,7 +1002,7 @@ svg.pl-counting .last-move { display: none; }
 @keyframes shelf-twinkle { 0%, 100% { opacity: .35; } 50% { opacity: 1; } }
 .shelf-moon { position: absolute; right: 22%; top: 16%; width: 54px; height: 54px; border-radius: 50%;
   box-shadow: -12px 6px 0 0 #f3ecd2, -12px 6px 24px 4px rgba(243, 236, 210, .45); }
-.shelf-orbit { position: absolute; left: 50%; top: 62%; width: 150px; height: 46px; margin-left: -75px; border-radius: 50%;
+.shelf-orbit { will-change: transform, opacity; position: absolute; left: 50%; top: 62%; width: 150px; height: 46px; margin-left: -75px; border-radius: 50%;
   border: 1px solid rgba(214, 190, 120, .18); animation: shelf-orbit 22s linear infinite; }
 .shelf-orbit .stone { position: absolute; top: -9px; width: 18px; height: 18px; border-radius: 50%; }
 .shelf-orbit .stone.b { left: -9px; background: radial-gradient(circle at 35% 30%, #6a6a78, #0b0b10 70%); box-shadow: 0 0 12px rgba(150, 160, 255, .5); }
@@ -1011,7 +1011,7 @@ svg.pl-counting .last-move { display: none; }
 
 /* moonlight falling through, slowly breathing */
 .shelf-shafts { position: absolute; z-index: 1; left: 50%; top: 40px; width: 900px; height: 900px; margin-left: -450px; pointer-events: none; }
-.shelf-shafts i { position: absolute; left: 50%; top: 0; width: 120px; height: 100%; margin-left: -60px; transform-origin: 50% 0;
+.shelf-shafts i { will-change: transform, opacity; position: absolute; left: 50%; top: 0; width: 120px; height: 100%; margin-left: -60px; transform-origin: 50% 0;
   background: linear-gradient(180deg, rgba(170, 185, 255, .16), rgba(170, 185, 255, .05) 55%, transparent 85%); filter: blur(8px);
   animation: shelf-shaft 9s ease-in-out infinite; }
 .shelf-shafts i:nth-child(1) { transform: rotate(14deg); } .shelf-shafts i:nth-child(2) { transform: rotate(-2deg); width: 160px; animation-delay: -3s; }
@@ -1020,7 +1020,7 @@ svg.pl-counting .last-move { display: none; }
 
 /* candles afloat */
 .shelf-candles { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
-.fcandle { position: absolute; width: calc(12px * var(--k)); height: calc(46px * var(--k)); border-radius: 2px 2px 3px 3px;
+.fcandle { will-change: transform, opacity; position: absolute; width: calc(12px * var(--k)); height: calc(46px * var(--k)); border-radius: 2px 2px 3px 3px;
   background: linear-gradient(90deg, #cdbd96, #fbf3dc 45%, #bfae86); box-shadow: 0 0 30px 10px rgba(255, 190, 100, .10);
   animation: shelf-float 7s ease-in-out infinite; }
 .fcandle .flame { position: absolute; left: 50%; top: -20px; width: 9px; height: 18px; margin-left: -4.5px; transform-origin: 50% 100%;
@@ -1033,12 +1033,12 @@ svg.pl-counting .last-move { display: none; }
 
 /* motes: warm dust, now and then a cool arcane spark */
 .shelf-motes { position: absolute; inset: 0; z-index: 4; pointer-events: none; }
-.shelf-motes i { position: absolute; bottom: -10px; width: calc(4px * var(--s)); height: calc(4px * var(--s)); border-radius: 50%;
+.shelf-motes i { will-change: transform, opacity; position: absolute; bottom: -10px; width: calc(4px * var(--s)); height: calc(4px * var(--s)); border-radius: 50%;
   background: #ffe6a8; box-shadow: 0 0 8px 2px rgba(255, 214, 140, .65); opacity: 0; animation: shelf-mote linear infinite; }
 .shelf-motes i.arcane { background: #cfd8ff; box-shadow: 0 0 10px 3px rgba(150, 170, 255, .7); }
 @keyframes shelf-mote { 0% { transform: translate(0, 0); opacity: 0; } 12% { opacity: .85; } 50% { transform: translate(24px, -50vh); }
   88% { opacity: .5; } 100% { transform: translate(-14px, -105vh); opacity: 0; } }
-.shelf-mist { position: absolute; left: -10%; right: -10%; bottom: -20px; height: 180px; z-index: 4; pointer-events: none;
+.shelf-mist { will-change: transform, opacity; position: absolute; left: -10%; right: -10%; bottom: -20px; height: 180px; z-index: 4; pointer-events: none;
   background: radial-gradient(ellipse 50% 60% at 30% 70%, rgba(180, 170, 210, .10), transparent 70%),
               radial-gradient(ellipse 50% 60% at 75% 80%, rgba(180, 170, 210, .09), transparent 70%);
   filter: blur(6px); animation: shelf-mist 26s ease-in-out infinite alternate; }
@@ -1123,10 +1123,16 @@ svg.pl-counting .last-move { display: none; }
 .spine .boss { position: absolute; bottom: 44px; width: 12px; height: 12px; border-radius: 50%;
   background: radial-gradient(circle at 35% 30%, #ffd9d9, #c41e3a 45%, #4d0712); box-shadow: 0 0 0 2px #b58f3e, 0 0 10px rgba(220, 40, 70, .7); }
 /* the Stream: an arcane volume, pulsing with a cold light */
-.spine.glow { --ink: #1b1640 !important; --gilt: #b9c6ff !important; animation: shelf-arcane 3.6s ease-in-out infinite; }
+/* the Stream: an arcane volume with a cold aura. The aura pulses in opacity on its own layer (the compositor's work,
+   no repaint); the spine's own shadow stays still */
+.spine.glow { --ink: #1b1640 !important; --gilt: #b9c6ff !important;
+  box-shadow: inset 0 0 0 1px rgba(170, 185, 255, .65), 0 0 12px 2px rgba(130, 150, 255, .35); }
 .spine.glow .spine-title .en { color: #dfe5ff; }
-@keyframes shelf-arcane { 0%, 100% { box-shadow: inset 0 0 0 1px rgba(160, 175, 255, .5), 0 0 12px 2px rgba(130, 150, 255, .35); }
-  50% { box-shadow: inset 0 0 0 1px rgba(190, 205, 255, .8), 0 0 28px 8px rgba(130, 150, 255, .6); } }
+.slot { position: relative; }
+.slot .aura { position: absolute; left: -14px; right: -14px; bottom: -6px; height: calc(var(--row) - 6px); pointer-events: none;
+  background: radial-gradient(ellipse 50% 50% at 50% 55%, rgba(140, 160, 255, .55), transparent 70%);
+  opacity: .35; will-change: opacity; animation: shelf-arcane 3.6s ease-in-out infinite; }
+@keyframes shelf-arcane { 0%, 100% { opacity: .3; } 50% { opacity: .85; } }
 /* game records: folios marked with a black and a white stone */
 .spine.record::after { content: "●○"; position: absolute; top: 24px; font-size: 9px; letter-spacing: 1px; color: var(--gilt); }
 .spine.record .spine-title { margin-top: 38px; }
@@ -1139,7 +1145,7 @@ svg.pl-counting .last-move { display: none; }
   .fcandle:nth-child(n+5) { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .shelf-window .star, .shelf-orbit, .shelf-shafts i, .fcandle, .fcandle .flame, .shelf-mist, .spine.glow, .spine-sheen { animation: none !important; }
+  .shelf-window .star, .shelf-orbit, .shelf-shafts i, .fcandle, .fcandle .flame, .shelf-mist, .slot .aura, .spine-sheen { animation: none !important; }
   .shelf-motes { display: none; }
   .spine { transition: none; }
 }

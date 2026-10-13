@@ -2163,7 +2163,9 @@ async function viewShelf() {
       book ? h("button", { type: "button", class: "spine-star" + (fav ? " on" : ""), title: fav ? "Unfavorite" : "Favorite", "aria-label": fav ? "Unfavorite" : "Favorite",
         onclick: e => { e.preventDefault(); e.stopPropagation(); const y = window.scrollY; toggleFavorite(book); viewShelf().then(() => scrollTo(0, y)); } }, fav ? "★" : "☆") : "",
     ]);
-    return h("div", { class: "slot" }, [el]);   // every slot the same height: a wrapped row sits on its own shelf
+    // every slot the same height: a wrapped row sits on its own shelf. The Stream's aura is the slot's own layer,
+    // pulsing in opacity only: an animated box-shadow repainted the whole shelf every frame (the user: "laggy")
+    return h("div", { class: "slot" }, kind === "glow" ? [h("span", { class: "aura", "aria-hidden": "true" }), el] : [el]);
   };
   const shelf = (name, en, books, short = false) => h("section", { class: "shelf" + (short ? " short" : "") }, [
     h("div", { class: "shelf-plaque" }, [h("span", { class: "zh" }, name), h("span", {}, en)]),
