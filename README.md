@@ -69,7 +69,7 @@ The engine is [web-katrain](https://github.com/ykrsama/web-katrain)'s KataGo
 implementation (MIT): a KataGo v8 model parser, feature encoder, and MCTS in
 TypeScript, running in a Web Worker on TF.js (WebGPU, WASM/CPU fallback),
 bundled with esbuild into `engine/katago-worker.js`. The bundled net is
-`g170-b6c96` (~3.7 MB). Positions are walled off with web-katrain's tsumego
+`kata1-b10c128` (~11 MB, converted from KataGo's text format by `tools/katago_txt2bin.py`; it replaced `g170-b6c96`). Positions are walled off with web-katrain's tsumego
 frame (KaTrain's F10 algorithm) so the engine reads the local fight, and the
 search is restricted to the frame's region of interest.
 

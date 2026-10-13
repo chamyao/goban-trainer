@@ -300,7 +300,10 @@ const Engine = {
   pending: new Map(), seq: 0,
   // in the Android app the worker and model are the app's own files (APP_LOCAL), even when the page is the live site
   // (the APK ships the model unzipped, under the .bin name: see android-app/prepare-web.mjs)
-  modelUrl: new URL(window.APP_LOCAL ? "engine/katago-small.bin" : "engine/katago-small.bin.gz", window.APP_LOCAL || location.href).href,
+  // the network: kata1-b10c128 (the user, 2026-10-13: "10 block"; ~1,550 Elo above the g170-b6c96 it replaces, ~3x
+  // the work a visit, so the searches below take half the visits they did), converted from KataGo's text format by
+  // tools/katago_txt2bin.py; ?v= so a browser fetches the new file under the old name
+  modelUrl: new URL(window.APP_LOCAL ? "engine/katago-small.bin" : "engine/katago-small.bin.gz?v=b10c128", window.APP_LOCAL || location.href).href,
 
   setStatus(status, detail) {
     this.status = status; this.detail = detail || "";
@@ -385,7 +388,7 @@ const Engine = {
         type: "katago:analyze", id, modelUrl: this.modelUrl, backend: "auto",
         komi: 6.5, rules: "japanese", topK: 8, analysisPvLen: 4,
         reuseTree: true, ownershipMode: "root",
-        visits: 400, maxTimeMs: 20000,
+        visits: 200, maxTimeMs: 20000,
         ...fields,
       });
     });
@@ -1636,7 +1639,7 @@ const Review = {
       const a = await this.enqueue(() => this.details.get(key) || Engine.analyze({
         board, currentPlayer: player,
         moveHistory: [], komi: this.game.meta.engineKomi,
-        visits: visits || 200, ownershipMode: "none",
+        visits: visits || 100, ownershipMode: "none",
       }));
       if (this.details.size > 300) this.details.clear();
       this.details.set(key, a);
@@ -1696,7 +1699,7 @@ const Review = {
     }
     const a = await this.enqueue(() => Engine.analyze({
       board: gridToBoardState(g.grids[k]), currentPlayer: player, moveHistory: hist,
-      komi: g.meta.engineKomi, visits: 100, ownershipMode: "none", topK: 10, analysisPvLen: 1, reuseTree: false,
+      komi: g.meta.engineKomi, visits: 50, ownershipMode: "none", topK: 10, analysisPvLen: 1, reuseTree: false,
     }));
     const best = (a.moves || [])[0];
     if (!best) return 0;
@@ -1706,7 +1709,7 @@ const Review = {
     const child = await this.enqueue(() => Engine.analyze({
       board: gridToBoardState(g.grids[k + 1]), currentPlayer: player === "black" ? "white" : "black",
       moveHistory: [...hist, { x: m.c, y: m.r, player }].slice(-6),
-      komi: g.meta.engineKomi, visits: 100, ownershipMode: "none", topK: 1, analysisPvLen: 1, reuseTree: false,
+      komi: g.meta.engineKomi, visits: 50, ownershipMode: "none", topK: 1, analysisPvLen: 1, reuseTree: false,
     }));
     return Math.max(0, sign * (best.scoreLead - child.rootScoreLead));
   },
@@ -1760,7 +1763,7 @@ const Review = {
       const a = await this.enqueue(() => Engine.analyze({
         board, currentPlayer: player,
         moveHistory: [], komi: this.game.meta.engineKomi,
-        visits: 150, ownershipMode: "root",
+        visits: 75, ownershipMode: "root",
       }));
       this.ownership = a.ownership || null;
       if (this.node.main !== undefined) {
@@ -3670,7 +3673,7 @@ async function markDeadWithKataGo(g, grid, err) {
     err.textContent = "KataGo is reading the position…";
     const a = await Engine.analyze({
       board: gridToBoardState(grid), currentPlayer: g.toMove() === WHITE ? "white" : "black",
-      moveHistory: [], komi: (g.data && g.data.komi) || 6.5, visits: 150, ownershipMode: "root",
+      moveHistory: [], komi: (g.data && g.data.komi) || 6.5, visits: 75, ownershipMode: "root",
     });
     const dead = [];
     for (let r = 0; r < N; r++)
