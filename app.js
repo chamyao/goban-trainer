@@ -2032,6 +2032,11 @@ function h(tag, attrs = {}, children = []) {
   return e;
 }
 
+// game records (data/games, tools/build_games.py): [id, title, native, games, line]
+const GAME_SHELVES = [["go-seigen", "Go Seigen", "吴清源", 883, "his games, 1926–1992"],
+                      ["huang-longshi", "Huang Longshi", "黄龙士", 121, "his games, the Qing dynasty's 17th century"],
+                      ["takemiya", "Takemiya Masaki", "武宫正树", 1740, "his games, 1965–2026"]];
+
 async function viewLibrary() {
   const nav = routeSeq;
   crumbs.textContent = "";
@@ -2041,6 +2046,7 @@ async function viewLibrary() {
   const prog = loadProgress();
   const favs = loadFavorites();
   root.innerHTML = "";
+  root.append(h("a", { class: "shelf-try", href: "#/shelf" }, "✦ Try the bookshelf"));
   const cats = { tsumego: "Tsumego", tesuji: "Tesuji", endgame: "Endgame" };
   // The Three Kingdoms campaign sits above everything.
   const tkDone = Object.values(prog.tk || {}).filter(v => v === 1).length;
@@ -2060,9 +2066,6 @@ async function viewLibrary() {
     ]));
   }
   // game records (data/games, tools/build_games.py): a shelf of their own; a game opens in the Review tab
-  const GAME_SHELVES = [["go-seigen", "Go Seigen", "吴清源", 883, "his games, 1926–1992"],
-                        ["huang-longshi", "Huang Longshi", "黄龙士", 121, "his games, the Qing dynasty's 17th century"],
-                        ["takemiya", "Takemiya Masaki", "武宫正树", 1740, "his games, 1965–2026"]];
   const gameShelf = h("div", { class: "book-list" });
   for (const [id, title, native, count, years] of GAME_SHELVES)
     gameShelf.append(h("div", { class: "book book-games", onclick: () => location.hash = `#/games/${id}` }, [
@@ -2103,6 +2106,77 @@ async function viewLibrary() {
     root.append(list);
   }
   root.append(h("div", { class: "cat-title" }, "Game records"), gameShelf);
+}
+
+// The bookshelf (a pilot, the user: "a more visual book shelf, animated, slightly mystical/festive, the books
+// showing their spines"): the same books as the Library, standing on lantern-lit shelves. A spine's height and
+// thickness follow the book's size, its colour its name; a gilt band rises with what's solved; a ribbon marks a
+// favourite. The story campaigns stand as tall tomes, the Stream glows, the game records have a shelf of their own.
+const SHELF_INKS = [["#7a1f1f", "#b8892f"], ["#1f3d5c", "#c9a54a"], ["#24492f", "#d0b25a"], ["#4a2a5c", "#c9a54a"],
+  ["#5c3a1a", "#e0c070"], ["#1e4a4a", "#c9a54a"], ["#6b2b3f", "#d6b25e"], ["#2f2f4f", "#cfae5a"], ["#3f4a1e", "#d8bc6a"]];
+function shelfInk(id) { let x = 0; for (const c of id) x = (x * 31 + c.charCodeAt(0)) >>> 0; return SHELF_INKS[x % SHELF_INKS.length]; }
+
+async function viewShelf() {
+  const nav = routeSeq;
+  crumbs.textContent = "";
+  root.innerHTML = `<div class="loading">Loading…</div>`;
+  const index = await getIndex();
+  if (nav !== routeSeq) return;
+  const prog = loadProgress(), favs = loadFavorites();
+  root.innerHTML = "";
+  const room = h("div", { class: "shelf-room" });
+  // the light: two lanterns that sway, and motes of gold drifting up through the room
+  room.append(h("div", { class: "shelf-lantern l1" }), h("div", { class: "shelf-lantern l2" }));
+  const motes = h("div", { class: "shelf-motes", "aria-hidden": "true" });
+  for (let i = 0; i < 28; i++) motes.append(h("i", { style: `left:${(i * 37) % 100}%;animation-delay:${-(i * 1.7) % 14}s;animation-duration:${10 + (i * 7) % 9}s;--s:${.5 + ((i * 13) % 10) / 10}` }));
+  room.append(motes);
+  room.append(h("div", { class: "shelf-head" }, [h("h2", {}, [h("span", { class: "zh" }, "藏经阁"), " The Library"]),
+    h("a", { class: "shelf-back", href: "#/" }, "← Classic view")]));
+
+  const spine = ({ id, title, native, sub, href, size, done = 0, total = 0, kind = "", fav = false, level = "" }) => {
+    const [ink, gilt] = shelfInk(id);
+    const hgt = Math.round(150 + Math.min(70, Math.sqrt(size || 50) * 3.2)), wid = Math.round(30 + Math.min(26, Math.log2((size || 50) + 1) * 2.4));
+    const frac = total ? Math.min(1, done / total) : 0;
+    const el = h("a", { class: `spine ${kind}`, href, title: `${title}${native ? " · " + native : ""}${sub ? "\n" + sub : ""}`,
+      style: `--ink:${ink};--gilt:${gilt};--h:${hgt}px;--w:${wid}px;--done:${frac}` }, [
+      h("span", { class: "spine-band top" }), h("span", { class: "spine-progress" }),
+      // the native title stacked a character at a time, upright, then the English running down the rest of the spine
+      h("span", { class: "spine-title" }, [
+        native ? h("span", { class: "zh" }, [...native].filter(c => c.trim()).slice(0, 7).map(c => h("b", {}, c))) : "",
+        h("span", { class: "en" }, title)]),
+      level ? h("span", { class: "spine-level" }, level) : "",
+      h("span", { class: "spine-band bottom" }),
+      fav ? h("span", { class: "spine-ribbon" }) : "",
+    ]);
+    return h("div", { class: "slot" }, [el]);   // every slot the same height: a wrapped row of books sits on its own plank
+  };
+  const shelf = (name, books, extra = []) => h("section", { class: "shelf" }, [
+    h("div", { class: "shelf-label" }, name),
+    h("div", { class: "shelf-row" }, [...books, ...extra]),
+  ]);
+  // things on a shelf: a pair of go bowls, a candle
+  const bowls = h("div", { class: "slot decor" }, [h("div", { class: "bowl black" }), h("div", { class: "bowl white" })]);
+  const candle = h("div", { class: "slot decor" }, [h("div", { class: "candle" }, [h("i", { class: "flame" })])]);
+
+  // the story campaigns: tall tomes
+  const tomes = [spine({ id: "tk", title: "Three Kingdoms", native: "三国演义", sub: "Romance of the Three Kingdoms: a story campaign through the novel", href: "#/tk", size: 900, kind: "tome",
+    done: Object.values(prog.tk || {}).filter(v => v === 1).length, total: 120 })];
+  for (const [id, nv] of Object.entries(typeof TK_NOVELS !== "undefined" ? TK_NOVELS : {}))
+    if (nv.live || (typeof TK_TEST !== "undefined" && TK_TEST))
+      tomes.push(spine({ id, title: nv.title, native: nv.native, sub: "A story campaign through the novel", href: `#/tk/${nv.first}`, size: 900, kind: "tome" }));
+  tomes.push(spine({ id: "stream", title: "Stream", native: "练习", sub: "Problems at your level, one after another", href: "#/stream", size: 600, kind: "glow" }));
+  room.append(shelf("故事 · Stories", tomes, [candle, bowls]));
+
+  const cats = [["tsumego", "死活 · Life and death"], ["tesuji", "手筋 · Tesuji"], ["endgame", "官子 · Endgame"]];
+  for (const [cat, name] of cats) {
+    const books = index.filter(b => b.category === cat).map(b => spine({ id: b.id, title: b.title, native: b.native, href: `#/book/${b.id}`,
+      size: b.count, done: Object.values(prog[b.id] || {}).filter(v => v === 1).length, total: b.count, fav: favs.has(b.id), level: b.level,
+      sub: `${b.count} problems${b.level ? " · " + b.level : ""}` }));
+    room.append(shelf(name, books));
+  }
+  room.append(shelf("棋谱 · Game records", GAME_SHELVES.map(([id, title, native, n, line]) =>
+    spine({ id: "g-" + id, title, native, href: `#/games/${id}`, size: n, kind: "record", sub: `${n} games · ${line}` }))));
+  root.append(room);
 }
 
 // A shelf of game records (data/games/<id>.json): the games by date, a search, and each opens in the Review tab
@@ -3678,6 +3752,7 @@ async function route() {
   else if (parts[0] === "tk" && parts[1] && parts[2]) await viewTKLevel(parseInt(parts[1], 10), parts[2]);
   else if (parts[0] === "tk") await viewTK(parseInt(parts[1], 10) || 0);
   else if (parts[0] === "games" && parts[1]) await viewGames(parts[1]);
+  else if (parts[0] === "shelf") await viewShelf();
   else if (parts[0] === "book" && parts[1] && parts[2]) await viewPlayer(parts[1], parseInt(parts[2], 10) || 1);
   else if (parts[0] === "book" && parts[1]) await viewBook(parts[1]);
   else await viewLibrary();
