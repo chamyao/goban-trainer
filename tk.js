@@ -2276,6 +2276,14 @@ const TKElo = {
   // (the user). Elo's expectation 1/(1+10^(d/400)) is 3/4 at d = -400·log10(3) ≈ -191, 1/2 at d = 0.
   BOARD: -Math.round(400 * Math.log10(3)), BOSS: 0,
   of(rank) { return 600 + rank * 50; },
+  LOG: 30,   // the last ratings kept ([r, n, at]), in the synced row, so a bad overwrite can be put back
+  // what's been dealt, kept small (it rides in the synced row): the last 300 problems, and of the Stream only its current board
+  trim(s) {
+    if (s.used && s.used.length > 300) s.used = s.used.slice(-300);
+    const cur = s.stream || 0;
+    if (s.slots) for (const k of Object.keys(s.slots)) if (k.startsWith("stream~") && +k.slice(7) < cur) delete s.slots[k];
+    return s;
+  },
   state(p = loadProgress()) { return p.tkElo || (p.tkElo = { r: this.START, n: 0, used: [], slots: {} }); },
   get rating() { return this.state().r; },
   label(r = this.rating) {
@@ -2295,7 +2303,7 @@ const TKElo = {
     const x = near[Math.floor(Math.random() * near.length)] || rated[0];
     s.slots[slot] = [x[0], x[1]];
     s.used.push(`${x[0]}:${x[1]}`);
-    if (s.used.length > 500) s.used = s.used.slice(-500);
+    this.trim(s);
     const keys = Object.keys(s.slots); if (keys.length > 400) for (const k of keys.slice(0, keys.length - 400)) delete s.slots[k];   // a seen board stays
     TK.saveProg(p);
     return s.slots[slot];
@@ -2309,6 +2317,8 @@ const TKElo = {
     const p = loadProgress(), s = this.state(p), r0 = s.r;
     s.r = this.after(s, x[2], win, mult);
     s.n = (s.n || 0) + 1;
+    s.at = Date.now();   // the latest rated answer: the newest wins across devices (Sync.mergeElo)
+    s.log = (s.log || []).concat([[s.r, s.n, s.at]]).slice(-this.LOG);
     TK.saveProg(p);
     return s.r - r0;
   },

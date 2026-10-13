@@ -12,7 +12,7 @@ const path = require('path');
     await p.route('**/phaser.min.js', r => r.fulfill({ path: path.join(__dirname, 'vendor/phaser.min.js'), contentType: 'application/javascript' }));
     await p.route('**/*.mp3', r => r.fulfill({ status: 404, body: '' }));
     await p.route('https://script.google.com/**', async r => { const req = r.request(), u = new URL(req.url());
-      if (req.method() === 'POST') { const j = JSON.parse(req.postData()); if (j.kind === 'progress') store[j.username] = j.data; return r.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' }); }
+      if (req.method() === 'POST') { const j = JSON.parse(req.postData()); if (j.kind === 'progress') store[j.username] = j.data.gz ? JSON.parse(require('zlib').gunzipSync(Buffer.from(j.data.gz, 'base64'))) : j.data; return r.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' }); }
       return r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ data: store[u.searchParams.get('username')] || {} }) }); });
     await p.goto(BASE + '#/tk/13'); await p.waitForTimeout(500);
     await p.evaluate(() => { localStorage.clear(); localStorage.setItem('gt-username', 'replaysync'); localStorage.setItem('tk-guide', 'off'); localStorage.setItem('tk-book', '13'); });

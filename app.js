@@ -92,9 +92,28 @@ const Sync = {
   async fetchRemote(kind = "progress") {
     if (!this.username) return {};
     const res = await fetch(`${this.API_URL}?username=${encodeURIComponent(this.username)}&kind=${kind}`);
-    if (!res.ok) { console.error("[sync] fetch failed", kind, res.status); return {}; }
+    if (!res.ok) {
+      console.error("[sync] fetch failed", kind, res.status);
+      if (kind === "progress") throw new Error(`fetch failed (${res.status})`);   // never merge (and then write) against a row we couldn't read
+      return {};
+    }
     const body = await res.json();
-    return body.data || {};
+    return kind === "progress" ? this.unpack(body.data) : body.data || {};
+  },
+  // the progress row goes up gzipped (base64): a Sheet cell holds 50,000 characters, and apo110's row grew past
+  // the 48,000 we send, so every save after Oct 11 was skipped and the sheet kept an old rating (the user: "6k, now 9k+")
+  async pack(data) {
+    try {
+      const gz = new Uint8Array(await new Response(new Blob([JSON.stringify(data)]).stream().pipeThrough(new CompressionStream("gzip"))).arrayBuffer());
+      let s = "";
+      for (let i = 0; i < gz.length; i += 0x8000) s += String.fromCharCode.apply(null, gz.subarray(i, i + 0x8000));
+      return { gz: btoa(s) };
+    } catch { return data; }
+  },
+  async unpack(data) {
+    if (!data || typeof data.gz !== "string") return data || {};
+    const gz = Uint8Array.from(atob(data.gz), c => c.charCodeAt(0));
+    return JSON.parse(await new Response(new Blob([gz]).stream().pipeThrough(new DecompressionStream("gzip"))).text());
   },
 
   // Pull this username's row, merge into local (solved sticks, favorites
@@ -122,7 +141,7 @@ const Sync = {
     if (this.catchUp(local, remote.tkLocal)) moved = true;
     return moved || JSON.stringify(local) !== before || favs.size !== nf;
   },
-  // solved sticks (1 beats anything); the adaptive rating keeps whichever has played more boards
+  // solved sticks (1 beats anything); the adaptive rating follows the latest rated answer (mergeElo)
   mergeInto(local, remote) {
     for (const bookId in remote) {
       if (bookId === "tkAt" || bookId === "tkUndo" || bookId === "tkReplay" || bookId === "tkSeen") {   // dated: the later date wins (TK.cleared, TK.seen)
@@ -136,10 +155,27 @@ const Sync = {
         for (const k in remote.tkMig) b[k] = Math.max(+b[k] || 0, +remote.tkMig[k] || 0);
         continue;
       }
-      if (bookId === "tkElo") { const r = remote.tkElo, l = local.tkElo; if (r && (!l || (r.n || 0) > (l.n || 0))) local.tkElo = r; continue; }
+      if (bookId === "tkElo") { local.tkElo = this.mergeElo(local.tkElo, remote.tkElo); continue; }
       const b = local[bookId] || (local[bookId] = {});
       for (const pid in remote[bookId]) if (b[pid] !== 1) b[pid] = remote[bookId][pid];
     }
+  },
+  // the rating: the copy with the latest rated answer (at, stamped by TKElo.result) wins, the sheet's on a tie, so a
+  // fresh browser or a stale tab never sets it back (before: the copy with more boards won, whatever its age);
+  // copies from before the stamps go by boards played. What was dealt (used, slots) and the Stream's place join.
+  mergeElo(l, r) {
+    if (!r) return l;
+    if (!l) return r;
+    const ta = l.at || 0, tb = r.at || 0, win = tb > ta || (tb === ta && (r.n || 0) >= (l.n || 0)) ? r : l;
+    const o = { ...l, r: win.r, n: win.n };
+    if (win.at) o.at = win.at;
+    o.used = [...new Set([...(r.used || []), ...(l.used || [])])];
+    o.slots = { ...(r.slots || {}), ...(l.slots || {}) };   // a board this browser has dealt stays
+    const st = (r.stream || 0) > (l.stream || 0) ? r : l;
+    for (const k of ["stream", "streamRated", "streamX"]) if (st[k] !== undefined) o[k] = st[k]; else delete o[k];
+    const log = new Map([...(r.log || []), ...(l.log || [])].map(e => [e[2], e]));
+    if (log.size) o.log = [...log.values()].sort((a, b) => a[2] - b[2]).slice(-TKElo.LOG);
+    return TKElo.trim(o);
   },
   tkKey: k => /^tk-world-\d+$/.test(k) || k === "tk-at" || k === "tk-party" || k === "tk-draw" || k === "tk-book" || k === "tk-items" || k === "tk-seen",
   // per world, the newest rollback a copy of the campaign was made after
@@ -184,9 +220,9 @@ const Sync = {
       localStorage.setItem(PROGRESS_KEY, JSON.stringify(local));
       // a world rolled back on another device since this one's copy: take that copy of it before writing ours over it
       if (this.catchUp(local, remote.tkLocal) && this.onStale) this.onStale();
-    } catch (e) { console.error("[sync] merge before save", e); }
+    } catch (e) { console.error("[sync] merge before save, not saving", e); return; }   // the sheet is the record: never write over a row we couldn't read
     const stamp = Date.now(); this.setStamp(stamp);
-    return this.save("progress", { progress: loadProgress(), favorites: [...loadFavorites()], tkLocal: this.tkLocal(), stamp });
+    return this.save("progress", await this.pack({ progress: loadProgress(), favorites: [...loadFavorites()], tkLocal: this.tkLocal(), stamp }));
   },
 
   // Google Sheets caps a cell at 50,000 characters — stay well clear of it
