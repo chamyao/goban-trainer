@@ -1149,3 +1149,4 @@ svg.pl-counting .last-move { display: none; }
   .shelf-motes { display: none; }
   .spine { transition: none; }
 }
+.byo-voice { display: flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 13px; color: var(--muted); cursor: pointer; }

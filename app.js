@@ -3567,6 +3567,46 @@ function playLobby() {
   ])];
 }
 
+// Korean byoyomi, read aloud on your turn (the user: "the korean byoyomi count with a voice ... they count up,
+// reference fox"): the timekeeper's call, "열" at 10 seconds used and "스물" at 20, then the last ten counted up,
+// 하나 … 아홉, one a second; "네 번 남았습니다" as a period goes, "마지막 초읽기입니다" for the last. The voice is the
+// browser's own Korean one (speechSynthesis: every phone has one; no files: Fox's and OGS's recordings are their own).
+const ByoVoice = {
+  KEY: "gt-byo-voice",
+  get on() { try { return localStorage.getItem(this.KEY) !== "off"; } catch { return true; } },
+  set on(v) { try { localStorage.setItem(this.KEY, v ? "on" : "off"); } catch {} },
+  COUNT: ["하나", "둘", "셋", "넷", "다섯", "여섯", "일곱", "여덟", "아홉"],
+  LEFT: ["", "한", "두", "세", "네", "다섯", "여섯", "일곱", "여덟", "아홉", "열"],
+  say(text) {
+    if (!this.on || typeof speechSynthesis === "undefined") return;
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "ko-KR"; u.rate = 1.15;
+    const v = speechSynthesis.getVoices().find(x => /^ko/i.test(x.lang));
+    if (v) u.voice = v;
+    speechSynthesis.cancel();   // a count is only worth hearing on time
+    speechSynthesis.speak(u);
+  },
+  // called a few times a second from the game's ticker: what to say now, once
+  tick(g) {
+    const st = g.byoVoice || (g.byoVoice = { periods: null, said: "" });
+    const t = g.phase === "play" && g.myColor ? g.timeLeft(g.myColor) : null;
+    if (!t || !t.byo) { st.periods = null; st.said = ""; return; }
+    if (st.periods !== null && t.periods < st.periods)   // a period gone
+      this.say(t.periods === 1 ? "마지막 초읽기입니다" : `${this.LEFT[t.periods] || t.periods} 번 남았습니다`);
+    else if (st.periods === null && g.myTurn)            // into byoyomi
+      this.say(t.periods === 1 ? "마지막 초읽기입니다" : `초읽기 ${this.LEFT[t.periods] || t.periods} 번`);
+    st.periods = t.periods;
+    if (!g.myTurn) { st.said = ""; return; }
+    const c = g.clock || {}, mine = g.myColor === BLACK ? c.black_time : c.white_time;
+    const len = (mine && mine.period_time) || 30, used = len - t.period, left = Math.ceil(t.period);
+    let key = "", text = "";
+    if (left <= 9 && left >= 1) { key = "c" + left; text = this.COUNT[9 - left]; }
+    else if (used >= 20 && len >= 30 && left >= 10) { key = "20"; text = "스물"; }   // (a 30 s period: 스물 at 10 left, then 하나)
+    else if (used >= 10 && len >= 20 && left >= 10) { key = "10"; text = "열"; }
+    if (key && key !== st.said) { st.said = key; this.say(text); }
+  },
+};
+
 function playGame(g) {
   const P = OGSPlay;
   const svg = document.createElementNS(SVGNS, "svg");
@@ -3634,6 +3674,7 @@ function playGame(g) {
       el.classList.toggle("low", !!t && t.byo && t.period < 10);
     }
     showCountdown();
+    ByoVoice.tick(g);
   }, 250);
 
   const status = h("div", { class: "meta-sub" },
@@ -3660,7 +3701,9 @@ function playGame(g) {
   }
 
   const aside = h("aside", {}, [
-    h("div", { class: "panel" }, [h("h2", {}, `OGS game ${g.id}`), ...rows, status, err]),
+    h("div", { class: "panel" }, [h("h2", {}, `OGS game ${g.id}`), ...rows, status, err,
+      g.myColor ? h("label", { class: "byo-voice" }, [h("input", { type: "checkbox", ...(ByoVoice.on ? { checked: "" } : {}),
+        onchange: e => { ByoVoice.on = e.target.checked; if (e.target.checked) ByoVoice.say("초읽기"); } }), " 초읽기 Korean byoyomi voice"]) : ""]),
     buttons.length ? h("div", { class: "panel" }, [h("div", { class: "rv-actions" }, buttons)]) : "",
   ]);
   return [h("div", { class: "review" }, [boardCard, aside])];
