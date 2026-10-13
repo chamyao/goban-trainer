@@ -2144,7 +2144,7 @@ async function viewShelf() {
     h("h2", {}, [h("span", { class: "zh" }, "藏经阁"), h("span", { class: "en" }, "The Library of Stones")]),
     h("a", { class: "shelf-back", href: "#/" }, "← Classic view")]));
 
-  const spine = ({ id, title, native, sub, href, size, done = 0, total = 0, kind = "", fav = false, level = "" }) => {
+  const spine = ({ id, title, native, sub, href, size, done = 0, total = 0, kind = "", fav = false, level = "", book = null }) => {
     const [ink, gilt] = shelfInk(id);
     const hgt = Math.round(158 + Math.min(66, Math.sqrt(size || 50) * 3)), wid = Math.round(30 + Math.min(24, Math.log2((size || 50) + 1) * 2.3));
     const frac = total ? Math.min(1, done / total) : 0;
@@ -2159,6 +2159,9 @@ async function viewShelf() {
       h("span", { class: "spine-progress" }), h("span", { class: "spine-sheen" }),
       kind === "tome" ? h("span", { class: "boss" }) : "",
       fav ? h("span", { class: "spine-ribbon" }) : "",
+      // a problem book's star: favourite it or not, there on the shelf (the classic Library's star, the same list)
+      book ? h("button", { type: "button", class: "spine-star" + (fav ? " on" : ""), title: fav ? "Unfavorite" : "Favorite", "aria-label": fav ? "Unfavorite" : "Favorite",
+        onclick: e => { e.preventDefault(); e.stopPropagation(); const y = window.scrollY; toggleFavorite(book); viewShelf().then(() => scrollTo(0, y)); } }, fav ? "★" : "☆") : "",
     ]);
     return h("div", { class: "slot" }, [el]);   // every slot the same height: a wrapped row sits on its own shelf
   };
@@ -2175,10 +2178,14 @@ async function viewShelf() {
   tomes.push(spine({ id: "stream", title: "Stream", native: "练习", sub: "Problems at your level, one after another", href: "#/stream", size: 700, kind: "glow" }));
   room.append(shelf("故事", "Tales", tomes, true));
 
+  const bookSpine = b => spine({ id: b.id, title: b.title, native: b.native, href: `#/book/${b.id}`, book: b.id,
+    size: b.count, done: Object.values(prog[b.id] || {}).filter(v => v === 1).length, total: b.count, fav: favs.has(b.id), level: b.level,
+    sub: `${b.count} problems${b.level ? " · " + b.level : ""}` });
+  // the favourites, as in the classic Library: a shelf of their own first, and still in their own shelves too
+  const favBooks = index.filter(b => favs.has(b.id));
+  if (favBooks.length) room.append(shelf("珍藏", "Favorites", favBooks.map(bookSpine), favBooks.length < 12));
   for (const [cat, zh, en] of [["tsumego", "死活", "Life and Death"], ["tesuji", "手筋", "Tesuji"], ["endgame", "官子", "Endgame"]])
-    room.append(shelf(zh, en, index.filter(b => b.category === cat).map(b => spine({ id: b.id, title: b.title, native: b.native, href: `#/book/${b.id}`,
-      size: b.count, done: Object.values(prog[b.id] || {}).filter(v => v === 1).length, total: b.count, fav: favs.has(b.id), level: b.level,
-      sub: `${b.count} problems${b.level ? " · " + b.level : ""}` }))));
+    room.append(shelf(zh, en, index.filter(b => b.category === cat).map(bookSpine)));
   room.append(shelf("棋谱", "Games of the Masters", GAME_SHELVES.map(([id, title, native, n, line]) =>
     spine({ id: "g-" + id, title, native, href: `#/games/${id}`, size: n, kind: "record", sub: `${n} games · ${line}` })), true));
   root.append(room);
