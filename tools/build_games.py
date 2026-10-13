@@ -49,6 +49,16 @@ def nested(text):
     return "".join(out)
 
 
+def komi_of(text):
+    y = re.match(r"\d{4}", prop(text, "DT"))
+    year = int(y.group(0)) if y else 0
+    if prop(text, "HA") not in ("", "0", "1") or year < 1955:
+        return "0"
+    if "Ing Cup" in prop(text, "EV") or "Ing" in prop(text, "RU"):
+        return "8"
+    return "4.5" if year < 1974 else "5.5" if year < 2003 else "6.5"
+
+
 def main():
     numbered = "--numbered" in sys.argv
     args = [a for a in sys.argv[1:] if a != "--numbered"]
@@ -74,10 +84,11 @@ def main():
         text = nested(text)
         text = re.sub(r"^\s*\(\s*;((?:\s*[A-Z]+(?:\[(?:\\.|[^\]])*\])+)*)\s*;(\s*(?:PB|PW|HA|KM|RE|DT|BR|WR|EV)\[)", r"(;\1\2", text, count=1)
         text = text.replace("Xi Xingyou", "Xu Xingyou")   # a misspelling in one game (No. 46): the search finds him
-        # no KM: these old records leave it out for a game without komi (before komi was standard, or a handicap
-        # game); say so, or the Review tab would take a modern 6.5 (the user: "was it really komi 6.5?")
+        # no KM: fill in the komi the game was played with, or the Review tab would take a modern 6.5 (the user:
+        # "was it really komi 6.5?"): none in a handicap game or before komi (Go Seigen's early games), then the
+        # Japanese pro standard of its year (4.5 from 1955, 5.5 from 1974, 6.5 from 2003), 8 under Ing rules
         if not prop(text, "KM"):
-            text = re.sub(r"\(\s*;", lambda m: m.group(0) + "KM[0]", text, count=1)
+            text = re.sub(r"\(\s*;", lambda m: m.group(0) + f"KM[{komi_of(text)}]", text, count=1)
         name = re.sub(r"[^A-Za-z0-9._-]", "_", str(f.relative_to(src)))   # a subfolder's games: "Yomiuri_1953-03-31.sgf"
         (out / name).write_text(text, encoding="utf-8")
         # no DT (only the date it was published, DTX): the file's own name is its date

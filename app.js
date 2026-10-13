@@ -2061,7 +2061,8 @@ async function viewLibrary() {
   }
   // game records (data/games, tools/build_games.py): a shelf of their own; a game opens in the Review tab
   const GAME_SHELVES = [["go-seigen", "Go Seigen", "吴清源", 883, "his games, 1926–1992"],
-                        ["huang-longshi", "Huang Longshi", "黄龙士", 121, "his games, the Qing dynasty's 17th century"]];
+                        ["huang-longshi", "Huang Longshi", "黄龙士", 121, "his games, the Qing dynasty's 17th century"],
+                        ["takemiya", "Takemiya Masaki", "武宫正树", 1740, "his games, 1965–2026"]];
   const gameShelf = h("div", { class: "book-list" });
   for (const [id, title, native, count, years] of GAME_SHELVES)
     gameShelf.append(h("div", { class: "book book-games", onclick: () => location.hash = `#/games/${id}` }, [

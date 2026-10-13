@@ -9,7 +9,7 @@ await p.goto('http://localhost:8765/#/');
 await p.evaluate(()=>{const m=document.getElementById('authModalBackdrop');if(m)m.hidden=true;});
 await p.waitForSelector('.book-games');
 check((await p.textContent('.book-games')).includes('883 games'),'the Library has a Go Seigen book on a Game records shelf');
-check((await p.locator('.book-games').count())===2&&(await p.locator('.book-games').nth(1).textContent()).includes('121 games'),'and a Huang Longshi book, 121 games');
+check((await p.locator('.book-games').count())===3&&(await p.locator('.book-games').nth(1).textContent()).includes('121 games')&&(await p.locator('.book-games').nth(2).textContent()).includes('1740 games'),'and Huang Longshi (121) and Takemiya Masaki (1740) books');
 await p.locator('.book-games').first().click();await p.waitForSelector('.games-row');
 check(await p.locator('.games-row').count()===400&&(await p.textContent('.games-head')).includes('883 games'),'the shelf lists his games (the first 400 of 883 until searched)');
 await p.fill('.games-search','Kitani 1939');await p.waitForTimeout(200);
