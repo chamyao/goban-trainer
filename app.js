@@ -2046,6 +2046,8 @@ async function viewLibrary() {
   const prog = loadProgress();
   const favs = loadFavorites();
   root.innerHTML = "";
+  root.append(h("div", { class: "tavern-hero" }, [h("div", {}, [h("b", {}, "棋馆"), h("span", {}, "The Go Tavern")]),
+    h("small", {}, "Pull up a stool. Pick a book, or a story.")]));   // shown only in the Tavern look
   root.append(h("a", { class: "shelf-try", href: "#/shelf" }, "✦ Try the bookshelf"));
   const cats = { tsumego: "Tsumego", tesuji: "Tesuji", endgame: "Endgame" };
   // The Three Kingdoms campaign sits above everything.
@@ -3740,6 +3742,25 @@ function viewFeedback() {
   ]));
 }
 
+/* ================= the Tavern look (a pilot) ================= */
+// The user: "pilot a whole site revamp ... like the Hearthstone experience; don't touch the story playthroughs".
+// Opt-in from the header's chip, kept per device (a look, not progress); theme-tavern.css does the rest. Never on a
+// story page (#/tk/...): those keep their own look.
+const Theme = {
+  KEY: "gt-theme",
+  get on() { try { return localStorage.getItem(this.KEY) === "tavern"; } catch { return false; } },
+  set on(v) { try { v ? localStorage.setItem(this.KEY, "tavern") : localStorage.removeItem(this.KEY); } catch {} },
+  apply(story) {
+    document.body.classList.toggle("theme-tavern", this.on && !story);
+    const chip = document.getElementById("themeChip");
+    if (chip) { chip.textContent = this.on ? "✦ Tavern: on" : "✦ Tavern"; chip.hidden = !!story; }
+  },
+};
+document.addEventListener("DOMContentLoaded", () => {
+  const chip = document.getElementById("themeChip");
+  if (chip) chip.addEventListener("click", () => { Theme.on = !Theme.on; route(); });
+});
+
 /* ================= router & keys ================= */
 
 // Bumped on every navigation so async views can tell they've gone stale.
@@ -3753,6 +3774,10 @@ async function route() {
   trainer = null;
   Review.els = null;
   const parts = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
+  Theme.apply(parts[0] === "tk");
+  // a story's opening scroll left open when you leave the story (the Library tab, Back) stayed over the page and
+  // took its clicks: it goes with the story
+  if (parts[0] !== "tk") for (const w of document.querySelectorAll("body > .tk-scroll-wrap")) w.remove();
   clearInterval(playTicker);
   const tab = ["review", "play", "feedback"].includes(parts[0]) ? parts[0] : "library";   // (the Stream is a card in the Library)
   if (window.Wukong && Wukong.suspend) Wukong.suspend(parts[0] === "tk" && !parts[2]);  // the map has its own party

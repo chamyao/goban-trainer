@@ -1,0 +1,150 @@
+/* ===== The Tavern: a whole-site look in the spirit of a card-game tavern (a pilot, the user: "the Hearthstone
+   experience"). Opt-in: body.theme-tavern, set by the header's Tavern toggle (app.js Theme). Never on the story
+   playthroughs (#/tk/...): route() drops the class there.
+   Gradients stand in for Graphics' textures until they land: --t-wall, --t-parchment, --t-hero (url()s, assets/ui/). */
+
+body.theme-tavern {
+  --bg: #2a1a10;
+  --card: #f3e3c0;
+  --ink: #3a2412;
+  --muted: #7d6243;
+  --chip: #e6cf9f;
+  --border: #b08a4a;
+  --accent: #2f7a4f;
+  --danger: #a23a2c;
+  --gold: #e8c46a;
+  --gold-deep: #9a6f22;
+  --jade: #2e7d64;
+  --t-wall: none; --t-parchment: none; --t-hero: none;
+  color: #f3e3c0;
+  background-color: #241509;
+  background-image:
+    var(--t-wall),
+    radial-gradient(ellipse 70% 40% at 50% 0%, rgba(255, 170, 80, .22), transparent 70%),
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, .25) 0 2px, transparent 2px 180px),
+    repeating-linear-gradient(90deg, #3b2414 0 60px, #33200f 60px 120px, #3e2715 120px 180px),
+    linear-gradient(180deg, #2c1b0e, #1c1008);
+  background-attachment: fixed;
+}
+body.theme-tavern a { color: inherit; }
+
+/* --- the header: a carved beam with gold trim; tabs as raised plates; chips as leather and gold --- */
+body.theme-tavern header {
+  background: linear-gradient(180deg, #5a3a1e 0%, #4a2e17 55%, #3a2310 100%);
+  border-bottom: 0; box-shadow: 0 3px 0 #c9a14a, 0 5px 0 #6b4a1c, 0 10px 24px rgba(0, 0, 0, .55);
+}
+body.theme-tavern header h1 a { color: #ffe3a3; font-family: "Cinzel", Georgia, serif; letter-spacing: .04em;
+  text-shadow: 0 2px 0 #2a170a, 0 0 18px rgba(255, 200, 110, .35); }
+body.theme-tavern #tabs a { color: #f0d9a8; font: 600 14px/1 "Cinzel", Georgia, serif; letter-spacing: .05em; padding: 9px 16px; border-radius: 6px;
+  background: linear-gradient(180deg, #6b4524, #4b2e15); box-shadow: inset 0 1px 0 rgba(255, 220, 160, .25), 0 0 0 1px #1d1007, 0 2px 0 #1d1007; }
+body.theme-tavern #tabs a:hover:not(.active) { background: linear-gradient(180deg, #7d532c, #583619); color: #fff1cc; }
+body.theme-tavern #tabs a.active { color: #2a1708; background: linear-gradient(180deg, #ffe39a 0%, #e8b94c 45%, #b9821f 100%);
+  box-shadow: inset 0 1px 0 #fff4c8, 0 0 0 1px #5a3a0e, 0 2px 0 #5a3a0e, 0 0 16px rgba(255, 200, 90, .55); }
+body.theme-tavern #crumbs, body.theme-tavern #crumbs a { color: #e8cf9a; }
+body.theme-tavern .engine-chip, body.theme-tavern .auth-chip, body.theme-tavern .theme-chip, body.theme-tavern .music-btn {
+  color: #f0d9a8; background: linear-gradient(180deg, #3c2412, #2a180b); box-shadow: inset 0 0 0 1px #9a7230, 0 2px 4px rgba(0, 0, 0, .5); }
+body.theme-tavern .auth-chip .email { color: #ffe3a3; }
+
+/* --- section titles: a red cloth ribbon --- */
+body.theme-tavern .cat-title { display: inline-block; position: relative; margin: 30px 0 14px 14px; padding: 7px 26px 8px;
+  font: 700 14px/1 "Cinzel", Georgia, serif; letter-spacing: .14em; text-transform: uppercase; color: #ffe9b8;
+  background: linear-gradient(180deg, #b3332a, #8a1f19 60%, #6e1712); text-shadow: 0 1px 0 #3d0a07;
+  clip-path: polygon(0 0, 100% 0, calc(100% - 12px) 50%, 100% 100%, 0 100%, 12px 50%); filter: drop-shadow(0 3px 2px rgba(0, 0, 0, .5)); }
+
+/* --- the library's books: cards on parchment with a gold frame --- */
+body.theme-tavern .book {
+  color: var(--ink); border: 0; border-radius: 10px; padding: 16px 18px 14px;
+  background: var(--t-parchment), radial-gradient(ellipse at 30% 20%, #fbf0d4, #ecd6a6 70%, #dcbf83);
+  box-shadow: inset 0 0 0 2px #c9a14a, inset 0 0 0 4px #6b4a1c, inset 0 0 0 5px #e6c46e, inset 0 0 22px rgba(120, 70, 20, .35), 0 6px 14px rgba(0, 0, 0, .5);
+  transition: transform .2s ease, box-shadow .2s ease; }
+body.theme-tavern .book:hover { transform: translateY(-3px) scale(1.015);
+  box-shadow: inset 0 0 0 2px #e8c46a, inset 0 0 0 4px #6b4a1c, inset 0 0 0 5px #ffe08a, inset 0 0 22px rgba(120, 70, 20, .3), 0 0 22px rgba(255, 200, 90, .55), 0 10px 18px rgba(0, 0, 0, .55); }
+body.theme-tavern .book .t { font: 700 15px/1.25 "Cinzel", Georgia, serif; color: #3a2210; }
+body.theme-tavern .book .n { color: #7d5a2e; }
+body.theme-tavern .book .star { color: #a07a2c; } body.theme-tavern .book .star.on { color: #d49a14; text-shadow: 0 0 8px rgba(255, 200, 60, .7); }
+body.theme-tavern .book .bar { background: rgba(90, 55, 20, .25); } body.theme-tavern .book .bar div { background: linear-gradient(90deg, #2e7d64, #49b08a); }
+body.theme-tavern .badge { background: #e2c88e; color: #4a2c10; box-shadow: inset 0 0 0 1px #a07a2c; }
+body.theme-tavern .badge.dan, body.theme-tavern .badge.turn { background: linear-gradient(180deg, #3a2212, #22130a); color: #ffe3a3; box-shadow: inset 0 0 0 1px #c9a14a; }
+
+/* the story campaign cards: portals with a gold frame and a glow */
+body.theme-tavern .tk-card { border-radius: 12px; box-shadow: inset 0 0 0 2px #e8c46a, inset 0 0 0 5px rgba(0, 0, 0, .35), 0 8px 18px rgba(0, 0, 0, .55), 0 0 26px rgba(255, 170, 70, .25); }
+body.theme-tavern .tk-card b { font-family: "Cinzel", Georgia, serif; letter-spacing: .03em; }
+body.theme-tavern .shelf-try { box-shadow: 0 0 0 1px #e8c46a, 0 4px 16px rgba(0, 0, 0, .55); }
+
+/* --- panels: parchment scrolls with gold trim --- */
+body.theme-tavern .panel, body.theme-tavern .modal, body.theme-tavern .games-list, body.theme-tavern .history-item {
+  color: var(--ink); border: 0; border-radius: 10px;
+  background: var(--t-parchment), radial-gradient(ellipse at 40% 25%, #fbf0d4, #ecd6a6 75%, #dcbf83);
+  box-shadow: inset 0 0 0 2px #c9a14a, inset 0 0 0 4px #6b4a1c, inset 0 0 0 5px #e6c46e, inset 0 0 26px rgba(120, 70, 20, .3), 0 8px 18px rgba(0, 0, 0, .5); }
+body.theme-tavern .panel h2 { font: 700 13px/1 "Cinzel", Georgia, serif; letter-spacing: .14em; color: #7a1f17;
+  padding-bottom: 8px; border-bottom: 1px solid rgba(154, 111, 34, .45); }
+body.theme-tavern .meta-title { font-family: "Cinzel", Georgia, serif; }
+body.theme-tavern .meta-sub, body.theme-tavern .source-note { color: #7d5a2e; }
+body.theme-tavern .games-row { border-top-color: rgba(154, 111, 34, .3); }
+body.theme-tavern .games-row:hover { background: rgba(255, 220, 140, .35); }
+body.theme-tavern .games-head h2 { font-family: "Cinzel", Georgia, serif; color: #ffe3a3; text-shadow: 0 2px 0 #1d1007; }
+body.theme-tavern .games-head .meta-sub, body.theme-tavern .book-head .sub { color: #e8cf9a; }
+body.theme-tavern .book-head h2 { font-family: "Cinzel", Georgia, serif; color: #ffe3a3; text-shadow: 0 2px 0 #1d1007; }
+body.theme-tavern input, body.theme-tavern textarea, body.theme-tavern select {
+  color: var(--ink); background: #fbf2dc; border: 1px solid #a07a2c; border-radius: 6px; box-shadow: inset 0 2px 4px rgba(90, 55, 20, .2); }
+
+/* --- buttons: chunky plates. Jade for the ordinary ones, gold for the main one --- */
+body.theme-tavern :is(.controls, .nav-row, .rv-nav, .rv-actions, .sgf-loader, .modal) button,
+body.theme-tavern .sgf-loader label.file, body.theme-tavern .book-head .reset-book {
+  font: 700 13.5px/1 "Cinzel", Georgia, serif; letter-spacing: .04em; color: #eafff4; border: 0; border-radius: 8px; padding: 11px 12px;
+  background: linear-gradient(180deg, #4fae8c 0%, #2e7d64 48%, #1d5a47 100%);
+  box-shadow: inset 0 1px 0 rgba(220, 255, 236, .45), inset 0 -2px 0 rgba(0, 0, 0, .25), 0 0 0 1px #0f3328, 0 0 0 3px #c9a14a, 0 0 0 4px #5a3a0e, 0 4px 6px rgba(0, 0, 0, .45);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, .5); transition: transform .08s ease, filter .15s ease; }
+body.theme-tavern :is(.controls, .nav-row, .rv-nav, .rv-actions, .sgf-loader, .modal) button:hover:not(:disabled) { filter: brightness(1.12); }
+body.theme-tavern :is(.controls, .nav-row, .rv-nav, .rv-actions, .sgf-loader, .modal) button:active:not(:disabled) { transform: translateY(2px); }
+body.theme-tavern :is(.controls, .rv-actions, .sgf-loader) button.primary {
+  color: #3a1f06; text-shadow: 0 1px 0 rgba(255, 245, 200, .7);
+  background: linear-gradient(180deg, #fff0b0 0%, #f4c94e 40%, #d69a1c 75%, #b07612 100%);
+  box-shadow: inset 0 1px 0 #fffbe0, inset 0 -3px 0 rgba(120, 70, 0, .35), 0 0 0 1px #6b4206, 0 0 0 3px #e8c46a, 0 0 0 4px #5a3a0e,
+    0 0 20px rgba(255, 200, 80, .6), 0 4px 6px rgba(0, 0, 0, .45); }
+body.theme-tavern .controls button.high-roller { color: #ffe9e0; background: linear-gradient(180deg, #e2604a, #a8291c 55%, #7a170f); }
+body.theme-tavern :is(.controls, .rv-actions) button.active { background: linear-gradient(180deg, #ffe39a, #c9922a); color: #3a1f06; }
+body.theme-tavern :is(.controls, .nav-row, .rv-nav, .rv-actions) button:disabled { filter: grayscale(.7) brightness(.8); opacity: .65; }
+
+/* --- the board: an ornate wood frame with gold corner caps, set on the tavern table --- */
+body.theme-tavern .board-card { position: relative; padding: 18px; border-radius: 14px;
+  background: linear-gradient(135deg, #6e4423, #4a2b13 40%, #6a4120 70%, #3e230f);
+  box-shadow: inset 0 0 0 2px #c9a14a, inset 0 0 0 6px #2a170a, inset 0 0 0 8px #8a6227, inset 0 0 18px rgba(0, 0, 0, .6), 0 18px 36px rgba(0, 0, 0, .6), 0 0 40px rgba(255, 170, 70, .12); }
+body.theme-tavern .board-card::before, body.theme-tavern .board-card::after { content: ""; position: absolute; width: 34px; height: 34px; pointer-events: none;
+  background: radial-gradient(circle at 50% 50%, #fff2c0, #e8c46a 35%, #9a6f22 70%, transparent 72%); filter: drop-shadow(0 2px 2px rgba(0, 0, 0, .6)); }
+body.theme-tavern .board-card::before { top: -10px; left: -10px; } body.theme-tavern .board-card::after { bottom: -10px; right: -10px; }
+
+/* --- status lines, the move tree, misc --- */
+body.theme-tavern #status.ok { color: #23704f; } body.theme-tavern #status.bad { color: #a23a2c; } body.theme-tavern #status.off { color: #8a5a10; }
+body.theme-tavern .err { color: #ffb4a6; }
+body.theme-tavern .panel .err, body.theme-tavern .modal .err { color: #a23a2c; }
+body.theme-tavern .loading { color: #e8cf9a; font-family: "Cinzel", Georgia, serif; letter-spacing: .1em; }
+
+/* --- the toggle itself --- */
+.theme-chip { font-size: 12.5px; padding: 5px 12px; border-radius: 999px; background: var(--chip); color: var(--muted); cursor: pointer; border: 0;
+  white-space: nowrap; font-family: inherit; }
+.theme-chip:hover { filter: brightness(1.05); }
+body.theme-tavern .theme-chip { font-family: "Cinzel", Georgia, serif; color: #ffe3a3; box-shadow: inset 0 0 0 1px #e8c46a, 0 0 12px rgba(255, 200, 90, .35); }
+
+@media (prefers-reduced-motion: reduce) { body.theme-tavern .book, body.theme-tavern button { transition: none !important; } }
+
+/* --- the Library's hero banner: the tavern itself (Graphics' painting goes in --t-hero) --- */
+.tavern-hero { display: none; }
+body.theme-tavern .tavern-hero { display: flex; flex-direction: column; justify-content: flex-end; gap: 6px; position: relative; overflow: hidden;
+  height: 210px; margin: -8px 0 22px; padding: 22px 28px; border-radius: 14px;
+  background: var(--t-hero),
+    radial-gradient(ellipse 35% 60% at 82% 70%, rgba(255, 150, 60, .55), transparent 70%),
+    radial-gradient(ellipse 50% 70% at 18% 30%, rgba(255, 200, 120, .18), transparent 70%),
+    linear-gradient(180deg, #3e2614, #1d1008);
+  background-size: cover; background-position: center;
+  box-shadow: inset 0 0 0 2px #c9a14a, inset 0 0 0 6px #2a170a, inset 0 0 0 7px #8a6227, inset 0 -60px 60px rgba(0, 0, 0, .55), 0 14px 30px rgba(0, 0, 0, .55); }
+body.theme-tavern .tavern-hero::after { content: ""; position: absolute; right: 9%; bottom: 18%; width: 70px; height: 90px; border-radius: 40% 40% 10% 10%;
+  background: radial-gradient(ellipse at 50% 80%, #fff2b0, #ffb347 40%, rgba(255, 90, 30, .0) 72%); filter: blur(2px); opacity: .85;
+  animation: tavern-fire 2.2s ease-in-out infinite; will-change: transform, opacity; }   /* the hearth */
+@keyframes tavern-fire { 0%, 100% { transform: scale(1, 1); opacity: .8; } 40% { transform: scale(1.06, .94); opacity: .95; } 70% { transform: scale(.95, 1.07); opacity: .85; } }
+body.theme-tavern .tavern-hero b { font: 700 46px/1 "Noto Serif SC", "Songti SC", serif; color: #ffe3a3; text-shadow: 0 3px 0 #2a170a, 0 0 24px rgba(255, 190, 90, .55); }
+body.theme-tavern .tavern-hero div span { margin-left: 14px; font: 700 30px/1 "Cinzel", Georgia, serif; letter-spacing: .06em; color: #ffe3a3; text-shadow: 0 3px 0 #2a170a; }
+body.theme-tavern .tavern-hero small { font: italic 500 18px/1.2 "Cormorant Garamond", Georgia, serif; color: #f3d9a4; }
+@media (max-width: 640px) { body.theme-tavern .tavern-hero { height: 160px; padding: 16px 18px; }
+  body.theme-tavern .tavern-hero b { font-size: 34px; } body.theme-tavern .tavern-hero div span { font-size: 21px; margin-left: 8px; } }
+@media (prefers-reduced-motion: reduce) { body.theme-tavern .tavern-hero::after { animation: none; } }
