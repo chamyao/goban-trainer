@@ -3246,7 +3246,7 @@ const OGSPlay = {
   // site hands the login back to the app.
   APP_REDIRECT: "https://chamyao.github.io/goban-trainer/oauth-app.html",
   AUTH_KEY: "goban.ogsAuth", FLOW_KEY: "goban.ogsFlow", SERVER_KEY: "goban.ogsServer",
-  TIME_LABEL: "19×19 · 5 min + 5×30 s byoyomi",
+  TIME_LABEL: "19×19 · 20 min + 5×30 s byoyomi",
 
   me: null, jwt: null, sock: null, game: null, search: null, loginError: "", listeners: new Set(),
 
@@ -3360,10 +3360,11 @@ const OGSPlay = {
       });
       return;
     }
-    // OGS's standard 19×19 "rapid" automatch: 5 min + 5×30 s byoyomi.
+    // OGS's 19×19 "live" automatch: 20 min + 5×30 s byoyomi (the user: 20 minutes, not 5; OGS's speeds are fixed
+    // presets, online-go.com src/views/Play/SPEED_OPTIONS.ts: rapid is 5 min + 5×30 s, live 20 min + 5×30 s)
     this.sock.send("automatch/find_match", {
       uuid: this.search.uuid,
-      size_speed_options: [{ size: "19x19", speed: "rapid", system: "byoyomi" }],
+      size_speed_options: [{ size: "19x19", speed: "live", system: "byoyomi" }],
       lower_rank_diff: 3, upper_rank_diff: 3,
       rules: { condition: "required", value: "japanese" },
       handicap: { condition: "preferred", value: "enabled" },
