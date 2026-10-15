@@ -3523,7 +3523,7 @@ function viewPlay(gameId) {
   const rerender = () => {
     if (!wrap.isConnected) { OGSPlay.listeners.delete(rerender); return; }
     wrap.textContent = "";
-    wrap.append(...playBody(gameId));
+    wrap.append(...(gameId ? [] : [friendLobby()]), ...playBody(gameId));
   };
   OGSPlay.listeners.add(rerender);
   rerender();
@@ -3643,17 +3643,18 @@ const ByoVoice = {
   },
 };
 
-function playGame(g) {
-  const P = OGSPlay;
+// g: an OGS LiveGame, or a friend's game (FriendGame); P: what plays its moves (OGSPlay, or the FriendPlay link)
+function playGame(g, P = OGSPlay) {
+  const sz = g.size || 19;
   const svg = document.createElementNS(SVGNS, "svg");
   const boardCard = h("div", { class: "board-card" }, [svg]);
   const { grid, last } = g.replay();
   const removed = g.removed;
   const scoring = g.phase === "stone removal";
 
-  const goban = new Goban(svg, { c0: 0, c1: 18, r0: 0, r1: 18 }, (c, r) => {
+  const goban = new Goban(svg, { c0: 0, c1: sz - 1, r0: 0, r1: sz - 1, sz }, (c, r) => {
     if (scoring) {
-      if (grid[r][c] === EMPTY) return;
+      if (grid[r][c] === EMPTY || grid[r][c] === WALL) return;
       const pts = [...groupAndLiberties(grid, c, r).stones].map(k => [(k - k % N) / N, k % N]);
       P.setRemoved(pts, !removed.has(r * N + c));
     } else if (g.myTurn && grid[r][c] === EMPTY && applyMove(grid, c, r, g.myColor)) {
@@ -3716,7 +3717,7 @@ function playGame(g) {
   const status = h("div", { class: "meta-sub" },
     g.phase === "loading" ? "Loading game…"
     : g.phase === "finished" ? g.resultText()
-    : scoring ? "Game over by passes — tap groups to mark them dead, then accept the score."
+    : scoring ? (g.scoreText ? g.scoreText() + " " : "") + "Game over by passes — tap groups to mark them dead, then accept the score."
     : g.myTurn ? (g.pending ? "Tap the stone again to play it." : "Your move.")
     : g.myColor ? "Opponent's move." : "Watching.");
   const err = h("div", { class: "err" }, g.error);
@@ -3730,14 +3731,14 @@ function playGame(g) {
   } else if (scoring && g.myColor) {
     buttons.push(h("button", { class: "primary", onclick: () => P.acceptScore() }, "Accept score"));
     buttons.push(h("button", { onclick: () => P.resumePlay() }, "Resume play"));
-    buttons.push(h("button", { class: "wide", onclick: () => markDeadWithKataGo(g, grid, err) }, "Mark dead stones with KataGo"));
+    if (sz === 19) buttons.push(h("button", { class: "wide", onclick: () => markDeadWithKataGo(g, grid, err, P) }, "Mark dead stones with KataGo"));
   } else if (g.phase === "finished") {
-    buttons.push(h("button", { class: "primary", onclick: () => reviewOgsGame(g.id, err) }, "Review this game"));
+    buttons.push(h("button", { class: "primary", onclick: () => P.review ? P.review(g, err) : reviewOgsGame(g.id, err) }, "Review this game"));
     buttons.push(h("button", { onclick: () => { P.game = null; location.hash = "#/play"; } }, "Back to lobby"));
   }
 
   const aside = h("aside", {}, [
-    h("div", { class: "panel" }, [h("h2", {}, `OGS game ${g.id}`), ...rows, status, err,
+    h("div", { class: "panel" }, [h("h2", {}, g.title || `OGS game ${g.id}`), ...rows, status, err, g.extra ? g.extra() : "",
       g.myColor ? h("label", { class: "byo-voice" }, [h("input", { type: "checkbox", ...(ByoVoice.on ? { checked: "" } : {}),
         onchange: e => { ByoVoice.on = e.target.checked; if (e.target.checked) ByoVoice.say("초읽기"); } }), " 초읽기 Korean byoyomi voice"]) : ""]),
     buttons.length ? h("div", { class: "panel" }, [h("div", { class: "rv-actions" }, buttons)]) : "",
@@ -3747,7 +3748,7 @@ function playGame(g) {
 
 // Proposes dead stones from KataGo's ownership map (stones in the
 // opponent's territory with high confidence).
-async function markDeadWithKataGo(g, grid, err) {
+async function markDeadWithKataGo(g, grid, err, P = OGSPlay) {
   try {
     err.textContent = "KataGo is reading the position…";
     const a = await Engine.analyze({
@@ -3761,8 +3762,8 @@ async function markDeadWithKataGo(g, grid, err) {
         if ((grid[r][c] === BLACK && own < -0.6) || (grid[r][c] === WHITE && own > 0.6)) dead.push([c, r]);
       }
     const before = stonesOf(g.removedStr);
-    if (before.length) OGSPlay.setRemoved(before, false);
-    if (dead.length) OGSPlay.setRemoved(dead, true);
+    if (before.length) P.setRemoved(before, false);
+    if (dead.length) P.setRemoved(dead, true);
     err.textContent = dead.length ? `Marked ${dead.length} dead stones — check them, then accept.` : "KataGo found no dead stones.";
   } catch (e) { err.textContent = `KataGo couldn't score this: ${e.message}`; }
 }
@@ -3776,6 +3777,394 @@ async function reviewOgsGame(id, err) {
     Review.saveState();
     location.hash = "#/review";
   } catch (e) { err.textContent = e.message; }
+}
+
+/* ================= play a friend (no login): two browsers, joined by a link ================= */
+
+// The user: "host a game on the website without having to log in" (OGS has no guest play: an account is needed to
+// sit at a board there). The host's page opens a game under a short code; the link #/friend/<code> joins it. The two
+// browsers talk directly (WebRTC, PeerJS: its free public server only introduces them), each keeping the whole game;
+// every change goes across as the whole state with a count (seq), the higher count winning (the host's on a tie).
+// Chinese rules (area), komi 7.5; two passes in a row end it: mark the dead, both accept the same marks.
+const FRIEND_TIMES = {
+  "20m": { main: 1200, periods: 5, period: 30, label: "20 min + 5×30 s byoyomi" },
+  "10m": { main: 600, periods: 3, period: 30, label: "10 min + 3×30 s byoyomi" },
+  "3m": { main: 180, periods: 3, period: 20, label: "3 min + 3×20 s byoyomi" },
+  "none": null,
+};
+
+class FriendGame {
+  constructor(S, me) { this.S = S; this.me = me; this.turnAt = Date.now(); this.error = ""; this.pending = null; }
+  get size() { return this.S.size; }
+  get phase() { return this.S.phase; }
+  get myColor() { return this.me.color || 0; }
+  get title() { return `Friendly game · ${this.S.code}`; }
+  get data() { return { komi: this.S.komi }; }
+  get clock() { const t = this.S.time; return t ? { black_time: { period_time: t.period }, white_time: { period_time: t.period } } : {}; }
+  player(color) { return { username: this.S.names[color] || (color === this.S.hostColor ? "Host" : "Friend") }; }
+  toMove() { return this.S.moves.length % 2 === 0 ? BLACK : WHITE; }
+  get myTurn() { return this.phase === "play" && this.myColor && this.toMove() === this.myColor; }
+  get removed() { return new Set(this.S.removed); }
+  get removedStr() { return this.S.removed.map(k => sgfPt(k % N, (k - k % N) / N)).join(""); }
+  blank() {
+    const sz = this.S.size;
+    return Array.from({ length: N }, (_, r) => Array.from({ length: N }, (_, c) => r < sz && c < sz ? EMPTY : WALL));
+  }
+  replay() {
+    let g = this.blank(), last = null;
+    for (let i = 0; i < this.S.moves.length; i++) {
+      const [c, r] = this.S.moves[i];
+      last = null;
+      if (c < 0) continue;
+      g = applyMove(g, c, r, i % 2 ? WHITE : BLACK) || g;
+      last = [c, r];
+    }
+    return { grid: g, last };
+  }
+  // a move's legality: an empty point, not suicide, not retaking a ko at once (the position before the last move)
+  legal(c, r) {
+    if (c < 0) return true;
+    const { grid } = this.replay();
+    if (c >= this.S.size || r >= this.S.size || grid[r][c] !== EMPTY) return false;
+    const g2 = applyMove(grid, c, r, this.toMove());
+    if (!g2) return false;
+    const prev = this.S.moves.length ? this.replayTo(this.S.moves.length - 1) : null;
+    return !prev || JSON.stringify(prev) !== JSON.stringify(g2);
+  }
+  replayTo(n) { const keep = this.S.moves; this.S.moves = keep.slice(0, n); const g = this.replay().grid; this.S.moves = keep; return g; }
+
+  // time left for color now, as LiveGame.timeLeft gives it ({ main, periods, period, byo }): Japanese byoyomi
+  timeLeft(color) {
+    const T = this.S.time;
+    if (!T) return null;
+    const t = this.S.clocks[color], running = this.phase === "play" && this.toMove() === color;
+    const main = t.main - (running ? (Date.now() - this.turnAt) / 1000 : 0);
+    if (main > 0) return { main, periods: t.periods, period: T.period, byo: false };
+    const over = -main, used = Math.floor(over / T.period), periods = Math.max(0, t.periods - used);
+    return { main: 0, periods, period: periods ? T.period - (over - used * T.period) : 0, byo: true };
+  }
+  outOfTime(color) { const t = this.timeLeft(color); return !!t && t.byo && !t.periods; }
+
+  // area: stones on the board (the marked dead lifted) and the empty points only one color reaches
+  score() {
+    const sz = this.S.size, g = this.replay().grid, dead = this.removed;
+    for (const k of dead) g[(k - k % N) / N][k % N] = EMPTY;
+    const pts = { [BLACK]: 0, [WHITE]: 0 }, seen = new Set();
+    for (let r = 0; r < sz; r++) for (let c = 0; c < sz; c++) {
+      if (g[r][c] !== EMPTY) { pts[g[r][c]]++; continue; }
+      if (seen.has(r * N + c)) continue;
+      const stack = [[c, r]], touch = new Set();
+      let n = 0;
+      seen.add(r * N + c);
+      while (stack.length) {
+        const [x, y] = stack.pop(); n++;
+        for (const [nx, ny] of neighbors(x, y)) {
+          const v = g[ny][nx];
+          if (v === EMPTY && !seen.has(ny * N + nx)) { seen.add(ny * N + nx); stack.push([nx, ny]); }
+          else if (v === BLACK || v === WHITE) touch.add(v);
+        }
+      }
+      if (touch.size === 1) pts[[...touch][0]] += n;
+    }
+    const b = pts[BLACK], w = pts[WHITE] + this.S.komi, d = b - w;
+    return { b, w, winner: d > 0 ? BLACK : WHITE, text: `${d > 0 ? "B" : "W"}+${Math.abs(d)}` };
+  }
+  scoreText() { const s = this.score(); return `Black ${s.b}, White ${s.w - this.S.komi} + ${this.S.komi} komi: ${s.text}.`; }
+  resultText() {
+    const R = this.S.result;
+    if (!R) return "";
+    const who = R.winner === BLACK ? "Black" : "White", mine = this.myColor && R.winner === this.myColor;
+    return R.how === "score" ? `${mine ? "You won" : this.myColor ? "You lost" : `${who} won`}: ${R.text}`
+      : `${mine ? "You won" : this.myColor ? "You lost" : `${who} won`} by ${R.how}`;
+  }
+  sgf() {
+    const S = this.S, names = c => (this.player(c).username || "").replace(/[\]\\]/g, "");
+    const re = S.result ? (S.result.how === "score" ? S.result.text : `${S.result.winner === BLACK ? "B" : "W"}+${S.result.how === "time" ? "T" : "R"}`) : "";
+    const mv = S.moves.map(([c, r], i) => `;${i % 2 ? "W" : "B"}[${c < 0 ? "" : sgfPt(c, r)}]`).join("");
+    return `(;GM[1]FF[4]CA[UTF-8]SZ[${S.size}]KM[${S.komi}]RU[Chinese]PB[${names(BLACK)}]PW[${names(WHITE)}]RE[${re}]DT[${new Date(S.created).toISOString().slice(0, 10)}]${mv})`;
+  }
+}
+
+const FriendPlay = {
+  PREFIX: "tczw-", KEY: "gt-friend-",
+  game: null, peer: null, conn: null, watchers: new Set(), listeners: new Set(), status: "", retry: null,
+  // loaded only when a friend's game opens
+  lib() {
+    if (window.Peer) return Promise.resolve();
+    return this._lib || (this._lib = new Promise((ok, no) => {
+      const sc = document.createElement("script");
+      sc.src = "peerjs/peerjs-1.5.4.min.js"; sc.onload = ok; sc.onerror = () => { this._lib = null; no(new Error("Couldn't load the connection library.")); };
+      document.head.append(sc);
+    }));
+  },
+  opts() { return window.FRIEND_PEER_OPTS || {}; },   // (a test points this at its own PeerJS server)
+  saved(code) { try { return JSON.parse(localStorage.getItem(this.KEY + code)); } catch { return null; } },
+  list() {
+    const out = [];
+    try { for (const k of Object.keys(localStorage)) if (k.startsWith(this.KEY)) { const v = this.saved(k.slice(this.KEY.length)); if (v && v.S) out.push(v); } } catch {}
+    return out.sort((a, b) => b.S.created - a.S.created);
+  },
+  persist() {
+    const g = this.game;
+    if (!g) return;
+    try {
+      localStorage.setItem(this.KEY + g.S.code, JSON.stringify({ S: g.S, me: g.me, elapsed: (Date.now() - g.turnAt) / 1000 }));
+      // finished games go after a week; at most the last ten kept
+      const all = this.list();
+      for (const v of all.slice(10)) localStorage.removeItem(this.KEY + v.S.code);
+      for (const v of all) if (v.S.phase === "finished" && Date.now() - v.S.created > 7 * 864e5) localStorage.removeItem(this.KEY + v.S.code);
+    } catch {}
+  },
+  emit() { for (const f of this.listeners) f(); },
+  link(code) { return `${location.origin}${location.pathname}#/friend/${code}`; },
+
+  host({ size, time, color, name }) {
+    const code = Array.from(crypto.getRandomValues(new Uint8Array(6)), b => "abcdefghjkmnpqrstuvwxyz23456789"[b % 31]).join("");
+    const hostColor = color === "black" ? BLACK : color === "white" ? WHITE : (Math.random() < .5 ? BLACK : WHITE);
+    const T = FRIEND_TIMES[time] || null;
+    const S = {
+      v: 1, code, size, komi: 7.5, time: T && { main: T.main, periods: T.periods, period: T.period, label: T.label },
+      hostColor, names: { [hostColor]: name || "" }, moves: [], removed: [], accepted: {},
+      clocks: T ? { [BLACK]: { main: T.main, periods: T.periods }, [WHITE]: { main: T.main, periods: T.periods } } : {},
+      phase: "waiting", result: null, seq: 0, created: Date.now(), guest: null,
+    };
+    this.close();
+    this.game = new FriendGame(S, { role: "host", color: hostColor, token: null });
+    this.persist();
+    location.hash = `#/friend/${code}`;
+  },
+
+  // open the game under this code: ours (the host's, or one we joined), or join it
+  open(code) {
+    if (this.game && this.game.S.code === code && (this.peer && !this.peer.destroyed)) return;
+    this.close();
+    const v = this.saved(code);
+    if (v) { this.game = new FriendGame(v.S, v.me); this.game.turnAt = Date.now() - (v.elapsed || 0) * 1000; }
+    else {
+      let token = ""; try { token = localStorage.getItem("gt-friend-token") || ""; if (!token) localStorage.setItem("gt-friend-token", token = crypto.randomUUID()); } catch { token = crypto.randomUUID(); }
+      this.game = new FriendGame({ code, phase: "joining", moves: [], removed: [], names: {}, clocks: {}, accepted: {}, seq: -1, size: 19, komi: 7.5 }, { role: "guest", color: 0, token });
+    }
+    this.status = "Connecting…";
+    this.lib().then(() => this.game && this.game.S.code === code && this.connect()).catch(e => { this.status = e.message; this.emit(); });
+  },
+  connect() {
+    const g = this.game, P = window.Peer;
+    if (g.me.role === "host") {
+      const peer = this.peer = new P(this.PREFIX + g.S.code, this.opts());
+      peer.on("open", () => { this.status = g.S.phase === "waiting" ? "" : "Waiting for your friend to come back…"; this.emit(); });
+      peer.on("connection", c => this.attach(c));
+      peer.on("error", e => {
+        // the code still held from a moment ago (a reload): try again shortly
+        if (e.type === "unavailable-id") { this.status = "Reopening the game…"; this.emit(); this.again(); }
+        else { this.status = `Connection trouble (${e.type || e.message}); retrying…`; this.emit(); if (peer.destroyed || peer.disconnected) this.again(); }
+      });
+      peer.on("disconnected", () => { if (!peer.destroyed) peer.reconnect(); });
+    } else {
+      const peer = this.peer = new P(undefined, this.opts());
+      peer.on("open", () => this.dial());
+      peer.on("error", e => {
+        this.status = e.type === "peer-unavailable" ? "The host's page isn't open. Retrying…" : `Connection trouble (${e.type || e.message}); retrying…`;
+        this.emit();
+        clearTimeout(this.retry); this.retry = setTimeout(() => this.peer === peer && !peer.destroyed && this.dial(), 3000);
+      });
+      peer.on("disconnected", () => { if (!peer.destroyed) peer.reconnect(); });
+    }
+  },
+  again() {
+    clearTimeout(this.retry);
+    const code = this.game && this.game.S.code;
+    this.retry = setTimeout(() => { if (!this.game || this.game.S.code !== code) return; if (this.peer) this.peer.destroy(); this.connect(); }, 3000);
+  },
+  dial() {
+    const g = this.game;
+    if (!g || !this.peer || this.peer.destroyed) return;
+    this.attach(this.peer.connect(this.PREFIX + g.S.code, { reliable: true }));
+  },
+  // the host keeps every link open (a third browser on the link watches); this.conn is the friend's (the host's, for a guest)
+  attach(c) {
+    const g = this.game;
+    c.on("open", () => {
+      if (g.me.role === "host") this.watchers.add(c);
+      else { if (this.conn && this.conn !== c) this.conn.close(); this.conn = c; }
+      this.status = "";
+      if (g.me.role === "guest") c.send({ t: "join", token: g.me.token, name: friendName() });
+      this.emit();
+    });
+    c.on("data", d => this.receive(c, d));
+    c.on("close", () => {
+      this.watchers.delete(c);
+      if (this.conn !== c) return;
+      this.conn = null;
+      if (!this.game || this.game !== g || g.S.phase === "finished") return this.emit();
+      this.status = g.me.role === "host" ? "Your friend left. The game is kept: they come back by the same link." : "Lost the host. Reconnecting…";
+      this.emit();
+      if (g.me.role === "guest") { clearTimeout(this.retry); this.retry = setTimeout(() => this.dial(), 2000); }
+    });
+  },
+  receive(c, d) {
+    const g = this.game;
+    if (!g || !d) return;
+    if (d.t === "join" && g.me.role === "host") {
+      const S = g.S, guestColor = 3 - S.hostColor;
+      if (!S.guest || S.guest === d.token) {
+        if (!S.guest) { S.guest = d.token; S.names[guestColor] = d.name || ""; S.phase = "play"; S.seq++; g.turnAt = Date.now(); }
+        if (this.conn && this.conn !== c) this.conn.close();
+        this.conn = c; this.status = "";
+        c.send({ t: "seat", color: guestColor });
+      }
+      c.send(this.packet());
+      this.persist(); this.emit();
+    } else if (d.t === "seat" && g.me.role === "guest") { g.me.color = d.color; this.persist(); this.emit(); }
+    else if (d.t === "state" && c === this.conn) this.take(d);
+  },
+  packet() { return { t: "state", S: this.game.S, elapsed: (Date.now() - this.game.turnAt) / 1000 }; },
+  take(d) {
+    const g = this.game, S2 = d.S;
+    if (!S2 || S2.code !== g.S.code) return;
+    if (!(S2.seq > g.S.seq || (S2.seq === g.S.seq && g.me.role === "guest"))) {   // ours is newer: send it back
+      if (S2.seq < g.S.seq) this.send();
+      return;
+    }
+    g.S = S2; g.turnAt = Date.now() - (d.elapsed || 0) * 1000; g.pending = null;
+    this.persist(); this.emit();
+  },
+  send() {
+    const p = this.packet();
+    for (const c of new Set([this.conn, ...this.watchers])) if (c && c.open) c.send(p);
+  },
+  change(fn) {   // a change of ours: apply, count it, keep it, send it
+    const g = this.game;
+    fn(g.S); g.S.seq++;
+    this.persist(); this.send(); this.emit();
+  },
+
+  // what playGame calls (as OGSPlay)
+  move(c, r) {
+    const g = this.game;
+    if (!g.myTurn || !g.legal(c, r)) { g.error = c >= 0 && g.myTurn ? "Not there (a ko must wait a move)." : ""; return this.emit(); }
+    const t = g.timeLeft(g.myColor);
+    if (t && t.byo && !t.periods) return this.lose(g.myColor, "time");
+    g.error = "";
+    this.change(S => {
+      if (t) S.clocks[g.myColor] = t.byo ? { main: 0, periods: t.periods } : { main: t.main, periods: S.clocks[g.myColor].periods };
+      S.moves.push([c, r]);
+      const n = S.moves.length;
+      if (n >= 2 && S.moves[n - 1][0] < 0 && S.moves[n - 2][0] < 0) { S.phase = "stone removal"; S.removed = []; S.accepted = {}; }
+    });
+    g.turnAt = Date.now();
+  },
+  lose(color, how) { this.change(S => { S.phase = "finished"; S.result = { winner: 3 - color, how }; }); },
+  resign() { this.lose(this.game.myColor, "resignation"); },
+  setRemoved(points, removed) {
+    this.change(S => {
+      const set = new Set(S.removed);
+      for (const [c, r] of points) removed ? set.add(r * N + c) : set.delete(r * N + c);
+      S.removed = [...set].sort((a, b) => a - b); S.accepted = {};
+    });
+  },
+  acceptScore() {
+    const g = this.game, key = g.S.removed.join(",");
+    this.change(S => {
+      S.accepted[g.myColor] = key;
+      if (S.accepted[BLACK] === key && S.accepted[WHITE] === key) {
+        const sc = g.score();
+        S.phase = "finished"; S.result = { winner: sc.winner, how: "score", text: sc.text };
+      }
+    });
+  },
+  resumePlay() { this.change(S => { S.phase = "play"; S.removed = []; S.accepted = {}; }); this.game.turnAt = Date.now(); },
+  review(g, err) {
+    try { Review.load(g.sgf()); Review.currentId = Review.newId(); Review.saveState(); location.hash = "#/review"; }
+    catch (e) { err.textContent = e.message; }
+  },
+  // the ticker: a clock that has run out ends the game (the other side's, after a grace for the wire)
+  tick() {
+    const g = this.game;
+    if (!g || g.phase !== "play" || !g.myColor) return;
+    const tm = g.toMove(), t = g.timeLeft(tm);
+    if (!t || !t.byo || t.periods) return;
+    if (tm === g.myColor) this.lose(tm, "time");
+    else if (Date.now() - g.turnAt > 1000 * (g.S.clocks[tm].main + g.S.clocks[tm].periods * g.S.time.period + 3)) this.lose(tm, "time");
+  },
+  close() {
+    clearTimeout(this.retry);
+    if (this.conn) try { this.conn.close(); } catch {}
+    if (this.peer) try { this.peer.destroy(); } catch {}
+    this.conn = this.peer = null; this.watchers.clear(); this.game = null; this.status = "";
+  },
+};
+// leaving the page: let the other side know at once (and free the code for a reload)
+addEventListener("pagehide", () => { if (FriendPlay.peer) try { FriendPlay.peer.destroy(); } catch {} });
+
+function friendName() { try { return localStorage.getItem("gt-friend-name") || Sync.username || ""; } catch { return ""; } }
+
+// the Play tab's first panel: host a game, or go back to one
+function friendLobby() {
+  const sel = (name, opts, val) => h("select", { class: "rec-field", name }, opts.map(([v, t]) => h("option", { value: v, ...(v === val ? { selected: "" } : {}) }, t)));
+  const size = sel("size", [["19", "19×19"], ["13", "13×13"], ["9", "9×9"]], "19");
+  const time = sel("time", [["20m", FRIEND_TIMES["20m"].label], ["10m", FRIEND_TIMES["10m"].label], ["3m", FRIEND_TIMES["3m"].label], ["none", "No clock"]], "20m");
+  const color = sel("color", [["random", "Colors: random"], ["black", "I take Black"], ["white", "I take White"]], "random");
+  const name = h("input", { class: "rec-field", placeholder: "Your name (optional)", value: friendName(), maxlength: "24" });
+  const go = () => {
+    try { localStorage.setItem("gt-friend-name", name.value.trim()); } catch {}
+    FriendPlay.host({ size: +size.value, time: time.value, color: color.value, name: name.value.trim() });
+  };
+  const mine = FriendPlay.list().filter(v => v.S.phase !== "finished").slice(0, 5).map(v => {
+    const row = h("div", { class: "history-item" }, [h("div", { class: "hi-open" }, [
+      h("div", { class: "t" }, `${v.S.phase === "waiting" ? "Waiting for a friend" : "Resume game"} · ${v.S.code}`),
+      h("div", { class: "n" }, `${v.S.size}×${v.S.size} · ${v.S.moves.length} moves · ${v.me.role === "host" ? "you host" : "you joined"}`),
+    ])]);
+    row.addEventListener("click", () => { location.hash = `#/friend/${v.S.code}`; });
+    return row;
+  });
+  return h("div", { class: "sgf-loader friend-lobby" }, [
+    h("div", { class: "cat-title" }, "Play a friend"),
+    h("div", {}, "No login: host a game, send your friend the link, and play here. Chinese rules, komi 7.5."),
+    h("div", { class: "row" }, [size, time, color]),
+    h("div", { class: "row" }, [name, h("button", { class: "primary host-friend", onclick: go }, "Host a game")]),
+    mine.length ? h("div", { class: "review-history", style: "margin:0" }, mine) : "",
+  ]);
+}
+
+function viewFriend(code) {
+  crumbs.textContent = "";
+  root.textContent = "";
+  const P = FriendPlay, wrap = h("div", { class: "play" });
+  root.append(wrap);
+  P.listeners.clear();
+  const rerender = () => {
+    if (!wrap.isConnected) { P.listeners.delete(rerender); return; }
+    wrap.textContent = "";
+    wrap.append(...friendBody());
+  };
+  P.listeners.add(rerender);
+  P.open(code);
+  rerender();
+}
+
+function friendBody() {
+  const P = FriendPlay, g = P.game;
+  if (!g) return [];
+  const st = h("div", { class: "meta-sub friend-status" }, P.status);
+  if (g.phase === "waiting" || g.phase === "joining") {
+    clearInterval(playTicker);
+    const url = P.link(g.S.code), field = h("input", { class: "rec-field friend-link", readonly: "", value: url });
+    const copy = h("button", { class: "primary", onclick: async () => {
+      try { await navigator.clipboard.writeText(url); copy.textContent = "Copied"; } catch { field.select(); }
+    } }, "Copy link");
+    const share = navigator.share ? h("button", { onclick: () => navigator.share({ title: "A game of Go", url }).catch(() => {}) }, "Share…") : "";
+    return [h("div", { class: "sgf-loader" }, g.phase === "joining"
+      ? [h("div", { class: "cat-title" }, "Joining a friend's game"), h("div", {}, `Game ${g.S.code}.`), st]
+      : [h("div", { class: "cat-title" }, "Waiting for your friend"),
+         h("div", {}, `Send this link. Keep this page open: the game runs between your two browsers. ${g.S.size}×${g.S.size}, ${g.S.time ? g.S.time.label : "no clock"}, you play ${g.myColor === BLACK ? "Black" : "White"}.`),
+         h("div", { class: "row" }, [field, copy, share]), st,
+         h("div", { class: "row" }, [h("button", { onclick: () => { try { localStorage.removeItem(P.KEY + g.S.code); } catch {} P.close(); location.hash = "#/play"; } }, "Cancel")])])];
+  }
+  g.extra = () => P.status ? st : "";
+  const out = playGame(g, P);
+  const tick = playTicker;   // playGame's ticker, plus the clocks running out
+  const t2 = setInterval(() => { if (playTicker !== tick || !document.body.contains(out[0])) return clearInterval(t2); P.tick(); }, 500);
+  return out;
 }
 
 /* ================= feedback ================= */
@@ -3862,13 +4251,14 @@ async function route() {
   // took its clicks: it goes with the story
   if (parts[0] !== "tk") for (const w of document.querySelectorAll("body > .tk-scroll-wrap")) w.remove();
   clearInterval(playTicker);
-  const tab = ["review", "play", "feedback"].includes(parts[0]) ? parts[0] : "library";   // (the Stream is a card in the Library)
+  const tab = ["review", "play", "feedback"].includes(parts[0]) ? parts[0] : parts[0] === "friend" ? "play" : "library";   // (the Stream is a card in the Library)
   if (window.Wukong && Wukong.suspend) Wukong.suspend(parts[0] === "tk" && !parts[2]);  // the map has its own party
   for (const a of document.querySelectorAll("#tabs a"))
     a.classList.toggle("active", a.dataset.tab === tab);
   if (parts[0] === "stream") await viewStream();
   else if (parts[0] === "review") viewReview();
   else if (parts[0] === "play") viewPlay(parts[1]);
+  else if (parts[0] === "friend" && parts[1]) viewFriend(parts[1]);
   else if (parts[0] === "feedback") viewFeedback();
   else if (parts[0] === "tk" && parts[1] === "chat") await viewTKChat(true);   // the plain chat window (Claude himself now sits in the Chang'an teahouse)
   else if (parts[0] === "tk" && parts[1] && parts[2]) await viewTKLevel(parseInt(parts[1], 10), parts[2]);
