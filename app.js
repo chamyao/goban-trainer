@@ -3658,9 +3658,8 @@ function playGame(g, P = OGSPlay) {
       const pts = [...groupAndLiberties(grid, c, r).stones].map(k => [(k - k % N) / N, k % N]);
       P.setRemoved(pts, !removed.has(r * N + c));
     } else if (g.myTurn && grid[r][c] === EMPTY && applyMove(grid, c, r, g.myColor)) {
-      // On touch screens the points are tiny: first tap previews, second tap plays.
-      const same = g.pending && g.pending[0] === c && g.pending[1] === r;
-      if (matchMedia("(pointer: coarse)").matches && !same) { g.pending = [c, r]; P.emit(); return; }
+      // (on a phone with tiny points the board itself asks for a second tap: Goban.tap; a confirm here as well made
+      // it four taps a move)
       g.pending = null; g.error = "";
       P.move(c, r);
     }
@@ -4138,6 +4137,15 @@ const FriendPlay = {
 };
 // leaving the page: let the other side know at once (and free the code for a reload)
 addEventListener("pagehide", () => { for (const x of [FriendPlay.peer, FriendLobby.peer]) if (x) try { x.destroy(); } catch {} });
+// a phone puts a page in the background (switching apps to send the link, the screen locking) and its links drop:
+// coming back, pick them up at once rather than at the next retry
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState !== "visible") return;
+  const P = FriendPlay, L = FriendLobby;
+  for (const x of [P.peer, L.peer]) if (x && x.disconnected && !x.destroyed) try { x.reconnect(); } catch {}
+  if (P.game && P.peer && !P.peer.destroyed && P.game.me.role === "guest" && !(P.conn && P.conn.open)) P.dial();
+  if (L.peer && !L.hub && !(L.up && L.up.open) && !L.timer) L.again(200);
+});
 // back from the browser's page cache (Back after leaving): the links were closed on the way out, so start afresh
 addEventListener("pageshow", e => { if (e.persisted && (FriendPlay.peer || FriendLobby.peer)) location.reload(); });
 
