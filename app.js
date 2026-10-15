@@ -3904,9 +3904,20 @@ const FriendPlay = {
     try { for (const k of Object.keys(localStorage)) if (k.startsWith(this.KEY)) { const v = this.saved(k.slice(this.KEY.length)); if (v && v.S) out.push(v); } } catch {}
     return out.sort((a, b) => b.S.created - a.S.created);
   },
+  // a waiting game of ours, listed: in the lobby's open games until someone sits down (or it's cancelled)
+  advertise() {
+    const g = this.game;
+    if (!g || g.me.role !== "host") return;
+    const S = g.S;
+    if (S.phase === "waiting" && S.listed !== false)
+      FriendLobby.offer({ code: S.code, size: S.size, time: S.time ? S.time.label : "no clock", name: S.names[S.hostColor] || "",
+                          hostColor: S.hostColor, at: S.created });
+    else FriendLobby.withdraw(S.code);
+  },
   persist() {
     const g = this.game;
     if (!g) return;
+    this.advertise();
     try {
       localStorage.setItem(this.KEY + g.S.code, JSON.stringify({ S: g.S, me: g.me, elapsed: (Date.now() - g.turnAt) / 1000 }));
       // finished games go after a week; at most the last ten kept
@@ -3918,7 +3929,7 @@ const FriendPlay = {
   emit() { for (const f of this.listeners) f(); },
   link(code) { return `${location.origin}${location.pathname}#/friend/${code}`; },
 
-  host({ size, time, color, name }) {
+  host({ size, time, color, name, listed = true }) {
     const code = Array.from(crypto.getRandomValues(new Uint8Array(6)), b => "abcdefghjkmnpqrstuvwxyz23456789"[b % 31]).join("");
     const hostColor = color === "black" ? BLACK : color === "white" ? WHITE : (Math.random() < .5 ? BLACK : WHITE);
     const T = FRIEND_TIMES[time] || null;
@@ -3926,7 +3937,7 @@ const FriendPlay = {
       v: 1, code, size, komi: 7.5, time: T && { main: T.main, periods: T.periods, period: T.period, label: T.label },
       hostColor, names: { [hostColor]: name || "" }, moves: [], removed: [], accepted: {},
       clocks: T ? { [BLACK]: { main: T.main, periods: T.periods }, [WHITE]: { main: T.main, periods: T.periods } } : {},
-      phase: "waiting", result: null, seq: 0, created: Date.now(), guest: null,
+      phase: "waiting", result: null, seq: 0, created: Date.now(), guest: null, listed,
     };
     this.close();
     this.game = new FriendGame(S, { role: "host", color: hostColor, token: null });
@@ -3939,7 +3950,7 @@ const FriendPlay = {
     if (this.game && this.game.S.code === code && (this.peer && !this.peer.destroyed)) return;
     this.close();
     const v = this.saved(code);
-    if (v) { this.game = new FriendGame(v.S, v.me); this.game.turnAt = Date.now() - (v.elapsed || 0) * 1000; }
+    if (v) { this.game = new FriendGame(v.S, v.me); this.game.turnAt = Date.now() - (v.elapsed || 0) * 1000; this.advertise(); }
     else {
       let token = ""; try { token = localStorage.getItem("gt-friend-token") || ""; if (!token) localStorage.setItem("gt-friend-token", token = crypto.randomUUID()); } catch { token = crypto.randomUUID(); }
       this.game = new FriendGame({ code, phase: "joining", moves: [], removed: [], names: {}, clocks: {}, accepted: {}, seq: -1, size: 19, komi: 7.5 }, { role: "guest", color: 0, token });
@@ -4094,7 +4105,81 @@ const FriendPlay = {
   },
 };
 // leaving the page: let the other side know at once (and free the code for a reload)
-addEventListener("pagehide", () => { if (FriendPlay.peer) try { FriendPlay.peer.destroy(); } catch {} });
+addEventListener("pagehide", () => { for (const x of [FriendPlay.peer, FriendLobby.peer]) if (x) try { x.destroy(); } catch {} });
+// back from the browser's page cache (Back after leaving): the links were closed on the way out, so start afresh
+addEventListener("pageshow", e => { if (e.persisted && (FriendPlay.peer || FriendLobby.peer)) location.reload(); });
+
+
+// Open games for anyone on the Play tab, no link needed (the user: "show the host to everyone"). There's no server of
+// ours to keep a list, and PeerJS's public one won't list its peers, so the browsers keep it: the first page to claim
+// the lobby's name holds the list, every other page links to it, hosts post their waiting games there; when the holder
+// leaves, the others race to claim the name again (and the hosts post again).
+const FriendLobby = {
+  ID: "tczw-lobby-v1", MAX_AGE: 3 * 3600e3,
+  peer: null, hub: false, up: null, conns: new Set(), offers: new Map(), mine: new Map(), games: [], listeners: new Set(), timer: null,
+  start() { if (!this.peer && !this.timer) FriendPlay.lib().then(() => this.claim()).catch(() => {}); },
+  emit() { for (const f of this.listeners) f(); },
+  again(ms = 300 + Math.random() * 1500) {
+    if (this.peer) try { this.peer.destroy(); } catch {}
+    this.peer = null; this.hub = false; this.up = null; this.conns.clear(); this.offers.clear();
+    clearTimeout(this.timer); this.timer = setTimeout(() => { this.timer = null; this.claim(); }, ms);
+  },
+  claim() {
+    const p = this.peer = new window.Peer(this.ID, FriendPlay.opts());
+    p.on("open", () => { this.hub = true; this.publish(); });
+    p.on("connection", c => {
+      this.conns.add(c);
+      c.on("open", () => c.send(this.list()));
+      c.on("data", d => this.hubReceive(c, d));
+      c.on("close", () => { this.conns.delete(c); for (const [k, o] of this.offers) if (o.c === c) this.offers.delete(k); this.publish(); });
+    });
+    p.on("error", e => {
+      if (this.peer !== p) return;
+      if (e.type === "unavailable-id") { try { p.destroy(); } catch {} this.client(); }
+      else if (!this.hub || p.destroyed) this.again(4000);
+    });
+    p.on("disconnected", () => { if (this.peer === p && !p.destroyed) p.reconnect(); });
+  },
+  client() {
+    const p = this.peer = new window.Peer(undefined, FriendPlay.opts());
+    p.on("open", () => {
+      const c = p.connect(this.ID, { reliable: true });
+      c.on("open", () => { this.up = c; for (const g of this.mine.values()) c.send({ t: "offer", g }); });
+      c.on("data", d => { if (d && d.t === "list") { this.games = d.games || []; this.emit(); } });
+      c.on("close", () => { if (this.peer === p) this.again(); });
+    });
+    p.on("error", e => { if (this.peer === p && (e.type === "peer-unavailable" || p.destroyed)) this.again(); });
+    p.on("disconnected", () => { if (this.peer === p && !p.destroyed) p.reconnect(); });
+  },
+  hubReceive(c, d) {
+    if (!d) return;
+    if (d.t === "offer" && d.g && /^[a-z0-9]{6}$/.test(d.g.code)) this.offers.set(d.g.code, { g: d.g, c });
+    else if (d.t === "withdraw") { const o = this.offers.get(d.code); if (o && o.c === c) this.offers.delete(d.code); }
+    else return;
+    this.publish();
+  },
+  list() {
+    const now = Date.now(), all = [...this.offers.values()].map(o => o.g).concat([...this.mine.values()]);
+    return { t: "list", games: all.filter(g => now - (g.at || 0) < this.MAX_AGE).sort((a, b) => b.at - a.at).slice(0, 30) };
+  },
+  publish() {
+    if (!this.hub) return;
+    const L = this.list();
+    this.games = L.games;
+    for (const c of this.conns) if (c.open) c.send(L);
+    this.emit();
+  },
+  offer(g) {
+    if (this.mine.has(g.code)) return;
+    this.mine.set(g.code, g);
+    this.start();
+    if (this.hub) this.publish(); else if (this.up && this.up.open) this.up.send({ t: "offer", g });
+  },
+  withdraw(code) {
+    if (!this.mine.delete(code)) return;
+    if (this.hub) this.publish(); else if (this.up && this.up.open) this.up.send({ t: "withdraw", code });
+  },
+};
 
 function friendName() { try { return localStorage.getItem("gt-friend-name") || Sync.username || ""; } catch { return ""; } }
 
@@ -4105,10 +4190,32 @@ function friendLobby() {
   const time = sel("time", [["20m", FRIEND_TIMES["20m"].label], ["10m", FRIEND_TIMES["10m"].label], ["3m", FRIEND_TIMES["3m"].label], ["none", "No clock"]], "20m");
   const color = sel("color", [["random", "Colors: random"], ["black", "I take Black"], ["white", "I take White"]], "random");
   const name = h("input", { class: "rec-field", placeholder: "Your name (optional)", value: friendName(), maxlength: "24" });
+  const listed = h("input", { type: "checkbox", class: "friend-listed", checked: "" });
   const go = () => {
     try { localStorage.setItem("gt-friend-name", name.value.trim()); } catch {}
-    FriendPlay.host({ size: +size.value, time: time.value, color: color.value, name: name.value.trim() });
+    FriendPlay.host({ size: +size.value, time: time.value, color: color.value, name: name.value.trim(), listed: listed.checked });
   };
+  // the open games, kept current as the lobby's list changes
+  const open = h("div", { class: "review-history friend-open", style: "margin:0" });
+  const fill = () => {
+    if (!open.isConnected && open.dataset.drawn) { FriendLobby.listeners.delete(fill); return; }
+    open.dataset.drawn = "1";
+    open.textContent = "";
+    const mine = new Set(FriendPlay.list().map(v => v.S.code)), games = FriendLobby.games;
+    if (!games.length) return open.append(h("div", { class: "meta-sub" }, FriendLobby.peer ? "No open games right now. Host one and it shows here for anyone on the Play tab." : "Looking for open games…"));
+    for (const g of games) {
+      const own = mine.has(g.code);
+      const row = h("div", { class: "history-item friend-game" }, [h("div", { class: "hi-open" }, [
+        h("div", { class: "t" }, `${own ? "Your game" : (g.name || "Someone")} · ${g.size}×${g.size}`),
+        h("div", { class: "n" }, `${g.time} · ${own ? "waiting for someone to join" : `you'd play ${g.hostColor === BLACK ? "White" : "Black"}`}`),
+      ])]);
+      row.addEventListener("click", () => { location.hash = `#/friend/${g.code}`; });
+      open.append(row);
+    }
+  };
+  FriendLobby.listeners.add(fill);
+  FriendLobby.start();
+  fill();
   const mine = FriendPlay.list().filter(v => v.S.phase !== "finished").slice(0, 5).map(v => {
     const row = h("div", { class: "history-item" }, [h("div", { class: "hi-open" }, [
       h("div", { class: "t" }, `${v.S.phase === "waiting" ? "Waiting for a friend" : "Resume game"} · ${v.S.code}`),
@@ -4119,9 +4226,11 @@ function friendLobby() {
   });
   return h("div", { class: "sgf-loader friend-lobby" }, [
     h("div", { class: "cat-title" }, "Play a friend"),
-    h("div", {}, "No login: host a game, send your friend the link, and play here. Chinese rules, komi 7.5."),
+    h("div", {}, "No login: join an open game below, or host one. Anyone on this page sees it, or send the link. Chinese rules, komi 7.5."),
+    h("div", { class: "meta-sub" }, "Open games"), open,
     h("div", { class: "row" }, [size, time, color]),
     h("div", { class: "row" }, [name, h("button", { class: "primary host-friend", onclick: go }, "Host a game")]),
+    h("label", { class: "meta-sub" }, [listed, " Show it in Open games (otherwise only the link joins)"]),
     mine.length ? h("div", { class: "review-history", style: "margin:0" }, mine) : "",
   ]);
 }
@@ -4156,9 +4265,9 @@ function friendBody() {
     return [h("div", { class: "sgf-loader" }, g.phase === "joining"
       ? [h("div", { class: "cat-title" }, "Joining a friend's game"), h("div", {}, `Game ${g.S.code}.`), st]
       : [h("div", { class: "cat-title" }, "Waiting for your friend"),
-         h("div", {}, `Send this link. Keep this page open: the game runs between your two browsers. ${g.S.size}×${g.S.size}, ${g.S.time ? g.S.time.label : "no clock"}, you play ${g.myColor === BLACK ? "Black" : "White"}.`),
+         h("div", {}, `${g.S.listed !== false ? "It's in Open games on the Play tab, or send" : "Send"} this link. Keep this page open: the game runs between your two browsers. ${g.S.size}×${g.S.size}, ${g.S.time ? g.S.time.label : "no clock"}, you play ${g.myColor === BLACK ? "Black" : "White"}.`),
          h("div", { class: "row" }, [field, copy, share]), st,
-         h("div", { class: "row" }, [h("button", { onclick: () => { try { localStorage.removeItem(P.KEY + g.S.code); } catch {} P.close(); location.hash = "#/play"; } }, "Cancel")])])];
+         h("div", { class: "row" }, [h("button", { onclick: () => { FriendLobby.withdraw(g.S.code); try { localStorage.removeItem(P.KEY + g.S.code); } catch {} P.close(); location.hash = "#/play"; } }, "Cancel")])])];
   }
   g.extra = () => P.status ? st : "";
   const out = playGame(g, P);

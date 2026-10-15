@@ -67,4 +67,28 @@ await G.evaluate(()=>FriendPlay.resign());await H.waitForFunction(()=>FriendPlay
 check(/You won by resignation/.test((await S(H)).result),`resigning ends it: "${(await S(H)).result}"`);
 const clock=await H.evaluate(()=>document.querySelector('.pl-clock').textContent);
 check(/20:00/.test(clock),`the default clock is 20 min + byoyomi (${clock})`);
+// Open games, no link (the user: "show the host to everyone"): a hosted game shows on the Play tab of others;
+// a click there joins it, and it leaves the list once someone sits down; the list lives on when its holder leaves
+const C=await dev('Cy');await C.goto(URL+'#/play');await shut(C);
+await H.goto(URL+'#/play');await shut(H);await H.waitForSelector('.friend-lobby');
+await H.selectOption('.friend-lobby select[name=size]','13');await H.click('.host-friend');await H.waitForSelector('.friend-link');
+const code3=(await H.inputValue('.friend-link')).split('/').pop();
+await G.goto(URL+'#/play');await shut(G);
+await G.waitForFunction(c=>[...document.querySelectorAll('.friend-game')].some(e=>e.textContent.includes('Ann')&&e.textContent.includes('13×13')),code3,{timeout:20000});
+check(true,'a hosted game shows in Open games on another browser, with the host\'s name and board');
+const cy=await C.waitForFunction(()=>document.querySelectorAll('.friend-game').length>0,null,{timeout:20000}).then(()=>true,()=>false);
+check(cy,'and on a third');
+await G.click('.friend-game');
+await G.waitForFunction(c=>FriendPlay.game&&FriendPlay.game.S.code===c&&FriendPlay.game.phase==='play'&&FriendPlay.game.myColor,code3,{timeout:20000});
+check(await G.evaluate(()=>FriendPlay.game.size===13),'a click in Open games joins it (13×13, no link)');
+const gone=await C.waitForFunction(()=>!document.querySelectorAll('.friend-game').length,null,{timeout:10000}).then(()=>true,()=>false);
+check(gone,'once someone sits down, it leaves Open games');
+// the list's holder leaves: the rest carry on (a new game still shows)
+const hubs=async()=>({H:await H.evaluate(()=>FriendLobby.hub),G:await G.evaluate(()=>FriendLobby.hub),C:await C.evaluate(()=>FriendLobby.hub)});
+const hb=await hubs();const holder=hb.H?H:hb.G?G:C;check(Object.values(hb).filter(Boolean).length===1,`one page holds the list (${JSON.stringify(hb)})`);
+const others=[H,G,C].filter(p=>p!==holder);await holder.evaluate(()=>dispatchEvent(new Event('pagehide')));await holder.close();   /* (a closing tab fires pagehide; page.close() alone doesn't) */
+await others[0].goto(URL+'#/play');await shut(others[0]);await others[0].waitForSelector('.friend-lobby');await others[0].click('.host-friend');await others[0].waitForSelector('.friend-link');
+await others[1].goto(URL+'#/play');await shut(others[1]);
+const re=await others[1].waitForFunction(()=>document.querySelectorAll('.friend-game').length>0,null,{timeout:30000}).then(()=>true,()=>false);
+check(re,'after the holder leaves, another page takes the list and a new game shows');
 await b.close();srv.close&&srv.close();console.log(fails?`friend-play: ${fails} failed`:'friend-play: all ok');process.exit(fails?1:0);})();
