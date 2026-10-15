@@ -3889,6 +3889,88 @@ class FriendGame {
   }
 }
 
+// A link between two pages, for friend games and the Open games list. Straight between the browsers (WebRTC) when the
+// networks allow; when that hasn't opened in 8 s, by way of the PeerJS server instead (the user: "stuck on
+// connecting": two phones on mobile data can't reach each other directly, and the relay servers PeerJS names,
+// eu-0/us-0.turn.peerjs.com, are gone). The server passes on candidate messages to a page by its name, which is how
+// the browsers meet anyway; a game's messages are as small. A relayed link pings, and closes after 45 s of silence.
+class WireLink {
+  constructor(peer, dst) { this.peer = peer; this.dst = dst; this.open = false; this.h = {}; this.seen = Date.now(); }
+  on(e, f) { (this.h[e] || (this.h[e] = [])).push(f); return this; }
+  fire(e, x) { for (const f of this.h[e] || []) try { f(x); } catch (err) { console.error("[wire]", err); } }
+  // shaped as a connection candidate (PeerJS's public server drops a page that sends anything else), ours riding along
+  raw(m) {
+    try { this.peer.socket.send({ type: "CANDIDATE", dst: this.dst, payload: { ...Wire.SHAPE, tczw: m } }); } catch {}
+  }
+  send(d) { if (this.relay) this.raw({ k: "d", d }); else if (this.c && this.c.open) this.c.send(d); }
+  opened() {
+    if (this.open || this.shut) return;
+    this.open = true;
+    if (this.relay) this.ping = setInterval(() => {
+      if (Date.now() - this.seen > 45000) return this.end();
+      this.raw({ k: "ping" });
+    }, 15000);
+    this.fire("open");
+  }
+  end() { if (this.shut) return; this.shut = true; this.open = false; clearInterval(this.ping); clearInterval(this.hi); clearTimeout(this.wait); Wire.links(this.peer).delete(this.dst); this.fire("close"); }
+  close() { if (this.relay) this.raw({ k: "bye" }); else if (this.c) try { this.c.close(); } catch {} this.end(); }
+  direct(c) {
+    this.c = c;
+    c.on("open", () => { if (!this.relay) this.opened(); });
+    c.on("data", d => { if (!this.relay) this.fire("data", d); });
+    c.on("close", () => { if (!this.relay) this.end(); });
+  }
+  toRelay() {   // the dialer's way round: say hello until the other page answers
+    if (this.relay || this.shut) return;
+    this.relay = true;
+    if (this.c) try { this.c.close(); } catch {}
+    const old = Wire.links(this.peer).get(this.dst);
+    if (old && old !== this) old.end();
+    Wire.links(this.peer).set(this.dst, this);
+    this.raw({ k: "hi" });
+    this.hi = setInterval(() => { if (this.open) clearInterval(this.hi); else this.raw({ k: "hi" }); }, 3000);
+  }
+}
+const Wire = {
+  WAIT: 8000,
+  SHAPE: { type: "data", connectionId: "tczw", candidate: { candidate: "candidate:0 1 udp 1 0.0.0.0 9 typ host", sdpMid: "0", sdpMLineIndex: 0 } },
+  links(peer) { return peer._tczwLinks || (peer._tczwLinks = new Map()); },
+  hook(peer) {
+    if (peer._tczwHooked) return;
+    peer._tczwHooked = true;
+    peer.socket.on("message", m => {
+      const t = m && m.type === "CANDIDATE" && m.payload && m.payload.tczw;
+      if (!t || !m.src) return;
+      setTimeout(() => { if (peer._lostMessages) peer._lostMessages.delete("tczw"); }, 0);   // (PeerJS keeps it for a connection that never comes)
+      let l = this.links(peer).get(m.src);
+      if (!l && t.k === "hi" && peer._tczwListen) {   // a page reaching us the long way round
+        l = new WireLink(peer, m.src); l.relay = true;
+        this.links(peer).set(m.src, l);
+        peer._tczwListen(l);
+      }
+      if (!l) return;
+      l.seen = Date.now();
+      if (t.k === "hi") { l.raw({ k: "ack" }); setTimeout(() => l.opened(), 0); }
+      else if (t.k === "ack") l.opened();
+      else if (t.k === "bye") l.end();
+      else if (t.k === "d") { l.opened(); l.fire("data", t.d); }
+    });
+  },
+  dial(peer, dst) {
+    this.hook(peer);
+    const l = new WireLink(peer, dst);
+    if (window.FRIEND_FORCE_RELAY) { setTimeout(() => l.toRelay(), 0); return l; }   // (a test's way to try it)
+    l.direct(peer.connect(dst, { reliable: true }));
+    l.wait = setTimeout(() => { if (!l.open) l.toRelay(); }, this.WAIT);
+    return l;
+  },
+  listen(peer, onLink) {
+    this.hook(peer);
+    peer._tczwListen = onLink;
+    peer.on("connection", c => { const l = new WireLink(peer, c.peer); l.direct(c); onLink(l); });
+  },
+};
+
 const FriendPlay = {
   PREFIX: "tczw-", KEY: "gt-friend-",
   game: null, peer: null, conn: null, watchers: new Set(), listeners: new Set(), status: "", retry: null,
@@ -3991,7 +4073,7 @@ const FriendPlay = {
     if (g.me.role === "host") {
       const peer = this.peer = new P(this.PREFIX + g.S.code, this.opts());
       peer.on("open", () => { this.status = g.S.phase === "waiting" ? "" : "Waiting for your friend to come back…"; this.emit(); });
-      peer.on("connection", c => this.attach(c));
+      Wire.listen(peer, c => this.attach(c));
       peer.on("error", e => {
         // the code still held from a moment ago (a reload): try again shortly
         if (e.type === "unavailable-id") { this.status = "Reopening the game…"; this.emit(); this.again(); }
@@ -4017,7 +4099,9 @@ const FriendPlay = {
   dial() {
     const g = this.game;
     if (!g || !this.peer || this.peer.destroyed) return;
-    this.attach(this.peer.connect(this.PREFIX + g.S.code, { reliable: true }));
+    if (this.dialing && !this.dialing.open) this.dialing.close();   // an attempt still hanging: only the newest
+    this.status = "Reaching the host…"; this.emit();
+    this.attach(this.dialing = Wire.dial(this.peer, this.PREFIX + g.S.code));
   },
   // the host keeps every link open (a third browser on the link watches); this.conn is the friend's (the host's, for a guest)
   attach(c) {
@@ -4167,7 +4251,7 @@ const FriendLobby = {
   claim() {
     const p = this.peer = new window.Peer(this.ID, FriendPlay.opts());
     p.on("open", () => { this.hub = true; this.publish(); });
-    p.on("connection", c => {
+    Wire.listen(p, c => {
       this.conns.add(c);
       c.on("open", () => c.send(this.list()));
       c.on("data", d => this.hubReceive(c, d));
@@ -4183,7 +4267,7 @@ const FriendLobby = {
   client() {
     const p = this.peer = new window.Peer(undefined, FriendPlay.opts());
     p.on("open", () => {
-      const c = p.connect(this.ID, { reliable: true });
+      const c = Wire.dial(p, this.ID);
       c.on("open", () => { this.up = c; for (const g of this.mine.values()) c.send({ t: "offer", g }); });
       c.on("data", d => { if (d && d.t === "list") { this.games = d.games || []; this.emit(); } });
       c.on("close", () => { if (this.peer === p) this.again(); });

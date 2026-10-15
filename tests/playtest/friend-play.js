@@ -100,4 +100,13 @@ await others[0].goto(URL+'#/play');await shut(others[0]);await others[0].waitFor
 await others[1].goto(URL+'#/play');await shut(others[1]);
 const re=await others[1].waitForFunction(()=>document.querySelectorAll('.friend-game').length>0,null,{timeout:30000}).then(()=>true,()=>false);
 check(re,'after the holder leaves, another page takes the list and a new game shows');
+// when the browsers can't reach each other directly (phones on mobile data; PeerJS's relays are gone): the game's
+// messages go by way of the PeerJS server (the user: "stuck on connecting")
+const R1=await dev('Rae'),R2=await dev('Sol');await R2.addInitScript(()=>{window.FRIEND_FORCE_RELAY=true;});
+await R1.goto(URL+'#/play');await shut(R1);await R1.waitForSelector('.friend-lobby');await R1.selectOption('.friend-lobby select[name=color]','black');await R1.click('.host-friend');await R1.waitForSelector('.friend-link');
+await R2.goto(await R1.inputValue('.friend-link'));
+const rel=await R2.waitForFunction(()=>FriendPlay.game&&FriendPlay.game.phase==='play'&&FriendPlay.game.myColor===2&&FriendPlay.conn&&FriendPlay.conn.relay,null,{timeout:20000}).then(()=>true,()=>false);
+check(rel,'a friend who can\'t link directly joins by way of the server');
+await play(R1,3,3);await waitN(R2,1);await play(R2,15,15);await waitN(R1,2);
+check(true,'and moves cross both ways');
 await b.close();srv.close&&srv.close();console.log(fails?`friend-play: ${fails} failed`:'friend-play: all ok');process.exit(fails?1:0);})();
