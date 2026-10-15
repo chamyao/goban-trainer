@@ -59,6 +59,15 @@ const hr=await S(H),gr=await S(G);
 check(hr.result&&gr.result&&hr.result.split(':')[1]===gr.result.split(':')[1]&&/[BW]\+[\d.]+/.test(hr.result),`both accept: one score on both (host "${hr.result}", friend "${gr.result}")`);
 const sgf=await H.evaluate(()=>FriendPlay.game.sgf());
 check(/SZ\[9\]/.test(sgf)&&/PB\[Ann\]/.test(sgf)&&/RE\[[BW]\+/.test(sgf),'the finished game makes an SGF for Review');
+// a rematch: asked by one, accepted by the other; both go to a new game, same board, colors swapped
+await G.click('button.rematch');await H.waitForFunction(()=>/wants a rematch/.test(document.querySelector('.play').textContent),null,{timeout:5000});
+check(true,'the rematch ask shows on the other side');
+await H.click('button.rematch');
+await H.waitForFunction(c=>FriendPlay.game&&FriendPlay.game.S.code!==c&&FriendPlay.game.phase==='play',link.split('/').pop(),{timeout:20000});
+await G.waitForFunction(()=>FriendPlay.game&&FriendPlay.game.phase==='play'&&FriendPlay.game.myColor,null,{timeout:20000});
+const rh=await S(H),rg=await S(G),rc=await H.evaluate(()=>({code:FriendPlay.game.S.code,size:FriendPlay.game.size}));
+check(rh.color===2&&rg.color===1&&rc.size===9&&rh.names[2]==='Ann'&&rh.names[1]==='Bo'&&await G.evaluate(()=>FriendPlay.game.S.code)===rc.code,`the rematch starts: colors swapped (host now ${rh.color===2?'White':'Black'}), 9×9 again, same names`);
+await play(G,4,4);await waitN(H,1);check(true,'and the first move crosses');
 // a second game: resign
 await H.goto(URL+'#/play');await shut(H);await H.waitForSelector('.friend-lobby');await H.click('.host-friend');await H.waitForSelector('.friend-link');
 const link2=await H.inputValue('.friend-link');await G.goto(link2);

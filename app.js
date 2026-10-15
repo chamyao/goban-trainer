@@ -3735,6 +3735,7 @@ function playGame(g, P = OGSPlay) {
   } else if (g.phase === "finished") {
     buttons.push(h("button", { class: "primary", onclick: () => P.review ? P.review(g, err) : reviewOgsGame(g.id, err) }, "Review this game"));
     buttons.push(h("button", { onclick: () => { P.game = null; location.hash = "#/play"; } }, "Back to lobby"));
+    if (P.finishedButtons) buttons.unshift(...P.finishedButtons(g));
   }
 
   const aside = h("aside", {}, [
@@ -3871,8 +3872,12 @@ class FriendGame {
   }
   scoreText() { const s = this.score(); return `Black ${s.b}, White ${s.w - this.S.komi} + ${this.S.komi} komi: ${s.text}.`; }
   resultText() {
-    const R = this.S.result;
+    const R = this.S.result, ask = this.S.rematch || {};
     if (!R) return "";
+    const note = this.S.next ? " · Rematch: starting…" : this.myColor && ask[3 - this.myColor] && !ask[this.myColor] ? " · Your friend wants a rematch." : "";
+    return this.outcome(R) + note;
+  }
+  outcome(R) {
     const who = R.winner === BLACK ? "Black" : "White", mine = this.myColor && R.winner === this.myColor;
     return R.how === "score" ? `${mine ? "You won" : this.myColor ? "You lost" : `${who} won`}: ${R.text}`
       : `${mine ? "You won" : this.myColor ? "You lost" : `${who} won`} by ${R.how}`;
@@ -3930,19 +3935,43 @@ const FriendPlay = {
   link(code) { return `${location.origin}${location.pathname}#/friend/${code}`; },
 
   host({ size, time, color, name, listed = true }) {
-    const code = Array.from(crypto.getRandomValues(new Uint8Array(6)), b => "abcdefghjkmnpqrstuvwxyz23456789"[b % 31]).join("");
     const hostColor = color === "black" ? BLACK : color === "white" ? WHITE : (Math.random() < .5 ? BLACK : WHITE);
-    const T = FRIEND_TIMES[time] || null;
-    const S = {
+    this.start(this.fresh({ size, T: FRIEND_TIMES[time] || null, hostColor, names: { [hostColor]: name || "" }, listed }));
+  },
+  fresh({ size, T, hostColor, names, listed, guest = null }) {
+    const code = Array.from(crypto.getRandomValues(new Uint8Array(6)), b => "abcdefghjkmnpqrstuvwxyz23456789"[b % 31]).join("");
+    return {
       v: 1, code, size, komi: 7.5, time: T && { main: T.main, periods: T.periods, period: T.period, label: T.label },
-      hostColor, names: { [hostColor]: name || "" }, moves: [], removed: [], accepted: {},
+      hostColor, names, moves: [], removed: [], accepted: {},
       clocks: T ? { [BLACK]: { main: T.main, periods: T.periods }, [WHITE]: { main: T.main, periods: T.periods } } : {},
-      phase: "waiting", result: null, seq: 0, created: Date.now(), guest: null, listed,
+      phase: "waiting", result: null, seq: 0, created: Date.now(), guest, listed,
     };
+  },
+  start(S) {
     this.close();
-    this.game = new FriendGame(S, { role: "host", color: hostColor, token: null });
+    this.game = new FriendGame(S, { role: "host", color: S.hostColor, token: null });
     this.persist();
-    location.hash = `#/friend/${code}`;
+    location.hash = `#/friend/${S.code}`;
+  },
+  // a rematch (the user): asked by one, accepted by the other; the host then opens the next game, same board and
+  // clock, colors swapped, its seat kept for the same friend, and both pages go to it (the code rides in the state)
+  rematch() { const c = this.game.myColor; this.change(S => { S.rematch = { ...(S.rematch || {}), [c]: true }; }); },
+  nextGame() {
+    const g = this.game, S = g.S;
+    if (g.me.role !== "host" || S.phase !== "finished" || S.next || !(S.rematch && S.rematch[BLACK] && S.rematch[WHITE])) return;
+    const N2 = this.fresh({ size: S.size, T: S.time, hostColor: 3 - S.hostColor, names: { [BLACK]: S.names[WHITE], [WHITE]: S.names[BLACK] },
+                            listed: false, guest: S.guest });
+    try { localStorage.setItem(this.KEY + N2.code, JSON.stringify({ S: N2, me: { role: "host", color: N2.hostColor, token: null }, elapsed: 0 })); } catch {}
+    this.change(s => { s.next = N2.code; });
+    setTimeout(() => { if (this.game === g) location.hash = `#/friend/${N2.code}`; }, 400);   // the word gone across first
+  },
+  finishedButtons(g) {
+    if (!g.myColor || g.S.next) return [];
+    const R = g.S.rematch || {}, mine = R[g.myColor], theirs = R[3 - g.myColor];
+    const b = h("button", { class: theirs ? "primary rematch" : "rematch", onclick: () => this.rematch() },
+                mine ? "Rematch asked…" : theirs ? "Accept rematch" : "Rematch");
+    b.disabled = !!mine;
+    return [b];
   },
 
   // open the game under this code: ours (the host's, or one we joined), or join it
@@ -4018,7 +4047,7 @@ const FriendPlay = {
     if (d.t === "join" && g.me.role === "host") {
       const S = g.S, guestColor = 3 - S.hostColor;
       if (!S.guest || S.guest === d.token) {
-        if (!S.guest) { S.guest = d.token; S.names[guestColor] = d.name || ""; S.phase = "play"; S.seq++; g.turnAt = Date.now(); }
+        if (S.phase === "waiting") { S.guest = d.token; S.names[guestColor] = S.names[guestColor] || d.name || ""; S.phase = "play"; S.seq++; g.turnAt = Date.now(); }
         if (this.conn && this.conn !== c) this.conn.close();
         this.conn = c; this.status = "";
         c.send({ t: "seat", color: guestColor });
@@ -4038,6 +4067,8 @@ const FriendPlay = {
     }
     g.S = S2; g.turnAt = Date.now() - (d.elapsed || 0) * 1000; g.pending = null;
     this.persist(); this.emit();
+    if (S2.next && g.me.role === "guest") { const code = S2.next; setTimeout(() => { if (this.game === g) location.hash = `#/friend/${code}`; }, 200); }
+    this.nextGame();
   },
   send() {
     const p = this.packet();
@@ -4047,6 +4078,7 @@ const FriendPlay = {
     const g = this.game;
     fn(g.S); g.S.seq++;
     this.persist(); this.send(); this.emit();
+    this.nextGame();
   },
 
   // what playGame calls (as OGSPlay)
