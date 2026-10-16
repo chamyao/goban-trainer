@@ -390,6 +390,13 @@ Name people in a brief by their CAST name ("Park Jong-gi", "Jang Baek-gi", "Ms. 
 Graphics matches names to portraits, so an id gets no look and no reference. Write "a single full-frame illustration,
 no panels, no speech bubbles" for any scene with a crowd and one focus.
 
+### Record-board scoring after the engine change (Misaeng)
+
+The engine network is now Lionffen b6c64 (main bea5f7ad), which has no score head: rootScoreLead reads 0. Choices already
+stored in Books 1–2 are data and unaffected. For new record boards (Book 3 on), score with rootWinRate (Black's) in
+tools/ms_score_choices.mjs and express each candidate's loss as a win-rate drop; keep only moves worse than Cho's.
+(Integration, 2026-10-16.)
+
 ### R23. Don't ask the user to approve plans (Misaeng)
 
 > "Yes don't ask for my approval next time" (on the Book 2 plan)
