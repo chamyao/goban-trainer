@@ -12,6 +12,9 @@ trusted (Huang Longshi's: few dated, some before he was born).
 
 Huang Longshi's 121 games: GoMagic's "Huang Longshi SGF Pack" (gomagic.org/download/huang-longshi-sgf-pack-121-games/).
 
+Honinbo Dosaku's 163 and Honinbo Doteki's 12 (the user): the same database's games.tgz, every game either played in
+(his own folder, the castle games, Hoshiai Hasseki's), one copy of each (11 of Dosaku's filed twice).
+
 The Go Seigen collection: Andries Brouwer's database, homepages.cwi.nl/~aeb/go/games/ (go_seigen.tgz, public
 domain by its compiler's note; much of it from GoGoD).
 """

@@ -2072,7 +2072,9 @@ function h(tag, attrs = {}, children = []) {
 // game records (data/games, tools/build_games.py): [id, title, native, games, line]
 const GAME_SHELVES = [["go-seigen", "Go Seigen", "吴清源", 883, "his games, 1926–1992"],
                       ["huang-longshi", "Huang Longshi", "黄龙士", 121, "his games, the Qing dynasty's 17th century"],
-                      ["takemiya", "Takemiya Masaki", "武宫正树", 1740, "his games, 1965–2026"]];
+                      ["takemiya", "Takemiya Masaki", "武宫正树", 1740, "his games, 1965–2026"],
+                      ["dosaku", "Honinbo Dosaku", "本因坊道策", 163, "his games, 1660–1697"],
+                      ["doteki", "Honinbo Doteki", "本因坊道的", 12, "his games, 1682–1690"]];
 
 async function viewLibrary() {
   const nav = routeSeq;
