@@ -1520,7 +1520,7 @@ const Review = {
         root.children = (raw.tree.children || []).map(c => this.rebuildNode(c, root));
         this.mainNodes = [root, ...this.collectMainLine(root)];
       }
-      if (Array.isArray(raw.analyses)) this.analyses = raw.analyses;
+      if (Array.isArray(raw.analyses)) this.analyses = raw.analyses.map(a => a && a.v === 2 ? a : null);   // unsearched ones: again
       if (Array.isArray(raw.losses) && raw.lossUnit === "wr") this.losses = raw.losses;   // (points, from the old network: judged again)
       if (typeof raw.showHints === "boolean") this.showHints = raw.showHints;
       if (typeof raw.movesOpen === "boolean") this.movesOpen = raw.movesOpen;
@@ -1729,29 +1729,36 @@ const Review = {
   async movePointsLost(k) {
     const g = this.game, m = g.moves[k];
     if (m.pass) return 0;
-    const player = m.color === BLACK ? "black" : "white";
     const sign = m.color === BLACK ? 1 : -1;
+    const a = await this.searchAt(k);
+    const best = (a.moves || [])[0];
+    if (!best) return 0;
+    const played = a.moves.find(c => c.x === m.c && c.y === m.r);
+    const mine = w => 100 * (sign > 0 ? w : 1 - w);
+    if (played) return Math.max(0, mine(best.winRate) - mine(played.winRate));
+    // Not among the searched candidates: the search of the position it leads to instead.
+    const child = await this.searchAt(k + 1);
+    return Math.max(0, mine(best.winRate) - mine(child.rootWinRate));
+  },
+
+  // a search of position k (100 visits), kept for this session: its win rate is the chart's (the user: "winrate
+  // swings in favor of whoever just moved": the network's look at a position without a search leans to the side to
+  // play, ~10 points either way); movePointsLost reads its moves
+  async searchAt(k) {
+    const g = this.game;
+    if (!this.searches || this.searches.game !== g) this.searches = { game: g, at: [] };
+    if (this.searches.at[k]) return this.searches.at[k];
     const hist = [];
     for (let j = Math.max(0, k - 6); j < k; j++) {
       const q = g.moves[j];
       if (!q.pass) hist.push({ x: q.c, y: q.r, player: q.color === BLACK ? "black" : "white" });
     }
     const a = await this.enqueue(() => Engine.analyze({
-      board: gridToBoardState(g.grids[k]), currentPlayer: player, moveHistory: hist,
+      board: gridToBoardState(g.grids[k]), currentPlayer: this.toMoveAt(k) === BLACK ? "black" : "white", moveHistory: hist,
       komi: g.meta.engineKomi, visits: 100, ownershipMode: "none", topK: 10, analysisPvLen: 1, reuseTree: false,
     }));
-    const best = (a.moves || [])[0];
-    if (!best) return 0;
-    const played = a.moves.find(c => c.x === m.c && c.y === m.r);
-    const mine = w => 100 * (sign > 0 ? w : 1 - w);
-    if (played) return Math.max(0, mine(best.winRate) - mine(played.winRate));
-    // Not among the searched candidates: search the position it leads to instead.
-    const child = await this.enqueue(() => Engine.analyze({
-      board: gridToBoardState(g.grids[k + 1]), currentPlayer: player === "black" ? "white" : "black",
-      moveHistory: [...hist, { x: m.c, y: m.r, player }].slice(-6),
-      komi: g.meta.engineKomi, visits: 100, ownershipMode: "none", topK: 1, analysisPvLen: 1, reuseTree: false,
-    }));
-    return Math.max(0, mine(best.winRate) - mine(child.rootWinRate));
+    this.searches.at[k] = a;
+    return a;
   },
 
   async analyzeAll() {
@@ -1765,15 +1772,9 @@ const Review = {
         if (this.runId !== run || !location.hash.startsWith("#/review")) break;
         if (this.analyses[k]) continue;
         try {
-          const a = await this.enqueue(() => Engine.evaluate({
-            board: gridToBoardState(g.grids[k]),
-            previousBoard: k > 0 ? gridToBoardState(g.grids[k - 1]) : undefined,
-            previousPreviousBoard: k > 1 ? gridToBoardState(g.grids[k - 2]) : undefined,
-            currentPlayer: this.toMoveAt(k) === BLACK ? "black" : "white",
-            komi: g.meta.engineKomi,
-          }));
+          const a = await this.searchAt(k);
           if (this.runId !== run) break;
-          this.analyses[k] = { w: a.rootWinRate, s: a.rootScoreLead };
+          this.analyses[k] = { w: a.rootWinRate, v: 2 };   // v 2: searched (before: the network's unsearched look)
           this.scheduleSave();
         } catch (e) { console.error(e); continue; }
         this.renderChart(); this.renderMistakes(); this.renderProgress(); this.renderReadout();
@@ -1808,12 +1809,7 @@ const Review = {
       this.ownership = null;   // (the network has no ownership head: Judge gives the win rate)
       if (this.node.main !== undefined) {
         const k = this.node.main, g = this.game;
-        const e = await Engine.evaluate({
-          board, currentPlayer: player, komi: g.meta.engineKomi,
-          previousBoard: k > 0 ? gridToBoardState(g.grids[k - 1]) : undefined,
-          previousPreviousBoard: k > 1 ? gridToBoardState(g.grids[k - 2]) : undefined,
-        });
-        this.analyses[k] = { w: e.rootWinRate, s: e.rootScoreLead };
+        this.analyses[k] = { w: a.rootWinRate, v: 2 };
         this.scheduleSave();
       }
       this.renderBoard(); this.renderReadout(); this.renderChart();
