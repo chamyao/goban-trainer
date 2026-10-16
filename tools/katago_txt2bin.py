@@ -2,7 +2,8 @@
 b15c192 nets) to the binary format our engine reads (.bin.gz: weights as "@BIN@" + little-endian float32).
 
 It walks the file in exactly the order engine-src/websrc/engine/katago/loadModelV8.ts reads it (model versions
-8..10: ordinary and gpool blocks), passing words and ints through and turning each weight array into binary.
+8..11: ordinary and gpool blocks; 11 names each activation, as Lionffen's b6c64 does with Mish), passing words and
+ints through and turning each weight array into binary.
 
     python3 -I tools/katago_txt2bin.py in.txt.gz out.bin.gz
 """
@@ -57,8 +58,8 @@ def convert(data):
     p = Conv(data)
     p.tok()
     v = p.int()
-    if not 8 <= v <= 10:
-        raise ValueError(f"model version {v}: this converter does 8..10 (newer nets are published as .bin.gz)")
+    if not 8 <= v <= 11:
+        raise ValueError(f"model version {v}: this converter does 8..11 (newer nets are published as .bin.gz)")
     p.int(); p.int()                                   # input channels, global input channels
     p.tok(); nblocks = p.int()
     for _ in range(5): p.int()                         # trunk, mid, regular, dilated, gpool channels

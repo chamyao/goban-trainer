@@ -336,10 +336,12 @@ const Engine = {
   pending: new Map(), seq: 0,
   // in the Android app the worker and model are the app's own files (APP_LOCAL), even when the page is the live site
   // (the APK ships the model unzipped, under the .bin name: see android-app/prepare-web.mjs)
-  // the network: kata1-b10c128 (the user, 2026-10-13: "10 block"; ~1,550 Elo above the g170-b6c96 it replaces, ~3x
-  // the work a visit, so the searches below take half the visits they did), converted from KataGo's text format by
-  // tools/katago_txt2bin.py; ?v= so a browser fetches the new file under the old name
-  modelUrl: new URL(window.APP_LOCAL ? "engine/katago-small.bin" : "engine/katago-small.bin.gz?v=b10c128", window.APP_LOCAL || location.href).href,
+  // the network: Lionffen's b6c64 (the user, 2026-10-16: "lets do lionffen 6 b"; 2025, KataGo's extra networks; 1.7 MB
+  // against kata1-b10c128's 11). At equal time it solved as many kyu problems and more dan ones (31/40 against 25/40),
+  // so the searches below take the visits they did before the 10-block net. It was trimmed of its score and ownership
+  // heads (they read 0): the review goes by win rate, and dead stones are marked by hand. Converted from KataGo's text
+  // format by tools/katago_txt2bin.py; ?v= so a browser fetches the new file under the old name
+  modelUrl: new URL(window.APP_LOCAL ? "engine/katago-small.bin" : "engine/katago-small.bin.gz?v=lionffen-b6c64", window.APP_LOCAL || location.href).href,
 
   setStatus(status, detail) {
     this.status = status; this.detail = detail || "";
@@ -424,7 +426,7 @@ const Engine = {
         type: "katago:analyze", id, modelUrl: this.modelUrl, backend: "auto",
         komi: 6.5, rules: "japanese", topK: 8, analysisPvLen: 4,
         reuseTree: true, ownershipMode: "root",
-        visits: 200, maxTimeMs: 20000,
+        visits: 400, maxTimeMs: 20000,
         ...fields,
       });
     });
@@ -435,6 +437,9 @@ document.addEventListener("DOMContentLoaded", () => {
   Engine.setStatus("off");
   document.getElementById("engineChip").addEventListener("click", () => Engine.ensure().catch(() => {}));
 });
+
+// a win rate (Black's, 0..1) the way the site shows it: the side ahead and its chance, "B 63%"
+function winText(w) { if (w == null || isNaN(w)) return ""; return w >= 0.5 ? `B ${Math.round(w * 100)}%` : `W ${Math.round((1 - w) * 100)}%`; }
 
 function gridToBoardState(grid, frameStones) {
   const board = grid.map(row => row.map(v => v === 1 ? "black" : v === 2 ? "white" : null));
@@ -936,8 +941,7 @@ class Trainer {
         placed = true;
         break;
       }
-      const lead = analysis.rootScoreLead ?? 0;
-      const score = `${lead >= 0 ? "B" : "W"}+${Math.abs(lead).toFixed(1)}`;
+      const score = winText(analysis.rootWinRate);
       this.setStatus("", "◈", placed ? `Engine play · ${score}` : `Engine passes · ${score}`);
     } catch (err) {
       if (this.alive) this.setStatus("off", "◌", "Engine error");
@@ -1381,7 +1385,7 @@ const Review = {
     this.game = gameFromSgf(text);
     this.sgfText = text;
     this.analyses = new Array(this.game.n + 1);
-    this.losses = new Array(this.game.n);   // points lost by move k, from a search of the position before it
+    this.losses = new Array(this.game.n);   // win rate (percentage points) lost by move k, from a search of the position before it
     this.analyzing = false;
     this.runId++;
     this.ownership = null;
@@ -1462,7 +1466,7 @@ const Review = {
       tree: this.serializeTree(this.mainNodes[0]),
       path: this.nodePath(this.node),
       analyses: this.analyses,
-      losses: this.losses,
+      losses: this.losses, lossUnit: "wr",
       showHints: this.showHints,
       movesOpen: this.movesOpen,
     };
@@ -1517,7 +1521,7 @@ const Review = {
         this.mainNodes = [root, ...this.collectMainLine(root)];
       }
       if (Array.isArray(raw.analyses)) this.analyses = raw.analyses;
-      if (Array.isArray(raw.losses)) this.losses = raw.losses;
+      if (Array.isArray(raw.losses) && raw.lossUnit === "wr") this.losses = raw.losses;   // (points, from the old network: judged again)
       if (typeof raw.showHints === "boolean") this.showHints = raw.showHints;
       if (typeof raw.movesOpen === "boolean") this.movesOpen = raw.movesOpen;
       this.node = (raw.path && this.nodeAtPath(raw.path)) || this.mainNodes[0];
@@ -1675,7 +1679,7 @@ const Review = {
       const a = await this.enqueue(() => this.details.get(key) || Engine.analyze({
         board, currentPlayer: player,
         moveHistory: [], komi: this.game.meta.engineKomi,
-        visits: visits || 100, ownershipMode: "none",
+        visits: visits || 200, ownershipMode: "none",
       }));
       if (this.details.size > 300) this.details.clear();
       this.details.set(key, a);
@@ -1712,17 +1716,16 @@ const Review = {
     const out = [];
     for (let k = 0; k < this.game.n; k++) {
       const loss = this.losses[k];
-      if (loss != null && loss >= 1.5) out.push({ k, loss });
+      if (loss != null && loss >= 10) out.push({ k, loss });
     }
     out.sort((x, y) => y.loss - x.loss);
     return out.slice(0, 6).sort((x, y) => x.k - y.k);
   },
 
-  // Points the mover gave up with move k: the best move's score minus the
-  // played move's, both taken from one search of the position *before* the
-  // move. Comparing two moves' after-positions this way cancels the
-  // side-to-move effect that makes comparing consecutive position scores
-  // reward whoever just moved (the network can't see a tactic until it's played).
+  // Win rate the mover gave up with move k (percentage points): the best move's minus the played move's, both
+  // taken from one search of the position *before* the move. Comparing two moves' after-positions this way cancels
+  // the side-to-move effect that makes comparing consecutive positions reward whoever just moved (the network can't
+  // see a tactic until it's played). (Win rate, not points: the network has no score head.) Win rates are Black's.
   async movePointsLost(k) {
     const g = this.game, m = g.moves[k];
     if (m.pass) return 0;
@@ -1735,19 +1738,20 @@ const Review = {
     }
     const a = await this.enqueue(() => Engine.analyze({
       board: gridToBoardState(g.grids[k]), currentPlayer: player, moveHistory: hist,
-      komi: g.meta.engineKomi, visits: 50, ownershipMode: "none", topK: 10, analysisPvLen: 1, reuseTree: false,
+      komi: g.meta.engineKomi, visits: 100, ownershipMode: "none", topK: 10, analysisPvLen: 1, reuseTree: false,
     }));
     const best = (a.moves || [])[0];
     if (!best) return 0;
     const played = a.moves.find(c => c.x === m.c && c.y === m.r);
-    if (played) return Math.max(0, played.relativePointsLost);
+    const mine = w => 100 * (sign > 0 ? w : 1 - w);
+    if (played) return Math.max(0, mine(best.winRate) - mine(played.winRate));
     // Not among the searched candidates: search the position it leads to instead.
     const child = await this.enqueue(() => Engine.analyze({
       board: gridToBoardState(g.grids[k + 1]), currentPlayer: player === "black" ? "white" : "black",
       moveHistory: [...hist, { x: m.c, y: m.r, player }].slice(-6),
-      komi: g.meta.engineKomi, visits: 50, ownershipMode: "none", topK: 1, analysisPvLen: 1, reuseTree: false,
+      komi: g.meta.engineKomi, visits: 100, ownershipMode: "none", topK: 1, analysisPvLen: 1, reuseTree: false,
     }));
-    return Math.max(0, sign * (best.scoreLead - child.rootScoreLead));
+    return Math.max(0, mine(best.winRate) - mine(child.rootWinRate));
   },
 
   async analyzeAll() {
@@ -1801,7 +1805,7 @@ const Review = {
         moveHistory: [], komi: this.game.meta.engineKomi,
         visits: 75, ownershipMode: "root",
       }));
-      this.ownership = a.ownership || null;
+      this.ownership = null;   // (the network has no ownership head: Judge gives the win rate)
       if (this.node.main !== undefined) {
         const k = this.node.main, g = this.game;
         const e = await Engine.evaluate({
@@ -1858,8 +1862,7 @@ const Review = {
     const detail = this.details.get(this.detailKey()) || this.quick.get(this.detailKey());
     const a = this.node.main !== undefined ? (this.analyses[this.node.main] || detail) : detail;
     if (a) {
-      const s = a.rootScoreLead ?? a.s;
-      evalTxt = `  ·  ${s >= 0 ? "B" : "W"}+${Math.abs(s).toFixed(1)}`;
+      evalTxt = `  ·  ${winText(a.rootWinRate ?? a.w)}`;
     }
     const onMain = this.node.main !== undefined;
     const at = onMain
@@ -1954,10 +1957,9 @@ const Review = {
   },
 
   chartGeom() {
-    let m = 5;
-    for (const a of this.analyses) if (a) m = Math.max(m, Math.abs(a.s));
-    return { W: 560, H: 150, L: 34, R: 10, T: 10, B: 22, M: Math.ceil(m / 5) * 5 };
+    return { W: 560, H: 150, L: 44, R: 10, T: 10, B: 22, M: 50 };   // Black's win rate, as -50..50 around even
   },
+  chartV(a) { return (a.w - 0.5) * 100; },
   chartX(k, geo) { return geo.L + (geo.W - geo.L - geo.R) * (this.game.n ? k / this.game.n : 0); },
   chartY(s, geo) { return geo.T + (geo.H - geo.T - geo.B) * (1 - (s / geo.M + 1) / 2); },
   chartK(px, geo) { return Math.round((px - geo.L) / (geo.W - geo.L - geo.R) * this.game.n); },
@@ -1974,7 +1976,7 @@ const Review = {
       return e;
     };
     // y labels + move label
-    for (const [s, label] of [[geo.M, `B+${geo.M}`], [0, "0"], [-geo.M, `W+${geo.M}`]])
+    for (const [s, label] of [[geo.M, "B 100%"], [0, "50%"], [-geo.M, "W 100%"]])
       el("text", { x: geo.L - 6, y: this.chartY(s, geo) + 3.5, "text-anchor": "end",
                    "font-size": 10, fill: "#8a8578" }).textContent = label;
     el("text", { x: geo.L, y: geo.H - 6, "font-size": 10, fill: "#8a8578" }).textContent = "move";
@@ -1982,7 +1984,7 @@ const Review = {
     // two-tone advantage fields: white's field on top, black's area below the curve
     const pts = [];
     for (let k = 0; k <= this.game.n; k++)
-      if (this.analyses[k]) pts.push([this.chartX(k, geo), this.chartY(this.analyses[k].s, geo), k]);
+      if (this.analyses[k]) pts.push([this.chartX(k, geo), this.chartY(this.chartV(this.analyses[k]), geo), k]);
     const yTop = geo.T, yBot = geo.H - geo.B;
     if (pts.length > 1) {
       const x0 = pts[0][0], x1 = pts[pts.length - 1][0];
@@ -1997,7 +1999,7 @@ const Review = {
     // mistake markers
     for (const m of this.mistakes()) {
       const a = this.analyses[m.k + 1];
-      el("circle", { cx: this.chartX(m.k + 1, geo), cy: this.chartY(a.s, geo), r: 4.5,
+      el("circle", { cx: this.chartX(m.k + 1, geo), cy: this.chartY(this.chartV(a), geo), r: 4.5,
                      fill: CHART_STATUS, stroke: "#fff", "stroke-width": 1.5 });
     }
     // current-move cursor (two-tone so it reads on both fields)
@@ -2027,7 +2029,7 @@ const Review = {
       tip.style.left = `${x * box.width / geo.W}px`;
       tip.style.top = `${geo.T * box.height / geo.H}px`;
       tip.textContent = `${k ? "move " + k + " · " + this.moveLabel(k - 1) : "start"}` +
-        (a ? ` — ${a.s >= 0 ? "B" : "W"}+${Math.abs(a.s).toFixed(1)}` : "");
+        (a ? ` — ${winText(a.w)}` : "");
     });
     hit.addEventListener("mouseleave", () => {
       hover.setAttribute("opacity", 0); hoverDark.setAttribute("opacity", 0); tip.style.display = "none";
@@ -2045,7 +2047,7 @@ const Review = {
         h("span", { class: "dot" }),
         h("span", { class: "who" }, `Move ${m.k + 1} · ${who}`),
         h("span", {}, this.moveLabel(m.k)),
-        h("span", { class: "loss" + (m.loss < 4 ? " minor" : "") }, `−${m.loss.toFixed(1)}`),
+        h("span", { class: "loss" + (m.loss < 20 ? " minor" : "") }, `−${Math.round(m.loss)}%`),
       ]));
     }
     if (!box.children.length)
@@ -3644,7 +3646,6 @@ function playGame(g, P = OGSPlay) {
   } else if (scoring && g.myColor) {
     buttons.push(h("button", { class: "primary", onclick: () => P.acceptScore() }, "Accept score"));
     buttons.push(h("button", { onclick: () => P.resumePlay() }, "Resume play"));
-    if (sz === 19) buttons.push(h("button", { class: "wide", onclick: () => markDeadWithKataGo(g, grid, err, P) }, "Mark dead stones with KataGo"));
   } else if (g.phase === "finished") {
     buttons.push(h("button", { class: "primary", onclick: () => P.review ? P.review(g, err) : reviewOgsGame(g.id, err) }, "Review this game"));
     buttons.push(h("button", { onclick: () => { P.game = null; location.hash = "#/play"; } }, "Back to lobby"));
@@ -3658,28 +3659,6 @@ function playGame(g, P = OGSPlay) {
     buttons.length ? h("div", { class: "panel" }, [h("div", { class: "rv-actions" }, buttons)]) : "",
   ]);
   return [h("div", { class: "review" }, [boardCard, aside])];
-}
-
-// Proposes dead stones from KataGo's ownership map (stones in the
-// opponent's territory with high confidence).
-async function markDeadWithKataGo(g, grid, err, P = OGSPlay) {
-  try {
-    err.textContent = "KataGo is reading the position…";
-    const a = await Engine.analyze({
-      board: gridToBoardState(grid), currentPlayer: g.toMove() === WHITE ? "white" : "black",
-      moveHistory: [], komi: (g.data && g.data.komi) || 6.5, visits: 75, ownershipMode: "root",
-    });
-    const dead = [];
-    for (let r = 0; r < N; r++)
-      for (let c = 0; c < N; c++) {
-        const own = a.ownership[r * N + c]; // + = Black's
-        if ((grid[r][c] === BLACK && own < -0.6) || (grid[r][c] === WHITE && own > 0.6)) dead.push([c, r]);
-      }
-    const before = stonesOf(g.removedStr);
-    if (before.length) P.setRemoved(before, false);
-    if (dead.length) P.setRemoved(dead, true);
-    err.textContent = dead.length ? `Marked ${dead.length} dead stones — check them, then accept.` : "KataGo found no dead stones.";
-  } catch (e) { err.textContent = `KataGo couldn't score this: ${e.message}`; }
 }
 
 async function reviewOgsGame(id, err) {
