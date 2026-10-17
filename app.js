@@ -519,6 +519,49 @@ function cropFor(problem) {
   return { c0: Math.max(0, c0), c1: Math.min(E, c1), r0: Math.max(0, r0), r1: Math.min(E, r1), sz: E + 1 };
 }
 
+/* ================= board themes ================= */
+// The user: "can you add board theme options". The header's ▦ chip cycles them, kept per device (a look, not
+// progress, like the Tavern chip). The gradient keeps the id "wood" whatever the colors: Wukong finds the board by it.
+// Switching repaints the boards on the page in place, so a problem in progress isn't reloaded.
+const BoardTheme = {
+  KEY: "goban-board",
+  LIST: [
+    { id: "kaya",   name: "Kaya",   wood: ["#e3bd6a", "#dcb35c", "#d2a850"], line: "#4a3f28", label: "#7a6535", stone: "rgba(0,0,0,.35)" },
+    { id: "light",  name: "Light",  wood: ["#f6e3b4", "#f0d79f", "#e8ca88"], line: "#5a4a2c", label: "#8a7444", stone: "rgba(0,0,0,.35)" },
+    { id: "walnut", name: "Walnut", wood: ["#b07a4c", "#a26e43", "#93623a"], line: "#2e1d10", label: "#f3e2c7", stone: "rgba(0,0,0,.45)" },
+    { id: "slate",  name: "Slate",  wood: ["#66707a", "#5b646d", "#515962"], line: "#161a1e", label: "#dde2e6", stone: "rgba(255,255,255,.4)" },
+    { id: "green",  name: "Green",  wood: ["#55935f", "#4b8755", "#417a4b"], line: "#15301a", label: "#e1f0e2", stone: "rgba(0,0,0,.45)" },
+    { id: "paper",  name: "Paper",  wood: ["#fcfbf7", "#f8f7f2", "#f2f0e9"], line: "#2b2b2b", label: "#666",    stone: "rgba(0,0,0,.55)" },
+  ],
+  get current() {
+    let id; try { id = localStorage.getItem(this.KEY); } catch {}
+    return this.LIST.find(t => t.id === id) || this.LIST[0];
+  },
+  next() {
+    const i = this.LIST.indexOf(this.current), t = this.LIST[(i + 1) % this.LIST.length];
+    try { t.id === "kaya" ? localStorage.removeItem(this.KEY) : localStorage.setItem(this.KEY, t.id); } catch {}
+    this.paintAll(); this.label();
+  },
+  // recolor a board already drawn by Goban.render
+  paint(svg, t = this.current) {
+    const stops = svg.querySelectorAll("#wood stop");
+    stops.forEach((s, i) => s.setAttribute("stop-color", t.wood[i] || t.wood[1]));
+    for (const e of svg.querySelectorAll(".bt-line")) e.setAttribute(e.tagName === "line" ? "stroke" : "fill", t.line);
+    for (const e of svg.querySelectorAll(".bt-label")) e.setAttribute("fill", t.label);
+    for (const e of svg.querySelectorAll(".bt-stone")) e.setAttribute("stroke", t.stone);
+    for (const e of svg.querySelectorAll(".bt-wood")) e.setAttribute("fill", t.wood[1]);
+  },
+  paintAll() { for (const svg of document.querySelectorAll("svg")) if (svg.querySelector("#wood")) this.paint(svg); },
+  label() {
+    const chip = document.getElementById("boardChip");
+    if (chip) { chip.textContent = "▦ " + this.current.name; chip.title = "Board: " + this.current.name + " (click for the next look)"; }
+  },
+};
+document.addEventListener("DOMContentLoaded", () => {
+  const chip = document.getElementById("boardChip");
+  if (chip) { BoardTheme.label(); chip.addEventListener("click", () => BoardTheme.next()); }
+});
+
 class Goban {
   static TOUCH = typeof matchMedia !== "undefined" && matchMedia("(pointer: coarse)").matches;
   constructor(svg, crop, onClick) {
@@ -543,12 +586,13 @@ class Goban {
   render(grid, lastMove, interactive) {
     const { c0, c1, r0, r1 } = this.crop, E = (this.crop.sz || 19) - 1;   // E: the board's last line
     this.svg.innerHTML = ""; this.ghost = null;
+    const t = BoardTheme.current;
     const defs = this.el("defs", {});
     defs.innerHTML = `
       <radialGradient id="bs" cx="35%" cy="30%"><stop offset="0%" stop-color="#5a5a5a"/><stop offset="100%" stop-color="#111"/></radialGradient>
       <radialGradient id="ws" cx="35%" cy="30%"><stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#cfcfc7"/></radialGradient>
       <linearGradient id="wood" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stop-color="#e3bd6a"/><stop offset="55%" stop-color="#dcb35c"/><stop offset="100%" stop-color="#d2a850"/>
+        <stop offset="0%" stop-color="${t.wood[0]}"/><stop offset="55%" stop-color="${t.wood[1]}"/><stop offset="100%" stop-color="${t.wood[2]}"/>
       </linearGradient>`;
     this.el("rect", { x: 0, y: 0, width: this.W, height: this.H, rx: 10, fill: "url(#wood)" });
 
@@ -557,13 +601,13 @@ class Goban {
       this.el("line", {
         x1: this.px(c0) - (c0 > 0 ? ext : 0), y1: this.py(r),
         x2: this.px(c1) + (c1 < E ? ext : 0), y2: this.py(r),
-        stroke: "var(--line)", "stroke-width": (r === 0 || r === E) ? 2.2 : 1.1,
+        class: "bt-line", stroke: t.line, "stroke-width": (r === 0 || r === E) ? 2.2 : 1.1,
       });
     for (let c = c0; c <= c1; c++)
       this.el("line", {
         x1: this.px(c), y1: this.py(r0) - (r0 > 0 ? ext : 0),
         x2: this.px(c), y2: this.py(r1) + (r1 < E ? ext : 0),
-        stroke: "var(--line)", "stroke-width": (c === 0 || c === E) ? 2.2 : 1.1,
+        class: "bt-line", stroke: t.line, "stroke-width": (c === 0 || c === E) ? 2.2 : 1.1,
       });
 
     // fade the cut edges so the board reads as continuing
@@ -576,24 +620,24 @@ class Goban {
     const stars = { 19: [3, 9, 15], 13: [3, 6, 9], 9: [2, 4, 6] }[E + 1] || [];
     for (const c of stars) for (const r of stars)
       if (c >= c0 && c <= c1 && r >= r0 && r <= r1)
-        this.el("circle", { cx: this.px(c), cy: this.py(r), r: 4, fill: "var(--line)" });
+        this.el("circle", { class: "bt-line", cx: this.px(c), cy: this.py(r), r: 4, fill: t.line });
 
     // in the margin, clear of a stone on the edge line (radius ~.47 cell)
     const labelRow = r0 === 0 ? { y: this.py(r0) - 27, edge: true } : { y: this.py(r1) + 34, edge: false };
     for (let c = c0; c <= c1; c++)
       this.el("text", { x: this.px(c), y: labelRow.y, "text-anchor": "middle", "font-size": 12.5,
-                        fill: "#7a6535", "font-weight": 600 }).textContent = COLS[c];
+                        class: "bt-label", fill: t.label, "font-weight": 600 }).textContent = COLS[c];
     const labelCol = c1 === E ? this.px(c1) + 29 : this.px(c0) - 29;
     for (let r = r0; r <= r1; r++)
       this.el("text", { x: labelCol, y: this.py(r) + 4.5, "text-anchor": "middle", "font-size": 12.5,
-                        fill: "#7a6535", "font-weight": 600 }).textContent = E + 1 - r;
+                        class: "bt-label", fill: t.label, "font-weight": 600 }).textContent = E + 1 - r;
 
     for (let r = r0; r <= r1; r++)
       for (let c = c0; c <= c1; c++)
         if (grid[r][c] === BLACK || grid[r][c] === WHITE) {
           this.el("circle", { cx: this.px(c), cy: this.py(r), r: this.cell * .47,
                               fill: grid[r][c] === BLACK ? "url(#bs)" : "url(#ws)",
-                              stroke: "rgba(0,0,0,.35)", "stroke-width": .8 });
+                              class: "bt-stone", stroke: t.stone, "stroke-width": .8 });
           if (lastMove && lastMove[0] === c && lastMove[1] === r)
             this.el("circle", { class: "last-move", cx: this.px(c), cy: this.py(r), r: this.cell * .2, fill: "none",
                                 stroke: grid[r][c] === BLACK ? "#fff" : "#333", "stroke-width": 2 });
@@ -3585,7 +3629,7 @@ function playGame(g, P = OGSPlay) {
                          fill: g.myColor === BLACK ? "url(#bs)" : "url(#ws)", "pointer-events": "none" });
   for (const k of removed) { // dead stones: fade and cross out
     const c = k % N, r = (k - c) / N, x = goban.px(c), y = goban.py(r), s = goban.cell * .22;
-    goban.el("circle", { cx: x, cy: y, r: goban.cell * .47, fill: "#dcb35c", opacity: .55, "pointer-events": "none" });
+    goban.el("circle", { class: "bt-wood", cx: x, cy: y, r: goban.cell * .47, fill: BoardTheme.current.wood[1], opacity: .55, "pointer-events": "none" });
     goban.el("path", { d: `M${x - s} ${y - s}L${x + s} ${y + s}M${x + s} ${y - s}L${x - s} ${y + s}`,
                        stroke: "var(--danger)", "stroke-width": 3, "pointer-events": "none" });
   }
