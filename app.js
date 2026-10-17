@@ -2823,6 +2823,168 @@ function viewRecord() {
   refresh();
 }
 
+/* ---- explore a board: set up stones, play out lines, then send to Review ---- */
+// The user: "in addition to record game add a board explore with board editing". Unlike the Recorder (a game as
+// played), this is a scratch board: setup stones go anywhere with no captures, moves follow the rules, and every
+// action is undoable. Kept as a draft per device, like the Recorder's.
+
+const Explorer = {
+  KEY: "goban.exploreDraft",
+  d: null, // { acts: [{set:color|0,c,r} | {color,c,r} | {color,pass}], redo: [...], next, tool: "play"|"black"|"white"|"erase" }
+
+  load() {
+    try { this.d = JSON.parse(localStorage.getItem(this.KEY)); } catch { this.d = null; }
+    if (!this.d || !Array.isArray(this.d.acts)) this.d = { acts: [], redo: [], next: BLACK, tool: "play" };
+    if (!Array.isArray(this.d.redo)) this.d.redo = [];
+  },
+  save() { try { localStorage.setItem(this.KEY, JSON.stringify(this.d)); } catch {} },
+  clear() { this.d = { acts: [], redo: [], next: BLACK, tool: this.d ? this.d.tool : "play" }; this.save(); },
+
+  // Replays the actions; returns { grid, last, keys } (keys = positions after each move, for ko).
+  replay() {
+    let g = Array.from({ length: N }, () => new Array(N).fill(EMPTY)), last = null;
+    const keys = [g.flat().join("")];
+    for (const a of this.d.acts) {
+      if ("set" in a) { g = g.map(row => row.slice()); g[a.r][a.c] = a.set; last = null; keys.push(g.flat().join("")); continue; }
+      last = null;
+      if (!a.pass) { g = applyMove(g, a.c, a.r, a.color) || g; last = [a.c, a.r]; }
+      keys.push(g.flat().join(""));
+    }
+    return { grid: g, last, keys };
+  },
+  push(a) { this.d.acts.push(a); this.d.redo = []; this.save(); },
+
+  // a tap with the current tool; false when nothing changes
+  tap(c, r) {
+    const { grid, keys } = this.replay(), t = this.d.tool;
+    if (t === "erase") { if (grid[r][c] === EMPTY) return false; this.push({ set: EMPTY, c, r }); return true; }
+    if (t === "black" || t === "white") {
+      const col = t === "black" ? BLACK : WHITE;
+      this.push({ set: grid[r][c] === col ? EMPTY : col, c, r });   // tapping your own color again takes it off
+      return true;
+    }
+    if (grid[r][c] !== EMPTY) return false;
+    const g2 = applyMove(grid, c, r, this.d.next);
+    if (!g2 || keys[keys.length - 2] === g2.flat().join("")) return false; // suicide / simple ko
+    this.push({ color: this.d.next, c, r });
+    this.d.next = 3 - this.d.next; this.save();
+    return true;
+  },
+  pass() { this.push({ color: this.d.next, pass: true }); this.d.next = 3 - this.d.next; this.save(); },
+  undo() {
+    const a = this.d.acts.pop(); if (!a) return;
+    this.d.redo.push(a);
+    if (!("set" in a)) this.d.next = a.color;
+    this.save();
+  },
+  redo() {
+    const a = this.d.redo.pop(); if (!a) return;
+    this.d.acts.push(a);
+    if (!("set" in a)) this.d.next = 3 - a.color;
+    this.save();
+  },
+
+  // Setup stones before the first move become AB/AW and the moves follow. If stones were edited after a move,
+  // the line can't be told as one game, so it sends the position as it stands with the side to move.
+  toSgf() {
+    const pt = (c, r) => String.fromCharCode(97 + c) + String.fromCharCode(97 + r);
+    const first = this.d.acts.findIndex(a => !("set" in a));
+    const editsAfter = first >= 0 && this.d.acts.slice(first).some(a => "set" in a);
+    let setupGrid, moves;
+    if (editsAfter || first < 0) {
+      setupGrid = this.replay().grid; moves = [];
+    } else {
+      const keep = this.d.acts; this.d.acts = keep.slice(0, first);
+      setupGrid = this.replay().grid; this.d.acts = keep;
+      moves = keep.slice(first);
+    }
+    const ab = [], aw = [];
+    for (let r = 0; r < N; r++) for (let c = 0; c < N; c++)
+      if (setupGrid[r][c] === BLACK) ab.push(pt(c, r)); else if (setupGrid[r][c] === WHITE) aw.push(pt(c, r));
+    const toPlay = moves.length ? moves[0].color : this.d.next;
+    let head = `;GM[1]FF[4]SZ[19]KM[6.5]DT[${new Date().toISOString().slice(0, 10)}]GN[Explored position]`;
+    if (ab.length) head += "AB" + ab.map(p => `[${p}]`).join("");
+    if (aw.length) head += "AW" + aw.map(p => `[${p}]`).join("");
+    head += `PL[${toPlay === BLACK ? "B" : "W"}]`;
+    return `(${head}${moves.map(m => `;${m.color === BLACK ? "B" : "W"}[${m.pass ? "" : pt(m.c, m.r)}]`).join("")})`;
+  },
+};
+
+function viewExplore() {
+  crumbs.innerHTML = "";
+  root.innerHTML = "";
+  if (!Explorer.d) Explorer.load();
+  const d = Explorer.d;
+
+  const svg = document.createElementNS(SVGNS, "svg");
+  const boardCard = h("div", { class: "board-card" });
+  boardCard.append(svg);
+  const goban = new Goban(svg, { c0: 0, c1: 18, r0: 0, r1: 18 }, (c, r) => { if (Explorer.tap(c, r)) refresh(); });
+  const status = h("div", { class: "meta-sub" });
+  const err = h("div", { class: "err" });
+  const btnUndo = h("button", { onclick: () => { Explorer.undo(); refresh(); } }, "Undo");
+  const btnRedo = h("button", { onclick: () => { Explorer.redo(); refresh(); } }, "Redo");
+  const btnSend = h("button", { class: "primary" }, "Send to Review");
+
+  const TOOLS = [["play", "Play"], ["black", "● Black"], ["white", "○ White"], ["erase", "Erase"]];
+  const toolBtns = TOOLS.map(([id, label]) =>
+    h("button", { onclick: () => { d.tool = id; Explorer.save(); refresh(); } }, label));
+
+  function refresh() {
+    const { grid, last } = Explorer.replay();
+    goban.hoverColor = d.tool === "black" ? BLACK : d.tool === "white" ? WHITE : d.next;
+    goban.render(grid, last, true);
+    const moves = d.acts.filter(a => !("set" in a)).length;
+    let stones = 0; for (const row of grid) for (const v of row) if (v !== EMPTY) stones++;
+    const doing = { play: `${d.next === BLACK ? "Black" : "White"} to play`, black: "Placing black stones",
+                    white: "Placing white stones", erase: "Tap a stone to remove it" }[d.tool];
+    status.textContent = `${stones} stones · ${moves} moves · ${doing}`;
+    TOOLS.forEach(([id], i) => toolBtns[i].classList.toggle("primary", d.tool === id));
+    btnUndo.disabled = !d.acts.length;
+    btnRedo.disabled = !d.redo.length;
+    btnSend.disabled = !stones && !moves;
+    err.textContent = "";
+  }
+
+  btnSend.addEventListener("click", () => {
+    try {
+      Review.load(Explorer.toSgf());
+      Review.currentId = Review.newId();
+      Review.saveState();
+      viewReview();
+    } catch (e) { err.textContent = e.message; }
+  });
+
+  const aside = h("aside", {}, [
+    h("div", { class: "panel" }, [
+      h("h2", {}, "Explore a board"),
+      h("div", { class: "meta-sub" }, "Set up any position with the stone tools, then switch to Play to try out lines. Setup stones don't capture; played moves do. Send to Review for the engine's view."),
+      status,
+    ]),
+    h("div", { class: "panel" }, [h("div", { class: "rv-actions" }, toolBtns)]),
+    h("div", { class: "panel" }, [
+      h("div", { class: "rv-actions" }, [
+        btnUndo, btnRedo,
+        h("button", { onclick: () => { Explorer.pass(); refresh(); } }, "Pass"),
+        h("button", { onclick: () => { d.next = 3 - d.next; Explorer.save(); refresh(); } }, "Swap color"),
+      ]),
+    ]),
+    h("div", { class: "panel" }, [
+      h("div", { class: "rv-actions" }, [
+        btnSend,
+        h("button", { onclick: () => {
+          if (d.acts.length && !confirm("Clear the board?")) return;
+          Explorer.clear(); viewExplore();
+        } }, "Clear board"),
+        h("button", { onclick: () => viewReview() }, "Back"),
+      ]),
+      err,
+    ]),
+  ]);
+  root.append(h("div", { class: "review" }, [boardCard, aside]));
+  refresh();
+}
+
 /* ---- import finished games from an OGS account (public API, CORS-open) ---- */
 
 const OGS = {
@@ -2979,6 +3141,7 @@ function viewReview() {
       h("div", { class: "row" }, [
         h("button", { class: "primary", onclick: () => tryLoad(ta.value) }, "Load SGF"),
         h("button", { onclick: () => viewRecord() }, "Record a game"),
+        h("button", { onclick: () => viewExplore() }, "Explore a board"),
         (() => { const l = h("label", { class: "file" }, "Choose file…");
                  l.append(file); l.addEventListener("click", () => file.click()); return l; })(),
         err,
