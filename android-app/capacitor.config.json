@@ -5,5 +5,6 @@
   "android": {
     "backgroundColor": "#f4f1ea",
     "adjustMarginsForEdgeToEdge": "auto"
-  }
+  },
+  "zoomEnabled": true
 }
