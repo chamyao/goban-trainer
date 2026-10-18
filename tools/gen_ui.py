@@ -58,8 +58,8 @@ PAINT = {   # name: (aspect, prompt)
 }
 
 # how each built asset is sliced (CSS border-image): insets in px of the built size
-SLICES = {"frame-wood": 100, "panel-trim": 24, "btn-gold": [0, 48], "btn-jade": [0, 48], "banner-ribbon": [0, 72],
-          "card-frame": [73, 52, 114, 52]}   # card-frame: its picture window (top right bottom left)
+SLICES = {"frame-wood": 86, "panel-trim": 24, "btn-gold": [0, 48], "btn-jade": [0, 48], "banner-ribbon": [0, 72],
+          "card-frame": [71, 49, 114, 50]}   # card-frame: its picture window (top right bottom left)
 
 
 def paint(names):
@@ -99,7 +99,11 @@ def mirrored(im, size):
 def cutout(name):
     from build_portraits import cut_851
     im = cut_851(Image.open(RAW / f"{name}.webp"))
-    return im.crop(im.getbbox())
+    # crop to the solid art, not to every faint speck the remover leaves: a speck off to one side pads that side and
+    # the art sits off-centre in its canvas (frame-wood was 63px right and 64px high of centre: the board looked shoved)
+    solid = im.getchannel("A").point(lambda v: 255 if v > 128 else 0).filter(ImageFilter.MinFilter(5))
+    x0, y0, x1, y1 = solid.getbbox()
+    return im.crop((max(0, x0 - 2), max(0, y0 - 2), min(im.width, x1 + 2), min(im.height, y1 + 2)))
 
 
 def clear_window(im, frac=.5):

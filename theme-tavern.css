@@ -191,3 +191,20 @@ body.theme-tavern .sgf-loader label.file, body.theme-tavern .book-head .reset-bo
 body.theme-tavern :is(.controls, .rv-actions, .sgf-loader) button.primary { color: #fff1c8; text-shadow: 0 1px 0 #3a0e06, 0 0 6px rgba(0, 0, 0, .6); }
 body.theme-tavern .board-card { box-shadow: none; filter: drop-shadow(0 16px 22px rgba(0, 0, 0, .6)); }
 body.theme-tavern .cat-title { padding: 0 18px; }
+/* the frame centred (Graphics, the user: "windows for tavern mode are off center"): frame-wood.png was padded off-centre
+   by a speck the cut-out kept, so the wood sat right of and above the board. Re-cut centred, sliced at its window (86);
+   the backing runs under the wood so no wall shows in the sliver between the board and the frame's inner edge */
+body.theme-tavern .board-card { border-image: url("assets/ui/frame-wood.png?v=2") 86 / 40px stretch;
+  background: linear-gradient(#3a2412, #3a2412) center / calc(100% - 60px) calc(100% - 60px) no-repeat border-box; }
+@media (max-width: 640px) { body.theme-tavern .board-card { border-width: 24px; border-image-width: 24px;
+  background-size: calc(100% - 36px) calc(100% - 36px); } }
+body.theme-tavern :is(.book, .panel, .modal, .games-list, .history-item) { border-image-source: url("assets/ui/panel-trim.png?v=2"); }
+/* the plates' and ribbon's caps were drawn over the padding: "border: 0 22px solid" is not valid CSS (border takes one
+   width), so the border stayed 0 and the labels ran into the caps, off-centre. Longhands give the caps their own room */
+body.theme-tavern :is(.controls, .nav-row, .rv-nav, .rv-actions, .sgf-loader, .modal) button,
+body.theme-tavern .sgf-loader label.file, body.theme-tavern .book-head .reset-book {
+  border-style: solid; border-color: transparent; border-width: 0 20px; border-image-width: 0 20px; padding: 9px 4px 11px; text-align: center; }
+body.theme-tavern .cat-title { border-style: solid; border-color: transparent; border-width: 0 34px; padding: 0 8px;
+  text-align: center; line-height: 30px; }   /* the silk band is the ribbon's top two-thirds; its tassels hang below */
+body.theme-tavern .sgf-loader label.file { display: flex; align-items: center; justify-content: center; }
+body.theme-tavern .nav-row .pos { white-space: nowrap; color: #7d5a2e; }
