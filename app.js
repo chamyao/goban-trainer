@@ -3525,7 +3525,7 @@ const OGSPlay = {
         uuid: this.search.uuid,
         size_speed_options: [{ size: "9x9", speed: "rapid", system: "byoyomi" }],
         lower_rank_diff: 3, upper_rank_diff: 3,
-        rules: { condition: "preferred", value: "japanese" },
+        rules: { condition: "required", value: "japanese" },   // (the user: "and japanese rules")
         handicap: { condition: "preferred", value: "disabled" },
       });
       return;
