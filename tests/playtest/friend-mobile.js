@@ -1,5 +1,5 @@
 // Play a friend on phones (the user: "does this work on mobile"): an iPhone hosts, a Pixel joins from Open games by a tap,
-// and a 19×19 move takes two taps (before: four, the board's confirm and the game's own both asking).
+// and a 19×19 move takes one tap (no confirm by default, the user: "get rid of the double tap").
 const root=require('child_process').execSync('npm root -g').toString().trim();
 const { chromium, devices } = require(root+'/playwright');const { ExpressPeerServer } = require(root+'/peer');const express=require(root+'/peer/node_modules/express');
 let fails=0;const check=(ok,w)=>{if(!ok)fails++;console.log((ok?'ok   ':'FAIL ')+w);};
@@ -14,6 +14,6 @@ await B.waitForSelector('.friend-game',{timeout:20000});await B.tap('.friend-gam
 await A.waitForFunction(()=>FriendPlay.game.phase==='play',null,{timeout:20000});await A.waitForTimeout(500);
 const pt=i=>A.locator('.board-card svg [cursor=pointer]').nth(i);
 let taps=0;for(;taps<6;){const bx=await pt(3*19+15).boundingBox();await A.touchscreen.tap(bx.x+bx.width/2,bx.y+bx.height/2);taps++;await A.waitForTimeout(250);if(await A.evaluate(()=>FriendPlay.game.S.moves.length))break;}
-check(taps===2,`a 19×19 move on an iPhone takes two taps (a ghost stone, then the stone): ${taps}`);
+check(taps===1,`a 19×19 move on an iPhone takes one tap (no confirm by default): ${taps}`);
 check(await B.waitForFunction(()=>FriendPlay.game.S.moves.length===1,null,{timeout:5000}).then(()=>true,()=>false),'it crosses to the Pixel');
 await b.close();srv.close();console.log(fails?`friend-mobile: ${fails} failed`:'friend-mobile: all ok');process.exit(fails?1:0);})();

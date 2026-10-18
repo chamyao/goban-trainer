@@ -649,11 +649,11 @@ class Goban {
         if (this.only && !this.only.has(String.fromCharCode(97 + c) + String.fromCharCode(97 + r))) continue;   // a multiple-choice board: only its letters take a tap
         const t = this.el("circle", { cx: this.px(c), cy: this.py(r), r: this.cell * .48,
                                       fill: "transparent", cursor: "pointer" });
-        t.addEventListener("mouseenter", () => {
+        if (!Goban.TOUCH) t.addEventListener("mouseenter", () => {   // (no hover on a phone: a hover that changes the board can make a phone's browser hold the tap back)
           if (grid[r][c] === EMPTY)
             t.setAttribute("fill", this.hoverColor === BLACK ? "rgba(20,20,20,.3)" : "rgba(255,255,255,.5)");
         });
-        t.addEventListener("mouseleave", () => t.setAttribute("fill", "transparent"));
+        if (!Goban.TOUCH) t.addEventListener("mouseleave", () => t.setAttribute("fill", "transparent"));
         t.addEventListener("click", () => this.tap(c, r, grid));
       }
   }
@@ -677,8 +677,9 @@ class Goban {
                                   stroke: "var(--accent)", "stroke-width": 2, "stroke-dasharray": "4 3" });
     this.ghost = { c, r, el: g };
   }
-  // "Confirm taps": auto (the default, as above) or never (one tap plays at any spacing)
-  static confirmMode() { try { return localStorage.getItem("goban-confirm") === "never" ? "never" : "auto"; } catch { return "auto"; } }
+  // "Confirm taps": never (the default since the user's "get rid of the double tap to confirm stone": one tap plays at
+  // any spacing) or auto (as above; the story menu's "Confirm taps" turns it back on)
+  static confirmMode() { try { return localStorage.getItem("goban-confirm") === "auto" ? "auto" : "never"; } catch { return "never"; } }
   static setConfirmMode(m) { try { localStorage.setItem("goban-confirm", m); } catch {} }
   clearGhost() { if (this.ghost) { this.ghost.el.remove(); this.ghost = null; } }
 
