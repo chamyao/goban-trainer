@@ -4,6 +4,7 @@ name: Android APK
 # new APK; a new APK (and the in-app "update available" bar) is only for changes to the app itself.
 on:
   push:
+    branches: [main]   # (one build per change: a branch carrying the same commit raced it to the android-latest tag)
     paths: ["android-app/**", ".github/workflows/android.yml"]
   workflow_dispatch:
 
