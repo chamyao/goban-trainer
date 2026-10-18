@@ -63,3 +63,14 @@ jobs:
           # The app compares this build number with its own versionCode on
           # launch; set it only after the APK is uploaded.
           gh release edit android-latest --title "Android app (build ${{ github.run_number }})"
+      # Obtainium (the user: automatic updates without the Play Store) reads the newest release's tag as the version:
+      # each build is also its own release, tagged as the APK's versionName (v1.0.N), the last three kept.
+      - name: Publish a versioned release for Obtainium
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          v="v1.0.${{ github.run_number }}"
+          gh release create "$v" goban-trainer.apk --target "${{ github.sha }}" --latest \
+            --title "Android app $v" --notes "Install with Obtainium (github.com/chamyao/goban-trainer) or download goban-trainer.apk."
+          gh release list --limit 100 --json tagName --jq '.[].tagName' | grep -E '^v1\.0\.[0-9]+$' | sort -t. -k3 -n -r | tail -n +4 |
+            while read old; do gh release delete "$old" --yes --cleanup-tag; done
