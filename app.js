@@ -3407,7 +3407,16 @@ const OGSPlay = {
   // site hands the login back to the app.
   APP_REDIRECT: "https://chamyao.github.io/goban-trainer/oauth-app.html",
   AUTH_KEY: "goban.ogsAuth", FLOW_KEY: "goban.ogsFlow", SERVER_KEY: "goban.ogsServer",
-  TIME_LABEL: "19×19 · 20 min + 5×30 s byoyomi",
+  TIME_LABEL: "19×19 byoyomi",
+  SPEEDS: [["blitz", "Blitz", "30 s + 5×10 s"], ["rapid", "Rapid", "5 min + 5×30 s"], ["live", "Live", "20 min + 5×30 s"]],
+  SPEEDS_KEY: "goban.ogsSpeeds",
+  // the speeds to look for, as ticked (Live alone, as before, until changed)
+  speeds() {
+    let v = null; try { v = JSON.parse(localStorage.getItem(this.SPEEDS_KEY)); } catch {}
+    v = Array.isArray(v) ? v.filter(x => this.SPEEDS.some(s => s[0] === x)) : [];
+    return v.length ? v : ["live"];
+  },
+  setSpeeds(v) { try { localStorage.setItem(this.SPEEDS_KEY, JSON.stringify(v)); } catch {} },
 
   me: null, jwt: null, sock: null, game: null, search: null, loginError: "", listeners: new Set(),
 
@@ -3521,11 +3530,11 @@ const OGSPlay = {
       });
       return;
     }
-    // OGS's 19×19 "live" automatch: 20 min + 5×30 s byoyomi (the user: 20 minutes, not 5; OGS's speeds are fixed
-    // presets, online-go.com src/views/Play/SPEED_OPTIONS.ts: rapid is 5 min + 5×30 s, live 20 min + 5×30 s)
+    // OGS's 19×19 automatch at the speeds ticked (the user: "add back the other time controls"; byoyomi only, "I only
+    // want byomi"). OGS's speeds are fixed presets, online-go.com src/views/Play/SPEED_OPTIONS.ts
     this.sock.send("automatch/find_match", {
       uuid: this.search.uuid,
-      size_speed_options: [{ size: "19x19", speed: "live", system: "byoyomi" }],
+      size_speed_options: this.speeds().map(speed => ({ size: "19x19", speed, system: "byoyomi" })),
       lower_rank_diff: 3, upper_rank_diff: 3,
       rules: { condition: "required", value: "japanese" },
       handicap: { condition: "preferred", value: "enabled" },
@@ -3684,6 +3693,21 @@ function playBody(gameId) {
   return playLobby();
 }
 
+// the time controls to search for (any of the ticked: the first opponent found at any of them); not while searching
+function speedPicker(P) {
+  const cur = new Set(P.speeds());
+  return h("div", { class: "row ogs-speeds" }, P.SPEEDS.map(([id, name, time]) => {
+    const box = h("input", { type: "checkbox", value: id, ...(cur.has(id) ? { checked: "" } : {}), ...(P.search ? { disabled: "" } : {}) });
+    box.addEventListener("change", () => {
+      const v = P.SPEEDS.map(s => s[0]).filter(x => x === id ? box.checked : cur.has(x));
+      if (!v.length) { box.checked = true; return; }   // at least one
+      cur.clear(); for (const x of v) cur.add(x);
+      P.setSpeeds(v);
+    });
+    return h("label", { class: "ogs-speed" }, [box, ` ${name} `, h("small", {}, time)]);
+  }));
+}
+
 function playLobby() {
   const P = OGSPlay;
   clearInterval(playTicker);
@@ -3721,7 +3745,7 @@ function playLobby() {
     h("div", {}, [`Logged in as `, h("b", {}, P.me.username), ` on ${P.base().replace("https://", "")}. `,
                   h("a", { href: "#/play", onclick: e => { e.preventDefault(); P.logout(); } }, "Log out")]),
     h("div", { class: "meta-sub" }, `Ranked ${P.TIME_LABEL}, Japanese rules, opponents within 3 ranks.`),
-    action, status, games,
+    speedPicker(P), action, status, games,
   ])];
 }
 

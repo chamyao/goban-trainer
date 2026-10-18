@@ -25,8 +25,10 @@ for (const [, f] of readFileSync(join(repo, "index.html"), "utf8").matchAll(/(?:
 const MODEL = "engine/katago-small.bin";
 writeFileSync(join(www, MODEL), gunzipSync(readFileSync(join(repo, MODEL + ".gz"))));
 const app = readFileSync(join(repo, "app.js"), "utf8");
-if (!app.includes(`"${MODEL}.gz"`)) throw new Error(`app.js no longer references ${MODEL}.gz`);
-writeFileSync(join(www, "app.js"), app.replace(`"${MODEL}.gz"`, `"${MODEL}"`));
+// (the web name may carry a cache tag, "...bin.gz?v=lionffen-b6c64": a new net under the old name)
+const gzRef = new RegExp(`"${MODEL.replace(/\./g, "\\.")}\\.gz(?:\\?[^"]*)?"`, "g");
+if (!gzRef.test(app)) throw new Error(`app.js no longer references ${MODEL}.gz`);
+writeFileSync(join(www, "app.js"), app.replace(gzRef, `"${MODEL}"`));
 
 cpSync(join(here, "native.js"), join(www, "native.js"));
 const html = readFileSync(join(repo, "index.html"), "utf8");
