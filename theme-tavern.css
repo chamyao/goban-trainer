@@ -123,6 +123,9 @@ body.theme-tavern .loading { color: #e8cf9a; font-family: "Cinzel", Georgia, ser
 .theme-chip { font-size: 12.5px; padding: 5px 12px; border-radius: 999px; background: var(--chip); color: var(--muted); cursor: pointer; border: 0;
   white-space: nowrap; font-family: inherit; }
 .theme-chip:hover { filter: brightness(1.05); }
+.theme-pick { display: inline-flex; align-items: center; gap: 6px; }
+.theme-pick select { font: inherit; color: inherit; background: transparent; border: 0; padding: 0; cursor: pointer; }
+body.theme-tavern .theme-pick select option { color: #222; }
 body.theme-tavern .theme-chip { font-family: "Cinzel", Georgia, serif; color: #ffe3a3; box-shadow: inset 0 0 0 1px #e8c46a, 0 0 12px rgba(255, 200, 90, .35); }
 
 @media (prefers-reduced-motion: reduce) { body.theme-tavern .book, body.theme-tavern button { transition: none !important; } }

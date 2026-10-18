@@ -4578,13 +4578,15 @@ const Theme = {
   set on(v) { try { v ? localStorage.setItem(this.KEY, "tavern") : localStorage.removeItem(this.KEY); } catch {} },
   apply(story) {
     document.body.classList.toggle("theme-tavern", this.on && !story);
-    const chip = document.getElementById("themeChip");
-    if (chip) { chip.textContent = this.on ? "✦ Tavern: on" : "✦ Tavern"; chip.hidden = !!story; }
+    const chip = document.getElementById("themeChip"), sel = document.getElementById("themeSelect");
+    if (sel) sel.value = this.on ? "tavern" : "classic";
+    if (chip) chip.hidden = !!story;
   },
 };
+// the site's theme (the user: "get rid of the tavern on / off and just have a site theme option"): Classic or Tavern
 document.addEventListener("DOMContentLoaded", () => {
-  const chip = document.getElementById("themeChip");
-  if (chip) chip.addEventListener("click", () => { Theme.on = !Theme.on; route(); });
+  const sel = document.getElementById("themeSelect");
+  if (sel) sel.addEventListener("change", () => { Theme.on = sel.value === "tavern"; route(); });
 });
 
 /* ================= router & keys ================= */
