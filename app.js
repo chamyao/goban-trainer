@@ -2133,23 +2133,21 @@ async function viewLibrary() {
   root.append(h("div", { class: "tavern-hero" }, [h("div", {}, [h("b", {}, "棋馆"), h("span", {}, "The Go Tavern")]),
     h("small", {}, "Pull up a stool. Pick a book, or a story.")]));   // shown only in the Tavern look
   const cats = { tsumego: "Tsumego", tesuji: "Tesuji", endgame: "Endgame" };
-  // The Three Kingdoms campaign sits above everything.
+  // the story campaigns: a Stories section of ordinary book entries, first (the user: "have the stories appear as
+  // normal book entries in their section"; before, banners above the shelves). tk-card / tk-card-<id> stay as hooks.
   const tkDone = Object.values(prog.tk || {}).filter(v => v === 1).length;
-  root.append(h("a", { class: "tk-card", href: "#/tk" }, [
-    h("img", { class: "tk-card-icon", src: "assets/tk/fan.png", alt: "" }),
-    h("span", {}, [h("b", {}, "三国演义 · Romance of the Three Kingdoms"),
-      h("small", {}, tkDone ? `${tkDone} levels cleared` : "A story campaign through the novel, 12K to 7D")]),
-    h("span", { class: "tk-card-go" }, "→"),
-  ]));
-  // Other novels' books (tk.js TK_NOVELS), each its own card; one not live yet shows in test mode only
-  for (const [id, nv] of Object.entries(typeof TK_NOVELS !== "undefined" ? TK_NOVELS : {})) {
+  const stories = [["#/tk", "tk-card", "Romance of the Three Kingdoms", "三国演义", "12K–7D", tkDone ? `${tkDone} cleared` : "story"]];
+  for (const [id, nv] of Object.entries(typeof TK_NOVELS !== "undefined" ? TK_NOVELS : {})) {   // tk.js TK_NOVELS; one not live yet: test mode only
     if (!nv.live && !(typeof TK_TEST !== "undefined" && TK_TEST)) continue;
-    root.append(h("a", { class: "tk-card tk-card-" + id, href: `#/tk/${nv.first}` }, [
-      ...(nv.icon ? [h("img", { class: "tk-card-icon", src: nv.icon, alt: "" })] : []),
-      h("span", {}, [h("b", {}, `${nv.native} · ${nv.title}`), h("small", {}, nv.live ? "A story campaign through the novel" : "测试模式 Test mode only")]),
-      h("span", { class: "tk-card-go" }, "→"),
-    ]));
+    stories.push([`#/tk/${nv.first}`, `tk-card tk-card-${id}`, nv.title, nv.native, nv.live ? "" : "test", "story"]);
   }
+  root.append(h("div", { class: "cat-title" }, "Stories"));
+  root.append(h("div", { class: "book-list" }, stories.map(([href, cls, title, native, grade, cnt]) =>
+    h("a", { class: `book book-story ${cls}`, href }, [
+      h("div", { class: "t" }, title),
+      h("div", { class: "n" }, `${native} · a story campaign through the novel`),
+      h("div", { class: "row" }, [...(grade ? [h("span", { class: "badge" + (/D/.test(grade) ? " dan" : "") }, grade)] : []), h("span", { class: "cnt" }, cnt)]),
+    ]))));
   // game records (data/games, tools/build_games.py): a shelf of their own; a game opens in the Review tab
   const gameShelf = h("div", { class: "book-list" });
   for (const [id, title, native, count, years] of GAME_SHELVES)

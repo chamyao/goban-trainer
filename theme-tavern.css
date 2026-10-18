@@ -67,8 +67,8 @@ body.theme-tavern .badge { background: #e2c88e; color: #4a2c10; box-shadow: inse
 body.theme-tavern .badge.dan, body.theme-tavern .badge.turn { background: linear-gradient(180deg, #3a2212, #22130a); color: #ffe3a3; box-shadow: inset 0 0 0 1px #c9a14a; }
 
 /* the story campaign cards: portals with a gold frame and a glow */
-body.theme-tavern .tk-card { border-radius: 12px; box-shadow: inset 0 0 0 2px #e8c46a, inset 0 0 0 5px rgba(0, 0, 0, .35), 0 8px 18px rgba(0, 0, 0, .55), 0 0 26px rgba(255, 170, 70, .25); }
-body.theme-tavern .tk-card b { font-family: "Cinzel", Georgia, serif; letter-spacing: .03em; }
+body.theme-tavern .tk-card:not(.book) { border-radius: 12px; box-shadow: inset 0 0 0 2px #e8c46a, inset 0 0 0 5px rgba(0, 0, 0, .35), 0 8px 18px rgba(0, 0, 0, .55), 0 0 26px rgba(255, 170, 70, .25); }
+body.theme-tavern .tk-card:not(.book) b { font-family: "Cinzel", Georgia, serif; letter-spacing: .03em; }
 
 /* --- panels: parchment scrolls with gold trim --- */
 body.theme-tavern .panel, body.theme-tavern .modal, body.theme-tavern .games-list, body.theme-tavern .history-item {
