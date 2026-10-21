@@ -199,12 +199,13 @@ const Avatars = (() => {
   // problems, the Stream, Turning points, games in Play ("have avatar appear on play boards too"). Made once, so a page
   // that redraws on every move (a live game) doesn't bring it in again each time; hidden on other pages. On a wide
   // screen the board's row keeps a column clear for it.
-  let fixed = null, fixedWho = "", pending = false;
+  let fixed = null, fixedWho = "", pending = false, lastHash = "";
   function figure(who) {
     if (fixed && fixedWho === who) return fixed;
     if (fixed) fixed.remove();
     const lead = h("img", { class: "avatar-lead", alt: "" });
     loadPortraits().then(m => { if (m[who]) lead.src = img(m[who]); });
+    lead.addEventListener("click", () => say(moment("tap")));   // (tappable where it stands clear of the board: a wide screen)
     fixed = h("div", { class: "avatar-fixed", hidden: "" }, [h("div", { class: "avatar-dlg", hidden: "" }, [h("div", { class: "avatar-name" }, name(who)), h("div", { class: "avatar-say" })]), lead]);
     fixedWho = who;
     document.body.append(fixed);
@@ -215,13 +216,16 @@ const Avatars = (() => {
     .map(b => b.parentNode.classList.contains("avatar-stage") ? b.parentNode.parentNode : b.parentNode).find(r => r.querySelector(":scope > aside"));
   function mount() {
     pending = false;
-    const who = picked(), row = who && boardRow();
-    document.body.classList.toggle("has-avatar", !!row);
-    if (!row) { if (fixed) fixed.hidden = true; return; }
+    const who = picked(), row = who && boardRow(), playing = !!who && /^#\/(play|friend)/.test(location.hash);
+    document.body.classList.toggle("has-avatar", !!(row || playing));
+    if (!row && !playing) { if (fixed) fixed.hidden = true; lastHash = ""; return; }
     const f = figure(who);
+    // the Play screen, arrived at without a game: "what to play?"
+    if (playing && !row && lastHash !== location.hash) setTimeout(() => say(moment("play")), 200);
+    lastHash = location.hash;
     if (f.hidden) { f.hidden = false; const l = f.querySelector(".avatar-lead"); l.style.animation = "none"; void l.offsetWidth; l.style.animation = ""; }
     // the column keeping the board clear of it, on a wide screen
-    const board = row.querySelector(":scope > .board-card");
+    const board = row && row.querySelector(":scope > .board-card");   // (the Play screen without a game: no board)
     if (board) { const stage = h("div", { class: "avatar-stage" }, [h("div", { class: "avatar-col" })]); row.insertBefore(stage, board); stage.append(board); }
   }
   const schedule = () => { if (!pending) { pending = true; requestAnimationFrame(mount); } };
@@ -232,6 +236,88 @@ const Avatars = (() => {
     const b = fixed.querySelector(".avatar-dlg");
     b.querySelector(".avatar-say").textContent = text; b.hidden = !text;
     return true;
+  }
+  // moments beyond a result, as Mahjong Soul's characters talk at the table (the user: "more dialogue similar in placement
+  // to Mahjong Soul ... e.g. 'what to play?' on the Play screen"): play (the Play screen), start (a game begins), win,
+  // lose (a game's end), idle (your turn, a while), tap (tapping the figure). Each character's own where written, else
+  // the plain lines (in English only for the Misaeng cast)
+  const MOMENTS = {
+    play: [["下哪一局？", "What shall we play?"], ["今天找谁对弈？", "Who shall we play today?"]],
+    start: [["开局了。", "Here we go."], ["请多指教。", "Let's have a good game."]],
+    win: [["赢了！", "We won!"], ["这一局，漂亮。", "A beautiful game."]],
+    lose: [["下次再来。", "Next time."], ["输了……复盘吧。", "Lost… let's review it."]],
+    idle: [["慢慢想。", "Take your time."], ["想好了吗？", "Decided yet?"]],
+    tap: [["嗯？", "Hm?"], ["专心下棋。", "Focus on the board."], ["我在看着呢。", "I'm watching."]],
+  };
+  const SAY = {
+    liubei: { play: [["今日与谁论棋？", "With whom shall we talk go today?"], ["贤士在何处？下一局吧。", "Where are the worthy? Let's play one."]],
+              win: [["此皆众人之力。", "This is everyone's strength."]], lose: [["胜败无常，备当自省。", "Win or lose, I must look inward."]],
+              tap: [["二弟三弟何在？", "Where are my brothers?"], ["天下大事，亦如此局。", "The affairs of the realm are like this board."]] },
+    diaochan: { play: [["今日与谁对弈？妾身陪着。", "Whom do we play today? I'll keep you company."], ["下一局吧，妾身想看你赢。", "Play one. I want to watch you win."]],
+                win: [["果然不出妾身所料。", "Just as I expected."]], lose: [["输一局，换一计。", "Lose a game, change a plan."]],
+                tap: [["妾身好看吗？", "Am I pretty?"], ["莫看我，看棋。", "Don't look at me, look at the board."], ["月色正好呢。", "The moonlight is lovely tonight."]] },
+    wangyun: { play: [["老夫与你下一盘。", "This old man will play you."]], win: [["社稷之福！", "A blessing for the realm!"]], lose: [["老夫再筹一计。", "I'll devise another plan."]],
+               tap: [["汉室，汉室啊……", "The Han, oh, the Han…"], ["莫扰老夫思量。", "Don't disturb my thinking."]] },
+    caocao: { play: [["天下英雄，谁可一战？", "Which hero under heaven will face me?"], ["来，与孤下一盘。", "Come, play me a game."]],
+              win: [["哈哈哈！天下归心！", "Ha! All hearts under heaven are mine!"]], lose: [["孤不过一时失手。", "A momentary slip, nothing more."]],
+              tap: [["何事？说。", "What is it? Speak."], ["孤在想天下大计。", "I'm thinking about the realm."]] },
+    lvbu: { play: [["谁敢来战？", "Who dares fight me?"], ["来！让我杀个痛快！", "Come! Let me fight to my heart's content!"]],
+            win: [["天下谁人能敌？", "Who under heaven can match me?"]], lose: [["这不算！再来！", "That doesn't count! Again!"]],
+            tap: [["别碰我的方天画戟。", "Don't touch my halberd."], ["赤兔在哪？", "Where's Red Hare?"]] },
+    lisu: { play: [["我去说一说，看谁肯来一局。", "Let me go and talk someone into a game."]], tap: [["我有一言相劝。", "A word of advice, if I may."]] },
+    jiaxu: { play: [["对手已算好了。", "I've already sized up the opponent."]], tap: [["……", "…"], ["少言，多算。", "Speak less. Reckon more."]] },
+    lijue: { play: [["找个人来砍！", "Find me someone to beat!"]], tap: [["看什么看！", "What are you looking at!"]] },
+    chenliu: { play: [["朕想下棋！", "I want to play!"]], tap: [["朕……朕不怕。", "I… I'm not scared."], ["陪朕玩一会儿？", "Play with me a while?"]] },
+    dongzhuo: { play: [["谁来陪咱家下棋？", "Who'll play with me?"]], tap: [["拿酒来！", "Bring wine!"]] },
+    chengong: { play: [["择一良局，以定大计。", "Choose a good game; settle a grand plan."]], tap: [["公台在此。", "Gongtai is here."]] },
+    yanshi: { play: [["夫君，今天下一盘吧。", "Husband, let's play a game today."]], tap: [["呀！吓我一跳。", "Oh! You startled me."]] },
+    zhangliao: { play: [["张辽请战！", "Zhang Liao asks to fight!"]], tap: [["整装待发。", "Ready to march."]] },
+    chendeng: { play: [["来一盘，消消食。", "A game, to settle the stomach."]], tap: [["鱼脍呢？", "Where's the raw fish?"]] },
+    houcheng: { play: [["来一局，赢了喝酒！", "A game, and drinks if we win!"]], tap: [["嘘，别声张。", "Shh, keep it down."]] },
+    zhaoyun: { play: [["子龙愿往！", "Zilong will go!"], ["主公，下哪一局？", "My lord, which game?"]],
+               win: [["幸不辱命。", "I have not failed my charge."]], lose: [["子龙请罪。", "Zilong begs forgiveness."]],
+               tap: [["子龙在。", "Zilong is here."], ["枪已磨好。", "My spear is sharpened."]] },
+    ladysun: { play: [["来，陪本小姐下一盘！", "Come, play me a game!"], ["今天找谁比试？", "Who's my match today?"]],
+               win: [["哼，早说了我不会输。", "Hmph, I told you I wouldn't lose."]], lose: [["不算不算，再来！", "Doesn't count, again!"]],
+               tap: [["不许乱碰！", "Hands off!"], ["我的剑可不是摆设。", "My sword isn't for decoration."]] },
+    daiyu: { play: [["又要下棋？罢了，陪你。", "Go again? Fine, I'll keep you company."], ["今天下哪一局？别输了又怪我。", "Which game today? Don't blame me if you lose."]],
+             win: [["赢了也就赢了。", "A win is a win."]], lose: [["输了，我早料到。", "We lost; I saw it coming."]],
+             tap: [["做什么？", "What is it?"], ["我又不是那起子人。", "I'm not one of those people."], ["花开得正好。", "The flowers are lovely now."]] },
+    grannyliu: { play: [["哎哟，下哪一盘？老婆子都想看看。", "Oh my, which game? I want to see them all."]],
+                 win: [["阿弥陀佛，赢了！", "Bless me, we won!"]], lose: [["输了也乐呵。", "Lost, but what fun."]],
+                 tap: [["哎哟，可不敢碰。", "Oh my, mustn't touch."], ["这园子比画儿还好看。", "This garden's prettier than a painting."]] },
+    ms_jang: { play: [["", "Which game? I'll read it out."], ["", "Let's play. I'm ready."]], win: [["", "We made it."]], lose: [["", "Let's review it. That's how you get better."]],
+               tap: [["", "Yes?"], ["", "I'm still an intern, you know."]] },
+    ms_oh: { play: [["", "Alright, what are we playing?"]], win: [["", "That's our team!"]], lose: [["", "Drinks anyway. Then we review."]],
+             tap: [["", "What, you need something?"], ["", "Don't slack off."]] },
+    ms_oh_hike: { play: [["", "Which trail today?"]], tap: [["", "Nice air up here, huh?"]] },
+    ms_ahn: { play: [["", "Which one. Pick fast."]], win: [["", "Good. Next."]], lose: [["", "Noted. Won't happen again."]],
+              tap: [["", "Busy."], ["", "Did you need something?"]] },
+    ms_parkjg: { play: [["", "Let's find an easy one, huh?"]], tap: [["", "Between you and me…"]] },
+    ms_sun: { play: [["", "Pick a game. We'll do it properly."]], tap: [["", "Take a break if you need one."]] },
+    ms_han: { play: [["", "Who's my next victim?"]], win: [["", "Obviously."]], lose: [["", "That one was rigged."]], tap: [["", "What?"]] },
+  };
+  // a moment's line, in the picked avatar's voice
+  function moment(kind) {
+    const who = picked(), mine = (SAY[who] || {})[kind], set = mine && mine.length ? mine : MOMENTS[kind];
+    const [zh, en] = set[Math.floor(Math.random() * set.length)];
+    return who.startsWith("ms_") || !zh ? en : `${zh} ${en}`;
+  }
+  // a game in Play: a line as it begins and as it ends, once each (a live game redraws on every move); your turn sitting
+  // a minute: a nudge
+  const games = {};
+  let idleT = 0;
+  function onGame(g) {
+    if (!picked()) return;
+    const id = g.id || g.code || "game", st = games[id] = games[id] || {};
+    if (g.phase === "play" && !st.start) { st.start = 1; setTimeout(() => say(moment("start")), 300); }
+    if (g.phase === "finished" && !st.end) {
+      const r = typeof g.resultText === "function" ? g.resultText() : "";
+      if (/^You won/.test(r)) { st.end = 1; setTimeout(() => say(moment("win")), 300); }
+      else if (/^You lost/.test(r)) { st.end = 1; setTimeout(() => say(moment("lose")), 300); }
+    }
+    clearTimeout(idleT);
+    if (g.phase === "play" && g.myTurn) idleT = setTimeout(() => { if (location.hash.startsWith("#/play") || location.hash.startsWith("#/friend")) say(moment("idle")); }, 60000);
   }
   const lastLine = {};
   addEventListener("tczw:result", e => {
@@ -310,5 +396,5 @@ const Avatars = (() => {
     if (r) new MutationObserver(schedule).observe(r, { childList: true, subtree: true });
     addEventListener("hashchange", schedule);
   });
-  return { VOICE, say, unlock, cleared, owns, picked, leads, catchUp, mount: () => { mount(); return fixed; }, view, merge, count, norm };
+  return { VOICE, SAY, MOMENTS, moment, onGame, say, unlock, cleared, owns, picked, leads, catchUp, mount: () => { mount(); return fixed; }, view, merge, count, norm };
 })();

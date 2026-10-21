@@ -1041,7 +1041,7 @@ body.has-avatar main { padding-bottom: calc(32vh + 12px); }
   .avatar-stage { display: flex; flex-direction: row; align-items: flex-end; }
   .avatar-col { display: block; flex: 0 0 clamp(150px, 14vw, 230px); }
   .avatar-fixed { flex-direction: column; align-items: stretch; right: auto; left: max(8px, calc((100vw - 1340px) / 2 + 24px)); width: calc(clamp(150px, 14vw, 230px) + 44px); }
-  .avatar-lead { width: 100%; height: auto; max-width: none; max-height: 72vh; order: 0; }
+  .avatar-lead { width: 100%; height: auto; max-width: none; max-height: 72vh; order: 0; pointer-events: auto; cursor: pointer; }   /* (clear of the board here: tap her) */
   .avatar-fixed > .avatar-dlg { margin: 0 44px 0 0; }
   body.has-avatar main { padding-bottom: 60px; }
 }

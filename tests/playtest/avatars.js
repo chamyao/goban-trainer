@@ -6,7 +6,7 @@ const { chromium } = require(require('child_process').execSync('npm root -g').to
 (async()=>{
 const b=await chromium.launch();const p=await b.newPage({viewport:{width:1366,height:850}});
 let fails=0;const check=(ok,what)=>{if(!ok)fails++;console.log((ok?'ok   ':'FAIL ')+what);};
-p.on('pageerror',e=>{fails++;console.log('ERR',e.message);});
+p.on('pageerror',e=>{fails++;console.log('ERR',e.message,(e.stack||'').split('\n').slice(1,4).join(' | '));});
 // before: Book 12 finished (its last board, 12-a18: only Books 1–3 have an N-boss), Red Chamber begun
 await p.addInitScript(()=>{if(sessionStorage.getItem('s'))return;sessionStorage.setItem('s',1);
   localStorage.setItem('gt-progress',JSON.stringify({tk:{'12-a18':1,'12-a3':1,'31-g1':1},tkUndo:{'12-a18':5,'12-a3':5}}));   /* (Book 12 since started over: still counts) */});
@@ -47,9 +47,17 @@ check(await p.evaluate(()=>document.querySelectorAll('.avatar-fixed').length===1
 // a page without a board: gone; a Play board: there
 await p.evaluate(()=>location.hash='#/');await p.waitForTimeout(400);
 check(await p.evaluate(()=>document.querySelector('.avatar-fixed').hidden),'the Library: not shown');
-await p.evaluate(()=>{location.hash='#/play';});await p.waitForTimeout(600);
+await p.evaluate(()=>{location.hash='#/play';});await p.waitForTimeout(900);
+const lobby=await p.evaluate(()=>({shown:!document.querySelector('.avatar-fixed').hidden,say:document.querySelector('.avatar-fixed .avatar-say').textContent}));
+check(lobby.shown&&lobby.say.length>2,`the Play screen: "what to play?" in her voice: "${lobby.say}"`);
 await p.evaluate(()=>{root.append(h('div',{class:'play'},[h('div',{class:'review'},[h('div',{class:'board-card'},[]),h('aside',{},[])])]));});await p.waitForTimeout(300);
 check(await p.evaluate(()=>!document.querySelector('.avatar-fixed').hidden),'a game\'s board in Play: shown');
+const said=await p.evaluate(async()=>{const out=[];const g={id:'t1',phase:'play',myTurn:false,resultText:()=>''};Avatars.onGame(g);await new Promise(r=>setTimeout(r,400));out.push(document.querySelector('.avatar-fixed .avatar-say').textContent);
+  Avatars.say('');Avatars.onGame(g);await new Promise(r=>setTimeout(r,400));out.push(document.querySelector('.avatar-fixed .avatar-say').textContent);
+  g.phase='finished';g.resultText=()=>'You won by resignation';Avatars.onGame(g);await new Promise(r=>setTimeout(r,400));out.push(document.querySelector('.avatar-fixed .avatar-say').textContent);return out;});
+check(said[0].length>2&&said[1]===''&&said[2].length>2&&said[2]!==said[0],`a game: a word as it begins (once: "${said[0]}"), and on a win: "${said[2]}"`);
+await p.click('.avatar-lead');
+check((await p.textContent('.avatar-fixed .avatar-say')).length>0,`tapping her: "${await p.textContent('.avatar-fixed .avatar-say')}"`);
 // a phone: held to the corner too, a third of the window
 await p.setViewportSize({width:390,height:844});await p.evaluate(()=>location.hash='#/stream');await p.waitForTimeout(1500);
 const ph=await p.evaluate(()=>{const l=document.querySelector(".avatar-lead").getBoundingClientRect();return {x:l.left,fx:document.querySelector(".avatar-fixed").getBoundingClientRect().left,h:l.height,bottom:Math.abs(l.bottom-innerHeight)<2,left:l.left<10,fixed:getComputedStyle(document.querySelector('.avatar-fixed')).position};});
