@@ -782,6 +782,9 @@ for _k, _look in _LOOKS.items():
 # Dialogue portraits in the Genshin look (the user's pick for the new style): one half-body cut-out per
 # speaker, on white for the background to be keyed out (tools/build_portraits.py). Looks beyond CAST here.
 FACE_LOOKS = {
+    # Jang as a trainee (Misaeng m1, an avatar lead): edited from ms_jang's portrait, so it is the same face
+    "ms_jang_young": ("young Jang Geu-rae", "a thin, quiet Korean boy of about sixteen with a black fringe, in a plain "
+                      "grey hoodie and jeans"),
     # Oh on the mountain (Misaeng m7): a portrait only; his stills take CAST's ms_oh
     "ms_oh_hike": ("Oh Sang-sik", "a tired, intense Korean team leader of about forty with bloodshot red eyes, messy "
                    "spiky black hair and stubble, in an orange-red hiking jacket over a dark top and grey hiking trousers"),
