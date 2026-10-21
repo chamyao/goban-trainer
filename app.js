@@ -2865,10 +2865,11 @@ const Turning = {
   },
 };
 
-function viewTurning(kind = "turn", at = 0) {
+// gid: one position picked from the list (viewTurningList); else the feed's next
+function viewTurning(kind = "turn", at = 0, gid = null) {
   const K = Turning.KINDS[kind];
   crumbs.innerHTML = "";
-  crumbs.append(h("a", { href: "#/" }, "Library"), ` / ${K.title}`);
+  crumbs.append(h("a", { href: "#/" }, "Library"), " / ", h("a", { href: K.route }, K.title), " / ", h("a", { href: `${K.route}/all` }, "All"));
   root.innerHTML = "";
   const s = Turning.state();
 
@@ -2876,7 +2877,7 @@ function viewTurning(kind = "turn", at = 0) {
   if (!s.uid && Sync.username && !Turning.pulled) {
     Turning.pulled = true;
     root.append(h("div", { class: "loading" }, "Loading your games from the sheet…"));
-    Turning.pull().catch(e => console.error("[turning] pull", e)).then(() => { if (location.hash === K.route) viewTurning(kind); });
+    Turning.pull().catch(e => console.error("[turning] pull", e)).then(() => { if (location.hash.startsWith(K.route)) viewTurning(kind); });
     return;
   }
   if (!s.uid) {
@@ -2903,7 +2904,7 @@ function viewTurning(kind = "turn", at = 0) {
     return;
   }
 
-  const item = Turning.pending(s, kind)[0];
+  const item = (gid && s.items.find(x => x.kind === kind && x.gid === gid)) || Turning.pending(s, kind)[0];
   const noun = kind === "key" ? "key moves" : "turning points";
   const tallyEl = h("div", { class: "meta-sub turning-tally" });
   const showTally = () => { const t = Turning.tally(Turning.state(), kind);
@@ -2912,11 +2913,11 @@ function viewTurning(kind = "turn", at = 0) {
   // the reading goes on unseen; the page hears only that something new is ready, or that it can't reach OGS
   const status = h("div", { class: "meta-sub turning-scan" });
   const setStatus = t => {
-    if (t === null) { showTally(); if (!item && location.hash === K.route) viewTurning(kind); return; }
+    if (t === null) { showTally(); if (!item && location.hash.startsWith(K.route)) viewTurning(kind); return; }
     status.textContent = item ? "" : t;   // (with a position to play, nothing about the reading at all)
   };
   Turning.onStatus = setStatus;
-  const who = h("div", { class: "meta-sub" }, [`OGS: ${s.user} · `,
+  const who = h("div", { class: "meta-sub" }, [h("a", { href: `${K.route}/all` }, "See all"), ` · OGS: ${s.user} · `,
     h("a", { href: "javascript:void 0", onclick: () => { Turning.save(Turning.fresh()); viewTurning(kind); } }, "change")]);
 
   if (!item) {
@@ -2994,7 +2995,7 @@ function viewTurning(kind = "turn", at = 0) {
         }));
         w = mine(b.rootWinRate);
       }
-      if (location.hash !== K.route) return;
+      if (!location.hash.startsWith(K.route)) return;
       tried.w = w;
       // judged against the best move of this same search (a search of another moment wobbles a few points): KataGo's
       // own top choice always counts, and so does a move within the engine's noise of it
@@ -3020,12 +3021,13 @@ function viewTurning(kind = "turn", at = 0) {
       if (fixed && firstTry && typeof Events !== "undefined") Events.earn(`tp:${item.gid}:${kind}`, 3);
     } catch (e) { console.error(e); result.textContent = "KataGo couldn't read that one."; tried = null; }
     busy = false; draw();
-    if (result.className === "ok" && location.hash === K.route) toReview();   // (solved: the board becomes the review)
+    if (result.className === "ok" && location.hash.startsWith(K.route)) toReview();   // (solved: the board becomes the review)
   };
   const next = () => {
     const st = Turning.state(), it = st.items.find(x => x.gid === item.gid && x.kind === kind);
     if (it) { it.seen = Date.now(); if (!it.fixed) it.skipped = Date.now(); }   // (passed over: behind the rest for an hour)
-    Turning.save(st); Turning.pushGame(item.gid); viewTurning(kind);
+    Turning.save(st); Turning.pushGame(item.gid);
+    if (location.hash !== K.route) location.hash = K.route; else viewTurning(kind);   // (from the list: on to the feed)
   };
   // Solved, or the answer shown, the board becomes the game's review in place (the user: "it shouldn't even have to be
   // a button, can't the board just become a review board with the slight difference of the game move / solution
@@ -5358,8 +5360,9 @@ async function route() {
     a.classList.toggle("active", a.dataset.tab === tab);
   if (parts[0] === "stream") await viewStream();
   else if (parts[0] === "events") Events.view();
-  else if (parts[0] === "turning") viewTurning("turn");
-  else if (parts[0] === "keymoves") viewTurning("key");
+  else if ((parts[0] === "turning" || parts[0] === "keymoves") && parts[1] === "all") viewTurningList(parts[0] === "turning" ? "turn" : "key");
+  else if (parts[0] === "turning") viewTurning("turn", 0, +parts[1] || null);
+  else if (parts[0] === "keymoves") viewTurning("key", 0, +parts[1] || null);
   else if (parts[0] === "review") viewReview();
   else if (parts[0] === "play") viewPlay(parts[1]);
   else if (parts[0] === "friend" && parts[1]) viewFriend(parts[1]);
@@ -5457,6 +5460,27 @@ if (loginParams.get("state") && (loginParams.get("code") || loginParams.get("err
     .catch(e => { OGSPlay.loginError = e.message; })
     .finally(() => { history.replaceState(null, "", location.pathname + (back || "#/play")); route(); });
 } else route();
+// every turning point (or key move) found, as a book's list (the user: "can you also have a view of turning points,
+// non-stream"): the newest game first, each opening its position (#/turning/<game id>)
+function viewTurningList(kind) {
+  const K = Turning.KINDS[kind], s = Turning.state();
+  crumbs.innerHTML = "";
+  crumbs.append(h("a", { href: "#/" }, "Library"), " / ", h("a", { href: K.route }, K.title), " / All");
+  root.innerHTML = "";
+  const items = s.items.filter(x => x.kind === kind).sort((a, b) => String(b.date).localeCompare(String(a.date)));
+  const t = Turning.tally(s, kind), pct = w => `${Math.round(100 * w)}%`;
+  root.append(h("div", { class: "cat-title" }, `${K.title} · ${t.solved} of ${t.found} solved`));
+  if (!items.length) { root.append(h("p", { class: "meta-sub" }, s.uid ? "None found yet; they appear as your games are read." : h("a", { href: K.route }, "Set your OGS name first"))); return; }
+  root.append(h("div", { class: "review-history turning-list" }, items.map(x => h("a", { class: "history-item turning-row" + (x.fixed ? " solved" : ""), href: `${K.route}/${x.gid}` }, [
+    h("div", { class: "hi-open" }, [
+      h("div", { class: "t" }, `${x.fixed ? "✓ " : ""}vs ${x.opp} · move ${x.k + 1}`),
+      h("div", { class: "n" }, `${new Date(x.date).toLocaleDateString()} · ` + (kind === "key"
+        ? `missed ${x.mine + x.theirs} times (${x.mine} by you)${x.won ? " · a game you won" : ""}`
+        : `${pct(x.before)} → ${pct(x.after)}`) + (x.tries && !x.fixed ? ` · tried ${x.tries}×` : "")),
+    ]),
+  ]))));
+}
+
 // the reading starts with the site, not with the page (the user: "is it still reading games? I don't see the number
 // increasing"): every game, in the background, giving way to whatever the page asks of the engine
 document.addEventListener("DOMContentLoaded", () => setTimeout(() => { try { if (Turning.state().uid) Turning.scan(); } catch (e) { console.error(e); } }, 5000));
