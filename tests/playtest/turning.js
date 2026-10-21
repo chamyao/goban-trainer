@@ -1,8 +1,10 @@
-// Turning points (#/turning, app.js Turning/viewTurning): the user's lost OGS games, each one's decisive move found
-// by KataGo, fed one after another to play again. OGS is mocked with three lost games and one won
-// (turning-games.json, from real 15–5k OGS games). Checks: the Library card opens it; a won game is skipped; a
-// turning point comes up at the player's move, from a position the player was winning; a move gets judged; Show
-// answer marks the moves; Next moves on and the played one is kept as done; Open in Review lands on the move.
+// Turning points and Key moves (#/turning, #/keymoves; app.js Turning/viewTurning): the player's OGS games read by
+// KataGo, a search of every position, and fed one at a time to play again. OGS is mocked with three lost games and one
+// won (turning-games.json, from real 15–5k OGS games); the searches run at 20 visits here to keep it short.
+// Checks: the Library cards; a turning point is the player's own move, in a lost game, from a lead; the tally and the
+// reading progress show; the game move is called the game move; KataGo's top move counts and a solved position is done
+// at once (a reload doesn't bring it back); Next on an unsolved one puts it behind the unseen; what was played before
+// a reread (an older version's state) stays played; Open in Review lands on the move, already analyzed.
 const { chromium } = require(require('child_process').execSync('npm root -g').toString().trim()+'/playwright');
 const URL='http://localhost:8765/';
 const GAMES=require('./turning-games.json');
@@ -10,59 +12,80 @@ const GAMES=require('./turning-games.json');
 const b=await chromium.launch();const p=await b.newPage({viewport:{width:1200,height:900}});
 let fails=0;const check=(ok,what)=>{if(!ok)fails++;console.log((ok?'ok   ':'FAIL ')+what);};
 p.on('pageerror',e=>{fails++;console.log('ERR',e.message);});
-const won=GAMES.filter(g=>!g.lost).map(g=>g.id);
-const list=[...GAMES.filter(g=>!g.lost),...GAMES.filter(g=>g.lost)].map((g,i)=>({id:g.id,ended:`2026-10-${10+i}T12:00:00Z`,annulled:false,outcome:'Resignation',
-  players:{black:{id:7,username:'me'},white:{id:8,username:'opp'+i}},black_lost:g.lost,white_lost:!g.lost}));
-const sgfReqs=[];
+const lostIds=GAMES.filter(g=>g.lost).map(g=>g.id);
+const list=[...GAMES.filter(g=>!g.lost),...GAMES.filter(g=>g.lost)].map((g,i)=>({id:g.id,ended:`2026-10-${19-i}T12:00:00Z`,annulled:false,outcome:'Resignation',
+  players:{black:{id:7,username:'me',ranking:20},white:{id:8,username:'opp'+i,ranking:20}},black_lost:g.lost,white_lost:!g.lost}));
 await p.route('https://online-go.com/**',r=>{const u=r.request().url();
   if(u.includes('/players?username='))return r.fulfill({json:{results:[{id:7,username:'me'}]}});
   if(/\/players\/7\/games/.test(u))return r.fulfill({json:{results:list,next:null}});
-  const m=/\/games\/(\d+)\/sgf/.exec(u);if(m){sgfReqs.push(+m[1]);return r.fulfill({body:GAMES.find(g=>g.id===+m[1]).sgf,contentType:'text/plain'});}
+  const m=/\/games\/(\d+)\/sgf/.exec(u);if(m)return r.fulfill({body:GAMES.find(g=>g.id===+m[1]).sgf,contentType:'text/plain'});
   return r.fulfill({status:404,body:''});});
+// an older version's state: the third lost game's turning point already solved
+await p.addInitScript(id=>{if(!sessionStorage.getItem('seeded')){sessionStorage.setItem('seeded','1');
+  localStorage.setItem('goban.turning',JSON.stringify({v:2,user:'me',uid:7,scanned:{},next:null,items:[{kind:'turn',gid:id,me:1,k:5,done:true,fixed:true,tries:1}]}));}
+  window.__fast=1;},lostIds[2]);
+const fast=()=>p.evaluate(()=>{Turning.VISITS=20;});
 await p.goto(URL+'#/');
 await p.evaluate(()=>{const m=document.getElementById('authModalBackdrop');if(m)m.hidden=true;});
 await p.waitForSelector('.book-turning',{timeout:20000});
+check(!!(await p.$('.book-keymoves')),'a Key moves card sits beside Turning points');
+await fast();
 await p.click('.book-turning');
-await p.fill('.sgf-loader input','me');await p.click('.sgf-loader button.primary');
-const t0=Date.now();
-await p.waitForSelector('.player svg',{timeout:600000});
-console.log(`  first turning point after ${Math.round((Date.now()-t0)/1000)} s`);
-const s=await p.evaluate(()=>JSON.parse(localStorage.getItem('goban.turning')));
-check(won.every(id=>s.scanned[id]===0)&&!sgfReqs.some(id=>won.includes(id)),'the won game is skipped without downloading it');
-const it=s.items.find(x=>!x.done);
-const g=await p.evaluate(sgf=>{const g=gameFromSgf(sgf);return {n:g.n};},it.sgf);
-check(it.me===1&&it.k%2===0&&it.k<g.n,`the turning point is one of the player's own moves (Black, move ${it.k+1} of ${g.n})`);
-check(it.before>=0.5&&it.loss>=10&&it.after<it.before,`from a position the player was winning (${Math.round(it.before*100)}% → ${Math.round(it.after*100)}%, ${Math.round(it.loss)} points given up)`);
-check((await p.textContent('#crumbs')).includes('Turning points')&&(await p.textContent('aside')).includes(`move ${it.k+1}`),'the page names the game and the move');
-const stones=()=>p.evaluate(()=>[...document.querySelectorAll('.player svg circle.bt-stone, .player svg image.bt-stone')].length);
-const n0=await stones();
-// play the game move again: it's judged as the game move
+const sawBar=p.waitForFunction(()=>{const b=document.querySelector('.turning-bar');return b&&b.style.display!=='none'&&/move \d+ of \d+/.test(document.querySelector('.turning-scan').textContent);},null,{timeout:900000}).then(()=>true,()=>false);
+check(await sawBar,'reading shows its progress: the game, move k of n, and a bar');
+await p.waitForSelector('.player svg',{timeout:900000});
+const S=()=>p.evaluate(()=>JSON.parse(localStorage.getItem('goban.turning')));
+let s=await S();
+const it=Turning_pending(s)[0];
+function Turning_pending(s){return s.items.filter(x=>!x.fixed&&x.kind==='turn');}
+check(it&&it.me===1&&it.k%2===0&&lostIds.includes(it.gid),`the turning point is the player's own move in a lost game (move ${it&&it.k+1})`);
+check(it.before>=0.4&&it.loss>=10&&it.real>0,`a real drop: ${Math.round(it.before*100)}% → ${Math.round(it.after*100)}%, ${Math.round(it.loss)} engine points, ${it.real} real`);
+check(/games read \(kept on this device\) · \d+ turning points found · 0 solved/.test(await p.textContent('.turning-tally')),`the tally: "${await p.textContent('.turning-tally')}"`);
 const gm=await p.evaluate(([sgf,k])=>{const m=gameFromSgf(sgf).moves[k];return [m.c,m.r];},[it.sgf,it.k]);
 await p.evaluate(([c,r])=>window.__turning.play(c,r),gm);
 await p.waitForFunction(()=>!/reading/.test(document.getElementById('status').textContent),null,{timeout:120000});
-check(await stones()===n0+1,'the move is on the board');
 check(/the move you played in the game/.test(await p.textContent('#status')),`the game move is called the game move: "${await p.textContent('#status')}"`);
-// try again with KataGo's own move: turned around
+// KataGo's top move, from a fresh search of the position
+const top=await p.evaluate(async()=>{const t=window.__turning,g=gameFromSgf(t.item.sgf),a=await Turning.search(g,t.pos.k,200);return [a.moves[0].x,a.moves[0].y];});
 await p.click('text=Try again');
-await p.evaluate(([c,r])=>window.__turning.play(c,r),it.best);
+await p.evaluate(([c,r])=>window.__turning.play(c,r),top);
 await p.waitForFunction(()=>!/reading/.test(document.getElementById('status').textContent),null,{timeout:120000});
 const st=await p.textContent('#status');
-check(/Turned it around/.test(st)&&await p.evaluate(()=>document.getElementById('status').className)==='ok',`KataGo's move turns it around: "${st}"`);
+check(/KataGo's top choice/.test(st)&&await p.evaluate(()=>document.getElementById('status').className)==='ok',`KataGo's top move gets the credit: "${st}"`);
+const solvedMarks=await p.evaluate(()=>[...document.querySelectorAll('.turn-mark')].map(e=>e.getAttribute('fill')));
+check(solvedMarks.length===1&&/176,65,62/.test(solvedMarks[0])||solvedMarks.length===2&&solvedMarks.some(f=>/176,65,62/.test(f)),`once solved, the game move is marked in red (${solvedMarks.length} marks)`);
+s=await S();const solved=s.items.find(x=>x.gid===it.gid&&x.kind==='turn');
+check(solved.fixed&&!solved.done,'solved: marked solved at once, without pressing Next (and it can come back as review)');
 await p.click('text=Show answer');
 check(await p.evaluate(()=>document.querySelectorAll('.turn-mark').length)===3,'Show answer marks KataGo\'s move, the game move and this try');
-await p.click('text=Next →');await p.waitForTimeout(500);
-const s2=await p.evaluate(()=>JSON.parse(localStorage.getItem('goban.turning')));
-const done=s2.items.find(x=>x.gid===it.gid);
-check(done.done&&done.fixed&&!done.sgf,'Next keeps it as played (and fixed), without its SGF');
-await p.waitForSelector('.player svg',{timeout:600000}).catch(()=>{});
-const more=(await p.evaluate(()=>JSON.parse(localStorage.getItem('goban.turning')))).items.find(x=>!x.done);
-if(more){
-  check((await p.textContent('aside')).includes(`move ${more.k+1}`),'the next turning point is dealt');
-  await p.click('text=Open in Review');await p.waitForTimeout(800);
-  const rv=await p.evaluate(()=>({h:location.hash,k:Review.node&&Review.node.main}));
-  check(rv.h==='#/review'&&rv.k===more.k,`Open in Review lands on the move (${rv.k})`);}
-else console.log('  (only one of the lost games had a turning point)');
-const s3=await p.evaluate(()=>JSON.parse(localStorage.getItem('goban.turning')));
-console.log(`  turning points found: ${s3.items.length} of ${GAMES.filter(g=>g.lost).length} lost games so far`);
+await p.reload();await p.evaluate(()=>{const m=document.getElementById('authModalBackdrop');if(m)m.hidden=true;});await fast();
+await p.waitForSelector('.player svg, .turning-scan',{timeout:60000});await p.waitForTimeout(500);
+const shown=await p.evaluate(()=>window.__turning&&document.querySelector('.player svg')?window.__turning.item:null);
+const unsolvedLeft=Turning_pending(await S()).length;
+check(unsolvedLeft?shown&&!shown.fixed:(!shown||shown.gid===it.gid),`after a reload an unsolved one comes first (${unsolvedLeft} unsolved; shows ${shown?shown.gid+(shown.fixed?' (solved)':''):'the reading page'})`);
+// the older version's solved game: read again, but still solved
+await p.waitForFunction(id=>{const s=JSON.parse(localStorage.getItem('goban.turning'));return s.scanned[id]!==undefined;},lostIds[2],{timeout:900000});
+s=await S();const old=s.items.find(x=>x.gid===lostIds[2]&&x.kind==='turn');
+check(!old||old.fixed,`a game solved before the reread stays solved (${old?'found again, solved':'no turning point this time'})`);
+check(s.v===3&&!s.items.some(x=>x.k===5&&x.gid===lostIds[2]),'the old state is read again under the new version');
+// Next on an unsolved one: behind the unseen ones
+await p.waitForSelector('.player svg',{timeout:900000});
+s=await S();const waiting=Turning_pending(s);
+if(waiting.length>=1){
+  const a=await p.evaluate(()=>window.__turning.item.gid);
+  await p.click('text=Next →');await p.waitForTimeout(600);
+  s=await S();const x=s.items.find(y=>y.gid===a&&y.kind==='turn');
+  const order=await p.evaluate(()=>Turning.pending(Turning.state(),'turn').map(y=>[y.gid,!!y.fixed]));
+  const uns=order.filter(y=>!y[1]).map(y=>y[0]);
+  check(x.seen&&(x.fixed?order[order.length-1][0]===a:uns[uns.length-1]===a),`Next puts it at the back of its group, unsolved before solved (${order.map(y=>y[0]+(y[1]?'✓':'')).join(', ')})`);
+  if(await p.$('.player svg')){
+    const k=await p.evaluate(()=>window.__turning.pos.k);
+    await p.click('text=Open in Review');await p.waitForTimeout(800);
+    const rv=await p.evaluate(()=>({h:location.hash,k:Review.node&&Review.node.main,an:Review.analyses.filter(Boolean).length,n:Review.game.n}));
+    check(rv.h==='#/review'&&rv.k===k&&rv.an===rv.n+1,`Open in Review lands on the move (${rv.k}), already analyzed (${rv.an} of ${rv.n+1} positions)`);
+  }
+}
+s=await S();
+console.log(`  turning points: ${s.items.filter(x=>x.kind==='turn').length}, key moves: ${s.items.filter(x=>x.kind==='key').length}, of ${Object.keys(s.scanned).length} games read`);
 await b.close();console.log(fails?`${fails} FAILED`:'all passed');process.exit(fails?1:0);
 })();
