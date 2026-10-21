@@ -2963,7 +2963,16 @@ function viewTurning(kind = "turn", at = 0, gid = null) {
     : `Their turn: they missed it too, and played the red move (${pct(1 - pos.after)} for them, where the green one keeps ${pct(1 - pos.bestW)}).`);
   const goban = new Goban(svg, { c0: 0, c1: 18, r0: 0, r1: 18 }, (c, r) => play(c, r));
   goban.hoverColor = me;
+  const step = d => { const v = Math.max(0, Math.min(k, view + d)); if (v !== view) { view = v; draw(); } };
+  const stepLabel = h("span", { class: "meta-sub" });
+  const backBtn = h("button", { title: "The move before (←)", onclick: () => step(-1) }, "◀");
+  const fwdBtn = h("button", { title: "The move after, up to the position (→)", onclick: () => step(1) }, "▶");
+  const stepNav = h("div", { class: "turn-steps" }, [h("button", { title: "The start", onclick: () => step(-k) }, "⏮"), backBtn, fwdBtn,
+    h("button", { title: "Back to the position", onclick: () => step(k) }, "⏭"), stepLabel]);
   let tried = null, show = playable ? null : "marks", busy = false;
+  // looking back: the moves that led here, never past the position (the user: "the option to look back on moves leading
+  // up to the turning point but not after")
+  let view = k;
   const prev = k > 0 ? g.moves[k - 1] : null, gm = g.moves[k];
   // "marks": the answer, the game move and the try; "solved": the game move beside the try (the user: "display an
   // indicator for the game mistake after solving")
@@ -2973,6 +2982,9 @@ function viewTurning(kind = "turn", at = 0, gid = null) {
     ...(tried && tried.w != null ? [[tried.c, tried.r, "rgba(53,102,176,.85)", Math.round(100 * tried.w)]] : []),
   ];
   const draw = () => {
+    stepLabel.textContent = view < k ? `After move ${view}: ${k - view} before the position` : `The position: move ${k + 1}`;
+    backBtn.disabled = view <= 0; fwdBtn.disabled = view >= k;
+    if (view < k) { const pm = view > 0 ? g.moves[view - 1] : null; goban.render(g.grids[view], pm && !pm.pass ? [pm.c, pm.r] : null, false); return; }
     const grid = tried ? tried.grid : g.grids[k];
     const last = tried ? [tried.c, tried.r] : prev && !prev.pass ? [prev.c, prev.r] : null;
     goban.render(grid, last, playable && !tried && !busy);
@@ -2983,7 +2995,7 @@ function viewTurning(kind = "turn", at = 0, gid = null) {
     }
   };
   const play = async (c, r) => {
-    if (!playable || tried || busy) return;
+    if (!playable || tried || busy || view < k) return;
     const g2 = applyMove(g.grids[k], c, r, me);
     if (!g2) return;
     busy = true; tried = { c, r, grid: g2 }; draw();
@@ -3050,7 +3062,7 @@ function viewTurning(kind = "turn", at = 0, gid = null) {
     location.hash = "#/review";
   };
   draw();
-  window.__turning = { play, item, pos, deep, openInReview };
+  window.__turning = { play, item, pos, deep, openInReview, step, view: () => view };
 
   const header = kind === "key"
     ? h("div", { class: "meta-sub" }, `Missed ${item.mine + item.theirs} times: ${item.mine} by you, ${item.theirs} by ${item.opp}${item.won ? " (a game you won)" : ""}`
@@ -3087,6 +3099,7 @@ function viewTurning(kind = "turn", at = 0, gid = null) {
       ].filter(Boolean)),
     ]),
   ]);
+  boardCard.append(stepNav);
   root.append(h("div", { class: "player" }, [boardCard, aside]));
   // the prompt is the avatar's to say, when there is one (the user: "'You're White. Find a move to keep the advantage.':
   // this line can be a dialogue for the avatar")
@@ -5376,6 +5389,9 @@ async function route() {
 document.addEventListener("keydown", e => {
   if (e.metaKey || e.ctrlKey || e.altKey) return;
   if (e.target && /TEXTAREA|INPUT/.test(e.target.tagName)) return;
+  if (window.__turning && /^#\/(turning|keymoves)/.test(location.hash) && !/\/all$/.test(location.hash) && /^Arrow(Left|Right)$/.test(e.key)) {
+    window.__turning.step(e.key === "ArrowLeft" ? -1 : 1); return;
+  }
   if (Review.els && Review.game) {
     if (e.key === "ArrowLeft") Review.back();
     else if (e.key === "ArrowRight") Review.forward();

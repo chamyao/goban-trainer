@@ -23,5 +23,16 @@ check(/1 of 3 solved/.test(await p.textContent('.cat-title')),'the count');
 await p.click('.turning-row:has-text("Gamma")');await p.waitForSelector('.player svg');
 check(await p.evaluate(()=>location.hash==='#/turning/103'&&window.__turning.item.gid===103),'a row opens its own position');
 check(await p.evaluate(()=>[...document.querySelectorAll('#crumbs a')].some(a=>a.textContent==='All')),'the way back to the list');
+// looking back (the user: "the option to look back on moves leading up to the turning point but not after"): position at move 24
+const stones=()=>p.evaluate(()=>document.querySelectorAll('.player svg circle:not(.turn-mark)').length);
+const at=await stones();
+await p.keyboard.press('ArrowLeft');await p.keyboard.press('ArrowLeft');
+check(await p.evaluate(()=>window.__turning.view())===22&&await stones()<at,`two moves back with ←: ${await p.textContent('.turn-steps .meta-sub')}`);
+await p.click('.player svg',{position:{x:30,y:30}});
+check(await p.evaluate(()=>!document.querySelector('.turn-mark')&&!/reading/.test(document.getElementById('status').textContent)),'no move played while looking back');
+for(let i=0;i<5;i++)await p.keyboard.press('ArrowRight');
+check(await p.evaluate(()=>window.__turning.view())===24&&await stones()===at,'→ comes back to the position and no further');
+await p.click('.turn-steps button:first-child');
+check(await p.evaluate(()=>window.__turning.view())===0,'⏮ the start');
 await b.close();console.log(fails?`${fails} FAILED`:'all passed');process.exit(fails?1:0);
 })();
