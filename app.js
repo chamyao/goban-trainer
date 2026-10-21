@@ -2416,18 +2416,6 @@ async function viewStream() {
           : h("a", { href: `https://www.101weiqi.com/q/${p.id}/`, target: "_blank" }, `${book.title} · 101weiqi #${p.id}`),
     x ? ` · ${GRADE_NAMES[x[2]]}` : "", x && x[4] ? " · KataGo-checked" : "",
   ]);
-  // ten minutes a problem (the user: "a ten minute timer; timing out is a fail"): from when it was first shown, kept
-  // with the progress so a reload doesn't restart it; run out unanswered and it's rated a miss
-  // hidden unless asked for (the user: "have the clock be default hidden and have a show clock"); it runs either way
-  const LIMIT = 600, key0 = `${bookId}:${pid}`, timer = h("span", { class: "stream-timer" });
-  const CLOCK_KEY = "gt-stream-clock", clockOn = () => { try { return localStorage.getItem(CLOCK_KEY) === "on"; } catch { return false; } };
-  const clockBtn = h("button", { type: "button", class: "clock-btn" });
-  const clockRow = h("div", { class: "stream-clock" }, [clockBtn, " ", timer]);
-  const showClock = () => { const on = clockOn(); timer.style.display = on ? "" : "none"; clockBtn.textContent = on ? "Hide clock" : "Show clock"; };
-  clockBtn.addEventListener("click", () => { try { localStorage.setItem(CLOCK_KEY, clockOn() ? "off" : "on"); } catch {} showClock(); });
-  showClock();
-  { const q = loadProgress(), st = TKElo.state(q);
-    if (st.streamRated !== key0 && (!st.streamT || st.streamT.k !== key0)) { st.streamT = { k: key0, at: Date.now() }; TK.saveProg(q); } }
   // AI analysis, once the problem is answered (before, it would give the answer away)
   const aiBtn = h("button", { class: "ai-btn", hidden: "", title: "KataGo's best moves here, with their win rates; play moves to see more",
     onclick: () => {
@@ -2445,7 +2433,7 @@ async function viewStream() {
   const aside = h("aside", {}, [
     h("div", { class: "panel" }, [
       h("h2", {}, "Stream"),
-      rating, h("div", {}, [stakes]), clockRow, source,
+      rating, h("div", {}, [stakes]), source,
       h("div", { class: "badges" }, [turnBadge]),
     ]),
     h("div", { class: "panel" }, [h("h2", {}, "Status"), status, note]),
@@ -2488,19 +2476,7 @@ async function viewStream() {
     showRating();
   };
   window.addEventListener("tczw:result", onResult);
-  const fmt = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
-  const tick = () => {
-    if (trainer !== t || !timer.isConnected) return clearInterval(clock);
-    const st = TKElo.state();
-    if (st.streamRated === key) { clearInterval(clock); clockRow.hidden = true; if (!p.sz) aiBtn.hidden = false; return; }   // answered
-    const left = LIMIT - (Date.now() - ((st.streamT && st.streamT.k === key && st.streamT.at) || Date.now())) / 1000;
-    clockRow.hidden = false;
-    timer.textContent = `⏱ ${fmt(Math.max(0, left))}`;
-    timer.classList.toggle("low", left <= 60);
-    if (left <= 0 && !t.done) { clearInterval(clock); t.flawed = "out of time"; t.finish("bad"); t.setStatus("bad", "⏱", "Time's up"); }
-  };
-  const clock = setInterval(tick, 1000);
-  tick();
+  if (TKElo.state().streamRated === key && !p.sz) aiBtn.hidden = false;   // answered before a reload
 }
 const GRADE_NAMES = Array.from({ length: 44 }, (_, i) => i < 30 ? `${15 - Math.floor(i / 2)}K${i % 2 ? "+" : ""}` : `${1 + Math.floor((i - 30) / 2)}D${(i - 30) % 2 ? "+" : ""}`);
 
