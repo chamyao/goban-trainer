@@ -54,3 +54,8 @@ body.season-halloween .book a, body.season-halloween #tabs a, body.season-hallow
 body.season-halloween .board-card { background: #211a2c; box-shadow: 0 0 0 1px #3a2d50, 0 0 28px rgba(255, 138, 31, .18); }
 body.season-halloween label.file { background: #2d2340; color: var(--ink); border-color: #4a3a66; }
 body.season-halloween .sgf-loader { padding: 16px; }
+
+/* the candy Easter egg's note */
+.candy-toast { position: fixed; left: 50%; top: 84px; transform: translateX(-50%); z-index: 50; padding: 10px 18px; border-radius: 999px;
+  background: #ff8a1f; color: #1b1024; font-weight: 700; box-shadow: 0 6px 20px rgba(0, 0, 0, .4); animation: candy-in .3s ease-out; }
+@keyframes candy-in { from { opacity: 0; transform: translate(-50%, -8px); } }

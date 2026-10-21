@@ -589,8 +589,8 @@ class Goban {
     const t = BoardTheme.current;
     const defs = this.el("defs", {});
     defs.innerHTML = `
-      <radialGradient id="bs" cx="35%" cy="30%"><stop offset="0%" stop-color="#5a5a5a"/><stop offset="100%" stop-color="#111"/></radialGradient>
-      <radialGradient id="ws" cx="35%" cy="30%"><stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#cfcfc7"/></radialGradient>
+      ${Candy.active() ? Candy.STONES : `<radialGradient id="bs" cx="35%" cy="30%"><stop offset="0%" stop-color="#5a5a5a"/><stop offset="100%" stop-color="#111"/></radialGradient>
+      <radialGradient id="ws" cx="35%" cy="30%"><stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#cfcfc7"/></radialGradient>`}
       <linearGradient id="wood" x1="0" y1="0" x2="1" y2="1">
         <stop offset="0%" stop-color="${t.wood[0]}"/><stop offset="55%" stop-color="${t.wood[1]}"/><stop offset="100%" stop-color="${t.wood[2]}"/>
       </linearGradient>`;
@@ -4650,6 +4650,36 @@ const Theme = {
 document.addEventListener("DOMContentLoaded", () => {
   const sel = document.getElementById("themeSelect");
   if (sel) sel.addEventListener("change", () => { Theme.choice = sel.value; route(); });
+});
+
+// An Easter egg for Halloween (the user: "easter eggs like white and black stones being candies / candy corn"):
+// Black's stones become chocolate truffles and White's candy corn. One visit in eight it's on from the start
+// ("Trick or treat!"); tapping the site's name five times quickly turns it on or off. Only in the Halloween look.
+const Candy = {
+  on: false,
+  STONES: `<radialGradient id="bs" cx="35%" cy="30%"><stop offset="0%" stop-color="#a8703f"/><stop offset="45%" stop-color="#5c3219"/><stop offset="100%" stop-color="#26120a"/></radialGradient>
+      <linearGradient id="ws" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fffaf0"/><stop offset="32%" stop-color="#fff3dc"/>
+        <stop offset="33%" stop-color="#ff9124"/><stop offset="65%" stop-color="#ff8a1f"/><stop offset="66%" stop-color="#ffd43b"/><stop offset="100%" stop-color="#f5c22a"/></linearGradient>`,
+  active() { return this.on && document.body.classList.contains("season-halloween"); },
+  toast(text) {
+    const t = h("div", { class: "candy-toast" }, text);
+    document.body.append(t);
+    setTimeout(() => t.remove(), 2600);
+  },
+  set(v, text) { this.on = v; if (text && this.active()) this.toast(text); else if (text && !v) this.toast(text); route(); },
+  taps: [],
+  tap() {
+    if (!document.body.classList.contains("season-halloween")) return;
+    const now = Date.now();
+    this.taps = this.taps.filter(t => now - t < 3000).concat(now);
+    if (this.taps.length >= 5) { this.taps = []; this.set(!this.on, this.on ? "The candy's all eaten." : "🍬 Trick or treat! The stones are candy."); }
+  },
+};
+document.addEventListener("DOMContentLoaded", () => {
+  const title = document.querySelector("header h1");
+  if (title) title.addEventListener("click", () => Candy.tap());
+  // a lucky visit: candy from the start (once the page has its season)
+  setTimeout(() => { if (document.body.classList.contains("season-halloween") && Math.random() < 1 / 8) Candy.set(true, "🍬 Trick or treat! The stones are candy today."); }, 600);
 });
 
 /* ================= router & keys ================= */
