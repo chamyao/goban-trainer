@@ -1,0 +1,123 @@
+{
+ "wall": {
+  "file": "wall.webp",
+  "size": [
+   1024,
+   1024
+  ]
+ },
+ "parchment": {
+  "file": "parchment.webp",
+  "size": [
+   512,
+   512
+  ]
+ },
+ "header-beam": {
+  "file": "header-beam.webp",
+  "size": [
+   744,
+   160
+  ]
+ },
+ "board-frame": {
+  "file": "board-frame.png",
+  "size": [
+   512,
+   512
+  ],
+  "slice": 115
+ },
+ "panel-frame": {
+  "file": "panel-frame.png",
+  "size": [
+   256,
+   256
+  ],
+  "slice": 41
+ },
+ "btn-pumpkin": {
+  "file": "btn-pumpkin.png",
+  "size": [
+   238,
+   64
+  ],
+  "slice": [
+   0,
+   48
+  ]
+ },
+ "btn-pumpkin-hover": {
+  "file": "btn-pumpkin-hover.png",
+  "size": [
+   238,
+   64
+  ],
+  "slice": [
+   0,
+   48
+  ]
+ },
+ "btn-pumpkin-pressed": {
+  "file": "btn-pumpkin-pressed.png",
+  "size": [
+   238,
+   64
+  ],
+  "slice": [
+   0,
+   48
+  ]
+ },
+ "btn-bone": {
+  "file": "btn-bone.png",
+  "size": [
+   160,
+   64
+  ],
+  "slice": [
+   0,
+   48
+  ]
+ },
+ "btn-bone-hover": {
+  "file": "btn-bone-hover.png",
+  "size": [
+   160,
+   64
+  ],
+  "slice": [
+   0,
+   48
+  ]
+ },
+ "btn-bone-pressed": {
+  "file": "btn-bone-pressed.png",
+  "size": [
+   160,
+   64
+  ],
+  "slice": [
+   0,
+   48
+  ]
+ },
+ "ribbon": {
+  "file": "ribbon.png",
+  "size": [
+   237,
+   72
+  ],
+  "slice": [
+   0,
+   72
+  ]
+ },
+ "bat": {
+  "file": "bat.png",
+  "size": [
+   205,
+   96
+  ]
+ }
+}

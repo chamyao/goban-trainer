@@ -1,10 +1,18 @@
-"""The tavern theme's UI art (body.theme-tavern): painted by Seedream 5 Pro, then cut out, tiled, sliced and given
-hover/pressed states here. A warm East Asian go-tavern in a chunky, painterly, warm-lit card-game look: lacquered wood,
-cloud scrolls, jade and gold. No logos, no text, nothing traced from any game.
+"""The site's skins' UI art, one set per look: painted by Seedream 5 Pro, then cut out, tiled, sliced and given
+hover/pressed states here. No logos, no text, nothing traced from any game.
 
-    python3 tools/gen_ui.py paint [NAME ...]   # paint the raw art into assets/ui/raw/ (one try each, ~$0.045 an image)
-    python3 tools/gen_ui.py build              # raw art -> assets/ui/*.webp|png, and assets/ui/ui.json (sizes, slices)
-    python3 tools/gen_ui.py sheet OUT.png      # a contact sheet of the built assets on dark and on parchment
+  tavern (body.theme-tavern, assets/ui/): a warm East Asian go-tavern, chunky card-game look: lacquered wood, cloud
+      scrolls, jade and gold.
+  halloween (body.season-halloween, assets/ui/halloween/): a haunted go hall: manor stone, gnarled wood, wrought iron,
+      cobwebs, pumpkins and bone.
+  A new season is a PAINT block, a build function and a SLICES entry in SETS below, plus its CSS block in
+  theme-seasonal.css (body.season-<name>, urls into assets/ui/<name>/).
+
+    python3 tools/gen_ui.py [--set NAME] paint [ASSET ...]   # raw art into <dir>/raw/ (one try each, ~$0.045 an image)
+    python3 tools/gen_ui.py [--set NAME] edit ASSET "instruction"  # fix a painting by an image edit of itself (~$0.045);
+                                                             # the original is kept as raw/ASSET.orig.webp
+    python3 tools/gen_ui.py [--set NAME] build               # raw art -> <dir>/*.webp|png and <dir>/ui.json (sizes, slices)
+    python3 tools/gen_ui.py [--set NAME] sheet OUT.png       # a contact sheet of the built assets
 
 REPLICATE_API_TOKEN comes from the environment. Cut-outs use 851-labs/background-remover (tools/build_portraits.py).
 """
@@ -61,15 +69,72 @@ PAINT = {   # name: (aspect, prompt)
 SLICES = {"frame-wood": 86, "panel-trim": 24, "btn-gold": [0, 48], "btn-jade": [0, 48], "banner-ribbon": [0, 72],
           "card-frame": [71, 49, 114, 50]}   # card-frame: its picture window (top right bottom left)
 
+HW_LOOK = ("Painterly hand-painted game UI art, chunky and moody, in the style of a cosy fantasy card game's Halloween "
+           "event: moonlit purples and deep blue-greys lit by warm pumpkin-orange candlelight, gnarled dark wood, "
+           "wrought iron, cobwebs. Spooky but friendly, not gory. No text, no letters, no logos, no faces of people.")
+HW_PAINT = {
+    "wall": ("1:1", "A flat, front-on texture of a haunted manor wall at night: rough dark grey-violet stone blocks with "
+                    "a little moss and faint cobweb wisps, evenly lit by soft moonlight, no objects, no windows, fills "
+                    "the whole frame edge to edge, seamless texture. " + HW_LOOK),
+    "parchment": ("1:1", "A flat, front-on texture of old aged parchment paper, pale bone-cream with soft grey-lilac "
+                         "mottling and faint foxing spots, light overall, evenly lit, no marks, no border, fills the "
+                         "whole frame edge to edge, seamless texture. " + HW_LOOK),
+    "header-beam": ("21:9", "A flat, front-on texture of one long dark carved wooden beam running horizontally across "
+                            "the whole frame, black-brown gnarled wood grain with a few thin cobweb strands, evenly "
+                            "lit, fills the whole frame edge to edge, seamless texture. " + HW_LOOK),
+    "board-frame": ("1:1", "A square ornate picture frame, front-on: thick gnarled carved dark haunted wood, twisting "
+                           "roots and branches along each side, a small glowing carved jack-o'-lantern on each of the "
+                           "four corners, a few cobwebs, the centre an empty plain white square, the frame only. "
+                           + ON_WHITE + " " + HW_LOOK),
+    "panel-frame": ("1:1", "A thin square decorative border, front-on: a slim line of black wrought iron with small "
+                           "curling scrolls and a tiny cobweb in each of the four corners, the centre empty plain "
+                           "white, the border only. " + ON_WHITE + " " + HW_LOOK),
+    "btn-pumpkin": ("21:9", "A single wide chunky game button plate, front-on, rounded rectangle: glossy carved pumpkin "
+                            "orange with ribbed rind texture and a dark bevelled rim, a warm highlight on top, a curling "
+                            "green vine tendril ornament at each end, empty in the middle. " + ON_WHITE + " " + HW_LOOK),
+    "btn-bone": ("21:9", "A single wide chunky game button plate, front-on, rounded rectangle: deep violet polished stone "
+                         "with a pale bone-white bevelled rim, a soft glossy highlight on top, a small carved bone "
+                         "ornament at each end, empty in the middle. " + ON_WHITE + " " + HW_LOOK),
+    "ribbon": ("21:9", "A single long tattered purple cloth banner for a title, front-on, flat in the middle with "
+                       "ragged torn swallow-tail ends at both sides, a thin orange trim along its edges, empty in the "
+                       "middle. " + ON_WHITE + " " + HW_LOOK),
+    "bat": ("1:1", "A single small cute cartoon bat flying, wings spread wide, seen from the front, dark violet-black "
+                   "with soft purple highlights, simple silhouette. " + ON_WHITE + " " + HW_LOOK),
+}
+HW_SLICES = {"btn-pumpkin": [0, 48], "btn-bone": [0, 48], "ribbon": [0, 72]}   # the frames: measured in build
+
 
 def paint(names):
     from gen_stills import replicate
     RAW.mkdir(parents=True, exist_ok=True)
-    for n in names or PAINT:
-        aspect, prompt = PAINT[n]
+    for n in names or SET["paint"]:
+        aspect, prompt = SET["paint"][n]
         raw, _ = replicate(prompt, None, aspect)
         Image.open(io.BytesIO(raw)).convert("RGB").save(RAW / f"{n}.webp", quality=95)
         print(f"  {n}: painted")
+
+
+def edit(name, instruction):
+    """An image edit of the painting itself (never a repaint): Seedream gets it as its input image."""
+    import base64, os, time
+    from gen_stills import fetch, http
+    src = RAW / f"{name}.webp"
+    buf = io.BytesIO(); Image.open(src).convert("RGB").save(buf, "JPEG", quality=92)
+    h = {"Authorization": f"Bearer {os.environ['REPLICATE_API_TOKEN']}", "Prefer": "wait"}
+    prompt = f"Edit this image. {instruction} Change nothing else: same colours, style and lighting."
+    r = http("https://api.replicate.com/v1/models/bytedance/seedream-5-pro/predictions",
+             {"input": {"prompt": prompt, "image_input": ["data:image/jpeg;base64," + base64.b64encode(buf.getvalue()).decode()],
+                        "aspect_ratio": SET["paint"][name][0], "size": "1K", "output_format": "png"}}, h)
+    while r.get("status") not in ("succeeded", "failed", "canceled"):
+        time.sleep(2); r = http(r["urls"]["get"], headers=h)
+    if r["status"] != "succeeded":
+        sys.exit(f"{name}: {r['status']} {r.get('error')}")
+    out = r["output"]
+    orig = RAW / f"{name}.orig.webp"
+    if not orig.exists():
+        src.rename(orig)
+    Image.open(io.BytesIO(fetch(out[0] if isinstance(out, list) else out))).convert("RGB").save(src, quality=95)
+    print(f"  {name}: edited (original kept as {orig.name})")
 
 
 def seamless(im, size):
@@ -134,14 +199,26 @@ def states(im, h=64):
     return {"": im, "-hover": hover, "-pressed": pressed}
 
 
-def build():
+def saver(meta):
+    """save(name, im, fmt): write a built asset into the set's dir and note its size and slice (hover/pressed share
+    their plate's slice) in meta, which becomes ui.json."""
     UI.mkdir(parents=True, exist_ok=True)
-    meta = {}
     def save(name, im, fmt="webp"):
         path = UI / f"{name}.{fmt}"
         im.save(path, quality=88) if fmt == "webp" else im.save(path)
-        meta[name] = {"file": path.name, "size": list(im.size), **({"slice": SLICES[name.split("-hover")[0].split("-pressed")[0]]}
-                                                                   if name.split("-hover")[0].split("-pressed")[0] in SLICES else {})}
+        base = name.split("-hover")[0].split("-pressed")[0]
+        meta[name] = {"file": path.name, "size": list(im.size), **({"slice": SET["slices"][base]} if base in SET["slices"] else {})}
+    return save
+
+
+def build():
+    meta = {}
+    SET["build"](saver(meta))
+    (UI / "ui.json").write_text(json.dumps(meta, indent=1))
+    print(f"built {len(meta)} assets in {UI.relative_to(ROOT)}")
+
+
+def build_tavern(save):
     wall = Image.open(RAW / "tavern-wall.webp").convert("RGB")   # the planks only: a beam would double when tiled
     save("tavern-wall", mirrored(wall.crop((0, int(wall.height * .04), wall.width, int(wall.height * .34))), 512))
     parch = Image.open(RAW / "parchment.webp").convert("RGB")    # its plain middle: the model added a border
@@ -159,8 +236,41 @@ def build():
     rib = cutout("banner-ribbon")
     save("banner-ribbon", rib.resize((round(rib.width * 72 / rib.height), 72), Image.LANCZOS), "png")
     save("card-frame", clear_window(cutout("card-frame"), .45).resize((300, 420), Image.LANCZOS), "png")
-    (UI / "ui.json").write_text(json.dumps(meta, indent=1))
-    print(f"built {len(meta)} assets in {UI.relative_to(ROOT)}")
+
+
+def window_inset(im):
+    """A frame's 9-slice inset: the smallest k whose inner square (k from every edge) holds no opaque pixel, so the
+    slices take all of the frame (bosses and corner pumpkins that reach inward included) and none of the window."""
+    a = im.getchannel("A").point(lambda v: 255 if v > 128 else 0)
+    k = 1
+    while a.crop((k, k, im.width - k, im.height - k)).getbbox():
+        k += 1
+    return k
+
+
+def build_halloween(save):
+    wall = Image.open(RAW / "wall.webp").convert("RGB")   # stone and candle sconces: mirrored, as the tavern planks
+    save("wall", mirrored(wall, 1024))
+    parch = Image.open(RAW / "parchment.webp").convert("RGB")   # the edit's plain parchment, softened for reading
+    W, H = parch.size
+    parch = parch.crop((int(W * .15), int(H * .15), int(W * .85), int(H * .85)))
+    parch = ImageEnhance.Contrast(ImageEnhance.Brightness(parch).enhance(1.06)).enhance(.75)
+    save("parchment", mirrored(parch, 512))   # mottling mirrors cleanly (seamless() left a cross here)
+    beam = Image.open(RAW / "header-beam.webp").convert("RGB")   # repeats sideways: the beam and its mirror
+    beam = beam.resize((round(beam.width * 160 / beam.height), 160), Image.LANCZOS)
+    both = Image.new("RGB", (beam.width * 2, 160)); both.paste(beam, (0, 0)); both.paste(beam.transpose(Image.FLIP_LEFT_RIGHT), (beam.width, 0))
+    save("header-beam", both)
+    for n, size in (("board-frame", 512), ("panel-frame", 256)):
+        im = clear_window(cutout(n)).resize((size, size), Image.LANCZOS)
+        SET["slices"][n] = window_inset(im)
+        save(n, im, "png")
+    for b in ("btn-pumpkin", "btn-bone"):
+        for suf, im in states(cutout(b)).items():
+            save(b + suf, im, "png")
+    rib = cutout("ribbon")
+    save("ribbon", rib.resize((round(rib.width * 72 / rib.height), 72), Image.LANCZOS), "png")
+    bat = cutout("bat")
+    save("bat", bat.resize((round(bat.width * 96 / bat.height), 96), Image.LANCZOS), "png")
 
 
 def sheet(out):
@@ -186,8 +296,17 @@ def sheet(out):
     s.save(out)
 
 
+SETS = {
+    "tavern": {"dir": UI, "paint": PAINT, "slices": SLICES, "build": build_tavern},
+    "halloween": {"dir": UI / "halloween", "paint": HW_PAINT, "slices": HW_SLICES, "build": build_halloween},
+}
+SET = SETS["tavern"]
+
 if __name__ == "__main__":
     a = sys.argv[1:]
+    if a[:1] == ["--set"]:
+        SET = SETS[a[1]]; a = a[2:]
+        UI = SET["dir"]; RAW = UI / "raw"
     if not a:
         sys.exit(__doc__)
-    {"paint": lambda: paint(a[1:]), "build": build, "sheet": lambda: sheet(a[1])}[a[0]]()
+    {"paint": lambda: paint(a[1:]), "edit": lambda: edit(a[1], a[2]), "build": build, "sheet": lambda: sheet(a[1])}[a[0]]()

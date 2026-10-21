@@ -2,58 +2,138 @@
    the website seasonal themed by default, similar to DragonVale's schedule"). Each season is body.season-<name>.
    The boards stay wood, so problems read the same in every season. Never on a story playthrough. */
 
-/* ===== Halloween (Oct 1 – Nov 2): night purples, pumpkin orange, bats and a cobweb ===== */
+/* ===== Halloween (Oct 1 – Nov 2): a haunted go hall. Graphics' painted set, assets/ui/halloween/ (tools/gen_ui.py
+   --set halloween; sizes and 9-slice insets in its ui.json): manor stone, a gnarled beam, parchment panels in wrought
+   iron, a haunted-wood board frame with a jack-o'-lantern on each corner, pumpkin and bone plates, tattered banners,
+   bats, candlelight and fog. A season is this block plus its folder. The boards stay wood. Motion is transform and
+   opacity only, and none under prefers-reduced-motion. ===== */
 body.season-halloween {
-  --bg: #15101d; --card: #211a2c; --ink: #efe6fb; --muted: #a596bb; --accent: #ff8a1f; --danger: #ff5d5d;
-  --chip: #2d2340; --border: #3a2d50;
-  background:
-    radial-gradient(ellipse 80% 45% at 50% 100%, rgba(255, 120, 20, .16), transparent 70%),
-    radial-gradient(circle at 88% 6%, rgba(255, 236, 190, .10) 0 40px, transparent 41px),
-    var(--bg);
+  --bg: #17111f; --card: #efe4d0; --ink: #2a1d33; --muted: #c9b8dc; --chip: #2d2340; --border: #4a3a66;
+  --accent: #e8731a; --danger: #b8322a;
+  color: #efe6fb;
+  background-color: #17111f;
+  background-image:
+    radial-gradient(circle at 86% 9%, rgba(255, 240, 200, .22) 0 46px, rgba(255, 240, 200, .07) 47px 120px, transparent 121px),
+    linear-gradient(180deg, rgba(14, 9, 22, .62), rgba(14, 9, 22, .45) 40%, rgba(14, 9, 22, .70)),
+    url("assets/ui/halloween/wall.webp");
+  background-repeat: no-repeat, no-repeat, repeat; background-size: auto, auto, 768px 768px;
   background-attachment: fixed;
-  color: var(--ink);
 }
-/* a cobweb in the top left corner, under everything */
-body.season-halloween::before {
-  content: ""; position: fixed; left: 0; top: 0; width: 220px; height: 220px; pointer-events: none; z-index: 0; opacity: .32;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 220' fill='none' stroke='%23d9cdf0' stroke-width='1.2'%3E%3Cpath d='M0 0L220 60M0 0L190 150M0 0L120 210M0 0L50 220'/%3E%3Cpath d='M55 15Q48 40 52 45Q40 45 13 50'/%3E%3Cpath d='M110 30Q96 70 104 90Q80 92 26 101'/%3E%3Cpath d='M165 45Q144 105 156 135Q118 140 39 152'/%3E%3Cpath d='M30 48Q24 52 12 53M80 70Q62 82 22 95'/%3E%3C/svg%3E") no-repeat;
-}
-/* bats crossing the sky now and then */
-body.season-halloween::after {
-  content: "🦇"; position: fixed; top: 14vh; left: -60px; font-size: 26px; pointer-events: none; z-index: 1; opacity: .85;
-  animation: hw-bat 23s linear infinite; filter: drop-shadow(0 2px 2px rgba(0, 0, 0, .5));
-}
-@keyframes hw-bat {
-  0% { transform: translate(0, 0) scale(.8); } 8% { transform: translate(18vw, -4vh) scale(1); }
-  16% { transform: translate(36vw, 3vh) scale(.9); } 24% { transform: translate(54vw, -5vh) scale(1.05); }
-  32% { transform: translate(72vw, 2vh) scale(.9); } 40% { transform: translate(110vw, -3vh) scale(1); }
-  100% { transform: translate(110vw, -3vh) scale(1); }
-}
-@media (prefers-reduced-motion: reduce) { body.season-halloween::after { animation: none; display: none; } }
-body.season-halloween header { background: rgba(22, 15, 32, .92); border-bottom: 2px solid #ff8a1f; backdrop-filter: blur(6px); }
-body.season-halloween header h1 a::after { content: " 🎃"; }
-body.season-halloween #tabs a.active { background: #ff8a1f; color: #1b1024; }
-body.season-halloween .cat-title { color: #ffb066; letter-spacing: .08em; }
-body.season-halloween .cat-title::before { content: "🎃 "; }
-body.season-halloween .book, body.season-halloween .panel, body.season-halloween .history-item, body.season-halloween .sgf-loader,
-body.season-halloween .modal, body.season-halloween .games-list {
-  background: var(--card); color: var(--ink); border: 1px solid var(--border); box-shadow: 0 2px 10px rgba(0, 0, 0, .35);
-}
-body.season-halloween .book:hover { box-shadow: 0 0 0 1px #ff8a1f, 0 0 18px rgba(255, 138, 31, .35); }
-body.season-halloween .badge { background: #3a2a52; color: #f3e6ff; }
-body.season-halloween .badge.dan { background: #ff8a1f; color: #1b1024; }
-body.season-halloween .bar { background: #3a2d50; } body.season-halloween .bar > div { background: #ff8a1f; }
-body.season-halloween button, body.season-halloween select, body.season-halloween input, body.season-halloween textarea {
-  background-color: #2d2340; color: var(--ink); border-color: #4a3a66;
-}
-body.season-halloween button.primary { background: #ff8a1f; border-color: #ff8a1f; color: #1b1024; font-weight: 700; }
-body.season-halloween .engine-chip, body.season-halloween .auth-chip, body.season-halloween .theme-chip { background: #2d2340; color: var(--ink); }
 body.season-halloween a { color: #ffb066; }
 body.season-halloween .book a, body.season-halloween #tabs a, body.season-halloween header h1 a { color: inherit; }
-/* the board keeps its wood, with a little candlelight */
-body.season-halloween .board-card { background: #211a2c; box-shadow: 0 0 0 1px #3a2d50, 0 0 28px rgba(255, 138, 31, .18); }
-body.season-halloween label.file { background: #2d2340; color: var(--ink); border-color: #4a3a66; }
-body.season-halloween .sgf-loader { padding: 16px; }
+
+/* --- the header: the gnarled beam, its embers flickering --- */
+body.season-halloween header { position: relative; background: #1a1220 url("assets/ui/halloween/header-beam.webp") left center / auto 100% repeat-x;
+  border-bottom: 0; box-shadow: 0 3px 0 #e8731a, 0 5px 0 #3a1f0c, 0 10px 24px rgba(0, 0, 0, .6); }
+body.season-halloween header::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse 30% 120% at 20% 50%, rgba(255, 140, 40, .16), transparent 70%),
+              radial-gradient(ellipse 30% 120% at 75% 50%, rgba(255, 140, 40, .14), transparent 70%);
+  animation: hw-flicker 3.1s ease-in-out infinite; }
+@keyframes hw-flicker { 0%, 100% { opacity: .75; } 30% { opacity: 1; } 55% { opacity: .6; } 80% { opacity: .95; } }
+body.season-halloween header > * { position: relative; z-index: 1; }
+body.season-halloween header h1 a { color: #ffd59a; font-family: "Cinzel", Georgia, serif; letter-spacing: .04em;
+  text-shadow: 0 2px 0 #12090f, 0 0 16px rgba(255, 140, 40, .55); }
+body.season-halloween #tabs a { color: #f0e2ff; font: 600 14px/1 "Cinzel", Georgia, serif; letter-spacing: .05em; padding: 9px 16px; border-radius: 6px;
+  background: linear-gradient(180deg, #3d2b52, #251932); box-shadow: inset 0 1px 0 rgba(220, 200, 255, .2), 0 0 0 1px #0d0812, 0 2px 0 #0d0812; }
+body.season-halloween #tabs a:hover:not(.active) { background: linear-gradient(180deg, #4d3766, #2f2040); }
+body.season-halloween #tabs a.active { color: #2a1206; background: linear-gradient(180deg, #ffc27a 0%, #f08a2c 50%, #b9530f 100%);
+  box-shadow: inset 0 1px 0 #ffe2b8, 0 0 0 1px #4a1d05, 0 2px 0 #4a1d05, 0 0 16px rgba(255, 140, 40, .6); }
+body.season-halloween #crumbs, body.season-halloween #crumbs a { color: #e6d3ff; }
+body.season-halloween :is(.engine-chip, .auth-chip, .theme-chip, .music-btn) {
+  color: #f0e2ff; background: linear-gradient(180deg, #2d2140, #1b1327); box-shadow: inset 0 0 0 1px #8a6aa8, 0 2px 4px rgba(0, 0, 0, .5); }
+
+/* --- section titles: the tattered banner --- */
+body.season-halloween .cat-title { display: inline-block; margin: 28px 0 12px 6px; height: 40px; line-height: 30px; padding: 0 10px;
+  font: 700 14px "Cinzel", Georgia, serif; letter-spacing: .14em; text-transform: uppercase; text-align: center; color: #ffe0b8;
+  text-shadow: 0 1px 0 #1a0c22, 0 0 8px rgba(0, 0, 0, .6);
+  border-style: solid; border-color: transparent; border-width: 0 34px;
+  border-image: url("assets/ui/halloween/ribbon.png") 0 72 fill / 0 34px stretch; filter: drop-shadow(0 3px 2px rgba(0, 0, 0, .55)); }
+
+/* --- cards and panels: aged parchment in wrought iron (corner candles and pumpkins in the slice) --- */
+body.season-halloween :is(.book, .panel, .modal, .games-list, .history-item) {
+  color: var(--ink); border-radius: 0;
+  background: linear-gradient(rgba(250, 242, 226, .38), rgba(250, 242, 226, .38)), url("assets/ui/halloween/parchment.webp") center / 512px 512px repeat;
+  border-style: solid; border-color: transparent; border-width: 14px;
+  border-image: url("assets/ui/halloween/panel-frame.png") 41 / 14px round;
+  box-shadow: inset 0 0 24px rgba(60, 30, 80, .25), 0 8px 18px rgba(0, 0, 0, .55); }
+body.season-halloween .book { transition: transform .2s ease; }
+body.season-halloween .book:hover { transform: translateY(-3px); box-shadow: inset 0 0 24px rgba(60, 30, 80, .2), 0 0 22px rgba(255, 140, 40, .5), 0 10px 18px rgba(0, 0, 0, .55); }
+/* inside the parchment: dark ink, dark muted text, links in a deep pumpkin; key caps as bone */
+body.season-halloween :is(.book, .panel, .modal, .games-list, .history-item) { --muted: #5e4a6c; }
+body.season-halloween :is(.book, .panel, .modal, .games-list, .history-item) a:not(.book) { color: #9a3f08; }
+body.season-halloween .keys b { background: #e6d6ef; color: #2a1d33; box-shadow: inset 0 0 0 1px #8a6aa8; }
+body.season-halloween .book .t { font: 700 15px/1.25 "Cinzel", Georgia, serif; color: #2a1633; }
+body.season-halloween .book .n, body.season-halloween :is(.meta-sub, .source-note) { color: var(--muted); }   /* light on the wall, dark in the parchment */
+body.season-halloween .panel h2 { font: 700 13px/1 "Cinzel", Georgia, serif; letter-spacing: .14em; color: #7a2a10;
+  padding-bottom: 8px; border-bottom: 1px solid rgba(90, 60, 110, .35); }
+body.season-halloween :is(.games-head, .book-head) h2 { font-family: "Cinzel", Georgia, serif; color: #ffd59a; text-shadow: 0 2px 0 #12090f; }
+body.season-halloween :is(.games-head .meta-sub, .book-head .sub) { color: #e6d3ff; }
+body.season-halloween .badge { background: #e6d6ef; color: #3a2350; box-shadow: inset 0 0 0 1px #8a6aa8; }
+body.season-halloween :is(.badge.dan, .badge.turn) { background: linear-gradient(180deg, #2d2140, #1b1327); color: #ffd59a; box-shadow: inset 0 0 0 1px #e8731a; }
+body.season-halloween .book .bar { background: rgba(60, 30, 80, .2); } body.season-halloween .book .bar div { background: linear-gradient(90deg, #d9631a, #ffa23c); }
+body.season-halloween .book .star.on { color: #e8731a; text-shadow: 0 0 8px rgba(255, 140, 40, .7); }
+body.season-halloween .games-row { border-top-color: rgba(90, 60, 110, .3); }
+body.season-halloween .games-row:hover { background: rgba(255, 170, 90, .25); }
+body.season-halloween .tk-card { box-shadow: 0 8px 18px rgba(0, 0, 0, .55), 0 0 24px rgba(255, 140, 40, .25); }
+body.season-halloween :is(input, textarea, select) { color: var(--ink); background: #f6eedf; border: 1px solid #6e5a7a; border-radius: 6px;
+  box-shadow: inset 0 2px 4px rgba(60, 30, 80, .2); }
+body.season-halloween #status.ok { color: #2a6e3c; } body.season-halloween #status.bad { color: #a8281e; } body.season-halloween #status.off { color: #8a4a10; }
+body.season-halloween .err { color: #ffb4a6; } body.season-halloween :is(.panel, .modal) .err { color: #a8281e; }
+body.season-halloween .nav-row .pos { white-space: nowrap; color: #5e4a6c; }
+body.season-halloween .loading { color: #e6d3ff; font-family: "Cinzel", Georgia, serif; letter-spacing: .1em; }
+
+/* --- buttons: bone-rimmed violet plates, the main one a pumpkin (caps 48 of 64; the middle stretches) --- */
+body.season-halloween :is(.controls, .nav-row, .rv-nav, .rv-actions, .sgf-loader, .modal) button,
+body.season-halloween .sgf-loader label.file, body.season-halloween .book-head .reset-book {
+  font: 700 13.5px/1 "Cinzel", Georgia, serif; letter-spacing: .04em; color: #f6ecff; text-shadow: 0 1px 1px rgba(0, 0, 0, .7);
+  background: none; box-shadow: none; border-radius: 0; min-height: 42px; padding: 9px 4px 11px; white-space: nowrap; text-align: center;
+  border-style: solid; border-color: transparent; border-width: 0 20px;
+  border-image: url("assets/ui/halloween/btn-bone.png") 0 48 fill / 0 20px stretch; }
+body.season-halloween .sgf-loader label.file { display: flex; align-items: center; justify-content: center; }
+body.season-halloween :is(.controls, .nav-row, .rv-nav, .rv-actions, .sgf-loader, .modal) button:hover:not(:disabled) { border-image-source: url("assets/ui/halloween/btn-bone-hover.png"); }
+body.season-halloween :is(.controls, .nav-row, .rv-nav, .rv-actions, .sgf-loader, .modal) button:active:not(:disabled) { border-image-source: url("assets/ui/halloween/btn-bone-pressed.png"); }
+body.season-halloween :is(.controls, .rv-actions, .sgf-loader, .modal) button.primary {
+  color: #2a1206; text-shadow: 0 1px 0 rgba(255, 220, 170, .6); border-image-source: url("assets/ui/halloween/btn-pumpkin.png");
+  filter: drop-shadow(0 0 10px rgba(255, 140, 40, .45)); }
+body.season-halloween :is(.controls, .rv-actions, .sgf-loader, .modal) button.primary:hover:not(:disabled) { border-image-source: url("assets/ui/halloween/btn-pumpkin-hover.png"); }
+body.season-halloween :is(.controls, .rv-actions, .sgf-loader, .modal) button.primary:active:not(:disabled) { border-image-source: url("assets/ui/halloween/btn-pumpkin-pressed.png"); }
+body.season-halloween :is(.controls, .rv-actions) button.active { border-image-source: url("assets/ui/halloween/btn-pumpkin.png"); color: #2a1206; text-shadow: none; }
+body.season-halloween :is(.controls, .nav-row, .rv-nav, .rv-actions) button:disabled { filter: grayscale(.7) brightness(.8); opacity: .6; }
+/* the plain buttons elsewhere (no painted plate): night violet with an orange edge */
+body.season-halloween button:not(:is(.controls, .nav-row, .rv-nav, .rv-actions, .sgf-loader, .modal) button):not(.theme-chip):not(.engine-chip):not(.auth-chip):not(.music-btn) {
+  background-color: #2d2340; color: #f0e2ff; border-color: #8a6aa8; }
+
+/* --- the board in the haunted-wood frame: a jack-o'-lantern on each corner; the board itself stays wood --- */
+body.season-halloween .board-card { position: relative; padding: 0; border-radius: 0; box-shadow: none;
+  background: linear-gradient(#24182c, #24182c) center / calc(100% - 64px) calc(100% - 64px) no-repeat border-box;
+  border-style: solid; border-color: transparent; border-width: 44px;
+  border-image: url("assets/ui/halloween/board-frame.png") 115 / 44px stretch;
+  filter: drop-shadow(0 16px 22px rgba(0, 0, 0, .6)) drop-shadow(0 0 18px rgba(255, 140, 40, .18)); }
+@media (max-width: 640px) {
+  body.season-halloween .board-card { border-width: 28px; border-image-width: 28px; background-size: calc(100% - 40px) calc(100% - 40px); } }
+
+/* --- ambient: two bats drifting across, fog along the foot of the page --- */
+body.season-halloween::before {   /* the fog */
+  content: ""; position: fixed; left: -10%; right: -10%; bottom: 0; height: 22vh; pointer-events: none; z-index: -1;
+  background: radial-gradient(ellipse 40% 60% at 25% 100%, rgba(200, 190, 230, .20), transparent 70%),
+              radial-gradient(ellipse 45% 70% at 70% 100%, rgba(200, 190, 230, .18), transparent 70%),
+              linear-gradient(0deg, rgba(190, 180, 220, .16), transparent);
+  animation: hw-fog 28s ease-in-out infinite alternate; }
+@keyframes hw-fog { from { transform: translateX(-3%); opacity: .8; } to { transform: translateX(3%); opacity: 1; } }
+body.season-halloween::after, html:has(body.season-halloween)::after {   /* the bats */
+  content: ""; position: fixed; top: 12vh; left: 0; width: 64px; height: 30px; pointer-events: none; z-index: 2;
+  background: url("assets/ui/halloween/bat.png") center / contain no-repeat; opacity: 0;
+  animation: hw-bat 26s linear infinite; will-change: transform, opacity; }
+html:has(body.season-halloween)::after { top: 26vh; width: 44px; height: 21px; animation-duration: 34s; animation-delay: -13s; }
+@keyframes hw-bat {
+  0% { transform: translate(-80px, 0) rotate(-6deg); opacity: 0; } 2% { opacity: .9; }
+  10% { transform: translate(22vw, -4vh) rotate(5deg); } 20% { transform: translate(44vw, 3vh) rotate(-5deg); }
+  30% { transform: translate(66vw, -5vh) rotate(6deg); } 40% { transform: translate(88vw, 2vh) rotate(-4deg); opacity: .9; }
+  46% { transform: translate(105vw, -3vh) rotate(4deg); opacity: 0; } 100% { transform: translate(105vw, -3vh); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  body.season-halloween::before, body.season-halloween header::after { animation: none; }
+  body.season-halloween::after, html:has(body.season-halloween)::after { display: none; }
+  body.season-halloween .book { transition: none; } }
 
 /* the candy Easter egg's note */
 .candy-toast { position: fixed; left: 50%; top: 84px; transform: translateX(-50%); z-index: 50; padding: 10px 18px; border-radius: 999px;
