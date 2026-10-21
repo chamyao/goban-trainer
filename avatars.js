@@ -64,7 +64,9 @@ const Avatars = (() => {
     for (const w of TK.data.worlds) {
       const mine = done.filter(k => parseInt(k, 10) === w.n);
       if (!mine.length) continue;
-      if (TK.cleared(`${w.n}-boss`)) for (const x of all.filter(x => x.books.includes(w.n))) unlock(x.who, true);
+      // finished: its last board cleared (a board nothing follows; only Books 1–3 call theirs N-boss)
+      const finished = TK.cleared(`${w.n}-boss`) || w.nodes.some(n => !TK.isStart(n.key) && !w.edges.some(e => e[0] === n.key) && TK.cleared(n.key));
+      if (finished) for (const x of all.filter(x => x.books.includes(w.n))) unlock(x.who, true);
       else unlock((w.party || [])[0], true);
     }
   }

@@ -7,9 +7,9 @@ const { chromium } = require(require('child_process').execSync('npm root -g').to
 const b=await chromium.launch();const p=await b.newPage();
 let fails=0;const check=(ok,what)=>{if(!ok)fails++;console.log((ok?'ok   ':'FAIL ')+what);};
 p.on('pageerror',e=>{fails++;console.log('ERR',e.message);});
-// before: Book 12 finished, Red Chamber begun
+// before: Book 12 finished (its last board, 12-a18: only Books 1–3 have an N-boss), Red Chamber begun
 await p.addInitScript(()=>{if(sessionStorage.getItem('s'))return;sessionStorage.setItem('s',1);
-  localStorage.setItem('gt-progress',JSON.stringify({tk:{'12-boss':1,'12-m3':1,'31-m1':1}}));});
+  localStorage.setItem('gt-progress',JSON.stringify({tk:{'12-a18':1,'12-a3':1,'31-g1':1}}));});
 await p.goto('http://localhost:8765/#/avatars');await p.evaluate(()=>{const m=document.getElementById('authModalBackdrop');if(m)m.hidden=true;});
 await p.waitForSelector('.avatar-tile',{timeout:30000});
 const own=await p.evaluate(()=>Object.keys(loadProgress().av.own).sort());
