@@ -98,6 +98,13 @@ HW_PAINT = {
     "ribbon": ("21:9", "A single long tattered purple cloth banner for a title, front-on, flat in the middle with "
                        "ragged torn swallow-tail ends at both sides, a thin orange trim along its edges, empty in the "
                        "middle. " + ON_WHITE + " " + HW_LOOK),
+    "stone-white": ("1:1", "A single big chunky piece of classic candy corn seen from straight above, a plump rounded "
+                           "triangle filling most of the frame: a broad bright yellow base, an orange middle band and a "
+                           "bright white tip, glossy, simple bold shapes, very light and bright overall. "
+                           + ON_WHITE + " " + HW_LOOK),
+    "stone-black": ("1:1", "A single big round dark chocolate truffle seen from straight above, filling most of the frame, "
+                           "very dark near-black cocoa-dusted surface with a soft glossy highlight, simple bold shape, very "
+                           "dark overall. " + ON_WHITE + " " + HW_LOOK),
     "bat": ("1:1", "A single small cute cartoon bat flying, wings spread wide, seen from the front, dark violet-black "
                    "with soft purple highlights, simple silhouette. " + ON_WHITE + " " + HW_LOOK),
 }
@@ -248,6 +255,17 @@ def window_inset(im):
     return k
 
 
+def candy_stone(im, size=128, fill=.92):
+    k = size * fill / max(im.size)
+    im = im.resize((round(im.width * k), round(im.height * k)), Image.LANCZOS)
+    out = Image.new("RGBA", (size, size))
+    x, y = (size - im.width) // 2, (size - im.height) // 2
+    shadow = Image.new("RGBA", im.size, (20, 10, 5, 0)); shadow.putalpha(im.getchannel("A").point(lambda v: v * .45))
+    out.alpha_composite(shadow.filter(ImageFilter.GaussianBlur(3)), (x + 2, min(size - im.height, y + 3)))
+    out.alpha_composite(im, (x, y - 1 if y else 0))
+    return out
+
+
 def build_halloween(save):
     wall = Image.open(RAW / "wall.webp").convert("RGB")   # stone and candle sconces: mirrored, as the tavern planks
     save("wall", mirrored(wall, 1024))
@@ -269,6 +287,8 @@ def build_halloween(save):
             save(b + suf, im, "png")
     rib = cutout("ribbon")
     save("ribbon", rib.resize((round(rib.width * 72 / rib.height), 72), Image.LANCZOS), "png")
+    for c in ("white", "black"):   # the candy Easter egg's stones: centred, 92% of a 128 square, a soft shadow inside
+        save(f"stone-{c}-1", candy_stone(cutout(f"stone-{c}")), "webp")
     bat = cutout("bat")
     save("bat", bat.resize((round(bat.width * 96 / bat.height), 96), Image.LANCZOS), "png")
 
