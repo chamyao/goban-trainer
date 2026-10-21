@@ -4665,7 +4665,7 @@ const Candy = {
         <stop offset="33%" stop-color="#ff9124"/><stop offset="65%" stop-color="#ff8a1f"/><stop offset="66%" stop-color="#ffd43b"/><stop offset="100%" stop-color="#f5c22a"/></linearGradient>`,
   active() { return this.on && document.body.classList.contains("season-halloween"); },
   // shaped candies, not striped circles (the user: "the Easter egg stones are still circular, I want new assets"):
-  // Graphics' painted variants when they're there (assets/ui/halloween/stone-{black,white}-N.webp), else the drawn
+  // Graphics' painted candy when it's there (assets/ui/halloween/stone-{black,white}-1.webp, one per colour), else the drawn
   // placeholders; a stone's variant follows its point, so it doesn't change from move to move
   DIR: "assets/ui/halloween/",
   sprites: { 1: ["assets/ui/halloween/wrapped-dark.svg"], 2: ["assets/ui/halloween/candy-corn.svg"] },
@@ -4673,7 +4673,7 @@ const Candy = {
     if (this.loaded) return; this.loaded = true;
     for (const [color, name] of [[1, "black"], [2, "white"]]) {
       const found = [];
-      for (let i = 1; i <= 3; i++) {
+      for (let i = 1; i <= 1; i++) {   // one candy per colour (the user: "one variation per color, not too many")
         const url = `${this.DIR}stone-${name}-${i}.webp`, img = new Image();
         img.onload = () => { found[i - 1] = url; this.sprites[color] = found.filter(Boolean); if (this.active()) route(); };
         img.src = url;
